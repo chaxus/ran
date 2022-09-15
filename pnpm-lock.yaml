@@ -3,11 +3,13 @@ lockfileVersion: 5.4
 specifiers:
   '@types/node': ^18.7.18
   '@vitejs/plugin-react': ^2.1.0
+  typescript: ^4.8.3
   vite: ^3.1.1
 
 devDependencies:
   '@types/node': 18.7.18
   '@vitejs/plugin-react': 2.1.0_vite@3.1.1
+  typescript: 4.8.3
   vite: 3.1.1
 
 packages:
@@ -779,6 +781,12 @@ packages:
   /to-fast-properties/2.0.0:
     resolution: {integrity: sha512-/OaKK0xYrs3DmxRYqL/yDc+FxFUVYhDlXMhRmv3z915w2HF1tnN1omB354j8VUGO/hbRzyD6Y3sA7v7GS/ceog==}
     engines: {node: '>=4'}
+    dev: true
+
+  /typescript/4.8.3:
+    resolution: {integrity: sha512-goMHfm00nWPa8UvR/CPSvykqf6dVV8x/dp0c5mFTMTIu0u0FlGWRioyy7Nn0PGAdHxpJZnuO/ut+PpQ8UiHAig==}
+    engines: {node: '>=4.2.0'}
+    hasBin: true
     dev: true
 
   /update-browserslist-db/1.0.9_browserslist@4.21.4:

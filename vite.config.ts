@@ -18,8 +18,8 @@ export default defineConfig({
     },
     lib: {
         entry: "./src/entry.ts",
-        name: "SmartyUI",
-        fileName: "smarty-ui",
+        name: "RanUI",
+        fileName: "ran-ui",
         // 导出模块格式
         formats: ["es", "umd","iife"],
       },
