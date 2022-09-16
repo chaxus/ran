@@ -95,11 +95,11 @@ class Modal extends HTMLElement {
       if(oldValue) {
         const childrenNodes = this.shadowRoot.childNodes;
         for(let i = 0; i < childrenNodes.length; i++) {
-          if(childrenNodes[i].nodeName === 'DIV' && childrenNodes[i].className === 'wrap') {
+          if(childrenNodes[i].nodeName === 'DIV' && childrenNodes[i]?.className === 'wrap') {
             if(newValue === 'true') {
-              childrenNodes[i].style.display = 'block';
+              childrenNodes[i]?.style.display = 'block';
             }else {
-              childrenNodes[i].style.display = 'none';
+              childrenNodes[i]?.style.display = 'none';
             }
           }
         }
