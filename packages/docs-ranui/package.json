@@ -1,0 +1,20 @@
+{
+  "name": "docs-ranui",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vitepress dev docs",
+    "build": "vitepress build docs",
+    "serve": "vitepress serve docs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@algolia/client-search": "^4.9.1",
+    "ranui": "workspace:^1.0.0",
+    "vitepress": "0.22.4"
+  }
+}

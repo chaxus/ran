@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "preinstall": "node ./bin/preinstall.ts",
     "dev": "vite",
@@ -15,11 +16,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@algolia/client-search": "^4.9.1",
     "@types/node": "^18.7.18",
     "terser": "^5.15.0",
     "typescript": "^4.8.3",
-    "vite": "^3.1.2",
-    "vitepress": "0.22.4"
+    "vite": "^3.1.2"
   }
 }

@@ -11,7 +11,7 @@ export default defineConfig({
     minify: 'terser',
     sourcemap: true, // 输出单独 source文件
     lib: {
-        entry: "./src/index.ts",
+        entry: "./index.ts",
         name: "ran",
         fileName: "ran",
         // 导出模块格式
