@@ -83,7 +83,7 @@ function RButton() {
       }
     }
   }
-  window.customElements.define('xu-button', Button);
+  window.customElements.define('r-button', Button);
 }
 
 export default RButton()

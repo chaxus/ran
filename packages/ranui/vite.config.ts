@@ -8,13 +8,14 @@ const __dirname = path.dirname(__filename);
 
 export default defineConfig({
   build: {
-    minify: false,
+    minify: 'terser',
+    sourcemap: true, // 输出单独 source文件
     lib: {
-        entry: "./src/index.ts",
-        name: "RanUI",
-        fileName: "ran-ui",
+        entry: "./index.ts",
+        name: "ranui",
+        fileName: "index",
         // 导出模块格式
-        formats: ["es", "umd","iife"],
+        formats: ["es", "umd"],
       },
   },
   resolve: {
