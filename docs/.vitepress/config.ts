@@ -18,6 +18,7 @@ const sidebar = {
   const config = {
     themeConfig: {
       sidebar,
-    }
+    },
   }
+
   export default config

@@ -2,7 +2,7 @@ function RButton() {
   const template = document.createElement("template");
   const slot = document.createElement('slot')
   const btn = document.createElement('div');
-  btn.setAttribute('class', 'r-btn');
+  btn.setAttribute('class', 'r-btn r-btn_default');
   slot.setAttribute('name', 'r-btn_content')
   btn.appendChild(slot)
   template.appendChild(btn)
@@ -14,7 +14,7 @@ function RButton() {
       this._type = {
         'primary': 'r-btn_primary',
         'warning': 'r-btn_warning',
-        'default': '#f0f0f0'
+        'default': 'r-btn_default'
       }
       this._btn = btn.cloneNode(true) as Element
       const shadowRoot = this.attachShadow({ mode: 'closed' });
@@ -24,23 +24,52 @@ function RButton() {
       style.textContent = `
         .r-btn {
           position: relative;
-          margin-right: 3px;
           display: inline-block;
-          padding: 6px 20px;
-          border-radius: 30px;
-          background-color: #f0f0f0;
-          color: #888;
-          outline: none;
-          border: none;
-          box-shadow: inset 0 5px 10px rgba(0,0,0, .3);
+          font-weight: 400;
+          white-space: nowrap;
+          text-align: center;
+          background-image: none;
+          border: 1px solid transparent;
+          box-shadow: 0 2px #00000004;
           cursor: pointer;
+          transition: all .3s cubic-bezier(.645,.045,.355,1);
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+          touch-action: manipulation;
+          height: 22px;
+          line-height: 22px;
+          padding: 4px 15px;
+          font-size: 14px;
+          border-radius: 2px;
+          color: #000000d9;
+          border-color: #d9d9d9;
+          background: #fff
+        }
+        .r-btn,.r-btn:active,.r-btn:focus {
+          outline: 0
         }
         .r-btn_primary {
-          background-color: #06c;
+          border-color: #1890ff;
+          background-color: #1890ff;
           color: #fff;
         }
         .r-btn_warning {
-          background-color: red;
+          border-color: #ff4d4f;
+          background-color: #ff4d4f;
+          color: #fff;
+        }
+        .r-btn_default:hover {
+          border-color: #1890ff;
+          color: #1890ff;
+        }
+        .r-btn_primary:hover{
+          background-color: #40a9ff;
+          color: #fff;
+        }
+        .r-btn_warning:hover {
+          background-color: #ff7875;
           color: #fff;
         }
       `
