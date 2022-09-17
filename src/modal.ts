@@ -82,7 +82,7 @@ class Modal extends HTMLElement {
       shadowRoot.appendChild(style);
       shadowRoot.appendChild(wrap);
     }
-    connectedCallback(el) {
+    connectedCallback(el:any) {
       console.log('insert dom', el)
     }
     disconnectedCallback() {
@@ -91,15 +91,15 @@ class Modal extends HTMLElement {
     adoptedCallback() {
       console.log('Custom square element moved to new page.');
     }
-    attributeChangedCallback(name, oldValue, newValue) {
-      if(oldValue) {
-        const childrenNodes = this.shadowRoot.childNodes;
-        for(let i = 0; i < childrenNodes.length; i++) {
-          if(childrenNodes[i].nodeName === 'DIV' && childrenNodes[i]?.className === 'wrap') {
+    attributeChangedCallback(name:string, oldValue:string|number|undefined, newValue:string|number|undefined) {
+      if(oldValue && this.shadowRoot) {
+        const children = [...this.shadowRoot.children] as Array<HTMLElement>
+        for(let i = 0; i < children.length; i++) {
+          if(children[i].nodeName === 'DIV' && children[i]?.className === 'wrap') {
             if(newValue === 'true') {
-              childrenNodes[i]?.style.display = 'block';
+              children[i].style.display = 'block';
             }else {
-              childrenNodes[i]?.style.display = 'none';
+              children[i].style.display = 'none';
             }
           }
         }
