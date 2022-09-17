@@ -12,10 +12,10 @@ export default defineConfig({
     sourcemap: true, // 输出单独 source文件
     lib: {
         entry: "./src/index.ts",
-        name: "RanUI",
-        fileName: "ran-ui",
+        name: "ran",
+        fileName: "ran",
         // 导出模块格式
-        formats: ["es", "umd","iife"],
+        formats: ["es", "umd", "iife"],
       },
   },
   resolve: {
