@@ -1,19 +1,22 @@
 function RButton() {
   const template = document.createElement("template");
   const slot = document.createElement('slot')
+  const btn = document.createElement('div');
+  btn.setAttribute('class', 'xu-button');
   slot.setAttribute('name', 'btn-content')
-  template.appendChild(slot)
+  btn.appendChild(slot)
+  template.appendChild(btn)
   class Button extends HTMLElement {
     constructor() {
       super();
       // 获取模板内容
-      const templateContent = template.content;
+      // const templateContent = template.content;
       // 组件内容
       const shadowRoot = this.attachShadow({ mode: 'open' });
-      const btn = document.createElement('button');
+      // const btn = document.createElement('button');
       // 克隆一份 防止重复使用 污染
-      btn.appendChild(templateContent.cloneNode(true));
-      btn.setAttribute('class', 'xu-button');
+      // btn.appendChild(templateContent.cloneNode(true));
+      // btn.setAttribute('class', 'xu-button');
       // 定义并获取按钮类型  primary | warning | default
       const type: Record<string, string> = {
         'primary': '#06c',
@@ -43,7 +46,7 @@ function RButton() {
         }
       `
       shadowRoot.appendChild(style);
-      shadowRoot.appendChild(btn);
+      shadowRoot.appendChild(btn.cloneNode(true));
     }
   }
   window.customElements.define('xu-button', Button);
