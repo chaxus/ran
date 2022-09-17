@@ -12,7 +12,7 @@ function RButton() {
       // 获取模板内容
       // const templateContent = template.content;
       // 组件内容
-      const shadowRoot = this.attachShadow({ mode: 'open' });
+      const shadowRoot = this.attachShadow({ mode: 'closed' });
       // const btn = document.createElement('button');
       // 克隆一份 防止重复使用 污染
       // btn.appendChild(templateContent.cloneNode(true));
@@ -24,6 +24,7 @@ function RButton() {
         'default': '#f0f0f0'
       }
       const attribute = this.getAttribute('type') || ''
+      console.log('attribute--->',this,this.getAttribute('type'))
       const btnType = Object.keys(type).includes(attribute) ? attribute : 'default';
       const btnColor = btnType === 'default' ? '#888' : '#fff';
 

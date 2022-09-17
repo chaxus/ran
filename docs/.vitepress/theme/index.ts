@@ -1,11 +1,9 @@
-import Theme from 'vitepress/dist/client/theme-default'
+import DefaultTheme from 'vitepress/theme'
 import '../../../src/index'
 
 export default {
-    ...Theme,
-    enhanceApp({ app }) {
-        app.config.compilerOptions = {
-            isCustomElement: tag => tag.startsWith('-')
-        }
-    }
+  ...DefaultTheme,
+  enhanceApp({ app }) {
+    app.config.compilerOptions.isCustomElement = (tag) => tag.includes('xu-')
+  }
 }
