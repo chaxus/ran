@@ -5,12 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "preinstall": "node ./bin/preinstall.ts",
-    "dev": "vite",
-    "build": "vite build",
-    "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs",
-    "docs:serve": "vitepress serve docs"
+    "preinstall": "node ./bin/preinstall.ts"
   },
   "keywords": [],
   "author": "",
