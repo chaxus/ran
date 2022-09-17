@@ -1,2 +1,3 @@
-const s: string = 'Hello Typescript'
-console.log(s)
+import './button'
+import './modal'
+
