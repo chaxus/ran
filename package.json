@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "preinstall": "node ./bin/preinstall.ts"
+    "preinstall": "node ./bin/preinstall.ts",
+    "clean": "sh ./bin/clean.sh"
   },
   "keywords": [],
   "author": "",

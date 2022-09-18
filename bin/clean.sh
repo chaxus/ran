@@ -1,2 +1,2 @@
 
-rm -rf ./packages/ranuts/$1
+rm -rf ./packages/$1
