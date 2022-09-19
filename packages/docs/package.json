@@ -1,6 +1,6 @@
 {
   "name": "docs",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
   "type": "module",
   "scripts": {
@@ -13,7 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "@algolia/client-search": "^4.9.1",
-    "ranui": "workspace:^1.0.0",
+    "ranui": "workspace:^0.1.0",
     "vitepress": "0.22.4"
   }
 }
