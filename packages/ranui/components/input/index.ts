@@ -1,13 +1,7 @@
 (function () {
-    const template = document.createElement('template')
-    template.innerHTML = `
-    <style>
-      .cai-input {
-        
-      }
-    </style>
-    <input type="text" id="caiInput">
-    `
+  const template = document.createElement("template");
+  const slot = document.createElement('slot')
+  const div = document.createElement('div');
     class Input extends HTMLElement {
       _input: HTMLInputElement | null
       constructor() {

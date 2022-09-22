@@ -16,7 +16,7 @@ function RButton() {
         'warning': 'r-btn_warning',
         'default': 'r-btn_default'
       }
-      this._btn = btn.cloneNode(true) as Element
+      this._btn = btn.cloneNode(true) as HTMLElement
       const shadowRoot = this.attachShadow({ mode: 'closed' });
       // 创建样式
       const style = document.createElement('style');
