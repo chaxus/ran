@@ -2,7 +2,8 @@
   "name": "ranui",
   "version": "0.1.0",
   "description": "",
-  "main": "dist/index.js",
+  "main": "dist/index.umd.cjs",
+  "module": "dist/index.js",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,5 +11,8 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "vite-plugin-dts": "^1.5.0"
+  }
 }
