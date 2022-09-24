@@ -1,39 +1,83 @@
 (function () {
   const template = document.createElement("template");
-  const slot = document.createElement('slot')
-  const div = document.createElement('div');
-    class Input extends HTMLElement {
-      _input: HTMLInputElement | null
-      constructor() {
-        super()
-        const shadow = this.attachShadow({
-          mode: 'closed'
-        })
-        const Input = document.createElement('input')
-        const content = template.content.cloneNode(true)  as HTMLElement // 克隆一份 防止重复使用 污染
-        this._input = content.querySelector('#caiInput') 
-        if(this._input){
-            this._input.value = this.getAttribute('value') || ''
-            this._input.addEventListener("input", ev => {
-                const target = ev.target as HTMLInputElement;
-                this.value = target ? target.value : ''
-                this.dispatchEvent(new CustomEvent("change", { detail: this.value }));
-              });
-        }
-        this.dispatchEvent(new CustomEvent("change", { detail: 11111 }));
-        
-        
-        shadow.appendChild(content)
-  
+  const input = document.createElement('input');
+  input.setAttribute('class', 'r-input');
+  template.appendChild(input)
+  class Input extends HTMLElement {
+    _input: HTMLInputElement | null
+    constructor() {
+      super()
+      const shadowRoot = this.attachShadow({ mode: 'closed' });
+      this._input = input.cloneNode(true) as HTMLInputElement
+      const attValue = this.getAttribute('value') || ''
+      if (attValue) {
+        this._input.value = attValue
       }
-      get value() {
-        return this.getAttribute("value");
-      }
-      set value(value) {
-        if(value !== null){
-            this.setAttribute("value", value);
+      this._input.addEventListener("input", ev => {
+        const target = ev.target as HTMLInputElement;
+        this.value = target ? target.value : ''
+        this.dispatchEvent(new CustomEvent("change", { detail: this.value }));
+      });
+      this.dispatchEvent(new CustomEvent("change", { detail: 11111 }));
+      // 创建样式
+      const style = document.createElement('style');
+      style.textContent = `
+        .r-input {
+          writing-mode: horizontal-tb;
+          text-rendering: auto;
+          letter-spacing: normal;
+          word-spacing: normal;
+          text-transform: none;
+          text-indent: 0px;
+          text-shadow: none;
+          text-align: start;
+          -webkit-rtl-ordering: logical;
+          cursor: text;
+          touch-action: manipulation;
+          -webkit-appearance: none;
+          text-overflow: ellipsis;
+          box-sizing: border-box;
+          margin: 0;
+          font-variant: tabular-nums;
+          list-style: none;
+          font-feature-settings: "tnum";
+          position: relative;
+          display: inline-block;
+          width: 100%;
+          min-width: 0;
+          padding: 4px 11px;
+          color: #000000d9;
+          font-size: 14px;
+          line-height: 1.5715;
+          background-color: #fff;
+          background-image: none;
+          border: 1px solid #d9d9d9;
+          border-radius: 2px;
+          transition: all .3s;
         }
+        .r-input:focus {
+          border-color: #40a9ff;
+          box-shadow: 0 0 0 2px rgba(24, 144, 255, .2);;
+          border-right-width: 1px;
+          outline: 0;
+        }
+        .r-input:hover {
+          border-color: #40a9ff;
+          border-right-width: 1px;
+        }
+      `
+      shadowRoot.appendChild(style);
+      shadowRoot.appendChild(this._input);
+
+    }
+    get value() {
+      return this.getAttribute("value");
+    }
+    set value(value) {
+      if (value !== null) {
+        this.setAttribute("value", value);
       }
     }
-    window.customElements.define('cai-input', Input)
-  })()
+  }
+  window.customElements.define('r-input', Input)
+})()
