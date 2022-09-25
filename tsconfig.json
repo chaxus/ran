@@ -15,9 +15,9 @@
     "inlineSourceMap": true,
     "baseUrl": ".",    
     "experimentalDecorators":true,   
-    "paths": {
-      "@/lib/*": ["app/lib/*"],
-    },              
+    // "paths": {
+    //   "@/lib/*": ["app/lib/*"],
+    // },              
   },
   "ts-node": {
       "esm": true,

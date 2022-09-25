@@ -11,12 +11,11 @@ const __dirname = path.dirname(__filename);
 export default defineConfig({
   build: {
     minify: 'terser',
-    sourcemap: true, // 输出单独 source文件
+    sourcemap: true,
     lib: {
       entry: "./index.ts",
       name: "ranui",
       fileName: "index",
-      // 导出模块格式
       formats: ["es", "umd"],
     },
   },
@@ -31,7 +30,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      "@/assets": resolve(__dirname, "client/assets"),
+      '@/components': resolve(__dirname, "components/")
     },
     extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json"],
   },
