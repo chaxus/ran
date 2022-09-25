@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "jsx": "react",
     "module": "ESNext",
     "esModuleInterop": true,
     "target": "ESNext",
@@ -13,12 +12,16 @@
     "noImplicitAny": true,
     "useUnknownInCatchVariables": false,
     "inlineSourceMap": true,
-    "experimentalDecorators":true,            
+    "baseUrl": ".",    
+    "experimentalDecorators":true,   
+    "paths": {
+      "@/function/*": ["function/*"],
+    },              
   },
   "ts-node": {
       "esm": true,
       "experimentalSpecifierResolution":"node",
   },
-  "include": ["**/*.ts", "**/*.tsx"],
+  "include": ["**/*.ts", "**/*.tsx", "__mocks__/fs.js"],
   "exclude": ["node_modules"]
 }
