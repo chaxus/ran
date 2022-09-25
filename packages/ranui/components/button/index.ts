@@ -1,4 +1,3 @@
-import styles from './index.less'
 
 function RButton() {
   const template = document.createElement("template");
@@ -19,12 +18,7 @@ function RButton() {
         'default': 'r-btn_default'
       }
       this._btn = btn.cloneNode(true) as HTMLElement
-      const shadowRoot = this.attachShadow({ mode: 'closed' });
-      // 创建样式
-      const style = document.createElement('style');
-      // 为shadow Dom添加样式
-      style.textContent = styles
-      shadowRoot.appendChild(style);
+      const shadowRoot = this.attachShadow({ mode: "closed" });
       shadowRoot.appendChild(this._btn);
     }
     connectedCallback(){

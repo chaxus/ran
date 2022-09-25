@@ -1,5 +1,3 @@
-import styles from './index.less'
-
 function RInput() {
   const template = document.createElement("template");
   const input = document.createElement('input');
@@ -21,10 +19,6 @@ function RInput() {
         // 自定义事件change
         this.dispatchEvent(new CustomEvent("change", { detail: this.value }));
       });
-      // 创建样式
-      const style = document.createElement('style');
-      style.textContent = styles
-      shadowRoot.appendChild(style);
       shadowRoot.appendChild(this._input);
     }
     get value() {
