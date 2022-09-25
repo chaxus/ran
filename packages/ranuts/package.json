@@ -15,8 +15,5 @@
   "license": "ISC",
   "devDependencies": {
     "vitest": "^0.23.4"
-  },
-  "dependencies": {
-    "memfs": "^3.4.7"
   }
 }
