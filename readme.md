@@ -1,11 +1,12 @@
 # ranui
 
-基于web components的组件库
+基于 `web components` 的组件库
 
 # docs 
 
-ranui的静态网站，说明文档
+`ranui` 组件库的说明文档，组件样例
 
 # ranuts
 
 常用功能函数的集合
+
