@@ -1,5 +1,5 @@
 
-function RButton() {
+function Component() {
   const template = document.createElement("template");
   const slot = document.createElement('slot')
   const btn = document.createElement('div');
@@ -7,7 +7,7 @@ function RButton() {
   slot.setAttribute('name', 'r-btn_content')
   btn.appendChild(slot)
   template.appendChild(btn)
-  class Button extends HTMLElement {
+  class CustomElement extends HTMLElement {
     _type: Record<string,string>;
     _btn: Element;
     constructor() {
@@ -28,7 +28,7 @@ function RButton() {
       }
     }
   }
-  window.customElements.define('r-button', Button);
+  window.customElements.define('r-button', CustomElement);
 }
 
-export default RButton()
+export default Component()
