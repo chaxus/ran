@@ -2,7 +2,8 @@ import { defineConfig } from "vite";
 import path, { resolve } from "path";
 import { fileURLToPath } from "url";
 import dts from 'vite-plugin-dts'
-import loadStyle from './plugins/loadStyle'
+import loadStyle from './plugins/load-style'
+import componentsIndex from './plugins/components-index'
 
 const __filename = fileURLToPath(import.meta.url);
 
@@ -11,27 +12,29 @@ const __dirname = path.dirname(__filename);
 export default defineConfig({
   build: {
     minify: 'terser',
-    sourcemap: true, // 输出单独 source文件
+    sourcemap: true,
     lib: {
-      entry: "./index.ts",
+      entry: resolve(__dirname, "index.ts"),
       name: "ranui",
       fileName: "index",
-      // 导出模块格式
       formats: ["es", "umd"],
     },
   },
   plugins: [
     dts({
-      //指定使用的tsconfig.json为我们整个项目根目录下掉,如果不配置,你也可以在components下新建tsconfig.json
-      tsConfigFilePath: '../../tsconfig.json'
+      tsConfigFilePath: './tsconfig.json'
     }),
     loadStyle({
       ignore:['ranui/components/modal/index.ts']
+    }),
+    componentsIndex({
+      path:[resolve(__dirname, "components/")]
     })
   ],
   resolve: {
     alias: {
-      "@/assets": resolve(__dirname, "client/assets"),
+      '@/components': resolve(__dirname, "components/"),
+      '@/assets': resolve(__dirname, "assets/"),
     },
     extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json"],
   },

@@ -13,7 +13,13 @@
     "noImplicitAny": true,
     "useUnknownInCatchVariables": false,
     "inlineSourceMap": true,
-    "experimentalDecorators":true,            
+    "baseUrl": ".",    
+    "experimentalDecorators":true,   
+    "paths": {
+      "@/assets/*": ["assets/*"],
+      "@/components/*": ["components/*"],
+      "@/plugins/*": ["plugins/*"],
+    },              
   },
   "ts-node": {
       "esm": true,

@@ -2,13 +2,19 @@
   "name": "ranuts",
   "version": "0.1.0",
   "description": "",
-  "main": "dist/index.js",
+  "main": "dist/index.umd.cjs",
+  "module": "dist/index.js",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "test": "vitest"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@vitejs/plugin-legacy": "^2.2.0",
+    "vitest": "^0.23.4"
+  }
 }

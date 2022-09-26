@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import path, { resolve } from "path";
 import { fileURLToPath } from "url";
+import dts from 'vite-plugin-dts'
 
 const __filename = fileURLToPath(import.meta.url);
 
@@ -11,28 +12,22 @@ export default defineConfig({
     minify: 'terser',
     sourcemap: true, // 输出单独 source文件
     lib: {
-        entry: "./index.ts",
-        name: "ranuts",
-        fileName: "index",
-        // 导出模块格式
-        formats: ["es", "umd"],
-      },
+      entry: "./index.ts",
+      name: "ranuts",
+      fileName: "index",
+      // 导出模块格式
+      formats: ["es", "umd"],
+    },
   },
   resolve: {
     alias: {
-      "@/assets": resolve(__dirname, "client/assets"),
+      "@/function": resolve(__dirname, "function/"),
     },
     extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json"],
   },
-  css: {
-    preprocessorOptions: {
-      less:{
-        javascriptEnabled: true,
-        additionalData: `@import "client/assets/base.css";`
-      }
-    },
-    modules: {
-      generateScopedName: "[name--[local]--[hash:base64:5]]",
-    },
-  },
+  plugins: [
+    dts({
+      tsConfigFilePath: './tsconfig.json'
+    }),
+  ]
 });
