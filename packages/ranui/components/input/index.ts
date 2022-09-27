@@ -1,9 +1,9 @@
-function RInput() {
+function Component() {
   const template = document.createElement("template");
   const input = document.createElement('input');
   input.setAttribute('class', 'r-input');
   template.appendChild(input)
-  class Input extends HTMLElement {
+  class CustomElement extends HTMLElement {
     _input: HTMLInputElement | null
     constructor() {
       super()
@@ -30,7 +30,7 @@ function RInput() {
       }
     }
   }
-  window.customElements.define('r-input', Input)
+  window.customElements.define('r-input', CustomElement)
 }
 
-export default RInput()
+export default Component()

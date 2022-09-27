@@ -28,7 +28,10 @@ export default defineConfig({
       ignore:['ranui/components/modal/index.ts']
     }),
     componentsIndex({
-      path:[resolve(__dirname, "components/")]
+      path:[
+        './components/',
+        // resolve(__dirname, "components/")
+      ]
     })
   ],
   resolve: {

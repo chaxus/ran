@@ -1,4 +1,4 @@
-import '/Users/ranzhouhang/Documents/code/ran/packages/ranui/components/button/index.ts';
-import '/Users/ranzhouhang/Documents/code/ran/packages/ranui/components/image/index.ts';
-import '/Users/ranzhouhang/Documents/code/ran/packages/ranui/components/input/index.ts';
-import '/Users/ranzhouhang/Documents/code/ran/packages/ranui/components/modal/index.ts';
+import './components//button/index.ts';
+import './components//image/index.ts';
+import './components//input/index.ts';
+import './components//modal/index.ts';

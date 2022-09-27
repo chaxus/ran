@@ -1,11 +1,11 @@
 import failImage from '@/assets/image/failImage'
 
-function RImage() {
+function Component() {
     const template = document.createElement("template");
     const container = document.createElement('div');
     container.setAttribute('class', 'r-image');
     template.appendChild(container)
-    class Img extends HTMLElement {
+    class CustomElement extends HTMLElement {
         _container: Element;
         constructor() {
             super();
@@ -18,17 +18,15 @@ function RImage() {
             const image = new Image()
             image.src = src
             image.addEventListener('error', () => {
-                // 加载失败的处理
                 image.src = failImage
             })
             image.addEventListener('load', () => {
-                // 加载成功的处理
                 this._container.appendChild(image)
             })
         }
     }
-    window.customElements.define('r-img', Img)
+    window.customElements.define('r-img', CustomElement)
 }
-export default RImage()
+export default Component()
 
 

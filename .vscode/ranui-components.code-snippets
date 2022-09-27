@@ -19,7 +19,7 @@
 		"scope": "javascript,typescript",
 		"prefix": "tfc",
 		"body": [
-			"function $1() {",
+			"function Component() {",
 			"   const template = document.createElement('template');",
 			"   const slot = document.createElement('slot');",
 			"   const div = document.createElement('div');",
@@ -27,7 +27,7 @@
 			"   slot.setAttribute('name', 'name');",
 			"   div.appendChild(slot);",
 			"   template.appendChild(div);",
-			"   class $2 extends HTMLElement {",
+			"   class CustomElement extends HTMLElement {",
 			"       _div: Element;",
 			"       constructor() {",
 			"           super();",
@@ -39,9 +39,9 @@
 			"",
 			"       }",
 			"   }",
-				"window.customElements.define('r-$3', $4)",
+				"window.customElements.define('r-$1', CustomElement)",
 			"}",
-			"export default $5()",
+			"export default Component()",
 			// $通过tab切换
 		],
 		"description": "ranui component template"
