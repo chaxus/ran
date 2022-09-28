@@ -29,7 +29,7 @@ export default defineConfig({
     }),
     componentsIndex({
       path:[
-        './components/',
+        './components',
         // resolve(__dirname, "components/")
       ]
     })
