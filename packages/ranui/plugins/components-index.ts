@@ -33,17 +33,12 @@ export default function componentsIndexPlugin(options: Options): Plugin {
         name: 'vite-plugin-components-index',
         async config(context) {
             const { entry = '' } = context.build?.lib || {};
-            if (entry) {
-                await createIndex(options, entry)
-                // const result = await readFile(entry)
-                // console.log('result---->',result);
-            }
+            if (entry) await createIndex(options, entry)
         },
         async handleHotUpdate(context) {
             const { entry = '' } = context.server.config.build.lib || {}
             const flag = await watchFile(entry)
-            console.log('flag--->',flag);
-            if(entry && flag) createIndex(options, entry)
+            if(entry && flag) await createIndex(options, entry)
         }
     }
 }
