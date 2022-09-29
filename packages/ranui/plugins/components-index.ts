@@ -1,34 +1,49 @@
 import { Plugin } from 'vite';
 import fs from "fs";
 import ranuts from 'ranuts';
-const { writeFile } = ranuts;
+const { writeFile, watchFile } = ranuts;
 
 interface Options {
     ignore?: Array<string>,
     path: Array<string>
 }
 
-const createIndex = (options: Options, entry: string) => {
+const createIndex = async (options: Options, entry: string) => {
     let content = ''
-    const { path } = options
-    path.forEach(item => {
-        fs.readdirSync(item).forEach(async data => {
-            content += `import '${path}/${data}/index.ts';\n`
-            await writeFile(entry, content)
-        })
-    })
+    const { path = [] } = options
+    const result = []
+    try {
+        for (const item of path) {
+            const fileList = fs.readdirSync(item)
+            for (const file of fileList) {
+                content += `import '${path}/${file}/index.ts';\n`
+                const data = await writeFile(entry, content)
+                result.push(data)
+            }
+        }
+        return result
+    } catch (error) {
+        throw error
+    }
+
 }
 
 export default function componentsIndexPlugin(options: Options): Plugin {
     return {
         name: 'vite-plugin-components-index',
-        config(context) {
+        async config(context) {
             const { entry = '' } = context.build?.lib || {};
-            if(entry) createIndex(options, entry)
+            if (entry) {
+                await createIndex(options, entry)
+                // const result = await readFile(entry)
+                // console.log('result---->',result);
+            }
         },
-        handleHotUpdate(context) {
+        async handleHotUpdate(context) {
             const { entry = '' } = context.server.config.build.lib || {}
-            if(entry) createIndex(options, entry)
+            const flag = await watchFile(entry)
+            console.log('flag--->',flag);
+            if(entry && flag) createIndex(options, entry)
         }
     }
 }
