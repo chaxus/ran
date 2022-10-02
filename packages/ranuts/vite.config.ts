@@ -22,6 +22,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@/function": resolve(__dirname, "function/"),
+      "@/model": resolve(__dirname, "model/"),
     },
     extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json"],
   },
