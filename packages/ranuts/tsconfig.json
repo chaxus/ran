@@ -15,8 +15,7 @@
     "baseUrl": ".",    
     "experimentalDecorators":true,   
     "paths": {
-      "@/function/*": ["function/*"],
-      "@/model/*": ["model/*"],
+      "@/library/*": ["library/*"],
     },              
   },
   "ts-node": {

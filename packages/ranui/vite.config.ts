@@ -3,7 +3,7 @@ import path, { resolve } from "path";
 import { fileURLToPath } from "url";
 import dts from 'vite-plugin-dts'
 import loadStyle from './plugins/load-style'
-import componentsIndex from './plugins/components-index'
+import autoImportFile from './plugins/auto-import-file'
 
 const __filename = fileURLToPath(import.meta.url);
 
@@ -27,7 +27,7 @@ export default defineConfig({
     loadStyle({
       ignore:['ranui/components/modal/index.ts']
     }),
-    componentsIndex({
+    autoImportFile({
       path:[
         './components',
         // resolve(__dirname, "components/")

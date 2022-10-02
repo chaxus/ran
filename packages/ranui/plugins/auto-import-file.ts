@@ -7,6 +7,18 @@ interface Options {
     ignore?: Array<string>,
     path: Array<string>
 }
+/**
+ * @description: 递归的查找目录
+ * @return {*}
+ */
+const recursionFindFile = (path: Array<string>) => {
+    for (const item of path) {
+        const fileList = fs.readdirSync(item)
+        for (const file of fileList) {
+        
+        }
+    }
+}
 
 const createIndex = async (options: Options, entry: string) => {
     let content = ''
@@ -30,7 +42,7 @@ const createIndex = async (options: Options, entry: string) => {
 
 export default function componentsIndexPlugin(options: Options): Plugin {
     return {
-        name: 'vite-plugin-components-index',
+        name: 'vite-plugin-auto-import-file',
         async config(context) {
             const { entry = '' } = context.build?.lib || {};
             if (entry) await createIndex(options, entry)
@@ -38,7 +50,7 @@ export default function componentsIndexPlugin(options: Options): Plugin {
         async handleHotUpdate(context) {
             const { entry = '' } = context.server.config.build.lib || {}
             const flag = await watchFile(entry)
-            if(entry && flag) await createIndex(options, entry)
+            if (entry && flag) await createIndex(options, entry)
         }
     }
 }
