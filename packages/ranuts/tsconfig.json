@@ -16,6 +16,7 @@
     "experimentalDecorators":true,   
     "paths": {
       "@/function/*": ["function/*"],
+      "@/model/*": ["model/*"],
     },              
   },
   "ts-node": {

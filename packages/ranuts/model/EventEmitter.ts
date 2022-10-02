@@ -1,14 +1,15 @@
+
 class EventEmitter{
-    _events: Record<string,any>;
+    _events: Record<string|symbol,any>;
     constructor(){
         this._events = {};
     }
 
-    on(eventName:string, callback:any){
+    on(eventName:string|symbol, callback:any){
         if(this._events[eventName]){
             // 注册一个 newListener 用于监听新的事件订阅
-            if(eventName !== "newListener"){
-                this.emit("newListener", eventName)
+            if(eventName !==  Symbol.for('newListener')){
+                this.emit(Symbol.for('newListener'), eventName)
             }
         }
         // 由于一个事件可能注册多个回调函数，所以使用数组来存储事件队列
@@ -17,7 +18,7 @@ class EventEmitter{
         this._events[eventName] = callbacks
     }
 
-    emit(eventName:string, ...args:any){
+    emit(eventName:string|symbol, ...args:any){
         const callbacks = this._events[eventName] || [];
         callbacks.forEach((cb:any) => cb(...args))
     }
@@ -41,6 +42,7 @@ class EventEmitter{
         const newCallbacks = callbacks.filter((fn:any) => fn != callback && fn.initialCallback != callback /* 用于once的取消订阅 */)
         this._events[eventName] = newCallbacks;
     }
+
 }
 
 export default EventEmitter
