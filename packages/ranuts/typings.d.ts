@@ -1,2 +1,2 @@
-declare module '@/function'
-declare module '@/model'
+declare module '@/function/*'
+declare module '@/model/*'
