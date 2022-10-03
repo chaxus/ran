@@ -1,4 +1,4 @@
-import { Plugin, UserConfig, HmrContext, ViteDevServer } from 'vite';
+import { Plugin } from 'vite';
 import fs from "fs";
 import ranuts from 'ranuts';
 const { writeFile, readFile, queryFileInfo } = ranuts;
@@ -48,7 +48,6 @@ export default function autoImportFilePlugin(options: Options): Plugin {
             const { entry = '' } = context.build?.lib || {};
             const { alias = {} } = context.resolve || {}
             const aliasList = Object.keys(alias)
-            console.log('options--->', context);
             if (entry) await createIndex(options, entry)
         },
         async handleHotUpdate(context) {
