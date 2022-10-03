@@ -11,7 +11,7 @@ interface Options {
 
 const createIndex = async (options: Options, entry: string) => {
     let content = ''
-    const { path = [], extensions = [] } = options
+    const { path = [], extensions = [], ignore = [] } = options
     /**
      * @description: 递归查找目录
      * @param {Array} path
@@ -20,10 +20,10 @@ const createIndex = async (options: Options, entry: string) => {
         for (const item of path) {
             const { status, data } = await queryFileInfo(item)
             const extension = item.substring(item.lastIndexOf('.'))
-            if (status && data.isFile() && extensions.includes(extension)) {
+            if (status && data.isFile() && extensions.includes(extension) && !ignore.includes(item)) {
                 content += `import '${item}';\n`
             }
-            if (status && data.isDirectory()) {
+            if (status && data.isDirectory() && !ignore.includes(item)) {
                 const fileList = fs.readdirSync(item)
                 const list = fileList.map(children => `${item}/${children}`)
                 await recurveFile(list)
