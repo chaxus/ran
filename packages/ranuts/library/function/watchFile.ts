@@ -1,5 +1,6 @@
 import { Stats } from "fs";
-import { fs } from '@/function/nodeLibrary'
+import fs from '@/node/fs'
+
 
 
 // 每20毫秒监控一次

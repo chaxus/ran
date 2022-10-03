@@ -1,4 +1,5 @@
-import { fs } from '@/function/nodeLibrary'
+import fs from '@/node/fs'
+
 
 
 type Error = NodeJS.ErrnoException | null

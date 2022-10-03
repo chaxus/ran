@@ -1,5 +1,3 @@
 const fs = require('fs')
 
-export {
-    fs
-}
+export default fs
