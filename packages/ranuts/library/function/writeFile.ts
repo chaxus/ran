@@ -1,5 +1,4 @@
-// const fs = require('fs')
-import fs from 'fs'
+import { fs } from '@/function/nodeLibrary'
 
 type Error = NodeJS.ErrnoException | null
 
@@ -10,10 +9,10 @@ const writeFile = (path: string, content: string) => new Promise((resolve, rejec
         encoding: 'utf-8'
     }, (err: Error) => {
         if (err) {
-            reject(err)
+            reject({ status: false, data: err })
             throw err
         } else {
-            resolve({ path, content })
+            resolve({ status: true, data: { path, content } })
         }
     })
 

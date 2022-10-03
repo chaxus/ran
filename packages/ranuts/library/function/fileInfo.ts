@@ -1,11 +1,11 @@
-const fs = require("fs");
+import { fs } from '@/function/nodeLibrary'
 
-type Error =  NodeJS.ErrnoException | null
+type Error = NodeJS.ErrnoException | null
 
 const getFileInfo = (path: string) =>
   new Promise((resolve, reject) => {
     fs.stat(path, (err: Error, data: string) => {
-      err ? reject(err) : resolve(data);
+      err ? reject({ status: false, data: err }) : resolve({ status: true, data });
     });
   });
 
