@@ -1,12 +1,12 @@
-const fs = require("fs");
+import fs from '@/node/fs'
 
-type Error =  NodeJS.ErrnoException | null
+type Error = NodeJS.ErrnoException | null
 
-const getFileInfo = (path: string) =>
+const queryFileInfo = (path: string) =>
   new Promise((resolve, reject) => {
     fs.stat(path, (err: Error, data: string) => {
-      err ? reject(err) : resolve(data);
+      err ? reject({ status: false, data: err }) : resolve({ status: true, data });
     });
   });
 
-export default getFileInfo;
+export default queryFileInfo;

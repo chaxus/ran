@@ -1,13 +1,13 @@
-const fs = require("fs");
-import readFile from './readFile'
+import fs from '@/node/fs'
+import readFile from '@/function/readFile'
 
 type Error = NodeJS.ErrnoException | null
 
 const appendFile = (path: string, content: string) =>
     new Promise((resolve, reject) => {
         fs.appendFile(path, content, (err: Error) => {
-            err ? reject(err) : readFile(path).then(data => {
-                resolve({ path, data })
+            err ? reject({ status: false, data: err }) : readFile(path).then((content: string) => {
+                resolve({ status: true, data: { path, content } })
             })
         });
     });

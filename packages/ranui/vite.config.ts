@@ -31,7 +31,8 @@ export default defineConfig({
       path:[
         './components',
         // resolve(__dirname, "components/")
-      ]
+      ],
+      extensions:[".ts"]
     })
   ],
   resolve: {

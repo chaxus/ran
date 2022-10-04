@@ -1,5 +1,7 @@
 import { Stats } from "fs";
-const fs = require("fs");
+import fs from '@/node/fs'
+
+
 
 // 每20毫秒监控一次
 const watchFile = (path: string, interval: number = 20) =>
@@ -7,9 +9,11 @@ const watchFile = (path: string, interval: number = 20) =>
     fs.watchFile(path, { interval }, (curr: Stats, prev: Stats) => {
       if (curr.mtime !== prev.mtime) {
         fs.unwatchFile(path);
-        resolve(true);
+        resolve({ status: true, data: { msg: 'file is changed' } });
+      } else {
+        resolve({ status: false, data: { msg: 'file is not changed' } })
       }
-    });
+    })
   });
 
 export default watchFile;

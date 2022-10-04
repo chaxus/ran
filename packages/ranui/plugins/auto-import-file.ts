@@ -1,56 +1,58 @@
 import { Plugin } from 'vite';
 import fs from "fs";
 import ranuts from 'ranuts';
-const { writeFile, watchFile } = ranuts;
+const { writeFile, readFile, queryFileInfo } = ranuts;
 
 interface Options {
     ignore?: Array<string>,
-    path: Array<string>
-}
-/**
- * @description: 递归的查找目录
- * @return {*}
- */
-const recursionFindFile = (path: Array<string>) => {
-    for (const item of path) {
-        const fileList = fs.readdirSync(item)
-        for (const file of fileList) {
-        
-        }
-    }
+    path: Array<string>,
+    extensions: Array<string>
 }
 
 const createIndex = async (options: Options, entry: string) => {
     let content = ''
-    const { path = [] } = options
-    const result = []
-    try {
+    const { path = [], extensions = [], ignore = [] } = options
+    /**
+     * @description: 递归查找目录
+     * @param {Array} path
+     */
+    const recurveFile = async (path: Array<string>) => {
         for (const item of path) {
-            const fileList = fs.readdirSync(item)
-            for (const file of fileList) {
-                content += `import '${path}/${file}/index.ts';\n`
-                const data = await writeFile(entry, content)
-                result.push(data)
+            const { status, data } = await queryFileInfo(item)
+            const extension = item.substring(item.lastIndexOf('.'))
+            if (status && data.isFile() && extensions.includes(extension) && !ignore.includes(item)) {
+                content += `import '${item}';\n`
+            }
+            if (status && data.isDirectory() && !ignore.includes(item)) {
+                const fileList = fs.readdirSync(item)
+                const list = fileList.map(children => `${item}/${children}`)
+                await recurveFile(list)
             }
         }
-        return result
+    }
+    try {
+        await recurveFile(path)
+        const currContent = await readFile(entry)
+        if (currContent !== content) return await writeFile(entry, content)
+        return { status: false }
     } catch (error) {
         throw error
     }
 
 }
 
-export default function componentsIndexPlugin(options: Options): Plugin {
+export default function autoImportFilePlugin(options: Options): Plugin {
     return {
         name: 'vite-plugin-auto-import-file',
         async config(context) {
             const { entry = '' } = context.build?.lib || {};
+            const { alias = {} } = context.resolve || {}
+            const aliasList = Object.keys(alias)
             if (entry) await createIndex(options, entry)
         },
         async handleHotUpdate(context) {
             const { entry = '' } = context.server.config.build.lib || {}
-            const flag = await watchFile(entry)
-            if (entry && flag) await createIndex(options, entry)
+            if (entry) await createIndex(options, entry)
         }
     }
 }
