@@ -28,7 +28,7 @@ function Component() {
       }
     }
     connectedCallback() {
-      this._btn.addEventListener('mousedown',  (event:any) => {
+      this._btn.addEventListener('mousemove',  (event:any) => {
         if (!this.disabled) {
           const { left, top } = this.getBoundingClientRect();
           this.style.setProperty('--x', (event.clientX - left) + 'px');
