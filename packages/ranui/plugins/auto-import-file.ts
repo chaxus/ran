@@ -33,7 +33,7 @@ const createIndex = async (options: Options, entry: string) => {
     try {
         await recurveFile(path)
         const currContent = await readFile(entry)
-        if (currContent !== content) return await writeFile(entry, content)
+        if (currContent.status && currContent.data !== content) return await writeFile(entry, content)
         return { status: false }
     } catch (error) {
         throw error
@@ -46,8 +46,8 @@ export default function autoImportFilePlugin(options: Options): Plugin {
         name: 'vite-plugin-auto-import-file',
         async config(context) {
             const { entry = '' } = context.build?.lib || {};
-            const { alias = {} } = context.resolve || {}
-            const aliasList = Object.keys(alias)
+            // const { alias = {} } = context.resolve || {}
+            // const aliasList = Object.keys(alias)
             if (entry) await createIndex(options, entry)
         },
         async handleHotUpdate(context) {
