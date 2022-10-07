@@ -58,8 +58,9 @@
   }
   &(:active)::after,
   &(:hover)::after {
-    transform: translate(-50%, -50%) scale(0);
-    opacity: 0.5;
+    transform: translate(-50%, -50%) scale(10);
+    opacity: 0;
+    // transition: 0s;
   }
   &::after {
     content: "";
@@ -67,14 +68,14 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    left: var(--x, 0);
-    top: var(--y, 0);
+    left: var(--ran-x, 0);
+    top: var(--ran-y, 0);
     pointer-events: none;
     background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
     background-repeat: no-repeat;
     background-position: 50%;
-    transform: translate(-50%, -50%) scale(10);
-    opacity: 0;
-    transition: transform .5s, opacity 1s;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0.5;
+    transition: transform 0.5s, opacity 1s;
   }
 }

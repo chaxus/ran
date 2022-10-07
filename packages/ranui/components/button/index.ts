@@ -9,11 +9,11 @@ function Component() {
   template.appendChild(btn)
   class CustomElement extends HTMLElement {
     static get observedAttributes() { return ['disabled'] }
-    _btn: Element;
+    _btn: HTMLDivElement;
     constructor() {
       super();
-      this._btn = btn.cloneNode(true) as HTMLElement
-      const shadowRoot = this.attachShadow({ mode: "open" });
+      this._btn = btn.cloneNode(true) as HTMLDivElement
+      const shadowRoot = this.attachShadow({ mode: "closed" });
       shadowRoot.appendChild(this._btn);
     }
     get disabled() {
@@ -27,23 +27,33 @@ function Component() {
         this.setAttribute('disabled', value);
       }
     }
+    mouseMove = (event: MouseEvent) => {
+      if (!this.disabled) {
+        const { left, top } = this.getBoundingClientRect();
+        this.style.setProperty('--ran-x', (event.clientX - left) + 'px');
+        this.style.setProperty('--ran-y', (event.clientY - top) + 'px');
+      }
+    }
+    mouseLeave = () => {
+      this.style.removeProperty('--ran-x');
+      this.style.removeProperty('--ran-y');
+    }
     connectedCallback() {
-      this._btn.addEventListener('mousemove',  (event:any) => {
-        if (!this.disabled) {
-          const { left, top } = this.getBoundingClientRect();
-          this.style.setProperty('--x', (event.clientX - left) + 'px');
-          this.style.setProperty('--y', (event.clientY - top) + 'px');
-        }
-      })
+      this._btn.addEventListener('mousemove', this.mouseMove)
+      this._btn.addEventListener('mouseleave', this.mouseLeave)
     }
-    attributeChangedCallback (name:string, oldValue:string, newValue:string) {
-      if(name == 'disabled' && this._btn){
-        if(newValue){
-            this._btn.setAttribute('disabled', newValue);
-        }else{
-            this._btn.removeAttribute('disabled');
-        }
+    disconnectCallback(){
+      this._btn.removeEventListener('mousemove', this.mouseMove)
+      this._btn.removeEventListener('mouseleave', this.mouseLeave)
     }
+    attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+      if (name == 'disabled' && this._btn) {
+        if (newValue) {
+          this._btn.setAttribute('disabled', newValue);
+        } else {
+          this._btn.removeAttribute('disabled');
+        }
+      }
     }
   }
   window.customElements.define('r-button', CustomElement);
