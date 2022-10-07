@@ -25,14 +25,15 @@ export default defineConfig({
       tsConfigFilePath: './tsconfig.json'
     }),
     loadStyle({
-      ignore:['ranui/components/modal/index.ts']
+      ignore: ['ranui/components/modal/index.ts']
     }),
     autoImportFile({
-      path:[
+      path: [
         './components',
         // resolve(__dirname, "components/")
       ],
-      extensions:[".ts"]
+      extensions: [".ts"],
+      ignore: ['./components/form/index.ts']
     })
   ],
   resolve: {
