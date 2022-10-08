@@ -10,29 +10,53 @@ function Component() {
       super()
       const shadowRoot = this.attachShadow({ mode: 'closed' });
       this._input = input.cloneNode(true) as HTMLInputElement
+      // 如果一开始就设置了input的值，则初始化input的值
       if (this.value) {
         this._input.value = this.value
       }
       shadowRoot.appendChild(this._input);
     }
-
+    /**
+     * @description: 获取input的值
+     * @return {String}
+     */    
     get value() {
       return this.getAttribute("value");
     }
+    /**
+     * @description: 设置input的值
+     * @param {String} value
+     */   
     set value(value) {
       if (value) {
         this.setAttribute("value", value);
       }
     }
+    /**
+     * @description: 获取input的占位字符
+     * @return {String}
+     */    
     get placeholder() {
       return this.getAttribute('placeholder') || '';
     }
+    /**
+     * @description: 设置input的占位字符
+     * @param {String} value
+     */    
     set placeholder(value) {
       this.setAttribute('placeholder', value);
     }
+    /**
+     * @description: input是否为必选
+     * @return {String}
+     */    
     get required() {
       return this.getAttribute('required');
     }
+    /**
+     * @description: 设置input是否为必选，除非设置成false，否则都是必填
+     * @param {*} value
+     */    
     set required(value) {
       if (!value || value === "false") {
         this.removeAttribute('required');
@@ -40,12 +64,24 @@ function Component() {
         this.setAttribute('required', '');
       }
     }
+    /**
+     * @description: 获取input校验失败的提示
+     * @return {String}
+     */    
     get warning() {
       return this.getAttribute('warning');
     }
+    /**
+     * @description: 获取校验的正则
+     * @return {String}
+     */    
     get pattern() {
       return this.getAttribute('pattern');
     }
+    /**
+     * @description: 设置input校验的正则
+     * @param {*} value
+     */    
     set pattern(value) {
       if (!value || value === "false") {
         this.removeAttribute('pattern');
@@ -53,6 +89,10 @@ function Component() {
         this.setAttribute('pattern', value);
       }
     }
+    /**
+     * @description: 原生的input方法
+     * @param {Event} event
+     */    
     inputValue = (event: Event) => {
       event.stopPropagation();
       const target = event.target as HTMLInputElement;
@@ -63,6 +103,9 @@ function Component() {
         }
       }));
     }
+    /**
+     * @description: 增加input上change方法
+     */    
     change = () => {
       this.dispatchEvent(new CustomEvent('change', {
         detail: {
@@ -70,13 +113,20 @@ function Component() {
         }
       }));
     }
+    /**
+     * @description: 增加focus方法
+     */    
     focus = () => {
-      this.dispatchEvent(new CustomEvent('change', {
+      this.dispatchEvent(new CustomEvent('focus', {
         detail: {
           value: this.value
         }
       }));
     }
+    /**
+     * @description: 检查校验是否成功
+     * @return {Boolean}
+     */    
     checkout = () => {
 
     }
