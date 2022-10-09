@@ -1,9 +1,10 @@
+
+import { falseList } from '@/assets/utils'
+
 function Component() {
   const template = document.createElement("template");
-  const input = document.createElement("input");
   const container = document.createElement("div");
-  container.setAttribute("class", "input-container");
-  container.appendChild(input);
+  container.setAttribute("class", "input");
   template.appendChild(container);
   class CustomElement extends HTMLElement {
     static get observedAttributes() {
@@ -17,17 +18,25 @@ function Component() {
       ];
     }
     shadowRoot: ShadowRoot;
+    _container: HTMLDivElement;
     _label: HTMLLabelElement | undefined;
     _input: HTMLInputElement;
     constructor() {
       super();
-      this.shadowRoot = this.attachShadow({ mode: "open" });
-      this._input = container.cloneNode(true) as HTMLInputElement;
+      this.shadowRoot = this.attachShadow({ mode: "closed" });
+      this._container = container.cloneNode(true) as HTMLDivElement;
+      this._input = document.createElement("input");
+      this._input.setAttribute("class", "input-main");
+      this._container.appendChild(this._input);
       // 如果一开始就设置了input的值，则初始化input的值
       if (this.value) {
         this._input.value = this.value;
+        this._container.setAttribute("value", this.value);
       }
-      this.shadowRoot.appendChild(this._input);
+      if(this.disabled){
+        this._container.setAttribute("disabled", '');
+      }
+      this.shadowRoot.appendChild(this._container);
     }
     /**
      * @description: 获取input的值
@@ -43,6 +52,10 @@ function Component() {
     set value(value) {
       if (value) {
         this.setAttribute("value", value);
+        this._container.setAttribute("value", value);
+      } else {
+        this.removeAttribute("value");
+        this._container.removeAttribute("value");
       }
     }
     /**
@@ -50,14 +63,18 @@ function Component() {
      * @return {String}
      */
     get placeholder() {
-      return this.getAttribute("placeholder") || "";
+      return this.getAttribute("placeholder");
     }
     /**
      * @description: 设置input的占位字符
      * @param {String} value
      */
     set placeholder(value) {
-      this.setAttribute("placeholder", value);
+      if (value) {
+        this.setAttribute("placeholder", value);
+      } else {
+        this.removeAttribute("placeholder");
+      }
     }
     /**
      * @description: input是否为必选
@@ -118,14 +135,14 @@ function Component() {
      * @return {String | null}
      */
     get disabled() {
-      return this.getAttribute("disabled");
+      return this.hasAttribute("disabled");
     }
     /**
      * @description: 设置input的disabled属性
      * @param {String} value
      */
     set disabled(value) {
-      if (value === null || value === "false") {
+      if (falseList.includes(value)) {
         this.removeAttribute("disabled");
       } else {
         this.setAttribute("disabled", "");
@@ -236,7 +253,7 @@ function Component() {
      * @param {string} name
      * @param {string} value
      * @return {*}
-     */    
+     */
     listenRequired(name: string, value: string) {
       if (name === "required" && this._input) {
         if (value && value !== "false") {
@@ -250,7 +267,7 @@ function Component() {
      * @description: 监听pattern属性函数
      * @param {string} name
      * @param {string} value
-     */    
+     */
     listenPattern(name: string, value: string) {
       if (name === "pattern" && this._input) {
         if (value && value !== "false") {
@@ -264,7 +281,7 @@ function Component() {
      * @description: 监听lable属性函数
      * @param {string} name
      * @param {string} value
-     */    
+     */
     listenLabel(name: string, value: string) {
       if (name === "label" && this._input) {
         if (value !== null) {
@@ -274,12 +291,12 @@ function Component() {
             this._label = document.createElement("label");
             this._label.innerHTML = value;
             this._label.setAttribute("class", "input-label");
-            this._input.appendChild(this._label);
+            this._container.appendChild(this._label);
           }
         } else {
-          this._input.removeAttribute("label");
+          this._container.removeAttribute("label");
           if (this._label) {
-            this._input.removeChild(this._label);
+            this._container.removeChild(this._label);
             this._label = undefined;
           }
         }

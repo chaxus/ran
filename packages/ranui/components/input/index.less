@@ -1,4 +1,4 @@
-.input-container {
+.input {
   position: relative;
   display: inline-block;
   width: 100%;
@@ -12,7 +12,50 @@
   border: 1px solid #d9d9d9;
   border-radius: 2px;
   transition: all 0.3s;
-  input {
+  &:active {
+    border-color: #40a9ff;
+    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+    border-right-width: 1px;
+    outline: 0;
+  }
+  &:hover {
+    border-color: #40a9ff;
+    border-right-width: 1px;
+  }
+  & > .input-main:hover ~ .input-label {
+    color: #40a9ff;
+  }
+  &[value] > .input-label {
+    transform: translateY(calc(-50% - 0.43em)) scale(0.8);
+    color: #00000040;
+  }
+  &[disabled] {
+    color: #00000040;
+    background-color: #f5f5f5;
+    border-color: #d9d9d9;
+    box-shadow: none;
+    cursor: not-allowed;
+    opacity: 1;
+    & > .input-main {
+      color: #00000040;
+      background-color: #f5f5f5;
+      border-color: #d9d9d9;
+      box-shadow: none;
+      cursor: not-allowed;
+      opacity: 1;
+    }
+    & > .input-main:hover ~ .input-label {
+      color: #999;
+      backdrop-filter: blur(30px);
+    }
+    & > .input-label {
+      color: #999;
+      border-color: #d9d9d9;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+  }
+  &-main {
     writing-mode: horizontal-tb;
     text-rendering: auto;
     letter-spacing: normal;
@@ -41,40 +84,32 @@
     background-color: #fff;
     background-image: none;
     transition: all 0.3s;
-    &:focus {
-      border: none;
-      outline: 0;
-    }
+    &:focus,
     &:hover {
       border: none;
       outline: 0;
     }
+    &::placeholder {
+      color: #999;
+    }
+    &:placeholder-shown ~ .input-label {
+      transform: translateY(calc(-50% - 0.43em)) scale(0.8);
+    }
+    &:focus ~ .input-label {
+      transform: translateY(calc(-50% - 0.43em)) scale(0.8);
+    }
   }
-  .input-label {
+  &-label {
     pointer-events: none;
-    // margin-left: -0.14em;
     position: absolute;
-    font-size: 10px;
-    top: -12px;
+    font-size: 14px;
     left: 8px;
     transition: transform 0.3s, color 0.3s, background-color 0.3s;
     transform-origin: left;
     padding: 0 0.2em;
     color: #999;
-    background-color: #fff;
-  }
-  &:focus {
-    border-color: #40a9ff;
-    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
-    border-right-width: 1px;
-    outline: 0;
-    .input-label {
-      transform: translateY(calc(-50% - 0.43em)) scale(0.8);
-      background: #fff;
-    }
-  }
-  &:hover {
-    border-color: #40a9ff;
-    border-right-width: 1px;
+    // background: #fff;
+    backdrop-filter: blur(30px);
+    opacity: 0.9;
   }
 }
