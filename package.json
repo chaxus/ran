@@ -6,7 +6,11 @@
   "type": "module",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "clean": "sh ./bin/clean.sh"
+    "clean": "sh ./bin/clean.sh",
+    "dev:ranui":"pnpm -F ranui dev",
+    "dev:docs":"pnpm -F docs dev",
+    "build:ranuts":"pnpm -F ranuts build",
+    "build:ranui":"pnpm -F ranui build"
   },
   "keywords": [],
   "author": "",

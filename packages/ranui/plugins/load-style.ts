@@ -8,7 +8,7 @@ export default function loadStylePlugin(options?: Options): Plugin {
         name: 'vite-plugin-load-style',
         transform(code, id) {
             const path = new RegExp('ranui\/components\/[a-zA-z0-9]+\/index\.ts')
-            const stylePath = new RegExp(/([a-zA-Z0-9]+)\s*=\s*this\.attachShadow\(\{.*\}\)/)
+            const stylePath = new RegExp(/((this\.)?[a-zA-Z0-9]+)\s*=\s*this\.attachShadow\(\{.*\}\)/)
             const front = `import f7170ee498e0dd32cbdcb63fba8f75cc from './index.less';`
             const { ignore = [] } = options ?? {}
             const [fragment, statement] = code.match(stylePath) ?? []
