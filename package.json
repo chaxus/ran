@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "preinstall": "node ./bin/preinstall.ts",
+    "preinstall": "npx only-allow pnpm",
     "clean": "sh ./bin/clean.sh"
   },
   "keywords": [],

@@ -28,7 +28,7 @@
 			"   div.appendChild(slot);",
 			"   template.appendChild(div);",
 			"   class CustomElement extends HTMLElement {",
-			"        static get observedAttributes() { return ['disabled'] }",
+			"       static get observedAttributes() { return ['disabled'] }",
 			"       _div: HTMLElement;",
 			"       constructor() {",
 			"           super();",
