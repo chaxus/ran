@@ -143,9 +143,12 @@ function Component() {
     set disabled(value) {
       if (falseList.includes(value)) {
         this.removeAttribute("disabled");
+        this._container.removeAttribute("disabled");
+        this._input.removeAttribute("disabled");
       } else {
         this.setAttribute("disabled", "");
         this._container.setAttribute("disabled", '');
+        this._input.setAttribute("disabled", '');
       }
     }
     /**
