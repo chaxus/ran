@@ -17,13 +17,12 @@ function Component() {
         "placeholder",
       ];
     }
-    shadowRoot: ShadowRoot;
     _container: HTMLDivElement;
     _label: HTMLLabelElement | undefined;
     _input: HTMLInputElement;
     constructor() {
       super();
-      this.shadowRoot = this.attachShadow({ mode: "closed" });
+      const shadowRoot = this.attachShadow({ mode: "closed" });
       this._container = container.cloneNode(true) as HTMLDivElement;
       this._input = document.createElement("input");
       this._input.setAttribute("class", "input-main");
@@ -36,7 +35,7 @@ function Component() {
       if(this.disabled){
         this._container.setAttribute("disabled", '');
       }
-      this.shadowRoot.appendChild(this._container);
+      shadowRoot.appendChild(this._container);
     }
     /**
      * @description: 获取input的值
@@ -50,7 +49,7 @@ function Component() {
      * @param {String} value
      */
     set value(value) {
-      if (value) {
+      if (!this.disabled && value) {
         this.setAttribute("value", value);
         this._container.setAttribute("value", value);
       } else {
@@ -146,6 +145,7 @@ function Component() {
         this.removeAttribute("disabled");
       } else {
         this.setAttribute("disabled", "");
+        this._container.setAttribute("disabled", '');
       }
     }
     /**
