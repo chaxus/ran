@@ -1,8 +1,11 @@
+
+import { falseList } from '@/assets/utils'
+
 function Component() {
   const template = document.createElement("template");
-  const input = document.createElement("input");
-  // input.setAttribute('class','r-input')
-  template.appendChild(input);
+  const container = document.createElement("div");
+  container.setAttribute("class", "input");
+  template.appendChild(container);
   class CustomElement extends HTMLElement {
     static get observedAttributes() {
       return [
@@ -14,16 +17,25 @@ function Component() {
         "placeholder",
       ];
     }
+    _container: HTMLDivElement;
+    _label: HTMLLabelElement | undefined;
     _input: HTMLInputElement;
     constructor() {
       super();
       const shadowRoot = this.attachShadow({ mode: "closed" });
-      this._input = input.cloneNode(true) as HTMLInputElement;
+      this._container = container.cloneNode(true) as HTMLDivElement;
+      this._input = document.createElement("input");
+      this._input.setAttribute("class", "input-main");
+      this._container.appendChild(this._input);
       // 如果一开始就设置了input的值，则初始化input的值
       if (this.value) {
         this._input.value = this.value;
+        this._container.setAttribute("value", this.value);
       }
-      shadowRoot.appendChild(this._input);
+      if(this.disabled){
+        this._container.setAttribute("disabled", '');
+      }
+      shadowRoot.appendChild(this._container);
     }
     /**
      * @description: 获取input的值
@@ -37,8 +49,12 @@ function Component() {
      * @param {String} value
      */
     set value(value) {
-      if (value) {
+      if (!this.disabled && value) {
         this.setAttribute("value", value);
+        this._container.setAttribute("value", value);
+      } else {
+        this.removeAttribute("value");
+        this._container.removeAttribute("value");
       }
     }
     /**
@@ -46,14 +62,18 @@ function Component() {
      * @return {String}
      */
     get placeholder() {
-      return this.getAttribute("placeholder") || "";
+      return this.getAttribute("placeholder");
     }
     /**
      * @description: 设置input的占位字符
      * @param {String} value
      */
     set placeholder(value) {
-      this.setAttribute("placeholder", value);
+      if (value) {
+        this.setAttribute("placeholder", value);
+      } else {
+        this.removeAttribute("placeholder");
+      }
     }
     /**
      * @description: input是否为必选
@@ -114,17 +134,21 @@ function Component() {
      * @return {String | null}
      */
     get disabled() {
-      return this.getAttribute("disabled");
+      return this.hasAttribute("disabled");
     }
     /**
      * @description: 设置input的disabled属性
      * @param {String} value
      */
     set disabled(value) {
-      if (value === null || value === "false") {
+      if (falseList.includes(value)) {
         this.removeAttribute("disabled");
+        this._container.removeAttribute("disabled");
+        this._input.removeAttribute("disabled");
       } else {
         this.setAttribute("disabled", "");
+        this._container.setAttribute("disabled", '');
+        this._input.setAttribute("disabled", '');
       }
     }
     /**
@@ -213,6 +237,74 @@ function Component() {
      * @return {Boolean}
      */
     checkout = () => {};
+    /**
+     * @description: 监听placeholder属性函数
+     * @param {string} name
+     * @param {string} value
+     */
+    listenPlaceholder(name: string, value: string) {
+      if (name === "placeholder" && this._input) {
+        if (value !== null) {
+          this._input.setAttribute("placeholder", value);
+        } else {
+          this._input.removeAttribute("placeholder");
+        }
+      }
+    }
+    /**
+     * @description: 监听required属性函数
+     * @param {string} name
+     * @param {string} value
+     * @return {*}
+     */
+    listenRequired(name: string, value: string) {
+      if (name === "required" && this._input) {
+        if (value && value !== "false") {
+          this._input.setAttribute("required", "");
+        } else {
+          this._input.removeAttribute("required");
+        }
+      }
+    }
+    /**
+     * @description: 监听pattern属性函数
+     * @param {string} name
+     * @param {string} value
+     */
+    listenPattern(name: string, value: string) {
+      if (name === "pattern" && this._input) {
+        if (value && value !== "false") {
+          this._input.setAttribute("pattern", value);
+        } else {
+          this._input.removeAttribute("pattern");
+        }
+      }
+    }
+    /**
+     * @description: 监听lable属性函数
+     * @param {string} name
+     * @param {string} value
+     */
+    listenLabel(name: string, value: string) {
+      if (name === "label" && this._input) {
+        if (value !== null) {
+          if (this._label) {
+            this._label.innerHTML = value;
+          } else {
+            this._label = document.createElement("label");
+            this._label.innerHTML = value;
+            this._label.setAttribute("class", "input-label");
+            this._container.appendChild(this._label);
+          }
+        } else {
+          this._container.removeAttribute("label");
+          if (this._label) {
+            this._container.removeChild(this._label);
+            this._label = undefined;
+          }
+        }
+      }
+    }
     connectedCallback() {
       this._input.addEventListener("input", this.inputValue);
       this._input.addEventListener("change", this.change);
@@ -223,37 +315,10 @@ function Component() {
       this._input.removeEventListener("change", this.change);
     }
     attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-      if (name == "placeholder" && this._input) {
-        if (newValue !== null) {
-          this._input.setAttribute("placeholder", newValue);
-        } else {
-          this._input.removeAttribute("placeholder");
-        }
-      }
-      if (name == "required" && this._input) {
-        if (newValue && newValue !== "false") {
-          this._input.setAttribute("required", "");
-        } else {
-          this._input.removeAttribute("required");
-        }
-      }
-      if (name == "pattern" && this._input) {
-        if (newValue && newValue !== "false") {
-          this._input.setAttribute("pattern", newValue);
-        } else {
-          this._input.removeAttribute("pattern");
-        }
-      }
-      if (name == "label" && this._input) {
-        if (newValue) {
-          const label = document.createElement('label')
-          label.setAttribute('class','input-label')
-          label.innerHTML = newValue
-          this._input.appendChild(label)
-        } else {
-          this._input.removeAttribute("label");
-        }
-      }
+      this.listenPlaceholder(name, newValue);
+      this.listenRequired(name, newValue);
+      this.listenPattern(name, newValue);
+      this.listenLabel(name, newValue);
     }
   }
   window.customElements.define("r-input", CustomElement);

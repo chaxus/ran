@@ -44,12 +44,12 @@ export default defineConfig({
     extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json"],
   },
   css: {
-    preprocessorOptions: {
-      less: {
-        javascriptEnabled: true,
-        additionalData: `@import "client/assets/base.css";`
-      }
-    },
+    // preprocessorOptions: {
+      // less: {
+      //   javascriptEnabled: true,
+      //   additionalData: `@import "client/assets/base.css";`
+      // }
+    // },
     modules: {
       generateScopedName: "[name--[local]--[hash:base64:5]]",
     },
