@@ -3,9 +3,9 @@ import path, { resolve } from "path";
 import { fileURLToPath } from "url";
 import dts from 'vite-plugin-dts'
 
-const __filename = fileURLToPath(import.meta.url);
+// const __filename = fileURLToPath(import.meta.url);
 
-const __dirname = path.dirname(__filename);
+// const __dirname = path.dirname(__filename);
 
 export default defineConfig({
   build: {
@@ -22,6 +22,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": resolve(__dirname, "library"),
+      // "@": './library',
     },
     extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json"],
   },

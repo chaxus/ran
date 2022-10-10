@@ -2,6 +2,13 @@ import fs from '@/node/fs'
 
 type Error = NodeJS.ErrnoException | null
 
+/**
+ * @description: 根据文件路径创建文件，如果文件存在会清空再写入，如果不存在会创建
+ * @param {string} path 文件路径
+ * @param {string} content 文件内容
+ * @return {Promise}
+ */
+
 const writeFile = (path: string, content: string) => new Promise((resolve, reject) => {
     fs.writeFile(path, content, {
         mode: 438, // 可读可写666，转化为十进制就是438 
@@ -17,8 +24,5 @@ const writeFile = (path: string, content: string) => new Promise((resolve, rejec
     })
 
 })
-
-
-
 
 export default writeFile

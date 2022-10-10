@@ -4,8 +4,8 @@ const sidebar = {
     {
       text: "通用",
       children: [
-        { text: "Button 按钮", link: "/components/button/" },
-        { text: "Input 输入框", link: "/components/input/" },
+        { text: "通用函数", link: "/docs/functions/" },
+        { text: "文件系统函数", link: "/docs/file/" },
       ],
     },
     { text: "导航" },
@@ -16,7 +16,7 @@ const sidebar = {
   ],
 };
 const config = {
-  title: "RanUI",
+  title: "Ranuts",
   themeConfig: {
     sidebar,
   },
