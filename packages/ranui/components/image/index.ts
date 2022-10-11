@@ -1,32 +1,56 @@
-import failImage from '@/assets/image/failImage'
+import failImage from "@/assets/image/failImage";
 
-function Component() {
-    const template = document.createElement("template");
-    const container = document.createElement('div');
-    container.setAttribute('class', 'r-image');
-    template.appendChild(container)
-    class CustomElement extends HTMLElement {
-        _container: Element;
-        constructor() {
-            super();
-            this._container = container.cloneNode(true) as HTMLElement
-            const shadowRoot = this.attachShadow({ mode: "closed" });
-            shadowRoot.appendChild(this._container);
-        }
-        connectedCallback() {
-            const src = this.getAttribute('src') || ''
-            const image = new Image()
-            image.src = src
-            image.addEventListener('error', () => {
-                image.src = failImage
-            })
-            image.addEventListener('load', () => {
-                this._container.appendChild(image)
-            })
-        }
+class CustomElement extends HTMLElement {
+  static get observedAttributes() {
+    return ["fallback"];
+  }
+  _image: HTMLImageElement | undefined;
+  _container: Element;
+  constructor() {
+    super();
+    this._container = document.createElement("div");
+    this._container.setAttribute("class", "r-image");
+    const shadowRoot = this.attachShadow({ mode: "closed" });
+    shadowRoot.appendChild(this._container);
+  }
+  get fallback() {
+    return this.getAttribute("fallback");
+  }
+  set fallback(value) {
+    if (value) {
+      this.setAttribute("fallback", value);
+    } else {
+      this.removeAttribute("fallback");
     }
-    window.customElements.define('r-img', CustomElement)
+  }
+
+  listenFallback(name: string, value: string) {
+    if (name === "fallback" && this._image) {
+      if (value) {
+        this._image.setAttribute("fallback", value);
+      } else {
+        this._image.removeAttribute("fallback");
+      }
+    }
+  }
+
+  connectedCallback() {
+    const src = this.getAttribute("src") || "";
+    this._image = new Image();
+    this._image.src = src;
+    this._image.addEventListener("error", () => {
+      if (this._image && this.fallback) {
+        this._image.src = this.fallback;
+      }
+    });
+    this._image.addEventListener("load", () => {
+      if (this._image) {
+        this._container.appendChild(this._image);
+      }
+    });
+  }
+  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+    this.listenFallback(name, newValue);
+  }
 }
-export default Component()
-
-
+export default window.customElements.define("r-img", CustomElement);
