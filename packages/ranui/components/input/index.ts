@@ -1,5 +1,4 @@
-
-import { falseList } from '@/assets/utils'
+import { falseList } from "@/assets/utils";
 
 function Component() {
   const template = document.createElement("template");
@@ -27,14 +26,6 @@ function Component() {
       this._input = document.createElement("input");
       this._input.setAttribute("class", "input-main");
       this._container.appendChild(this._input);
-      // 如果一开始就设置了input的值，则初始化input的值
-      if (this.value) {
-        this._input.value = this.value;
-        this._container.setAttribute("value", this.value);
-      }
-      if(this.disabled){
-        this._container.setAttribute("disabled", '');
-      }
       shadowRoot.appendChild(this._container);
     }
     /**
@@ -147,8 +138,8 @@ function Component() {
         this._input.removeAttribute("disabled");
       } else {
         this.setAttribute("disabled", "");
-        this._container.setAttribute("disabled", '');
-        this._input.setAttribute("disabled", '');
+        this._container.setAttribute("disabled", "");
+        this._input.setAttribute("disabled", "");
       }
     }
     /**
@@ -306,6 +297,15 @@ function Component() {
       }
     }
     connectedCallback() {
+      // 如果一开始就设置了input的值，则初始化input的值
+      if (this.value) {
+        this._input.value = this.value;
+        this._container.setAttribute("value", this.value);
+      }
+      if (this.disabled) {
+        this._container.setAttribute("disabled", "");
+        this._input.setAttribute("disabled","")
+      }
       this._input.addEventListener("input", this.inputValue);
       this._input.addEventListener("change", this.change);
       this._input.addEventListener("focus", this.focus);
