@@ -5,7 +5,7 @@
   white-space: nowrap;
   text-align: center;
   background-image: none;
-  // border: 1px solid transparent;
+  border: 1px solid transparent;
   box-shadow: 0 2px #00000004;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
@@ -36,6 +36,9 @@
     background-color: #1890ff;
     color: #fff;
   }
+  &([type="primary"])::after {
+    background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+  }
   &([type="primary"]:hover) {
     background-color: #40a9ff;
     color: #fff;
@@ -45,6 +48,9 @@
     background-color: #ff4d4f;
     color: #fff;
   }
+  &([type="warning"])::after {
+    background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+  }
   &([type="warning"]:hover) {
     background-color: #ff7875;
     color: #fff;
@@ -53,7 +59,6 @@
     cursor: not-allowed;
     pointer-events: none;
     opacity: 0.6;
-    // pointer-events: all;
   }
   &(:active)::after {
     transform: translate(-50%, -50%) scale(0);
@@ -72,7 +77,7 @@
     left: var(--ran-x, 0);
     top: var(--ran-y, 0);
     pointer-events: none;
-    background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+    background-image: radial-gradient(circle, #1890ff 10%, transparent 10.01%);
     background-repeat: no-repeat;
     background-position: 50%;
     transform: translate(-50%, -50%) scale(10);
