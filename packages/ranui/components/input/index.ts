@@ -2,7 +2,15 @@ import { falseList } from "@/assets/utils";
 
 class CustomElement extends HTMLElement {
   static get observedAttributes() {
-    return ["label", "disabled", "name", "pattern", "required", "placeholder"];
+    return [
+      "label",
+      "disabled",
+      "name",
+      "pattern",
+      "required",
+      "placeholder",
+      "type",
+    ];
   }
   private _container: HTMLDivElement;
   private _label: HTMLLabelElement | undefined;
@@ -162,14 +170,36 @@ class CustomElement extends HTMLElement {
    * @return {String}
    */
   get icon() {
-    return this.getAttribute("icon") || "";
+    return this.getAttribute("icon");
   }
   /**
    * @description: 设置icon来表示标识
-   * @param {string} value
+   * @param {string|null} value
    */
-  set icon(value: string) {
-    this.setAttribute("icon", value);
+  set icon(value) {
+    if (value) {
+      this.setAttribute("icon", value);
+    } else {
+      this.removeAttribute("icon");
+    }
+  }
+  /**
+   * @description: 获取input的类型
+   * @return {string|null}
+   */
+  get type() {
+    return this.getAttribute("type");
+  }
+  /**
+   * @description: 设置input的类型
+   * @param {string|null} value
+   */
+  set type(value) {
+    if (value) {
+      this.setAttribute("type", value);
+    } else {
+      this.removeAttribute("type");
+    }
   }
 
   /**
@@ -261,7 +291,7 @@ class CustomElement extends HTMLElement {
     }
   }
   /**
-   * @description: 监听lable属性函数
+   * @description: 监听label属性函数
    * @param {string} name
    * @param {string} value
    */
@@ -285,6 +315,20 @@ class CustomElement extends HTMLElement {
       }
     }
   }
+  /**
+   * @description: 监听type属性
+   * @param {string} name
+   * @param {string} value
+   */
+  listenType(name: string, value: string) {
+    if (name === "type" && this._input) {
+      if (value) {
+        this._input.setAttribute("type", value);
+      } else {
+        this._input.removeAttribute("type");
+      }
+    }
+  }
   connectedCallback() {
     // 如果一开始就设置了input的值，则初始化input的值
     if (this.value) {
@@ -294,6 +338,9 @@ class CustomElement extends HTMLElement {
     if (this.disabled) {
       this._container.setAttribute("disabled", "");
       this._input.setAttribute("disabled", "");
+    }
+    if (this.type) {
+      this._input.setAttribute("type", this.type);
     }
     this._input.addEventListener("input", this.inputValue);
     this._input.addEventListener("change", this.change);
