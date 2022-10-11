@@ -53,4 +53,10 @@ class CustomElement extends HTMLElement {
   }
 }
 
-export default window.customElements.define("r-button", CustomElement);
+function Custom() {
+  if (!customElements.get("r-button")) {
+    customElements.define("r-button", CustomElement);
+  }
+}
+
+export default Custom()

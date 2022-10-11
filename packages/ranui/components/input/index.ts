@@ -358,4 +358,10 @@ class CustomElement extends HTMLElement {
   }
 }
 
-export default window.customElements.define("r-input", CustomElement);
+function Custom() {
+  if (!customElements.get("r-input")) {
+    customElements.define("r-input", CustomElement);
+  }
+}
+
+export default Custom()

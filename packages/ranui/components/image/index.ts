@@ -53,4 +53,10 @@ class CustomElement extends HTMLElement {
     this.listenFallback(name, newValue);
   }
 }
-export default window.customElements.define("r-img", CustomElement);
+function Custom() {
+  if (!customElements.get("r-img")) {
+    customElements.define("r-img", CustomElement);
+  }
+}
+
+export default Custom();
