@@ -27,7 +27,7 @@ function Component() {
         this.setAttribute('disabled', value);
       }
     }
-    mouseMove = (event: MouseEvent) => {
+    mousedown = (event: MouseEvent) => {
       if (!this.disabled) {
         const { left, top } = this.getBoundingClientRect();
         this.style.setProperty('--ran-x', (event.clientX - left) + 'px');
@@ -39,11 +39,11 @@ function Component() {
       this.style.removeProperty('--ran-y');
     }
     connectedCallback() {
-      this._btn.addEventListener('mousemove', this.mouseMove)
+      this._btn.addEventListener('mousedown', this.mousedown)
       this._btn.addEventListener('mouseleave', this.mouseLeave)
     }
     disconnectCallback(){
-      this._btn.removeEventListener('mousemove', this.mouseMove)
+      this._btn.removeEventListener('mousedown', this.mousedown)
       this._btn.removeEventListener('mouseleave', this.mouseLeave)
     }
     attributeChangedCallback(name: string, oldValue: string, newValue: string) {

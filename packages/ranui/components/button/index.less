@@ -14,8 +14,6 @@
   -ms-user-select: none;
   user-select: none;
   touch-action: manipulation;
-  // min-width: 86px;
-  // min-height: 30px;
   line-height: 22px;
   padding: 4px 15px;
   font-size: 14px;
@@ -56,11 +54,10 @@
     opacity: 0.6;
     // pointer-events: all;
   }
-  &(:active)::after,
-  &(:hover)::after {
-    transform: translate(-50%, -50%) scale(10);
-    opacity: 0;
-    // transition: 0s;
+  &(:active)::after {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0.3;
+    transition: 0s;
   }
   &::after {
     content: "";
@@ -74,8 +71,8 @@
     background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
     background-repeat: no-repeat;
     background-position: 50%;
-    transform: translate(-50%, -50%) scale(0);
-    opacity: 0.5;
-    transition: transform 0.5s, opacity 1s;
+    transform: translate(-50%, -50%) scale(10);
+    opacity: 0;
+    transition: transform 0.3s, opacity 0.8s;
   }
 }
