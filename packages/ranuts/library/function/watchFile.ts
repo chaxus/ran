@@ -21,3 +21,4 @@ const watchFile = (path: string, interval: number = 20) =>
   });
 
 export default watchFile;
+
