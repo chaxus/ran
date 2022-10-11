@@ -16,7 +16,7 @@ const sidebar = {
   ],
 };
 const config = {
-  title: "Ranuts",
+  title: "ranuts",
   themeConfig: {
     sidebar,
   },
