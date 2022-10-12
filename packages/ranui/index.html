@@ -1,30 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <script src="./index.ts" type="module"></script>
-</head>
+  </head>
 
-<body>
-    <!-- <h1>Hello RanUi</h1> -->
-    <div style="margin-bottom:20px;">
-        <div>按钮</div>
-        <r-button type="primary"><span slot="r-btn_content">主要按钮</span></r-button>
-        <r-button type="warning"><span slot="r-btn_content">警告按钮</span></r-button>
-        <r-button type="default"><span slot="r-btn_content">默认按钮</span></r-button>
-        <r-button type="default" disabled="true"><span slot="r-btn_content">disable按钮</span></r-button>
-        <div style="margin:20px">输入框</div>
-        <r-input label="user" disabled></r-input>
-        <div>图片</div>
-        <span>加载失败</span>
-        <r-img src=""></r-img>
-        <div>表单</div>
-        <!-- <iframe name="hidden" style="display:none;"></iframe> -->
-        <form id="form">
+  <body>
+    <!-- <h1>Hello RanUI</h1> -->
+    <div style="margin: 20px">
+      <!-- <div>按钮</div>
+        <r-button type="primary">主要按钮</r-button>
+        <r-button type="warning">警告按钮</r-button>
+        <r-button type="default">默认按钮</r-button>
+        <r-button type="default" disabled="true">disable按钮</r-button>
+        <div style="margin:20px">输入框</div> -->
+      <r-input label="user" type="password"></r-input>
+      <div>图片</div>
+      <span>加载失败</span>
+      <r-img fallback=""></r-img>
+      <div>表单</div>
+      <r-tabs>
+        <r-tab label="tab1">tab1</r-tab>
+        <r-tab label="tab2">tab2</r-tab>
+        <r-tab label="tab3">tab3</r-tab>
+      </r-tabs>
+      <!-- <iframe name="hidden" style="display:none;"></iframe> -->
+      <form id="form">
             <fieldset>
                 <legend>Choose your favorite monster</legend>
 
@@ -41,20 +45,22 @@
         </form>
     </div>
     <script>
-        const form = document.getElementById('form')
-        const onFinish = (e) => {
-            e.preventDefault()
-            const jsonData = {}
-            const formData = new FormData(form)
-            formData.forEach((value, key) => {
-                if (!jsonData[key]) {
-                    jsonData[key] = formData.getAll(key).length > 1 ? formData.getAll(key) : formData.get(key);
-                }
-            });
-            console.log('e---->', jsonData);
-        }
-        form.addEventListener('submit', onFinish)
+      const form = document.getElementById("form");
+      const onFinish = (e) => {
+        e.preventDefault();
+        const jsonData = {};
+        const formData = new FormData(form);
+        formData.forEach((value, key) => {
+          if (!jsonData[key]) {
+            jsonData[key] =
+              formData.getAll(key).length > 1
+                ? formData.getAll(key)
+                : formData.get(key);
+          }
+        });
+        console.log("e---->", jsonData);
+      };
+      form.addEventListener("submit", onFinish);
     </script>
-</body>
-
+  </body>
 </html>

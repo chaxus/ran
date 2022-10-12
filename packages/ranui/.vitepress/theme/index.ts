@@ -1,5 +1,5 @@
 import DefaultTheme from 'vitepress/theme'
-import 'ranui' // 打包
+import '../../index'
 
 export default {
   ...DefaultTheme,

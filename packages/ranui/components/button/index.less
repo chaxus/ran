@@ -14,15 +14,14 @@
   -ms-user-select: none;
   user-select: none;
   touch-action: manipulation;
-  // min-width: 86px;
-  // min-height: 30px;
   line-height: 22px;
-  padding: 4px 15px;
   font-size: 14px;
   border-radius: 2px;
   color: #000000d9;
   border-color: #d9d9d9;
   background: #fff;
+  overflow: hidden;
+  pointer-events: auto;
   &,
   &(:active),
   &(:focus) {
@@ -37,6 +36,9 @@
     background-color: #1890ff;
     color: #fff;
   }
+  &([type="primary"])::after {
+    background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+  }
   &([type="primary"]:hover) {
     background-color: #40a9ff;
     color: #fff;
@@ -46,6 +48,9 @@
     background-color: #ff4d4f;
     color: #fff;
   }
+  &([type="warning"])::after {
+    background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+  }
   &([type="warning"]:hover) {
     background-color: #ff7875;
     color: #fff;
@@ -54,13 +59,14 @@
     cursor: not-allowed;
     pointer-events: none;
     opacity: 0.6;
-    // pointer-events: all;
   }
-  &(:active)::after,
-  &(:hover)::after {
-    transform: translate(-50%, -50%) scale(10);
-    opacity: 0;
-    // transition: 0s;
+  &(:active)::after {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0.3;
+    transition: 0s;
+  }
+  &(:not([disabled]):active) .btn::before {
+    opacity: 0.2;
   }
   &::after {
     content: "";
@@ -71,11 +77,15 @@
     left: var(--ran-x, 0);
     top: var(--ran-y, 0);
     pointer-events: none;
-    background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+    background-image: radial-gradient(circle, #1890ff 10%, transparent 10.01%);
     background-repeat: no-repeat;
     background-position: 50%;
-    transform: translate(-50%, -50%) scale(0);
-    opacity: 0.5;
-    transition: transform 0.5s, opacity 1s;
+    transform: translate(-50%, -50%) scale(10);
+    opacity: 0;
+    transition: transform 0.3s, opacity 0.8s;
+  }
+  .slot {
+    display: block;
+    margin: 4px 15px;
   }
 }

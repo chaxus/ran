@@ -4,8 +4,9 @@ const sidebar = {
     {
       text: "通用",
       children: [
-        { text: "Button 按钮", link: "/components/button/" },
-        { text: "Input 输入框", link: "/components/input/" },
+        { text: "Button 按钮", link: "/docs/button/" },
+        { text: "Input 输入框", link: "/docs/input/" },
+        { text: "Image 图片", link: "/docs/image/" },
       ],
     },
     { text: "导航" },
