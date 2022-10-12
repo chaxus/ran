@@ -79,10 +79,12 @@ class Tabs extends HTMLElement {
     slots.forEach((item, index) => {
       const label = item.getAttribute("label") || '';
       const itemElement = document.createElement('r-button')
-      itemElement.setAttribute('class','tab-header_nav__item')
-      itemElement.setAttribute('type','text')
+      itemElement.setAttribute('class', 'tab-header_nav__item')
+      itemElement.setAttribute('type', 'text')
       itemElement.innerHTML = label
       this._nav.appendChild(itemElement)
+      const { width } =  itemElement.getBoundingClientRect()
+      this._line.style.setProperty("width", `${width}px`);
     });
   };
 
@@ -90,8 +92,8 @@ class Tabs extends HTMLElement {
     this._slot.addEventListener("slotchange", this.listenSlotChange);
   }
 
-  disconnectCallback() {}
-  attributeChangedCallback(name: string, oldValue: string, newValue: string) {}
+  disconnectCallback() { }
+  attributeChangedCallback(name: string, oldValue: string, newValue: string) { }
 }
 
 function CustomElement() {
