@@ -1,5 +1,8 @@
 .tab {
   &-header {
+    position: relative;
+    overflow: hidden;
+    scroll-behavior: smooth;
     &_nav {
       display: flex;
       flex-flow: row nowrap;
@@ -9,6 +12,13 @@
       }
     }
     &_line {
+      position: absolute;
+      width: 0;
+      margin-top: -2px;
+      height: 2px;
+      border-radius: 2px;
+      background: var(--themeColor, #1890ff);
+      transition: 0.2s;
     }
   }
   &-content {
