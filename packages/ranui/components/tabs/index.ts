@@ -1,6 +1,6 @@
 class Tabs extends HTMLElement {
   static get observedAttributes() {
-    return ["label", "key", "disabled", "icon"];
+    return ["active", 'forceRender'];
   }
   _container: HTMLDivElement;
   _header: HTMLDivElement;
@@ -73,18 +73,24 @@ class Tabs extends HTMLElement {
   set type(value) {
     this.setAttribute("type", value);
   }
-
+  onButtonClick = (e: Event, key: string, index: number, width: number) => {
+    if (key) this.setAttribute('active', key)
+    this._line.style.setProperty('transform', `translateX(${width * index}px)`)
+  }
   listenSlotChange = () => {
     const slots = this._slot.assignedElements();
     slots.forEach((item, index) => {
       const label = item.getAttribute("label") || '';
+      const key = item.getAttribute('key') || `${index}`
       const itemElement = document.createElement('r-button')
       itemElement.setAttribute('class', 'tab-header_nav__item')
       itemElement.setAttribute('type', 'text')
+      itemElement.setAttribute('key', key)
       itemElement.innerHTML = label
       this._nav.appendChild(itemElement)
-      const { width } =  itemElement.getBoundingClientRect()
+      const { width = 0 } = itemElement.getBoundingClientRect()
       this._line.style.setProperty("width", `${width}px`);
+      itemElement.addEventListener('click', (e) => this.onButtonClick(e, key, index, width))
     });
   };
 
