@@ -1,6 +1,6 @@
 class TabPane extends HTMLElement {
   static get observedAttributes() {
-    return ["active"];
+    return ["label", "key", "disabled", "icon"];
   }
   _div: HTMLElement;
   constructor() {
@@ -39,9 +39,13 @@ class TabPane extends HTMLElement {
       this.setAttribute("disabled", value);
     }
   }
-
-  connectedCallback() {}
-  disconnectCallback() {}
+  onClick(e: Event) {
+    console.log('e',e);
+  }
+  connectedCallback() {
+    this._div.addEventListener('click', this.onClick)
+  }
+  disconnectCallback() { }
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     if (oldValue !== newValue && newValue) {
       // const { emitLabel } = this.parentNode;
