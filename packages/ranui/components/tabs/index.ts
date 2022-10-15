@@ -9,6 +9,7 @@ class Tabs extends HTMLElement {
   _content: HTMLDivElement;
   _wrap: HTMLDivElement;
   _slot: HTMLSlotElement;
+  tabHeaderKeyMapIndex: Record<string, number>;
   constructor() {
     super();
     /**
@@ -43,11 +44,18 @@ class Tabs extends HTMLElement {
     this._header.appendChild(this._line);
     this._container.appendChild(this._header);
     this._container.appendChild(this._content);
+
+    this.tabHeaderKeyMapIndex = {}
+
     const shadowRoot = this.attachShadow({ mode: "closed" });
     shadowRoot.appendChild(this._container);
   }
   get align() {
     return this.getAttribute("align") || "start";
+  }
+
+  set align(value) {
+    this.setAttribute("align", value);
   }
 
   get type() {
@@ -56,10 +64,6 @@ class Tabs extends HTMLElement {
 
   get active() {
     return this.getAttribute("active");
-  }
-
-  set align(value) {
-    this.setAttribute("align", value);
   }
 
   set active(value) {
@@ -73,25 +77,70 @@ class Tabs extends HTMLElement {
   set type(value) {
     this.setAttribute("type", value);
   }
-  onButtonClick = (e: Event, key: string, index: number, width: number) => {
-    if (key) this.setAttribute('active', key)
-    this._line.style.setProperty('transform', `translateX(${width * index}px)`)
+  initTabHeaderKeyMapIndex = (key: string, index: number) => {
+    const value = this.tabHeaderKeyMapIndex[key]
+    if (value) {
+      throw new Error('tab 组件的 key 属性存在重复')
+    } else {
+      this.tabHeaderKeyMapIndex[key] = index
+    }
   }
+  /**
+   * @description: 根据传入的tabPane生成tabs的头部
+   * @param {Element} tabPane
+   * @param {number} index
+   * @return {Element}
+   */
+  createTabHeader(tabPane: Element, index: number) {
+    const label = tabPane.getAttribute("label") || '';
+    const key = tabPane.getAttribute('key') || `${index}`
+    this.initTabHeaderKeyMapIndex(key, index)
+    const tabHeader = document.createElement('r-button')
+    tabHeader.setAttribute('class', 'tab-header_nav__item')
+    tabHeader.setAttribute('type', 'text')
+    tabHeader.setAttribute('ran-key', key)
+    tabHeader.innerHTML = label
+    return tabHeader
+  }
+  /**
+   * @description: 根据点击设置tabLine的位置
+   * @param {Event} e
+   * @param {number} index
+   * @param {number} width
+   */
+  setTabLine = (e: Event, width: number) => {
+    const tabHeader = e.target as Element
+    const key = tabHeader.getAttribute('ran-key')
+    if (key) {
+      this.setAttribute('active', key)
+      const index = this.tabHeaderKeyMapIndex[key]
+      this._line.style.setProperty('transform', `translateX(${width * index}px)`)
+    }
+  }
+  /**
+   * @description: 初始化tabs的active属性
+   * @param {Element} slots
+   */
+  initActive = (slots: Element[]) => {
+    const key = slots[0].getAttribute('ran-key') || 0
+    if (this.active === null && key !== null) {
+      this.setAttribute('active', `${key}`)
+    }
+  }
+  /**
+   * @description: 监听slot组件的添加/删除/替换操作，进行tabs初始化
+   * @return {*}
+   */
   listenSlotChange = () => {
     const slots = this._slot.assignedElements();
     slots.forEach((item, index) => {
-      const label = item.getAttribute("label") || '';
-      const key = item.getAttribute('key') || `${index}`
-      const itemElement = document.createElement('r-button')
-      itemElement.setAttribute('class', 'tab-header_nav__item')
-      itemElement.setAttribute('type', 'text')
-      itemElement.setAttribute('key', key)
-      itemElement.innerHTML = label
-      this._nav.appendChild(itemElement)
-      const { width = 0 } = itemElement.getBoundingClientRect()
+      const tabPane = this.createTabHeader(item, index)
+      this._nav.appendChild(tabPane)
+      const { width = 0 } = tabPane.getBoundingClientRect()
       this._line.style.setProperty("width", `${width}px`);
-      itemElement.addEventListener('click', (e) => this.onButtonClick(e, key, index, width))
+      tabPane.addEventListener('click', (e) => this.setTabLine(e, width))
     });
+    this.initActive(slots)
   };
 
   connectedCallback() {
