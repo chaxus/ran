@@ -50,6 +50,7 @@ class Tabs extends HTMLElement {
     const shadowRoot = this.attachShadow({ mode: "closed" });
     shadowRoot.appendChild(this._container);
   }
+
   get align() {
     return this.getAttribute("align") || "start";
   }
@@ -77,10 +78,15 @@ class Tabs extends HTMLElement {
   set type(value) {
     this.setAttribute("type", value);
   }
+  /**
+   * @description: 构建tabPane组件key值和index的映射，同时判断一个tabs下的tabPane key值不能重复
+   * @param {string} key
+   * @param {number} index
+   */
   initTabHeaderKeyMapIndex = (key: string, index: number) => {
     const value = this.tabHeaderKeyMapIndex[key]
     if (value) {
-      throw new Error('tab 组件的 key 属性存在重复')
+      throw new Error('tab 组件的 key 值存在重复, 或者某个 tab 组件缺少 key 属性')
     } else {
       this.tabHeaderKeyMapIndex[key] = index
     }
@@ -102,6 +108,7 @@ class Tabs extends HTMLElement {
     tabHeader.innerHTML = label
     return tabHeader
   }
+
   /**
    * @description: 根据点击设置tabLine的位置
    * @param {Event} e
@@ -115,6 +122,14 @@ class Tabs extends HTMLElement {
       this.setAttribute('active', key)
       const index = this.tabHeaderKeyMapIndex[key]
       this._line.style.setProperty('transform', `translateX(${width * index}px)`)
+      this.setTabContent()
+    }
+  }
+  setTabContent = () => {
+    const key = this.active
+    if (key) {
+      const index = this.tabHeaderKeyMapIndex[key]
+      this._wrap.style.setProperty('transform', `translateX(${index * -100}%)`)
     }
   }
   /**
