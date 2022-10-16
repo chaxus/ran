@@ -1,3 +1,4 @@
+import { isDisabled } from '@/utils/index'
 class Tabs extends HTMLElement {
   static get observedAttributes() {
     return ["active", 'forceRender'];
@@ -79,6 +80,16 @@ class Tabs extends HTMLElement {
     this.setAttribute("type", value);
   }
   /**
+   * @description: 判断这个元素上是否有disabled属性
+   * @param {Element} element
+   * @return {*}
+   */  
+  isDisabled(element:Element) {
+    const disabled = element.getAttribute('disabled')
+    if (disabled && disabled !== 'false') return true
+    return false
+  }
+  /**
    * @description: 构建tabPane组件key值和index的映射，同时判断一个tabs下的tabPane key值不能重复
    * @param {string} key
    * @param {number} index
@@ -100,10 +111,12 @@ class Tabs extends HTMLElement {
   createTabHeader(tabPane: Element, index: number) {
     const label = tabPane.getAttribute("label") || '';
     const key = tabPane.getAttribute('key') || `${index}`
+    const type = tabPane.getAttribute('type') || 'text'
     this.initTabHeaderKeyMapIndex(key, index)
     const tabHeader = document.createElement('r-button')
     tabHeader.setAttribute('class', 'tab-header_nav__item')
-    tabHeader.setAttribute('type', 'text')
+    tabHeader.setAttribute('type', type)
+    this.isDisabled(tabPane) && tabHeader.setAttribute('disabled', '')
     tabHeader.setAttribute('ran-key', key)
     tabHeader.innerHTML = label
     return tabHeader
@@ -118,7 +131,8 @@ class Tabs extends HTMLElement {
   setTabLine = (e: Event, width: number) => {
     const tabHeader = e.target as Element
     const key = tabHeader.getAttribute('ran-key')
-    if (key) {
+    const disabled = tabHeader.hasAttribute('disabled')
+    if (!disabled && key) {
       this.setAttribute('active', key)
       const index = this.tabHeaderKeyMapIndex[key]
       this._line.style.setProperty('transform', `translateX(${width * index}px)`)
@@ -138,6 +152,9 @@ class Tabs extends HTMLElement {
    */
   initActive = (slots: Element[]) => {
     const key = slots[0].getAttribute('ran-key') || 0
+    slots.filter(item => {
+      const disabled = item.hasAttribute('disabled')
+    })
     if (this.active === null && key !== null) {
       this.setAttribute('active', `${key}`)
     }
