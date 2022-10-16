@@ -148,21 +148,18 @@ class Tabs extends HTMLElement {
       this.setTabContent(key)
     }
   }
-  initTabLineWidth = () => {
-
-  }
   /**
    * @description: 初始化tabs的active属性和tabLine,tabContent
    */
   initActive = () => {
     const tabHeaderList = [...this._nav.children]
-    const firstTabHeader = tabHeaderList.filter(item => !isDisabled(item)).shift()
-    if (!firstTabHeader) return
-    const index = tabHeaderList.findIndex(item => item === firstTabHeader)
-    const key = firstTabHeader?.getAttribute('ran-key') || `${index}`
+    const initTabHeader = tabHeaderList.filter(item => !isDisabled(item)).shift()
+    if (!initTabHeader) return
+    const index = tabHeaderList.findIndex(item => item === initTabHeader)
+    const key = initTabHeader?.getAttribute('ran-key') || `${index}`
     if (this.active === null && key !== null) {
       this.setAttribute('active', `${key}`)
-      const { width = 0 } = firstTabHeader.getBoundingClientRect()
+      const { width = 0 } = initTabHeader.getBoundingClientRect()
       this._line.style.setProperty("width", `${width}px`);
       this.setTabLine(key)
       this.setTabContent(key)
