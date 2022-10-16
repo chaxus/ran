@@ -4,7 +4,6 @@
   * @return {*}
   */
 export const isDisabled = (element: Element) => {
-    const disabled = element.getAttribute('disabled')
-    if (disabled && disabled !== 'false') return true
+    if (element.hasAttribute('disabled') && element.getAttribute('disabled') !== 'false') return true
     return false
 }

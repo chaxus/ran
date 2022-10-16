@@ -1,3 +1,5 @@
+import { isDisabled } from '@/utils/index'
+
 class CustomElement extends HTMLElement {
   static get observedAttributes() {
     return ["disabled", "type"];
@@ -13,9 +15,7 @@ class CustomElement extends HTMLElement {
     shadowRoot.appendChild(this._btn);
   }
   get disabled() {
-    const disabled = this.getAttribute('disabled')
-    if (disabled && disabled !== 'false') return true
-    return false
+    return isDisabled(this)
   }
   set disabled(value: boolean | string | undefined | null) {
     if (!value || value === "false") {
