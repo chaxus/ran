@@ -1,4 +1,4 @@
-import { falseList } from "@/assets/utils";
+import { isDisabled, falseList } from '@/utils/index'
 
 class CustomElement extends HTMLElement {
   static get observedAttributes() {
@@ -37,7 +37,7 @@ class CustomElement extends HTMLElement {
    * @param {String} value
    */
   set value(value) {
-    if (!this.disabled && value) {
+    if (!isDisabled(this) && value) {
       this.setAttribute("value", value);
       this._container.setAttribute("value", value);
     } else {
@@ -122,7 +122,7 @@ class CustomElement extends HTMLElement {
    * @return {String | null}
    */
   get disabled() {
-    return this.hasAttribute("disabled");
+    return isDisabled(this);
   }
   /**
    * @description: 设置input的disabled属性
@@ -335,7 +335,7 @@ class CustomElement extends HTMLElement {
       this._input.value = this.value;
       this._container.setAttribute("value", this.value);
     }
-    if (this.disabled) {
+    if (isDisabled(this)) {
       this._container.setAttribute("disabled", "");
       this._input.setAttribute("disabled", "");
     }

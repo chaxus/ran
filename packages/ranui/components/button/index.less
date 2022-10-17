@@ -27,7 +27,7 @@
   &(:focus) {
     outline: 0;
   }
-  &(:hover) {
+  &(:not([disabled]):hover) {
     border-color: #1890ff;
     color: #1890ff;
   }
@@ -36,10 +36,10 @@
     background-color: #1890ff;
     color: #fff;
   }
-  &([type="primary"])::after {
+  &([type="primary"]:not([disabled]))::after {
     background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
   }
-  &([type="primary"]:hover) {
+  &([type="primary"]:not([disabled]):hover) {
     background-color: #40a9ff;
     color: #fff;
   }
@@ -48,30 +48,31 @@
     background-color: #ff4d4f;
     color: #fff;
   }
-  &([type="warning"])::after {
+  &([type="warning"]:not([disabled]))::after {
     background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
   }
-  &([type="warning"]:hover) {
-    background-color: #ff7875;
+  &([type="warning"]:not([disabled]):hover) {
+    border-color: #ff4d4f;
+    background-color: #ff4d4f;
     color: #fff;
   }
   &([type="text"]) {
     border: none;
   }
-  &([disabled="true"]) {
+  &([disabled]) {
     cursor: not-allowed;
-    pointer-events: none;
+    pointer-events: all;
     opacity: 0.6;
   }
-  &(:active)::after {
+  &(:not([disabled]):active)::after {
     transform: translate(-50%, -50%) scale(0);
     opacity: 0.3;
     transition: 0s;
   }
-  &(:not([disabled]):active) .btn::before {
+  &(:active) .btn::before {
     opacity: 0.2;
   }
-  &::after {
+  &(:not([disabled]))::after {
     content: "";
     display: block;
     position: absolute;

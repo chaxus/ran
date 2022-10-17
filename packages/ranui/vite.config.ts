@@ -40,6 +40,7 @@ export default defineConfig({
     alias: {
       '@/components': resolve(__dirname, "components/"),
       '@/assets': resolve(__dirname, "assets/"),
+      '@/utils': resolve(__dirname, "utils/"),
     },
     extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json"],
   },

@@ -1,3 +1,5 @@
+import { isDisabled } from '@/utils/index'
+
 class CustomElement extends HTMLElement {
   static get observedAttributes() {
     return ["disabled", "type"];
@@ -13,18 +15,17 @@ class CustomElement extends HTMLElement {
     shadowRoot.appendChild(this._btn);
   }
   get disabled() {
-    const disable = this.getAttribute("disabled");
-    return disable;
+    return isDisabled(this)
   }
-  set disabled(value) {
+  set disabled(value: boolean | string | undefined | null) {
     if (!value || value === "false") {
       this.removeAttribute("disabled");
     } else {
-      this.setAttribute("disabled", value);
+      this.setAttribute("disabled", '');
     }
   }
   mousedown = (event: MouseEvent) => {
-    if (!this.disabled) {
+    if (!this.disabled || this.disabled === 'false') {
       const { left, top } = this.getBoundingClientRect();
       this.style.setProperty("--ran-x", event.clientX - left + "px");
       this.style.setProperty("--ran-y", event.clientY - top + "px");
@@ -44,10 +45,11 @@ class CustomElement extends HTMLElement {
   }
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     if (name == "disabled" && this._btn) {
-      if (newValue) {
-        this._btn.setAttribute("disabled", newValue);
+      if (!newValue || newValue === "false") {
+        this._btn.setAttribute("disabled", '');
       } else {
         this._btn.removeAttribute("disabled");
+
       }
     }
   }

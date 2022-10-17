@@ -1,3 +1,4 @@
+import { isDisabled } from '@/utils/index'
 class Tabs extends HTMLElement {
   static get observedAttributes() {
     return ["active", 'forceRender'];
@@ -70,6 +71,8 @@ class Tabs extends HTMLElement {
   set active(value) {
     if (value) {
       this.setAttribute("active", value);
+      this.setTabLine(value)
+      this.setTabContent(value)
     } else {
       this.removeAttribute("active");
     }
@@ -100,46 +103,66 @@ class Tabs extends HTMLElement {
   createTabHeader(tabPane: Element, index: number) {
     const label = tabPane.getAttribute("label") || '';
     const key = tabPane.getAttribute('key') || `${index}`
+    const type = tabPane.getAttribute('type') || 'text'
     this.initTabHeaderKeyMapIndex(key, index)
     const tabHeader = document.createElement('r-button')
     tabHeader.setAttribute('class', 'tab-header_nav__item')
-    tabHeader.setAttribute('type', 'text')
+    tabHeader.setAttribute('type', type)
+    isDisabled(tabPane) && tabHeader.setAttribute('disabled', '')
     tabHeader.setAttribute('ran-key', key)
     tabHeader.innerHTML = label
     return tabHeader
   }
-
   /**
-   * @description: 根据点击设置tabLine的位置
-   * @param {Event} e
-   * @param {number} index
-   * @param {number} width
+   * @description: 通过key值设置tabLine的位置
+   * @param {string} key
    */
-  setTabLine = (e: Event, width: number) => {
-    const tabHeader = e.target as Element
-    const key = tabHeader.getAttribute('ran-key')
+  setTabLine = (key: string) => {
     if (key) {
-      this.setAttribute('active', key)
       const index = this.tabHeaderKeyMapIndex[key]
-      this._line.style.setProperty('transform', `translateX(${width * index}px)`)
-      this.setTabContent()
+      this._line.style.setProperty('transform', `translateX(${100 * index}%)`)
     }
   }
-  setTabContent = () => {
-    const key = this.active
+  /**
+   * @description: 通过传入的key值设置tabContent
+   */
+  setTabContent = (key: string) => {
     if (key) {
       const index = this.tabHeaderKeyMapIndex[key]
       this._wrap.style.setProperty('transform', `translateX(${index * -100}%)`)
     }
   }
   /**
-   * @description: 初始化tabs的active属性
-   * @param {Element} slots
+   * @description: 根据点击设置tabLine的位置
+   * @param {Event} e
+   * @param {number} index
+   * @param {number} width
    */
-  initActive = (slots: Element[]) => {
-    const key = slots[0].getAttribute('ran-key') || 0
+  clickTabHead = (e: Event) => {
+    const tabHeader = e.target as Element
+    const key = tabHeader.getAttribute('ran-key')
+    const disabled = isDisabled(tabHeader)
+    if (!disabled && key) {
+      this.setAttribute('active', key)
+      this.setTabLine(key)
+      this.setTabContent(key)
+    }
+  }
+  /**
+   * @description: 初始化tabs的active属性和tabLine,tabContent
+   */
+  initActive = () => {
+    const tabHeaderList = [...this._nav.children]
+    const initTabHeader = tabHeaderList.filter(item => !isDisabled(item)).shift()
+    if (!initTabHeader) return
+    const index = tabHeaderList.findIndex(item => item === initTabHeader)
+    const key = initTabHeader?.getAttribute('ran-key') || `${index}`
     if (this.active === null && key !== null) {
       this.setAttribute('active', `${key}`)
+      const { width = 0 } = initTabHeader.getBoundingClientRect()
+      this._line.style.setProperty("width", `${width}px`);
+      this.setTabLine(key)
+      this.setTabContent(key)
     }
   }
   /**
@@ -151,19 +174,28 @@ class Tabs extends HTMLElement {
     slots.forEach((item, index) => {
       const tabPane = this.createTabHeader(item, index)
       this._nav.appendChild(tabPane)
-      const { width = 0 } = tabPane.getBoundingClientRect()
-      this._line.style.setProperty("width", `${width}px`);
-      tabPane.addEventListener('click', (e) => this.setTabLine(e, width))
+      tabPane.addEventListener('click', this.clickTabHead)
     });
-    this.initActive(slots)
+    this.initActive()
   };
 
   connectedCallback() {
     this._slot.addEventListener("slotchange", this.listenSlotChange);
   }
 
-  disconnectCallback() { }
-  attributeChangedCallback(name: string, oldValue: string, newValue: string) { }
+  disconnectCallback() {
+    this._slot.removeEventListener("slotchange", this.listenSlotChange);
+  }
+
+  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+    if (oldValue !== newValue) {
+      this.dispatchEvent(new CustomEvent('change', {
+        detail: {
+          active: this.active,
+        }
+      }));
+    }
+  }
 }
 
 function CustomElement() {
