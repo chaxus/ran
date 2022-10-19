@@ -28,9 +28,7 @@ function Component() {
             return this.getAttribute("value");
         }
         set value(value) {
-            if (value !== null) {
-                this.setAttribute("value", value);
-            }
+            if (value !== null) this.setAttribute("value", value);
         }
     }
     window.customElements.define('r-form', CustomElement)
