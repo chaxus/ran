@@ -7,10 +7,10 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "clean": "sh ./bin/clean.sh",
-    "dev:ranui":"pnpm -F ranui dev",
-    "dev:ranuts":"pnpm -F ranuts dev",
-    "build:ranuts":"pnpm -F ranuts build",
-    "build:ranui":"pnpm -F ranui build"
+    "dev:ranui": "pnpm -F ranui dev",
+    "dev:ranuts": "pnpm -F ranuts dev",
+    "build:ranuts": "pnpm -F ranuts build",
+    "build:ranui": "pnpm -F ranui build"
   },
   "keywords": [],
   "author": "",
@@ -19,7 +19,7 @@
     "@types/node": "^18.7.18",
     "terser": "^5.15.0",
     "typescript": "^4.8.3",
-    "vite": "^3.1.2"
+    "vite": "^3.1.8"
   },
   "dependencies": {
     "vite-plugin-dts": "^1.5.0"

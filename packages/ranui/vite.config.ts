@@ -14,7 +14,7 @@ export default defineConfig({
     minify: 'terser',
     sourcemap: true,
     lib: {
-      entry: resolve(__dirname, "entry.ts"),
+      entry: resolve(__dirname, "index.ts"),
       name: "ranui",
       fileName: "index",
       formats: ["es", "umd"],
