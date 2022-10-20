@@ -2,4 +2,3 @@ node_modules
 pnpm-lock.yaml
 dist
 .DS_Store
-packages/ranui/entry.ts

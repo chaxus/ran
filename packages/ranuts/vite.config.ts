@@ -11,6 +11,9 @@ export default defineConfig({
   build: {
     minify: 'terser',
     sourcemap: true, // 输出单独 source文件
+    rollupOptions: {
+      inlineDynamicImports: true,
+    },
     lib: {
       entry: "./index.ts",
       name: "ranuts",

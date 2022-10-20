@@ -1,10 +1,20 @@
 {
   "name": "ranui",
-  "version": "0.1.0",
-  "description": "",
+  "version": "0.1.1-alpha",
+  "description": "基于web components的组件库",
   "main": "dist/index.umd.cjs",
   "module": "dist/index.js",
   "type": "module",
+  "types": "./dist/index.d.ts",
+  "engines": {
+    "node": "^14.18.0 || >=16.0.0"
+  },
+  "homepage": "https://github.com/chaxus/ran/tree/main/packages/ranui/docs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chaxus/ran",
+    "directory": "packages/ranui"
+  },
   "scripts": {
     "dev": "vitepress dev",
     "start": "vite",

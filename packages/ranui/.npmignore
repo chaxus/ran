@@ -1,0 +1,13 @@
+.npmignore
+components
+assets
+docs
+node_modules
+plugins
+utils
+index.html
+index.ts
+tsconfig.json
+typings.d.ts
+vite.config.ts
+.vitepress
