@@ -40,10 +40,11 @@ const createIndex = async (options: Options, entry: string) => {
     }
 
 }
-
+// 当初始目录中没有index的时候，不会主动生成，需要至少增加一个空index.js
 export default function autoImportFilePlugin(options: Options): Plugin {
     return {
         name: 'vite-plugin-auto-import-file',
+        enforce: 'pre',
         async config(context) {
             const { entry = '' } = context.build?.lib || {};
             // const { alias = {} } = context.resolve || {}

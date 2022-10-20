@@ -7,6 +7,11 @@
     flex-shrink: 0;
     overflow: auto;
   }
+  &([type="line"]) {
+    .tab-header_line {
+      visibility: hidden;
+    }
+  }
   &-header {
     position: relative;
     overflow: hidden;
@@ -29,6 +34,7 @@
       transition: 0.2s;
     }
   }
+
   &-content {
     overflow: hidden;
     &_wrap {
