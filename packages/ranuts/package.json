@@ -1,10 +1,16 @@
 {
   "name": "ranuts",
-  "version": "0.1.0",
-  "description": "",
+  "version": "0.1.0-alpha",
+  "description": "常用函数",
   "main": "dist/index.umd.cjs",
   "module": "dist/index.js",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chaxus/ran",
+    "directory": "packages/ranuts"
+  },
+  "homepage": "https://github.com/chaxus/ran/tree/main/packages/ranuts/docs",
   "scripts": {
     "dev":"vitepress dev",
     "build": "vite build",
