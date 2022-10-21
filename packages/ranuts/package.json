@@ -1,6 +1,6 @@
 {
   "name": "ranuts",
-  "version": "0.1.0-alpha",
+  "version": "0.1.0-alpha.1",
   "description": "常用函数",
   "main": "dist/index.umd.cjs",
   "module": "dist/index.js",
