@@ -1,4 +1,4 @@
-import writeFile from '@/function/writeFile'
+import writeFile from '@/functions/writeFile'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import path from "path";
 import { fileURLToPath } from "url";
