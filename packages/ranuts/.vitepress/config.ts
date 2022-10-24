@@ -2,10 +2,11 @@ const sidebar = {
   "/": [
     { text: "快速开始", link: "/" },
     {
-      text: "通用",
+      text: "工具函数",
       children: [
         { text: "通用函数", link: "/docs/functions/" },
         { text: "文件系统函数", link: "/docs/file/" },
+        { text: "统计执行时间", link: "/docs/functions/task/" },
       ],
     },
     {
