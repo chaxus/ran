@@ -1,12 +1,9 @@
 
 
-const taskEnd = (symbol:symbol) => {
+const taskEnd = (symbol: symbol) => {
     const startTime = Symbol.keyFor(symbol)
-    if(startTime){
-        const endTime = performance.now()
-        return endTime - Number(startTime)
-    }
-    throw new Error('can not find task start')
+    if (startTime) return performance.now() - Number(startTime)
+    throw new Error('can not find taskId')
 }
 
 export default taskEnd
