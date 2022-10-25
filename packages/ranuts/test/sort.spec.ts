@@ -12,15 +12,15 @@ import { describe, expect, it } from 'vitest'
 
 const handing = (name: string, sort: Function, limit: number = 1) => {
     it(name, () => {
-        const task = startTask()
+        const taskId = startTask()
         for (let i = 0; i < limit; i++) {
             const exampleArray = randomArray()
             const result = sort(exampleArray)
             const rightResult = [...exampleArray].sort((a: number, b: number) => a - b)
             expect(result).toEqual(rightResult);
         }
-        const time = taskEnd(task)
-        console.log(name,time);
+        const time = taskEnd(taskId)
+        console.log(name, time);
     });
 }
 
