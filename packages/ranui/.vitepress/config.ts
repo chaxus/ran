@@ -17,7 +17,7 @@ const sidebar = {
   ],
 };
 const config = {
-  title: "RanUI",
+  title: "ranui",
   themeConfig: {
     sidebar,
   },
