@@ -5,6 +5,7 @@ import dts from 'vite-plugin-dts'
 import loadStyle from './plugins/load-style'
 import autoImportFile from './plugins/auto-import-file'
 
+
 // const __filename = fileURLToPath(import.meta.url);
 
 // const __dirname = path.dirname(__filename);
@@ -34,7 +35,7 @@ export default defineConfig({
       ],
       extensions: [".ts"],
       ignore: ['./components/form/index.ts']
-    })
+    }),
   ],
   resolve: {
     alias: {

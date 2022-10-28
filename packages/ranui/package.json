@@ -30,6 +30,6 @@
     "vitepress": "0.22.4"
   },
   "dependencies": {
-    "ranuts": "workspace:0.1.0-alpha"
+    "ranuts": "workspace:0.1.0-alpha.1"
   }
 }
