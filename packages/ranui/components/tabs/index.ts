@@ -224,6 +224,7 @@ class Tabs extends HTMLElement {
       tabPane.addEventListener("click", this.clickTabHead);
     });
     this.initActive();
+    // 如果存在align属性，进行设置tabLine的初始位置
     if (this.align) {
       if (this.align === "center") this.initTabLineAlignCenter();
       if (this.align === "end") this.initTabLineAlignEnd();
@@ -248,13 +249,10 @@ class Tabs extends HTMLElement {
         })
       );
     }
+    // 改变align属性，进行设置tabLine的初始位置
     if (name === "align") {
-      if (newValue === "center") {
-        this.initTabLineAlignCenter();
-      }
-      if (newValue === "end") {
-        this.initTabLineAlignEnd();
-      }
+      if (newValue === "center") this.initTabLineAlignCenter();
+      if (newValue === "end") this.initTabLineAlignEnd();
     }
   }
 }

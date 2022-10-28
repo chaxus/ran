@@ -22,7 +22,11 @@
       flex-flow: row nowrap;
       justify-content: flex-start;
       align-items: center;
+      &::-webkit-scrollbar {
+        display: none;
+      }
       &__item {
+        flex-shrink: 0;
       }
       .active {
         color: #1890ff;
