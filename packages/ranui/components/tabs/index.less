@@ -1,4 +1,5 @@
 .tab {
+  // 这个伪类选择器仅仅适用于 影子节点树 (Shadow Dom)。并且只会选择实际的元素节点，而不包括文本节点。
   ::slotted(r-tab) {
     box-sizing: border-box;
     width: 100%;
@@ -23,6 +24,9 @@
       align-items: center;
       &__item {
       }
+      .active {
+        color: #1890ff;
+      }
     }
     &_line {
       position: absolute;
@@ -42,6 +46,68 @@
       width: 100%;
       height: 100%;
       transition: 0.2s;
+    }
+  }
+}
+:host([type="line"]) {
+  .tab {
+    &-header {
+      &_nav {
+        &__item {
+          border: solid 1px transparent;
+        }
+        .active {
+          color: #1890ff;
+          border: solid 1px transparent;
+          border-color: var(--borderColor, rgba(0, 0, 0, 0.2))
+            var(--borderColor, rgba(0, 0, 0, 0.2)) transparent;
+          border-radius: var(--borderRadius, 0.25em) var(--borderRadius, 0.25em)
+            0 0;
+        }
+      }
+      &_line {
+        transition: none;
+        visibility: hidden;
+        &::after,
+        &::before {
+          content: "";
+          position: absolute;
+          visibility: visible;
+          width: 9999px;
+          height: 1px;
+          bottom: 0;
+          background: var(--borderColor, rgba(0, 0, 0, 0.2));
+        }
+        &::after {
+          left: 100%;
+        }
+        &::before {
+          right: 100%;
+        }
+      }
+    }
+  }
+}
+:host([align="center"]) {
+  .tab {
+    &-header {
+      &_nav {
+        justify-content: center;
+      }
+      &_line {
+        left: 50%;
+      }
+    }
+  }
+}
+:host([align="end"]) {
+  .tab {
+    &-header {
+      &_nav {
+        justify-content: flex-end;
+      }
+      &_line {
+      }
     }
   }
 }
