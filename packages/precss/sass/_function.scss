@@ -1,0 +1,10 @@
+@charset "UTF-8";
+
+@mixin background($url, $width, $height, $size: contain) {
+  background-image: $url;
+  background-size: $size;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: $width;
+  height: $height;
+}

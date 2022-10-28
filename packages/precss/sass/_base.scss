@@ -1,0 +1,119 @@
+@charset "UTF-8";
+
+/**
+ * @description: Icon呼吸左右放大效果
+ * @return {*}
+ */
+@keyframes breathIcon {
+  0% {
+    transform: scale(0.8);
+  }
+  25% {
+    transform: scale(1);
+    transform: skewX(0);
+  }
+  31% {
+    transform: skewX(13deg);
+  }
+  37% {
+    transform: skewX(0);
+  }
+  43% {
+    transform: skewX(-13deg);
+  }
+  49% {
+    transform: skewX(0);
+    transform: scale(1);
+  }
+  55% {
+    transform: scale(1.1);
+  }
+  65% {
+    transform: scale(1);
+  }
+  75% {
+    transform: scale(1.1);
+  }
+  85% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0.8);
+  }
+}
+
+@mixin animated-row {
+  animation-duration: 2s; /*动画时间*/
+  animation-fill-mode: both; /*播放后的状态*/
+  animation-iteration-count: infinite; /*动作循环的次数：infinite 无限循环*/
+  animation-name: row; /*动画的名称*/
+  transform-origin: center bottom; /*设置动画旋转元素的基点为：居中靠下*/
+}
+
+@keyframes row {
+  20% {
+    transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    transform: translate3d(0, 0, 0);
+  }
+  43% {
+    transition-timing-function: cubic-bezier(0.755, 0.5, 0.855, 0.06);
+    transform: translate3d(0, -3px, 0);
+  }
+  70% {
+    transition-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    transform: translate3d(0, -2px, 0);
+  }
+  90% {
+    transform: translate3d(0, -1px, 0);
+  }
+}
+// 白光动画
+@keyframes twinkle {
+  0% {
+    left: -10%;
+  }
+
+  50% {
+    left: -10%;
+  }
+
+  66.6% {
+    left: 100%;
+    transition: 1s ease;
+  }
+
+  67% {
+    left: -10%;
+  }
+
+  83.6% {
+    left: 100%;
+    transition: 1s ease;
+  }
+
+  83.7% {
+    left: -10%;
+  }
+
+  100% {
+    left: 100%;
+    transition: 1s ease;
+  }
+}
+// 白光动画
+&:after {
+  content: "";
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 10%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-45deg);
+  animation: twinkle 6s infinite;
+}
