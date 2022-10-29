@@ -4,6 +4,7 @@
         "preinstall",
         "ranui",
         "ranuts",
+        "skipsvgo",
         "slotchange",
         "vitepress"
     ]

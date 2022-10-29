@@ -4,6 +4,7 @@ import { fileURLToPath } from "url";
 import dts from 'vite-plugin-dts'
 import loadStyle from './plugins/load-style'
 import autoImportFile from './plugins/auto-import-file'
+import loadSvg from './plugins/load-svg'
 
 
 // const __filename = fileURLToPath(import.meta.url);
@@ -22,6 +23,7 @@ export default defineConfig({
     },
   },
   plugins: [
+    loadSvg({ svgo: false, defaultImport: 'raw' }),
     dts({
       tsConfigFilePath: './tsconfig.json'
     }),
@@ -47,10 +49,10 @@ export default defineConfig({
   },
   css: {
     // preprocessorOptions: {
-      // less: {
-      //   javascriptEnabled: true,
-      //   additionalData: `@import "client/assets/base.css";`
-      // }
+    // less: {
+    //   javascriptEnabled: true,
+    //   additionalData: `@import "client/assets/base.css";`
+    // }
     // },
     modules: {
       generateScopedName: "[name--[local]--[hash:base64:5]]",

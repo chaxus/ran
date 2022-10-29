@@ -4,6 +4,7 @@ import watchFile from "@/functions/watchFile";
 import EventEmitter from "@/model/EventEmitter";
 import queryFileInfo from "@/functions/fileInfo";
 import filterObj from "@/functions/filterObj";
+import str2Xml from '@/functions/str2Xml'
 
 export default {
     writeFile,
@@ -11,5 +12,6 @@ export default {
     watchFile,
     EventEmitter,
     queryFileInfo,
-    filterObj
+    filterObj,
+    str2Xml
 }
