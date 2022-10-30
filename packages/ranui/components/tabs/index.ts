@@ -182,6 +182,8 @@ class Tabs extends HTMLElement {
    */
   clickTabHead = (e: Event) => {
     const tabHeader = e.target as Element;
+    // 移动元素到可视区域内
+    tabHeader.scrollIntoView({ block: "center", inline: "center" })
     const key = tabHeader.getAttribute("ran-key");
     const disabled = isDisabled(tabHeader);
     if (!disabled && key) {

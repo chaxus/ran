@@ -7,6 +7,7 @@ const sidebar = {
         { text: "Button 按钮", link: "/docs/button/" },
         { text: "Input 输入框", link: "/docs/input/" },
         { text: "Image 图片", link: "/docs/image/" },
+        { text: "Icon 图标", link: "/docs/icon/" },
       ],
     },
     { text: "导航" },
@@ -18,6 +19,10 @@ const sidebar = {
 };
 const config = {
   title: "ranui",
+  description:'基于web component的组件库',
+  markdown: {
+    lineNumbers: true
+  },
   themeConfig: {
     sidebar,
   },
