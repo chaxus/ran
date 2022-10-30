@@ -5,6 +5,7 @@ class CustomElement extends HTMLElement {
     return ["disabled", "type", "icon"];
   }
   _btn: HTMLDivElement;
+  _iconElement?: HTMLElement;
   _slot: HTMLSlotElement;
   constructor() {
     super();
@@ -43,14 +44,21 @@ class CustomElement extends HTMLElement {
       // 获取button的尺寸
       const { width, height } = this._slot.getBoundingClientRect()
       const size = Math.min(width, height)
-      // 创建icon，设置name,size,color
-      const iconElement = document.createElement('r-icon')
-      iconElement.setAttribute('name', this.icon)
-      iconElement.setAttribute('size', `${size - 5}`)
-      iconElement.setAttribute('color', 'currentColor')
-      iconElement.setAttribute('class', 'icon')
-      // 添加到btn元素的首位
-      this._slot.insertAdjacentElement('beforebegin', iconElement)
+      if (this._iconElement) {
+        // 如果有_iconElement，只用设置name和size
+        this._iconElement.setAttribute('name', this.icon)
+        this._iconElement.setAttribute('size', `${size - 5}`)
+      } else {
+        // 创建icon，设置name,size,color
+        this._iconElement = document.createElement('r-icon')
+        this._iconElement.setAttribute('name', this.icon)
+        this._iconElement.setAttribute('size', `${size - 5}`)
+        this._iconElement.setAttribute('color', 'currentColor')
+        this._iconElement.setAttribute('class', 'icon')
+        // 添加到btn元素的首位
+        this._slot.insertAdjacentElement('beforebegin', this._iconElement)
+      }
+
     }
   }
   mousedown = (event: MouseEvent) => {

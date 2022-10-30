@@ -64,11 +64,28 @@
  <r-icon name="lock" size="50" color="#3F51B5" ></r-icon>
 ```
 
+
+### 旋转`spin`
+
+设置spin开启旋转，传入数字控制旋转的速度，数字越小旋转越快
+
+<div style='display:flex'>
+ <r-icon name="loading" size="50" color="#1E90FF" spin='0.7'></r-icon>
+ <r-icon name="loading" size="50" color="#1E90FF" spin></r-icon>
+ <r-icon name="loading" size="50" color="#1E90FF" spin='5'></r-icon>
+</div>
+
+```html
+ <r-icon name="loading" size="50" color="#1E90FF" spin='0.7'></r-icon>
+ <r-icon name="loading" size="50" color="#1E90FF" spin></r-icon>
+ <r-icon name="loading" size="50" color="#1E90FF" spin='5'></r-icon>
+```
+
 ## 图标列表
 
 <div style="display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     flex-flow: row wrap;">
     <div style="display: flex;
         align-items: center;
@@ -133,5 +150,13 @@
         flex-flow: column nowrap;">
         <r-icon name="user" size="50" ></r-icon>
         <span>user</span>
+    </div>
+     <div style="display: flex;
+        align-items: center;
+        margin: 15px;
+        justify-content: center;
+        flex-flow: column nowrap;">
+        <r-icon name="loading" size="50" ></r-icon>
+        <span>loading</span>
     </div>
 </div>
