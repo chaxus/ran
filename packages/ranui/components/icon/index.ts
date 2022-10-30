@@ -76,10 +76,11 @@ function Component() {
 
         }
         attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-            if (name === "name") this.loadSvg()
-            if (name === "size") this.setSize()
-            if (name === "color") this.setColor()
-
+            if (newValue !== oldValue) {
+                if (name === "name") this.loadSvg()
+                if (name === "size") this.setSize()
+                if (name === "color") this.setColor()
+            }
         }
     }
     window.customElements.define('r-icon', CustomElement)
