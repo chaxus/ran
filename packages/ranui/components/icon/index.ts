@@ -3,7 +3,7 @@ const { str2Xml } = ranuts;
 
 function Component() {
     class CustomElement extends HTMLElement {
-        static get observedAttributes() { return ['disabled'] }
+        static get observedAttributes() { return ['name', 'size', 'color', 'spin'] }
         _svg?: HTMLElement;
         _div: HTMLElement;
         constructor() {
@@ -31,6 +31,12 @@ function Component() {
         set color(value) {
             if (value) this.setAttribute("color", value);
         }
+        get spin() {
+            return this.getAttribute("spin");
+        }
+        set spin(value) {
+            if (value !== null) this.setAttribute("spin", value);
+        }
         /**
          * @description: 根据name属性加载对应的svg
          */
@@ -41,6 +47,7 @@ function Component() {
                     const result = await import(`../../assets/icons/${this.name}.svg`)
                     if (result && result.default && result.default.status) {
                         const { data } = result.default
+                        this._svg && this._div.removeChild(this._svg)
                         this._svg = str2Xml(data, 'image/svg+xml')
                         if (this._svg) {
                             this._div.appendChild(this._svg)
@@ -71,15 +78,25 @@ function Component() {
                 this._svg.setAttribute('fill', this.color)
             }
         }
+        /**
+         * @description: 设置是否旋转和旋转的速度
+         */        
+        setSpin = () => {
+            if(this.spin){
+                this.style.setProperty("animation-duration", `${this.spin}s`);
+            }
+        }
         connectedCallback() {
             this.loadSvg()
 
         }
         attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-            if (name === "name") this.loadSvg()
-            if (name === "size") this.setSize()
-            if (name === "color") this.setColor()
-
+            if (newValue !== oldValue) {
+                if (name === "name") this.loadSvg()
+                if (name === "size") this.setSize()
+                if (name === "color") this.setColor()
+                if (name === "spin") this.setSpin()
+            }
         }
     }
     window.customElements.define('r-icon', CustomElement)
