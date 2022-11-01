@@ -18,10 +18,10 @@
   "devDependencies": {
     "@types/node": "^18.7.18",
     "terser": "^5.15.0",
-    "typescript": "^4.8.3",
-    "vite": "^3.1.8"
+    "typescript": "^4.8.3"
   },
   "dependencies": {
-    "vite-plugin-dts": "^1.5.0"
+    "vite": "^3.2.1",
+    "vite-plugin-dts": "1.5.0"
   }
 }

@@ -24,9 +24,7 @@ export default defineConfig({
   },
   plugins: [
     loadSvg({ svgo: false, defaultImport: 'raw' }),
-    dts({
-      tsConfigFilePath: './tsconfig.json'
-    }),
+    dts(),
     loadStyle({
       ignore: ['ranui/components/modal/index.ts']
     }),
