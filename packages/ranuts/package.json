@@ -13,7 +13,7 @@
   "homepage": "https://github.com/chaxus/ran/tree/main/packages/ranuts/docs",
   "scripts": {
     "dev": "vitepress dev",
-    "build": "vite build",
+    "build": "tsc --noEmit && vite build",
     "build:docs": "vitepress build",
     "serve": "vitepress serve",
     "test": "vitest"

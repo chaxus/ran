@@ -1,7 +1,10 @@
+import * as fs from "node:fs";
 
-let fs = { status: false, message: 'require is not defined' }
-if (typeof require !== 'undefined') {
-    fs = require('fs')
+let fileSystem: any;
+if (typeof require !== "undefined") {
+  fileSystem = require("fs");
+} else {
+  fileSystem = { status: false, message: "require is not defined" };
 }
 
-export default fs
+export default fileSystem;
