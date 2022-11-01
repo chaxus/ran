@@ -113,6 +113,8 @@ function Modal() {
       return ['visible'];
     }
   }
-  window.customElements.define('xu-modal', Modal);
+  if (!customElements.get("r-modal")) {
+    customElements.define("r-modal", Modal);
+  }
 }
 export default Modal()
