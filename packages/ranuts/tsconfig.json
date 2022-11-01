@@ -1,4 +1,6 @@
 {
+  "include": ["library"],
+  "exclude": ["node_modules"],
   "compilerOptions": {
     "module": "ESNext",
     "esModuleInterop": true,
@@ -22,6 +24,4 @@
       "esm": true,
       "experimentalSpecifierResolution":"node",
   },
-  "include": ["library"],
-  "exclude": ["node_modules"]
 }
