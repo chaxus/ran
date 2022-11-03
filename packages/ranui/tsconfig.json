@@ -1,6 +1,7 @@
 {
+  "include": ["components", "plugins", "utils", "assets"],
+  "exclude": ["node_modules/**"],
   "compilerOptions": {
-    "jsx": "react",
     "module": "ESNext",
     "esModuleInterop": true,
     "target": "ESNext",
@@ -13,19 +14,17 @@
     "noImplicitAny": true,
     "useUnknownInCatchVariables": false,
     "inlineSourceMap": true,
-    "baseUrl": ".",    
-    "experimentalDecorators":true,   
+    "baseUrl": ".",
+    "experimentalDecorators": true,
     "paths": {
       "@/assets/*": ["assets/*"],
       "@/components/*": ["components/*"],
       "@/plugins/*": ["plugins/*"],
-      "@/utils/*": ["utils/*"],
-    },              
+      "@/utils/*": ["utils/*"]
+    }
   },
   "ts-node": {
-      "esm": true,
-      "experimentalSpecifierResolution":"node",
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
   },
-  "include": ["**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
 }

@@ -1,4 +1,6 @@
 {
+  "include": ["library"],
+  "exclude": ["node_modules"],
   "compilerOptions": {
     "module": "ESNext",
     "esModuleInterop": true,
@@ -15,13 +17,11 @@
     "baseUrl": ".",    
     "experimentalDecorators":true,   
     "paths": {
-      "@/library/*": ["library/*"],
+      "@/*": ["library/*"],
     },              
   },
   "ts-node": {
       "esm": true,
       "experimentalSpecifierResolution":"node",
   },
-  "include": ["**/*.ts", "**/*.tsx", "__mocks__/fs.js"],
-  "exclude": ["node_modules"]
 }

@@ -1,7 +1,12 @@
 import fs from '@/node/fs'
-import readFile from '@/function/readFile'
+import readFile from '@/functions/readFile'
 
 type Error = NodeJS.ErrnoException | null
+
+interface Status {
+    status: boolean;
+    message: string;
+  }
 
 /**
  * @description: 给一个已经存在的文件追加内容
@@ -13,8 +18,8 @@ type Error = NodeJS.ErrnoException | null
 const appendFile = (path: string, content: string) =>
     new Promise((resolve, reject) => {
         fs.appendFile(path, content, (err: Error) => {
-            err ? reject({ status: false, data: err }) : readFile(path).then((content: string) => {
-                resolve({ status: true, data: { path, content } })
+            err ? reject({ status: false, data: err }) : readFile(path).then((result) => {
+                resolve(result)
             })
         });
     });
