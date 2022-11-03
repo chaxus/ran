@@ -1,7 +1,8 @@
 import { Plugin } from 'vite';
 import fs from "fs";
+import { resolve } from 'path';
 import ranuts from 'ranuts';
-const { writeFile, readFile, queryFileInfo } = ranuts;
+const { writeFile, readFile, queryFileInfo, readDir } = ranuts;
 
 interface Options {
     ignore?: Array<string>,
@@ -9,6 +10,19 @@ interface Options {
     extensions: Array<string>,
     defaultImport?: string
 }
+/**
+ * @description: 用于生成assets/icon目录下的文件名列表
+ */
+const loadIcons = async () => {
+    const dirPath = resolve(__dirname, '../assets/icons')
+    const fileNameList = await readDir({ dirPath }) || []
+    const result = fileNameList.filter((item: string) => item[0] !== '.').map((item: string) => {
+      const [name, _] = item.split('.')
+      return name
+    })
+    console.log('fileNameList---->', result);
+    return fileNameList
+  }
 
 const createIndex = async (options: Options, entry: string) => {
     let content = ''
@@ -46,29 +60,13 @@ const createIndex = async (options: Options, entry: string) => {
 export default function autoImportFilePlugin(options: Options): Plugin {
     const autoImportRegex = /\|importFile(\?(raw|skipsvgo|dir))?$/
     return {
-        name: 'vite-plugin-auto-import-file',
-        // enforce: 'pre',
-        // async resolveId(id:any) {
-        //     const { defaultImport } = options
-        //     if (!id.match(autoImportRegex)) return
-        //     const [path, query] = id.split('?', 2)
-        //     const [indeedPath, flag] = path.split('|', 2)
-        //     const importType = query || defaultImport
-        //     console.log('id--->', id, path, query, indeedPath, flag);
-
-        //     if (importType === 'url') return indeedPath
-        //     if (importType === 'dir') {
-        //         const fileList = fs.readdirSync(indeedPath);
-        //         console.log('fileList--->', fileList);
-        //         return fileList
-        //     }
-        //     return indeedPath
-        // },
+        name: 'vite-plugin-auto-import-file',        
         async config(context:any) {
             const { entry = '' } = context.build?.lib || {};
             // const { alias = {} } = context.resolve || {}
             // console.log('alias--->',alias);
             // const aliasList = Object.keys(alias)
+            // loadIcons()
             if (entry) await createIndex(options, entry)
         },
         async handleHotUpdate(context:any) {
