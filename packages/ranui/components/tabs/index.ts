@@ -108,7 +108,7 @@ class Tabs extends HTMLElement {
    */
   createTabHeader(tabPane: Element, index: number) {
     const label = tabPane.getAttribute("label") || "";
-    const key = tabPane.getAttribute("key") || `${index}`;
+    const key = tabPane.getAttribute("ranKey") || `${index}`;
     const type = tabPane.getAttribute("type") || "text";
     this.initTabHeaderKeyMapIndex(key, index);
     const tabHeader = document.createElement("r-button");
@@ -183,7 +183,7 @@ class Tabs extends HTMLElement {
   clickTabHead = (e: Event) => {
     const tabHeader = e.target as Element;
     // 移动元素到可视区域内
-    tabHeader.scrollIntoView({ block: "center", inline: "center" })
+    tabHeader.scrollIntoView({ block: "center", inline: "center" });
     const key = tabHeader.getAttribute("ran-key");
     const disabled = isDisabled(tabHeader);
     if (!disabled && key) {
@@ -199,19 +199,27 @@ class Tabs extends HTMLElement {
    */
   initActive = () => {
     const tabHeaderList = [...this._nav.children];
-    const initTabHeader = tabHeaderList
-      .filter((item) => !isDisabled(item))
-      .shift();
+    const initTabList = tabHeaderList.filter((item) => !isDisabled(item));
+    let initTabHeader: Element | undefined;
+    // 如果有active，找到active对应的标签，设置活跃标签
+    if (this.active !== null) {
+      initTabHeader = initTabList.find((item,index)=>((item.getAttribute("ran-key") || `${index}`) === this.active));
+    }
+    // 如果没有active，则默认第一个标签为活跃标签
+    if(!initTabHeader){
+      initTabHeader = initTabList.shift();
+    }
+    // 如果都没有，则返回
     if (!initTabHeader) return;
     const index = tabHeaderList.findIndex((item) => item === initTabHeader);
     const key = initTabHeader?.getAttribute("ran-key") || `${index}`;
-    if (this.active === null && key !== null) {
-      this.setAttribute("active", `${key}`);
-      setElementClass(initTabHeader, "active");
-      const { width = 0 } = initTabHeader.getBoundingClientRect();
-      this._line.style.setProperty("width", `${width}px`);
-      this.setTabLine(key);
-      this.setTabContent(key);
+    if (key !== null) {
+        this.setAttribute("active", `${key}`);
+        setElementClass(initTabHeader, "active");
+        const { width = 0 } = initTabHeader.getBoundingClientRect();
+        this._line.style.setProperty("width", `${width}px`);
+        this.setTabLine(key);
+        this.setTabContent(key);
     }
   };
   /**
@@ -232,13 +240,25 @@ class Tabs extends HTMLElement {
       if (this.align === "end") this.initTabLineAlignEnd();
     }
   };
+  /**
+   * @description: 初始化tab
+   */  
+  initTab = () => {
+    this._slot.addEventListener("slotchange", this.listenSlotChange);
+  }
+  /**
+   * @description: 卸载tab
+   */  
+  unloadTab = () => {
+    this._slot.removeEventListener("slotchange", this.listenSlotChange);
+  }
 
   connectedCallback() {
-    this._slot.addEventListener("slotchange", this.listenSlotChange);
+    this.initTab()
   }
 
   disconnectCallback() {
-    this._slot.removeEventListener("slotchange", this.listenSlotChange);
+    this.unloadTab()
   }
 
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
