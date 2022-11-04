@@ -58,7 +58,6 @@ class TabPane extends HTMLElement {
         // TODO 设置disabled或者key之后，会影响父组件
         // console.log('this.parentNode-->', this.parentElement,this.parentNode);
       }
-    // }
   }
 }
 

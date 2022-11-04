@@ -20,7 +20,6 @@
     <r-button type="default" icon="user">默认按钮</r-button>
     <r-button type="primary" disabled>disable按钮</r-button>
     <div style="margin:20px">输入框</div>
-    <r-input label="user" type="password"></r-input>
     <div>图片</div>
     <!-- <r-button type="text" disabled>默认按钮</r-button> -->
     <span>加载失败</span>
@@ -51,10 +50,23 @@
         <button type="submit">提交按钮</button>
       </fieldset>
     </form>
-    <div>图标</div>
-    <r-icon name="lock" size="100" color="#1E90FF" spin></r-icon>
+    <!-- <div>图标</div> -->
+    <!-- <r-icon name="lock" size="100" color="#1E90FF" spin></r-icon> -->
+  </div>
+  <div id="input">
+    <r-input label="user" type="password"></r-input>
   </div>
   <script>
+    const input = document.getElementById('input')
+    const rinput = document.createElement('r-input')
+    rinput.setAttribute('label','home')
+    const func = () => {
+      console.log('fsdafdsafds');
+    }
+    rinput.setAttribute('pattern',func)
+    console.log('rinput',rinput);
+    input.appendChild(rinput)
+
     const form = document.getElementById("form");
     const onFinish = (e) => {
       e.preventDefault();
