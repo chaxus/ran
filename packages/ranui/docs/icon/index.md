@@ -82,80 +82,41 @@
 ```
 
 ## 图标列表
+
 <div style="display: flex;
     align-items: center;
     justify-content: flex-start;
-    flex-flow: row wrap;">
-    <div style="display: flex;
-        align-items: center;
-        margin: 15px;
-        justify-content: center;
-        flex-flow: column nowrap;">
-        <r-icon name="lock" size="50" ></r-icon>
-        <span>lock</span>
-    </div>
-     <div style="display: flex;
-        align-items: center;
-        margin: 15px;
-        justify-content: center;
-        flex-flow: column nowrap;">
-        <r-icon name="unlock" size="50" ></r-icon>
-        <span>unlock</span>
-    </div>
-    <div style="display: flex;
-        align-items: center;
-        margin: 15px;
-        justify-content: center;
-        flex-flow: column nowrap;">
-        <r-icon name="eye" size="50" ></r-icon>
-        <span>eye</span>
-    </div>
-     <div style="display: flex;
-        align-items: center;
-        margin: 15px;
-        justify-content: center;
-        flex-flow: column nowrap;">
-        <r-icon name="eye-close" size="50" ></r-icon>
-        <span>eye-close</span>
-    </div>
-    <div style="display: flex;
-        align-items: center;
-        margin: 15px;
-        justify-content: center;
-        flex-flow: column nowrap;">
-        <r-icon name="check-circle" size="50" ></r-icon>
-        <span>check-circle</span>
-    </div>
-    <div style="display: flex;
-        align-items: center;
-        margin: 15px;
-        justify-content: center;
-        flex-flow: column nowrap;">
-        <r-icon name="close-circle" size="50" ></r-icon>
-        <span>close-circle</span>
-    </div>
-    <div style="display: flex;
-        align-items: center;
-        margin: 15px;
-        justify-content: center;
-        flex-flow: column nowrap;">
-        <r-icon name="info-circle" size="50" ></r-icon>
-        <span>info-circle</span>
-    </div>
-     <div style="display: flex;
-        align-items: center;
-        margin: 15px;
-        justify-content: center;
-        flex-flow: column nowrap;">
-        <r-icon name="user" size="50" ></r-icon>
-        <span>user</span>
-    </div>
-     <div style="display: flex;
-        align-items: center;
-        margin: 15px;
-        justify-content: center;
-        flex-flow: column nowrap;">
-        <r-icon name="loading" size="50" ></r-icon>
-        <span>loading</span>
-    </div>
-</div>
+    flex-flow: row wrap;" id="icon-list"></div>
+
+<script>
+const createIconList = () => {
+  setTimeout(() => {
+    const list = ['add-user', 'book',
+    'check-circle', 'close-circle',
+    'eye-close', 'eye',
+    'info-circle', 'loading',
+    'lock', 'message',
+    'power-off', 'setting',
+    'team', 'unlock',
+    'user']
+    const dom = document.getElementById('icon-list')
+    list.forEach(item => {
+      const container = document.createElement('div')
+      container.style.setProperty('display', 'flex')
+      container.style.setProperty('align-items', 'center')
+      container.style.setProperty('margin', '15px')
+      container.style.setProperty('justify-content', 'center')
+      container.style.setProperty('flex-flow', 'column nowrap')
+      const icon = document.createElement('r-icon')
+      icon.setAttribute('name', item)
+      icon.setAttribute('size', "50")
+      container.appendChild(icon)
+      const span = document.createElement('span')
+      span.innerHTML = item
+      container.appendChild(span)
+      dom?.appendChild(container)
+    })
+  }, 0)
+}
+createIconList()
+</script>

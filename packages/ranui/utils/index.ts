@@ -1,3 +1,7 @@
+import ranuts from "ranuts";
+const { readDir } = ranuts
+// import { resolve } from "path";
+
 export const falseList = [false, "false", null, undefined];
 /**
  * @description: 判断这个元素上是否有disabled属性
@@ -35,3 +39,38 @@ export const deleteElementChildClass = (
     pre.forEach((item) => item.classList.remove(deleteClass));
   }
 };
+
+/**
+ * @description: 创建icon的文档示例
+ */
+export const createIconList = () => {
+  setTimeout(() => {
+    const list = ['add-user', 'book',
+    'check-circle', 'close-circle',
+    'eye-close', 'eye',
+    'info-circle', 'loading',
+    'lock', 'message',
+    'power-off', 'setting',
+    'team', 'unlock',
+    'user']
+    const dom = document.getElementById('icon-list')
+    list.forEach(item => {
+      const container = document.createElement('div')
+      container.style.setProperty('display', 'flex')
+      container.style.setProperty('align-items', 'center')
+      container.style.setProperty('margin', '15px')
+      container.style.setProperty('justify-content', 'center')
+      container.style.setProperty('flex-flow', 'column nowrap')
+      const icon = document.createElement('r-icon')
+      icon.setAttribute('name', item)
+      icon.setAttribute('size', "50")
+      container.appendChild(icon)
+      const span = document.createElement('span')
+      span.innerHTML = item
+      container.appendChild(span)
+      console.log(container, dom)
+      dom?.appendChild(container)
+    })
+  }, 0)
+}
+

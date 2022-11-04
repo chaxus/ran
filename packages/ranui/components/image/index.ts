@@ -14,7 +14,7 @@ class CustomElement extends HTMLElement {
     shadowRoot.appendChild(this._container);
   }
   get fallback() {
-    return this.getAttribute("fallback");
+    return this.getAttribute("fallback") || failImage;
   }
   set fallback(value) {
     if (value) {

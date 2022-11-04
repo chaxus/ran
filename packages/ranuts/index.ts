@@ -4,7 +4,7 @@ import watchFile from "@/functions/watchFile";
 import EventEmitter from "@/model/EventEmitter";
 import queryFileInfo from "@/functions/fileInfo";
 import filterObj from "@/functions/filterObj";
-// import readDir from "@/functions/readDir";
+import readDir from "@/functions/readDir";
 import str2Xml from '@/functions/str2Xml'
 
 export default {
@@ -15,5 +15,5 @@ export default {
     queryFileInfo,
     filterObj,
     str2Xml,
-    // readDir
+    readDir
 }
