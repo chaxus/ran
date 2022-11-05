@@ -47,18 +47,17 @@ class TabPane extends HTMLElement {
   }
   disconnectCallback() { }
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-    if (oldValue !== newValue && newValue) {
+    // if (oldValue !== newValue && newValue) {
       // const { emitLabel } = this.parentNode;
       // if (name === "label") {
       //   emitLabel;
       //   this.parentNode?.update &&
       //     this.parentNode.updatalabel(this.key, newValue);
       // }
-      // if (name === "disabled") {
-      //   this.parentNode?.updatadisabled &&
-      //     this.parentNode.updatadisabled(this.key, newValue);
-      // }
-    }
+      if (name === "disabled") {
+        // TODO 设置disabled或者key之后，会影响父组件
+        // console.log('this.parentNode-->', this.parentElement,this.parentNode);
+      }
   }
 }
 

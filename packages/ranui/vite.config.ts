@@ -23,11 +23,11 @@ export default defineConfig({
     },
   },
   plugins: [
-    dts(),
-    loadSvg({ svgo: false, defaultImport: 'raw' }),
     loadStyle({
       ignore: ['ranui/components/modal/index.ts']
     }),
+    dts(),
+    loadSvg({ svgo: false, defaultImport: 'raw' }),
     autoImportFile({
       path: [
         './components',

@@ -58,7 +58,7 @@ const createIndex = async (options: Options, entry: string) => {
 
 // 当初始目录中没有index的时候，不会主动生成，需要至少增加一个空index.js
 export default function autoImportFilePlugin(options: Options): Plugin {
-    const autoImportRegex = /\|importFile(\?(raw|skipsvgo|dir))?$/
+    // const autoImportRegex = /\|importFile(\?(raw|skipsvgo|dir))?$/
     return {
         name: 'vite-plugin-auto-import-file',        
         async config(context:any) {
