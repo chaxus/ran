@@ -210,6 +210,9 @@ class CustomElement extends HTMLElement {
     event.stopPropagation();
     const target = event.target as HTMLInputElement;
     this.value = target ? target.value : "";
+    // 增加onchange事件
+    this.change()
+    // 默认input事件
     this.dispatchEvent(
       new CustomEvent("input", {
         detail: {
@@ -242,6 +245,12 @@ class CustomElement extends HTMLElement {
       })
     );
   };
+  /**
+   * @description: 自定义校验函数
+   */  
+  validate = () => {
+    
+  }
   /**
    * @description: 检查校验是否成功
    * @return {Boolean}
@@ -343,12 +352,10 @@ class CustomElement extends HTMLElement {
       this._input.setAttribute("type", this.type);
     }
     this._input.addEventListener("input", this.inputValue);
-    this._input.addEventListener("change", this.change);
     this._input.addEventListener("focus", this.focus);
   }
   disconnectCallback() {
     this._input.removeEventListener("input", this.inputValue);
-    this._input.removeEventListener("change", this.change);
   }
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     this.listenPlaceholder(name, newValue);

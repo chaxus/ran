@@ -118,22 +118,39 @@
 
 ### onchange
 
-文本改变的时候触发（失焦后）。
+文本改变的时候触发。
 
-<r-input onchange="XyMessage.info(this.value)"></r-input>
+<r-input onchange="console.log(this.value)"></r-input>
 
 ```html
-<r-input onchange="fn(event)"></r-input>
+<r-input onchange="func(this.value)"></r-input>
+```
+
+```js
+  const input = document.createElement('r-input')
+    input.setAttribute('label','home')
+    const func = (e) => {
+      console.log(e);
+    }
+    input.addEventListener("change", func);
 ```
 
 ### oninput
 
 输入时触发。
-<r-input oninput="XyMessage.info(this.value)"></r-input>
+<r-input oninput="console.log(this.value)"></r-input>
 
-```html
-<r-input oninput="fn(event)"></r-input>
+```js
+  const input = document.createElement('r-input')
+  input.setAttribute('label','home')
+  const func = (e) => {
+      console.log(e);
+  }
+  input.addEventListener("input", func);
 ```
+![input方法]('./../../../assets/docs/input-input.jpg')
+
+
 
 ### checkout
 
