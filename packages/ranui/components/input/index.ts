@@ -6,15 +6,16 @@ class CustomElement extends HTMLElement {
       "label",
       "disabled",
       "name",
-      "pattern",
-      "required",
       "placeholder",
       "type",
+      "icon",
+      "status"
     ];
   }
   private _container: HTMLDivElement;
   private _label: HTMLLabelElement | undefined;
   private _input: HTMLInputElement;
+  private _icon: HTMLElement | undefined;
   constructor() {
     super();
     const shadowRoot = this.attachShadow({ mode: "closed" });
@@ -82,42 +83,6 @@ class CustomElement extends HTMLElement {
     }
   }
   /**
-   * @description: 获取input校验失败的提示
-   * @return {String}
-   */
-  get warning() {
-    return this.getAttribute("warning");
-  }
-  /**
-   * @description: 设置input校验失败的提示信息
-   * @param {String} value
-   */
-  set warning(value) {
-    if (!value) {
-      this.removeAttribute("warning");
-    } else {
-      this.setAttribute("warning", value);
-    }
-  }
-  /**
-   * @description: 获取校验的正则
-   * @return {String}
-   */
-  get pattern() {
-    return this.getAttribute("pattern");
-  }
-  /**
-   * @description: 设置input校验的正则
-   * @param {*} value
-   */
-  set pattern(value) {
-    if (!value || value === "false") {
-      this.removeAttribute("pattern");
-    } else {
-      this.setAttribute("pattern", value);
-    }
-  }
-  /**
    * @description: 获取input上disabled属性
    * @return {String | null}
    */
@@ -152,6 +117,24 @@ class CustomElement extends HTMLElement {
     this.setAttribute("label", value);
   }
   /**
+   * @description: 获取input框的状态
+   */
+  get status() {
+    return this.getAttribute("status") || "";
+  }
+  /**
+   * @description: 设置input框的状态
+   */
+  set status(value: string) {
+    if (value) {
+      this.removeAttribute("status");
+      this._container.removeAttribute("status");
+    } else {
+      this.setAttribute("status", value);
+      this._container.setAttribute("status", value);
+    }
+  }
+  /**
    * @description: 与form组件联动时，收集的属性名
    * @return {String}
    */
@@ -164,6 +147,48 @@ class CustomElement extends HTMLElement {
    */
   set name(value: string) {
     this.setAttribute("name", value);
+  }
+  /**
+   * @description: 当input类型为number类型时，可以获取min属性
+   * @return {String}
+   */
+  get min() {
+    return this.getAttribute("min") || "";
+  }
+  /**
+   * @description: 当input类型为number类型时，设置min属性
+   * @param {string} value
+   */
+  set min(value: string) {
+    if(this.type === 'number') this.setAttribute("min", value);
+  }
+  /**
+   * @description: 当input类型为number类型时，可以获取max属性
+   * @return {String}
+   */
+  get max() {
+    return this.getAttribute("max") || "";
+  }
+  /**
+   * @description: 当input类型为number类型时，设置max属性
+   * @param {string} value
+   */
+  set max(value: string) {
+    if(this.type === 'number') this.setAttribute("max", value);
+  }
+  /**
+   * @description: 当input类型为number类型时，可以获取step属性
+   * @return {String}
+   */
+  get step() {
+    return this.getAttribute("step") || "";
+  }
+  /**
+   * @description: 当input类型为number类型时，设置step属性
+   * @param {string} value
+   */
+  set step(value: string) {
+    if(this.type === 'number') this.setAttribute("step", value);
   }
   /**
    * @description: 获取一个icon
@@ -201,7 +226,6 @@ class CustomElement extends HTMLElement {
       this.removeAttribute("type");
     }
   }
-
   /**
    * @description: 原生的input方法
    * @param {Event} event
@@ -246,17 +270,6 @@ class CustomElement extends HTMLElement {
     );
   };
   /**
-   * @description: 自定义校验函数
-   */  
-  validate = () => {
-    
-  }
-  /**
-   * @description: 检查校验是否成功
-   * @return {Boolean}
-   */
-  checkout = () => {};
-  /**
    * @description: 监听placeholder属性函数
    * @param {string} name
    * @param {string} value
@@ -267,35 +280,6 @@ class CustomElement extends HTMLElement {
         this._input.setAttribute("placeholder", value);
       } else {
         this._input.removeAttribute("placeholder");
-      }
-    }
-  }
-  /**
-   * @description: 监听required属性函数
-   * @param {string} name
-   * @param {string} value
-   * @return {*}
-   */
-  listenRequired(name: string, value: string) {
-    if (name === "required" && this._input) {
-      if (value && value !== "false") {
-        this._input.setAttribute("required", "");
-      } else {
-        this._input.removeAttribute("required");
-      }
-    }
-  }
-  /**
-   * @description: 监听pattern属性函数
-   * @param {string} name
-   * @param {string} value
-   */
-  listenPattern(name: string, value: string) {
-    if (name === "pattern" && this._input) {
-      if (value && value !== "false") {
-        this._input.setAttribute("pattern", value);
-      } else {
-        this._input.removeAttribute("pattern");
       }
     }
   }
@@ -335,6 +319,62 @@ class CustomElement extends HTMLElement {
         this._input.setAttribute("type", value);
       } else {
         this._input.removeAttribute("type");
+        this._input.removeAttribute("min");
+        this._input.removeAttribute("max");
+        this._input.removeAttribute("step");
+      }
+    }
+  }
+  /**
+   * @description: 监听status属性
+   * @param {string} name
+   * @param {string} value
+   */
+  listenStatus(name: string, value: string) {
+    if (name === "status" && this._container) {
+      if (value) {
+        this._container.setAttribute("status", value);
+      } else {
+        this._container.removeAttribute("status");
+      }
+    }
+  }
+  /**
+   * @description: 监听disabled属性
+   * @param {string} name
+   * @param {string} value
+   */
+  listenDisabled(name: string, value: string) {
+    if (name === "disabled" && this._container) {
+      if (falseList.includes(value)) {
+        this._container.removeAttribute("disabled");
+      } else {
+        this._container.setAttribute("disabled", "");
+        this._input.setAttribute("disabled", "");
+      }
+    }
+  }
+  /**
+   * @description:  监听icon属性
+   * @param {string} name
+   * @param {string} value
+   */
+  listenIcon(name: string, value: string, oldValue: string) {
+    if (name === "icon") {
+      if (value && value !== oldValue) {
+        this.removeAttribute('label')
+        this.setAttribute("icon", value);
+        if (!this._icon) {
+          this._icon = document.createElement('r-icon')
+          const { width, height } = this._input.getBoundingClientRect()
+          const size = Math.min(width, height)
+          this._icon.setAttribute('size', `${size}`)
+          this._input.insertAdjacentElement('beforebegin', this._icon)
+        }
+        this._icon.setAttribute('name', value)
+      } else {
+        this.removeAttribute("icon");
+        this._icon && this._container.removeChild(this._icon)
       }
     }
   }
@@ -343,6 +383,9 @@ class CustomElement extends HTMLElement {
     if (this.value) {
       this._input.value = this.value;
       this._container.setAttribute("value", this.value);
+    }
+    if (this.status) {
+      this._container.setAttribute("status", this.status);
     }
     if (isDisabled(this)) {
       this._container.setAttribute("disabled", "");
@@ -359,9 +402,10 @@ class CustomElement extends HTMLElement {
   }
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     this.listenPlaceholder(name, newValue);
-    this.listenRequired(name, newValue);
-    this.listenPattern(name, newValue);
     this.listenLabel(name, newValue);
+    this.listenStatus(name, newValue)
+    this.listenDisabled(name, newValue)
+    this.listenIcon(name, newValue, oldValue)
   }
 }
 

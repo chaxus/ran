@@ -1,6 +1,6 @@
 .input {
   position: relative;
-  display: inline-block;
+  display: flex;
   width: 100%;
   min-width: 0;
   padding: 2px 8px;
@@ -9,7 +9,10 @@
   line-height: 1.5715;
   background-color: #fff;
   background-image: none;
-  border: 1px solid #d9d9d9;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #d9d9d9;
+  // border: 1px solid #d9d9d9;
   border-radius: 2px;
   transition: all 0.3s;
   &:active {
@@ -28,6 +31,18 @@
   &[value] > .input-label {
     transform: translateY(calc(-50% - 0.43em)) scale(0.8);
     color: #00000040;
+  }
+  &[status="error"]{
+    border-color: #ff4d4f;
+    & > .input-main:hover ~ .input-label {
+      color: #ff4d4f;
+    }
+  }
+  &[status="warning"]{
+    border-color: #ff7875;
+    & > .input-main:hover ~ .input-label {
+      color: #ff7875;
+    }
   }
   &[disabled] {
     color: #00000040;

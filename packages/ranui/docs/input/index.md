@@ -65,7 +65,7 @@
 
 ### 图标`icon`
 
-可以设置一个`icon`来表示标签标识。
+可以设置一个`icon`来表示标签标识。icon的颜色跟随input颜色
 
 <r-input icon="user"></r-input>
 
@@ -83,34 +83,27 @@
 <r-input type="number" min="-10" max="10" step="0.5" ></r-input>
 ```
 
-### 必填项`required`
-
-<r-input icon="user" required placeholder="required"></r-input>
-
-```html
-<r-input icon="user" required placeholder="required"></r-input>
-```
-
-### 正则校验pattern
-
-设置`pattern`属性，这是一个正则。
-
-<r-input icon="phone" pattern="^1(3|4|5|6|7|8|9)\d{9}$" placeholder="请输入手机号"></r-input>
-
-```html
-<r-input icon="phone" pattern="^1(3|4|5|6|7|8|9)\d{9}$" placeholder="请输入手机号"></r-input>
-```
-
-### 自定义错误提示
-可以自定义提示信息`warning`
-
-<r-input icon="phone" pattern="^1(3|4|5|6|7|8|9)\d{9}$" placeholder="请输入手机号" warning="手机号格式有误"></r-input>
-
-```html
-<r-input icon="phone" pattern="^1(3|4|5|6|7|8|9)\d{9}$" placeholder="请输入手机号" warning="手机号格式有误"></r-input>
-```
 ### name属性名
 跟form组件联动的时候有效，form提交时收集的字段名字
+
+### status状态
+
+- error
+<div>
+ <r-input  status="error"></r-input>
+</div>
+
+ ```xml
+ <r-input status="error"></r-input>
+ ```
+
+- warning
+
+  <r-input status="warning"></r-input>
+
+ ```xml
+ <r-input  status="warning"></r-input>
+ ```
 
 ## 事件`event`
 
@@ -149,15 +142,3 @@
   input.addEventListener("input", func);
 ```
 ![input方法]('./../../../assets/docs/input-input.jpg')
-
-
-
-### checkout
-
-主动校验，弹出提示信息。
-
-<r-input required placeholder="required"></r-input>
-
-```js
-input.checkout();
-```

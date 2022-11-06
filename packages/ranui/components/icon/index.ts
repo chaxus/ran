@@ -73,8 +73,8 @@ class CustomElement extends HTMLElement {
     * @description: 设置icon的颜色
     */
     setColor = () => {
-        if (this._svg && this.color) {
-            this._svg.setAttribute('fill', this.color)
+        if (this._svg) {
+            this.color ? this._svg.setAttribute('fill', this.color) : this._svg.setAttribute('fill', 'currentColor')
         }
     }
     /**
