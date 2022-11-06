@@ -54,16 +54,20 @@
     <!-- <r-icon name="lock" size="100" color="#1E90FF" spin></r-icon> -->
   </div>
   <div id="input">
-    <r-input label="user" type="password"></r-input>
+    <r-input label="user" onchange="func(this.value)"></r-input>
   </div>
   <script>
     const input = document.getElementById('input')
     const rinput = document.createElement('r-input')
     rinput.setAttribute('label','home')
-    const func = () => {
-      console.log('fsdafdsafds');
+    const func = (e) => {
+      console.log('fsdafdsafds',e);
     }
-    rinput.setAttribute('pattern',func)
+    const validate = (e) => {
+      console.log('fdasfa',e);
+    }
+    rinput.addEventListener("change", func);
+    rinput.addEventListener("validate", validate);
     console.log('rinput',rinput);
     input.appendChild(rinput)
 
