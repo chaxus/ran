@@ -28,14 +28,14 @@ export default defineConfig({
     }),
     dts(),
     loadSvg({ svgo: false, defaultImport: 'raw' }),
-    autoImportFile({
-      path: [
-        './components',
-        // resolve(__dirname, "components/")
-      ],
-      extensions: [".ts"],
-      ignore: ['./components/form/index.ts']
-    }),
+    // autoImportFile({
+    //   path: [
+    //     './components',
+    //     // resolve(__dirname, "components/")
+    //   ],
+    //   extensions: [".ts"],
+    //   ignore: ['./components/form/index.ts','./components/toast/index.ts']
+    // }),
   ],
   resolve: {
     alias: {
