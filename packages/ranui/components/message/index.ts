@@ -1,8 +1,4 @@
-interface Prompt {
-  text: string;
-  duration?: number;
-  close?: () => void;
-}
+
 const typeMapIcon = new Map([
   ["success", "check-circle"],
   ["warning", "warning-circle"],
@@ -53,7 +49,7 @@ class CustomElement extends HTMLElement {
     if (value) this.setAttribute("text", value);
   }
 
-  connectedCallback() {}
+  connectedCallback() { }
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     if (name === "text" && oldValue !== newValue) {
       this._span.textContent = newValue;
@@ -62,13 +58,15 @@ class CustomElement extends HTMLElement {
       const icon = typeMapIcon.get(newValue)
       if (icon) {
         this._icon?.setAttribute("name", icon);
-        this._icon?.style.setProperty('margin-right','8px')
-        this._icon?.setAttribute('size','18')
-        this._icon?.setAttribute('color','#1890ff')
+        this._icon?.style.setProperty('margin-right', '8px')
+        this._icon?.setAttribute('size', '18')
+        this._icon?.setAttribute('color', '#1890ff')
       }
     }
   }
 }
+
+
 
 function Custom() {
   if (!customElements.get("r-message")) {
@@ -80,22 +78,30 @@ function Custom() {
   document.body.appendChild(container);
   container.appendChild(div);
   return {
-    info: ({ text, duration = 1500, close }: Prompt) => {
+    info: (options: Component.Prompt | string) => {
       const message = new CustomElement();
       message.timeId && clearTimeout(message.timeId);
       message.setAttribute("type", "info");
-      message.setAttribute("text", text);
       message.setAttribute("show", "true");
+      let duration = 1500
+      let close: Component.Prompt["close"]
+      if (typeof options === 'string') {
+        message.setAttribute("text", options);
+      } else {
+        message.setAttribute("text", options.text);
+        close = options.close
+        duration = options.duration || 1500
+      }
       message.timeId = setTimeout(() => {
         message.setAttribute("show", "false");
         if (close) close();
       }, duration);
       div.appendChild(message);
     },
-    success: ({ text, duration = 1500, close }: Prompt) => {},
-    error: ({ text, duration = 1500, close }: Prompt) => {},
-    warning: ({ text, duration = 1500, close }: Prompt) => {},
-    toast: ({ text, duration = 1500, close }: Prompt) => {},
+    success: ({ text, duration = 1500, close }: Component.Prompt) => { },
+    error: ({ text, duration = 1500, close }: Component.Prompt) => { },
+    warning: ({ text, duration = 1500, close }: Component.Prompt) => { },
+    toast: ({ text, duration = 1500, close }: Component.Prompt) => { },
   };
 }
 
