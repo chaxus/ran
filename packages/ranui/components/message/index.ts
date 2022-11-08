@@ -1,16 +1,15 @@
 interface Prompt {
   text: string;
   duration?: number;
-  onclose?: () => void;
+  close?: () => void;
 }
-
-const typeMapIcon = {
-  success: "check-circle",
-  warning: "warning-circle",
-  error: "close-circle",
-  info: "info-circle",
-  toast: null,
-};
+const typeMapIcon = new Map([
+  ["success", "check-circle"],
+  ["warning", "warning-circle"],
+  ["error", "close-circle"],
+  ["info", "info-circle"],
+  ["toast", null],
+])
 
 class CustomElement extends HTMLElement {
   _info: HTMLDivElement;
@@ -18,8 +17,11 @@ class CustomElement extends HTMLElement {
   _content: HTMLDivElement;
   _icon?: HTMLElement;
   _span: HTMLSpanElement;
+  show?: boolean;
+  timeId?: NodeJS.Timeout;
+  close?: () => void;
   static get observedAttributes() {
-    return ["type", "icon"];
+    return ["type", "text"];
   }
   constructor() {
     super();
@@ -38,59 +40,63 @@ class CustomElement extends HTMLElement {
     const shadowRoot = this.attachShadow({ mode: "closed" });
     shadowRoot.appendChild(this._notice);
   }
-  get timeId() {
-    return this.getAttribute("timeId");
-  }
-  set timeId(value) {
-    if (value) this.setAttribute("timeId", value);
-  }
   get type() {
     return this.getAttribute("type");
   }
   set type(value) {
     if (value) this.setAttribute("type", value);
   }
-
-  connectedCallback() {
-    
+  get text() {
+    return this.getAttribute("text");
   }
-  attributeChangedCallback(name: string, oldValue: string, newValue: string) {}
+  set text(value) {
+    if (value) this.setAttribute("text", value);
+  }
+
+  connectedCallback() {}
+  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+    if (name === "text" && oldValue !== newValue) {
+      this._span.textContent = newValue;
+    }
+    if (name === "type" && oldValue !== newValue) {
+      const icon = typeMapIcon.get(newValue)
+      if (icon) {
+        this._icon?.setAttribute("name", icon);
+        this._icon?.style.setProperty('margin-right','8px')
+        this._icon?.setAttribute('size','18')
+        this._icon?.setAttribute('color','#1890ff')
+      }
+    }
+  }
 }
 
 function Custom() {
   if (!customElements.get("r-message")) {
     customElements.define("r-message", CustomElement);
   }
-  const container = document.createElement('div')
-  const div = document.createElement('div')
-  div.setAttribute('class','ranui-message')
-  document.body.appendChild(container)
-  container.appendChild(div)
+  const container = document.createElement("div");
+  const div = document.createElement("div");
+  div.setAttribute("class", "ranui-message");
+  document.body.appendChild(container);
+  container.appendChild(div);
   return {
-    info: ({ text, duration = 1500, onclose }: Prompt) => {
-      const message = new CustomElement()
+    info: ({ text, duration = 1500, close }: Prompt) => {
+      const message = new CustomElement();
       message.timeId && clearTimeout(message.timeId);
-      message.type = 'info';
+      message.setAttribute("type", "info");
+      message.setAttribute("text", text);
+      message.setAttribute("show", "true");
+      message.timeId = setTimeout(() => {
+        message.setAttribute("show", "false");
+        if (close) close();
+      }, duration);
+      div.appendChild(message);
     },
-    success:  ({ text, duration = 1500, onclose }: Prompt) => {},
-    error:  ({ text, duration = 1500, onclose }: Prompt) => {},
-    warning:  ({ text, duration = 1500, onclose }: Prompt) => {},
-    toast:  ({ text, duration = 1500, onclose }: Prompt) => {},
-  }
+    success: ({ text, duration = 1500, close }: Prompt) => {},
+    error: ({ text, duration = 1500, close }: Prompt) => {},
+    warning: ({ text, duration = 1500, close }: Prompt) => {},
+    toast: ({ text, duration = 1500, close }: Prompt) => {},
+  };
 }
-
-const Toast = (msg: string, duration = 2000) => {
-  duration = Number.isNaN(duration) ? 3000 : duration;
-  const dom = document.createElement("div");
-  dom.innerHTML = msg;
-  dom.style.cssText = styles;
-  document.body.appendChild(dom);
-  setTimeout(function () {
-    dom.style.opacity = "0";
-    setTimeout(() => document.body.removeChild(dom), 2000);
-  }, duration);
-};
-
-
 
 export default Custom();
