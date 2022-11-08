@@ -99,4 +99,8 @@ function Custom() {
   };
 }
 
-export default Custom();
+const message = Custom();
+
+window.message = message
+
+export default message;
