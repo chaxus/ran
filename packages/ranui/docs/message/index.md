@@ -31,12 +31,16 @@
 <div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
      <r-button  onclick="message.success('这是一条提示')">成功提示</r-button>
 </div>
+<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
+     <r-button  onclick="message.toast('这是一条提示')">toast提示</r-button>
+</div>
 
 ```html
 <r-button  onclick="message.info('这是一条提示')">信息提示</r-button>
 <r-button  onclick="message.warning('这是一条提示')">警告提示</r-button>
 <r-button onclick="message.error('这是一条提示')">错误提示</r-button>
 <r-button  onclick="message.success('这是一条提示')">成功提示</r-button>
+<r-button  onclick="message.toast('这是一条提示')">toast提示</r-button>
 ```
 
 ## 方法
@@ -52,6 +56,8 @@
 
 `message.success('这是一条提示')`
 
+`message.toast('这是一条提示')"`
+
 2. 也可以传一个对象，设置提示内容，关闭延时，关闭时触发的回调函数
 
 `message.info({content:'这是一条提示', duration: 2000, close: () => {}})`
@@ -61,6 +67,8 @@
 `message.error({content:'这是一条提示', duration: 2000, close: () => {}})`
 
 `message.success({content:'这是一条提示', duration: 2000, close: () => {}})`
+
+`message.toast({content:'这是一条提示', duration: 2000, close: () => {}})`
 
 
 | 参数     | 说明     | 类型                                     |

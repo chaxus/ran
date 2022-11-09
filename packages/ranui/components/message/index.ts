@@ -1,5 +1,6 @@
-const AnimationTime = 300 // message退出动画执行的时间
-const defaultDuration = 3000 // 默认message存在的时间
+const AnimationTime = 300; // message退出动画执行的时间
+const defaultDuration = 3000; // 默认message存在的时间
+
 // message类型映射icon的类型
 const typeMapIcon = new Map([
   ["success", "check-circle-fill"],
@@ -15,8 +16,8 @@ const typeMapColor = new Map([
   ["warning", "#faad14"],
   ["error", "#ff4d4f"],
   ["info", "#1890ff"],
-  ["toast", 'rgba(0, 0, 0, 0.7)'],
-])
+  ["toast", "rgba(0, 0, 0, 0.7)"],
+]);
 
 class CustomElement extends HTMLElement {
   _info: HTMLDivElement;
@@ -27,7 +28,7 @@ class CustomElement extends HTMLElement {
   timeId?: NodeJS.Timeout;
   close?: () => void;
   static get observedAttributes() {
-    return ["type", "text"];
+    return ["type", "content"];
   }
   constructor() {
     super();
@@ -52,27 +53,33 @@ class CustomElement extends HTMLElement {
   set type(value) {
     if (value) this.setAttribute("type", value);
   }
-  get text() {
-    return this.getAttribute("text");
+  get content() {
+    return this.getAttribute("content");
   }
-  set text(value) {
-    if (value) this.setAttribute("text", value);
+  set content(value) {
+    if (value) this.setAttribute("content", value);
   }
-
+  /**
+   * @description: 设置图标
+   * @param {string} value
+   */  
+  setIcon = (value:string) => {
+    const icon = typeMapIcon.get(value);
+    const color = typeMapColor.get(value);
+    if (icon) {
+      this._icon?.setAttribute("name", icon);
+      this._icon?.style.setProperty("margin-right", "8px");
+      this._icon?.setAttribute("size", "18");
+      color && this._icon?.setAttribute("color", color);
+    }
+  }
   connectedCallback() {}
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-    if (name === "text" && oldValue !== newValue) {
+    if (name === "content" && oldValue !== newValue) {
       this._span.textContent = newValue;
     }
     if (name === "type" && oldValue !== newValue) {
-      const icon = typeMapIcon.get(newValue);
-      const color = typeMapColor.get(newValue)
-      if (icon) {
-        this._icon?.setAttribute("name", icon);
-        this._icon?.style.setProperty("margin-right", "8px");
-        this._icon?.setAttribute("size", "18");
-        color && this._icon?.setAttribute("color", color);
-      }
+      this.setIcon(newValue)
     }
   }
 }
@@ -86,37 +93,39 @@ function Custom() {
   div.setAttribute("class", "ranui-message");
   document.body.appendChild(container);
   container.appendChild(div);
-  const commonPrompt = (type:string) => {
+  const commonPrompt = (type: string) => {
     return (options: Ran.Prompt | string) => {
       const message = new CustomElement();
-        message.timeId && clearTimeout(message.timeId);
-        message.setAttribute("type", type);
-        let duration = defaultDuration;
-        let close: Ran.Prompt["close"];
-        if (typeof options === "string") {
-          message.setAttribute("text", options);
-        } else {
-          message.setAttribute("text", options.content);
-          close = options.close;
-          duration = options.duration || defaultDuration;
-        }
-        const time = setTimeout(() => {
-          message.setAttribute("class", "message-leave");
-          clearTimeout(time);
-        }, duration - AnimationTime);
-        message.timeId = setTimeout(() => {
-          div.removeChild(message);
-          if (close) close();
-        }, duration);
-        div.appendChild(message);
-        message.setAttribute('class','message-in')
-    }
-  }
+      message.setAttribute("class", 'message');
+      message.timeId && clearTimeout(message.timeId);
+      message.setAttribute("type", type);
+      let duration = defaultDuration;
+      let close: Ran.Prompt["close"];
+      if (typeof options === "string") {
+        message.setAttribute("content", options);
+      } else {
+        message.setAttribute("content", options.content);
+        close = options.close;
+        duration = options.duration || defaultDuration;
+      }
+      const time = setTimeout(() => {
+        message.classList.remove("message-in");
+        message.classList.add("message-leave");
+        clearTimeout(time);
+      }, duration - AnimationTime);
+      message.timeId = setTimeout(() => {
+        div.removeChild(message);
+        if (close) close();
+      }, duration);
+      div.appendChild(message);
+      message.classList.add("message-in");
+    };
+  };
   return {
-    info: commonPrompt('info'),
-    success: commonPrompt('success'),
-    error: commonPrompt('error'),
-    warning:commonPrompt('warning'),
+    info: commonPrompt("info"),
+    success: commonPrompt("success"),
+    error: commonPrompt("error"),
+    warning: commonPrompt("warning"),
     toast: commonPrompt('toast'),
   };
 }
