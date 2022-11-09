@@ -1,11 +1,23 @@
+const AnimationTime = 300; // message退出动画执行的时间
+const defaultDuration = 3000; // 默认message存在的时间
 
+// message类型映射icon的类型
 const typeMapIcon = new Map([
-  ["success", "check-circle"],
-  ["warning", "warning-circle"],
-  ["error", "close-circle"],
-  ["info", "info-circle"],
+  ["success", "check-circle-fill"],
+  ["warning", "warning-circle-fill"],
+  ["error", "close-circle-fill"],
+  ["info", "info-circle-fill"],
   ["toast", null],
-])
+]);
+
+// message类型映射icon的颜色
+const typeMapColor = new Map([
+  ["success", "#52c41a"],
+  ["warning", "#faad14"],
+  ["error", "#ff4d4f"],
+  ["info", "#1890ff"],
+  ["toast", "rgba(0, 0, 0, 0.7)"],
+]);
 
 class CustomElement extends HTMLElement {
   _info: HTMLDivElement;
@@ -13,11 +25,10 @@ class CustomElement extends HTMLElement {
   _content: HTMLDivElement;
   _icon?: HTMLElement;
   _span: HTMLSpanElement;
-  show?: boolean;
   timeId?: NodeJS.Timeout;
   close?: () => void;
   static get observedAttributes() {
-    return ["type", "text"];
+    return ["type", "content"];
   }
   constructor() {
     super();
@@ -42,31 +53,36 @@ class CustomElement extends HTMLElement {
   set type(value) {
     if (value) this.setAttribute("type", value);
   }
-  get text() {
-    return this.getAttribute("text");
+  get content() {
+    return this.getAttribute("content");
   }
-  set text(value) {
-    if (value) this.setAttribute("text", value);
+  set content(value) {
+    if (value) this.setAttribute("content", value);
   }
-
-  connectedCallback() { }
+  /**
+   * @description: 设置图标
+   * @param {string} value
+   */  
+  setIcon = (value:string) => {
+    const icon = typeMapIcon.get(value);
+    const color = typeMapColor.get(value);
+    if (icon) {
+      this._icon?.setAttribute("name", icon);
+      this._icon?.style.setProperty("margin-right", "8px");
+      this._icon?.setAttribute("size", "18");
+      color && this._icon?.setAttribute("color", color);
+    }
+  }
+  connectedCallback() {}
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-    if (name === "text" && oldValue !== newValue) {
+    if (name === "content" && oldValue !== newValue) {
       this._span.textContent = newValue;
     }
     if (name === "type" && oldValue !== newValue) {
-      const icon = typeMapIcon.get(newValue)
-      if (icon) {
-        this._icon?.setAttribute("name", icon);
-        this._icon?.style.setProperty('margin-right', '8px')
-        this._icon?.setAttribute('size', '18')
-        this._icon?.setAttribute('color', '#1890ff')
-      }
+      this.setIcon(newValue)
     }
   }
 }
-
-
 
 function Custom() {
   if (!customElements.get("r-message")) {
@@ -77,36 +93,45 @@ function Custom() {
   div.setAttribute("class", "ranui-message");
   document.body.appendChild(container);
   container.appendChild(div);
-  return {
-    info: (options: Component.Prompt | string) => {
+  const commonPrompt = (type: string) => {
+    return (options: Ran.Prompt | string) => {
       const message = new CustomElement();
+      message.setAttribute("class", 'message');
       message.timeId && clearTimeout(message.timeId);
-      message.setAttribute("type", "info");
-      message.setAttribute("show", "true");
-      let duration = 1500
-      let close: Component.Prompt["close"]
-      if (typeof options === 'string') {
-        message.setAttribute("text", options);
+      message.setAttribute("type", type);
+      let duration = defaultDuration;
+      let close: Ran.Prompt["close"];
+      if (typeof options === "string") {
+        message.setAttribute("content", options);
       } else {
-        message.setAttribute("text", options.text);
-        close = options.close
-        duration = options.duration || 1500
+        message.setAttribute("content", options.content);
+        close = options.close;
+        duration = options.duration || defaultDuration;
       }
+      const time = setTimeout(() => {
+        message.classList.remove("message-in");
+        message.classList.add("message-leave");
+        clearTimeout(time);
+      }, duration - AnimationTime);
       message.timeId = setTimeout(() => {
-        message.setAttribute("show", "false");
+        div.removeChild(message);
         if (close) close();
       }, duration);
       div.appendChild(message);
-    },
-    success: ({ text, duration = 1500, close }: Component.Prompt) => { },
-    error: ({ text, duration = 1500, close }: Component.Prompt) => { },
-    warning: ({ text, duration = 1500, close }: Component.Prompt) => { },
-    toast: ({ text, duration = 1500, close }: Component.Prompt) => { },
+      message.classList.add("message-in");
+    };
+  };
+  return {
+    info: commonPrompt("info"),
+    success: commonPrompt("success"),
+    error: commonPrompt("error"),
+    warning: commonPrompt("warning"),
+    toast: commonPrompt('toast'),
   };
 }
 
 const message = Custom();
 
-window.message = message
+window.message = message;
 
 export default message;

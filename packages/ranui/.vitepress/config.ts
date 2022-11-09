@@ -4,29 +4,38 @@ const sidebar = {
     {
       text: "通用",
       children: [
-        { text: "Button 按钮", link: "/docs/button/" },
-        { text: "Input 输入框", link: "/docs/input/" },
-        { text: "Image 图片", link: "/docs/image/" },
-        { text: "Icon 图标", link: "/docs/icon/" },
-        { text: "Tab 标签页", link: "/docs/tab/" },
+        { text: "Button 按钮", link: "/button/" },
+        { text: "Icon 图标", link: "/icon/" },
       ],
     },
-    { text: "导航" },
-    { text: "反馈" },
-    { text: "数据录入" },
-    { text: "数据展示" },
-    { text: "布局" },
+    {
+      text: "数据录入",
+      children: [{ text: "Input 输入框", link: "/input/" }],
+    },
+    {
+      text: "数据展示",
+      children: [
+        { text: "Tab 标签页", link: "/tab/" },
+        { text: "Image 图片", link: "/image/" },
+      ],
+    },
+    {
+      text: "反馈",
+      children: [{ text: "message 提示", link: "/message/" }],
+    },
+   
   ],
 };
 const config = {
   title: "ranui",
-  description:'基于web component的组件库',
+  description: "基于web component的组件库",
   markdown: {
-    lineNumbers: true
+    lineNumbers: true,
   },
   themeConfig: {
     sidebar,
   },
+  base:'/docs/'
 };
 
 export default config;

@@ -1,37 +1,95 @@
-.toast {
-  max-width: 60%;
-  min-width: 150px;
-  padding: 5px 10px;
-  min-height: 20px;
-  color: rgb(255, 255, 255);
-  line-height: 150%;
-  text-align: center;
-  border-radius: 4px;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 999999;
-  background: rgba(0, 0, 0, 0.7);
+@keyframes MessageMoveUpIn {
+  0% {
+    transform: translateY(-100%);
+    transform-origin: 0 0;
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    transform-origin: 0 0;
+    opacity: 1;
+  }
+}
+@keyframes MessageMoveOut {
+  0% {
+    max-height: 150px;
+    padding: 8px;
+    opacity: 1;
+  }
+
+  to {
+    max-height: 0;
+    padding: 0;
+    opacity: 0;
+  }
+}
+.ranui-message {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  color: #000000d9;
   font-size: 14px;
-  word-break: break-all;
+  font-variant: tabular-nums;
+  line-height: 1.5715;
+  list-style: none;
+  font-feature-settings: "tnum";
+  position: fixed;
+  top: 8px;
+  left: 0;
+  z-index: 1010;
+  width: 100%;
+  pointer-events: none;
+}
+:host {
+  &([type="toast"]) {
+    --ranui-message-background: rgba(0, 0, 0, 0.7);
+    --ranui-message-color: #fff;
+    --ranui-message-border-radius: 7px;
+  }
 }
 .message {
   &-notice {
     padding: 8px;
     text-align: center;
+    max-width: 90%;
+    margin: 0 auto;
+    word-break: break-all;
     &-content {
       display: inline-block;
       padding: 10px 16px;
-      background: #fff;
-      border-radius: 2px;
+      background: var(--ranui-message-background, #fff);
+      border-radius: var(--ranui-message-border-radius, 2px);
       box-shadow: 0 3px 6px -4px #0000001f, 0 6px 16px #00000014,
         0 9px 28px 8px #0000000d;
       pointer-events: all;
       &-info {
         align-items: center;
         display: flex;
+        span {
+          margin: 0;
+          padding: 0;
+          color: var(--ranui-message-color, #000000d9);
+          font-size: 14px;
+          font-variant: tabular-nums;
+          list-style: none;
+          font-feature-settings: "tnum";
+          z-index: 1010;
+          width: 100%;
+          pointer-events: none;
+        }
       }
     }
+  }
+  &-leave {
+    animation-name: MessageMoveOut;
+    animation-duration: 0.3s;
+  }
+  &-in {
+    animation-name: MessageMoveUpIn;
+    // animation-play-state: running;
+    animation-duration: 0.2s;
+    animation-fill-mode: both;
+    // animation-play-state: paused
   }
 }
