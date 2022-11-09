@@ -1,6 +1,6 @@
 const sidebar = {
   "/": [
-    { text: "快速开始", link: "/" },
+    { text: "快速开始", link: "/docs/" },
     {
       text: "通用",
       children: [
