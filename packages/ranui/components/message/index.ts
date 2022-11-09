@@ -1,11 +1,10 @@
-
 const typeMapIcon = new Map([
-  ["success", "check-circle"],
-  ["warning", "warning-circle"],
-  ["error", "close-circle"],
-  ["info", "info-circle"],
+  ["success", "check-circle-fill"],
+  ["warning", "warning-circle-fill"],
+  ["error", "close-circle-fill"],
+  ["info", "info-circle-fill"],
   ["toast", null],
-])
+]);
 
 class CustomElement extends HTMLElement {
   _info: HTMLDivElement;
@@ -13,7 +12,6 @@ class CustomElement extends HTMLElement {
   _content: HTMLDivElement;
   _icon?: HTMLElement;
   _span: HTMLSpanElement;
-  show?: boolean;
   timeId?: NodeJS.Timeout;
   close?: () => void;
   static get observedAttributes() {
@@ -49,24 +47,22 @@ class CustomElement extends HTMLElement {
     if (value) this.setAttribute("text", value);
   }
 
-  connectedCallback() { }
+  connectedCallback() {}
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     if (name === "text" && oldValue !== newValue) {
       this._span.textContent = newValue;
     }
     if (name === "type" && oldValue !== newValue) {
-      const icon = typeMapIcon.get(newValue)
+      const icon = typeMapIcon.get(newValue);
       if (icon) {
         this._icon?.setAttribute("name", icon);
-        this._icon?.style.setProperty('margin-right', '8px')
-        this._icon?.setAttribute('size', '18')
-        this._icon?.setAttribute('color', '#1890ff')
+        this._icon?.style.setProperty("margin-right", "8px");
+        this._icon?.setAttribute("size", "18");
+        this._icon?.setAttribute("color", "#1890ff");
       }
     }
   }
 }
-
-
 
 function Custom() {
   if (!customElements.get("r-message")) {
@@ -77,36 +73,42 @@ function Custom() {
   div.setAttribute("class", "ranui-message");
   document.body.appendChild(container);
   container.appendChild(div);
+  const AnimationTime = 300
+  const defaultDuration = 3000
   return {
-    info: (options: Component.Prompt | string) => {
+    info: (options: Ran.Prompt | string) => {
       const message = new CustomElement();
       message.timeId && clearTimeout(message.timeId);
       message.setAttribute("type", "info");
-      message.setAttribute("show", "true");
-      let duration = 1500
-      let close: Component.Prompt["close"]
-      if (typeof options === 'string') {
+      let duration = defaultDuration;
+      let close: Ran.Prompt["close"];
+      if (typeof options === "string") {
         message.setAttribute("text", options);
       } else {
         message.setAttribute("text", options.text);
-        close = options.close
-        duration = options.duration || 1500
+        close = options.close;
+        duration = options.duration || defaultDuration;
       }
+      const time = setTimeout(() => {
+        message.setAttribute("class", "message-leave");
+        clearTimeout(time);
+      }, duration - AnimationTime);
       message.timeId = setTimeout(() => {
-        message.setAttribute("show", "false");
+        div.removeChild(message);
         if (close) close();
       }, duration);
       div.appendChild(message);
+      message.setAttribute('class','message-in')
     },
-    success: ({ text, duration = 1500, close }: Component.Prompt) => { },
-    error: ({ text, duration = 1500, close }: Component.Prompt) => { },
-    warning: ({ text, duration = 1500, close }: Component.Prompt) => { },
-    toast: ({ text, duration = 1500, close }: Component.Prompt) => { },
+    success: ({ text, duration = 1500, close }: Ran.Prompt) => {},
+    error: ({ text, duration = 1500, close }: Ran.Prompt) => {},
+    warning: ({ text, duration = 1500, close }: Ran.Prompt) => {},
+    toast: ({ text, duration = 1500, close }: Ran.Prompt) => {},
   };
 }
 
 const message = Custom();
 
-window.message = message
+window.message = message;
 
 export default message;

@@ -7,7 +7,7 @@ declare module '@/plugins'
 declare module '@/utils'
 
 
-declare namespace Component {
+declare namespace Ran {
 
     type Hint = (options: Prompt) => void
     interface Prompt {
@@ -26,5 +26,5 @@ declare namespace Component {
 
 
 declare interface Window {
-    message: Component.Message
+    message: Ran.Message
 }
