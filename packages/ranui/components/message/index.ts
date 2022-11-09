@@ -1,3 +1,6 @@
+const AnimationTime = 300 // message退出动画执行的时间
+const defaultDuration = 3000 // 默认message存在的时间
+// message类型映射icon的类型
 const typeMapIcon = new Map([
   ["success", "check-circle-fill"],
   ["warning", "warning-circle-fill"],
@@ -5,6 +8,15 @@ const typeMapIcon = new Map([
   ["info", "info-circle-fill"],
   ["toast", null],
 ]);
+
+// message类型映射icon的颜色
+const typeMapColor = new Map([
+  ["success", "#52c41a"],
+  ["warning", "#faad14"],
+  ["error", "#ff4d4f"],
+  ["info", "#1890ff"],
+  ["toast", 'rgba(0, 0, 0, 0.7)'],
+])
 
 class CustomElement extends HTMLElement {
   _info: HTMLDivElement;
@@ -54,11 +66,12 @@ class CustomElement extends HTMLElement {
     }
     if (name === "type" && oldValue !== newValue) {
       const icon = typeMapIcon.get(newValue);
+      const color = typeMapColor.get(newValue)
       if (icon) {
         this._icon?.setAttribute("name", icon);
         this._icon?.style.setProperty("margin-right", "8px");
         this._icon?.setAttribute("size", "18");
-        this._icon?.setAttribute("color", "#1890ff");
+        color && this._icon?.setAttribute("color", color);
       }
     }
   }
@@ -73,37 +86,38 @@ function Custom() {
   div.setAttribute("class", "ranui-message");
   document.body.appendChild(container);
   container.appendChild(div);
-  const AnimationTime = 300
-  const defaultDuration = 3000
-  return {
-    info: (options: Ran.Prompt | string) => {
+  const commonPrompt = (type:string) => {
+    return (options: Ran.Prompt | string) => {
       const message = new CustomElement();
-      message.timeId && clearTimeout(message.timeId);
-      message.setAttribute("type", "info");
-      let duration = defaultDuration;
-      let close: Ran.Prompt["close"];
-      if (typeof options === "string") {
-        message.setAttribute("text", options);
-      } else {
-        message.setAttribute("text", options.text);
-        close = options.close;
-        duration = options.duration || defaultDuration;
-      }
-      const time = setTimeout(() => {
-        message.setAttribute("class", "message-leave");
-        clearTimeout(time);
-      }, duration - AnimationTime);
-      message.timeId = setTimeout(() => {
-        div.removeChild(message);
-        if (close) close();
-      }, duration);
-      div.appendChild(message);
-      message.setAttribute('class','message-in')
-    },
-    success: ({ text, duration = 1500, close }: Ran.Prompt) => {},
-    error: ({ text, duration = 1500, close }: Ran.Prompt) => {},
-    warning: ({ text, duration = 1500, close }: Ran.Prompt) => {},
-    toast: ({ text, duration = 1500, close }: Ran.Prompt) => {},
+        message.timeId && clearTimeout(message.timeId);
+        message.setAttribute("type", type);
+        let duration = defaultDuration;
+        let close: Ran.Prompt["close"];
+        if (typeof options === "string") {
+          message.setAttribute("text", options);
+        } else {
+          message.setAttribute("text", options.text);
+          close = options.close;
+          duration = options.duration || defaultDuration;
+        }
+        const time = setTimeout(() => {
+          message.setAttribute("class", "message-leave");
+          clearTimeout(time);
+        }, duration - AnimationTime);
+        message.timeId = setTimeout(() => {
+          div.removeChild(message);
+          if (close) close();
+        }, duration);
+        div.appendChild(message);
+        message.setAttribute('class','message-in')
+    }
+  }
+  return {
+    info: commonPrompt('info'),
+    success: commonPrompt('success'),
+    error: commonPrompt('error'),
+    warning:commonPrompt('warning'),
+    toast: commonPrompt('toast'),
   };
 }
 
