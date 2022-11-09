@@ -13,6 +13,5 @@
 1. 兼容性问题，不支持IE
 ![](../assets//docs//customElements.png)
 2. CSS和JS隔离的太好以至于定制化的样式干预反而有些困难
-3. 用`React`或者`Vue`等框架开发的时候，框架的一些语法不支持使用，因为使用原生JS开发的（TODO: 用`babel`做一个转换）
 
 **git地址**：https://github.com/chaxus/ran
