@@ -11,7 +11,7 @@ declare namespace Ran {
 
     type Hint = (options: Prompt) => void
     interface Prompt {
-        text: string;
+        content: string;
         duration?: number;
         close?: () => void;
     }

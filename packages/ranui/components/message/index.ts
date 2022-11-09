@@ -96,7 +96,7 @@ function Custom() {
         if (typeof options === "string") {
           message.setAttribute("text", options);
         } else {
-          message.setAttribute("text", options.text);
+          message.setAttribute("text", options.content);
           close = options.close;
           duration = options.duration || defaultDuration;
         }

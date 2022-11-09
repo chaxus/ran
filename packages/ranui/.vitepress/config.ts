@@ -9,6 +9,7 @@ const sidebar = {
         { text: "Image 图片", link: "/docs/image/" },
         { text: "Icon 图标", link: "/docs/icon/" },
         { text: "Tab 标签页", link: "/docs/tab/" },
+        { text: "message 提示", link: "/docs/message/" },
       ],
     },
     { text: "导航" },
