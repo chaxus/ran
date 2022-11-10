@@ -1,4 +1,6 @@
 import DefaultTheme from 'vitepress/theme'
+import './index.less'
+import './vars.less'
 
 export default {
   ...DefaultTheme,

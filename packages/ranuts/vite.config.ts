@@ -30,8 +30,12 @@ export default defineConfig({
     extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json"],
   },
   plugins: [
-    dts({
-      tsConfigFilePath: './tsconfig.json'
-    }),
-  ]
+    dts(),
+  ],
+  server:{
+    fs: {
+      strict: false,
+      allow: [],
+    },
+  }
 });
