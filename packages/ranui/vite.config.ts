@@ -29,12 +29,13 @@ export default defineConfig({
     dts(),
     loadSvg({ svgo: false, defaultImport: 'raw' }),
     autoImportFile({
+      output:resolve(__dirname, "components.ts"),
       path: [
         './components',
         // resolve(__dirname, "components/")
       ],
       extensions: [".ts"],
-      ignore: ['./components/form/index.ts','./components/toast/index.ts']
+      ignore: ['./components/form/index.ts','./components/modal/index.ts']
     }),
   ],
   resolve: {
@@ -46,12 +47,12 @@ export default defineConfig({
     extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json"],
   },
   css: {
-    // preprocessorOptions: {
-    // less: {
-    //   javascriptEnabled: true,
-    //   additionalData: `@import "client/assets/base.css";`
-    // }
-    // },
+    preprocessorOptions: {
+    less: {
+      javascriptEnabled:true,
+      additionalData: `@import "./base.less";`
+    }
+    },
     modules: {
       generateScopedName: "[name--[local]--[hash:base64:5]]",
     },

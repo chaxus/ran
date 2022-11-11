@@ -8,7 +8,8 @@ interface Options {
     ignore?: Array<string>,
     path: Array<string>,
     extensions: Array<string>,
-    defaultImport?: string
+    defaultImport?: string,
+    output?:string
 }
 /**
  * @description: 用于生成assets/icon目录下的文件名列表
@@ -63,15 +64,17 @@ export default function autoImportFilePlugin(options: Options): Plugin {
         name: 'vite-plugin-auto-import-file',        
         async config(context:any) {
             const { entry = '' } = context.build?.lib || {};
+            const output = options.output || entry
             // const { alias = {} } = context.resolve || {}
             // console.log('alias--->',alias);
             // const aliasList = Object.keys(alias)
             // loadIcons()
-            if (entry) await createIndex(options, entry)
+            if (output) await createIndex(options, output)
         },
         async handleHotUpdate(context:any) {
             const { entry = '' } = context.server.config.build.lib || {}
-            if (entry) await createIndex(options, entry)
+            const output = options.output || entry
+            if (output) await createIndex(options, output)
         }
     }
 }
