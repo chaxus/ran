@@ -7,7 +7,7 @@
 - 针对所有的元素重复以上的步骤，除了最后一个；
 - 重复步骤1~3，直到排序完成。
 ## 1.3 动图演示
-![冒泡排序](../../../assets/sort/bubble.gif)
+![冒泡排序](../../../assets/ranuts/sort/bubble.gif)
 ## 1.4 代码演示
 ```js
 function bubbleSort(arr) {

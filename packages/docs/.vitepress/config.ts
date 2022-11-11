@@ -35,7 +35,7 @@ export default defineConfig({
           items: [
             { text: "概览", link: "/ranuts/sort/" },
             { text: "冒泡排序", link: "/ranuts/sort/bubble/" },
-            { text: "选择排序", link: "/ranuts/sort/selection/" },
+            { text: "选择排序", link: "/ranuts/sort/select/" },
             { text: "插入排序", link: "/ranuts/sort/insert/" },
             { text: "希尔排序", link: "/ranuts/sort/shell/" },
             { text: "归并排序", link: "/ranuts/sort/merge/" },

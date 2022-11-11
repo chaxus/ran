@@ -8,12 +8,12 @@ hero:
   text: 风起于青萍之末
   tagline: Believe in yourself, there's nothing you can't do！
   image:
-    src: /home.svg
+    # src: /assets/home.svg
     alt: logo
   actions:
     - theme: brand
       text: 更多详情
-      link: /docs/
+      link: https://github.com/chaxus/ran
     - theme: alt
       text: 访问我的GitHub
       link: https://github.com/chaxus/ran
