@@ -10,7 +10,7 @@ export default defineConfig({
       { text: "首页", link: "/" },
       { text: "工具函数", link: "/ranuts/functions/" },
       { text: "组件库", link: "/ranui/" },
-      { text: "我的掘金", link: "https://juejin.cn/user/2981531263964718" },
+      // { text: "我的掘金", link: "https://juejin.cn/user/2981531263964718" },
     ],
     socialLinks: [{ icon: "github", link: "https://github.com/chaxus/ran" }],
     footer: {
@@ -49,12 +49,31 @@ export default defineConfig({
       ],
       "/ranui/":[
         {
+          text:'通用',
           items: [
-            { text: "按钮", link: "/ranui/button/" },
-            { text: "图标", link: "/ranui/icon/" },
-            { text: "图标", link: "/ranui/icon/" },
+            { text: "Button 按钮", link: "/ranui/button/" },
+            { text: "Icon 图标", link: "/ranui/icon/" },
           ],
         },
+        {
+          text:'数据展示',
+          items:[
+            { text: "Image 图片", link: "/ranui/image/" },
+            { text: "Tabs 标签页", link: "/ranui/tabs/" },
+          ]
+        },
+        {
+          text:'数据录入',
+          items: [
+            { text: "Input 输入框", link: "/ranui/input/" },
+          ],
+        },
+        {
+          text:'反馈',
+          items: [
+            { text: "Message 全局提示", link: "/ranui/message/" },
+          ],
+        }
       ]
     },
   },

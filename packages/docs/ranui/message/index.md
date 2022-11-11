@@ -38,7 +38,7 @@
 ```html
 <r-button  onclick="message.info('这是一条提示')">信息提示</r-button>
 <r-button  onclick="message.warning('这是一条提示')">警告提示</r-button>
-<r-button onclick="message.error('这是一条提示')">错误提示</r-button>
+<r-button  onclick="message.error('这是一条提示')">错误提示</r-button>
 <r-button  onclick="message.success('这是一条提示')">成功提示</r-button>
 <r-button  onclick="message.toast('这是一条提示')">toast提示</r-button>
 ```

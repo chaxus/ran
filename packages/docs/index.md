@@ -13,7 +13,7 @@ hero:
   actions:
     - theme: brand
       text: 更多详情
-      link: /docs/sort/
+      link: /docs/
     - theme: alt
       text: 访问我的GitHub
       link: https://github.com/chaxus/ran

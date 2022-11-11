@@ -56,4 +56,10 @@ export default defineConfig({
       generateScopedName: "[name--[local]--[hash:base64:5]]",
     },
   },
+  server:{
+    fs: {
+      strict: false,
+      allow: [],
+    },
+  }
 });

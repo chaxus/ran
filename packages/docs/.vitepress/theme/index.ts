@@ -1,4 +1,5 @@
 import DefaultTheme from 'vitepress/theme'
+import 'ranui'
 import './styles/index.less'
 import './styles/vars.less'
 

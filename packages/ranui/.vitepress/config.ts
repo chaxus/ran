@@ -4,24 +4,24 @@ const sidebar = {
     {
       text: "通用",
       children: [
-        { text: "Button 按钮", link: "/button/" },
-        { text: "Icon 图标", link: "/icon/" },
+        { text: "Button 按钮", link: "/docs/button/" },
+        { text: "Icon 图标", link: "/docs/icon/" },
       ],
     },
     {
       text: "数据录入",
-      children: [{ text: "Input 输入框", link: "/input/" }],
+      children: [{ text: "Input 输入框", link: "/docs/input/" }],
     },
     {
       text: "数据展示",
       children: [
-        { text: "Tab 标签页", link: "/tab/" },
-        { text: "Image 图片", link: "/image/" },
+        { text: "Tab 标签页", link: "/docs/tab/" },
+        { text: "Image 图片", link: "/docs/image/" },
       ],
     },
     {
       text: "反馈",
-      children: [{ text: "message 提示", link: "/message/" }],
+      children: [{ text: "message 提示", link: "/docs/message/" }],
     },
    
   ],
