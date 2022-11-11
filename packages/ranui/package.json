@@ -29,7 +29,7 @@
     "less": "^4.1.3",
     "ranuts": "workspace:0.1.0-alpha.1",
     "svgo": "^3.0.0",
-    "vitepress": "1.0.0-alpha.4"
+    "vitepress": "1.0.0-alpha.28"
   },
   "dependencies": {
     "vite": "^3.2.3",

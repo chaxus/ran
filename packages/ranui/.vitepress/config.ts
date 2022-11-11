@@ -3,7 +3,6 @@ import { defineConfig } from "vitepress";
 
 const sidebar = {
   "/": [
-    { text: "快速开始", link: "/docs/" },
     {
       text: "通用",
       items: [
