@@ -7,7 +7,7 @@ export default defineConfig({
   lastUpdated: true,
   themeConfig: {
     nav: [
-      { text: "首页", link: "/" },
+      { text: "首页", link: "/docs/" },
       { text: "工具函数", link: "/docs/functions/" },
       { text: "文件函数", link: "/docs/file/" },
       { text: "排序算法", link: "/docs/sort/" },
