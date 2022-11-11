@@ -11,7 +11,7 @@
 - 缺点：
 
 1. 兼容性问题，不支持IE
-![](../../../assets/ranui/customElements.png)
+![](../assets/ranui/customElements.png)
 2. CSS和JS隔离的太好以至于定制化的样式干预反而有些困难
 
 **git地址**：https://github.com/chaxus/ran

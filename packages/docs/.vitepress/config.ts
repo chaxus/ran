@@ -2,13 +2,13 @@ import { defineConfig } from "vitepress";
 
 export default defineConfig({
   title: "ranuts",
-  description: "常用函数集合",
+  description: "个人服务",
   base: "/",
   lastUpdated: true,
   themeConfig: {
     nav: [
       { text: "首页", link: "/" },
-      { text: "工具函数", link: "/ranuts/functions/" },
+      { text: "函数库", link: "/ranuts/functions/" },
       { text: "组件库", link: "/ranui/" },
       // { text: "我的掘金", link: "https://juejin.cn/user/2981531263964718" },
     ],

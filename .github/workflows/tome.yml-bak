@@ -1,0 +1,41 @@
+name: build to my server
+on: 
+  push: 
+    branches: 
+      - main # 这里表示push到main分支就会触发流程
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # 这是github官方的一个action，用于clone该仓库的源码到工作流中，
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+
+      - name: Build
+        run: |
+          npm install  # 安装依赖
+          npm run build  # 执行打包
+  
+      # 连接到ssh，并且做一个拷贝操作的action
+      - name: Deploy 🚀
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.AK_HOST }} # 服务器host
+          username: ${{ secrets.AK_USER }} # 服务器用户名
+          password: ${{ secrets.AK_PASS }} # 服务器密码
+          source: './docs/.vitepress/dist/*' # 需要上传的文件, 多文件使用逗号隔开
+          target: '/usr/local/qiankun/blog' # 上传到服务器的什么位置
+
+        # uses: cross-the-world/scp-pipeline@master
+        # env:
+        #   WELCOME: "ssh scp ssh pipelines"
+        #   LASTSSH: "Doing something after copying"
+        # with:
+        #  host: ${{ secrets.AK_HOST }}
+        #  user: ${{ secrets.AK_USER }}
+        #  pass: ${{ secrets.AK_PASS }}
+        #  connect_timeout: 10s
+        #  local: './docs/.vitepress/dist/*' # 这里是下一步要创建的vue项目构建完成后的静态资源路径
+        #  remote: /usr/local/qiankun/blog # 这里是 step1 中，在服务器上创建用于存放静态资源的文件夹

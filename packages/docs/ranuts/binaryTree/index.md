@@ -30,7 +30,7 @@
 ## 平衡二叉树
 
 平衡二叉树(AVL)一定是二叉搜索树，且左子树和右子树的高度差的绝对值不超过1。
-![平衡二叉树](../../assets/img/tree/balanceTree.png)
+![平衡二叉树](../../assets/ranuts/tree/balanceTree.png)
 
 ## B树
 

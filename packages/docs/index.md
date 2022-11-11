@@ -6,7 +6,7 @@ title: Home
 hero:
   name: chaxus
   text: 风起于青萍之末
-  tagline: Believe in yourself, there's nothing you can't do！
+  tagline: A ship in harbor is safe, but that is not what ships are built for.
   image:
     # src: /assets/home.svg
     alt: logo
