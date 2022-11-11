@@ -1,4 +1,3 @@
-import * as fs from "node:fs";
 
 let fileSystem: any;
 if (typeof require !== "undefined") {

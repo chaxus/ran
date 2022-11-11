@@ -1,6 +1,6 @@
 {
   "include": ["library"],
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules","dist"],
   "compilerOptions": {
     "module": "ESNext",
     "esModuleInterop": true,
@@ -17,7 +17,10 @@
     "baseUrl": ".",    
     "experimentalDecorators":true,   
     "paths": {
-      "@/*": ["library/*"],
+      "@/functions": ["library/functions/*"],
+      "@/model": ["library/model/*"],
+      "@/library": ["library/*"],
+      "@/node": ["library/functions/node/*"],
     },              
   },
   "ts-node": {

@@ -1,13 +1,13 @@
-import writeFile from "@/functions/writeFile";
-import readFile from '@/functions/readFile'
-import watchFile from "@/functions/watchFile";
-import EventEmitter from "@/model/EventEmitter";
-import queryFileInfo from "@/functions/fileInfo";
-import filterObj from "@/functions/filterObj";
-import readDir from "@/functions/readDir";
-import str2Xml from '@/functions/str2Xml'
+import writeFile from "./library/functions/writeFile";
+import readFile from "./library/functions/readFile"
+import watchFile from "./library/functions/watchFile";
+import EventEmitter from "./library/model/EventEmitter";
+import queryFileInfo from "./library/functions/fileInfo";
+import filterObj from "./library/functions/filterObj";
+import readDir from "./library/functions/readDir";
+import str2Xml from './library/functions/str2Xml'
 
-export default {
+export {
     writeFile,
     readFile,
     watchFile,

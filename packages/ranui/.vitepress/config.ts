@@ -1,5 +1,8 @@
 import { defineConfig } from "vitepress";
 
+const nav = [
+  { text: "组件库", link: "/docs/" },
+]
 
 const sidebar = {
   "/": [
@@ -31,6 +34,7 @@ const config = {
   title: "ranui",
   description: "基于web component的组件库",
   themeConfig: {
+    nav,
     sidebar,
   },
   base: "/",

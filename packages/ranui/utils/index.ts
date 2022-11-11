@@ -1,5 +1,4 @@
-import ranuts from "ranuts";
-const { readDir } = ranuts
+import { readDir } from "ranuts";
 // import { resolve } from "path";
 
 export const falseList = [false, "false", null, undefined];
