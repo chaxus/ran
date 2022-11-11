@@ -1,0 +1,53 @@
+#app .VPNavBar {
+    border-bottom: 1px solid var(--vp-c-divider-light);
+}
+
+#app .VPHomeHero {
+    margin-top: 20px;
+    margin-bottom: 35px;
+
+    .main {
+        margin-top: -40px;
+    }
+}
+
+#app .VPNavBarTitle {
+    .title {
+        color: transparent;
+        background: var(--vp-home-hero-name-background);
+        -webkit-background-clip: text;
+    }
+}
+
+.font-icon {
+    padding: 2px 8px;
+    border-radius: 4px;
+
+    display: inline-block;
+    background-color: var(--vp-c-gray-light-4);
+}
+
+.dark .font-icon {
+    background-color: var(--vp-c-bg);
+}
+
+
+p img {
+    margin-top: 2px;
+}
+
+@media (max-width: 960px) {
+    #app .image {
+        margin-top: -75px;
+    }
+
+    #app .VPHomeHero {
+        margin-bottom: 5px;
+
+        .main {
+            margin-top: 50px;
+        }
+    }
+}
+
+@media (min-width: 960px) {}
