@@ -1,13 +1,11 @@
 name: pages-build-site
-
-on: # 触发条件
-  push: # 每当 push 到 master 分支时触发部署
+on: 
+  push: 
     branches:
       - main
-
 jobs:
   deploy:
-    runs-on: ubuntu-latest # 指定运行所需要的虚拟机环境（必填）
+    runs-on: ubuntu-latest 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
