@@ -1,7 +1,7 @@
 import { defineConfig } from "vitepress";
 
 export default defineConfig({
-  title: "ranuts",
+  title: "chaxus",
   description: "个人服务",
   base: "/ran/",
   lastUpdated: true,
