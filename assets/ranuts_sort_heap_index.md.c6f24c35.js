@@ -1,1 +1,0 @@
-import{_ as e,c as t,o as a}from"./app.df631a38.js";const m=JSON.parse('{"title":"","description":"","frontmatter":{},"headers":[],"relativePath":"ranuts/sort/heap/index.md","lastUpdated":1668228831000}'),r={name:"ranuts/sort/heap/index.md"};function s(n,o,c,d,p,i){return a(),t("div")}const f=e(r,[["render",s]]);export{m as __pageData,f as default};
