@@ -3,7 +3,7 @@ import { defineConfig } from "vitepress";
 export default defineConfig({
   title: "ranuts",
   description: "个人服务",
-  base: "/",
+  base: "/ran/",
   lastUpdated: true,
   themeConfig: {
     nav: [
