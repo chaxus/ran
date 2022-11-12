@@ -43,14 +43,15 @@ jobs:
 
       - name: Build ranuts
         run: pnpm -F ranuts build
+
       - name: Build ranui
         run: pnpm -F ranui build
+
       - name: Build docs
         run: pnpm -F docs build
 
-      # - name: CreateTag
-      #   run git tag -a
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
+          github_token: ${{ secrets.RAN_ACTIONS_TOKEN }}
           publish_dir: packages/docs/.vitepress/dist
