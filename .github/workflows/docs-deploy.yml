@@ -3,7 +3,7 @@ name: build to my github
 on: # 触发条件
   push: # 每当 push 到 master 分支时触发部署
     branches:
-      - feature/docs
+      - main
 
 jobs:
   deploy:
