@@ -42,7 +42,7 @@ jobs:
         run: pnpm install
 
       - name: Build
-        run: pnpm -F docs build
+        run: pnpm -F ranuts build & pnpm -F ranui build & pnpm -F docs build
 
       # - name: CreateTag
       #   run git tag -a
