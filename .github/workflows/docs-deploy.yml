@@ -3,7 +3,7 @@ name: build to my github
 on: # 触发条件
   push: # 每当 push 到 master 分支时触发部署
     branches:
-      - main
+      - feature/docs
 
 jobs:
   deploy:
@@ -12,17 +12,16 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 17
           cache: npm
-      - run: npm install --frozen-lockfile
+      - run: npx pnpm install 
 
       - name: Build
-        run: npm run build
+        run: npx pnpm -F docs build
 
       # - name: CreateTag
       #   run git tag -a
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_RAN_TOKEN }}
           publish_dir: packages/docs/.vitepress/dist
