@@ -41,8 +41,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build
-        run: pnpm -F ranuts build & pnpm -F ranui build & pnpm -F docs build
+      - name: Build ranuts
+        run: pnpm -F ranuts build
+      - name: Build ranui
+        run: pnpm -F ranui build
+      - name: Build docs
+        run: pnpm -F docs build
 
       # - name: CreateTag
       #   run git tag -a
