@@ -1,4 +1,4 @@
-name: build to my github
+name: pages-build-deployment
 
 on: # 触发条件
   push: # 每当 push 到 master 分支时触发部署
