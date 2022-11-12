@@ -1,6 +1,5 @@
 import fs from '../node/fs'
 
-
 type Error = NodeJS.ErrnoException | null
 
 /**
@@ -10,7 +9,7 @@ type Error = NodeJS.ErrnoException | null
  * @return {Promise}
  */
 
-const readFile = (path: string, format: string = "utf-8") =>
+const readFile = (path: string, format: string = "utf-8"):Promise<Ranuts.Status> =>
   new Promise((resolve, reject) => {
     fs.readFile(path, format, (err: Error, data: string) => {
       err ? reject({ status: false, data: err }) : resolve({ status: true, data });

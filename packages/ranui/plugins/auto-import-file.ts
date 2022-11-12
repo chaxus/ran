@@ -1,8 +1,7 @@
 import { Plugin } from 'vite';
 import fs from "fs";
 import { resolve } from 'path';
-import ranuts from 'ranuts';
-const { writeFile, readFile, queryFileInfo, readDir } = ranuts;
+import { writeFile, readFile, queryFileInfo, readDir } from 'ranuts';
 
 interface Options {
     ignore?: Array<string>,
@@ -48,8 +47,8 @@ const createIndex = async (options: Options, entry: string) => {
     }
     try {
         await recurveFile(path)
-        const currContent = await readFile(entry)
-        if (currContent.status && currContent.data !== content) return await writeFile(entry, content)
+        const { status, data } = await readFile(entry)
+        if (status && data !== content) return await writeFile(entry, content)
         return { status: false }
     } catch (error) {
         throw error

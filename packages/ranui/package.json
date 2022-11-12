@@ -18,7 +18,7 @@
   "scripts": {
     "dev": "vitepress dev",
     "start": "vite",
-    "build": "vite build",
+    "build": "tsc --noEmit && vite build",
     "build:docs": "vitepress build",
     "serve:docs": "vitepress serve"
   },

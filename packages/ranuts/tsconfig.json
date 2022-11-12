@@ -1,5 +1,5 @@
 {
-  "include": ["library"],
+  "include": ["library","**/*.ts"],
   "exclude": ["node_modules","dist"],
   "compilerOptions": {
     "module": "ESNext",
