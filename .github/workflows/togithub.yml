@@ -25,4 +25,4 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_RAN_TOKEN }}
-          publish_dir: docs/.vitepress/dist
+          publish_dir: packages/docs/.vitepress/dist
