@@ -8,7 +8,7 @@ hero:
   text: 风起于青萍之末
   tagline: A ship in harbor is safe, but that is not what ships are built for.
   image:
-    # src: /assets/home.svg
+    src: /home.svg
     alt: logo
   actions:
     - theme: brand

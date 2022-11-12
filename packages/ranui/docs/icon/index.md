@@ -99,23 +99,25 @@ const createIconList = () => {
     'power-off', 'setting',
     'team', 'unlock',
     'user']
-    const dom = document.getElementById('icon-list')
-    list.forEach(item => {
-      const container = document.createElement('div')
-      container.style.setProperty('display', 'flex')
-      container.style.setProperty('align-items', 'center')
-      container.style.setProperty('margin', '15px')
-      container.style.setProperty('justify-content', 'center')
-      container.style.setProperty('flex-flow', 'column nowrap')
-      const icon = document.createElement('r-icon')
-      icon.setAttribute('name', item)
-      icon.setAttribute('size', "50")
-      container.appendChild(icon)
-      const span = document.createElement('span')
-      span.innerHTML = item
-      container.appendChild(span)
-      dom?.appendChild(container)
-    })
+    if (typeof document !== "undefined") {
+      const dom = document.getElementById('icon-list')
+      list.forEach(item => {
+        const container = document.createElement('div')
+        container.style.setProperty('display', 'flex')
+        container.style.setProperty('align-items', 'center')
+        container.style.setProperty('margin', '15px')
+        container.style.setProperty('justify-content', 'center')
+        container.style.setProperty('flex-flow', 'column nowrap')
+        const icon = document.createElement('r-icon')
+        icon.setAttribute('name', item)
+        icon.setAttribute('size', "50")
+        container.appendChild(icon)
+        const span = document.createElement('span')
+        span.innerHTML = item
+        container.appendChild(span)
+        dom?.appendChild(container)
+      })
+    }
   }, 0)
 }
 createIconList()
