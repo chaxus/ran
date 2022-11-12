@@ -9,10 +9,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest # 指定运行所需要的虚拟机环境（必填）
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout
+      - uses: actions/setup-node
         with:
-          node-version: 17
+          node-version: 16
           cache: npm
       - run: npx pnpm install 
 
