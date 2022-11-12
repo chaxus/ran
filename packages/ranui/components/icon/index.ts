@@ -1,6 +1,4 @@
-import ranuts from 'ranuts';
-const { str2Xml } = ranuts;
-
+import { str2Xml }  from 'ranuts';
 class CustomElement extends HTMLElement {
     static get observedAttributes() { return ['name', 'size', 'color', 'spin'] }
     _svg?: HTMLElement;

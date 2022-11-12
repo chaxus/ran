@@ -1,0 +1,21 @@
+{
+  "name": "docs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "serve": "vitepress serve"
+  },
+  "keywords": [],
+  "author": "chaxus",
+  "license": "ISC",
+  "devDependencies": {
+    "vitepress": "1.0.0-alpha.28"
+  },
+  "dependencies": {
+    "ranui": "workspace:0.1.1-alpha.1",
+    "ranuts": "workspace:0.1.0-alpha.1"
+  }
+}

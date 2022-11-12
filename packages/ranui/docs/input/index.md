@@ -141,4 +141,4 @@
   }
   input.addEventListener("input", func);
 ```
-![input方法]('./../../../assets/docs/input-input.jpg')
+![input方法](../../assets/docs/input-input.jpg)

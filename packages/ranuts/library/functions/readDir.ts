@@ -1,4 +1,5 @@
-import fs from '@/node/fs'
+import fs from '../node/fs'
+
 
 interface Options {
     dirPath: string,

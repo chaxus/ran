@@ -1,5 +1,6 @@
 import { Stats } from "fs";
-import fs from '@/node/fs'
+import fs from '../node/fs'
+
 
 /**
  * @description: 观察一个文件是否被改变，返回状态
