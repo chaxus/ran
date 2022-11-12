@@ -12,7 +12,7 @@
     "build:ranuts": "pnpm -F ranuts build",
     "build:ranui": "pnpm -F ranui build"
   },
-  "homepage": "https://chaxus.github.io/ran",
+  "homepage": "https://chaxus.github.io/ran/",
   "keywords": [],
   "author": "",
   "license": "ISC",
