@@ -26,3 +26,11 @@ declare namespace Ran {
 declare interface Window {
   message: Ran.Message;
 }
+
+declare namespace Ranuts {
+  interface Identification {
+      _identification: boolean;
+      message?: string;
+      data?:any
+  }
+}

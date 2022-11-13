@@ -1,8 +1,9 @@
 import { Plugin } from 'vite';
 import fs from "fs";
 import { resolve } from 'path';
-import { writeFile, readFile, queryFileInfo, readDir } from 'ranuts';
+import ranuts from 'ranuts';
 
+const  { writeFile, readFile, queryFileInfo, readDir } = ranuts
 interface Options {
     ignore?: Array<string>,
     path: Array<string>,
@@ -33,12 +34,12 @@ const createIndex = async (options: Options, entry: string) => {
      */
     const recurveFile = async (path: Array<string>) => {
         for (const item of path) {
-            const { status, data } = await queryFileInfo(item)
+            const { _identification, data } = await queryFileInfo(item)
             const extension = item.substring(item.lastIndexOf('.'))
-            if (status && data.isFile() && extensions.includes(extension) && !ignore.includes(item)) {
+            if (_identification && data.isFile() && extensions.includes(extension) && !ignore.includes(item)) {
                 content += `import '${item}';\n`
             }
-            if (status && data.isDirectory() && !ignore.includes(item)) {
+            if (_identification && data.isDirectory() && !ignore.includes(item)) {
                 const fileList = fs.readdirSync(item)
                 const list = fileList.map(children => `${item}/${children}`)
                 await recurveFile(list)
@@ -47,9 +48,9 @@ const createIndex = async (options: Options, entry: string) => {
     }
     try {
         await recurveFile(path)
-        const { status, data } = await readFile(entry)
-        if (status && data !== content) return await writeFile(entry, content)
-        return { status: false }
+        const { _identification, data } = await readFile(entry)
+        if (_identification && data !== content) return await writeFile(entry, content)
+        return { _identification: false }
     } catch (error) {
         throw error
     }

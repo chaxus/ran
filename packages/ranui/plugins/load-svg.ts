@@ -1,7 +1,8 @@
 import { Plugin } from 'vite';
-import { readFile } from 'ranuts';
+import ranuts from 'ranuts';
 import { optimize, Config, Output } from 'svgo'
 
+const { readFile } = ranuts
 interface Options {
     defaultImport?: string,
     svgoConfig?:Config,
@@ -21,7 +22,7 @@ export default function loadSvgPlugin(options: Options = {}): Plugin {
             const [path, query] = id.split('?', 2)
             const importType = query || defaultImport
             if (importType === 'url') return
-            let svg:Output
+            let svg: any
             try {
                 svg = await readFile(path, 'utf-8')
             } catch (ex) {

@@ -8,10 +8,11 @@ type Error = NodeJS.ErrnoException | null
  * @return {Promise}
  */
 
-const queryFileInfo = (path: string):Promise<Ranuts.Status> =>
+const queryFileInfo = (path: string):Promise<Ranuts.Identification> =>
   new Promise((resolve, reject) => {
+    if(!fs._identification) return reject({ _identification: false, data: 'fs is not loaded' })
     fs.stat(path, (err: Error, data: string) => {
-      err ? reject({ status: false, data: err }) : resolve({ status: true, data });
+      err ? reject({ _identification: false, data: err }) : resolve({ _identification: true, data });
     });
   });
 
