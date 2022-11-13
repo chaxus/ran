@@ -1,0 +1,12 @@
+// tsconfig.json
+{
+  "compilerOptions": {
+    // 支持 commonjs 模块的 default import，如 import path from 'path'
+    // 否则只能通过 import * as path from 'path' 进行导入
+    "esModuleInterop": true,
+    "target": "ES2020",
+    "moduleResolution": "node",
+    "module": "ES2020",
+    "strict": true
+  }
+}
