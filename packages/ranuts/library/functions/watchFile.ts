@@ -9,14 +9,15 @@ import fs from '../node/fs'
  * @return {Promise}
  */
 
-const watchFile = (path: string, interval: number = 20) =>
+const watchFile = (path: string, interval: number = 20):Promise<Ranuts.Identification> =>
   new Promise((resolve, reject) => {
+    if(!fs._identification) return reject({ _identification: false, data: 'fs is not loaded' })
     fs.watchFile(path, { interval }, (curr: Stats, prev: Stats) => {
       if (curr.mtime !== prev.mtime) {
         fs.unwatchFile(path);
-        resolve({ status: true, data: { msg: 'file is changed' } });
+        resolve({ _identification: true, data: { msg: 'file is changed' } });
       } else {
-        resolve({ status: false, data: { msg: 'file is not changed' } })
+        resolve({ _identification: false, data: { msg: 'file is not changed' } })
       }
     })
   });

@@ -45,7 +45,7 @@ function Custom() {
                     // vite 对动态导入的一些限制 https://github.com/rollup/plugins/tree/master/packages/dynamic-import-vars#limitations
                     try {
                         const result = await import(`../../assets/icons/${this.name}.svg`)
-                        if (result && result.default && result.default.status) {
+                        if (result && result.default && result.default._identification) {
                             const { data } = result.default
                             this._svg && this._div.removeChild(this._svg)
                             this._svg = str2Xml(data, 'image/svg+xml')

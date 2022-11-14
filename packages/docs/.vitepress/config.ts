@@ -2,10 +2,14 @@ import { defineConfig } from "vitepress";
 
 export default defineConfig({
   title: "chaxus",
-  description: "个人服务",
+  description: "基于web component组件库,常用函数库utils,个人文章记录等",
   base: "/ran/",
   lastUpdated: true,
+  head: [
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/home.svg' }],
+  ],
   themeConfig: {
+    logo: '/home.svg',
     nav: [
       { text: "首页", link: "/" },
       { text: "函数库", link: "/ranuts/functions/" },

@@ -1,0 +1,20 @@
+{
+  "name": "ranite",
+  "version": "0.0.1-alpha.1",
+  "description": "",
+  "main": "index.js",
+  "bin": {
+    "ran": "bin/ranite"
+  },
+  "scripts": {
+    "start": "tsup --watch",
+    "build": "tsup --minify"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cac": "^6.7.14",
+    "tsup": "^6.4.0"
+  }
+}

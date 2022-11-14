@@ -1,4 +1,4 @@
-Monorepo repo 主要分为下面几个部分
+`Monorepo`，分为以下部分
 
 # docs
 
@@ -14,7 +14,11 @@ Monorepo repo 主要分为下面几个部分
 
 # press
 
-常用css
+常用`css`，有`sass`和`less`
+
+# ranite
+
+前端打包构建工具
 
 
 

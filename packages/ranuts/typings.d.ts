@@ -4,3 +4,11 @@ declare module '@/node/*'
 declare module '@/sort/*'
 declare module '@/library/*'
 
+declare namespace Ranuts {
+    interface Identification {
+        _identification: boolean;
+        message?: string;
+        data?:any
+    }
+}
+
