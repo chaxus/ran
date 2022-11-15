@@ -6,7 +6,9 @@ export default defineConfig({
   base: "/ran/",
   lastUpdated: true,
   head: [
-    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/home.svg' }],
+    ['link', { rel: 'icon',  href: '/favicon.ico' }],
+    ['meta', { property: 'og:type', content: 'website' }],
+    ['meta', { name: 'theme-color', content: '#646cff' }],
   ],
   themeConfig: {
     logo: '/home.svg',

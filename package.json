@@ -7,10 +7,7 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "clean": "sh ./bin/clean.sh",
-    "dev:ranui": "pnpm -F ranui dev",
-    "dev:ranuts": "pnpm -F ranuts dev",
-    "build:ranuts": "pnpm -F ranuts build",
-    "build:ranui": "pnpm -F ranui build"
+    "build": "sh ./bin/build.sh"
   },
   "homepage": "https://chaxus.github.io/ran/",
   "keywords": [],
