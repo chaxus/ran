@@ -26,10 +26,18 @@ importers:
   packages/ranite:
     specifiers:
       cac: ^6.7.14
+      picocolors: ^1.0.0
       tsup: ^6.4.0
     devDependencies:
       cac: 6.7.14
+      picocolors: 1.0.0
       tsup: 6.4.0
+
+  packages/ranite-test:
+    specifiers:
+      ranite: workspace:0.0.1-alpha.1
+    devDependencies:
+      ranite: link:../ranite
 
   packages/ranui:
     specifiers:

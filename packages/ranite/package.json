@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "bin": {
-    "ran": "bin/ranite"
+    "ranite": "bin/ranite"
   },
   "scripts": {
     "start": "tsup --watch",
@@ -15,6 +15,7 @@
   "license": "ISC",
   "devDependencies": {
     "cac": "^6.7.14",
+    "picocolors": "^1.0.0",
     "tsup": "^6.4.0"
   }
 }

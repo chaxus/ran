@@ -1,17 +1,28 @@
-// 用于构建cli命令行的工具
-import cac from "cac"; 
+// 构建cli命令行
+import { startDevServer } from "./server";
 
-const cli = cac();
+const argv = process.argv;
+/**
+ * @description:  执行ran dev后，process.argv的值
+ * 测试 cli~ [
+  '/Users/.nvm/versions/node/v16.14.2/bin/node',
+  '/Users/Documents/code/ran/packages/ranite/bin/ranite',
+  'serve'
+    ]
+ */
+const dev = (cmd: string) => {
+    if (cmd === 'dev' || cmd === 'serve') {
+        startDevServer()
+    }
+}
+function parseOptions(options = {}) {
+    const argv = process.argv;
+    for (let i = 2; i < argv.length; i++) {
+        const cmd = argv[i];
+        dev(cmd)
+    }
+}
 
-// [] 中的内容为可选参数，也就是说仅输入 `vite` 命令下会执行下面的逻辑
-cli
-  .command("[root]", "Run the development server")
-  .alias("serve")
-  .alias("dev")
-  .action(async () => {
-    console.log('测试 cli~');
-  });
+parseOptions()
 
-cli.help();
 
-cli.parse();
