@@ -14,7 +14,6 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "cac": "^6.7.14",
     "picocolors": "^1.0.0",
     "tsup": "^6.4.0"
   }
