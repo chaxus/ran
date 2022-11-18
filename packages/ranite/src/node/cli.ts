@@ -11,18 +11,18 @@ const argv = process.argv;
     ]
  */
 const dev = (cmd: string) => {
-    if (cmd === 'dev' || cmd === 'serve') {
-        startDevServer()
-    }
+    // 如果命令是dev或者是serve，启动服务
+  if (cmd === "dev" || cmd === "serve") {
+    startDevServer();
+  }
+};
+function parseOptions() {
+  const argv = process.argv;
+  for (let i = 0; i < argv.length; i++) {
+    const cmd = argv[i];
+    // console.log("cmd--->", argv, cmd);
+    dev(cmd);
+  }
 }
-function parseOptions(options = {}) {
-    const argv = process.argv;
-    for (let i = 2; i < argv.length; i++) {
-        const cmd = argv[i];
-        dev(cmd)
-    }
-}
 
-parseOptions()
-
-
+parseOptions();

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "bin": {
-    "ranite": "bin/ranite"
+    "ran": "bin/ranite"
   },
   "scripts": {
     "start": "tsup --watch",

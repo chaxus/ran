@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "ran"
+    "dev": "ran dev"
   },
   "keywords": [],
   "author": "",
