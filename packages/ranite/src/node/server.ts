@@ -1,6 +1,5 @@
 import { blue, green } from "picocolors";
-import { optimize } from "../optimizer/index";
-import path from "path";
+import { optimize } from "./optimizer/index";
 
 const http = require("http");
 const url = require("url");
@@ -25,8 +24,6 @@ const startDevServer = () => {
   server.listen(8080, async () => {
     const { port } = server.address(); // { address: '::', family: 'IPv6', port: 8080 }
     const root = process.cwd();
-    // 1. 确定入口
-    const entry = path.resolve(root, "src/main.tsx");
     await optimize(root);
     console.log(
       green("🚀 No-Bundle 服务已经成功启动!"),

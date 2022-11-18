@@ -71,3 +71,9 @@ runBuild();
 
 ## Esbuild 插件开发
 
+
+# es-module-lexer
+
+官方说明：[es-module-lexer](https://www.npmjs.com/package/es-module-lexer)
+
+es-module-lexer 是一个可以对 ES Module 语句进行词法分析的工具包。
