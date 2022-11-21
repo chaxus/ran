@@ -7,7 +7,8 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "clean": "sh ./bin/clean.sh",
-    "build": "sh ./bin/build.sh"
+    "build": "sh ./bin/build.sh",
+    "test": "sh ./bin/test.sh"
   },
   "homepage": "https://chaxus.github.io/ran/",
   "keywords": [],

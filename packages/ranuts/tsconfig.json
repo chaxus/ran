@@ -1,5 +1,5 @@
 {
-  "include": ["library","**/*.ts"],
+  "include": ["src","**/*.ts"],
   "exclude": ["node_modules","dist"],
   "compilerOptions": {
     "module": "ESNext",
@@ -17,10 +17,7 @@
     "baseUrl": ".",    
     "experimentalDecorators":true,   
     "paths": {
-      "@/functions": ["library/functions/*"],
-      "@/model": ["library/model/*"],
-      "@/library": ["library/*"],
-      "@/node": ["library/functions/node/*"],
+      "@": ["src/*"],
     },              
   },
   "ts-node": {

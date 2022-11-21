@@ -4,8 +4,8 @@ import {
     NodeType,
     Program,
     ExportDeclaration,
-} from "../../library/astParser";
-import { parse } from "../../library/astParser";
+} from "../../src/astParser";
+import { parse } from "../../src/astParser";
 
 describe("testParserFunction", () => {
     it("test variable declaration", () => {

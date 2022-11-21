@@ -1,8 +1,9 @@
-declare module '@/functions/*'
-declare module '@/model/*'
+declare module '@/file/*'
+declare module '@/designMode/*'
 declare module '@/node/*'
 declare module '@/sort/*'
-declare module '@/library/*'
+declare module '@/astParser/*'
+declare module '@/utils/*'
 
 declare namespace Ranuts {
     interface Identification {
