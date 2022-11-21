@@ -2,7 +2,7 @@ import { Loader, Plugin } from "esbuild";
 import { BARE_IMPORT_RE } from "../constants";
 // 用来分析 es 模块 import/export 语句的库
 import { init, parse } from "es-module-lexer";
-import path from "path";
+import { extname } from "node:path";
 // 一个实现了 node 路径解析算法的库
 import resolve from "resolve";
 // 一个更加好用的文件操作库
@@ -21,19 +21,19 @@ export function preBundlePlugin(deps: Set<string>): Plugin {
           filter: BARE_IMPORT_RE,
         },
         (resolveInfo) => {
-          const { path: id, importer } = resolveInfo;
+          const { path, importer } = resolveInfo;
           const isEntry = !importer;
           // 命中需要预编译的依赖
-          if (deps.has(id)) {
+          if (deps.has(path)) {
             // 若为入口，则标记 dep 的 namespace
             return isEntry
               ? {
-                  path: id,
+                  path,
                   namespace: "dep",
                 }
               : {
                   // 因为走到 onResolve 了，所以这里的 path 就是绝对路径了
-                  path: resolve.sync(id, { basedir: process.cwd() }),
+                  path: resolve.sync(path, { basedir: process.cwd() }),
                 };
           }
         }
@@ -48,9 +48,9 @@ export function preBundlePlugin(deps: Set<string>): Plugin {
         async (loadInfo) => {
           // es-module-lexer init 初始化
           await init;
-          const id = loadInfo.path;
+          const { path } = loadInfo;
           const root = process.cwd();
-          const entryPath = resolve.sync(id, { basedir: root });
+          const entryPath = resolve.sync(path, { basedir: root });
           const code = await fs.readFile(entryPath, "utf-8");
           // es-module-lexer 进行词法分析
           const [imports, exports] = await parse(code);
@@ -75,7 +75,7 @@ export function preBundlePlugin(deps: Set<string>): Plugin {
             proxyModule.push(`export * from "${entryPath}"`);
           }
           debug("代理模块内容: %o", proxyModule.join("\n"));
-          const loader = path.extname(entryPath).slice(1);
+          const loader = extname(entryPath).slice(1);
           return {
             loader: loader as Loader,
             contents: proxyModule.join("\n"),
