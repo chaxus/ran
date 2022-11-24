@@ -1,5 +1,5 @@
 import { Stats } from "fs";
-import fs from '../node/fs'
+import fs from '@/node/fs'
 
 
 /**

@@ -1,5 +1,5 @@
-import fs from '../node/fs'
-import readFile from './readFile'
+import fs from '@/node/fs'
+import readFile from '@/file/readFile'
 
 type Error = NodeJS.ErrnoException | null
 
@@ -14,7 +14,7 @@ const appendFile = (path: string, content: string):Promise<Ranuts.Identification
     new Promise((resolve, reject) => {
         if(!fs._identification) return reject({ _identification: false, data: 'fs is not loaded' })
         fs.appendFile(path, content, (err: Error) => {
-            err ? reject({ _identification: false, data: err }) : readFile(path).then((result) => {
+            err ? reject({ _identification: false, data: err }) : readFile(path).then((result:Ranuts.Identification) => {
                 resolve(result)
             })
         });

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { Tokenizer } from '../../library/astParser'
+import { Tokenizer } from '@/astParser/index'
 
 describe("testTokenizerFunction", () => {
     it("test example", () => {
