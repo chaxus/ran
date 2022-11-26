@@ -17,7 +17,6 @@ export function compose<T>(middleware: Array<Compose.Middleware<T>>): Compose.Co
         if (typeof fn !== 'function') throw new TypeError('Middleware must be composed of functions!')
     }
     return function (context, next) {
-        // last called middleware #
         let index = -1
         return dispatch(0)
         function dispatch(i: number): Promise<never> | Promise<void> {

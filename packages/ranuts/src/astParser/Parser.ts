@@ -23,7 +23,7 @@ import {
   FunctionExpression,
   BinaryExpression,
 } from "./node-types";
-
+// 语法分析器
 export class Parser {
   private _tokens: Token[] = [];
   private _currentIndex = 0;

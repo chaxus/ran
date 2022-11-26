@@ -1,5 +1,8 @@
 import { isWhiteSpace, isAlpha, isDigit, isUnderline } from "./utils";
 
+// 词法分析器，将代码划分为一个个词法单元，便于进行后续的语法分析
+// 本质上是对代码字符串进行逐个字符的扫描，然后根据一定的语法规则进行分组。
+
 export enum TokenType {
   Let = "Let",
   Const = "Const",
@@ -26,6 +29,7 @@ export enum TokenType {
   Asterisk = "Asterisk",
 }
 
+// 扫描模式
 export enum ScanMode {
   Normal,
   Identifier,
@@ -33,6 +37,7 @@ export enum ScanMode {
   Number,
 }
 
+// 词法分析，token的类型，值，开始位置，结束位置，文本
 export type Token = {
   type: TokenType;
   value?: string;
@@ -42,6 +47,7 @@ export type Token = {
 };
 
 // 策略模式
+// Token 的生成器对象
 const TOKENS_GENERATOR: Record<string, (...args: any[]) => Token> = {
   let(start: number) {
     return { type: TokenType.Let, value: "let", start, end: start + 3 };
@@ -181,8 +187,10 @@ const TOKENS_GENERATOR: Record<string, (...args: any[]) => Token> = {
   },
 };
 
+// 单字符标记
 type SingleCharTokens = "(" | ")" | "{" | "}" | "." | ";" | "," | "*" | "=";
 
+// 单字符标记
 const KNOWN_SINGLE_CHAR_TOKENS = new Map<
   SingleCharTokens,
   typeof TOKENS_GENERATOR[keyof typeof TOKENS_GENERATOR]
@@ -214,6 +222,7 @@ const OPERATOR_TOKENS = [
   ">>",
 ];
 
+// 词法分析器
 export class Tokenizer {
   private _tokens: Token[] = [];
   private _currentIndex: number = 0;
@@ -222,8 +231,21 @@ export class Tokenizer {
   constructor(input: string) {
     this._source = input;
   }
+  /**
+   * @description: 设置扫描的模式
+   * @param {ScanMode} mode
+   */  
+  private _setScanMode(mode: ScanMode) {
+    this._scanMode = mode;
+  }
+  /**
+   * @description: 将扫描模式设置成普通模式
+   */  
+  private _resetScanMode() {
+    this._scanMode = ScanMode.Normal;
+  }
 
-  scanIndentifier(): void {
+  scanIdentifier(): void {
     this._setScanMode(ScanMode.Identifier);
     // 继续扫描，直到收集完整的单词
     let identifier = "";
@@ -314,7 +336,7 @@ export class Tokenizer {
       }
       // 2. 判断是否是字母
       else if (isAlpha(currentChar)) {
-        this.scanIndentifier();
+        this.scanIdentifier();
         continue;
       }
       // 3. 判断是否是单字符 () {} . ; *
@@ -404,13 +426,5 @@ export class Tokenizer {
       return this._tokens[this._tokens.length - 1];
     }
     throw new Error("Previous token not found");
-  }
-
-  private _setScanMode(mode: ScanMode) {
-    this._scanMode = mode;
-  }
-
-  private _resetScanMode() {
-    this._scanMode = ScanMode.Normal;
   }
 }
