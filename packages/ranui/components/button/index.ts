@@ -4,7 +4,7 @@ function Custom() {
   if (typeof window !== "undefined" && !customElements.get("r-button")) {
     class CustomElement extends HTMLElement {
       static get observedAttributes() {
-        return ["disabled", "type", "icon"];
+        return ["disabled", "icon"];
       }
       _btn: HTMLDivElement;
       _iconElement?: HTMLElement;
@@ -36,11 +36,11 @@ function Custom() {
         if (value) {
           this.setAttribute('icon', value)
         }
-        /**
-         * @description: 设置button的icon
-         * @return {*}
-         */
       }
+      /**
+        * @description: 设置button的icon
+        * @return {*}
+        */
       setIcon = () => {
         if (this.icon) {
           // 获取button的尺寸
@@ -60,7 +60,7 @@ function Custom() {
             // 添加到btn元素的首位
             this._slot.insertAdjacentElement('beforebegin', this._iconElement)
           }
-    
+
         }
       }
       mousedown = (event: MouseEvent) => {
