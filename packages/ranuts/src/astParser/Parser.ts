@@ -22,7 +22,7 @@ import {
   ExportDeclaration,
   FunctionExpression,
   BinaryExpression,
-} from "./node-types";
+} from "./nodeTypes";
 // 语法分析器
 export class Parser {
   private _tokens: Token[] = [];

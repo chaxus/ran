@@ -1,4 +1,4 @@
-import { isWhiteSpace, isAlpha, isDigit, isUnderline } from "./utils";
+import { isWhiteSpace, isAlpha, isDigit, isUnderline } from "@/astParser/utils";
 
 // 词法分析器，将代码划分为一个个词法单元，便于进行后续的语法分析
 // 本质上是对代码字符串进行逐个字符的扫描，然后根据一定的语法规则进行分组。

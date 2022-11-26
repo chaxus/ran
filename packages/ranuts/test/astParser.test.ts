@@ -1,10 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import { Tokenizer, parse } from '@/astParser/index'
+import { Tokenizer, parse, NodeType } from '@/astParser/index'
 import {
     MemberExpression,
-    NodeType,
     Program,
-} from "../src/astParser";
+} from "../src/astParser/nodeTypes";
 
 describe("astParser", () => {
     it("tokenizer: testTokenizerFunction", () => {
