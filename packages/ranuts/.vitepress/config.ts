@@ -8,10 +8,9 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: "首页", link: "/docs/" },
-      { text: "工具函数", link: "/docs/functions/" },
+      { text: "工具函数", link: "/docs/utils/" },
       { text: "文件函数", link: "/docs/file/" },
       { text: "排序算法", link: "/docs/sort/" },
-      { text: "我的掘金", link: "https://juejin.cn/user/2981531263964718" },
     ],
     socialLinks: [{ icon: "github", link: "https://github.com/chaxus/ran" }],
     footer: {
@@ -19,12 +18,12 @@ export default defineConfig({
       copyright: "Copyright © 2022-11-11",
     },
     sidebar: {
-      "/docs/functions/": [
+      "/docs/utils/": [
         {
           items: [
-            { text: "通用函数", link: "/docs/functions/" },
-
-            { text: "统计执行时间", link: "/docs/functions/task/" },
+            { text: "通用函数", link: "/docs/utils/" },
+            { text: "统计执行时间", link: "/docs/utils/task" },
+            { text: "compose函数", link: "/docs/utils/compose" },
           ],
         },
       ],

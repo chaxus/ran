@@ -1,5 +1,5 @@
-import { Parser } from "./Parser";
-import { Tokenizer } from "./Tokenizer";
+import { Parser } from "@/astParser/Parser";
+import { Tokenizer } from "@/astParser/Tokenizer";
 
 export function parse(code: string) {
   const tokenizer = new Tokenizer(code);
@@ -8,5 +8,5 @@ export function parse(code: string) {
   return parser.parse();
 }
 
-export * from "./Tokenizer";
-export * from "./node-types";
+export * from "@/astParser/Tokenizer";
+export * from "@/astParser/nodeTypes";

@@ -22,6 +22,23 @@ export enum NodeType {
     ExportAllDeclaration = "ExportAllDeclaration",
     VariableDeclarator = "VariableDeclarator",
   }
+
+  export type Statement =
+  | ImportDeclaration
+  | ExportDeclaration
+  | VariableDeclaration
+  | FunctionDeclaration
+  | ExpressionStatement
+  | BlockStatement
+  | ReturnStatement;
+
+export type Expression =
+  | CallExpression
+  | MemberExpression
+  | Identifier
+  | Literal
+  | BinaryExpression
+  | FunctionExpression;
   
   export enum FunctionType {
     FunctionDeclaration,
@@ -175,20 +192,5 @@ export enum NodeType {
     argument: Expression;
   }
   
-  export type Statement =
-    | ImportDeclaration
-    | ExportDeclaration
-    | VariableDeclaration
-    | FunctionDeclaration
-    | ExpressionStatement
-    | BlockStatement
-    | ReturnStatement;
-  
-  export type Expression =
-    | CallExpression
-    | MemberExpression
-    | Identifier
-    | Literal
-    | BinaryExpression
-    | FunctionExpression;
+
   
