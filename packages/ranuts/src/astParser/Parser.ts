@@ -60,7 +60,6 @@ export class Parser {
   }
 
   private _parseStatement(): Statement {
-
     // TokenType 来自 Tokenizer 的实现中
     if (this._checkCurrentTokenType(TokenType.Function)) {
       return this._parseFunctionDeclaration() as FunctionDeclaration;
