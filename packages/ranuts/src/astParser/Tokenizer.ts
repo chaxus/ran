@@ -187,10 +187,10 @@ const TOKENS_GENERATOR: Record<string, (...args: any[]) => Token> = {
   },
 };
 
-// 单字符标记
+// 单字符token
 type SingleCharTokens = "(" | ")" | "{" | "}" | "." | ";" | "," | "*" | "=";
 
-// 单字符标记
+// 单字符token
 const KNOWN_SINGLE_CHAR_TOKENS = new Map<
   SingleCharTokens,
   typeof TOKENS_GENERATOR[keyof typeof TOKENS_GENERATOR]
@@ -205,9 +205,9 @@ const KNOWN_SINGLE_CHAR_TOKENS = new Map<
   ["*", TOKENS_GENERATOR.asterisk],
   ["=", TOKENS_GENERATOR.assign],
 ]);
-
+// 引号token
 const QUOTATION_TOKENS = ["'", '"', "`"];
-
+// 操作符token
 const OPERATOR_TOKENS = [
   "+",
   "-",
@@ -234,17 +234,17 @@ export class Tokenizer {
   /**
    * @description: 设置扫描的模式
    * @param {ScanMode} mode
-   */  
+   */
   private _setScanMode(mode: ScanMode) {
     this._scanMode = mode;
   }
   /**
    * @description: 将扫描模式设置成普通模式
-   */  
+   */
   private _resetScanMode() {
     this._scanMode = ScanMode.Normal;
   }
-
+  // 扫描标识符
   scanIdentifier(): void {
     this._setScanMode(ScanMode.Identifier);
     // 继续扫描，直到收集完整的单词
@@ -272,10 +272,11 @@ export class Tokenizer {
     else {
       token = TOKENS_GENERATOR["identifier"](startIndex, identifier);
     }
+    // 词法分析加入this._tokens
     this._tokens.push(token);
     this._resetScanMode();
   }
-
+  // 扫描字符串变量
   scanStringLiteral(): void {
     this._setScanMode(ScanMode.StringLiteral);
     const startIndex = this._currentIndex;
@@ -296,10 +297,11 @@ export class Tokenizer {
       str,
       `${startQuotation}${str}${startQuotation}`
     );
+    // 词法分析加入this._tokens
     this._tokens.push(token);
     this._resetScanMode();
   }
-
+  // 扫描数字
   _scanNumber(): void {
     this._setScanMode(ScanMode.Number);
     const startIndex = this._currentIndex;
@@ -320,6 +322,7 @@ export class Tokenizer {
       throw new Error('Unexpected character "."');
     }
     const token = TOKENS_GENERATOR.number(startIndex, number);
+    // 词法分析加入this._tokens
     this._tokens.push(token);
     this._resetScanMode();
   }
@@ -398,6 +401,7 @@ export class Tokenizer {
       }
     }
     this._resetCurrentIndex();
+    // 返回token数组
     return this._getTokens();
   }
 

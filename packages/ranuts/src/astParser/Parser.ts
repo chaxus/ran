@@ -23,6 +23,11 @@ import {
   FunctionExpression,
   BinaryExpression,
 } from "./nodeTypes";
+
+const PROGRAM_GENERATOR: Record<string, (...args: any[]) => Token> = {
+
+}
+
 // 语法分析器
 export class Parser {
   private _tokens: Token[] = [];
@@ -35,7 +40,8 @@ export class Parser {
     const program = this._parseProgram();
     return program;
   }
-
+  // 一个程序(Program)实际上由各个语句(Statement)来构成
+  // 因此在_parseProgram逻辑中，需要扫描一个个语句，然后放到 Program 对象的 body 中。
   private _parseProgram(): Program {
     const program: Program = {
       type: NodeType.Program,
@@ -54,6 +60,8 @@ export class Parser {
   }
 
   private _parseStatement(): Statement {
+
+    // TokenType 来自 Tokenizer 的实现中
     if (this._checkCurrentTokenType(TokenType.Function)) {
       return this._parseFunctionDeclaration() as FunctionDeclaration;
     } else if (this._checkCurrentTokenType(TokenType.Identifier)) {
@@ -75,7 +83,7 @@ export class Parser {
     ) {
       return this._parseVariableDeclaration();
     }
-    console.log(this._getCurrentToken());
+    console.log('Unexpected token:', this._getCurrentToken());
     throw new Error("Unexpected token");
   }
 
@@ -278,7 +286,9 @@ export class Parser {
   }
 
   private _parseVariableDeclaration(): VariableDeclaration {
+    // 获取语句开始位置
     const { start } = this._getCurrentToken();
+    // 拿到 let
     const kind = this._getCurrentToken().value;
     this._goNext([TokenType.Let, TokenType.Var, TokenType.Const]);
     const declarations = [];
@@ -294,6 +304,7 @@ export class Parser {
       return true;
     };
     while (!isVariableDeclarationEnded()) {
+      // 解析变量名 foo
       const id = this._parseIdentifier();
       let init = null;
       if (this._checkCurrentTokenType(TokenType.Assign)) {
@@ -321,6 +332,7 @@ export class Parser {
         this._goNext(TokenType.Comma);
       }
     }
+    // 构造 Declaration 节点
     const node: VariableDeclaration = {
       type: NodeType.VariableDeclaration,
       kind: kind as VariableKind,
@@ -361,6 +373,7 @@ export class Parser {
   private _parseExpression(): Expression {
     // 先检查是否是一个函数表达式
     if (this._checkCurrentTokenType(TokenType.Function)) {
+      // 解析函数表达式
       return this._parseFunctionExpression();
     }
     if (
@@ -369,21 +382,21 @@ export class Parser {
       return this._parseLiteral();
     }
     // 拿到标识符，如 a
-    let expresion: Expression = this._parseIdentifier();
+    let expression: Expression = this._parseIdentifier();
     while (!this._isEnd()) {
       if (this._checkCurrentTokenType(TokenType.LeftParen)) {
-        expresion = this._parseCallExpression(expresion);
+        expression = this._parseCallExpression(expression);
       } else if (this._checkCurrentTokenType(TokenType.Dot)) {
         // 继续解析，a.b
-        expresion = this._parseMemberExpression(expresion as MemberExpression);
+        expression = this._parseMemberExpression(expression as MemberExpression);
       } else if (this._checkCurrentTokenType(TokenType.Operator)) {
         // 解析 a + b
-        expresion = this.__parseBinaryOperatorExpression(expresion);
+        expression = this.__parseBinaryOperatorExpression(expression);
       } else {
         break;
       }
     }
-    return expresion;
+    return expression;
   }
 
   private __parseBinaryOperatorExpression(
@@ -484,9 +497,9 @@ export class Parser {
       let param =
         mode === FunctionType.FunctionDeclaration
           ? // 函数声明
-            this._parseIdentifier()
+          this._parseIdentifier()
           : // 函数调用
-            this._parseExpression();
+          this._parseExpression();
       params.push(param);
       if (!this._checkCurrentTokenType(TokenType.RightParen)) {
         this._goNext(TokenType.Comma);
@@ -543,6 +556,7 @@ export class Parser {
     return blockStatement;
   }
 
+  // 检查当前的token类型是否等于传入的类型(this._tokens[this._currentIndex])
   private _checkCurrentTokenType(type: TokenType | TokenType[]): boolean {
     if (this._isEnd()) {
       return false;
@@ -560,7 +574,7 @@ export class Parser {
       this._goNext(TokenType.Semicolon);
     }
   }
-
+  // 工具方法，表示消费当前 Token，扫描位置移动到下一个 token
   private _goNext(type: TokenType | TokenType[]): Token {
     const currentToken = this._tokens[this._currentIndex];
     // 断言当前 Token 的类型，如果不能匹配，则抛出错误
@@ -578,7 +592,7 @@ export class Parser {
     this._currentIndex++;
     return currentToken;
   }
-
+  // token 是否已经扫描完
   private _isEnd(): boolean {
     return this._currentIndex >= this._tokens.length;
   }
