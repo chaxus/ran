@@ -1,0 +1,1 @@
+import{_ as e,c as t,o as r}from"./app.82400e88.js";const m=JSON.parse('{"title":"","description":"","frontmatter":{},"headers":[],"relativePath":"ranuts/sort/merge/index.md","lastUpdated":1669520302000}'),a={name:"ranuts/sort/merge/index.md"};function s(n,o,c,d,i,p){return r(),t("div")}const f=e(a,[["render",s]]);export{m as __pageData,f as default};
