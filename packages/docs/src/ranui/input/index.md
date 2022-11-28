@@ -142,4 +142,4 @@
   input.addEventListener("input", func);
 ```
 事件的`e`参数结构
-![input方法](../../assets/ranui/input-input.jpg)
+![input方法](../../../assets/ranui/input-input.jpg)

@@ -14,8 +14,9 @@ export default defineConfig({
     logo: '/home.svg',
     nav: [
       { text: "首页", link: "/" },
-      { text: "函数库", link: "/ranuts/functions/" },
-      { text: "组件库", link: "/ranui/" },
+      { text: "函数", link: "/src/ranuts/utils/" },
+      { text: "组件", link: "/src/ranui/" },
+      { text: "璀璨", link: "/src/article/" },
       // { text: "我的掘金", link: "https://juejin.cn/user/2981531263964718" },
     ],
     socialLinks: [{ icon: "github", link: "https://github.com/chaxus/ran" }],
@@ -24,62 +25,69 @@ export default defineConfig({
       copyright: "Copyright © 2022-11-11",
     },
     sidebar: {
-      "/ranuts/": [
+      "/src/ranuts/": [
         {
           text:'通用函数',
           items: [
-            { text: "过滤对象", link: "/ranuts/functions/" },
-            { text: "统计执行时间", link: "/ranuts/functions/task/" },
+            { text: "过滤对象", link: "/src/ranuts/utils/" },
+            { text: "统计执行时间", link: "/src/ranuts/utils/task/" },
           ],
         },
         {
           text:'文件操作',
-          items: [{ text: "监听文件是否改变", link: "/ranuts/file/" }],
+          items: [{ text: "监听文件是否改变", link: "/src/ranuts/file/" }],
         },
         {
           text: "排序算法",
           items: [
-            { text: "概览", link: "/ranuts/sort/" },
-            { text: "冒泡排序", link: "/ranuts/sort/bubble/" },
-            { text: "选择排序", link: "/ranuts/sort/select/" },
-            { text: "插入排序", link: "/ranuts/sort/insert/" },
-            { text: "希尔排序", link: "/ranuts/sort/shell/" },
-            { text: "归并排序", link: "/ranuts/sort/merge/" },
-            { text: "快速排序", link: "/ranuts/sort/quick/" },
-            { text: "堆排序", link: "/ranuts/sort/heap/" },
-            { text: "计数排序", link: "/ranuts/sort/count/" },
-            { text: "桶排序", link: "/ranuts/sort/bucket/" },
-            { text: "基数排序", link: "/ranuts/sort/radix/" },
+            { text: "概览", link: "/src/ranuts/sort/" },
+            { text: "冒泡排序", link: "/src/ranuts/sort/bubble/" },
+            { text: "选择排序", link: "/src/ranuts/sort/select/" },
+            { text: "插入排序", link: "/src/ranuts/sort/insert/" },
+            { text: "希尔排序", link: "/src/ranuts/sort/shell/" },
+            { text: "归并排序", link: "/src/ranuts/sort/merge/" },
+            { text: "快速排序", link: "/src/ranuts/sort/quick/" },
+            { text: "堆排序", link: "/src/ranuts/sort/heap/" },
+            { text: "计数排序", link: "/src/ranuts/sort/count/" },
+            { text: "桶排序", link: "/src/ranuts/sort/bucket/" },
+            { text: "基数排序", link: "/src/ranuts/sort/radix/" },
           ],
         },
       ],
-      "/ranui/":[
+      "/src/ranui/":[
         {
           text:'通用',
           items: [
-            { text: "Button 按钮", link: "/ranui/button/" },
-            { text: "Icon 图标", link: "/ranui/icon/" },
+            { text: "Button 按钮", link: "/src/ranui/button/" },
+            { text: "Icon 图标", link: "/src/ranui/icon/" },
           ],
         },
         {
           text:'数据展示',
           items:[
-            { text: "Image 图片", link: "/ranui/image/" },
-            { text: "Tabs 标签页", link: "/ranui/tabs/" },
+            { text: "Image 图片", link: "/src/ranui/image/" },
+            { text: "Tabs 标签页", link: "/src/ranui/tabs/" },
           ]
         },
         {
           text:'数据录入',
           items: [
-            { text: "Input 输入框", link: "/ranui/input/" },
+            { text: "Input 输入框", link: "/src/ranui/input/" },
           ],
         },
         {
           text:'反馈',
           items: [
-            { text: "Message 全局提示", link: "/ranui/message/" },
+            { text: "Message 全局提示", link: "/src/ranui/message/" },
           ],
         }
+      ],
+      "/src/article/":[
+        {
+          items:[
+            { text: "23 种经典设计模式", link: "/src/article/" },
+          ]
+        },
       ]
     },
   },
