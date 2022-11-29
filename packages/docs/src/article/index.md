@@ -1,7 +1,7 @@
 
 # 学习并理解 23 种设计模式
 
->设计模式 Design Pattern 是一套被反复使用、多数人知晓的、经过分类编目的、代码设计经验的总结，使用设计模式是为了可重用代码、让代码更容易被他人理解并且保证代码可靠性。。
+>设计模式 `Design Pattern` 是一套被反复使用、多数人知晓的、经过分类编目的、代码设计经验的总结，使用设计模式是为了可重用代码、让代码更容易被他人理解并且保证代码可靠性。。
 
 在《设计模式：可复用面向对象软件的基础》一书中所介绍的 23 种经典设计模式，不过设计模式并不仅仅只有这 23 种，随着软件开发行业的发展，越来越多的新模式不断诞生并得以应用。有经验的开发者在学习设计模式可以和过往的经验互相印证，更容易理解这些设计模式。
 
@@ -25,33 +25,43 @@
 
 * 组合优于继承：不能滥用继承来拓展功能，配合组合会更灵活。同样拿「电脑」抽象类来举例，如果使用继承，区分不同类型的「电脑」我们可以派生出「台式电脑」和「笔记本电脑」，如果再增加一个维度，根据品牌又能继续细分出「联想台式电脑」、「联想笔记本电脑」、「苹果台式电脑」和「苹果笔记本电脑」等等，如果再增加一个维度继续细分下去，显然继承是无法胜任的。这个时候可以使用继承加组合方式，组合的对象也可以进行抽象化设计：
 
-	```
+	```ts
 	// 品牌
-	@interface Brand : NSObject
-	@interface Lenovo : Brand
-	@interface Apple : Brand
-	
+	interface Brand {
+        // ...
+    }
+	interface Lenovo extends Brand {
+        // ...
+    }
+	interface Apple extends Brand {
+        // ...
+    }
 	// CPU
-	@interface CPU : NSObject
-	@interface Inter : CPU
-	@interface AMD : CPU
+	interface CPU {
+        // ...
+    }
+	interface Inter extends CPU {
+         // ...
+    }
+	interface AMD extends CPU {
+        // ...
+    }
+    // 电脑
+	interface Computer {
+        // ...
+    }
+	
+	interface DesktopComputer extends Computer {
 
-	
-	@interface Computer : NSObject
-	// 品牌
-	@property (nonatomic, strong) Brand *brand;
-	// CPU
-	@property (nonatomic, strong) CPU *cpu;
-	@end
-	
-	@interface Computer : NSObject
-	@interface DesktopComputer : Computer
-	@interface NotebookComputer : Computer
+    }
+	interface NotebookComputer extends Computer{
+
+    }
 	```
 
 ## 一、UML 类图
 
-每个模式都有相应的对象结构图，同时为了展示对象间的交互细节， 有些时候会用到 UML 图来介绍其如何运行。这里不会将 UML 的各种元素都提到，只想讲讲类图中各个类之间的关系， 能看懂类图中各个类之间的线条、箭头代表什么意思后，也就足够应对日常的工作和交流。同时，我们应该能将类图所表达的含义和最终的代码对应起来。有了这些知识，看后面章节的设计模式结构图就没有什么问题了。
+每个模式都有相应的对象结构图，同时为了展示对象间的交互细节， 有些时候会用到 `UML` 图来介绍其如何运行。这里不会将 `UML` 的各种元素都提到，只想讲讲类图中各个类之间的关系， 能看懂类图中各个类之间的线条、箭头代表什么意思后，也就足够应对日常的工作和交流。同时，我们应该能将类图所表达的含义和最终的代码对应起来。有了这些知识，看后面章节的设计模式结构图就没有什么问题了。
 
 <!-- 本文中大部分是 UML 类图，也有个别简易流程图。由于文中部分模式并未配图，你可以在[这里](../../assets/article/designPattern/UML/创建型/单例.jpg)查看我在网络上收集的完整 23 种设计模式 UML 类图。 -->
 
@@ -243,7 +253,7 @@
 11. 访问者模式
 
 
-## 四、创建型 - 设计模式
+## 四、创建型
 
 ### 4.1 简单工厂模式
 
@@ -255,41 +265,45 @@
 
 简单工厂模式像一个代工厂，一个工厂可以生产多种产品。举个例子，一个饮料加工厂同时帮百事可乐和可口可乐生产，加工厂根据输入参数``Type``来生产不同的产品。
 
-```
+```ts
 // 可乐抽象类
 interface Cola {
 
 }
 
 // 可口可乐产品类
-@interface CocaCola : Cola
+interface CocaCola extends Cola {
+
+}
 
 // 百事可乐产品类
-@interface PesiCola : Cola
-```
+interface PepsiCola extends Cola {
+
+}
 
 ```
+
+```ts
 // 简单工厂实现
 // SimpleFactory
-
-createColaWithType:(NSInteger)type {
+const createColaWithType = (type:number) => {
     switch (type) {
         case 0:
-            return [CocaCola new];
+            return new CocaCola();
         case 1:
-            return [PesiCola new];
+            return new PepsiCola();
         default:
             return null;
             break;
     }
 }
 ```
-```
+```ts
 // 0 生产可口可乐
-Cola *cocaCola = [SimpleFactory createColaWithType:0];
+const cocaCola:CocaCola = createColaWithType(0);
 
 // 1 生产百事可乐
-Cola *pesiCola = [SimpleFactory createColaWithType:1];
+const pepsiCola:PepsiCola = createColaWithType(1);
 ```
 
 **优点：**
@@ -304,7 +318,7 @@ Cola *pesiCola = [SimpleFactory createColaWithType:1];
 
 ### 4.2 工厂方法模式
 
->工厂方法模式(Factory Method Pattern)又称为工厂模式，工厂父类负责定义创建产品对象的公共接口，而工厂子类则负责生成具体的产品对象，即通过不同的工厂子类来创建不同的产品对象。
+>工厂方法模式(`Factory Method Pattern`)又称为工厂模式，工厂父类负责定义创建产品对象的公共接口，而工厂子类则负责生成具体的产品对象，即通过不同的工厂子类来创建不同的产品对象。
 
 ![](../../assets/article/designPattern/工厂方法.png)
 
@@ -312,34 +326,27 @@ Cola *pesiCola = [SimpleFactory createColaWithType:1];
 
 工厂方法和简单工厂有一些区别，简单工厂是由一个代工厂生产不同的产品，而工厂方法是对工厂进行抽象化，不同产品都由专门的具体工厂来生产。可口可乐工厂专门生产可口可乐，百事可乐工厂专门生产百事可乐。
 
-```
+```ts
 // 工厂抽象类
-@implementation Factory
-+ (Cola *)createCola {
-    return [Cola new];
+const createCola = () => {
+    return new Cola()
 }
-@end
 
 // 可口可乐工厂
-@implementation CocaColaFactory
-
-+ (Cola *)createCola {
-    return [CocaCola new];
+const createCocaCola = () => {
+    return new CocaCola()
 }
-@end
 
 // 百事可乐工厂
-@implementation PesiColaFactory
-+ (Cola *)createCola {
-    return [PesiCola new];
+const createPepsiCola = () => {
+    return new PepsiCola()
 }
-@end
 ```
 
-```
+```ts
 // 根据不同的工厂类生产不同的产品
-Cola *pesiCola = [PesiColaFactory createCola];
-Cola *cocaCola = [CocaColaFactory createCola];
+const cocaCola:CocaCola = createCocaCola();
+const pepsiCola:PepsiCola = createPepsiCola();
 ```
 
 **优点：**
@@ -361,85 +368,75 @@ Cola *cocaCola = [CocaColaFactory createCola];
 
 抽象工厂和工厂方法不同的地方在于，生产产品的工厂是抽象的。举例，可口可乐公司生产可乐的同时，也需要生产装可乐的瓶子和箱子，瓶子和箱子也是可口可乐专属定制的，同样百事可乐公司也会有这个需求。这个时候我们的工厂不仅仅是生产可乐饮料的工厂，还必须同时生产同一主题的瓶子和箱子，所以它是一个抽象的主题工厂，专门生产同一主题的不同商品。
 
-```
+```ts
 // 可乐抽象类和派生类
-@interface Cola : NSObject
-@end
-@interface CocaCola : Cola
-@end
-@interface PesiCola : Cola
-@end
+interface Cola {
+}
+
+interface CocaCola extends Cola {
+}
+
+interface PepsiCola extends Cola {
+}
 
 // 瓶子抽象类和派生类
-@interface Bottle : NSObject
-@end
-@interface CocaColaBottle : Bottle
-@end
-@interface PesiColaBottle : Bottle
-@end
+interface Bottle {
+
+}
+
+interface CocaColaBottle extends Bottle {
+
+}
+
+interface PepsiColaBottle extends Bottle {
+
+}
 
 // 箱子抽象类和派生类
-@interface Box : NSObject
-@end
-@interface CocaColaBox : Box
-@end
-@interface PesiColaBox : Box
-@end
-```
+interface Box {
 
-```
+}
+
+interface CocaColaBox extends Box {
+
+}
+
+interface PepsiColaBox extends Box {
+
+}
+
 // 工厂抽象类
-@implementation Factory
-
-+ (Cola *)createCola {
-    return [Cola new];
+const Factory = {
+    createCola: ()=>return new Cola(),
+    createBottle: ()=>return new Bottle(),
+    createBox: ()=>return new Box(),
 }
-+ (Bottle *)createBottle {
-    return [Bottle new];
-}
-+ (Box *)createBox {
-    return [Box new];
-}
-@end
 
 // 可口可乐主题工厂
-@implementation CocaColaFactory
-
-+ (CocaCola *)createCola {
-    return [CocaCola new];
+const CocaColaFactory = {
+    createCola: ()=>return new CocaCola(),
+    createBottle: ()=>return new CocaColaBottle(),
+    createBox: ()=>return new CocaColaBox(),
 }
-+ (CocaColaBottle *)createBottle {
-    return [CocaColaBottle new];
-}
-+ (CocaColaBox *)createBox {
-    return [CocaColaBox new];
-}
-@end
 
 // 百事可乐主题工厂
-@implementation PesiColaFactory
-+ (PesiCola *)createCola {
-    return [PesiCola new];
+const PepsiColaFactory = {
+    createCola: ()=>return new PepsiCola(),
+    createBottle: ()=>return new PepsiColaBottle(),
+    createBox: ()=>return new PepsiColaBox(),
 }
-+ (PesiColaBottle *)createBottle {
-    return [PesiColaBottle new];
-}
-+ (PesiColaBox *)createBox {
-    return [PesiColaBox new];
-}
-@end
 ```
 
-```
+```ts
 // 可口可乐主题
-Cola *cocaCola = [CocaColaFactory createCola];
-Bottle *cocaColaBottle = [CocaColaFactory createBottle];
-Box *cocaColaBox = [CocaColaFactory createBox];
+const cocaCola = CocaColaFactory.createCola();
+const cocaColaBottle = CocaColaFactory.createBottle();
+const cocaColaBox = CocaColaFactory.createBox();
 
 // 百事可乐主题
-Cola *pesiCola = [PesiColaFactory createCola];
-Bottle *pesiColaBottle = [PesiColaFactory createBottle];
-Box *pesiColaBox = [PesiColaFactory createBox];
+const pepsiCola = PepsiColaFactory.createCola();
+const pepsiColaBottle = PepsiColaFactory.createBottle();
+const pepsiColaBox = PepsiColaFactory.createBox();
 
 ```
 
@@ -454,25 +451,26 @@ Box *pesiColaBox = [PesiColaFactory createBox];
 
 ### 4.4 单例模式
 
->单例模式(Singleton Pattern)：单例模式确保某一个类只有一个实例，并提供一个访问它的全剧访问点。
+>单例模式(`Singleton Pattern`)：单例模式确保某一个类只有一个实例，并提供一个访问它的全剧访问点。
+
+![](../../assets/article/designPattern/UML/创建型/单例.jpg)
 
 **举例：**
 
 单例模式下，对应类只能生成一个实例。就像一个王国只能有一个国王，一旦王国里的事务多起来，这唯一的国王也容易职责过重。
 
-```
-@implementation Singleton
+```ts
+class Singleton {
 
-+ (instancetype)shareInstance {
-    static Singleton *shareInstance = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        shareInstance = [[Singleton alloc] init];
-    });
-    return shareInstance;
 }
 
-@end
+function createSingleton () {
+    let instance
+    return function(){
+        if(!instance) return new Singleton()
+        return instance
+    }
+}
 ```
 
 **优点：**
@@ -489,30 +487,77 @@ Box *pesiColaBox = [PesiColaFactory createBox];
 
 >生成器模式(Builder Pattern)：也叫创建者模式，它将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。
 
-![](../../assets/article/designPattern/建造者.png)
+![](../../assets/article/designPattern/建造者.jpeg)
 
 
 **举例：**
 
-生成器模式将复杂的创建逻辑进行分割，例如生产汽车，分步骤创建安装不同的零件。如果创建逻辑简单则没有拆分的必要。
+生成器模式的主要角色如下：
 
-```
-// 汽车生产器
-@interface Builder : NSObject
+1. 生成器：接口生命再所有类型生成器中通用的产品构造步骤
+2. 具体生成器：提供构造过程的不同实现。具体生成器也可以构造不遵循通用接口的产品
+3. 产品：是最终生成的对象。由不同生成器构造的产品无需属于同一类层次构造或接口
+4. 指挥者：定义调用构造步骤的顺序，这样你就可以创建和服用特定的产品配置
+5. 客户端：必须将某个生成器对象与主管类关联，一般情况下，你只需要通过指挥者类构造函数的参数进行一次性关联即可
 
-+ (void)buildEngine;
-+ (void)buildWheel;
-+ (void)buildBody;
+```ts
+// 抽象建造者
+abstract class Builder {
+    public abstract buildPartA():void;
+    public abstract buildPartB():void;
+    public abstract buildPartC():void;
+    public abstract buildProduct():Product;
+}
 
-@end
-```
+// 具体建造者
+class ConcreteBuilder extends Builder {
+    private product:Product;
+    constructor(product:Product) {
+        super();
+        this.product = product;
+    }
 
-```
-// 创建过程进行拆分
-Builder *builder = [Builder new];
-[builder buildBody];
-[builder buildWheel];
-[builder buildEngine];
+    public buildPartA():void {}
+    public buildPartB():void {}
+    public buildPartC():void {}
+
+    // 最终组建一个产品
+    public buildProduct():Product {
+        return this.product;
+    }
+}
+
+// 产品角色
+class Product {
+    public doSomething():void {
+        // 独立业务
+    }
+}
+
+// 指挥者
+class Director {
+    private _builder:Builder;
+    constructor(builder:Builder) {
+        this._builder = builder;
+    }
+
+    set builder(builder:Builder) {
+        this._builder = builder;
+    }
+
+    // 将处理建造的流程交给指挥者
+    public constructorProduct() {
+        this._builder.buildPartA();
+        this._builder.buildPartB();
+        this._builder.buildPartC();
+        return this._builder.buildProduct();
+    }
+}
+
+// 使用
+const builder:Builder = new ConcreteBuilder(new Product());
+const director:Director = new Director(builder);
+const product:Product = director.constructorProduct();
 ```
 
 **优点：**
@@ -525,41 +570,53 @@ Builder *builder = [Builder new];
 **缺点：**
 
 * 建造者模式所创建的产品一般具有较多的共同点，其组成部分相似，如果产品之间的差异性很大，则不适合使用建造者模式，因此其使用范围受到一定的限制。
-* 如果产品的内部变化复杂，可能会导致需要定义很多具体建造者类来实现这种变化，导致系统变得很庞大。
+* 如果产品的内部变化复杂，可能会导致需要定义很多具体建造者类来实现这种变化，导致系统变得很庞大，增加系统的理解难度和运行成本。
 
 ### 4.6 原型模式
 
->原型模式（Prototype Pattern）: 使用原型实例指定待创建对象的类型，并且通过复制这个原型来创建新的对象。
+>原型模式（`Prototype Pattern`）: 使用原型实例指定待创建对象的类型，并且通过复制这个原型来创建新的对象。
+
+![](../../assets/article/designPattern/UML/创建型/原型.jpg)
 
 **举例：**
 
 原型模式就像复印技术，根据原对象复印出一个新对象，并根据需求对新对象进行微调。
 
+```ts
+// 因为不是构造函数，所以不用大写
+const car = {
+    drive: function () { },
+    name: '马自达 3'
+};
+
+// 使用Object.create创建一个新车x
+const anotherCar = Object.create(someCar);
+anotherCar.name = '丰田佳美';
+
 ```
-@interface Student : NSObject
 
-@property (nonatomic, copy) NSString *name;
-@property (nonatomic, copy) NSString *age;
-@property (nonatomic, copy) NSString *class;
-@property (nonatomic, copy) NSString *school;
+```ts
+const vehiclePrototype = {
+    init: function (carModel) {
+        this.model = carModel;
+    },
+    getModel: function () {
+        console.log('车辆模具是：' + this.model);
+    }
+};
 
-@end
+function vehicle(model) {
+    function F() { };
+    F.prototype = vehiclePrototype;
 
-```
+    const f = new F();
 
-```
-// 原对象
-Student *lily = [Student alloc] init];
-lily.name = @"lily";
-lily.age = @"13";
-lily.class = @"五年一班";
-lily.school = @"实现学校";
+    f.init(model);
+    return f;
+}
 
-// 复制原对象
-Student *tom = [lily copy];
-
-// 在原对象基础上微调
-tom.name = @"tom";
+const car = vehicle('福特Escort');
+car.getModel();
 
 ```
 
@@ -572,79 +629,41 @@ tom.name = @"tom";
 
 * 对象包含的所有对象都需要配备一个克隆的方法，这就使得在对象层级比较多的情况下，代码量会很大，也更加复杂。
 
-## 五、结构型 - 设计模式
+## 五、结构型
 
 ### 5.1 装饰模式
 
->装饰模式(Decorator Pattern) ：不改变原有对象的前提下，动态地给一个对象增加一些额外的功能。
+>装饰模式(`Decorator Pattern`) ：不改变原有对象的前提下，动态地给一个对象增加一些额外的功能。
 
 ![](../../assets/article/designPattern/装饰.jpg)
 
 **举例：**
 
-装饰模式贴合开闭原则，在不改变原有类的情况下，对父类进行改造或新增功能。举例，定一个抽象类``Tea``，只能提供白开水，但是通过装饰类``BlackTea``装饰之后拓展了新功能，通过``BlackTea``类可以用白开水泡红茶，还可以选择加柠檬。
+装饰模式贴合开闭原则，在不改变原有类的情况下，对父类进行改造或新增功能。
 
+装饰类
+```js
+@annotation
+class MyClass { }
+
+function annotation(target) {
+   target.annotated = true;
+}
 ```
-@interface Tea : NSObject
+装饰方法或属性
+```js
 
-+ (instancetype)createTea;
-
-@end
-
-@interface BlackTea : Tea
-
-@property (nonatomic, strong) Tea *tea;
-
-// 加红茶
-- (void)addBlackTea;
-// 红茶可以加柠檬
-- (void)addLemon;
-
-@end
-```
-
-```
-@implementation Tea
-
-+ (instancetype)createTea {
-    NSLog(@"add water");
-    return [self new];
+class MyClass {
+  @readonly
+  method() { }
 }
 
-@end
-
-@implementation BlackTea
-// 先加红茶，再加水
-+ (instancetype)createTea {
-    return [self new];
+function readonly(target, name, descriptor) {
+  descriptor.writable = false;
+  return descriptor;
 }
 
-- (void)addBlackTea {
-    NSLog(@"add black tea");
-}
-
-- (void)addLemon {
-    NSLog(@"add lemon");
-}
-
-@end
 ```
-
-```
-// 茶
-Tea *tea = [Tea createTea]; 
-// output: add water
-
-// 红茶
-BlackTea *blackTea = [BlackTea createTea];
-blackTea.tea = tea
-[blackTea addBlackTea];
-[blackTea addLemon];
-// output: 
-// add black tea 
-// add lemon
-```
-
 **优点：**
 
 * 比继承更加灵活：不同于在编译期起作用的继承；装饰者模式可以在运行时扩展一个对象的功能。另外也可以通过配置文件在运行时选择不同的装饰器，从而实现不同的行为。也可以通过不同的组合，可以实现不同效果。
@@ -665,51 +684,18 @@ blackTea.tea = tea
 
 **举例：**
 
-外观模式提供了简单明确的接口，但是在内部众多子系统功能进行整合。就像图片缓存，内部包含了涉及到其他子系统的如缓存、下载等处理，外观模式将这些复杂的逻辑都隐藏了。在``UIImageView``和``UIButton``调用的时候，你只需要调一个``setImageWithUrl:(NSString *)url``接口就可以了，达到解耦合的目的。
+外观模式提供了简单明确的接口，但是在内部众多子系统功能进行整合。就像图片缓存，内部包含了涉及到其他子系统的如缓存、下载等处理，外观模式将这些复杂的逻辑都隐藏了。在兼容浏览器事件绑定，你只需要调一个`addMyEvent`接口就可以了，达到解耦合的目的。
 
-```
-@implementation WebImage
-
-+ (UIImage *)getImageWithUrl:(NSString *)url {
-    // 查看图片是否有缓存
-    id cacheImage = [ImageCaches getImageFromCacheWithUrl:url];
-    if (cacheImage) {
-        return cacheImage;
+```js
+const addMyEvent = function (el, ev, fn) {
+    if (el.addEventListener) {
+        el.addEventListener(ev, fn, false)
+    } else if (el.attachEvent) {
+        el.attachEvent('on' + ev, fn)
+    } else {
+        el['on' + ev] = fn
     }
-    
-    // 下载图片
-    id downloadImage = [ImageDownloader downloadImageWithUrl:url];
-    if (downloadImage) {
-    	// 缓存图片
-    	[ImageCaches cacheImage:downloadImage];
-    	return downloadImage;
-    }else{
-    	return nil;
-    }
-}
-@end
-
-@implementation UIImageView + WebImage / UIButton + WebImage
-
-- (void)setImageWithUrl:(NSString *)url {
-    UIImage webImage = [WebImage getImageWithUrl:url];
-    if (webImage) {
-    	[self setImage:webImage];
-    }
-}
-@end
-
-
-```
-
-```
-// 使用的时候不需要关系内部缓存逻辑
-UIImageView *webImage = [UIImageView new];
-[webImage setImageWithUrl:@"https://imageUrl"];
-
-UIButton *webButton = [UIButton new];
-[webButton setImageWithUrl:@"https://imageUrl"];
-
+}; 
 ```
 
 **优点：**
@@ -731,90 +717,41 @@ UIButton *webButton = [UIButton new];
 
 代理模式像一个房屋中介，买家只能通过中介来买房，代理具备被代理类的所有功能，就像房东有卖房功能，中介也具有卖房功能。此外代理实例还可以帮助被代理实例进行一些额外处理，比如中介可以帮助房东筛选优质买家的功能，帮助房东pass掉一些不符合条件的买家。还有消息队列也是该模式。
 
-```
-// 顾客
-@interface Customer ()
+参考`koa`中的代理模式，把`response`上的一些属性和方法代理出来，方便使用
+```js
 
-@property (nonatomic, strong) Waiter *waiter;
+/**
+ * Response delegation.
+ */
+const delegate = require('delegates');
 
-@end
+const prototype = module.exports = {}
 
-@implementation Customer
-
-// 叫服务生
-- (Waiter *)callWaiter {
-    _waiter = [Waiter new];
-    return _waiter;
-}
-
-// 顾客点菜
-- (void)orderingFood:(NSString *)food  {
-    [_waiter orderingFood:food];
-}
-
-// 顾客取消某个菜
-- (void)removeFood:(NSString *)food  {
-    [_waiter removeFood:food];
-}
-
-@end
-
-// 服务生
-@interface Waiter ()
-
-@property (nonatomic, strong) NSMutableArray *cacheList;
-
-@end
-
-@implementation Waiter
-
-// 记下顾客点的菜
-- (void)orderingFood:(NSString *)food  {
-    [self.cacheList addObject:food];
-}
-
-// 帮助顾客取消某个菜
-- (void)removeFood:(NSString *)food  {
-    [self.cacheList removeObject:food];
-}
-
-// 将最早点的菜推给厨师
-- (void)pushToChef:(Chef *)chef {
-    [chef cookFood:self.cacheList.firstObject];
-    [self.cacheList removeObject:self.cacheList.firstObject];
-}
-
-@end
-
-// 厨师
-@implementation Chef
-
-- (void)cookFood:(NSString *)food {
-    NSLog(@"cook %@",food);
-}
-
-@end
-```
+delegate(prototype, 'response')
+  .method('attachment')
+  .method('redirect')
+  .method('remove')
+  .method('vary')
+  .method('has')
+  .method('set')
+  .method('append')
+  .method('flushHeaders')
+  .access('status')
+  .access('message')
+  .access('body')
+  .access('length')
+  .access('type')
+  .access('lastModified')
+  .access('etag')
+  .getter('headerSent')
+  .getter('writable');
 
 ```
-// 餐厅厨师
-Chef *chef = [Chef new];
-
-// 顾客
-Customer *lily = [Customer new];
-// 顾客叫服务生
-[lily callWaiter];
-// 顾客点餐
-[lily orderingFood:@"小鸡炖蘑菇"];
-[lily orderingFood:@"东坡肉"];
-[lily orderingFood:@"虾饺皇"];
-[lily orderingFood:@"红烧大虾"];
-// 顾客取消某个菜
-[lily removeFood:@"东坡肉"];
-
-// 将最早点的菜菜推给厨师去烹饪
-[waiter pushToChef:chef];
-
+对`context`,`request`,`response`做一个代理，保护真正的`context`,`request`,`response`
+```js
+    this.context = Object.create(context);
+    this.request = Object.create(request);
+    this.response = Object.create(response);
 ```
 
 **优点：**
@@ -831,7 +768,7 @@ Customer *lily = [Customer new];
 
 ### 5.4 享元模式
 
->享元模式(Flyweight Pattern)：运用共享技术复用大量细粒度的对象,降低程序内存的占用,提高程序的性能。
+>享元模式(`Flyweight Pattern`)：运用共享技术复用大量细粒度的对象,降低程序内存的占用,提高程序的性能。
 
 
 ![](../../assets/article/designPattern/享元.png)
@@ -842,93 +779,44 @@ Customer *lily = [Customer new];
 
 享元模式区保证共享内部状态如音乐库，而外部状态根据不同需求定制如各种访问权限，使用中不能去改变内部状态，以达到共享的目的。
 
-```
+```ts
 // 音乐服务
-@interface MusicService ()
+const MusicService = {}
 
 // 共享的音乐库
-@property (nonatomic, strong) NSArray *musicLibrary;
+const musicLibrary = {};
 
-@end
-
-@implementation MusicService
 // 听音乐
-- (void)listenToMusct:(NSString *)music {
+const listenToMusic = (music) => {
     ...
 }
 // 下载音乐
-- (void)downloadMusic:(NSString *)music {
+const downloadMusic = (music) => {
     ...
 }
 
-@end
 
 // 免费音乐服务
-@interface FreeMusicService : NSObject
-
-@property (nonatomic, strong) MusicService *musicSever;
-
-- (void)listenFreeMusic:(NSString *)music;
-
-@end
-
-@implementation FreeMusicService
-
-// 只能听免费音乐
-- (void)listenToFreeMusic:(NSString *)music {
-    if ([music isEqualToString:@"free"]) {
-    	// 如果是免费则播放
-        [self.musicSever listenMusct:music];
-    }else{
-    	// 如果是收费音乐，则提示用户升级 Vip
-        NSLog(@"please upgrade to Vip");
+const FreeMusicService = {
+    listenFreeMusic: (music)=>{
+        if(isMusicFree(music)){
+            // 如果是免费则播放
+            listenToMusic()
+        }else{
+    	    // 如果是收费音乐，则提示用户升级 Vip
+            console.log("please upgrade to Vip")
+        }
     }
 }
 
-@end
-
 
 // Vip 音乐服务
-@interface VipMusicService : NSObject
-
-@property (nonatomic, strong) MusicService *musicSever;
-
-- (void)listenMusic:(NSString *)music;
-
-- (void)downloadMusic:(NSString *)music;
-
-@end
-
-@implementation VipMusicService
-
-// 可以听全部的音乐
-- (void)listenToMusic:(NSString *)music {
-    [self.musicSever listenMusct:music];
+const VipMusicService = {
+    // 可以听全部的音乐
+    listenMusic:listenToMusic
+    // 可以下载音乐
+    downloadMusic:downloadMusic
 }
-
-// 可以下载音乐
-- (void)downloadMusic:(NSString *)music {
-    [self.musicSever downloadMusic:music];
-}
-
-@end
-```
-
-```
-// 新建一个基础音乐库
-MusicService *musicService = [MusicService new];
-
-// 免费服务
-FreeMusicService *freeService = [FreeMusicService new];
-// 收费服务
-VipMusicService *vipService = [VipMusicService new];
-
-// 共享一个音乐库
-freeService.musicSever = musicService;
-vipService.musicSever = musicService;
-
-[freeService listenFreeMusic:@"免费音乐"];
-[vipService listenMusic:@"全部音乐"];
 ```
 
 **优点：**
@@ -951,7 +839,7 @@ vipService.musicSever = musicService;
 
 尽管手机都有各自的不同之处，但是他们都有一个手机卡卡槽，卡槽里可以插不同运营商的卡。不管手机和卡内部如何改变，只要卡槽的行业标准没有变，就都可以正常使用。桥接模式在于将复杂的类进行分割，优先对象组合的方式，就像将手机里的手机卡抽离出去新建一个类，实现手机实例持有一个手机卡实例的组合方式。而不是通过继承来新建多个不同手机卡的手机子类。
 
-```
+```js
 // 创建手机 SIM 卡协议
 @protocol SIMCardProtocol <NSObject>
 // 读取 SIM 卡信息接口
@@ -1013,7 +901,7 @@ vipService.musicSever = musicService;
 @end
 ```
 
-```
+```js
 // 联通卡
 UnicomSIMCard *unicomSim = [UnicomSIMCard new];
 // 移动卡
@@ -1053,7 +941,7 @@ iPhone *iPhoneX = [iPhone new];
 
 适配器模式顾名思义，比如内地用像港版插头需要一个转接头。再比如iPhone的手机卡是特别小的 Nano 卡，把 Nano 卡拿到其他手机上不能贴合卡槽尺寸，所以我们需要加一个符合卡槽尺寸的卡套。
 
-```
+```js
 // 标准卡 尺寸协议
 @protocol StandardSIMSizeProtocol <NSObject>
 - (void)normalSize;
@@ -1103,7 +991,7 @@ iPhone *iPhoneX = [iPhone new];
 @end
 ```
 
-```
+```js
 // 标准卡
 StandardSIMCard *standardCard = [StandardSIMCard new];
 // Nano 卡
@@ -1136,7 +1024,7 @@ nanoAdapter.nanoSIMCard = nanoCard;
 * 增加了系统的复杂性
 
 
-## 六、行为型 - 设计模式
+## 六、行为型
 
 
 ### 6.1 职责链模式
@@ -1149,7 +1037,7 @@ nanoAdapter.nanoSIMCard = nanoCard;
 
 职责链模式在 iOS 中有大量的应用，比如事件响应链，事件传递下来会先判断该事件是不是应该由自己处理，如果不是由自己处理则传给下一位响应者去处理，如此循环下去。需要注意的是要避免响应链循环调用造成死循环，还有当所有的响应者都无法处理时的情况。
 
-```
+```js
 // 响应者
 @interface Responder : NSObject
 
@@ -1180,7 +1068,7 @@ nanoAdapter.nanoSIMCard = nanoCard;
 @end
 ```
 
-```
+```js
 // 建立响应链
 Responder *successResponder = [Responder new];
 Responder *warmingResponder = [Responder new];
@@ -1240,7 +1128,7 @@ serviceResponder.name = @"service fail";
 
 和之前代理模式中的举例有些相似，不过命令模式的本质是对命令进行封装，将发出命令的责任和执行命令的责任分割开。例如遥控器是一个调用者，不同按钮代表不同的命令，而电视是接收者。
 
-```
+```js
 // 命令 -> 按钮
 @interface Command : NSObject
 
@@ -1299,7 +1187,7 @@ serviceResponder.name = @"service fail";
 @end
 ```
 
-```
+```js
 // 接收者
 TV *tv = [TV new];
 
@@ -1344,12 +1232,12 @@ Controller *controller = [Controller new];
 
 说到解释器模式，我们的编译器，在对代码进行编译的时候也用到了该模式。我们可以直接来做一个简单的解释器，一个给机器人下发指令的解释器。
 
-命令 | 参数 
------|-----
-direction 移动方向 |'up'  'down'  'left'  'right'
-action 移动方式 | 'move'  'run'
-distance 移动距离 | an integer 
-表达式终结符号| ';' 
+| 命令               | 参数                          |
+| ------------------ | ----------------------------- |
+| direction 移动方向 | 'up'  'down'  'left'  'right' |
+| action 移动方式    | 'move'  'run'                 |
+| distance 移动距离  | an integer                    |
+| 表达式终结符号     | ';'                           |
 
 通过建立一个映射关系可以很快将指令转换成行为，例如``up run 5;`` 表示向上跑5米，而``left move 12;`` 表示向左移动12米。
 
@@ -1375,7 +1263,7 @@ distance 移动距离 | an integer
 
 迭代器帮助请求方获取数据，避免直接操作数据聚合类，使数据聚合类专注存储数据。具体应用有分页等功能，分页功能的迭代器将专门负责操作分页数据，将操作逻辑和数据源分离。
 
-```
+```js
 // 数据列表
 @interface List : NSObject
 
@@ -1443,7 +1331,7 @@ distance 移动距离 | an integer
 @end
 ```
 
-```
+```js
 // 使用迭代器输出数据
 Iterator *iterator = [Iterator new];
 NSLog(@"%@",[iterator next]); // 1
@@ -1474,7 +1362,7 @@ NSLog(@"%@",[iterator previous]); // 2
 
 中介者模式将一个网状的系统结构变成一个以中介者对象为中心的星形结构，在这个星型结构中，使用中介者对象与其他对象的一对多关系来取代原有对象之间的多对多关系。所有成员通过中介者交互，方便拓展新的成员，例如下面的例子，新增一个聊天室成员只需要新建一个成员实例，然后再在聊天室中介者那注册就可以加入聊天室了。
 
-```
+```js
 // 聊天室中介者
 @interface ChatMediator : NSObject
 
@@ -1549,7 +1437,7 @@ NSLog(@"%@",[iterator previous]); // 2
 @end
 ```
 
-```
+```js
 // 聊天室中介者
 ChatMediator *mediator = [ChatMediator shareMediator];
 // 新建聊天室成员
@@ -1592,13 +1480,14 @@ tom receive: hi tom! from jack
 
 >备忘录模式(Memento Pattern)：在不破坏封装的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态，这样可以在以后将对象恢复到原先保存的状态。它是一种对象行为型模式，其别名为Token。
 
+![](../../assets/article/designPattern/UML/行为型/备忘录.jpg)
 **举例：**
 
 备忘录模式提供了一种状态恢复的实现机制，使得用户可以方便地回到一个特定的历史步骤，当新的状态无效或者存在问题时，可以使用暂时存储起来的备忘录将状态复原，当前很多软件都提供了撤销操作，其中就使用了备忘录模式。
 
 我们用一个简单的游戏存档来举例，这也是备忘录模式的一种应用。
 
-```
+```js
 // 角色状态
 @interface PlayerState : NSObject
 
@@ -1659,7 +1548,7 @@ tom receive: hi tom! from jack
 @end
 ```
 
-```
+```js
 // 创建角色 A
 Player *playA = [Player new];
 [playA setPlayerName:@"King" level:99 rank:30];
@@ -1698,7 +1587,7 @@ NSLog(@"name:%@ level:%ld rank:%ld", playB.state.name, playB.state.level, playB.
 
 在 iOS 中，观察者模式经常使用到，下面我就用 KVO 实现了一个通过气象台观察天气变化的简单例子。
 
-```
+```js
 // 观察目标 - 气象站
 @interface WeatherStation : NSObject
 
@@ -1765,7 +1654,7 @@ NSLog(@"name:%@ level:%ld rank:%ld", playB.state.name, playB.state.level, playB.
 @end
 ```
 
-```
+```js
 // 新建监听目标 - 气象站
 WeatherStation *station = [WeatherStation new];
 // 新建监听者
@@ -1815,7 +1704,7 @@ student observe weather changed: sunny
 
 我们可以做一个简单的例子，我设计了一个银行账户系统，根据存钱余额来自动设置账户的状态，银行账户在不同状态下，进行存钱、取钱和借钱的行为。在不同状态下，这些行为得到的回复也不一样，比如说没有余额时无法取钱，只能借钱。
 
-```
+```js
 // 账户状态抽象类
 @interface State : NSObject
 // 存钱
@@ -1982,7 +1871,7 @@ student observe weather changed: sunny
 @end
 ```
 
-```
+```js
 // 初始化银行账户
 Account *bankAccount = [Account new];
 // 取 50
@@ -2024,7 +1913,7 @@ Account *bankAccount = [Account new];
 
 生活中也有很多类似的例子，就比如说商城的会员卡机制。我们去商城购物可以通过持有的会员卡打折，购买同一件商品时，持有不同等级的会员卡，能得到不同力度的折扣。下面的例子中我列举了青铜、白银、黄金三种 Vip 会员卡，传入不同的会员卡最终需要支付的金额也会有所不同。
 
-```
+```js
 // Vip  - 销售策略抽象类
 @interface Vip : NSObject
 
@@ -2121,7 +2010,7 @@ Account *bankAccount = [Account new];
 @end
 ```
 
-```
+```js
 // 初始化商城类
 OnlineShop *shop = [OnlineShop new];
 // 新建各种 vip
@@ -2160,7 +2049,11 @@ BronzeVip *bronzeVip = [BronzeVip new];
 
 **举例：**
 
-模板方法模式在 iOS 中的应用也非常多，如 UIViewController 的生命周期函数，定义在父类，子类可以重写这些函数。
+模板方法模式的使用场景
+
+- 模板方法模式常被架构师用于搭建项目的框架，架构师定好了框架的骨架，程序员继承框架的结构之后，负责往里面填空
+- 钩子方法：各种框架中的钩子函数往往在初始化时就规定各个钩子函数的名称以及执行时机，对于使用者只需要在钩子函数中注入自定义逻辑代码即可
+- 回调函数：回调函数在特定的时机执行，但是具体的操作交给具体的函数实现。把变化的部分封装成一个函数剩下的就成了模板
 
 模板方法模式具体应用又分为三类：
 
@@ -2172,7 +2065,7 @@ BronzeVip *bronzeVip = [BronzeVip new];
 
 下面给出一个例子，在给定一个有固定模板的烹饪教程的情况下，根据不同烹饪需求对教程中的内容进行动态调整。
 
-```
+```js
 // 烹饪教程 模板方法类
 @interface CookTutorial : NSObject
 
@@ -2256,13 +2149,13 @@ BronzeVip *bronzeVip = [BronzeVip new];
 @end
 ```
 
-```
+```js
 CookFish * cookFish = [CookFish new];
 [cookFish cook]; 
 输出：
 1. 准备好生鳕鱼
-3. 生鳕鱼入锅
-4. 加盐
+2. 生鳕鱼入锅
+3. 加盐
 4. 加黑胡椒
 ```
 * 第一个步骤``prepareIngredients``， 父类中没有具体实现为抽象方法，子类中直接覆盖。
@@ -2293,7 +2186,7 @@ CookFish * cookFish = [CookFish new];
 
 在使用访问者模式时，被访问元素通常不是单独存在的，它们存储在一个集合中，这个集合被称为「对象结构」，访问者通过遍历对象结构实现对其中存储的元素的逐个操作。通过一个简单的例子了解访问者模式，访问者有财务部门``FADepartment``和 HR 部门``HRDepartment``，通过访问雇员``Employee``来查看雇员的工作情况。
 
-```
+```js
 // 部门抽象类 - 访问者抽象类
 @interface Department : NSObject
 // 访问抽象方法 用来声明方法
@@ -2369,7 +2262,7 @@ CookFish * cookFish = [CookFish new];
 @end
 ```
 
-```
+```js
 // 新建财务和 HR - 访问者
 FADepartment *fa = [FADepartment new];
 HRDepartment *hr = [HRDepartment new];
@@ -2423,7 +2316,9 @@ bill 本周获取薪资：5700
 
 # 参考
 
-* [Study-Plan](https://github.com/xietao3/Study-Plan) 作者：xietao3
+* [Study-Plan](https://github.com/xietao3/Study-Plan)
+* [ES6 系列之我们来聊聊装饰器](https://juejin.cn/post/6844903713866252296)
+* [设计模式之生成器模式](https://segmentfault.com/a/1190000038250020)
 * [https://juejin.im/user/57f8ffda2e958a005581e3c0/posts](https://juejin.im/user/57f8ffda2e958a005581e3c0/posts)
 * [https://design-patterns.readthedocs.io/zh_CN/latest/index.html](https://design-patterns.readthedocs.io/zh_CN/latest/index.html)
 * [https://blog.csdn.net/lovelion/article/details/17517213](https://blog.csdn.net/lovelion/article/details/17517213)

@@ -92,3 +92,7 @@ export default defineConfig({
     },
   },
 });
+
+interface Brand {
+  
+}
