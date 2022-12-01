@@ -2,6 +2,7 @@ import { Loader, Plugin } from "esbuild";
 import { BARE_IMPORT_RE } from "../constants";
 // 用来分析 es 模块 import/export 语句的库
 import { init, parse } from "es-module-lexer";
+// 获取文件的扩展名
 import { extname } from "node:path";
 // 一个实现了 node 路径解析算法的库
 import resolve from "resolve";
@@ -11,7 +12,10 @@ import fs from "fs-extra";
 import createDebug from "debug";
 
 const debug = createDebug("dev");
-
+/**
+ * @description: 处理预编译收集到的依赖，将cjs转化为esm，同时将esm规范化
+ * @param {Set} deps
+ */
 export function preBundlePlugin(deps: Set<string>): Plugin {
   return {
     name: "esbuild:pre-bundle",
@@ -21,6 +25,8 @@ export function preBundlePlugin(deps: Set<string>): Plugin {
           filter: BARE_IMPORT_RE,
         },
         (resolveInfo) => {
+          // path 模块路径
+          // importer 父模块路径
           const { path, importer } = resolveInfo;
           const isEntry = !importer;
           // 命中需要预编译的依赖
@@ -48,21 +54,23 @@ export function preBundlePlugin(deps: Set<string>): Plugin {
         async (loadInfo) => {
           // es-module-lexer init 初始化
           await init;
+          // 模块路径
           const { path } = loadInfo;
           const root = process.cwd();
           const entryPath = resolve.sync(path, { basedir: root });
           const code = await fs.readFile(entryPath, "utf-8");
           // es-module-lexer 进行词法分析
+          // imports 和 exports 都是一个数组，其中每个元素（对象）代表一个导入语句的解析后的结果，具体会包含导入或导出的模块的名称、在源代码中的位置等信息。
           const [imports, exports] = await parse(code);
           let proxyModule = [];
-          // cjs
+          // 如果没有imports分析和exports分析，说明是一个cjs模块，进入cjs模块导入
           if (!imports.length && !exports.length) {
             // 构造代理模块
             // 通过 require 拿到模块的导出对象
             const res = require(entryPath);
             // 用 Object.keys 拿到所有的具名导出
             const specifiers = Object.keys(res);
-             // 构造 export 语句交给 Esbuild 打包
+             // 构造 export 语句交给 Esbuild 打包，将cjs模块转化为esm
             proxyModule.push(
               `export { ${specifiers.join(",")} } from "${entryPath}"`,
               `export default require("${entryPath}")`
@@ -75,8 +83,10 @@ export function preBundlePlugin(deps: Set<string>): Plugin {
             proxyModule.push(`export * from "${entryPath}"`);
           }
           debug("代理模块内容: %o", proxyModule.join("\n"));
+          // 指定 loader，如`js`、`ts`、`jsx`、`tsx`、`json`等等
           const loader = extname(entryPath).slice(1);
           return {
+            // 指定 loader，如`js`、`ts`、`jsx`、`tsx`、`json`等等
             loader: loader as Loader,
             contents: proxyModule.join("\n"),
             resolveDir: root,
