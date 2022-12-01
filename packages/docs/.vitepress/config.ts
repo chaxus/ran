@@ -86,6 +86,7 @@ export default defineConfig({
         {
           items:[
             { text: "23 种经典设计模式", link: "/src/article/" },
+            { text: "函数式编程", link: "/src/article/functionalProgramming.md" },
           ]
         },
       ]

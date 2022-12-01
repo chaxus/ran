@@ -1,5 +1,5 @@
 
-# 学习并理解 23 种设计模式
+# 23 种经典设计模式
 
 >设计模式 `Design Pattern` 是一套被反复使用、多数人知晓的、经过分类编目的、代码设计经验的总结，使用设计模式是为了可重用代码、让代码更容易被他人理解并且保证代码可靠性。。
 
@@ -328,25 +328,25 @@ const pepsiCola:PepsiCola = createColaWithType(1);
 
 ```ts
 // 工厂抽象类
-const createCola = () => {
-    return new Cola()
+class Cola {
+
 }
 
 // 可口可乐工厂
-const createCocaCola = () => {
-    return new CocaCola()
+class CocaCola extends Cola {
+
 }
 
 // 百事可乐工厂
-const createPepsiCola = () => {
-    return new PepsiCola()
+class PepsiCola extends Cola {
+
 }
 ```
 
 ```ts
 // 根据不同的工厂类生产不同的产品
-const cocaCola:CocaCola = createCocaCola();
-const pepsiCola:PepsiCola = createPepsiCola();
+const cocaCola = new CocaCola();
+const pepsiCola = new PepsiCola();
 ```
 
 **优点：**
@@ -360,6 +360,8 @@ const pepsiCola:PepsiCola = createPepsiCola();
 
 ### 4.3 抽象工厂模式
 
+抽象工厂模式并不直接生成实例， 而是用于对产品类簇的创建。
+
 >抽象工厂模式(Abstract Factory Pattern)：提供一个创建一系列相关或相互依赖对象的接口，而无须指定它们具体的类。
 
 ![](../../assets/article/designPattern/抽象工厂.png)
@@ -370,60 +372,60 @@ const pepsiCola:PepsiCola = createPepsiCola();
 
 ```ts
 // 可乐抽象类和派生类
-interface Cola {
+class Cola {
 }
 
-interface CocaCola extends Cola {
+class CocaCola extends Cola {
 }
 
-interface PepsiCola extends Cola {
+class PepsiCola extends Cola {
 }
 
 // 瓶子抽象类和派生类
-interface Bottle {
+class Bottle {
 
 }
 
-interface CocaColaBottle extends Bottle {
+class CocaColaBottle extends Bottle {
 
 }
 
-interface PepsiColaBottle extends Bottle {
+class PepsiColaBottle extends Bottle {
 
 }
 
 // 箱子抽象类和派生类
-interface Box {
+class Box {
 
 }
 
-interface CocaColaBox extends Box {
+class CocaColaBox extends Box {
 
 }
 
-interface PepsiColaBox extends Box {
+class PepsiColaBox extends Box {
 
 }
 
 // 工厂抽象类
 const Factory = {
-    createCola: ()=>return new Cola(),
-    createBottle: ()=>return new Bottle(),
-    createBox: ()=>return new Box(),
+    createCola: ()=> new Cola(),
+    createBottle: ()=> new Bottle(),
+    createBox: ()=> new Box(),
 }
 
 // 可口可乐主题工厂
 const CocaColaFactory = {
-    createCola: ()=>return new CocaCola(),
-    createBottle: ()=>return new CocaColaBottle(),
-    createBox: ()=>return new CocaColaBox(),
+    createCola: ()=> new CocaCola(),
+    createBottle: ()=> new CocaColaBottle(),
+    createBox: ()=> new CocaColaBox(),
 }
 
 // 百事可乐主题工厂
 const PepsiColaFactory = {
-    createCola: ()=>return new PepsiCola(),
-    createBottle: ()=>return new PepsiColaBottle(),
-    createBox: ()=>return new PepsiColaBox(),
+    createCola: ()=> new PepsiCola(),
+    createBottle: ()=> new PepsiColaBottle(),
+    createBox: ()=> new PepsiColaBox(),
 }
 ```
 
@@ -486,6 +488,8 @@ function createSingleton () {
 ### 4.5 生成器模式
 
 >生成器模式(Builder Pattern)：也叫创建者模式，它将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。
+
+工厂模式主要是为了创建对象实例或者类簇（抽象工厂），关心的是最终产出(创建)的是什么，而不关心创建的过程。而建造者模式关心的是创建这个对象的整个过程，甚至于创建对象的每一个细节。 
 
 ![](../../assets/article/designPattern/建造者.jpeg)
 
@@ -574,7 +578,7 @@ const product:Product = director.constructorProduct();
 
 ### 4.6 原型模式
 
->原型模式（`Prototype Pattern`）: 使用原型实例指定待创建对象的类型，并且通过复制这个原型来创建新的对象。
+>原型模式（`Prototype Pattern`）: 用原型实例指向创建对象的类，使用于创建新的对象的类的共享原型的属性与方法。
 
 ![](../../assets/article/designPattern/UML/创建型/原型.jpg)
 
@@ -633,7 +637,9 @@ car.getModel();
 
 ### 5.1 装饰模式
 
->装饰模式(`Decorator Pattern`) ：不改变原有对象的前提下，动态地给一个对象增加一些额外的功能。
+>装饰模式(`Decorator Pattern`) ：向一个现有的对象添加新的功能，同时又不改变其结构的设计模式被称为装饰器模式，它是作为现有的类的一个包装。
+
+可以将装饰器理解为游戏人物购买的装备，例如LOL中的英雄刚开始游戏时只有基础的攻击力和法强。但是在购买的装备后，在触发攻击和技能时，能够享受到装备带来的输出加成。我们可以理解为购买的装备给英雄的攻击和技能的相关方法进行了装饰。
 
 ![](../../assets/article/designPattern/装饰.jpg)
 
@@ -642,7 +648,7 @@ car.getModel();
 装饰模式贴合开闭原则，在不改变原有类的情况下，对父类进行改造或新增功能。
 
 装饰类
-```js
+```ts
 @annotation
 class MyClass { }
 
@@ -676,7 +682,7 @@ function readonly(target, name, descriptor) {
 
 ### 5.2 外观模式
 
->外观模式(Facade Pattern)：外观模式定义了一个高层接口，为子系统中的一组接口提供一个统一的接口。外观模式又称为门面模式，它是一种结构型设计模式模式。
+>外观模式(Facade Pattern)：外观模式定义了一个高层接口，为子系统中的一组接口提供一个统一的接口。使得子系统更容易使用，不仅简化类中的接口，而且实现调用者和接口的解耦。外观模式又称为门面模式，它是一种结构型设计模式模式。
 
 
 ![](../../assets/article/designPattern/外观.png)
@@ -768,14 +774,14 @@ delegate(prototype, 'response')
 
 ### 5.4 享元模式
 
->享元模式(`Flyweight Pattern`)：运用共享技术复用大量细粒度的对象,降低程序内存的占用,提高程序的性能。
+>享元模式(`Flyweight Pattern`)：享元模式是一种优化程序性能的模式, 本质为减少对象创建的个数。运用共享技术复用大量细粒度的对象,降低程序内存的占用,提高程序的性能。以下情况可以使用享元模式:有大量相似的对象, 占用了大量内存。对象中大部分状态可以抽离为外部状态。
 
 
 ![](../../assets/article/designPattern/享元.png)
 
 **举例：**
 
-例如 UITableViewCell 的缓存机制，达到降低内存消耗的目的。举例，音乐服务根据收费划分出免费用户和会员用户，免费用户只能听部分免费音乐，会员用户可以听全部的音乐，并且可以下载。虽然权限上二者间有一些区别，但是他们所享受的音乐来是自于同一个音乐库，这样所有的音乐都只需要保存一份就可以了。另外如果出现音乐库里没有的音乐时，则需要新增该音乐，然后其他服务也可以享受新增的音乐，相当于享元池或缓存池的功能。
+举例，音乐服务根据收费划分出免费用户和会员用户，免费用户只能听部分免费音乐，会员用户可以听全部的音乐，并且可以下载。虽然权限上二者间有一些区别，但是他们所享受的音乐来是自于同一个音乐库，这样所有的音乐都只需要保存一份就可以了。另外如果出现音乐库里没有的音乐时，则需要新增该音乐，然后其他服务也可以享受新增的音乐，相当于享元池或缓存池的功能。
 
 享元模式区保证共享内部状态如音乐库，而外部状态根据不同需求定制如各种访问权限，使用中不能去改变内部状态，以达到共享的目的。
 
@@ -813,9 +819,9 @@ const FreeMusicService = {
 // Vip 音乐服务
 const VipMusicService = {
     // 可以听全部的音乐
-    listenMusic:listenToMusic
+    listenMusic
     // 可以下载音乐
-    downloadMusic:downloadMusic
+    downloadMusic
 }
 ```
 
@@ -831,97 +837,62 @@ const VipMusicService = {
 
 ### 5.5 桥接模式
 
->桥接模式(Simple Factory Pattern)：将抽象部分与它的实现部分分离,使它们都可以独立地变化。
+>桥接模式(`Simple Factory Pattern`)：将抽象部分与它的实现部分分离,使它们都可以独立地变化。
 
 ![](../../assets/article/designPattern/桥接.png)
 
 **举例：**
 
-尽管手机都有各自的不同之处，但是他们都有一个手机卡卡槽，卡槽里可以插不同运营商的卡。不管手机和卡内部如何改变，只要卡槽的行业标准没有变，就都可以正常使用。桥接模式在于将复杂的类进行分割，优先对象组合的方式，就像将手机里的手机卡抽离出去新建一个类，实现手机实例持有一个手机卡实例的组合方式。而不是通过继承来新建多个不同手机卡的手机子类。
+球和人都可以进行运动，但球有运动和颜色，人可以运动和说话。对共同部分进行抽象。
 
 ```js
-// 创建手机 SIM 卡协议
-@protocol SIMCardProtocol <NSObject>
-// 读取 SIM 卡信息接口
-- (void)getSIMInfo;
-
-@end
-
-// SIM 卡抽象类
-@interface SIMCard : NSObject
-- (void)getSIMInfo;
-@end
-
-@implementation SIMCard
-- (void)getSIMInfo {}
-@end
-
-// 联通 SIM 卡
-@interface UnicomSIMCard : SIMCard<SIMCardProtocol>
-@end
-
-@implementation UnicomSIMCard
-- (void)getSIMInfo {
-    NSLog(@"Welcome Unicom User");
+class Speed {            // 运动模块
+  constructor(x, y) {
+    this.x = x
+    this.y = y
+  }
+  run() {  console.log(`运动起来 ${this.x} + ${this.y}`)  }
 }
-@end
 
-// 移动 SIM 卡
-@interface MobileSIMCard : SIMCard<SIMCardProtocol>
-@end
-
-@implementation MobileSIMCard
-- (void)getSIMInfo {
-    NSLog(@"Welcome Mobile User");
+class Color {            // 着色模块
+  constructor(cl) {
+    this.color = cl
+  }
+  draw() {  console.log(`绘制颜色 ${this.color}`)  }
 }
-@end
 
-// 手机抽象类
-@interface Phone : NSObject
-// 持有 SIM 卡
-@property (nonatomic, strong) SIMCard *simCard;
-// 启动手机方法
-- (void)launchPhone;
-@end
-
-@implementation Phone
-- (void)launchPhone {
-    if (self.simCard) {
-        [self.simCard getSIMInfo];
-    }
+class Speak {
+  constructor(wd) {
+    this.word = wd
+  }
+  say() {  console.log(`说话 ${this.word}`)  }
 }
-@end
 
-// iPhone
-@interface iPhone : Phone
-@end
+class Ball {                     // 创建球类，可以着色和运动
+  constructor(x, y, cl) {
+    this.speed = new Speed(x, y)
+    this.color = new Color(cl)
+  }
+  init() {
+    this.speed.run()
+    this.color.draw()
+  }
+}
 
-// 小米手机
-@interface miPhone : Phone
-@end
+class Man {                    // 人类，可以运动和说话
+  constructor(x, y, wd) {
+    this.speed = new Speed(x, y)
+    this.speak = new Speak(wd)
+  }
+  init() {
+    this.speed.run()
+    this.speak.say()
+  }
+}
+
+const man = new Man(1, 2, 'hello ?')
+man.init()                                // 运动起来 1 + 2      说话 hello?
 ```
-
-```js
-// 联通卡
-UnicomSIMCard *unicomSim = [UnicomSIMCard new];
-// 移动卡
-MobileSIMCard *mobileSim = [MobileSIMCard new];
-
-// 小米手机安装上联调卡
-miPhone *mi9 = [miPhone new];
-[mi9 setSimCard:unicomSim];
-
-// iPhone 安装上移动卡
-iPhone *iPhoneX = [iPhone new];
-[iPhoneX setSimCard:mobileSim];
-
-// 开机
-[mi9 launchPhone];
-[iPhoneX launchPhone];
-
-```
-
-``SIMCardProtocol ``协议相当于行业标准，所以手机卡都要遵循该协议。而各个手机生产商知道该协议，就可以直接利用该协议获得 SIM 卡内部信息。
 
 **优点：**
 
@@ -933,85 +904,26 @@ iPhone *iPhoneX = [iPhone new];
 
 ### 5.6 适配器模式
 
->适配器模式(Adapter Pattern) ：将一个接口转换成客户希望的另一个接口，使得原本由于接口不兼容而不能一起工作的那些类可以一起工作。适配器模式的别名是包装器模式（Wrapper），是一种结构型设计模式。
+>适配器模式(`Adapter Pattern`) ：适配器模式是用来解决两个接口不兼容的情况，不需要改变已有的接口，通过包装一层的方式，实现两个接口正常协作。当我们试图调用模块或者对象的某个接口时，却发现这个接口的格式并不符合目前的需求, 则可以用适配器模式。
+
 
 ![](../../assets/article/designPattern/适配器.png)
 
 **举例：**
 
-适配器模式顾名思义，比如内地用像港版插头需要一个转接头。再比如iPhone的手机卡是特别小的 Nano 卡，把 Nano 卡拿到其他手机上不能贴合卡槽尺寸，所以我们需要加一个符合卡槽尺寸的卡套。
+事件绑定兼容各浏览器
 
 ```js
-// 标准卡 尺寸协议
-@protocol StandardSIMSizeProtocol <NSObject>
-- (void)normalSize;
-@end
-
-// nano 卡尺寸协议
-@protocol NanoSIMSizeProtocol <NSObject>
-- (void)nanoSize;
-@end
-
-// 标准卡 遵循标准协议
-@interface StandardSIMCard : SIMCard<StandardSIMSizeProtocol>
-@end
-
-@implementation StandardSIMCard
-- (void)normalSize {}
-@end
-
-// nano 卡遵循 nano 协议
-@interface NanoSIMCard : SIMCard<NanoSIMSizeProtocol>
-@end
-
-@implementation NanoSIMCard
-- (void)nanoSize {}
-@end
-
-// Nano 卡套
-@interface NanoAdapter : SIMCard<StandardSIMSizeProtocol>
-@property (nonatomic, strong) NanoSIMCard *nanoSIMCard;
-@end
-
-@implementation NanoAdapter
-- (void)normalSize {}
-@end
-
-// 
-@interface OnePhone : Phone
-
-- (void)setSimCard:(SIMCard *)simCard;
-
-@end
-
-@implementation OnePhone
-- (void)setSimCard:(SIMCard *)simCard {
-    [simCard normalSize];
-}
-@end
-```
-
-```js
-// 标准卡
-StandardSIMCard *standardCard = [StandardSIMCard new];
-// Nano 卡
-NanoSIMCard *nanoCard = [NanoSIMCard new];
-
-// 创建大卡槽手机 插入卡后会调用 normalSize() 方法
-OnePhone *onePhone = [OnePhone new];
-
-// 标准卡 遵循 StandardSIMSizeProtocol，协议 实现了 normalSize() 方法
-[onePhone setSimCard:standardCard];
-
-// Nano 遵循 NanoSIMSizeProtocol 协议，并没有实现了 normalSize() 方法，所以会报错
-[onePhone setSimCard:nanoCard];
-
-// 加一个 Nano 卡套
-NanoAdapter *nanoAdapter = [NanoAdapter new];
-// 卡套持有 Nano 卡实例，方便获取 Nano 卡信息
-nanoAdapter.nanoSIMCard = nanoCard;
-// 将卡套放入手机， 卡套遵循 StandardSIMSizeProtocol，实现了 normalSize() 方法
-[onePhone setSimCard:nanoAdapter];
+function addEvent(ele, event, callback) {
+    if (ele.addEventListener) {
+      ele.addEventListener(event, callback)
+    } else if(ele.attachEvent) {
+      ele.attachEvent('on' + event, callback)
+    } else {
+      ele['on' + event] = callback
+    }
+  }
+​
 ```
 
 **优点：**
@@ -1029,79 +941,56 @@ nanoAdapter.nanoSIMCard = nanoCard;
 
 ### 6.1 职责链模式
 
->职责链模式(Chain of Responsibility  Pattern)：避免请求发送者与接收者耦合在一起，让多个对象都有可能接收请求，将这些对象连接成一条链，并且沿着这条链传递请求，直到有对象处理它为止。职责链模式是一种对象行为型模式。
+>职责链模式(Chain of Responsibility  Pattern)：避免请求发送者与接收者耦合在一起，让多个对象都有可能接收请求，将这些对象连接成一条链，并且沿着这条链传递请求，直到有对象处理它为止。职责链模式是一种对象行为型模式。 类似多米诺骨牌, 通过请求第一个条件, 会持续执行后续的条件, 直到返回结果为止。
 
 ![](../../assets/article/designPattern/责任链.png)
 
 **举例：**
 
-职责链模式在 iOS 中有大量的应用，比如事件响应链，事件传递下来会先判断该事件是不是应该由自己处理，如果不是由自己处理则传给下一位响应者去处理，如此循环下去。需要注意的是要避免响应链循环调用造成死循环，还有当所有的响应者都无法处理时的情况。
+场景: 某电商针对已付过定金的用户有优惠政策, 在正式购买后, 已经支付过 500 元定金的用户会收到 100 元的优惠券, 200 元定金的用户可以收到 50 元优惠券, 没有支付过定金的用户只能正常购买。
 
 ```js
-// 响应者
-@interface Responder : NSObject
-
-@property (nonatomic, strong) Responder *nextResponder;
-@property (nonatomic, strong) NSString *name;
-@property (nonatomic, assign) NSUInteger UpperLimit;
-@property (nonatomic, assign) NSUInteger LowerLimit;
-
-- (void)respondWithCode:(NSUInteger)code;
-
-@end
-
-@implementation Responder
-
-- (void)respondWithCode:(NSUInteger)code {
-    if (_LowerLimit <= code && code <= _UpperLimit) {
-    	// 在处理范围内 
-        NSLog(@"code: %ld is %@", code, _name);
-    }else if (_nextResponder){
-    	// 不在处理范围则 传递给下一位响应者
-        [_nextResponder respondWithCode:code];
+const order500 = function(orderType,pay,stock){
+    if(orderType ===1 &&pay==true){
+      console.log('500元定金预购，得到100元优惠劵')
     }else{
-    	// 响应链结束
-        NSLog(@"code: %ld no match responder", code);
+      return 'nextSuccess'
     }
-}
-
-@end
-```
-
-```js
-// 建立响应链
-Responder *successResponder = [Responder new];
-Responder *warmingResponder = [Responder new];
-Responder *httpResponder = [Responder new];
-Responder *serviceResponder = [Responder new];
-
-successResponder.nextResponder = warmingResponder;
-warmingResponder.nextResponder = httpResponder;
-httpResponder.nextResponder = serviceResponder;
-
-// 设置处理范围
-successResponder.LowerLimit = 200;
-successResponder.UpperLimit = 299;
-successResponder.name = @"success";
-
-warmingResponder.LowerLimit = 300;
-warmingResponder.UpperLimit = 399;
-warmingResponder.name = @"warming";
-
-httpResponder.LowerLimit = 400;
-httpResponder.UpperLimit = 499;
-httpResponder.name = @"http fail";
-
-serviceResponder.LowerLimit = 500;
-serviceResponder.UpperLimit = 599;
-serviceResponder.name = @"service fail";
-
-// 使用响应者链
-[successResponder respondWithCode:200]; // code: 200 is success
-[successResponder respondWithCode:310]; // code: 310 is warming
-[successResponder respondWithCode:401]; // code: 401 is http fail
-[successResponder respondWithCode:555]; // code: 555 is service fail
-[successResponder respondWithCode:666]; // code: 666 no match responder
+  }
+  const order200 = function(orderType,pay,stock){
+    if(orderType ===2&&pay===true){
+      console.log('200元定金预购，得到50元優惠卷')
+    }else{
+      return 'nextSuccess'
+    }
+  }
+  const orderCommon = function(orderType,pay,stock){
+    if(orderType==3&&stock>0){
+      console.log('普通購買，无優惠卷')
+    }else{
+      console.log('库存不够')
+    }
+  }
+  //链路代码
+  const chain = function(fn){
+    this.fn = fn
+    this.successor = null
+  }
+  chain.prototype.setNext = function(successor){
+    this.successor = successor
+  }
+  chain.prototype.init = function(){
+    const result = this.fn.apply(this,arguments)
+    if(result == 'nextSuccess'){
+      this.successor.init.apply(this.successor,arguments)
+    }
+  }
+  const order500New = new chain(order500)
+  const order200New = new chain(order200)
+  const orderCommonNew = new chain(orderCommon)
+  order500New.setNext(order200New)
+  order200New.setNext(orderCommonNew)
+  order500New.init(3,true,500)// 普通购买, 无优惠券
 ```
 
 
@@ -1120,7 +1009,13 @@ serviceResponder.name = @"service fail";
 
 ### 6.2 命令模式
 
->命令模式(Command Pattern)：将一个请求封装为一个对象，从而让我们可用不同的请求对客户进行参数化；对请求排队或者记录请求日志，以及支持可撤销的操作。命令模式是一种对象行为型模式，其别名为动作(Action)模式或事务(Transaction)模式。
+>命令模式(`Command Pattern`)：将一个请求封装为一个对象，从而让我们可用不同的请求对客户进行参数化；命令模式是一种对象行为型模式，其别名为动作(`Action`)模式或事务(`Transaction`)模式。
+
+命令模式由三种角色构成：
+1. 发布者 `invoker`（发出命令，调用命令对象，不知道如何执行与谁执行）；
+2. 接收者 `receiver` (提供对应接口处理请求，不知道谁发起请求）；
+3. 命令对象 `command`（接收命令，调用接收者对应接口处理发布者的请求）。
+发布者 invoker 和接收者 receiver 各自独立，将请求封装成命令对象 command ，请求的具体执行由命令对象 command 调用接收者 receiver 对应接口执行。
 
 ![](../../assets/article/designPattern/命令.png)
 
@@ -1129,86 +1024,36 @@ serviceResponder.name = @"service fail";
 和之前代理模式中的举例有些相似，不过命令模式的本质是对命令进行封装，将发出命令的责任和执行命令的责任分割开。例如遥控器是一个调用者，不同按钮代表不同的命令，而电视是接收者。
 
 ```js
-// 命令 -> 按钮
-@interface Command : NSObject
-
-@property (nonatomic, assign) SEL sel;
-@property (nonatomic, strong) NSObject *target;
-
-- (void)execute;
-@end
-
-@implementation Command
-
-- (void)execute {
-    [self.target performSelector:_sel withObject:nil];
+class Receiver {  // 接收者类
+  execute() {
+    console.log('接收者执行请求');
+  }
 }
 
-@end
-
-// 调用者 -> 遥控器
-@interface Controller : NSObject
-
-// 执行命令
-- (void)invokCommand:(Command *)command;
-// 取消命令
-- (void)cancelCommand:(Command *)command;
-@end
-
-@implementation Controller
-
-- (void)invokCommand:(Command *)command {
-    [command execute];
+class Command {   // 命令对象类
+  constructor(receiver) {
+    this.receiver = receiver;
+  }
+  execute () {    // 调用接收者对应接口执行
+    console.log('命令对象->接收者->对应接口执行');
+    this.receiver.execute();
+  }
 }
 
-- (void)cancelCommand:(Command *)command {
+class Invoker {   // 发布者类
+  constructor(command) {
+    this.command = command;
+  }
+  invoke() {      // 发布请求，调用命令对象
+    console.log('发布者发布请求');
+    this.command.execute();
+  }
 }
 
-@end
-
-// 接收者 -> 电视
-@interface TV : NSObject
-
-- (void)turnOn;
-
-- (void)turnOff;
-@end
-
-@implementation TV
-
-- (void)turnOn {
-    NSLog(@"trun on");
-}
-
-- (void)turnOff {
-    NSLog(@"trun off");
-}
-
-@end
-```
-
-```js
-// 接收者
-TV *tv = [TV new];
-
-// 定义命令 可以定义一个命令抽象类然后派生出各种命令类，这里作者就偷个懒了
-Command *turnOnCommand = [Command new];
-turnOnCommand.sel = @selector(turnOn); // 开电视命令
-turnOnCommand.target = tv;
-
-Command *turnOffCommand = [Command new];
-turnOffCommand.sel = @selector(turnOff); // 关电视命令
-turnOffCommand.target = tv;
-
-// 调用者
-Controller *controller = [Controller new];
-
-// 调用者直接调用命令，不接触接收者
-[controller invokCommand:turnOnCommand]; // trun on
-[controller invokCommand:turnOffCommand]; // trun off
-
-// 在此基础上也可以拓展出取消命令 cancelCommand 等方法就不一一列举
-
+const warehouse = new Receiver();       // 仓库
+const order = new Command(warehouse);   // 订单
+const client = new Invoker(order);      // 客户
+client.invoke();
 ```
 
 **优点：**
@@ -1224,23 +1069,64 @@ Controller *controller = [Controller new];
 
 ### 6.3 解释器模式
 
->解释器模式(Interpreter Pattern)：定义一个语言的文法，并且建立一个解释器来解释该语言中的句子，这里的“语言”是指使用规定格式和语法的代码。解释器模式是一种类行为型模式。
+>解释器模式(`Interpreter Pattern`)：定义一个语言的文法，并且建立一个解释器来解释该语言中的句子，这里的“语言”是指使用规定格式和语法的代码。解释器模式是一种类行为型模式。
 
 ![](../../assets/article/designPattern/解释器.jpg)
 
 **举例：**
 
-说到解释器模式，我们的编译器，在对代码进行编译的时候也用到了该模式。我们可以直接来做一个简单的解释器，一个给机器人下发指令的解释器。
+给定一个语言, 定义它的文法的一种表示，并定义一个解释器, 该解释器使用该表示来解释语言中的句子。
 
-| 命令               | 参数                          |
-| ------------------ | ----------------------------- |
-| direction 移动方向 | 'up'  'down'  'left'  'right' |
-| action 移动方式    | 'move'  'run'                 |
-| distance 移动距离  | an integer                    |
-| 表达式终结符号     | ';'                           |
-
-通过建立一个映射关系可以很快将指令转换成行为，例如``up run 5;`` 表示向上跑5米，而``left move 12;`` 表示向左移动12米。
-
+```js
+class Context {
+    constructor() {
+      this._list = []; // 存放 终结符表达式
+      this._sum = 0; // 存放 非终结符表达式(运算结果)
+    }
+  
+    get sum() {
+      return this._sum;
+    }
+    set sum(newValue) {
+      this._sum = newValue;
+    }
+    add(expression) {
+      this._list.push(expression);
+    }
+    get list() {
+      return [...this._list];
+    }
+  }
+  
+  class PlusExpression {
+    interpret(context) {
+      if (!(context instanceof Context)) {
+        throw new Error("TypeError");
+      }
+      context.sum = ++context.sum;
+    }
+  }
+  class MinusExpression {
+    interpret(context) {
+      if (!(context instanceof Context)) {
+        throw new Error("TypeError");
+      }
+      context.sum = --context.sum;
+    }
+  }
+  
+  /** 以下是测试代码 **/
+  const context = new Context();
+  
+  // 依次添加: 加法 | 加法 | 减法 表达式
+  context.add(new PlusExpression());
+  context.add(new PlusExpression());
+  context.add(new MinusExpression());
+  
+  // 依次执行: 加法 | 加法 | 减法 表达式
+  context.list.forEach(expression => expression.interpret(context));
+  console.log(context.sum);
+```
 **优点：**
 
 * 易于改变和扩展文法。由于在解释器模式中使用类来表示语言的文法规则，因此可以通过继承等机制来改变或扩展文法。
@@ -1255,7 +1141,7 @@ Controller *controller = [Controller new];
 
 ### 6.4 迭代器模式
 
->迭代器模式(Iterator Pattern)：提供一种方法来访问聚合对象，而不用暴露这个对象的内部表示，其别名为游标(Cursor)。迭代器模式是一种对象行为型模式。
+>迭代器模式(`Iterator Pattern`)：一个相对简单的模式，目前绝大多数语言都内置了迭代器，以至于大家都不觉得这是一种设计模式。迭代器并不只迭代数组，迭代器可以中止。提供一种方法来访问聚合对象，而不用暴露这个对象的内部表示，其别名为游标(`Cursor`)。迭代器模式是一种对象行为型模式。
 
 ![](../../assets/article/designPattern/迭代器.png)
 
@@ -1264,81 +1150,16 @@ Controller *controller = [Controller new];
 迭代器帮助请求方获取数据，避免直接操作数据聚合类，使数据聚合类专注存储数据。具体应用有分页等功能，分页功能的迭代器将专门负责操作分页数据，将操作逻辑和数据源分离。
 
 ```js
-// 数据列表
-@interface List : NSObject
-
-@property (nonatomic, strong) NSArray *list;
-
-@end
-
-@implementation List
-
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-    	// 原始数据
-        _list = @[@"0",@"1",@"2",@"3",@"4",@"5"];
+var each = function (arr, callback) {
+    for (var i = 0, len = arr.length; i<len; i++) {
+        callback.call(arr[i], i, arr[i])
     }
-    return self;
 }
 
-@end
-
-// 迭代器
-@interface Iterator : NSObject
-
-@property (nonatomic, assign) NSUInteger index;
-
-- (NSString *)previous; // 上一个数据
-- (NSString *)next; // 下一个数据
-- (BOOL)isFirst; // 当前是否为第一个数据
-
-@end
-
-@interface Iterator ()
-
-// 迭代器持有数据源
-@property (nonatomic, strong) List *list;
-
-@end
-
-@implementation Iterator
-
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-        _list = [List new];
-    }
-    return self;
-}
-
-- (NSString *)previous {
-    _index = MAX(0, _index - 1);
-    return [_list.list objectAtIndex:_index];
-}
-
-- (NSString *)next {
-    _index = MIN(_list.list.count-1, _index + 1);
-    return [_list.list objectAtIndex:_index];
-}
-
-- (BOOL)isFirst {
-    return _index == 0;
-}
-
-@end
-```
-
-```js
-// 使用迭代器输出数据
-Iterator *iterator = [Iterator new];
-NSLog(@"%@",[iterator next]); // 1
-NSLog(@"%@",[iterator next]); // 2
-NSLog(@"%@",[iterator next]); // 3
-NSLog(@"%@",[iterator previous]); // 2
-
+each([1,2,3,4,5], function(i, el) {
+    console.log('index: ',i)
+    console.log('item: ', el)
+})
 ```
 
 **优点：**
@@ -1354,116 +1175,64 @@ NSLog(@"%@",[iterator previous]); // 2
 
 ### 6.5 中介者模式
 
->中介者模式(Mediator Pattern)：用一个中介对象（中介者）来封装一系列的对象交互，中介者使各对象不需要显式地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。中介者模式又称为调停者模式，它是一种对象行为型模式。
+>中介者模式`(Mediator Pattern`)：对象和对象之间借助第三方中介者进行通信。用一个中介对象（中介者）来封装一系列的对象交互，中介者使各对象不需要显式地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。中介者模式又称为调停者模式，它是一种对象行为型模式。
 
 ![](../../assets/article/designPattern/中介者.png)
 
 **举例：**
 
-中介者模式将一个网状的系统结构变成一个以中介者对象为中心的星形结构，在这个星型结构中，使用中介者对象与其他对象的一对多关系来取代原有对象之间的多对多关系。所有成员通过中介者交互，方便拓展新的成员，例如下面的例子，新增一个聊天室成员只需要新建一个成员实例，然后再在聊天室中介者那注册就可以加入聊天室了。
+中介者模式将一个网状的系统结构变成一个以中介者对象为中心的星形结构，在这个星型结构中，使用中介者对象与其他对象的一对多关系来取代原有对象之间的多对多关系。所有成员通过中介者交互，方便拓展新的成员，例如下面的例子，一场测试结束后, 公布结果: 告知解答出题目的人挑战成功, 否则挑战失败。在这段代码中 A、B、C 之间没有直接发生关系, 而是通过另外的 playerMiddle 对象建立链接, 姑且将之当成是中介者模式了。
 
 ```js
-// 聊天室中介者
-@interface ChatMediator : NSObject
-
-+ (instancetype)shareMediator;
-// 聊天室成员注册
-- (void)registerChatMember:(ChatMember *)chatMember;
-// 转发消息
-- (void)forwardMsg:(NSString *)msg fromMember:(ChatMember *)fromMember;
-
-@end
-
-@interface ChatMediator ()
-
-@property (nonatomic, strong) NSMutableArray *memberList; // 已注册成员列表
-
-@end
-
-@implementation ChatMediator
-
-+ (instancetype)shareMediator {
-    static ChatMediator *shareInstance = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        shareInstance = [[ChatMediator alloc] init];
-    });
-    return shareInstance;
-}
-
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-        _memberList = [[NSMutableArray alloc] init];
+const player = function(name) {
+      this.name = name
+      playerMiddle.add(name)
     }
-    return self;
-}
-
-- (void)registerChatMember:(ChatMember *)chatMember {
-    [_memberList addObject:chatMember];
-}
-
-- (void)forwardMsg:(NSString *)msg fromMember:(ChatMember *)fromMember {
-    [_memberList enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        ChatMember *member = obj;
-        if (member != fromMember) [member receiveMsg:msg fromMember:member];
-    }];
-}
-
-@end
-
-// 聊天室成员
-@interface ChatMember : NSObject
-
-@property (nonatomic, strong) NSString *userName; // 成员昵称
-// 发送消息
-- (void)sendMsg:(NSString *)msg;
-// 接收消息
-- (void)receiveMsg:(NSString *)msg fromMember:(ChatMember *)fromMember;
-
-@end
-
-@implementation ChatMember
-
-- (void)sendMsg:(NSString *)msg {
-    [[ChatMediator shareMediator] forwardMsg:msg fromMember:self];
-}
-
-- (void)receiveMsg:(NSString *)msg fromMember:(ChatMember *)fromMember {
-    NSLog(@"%@ receive: %@ from %@", _userName, msg, fromMember.userName);
-}
-
-@end
-```
-
-```js
-// 聊天室中介者
-ChatMediator *mediator = [ChatMediator shareMediator];
-// 新建聊天室成员
-ChatMember *lily = [ChatMember new];
-ChatMember *tom = [ChatMember new];
-ChatMember *jack = [ChatMember new];
-// 成员在中介者处注册
-[mediator registerChatMember:lily];
-[mediator registerChatMember:tom];
-[mediator registerChatMember:jack];
-// 命名
-lily.userName = @"lily";
-tom.userName = @"tom";
-jack.userName = @"jack";
-// 发送消息
-[lily sendMsg:@"hello everyone!"];
-[tom sendMsg:@"hello lily!"];
-[jack sendMsg:@"hi tom!"];
-
-输出：
-tom receive: hello everyone! from lily
-jack receive: hello everyone! from lily
-lily receive: hello lily! from tom
-jack receive: hello lily! from tom
-lily receive: hi tom! from jack
-tom receive: hi tom! from jack
+    player.prototype.win = function() {
+      playerMiddle.win(this.name)
+    }
+    player.prototype.lose = function(){
+      playerMiddle.lose(this.name)
+    }
+    const playerMiddle =(function(){ //将就用下这个demo, 这个函数充当中介者
+      const players =[]
+      const winArr = []
+      const loseArr = []
+      return {
+        add: function(name) {
+          players.push(name)
+        },
+        win: function(name){
+          winArr.push(name)
+          if(winArr.length + loseArr.length === players.length){
+            this.show()
+          }
+        },
+        lose: function(name){
+          loseArr.push(name)
+          if(winArr.length + loseArr.length === players.length){
+            this.show()
+          }
+        },
+        show: function(){
+          for(let winner of winArr){
+            console.log(winner+'挑戰成功;')
+          }
+          for(let loser of loseArr){
+            console.log(loser+'挑战失败;')
+          }
+        }
+      }
+    }())
+    const a = new player('A选手')
+    const b = new player('B选手')
+    const c = new player('C选手')
+    a.win()
+    b.lose()
+    c.win()
+    // A 选手挑战成功;
+// B 选手挑战成功;
+// C 选手挑战失败;
 ```
 
 **优点：**
@@ -1478,91 +1247,32 @@ tom receive: hi tom! from jack
 
 ### 6.6 备忘录模式
 
->备忘录模式(Memento Pattern)：在不破坏封装的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态，这样可以在以后将对象恢复到原先保存的状态。它是一种对象行为型模式，其别名为Token。
+>备忘录模式(`Memento Pattern`)：在不破坏封装的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态，以便日后对象使用或者对象恢复到以前的某个状态。它是一种对象行为型模式，其别名为Token。
 
 ![](../../assets/article/designPattern/UML/行为型/备忘录.jpg)
 **举例：**
 
 备忘录模式提供了一种状态恢复的实现机制，使得用户可以方便地回到一个特定的历史步骤，当新的状态无效或者存在问题时，可以使用暂时存储起来的备忘录将状态复原，当前很多软件都提供了撤销操作，其中就使用了备忘录模式。
 
-我们用一个简单的游戏存档来举例，这也是备忘录模式的一种应用。
+当我们开发一个分页组件的时候，点击下一页获取新的数据，但是当点击上一页时，又重新获取数据，造成无谓的流量浪费，这时可以对数据进行缓存。
 
 ```js
-// 角色状态
-@interface PlayerState : NSObject
-
-@property (nonatomic, strong) NSString *name;
-@property (nonatomic, assign) NSUInteger level;
-@property (nonatomic, assign) NSUInteger rank;
-
-@end
-
-@implementation PlayerState@end
-
-// 角色类
-@interface Player : NSObject
-
-@property (nonatomic, strong) PlayerState *state; // 角色状态
-
-// 设置角色状态
-- (void)setPlayerName:(NSString *)name level:(NSUInteger)level rank:(NSUInteger)rank;
-
-@end
-
-@implementation Player
-- (void)setPlayerName:(NSString *)name level:(NSUInteger)level rank:(NSUInteger)rank {
-    if (!_state) _state = [PlayerState new];
-    _state.name = name;
-    _state.level = level;
-    _state.rank = rank;
-}
-@end
-
-// 备忘录
-@interface Memorandum : NSObject
-
-// 存储
-- (void)storeWithPlayer:(Player *)player;
-// 恢复
-- (void)restoreWithPlayer:(Player *)player;
-
-@end
-
-
-@interface Memorandum ()
-
-@property (nonatomic, strong) PlayerState *state; // 备忘录存储的角色状态
-
-@end
-
-@implementation Memorandum
-
-- (void)storeWithPlayer:(Player *)player {
-    _state = player.state;
-}
-
-- (void)restoreWithPlayer:(Player *)player {
-    if(_state) player.state = _state;
-}
-
-@end
-```
-
-```js
-// 创建角色 A
-Player *playA = [Player new];
-[playA setPlayerName:@"King" level:99 rank:30];
-
-// 创建备忘录并保存角色 A 的状态
-Memorandum *memorandum = [Memorandum new];
-[memorandum storeWithPlayer:playA];
-
-// 创建角色 B 并使用备忘录恢复状态
-Player *playB = [Player new];
-[memorandum restoreWithPlayer:playB];
-NSLog(@"name:%@ level:%ld rank:%ld", playB.state.name, playB.state.level, playB.state.rank);
-
-输出：name:King level:99 rank:30
+// 备忘录模式伪代码
+    var Page = function () {
+     // 通过cache对象缓存数据
+      var cache = {}
+      return function (page, fn) {
+        if (cache[page]) {
+          showPage(page, cache[page])
+        } else {
+          $.post('/url', function (data) {
+            showPage(page, data)
+            cache[page] = data
+          })
+        }
+        fn && fn()
+      }
+    }
 
 ```
 
@@ -1577,7 +1287,7 @@ NSLog(@"name:%@ level:%ld rank:%ld", playB.state.name, playB.state.level, playB.
 
 ### 6.7 观察者模式
 
->观察者模式(Observer Pattern)：定义对象之间的一种一对多依赖关系，使得每当一个对象状态发生改变时，其相关依赖对象皆得到通知并被自动更新。观察者模式的别名包括发布-订阅（Publish/Subscribe）模式、模型-视图（Model/View）模式、源-监听器（Source/Listener）模式或从属者（Dependents）模式。观察者模式是一种对象行为型模式。
+>观察者模式(`Observer Pattern)`：定义对象之间的一种一对多依赖关系，使得每当一个对象状态发生改变时，其相关依赖对象皆得到通知并被自动更新。观察者模式的别名包括发布-订阅（`Publish/Subscribe`）模式、模型-视图（`Model/View`）模式、源-监听器（`Source/Listener`）模式或从属者（`Dependents`）模式。观察者模式是一种对象行为型模式。
 
 ![](../../assets/article/designPattern/观察者.png)
 
@@ -1585,97 +1295,18 @@ NSLog(@"name:%@ level:%ld rank:%ld", playB.state.name, playB.state.level, playB.
 
 观察者模式是使用频率最高的设计模式之一，它用于建立一种对象与对象之间的依赖关系，一个对象发生改变时将自动通知其他对象，其他对象将相应作出反应。
 
-在 iOS 中，观察者模式经常使用到，下面我就用 KVO 实现了一个通过气象台观察天气变化的简单例子。
+在`JavaScript`中观察者模式的实现主要用事件模型，`DOM`事件。
 
 ```js
-// 观察目标 - 气象站
-@interface WeatherStation : NSObject
-
-@property (nonatomic, strong) NSString *state; // 天气状态
-
-// 观察者注册方法
-- (void)registerWithObserver:(Observer *)observer;
-
-@end
-
-@interface WeatherStation ()
-
-@property (nonatomic, strong) NSMutableArray *observerList;
-
-@end
-
-@implementation WeatherStation
-
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-        [self addObserver:self forKeyPath:@"state" options:NSKeyValueObservingOptionNew context:nil];
-    }
-    return self;
+// 发布者
+var pub = function() {
+    console.log('欢迎订阅!')
 }
+// 订阅者
+var sub = document.body;
 
-- (void)dealloc {
-    [self removeObserver:self forKeyPath:@"state"];
-}
-
-// 目标状态改变监听事件
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
-    NSString *state = change[@"new"];
-    [_observerList enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        Observer *ob = obj;
-        [ob observeWeather:state];
-    }];
-}
-
-// 观察者注册方法
-- (void)registerWithObserver:(Observer *)observer {
-    if (!_observerList) _observerList = [NSMutableArray new];
-    [_observerList addObject:observer];
-}
-
-@end
-
-// 观察者
-@interface Observer : NSObject
-
-@property (nonatomic, strong) NSString *name; // 观察者名字
-// 被通知方法
-- (void)observeWeather:(NSString *)weather;
-
-@end
-
-@implementation Observer
-
-- (void)observeWeather:(NSString *)weather {
-    NSLog(@"%@ observe weather changed: %@", _name, weather);
-}
-
-@end
-```
-
-```js
-// 新建监听目标 - 气象站
-WeatherStation *station = [WeatherStation new];
-// 新建监听者
-Observer *farmer = [Observer new];
-Observer *student = [Observer new];
-farmer.name = @"farmer";
-student.name = @"student";
-
-// 监听者注册
-[station registerWithObserver:farmer];
-[station registerWithObserver:student];
-
-// 改变状态
-station.state = @"rainy";
-station.state = @"sunny";
-
-输出：
-farmer observe weather changed: rainy
-student observe weather changed: rainy
-farmer observe weather changed: sunny
-student observe weather changed: sunny
+// 订阅者实现订阅
+sub.addEventListener('click', pub, false);
 ```
 
 
@@ -1694,7 +1325,7 @@ student observe weather changed: sunny
 
 ### 6.8 状态模式
 
->状态模式(State Pattern)：允许一个对象在其内部状态改变时改变它的行为，对象看起来似乎修改了它的类。其别名为状态对象(Objects for States)，状态模式是一种对象行为型模式。
+>状态模式(`State Pattern`)：允许一个对象在其内部状态改变时改变它的行为，对象看起来似乎修改了它的类。其别名为状态对象(`Objects for States`)，其实就是用一个对象或者数组记录一组状态，每个状态对应一个实现，实现的时候根据状态挨个去运行实现。状态模式是一种对象行为型模式。
 
 ![](../../assets/article/designPattern/状态.png)
 
@@ -1702,190 +1333,40 @@ student observe weather changed: sunny
 
 状态模式用于解决复杂对象的状态转换以及不同状态下行为的封装问题。当系统中某个对象存在多个状态，这些状态之间可以进行转换，所以对象在不同状态下具有不同行为时可以使用状态模式。状态模式将一个对象的状态从该对象中分离出来，封装到专门的状态类中，使得对象状态可以灵活变化。
 
-我们可以做一个简单的例子，我设计了一个银行账户系统，根据存钱余额来自动设置账户的状态，银行账户在不同状态下，进行存钱、取钱和借钱的行为。在不同状态下，这些行为得到的回复也不一样，比如说没有余额时无法取钱，只能借钱。
+比如超级玛丽，就可能同时有好几个状态比如 跳跃，移动，射击，蹲下 等，如果对这些动作一个个进行处理判断，需要多个if-else或者switch不仅丑陋不说，而且在遇到有组合动作的时候，实现就会变的更为复杂，这里可以使用状态模式来实现。
+
+状态模式的思路是：首先创建一个状态对象或者数组，内部保存状态变量，然后内部封装好每种动作对应的状态，然后状态对象返回一个接口对象，它可以对内部的状态修改或者调用。
 
 ```js
-// 账户状态抽象类
-@interface State : NSObject
-// 存钱
-- (BOOL)saveMoney:(float)money;
-// 取钱
-- (BOOL)drawMoney:(float)money;
-// 借钱
-- (BOOL)borrowMoney:(float)money;
-
-@end
-
-@implementation State
-
-- (BOOL)saveMoney:(float)money {
-    return NO;
-}
-
-- (BOOL)drawMoney:(float)money {
-   return NO;
-}
-
-- (BOOL)borrowMoney:(float)money {
-   return NO;
-}
-
-@end
-
-// 存款富余状态
-@interface RichState : State
-@end
-
-@implementation RichState
-// 存钱
-- (BOOL)saveMoney:(float)money {
-    NSLog(@"欢迎存钱 %.2f", money);
-    return YES;
-}
-// 取钱
-- (BOOL)drawMoney:(float)money {
-    NSLog(@"欢迎取钱 %.2f", money);
-    return YES;
-}
-// 借钱
-- (BOOL)borrowMoney:(float)money {
-    NSLog(@"您还有余额，请先花完余额");
-    return NO;
-}
-
-@end
-
-// 零存款零负债状态
-@interface ZeroState : State
-@end
-
-@implementation ZeroState
-// 存钱
-- (BOOL)saveMoney:(float)money {
-    NSLog(@"欢迎存钱 %.2f", money);
-    return YES;
-}
-// 取钱
-- (BOOL)drawMoney:(float)money {
-    NSLog(@"您当前没有余额");
-    return NO;
-}
-// 借钱
-- (BOOL)borrowMoney:(float)money {
-    NSLog(@"欢迎借钱 %.2f", money);
-    return YES;
-}
-
-@end
-
-// 负债状态
-@interface DebtState : State
-@end
-
-@implementation DebtState
-// 存钱
-- (BOOL)saveMoney:(float)money {
-    NSLog(@"欢迎还钱 %.2f", money);
-    return YES;
-}
-// 取钱
-- (BOOL)drawMoney:(float)money {
-    NSLog(@"您当前没有余额");
-    return NO;
-}
-// 借钱
-- (BOOL)borrowMoney:(float)money {
-    NSLog(@"上次欠的账还没有还清，暂时无法借钱");
-    return NO;
-}
-
-@end
-
-// 银行账户类
-@interface Account : NSObject
-// 存钱
-- (void)saveMoney:(float)money;
-// 取钱
-- (void)drawMoney:(float)money;
-// 借钱
-- (void)borrowMoney:(float)money;
-
-@end
-
-@interface Account ()
-
-@property (nonatomic, assign) float money; // 余额
-@property (nonatomic, strong) State *state; // 账户状态
-
-@end
-
-@implementation Account
-
-// 初始化账户
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-        _money = 0;
-        _state = [ZeroState new];
+class SuperMarry {
+  constructor() {
+    this._currentState = []
+    this.states = {
+      jump() {console.log('跳跃!')},
+      move() {console.log('移动!')},
+      shoot() {console.log('射击!')},
+      squat() {console.log('蹲下!')}
     }
-    return self;
+  }
+  
+  change(arr) {  // 更改当前动作
+    this._currentState = arr
+    return this
+  }
+  
+  go() {
+    console.log('触发动作')
+    this._currentState.forEach(T => this.states[T] && this.states[T]())
+    return this
+  }
 }
 
-// 存钱
-- (void)saveMoney:(float)money {
-    if ([_state saveMoney:money]) {
-        _money += money;
-        [self updateState];
-    }
-    NSLog(@"余额：%.2f", _money);
-}
-// 取钱
-- (void)drawMoney:(float)money {
-    if ([_state drawMoney:money]) {
-        _money -= money;
-        [self updateState];
-    }
-    NSLog(@"余额：%.2f", _money);
-}
-// 借钱
-- (void)borrowMoney:(float)money {
-    if ([_state borrowMoney:money]) {
-        _money -= money;
-        [self updateState];
-    }
-    NSLog(@"余额：%.2f", _money);
-}
-
-// 更新账户状态
-- (void)updateState {
-    if (_money > 0) {
-        _state = [RichState new];
-    }else if (_money == 0) {
-        _state = [ZeroState new];
-    }else{
-        _state = [DebtState new];
-    }
-}
-
-@end
-```
-
-```js
-// 初始化银行账户
-Account *bankAccount = [Account new];
-// 取 50
-[bankAccount drawMoney:50]; // 余额：0 您当前没有余额
-// 存 100
-[bankAccount saveMoney:100]; // 余额：0 欢迎存钱 100.00
-// 借 100
-[bankAccount borrowMoney:100]; // 余额：100 您还有余额，请先花完余额
-// 取 100
-[bankAccount drawMoney:100]; // 余额：100 欢迎取钱 100.00
-// 借 100
-[bankAccount borrowMoney:100]; // 余额：0 欢迎借钱 100.00
-// 借 50
-[bankAccount borrowMoney:50]; // 余额：-100 上次欠的账还没有还清，暂时无法借钱
+new SuperMarry()
+    .change(['jump', 'shoot'])
+    .go()                    // 触发动作  跳跃!  射击!
+    .go()                    // 触发动作  跳跃!  射击!
+    .change(['squat'])
+    .go()                    // 触发动作  蹲下!
 ```
 
 **优点：**
@@ -1903,7 +1384,7 @@ Account *bankAccount = [Account new];
 
 ### 6.9 策略模式
 
->策略模式(Strategy Pattern)：定义一系列算法类，将每一个算法封装起来，并让它们可以相互替换，策略模式让算法独立于使用它的客户而变化，也称为政策模式(Policy)。策略模式是一种对象行为型模式。
+>策略模式(`Strategy Pattern`)：定义一些列算法，把他们封装起来，并且可以相互替换。就是把看似毫无联系的代码提取封装、复用，使之更容易被理解和拓展。常见的用于一次if判断、switch枚举、数据字典等流程判断语句中。也称为政策模式(`Policy`)。策略模式是一种对象行为型模式。
 
 ![](../../assets/article/designPattern/策略.png)
 
@@ -1911,120 +1392,55 @@ Account *bankAccount = [Account new];
 
 使用策略模式时，我们可以定义一些策略类，每一个策略类中封装一种具体的算法。在这里，每一个封装算法的类我们都可以称之为一种策略，根据传入不同的策略类，使环境类执行不同策略类中的算法。
 
-生活中也有很多类似的例子，就比如说商城的会员卡机制。我们去商城购物可以通过持有的会员卡打折，购买同一件商品时，持有不同等级的会员卡，能得到不同力度的折扣。下面的例子中我列举了青铜、白银、黄金三种 Vip 会员卡，传入不同的会员卡最终需要支付的金额也会有所不同。
+在游戏中，我们每玩完一局游戏都有对用户进行等级评价，比如S级4倍经验，A级3倍经验，B级2倍经验，其他1倍经验，用函数来表达如下：
 
 ```js
-// Vip  - 销售策略抽象类
-@interface Vip : NSObject
-
-// vip 折扣
-- (float)getDiscount;
-// vip 所需邮费
-- (float)getPostage;
-// 根据折扣和邮费计算价格
-- (float)calcPrice:(float)price;
-
-@end
-
-@implementation Vip
-
-- (float)getDiscount {
-    return 1;
-}
-
-- (float)getPostage {
-    return 20;
-}
-
-- (float)calcPrice:(float)price {
-    float payPrice = price*[self getDiscount] + [self getPostage];
-    return payPrice;
-}
-
-@end
-
-// 青铜 vip - 具体策略类
-@interface BronzeVip : Vip
-@end
-
-@implementation BronzeVip
-
-- (float)getDiscount {
-    return 0.9;
-}
-
-- (float)getPostage {
-    return 20;
-}
-
-@end
-
-// 白银 vip
-@interface SilverVip : Vip
-@end
-
-@implementation SilverVip
-
-- (float)getDiscount {
-    return 0.7;
-}
-
-- (float)getPostage {
-    return 10;
-}
-
-@end
-
-// 黄金 vip
-@interface GoldVip : Vip
-@end
-
-@implementation GoldVip
-
-- (float)getDiscount {
-    return 0.5;
-}
-
-- (float)getPostage {
-    return 0;
-}
-
-@end
-
-// 线上商城 - 环境类
-@interface OnlineShop : NSObject
-
-// 购买商品 传入持有的 vip 卡
-- (void)buyProductWithVip:(Vip *)vip;
-
-@end
-
-@implementation OnlineShop
-
-- (void)buyProductWithVip:(Vip *)vip {
-    float productPrice = 100;
-    float payPrice = [vip calcPrice:productPrice];
-    NSLog(@"pay: %f", payPrice);
-}
-
-@end
+  // 改为策略模式 分成两个函数来写
+    const strategy = {
+      'S' : function(experience){
+        return 4*experience
+      },
+      'A' : function(experience){
+        return 3*experience
+      },
+      'B' : function(experience){
+        return 2*experience
+      }
+    }
+    // getExperience可以复用
+    function getExperience(strategy, level, experience){
+      return (level in strategy) ? strategy[level](experience) : experience
+    }
+    var s = getExperience(strategy, 'S', 100)
+    var a = getExperience(strategy, 'A', 100)
+    console.log(s, a) // 400 300
 ```
 
 ```js
-// 初始化商城类
-OnlineShop *shop = [OnlineShop new];
-// 新建各种 vip
-GoldVip *goldVip = [GoldVip new];
-SilverVip *silverVip = [SilverVip new];
-BronzeVip *bronzeVip = [BronzeVip new];
-
-// 使用青铜 vip 购买 100 元的商品
-[shop buyProductWithVip:bronzeVip]; // 9折+20运费 pay: 110.00
-// 使用白银 vip 购买 100 元的商品
-[shop buyProductWithVip:silverVip]; // 7折+10运费 pay: 80.00
-// 使用黄金 vip 购买 100 元的商品
-[shop buyProductWithVip:goldVip]; // 5折+ 0运费 pay: 50.00
-
+// 指令处理集合
+var compileUtil = {
+    // v-text更新视图原理
+    text: function(node, vm, exp) {
+        this.bind(node, vm, exp, 'text');
+    },
+    // v-html更新视图原理
+    html: function(node, vm, exp) {
+        this.bind(node, vm, exp, 'html');
+    },
+    // v-class绑定原理
+    class: function(node, vm, exp) {
+        this.bind(node, vm, exp, 'class');
+    },
+    bind: function(node, vm, exp, dir) {
+        // 不同指令触发视图更新
+        var updaterFn = updater[dir + 'Updater'];
+        updaterFn && updaterFn(node, this._getVMVal(vm, exp));
+        new Watcher(vm, exp, function(value, oldValue) {
+            updaterFn && updaterFn(node, value, oldValue);
+        });
+    }
+    ......
+}
 ```
 
 **优点：**
@@ -2063,105 +1479,153 @@ BronzeVip *bronzeVip = [BronzeVip new];
 
 * 钩子方法：一个钩子方法由一个抽象类或具体类声明并实现，而其子类可能会加以扩展。通常在父类中给出的实现是一个空实现，并以该空实现作为方法的默认实现，当然钩子方法也可以提供一个非空的默认实现。通过在子类中实现的钩子方法对父类方法的执行进行约束，实现子类对父类行为的反向控制。
 
-下面给出一个例子，在给定一个有固定模板的烹饪教程的情况下，根据不同烹饪需求对教程中的内容进行动态调整。
+泡一杯咖啡
+
+先我们先来泡一杯咖啡，一般来说，泡咖啡的步骤通常如下：
+
+1.先把水煮沸；
+
+2.用沸水冲泡咖啡；
+
+3.把咖啡倒进杯子；
+
+4.加糖和牛奶。
+
+我们用es5来得到一杯香浓的咖啡吧：
 
 ```js
-// 烹饪教程 模板方法类
-@interface CookTutorial : NSObject
+var Coffee=function(){}
+Coffee.prototype.boilWater=function(){
+    console.log('水煮开了');
+}
+Coffee.prototype.brewCoffeeGriends=function(){
+    console.log('用沸水冲泡咖啡');
+}
+Coffee.prototype.pourInCup=function(){
+    console.log('把咖啡倒进杯子');
+}
+Coffee.prototype.addSugarAndMilk=function(){
+    console.log('加糖和牛奶');
+}
+// 封装 将实现的细节交给类的内部
+Coffee.prototype.init = function() {
+            this.boilWater();
+            this.brewCoffeeGriends();
+            this.pourInCup();
+            this.addSugarAndMilk();
+}
+var coffee=new Coffee();
+coffee.init();
+```
+泡一壶茶
 
-// 烹饪食物 - 具体方法
-- (void)cook;
-// 准备食材 - 抽象方法
-- (void)prepareIngredients;
-// 加食用油 具体方法
-- (void)addFat;
-// 加入食材 - 抽象方法
-- (void)addIngredients;
-// 加入调味品 - 具体方法
-- (void)addFlavouring;
-// 是否为健康食物 - 钩子方法
-- (BOOL)isHealthyFood;
+其实呢，泡茶的步骤跟泡咖啡的步骤相差不大，大致是这样的：
 
-@end
+1.把水煮沸；
 
-@implementation CookTutorial
+2.用沸水浸泡茶叶；
 
-- (void)cook {
-    [self prepareIngredients];
-    // 如果是健康食物不加食用油
-    if (![self isHealthyFood]) {
-        [self addFat];
+3.把茶水倒进杯子；
+
+4.加柠檬。
+
+来，咱用es6来泡茶：
+
+```js
+class Tea{
+    constructor(){
+
     }
-    [self addIngredients];
-    [self addFlavouring];
+    boilWater(){
+        console.log('把水烧开');
+    }
+    steepTeaBag(){
+        console.log('浸泡茶叶');
+    }
+    pourInCup(){
+        console.log('倒进杯子');
+    }
+    addLemon(){
+        console.log('加柠檬');
+    }
+    init(){
+            this.boilWater();
+            this.steepTeaBag();
+            this.pourInCup();
+            this.addLemon();
+    }
 }
-
-// 抽象方法
-- (void)prepareIngredients {}
-
-// 具体方法
-- (void)addFat {
-    NSLog(@"2. 加调和油");
-}
-
-// 抽象方法
-- (void)addIngredients {}
-
-// 具体方法
-- (void)addFlavouring {
-    NSLog(@"4. 加盐");
-}
-
-//  钩子方法
-- (BOOL)isHealthyFood {
-    return NO;
-}
-
-@end
-
-// 烹饪 🐟 - 模板方法子类
-@interface CookFish : CookTutorial
-@end
-
-@implementation CookFish
-
-// 准备食材
-- (void)prepareIngredients {
-    NSLog(@"1. 准备好生鳕鱼");
-}
-
-// 加入食材
-- (void)addIngredients {
-    NSLog(@"3. 生鳕鱼入锅");
-}
-
-// 加入调味品
-- (void)addFlavouring {
-    [super addFlavouring];
-    NSLog(@"4. 加黑胡椒");
-}
-
-// 是否为健康食物（不放油）
-- (BOOL)isHealthyFood {
-    return YES;
-}
-
-@end
+var tea=new Tea();
+tea.init();
 ```
+
+现在到了思考的时间，我们刚刚泡了一杯咖啡和一壶茶，有没有觉得这两个过程是大同小异的。我们能很容易的就找出他们的共同点，不同点就是原料不同嘛，茶和咖啡，我们可以把他们抽象为"饮料"哇；泡的方式不同嘛，一个是冲泡，一个是浸泡，我们可以把这个行为抽象为"泡"；加入的调料也不同咯，加糖和牛奶，加柠檬，它们也可以抽象为"调料"吖。
+
+这么一分析，是不是很清楚了吖，我们整理一下就是：
+
+1.把水煮沸；
+
+2.用沸水冲泡饮料；
+
+3.把饮料倒进杯子；
+
+4.加调料。
+
+大家请注意！大家请注意！主角来了！之前我们已经扔出了概念，所以我们现在可以创建一个抽象父类来表示泡一杯饮料的过程。那么，抽象父类？
+
+抽象类？
+
+抽象类是不能被实例化的，一定是用来继承的。继承了抽象类的所有子类都将拥有跟抽象类一致的接口方法，抽象类的主要作用就是为它的子类定义这些公共接口。
+
+通过上面分析，这里具体来说就是要把泡茶和泡咖啡的共同步骤共同点找出来，封装到父类，也就是抽象类中，然后不同的步骤写在子类中，也就是茶和咖啡中。抽象类既然不能被实例化，不怕啊，子类就是他的实例化。
+
+泡饮料啦！
 
 ```js
-CookFish * cookFish = [CookFish new];
-[cookFish cook]; 
-输出：
-1. 准备好生鳕鱼
-2. 生鳕鱼入锅
-3. 加盐
-4. 加黑胡椒
+var Beverage=function(){}
+Beverage.prototype.boilWater=function(){
+        console.log('把水煮沸');
+}
+Beverage.prototype.brew=function(){};
+Beverage.prototype.pourInCup=function(){};
+Beverage.prototype.addCondiments=function(){};
+// 抽象方法
+Beverage.prototype.init=function(){
+    this.boilWater();
+    this.brew();
+    this.pourInCup();
+    this.addCondiments();
+}
+var Coffee=function(){
+    // 将父类的构造方法拿来执行一下
+    Beverage.apply(this,arguments);
+    // 就像es6的super执行 执行后this才会有对象的属性
+}
+Coffee.prototype=new Beverage();
+var coffee=new Coffee();
+coffee.init();
+var Tea=function(){
+
+}
+Tea.prototype=new Beverage();
+Tea.prototype.brew=function(){
+    console.log('用沸水浸泡茶叶');
+}
+Tea.prototype.pourInCup=function(){
+    console.log('把茶叶倒进杯子');
+}
+Tea.prototype.addCondiments=function(){
+    console.log('加柠檬');
+}
+var tea=new Tea();
+tea.init();
 ```
-* 第一个步骤``prepareIngredients``， 父类中没有具体实现为抽象方法，子类中直接覆盖。
-* 第二个步骤加食用油方法``addFat``被钩子方法``isHealthyFood ``给跳过了。
-* 第三步``addIngredients ``在父类中同样是抽象方法，子类直接覆盖。
-* 第四步``addFlavouring ``在父类中有具体实现，子类继承父类的「加盐操作」后又增加了新的「加黑胡椒」操作。
+这里既泡了咖啡又泡了茶，是不是没有之前那么繁琐呢，这里的代码可是很高级的呢。
+
+这里用一个父类Beverage来表示Coffee和Tea，然后子类就是后面的Coffee和Tea啦，因为这里的Beverage是一个抽象的存在，需要子类来继承它。泡饮品的流程，可以理解为一个模板模式 ，抽象类Beverage， 抽象方法init()在子类中实现。js的继承是基于原型链的继承，这里prototype就是类的原型链。这里由于coffee对象和tea对象的原型prototype上都没有对应的init(),所以请求会顺着原型链，找到父类Beverage的init()。子类寻找对应的属性和方法的时候会顺着原型链去查找，先找自己，没有找到会顺着去父类里面查找。
+
+Beverage.prototype.init被称为模板方法的原因是，该方法中封装了子类的算法框架，它作为一个算法的模板，指导子类以何种顺序去执行哪些方法。
+
 
 **优点：**
 
@@ -2176,7 +1640,7 @@ CookFish * cookFish = [CookFish new];
 
 ### 6.11 访问者模式
 
->访问者模式(Visitor Pattern):提供一个作用于某对象结构中的各元素的操作表示，它使我们可以在不改变各元素的类的前提下定义作用于这些元素的新操作。访问者模式是一种对象行为型模式。
+>访问者模式(`Visitor Pattern`):提供一个作用于某对象结构中的各元素的操作表示，它使我们可以在不改变各元素的类的前提下定义作用于这些元素的新操作。访问者模式是一种对象行为型模式。
 
 ![](../../assets/article/designPattern/访问者.png)
 
@@ -2184,117 +1648,66 @@ CookFish * cookFish = [CookFish new];
 
 访问者模式是一种较为复杂的行为型设计模式，它包含访问者和被访问元素两个主要组成部分，这些被访问的元素通常具有不同的类型，且不同的访问者可以对它们进行不同的访问操作。访问者模式使得用户可以在不修改现有系统的情况下扩展系统的功能，为这些不同类型的元素增加新的操作。
 
-在使用访问者模式时，被访问元素通常不是单独存在的，它们存储在一个集合中，这个集合被称为「对象结构」，访问者通过遍历对象结构实现对其中存储的元素的逐个操作。通过一个简单的例子了解访问者模式，访问者有财务部门``FADepartment``和 HR 部门``HRDepartment``，通过访问雇员``Employee``来查看雇员的工作情况。
+在使用访问者模式时，被访问元素通常不是单独存在的，它们存储在一个集合中，这个集合被称为「对象结构」，访问者通过遍历对象结构实现对其中存储的元素的逐个操作。
 
 ```js
-// 部门抽象类 - 访问者抽象类
-@interface Department : NSObject
-// 访问抽象方法 用来声明方法
-- (void)visitEmployee:(Employee *)employee;
-
-@end
-
-@implementation Department
-
-- (void)visitEmployee:(Employee *)employee {}
-
-@end
-
-// 财务部门 - 具体访问者类
-@interface FADepartment : Department
-@end
-
-@implementation FADepartment
-// 访问具体方法
-- (void)visitEmployee:(Employee *)employee {
-    if (employee.workTime > 40) {
-        NSLog(@"%@ 工作时间满 40 小时", employee.name);
-    }else{
-        NSLog(@"%@ 工作时间不满 40 小时，要警告！", employee.name);
+// 访问者模式：DOM事件绑定
+var bindEvent = function(dom, type, fn, data) {
+    if (dom.addEventListener) {
+        dom.addEventListener(type, fn, false);
+    } else if (dom.attachEvent) {
+        // dom.attachEvent('on'+type, fn);
+        var data = data || {};
+        dom.attachEvent('on' + type, function(e) {
+            // 在IE中this指向 window，使用call改变this的指向
+            fn.call(dom, e, data);
+        });
+    } else {
+        dom['on' + type] = fn;
     }
 }
-
-@end
-
-// HR 部门 - 具体访问者类
-@interface HRDepartment : Department
-@end
-
-@implementation HRDepartment
-// 访问具体方法
-- (void)visitEmployee:(Employee *)employee {
-    NSUInteger weekSalary = employee.workTime * employee.salary;
-    NSLog(@"%@ 本周获取薪资：%ld",employee.name , weekSalary);
+function $(id) {
+    return document.getElementById(id);
 }
-
-@end
-
-// 抽象雇员类 - 被访问者抽象类
-@interface Employee : NSObject
-// 姓名
-@property (nonatomic, strong) NSString *name;
-// 工作时间
-@property (nonatomic, assign) NSUInteger workTime;
-// 时薪
-@property (nonatomic, assign) NSUInteger salary;
-// 接受访问抽象方法
-- (void)accept:(Department *)department;
-
-@end
-
-@implementation Employee
-
-- (void)accept:(Department *)department {}
-
-@end
-
-// 雇员具体类 - 被访问者具体类
-@interface FulltimeEmployee : Employee
-
-@end
-
-@implementation FulltimeEmployee
-// 接受访问具体方法
-- (void)accept:(Department *)department {
-    [department visitEmployee:self];
-}
-
-@end
+​
+bindEvent($(demo), 'click', function() {
+    // this 指向dom对象
+    this.style.background = 'red';
+});
+​
+bindEvent($('btn'), 'click', function(e, data) {
+    $('text').innerHTML = e.type + data.text + this.tagName;
+}, { text: 'demo' });
 ```
+访问者模式的思想就是在不改变操作对象的同时，为它添加新的操作方法，以实现对操作对象的访问。我们知道，call 和 apply 的作用就是更改函数执行时的作用域，这正是访问者模式的精髓。通过 call、apply 这两种方式我们就可以让某个对象在其它作用域中运行。
 
 ```js
-// 新建财务和 HR - 访问者
-FADepartment *fa = [FADepartment new];
-HRDepartment *hr = [HRDepartment new];
-
-// 新建雇员 - 被访问者
-FulltimeEmployee *tim = [FulltimeEmployee new];
-tim.name = @"tim";
-tim.workTime = 55;
-tim.salary = 100;
-
-FulltimeEmployee *bill = [FulltimeEmployee new];
-bill.name = @"bill";
-bill.workTime = 38;
-bill.salary = 150;
-
-// 一般被访问者都存储在数据集合中方便遍历，集合中可以存储不同类型的被访问者
-NSArray *employeeList = @[tim, bill];
-[employeeList enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-    Employee *employee = obj;
-    // 接受财务访问
-    [employee accept:fa];
-    // 接受 HR 访问
-    [employee accept:hr];
-}];
-
-输出：
-tim 工作时间满 40 小时
-tim 本周获取薪资：5500
-bill 工作时间不满 40 小时，要警告！
-bill 本周获取薪资：5700
+// 数组方法封装
+var Visitor = (function() {
+    return {
+        splice: function() {
+            var args = Array.prototype.splice.call(arguments, 1);
+            return Array.prototype.splice.apply(arguments[0], args);
+        },
+        push: function() {
+            var len = arguments[0].length || 0;
+            var args = this.splice(arguments, 1);
+            arguments[0].length = len + arguments.length - 1;
+            return Array.prototype.push.apply(arguments[0], args);
+        },
+        pop: function() {
+            return Array.prototype.pop.apply(arguments[0]);
+        }
+    }
+})();
+​
+var a = new Object();
+Visitor.push(a,1,2,3,4);
+Visitor.push(a,4,5,6);
+Visitor.pop(a);
+Visitor.splice(a,2);
 ```
-
+访问者模式解决了数据与数据的操作方法之间的耦合，让数据的操作方法独立于数据，使其可以自由演变。因此，访问者模式更适合于那些数据稳定、但数据的操作方法易变的环境下。
 
 **优点：**
 
@@ -2317,6 +1730,7 @@ bill 本周获取薪资：5700
 # 参考
 
 * [Study-Plan](https://github.com/xietao3/Study-Plan)
+* [javaScript设计模式统计](https://zhuanlan.zhihu.com/p/472719016)
 * [ES6 系列之我们来聊聊装饰器](https://juejin.cn/post/6844903713866252296)
 * [设计模式之生成器模式](https://segmentfault.com/a/1190000038250020)
 * [https://juejin.im/user/57f8ffda2e958a005581e3c0/posts](https://juejin.im/user/57f8ffda2e958a005581e3c0/posts)
