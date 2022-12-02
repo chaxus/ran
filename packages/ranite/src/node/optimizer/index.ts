@@ -1,6 +1,6 @@
 import path from "path";
 import { build } from "esbuild";
-import { scanPlugin } from "./scanPlguin";
+import { scanPlugin } from "./scanPlugin";
 import { preBundlePlugin } from "./preBundlePlugin"
 import { green } from "picocolors";
 import { PRE_BUNDLE_DIR } from '../constants'
@@ -30,6 +30,7 @@ export async function optimize(root: string) {
     bundle: true,
     format: "esm",
     splitting: true,
+    // 指定打包输出的目录：node_modules/.ranite
     outdir: path.resolve(root, PRE_BUNDLE_DIR),
     plugins: [preBundlePlugin(deps)],
   });

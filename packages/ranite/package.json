@@ -14,7 +14,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "chokidar": "^3.5.3",
+    "connect": "^3.7.0",
     "picocolors": "^1.0.0",
+    "rollup": "^3.5.1",
     "tsup": "^6.4.0"
   },
   "dependencies": {
