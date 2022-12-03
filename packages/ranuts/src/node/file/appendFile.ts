@@ -1,5 +1,5 @@
-import fs from '@/node/fs'
-import readFile from '@/file/readFile'
+import fs from '@/node/file/fs'
+import readFile from '@/node/file/readFile'
 
 type Error = NodeJS.ErrnoException | null
 
