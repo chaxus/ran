@@ -1,9 +1,8 @@
-import connect from "connect";
 import { red } from "picocolors";
 import { WebSocketServer, WebSocket } from "ws";
 import { HMR_PORT } from "./constants";
 
-export function createWebSocketServer(server: connect.Server): {
+export function createWebSocketServer(): {
   send: (msg: string) => void;
   close: () => void;
 } {

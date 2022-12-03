@@ -5,7 +5,7 @@ import { transformMiddleware } from "./middlewares/transform";
 import { ModuleGraph } from "../ModuleGraph";
 import { createPluginContainer, PluginContainer } from "../pluginContainer";
 import { resolvePlugins } from "../plugins";
-import { indexHtmlMiddware } from "./middlewares/indexHtml";
+import { indexHtmlMiddleware } from "./middlewares/indexHtml";
 import { staticMiddleware } from "./middlewares/static";
 import { createWebSocketServer } from "../ws";
 import chokidar, { FSWatcher } from "chokidar";
@@ -34,7 +34,7 @@ export async function startDevServer() {
     ignoreInitial: true,
   });
   // WebSocket 对象
-  const ws = createWebSocketServer(app);
+  const ws = createWebSocketServer();
   // // 开发服务器上下文
   const serverContext: ServerContext = {
     root: process.cwd(),
@@ -56,7 +56,7 @@ export async function startDevServer() {
   app.use(transformMiddleware(serverContext));
 
   // 入口 HTML 资源
-  app.use(indexHtmlMiddware(serverContext));
+  app.use(indexHtmlMiddleware(serverContext));
 
   // 静态资源
   app.use(staticMiddleware());

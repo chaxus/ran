@@ -3,7 +3,7 @@ import { ServerContext } from "../index";
 import path from "path";
 import { pathExists, readFile } from "fs-extra";
 
-export function indexHtmlMiddware(
+export function indexHtmlMiddleware(
   serverContext: ServerContext
 ): NextHandleFunction {
   return async (req, res, next) => {
