@@ -9,7 +9,7 @@ interface TextVirtualDom {
 }
 
 interface RangeElementProps {
-    [key: string]: string | VirtualDom | Array<VirtualDom | TextVirtualDom>
+    [key: string]: string | VirtualDom | Array<VirtualDom | TextVirtualDom> | EventListenerOrEventListenerObject
 }
 
 interface VirtualDom {
@@ -17,6 +17,26 @@ interface VirtualDom {
     props: RangeElementProps
 }
 
+type State = number | string | null | undefined | Record<string, any> | Array<any>
+
+type FiberType = (x: RangeElementProps) => Fiber | string
+
+interface Fiber {
+    type: FiberType,
+    props: RangeElementProps,
+    dom: any,
+    return: Fiber,
+    alternate: Fiber,          // 记录下上次状态
+    effectTag: string,
+    hooks: Array<State>
+    child: Fiber,
+}
+
+// 任务调度
+let nextUnitOfWork = null;
+let workInProgressRoot = null;
+let currentRoot = null;
+let deletions: Array<Fiber>;
 
 /**
  * @description: 创建文本虚拟DOM
@@ -55,11 +75,11 @@ function createElement(type: string, props: RangeElementProps, ...children: Arra
 
 /**
  * @description: 根据虚拟DOM创建真实DOM
- * @param {VirtualDom | TextVirtualDom} virtualDom
+ * @param {Fiber} virtualDom
  * @return {*}
  */
-function createDom(virtualDom: VirtualDom | TextVirtualDom) {
-    let dom: Text | HTMLElement;
+function createDom(virtualDom: Fiber) {
+    let dom: any;
     // 检查当前节点是文本还是对象
     if (virtualDom.type === 'TEXT') {
         dom = document.createTextNode(virtualDom.props.nodeValue as string);
@@ -72,7 +92,8 @@ function createDom(virtualDom: VirtualDom | TextVirtualDom) {
                 .filter(key => key !== 'children')
                 .forEach(item => {
                     if (item.indexOf('on') === 0) {
-                        dom.addEventListener(item.substring(2).toLowerCase(), virtualDom.props[item], false);
+                        const listener = virtualDom.props[item] as EventListenerOrEventListenerObject
+                        dom.addEventListener(item.substring(2).toLowerCase(), listener, false);
                     } else {
                         dom[item] = virtualDom.props[item];
                     }
@@ -116,15 +137,22 @@ function updateDom(dom, prevProps, nextProps) {
         });
 }
 
-// 统一操作DOM
+/**
+ * @description: 统一操作DOM
+ */
 function commitRoot() {
     deletions.forEach(commitRootImpl);     // 执行真正的节点删除
     commitRootImpl(workInProgressRoot.child);    // 开启递归
     currentRoot = workInProgressRoot;    // 记录一下currentRoot
     workInProgressRoot = null;     // 操作完后将workInProgressRoot重置
 }
-
-function commitDeletion(fiber, domParent) {
+/**
+ * @description: 
+ * @param {*} fiber
+ * @param {*} domParent
+ * @return {*}
+ */
+function commitDeletion(fiber: Fiber, domParent) {
     if (fiber.dom) {
         // dom存在，是普通节点
         domParent.removeChild(fiber.dom);
@@ -134,7 +162,7 @@ function commitDeletion(fiber, domParent) {
     }
 }
 
-function commitRootImpl(fiber) {
+function commitRootImpl(fiber: Fiber) {
     if (!fiber) {
         return;
     }
@@ -162,12 +190,10 @@ function commitRootImpl(fiber) {
     commitRootImpl(fiber.sibling);
 }
 
-// 任务调度
-let nextUnitOfWork = null;
-let workInProgressRoot = null;
-let currentRoot = null;
-let deletions = null;
-// workLoop用来调度任务
+/**
+ * @description: workLoop用来调度任务
+ * @param {*} deadline
+ */
 function workLoop(deadline) {
     while (nextUnitOfWork && deadline.timeRemaining() > 1) {
         // 这个while循环会在任务执行完或者时间到了的时候结束
@@ -182,8 +208,12 @@ function workLoop(deadline) {
     // 如果任务还没完，但是时间到了，我们需要继续注册requestIdleCallback
     requestIdleCallback(workLoop);
 }
-
-function buildNewFiber(fiber, workInProgressFiber) {
+/**
+ * @description: 构建一个新的Fiber
+ * @param {*} fiber
+ * @param {*} workInProgressFiber
+ */
+function buildNewFiber(fiber: Fiber, workInProgressFiber) {
     return {
         type: fiber.type,
         props: fiber.props,
@@ -298,7 +328,7 @@ function useState(init) {
     return [hook.state, setState]
 }
 
-function updateFunctionComponent(fiber) {
+function updateFunctionComponent(fiber: Fiber) {
     // 支持useState，初始化变量
     wipFiber = fiber;
     hookIndex = 0;
@@ -311,7 +341,7 @@ function updateFunctionComponent(fiber) {
 }
 
 // updateHostComponent就是之前的操作，只是单独抽取了一个方法
-function updateHostComponent(fiber) {
+function updateHostComponent(fiber: Fiber) {
     if (!fiber.dom) {
         fiber.dom = createDom(fiber);   // 创建一个DOM挂载上去
     }
