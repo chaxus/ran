@@ -21,21 +21,25 @@ type State = number | string | null | undefined | Record<string, any> | Array<an
 
 type FiberType = (x: RangeElementProps) => Fiber | string
 
+// 父节点指向第一个子节点，子节点有指向其他子节点的指针，这就是个链表
 interface Fiber {
     type: FiberType,
     props: RangeElementProps,
     dom: any,
-    return: Fiber,
-    alternate: Fiber,          // 记录下上次状态
+    return: Fiber, // 指向父元素
+    alternate: Fiber,          // 记录下上次状态，指向上一次运行的根节点，也就是 currentRoot
     effectTag: string,
     hooks: Array<State>
-    child: Fiber,
+    child: Fiber, // 指向子元素
+    sibling: Fiber, // 指向下一个兄弟元素
 }
 
+type FiberNode = Fiber | undefined
+
 // 任务调度
-let nextUnitOfWork = null;
-let workInProgressRoot = null;
-let currentRoot = null;
+let nextUnitOfWork: FiberNode = undefined; // 下一个任务
+let workInProgressRoot: FiberNode = undefined; // 根节点
+let currentRoot: FiberNode = undefined; // 指向上一次运行的根节点
 let deletions: Array<Fiber>;
 
 /**
@@ -142,9 +146,12 @@ function updateDom(dom, prevProps, nextProps) {
  */
 function commitRoot() {
     deletions.forEach(commitRootImpl);     // 执行真正的节点删除
-    commitRootImpl(workInProgressRoot.child);    // 开启递归
-    currentRoot = workInProgressRoot;    // 记录一下currentRoot
-    workInProgressRoot = null;     // 操作完后将workInProgressRoot重置
+    if(workInProgressRoot){
+      commitRootImpl(workInProgressRoot.child);    // 开启递归
+      currentRoot = workInProgressRoot;    // 记录一下 currentRoot
+      workInProgressRoot = undefined;     // 操作完后将workInProgressRoot重置
+    }
+ 
 }
 /**
  * @description: 
@@ -192,9 +199,9 @@ function commitRootImpl(fiber: Fiber) {
 
 /**
  * @description: workLoop用来调度任务
- * @param {*} deadline
+ * @param {IdleDeadline} deadline 用于获取当前空闲时间，以及回调是否在超时时间前已经执行的状态。
  */
-function workLoop(deadline) {
+function workLoop(deadline:IdleDeadline) {
     while (nextUnitOfWork && deadline.timeRemaining() > 1) {
         // 这个while循环会在任务执行完或者时间到了的时候结束
         nextUnitOfWork = performUnitOfWork(nextUnitOfWork);
@@ -343,7 +350,7 @@ function updateFunctionComponent(fiber: Fiber) {
 // updateHostComponent就是之前的操作，只是单独抽取了一个方法
 function updateHostComponent(fiber: Fiber) {
     if (!fiber.dom) {
-        fiber.dom = createDom(fiber);   // 创建一个DOM挂载上去
+        fiber.dom = createDom(fiber);   // 创建一个DOM挂载上去，fiber转真实DOM
     }
 
     // 将我们前面的vDom结构转换为fiber结构
@@ -354,7 +361,12 @@ function updateHostComponent(fiber: Fiber) {
 }
 
 // performUnitOfWork用来执行任务，参数是我们的当前fiber任务，返回值是下一个任务
-function performUnitOfWork(fiber) {
+// 我们需要将之前的vDom结构转换为Fiber的数据结构，同时需要能够通过其中任意一个节点返回下一个节点，其实就是遍历这个链表。
+// 遍历的时候从根节点出发，先找子元素，如果子元素存在，直接返回，如果没有子元素了就找兄弟元素，找完所有的兄弟元素后再返回父元素，然后再找这个父元素的兄弟元素。
+// 先找子元素，再找兄弟元素，最后找父元素
+// 整个遍历过程其实是个深度优先遍历
+// 在深度优先遍历的过程中，某些父节点会被二次遍历，所以我们写代码时，return的父节点不会作为下一个任务返回，只有sibling和child才会作为下一个任务返回。
+function performUnitOfWork(fiber:Fiber) {
     // 检测函数组件
     const isFunctionComponent = fiber.type instanceof Function;
     if (isFunctionComponent) {
@@ -364,23 +376,24 @@ function performUnitOfWork(fiber) {
     }
 
     // 这个函数的返回值是下一个任务，这其实是一个深度优先遍历
-    // 先找子元素，没有子元素了就找兄弟元素
-    // 兄弟元素也没有了就返回父元素
-    // 然后再找这个父元素的兄弟元素
-    // 最后到根节点结束
-    // 这个遍历的顺序其实就是从上到下，从左到右
+    
     if (fiber.child) {
         return fiber.child;
     }
-
+   
     let nextFiber = fiber;
     while (nextFiber) {
+        // 先找子元素，没有子元素了就找兄弟元素 
         if (nextFiber.sibling) {
             return nextFiber.sibling;
         }
-
+        // 兄弟元素也没有了就返回父元素
+        // 然后再找这个父元素的兄弟元素
+        // 最后到根节点结束
+        // 这个遍历的顺序其实就是从上到下，从左到右
         nextFiber = nextFiber.return;
     }
+   
 }
 // 使用requestIdleCallback开启workLoop
 requestIdleCallback(workLoop);
