@@ -54,6 +54,7 @@ jobs:
           github_token: ${{ secrets.RAN_ACTIONS_TOKEN }}
           exclude_assets: ''
           publish_dir: packages/docs/.vitepress/dist
+
   lint:
     if: github.repository == 'chaxus/ran'
     timeout-minutes: 10
@@ -64,14 +65,18 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2.2.4
-
-      - name: Set node version to 16
-        uses: actions/setup-node@v3
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        id: pnpm-install
         with:
-          node-version: 16
-          cache: "pnpm"
+          version: 7
+          run_install: false
+      
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
 
       - name: Install deps
         run: pnpm install
