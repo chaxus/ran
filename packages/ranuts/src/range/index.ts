@@ -5,6 +5,7 @@ type FiberProps = any
 type AuthenticElement = any
 
 interface InventedElement {
+    dom?: Element,
     type: string;
     props: InventedElementProps;
 }
@@ -41,7 +42,7 @@ function createTextInventedElement(text: string): InventedElement {
  * @param {array} children
  * @return {VirtualDom}
  */
-function createInventedElement(type: string, config: InventedElementProps, children: Array<InventedElement>): InventedElement {
+function createElement(type: string, config: InventedElementProps, children: Array<InventedElement>): InventedElement {
     const props = {
         ...config,
         // children也要放到props里面去，这样我们在组件里面就能通过this.props.children拿到子元素
@@ -54,7 +55,7 @@ function createInventedElement(type: string, config: InventedElementProps, child
 }
 
 /**
- * @description: 将虚拟DOM渲染成真实DOM, 参考react源码：https://github.com/facebook/react/blob/main/packages/react-dom/src/client/ReactDOMLegacy.js
+ * @description: 将fiber渲染成真实DOM, 参考react源码：https://github.com/facebook/react/blob/main/packages/react-dom/src/client/ReactDOMLegacy.js
  * @param {VirtualDom} element
  * @return {RealDom}
  */
@@ -285,17 +286,27 @@ function fiberHandler(fiber: Fiber) {
     fiber.child && fiberHandler(fiber.child);
     fiber.sibling && fiberHandler(fiber.sibling);
 }
+/**
+ * @description: 传入虚拟DOM和需要挂载的根节点，将虚拟DOM转化为Fiber，将fiber转化为真实DOM进行挂载
+ * @param {InventedElement} inventedElement
+ * @param {Element} root
+ */
+function render(inventedElement: InventedElement, root: Element) {
+    // 保存上一次的fiber根节点，进行对比更新
+    const alternate = fiberRoot
 
-function render(fiber: Fiber, root: Element) {
     fiberRoot = {
         type: 'ROOT',
         dom: root,
-        child: fiber,
+        child: inventedElement,
+        alternate,
     }
 
     deletions = [];
 
     currentFiberNode = fiberRoot;
+    // 开始进行遍历更新
+    requestIdleCallback(schedule);
 }
 
 let deletions: Array<Fiber> = []
@@ -304,5 +315,6 @@ let fiberRoot: Fiber | undefined; // 记录fiber的根节点
 
 
 export {
-    render
+    render,
+    createElement
 }
