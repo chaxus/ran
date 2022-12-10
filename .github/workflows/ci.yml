@@ -1,0 +1,37 @@
+
+name: pages-build-site
+on:
+  pull_request:
+    branches: main
+jobs:
+  lint:
+    if: github.repository == 'chaxus/ran'
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    name: "Lint: node-16, ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 7
+          run_install: false
+      
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - name: Install deps
+        run: pnpm install
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Test
+        run: pnpm run test
