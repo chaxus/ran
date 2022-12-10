@@ -1,146 +1,308 @@
-type VirtualDomProps = any
+type InventedElementProps = any
 
-type RealDom = any
-interface VirtualDom {
-  type: string;
-  props: VirtualDomProps;
+type FiberProps = any
+
+type AuthenticElement = any
+
+interface InventedElement {
+    type: string;
+    props: InventedElementProps;
 }
 
 interface Fiber {
-  props:VirtualDomProps,
-  type:string,
-  effectTag:string, // 操作的标记
-  child:Fiber, // 子节点
-  sibling:Fiber, // 兄弟节点
-  return:Fiber, // 指向父节点
-  dom:RealDom, // 判断是不是根节点
-  alternate:Fiber,
-
+    props?: FiberProps,
+    type: string
+    effectTag?: string, // 操作的标记
+    child?: Fiber, // 子节点
+    sibling?: Fiber, // 兄弟节点
+    return?: Fiber, // 指向父节点
+    dom?: AuthenticElement, // 判断是不是根节点
+    alternate?: Fiber, // 记录上次的状态，进行diff对比
 }
 
-function createTextVDom(text:string):VirtualDom{
-  return {
-    type: 'TEXT',
-    props: {
-      nodeValue: text,
-      children: []
+/**
+ * @description: 创建文本虚拟DOM
+ * @param {string} text
+ * @return {VirtualDom}
+ */
+function createTextInventedElement(text: string): InventedElement {
+    return {
+        type: 'TEXT',
+        props: {
+            nodeValue: text,
+            children: []
+        }
     }
-  }
 }
-
-function createVirtualDom(type:string, props:VirtualDomProps, ...children:Array<VirtualDom>):VirtualDom {
-  // 核心逻辑不复杂，将参数都塞到一个对象上返回就行
-  // children也要放到props里面去，这样我们在组件里面就能通过this.props.children拿到子元素
-  return {
-    type,
-    props: {
-      ...props,
-      children: children.map(child => {
-        return typeof child === 'object' ? child: createTextVDom(child)
-      })
-    }
-  }
-}
-
-// 创建DOM的操作
-function createDom(vDom:VirtualDom) {
-  let dom: RealDom;
-  // 检查当前节点是文本还是对象
-  if(vDom.type === 'TEXT') {
-    dom = document.createTextNode(vDom.props.nodeValue);
-  } else {
-    dom = document.createElement(vDom.type);
-
-    // 将vDom上除了children外的属性都挂载到真正的DOM上去
-    if(vDom.props) {
-      Object.keys(vDom.props)
-        .filter(key => key !== 'children')
-        .forEach(item => {
-          if(item.indexOf('on') === 0) {
-            dom.addEventListener(item.substring(2).toLowerCase(), vDom.props[item], false);
-          } else {
-            dom[item] = vDom.props[item];
-          }
+/**
+ * @description: 创建虚拟DOM，参考React源码：https://github.com/facebook/react/blob/main/packages/react/src/ReactElement.js
+ * @param {string} type
+ * @param {VirtualDomProps} props
+ * @param {array} children
+ * @return {VirtualDom}
+ */
+function createInventedElement(type: string, config: InventedElementProps, children: Array<InventedElement>): InventedElement {
+    const props = {
+        ...config,
+        // children也要放到props里面去，这样我们在组件里面就能通过this.props.children拿到子元素
+        children: children.map(child => {
+            return typeof child === 'object' ? child : createTextInventedElement(child)
         })
     }
-  }
-  return dom;
+    // 核心逻辑不复杂，将参数都塞到一个对象上返回就行
+    return { type, props }
 }
 
-// 更新DOM的操作
-function updateDom(dom:RealDom, prevProps:VirtualDomProps, nextProps:VirtualDomProps) {
-  // 1. 过滤children属性
-  // 2. 老的存在，新的没了，取消
-  // 3. 新的存在，老的没有，新增
-  Object.keys(prevProps)
-    .filter(name => name !== 'children')
-    .filter(name => !(name in nextProps))
-    .forEach(name => {
-      if(name.indexOf('on') === 0) {
-        dom.removeEventListener(name.substring(2).toLowerCase(), prevProps[name], false);
-      } else {
-        dom[name] = '';
-      }
-    });
-
-  Object.keys(nextProps)
-    .filter(name => name !== 'children')
-    .forEach(name => {
-      if(name.indexOf('on') === 0) {
-        dom.addEventListener(name.substring(2).toLowerCase(), nextProps[name], false);
-      } else {
-        dom[name] = nextProps[name];
-      }
-    });
+/**
+ * @description: 将虚拟DOM渲染成真实DOM, 参考react源码：https://github.com/facebook/react/blob/main/packages/react-dom/src/client/ReactDOMLegacy.js
+ * @param {VirtualDom} element
+ * @return {RealDom}
+ */
+function fiberToAuthenticElement(fiber: Fiber): AuthenticElement {
+    // 检查当前节点是文本还是对象
+    if (fiber.type === 'TEXT') {
+        return document.createTextNode(fiber.props.nodeValue)
+    }
+    const dom = document.createElement(fiber.type);
+    for (const prop in fiber.props) {
+        // 将fiber上除了props属性都挂载到真正的DOM上去
+        if (prop.startsWith('on')) {
+            // 处理监听事件
+            dom.addEventListener(prop.toLowerCase(), fiber.props[prop], false);
+        } else {
+            dom.setAttribute(prop, fiber.props[prop]);
+        }
+    }
+    return dom;
 }
-let deletions:Array<Fiber>// 需要删除的节点，汇总统一删除
-let workInProgressRoot:Fiber | undefined // 根节点
-let currentRoot:Fiber
-// 统一操作DOM
-function commitRoot() {
-  deletions.forEach(commitRootImpl);     // 执行真正的节点删除
-  if(workInProgressRoot){
-    commitRootImpl(workInProgressRoot.child);    // 开启递归
-    currentRoot = workInProgressRoot;    // 记录一下currentRoot
-    workInProgressRoot = undefined;     // 操作完后将workInProgressRoot重置
-  }
- 
+/**
+ * @description: 虚拟DOM转Fiber，用于替代虚拟DOM直接diff和转真实DOM。转成fiber后再一次性render，也叫commit。
+ * @return {*}
+ */
+function reconcile(fiber: Fiber) {
+    // 把虚拟DOM 的 render 和 patch阶段，变成了虚拟DOM转fiber的reconcile，同时空闲时才转schedule，转完后一次性commitFiber
+    // 用于解决虚拟DOM转真实DOM时，render和patch时间过长的问题。只解决了patch时候问题。 
+    reconcileFiberNode(fiber)
+    // 这个函数的返回值是下一个任务，这其实是一个深度优先遍历
+    // 先找子元素，没有子元素了就找兄弟元素
+    // 兄弟元素也没有了就返回父元素
+    // 然后再找这个父元素的兄弟元素
+    // 最后到根节点结束
+    // 这个遍历的顺序其实就是从上到下，从左到右
+    if (fiber.child) {
+        return fiber.child;
+    }
+
+    let nextFiber = fiber;
+    while (nextFiber) {
+        if (nextFiber.sibling) {
+            return nextFiber.sibling;
+        }
+        if (nextFiber.return) {
+            nextFiber = nextFiber.return;
+        }
+    }
+}
+/**
+ * @description: 处理当前fiber节点
+ * @return {*}
+ */
+function reconcileFiberNode(fiber: Fiber) {
+    if (!fiber.dom) {
+        fiber.dom = fiberToAuthenticElement(fiber)
+    }
+    // reconcileChildren是把之前的 vdom 转成 child、sibling、return 这样串联起来的 fiber 链表：
+    reconcileChildren(fiber, fiber.props.children)
 }
 
-function commitDeletion(fiber:Fiber, domParent:RealDom) {
-  if(fiber.dom) {
-    // dom存在，是普通节点
-    domParent.removeChild(fiber.dom);
-  } else {
-    // dom不存在，是函数组件,向下递归查找真实DOM
-    commitDeletion(fiber.child, domParent);
-  }
+
+
+function reconcileChildren(fiber: Fiber, children: Array<Fiber>) {
+    // 构建fiber结构
+    let alternateFiber = fiber.alternate && fiber.alternate.child;  // 获取上次的fiber树
+    let updateFiber: Fiber | undefined;
+    let prevSibling: Fiber | undefined;
+    let index = 0;
+    if (children && children.length) {
+        // 第一次没有oldFiber，那全部是REPLACEMENT
+        // 处理新增的情况
+        if (!alternateFiber) {
+            for (let i = 0; i < children.length; i++) {
+                const element = children[i];
+                const { type, props } = element
+                updateFiber = {
+                    return: fiber,
+                    type,
+                    props,
+                    effectTag: 'REPLACEMENT'      // 添加一个操作标记
+                }
+                // 父级的child指向第一个子元素
+                if (i === 0) {
+                    fiber.child = updateFiber;
+                } else {
+                    // 每个子元素拥有指向下一个子元素的指针
+                    if (prevSibling) {
+                        prevSibling.sibling = updateFiber;
+                    }
+                }
+                prevSibling = updateFiber;
+            }
+        }
+        // 处理更新和删除的情况
+        while (index < children.length && alternateFiber) {
+            const element = children[index];
+            // 对比oldFiber和当前element
+            const sameType = alternateFiber && element && alternateFiber.type === element.type;  //检测类型是不是一样
+            // 先比较元素类型
+            if (sameType) {
+                // 如果类型一样，复用节点，更新props
+                const { type, dom } = alternateFiber
+                updateFiber = {
+                    type,
+                    props: element.props,
+                    dom,
+                    return: fiber,
+                    alternate: alternateFiber,          // 记录下上次状态
+                    effectTag: 'UPDATE'           // 添加一个操作标记
+                }
+            } else if (!sameType && element) {
+                // 如果类型不一样，有新的节点，创建新节点替换老节点
+                const { type, props } = element
+                updateFiber = {
+                    type,
+                    props,
+                    return: fiber,
+                    effectTag: 'REPLACEMENT'      // 添加一个操作标记
+                }
+            } else if (!sameType && alternateFiber) {
+                // 如果类型不一样，没有新节点，有老节点，删除老节点
+                alternateFiber.effectTag = 'DELETION';   // 添加删除标记
+                deletions.push(alternateFiber);          // 一个数组收集所有需要删除的节点
+            }
+
+
+            alternateFiber = alternateFiber.sibling;     // 循环处理兄弟元素
+
+            // 父级的child指向第一个子元素
+            if (index === 0) {
+                fiber.child = updateFiber;
+            } else {
+                // 每个子元素拥有指向下一个子元素的指针
+                if (prevSibling) {
+                    prevSibling.sibling = updateFiber;
+                }
+            }
+
+            prevSibling = updateFiber;
+            index++;
+        }
+    }
 }
 
-function commitRootImpl(fiber:Fiber) {
-  if(!fiber) {
-    return;
-  }
+/**
+ * @description: 空闲调度reconcile，进行虚拟DOM转fiber，同时收集区别
+ * @return {*}
+ */
+function schedule(deadline: IdleDeadline) {
+    while (currentFiberNode && deadline.timeRemaining() > 1) {
+        // 这个while循环会在任务执行完或者时间到了的时候结束
+        currentFiberNode = reconcile(currentFiberNode);
+    }
 
-  // const parentDom = fiber.return.dom;
-  // 向上查找真正的DOM
-  let parentFiber = fiber.return;
-  while(!parentFiber.dom) {
-    parentFiber = parentFiber.return;
-  }
-  const parentDom:RealDom = parentFiber.dom;
+    // 任务做完后统一渲染
+    if (!currentFiberNode && fiberRoot) {
+        commitFiber();
+    }
 
-  if(fiber.effectTag === 'REPLACEMENT' && fiber.dom) {
-    parentDom.appendChild(fiber.dom);
-  } else if(fiber.effectTag === 'DELETION') {
-    // parentDom.removeChild(fiber.dom);
-    commitDeletion(fiber, parentDom);
-  } else if(fiber.effectTag === 'UPDATE' && fiber.dom) {
-    // 更新DOM属性
-    updateDom(fiber.dom, fiber.alternate.props, fiber.props);
-  }
+    // 如果任务还没完，但是时间到了，我们需要继续注册requestIdleCallback
+    requestIdleCallback(schedule);
+}
+/**
+ * @description: fiber构建完成，同时区别也构建完成，进行统一的commit渲染
+ * @return {*}
+ */
+function commitFiber() {
+    deletions.forEach(fiberHandler);     // 执行真正的节点删除
+    fiberRoot && fiberHandler(fiberRoot);    // 开启递归
+    currentFiberNode = fiberRoot;    // 记录一下currentRoot
+    fiberRoot = undefined;     // 操作完后将workInProgressRoot重置
+}
+function replacementHandler(fiber: Fiber) {
+    if (fiber.return) {
+        const parentDom = fiber.return.dom
+        parentDom.appendChild(fiber.dom);
+    }
+}
+function deletionHandler(fiber: Fiber) {
+    if (fiber.return) {
+        const parentDom = fiber.return.dom
+        parentDom.removeChild(fiber.dom);
+    }
 
-  // 递归操作子元素和兄弟元素
-  commitRootImpl(fiber.child);
-  commitRootImpl(fiber.sibling);
+}
+function updateHandler(fiber: Fiber) {
+    const { dom, alternate, props } = fiber
+    const prevProps = alternate?.props
+    const nextProps = props
+    // 删除老的所有属性
+    for (const prev in prevProps) {
+        if (prev.startsWith('on')) {
+            // 处理监听事件
+            dom.removeEventListener(prev.toLowerCase(), fiber.props[prev], false);
+        } else {
+            dom.removeAttribute(prev)
+        }
+    }
+    // 新增新的所有属性
+    for (const next in nextProps) {
+        if (next.startsWith('on')) {
+            // 处理监听事件
+            dom.addEventListener(next.toLowerCase(), fiber.props[next], false);
+        } else {
+            dom.setAttribute(next, fiber.props[next])
+        }
+    }
+}
+const fiberHandlerMapEffectTag = new Map([
+    ['REPLACEMENT', replacementHandler],
+    ['DELETION', deletionHandler],
+    ['UPDATE', updateHandler],
+])
+
+function fiberHandler(fiber: Fiber) {
+    if (!fiber) {
+        return;
+    }
+    // 向上查找真正的DOM
+    let parentFiber = fiber.return;
+    while (parentFiber && !parentFiber.dom) {
+        parentFiber = parentFiber.return;
+    }
+    const handler = fiberHandlerMapEffectTag.get(fiber.effectTag || '')
+    handler && handler(fiber)
+
+    // 递归操作子元素和兄弟元素
+    fiber.child && fiberHandler(fiber.child);
+    fiber.sibling && fiberHandler(fiber.sibling);
+}
+
+function render(fiber: Fiber, root: Element) {
+    fiberRoot = {
+        type: 'ROOT',
+        dom: root,
+        child: fiber,
+    }
+
+    deletions = [];
+
+    currentFiberNode = fiberRoot;
+}
+
+let deletions: Array<Fiber> = []
+let currentFiberNode: Fiber | undefined; // 用于记录当前处理到的fiber节点
+let fiberRoot: Fiber | undefined; // 记录fiber的根节点
+
+
+export {
+    render
 }
