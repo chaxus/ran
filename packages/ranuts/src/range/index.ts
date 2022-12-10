@@ -5,7 +5,6 @@ type FiberProps = any
 type AuthenticElement = any
 
 interface InventedElement {
-    dom?: Element,
     type: string;
     props: InventedElementProps;
 }
@@ -113,21 +112,24 @@ function reconcileFiberNode(fiber: Fiber) {
         fiber.dom = fiberToAuthenticElement(fiber)
     }
     // reconcileChildren是把之前的 vdom 转成 child、sibling、return 这样串联起来的 fiber 链表：
-    reconcileChildren(fiber, fiber.props.children)
+    reconcileChildren(fiber)
 }
 
 
 
-function reconcileChildren(fiber: Fiber, children: Array<Fiber>) {
+function reconcileChildren(fiber: Fiber) {
+    // 只有虚拟DOM才有fiber.props.children， fiber是通过child指向子节点
+    const children: Array<Fiber> = fiber.props.children
     // 构建fiber结构
-    let alternateFiber = fiber.alternate && fiber.alternate.child;  // 获取上次的fiber树
+    const alternateFiber = fiber.alternate // 获取上次的fiber树
+    let alternateChildFiber = fiber.alternate && fiber.alternate.child // 获取子fiber树第一个
     let updateFiber: Fiber | undefined;
     let prevSibling: Fiber | undefined;
     let index = 0;
     if (children && children.length) {
         // 第一次没有oldFiber，那全部是REPLACEMENT
         // 处理新增的情况
-        if (!alternateFiber) {
+        if (!alternateChildFiber) {
             for (let i = 0; i < children.length; i++) {
                 const element = children[i];
                 const { type, props } = element
@@ -140,30 +142,31 @@ function reconcileChildren(fiber: Fiber, children: Array<Fiber>) {
                 // 父级的child指向第一个子元素
                 if (i === 0) {
                     fiber.child = updateFiber;
+                    prevSibling = updateFiber;
                 } else {
                     // 每个子元素拥有指向下一个子元素的指针
                     if (prevSibling) {
                         prevSibling.sibling = updateFiber;
+                        prevSibling = prevSibling.sibling
                     }
                 }
-                prevSibling = updateFiber;
             }
         }
         // 处理更新和删除的情况
-        while (index < children.length && alternateFiber) {
+        while (index < children.length && alternateChildFiber) {
             const element = children[index];
             // 对比oldFiber和当前element
-            const sameType = alternateFiber && element && alternateFiber.type === element.type;  //检测类型是不是一样
+            const sameType = alternateChildFiber && element && alternateChildFiber.type === element.type;  //检测类型是不是一样
             // 先比较元素类型
             if (sameType) {
                 // 如果类型一样，复用节点，更新props
-                const { type, dom } = alternateFiber
+                const { type, dom } = alternateChildFiber
                 updateFiber = {
                     type,
                     props: element.props,
                     dom,
                     return: fiber,
-                    alternate: alternateFiber,          // 记录下上次状态
+                    alternate: alternateChildFiber,          // 记录下上次状态
                     effectTag: 'UPDATE'           // 添加一个操作标记
                 }
             } else if (!sameType && element) {
@@ -175,26 +178,30 @@ function reconcileChildren(fiber: Fiber, children: Array<Fiber>) {
                     return: fiber,
                     effectTag: 'REPLACEMENT'      // 添加一个操作标记
                 }
-            } else if (!sameType && alternateFiber) {
+            } else if (!sameType && alternateChildFiber) {
                 // 如果类型不一样，没有新节点，有老节点，删除老节点
-                alternateFiber.effectTag = 'DELETION';   // 添加删除标记
-                deletions.push(alternateFiber);          // 一个数组收集所有需要删除的节点
+                alternateChildFiber.effectTag = 'DELETION';   // 添加删除标记
+                deletions.push(alternateChildFiber);          // 一个数组收集所有需要删除的节点
+            }
+            if (updateFiber) {
+                // 指向修改前的fiber
+                updateFiber.alternate = alternateChildFiber
             }
 
-
-            alternateFiber = alternateFiber.sibling;     // 循环处理兄弟元素
+            alternateChildFiber = alternateChildFiber.sibling;     // 循环处理兄弟元素
 
             // 父级的child指向第一个子元素
             if (index === 0) {
                 fiber.child = updateFiber;
+                // 初始化prevSibling
+                prevSibling = updateFiber;
             } else {
                 // 每个子元素拥有指向下一个子元素的指针
                 if (prevSibling) {
                     prevSibling.sibling = updateFiber;
+                    prevSibling = prevSibling.sibling
                 }
             }
-
-            prevSibling = updateFiber;
             index++;
         }
     }
@@ -294,22 +301,21 @@ function fiberHandler(fiber: Fiber) {
 function render(inventedElement: InventedElement, root: Element) {
     // 保存上一次的fiber根节点，进行对比更新
     const alternate = fiberRoot
-
     fiberRoot = {
         type: 'ROOT',
         dom: root,
-        child: inventedElement,
+        props: {
+            children: [inventedElement]
+        },
         alternate,
     }
-
     deletions = [];
-
     currentFiberNode = fiberRoot;
     // 开始进行遍历更新
     requestIdleCallback(schedule);
 }
 
-let deletions: Array<Fiber> = []
+let deletions: Array<Fiber> = [] // 需要删除的节点
 let currentFiberNode: Fiber | undefined; // 用于记录当前处理到的fiber节点
 let fiberRoot: Fiber | undefined; // 记录fiber的根节点
 
