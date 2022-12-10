@@ -271,12 +271,16 @@ function updateHandler(fiber: Fiber) {
         }
     }
 }
+
 const fiberHandlerMapEffectTag = new Map([
     ['REPLACEMENT', replacementHandler],
     ['DELETION', deletionHandler],
     ['UPDATE', updateHandler],
 ])
-
+/**
+ * @description: 不同类型的fiber对应不同的处理方式
+ * @param {Fiber} fiber
+ */
 function fiberHandler(fiber: Fiber) {
     if (!fiber) {
         return;
@@ -301,6 +305,7 @@ function fiberHandler(fiber: Fiber) {
 function render(inventedElement: InventedElement, root: Element) {
     // 保存上一次的fiber根节点，进行对比更新
     const alternate = fiberRoot
+    // fiber和虚拟DOM结构上差不多，将虚拟DOM构建称fiber
     fiberRoot = {
         type: 'ROOT',
         dom: root,
