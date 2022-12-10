@@ -30,7 +30,7 @@ export default defineConfig({
           text:'通用函数',
           items: [
             { text: "过滤对象", link: "/src/ranuts/utils/" },
-            { text: "统计执行时间", link: "/src/ranuts/utils/task/" },
+            { text: "统计执行时间", link: "/src/ranuts/utils/task" },
           ],
         },
         {
