@@ -1,4 +1,4 @@
-import { Plugin } from 'esbuild'
+import type { Plugin } from 'esbuild'
 import { BARE_IMPORT_RE, EXTERNAL_TYPES } from '../constants'
 /**
  * @description: 根据BARE_IMPORT_RE，和EXTERNAL_TYPES，将一些文件添加进依赖组deps，同时不让esbuild去处理

@@ -1,11 +1,11 @@
-import path from 'path'
+import path from 'node:path'
 import { build } from 'esbuild'
-import { scanPlugin } from './scanPlugin'
-import { preBundlePlugin } from './preBundlePlugin'
 import { green } from 'picocolors'
 import { PRE_BUNDLE_DIR } from '../constants'
+import { scanPlugin } from './scanPlugin'
+import { preBundlePlugin } from './preBundlePlugin'
 
-export async function optimize(root: string) {
+export async function optimize(root: string):Promise<void> {
   // 1. 确定入口
   const entry = path.resolve(root, 'src/main.tsx')
   // 2. 从入口处扫描依赖

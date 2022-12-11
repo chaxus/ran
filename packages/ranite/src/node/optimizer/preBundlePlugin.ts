@@ -1,15 +1,15 @@
-import { Loader, Plugin } from 'esbuild'
-import { BARE_IMPORT_RE } from '../constants'
 // 用来分析 es 模块 import/export 语句的库
+import { extname } from 'node:path'
 import { init, parse } from 'es-module-lexer'
 // 获取文件的扩展名
-import { extname } from 'node:path'
+import type { Loader, Plugin } from 'esbuild'
 // 一个实现了 node 路径解析算法的库
 import resolve from 'resolve'
 // 一个更加好用的文件操作库
 import fs from 'fs-extra'
 // 用来开发打印 debug 日志的库
 import createDebug from 'debug'
+import { BARE_IMPORT_RE } from '../constants'
 
 const debug = createDebug('dev')
 /**
@@ -62,7 +62,7 @@ export function preBundlePlugin(deps: Set<string>): Plugin {
           // es-module-lexer 进行词法分析
           // imports 和 exports 都是一个数组，其中每个元素（对象）代表一个导入语句的解析后的结果，具体会包含导入或导出的模块的名称、在源代码中的位置等信息。
           const [imports, exports] = await parse(code)
-          let proxyModule = []
+          const proxyModule = []
           // 如果没有imports分析和exports分析，说明是一个cjs模块，进入cjs模块导入
           if (!imports.length && !exports.length) {
             // 构造代理模块

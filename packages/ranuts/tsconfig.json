@@ -2,19 +2,26 @@
   "include": ["src", "**/*.ts"],
   "exclude": ["node_modules", "dist"],
   "compilerOptions": {
-    "target": "ES2020",
     "module": "ESNext",
-    "outDir": "dist",
-    "baseUrl": ".",
-    "allowJs": true,
     "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "moduleResolution": "Node",
-    "skipLibCheck": true,
-    "noUnusedLocals": true,
-    "jsx": "preserve",
+    "target": "ESNext",
+    "moduleResolution": "node",
+    "outDir": "dist",
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "isolatedModules": false,
+    "strict": true,
+    "noImplicitAny": true,
+    "useUnknownInCatchVariables": false,
+    "inlineSourceMap": true,
+    "baseUrl": ".",
+    "experimentalDecorators": true,
     "paths": {
-      "~compose": ["./src/utils/compose.ts"]
+      "~compose": ["src/utils/compose.ts"]
     }
   },
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
+  }
 }

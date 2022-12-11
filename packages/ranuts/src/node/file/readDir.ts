@@ -5,7 +5,7 @@ interface Options {
   ignores?: Array<string>
 }
 
-const readDir = (options: Options):string => {
+const readDir = (options: Options):Array<string> => {
   const { dirPath } = options
   try {
     return fs.readdirSync(dirPath)

@@ -7,7 +7,7 @@
 const str2Xml = (
   xmlStr: string,
   format: DOMParserSupportedType = 'text/xml',
-):HTMLElement | null => {
+):HTMLElement | undefined => {
   if (window.DOMParser)
     return new window.DOMParser().parseFromString(xmlStr, format)
       .documentElement
@@ -20,7 +20,7 @@ const str2Xml = (
     xmlDoc.loadXML(xmlStr)
     return xmlDoc
   }
-  return null
+  return undefined
 }
 
 export default str2Xml
