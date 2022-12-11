@@ -68,14 +68,13 @@
 
 ```html
 <r-tabs active="B">
-    <r-tab label="tab1" key="A">tab1</r-tab>
-    <r-tab label="tab2" key="B">tab2</r-tab>
-    <r-tab label="tab3" key="C">tab3</r-tab>
+  <r-tab label="tab1" key="A">tab1</r-tab>
+  <r-tab label="tab2" key="B">tab2</r-tab>
+  <r-tab label="tab3" key="C">tab3</r-tab>
 </r-tabs>
 ```
 
 ### 图标`icon`
-
 
 每个`r-tab`可以指定`icon`，配合`label`实现图标加文字的效果。
 
@@ -87,9 +86,9 @@
 
 ```html
 <r-tabs>
-    <r-tab label="home" icon="home">tab1</r-tab>
-    <r-tab label="message" icon="message">tab2</r-tab>
-    <r-tab label="user" icon="user">tab3</r-tab>
+  <r-tab label="home" icon="home">tab1</r-tab>
+  <r-tab label="message" icon="message">tab2</r-tab>
+  <r-tab label="user" icon="user">tab3</r-tab>
 </r-tabs>
 ```
 
@@ -103,9 +102,9 @@
 
 ```html
 <r-tabs>
-    <r-tab icon="home">tab1</r-tab>
-    <r-tab icon="message">tab2</r-tab>
-    <r-tab icon="user">tab3</r-tab>
+  <r-tab icon="home">tab1</r-tab>
+  <r-tab icon="message">tab2</r-tab>
+  <r-tab icon="user">tab3</r-tab>
 </r-tabs>
 ```
 
@@ -115,7 +114,6 @@
 
 ## 事件`event`
 
-### onchange 
+### onchange
 
 切换完成时触发。
-

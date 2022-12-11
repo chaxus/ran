@@ -1,10 +1,9 @@
-
-let fileSystem: any;
-if (typeof require !== "undefined") {
-  fileSystem = require("fs");
+const fs = {}
+let fileSystem: any = fs
+if (typeof fileSystem.Stats === 'function') {
   fileSystem._identification = true
 } else {
-  fileSystem = { _identification: false, message: "require is not defined" };
+  fileSystem = { _identification: false, message: 'require is not defined' }
 }
 
-export default fileSystem;
+export default fileSystem

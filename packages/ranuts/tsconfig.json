@@ -1,6 +1,6 @@
 {
-  "include": ["src","**/*.ts"],
-  "exclude": ["node_modules","dist"],
+  "include": ["src", "**/*.ts"],
+  "exclude": ["node_modules", "dist"],
   "compilerOptions": {
     "module": "ESNext",
     "esModuleInterop": true,
@@ -14,14 +14,14 @@
     "noImplicitAny": true,
     "useUnknownInCatchVariables": false,
     "inlineSourceMap": true,
-    "baseUrl": ".",    
-    "experimentalDecorators":true,   
+    "baseUrl": ".",
+    "experimentalDecorators": true,
     "paths": {
-      "@": ["src/*"],
-    },              
+      "~compose": ["src/utils/compose.ts"]
+    }
   },
   "ts-node": {
-      "esm": true,
-      "experimentalSpecifierResolution":"node",
-  },
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
+  }
 }

@@ -1,57 +1,57 @@
-import { NextHandleFunction } from "connect";
-import { CLIENT_PUBLIC_PATH } from "../../constants";
+import type { NextHandleFunction } from 'connect'
+import createDebug from 'debug'
+import { CLIENT_PUBLIC_PATH } from '../../constants'
 import {
-  isJSRequest,
+  cleanUrl,
   isCSSRequest,
   isImportRequest,
   isInternalRequest,
-  cleanUrl,
-} from "../../utils";
-import { ServerContext } from "../index";
-import createDebug from "debug";
+  isJSRequest,
+} from '../../utils'
+import type { ServerContext } from '../index'
 
-const debug = createDebug("dev");
+const debug = createDebug('dev')
 
 export async function transformRequest(
   url: string,
-  serverContext: ServerContext
-) {
-  const { moduleGraph, pluginContainer } = serverContext;
-  url = cleanUrl(url);
-  let mod = await moduleGraph.getModuleByUrl(url);
+  serverContext: ServerContext,
+): Promise<any> {
+  const { moduleGraph, pluginContainer } = serverContext
+  url = cleanUrl(url)
+  let mod = await moduleGraph.getModuleByUrl(url)
   if (mod && mod.transformResult) {
-    return mod.transformResult;
+    return mod.transformResult
   }
-  const resolvedResult = await pluginContainer.resolveId(url);
-  let transformResult;
+  const resolvedResult = await pluginContainer.resolveId(url)
+  let transformResult
   if (resolvedResult?.id) {
-    let code = await pluginContainer.load(resolvedResult.id);
-    if (typeof code === "object" && code !== null) {
-      code = code.code;
+    let code = await pluginContainer.load(resolvedResult.id)
+    if (typeof code === 'object' && code != null) {
+      code = code.code
     }
-    mod = await moduleGraph.ensureEntryFromUrl(url);
+    mod = await moduleGraph.ensureEntryFromUrl(url)
     if (code) {
       transformResult = await pluginContainer.transform(
         code as string,
-        resolvedResult?.id
-      );
+        resolvedResult?.id,
+      )
     }
   }
   if (mod) {
-    mod.transformResult = transformResult;
+    mod.transformResult = transformResult
   }
-  return transformResult;
+  return transformResult
 }
 
 export function transformMiddleware(
-  serverContext: ServerContext
+  serverContext: ServerContext,
 ): NextHandleFunction {
   return async (req, res, next) => {
-    if (req.method !== "GET" || !req.url) {
-      return next();
+    if (req.method !== 'GET' || !req.url) {
+      return next()
     }
-    const url = req.url;
-    debug("transformMiddleware: %s", url);
+    const url = req.url
+    debug('transformMiddleware: %s', url)
     // transform JS and CSS request
     if (
       isJSRequest(url) ||
@@ -59,18 +59,18 @@ export function transformMiddleware(
       // 静态资源的 import 请求，如 import logo from './logo.svg';
       isImportRequest(url)
     ) {
-      let result = await transformRequest(url, serverContext);
+      let result = await transformRequest(url, serverContext)
       if (!result) {
-        return next();
+        return next()
       }
-      if (result && typeof result !== "string") {
-        result = result.code;
+      if (result && typeof result !== 'string') {
+        result = result.code
       }
-      res.statusCode = 200;
-      res.setHeader("Content-Type", "application/javascript");
-      return res.end(result);
+      res.statusCode = 200
+      res.setHeader('Content-Type', 'application/javascript')
+      return res.end(result)
     }
 
-    next();
-  };
+    next()
+  }
 }

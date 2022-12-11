@@ -1,4 +1,4 @@
-import fs from '@/node/file/fs'
+import fs from './fs'
 
 type Error = NodeJS.ErrnoException | null
 
@@ -8,12 +8,15 @@ type Error = NodeJS.ErrnoException | null
  * @return {Promise}
  */
 
-const queryFileInfo = (path: string):Promise<Ranuts.Identification> =>
+const queryFileInfo = (path: string): Promise<Ranuts.Identification> =>
   new Promise((resolve, reject) => {
-    if(!fs._identification) return reject({ _identification: false, data: 'fs is not loaded' })
+    if (!fs._identification)
+      return reject({ _identification: false, data: 'fs is not loaded' })
     fs.stat(path, (err: Error, data: string) => {
-      err ? reject({ _identification: false, data: err }) : resolve({ _identification: true, data });
-    });
-  });
+      err
+        ? reject({ _identification: false, data: err })
+        : resolve({ _identification: true, data })
+    })
+  })
 
-export default queryFileInfo;
+export default queryFileInfo

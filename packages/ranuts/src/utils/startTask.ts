@@ -1,8 +1,6 @@
-
-
-const startTask = () => {
-    const startTime = performance.now()
-    return Symbol.for(`${startTime}`)
+const startTask = (): symbol => {
+  const startTime = performance.now()
+  return Symbol.for(`${startTime}`)
 }
 
 export default startTask

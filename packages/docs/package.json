@@ -12,6 +12,7 @@
   "author": "chaxus",
   "license": "ISC",
   "devDependencies": {
+    "less": "^4.1.3",
     "vitepress": "1.0.0-alpha.28"
   },
   "dependencies": {

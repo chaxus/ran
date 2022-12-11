@@ -1,4 +1,4 @@
-import fs from '@/node/file/fs'
+import fs from './fs'
 
 type Error = NodeJS.ErrnoException | null
 
@@ -9,12 +9,18 @@ type Error = NodeJS.ErrnoException | null
  * @return {Promise}
  */
 
-const readFile = (path: string, format: string = "utf-8"):Promise<Ranuts.Identification> =>
+const readFile = (
+  path: string,
+  format: string = 'utf-8',
+): Promise<Ranuts.Identification> =>
   new Promise((resolve, reject) => {
-    if(!fs._identification) return reject({ _identification: false, data: 'fs is not loaded' })
+    if (!fs._identification)
+      return reject({ _identification: false, data: 'fs is not loaded' })
     fs.readFile(path, format, (err: Error, data: string) => {
-      err ? reject({ _identification: false, data: err }) : resolve({ _identification: true, data });
-    });
-  });
+      err
+        ? reject({ _identification: false, data: err })
+        : resolve({ _identification: true, data })
+    })
+  })
 
-export default readFile;
+export default readFile

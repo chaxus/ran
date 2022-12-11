@@ -1,4 +1,5 @@
 # Input 输入框
+
 通过鼠标或键盘输入内容，是最基础的表单域的包装。
 
 ## 代码演示
@@ -7,15 +8,15 @@
     输入框：<r-input></r-input>
 </div>
 
-
 ```xml
 <r-input></r-input>
 ```
 
 ## 属性
+
 ### 标签`label`
 
-提供类似于Metiral Design的输入体验。
+提供类似于 Metiral Design 的输入体验。
 
 <r-input label="user"></r-input>
 
@@ -65,7 +66,7 @@
 
 ### 图标`icon`
 
-可以设置一个`icon`来表示标签标识。icon的颜色跟随input颜色
+可以设置一个`icon`来表示标签标识。icon 的颜色跟随 input 颜色
 
 <r-input icon="user"></r-input>
 
@@ -80,30 +81,31 @@
 <r-input type="number" min="-10" max="10" step="0.5" ></r-input>
 
 ```html
-<r-input type="number" min="-10" max="10" step="0.5" ></r-input>
+<r-input type="number" min="-10" max="10" step="0.5"></r-input>
 ```
 
-### name属性名
-跟form组件联动的时候有效，form提交时收集的字段名字
+### name 属性名
 
-### status状态
+跟 form 组件联动的时候有效，form 提交时收集的字段名字
+
+### status 状态
 
 - error
 <div>
  <r-input  status="error"></r-input>
 </div>
 
- ```xml
- <r-input status="error"></r-input>
- ```
+```xml
+<r-input status="error"></r-input>
+```
 
 - warning
 
   <r-input status="warning"></r-input>
 
- ```xml
- <r-input  status="warning"></r-input>
- ```
+```xml
+<r-input  status="warning"></r-input>
+```
 
 ## 事件`event`
 
@@ -120,12 +122,12 @@
 ```
 
 ```js
-  const input = document.createElement('r-input')
-    input.setAttribute('label','home')
-    const func = (e) => {
-      console.log(e);
-    }
-    input.addEventListener("change", func);
+const input = document.createElement('r-input')
+input.setAttribute('label', 'home')
+const func = (e) => {
+  console.log(e)
+}
+input.addEventListener('change', func)
 ```
 
 ### oninput
@@ -134,12 +136,13 @@
 <r-input oninput="console.log(this.value)"></r-input>
 
 ```js
-  const input = document.createElement('r-input')
-  input.setAttribute('label','home')
-  const func = (e) => {
-      console.log(e);
-  }
-  input.addEventListener("input", func);
+const input = document.createElement('r-input')
+input.setAttribute('label', 'home')
+const func = (e) => {
+  console.log(e)
+}
+input.addEventListener('input', func)
 ```
+
 事件的`e`参数结构
 ![input方法](../../../assets/ranui/input-input.jpg)

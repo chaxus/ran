@@ -1,7 +1,6 @@
 import assert from 'node:assert'
 import { describe, it } from 'vitest'
-import escapeHtml  from '@/node/http/escapeHtml'
-
+import escapeHtml from '../../../src/node/http/escapeHtml'
 
 describe('escapeHtml(string)', function () {
   describe('when string is undefined', function () {
@@ -22,13 +21,7 @@ describe('escapeHtml(string)', function () {
     })
   })
 
-  describe('when string is an object', function () {
-    it('should return "[object Object]"', function () {
-      assert.strictEqual(escapeHtml({}), '[object Object]')
-    })
-  })
-
-  describe('when string contains \'"\'', function () {
+  describe("when string contains '\"'", function () {
     describe('as only character', function () {
       it('should replace with "&quot;"', function () {
         assert.strictEqual(escapeHtml('"'), '&quot;')
@@ -190,8 +183,10 @@ describe('escapeHtml(string)', function () {
 
   describe('when escaped character mixed', function () {
     it('should escape all occurrances', function () {
-      assert.strictEqual(escapeHtml('&foo <> bar "fizz" l\'a'),
-        '&amp;foo &lt;&gt; bar &quot;fizz&quot; l&#39;a')
+      assert.strictEqual(
+        escapeHtml('&foo <> bar "fizz" l\'a'),
+        '&amp;foo &lt;&gt; bar &quot;fizz&quot; l&#39;a',
+      )
     })
   })
 })

@@ -1,13 +1,12 @@
+type Obj = Record<string, any>
 
-type Obj = Record<string,any>
-
-const merge = (a:Obj, b:Obj) => {
-    if (a && b) {
-        for (let key in b) {
-            a[key] = b[key];
-        }
+const merge = (a: Obj, b?: Obj): Obj => {
+  if (a && b) {
+    for (const key in b) {
+      a[key] = b[key]
     }
-    return a;
-};
+  }
+  return a
+}
 
 export default merge

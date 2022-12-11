@@ -1,18 +1,18 @@
-
 /**
  * RegExp to match non-URL code points, *after* encoding (i.e. not including "%")
  * and including invalid escape sequences.
- * @private
  */
 
-const ENCODE_CHARS_REGEXP = /(?:[^\x21\x25\x26-\x3B\x3D\x3F-\x5B\x5D\x5F\x61-\x7A\x7E]|%(?:[^0-9A-Fa-f]|[0-9A-Fa-f][^0-9A-Fa-f]|$))+/g
+const ENCODE_CHARS_REGEXP =
+  /(?:[^\x21\x25\x26-\x3B\x3D\x3F-\x5B\x5D\x5F\x61-\x7A\x7E]|%(?:[^\dA-Fa-f]|[\dA-Fa-f][^\dA-Fa-f]|$))+/g
 
 /**
  * RegExp to match unmatched surrogate pair.
  * @private
  */
 
-const UNMATCHED_SURROGATE_PAIR_REGEXP = /(^|[^\uD800-\uDBFF])[\uDC00-\uDFFF]|[\uD800-\uDBFF]([^\uDC00-\uDFFF]|$)/g
+const UNMATCHED_SURROGATE_PAIR_REGEXP =
+  /(^|[^\uD800-\uDBFF])[\uDC00-\uDFFF]|[\uD800-\uDBFF]([^\uDC00-\uDFFF]|$)/g
 
 /**
  * String to replace unmatched surrogate pair with.
@@ -39,7 +39,7 @@ const UNMATCHED_SURROGATE_PAIR_REPLACE = '$1\uFFFD$2'
  * @public
  */
 
-export default function encodeUrl (url:string) {
+export default function encodeUrl(url: string): string {
   return String(url)
     .replace(UNMATCHED_SURROGATE_PAIR_REGEXP, UNMATCHED_SURROGATE_PAIR_REPLACE)
     .replace(ENCODE_CHARS_REGEXP, encodeURI)

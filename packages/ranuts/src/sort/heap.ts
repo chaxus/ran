@@ -3,8 +3,8 @@
  * @param {Array} list
  * @return {Array}
  */
-const heap = (list: Array<string>) => {
-    return list
+const heap = (list: Array<string>): Array<string> => {
+  return list
 }
 
 export default heap

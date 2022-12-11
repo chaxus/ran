@@ -1,87 +1,74 @@
 {
-	// Place your ran 工作区 snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and 
-	// description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope 
-	// is left empty or omitted, the snippet gets applied to all languages. The prefix is what is 
-	// used to trigger the snippet and the body will be expanded and inserted. Possible variables are: 
-	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. 
-	// Placeholders with the same ids are connected.
-	// Example:
-	// "Print to console": {
-	// 	"scope": "javascript,typescript",
-	// 	"prefix": "log",
-	// 	"body": [
-	// 		"console.log('$1');",
-	// 		"$2"
-	// 	],
-	// 	"description": "Log output to console"
-	// }
-	"print component": {
-		"scope": "javascript,typescript",
-		"prefix": "tfc",
-		"body": [
-			"function Component() {",
-			"   const template = document.createElement('template');",
-			"   const slot = document.createElement('slot');",
-			"   const div = document.createElement('div');",
-			"   div.setAttribute('class', 'class');",
-			"   slot.setAttribute('name', 'name');",
-			"   div.appendChild(slot);",
-			"   template.appendChild(div);",
-			"   class CustomElement extends HTMLElement {",
-			"       static get observedAttributes() { return ['disabled'] }",
-			"       _div: HTMLElement;",
-			"       constructor() {",
-			"           super();",
-			"           this._div = div.cloneNode(true) as HTMLElement",
-			"           const shadowRoot = this.attachShadow({ mode: 'closed' });",
-			"           shadowRoot.appendChild(this._div);",
-			"       }",
-			"       connectedCallback() {",
-			"",
-			"       }",
-			"       disconnectCallback() {",
-			"",
-			"       }",
-			"       attributeChangedCallback (name:string, oldValue:string, newValue:string) {",
-			"",
-			"       }",
-			"   }",
-				"window.customElements.define('r-$1', CustomElement)",
-			"}",
-			"export default Component()",
-			// $通过tab切换
-		],
-		"description": "ranui component template"
-	},
-	"Print sort function": {
-		"scope": "javascript,typescript",
-		"prefix": "sf",
-		"body": [
-			"const $1 = ($2) => {",
-			"",
-			"}",
-			"",
-			"export default $1",
-		],
-		"description": "Log output to console"
-	},
-	"Print to return": {
-		"scope": "javascript,typescript",
-		"prefix": "rt",
-		"body": [
-			"return",
-		],
-		"description": "Log output to console"
-	},
-	"Print to for": {
-		"scope": "javascript,typescript",
-		"prefix": "for",
-		"body": [
-			"for(let i = 0; i < $1; i++) {",
-			"",
-			"}",
-		],
-		"description": "Log output to console"
-	}
-	
+  // Place your ran 工作区 snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and
+  // description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope
+  // is left empty or omitted, the snippet gets applied to all languages. The prefix is what is
+  // used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+  // $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders.
+  // Placeholders with the same ids are connected.
+  // Example:
+  // "Print to console": {
+  // 	"scope": "javascript,typescript",
+  // 	"prefix": "log",
+  // 	"body": [
+  // 		"console.log('$1');",
+  // 		"$2"
+  // 	],
+  // 	"description": "Log output to console"
+  // }
+  "print component": {
+    "scope": "javascript,typescript",
+    "prefix": "tfc",
+    "body": [
+      "function Component() {",
+      "   const template = document.createElement('template');",
+      "   const slot = document.createElement('slot');",
+      "   const div = document.createElement('div');",
+      "   div.setAttribute('class', 'class');",
+      "   slot.setAttribute('name', 'name');",
+      "   div.appendChild(slot);",
+      "   template.appendChild(div);",
+      "   class CustomElement extends HTMLElement {",
+      "       static get observedAttributes() { return ['disabled'] }",
+      "       _div: HTMLElement;",
+      "       constructor() {",
+      "           super();",
+      "           this._div = div.cloneNode(true) as HTMLElement",
+      "           const shadowRoot = this.attachShadow({ mode: 'closed' });",
+      "           shadowRoot.appendChild(this._div);",
+      "       }",
+      "       connectedCallback() {",
+      "",
+      "       }",
+      "       disconnectCallback() {",
+      "",
+      "       }",
+      "       attributeChangedCallback (name:string, oldValue:string, newValue:string) {",
+      "",
+      "       }",
+      "   }",
+      "window.customElements.define('r-$1', CustomElement)",
+      "}",
+      "export default Component()"
+      // $通过tab切换
+    ],
+    "description": "ranui component template"
+  },
+  "Print sort function": {
+    "scope": "javascript,typescript",
+    "prefix": "sf",
+    "body": ["const $1 = ($2) => {", "", "}", "", "export default $1"],
+    "description": "Log output to console"
+  },
+  "Print to return": {
+    "scope": "javascript,typescript",
+    "prefix": "rt",
+    "body": ["return"],
+    "description": "Log output to console"
+  },
+  "Print to for": {
+    "scope": "javascript,typescript",
+    "prefix": "for",
+    "body": ["for(let i = 0; i < $1; i++) {", "", "}"],
+    "description": "Log output to console"
+  }
 }
