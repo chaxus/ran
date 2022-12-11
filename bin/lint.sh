@@ -1,3 +1,3 @@
 
 bin=./node_modules/.bin
-$bin/eslint --cache . && $bin/prettier --check --cache .
+pnpm run format && $bin/eslint --cache . && $bin/prettier --check --cache .
