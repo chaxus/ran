@@ -1,11 +1,11 @@
 name: pages-build-site
-on: 
-  push: 
+on:
+  push:
     branches:
       - main
 jobs:
   deploy:
-    runs-on: ubuntu-latest 
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -21,7 +21,7 @@ jobs:
         with:
           version: 7
           run_install: false
-      
+
       - name: Get pnpm store directory
         id: pnpm-cache
         shell: bash
@@ -52,5 +52,5 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.RAN_ACTIONS_TOKEN }}
-          exclude_assets: ''
+          exclude_assets: ""
           publish_dir: packages/docs/.vitepress/dist

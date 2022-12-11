@@ -4,19 +4,19 @@
  * @return {Array}
  */
 const shell = (list: Array<number>) => {
-    const { length } = list
-    for (let gap = Math.floor(length / 2); gap > 0; gap = Math.floor(gap / 2)) {
-        for(let i = gap; i < length; i++){
-            let j = i;
-            const current = list[i]
-            while(j - gap >= 0 && current < list[j - gap]){
-                list[j] = list[j - gap]
-                j = j - gap
-            }
-            list[j] = current
-        }
+  const { length } = list
+  for (let gap = Math.floor(length / 2); gap > 0; gap = Math.floor(gap / 2)) {
+    for (let i = gap; i < length; i++) {
+      let j = i
+      const current = list[i]
+      while (j - gap >= 0 && current < list[j - gap]) {
+        list[j] = list[j - gap]
+        j = j - gap
+      }
+      list[j] = current
     }
-    return list
+  }
+  return list
 }
 
 export default shell

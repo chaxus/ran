@@ -1,6 +1,5 @@
-import { defineConfig } from "vite";
-import path, { resolve } from "path";
-import { fileURLToPath } from "url";
+import { defineConfig } from 'vite'
+import { resolve } from 'path'
 import dts from 'vite-plugin-dts'
 
 // const __filename = fileURLToPath(import.meta.url);
@@ -15,26 +14,24 @@ export default defineConfig({
       inlineDynamicImports: true,
     },
     lib: {
-      entry: "./index.ts",
-      name: "ranuts",
-      fileName: "index",
+      entry: './index.ts',
+      name: 'ranuts',
+      fileName: 'index',
       // 导出模块格式
-      formats: ["es", "umd"],
+      formats: ['es', 'umd'],
     },
   },
   resolve: {
     alias: {
-      "@": resolve(__dirname, "src"),
+      '@': resolve(__dirname, 'src'),
     },
-    extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json"],
+    extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json'],
   },
-  plugins: [
-    dts(),
-  ],
-  server:{
+  plugins: [dts()],
+  server: {
     fs: {
       strict: false,
       allow: [],
     },
-  }
-});
+  },
+})

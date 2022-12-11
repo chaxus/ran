@@ -1,13 +1,15 @@
 # Button 按钮
+
 按钮用于开始一个即时操作。
 
 ## 代码演示
 
- <r-button >Button</r-button>
+<r-button >Button</r-button>
 
 ```xml
  <r-button >Button</r-button>
 ```
+
 ## 属性
 
 ### 类型`type`
@@ -70,7 +72,6 @@
 <div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
      <r-button type="primary" icon="home">主要按钮</r-button>
 </div>
-
 
 ```xml
 <r-button type="default" icon="user">默认按钮</r-button>

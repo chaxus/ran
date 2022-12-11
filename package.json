@@ -1,14 +1,21 @@
 {
-  "name": "ran",
+  "name": "@ran/monorepo",
   "version": "1.0.0",
   "description": "Monorepo",
   "main": "index.js",
   "type": "module",
+  "engines": {
+    "node": "^14.18.0 || >=16.0.0"
+  },
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "clean": "sh ./bin/clean.sh",
     "build": "sh ./bin/build.sh",
-    "test": "sh ./bin/test.sh"
+    "test": "sh ./bin/test.sh",
+    "lint": "sh ./bin/lint.sh",
+    "lint:ts": "eslint --cache .",
+    "lint:prettier": "prettier --check --cache .",
+    "format": "prettier --write --cache ."
   },
   "homepage": "https://chaxus.github.io/ran/",
   "keywords": [],
@@ -16,6 +23,14 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^18.7.18",
+    "@typescript-eslint/eslint-plugin": "^5.46.0",
+    "@typescript-eslint/parser": "^5.46.0",
+    "eslint": "^8.29.0",
+    "eslint-define-config": "^1.12.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-regexp": "^1.11.0",
+    "prettier": "^2.8.1",
     "terser": "^5.15.0",
     "typescript": "^4.8.3"
   }

@@ -6,10 +6,9 @@ declare module '@/astParser/*'
 declare module '@/utils/*'
 
 declare namespace Ranuts {
-    interface Identification {
-        _identification: boolean;
-        message?: string;
-        data?:any
-    }
+  interface Identification {
+    _identification: boolean
+    message?: string
+    data?: any
+  }
 }
-

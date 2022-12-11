@@ -107,7 +107,6 @@
     </r-tabs>
 ```
 
-
 ### 类型`type`
 
 `r-tabs`属性，设置标签页的种类。如果不设置，默认为`flat`
@@ -129,6 +128,7 @@
       <r-tab label="tab3">33333</r-tab>
 </r-tabs>
 ```
+
 2. `line`
 
 <div style="width:100%;">

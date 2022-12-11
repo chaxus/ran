@@ -1,7 +1,6 @@
-
 const matchHtmlRegExp = /["'&<>]/
 
-export default function escapeHtml (string:string) {
+export default function escapeHtml(string: string) {
   const str = '' + string
   const match = matchHtmlRegExp.exec(str)
 
@@ -43,7 +42,5 @@ export default function escapeHtml (string:string) {
     html += escape
   }
 
-  return lastIndex !== index
-    ? html + str.substring(lastIndex, index)
-    : html
+  return lastIndex !== index ? html + str.substring(lastIndex, index) : html
 }

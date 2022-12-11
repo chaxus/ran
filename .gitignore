@@ -4,3 +4,4 @@ vite.config.ts.timestamp*
 config.ts.timestamp*
 .temp
 .DS_Store
+.eslintcache

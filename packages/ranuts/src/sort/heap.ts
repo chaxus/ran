@@ -4,7 +4,7 @@
  * @return {Array}
  */
 const heap = (list: Array<string>) => {
-    return list
+  return list
 }
 
 export default heap

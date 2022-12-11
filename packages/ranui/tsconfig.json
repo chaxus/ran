@@ -1,6 +1,6 @@
 {
-  "include": ["components", "plugins", "utils", "assets","**/*.ts"],
-  "exclude": ["node_modules/**","dist/**"],
+  "include": ["components", "plugins", "utils", "assets", "**/*.ts"],
+  "exclude": ["node_modules/**", "dist/**"],
   "compilerOptions": {
     "module": "ESNext",
     "esModuleInterop": true,
@@ -26,5 +26,5 @@
   "ts-node": {
     "esm": true,
     "experimentalSpecifierResolution": "node"
-  },
+  }
 }

@@ -18,7 +18,7 @@ hero:
       text: 访问我的GitHub
       link: https://github.com/chaxus/ran
 features:
-  - icon: ⚡️ 
+  - icon: ⚡️
     title: 记录生活，记录学习
     details: 很多时候我们可以停下来，多回头看看，让那些美好的记忆成为永恒
   - icon: 🖖

@@ -1,6 +1,5 @@
 import fs from '@/node/file/fs'
 
-
 type Error = NodeJS.ErrnoException | null
 
 /**
@@ -10,21 +9,30 @@ type Error = NodeJS.ErrnoException | null
  * @return {Promise}
  */
 
-const writeFile = (path: string, content: string):Promise<Ranuts.Identification> => new Promise((resolve, reject) => {
-    if(!fs._identification) return reject({ _identification: false, data: 'fs is not loaded' })
-    fs.writeFile(path, content, {
-        mode: 438, // 可读可写666，转化为十进制就是438 
+const writeFile = (
+  path: string,
+  content: string,
+): Promise<Ranuts.Identification> =>
+  new Promise((resolve, reject) => {
+    if (!fs._identification)
+      return reject({ _identification: false, data: 'fs is not loaded' })
+    fs.writeFile(
+      path,
+      content,
+      {
+        mode: 438, // 可读可写666，转化为十进制就是438
         flag: 'w+', // r+并不会清空再写入，w+会清空再写入
-        encoding: 'utf-8'
-    }, (err: Error) => {
+        encoding: 'utf-8',
+      },
+      (err: Error) => {
         if (err) {
-            reject({ _identification: false, data: err })
-            throw err
+          reject({ _identification: false, data: err })
+          throw err
         } else {
-            resolve({ _identification: true, data: { path, content } })
+          resolve({ _identification: true, data: { path, content } })
         }
-    })
-
-})
+      },
+    )
+  })
 
 export default writeFile
