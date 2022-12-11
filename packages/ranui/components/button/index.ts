@@ -87,7 +87,7 @@ function Custom() {
         oldValue: string,
         newValue: string,
       ) {
-        if (name == 'disabled' && this._btn) {
+        if (name === 'disabled' && this._btn) {
           if (!newValue || newValue === 'false') {
             this._btn.setAttribute('disabled', '')
           } else {

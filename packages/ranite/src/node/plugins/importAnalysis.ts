@@ -1,4 +1,6 @@
+import path from 'node:path'
 import { init, parse } from 'es-module-lexer'
+import MagicString from 'magic-string'
 import {
   BARE_IMPORT_RE,
   CLIENT_PUBLIC_PATH,
@@ -10,10 +12,8 @@ import {
   isInternalRequest,
   isJSRequest,
 } from '../utils'
-import MagicString from 'magic-string'
-import path from 'path'
-import { Plugin } from '../plugin'
-import { ServerContext } from '../server/index'
+import type { Plugin } from '../plugin'
+import type { ServerContext } from '../server/index'
 
 export function importAnalysisPlugin(): Plugin {
   let serverContext: ServerContext
@@ -40,7 +40,7 @@ export function importAnalysisPlugin(): Plugin {
         }
         const cleanedId = cleanUrl(resolved.id)
         const mod = moduleGraph.getModuleById(cleanedId)
-        let resolvedId = `/${getShortName(resolved.id, serverContext.root)}`
+        const resolvedId = `/${getShortName(resolved.id, serverContext.root)}`
         if (mod && mod.lastHMRTimestamp > 0) {
           // resolvedId += "?t=" + mod.lastHMRTimestamp;
         }

@@ -166,7 +166,7 @@ function getStatusMessage(code: number) {
  * @public
  */
 
-function getStatus(code?: number | string):number | string | undefined {
+function getStatus(code?: number | string): number | string | undefined {
   if (typeof code === 'number') {
     // return message
     return getStatusMessage(code)

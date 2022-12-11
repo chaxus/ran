@@ -1,8 +1,8 @@
-import { ServerContext } from './server/index'
 import { blue, green } from 'picocolors'
+import type { ServerContext } from './server/index'
 import { getShortName } from './utils'
 
-export function bindingHMREvents(serverContext: ServerContext) {
+export function bindingHMREvents(serverContext: ServerContext): void {
   const { watcher, ws, root } = serverContext
 
   watcher.on('change', async (file) => {

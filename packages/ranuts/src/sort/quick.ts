@@ -11,17 +11,17 @@
  * @return {number} index
  */
 const partition = (list: Array<number>, left: number, right: number) => {
-  let pivot = left
+  const pivot = left
   let index = pivot + 1
   for (let i = index; i <= right; i++) {
     if (list[i] < list[pivot]) {
-      let temp = list[i]
+      const temp = list[i]
       list[i] = list[index]
       list[index] = temp
       index++
     }
   }
-  let temp = list[pivot]
+  const temp = list[pivot]
   list[pivot] = list[index - 1]
   list[index - 1] = temp
   return index - 1
@@ -47,7 +47,7 @@ const combine = (list: Array<number>, left: number, right: number) => {
  * @param {Array} list
  * @return {Array}
  */
-const quick = (list: Array<number>):Array<number> => {
+const quick = (list: Array<number>): Array<number> => {
   const { length } = list
   return combine(list, 0, length - 1)
 }

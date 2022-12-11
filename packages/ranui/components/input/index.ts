@@ -278,7 +278,7 @@ function Custom() {
        */
       listenPlaceholder(name: string, value: string) {
         if (name === 'placeholder' && this._input) {
-          if (value !== null) {
+          if (value != null) {
             this._input.setAttribute('placeholder', value)
           } else {
             this._input.removeAttribute('placeholder')
@@ -292,7 +292,7 @@ function Custom() {
        */
       listenLabel(name: string, value: string) {
         if (name === 'label' && this._input) {
-          if (value !== null) {
+          if (value != null) {
             if (this._label) {
               this._label.innerHTML = value
             } else {

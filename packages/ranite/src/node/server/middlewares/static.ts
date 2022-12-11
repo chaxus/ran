@@ -1,7 +1,7 @@
-import { NextHandleFunction } from 'connect'
+import type { NextHandleFunction } from 'connect'
+import sirv from 'sirv'
 import { CLIENT_PUBLIC_PATH } from '../../constants'
 import { isImportRequest } from '../../utils'
-import sirv from 'sirv'
 
 export function staticMiddleware(): NextHandleFunction {
   const serveFromRoot = sirv('/', { dev: true })

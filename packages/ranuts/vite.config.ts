@@ -4,10 +4,9 @@ import { defineConfig } from 'vite'
 import dts from 'vite-plugin-dts'
 import vitePluginBanner from './plugins/vite-plugins-banner'
 
+const __filename = fileURLToPath(import.meta.url)
 
-const __filename = fileURLToPath(import.meta.url);
-
-const __dirname = path.dirname(__filename);
+const __dirname = path.dirname(__filename)
 
 export default defineConfig({
   build: {

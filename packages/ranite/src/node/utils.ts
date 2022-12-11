@@ -1,6 +1,6 @@
+import path from 'node:path'
+import os from 'node:os'
 import { CLIENT_PUBLIC_PATH, HASH_RE, JS_TYPES_RE, QEURY_RE } from './constants'
-import path from 'path'
-import os from 'os'
 
 const INTERNAL_LIST = [CLIENT_PUBLIC_PATH, '/@react-refresh']
 
@@ -48,6 +48,6 @@ export function isPlainObject(obj: any): boolean {
   return Object.prototype.toString.call(obj) === '[object Object]'
 }
 
-export function getShortName(file: string, root: string) {
+export function getShortName(file: string, root: string): string {
   return file.startsWith(root + '/') ? path.posix.relative(root, file) : file
 }

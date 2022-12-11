@@ -1,7 +1,7 @@
+import type { Plugin } from '../plugin'
 import { esbuildTransformPlugin } from './esbuild'
 import { resolvePlugin } from './resolve'
 import { importAnalysisPlugin } from './importAnalysis'
-import { Plugin } from '../plugin'
 import { cssPlugin } from './css'
 import { assetPlugin } from './assets'
 import { clientInjectPlugin } from './clientInject'

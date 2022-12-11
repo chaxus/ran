@@ -1,4 +1,4 @@
-import path from 'path'
+import path from 'node:path'
 
 // 无关的资源进行 external，不让 esbuild 处理，防止 Esbuild 报错
 export const EXTERNAL_TYPES = [

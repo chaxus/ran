@@ -1,4 +1,4 @@
-import type { Token} from './Tokenizer';
+import type { Token } from './Tokenizer'
 import { TokenType } from './Tokenizer'
 import type {
   BinaryExpression,
@@ -20,11 +20,9 @@ import type {
   Statement,
   VariableDeclaration,
   VariableDeclarator,
-  VariableKind} from './nodeTypes';
-import {
-  FunctionType,
-  NodeType
+  VariableKind,
 } from './nodeTypes'
+import { FunctionType, NodeType } from './nodeTypes'
 
 // const PROGRAM_GENERATOR: Record<string, (...args: any[]) => Token> = {}
 

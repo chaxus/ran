@@ -1,21 +1,21 @@
-import { NextHandleFunction } from 'connect'
+import type { NextHandleFunction } from 'connect'
+import createDebug from 'debug'
 import { CLIENT_PUBLIC_PATH } from '../../constants'
 import {
-  isJSRequest,
+  cleanUrl,
   isCSSRequest,
   isImportRequest,
   isInternalRequest,
-  cleanUrl,
+  isJSRequest,
 } from '../../utils'
-import { ServerContext } from '../index'
-import createDebug from 'debug'
+import type { ServerContext } from '../index'
 
 const debug = createDebug('dev')
 
 export async function transformRequest(
   url: string,
   serverContext: ServerContext,
-) {
+): Promise<any> {
   const { moduleGraph, pluginContainer } = serverContext
   url = cleanUrl(url)
   let mod = await moduleGraph.getModuleByUrl(url)
@@ -26,7 +26,7 @@ export async function transformRequest(
   let transformResult
   if (resolvedResult?.id) {
     let code = await pluginContainer.load(resolvedResult.id)
-    if (typeof code === 'object' && code !== null) {
+    if (typeof code === 'object' && code != null) {
       code = code.code
     }
     mod = await moduleGraph.ensureEntryFromUrl(url)

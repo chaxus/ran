@@ -3,7 +3,7 @@
  * @param {Array} list
  * @return {Array}
  */
-const bubble = (list: Array<number>):Array<number> => {
+const bubble = (list: Array<number>): Array<number> => {
   const length = list.length
   for (let i = 0; i < length; i++) {
     for (let j = 0; j < length; j++) {

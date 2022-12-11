@@ -1,4 +1,4 @@
-import { ServerContext } from './server/index'
+import type { ServerContext } from './server/index'
 
 export interface CustomPluginOptions {
   [plugin: string]: any

@@ -1,12 +1,16 @@
-import { Plugin } from '../plugin'
-import fs from 'fs'
-import path from 'path'
-import { isJSRequest } from '../utils'
+import fs from 'node:fs'
+import { fileURLToPath } from 'node:url'
+import path from 'node:path'
 import { transformAsync } from '@babel/core'
+import { isJSRequest } from '../utils'
+import type { Plugin } from '../plugin'
 
 function loadPlugin(path: string): Promise<any> {
   return import(path).then((module) => module.default || module)
 }
+const __filename = fileURLToPath(import.meta.url)
+
+const __dirname = path.dirname(__filename)
 
 const RUNTIME_PUBLIC_PATH = '/@react-refresh'
 
@@ -54,7 +58,7 @@ if (import.meta.hot) {
     RefreshRuntime.register(type, __SOURCE__ + " " + id)
   };
   window.$RefreshSig$ = RefreshRuntime.createSignatureFunctionForTransform;
-}`.replace(/[\n]+/gm, '')
+}`.replace(/\n+/g, '')
 
 const footer = `
 if (import.meta.hot) {

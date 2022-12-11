@@ -39,7 +39,7 @@ const UNMATCHED_SURROGATE_PAIR_REPLACE = '$1\uFFFD$2'
  * @public
  */
 
-export default function encodeUrl(url: string):string {
+export default function encodeUrl(url: string): string {
   return String(url)
     .replace(UNMATCHED_SURROGATE_PAIR_REGEXP, UNMATCHED_SURROGATE_PAIR_REPLACE)
     .replace(ENCODE_CHARS_REGEXP, encodeURI)

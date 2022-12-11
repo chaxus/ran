@@ -119,9 +119,10 @@ module.exports = defineConfig({
       },
     },
     {
-      files: ['packages/ranite/src/node/**'],
+      files: ['packages/ranite/**'],
       rules: {
-        'no-console': ['error'],
+        'no-console': ['error', { allow: ['warn', 'error', 'log'] }],
+        'no-restricted-globals': ['error', 'event'],
       },
     },
     {

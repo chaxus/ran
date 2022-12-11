@@ -1,13 +1,12 @@
 import { red } from 'picocolors'
-import { WebSocketServer, WebSocket } from 'ws'
+import { WebSocket, WebSocketServer } from 'ws'
 import { HMR_PORT } from './constants'
 
 export function createWebSocketServer(): {
   send: (msg: string) => void
   close: () => void
 } {
-  let wss: WebSocketServer
-  wss = new WebSocketServer({ port: HMR_PORT })
+  const wss: WebSocketServer = new WebSocketServer({ port: HMR_PORT })
   wss.on('connection', (socket) => {
     socket.send(JSON.stringify({ type: 'connected' }))
   })

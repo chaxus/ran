@@ -1,6 +1,6 @@
 import type { Plugin } from 'vite'
 import { readFile } from 'ranuts'
-import type { Config} from 'svgo';
+import type { Config } from 'svgo'
 import { optimize } from 'svgo'
 
 // const { readFile } = ranuts

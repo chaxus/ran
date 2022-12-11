@@ -1,10 +1,10 @@
+import path from 'node:path'
 import resolve from 'resolve'
-import { Plugin } from '../plugin'
-import { ServerContext } from '../server/index'
-import path from 'path'
 import { pathExists } from 'fs-extra'
+import type { Plugin } from '../plugin'
+import type { ServerContext } from '../server/index'
 import { DEFAULT_EXTERSIONS } from '../constants'
-import { removeImportQuery, cleanUrl, isInternalRequest } from '../utils'
+import { cleanUrl, isInternalRequest, removeImportQuery } from '../utils'
 
 export function resolvePlugin(): Plugin {
   let serverContext: ServerContext

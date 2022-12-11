@@ -5,7 +5,7 @@ import { PRE_BUNDLE_DIR } from '../constants'
 import { scanPlugin } from './scanPlugin'
 import { preBundlePlugin } from './preBundlePlugin'
 
-export async function optimize(root: string):Promise<void> {
+export async function optimize(root: string): Promise<void> {
   // 1. 确定入口
   const entry = path.resolve(root, 'src/main.tsx')
   // 2. 从入口处扫描依赖

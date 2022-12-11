@@ -1,11 +1,10 @@
-
 export const falseList = [false, 'false', null, undefined]
 /**
  * @description: 判断这个元素上是否有disabled属性
  * @param {Element} element
  * @return {*}
  */
-export const isDisabled = (element: Element):boolean => {
+export const isDisabled = (element: Element): boolean => {
   const status = element.hasAttribute('disabled')
   const value = element.getAttribute('disabled')
   if (status && !falseList.includes(value)) return true
@@ -16,7 +15,7 @@ export const isDisabled = (element: Element):boolean => {
  * @param {Element} element
  * @param {string} addClass
  */
-export const setElementClass = (element: Element, addClass: string):void => {
+export const setElementClass = (element: Element, addClass: string): void => {
   const classList = element.classList
   if (!classList.contains(addClass)) {
     classList.add(addClass)
@@ -30,7 +29,7 @@ export const setElementClass = (element: Element, addClass: string):void => {
 export const deleteElementChildClass = (
   parent: Element,
   deleteClass: string,
-):void => {
+): void => {
   const pre = parent.querySelectorAll(`.${deleteClass}`)
   if (pre.length > 0) {
     pre.forEach((item) => item.classList.remove(deleteClass))
@@ -40,7 +39,7 @@ export const deleteElementChildClass = (
 /**
  * @description: 创建icon的文档示例
  */
-export const createIconList = ():void => {
+export const createIconList = (): void => {
   setTimeout(() => {
     const list = [
       'add-user',

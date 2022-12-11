@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { Next } from '../../src/utils/compose';
+import type { Next } from '../../src/utils/compose'
 import { compose } from '../../src/utils/compose'
 
 describe('utils', () => {

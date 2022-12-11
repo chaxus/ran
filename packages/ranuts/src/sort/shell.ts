@@ -3,7 +3,7 @@
  * @param {Array} list
  * @return {Array}
  */
-const shell = (list: Array<number>):Array<number> => {
+const shell = (list: Array<number>): Array<number> => {
   const { length } = list
   for (let gap = Math.floor(length / 2); gap > 0; gap = Math.floor(gap / 2)) {
     for (let i = gap; i < length; i++) {

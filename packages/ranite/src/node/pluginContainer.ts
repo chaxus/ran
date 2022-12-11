@@ -1,10 +1,10 @@
 import type {
   LoadResult,
   PartialResolvedId,
-  SourceDescription,
+  Plugin,
   ResolvedId,
+  SourceDescription,
 } from './plugin'
-import { Plugin } from './plugin'
 
 export interface PluginContainer {
   resolveId(id: string, importer?: string): Promise<PartialResolvedId | null>

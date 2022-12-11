@@ -1,8 +1,8 @@
-import { CLIENT_PUBLIC_PATH, HMR_PORT } from '../constants'
-import { Plugin } from '../plugin'
+import path from 'node:path'
 import fs from 'fs-extra'
-import path from 'path'
-import { ServerContext } from '../server/index'
+import { CLIENT_PUBLIC_PATH, HMR_PORT } from '../constants'
+import type { Plugin } from '../plugin'
+import type { ServerContext } from '../server/index'
 
 export function clientInjectPlugin(): Plugin {
   let serverContext: ServerContext

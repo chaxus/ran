@@ -29,7 +29,7 @@ function Modal() {
       modal.setAttribute('class', 'xu-modal')
 
       // header
-      let title = this.getAttribute('title')
+      const title = this.getAttribute('title')
       header.textContent = title
       btnClose.setAttribute('class', 'xu-close')
       btnClose.textContent = 'x'

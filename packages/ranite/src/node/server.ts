@@ -1,10 +1,10 @@
+import type { ClientRequestArgs } from 'node:http'
+import http from 'node:http'
+import url from 'node:url'
 import { blue, green } from 'picocolors'
 import { optimize } from './optimizer/index'
 
-const http = require('http')
-const url = require('url')
-
-const startDevServer = () => {
+const startDevServer = (): void => {
   const startTime = Date.now()
   const server = http.createServer((req, res) => {
     const { pathname } = url.parse(`http://${req.headers.host}${req.url}`)
@@ -22,7 +22,7 @@ const startDevServer = () => {
   })
 
   server.listen(8080, async () => {
-    const { port } = server.address() // { address: '::', family: 'IPv6', port: 8080 }
+    const { port } = server.address() as ClientRequestArgs // { address: '::', family: 'IPv6', port: 8080 }
     const root = process.cwd()
     await optimize(root)
     console.log(

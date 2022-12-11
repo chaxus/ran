@@ -43,7 +43,7 @@ interface HotCallback {
 const hotModulesMap = new Map<string, HotModule>()
 const pruneMap = new Map<string, (data: any) => void | Promise<void>>()
 
-export const createHotContext = (ownerPath: string) => {
+export const createHotContext = (ownerPath: string): any => {
   const mod = hotModulesMap.get(ownerPath)
   if (mod) {
     mod.callbacks = []
@@ -104,7 +104,7 @@ async function fetchUpdate({ path, timestamp }: Update) {
 
 const sheetsMap = new Map()
 
-export function updateStyle(id: string, content: string):void {
+export function updateStyle(id: string, content: string): void {
   let style = sheetsMap.get(id)
   if (!style) {
     style = document.createElement('style')

@@ -1,16 +1,18 @@
 import connect from 'connect'
-import { optimize } from '../optimizer/index'
 import { blue, green } from 'picocolors'
-import { transformMiddleware } from './middlewares/transform'
+import type { FSWatcher } from 'chokidar'
+import chokidar from 'chokidar'
+import { optimize } from '../optimizer/index'
 import { ModuleGraph } from '../ModuleGraph'
-import { createPluginContainer, PluginContainer } from '../pluginContainer'
+import type { PluginContainer } from '../pluginContainer'
+import { createPluginContainer } from '../pluginContainer'
 import { resolvePlugins } from '../plugins'
-import { indexHtmlMiddleware } from './middlewares/indexHtml'
-import { staticMiddleware } from './middlewares/static'
 import { createWebSocketServer } from '../ws'
-import chokidar, { FSWatcher } from 'chokidar'
 import { bindingHMREvents } from '../hmr'
-import { Plugin } from '../plugin'
+import type { Plugin } from '../plugin'
+import { staticMiddleware } from './middlewares/static'
+import { indexHtmlMiddleware } from './middlewares/indexHtml'
+import { transformMiddleware } from './middlewares/transform'
 
 export interface ServerContext {
   root: string
@@ -22,7 +24,7 @@ export interface ServerContext {
   watcher: FSWatcher
 }
 
-export async function startDevServer() {
+export async function startDevServer(): Promise<void> {
   const app = connect()
   const root = process.cwd()
   const startTime = Date.now()

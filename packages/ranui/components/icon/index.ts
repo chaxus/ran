@@ -37,7 +37,7 @@ function Custom() {
         return this.getAttribute('spin')
       }
       set spin(value) {
-        if (value !== null) this.setAttribute('spin', value)
+        if (value != null) this.setAttribute('spin', value)
       }
       /**
        * @description: 根据name属性加载对应的svg

@@ -16,9 +16,9 @@ interface Req extends IncomingMessage {
  * @param {Req} req
  * @return {ParseUrl}
  */
-export default function (req: Req):ParseUrl | undefined {
+export default function (req: Req): ParseUrl | undefined {
   const url = req.url
-  if (url === void 0) return 
+  if (url === void 0) return
 
   let obj = req._parsedUrl
   if (obj && obj._raw === url) return obj

@@ -8,7 +8,7 @@
 const filterObj = (
   obj: Record<string | symbol, any>,
   list: Array<string | symbol>,
-):Record<string | symbol, any> => {
+): Record<string | symbol, any> => {
   const result: Record<string | symbol, any> = {}
   Object.keys(obj).forEach((item) => {
     if (!list.includes(obj[item])) {

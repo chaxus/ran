@@ -1,8 +1,8 @@
+import path from 'node:path'
 import { readFile } from 'fs-extra'
-import { Plugin } from '../plugin'
-import { isJSRequest } from '../utils'
 import esbuild from 'esbuild'
-import path from 'path'
+import type { Plugin } from '../plugin'
+import { isJSRequest } from '../utils'
 
 export function esbuildTransformPlugin(): Plugin {
   return {

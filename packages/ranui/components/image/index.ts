@@ -1,4 +1,4 @@
-import failImage from '@/assets/image/failImage'
+import failImage from '../../assets/image/failImage'
 
 function Custom() {
   if (typeof window !== 'undefined' && !customElements.get('r-img')) {

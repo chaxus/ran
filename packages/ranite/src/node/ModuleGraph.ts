@@ -51,7 +51,7 @@ export class ModuleGraph {
   async updateModuleInfo(
     mod: ModuleNode,
     importedModules: Set<string | ModuleNode>,
-  ):Promise<void> {
+  ): Promise<void> {
     const prevImports = mod.importedModules
     for (const curImports of importedModules) {
       const dep =
@@ -71,7 +71,7 @@ export class ModuleGraph {
     }
   }
 
-  invalidateModule(file: string):void {
+  invalidateModule(file: string): void {
     const mod = this.idToModuleMap.get(file)
     if (mod) {
       mod.lastHMRTimestamp = Date.now()

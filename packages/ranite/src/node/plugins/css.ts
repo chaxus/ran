@@ -1,7 +1,7 @@
 import { readFile } from 'fs-extra'
 import { CLIENT_PUBLIC_PATH } from '../constants'
-import { Plugin } from '../plugin'
-import { ServerContext } from '../server'
+import type { Plugin } from '../plugin'
+import type { ServerContext } from '../server/index'
 import { getShortName } from '../utils'
 
 export function cssPlugin(): Plugin {

@@ -1,7 +1,7 @@
-import { NextHandleFunction } from 'connect'
-import { ServerContext } from '../index'
-import path from 'path'
+import path from 'node:path'
+import type { NextHandleFunction } from 'connect'
 import { pathExists, readFile } from 'fs-extra'
+import type { ServerContext } from '../index'
 
 export function indexHtmlMiddleware(
   serverContext: ServerContext,

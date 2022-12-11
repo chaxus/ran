@@ -4,9 +4,9 @@ import { fileURLToPath } from 'node:url'
 import type { Plugin } from 'vite'
 import { queryFileInfo, readDir, readFile, writeFile } from 'ranuts'
 
-const __filename = fileURLToPath(import.meta.url);
+const __filename = fileURLToPath(import.meta.url)
 
-const __dirname = path.dirname(__filename);
+const __dirname = path.dirname(__filename)
 
 // const { writeFile, readFile, queryFileInfo, readDir } = ranuts
 interface Options {
@@ -65,7 +65,7 @@ const createIndex = async (options: Options, entry: string) => {
       return await writeFile(entry, content)
     return { _identification: false }
   } catch (error) {
-    console.log('readFile-->', readFile, fs);
+    console.log('readFile-->', readFile, fs)
     console.error('auto-import-file error:', error)
     throw error
   }

@@ -308,7 +308,7 @@ function fiberHandler(fiber: Fiber) {
  * @param {InventedElement} inventedElement
  * @param {Element} root
  */
-function render(inventedElement: InventedElement, root: Element):void {
+function render(inventedElement: InventedElement, root: Element): void {
   // 保存上一次的fiber根节点，进行对比更新
   const alternate = fiberRoot
   // fiber和虚拟DOM结构上差不多，将虚拟DOM构建称fiber
