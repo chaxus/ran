@@ -104,7 +104,7 @@ async function fetchUpdate({ path, timestamp }: Update) {
 
 const sheetsMap = new Map()
 
-export function updateStyle(id: string, content: string) {
+export function updateStyle(id: string, content: string):void {
   let style = sheetsMap.get(id)
   if (!style) {
     style = document.createElement('style')

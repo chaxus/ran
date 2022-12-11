@@ -3,7 +3,7 @@
  * @param {Array} list
  * @return {Array}
  */
-const select = (list: Array<number>) => {
+const select = (list: Array<number>):Array<number> => {
   const { length } = list
   for (let i = 0; i < length; i++) {
     let minIndex = i

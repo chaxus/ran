@@ -75,7 +75,6 @@ function Custom() {
           color && this._icon?.setAttribute('color', color)
         }
       }
-      connectedCallback() {}
       attributeChangedCallback(
         name: string,
         oldValue: string,
@@ -130,7 +129,6 @@ function Custom() {
       warning: commonPrompt('warning'),
       toast: commonPrompt('toast'),
     }
-  } else {
   }
 }
 

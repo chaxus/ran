@@ -1,8 +1,8 @@
-const swap = (list: Array<number>, left: number, right: number) => {
-  let temp = list[left]
-  list[left] = list[right]
-  list[right] = temp
-}
+// const swap = (list: Array<number>, left: number, right: number) => {
+//   let temp = list[left]
+//   list[left] = list[right]
+//   list[right] = temp
+// }
 /**
  * @description: 设置基准值pivot
  * @param {Array} list
@@ -47,7 +47,7 @@ const combine = (list: Array<number>, left: number, right: number) => {
  * @param {Array} list
  * @return {Array}
  */
-const quick = (list: Array<number>) => {
+const quick = (list: Array<number>):Array<number> => {
   const { length } = list
   return combine(list, 0, length - 1)
 }

@@ -1,10 +1,12 @@
+import path, { resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'vite'
-import { resolve } from 'path'
 import dts from 'vite-plugin-dts'
 
-// const __filename = fileURLToPath(import.meta.url);
 
-// const __dirname = path.dirname(__filename);
+const __filename = fileURLToPath(import.meta.url);
+
+const __dirname = path.dirname(__filename);
 
 export default defineConfig({
   build: {

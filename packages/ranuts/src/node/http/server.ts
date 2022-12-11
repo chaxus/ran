@@ -1,4 +1,5 @@
-import http, { IncomingMessage, ServerResponse } from 'node:http'
+import type { IncomingMessage, ServerResponse } from 'node:http';
+import http from 'node:http'
 
 type Next = () => Promise<never> | Promise<void>
 
@@ -16,13 +17,14 @@ class Server {
      * @description: 添加中间件
      */
   }
-  use(handle: MiddlewareFunction) {
+  use(handle: MiddlewareFunction):void {
     if (!handle) {
       throw new Error('the use function has an incorrect argument')
     }
     this.stack.push(handle)
   }
-  listen(...args: any) {
+  listen(...args: any):http.Server<typeof IncomingMessage, typeof ServerResponse>
+  {
     const fn = compose(this.stack)
     const server = http.createServer((req, res) => {
       fn(req, res).then().catch(onerror)

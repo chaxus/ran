@@ -14,6 +14,7 @@
     "test": "sh ./bin/test.sh",
     "lint": "sh ./bin/lint.sh",
     "lint:ts": "eslint --cache .",
+    "lint:fix": "eslint --cache --fix",
     "lint:prettier": "prettier --check --cache .",
     "format": "prettier --write --cache ."
   },

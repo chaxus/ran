@@ -1,8 +1,8 @@
 import {
+  deleteElementChildClass,
   isDisabled,
   setElementClass,
-  deleteElementChildClass,
-} from '@/utils/index'
+} from '../../utils/index'
 
 function CustomElement() {
   if (typeof window !== 'undefined' && !customElements.get('r-tabs')) {
@@ -209,7 +209,7 @@ function CustomElement() {
         const initTabList = tabHeaderList.filter((item) => !isDisabled(item))
         let initTabHeader: Element | undefined
         // 如果有active，找到active对应的标签，设置活跃标签
-        if (this.active !== null) {
+        if (this.active != null) {
           initTabHeader = initTabList.find(
             (item, index) =>
               (item.getAttribute('ran-key') || `${index}`) === this.active,
@@ -223,7 +223,7 @@ function CustomElement() {
         if (!initTabHeader) return
         const index = tabHeaderList.findIndex((item) => item === initTabHeader)
         const key = initTabHeader?.getAttribute('ran-key') || `${index}`
-        if (key !== null) {
+        if (key != null) {
           this.setAttribute('active', `${key}`)
           setElementClass(initTabHeader, 'active')
           const { width = 0 } = initTabHeader.getBoundingClientRect()

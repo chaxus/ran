@@ -4,7 +4,7 @@ class EventEmitter {
     this._events = {}
   }
 
-  on = (eventName: string | symbol, callback: any) => {
+  on = (eventName: string | symbol, callback: any):void => {
     if (this._events[eventName] && eventName !== Symbol.for('new-listener')) {
       // 注册一个 newListener 用于监听新的事件订阅
       this.emit(Symbol.for('new-listener'), eventName)
@@ -15,12 +15,12 @@ class EventEmitter {
     this._events[eventName] = callbacks
   }
 
-  emit = (eventName: string | symbol, ...args: any) => {
+  emit = (eventName: string | symbol, ...args: any):void => {
     const callbacks = this._events[eventName] || []
     callbacks.forEach((cb: any) => cb(...args))
   }
 
-  once = (eventName: string | symbol, callback: any) => {
+  once = (eventName: string | symbol, callback: any):void => {
     // 由于需要在回调函数执行后，取消订阅当前事件，所以需要对传入的回调函数做一层包装,然后绑定包装后的函数
     const one = (...args: any) => {
       callback(...args)
@@ -33,13 +33,13 @@ class EventEmitter {
     this.on(eventName, one)
   }
 
-  off = (eventName: string | symbol, callback: any) => {
+  off = (eventName: string | symbol, callback: any):void => {
     // 找到事件对应的回调函数，删除对应的回调函数
     const callbacks = this._events[eventName] || []
     const newCallbacks = callbacks.filter(
       (fn: any) =>
-        fn != callback &&
-        fn.initialCallback != callback /* 用于once的取消订阅 */,
+        fn !== callback &&
+        fn.initialCallback !== callback /* 用于once的取消订阅 */,
     )
     this._events[eventName] = newCallbacks
   }

@@ -1,4 +1,4 @@
-import { IncomingMessage } from 'node:http'
+import type { IncomingMessage } from 'node:http'
 
 interface ParseUrl {
   search?: string
@@ -16,9 +16,9 @@ interface Req extends IncomingMessage {
  * @param {Req} req
  * @return {ParseUrl}
  */
-export default function (req: Req) {
-  let url = req.url
-  if (url === void 0) return url
+export default function (req: Req):ParseUrl | undefined {
+  const url = req.url
+  if (url === void 0) return 
 
   let obj = req._parsedUrl
   if (obj && obj._raw === url) return obj
@@ -27,7 +27,7 @@ export default function (req: Req) {
   obj.query = obj.search = undefined
   obj.href = obj.path = obj.pathname = url
 
-  let idx = url.indexOf('?', 1)
+  const idx = url.indexOf('?', 1)
   if (idx !== -1) {
     obj.search = url.substring(idx)
     obj.query = obj.search.substring(1)

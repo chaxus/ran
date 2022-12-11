@@ -1,5 +1,3 @@
-import { readDir } from 'ranuts'
-// import { resolve } from "path";
 
 export const falseList = [false, 'false', null, undefined]
 /**
@@ -7,7 +5,7 @@ export const falseList = [false, 'false', null, undefined]
  * @param {Element} element
  * @return {*}
  */
-export const isDisabled = (element: Element) => {
+export const isDisabled = (element: Element):boolean => {
   const status = element.hasAttribute('disabled')
   const value = element.getAttribute('disabled')
   if (status && !falseList.includes(value)) return true
@@ -18,7 +16,7 @@ export const isDisabled = (element: Element) => {
  * @param {Element} element
  * @param {string} addClass
  */
-export const setElementClass = (element: Element, addClass: string) => {
+export const setElementClass = (element: Element, addClass: string):void => {
   const classList = element.classList
   if (!classList.contains(addClass)) {
     classList.add(addClass)
@@ -32,7 +30,7 @@ export const setElementClass = (element: Element, addClass: string) => {
 export const deleteElementChildClass = (
   parent: Element,
   deleteClass: string,
-) => {
+):void => {
   const pre = parent.querySelectorAll(`.${deleteClass}`)
   if (pre.length > 0) {
     pre.forEach((item) => item.classList.remove(deleteClass))
@@ -42,7 +40,7 @@ export const deleteElementChildClass = (
 /**
  * @description: 创建icon的文档示例
  */
-export const createIconList = () => {
+export const createIconList = ():void => {
   setTimeout(() => {
     const list = [
       'add-user',

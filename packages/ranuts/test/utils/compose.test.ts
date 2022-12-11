@@ -1,7 +1,6 @@
-import { compose, Next } from '@/utils/compose'
 import { describe, expect, it } from 'vitest'
-
-type Next = () => Promise<never> | Promise<void>
+import type { Next } from '../../src/utils/compose';
+import { compose } from '../../src/utils/compose'
 
 describe('utils', () => {
   it('compose: compose', async () => {
@@ -16,7 +15,7 @@ describe('utils', () => {
     const arr: Array<Number> = []
     const stack = []
 
-    stack.push(async (context: never, next: Next) => {
+    stack.push(async (context: unknown, next: Next) => {
       arr.push(1) //1
       await wait(1)
       await next()
@@ -24,7 +23,7 @@ describe('utils', () => {
       arr.push(6) //6
     })
 
-    stack.push(async (context: never, next: Next) => {
+    stack.push(async (context: unknown, next: Next) => {
       arr.push(2) //2
       await wait(1)
       await next()
@@ -32,7 +31,7 @@ describe('utils', () => {
       arr.push(5) //5
     })
 
-    stack.push(async (context: never, next: Next) => {
+    stack.push(async (context: unknown, next: Next) => {
       arr.push(3) //3
       await wait(1)
       await next()
@@ -48,7 +47,7 @@ describe('utils', () => {
     const arr: Array<number> = []
     const stack = []
 
-    stack.push(async (ctx: never, next: Next) => {
+    stack.push(async (ctx: unknown, next: Next) => {
       arr.push(1)
       try {
         arr.push(6)
@@ -60,7 +59,7 @@ describe('utils', () => {
       arr.push(3)
     })
 
-    stack.push(async (ctx: never, next: Next) => {
+    stack.push(async (ctx: unknown, next: Next) => {
       arr.push(4)
       throw new Error()
     })

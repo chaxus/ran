@@ -125,7 +125,7 @@ function reconcileChildren(fiber: Fiber) {
   // 只有虚拟DOM才有fiber.props.children， fiber是通过child指向子节点
   const children: Array<Fiber> = fiber.props.children
   // 构建fiber结构
-  const alternateFiber = fiber.alternate // 获取上次的fiber树
+  // const alternateFiber = fiber.alternate // 获取上次的fiber树
   let alternateChildFiber = fiber.alternate && fiber.alternate.child // 获取子fiber树第一个
   let updateFiber: Fiber | undefined
   let prevSibling: Fiber | undefined
@@ -308,7 +308,7 @@ function fiberHandler(fiber: Fiber) {
  * @param {InventedElement} inventedElement
  * @param {Element} root
  */
-function render(inventedElement: InventedElement, root: Element) {
+function render(inventedElement: InventedElement, root: Element):void {
   // 保存上一次的fiber根节点，进行对比更新
   const alternate = fiberRoot
   // fiber和虚拟DOM结构上差不多，将虚拟DOM构建称fiber

@@ -1,4 +1,4 @@
-import { isDisabled } from '@/utils/index'
+import { isDisabled } from '../../utils/index'
 
 function Custom() {
   if (typeof window !== 'undefined' && !customElements.get('r-button')) {

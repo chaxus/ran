@@ -3,7 +3,7 @@
  * @param {Array} list
  * @return {Array}
  */
-const insert = (list: Array<string>) => {
+const insert = (list: Array<string>):Array<string> => {
   const { length } = list
   for (let i = 1; i < length; i++) {
     let preIndex = i - 1

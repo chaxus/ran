@@ -1,8 +1,8 @@
-import writeFile from '@/node/file/writeFile'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import fs from 'node:fs'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import path from 'path'
-import { fileURLToPath } from 'url'
-import fs from 'fs'
+import writeFile from '../../../src/node/file/writeFile'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)

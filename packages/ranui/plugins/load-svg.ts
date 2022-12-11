@@ -1,6 +1,7 @@
-import { Plugin } from 'vite'
+import type { Plugin } from 'vite'
 import ranuts from 'ranuts'
-import { optimize, Config, Output } from 'svgo'
+import type { Config} from 'svgo';
+import { optimize } from 'svgo'
 
 const { readFile } = ranuts
 interface Options {

@@ -1,4 +1,4 @@
-import fs from '@/node/file/fs'
+import fs from './fs'
 
 type Error = NodeJS.ErrnoException | null
 

@@ -1,6 +1,6 @@
 import assert from 'node:assert'
 import { describe, it } from 'vitest'
-import escapeHtml from '@/node/http/escapeHtml'
+import escapeHtml from '../../../src/node/http/escapeHtml'
 
 describe('escapeHtml(string)', function () {
   describe('when string is undefined', function () {
@@ -18,12 +18,6 @@ describe('escapeHtml(string)', function () {
   describe('when string is a number', function () {
     it('should return stringified number', function () {
       assert.strictEqual(escapeHtml(42), '42')
-    })
-  })
-
-  describe('when string is an object', function () {
-    it('should return "[object Object]"', function () {
-      assert.strictEqual(escapeHtml({}), '[object Object]')
     })
   })
 

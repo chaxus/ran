@@ -3,7 +3,7 @@
  * @param {Array} list
  * @return {Array}
  */
-const heap = (list: Array<string>) => {
+const heap = (list: Array<string>):Array<string> => {
   return list
 }
 

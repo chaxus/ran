@@ -1,6 +1,7 @@
-import { join, resolve } from 'path'
-import { readdir, stat, readdirSync, statSync, Stats } from 'fs'
-import { promisify } from 'util'
+import { join, resolve } from 'node:path'
+import type { Stats } from 'node:fs';
+import { readdir, readdirSync, stat, statSync } from 'node:fs'
+import { promisify } from 'node:util'
 
 const toStats = promisify(stat)
 const toRead = promisify(readdir)
@@ -12,12 +13,12 @@ type Caller = (relPath: string, absPath: string, stats: Stats) => any
  * @param {Caller} callback
  * @param {*} pre
  */
-export async function traverse(dir: string, callback: Caller, pre = '') {
+export async function traverse(dir: string, callback: Caller, pre = ''):Promise<any> {
   dir = resolve('.', dir)
   await toRead(dir).then((arr) => {
     return Promise.all(
       arr.map((str) => {
-        let abs = join(dir, str)
+        const abs = join(dir, str)
         return toStats(abs).then((stats) => {
           return stats.isDirectory()
             ? traverse(abs, callback, join(pre, str))
@@ -33,9 +34,9 @@ export async function traverse(dir: string, callback: Caller, pre = '') {
  * @param {Caller} callback
  * @param {*} pre
  */
-export function traverseSync(dir: string, callback: Caller, pre = '') {
+export function traverseSync(dir: string, callback: Caller, pre = ''):void {
   dir = resolve('.', dir)
-  let arr = readdirSync(dir)
+  const arr = readdirSync(dir)
   let i = 0,
     abs,
     stats

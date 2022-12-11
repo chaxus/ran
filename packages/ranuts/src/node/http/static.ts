@@ -1,9 +1,10 @@
-import fs, { Stats } from 'node:fs'
+import type { Stats } from 'node:fs';
+import fs from 'node:fs'
 import { join, normalize, resolve } from 'node:path'
-import { traverseSync } from '@/node/http/traverse'
-import parse from '@/node/http/paresUrl'
-import { lookup } from '@/node/http/mimeType'
 import type { IncomingMessage, ServerResponse } from 'node:http'
+import { traverseSync } from './traverse'
+import parse from './paresUrl'
+import { lookup } from './mimeType'
 
 type ArrayAble<T> = T | T[]
 
@@ -24,13 +25,13 @@ interface Options {
 
 type NextHandler = () => void | Promise<void>
 
-type RequestHandler = (
-  req: IncomingMessage,
-  res: ServerResponse,
-  next?: NextHandler,
-) => void
+// type RequestHandler = (
+//   req: IncomingMessage,
+//   res: ServerResponse,
+//   next?: NextHandler,
+// ) => void
 
-const noop = () => {}
+const noop = () => { }
 
 function isMatch(uri: string, arr: Array<RegExp>) {
   for (let i = 0; i < arr.length; i++) {
@@ -46,7 +47,7 @@ function toAssume(uri: string, extns: string | any[]) {
     uri = uri.substring(0, len)
   }
 
-  let arr = [],
+  const arr = [],
     tmp = `${uri}/index`
   for (; i < extns.length; i++) {
     x = extns[i] ? `.${extns[i]}` : ''
@@ -98,7 +99,7 @@ function send(
     opts: Record<string, number> = {}
   headers = { ...headers }
 
-  for (let key in headers) {
+  for (const key in headers) {
     tmp = res.getHeader(key)?.toString()
     if (tmp) headers[key] = tmp
   }
@@ -109,9 +110,9 @@ function send(
 
   if (req.headers.range) {
     code = 206
-    let [x, y] = req.headers.range.replace('bytes=', '').split('-')
-    let end = (opts.end = parseInt(y, 10) || stats.size - 1)
-    let start = (opts.start = parseInt(x, 10) || 0)
+    const [x, y] = req.headers.range.replace('bytes=', '').split('-')
+    const end = (opts.end = parseInt(y, 10) || stats.size - 1)
+    const start = (opts.start = parseInt(x, 10) || 0)
 
     if (start >= stats.size || end >= stats.size) {
       res.setHeader('Content-Range', `bytes */${stats.size}`)
@@ -134,12 +135,12 @@ const ENCODING = new Map([
 ])
 
 function toHeaders(name: string, stats: fs.Stats, isEtag: boolean) {
-  let enc: string | undefined = ENCODING.get(name.slice(-3))
+  const enc: string | undefined = ENCODING.get(name.slice(-3))
 
   let ctype: string = lookup(name.slice(0, enc?.length && -3)) || ''
   if (ctype === 'text/html') ctype += ';charset=utf-8'
 
-  let headers: Record<string, string | number> = {
+  const headers: Record<string, string | number> = {
     'Content-Length': stats.size,
     'Content-Type': ctype,
     'Last-Modified': stats.mtime.toUTCString(),
@@ -151,29 +152,30 @@ function toHeaders(name: string, stats: fs.Stats, isEtag: boolean) {
   return headers
 }
 
-export default function (dir: string, opts: Options = {}) {
+export default function (dir: string, opts: Options = {}):any {
   dir = resolve(dir || '.')
 
-  let isNotFound = opts.onNoMatch || is404
-  let setHeaders = opts.setHeaders || noop
+  const isNotFound = opts.onNoMatch || is404
+  const setHeaders = opts.setHeaders || noop
 
-  let extensions = opts.extensions || ['html', 'htm']
-  let gzips = opts.gzip && extensions.map((x) => `${x}.gz`).concat('gz')
-  let brots = opts.brotli && extensions.map((x) => `${x}.br`).concat('br')
+  const extensions = opts.extensions || ['html', 'htm']
+  const gzips = opts.gzip && extensions.map((x) => `${x}.gz`).concat('gz')
+  const brots = opts.brotli && extensions.map((x) => `${x}.br`).concat('br')
 
   const FILES: any = {}
 
   let fallback = '/'
-  let isEtag = !!opts.etag
-  let isSPA = !!opts.single
+  const isEtag = !!opts.etag
+  const isSPA = !!opts.single
   if (typeof opts.single === 'string') {
-    let idx = opts.single.lastIndexOf('.')
-    fallback += !!~idx ? opts.single.substring(0, idx) : opts.single
+    const idx = opts.single.lastIndexOf('.')
+    fallback += ~idx ? opts.single.substring(0, idx) : opts.single
   }
 
-  let ignores: Array<RegExp> = []
+  const ignores: Array<RegExp> = []
   if (opts.ignores !== false) {
-    ignores.push(/[/]([A-Za-z\s\d~$._-]+\.\w+){1,}$/) // any extn
+    // ignores.push(/\/([\w\s~$.-]+\.\w+)+$/) // any extn
+    ignores.push(/\w+/)
     if (opts.dotfiles) ignores.push(/\/\.\w/)
     else ignores.push(/\/\.well-known/)
     if (Array.isArray(opts.ignores)) {
@@ -189,11 +191,11 @@ export default function (dir: string, opts: Options = {}) {
 
   if (!opts.dev) {
     traverseSync(dir, (name: string, abs: any, stats: any) => {
-      if (/\.well-known[\\+\/]/.test(name)) {
-      } // keep
-      else if (!opts.dotfiles && /(^\.|[\\+|\/+]\.)/.test(name)) return
+      if (/\.well-known[\\+/]/.test(name)) { } // keep
+      // eslint-disable-next-line regexp/no-unused-capturing-group
+      else if (!opts.dotfiles && /(^\.|[\\+|/]\.)/.test(name)) return
 
-      let headers = toHeaders(name, stats, isEtag)
+      const headers = toHeaders(name, stats, isEtag)
       if (cc) headers['Cache-Control'] = cc
 
       FILES['/' + name.normalize().replace(/\\+/g, '/')] = {
@@ -204,7 +206,7 @@ export default function (dir: string, opts: Options = {}) {
     })
   }
 
-  let lookup = opts.dev
+  const lookup = opts.dev
     ? viaLocal.bind(0, dir, isEtag)
     : viaCache.bind(0, FILES)
 
@@ -213,10 +215,11 @@ export default function (dir: string, opts: Options = {}) {
     res: ServerResponse,
     next?: NextHandler,
   ) {
-    let extns = ['']
-    let pathname = parse(req).pathname
-    let val = req.headers['accept-encoding']?.toString() || ''
+    const extns = ['']
+    let { pathname = '' } = parse(req) || {}
+    const val = req.headers['accept-encoding']?.toString() || ''
     if (gzips && val.includes('gzip')) extns.unshift(...gzips)
+    // eslint-disable-next-line regexp/no-dupe-disjunctions, regexp/no-unused-capturing-group
     if (brots && /(br|brotli)/i.test(val)) extns.unshift(...brots)
     extns.push(...extensions) // [...br, ...gz, orig, ...exts]
 
@@ -228,7 +231,7 @@ export default function (dir: string, opts: Options = {}) {
       }
     }
 
-    let data =
+    const data =
       lookup(pathname, extns) ||
       (isSPA && !isMatch(pathname, ignores) && lookup(fallback, extns))
     if (!data) return next ? next() : isNotFound(req, res)

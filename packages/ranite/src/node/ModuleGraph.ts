@@ -1,4 +1,4 @@
-import { PartialResolvedId, TransformResult } from 'rollup'
+import type { PartialResolvedId, TransformResult } from 'rollup'
 import { cleanUrl } from './utils'
 
 export class ModuleNode {
@@ -51,7 +51,7 @@ export class ModuleGraph {
   async updateModuleInfo(
     mod: ModuleNode,
     importedModules: Set<string | ModuleNode>,
-  ) {
+  ):Promise<void> {
     const prevImports = mod.importedModules
     for (const curImports of importedModules) {
       const dep =
@@ -71,7 +71,7 @@ export class ModuleGraph {
     }
   }
 
-  invalidateModule(file: string) {
+  invalidateModule(file: string):void {
     const mod = this.idToModuleMap.get(file)
     if (mod) {
       mod.lastHMRTimestamp = Date.now()

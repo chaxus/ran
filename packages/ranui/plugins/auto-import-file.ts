@@ -1,6 +1,6 @@
-import { Plugin } from 'vite'
-import fs from 'fs'
-import { resolve } from 'path'
+import fs from 'node:fs'
+import { resolve } from 'node:path'
+import type { Plugin } from 'vite'
 import ranuts from 'ranuts'
 
 const { writeFile, readFile, queryFileInfo, readDir } = ranuts

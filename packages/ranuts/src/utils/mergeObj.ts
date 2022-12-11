@@ -1,8 +1,8 @@
 type Obj = Record<string, any>
 
-const merge = (a: Obj, b: Obj) => {
+const merge = (a: Obj, b?: Obj):Obj => {
   if (a && b) {
-    for (let key in b) {
+    for (const key in b) {
       a[key] = b[key]
     }
   }

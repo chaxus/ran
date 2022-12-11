@@ -1,17 +1,16 @@
 export type Next = () => Promise<never> | Promise<void>
 
-declare namespace Compose {
-  type Middleware<T> = (context: T, next: Next) => any
-  type ComposedMiddleware<T> = (context: T, next?: Next) => Promise<void>
-}
+type Middleware<T> = (context: T, next: Next) => any
+
+type ComposedMiddleware<T> = (context: T, next?: Next) => Promise<void>
 /**
  * @description: 将异步函数转化为同步的方式进行执行
  * @param {Array} middleware
  * @return {*}
  */
 export function compose<T>(
-  middleware: Array<Compose.Middleware<T>>,
-): Compose.ComposedMiddleware<T> {
+  middleware: Array<Middleware<T>>,
+): ComposedMiddleware<T> {
   if (!Array.isArray(middleware))
     throw new TypeError('Middleware stack must be an array!')
   for (const fn of middleware) {

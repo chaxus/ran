@@ -1,30 +1,32 @@
-import { Token, TokenType } from './Tokenizer'
-import {
+import type { Token} from './Tokenizer';
+import { TokenType } from './Tokenizer'
+import type {
+  BinaryExpression,
   BlockStatement,
   CallExpression,
+  ExportDeclaration,
+  ExportSpecifier,
   Expression,
   ExpressionStatement,
   FunctionDeclaration,
-  FunctionType,
+  FunctionExpression,
   Identifier,
   ImportDeclaration,
   ImportSpecifiers,
   Literal,
   MemberExpression,
-  NodeType,
   Program,
+  ReturnStatement,
   Statement,
   VariableDeclaration,
   VariableDeclarator,
-  VariableKind,
-  ReturnStatement,
-  ExportSpecifier,
-  ExportDeclaration,
-  FunctionExpression,
-  BinaryExpression,
+  VariableKind} from './nodeTypes';
+import {
+  FunctionType,
+  NodeType
 } from './nodeTypes'
 
-const PROGRAM_GENERATOR: Record<string, (...args: any[]) => Token> = {}
+// const PROGRAM_GENERATOR: Record<string, (...args: any[]) => Token> = {}
 
 // 语法分析器
 export class Parser {
@@ -491,7 +493,7 @@ export class Parser {
     this._goNext(TokenType.LeftParen)
     const params = []
     while (!this._checkCurrentTokenType(TokenType.RightParen)) {
-      let param =
+      const param =
         mode === FunctionType.FunctionDeclaration
           ? // 函数声明
             this._parseIdentifier()

@@ -7,7 +7,7 @@
 const str2Xml = (
   xmlStr: string,
   format: DOMParserSupportedType = 'text/xml',
-) => {
+):HTMLElement | null => {
   if (window.DOMParser)
     return new window.DOMParser().parseFromString(xmlStr, format)
       .documentElement

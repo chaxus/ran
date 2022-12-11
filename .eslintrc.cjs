@@ -106,6 +106,10 @@ module.exports = defineConfig({
       files: ['packages/**'],
       excludedFiles: '**/test/**',
       rules: {
+        'no-undef': 'off',
+        'no-empty': 'off',
+        'no-constant-condition': 'off',
+        '@typescript-eslint/no-empty-function': 'off',
         'no-restricted-globals': [
           'error',
           'require',
@@ -118,12 +122,6 @@ module.exports = defineConfig({
       files: ['packages/ranite/src/node/**'],
       rules: {
         'no-console': ['error'],
-      },
-    },
-    {
-      files: ['packages/ranite/src/test/**', '*.spec.ts'],
-      rules: {
-        'node/no-extraneous-import': 'off',
       },
     },
     {

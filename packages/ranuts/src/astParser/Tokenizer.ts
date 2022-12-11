@@ -1,4 +1,4 @@
-import { isWhiteSpace, isAlpha, isDigit, isUnderline } from '@/astParser/utils'
+import { isAlpha, isDigit, isUnderline, isWhiteSpace } from './utils'
 
 // 词法分析器，将代码划分为一个个词法单元，便于进行后续的语法分析
 // 本质上是对代码字符串进行逐个字符的扫描，然后根据一定的语法规则进行分组。
@@ -330,7 +330,7 @@ export class Tokenizer {
   tokenize(): Token[] {
     // 扫描
     while (this._currentIndex < this._source.length) {
-      let currentChar = this._source[this._currentIndex]
+      const currentChar = this._source[this._currentIndex]
       const startIndex = this._currentIndex
       // 1. 判断是否是分隔符
       if (isWhiteSpace(currentChar)) {

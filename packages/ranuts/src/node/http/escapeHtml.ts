@@ -1,6 +1,6 @@
 const matchHtmlRegExp = /["'&<>]/
 
-export default function escapeHtml(string: string) {
+export default function escapeHtml(string?: string | number | null): string {
   const str = '' + string
   const match = matchHtmlRegExp.exec(str)
 
