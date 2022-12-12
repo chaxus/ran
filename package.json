@@ -2,7 +2,6 @@
   "name": "@ran/monorepo",
   "version": "1.0.0",
   "description": "Monorepo",
-  "main": "index.js",
   "type": "module",
   "engines": {
     "node": "^14.18.0 || >=16.0.0"
