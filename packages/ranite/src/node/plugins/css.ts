@@ -7,7 +7,7 @@ import { getShortName } from '../utils'
 export function cssPlugin(): Plugin {
   let serverContext: ServerContext
   return {
-    name: 'm-vite:css',
+    name: 'ranite:css',
     configureServer(s) {
       serverContext = s
     },

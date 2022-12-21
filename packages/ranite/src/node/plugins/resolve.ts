@@ -9,7 +9,7 @@ import { cleanUrl, isInternalRequest, removeImportQuery } from '../utils'
 export function resolvePlugin(): Plugin {
   let serverContext: ServerContext
   return {
-    name: 'm-vite:resolve',
+    name: 'ranite:resolve',
     configureServer(s) {
       serverContext = s
     },

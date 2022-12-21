@@ -18,7 +18,7 @@ import type { ServerContext } from '../server/index'
 export function importAnalysisPlugin(): Plugin {
   let serverContext: ServerContext
   return {
-    name: 'm-vite:import-analysis',
+    name: 'ranite:import-analysis',
     configureServer(s) {
       serverContext = s
     },
