@@ -75,7 +75,7 @@ if (import.meta.hot) {
 
 export function reactHMRPlugin(): Plugin {
   return {
-    name: 'm-vite:react-refresh',
+    name: 'ranite:react-refresh',
     resolveId(id) {
       if (id === RUNTIME_PUBLIC_PATH) {
         return { id }

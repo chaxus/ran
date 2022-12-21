@@ -7,7 +7,7 @@ import type { ServerContext } from '../server/index'
 export function clientInjectPlugin(): Plugin {
   let serverContext: ServerContext
   return {
-    name: 'm-vite:client-inject',
+    name: 'ranite:client-inject',
     configureServer(s) {
       serverContext = s
     },

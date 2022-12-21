@@ -6,7 +6,7 @@ import { isJSRequest } from '../utils'
 
 export function esbuildTransformPlugin(): Plugin {
   return {
-    name: 'm-vite:esbuild-transform',
+    name: 'ranite:esbuild-transform',
     async load(id) {
       if (isJSRequest(id)) {
         try {
