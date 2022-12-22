@@ -8,7 +8,9 @@ export function bindingHMREvents(serverContext: ServerContext): void {
   watcher.on('change', async (file) => {
     console.log(`✨${blue('[hmr]')} ${green(file)} changed`)
     const { moduleGraph } = serverContext
+    // 清除模块依赖图中的缓存
     await moduleGraph.invalidateModule(file)
+    // 向客户端发送更新信息
     ws.send({
       type: 'update',
       updates: [

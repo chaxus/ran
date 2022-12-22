@@ -30,6 +30,8 @@ export function importAnalysisPlugin(): Plugin {
       const importedModules = new Set<string>()
       const [imports] = parse(code)
       const ms = new MagicString(code)
+      const { moduleGraph } = serverContext
+      const curMod = moduleGraph.getModuleById(id)!
       const resolve = async (id: string, importer?: string) => {
         const resolved = await serverContext.pluginContainer.resolveId(
           id,
@@ -46,8 +48,6 @@ export function importAnalysisPlugin(): Plugin {
         }
         return resolvedId
       }
-      const { moduleGraph } = serverContext
-      const curMod = moduleGraph.getModuleById(id)!
 
       for (const importInfo of imports) {
         const { s: modStart, e: modEnd, n: modSource } = importInfo
@@ -80,8 +80,8 @@ export function importAnalysisPlugin(): Plugin {
       if (!id.includes('node_modules')) {
         // 注入 HMR 相关的工具函数
         ms.prepend(
-          `import { createHotContext as __vite__createHotContext } from "${CLIENT_PUBLIC_PATH}";` +
-            `import.meta.hot = __vite__createHotContext(${JSON.stringify(
+          `import { createHotContext as __ranite__createHotContext } from "${CLIENT_PUBLIC_PATH}";` +
+            `import.meta.hot = __ranite__createHotContext(${JSON.stringify(
               cleanUrl(curMod.url),
             )});`,
         )

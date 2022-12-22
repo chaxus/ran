@@ -21,7 +21,7 @@ export function cssPlugin(): Plugin {
         // 包装成 JS 模块
         const jsContent = `
 import { createHotContext as __vite__createHotContext } from "${CLIENT_PUBLIC_PATH}";
-import.meta.hot = __vite__createHotContext("/${getShortName(
+import.meta.hot = __ranite__createHotContext("/${getShortName(
           id,
           serverContext.root,
         )}");
