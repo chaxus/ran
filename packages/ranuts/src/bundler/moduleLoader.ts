@@ -2,14 +2,22 @@ import { readFile } from 'node:fs/promises'
 import { Module } from './module'
 import { defaultResolver } from './utils/resolve'
 import type { Bundle } from './bundle'
-
+/**
+ * @description: 1.调用 resolveId 方法解析模块路径 2.初始化模块实例即 Module 对象，解析模块 AST 3.递归初始化模块的所有依赖模块
+ * @return {*}
+ */
 export class ModuleLoader {
   bundle: Bundle
   resolveIdsMap: Map<string, string | false> = new Map()
   constructor(bundle: Bundle) {
     this.bundle = bundle
   }
-
+  /**
+   * @description: 解析模块逻辑
+   * @param {string} id
+   * @param {string} importer
+   * @return {*}
+   */  
   resolveId(id: string, importer: string | null): string | false {
     const cacheKey = id + importer
     if (this.resolveIdsMap.has(cacheKey)) {
@@ -19,7 +27,10 @@ export class ModuleLoader {
     this.resolveIdsMap.set(cacheKey, resolved)
     return resolved
   }
-  // 加载模块并解析
+  /**
+   * @description: 加载模块内容并解析
+   * @return {*}
+   */  
   async fetchModule(
     id: string,
     importer: null | string,
@@ -32,6 +43,7 @@ export class ModuleLoader {
     if (path === false) {
       return null
     }
+    // 查找缓存
     const existModule = this.bundle.getModuleById(path)
     if (existModule) {
       return existModule

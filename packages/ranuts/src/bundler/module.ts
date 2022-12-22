@@ -1,6 +1,6 @@
 import MagicString from 'magic-string';
 import type { Statement as StatementNode } from '../astParser';
-import { Node, parse } from '../astParser';
+import { parse } from '../astParser';
 import type { Bundle } from './bundle';
 import { Statement } from './statement';
 import type { ModuleLoader } from './moduleLoader';
@@ -79,6 +79,7 @@ export class Module {
       const ast = parse(code) as any;
 
       const nodes = ast.body as StatementNode[];
+      // 以语句(Statement)的维度来拆分 Module，保存 statement 的集合，供之后分析
       this.statements = nodes.map((node) => {
         const magicString = this.magicString.snip(node.start, node.end);
         return new Statement(node, magicString, this);
@@ -87,11 +88,14 @@ export class Module {
       console.log(e);
       throw e;
     }
+    // 分析 AST 节点
     this.analyseAST();
   }
 
   analyseAST():void {
+    // 以语句为最小单元来分析
     this.statements.forEach((statement) => {
+       // 对 statement 进行分析
       statement.analyse();
       if (statement.isImportDeclaration) {
         this.addImports(statement);
@@ -105,6 +109,7 @@ export class Module {
         });
       }
     });
+    // 注册 statement 的 next 属性，用于生成代码使用，next 即下一个 statement 的起始位置
     const statements = this.statements;
     let next = this.code.length;
     for (let i = statements.length - 1; i >= 0; i--) {

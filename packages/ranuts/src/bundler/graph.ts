@@ -9,7 +9,10 @@ interface GraphOptions {
   entry: string;
   bundle: Bundle;
 }
-
+/**
+ * @description: 模块依赖图对象的实现
+ * @return {*}
+ */
 export class Graph {
   entryPath: string;
   basedir: string;
@@ -25,11 +28,12 @@ export class Graph {
     this.entryPath = resolve(entry);
     this.basedir = dirname(this.entryPath);
     this.bundle = bundle;
+    // 初始化模块加载器对象
     this.moduleLoader = new ModuleLoader(bundle);
   }
 
   async build():Promise<void> {
-    // 1. 获取并解析模块信息
+    // 1. 获取并解析模块信息，返回入口模块对象
     const entryModule = await this.moduleLoader.fetchModule(
       this.entryPath,
       null,
@@ -45,10 +49,10 @@ export class Graph {
       declaration!.use();
     });
     // 5. 处理命名冲突
-    this.doconflict();
+    this.handleNameConflict();
   }
 
-  doconflict():void {
+  handleNameConflict():void {
     const used: Record<string, true> = {};
 
     function getSafeName(name: string) {
@@ -88,11 +92,11 @@ export class Graph {
 
     function getCyclePath(id: string, parentId: string): string[] {
       const paths = [id];
-      let currrentId = parentId;
-      while (currrentId !== id) {
-        paths.push(currrentId);
+      let currentId = parentId;
+      while (currentId !== id) {
+        paths.push(currentId);
         // 向前回溯
-        currrentId = parent[currrentId];
+        currentId = parent[currentId];
       }
       paths.push(paths[0]);
       return paths.reverse();

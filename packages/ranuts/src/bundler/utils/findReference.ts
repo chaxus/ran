@@ -1,5 +1,6 @@
 import type { Statement } from '../statement';
 import { Reference } from '../ast/Declaration';
+import type { Node } from '../ast/Node'
 import { walk } from './walk';
 
 function isReference(node: any, parent: any): boolean {
@@ -19,14 +20,14 @@ export function findReference(statement: Statement):void {
   const { references, scope: initialScope, node } = statement;
   let scope = initialScope;
   walk(node, {
-    enter(node: any, parent: any) {
+    enter(node: Node, parent: Node | undefined) {
       if (node._scope) scope = node._scope;
       if (isReference(node, parent)) {
         const reference = new Reference(node, scope, statement);
         references.push(reference);
       }
     },
-    leave(node: any) {
+    leave(node: Node) {
       if (node._scope && scope.parent) {
         scope = scope.parent;
       }

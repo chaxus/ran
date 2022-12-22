@@ -9,6 +9,7 @@ interface BundleOptions {
 export class Bundle {
   graph: Graph;
   constructor(options: BundleOptions) {
+    // 初始化模块依赖图对象
     this.graph = new Graph({
       entry: options.entry,
       bundle: this
@@ -16,6 +17,7 @@ export class Bundle {
   }
 
   async build():Promise<void> {
+    // 模块打包逻辑，完成所有的 AST 相关操作
     await this.graph.build();
   }
 
@@ -26,7 +28,10 @@ export class Bundle {
   addModule(module: Module):void {
     return this.graph.addModule(module);
   }
-
+  /**
+   * @description: 代码生成逻辑，拼接模块 AST 节点，产出代码
+   * @return {*}
+   */  
   render(): { code: string; map: MagicString.SourceMap } {
     const msBundle = new MagicString.Bundle({ separator: '\n' });
 

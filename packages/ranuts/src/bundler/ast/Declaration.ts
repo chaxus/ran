@@ -12,6 +12,7 @@ export class Declaration {
   isUsed: boolean = false;
   isReassigned: boolean = false;
   constructor(node: any, isParam: boolean, statement: Statement | null) {
+    // 考虑函数和变量声明两种情况
     if (node) {
       if (node.type === 'FunctionDeclaration') {
         this.isFunctionDeclaration = true;

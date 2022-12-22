@@ -1,6 +1,10 @@
 import type { Declaration, ExportDeclaration} from '../../astParser';
 import { NodeType } from '../../astParser';
-
+/**
+ * @description: 是否为函数节点
+ * @param {Declaration} node
+ * @return {*}
+ */
 export function isFunctionDeclaration(node: Declaration): boolean {
   if (!node) return false;
 
@@ -19,11 +23,19 @@ export function isFunctionDeclaration(node: Declaration): boolean {
       node.declaration.type === NodeType.FunctionDeclaration)
   );
 }
-
+/**
+ * @description: 是否为 export 声明节点
+ * @param {ExportDeclaration} node
+ * @return {*}
+ */
 export function isExportDeclaration(node: ExportDeclaration): boolean {
   return /^Export/.test(node.type);
 }
-
+/**
+ * @description: 是否为 import 声明节点
+ * @param {any} node
+ * @return {*}
+ */
 export function isImportDeclaration(node: any):boolean {
   return node.type === 'ImportDeclaration';
 }

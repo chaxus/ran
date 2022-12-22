@@ -1,3 +1,5 @@
+import type { Scope } from '../bundler/ast/Scope';
+
 export enum NodeType {
   Program = 'Program',
   VariableDeclaration = 'VariableDeclaration',
@@ -49,6 +51,7 @@ export interface Node {
   type: string
   start: number
   end: number
+  _scope?: Scope
 }
 
 export interface Program extends Node {

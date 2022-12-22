@@ -1,7 +1,9 @@
 import type { Statement } from '../statement';
 import type { Scope } from './Scope';
 import type { Declaration } from './Declaration';
-
+/**
+ * @description: 记录其它节点与 Declaration 节点的引用关系
+ */
 export class Reference {
   node: any;
   scope: Scope;
