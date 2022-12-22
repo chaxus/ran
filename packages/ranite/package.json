@@ -18,7 +18,6 @@
     "chokidar": "^3.5.3",
     "connect": "^3.7.0",
     "picocolors": "^1.0.0",
-    "rollup": "^3.7.2",
     "sirv": "^2.0.2",
     "tsup": "^6.4.0"
   },
