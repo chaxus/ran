@@ -29,7 +29,7 @@ export const createPluginContainer = (plugins: Plugin[]): PluginContainer => {
   // 插件容器
   const pluginContainer: PluginContainer = {
     /**
-     * @description:
+     * @description: 调用插件本身的resolveId方法，解析文件地址，我们可以返回我们想返回的地址给ranite加载
      * @param {string} id 文件路径
      * @param {string} importer // 使用id文件路径的父路径
      */
@@ -48,7 +48,7 @@ export const createPluginContainer = (plugins: Plugin[]): PluginContainer => {
     },
     /**
      * @description: 加载模块的内容
-     * @param {*} id
+     * @param {*} id 文件路径
      * @return {*}
      */
     async load(id) {
@@ -65,8 +65,8 @@ export const createPluginContainer = (plugins: Plugin[]): PluginContainer => {
     },
     /**
      * @description: 自定义模块转换
-     * @param {*} code
-     * @param {*} id
+     * @param {*} code 转换前的文件内容
+     * @param {*} id 转换前的文件路径
      * @return {*}
      */
     async transform(code, id) {

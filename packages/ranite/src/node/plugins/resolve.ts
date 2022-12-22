@@ -6,6 +6,9 @@ import type { ServerContext } from '../server/index'
 import { DEFAULT_EXTERSIONS } from '../constants'
 import { cleanUrl, isInternalRequest, removeImportQuery } from '../utils'
 
+/**
+ * @description: 路径解析插件，将请求路径转换成真实存在的文件路径
+ */
 export function resolvePlugin(): Plugin {
   let serverContext: ServerContext
   return {

@@ -100,6 +100,9 @@ module.exports = defineConfig({
     ],
 
     'regexp/no-contradiction-with-assertion': 'error',
+    "regexp/no-unused-capturing-group": ["error", {
+      "fixable": true
+    }]
   },
   overrides: [
     {

@@ -28,9 +28,12 @@ export async function startDevServer(): Promise<void> {
   const app = connect()
   const root = process.cwd()
   const startTime = Date.now()
+  // 加载所有的插件
   const plugins = resolvePlugins()
-  const moduleGraph = new ModuleGraph((url) => pluginContainer.resolveId(url))
+  // 通过加载所有的插件，创建插件容器
   const pluginContainer = createPluginContainer(plugins)
+  // 加载模块的依赖图
+  const moduleGraph = new ModuleGraph((url) => pluginContainer.resolveId(url))
   const watcher = chokidar.watch(root, {
     ignored: ['**/node_modules/**', '**/.git/**'],
     ignoreInitial: true,
