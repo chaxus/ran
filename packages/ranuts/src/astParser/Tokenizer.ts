@@ -2,7 +2,9 @@ import { isAlpha, isDigit, isUnderline, isWhiteSpace } from './utils'
 
 // 词法分析器，将代码划分为一个个词法单元，便于进行后续的语法分析
 // 本质上是对代码字符串进行逐个字符的扫描，然后根据一定的语法规则进行分组。
-
+/**
+ * @description: 声明一些必要的类型
+ */
 export enum TokenType {
   Let = 'Let',
   Const = 'Const',
@@ -190,7 +192,7 @@ const TOKENS_GENERATOR: Record<string, (...args: any[]) => Token> = {
 // 单字符token
 type SingleCharTokens = '(' | ')' | '{' | '}' | '.' | ';' | ',' | '*' | '='
 
-// 单字符token
+// 单字符到 Token 生成器的映射
 const KNOWN_SINGLE_CHAR_TOKENS = new Map<
   SingleCharTokens,
   typeof TOKENS_GENERATOR[keyof typeof TOKENS_GENERATOR]
@@ -222,7 +224,15 @@ const OPERATOR_TOKENS = [
   '>>',
 ]
 
-// 词法分析器
+/**
+ * @description: 词法分析器，分词器
+ * 在扫描字符的过程，我们需要对不同的字符各自进行不同的处理，具体的策略如下：
+ * 1. 当前字符为分隔符，如空格，直接跳过，不处理；
+ * 2. 当前字符为字母，需要继续扫描，获取完整的单词:
+ *  如果单词为语法关键字，则新建相应关键字的 Token
+ *  否则视为普通的变量名
+ * 3. 当前字符为单字符，如{、}、(、)，则新建单字符对应的 Token
+ */
 export class Tokenizer {
   private _tokens: Token[] = []
   private _currentIndex: number = 0

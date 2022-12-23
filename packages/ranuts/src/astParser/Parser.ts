@@ -26,7 +26,12 @@ import { FunctionType, NodeType } from './nodeTypes'
 
 // const PROGRAM_GENERATOR: Record<string, (...args: any[]) => Token> = {}
 
-// 语法分析器
+/**
+ * @description: 语法分析器
+ * 在解析出词法 token 之后，我们就可以进入语法分析阶段了。
+ * 在这个阶段，我们会依次遍历 token，对代码进行语法结构层面的分析，最后的目标是生成 AST 数据结构。
+ * AST 结构可以通过 https://astexplorer.net/ 去查看
+ */
 export class Parser {
   private _tokens: Token[] = []
   private _currentIndex = 0
@@ -38,8 +43,11 @@ export class Parser {
     const program = this._parseProgram()
     return program
   }
-  // 一个程序(Program)实际上由各个语句(Statement)来构成
-  // 因此在_parseProgram逻辑中，需要扫描一个个语句，然后放到 Program 对象的 body 中。
+  /**
+   * @description: 解析生成 AST 的核心逻辑
+   * 一个程序(Program)实际上由各个语句(Statement)来构成
+   * 因此在_parseProgram逻辑中，需要扫描一个个语句，然后放到 Program 对象的 body 中。
+   */  
   private _parseProgram(): Program {
     const program: Program = {
       type: NodeType.Program,
@@ -281,7 +289,14 @@ export class Parser {
     this._skipSemicolon()
     return exportDeclaration!
   }
-
+  /**
+   * @description: 解析变量的声明
+   * 发现 let 关键词对应的 token，进入 _parseVariableDeclaration
+   * 解析变量名，如示例代码中的 foo
+   * 解析函数表达式，如示例代码中的 function() {}
+   * 其中，解析变量名的过程我们通过 _parseIdentifier 方法实现，解析函数表达式的过程由 _parseFunctionExpression 来实现
+   * @return {VariableDeclaration}
+   */  
   private _parseVariableDeclaration(): VariableDeclaration {
     // 获取语句开始位置
     const { start } = this._getCurrentToken()
@@ -464,7 +479,10 @@ export class Parser {
     }
     return node
   }
-
+  /**
+   * @description: 解析函数表达式
+   * @return {*}
+   */  
   private _parseFunctionExpression(): FunctionExpression {
     const { start } = this._getCurrentToken()
     this._goNext(TokenType.Function)
@@ -484,12 +502,17 @@ export class Parser {
     }
     return node
   }
-
+  /**
+   * @description: 解析函数参数
+   * 
+   */  
   private _parseParams(
     mode: FunctionType = FunctionType.FunctionDeclaration,
   ): Identifier[] | Expression[] {
+    // 消费 "("
     this._goNext(TokenType.LeftParen)
     const params = []
+     // 逐个解析括号中的参数
     while (!this._checkCurrentTokenType(TokenType.RightParen)) {
       const param =
         mode === FunctionType.FunctionDeclaration
@@ -502,6 +525,7 @@ export class Parser {
         this._goNext(TokenType.Comma)
       }
     }
+    // 消费 ")"
     this._goNext(TokenType.RightParen)
     return params
   }
@@ -522,7 +546,10 @@ export class Parser {
     this._goNext(token.type)
     return literal
   }
-
+  /**
+   * @description: 解析变量名
+   * @return {Identifier}
+   */  
   private _parseIdentifier(): Identifier {
     const token = this._getCurrentToken()
     const identifier: Identifier = {
@@ -534,7 +561,10 @@ export class Parser {
     this._goNext(TokenType.Identifier)
     return identifier
   }
-
+  /**
+   * @description: 解析函数体
+   * @return {BlockStatement}
+   */  
   private _parseBlockStatement(): BlockStatement {
     const { start } = this._getCurrentToken()
     const blockStatement: BlockStatement = {
@@ -543,12 +573,15 @@ export class Parser {
       start,
       end: Infinity,
     }
+     // 消费 "{"
     this._goNext(TokenType.LeftCurly)
     while (!this._checkCurrentTokenType(TokenType.RightCurly)) {
+      // 递归调用 _parseStatement 解析函数体中的语句(Statement)
       const node = this._parseStatement()
       blockStatement.body.push(node)
     }
     blockStatement.end = this._getCurrentToken().end
+     // 消费 "}"
     this._goNext(TokenType.RightCurly)
     return blockStatement
   }
@@ -571,7 +604,11 @@ export class Parser {
       this._goNext(TokenType.Semicolon)
     }
   }
-  // 工具方法，表示消费当前 Token，扫描位置移动到下一个 token
+  /**
+   * @description: 工具方法，表示消费当前 Token，扫描位置移动到下一个 token
+   * @param {TokenType} type
+   * @return {Token}
+   */  
   private _goNext(type: TokenType | TokenType[]): Token {
     const currentToken = this._tokens[this._currentIndex]
     // 断言当前 Token 的类型，如果不能匹配，则抛出错误
@@ -589,7 +626,10 @@ export class Parser {
     this._currentIndex++
     return currentToken
   }
-  // token 是否已经扫描完
+  /**
+   * @description: token 是否已经扫描完
+   * @return {boolean}
+   */  
   private _isEnd(): boolean {
     return this._currentIndex >= this._tokens.length
   }
