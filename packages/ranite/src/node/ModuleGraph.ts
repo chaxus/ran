@@ -126,11 +126,7 @@ export class ModuleGraph {
     // 通过创建时传入，用于获取文件路径
     private resolveId: (url: string) => Promise<PartialResolvedId | null>,
   ) {}
-  /**
-   * @description: 通过绝对路径获取模块
-   * @param {string} id
-   * @return {ModuleNode | undefined}
-   */    
+  
   getModuleById(id: string): ModuleNode | undefined {
     return this.idToModuleMap.get(id)
   }
@@ -139,12 +135,16 @@ export class ModuleGraph {
     const { url } = await this._resolve(rawUrl)
     return this.urlToModuleMap.get(url)
   }
-
+  /**
+   * @description: 注册模块，返回或者创建新的 ModuleNode 节点
+   * @param {string} rawUrl
+   * @return {*}
+   */  
   async ensureEntryFromUrl(rawUrl: string): Promise<ModuleNode> {
     const { url, resolvedId } = await this._resolve(rawUrl)
     // 首先检查缓存
     if (this.urlToModuleMap.has(url)) {
-      return this.urlToModuleMap.get(url) as ModuleNode
+      return this.urlToModuleMap.get(url)
     }
     // 若无缓存，更新 urlToModuleMap 和 idToModuleMap
     const mod = new ModuleNode(url)
@@ -176,10 +176,11 @@ export class ModuleGraph {
       }
     }
   }
-
+  // HMR 触发时会执行这个方法
   invalidateModule(file: string): void {
     const mod = this.idToModuleMap.get(file)
     if (mod) {
+      // 更新时间戳
       mod.lastHMRTimestamp = Date.now()
       mod.transformResult = null
       mod.importers.forEach((importer) => {
