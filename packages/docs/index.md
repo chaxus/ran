@@ -4,7 +4,7 @@ layout: home
 title: Home
 
 hero:
-  name: chaxus
+  name: ran
   text: 风起于青萍之末
   tagline: A ship in harbor is safe, but that is not what ships are built for.
   image:

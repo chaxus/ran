@@ -1,7 +1,7 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
-  title: 'chaxus',
+  title: 'ran',
   description: '基于web component组件库,常用函数库utils,个人文章记录等',
   base: '/ran/',
   lastUpdated: true,
@@ -86,11 +86,13 @@ export default defineConfig({
               text: '函数式编程',
               link: '/src/article/functionalProgramming.md',
             },
+            {
+              text: 'Abstract Syntax Tree',
+              link: '/src/article/astParse/tokenizer.md',
+            },
           ],
         },
       ],
     },
   },
 })
-
-interface Brand {}
