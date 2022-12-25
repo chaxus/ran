@@ -31,7 +31,7 @@ export const HASH_RE = /#.*$/s
 // 预构建产物默认存放在 node_modules 中的 .ranite 目录中
 export const PRE_BUNDLE_DIR = path.join('node_modules', '.ranite')
 
-export const DEFAULT_EXTERSIONS = ['.tsx', '.ts', '.jsx', 'js']
+export const DEFAULT_EXTENSIONS = ['.tsx', '.ts', '.jsx', 'js']
 export const HMR_HEADER = 'ranite-hmr'
 export const CLIENT_PUBLIC_PATH = '/@ranite/client'
 export const HMR_PORT = 24678

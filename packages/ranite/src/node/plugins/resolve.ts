@@ -3,7 +3,7 @@ import resolve from 'resolve'
 import { pathExists } from 'fs-extra'
 import type { Plugin } from '../plugin'
 import type { ServerContext } from '../server/index'
-import { DEFAULT_EXTERSIONS } from '../constants'
+import { DEFAULT_EXTENSIONS } from '../constants'
 import { cleanUrl, isInternalRequest, removeImportQuery } from '../utils'
 
 /**
@@ -44,7 +44,7 @@ export function resolvePlugin(): Plugin {
           }
         } else {
           // ./App -> ./App.tsx
-          for (const extname of DEFAULT_EXTERSIONS) {
+          for (const extname of DEFAULT_EXTENSIONS) {
             try {
               const withExtension = `${id}${extname}`
               resolvedId = resolve.sync(withExtension, {

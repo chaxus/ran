@@ -6,6 +6,13 @@
   "module": "dist/index.js",
   "type": "module",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.umd.cjs"
+    }
+  },
   "engines": {
     "node": "^14.18.0 || >=16.0.0"
   },
