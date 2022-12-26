@@ -24,7 +24,8 @@
     "build": "tsc --noEmit && vite build",
     "build:docs": "vitepress build",
     "serve": "vitepress serve",
-    "test": "vitest"
+    "test": "vitest",
+    "prepublish": "npm run build"
   },
   "keywords": [],
   "author": "",
