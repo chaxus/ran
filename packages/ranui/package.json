@@ -27,7 +27,8 @@
     "start": "vite",
     "build": "vite build",
     "build:docs": "vitepress build",
-    "serve:docs": "vitepress serve"
+    "serve:docs": "vitepress serve",
+    "prepublish": "npm run build" 
   },
   "keywords": [],
   "author": "",
