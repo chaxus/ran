@@ -431,7 +431,137 @@ type MapType<T> = {
 
 ### 4.内置高级类型
 
-## 四.综合使用
+## 四.高级使用
+
+### 1.模式匹配提取
+
+字符串可以和正则做模式匹配，找到匹配的部分，提取子组，之后可以用 1,2 等引用匹配的子组。
+
+```ts
+'abc'.replace(/a(b)c/,'$1,$1,$1')
+// 'b,b,b'
+```
+
+Typescript 的类型也同样可以做模式匹配。
+
+比如这样一个 Promise 类型：
+
+```ts
+type p = Promise<'guang'>;
+```
+
+我们想提取 value 的类型，可以这样做：
+
+```ts
+type GetValueType<P> = P extends Promise<infer Value> ? Value : never;
+```
+
+通过 extends 对传入的类型参数 P 做模式匹配，其中值的类型是需要提取的，通过 infer 声明一个局部变量 Value 来保存，如果匹配，就返回匹配到的 Value，否则就返回 never 代表没匹配到。
+
+```ts
+// type GetValueResult = 'value'
+type GetValueResult = GetValueType<Promise<'value'>>
+```
+
+这就是 Typescript 类型的模式匹配：
+
+Typescript 类型的模式匹配是通过 extends 对类型参数做匹配，结果保存到通过 infer 声明的局部类型变量里，如果匹配就能从该局部变量里拿到提取出的类型。
+
+这个模式匹配的套路有多有用呢？我们来看下在数组、字符串、函数、构造器等类型里的应用。
+
+#### (1).数组类型
+##### 提取第一个元素
+
+数组类型想提取第一个元素的类型怎么做呢？
+
+```ts
+type arr = [1,2,3]
+```
+用它来匹配一个模式类型，提取第一个元素的类型到通过 infer 声明的局部变量里返回。
+```ts
+type GetFirst<Arr extends unknown[]> = Arr extends [infer First, ...unknown[]] ? First : never;
+```
+类型参数 Arr 通过 extends 约束为只能是数组类型，数组元素是 unkown 也就是可以是任何值。
+> any 和 unknown 的区别： any 和 unknown 都代表任意类型，但是 unknown 只能接收任意类型的值，而 any 除了可以接收任意类型的值，也可以赋值给任意类型（除了 never）。类型体操中经常用 unknown 接受和匹配任何类型，而很少把任何类型赋值给某个类型变量。
+
+对 Arr 做模式匹配，把我们要提取的第一个元素的类型放到通过 infer 声明的 First 局部变量里，后面的元素可以是任何类型，用 unknown 接收，然后把局部变量 First 返回。
+
+当类型参数 Arr 为 [1,2,3] 时：
+
+```ts
+type GetFirst<Arr extends unknown[]> = Arr extends [infer First, ...unknown[]] ? First : never;
+type GetFirstValue = GetFirst<[1,2,3]>
+// type GetFirstValue = 1
+```
+当类型参数 Arr 为 [] 时：
+
+```ts
+type GetFirstResult = GetFirst<[]>
+// type GetFirstResult = never
+```
+##### 提取最后一个元素
+可以提取第一个元素，当然也可以提取最后一个元素，修改下模式类型就行：
+```ts
+type GetLastValue<Arr extends unknown[]> = Arr extends [...unknown, infer Last] ? Last : never; 
+```
+当类型参数 Arr 为 [1,2,3]时：
+
+```ts
+type GetLastResult = GetFirst<[1,2,3]>
+// type GetLastResult = 3
+```
+##### PopArr
+我们分别取了首尾元素，当然也可以取剩余的数组，比如取去掉了最后一个元素的数组：
+```ts
+type PopArr<Arr extends unknown[]> = Arr extends [...infer Rest, unknown] ? Rest : never;
+```
+如果是空数组，就直接返回，否则匹配剩余的元素，放到 infer 声明的局部变量 Rest 里，返回 Rest。
+
+当类型参数 Arr 为 [1,2,3] 时：
+```ts
+type PopResult = PopArr<[1,2,3]>
+// type PopResult = [1,2]
+```
+当类型参数 Arr 为 [] 时：
+```ts
+type PopResult = PopArr<[]>
+// type PopResult = []
+```
+##### ShiftArr
+
+同理可得 ShiftArr 的实现：
+
+```ts
+type ShiftArr<Arr extends unknown[]> = Arr extends [unknown, ...infer Rest] ? Rest : never;
+```
+当类型参数 Arr 为 [1,2,3]时：
+
+```ts
+type ShiftResult = ShiftArr<[1,2,3]>
+// type ShiftResult = [2,3]
+```
+
+#### (2).字符串类型
+
+字符串类型也同样可以做模式匹配，匹配一个模式字符串，把需要提取的部分放到 infer 声明的局部变量里。
+
+##### StartsWith
+
+判断字符串是否以某个前缀开头，也是通过模式匹配：
+
+```ts
+type StartWith<str extends string, Prefix extends string> = Str extends `${Prefix}${string}` ? true : false;
+```
+需要声明字符串 Str、匹配的前缀 Prefix 两个类型参数，它们都是 string。
+
+用 Str 去匹配一个模式类型，模式类型的前缀是 Prefix，后面是任意的 string，如果匹配返回 true，否则返回 false。
+
+当匹配时：
+
+
+
+#### (3).函数
+#### (4).构造器类型
 
 
 
