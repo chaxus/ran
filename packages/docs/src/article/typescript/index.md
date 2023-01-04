@@ -558,6 +558,21 @@ type StartWith<str extends string, Prefix extends string> = Str extends `${Prefi
 
 当匹配时：
 
+```ts
+type StartWithResult = StartWidth<'prefix string','prefix'>
+// type StartWithResult = true
+```
+
+不匹配时：
+
+```ts
+type StartWithResult = StartWidth<'prefix string','string'>
+// type StartWithResult = false
+```
+##### Replace
+
+
+
 
 
 #### (3).函数
