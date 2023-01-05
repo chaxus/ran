@@ -115,6 +115,7 @@ function getPropValue<
     return obj[key];
 }
 ```
+
 这里的 keyof T、T[Key] 就是对类型参数 T 的类型运算。
 
 TypeScript 的类型系统就是第三种，支持对类型参数做各种逻辑处理，可以写很复杂的类型逻辑。
@@ -175,6 +176,7 @@ type ParseQueryString<Str extends string> =
         ? MergeParams<ParseParam<Param>, ParseQueryString<Rest>>
         : ParseParam<Str>;
 ```
+
 TypeScript 的类型系统是图灵完备的，也就是能描述各种可计算逻辑。简单点来理解就是循环、条件等各种 JS 里面有的语法它都有，JS 能写的逻辑它都能写。
 
 对类型参数的编程是 TypeScript 类型系统最强大的部分，可以实现各种复杂的类型计算逻辑，是它的优点。但同时也被认为是它的缺点，因为除了业务逻辑外还要写很多类型逻辑。
@@ -221,7 +223,9 @@ const obj: IPerson = {
     age: 18
 }
 ```
+
 函数：
+
 ```ts
 interface SayHello {
     (name: string): string;
@@ -231,7 +235,9 @@ const func: SayHello = (name: string) => {
     return 'hello,' + name
 }
 ```
+
 构造器：
+
 ```ts
 interface PersonConstructor {
     new (name: string, age: number): IPerson;
@@ -241,6 +247,7 @@ function createPerson(ctor: PersonConstructor):IPerson {
     return new ctor('guang', 18);
 }
 ```
+
 对象类型、class 类型在 TypeScript 里也叫做索引类型，也就是索引了多个元素的类型的意思。对象可以动态添加属性，如果不知道会有什么属性，可以用可索引签名：
 
 ```ts
@@ -251,6 +258,7 @@ const obj:IPerson = {};
 obj.name = 'guang';
 obj.age = 18;
 ```
+
 总之，接口可以用来描述函数、构造器、索引类型（对象、class、数组）等复合类型。
 
 #### 枚举
@@ -311,7 +319,7 @@ type tuple = [string, number?];
 
 我们知道了 TypeScript 类型系统里有哪些类型，那么可以对这些类型做什么类型运算呢？
 
-#### 条件：extends ? :
+#### 条件：extends ?
 
 TypeScript 里的条件判断是 extends ? :，叫做条件类型（Conditional Type）比如：
 
@@ -331,6 +339,7 @@ type isTwo<T> = T extends 2 ? true: false;
 type res = isTwo<1>; // type res = false
 type res2 = isTwo<2>; // type res = true
 ```
+
 这种类型也叫做高级类型。
 
 高级类型的特点是传入类型参数，经过一系列类型运算逻辑后，返回新的类型。
@@ -346,6 +355,7 @@ type First<Tuple extends unknown[]> = Tuple extends [infer T,...infer R] ? T : n
 
 type res = First<[1,2,3]>; // type res = 1
 ```
+
 注意，第一个 extends 不是条件，条件类型是 extends ? :，这里的 extends 是约束的意思，也就是约束类型参数只能是数组类型。
 
 因为不知道数组元素的具体类型，所以用 unknown。
@@ -367,6 +377,7 @@ type Union = 1 | 2 | 3;
 ```ts
 type ObjType = {a: number } & {c: boolean};
 ```
+
 注意，同一类型可以合并，不同的类型没法合并，会被舍弃：
 
 可以合并的
@@ -410,11 +421,13 @@ type MapType<T> = {
 
 type res = MapType<{a: 1, b: 2}>; // type res = { a: [1, 1, 1]; b:[2, 2, 2]; }
 ```
+
 映射类型就相当于把一个集合映射到另一个集合，这是它名字的由来。
 
 除了值可以变化，索引也可以做变化，用 as 运算符，叫做重映射。
 
 我们用 as 把索引也做了修改，改成了 3 个 key 重复：
+
 ```ts
 type MapType<T> = {
     [
@@ -425,6 +438,7 @@ type MapType<T> = {
 
 // type res = { aaa: [1, 1, 1]; bbb: [2, 2, 2]; }
 ```
+
 这里的 & string 可能大家会迷惑，解释一下：
 
 因为索引类型（对象、class 等）可以用 string、number 和 symbol 作为 key，这里 keyof T 取出的索引就是 string | number | symbol 的联合类型，和 string 取交叉部分就只剩下 string 了。就像前面所说，交叉类型会把同一类型做合并，不同类型舍弃。
@@ -470,6 +484,7 @@ Typescript 类型的模式匹配是通过 extends 对类型参数做匹配，结
 这个模式匹配的套路有多有用呢？我们来看下在数组、字符串、函数、构造器等类型里的应用。
 
 #### (1).数组类型
+
 ##### 提取第一个元素
 
 数组类型想提取第一个元素的类型怎么做呢？
@@ -477,10 +492,13 @@ Typescript 类型的模式匹配是通过 extends 对类型参数做匹配，结
 ```ts
 type arr = [1,2,3]
 ```
+
 用它来匹配一个模式类型，提取第一个元素的类型到通过 infer 声明的局部变量里返回。
+
 ```ts
 type GetFirst<Arr extends unknown[]> = Arr extends [infer First, ...unknown[]] ? First : never;
 ```
+
 类型参数 Arr 通过 extends 约束为只能是数组类型，数组元素是 unkown 也就是可以是任何值。
 > any 和 unknown 的区别： any 和 unknown 都代表任意类型，但是 unknown 只能接收任意类型的值，而 any 除了可以接收任意类型的值，也可以赋值给任意类型（除了 never）。类型体操中经常用 unknown 接受和匹配任何类型，而很少把任何类型赋值给某个类型变量。
 
@@ -493,40 +511,53 @@ type GetFirst<Arr extends unknown[]> = Arr extends [infer First, ...unknown[]] ?
 type GetFirstValue = GetFirst<[1,2,3]>
 // type GetFirstValue = 1
 ```
+
 当类型参数 Arr 为 [] 时：
 
 ```ts
 type GetFirstResult = GetFirst<[]>
 // type GetFirstResult = never
 ```
+
 ##### 提取最后一个元素
+
 可以提取第一个元素，当然也可以提取最后一个元素，修改下模式类型就行：
+
 ```ts
 type GetLastValue<Arr extends unknown[]> = Arr extends [...unknown, infer Last] ? Last : never; 
 ```
+
 当类型参数 Arr 为 [1,2,3]时：
 
 ```ts
 type GetLastResult = GetFirst<[1,2,3]>
 // type GetLastResult = 3
 ```
+
 ##### PopArr
+
 我们分别取了首尾元素，当然也可以取剩余的数组，比如取去掉了最后一个元素的数组：
+
 ```ts
 type PopArr<Arr extends unknown[]> = Arr extends [...infer Rest, unknown] ? Rest : never;
 ```
+
 如果是空数组，就直接返回，否则匹配剩余的元素，放到 infer 声明的局部变量 Rest 里，返回 Rest。
 
 当类型参数 Arr 为 [1,2,3] 时：
+
 ```ts
 type PopResult = PopArr<[1,2,3]>
 // type PopResult = [1,2]
 ```
+
 当类型参数 Arr 为 [] 时：
+
 ```ts
 type PopResult = PopArr<[]>
 // type PopResult = []
 ```
+
 ##### ShiftArr
 
 同理可得 ShiftArr 的实现：
@@ -534,6 +565,7 @@ type PopResult = PopArr<[]>
 ```ts
 type ShiftArr<Arr extends unknown[]> = Arr extends [unknown, ...infer Rest] ? Rest : never;
 ```
+
 当类型参数 Arr 为 [1,2,3]时：
 
 ```ts
@@ -552,6 +584,7 @@ type ShiftResult = ShiftArr<[1,2,3]>
 ```ts
 type StartWith<str extends string, Prefix extends string> = Str extends `${Prefix}${string}` ? true : false;
 ```
+
 需要声明字符串 Str、匹配的前缀 Prefix 两个类型参数，它们都是 string。
 
 用 Str 去匹配一个模式类型，模式类型的前缀是 Prefix，后面是任意的 string，如果匹配返回 true，否则返回 false。
@@ -569,14 +602,140 @@ type StartWithResult = StartWidth<'prefix string','prefix'>
 type StartWithResult = StartWidth<'prefix string','string'>
 // type StartWithResult = false
 ```
+
 ##### Replace
 
+字符串可以匹配一个模式类型，提取想要的部分，自然也可以用这些再构成一个新的类型。
 
+比如实现字符串替换：
 
+```ts
+type ReplaceStr<
+    Str extends string,
+    From extends string,
+    To extends string
+> = Str extends `${infer Prefix}${From}${infer Suffix}` 
+        ? `${Prefix}${To}${Suffix}` : Str;
+```
 
+声明要替换的字符串 Str、待替换的字符串 From、替换成的字符串 3 个类型参数，通过 extends 约束为都是 string 类型。
+
+用 Str 去匹配模式串，模式串由 From 和之前之后的字符串构成，把之前之后的字符串放到通过 infer 声明的局部变量 Prefix、Suffix 里。
+
+用 Prefix、Suffix 加上替换到的字符串 To 构造成新的字符串类型返回。
+
+当匹配时：
+
+```ts
+type ReplaceResult = ReplaceStr<'str replace to result', 'result', 'aaaa'>
+// type ReplaceResult =  'str replace to aaaa'
+```
+
+不匹配时：
+
+```ts
+type ReplaceResult = ReplaceStr<'str replace to result', '???', 'aaaa'>
+// type ReplaceResult =  'str replace to result'
+```
+
+##### Trim
+
+能够匹配和替换字符串，那也就能实现去掉空白字符的 Trim：
+
+不过因为我们不知道有多少个空白字符，所以只能一个个匹配和去掉，需要递归。
+
+先实现 TrimRight:
+
+```ts
+type TrimRight<Str extends string> = Str extends `${infer Rest}${' ' | '\n' ｜ '\t'}` ? TrimRight<Rest> : Str
+```
+
+类型参数 Str 是要 Trim 的字符串。
+
+如果 Str 匹配字符串 + 空白字符 (空格、换行、制表符)，那就把字符串放到 infer 声明的局部变量 Rest 里。
+
+把 Rest 作为类型参数递归 TrimRight，直到不匹配，这时的类型参数 Str 就是处理结果。
+
+```ts
+type TrimRightResult = TrimRight<'value          '>
+// type TrimRightResult = 'value'
+```
+
+同理可得 TrimLeft：
+
+```ts
+type TrimLeft<Str extends string> = Str extends `${' '|'\n'|'\t'}`${infer Rest} ? TrimLeft<Rest> : Str
+```
+
+TrimRight 和 TrimLeft 结合就是 Trim：
+
+```ts
+type Trim<Str extends string> = TrimRight<TrimLeft<Str>>
+```
 
 #### (3).函数
+
+函数同样也可以做类型匹配，比如提取参数、返回值的类型。
+
+##### GetParameters
+
+函数类型可以通过模式匹配来提取参数的类型：
+
+```ts
+type GetParameters<Func extends Function> = Func extends (...args: infer Args) => unknown ? Args : never
+```
+
+类型参数 Func 是要匹配的函数类型，通过 extends 约束为 Function。
+
+Func 和模式类型做匹配，参数类型放到用 infer 声明的局部变量 Args 里，返回值可以是任何类型，用 unknown。
+
+返回提取到的参数类型 Args。
+
+```ts
+type GetParametersResult = GetParameters<(name:string,age:number)=>string>
+// type GetParametersResult = [name:string,age:number]
+```
+
+##### GetReturnType
+
+能提取参数类型，同样也可以提取返回值类型：
+
+```ts
+type GetReturnType<Func extends Function> = Func extends (...args:unknown[]) => infer ReturnType ? ReturnType : never 
+```
+
+Func 和模式类型做匹配，提取返回值到通过 infer 声明的局部变量 ReturnType 里返回。
+
+参数类型可以是任意类型，也就是 any[]（注意，这里不能用 unknown，这里的解释涉及到参数的逆变性质，具体原因逆变那一节会解释）。
+
+```ts
+type GetReturnTypeResult = GetReturnType<()=>'return value'>
+// type GetReturnTypeResult = 'return value'
+```
+
+##### GetThisParameterType
+
+方法里可以调用 this，比如这样：
+
+```ts
+class Dong {
+    name: string;
+
+    constructor() {
+        this.name = "dong";
+    }
+
+    hello() {
+        return 'hello, I\'m ' + this.name;
+    }
+}
+
+const dong = new Dong();
+dong.hello();
+```
+
+用对象.方法名的方式调用的时候，this 就指向那个对象。
+
+但是方法也可以用 call 或者 apply 调用：
+
 #### (4).构造器类型
-
-
-
