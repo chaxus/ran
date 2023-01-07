@@ -443,7 +443,134 @@ type MapType<T> = {
 
 因为索引类型（对象、class 等）可以用 string、number 和 symbol 作为 key，这里 keyof T 取出的索引就是 string | number | symbol 的联合类型，和 string 取交叉部分就只剩下 string 了。就像前面所说，交叉类型会把同一类型做合并，不同类型舍弃。
 
-### 4.内置高级类型
+## 四.判断类型的类型
 
-## 四.高级使用
+### IsAny
+
+如何判断一个类型是 any 类型呢？要根据它的特性来：
+
+any 类型与任何类型的交叉都是 any，也就是 1 & any 结果是 any。
+
+所以，可以这样写：
+
+```ts
+type IsAny<T> = 'null' extends ('undefined' & T) ? true : false
+```
+
+### IsEqual
+
+之前我们实现 IsEqual 是这样写的：
+
+```ts
+type IsEqual<A, B> = (A extends B ? true : false) & (B extends A ? true : false);
+```
+
+问题出在 any 的判断上：
+
+```ts
+type IsEqualResult = IsEqual<'aaa', any>
+// type IsEqualResult = false
+```
+
+因为 any 可以是任何类型，任何类型也都是 any，所以当这样写判断不出 any 类型来。
+
+所以，我们会这样写：
+
+```ts
+type IsEqual<A, B> = (<T>() => T extends A ? 1 : 2) extends (<T>() => T extends B ? 1 : 2)
+    ? true : false;
+```
+
+这样就能正常判断了：
+
+其中 T 是不传类型的，相当于一个临时变量
+
+其目的是对比：
+
+```ts
+<T>() => T extends X ? 1 : 2
+<T>() => T extends Y ? 1 : 2
+```
+
+这两个泛型函数类型是否相等，[原理](https://stackoverflow.com/questions/68961864/how-does-the-equals-work-in-typescript/68963796#68963796)
+
+
+
+### IsUnion
+
+还记得怎么判断 union 类型么？要根据它遇到条件类型时会分散成单个传入做计算的特性：
+
+```ts
+type IsUnion<A, B = A> =
+    A extends A
+        ? [B] extends [A]
+            ? false
+            : true
+        : never
+```
+
+### IsNever
+
+never 在条件类型中也比较特殊，如果条件类型左边是类型参数，并且传入的是 never，那么直接返回 never：
+
+```ts
+type TestNever<T> = T extends number ? 1 : 2;
+```
+
+当 T 为 never 时：
+
+```ts
+type TestNeverResult = TestNever<never>
+// type TestNeverResult = never
+```
+
+所以，要判断 never 类型，就不能直接 T extends number，可以这样写：
+
+```ts
+type IsNever<T> = [T] extends [never] ? true : false
+```
+
+这样就能正常判断 never 类型了：
+
+```ts
+type TestNeverResult = IsNever<never>
+// type TestNeverResult = true
+```
+
+除此以外，any 在条件类型中也比较特殊，如果类型参数为 any，会直接返回 trueType 和 falseType 的合并：
+
+```ts
+type TestAny<T> = T extends number ? 1 : 2;
+
+type TestAnyResult = TestAny<any>
+// type TestAnyResult = 1 | 2
+```
+
+联合类型、never、any 在作为条件类型的类型参数时的这些特殊情况，也会在后面的原理篇来解释原因。
+
+### IsTuple
+
+元组类型怎么判断呢？它和数组有什么区别呢？
+
+元组类型的 length 是数字字面量，而数组的 length 是 number。
+
+```ts
+type len 
+```
+
+### UnionToIntersection
+
+类型之间是有父子关系的，更具体的那个是子类型，比如 A 和 B 的交叉类型 A & B 就是联合类型 A | B 的子类型，因为更具体。
+
+如果允许父类型赋值给子类型，就叫做逆变。
+
+如果允许子类型赋值给父类型，就叫做协变。
+
+（关于逆变、协变等概念的详细解释可以看原理篇）
+
+在 TypeScript 中有函数参数是有逆变的性质的，也就是如果参数可能是多个类型，参数类型会变成它们的交叉类型。
+
+所以联合转交叉可以这样实现 ：
+
+
 
