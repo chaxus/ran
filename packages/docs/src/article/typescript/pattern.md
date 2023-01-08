@@ -12,7 +12,7 @@ Typescript 的类型也同样可以做模式匹配。
 比如这样一个 Promise 类型：
 
 ```ts
-type p = Promise<'guang'>;
+type p = Promise<'value'>;
 ```
 
 我们想提取 value 的类型，可以这样做：
