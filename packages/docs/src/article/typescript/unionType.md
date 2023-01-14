@@ -158,3 +158,102 @@ A extends A 这种写法是为了触发分布式条件类型，让每个类型�
 A extends A 和 [A] extends [A] 是不同的处理，前者是单个类型和整个类型做判断，后者两边都是整个联合类型，因为只有 extends 左边直接是类型参数才会触发分布式条件类型。
 
 理解了这两点，分布式条件类型就算掌握了。
+
+## BEM
+
+bem 是 css 命名规范，用 block__element--modifier 的形式来描述某个区块下面的某个元素的某个状态的样式。
+
+那么我们可以写这样一个高级类型，传入 block、element、modifier，返回构造出的 class 名：
+
+这样使用：
+
+```ts
+type bemResult = BEM<'guang', ['aaa', 'bbb'], ['warning', 'success']>;
+```
+
+它的实现就是三部分的合并，但传入的是数组，要递归遍历取出每一个元素来和其他部分组合，这样太麻烦了。
+
+而如果是联合类型就不用递归遍历了，因为联合类型遇到字符串也是会单独每个元素单独传入做处理。
+
+数组转联合类型可以这样写：
+
+```ts
+type union = ['aaa','bbb'][number]
+// type union = 'aaa' | 'bbb'
+```
+
+那么 BEM 就可以这样实现：
+
+```ts
+type BEM<
+    Block extends string,
+    Element extends string[],
+    Modifiers extends string[]
+> = `${Block}__${Element[number]}--${Modifiers[number]}`;
+```
+
+类型参数 Block、Element、Modifiers 分别是 bem 规范的三部分，其中 Element 和 Modifiers 都可能多个，约束为 string[]。
+
+构造一个字符串类型，其中 Element 和 Modifiers 通过索引访问来变为联合类型。
+
+字符串类型中遇到联合类型的时候，会每个元素单独传入计算，也就是这样的效果：
+
+```ts
+type RemResult = BEM<'a', ['b','c'], ['d','e']>
+// type RemResult = 'a__b--d' | 'a__b--e' | 'a__c--d' | 'a__b--e'
+```
+
+可以看到，用好了联合类型，确实能简化类型编程逻辑。
+
+## AllCombinations
+
+我们再来实现一个全组合的高级类型，也是联合类型相关的：
+
+希望传入 'A' | 'B' 的时候，能够返回所有的组合： 'A' | 'B' | 'BA' | 'AB'。
+
+这种全组合问题的实现思路就是两两组合，组合出的字符串再和其他字符串两两组和：
+
+比如 'A' | 'B' | 'c'，就是 A 和 B、C 组合，B 和 A、C 组合，C 和 A、B 组合。然后组合出来的字符串再和其他字符串组合。
+
+任何两个类型的组合有四种：A、B、AB、BA
+
+```ts
+type Combination<A extends string, B extends string> =
+    | A
+    | B
+    | `${A}${B}`
+    | `${B}${A}`;
+```
+
+然后构造出来的字符串再和其他字符串组合。
+
+所以全组合的高级类型就是这样：
+
+```ts
+type AllCombinations<A extends string, B extends string = A> = 
+    A extends A
+        ? Combination<A, AllCombinations<Exclude<B, A>>>
+        : never;
+```
+
+类型参数 A、B 是待组合的两个联合类型，B 默认是 A 也就是同一个。
+
+A extends A 的意义就是让联合类型每个类型单独传入做处理，上面我们刚学会。
+
+A 的处理就是 A 和 B 中去掉 A 以后的所有类型组合，也就是 Combination<A, B 去掉 A 以后的所有组合>。
+
+而 B 去掉 A 以后的所有组合就是 AllCombinations<Exclude<B, A>>，所以全组合就是 Combination<A, AllCombinations<Exclude<B, A>>>。
+
+## 总结
+
+联合类型中的每个类型都是相互独立的，TypeScript 对它做了特殊处理，也就是遇到字符串类型、条件类型的时候会把每个类型单独传入做计算，最后把每个类型的计算结果合并成联合类型。
+
+条件类型左边是联合类型的时候就会触法这种处理，叫做分布式条件类型。
+
+有两点特别要注意：
+
+- A extends A 不是没意义，意义是取出联合类型中的单个类型放入 A
+
+- A extends A 才是分布式条件类型， [A] extends [A] 就不是了，只有左边是单独的类型参数才可以。
+
+我们后面做了一些案例，发现联合类型的这种 distributive 的特性确实能简化类型编程，但是也增加了认知成本，不过这也是不可避免的事。
