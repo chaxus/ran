@@ -183,6 +183,163 @@ TypeScript 的类型系统是图灵完备的，也就是能描述各种可计算
 
 不过，我倒是觉得这种复杂度是不可避免的，因为 JS 本身足够灵活，要准确定义类型那类型系统必然也要设计的足够灵活。
 
+### 4.类型安全和型变
+
+TypeScript 给 JavaScript 添加了一套静态类型系统，是为了保证类型安全的，也就是保证变量只能赋同类型的值，对象只能访问它有的属性、方法。
+
+比如 number 类型的值不能赋值给 boolean 类型的变量，Date 类型的对象就不能调用 exec 方法。
+
+这是类型检查做的事情，遇到类型安全问题会在编译时报错。
+
+但是这种类型安全的限制也不能太死板，有的时候需要一些变通，比如子类型是可以赋值给父类型的变量的，可以完全当成父类型来使用，也就是“型变（variant）”（类型改变）。
+
+这种“型变”分为两种，一种是子类型可以赋值给父类型，叫做协变（covariant），一种是父类型可以赋值给子类型，叫做逆变（contravariant）。
+
+先来看下协变：
+
+#### 协变（covariant）
+
+对具体成员的输出参数进行一次类型转换，且类型转换的准则是 “里氏替换原则”。
+
+其中协变是很好理解的，比如我们有两个 interface：
+
+```ts
+interface Animal {
+    name: string;
+    age: number;
+} 
+
+interface Cat {
+    name: string;
+    age: number;
+    hobbies: string[]
+}
+```
+
+这里 Cat 是 Animal 的子类型，更具体，那么 Cat 类型的变量就可以赋值给 Animal 类型：
+
+```ts
+
+let animal: Animal = {
+    name:'cat',
+    age:3
+}
+
+let cat: Cat = {
+    name: 'Tony',
+    age:5,
+    hobbies: ['run', 'swim']
+}
+
+animal = cat
+```
+
+这并不会报错，虽然这俩类型不一样，但是依然是类型安全的。
+
+这种子类型可以赋值给父类型的情况就叫做协变。
+
+为什么要支持协变很容易理解：类型系统支持了父子类型，那如果子类型还不能赋值给父类型，还叫父子类型么？
+
+所以型变是实现类型父子关系必须的，它在保证类型安全的基础上，增加了类型系统的灵活性。
+
+逆变相对难理解一些：
+
+#### 逆变（contravariant）
+
+是对具体成员的输入参数进行一次类型转换，且类型转换的准则是"里氏替换原则"。
+
+我们有这样两个函数：
+
+```ts
+let printHobbies: (cat: Cat) => void;
+
+printHobbies = (cat) => {
+    console.log(cat.hobbies);
+}
+
+let printName: (animal: Animal) => void;
+
+printName = (animal) => {
+    console.log(animal.name);
+}
+```
+
+printHobbies 的参数 Guang 是 printName 参数 Person 的子类型。
+
+那么问题来了，printName 能赋值给 printHobbies 么？printHobbies 能赋值给 printName 么？
+
+测试一下发现是这样的：
+
+```ts
+let printHobbies: (cat: Cat) => void;
+
+printHobbies = (cat) => {
+    console.log(cat.hobbies);
+}
+
+let printName: (animal: Animal) => void;
+
+printName = (animal) => {
+    console.log(animal.name);
+}
+
+printHobbies = printName
+```
+
+printName 的参数 Person 不是 printHobbies 的参数 Guang 的父类型么，为啥能赋值给子类型？
+
+因为这个函数调用的时候是按照 Guang 来约束的类型，但实际上函数只用到了父类型 Person 的属性和方法，当然不会有问题，依然是类型安全的。
+
+这就是逆变，函数的参数有逆变的性质（而返回值是协变的，也就是子类型可以赋值给父类型）。
+
+那反过来呢，如果 printHoobies 赋值给 printName 会发生什么？
+
+因为函数声明的时候是按照 Person 来约束类型，但是调用的时候是按照 Guang 的类型来访问的属性和方法，那自然类型不安全了，所以就会报错。
+
+但是在 ts2.x 之前支持这种赋值，也就是父类型可以赋值给子类型，子类型可以赋值给父类型，既逆变又协变，叫做“双向协变”。
+
+但是这明显是有问题的，不能保证类型安全，所以之后 ts 加了一个编译选项 strictFunctionTypes，设置为 true 就只支持函数参数的逆变，设置为 false 则是双向协变。
+
+我们把 strictFunctionTypes 关掉之后，就会发现两种赋值都可以了。
+
+这样就支持函数参数的双向协变，类型检查不会报错，但不能严格保证类型安全。
+
+开启之后，函数参数就只支持逆变，子类型赋值给父类型就会报错。
+
+再举个逆变的例子，大家觉得下面这样的 ts 代码会报错么：
+
+```ts
+type Func = (a: string) => void;
+
+const func: Func = (a: 'hello') => undefined
+```
+
+答案是参数的位置会，返回值的位置不会：
+
+参数的位置是逆变的，也就是被赋值的函数参数要是赋值的函数参数的子类型，而 string 不是 'hello' 的子类型，所以报错了。
+
+返回值的位置是协变的，也就是赋值的函数的返回值是被赋值的函数的返回值的子类型，这里 undefined 是 void 的子类型，所以不报错。
+
+### 不变（invariant）
+
+逆变和协变都是型变，是针对父子类型而言的，非父子类型自然就不会型变，也就是不变：
+
+非父子类型之间不会发生型变，只要类型不一样就会报错
+
+那类型之间的父子关系是怎么确定的呢，好像也没有看到 extends 的继承？
+
+像 java 里面的类型都是通过 extends 继承的，如果 A extends B，那 A 就是 B 的子类型。这种叫做名义类型系统（nominal type）。
+
+而 ts 里不看这个，只要结构上是一致的，那么就可以确定父子关系，这种叫做结构类型系统（structual type）。
+
+通过结构，更具体的那个是子类型。这里的 Cat 有 Animal 的所有属性，并且还多了一些属性，所以 Cat 是 Animal 的子类型。
+
+注意，这里用的是更具体，而不是更多。
+
+判断联合类型父子关系的时候， 'a' | 'b' 和 'a' | 'b' | 'c' 哪个更具体？
+
+'a' | 'b' 更具体，所以 'a' | 'b' 是 'a' | 'b' | 'c' 的子类型。
+
 ## 三.TypeScript 类型系统
 
 ### 1.支持的类型
@@ -562,9 +719,9 @@ type len
 
 类型之间是有父子关系的，更具体的那个是子类型，比如 A 和 B 的交叉类型 A & B 就是联合类型 A | B 的子类型，因为更具体。
 
-如果允许父类型赋值给子类型，就叫做逆变。
+如果允许父类型赋值给子类型，就叫做**逆变**。
 
-如果允许子类型赋值给父类型，就叫做协变。
+如果允许子类型赋值给父类型，就叫做**协变**。
 
 （关于逆变、协变等概念的详细解释可以看原理篇）
 
@@ -572,5 +729,69 @@ type len
 
 所以联合转交叉可以这样实现 ：
 
+```ts
+type UnionToIntersection<U> = 
+    (U extends U ? (x: U) => unknown : never) extends (x: infer R) => unknown
+        ? R
+        : never
+```
 
+类型参数 U 是要转换的联合类型。
 
+U extends U 是为了触发联合类型的 distributive 的性质，让每个类型单独传入做计算，最后合并。
+
+利用 U 做为参数构造个函数，通过模式匹配取参数的类型。
+
+结果就是交叉类型
+
+函数参数的逆变性质一般就联合类型转交叉类型会用，记住就行。
+
+### GetOptional
+
+如何提取索引类型中的可选索引呢？
+
+这也要利用可选索引的特性：可选索引的值为 undefined 和值类型的联合类型。
+
+过滤可选索引，就要构造一个新的索引类型，过程中做过滤：
+
+```ts
+type GetOptional<Obj extends  Record<string, any>> = {
+    [
+        Key in keyof Obj 
+            as {} extends Pick<Obj, Key> ? Key : never
+    ] : Obj[Key];
+}
+```
+
+类型参数 Obj 为待处理的索引类型，类型约束为索引为 string、值为任意类型的索引类型 Record<string, any>。
+
+用映射类型的语法重新构造索引类型，索引是之前的索引也就是 Key in keyof Obj，但要做一些过滤，也就是 as 之后的部分。
+
+过滤的方式就是单独取出该索引之后，判断空对象是否是其子类型。
+
+这里的 Pick 是 ts 提供的内置高级类型，就是取出某个 Key 构造新的索引类型：
+
+```ts
+type Pick<T, K extends keyof T> = { [P in K]: T[P]; }
+```
+
+比如单独取出 age 构造的新的索引类型是这样的：
+
+可选的意思是这个索引可能没有，没有的时候，那 Pick<Obj, Key> 就是空的，所以 {} extends Pick<Obj, Key> 就能过滤出可选索引。
+
+值的类型依然是之前的，也就是 Obj[Key]。
+
+这样，就能过滤出所有可选索引，构造成新的索引类型：
+
+## 总结
+
+- any 类型与任何类型的交叉都是 any，也就是 1 & any 结果是 any，可以用这个特性判断 any 类型。
+- 联合类型作为类型参数出现在条件类型左侧时，会分散成单个类型传入，最后合并。
+- never 作为类型参数出现在条件类型左侧时，会直接返回 never。
+- any 作为类型参数出现在条件类型左侧时，会直接返回 trueType 和 falseType 的联合类型。
+- 元组类型也是数组类型，但 length 是数字字面量，而数组的 length 是 number。可以用来判断元组类型。
+- 函数参数处会发生逆变，可以用来实现联合类型转交叉类型。
+- 可选索引的索引可能没有，那 Pick 出来的就可能是 {}，可以用来过滤可选索引，反过来也可以过滤非可选索引。
+- 索引类型的索引为字符串字面量类型，而可索引签名不是，可以用这个特性过滤掉可索引签名。
+- keyof 只能拿到 class 的 public 的索引，可以用来过滤出 public 的属性。
+- 默认推导出来的不是字面量类型，加上 as const 可以推导出字面量类型，但带有 readonly 修饰，这样模式匹配的时候也得加上 readonly 才行。
