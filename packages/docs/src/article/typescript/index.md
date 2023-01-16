@@ -651,8 +651,6 @@ type IsEqual<A, B> = (<T>() => T extends A ? 1 : 2) extends (<T>() => T extends 
 
 这两个泛型函数类型是否相等，[原理](https://stackoverflow.com/questions/68961864/how-does-the-equals-work-in-typescript/68963796#68963796)
 
-
-
 ### IsUnion
 
 还记得怎么判断 union 类型么？要根据它遇到条件类型时会分散成单个传入做计算的特性：
