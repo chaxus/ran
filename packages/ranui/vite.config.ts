@@ -28,7 +28,7 @@ export default defineConfig({
     dts(),
     loadSvg({ svgo: false, defaultImport: 'raw' }),
     autoImportFile({
-      output: resolve(__dirname, 'components.ts'),
+      output: resolve(__dirname, 'component.ts'),
       path: [
         './components',
         // resolve(__dirname, "components/")
