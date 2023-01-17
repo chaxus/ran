@@ -1,10 +1,10 @@
-import { isDisabled } from '../../utils/index'
+import { falseList, isDisabled } from '../../utils/index'
 
 function Custom() {
   if (typeof window !== 'undefined' && !customElements.get('r-button')) {
-    class CustomElement extends HTMLElement {
+    class Button extends HTMLElement {
       static get observedAttributes() {
-        return ['disabled', 'icon']
+        return ['disabled', 'icon', 'effect']
       }
       _btn: HTMLDivElement
       _iconElement?: HTMLElement
@@ -35,6 +35,16 @@ function Custom() {
       set icon(value) {
         if (value) {
           this.setAttribute('icon', value)
+        }
+      }
+      get effect() {
+        return this.getAttribute('effect')
+      }
+      set effect(value) {
+        if (falseList.includes(value) || !value) {
+          this.removeAttribute('effect')
+        } else {
+          this.setAttribute('effect', value)
         }
       }
       /**
@@ -101,8 +111,8 @@ function Custom() {
         }
       }
     }
-    customElements.define('r-button', CustomElement)
-    return CustomElement
+    customElements.define('r-button', Button)
+    return Button
   }
 }
 

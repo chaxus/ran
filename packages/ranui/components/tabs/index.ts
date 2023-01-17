@@ -8,7 +8,7 @@ function CustomElement() {
   if (typeof window !== 'undefined' && !customElements.get('r-tabs')) {
     class Tabs extends HTMLElement {
       static get observedAttributes() {
-        return ['active', 'forceRender', 'type', 'align']
+        return ['active', 'forceRender', 'type', 'align', 'effect']
       }
       _container: HTMLDivElement
       _header: HTMLDivElement
@@ -88,6 +88,19 @@ function CustomElement() {
           this.removeAttribute('active')
         }
       }
+
+      get effect() {
+        return this.getAttribute('effect')
+      }
+
+      set effect(value) {
+        if (!value || value === 'false') {
+          this.removeAttribute('effect')
+        } else {
+          this.setAttribute('effect', value)
+        }
+      }
+
       /**
        * @description: 构建tabPane组件key值和index的映射，同时判断一个tabs下的tabPane key值不能重复
        * @param {string} key
@@ -111,7 +124,12 @@ function CustomElement() {
        */
       createTabHeader(tabPane: Element, index: number) {
         const label = tabPane.getAttribute('label') || ''
-        const key = tabPane.getAttribute('ranKey') || `${index}`
+        const key =
+          tabPane.getAttribute('ranKey') ||
+          tabPane.getAttribute('rankey') ||
+          tabPane.getAttribute('ran-key') ||
+          tabPane.getAttribute('key') ||
+          `${index}`
         const type = tabPane.getAttribute('type') || 'text'
         this.initTabHeaderKeyMapIndex(key, index)
         const tabHeader = document.createElement('r-button')
@@ -119,6 +137,7 @@ function CustomElement() {
         tabHeader.setAttribute('type', type)
         isDisabled(tabPane) && tabHeader.setAttribute('disabled', '')
         tabHeader.setAttribute('ran-key', key)
+        tabPane.setAttribute('ran-key', key)
         tabHeader.innerHTML = label
         return tabHeader
       }
@@ -202,6 +221,24 @@ function CustomElement() {
         }
       }
       /**
+       * @description: tabPane 设置属性，需要在 tabs 上展示时触发
+       * @param {string} key
+       * @param {string} value
+       */
+      updateAttribute = (
+        key: string,
+        attribute: string,
+        value: string | null = '',
+      ) => {
+        const index = this.tabHeaderKeyMapIndex[key]
+        console.log('att--->',key,  attribute, value);
+        if (key && value && this._nav.children[index]) {
+          this._nav.children[index]?.setAttribute(attribute, value)
+        } else {
+          this._nav.children[index]?.removeAttribute(attribute)
+        }
+      }
+      /**
        * @description: 初始化tabs的active属性和tabLine,tabContent
        */
       initActive = () => {
@@ -243,6 +280,15 @@ function CustomElement() {
           this._nav.appendChild(tabPane)
           tabPane.addEventListener('click', this.clickTabHead)
         })
+        const buttonList = [...this._nav.children]
+        buttonList.forEach((element) => {
+          this.effect
+            ? element.setAttribute('effect', this.effect)
+            : element.removeAttribute('effect')
+        })
+        const lastElement = buttonList.pop();
+        console.log('l--->', lastElement);
+        lastElement?.setAttribute('effect',this.effect || '')
         this.initActive()
         // 如果存在align属性，进行设置tabLine的初始位置
         if (this.align) {
@@ -284,15 +330,26 @@ function CustomElement() {
               },
             }),
           )
-        }
-        // 改变align属性，进行设置tabLine的初始位置
-        if (name === 'align') {
-          if (newValue === 'center') this.initTabLineAlignCenter()
-          if (newValue === 'end') this.initTabLineAlignEnd()
+          // 改变align属性，进行设置tabLine的初始位置
+          if (name === 'align') {
+            if (newValue === 'center') this.initTabLineAlignCenter()
+            if (newValue === 'end') this.initTabLineAlignEnd()
+          }
+          if (name === 'effect') {
+            const tabHeaderList = [...this._nav.children]
+            tabHeaderList.forEach((item) => {
+              if (!this.effect || this.effect === 'false') {
+                item.removeAttribute('effect')
+              } else {
+                item.setAttribute('effect', newValue)
+              }
+            })
+          }
         }
       }
     }
     customElements.define('r-tabs', Tabs)
+    return Tabs
   }
 }
 

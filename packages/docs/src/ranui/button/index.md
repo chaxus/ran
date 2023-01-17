@@ -4,7 +4,7 @@
 
 ## 代码演示
 
-<r-button >Button</r-button>
+<r-button>Button</r-button>
 
 ```xml
  <r-button >Button</r-button>
@@ -72,6 +72,18 @@
 <div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
      <r-button type="primary" icon="home">主要按钮</r-button>
 </div>
+
+```xml
+<r-button type="default" icon="user">默认按钮</r-button>
+<r-button type="primary" icon="home">主要按钮</r-button>
+```
+
+### 特效 effect
+
+如果需要纯净的 Button ，可以加上 effect = false ，屏蔽点击时候的水波纹特效
+
+<r-button type="default" effect="fase" icon="user">默认按钮</r-button>
+<r-button type="primary" effect="fase" icon="home">主要按钮</r-button>
 
 ```xml
 <r-button type="default" icon="user">默认按钮</r-button>
