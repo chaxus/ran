@@ -28,7 +28,6 @@ const loadIcons = async () => {
       const [name, _] = item.split('.')
       return name
     })
-  console.log('fileNameList---->', result)
   return fileNameList
 }
 
