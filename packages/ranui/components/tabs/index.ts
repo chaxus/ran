@@ -137,6 +137,10 @@ function CustomElement() {
         tabHeader.setAttribute('type', type)
         isDisabled(tabPane) && tabHeader.setAttribute('disabled', '')
         tabHeader.setAttribute('ran-key', key)
+        if(this.effect){
+          tabPane.setAttribute('effect', this.effect)
+          this._line.style.setProperty('display', 'none')
+        }
         tabPane.setAttribute('ran-key', key)
         tabHeader.innerHTML = label
         return tabHeader
@@ -231,7 +235,6 @@ function CustomElement() {
         value: string | null = '',
       ) => {
         const index = this.tabHeaderKeyMapIndex[key]
-        console.log('att--->',key,  attribute, value);
         if (key && value && this._nav.children[index]) {
           this._nav.children[index]?.setAttribute(attribute, value)
         } else {
@@ -280,15 +283,6 @@ function CustomElement() {
           this._nav.appendChild(tabPane)
           tabPane.addEventListener('click', this.clickTabHead)
         })
-        const buttonList = [...this._nav.children]
-        buttonList.forEach((element) => {
-          this.effect
-            ? element.setAttribute('effect', this.effect)
-            : element.removeAttribute('effect')
-        })
-        const lastElement = buttonList.pop();
-        console.log('l--->', lastElement);
-        lastElement?.setAttribute('effect',this.effect || '')
         this.initActive()
         // 如果存在align属性，进行设置tabLine的初始位置
         if (this.align) {
