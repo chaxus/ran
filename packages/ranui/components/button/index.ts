@@ -104,7 +104,6 @@ function Custom() {
     customElements.define('r-button', CustomElement)
     return CustomElement
   }
-  return HTMLDivElement
 }
 
 export default Custom()
