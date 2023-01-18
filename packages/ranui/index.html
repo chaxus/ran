@@ -18,7 +18,7 @@
         onclick="window.Toast('fdsafds');console.log('fdsafsad')"
         >主要按钮</r-button
       >
-      <r-button type="warning">警告按钮</r-button>
+      <r-button type="warning" effect="false">警告按钮</r-button>
       <r-button type="default" icon="user">默认按钮</r-button>
       <r-button type="primary" disabled>disable按钮</r-button>
       <div style="margin: 20px">输入框</div>
@@ -27,14 +27,15 @@
       <span>加载失败</span>
       <r-img fallback=""></r-img>
       <div>表单</div>
-      <r-tabs type="line" active="??">
+      <r-tabs type="text">
         <!-- <r-tab label="tab1">11111</r-tab>
       <r-tab label="tab2">22222</r-tab>
       <r-tab label="tab3">33333</r-tab> -->
-        <r-tab label="tab1" ranKey="a" disabled>11111</r-tab>
-        <r-tab label="tab2" ranKey="??">22222</r-tab>
-        <r-tab label="tab3" ranKey="10">33333</r-tab>
-        <r-tab label="tab7777777">77777</r-tab>
+        <!-- <r-tab label="tab1" key="a" disabled>11111</r-tab>
+        <r-tab label="tab2" icon="home" ran-key="aaa">22222</r-tab>
+        <r-tab label="tab3"  ranKey="10">33333</r-tab> -->
+        <r-tab label="tab2">22222</r-tab>
+        <r-tab label="tab7777777" >77777</r-tab>
       </r-tabs>
       <!-- <iframe name="hidden" style="display:none;"></iframe> -->
       <form id="form">
@@ -71,7 +72,7 @@
       }
       rinput.addEventListener('change', func)
       rinput.addEventListener('validate', validate)
-      console.log('rinput', rinput)
+      // console.log('rinput', rinput)
       input.appendChild(rinput)
 
       const form = document.getElementById('form')

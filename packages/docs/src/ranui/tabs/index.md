@@ -110,6 +110,8 @@
 
 ### 风格`type`
 
+风格有text，clean,
+
 ### 对齐`align`
 
 ## 事件`event`
