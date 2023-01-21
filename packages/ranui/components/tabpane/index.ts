@@ -76,17 +76,17 @@ function CustomElement() {
        * @description: 在页面元素都加载完毕后，设置 tab 上的图标
        */
       initAttribute = () => {
+        this.parent = this.parentNode as ParentNode & ExtendParentNode
         this.key && this.parent?.updateAttribute(this.key, 'icon', this.icon)
-        window.onload = () => {
-          this.parent = this.parentNode as ParentNode & ExtendParentNode
-          this.key && this.parent?.updateAttribute(this.key, 'effect', this.effect)
-        }
+        this.key && this.parent?.updateAttribute(this.key, 'effect', this.effect)
       }
       connectedCallback() {
         this._div.addEventListener('click', this.onClick)
-        this.initAttribute()
+        document.addEventListener('DOMContentLoaded', this.initAttribute)
       }
-      disconnectCallback() {}
+      disconnectCallback() {
+        document.removeEventListener('DOMContentLoaded', this.initAttribute)
+      }
       attributeChangedCallback(
         name: string,
         oldValue: string,
@@ -99,17 +99,10 @@ function CustomElement() {
           if (this.key && name === 'effect' && this.parent?.updateAttribute) {
             this.parent?.updateAttribute(this.key, 'effect', newValue)
           }
-        }
-        // if (oldValue !== newValue && newValue) {
-        // const { emitLabel } = this.parentNode;
-        // if (name === "label") {
-        //   emitLabel;
-        //   this.parentNode?.update &&
-        //     this.parentNode.updatalabel(this.key, newValue);
-        // }
-        if (name === 'disabled') {
-          // TODO 设置disabled或者key之后，会影响父组件
-          // console.log('this.parentNode-->', this.parentElement,this.parentNode);
+          if (name === 'disabled') {
+            // TODO 设置disabled或者key之后，会影响父组件
+            // console.log('this.parentNode-->', this.parentElement,this.parentNode);
+          }
         }
       }
     }

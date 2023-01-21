@@ -1,96 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <script src="./index.ts" type="module"></script>
-  </head>
 
-  <body>
-    <!-- <h1>Hello RanUI</h1> -->
-    <div style="margin: 20px">
-      <r-icon-list>fdsafsd</r-icon-list>
-      <div>按钮</div>
-      <r-button
-        type="primary"
-        onclick="window.Toast('fdsafds');console.log('fdsafsad')"
-        >主要按钮</r-button
-      >
-      <r-button type="warning" effect="false">警告按钮</r-button>
-      <r-button type="default" icon="user">默认按钮</r-button>
-      <r-button type="primary" disabled>disable按钮</r-button>
-      <div style="margin: 20px">输入框</div>
-      <div>图片</div>
-      <!-- <r-button type="text" disabled>默认按钮</r-button> -->
-      <span>加载失败</span>
-      <r-img fallback=""></r-img>
-      <div>表单</div>
-      <r-tabs type="text">
-        <!-- <r-tab label="tab1">11111</r-tab>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <script src="./index.ts" type="module"></script>
+</head>
+
+<body>
+  <!-- <h1>Hello RanUI</h1> -->
+  <div style="margin: 20px">
+    <r-icon-list>fdsafsd</r-icon-list>
+    <div>按钮</div>
+    <r-button type="primary" onclick="window.Toast('fdsafds');console.log('fdsafsad')">主要按钮</r-button>
+    <r-button type="warning" effect="false">警告按钮</r-button>
+    <r-button type="default" icon="user">默认按钮</r-button>
+    <r-button type="primary" disabled>disable按钮</r-button>
+    <div style="margin: 20px">输入框</div>
+    <div>图片</div>
+    <!-- <r-button type="text" disabled>默认按钮</r-button> -->
+    <span>加载失败</span>
+    <r-img fallback=""></r-img>
+    <div>表单</div>
+    <r-tabs type="text" effect="false">
+      <r-tab label="tab1" icon="home">11111</r-tab>
       <r-tab label="tab2">22222</r-tab>
-      <r-tab label="tab3">33333</r-tab> -->
-        <!-- <r-tab label="tab1" key="a" disabled>11111</r-tab>
-        <r-tab label="tab2" icon="home" ran-key="aaa">22222</r-tab>
-        <r-tab label="tab3"  ranKey="10">33333</r-tab> -->
-        <r-tab label="tab2">22222</r-tab>
-        <r-tab label="tab7777777" >77777</r-tab>
-      </r-tabs>
-      <!-- <iframe name="hidden" style="display:none;"></iframe> -->
-      <form id="form">
-        <fieldset>
-          <legend>Choose your favorite monster</legend>
+      <r-tab label="tab3">33333</r-tab>
+      <r-tab label="tab1" key="a" disabled>11111</r-tab>
+      <r-tab label="tab2" icon="home" ran-key="aaa">22222</r-tab>
+      <r-tab label="tab3" ranKey="10">33333</r-tab>
+      <r-tab label="tab2">22222</r-tab>
+      <r-tab label="tab7777777">77777</r-tab>
+    </r-tabs>
+    <!-- <iframe name="hidden" style="display:none;"></iframe> -->
+    <form id="form">
+      <fieldset>
+        <legend>Choose your favorite monster</legend>
 
-          <input type="radio" id="kraken" name="monster" value="K" />
-          <label for="kraken">Kraken</label><br />
+        <input type="radio" id="kraken" name="monster" value="K" />
+        <label for="kraken">Kraken</label><br />
 
-          <input type="radio" id="sasquatch" name="monster" value="S" />
-          <label for="sasquatch">Sasquatch</label><br />
+        <input type="radio" id="sasquatch" name="monster" value="S" />
+        <label for="sasquatch">Sasquatch</label><br />
 
-          <input type="radio" id="mothman" name="monster" value="M" />
-          <label for="mothman">Mothman</label>
-          <button type="submit">提交按钮</button>
-        </fieldset>
-      </form>
-      <div>图标</div>
-      <r-icon name="lock" size="100" color="#1E90FF" spin></r-icon>
-    </div>
-    <div id="input">
-      <r-input label="user" onchange="func(this.value)" icon="user"></r-input>
-      <r-input label="user"></r-input>
-    </div>
-    <script>
-      const input = document.getElementById('input')
-      const rinput = document.createElement('r-input')
-      rinput.setAttribute('label', 'home')
-      const func = (e) => {
-        console.log('fsdafdsafds', e)
-      }
-      const validate = (e) => {
-        console.log('fdasfa', e)
-      }
-      rinput.addEventListener('change', func)
-      rinput.addEventListener('validate', validate)
-      // console.log('rinput', rinput)
-      input.appendChild(rinput)
+        <input type="radio" id="mothman" name="monster" value="M" />
+        <label for="mothman">Mothman</label>
+        <button type="submit">提交按钮</button>
+      </fieldset>
+    </form>
+    <div>图标</div>
+    <r-icon name="lock" size="100" color="#1E90FF" spin></r-icon>
+  </div>
+  <div id="input">
+    <r-input label="user" onchange="func(this.value)" icon="user"></r-input>
+    <r-input label="user"></r-input>
+  </div>
+  <script>
+    const input = document.getElementById('input')
+    const rinput = document.createElement('r-input')
+    rinput.setAttribute('label', 'home')
+    const func = (e) => {
+      console.log('fsdafdsafds', e)
+    }
+    const validate = (e) => {
+      console.log('fdasfa', e)
+    }
+    rinput.addEventListener('change', func)
+    rinput.addEventListener('validate', validate)
+    // console.log('rinput', rinput)
+    input.appendChild(rinput)
 
-      const form = document.getElementById('form')
-      const onFinish = (e) => {
-        e.preventDefault()
-        const jsonData = {}
-        const formData = new FormData(form)
-        formData.forEach((value, key) => {
-          if (!jsonData[key]) {
-            jsonData[key] =
-              formData.getAll(key).length > 1
-                ? formData.getAll(key)
-                : formData.get(key)
-          }
-        })
-        console.log('e---->', jsonData)
-      }
-      form.addEventListener('submit', onFinish)
-    </script>
-  </body>
+    const form = document.getElementById('form')
+    const onFinish = (e) => {
+      e.preventDefault()
+      const jsonData = {}
+      const formData = new FormData(form)
+      formData.forEach((value, key) => {
+        if (!jsonData[key]) {
+          jsonData[key] =
+            formData.getAll(key).length > 1
+              ? formData.getAll(key)
+              : formData.get(key)
+        }
+      })
+      console.log('e---->', jsonData)
+    }
+    form.addEventListener('submit', onFinish)
+  </script>
+</body>
+
 </html>
