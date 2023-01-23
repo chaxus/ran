@@ -1,5 +1,4 @@
 .vitepress
-assets
 docs
 library
 node_modules
