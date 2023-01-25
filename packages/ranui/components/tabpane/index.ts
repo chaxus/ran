@@ -92,17 +92,10 @@ function CustomElement() {
         oldValue: string,
         newValue: string,
       ) {
-        if (oldValue !== newValue) {
-          if (this.key && name === 'icon' && this.parent?.updateAttribute) {
-            this.parent?.updateAttribute(this.key, 'icon', newValue)
-          }
-          if (this.key && name === 'effect' && this.parent?.updateAttribute) {
-            this.parent?.updateAttribute(this.key, 'effect', newValue)
-          }
-          if (name === 'disabled') {
-            // TODO 设置disabled或者key之后，会影响父组件
-            // console.log('this.parentNode-->', this.parentElement,this.parentNode);
-          }
+        if (oldValue !== newValue && this.key && this.parent?.updateAttribute) {
+          if (name === 'icon') this.parent?.updateAttribute(this.key, 'icon', newValue)
+          if (name === 'effect') this.parent?.updateAttribute(this.key, 'effect', newValue)
+          if (name === 'disabled') this.parent?.updateAttribute(this.key, 'disabled', newValue)
         }
       }
     }

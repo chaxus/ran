@@ -1,3 +1,7 @@
+
+@clickX: var(--ran-x, 0);
+@clickY: var(--ran-y, 0);
+
 :host {
   position: relative;
   display: inline-block;
@@ -78,8 +82,8 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    left: var(--ran-x, 0);
-    top: var(--ran-y, 0);
+    left: @clickX;
+    top: @clickY;
     pointer-events: none;
     background-image: radial-gradient(circle, #1890ff 10%, transparent 10.01%);
     background-repeat: no-repeat;
