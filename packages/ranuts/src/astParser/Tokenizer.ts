@@ -11,6 +11,7 @@ export enum TokenType {
   Var = 'Var',
   Assign = 'Assign',
   Function = 'Function',
+  Class = 'Class',
   Number = 'Number',
   Operator = 'Operator',
   Identifier = 'Identifier',
@@ -49,7 +50,7 @@ export type Token = {
 }
 
 // 策略模式
-// Token 的生成器对象
+// Token 的生成器对象，关键词的映射
 const TOKENS_GENERATOR: Record<string, (...args: any[]) => Token> = {
   let(start: number) {
     return { type: TokenType.Let, value: 'let', start, end: start + 3 }
@@ -118,6 +119,14 @@ const TOKENS_GENERATOR: Record<string, (...args: any[]) => Token> = {
       start,
       end: start + value.length,
       raw: value,
+    }
+  },
+  class(start: number){
+    return {
+      type: TokenType.Class,
+      value: 'class',
+      start,
+      end: start + 5,
     }
   },
   function(start: number) {
@@ -277,10 +286,7 @@ export class Tokenizer {
     let token
     // 1. 结果为关键字
     if (identifier in TOKENS_GENERATOR) {
-      token =
-        TOKENS_GENERATOR[identifier as keyof typeof TOKENS_GENERATOR](
-          startIndex,
-        )
+      token = TOKENS_GENERATOR[identifier as keyof typeof TOKENS_GENERATOR](startIndex)
     }
     // 2. 结果为标识符
     else {
@@ -419,8 +425,8 @@ export class Tokenizer {
     return this._getTokens()
   }
   /**
-   * @description: 
-   * @return {*}
+   * @description: 返回当前的字符串
+   * @return {string}
    */  
   private _getCurrentChar() {
     return this._source[this._currentIndex]
