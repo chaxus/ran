@@ -633,7 +633,10 @@ export class Parser {
   private _isEnd(): boolean {
     return this._currentIndex >= this._tokens.length
   }
-
+  /**
+   * @description: 获取当前的token
+   * @return {Token}
+   */  
   private _getCurrentToken(): Token {
     return this._tokens[this._currentIndex]
   }
