@@ -34,7 +34,7 @@ export enum TokenType {
 // 扫描模式
 export enum ScanMode {
   Normal,
-  Identifier,
+  Identifier, // 扫描标识符，单词
   StringLiteral,
   Number,
 }
@@ -234,12 +234,16 @@ const OPERATOR_TOKENS = [
  * 3. 当前字符为单字符，如{、}、(、)，则新建单字符对应的 Token
  */
 export class Tokenizer {
-  private _tokens: Token[] = []
-  private _currentIndex: number = 0
-  private _source: string
-  private _scanMode = ScanMode.Normal
+  private _tokens: Token[] = [] // 最终返回的结果，tokens数组
+  private _currentIndex: number = 0 // 扫描当前代码片段的位置
+  private _source: string // 当前传入的代码片段
+  private _scanMode = ScanMode.Normal // 扫描模式，对不同的类型做不同的操作
+  /**
+   * @description: 参数是代码片段
+   * @param {string} input
+   */  
   constructor(input: string) {
-    this._source = input
+    this._source = input // 获取源代码
   }
   /**
    * @description: 设置扫描的模式
@@ -249,7 +253,7 @@ export class Tokenizer {
     this._scanMode = mode
   }
   /**
-   * @description: 将扫描模式设置成普通模式
+   * @description: 将扫描模式重置成普通模式
    */
   private _resetScanMode() {
     this._scanMode = ScanMode.Normal
@@ -414,7 +418,10 @@ export class Tokenizer {
     // 返回token数组
     return this._getTokens()
   }
-
+  /**
+   * @description: 
+   * @return {*}
+   */  
   private _getCurrentChar() {
     return this._source[this._currentIndex]
   }
