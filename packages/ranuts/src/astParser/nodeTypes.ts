@@ -14,9 +14,9 @@ export enum NodeType {
   FunctionExpression = 'FunctionExpression',
   Literal = 'Literal',
   ImportDeclaration = 'ImportDeclaration',
-  ImportSpecifier = 'ImportSpecifier',
-  ImportDefaultSpecifier = 'ImportDefaultSpecifier',
-  ImportNamespaceSpecifier = 'ImportNamespaceSpecifier',
+  ImportSpecifier = 'ImportSpecifier', // import {c, d} from 'c';
+  ImportDefaultSpecifier = 'ImportDefaultSpecifier', // import a from 'a';
+  ImportNamespaceSpecifier = 'ImportNamespaceSpecifier', // import * as b from 'b';
   ExportDeclaration = 'ExportDeclaration',
   ExportSpecifier = 'ExportSpecifier',
   ExportDefaultDeclaration = 'ExportDefaultDeclaration',
@@ -132,9 +132,7 @@ export interface ImportNamespaceSpecifier extends Node {
   local: Identifier
 }
 
-export type ImportSpecifiers =
-  | (ImportSpecifier | ImportDefaultSpecifier)[]
-  | ImportNamespaceSpecifier[]
+export type ImportSpecifiers = Array<ImportSpecifier | ImportDefaultSpecifier | ImportNamespaceSpecifier>
 
 export interface ImportDeclaration extends Node {
   type: NodeType.ImportDeclaration

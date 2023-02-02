@@ -12,6 +12,9 @@ import type {
   FunctionExpression,
   Identifier,
   ImportDeclaration,
+  ImportDefaultSpecifier,
+  ImportNamespaceSpecifier,
+  ImportSpecifier,
   ImportSpecifiers,
   Literal,
   MemberExpression,
@@ -64,42 +67,40 @@ export class Parser {
     }
     return program
   }
-
+  /**
+   * @description: 对于不同的token类型，有不同的解析逻辑
+   * @return {Statement}
+   */  
   private _parseStatement(): Statement {
     // TokenType 来自 Tokenizer 的实现中
-    if (this._checkCurrentTokenType(TokenType.Function)) {
-      return this._parseFunctionDeclaration() as FunctionDeclaration
-    } else if (this._checkCurrentTokenType(TokenType.Identifier)) {
-      return this._parseExpressionStatement()
-    } else if (this._checkCurrentTokenType(TokenType.LeftCurly)) {
-      return this._parseBlockStatement()
-    } else if (this._checkCurrentTokenType(TokenType.Return)) {
-      return this._parseReturnStatement()
-    } else if (this._checkCurrentTokenType(TokenType.Import)) {
-      return this._parseImportStatement()
-    } else if (this._checkCurrentTokenType(TokenType.Export)) {
-      return this._parseExportStatement()
-    } else if (
-      this._checkCurrentTokenType([
+    if (this._checkCurrentTokenType(TokenType.Function)) return this._parseFunctionDeclaration()
+    if (this._checkCurrentTokenType(TokenType.Identifier)) return this._parseExpressionStatement()
+    if (this._checkCurrentTokenType(TokenType.LeftCurly)) return this._parseBlockStatement()
+    if (this._checkCurrentTokenType(TokenType.Return)) return this._parseReturnStatement()
+    if (this._checkCurrentTokenType(TokenType.Import)) return this._parseImportDeclaration()
+    if (this._checkCurrentTokenType(TokenType.Export)) return this._parseExportDeclaration()
+    if (this._checkCurrentTokenType([
         TokenType.Let,
         TokenType.Var,
         TokenType.Const,
-      ])
-    ) {
+      ])) {
       return this._parseVariableDeclaration()
     }
     console.log('Unexpected token:', this._getCurrentToken())
     throw new Error('Unexpected token')
   }
-
-  private _parseImportStatement(): ImportDeclaration {
+  /**
+   * @description: 解析 import 声明
+   * @return {ImportDeclaration}
+   */  
+  private _parseImportDeclaration(): ImportDeclaration {
     const { start } = this._getCurrentToken()
-    const specifiers = []
+    const specifiers:ImportSpecifiers = []
     this._goNext(TokenType.Import)
     // import a
     if (this._checkCurrentTokenType(TokenType.Identifier)) {
       const local = this._parseIdentifier()
-      const defaultSpecifier = {
+      const defaultSpecifier:ImportDefaultSpecifier = {
         type: NodeType.ImportDefaultSpecifier,
         local,
         start: local.start,
@@ -120,7 +121,7 @@ export class Parser {
           this._goNext(TokenType.As)
           local = this._parseIdentifier()
         }
-        const importSpecifier = {
+        const importSpecifier:ImportSpecifier = {
           type: NodeType.ImportSpecifier,
           imported: specifier,
           local: local ? local : specifier,
@@ -140,7 +141,7 @@ export class Parser {
       this._goNext(TokenType.Asterisk)
       this._goNext(TokenType.As)
       const local = this._parseIdentifier()
-      const importNamespaceSpecifier = {
+      const importNamespaceSpecifier:ImportNamespaceSpecifier = {
         type: NodeType.ImportNamespaceSpecifier,
         local,
         start,
@@ -164,10 +165,13 @@ export class Parser {
     this._skipSemicolon()
     return node
   }
-
-  private _parseExportStatement(): ExportDeclaration {
+  /**
+   * @description: 解析 export 声明
+   * @return {ExportDeclaration}
+   */  
+  private _parseExportDeclaration(): ExportDeclaration {
     const { start } = this._getCurrentToken()
-    let exportDeclaration: ExportDeclaration | null = null
+    let exportDeclaration: ExportDeclaration | undefined
     const specifiers: ExportSpecifier[] = []
     this._goNext(TokenType.Export)
     // export default
@@ -185,7 +189,7 @@ export class Parser {
         }
       }
       // export default function() {}
-      else if (this._checkCurrentTokenType(TokenType.Function)) {
+      if (this._checkCurrentTokenType(TokenType.Function)) {
         const declaration = this._parseFunctionDeclaration()
         exportDeclaration = {
           type: NodeType.ExportDefaultDeclaration,
@@ -194,7 +198,16 @@ export class Parser {
           end: declaration.end,
         }
       }
-      // TODO: export default class {}
+      // export default class {}
+      if (this._checkCurrentTokenType(TokenType.Class)) {
+        const declaration = this._parseFunctionDeclaration()
+        exportDeclaration = {
+          type: NodeType.ExportDefaultDeclaration,
+          declaration,
+          start,
+          end: declaration.end,
+        }
+      }
       // TODO: export default { a: 1 };
     }
     // export {
@@ -529,7 +542,10 @@ export class Parser {
     this._goNext(TokenType.RightParen)
     return params
   }
-
+  /**
+   * @description: 解析字面量，const name = 'value', value就是字面量
+   * @return {Literal}
+   */  
   private _parseLiteral(): Literal {
     const token = this._getCurrentToken()
     let value: string | number | boolean = token.value!
