@@ -27,8 +27,6 @@ import type {
 } from './nodeTypes'
 import { FunctionType, NodeType } from './nodeTypes'
 
-// const PROGRAM_GENERATOR: Record<string, (...args: any[]) => Token> = {}
-
 /**
  * @description: 语法分析器
  * 在解析出词法 token 之后，我们就可以进入语法分析阶段了。
@@ -79,13 +77,7 @@ export class Parser {
     if (this._checkCurrentTokenType(TokenType.Return)) return this._parseReturnStatement()
     if (this._checkCurrentTokenType(TokenType.Import)) return this._parseImportDeclaration()
     if (this._checkCurrentTokenType(TokenType.Export)) return this._parseExportDeclaration()
-    if (this._checkCurrentTokenType([
-        TokenType.Let,
-        TokenType.Var,
-        TokenType.Const,
-      ])) {
-      return this._parseVariableDeclaration()
-    }
+    if (this._checkCurrentTokenType([TokenType.Let,TokenType.Var,TokenType.Const])) return this._parseVariableDeclaration()
     console.log('Unexpected token:', this._getCurrentToken())
     throw new Error('Unexpected token')
   }
@@ -199,15 +191,6 @@ export class Parser {
         }
       }
       // export default class {}
-      if (this._checkCurrentTokenType(TokenType.Class)) {
-        const declaration = this._parseFunctionDeclaration()
-        exportDeclaration = {
-          type: NodeType.ExportDefaultDeclaration,
-          declaration,
-          start,
-          end: declaration.end,
-        }
-      }
       // TODO: export default { a: 1 };
     }
     // export {
@@ -394,7 +377,7 @@ export class Parser {
     return expressionStatement
   }
 
-  // 需要考虑 a.b.c 嵌套结构
+  // 解析对象的 a.b.c 嵌套结构
   private _parseExpression(): Expression {
     // 先检查是否是一个函数表达式
     if (this._checkCurrentTokenType(TokenType.Function)) {
