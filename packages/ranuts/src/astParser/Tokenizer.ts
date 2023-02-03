@@ -121,7 +121,7 @@ const TOKENS_GENERATOR: Record<string, (...args: any[]) => Token> = {
       raw: value,
     }
   },
-  class(start: number){
+  class(start: number) {
     return {
       type: TokenType.Class,
       value: 'class',
@@ -250,9 +250,73 @@ export class Tokenizer {
   /**
    * @description: 参数是代码片段
    * @param {string} input
-   */  
+   */
   constructor(input: string) {
     this._source = input // 获取源代码
+  }
+  /**
+ * @description: 主程序，扫描字符串生成 token
+ */
+  tokenize(): Token[] {
+    // 扫描
+    while (this._currentIndex < this._source.length) {
+      const currentChar = this._source[this._currentIndex]
+      const startIndex = this._currentIndex
+      // 1. 判断是否是分隔符
+      if (isWhiteSpace(currentChar)) {
+        this._currentIndex++
+        continue
+      }
+      // 2. 判断是否是字母
+      else if (isAlpha(currentChar)) {
+        // 扫描标识符
+        this.scanIdentifier()
+        continue
+      }
+      // 3. 判断是否是单字符 () {} . ; *
+      else if (KNOWN_SINGLE_CHAR_TOKENS.has(currentChar as SingleCharTokens)) {
+        // * 字符特殊处理
+        if (currentChar === '*') {
+          // 前瞻，如果是非 import/export，则认为是二元运算符，避免误判
+          const previousToken = this._getPreviousToken()
+          if (previousToken.type !== TokenType.Import && previousToken.type !== TokenType.Export) {
+            this._tokens.push(TOKENS_GENERATOR.operator(startIndex, currentChar))
+            this._currentIndex++
+            continue
+          }
+          // 否则按照 import/export 中的 * 处理
+        }
+        const token = KNOWN_SINGLE_CHAR_TOKENS.get(currentChar as SingleCharTokens)!(startIndex)
+        this._tokens.push(token)
+        this._currentIndex++
+      }
+      // 4. 判断是否为引号
+      else if (QUOTATION_TOKENS.includes(currentChar)) {
+        // 如果是引号，就去扫描字符串变量
+        this.scanStringLiteral()
+        // 跳过结尾的引号
+        this._currentIndex++
+        continue
+      }
+      // 5. 判断二元计算符
+      else if (OPERATOR_TOKENS.includes(currentChar) && this._scanMode === ScanMode.Normal) {
+        this._tokens.push(TOKENS_GENERATOR.operator(startIndex, currentChar))
+        this._currentIndex++
+        continue
+      } else if (OPERATOR_TOKENS.includes(currentChar + this._getNextChar()) && this._scanMode === ScanMode.Normal) {
+        this._tokens.push(TOKENS_GENERATOR.operator(startIndex, currentChar + this._getNextChar()))
+        this._currentIndex += 2
+        continue
+      }
+      // 6. 判断数字
+      else if (isDigit(currentChar)) {
+        this._scanNumber()
+        continue
+      }
+    }
+    this._resetCurrentIndex()
+    // 返回结果 token 数组
+    return this._getTokens()
   }
   /**
    * @description: 设置扫描的模式
@@ -274,6 +338,7 @@ export class Tokenizer {
     let identifier = ''
     let currentChar = this._getCurrentChar()
     const startIndex = this._currentIndex
+    // 如果是字母，数字，下划线，收集成字符
     while (
       isAlpha(currentChar) ||
       isDigit(currentChar) ||
@@ -346,88 +411,10 @@ export class Tokenizer {
     this._tokens.push(token)
     this._resetScanMode()
   }
-
-  tokenize(): Token[] {
-    // 扫描
-    while (this._currentIndex < this._source.length) {
-      const currentChar = this._source[this._currentIndex]
-      const startIndex = this._currentIndex
-      // 1. 判断是否是分隔符
-      if (isWhiteSpace(currentChar)) {
-        this._currentIndex++
-        continue
-      }
-      // 2. 判断是否是字母
-      else if (isAlpha(currentChar)) {
-        this.scanIdentifier()
-        continue
-      }
-      // 3. 判断是否是单字符 () {} . ; *
-      else if (KNOWN_SINGLE_CHAR_TOKENS.has(currentChar as SingleCharTokens)) {
-        // * 字符特殊处理
-        if (currentChar === '*') {
-          // 前瞻，如果是非 import/export，则认为是二元运算符，避免误判
-          const previousToken = this._getPreviousToken()
-          if (
-            previousToken.type !== TokenType.Import &&
-            previousToken.type !== TokenType.Export
-          ) {
-            this._tokens.push(
-              TOKENS_GENERATOR.operator(startIndex, currentChar),
-            )
-            this._currentIndex++
-            continue
-          }
-          // 否则按照 import/export 中的 * 处理
-        }
-        const token = KNOWN_SINGLE_CHAR_TOKENS.get(
-          currentChar as SingleCharTokens,
-        )!(startIndex)
-        this._tokens.push(token)
-        this._currentIndex++
-      }
-      // 4. 判断是否为引号
-      else if (QUOTATION_TOKENS.includes(currentChar)) {
-        this.scanStringLiteral()
-        // 跳过结尾的引号
-        this._currentIndex++
-        continue
-      }
-      // 5. 判断二元计算符
-      else if (
-        OPERATOR_TOKENS.includes(currentChar) &&
-        this._scanMode === ScanMode.Normal
-      ) {
-        this._tokens.push(TOKENS_GENERATOR.operator(startIndex, currentChar))
-        this._currentIndex++
-        continue
-      } else if (
-        OPERATOR_TOKENS.includes(currentChar + this._getNextChar()) &&
-        this._scanMode === ScanMode.Normal
-      ) {
-        this._tokens.push(
-          TOKENS_GENERATOR.operator(
-            startIndex,
-            currentChar + this._getNextChar(),
-          ),
-        )
-        this._currentIndex += 2
-        continue
-      }
-      // 6. 判断数字
-      else if (isDigit(currentChar)) {
-        this._scanNumber()
-        continue
-      }
-    }
-    this._resetCurrentIndex()
-    // 返回token数组
-    return this._getTokens()
-  }
   /**
-   * @description: 返回当前的字符串
+   * @description: 返回当前的字符
    * @return {string}
-   */  
+   */
   private _getCurrentChar() {
     return this._source[this._currentIndex]
   }
@@ -446,7 +433,10 @@ export class Tokenizer {
   private _getTokens() {
     return this._tokens
   }
-
+  /**
+   * @description: 返回最后一个 Token
+   * @return {Token}
+   */  
   private _getPreviousToken() {
     // 前瞻 Token
     if (this._tokens.length > 0) {
