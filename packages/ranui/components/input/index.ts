@@ -372,13 +372,27 @@ function Custom() {
               const size = Math.min(width, height)
               this._icon.setAttribute('size', `${size}`)
               this._input.insertAdjacentElement('beforebegin', this._icon)
+              console.log(document.readyState, this._input, this._input.clientHeight, width, height, this._input.getBoundingClientRect());
             }
             this._icon.setAttribute('name', value)
           } else {
-            this.removeAttribute('icon')
-            this._icon && this._container.removeChild(this._icon)
+            // this.removeAttribute('icon')
+            // this._icon && this._container.removeChild(this._icon)
           }
         }
+      }
+      /**
+       * @description: 聚合监听事件
+       * @param {string} name
+       * @param {string} oldValue
+       * @param {string} newValue
+       */
+      listenEvent(name: string, oldValue: string, newValue: string) {
+        this.listenPlaceholder(name, newValue)
+        this.listenLabel(name, newValue)
+        this.listenStatus(name, newValue)
+        this.listenDisabled(name, newValue)
+        this.listenIcon(name, newValue, oldValue)
       }
       connectedCallback() {
         // 如果一开始就设置了input的值，则初始化input的值
@@ -398,20 +412,22 @@ function Custom() {
         }
         this._input.addEventListener('input', this.inputValue)
         this._input.addEventListener('focus', this.focus)
+        if (document.readyState === 'complete') {
+          if (!this._icon) {
+            this._icon = document.createElement('r-icon')
+            const { width, height } = this._input.getBoundingClientRect()
+            const size = Math.min(width, height)
+            this._icon.setAttribute('size', `${size}`)
+            this._input.insertAdjacentElement('beforebegin', this._icon)
+            this.icon && this._icon.setAttribute('name', this.icon)
+          }
+        }
       }
       disconnectCallback() {
         this._input.removeEventListener('input', this.inputValue)
       }
-      attributeChangedCallback(
-        name: string,
-        oldValue: string,
-        newValue: string,
-      ) {
-        this.listenPlaceholder(name, newValue)
-        this.listenLabel(name, newValue)
-        this.listenStatus(name, newValue)
-        this.listenDisabled(name, newValue)
-        this.listenIcon(name, newValue, oldValue)
+      attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+        this.listenEvent(name, newValue, oldValue)
       }
     }
     customElements.define('r-input', CustomElement)
