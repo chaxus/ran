@@ -362,24 +362,24 @@ function Custom() {
        * @param {string} value
        */
       listenIcon(name: string, value: string, oldValue: string) {
-        if (name === 'icon') {
-          if (value && value !== oldValue) {
-            this.removeAttribute('label')
-            this.setAttribute('icon', value)
-            if (!this._icon) {
-              this._icon = document.createElement('r-icon')
-              const { width, height } = this._input.getBoundingClientRect()
-              const size = Math.min(width, height)
-              this._icon.setAttribute('size', `${size}`)
-              this._input.insertAdjacentElement('beforebegin', this._icon)
-              console.log(document.readyState, this._input, this._input.clientHeight, width, height, this._input.getBoundingClientRect());
-            }
-            this._icon.setAttribute('name', value)
-          } else {
-            // this.removeAttribute('icon')
-            // this._icon && this._container.removeChild(this._icon)
-          }
+        if (name === 'icon' && value && value !== oldValue) {
+          this.removeAttribute('label')
+          this.setAttribute('icon', value)
+          this.dealIcon()
         }
+      }
+      /**
+       * @description: 处理icon属性的问题
+       */
+      dealIcon = () => {
+        if (!this._icon) {
+          this._icon = document.createElement('r-icon')
+          const { width, height } = this._input.getBoundingClientRect()
+          const size = Math.min(width, height)
+          this._icon.setAttribute('size', `${size}`)
+          this._input.insertAdjacentElement('beforebegin', this._icon)
+        }
+        this.icon && this._icon.setAttribute('name', this.icon)
       }
       /**
        * @description: 聚合监听事件
@@ -413,14 +413,7 @@ function Custom() {
         this._input.addEventListener('input', this.inputValue)
         this._input.addEventListener('focus', this.focus)
         if (document.readyState === 'complete') {
-          if (!this._icon) {
-            this._icon = document.createElement('r-icon')
-            const { width, height } = this._input.getBoundingClientRect()
-            const size = Math.min(width, height)
-            this._icon.setAttribute('size', `${size}`)
-            this._input.insertAdjacentElement('beforebegin', this._icon)
-            this.icon && this._icon.setAttribute('name', this.icon)
-          }
+          this.dealIcon()
         }
       }
       disconnectCallback() {
