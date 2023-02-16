@@ -75,7 +75,10 @@ export default defineConfig({
         },
         {
           text: '反馈',
-          items: [{ text: 'Message 全局提示', link: '/src/ranui/message/' }],
+          items: [
+            { text: 'Message 全局提示', link: '/src/ranui/message/' },
+            { text: 'Skeleton 骨架屏', link: '/src/ranui/skeleton/' }
+          ],
         },
       ],
       '/src/article/': [
