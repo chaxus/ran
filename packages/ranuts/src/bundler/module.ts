@@ -1,11 +1,11 @@
 import MagicString from 'magic-string';
-import type { Statement as StatementNode } from '../astParser';
 import { parse } from '../astParser';
 import type { Bundle } from './bundle';
 import { Statement } from './statement';
 import type { ModuleLoader } from './moduleLoader';
 import type {
-  Declaration} from './ast/Declaration';
+  Declaration
+} from './ast/Declaration';
 import {
   SyntheticDefaultDeclaration,
   SyntheticNamespaceDeclaration
@@ -76,30 +76,33 @@ export class Module {
     this.reexports = {};
     this.declarations = {};
     try {
-      const ast = parse(code) as any;
-
-      const nodes = ast.body as StatementNode[];
+      // 将整个模块解析成 ast 结构，用于分析模块
+      const ast = parse(code);
+      // 获取 ast 的 内容体
+      const nodes = ast.body;
       // 以语句(Statement)的维度来拆分 Module，保存 statement 的集合，供之后分析
       this.statements = nodes.map((node) => {
         const magicString = this.magicString.snip(node.start, node.end);
         return new Statement(node, magicString, this);
       });
     } catch (e) {
-      console.log(e);
+      console.log('generate module fail: ', e);
       throw e;
     }
     // 分析 AST 节点
-    this.analyseAST();
+    this.analyzeAST();
   }
 
-  analyseAST():void {
+  analyzeAST(): void {
     // 以语句为最小单元来分析
     this.statements.forEach((statement) => {
-       // 对 statement 进行分析
-      statement.analyse();
+      // 对 statement 进行分析
+      statement.analyze();
+      // 如果有 import 声明
       if (statement.isImportDeclaration) {
         this.addImports(statement);
       } else if (statement.isExportDeclaration) {
+        // 如果有 export 声明
         this.addExports(statement);
       }
       // 注册顶层声明
@@ -119,13 +122,13 @@ export class Module {
     // console.log('module:', this.path, this.declarations);
   }
 
-  addDependencies(source: string):void {
+  addDependencies(source: string): void {
     if (!this.dependencies.includes(source)) {
       this.dependencies.push(source);
     }
   }
 
-  addImports(statement: Statement):void {
+  addImports(statement: Statement): void {
     const node = statement.node as any;
     const source = node.source.value;
     // import
@@ -136,14 +139,14 @@ export class Module {
       const name = isDefault
         ? 'default'
         : isNamespace
-        ? '*'
-        : specifier.imported.name;
+          ? '*'
+          : specifier.imported.name;
       this.imports[localName] = { source, name, localName };
     });
     this.addDependencies(source);
   }
 
-  addExports(statement: Statement):void {
+  addExports(statement: Statement): void {
     const node = statement.node as any;
     const source = node.source && node.source.value;
     if (node.type === 'ExportNamedDeclaration') {
@@ -192,7 +195,7 @@ export class Module {
       const identifier =
         // export default foo;
         (node.declaration.id && node.declaration.id.name) ||
-        // export defualt function foo(){}
+        // export default function foo(){}
         node.declaration.name;
 
       this.exports['default'] = {
@@ -214,12 +217,12 @@ export class Module {
     }
   }
 
-  bind():void {
+  bind(): void {
     this.bindImportSpecifiers();
     this.bindReferences();
   }
 
-  bindImportSpecifiers():void {
+  bindImportSpecifiers(): void {
     [...Object.values(this.imports), ...Object.values(this.reexports)].forEach(
       (specifier) => {
         specifier.module = this._getModuleBySource(specifier.source!);
@@ -237,7 +240,7 @@ export class Module {
     });
   }
 
-  bindReferences():void {
+  bindReferences(): void {
     // 处理 default 导出
     if (this.declarations['default'] && this.exports['default'].localName) {
       const declaration = this.trace(this.exports['default'].localName);
@@ -260,13 +263,13 @@ export class Module {
       });
     });
   }
-  getOrCreateNamespace():Declaration {
+  getOrCreateNamespace(): Declaration {
     if (!this.declarations['*']) {
       this.declarations['*'] = new SyntheticNamespaceDeclaration(this);
     }
     return this.declarations['*'];
   }
-  trace(name: string):Declaration | null {
+  trace(name: string): Declaration | null {
     if (this.declarations[name]) {
       // 从当前模块找
       return this.declarations[name];
@@ -298,8 +301,7 @@ export class Module {
       );
       if (!declaration) {
         throw new Error(
-          `${reexportDeclaration.localName} is not exported by module ${
-            reexportDeclaration.module!.path
+          `${reexportDeclaration.localName} is not exported by module ${reexportDeclaration.module!.path
           }(imported by ${this.path})`
         );
       }
@@ -324,7 +326,7 @@ export class Module {
     return null;
   }
 
-  render():MagicString {
+  render(): MagicString {
     const source = this.magicString.clone().trim();
     this.statements.forEach((statement) => {
       // 1. Tree Shaking
@@ -373,7 +375,7 @@ export class Module {
           // export default function() {}  -> function a() {}
           if (statement.node.declaration.type === 'FunctionDeclaration') {
             if (statement.node.declaration.id) {
-              // export default function foo() {} -> const a = funciton foo() {}
+              // export default function foo() {} -> const a = function foo() {}
               source.overwrite(
                 statement.node.start,
                 statement.node.declaration.start,

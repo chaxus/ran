@@ -4,6 +4,8 @@ declare module '@/node/*'
 declare module '@/sort/*'
 declare module '@/astParser/*'
 declare module '@/utils/*'
+declare module '@/bundler/*'
+
 
 declare namespace Ranuts {
   interface Identification {

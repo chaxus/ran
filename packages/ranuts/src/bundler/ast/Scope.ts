@@ -9,7 +9,10 @@ interface ScopeOptions {
   statement: Statement;
   isTopLevel?: boolean;
 }
-
+/**
+ * @description: 封装作用域相关的基本信息
+ * @return {*}
+ */
 export class Scope {
   // 父作用域
   parent?: Scope;

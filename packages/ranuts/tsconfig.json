@@ -17,7 +17,7 @@
     "baseUrl": ".",
     "experimentalDecorators": true,
     "paths": {
-      "~compose": ["src/utils/compose.ts"]
+      "@/*": ["src/*"]
     }
   },
   "ts-node": {

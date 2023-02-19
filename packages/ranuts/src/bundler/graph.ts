@@ -102,7 +102,7 @@ export class Graph {
       return paths.reverse();
     }
 
-    function analyseModule(module: Module) {
+    function analyzeModule(module: Module) {
       if (analysedModule[module.id]) {
         return;
       }
@@ -115,13 +115,13 @@ export class Graph {
           continue;
         }
         parent[dependency.id] = module.id;
-        analyseModule(dependency);
+        analyzeModule(dependency);
       }
       analysedModule[module.id] = true;
       orderedModules.push(module);
     }
 
-    analyseModule(entryModule);
+    analyzeModule(entryModule);
     if (cyclePathList.length) {
       cyclePathList.forEach((paths) => {
         console.log(paths);
