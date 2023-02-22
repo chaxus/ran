@@ -11,6 +11,9 @@ import {
 import { Scope } from './ast/Scope';
 import type { Module } from './module';
 
+/**
+ * @description: 生成用于分析的 Statement 语句
+ */
 export class Statement {
   // acorn type problem
   node: StatementNode;
@@ -43,7 +46,7 @@ export class Statement {
     this.isFunctionDeclaration = isFunctionDeclaration(node as FunctionDeclaration);
   }
 
-  analyse():void {
+  analyze():void {
     if (this.isImportDeclaration) return;
     // 1、构建作用域链，记录 Declaration 节点表
     buildScope(this);

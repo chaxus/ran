@@ -16,7 +16,7 @@ export default defineConfig({
       { text: '首页', link: '/' },
       { text: '函数', link: '/src/ranuts/utils/' },
       { text: '组件', link: '/src/ranui/' },
-      { text: '璀璨', link: '/src/article/' },
+      { text: '璀璨', link: '/src/article/designMode.md' },
       // { text: "我的掘金", link: "https://juejin.cn/user/2981531263964718" },
     ],
     socialLinks: [{ icon: 'github', link: 'https://github.com/chaxus/ran' }],
@@ -75,7 +75,10 @@ export default defineConfig({
         },
         {
           text: '反馈',
-          items: [{ text: 'Message 全局提示', link: '/src/ranui/message/' }],
+          items: [
+            { text: 'Message 全局提示', link: '/src/ranui/message/' },
+            { text: 'Skeleton 骨架屏', link: '/src/ranui/skeleton/' }
+          ],
         },
       ],
       '/src/article/': [
@@ -85,11 +88,7 @@ export default defineConfig({
             {
               text: '函数式编程',
               link: '/src/article/functionalProgramming.md',
-            },
-            // {
-            //   text: 'Abstract Syntax Tree',
-            //   link: '/src/article/astParse/tokenizer.md',
-            // },
+            }
           ],
         },
       ],

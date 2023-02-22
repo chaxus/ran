@@ -13,7 +13,7 @@ interface Build {
     }
 }
 
-export function build(options: Options):Promise<any> {
+export function build(options: Options):Promise<Build> {
   const bundle = new Bundle({
     entry: options.input
   });

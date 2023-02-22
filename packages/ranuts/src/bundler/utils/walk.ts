@@ -1,11 +1,11 @@
 
 import type { Statement } from '../../astParser';
-import type {Node} from '../ast/Node'
+import type { Node } from '../ast/Node'
 
 let shouldSkip;
 let shouldAbort: boolean;
 
-type Enter = (node: Node, parent?:Node, prop?:string)=>void
+type Enter = (node: Node, parent?: Node, prop?: string) => void
 
 /**
  * @description: 无论是构建作用域链还是记录引用节点，都离不开一个最基本的操作，那就是对 AST 进行遍历操作
@@ -13,7 +13,7 @@ type Enter = (node: Node, parent?:Node, prop?:string)=>void
  * @param {object} param2
  * @return {*}
  */
-export function walk(ast: Statement, { enter, leave }: { enter: Enter; leave: Enter }):void {
+export function walk(ast: Statement, { enter, leave }: { enter: Enter; leave: Enter }): void {
   shouldAbort = false;
   visit(ast, undefined, enter, leave);
 }
@@ -46,7 +46,7 @@ function visit(node: Node, parent: Node | undefined, enter: Enter, leave: Enter,
       (key) => typeof node[key as keyof Node] === 'object'
     ));
 
-  let key, value:any;
+  let key, value: any;
 
   for (let i = 0; i < keys.length; i++) {
     key = keys[i];
