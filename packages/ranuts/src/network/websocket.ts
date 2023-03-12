@@ -8,9 +8,9 @@ interface FrameMeta {
     opcode: number;
     mask: boolean;
     maskKey: Buffer | null;
-    maxSize: number;
+    payloadSize: number;
     size: number;
-    MetaSize: number;
+    metaSize: number;
 }
 
 const sixteenBitsMax = 65535 // 65536 is the max of 16 bits
@@ -109,7 +109,7 @@ class WebSocket extends EventEmitter {
          * @param {FrameMeta} meta
          */        
         const handleFrameMeta = (meta: FrameMeta) => {
-            const metaLength = meta.MetaSize
+            const metaLength = meta.metaSize
             buf.subarray(0, metaLength)
             buf = buf.subarray(metaLength); 
             return buf
@@ -128,7 +128,7 @@ class WebSocket extends EventEmitter {
                 client.emit("data", data); 
                 data = Buffer.allocUnsafe(0);
             }
-            buf = buf.subarray(size); // consume `buf`
+            buf = buf.subarray(size);
         }
         socket.on("data", (chunk) => { 
             buf = Buffer.concat([buf, chunk]); 
@@ -164,28 +164,28 @@ class WebSocket extends EventEmitter {
      */    
     parseFrameMeta(source: Buffer): FrameMeta {
         const src = Buffer.from(source);
-        const maxSize = src[1] & 127;
+        const payloadSize = src[1] & 127;
         let size = 0; 
-        let MetaSize = 0; 
+        let metaSize = 0; 
         const masked = src[1] >= 128;
-        if (maxSize === 127) {
+        if (payloadSize === 127) {
             size = src.readUInt32BE(6);
-            MetaSize = 10;
-        } else if (maxSize === 126) {
+            metaSize = 10;
+        } else if (payloadSize === 126) {
             size = src.readUInt16BE(2);
-            MetaSize = 4;
+            metaSize = 4;
         } else {
-            size = maxSize;
-            MetaSize = 2;
+            size = payloadSize;
+            metaSize = 2;
         }
         return {
             fin: src[0] >= 128,
             opcode: src[0] & 15,
             mask: masked,
-            maskKey: masked ? src.subarray(MetaSize, MetaSize + (masked ? 4 : 0)) : null,
-            maxSize,
+            maskKey: masked ? src.subarray(metaSize, metaSize + (masked ? 4 : 0)) : null,
+            payloadSize,
             size,
-            MetaSize: MetaSize + (masked ? 4 : 0)
+            metaSize: metaSize + (masked ? 4 : 0)
         };
     }
     iMask(data: Buffer, key: Buffer | null): Buffer {
