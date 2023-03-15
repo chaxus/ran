@@ -15,7 +15,7 @@ describe('utils', () => {
     const arr: Array<Number> = []
     const stack = []
 
-    stack.push(async (context: unknown, next: Next) => {
+    stack.push(async (_context: unknown, next: Next) => {
       arr.push(1) //1
       await wait(1)
       await next()
@@ -23,7 +23,7 @@ describe('utils', () => {
       arr.push(6) //6
     })
 
-    stack.push(async (context: unknown, next: Next) => {
+    stack.push(async (_context: unknown, next: Next) => {
       arr.push(2) //2
       await wait(1)
       await next()
@@ -31,7 +31,7 @@ describe('utils', () => {
       arr.push(5) //5
     })
 
-    stack.push(async (context: unknown, next: Next) => {
+    stack.push(async (_context: unknown, next: Next) => {
       arr.push(3) //3
       await wait(1)
       await next()
@@ -47,7 +47,7 @@ describe('utils', () => {
     const arr: Array<number> = []
     const stack = []
 
-    stack.push(async (ctx: unknown, next: Next) => {
+    stack.push(async (_ctx: unknown, next: Next) => {
       arr.push(1)
       try {
         arr.push(6)
@@ -59,7 +59,7 @@ describe('utils', () => {
       arr.push(3)
     })
 
-    stack.push(async (ctx: unknown, next: Next) => {
+    stack.push(async (_ctx: unknown, _next: Next) => {
       arr.push(4)
       throw new Error()
     })

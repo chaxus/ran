@@ -2,6 +2,7 @@
   "cSpell.words": [
     "analysed",
     "chaxus",
+    "DOMAPI",
     "esbuild",
     "Metiral",
     "picocolors",
@@ -11,6 +12,8 @@
     "ranuts",
     "skipsvgo",
     "slotchange",
-    "vitepress"
+    "vitepress",
+    "vnode",
+    "vnodes"
   ]
 }

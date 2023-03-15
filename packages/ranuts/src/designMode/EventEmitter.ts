@@ -1,4 +1,4 @@
-type Callback = (...args: Array<unknown>) => unknown
+type Callback = (...args:any) => unknown
 
 type EventName = string | symbol
 

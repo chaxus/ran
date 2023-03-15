@@ -29,7 +29,7 @@ module.exports = defineConfig({
     ],
 
     'node/no-missing-import': [
-      'error',
+      'off',
       {
         allowModules: ['types', 'estree', 'less', 'sass', 'stylus'],
         tryExtensions: ['.ts', '.js', '.jsx', '.tsx', '.d.ts'],
