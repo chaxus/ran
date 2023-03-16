@@ -280,8 +280,14 @@ export function init(): (oldVnode: VNode | Element, vnode: VNode) => VNode {
         newStartVnode = newCh[++newStartIdx]
       } else if (newEndVnode == null) {
         newEndVnode = newCh[--newEndIdx]
+        // key 和 sel 相同，则就是相同节点
       } else if (sameVnode(oldStartVnode, newStartVnode)) {
         // 当旧头VNode和新头VNode是相同VNode时，将新头VNode差异更新到旧头VNode上，同时将新旧头索引后移
+        // 对比两个节点，如果newVnode有vnodeData，
+        // 执行update钩子，更新oldNode上的模块的内容
+        // 更新加载过的模块里的内容
+        // 判断节点的类型，文本节点直接替换，如果不是文本节点
+        // 判断是否有子元素，更新子元素
         patchVnode(oldStartVnode, newStartVnode)
         oldStartVnode = oldCh[++oldStartIdx]
         newStartVnode = newCh[++newStartIdx]
@@ -296,11 +302,7 @@ export function init(): (oldVnode: VNode | Element, vnode: VNode) => VNode {
          * 最后将旧头索引后移，新尾索引前移
          */
         patchVnode(oldStartVnode, newEndVnode)
-        api.insertBefore(
-          parentElm,
-          oldStartVnode.elm!,
-          api.nextSibling(oldEndVnode.elm!),
-        )
+        api.insertBefore(parentElm,oldStartVnode.elm!,api.nextSibling(oldEndVnode.elm!))
         oldStartVnode = oldCh[++oldStartIdx]
         newEndVnode = newCh[--newEndIdx]
       } else if (sameVnode(oldEndVnode, newStartVnode)) {

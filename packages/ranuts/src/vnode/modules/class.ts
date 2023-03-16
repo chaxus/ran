@@ -10,9 +10,9 @@ function updateClass(oldVnode: VNode, vnode: VNode): void {
   // 获取新VNode的dom元素
   const elm: Element = vnode.elm as Element
   // 获取旧VNode的class数据
-  let oldClass = (oldVnode.data as VNodeData).class
+  let oldClass = oldVnode.data && oldVnode.data.class
   // 获取新VNode的class数据
-  let className = (vnode.data as VNodeData).class
+  let className = vnode.data && vnode.data.class
 
   // 如果新旧VNode都没有class，直接返回
   if (!oldClass && !className) return
