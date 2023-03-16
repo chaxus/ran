@@ -6,6 +6,9 @@
   "module": "dist/index.js",
   "type": "module",
   "types": "dist/index.d.ts",
+  "engines": {
+    "node": "^14.18.0 || >=16.0.0"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
