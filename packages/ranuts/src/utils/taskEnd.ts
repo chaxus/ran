@@ -1,15 +1,14 @@
 import { hrtime } from 'node:process'
 
 const taskEnd = (symbol: symbol): number | bigint => {
-  if(typeof window !== 'undefined'){
-    const startTime = Symbol.keyFor(symbol)
-    if (startTime) return window.performance.now() - Number(startTime)
+  const startTime = Symbol.keyFor(symbol)
+  if (typeof window !== 'undefined' && startTime) {
+    return window.performance.now() - Number(startTime)
   }
-  if(typeof process !== 'undefined'){
-    const startTime = Symbol.keyFor(symbol)
-    if (startTime) return hrtime.bigint() - BigInt(startTime)
+  if (typeof process !== 'undefined' && startTime) {
+    return hrtime.bigint() - BigInt(startTime)
   }
-  return Date.now() - Number(Symbol.keyFor(symbol))
+  return Date.now() - Number(startTime)
 }
 
 export default taskEnd

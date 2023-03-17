@@ -36,7 +36,7 @@ function invokeHandler<N extends keyof HTMLElementEventMap>(
 
 function handleEvent(event: Event, vnode: VNode) {
   const name = event.type
-  const on = (vnode.data as VNodeData).on
+  const on = vnode.data && vnode.data.on
 
   // 如果on中存在事件监听，则进行运行
   if (on && on[name]) {
@@ -53,13 +53,13 @@ function createListener() {
 
 function updateEventListeners(oldVnode: VNode, vnode?: VNode): void {
   // 获取旧VNode中监听的事件
-  const oldOn = (oldVnode.data as VNodeData).on
+  const oldOn = oldVnode?.data?.on
   // 获取旧VNode中已经创建的监听事件
-  const oldListener = (oldVnode as any).listener
+  const oldListener = oldVnode?.listener
   // 获取旧VNode的dom
   const oldElm: Element = oldVnode.elm as Element
   // 获取新VNode中监听的事件
-  const on = vnode && (vnode.data as VNodeData).on
+  const on = vnode?.data?.on
   // 获取新VNode中已经创建的监听事件
   const elm: Element = (vnode && vnode.elm) as Element
   // 缓存遍历中当前事件的名称
@@ -92,10 +92,9 @@ function updateEventListeners(oldVnode: VNode, vnode?: VNode): void {
   // 如果新VNode有事件监听
   if (on) {
     // 如果新VNode上已经存在事件监听，则直接继承，如果没有则创建一个新事件监听
-    const listener = ((vnode as any).listener =
-      (oldVnode as any).listener || createListener())
+    const listener = vnode.listener = oldVnode.listener || createListener()
     // 更新listener上的vnode
-    listener.vnode = vnode
+    // listener.vnode = vnode
 
     // 如果旧VNode没有事件监听
     if (!oldOn) {
