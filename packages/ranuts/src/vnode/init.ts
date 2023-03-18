@@ -1,7 +1,6 @@
 // 虚拟dom
 import type { VNode } from './vnode'
 import { vnode } from './vnode'
-
 // 引入操作的dom api的相关方法
 import type { DOMAPI } from './htmlDomApi'
 import { htmlDomApi } from './htmlDomApi'
