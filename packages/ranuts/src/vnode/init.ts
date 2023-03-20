@@ -227,7 +227,7 @@ export function init(): (oldVnode: VNode | Element, vnode: VNode) => VNode {
           // 触发destroy钩子函数
           invokeDestroyHook(ch)
           /*
-           * 在snabbdom中这里需要判断remove钩子函数是否全部调用,而我们terdom没有remove钩子函数,所以
+           * 在dom中这里需要判断remove钩子函数是否全部调用,而我们dom没有remove钩子函数,所以
            * 不需要判断
            */
           rm = createRmCb(ch.elm!)
