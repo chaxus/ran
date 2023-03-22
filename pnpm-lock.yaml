@@ -99,6 +99,7 @@ importers:
       '@types/node': ^18.11.18
       async_hooks: ^1.0.0
       magic-string: ^0.27.0
+      path-is-absolute: ^2.0.0
       picocolors: ^1.0.0
       vite: ^3.2.3
       vite-plugin-dts: ^1.7.0
@@ -106,6 +107,7 @@ importers:
       vitest: ^0.23.4
     dependencies:
       magic-string: 0.27.0
+      path-is-absolute: 2.0.0
       vite: 3.2.3_@types+node@18.11.18
       vite-plugin-dts: 1.7.0_vite@3.2.3
       vitepress: 1.0.0-alpha.4
@@ -3460,9 +3462,15 @@ packages:
     dev: true
 
   /path-is-absolute/1.0.1:
-    resolution: {integrity: sha512-AVbw3UJ2e9bq64vSaS9Am0fje1Pa8pbGqTTsmXfaIiMpnr5DlDhfJOuLj9Sf95ZPVDAUerDfEk88MPmPe7UCQg==}
+    resolution: {integrity: sha1-F0uSaHNVNP+8es5r9TpanhtcX18=}
     engines: {node: '>=0.10.0'}
     dev: true
+
+  /path-is-absolute/2.0.0:
+    resolution: {integrity: sha1-y6QW9PO+XQaK/iCD2bOzcHQUUz0=}
+    engines: {node: '>=0.10.0'}
+    deprecated: This package is no longer relevant as Node.js 0.12 is unmaintained.
+    dev: false
 
   /path-key/3.1.1:
     resolution: {integrity: sha512-ojmeN0qd+y0jszEtoY48r0Peq5dwMEkIlCOu6Q5f41lfkswXuKtYrhgoTpLnyIcHm24Uhqx+5Tqm2InSwLhE6Q==}
