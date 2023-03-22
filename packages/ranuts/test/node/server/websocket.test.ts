@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import type { Client } from '../../../src/network/websocket'
-import WSS from '../../../src/network/websocket'
+import type { Client } from '@/server/websocket'
+import WSS from '@/server/websocket'
 
 // const ws = new WSS({ port: 500 })
 // ws.on('connect', (cli: Client) => {

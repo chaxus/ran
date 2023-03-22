@@ -6,6 +6,13 @@ import queryFileInfo from './src/node/file/fileInfo'
 import filterObj from './src/utils/filterObj'
 import readDir from './src/node/file/readDir'
 import str2Xml from './src/utils/str2Xml'
+import { init } from '@/vnode/init'
+import { h } from '@/vnode/h'
+
+const vnode = {
+  init,
+  h
+}
 
 export {
   writeFile,
@@ -16,4 +23,5 @@ export {
   filterObj,
   str2Xml,
   readDir,
+  vnode
 }
