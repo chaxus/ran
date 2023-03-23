@@ -1,8 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import type { IncomingMessage, ServerResponse } from 'node:http'
-
-type Next = () => Promise<never> | Promise<void>
+import type { MiddlewareFunction, Next } from '@/server/server'
 
 interface TypesExtension {
   [x: string]: string
@@ -13,17 +12,12 @@ interface Option {
   types: TypesExtension
 }
 
-type MiddlewareFunction = (
-  req: IncomingMessage,
-  res: ServerResponse,
-  next: Next,
-) => Promise<void> | void
-
 // 允许访问的文件类型
 const defaultTypes: TypesExtension = {
   html: 'text/html',
   css: 'text/css',
   js: 'application/javascript',
+  ts: 'application/javascript',
   png: 'image/png',
   jpg: 'image/jpeg',
   jpeg: 'image/jpeg',

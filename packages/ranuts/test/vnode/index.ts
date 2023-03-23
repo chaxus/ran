@@ -1,4 +1,4 @@
-import Application from '@/node/http/server'
+import Application from '@/server/server'
 import send from '@/server/send'
 
 const app = new Application()

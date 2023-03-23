@@ -1,9 +1,9 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import http from 'node:http'
 
-type Next = () => Promise<never> | Promise<void>
+export type Next = () => Promise<never> | Promise<void>
 
-type MiddlewareFunction = (
+export type MiddlewareFunction = (
   req: IncomingMessage,
   res: ServerResponse,
   next: Next,
@@ -47,7 +47,6 @@ function compose(middleware: Array<MiddlewareFunction>) {
   }
   return function (req: IncomingMessage, res: ServerResponse, next?: Next) {
     let index = -1
-    return dispatch(0)
     function dispatch(i: number): Promise<never> | Promise<void> {
       if (i <= index)
         return Promise.reject(new Error('next() called multiple times'))
@@ -61,6 +60,7 @@ function compose(middleware: Array<MiddlewareFunction>) {
         return Promise.reject(err)
       }
     }
+    return dispatch(0)
   }
 }
 
