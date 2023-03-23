@@ -187,3 +187,5 @@ function getStatus(code?: number | string): number | string | undefined {
 }
 
 export default status
+
+export { getStatus }

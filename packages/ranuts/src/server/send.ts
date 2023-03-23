@@ -26,7 +26,7 @@ const defaultTypes: TypesExtension = {
   xml: 'application/xml',
 }
 
-const staticServer = (option: Partial<Option> = {}): MiddlewareFunction => {
+const staticMiddleware = (option: Partial<Option> = {}): MiddlewareFunction => {
   const { pathname, types = defaultTypes } = option
   return async (
     req: IncomingMessage,
@@ -35,6 +35,7 @@ const staticServer = (option: Partial<Option> = {}): MiddlewareFunction => {
   ): Promise<void> => {
     try {
       if (req.url) {
+        // 获取传入的地址，如果没有，取当前的目录
         const dirPath = pathname ? pathname : process.cwd()
         // 静态资源文件根路径
         const root = path.normalize(path.resolve(dirPath))
@@ -57,6 +58,7 @@ const staticServer = (option: Partial<Option> = {}): MiddlewareFunction => {
         if (req.url === '/') {
           // 则文件名是 index.html
           fileName = 'index.html'
+          // 如果访问的文件类型不在允许的类型里面，默认返回index.html
         } else if (!extension) {
           try {
             // 检测文件是否允许访问
@@ -68,7 +70,7 @@ const staticServer = (option: Partial<Option> = {}): MiddlewareFunction => {
             fileName = path.join(req.url, 'index.html')
           }
         }
-
+        // 有文件名且访问的文件类型也允许访问
         const filePath = path.join(root, fileName)
         const isPathUnderRoot = path
           .normalize(path.resolve(filePath))
@@ -97,4 +99,4 @@ const staticServer = (option: Partial<Option> = {}): MiddlewareFunction => {
   }
 }
 
-export default staticServer
+export default staticMiddleware
