@@ -19,6 +19,7 @@ export const MimeType = new Map([
   ['.ser', 'application/java-serialized-object'],
   ['.class', 'application/java-vm'],
   ['.js', 'application/javascript'],
+  ['.ts', 'application/javascript'],
   ['.json', 'application/json'],
   ['.lostxml', 'application/lost+xml'],
   ['.hqx', 'application/mac-binhex40'],
@@ -552,8 +553,10 @@ export const MimeType = new Map([
   ['.fig', 'application/x-xfig'],
   ['.xpi', 'application/x-xpinstall'],
   ['.xenc', 'application/xenc+xml'],
-  ['.xhtml,.xht', 'application/xhtml+xml'],
-  ['.xml,.xsl', 'application/xml'],
+  ['.xhtml', 'application/xhtml+xml'],
+  ['.xht', 'application/xhtml+xml'],
+  ['.xsl', 'application/xml'],
+  ['.xml', 'application/xml'],
   ['.dtd', 'application/xml-dtd'],
   ['.xop', 'application/xop+xml'],
   ['.xslt', 'application/xslt+xml'],
@@ -642,7 +645,8 @@ export const MimeType = new Map([
   ['.ics,.ifb', 'text/calendar'],
   ['.css', 'text/css'],
   ['.csv', 'text/csv'],
-  ['.html,.htm', 'text/html'],
+  ['.html', 'text/html'],
+  ['.htm', 'text/html'],
   ['.txt', 'text/plain'],
   ['.text', 'text/plain'],
   ['.conf', 'text/plain'],
@@ -730,5 +734,6 @@ export const addMimeType = (
 export function queryMimeType(ext: string): string | undefined {
   const tmp = ('' + ext).trim().toLowerCase()
   let idx = tmp.lastIndexOf('.')
-  return MimeType.get(`.${!~idx ? tmp : tmp.substring(++idx)}`)
+  const suffix = !~idx ? tmp : tmp.substring(++idx)
+  return MimeType.get(`.${suffix}`) || MimeType.get(suffix)
 }

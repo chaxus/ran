@@ -2,32 +2,16 @@ import fs from 'node:fs'
 import path from 'node:path'
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import type { MiddlewareFunction, Next } from '@/server/server'
-
-interface TypesExtension {
-  [x: string]: string
-}
+import { addMimeType, queryMimeType } from '@/node/http/mimeType'
 
 interface Option {
   pathname: string
-  types: TypesExtension
+  fileTypes: Record<string, string>
 }
-
-// 允许访问的文件类型
-const defaultTypes: TypesExtension = {
-  html: 'text/html',
-  css: 'text/css',
-  js: 'application/javascript',
-  ts: 'application/javascript',
-  png: 'image/png',
-  jpg: 'image/jpeg',
-  jpeg: 'image/jpeg',
-  gif: 'image/gif',
-  json: 'application/json',
-  xml: 'application/xml',
-}
+const html = 'text/html'
 
 const staticMiddleware = (option: Partial<Option> = {}): MiddlewareFunction => {
-  const { pathname, types = defaultTypes } = option
+  const { pathname, fileTypes = {} } = option
   return async (
     req: IncomingMessage,
     res: ServerResponse,
@@ -41,8 +25,10 @@ const staticMiddleware = (option: Partial<Option> = {}): MiddlewareFunction => {
         const root = path.normalize(path.resolve(dirPath))
         // 获取访问的文件类型
         const extension = path.extname(req.url).slice(1)
+        // 增加mimeType
+        Object.keys(fileTypes).forEach((key) => addMimeType(key, fileTypes[key]))
         // 文件类型后缀
-        const type = extension ? types[extension] : types.html
+        const type = extension ? queryMimeType(extension) : html
         // 是否支持的文件类型
         const supportedExtension = Boolean(type)
         // 如果这个文件类型不允许访问，则直接返回404
