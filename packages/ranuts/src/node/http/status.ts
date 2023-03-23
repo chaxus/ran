@@ -186,4 +186,4 @@ function getStatus(code?: number | string): number | string | undefined {
   return getStatusCode(code)
 }
 
-export { status, getStatus }
+export default status

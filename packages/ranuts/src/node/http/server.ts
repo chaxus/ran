@@ -6,8 +6,8 @@ type Next = () => Promise<never> | Promise<void>
 type MiddlewareFunction = (
   req: IncomingMessage,
   res: ServerResponse,
-  next?: Next,
-) => void
+  next: Next,
+) => void | Promise<void>
 
 class Server {
   stack: Array<MiddlewareFunction>

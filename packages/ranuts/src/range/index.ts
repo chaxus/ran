@@ -20,6 +20,10 @@ interface Fiber {
   alternate?: Fiber // 记录上次的状态，进行diff对比
 }
 
+let deletions: Array<Fiber> = [] // 需要删除的节点
+let currentFiberNode: Fiber | undefined // 用于记录当前处理到的fiber节点
+let fiberRoot: Fiber | undefined // 记录fiber的根节点
+
 /**
  * @description: 创建文本虚拟DOM
  * @param {string} text
@@ -82,7 +86,7 @@ function fiberToAuthenticElement(fiber: Fiber): AuthenticElement {
   return dom
 }
 /**
- * @description: 虚拟DOM转Fiber，用于替代虚拟DOM直接diff和转真实DOM。转成fiber后再一次性render，也叫commit。
+ * @description: 深度遍历，虚拟DOM转Fiber，用于替代虚拟DOM直接diff和转真实DOM。转成fiber后再一次性render，也叫commit。
  * @return {*}
  */
 function reconcile(fiber: Fiber) {
@@ -110,29 +114,33 @@ function reconcile(fiber: Fiber) {
   }
 }
 /**
- * @description: 处理当前fiber节点
+ * @description: 处理当前fiber节点，diff当前的节点
  * @return {*}
  */
 function reconcileFiberNode(fiber: Fiber) {
   if (!fiber.dom) {
+    // 如果 fiber 上没有真实的 dom ，则生成一个真实的 dom
     fiber.dom = fiberToAuthenticElement(fiber)
   }
   // reconcileChildren是把之前的 vdom 转成 child、sibling、return 这样串联起来的 fiber 链表：
   reconcileChildren(fiber)
 }
-
+/**
+ * @description: 如果 fiber 上有真实的 dom，则进行更新 dom 操作
+ * @param {Fiber} fiber
+ */
 function reconcileChildren(fiber: Fiber) {
   // 只有虚拟DOM才有fiber.props.children， fiber是通过child指向子节点
-  const children: Array<Fiber> = fiber.props.children
+  const children: Array<Fiber> = fiber.props.children // 获取现在的 fiber 树
   // 构建fiber结构
   // const alternateFiber = fiber.alternate // 获取上次的fiber树
-  let alternateChildFiber = fiber.alternate && fiber.alternate.child // 获取子fiber树第一个
+  let alternateChildFiber = fiber.alternate && fiber.alternate.child // 获取上次的 fiber 树
   let updateFiber: Fiber | undefined
   let prevSibling: Fiber | undefined
   let index = 0
+  // 如果上次有 fiber children
   if (children && children.length) {
-    // 第一次没有oldFiber，那全部是REPLACEMENT
-    // 处理新增的情况
+    // 但没有 old fiber，那就说明需要新增方法
     if (!alternateChildFiber) {
       for (let i = 0; i < children.length; i++) {
         const element = children[i]
@@ -156,7 +164,7 @@ function reconcileChildren(fiber: Fiber) {
         }
       }
     }
-    // 处理更新和删除的情况
+    // 如果有老的 fiber，也有新的 fiber，处理更新和删除的情况
     while (index < children.length && alternateChildFiber) {
       const element = children[index]
       // 对比oldFiber和当前element
@@ -325,9 +333,5 @@ function render(inventedElement: InventedElement, root: Element): void {
   // 开始进行遍历更新
   requestIdleCallback(schedule)
 }
-
-let deletions: Array<Fiber> = [] // 需要删除的节点
-let currentFiberNode: Fiber | undefined // 用于记录当前处理到的fiber节点
-let fiberRoot: Fiber | undefined // 记录fiber的根节点
 
 export { render, createElement }
