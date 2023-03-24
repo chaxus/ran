@@ -1,39 +1,17 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import type { IncomingMessage, ServerResponse } from 'node:http'
-
-type Next = () => Promise<never> | Promise<void>
-
-interface TypesExtension {
-  [x: string]: string
-}
+import type { MiddlewareFunction, Next } from '@/server/server'
+import { addMimeType, queryMimeType } from '@/node/http/mimeType'
 
 interface Option {
   pathname: string
-  types: TypesExtension
+  fileTypes: Record<string, string>
 }
+const html = 'text/html'
 
-type MiddlewareFunction = (
-  req: IncomingMessage,
-  res: ServerResponse,
-  next: Next,
-) => Promise<void> | void
-
-// 允许访问的文件类型
-const defaultTypes: TypesExtension = {
-  html: 'text/html',
-  css: 'text/css',
-  js: 'application/javascript',
-  png: 'image/png',
-  jpg: 'image/jpeg',
-  jpeg: 'image/jpeg',
-  gif: 'image/gif',
-  json: 'application/json',
-  xml: 'application/xml',
-}
-
-const staticServer = (option: Partial<Option> = {}): MiddlewareFunction => {
-  const { pathname, types = defaultTypes } = option
+const staticMiddleware = (option: Partial<Option> = {}): MiddlewareFunction => {
+  const { pathname, fileTypes = {} } = option
   return async (
     req: IncomingMessage,
     res: ServerResponse,
@@ -41,13 +19,16 @@ const staticServer = (option: Partial<Option> = {}): MiddlewareFunction => {
   ): Promise<void> => {
     try {
       if (req.url) {
+        // 获取传入的地址，如果没有，取当前的目录
         const dirPath = pathname ? pathname : process.cwd()
         // 静态资源文件根路径
         const root = path.normalize(path.resolve(dirPath))
         // 获取访问的文件类型
         const extension = path.extname(req.url).slice(1)
+        // 增加mimeType
+        Object.keys(fileTypes).forEach((key) => addMimeType(key, fileTypes[key]))
         // 文件类型后缀
-        const type = extension ? types[extension] : types.html
+        const type = extension ? queryMimeType(extension) : html
         // 是否支持的文件类型
         const supportedExtension = Boolean(type)
         // 如果这个文件类型不允许访问，则直接返回404
@@ -63,6 +44,7 @@ const staticServer = (option: Partial<Option> = {}): MiddlewareFunction => {
         if (req.url === '/') {
           // 则文件名是 index.html
           fileName = 'index.html'
+          // 如果访问的文件类型不在允许的类型里面，默认返回index.html
         } else if (!extension) {
           try {
             // 检测文件是否允许访问
@@ -74,7 +56,7 @@ const staticServer = (option: Partial<Option> = {}): MiddlewareFunction => {
             fileName = path.join(req.url, 'index.html')
           }
         }
-
+        // 有文件名且访问的文件类型也允许访问
         const filePath = path.join(root, fileName)
         const isPathUnderRoot = path
           .normalize(path.resolve(filePath))
@@ -103,4 +85,4 @@ const staticServer = (option: Partial<Option> = {}): MiddlewareFunction => {
   }
 }
 
-export default staticServer
+export default staticMiddleware
