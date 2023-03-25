@@ -8,8 +8,6 @@ interface Option {
   pathname: string
   fileTypes: Record<string, string>
 }
-const html = 'text/html'
-
 const staticMiddleware = (option: Partial<Option> = {}): MiddlewareFunction => {
   const { pathname, fileTypes = {} } = option
   return async (
@@ -19,6 +17,7 @@ const staticMiddleware = (option: Partial<Option> = {}): MiddlewareFunction => {
   ): Promise<void> => {
     try {
       if (req.url) {
+        const htmlContentType = 'text/html'
         // 获取传入的地址，如果没有，取当前的目录
         const dirPath = pathname ? pathname : process.cwd()
         // 静态资源文件根路径
@@ -26,9 +25,11 @@ const staticMiddleware = (option: Partial<Option> = {}): MiddlewareFunction => {
         // 获取访问的文件类型
         const extension = path.extname(req.url).slice(1)
         // 增加mimeType
-        Object.keys(fileTypes).forEach((key) => addMimeType(key, fileTypes[key]))
+        Object.keys(fileTypes).forEach((key) =>
+          addMimeType(key, fileTypes[key]),
+        )
         // 文件类型后缀
-        const type = extension ? queryMimeType(extension) : html
+        const type = extension ? queryMimeType(extension) : htmlContentType
         // 是否支持的文件类型
         const supportedExtension = Boolean(type)
         // 如果这个文件类型不允许访问，则直接返回404
