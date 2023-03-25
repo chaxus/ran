@@ -1,0 +1,1 @@
+import{_ as e,c as t,o as s}from"./app.6a3accc3.js";const _=JSON.parse('{"title":"","description":"","frontmatter":{},"headers":[],"relativePath":"src/ranuts/sort/shell/index.md","lastUpdated":1679725502000}'),r={name:"src/ranuts/sort/shell/index.md"};function a(n,o,c,d,i,p){return s(),t("div")}const m=e(r,[["render",a]]);export{_ as __pageData,m as default};
