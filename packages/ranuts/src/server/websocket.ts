@@ -1,7 +1,7 @@
 import http from 'node:http'
 import crypto from 'node:crypto'
 import type internal from 'node:stream'
-import EventEmitter from '../designMode/EventEmitter'
+import EventEmitter from '@/designMode/EventEmitter'
 
 interface FrameMeta {
     fin: boolean;

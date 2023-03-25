@@ -1,7 +1,7 @@
 import { falseList, isDisabled } from '@/utils/index'
 
 function Custom() {
-  if (typeof window !== 'undefined' && !customElements.get('r-button')) {
+  if (typeof document !== 'undefined' && !customElements.get('r-button')) {
     class Button extends HTMLElement {
       static get observedAttributes() {
         return ['disabled', 'icon', 'effect']
