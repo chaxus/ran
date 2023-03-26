@@ -1,4 +1,4 @@
-export const MimeType = new Map([
+export const MimeType = new Map<string, string>([
   ['.ez', 'application/andrew-inset'],
   ['.aw', 'application/applixware'],
   ['.txt', 'text/plain'],
@@ -812,7 +812,7 @@ export const MimeType = new Map([
   ['.f4v', 'video/x-f4v'],
   ['.fli', 'video/x-fli'],
   ['.flv', 'video/x-flv'],
-  [".m4v", "video/x-m4v"],
+  ['.m4v', 'video/x-m4v'],
   ['.asf', 'video/x-ms-asf'],
   ['.asx', 'video/x-ms-asf'],
   ['.wm', 'video/x-ms-wm'],
@@ -842,7 +842,7 @@ export const MimeType = new Map([
   ['.appcache', 'text/cache-manifest'],
 ])
 
-export const addMimeType = (
+export const setMime = (
   ext: string,
   mimeType: string,
 ): Map<string, string> => {
@@ -850,7 +850,7 @@ export const addMimeType = (
   return MimeType
 }
 
-export function queryMimeType(ext: string): string | undefined {
+export function queryMime(ext: string): string | undefined {
   const tmp = ('' + ext).trim().toLowerCase()
   let idx = tmp.lastIndexOf('.')
   const suffix = !~idx ? tmp : tmp.substring(++idx)

@@ -1,3 +1,14 @@
+// 当浏览器有空闲或者超时了就会调用performWork来执行任务：
+// workLoop 的工作大概猜到了，它会从更新队列(updateQueue)中弹出更新任务来执行
+// 每执行完一个‘执行单元‘，就检查一下剩余时间是否充足，如果充足就进行执行下一个执行单元，反之则停止执行，保存现场，等下一次有执行权时恢复:
+// performUnitOfWork 负责对 Fiber 进行操作，并按照深度遍历的顺序返回下一个 Fiber。
+// Reconciliation：
+// 可以认为是 Diff 阶段, 这个阶段可以被中断, 这个阶段会找出所有节点变更，例如节点新增、删除、属性变更等等,
+// 这些变更React 称之为'副作用(Effect)' . 以下生命周期钩子会在协调阶段被调用：
+// Commit
+// 将上一个阶段计算出来的需要处理的**副作用(Effects)**一次性执行了。
+// 这个阶段必须同步执行，不能被打断. 这些生命周期钩子在提交阶段被执行:
+
 type InventedElementProps = any
 
 type FiberProps = any
@@ -10,14 +21,41 @@ interface InventedElement {
 }
 
 interface Fiber {
-  props?: FiberProps
+  /**
+   * @description: 节点的类型信息
+   */  
+  // 标记 Fiber 类型, 例如函数组件、类组件、宿主组件
+  tag?: string
+  // 节点元素类型, 是具体的类组件、函数组件、宿主组件(字符串)
   type: string
+  /**
+   * @description: 节点的状态
+   */  
+  props?: FiberProps,
+  pendingProps?: any,
+  // 上一次渲染的props
+  memoizedProps?: any, // The props used to create the output.
+  // 上一次渲染的组件状态
+  memoizedState?: any,
+  /**
+   * @description: 副作用
+   */  
   effectTag?: string // 操作的标记
+  // 和节点关系一样，React 同样使用链表来将所有有副作用的Fiber连接起来
+  nextEffect?: Fiber | null,
+  /**
+   * @description: 节点的结构信息
+   */  
   child?: Fiber // 子节点
   sibling?: Fiber // 兄弟节点
   return?: Fiber // 指向父节点
-  dom?: AuthenticElement // 判断是不是根节点
+  key?: string, // 子节点的唯一键, 即我们渲染列表传入的key属性
+  /**
+   * @description: 指向的旧节点
+   */  
   alternate?: Fiber // 记录上次的状态，进行diff对比
+
+  dom?: AuthenticElement // 判断是不是根节点
 }
 
 let deletions: Array<Fiber> = [] // 需要删除的节点
