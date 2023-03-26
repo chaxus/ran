@@ -18,7 +18,7 @@ export class Bundle {
 
   async build():Promise<void> {
     // 模块打包逻辑，完成所有的 AST 相关操作
-    await this.graph.build();
+    return await this.graph.build();
   }
 
   getModuleById(id: string):Module {

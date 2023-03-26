@@ -36,12 +36,14 @@ export class Declaration {
   }
 
   use():void {
+    // 标记该节点被使用
     this.isUsed = true;
+    // 对应的 statement 节点也应该被标记
     if (this.statement) {
       this.statement.mark();
     }
   }
-
+  // 另外，你可以加上 render 方法，便于后续代码生成的步骤
   render():string | null {
     return this.name;
   }

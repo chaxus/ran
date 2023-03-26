@@ -5,7 +5,7 @@ import type { Node } from '../ast/Node'
 let shouldSkip;
 let shouldAbort: boolean;
 
-type Enter = (node: Node, parent?: Node, prop?: string) => void
+type WalkOperate = (node: Node, parent?: Node, prop?: string) => void
 
 /**
  * @description: 无论是构建作用域链还是记录引用节点，都离不开一个最基本的操作，那就是对 AST 进行遍历操作
@@ -13,7 +13,7 @@ type Enter = (node: Node, parent?: Node, prop?: string) => void
  * @param {object} param2
  * @return {*}
  */
-export function walk(ast: Statement, { enter, leave }: { enter: Enter; leave: Enter }): void {
+export function walk(ast: Statement, { enter, leave }: { enter: WalkOperate; leave: WalkOperate }): void {
   shouldAbort = false;
   visit(ast, undefined, enter, leave);
 }
@@ -31,7 +31,7 @@ function isArray(thing: any) {
   return toString.call(thing) === '[object Array]';
 }
 
-function visit(node: Node, parent: Node | undefined, enter: Enter, leave: Enter, prop?: string) {
+function visit(node: Node, parent: Node | undefined, enter: WalkOperate, leave: WalkOperate, prop?: string) {
   if (!node || shouldAbort) return;
 
   if (enter) {

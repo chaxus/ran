@@ -18,7 +18,7 @@ export class ModuleLoader {
    * @param {string} importer
    * @return {*}
    */  
-  resolveId(id: string, importer: string | null): string | false {
+  resolveId(id: string, importer: string = ''): string | false {
     const cacheKey = id + importer
     if (this.resolveIdsMap.has(cacheKey)) {
       return this.resolveIdsMap.get(cacheKey)!
@@ -33,7 +33,7 @@ export class ModuleLoader {
    */  
   async fetchModule(
     id: string,
-    importer: null | string,
+    importer: string,
     isEntry = false,
     bundle: Bundle = this.bundle,
     loader: ModuleLoader = this,
