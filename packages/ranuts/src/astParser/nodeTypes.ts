@@ -1,4 +1,4 @@
-import type { Scope } from '../bundler/ast/Scope';
+import type { Scope } from '@/ranpack/ast/Scope';
 
 export enum NodeType {
   Program = 'Program',

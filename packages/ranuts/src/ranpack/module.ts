@@ -288,7 +288,7 @@ export class Module {
     }
     return null;
   }
-
+  // 从导出名追溯到 Declaration 声明节点
   traceExport(name: string): Declaration | null {
     // 1. reexport
     // export { foo as bar } from './mod'
@@ -411,7 +411,7 @@ export class Module {
     }
     return source.trim();
   }
-
+  // 拿到模块所有导出
   getExports(): string[] {
     return [
       ...keys(this.exports),
