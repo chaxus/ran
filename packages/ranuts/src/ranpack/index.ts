@@ -56,6 +56,8 @@ const writeFile = (path: string, content: string, format: BufferEncoding = 'utf-
   })
 }
 
+
+
 export function build(options: Options): Promise<Build> {
   const { input = './index.js', output = './dist/index.js' } = options
   const bundle = new Bundle({
