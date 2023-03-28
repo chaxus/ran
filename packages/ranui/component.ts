@@ -6,3 +6,4 @@ import './components/message/index.ts';
 import './components/skeleton/index.ts';
 import './components/tabpane/index.ts';
 import './components/tabs/index.ts';
+import './components/video/index.ts';
