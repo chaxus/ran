@@ -65,9 +65,8 @@ export function build(options: Options): Promise<Build> {
   });
   return bundle.build().then(() => {
     const generate = () => bundle.render()
-    return {
-      generate,
-      write: async () => {
+    const write = async () => {
+      try {
         const { code, map } = generate();
         if (!existsSync(dirname(output))) {
           await createDir(output)
@@ -76,7 +75,10 @@ export function build(options: Options): Promise<Build> {
           writeFile(output, code),
           writeFile(output + '.map', map.toString())
         ]);
+      } catch (error) {
+        console.warn('write bundle error', error)
       }
-    };
+    }
+    return { generate, write };
   });
 }
