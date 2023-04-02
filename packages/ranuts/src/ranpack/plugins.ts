@@ -3,6 +3,12 @@ interface PluginItem {
   exec: Function
 }
 
+// pre-alias
+// alias
+// modulepreload-polyfill
+// optimized-deps
+// resolve
+
 interface Plugin {
   [x: string]: (() => void) | undefined | string
   name: string

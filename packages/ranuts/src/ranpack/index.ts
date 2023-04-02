@@ -18,9 +18,7 @@ interface Build {
   write: () => any
 }
 
-const existsSync = (dirname: string) => {
-  return fs.existsSync(dirname)
-}
+const existsSync = (dirname: string) => fs.existsSync(dirname)
 
 const createDir = (path: string) => {
   return new Promise((resolve, reject) => {
@@ -56,29 +54,27 @@ const writeFile = (path: string, content: string, format: BufferEncoding = 'utf-
   })
 }
 
-
-
 export function build(options: Options): Promise<Build> {
   const { input = './index.js', output = './dist/index.js' } = options
   const bundle = new Bundle({
     entry: input
   });
-  return bundle.build().then(() => {
-    const generate = () => bundle.render()
-    const write = async () => {
-      try {
-        const { code, map } = generate();
-        if (!existsSync(dirname(output))) {
-          await createDir(output)
-        }
-        return Promise.all([
-          writeFile(output, code),
-          writeFile(output + '.map', map.toString())
-        ]);
-      } catch (error) {
-        console.warn('write bundle error', error)
+  const generate = () => bundle.render()
+  const write = async () => {
+    try {
+      const { code, map } = generate();
+      if (!existsSync(dirname(output))) {
+        await createDir(output)
       }
+      return Promise.all([
+        writeFile(output, code),
+        writeFile(output + '.map', map.toString())
+      ]);
+    } catch (error) {
+      console.warn('write bundle error', error)
     }
+  }
+  return bundle.build().then(() => {
     return { generate, write };
   });
 }
