@@ -10,9 +10,7 @@ type Formatter = (
   replace?: string,
 ) => (input: string) => string
 
-const formatter: Formatter =
-  (open, close, replace = open) =>
-  (input) => {
+const formatter: Formatter = (open, close, replace = open) => (input) => {
     const string = '' + input
     const index = string.indexOf(close, open.length)
     return ~index

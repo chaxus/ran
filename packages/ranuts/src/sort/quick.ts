@@ -1,8 +1,3 @@
-// const swap = (list: Array<number>, left: number, right: number) => {
-//   let temp = list[left]
-//   list[left] = list[right]
-//   list[right] = temp
-// }
 /**
  * @description: 设置基准值pivot
  * @param {Array} list
