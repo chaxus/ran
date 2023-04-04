@@ -1,4 +1,4 @@
-type Callback = (...args:any) => unknown
+type Callback = (...args: any) => unknown
 
 type EventName = string | symbol
 
@@ -8,7 +8,7 @@ type EventItem = {
   initialCallback?: Callback
 }
 
-class EventEmitter {
+class Subscribe {
   _events: Record<EventName, Array<EventItem>>
   constructor() {
     this._events = {}
@@ -86,4 +86,4 @@ class EventEmitter {
   }
 }
 
-export default EventEmitter
+export default Subscribe
