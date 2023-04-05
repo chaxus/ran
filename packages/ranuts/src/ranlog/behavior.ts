@@ -1,22 +1,5 @@
-import { throttle } from './utils'
-import { report } from './report'
-import type { Payload } from './index'
+import { Noop } from './utils'
 
-
-export const handleClick = ({ url, payload }: Payload): void => {
-    const throttleReport = throttle(report)
-    document.addEventListener(
-        'click',
-        function () {
-            throttleReport({
-                url,
-                payload: {
-                    ...payload,
-                    behavior: 'click',
-                    data: this,
-                }
-            })
-        },
-        true
-    );
+export const handleClick = (hooks:(event: MouseEvent) => void = Noop): void => {
+    document.addEventListener('click', function (event) { hooks(event) }, true);
 }
