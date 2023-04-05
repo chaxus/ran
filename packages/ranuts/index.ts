@@ -8,6 +8,7 @@ import readDir from './src/file/readDir'
 import str2Xml from './src/utils/str2Xml'
 import { init } from '@/vnode/init'
 import { h } from '@/vnode/h'
+import monitor from '@/ranlog'
 
 const vnode = {
   init,

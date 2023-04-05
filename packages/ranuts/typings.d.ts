@@ -16,3 +16,13 @@ declare namespace Ranuts {
     data?: any
   }
 }
+
+interface Window {
+  returnCitySN: {
+    cid: string,
+    cip: string,
+    cname: string
+  }
+}
+
+
