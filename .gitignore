@@ -5,3 +5,5 @@ config.ts.timestamp*
 .temp
 .DS_Store
 .eslintcache
+package-lock.json
+pnpm-lock.yaml

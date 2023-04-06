@@ -23,6 +23,14 @@ interface Window {
     cip: string,
     cname: string
   }
+  ranlog: boolean | undefined
+}
+
+declare namespace NodeJS {
+  interface Process {
+    ranlog: boolean | undefined
+  }
+  
 }
 
 
