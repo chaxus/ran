@@ -4,7 +4,8 @@ import { isString } from './utils'
  * @description: Gets the current environment configuration
  * @return {string}
  */
-export const getHost = (env?: string): string => {
+export const getHost = (env?: string): string | undefined => {
+    if(typeof window !== 'undefined'){
     let host = ''
     if (env && isString(env)) {
         if (/trunk|neibu|release/.test(env)) {
@@ -26,4 +27,5 @@ export const getHost = (env?: string): string => {
         }
     }
     return host ? `https://log${host}.chaxus.com` : "https://log.chaxus.com";
+}
 }

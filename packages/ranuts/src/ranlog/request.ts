@@ -36,6 +36,7 @@ export const handleFetchHook = (options: Partial<Options> = {}): void => {
  * @return {*}
  */
 export const handleXhrHook = (options: Partial<Options> = {}): void => {
+    if (typeof window !== 'undefined') {
     const originalXhrProto = XMLHttpRequest.prototype;
     const { requestHook = Noop, responseHook = Noop, errorHook = Noop } = options
     const replacementXhrOpen = (originalOpen: any) => {
@@ -57,4 +58,5 @@ export const handleXhrHook = (options: Partial<Options> = {}): void => {
         };
     }
     replaceOld(originalXhrProto, 'send', replacementXhrSend);
+}
 }

@@ -19,9 +19,12 @@ interface BasicType {
     fcp: number | undefined; // 渲染出第一个内容，首屏结束时间
 }
 
-export function getPerformance(): BasicType {
+export function getPerformance(): BasicType | undefined {
+    if(typeof window !== 'undefined'){
     const [performanceNavigationTiming] = performance.getEntriesByType('navigation')
-    const [firstPaint, firstContentfulPaint] = performance.getEntriesByType('paint')
+    const [firstPaint = {}, firstContentfulPaint = {}] = performance.getEntriesByType('paint')
+    const { startTime: fp } = firstPaint as PerformancePaintTiming;
+    const { startTime: fcp } = firstContentfulPaint as PerformancePaintTiming;
     const {
         domainLookupEnd,
         domainLookupStart,
@@ -42,8 +45,6 @@ export function getPerformance(): BasicType {
         redirectStart,
         redirectCount
     } = performanceNavigationTiming as PerformanceNavigationTiming;
-    const { startTime: fp } = firstPaint;
-    const { startTime: fcp } = firstContentfulPaint;
     return {
         dnsSearch: domainLookupEnd - domainLookupStart,
         tcpConnect: connectEnd - connectStart,
@@ -58,8 +59,9 @@ export function getPerformance(): BasicType {
         httpHead: transferSize - encodedBodySize,
         redirect: redirectCount,
         redirectTime: redirectEnd - redirectStart,
-        duration: duration,
-        fp: fp,
-        fcp: fcp,
+        duration,
+        fp,
+        fcp,
     };
+}
 }
