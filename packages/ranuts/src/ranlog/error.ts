@@ -1,20 +1,10 @@
-import { report } from './report'
-import type { Payload } from './index'
+import { Noop } from './utils'
+import type { Hooks } from './utils'
 
-export const handleError = ({ url, payload }: Payload): void => {
-    window.addEventListener('unhandledrejection', (error) => {
-        const param = {
-            url,
-            payload: Object.assign({}, payload, { error })
-        }
-        report(param)
-    }, true);
+export const handleError = (hooks: Hooks = Noop): void => {
+    window.addEventListener('unhandledrejection', (error) => {hooks(error)}, true);
     window.addEventListener('error', (error) => {
-        const param = {
-            url,
-            payload: Object.assign({}, payload, { error })
-        }
-        report(param)
+        hooks(error)
         return false // 取消默认事件
     }, true) // 捕获阶段
 }

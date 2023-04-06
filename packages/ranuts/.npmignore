@@ -10,3 +10,7 @@ index.ts
 tsconfig.json
 typings.d.ts
 vite.config.ts
+src
+assets
+dist/index.js.map
+dist/index.umd.cjs.map
