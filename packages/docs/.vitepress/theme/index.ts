@@ -6,21 +6,19 @@ import './styles/vars.less'
 
 const initialize = (callback = () => {}) => {
   if (typeof window !== 'undefined' && !window.ran_docs) {
-      window.ran_docs = true
-      callback()
+    window.ran_docs = true
+    callback()
   }
   if (typeof process !== 'undefined' && !process.ran_docs) {
-      process.ran_docs = true
-      callback()
+    process.ran_docs = true
+    callback()
   }
 }
 
 export default {
   ...DefaultTheme,
   enhanceApp({ app }) {
-    initialize(()=>{ 
-      new Monitor()
-    })
+    initialize(() => new Monitor())
     app.config.compilerOptions.isCustomElement = (tag) => tag.includes('r-')
   },
 }
