@@ -36,8 +36,6 @@
   "devDependencies": {
     "@babel/parser": "^7.20.13",
     "@types/node": "^18.11.18",
-    "async_hooks": "^1.0.0",
-    "picocolors": "^1.0.0",
     "vitest": "^0.23.4"
   },
   "dependencies": {
