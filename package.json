@@ -35,6 +35,6 @@
     "typescript": "^4.8.3"
   },
   "dependencies": {
-    "ranuts": "workspace:0.1.0-alpha.3"
+    "ranui": "workspace:0.1.1-alpha.3"
   }
 }

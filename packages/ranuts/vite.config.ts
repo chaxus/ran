@@ -30,10 +30,4 @@ export default defineConfig({
     extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json'],
   },
   plugins: [dts(), vitePluginBanner()],
-  server: {
-    fs: {
-      strict: false,
-      allow: [],
-    },
-  },
 })

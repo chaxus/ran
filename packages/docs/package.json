@@ -13,10 +13,10 @@
   "license": "ISC",
   "devDependencies": {
     "less": "^4.1.3",
-    "vitepress": "1.0.0-alpha.28"
+    "vitepress": "1.0.0-alpha.65"
   },
   "dependencies": {
-    "ranui": "workspace:0.1.1-alpha.2",
-    "ranuts": "workspace:0.1.0-alpha.1"
+    "ranui": "workspace:0.1.1-alpha.3",
+    "ranuts": "0.1.0-alpha.5"
   }
 }
