@@ -32,8 +32,21 @@ const createDir = (path: string) => {
     });
   })
 }
-
-const writeFile = (path: string, content: string, format: BufferEncoding = 'utf-8') => {
+interface WriteFileInfo {
+  success: boolean,
+  data: {
+    path: string,
+    content: string
+  } | Error
+}
+/**
+ * @description: 
+ * @param {string} path
+ * @param {string} content
+ * @param {BufferEncoding} format
+ * @return {*}
+ */
+export const writeFile = (path: string, content: string, format: BufferEncoding = 'utf-8'): Promise<WriteFileInfo> => {
   return new Promise((resolve, reject) => {
     fs.writeFile(
       path,

@@ -63,24 +63,24 @@ export const getWindow = (): ClientRatio => {
 export function createData(
   params: Record<string, unknown> = {},
 ): Record<string, unknown> {
-  if (typeof window !== 'undefined') {
-    const { width, height } = getWindow()
-    return Object.assign(
-      {},
-      {
-        id: randomString(),
-        path: window.location.href,
-        time: Date.now(),
-        userAgent: window.navigator.userAgent,
-        referrer: document.referrer,
-        ip: window.returnCitySN || { cid: '', cip: '', cname: '' },
-        userId: getCookie('chaxus_prod'),
-        ratio: `${width}x${height}`,
-      },
-      params,
-    )
-  }
-  return {}
+  if(typeof window !== 'undefined'){
+  const { width, height } = getWindow()
+  return Object.assign(
+    {},
+    {
+      id: randomString(),
+      path: window.location.href,
+      time: Date.now(),
+      referrer: document.referrer,
+      ip: window.returnCitySN || { cid: '', cip: '', cname: '' },
+      userId: getCookie('chaxus_prod'),
+      ratio: `${width}x${height}`,
+      userAgent: window.navigator.userAgent,
+    },
+    params,
+  )
+}
+return {}
 }
 
 export const throttle = (fn: Function, wait: number = 500): Function => {
