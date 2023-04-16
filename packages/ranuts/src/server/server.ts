@@ -11,7 +11,7 @@ export type MiddlewareFunction = (
 ) => void | Promise<void>
 
 export interface Context {
-  [x: string]: unknown
+  [x:string]: any
   ipv4: () => string | undefined,
   req: IncomingMessage
   res: ServerResponse
@@ -40,10 +40,12 @@ class Server {
   stack: Array<MiddlewareFunction>
   ctx: Context
   constructor() {
+    const req = new http.IncomingMessage(new Socket())
+    const res = new http.ServerResponse(req)
     this.ctx = {
       ipv4,
-      req: new http.IncomingMessage(new Socket()),
-      res: new http.ServerResponse(new http.IncomingMessage(new Socket()))
+      req,
+      res,
     }
     this.stack = []
     /**
