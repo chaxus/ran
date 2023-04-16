@@ -850,7 +850,7 @@ export const setMime = (
   return MimeType
 }
 
-export function queryMime(ext: string): string | undefined {
+export function getMime(ext: string): string | undefined {
   const tmp = ('' + ext).trim().toLowerCase()
   let idx = tmp.lastIndexOf('.')
   const suffix = !~idx ? tmp : tmp.substring(++idx)

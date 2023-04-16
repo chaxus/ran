@@ -2,7 +2,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import type { MiddlewareFunction, Next } from '@/server/server'
-import { queryMime, setMime } from '@/node/http/mimeType'
+import { getMime, setMime } from '@/node/http/mimeType'
 
 interface Option {
   pathname: string
@@ -29,7 +29,7 @@ const staticMiddleware = (option: Partial<Option> = {}): MiddlewareFunction => {
         setMime(key, fileTypes[key]),
         )
         // 文件类型后缀
-        const type = extension ? queryMime(extension) : htmlContentType
+        const type = extension ? getMime(extension) : htmlContentType
         // 是否支持的文件类型
         const supportedExtension = Boolean(type)
         // 如果这个文件类型不允许访问，则直接返回404

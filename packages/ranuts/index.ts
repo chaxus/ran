@@ -9,6 +9,7 @@ import str2Xml from './src/utils/str2Xml'
 import { init } from '@/vnode/init'
 import { h } from '@/vnode/h'
 import Monitor from '@/ranlog'
+import { MimeType, getMime, setMime } from '@/server/mimeType'
 
 const vnode = {
   init,
@@ -25,5 +26,8 @@ export {
   str2Xml,
   readDir,
   vnode,
-  Monitor
+  Monitor,
+  MimeType, 
+  getMime, 
+  setMime
 }

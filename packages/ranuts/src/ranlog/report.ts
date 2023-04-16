@@ -28,7 +28,7 @@ const sendImage = ({ url = "", payload = {} }) => {
 
 export const report = ({ url = '', type = 'application/json; charset=UTF-8', payload = {} }: BeaconPayload): boolean | undefined | void => {
     const requestUrl = url ? url : getHost()
-    if (typeof navigator.sendBeacon !== 'undefined') {  // 判断sendBeacon是否支持可用
+    if (typeof navigator !== 'undefined') {  // 判断sendBeacon是否支持可用
         return sendBeacon({ url: requestUrl, type, payload })
     }
     return sendImage({ url: requestUrl, payload })
