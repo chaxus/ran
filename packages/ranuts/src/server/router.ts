@@ -5,10 +5,10 @@ import type { Context, MiddlewareFunction, Next } from '@/server/server'
  * Basic usage:
  *
  * ```javascript
- * const Koa = require('koa');
- * const Router = require('@koa/router');
+ * import Server from '@/server/server'
+ * import Router from '@/server/router'
  *
- * const app = new Koa();
+ * const app = new Server();
  * const router = new Router();
  *
  * router.get('/', (ctx, next) => {
