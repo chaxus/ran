@@ -13,21 +13,27 @@ interface ClearStrOption {
 const clearStr = (str: string, options: ClearStrOption = {}): string => {
   const { urlencoded = true } = options
   const s = String.prototype.trim.call(str)
-  return urlencoded ? decodeURIComponent(s).replace(/"|'/g, '') : s.replace(/"|'/g, '')
+  return urlencoded
+    ? decodeURIComponent(s).replace(/"|'/g, '')
+    : s.replace(/"|'/g, '')
 }
 
 /**
- * @description: 将字符串转对象，比如 
- * @param {string} url 'a=1&b=2&c=3' 
- * @param {string} sep & 
+ * @description: 将字符串转对象，比如
+ * @param {string} url 'a=1&b=2&c=3'
+ * @param {string} sep &
  * @param {string} eq =
  * @return {object} {a:1,b:2,c:3}
  */
-export const strParse = (str: string = '', sep: string | RegExp = '', eq: string | RegExp = ''): Record<string, string> => {
-  const result: Record<string, string> = {};
+export const strParse = (
+  str: string = '',
+  sep: string | RegExp = '',
+  eq: string | RegExp = '',
+): Record<string, string> => {
+  const result: Record<string, string> = {}
   const list = str.split(sep)
   if (list.length > 0) {
-    list.forEach(item => {
+    list.forEach((item) => {
       const [key = '', value = ''] = item.split(eq)
       if (clearStr(key)) {
         result[clearStr(key)] = clearStr(value)
@@ -41,14 +47,21 @@ export const strParse = (str: string = '', sep: string | RegExp = '', eq: string
 //     it('should keep URL the same', function () {
 
 interface ServerBody {
-  uploadDir: string, // Sets the directory for placing file uploads in, default os.tmpDir()
-  encoding: BufferEncoding, // Sets encoding for incoming form fields, default utf-8
-  urlencoded: boolean, // Parse urlencoded bodies, default true
+  uploadDir: string // Sets the directory for placing file uploads in, default os.tmpDir()
+  encoding: BufferEncoding // Sets encoding for incoming form fields, default utf-8
+  urlencoded: boolean // Parse urlencoded bodies, default true
   json: boolean // Parse JSON bodies, default true
 }
 
-const bodyMiddleware = (options: Partial<ServerBody> = {}): MiddlewareFunction => {
-  const { uploadDir = '.', encoding = '', urlencoded = true, json = true } = options
+const bodyMiddleware = (
+  options: Partial<ServerBody> = {},
+): MiddlewareFunction => {
+  const {
+    uploadDir = '.',
+    encoding = '',
+    urlencoded = true,
+    json = true,
+  } = options
   return (ctx: Context, next: Next) => {
     const { req, res } = ctx
     const { url, method } = req
@@ -64,7 +77,7 @@ const bodyMiddleware = (options: Partial<ServerBody> = {}): MiddlewareFunction =
     ctx.request.url = url
     ctx.request.query = query
     // 处理 contentType
-    const contentType = req.headers["content-type"]
+    const contentType = req.headers['content-type']
     // application/json
     if (contentType === 'application/json') {
       if (encoding) {
@@ -77,14 +90,19 @@ const bodyMiddleware = (options: Partial<ServerBody> = {}): MiddlewareFunction =
         body += data
       })
       req.on('end', () => {
-        ctx.request.body = json ? JSON.parse(body) : body
         res.setHeader('content-type', 'application/json;charset=UTF-8')
+        try {
+          ctx.request.body = json ? JSON.parse(body) : body
+        } catch (error) {
+          ctx.request.body = body
+        }
         next()
       })
     }
     // multipart/form-data
     if (contentType?.includes('multipart/form-data;')) {
-      const [contentType, boundaryStr] = req.headers["content-type"]?.split(';').map(item => item.trim()) || []
+      const [contentType, boundaryStr] =
+        req.headers['content-type']?.split(';').map((item) => item.trim()) || []
       const [_, boundary] = boundaryStr.split('=')
       // const fileSize = req.headers['content-length']
       if (encoding) {
@@ -101,25 +119,39 @@ const bodyMiddleware = (options: Partial<ServerBody> = {}): MiddlewareFunction =
       })
       req.on('end', () => {
         const payload: Record<string, string> = {}
-        body.split('\r\n').slice(0, 4).forEach(item => {
-          Object.assign(payload, strParse(item, ';', /=|:/))
-        })
+        body
+          .split('\r\n')
+          .slice(0, 4)
+          .forEach((item) => {
+            Object.assign(payload, strParse(item, ';', /=|:/))
+          })
         const fileContentType = payload['Content-Type']
-        const fileName = Buffer.from(payload['filename'], "latin1").toString("utf8")
-        const fileDataIndex = body.indexOf(fileContentType) + fileContentType.length
+        const fileName = Buffer.from(payload['filename'], 'latin1').toString(
+          'utf8',
+        )
+        const fileDataIndex =
+          body.indexOf(fileContentType) + fileContentType.length
         const fileData = body.substring(fileDataIndex).replace(/^\s+/, '')
-        const finalData = fileData.substring(0, fileData.indexOf(`--${boundary}--`))
-        fs.writeFile(`${uploadDir}/${fileName}`, finalData, { encoding: 'binary' }, (error) => {
-          if (!error) {
-            res.setHeader('content-type', 'application/json;charset=UTF-8')
-            next()
-          } else {
-            throw error
-          }
-        })
+        const finalData = fileData.substring(
+          0,
+          fileData.indexOf(`--${boundary}--`),
+        )
+        fs.writeFile(
+          `${uploadDir}/${fileName}`,
+          finalData,
+          { encoding: 'binary' },
+          (error) => {
+            if (!error) {
+              res.setHeader('content-type', 'application/json;charset=UTF-8')
+              next()
+            } else {
+              throw error
+            }
+          },
+        )
       })
     }
-    // TODO 
+    // TODO
     // application/x-www-form-urlencoded
     // application/json-patch+json
     // application/vnd.api+json
