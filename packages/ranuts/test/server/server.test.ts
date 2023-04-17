@@ -11,15 +11,13 @@ const PORT = 30103
 const router = new Router()
 
 router.get('/api/test', (ctx, next) => {
-  const { res } = ctx
   const { query } = ctx.request
-  res.end(JSON.stringify(query))
+  ctx.res.end(JSON.stringify(query))
 })
 
 router.post('/api/test', (ctx, next) => {
-  const { res } = ctx
   const { body } = ctx.request
-  res.end(JSON.stringify(body))
+  ctx.res.end(JSON.stringify(body))
 })
 
 const requestMiddleWare = (ctx: Context, next: Next) => {

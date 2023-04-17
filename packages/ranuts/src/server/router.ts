@@ -27,8 +27,12 @@ type Handler = (ctx: Context, next: Next) => void
 class Router {
   ctx?: Context
   map: Map<string, Map<string, Handler>>
+  methods: Set<string>
+  paths: Set<string>
   constructor() {
     this.map = new Map()
+    this.methods = new Set()
+    this.paths = new Set()
   }
   get(url: string, handler: Handler): void {
     this.addHandlerToMap('GET')(url, handler)
@@ -52,7 +56,9 @@ class Router {
     this.addHandlerToMap('OPTIONS')(url, handler)
   }
   private addHandlerToMap(method: string) {
+    this.methods.add(method)
     return (url: string, handler: Handler): void => {
+      this.paths.add(url)
       let path = this.map.get(method)
       if (!path) {
         path = new Map()
@@ -71,7 +77,20 @@ class Router {
     }
   }
   allowedMethods(): MiddlewareFunction {
-    return (ctx, next) => {}
+    return (ctx, next) => {
+      const { res } = ctx
+      const { path, method } = ctx.request
+      // 地址存在，但方法不存在
+      if(!this.methods.has(method) && this.paths.has(path)){
+        res.statusCode = 405
+        res.end('method is not allowed')
+      }
+      // 方法和地址都不存在
+      if(!this.methods.has(method) && !this.paths.has(path)){
+        res.statusCode = 404
+        res.end('method is not allowed')
+      }
+    }
   }
 }
 
