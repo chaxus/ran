@@ -1,7 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
-import type { IncomingMessage, ServerResponse } from 'node:http'
-import type { MiddlewareFunction, Next } from '@/server/server'
+import type { Context, MiddlewareFunction, Next } from '@/server/server'
 import { getMime, setMime } from '@/node/http/mimeType'
 
 interface Option {
@@ -11,11 +10,11 @@ interface Option {
 const staticMiddleware = (option: Partial<Option> = {}): MiddlewareFunction => {
   const { pathname, fileTypes = {} } = option
   return async (
-    req: IncomingMessage,
-    res: ServerResponse,
+    ctx: Context,
     next: Next,
   ): Promise<void> => {
     try {
+      const { req, res } = ctx
       if (req.url) {
         const htmlContentType = 'text/html'
         // 获取传入的地址，如果没有，取当前的目录
@@ -26,7 +25,7 @@ const staticMiddleware = (option: Partial<Option> = {}): MiddlewareFunction => {
         const extension = path.extname(req.url).slice(1)
         // 增加mimeType
         Object.keys(fileTypes).forEach((key) =>
-        setMime(key, fileTypes[key]),
+          setMime(key, fileTypes[key]),
         )
         // 文件类型后缀
         const type = extension ? getMime(extension) : htmlContentType
@@ -82,7 +81,7 @@ const staticMiddleware = (option: Partial<Option> = {}): MiddlewareFunction => {
         console.log('request has not url')
       }
       await next()
-    } catch (error) {}
+    } catch (error) { }
   }
 }
 
