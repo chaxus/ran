@@ -1,4 +1,4 @@
-'Monorepo' structure, the project includes ** component library, ** packaging tool **, **AST parsing **, ** function library ** and so on
+`Monorepo` structure, the project includes **component library, **packaging tool**, **AST parsing**, **function library** and so on
 
 The packages directory is divided into the following sections
 
