@@ -1,23 +1,25 @@
-`Monorepo`结构，项目包括 **组件库** ，**打包工具**，**AST 解析**，**函数库** 等等
+'Monorepo' structure, the project includes ** component library, ** packaging tool **, **AST parsing **, ** function library ** and so on
 
-packages 目录分为以下部分
+The packages directory is divided into the following sections
 
 # docs
 
-说明文档：https://chaxus.github.io/ran/
+document：https://chaxus.github.io/ran/
 
 # ranui
 
-基于 `web components` 组件库
+Based on `web components` UI library
+
+Related articles: https://juejin.cn/post/7170219296226803725
 
 # ranuts
 
-常用函数的集合
+A collection of commonly used functions
 
 # press
 
-常用`css`，有`sass`和`less`
+Commonly used 'css', have 'sass' and 'less'
 
 # ranite
 
-前端打包构建工具
+Packaged build tool
