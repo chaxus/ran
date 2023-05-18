@@ -1,0 +1,1 @@
+import{_ as e,o as t,c as s}from"./chunks/framework.1e6d3629.js";const _=JSON.parse('{"title":"","description":"","frontmatter":{},"headers":[],"relativePath":"src/ranuts/sort/shell/index.md","lastUpdated":1684423852000}'),r={name:"src/ranuts/sort/shell/index.md"};function a(n,o,c,d,i,p){return t(),s("div")}const m=e(r,[["render",a]]);export{_ as __pageData,m as default};

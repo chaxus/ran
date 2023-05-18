@@ -1,1 +1,0 @@
-import{_ as e,c as t,o as a}from"./chunks/framework.e0cb2025.js";const m=JSON.parse('{"title":"","description":"","frontmatter":{},"headers":[],"relativePath":"src/ranuts/sort/heap/index.md","lastUpdated":1682389860000}'),r={name:"src/ranuts/sort/heap/index.md"};function s(n,o,c,d,p,i){return a(),t("div")}const f=e(r,[["render",s]]);export{m as __pageData,f as default};
