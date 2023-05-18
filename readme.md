@@ -20,6 +20,3 @@ A collection of commonly used functions
 
 Commonly used 'css', have 'sass' and 'less'
 
-# ranite
-
-Packaged build tool
