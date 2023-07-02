@@ -45,25 +45,29 @@ function Custom() {
       loadLocal = () => {
         return new Promise<void>((resolve, reject) => {
           // vite 对动态导入的一些限制 https://github.com/rollup/plugins/tree/master/packages/dynamic-import-vars#limitations
-          import(`../../assets/icons/${this.name}.svg`).then(result => {
-            if (result && result.default && result.default._identification) {
-              const { data } = result.default
-              this._icon && this._div.removeChild(this._icon)
-              this._icon = str2Xml(data, 'image/svg+xml')
-              if (this._icon) {
-                this._div.appendChild(this._icon)
-                this.setSize()
-                this.setColor()
-                resolve();
+          import(`../../assets/icons/${this.name}.svg`)
+            .then((result) => {
+              if (result && result.default && result.default._identification) {
+                const { data } = result.default
+                this._icon && this._div.removeChild(this._icon)
+                this._icon = str2Xml(data, 'image/svg+xml')
+                if (this._icon) {
+                  this._div.appendChild(this._icon)
+                  this.setSize()
+                  this.setColor()
+                  resolve()
+                }
+              } else {
+                this.loadNs()
+                reject(
+                  `\n couldn't be loaded by r-icon, message: ${this.name} icon is undefined`,
+                )
               }
-            } else {
+            })
+            .catch((error) => {
               this.loadNs()
-              reject(`\n couldn't be loaded by r-icon, message: ${this.name} icon is undefined`)
-            }
-          }).catch(error => {
-            this.loadNs()
-            // reject(`\n couldn't be loaded by r-icon, message: ${error}`)
-          })
+              // reject(`\n couldn't be loaded by r-icon, message: ${error}`)
+            })
         })
       }
       /**
@@ -72,16 +76,20 @@ function Custom() {
       loadNs = () => {
         // https://www.iconfont.cn/collections/detail?spm=a313x.7781069.1998910419.dc64b3430&cid=9402
         if (this._icon && this._div) {
-          this._div.removeChild(this._icon);
+          this._div.removeChild(this._icon)
         }
-        this._icon = document.createElement('svg');
-        this._icon.setAttribute('class','icon')
-        this._icon.setAttribute('viewBox','0 0 1024 1024')
-        this._icon.setAttribute('width','100')
-        this._icon.setAttribute('height','100')
+        this._icon = document.createElement('svg')
+        this._icon.setAttribute('class', 'icon')
+        this._icon.setAttribute('viewBox', '0 0 1024 1024')
+        this._icon.setAttribute('width', '100')
+        this._icon.setAttribute('height', '100')
         const xLinksNs = 'http://www.w3.org/1999/xlink'
-        const use = document.createElementNS(xLinksNs,'use')
-        use.setAttributeNS(xLinksNs, 'xlink:href', `../../assets/iconfont/icon.svg#icon-${this.name}`);
+        const use = document.createElementNS(xLinksNs, 'use')
+        use.setAttributeNS(
+          xLinksNs,
+          'xlink:href',
+          `../../assets/iconfont/icon.svg#icon-${this.name}`,
+        )
         this._icon.appendChild(use)
         this._div.appendChild(this._icon)
       }

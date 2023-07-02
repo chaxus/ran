@@ -9,10 +9,7 @@ interface Option {
 }
 const staticMiddleware = (option: Partial<Option> = {}): MiddlewareFunction => {
   const { pathname, fileTypes = {} } = option
-  return async (
-    ctx: Context,
-    next: Next,
-  ): Promise<void> => {
+  return async (ctx: Context, next: Next): Promise<void> => {
     try {
       const { req, res } = ctx
       if (req.url) {
@@ -24,9 +21,7 @@ const staticMiddleware = (option: Partial<Option> = {}): MiddlewareFunction => {
         // 获取访问的文件类型
         const extension = path.extname(req.url).slice(1)
         // 增加mimeType
-        Object.keys(fileTypes).forEach((key) =>
-          setMime(key, fileTypes[key]),
-        )
+        Object.keys(fileTypes).forEach((key) => setMime(key, fileTypes[key]))
         // 文件类型后缀
         const type = extension ? getMime(extension) : htmlContentType
         // 是否支持的文件类型
@@ -81,7 +76,7 @@ const staticMiddleware = (option: Partial<Option> = {}): MiddlewareFunction => {
         console.log('request has not url')
       }
       await next()
-    } catch (error) { }
+    } catch (error) {}
   }
 }
 

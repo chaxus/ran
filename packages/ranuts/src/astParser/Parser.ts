@@ -48,7 +48,7 @@ export class Parser {
    * @description: 解析生成 AST 的核心逻辑
    * 一个程序(Program)实际上由各个语句(Statement)来构成
    * 因此在_parseProgram逻辑中，需要扫描一个个语句，然后放到 Program 对象的 body 中。
-   */  
+   */
   private _parseProgram(): Program {
     const program: Program = {
       type: NodeType.Program,
@@ -68,31 +68,44 @@ export class Parser {
   /**
    * @description: 对于不同的token类型，有不同的解析逻辑
    * @return {Statement}
-   */  
+   */
   private _parseStatement(): Statement {
     // TokenType 来自 Tokenizer 的实现中
-    if (this._checkCurrentTokenType(TokenType.Function)) return this._parseFunctionDeclaration()
-    if (this._checkCurrentTokenType(TokenType.Identifier)) return this._parseExpressionStatement()
-    if (this._checkCurrentTokenType(TokenType.LeftCurly)) return this._parseBlockStatement()
-    if (this._checkCurrentTokenType(TokenType.Return)) return this._parseReturnStatement()
-    if (this._checkCurrentTokenType(TokenType.Import)) return this._parseImportDeclaration()
-    if (this._checkCurrentTokenType(TokenType.Export)) return this._parseExportDeclaration()
-    if (this._checkCurrentTokenType([TokenType.Let,TokenType.Var,TokenType.Const])) return this._parseVariableDeclaration()
+    if (this._checkCurrentTokenType(TokenType.Function))
+      return this._parseFunctionDeclaration()
+    if (this._checkCurrentTokenType(TokenType.Identifier))
+      return this._parseExpressionStatement()
+    if (this._checkCurrentTokenType(TokenType.LeftCurly))
+      return this._parseBlockStatement()
+    if (this._checkCurrentTokenType(TokenType.Return))
+      return this._parseReturnStatement()
+    if (this._checkCurrentTokenType(TokenType.Import))
+      return this._parseImportDeclaration()
+    if (this._checkCurrentTokenType(TokenType.Export))
+      return this._parseExportDeclaration()
+    if (
+      this._checkCurrentTokenType([
+        TokenType.Let,
+        TokenType.Var,
+        TokenType.Const,
+      ])
+    )
+      return this._parseVariableDeclaration()
     console.log('Unexpected token:', this._getCurrentToken())
     throw new Error('Unexpected token')
   }
   /**
    * @description: 解析 import 声明
    * @return {ImportDeclaration}
-   */  
+   */
   private _parseImportDeclaration(): ImportDeclaration {
     const { start } = this._getCurrentToken()
-    const specifiers:ImportSpecifiers = []
+    const specifiers: ImportSpecifiers = []
     this._goNext(TokenType.Import)
     // import a
     if (this._checkCurrentTokenType(TokenType.Identifier)) {
       const local = this._parseIdentifier()
-      const defaultSpecifier:ImportDefaultSpecifier = {
+      const defaultSpecifier: ImportDefaultSpecifier = {
         type: NodeType.ImportDefaultSpecifier,
         local,
         start: local.start,
@@ -113,7 +126,7 @@ export class Parser {
           this._goNext(TokenType.As)
           local = this._parseIdentifier()
         }
-        const importSpecifier:ImportSpecifier = {
+        const importSpecifier: ImportSpecifier = {
           type: NodeType.ImportSpecifier,
           imported: specifier,
           local: local ? local : specifier,
@@ -133,7 +146,7 @@ export class Parser {
       this._goNext(TokenType.Asterisk)
       this._goNext(TokenType.As)
       const local = this._parseIdentifier()
-      const importNamespaceSpecifier:ImportNamespaceSpecifier = {
+      const importNamespaceSpecifier: ImportNamespaceSpecifier = {
         type: NodeType.ImportNamespaceSpecifier,
         local,
         start,
@@ -160,7 +173,7 @@ export class Parser {
   /**
    * @description: 解析 export 声明
    * @return {ExportDeclaration}
-   */  
+   */
   private _parseExportDeclaration(): ExportDeclaration {
     const { start } = this._getCurrentToken()
     let exportDeclaration: ExportDeclaration | undefined
@@ -292,7 +305,7 @@ export class Parser {
    * 解析函数表达式，如示例代码中的 function() {}
    * 其中，解析变量名的过程我们通过 _parseIdentifier 方法实现，解析函数表达式的过程由 _parseFunctionExpression 来实现
    * @return {VariableDeclaration}
-   */  
+   */
   private _parseVariableDeclaration(): VariableDeclaration {
     // 获取语句开始位置
     const { start } = this._getCurrentToken()
@@ -478,7 +491,7 @@ export class Parser {
   /**
    * @description: 解析函数表达式
    * @return {*}
-   */  
+   */
   private _parseFunctionExpression(): FunctionExpression {
     const { start } = this._getCurrentToken()
     this._goNext(TokenType.Function)
@@ -500,15 +513,15 @@ export class Parser {
   }
   /**
    * @description: 解析函数参数
-   * 
-   */  
+   *
+   */
   private _parseParams(
     mode: FunctionType = FunctionType.FunctionDeclaration,
   ): Identifier[] | Expression[] {
     // 消费 "("
     this._goNext(TokenType.LeftParen)
     const params = []
-     // 逐个解析括号中的参数
+    // 逐个解析括号中的参数
     while (!this._checkCurrentTokenType(TokenType.RightParen)) {
       const param =
         mode === FunctionType.FunctionDeclaration
@@ -528,7 +541,7 @@ export class Parser {
   /**
    * @description: 解析字面量，const name = 'value', value就是字面量
    * @return {Literal}
-   */  
+   */
   private _parseLiteral(): Literal {
     const token = this._getCurrentToken()
     let value: string | number | boolean = token.value!
@@ -548,7 +561,7 @@ export class Parser {
   /**
    * @description: 解析变量名
    * @return {Identifier}
-   */  
+   */
   private _parseIdentifier(): Identifier {
     const token = this._getCurrentToken()
     const identifier: Identifier = {
@@ -563,7 +576,7 @@ export class Parser {
   /**
    * @description: 解析函数体
    * @return {BlockStatement}
-   */  
+   */
   private _parseBlockStatement(): BlockStatement {
     const { start } = this._getCurrentToken()
     const blockStatement: BlockStatement = {
@@ -572,7 +585,7 @@ export class Parser {
       start,
       end: Infinity,
     }
-     // 消费 "{"
+    // 消费 "{"
     this._goNext(TokenType.LeftCurly)
     while (!this._checkCurrentTokenType(TokenType.RightCurly)) {
       // 递归调用 _parseStatement 解析函数体中的语句(Statement)
@@ -580,7 +593,7 @@ export class Parser {
       blockStatement.body.push(node)
     }
     blockStatement.end = this._getCurrentToken().end
-     // 消费 "}"
+    // 消费 "}"
     this._goNext(TokenType.RightCurly)
     return blockStatement
   }
@@ -607,7 +620,7 @@ export class Parser {
    * @description: 工具方法，表示消费当前 Token，扫描位置移动到下一个 token
    * @param {TokenType} type
    * @return {Token}
-   */  
+   */
   private _goNext(type: TokenType | TokenType[]): Token {
     const currentToken = this._tokens[this._currentIndex]
     // 断言当前 Token 的类型，如果不能匹配，则抛出错误
@@ -628,14 +641,14 @@ export class Parser {
   /**
    * @description: token 是否已经扫描完
    * @return {boolean}
-   */  
+   */
   private _isEnd(): boolean {
     return this._currentIndex >= this._tokens.length
   }
   /**
    * @description: 获取当前的token
    * @return {Token}
-   */  
+   */
   private _getCurrentToken(): Token {
     return this._tokens[this._currentIndex]
   }

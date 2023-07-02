@@ -1,5 +1,3 @@
-// import randomArray from "./randomArray"
-
 class Heap {
   arr: Array<number>
   size: number
@@ -32,7 +30,7 @@ class Heap {
     for (let i = Math.floor(this.size / 2); i >= 0; i--) {
       this.heapHandler(i)
     }
-    for (let i = this.size; i >= 0; i--) {
+    for (let i = this.size - 1; i >= 0; i--) {
       this.swap(0, i)
       this.size--
       this.heapHandler(0)
@@ -49,6 +47,5 @@ const heap = (list: Array<number>): Array<number> => {
   const { arr } = new Heap(list)
   return arr
 }
-
 
 export default heap

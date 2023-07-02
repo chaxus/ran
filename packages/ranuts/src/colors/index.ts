@@ -10,7 +10,9 @@ type Formatter = (
   replace?: string,
 ) => (input: string) => string
 
-const formatter: Formatter = (open, close, replace = open) => (input) => {
+const formatter: Formatter =
+  (open, close, replace = open) =>
+  (input) => {
     const string = '' + input
     const index = string.indexOf(close, open.length)
     return ~index
@@ -33,8 +35,14 @@ const replaceClose = (
 }
 
 const colors = (enabled = isColorSupported) => {
-  const result: Record<string, (input: string) => string | StringConstructor> = {}
-  Object.keys(FMT).forEach((key) => result[key] = enabled ? formatter(FMT[key][OPEN], FMT[key][CLOSE]) : String)
+  const result: Record<string, (input: string) => string | StringConstructor> =
+    {}
+  Object.keys(FMT).forEach(
+    (key) =>
+      (result[key] = enabled
+        ? formatter(FMT[key][OPEN], FMT[key][CLOSE])
+        : String),
+  )
   return result
 }
 
@@ -43,8 +51,20 @@ const createColors = (enabled = isColorSupported) => ({
   reset: enabled
     ? (s: string) => `${FMT.reset[OPEN]}${s}${FMT.reset[CLOSE]}`
     : String,
-  bold: enabled ? formatter(FMT.bold[OPEN], FMT.bold[CLOSE], `${FMT.bold[CLOSE]}${FMT.bold[OPEN]}`) : String,
-  dim: enabled ? formatter(FMT.dim[OPEN], FMT.dim[CLOSE], `${FMT.dim[CLOSE]}${FMT.dim[OPEN]}`) : String,
+  bold: enabled
+    ? formatter(
+        FMT.bold[OPEN],
+        FMT.bold[CLOSE],
+        `${FMT.bold[CLOSE]}${FMT.bold[OPEN]}`,
+      )
+    : String,
+  dim: enabled
+    ? formatter(
+        FMT.dim[OPEN],
+        FMT.dim[CLOSE],
+        `${FMT.dim[CLOSE]}${FMT.dim[OPEN]}`,
+      )
+    : String,
 })
 
 export default Object.assign({}, colors(), createColors())

@@ -14,4 +14,3 @@ export function primitive(s: unknown): s is string | number {
 export function isVnode(s: any): s is VNode {
   return !!s?.sel
 }
-

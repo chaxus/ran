@@ -842,10 +842,7 @@ export const MimeType = new Map<string, string>([
   ['.appcache', 'text/cache-manifest'],
 ])
 
-export const setMime = (
-  ext: string,
-  mimeType: string,
-): Map<string, string> => {
+export const setMime = (ext: string, mimeType: string): Map<string, string> => {
   MimeType.set(ext, mimeType)
   return MimeType
 }

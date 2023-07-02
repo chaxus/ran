@@ -17,7 +17,7 @@ export class ModuleLoader {
    * @param {string} id
    * @param {string} importer
    * @return {*}
-   */  
+   */
   resolveId(id: string, importer: string = ''): string | false {
     const cacheKey = id + importer
     if (this.resolveIdsMap.has(cacheKey)) {
@@ -30,7 +30,7 @@ export class ModuleLoader {
   /**
    * @description: 加载模块内容并解析
    * @return {*}
-   */  
+   */
   async fetchModule(
     id: string,
     importer: string,

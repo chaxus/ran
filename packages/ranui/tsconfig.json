@@ -22,5 +22,5 @@
       "@/plugins/*": ["plugins/*"],
       "@/utils/*": ["utils/*"]
     }
-  },
+  }
 }

@@ -11,8 +11,8 @@ export type MiddlewareFunction = (
 ) => void | Promise<void>
 
 export interface Context {
-  [x:string]: any
-  ipv4: () => string | undefined,
+  [x: string]: any
+  ipv4: () => string | undefined
   req: IncomingMessage
   res: ServerResponse
 }

@@ -10,7 +10,7 @@ import taskEnd from '../src/utils/taskEnd'
 import startTask from '../src/utils/startTask'
 import heap from '@/sort/heap'
 
-const handing = (name: string, sort: Function, limit: number = 1) => {
+const handing = (name: string, sort: Function, limit: number = 10) => {
   it(name, () => {
     const taskId = startTask()
     for (let i = 0; i < limit; i++) {

@@ -5,8 +5,8 @@ interface Options {
 }
 
 interface ReturnType {
-    ping:number,
-    jitter:number
+  ping: number
+  jitter: number
 }
 
 /**
@@ -37,7 +37,11 @@ const imageRequest = (url?: string): Promise<number> => {
  * @param {HandlerFunction} handler
  * @param {array} params
  */
-const durationHandler = <T,U>(handler: (...args:T[]) => U, ...params: T[]):(a:number)=>Promise<U> =>
+const durationHandler =
+  <T, U>(
+    handler: (...args: T[]) => U,
+    ...params: T[]
+  ): ((a: number) => Promise<U>) =>
   (duration: number): Promise<U> =>
     new Promise((resolve, reject) => {
       setTimeout(async () => {
@@ -54,7 +58,7 @@ const durationHandler = <T,U>(handler: (...args:T[]) => U, ...params: T[]):(a:nu
  * @description: 通过请求来测试当前网络的ping值
  * @param {*} options
  */
-const networkSpeed = async (options: Options):Promise<ReturnType> => {
+const networkSpeed = async (options: Options): Promise<ReturnType> => {
   const { url, duration = 3000, count = 5 } = options
   // 抖动，用来描述网络的波动情况。比如每秒测量一次 ping 值，5s 后取五次测量结果的最大最小值求差，可以看出网络的波动情况，差值越小代表网络越稳定；
   let jitter = 0
@@ -62,7 +66,7 @@ const networkSpeed = async (options: Options):Promise<ReturnType> => {
   let ping = 0
   // ping值的数组
   const pingList: Array<number> = []
-  for(let i = 0; i < count; i++){
+  for (let i = 0; i < count; i++) {
     const handler = durationHandler(imageRequest, url)
     const delta = await handler(duration)
     pingList.push(delta)

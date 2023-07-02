@@ -22,6 +22,6 @@ export function isUnderline(char: string): boolean {
  * @param {number} code code = string.charCodeAt(index)
  * @return {boolean}
  */
-export function isNewLine(code:number):boolean {
+export function isNewLine(code: number): boolean {
   return code === 10 || code === 13 || code === 0x2028 || code === 0x2029
 }

@@ -1,4 +1,4 @@
-import type { Scope } from '@/ranpack/ast/Scope';
+import type { Scope } from '@/ranpack/ast/Scope'
 
 export enum NodeType {
   Program = 'Program',
@@ -132,7 +132,9 @@ export interface ImportNamespaceSpecifier extends Node {
   local: Identifier
 }
 
-export type ImportSpecifiers = Array<ImportSpecifier | ImportDefaultSpecifier | ImportNamespaceSpecifier>
+export type ImportSpecifiers = Array<
+  ImportSpecifier | ImportDefaultSpecifier | ImportNamespaceSpecifier
+>
 
 export interface ImportDeclaration extends Node {
   type: NodeType.ImportDeclaration

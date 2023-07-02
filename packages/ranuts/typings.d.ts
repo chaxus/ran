@@ -8,7 +8,6 @@ declare module '@/bundler/*'
 declare module '@/vnode/*'
 declare module '@/server/*'
 
-
 declare namespace Ranuts {
   interface Identification {
     _identification: boolean
@@ -19,8 +18,8 @@ declare namespace Ranuts {
 
 interface Window {
   returnCitySN: {
-    cid: string,
-    cip: string,
+    cid: string
+    cip: string
     cname: string
   }
   ranlog: boolean | undefined
@@ -30,7 +29,4 @@ declare namespace NodeJS {
   interface Process {
     ranlog: boolean | undefined
   }
-  
 }
-
-

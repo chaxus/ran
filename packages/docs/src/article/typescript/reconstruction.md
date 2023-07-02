@@ -7,19 +7,19 @@ TypeScript 类型系统支持 3 种可以声明任意类型的变量： type、i
 type 叫做类型别名，其实就是声明一个变量存储某个类型：
 
 ```ts
-type ttt = Promise<number>;
+type ttt = Promise<number>
 ```
 
 infer 用于类型的提取，然后存到一个变量里，相当于局部变量：
 
 ```ts
-type GetValueType<P> = P extends Promise<infer Value> ? Value : never;
+type GetValueType<P> = P extends Promise<infer Value> ? Value : never
 ```
 
 类型参数用于接受具体的类型，在类型运算中也相当于局部变量：
 
 ```ts
-type isTwo<T> = T extends 2 ? true: false;
+type isTwo<T> = T extends 2 ? true : false
 ```
 
 但是，严格来说这三种也都不叫变量，因为它们不能被重新赋值。
@@ -47,7 +47,7 @@ TypeScript 的 type、infer、类型参数声明的变量都不能修改，想�
 有这样一个元组类型：
 
 ```ts
-type tuple = [1,2,3];
+type tuple = [1, 2, 3]
 ```
 
 我想给这个元组类型再添加一些类型，怎么做呢？
@@ -55,7 +55,7 @@ type tuple = [1,2,3];
 TypeScript 类型变量不支持修改，我们可以构造一个新的元组类型：
 
 ```ts
-type Push<Arr extends unknown[], Ele> = [...Arr, Ele] 
+type Push<Arr extends unknown[], Ele> = [...Arr, Ele]
 ```
 
 类型参数 Arr 是要修改的数组/元组类型，元素的类型任意，也就是 unknown。
@@ -65,7 +65,7 @@ type Push<Arr extends unknown[], Ele> = [...Arr, Ele]
 返回的是用 Arr 已有的元素加上 Ele 构造的新的元组类型。
 
 ```ts
-type PushResult = Push<[1,2,3],4>
+type PushResult = Push<[1, 2, 3], 4>
 // type PushResult = [1,2,3,4]
 ```
 
@@ -78,7 +78,7 @@ type PushResult = Push<[1,2,3],4>
 可以在后面添加，同样也可以在前面添加：
 
 ```ts
-type Unshift<Arr extends  unknown[], Ele> = [Ele, ...Arr];
+type Unshift<Arr extends unknown[], Ele> = [Ele, ...Arr]
 ```
 
 ### Zip
@@ -86,20 +86,27 @@ type Unshift<Arr extends  unknown[], Ele> = [Ele, ...Arr];
 有这样两个元组：
 
 ```ts
-type tuple1 = [1,2];
-type tuple2 = ['name', 'value'];
+type tuple1 = [1, 2]
+type tuple2 = ['name', 'value']
 ```
 
 我们想把它们合并成这样的元组：
 
 ```ts
-type tuple = [[1, 'name'], [2, 'value']];
+type tuple = [[1, 'name'], [2, 'value']]
 ```
 
 思路很容易想到，提取元组中的两个元素，构造成新的元组：
 
 ```ts
-type Zip<One extends [unknown, unknown], Other extends [unknown, unknown]> = One extends [infer OneFirst, infer OneSecond] ? Other extends [infer OtherFirst, infer OtherSecond] ? [[OneFirst, OtherFirst],[OneSecond, OtherSecond]] : [] : []
+type Zip<
+  One extends [unknown, unknown],
+  Other extends [unknown, unknown],
+> = One extends [infer OneFirst, infer OneSecond]
+  ? Other extends [infer OtherFirst, infer OtherSecond]
+    ? [[OneFirst, OtherFirst], [OneSecond, OtherSecond]]
+    : []
+  : []
 ```
 
 两个类型参数 One、Other 是两个元组，类型是 [unknown, unknown]，代表 2 个任意类型的元素构成的元组。
@@ -118,7 +125,14 @@ type ZipResult = Zip<[1, 2], ['name', 'value']>
 那就得用递归了：
 
 ```ts
-type Zip<One extends unknown[], Other extends unknown[]> = One extends [infer OneFirst, ...infer OneRest] ? Other extends [infer OtherFirst, ...infer OtherRest] ? [[OneFirst, OtherFirst], ...Zip<OneRest, OtherRest>] : [] : []
+type Zip<One extends unknown[], Other extends unknown[]> = One extends [
+  infer OneFirst,
+  ...infer OneRest,
+]
+  ? Other extends [infer OtherFirst, ...infer OtherRest]
+    ? [[OneFirst, OtherFirst], ...Zip<OneRest, OtherRest>]
+    : []
+  : []
 ```
 
 类型参数 One、Other 声明为 unknown[]，也就是元素个数任意，类型任意的数组。
@@ -130,8 +144,10 @@ type Zip<One extends unknown[], Other extends unknown[]> = One extends [infer On
 这样，就能处理任意个数元组的合并：
 
 ```ts
-
-type ZipResult = Zip<[1, 2, 3, 4, 5], ['name', 'value', 'three', 'four', 'five']>
+type ZipResult = Zip<
+  [1, 2, 3, 4, 5],
+  ['name', 'value', 'three', 'four', 'five']
+>
 // type ZipResult = [[1, 'name'], [2, 'value'], [3, 'three'], [4, 'four'], [5, 'five']];
 ```
 
@@ -146,9 +162,8 @@ type ZipResult = Zip<[1, 2, 3, 4, 5], ['name', 'value', 'three', 'four', 'five']
 需要用到字符串类型的提取和重新构造：
 
 ```ts
-type CapitalizeStr<Str extends string> = 
-    Str extends `${infer First}${infer Rest}` 
-        ? `${Uppercase<First>}${Rest}` : Str;
+type CapitalizeStr<Str extends string> =
+  Str extends `${infer First}${infer Rest}` ? `${Uppercase<First>}${Rest}` : Str
 ```
 
 我们声明了类型参数 Str 是要处理的字符串类型，通过 extends 约束为 string。
@@ -166,15 +181,15 @@ type CapitalizeStr<Str extends string> =
 同样是提取和重新构造：
 
 ```ts
-type CamelCase<Str extends string> = 
-    Str extends `${infer Left}_${infer Right}${infer Rest}`
-        ? `${Left}${Uppercase<Right>}${CamelCase<Rest>}`
-        : Str;
+type CamelCase<Str extends string> =
+  Str extends `${infer Left}_${infer Right}${infer Rest}`
+    ? `${Left}${Uppercase<Right>}${CamelCase<Rest>}`
+    : Str
 ```
 
 类型参数 Str 是待处理的字符串类型，约束为 string。
 
-提取 _ 之前和之后的两个字符到 infer 声明的局部变量 Left 和 Right，剩下的字符放到 Rest 里。
+提取 \_ 之前和之后的两个字符到 infer 声明的局部变量 Left 和 Right，剩下的字符放到 Rest 里。
 
 然后把右边的字符 Right 大写，和 Left 构造成新的字符串，剩余的字符 Rest 要继续递归的处理。
 
@@ -185,9 +200,12 @@ type CamelCase<Str extends string> =
 可以修改自然也可以删除，我们再来做一个删除一段字符串的案例：删除字符串中的某个子串
 
 ```ts
-type DropSubStr<Str extends string, SubStr extends string> = 
-    Str extends `${infer Prefix}${SubStr}${infer Suffix}` 
-        ? DropSubStr<`${Prefix}${Suffix}`, SubStr> : Str;
+type DropSubStr<
+  Str extends string,
+  SubStr extends string,
+> = Str extends `${infer Prefix}${SubStr}${infer Suffix}`
+  ? DropSubStr<`${Prefix}${Suffix}`, SubStr>
+  : Str
 ```
 
 类型参数 Str 是待处理的字符串， SubStr 是要删除的字符串，都通过 extends 约束为 string 类型。
@@ -209,9 +227,11 @@ type DropSubStr<Str extends string, SubStr extends string> =
 比如在已有的函数类型上添加一个参数:
 
 ```ts
-type AppendArgument<Func extends Function, Arg> = 
-    Func extends (...args: infer Args) => infer ReturnType 
-        ? (...args: [...Args, Arg]) => ReturnType : never;
+type AppendArgument<Func extends Function, Arg> = Func extends (
+  ...args: infer Args
+) => infer ReturnType
+  ? (...args: [...Args, Arg]) => ReturnType
+  : never
 ```
 
 类型参数 Func 是待处理的函数类型，通过 extends 约束为 Function，Arg 是要添加的参数类型。
@@ -230,9 +250,9 @@ type AppendArgument<Func extends Function, Arg> =
 
 ```ts
 type obj = {
-  name: string;
-  age: number;
-  gender: boolean;
+  name: string
+  age: number
+  gender: boolean
 }
 ```
 
@@ -240,17 +260,17 @@ type obj = {
 
 ```ts
 type obj = {
-  readonly name: string;
-  age?: number;
-  gender: boolean;
+  readonly name: string
+  age?: number
+  gender: boolean
 }
 ```
 
 对它的修改和构造新类型涉及到了映射类型的语法：
 
 ```ts
-type Mapping<Obj extends object> = { 
-    [Key in keyof Obj]: Obj[Key]
+type Mapping<Obj extends object> = {
+  [Key in keyof Obj]: Obj[Key]
 }
 ```
 
@@ -259,8 +279,8 @@ type Mapping<Obj extends object> = {
 映射的过程中可以对 value 做下修改，比如：
 
 ```ts
-type Mapping<Obj extends object> = { 
-    [Key in keyof Obj]: [Obj[Key], Obj[Key], Obj[Key]]
+type Mapping<Obj extends object> = {
+  [Key in keyof Obj]: [Obj[Key], Obj[Key], Obj[Key]]
 }
 ```
 
@@ -277,8 +297,8 @@ type Mapping<Obj extends object> = {
 比如把索引类型的 Key 变为大写。
 
 ```ts
-type UppercaseKey<Obj extends object> = { 
-    [Key in keyof Obj as Uppercase<Key & string>]: Obj[Key]
+type UppercaseKey<Obj extends object> = {
+  [Key in keyof Obj as Uppercase<Key & string>]: Obj[Key]
 }
 ```
 
@@ -297,7 +317,7 @@ value 保持不变，也就是之前的索引 Key 对应的值的类型 Obj[Key]
 TypeScript 提供了内置的高级类型 Record 来创建索引类型：
 
 ```ts
-type Record<K extends string | number | symbol, T> = { [P in K]: T; }
+type Record<K extends string | number | symbol, T> = { [P in K]: T }
 ```
 
 指定索引和值的类型分别为 K 和 T，就可以创建一个对应的索引类型。
@@ -305,8 +325,8 @@ type Record<K extends string | number | symbol, T> = { [P in K]: T; }
 上面的索引类型的约束我们用的 object，其实更语义化一点我推荐用 Record<string, any>：
 
 ```ts
-type UppercaseKey<Obj extends Record<string, any>> = { 
-    [Key in keyof Obj as Uppercase<Key & string>]: Obj[Key]
+type UppercaseKey<Obj extends Record<string, any>> = {
+  [Key in keyof Obj as Uppercase<Key & string>]: Obj[Key]
 }
 ```
 
@@ -319,8 +339,8 @@ type UppercaseKey<Obj extends Record<string, any>> = {
 那我们就可以实现给索引类型添加 readonly 修饰的高级类型：
 
 ```ts
-type ToReadonly<T> =  {
-    readonly [Key in keyof T]: T[Key];
+type ToReadonly<T> = {
+  readonly [Key in keyof T]: T[Key]
 }
 ```
 
@@ -332,7 +352,7 @@ type ToReadonly<T> =  {
 
 ```ts
 type ToPartial<T> = {
-    [Key in keyof T]?: T[Key]
+  [Key in keyof T]?: T[Key]
 }
 ```
 
@@ -344,7 +364,7 @@ type ToPartial<T> = {
 
 ```ts
 type ToMutable<T> = {
-    -readonly [Key in keyof T]: T[Key]
+  -readonly [Key in keyof T]: T[Key]
 }
 ```
 
@@ -356,7 +376,7 @@ type ToMutable<T> = {
 
 ```ts
 type ToRequired<T> = {
-    [Key in keyof T]-?: T[Key]
+  [Key in keyof T]-?: T[Key]
 }
 ```
 
@@ -367,13 +387,8 @@ type ToRequired<T> = {
 可以在构造新索引类型的时候根据值的类型做下过滤：
 
 ```ts
-type FilterByValueType<
-    Obj extends Record<string, any>, 
-    ValueType
-> = {
-    [Key in keyof Obj 
-        as Obj[Key] extends ValueType ? Key : never]
-        : Obj[Key]
+type FilterByValueType<Obj extends Record<string, any>, ValueType> = {
+  [Key in keyof Obj as Obj[Key] extends ValueType ? Key : never]: Obj[Key]
 }
 ```
 

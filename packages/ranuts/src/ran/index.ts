@@ -23,36 +23,36 @@ interface InventedElement {
 interface Fiber {
   /**
    * @description: 节点的类型信息
-   */  
+   */
   // 标记 Fiber 类型, 例如函数组件、类组件、宿主组件
   tag?: string
   // 节点元素类型, 是具体的类组件、函数组件、宿主组件(字符串)
   type: string
   /**
    * @description: 节点的状态
-   */  
-  props?: FiberProps,
-  pendingProps?: any,
+   */
+  props?: FiberProps
+  pendingProps?: any
   // 上一次渲染的props
-  memoizedProps?: any, // The props used to create the output.
+  memoizedProps?: any // The props used to create the output.
   // 上一次渲染的组件状态
-  memoizedState?: any,
+  memoizedState?: any
   /**
    * @description: 副作用
-   */  
+   */
   effectTag?: string // 操作的标记
   // 和节点关系一样，React 同样使用链表来将所有有副作用的Fiber连接起来
-  nextEffect?: Fiber | null,
+  nextEffect?: Fiber | null
   /**
    * @description: 节点的结构信息
-   */  
+   */
   child?: Fiber // 子节点
   sibling?: Fiber // 兄弟节点
   return?: Fiber // 指向父节点
-  key?: string, // 子节点的唯一键, 即我们渲染列表传入的key属性
+  key?: string // 子节点的唯一键, 即我们渲染列表传入的key属性
   /**
    * @description: 指向的旧节点
-   */  
+   */
   alternate?: Fiber // 记录上次的状态，进行diff对比
 
   dom?: AuthenticElement // 判断是不是根节点

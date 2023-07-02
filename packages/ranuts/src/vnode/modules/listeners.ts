@@ -25,7 +25,7 @@ function invokeHandler<N extends keyof HTMLElementEventMap>(
 ): void {
   if (isFunction(handler)) {
     // 如果类型是function，说明只有一个事件监听，将this指向vnode调用
-    (handler as Function).call(vnode, event, vnode)
+    ;(handler as Function).call(vnode, event, vnode)
   } else if (typeof handler === 'object') {
     // 如果类型是对象，说明有多个事件监听，遍历依次调用
     for (let i = 0; i < handler.length; i++) {
@@ -92,7 +92,7 @@ function updateEventListeners(oldVnode: VNode, vnode?: VNode): void {
   // 如果新VNode有事件监听
   if (on) {
     // 如果新VNode上已经存在事件监听，则直接继承，如果没有则创建一个新事件监听
-    const listener = vnode.listener = oldVnode.listener || createListener()
+    const listener = (vnode.listener = oldVnode.listener || createListener())
     // 更新listener上的vnode
     // listener.vnode = vnode
 

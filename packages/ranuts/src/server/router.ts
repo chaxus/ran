@@ -81,19 +81,21 @@ class Router {
       const { res } = ctx
       const { path, method } = ctx.request
       // 地址存在，但方法不存在
-      if(!this.methods.has(method) && this.paths.has(path)){
+      if (!this.methods.has(method) && this.paths.has(path)) {
         res.statusCode = 405
         res.end('405, method is not allowed')
       }
       // 地址不存在，但方法存在
-      if(this.methods.has(method) && !this.paths.has(path)){
+      if (this.methods.has(method) && !this.paths.has(path)) {
         res.statusCode = 404
         res.end('404, the request address does not exist')
       }
       // 方法和地址都不存在
-      if(!this.methods.has(method) && !this.paths.has(path)){
+      if (!this.methods.has(method) && !this.paths.has(path)) {
         res.statusCode = 501
-        res.end('501, not support the functionality needed to satisfy the request')
+        res.end(
+          '501, not support the functionality needed to satisfy the request',
+        )
       }
     }
   }

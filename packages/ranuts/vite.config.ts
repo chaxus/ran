@@ -14,7 +14,7 @@ export default defineConfig({
     sourcemap: true, // 输出单独 source文件
     rollupOptions: {
       inlineDynamicImports: true,
-      external: ['node:fs','fs'],
+      external: ['node:fs', 'fs'],
     },
     lib: {
       entry: './index.ts',
@@ -30,5 +30,5 @@ export default defineConfig({
     },
     extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json'],
   },
-  plugins: [dts(),vitePluginBanner()],
+  plugins: [dts(), vitePluginBanner()],
 })

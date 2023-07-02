@@ -204,7 +204,7 @@ type SingleCharTokens = '(' | ')' | '{' | '}' | '.' | ';' | ',' | '*' | '='
 // 单字符到 Token 生成器的映射
 const KNOWN_SINGLE_CHAR_TOKENS = new Map<
   SingleCharTokens,
-  typeof TOKENS_GENERATOR[keyof typeof TOKENS_GENERATOR]
+  (typeof TOKENS_GENERATOR)[keyof typeof TOKENS_GENERATOR]
 >([
   ['(', TOKENS_GENERATOR.leftParen],
   [')', TOKENS_GENERATOR.rightParen],
@@ -255,8 +255,8 @@ export class Tokenizer {
     this._source = input // 获取源代码
   }
   /**
- * @description: 主程序，扫描字符串生成 token
- */
+   * @description: 主程序，扫描字符串生成 token
+   */
   tokenize(): Token[] {
     // 扫描
     while (this._currentIndex < this._source.length) {
@@ -279,14 +279,21 @@ export class Tokenizer {
         if (currentChar === '*') {
           // 前瞻，如果是非 import/export，则认为是二元运算符，避免误判
           const previousToken = this._getPreviousToken()
-          if (previousToken.type !== TokenType.Import && previousToken.type !== TokenType.Export) {
-            this._tokens.push(TOKENS_GENERATOR.operator(startIndex, currentChar))
+          if (
+            previousToken.type !== TokenType.Import &&
+            previousToken.type !== TokenType.Export
+          ) {
+            this._tokens.push(
+              TOKENS_GENERATOR.operator(startIndex, currentChar),
+            )
             this._currentIndex++
             continue
           }
           // 否则按照 import/export 中的 * 处理
         }
-        const token = KNOWN_SINGLE_CHAR_TOKENS.get(currentChar as SingleCharTokens)!(startIndex)
+        const token = KNOWN_SINGLE_CHAR_TOKENS.get(
+          currentChar as SingleCharTokens,
+        )!(startIndex)
         this._tokens.push(token)
         this._currentIndex++
       }
@@ -299,12 +306,23 @@ export class Tokenizer {
         continue
       }
       // 5. 判断二元计算符
-      else if (OPERATOR_TOKENS.includes(currentChar) && this._scanMode === ScanMode.Normal) {
+      else if (
+        OPERATOR_TOKENS.includes(currentChar) &&
+        this._scanMode === ScanMode.Normal
+      ) {
         this._tokens.push(TOKENS_GENERATOR.operator(startIndex, currentChar))
         this._currentIndex++
         continue
-      } else if (OPERATOR_TOKENS.includes(currentChar + this._getNextChar()) && this._scanMode === ScanMode.Normal) {
-        this._tokens.push(TOKENS_GENERATOR.operator(startIndex, currentChar + this._getNextChar()))
+      } else if (
+        OPERATOR_TOKENS.includes(currentChar + this._getNextChar()) &&
+        this._scanMode === ScanMode.Normal
+      ) {
+        this._tokens.push(
+          TOKENS_GENERATOR.operator(
+            startIndex,
+            currentChar + this._getNextChar(),
+          ),
+        )
         this._currentIndex += 2
         continue
       }
@@ -351,7 +369,10 @@ export class Tokenizer {
     let token
     // 1. 结果为关键字
     if (identifier in TOKENS_GENERATOR) {
-      token = TOKENS_GENERATOR[identifier as keyof typeof TOKENS_GENERATOR](startIndex)
+      token =
+        TOKENS_GENERATOR[identifier as keyof typeof TOKENS_GENERATOR](
+          startIndex,
+        )
     }
     // 2. 结果为标识符
     else {
@@ -436,7 +457,7 @@ export class Tokenizer {
   /**
    * @description: 返回最后一个 Token
    * @return {Token}
-   */  
+   */
   private _getPreviousToken() {
     // 前瞻 Token
     if (this._tokens.length > 0) {

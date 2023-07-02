@@ -38,7 +38,7 @@ function updateClass(oldVnode: VNode, vnode: VNode): void {
     // 如果新旧VNode的class值不同，则根据新VNode的class值是true or false来判断是新增还是删除class
     cur = className[name]
     if (cur !== oldClass[name]) {
-      (elm.classList as any)[cur ? 'add' : 'remove'](name)
+      ;(elm.classList as any)[cur ? 'add' : 'remove'](name)
     }
   }
 }

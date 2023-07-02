@@ -77,7 +77,7 @@ export default defineConfig({
           text: '反馈',
           items: [
             { text: 'Message 全局提示', link: '/src/ranui/message/' },
-            { text: 'Skeleton 骨架屏', link: '/src/ranui/skeleton/' }
+            { text: 'Skeleton 骨架屏', link: '/src/ranui/skeleton/' },
           ],
         },
       ],
@@ -88,7 +88,7 @@ export default defineConfig({
             {
               text: '函数式编程',
               link: '/src/article/functionalProgramming.md',
-            }
+            },
           ],
         },
       ],
