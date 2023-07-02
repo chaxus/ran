@@ -8,6 +8,7 @@ import quick from '../src/sort/quick'
 import randomArray from '../src/sort/randomArray'
 import taskEnd from '../src/utils/taskEnd'
 import startTask from '../src/utils/startTask'
+import heap from '@/sort/heap'
 
 const handing = (name: string, sort: Function, limit: number = 1) => {
   it(name, () => {
@@ -32,4 +33,5 @@ describe('sort', () => {
   handing('shell sort', shell)
   handing('merge sort', merge)
   handing('quick sort', quick)
+  handing('heap sort', heap)
 })

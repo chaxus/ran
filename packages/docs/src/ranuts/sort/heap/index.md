@@ -11,26 +11,10 @@
 
 ## 动图演示
 
-![插入排序](../../../../assets/ranuts/sort/insert.gif)
+![插入排序](../../../../assets/ranuts/sort/heap.gif)
 
 ## 代码演示
 
 ```ts
-const insert = (list: Array<string>): Array<string> => {
-  const { length } = list
-  for (let i = 1; i < length; i++) {
-    let preIndex = i - 1
-    const current = list[i]
-    while (preIndex >= 0 && list[preIndex] > current) {
-      list[preIndex + 1] = list[preIndex]
-      preIndex--
-    }
-    list[preIndex + 1] = current
-  }
-  return list
-}
+
 ```
-
-## 算法分析
-
-插入排序在实现上，通常采用in-place排序（即只需用到O(1)的额外空间的排序），因而在从后向前扫描过程中，需要反复把已排序元素逐步向后挪位，为最新元素提供插入空间。
