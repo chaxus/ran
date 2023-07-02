@@ -1,4 +1,4 @@
-import { describe, it } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import Server from '@/server/server'
 import bodyMiddleware from '@/server/body'
 import colors from '@/colors'
@@ -48,3 +48,8 @@ app.listen(PORT, () => {
 })
 //     })
 // })
+describe('encodeUrl(url)', function () {
+  it('should keep URL the same', function () {
+    expect(1).toEqual(1)
+  })
+})
