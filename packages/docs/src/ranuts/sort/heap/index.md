@@ -11,7 +11,7 @@
 
 ## 动图演示
 
-![插入排序](../../../../assets/ranuts/sort/heap.gif)
+![堆排序](../../../../assets/ranuts/sort/heap.gif)
 
 ## 代码演示
 

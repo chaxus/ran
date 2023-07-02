@@ -6,7 +6,7 @@
  * @return {Array<number>}
  */
 const randomArray = (
-  length: number = 10,
+  length: number = 20,
   min: number = 0,
   max: number = min + 100,
 ): Array<number> => {

@@ -10,7 +10,7 @@
 
 ## 动图演示
 
-![插入排序](../../../../assets/ranuts/sort/merge.gif)
+![归并排序](../../../../assets/ranuts/sort/merge.gif)
 
 ## 代码演示
 
