@@ -1,28 +1,26 @@
-
-
 @number: 49;
 @keyframes loading {
-    .circle(@index) when (@index < @number){
-        @i: @index+1;
-        @x: round((@i / @number) * 100,2);
-        @selector: e('@{x}%');
-        @{selector} {
-            background-image: url('../../assets/image/loading/1_@{i}.png');
-        } 
-        .circle(@i)
+  .circle(@index) when (@index < @number) {
+    @i: @index+1;
+    @x: round((@i / @number) * 100, 2);
+    @selector: e('@{x}%');
+    @{selector} {
+      background-image: url('../../assets/image/loading/1_@{i}.png');
     }
-    .circle(0);
+    .circle(@i);
+  }
+  .circle(0);
 }
 
 .video-control_loading {
-    z-index: 10;
-    top: calc(50vh - 60px);
-    left: calc(50vw - 60px);
-    position: fixed;
-    width: 120px;
-    height: 120px;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: contain;
-    animation: loading 1s infinite;
+  z-index: 10;
+  top: calc(50vh - 60px);
+  left: calc(50vw - 60px);
+  position: fixed;
+  width: 120px;
+  height: 120px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  animation: loading 1s infinite;
 }

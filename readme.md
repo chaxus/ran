@@ -19,4 +19,3 @@ A collection of commonly used functions
 # press
 
 Commonly used 'css', have 'sass' and 'less'
-

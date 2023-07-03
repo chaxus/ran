@@ -1,4 +1,3 @@
-
 @activeColor: var(--active-color, #1890ff);
 @lineColor: var(--line-color, #1890ff);
 @borderColor: var(--border-color, rgba(0, 0, 0, 0.2));
@@ -60,7 +59,7 @@
     }
   }
 }
-:host([type="line"]) {
+:host([type='line']) {
   .tab {
     &-header {
       &_nav {
@@ -79,7 +78,7 @@
         visibility: hidden;
         &::after,
         &::before {
-          content: "";
+          content: '';
           position: absolute;
           visibility: visible;
           width: 9999px;
@@ -97,7 +96,7 @@
     }
   }
 }
-:host([align="center"]) {
+:host([align='center']) {
   .tab {
     &-header {
       &_nav {
@@ -109,7 +108,7 @@
     }
   }
 }
-:host([align="end"]) {
+:host([align='end']) {
   .tab {
     &-header {
       &_nav {

@@ -137,7 +137,7 @@ function CustomElement() {
         tabHeader.setAttribute('type', type)
         isDisabled(tabPane) && tabHeader.setAttribute('disabled', '')
         tabHeader.setAttribute('ran-key', key)
-        if(this.effect){
+        if (this.effect) {
           tabPane.setAttribute('effect', this.effect)
           this._line.style.setProperty('display', 'none')
         }

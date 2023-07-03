@@ -22,9 +22,5 @@
       "@/plugins/*": ["plugins/*"],
       "@/utils/*": ["utils/*"]
     }
-  },
-  "ts-node": {
-    "esm": true,
-    "experimentalSpecifierResolution": "node"
   }
 }

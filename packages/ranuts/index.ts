@@ -13,7 +13,7 @@ import { MimeType, getMime, setMime } from '@/server/mimeType'
 
 const vnode = {
   init,
-  h
+  h,
 }
 
 export {
@@ -27,7 +27,7 @@ export {
   readDir,
   vnode,
   Monitor,
-  MimeType, 
-  getMime, 
-  setMime
+  MimeType,
+  getMime,
+  setMime,
 }

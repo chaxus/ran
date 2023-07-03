@@ -70,7 +70,7 @@ module.exports = defineConfig({
       'error',
       { allow: ['arrowFunctions'] },
     ],
-    '@typescript-eslint/no-this-alias':'off',
+    '@typescript-eslint/no-this-alias': 'off',
     '@typescript-eslint/no-empty-interface': 'off',
     '@typescript-eslint/no-explicit-any': 'off', // maybe we should turn this on in a new PR
     '@typescript-eslint/no-extra-semi': 'off', // conflicts with prettier
@@ -82,7 +82,7 @@ module.exports = defineConfig({
       'error',
       { prefer: 'type-imports' },
     ],
-    'prefer-rest-params':'off',
+    'prefer-rest-params': 'off',
     'import/no-nodejs-modules': [
       'error',
       { allow: builtinModules.map((mod) => `node:${mod}`) },
@@ -101,9 +101,12 @@ module.exports = defineConfig({
     ],
 
     'regexp/no-contradiction-with-assertion': 'error',
-    "regexp/no-unused-capturing-group": ["error", {
-      "fixable": true
-    }]
+    'regexp/no-unused-capturing-group': [
+      'error',
+      {
+        fixable: true,
+      },
+    ],
   },
   overrides: [
     {

@@ -9,5 +9,4 @@ const isColorSupported =
     (tty.isatty(1) && process.env.TERM !== 'dumb') ||
     'CI' in process.env)
 
-
 export default isColorSupported

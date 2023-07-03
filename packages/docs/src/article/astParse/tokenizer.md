@@ -25,37 +25,40 @@ AST 是对源码的抽象，字面量、标识符、表达式、语句、模块�
 
 ![](../../../assets//ranuts//astParse//Literal.jpeg)
 
-
 代码中的字面量很多，`babel` 就是通过 `xxLiteral` 来抽象这部分内容的。
 
 ### Identifier
+
 `Identifer` 是标识符的意思，变量名、属性名、参数名等各种声明和引用的名字，都是`Identifer`。
 
-我们知道， `JS`  中的标识符只能包含字母或数字或下划线 `（“_”）` 或美元符号 `（“$”）` ，且不能以数字开头。这是 `Identifier` 的词法特点。
+我们知道， `JS` 中的标识符只能包含字母或数字或下划线 `（“_”）` 或美元符号 `（“$”）` ，且不能以数字开头。这是 `Identifier` 的词法特点。
 
 尝试分析一下，下面这一段代码里面有多少 `Identifier` 呢？
+
 ```js
-const name = 'value';
+const name = 'value'
 
 function say(name) {
-  console.log(name);
+  console.log(name)
 }
 
 const obj = {
-  name: 'guang'
+  name: 'guang',
 }
 ```
+
 答案是这些
 
 ![](../../../assets//ranuts//astParse//Identifier.jpeg)
 
-
 ### Statement
+
 `statement` 是语句，它是可以独立执行的单位，比如 `break、continue、debugger、return` 或者 `if` 语句、`while` 语句、`for` 语句，还有声明语句，表达式语句等。我们写的每一条可以独立执行的代码都是语句。
 
 语句末尾一般会加一个分号分隔，或者用换行分隔。
 
 下面这些我们经常写的代码，每一行都是一个 `Statement`：
+
 ```js
 break;
 continue;
@@ -72,6 +75,7 @@ switch (v){case 1: break;default:;}
 label: console.log();
 with (a){}
 ```
+
 它们对应的 AST 节点如下图所示：
 
 ![](../../../assets//ranuts//astParse//Statement.jpeg)
@@ -79,31 +83,35 @@ with (a){}
 语句是代码执行的最小单位，可以说，代码是由语句 `（Statement）` 构成的。
 
 ### Declaration
-声明语句是一种特殊的语句，它执行的逻辑是在作用域内声明一个变量、函数、 `class、import、export`  等。
+
+声明语句是一种特殊的语句，它执行的逻辑是在作用域内声明一个变量、函数、 `class、import、export` 等。
 
 比如下面这些语句都是声明语句：
+
 ```js
-const a = 1;
-function b(){}
+const a = 1
+function b() {}
 class C {}
 
-import d from 'e';
+import d from 'e'
 
-export default e = 1;
-export {e};
-export * from 'e';
+export default e = 1
+export { e }
+export * from 'e'
 ```
+
 它们对应的 AST 节点如下图：
 
 ![](../../../assets//ranuts//astParse//Declaration.jpeg)
 
-
 声明语句用于定义变量，这也是代码中一个基础组成部分。
 
 ### Expression
+
 `expression` 是表达式，特点是执行完以后有返回值，这是和语句 (`statement`) 的区别。
 
 下面是一些常见的表达式
+
 ```js
 [1,2,3]
 a = 1
@@ -117,7 +125,8 @@ this;
 super;
 a::b;
 ```
-它们对应的AST如图：
+
+它们对应的 AST 如图：
 
 ![](../../../assets//ranuts//astParse//Expression.jpeg)
 
@@ -128,66 +137,81 @@ a::b;
 我们判断 `AST` 节点是不是某种类型要看它是不是符合该种类型的特点，比如语句的特点是能够单独执行，表达式的特点是有返回值。
 
 有的表达式可以单独执行，符合语句的特点，所以也是语句，比如赋值表达式、数组表达式等。
+
 ```js
-a=1;
-[1,2,3];
+a = 1
+;[1, 2, 3]
 ```
+
 但有的表达式不能单独执行，需要和其他类型的节点组合在一起构成语句。
 
 比如匿名函数表达式和匿名 `class` 表达式单独执行会报错：
+
 ```js
 function(){};
 class{}
 ```
+
 需要和其他部分一起构成一条语句，比如组成赋值语句：
+
 ```js
-a = function() {}
-b = class{}
+a = function () {}
+b = class {}
 ```
+
 这条赋值语句对应的 `AST` 是这样的：
 
 ![](../../../assets//ranuts//astParse//ExpressionStatement.jpeg)
 
-
 你会发现赋值语句的 AST 节点 `AssignmentExpression` 包裹了一层 `ExpressionStatement` 的节点，代表这个表达式是被当成语句执行的。
 
 ### Class
+
 `class` 的语法也有专门的 AST 节点来表示。
 
 整个 `class` 的内容是 `ClassBody` ，属性是 `ClassProperty` ，方法是 `ClassMethod` （通过 `kind` 属性来区分是 `constructor` 还是 `method` ）。
 
 比如下面的代码
+
 ```js
-class Guang extends Person{
-    name = 'guang';
-    constructor() {}
-    eat() {}
+class Guang extends Person {
+  name = 'guang'
+  constructor() {}
+  eat() {}
 }
 ```
-对应的AST是这样的
+
+对应的 AST 是这样的
 
 ![](../../../assets//ranuts//astParse//Class.jpeg)
 
 `class` 是 `es next` 的语法， `babel` 中有专门的 `AST` 来表示它的内容。
 
 ### Modules
+
 `es module` 是语法级别的模块规范，所以也有专门的 `AST` 节点。
 
 **import**
 `import` 有 3 种语法：
 
 `named import`：
+
 ```js
-import {c, d} from 'c';
+import { c, d } from 'c'
 ```
+
 `default import`：
+
 ```js
-import a from 'a';
+import a from 'a'
 ```
+
 `namespaced import`:
+
 ```js
-import * as b from 'b';
+import * as b from 'b'
 ```
+
 这 3 种语法都对应 `ImportDeclaration` 节点，但是 `specifiers` 属性不同，分别对应 `ImportSpicifier` `、ImportDefaultSpecifier` `、ImportNamespaceSpcifier` 。
 
 ![](../../../assets//ranuts//astParse//import.jpeg)
@@ -195,34 +219,42 @@ import * as b from 'b';
 图中黄框标出的就是 `specifier` 部分。可以直观的看出整体结构相同，只是 `specifier` 部分不同，所以 `import` 语法的 `AST` 的结构是 `ImportDeclaration` 包含着各种 `import specifier` 。
 
 **export**
-`export` 也有3种语法：
+`export` 也有 3 种语法：
 
 `named export`：
+
 ```js
-export { b, d};
+export { b, d }
 ```
+
 `default export`：
+
 ```js
-export default a;
+export default a
 ```
+
 `all export`：
+
 ```js
-export * from 'c';
+export * from 'c'
 ```
+
 分别对应 `ExportNamedDeclaration` `、ExportDefaultDeclaration` `、ExportAllDeclaration` 的 `AST` 。
 
 比如这三种 `export`
+
 ```js
-export { b, d};
-export default a;
-export * from 'c';
+export { b, d }
+export default a
+export * from 'c'
 ```
+
 对应的 AST 节点为
 
 ![](../../../assets//ranuts//astParse//export.jpeg)
 
-
 ### Program & Directive
+
 `program` 是代表整个程序的节点，它有 `body` 属性代表程序体，存放 `statement` 数组，就是具体执行的语句的集合。还有 `directives` 属性，存放 `Directive` 节点，比如 `"use strict"` 这种指令会使用 `Directive` 节点表示。
 
 ![](../../../assets//ranuts//astParse//Program.jpeg)
@@ -237,7 +269,6 @@ export * from 'c';
 
 ![](../../../assets//ranuts//astParse//File.jpeg)
 
-
 上面 6 种就是常见的一些 `AST` 节点类型， `babel` 就是通过这些节点来抽象源码中不同的部分。
 
 ### `AST` 可视化查看工具
@@ -248,19 +279,18 @@ export * from 'c';
 
 ![](../../../assets//ranuts//astParse//axtexplorer.jpeg)
 
-
 这个网站可以查看代码 `parse` 以后的 `AST` ，可以切换 `parse` 的语言和用的 `parser` ，也可以修改 `parse options` 。
 
 点击这里的 `save` 就可以保存下来，然后把 `url` 分享出去：
 
 ![](../../../assets//ranuts//astParse//axtexplorerSave.jpeg)
 
-
 比如这个链接: `https://astexplorer.net/`
 
 如果想查看全部的 `AST` 可以在 `babel parser` 仓库里的 `AST` 文档里查，或者直接去看 `@babel/types` 的 `typescript` 类型定义。
 
 ### AST 的公共属性
+
 每种 `AST` 都有自己的属性，但是它们也有一些公共的属性：
 
 `type`： `AST` 节点的类型
@@ -297,13 +327,13 @@ export * from 'c';
 词法分析器，也叫分词器(`Tokenizer`)，它的作用是将代码划分为一个个词法单元，便于进行后续的语法分析。比如下面的这段代码:
 
 ```js
-let foo = function() {}
+let foo = function () {}
 ```
 
 在经过分词之后，代码会被切分为如下的 `token` 数组:
 
 ```js
-['let', 'foo', '=', 'function', '(', ')', '{', '}']
+;['let', 'foo', '=', 'function', '(', ')', '{', '}']
 ```
 
 从中你可以看到，原本一行普通的代码字符串被拆分成了拥有语法属性的 `token` 列表，不同的 `token` 之间也存在千丝万缕的联系，而后面所要介绍的语法分析器，就是来梳理各个 `token` 之间的联系，整理出 `AST` 数据结构。
@@ -316,62 +346,65 @@ let foo = function() {}
 ### 1. 确定 Token 的类型和规则
 
 增加 `Token` 的类型
+
 ```ts
 export enum TokenType {
   // let
-  Let = "Let",
+  Let = 'Let',
   // =
-  Assign = "Assign",
+  Assign = 'Assign',
   // function
-  Function = "Function",
+  Function = 'Function',
   // 变量名
-  Identifier = "Identifier",
+  Identifier = 'Identifier',
   // (
-  LeftParen = "LeftParen",
+  LeftParen = 'LeftParen',
   // )
-  RightParen = "RightParen",
+  RightParen = 'RightParen',
   // {
-  LeftCurly = "LeftCurly",
+  LeftCurly = 'LeftCurly',
   // }
-  RightCurly = "RightCurly",
+  RightCurly = 'RightCurly',
 }
 
 export type Token = {
-  type: TokenType;
-  value?: string;
-  start: number;
-  end: number;
-  raw?: string;
-};
+  type: TokenType
+  value?: string
+  start: number
+  end: number
+  raw?: string
+}
 ```
+
 定义 Token 类型到规则的映射
+
 ```ts
 const TOKENS_GENERATOR: Record<string, (...args: any[]) => Token> = {
   let(start: number) {
-    return { type: TokenType.Let, value: "let", start, end: start + 3 };
+    return { type: TokenType.Let, value: 'let', start, end: start + 3 }
   },
   assign(start: number) {
-    return { type: TokenType.Assign, value: "=", start, end: start + 1 };
+    return { type: TokenType.Assign, value: '=', start, end: start + 1 }
   },
   function(start: number) {
     return {
       type: TokenType.Function,
-      value: "function",
+      value: 'function',
       start,
       end: start + 8,
-    };
+    }
   },
   leftParen(start: number) {
-    return { type: TokenType.LeftParen, value: "(", start, end: start + 1 };
+    return { type: TokenType.LeftParen, value: '(', start, end: start + 1 }
   },
   rightParen(start: number) {
-    return { type: TokenType.RightParen, value: ")", start, end: start + 1 };
+    return { type: TokenType.RightParen, value: ')', start, end: start + 1 }
   },
   leftCurly(start: number) {
-    return { type: TokenType.LeftCurly, value: "{", start, end: start + 1 };
+    return { type: TokenType.LeftCurly, value: '{', start, end: start + 1 }
   },
   rightCurly(start: number) {
-    return { type: TokenType.RightCurly, value: "}", start, end: start + 1 };
+    return { type: TokenType.RightCurly, value: '}', start, end: start + 1 }
   },
   identifier(start: number, value: string) {
     return {
@@ -379,23 +412,23 @@ const TOKENS_GENERATOR: Record<string, (...args: any[]) => Token> = {
       value,
       start,
       end: start + value.length,
-    };
+    }
   },
 }
 
-type SingleCharTokens = "(" | ")" | "{" | "}" | "=";
+type SingleCharTokens = '(' | ')' | '{' | '}' | '='
 
 // 单字符到 Token 生成器的映射
 const KNOWN_SINGLE_CHAR_TOKENS = new Map<
   SingleCharTokens,
-  typeof TOKENS_GENERATOR[keyof typeof TOKENS_GENERATOR]
+  (typeof TOKENS_GENERATOR)[keyof typeof TOKENS_GENERATOR]
 >([
-  ["(", TOKENS_GENERATOR.leftParen],
-  [")", TOKENS_GENERATOR.rightParen],
-  ["{", TOKENS_GENERATOR.leftCurly],
-  ["}", TOKENS_GENERATOR.rightCurly],
-  ["=", TOKENS_GENERATOR.assign],
-]);
+  ['(', TOKENS_GENERATOR.leftParen],
+  [')', TOKENS_GENERATOR.rightParen],
+  ['{', TOKENS_GENERATOR.leftCurly],
+  ['}', TOKENS_GENERATOR.rightCurly],
+  ['=', TOKENS_GENERATOR.assign],
+])
 ```
 
 有了 Token 类型和对应生成的规则，我们便可以去遍历分析代码，输出分析后的结果。
@@ -406,90 +439,95 @@ const KNOWN_SINGLE_CHAR_TOKENS = new Map<
 
 - 当前字符为分隔符，如空格，直接跳过，不处理；
 - 当前字符为字母，需要继续扫描，获取完整的单词:
-    - 如果单词为语法关键字，则新建相应关键字的 `Token`
-    - 否则视为普通的变量名
+  - 如果单词为语法关键字，则新建相应关键字的 `Token`
+  - 否则视为普通的变量名
 - 当前字符为单字符，如`{、}、(、)`，则新建单字符对应的 `Token`
 
 ```ts
 export class Tokenizer {
-  private _tokens: Token[] = [];
-  private _currentIndex: number = 0;
-  private _source: string;
+  private _tokens: Token[] = []
+  private _currentIndex: number = 0
+  private _source: string
   constructor(input: string) {
-    this._source = input;
+    this._source = input
   }
   tokenize(): Token[] {
     while (this._currentIndex < this._source.length) {
-      let currentChar = this._source[this._currentIndex];
-      const startIndex = this._currentIndex;
-      
+      let currentChar = this._source[this._currentIndex]
+      const startIndex = this._currentIndex
+
       // 根据语法规则进行 token 分组
       // while 循环内部
-        let currentChar = this._source[this._currentIndex];
-        const startIndex = this._currentIndex;
+      let currentChar = this._source[this._currentIndex]
+      const startIndex = this._currentIndex
 
-        const isAlpha = (char: string): boolean => {
-        return (char >= "a" && char <= "z") || (char >= "A" && char <= "Z");
-        }
+      const isAlpha = (char: string): boolean => {
+        return (char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z')
+      }
 
-        // 1. 处理空格
-        if (currentChar === ' ') {
-        this._currentIndex++;
-        continue;
+      // 1. 处理空格
+      if (currentChar === ' ') {
+        this._currentIndex++
+        continue
+      }
+      // 2. 处理字母
+      else if (isAlpha(currentChar)) {
+        let identifier = ''
+        while (isAlpha(currentChar)) {
+          identifier += currentChar
+          this._currentIndex++
+          currentChar = this._source[this._currentIndex]
         }
-        // 2. 处理字母
-        else if (isAlpha(currentChar)) {
-        let identifier = '';
-        while(isAlpha(currentChar)) {
-            identifier += currentChar;
-            this._currentIndex ++;
-            currentChar = this._source[this._currentIndex];
-        }
-        let token: Token;
+        let token: Token
         if (identifier in TOKENS_GENERATOR) {
-            // 如果是关键字
-            token =
-                TOKENS_GENERATOR[identifier as keyof typeof TOKENS_GENERATOR](
-                startIndex
-                );
+          // 如果是关键字
+          token =
+            TOKENS_GENERATOR[identifier as keyof typeof TOKENS_GENERATOR](
+              startIndex,
+            )
         } else {
-            // 如果是普通标识符
-            token = TOKENS_GENERATOR["identifier"](startIndex, identifier);
+          // 如果是普通标识符
+          token = TOKENS_GENERATOR['identifier'](startIndex, identifier)
         }
-        this._tokens.push(token);
-        continue;
-        }
-        // 3. 处理单字符
-        else if(KNOWN_SINGLE_CHAR_TOKENS.has(currentChar as SingleCharTokens)) {
+        this._tokens.push(token)
+        continue
+      }
+      // 3. 处理单字符
+      else if (KNOWN_SINGLE_CHAR_TOKENS.has(currentChar as SingleCharTokens)) {
         const token = KNOWN_SINGLE_CHAR_TOKENS.get(
-            currentChar as SingleCharTokens
-        )!(startIndex);
-        this._tokens.push(token);
-        this._currentIndex++;
-        continue;
-        }
+          currentChar as SingleCharTokens,
+        )!(startIndex)
+        this._tokens.push(token)
+        this._currentIndex++
+        continue
+      }
     }
-    return this._tokens;
+    return this._tokens
   }
 }
 ```
+
 使用方式
+
 ```ts
-const tokenizer = new Tokenizer("let a = function() {}");
+const tokenizer = new Tokenizer('let a = function() {}')
 ```
+
 结果
+
 ```ts
 const tokenizer = [
-      { type: "Let", value: "let", start: 0, end: 3 },
-      { type: "Identifier", value: "a", start: 4, end: 5 },
-      { type: "Assign", value: "=", start: 6, end: 7 },
-      { type: "Function", value: "function", start: 8, end: 16 },
-      { type: "LeftParen", value: "(", start: 16, end: 17 },
-      { type: "RightParen", value: ")", start: 17, end: 18 },
-      { type: "LeftCurly", value: "{", start: 19, end: 20 },
-      { type: "RightCurly", value: "}", start: 20, end: 21 },
-    ];
+  { type: 'Let', value: 'let', start: 0, end: 3 },
+  { type: 'Identifier', value: 'a', start: 4, end: 5 },
+  { type: 'Assign', value: '=', start: 6, end: 7 },
+  { type: 'Function', value: 'function', start: 8, end: 16 },
+  { type: 'LeftParen', value: '(', start: 16, end: 17 },
+  { type: 'RightParen', value: ')', start: 17, end: 18 },
+  { type: 'LeftCurly', value: '{', start: 19, end: 20 },
+  { type: 'RightCurly', value: '}', start: 20, end: 21 },
+]
 ```
+
 一个简易版本的分词器已经被我们开发出来了，不过目前的分词器还比较简陋，仅仅支持有限的语法，不过在明确了核心的开发步骤之后，后面继续完善的过程就比较简单了。
 
 ## 四.编写语法分析器（Parser）
@@ -501,5 +539,6 @@ const tokenizer = [
 接下来，我们要做的就是将 `token` 数组转换为上图所示的 `AST` 数据。
 
 开发步骤主要分为：
+
 - 初始化类型声明
-- 
+-

@@ -22,7 +22,7 @@ import WSS from '@/server/websocket'
 // })
 
 describe('astParser', () => {
-    it('websocket', () => {
-      expect(1).toEqual(1)
-    })
+  it('websocket', () => {
+    expect(1).toEqual(1)
   })
+})

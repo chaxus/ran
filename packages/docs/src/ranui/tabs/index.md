@@ -110,7 +110,7 @@
 
 ### 风格`type`
 
-风格有text，clean,
+风格有 text，clean,
 
 ### 对齐`align`
 

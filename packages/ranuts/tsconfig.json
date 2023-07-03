@@ -19,9 +19,5 @@
     "paths": {
       "@/*": ["src/*"]
     }
-  },
-  "ts-node": {
-    "esm": true,
-    "experimentalSpecifierResolution": "node"
   }
 }

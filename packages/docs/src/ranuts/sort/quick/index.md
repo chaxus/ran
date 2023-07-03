@@ -12,7 +12,7 @@
 
 ## 动图演示
 
-![插入排序](../../../../assets/ranuts/sort/quick.gif)
+![快速排序](../../../../assets/ranuts/sort/quick.gif)
 
 ## 代码演示
 

@@ -1,4 +1,3 @@
-
 const fetchAB = (url: string) => {
   return new Promise((resolve) => {
     const xhr = new XMLHttpRequest()
@@ -81,7 +80,7 @@ function Custom() {
           })
         }
       }
-      videoUrlToBlob = (src: string,source: HTMLSourceElement) => {
+      videoUrlToBlob = (src: string, source: HTMLSourceElement) => {
         const mimeCodec = 'video/mp4; codecs="avc1.42E01E, mp4a.40.2"'
         if ('MediaSource' in window && MediaSource.isTypeSupported(mimeCodec)) {
           const mediaSource = new MediaSource()
@@ -94,13 +93,11 @@ function Custom() {
       ranloadedmetadata = () => {
         this.totalTime = this._video.duration
       }
-      
+
       ranCanplay = () => {
         this.canplay = true
       }
-      ranPlay = () => {
-        
-      }
+      ranPlay = () => {}
       ranPlaying = () => {
         this.presentTime = this._video.currentTime
       }
@@ -141,7 +138,7 @@ function Custom() {
       disconnectCallback() {
         this.videoUnmountEvent()
       }
-      attributeChangedCallback(name: string,old: string,fresh: string) {}
+      attributeChangedCallback(name: string, old: string, fresh: string) {}
     }
     customElements.define('r-video', Video)
     return Video

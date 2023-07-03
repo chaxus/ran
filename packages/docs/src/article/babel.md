@@ -9,4 +9,3 @@ babel 核心库主要是：
 - @babel/code-frame 可以创建友好的报错信息
 - @babel/generator 打印 AST 成目标代码字符串，支持 comments、minified、sourceMaps 等选项。
 - @babel/core 基于上面的包来完成 babel 的编译流程，并应用 plugin 和 preset。
-

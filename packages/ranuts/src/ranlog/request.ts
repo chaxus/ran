@@ -2,33 +2,38 @@ import { Noop, replaceOld } from './utils'
 import type { Hooks } from './utils'
 
 interface Options {
-    requestHook: Hooks,
-    responseHook: Hooks,
-    errorHook: Hooks
+  requestHook: Hooks
+  responseHook: Hooks
+  errorHook: Hooks
 }
 /**
  * @description: fetch
  * @param {Partial} options
  */
 export const handleFetchHook = (options: Partial<Options> = {}): void => {
-    if (typeof window !== 'undefined') {
-        const { requestHook = Noop, responseHook = Noop, errorHook = Noop } = options
-        const replacement = (originalFetch: any) => {
-            return (url: string, config?: any) => {
-                requestHook(url, config)
-                return originalFetch.apply(window, [url, config])
-                    .then((response: Response) => {
-                        responseHook(url, config, response)
-                        return response
-                    })
-                    .catch((error: Error) => {
-                        errorHook(url, error)
-                        throw error;
-                    })
-            }
-        }
-        replaceOld(window, 'fetch', replacement)
+  if (typeof window !== 'undefined') {
+    const {
+      requestHook = Noop,
+      responseHook = Noop,
+      errorHook = Noop,
+    } = options
+    const replacement = (originalFetch: any) => {
+      return (url: string, config?: any) => {
+        requestHook(url, config)
+        return originalFetch
+          .apply(window, [url, config])
+          .then((response: Response) => {
+            responseHook(url, config, response)
+            return response
+          })
+          .catch((error: Error) => {
+            errorHook(url, error)
+            throw error
+          })
+      }
     }
+    replaceOld(window, 'fetch', replacement)
+  }
 }
 /**
  * @description: xhr
@@ -36,27 +41,31 @@ export const handleFetchHook = (options: Partial<Options> = {}): void => {
  * @return {*}
  */
 export const handleXhrHook = (options: Partial<Options> = {}): void => {
-    if (typeof window !== 'undefined') {
-    const originalXhrProto = XMLHttpRequest.prototype;
-    const { requestHook = Noop, responseHook = Noop, errorHook = Noop } = options
+  if (typeof window !== 'undefined') {
+    const originalXhrProto = XMLHttpRequest.prototype
+    const {
+      requestHook = Noop,
+      responseHook = Noop,
+      errorHook = Noop,
+    } = options
     const replacementXhrOpen = (originalOpen: any) => {
-        return function (this: XMLHttpRequest, ...args: unknown[]): void {
-            requestHook(args)
-            originalOpen.apply(this, args);
-        };
+      return function (this: XMLHttpRequest, ...args: unknown[]): void {
+        requestHook(args)
+        originalOpen.apply(this, args)
+      }
     }
-    replaceOld(originalXhrProto, 'open', replacementXhrOpen);
+    replaceOld(originalXhrProto, 'open', replacementXhrOpen)
     const replacementXhrSend = (originalSend: any) => {
-        return function (this: any, ...args: any[]): void {
-            this.addEventListener('loadend', function (this: unknown) {
-                responseHook(this)
-            });
-            this.addEventListener('error', function (this: unknown) {
-                errorHook(this)
-            });
-            originalSend.apply(this, args);
-        };
+      return function (this: any, ...args: any[]): void {
+        this.addEventListener('loadend', function (this: unknown) {
+          responseHook(this)
+        })
+        this.addEventListener('error', function (this: unknown) {
+          errorHook(this)
+        })
+        originalSend.apply(this, args)
+      }
     }
-    replaceOld(originalXhrProto, 'send', replacementXhrSend);
-}
+    replaceOld(originalXhrProto, 'send', replacementXhrSend)
+  }
 }

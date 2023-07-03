@@ -7,7 +7,7 @@ describe('astParser', () => {
    * @description: 分词器的作用
    * @param {testTokenizerFunction} tokenizer
    * @return {Array}
-   */  
+   */
   it('tokenizer: testTokenizerFunction', () => {
     const result = [
       { type: 'Let', value: 'let', start: 0, end: 3 },

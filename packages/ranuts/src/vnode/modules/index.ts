@@ -8,15 +8,15 @@ import type { VNode } from '@/vnode/vnode'
 export type ModuleHook = any
 
 export type Modules = {
-    [key: string]: {
-      [key: string]: ModuleHook
-    }
+  [key: string]: {
+    [key: string]: ModuleHook
   }
+}
 
 export const modules: Modules = {
-    attributesModule,
-    classModule,
-    eventListenersModule,
-    propsModule,
-    styleModule
+  attributesModule,
+  classModule,
+  eventListenersModule,
+  propsModule,
+  styleModule,
 }

@@ -7,7 +7,7 @@ import { htmlDomApi } from './htmlDomApi'
 // 类型判断
 import * as is from './is'
 // 导入模块
-import type { ModuleHook } from './modules';
+import type { ModuleHook } from './modules'
 import { modules } from './modules'
 
 type NonUndefined<T> = T extends undefined ? never : T
@@ -301,7 +301,11 @@ export function init(): (oldVnode: VNode | Element, vnode: VNode) => VNode {
          * 最后将旧头索引后移，新尾索引前移
          */
         patchVnode(oldStartVnode, newEndVnode)
-        api.insertBefore(parentElm,oldStartVnode.elm!,api.nextSibling(oldEndVnode.elm!))
+        api.insertBefore(
+          parentElm,
+          oldStartVnode.elm!,
+          api.nextSibling(oldEndVnode.elm!),
+        )
         oldStartVnode = oldCh[++oldStartIdx]
         newEndVnode = newCh[--newEndIdx]
       } else if (sameVnode(oldEndVnode, newStartVnode)) {

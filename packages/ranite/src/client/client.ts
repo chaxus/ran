@@ -96,7 +96,7 @@ async function fetchUpdate({ path, timestamp }: Update) {
     Array.from(modulesToUpdate).map(async (dep) => {
       const [path, query] = dep.split(`?`)
       try {
-         // 通过动态 import 拉取最新模块
+        // 通过动态 import 拉取最新模块
         const newMod = await import(
           path + `?t=${timestamp}${query ? `&${query}` : ''}`
         )
@@ -106,7 +106,7 @@ async function fetchUpdate({ path, timestamp }: Update) {
   )
 
   return () => {
-     // 拉取最新模块后执行更新回调
+    // 拉取最新模块后执行更新回调
     for (const { deps, fn } of mod.callbacks) {
       fn(deps.map((dep: any) => moduleMap.get(dep)))
     }

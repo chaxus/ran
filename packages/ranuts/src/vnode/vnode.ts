@@ -3,8 +3,7 @@ import type { Attrs } from './modules/attributes'
 import type { Classes } from './modules/class'
 import type { Props } from './modules/props'
 import type { VNodeStyle } from './modules/style'
-import type { Hooks } from "./hooks";
-
+import type { Hooks } from './hooks'
 
 export type VNodes = VNode[]
 export type VNodeChildElement = VNode | string | number

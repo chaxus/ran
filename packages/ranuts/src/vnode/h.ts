@@ -11,7 +11,7 @@ import * as is from './is'
 
 export function addNS(
   data: VNodeData,
-  children: Array<VNode | string | number> |undefined,
+  children: Array<VNode | string | number> | undefined,
   sel: string | undefined,
 ): void {
   data.ns = 'http://www.w3.org/2000/svg'

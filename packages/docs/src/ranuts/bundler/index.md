@@ -2,6 +2,7 @@
 
 `Bundler`的使用：
 传入 options 参数
+
 ```
 function build(options: Options):Promise<Build> {
   const bundle = new Bundle({
@@ -14,6 +15,7 @@ function build(options: Options):Promise<Build> {
   });
 }
 ```
+
 架构图
 
 ![](../../../assets/article/bundle/bundle.png)

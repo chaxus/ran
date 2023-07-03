@@ -1,75 +1,78 @@
 import { cleanUrl } from './utils'
 
 export interface ResolvedId extends ModuleOptions {
-	external: boolean | 'absolute';
-	id: string;
+  external: boolean | 'absolute'
+  id: string
 }
 interface ModuleInfo extends ModuleOptions {
-	ast: AcornNode | null;
-	code: string | null;
-	dynamicImporters: readonly string[];
-	dynamicallyImportedIdResolutions: readonly ResolvedId[];
-	dynamicallyImportedIds: readonly string[];
-	exportedBindings: Record<string, string[]> | null;
-	exports: string[] | null;
-	hasDefaultExport: boolean | null;
-	/** @deprecated Use `moduleSideEffects` instead */
-	hasModuleSideEffects: boolean | 'no-treeshake';
-	id: string;
-	implicitlyLoadedAfterOneOf: readonly string[];
-	implicitlyLoadedBefore: readonly string[];
-	importedIdResolutions: readonly ResolvedId[];
-	importedIds: readonly string[];
-	importers: readonly string[];
-	isEntry: boolean;
-	isExternal: boolean;
-	isIncluded: boolean | null;
+  ast: AcornNode | null
+  code: string | null
+  dynamicImporters: readonly string[]
+  dynamicallyImportedIdResolutions: readonly ResolvedId[]
+  dynamicallyImportedIds: readonly string[]
+  exportedBindings: Record<string, string[]> | null
+  exports: string[] | null
+  hasDefaultExport: boolean | null
+  /** @deprecated Use `moduleSideEffects` instead */
+  hasModuleSideEffects: boolean | 'no-treeshake'
+  id: string
+  implicitlyLoadedAfterOneOf: readonly string[]
+  implicitlyLoadedBefore: readonly string[]
+  importedIdResolutions: readonly ResolvedId[]
+  importedIds: readonly string[]
+  importers: readonly string[]
+  isEntry: boolean
+  isExternal: boolean
+  isIncluded: boolean | null
 }
 
 export interface ExistingRawSourceMap {
-	file?: string;
-	mappings: string;
-	names: string[];
-	sourceRoot?: string;
-	sources: string[];
-	sourcesContent?: string[];
-	version: number;
+  file?: string
+  mappings: string
+  names: string[]
+  sourceRoot?: string
+  sources: string[]
+  sourcesContent?: string[]
+  version: number
 }
 
-export type SourceMapInput = ExistingRawSourceMap | string | null | { mappings: '' };
-
+export type SourceMapInput =
+  | ExistingRawSourceMap
+  | string
+  | null
+  | { mappings: '' }
 
 interface AcornNode {
-	end: number;
-	start: number;
-	type: string;
+  end: number
+  start: number
+  type: string
 }
 export interface SourceDescription extends Partial<PartialNull<ModuleOptions>> {
-	ast?: AcornNode;
-	code: string;
-	map?: SourceMapInput;
+  ast?: AcornNode
+  code: string
+  map?: SourceMapInput
 }
 
-type NullValue = null | undefined | void;
+type NullValue = null | undefined | void
 
-export type TransformResult = string | NullValue | Partial<SourceDescription>;
+export type TransformResult = string | NullValue | Partial<SourceDescription>
 
 export interface CustomPluginOptions {
-	[plugin: string]: any;
+  [plugin: string]: any
 }
 interface ModuleOptions {
-	assertions: Record<string, string>;
-	meta: CustomPluginOptions;
-	moduleSideEffects: boolean | 'no-treeshake';
-	syntheticNamedExports: boolean | string;
+  assertions: Record<string, string>
+  meta: CustomPluginOptions
+  moduleSideEffects: boolean | 'no-treeshake'
+  syntheticNamedExports: boolean | string
 }
 
 type PartialNull<T> = {
-	[P in keyof T]: T[P] | null;
-};
+  [P in keyof T]: T[P] | null
+}
 interface PartialResolvedId extends Partial<PartialNull<ModuleOptions>> {
-	external?: boolean | 'absolute' | 'relative';
-	id: string;
+  external?: boolean | 'absolute' | 'relative'
+  id: string
 }
 
 const cssLangs = `\\.(?:css|less|sass|scss|styl|stylus|pcss|postcss)(?:$|\\?)`
@@ -126,7 +129,7 @@ export class ModuleGraph {
     // 通过创建时传入，用于获取文件路径
     private resolveId: (url: string) => Promise<PartialResolvedId | null>,
   ) {}
-  
+
   getModuleById(id: string): ModuleNode | undefined {
     return this.idToModuleMap.get(id)
   }
@@ -139,7 +142,7 @@ export class ModuleGraph {
    * @description: 注册模块，返回或者创建新的 ModuleNode 节点
    * @param {string} rawUrl
    * @return {*}
-   */  
+   */
   async ensureEntryFromUrl(rawUrl: string): Promise<ModuleNode> {
     const { url, resolvedId } = await this._resolve(rawUrl)
     // 首先检查缓存
@@ -188,7 +191,7 @@ export class ModuleGraph {
       })
     }
   }
-  
+
   private async _resolve(
     url: string,
   ): Promise<{ url: string; resolvedId: string }> {

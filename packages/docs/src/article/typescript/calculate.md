@@ -45,12 +45,10 @@ TypeScript 类型系统中没有加减乘除运算符，但是可以通过构造
 
 ```ts
 type BuildArray<
-    Length extends number, 
-    Ele = unknown, 
-    Arr extends unknown[] = []
-> = Arr['length'] extends Length 
-        ? Arr 
-        : BuildArray<Length, Ele, [...Arr, Ele]>;
+  Length extends number,
+  Ele = unknown,
+  Arr extends unknown[] = [],
+> = Arr['length'] extends Length ? Arr : BuildArray<Length, Ele, [...Arr, Ele]>
 ```
 
 类型参数 Length 是要构造的数组的长度。类型参数 Ele 是数组元素，默认为 unknown。类型参数 Arr 为构造出的数组，默认是 []。
@@ -60,8 +58,10 @@ type BuildArray<
 构造数组实现了，那么基于它就能实现加法：
 
 ```ts
-type Add<Num1 extends number, Num2 extends number> = 
-    [...BuildArray<Num1>,...BuildArray<Num2>]['length'];
+type Add<Num1 extends number, Num2 extends number> = [
+  ...BuildArray<Num1>,
+  ...BuildArray<Num2>,
+]['length']
 ```
 
 我们拿大一点的数测试下：
@@ -84,10 +84,12 @@ type AddResult = Add<32, 25>
 所以减法的实现是这样的：
 
 ```ts
-type Subtract<Num1 extends number, Num2 extends number> = 
-    BuildArray<Num1> extends [...arr1: BuildArray<Num2>, ...arr2: infer Rest]
-        ? Rest['length']
-        : never;
+type Subtract<
+  Num1 extends number,
+  Num2 extends number,
+> = BuildArray<Num1> extends [...arr1: BuildArray<Num2>, ...arr2: infer Rest]
+  ? Rest['length']
+  : never
 ```
 
 类型参数 Num1、Num2 分别是被减数和减数，通过 extends 约束为 number。
@@ -110,11 +112,12 @@ type Subtract<Num1 extends number, Num2 extends number> =
 
 ```ts
 type Multiplication<
-    Num1 extends number,
-    Num2 extends number,
-    ResultArr extends unknown[] = []
-> = Num2 extends 0 ? ResultArr['length']
-        : Multiplication<Num1, Subtract<Num2, 1>, [...BuildArray<Num1>, ...ResultArr]>;
+  Num1 extends number,
+  Num2 extends number,
+  ResultArr extends unknown[] = [],
+> = Num2 extends 0
+  ? ResultArr['length']
+  : Multiplication<Num1, Subtract<Num2, 1>, [...BuildArray<Num1>, ...ResultArr]>
 ```
 
 类型参数 Num1 和 Num2 分别是被加数和加数。
@@ -145,11 +148,12 @@ type Multiplication<
 
 ```ts
 type Divide<
-    Num1 extends number,
-    Num2 extends number,
-    CountArr extends unknown[] = []
-> = Num1 extends 0 ? CountArr['length']
-        : Divide<Subtract<Num1, Num2>, Num2, [unknown, ...CountArr]>;
+  Num1 extends number,
+  Num2 extends number,
+  CountArr extends unknown[] = [],
+> = Num1 extends 0
+  ? CountArr['length']
+  : Divide<Subtract<Num1, Num2>, Num2, [unknown, ...CountArr]>
 ```
 
 类型参数 Num1 和 Num2 分别是被减数和减数。
@@ -176,11 +180,11 @@ type Divide<
 
 ```ts
 type StrLen<
-    Str extends string,
-    CountArr extends unknown[] = []
-> = Str extends `${string}${infer Rest}` 
-    ? StrLen<Rest, [...CountArr, unknown]> 
-    : CountArr['length']
+  Str extends string,
+  CountArr extends unknown[] = [],
+> = Str extends `${string}${infer Rest}`
+  ? StrLen<Rest, [...CountArr, unknown]>
+  : CountArr['length']
 ```
 
 类型参数 Str 是待处理的字符串。类型参数 CountArr 是做计数的数组，默认值 [] 代表从 0 开始。
@@ -199,16 +203,16 @@ type StrLen<
 
 ```ts
 type GreaterThan<
-    Num1 extends number,
-    Num2 extends number,
-    CountArr extends unknown[] = []
-> = Num1 extends Num2 
-    ? false
-    : CountArr['length'] extends Num2
-        ? true
-        : CountArr['length'] extends Num1
-            ? false
-            : GreaterThan<Num1, Num2, [...CountArr, unknown]>;
+  Num1 extends number,
+  Num2 extends number,
+  CountArr extends unknown[] = [],
+> = Num1 extends Num2
+  ? false
+  : CountArr['length'] extends Num2
+  ? true
+  : CountArr['length'] extends Num1
+  ? false
+  : GreaterThan<Num1, Num2, [...CountArr, unknown]>
 ```
 
 类型参数 Num1 和 Num2 是待比较的两个数。
@@ -233,21 +237,26 @@ type GreaterThan<
 
 Fibonacci 数列是 1、1、2、3、5、8、13、21、34、…… 这样的数列，有当前的数是前两个数的和的规律。
 
-F(0) = 1，F(1) = 1, F(n) = F(n - 1) + F(n - 2)（n ≥ 2，n ∈ N*）
+F(0) = 1，F(1) = 1, F(n) = F(n - 1) + F(n - 2)（n ≥ 2，n ∈ N\*）
 
 也就是递归的加法，在 TypeScript 类型编程里用构造数组来实现这种加法：
 
 ```ts
 type FibonacciLoop<
-    PrevArr extends unknown[], 
-    CurrentArr extends unknown[], 
-    IndexArr extends unknown[] = [], 
-    Num extends number = 1
+  PrevArr extends unknown[],
+  CurrentArr extends unknown[],
+  IndexArr extends unknown[] = [],
+  Num extends number = 1,
 > = IndexArr['length'] extends Num
-    ? CurrentArr['length']
-    : FibonacciLoop<CurrentArr, [...PrevArr, ...CurrentArr], [...IndexArr, unknown], Num> 
+  ? CurrentArr['length']
+  : FibonacciLoop<
+      CurrentArr,
+      [...PrevArr, ...CurrentArr],
+      [...IndexArr, unknown],
+      Num
+    >
 
-type Fibonacci<Num extends number> = FibonacciLoop<[1], [], [], Num>;
+type Fibonacci<Num extends number> = FibonacciLoop<[1], [], [], Num>
 ```
 
 类型参数 PrevArr 是代表之前的累加值的数组。类型参数 CurrentArr 是代表当前数值的数组。
@@ -265,4 +274,3 @@ type Fibonacci<Num extends number> = FibonacciLoop<[1], [], [], Num>;
 这就是递归计算 Fibinacci 数列的数的过程。
 
 可以正确的算出第 8 个数是 21:
-
