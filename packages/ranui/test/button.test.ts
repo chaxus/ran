@@ -1,4 +1,3 @@
-import { describe, expect, it } from 'vitest'
 import Button from '@/components/button'
 
 describe('button', () => {
