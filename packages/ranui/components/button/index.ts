@@ -1,5 +1,13 @@
 import { falseList, isDisabled } from '@/utils/index'
 
+
+class CustomError {
+  message: string
+  constructor(message:string = 'document is undefined or r-button is exist'){
+    this.message = message
+  }
+}
+
 function Custom() {
   if (typeof document !== 'undefined' && !customElements.get('r-button')) {
     class Button extends HTMLElement {
@@ -113,6 +121,8 @@ function Custom() {
     }
     customElements.define('r-button', Button)
     return Button
+  }else{
+    return CustomError
   }
 }
 

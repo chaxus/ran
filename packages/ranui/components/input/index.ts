@@ -1,5 +1,12 @@
 import { falseList, isDisabled } from '../../utils/index'
 
+class CustomError {
+  message: string
+  constructor(message:string = 'document is undefined or r-input is exist'){
+    this.message = message
+  }
+}
+
 function Custom() {
   if (typeof window !== 'undefined' && !customElements.get('r-input')) {
     class CustomElement extends HTMLElement {
@@ -428,6 +435,9 @@ function Custom() {
       }
     }
     customElements.define('r-input', CustomElement)
+    return CustomElement
+  }else{
+    return CustomError
   }
 }
 
