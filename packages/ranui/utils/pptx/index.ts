@@ -34,15 +34,18 @@ interface Worker {
 
 const newSvg = (parentSelector: string, width: string, height: string) => {
   if (parentSelector == null || parentSelector === undefined) {
-    parentSelector = "body";
+    parentSelector = 'body'
   }
-  const selectedShape = d3.select(parentSelector);
+  const selectedShape = d3.select(parentSelector)
   if (selectedShape.empty()) {
-    throw "The '" + parentSelector + "' selector did not match any elements.  Please prefix with '#' to select by id or '.' to select by class";
+    throw (
+      "The '" +
+      parentSelector +
+      "' selector did not match any elements.  Please prefix with '#' to select by id or '.' to select by class"
+    )
   }
-  return selectedShape.append("svg").attr("width", width).attr("height", height);
-};
-
+  return selectedShape.append('svg').attr('width', width).attr('height', height)
+}
 
 /**
  * @param {ArrayBuffer} pptx
@@ -60,16 +63,19 @@ export const renderPptx = (options: Options): Promise<any> | undefined => {
     return new Promise((resolve, reject) => {
       const processMessage = (msg: Msg) => {
         if (isDone) return
-        const div = document.createElement('div');
+        const div = document.createElement('div')
         const style = document.createElement('style')
         switch (msg.type) {
           case 'slide':
-            div.innerHTML = msg.data;
+            div.innerHTML = msg.data
             wrapper.appendChild(div)
             break
           case 'pptx-thumb':
             if (thumbElement)
-              thumbElement?.setAttribute('src', `data:image/jpeg;base64,${msg.data}`)
+              thumbElement?.setAttribute(
+                'src',
+                `data:image/jpeg;base64,${msg.data}`,
+              )
             break
           case 'slideSize':
             break
@@ -113,10 +119,17 @@ export const renderPptx = (options: Options): Promise<any> | undefined => {
     }).then((time) => {
       const resize = () => {
         const slidesWidth = Math.max(
-          ...Array.from(wrapper.children).filter(item => item.nodeName === 'section').map((s) => (s as HTMLElement).offsetWidth),
+          ...Array.from(wrapper.children)
+            .filter((item) => item.nodeName === 'section')
+            .map((s) => (s as HTMLElement).offsetWidth),
         )
-        const wrapperWidth = (wrapper.children[0] as HTMLElement).offsetWidth;
-        wrapper.setAttribute('style', `transform: scale(${wrapperWidth / slidesWidth}),transform-origin': 'top left'`)
+        const wrapperWidth = (wrapper.children[0] as HTMLElement).offsetWidth
+        wrapper.setAttribute(
+          'style',
+          `transform: scale(${
+            wrapperWidth / slidesWidth
+          }),transform-origin': 'top left'`,
+        )
       }
       resize()
       window.addEventListener('resize', resize)
@@ -159,16 +172,16 @@ export const renderPptx = (options: Options): Promise<any> | undefined => {
 
     switch (chartType) {
       case 'lineChart': {
-        const { data: data_, xLabels, groupLabels } = convertChartData(chartData)
+        const {
+          data: data_,
+          xLabels,
+          groupLabels,
+        } = convertChartData(chartData)
         data = data_
         const container = document.getElementById(chartID) || document.body
         const svg =
           container &&
-          newSvg(
-            `#${chartID}`,
-            container.style.width,
-            container.style.height,
-          )
+          newSvg(`#${chartID}`, container.style.width, container.style.height)
 
         const myChart = new dimple.chart(svg, data)
         const xAxis = myChart.addCategoryAxis('x', 'name')
@@ -184,7 +197,11 @@ export const renderPptx = (options: Options): Promise<any> | undefined => {
         break
       }
       case 'barChart': {
-        const { data: data_, xLabels, groupLabels } = convertChartData(chartData)
+        const {
+          data: data_,
+          xLabels,
+          groupLabels,
+        } = convertChartData(chartData)
         data = data_
         const container = document.getElementById(chartID) || document.body
         const svg = newSvg(
@@ -228,7 +245,11 @@ export const renderPptx = (options: Options): Promise<any> | undefined => {
         break
       }
       case 'areaChart': {
-        const { data: data_, xLabels, groupLabels } = convertChartData(chartData)
+        const {
+          data: data_,
+          xLabels,
+          groupLabels,
+        } = convertChartData(chartData)
         data = data_
         const container = document.getElementById(chartID) || document.body
         const svg = newSvg(
@@ -267,7 +288,7 @@ export const renderPptx = (options: Options): Promise<any> | undefined => {
   function findElementClass(element: Element, name: string) {
     const result: Element[] = []
     const dfs = (list: Element[]) => {
-      list.forEach(item => {
+      list.forEach((item) => {
         if (item.children.length > 0) {
           dfs(Array.from(item.children))
         }
@@ -286,7 +307,10 @@ export const renderPptx = (options: Options): Promise<any> | undefined => {
     const paragraphsArray = Array.from(elem)
     for (let i = 0; i < paragraphsArray.length; i++) {
       // innerHTML
-      const buSpan = findElementClass(paragraphsArray[i], 'numeric-bullet-style')
+      const buSpan = findElementClass(
+        paragraphsArray[i],
+        'numeric-bullet-style',
+      )
       if (buSpan.length > 0) {
         // console.log("DIV-"+i+":");
         let prevBultTyp: string | null = ''
@@ -312,7 +336,10 @@ export const renderPptx = (options: Options): Promise<any> | undefined => {
               buletIndex++
               tmpArry[tmpArryIndx] = buletIndex
               buletTypSrry[tmpArryIndx] = bulletType
-            } else if (bulletType !== prevBultTyp && bulletLvl === prevBultLvl) {
+            } else if (
+              bulletType !== prevBultTyp &&
+              bulletLvl === prevBultLvl
+            ) {
               prevBultTyp = bulletType
               prevBultLvl = bulletLvl
               tmpArryIndx++
@@ -461,7 +488,7 @@ export const renderPptx = (options: Options): Promise<any> | undefined => {
     return {
       format: function (n: number) {
         let ret = ''
-        arr.forEach(item => {
+        arr.forEach((item) => {
           const num = item[0]
           if (parseInt(num.toString()) > 0) {
             for (; n >= Number(num); n -= Number(num)) ret += item[1]

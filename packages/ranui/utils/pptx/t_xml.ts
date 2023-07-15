@@ -18,7 +18,7 @@ interface Node {
   [x: string]: Array<{ length: number } | Record<string, Attrs> | undefined>
 }
 
-export default function t_xml(S: string):Record<string, any> {
+export default function t_xml(S: string): Record<string, any> {
   const openBracket = '<'
   const openBracketCC = '<'.charCodeAt(0)
   const closeBracket = '>'

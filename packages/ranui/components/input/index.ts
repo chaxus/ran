@@ -2,7 +2,7 @@ import { falseList, isDisabled } from '../../utils/index'
 
 class CustomError {
   message: string
-  constructor(message:string = 'document is undefined or r-input is exist'){
+  constructor(message: string = 'document is undefined or r-input is exist') {
     this.message = message
   }
 }
@@ -436,7 +436,7 @@ function Custom() {
     }
     customElements.define('r-input', CustomElement)
     return CustomElement
-  }else{
+  } else {
     return CustomError
   }
 }

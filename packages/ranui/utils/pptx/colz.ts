@@ -281,7 +281,7 @@ export const hslToRgb = function (
   return [round(r * 255), round(g * 255), round(b * 255)]
 }
 
-export const rgbToHsb = function (r: number, g: number, b: number):number[] {
+export const rgbToHsb = function (r: number, g: number, b: number): number[] {
   let h = 0,
     s,
     v
@@ -321,7 +321,7 @@ export const rgbToHsb = function (r: number, g: number, b: number):number[] {
   return [h, s, v]
 }
 
-export const hsbToRgb = function (h: number, s: number, v: number):number[] {
+export const hsbToRgb = function (h: number, s: number, v: number): number[] {
   let r = 0,
     g = 0,
     b = 0
@@ -375,7 +375,7 @@ export const hsbToRgb = function (h: number, s: number, v: number):number[] {
 
 export const hsvToRgb = hsbToRgb
 
-export const hsbToHsl = function (h: any, s: any, b: any):number[] {
+export const hsbToHsl = function (h: any, s: any, b: any): number[] {
   return rgbToHsl(hsbToRgb(h, s, b))
 }
 
@@ -393,7 +393,7 @@ export class ColorScheme {
     }
   }
 
-  createFromColors(colorVal: (string | number)[]):Color[] {
+  createFromColors(colorVal: (string | number)[]): Color[] {
     for (const i in colorVal) {
       if (Object.prototype.hasOwnProperty.call(colorVal, i)) {
         this.palette.push(new Color(colorVal[i]))
@@ -405,7 +405,7 @@ export class ColorScheme {
   createFromAngles(
     colorVal: string | number | (string | number)[],
     angleArray: number[],
-  ):Color[] {
+  ): Color[] {
     this.palette.push(new Color(colorVal))
     for (const i in angleArray) {
       if (Object.prototype.hasOwnProperty.call(angleArray, i)) {
@@ -424,27 +424,27 @@ export class ColorScheme {
     return this.palette
   }
 
-  static Compl(colorVal: ColorVal):ColorScheme {
+  static Compl(colorVal: ColorVal): ColorScheme {
     return new this(colorVal, [180])
   }
 
-  static Triad(colorVal: ColorVal):ColorScheme {
+  static Triad(colorVal: ColorVal): ColorScheme {
     return new this(colorVal, [120, 240])
   }
 
-  static Tetrad(colorVal: ColorVal):ColorScheme {
+  static Tetrad(colorVal: ColorVal): ColorScheme {
     return new this(colorVal, [60, 180, 240])
   }
 
-  static Analog(colorVal: ColorVal):ColorScheme {
+  static Analog(colorVal: ColorVal): ColorScheme {
     return new this(colorVal, [-45, 45])
   }
 
-  static Split(colorVal: ColorVal):ColorScheme {
+  static Split(colorVal: ColorVal): ColorScheme {
     return new this(colorVal, [150, 210])
   }
 
-  static Accent(colorVal: ColorVal):ColorScheme {
+  static Accent(colorVal: ColorVal): ColorScheme {
     return new this(colorVal, [-45, 45, 180])
   }
 }

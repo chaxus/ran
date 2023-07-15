@@ -5,10 +5,10 @@ describe('button', () => {
     const element = new Button()
     expect(element).toBeTruthy()
   })
-  it('test button ui',()=>{
+  it('test button ui', () => {
     new Button()
     const rButton = document.createElement('r-button')
     document.body.appendChild(rButton)
-    expect(document.body).toMatchSnapshot();
+    expect(document.body).toMatchSnapshot()
   })
 })

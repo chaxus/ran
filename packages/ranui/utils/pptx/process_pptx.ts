@@ -28,7 +28,6 @@ interface ChartData {
   }
 }
 
-
 function base64ArrayBuffer(arrayBuff: Uint8Array) {
   const buff = new Uint8Array(arrayBuff)
   let text = ''

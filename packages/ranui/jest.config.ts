@@ -3,7 +3,7 @@
  * https://jestjs.io/docs/configuration
  */
 
-import type {Config} from 'jest';
+import type { Config } from 'jest'
 
 const config: Config = {
   // All imported modules in your tests should be mocked automatically
@@ -92,10 +92,10 @@ const config: Config = {
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
   // moduleNameMapper: {},
   moduleNameMapper: {
-    "^@/components/(.*)$": "<rootDir>/components/$1",
-    "^@/utils/(.*)$": "<rootDir>/utils/$1",
-    "^@/assets/(.*)$": "<rootDir>/assets/$1",
-    "\.(css|less)$": "identity-obj-proxy" // 有使用 sass 需求的同学可以把正则换成 ^\.(css|less|sass|scss)$
+    '^@/components/(.*)$': '<rootDir>/components/$1',
+    '^@/utils/(.*)$': '<rootDir>/utils/$1',
+    '^@/assets/(.*)$': '<rootDir>/assets/$1',
+    '.(css|less)$': 'identity-obj-proxy', // 有使用 sass 需求的同学可以把正则换成 ^\.(css|less|sass|scss)$
   },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
@@ -152,7 +152,7 @@ const config: Config = {
   // snapshotSerializers: [],
 
   // The test environment that will be used for testing
-  testEnvironment: "jsdom",
+  testEnvironment: 'jsdom',
 
   // Options that will be passed to the testEnvironment
   // testEnvironmentOptions: {},
@@ -184,7 +184,7 @@ const config: Config = {
   // transform: undefined,
   transform: {
     '\\.[jt]sx?$': 'babel-jest',
-    "^.+\.svg$": "<rootDir>/svg-transform.js",
+    '^.+.svg$': '<rootDir>/svg-transform.js',
   },
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
@@ -204,6 +204,6 @@ const config: Config = {
 
   // Whether to use watchman for file crawling
   // watchman: true,
-};
+}
 
-export default config;
+export default config
