@@ -91,3 +91,7 @@ export default function autoImportFilePlugin(options: Options): Plugin {
     },
   }
 }
+
+// const pdfjsWorker = typeof window !== "undefined" ? require("./pdf.worker.js") : {}
+
+// module.exports = pdfjsWorker

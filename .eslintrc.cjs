@@ -35,6 +35,7 @@ module.exports = defineConfig({
         tryExtensions: ['.ts', '.js', '.jsx', '.tsx', '.d.ts'],
       },
     ],
+    'regexp/no-obscure-range':'off',
     'node/no-missing-require': [
       'error',
       {

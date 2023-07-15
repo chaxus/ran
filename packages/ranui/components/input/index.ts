@@ -21,10 +21,10 @@ function Custom() {
           'status',
         ]
       }
-      private _container: HTMLDivElement
-      private _label: HTMLLabelElement | undefined
-      private _input: HTMLInputElement
-      private _icon: HTMLElement | undefined
+      _container: HTMLDivElement
+      _label: HTMLLabelElement | undefined
+      _input: HTMLInputElement
+      _icon: HTMLElement | undefined
       constructor() {
         super()
         const shadowRoot = this.attachShadow({ mode: 'closed' })

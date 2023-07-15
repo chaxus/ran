@@ -14,6 +14,13 @@ export default defineConfig({
   build: {
     minify: 'terser',
     sourcemap: true,
+    // rollupOptions:{
+    //   output:{
+    //     manualChunks:{
+    //       d3:['d3']
+    //     }
+    //   }
+    // },
     lib: {
       entry: resolve(__dirname, 'index.ts'),
       name: 'ranui',

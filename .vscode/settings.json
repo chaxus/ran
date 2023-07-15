@@ -1,10 +1,12 @@
 {
   "cSpell.words": [
     "analysed",
+    "binarystring",
     "chaxus",
     "DOMAPI",
     "esbuild",
     "Metiral",
+    "Ovride",
     "picocolors",
     "preinstall",
     "ranite",
@@ -13,6 +15,7 @@
     "ranpack",
     "ranui",
     "ranuts",
+    "simplefy",
     "skipsvgo",
     "slotchange",
     "vitepress",

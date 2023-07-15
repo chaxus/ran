@@ -67,6 +67,7 @@ export default defineConfig({
           items: [
             { text: 'Image 图片', link: '/src/ranui/image/' },
             { text: 'Tabs 标签页', link: '/src/ranui/tabs/' },
+            { text: 'Preview 预览', link: '/src/ranui/preview/' },
           ],
         },
         {
