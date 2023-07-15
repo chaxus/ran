@@ -1,6 +1,4 @@
-import { renderDocx } from '@/utils/docx'
-import { renderPdf } from '@/utils/pdf'
-import { renderPptx } from '@/utils/pptx'
+
 
 const PPTX =
     'application/vnd.openxmlformats-officedocument.presentationml.presentation'
@@ -8,8 +6,11 @@ const PDF = 'application/pdf'
 const DOCX =
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
 
-function Custom() {
+async function Custom() {
     if (typeof window !== 'undefined' && !customElements.get('r-preview')) {
+        const { renderPptx } = await import('@/utils/pptx')
+        const { renderDocx } = await import('@/utils/docx')
+        const { renderPdf } = await import('@/utils/pdf')
         const url2File = (
             url: string,
             onProgress?: (x: ProgressEvent<EventTarget>) => void,
@@ -62,6 +63,7 @@ function Custom() {
                 renderDocx({ buffer: file, bodyContainer: dom }),
             )
         }
+
         const renderFileMap = new Map<
             string,
             (file: File, dom?: HTMLElement) => Promise<void>

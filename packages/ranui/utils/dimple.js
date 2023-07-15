@@ -2990,7 +2990,7 @@ dimple.storyboard = function (chart, categoryFields) {
     // Source: /src/objects/storyboard/methods/pauseAnimation.js
     this.pauseAnimation = function () {
         if (this._animationTimer !== null) {
-            window.clearInterval(this._animationTimer);
+            clearInterval(this._animationTimer);
             this._animationTimer = null;
         }
     };
@@ -3001,7 +3001,7 @@ dimple.storyboard = function (chart, categoryFields) {
     this.startAnimation = function () {
         if (this._animationTimer === null) {
             if (this.onTick !== null) { this.onTick(this.getFrameValue()); }
-            this._animationTimer = window.setInterval((function (storyboard) {
+            this._animationTimer = setInterval((function (storyboard) {
                 return function () {
                     storyboard._goToFrameIndex(storyboard._frame + 1);
                     if (storyboard.onTick !== null) {
@@ -3018,7 +3018,7 @@ dimple.storyboard = function (chart, categoryFields) {
     // Source: /src/objects/storyboard/methods/stopAnimation.js
     this.stopAnimation = function () {
         if (this._animationTimer !== null) {
-            window.clearInterval(this._animationTimer);
+            clearInterval(this._animationTimer);
             this._animationTimer = null;
             this._frame = 0;
         }
