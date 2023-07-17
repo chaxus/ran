@@ -1,6 +1,13 @@
 {
-  "include": ["components", "plugins", "utils", "assets", "**/*.ts"],
-  "exclude": ["node_modules/**", "dist/**"],
+  "include": [
+    "components",
+    "plugins",
+    "utils",
+    "assets",
+    "test",
+    "**/*.ts"
+  ],
+  "exclude": ["node_modules/**", "dist/**", "cypress.config.ts", "cypress"],
   "compilerOptions": {
     "module": "ESNext",
     "esModuleInterop": true,

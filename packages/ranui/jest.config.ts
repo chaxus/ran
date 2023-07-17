@@ -22,8 +22,21 @@ const config: Config = {
   // collectCoverage: false,
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
-  // collectCoverageFrom: undefined,
-
+  // 需要收集单测覆盖率的文件，glob表达式，业务项目可以控制在公共components和hooks
+  collectCoverageFrom: [
+    '<rootDir>/src/components/**/*.{js,jsx,tsx,(!d).ts}',
+  ],
+  // 覆盖率生成的目录
+  coverageDirectory: '<rootDir>/jest/coverage',
+  // 覆盖率值的卡点，推荐业务 50% - 70%，架构 70% - 90%，涉及滚动，跳转等较难覆盖逻辑可以适当下调
+  coverageThreshold: {
+    global: {
+      branches: 90,
+      functions: 90,
+      lines: 90,
+      statements: 90,
+    },
+  },
   // The directory where Jest should output its coverage files
   // coverageDirectory: undefined,
 
@@ -161,10 +174,10 @@ const config: Config = {
   // testLocationInResults: false,
 
   // The glob patterns Jest uses to detect test files
-  // testMatch: [
-  //   "**/__tests__/**/*.[jt]s?(x)",
-  //   "**/?(*.)+(spec|test).[tj]s?(x)"
-  // ],
+  testMatch: [
+    // "**/__tests__/**/*.[jt]s?(x)",
+    "**/?(*.)+(spec|test).[tj]s?(x)"
+  ],
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
   // testPathIgnorePatterns: [

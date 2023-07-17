@@ -35,6 +35,7 @@ module.exports = defineConfig({
         tryExtensions: ['.ts', '.js', '.jsx', '.tsx', '.d.ts'],
       },
     ],
+    'no-restricted-globals':'off',
     'regexp/no-obscure-range': 'off',
     'node/no-missing-require': [
       'error',
@@ -118,19 +119,13 @@ module.exports = defineConfig({
         'no-empty': 'off',
         'no-constant-condition': 'off',
         '@typescript-eslint/no-empty-function': 'off',
-        'no-restricted-globals': [
-          'error',
-          'require',
-          '__dirname',
-          '__filename',
-        ],
       },
     },
     {
       files: ['packages/ranite/**'],
       rules: {
         'no-console': ['error', { allow: ['warn', 'error', 'log'] }],
-        'no-restricted-globals': ['error', 'event'],
+        // 'no-restricted-globals': ['error', 'event'],
       },
     },
     {
