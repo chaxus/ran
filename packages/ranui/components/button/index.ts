@@ -11,7 +11,7 @@ function Custom() {
   if (typeof document !== 'undefined' && !customElements.get('r-button')) {
     class Button extends HTMLElement {
       static get observedAttributes() {
-        return ['disabled', 'icon', 'effect']
+        return ['disabled', 'icon', 'effect','iconSize']
       }
       _btn: HTMLDivElement
       _iconElement?: HTMLElement
@@ -36,18 +36,32 @@ function Custom() {
           this.setAttribute('disabled', '')
         }
       }
+      get iconSize() {
+        return  this.getAttribute('iconSize')
+      }
+      set iconSize(value: string | undefined | null) {
+        if (!value || value === 'false') {
+          this.removeAttribute('iconSize')
+        } else {
+          this.setAttribute('iconSize', value)
+          this.setIcon()
+        }
+      }
       get icon() {
         return this.getAttribute('icon')
       }
-      set icon(value) {
-        if (value) {
+      set icon(value:string | null) {
+        if (!value || value === 'false') {
+          this.removeAttribute('icon')
+        }else{
           this.setAttribute('icon', value)
+          this.setIcon()
         }
       }
       get effect() {
         return this.getAttribute('effect')
       }
-      set effect(value) {
+      set effect(value:string | null) {
         if (falseList.includes(value) || !value) {
           this.removeAttribute('effect')
         } else {
@@ -66,16 +80,19 @@ function Custom() {
           if (this._iconElement) {
             // 如果有_iconElement，只用设置name和size
             this._iconElement.setAttribute('name', this.icon)
-            this._iconElement.setAttribute('size', `${size - 5}`)
           } else {
             // 创建icon，设置name,size,color
             this._iconElement = document.createElement('r-icon')
             this._iconElement.setAttribute('name', this.icon)
-            this._iconElement.setAttribute('size', `${size - 5}`)
             this._iconElement.setAttribute('color', 'currentColor')
             this._iconElement.setAttribute('class', 'icon')
             // 添加到btn元素的首位
             this._slot.insertAdjacentElement('beforebegin', this._iconElement)
+          }
+          if(this.iconSize){
+            this._iconElement.setAttribute('size', this.iconSize)
+          }else{
+            this._iconElement.setAttribute('size', `${size - 5}`)
           }
         }
       }
@@ -111,9 +128,14 @@ function Custom() {
             this._btn.removeAttribute('disabled')
           }
         }
-        if (name === 'icon') {
+        if (name === 'icon' && this._btn) {
           if (oldValue !== newValue) {
             this.setIcon()
+          }
+        }
+        if (name === 'iconSize' && this._btn) {
+          if (oldValue !== newValue) {
+            this._btn.setAttribute('iconSize', newValue)
           }
         }
       }

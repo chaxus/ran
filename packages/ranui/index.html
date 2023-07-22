@@ -35,12 +35,12 @@
       <span>加载失败</span>
       <r-img fallback=""></r-img>
       <div>表单</div>
-      <r-tabs type="text" effect="false">
+      <r-tabs type="text" >
         <r-tab label="tab1" icon="home">11111</r-tab>
         <r-tab label="tab2">22222</r-tab>
         <r-tab label="tab3">33333</r-tab>
         <r-tab label="tab1" key="a" disabled>11111</r-tab>
-        <r-tab label="tab2" icon="home" ran-key="aaa">22222</r-tab>
+        <r-tab label="tab2" icon="home" r-key="aaa">22222</r-tab>
         <r-tab label="tab3" ranKey="10">33333</r-tab>
         <r-tab label="tab2">22222</r-tab>
         <r-tab label="tab7777777">77777</r-tab>
@@ -65,11 +65,10 @@
       <r-icon name="lock" size="100" color="#1E90FF"></r-icon>
     </div>
     <div id="input">
-      <r-input icon="user"></r-input>
-      <!-- <r-input icon="user"></r-input>
-    <r-input label="user"></r-input> -->
+      <r-input icon="user" status="error"></r-input>
+    <r-input label="user" status="warning"></r-input>
     </div>
-    <script>
+    <!-- <script>
       const input = document.getElementById('input')
       const rinput = document.createElement('r-input')
       rinput.setAttribute('label', 'home')
@@ -97,7 +96,7 @@
                 : formData.get(key)
           }
         })
-        console.log('e---->', jsonData)
+        console.log('e', jsonData)
       }
       form.addEventListener('submit', onFinish)
       const changeFile = (event) => {
@@ -122,6 +121,6 @@
           }
         }
       }
-    </script>
+    </script> -->
   </body>
 </html>

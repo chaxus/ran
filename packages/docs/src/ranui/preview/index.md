@@ -25,7 +25,7 @@
 
 ```xml
  <r-icon name="eye"></r-icon><r-preview >点击预览</r-preview>
- <r-button type="primary" onclick="uploadFile()">上传docx</r-button>
+ <r-button type="primary" onclick="uploadFile()">上传pptx</r-button>
 ```
 
 预览`pdf`
@@ -37,7 +37,7 @@
 
 ```xml
  <r-icon name="eye"></r-icon><r-preview >点击预览</r-preview>
- <r-button type="primary" onclick="uploadFile()">上传docx</r-button>
+ <r-button type="primary" onclick="uploadFile()">上传pdf</r-button>
 ```
 
 ## 属性

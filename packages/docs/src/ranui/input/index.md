@@ -92,7 +92,7 @@
 
 - error
 <div>
- <r-input  status="error"></r-input>
+ <r-input status="error"></r-input>
 </div>
 
 ```xml

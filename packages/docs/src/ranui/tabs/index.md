@@ -61,16 +61,16 @@
 `active`作用在`r-tabs`上，可以指定切换到具体标签页，也可以指定初始值。
 
 <r-tabs active="B">
-    <r-tab label="tab1" key="A">tab1</r-tab>
-    <r-tab label="tab2" key="B">tab2</r-tab>
-    <r-tab label="tab3" key="C">tab3</r-tab>
+    <r-tab label="tab1" r-key="A">tab1</r-tab>
+    <r-tab label="tab2" r-key="B">tab2</r-tab>
+    <r-tab label="tab3" r-key="C">tab3</r-tab>
 </r-tabs>
 
 ```html
 <r-tabs active="B">
-  <r-tab label="tab1" key="A">tab1</r-tab>
-  <r-tab label="tab2" key="B">tab2</r-tab>
-  <r-tab label="tab3" key="C">tab3</r-tab>
+  <r-tab label="tab1" r-key="A">tab1</r-tab>
+  <r-tab label="tab2" r-key="B">tab2</r-tab>
+  <r-tab label="tab3" r-key="C">tab3</r-tab>
 </r-tabs>
 ```
 
@@ -92,19 +92,19 @@
 </r-tabs>
 ```
 
-也可以单独指定`icon`，不使用`label`。
+也可以单独指定`icon`，不使用`label`。但这种情况必须要设置`icon`的`size`，否则无法判断`icon`的大小
 
 <r-tabs>
-    <r-tab icon="home">tab1</r-tab>
-    <r-tab icon="message">tab2</r-tab>
-    <r-tab icon="user">tab3</r-tab>
+    <r-tab icon="home" iconSize='22'>tab1</r-tab>
+    <r-tab icon="message" iconSize='22'>tab2</r-tab>
+    <r-tab icon="user" iconSize='22'>tab3</r-tab>
 </r-tabs>
 
 ```html
 <r-tabs>
-  <r-tab icon="home">tab1</r-tab>
-  <r-tab icon="message">tab2</r-tab>
-  <r-tab icon="user">tab3</r-tab>
+  <r-tab icon="home" iconSize='22'>tab1</r-tab>
+  <r-tab icon="message" iconSize='22'>tab2</r-tab>
+  <r-tab icon="user" iconSize='22'>tab3</r-tab>
 </r-tabs>
 ```
 

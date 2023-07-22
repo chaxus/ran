@@ -5,6 +5,15 @@ export default defineConfig({
   description: '基于web component组件库,常用函数库utils,个人文章记录等',
   base: '/ran/',
   lastUpdated: true,
+  vue: {
+    template: {
+      compilerOptions: {
+          isCustomElement: (tag) => {
+              return tag.startsWith('r-')
+          }
+      }
+  }
+  },
   head: [
     ['link', { rel: 'icon', href: '/favicon.ico' }],
     ['meta', { property: 'og:type', content: 'website' }],

@@ -19,7 +19,7 @@ export default {
   ...DefaultTheme,
   enhanceApp({ app }) {
     // initialize(() => new Monitor())
-    app.config.compilerOptions.isCustomElement = (tag) => tag.includes('r-')
+    // app.config.compilerOptions.isCustomElement = (tag) => tag.includes('r-')
     // preview component
     if (typeof window !== 'undefined') {
       window.uploadFile = (name) => {

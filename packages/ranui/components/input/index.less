@@ -34,13 +34,13 @@
   }
   &[status='error'] {
     border-color: #ff4d4f;
-    & > .input-main:hover ~ .input-label {
+    & > .input-main ~ .input-label {
       color: #ff4d4f;
     }
   }
   &[status='warning'] {
     border-color: #ff7875;
-    & > .input-main:hover ~ .input-label {
+    & > .input-main ~ .input-label {
       color: #ff7875;
     }
   }
@@ -118,12 +118,12 @@
     position: absolute;
     font-size: 14px;
     left: 8px;
-    transition: transform 0.3s, color 0.3s, background-color 0.3s;
+    transition: transform 0.3s, color 0.3s, background-color 0.3s, backdrop-filter 0.3s;
     transform-origin: left;
     padding: 0 0.2em;
     color: #999;
-    // background: #fff;
-    backdrop-filter: blur(10px);
+    background: #fff;
+    // backdrop-filter: blur(50px);
     opacity: 0.9;
   }
 }

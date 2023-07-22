@@ -55,6 +55,7 @@ function CustomElement() {
 
         this.tabHeaderKeyMapIndex = {}
 
+
         const shadowRoot = this.attachShadow({ mode: 'closed' })
         shadowRoot.appendChild(this._container)
       }
@@ -124,24 +125,23 @@ function CustomElement() {
        */
       createTabHeader(tabPane: Element, index: number) {
         const label = tabPane.getAttribute('label') || ''
-        const key =
-          tabPane.getAttribute('ranKey') ||
-          tabPane.getAttribute('rankey') ||
-          tabPane.getAttribute('ran-key') ||
-          tabPane.getAttribute('key') ||
-          `${index}`
+        const icon = tabPane.getAttribute('icon') || ''
+        const iconSize = tabPane.getAttribute('iconSize') || ''
+        const key = tabPane.getAttribute('r-key') || `${index}`
         const type = tabPane.getAttribute('type') || 'text'
         this.initTabHeaderKeyMapIndex(key, index)
         const tabHeader = document.createElement('r-button')
         tabHeader.setAttribute('class', 'tab-header_nav__item')
         tabHeader.setAttribute('type', type)
+        icon && tabHeader.setAttribute('icon', icon)
+        iconSize && tabHeader.setAttribute('iconSize', iconSize)
         isDisabled(tabPane) && tabHeader.setAttribute('disabled', '')
-        tabHeader.setAttribute('ran-key', key)
+        tabHeader.setAttribute('r-key', key)
         if (this.effect) {
           tabPane.setAttribute('effect', this.effect)
           this._line.style.setProperty('display', 'none')
         }
-        tabPane.setAttribute('ran-key', key)
+        tabPane.setAttribute('r-key', key)
         tabHeader.innerHTML = label
         return tabHeader
       }
@@ -214,7 +214,7 @@ function CustomElement() {
         // 移动元素到可视区域内
         // tabHeader.scrollIntoView({ block: "center", inline: "center" });
         // TODO: tab超出屏幕滚动问题
-        const key = tabHeader.getAttribute('ran-key')
+        const key = tabHeader.getAttribute('r-key')
         const disabled = isDisabled(tabHeader)
         if (!disabled && key) {
           this.setAttribute('active', key)
@@ -251,9 +251,9 @@ function CustomElement() {
         // 如果有active，找到active对应的标签，设置活跃标签
         if (this.active != null) {
           initTabHeader = initTabList.find(
-            (item, index) =>
-              (item.getAttribute('ran-key') || `${index}`) === this.active,
+            (item) => item.getAttribute('r-key') === this.active
           )
+          initTabHeader?.setAttribute('r-key', this.active)
         }
         // 如果没有active，则默认第一个标签为活跃标签
         if (!initTabHeader) {
@@ -262,14 +262,15 @@ function CustomElement() {
         // 如果都没有，则返回
         if (!initTabHeader) return
         const index = tabHeaderList.findIndex((item) => item === initTabHeader)
-        const key = initTabHeader?.getAttribute('ran-key') || `${index}`
+        const key = initTabHeader?.getAttribute('r-key') || `${index}`
         if (key != null) {
           this.setAttribute('active', `${key}`)
           setElementClass(initTabHeader, 'active')
-          const { width = 0 } = initTabHeader.getBoundingClientRect()
-          this._line.style.setProperty('width', `${width}px`)
-          this.setTabLine(key)
           this.setTabContent(key)
+          setTimeout(() => {
+            // icon 渲染过慢的问题
+            this.setTabLine(key)
+          }, 200);
         }
       }
       /**
@@ -338,6 +339,9 @@ function CustomElement() {
                 item.setAttribute('effect', newValue)
               }
             })
+          }
+          if (name === 'active') {
+            this.setAttribute(name, newValue)
           }
         }
       }

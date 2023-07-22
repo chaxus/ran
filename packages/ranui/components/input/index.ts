@@ -431,7 +431,7 @@ function Custom() {
         oldValue: string,
         newValue: string,
       ) {
-        this.listenEvent(name, newValue, oldValue)
+        this.listenEvent(name, oldValue, newValue)
       }
     }
     customElements.define('r-input', CustomElement)

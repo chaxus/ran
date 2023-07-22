@@ -10,7 +10,7 @@ function CustomElement() {
   if (typeof window !== 'undefined' && !customElements.get('r-tab')) {
     class TabPane extends HTMLElement {
       static get observedAttributes() {
-        return ['label', 'key', 'disabled', 'icon', 'effect']
+        return ['label', 'key', 'disabled', 'icon', 'effect', 'iconSize']
       }
       _div: HTMLElement
       parent: (ParentNode & ExtendParentNode) | undefined | null
@@ -30,23 +30,30 @@ function CustomElement() {
         return this.getAttribute('icon')
       }
       set icon(value) {
-        if (value) {
+        if (!value || value === 'false') {
+          this.removeAttribute('icon')
+        } else {
           this.setAttribute('icon', value)
         }
       }
+      get iconSize() {
+        return this.getAttribute('iconSize')
+      }
+      set iconSize(value) {
+        if (!value || value === 'false') {
+          this.removeAttribute('iconSize')
+        } else {
+          this.setAttribute('iconSize', value)
+        }
+      }
       get key() {
-        return (
-          this.getAttribute('ranKey') ||
-          this.getAttribute('rankey') ||
-          this.getAttribute('ran-key') ||
-          this.getAttribute('key')
-        )
+        return this.getAttribute('r-key')
       }
       set key(value) {
         if (value) {
-          this.setAttribute('key', value)
+          this.setAttribute('r-key', value)
         } else {
-          this.removeAttribute('key')
+          this.removeAttribute('r-key')
         }
       }
       get disabled() {
@@ -78,8 +85,8 @@ function CustomElement() {
       initAttribute = () => {
         this.parent = this.parentNode as ParentNode & ExtendParentNode
         this.key && this.parent?.updateAttribute(this.key, 'icon', this.icon)
-        this.key &&
-          this.parent?.updateAttribute(this.key, 'effect', this.effect)
+        this.key && this.parent?.updateAttribute(this.key, 'iconSize', this.iconSize)
+        this.key && this.parent?.updateAttribute(this.key, 'effect', this.effect)
       }
       connectedCallback() {
         this._div.addEventListener('click', this.onClick)
@@ -96,6 +103,8 @@ function CustomElement() {
         if (oldValue !== newValue && this.key && this.parent?.updateAttribute) {
           if (name === 'icon')
             this.parent?.updateAttribute(this.key, 'icon', newValue)
+          if (name === 'iconSize')
+            this.parent?.updateAttribute(this.key, 'iconSize', newValue)
           if (name === 'effect')
             this.parent?.updateAttribute(this.key, 'effect', newValue)
           if (name === 'disabled')
