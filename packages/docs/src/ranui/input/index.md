@@ -16,7 +16,7 @@
 
 ### 标签`label`
 
-提供类似于 Metiral Design 的输入体验。
+提供类似于 `Metiral Design` 的输入体验。
 
 <r-input label="user"></r-input>
 
@@ -66,7 +66,7 @@
 
 ### 图标`icon`
 
-可以设置一个`icon`来表示标签标识。icon 的颜色跟随 input 颜色
+可以设置一个`icon`来表示标签标识。
 
 <r-input icon="user"></r-input>
 
@@ -91,6 +91,9 @@
 ### status 状态
 
 - error
+
+默认色值: `#ff4d4f`
+
 <div>
  <r-input status="error"></r-input>
 </div>
@@ -101,7 +104,11 @@
 
 - warning
 
+默认色值: `#ff7875`
+
+<div>
   <r-input status="warning"></r-input>
+</div>
 
 ```xml
 <r-input  status="warning"></r-input>

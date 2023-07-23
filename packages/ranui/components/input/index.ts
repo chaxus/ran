@@ -136,11 +136,11 @@ function Custom() {
        */
       set status(value: string) {
         if (value) {
-          this.removeAttribute('status')
-          this._container.removeAttribute('status')
-        } else {
           this.setAttribute('status', value)
           this._container.setAttribute('status', value)
+        } else {
+          this.removeAttribute('status')
+          this._container.removeAttribute('status')
         }
       }
       /**
