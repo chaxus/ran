@@ -10,6 +10,13 @@ UI Component library based on `Web Component`
 <a href="https://bundlephobia.com/result?p=ranui"><img src="https://img.badgesize.io/https:/unpkg.com/ranui/dist/index.umd.cjs?label=brotli&compression=brotli" alt="brotli"></a>
 <a href="#alternative-installation-methods"><img src="https://img.shields.io/badge/module%20formats-umd%2C%20esm-green.svg" alt="module formats: umd, esm"></a>
 
+## Feature
+
+- **Across the frame**: It works with react, vue, or native projects.
+- **Componentization**: The shadow dom actually implements componentization of style and functionality.
+- **native**: A component is like using a div tag.
+- **No dependence**: Pure native, no preprocessor compilation required.
+
 ## Install
 
 Using npm:
