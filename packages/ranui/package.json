@@ -1,6 +1,6 @@
 {
   "name": "ranui",
-  "version": "0.1.1-alpha.4",
+  "version": "0.1.1-alpha.5",
   "description": "基于web components的组件库",
   "main": "dist/index.umd.cjs",
   "module": "dist/index.js",
