@@ -1,18 +1,15 @@
-const PPTX =
-  'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+const PPTX = 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
 const PDF = 'application/pdf'
-const DOCX =
-  'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+const DOCX = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
 
 async function Custom() {
   if (typeof window !== 'undefined' && !customElements.get('r-preview')) {
+    
     const { renderPptx } = await import('@/utils/pptx')
     const { renderDocx } = await import('@/utils/docx')
     const { renderPdf } = await import('@/utils/pdf')
-    const url2File = (
-      url: string,
-      onProgress?: (x: ProgressEvent<EventTarget>) => void,
-    ): Promise<File> => {
+
+    const url2File = (url: string,onProgress?: (x: ProgressEvent<EventTarget>) => void): Promise<File> => {
       return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest()
         xhr.open('GET', url)
@@ -70,6 +67,7 @@ async function Custom() {
       [PPTX, renderPpt],
       [DOCX, renderWord],
     ])
+
     class CustomElement extends HTMLElement {
       static get observedAttributes() {
         return ['src']
@@ -122,9 +120,9 @@ async function Custom() {
         }
       }
       closePreview = () => {
-        if (this.preview) {
-          this.preview.style.display = 'none'
-        }
+        // if (this.preview) {
+        //   this.preview.style.display = 'none'
+        // }
       }
       showPreview = () => {
         if (this.src) {

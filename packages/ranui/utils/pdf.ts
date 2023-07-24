@@ -16,7 +16,7 @@ interface RenderContext {
 interface PDFPageProxy {
   pageNumber: number
   getViewport: () => Viewport
-  render: (options: RenderContext) => never
+  render: (options: RenderContext) => void
 }
 
 interface PDFDocumentProxy {

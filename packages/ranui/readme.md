@@ -24,6 +24,7 @@ Using npm:
 ```console
 npm install ranui --save
 ```
+
 ## Document
 
 [See components and use examples](https://chaxus.github.io/ran/src/ranui/)
@@ -32,7 +33,8 @@ npm install ranui --save
 
 It is based on the `Web Component`, you can use it without focusing on the framework.
 
-- tsx 
+- tsx
+
 ```tsx
 import Button from 'ranui'
 
@@ -46,6 +48,7 @@ const App = () => {
 ```
 
 - html
+
 ```html
 <script src="./ranui/dist/index.umd.cjs"></script>
 
@@ -54,6 +57,7 @@ const App = () => {
 </body>
 
 ```
+
 - js
 
 ```js
@@ -63,7 +67,6 @@ const Button  = document.createElement('r-button')
 Button.appendChild('this is button text')
 document.body.appendChild(Button)
 ```
-
 
 ### Meta
 
