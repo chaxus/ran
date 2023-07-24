@@ -2,21 +2,91 @@
 
 基于 `Web Components UI`组件库
 
-- 优点：
+## 特点
 
-1. 跨框架，基于原生能力开发，只要能支持原生 JS 的框架都能使用。
-2. 几乎没有依赖。
-3. 基于 shadow dom 进行组件化，能做到 CSS 和 JS 的彻底隔离
+1. 跨框架，基于原生能力开发。
+2. 使用`ts`开发，有类型和声明文件。
+3. 纯手写，无依赖。
+4. 全部大小不到`100k`。
 
-- 缺点：
+## 全量引入
 
-1. 兼容性问题，不支持 IE
+```ts
+import 'ranui'
+```
+
+## 按需引入
+
+```ts
+import Button from 'ranui'
+```
+
+## 组件总览
+
+<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
+     <r-button type="primary">主要按钮</r-button>
+</div>
+<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
+     <r-button type="warning">警告按钮</r-button>
+</div>
+<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
+    <r-button type="text">文本按钮</r-button>
+</div>
+<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
+    <r-button >默认按钮</r-button>
+</div>
+<div style='display:flex'>
+     <r-icon name="lock" size="50" ></r-icon>
+     <r-icon name="user" size="50" ></r-icon>
+     <r-icon name="loading" size="50" color="#1E90FF" spin></r-icon>
+</div>
+
+<div style="width: 100px;margin-top:10px">
+    <r-skeleton ></r-skeleton>
+</div>
+<div style="margin-top:10px">
+    <r-skeleton ></r-skeleton>
+</div>
+<div style="margin-top:10px">
+    <r-skeleton ></r-skeleton>
+</div>
+<div style="width: 200px;margin-top:10px;margin-bottom: 12px;">
+    <r-skeleton ></r-skeleton>
+</div>
+
+<div style="display:block;margin-right: 8px;margin-bottom: 12px;">
+     <r-input label="user"></r-input>
+</div>
+
+<div style="display:block;margin-right: 8px;margin-bottom: 12px;">
+     <r-input icon="lock" type="password"></r-input>
+</div>
+
+<r-button onclick="message.info('这是一条提示')">信息提示</r-button>
+<r-button onclick="message.warning('这是一条提示')">警告提示</r-button>
+<r-button onclick="message.error('这是一条提示')">错误提示</r-button>
+<r-button onclick="message.success('这是一条提示')">成功提示</r-button>
+<r-button onclick="message.toast('这是一条提示')">toast提示</r-button>
+
+<div style="display:block;margin-right: 8px;margin-bottom: 12px;">
+   <r-tabs>
+      <r-tab label="home" icon="home">tab1</r-tab>
+      <r-tab label="message" icon="message">tab2</r-tab>
+      <r-tab label="user" icon="user">tab3</r-tab>
+   </r-tabs>
+</div>
+
+
+
+## 兼容性
+
+- 不支持 IE，其他均有较好支持
    ![](../../assets/ranui/customElements.png)
-2. CSS 和 JS 隔离的太好以至于定制化样式反而有些困难
 
-**git 地址**：https://github.com/chaxus/ran
 
-# 参考链接
+**项目地址**：https://github.com/chaxus/ran
+
+## 相关资源
 
 1. [优秀的组件设计](https://www.checklist.design/)
 2. [在线生成 CSS 渐变色](https://webgradients.com/)
@@ -32,7 +102,7 @@
 12. [can i use 检测兼容性 API 网站](https://caniuse.com/)
 13. [figma](https://www.figma.com/)
 
-# 协议标准
+## 协议和标准
 
 1.  [RFCs](https://www.rfc-editor.org/)
 2.  [ECMA](https://www.ecma-international.org/)

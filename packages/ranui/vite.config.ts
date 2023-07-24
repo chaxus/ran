@@ -41,7 +41,7 @@ export default defineConfig({
         // resolve(__dirname, "components/")
       ],
       extensions: ['.ts'],
-      ignore: ['./components/form/index.ts', './components/modal/index.ts'],
+      ignore: ['./components/form/index.ts', './components/modal/index.ts','./components/preview/index.ts','./components/video/index.ts'],
     }),
   ],
   resolve: {
