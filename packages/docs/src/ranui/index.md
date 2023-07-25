@@ -4,16 +4,71 @@
 
 ## 特点
 
-1. 跨框架，基于原生能力开发。
-2. 使用`ts`开发，有类型和声明文件。
-3. 纯手写，无依赖。
-4. 全部大小不到`100k`。
+1. 基于`Web Components`开发，能做到跨框架复用，统一所有情况。
+2. 采用`Typescript`开发，有声明和类型文件。
+3. 纯原生手写，无依赖。
+4. 整体项目全量导入不到`100k`，`brotli`压缩后整体只有`14.70 KiB`，
+5. `MIT`协议
+6. 文档基于`vitepress`搭建，所有组件实例均可交互
+
+
+## 项目地址
+
+- `git`地址：`https://github.com/chaxus/ran/tree/main/packages/ranui`，欢迎大家提出各种改进建议，`issue`和`pr`。
+- `npm`地址：`https://www.npmjs.com/package/ranui`
+
+![npm地址](../../assets/ranui/ranui-npm.jpg)
+
+## 使用
+
+- html
+
+```html
+<script src="./ranui/dist/index.umd.cjs"></script>
+
+<body>
+    <r-button>Button</r-button>
+</body>
+```
+
+- vue
+
+```vue
+<template>
+    <r-button>Button</r-button>
+</template>
+```
+
+- react
+
+```jsx
+import Button from 'ranui'
+const App = () => {
+    return (
+        <>
+            <r-button>Button</r-button>
+        </>
+    )
+}
+
+```
+
+```js
+import 'ranui'
+
+const Button  = document.createElement('r-button')
+Button.appendChild('this is button text')
+document.body.appendChild(Button)
+
+```
+大多数情况都可以像原生的`div`标签一样使用
 
 ## 全量引入
 
 ```ts
 import 'ranui'
 ```
+
 
 ## 按需引入
 
@@ -22,6 +77,8 @@ import Button from 'ranui'
 ```
 
 ## 组件总览
+
+- Button
 
 <div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
      <r-button type="primary">主要按钮</r-button>
@@ -35,11 +92,16 @@ import Button from 'ranui'
 <div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
     <r-button >默认按钮</r-button>
 </div>
+
+- Icon
+
 <div style='display:flex'>
      <r-icon name="lock" size="50" ></r-icon>
      <r-icon name="user" size="50" ></r-icon>
      <r-icon name="loading" size="50" color="#1E90FF" spin></r-icon>
 </div>
+
+- Skeleton
 
 <div style="width: 100px;margin-top:10px">
     <r-skeleton ></r-skeleton>
@@ -54,6 +116,8 @@ import Button from 'ranui'
     <r-skeleton ></r-skeleton>
 </div>
 
+- Input
+
 <div style="display:block;margin-right: 8px;margin-bottom: 12px;">
      <r-input label="user"></r-input>
 </div>
@@ -62,11 +126,15 @@ import Button from 'ranui'
      <r-input icon="lock" type="password"></r-input>
 </div>
 
+- message
+
 <r-button onclick="message.info('这是一条提示')">信息提示</r-button>
 <r-button onclick="message.warning('这是一条提示')">警告提示</r-button>
 <r-button onclick="message.error('这是一条提示')">错误提示</r-button>
 <r-button onclick="message.success('这是一条提示')">成功提示</r-button>
 <r-button onclick="message.toast('这是一条提示')">toast提示</r-button>
+
+- Tab
 
 <div style="display:block;margin-right: 8px;margin-bottom: 12px;">
    <r-tabs>
@@ -83,8 +151,6 @@ import Button from 'ranui'
 - 不支持 IE，其他均有较好支持
    ![](../../assets/ranui/customElements.png)
 
-
-**项目地址**：https://github.com/chaxus/ran
 
 ## 相关资源
 
