@@ -53,6 +53,8 @@ const App = () => {
 
 ```
 
+- js
+
 ```js
 import 'ranui'
 
