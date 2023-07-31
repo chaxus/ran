@@ -11,7 +11,7 @@ function Custom() {
   if (typeof document !== 'undefined' && !customElements.get('r-button')) {
     class Button extends HTMLElement {
       static get observedAttributes() {
-        return ['disabled', 'icon', 'effect','iconSize']
+        return ['disabled', 'icon', 'effect', 'iconSize']
       }
       _btn: HTMLDivElement
       _iconElement?: HTMLElement
@@ -37,7 +37,7 @@ function Custom() {
         }
       }
       get iconSize() {
-        return  this.getAttribute('iconSize')
+        return this.getAttribute('iconSize')
       }
       set iconSize(value: string | undefined | null) {
         if (!value || value === 'false') {
@@ -50,10 +50,10 @@ function Custom() {
       get icon() {
         return this.getAttribute('icon')
       }
-      set icon(value:string | null) {
+      set icon(value: string | null) {
         if (!value || value === 'false') {
           this.removeAttribute('icon')
-        }else{
+        } else {
           this.setAttribute('icon', value)
           this.setIcon()
         }
@@ -61,7 +61,7 @@ function Custom() {
       get effect() {
         return this.getAttribute('effect')
       }
-      set effect(value:string | null) {
+      set effect(value: string | null) {
         if (falseList.includes(value) || !value) {
           this.removeAttribute('effect')
         } else {
@@ -89,9 +89,9 @@ function Custom() {
             // 添加到btn元素的首位
             this._slot.insertAdjacentElement('beforebegin', this._iconElement)
           }
-          if(this.iconSize){
+          if (this.iconSize) {
             this._iconElement.setAttribute('size', this.iconSize)
-          }else{
+          } else {
             this._iconElement.setAttribute('size', `${size - 5}`)
           }
         }
@@ -104,8 +104,10 @@ function Custom() {
         }
       }
       mouseLeave = () => {
-        this.style.removeProperty('--ran-x')
-        this.style.removeProperty('--ran-y')
+        setTimeout(() => {
+          this.style.removeProperty('--ran-x')
+          this.style.removeProperty('--ran-y')
+        }, 300)
       }
       connectedCallback() {
         this._btn.addEventListener('mousedown', this.mousedown)
