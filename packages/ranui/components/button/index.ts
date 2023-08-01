@@ -11,11 +11,12 @@ function Custom() {
   if (typeof document !== 'undefined' && !customElements.get('r-button')) {
     class Button extends HTMLElement {
       static get observedAttributes() {
-        return ['disabled', 'icon', 'effect', 'iconSize']
+        return ['disabled', 'icon', 'effect', 'iconSize', 'sheet']
       }
       _btn: HTMLDivElement
       _iconElement?: HTMLElement
       _slot: HTMLSlotElement
+      _shadowDom: ShadowRoot
       constructor() {
         super()
         this._slot = document.createElement('slot')
@@ -24,7 +25,14 @@ function Custom() {
         this._btn.appendChild(this._slot)
         this._slot.setAttribute('class', 'slot')
         const shadowRoot = this.attachShadow({ mode: 'closed' })
+        this._shadowDom = shadowRoot
         shadowRoot.appendChild(this._btn)
+      }
+      get sheet() {
+        return this.getAttribute('sheet')
+      }
+      set sheet(value) {
+        this.setAttribute('sheet', value || '')
       }
       get disabled() {
         return isDisabled(this)
@@ -109,9 +117,21 @@ function Custom() {
           this.style.removeProperty('--ran-y')
         }, 300)
       }
+      handlerExternalCss() {
+        if (this.sheet) {
+          try {
+            const sheet = new CSSStyleSheet();
+            sheet.insertRule(this.sheet);
+            this._shadowDom.adoptedStyleSheets = [sheet];
+          } catch (error) {
+            console.error(`Failed to parse the rule in CSSStyleSheet: ${this.sheet}`)
+          }
+        }
+      }
       connectedCallback() {
         this._btn.addEventListener('mousedown', this.mousedown)
         this._btn.addEventListener('mouseleave', this.mouseLeave)
+        this.handlerExternalCss()
         this.setIcon()
       }
       disconnectCallback() {
@@ -130,16 +150,9 @@ function Custom() {
             this._btn.removeAttribute('disabled')
           }
         }
-        if (name === 'icon' && this._btn) {
-          if (oldValue !== newValue) {
-            this.setIcon()
-          }
-        }
-        if (name === 'iconSize' && this._btn) {
-          if (oldValue !== newValue) {
-            this._btn.setAttribute('iconSize', newValue)
-          }
-        }
+        if (name === 'icon' && this._btn && oldValue !== newValue) this.setIcon()
+        if (name === 'iconSize' && this._btn && oldValue !== newValue) this._btn.setAttribute('iconSize', newValue)
+        if (name === 'sheet' && this._shadowDom && oldValue !== newValue) this.handlerExternalCss()
       }
     }
     customElements.define('r-button', Button)
