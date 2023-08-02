@@ -1,7 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`input test input ui 1`] = `
-<body>
-  <r-input />
-</body>
-`;

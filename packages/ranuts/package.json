@@ -24,7 +24,7 @@
   "homepage": "https://github.com/chaxus/ran/tree/main/packages/ranuts/docs",
   "scripts": {
     "build": "tsc --noEmit && vite build",
-    "test": "vitest",
+    "test": "vitest run",
     "prepublish": "npm run build"
   },
   "keywords": [],
