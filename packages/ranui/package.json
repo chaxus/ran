@@ -28,7 +28,7 @@
     "dev": "vite",
     "build": "vite build",
     "prepublish": "npm run build",
-    "test": "playwright test",
+    "test": "sh ./bin/test.sh",
     "test:report": "playwright show-report",
     "test:ui": "playwright test --ui"
   },
