@@ -13,7 +13,6 @@ const __dirname = path.dirname(__filename)
 export default defineConfig({
   build: {
     minify: 'terser',
-    sourcemap: true,
     lib: {
       entry: resolve(__dirname, 'index.ts'),
       name: 'ranui',
@@ -27,15 +26,15 @@ export default defineConfig({
     }),
     dts(),
     loadSvg({ svgo: false, defaultImport: 'raw' }),
-    autoImportFile({
-      output: resolve(__dirname, 'component.ts'),
-      path: [
-        './components',
-        // resolve(__dirname, "components/")
-      ],
-      extensions: ['.ts'],
-      ignore: ['./components/form/index.ts', './components/modal/index.ts', './components/preview/index.ts', './components/video/index.ts'],
-    }),
+    // autoImportFile({
+    //   output: resolve(__dirname, 'component.ts'),
+    //   path: [
+    //     './components',
+    //     // resolve(__dirname, "components/")
+    //   ],
+    //   extensions: ['.ts'],
+    //   ignore: ['./components/form/index.ts', './components/modal/index.ts', './components/video/index.ts'],
+    // }),
   ],
   resolve: {
     alias: {

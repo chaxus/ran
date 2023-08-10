@@ -78,3 +78,17 @@ export const createIconList = (): void => {
     })
   }, 0)
 }
+
+export const loadScript = (src: string): Promise<{ success: boolean }> => {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script')
+    script.src = src
+    script.onload = function () {
+      resolve({ success: true })
+    }
+    script.onerror = function (error) {
+      reject({ success: false, error })
+    }
+    document.body.append(script)
+  })
+}

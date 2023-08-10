@@ -15,7 +15,6 @@ UI Component library based on `Web Component`
 - **Across the frame**: It works with react, vue, or native projects.
 - **Componentization**: The shadow dom actually implements componentization of style and functionality.
 - **native**: A component is like using a div tag.
-- **No dependence**: Pure native, no preprocessor compilation required.
 
 ## Install
 

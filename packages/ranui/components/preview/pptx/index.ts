@@ -1,6 +1,6 @@
-import * as d3 from 'd3'
-import processPptx from '@/utils/pptx/process_pptx'
-import dimple from '@/utils/dimple'
+import * as d3 from '@/assets/js/d3'
+import processPptx from '@/components/preview/pptx/process_pptx'
+import dimple from '@/assets/js/dimple'
 
 type ChartData = Array<{
   key: string

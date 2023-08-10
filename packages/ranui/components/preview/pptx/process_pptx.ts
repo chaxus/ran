@@ -1,7 +1,7 @@
 import JSZip from 'jszip'
-import t_xml from '@/utils/pptx/t_xml'
-import { Color } from '@/utils/pptx/colz'
-import type { Msg } from '@/utils/pptx'
+import t_xml from '@/components/preview/pptx/t_xml'
+import { Color } from '@/components/preview/pptx/colz'
+import type { Msg } from '@/components/preview/pptx'
 
 interface InputByType {
   base64: string

@@ -12,15 +12,7 @@ export const renderDocx = (options: DocxOptions): Promise<void> | undefined => {
     const { bodyContainer, styleContainer, buffer, docxOptions = {} } = options
     const defaultOptions = {
       className: 'docx',
-      inWrapper: true,
-      ignoreWidth: false,
-      ignoreHeight: false,
-      ignoreFonts: false,
-      breakPages: true,
-      ignoreLastRenderedPageBreak: true,
-      experimental: false,
-      trimXmlDeclaration: true,
-      debug: false,
+      ignoreLastRenderedPageBreak: false,
     }
     const configuration = Object.assign({}, defaultOptions, docxOptions)
     if (bodyContainer) {

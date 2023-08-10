@@ -11,7 +11,6 @@ const __dirname = path.dirname(__filename)
 export default defineConfig({
   build: {
     minify: 'terser',
-    sourcemap: true, // 输出单独 source文件
     rollupOptions: {
       inlineDynamicImports: true,
       external: ['node:fs', 'fs'],

@@ -1,5 +1,9 @@
-import * as pdfjs from 'pdfjs-dist/build/pdf'
-import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.entry'
+import { pdfjsLib } from '@/assets/js/pdf'
+import { worker } from '@/assets/js/pdf-worker'
+import { loadScript } from '@/utils/index'
+
+const pdfjs: any = `data:text/javascript;base64,${pdfjsLib}`
+const pdfjsWorker: any = `data:text/javascript;base64,${worker}`
 
 interface Viewport {
   width: number
@@ -66,13 +70,15 @@ class PdfPreview {
     })
   }
   pdfPreview = () => {
-    pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker
-    pdfjs.getDocument(this.pdf).promise.then(async (doc: PDFDocumentProxy) => {
-      this.pdfDoc = doc
-      this.total = doc.numPages
-      for (let i = 1; i <= this.total; i++) {
-        await this.getPdfPage(i)
-      }
+    loadScript(pdfjs).then(() => {
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker
+      window.pdfjsLib.getDocument(this.pdf).promise.then(async (doc: PDFDocumentProxy) => {
+        this.pdfDoc = doc
+        this.total = doc.numPages
+        for (let i = 1; i <= this.total; i++) {
+          await this.getPdfPage(i)
+        }
+      })
     })
   }
   prevPage = () => {
