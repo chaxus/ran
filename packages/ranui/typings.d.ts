@@ -28,6 +28,7 @@ declare namespace Ran {
 declare interface Window {
   message: Ran.Message
   dimple: any
+  pdfjsLib: any,
 }
 // ranuts 声明文件
 declare module '@/file/*'

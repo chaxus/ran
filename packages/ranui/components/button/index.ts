@@ -120,11 +120,13 @@ function Custom() {
       handlerExternalCss() {
         if (this.sheet) {
           try {
-            const sheet = new CSSStyleSheet();
-            sheet.insertRule(this.sheet);
-            this._shadowDom.adoptedStyleSheets = [sheet];
+            const sheet = new CSSStyleSheet()
+            sheet.insertRule(this.sheet)
+            this._shadowDom.adoptedStyleSheets = [sheet]
           } catch (error) {
-            console.error(`Failed to parse the rule in CSSStyleSheet: ${this.sheet}`)
+            console.error(
+              `Failed to parse the rule in CSSStyleSheet: ${this.sheet}`,
+            )
           }
         }
       }
@@ -150,9 +152,12 @@ function Custom() {
             this._btn.removeAttribute('disabled')
           }
         }
-        if (name === 'icon' && this._btn && oldValue !== newValue) this.setIcon()
-        if (name === 'iconSize' && this._btn && oldValue !== newValue) this._btn.setAttribute('iconSize', newValue)
-        if (name === 'sheet' && this._shadowDom && oldValue !== newValue) this.handlerExternalCss()
+        if (name === 'icon' && this._btn && oldValue !== newValue)
+          this.setIcon()
+        if (name === 'iconSize' && this._btn && oldValue !== newValue)
+          this._btn.setAttribute('iconSize', newValue)
+        if (name === 'sheet' && this._shadowDom && oldValue !== newValue)
+          this.handlerExternalCss()
       }
     }
     customElements.define('r-button', Button)

@@ -41,15 +41,11 @@ export default {
         uploadFile.onchange = (e) => {
           const { files = [] } = uploadFile
           if (preview) {
-            preview.innerText = '加载中'
             if (files && files.length > 0) {
               preview.setAttribute('src', '')
               const file = files[0]
               const url = URL.createObjectURL(file)
               preview.setAttribute('src', url)
-              preview.innerText = '点击预览'
-            } else {
-              preview.innerText = '还没有预览的文件'
             }
           }
         }

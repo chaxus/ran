@@ -1,4 +1,4 @@
-import processPptx from '@/utils/pptx/process_pptx'
+import processPptx from '@/components/preview/pptx/process_pptx'
 
 processPptx(
   (func) => {
