@@ -9,8 +9,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        # os: [ubuntu-latest]
-        # node_version: [14, 16, 18]
+        os: [ubuntu-latest]
+        node_version: [14, 16, 18]
         include:
           # Active LTS + other OS
           - os: macos-latest
@@ -40,9 +40,6 @@ jobs:
       - name: Install deps
         run: pnpm install
 
-      - name: Build
-        run: pnpm run build
-
       - name: format
         run: pnpm run format
 
@@ -51,3 +48,6 @@ jobs:
 
       - name: Test
         run: pnpm run test
+
+      - name: Build
+        run: pnpm run build
