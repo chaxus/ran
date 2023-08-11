@@ -21,6 +21,23 @@ const typeMapColor = new Map([
 
 function Custom() {
   if (typeof window !== 'undefined' && !customElements.get('r-message')) {
+
+    // class CustomMessageContain extends HTMLElement {
+    //   _contain: HTMLDivElement;
+    //   _slot: HTMLSlotElement;
+    //   constructor() {
+    //     super();
+    //     this._contain = document.createElement("div");
+    //     this._contain.setAttribute("class", "ranui-message");
+    //     this._slot = document.createElement("slot");
+    //     this._contain.appendChild(this._slot);
+    //     const shadowRoot = this.attachShadow({ mode: "closed" });
+    //     shadowRoot.appendChild(this._contain);
+    //   }
+    // }
+    
+    // customElements.define("r-message-contain", CustomMessageContain);
+    
     class CustomMessage extends HTMLElement {
       _info: HTMLDivElement
       _notice: HTMLDivElement
@@ -34,7 +51,6 @@ function Custom() {
       }
       constructor() {
         super()
-        
         this._notice = document.createElement('div')
         this._notice.setAttribute('class', 'message-notice')
         this._content = document.createElement('div')
@@ -90,6 +106,11 @@ function Custom() {
       }
     }
     customElements.define('r-message', CustomMessage)
+
+    // const container = document.createElement('div')
+    // const div = document.createElement('r-message-contain')
+    // document.body.appendChild(container)
+    // container.appendChild(div)
 
     const container = document.createElement('div')
     const div = document.createElement('div')
