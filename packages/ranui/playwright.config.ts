@@ -1,5 +1,9 @@
 import { defineConfig, devices } from '@playwright/test'
 
+export const TIME_OUT = 3000
+
+export const DEV_SERVER = 'http://localhost:5124/'
+
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
@@ -71,7 +75,7 @@ export default defineConfig({
   /* Run your local dev server before starting the tests */
   webServer: {
     command: 'npm run dev',
-    url: 'http://localhost:5124/',
+    url: DEV_SERVER,
     reuseExistingServer: !process.env.CI,
   },
 })
