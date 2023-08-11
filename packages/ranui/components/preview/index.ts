@@ -108,7 +108,6 @@ async function Custom() {
       previewContext?: HTMLDivElement
       _slot: HTMLSlotElement
       _div: HTMLElement
-      private _shadowDom: ShadowRoot
       constructor() {
         super()
         this._div = document.createElement('div')
@@ -118,9 +117,7 @@ async function Custom() {
         this._slot.setAttribute('class', 'r-preview-slot')
         this._div.setAttribute('class', 'r-preview')
         const shadowRoot = this.attachShadow({ mode: 'closed' })
-        this._shadowDom = shadowRoot
         shadowRoot.appendChild(this._div)
-        this.handlerExternalCss(excelStyles)
       }
       get label() {
         return this.getAttribute('label')
@@ -134,15 +131,6 @@ async function Custom() {
       set src(value) {
         if (value) this.setAttribute('src', value)
       }
-      handlerExternalCss(styles: string) {
-        try {
-          const sheet = new CSSStyleSheet()
-          sheet.insertRule(styles)
-          this._shadowDom.adoptedStyleSheets = [sheet]
-        } catch (error) {
-          console.error(`Failed to parse the rule in CSSStyleSheet: ${styles}`)
-        }
-      }
       onProgress = (event: ProgressEvent<EventTarget>) => {
         const num = (event.loaded / event.total) * 100
         const progress = num.toFixed(2) + '%'
@@ -154,10 +142,9 @@ async function Custom() {
             file = await requestFile(file, { onProgress: this.onProgress })
           }
           const { type } = file
-          console.log('type', type)
           const handler = renderFileMap.get(type)
           if (handler && this.previewContext) {
-            // document.body.style.overflow = 'hidden'
+            document.body.style.overflow = 'hidden'
             handler(file, this.previewContext)
           }
         } catch (error) {
@@ -166,6 +153,7 @@ async function Custom() {
       }
       closePreview = () => {
         if (this.preview) {
+          document.body.style.overflow = 'auto'
           this.preview.style.display = 'none'
         }
       }

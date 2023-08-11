@@ -1,7 +1,7 @@
 import Spreadsheet from 'x-data-spreadsheet'
 import { debounce } from 'lodash'
+import type { Media } from '@/components/preview/excel/media'
 import {
-  getData,
   readExcelData,
   transferExcelToSpreadSheet,
 } from '@/components/preview/excel/excel'
@@ -31,7 +31,6 @@ function readOnlyInput(root: HTMLElement) {
     for (const node of nodes) {
       node && !node.readOnly && (node.readOnly = true)
     }
-    document.activeElement && document.activeElement.blur()
   }
 }
 const defaultOptions = {
@@ -44,18 +43,18 @@ class JsExcelPreview {
   wrapperMain?: HTMLDivElement
   xs?: Xs
   sheetIndex: number
-  mediasSource: never[]
+  mediasSource?: Partial<Media>
   workbookDataSource: { _worksheets: never[] }
   ctx?: CanvasRenderingContext2D | null
   fileData?: ArrayBuffer | string
   observer?: MutationObserver
-  offset?: null
+  offset?: { scroll: { x: number; y: number } } | undefined
 
   constructor(container: HTMLElement, options = {}) {
     this.container = container
     this.options = { ...defaultOptions, ...options }
     this.sheetIndex = 1
-    this.mediasSource = []
+    this.mediasSource = {}
     this.workbookDataSource = {
       _worksheets: [],
     }
@@ -96,43 +95,52 @@ class JsExcelPreview {
     const that = this
     if (this.xs.bottombar) {
       const swapFunc = this.xs.bottombar.swapFunc
-      this.xs.bottombar.swapFunc = function (index) {
-        swapFunc.call(that.xs.bottombar, index)
-        that.sheetIndex = index + 1
+      this.xs.bottombar.swapFunc = (index) => {
+        swapFunc.call(this.xs?.bottombar, index)
+        this.sheetIndex = index + 1
         setTimeout(() => {
-          that.xs.reRender()
-          renderImage(
-            that.ctx,
-            that.mediasSource,
-            that.workbookDataSource._worksheets[that.sheetIndex],
-            that.offset,
-          )
+          this.xs?.reRender && this.xs?.reRender()
+          if (this.mediasSource && this.ctx && this.offset) {
+            renderImage(
+              this.ctx,
+              this.mediasSource,
+              this.workbookDataSource._worksheets[this.sheetIndex],
+              this.offset,
+            )
+          }
         })
       }
     }
     if (this.xs.sheet?.editor) {
       const clear = this.xs.sheet.editor.clear
-      this.xs.sheet.editor.clear = function (...args) {
-        clear.apply(that.xs.sheet.editor, args)
+      this.xs.sheet.editor.clear = (...args) => {
+        clear.apply(this.xs?.sheet?.editor, args)
+
         setTimeout(() => {
-          renderImage(
-            that.ctx,
-            that.mediasSource,
-            that.workbookDataSource._worksheets[that.sheetIndex],
-            that.offset,
-          )
+          if (this.ctx && this.mediasSource && this.offset) {
+            renderImage(
+              this.ctx,
+              this.mediasSource,
+              this.workbookDataSource._worksheets[this.sheetIndex],
+              this.offset,
+            )
+          }
         })
       }
       const setOffset = this.xs.sheet.editor.setOffset
-      this.xs.sheet.editor.setOffset = function (...args) {
-        setOffset.apply(that.xs.sheet.editor, args)
-        that.offset = args[0]
-        renderImage(
-          that.ctx,
-          that.mediasSource,
-          that.workbookDataSource._worksheets[that.sheetIndex],
-          that.offset,
-        )
+      this.xs.sheet.editor.setOffset = (...args) => {
+        setOffset.apply(this.xs?.sheet?.editor, args)
+        if(args.length > 1){
+            this.offset = args.shift()
+        }
+        if (this.ctx && this.mediasSource && this.offset) {
+          renderImage(
+            this.ctx,
+            this.mediasSource,
+            this.workbookDataSource._worksheets[this.sheetIndex],
+            this.offset,
+          )
+        }
       }
     }
 
@@ -152,16 +160,18 @@ class JsExcelPreview {
           transferExcelToSpreadSheet(workbook, this.options)
         this.mediasSource = medias
         this.workbookDataSource = workbookSource
-        this.offset = null
+        this.offset = undefined
         this.sheetIndex = 1
         clearCache()
         this.xs?.loadData(workbookData)
-        renderImage(
-          this.ctx,
-          this.mediasSource,
-          this.workbookDataSource._worksheets[this.sheetIndex],
-          this.offset,
-        )
+        if (this.ctx && this.mediasSource && this.offset) {
+          renderImage(
+            this.ctx,
+            this.mediasSource,
+            this.workbookDataSource._worksheets[this.sheetIndex],
+            this.offset,
+          )
+        }
       })
       .catch((e) => {
         this.mediasSource = []

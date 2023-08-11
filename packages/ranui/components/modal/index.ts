@@ -11,7 +11,6 @@ function Modal() {
       super()
       // 获取模板内容
       const templateContent = template.content
-
       const shadowRoot = this.attachShadow({ mode: 'open' })
       const wrap = document.createElement('div')
       const modal = document.createElement('div')
