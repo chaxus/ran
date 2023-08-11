@@ -21,7 +21,7 @@ const typeMapColor = new Map([
 
 function Custom() {
   if (typeof window !== 'undefined' && !customElements.get('r-message')) {
-    class CustomElement extends HTMLElement {
+    class CustomMessage extends HTMLElement {
       _info: HTMLDivElement
       _notice: HTMLDivElement
       _content: HTMLDivElement
@@ -34,6 +34,7 @@ function Custom() {
       }
       constructor() {
         super()
+        
         this._notice = document.createElement('div')
         this._notice.setAttribute('class', 'message-notice')
         this._content = document.createElement('div')
@@ -88,15 +89,17 @@ function Custom() {
         }
       }
     }
-    customElements.define('r-message', CustomElement)
+    customElements.define('r-message', CustomMessage)
+
     const container = document.createElement('div')
     const div = document.createElement('div')
     div.setAttribute('class', 'ranui-message')
     document.body.appendChild(container)
     container.appendChild(div)
+
     const commonPrompt = (type: string) => {
       return (options: Ran.Prompt | string) => {
-        const message = new CustomElement()
+        const message = new CustomMessage()
         message.setAttribute('class', 'message')
         message.timeId && clearTimeout(message.timeId)
         message.setAttribute('type', type)
@@ -109,19 +112,28 @@ function Custom() {
           close = options.close
           duration = options.duration || defaultDuration
         }
+
         const time = setTimeout(() => {
           message.classList.remove('message-in')
           message.classList.add('message-leave')
           clearTimeout(time)
         }, duration - AnimationTime)
+
         message.timeId = setTimeout(() => {
+          message.classList.remove('message-leave')
           div.removeChild(message)
           if (close) close()
         }, duration)
+
         div.appendChild(message)
         message.classList.add('message-in')
+        setTimeout(() => {
+          message.classList.remove('message-in')
+        }, AnimationTime);
+
       }
     }
+
     return {
       info: commonPrompt('info'),
       success: commonPrompt('success'),
