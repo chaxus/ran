@@ -88,7 +88,7 @@ export default defineConfig({
           items: [
             { text: 'Message 全局提示', link: '/src/ranui/message/' },
             { text: 'Skeleton 骨架屏', link: '/src/ranui/skeleton/' },
-            { text: 'Modal 对话框', link: '/src/ranui/modal/' },
+            // { text: 'Modal 对话框', link: '/src/ranui/modal/' },
           ],
         },
       ],
