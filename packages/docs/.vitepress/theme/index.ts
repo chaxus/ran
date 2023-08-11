@@ -28,7 +28,7 @@ export default {
     if (typeof window !== 'undefined') {
       const script = document.createElement('script')
       script.async = true
-      script.setAttribute('src',GTAG)
+      script.setAttribute('src', GTAG)
       const codeScript = document.createElement('script')
       codeScript.innerText = code
       document.body.appendChild(script)

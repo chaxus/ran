@@ -38,11 +38,11 @@ It is based on the `Web Component`, you can use it without focusing on the frame
 import Button from 'ranui'
 
 const App = () => {
-    return (
-        <>
-            <r-button>Button</r-button>
-        </>
-    )
+  return (
+    <>
+      <r-button>Button</r-button>
+    </>
+  )
 }
 ```
 
@@ -52,9 +52,8 @@ const App = () => {
 <script src="./ranui/dist/index.umd.cjs"></script>
 
 <body>
-    <r-button>Button</r-button>
+  <r-button>Button</r-button>
 </body>
-
 ```
 
 - js
@@ -62,7 +61,7 @@ const App = () => {
 ```js
 import 'ranui'
 
-const Button  = document.createElement('r-button')
+const Button = document.createElement('r-button')
 Button.appendChild('this is button text')
 document.body.appendChild(Button)
 ```

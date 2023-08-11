@@ -85,8 +85,10 @@ function CustomElement() {
       initAttribute = () => {
         this.parent = this.parentNode as ParentNode & ExtendParentNode
         this.key && this.parent?.updateAttribute(this.key, 'icon', this.icon)
-        this.key && this.parent?.updateAttribute(this.key, 'iconSize', this.iconSize)
-        this.key && this.parent?.updateAttribute(this.key, 'effect', this.effect)
+        this.key &&
+          this.parent?.updateAttribute(this.key, 'iconSize', this.iconSize)
+        this.key &&
+          this.parent?.updateAttribute(this.key, 'effect', this.effect)
       }
       connectedCallback() {
         this._div.addEventListener('click', this.onClick)

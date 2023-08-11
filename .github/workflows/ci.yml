@@ -9,14 +9,14 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest]
-        node_version: [14, 16, 18]
+        # os: [ubuntu-latest]
+        # node_version: [14, 16, 18]
         include:
           # Active LTS + other OS
           - os: macos-latest
-            node_version: 18
+            node_version: [16, 18]
           - os: windows-latest
-            node_version: 18
+            node_version: [16, 18]
       fail-fast: false
     name: "Build&Test: node-${{ matrix.node_version }}, ${{ matrix.os }}"
     steps:
@@ -46,8 +46,8 @@ jobs:
       - name: format
         run: pnpm run format
 
-      - name: Test
-        run: pnpm run test
-
       - name: Lint
         run: pnpm run lint
+
+      - name: Test
+        run: pnpm run test

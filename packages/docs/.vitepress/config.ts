@@ -8,11 +8,11 @@ export default defineConfig({
   vue: {
     template: {
       compilerOptions: {
-          isCustomElement: (tag) => {
-              return tag.startsWith('r-')
-          }
-      }
-  }
+        isCustomElement: (tag) => {
+          return tag.startsWith('r-')
+        },
+      },
+    },
   },
   head: [
     ['link', { rel: 'icon', href: '/favicon.ico' }],

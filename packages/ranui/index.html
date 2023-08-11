@@ -35,14 +35,24 @@
       <r-tab label="tab7777777">77777</r-tab>
     </r-tabs>
     <h2>Input</h2>
-    <div style="width: 40%;height: 200px;display: flex;flex-flow: column;justify-content: space-around;">
+    <div
+      style="
+        width: 40%;
+        height: 200px;
+        display: flex;
+        flex-flow: column;
+        justify-content: space-around;
+      "
+    >
       <r-input label="user"></r-input>
       <r-input icon="account" status="error"></r-input>
       <r-input icon="home" status="warning" disabled></r-input>
     </div>
     <h2>Preview</h2>
-    <r-button type="primary" onclick="uploadFile()">choose file to preview</r-button>
-    <r-preview id="preview" ></r-preview>
+    <r-button type="primary" onclick="uploadFile()"
+      >choose file to preview</r-button
+    >
+    <r-preview id="preview"></r-preview>
     <script>
       const uploadFile = () => {
         const preview = document.getElementById('preview')

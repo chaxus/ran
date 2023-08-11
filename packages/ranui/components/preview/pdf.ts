@@ -72,13 +72,15 @@ class PdfPreview {
   pdfPreview = () => {
     loadScript(pdfjs).then(() => {
       window.pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker
-      window.pdfjsLib.getDocument(this.pdf).promise.then(async (doc: PDFDocumentProxy) => {
-        this.pdfDoc = doc
-        this.total = doc.numPages
-        for (let i = 1; i <= this.total; i++) {
-          await this.getPdfPage(i)
-        }
-      })
+      window.pdfjsLib
+        .getDocument(this.pdf)
+        .promise.then(async (doc: PDFDocumentProxy) => {
+          this.pdfDoc = doc
+          this.total = doc.numPages
+          for (let i = 1; i <= this.total; i++) {
+            await this.getPdfPage(i)
+          }
+        })
     })
   }
   prevPage = () => {

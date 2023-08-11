@@ -4,7 +4,6 @@ const PDF = 'application/pdf'
 const DOCX =
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
 
-
 async function Custom() {
   if (typeof window !== 'undefined' && !customElements.get('r-preview')) {
     const { renderPptx } = await import('@/components/preview/pptx')
