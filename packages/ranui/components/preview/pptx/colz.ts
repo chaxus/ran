@@ -164,6 +164,17 @@ export const hexToRgb = function (
     : null
 }
 
+export const getDarkColor = (color:string, level:number):string => {
+  const rgbc = hexToRgb(color) || [];
+  for (let i = 0; i < 3; i++) rgbc[i] = Math.floor(Number(rgbc[i]) * (1 - level));
+  return rgbToHex(rgbc[0], rgbc[1], rgbc[2]);
+}
+export function getLightColor(color:string, level:number):string {
+  const rgbc = hexToRgb(color) || []
+  for (let i = 0; i < 3; i++) rgbc[i] = Math.floor((255 - Number(rgbc[i])) * level + Number(rgbc[i]));
+  return rgbToHex(rgbc[0], rgbc[1], rgbc[2]);
+}
+
 export const componentToHex = function (c: string | number): string {
   const hex = c.toString(16)
   return hex.length === 1 ? '0' + hex : hex

@@ -1,37 +1,64 @@
+import excelStyles from '@/components/preview/excel/index.less'
+interface Url2FileOption {
+  responseType: XMLHttpRequestResponseType
+  onProgress: (x: ProgressEvent<EventTarget>) => void
+  method: string
+  withCredentials: boolean
+  headers: Record<string, string>
+  body: string
+}
+
 const PPTX =
   'application/vnd.openxmlformats-officedocument.presentationml.presentation'
 const PDF = 'application/pdf'
 const DOCX =
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
 
+const XLSX = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+const XLS = 'application/vnd.ms-excel'
+
+const requestFile = (
+  url: string,
+  options: Partial<Url2FileOption> = {},
+): Promise<File> => {
+  const {
+    onProgress = () => {},
+    headers = {},
+    responseType = 'blob',
+    method = 'GET',
+    withCredentials = false,
+  } = options
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest()
+    xhr.open(method, url, true)
+    xhr.responseType = responseType
+    xhr.onload = () => {
+      const blob = xhr.response
+      const file = new File([blob], blob.name, { type: blob.type })
+      resolve(file)
+    }
+    xhr.onprogress = (event) => {
+      onProgress && onProgress(event)
+    }
+    xhr.onerror = (e) => {
+      reject(e)
+    }
+    xhr.withCredentials = withCredentials
+    if (headers) {
+      Object.keys(headers).forEach(function (key) {
+        xhr.setRequestHeader(key, headers[key])
+      })
+    }
+    xhr.send()
+  })
+}
+
 async function Custom() {
   if (typeof window !== 'undefined' && !customElements.get('r-preview')) {
     const { renderPptx } = await import('@/components/preview/pptx')
     const { renderDocx } = await import('@/components/preview/docx')
     const { renderPdf } = await import('@/components/preview/pdf')
-
-    const url2File = (
-      url: string,
-      onProgress?: (x: ProgressEvent<EventTarget>) => void,
-    ): Promise<File> => {
-      return new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest()
-        xhr.open('GET', url)
-        xhr.responseType = 'blob'
-        xhr.onload = () => {
-          const blob = xhr.response
-          const file = new File([blob], blob.name, { type: blob.type })
-          resolve(file)
-        }
-        xhr.onprogress = (event) => {
-          onProgress && onProgress(event)
-        }
-        xhr.onerror = (e) => {
-          reject(e)
-        }
-        xhr.send()
-      })
-    }
+    const { renderExcel } = await import('@/components/preview/excel')
 
     const renderPpt = (file: File, dom?: HTMLElement) => {
       return new Promise<void>((resolve, reject) => {
@@ -70,6 +97,7 @@ async function Custom() {
       [PDF, renderPdf],
       [PPTX, renderPpt],
       [DOCX, renderWord],
+      [XLSX, renderExcel],
     ])
 
     class CustomElement extends HTMLElement {
@@ -80,6 +108,7 @@ async function Custom() {
       previewContext?: HTMLDivElement
       _slot: HTMLSlotElement
       _div: HTMLElement
+      private _shadowDom: ShadowRoot
       constructor() {
         super()
         this._div = document.createElement('div')
@@ -89,7 +118,9 @@ async function Custom() {
         this._slot.setAttribute('class', 'r-preview-slot')
         this._div.setAttribute('class', 'r-preview')
         const shadowRoot = this.attachShadow({ mode: 'closed' })
+        this._shadowDom = shadowRoot
         shadowRoot.appendChild(this._div)
+        this.handlerExternalCss(excelStyles)
       }
       get label() {
         return this.getAttribute('label')
@@ -103,6 +134,15 @@ async function Custom() {
       set src(value) {
         if (value) this.setAttribute('src', value)
       }
+      handlerExternalCss(styles: string) {
+        try {
+          const sheet = new CSSStyleSheet()
+          sheet.insertRule(styles)
+          this._shadowDom.adoptedStyleSheets = [sheet]
+        } catch (error) {
+          console.error(`Failed to parse the rule in CSSStyleSheet: ${styles}`)
+        }
+      }
       onProgress = (event: ProgressEvent<EventTarget>) => {
         const num = (event.loaded / event.total) * 100
         const progress = num.toFixed(2) + '%'
@@ -111,9 +151,10 @@ async function Custom() {
       handleFile = async (file: string | File) => {
         try {
           if (typeof file === 'string') {
-            file = await url2File(file, this.onProgress)
+            file = await requestFile(file, { onProgress: this.onProgress })
           }
           const { type } = file
+          console.log('type', type)
           const handler = renderFileMap.get(type)
           if (handler && this.previewContext) {
             // document.body.style.overflow = 'hidden'
