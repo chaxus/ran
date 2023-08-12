@@ -1,6 +1,6 @@
 import JSZip from 'jszip'
 import t_xml from '@/components/preview/pptx/t_xml'
-import { Color } from '@/components/preview/pptx/colz'
+import { Color } from '@/components/preview/colz'
 import type { Msg } from '@/components/preview/pptx'
 
 interface InputByType {

@@ -79,6 +79,23 @@ export const createIconList = (): void => {
   }, 0)
 }
 
+export const createObjectURL = async (
+  src: Blob | ArrayBuffer | Response,
+): Promise<string> => {
+  if (typeof src === 'string') {
+    return src
+  } else if (src instanceof Blob) {
+    return URL.createObjectURL(src)
+  } else if (src instanceof ArrayBuffer) {
+    return URL.createObjectURL(new Blob([src]))
+  } else if (src instanceof Response) {
+    const result = await src.blob()
+    return URL.createObjectURL(result)
+  } else {
+    return src
+  }
+}
+
 export const loadScript = (src: string): Promise<{ success: boolean }> => {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script')

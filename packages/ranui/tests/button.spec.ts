@@ -1,13 +1,13 @@
 import { expect, test } from '@playwright/test'
+import { DEV_SERVER, TIME_OUT } from '../playwright.config'
 
-const TIME_OUT = 1000
-
-test('button', ({ page }) => {
+test('button', async ({ page }) => {
   setTimeout(async () => {
-    page.goto('http://localhost:5124/')
-    // await page.waitForLoadState('domcontentloaded')
+    await page.waitForURL(DEV_SERVER, { timeout: TIME_OUT })
+    await page.goto(DEV_SERVER)
+    await page.waitForLoadState('domcontentloaded')
     await page.waitForLoadState('load')
-    // await page.waitForLoadState('networkidle')
+    await page.waitForLoadState('networkidle')
     await expect(page).toHaveTitle(/ranui/)
     await page.evaluate(() => {
       const component = document.createElement('r-button')

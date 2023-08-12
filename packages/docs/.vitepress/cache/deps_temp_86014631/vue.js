@@ -9488,7 +9488,7 @@ var defineSSRCustomElement = (options) => {
 };
 var BaseClass = typeof HTMLElement !== "undefined" ? HTMLElement : class {
 };
-var VueElement = class _VueElement extends BaseClass {
+var VueElement = class extends BaseClass {
   constructor(_def, _props = {}, hydrate2) {
     super();
     this._def = _def;
@@ -9659,7 +9659,7 @@ var VueElement = class _VueElement extends BaseClass {
         };
         let parent = this;
         while (parent = parent && (parent.parentNode || parent.host)) {
-          if (parent instanceof _VueElement) {
+          if (parent instanceof VueElement) {
             instance.parent = parent._instance;
             instance.provides = parent._instance.provides;
             break;

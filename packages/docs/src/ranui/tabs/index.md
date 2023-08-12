@@ -102,9 +102,9 @@
 
 ```html
 <r-tabs>
-  <r-tab icon="home" iconSize='22'>tab1</r-tab>
-  <r-tab icon="message" iconSize='22'>tab2</r-tab>
-  <r-tab icon="user" iconSize='22'>tab3</r-tab>
+  <r-tab icon="home" iconSize="22">tab1</r-tab>
+  <r-tab icon="message" iconSize="22">tab2</r-tab>
+  <r-tab icon="user" iconSize="22">tab3</r-tab>
 </r-tabs>
 ```
 

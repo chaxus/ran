@@ -25,7 +25,7 @@
 <script src="./ranui/dist/index.umd.cjs"></script>
 
 <body>
-    <r-button>Button</r-button>
+  <r-button>Button</r-button>
 </body>
 ```
 
@@ -33,7 +33,7 @@
 
 ```vue
 <template>
-    <r-button>Button</r-button>
+  <r-button>Button</r-button>
 </template>
 ```
 
@@ -42,26 +42,24 @@
 ```jsx
 import Button from 'ranui'
 const App = () => {
-    return (
-        <>
-            <r-button>Button</r-button>
-        </>
-    )
+  return (
+    <>
+      <r-button>Button</r-button>
+    </>
+  )
 }
-
 ```
-
 
 - js
 
 ```js
 import 'ranui'
 
-const Button  = document.createElement('r-button')
+const Button = document.createElement('r-button')
 Button.appendChild('this is button text')
 document.body.appendChild(Button)
-
 ```
+
 大多数情况都可以像原生的`div`标签一样使用
 
 ## 全量引入
@@ -69,7 +67,6 @@ document.body.appendChild(Button)
 ```ts
 import 'ranui'
 ```
-
 
 ## 按需引入
 
@@ -133,7 +130,7 @@ import Button from 'ranui'
 <r-button onclick="message.warning('这是一条提示')">警告提示</r-button>
 <r-button onclick="message.error('这是一条提示')">错误提示</r-button>
 <r-button onclick="message.success('这是一条提示')">成功提示</r-button>
-<r-button onclick="message.toast('这是一条提示')">toast提示</r-button>
+<r-button onclick="message.toast('这是一条提示')">toast 提示</r-button>
 
 - Tab
 
@@ -145,13 +142,10 @@ import Button from 'ranui'
    </r-tabs>
 </div>
 
-
-
 ## 兼容性
 
 - 不支持 IE，其他均有较好支持
-   ![](../../assets/ranui/customElements.png)
-
+  ![](../../assets/ranui/customElements.png)
 
 ## 相关资源
 

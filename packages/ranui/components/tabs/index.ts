@@ -55,7 +55,6 @@ function CustomElement() {
 
         this.tabHeaderKeyMapIndex = {}
 
-
         const shadowRoot = this.attachShadow({ mode: 'closed' })
         shadowRoot.appendChild(this._container)
       }
@@ -251,7 +250,7 @@ function CustomElement() {
         // 如果有active，找到active对应的标签，设置活跃标签
         if (this.active != null) {
           initTabHeader = initTabList.find(
-            (item) => item.getAttribute('r-key') === this.active
+            (item) => item.getAttribute('r-key') === this.active,
           )
           initTabHeader?.setAttribute('r-key', this.active)
         }
@@ -270,7 +269,7 @@ function CustomElement() {
           setTimeout(() => {
             // icon 渲染过慢的问题
             this.setTabLine(key)
-          }, 200);
+          }, 200)
         }
       }
       /**

@@ -8,11 +8,11 @@ export default defineConfig({
   vue: {
     template: {
       compilerOptions: {
-          isCustomElement: (tag) => {
-              return tag.startsWith('r-')
-          }
-      }
-  }
+        isCustomElement: (tag) => {
+          return tag.startsWith('r-')
+        },
+      },
+    },
   },
   head: [
     ['link', { rel: 'icon', href: '/favicon.ico' }],
@@ -88,6 +88,7 @@ export default defineConfig({
           items: [
             { text: 'Message 全局提示', link: '/src/ranui/message/' },
             { text: 'Skeleton 骨架屏', link: '/src/ranui/skeleton/' },
+            // { text: 'Modal 对话框', link: '/src/ranui/modal/' },
           ],
         },
       ],

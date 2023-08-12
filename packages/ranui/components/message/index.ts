@@ -21,7 +21,24 @@ const typeMapColor = new Map([
 
 function Custom() {
   if (typeof window !== 'undefined' && !customElements.get('r-message')) {
-    class CustomElement extends HTMLElement {
+
+    // class CustomMessageContain extends HTMLElement {
+    //   _contain: HTMLDivElement;
+    //   _slot: HTMLSlotElement;
+    //   constructor() {
+    //     super();
+    //     this._contain = document.createElement("div");
+    //     this._contain.setAttribute("class", "ranui-message");
+    //     this._slot = document.createElement("slot");
+    //     this._contain.appendChild(this._slot);
+    //     const shadowRoot = this.attachShadow({ mode: "closed" });
+    //     shadowRoot.appendChild(this._contain);
+    //   }
+    // }
+    
+    // customElements.define("r-message-contain", CustomMessageContain);
+    
+    class CustomMessage extends HTMLElement {
       _info: HTMLDivElement
       _notice: HTMLDivElement
       _content: HTMLDivElement
@@ -88,15 +105,22 @@ function Custom() {
         }
       }
     }
-    customElements.define('r-message', CustomElement)
+    customElements.define('r-message', CustomMessage)
+
+    // const container = document.createElement('div')
+    // const div = document.createElement('r-message-contain')
+    // document.body.appendChild(container)
+    // container.appendChild(div)
+
     const container = document.createElement('div')
     const div = document.createElement('div')
     div.setAttribute('class', 'ranui-message')
     document.body.appendChild(container)
     container.appendChild(div)
+
     const commonPrompt = (type: string) => {
       return (options: Ran.Prompt | string) => {
-        const message = new CustomElement()
+        const message = new CustomMessage()
         message.setAttribute('class', 'message')
         message.timeId && clearTimeout(message.timeId)
         message.setAttribute('type', type)
@@ -109,19 +133,28 @@ function Custom() {
           close = options.close
           duration = options.duration || defaultDuration
         }
+
         const time = setTimeout(() => {
           message.classList.remove('message-in')
           message.classList.add('message-leave')
           clearTimeout(time)
         }, duration - AnimationTime)
+
         message.timeId = setTimeout(() => {
+          message.classList.remove('message-leave')
           div.removeChild(message)
           if (close) close()
         }, duration)
+
         div.appendChild(message)
         message.classList.add('message-in')
+        setTimeout(() => {
+          message.classList.remove('message-in')
+        }, AnimationTime);
+
       }
     }
+
     return {
       info: commonPrompt('info'),
       success: commonPrompt('success'),

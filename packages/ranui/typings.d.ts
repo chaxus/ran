@@ -1,8 +1,8 @@
 declare module '*.less'
 declare module '*.ts'
 declare module '*.svg'
-declare module 'pdfjs-dist/*'
 declare module 'docx-preview'
+declare module 'exceljs/*'
 declare module '@/assets/*'
 declare module '@/components/*'
 declare module '@/plugins/*'
@@ -28,7 +28,7 @@ declare namespace Ran {
 declare interface Window {
   message: Ran.Message
   dimple: any
-  pdfjsLib: any,
+  pdfjsLib: any
 }
 // ranuts 声明文件
 declare module '@/file/*'
