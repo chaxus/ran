@@ -6,14 +6,14 @@
 
 1. 基于`Web Components`开发，能做到跨框架复用，统一所有情况。
 2. 采用`Typescript`开发，有声明和类型文件。
-3. 纯原生手写，基础组件做到无依赖，体积很小。
+3. 纯原生手写，基础组件无依赖。
 4. `MIT`协议
-5. 文档基于`vitepress`搭建，所有组件实例均可交互
+5. 文档基于`vitepress`搭建，所有组件实例均可交互。
 
 ## 项目地址
 
-- `git`地址：`https://github.com/chaxus/ran/tree/main/packages/ranui`，欢迎大家提出各种改进建议，`issue`和`pr`。
-- `npm`地址：`https://www.npmjs.com/package/ranui`
+- `git`：`https://github.com/chaxus/ran/tree/main/packages/ranui`。
+- `npm`：`https://www.npmjs.com/package/ranui`
 
 ![npm地址](../../assets/ranui/ranui-npm.jpg)
 
@@ -74,7 +74,7 @@ import 'ranui'
 import Button from 'ranui'
 ```
 
-## 组件总览
+## 组件概览
 
 - Button
 
@@ -141,6 +141,7 @@ import Button from 'ranui'
       <r-tab label="user" icon="user">tab3</r-tab>
    </r-tabs>
 </div>
+
 
 ## 兼容性
 

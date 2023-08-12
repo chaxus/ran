@@ -109,3 +109,48 @@ export const loadScript = (src: string): Promise<{ success: boolean }> => {
     document.body.append(script)
   })
 }
+
+interface Url2FileOption {
+  responseType: XMLHttpRequestResponseType
+  onProgress: (x: ProgressEvent<EventTarget>) => void
+  method: string
+  withCredentials: boolean
+  headers: Record<string, string>
+  body: string
+}
+
+export const requestFile = (
+  url: string,
+  options: Partial<Url2FileOption> = {},
+): Promise<File> => {
+  const {
+    onProgress = () => {},
+    headers = {},
+    responseType = 'blob',
+    method = 'GET',
+    withCredentials = false,
+  } = options
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest()
+    xhr.open(method, url, true)
+    xhr.responseType = responseType
+    xhr.onload = () => {
+      const blob = xhr.response
+      const file = new File([blob], blob.name, { type: blob.type })
+      resolve(file)
+    }
+    xhr.onprogress = (event) => {
+      onProgress && onProgress(event)
+    }
+    xhr.onerror = (e) => {
+      reject(e)
+    }
+    xhr.withCredentials = withCredentials
+    if (headers) {
+      Object.keys(headers).forEach(function (key) {
+        xhr.setRequestHeader(key, headers[key])
+      })
+    }
+    xhr.send()
+  })
+}

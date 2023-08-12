@@ -1,12 +1,6 @@
-import excelStyles from '@/components/preview/excel/index.less'
-interface Url2FileOption {
-  responseType: XMLHttpRequestResponseType
-  onProgress: (x: ProgressEvent<EventTarget>) => void
-  method: string
-  withCredentials: boolean
-  headers: Record<string, string>
-  body: string
-}
+
+import { requestFile } from '@/utils/index'
+import '@/components/icon'
 
 const PPTX =
   'application/vnd.openxmlformats-officedocument.presentationml.presentation'
@@ -17,44 +11,9 @@ const DOCX =
 const XLSX = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 const XLS = 'application/vnd.ms-excel'
 
-const requestFile = (
-  url: string,
-  options: Partial<Url2FileOption> = {},
-): Promise<File> => {
-  const {
-    onProgress = () => {},
-    headers = {},
-    responseType = 'blob',
-    method = 'GET',
-    withCredentials = false,
-  } = options
-  return new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest()
-    xhr.open(method, url, true)
-    xhr.responseType = responseType
-    xhr.onload = () => {
-      const blob = xhr.response
-      const file = new File([blob], blob.name, { type: blob.type })
-      resolve(file)
-    }
-    xhr.onprogress = (event) => {
-      onProgress && onProgress(event)
-    }
-    xhr.onerror = (e) => {
-      reject(e)
-    }
-    xhr.withCredentials = withCredentials
-    if (headers) {
-      Object.keys(headers).forEach(function (key) {
-        xhr.setRequestHeader(key, headers[key])
-      })
-    }
-    xhr.send()
-  })
-}
-
 async function Custom() {
   if (typeof window !== 'undefined' && !customElements.get('r-preview')) {
+
     const { renderPptx } = await import('@/components/preview/pptx')
     const { renderDocx } = await import('@/components/preview/docx')
     const { renderPdf } = await import('@/components/preview/pdf')
@@ -98,16 +57,19 @@ async function Custom() {
       [PPTX, renderPpt],
       [DOCX, renderWord],
       [XLSX, renderExcel],
+      [XLS, renderExcel],
     ])
 
     class CustomElement extends HTMLElement {
+      _loadingText: any
       static get observedAttributes() {
-        return ['src']
+        return ['src', 'closeable']
       }
       preview?: HTMLElement | null
       previewContext?: HTMLDivElement
       _slot: HTMLSlotElement
       _div: HTMLElement
+      _loadingElement?: HTMLDivElement
       constructor() {
         super()
         this._div = document.createElement('div')
@@ -131,10 +93,37 @@ async function Custom() {
       set src(value) {
         if (value) this.setAttribute('src', value)
       }
+      get closeable() {
+        return this.getAttribute('closeable')
+      }
+      set closeable(value) {
+        if (value) this.setAttribute('closeable', value)
+      }
+      createLoading = () => {
+        this._loadingElement = document.createElement('div')
+        this._loadingElement.setAttribute('class', 'r-preview-loading')
+        const icon = document.createElement('r-icon')
+        icon.setAttribute('name', 'loading')
+        icon.setAttribute('size', '100')
+        icon.setAttribute('color', '#1E90FF')
+        icon.setAttribute('spin', '')
+        this._loadingText = document.createElement('div')
+        this._loadingElement.appendChild(icon)
+        this._loadingText.setAttribute('class', 'r-preview-loading-text')
+        this._loadingElement.appendChild(this._loadingText)
+        return this._loadingElement
+      }
       onProgress = (event: ProgressEvent<EventTarget>) => {
         const num = (event.loaded / event.total) * 100
-        const progress = num.toFixed(2) + '%'
-        console.log(progress)
+        const progress = Math.min(99, num).toFixed(2) + '%'
+        if (this._loadingText && this._loadingElement) {
+          this._loadingText.innerText = `Loading ${progress}`
+          if (num >= 100) {
+            setTimeout(() => {
+              this.preview?.removeChild(this._loadingElement!)
+            }, 300);
+          }
+        }
       }
       handleFile = async (file: string | File) => {
         try {
@@ -144,7 +133,7 @@ async function Custom() {
           const { type } = file
           const handler = renderFileMap.get(type)
           if (handler && this.previewContext) {
-            document.body.style.overflow = 'hidden'
+            // document.body.style.overflow = 'hidden'
             handler(file, this.previewContext)
           }
         } catch (error) {
@@ -153,8 +142,10 @@ async function Custom() {
       }
       closePreview = () => {
         if (this.preview) {
-          document.body.style.overflow = 'auto'
-          this.preview.style.display = 'none'
+          // document.body.style.overflow = 'auto'
+          // this.preview.style.display = 'none'
+          document.body.removeChild(this.preview)
+          this.preview = undefined
         }
       }
       showPreview = () => {
@@ -167,17 +158,21 @@ async function Custom() {
             this.preview.setAttribute('id', 'r-preview-mask')
             const previewOption = document.createElement('div')
             previewOption.setAttribute('class', 'r-preview-options')
-            const previewCloseButton = document.createElement('button')
-            previewCloseButton.setAttribute('class', 'r-preview-options-close')
-            previewCloseButton.addEventListener('click', this.closePreview)
+            if (this.closeable !== 'false') {
+              const previewCloseButton = document.createElement('button')
+              previewCloseButton.setAttribute('class', 'r-preview-options-close')
+              previewCloseButton.addEventListener('click', this.closePreview)
+              previewOption.appendChild(previewCloseButton)
+            }
             const previewContain = document.createElement('div')
             previewContain.setAttribute('class', 'r-preview-contain')
             this.previewContext = document.createElement('div')
             this.previewContext.setAttribute('class', 'r-preview-context')
             previewContain.appendChild(this.previewContext)
-            previewOption.appendChild(previewCloseButton)
             this.preview.appendChild(previewOption)
-            this.preview.appendChild(previewContain)
+            this.preview?.appendChild(previewContain)
+            this._loadingElement = this.createLoading()
+            this.preview.appendChild(this._loadingElement)
             document.body.appendChild(this.preview)
           }
           this.handleFile(this.src)

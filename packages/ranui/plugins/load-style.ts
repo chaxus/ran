@@ -22,7 +22,7 @@ export default function loadStylePlugin(options?: Options): Plugin {
       ) {
         const front = `import f7170ee498e0dd32cbdcb63fba8f75cc from '${id.replace(
           'index.ts',
-          'index.less',
+          'index.less?inline',
         )}';`
         result = result.replace(
           stylePath,

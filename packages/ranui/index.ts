@@ -1,4 +1,4 @@
-import styles from './base.less'
+import styles from './base.less?inline'
 
 export * as button from '@/components/button'
 export * as icon from '@/components/icon'
