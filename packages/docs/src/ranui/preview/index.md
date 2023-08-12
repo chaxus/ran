@@ -1,4 +1,4 @@
-# preview 预览组件
+# preview 文件预览组件
 
 支持`docx`，`pptx`，`pdf`,`xlsx`文件的预览
 
@@ -10,7 +10,7 @@
 </div>
 
 ```html
-<r-preview ></r-preview>
+<r-preview id="preview"></r-preview>
 <r-button type="primary" onclick="uploadFile()">上传docx</r-button>
 
 <script>
@@ -44,7 +44,7 @@
 
 ### 是否可关闭`closeable`
 
-`closeable` 不设置默认为 `true` ，可以关闭，传 `false` 表示不展示关闭按钮，不可关闭
+`closeable` 默认为 `true` ，可以关闭，当设置成 `false` 时， 表示不可关闭，将不会展示右上角的关闭按钮
 
 ```html
 <r-preview closeable="false"></r-preview>
