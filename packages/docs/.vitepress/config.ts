@@ -1,9 +1,11 @@
 import { defineConfig } from 'vitepress'
 
+const BASE_PATH = '/ran/'
+
 export default defineConfig({
   title: 'ran',
   description: '基于web component组件库,常用函数库utils,个人文章记录等',
-  base: '/ran/',
+  base: BASE_PATH,
   lastUpdated: true,
   vue: {
     template: {
@@ -15,9 +17,10 @@ export default defineConfig({
     },
   },
   head: [
-    ['link', { rel: 'icon', href: '/ran/favicon.ico' }],
+    ['link', { rel: 'icon', href: `${BASE_PATH}favicon.ico` }],
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { name: 'theme-color', content: '#646cff' }],
+    ['meta', { httpEquiv: 'Permissions-Policy', content: 'interest-cohort=()' }],
   ],
   themeConfig: {
     logo: '/home.svg',
@@ -26,7 +29,6 @@ export default defineConfig({
       { text: '函数', link: '/src/ranuts/utils/' },
       { text: '组件', link: '/src/ranui/' },
       { text: '璀璨', link: '/src/article/designMode.md' },
-      // { text: "我的掘金", link: "https://juejin.cn/user/2981531263964718" },
     ],
     socialLinks: [{ icon: 'github', link: 'https://github.com/chaxus/ran' }],
     footer: {
