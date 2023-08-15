@@ -1,4 +1,4 @@
-The project includes **component library**, **packaging tool**, **function library** and so on
+The project includes **web components library**, **packaging tool**, **function library** and so on
 
 The packages directory is divided into the following sections
 
