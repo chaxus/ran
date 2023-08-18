@@ -1,4 +1,4 @@
-# preview 文件预览组件
+# preview 文件预览
 
 支持`docx`，`pptx`，`pdf`,`xlsx`文件的预览
 
