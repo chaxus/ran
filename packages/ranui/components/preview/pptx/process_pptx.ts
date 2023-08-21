@@ -364,12 +364,14 @@ export default function processPptx(
       slideMasterContent,
       warpObj,
     )
-
+    const slideSizeWidth = Math.min(slideSize.width,document.body.clientWidth)
+    const base = slideSize.width / slideSizeWidth
+    const slideSizeHeight = slideSize.height / base
     let result =
       "<section style='width:" +
-      slideSize.width +
+      slideSizeWidth +
       'px; height:' +
-      slideSize.height +
+      slideSizeHeight +
       'px;' +
       bgColor +
       "'>"

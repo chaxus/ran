@@ -56,7 +56,7 @@ export const renderPptx = (options: Options): Promise<any> | undefined => {
   if (typeof window !== 'undefined') {
     const { pptx, resultElement, thumbElement } = options
     const wrapper = document.createElement('div')
-    wrapper.setAttribute('class', 'pptx-wrapper')
+    wrapper.setAttribute('class', 'r-preview-pptx-main')
     resultElement.innerHTML = ''
     resultElement.appendChild(wrapper)
     let isDone = false

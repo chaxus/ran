@@ -185,43 +185,129 @@ interface Cell {
     style:Style
 }
 
-function getCellText(cell:Cell) {
+function getCellText(cell:Cell){
   //console.log(cell);
-  const { numFmt, value, type } = cell
-  switch (type) {
-    case 2: //数字
-      return value + ''
-    case 3: //字符串
-      return value
-    case 4: //日期
-      switch (numFmt) {
-        case 'yyyy-mm-dd;@':
-          return dayjs(value).format('YYYY-MM-DD')
-        case 'mm-dd-yy':
-          return dayjs(value).format('YYYY/MM/DD')
-        case '[$-F800]dddd, mmmm dd, yyyy':
-          return dayjs(value).format('YYYY年M月D日 ddd')
-        case 'm"月"d"日";@':
-          return dayjs(value).format('M月D日')
-        case 'yyyy/m/d h:mm;@':
-        case 'm/d/yy "h":mm':
-          return dayjs(value).subtract(8, 'hour').format('YYYY/M/DD HH:mm')
-        case 'h:mm;@':
-          return dayjs(value).format('HH:mm')
-        default:
-          return dayjs(value).format('YYYY-MM-DD')
-      }
+  const {numFmt, value, type} = cell;
+  switch (type){
+      case 2: //数字
+          try {
+              //numFmt:
+              // "0.00%"
+              // "0.00_);(0.00)"
+              // "#,##0.000_);(#,##0.000)"   千分位
+              // "#,##0.000;[Red]#,##0.000"
+              if(cell.style.numFmt){
+                  if(cell.style.numFmt.endsWith('%')){
+                      const precision = cell.style.numFmt.match(/\.(\d+)%/);
+                      if(precision){
+                          return (Number(value) * 100).toFixed(precision[1].length) + '%';
+                      }else {
+                          return Number(value) * 100 + '%';
+                      }
+                  }else if(/0(?:\.0+)?/.test(cell.style.numFmt)){
+                      if(Number(value) === 0 && cell.style.numFmt.startsWith('_')){
+                          return '-';
+                      }
+                      let precision = cell.style.numFmt.match(/0\.(0+)(_|;|$)/);
+                      if(precision){
+                          precision = precision[1].length;
+                      }else{
+                          precision = 0;
+                      }
 
-    case 5: //超链接
-      return (value as unknown as { text:string }).text
-    case 6: //公式
-      return get(value, 'result.error')
-    case 8: //富文本
-      return cell.text
-    default:
-      return value
+                      let result:string | string[] = Number(value).toFixed(precision) + '';
+                      if(cell.style.numFmt.includes('#,##')){
+                          //千分位
+                          result = result.split('.');
+                          const number = result[0].split('').reverse();
+                          const newNumber = [];
+                          for(let i = 0; i< number.length; i++){
+                              newNumber.push(number[i]);
+                              if((i+1) % 3 === 0 && i < number.length - 1 && number[i+1] !== '-'){
+                                  newNumber.push(',');
+                              }
+
+                          }
+                          result[0] = newNumber.reverse().join('');
+                          result = result.join('.');
+                      }
+                      return result;
+                  }
+
+              }
+              return value + '';
+          }catch (e){
+              return value;
+          }
+          
+      case 3: //字符串
+          return value;
+      case 4: //日期
+          switch (numFmt){
+              case 'yyyy-mm-dd;@':
+                  return dayjs(value).format('YYYY-MM-DD');
+              case 'mm-dd-yy':
+                  return dayjs(value).format('YYYY/MM/DD');
+              case '[$-F800]dddd, mmmm dd, yyyy':
+                  return dayjs(value).format('YYYY年M月D日 ddd');
+              case 'm"月"d"日";@':
+                  return dayjs(value).format('M月D日');
+              case 'yyyy/m/d h:mm;@':
+              case 'm/d/yy "h":mm':
+                  return dayjs(value).subtract(8, 'hour').format('YYYY/M/DD HH:mm');
+              case 'h:mm;@':
+                  return dayjs(value).format('HH:mm');
+              default:
+                  return dayjs(value).format('YYYY-MM-DD');
+          }
+
+      case 5: //超链接
+          return (value as any).text;
+      case 6: //公式
+          return get(value, 'result.error') || (value as any).result;
+      case 8: //富文本
+          return cell.text;
+      default:
+          return value;
   }
 }
+
+// function getCellText(cell:Cell) {
+//   const { numFmt, value, type } = cell
+//   switch (type) {
+//     case 2: //数字
+//       return value + ''
+//     case 3: //字符串
+//       return value
+//     case 4: //日期
+//       switch (numFmt) {
+//         case 'yyyy-mm-dd;@':
+//           return dayjs(value).format('YYYY-MM-DD')
+//         case 'mm-dd-yy':
+//           return dayjs(value).format('YYYY/MM/DD')
+//         case '[$-F800]dddd, mmmm dd, yyyy':
+//           return dayjs(value).format('YYYY年M月D日 ddd')
+//         case 'm"月"d"日";@':
+//           return dayjs(value).format('M月D日')
+//         case 'yyyy/m/d h:mm;@':
+//         case 'm/d/yy "h":mm':
+//           return dayjs(value).subtract(8, 'hour').format('YYYY/M/DD HH:mm')
+//         case 'h:mm;@':
+//           return dayjs(value).format('HH:mm')
+//         default:
+//           return dayjs(value).format('YYYY-MM-DD')
+//       }
+
+//     case 5: //超链接
+//       return (value as unknown as { text:string }).text
+//     case 6: //公式
+//       return get(value, 'result.error')
+//     case 8: //富文本
+//       return cell.text
+//     default:
+//       return value
+//   }
+// }
 
 interface Color {
     r:number,
@@ -290,9 +376,6 @@ function getStyle(cell:Cell) {
   if (backGroundColor) {
     cell.style.bgcolor = backGroundColor
   }
-  //*************************************************************************** */
-
-  //*********************字体存在背景色******************************
   // 字体颜色
   let fontColor = null
   if (cell.style.font && cell.style.font.color) {
