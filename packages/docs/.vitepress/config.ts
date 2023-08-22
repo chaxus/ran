@@ -67,6 +67,9 @@ export default defineConfig({
       ],
       '/src/ranui/': [
         {
+          text: 'Overview 总览', link: '/src/ranui/'
+        },
+        {
           text: '通用',
           items: [
             { text: 'Button 按钮', link: '/src/ranui/button/' },
