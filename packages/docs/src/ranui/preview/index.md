@@ -84,7 +84,7 @@ const FilePreview = () => {
 }
 ```
 
-`jsx`中会定义所有原生组件的类型，`web-component`类型不在里面，需要进行追加
+`jsx`在`TypeScript`中定义了所有`html`原生组件的类型。`web component`类型不在`jsx`定义中。需要手动添加。否则会有类型问题，但它实际上是有效的。
 
 ```ts
 // typings.d.ts

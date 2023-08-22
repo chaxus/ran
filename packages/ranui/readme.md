@@ -12,9 +12,9 @@ UI Component library based on `Web Component`
 
 ## Feature
 
-- **Across the frame**: It works with react, vue, or native projects.
-- **Componentization**: The shadow dom actually implements componentization of style and functionality.
-- **native**: A component is like using a div tag.
+- **Across the frame**: It works with `react`, `vue`, or native projects.
+- **Componentization**: The `shadow dom` actually implements componentization of style and functionality.
+- **native**: A component is like using a `div`tag.
 
 ## Install
 
@@ -32,21 +32,17 @@ npm install ranui --save
 
 It is based on the `Web Component`, you can use it without focusing on the framework.
 
-- tsx
+In most cases, you can use it just like a native `div` tag
 
-```tsx
-import Button from 'ranui'
-
-const App = () => {
-  return (
-    <>
-      <r-button>Button</r-button>
-    </>
-  )
-}
-```
+Here are some examples:
 
 - html
+- js
+- jsx
+- vue
+- tsx
+
+### html
 
 ```html
 <script src="./ranui/dist/index.umd.cjs"></script>
@@ -56,7 +52,7 @@ const App = () => {
 </body>
 ```
 
-- js
+### js
 
 ```js
 import 'ranui'
@@ -66,6 +62,95 @@ Button.appendChild('this is button text')
 document.body.appendChild(Button)
 ```
 
-### Meta
+### jsx
+
+```jsx
+import 'ranui'
+const App = () => {
+  return (
+    <>
+      <r-button>Button</r-button>
+    </>
+  )
+}
+```
+
+### vue 
+
+```vue
+<template>
+  <r-button></r-button>
+</template>
+<script>
+  import 'ranui'
+</script>
+
+```
+
+### tsx
+
+```tsx
+// react 18 
+import type { SyntheticEvent } from 'react';
+import React, { useRef } from 'react'
+import 'ranui'
+
+const FilePreview = () => {
+    const ref = useRef<HTMLDivElement | null>(null)
+    const uploadFile = (e: SyntheticEvent<HTMLDivElement>) => {
+        if (ref.current) {
+            const uploadFile = document.createElement('input')
+            uploadFile.setAttribute('type', 'file')
+            uploadFile.click()
+            uploadFile.onchange = (e) => {
+                const { files = [] } = uploadFile
+                if (files && files?.length > 0 && ref.current) {
+                    ref.current.setAttribute('src', '')
+                    const file = files[0]
+                    const url = URL.createObjectURL(file)
+                    ref.current.setAttribute('src', url)
+                }
+            }
+        }
+    }
+    return (
+        <div >
+            <r-preview ref={ref}></r-preview>
+            <r-button type="primary" onClick={uploadFile}>choose file to preview</r-button>
+        </div>
+    )
+}
+```
+
+`jsx` defines the types of all `HTML-native` components in `TypeScript`. 
+
+The `web component` type is not in the `jsx` definition. 
+
+You need to add it manually. 
+
+Otherwise you'll have type problems, but it actually works.
+
+```ts
+// typings.d.ts
+interface RButton {
+  type?: string,
+  onClick?: React.MouseEventHandler<HTMLDivElement> | undefined
+}
+
+interface RPreview {
+  src?: string | Blob | ArrayBuffer,
+  onClick?: React.MouseEventHandler<HTMLDivElement> | undefined
+  ref?: React.MutableRefObject<HTMLDivElement | null>
+}
+
+declare namespace JSX {
+  interface IntrinsicElements {
+    'r-preview': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & RPreview
+    'r-button': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & RButton
+  }
+}
+```
+
+## Meta
 
 [LICENSE (MIT)](/LICENSE)

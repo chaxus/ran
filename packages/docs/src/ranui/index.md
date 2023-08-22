@@ -15,11 +15,21 @@
 - `git`：`https://github.com/chaxus/ran/tree/main/packages/ranui`。
 - `npm`：`https://www.npmjs.com/package/ranui`
 
-![npm地址](../../assets/ranui/ranui-npm.jpg)
+<!-- ![npm地址](../../assets/ranui/ranui-npm.jpg) -->
 
-## 使用
+## Usage
+
+大多数情况都可以像原生的`div`标签一样使用。
+
+接下来给出一些使用的例子
 
 - html
+- js
+- jsx
+- vue
+- tsx
+
+### html
 
 ```html
 <script src="./ranui/dist/index.umd.cjs"></script>
@@ -29,28 +39,7 @@
 </body>
 ```
 
-- vue
-
-```vue
-<template>
-  <r-button>Button</r-button>
-</template>
-```
-
-- react
-
-```jsx
-import Button from 'ranui'
-const App = () => {
-  return (
-    <>
-      <r-button>Button</r-button>
-    </>
-  )
-}
-```
-
-- js
+### js
 
 ```js
 import 'ranui'
@@ -60,21 +49,89 @@ Button.appendChild('this is button text')
 document.body.appendChild(Button)
 ```
 
-大多数情况都可以像原生的`div`标签一样使用
+### jsx
 
-## 全量引入
-
-```ts
+```jsx
 import 'ranui'
+const App = () => {
+  return (
+    <>
+      <r-button>Button</r-button>
+    </>
+  )
+}
 ```
 
-## 按需引入
+### vue
+
+```vue
+<template>
+  <r-button>Button</r-button>
+</template>
+<script>
+import 'ranui'
+</script>
+```
+
+## tsx
+
+```tsx
+// react 18 
+import type { SyntheticEvent } from 'react';
+import React, { useRef } from 'react'
+import 'ranui'
+
+const FilePreview = () => {
+    const ref = useRef<HTMLDivElement | null>(null)
+    const uploadFile = (e: SyntheticEvent<HTMLDivElement>) => {
+        if (ref.current) {
+            const uploadFile = document.createElement('input')
+            uploadFile.setAttribute('type', 'file')
+            uploadFile.click()
+            uploadFile.onchange = (e) => {
+                const { files = [] } = uploadFile
+                if (files && files?.length > 0 && ref.current) {
+                    ref.current.setAttribute('src', '')
+                    const file = files[0]
+                    const url = URL.createObjectURL(file)
+                    ref.current.setAttribute('src', url)
+                }
+            }
+        }
+    }
+    return (
+        <div >
+            <r-preview ref={ref}></r-preview>
+            <r-button type="primary" onClick={uploadFile}>choose file to preview</r-button>
+        </div>
+    )
+}
+```
+
+`jsx`在`TypeScript`中定义了所有`html`原生组件的类型。`web component`类型不在`jsx`定义中。需要手动添加。否则会有类型问题，但它实际上是有效的。
 
 ```ts
-import Button from 'ranui'
+// typings.d.ts
+interface RButton {
+  type?: string,
+  onClick?: React.MouseEventHandler<HTMLDivElement> | undefined
+}
+
+interface RPreview {
+  src?: string | Blob | ArrayBuffer,
+  onClick?: React.MouseEventHandler<HTMLDivElement> | undefined
+  ref?: React.MutableRefObject<HTMLDivElement | null>
+}
+
+declare namespace JSX {
+  interface IntrinsicElements {
+    'r-preview': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & RPreview
+    'r-button': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & RButton
+  }
+}
 ```
 
-## 组件概览
+## Component overview
 
 - Button
 
@@ -143,9 +200,9 @@ import Button from 'ranui'
 </div>
 
 
-## 兼容性
+## compatibility 兼容性
 
-- 不支持 IE，其他均有较好支持
+- 不支持 `IE`，其他均有较好支持
   ![](../../assets/ranui/customElements.png)
 
 ## 相关资源
