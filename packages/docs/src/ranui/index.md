@@ -2,7 +2,7 @@
 
 基于 `Web Components UI`组件库
 
-## 特点
+## Feature 特点
 
 1. 基于`Web Components`开发，能做到跨框架复用，统一所有情况。
 2. 采用`Typescript`开发，有声明和类型文件。
@@ -10,7 +10,7 @@
 4. `MIT`协议
 5. 文档基于`vitepress`搭建，所有组件实例均可交互。
 
-## 项目情况
+## Situation 项目情况
 
 <a style="display:inline-block;margin-left: 4px;" href="https://github.com/chaxus/ran"><img src="https://img.shields.io/github/actions/workflow/status/chaxus/ran/ci.yml" alt="Build Status"></a>
 <a style="display:inline-block;margin-left: 4px;" href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/v/ranui.svg" alt="npm-v"></a>
@@ -22,19 +22,19 @@
 - `npm`：`https://www.npmjs.com/package/ranui`
 
 
-## Usage
+## Usage 使用
 
-大多数情况都可以像原生的`div`标签一样使用。
+大多数情况都可以像原生的 `div` 标签一样使用。
 
-接下来给出一些使用的例子
+接下来是一些使用例子
 
-- html
-- js
-- jsx
-- vue
-- tsx
+- `html`
+- `js`
+- `jsx`
+- `vue`
+- `tsx`
 
-### html
+### `html`
 
 ```html
 <script src="./ranui/dist/index.umd.cjs"></script>
@@ -44,7 +44,7 @@
 </body>
 ```
 
-### js
+### `js`
 
 ```js
 import 'ranui'
@@ -54,7 +54,7 @@ Button.appendChild('this is button text')
 document.body.appendChild(Button)
 ```
 
-### jsx
+### `jsx`
 
 ```jsx
 import 'ranui'
@@ -67,7 +67,7 @@ const App = () => {
 }
 ```
 
-### vue
+### `vue`
 
 ```vue
 <template>
@@ -78,7 +78,7 @@ import 'ranui'
 </script>
 ```
 
-## tsx
+## `tsx`
 
 ```tsx
 // react 18 
@@ -138,7 +138,7 @@ declare namespace JSX {
 
 ## Component overview
 
-- Button
+- `Button`
 
 <div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
      <r-button type="primary">主要按钮</r-button>
@@ -153,7 +153,7 @@ declare namespace JSX {
     <r-button >默认按钮</r-button>
 </div>
 
-- Icon
+- `Icon`
 
 <div style='display:flex'>
      <r-icon name="lock" size="50" ></r-icon>
@@ -161,7 +161,7 @@ declare namespace JSX {
      <r-icon name="loading" size="50" color="#1E90FF" spin></r-icon>
 </div>
 
-- Skeleton
+- `Skeleton`
 
 <div style="width: 100px;margin-top:10px">
     <r-skeleton ></r-skeleton>
@@ -176,7 +176,7 @@ declare namespace JSX {
     <r-skeleton ></r-skeleton>
 </div>
 
-- Input
+- `Input`
 
 <div style="display:block;margin-right: 8px;margin-bottom: 12px;">
      <r-input label="user"></r-input>
@@ -186,7 +186,7 @@ declare namespace JSX {
      <r-input icon="lock" type="password"></r-input>
 </div>
 
-- message
+- `message`
 
 <r-button onclick="message.info('这是一条提示')">信息提示</r-button>
 <r-button onclick="message.warning('这是一条提示')">警告提示</r-button>
@@ -194,7 +194,7 @@ declare namespace JSX {
 <r-button onclick="message.success('这是一条提示')">成功提示</r-button>
 <r-button onclick="message.toast('这是一条提示')">toast 提示</r-button>
 
-- Tab
+- `Tab`
 
 <div style="display:block;margin-right: 8px;margin-bottom: 12px;">
    <r-tabs>
@@ -205,7 +205,7 @@ declare namespace JSX {
 </div>
 
 
-## compatibility 兼容性
+## Compatibility 兼容性
 
 - 不支持 `IE`，其他均有较好支持
   ![](../../assets/ranui/customElements.png)
