@@ -34,8 +34,12 @@
 - tsx 例子
 
 ```tsx
-import 'ranui'
+
 // react 18 
+import type { SyntheticEvent } from 'react';
+import React, { useRef } from 'react'
+import 'ranui'
+
 const FilePreview = () => {
     const ref = useRef<HTMLDivElement | null>(null)
     const uploadFile = (e: SyntheticEvent<HTMLDivElement>) => {
