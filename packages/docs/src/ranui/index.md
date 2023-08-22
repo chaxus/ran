@@ -10,12 +10,17 @@
 4. `MIT`协议
 5. 文档基于`vitepress`搭建，所有组件实例均可交互。
 
-## 项目地址
+## 项目情况
 
-- `git`：`https://github.com/chaxus/ran/tree/main/packages/ranui`。
+<a href="https://github.com/chaxus/ran/actions"><img src="https://img.shields.io/github/actions/workflow/status/chaxus/ran/ci.yml" alt="Build Status"></a>
+<a href="https://npmjs.com/package/ranui"><img src="https://img.shields.io/npm/v/ranui.svg" alt="npm-v"></a>
+<a href="https://npmjs.com/package/ranui"><img src="https://img.shields.io/npm/dt/ranui.svg" alt="npm-d"></a>
+<a href="https://bundlephobia.com/result?p=ranui"><img src="https://img.badgesize.io/https:/unpkg.com/ranui/dist/index.umd.cjs?label=brotli&compression=brotli" alt="brotli"></a>
+<a href="#alternative-installation-methods"><img src="https://img.shields.io/badge/module%20formats-umd%2C%20esm-green.svg" alt="module formats: umd, esm"></a>
+
+- `git`：`https://github.com/chaxus/ran/tree/main/packages/ranui`
 - `npm`：`https://www.npmjs.com/package/ranui`
 
-<!-- ![npm地址](../../assets/ranui/ranui-npm.jpg) -->
 
 ## Usage
 
