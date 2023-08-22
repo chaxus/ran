@@ -31,10 +31,27 @@
       }
 </script>
 ```
-- tsx 例子
+## 属性
+
+### 资源地址`src`
+
+有 `src` 地址即可打开弹窗，没有`src`就不展示
+
+```html
+<r-preview src=""></r-preview>
+```
+
+### 是否可关闭`closeable`
+
+`closeable` 默认为 `true` ，可以关闭，当设置成 `false` 时， 表示不可关闭，将不会展示右上角的关闭按钮
+
+```html
+<r-preview closeable="false"></r-preview>
+```
+
+## tsx 例子
 
 ```tsx
-
 // react 18 
 import type { SyntheticEvent } from 'react';
 import React, { useRef } from 'react'
@@ -88,24 +105,6 @@ declare namespace JSX {
     'r-button': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & RButton
   }
 }
-```
-
-## 属性
-
-### 资源地址`src`
-
-有 `src` 地址即可打开弹窗，没有`src`就不展示
-
-```html
-<r-preview src=""></r-preview>
-```
-
-### 是否可关闭`closeable`
-
-`closeable` 默认为 `true` ，可以关闭，当设置成 `false` 时， 表示不可关闭，将不会展示右上角的关闭按钮
-
-```html
-<r-preview closeable="false"></r-preview>
 ```
 
 
