@@ -11,7 +11,7 @@
 
 ```html
 <r-preview id="preview"></r-preview>
-<r-button type="primary" onclick="uploadFile()">上传docx</r-button>
+<r-button type="primary" onclick="uploadFile()">choose file to preview</r-button>
 
 <script>
       const uploadFile = () => {
@@ -30,6 +30,59 @@
         }
       }
 </script>
+```
+- tsx 例子
+
+```tsx
+// react 18 
+const FilePreview = () => {
+    const ref = useRef<HTMLDivElement | null>(null)
+    const uploadFile = (e: SyntheticEvent<HTMLDivElement>) => {
+        if (ref.current) {
+            const uploadFile = document.createElement('input')
+            uploadFile.setAttribute('type', 'file')
+            uploadFile.click()
+            uploadFile.onchange = (e) => {
+                const { files = [] } = uploadFile
+                if (files && files?.length > 0 && ref.current) {
+                    ref.current.setAttribute('src', '')
+                    const file = files[0]
+                    const url = URL.createObjectURL(file)
+                    ref.current.setAttribute('src', url)
+                }
+            }
+        }
+    }
+    return (
+        <div >
+            <r-preview ref={ref}></r-preview>
+            <r-button type="primary" onClick={uploadFile}>choose file to preview</r-button>
+        </div>
+    )
+}
+```
+
+`jsx`中会定义所有原生组件的类型，`web-component`类型不在里面，需要进行追加
+
+```ts
+// typings.d.ts
+interface RButton {
+  type?: string,
+  onClick?: React.MouseEventHandler<HTMLDivElement> | undefined
+}
+
+interface RPreview {
+  src?: string | Blob | ArrayBuffer,
+  onClick?: React.MouseEventHandler<HTMLDivElement> | undefined
+  ref?: React.MutableRefObject<HTMLDivElement | null>
+}
+
+declare namespace JSX {
+  interface IntrinsicElements {
+    'r-preview': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & RPreview
+    'r-button': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & RButton
+  }
+}
 ```
 
 ## 属性
