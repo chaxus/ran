@@ -34,6 +34,7 @@
 - tsx 例子
 
 ```tsx
+import 'ranui'
 // react 18 
 const FilePreview = () => {
     const ref = useRef<HTMLDivElement | null>(null)
