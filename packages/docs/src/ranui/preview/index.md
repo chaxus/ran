@@ -49,5 +49,3 @@
 ```html
 <r-preview closeable="false"></r-preview>
 ```
-
-
