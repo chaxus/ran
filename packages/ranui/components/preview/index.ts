@@ -133,6 +133,11 @@ async function Custom() {
           const { type } = file
           const handler = renderFileMap.get(type)
           if (handler && this.previewContext) {
+            if (type === XLSX || type === XLS) {
+              this.previewContext.style.setProperty('width', '100%')
+            } else {
+              this.previewContext.style.setProperty('width', 'auto')
+            }
             // document.body.style.overflow = 'hidden'
             handler(file, this.previewContext)
           }

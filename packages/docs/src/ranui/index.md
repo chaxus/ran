@@ -2,7 +2,7 @@
 
 基于 `Web Components UI`组件库
 
-## 特点
+## Feature 特点
 
 1. 基于`Web Components`开发，能做到跨框架复用，统一所有情况。
 2. 采用`Typescript`开发，有声明和类型文件。
@@ -10,16 +10,31 @@
 4. `MIT`协议
 5. 文档基于`vitepress`搭建，所有组件实例均可交互。
 
-## 项目地址
+## Situation 项目情况
 
-- `git`：`https://github.com/chaxus/ran/tree/main/packages/ranui`。
+<a style="display:inline-block;margin-left: 4px;" href="https://github.com/chaxus/ran"><img src="https://img.shields.io/github/actions/workflow/status/chaxus/ran/ci.yml" alt="Build Status"></a>
+<a style="display:inline-block;margin-left: 4px;" href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/v/ranui.svg" alt="npm-v"></a>
+<a style="display:inline-block;margin-left: 4px;" href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/dt/ranui.svg" alt="npm-d"></a>
+<a style="display:inline-block;margin-left: 4px;" href="https://github.com/chaxus/ran"><img src="https://img.badgesize.io/https:/unpkg.com/ranui/dist/index.umd.cjs?label=brotli&compression=brotli" alt="brotli"></a>
+<a style="display:inline-block;margin-left: 4px;" href="https://github.com/chaxus/ran"><img src="https://img.shields.io/badge/module%20formats-umd%2C%20esm-green.svg" alt="module formats: umd, esm"></a>
+
+- `git`：`https://github.com/chaxus/ran/tree/main/packages/ranui`
 - `npm`：`https://www.npmjs.com/package/ranui`
 
-![npm地址](../../assets/ranui/ranui-npm.jpg)
 
-## 使用
+## Usage 使用
 
-- html
+大多数情况都可以像原生的 `div` 标签一样使用。
+
+接下来是一些使用例子
+
+- `html`
+- `js`
+- `jsx`
+- `vue`
+- `tsx`
+
+### `html`
 
 ```html
 <script src="./ranui/dist/index.umd.cjs"></script>
@@ -29,28 +44,7 @@
 </body>
 ```
 
-- vue
-
-```vue
-<template>
-  <r-button>Button</r-button>
-</template>
-```
-
-- react
-
-```jsx
-import Button from 'ranui'
-const App = () => {
-  return (
-    <>
-      <r-button>Button</r-button>
-    </>
-  )
-}
-```
-
-- js
+### `js`
 
 ```js
 import 'ranui'
@@ -60,23 +54,91 @@ Button.appendChild('this is button text')
 document.body.appendChild(Button)
 ```
 
-大多数情况都可以像原生的`div`标签一样使用
+### `jsx`
 
-## 全量引入
-
-```ts
+```jsx
 import 'ranui'
+const App = () => {
+  return (
+    <>
+      <r-button>Button</r-button>
+    </>
+  )
+}
 ```
 
-## 按需引入
+### `vue`
+
+```vue
+<template>
+  <r-button>Button</r-button>
+</template>
+<script>
+import 'ranui'
+</script>
+```
+
+## `tsx`
+
+```tsx
+// react 18 
+import type { SyntheticEvent } from 'react';
+import React, { useRef } from 'react'
+import 'ranui'
+
+const FilePreview = () => {
+    const ref = useRef<HTMLDivElement | null>(null)
+    const uploadFile = (e: SyntheticEvent<HTMLDivElement>) => {
+        if (ref.current) {
+            const uploadFile = document.createElement('input')
+            uploadFile.setAttribute('type', 'file')
+            uploadFile.click()
+            uploadFile.onchange = (e) => {
+                const { files = [] } = uploadFile
+                if (files && files?.length > 0 && ref.current) {
+                    ref.current.setAttribute('src', '')
+                    const file = files[0]
+                    const url = URL.createObjectURL(file)
+                    ref.current.setAttribute('src', url)
+                }
+            }
+        }
+    }
+    return (
+        <div >
+            <r-preview ref={ref}></r-preview>
+            <r-button type="primary" onClick={uploadFile}>choose file to preview</r-button>
+        </div>
+    )
+}
+```
+
+`jsx`在`TypeScript`中定义了所有`html`原生组件的类型。`web component`类型不在`jsx`定义中。需要手动添加。否则会有类型问题，但它实际上是有效的。
 
 ```ts
-import Button from 'ranui'
+// typings.d.ts
+interface RButton {
+  type?: string,
+  onClick?: React.MouseEventHandler<HTMLDivElement> | undefined
+}
+
+interface RPreview {
+  src?: string | Blob | ArrayBuffer,
+  onClick?: React.MouseEventHandler<HTMLDivElement> | undefined
+  ref?: React.MutableRefObject<HTMLDivElement | null>
+}
+
+declare namespace JSX {
+  interface IntrinsicElements {
+    'r-preview': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & RPreview
+    'r-button': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & RButton
+  }
+}
 ```
 
-## 组件概览
+## Component overview
 
-- Button
+- `Button`
 
 <div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
      <r-button type="primary">主要按钮</r-button>
@@ -91,7 +153,7 @@ import Button from 'ranui'
     <r-button >默认按钮</r-button>
 </div>
 
-- Icon
+- `Icon`
 
 <div style='display:flex'>
      <r-icon name="lock" size="50" ></r-icon>
@@ -99,7 +161,7 @@ import Button from 'ranui'
      <r-icon name="loading" size="50" color="#1E90FF" spin></r-icon>
 </div>
 
-- Skeleton
+- `Skeleton`
 
 <div style="width: 100px;margin-top:10px">
     <r-skeleton ></r-skeleton>
@@ -114,7 +176,7 @@ import Button from 'ranui'
     <r-skeleton ></r-skeleton>
 </div>
 
-- Input
+- `Input`
 
 <div style="display:block;margin-right: 8px;margin-bottom: 12px;">
      <r-input label="user"></r-input>
@@ -124,7 +186,7 @@ import Button from 'ranui'
      <r-input icon="lock" type="password"></r-input>
 </div>
 
-- message
+- `message`
 
 <r-button onclick="message.info('这是一条提示')">信息提示</r-button>
 <r-button onclick="message.warning('这是一条提示')">警告提示</r-button>
@@ -132,7 +194,7 @@ import Button from 'ranui'
 <r-button onclick="message.success('这是一条提示')">成功提示</r-button>
 <r-button onclick="message.toast('这是一条提示')">toast 提示</r-button>
 
-- Tab
+- `Tab`
 
 <div style="display:block;margin-right: 8px;margin-bottom: 12px;">
    <r-tabs>
@@ -143,9 +205,9 @@ import Button from 'ranui'
 </div>
 
 
-## 兼容性
+## Compatibility 兼容性
 
-- 不支持 IE，其他均有较好支持
+- 不支持 `IE`，其他均有较好支持
   ![](../../assets/ranui/customElements.png)
 
 ## 相关资源
