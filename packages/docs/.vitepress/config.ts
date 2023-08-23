@@ -2,6 +2,39 @@ import { defineConfig } from 'vitepress'
 
 const BASE_PATH = '/ran/'
 
+const GTAG = 'https://www.googletagmanager.com/gtag/js?id=G-0MPS5WH1C0'
+
+const googleAnalyse = `;window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);};gtag('js', new Date());gtag('config', 'G-0MPS5WH1C0');`
+
+const baiduAnalyse = `
+;var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?3bc20bd8070ce614078a36c686209456";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+`
+
+const previewCode = `
+  window.uploadFile = (name) => {
+        const preview = document.getElementById(name)
+        const uploadFile = document.createElement('input')
+        uploadFile.setAttribute('type', 'file')
+        uploadFile.click()
+        uploadFile.onchange = (e) => {
+          const { files = [] } = uploadFile
+          if (preview) {
+            if (files && files.length > 0) {
+              preview.setAttribute('src', '')
+              const file = files[0]
+              const url = URL.createObjectURL(file)
+              preview.setAttribute('src', url)
+            }
+          }
+        }
+      }
+`
 export default defineConfig({
   title: 'ran',
   description: '基于web component组件库,常用函数库utils,个人文章记录等',
@@ -20,7 +53,14 @@ export default defineConfig({
     ['link', { rel: 'icon', href: `${BASE_PATH}favicon.ico` }],
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { name: 'theme-color', content: '#646cff' }],
-    ['meta', { httpEquiv: 'Permissions-Policy', content: 'interest-cohort=()' }],
+    [
+      'meta',
+      { httpEquiv: 'Permissions-Policy', content: 'interest-cohort=()' },
+    ],
+    ['script', { src: GTAG }],
+    ['script', {}, googleAnalyse],
+    ['script', {}, baiduAnalyse],
+    ['script', {}, previewCode],
   ],
   themeConfig: {
     logo: '/home.svg',

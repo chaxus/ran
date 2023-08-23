@@ -106,7 +106,6 @@ export const renderPptx = (options: Options): Promise<any> | undefined => {
       }
       const worker: Worker = {
         postMessage,
-        // terminate,
       }
       processPptx((func: (x: Msg) => void) => {
         worker.postMessage = func

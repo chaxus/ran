@@ -43,68 +43,8 @@
 
 ### 是否可关闭`closeable`
 
-`closeable` 默认为 `true` ，可以关闭，当设置成 `false` 时， 表示不可关闭，将不会展示右上角的关闭按钮
+`closeable` 默认为 `true` ，可以关闭，设置成 `false` 时， 表示不可关闭，将不会展示右上角的关闭按钮
 
 ```html
 <r-preview closeable="false"></r-preview>
 ```
-
-## tsx 例子
-
-```tsx
-// react 18 
-import type { SyntheticEvent } from 'react';
-import React, { useRef } from 'react'
-import 'ranui'
-
-const FilePreview = () => {
-    const ref = useRef<HTMLDivElement | null>(null)
-    const uploadFile = (e: SyntheticEvent<HTMLDivElement>) => {
-        if (ref.current) {
-            const uploadFile = document.createElement('input')
-            uploadFile.setAttribute('type', 'file')
-            uploadFile.click()
-            uploadFile.onchange = (e) => {
-                const { files = [] } = uploadFile
-                if (files && files?.length > 0 && ref.current) {
-                    ref.current.setAttribute('src', '')
-                    const file = files[0]
-                    const url = URL.createObjectURL(file)
-                    ref.current.setAttribute('src', url)
-                }
-            }
-        }
-    }
-    return (
-        <div >
-            <r-preview ref={ref}></r-preview>
-            <r-button type="primary" onClick={uploadFile}>choose file to preview</r-button>
-        </div>
-    )
-}
-```
-
-`jsx`在`TypeScript`中定义了所有`html`原生组件的类型。`web component`类型不在`jsx`定义中。需要手动添加。否则会有类型问题，但它实际上是有效的。
-
-```ts
-// typings.d.ts
-interface RButton {
-  type?: string,
-  onClick?: React.MouseEventHandler<HTMLDivElement> | undefined
-}
-
-interface RPreview {
-  src?: string | Blob | ArrayBuffer,
-  onClick?: React.MouseEventHandler<HTMLDivElement> | undefined
-  ref?: React.MutableRefObject<HTMLDivElement | null>
-}
-
-declare namespace JSX {
-  interface IntrinsicElements {
-    'r-preview': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & RPreview
-    'r-button': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & RButton
-  }
-}
-```
-
-
