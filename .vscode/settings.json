@@ -6,6 +6,7 @@
     "componentization",
     "DOMAPI",
     "esbuild",
+    "keyof",
     "Metiral",
     "Ovride",
     "picocolors",
