@@ -40,6 +40,9 @@ export default defineConfig({
   description: '基于web component组件库,常用函数库utils,个人文章记录等',
   base: BASE_PATH,
   lastUpdated: true,
+  locales: {
+    root: { label: "简体中文", lang: "zh-CN" },
+  },
   vue: {
     template: {
       compilerOptions: {
