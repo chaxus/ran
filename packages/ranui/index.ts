@@ -8,7 +8,7 @@ export * as message from '@/components/message'
 export * as preview from '@/components/preview'
 export * as skeleton from '@/components/skeleton'
 export * as tabpane from '@/components/tabpane'
-export * as tabs from '@/components/tabs'
+export * as tab from '@/components/tab'
 
 if (typeof document !== 'undefined') {
   const style = document.createElement('style')

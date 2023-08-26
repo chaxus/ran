@@ -3,18 +3,18 @@
   "version": "0.1.4-alpha.2",
   "description": "UI Component library based on `Web Component`",
   "main": "dist/umd/index.umd.cjs",
-  "module": "dist/index.js",
+  "module": "dist/components/index.js",
   "type": "module",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
+      "import": "./dist/components/index.js",
       "require": "./dist/umd/index.umd.cjs"
     },
     "./*": {
-      "types": "./dist/*",
-      "import": "./dist/*",
+      "types": "./dist/components/*",
+      "import": "./dist/components/*",
       "require": "./dist/umd/*"
     }
   },
