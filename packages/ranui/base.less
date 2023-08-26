@@ -94,12 +94,14 @@
     }
   }
   .r-preview-contain {
-    max-width: 100vw;
+    max-width: calc(100vw - 20px);
+    margin: 0 auto;
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
     justify-content: center;
     .r-preview-context {
+      margin: 0 auto;
       height: calc(100vh - 68px);
       display: flex;
       flex-flow: column nowrap;
@@ -110,6 +112,7 @@
       .r-preview-excel-main {
         width: 100%;
         height: 100%;
+        margin-bottom: 10px;
         .x-spreadsheet {
           font-size: 13px;
           line-height: normal;

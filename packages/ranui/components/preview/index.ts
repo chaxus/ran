@@ -136,7 +136,8 @@ async function Custom() {
             if (type === XLSX || type === XLS) {
               this.previewContext.style.setProperty('width', '100%')
             } else {
-              this.previewContext.style.setProperty('width', 'auto')
+
+              this.previewContext.style.setProperty('width', '100%')
             }
             // document.body.style.overflow = 'hidden'
             handler(file, this.previewContext)

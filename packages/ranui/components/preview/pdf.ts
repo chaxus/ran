@@ -49,13 +49,15 @@ class PdfPreview {
           const canvas = document.createElement('canvas')
           this.dom.appendChild(canvas)
           const context = canvas.getContext('2d')
+          const clientWidth = document.body.clientWidth - 20
           const [_, __, width, height] = viewport.viewBox
-          canvas.width = width
+          const baseRadio = width > clientWidth ?  clientWidth / width : 1
+          canvas.width = width 
           canvas.height = height
           viewport.width = width
           viewport.height = height
-          canvas.style.width = Math.floor(viewport.width) + 'px'
-          canvas.style.height = Math.floor(viewport.height) + 'px'
+          canvas.style.width = Math.floor(viewport.width) * baseRadio + 'px'
+          canvas.style.height = Math.floor(viewport.height) * baseRadio + 'px'
           const renderContext = {
             canvasContext: context,
             viewport: viewport,
