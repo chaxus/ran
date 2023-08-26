@@ -1,5 +1,6 @@
 
 import { requestFile } from '@/utils/index'
+import '../../base.less'
 import '@/components/icon'
 
 const PPTX =

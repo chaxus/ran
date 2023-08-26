@@ -33,9 +33,15 @@ export const es: BuildOptions = {
       message: resolve(__dirname, 'components/message/index.ts'),
       preview: resolve(__dirname, 'components/preview/index.ts'),
       skeleton: resolve(__dirname, 'components/skeleton/index.ts'),
-      tab: resolve(__dirname, 'components/tabs/index.ts'),
+      tabpane: resolve(__dirname, 'components/tabpane/index.ts'),
+      tab: resolve(__dirname, 'components/tab/index.ts'),
     },
-    fileName: (_: string, name: string): string => `${name}.js`,
+    fileName: (_: string, name: string): string => {
+      if (name === 'index') {
+        return `${name}.js`
+      }
+      return `components/${name}/index.js`
+    },
     formats: ['es'],
   },
 }
