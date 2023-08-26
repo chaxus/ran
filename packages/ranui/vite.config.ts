@@ -35,7 +35,7 @@ export const es: BuildOptions = {
       skeleton: resolve(__dirname, 'components/skeleton/index.ts'),
       tab: resolve(__dirname, 'components/tabs/index.ts'),
     },
-    fileName: (_: string, name: string): string => `${name}.js`,
+    fileName: (_: string, name: string): string => `components/${name}/index.js`,
     formats: ['es'],
   },
 }
