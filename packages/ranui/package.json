@@ -1,6 +1,6 @@
 {
   "name": "ranui",
-  "version": "0.1.4-alpha.1",
+  "version": "0.1.4-alpha.2",
   "description": "UI Component library based on `Web Component`",
   "main": "dist/umd/index.umd.cjs",
   "module": "dist/index.js",
@@ -11,6 +11,11 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/umd/index.umd.cjs"
+    },
+    "./*": {
+      "types": "./dist/*",
+      "import": "./dist/*",
+      "require": "./dist/umd/*"
     }
   },
   "files": [
@@ -27,6 +32,7 @@
   "scripts": {
     "dev": "vite",
     "build": "sh ./bin/build.sh",
+    "prepublish": "npm run build",
     "test": "sh ./bin/test.sh",
     "test:report": "playwright show-report",
     "test:ui": "playwright test --ui"
