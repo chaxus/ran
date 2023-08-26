@@ -38,7 +38,7 @@ export const es: BuildOptions = {
     },
     fileName: (_: string, name: string): string => {
       if (name === 'index') {
-        return name
+        return `${name}.js`
       }
       return `components/${name}/index.js`
     },

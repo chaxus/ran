@@ -1,21 +1,16 @@
 {
   "name": "ranui",
-  "version": "0.1.4-alpha.2",
+  "version": "0.1.4-alpha.4",
   "description": "UI Component library based on `Web Component`",
   "main": "dist/umd/index.umd.cjs",
-  "module": "dist/components/index.js",
+  "module": "dist/index.js",
   "type": "module",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/components/index.js",
+      "import": "./dist/index.js",
       "require": "./dist/umd/index.umd.cjs"
-    },
-    "./*": {
-      "types": "./dist/components/*",
-      "import": "./dist/components/*",
-      "require": "./dist/umd/*"
     }
   },
   "files": [
