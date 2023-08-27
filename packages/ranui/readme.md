@@ -45,13 +45,16 @@ import 'ranui/style'
 
 Support global import
 
+- ES module
+
 ```js
 import 'ranui'
 ```
-or
+- UMD, IIFE, CJS
 ```html
 <script src="./ranui/dist/umd/index.umd.cjs"></script>
 ```
+
 
 ## Usage
 
