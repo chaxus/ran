@@ -22,6 +22,36 @@
 - `npm`：`https://www.npmjs.com/package/ranui`
 
 
+## Import 导入方式
+
+支持按需引入
+
+```js
+import 'ranui/button'
+```
+
+对于一些全局展示的组件，比如 `preview` 和 `message`，需要加载一些额外的样式
+
+```js
+import 'ranui/preview'
+import 'ranui/style'
+```
+
+也可以全局导入，更加方便，这样什么都不用考虑了，梭哈完事。
+
+- `ES module`
+
+```js
+import 'ranui'
+```
+
+- `UMD`, `IIFE`, `CJS`
+
+```html
+<script src="./ranui/dist/umd/index.umd.cjs"></script>
+```
+
+
 ## Usage 使用
 
 大多数情况都可以像原生的 `div` 标签一样使用。
@@ -37,7 +67,7 @@
 ### `html`
 
 ```html
-<script src="./ranui/dist/index.umd.cjs"></script>
+<script src="./ranui/dist/umd/index.umd.cjs"></script>
 
 <body>
   <r-button>Button</r-button>
