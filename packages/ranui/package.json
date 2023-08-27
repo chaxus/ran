@@ -1,34 +1,18 @@
 {
   "name": "ranui",
-  "version": "0.1.4-alpha.4",
+  "version": "0.1.4-alpha.5",
   "description": "UI Component library based on `Web Component`",
   "main": "dist/umd/index.umd.cjs",
   "module": "dist/index.js",
   "type": "module",
   "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/umd/index.umd.cjs"
-    },
-    "./*": {
-      "types": "./dist/*",
-      "import": "./dist/*",
-      "require": "./dist/umd/*"
-    }
-  },
-  "files": [
-    "dist/*"
-  ],
-  "engines": {
-    "node": "^14.18.0 || >=16.0.0"
-  },
   "homepage": "https://chaxus.github.io/ran/src/ranui/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/chaxus/ran/tree/main/packages/ranui"
   },
+  "author": "chaxus",
+  "license": "MIT",
   "scripts": {
     "dev": "vite",
     "build": "sh ./bin/build.sh",
@@ -37,6 +21,12 @@
     "test:report": "playwright show-report",
     "test:ui": "playwright test --ui"
   },
+  "files": [
+    "dist/*"
+  ],
+  "engines": {
+    "node": "^14.18.0 || >=16.0.0"
+  },
   "keywords": [
     "ran",
     "component",
@@ -44,8 +34,53 @@
     "ui",
     "design"
   ],
-  "author": "",
-  "license": "MIT",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/umd/index.umd.cjs"
+    },
+    "./button": {
+      "types": "./dist/components/button/index.d.ts",
+      "import": "./dist/components/button/index.js",
+      "require": "./dist/umd/index.umd.cjs"
+    },
+    "./icon": {
+      "types": "./dist/components/icon/index.d.ts",
+      "import": "./dist/components/icon/index.js",
+      "require": "./dist/umd/index.umd.cjs"
+    },
+    "./image": {
+      "types": "./dist/components/image/index.d.ts",
+      "import": "./dist/components/image/index.js",
+      "require": "./dist/umd/index.umd.cjs"
+    },
+    "./input": {
+      "types": "./dist/components/input/index.d.ts",
+      "import": "./dist/components/input/index.js",
+      "require": "./dist/umd/index.umd.cjs"
+    },
+    "./message": {
+      "types": "./dist/components/message/index.d.ts",
+      "import": "./dist/components/message/index.js",
+      "require": "./dist/umd/index.umd.cjs"
+    },
+    "./preview": {
+      "types": "./dist/components/preview/index.d.ts",
+      "import": "./dist/components/preview/index.js",
+      "require": "./dist/umd/index.umd.cjs"
+    },
+    "./skeleton": {
+      "types": "./dist/components/skeleton/index.d.ts",
+      "import": "./dist/components/skeleton/index.js",
+      "require": "./dist/umd/index.umd.cjs"
+    },
+    "./tab": {
+      "types": "./dist/components/tab/index.d.ts",
+      "import": "./dist/components/tab/index.js",
+      "require": "./dist/umd/index.umd.cjs"
+    }
+  },
   "devDependencies": {
     "@babel/core": "^7.20.5",
     "@babel/preset-env": "^7.22.7",
