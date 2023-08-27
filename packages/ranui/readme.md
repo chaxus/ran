@@ -50,11 +50,12 @@ Support global import
 ```js
 import 'ranui'
 ```
+
 - UMD, IIFE, CJS
+
 ```html
 <script src="./ranui/dist/umd/index.umd.cjs"></script>
 ```
-
 
 ## Usage
 
