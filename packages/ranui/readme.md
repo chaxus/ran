@@ -28,6 +28,31 @@ npm install ranui --save
 
 [See components and use examples](https://chaxus.github.io/ran/src/ranui/)
 
+## Import 
+
+Support for on-demand import, which can reduce the size of loaded js
+
+```js
+import 'ranui/button'
+```
+
+For global components like `preview` and `message`, you need to import global styles
+
+```js
+import 'ranui/preview'
+import 'ranui/style'
+```
+
+Support global import
+
+```js
+import 'ranui'
+```
+or
+```html
+<script src="./ranui/dist/umd/index.umd.cjs"></script>
+```
+
 ## Usage
 
 It is based on the `Web Component`, you can use it without focusing on the framework.
@@ -45,7 +70,7 @@ Here are some examples:
 ### html
 
 ```html
-<script src="./ranui/dist/index.umd.cjs"></script>
+<script src="./ranui/dist/umd/index.umd.cjs"></script>
 
 <body>
   <r-button>Button</r-button>
