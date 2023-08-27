@@ -16,7 +16,7 @@
     "vitepress": "1.0.0-alpha.65"
   },
   "dependencies": {
-    "ranui": "workspace:0.1.4-alpha.5",
+    "ranui": "workspace:0.1.4-alpha.6",
     "ranuts": "0.1.0-alpha.5"
   }
 }

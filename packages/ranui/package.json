@@ -1,6 +1,6 @@
 {
   "name": "ranui",
-  "version": "0.1.4-alpha.5",
+  "version": "0.1.4-alpha.6",
   "description": "UI Component library based on `Web Component`",
   "main": "dist/umd/index.umd.cjs",
   "module": "dist/index.js",
@@ -78,6 +78,11 @@
     "./tab": {
       "types": "./dist/components/tab/index.d.ts",
       "import": "./dist/components/tab/index.js",
+      "require": "./dist/umd/index.umd.cjs"
+    },
+    "./style": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/style.css",
       "require": "./dist/umd/index.umd.cjs"
     }
   },

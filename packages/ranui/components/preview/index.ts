@@ -1,5 +1,6 @@
 
 import { requestFile } from '@/utils/index'
+import closeIcon from '@/assets/icons/close-circle-fill.svg'
 import '../../base.less'
 import '@/components/icon'
 
@@ -168,6 +169,7 @@ async function Custom() {
             if (this.closeable !== 'false') {
               const previewCloseButton = document.createElement('button')
               previewCloseButton.setAttribute('class', 'r-preview-options-close')
+              previewCloseButton.style.setProperty('background-image',closeIcon)
               previewCloseButton.addEventListener('click', this.closePreview)
               previewOption.appendChild(previewCloseButton)
             }
