@@ -37,7 +37,7 @@ function ipv4(): string | undefined {
 }
 
 class Server {
-  stack: Array<MiddlewareFunction>
+  middleware: Array<MiddlewareFunction>
   ctx: Context
   constructor() {
     const req = new http.IncomingMessage(new Socket())
@@ -47,7 +47,7 @@ class Server {
       req,
       res,
     }
-    this.stack = []
+    this.middleware = []
     /**
      * @description: 添加中间件
      */
@@ -56,10 +56,10 @@ class Server {
     if (!handle) {
       throw new Error('the use function has an incorrect argument')
     }
-    this.stack.push(handle)
+    this.middleware.push(handle)
   }
   listen(...args: any): http.Server {
-    const fn = compose(this.stack)
+    const fn = compose(this.middleware)
     const server = http.createServer((req, res) => {
       this.ctx.req = req
       this.ctx.res = res

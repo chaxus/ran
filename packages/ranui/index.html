@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link rel="icon" href="data:;">
+    <link rel="icon" href="data:;" />
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -47,15 +47,21 @@
       "
     >
       <r-input label="user"></r-input>
-      <r-input icon="account" status="error"></r-input>
+      <r-input id="input2" icon="account" status="error" onChange="changeInput(this.value)"></r-input>
+      <input oninput="changeInput"></input>
       <r-input icon="home" status="warning" disabled></r-input>
     </div>
     <h2>Preview</h2>
-    <r-button type="primary" onclick="uploadFile()"
-      >choose file to preview</r-button
+    <r-button type="primary" onclick="uploadFile()">choose file to preview</r-button
     >
     <r-preview id="preview"></r-preview>
     <script>
+      const inputDom = document.getElementById('input2')
+      function changeInput(e){
+        console.log('e--->',e)
+      }
+      // inputDom.addEventListener("change", changeInput);
+      
       const uploadFile = () => {
         const preview = document.getElementById('preview')
         const uploadFile = document.createElement('input')
@@ -74,9 +80,13 @@
     </script>
     <h2>message</h2>
     <r-button onclick="message.info('这是一条提示 info')">信息提示</r-button>
-    <r-button onclick="message.warning('这是一条提示 warning')">警告提示</r-button>
+    <r-button onclick="message.warning('这是一条提示 warning')"
+      >警告提示</r-button
+    >
     <r-button onclick="message.error('这是一条提示 error')">错误提示</r-button>
-    <r-button onclick="message.success('这是一条提示 success')">成功提示</r-button>
+    <r-button onclick="message.success('这是一条提示 success')"
+      >成功提示</r-button
+    >
     <r-button onclick="message.toast('这是一条提示 toast')">成功提示</r-button>
   </body>
 </html>
