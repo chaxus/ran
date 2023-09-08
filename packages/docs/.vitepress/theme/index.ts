@@ -3,7 +3,6 @@ import 'ranui'
 import './styles/index.less'
 import './styles/vars.less'
 
-
 export default {
   ...DefaultTheme,
   enhanceApp({ app }) {},

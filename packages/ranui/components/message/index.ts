@@ -23,7 +23,6 @@ const typeMapColor = new Map([
 
 function Custom() {
   if (typeof window !== 'undefined' && !customElements.get('r-message')) {
-
     // class CustomMessageContain extends HTMLElement {
     //   _contain: HTMLDivElement;
     //   _slot: HTMLSlotElement;
@@ -37,9 +36,9 @@ function Custom() {
     //     shadowRoot.appendChild(this._contain);
     //   }
     // }
-    
+
     // customElements.define("r-message-contain", CustomMessageContain);
-    
+
     class CustomMessage extends HTMLElement {
       _info: HTMLDivElement
       _notice: HTMLDivElement
@@ -152,8 +151,7 @@ function Custom() {
         message.classList.add('message-in')
         setTimeout(() => {
           message.classList.remove('message-in')
-        }, AnimationTime);
-
+        }, AnimationTime)
       }
     }
 

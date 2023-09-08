@@ -364,7 +364,7 @@ export default function processPptx(
       slideMasterContent,
       warpObj,
     )
-    const slideSizeWidth = Math.min(slideSize.width,document.body.clientWidth)
+    const slideSizeWidth = Math.min(slideSize.width, document.body.clientWidth)
     const base = slideSize.width / slideSizeWidth
     const slideSizeHeight = slideSize.height / base
     let result =

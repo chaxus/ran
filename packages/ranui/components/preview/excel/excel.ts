@@ -149,7 +149,7 @@ interface spreadSheet {
   cols: {
     [x: string]: Partial<{
       width: number
-    }>,
+    }>
   }
 }
 
@@ -169,106 +169,108 @@ function transferColumns(
     }
   }
 
-  (spreadSheet.cols.len as number) = Math.max(
+  ;(spreadSheet.cols.len as number) = Math.max(
     Object.keys(spreadSheet.cols).length,
     options.minColLength || 0,
   )
 }
 type Style = any
 
-
 interface Cell {
-    numFmt:string, 
-    value:string,
-    type:number,
-    text:string,
-    style:Style
+  numFmt: string
+  value: string
+  type: number
+  text: string
+  style: Style
 }
 
-function getCellText(cell:Cell){
+function getCellText(cell: Cell) {
   //console.log(cell);
-  const {numFmt, value, type} = cell;
-  switch (type){
-      case 2: //数字
-          try {
-              //numFmt:
-              // "0.00%"
-              // "0.00_);(0.00)"
-              // "#,##0.000_);(#,##0.000)"   千分位
-              // "#,##0.000;[Red]#,##0.000"
-              if(cell.style.numFmt){
-                  if(cell.style.numFmt.endsWith('%')){
-                      const precision = cell.style.numFmt.match(/\.(\d+)%/);
-                      if(precision){
-                          return (Number(value) * 100).toFixed(precision[1].length) + '%';
-                      }else {
-                          return Number(value) * 100 + '%';
-                      }
-                  }else if(/0(?:\.0+)?/.test(cell.style.numFmt)){
-                      if(Number(value) === 0 && cell.style.numFmt.startsWith('_')){
-                          return '-';
-                      }
-                      let precision = cell.style.numFmt.match(/0\.(0+)(_|;|$)/);
-                      if(precision){
-                          precision = precision[1].length;
-                      }else{
-                          precision = 0;
-                      }
+  const { numFmt, value, type } = cell
+  switch (type) {
+    case 2: //数字
+      try {
+        //numFmt:
+        // "0.00%"
+        // "0.00_);(0.00)"
+        // "#,##0.000_);(#,##0.000)"   千分位
+        // "#,##0.000;[Red]#,##0.000"
+        if (cell.style.numFmt) {
+          if (cell.style.numFmt.endsWith('%')) {
+            const precision = cell.style.numFmt.match(/\.(\d+)%/)
+            if (precision) {
+              return (Number(value) * 100).toFixed(precision[1].length) + '%'
+            } else {
+              return Number(value) * 100 + '%'
+            }
+          } else if (/0(?:\.0+)?/.test(cell.style.numFmt)) {
+            if (Number(value) === 0 && cell.style.numFmt.startsWith('_')) {
+              return '-'
+            }
+            let precision = cell.style.numFmt.match(/0\.(0+)(_|;|$)/)
+            if (precision) {
+              precision = precision[1].length
+            } else {
+              precision = 0
+            }
 
-                      let result:string | string[] = Number(value).toFixed(precision) + '';
-                      if(cell.style.numFmt.includes('#,##')){
-                          //千分位
-                          result = result.split('.');
-                          const number = result[0].split('').reverse();
-                          const newNumber = [];
-                          for(let i = 0; i< number.length; i++){
-                              newNumber.push(number[i]);
-                              if((i+1) % 3 === 0 && i < number.length - 1 && number[i+1] !== '-'){
-                                  newNumber.push(',');
-                              }
-
-                          }
-                          result[0] = newNumber.reverse().join('');
-                          result = result.join('.');
-                      }
-                      return result;
-                  }
-
+            let result: string | string[] =
+              Number(value).toFixed(precision) + ''
+            if (cell.style.numFmt.includes('#,##')) {
+              //千分位
+              result = result.split('.')
+              const number = result[0].split('').reverse()
+              const newNumber = []
+              for (let i = 0; i < number.length; i++) {
+                newNumber.push(number[i])
+                if (
+                  (i + 1) % 3 === 0 &&
+                  i < number.length - 1 &&
+                  number[i + 1] !== '-'
+                ) {
+                  newNumber.push(',')
+                }
               }
-              return value + '';
-          }catch (e){
-              return value;
+              result[0] = newNumber.reverse().join('')
+              result = result.join('.')
+            }
+            return result
           }
-          
-      case 3: //字符串
-          return value;
-      case 4: //日期
-          switch (numFmt){
-              case 'yyyy-mm-dd;@':
-                  return dayjs(value).format('YYYY-MM-DD');
-              case 'mm-dd-yy':
-                  return dayjs(value).format('YYYY/MM/DD');
-              case '[$-F800]dddd, mmmm dd, yyyy':
-                  return dayjs(value).format('YYYY年M月D日 ddd');
-              case 'm"月"d"日";@':
-                  return dayjs(value).format('M月D日');
-              case 'yyyy/m/d h:mm;@':
-              case 'm/d/yy "h":mm':
-                  return dayjs(value).subtract(8, 'hour').format('YYYY/M/DD HH:mm');
-              case 'h:mm;@':
-                  return dayjs(value).format('HH:mm');
-              default:
-                  return dayjs(value).format('YYYY-MM-DD');
-          }
+        }
+        return value + ''
+      } catch (e) {
+        return value
+      }
 
-      case 5: //超链接
-          return (value as any).text;
-      case 6: //公式
-          return get(value, 'result.error') || (value as any).result;
-      case 8: //富文本
-          return cell.text;
-      default:
-          return value;
+    case 3: //字符串
+      return value
+    case 4: //日期
+      switch (numFmt) {
+        case 'yyyy-mm-dd;@':
+          return dayjs(value).format('YYYY-MM-DD')
+        case 'mm-dd-yy':
+          return dayjs(value).format('YYYY/MM/DD')
+        case '[$-F800]dddd, mmmm dd, yyyy':
+          return dayjs(value).format('YYYY年M月D日 ddd')
+        case 'm"月"d"日";@':
+          return dayjs(value).format('M月D日')
+        case 'yyyy/m/d h:mm;@':
+        case 'm/d/yy "h":mm':
+          return dayjs(value).subtract(8, 'hour').format('YYYY/M/DD HH:mm')
+        case 'h:mm;@':
+          return dayjs(value).format('HH:mm')
+        default:
+          return dayjs(value).format('YYYY-MM-DD')
+      }
+
+    case 5: //超链接
+      return (value as any).text
+    case 6: //公式
+      return get(value, 'result.error') || (value as any).result
+    case 8: //富文本
+      return cell.text
+    default:
+      return value
   }
 }
 
@@ -310,13 +312,13 @@ function getCellText(cell:Cell){
 // }
 
 interface Color {
-    r:number,
-    g:number,
-    b:number,
-    a:number
+  r: number
+  g: number
+  b: number
+  a: number
 }
 
-function transferArgbColor(originColor:string) {
+function transferArgbColor(originColor: string) {
   if (typeof originColor === 'object') {
     return '#000000'
   }
@@ -326,9 +328,10 @@ function transferArgbColor(originColor:string) {
   originColor = originColor.trim().toLowerCase() //去掉前后空格
   const color: Partial<Color> = {}
   try {
-    const argb = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(
-      originColor,
-    ) || ''
+    const argb =
+      /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(
+        originColor,
+      ) || ''
     color.r = parseInt(argb[2], 16)
     color.g = parseInt(argb[3], 16)
     color.b = parseInt(argb[4], 16)
@@ -341,7 +344,7 @@ function transferArgbColor(originColor:string) {
   }
 }
 
-function transferThemeColor(themeIndex:number, tint:number) {
+function transferThemeColor(themeIndex: number, tint: number) {
   if (themeIndex > 9) {
     return '#C7C9CC'
   }
@@ -353,14 +356,16 @@ function transferThemeColor(themeIndex:number, tint:number) {
     return getDarkColor(themeColor[themeIndex], Math.abs(tint))
   }
 }
-function getStyle(cell:Cell) {
+function getStyle(cell: Cell) {
   cell.style = cloneDeep(cell.style)
   let backGroundColor = null
   if (cell.style.fill && cell.style.fill.fgColor) {
     // 8位字符颜色先转rgb再转16进制颜色
     if (cell.style.fill.fgColor.argb) {
       backGroundColor = transferArgbColor(cell.style.fill.fgColor.argb)
-    } else if ( Object.prototype.hasOwnProperty.call(cell.style.fill.fgColor,'theme')) {
+    } else if (
+      Object.prototype.hasOwnProperty.call(cell.style.fill.fgColor, 'theme')
+    ) {
       backGroundColor = transferThemeColor(
         cell.style.fill.fgColor.theme,
         cell.style.fill.fgColor.tint,
@@ -381,7 +386,9 @@ function getStyle(cell:Cell) {
   if (cell.style.font && cell.style.font.color) {
     if (cell.style.font.color.argb) {
       fontColor = transferArgbColor(cell.style.font.color.argb)
-    } else if (Object.prototype.hasOwnProperty.call(cell.style.font.color,'theme')) {
+    } else if (
+      Object.prototype.hasOwnProperty.call(cell.style.font.color, 'theme')
+    ) {
       fontColor = transferThemeColor(
         cell.style.font.color.theme,
         cell.style.font.color.tint,
@@ -410,7 +417,7 @@ function getStyle(cell:Cell) {
   }
 
   if (cell.style.border) {
-    const styleBorder:any = {}
+    const styleBorder: any = {}
     Object.keys(cell.style.border).forEach((position) => {
       const originBorder = cell.style.border[position]
       let bordColor = '#000000'
@@ -420,7 +427,9 @@ function getStyle(cell:Cell) {
       } else if (originBorder.color) {
         if (originBorder.color.argb) {
           bordColor = transferArgbColor(originBorder.color.argb) || ''
-        } else if (Object.prototype.hasOwnProperty.call(originBorder.color,'theme')) {
+        } else if (
+          Object.prototype.hasOwnProperty.call(originBorder.color, 'theme')
+        ) {
           bordColor = transferThemeColor(
             originBorder.color.theme,
             originBorder.color.tint,
@@ -438,12 +447,11 @@ function getStyle(cell:Cell) {
   return cell.style
 }
 
-
-export function transferExcelToSpreadSheet(workbook:any, options:any):any {
-  const workbookData:Array<string> = []
-  workbook.eachSheet((sheet:any) => {
+export function transferExcelToSpreadSheet(workbook: any, options: any): any {
+  const workbookData: Array<string> = []
+  workbook.eachSheet((sheet: any) => {
     // 构造x-data-spreadsheet 的 sheet 数据源结构
-    const sheetData:any = {
+    const sheetData: any = {
       name: sheet.name,
       styles: [],
       rows: {},
@@ -452,10 +460,10 @@ export function transferExcelToSpreadSheet(workbook:any, options:any):any {
       media: [],
     }
     // 收集合并单元格信息
-    const mergeAddressData:any = []
+    const mergeAddressData: any = []
     for (const mergeRange in sheet._merges) {
       sheetData.merges.push(sheet._merges[mergeRange].shortRange)
-      const mergeAddress:Record<string,any> = {}
+      const mergeAddress: Record<string, any> = {}
       // 合并单元格起始地址
       mergeAddress.startAddress = sheet._merges[mergeRange].tl
       // 合并单元格终止地址
@@ -473,7 +481,7 @@ export function transferExcelToSpreadSheet(workbook:any, options:any):any {
 
     transferColumns(sheet, sheetData, options)
     // 遍历行
-    ;(sheet._rows || []).forEach((row:any, spreadSheetRowIndex:number) => {
+    ;(sheet._rows || []).forEach((row: any, spreadSheetRowIndex: number) => {
       sheetData.rows[spreadSheetRowIndex] = { cells: {} }
 
       if (row.height) {
@@ -484,7 +492,7 @@ export function transferExcelToSpreadSheet(workbook:any, options:any):any {
           defaultRowHeight + (options.heightOffset || 0)
       }
       //includeEmpty = false 不包含空白单元格
-      ;(row._cells || []).forEach((cell:any, spreadSheetColIndex:number) => {
+      ;(row._cells || []).forEach((cell: any, spreadSheetColIndex: number) => {
         sheetData.rows[spreadSheetRowIndex].cells[spreadSheetColIndex] = {}
 
         const mergeAddress = find(mergeAddressData, function (o) {

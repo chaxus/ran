@@ -28,7 +28,7 @@ export interface Media {
 }
 
 export interface Sheet {
-  name:string
+  name: string
   _media: Array<Media>
   _columns: Array<{ width: number; height: number }>
   _rows: Array<{ width: number; height: number }>

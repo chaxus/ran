@@ -130,8 +130,8 @@ class JsExcelPreview {
       const setOffset = this.xs.sheet.editor.setOffset
       this.xs.sheet.editor.setOffset = (...args) => {
         setOffset.apply(this.xs?.sheet?.editor, args)
-        if(args.length > 1){
-            this.offset = args.shift()
+        if (args.length > 1) {
+          this.offset = args.shift()
         }
         if (this.ctx && this.mediasSource && this.offset) {
           renderImage(

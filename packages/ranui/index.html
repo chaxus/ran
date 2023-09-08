@@ -47,21 +47,27 @@
       "
     >
       <r-input label="user"></r-input>
-      <r-input id="input2" icon="account" status="error" onChange="changeInput(this.value)"></r-input>
-      <input oninput="changeInput"></input>
+      <r-input
+        id="input2"
+        icon="account"
+        status="error"
+        onChange="changeInput(this.value)"
+      ></r-input>
+      <input oninput="changeInput" />
       <r-input icon="home" status="warning" disabled></r-input>
     </div>
     <h2>Preview</h2>
-    <r-button type="primary" onclick="uploadFile()">choose file to preview</r-button
+    <r-button type="primary" onclick="uploadFile()"
+      >choose file to preview</r-button
     >
     <r-preview id="preview"></r-preview>
     <script>
       const inputDom = document.getElementById('input2')
-      function changeInput(e){
-        console.log('e--->',e)
+      function changeInput(e) {
+        console.log('e--->', e)
       }
       // inputDom.addEventListener("change", changeInput);
-      
+
       const uploadFile = () => {
         const preview = document.getElementById('preview')
         const uploadFile = document.createElement('input')

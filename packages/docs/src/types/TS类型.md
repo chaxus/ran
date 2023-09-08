@@ -9,7 +9,7 @@
 元组（Tuple）就是元素个数和类型固定的数组类型：
 
 ```ts
-type Tuple = [number, string];
+type Tuple = [number, string]
 ```
 
 ## Interface
@@ -19,20 +19,19 @@ type Tuple = [number, string];
 - 对象
 
 ```ts
-
 interface IPerson {
-    name: string;
-    age: number;
+  name: string
+  age: number
 }
 
 class Person implements IPerson {
-    name: string;
-    age: number;
+  name: string
+  age: number
 }
 
 const obj: IPerson = {
-    name: 'name',
-    age: 18
+  name: 'name',
+  age: 18,
 }
 ```
 
@@ -40,11 +39,11 @@ const obj: IPerson = {
 
 ```ts
 interface SayHello {
-    (name: string): string;
+  (name: string): string
 }
 
 const func: SayHello = (name: string) => {
-    return 'hello,' + name
+  return 'hello,' + name
 }
 ```
 
@@ -52,11 +51,11 @@ const func: SayHello = (name: string) => {
 
 ```ts
 interface PersonConstructor {
-    new (name: string, age: number): IPerson;
+  new (name: string, age: number): IPerson
 }
 
-function createPerson(ctor: PersonConstructor):IPerson {
-    return new ctor('name', 18);
+function createPerson(ctor: PersonConstructor): IPerson {
+  return new ctor('name', 18)
 }
 ```
 
@@ -64,11 +63,11 @@ function createPerson(ctor: PersonConstructor):IPerson {
 
 ```ts
 interface IPerson {
-    [prop: string]: string | number;
+  [prop: string]: string | number
 }
-const obj:IPerson = {};
-obj.name = 'name';
-obj.age = 18;
+const obj: IPerson = {}
+obj.name = 'name'
+obj.age = 18
 ```
 
 ## Enum
@@ -77,14 +76,14 @@ obj.age = 18;
 
 ```ts
 enum Transpiler {
-    Babel = 'babel',
-    Postcss = 'postcss',
-    Terser = 'terser',
-    Prettier = 'prettier',
-    TypeScriptCompiler = 'tsc'
+  Babel = 'babel',
+  Postcss = 'postcss',
+  Terser = 'terser',
+  Prettier = 'prettier',
+  TypeScriptCompiler = 'tsc',
 }
 
-const transpiler = Transpiler.TypeScriptCompiler;
+const transpiler = Transpiler.TypeScriptCompiler
 ```
 
 此外，TypeScript 还支持字面量类型，也就是类似 1111、'aaaa'、{ a: 1} 这种值也可以做为类型。
@@ -94,9 +93,7 @@ const transpiler = Transpiler.TypeScriptCompiler;
 所以想要约束以某个字符串开头的字符串字面量类型时可以这样写：
 
 ```ts
-function func(str:`#${string}`){
-
-}
+function func(str: `#${string}`) {}
 
 func('aaa') // error
 
@@ -125,9 +122,9 @@ func('#aaa') // true
 
 ```ts
 interface IPerson {
-    readonly name: string;
-    age?: number;
+  readonly name: string
+  age?: number
 }
 
-type tuple = [string, number?];
+type tuple = [string, number?]
 ```

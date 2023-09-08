@@ -1,4 +1,3 @@
-
 function Custom() {
   if (typeof window !== 'undefined' && !customElements.get('r-modal')) {
     class CustomModal extends HTMLElement {

@@ -1,6 +1,6 @@
 import path, { resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import type { BuildOptions, UserConfig } from 'vite';
+import type { BuildOptions, UserConfig } from 'vite'
 import { defineConfig } from 'vite'
 import dts from 'vite-plugin-dts'
 import loadStyle from './plugins/load-style'

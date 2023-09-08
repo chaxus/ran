@@ -21,7 +21,6 @@
 - `git`：`https://github.com/chaxus/ran/tree/main/packages/ranui`
 - `npm`：`https://www.npmjs.com/package/ranui`
 
-
 ## Import 导入方式
 
 支持按需引入
@@ -50,7 +49,6 @@ import 'ranui'
 ```html
 <script src="./ranui/dist/umd/index.umd.cjs"></script>
 ```
-
 
 ## Usage 使用
 
@@ -111,35 +109,37 @@ import 'ranui'
 ## `tsx`
 
 ```tsx
-// react 18 
-import type { SyntheticEvent } from 'react';
+// react 18
+import type { SyntheticEvent } from 'react'
 import React, { useRef } from 'react'
 import 'ranui'
 
 const FilePreview = () => {
-    const ref = useRef<HTMLDivElement | null>(null)
-    const uploadFile = (e: SyntheticEvent<HTMLDivElement>) => {
-        if (ref.current) {
-            const uploadFile = document.createElement('input')
-            uploadFile.setAttribute('type', 'file')
-            uploadFile.click()
-            uploadFile.onchange = (e) => {
-                const { files = [] } = uploadFile
-                if (files && files?.length > 0 && ref.current) {
-                    ref.current.setAttribute('src', '')
-                    const file = files[0]
-                    const url = URL.createObjectURL(file)
-                    ref.current.setAttribute('src', url)
-                }
-            }
+  const ref = useRef<HTMLDivElement | null>(null)
+  const uploadFile = (e: SyntheticEvent<HTMLDivElement>) => {
+    if (ref.current) {
+      const uploadFile = document.createElement('input')
+      uploadFile.setAttribute('type', 'file')
+      uploadFile.click()
+      uploadFile.onchange = (e) => {
+        const { files = [] } = uploadFile
+        if (files && files?.length > 0 && ref.current) {
+          ref.current.setAttribute('src', '')
+          const file = files[0]
+          const url = URL.createObjectURL(file)
+          ref.current.setAttribute('src', url)
         }
+      }
     }
-    return (
-        <div >
-            <r-preview ref={ref}></r-preview>
-            <r-button type="primary" onClick={uploadFile}>choose file to preview</r-button>
-        </div>
-    )
+  }
+  return (
+    <div>
+      <r-preview ref={ref}></r-preview>
+      <r-button type="primary" onClick={uploadFile}>
+        choose file to preview
+      </r-button>
+    </div>
+  )
 }
 ```
 
@@ -148,20 +148,28 @@ const FilePreview = () => {
 ```ts
 // typings.d.ts
 interface RButton {
-  type?: string,
+  type?: string
   onClick?: React.MouseEventHandler<HTMLDivElement> | undefined
 }
 
 interface RPreview {
-  src?: string | Blob | ArrayBuffer,
+  src?: string | Blob | ArrayBuffer
   onClick?: React.MouseEventHandler<HTMLDivElement> | undefined
   ref?: React.MutableRefObject<HTMLDivElement | null>
 }
 
 declare namespace JSX {
   interface IntrinsicElements {
-    'r-preview': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & RPreview
-    'r-button': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & RButton
+    'r-preview': React.DetailedHTMLProps<
+      React.HTMLAttributes<HTMLDivElement>,
+      HTMLDivElement
+    > &
+      RPreview
+    'r-button': React.DetailedHTMLProps<
+      React.HTMLAttributes<HTMLDivElement>,
+      HTMLDivElement
+    > &
+      RButton
   }
 }
 ```
@@ -233,7 +241,6 @@ declare namespace JSX {
       <r-tab label="user" icon="user">tab3</r-tab>
    </r-tabs>
 </div>
-
 
 ## Compatibility 兼容性
 

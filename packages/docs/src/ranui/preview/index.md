@@ -11,26 +11,29 @@
 
 ```html
 <r-preview id="preview"></r-preview>
-<r-button type="primary" onclick="uploadFile()">choose file to preview</r-button>
+<r-button type="primary" onclick="uploadFile()"
+  >choose file to preview</r-button
+>
 
 <script>
-      const uploadFile = () => {
-        const preview = document.getElementById('preview')
-        const uploadFile = document.createElement('input')
-        uploadFile.setAttribute('type', 'file')
-        uploadFile.click()
-        uploadFile.onchange = (e) => {
-          const { files = [] } = uploadFile
-          if (files.length > 0) {
-            preview.setAttribute('src', '')
-            const file = files[0]
-            const url = URL.createObjectURL(file)
-            preview.setAttribute('src', url)
-          }
-        }
+  const uploadFile = () => {
+    const preview = document.getElementById('preview')
+    const uploadFile = document.createElement('input')
+    uploadFile.setAttribute('type', 'file')
+    uploadFile.click()
+    uploadFile.onchange = (e) => {
+      const { files = [] } = uploadFile
+      if (files.length > 0) {
+        preview.setAttribute('src', '')
+        const file = files[0]
+        const url = URL.createObjectURL(file)
+        preview.setAttribute('src', url)
       }
+    }
+  }
 </script>
 ```
+
 ## 属性
 
 ### 资源地址`src`

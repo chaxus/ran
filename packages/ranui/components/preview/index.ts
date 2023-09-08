@@ -1,4 +1,3 @@
-
 import { requestFile } from '@/utils/index'
 import '../../base.less'
 import '@/components/icon'
@@ -14,7 +13,6 @@ const XLS = 'application/vnd.ms-excel'
 
 async function Custom() {
   if (typeof window !== 'undefined' && !customElements.get('r-preview')) {
-
     const { renderPptx } = await import('@/components/preview/pptx')
     const { renderDocx } = await import('@/components/preview/docx')
     const { renderPdf } = await import('@/components/preview/pdf')
@@ -122,7 +120,7 @@ async function Custom() {
           if (num >= 100) {
             setTimeout(() => {
               this.preview?.removeChild(this._loadingElement!)
-            }, 300);
+            }, 300)
           }
         }
       }
@@ -137,7 +135,6 @@ async function Custom() {
             if (type === XLSX || type === XLS) {
               this.previewContext.style.setProperty('width', '100%')
             } else {
-
               this.previewContext.style.setProperty('width', '100%')
             }
             // document.body.style.overflow = 'hidden'
@@ -167,9 +164,12 @@ async function Custom() {
             previewOption.setAttribute('class', 'r-preview-options')
             if (this.closeable !== 'false') {
               const previewCloseButton = document.createElement('r-icon')
-              previewCloseButton.setAttribute('class', 'r-preview-options-close')
-              previewCloseButton.setAttribute('name','close-circle-fill')
-              previewCloseButton.setAttribute('size','40')
+              previewCloseButton.setAttribute(
+                'class',
+                'r-preview-options-close',
+              )
+              previewCloseButton.setAttribute('name', 'close-circle-fill')
+              previewCloseButton.setAttribute('size', '40')
               previewCloseButton.addEventListener('click', this.closePreview)
               previewOption.appendChild(previewCloseButton)
             }

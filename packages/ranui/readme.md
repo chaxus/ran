@@ -28,7 +28,7 @@ npm install ranui --save
 
 [See components and use examples](https://chaxus.github.io/ran/src/ranui/)
 
-## Import 
+## Import
 
 Support for on-demand import, which can reduce the size of loaded js
 
@@ -104,78 +104,87 @@ const App = () => {
 }
 ```
 
-### vue 
+### vue
 
 ```vue
 <template>
   <r-button></r-button>
 </template>
 <script>
-  import 'ranui'
+import 'ranui'
 </script>
-
 ```
 
 ### tsx
 
 ```tsx
-// react 18 
-import type { SyntheticEvent } from 'react';
+// react 18
+import type { SyntheticEvent } from 'react'
 import React, { useRef } from 'react'
 import 'ranui'
 
 const FilePreview = () => {
-    const ref = useRef<HTMLDivElement | null>(null)
-    const uploadFile = (e: SyntheticEvent<HTMLDivElement>) => {
-        if (ref.current) {
-            const uploadFile = document.createElement('input')
-            uploadFile.setAttribute('type', 'file')
-            uploadFile.click()
-            uploadFile.onchange = (e) => {
-                const { files = [] } = uploadFile
-                if (files && files?.length > 0 && ref.current) {
-                    ref.current.setAttribute('src', '')
-                    const file = files[0]
-                    const url = URL.createObjectURL(file)
-                    ref.current.setAttribute('src', url)
-                }
-            }
+  const ref = useRef<HTMLDivElement | null>(null)
+  const uploadFile = (e: SyntheticEvent<HTMLDivElement>) => {
+    if (ref.current) {
+      const uploadFile = document.createElement('input')
+      uploadFile.setAttribute('type', 'file')
+      uploadFile.click()
+      uploadFile.onchange = (e) => {
+        const { files = [] } = uploadFile
+        if (files && files?.length > 0 && ref.current) {
+          ref.current.setAttribute('src', '')
+          const file = files[0]
+          const url = URL.createObjectURL(file)
+          ref.current.setAttribute('src', url)
         }
+      }
     }
-    return (
-        <div >
-            <r-preview ref={ref}></r-preview>
-            <r-button type="primary" onClick={uploadFile}>choose file to preview</r-button>
-        </div>
-    )
+  }
+  return (
+    <div>
+      <r-preview ref={ref}></r-preview>
+      <r-button type="primary" onClick={uploadFile}>
+        choose file to preview
+      </r-button>
+    </div>
+  )
 }
 ```
 
-`jsx` defines the types of all `HTML-native` components in `TypeScript`. 
+`jsx` defines the types of all `HTML-native` components in `TypeScript`.
 
-The `web component` type is not in the `jsx` definition. 
+The `web component` type is not in the `jsx` definition.
 
-You need to add it manually. 
+You need to add it manually.
 
 Otherwise you'll have type problems, but it actually works.
 
 ```ts
 // typings.d.ts
 interface RButton {
-  type?: string,
+  type?: string
   onClick?: React.MouseEventHandler<HTMLDivElement> | undefined
 }
 
 interface RPreview {
-  src?: string | Blob | ArrayBuffer,
+  src?: string | Blob | ArrayBuffer
   onClick?: React.MouseEventHandler<HTMLDivElement> | undefined
   ref?: React.MutableRefObject<HTMLDivElement | null>
 }
 
 declare namespace JSX {
   interface IntrinsicElements {
-    'r-preview': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & RPreview
-    'r-button': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & RButton
+    'r-preview': React.DetailedHTMLProps<
+      React.HTMLAttributes<HTMLDivElement>,
+      HTMLDivElement
+    > &
+      RPreview
+    'r-button': React.DetailedHTMLProps<
+      React.HTMLAttributes<HTMLDivElement>,
+      HTMLDivElement
+    > &
+      RButton
   }
 }
 ```

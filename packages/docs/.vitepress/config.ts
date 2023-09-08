@@ -41,7 +41,7 @@ export default defineConfig({
   base: BASE_PATH,
   lastUpdated: true,
   locales: {
-    root: { label: "简体中文", lang: "zh-CN" },
+    root: { label: '简体中文', lang: 'zh-CN' },
   },
   vue: {
     template: {
@@ -78,12 +78,12 @@ export default defineConfig({
       message: 'Released under the MIT License.',
       copyright: 'Copyright © 2022-11-11',
     },
-    algolia: {
-      appId: 'RDX0Y4AQW1', // 需要替换
-      apiKey: 'c7b6e28f95335eddc66c5a1b54ad9834', // 需要替换
-      indexName: 'chaxus_ran', // 需要替换
-      placeholder: 'search',
-    },
+    // algolia: {
+    //   appId: 'RDX0Y4AQW1', 
+    //   apiKey: 'c7b6e28f95335eddc66c5a1b54ad9834', 
+    //   indexName: 'chaxus_ran', 
+    //   placeholder: 'search',
+    // },
     sidebar: {
       '/src/ranuts/': [
         {
@@ -116,7 +116,8 @@ export default defineConfig({
       ],
       '/src/ranui/': [
         {
-          text: 'Overview 总览', link: '/src/ranui/'
+          text: 'Overview 总览',
+          link: '/src/ranui/',
         },
         {
           text: '通用',

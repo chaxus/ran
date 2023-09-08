@@ -19,7 +19,7 @@ function Custom() {
           'type',
           'icon',
           'status',
-          'onChange'
+          'onChange',
         ]
       }
       _container: HTMLDivElement
