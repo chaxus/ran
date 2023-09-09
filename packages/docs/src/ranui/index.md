@@ -4,11 +4,11 @@
 
 ## Feature 特点
 
-1. 基于`Web Components`开发，能做到跨框架复用，统一所有情况。
-2. 采用`Typescript`开发，有声明和类型文件。
+1. 基于`Web Components`开发，跨框架复用，统一所有情况。
+2. `TypeScript`开发，有声明和类型文件。
 3. 纯原生手写，基础组件无依赖。
-4. `MIT`协议
-5. 文档基于`vitepress`搭建，所有组件实例均可交互。
+4. 文档基于`vitepress`，所有组件实例可交互。
+5. `MIT`协议。
 
 ## Situation 项目情况
 
@@ -56,13 +56,13 @@ import 'ranui'
 
 接下来是一些使用例子
 
-- `html`
-- `js`
-- `jsx`
-- `vue`
-- `tsx`
+1. `html`
+2. `js`
+3. `jsx`
+4. `vue`
+5. `tsx`
 
-### `html`
+### 1.`html`
 
 ```html
 <script src="./ranui/dist/umd/index.umd.cjs"></script>
@@ -72,7 +72,7 @@ import 'ranui'
 </body>
 ```
 
-### `js`
+### 2.`js`
 
 ```js
 import 'ranui'
@@ -82,7 +82,7 @@ Button.appendChild('this is button text')
 document.body.appendChild(Button)
 ```
 
-### `jsx`
+### 3.`jsx`
 
 ```jsx
 import 'ranui'
@@ -95,7 +95,7 @@ const App = () => {
 }
 ```
 
-### `vue`
+### 4.`vue`
 
 ```vue
 <template>
@@ -106,7 +106,7 @@ import 'ranui'
 </script>
 ```
 
-## `tsx`
+### 5.`tsx`
 
 ```tsx
 // react 18
@@ -174,7 +174,7 @@ declare namespace JSX {
 }
 ```
 
-## Component overview
+## Overview 总览
 
 - `Button`
 
@@ -242,12 +242,41 @@ declare namespace JSX {
    </r-tabs>
 </div>
 
+## Event 事件
+
+在`HTML`元素中，你可以使用`on`属性来定义事件处理程序。这是旧的事件处理程序的方法，现代的`web`开发推荐使用`addEventListener`方法。
+
+```js
+<r-button id="button">按钮</r-button>
+
+<script>
+  const button = document.getElementById('button');  
+  button.addEventListener('click', function(event) {  
+    alert('新的点击事件！');  
+  });
+</script>
+```
+
+然而，如果你确实需要使用`on`属性，下面是一个示例：
+
+```js
+<r-input onchange="change(this.value)"></r-input>
+
+<script>
+  function change(e) {
+    console.log('e--->', e)
+  }
+</script>
+```
+
+请注意，使用`on`属性来定义事件处理程序有一些限制和缺点。例如，你不能使用事件捕获或事件委托，而且每个事件类型都需要一个单独的属性。这也是为什么现代的`web`开发推荐使用`addEventListener`方法的原因。
+
 ## Compatibility 兼容性
 
 - 不支持 `IE`，其他均有较好支持
   ![](../../assets/ranui/customElements.png)
 
-## 相关资源
+## Other 相关资源
 
 1. [优秀的组件设计](https://www.checklist.design/)
 2. [在线生成 CSS 渐变色](https://webgradients.com/)

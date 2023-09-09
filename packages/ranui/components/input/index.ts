@@ -19,7 +19,6 @@ function Custom() {
           'type',
           'icon',
           'status',
-          'onChange',
         ]
       }
       _container: HTMLDivElement
@@ -240,12 +239,12 @@ function Custom() {
        * @description: 原生的input方法
        * @param {Event} event
        */
-      inputValue = (event: Event) => {
+      customInput = (event: Event) => {
         event.stopPropagation()
         const target = event.target as HTMLInputElement
         this.value = target ? target.value : ''
         // 增加onchange事件
-        this.change()
+        this.customChange()
         // 默认input事件
         this.dispatchEvent(
           new CustomEvent('input', {
@@ -265,7 +264,7 @@ function Custom() {
       /**
        * @description: 增加change方法，同时兼容大小写的情况
        */
-      change = () => {
+      customChange = () => {
         this.dispatchEvent(
           new CustomEvent('change', {
             detail: {
@@ -275,18 +274,6 @@ function Custom() {
         )
         this.dispatchEvent(
           new CustomEvent('Change', {
-            detail: {
-              value: this.value,
-            },
-          }),
-        )
-      }
-      /**
-       * @description: 增加focus方法
-       */
-      focus = () => {
-        this.dispatchEvent(
-          new CustomEvent('focus', {
             detail: {
               value: this.value,
             },
@@ -432,14 +419,14 @@ function Custom() {
         if (this.type) {
           this._input.setAttribute('type', this.type)
         }
-        this._input.addEventListener('input', this.inputValue)
-        this._input.addEventListener('focus', this.focus)
+        this._input.addEventListener('input', this.customInput)
         if (document.readyState === 'complete') {
           this.dealIcon()
         }
       }
       disconnectCallback() {
-        this._input.removeEventListener('input', this.inputValue)
+        this._input.removeEventListener('input', this.customInput)
+
       }
       attributeChangedCallback(
         name: string,
