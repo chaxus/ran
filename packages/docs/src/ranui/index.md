@@ -21,35 +21,6 @@
 - `git`：`https://github.com/chaxus/ran/tree/main/packages/ranui`
 - `npm`：`https://www.npmjs.com/package/ranui`
 
-## Import 导入方式
-
-支持按需引入
-
-```js
-import 'ranui/button'
-```
-
-对于一些全局展示的组件，比如 `preview` 和 `message`，需要加载一些额外的样式
-
-```js
-import 'ranui/preview'
-import 'ranui/style'
-```
-
-也可以全局导入，更加方便，这样什么都不用考虑了，梭哈完事。
-
-- `ES module`
-
-```js
-import 'ranui'
-```
-
-- `UMD`, `IIFE`, `CJS`
-
-```html
-<script src="./ranui/dist/umd/index.umd.cjs"></script>
-```
-
 ## Usage 使用
 
 大多数情况都可以像原生的 `div` 标签一样使用。
@@ -174,7 +145,36 @@ declare namespace JSX {
 }
 ```
 
-## Overview 总览
+## Import 导入方式
+
+支持按需引入
+
+```js
+import 'ranui/button'
+```
+
+对于一些全局展示的组件，比如 `preview` 和 `message`，需要加载一些额外的样式
+
+```js
+import 'ranui/preview'
+import 'ranui/style'
+```
+
+也可以全局导入，更加方便，这样什么都不用考虑了，梭哈完事。
+
+- `ES module`
+
+```js
+import 'ranui'
+```
+
+- `UMD`, `IIFE`, `CJS`
+
+```html
+<script src="./ranui/dist/umd/index.umd.cjs"></script>
+```
+
+## Overview 组件总览
 
 - `Button`
 
@@ -275,6 +275,12 @@ declare namespace JSX {
 
 - 不支持 `IE`，其他均有较好支持
   ![](../../assets/ranui/customElements.png)
+
+## Contributors 贡献者
+
+<a href="https://github.com/chaxus/ran/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=chaxus/ran" />
+</a>
 
 ## Other 相关资源
 
