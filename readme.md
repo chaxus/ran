@@ -10,7 +10,7 @@ document：https://chaxus.github.io/ran/
 
 Based on `web components` UI library
 
-document：https://chaxus.github.io/ran/
+document：https://chaxus.github.io/ran/src/ranui/
 
 # ranuts
 
