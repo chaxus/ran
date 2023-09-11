@@ -1,8 +1,5 @@
 import { createCustomError, falseList, isDisabled } from '@/utils/index'
 
-
-
-
 function Custom() {
   if (typeof window !== 'undefined' && !customElements.get('r-input')) {
     class CustomElement extends HTMLElement {

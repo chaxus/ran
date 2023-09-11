@@ -176,11 +176,11 @@ export const getPixelRatio = (
   return (window.devicePixelRatio || 1) / backingStore
 }
 
-interface CustomErrorType {
+export interface CustomErrorType {
   new (m: string):void
 }
 
-export const createCustomError = (msg: string): CustomErrorType => {
+export function createCustomError(msg: string):CustomErrorType{
   return class CustomError {
     message: string
     constructor(message: string = msg) {
