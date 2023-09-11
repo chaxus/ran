@@ -1,11 +1,10 @@
 import { createCustomError, getPixelRatio } from '@/utils/index'
+
 interface AbilityTags {
   abilityTagName: string
   userScoreRate: number
   backgroundColor: string
 }
-
-interface ColorList {}
 
 function Custom() {
   if (typeof document !== 'undefined' && !customElements.get('r-radar')) {
@@ -18,7 +17,6 @@ function Custom() {
       mAngle: number
       mColorPolygon: string
       mColorLines: string
-      colorList: any
       static get observedAttributes() {
         return ['abilityTags']
       }
@@ -54,6 +52,12 @@ function Custom() {
       }
       set abilityTags(value) {
         this.setAttribute('abilityTags', value || '')
+      }
+      get colorList() {
+        return this.getAttribute('colorList')
+      }
+      set colorList(value) {
+        this.setAttribute('colorList', value || '')
       }
       refreshData() {
         const ctx = this.abilityRadarChart.getContext('2d')

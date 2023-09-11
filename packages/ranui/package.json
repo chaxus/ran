@@ -80,6 +80,11 @@
       "import": "./dist/components/tab/index.js",
       "require": "./dist/umd/index.umd.cjs"
     },
+    "./radar": {
+      "types": "./dist/components/radar/index.d.ts",
+      "import": "./dist/components/radar/index.js",
+      "require": "./dist/umd/index.umd.cjs"
+    },
     "./style": {
       "types": "./dist/index.d.ts",
       "import": "./dist/style.css",
