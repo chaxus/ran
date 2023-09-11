@@ -327,7 +327,7 @@ function Custom() {
         }
       }
     }
-    customElements.define('r-button', RadarChart)
+    customElements.define('r-radar', RadarChart)
     return RadarChart
   }
 }
