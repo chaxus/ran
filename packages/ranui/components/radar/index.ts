@@ -8,6 +8,7 @@ interface AbilityTags {
   fontFamily: string
   fontColor: string
 }
+
 const BACKGROUND_COLOR = 'rgba(0,0,0,0)'
 const FONT_COLOR = 'rgba(0,0,0,1)'
 const POLYGON_COLOR = '#e6e6e6'
@@ -19,14 +20,20 @@ const STROKE_COLOR = 'rgba(255,121,35,0.60)'
 function Custom() {
   if (typeof document !== 'undefined' && !customElements.get('r-radar')) {
     class RadarChart extends HTMLElement {
-      mData: Array<AbilityTags>
-      mCount: number
-      mW: number
-      mCenter: number
-      mRadius: number
-      mAngle: number
+      mData?: Array<AbilityTags>
+      mCount?: number
+      mW?: number
+      mCenter?: number
+      mRadius?: number
+      mAngle?: number
       static get observedAttributes() {
-        return ['abilitys','colorPolygon','colorLine','fillColor','strokeColor']
+        return [
+          'abilitys',
+          'colorPolygon',
+          'colorLine',
+          'fillColor',
+          'strokeColor',
+        ]
       }
       abilityRadarChartContainer: HTMLDivElement
       abilityRadarChart: HTMLCanvasElement
@@ -43,13 +50,6 @@ function Custom() {
         const shadowRoot = this.attachShadow({ mode: 'closed' })
         this._shadowDom = shadowRoot
         shadowRoot.appendChild(this.abilityRadarChartContainer)
-        this.mW = 400
-        this.mData = JSON.parse(this.abilitys || '')
-        this.mCount = this.mData?.length || 1 // 边数
-        this.mCenter = this.mW / 2 // 中心点
-        this.mRadius = this.mCenter - 50 * 1 // 半径(减去的值用于给绘制的文本留空间)
-        this.mAngle = (Math.PI * 2) / this.mCount // 角度
-        
       }
       get abilitys() {
         return this.getAttribute('abilitys')
@@ -107,6 +107,8 @@ function Custom() {
         this.drawCircle(ctx)
       }
       drawSide(ctx: CanvasRenderingContext2D) {
+        if (!this.mRadius || !this.mCount || !this.mCenter || !this.mAngle)
+          return
         ctx.save()
         ctx.strokeStyle = this.colorLine
         const r = this.mRadius
@@ -120,6 +122,8 @@ function Custom() {
       }
       // 绘制多边形边
       drawPolygon(ctx: CanvasRenderingContext2D) {
+        if (!this.mRadius || !this.mCount || !this.mCenter || !this.mAngle)
+          return
         ctx.save()
         ctx.strokeStyle = this.colorPolygon
         const r = this.mRadius / 4 // 单位半径
@@ -141,6 +145,8 @@ function Custom() {
 
       // 顶点连线
       drawLines(ctx: CanvasRenderingContext2D) {
+        if (!this.mRadius || !this.mCount || !this.mCenter || !this.mAngle)
+          return
         ctx.save()
         ctx.beginPath()
         ctx.strokeStyle = this.colorLine
@@ -156,13 +162,22 @@ function Custom() {
 
       // 绘制文本
       drawText(ctx: CanvasRenderingContext2D) {
+        if (
+          !this.mRadius ||
+          !this.mCount ||
+          !this.mCenter ||
+          !this.mAngle ||
+          !this.mData
+        )
+          return
         ctx.save()
         const radio = getPixelRatio(ctx)
         const defaultFontSize = this.mCenter / 12
         for (let i = 0; i < this.mCount; i++) {
           const x = this.mCenter + this.mRadius * Math.sin(this.mAngle * i)
           const y = this.mCenter + this.mRadius * Math.cos(this.mAngle * i)
-          const backgroundColor = this.mData[i].backgroundColor || BACKGROUND_COLOR
+          const backgroundColor =
+            this.mData[i].backgroundColor || BACKGROUND_COLOR
           const fontColor = this.mData[i].fontColor || FONT_COLOR
           const fontFamily = this.mData[i].fontFamily || FONT_FAMILY
           const fontSize = this.mData[i].fontSize || defaultFontSize
@@ -179,9 +194,8 @@ function Custom() {
               this.mData[i].abilityName,
               fontColor,
               fontFamily,
-              fontSize
+              fontSize,
             )
-            // ctx.fillText(mData[i].abilityTagName, x, y + fontSize);
           } else if (
             this.mAngle * i >= Math.PI / 2 &&
             this.mAngle * i < Math.PI
@@ -197,9 +211,8 @@ function Custom() {
               this.mData[i].abilityName,
               fontColor,
               fontFamily,
-              fontSize
+              fontSize,
             )
-            // ctx.fillText(mData[i].abilityTagName, x - ctx.measureText(mData[i].abilityTagName).width, y + fontSize);
           } else if (
             this.mAngle * i >= Math.PI &&
             this.mAngle * i < (Math.PI * 3) / 2
@@ -215,11 +228,9 @@ function Custom() {
               this.mData[i].abilityName,
               fontColor,
               fontFamily,
-              fontSize
+              fontSize,
             )
-            // ctx.fillText(mData[i].abilityTagName, x - ctx.measureText(mData[i].abilityTagName).width, y);
           } else {
-            // ctx.fillText(mData[i].abilityTagName, x, y);
             this.drawButton(
               ctx,
               backgroundColor,
@@ -231,7 +242,7 @@ function Custom() {
               this.mData[i].abilityName,
               fontColor,
               fontFamily,
-              fontSize
+              fontSize,
             )
           }
         }
@@ -248,9 +259,9 @@ function Custom() {
         height: number,
         radius: number,
         text: string,
-        fontColor:string,
-        fontFamily:string,
-        fontSize:string | number
+        fontColor: string,
+        fontFamily: string,
+        fontSize: string | number,
       ) {
         ctx.beginPath()
         const radio = getPixelRatio(ctx)
@@ -287,6 +298,14 @@ function Custom() {
       }
       // 绘制数据区域
       drawRegion(ctx: CanvasRenderingContext2D) {
+        if (
+          !this.mRadius ||
+          !this.mCount ||
+          !this.mCenter ||
+          !this.mAngle ||
+          !this.mData
+        )
+          return
         const radio = getPixelRatio(ctx)
         ctx.save()
         ctx.beginPath()
@@ -316,6 +335,14 @@ function Custom() {
 
       // 画点
       drawCircle(ctx: CanvasRenderingContext2D) {
+        if (
+          !this.mRadius ||
+          !this.mCount ||
+          !this.mCenter ||
+          !this.mAngle ||
+          !this.mData
+        )
+          return
         const radio = getPixelRatio(ctx)
         ctx.save()
         for (let i = 0; i < this.mCount; i++) {
@@ -349,7 +376,13 @@ function Custom() {
         oldValue: string,
         newValue: string,
       ) {
-        const attribute = ['abilitys','colorPolygon','colorLine']
+        const attribute = [
+          'abilitys',
+          'colorPolygon',
+          'colorLine',
+          'fillColor',
+          'strokeColor',
+        ]
         if (
           attribute.includes(name) &&
           this.abilityRadarChartContainer &&
