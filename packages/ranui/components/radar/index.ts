@@ -1,10 +1,20 @@
 import { createCustomError, getPixelRatio } from '@/utils/index'
 
 interface AbilityTags {
-  abilityTagName: string
-  userScoreRate: number
+  abilityName: string
+  scoreRate: number
   backgroundColor: string
+  fontSize: string
+  fontFamily: string
+  fontColor: string
 }
+const BACKGROUND_COLOR = 'rgba(0,0,0,0)'
+const FONT_COLOR = 'rgba(0,0,0,1)'
+const POLYGON_COLOR = '#e6e6e6'
+const LINE_COLOR = '#e6e6e6'
+const FONT_FAMILY = '黑体'
+const FILL_COLOR = 'rgba(255,121,35,0.60)'
+const STROKE_COLOR = 'rgba(255,121,35,0.60)'
 
 function Custom() {
   if (typeof document !== 'undefined' && !customElements.get('r-radar')) {
@@ -15,10 +25,8 @@ function Custom() {
       mCenter: number
       mRadius: number
       mAngle: number
-      mColorPolygon: string
-      mColorLines: string
       static get observedAttributes() {
-        return ['abilityTags']
+        return ['abilitys','colorPolygon','colorLine','fillColor','strokeColor']
       }
       abilityRadarChartContainer: HTMLDivElement
       abilityRadarChart: HTMLCanvasElement
@@ -27,37 +35,55 @@ function Custom() {
       constructor() {
         super()
         this.abilityRadarChartContainer = document.createElement('div')
-        this.abilityRadarChartContainer.setAttribute(
-          'class',
-          'radar-chart-container',
-        )
+        this.abilityRadarChartContainer.setAttribute('class', 'radar')
         this.abilityRadarChart = document.createElement('canvas')
         this.abilityRadarChart.style.setProperty('width', '100%')
         this.abilityRadarChart.style.setProperty('height', '100%')
         this.abilityRadarChartContainer.appendChild(this.abilityRadarChart)
         const shadowRoot = this.attachShadow({ mode: 'closed' })
         this._shadowDom = shadowRoot
+        shadowRoot.appendChild(this.abilityRadarChartContainer)
         this.mW = 400
-        this.mData = JSON.parse(this.abilityTags || '')
+        this.mData = JSON.parse(this.abilitys || '')
         this.mCount = this.mData?.length || 1 // 边数
         this.mCenter = this.mW / 2 // 中心点
-        this.mRadius = this.mCenter - 90 // 半径(减去的值用于给绘制的文本留空间)
+        this.mRadius = this.mCenter - 50 * 1 // 半径(减去的值用于给绘制的文本留空间)
         this.mAngle = (Math.PI * 2) / this.mCount // 角度
-        this.mColorPolygon = '#e6e6e6' // 多边形颜色
-        this.mColorLines = '#e6e6e6' // 顶点连线颜色
-        shadowRoot.appendChild(this.abilityRadarChartContainer)
+        
       }
-      get abilityTags() {
-        return this.getAttribute('abilityTags')
+      get abilitys() {
+        return this.getAttribute('abilitys')
       }
-      set abilityTags(value) {
-        this.setAttribute('abilityTags', value || '')
+      set abilitys(value) {
+        this.setAttribute('abilitys', value || '')
       }
-      get colorList() {
-        return this.getAttribute('colorList')
+      // 多边形颜色
+      get colorPolygon() {
+        return this.getAttribute('colorPolygon') || POLYGON_COLOR
       }
-      set colorList(value) {
-        this.setAttribute('colorList', value || '')
+      set colorPolygon(value) {
+        this.setAttribute('colorPolygon', value || POLYGON_COLOR)
+      }
+      // 顶点连线颜色
+      get colorLine() {
+        return this.getAttribute('colorLine') || LINE_COLOR
+      }
+      set colorLine(value) {
+        this.setAttribute('colorLine', value || LINE_COLOR)
+      }
+      // 数据渲染处的颜色
+      get fillColor() {
+        return this.getAttribute('fillColor') || FILL_COLOR
+      }
+      set fillColor(value) {
+        this.setAttribute('fillColor', value || FILL_COLOR)
+      }
+      // 数据渲染处线和点的颜色
+      get strokeColor() {
+        return this.getAttribute('strokeColor') || STROKE_COLOR
+      }
+      set strokeColor(value) {
+        this.setAttribute('strokeColor', value || STROKE_COLOR)
       }
       refreshData() {
         const ctx = this.abilityRadarChart.getContext('2d')
@@ -68,11 +94,11 @@ function Custom() {
         this.abilityRadarChart.width = width
         this.abilityRadarChart.height = height
         this.mW = width
-        this.mData = JSON.parse(this.abilityTags || '')
-        this.mCount = this.mData?.length || 1
-        this.mCenter = this.mW / 2
-        this.mRadius = this.mCenter - 50 * radio
-        this.mAngle = (Math.PI * 2) / this.mCount
+        this.mData = JSON.parse(this.abilitys || '')
+        this.mCount = this.mData?.length || 1 // 边数
+        this.mCenter = this.mW / 2 // 中心点
+        this.mRadius = this.mCenter - 50 * radio // 半径(减去的值用于给绘制的文本留空间)
+        this.mAngle = (Math.PI * 2) / this.mCount // 角度
         this.drawPolygon(ctx)
         this.drawSide(ctx)
         this.drawLines(ctx)
@@ -82,7 +108,7 @@ function Custom() {
       }
       drawSide(ctx: CanvasRenderingContext2D) {
         ctx.save()
-        ctx.strokeStyle = this.mColorLines
+        ctx.strokeStyle = this.colorLine
         const r = this.mRadius
         for (let j = 0; j < this.mCount; j++) {
           const x = this.mCenter + r * Math.sin(this.mAngle * j)
@@ -95,7 +121,7 @@ function Custom() {
       // 绘制多边形边
       drawPolygon(ctx: CanvasRenderingContext2D) {
         ctx.save()
-        ctx.strokeStyle = this.mColorPolygon
+        ctx.strokeStyle = this.colorPolygon
         const r = this.mRadius / 4 // 单位半径
         ctx.setLineDash([6, 6])
         for (let i = 0; i < 4; i++) {
@@ -117,7 +143,7 @@ function Custom() {
       drawLines(ctx: CanvasRenderingContext2D) {
         ctx.save()
         ctx.beginPath()
-        ctx.strokeStyle = this.mColorLines
+        ctx.strokeStyle = this.colorLine
         for (let i = 0; i < this.mCount; i++) {
           const x = this.mCenter + this.mRadius * Math.sin(this.mAngle * i)
           const y = this.mCenter + this.mRadius * Math.cos(this.mAngle * i)
@@ -132,21 +158,28 @@ function Custom() {
       drawText(ctx: CanvasRenderingContext2D) {
         ctx.save()
         const radio = getPixelRatio(ctx)
-        const fontSize = this.mCenter / 12
-        ctx.font = `${fontSize}px Microsoft Yahei`
+        const defaultFontSize = this.mCenter / 12
         for (let i = 0; i < this.mCount; i++) {
           const x = this.mCenter + this.mRadius * Math.sin(this.mAngle * i)
           const y = this.mCenter + this.mRadius * Math.cos(this.mAngle * i)
+          const backgroundColor = this.mData[i].backgroundColor || BACKGROUND_COLOR
+          const fontColor = this.mData[i].fontColor || FONT_COLOR
+          const fontFamily = this.mData[i].fontFamily || FONT_FAMILY
+          const fontSize = this.mData[i].fontSize || defaultFontSize
+          ctx.font = `${fontSize}px ${fontFamily}`
           if (this.mAngle * i >= 0 && this.mAngle * i < Math.PI / 2) {
             this.drawButton(
               ctx,
-              this.colorList[i],
+              backgroundColor,
               x,
               y,
               44 * radio,
               24 * radio,
               12 * radio,
-              this.mData[i].abilityTagName,
+              this.mData[i].abilityName,
+              fontColor,
+              fontFamily,
+              fontSize
             )
             // ctx.fillText(mData[i].abilityTagName, x, y + fontSize);
           } else if (
@@ -155,13 +188,16 @@ function Custom() {
           ) {
             this.drawButton(
               ctx,
-              this.colorList[i],
+              backgroundColor,
               x,
               y - 24 * radio,
               44 * radio,
               24 * radio,
               12 * radio,
-              this.mData[i].abilityTagName,
+              this.mData[i].abilityName,
+              fontColor,
+              fontFamily,
+              fontSize
             )
             // ctx.fillText(mData[i].abilityTagName, x - ctx.measureText(mData[i].abilityTagName).width, y + fontSize);
           } else if (
@@ -170,26 +206,32 @@ function Custom() {
           ) {
             this.drawButton(
               ctx,
-              this.colorList[i],
+              backgroundColor,
               x - 44 * radio,
               y - 24 * radio,
               44 * radio,
               24 * radio,
               12 * radio,
-              this.mData[i].abilityTagName,
+              this.mData[i].abilityName,
+              fontColor,
+              fontFamily,
+              fontSize
             )
             // ctx.fillText(mData[i].abilityTagName, x - ctx.measureText(mData[i].abilityTagName).width, y);
           } else {
             // ctx.fillText(mData[i].abilityTagName, x, y);
             this.drawButton(
               ctx,
-              this.colorList[i],
+              backgroundColor,
               x - 44 * radio,
               y,
               44 * radio,
               24 * radio,
               12 * radio,
-              this.mData[i].abilityTagName,
+              this.mData[i].abilityName,
+              fontColor,
+              fontFamily,
+              fontSize
             )
           }
         }
@@ -206,10 +248,13 @@ function Custom() {
         height: number,
         radius: number,
         text: string,
+        fontColor:string,
+        fontFamily:string,
+        fontSize:string | number
       ) {
         ctx.beginPath()
         const radio = getPixelRatio(ctx)
-        ctx.fillStyle = color || this.colorList[4]
+        ctx.fillStyle = color
         ctx.moveTo(x + radius, y)
         ctx.lineTo(x + width - radius, y)
         ctx.arc(
@@ -234,8 +279,8 @@ function Custom() {
         ctx.fill()
         ctx.closePath()
         ctx.beginPath()
-        ctx.fillStyle = '#fff'
-        ctx.font = `${12 * radio}px 黑体`
+        ctx.fillStyle = fontColor
+        ctx.font = `${fontSize || 12 * radio}px ${fontFamily}`
         ctx.textAlign = 'center'
         ctx.textBaseline = 'middle'
         ctx.fillText(text, x + width / 2, y + height / 2)
@@ -250,20 +295,20 @@ function Custom() {
             this.mCenter +
             (this.mRadius *
               Math.sin(this.mAngle * i) *
-              this.mData[i].userScoreRate) /
+              this.mData[i].scoreRate) /
               100
           const y =
             this.mCenter +
             (this.mRadius *
               Math.cos(this.mAngle * i) *
-              this.mData[i].userScoreRate) /
+              this.mData[i].scoreRate) /
               100
           ctx.lineTo(x, y)
         }
         ctx.closePath()
-        ctx.fillStyle = 'rgba(255,121,35,0.60)'
+        ctx.fillStyle = this.fillColor
         ctx.fill()
-        ctx.strokeStyle = 'rgba(255,121,35,0.60)'
+        ctx.strokeStyle = this.strokeColor
         ctx.lineWidth = 1 * radio
         ctx.stroke()
         ctx.restore()
@@ -278,18 +323,18 @@ function Custom() {
             this.mCenter +
             (this.mRadius *
               Math.sin(this.mAngle * i) *
-              this.mData[i].userScoreRate) /
+              this.mData[i].scoreRate) /
               100
           const y =
             this.mCenter +
             (this.mRadius *
               Math.cos(this.mAngle * i) *
-              this.mData[i].userScoreRate) /
+              this.mData[i].scoreRate) /
               100
           ctx.beginPath()
           ctx.arc(x, y, 3, 0, Math.PI * 2)
           ctx.lineWidth = 1.5 * radio
-          ctx.strokeStyle = 'rgba(255,121,35,0.60)'
+          ctx.strokeStyle = this.strokeColor
           ctx.stroke()
         }
         ctx.restore()
@@ -304,9 +349,10 @@ function Custom() {
         oldValue: string,
         newValue: string,
       ) {
+        const attribute = ['abilitys','colorPolygon','colorLine']
         if (
-          name === 'abilityTags' &&
-          this._shadowDom &&
+          attribute.includes(name) &&
+          this.abilityRadarChartContainer &&
           oldValue !== newValue
         ) {
           this.refreshData()
@@ -315,7 +361,7 @@ function Custom() {
     }
     customElements.define('r-radar', RadarChart)
     return RadarChart
-  }else{
+  } else {
     return createCustomError('document is undefined or r-radar is exist')
   }
 }
