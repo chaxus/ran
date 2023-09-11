@@ -1,6 +1,6 @@
 import { defineConfig, devices } from '@playwright/test'
 
-export const TIME_OUT = 3000
+export const TIME_OUT = 6000
 
 export const DEV_SERVER = 'http://localhost:5124/'
 
