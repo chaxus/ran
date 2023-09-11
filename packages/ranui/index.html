@@ -47,13 +47,6 @@
       "
     >
       <r-input label="user"></r-input>
-      <r-input
-        id="input2"
-        icon="account"
-        status="error"
-        onChange="changeInput(this.value)"
-      ></r-input>
-      <input oninput="changeInput" />
       <r-input icon="home" status="warning" disabled></r-input>
     </div>
     <h2>Preview</h2>
@@ -63,11 +56,6 @@
     <r-preview id="preview"></r-preview>
     <script>
       const inputDom = document.getElementById('input2')
-      function changeInput(e) {
-        console.log('e--->', e)
-      }
-      // inputDom.addEventListener("change", changeInput);
-
       const uploadFile = () => {
         const preview = document.getElementById('preview')
         const uploadFile = document.createElement('input')
@@ -94,5 +82,7 @@
       >成功提示</r-button
     >
     <r-button onclick="message.toast('这是一条提示 toast')">成功提示</r-button>
+    <h2>雷达图</h2>
+    <r-radar style="width:300px;height:300px;display: block;" fillColor="red" strokeColor="blue" colorPolygon="green" colorLine="blue" abilitys='[{"abilityName":"生命","scoreRate":"10","backgroundColor":"red","fontSize":"30","fontColor":"blue"},{"abilityName":"攻击","scoreRate":"90"},{"abilityName":"防御","scoreRate":"20"},{"abilityName":"元素精通","scoreRate":"50"},{"abilityName":"暴击率","scoreRate":"80"},{"abilityName":"暴击伤害","scoreRate":"50"}]'></r-radar>
   </body>
 </html>

@@ -9,6 +9,7 @@ export * as preview from '@/components/preview'
 export * as skeleton from '@/components/skeleton'
 export * as tabpane from '@/components/tabpane'
 export * as tab from '@/components/tab'
+export * as radar from '@/components/radar'
 
 if (typeof document !== 'undefined') {
   const style = document.createElement('style')

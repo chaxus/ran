@@ -35,6 +35,7 @@ export const es: BuildOptions = {
       skeleton: resolve(__dirname, 'components/skeleton/index.ts'),
       tabpane: resolve(__dirname, 'components/tabpane/index.ts'),
       tab: resolve(__dirname, 'components/tab/index.ts'),
+      radar: resolve(__dirname, 'components/radar/index.ts'),
     },
     fileName: (_: string, name: string): string => {
       if (name === 'index') {

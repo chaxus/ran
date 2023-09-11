@@ -1,11 +1,4 @@
-import { falseList, isDisabled } from '../../utils/index'
-
-class CustomError {
-  message: string
-  constructor(message: string = 'document is undefined or r-input is exist') {
-    this.message = message
-  }
-}
+import { createCustomError, falseList, isDisabled } from '@/utils/index'
 
 function Custom() {
   if (typeof window !== 'undefined' && !customElements.get('r-input')) {
@@ -439,7 +432,7 @@ function Custom() {
     customElements.define('r-input', CustomElement)
     return CustomElement
   } else {
-    return CustomError
+    return createCustomError('document is undefined or r-input is exist')
   }
 }
 
