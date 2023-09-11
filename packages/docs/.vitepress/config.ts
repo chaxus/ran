@@ -132,6 +132,7 @@ export default defineConfig({
             { text: 'Image 图片', link: '/src/ranui/image/' },
             { text: 'Tabs 标签页', link: '/src/ranui/tabs/' },
             { text: 'Preview 预览', link: '/src/ranui/preview/' },
+            { text: 'Radar 雷达图', link: '/src/ranui/radar/' },
           ],
         },
         {
