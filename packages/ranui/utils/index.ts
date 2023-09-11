@@ -154,3 +154,37 @@ export const requestFile = (
     xhr.send()
   })
 }
+
+interface Context {
+  backingStorePixelRatio: number
+  webkitBackingStorePixelRatio: number
+  mozBackingStorePixelRatio: number
+  msBackingStorePixelRatio: number
+  oBackingStorePixelRatio: number
+}
+
+export const getPixelRatio = (
+  context: CanvasRenderingContext2D & Partial<Context>,
+): number => {
+  const backingStore =
+    context.backingStorePixelRatio ||
+    context.webkitBackingStorePixelRatio ||
+    context.mozBackingStorePixelRatio ||
+    context.msBackingStorePixelRatio ||
+    context.oBackingStorePixelRatio ||
+    1
+  return (window.devicePixelRatio || 1) / backingStore
+}
+
+interface CustomError {
+  new (m: string):void
+}
+
+export const createCustomError = (msg: string): CustomError => {
+  return class CustomError {
+    message: string
+    constructor(message: string = msg) {
+      this.message = message
+    }
+  }
+}

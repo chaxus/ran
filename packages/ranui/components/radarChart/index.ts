@@ -1,24 +1,4 @@
-interface Context {
-  backingStorePixelRatio: number
-  webkitBackingStorePixelRatio: number
-  mozBackingStorePixelRatio: number
-  msBackingStorePixelRatio: number
-  oBackingStorePixelRatio: number
-}
-
-export const getPixelRatio = (
-  context: CanvasRenderingContext2D & Partial<Context>,
-): number => {
-  const backingStore =
-    context.backingStorePixelRatio ||
-    context.webkitBackingStorePixelRatio ||
-    context.mozBackingStorePixelRatio ||
-    context.msBackingStorePixelRatio ||
-    context.oBackingStorePixelRatio ||
-    1
-  return (window.devicePixelRatio || 1) / backingStore
-}
-
+import { createCustomError, getPixelRatio } from '@/utils/index'
 interface AbilityTags {
   abilityTagName: string
   userScoreRate: number
@@ -311,7 +291,9 @@ function Custom() {
         ctx.restore()
       }
 
-      connectedCallback() {}
+      connectedCallback() {
+        this.refreshData()
+      }
       disconnectCallback() {}
       attributeChangedCallback(
         name: string,
@@ -329,5 +311,9 @@ function Custom() {
     }
     customElements.define('r-radar', RadarChart)
     return RadarChart
+  }else{
+    return createCustomError('document is undefined or r-radar is exist')
   }
 }
+
+export default Custom()
