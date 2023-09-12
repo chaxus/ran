@@ -35,5 +35,12 @@ const instanceOf = (obj: Object, cst: Function) => {
  * @return {*} Object
  */
 function customNew() {
-    
+    const constructor = Array.prototype.shift.call(arguments)
+    if(typeof constructor !== 'function'){
+        throw new Error("constructor must be function");
+    }
+    const newObject = Object.create(constructor.prototype)
+    const result = constructor.apply(newObject,arguments)
+    const flag = result && result instanceof Object
+    return flag ? result : newObject
 }
