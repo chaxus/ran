@@ -242,6 +242,10 @@ import 'ranui'
    </r-tabs>
 </div>
 
+- `Radar`
+
+<r-radar style="width:300px;height:300px;display: block;" abilitys='[{"abilityName":"生命","scoreRate":"10"},{"abilityName":"攻击","scoreRate":"90"},{"abilityName":"防御","scoreRate":"20"},{"abilityName":"元素精通","scoreRate":"50"},{"abilityName":"暴击率","scoreRate":"80"},{"abilityName":"暴击伤害","scoreRate":"50"}]'></r-radar>
+
 ## Event 事件
 
 在`HTML`元素中，你可以使用`on`属性来定义事件处理程序。这是旧的事件处理程序的方法，现代的`web`开发推荐使用`addEventListener`方法。
