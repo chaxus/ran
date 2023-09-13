@@ -16,6 +16,71 @@ const replaceSpace = function (s: string) {
  * @param {*} n
  * @return {*}
  */
-const reverseLeftWords = function(s:string, n:number) {
-    return s.slice(n) + s.slice(0,n)
+const reverseLeftWords = function (s: string, n: number) {
+    return s.slice(n) + s.slice(0, n)
+};
+
+/**
+ * @description: 剑指 Offer 20. 表示数值的字符串
+ * @param {string} s
+ * @return {boolean}
+ */
+const isNumber = function (s: string) {
+    // 整数：[\+\-]?\d+ 
+    // 小数：[\+\-]?(\d+\.|\d+\.\d+|\.\d+)
+    // [eE][\+\-]?\d+ 
+    return /^\s*(?:[+\-]?\d+|[+\-]?(?:\d+\.|\d+\.\d+|\.\d+))(?:[eE][+\-]?\d+)?\s*$/.test(s)
+};
+
+/**
+ * @description: 剑指 Offer 67. 把字符串转换成整数
+ * @param {string} str
+ * @return {number}
+ */
+const strToInt = function (str: string) {
+    const [item] = /^\s*([+\-]?\d+)/.exec(str) || [0]
+    if (Number(item) >= Math.pow(2, 31) - 1) {
+        return Math.pow(2, 31) - 1
+    }
+    if (Number(item) <= -Math.pow(2, 31)) {
+        return -Math.pow(2, 31)
+    }
+    return item
+};
+
+// 链表
+/**
+ * @description: 剑指 Offer 06. 从尾到头打印链表
+ * @param {ListNode} head
+ * @return {Array<number>}
+ */
+interface ListNode {
+    val: number,
+    next: ListNode | null
+}
+const reversePrint = function (head: ListNode | null) {
+    const result = []
+    while (head) {
+        result.unshift(head.val)
+        head = head.next
+    }
+    return result
+};
+
+/**
+ * @description: 剑指 Offer 24. 反转链表
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
+const reverseList = function(head:ListNode | null) {
+    // prev curr next
+    let prev = null
+    let curr = head
+    while(curr){
+        const next = curr.next
+        curr.next = prev
+        prev = curr
+        curr = next
+    }
+    return prev
 };
