@@ -3,6 +3,7 @@
     "abilitys",
     "analysed",
     "binarystring",
+    "brotli",
     "chaxus",
     "componentization",
     "DOMAPI",
@@ -24,6 +25,7 @@
     "skipsvgo",
     "slotchange",
     "tabpane",
+    "tailwindcss",
     "vitepress",
     "vnode",
     "vnodes"

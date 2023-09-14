@@ -52,10 +52,18 @@ function Custom() {
         shadowRoot.appendChild(this.abilityRadarChartContainer)
       }
       get abilitys() {
-        return this.getAttribute('abilitys')
+        const item = this.getAttribute('abilitys')
+        if(typeof item === 'string'){
+          return JSON.parse(item)
+        }
+        return item
       }
       set abilitys(value) {
-        this.setAttribute('abilitys', value || '')
+        if(typeof value === 'string'){
+          this.setAttribute('abilitys', value || '')
+        }else{
+          this.setAttribute('abilitys', JSON.stringify(value) || '')
+        }
       }
       // 多边形颜色
       get colorPolygon() {
@@ -94,7 +102,8 @@ function Custom() {
         this.abilityRadarChart.width = width
         this.abilityRadarChart.height = height
         this.mW = width
-        this.mData = JSON.parse(this.abilitys || '')
+        // mData defined types
+        this.mData = this.abilitys
         this.mCount = this.mData?.length || 1 // 边数
         this.mCenter = this.mW / 2 // 中心点
         this.mRadius = this.mCenter - 50 * radio // 半径(减去的值用于给绘制的文本留空间)
