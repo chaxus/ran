@@ -250,7 +250,7 @@ import 'ranui'
 
 在`HTML`元素中，你可以使用`on`属性来定义事件处理程序。这是旧的事件处理程序的方法，现代的`web`开发推荐使用`addEventListener`方法。
 
-```js
+```html
 <r-button id="button">按钮</r-button>
 
 <script>
@@ -263,7 +263,7 @@ import 'ranui'
 
 然而，如果你确实需要使用`on`属性，下面是一个示例：
 
-```js
+```html
 <r-input onchange="change(this.value)"></r-input>
 
 <script>
@@ -274,6 +274,19 @@ import 'ranui'
 ```
 
 请注意，使用`on`属性来定义事件处理程序有一些限制和缺点。例如，你不能使用事件捕获或事件委托，而且每个事件类型都需要一个单独的属性。这也是为什么现代的`web`开发推荐使用`addEventListener`方法的原因。
+
+还可以使用`property`的方式：
+
+```html
+<r-input id="input"></r-input>
+
+<script>
+  const input = document.getElementById("input")
+  input.onchange = (e) {
+    console.log('e--->', e)
+  }
+</script>
+```
 
 ## Compatibility 兼容性
 

@@ -25,6 +25,7 @@
     "skipsvgo",
     "slotchange",
     "tabpane",
+    "tailwindcss",
     "vitepress",
     "vnode",
     "vnodes"
