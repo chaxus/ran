@@ -177,10 +177,10 @@ export const getPixelRatio = (
 }
 
 export interface CustomErrorType {
-  new (m: string):void
+  new (m: string): void
 }
 
-export function createCustomError(msg: string):CustomErrorType{
+export function createCustomError(msg: string): CustomErrorType {
   return class CustomError {
     message: string
     constructor(message: string = msg) {
@@ -188,3 +188,17 @@ export function createCustomError(msg: string):CustomErrorType{
     }
   }
 }
+
+export const presentDevice = (function () {
+  const ua = navigator.userAgent.toLowerCase()
+  if (/ipad|ipod/.test(ua)) {
+    return 'ipad'
+  }
+  if (/android/.test(ua)) {
+    return 'android'
+  }
+  if (/iphone/.test(ua)) {
+    return 'iphone'
+  }
+  return 'pc'
+})()

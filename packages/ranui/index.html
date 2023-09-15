@@ -11,11 +11,7 @@
   <body>
     <h1>Hello RanUI</h1>
     <h2>Button</h2>
-    <r-button
-      type="primary"
-      onclick="window.Toast('fdsafds');console.log('fdsafsad')"
-      >主要按钮</r-button
-    >
+    <r-button type="primary">主要按钮</r-button>
     <r-button type="warning" effect="false">警告按钮</r-button>
     <r-button type="default" icon="user" sheet=".btn { width: 100px; }"
       >默认按钮</r-button
@@ -27,13 +23,13 @@
     <r-icon name="loading" size="40" color="#1E90FF" spin></r-icon>
     <h2>Tab</h2>
     <r-tabs type="text">
-      <r-tab label="tab1" icon="home">11111</r-tab>
-      <r-tab label="tab2">22222</r-tab>
-      <r-tab label="tab3">33333</r-tab>
-      <r-tab label="tab1" key="a" disabled>11111</r-tab>
-      <r-tab label="tab2" icon="home" r-key="aaa">22222</r-tab>
-      <r-tab label="tab3" ranKey="10">33333</r-tab>
-      <r-tab label="tab2">22222</r-tab>
+      <r-tab label="重名" icon="home">tab1</r-tab>
+      <r-tab label="tab2">tab2</r-tab>
+      <r-tab label="tab3">tab3</r-tab>
+      <r-tab label="重名" key="a" disabled>11111</r-tab>
+      <r-tab label="tab5" icon="home" r-key="aaa">22222</r-tab>
+      <r-tab label="tab6" ranKey="10">33333</r-tab>
+      <r-tab label="tab7">22222</r-tab>
       <r-tab label="tab7777777">77777</r-tab>
     </r-tabs>
     <h2>Input</h2>
