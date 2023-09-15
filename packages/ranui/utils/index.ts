@@ -188,17 +188,15 @@ export function createCustomError(msg: string): CustomErrorType {
     }
   }
 }
-
+/**
+ * @description: 判断当前设备
+ * @param {*} function
+ * @return {*}
+ */
 export const presentDevice = (function () {
   const ua = navigator.userAgent.toLowerCase()
-  if (/ipad|ipod/.test(ua)) {
-    return 'ipad'
-  }
-  if (/android/.test(ua)) {
-    return 'android'
-  }
-  if (/iphone/.test(ua)) {
-    return 'iphone'
-  }
+  if (/ipad|ipod/.test(ua)) return 'ipad'
+  if (/android/.test(ua)) return 'android'
+  if (/iphone/.test(ua)) return 'iphone'
   return 'pc'
 })()
