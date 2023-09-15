@@ -1,42 +1,24 @@
 import { defineConfig } from 'vitepress'
+import {
+  GTAG,
+  googleAnalyse,
+  baiduAnalyse,
+  previewCode,
+  DESCRIPTION,
+  HOME,
+  HOME_ICON,
+  UTILS_PATH,
+  RANUI_PATH,
+  ARTICLE_PATH,
+  KEY_WORDS,
+  GITHUB,
+} from './common/index'
 
 const BASE_PATH = '/'
 
-const GTAG = 'https://www.googletagmanager.com/gtag/js?id=G-0MPS5WH1C0'
-
-const googleAnalyse = `;window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);};gtag('js', new Date());gtag('config', 'G-0MPS5WH1C0');`
-
-const baiduAnalyse = `
-;var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "https://hm.baidu.com/hm.js?3bc20bd8070ce614078a36c686209456";
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();
-`
-const previewCode = `
-  window.uploadFile = (name) => {
-        const preview = document.getElementById(name)
-        const uploadFile = document.createElement('input')
-        uploadFile.setAttribute('type', 'file')
-        uploadFile.click()
-        uploadFile.onchange = (e) => {
-          const { files = [] } = uploadFile
-          if (preview) {
-            if (files && files.length > 0) {
-              preview.setAttribute('src', '')
-              const file = files[0]
-              const url = URL.createObjectURL(file)
-              preview.setAttribute('src', url)
-            }
-          }
-        }
-      }
-`
 export default defineConfig({
   title: 'ran',
-  description: 'Based on web component library, common function library utils, personal article record and so on',
+  description: DESCRIPTION,
   base: BASE_PATH,
   lastUpdated: true,
   locales: {
@@ -52,20 +34,32 @@ export default defineConfig({
     },
   },
   head: [
-    // base 
+    // base
     ['link', { rel: 'icon', href: `${BASE_PATH}favicon.ico` }],
     ['meta', { name: 'theme-color', content: '#646cff' }],
-    // og 
+    // og
     ['meta', { property: 'og:title', content: 'ran' }],
-    ['meta', { property: 'og:description', content: 'Based on web component library, common function library utils, personal article record and so on' }],
-    ['meta', { property: 'og:url', content: 'https://chaxus.github.io/' }],
-    ['meta', { property: 'og:image', content: 'https://chaxus.github.io/home.svg' }],
+    [
+      'meta',
+      {
+        property: 'og:description',
+        content: DESCRIPTION
+      },
+    ],
+    ['meta', { property: 'og:url', content: HOME }],
+    ['meta', { property: 'og:image', content: HOME_ICON }],
     ['meta', { property: 'og:type', content: 'article' }],
-    ['meta', { property: 'article:home', content: 'https://chaxus.github.io/src/ranuts/utils/' }],
-    ['meta', { property: 'article:ranui', content: 'https://chaxus.github.io/src/ranui/' }],
-    ['meta', { property: 'article:section', content: 'https://chaxus.github.io/src/article/designMode.html' }],
+    [
+      'meta',
+      {
+        property: 'article:home',
+        content: UTILS_PATH,
+      },
+    ],
+    ['meta', { property: 'article:ranui', content: RANUI_PATH }],
+    ['meta', { property: 'article:section', content: ARTICLE_PATH }],
     // keywords
-    ['meta', { name: 'keywords', content: 'ran,component,components,ui,design,ranui,web-components,javascript,typescript,js' }],
+    ['meta', { name: 'keywords', content: KEY_WORDS }],
     // chrome
     [
       'meta',
@@ -86,15 +80,15 @@ export default defineConfig({
       { text: '组件', link: '/src/ranui/' },
       { text: '璀璨', link: '/src/article/designMode.md' },
     ],
-    socialLinks: [{ icon: 'github', link: 'https://github.com/chaxus/ran' }],
+    socialLinks: [{ icon: 'github', link: GITHUB }],
     footer: {
       message: 'Released under the MIT License.',
       copyright: 'Copyright © 2022-11-11',
     },
     // algolia: {
-    //   appId: 'RDX0Y4AQW1', 
-    //   apiKey: 'c7b6e28f95335eddc66c5a1b54ad9834', 
-    //   indexName: 'chaxus_ran', 
+    //   appId: 'RDX0Y4AQW1',
+    //   apiKey: 'c7b6e28f95335eddc66c5a1b54ad9834',
+    //   indexName: 'chaxus_ran',
     //   placeholder: 'search',
     // },
     sidebar: {

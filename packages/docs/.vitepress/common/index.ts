@@ -1,0 +1,50 @@
+export const GTAG = 'https://www.googletagmanager.com/gtag/js?id=G-0MPS5WH1C0'
+
+export const googleAnalyse = `;window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);};gtag('js', new Date());gtag('config', 'G-0MPS5WH1C0');`
+
+export const baiduAnalyse = `
+;var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?3bc20bd8070ce614078a36c686209456";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+`
+export const previewCode = `
+  window.uploadFile = (name) => {
+        const preview = document.getElementById(name)
+        const uploadFile = document.createElement('input')
+        uploadFile.setAttribute('type', 'file')
+        uploadFile.click()
+        uploadFile.onchange = (e) => {
+          const { files = [] } = uploadFile
+          if (preview) {
+            if (files && files.length > 0) {
+              preview.setAttribute('src', '')
+              const file = files[0]
+              const url = URL.createObjectURL(file)
+              preview.setAttribute('src', url)
+            }
+          }
+        }
+      }
+`
+
+export const DESCRIPTION =
+  'Based on web component library, common function library utils, personal article record and so on'
+
+export const HOME = 'https://chaxus.github.io/'
+
+export const HOME_ICON = `${HOME}home.svg`
+
+export const UTILS_PATH = `${HOME}src/ranuts/utils/`
+
+export const RANUI_PATH = `${HOME}src/ranui/`
+
+export const ARTICLE_PATH = `${HOME}src/article/designMode.html`
+
+export const KEY_WORDS =
+  'ran,component,components,ui,design,ranui,web-components,javascript,typescript,js'
+
+export const GITHUB = 'https://github.com/chaxus/ran'
