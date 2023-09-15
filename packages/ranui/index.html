@@ -6,6 +6,86 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ranui</title>
+    <script async>
+      // 添加资源到缓存
+      const addResourcesToCache = async (resources) => {
+        const cache = await caches.open('v1')
+        await cache.addAll(resources)
+      }
+      const putInCache = async (request, response) => {
+        const cache = await caches.open('v1')
+        await cache.put(request, response)
+      }
+      const cacheFirst = async (request) => {
+        // 首先从缓存中获取资源
+        const responseFromCache = await caches.match(request)
+        if (responseFromCache) {
+          return responseFromCache
+        }
+        // 然后尝试从网络中获取资源
+        try {
+          const responseFromNetwork = await fetch(request)
+          // 响应可能会被使用
+          // 我们需要将它的拷贝放入缓存
+          // 然后再返回该响应
+          putInCache(request, responseFromNetwork.clone())
+          return responseFromNetwork
+        } catch (error) {
+          const fallbackResponse = await caches.match(fallbackUrl)
+          if (fallbackResponse) {
+            return fallbackResponse
+          }
+          // 当回落的响应也不可用时，
+          // 我们便无能为力了，但我们始终需要
+          // 返回 Response 对象
+          return new Response('Network error happened', {
+            status: 408,
+            headers: { 'Content-Type': 'text/plain' },
+          })
+        }
+      }
+      const registerServiceWorker = async (paths = []) => {
+        // 只有 https 可以开启service-work
+        if (!window.location.protocol.includes('https')) return
+        if ('serviceWorker' in navigator) {
+          try {
+            const registration = await navigator.serviceWorker.register(
+              'service-worker.js',
+              {
+                scope: '/',
+              },
+            )
+            if (registration.installing) {
+              console.log('正在安装 Service worker')
+            } else if (registration.waiting) {
+              console.log('已安装 Service worker installed')
+            } else if (registration.active) {
+              console.log('激活 Service worker')
+              registration.addEventListener('install', (event) => {
+                event.waitUntil(addResourcesToCache(paths))
+              })
+              registration.addEventListener('fetch', (event) => {
+                event.respondWith(
+                  cacheFirst({
+                    request: event.request,
+                    fallbackUrl: '/',
+                  }),
+                )
+              })
+            }
+          } catch (error) {
+            console.error(`注册失败：${error}`)
+          }
+        }
+      }
+      const paths = [
+        '/assets/js/pdf.js',
+        '/assets/js/d3.js',
+        '/assets/js/pdf-worker.js',
+        '/assets/js/dimple.js',
+      ]
+      registerServiceWorker(paths)
+    </script>
     <script src="./index.ts" type="module"></script>
   </head>
   <body>
@@ -87,85 +167,5 @@
       colorLine="blue"
       abilitys='[{"abilityName":"生命","scoreRate":"10","backgroundColor":"red","fontSize":"30","fontColor":"blue"},{"abilityName":"攻击","scoreRate":"90"},{"abilityName":"防御","scoreRate":"20"},{"abilityName":"元素精通","scoreRate":"50"},{"abilityName":"暴击率","scoreRate":"80"},{"abilityName":"暴击伤害","scoreRate":"50"}]'
     ></r-radar>
-    <script>
-      // 添加资源到缓存
-      const addResourcesToCache = async (resources) => {
-        const cache = await caches.open('v1')
-        await cache.addAll(resources)
-      }
-      const putInCache = async (request, response) => {
-        const cache = await caches.open('v1')
-        await cache.put(request, response)
-      }
-      const cacheFirst = async (request) => {
-        // 首先从缓存中获取资源
-        const responseFromCache = await caches.match(request)
-        if (responseFromCache) {
-          return responseFromCache
-        }
-        // 然后尝试从网络中获取资源
-        try {
-          const responseFromNetwork = await fetch(request)
-          // 响应可能会被使用
-          // 我们需要将它的拷贝放入缓存
-          // 然后再返回该响应
-          putInCache(request, responseFromNetwork.clone())
-          return responseFromNetwork
-        } catch (error) {
-          const fallbackResponse = await caches.match(fallbackUrl)
-          if (fallbackResponse) {
-            return fallbackResponse
-          }
-          // 当回落的响应也不可用时，
-          // 我们便无能为力了，但我们始终需要
-          // 返回 Response 对象
-          return new Response('Network error happened', {
-            status: 408,
-            headers: { 'Content-Type': 'text/plain' },
-          })
-        }
-      }
-      const registerServiceWorker = async (paths = []) => {
-        // 只有 https 可以开启service-work
-        if (!window.location.protocol.includes('https')) return
-        if ('serviceWorker' in navigator) {
-          try {
-            const registration = await navigator.serviceWorker.register(
-              'service-worker.js',
-              {
-                scope: '/',
-              },
-            )
-            if (registration.installing) {
-              console.log('正在安装 Service worker')
-            } else if (registration.waiting) {
-              console.log('已安装 Service worker installed')
-            } else if (registration.active) {
-              console.log('激活 Service worker')
-              registration.addEventListener('install', (event) => {
-                event.waitUntil(addResourcesToCache(paths))
-              })
-              registration.addEventListener('fetch', (event) => {
-                event.respondWith(
-                  cacheFirst({
-                    request: event.request,
-                    fallbackUrl: '/',
-                  }),
-                )
-              })
-            }
-          } catch (error) {
-            console.error(`注册失败：${error}`)
-          }
-        }
-      }
-      const paths = [
-        '/assets/js/pdf.js',
-        '/assets/js/d3.js',
-        '/assets/js/pdf-worker.js',
-        '/assets/js/dimple.js',
-      ]
-      registerServiceWorker(paths)
-    </script>
   </body>
 </html>
