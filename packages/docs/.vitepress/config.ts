@@ -1,6 +1,6 @@
 import { defineConfig } from 'vitepress'
 
-const BASE_PATH = '/ran/'
+const BASE_PATH = '/'
 
 const GTAG = 'https://www.googletagmanager.com/gtag/js?id=G-0MPS5WH1C0'
 
@@ -15,7 +15,6 @@ const baiduAnalyse = `
   s.parentNode.insertBefore(hm, s);
 })();
 `
-
 const previewCode = `
   window.uploadFile = (name) => {
         const preview = document.getElementById(name)
@@ -59,12 +58,12 @@ export default defineConfig({
     // og 
     ['meta', { property: 'og:title', content: 'ran' }],
     ['meta', { property: 'og:description', content: 'Based on web component library, common function library utils, personal article record and so on' }],
+    ['meta', { property: 'og:url', content: 'https://chaxus.github.io/ran/' }],
+    ['meta', { property: 'og:image', content: 'https://chaxus.github.io/ran/home.svg' }],
     ['meta', { property: 'og:type', content: 'article' }],
     ['meta', { property: 'article:home', content: 'https://chaxus.github.io/ran/src/ranuts/utils/' }],
     ['meta', { property: 'article:ranui', content: 'https://chaxus.github.io/ran/src/ranui/' }],
     ['meta', { property: 'article:section', content: 'https://chaxus.github.io/ran/src/article/designMode.html' }],
-    ['meta', { property: 'og:url', content: 'https://chaxus.github.io/ran/' }],
-    ['meta', { property: 'og:image', content: 'https://chaxus.github.io/ran/home.svg' }],
     // keywords
     ['meta', { name: 'keywords', content: 'ran,component,components,ui,design,ranui,web-components,javascript,typescript,js' }],
     // chrome
