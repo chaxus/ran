@@ -26,7 +26,7 @@ npm install ranui --save
 
 ## Document
 
-[See components and use examples](https://chaxus.github.io/ran/src/ranui/)
+[See components and use examples](https://chaxus.github.io/src/ranui/)
 
 ## Import
 

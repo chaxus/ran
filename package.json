@@ -17,7 +17,7 @@
     "lint:prettier": "prettier --check --cache .",
     "format": "prettier --write --cache ."
   },
-  "homepage": "https://chaxus.github.io/ran/",
+  "homepage": "https://chaxus.github.io/",
   "keywords": [],
   "author": "",
   "license": "ISC",
