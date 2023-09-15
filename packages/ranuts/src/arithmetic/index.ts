@@ -72,11 +72,11 @@ const reversePrint = function (head: ListNode | null) {
  * @param {ListNode} head
  * @return {ListNode}
  */
-const reverseList = function(head:ListNode | null) {
+const reverseList = function (head: ListNode | null) {
     // prev curr next
     let prev = null
     let curr = head
-    while(curr){
+    while (curr) {
         const next = curr.next
         curr.next = prev
         prev = curr
@@ -84,3 +84,25 @@ const reverseList = function(head:ListNode | null) {
     }
     return prev
 };
+/**
+ * @description: 剑指 Offer 35. 复杂链表的复制
+ * @param {*} head
+ * @param {*} cacheNode
+ * @return {*}
+ */
+interface HeadNode {
+    val: string,
+    next?: HeadNode,
+    random?: HeadNode
+}
+const copyRandomList = function (head?: HeadNode, cacheNode = new Map()) {
+    if (head == null) {
+        return null
+    }
+    if (!cacheNode.get(head)) {
+        cacheNode.set(head, { val: head.val })
+        Object.assign(cacheNode.get(head), { next: copyRandomList(head.next, cacheNode), random: copyRandomList(head.random, cacheNode) })
+    }
+    return cacheNode.get(head)
+};
+
