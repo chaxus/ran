@@ -1,4 +1,33 @@
+/*
+ * @Author: chaxus nouo18@163.com
+ * @Date: 2023-09-14 21:21:31
+ * @LastEditors: chaxus nouo18@163.com
+ * @LastEditTime: 2023-09-18 00:03:39
+ * @FilePath: /ran/packages/ranuts/src/arithmetic/index.ts
+ * @Description: 字符串 string
+ * @Description: 链表
+ * @Description: 二叉树
+ * @Description: 双指针
+ */
+interface ListNode {
+    val: number,
+    next: ListNode | null
+}
+
+interface HeadNode {
+    val: string,
+    next?: HeadNode,
+    random?: HeadNode
+}
+
+interface TreeNode {
+    val: number,
+    left?: TreeNode,
+    right?: TreeNode
+}
+
 // 字符串 string
+
 /**
  * @description: 请实现一个函数，把字符串 s 中的每个空格替换成"%20"。
  * @param {string} s
@@ -54,10 +83,7 @@ const strToInt = function (str: string) {
  * @param {ListNode} head
  * @return {Array<number>}
  */
-interface ListNode {
-    val: number,
-    next: ListNode | null
-}
+
 const reversePrint = function (head: ListNode | null) {
     const result = []
     while (head) {
@@ -90,11 +116,7 @@ const reverseList = function (head: ListNode | null) {
  * @param {*} cacheNode
  * @return {*}
  */
-interface HeadNode {
-    val: string,
-    next?: HeadNode,
-    random?: HeadNode
-}
+
 const copyRandomList = function (head?: HeadNode, cacheNode = new Map()) {
     if (head == null) {
         return null
@@ -105,4 +127,141 @@ const copyRandomList = function (head?: HeadNode, cacheNode = new Map()) {
     }
     return cacheNode.get(head)
 };
+
+// 二叉树
+
+
+
+/**
+ * @description: 二叉树的前序遍历
+ * @return {*}
+ */
+const preOrderTraversal = (root?: TreeNode, res: Array<number> = []) => {
+    if (!root) return
+    res.push(root.val)
+    preOrderTraversal(root.left, res)
+    preOrderTraversal(root.right, res)
+    return res
+}
+
+/**
+ * @description: 二叉树的中序遍历
+ * @return {*}
+ */
+const inOrderTraversal = (root?: TreeNode, res: Array<number> = []) => {
+    if (!root) return
+    preOrderTraversal(root.left, res)
+    res.push(root.val)
+    preOrderTraversal(root.right, res)
+    return res
+}
+
+/**
+ * @description: 二叉树的后序遍历
+ * @return {*}
+ */
+const postOrderTraversal = (root?: TreeNode, res: Array<number> = []) => {
+    if (!root) return
+    preOrderTraversal(root.left, res)
+    preOrderTraversal(root.right, res)
+    res.push(root.val)
+    return res
+}
+
+/**
+ * @description: 二叉树的层序遍历
+ * @return {*}
+ */
+const leverOrderTraversal = (root?: TreeNode, res: Array<number> = []) => {
+    if (!root) return
+    preOrderTraversal(root.left, res)
+    preOrderTraversal(root.right, res)
+    res.push(root.val)
+    return res
+}
+
+// 双指针
+
+/**
+ * @description: 剑指 Offer 18. 删除链表的节点
+ * @param {ListNode} head
+ * @param {number} val
+ * @return {*}
+ */
+const deleteNode = function (head: ListNode, val: number) {
+    let prev = head
+    let cur = head.next
+    if (head.val === val) {
+        head.next = null
+        return cur
+    }
+    while (cur) {
+        if (cur.val === val) {
+            prev.next = cur.next
+            break
+        } else {
+            prev = cur
+            cur = cur.next
+        }
+    }
+    return head
+};
+/**
+ * @description: 剑指 Offer 22. 链表中倒数第k个节点
+ * @param {ListNode} head
+ * @param {number} k
+ * @return {*}
+ */
+const getKthFromEnd = function (head: ListNode, k: number) {
+    let pre: ListNode | null = head
+    let cur: ListNode | null = head
+    while (cur) {
+        if (k <= 0) {
+            pre = pre?.next || null
+        } else {
+            k--
+        }
+        cur = cur.next
+    }
+    return pre
+};
+/**
+ * @description: 剑指 Offer 25. 合并两个排序的链表
+ * @param {ListNode} l1
+ * @param {ListNode} l2
+ * @return {*}
+ */
+const mergeTwoLists = function (l1: ListNode | null, l2: ListNode | null) {
+    if (l1 == null) {
+        return l2;
+    } else if (l2 == null) {
+        return l1;
+    } else if (l1.val < l2.val) {
+        l1.next = mergeTwoLists(l1.next, l2);
+        return l1;
+    } else {
+        l2.next = mergeTwoLists(l1, l2.next);
+        return l2;
+    }
+};
+/**
+ * @description: 剑指 Offer 52. 两个链表的第一个公共节点
+ * @param {*} headA
+ * @param {*} headB
+ * @return {*}
+ */
+const getIntersectionNode = function (headA: ListNode | null, headB: ListNode | null) {
+    if (headA === null || headB === null) {
+        return null
+    }
+    let p1: ListNode | null = headA, p2: ListNode | null = headB;
+    while (p1 !== p2) {
+        p1 = p1 === null ? headB : p1.next
+        p2 = p2 === null ? headA : p2.next
+    }
+    return p1
+};
+
+
+
 
