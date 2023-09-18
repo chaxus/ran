@@ -43,7 +43,7 @@ export default defineConfig({
       'meta',
       {
         property: 'og:description',
-        content: DESCRIPTION
+        content: DESCRIPTION,
       },
     ],
     ['meta', { property: 'og:url', content: HOME }],

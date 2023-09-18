@@ -53,15 +53,15 @@ function Custom() {
       }
       get abilitys() {
         const item = this.getAttribute('abilitys')
-        if(typeof item === 'string'){
+        if (typeof item === 'string') {
           return JSON.parse(item)
         }
         return item
       }
       set abilitys(value) {
-        if(typeof value === 'string'){
+        if (typeof value === 'string') {
           this.setAttribute('abilitys', value || '')
-        }else{
+        } else {
           this.setAttribute('abilitys', JSON.stringify(value) || '')
         }
       }

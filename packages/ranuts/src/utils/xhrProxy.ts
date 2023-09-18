@@ -1,12 +1,11 @@
+// const XHR = window.XMLHttpRequest
 
-const XHR = window.XMLHttpRequest
+// XHR.prototype.use = () => {
 
-XHR.prototype.use = () => {
+// }
 
-}
+// class XHRMiddleware {
+//     constructor(){
 
-class XHRMiddleware {
-    constructor(){
-
-    }
-}
+//     }
+// }
