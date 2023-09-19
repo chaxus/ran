@@ -2,7 +2,7 @@
  * @Author: chaxus nouo18@163.com
  * @Date: 2023-09-14 21:21:31
  * @LastEditors: chaxus nouo18@163.com
- * @LastEditTime: 2023-09-18 00:03:39
+ * @LastEditTime: 2023-09-19 09:50:25
  * @FilePath: /ran/packages/ranuts/src/arithmetic/index.ts
  * @Description: 字符串 string
  * @Description: 链表
@@ -253,18 +253,62 @@ const mergeTwoLists = function (l1: ListNode | null, l2: ListNode | null) {
  * @param {*} headB
  * @return {*}
  */
-const getIntersectionNode = function (
-  headA: ListNode | null,
-  headB: ListNode | null,
-) {
-  if (headA === null || headB === null) {
-    return null
-  }
-  let p1: ListNode | null = headA,
-    p2: ListNode | null = headB
-  while (p1 !== p2) {
-    p1 = p1 === null ? headB : p1.next
-    p2 = p2 === null ? headA : p2.next
-  }
-  return p1
-}
+const getIntersectionNode = function (headA: ListNode | null, headB: ListNode | null) {
+    if (headA === null || headB === null) {
+        return null
+    }
+    let p1: ListNode | null = headA, p2: ListNode | null = headB;
+    while (p1 !== p2) {
+        p1 = p1 === null ? headB : p1.next
+        p2 = p2 === null ? headA : p2.next
+    }
+    return p1
+};
+/**
+ * @description: 剑指 Offer 21. 调整数组顺序使奇数位于偶数前面
+ * @param {*} nums
+ * @return {*}
+ */
+const exchange = function (nums: Array<number>) {
+    let left = 0, right = nums.length - 1
+    while (left < right) {
+        while (left < right && nums[left] % 2 === 1) {
+            left++
+        }
+        while (left < right && nums[right] % 2 === 0) {
+            right--
+        }
+        if (left < right) {
+            nums[left] = nums[left] ^ nums[right]
+            nums[right] = nums[left] ^ nums[right]
+            nums[left] = nums[left] ^ nums[right]
+            left++
+            right--
+        }
+    }
+    return nums
+};
+/**
+ * @description: 剑指 Offer 57. 和为s的两个数字
+ * @param {Array} nums
+ * @param {number} target
+ * @return {*}
+ */
+const twoSum = function (nums: Array<number>, target: number) {
+    let l = 0, r = nums.length - 1
+    while (l < r) {
+        if (nums[l] + nums[r] === target) return [nums[l], nums[r]]
+        if (nums[l] + nums[r] > target) {
+            r--
+        } else {
+            l++
+        }
+    }
+    return []
+};
+
+
+
+
+
+
