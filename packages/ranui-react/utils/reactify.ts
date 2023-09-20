@@ -28,17 +28,40 @@ const reactifyWebComponent = (
       this.ref.current.addEventListener(event, val)
     }
 
+    setProperty(prop: string, val: any) {
+      this.ref.current[prop] = val
+    }
+
+    setAttribute(prop: string, val: string | boolean | number) {
+      if (val === false) return this.ref.current.removeAttribute(prop)
+      this.ref.current.setAttribute(prop, val.toString())
+    }
+
     update() {
       this.clearEventHandlers()
-      if (!this.ref.current) return
-      Object.entries(this.props).forEach(([prop, val]) => {
+      Object.entries(this.props).forEach(([prop, val]: [string, any]) => {
+        // Check to see if we're forcing the value into a type, and don't
+        // proceed if we force
+        if (prop === 'style') return
+        // We haven't forced the type, so determine the correct typing and
+        // assign the value to the right place
+        if (prop === 'children') return undefined
+        if (prop.toLowerCase() === 'classname') {
+          return (this.ref.current.className = val as string)
+        }
+        const valTypeList = ['string', 'number', 'boolean']
+        if (valTypeList.includes(typeof val)) {
+          this.setProperty(prop, val)
+          this.setAttribute(prop, val)
+          return
+        }
         if (typeof val === 'function') {
           if (prop.match(/^on[A-Za-z]/)) {
             const eventName = prop.substring(2).toLowerCase()
             return this.setEvent(eventName, val)
           }
         }
-        return true
+        this.setProperty(prop, val)
       })
     }
 
