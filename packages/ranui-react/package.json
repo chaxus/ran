@@ -1,0 +1,62 @@
+{
+  "name": "@ranui/react",
+  "version": "0.1.5",
+  "description": "UI Component library based on `Web Component`",
+  "main": "dist/umd/index.umd.cjs",
+  "module": "dist/index.js",
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "homepage": "https://chaxus.github.io/src/ranui/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chaxus/ran/tree/main/packages/ranui"
+  },
+  "author": "chaxus",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "sh ./bin/build.sh",
+    "prepublish": "npm run build",
+    "test": "sh ./bin/test.sh",
+    "test:report": "playwright show-report",
+    "test:ui": "playwright test --ui"
+  },
+  "files": [
+    "dist/*"
+  ],
+  "engines": {
+    "node": "^14.18.0 || >=16.0.0"
+  },
+  "keywords": [
+    "ran",
+    "component",
+    "components",
+    "ui",
+    "design",
+    "react"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/umd/index.umd.cjs"
+    }
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.5",
+    "@babel/preset-env": "^7.22.7",
+    "@babel/preset-typescript": "^7.22.5",
+    "@playwright/test": "^1.36.2",
+    "@types/react": "^18.2.22",
+    "prettier": "^2.8.1",
+    "ranuts": "workspace:0.1.0-alpha.7",
+    "tsx": "^3.12.7",
+    "vite": "^4.4.9",
+    "vite-plugin-dts": "^3.5.3"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^4.0.4",
+    "ranui": "workspace:^0.1.5",
+    "react": "^18.2.0"
+  }
+}
