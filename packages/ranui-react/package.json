@@ -6,10 +6,10 @@
   "module": "dist/index.js",
   "type": "module",
   "types": "./dist/index.d.ts",
-  "homepage": "https://chaxus.github.io/ran/src/ranui/",
+  "homepage": "https://chaxus.github.io/ran/src/ranui-react/",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/chaxus/ran/tree/main/packages/ranui"
+    "url": "git+https://github.com/chaxus/ran/tree/main/packages/ranui-react"
   },
   "author": "chaxus",
   "license": "MIT",

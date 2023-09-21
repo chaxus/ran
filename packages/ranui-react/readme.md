@@ -7,7 +7,7 @@ UI Component library based on `Web Component`
 <a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/github/actions/workflow/status/chaxus/ran/ci.yml" alt="Build Status"></a>
 <a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/v/ranui.svg" alt="npm-v"></a>
 <a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/dt/ranui.svg" alt="npm-d"></a>
-<a href="https://github.com/chaxus/ran"><img src="https://img.badgesize.io/https:/unpkg.com/ranui/dist/umd/index.umd.cjs?label=brotli&compression=brotli" alt="brotli"></a>
+<a href="https://github.com/chaxus/ran"><img src="https://img.badgesize.io/https:/unpkg.com/ranui-react/dist/umd/index.umd.cjs?label=brotli&compression=brotli" alt="brotli"></a>
 <a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/badge/module%20formats-umd%2C%20esm-green.svg" alt="module formats: umd, esm"></a>
 
 ## Feature
@@ -21,7 +21,7 @@ UI Component library based on `Web Component`
 Using npm:
 
 ```console
-npm install ranui --save
+npm install @ranui/react --save
 ```
 
 ## Document
@@ -33,28 +33,13 @@ npm install ranui --save
 Support for on-demand import, which can reduce the size of loaded js
 
 ```js
-import 'ranui/button'
-```
-
-For global components like `preview` and `message`, you need to import global styles
-
-```js
-import 'ranui/preview'
-import 'ranui/style'
-```
-
-Support global import
-
-- ES module
-
-```js
-import 'ranui'
+import { Button } '@ranui/react'
 ```
 
 - UMD, IIFE, CJS
 
 ```html
-<script src="./ranui/dist/umd/index.umd.cjs"></script>
+<script src="./@ranui/react/dist/umd/index.umd.cjs"></script>
 ```
 
 ## Usage
