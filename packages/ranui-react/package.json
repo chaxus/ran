@@ -1,6 +1,6 @@
 {
   "name": "@ranui/react",
-  "version": "0.0.3",
+  "version": "0.1.0--alpha.1",
   "description": "UI Component library based on `Web Component`",
   "main": "dist/umd/index.umd.cjs",
   "module": "dist/index.js",
