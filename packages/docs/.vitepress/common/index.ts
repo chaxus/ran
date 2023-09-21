@@ -1,8 +1,8 @@
 export const GTAG = 'https://www.googletagmanager.com/gtag/js?id=G-0MPS5WH1C0'
 
-export const googleAnalyse = `;window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);};gtag('js', new Date());gtag('config', 'G-0MPS5WH1C0');`
+export const GOOGLE_ANALYSE = `;window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);};gtag('js', new Date());gtag('config', 'G-0MPS5WH1C0');`
 
-export const baiduAnalyse = `
+export const BD_ANALYSE = `
 ;var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
@@ -11,7 +11,8 @@ export const baiduAnalyse = `
   s.parentNode.insertBefore(hm, s);
 })();
 `
-export const previewCode = `
+
+export const PREVIEW_CODE = `
   window.uploadFile = (name) => {
         const preview = document.getElementById(name)
         const uploadFile = document.createElement('input')
@@ -34,7 +35,9 @@ export const previewCode = `
 export const DESCRIPTION =
   'Based on web component library, common function library utils, personal article record and so on'
 
-export const HOME = 'https://chaxus.github.io/'
+export const HOME = 'https://chaxus.github.io/ran/'
+
+export const BASE_PATH = '/ran/'
 
 export const HOME_ICON = `${HOME}home.svg`
 
@@ -48,3 +51,4 @@ export const KEY_WORDS =
   'ran,component,components,ui,design,ranui,web-components,javascript,typescript,js'
 
 export const GITHUB = 'https://github.com/chaxus/ran'
+

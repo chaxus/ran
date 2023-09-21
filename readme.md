@@ -4,13 +4,13 @@ The packages directory is divided into the following sections
 
 # docs
 
-document：https://chaxus.github.io/
+document：https://chaxus.github.io/ran/
 
 # ranui
 
 Based on `web components` UI library
 
-document：https://chaxus.github.io/src/ranui/
+document：https://chaxus.github.io/ran/src/ranui/
 
 # ranuts
 

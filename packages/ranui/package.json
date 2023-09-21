@@ -6,7 +6,7 @@
   "module": "dist/index.js",
   "type": "module",
   "types": "./dist/index.d.ts",
-  "homepage": "https://chaxus.github.io/src/ranui/",
+  "homepage": "https://chaxus.github.io/ran/src/ranui/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/chaxus/ran/tree/main/packages/ranui"

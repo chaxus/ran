@@ -1,9 +1,9 @@
 import { defineConfig } from 'vitepress'
 import {
   GTAG,
-  googleAnalyse,
-  baiduAnalyse,
-  previewCode,
+  GOOGLE_ANALYSE,
+  BD_ANALYSE,
+  PREVIEW_CODE,
   DESCRIPTION,
   HOME,
   HOME_ICON,
@@ -12,9 +12,8 @@ import {
   ARTICLE_PATH,
   KEY_WORDS,
   GITHUB,
+  BASE_PATH
 } from './common/index'
-
-const BASE_PATH = '/'
 
 export default defineConfig({
   title: 'ran',
@@ -67,10 +66,10 @@ export default defineConfig({
     ],
     // report
     ['script', { src: GTAG }],
-    ['script', {}, googleAnalyse],
-    ['script', {}, baiduAnalyse],
+    ['script', {}, GOOGLE_ANALYSE],
+    ['script', {}, BD_ANALYSE],
     // preview component script
-    ['script', {}, previewCode],
+    ['script', {}, PREVIEW_CODE],
   ],
   themeConfig: {
     logo: '/home.svg',
