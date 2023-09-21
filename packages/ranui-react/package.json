@@ -19,7 +19,8 @@
     "prepublish": "npm run build",
     "test": "sh ./bin/test.sh",
     "test:report": "playwright show-report",
-    "test:ui": "playwright test --ui"
+    "test:ui": "playwright test --ui",
+    "publish": "npm publish --access public"
   },
   "files": [
     "dist/*"
@@ -35,6 +36,9 @@
     "design",
     "react"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
