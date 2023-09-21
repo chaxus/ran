@@ -103,6 +103,18 @@ const App = () => {
   )
 }
 ```
+or Use the version of react：
+
+```jsx
+import { Button } from '@ranui/react'
+const App = () => {
+  return (
+    <>
+      <Button>Button</Button>
+    </>
+  )
+}
+```
 
 ### vue
 
@@ -117,6 +129,20 @@ import 'ranui'
 
 ### tsx
 
+Use the version of react：
+
+```jsx
+import { Button } from '@ranui/react'
+
+const App = () => {
+  return (
+    <>
+      <Button>Button</Button>
+    </>
+  )
+}
+```
+or use native version: 
 ```tsx
 // react 18
 import type { SyntheticEvent } from 'react'
