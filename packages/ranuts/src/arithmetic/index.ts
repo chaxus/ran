@@ -2,7 +2,7 @@
  * @Author: chaxus nouo18@163.com
  * @Date: 2023-09-14 21:21:31
  * @LastEditors: chaxus nouo18@163.com
- * @LastEditTime: 2023-09-21 20:15:32
+ * @LastEditTime: 2023-09-21 22:36:08
  * @FilePath: /ran/packages/ranuts/src/arithmetic/index.ts
  * @Description: 字符串 string
  * @Description: 链表
@@ -315,21 +315,22 @@ const twoSum = function (nums: Array<number>, target: number) {
 }
 
 // 排序
-class Heap {
+export class MinHeap {
   arr: Array<number>
   size: number
   constructor(arr: Array<number>) {
-    this.arr = arr
-    this.size = arr.length
+    this.arr = [...arr]
+    this.size = this.arr.length
     this.buildMaxHeap()
   }
   private swap = (i: number, j: number) => {
+    if(i === j) return 
     this.arr[i] = this.arr[i] ^ this.arr[j]
     this.arr[j] = this.arr[i] ^ this.arr[j]
     this.arr[i] = this.arr[i] ^ this.arr[j]
   }
   /**
-   * @description: 自上而下的调整
+   * @description: 自上而下的调整，比较当前节点和子节点的大小
    * @param {number} i 父节点
    * @return {*}
    */
@@ -369,7 +370,7 @@ class Heap {
     }
   }
   /**
-   * @description: 这是大顶堆，每个节点的值都大于或等于它的子节点的值
+   * @description: 堆排序
    * @return {*}
    */
   private buildMaxHeap = () => {
@@ -381,34 +382,38 @@ class Heap {
       this.size--
       this.heapHandler(0)
     }
+    this.size = this.arr.length
   }
   /**
    * @description: 插入
    * @param {number} item
    * @return {*}
    */
-  insert = (item: number) => {
+  insert = (item: number): Array<number> => {
     this.arr.push(item)
     this.size = this.arr.length
     this.heapHand(this.size - 1)
+    return this.arr
   }
   /**
    * @description: 查找，返回索引 index
    * @param {number} item
    * @return {*}
    */
-  select = (item: number) => {
+  select = (item: number): number => {
     if (this.arr.length <= 0) return -1
-    
-
+    return 0
   }
-  delete = () => {}
+  delete = (): Array<number> => {
+    return this.arr
+  }
   /**
    * @description: 堆的调整
    * @return {*}
    */
-  sort = () => {
+  sort = (): Array<number> => {
     this.buildMaxHeap()
+    return this.arr
   }
 }
 
@@ -417,9 +422,8 @@ class Heap {
  * @param {Array} list
  * @return {Array}
  */
-const heap = (list: Array<number>): Array<number> => {
-  const { arr } = new Heap(list)
+export const heap = (list: Array<number>): Array<number> => {
+  const { arr } = new MinHeap(list)
   return arr
 }
 
-export default heap

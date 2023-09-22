@@ -66,8 +66,8 @@ export default defineConfig({
     ],
     // report
     ['script', { src: GTAG }],
-    ['script', {}, GOOGLE_ANALYSE],
-    ['script', {}, BD_ANALYSE],
+    ['script', { defer: "true" }, GOOGLE_ANALYSE],
+    ['script', { defer: "true" }, BD_ANALYSE],
     // preview component script
     ['script', {}, PREVIEW_CODE],
   ],
