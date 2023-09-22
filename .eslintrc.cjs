@@ -16,7 +16,7 @@ module.exports = defineConfig({
     ecmaVersion: 2021,
   },
   rules: {
-    eqeqeq: ['warn', 'always', { null: 'never' }],
+    // eqeqeq: ['warn', 'always', { null: 'never' }],
     'no-debugger': ['error'],
     'no-empty': ['warn', { allowEmptyCatch: true }],
     'no-process-exit': 'off',

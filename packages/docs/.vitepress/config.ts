@@ -1,43 +1,23 @@
 import { defineConfig } from 'vitepress'
+import {
+  GTAG,
+  GOOGLE_ANALYSE,
+  BD_ANALYSE,
+  PREVIEW_CODE,
+  DESCRIPTION,
+  HOME,
+  HOME_ICON,
+  UTILS_PATH,
+  RANUI_PATH,
+  ARTICLE_PATH,
+  KEY_WORDS,
+  GITHUB,
+  BASE_PATH
+} from './common/index'
 
-const BASE_PATH = '/ran/'
-
-const GTAG = 'https://www.googletagmanager.com/gtag/js?id=G-0MPS5WH1C0'
-
-const googleAnalyse = `;window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);};gtag('js', new Date());gtag('config', 'G-0MPS5WH1C0');`
-
-const baiduAnalyse = `
-;var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "https://hm.baidu.com/hm.js?3bc20bd8070ce614078a36c686209456";
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();
-`
-
-const previewCode = `
-  window.uploadFile = (name) => {
-        const preview = document.getElementById(name)
-        const uploadFile = document.createElement('input')
-        uploadFile.setAttribute('type', 'file')
-        uploadFile.click()
-        uploadFile.onchange = (e) => {
-          const { files = [] } = uploadFile
-          if (preview) {
-            if (files && files.length > 0) {
-              preview.setAttribute('src', '')
-              const file = files[0]
-              const url = URL.createObjectURL(file)
-              preview.setAttribute('src', url)
-            }
-          }
-        }
-      }
-`
 export default defineConfig({
   title: 'ran',
-  description: '基于web component组件库,常用函数库utils,个人文章记录等',
+  description: DESCRIPTION,
   base: BASE_PATH,
   lastUpdated: true,
   locales: {
@@ -53,17 +33,43 @@ export default defineConfig({
     },
   },
   head: [
+    // base
     ['link', { rel: 'icon', href: `${BASE_PATH}favicon.ico` }],
-    ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { name: 'theme-color', content: '#646cff' }],
+    // og
+    ['meta', { property: 'og:title', content: 'ran' }],
+    [
+      'meta',
+      {
+        property: 'og:description',
+        content: DESCRIPTION,
+      },
+    ],
+    ['meta', { property: 'og:url', content: HOME }],
+    ['meta', { property: 'og:image', content: HOME_ICON }],
+    ['meta', { property: 'og:type', content: 'article' }],
+    [
+      'meta',
+      {
+        property: 'article:home',
+        content: UTILS_PATH,
+      },
+    ],
+    ['meta', { property: 'article:ranui', content: RANUI_PATH }],
+    ['meta', { property: 'article:section', content: ARTICLE_PATH }],
+    // keywords
+    ['meta', { name: 'keywords', content: KEY_WORDS }],
+    // chrome
     [
       'meta',
       { httpEquiv: 'Permissions-Policy', content: 'interest-cohort=()' },
     ],
+    // report
     ['script', { src: GTAG }],
-    ['script', {}, googleAnalyse],
-    ['script', {}, baiduAnalyse],
-    ['script', {}, previewCode],
+    ['script', { defer: "true" }, GOOGLE_ANALYSE],
+    ['script', { defer: "true" }, BD_ANALYSE],
+    // preview component script
+    ['script', {}, PREVIEW_CODE],
   ],
   themeConfig: {
     logo: '/home.svg',
@@ -73,15 +79,15 @@ export default defineConfig({
       { text: '组件', link: '/src/ranui/' },
       { text: '璀璨', link: '/src/article/designMode.md' },
     ],
-    socialLinks: [{ icon: 'github', link: 'https://github.com/chaxus/ran' }],
+    socialLinks: [{ icon: 'github', link: GITHUB }],
     footer: {
       message: 'Released under the MIT License.',
       copyright: 'Copyright © 2022-11-11',
     },
     // algolia: {
-    //   appId: 'RDX0Y4AQW1', 
-    //   apiKey: 'c7b6e28f95335eddc66c5a1b54ad9834', 
-    //   indexName: 'chaxus_ran', 
+    //   appId: 'RDX0Y4AQW1',
+    //   apiKey: 'c7b6e28f95335eddc66c5a1b54ad9834',
+    //   indexName: 'chaxus_ran',
     //   placeholder: 'search',
     // },
     sidebar: {

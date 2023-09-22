@@ -419,7 +419,6 @@ function Custom() {
       }
       disconnectCallback() {
         this._input.removeEventListener('input', this.customInput)
-
       }
       attributeChangedCallback(
         name: string,

@@ -6,16 +6,92 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ranui</title>
+    <script async>
+      // 添加资源到缓存
+      const addResourcesToCache = async (resources) => {
+        const cache = await caches.open('v1')
+        await cache.addAll(resources)
+      }
+      const putInCache = async (request, response) => {
+        const cache = await caches.open('v1')
+        await cache.put(request, response)
+      }
+      const cacheFirst = async (request) => {
+        // 首先从缓存中获取资源
+        const responseFromCache = await caches.match(request)
+        if (responseFromCache) {
+          return responseFromCache
+        }
+        // 然后尝试从网络中获取资源
+        try {
+          const responseFromNetwork = await fetch(request)
+          // 响应可能会被使用
+          // 我们需要将它的拷贝放入缓存
+          // 然后再返回该响应
+          putInCache(request, responseFromNetwork.clone())
+          return responseFromNetwork
+        } catch (error) {
+          const fallbackResponse = await caches.match(fallbackUrl)
+          if (fallbackResponse) {
+            return fallbackResponse
+          }
+          // 当回落的响应也不可用时，
+          // 我们便无能为力了，但我们始终需要
+          // 返回 Response 对象
+          return new Response('Network error happened', {
+            status: 408,
+            headers: { 'Content-Type': 'text/plain' },
+          })
+        }
+      }
+      const registerServiceWorker = async (paths = []) => {
+        // 只有 https 可以开启service-work
+        if (!window.location.protocol.includes('https')) return
+        if ('serviceWorker' in navigator) {
+          try {
+            const registration = await navigator.serviceWorker.register(
+              'service-worker.js',
+              {
+                scope: '/',
+              },
+            )
+            if (registration.installing) {
+              console.log('正在安装 Service worker')
+            } else if (registration.waiting) {
+              console.log('已安装 Service worker installed')
+            } else if (registration.active) {
+              console.log('激活 Service worker')
+              registration.addEventListener('install', (event) => {
+                event.waitUntil(addResourcesToCache(paths))
+              })
+              registration.addEventListener('fetch', (event) => {
+                event.respondWith(
+                  cacheFirst({
+                    request: event.request,
+                    fallbackUrl: '/',
+                  }),
+                )
+              })
+            }
+          } catch (error) {
+            console.error(`注册失败：${error}`)
+          }
+        }
+      }
+      const paths = [
+        '/assets/js/pdf.js',
+        '/assets/js/d3.js',
+        '/assets/js/pdf-worker.js',
+        '/assets/js/dimple.js',
+      ]
+      registerServiceWorker(paths)
+    </script>
     <script src="./index.ts" type="module"></script>
   </head>
   <body>
     <h1>Hello RanUI</h1>
     <h2>Button</h2>
-    <r-button
-      type="primary"
-      onclick="window.Toast('fdsafds');console.log('fdsafsad')"
-      >主要按钮</r-button
-    >
+    <r-button type="primary">主要按钮</r-button>
     <r-button type="warning" effect="false">警告按钮</r-button>
     <r-button type="default" icon="user" sheet=".btn { width: 100px; }"
       >默认按钮</r-button
@@ -27,13 +103,13 @@
     <r-icon name="loading" size="40" color="#1E90FF" spin></r-icon>
     <h2>Tab</h2>
     <r-tabs type="text">
-      <r-tab label="tab1" icon="home">11111</r-tab>
-      <r-tab label="tab2">22222</r-tab>
-      <r-tab label="tab3">33333</r-tab>
-      <r-tab label="tab1" key="a" disabled>11111</r-tab>
-      <r-tab label="tab2" icon="home" r-key="aaa">22222</r-tab>
-      <r-tab label="tab3" ranKey="10">33333</r-tab>
-      <r-tab label="tab2">22222</r-tab>
+      <r-tab label="重名" icon="home">tab1</r-tab>
+      <r-tab label="tab2">tab2</r-tab>
+      <r-tab label="tab3">tab3</r-tab>
+      <r-tab label="重名" key="a" disabled>11111</r-tab>
+      <r-tab label="tab5" icon="home" r-key="aaa">22222</r-tab>
+      <r-tab label="tab6" ranKey="10">33333</r-tab>
+      <r-tab label="tab7">22222</r-tab>
       <r-tab label="tab7777777">77777</r-tab>
     </r-tabs>
     <h2>Input</h2>
@@ -83,6 +159,13 @@
     >
     <r-button onclick="message.toast('这是一条提示 toast')">成功提示</r-button>
     <h2>雷达图</h2>
-    <r-radar style="width:300px;height:300px;display: block;" fillColor="red" strokeColor="blue" colorPolygon="green" colorLine="blue" abilitys='[{"abilityName":"生命","scoreRate":"10","backgroundColor":"red","fontSize":"30","fontColor":"blue"},{"abilityName":"攻击","scoreRate":"90"},{"abilityName":"防御","scoreRate":"20"},{"abilityName":"元素精通","scoreRate":"50"},{"abilityName":"暴击率","scoreRate":"80"},{"abilityName":"暴击伤害","scoreRate":"50"}]'></r-radar>
+    <r-radar
+      style="width: 300px; height: 300px; display: block"
+      fillColor="red"
+      strokeColor="blue"
+      colorPolygon="green"
+      colorLine="blue"
+      abilitys='[{"abilityName":"生命","scoreRate":"10","backgroundColor":"red","fontSize":"30","fontColor":"blue"},{"abilityName":"攻击","scoreRate":"90"},{"abilityName":"防御","scoreRate":"20"},{"abilityName":"元素精通","scoreRate":"50"},{"abilityName":"暴击率","scoreRate":"80"},{"abilityName":"暴击伤害","scoreRate":"50"}]'
+    ></r-radar>
   </body>
 </html>

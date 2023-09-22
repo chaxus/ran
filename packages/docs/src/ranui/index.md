@@ -254,10 +254,10 @@ import 'ranui'
 <r-button id="button">按钮</r-button>
 
 <script>
-  const button = document.getElementById('button');  
-  button.addEventListener('click', function(event) {  
-    alert('新的点击事件！');  
-  });
+  const button = document.getElementById('button')
+  button.addEventListener('click', function (event) {
+    alert('新的点击事件！')
+  })
 </script>
 ```
 

@@ -1,4 +1,9 @@
-import { createCustomError, falseList, isDisabled } from '@/utils/index'
+import {
+  createCustomError,
+  falseList,
+  isDisabled,
+  presentDevice,
+} from '@/utils/index'
 
 function Custom() {
   if (typeof document !== 'undefined' && !customElements.get('r-button')) {
@@ -98,6 +103,7 @@ function Custom() {
         }
       }
       mousedown = (event: MouseEvent) => {
+        if (presentDevice !== 'pc') return
         if (!this.disabled || this.disabled === 'false') {
           const { left, top } = this.getBoundingClientRect()
           this.style.setProperty('--ran-x', event.clientX - left + 'px')
@@ -105,6 +111,7 @@ function Custom() {
         }
       }
       mouseLeave = () => {
+        if (presentDevice !== 'pc') return
         setTimeout(() => {
           this.style.removeProperty('--ran-x')
           this.style.removeProperty('--ran-y')

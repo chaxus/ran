@@ -1,0 +1,24 @@
+{
+  "include": ["components", "test", "**/*.ts"],
+  "exclude": ["node_modules/**", "dist/**"],
+  "compilerOptions": {
+    "module": "ESNext",
+    "esModuleInterop": true,
+    "target": "ESNext",
+    "moduleResolution": "node",
+    "outDir": "dist",
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "isolatedModules": false,
+    "strict": true,
+    "noImplicitAny": true,
+    "useUnknownInCatchVariables": false,
+    "inlineSourceMap": true,
+    "baseUrl": ".",
+    "experimentalDecorators": true,
+    "paths": {
+      "@/components/*": ["components/*"],
+      "@/utils/*": ["utils/*"]
+    }
+  }
+}
