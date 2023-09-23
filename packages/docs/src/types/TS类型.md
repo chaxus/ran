@@ -9,7 +9,7 @@
 元组（Tuple）就是元素个数和类型固定的数组类型：
 
 ```ts
-type Tuple = [number, string]
+type Tuple = [number, string];
 ```
 
 ## Interface
@@ -20,42 +20,42 @@ type Tuple = [number, string]
 
 ```ts
 interface IPerson {
-  name: string
-  age: number
+  name: string;
+  age: number;
 }
 
 class Person implements IPerson {
-  name: string
-  age: number
+  name: string;
+  age: number;
 }
 
 const obj: IPerson = {
   name: 'name',
   age: 18,
-}
+};
 ```
 
 - 函数
 
 ```ts
 interface SayHello {
-  (name: string): string
+  (name: string): string;
 }
 
 const func: SayHello = (name: string) => {
-  return 'hello,' + name
-}
+  return 'hello,' + name;
+};
 ```
 
 - 构造器
 
 ```ts
 interface PersonConstructor {
-  new (name: string, age: number): IPerson
+  new (name: string, age: number): IPerson;
 }
 
 function createPerson(ctor: PersonConstructor): IPerson {
-  return new ctor('name', 18)
+  return new ctor('name', 18);
 }
 ```
 
@@ -63,11 +63,11 @@ function createPerson(ctor: PersonConstructor): IPerson {
 
 ```ts
 interface IPerson {
-  [prop: string]: string | number
+  [prop: string]: string | number;
 }
-const obj: IPerson = {}
-obj.name = 'name'
-obj.age = 18
+const obj: IPerson = {};
+obj.name = 'name';
+obj.age = 18;
 ```
 
 ## Enum
@@ -83,7 +83,7 @@ enum Transpiler {
   TypeScriptCompiler = 'tsc',
 }
 
-const transpiler = Transpiler.TypeScriptCompiler
+const transpiler = Transpiler.TypeScriptCompiler;
 ```
 
 此外，TypeScript 还支持字面量类型，也就是类似 1111、'aaaa'、{ a: 1} 这种值也可以做为类型。
@@ -95,9 +95,9 @@ const transpiler = Transpiler.TypeScriptCompiler
 ```ts
 function func(str: `#${string}`) {}
 
-func('aaa') // error
+func('aaa'); // error
 
-func('#aaa') // true
+func('#aaa'); // true
 ```
 
 ## void
@@ -122,9 +122,9 @@ func('#aaa') // true
 
 ```ts
 interface IPerson {
-  readonly name: string
-  age?: number
+  readonly name: string;
+  age?: number;
 }
 
-type tuple = [string, number?]
+type tuple = [string, number?];
 ```

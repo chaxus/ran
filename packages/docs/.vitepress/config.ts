@@ -1,4 +1,4 @@
-import { defineConfig } from 'vitepress'
+import { defineConfig } from 'vitepress';
 import {
   GTAG,
   GOOGLE_ANALYSE,
@@ -12,8 +12,8 @@ import {
   ARTICLE_PATH,
   KEY_WORDS,
   GITHUB,
-  BASE_PATH
-} from './common/index'
+  BASE_PATH,
+} from './common/index';
 
 export default defineConfig({
   title: 'ran',
@@ -27,7 +27,7 @@ export default defineConfig({
     template: {
       compilerOptions: {
         isCustomElement: (tag) => {
-          return tag.startsWith('r-')
+          return tag.startsWith('r-');
         },
       },
     },
@@ -66,8 +66,8 @@ export default defineConfig({
     ],
     // report
     ['script', { src: GTAG }],
-    ['script', { defer: "true" }, GOOGLE_ANALYSE],
-    ['script', { defer: "true" }, BD_ANALYSE],
+    ['script', { defer: 'true' }, GOOGLE_ANALYSE],
+    ['script', { defer: 'true' }, BD_ANALYSE],
     // preview component script
     ['script', {}, PREVIEW_CODE],
   ],
@@ -167,4 +167,4 @@ export default defineConfig({
       ],
     },
   },
-})
+});

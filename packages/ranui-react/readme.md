@@ -69,36 +69,37 @@ Here are some examples:
 ### js
 
 ```js
-import 'ranui'
+import 'ranui';
 
-const Button = document.createElement('r-button')
-Button.appendChild('this is button text')
-document.body.appendChild(Button)
+const Button = document.createElement('r-button');
+Button.appendChild('this is button text');
+document.body.appendChild(Button);
 ```
 
 ### jsx
 
 ```jsx
-import 'ranui'
+import 'ranui';
 const App = () => {
   return (
     <>
       <r-button>Button</r-button>
     </>
-  )
-}
+  );
+};
 ```
+
 or Use the version of react：
 
 ```jsx
-import { Button } from '@ranui/react'
+import { Button } from '@ranui/react';
 const App = () => {
   return (
     <>
       <Button>Button</Button>
     </>
-  )
-}
+  );
+};
 ```
 
 ### vue
@@ -108,7 +109,7 @@ const App = () => {
   <r-button></r-button>
 </template>
 <script>
-import 'ranui'
+import 'ranui';
 </script>
 ```
 
@@ -117,41 +118,43 @@ import 'ranui'
 Use the version of react：
 
 ```jsx
-import { Button } from '@ranui/react'
+import { Button } from '@ranui/react';
 
 const App = () => {
   return (
     <>
       <Button>Button</Button>
     </>
-  )
-}
+  );
+};
 ```
-or use native version: 
+
+or use native version:
+
 ```tsx
 // react 18
-import type { SyntheticEvent } from 'react'
-import React, { useRef } from 'react'
-import 'ranui'
+import type { SyntheticEvent } from 'react';
+import React, { useRef } from 'react';
+import 'ranui';
 
 const FilePreview = () => {
-  const ref = useRef<HTMLDivElement | null>(null)
+  const ref = useRef<HTMLDivElement | null>(null);
   const uploadFile = (e: SyntheticEvent<HTMLDivElement>) => {
     if (ref.current) {
-      const uploadFile = document.createElement('input')
-      uploadFile.setAttribute('type', 'file')
-      uploadFile.click()
+      const uploadFile = document.createElement('input');
+      uploadFile.setAttribute('type', 'file');
+      uploadFile.click();
       uploadFile.onchange = (e) => {
-        const { files = [] } = uploadFile
+        const { files = [] } = uploadFile;
         if (files && files?.length > 0 && ref.current) {
-          ref.current.setAttribute('src', '')
-          const file = files[0]
-          const url = URL.createObjectURL(file)
-          ref.current.setAttribute('src', url)
+          ref.current.setAttribute('src', '');
+          const file = files[0];
+          const url = URL.createObjectURL(file);
+          ref.current.setAttribute('src', url);
         }
-      }
+      };
     }
-  }
+  };
   return (
     <div>
       <r-preview ref={ref}></r-preview>
@@ -159,8 +162,8 @@ const FilePreview = () => {
         choose file to preview
       </r-button>
     </div>
-  )
-}
+  );
+};
 ```
 
 `jsx` defines the types of all `HTML-native` components in `TypeScript`.
@@ -174,14 +177,14 @@ Otherwise you'll have type problems, but it actually works.
 ```ts
 // typings.d.ts
 interface RButton {
-  type?: string
-  onClick?: React.MouseEventHandler<HTMLDivElement> | undefined
+  type?: string;
+  onClick?: React.MouseEventHandler<HTMLDivElement> | undefined;
 }
 
 interface RPreview {
-  src?: string | Blob | ArrayBuffer
-  onClick?: React.MouseEventHandler<HTMLDivElement> | undefined
-  ref?: React.MutableRefObject<HTMLDivElement | null>
+  src?: string | Blob | ArrayBuffer;
+  onClick?: React.MouseEventHandler<HTMLDivElement> | undefined;
+  ref?: React.MutableRefObject<HTMLDivElement | null>;
 }
 
 declare namespace JSX {
@@ -190,12 +193,12 @@ declare namespace JSX {
       React.HTMLAttributes<HTMLDivElement>,
       HTMLDivElement
     > &
-      RPreview
+      RPreview;
     'r-button': React.DetailedHTMLProps<
       React.HTMLAttributes<HTMLDivElement>,
       HTMLDivElement
     > &
-      RButton
+      RButton;
   }
 }
 ```

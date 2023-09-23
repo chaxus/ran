@@ -129,12 +129,12 @@
 ```
 
 ```js
-const input = document.createElement('r-input')
-input.setAttribute('label', 'home')
+const input = document.createElement('r-input');
+input.setAttribute('label', 'home');
 const func = (e) => {
-  console.log(e)
-}
-input.addEventListener('change', func)
+  console.log(e);
+};
+input.addEventListener('change', func);
 ```
 
 ### oninput
@@ -143,12 +143,12 @@ input.addEventListener('change', func)
 <r-input oninput="console.log(this.value)"></r-input>
 
 ```js
-const input = document.createElement('r-input')
-input.setAttribute('label', 'home')
+const input = document.createElement('r-input');
+input.setAttribute('label', 'home');
 const func = (e) => {
-  console.log(e)
-}
-input.addEventListener('input', func)
+  console.log(e);
+};
+input.addEventListener('input', func);
 ```
 
 事件的`e`参数结构

@@ -1,7 +1,7 @@
-import { init } from '@/vnode/init'
-import { h } from '@/vnode/h'
+import { init } from '@/vnode/init';
+import { h } from '@/vnode/h';
 // 2. 注册模块
-const patch = init()
+const patch = init();
 
 // 3. 使用h()函数的第二个参数传入模块需要的数据(对象)
 const content = h('div', [
@@ -26,7 +26,7 @@ const content = h('div', [
     },
     'https://github.com/chaxus/ran',
   ),
-])
+]);
 
 const vnode = h(
   'div',
@@ -40,8 +40,8 @@ const vnode = h(
     },
   },
   [content],
-)
+);
 
-const app = document.querySelector('#app')
+const app = document.querySelector('#app');
 
-app && patch(app, vnode)
+app && patch(app, vnode);

@@ -4,7 +4,7 @@
  */
 
 const ENCODE_CHARS_REGEXP =
-  /(?:[^\x21\x25\x26-\x3B\x3D\x3F-\x5B\x5D\x5F\x61-\x7A\x7E]|%(?:[^\dA-Fa-f]|[\dA-Fa-f][^\dA-Fa-f]|$))+/g
+  /(?:[^\x21\x25\x26-\x3B\x3D\x3F-\x5B\x5D\x5F\x61-\x7A\x7E]|%(?:[^\dA-Fa-f]|[\dA-Fa-f][^\dA-Fa-f]|$))+/g;
 
 /**
  * RegExp to match unmatched surrogate pair.
@@ -12,14 +12,14 @@ const ENCODE_CHARS_REGEXP =
  */
 
 const UNMATCHED_SURROGATE_PAIR_REGEXP =
-  /(^|[^\uD800-\uDBFF])[\uDC00-\uDFFF]|[\uD800-\uDBFF]([^\uDC00-\uDFFF]|$)/g
+  /(^|[^\uD800-\uDBFF])[\uDC00-\uDFFF]|[\uD800-\uDBFF]([^\uDC00-\uDFFF]|$)/g;
 
 /**
  * String to replace unmatched surrogate pair with.
  * @private
  */
 
-const UNMATCHED_SURROGATE_PAIR_REPLACE = '$1\uFFFD$2'
+const UNMATCHED_SURROGATE_PAIR_REPLACE = '$1\uFFFD$2';
 
 /**
  * Encode a URL to a percent-encoded form, excluding already-encoded sequences.
@@ -42,5 +42,5 @@ const UNMATCHED_SURROGATE_PAIR_REPLACE = '$1\uFFFD$2'
 export default function encodeUrl(url: string): string {
   return String(url)
     .replace(UNMATCHED_SURROGATE_PAIR_REGEXP, UNMATCHED_SURROGATE_PAIR_REPLACE)
-    .replace(ENCODE_CHARS_REGEXP, encodeURI)
+    .replace(ENCODE_CHARS_REGEXP, encodeURI);
 }

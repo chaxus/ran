@@ -1,10 +1,10 @@
-import { Noop, replaceOld } from './utils'
-import type { Hooks } from './utils'
+import { Noop, replaceOld } from './utils';
+import type { Hooks } from './utils';
 
 interface Options {
-  requestHook: Hooks
-  responseHook: Hooks
-  errorHook: Hooks
+  requestHook: Hooks;
+  responseHook: Hooks;
+  errorHook: Hooks;
 }
 /**
  * @description: fetch
@@ -16,25 +16,25 @@ export const handleFetchHook = (options: Partial<Options> = {}): void => {
       requestHook = Noop,
       responseHook = Noop,
       errorHook = Noop,
-    } = options
+    } = options;
     const replacement = (originalFetch: any) => {
       return (url: string, config?: any) => {
-        requestHook(url, config)
+        requestHook(url, config);
         return originalFetch
           .apply(window, [url, config])
           .then((response: Response) => {
-            responseHook(url, config, response)
-            return response
+            responseHook(url, config, response);
+            return response;
           })
           .catch((error: Error) => {
-            errorHook(url, error)
-            throw error
-          })
-      }
-    }
-    replaceOld(window, 'fetch', replacement)
+            errorHook(url, error);
+            throw error;
+          });
+      };
+    };
+    replaceOld(window, 'fetch', replacement);
   }
-}
+};
 /**
  * @description: xhr
  * @param {Partial} options
@@ -42,30 +42,30 @@ export const handleFetchHook = (options: Partial<Options> = {}): void => {
  */
 export const handleXhrHook = (options: Partial<Options> = {}): void => {
   if (typeof window !== 'undefined') {
-    const originalXhrProto = XMLHttpRequest.prototype
+    const originalXhrProto = XMLHttpRequest.prototype;
     const {
       requestHook = Noop,
       responseHook = Noop,
       errorHook = Noop,
-    } = options
+    } = options;
     const replacementXhrOpen = (originalOpen: any) => {
       return function (this: XMLHttpRequest, ...args: unknown[]): void {
-        requestHook(args)
-        originalOpen.apply(this, args)
-      }
-    }
-    replaceOld(originalXhrProto, 'open', replacementXhrOpen)
+        requestHook(args);
+        originalOpen.apply(this, args);
+      };
+    };
+    replaceOld(originalXhrProto, 'open', replacementXhrOpen);
     const replacementXhrSend = (originalSend: any) => {
       return function (this: any, ...args: any[]): void {
         this.addEventListener('loadend', function (this: unknown) {
-          responseHook(this)
-        })
+          responseHook(this);
+        });
         this.addEventListener('error', function (this: unknown) {
-          errorHook(this)
-        })
-        originalSend.apply(this, args)
-      }
-    }
-    replaceOld(originalXhrProto, 'send', replacementXhrSend)
+          errorHook(this);
+        });
+        originalSend.apply(this, args);
+      };
+    };
+    replaceOld(originalXhrProto, 'send', replacementXhrSend);
   }
-}
+};

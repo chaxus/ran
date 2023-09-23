@@ -4,20 +4,20 @@
  * @return {Array}
  */
 const select = (list: Array<number>): Array<number> => {
-  const { length } = list
+  const { length } = list;
   for (let i = 0; i < length; i++) {
-    let minIndex = i
+    let minIndex = i;
     for (let j = i + 1; j < length; j++) {
       if (list[j] <= list[minIndex]) {
-        minIndex = j
+        minIndex = j;
       }
     }
 
-    const temp = list[i]
-    list[i] = list[minIndex]
-    list[minIndex] = temp
+    const temp = list[i];
+    list[i] = list[minIndex];
+    list[minIndex] = temp;
   }
-  return list
-}
+  return list;
+};
 
-export default select
+export default select;

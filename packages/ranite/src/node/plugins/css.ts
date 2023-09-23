@@ -1,19 +1,19 @@
-import { readFile } from 'fs-extra'
-import { CLIENT_PUBLIC_PATH } from '../constants'
-import type { Plugin } from '../plugin'
-import type { ServerContext } from '../server/index'
-import { getShortName } from '../utils'
+import { readFile } from 'fs-extra';
+import { CLIENT_PUBLIC_PATH } from '../constants';
+import type { Plugin } from '../plugin';
+import type { ServerContext } from '../server/index';
+import { getShortName } from '../utils';
 
 export function cssPlugin(): Plugin {
-  let serverContext: ServerContext
+  let serverContext: ServerContext;
   return {
     name: 'ranite:css',
     configureServer(s) {
-      serverContext = s
+      serverContext = s;
     },
     load(id) {
       if (id.endsWith('.css')) {
-        return readFile(id, 'utf-8')
+        return readFile(id, 'utf-8');
       }
     },
     async transform(code, id) {
@@ -33,12 +33,12 @@ const css = '${code.replace(/\n/g, '')}';
 updateStyle(id, css);
 import.meta.hot.accept();
 export default css;
-import.meta.hot.prune(() => removeStyle(id));`.trim()
+import.meta.hot.prune(() => removeStyle(id));`.trim();
         return {
           code: jsContent,
-        }
+        };
       }
-      return null
+      return null;
     },
-  }
+  };
 }

@@ -7,15 +7,15 @@
  */
 
 interface Fiber {
-  type: string
-  dom?: HTMLElement | Text
-  parent?: Fiber
-  child?: Fiber
-  sibling?: Fiber
+  type: string;
+  dom?: HTMLElement | Text;
+  parent?: Fiber;
+  child?: Fiber;
+  sibling?: Fiber;
   props: {
-    [x: string]: Array<Fiber> | string | undefined
-    children?: Array<Fiber>
-  }
+    [x: string]: Array<Fiber> | string | undefined;
+    children?: Array<Fiber>;
+  };
 }
 /**
  * @description: 创建真正的dom
@@ -24,16 +24,16 @@ interface Fiber {
  */
 const createElement = (element: Fiber): HTMLElement | Text => {
   if (element.type === 'TEXT_ELEMENT') {
-    return document.createTextNode('')
+    return document.createTextNode('');
   }
-  return document.createElement(element.type)
-}
+  return document.createElement(element.type);
+};
 /**
  * @description: 过滤一些props上的属性
  * @param {string} key
  * @return {Boolean}
  */
-const filterProps = (key: string) => key !== 'children'
+const filterProps = (key: string) => key !== 'children';
 
 /**
  * @description: 过滤文本dom
@@ -41,8 +41,8 @@ const filterProps = (key: string) => key !== 'children'
  * @return {Boolean}
  */
 const filterText = (dom: HTMLElement | Text) => {
-  return dom instanceof HTMLElement
-}
+  return dom instanceof HTMLElement;
+};
 
 /**
  * @description: render函数
@@ -51,7 +51,7 @@ const filterText = (dom: HTMLElement | Text) => {
  */
 const render = (element: Fiber, container: HTMLElement): void => {
   // 创建一个真实的DOM
-  const dom = createElement(element)
+  const dom = createElement(element);
   // 将元素上的props属性追加到真实的dom上面
   Object.keys(element.props)
     .filter(filterProps)
@@ -70,26 +70,26 @@ const render = (element: Fiber, container: HTMLElement): void => {
           // get, set
           // 如果一个描述符不具有 value、writable、get 和 set 中的任意一个键，那么它将被认为是一个数据描述符。
           // 如果一个描述符同时拥有 value 或 writable 和 get 或 set 键，则会产生一个异常。
-        })
+        });
       }
-    })
+    });
   // 如果有children，递归render
   if (element.props?.children) {
     element.props.children.forEach((child) => {
       if (dom instanceof HTMLElement) {
-        render(child, dom)
+        render(child, dom);
       }
-    })
+    });
   }
   // 最终将真实的dom添加到指定的dom里面
-  container.appendChild(dom)
-}
+  container.appendChild(dom);
+};
 
-const createFiber = () => {}
+const createFiber = () => {};
 
 class Concurrent {
-  nextUnitOfWork: Fiber | undefined
-  wipRoot: Fiber | undefined
+  nextUnitOfWork: Fiber | undefined;
+  wipRoot: Fiber | undefined;
   constructor(element: Fiber, container: HTMLElement) {
     this.wipRoot = {
       type: 'root',
@@ -97,21 +97,21 @@ class Concurrent {
       props: {
         children: [element],
       },
-    }
-    this.nextUnitOfWork = this.wipRoot
+    };
+    this.nextUnitOfWork = this.wipRoot;
   }
   workLoop(deadline: IdleDeadline) {
-    let shouldYield = false
+    let shouldYield = false;
     // 我们需要在空闲的时间循环执行任务单元
     while (this.nextUnitOfWork && !shouldYield) {
-      this.nextUnitOfWork = this.performUnitOfWork(this.nextUnitOfWork)
-      shouldYield = deadline.timeRemaining() < 1
+      this.nextUnitOfWork = this.performUnitOfWork(this.nextUnitOfWork);
+      shouldYield = deadline.timeRemaining() < 1;
     }
     if (!this.nextUnitOfWork && this.wipRoot) {
-      this.commitRoot()
+      this.commitRoot();
     }
     // https://developer.mozilla.org/zh-CN/docs/Web/API/Window/requestIdleCallback
-    requestIdleCallback(this.workLoop)
+    requestIdleCallback(this.workLoop);
   }
   /**
    * @description: 执行一个任务单元，并返回下一个任务单元
@@ -120,60 +120,60 @@ class Concurrent {
   performUnitOfWork(fiber: Fiber) {
     // 然后对于当前元素的子元素，会对每一个子元素创建一个 fiber
     if (!fiber.dom) {
-      fiber.dom = createElement(fiber)
+      fiber.dom = createElement(fiber);
     }
     if (fiber?.parent?.dom) {
-      fiber.parent.dom.appendChild(fiber.dom)
+      fiber.parent.dom.appendChild(fiber.dom);
     }
-    const elements = fiber.props.children || []
+    const elements = fiber.props.children || [];
     // 然后将它们添加到 fiber 树中，作为子节点还是兄弟节点。区别在于是否是第一个子节点
-    let index = 0
-    let prevSibling
+    let index = 0;
+    let prevSibling;
     while (index < elements.length) {
-      const element = elements[index]
+      const element = elements[index];
       const newFiber: Fiber = {
         type: element.type,
         props: element.props,
         parent: fiber,
-      }
+      };
       if (index === 0) {
-        fiber.child = newFiber
+        fiber.child = newFiber;
       } else {
         if (prevSibling) {
-          prevSibling.sibling = newFiber
+          prevSibling.sibling = newFiber;
         }
       }
-      prevSibling = newFiber
-      index++
+      prevSibling = newFiber;
+      index++;
     }
     // 最后，我们返回下一个工作单元，首先寻找它的子元素，然后是兄弟元素，然后是舅舅元素，直到根节点。
     if (fiber.child) {
-      return fiber.child
+      return fiber.child;
     }
-    let nextFiber: Fiber | undefined = fiber
+    let nextFiber: Fiber | undefined = fiber;
     while (nextFiber) {
       if (nextFiber.sibling) {
-        return nextFiber.sibling
+        return nextFiber.sibling;
       }
-      nextFiber = nextFiber.parent
+      nextFiber = nextFiber.parent;
     }
   }
   startWork() {
-    requestIdleCallback(this.workLoop)
+    requestIdleCallback(this.workLoop);
   }
   commitRoot() {
-    this.commitWork(this.wipRoot?.child)
-    this.wipRoot = undefined
+    this.commitWork(this.wipRoot?.child);
+    this.wipRoot = undefined;
   }
   commitWork(fiber: Fiber | undefined) {
     if (!fiber) {
-      return
+      return;
     }
-    const domParent = fiber?.parent?.dom
-    fiber?.dom && domParent?.appendChild(fiber.dom)
-    this.commitWork(fiber.child)
-    this.commitWork(fiber.sibling)
+    const domParent = fiber?.parent?.dom;
+    fiber?.dom && domParent?.appendChild(fiber.dom);
+    this.commitWork(fiber.child);
+    this.commitWork(fiber.sibling);
   }
 }
 
-export { render }
+export { render };

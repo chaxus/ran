@@ -1,6 +1,6 @@
-import fs from './fs'
+import fs from './fs';
 
-type Error = NodeJS.ErrnoException | null
+type Error = NodeJS.ErrnoException | null;
 
 /**
  * @description: 读取一个文件，读取成功返回状态码和文件内容
@@ -15,12 +15,12 @@ const readFile = (
 ): Promise<Ranuts.Identification> =>
   new Promise((resolve, reject) => {
     if (!fs._identification)
-      return reject({ _identification: false, data: 'fs is not loaded' })
+      return reject({ _identification: false, data: 'fs is not loaded' });
     fs.readFile(path, format, (err: Error, data: string) => {
       err
         ? reject({ _identification: false, data: err })
-        : resolve({ _identification: true, data })
-    })
-  })
+        : resolve({ _identification: true, data });
+    });
+  });
 
-export default readFile
+export default readFile;

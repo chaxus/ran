@@ -1,6 +1,6 @@
-import reactify from '@/utils/reactify'
-import 'ranui/message'
+import reactify from '@/utils/reactify';
+import 'ranui/message';
 
-const message = reactify('r-message')
+const message = reactify('r-message');
 
-export default message
+export default message;

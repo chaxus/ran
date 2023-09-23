@@ -1,7 +1,7 @@
-import fs from './fs'
-import readFile from './readFile'
+import fs from './fs';
+import readFile from './readFile';
 
-type Error = NodeJS.ErrnoException | null
+type Error = NodeJS.ErrnoException | null;
 
 /**
  * @description: 给一个已经存在的文件追加内容
@@ -16,14 +16,14 @@ const appendFile = (
 ): Promise<Ranuts.Identification> =>
   new Promise((resolve, reject) => {
     if (!fs._identification)
-      return reject({ _identification: false, data: 'fs is not loaded' })
+      return reject({ _identification: false, data: 'fs is not loaded' });
     fs.appendFile(path, content, (err: Error) => {
       err
         ? reject({ _identification: false, data: err })
         : readFile(path).then((result: Ranuts.Identification) => {
-            resolve(result)
-          })
-    })
-  })
+            resolve(result);
+          });
+    });
+  });
 
-export default appendFile
+export default appendFile;

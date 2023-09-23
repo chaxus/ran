@@ -13,40 +13,40 @@
 
 ```ts
 const count = (list: Array<number>, max: number = 100): Array<number> => {
-  const countList = new Array(max + 1)
+  const countList = new Array(max + 1);
   for (let i = 0; i < list.length; i++) {
     if (!countList[list[i]]) {
-      countList[list[i]] = 0
+      countList[list[i]] = 0;
     }
-    countList[list[i]]++
+    countList[list[i]]++;
   }
-  let startIndex = 0
+  let startIndex = 0;
   for (let i = 0; i < countList.length; i++) {
     while (countList[i] > 0) {
-      list[startIndex++] = i
-      countList[i]--
+      list[startIndex++] = i;
+      countList[i]--;
     }
   }
-  return list
-}
+  return list;
+};
 const getMax = (list: Array<number>) => {
-  let max = list[0]
+  let max = list[0];
   for (let i = 0; i < list.length; i++) {
     if (max < list[i]) {
-      max = list[i]
+      max = list[i];
     }
   }
-  return max
-}
+  return max;
+};
 const getMin = (list: Array<number>) => {
-  let min = list[0]
+  let min = list[0];
   for (let i = 0; i < list.length; i++) {
     if (min > list[i]) {
-      min = list[i]
+      min = list[i];
     }
   }
-  return min
-}
+  return min;
+};
 
 /**
  * @description: 桶排序
@@ -59,21 +59,21 @@ const bucket = (
   max?: number,
   min?: number,
 ): Array<number> => {
-  if (list.length === 0) return list
-  if (!max) max = getMax(list)
-  if (!min) min = getMin(list)
-  const bucketCount = Math.floor((max - min) / bucketSize) + 1
-  const buckets = new Array(bucketCount + 1).fill(0).map(() => new Array(0))
+  if (list.length === 0) return list;
+  if (!max) max = getMax(list);
+  if (!min) min = getMin(list);
+  const bucketCount = Math.floor((max - min) / bucketSize) + 1;
+  const buckets = new Array(bucketCount + 1).fill(0).map(() => new Array(0));
 
   for (let i = 0; i < list.length; i++) {
-    buckets[Math.floor((list[i] - min) / bucketSize)].push(list[i])
+    buckets[Math.floor((list[i] - min) / bucketSize)].push(list[i]);
   }
-  list = []
+  list = [];
   for (let i = 0; i < bucketCount; i++) {
-    list = list.concat(count(buckets[i]))
+    list = list.concat(count(buckets[i]));
   }
-  return list
-}
+  return list;
+};
 ```
 
 ## 算法分析

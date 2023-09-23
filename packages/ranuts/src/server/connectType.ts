@@ -3,6 +3,6 @@
  */
 const connect = () => {
   if (typeof window !== 'undefined') {
-    return (window.navigator as any).connection
+    return (window.navigator as any).connection;
   }
-}
+};

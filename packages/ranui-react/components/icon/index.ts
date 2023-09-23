@@ -1,6 +1,6 @@
-import reactify from '@/utils/reactify'
-import 'ranui/button'
+import reactify from '@/utils/reactify';
+import 'ranui/button';
 
-const Icon = reactify('r-icon')
+const Icon = reactify('r-icon');
 
-export default Icon
+export default Icon;

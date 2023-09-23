@@ -18,21 +18,21 @@ n 个记录的直接选择排序可经过 n-1 趟直接选择排序得到有序�
 
 ```js
 function selectionSort(arr) {
-  var len = arr.length
-  var minIndex, temp
+  var len = arr.length;
+  var minIndex, temp;
   for (var i = 0; i < len - 1; i++) {
-    minIndex = i
+    minIndex = i;
     for (var j = i + 1; j < len; j++) {
       if (arr[j] < arr[minIndex]) {
         // 寻找最小的数
-        minIndex = j // 将最小数的索引保存
+        minIndex = j; // 将最小数的索引保存
       }
     }
-    temp = arr[i]
-    arr[i] = arr[minIndex]
-    arr[minIndex] = temp
+    temp = arr[i];
+    arr[i] = arr[minIndex];
+    arr[minIndex] = temp;
   }
-  return arr
+  return arr;
 }
 ```
 

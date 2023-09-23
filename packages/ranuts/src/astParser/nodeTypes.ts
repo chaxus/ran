@@ -1,4 +1,4 @@
-import type { Scope } from '@/ranpack/ast/Scope'
+import type { Scope } from '@/ranpack/ast/Scope';
 
 export enum NodeType {
   Program = 'Program',
@@ -32,7 +32,7 @@ export type Statement =
   | FunctionDeclaration
   | ExpressionStatement
   | BlockStatement
-  | ReturnStatement
+  | ReturnStatement;
 // 表达式语句
 export type Expression =
   | CallExpression
@@ -40,7 +40,7 @@ export type Expression =
   | Identifier
   | Literal
   | BinaryExpression
-  | FunctionExpression
+  | FunctionExpression;
 // 函数类型
 export enum FunctionType {
   FunctionDeclaration,
@@ -48,98 +48,98 @@ export enum FunctionType {
 }
 
 export interface Node {
-  type: string
-  start: number
-  end: number
-  _scope?: Scope
+  type: string;
+  start: number;
+  end: number;
+  _scope?: Scope;
 }
 
 export interface Program extends Node {
-  type: NodeType.Program
-  body: Statement[]
+  type: NodeType.Program;
+  body: Statement[];
 }
 
 export interface Literal extends Node {
-  type: NodeType.Literal
-  value: string
-  raw: string
+  type: NodeType.Literal;
+  value: string;
+  raw: string;
 }
 
 export interface Identifier extends Node {
-  type: NodeType.Identifier
-  name: string
+  type: NodeType.Identifier;
+  name: string;
 }
 
 export interface CallExpression extends Node {
-  type: NodeType.CallExpression
-  callee: Expression
-  arguments: Expression[]
+  type: NodeType.CallExpression;
+  callee: Expression;
+  arguments: Expression[];
 }
 
 export interface MemberExpression extends Node {
-  type: NodeType.MemberExpression
-  object: Identifier | MemberExpression
-  property: Identifier
-  computed: boolean
+  type: NodeType.MemberExpression;
+  object: Identifier | MemberExpression;
+  property: Identifier;
+  computed: boolean;
 }
 
 export interface BlockStatement extends Node {
-  type: NodeType.BlockStatement
-  body: Statement[]
+  type: NodeType.BlockStatement;
+  body: Statement[];
 }
 
 export interface ExpressionStatement extends Node {
-  type: NodeType.ExpressionStatement
-  expression: Expression
+  type: NodeType.ExpressionStatement;
+  expression: Expression;
 }
 
 export interface FunctionExpression extends FunctionNode {
-  type: NodeType.FunctionExpression
+  type: NodeType.FunctionExpression;
 }
 
 export interface FunctionDeclaration extends FunctionNode {
-  type: NodeType.FunctionDeclaration
-  id: Identifier | null
+  type: NodeType.FunctionDeclaration;
+  id: Identifier | null;
 }
 
-export type VariableKind = 'var' | 'let' | 'const'
+export type VariableKind = 'var' | 'let' | 'const';
 
 export interface VariableDeclarator extends Node {
-  type: NodeType.VariableDeclarator
-  id: Identifier
-  init: Expression | Literal | null
+  type: NodeType.VariableDeclarator;
+  id: Identifier;
+  init: Expression | Literal | null;
 }
 
 export interface VariableDeclaration extends Node {
-  type: NodeType.VariableDeclaration
-  kind: 'var' | 'let' | 'const'
-  declarations: VariableDeclarator[]
+  type: NodeType.VariableDeclaration;
+  kind: 'var' | 'let' | 'const';
+  declarations: VariableDeclarator[];
 }
 
 export interface ImportSpecifier extends Node {
-  type: NodeType.ImportSpecifier
-  imported: Identifier
-  local: Identifier
+  type: NodeType.ImportSpecifier;
+  imported: Identifier;
+  local: Identifier;
 }
 
 export interface ImportDefaultSpecifier extends Node {
-  type: NodeType.ImportDefaultSpecifier
-  local: Identifier
+  type: NodeType.ImportDefaultSpecifier;
+  local: Identifier;
 }
 
 export interface ImportNamespaceSpecifier extends Node {
-  type: NodeType.ImportNamespaceSpecifier
-  local: Identifier
+  type: NodeType.ImportNamespaceSpecifier;
+  local: Identifier;
 }
 
 export type ImportSpecifiers = Array<
   ImportSpecifier | ImportDefaultSpecifier | ImportNamespaceSpecifier
->
+>;
 
 export interface ImportDeclaration extends Node {
-  type: NodeType.ImportDeclaration
-  specifiers: ImportSpecifiers
-  source: Literal
+  type: NodeType.ImportDeclaration;
+  specifiers: ImportSpecifiers;
+  source: Literal;
 }
 
 export type Declaration =
@@ -147,50 +147,50 @@ export type Declaration =
   | VariableDeclaration
   | ImportDeclaration
   | ExportDeclaration
-  | VariableDeclarator
+  | VariableDeclarator;
 
 export interface ExportSpecifier extends Node {
-  type: NodeType.ExportSpecifier
-  exported: Identifier
-  local: Identifier
+  type: NodeType.ExportSpecifier;
+  exported: Identifier;
+  local: Identifier;
 }
 
 export interface ExportNamedDeclaration extends Node {
-  type: NodeType.ExportNamedDeclaration
-  declaration: Declaration | null
-  specifiers: ExportSpecifier[]
-  source: Literal | null
+  type: NodeType.ExportNamedDeclaration;
+  declaration: Declaration | null;
+  specifiers: ExportSpecifier[];
+  source: Literal | null;
 }
 
 export interface ExportDefaultDeclaration extends Node {
-  type: NodeType.ExportDefaultDeclaration
-  declaration: Declaration | Expression
+  type: NodeType.ExportDefaultDeclaration;
+  declaration: Declaration | Expression;
 }
 
 export interface ExportAllDeclaration extends Node {
-  type: NodeType.ExportAllDeclaration
-  source: Literal
-  exported: Identifier | null
+  type: NodeType.ExportAllDeclaration;
+  source: Literal;
+  exported: Identifier | null;
 }
 
 export type ExportDeclaration =
   | ExportNamedDeclaration
   | ExportDefaultDeclaration
-  | ExportAllDeclaration
+  | ExportAllDeclaration;
 
 export interface BinaryExpression extends Node {
-  type: NodeType.BinaryExpression
-  left: Expression
-  right: Expression
-  operator: string
+  type: NodeType.BinaryExpression;
+  left: Expression;
+  right: Expression;
+  operator: string;
 }
 export interface FunctionNode extends Node {
-  id: Identifier | null
-  params: Expression[] | Identifier[]
-  body: BlockStatement
+  id: Identifier | null;
+  params: Expression[] | Identifier[];
+  body: BlockStatement;
 }
 
 export interface ReturnStatement extends Node {
-  type: NodeType.ReturnStatement
-  argument: Expression
+  type: NodeType.ReturnStatement;
+  argument: Expression;
 }

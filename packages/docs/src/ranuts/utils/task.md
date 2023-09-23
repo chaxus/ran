@@ -37,13 +37,13 @@
 ### 3.使用例子
 
 ```js
-const taskId = startTask()
+const taskId = startTask();
 
 // do something
 
-const time = taskEnd(taskId)
+const time = taskEnd(taskId);
 
-console.log('task 执行花费的时间', time)
+console.log('task 执行花费的时间', time);
 ```
 
 ## 二.new Date().getTime()

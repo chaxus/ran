@@ -1,8 +1,8 @@
-import { defineConfig, devices } from '@playwright/test'
+import { defineConfig, devices } from '@playwright/test';
 
-export const TIME_OUT = 6000
+export const TIME_OUT = 6000;
 
-export const DEV_SERVER = 'http://localhost:5124/'
+export const DEV_SERVER = 'http://localhost:5124/';
 
 /**
  * Read environment variables from file.
@@ -78,4 +78,4 @@ export default defineConfig({
     url: DEV_SERVER,
     reuseExistingServer: !process.env.CI,
   },
-})
+});

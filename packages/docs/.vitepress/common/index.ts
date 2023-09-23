@@ -1,6 +1,6 @@
-export const GTAG = 'https://www.googletagmanager.com/gtag/js?id=G-0MPS5WH1C0'
+export const GTAG = 'https://www.googletagmanager.com/gtag/js?id=G-0MPS5WH1C0';
 
-export const GOOGLE_ANALYSE = `;window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);};gtag('js', new Date());gtag('config', 'G-0MPS5WH1C0');`
+export const GOOGLE_ANALYSE = `;window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);};gtag('js', new Date());gtag('config', 'G-0MPS5WH1C0');`;
 
 export const BD_ANALYSE = `
 ;var _hmt = _hmt || [];
@@ -10,7 +10,7 @@ export const BD_ANALYSE = `
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();
-`
+`;
 
 export const PREVIEW_CODE = `
   window.uploadFile = (name) => {
@@ -30,25 +30,24 @@ export const PREVIEW_CODE = `
           }
         }
       }
-`
+`;
 
 export const DESCRIPTION =
-  'Based on web component library, common function library utils, personal article record and so on'
+  'Based on web component library, common function library utils, personal article record and so on';
 
-export const HOME = 'https://chaxus.github.io/ran/'
+export const HOME = 'https://chaxus.github.io/ran/';
 
-export const BASE_PATH = '/ran/'
+export const BASE_PATH = '/ran/';
 
-export const HOME_ICON = `${HOME}home.svg`
+export const HOME_ICON = `${HOME}home.svg`;
 
-export const UTILS_PATH = `${HOME}src/ranuts/utils/`
+export const UTILS_PATH = `${HOME}src/ranuts/utils/`;
 
-export const RANUI_PATH = `${HOME}src/ranui/`
+export const RANUI_PATH = `${HOME}src/ranui/`;
 
-export const ARTICLE_PATH = `${HOME}src/article/designMode.html`
+export const ARTICLE_PATH = `${HOME}src/article/designMode.html`;
 
 export const KEY_WORDS =
-  'ran,component,components,ui,design,ranui,web-components,javascript,typescript,js'
+  'ran,component,components,ui,design,ranui,web-components,javascript,typescript,js';
 
-export const GITHUB = 'https://github.com/chaxus/ran'
-
+export const GITHUB = 'https://github.com/chaxus/ran';

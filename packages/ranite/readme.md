@@ -19,7 +19,7 @@ Build API 主要用来进行项目打包，包括 build、buildSync 和 serve �
 首先我们来试着在 Node.js 中使用 build 方法。你可以在项目根目录新建 build.js 文件，内容如下:
 
 ```js
-const { build, buildSync, serve } = require('esbuild')
+const { build, buildSync, serve } = require('esbuild');
 
 async function runBuild() {
   // 异步方法，返回一个 Promise
@@ -54,11 +54,11 @@ async function runBuild() {
     loader: {
       '.png': 'base64',
     },
-  })
-  console.log(result)
+  });
+  console.log(result);
 }
 
-runBuild()
+runBuild();
 ```
 
 随后，你在命令行执行 node build.js，就能在控制台发现如下日志信息:

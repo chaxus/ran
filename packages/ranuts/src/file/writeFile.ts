@@ -1,6 +1,6 @@
-import fs from './fs'
+import fs from './fs';
 
-type Error = NodeJS.ErrnoException | null
+type Error = NodeJS.ErrnoException | null;
 
 /**
  * @description: 根据文件路径创建文件，如果文件存在会清空再写入，如果不存在会创建
@@ -15,7 +15,7 @@ const writeFile = (
 ): Promise<Ranuts.Identification> =>
   new Promise((resolve, reject) => {
     if (!fs._identification)
-      return reject({ _identification: false, data: 'fs is not loaded' })
+      return reject({ _identification: false, data: 'fs is not loaded' });
     fs.writeFile(
       path,
       content,
@@ -26,13 +26,13 @@ const writeFile = (
       },
       (err: Error) => {
         if (err) {
-          reject({ _identification: false, data: err })
-          throw err
+          reject({ _identification: false, data: err });
+          throw err;
         } else {
-          resolve({ _identification: true, data: { path, content } })
+          resolve({ _identification: true, data: { path, content } });
         }
       },
-    )
-  })
+    );
+  });
 
-export default writeFile
+export default writeFile;

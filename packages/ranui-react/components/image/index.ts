@@ -1,6 +1,6 @@
-import reactify from '@/utils/reactify'
-import 'ranui/image'
+import reactify from '@/utils/reactify';
+import 'ranui/image';
 
-const Image = reactify('r-image')
+const Image = reactify('r-image');
 
-export default Image
+export default Image;

@@ -17,20 +17,20 @@
 
 <script>
   const uploadFile = () => {
-    const preview = document.getElementById('preview')
-    const uploadFile = document.createElement('input')
-    uploadFile.setAttribute('type', 'file')
-    uploadFile.click()
+    const preview = document.getElementById('preview');
+    const uploadFile = document.createElement('input');
+    uploadFile.setAttribute('type', 'file');
+    uploadFile.click();
     uploadFile.onchange = (e) => {
-      const { files = [] } = uploadFile
+      const { files = [] } = uploadFile;
       if (files.length > 0) {
-        preview.setAttribute('src', '')
-        const file = files[0]
-        const url = URL.createObjectURL(file)
-        preview.setAttribute('src', url)
+        preview.setAttribute('src', '');
+        const file = files[0];
+        const url = URL.createObjectURL(file);
+        preview.setAttribute('src', url);
       }
-    }
-  }
+    };
+  };
 </script>
 ```
 

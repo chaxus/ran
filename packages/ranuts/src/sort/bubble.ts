@@ -4,18 +4,18 @@
  * @return {Array}
  */
 const bubble = (list: Array<number>): Array<number> => {
-  const length = list.length
+  const length = list.length;
   for (let i = 0; i < length; i++) {
     for (let j = 0; j < length; j++) {
-      let temp
+      let temp;
       if (list[j] > list[i]) {
-        temp = list[j]
-        list[j] = list[i]
-        list[i] = temp
+        temp = list[j];
+        list[j] = list[i];
+        list[i] = temp;
       }
     }
   }
-  return list
-}
+  return list;
+};
 
-export default bubble
+export default bubble;

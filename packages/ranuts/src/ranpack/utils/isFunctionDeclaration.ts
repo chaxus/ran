@@ -1,12 +1,12 @@
-import type { Declaration, ExportDeclaration } from '../../astParser'
-import { NodeType } from '../../astParser'
+import type { Declaration, ExportDeclaration } from '../../astParser';
+import { NodeType } from '../../astParser';
 /**
  * @description: 是否为函数节点
  * @param {Declaration} node
  * @return {*}
  */
 export function isFunctionDeclaration(node: Declaration): boolean {
-  if (!node) return false
+  if (!node) return false;
 
   return (
     // function foo() {}
@@ -21,7 +21,7 @@ export function isFunctionDeclaration(node: Declaration): boolean {
       node.type === NodeType.ExportDefaultDeclaration) &&
       !!node.declaration &&
       node.declaration.type === NodeType.FunctionDeclaration)
-  )
+  );
 }
 /**
  * @description: 是否为 export 声明节点
@@ -29,7 +29,7 @@ export function isFunctionDeclaration(node: Declaration): boolean {
  * @return {*}
  */
 export function isExportDeclaration(node: ExportDeclaration): boolean {
-  return /^Export/.test(node.type)
+  return /^Export/.test(node.type);
 }
 /**
  * @description: 是否为 import 声明节点
@@ -37,5 +37,5 @@ export function isExportDeclaration(node: ExportDeclaration): boolean {
  * @return {*}
  */
 export function isImportDeclaration(node: any): boolean {
-  return node.type === 'ImportDeclaration'
+  return node.type === 'ImportDeclaration';
 }

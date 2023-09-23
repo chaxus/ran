@@ -1,6 +1,6 @@
-import reactify from '@/utils/reactify'
-import 'ranui/tab'
+import reactify from '@/utils/reactify';
+import 'ranui/tab';
 
-const Tab = reactify('r-tab')
+const Tab = reactify('r-tab');
 
-export default Tab
+export default Tab;

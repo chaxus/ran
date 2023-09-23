@@ -11,20 +11,20 @@
  * @Description: 排序
  */
 interface ListNode {
-  val: number
-  next: ListNode | null
+  val: number;
+  next: ListNode | null;
 }
 
 interface HeadNode {
-  val: string
-  next?: HeadNode
-  random?: HeadNode
+  val: string;
+  next?: HeadNode;
+  random?: HeadNode;
 }
 
 interface TreeNode {
-  val: number
-  left?: TreeNode
-  right?: TreeNode
+  val: number;
+  left?: TreeNode;
+  right?: TreeNode;
 }
 
 // 字符串 string
@@ -35,8 +35,8 @@ interface TreeNode {
  * @return {string}
  */
 const replaceSpace = function (s: string) {
-  return s.split(' ').join('%20')
-}
+  return s.split(' ').join('%20');
+};
 /**
  * @description: 左旋转字符串
  * 字符串的左旋转操作是把字符串前面的若干个字符转移到字符串的尾部。
@@ -47,8 +47,8 @@ const replaceSpace = function (s: string) {
  * @return {*}
  */
 const reverseLeftWords = function (s: string, n: number) {
-  return s.slice(n) + s.slice(0, n)
-}
+  return s.slice(n) + s.slice(0, n);
+};
 
 /**
  * @description: 剑指 Offer 20. 表示数值的字符串
@@ -61,8 +61,8 @@ const isNumber = function (s: string) {
   // [eE][\+\-]?\d+
   return /^\s*(?:[+\-]?\d+|[+\-]?(?:\d+\.|\d+\.\d+|\.\d+))(?:[eE][+\-]?\d+)?\s*$/.test(
     s,
-  )
-}
+  );
+};
 
 /**
  * @description: 剑指 Offer 67. 把字符串转换成整数
@@ -70,15 +70,15 @@ const isNumber = function (s: string) {
  * @return {number}
  */
 const strToInt = function (str: string) {
-  const [item] = /^\s*([+\-]?\d+)/.exec(str) || [0]
+  const [item] = /^\s*([+\-]?\d+)/.exec(str) || [0];
   if (Number(item) >= Math.pow(2, 31) - 1) {
-    return Math.pow(2, 31) - 1
+    return Math.pow(2, 31) - 1;
   }
   if (Number(item) <= -Math.pow(2, 31)) {
-    return -Math.pow(2, 31)
+    return -Math.pow(2, 31);
   }
-  return item
-}
+  return item;
+};
 
 // 链表
 /**
@@ -88,13 +88,13 @@ const strToInt = function (str: string) {
  */
 
 const reversePrint = function (head: ListNode | null) {
-  const result = []
+  const result = [];
   while (head) {
-    result.unshift(head.val)
-    head = head.next
+    result.unshift(head.val);
+    head = head.next;
   }
-  return result
-}
+  return result;
+};
 
 /**
  * @description: 剑指 Offer 24. 反转链表
@@ -103,16 +103,16 @@ const reversePrint = function (head: ListNode | null) {
  */
 const reverseList = function (head: ListNode | null) {
   // prev curr next
-  let prev = null
-  let curr = head
+  let prev = null;
+  let curr = head;
   while (curr) {
-    const next = curr.next
-    curr.next = prev
-    prev = curr
-    curr = next
+    const next = curr.next;
+    curr.next = prev;
+    prev = curr;
+    curr = next;
   }
-  return prev
-}
+  return prev;
+};
 /**
  * @description: 剑指 Offer 35. 复杂链表的复制
  * @param {*} head
@@ -122,17 +122,17 @@ const reverseList = function (head: ListNode | null) {
 
 const copyRandomList = function (head?: HeadNode, cacheNode = new Map()) {
   if (head == null) {
-    return null
+    return null;
   }
   if (!cacheNode.get(head)) {
-    cacheNode.set(head, { val: head.val })
+    cacheNode.set(head, { val: head.val });
     Object.assign(cacheNode.get(head), {
       next: copyRandomList(head.next, cacheNode),
       random: copyRandomList(head.random, cacheNode),
-    })
+    });
   }
-  return cacheNode.get(head)
-}
+  return cacheNode.get(head);
+};
 
 // 二叉树
 
@@ -141,48 +141,48 @@ const copyRandomList = function (head?: HeadNode, cacheNode = new Map()) {
  * @return {*}
  */
 const preOrderTraversal = (root?: TreeNode, res: Array<number> = []) => {
-  if (!root) return
-  res.push(root.val)
-  preOrderTraversal(root.left, res)
-  preOrderTraversal(root.right, res)
-  return res
-}
+  if (!root) return;
+  res.push(root.val);
+  preOrderTraversal(root.left, res);
+  preOrderTraversal(root.right, res);
+  return res;
+};
 
 /**
  * @description: 二叉树的中序遍历
  * @return {*}
  */
 const inOrderTraversal = (root?: TreeNode, res: Array<number> = []) => {
-  if (!root) return
-  preOrderTraversal(root.left, res)
-  res.push(root.val)
-  preOrderTraversal(root.right, res)
-  return res
-}
+  if (!root) return;
+  preOrderTraversal(root.left, res);
+  res.push(root.val);
+  preOrderTraversal(root.right, res);
+  return res;
+};
 
 /**
  * @description: 二叉树的后序遍历
  * @return {*}
  */
 const postOrderTraversal = (root?: TreeNode, res: Array<number> = []) => {
-  if (!root) return
-  preOrderTraversal(root.left, res)
-  preOrderTraversal(root.right, res)
-  res.push(root.val)
-  return res
-}
+  if (!root) return;
+  preOrderTraversal(root.left, res);
+  preOrderTraversal(root.right, res);
+  res.push(root.val);
+  return res;
+};
 
 /**
  * @description: 二叉树的层序遍历
  * @return {*}
  */
 const leverOrderTraversal = (root?: TreeNode, res: Array<number> = []) => {
-  if (!root) return
-  preOrderTraversal(root.left, res)
-  preOrderTraversal(root.right, res)
-  res.push(root.val)
-  return res
-}
+  if (!root) return;
+  preOrderTraversal(root.left, res);
+  preOrderTraversal(root.right, res);
+  res.push(root.val);
+  return res;
+};
 
 // 双指针
 
@@ -193,23 +193,23 @@ const leverOrderTraversal = (root?: TreeNode, res: Array<number> = []) => {
  * @return {*}
  */
 const deleteNode = function (head: ListNode, val: number) {
-  let prev = head
-  let cur = head.next
+  let prev = head;
+  let cur = head.next;
   if (head.val === val) {
-    head.next = null
-    return cur
+    head.next = null;
+    return cur;
   }
   while (cur) {
     if (cur.val === val) {
-      prev.next = cur.next
-      break
+      prev.next = cur.next;
+      break;
     } else {
-      prev = cur
-      cur = cur.next
+      prev = cur;
+      cur = cur.next;
     }
   }
-  return head
-}
+  return head;
+};
 /**
  * @description: 剑指 Offer 22. 链表中倒数第k个节点
  * @param {ListNode} head
@@ -217,18 +217,18 @@ const deleteNode = function (head: ListNode, val: number) {
  * @return {*}
  */
 const getKthFromEnd = function (head: ListNode, k: number) {
-  let pre: ListNode | null = head
-  let cur: ListNode | null = head
+  let pre: ListNode | null = head;
+  let cur: ListNode | null = head;
   while (cur) {
     if (k <= 0) {
-      pre = pre?.next || null
+      pre = pre?.next || null;
     } else {
-      k--
+      k--;
     }
-    cur = cur.next
+    cur = cur.next;
   }
-  return pre
-}
+  return pre;
+};
 /**
  * @description: 剑指 Offer 25. 合并两个排序的链表
  * @param {ListNode} l1
@@ -237,17 +237,17 @@ const getKthFromEnd = function (head: ListNode, k: number) {
  */
 const mergeTwoLists = function (l1: ListNode | null, l2: ListNode | null) {
   if (l1 == null) {
-    return l2
+    return l2;
   } else if (l2 == null) {
-    return l1
+    return l1;
   } else if (l1.val < l2.val) {
-    l1.next = mergeTwoLists(l1.next, l2)
-    return l1
+    l1.next = mergeTwoLists(l1.next, l2);
+    return l1;
   } else {
-    l2.next = mergeTwoLists(l1, l2.next)
-    return l2
+    l2.next = mergeTwoLists(l1, l2.next);
+    return l2;
   }
-}
+};
 /**
  * @description: 剑指 Offer 52. 两个链表的第一个公共节点
  * @param {*} headA
@@ -259,16 +259,16 @@ const getIntersectionNode = function (
   headB: ListNode | null,
 ) {
   if (headA === null || headB === null) {
-    return null
+    return null;
   }
   let p1: ListNode | null = headA,
-    p2: ListNode | null = headB
+    p2: ListNode | null = headB;
   while (p1 !== p2) {
-    p1 = p1 === null ? headB : p1.next
-    p2 = p2 === null ? headA : p2.next
+    p1 = p1 === null ? headB : p1.next;
+    p2 = p2 === null ? headA : p2.next;
   }
-  return p1
-}
+  return p1;
+};
 /**
  * @description: 剑指 Offer 21. 调整数组顺序使奇数位于偶数前面
  * @param {*} nums
@@ -276,24 +276,24 @@ const getIntersectionNode = function (
  */
 const exchange = function (nums: Array<number>) {
   let left = 0,
-    right = nums.length - 1
+    right = nums.length - 1;
   while (left < right) {
     while (left < right && nums[left] % 2 === 1) {
-      left++
+      left++;
     }
     while (left < right && nums[right] % 2 === 0) {
-      right--
+      right--;
     }
     if (left < right) {
-      nums[left] = nums[left] ^ nums[right]
-      nums[right] = nums[left] ^ nums[right]
-      nums[left] = nums[left] ^ nums[right]
-      left++
-      right--
+      nums[left] = nums[left] ^ nums[right];
+      nums[right] = nums[left] ^ nums[right];
+      nums[left] = nums[left] ^ nums[right];
+      left++;
+      right--;
     }
   }
-  return nums
-}
+  return nums;
+};
 /**
  * @description: 剑指 Offer 57. 和为s的两个数字
  * @param {Array} nums
@@ -302,33 +302,33 @@ const exchange = function (nums: Array<number>) {
  */
 const twoSum = function (nums: Array<number>, target: number) {
   let l = 0,
-    r = nums.length - 1
+    r = nums.length - 1;
   while (l < r) {
-    if (nums[l] + nums[r] === target) return [nums[l], nums[r]]
+    if (nums[l] + nums[r] === target) return [nums[l], nums[r]];
     if (nums[l] + nums[r] > target) {
-      r--
+      r--;
     } else {
-      l++
+      l++;
     }
   }
-  return []
-}
+  return [];
+};
 
 // 排序
 export class MinHeap {
-  value: Array<number>
-  size: number
+  value: Array<number>;
+  size: number;
   constructor(arr: Array<number>) {
-    this.value = [...arr]
-    this.size = this.value.length
-    this.buildMaxHeap()
+    this.value = [...arr];
+    this.size = this.value.length;
+    this.buildMaxHeap();
   }
   private swap = (i: number, j: number) => {
-    if(i === j) return 
-    this.value[i] = this.value[i] ^ this.value[j]
-    this.value[j] = this.value[i] ^ this.value[j]
-    this.value[i] = this.value[i] ^ this.value[j]
-  }
+    if (i === j) return;
+    this.value[i] = this.value[i] ^ this.value[j];
+    this.value[j] = this.value[i] ^ this.value[j];
+    this.value[i] = this.value[i] ^ this.value[j];
+  };
   /**
    * @description: 自上而下的调整，比较当前节点和子节点的大小
    * @param {number} i 父节点
@@ -336,85 +336,85 @@ export class MinHeap {
    */
   private heapHandler = (i: number) => {
     // i 是当前节点，left 和 right 是左节点和右节点
-    const left = 2 * i + 1
-    const right = 2 * i + 2
-    let largest = i
+    const left = 2 * i + 1;
+    const right = 2 * i + 2;
+    let largest = i;
     if (left < this.size && this.value[left] > this.value[largest]) {
-      largest = left
+      largest = left;
     }
     if (right < this.size && this.value[right] > this.value[largest]) {
-      largest = right
+      largest = right;
     }
     if (largest !== i) {
-      this.swap(i, largest)
-      this.heapHandler(largest)
+      this.swap(i, largest);
+      this.heapHandler(largest);
     }
-  }
+  };
   /**
    * @description: 自下而上的调整
    * @param {number} i
    * @return {*}
    */
   private heapHand = (i: number) => {
-    let largest = i
+    let largest = i;
     if (i % 2 === 0) {
-      largest = (i - 2) / 2
+      largest = (i - 2) / 2;
     } else {
-      largest = (i - 1) / 2
+      largest = (i - 1) / 2;
     }
     if (this.value[largest] < this.value[i]) {
-      this.swap(i, largest)
+      this.swap(i, largest);
     }
     if (largest > 0) {
-      this.heapHandler(largest)
+      this.heapHandler(largest);
     }
-  }
+  };
   /**
    * @description: 堆排序
    * @return {*}
    */
   private buildMaxHeap = () => {
     for (let i = Math.floor(this.size / 2); i >= 0; i--) {
-      this.heapHandler(i)
+      this.heapHandler(i);
     }
     for (let i = this.size - 1; i >= 0; i--) {
-      this.swap(0, i)
-      this.size--
-      this.heapHandler(0)
+      this.swap(0, i);
+      this.size--;
+      this.heapHandler(0);
     }
-    this.size = this.value.length
-  }
+    this.size = this.value.length;
+  };
   /**
    * @description: 插入
    * @param {number} item
    * @return {*}
    */
   insert = (item: number): Array<number> => {
-    this.value.push(item)
-    this.size = this.value.length
-    this.heapHand(this.size - 1)
-    return this.value
-  }
+    this.value.push(item);
+    this.size = this.value.length;
+    this.heapHand(this.size - 1);
+    return this.value;
+  };
   /**
    * @description: 查找，返回索引 index
    * @param {number} item
    * @return {*}
    */
   select = (item: number): number => {
-    if (this.value.length <= 0) return -1
-    return 0
-  }
+    if (this.value.length <= 0) return -1;
+    return 0;
+  };
   delete = (): Array<number> => {
-    return this.value
-  }
+    return this.value;
+  };
   /**
    * @description: 堆的调整
    * @return {*}
    */
   sort = (): Array<number> => {
-    this.buildMaxHeap()
-    return this.value
-  }
+    this.buildMaxHeap();
+    return this.value;
+  };
 }
 
 /**
@@ -423,7 +423,6 @@ export class MinHeap {
  * @return {Array}
  */
 export const heap = (list: Array<number>): Array<number> => {
-  const { value } = new MinHeap(list)
-  return value
-}
-
+  const { value } = new MinHeap(list);
+  return value;
+};

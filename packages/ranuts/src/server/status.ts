@@ -63,7 +63,7 @@ const codes = new Map([
   [509, 'Bandwidth Limit Exceeded'],
   [510, 'Not Extended'],
   [511, 'Network Authentication Required'],
-])
+]);
 
 const status = {
   // status code to message map
@@ -94,7 +94,7 @@ const status = {
     503: true,
     504: true,
   },
-}
+};
 
 /**
  * @private
@@ -104,11 +104,11 @@ const status = {
  * @return {Record<string, number>}
  */
 function createMessageToStatusCodeMap(codes: Map<number, string>) {
-  const map: Map<string, number> = new Map()
+  const map: Map<string, number> = new Map();
   for (const [status, message] of codes) {
-    map.set(message.toLowerCase(), status)
+    map.set(message.toLowerCase(), status);
   }
-  return map
+  return map;
 }
 
 /**
@@ -117,11 +117,11 @@ function createMessageToStatusCodeMap(codes: Map<number, string>) {
  */
 
 function createStatusCodeList(codes: Map<number, string>) {
-  const codeList: Array<number> = []
+  const codeList: Array<number> = [];
   for (const [status, _] of codes) {
-    codeList.push(status)
+    codeList.push(status);
   }
-  return codeList
+  return codeList;
 }
 
 /**
@@ -130,13 +130,13 @@ function createStatusCodeList(codes: Map<number, string>) {
  */
 
 function getStatusCode(message: string) {
-  const msg = message.toLowerCase()
-  status.code.has(msg)
+  const msg = message.toLowerCase();
+  status.code.has(msg);
   if (!status.code.has(msg)) {
-    throw new Error('invalid status message: "' + message + '"')
+    throw new Error('invalid status message: "' + message + '"');
   }
 
-  return status.code.get(msg)
+  return status.code.get(msg);
 }
 
 /**
@@ -146,10 +146,10 @@ function getStatusCode(message: string) {
 
 function getStatusMessage(code: number) {
   if (!status.message.has(code)) {
-    throw new Error('invalid status code: ' + code)
+    throw new Error('invalid status code: ' + code);
   }
 
-  return status.message.get(code)
+  return status.message.get(code);
 }
 
 /**
@@ -169,23 +169,23 @@ function getStatusMessage(code: number) {
 function getStatus(code?: number | string): number | string | undefined {
   if (typeof code === 'number') {
     // return message
-    return getStatusMessage(code)
+    return getStatusMessage(code);
   }
 
   if (typeof code !== 'string') {
-    throw new TypeError('code must be a number or string')
+    throw new TypeError('code must be a number or string');
   }
 
   // '403'
-  const n = parseInt(code, 10)
+  const n = parseInt(code, 10);
   if (!isNaN(n) && status.codes.includes(n)) {
     // return message
-    return getStatusMessage(n)
+    return getStatusMessage(n);
   }
   // return code
-  return getStatusCode(code)
+  return getStatusCode(code);
 }
 
-export default status
+export default status;
 
-export { getStatus }
+export { getStatus };

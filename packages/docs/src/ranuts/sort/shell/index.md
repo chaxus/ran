@@ -23,20 +23,20 @@
  * @return {Array}
  */
 const shell = (list: Array<number>): Array<number> => {
-  const { length } = list
+  const { length } = list;
   for (let gap = Math.floor(length / 2); gap > 0; gap = Math.floor(gap / 2)) {
     for (let i = gap; i < length; i++) {
-      let j = i
-      const current = list[i]
+      let j = i;
+      const current = list[i];
       while (j - gap >= 0 && current < list[j - gap]) {
-        list[j] = list[j - gap]
-        j = j - gap
+        list[j] = list[j - gap];
+        j = j - gap;
       }
-      list[j] = current
+      list[j] = current;
     }
   }
-  return list
-}
+  return list;
+};
 ```
 
 ## 算法分析

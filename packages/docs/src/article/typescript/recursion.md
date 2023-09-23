@@ -15,7 +15,7 @@ TypeScript 类型系统不支持循环，但支持递归。当处理数量（个
 先用 Promise 热热身，实现一个提取不确定层数的 Promise 中的 value 类型的高级类型。
 
 ```ts
-type ttt = Promise<Promise<Promise<Record<string, any>>>>
+type ttt = Promise<Promise<Promise<Record<string, any>>>>;
 ```
 
 这里是 3 层 Promise，value 类型是索引类型。
@@ -31,7 +31,7 @@ type DeepPromiseValueType<P extends Promise<unknown>> = P extends Promise<
   ? ValueType extends Promise<unknown>
     ? DeepPromiseValueType<ValueType>
     : ValueType
-  : never
+  : never;
 ```
 
 类型参数 P 是待处理的 Promise，通过 extends 约束为 Promise 类型，value 类型不确定，设为 unknown。
@@ -49,7 +49,7 @@ type DeepPromiseValueType<P extends Promise<unknown>> = P extends Promise<
 ```ts
 type DeepPromiseValueType2<T> = T extends Promise<infer ValueType>
   ? DeepPromiseValueType2<ValueType>
-  : T
+  : T;
 ```
 
 不再约束类型参数必须是 Promise，这样就可以少一层判断。
@@ -63,13 +63,13 @@ type DeepPromiseValueType2<T> = T extends Promise<infer ValueType>
 有这样一个元组类型：
 
 ```ts
-type arr = [1, 2, 3, 4, 5]
+type arr = [1, 2, 3, 4, 5];
 ```
 
 我们把它反过来，也就是变成：
 
 ```ts
-type arr = [5, 4, 3, 2, 1]
+type arr = [5, 4, 3, 2, 1];
 ```
 
 这个学完了提取和构造很容易写出来：
@@ -83,7 +83,7 @@ type ReverseArr<Arr extends unknown[]> = Arr extends [
   infer Five,
 ]
   ? [Five, Four, Three, Two, One]
-  : never
+  : never;
 ```
 
 但如果数组长度不确定呢？
@@ -98,7 +98,7 @@ type ReverseArr<Arr extends unknown[]> = Arr extends [
   ...infer Rest,
 ]
   ? [...ReverseArr<Rest>, First]
-  : Arr
+  : Arr;
 ```
 
 类型参数 Arr 为待处理的数组类型，元素类型不确定，也就是 unknown。
@@ -125,9 +125,10 @@ type Includes<Arr extends unknown[], FindItem> = Arr extends [
   ? IsEqual<First, FindItem> extends true
     ? true
     : Includes<Rest, FindItem>
-  : false
+  : false;
 
-type IsEqual<A, B> = (A extends B ? true : false) & (B extends A ? true : false)
+type IsEqual<A, B> = (A extends B ? true : false) &
+  (B extends A ? true : false);
 ```
 
 类型参数 Arr 是待查找的数组类型，元素类型任意，也就是 unknown。FindItem 待查找的元素类型。
@@ -155,9 +156,10 @@ type RemoveItem<
   ? IsEqual<First, Item> extends true
     ? RemoveItem<Rest, Item, Result>
     : RemoveItem<Rest, Item, [...Result, First]>
-  : Result
+  : Result;
 
-type IsEqual<A, B> = (A extends B ? true : false) & (B extends A ? true : false)
+type IsEqual<A, B> = (A extends B ? true : false) &
+  (B extends A ? true : false);
 ```
 
 类型参数 Arr 是待处理的数组，元素类型任意，也就是 unknown[]。类型参数 Item 为待查找的元素类型。类型参数 Result 是构造出的新数组，默认值是 []。
@@ -181,7 +183,7 @@ type BuildArray<
   Length extends number,
   Ele = unknown,
   Arr extends unknown[] = [],
-> = Arr['length'] extends Length ? Arr : BuildArray<Length, Ele, [...Arr, Ele]>
+> = Arr['length'] extends Length ? Arr : BuildArray<Length, Ele, [...Arr, Ele]>;
 ```
 
 类型参数 Length 为数组长度，约束为 number。类型参数 Ele 为元素类型，默认值为 unknown。类型参数 Arr 为构造出的数组，默认值是 []。
@@ -203,7 +205,7 @@ type ReplaceStr<
   To extends string,
 > = Str extends `${infer Prefix}${From}${infer Suffix}`
   ? `${Prefix}${To}${Suffix}`
-  : Str
+  : Str;
 ```
 
 它能把一个字符串中的某个字符替换成另一个：
@@ -223,7 +225,7 @@ type ReplaceAll<
   To extends string,
 > = Str extends `${infer Left}${From}${infer Right}`
   ? `${Left}${To}${ReplaceAll<Right, From, To>}`
-  : Str
+  : Str;
 ```
 
 类型参数 Str 是待处理的字符串类型，From 是待替换的字符，To 是替换到的字符。
@@ -248,7 +250,7 @@ type ReplaceAll<
 type StringToUnion<Str extends string> =
   Str extends `${infer One}${infer Two}${infer Three}${infer Four}`
     ? One | Two | Three | Four
-    : never
+    : never;
 ```
 
 但如果字符串长度不确定呢？
@@ -259,7 +261,7 @@ type StringToUnion<Str extends string> =
 type StringToUnion<Str extends string> =
   Str extends `${infer First}${infer Rest}`
     ? First | StringToUnion<Rest>
-    : never
+    : never;
 ```
 
 类型参数 Str 为待处理的字符串类型，通过 extends 约束为 string。
@@ -282,7 +284,7 @@ type ReverseStr<
   Result extends string = '',
 > = Str extends `${infer First}${infer Rest}`
   ? ReverseStr<Rest, `${First}${Result}`>
-  : Result
+  : Result;
 ```
 
 类型参数 Str 为待处理的字符串。类型参数 Result 为构造出的字符，默认值是空串。
@@ -305,8 +307,8 @@ type ReverseStr<
 
 ```ts
 type ToReadonly<T> = {
-  readonly [Key in keyof T]: T[Key]
-}
+  readonly [Key in keyof T]: T[Key];
+};
 ```
 
 如果这个索引类型层数不确定呢？
@@ -318,16 +320,16 @@ type obj = {
   a: {
     b: {
       c: {
-        f: () => 'dong'
+        f: () => 'dong';
         d: {
           e: {
-            guang: string
-          }
-        }
-      }
-    }
-  }
-}
+            guang: string;
+          };
+        };
+      };
+    };
+  };
+};
 ```
 
 数量（层数）不确定，类型体操中应该自然的想到递归。
@@ -340,8 +342,8 @@ type DeepReadonly<Obj extends Record<string, any>> = {
     ? Obj[Key] extends Function
       ? Obj[Key]
       : DeepReadonly<Obj[Key]>
-    : Obj[Key]
-}
+    : Obj[Key];
+};
 ```
 
 类型参数 Obj 是待处理的索引类型，约束为 Record<string, any>，也就是索引为 string，值为任意类型的索引类型。
@@ -373,7 +375,7 @@ type DeepReadonly<Obj extends Record<string, any>> = Obj extends any
         ? Obj[Key] extends Function
           ? Obj[Key]
           : DeepReadonly<Obj[Key]>
-        : Obj[Key]
+        : Obj[Key];
     }
-  : never
+  : never;
 ```

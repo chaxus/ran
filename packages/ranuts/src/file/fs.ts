@@ -1,9 +1,9 @@
-const fs = {}
-let fileSystem: any = fs
+const fs = {};
+let fileSystem: any = fs;
 if (typeof process !== 'undefined' && typeof fileSystem.Stats === 'function') {
-  fileSystem._identification = true
+  fileSystem._identification = true;
 } else {
-  fileSystem = { _identification: false, message: 'require is not defined' }
+  fileSystem = { _identification: false, message: 'require is not defined' };
 }
 
-export default fileSystem
+export default fileSystem;

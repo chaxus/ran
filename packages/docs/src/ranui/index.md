@@ -46,24 +46,24 @@
 ### 2.`js`
 
 ```js
-import 'ranui'
+import 'ranui';
 
-const Button = document.createElement('r-button')
-Button.appendChild('this is button text')
-document.body.appendChild(Button)
+const Button = document.createElement('r-button');
+Button.appendChild('this is button text');
+document.body.appendChild(Button);
 ```
 
 ### 3.`jsx`
 
 ```jsx
-import 'ranui'
+import 'ranui';
 const App = () => {
   return (
     <>
       <r-button>Button</r-button>
     </>
-  )
-}
+  );
+};
 ```
 
 ### 4.`vue`
@@ -73,7 +73,7 @@ const App = () => {
   <r-button>Button</r-button>
 </template>
 <script>
-import 'ranui'
+import 'ranui';
 </script>
 ```
 
@@ -81,28 +81,28 @@ import 'ranui'
 
 ```tsx
 // react 18
-import type { SyntheticEvent } from 'react'
-import React, { useRef } from 'react'
-import 'ranui'
+import type { SyntheticEvent } from 'react';
+import React, { useRef } from 'react';
+import 'ranui';
 
 const FilePreview = () => {
-  const ref = useRef<HTMLDivElement | null>(null)
+  const ref = useRef<HTMLDivElement | null>(null);
   const uploadFile = (e: SyntheticEvent<HTMLDivElement>) => {
     if (ref.current) {
-      const uploadFile = document.createElement('input')
-      uploadFile.setAttribute('type', 'file')
-      uploadFile.click()
+      const uploadFile = document.createElement('input');
+      uploadFile.setAttribute('type', 'file');
+      uploadFile.click();
       uploadFile.onchange = (e) => {
-        const { files = [] } = uploadFile
+        const { files = [] } = uploadFile;
         if (files && files?.length > 0 && ref.current) {
-          ref.current.setAttribute('src', '')
-          const file = files[0]
-          const url = URL.createObjectURL(file)
-          ref.current.setAttribute('src', url)
+          ref.current.setAttribute('src', '');
+          const file = files[0];
+          const url = URL.createObjectURL(file);
+          ref.current.setAttribute('src', url);
         }
-      }
+      };
     }
-  }
+  };
   return (
     <div>
       <r-preview ref={ref}></r-preview>
@@ -110,8 +110,8 @@ const FilePreview = () => {
         choose file to preview
       </r-button>
     </div>
-  )
-}
+  );
+};
 ```
 
 `jsx`在`TypeScript`中定义了所有`html`原生组件的类型。`web component`类型不在`jsx`定义中。需要手动添加。否则会有类型问题，但它实际上是有效的。
@@ -119,14 +119,14 @@ const FilePreview = () => {
 ```ts
 // typings.d.ts
 interface RButton {
-  type?: string
-  onClick?: React.MouseEventHandler<HTMLDivElement> | undefined
+  type?: string;
+  onClick?: React.MouseEventHandler<HTMLDivElement> | undefined;
 }
 
 interface RPreview {
-  src?: string | Blob | ArrayBuffer
-  onClick?: React.MouseEventHandler<HTMLDivElement> | undefined
-  ref?: React.MutableRefObject<HTMLDivElement | null>
+  src?: string | Blob | ArrayBuffer;
+  onClick?: React.MouseEventHandler<HTMLDivElement> | undefined;
+  ref?: React.MutableRefObject<HTMLDivElement | null>;
 }
 
 declare namespace JSX {
@@ -135,12 +135,12 @@ declare namespace JSX {
       React.HTMLAttributes<HTMLDivElement>,
       HTMLDivElement
     > &
-      RPreview
+      RPreview;
     'r-button': React.DetailedHTMLProps<
       React.HTMLAttributes<HTMLDivElement>,
       HTMLDivElement
     > &
-      RButton
+      RButton;
   }
 }
 ```
@@ -150,14 +150,14 @@ declare namespace JSX {
 支持按需引入
 
 ```js
-import 'ranui/button'
+import 'ranui/button';
 ```
 
 对于一些全局展示的组件，比如 `preview` 和 `message`，需要加载一些额外的样式
 
 ```js
-import 'ranui/preview'
-import 'ranui/style'
+import 'ranui/preview';
+import 'ranui/style';
 ```
 
 也可以全局导入，更加方便，这样什么都不用考虑了，梭哈完事。
@@ -165,7 +165,7 @@ import 'ranui/style'
 - `ES module`
 
 ```js
-import 'ranui'
+import 'ranui';
 ```
 
 - `UMD`, `IIFE`, `CJS`
@@ -254,10 +254,10 @@ import 'ranui'
 <r-button id="button">按钮</r-button>
 
 <script>
-  const button = document.getElementById('button')
+  const button = document.getElementById('button');
   button.addEventListener('click', function (event) {
-    alert('新的点击事件！')
-  })
+    alert('新的点击事件！');
+  });
 </script>
 ```
 
@@ -268,7 +268,7 @@ import 'ranui'
 
 <script>
   function change(e) {
-    console.log('e--->', e)
+    console.log('e--->', e);
   }
 </script>
 ```
