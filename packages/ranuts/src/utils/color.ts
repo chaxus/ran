@@ -83,7 +83,7 @@ export class Color {
       if (str.length < 7) {
         str = '#' + str[1] + str[1] + str[2] + str[2] + str[3] + str[3]
       }
-      ;[r, g, b] = hexToRgb(str)
+      [r, g, b] = hexToRgb(str)
     } else if (r instanceof Array) {
       a = r[3] || a
       b = r[2]

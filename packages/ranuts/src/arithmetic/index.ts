@@ -2,7 +2,7 @@
  * @Author: chaxus nouo18@163.com
  * @Date: 2023-09-14 21:21:31
  * @LastEditors: chaxus nouo18@163.com
- * @LastEditTime: 2023-09-21 22:36:08
+ * @LastEditTime: 2023-09-23 11:01:00
  * @FilePath: /ran/packages/ranuts/src/arithmetic/index.ts
  * @Description: 字符串 string
  * @Description: 链表
@@ -316,18 +316,18 @@ const twoSum = function (nums: Array<number>, target: number) {
 
 // 排序
 export class MinHeap {
-  arr: Array<number>
+  value: Array<number>
   size: number
   constructor(arr: Array<number>) {
-    this.arr = [...arr]
-    this.size = this.arr.length
+    this.value = [...arr]
+    this.size = this.value.length
     this.buildMaxHeap()
   }
   private swap = (i: number, j: number) => {
     if(i === j) return 
-    this.arr[i] = this.arr[i] ^ this.arr[j]
-    this.arr[j] = this.arr[i] ^ this.arr[j]
-    this.arr[i] = this.arr[i] ^ this.arr[j]
+    this.value[i] = this.value[i] ^ this.value[j]
+    this.value[j] = this.value[i] ^ this.value[j]
+    this.value[i] = this.value[i] ^ this.value[j]
   }
   /**
    * @description: 自上而下的调整，比较当前节点和子节点的大小
@@ -339,10 +339,10 @@ export class MinHeap {
     const left = 2 * i + 1
     const right = 2 * i + 2
     let largest = i
-    if (left < this.size && this.arr[left] > this.arr[largest]) {
+    if (left < this.size && this.value[left] > this.value[largest]) {
       largest = left
     }
-    if (right < this.size && this.arr[right] > this.arr[largest]) {
+    if (right < this.size && this.value[right] > this.value[largest]) {
       largest = right
     }
     if (largest !== i) {
@@ -362,7 +362,7 @@ export class MinHeap {
     } else {
       largest = (i - 1) / 2
     }
-    if (this.arr[largest] < this.arr[i]) {
+    if (this.value[largest] < this.value[i]) {
       this.swap(i, largest)
     }
     if (largest > 0) {
@@ -382,7 +382,7 @@ export class MinHeap {
       this.size--
       this.heapHandler(0)
     }
-    this.size = this.arr.length
+    this.size = this.value.length
   }
   /**
    * @description: 插入
@@ -390,10 +390,10 @@ export class MinHeap {
    * @return {*}
    */
   insert = (item: number): Array<number> => {
-    this.arr.push(item)
-    this.size = this.arr.length
+    this.value.push(item)
+    this.size = this.value.length
     this.heapHand(this.size - 1)
-    return this.arr
+    return this.value
   }
   /**
    * @description: 查找，返回索引 index
@@ -401,11 +401,11 @@ export class MinHeap {
    * @return {*}
    */
   select = (item: number): number => {
-    if (this.arr.length <= 0) return -1
+    if (this.value.length <= 0) return -1
     return 0
   }
   delete = (): Array<number> => {
-    return this.arr
+    return this.value
   }
   /**
    * @description: 堆的调整
@@ -413,7 +413,7 @@ export class MinHeap {
    */
   sort = (): Array<number> => {
     this.buildMaxHeap()
-    return this.arr
+    return this.value
   }
 }
 
@@ -423,7 +423,7 @@ export class MinHeap {
  * @return {Array}
  */
 export const heap = (list: Array<number>): Array<number> => {
-  const { arr } = new MinHeap(list)
-  return arr
+  const { value } = new MinHeap(list)
+  return value
 }
 

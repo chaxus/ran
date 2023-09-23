@@ -36,10 +36,10 @@ function updateStyle(oldVnode: VNode, vnode: VNode): void {
     if (!style[name]) {
       if (name[0] === '-' && name[1] === '-') {
         // 如果是以 -- 开头,代表是css变量,使用removeProperty删除
-        ;(elm as any).style.removeProperty(name)
+        (elm as any).style.removeProperty(name)
       } else {
         // 否则直接设为空
-        ;(elm as any).style[name] = ''
+        (elm as any).style[name] = ''
       }
     }
   }
@@ -51,10 +51,10 @@ function updateStyle(oldVnode: VNode, vnode: VNode): void {
     if (cur !== oldStyle[name]) {
       if (name[0] === '-' && name[1] === '-') {
         // 如果是以 -- 开头,代表是css变量,使用setProperty设置
-        ;(elm as any).style.setProperty(name, cur)
+        (elm as any).style.setProperty(name, cur)
       } else {
         // 否则直接设置
-        ;(elm as any).style[name] = cur
+        (elm as any).style[name] = cur
       }
     }
   }
@@ -71,7 +71,7 @@ function applyDestroyStyle(vnode: VNode): void {
   const s = (vnode.data as VNodeData).style
   if (!s || !(style = s.destroy)) return
   for (name in style) {
-    ;(elm as any).style[name] = style[name]
+    (elm as any).style[name] = style[name]
   }
 }
 
@@ -82,7 +82,7 @@ function applyRemoveStyle(vnode: VNode, rm: () => void): void {
     return
   }
   if (!reflowForced) {
-    ;(vnode.elm as any).offsetLeft
+    (vnode.elm as any).offsetLeft
     reflowForced = true
   }
   let name: string
@@ -100,7 +100,7 @@ function applyRemoveStyle(vnode: VNode, rm: () => void): void {
   for (; i < props.length; ++i) {
     if (applied.indexOf(props[i]) !== -1) amount++
   }
-  ;(elm as any).addEventListener(
+  (elm as any).addEventListener(
     'transitionend',
     function (ev: TransitionEvent) {
       if (ev.target === elm) --amount

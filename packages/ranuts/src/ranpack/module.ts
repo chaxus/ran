@@ -221,7 +221,7 @@ export class Module {
   }
 
   bindImportSpecifiers(): void {
-    ;[...Object.values(this.imports), ...Object.values(this.reexports)].forEach(
+    [...Object.values(this.imports), ...Object.values(this.reexports)].forEach(
       (specifier) => {
         specifier.module = this._getModuleBySource(specifier.source!)
       },
@@ -243,7 +243,7 @@ export class Module {
     if (this.declarations['default'] && this.exports['default'].localName) {
       const declaration = this.trace(this.exports['default'].localName)
       if (declaration) {
-        ;(this.declarations['default'] as SyntheticDefaultDeclaration).bind(
+        (this.declarations['default'] as SyntheticDefaultDeclaration).bind(
           declaration,
         )
       }

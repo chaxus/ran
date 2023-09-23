@@ -33,7 +33,7 @@ function updateProps(oldVnode: VNode, vnode: VNode): void {
     old = oldProps[key]
     // 如果新旧prop值不同，同时当dom是含有value属性的元素（如：input），当前value值和当前prop值不同时，将值设置为当前prop的值
     if (old !== cur && (key !== 'value' || (elm as any)[key] !== cur)) {
-      ;(elm as any)[key] = cur
+      (elm as any)[key] = cur
     }
   }
 }

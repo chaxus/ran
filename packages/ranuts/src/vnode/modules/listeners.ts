@@ -25,7 +25,7 @@ function invokeHandler<N extends keyof HTMLElementEventMap>(
 ): void {
   if (isFunction(handler)) {
     // 如果类型是function，说明只有一个事件监听，将this指向vnode调用
-    ;(handler as Function).call(vnode, event, vnode)
+    (handler as Function).call(vnode, event, vnode)
   } else if (typeof handler === 'object') {
     // 如果类型是对象，说明有多个事件监听，遍历依次调用
     for (let i = 0; i < handler.length; i++) {

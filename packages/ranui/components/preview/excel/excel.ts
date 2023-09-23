@@ -169,7 +169,7 @@ function transferColumns(
     }
   }
 
-  ;(spreadSheet.cols.len as number) = Math.max(
+  (spreadSheet.cols.len as number) = Math.max(
     Object.keys(spreadSheet.cols).length,
     options.minColLength || 0,
   )
@@ -492,7 +492,7 @@ export function transferExcelToSpreadSheet(workbook: any, options: any): any {
           defaultRowHeight + (options.heightOffset || 0)
       }
       //includeEmpty = false 不包含空白单元格
-      ;(row._cells || []).forEach((cell: any, spreadSheetColIndex: number) => {
+      (row._cells || []).forEach((cell: any, spreadSheetColIndex: number) => {
         sheetData.rows[spreadSheetRowIndex].cells[spreadSheetColIndex] = {}
 
         const mergeAddress = find(mergeAddressData, function (o) {
