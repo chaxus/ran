@@ -3,15 +3,14 @@
  * @param {Array} list
  * @return {Array}
  */
-const bubble = (list: Array<number>): Array<number> => {
-  const length = list.length
-  for (let i = 0; i < length; i++) {
-    for (let j = 0; j < length; j++) {
-      let temp
-      if (list[j] > list[i]) {
-        temp = list[j]
-        list[j] = list[i]
-        list[i] = temp
+const bubble = (list: number[]): number[] => {
+  const size = list.length
+  for (let i = 0; i < size; i++) {
+    for (let j = 0; j < size; j++) {
+      if (list[i] < list[j]) {
+        list[i] = list[i] ^ list[j]
+        list[j] = list[i] ^ list[j]
+        list[i] = list[i] ^ list[j]
       }
     }
   }

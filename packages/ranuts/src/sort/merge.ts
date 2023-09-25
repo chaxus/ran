@@ -1,18 +1,17 @@
-const combine = (left: Array<number>, right: Array<number>) => {
-  const list: Array<number> = []
+const combine = (left: number[], right: number[]) => {
+  const list: number[] = []
   while (left.length > 0 && right.length > 0) {
     if (left[0] <= right[0]) {
-      list.push(left.shift() as number)
+      list.push(left.shift()!)
     } else {
-      list.push(right.shift() as number)
+      list.push(right.shift()!)
     }
   }
-
   while (left.length) {
-    list.push(left.shift() as number)
+    list.push(left.shift()!)
   }
   while (right.length) {
-    list.push(right.shift() as number)
+    list.push(right.shift()!)
   }
   return list
 }
