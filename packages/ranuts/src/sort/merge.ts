@@ -13,22 +13,22 @@ const combine = (left: number[], right: number[]) => {
   while (right.length) {
     list.push(right.shift()!)
   }
-  return list
-}
+  return list;
+};
 /**
  * @description: 归并排序
  * @param {Array} list
  * @return {Array}
  */
 const merge = (list: Array<number>): Array<number> => {
-  const { length } = list
+  const { length } = list;
   if (length < 2) {
-    return list
+    return list;
   }
-  const middle = Math.floor(length / 2)
-  const left = list.slice(0, middle)
-  const right = list.slice(middle)
-  return combine(merge(left), merge(right))
-}
+  const middle = Math.floor(length / 2);
+  const left = list.slice(0, middle);
+  const right = list.slice(middle);
+  return combine(merge(left), merge(right));
+};
 
-export default merge
+export default merge;

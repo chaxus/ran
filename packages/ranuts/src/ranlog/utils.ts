@@ -1,8 +1,8 @@
-import os from 'node:os'
+import os from 'node:os';
 
 export function querystring(data = {}): string {
   if (typeof data !== 'object') {
-    throw new TypeError('param must be object')
+    throw new TypeError('param must be object');
   }
   return Object.entries(data)
     .reduce(
@@ -16,32 +16,32 @@ export function querystring(data = {}): string {
             searchParams),
       new URLSearchParams(),
     )
-    .toString()
+    .toString();
 }
 
 export function randomString(len: number = 8): string {
-  const chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678'
-  const maxPos = chars.length
-  let pwd = ''
+  const chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
+  const maxPos = chars.length;
+  let pwd = '';
   for (let i = 0; i < len; i++) {
-    pwd += chars.charAt(Math.floor(Math.random() * maxPos))
+    pwd += chars.charAt(Math.floor(Math.random() * maxPos));
   }
-  return `${Date.now()}-${pwd}`
+  return `${Date.now()}-${pwd}`;
 }
 
 export function getCookie(name: string): string {
   if (typeof window !== 'undefined') {
     const cookieList = document.cookie.match(
       new RegExp(`(^| )${name}(?:=([^;]*))?(;|$)`),
-    )
-    if (cookieList && cookieList[2]) return cookieList[2]
+    );
+    if (cookieList && cookieList[2]) return cookieList[2];
   }
-  return ''
+  return '';
 }
 
 interface ClientRatio {
-  width: number
-  height: number
+  width: number;
+  height: number;
 }
 
 /**
@@ -52,19 +52,19 @@ export const getWindow = (): ClientRatio => {
     return {
       width: window.innerWidth,
       height: window.innerHeight,
-    }
+    };
   }
   return {
     width: 0,
     height: 0,
-  }
-}
+  };
+};
 
 export function createData(
   params: Record<string, unknown> = {},
 ): Record<string, unknown> {
   if (typeof window !== 'undefined') {
-    const { width, height } = getWindow()
+    const { width, height } = getWindow();
     return Object.assign(
       {},
       {
@@ -78,37 +78,37 @@ export function createData(
         userAgent: window.navigator.userAgent,
       },
       params,
-    )
+    );
   }
-  return {}
+  return {};
 }
 
 export const throttle = (fn: Function, wait: number = 500): Function => {
-  let timer: NodeJS.Timeout | null = null
+  let timer: NodeJS.Timeout | null = null;
   return function (this: unknown, ...args: unknown[]) {
-    const context = this
+    const context = this;
     if (!timer) {
       timer = setTimeout(() => {
-        timer = null
-        fn.apply(context, args)
-      }, wait)
+        timer = null;
+        fn.apply(context, args);
+      }, wait);
     }
-  }
-}
+  };
+};
 
-export const Noop = (): void => {}
+export const Noop = (): void => {};
 
 export function changeHumpToLowerCase(str: string): string {
-  const arr = str.split('')
+  const arr = str.split('');
   const lowerCase = arr.map((val) => {
     if (val.toUpperCase() === val) {
-      return '_' + val.toLowerCase()
+      return '_' + val.toLowerCase();
     } else {
-      return val
+      return val;
     }
-  })
-  str = lowerCase.join('')
-  return str
+  });
+  str = lowerCase.join('');
+  return str;
 }
 
 /**
@@ -126,34 +126,34 @@ export function replaceOld(
   replacement: (...args: unknown[]) => unknown,
   isForced?: boolean,
 ): void {
-  if (typeof source === 'undefined') return
+  if (typeof source === 'undefined') return;
   if (name in source || isForced) {
-    const original = source[name]
-    const wrapped = replacement(original)
+    const original = source[name];
+    const wrapped = replacement(original);
     if (typeof wrapped === 'function') {
-      source[name] = wrapped
+      source[name] = wrapped;
     }
   }
 }
 
 export const isString = (obj: unknown): boolean => {
-  return toString.call(obj) === '[object String]'
-}
+  return toString.call(obj) === '[object String]';
+};
 
-export type Hooks = (...args: unknown[]) => void
+export type Hooks = (...args: unknown[]) => void;
 
 export function getIPAdress(): string | undefined {
-  const interfaces = os.networkInterfaces()
+  const interfaces = os.networkInterfaces();
   for (const name in interfaces) {
-    const iface: any = interfaces[name]
+    const iface: any = interfaces[name];
     for (let i = 0; i < iface.length; i++) {
-      const alias = iface[i]
+      const alias = iface[i];
       if (
         alias.family === 'IPv4' &&
         alias.address !== '127.0.0.1' &&
         !alias.internal
       ) {
-        return alias.address
+        return alias.address;
       }
     }
   }

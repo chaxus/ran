@@ -1,14 +1,14 @@
-import path, { resolve } from 'node:path'
-import { fileURLToPath } from 'node:url'
-import type { BuildOptions, UserConfig } from 'vite'
-import { defineConfig } from 'vite'
-import dts from 'vite-plugin-dts'
-import loadStyle from './plugins/load-style'
-import loadSvg from './plugins/load-svg'
+import path, { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import type { BuildOptions, UserConfig } from 'vite';
+import { defineConfig } from 'vite';
+import dts from 'vite-plugin-dts';
+import loadStyle from './plugins/load-style';
+import loadSvg from './plugins/load-svg';
 
-const __filename = fileURLToPath(import.meta.url)
+const __filename = fileURLToPath(import.meta.url);
 
-const __dirname = path.dirname(__filename)
+const __dirname = path.dirname(__filename);
 
 export const umd: BuildOptions = {
   minify: 'terser',
@@ -19,7 +19,7 @@ export const umd: BuildOptions = {
     fileName: 'index',
     formats: ['umd'],
   },
-}
+};
 
 export const es: BuildOptions = {
   minify: 'terser',
@@ -39,13 +39,13 @@ export const es: BuildOptions = {
     },
     fileName: (_: string, name: string): string => {
       if (name === 'index') {
-        return `${name}.js`
+        return `${name}.js`;
       }
-      return `components/${name}/index.js`
+      return `components/${name}/index.js`;
     },
     formats: ['es'],
   },
-}
+};
 
 export const viteConfig: UserConfig = {
   plugins: [
@@ -81,6 +81,6 @@ export const viteConfig: UserConfig = {
       allow: [],
     },
   },
-}
+};
 
-export default defineConfig(viteConfig)
+export default defineConfig(viteConfig);

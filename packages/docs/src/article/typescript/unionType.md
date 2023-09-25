@@ -5,17 +5,19 @@
 比如这样一个联合类型：
 
 ```ts
-type Union = 'a' | 'b' | 'c'
+type Union = 'a' | 'b' | 'c';
 ```
 
 我们想把其中的 a 大写，就可以这样写：
 
 ```ts
-type UppercaseA<Item extends string> = Item extends 'a' ? Uppercase<Item> : Item
+type UppercaseA<Item extends string> = Item extends 'a'
+  ? Uppercase<Item>
+  : Item;
 ```
 
 ```ts
-type result = UppercaseA<Union>
+type result = UppercaseA<Union>;
 // type result = 'A' | 'b' | 'c';
 ```
 
@@ -39,13 +41,13 @@ Camelcase 我们实现过，就是提取字符串中的字符，首字母大写�
 type Camelcase<Str extends string> =
   Str extends `${infer Left}_${infer Right}${infer Rest}`
     ? `${Left}${Uppercase<Right>}${Camelcase<Rest>}`
-    : Str
+    : Str;
 ```
 
 提取 \_ 左右的字符，把右边字符大写之后构造成新的字符串，余下的字符串递归处理。
 
 ```ts
-type CamelcaseResult = Camelcase<'aa_aa_aa'>
+type CamelcaseResult = Camelcase<'aa_aa_aa'>;
 // type CamelcaseResult = 'aaAaAa'
 ```
 
@@ -57,7 +59,7 @@ type CamelcaseArr<Arr extends unknown[]> = Arr extends [
   ...infer RestArr,
 ]
   ? [Camelcase<Item & string>, ...CamelcaseArr<RestArr>]
-  : []
+  : [];
 ```
 
 类型参数 Arr 为待处理数组。
@@ -72,7 +74,7 @@ type CamelcaseArr<Arr extends unknown[]> = Arr extends [
 type CamelcaseUnion<Item extends string> =
   Item extends `${infer Left}_${infer Right}${infer Rest}`
     ? `${Left}${Uppercase<Right>}${CamelcaseUnion<Rest>}`
-    : Item
+    : Item;
 ```
 
 这不和单个字符串的处理没区别么？
@@ -88,7 +90,7 @@ type CamelcaseUnion<Item extends string> =
 判断联合类型我们会这样写：
 
 ```ts
-type IsUnion<A, B = A> = A extends A ? ([B] extends [A] ? false : true) : never
+type IsUnion<A, B = A> = A extends A ? ([B] extends [A] ? false : true) : never;
 ```
 
 当传入联合类型时，会返回 true：
@@ -110,9 +112,9 @@ type IsUnionResult = IsUnion<['a' | 'b' 'c']>
 我们先来看这样一个类型：
 
 ```ts
-type TestUnion<A, B = A> = A extends A ? { a: A; b: B } : never
+type TestUnion<A, B = A> = A extends A ? { a: A; b: B } : never;
 
-type TestUnionResult = TestUnion<'a' | 'b' | 'c'>
+type TestUnionResult = TestUnion<'a' | 'b' | 'c'>;
 ```
 
 传入联合类型 'a' | 'b' | 'c' 的时候，结果是这样的：
@@ -126,7 +128,7 @@ A 和 B 都是同一个联合类型，为啥值还不一样呢？
 那么利用这个特点就可以实现 Union 类型的判断：
 
 ```ts
-type IsUnion<A, B = A> = A extends A ? ([B] extends [A] ? false : true) : never
+type IsUnion<A, B = A> = A extends A ? ([B] extends [A] ? false : true) : never;
 ```
 
 类型参数 A、B 是待判断的联合类型，B 默认值为 A，也就是同一个类型。
@@ -158,7 +160,7 @@ bem 是 css 命名规范，用 block\_\_element--modifier 的形式来描述某�
 这样使用：
 
 ```ts
-type bemResult = BEM<'guang', ['aaa', 'bbb'], ['warning', 'success']>
+type bemResult = BEM<'guang', ['aaa', 'bbb'], ['warning', 'success']>;
 ```
 
 它的实现就是三部分的合并，但传入的是数组，要递归遍历取出每一个元素来和其他部分组合，这样太麻烦了。
@@ -168,7 +170,7 @@ type bemResult = BEM<'guang', ['aaa', 'bbb'], ['warning', 'success']>
 数组转联合类型可以这样写：
 
 ```ts
-type union = ['aaa', 'bbb'][number]
+type union = ['aaa', 'bbb'][number];
 // type union = 'aaa' | 'bbb'
 ```
 
@@ -179,7 +181,7 @@ type BEM<
   Block extends string,
   Element extends string[],
   Modifiers extends string[],
-> = `${Block}__${Element[number]}--${Modifiers[number]}`
+> = `${Block}__${Element[number]}--${Modifiers[number]}`;
 ```
 
 类型参数 Block、Element、Modifiers 分别是 bem 规范的三部分，其中 Element 和 Modifiers 都可能多个，约束为 string[]。
@@ -189,7 +191,7 @@ type BEM<
 字符串类型中遇到联合类型的时候，会每个元素单独传入计算，也就是这样的效果：
 
 ```ts
-type RemResult = BEM<'a', ['b', 'c'], ['d', 'e']>
+type RemResult = BEM<'a', ['b', 'c'], ['d', 'e']>;
 // type RemResult = 'a__b--d' | 'a__b--e' | 'a__c--d' | 'a__b--e'
 ```
 
@@ -212,7 +214,7 @@ type Combination<A extends string, B extends string> =
   | A
   | B
   | `${A}${B}`
-  | `${B}${A}`
+  | `${B}${A}`;
 ```
 
 然后构造出来的字符串再和其他字符串组合。
@@ -222,7 +224,7 @@ type Combination<A extends string, B extends string> =
 ```ts
 type AllCombinations<A extends string, B extends string = A> = A extends A
   ? Combination<A, AllCombinations<Exclude<B, A>>>
-  : never
+  : never;
 ```
 
 类型参数 A、B 是待组合的两个联合类型，B 默认是 A 也就是同一个。

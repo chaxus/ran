@@ -1,7 +1,7 @@
-import Application from '@/server/server'
-import send from '@/server/send'
+import Application from '@/server/server';
+import send from '@/server/send';
 
-const app = new Application()
+const app = new Application();
 
 // 允许访问的文件类型
 const fileTypes: Record<string, string> = {
@@ -15,11 +15,11 @@ const fileTypes: Record<string, string> = {
   gif: 'image/gif',
   json: 'application/json',
   xml: 'application/xml',
-}
+};
 
 // app.use(send({ fileTypes }))
-app.use(send())
+app.use(send());
 
 app.listen(8088, () => {
-  console.log(`Server port is http://localhost:8088`)
-})
+  console.log(`Server port is http://localhost:8088`);
+});

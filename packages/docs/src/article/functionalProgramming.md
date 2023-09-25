@@ -10,15 +10,15 @@
 
 ```js
 //非函数式编程,面向过程的编程方式
-let num1 = 1
-let num2 = 2
-let sum = num1 + num2
+let num1 = 1;
+let num2 = 2;
+let sum = num1 + num2;
 
 //函数式编程,对面向过程的抽象
 function sum(n1, n2) {
-  return n1 + n2
+  return n1 + n2;
 }
-let result = sum(1, 2)
+let result = sum(1, 2);
 ```
 
 ## 一. `JS`函数基本知识
@@ -33,8 +33,8 @@ let result = sum(1, 2)
 
 ```js
 let fn = function () {
-  console.log('First-class Function MDN')
-}
+  console.log('First-class Function MDN');
+};
 ```
 
 ## 二.高阶函数
@@ -49,31 +49,31 @@ let fn = function () {
 //forEach
 function forEach(array, fn) {
   for (let item of array) {
-    fn(item)
+    fn(item);
   }
 }
 
 //filter
 function filter(array, fn) {
-  let result = []
+  let result = [];
   for (let item of array) {
     if (fn(item)) {
-      result.push(item)
+      result.push(item);
     }
   }
-  return result
+  return result;
 }
 
 //测试
-let array = [1, 2, 3, 4, 5, 6, 7]
+let array = [1, 2, 3, 4, 5, 6, 7];
 forEach(array, function (item) {
-  console.log(item)
-})
+  console.log(item);
+});
 
 let r = filter(array, function (item) {
-  return item % 2 === 0
-})
-console.log(r)
+  return item % 2 === 0;
+});
+console.log(r);
 ```
 
 2. 函数作为返回值
@@ -81,34 +81,34 @@ console.log(r)
 ```js
 //高阶函数，函数作为返回值
 function makeFn() {
-  let msg = 'Highter-order Function'
+  let msg = 'Highter-order Function';
   return function () {
-    console.log(msg)
-  }
+    console.log(msg);
+  };
 }
 //第一种调用方式
-const fn = makeFn()
-fn()
+const fn = makeFn();
+fn();
 //第二种调用方式
-makeFn()()
+makeFn()();
 //once只能执行一次的函数
 function once(fn) {
-  let done = false
+  let done = false;
   return function () {
     if (!done) {
-      done = true
-      return fn.apply(this, arguments)
+      done = true;
+      return fn.apply(this, arguments);
     }
-  }
+  };
 }
 let pay = once(function (money) {
-  console.log(`支付${money}`)
-})
-pay(5)
-pay(5)
-pay(5)
-pay(5)
-pay(5)
+  console.log(`支付${money}`);
+});
+pay(5);
+pay(5);
+pay(5);
+pay(5);
+pay(5);
 ```
 
 ## 三.闭包
@@ -138,12 +138,12 @@ pay(5)
 ```js
 //memoize函数
 function memoize(fn) {
-  let cache = {}
+  let cache = {};
   return function () {
-    let key = JSON.stringfy(arguments)
-    cache[key] = cache[key] || fn.apply(fn, arguments)
-    return cache[key]
-  }
+    let key = JSON.stringfy(arguments);
+    cache[key] = cache[key] || fn.apply(fn, arguments);
+    return cache[key];
+  };
 }
 ```
 
@@ -153,14 +153,14 @@ function memoize(fn) {
 
 ```js
 //不纯的函数
-let mini = 18
+let mini = 18;
 function checkAge(age) {
-  return age > min
+  return age > min;
 }
 //纯函数(有硬编码，后续可以通过柯里化来解决)
 function checkAge(age) {
-  let mini = 18
-  return age > mini
+  let mini = 18;
+  return age > mini;
 }
 ```
 
@@ -170,17 +170,17 @@ function checkAge(age) {
 //解决上述硬编码的问题
 function checkAge(min) {
   return function (age) {
-    return age >= min
-  }
+    return age >= min;
+  };
 }
-let checkAge18 = checkAge(18)
-checkAge18(22)
+let checkAge18 = checkAge(18);
+checkAge18(22);
 ```
 
 `es6`进行简化
 
 ```js
-let checkAge = (min) => (age) => age >= min
+let checkAge = (min) => (age) => age >= min;
 ```
 
 - 当一个函数有多个参数的时候，可以先传递一部分，先调用它，并返回一个函数(这部分参数以后保持不变)
@@ -193,14 +193,14 @@ let checkAge = (min) => (age) => age >= min
 
 ```js
 //lodash中的curry的使用
-const _ = require('loadsh')
+const _ = require('loadsh');
 function getSum(a, b, c) {
-  return a + b + c
+  return a + b + c;
 }
-const curried = _.curry(getSum)
-console.log(curried(1, 2, 3)) //6
-console.log(curried(1)(2, 3)) //6
-console.log(curried(1)(2)(3)) //6
+const curried = _.curry(getSum);
+console.log(curried(1, 2, 3)); //6
+console.log(curried(1)(2, 3)); //6
+console.log(curried(1)(2)(3)); //6
 ```
 
 实现一个 curry 函数
@@ -210,12 +210,12 @@ function curry(func) {
   return function curriedFn(...args) {
     if (args.length < func.length) {
       return function () {
-        return curriedFn(...args.concat(Array.form(arguments)))
-      }
+        return curriedFn(...args.concat(Array.form(arguments)));
+      };
     } else {
-      return func(...args)
+      return func(...args);
     }
-  }
+  };
 }
 ```
 
@@ -236,15 +236,15 @@ function curry(func) {
 function composeRight(...args) {
   return function (value) {
     args.reverse().reduce(function (acc, fn) {
-      return fn(acc)
-    }, value)
-  }
+      return fn(acc);
+    }, value);
+  };
 }
 //箭头函数
 const compose =
   (...args) =>
   (value) =>
-    args.reverse().reduce((acc, fn) => fn(acc), value)
+    args.reverse().reduce((acc, fn) => fn(acc), value);
 //如果是表达式赋值的话，不会变量提升
 ```
 
@@ -253,9 +253,9 @@ const compose =
 
 ```js
 const log = (v) => {
-  console.log(v)
-  return v
-}
+  console.log(v);
+  return v;
+};
 ```
 
 - `lodash`库中的 fp 模块
@@ -264,15 +264,15 @@ const log = (v) => {
 
 ```js
 //lodash方法
-const _ = require('lodash')
-_.map(['a', 'b', 'c'], _.toUpper)
+const _ = require('lodash');
+_.map(['a', 'b', 'c'], _.toUpper);
 //=>['A','B','C']
-_.map(['a', 'b', 'c'])
+_.map(['a', 'b', 'c']);
 //=>['a','b','c']
 //loadsh/fp模块
-const fp = require('lodasg/fp')
-fp.map(fp.toUpper, ['a', 'b', 'c'])
-fp.map(fp.toUpper)(['a', 'b', 'c'])
+const fp = require('lodasg/fp');
+fp.map(fp.toUpper, ['a', 'b', 'c']);
+fp.map(fp.toUpper)(['a', 'b', 'c']);
 ```
 
 ## 七.Point Free
@@ -284,7 +284,7 @@ fp.map(fp.toUpper)(['a', 'b', 'c'])
 - 需要定义一些辅助的基本运算函数
 
 ```js
-const f = fp.flowRight(fp.join('-'), fp.map(_.toLower), fp.splite(''))
+const f = fp.flowRight(fp.join('-'), fp.map(_.toLower), fp.splite(''));
 ```
 
 ## 八.`functor`(函子)
@@ -300,17 +300,17 @@ class Container {
   //函子内部要有一个值
   constructor(value) {
     //这个值是传入进来的，且不对外公布
-    this._value = value
+    this._value = value;
   }
   map(fn) {
     //map方法，接受一个处理值的函数,去处理这个值。
     //并且要把处理的值，传给一个新的函子，最后返回这个新的函子
-    return new Container(fn(this._value))
+    return new Container(fn(this._value));
   }
 }
 
 //新建一个函子
-let r = new Container(5).map((x) => x + 1).map((x) => x * x)
+let r = new Container(5).map((x) => x + 1).map((x) => x * x);
 ```
 
 `of`方法：
@@ -319,20 +319,20 @@ let r = new Container(5).map((x) => x + 1).map((x) => x * x)
 //of方法用来返回一个函子对象
 class Container {
   constructor(value) {
-    this._value = value
+    this._value = value;
   }
   static of(value) {
     //传入值，返回一个新的函子对象
-    return new Container(value)
+    return new Container(value);
   }
   map(fn) {
-    return Container.of(fn(this._value))
+    return Container.of(fn(this._value));
   }
 }
 let r = Container.of(5)
   .map((x) => x + 1)
-  .map((x) => x * x)
-console.log(r) //打印出来的是一个函子，不是值，永远不会把这个值取出来，需要改变这个值的时候，使用map方法传入一个函数去处理，进行链式调用。
+  .map((x) => x * x);
+console.log(r); //打印出来的是一个函子，不是值，永远不会把这个值取出来，需要改变这个值的时候，使用map方法传入一个函数去处理，进行链式调用。
 ```
 
 - 总结
@@ -349,22 +349,22 @@ console.log(r) //打印出来的是一个函子，不是值，永远不会把这
 //MayBe函子
 class MayBe {
   static of(value) {
-    return new MayBe(value)
+    return new MayBe(value);
   }
   constructor(value) {
-    this._value = value
+    this._value = value;
   }
   map(fn) {
-    return this.isNothing() ? MayBe.of(null) : MayBe.of(fn(this._value))
+    return this.isNothing() ? MayBe.of(null) : MayBe.of(fn(this._value));
   }
   isNothing() {
-    return this._value === null || this._value === undefined
+    return this._value === null || this._value === undefined;
   }
 }
 let r = MayBe.of(null)
   .map((x) => x + 1)
-  .map((x) => x * x)
-console.log(r)
+  .map((x) => x * x);
+console.log(r);
 ```
 
 - 问题：如果多次调用 map，中间出现了 null 空值的情况，最后会返回包含 null 的函子。虽然 maybe 函子可以处理空值的情况，但不知道是哪一步出现了空值
@@ -376,40 +376,40 @@ console.log(r)
 //Either函子
 class Left {
   static of(value) {
-    return new Left(value)
+    return new Left(value);
   }
   constructor(value) {
-    this._value = value
+    this._value = value;
   }
   map(fn) {
-    return this
+    return this;
   }
 }
 
 class Right {
   static of(value) {
-    return new Right(value)
+    return new Right(value);
   }
   constructor(value) {
-    this._value = value
+    this._value = value;
   }
   map(fn) {
-    return Right.of(fn(this._value))
+    return Right.of(fn(this._value));
   }
 }
 
 function parseJSON(str) {
   try {
-    return Right.of(JSON.parse(str))
+    return Right.of(JSON.parse(str));
   } catch (error) {
-    return Left.of({ error: error.message })
+    return Left.of({ error: error.message });
   }
 }
-let l = parseJSON('{name:zs}') //error
-console.log(l)
-let r = parseJSON('{"name":"zs"}')
-console.log(r)
-r.map((x) => x.toUpper())
+let l = parseJSON('{name:zs}'); //error
+console.log(l);
+let r = parseJSON('{"name":"zs"}');
+console.log(r);
+r.map((x) => x.toUpper());
 ```
 
 - IO 函子
@@ -418,25 +418,25 @@ r.map((x) => x.toUpper())
   - 把不纯的操作交给调用者来处理
 
 ```js
-const fp = require('lodash/fp')
+const fp = require('lodash/fp');
 class IO {
   static of(x) {
     return new IO(function () {
-      return x
-    })
+      return x;
+    });
   }
   constructor(fn) {
-    this._value = fn
+    this._value = fn;
   }
   map(fn) {
-    return IO.of(fp.flowRight(fn, this._value))
+    return IO.of(fp.flowRight(fn, this._value));
   }
 }
 //调用
 //因为是在node环境，所以直接传递process对象，node的进程
-let r = IO.of(process).map((p) => p.execPath)
-console.log(r) //IO {_value :[Function]}
-console.log(r._value()) //执行node进程的路径
+let r = IO.of(process).map((p) => p.execPath);
+console.log(r); //IO {_value :[Function]}
+console.log(r._value()); //执行node进程的路径
 ```
 
 - folktale
@@ -447,20 +447,20 @@ console.log(r._value()) //执行node进程的路径
 ```js
 //folktale  2.3.2
 //Task处理异步任务
-const fs = require('fs')
-const { task } = require('folktale/concurrency/task')
-const { split, find } = require('loadsh/fp')
+const fs = require('fs');
+const { task } = require('folktale/concurrency/task');
+const { split, find } = require('loadsh/fp');
 
 function readFile(filename) {
   return task((resolver) => {
     fs.readFile(filename, 'utf-8', (error, data) => {
       if (error) {
-        resolver.reject(err)
+        resolver.reject(err);
       } else {
-        resolver.resolve(data)
+        resolver.resolve(data);
       }
-    })
-  })
+    });
+  });
 }
 //会返回一个Task函子
 readFile('package.json')
@@ -468,12 +468,12 @@ readFile('package.json')
   .listen({
     //监听事件的状态
     onRejected: (err) => {
-      console.log(err)
+      console.log(err);
     },
     onResolved: (value) => {
-      console.log(value)
+      console.log(value);
     },
-  })
+  });
 //可以在run之前调用map，去处理返回的结果
 readFile('package.json')
   .map(split('\n'))
@@ -482,12 +482,12 @@ readFile('package.json')
   .listen({
     //监听事件的状态
     onRejected: (err) => {
-      console.log(err)
+      console.log(err);
     },
     onResolved: (value) => {
-      console.log(value)
+      console.log(value);
     },
-  })
+  });
 ```
 
 - Pointed 函子
@@ -497,35 +497,35 @@ readFile('package.json')
   - Monad 函子是为来解决 IO 函子嵌套的问题
 
 ```js
-const fp = require('lodash/fp')
-const fs = require('fs')
+const fp = require('lodash/fp');
+const fs = require('fs');
 class IO {
   static of(x) {
     return new IO(function () {
-      return x
-    })
+      return x;
+    });
   }
   constructor(fn) {
-    this._value = fn
+    this._value = fn;
   }
   map(fn) {
-    return IO.of(fp.flowRight(fn, this._value))
+    return IO.of(fp.flowRight(fn, this._value));
   }
 }
 let readFile = function (filename) {
   return new IO(function () {
-    return fs.readFileSync(filename, 'utf-8')
-  })
-}
+    return fs.readFileSync(filename, 'utf-8');
+  });
+};
 let print = function (x) {
   return new IO(function (x) {
-    console.log(x)
-    return x
-  })
-}
-let cat = fp.flowRight(print, readFile)
-let r = cat('package.json')._value()._value()
-console.log(r)
+    console.log(x);
+    return x;
+  });
+};
+let cat = fp.flowRight(print, readFile);
+let r = cat('package.json')._value()._value();
+console.log(r);
 ```
 
 - Monad 函子是一个可以变扁的 Pointed 函子，变扁就是解决函子嵌套的问题 IO(IO(x))
@@ -533,37 +533,37 @@ console.log(r)
 
 ```js
 //注意看join方法
-const fp = require('lodash/fp')
-const fs = require('fs')
+const fp = require('lodash/fp');
+const fs = require('fs');
 class IO {
   static of(x) {
     return new IO(function () {
-      return x
-    })
+      return x;
+    });
   }
   constructor(fn) {
-    this._value = fn
+    this._value = fn;
   }
   map(fn) {
-    return IO.of(fp.flowRight(fn, this._value))
+    return IO.of(fp.flowRight(fn, this._value));
   }
   join() {
-    return this._value()
+    return this._value();
   }
   flatMap(fn) {
     //经常会用到map和join方法，所以就用flatMap将其变扁
-    return this.map(fn).join()
+    return this.map(fn).join();
   }
 }
 let print = function (x) {
   return new IO(function () {
-    console.log(x)
-    return x
-  })
-}
+    console.log(x);
+    return x;
+  });
+};
 let r = readFile('package.json') //这里可以用map去处理内容
   .flatMap(print)
-  .join()
+  .join();
 ```
 
 ## 参考资料

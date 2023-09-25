@@ -1,25 +1,25 @@
-import fs from 'node:fs'
-import { fileURLToPath } from 'node:url'
-import path from 'node:path'
-import { transformAsync } from '@babel/core'
-import { isJSRequest } from '../utils'
-import type { Plugin } from '../plugin'
+import fs from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
+import { transformAsync } from '@babel/core';
+import { isJSRequest } from '../utils';
+import type { Plugin } from '../plugin';
 
 function loadPlugin(path: string): Promise<any> {
-  return import(path).then((module) => module.default || module)
+  return import(path).then((module) => module.default || module);
 }
-const __filename = fileURLToPath(import.meta.url)
+const __filename = fileURLToPath(import.meta.url);
 
-const __dirname = path.dirname(__filename)
+const __dirname = path.dirname(__filename);
 
-const RUNTIME_PUBLIC_PATH = '/@react-refresh'
+const RUNTIME_PUBLIC_PATH = '/@react-refresh';
 
 const runtimeFilePath = path.resolve(
   __dirname,
   '..',
   'node_modules',
   'react-refresh/cjs/react-refresh-runtime.development.js',
-)
+);
 
 // react refresh 的具体内容
 export const runtimeCode = `
@@ -34,7 +34,7 @@ function debounce(fn, delay) {
 }
 exports.performReactRefresh = debounce(exports.performReactRefresh, 16)
 export default exports
-`
+`;
 
 // 需要注入的全局代码
 export const preambleCode = `
@@ -43,7 +43,7 @@ RefreshRuntime.injectIntoGlobalHook(window)
 window.$RefreshReg$ = () => {}
 window.$RefreshSig$ = () => (type) => type
 window.__vite_plugin_react_preamble_installed__ = true
-`
+`;
 
 const header = `
 import RefreshRuntime from "${RUNTIME_PUBLIC_PATH}";
@@ -58,7 +58,7 @@ if (import.meta.hot) {
     RefreshRuntime.register(type, __SOURCE__ + " " + id)
   };
   window.$RefreshSig$ = RefreshRuntime.createSignatureFunctionForTransform;
-}`.replace(/\n+/g, '')
+}`.replace(/\n+/g, '');
 
 const footer = `
 if (import.meta.hot) {
@@ -71,45 +71,45 @@ if (import.meta.hot) {
       RefreshRuntime.performReactRefresh();
     }, 30);
   }
-}`
+}`;
 
 export function reactHMRPlugin(): Plugin {
   return {
     name: 'ranite:react-refresh',
     resolveId(id) {
       if (id === RUNTIME_PUBLIC_PATH) {
-        return { id }
+        return { id };
       }
-      return null
+      return null;
     },
     async load(id) {
       if (id === RUNTIME_PUBLIC_PATH) {
         return runtimeCode.replace(
           'process.env.NODE_ENV',
           JSON.stringify('development'),
-        )
+        );
       }
     },
     async transform(code, id) {
       if (isJSRequest(id) && !id.includes('node_modules')) {
-        const reactRefreshPlugin = await loadPlugin('react-refresh/babel')
+        const reactRefreshPlugin = await loadPlugin('react-refresh/babel');
         const transformedCode = await transformAsync(code, {
           plugins: [reactRefreshPlugin],
-        })
+        });
         return {
           code:
             header.replace('__SOURCE__', JSON.stringify(id)) +
             transformedCode!.code +
             footer,
-        }
+        };
       }
-      return null
+      return null;
     },
     transformIndexHtml(raw) {
       return raw.replace(
         /(<head[^>]*>)/i,
         `$1<script type="module">${preambleCode}</script>`,
-      )
+      );
     },
-  }
+  };
 }

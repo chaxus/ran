@@ -1,13 +1,13 @@
-import fs from 'node:fs'
-import path, { resolve } from 'node:path'
-import { fileURLToPath } from 'node:url'
-import type { Plugin } from 'vite'
+import fs from 'node:fs';
+import path, { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import type { Plugin } from 'vite';
 
-const __filename = fileURLToPath(import.meta.url)
+const __filename = fileURLToPath(import.meta.url);
 
-const __dirname = path.dirname(__filename)
+const __dirname = path.dirname(__filename);
 
-const indexPath = resolve(__dirname, '../dist/index.js')
+const indexPath = resolve(__dirname, '../dist/index.js');
 
 export default function vitePluginBanner(): Plugin {
   return {
@@ -19,7 +19,7 @@ export default function vitePluginBanner(): Plugin {
           const code = data.replace(
             'const fs = {};\n',
             'import fs from "node:fs";\n',
-          )
+          );
           fs.writeFile(
             indexPath,
             code,
@@ -29,11 +29,11 @@ export default function vitePluginBanner(): Plugin {
               encoding: 'utf-8',
             },
             (error) => console.error('write bundle error', error),
-          )
+          );
         } else {
-          console.error('read bundle error', error)
+          console.error('read bundle error', error);
         }
-      })
+      });
     },
-  }
+  };
 }

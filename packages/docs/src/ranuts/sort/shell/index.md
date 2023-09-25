@@ -35,8 +35,8 @@ const shell = (list: number[]):number[] => {
       list[preIndex + gap] = current
     }
   }
-  return list
-}
+  return list;
+};
 ```
 
 ## 算法分析

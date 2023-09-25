@@ -1,204 +1,204 @@
-import JSZip from 'jszip'
-import t_xml from '@/components/preview/pptx/t_xml'
-import { Color } from '@/components/preview/colz'
-import type { Msg } from '@/components/preview/pptx'
+import JSZip from 'jszip';
+import t_xml from '@/components/preview/pptx/t_xml';
+import { Color } from '@/components/preview/colz';
+import type { Msg } from '@/components/preview/pptx';
 
 interface InputByType {
-  base64: string
-  string: string
-  text: string
-  binarystring: string
-  array: number[]
-  uint8array: Uint8Array
-  arraybuffer: ArrayBuffer
-  blob: Blob
-  stream: NodeJS.ReadableStream
+  base64: string;
+  string: string;
+  text: string;
+  binarystring: string;
+  array: number[];
+  uint8array: Uint8Array;
+  arraybuffer: ArrayBuffer;
+  blob: Blob;
+  stream: NodeJS.ReadableStream;
 }
 
 type InputFileFormat =
   | InputByType[keyof InputByType]
-  | Promise<InputByType[keyof InputByType]>
+  | Promise<InputByType[keyof InputByType]>;
 
 interface ChartData {
-  type: string
+  type: string;
   data: {
-    chartID: string
-    chartType: string
-    chartData: Array<Record<string, any>[]>
-  }
+    chartID: string;
+    chartType: string;
+    chartData: Array<Record<string, any>[]>;
+  };
 }
 
 function base64ArrayBuffer(arrayBuff: Uint8Array) {
-  const buff = new Uint8Array(arrayBuff)
-  let text = ''
+  const buff = new Uint8Array(arrayBuff);
+  let text = '';
   for (let i = 0; i < buff.byteLength; i++) {
-    text += String.fromCharCode(buff[i])
+    text += String.fromCharCode(buff[i]);
   }
-  return btoa(text)
+  return btoa(text);
 }
 
 function extractFileExtension(filename: string) {
-  const dot = filename.lastIndexOf('.')
-  if (dot === 0 || dot === -1) return ''
-  return filename.substr(filename.lastIndexOf('.') + 1)
+  const dot = filename.lastIndexOf('.');
+  if (dot === 0 || dot === -1) return '';
+  return filename.substr(filename.lastIndexOf('.') + 1);
 }
 
 export default function processPptx(
   setOnMessage: {
-    (func: (x: Msg<string>) => void): void
-    (func: any): void
-    (x: (e: { type: string; data: InputFileFormat }) => Promise<void>): void
+    (func: (x: Msg<string>) => void): void;
+    (func: any): void;
+    (x: (e: { type: string; data: InputFileFormat }) => Promise<void>): void;
   },
   postMessage: (x: Msg) => void,
 ): void {
-  const charts: ChartData[] = []
-  let chartID = 0
+  const charts: ChartData[] = [];
+  let chartID = 0;
 
-  let themeContent: string | Record<string, any> = ''
+  let themeContent: string | Record<string, any> = '';
 
-  let slideLayoutClrOvride: Record<string, any> | string = ''
+  let slideLayoutClrOvride: Record<string, any> | string = '';
 
-  const styleTable: Record<string, any> = {}
+  const styleTable: Record<string, any> = {};
 
-  let tableStyles: Record<string, any>
+  let tableStyles: Record<string, any>;
   // 设置postMessage方法
   setOnMessage(async (e: { type: string; data: InputFileFormat }) => {
     switch (e.type) {
       case 'processPPTX': {
         try {
-          await processPPTX(e.data)
+          await processPPTX(e.data);
         } catch (e) {
-          console.error('AN ERROR HAPPENED DURING processPPTX', e)
+          console.error('AN ERROR HAPPENED DURING processPPTX', e);
           postMessage({
             type: 'ERROR',
             data: e.toString(),
-          })
+          });
         }
-        break
+        break;
       }
       default:
     }
-  })
+  });
 
   async function processPPTX(data: InputFileFormat) {
-    const zip = await JSZip.loadAsync(data)
-    const dateBefore = Date.now()
+    const zip = await JSZip.loadAsync(data);
+    const dateBefore = Date.now();
 
     if (zip.file('docProps/thumbnail.jpeg')) {
       const pptxThumbImg = await zip
         .file('docProps/thumbnail.jpeg')
-        ?.async('base64')
+        ?.async('base64');
       postMessage({
         type: 'pptx-thumb',
         data: pptxThumbImg,
-      })
+      });
     }
 
-    const filesInfo = await getContentTypes(zip)
-    const slideSize = await getSlideSize(zip)
-    themeContent = await loadTheme(zip)
+    const filesInfo = await getContentTypes(zip);
+    const slideSize = await getSlideSize(zip);
+    themeContent = await loadTheme(zip);
 
-    tableStyles = await readXmlFile(zip, 'ppt/tableStyles.xml')
+    tableStyles = await readXmlFile(zip, 'ppt/tableStyles.xml');
 
     postMessage({
       type: 'slideSize',
       data: slideSize,
-    })
+    });
 
-    const numOfSlides = filesInfo['slides'].length
+    const numOfSlides = filesInfo['slides'].length;
     for (let i = 0; i < numOfSlides; i++) {
-      const filename = filesInfo['slides'][i]
-      const slideHtml = await processSingleSlide(zip, filename, i, slideSize)
+      const filename = filesInfo['slides'][i];
+      const slideHtml = await processSingleSlide(zip, filename, i, slideSize);
       postMessage({
         type: 'slide',
         data: slideHtml,
-      })
+      });
       postMessage({
         type: 'progress-update',
         data: ((i + 1) * 100) / numOfSlides,
-      })
+      });
     }
 
     postMessage({
       type: 'globalCSS',
       data: genGlobalCSS(),
-    })
+    });
 
-    const dateAfter = Date.now()
+    const dateAfter = Date.now();
     postMessage({
       type: 'Done',
       data: {
         time: dateAfter - dateBefore,
         charts,
       },
-    })
+    });
   }
 
   async function readXmlFile(zip: JSZip, filename: string) {
-    return t_xml((await zip.file(filename)?.async('text')) || '')
+    return t_xml((await zip.file(filename)?.async('text')) || '');
   }
 
   async function getContentTypes(zip: JSZip) {
-    const ContentTypesJson = await readXmlFile(zip, '[Content_Types].xml')
-    const subObj = ContentTypesJson['Types']['Override']
-    const slidesLocArray = []
-    const slideLayoutsLocArray = []
+    const ContentTypesJson = await readXmlFile(zip, '[Content_Types].xml');
+    const subObj = ContentTypesJson['Types']['Override'];
+    const slidesLocArray = [];
+    const slideLayoutsLocArray = [];
     for (let i = 0; i < subObj.length; i++) {
       switch (subObj[i]['attrs']['ContentType']) {
         case 'application/vnd.openxmlformats-officedocument.presentationml.slide+xml':
-          slidesLocArray.push(subObj[i]['attrs']['PartName'].substr(1))
-          break
+          slidesLocArray.push(subObj[i]['attrs']['PartName'].substr(1));
+          break;
         case 'application/vnd.openxmlformats-officedocument.presentationml.slideLayout+xml':
-          slideLayoutsLocArray.push(subObj[i]['attrs']['PartName'].substr(1))
-          break
+          slideLayoutsLocArray.push(subObj[i]['attrs']['PartName'].substr(1));
+          break;
         default:
       }
     }
     return {
       slides: slidesLocArray,
       slideLayouts: slideLayoutsLocArray,
-    }
+    };
   }
 
   async function getSlideSize(zip: JSZip) {
     // Pixel = EMUs * Resolution / 914400;  (Resolution = 96)
-    const content = await readXmlFile(zip, 'ppt/presentation.xml')
-    const sldSzAttrs = content['p:presentation']['p:sldSz']['attrs']
+    const content = await readXmlFile(zip, 'ppt/presentation.xml');
+    const sldSzAttrs = content['p:presentation']['p:sldSz']['attrs'];
     return {
       width: (parseInt(sldSzAttrs['cx']) * 96) / 914400,
       height: (parseInt(sldSzAttrs['cy']) * 96) / 914400,
-    }
+    };
   }
 
   async function loadTheme(zip: JSZip) {
     const preResContent = await readXmlFile(
       zip,
       'ppt/_rels/presentation.xml.rels',
-    )
-    const relationshipArray = preResContent['Relationships']['Relationship']
-    let themeURI
+    );
+    const relationshipArray = preResContent['Relationships']['Relationship'];
+    let themeURI;
     if (relationshipArray.constructor === Array) {
       for (let i = 0; i < relationshipArray.length; i++) {
         if (
           relationshipArray[i]['attrs']['Type'] ===
           'http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme'
         ) {
-          themeURI = relationshipArray[i]['attrs']['Target']
-          break
+          themeURI = relationshipArray[i]['attrs']['Target'];
+          break;
         }
       }
     } else if (
       relationshipArray['attrs']['Type'] ===
       'http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme'
     ) {
-      themeURI = relationshipArray['attrs']['Target']
+      themeURI = relationshipArray['attrs']['Target'];
     }
 
     if (themeURI === undefined) {
-      throw Error("Can't open theme file.")
+      throw Error("Can't open theme file.");
     }
 
-    return readXmlFile(zip, 'ppt/' + themeURI)
+    return readXmlFile(zip, 'ppt/' + themeURI);
   }
 
   async function processSingleSlide(
@@ -210,14 +210,14 @@ export default function processPptx(
     postMessage({
       type: 'INFO',
       data: 'Processing slide' + (index + 1),
-    })
+    });
 
     const resName =
-      sldFileName.replace('slides/slide', 'slides/_rels/slide') + '.rels'
-    const resContent = await readXmlFile(zip, resName)
-    let RelationshipArray = resContent['Relationships']['Relationship']
-    let layoutFilename = ''
-    const slideResObj: Record<string, any> = {}
+      sldFileName.replace('slides/slide', 'slides/_rels/slide') + '.rels';
+    const resContent = await readXmlFile(zip, resName);
+    let RelationshipArray = resContent['Relationships']['Relationship'];
+    let layoutFilename = '';
+    const slideResObj: Record<string, any> = {};
     if (RelationshipArray.constructor === Array) {
       for (let i = 0; i < RelationshipArray.length; i++) {
         switch (RelationshipArray[i]['attrs']['Type']) {
@@ -225,8 +225,8 @@ export default function processPptx(
             layoutFilename = RelationshipArray[i]['attrs']['Target'].replace(
               '../',
               'ppt/',
-            )
-            break
+            );
+            break;
           case 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/notesSlide':
           case 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/image':
           case 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart':
@@ -241,7 +241,7 @@ export default function processPptx(
                 '../',
                 'ppt/',
               ),
-            }
+            };
           }
         }
       }
@@ -249,27 +249,30 @@ export default function processPptx(
       layoutFilename = RelationshipArray['attrs']['Target'].replace(
         '../',
         'ppt/',
-      )
+      );
     }
     // console.log(slideResObj);
     // Open slideLayoutXX.xml
-    const slideLayoutContent = await readXmlFile(zip, layoutFilename)
-    const slideLayoutTables = indexNodes(slideLayoutContent)
+    const slideLayoutContent = await readXmlFile(zip, layoutFilename);
+    const slideLayoutTables = indexNodes(slideLayoutContent);
     const sldLayoutClrOvr =
-      slideLayoutContent['p:sldLayout']['p:clrMapOvr']['a:overrideClrMapping']
+      slideLayoutContent['p:sldLayout']['p:clrMapOvr']['a:overrideClrMapping'];
 
     if (sldLayoutClrOvr !== undefined) {
-      slideLayoutClrOvride = sldLayoutClrOvr['attrs']
+      slideLayoutClrOvride = sldLayoutClrOvr['attrs'];
     }
     const slideLayoutResFilename =
       layoutFilename.replace(
         'slideLayouts/slideLayout',
         'slideLayouts/_rels/slideLayout',
-      ) + '.rels'
-    const slideLayoutResContent = await readXmlFile(zip, slideLayoutResFilename)
-    RelationshipArray = slideLayoutResContent['Relationships']['Relationship']
-    let masterFilename = ''
-    const layoutResObj: Record<string, unknown> = {}
+      ) + '.rels';
+    const slideLayoutResContent = await readXmlFile(
+      zip,
+      slideLayoutResFilename,
+    );
+    RelationshipArray = slideLayoutResContent['Relationships']['Relationship'];
+    let masterFilename = '';
+    const layoutResObj: Record<string, unknown> = {};
     if (RelationshipArray.constructor === Array) {
       for (let i = 0; i < RelationshipArray.length; i++) {
         switch (RelationshipArray[i]['attrs']['Type']) {
@@ -277,8 +280,8 @@ export default function processPptx(
             masterFilename = RelationshipArray[i]['attrs']['Target'].replace(
               '../',
               'ppt/',
-            )
-            break
+            );
+            break;
           default:
             layoutResObj[RelationshipArray[i]['attrs']['Id']] = {
               type: RelationshipArray[i]['attrs']['Type'].replace(
@@ -289,31 +292,34 @@ export default function processPptx(
                 '../',
                 'ppt/',
               ),
-            }
+            };
         }
       }
     } else {
       masterFilename = RelationshipArray['attrs']['Target'].replace(
         '../',
         'ppt/',
-      )
+      );
     }
-    const slideMasterContent = await readXmlFile(zip, masterFilename)
+    const slideMasterContent = await readXmlFile(zip, masterFilename);
     const slideMasterTextStyles = getTextByPathList(slideMasterContent, [
       'p:sldMaster',
       'p:txStyles',
-    ])
-    const slideMasterTables = indexNodes(slideMasterContent)
+    ]);
+    const slideMasterTables = indexNodes(slideMasterContent);
 
     const slideMasterResFilename =
       masterFilename.replace(
         'slideMasters/slideMaster',
         'slideMasters/_rels/slideMaster',
-      ) + '.rels'
-    const slideMasterResContent = await readXmlFile(zip, slideMasterResFilename)
-    RelationshipArray = slideMasterResContent['Relationships']['Relationship']
-    let themeFilename = ''
-    const masterResObj: Record<string, unknown> = {}
+      ) + '.rels';
+    const slideMasterResContent = await readXmlFile(
+      zip,
+      slideMasterResFilename,
+    );
+    RelationshipArray = slideMasterResContent['Relationships']['Relationship'];
+    let themeFilename = '';
+    const masterResObj: Record<string, unknown> = {};
     if (RelationshipArray.constructor === Array) {
       for (let i = 0; i < RelationshipArray.length; i++) {
         switch (RelationshipArray[i]['attrs']['Type']) {
@@ -321,8 +327,8 @@ export default function processPptx(
             themeFilename = RelationshipArray[i]['attrs']['Target'].replace(
               '../',
               'ppt/',
-            )
-            break
+            );
+            break;
           default:
             masterResObj[RelationshipArray[i]['attrs']['Id']] = {
               type: RelationshipArray[i]['attrs']['Type'].replace(
@@ -333,21 +339,21 @@ export default function processPptx(
                 '../',
                 'ppt/',
               ),
-            }
+            };
         }
       }
     } else {
       themeFilename = RelationshipArray['attrs']['Target'].replace(
         '../',
         'ppt/',
-      )
+      );
     }
 
     if (themeFilename !== undefined) {
-      themeContent = await readXmlFile(zip, themeFilename)
+      themeContent = await readXmlFile(zip, themeFilename);
     }
-    const slideContent = await readXmlFile(zip, sldFileName)
-    const nodes = slideContent['p:sld']['p:cSld']['p:spTree']
+    const slideContent = await readXmlFile(zip, sldFileName);
+    const nodes = slideContent['p:sld']['p:cSld']['p:spTree'];
     const warpObj = {
       zip: zip,
       slideLayoutTables: slideLayoutTables,
@@ -356,17 +362,17 @@ export default function processPptx(
       slideMasterTextStyles: slideMasterTextStyles,
       layoutResObj: layoutResObj,
       masterResObj: masterResObj,
-    }
+    };
 
     const bgColor = await getSlideBackgroundFill(
       slideContent,
       slideLayoutContent,
       slideMasterContent,
       warpObj,
-    )
-    const slideSizeWidth = Math.min(slideSize.width, document.body.clientWidth)
-    const base = slideSize.width / slideSizeWidth
-    const slideSizeHeight = slideSize.height / base
+    );
+    const slideSizeWidth = Math.min(slideSize.width, document.body.clientWidth);
+    const base = slideSize.width / slideSizeWidth;
+    const slideSizeHeight = slideSize.height / base;
     let result =
       "<section style='width:" +
       slideSizeWidth +
@@ -374,7 +380,7 @@ export default function processPptx(
       slideSizeHeight +
       'px;' +
       bgColor +
-      "'>"
+      "'>";
 
     for (const nodeKey in nodes) {
       if (nodes[nodeKey].constructor === Array) {
@@ -383,95 +389,95 @@ export default function processPptx(
             nodeKey,
             nodes[nodeKey][i],
             warpObj,
-          )
+          );
         }
       } else {
-        result += await processNodesInSlide(nodeKey, nodes[nodeKey], warpObj)
+        result += await processNodesInSlide(nodeKey, nodes[nodeKey], warpObj);
       }
     }
 
-    return result + '</section>'
+    return result + '</section>';
   }
 
   function indexNodes(content: Record<string, any>) {
-    const keys = Object.keys(content)
-    const spTreeNode = content[keys[0]]['p:cSld']['p:spTree']
+    const keys = Object.keys(content);
+    const spTreeNode = content[keys[0]]['p:cSld']['p:spTree'];
 
-    const idTable: Record<string, any> = {}
-    const idxTable: Record<string, any> = {}
-    const typeTable: Record<string, any> = {}
+    const idTable: Record<string, any> = {};
+    const idxTable: Record<string, any> = {};
+    const typeTable: Record<string, any> = {};
 
     for (const key in spTreeNode) {
       if (key === 'p:nvGrpSpPr' || key === 'p:grpSpPr') {
-        continue
+        continue;
       }
 
-      const targetNode = spTreeNode[key]
+      const targetNode = spTreeNode[key];
 
       if (targetNode.constructor === Array) {
         for (let i = 0; i < targetNode.length; i++) {
-          const nvSpPrNode = targetNode[i]['p:nvSpPr']
+          const nvSpPrNode = targetNode[i]['p:nvSpPr'];
           const id = getTextByPathList(nvSpPrNode, [
             'p:cNvPr',
             'attrs',
             'id',
-          ]) as string
+          ]) as string;
           const idx = getTextByPathList(nvSpPrNode, [
             'p:nvPr',
             'p:ph',
             'attrs',
             'idx',
-          ]) as string
+          ]) as string;
           const type = getTextByPathList(nvSpPrNode, [
             'p:nvPr',
             'p:ph',
             'attrs',
             'type',
-          ]) as string
+          ]) as string;
 
           if (id !== undefined) {
-            idTable[id] = targetNode[i]
+            idTable[id] = targetNode[i];
           }
           if (idx !== undefined) {
-            idxTable[idx] = targetNode[i]
+            idxTable[idx] = targetNode[i];
           }
           if (type !== undefined) {
-            typeTable[type] = targetNode[i]
+            typeTable[type] = targetNode[i];
           }
         }
       } else {
-        const nvSpPrNode = targetNode['p:nvSpPr']
+        const nvSpPrNode = targetNode['p:nvSpPr'];
         const id = getTextByPathList(nvSpPrNode, [
           'p:cNvPr',
           'attrs',
           'id',
-        ]) as string
+        ]) as string;
         const idx = getTextByPathList(nvSpPrNode, [
           'p:nvPr',
           'p:ph',
           'attrs',
           'idx',
-        ]) as string
+        ]) as string;
         const type = getTextByPathList(nvSpPrNode, [
           'p:nvPr',
           'p:ph',
           'attrs',
           'type',
-        ]) as string
+        ]) as string;
 
         if (id !== undefined) {
-          idTable[id] = targetNode
+          idTable[id] = targetNode;
         }
         if (idx !== undefined) {
-          idxTable[idx] = targetNode
+          idxTable[idx] = targetNode;
         }
         if (type !== undefined) {
-          typeTable[type] = targetNode
+          typeTable[type] = targetNode;
         }
       }
     }
 
-    return { idTable: idTable, idxTable: idxTable, typeTable: typeTable }
+    return { idTable: idTable, idxTable: idxTable, typeTable: typeTable };
   }
 
   async function processNodesInSlide(
@@ -479,47 +485,47 @@ export default function processPptx(
     nodeValue: Record<string, any>,
     warpObj: Record<string, any>,
   ) {
-    let result = ''
+    let result = '';
 
     switch (nodeKey) {
       case 'p:sp': // Shape, Text
-        result = await processSpNode(nodeValue, warpObj)
-        break
+        result = await processSpNode(nodeValue, warpObj);
+        break;
       case 'p:cxnSp': // Shape, Text (with connection)
-        result = await processCxnSpNode(nodeValue, warpObj)
-        break
+        result = await processCxnSpNode(nodeValue, warpObj);
+        break;
       case 'p:pic': // Picture
-        result = await processPicNode(nodeValue, warpObj)
-        break
+        result = await processPicNode(nodeValue, warpObj);
+        break;
       case 'p:graphicFrame': // Chart, Diagram, Table
-        result = await processGraphicFrameNode(nodeValue, warpObj)
-        break
+        result = await processGraphicFrameNode(nodeValue, warpObj);
+        break;
       case 'p:grpSp': // 群組
-        result = await processGroupSpNode(nodeValue, warpObj)
-        break
+        result = await processGroupSpNode(nodeValue, warpObj);
+        break;
       default:
     }
 
-    return result
+    return result;
   }
 
   async function processGroupSpNode(
     node: Record<string, any>,
     warpObj: Record<string, any>,
   ) {
-    const factor = 96 / 914400
+    const factor = 96 / 914400;
 
-    const xfrmNode = node['p:grpSpPr']['a:xfrm']
-    const x = parseInt(xfrmNode['a:off']['attrs']['x']) * factor
-    const y = parseInt(xfrmNode['a:off']['attrs']['y']) * factor
-    const chx = parseInt(xfrmNode['a:chOff']['attrs']['x']) * factor
-    const chy = parseInt(xfrmNode['a:chOff']['attrs']['y']) * factor
-    const cx = parseInt(xfrmNode['a:ext']['attrs']['cx']) * factor
-    const cy = parseInt(xfrmNode['a:ext']['attrs']['cy']) * factor
-    const chcx = parseInt(xfrmNode['a:chExt']['attrs']['cx']) * factor
-    const chcy = parseInt(xfrmNode['a:chExt']['attrs']['cy']) * factor
+    const xfrmNode = node['p:grpSpPr']['a:xfrm'];
+    const x = parseInt(xfrmNode['a:off']['attrs']['x']) * factor;
+    const y = parseInt(xfrmNode['a:off']['attrs']['y']) * factor;
+    const chx = parseInt(xfrmNode['a:chOff']['attrs']['x']) * factor;
+    const chy = parseInt(xfrmNode['a:chOff']['attrs']['y']) * factor;
+    const cx = parseInt(xfrmNode['a:ext']['attrs']['cx']) * factor;
+    const cy = parseInt(xfrmNode['a:ext']['attrs']['cy']) * factor;
+    const chcx = parseInt(xfrmNode['a:chExt']['attrs']['cx']) * factor;
+    const chcy = parseInt(xfrmNode['a:chExt']['attrs']['cy']) * factor;
 
-    const order = node['attrs']['order']
+    const order = node['attrs']['order'];
 
     let result =
       "<div class='block group' style='z-index: " +
@@ -532,7 +538,7 @@ export default function processPptx(
       (cx - chcx) +
       'px; height: ' +
       (cy - chcy) +
-      "px;'>"
+      "px;'>";
 
     for (const nodeKey in node) {
       if (node[nodeKey].constructor === Array) {
@@ -541,16 +547,16 @@ export default function processPptx(
             nodeKey,
             node[nodeKey][i],
             warpObj,
-          )
+          );
         }
       } else {
-        result += await processNodesInSlide(nodeKey, node[nodeKey], warpObj)
+        result += await processNodesInSlide(nodeKey, node[nodeKey], warpObj);
       }
     }
 
-    result += '</div>'
+    result += '</div>';
 
-    return result
+    return result;
   }
 
   async function processSpNode(
@@ -569,33 +575,33 @@ export default function processPptx(
      *  966 </xsd:complexType>
      */
 
-    const id = node['p:nvSpPr']['p:cNvPr']['attrs']['id']
-    const name = node['p:nvSpPr']['p:cNvPr']['attrs']['name']
+    const id = node['p:nvSpPr']['p:cNvPr']['attrs']['id'];
+    const name = node['p:nvSpPr']['p:cNvPr']['attrs']['name'];
     const idx =
       node['p:nvSpPr']['p:nvPr']['p:ph'] === undefined
         ? undefined
-        : node['p:nvSpPr']['p:nvPr']['p:ph']['attrs']['idx']
+        : node['p:nvSpPr']['p:nvPr']['p:ph']['attrs']['idx'];
     let type =
       node['p:nvSpPr']['p:nvPr']['p:ph'] === undefined
         ? undefined
-        : node['p:nvSpPr']['p:nvPr']['p:ph']['attrs']['type']
-    const order = node['attrs']['order']
+        : node['p:nvSpPr']['p:nvPr']['p:ph']['attrs']['type'];
+    const order = node['attrs']['order'];
 
-    let slideLayoutSpNode
-    let slideMasterSpNode
+    let slideLayoutSpNode;
+    let slideMasterSpNode;
 
     if (type !== undefined) {
       if (idx !== undefined) {
-        slideLayoutSpNode = warpObj['slideLayoutTables']['typeTable'][type]
-        slideMasterSpNode = warpObj['slideMasterTables']['typeTable'][type]
+        slideLayoutSpNode = warpObj['slideLayoutTables']['typeTable'][type];
+        slideMasterSpNode = warpObj['slideMasterTables']['typeTable'][type];
       } else {
-        slideLayoutSpNode = warpObj['slideLayoutTables']['typeTable'][type]
-        slideMasterSpNode = warpObj['slideMasterTables']['typeTable'][type]
+        slideLayoutSpNode = warpObj['slideLayoutTables']['typeTable'][type];
+        slideMasterSpNode = warpObj['slideMasterTables']['typeTable'][type];
       }
     } else {
       if (idx !== undefined) {
-        slideLayoutSpNode = warpObj['slideLayoutTables']['idxTable'][idx]
-        slideMasterSpNode = warpObj['slideMasterTables']['idxTable'][idx]
+        slideLayoutSpNode = warpObj['slideLayoutTables']['idxTable'][idx];
+        slideMasterSpNode = warpObj['slideMasterTables']['idxTable'][idx];
       } else {
         // Nothing
       }
@@ -608,7 +614,7 @@ export default function processPptx(
         'p:ph',
         'attrs',
         'type',
-      ])
+      ]);
       if (type === undefined) {
         type = getTextByPathList(slideMasterSpNode, [
           'p:nvSpPr',
@@ -616,7 +622,7 @@ export default function processPptx(
           'p:ph',
           'attrs',
           'type',
-        ])
+        ]);
       }
     }
 
@@ -630,19 +636,19 @@ export default function processPptx(
       type,
       order,
       warpObj,
-    )
+    );
   }
 
   async function processCxnSpNode(
     node: Record<string, any>,
     warpObj: Record<string, any>,
   ) {
-    const id = node['p:nvCxnSpPr']['p:cNvPr']['attrs']['id']
-    const name = node['p:nvCxnSpPr']['p:cNvPr']['attrs']['name']
+    const id = node['p:nvCxnSpPr']['p:cNvPr']['attrs']['id'];
+    const name = node['p:nvCxnSpPr']['p:cNvPr']['attrs']['name'];
     // const idx = (node["p:nvCxnSpPr"]["p:nvPr"]["p:ph"] === undefined) ? undefined : node["p:nvSpPr"]["p:nvPr"]["p:ph"]["attrs"]["idx"];
     // const type = (node["p:nvCxnSpPr"]["p:nvPr"]["p:ph"] === undefined) ? undefined : node["p:nvSpPr"]["p:nvPr"]["p:ph"]["attrs"]["type"];
     // <p:cNvCxnSpPr>(<p:cNvCxnSpPr>, <a:endCxn>)
-    const order = node['attrs']['order']
+    const order = node['attrs']['order'];
 
     return await genShape(
       node,
@@ -654,7 +660,7 @@ export default function processPptx(
       undefined,
       order,
       warpObj,
-    )
+    );
   }
 
   async function genShape(
@@ -668,58 +674,58 @@ export default function processPptx(
     order: string,
     warpObj: any,
   ) {
-    const xfrmList = ['p:spPr', 'a:xfrm']
+    const xfrmList = ['p:spPr', 'a:xfrm'];
     const slideXfrmNode = getTextByPathList(node, xfrmList) as Record<
       string,
       any
-    >
+    >;
     const slideLayoutXfrmNode = getTextByPathList(
       slideLayoutSpNode as Record<string, any>,
       xfrmList,
-    ) as Record<string, any>
+    ) as Record<string, any>;
     const slideMasterXfrmNode = getTextByPathList(
       slideMasterSpNode as Record<string, any>,
       xfrmList,
-    ) as Record<string, any>
+    ) as Record<string, any>;
 
-    let result = ''
-    const shpId = getTextByPathList(node, ['attrs', 'order']) as string
+    let result = '';
+    const shpId = getTextByPathList(node, ['attrs', 'order']) as string;
     // console.log("shpId: ",shpId)
     const shapType = getTextByPathList(node, [
       'p:spPr',
       'a:prstGeom',
       'attrs',
       'prst',
-    ])
+    ]);
 
     // custGeom - Amir
     const custShapType = getTextByPathList(node, [
       'p:spPr',
       'a:custGeom',
-    ]) as Record<string, any>
+    ]) as Record<string, any>;
 
-    let isFlipV = false
+    let isFlipV = false;
     if (
       getTextByPathList(slideXfrmNode, ['attrs', 'flipV']) === '1' ||
       getTextByPathList(slideXfrmNode, ['attrs', 'flipH']) === '1'
     ) {
-      isFlipV = true
+      isFlipV = true;
     }
     // ///////////////////////Amir////////////////////////
     // rotate
     const rotate = angleToDegrees(
       getTextByPathList(slideXfrmNode, ['attrs', 'rot']) as string,
-    )
+    );
     // console.log("rotate: "+rotate);
     // ////////////////////////////////////////////////
-    let w = 0
-    let h = 0
-    let border: Record<string, any> = {}
-    let headEndNodeAttrs
-    let tailEndNodeAttrs
-    let fillColor
-    let grndFillFlg = false
-    let imgFillFlg = false
+    let w = 0;
+    let h = 0;
+    let border: Record<string, any> = {};
+    let headEndNodeAttrs;
+    let tailEndNodeAttrs;
+    let fillColor;
+    let grndFillFlg = false;
+    let imgFillFlg = false;
     if (shapType !== undefined || custShapType !== undefined) {
       // const off = getTextByPathList(slideXfrmNode, ['a:off', 'attrs'])
       // const x = parseInt(off['x']) * 96 / 914400
@@ -728,9 +734,9 @@ export default function processPptx(
       const ext = getTextByPathList(slideXfrmNode, [
         'a:ext',
         'attrs',
-      ]) as Record<string, any>
-      w = (parseInt(ext['cx']) * 96) / 914400
-      h = (parseInt(ext['cy']) * 96) / 914400
+      ]) as Record<string, any>;
+      w = (parseInt(ext['cx']) * 96) / 914400;
+      h = (parseInt(ext['cy']) * 96) / 914400;
 
       result +=
         "<svg class='drawing' _id='" +
@@ -750,52 +756,52 @@ export default function processPptx(
         'transform: rotate(' +
         rotate +
         'deg);' +
-        "'>"
-      result += '<defs>'
+        "'>";
+      result += '<defs>';
       // Fill Color
       fillColor = (await getShapeFill(node, true, warpObj)) as Record<
         string,
         any
-      >
+      >;
       const clrFillType = getFillType(
         getTextByPathList(node, ['p:spPr']) as Record<string, any>,
-      )
+      );
       // ///////////////////////////////////////
       if (clrFillType === 'GRADIENT_FILL') {
-        grndFillFlg = true
-        const colorArray = fillColor.color
-        const angl = fillColor.rot
+        grndFillFlg = true;
+        const colorArray = fillColor.color;
+        const angl = fillColor.rot;
         const svgGrdnt = getSvgGradient(
           w.toString(),
           h.toString(),
           angl,
           colorArray,
           shpId,
-        )
+        );
         // fill="url(#linGrd)"
-        result += svgGrdnt
+        result += svgGrdnt;
       } else if (clrFillType === 'PIC_FILL') {
-        imgFillFlg = true
-        const svgBgImg = getSvgImagePattern(fillColor, shpId)
+        imgFillFlg = true;
+        const svgBgImg = getSvgImagePattern(fillColor, shpId);
         // fill="url(#imgPtrn)"
         // console.log(svgBgImg)
-        result += svgBgImg
+        result += svgBgImg;
       }
       // Border Color
-      border = getBorder(node, true) as Record<string, any>
+      border = getBorder(node, true) as Record<string, any>;
 
       headEndNodeAttrs = getTextByPathList(node, [
         'p:spPr',
         'a:ln',
         'a:headEnd',
         'attrs',
-      ]) as Record<string, any>
+      ]) as Record<string, any>;
       tailEndNodeAttrs = getTextByPathList(node, [
         'p:spPr',
         'a:ln',
         'a:tailEnd',
         'attrs',
-      ]) as Record<string, any>
+      ]) as Record<string, any>;
       // type: none, triangle, stealth, diamond, oval, arrow
 
       if (
@@ -813,10 +819,10 @@ export default function processPptx(
           border.color +
           "' fill='" +
           border.color +
-          "' orient='auto-start-reverse' markerUnits='strokeWidth'><path d='M 0 0 L 10 5 L 0 10 z' /></marker>"
-        result += triangleMarker
+          "' orient='auto-start-reverse' markerUnits='strokeWidth'><path d='M 0 0 L 10 5 L 0 10 z' /></marker>";
+        result += triangleMarker;
       }
-      result += '</defs>'
+      result += '</defs>';
     }
     if (shapType !== undefined && custShapType === undefined) {
       switch (shapType) {
@@ -978,8 +984,8 @@ export default function processPptx(
             border.width +
             "' stroke-dasharray='" +
             border.strokeDasharray +
-            "' />"
-          break
+            "' />";
+          break;
         }
         case 'ellipse': {
           result +=
@@ -1003,8 +1009,8 @@ export default function processPptx(
             border.width +
             "' stroke-dasharray='" +
             border.strokeDasharray +
-            "' />"
-          break
+            "' />";
+          break;
         }
         case 'roundRect': {
           result +=
@@ -1024,16 +1030,16 @@ export default function processPptx(
             border.width +
             "' stroke-dasharray='" +
             border.strokeDasharray +
-            "' />"
-          break
+            "' />";
+          break;
         }
         case 'bentConnector2': {
           // 直角 (path)
-          let d
+          let d;
           if (isFlipV) {
-            d = 'M 0 ' + w + ' L ' + h + ' ' + w + ' L ' + h + ' 0'
+            d = 'M 0 ' + w + ' L ' + h + ' ' + w + ' L ' + h + ' 0';
           } else {
-            d = 'M ' + w + ' 0 L ' + w + ' ' + h + ' L 0 ' + h
+            d = 'M ' + w + ' 0 L ' + w + ' ' + h + ' L 0 ' + h;
           }
           result +=
             "<path d='" +
@@ -1044,23 +1050,23 @@ export default function processPptx(
             border.width +
             "' stroke-dasharray='" +
             border.strokeDasharray +
-            "' fill='none' "
+            "' fill='none' ";
           if (
             headEndNodeAttrs !== undefined &&
             (headEndNodeAttrs['type'] === 'triangle' ||
               headEndNodeAttrs['type'] === 'arrow')
           ) {
-            result += "marker-start='url(#markerTriangle_" + shpId + ")' "
+            result += "marker-start='url(#markerTriangle_" + shpId + ")' ";
           }
           if (
             tailEndNodeAttrs !== undefined &&
             (tailEndNodeAttrs['type'] === 'triangle' ||
               tailEndNodeAttrs['type'] === 'arrow')
           ) {
-            result += "marker-end='url(#markerTriangle_" + shpId + ")' "
+            result += "marker-end='url(#markerTriangle_" + shpId + ")' ";
           }
-          result += '/>'
-          break
+          result += '/>';
+          break;
         }
         case 'rtTriangle': {
           result +=
@@ -1082,8 +1088,8 @@ export default function processPptx(
             border.width +
             "' stroke-dasharray='" +
             border.strokeDasharray +
-            "' />"
-          break
+            "' />";
+          break;
         }
         case 'triangle': {
           const shapAdjst = getTextByPathList(node, [
@@ -1093,10 +1099,10 @@ export default function processPptx(
             'a:gd',
             'attrs',
             'fmla',
-          ])
-          let shapAdjstVal = 0.5
+          ]);
+          let shapAdjstVal = 0.5;
           if (shapAdjst !== undefined) {
-            shapAdjstVal = (parseInt(shapAdjst.substr(4)) * 96) / 9144000
+            shapAdjstVal = (parseInt(shapAdjst.substr(4)) * 96) / 9144000;
             // console.log("w: "+w+"\nh: "+h+"\nshapAdjst: "+shapAdjst+"\nshapAdjstVal: "+shapAdjstVal);
           }
           result +=
@@ -1120,8 +1126,8 @@ export default function processPptx(
             border.width +
             "' stroke-dasharray='" +
             border.strokeDasharray +
-            "' />"
-          break
+            "' />";
+          break;
         }
         case 'diamond': {
           result +=
@@ -1149,8 +1155,8 @@ export default function processPptx(
             border.width +
             "' stroke-dasharray='" +
             border.strokeDasharray +
-            "' />"
-          break
+            "' />";
+          break;
         }
         case 'trapezoid': {
           const shapAdjst = getTextByPathList(node, [
@@ -1160,12 +1166,12 @@ export default function processPptx(
             'a:gd',
             'attrs',
             'fmla',
-          ])
-          let adjstVal = 0.25
-          const maxAdjConst = 0.7407
+          ]);
+          let adjstVal = 0.25;
+          const maxAdjConst = 0.7407;
           if (shapAdjst !== undefined) {
-            const adjst = (parseInt(shapAdjst.substr(4)) * 96) / 9144000
-            adjstVal = (adjst * 0.5) / maxAdjConst
+            const adjst = (parseInt(shapAdjst.substr(4)) * 96) / 9144000;
+            adjstVal = (adjst * 0.5) / maxAdjConst;
             // console.log("w: "+w+"\nh: "+h+"\nshapAdjst: "+shapAdjst+"\nadjstVal: "+adjstVal);
           }
           result +=
@@ -1191,8 +1197,8 @@ export default function processPptx(
             border.width +
             "' stroke-dasharray='" +
             border.strokeDasharray +
-            "' />"
-          break
+            "' />";
+          break;
         }
         case 'parallelogram': {
           const shapAdjst = getTextByPathList(node, [
@@ -1202,17 +1208,17 @@ export default function processPptx(
             'a:gd',
             'attrs',
             'fmla',
-          ])
-          let adjstVal = 0.25
-          let maxAdjConst
+          ]);
+          let adjstVal = 0.25;
+          let maxAdjConst;
           if (w > h) {
-            maxAdjConst = w / h
+            maxAdjConst = w / h;
           } else {
-            maxAdjConst = h / w
+            maxAdjConst = h / w;
           }
           if (shapAdjst !== undefined) {
-            const adjst = parseInt(shapAdjst.substr(4)) / 100000
-            adjstVal = adjst / maxAdjConst
+            const adjst = parseInt(shapAdjst.substr(4)) / 100000;
+            adjstVal = adjst / maxAdjConst;
             // console.log("w: "+w+"\nh: "+h+"\nadjst: "+adjstVal+"\nmaxAdjConst: "+maxAdjConst);
           }
           result +=
@@ -1238,8 +1244,8 @@ export default function processPptx(
             border.width +
             "' stroke-dasharray='" +
             border.strokeDasharray +
-            "' />"
-          break
+            "' />";
+          break;
         }
         case 'pentagon': {
           result +=
@@ -1271,8 +1277,8 @@ export default function processPptx(
             border.width +
             "' stroke-dasharray='" +
             border.strokeDasharray +
-            "' />"
-          break
+            "' />";
+          break;
         }
         case 'hexagon': {
           const shapAdjstArray =
@@ -1281,8 +1287,8 @@ export default function processPptx(
               'a:prstGeom',
               'a:avLst',
               'a:gd',
-            ]) as Array<Record<string, any>>) || []
-          let shapAdjst
+            ]) as Array<Record<string, any>>) || [];
+          let shapAdjst;
           for (let i = 0; i < shapAdjstArray.length; i++) {
             if (
               getTextByPathList(shapAdjstArray[i], ['attrs', 'name']) === 'adj'
@@ -1290,15 +1296,15 @@ export default function processPptx(
               shapAdjst = getTextByPathList(shapAdjstArray[i], [
                 'attrs',
                 'fmla',
-              ])
+              ]);
             }
           }
-          let adjstVal = 0.25
-          const maxAdjConst = 0.62211
+          let adjstVal = 0.25;
+          const maxAdjConst = 0.62211;
 
           if (shapAdjst !== undefined) {
-            const adjst = (parseInt(shapAdjst.substr(4)) * 96) / 9144000
-            adjstVal = (adjst * 0.5) / maxAdjConst
+            const adjst = (parseInt(shapAdjst.substr(4)) * 96) / 9144000;
+            adjstVal = (adjst * 0.5) / maxAdjConst;
             // console.log("w: "+w+"\nh: "+h+"\nadjst: "+adjstVal);
           }
           result +=
@@ -1332,8 +1338,8 @@ export default function processPptx(
             border.width +
             "' stroke-dasharray='" +
             border.strokeDasharray +
-            "' />"
-          break
+            "' />";
+          break;
         }
         case 'heptagon': {
           result +=
@@ -1373,8 +1379,8 @@ export default function processPptx(
             border.width +
             "' stroke-dasharray='" +
             border.strokeDasharray +
-            "' />"
-          break
+            "' />";
+          break;
         }
         case 'octagon': {
           const shapAdjst = getTextByPathList(node, [
@@ -1384,12 +1390,12 @@ export default function processPptx(
             'a:gd',
             'attrs',
             'fmla',
-          ])
-          let adj1 = 0.25
+          ]);
+          let adj1 = 0.25;
           if (shapAdjst !== undefined) {
-            adj1 = parseInt(shapAdjst.substr(4)) / 100000
+            adj1 = parseInt(shapAdjst.substr(4)) / 100000;
           }
-          const adj2 = 1 - adj1
+          const adj2 = 1 - adj1;
           // console.log("adj1: "+adj1+"\nadj2: "+adj2);
           result +=
             " <polygon points='" +
@@ -1428,9 +1434,9 @@ export default function processPptx(
             border.width +
             "' stroke-dasharray='" +
             border.strokeDasharray +
-            "' />"
+            "' />";
 
-          break
+          break;
         }
         case 'decagon': {
           result +=
@@ -1480,8 +1486,8 @@ export default function processPptx(
             border.width +
             "' stroke-dasharray='" +
             border.strokeDasharray +
-            "' />"
-          break
+            "' />";
+          break;
         }
         case 'dodecagon': {
           result +=
@@ -1537,8 +1543,8 @@ export default function processPptx(
             border.width +
             "' stroke-dasharray='" +
             border.strokeDasharray +
-            "' />"
-          break
+            "' />";
+          break;
         }
         case 'bentConnector3': {
           const shapAdjst = getTextByPathList(node, [
@@ -1548,11 +1554,11 @@ export default function processPptx(
             'a:gd',
             'attrs',
             'fmla',
-          ])
+          ]);
           // console.log("isFlipV: "+String(isFlipV)+"\nshapAdjst: "+shapAdjst)
-          let shapAdjstVal = 0.5
+          let shapAdjstVal = 0.5;
           if (shapAdjst !== undefined) {
-            shapAdjstVal = parseInt(shapAdjst.substr(4)) / 100000
+            shapAdjstVal = parseInt(shapAdjst.substr(4)) / 100000;
             // console.log("isFlipV: "+String(isFlipV)+"\nshapAdjst: "+shapAdjst+"\nshapAdjstVal: "+shapAdjstVal);
             if (isFlipV) {
               result +=
@@ -1573,7 +1579,7 @@ export default function processPptx(
                 border.width +
                 "' stroke-dasharray='" +
                 border.strokeDasharray +
-                "' "
+                "' ";
             } else {
               result +=
                 " <polyline points='0 0," +
@@ -1593,25 +1599,25 @@ export default function processPptx(
                 border.width +
                 "' stroke-dasharray='" +
                 border.strokeDasharray +
-                "' "
+                "' ";
             }
             if (
               headEndNodeAttrs !== undefined &&
               (headEndNodeAttrs['type'] === 'triangle' ||
                 headEndNodeAttrs['type'] === 'arrow')
             ) {
-              result += "marker-start='url(#markerTriangle_" + shpId + ")' "
+              result += "marker-start='url(#markerTriangle_" + shpId + ")' ";
             }
             if (
               tailEndNodeAttrs !== undefined &&
               (tailEndNodeAttrs['type'] === 'triangle' ||
                 tailEndNodeAttrs['type'] === 'arrow')
             ) {
-              result += "marker-end='url(#markerTriangle_" + shpId + ")' "
+              result += "marker-end='url(#markerTriangle_" + shpId + ")' ";
             }
-            result += '/>'
+            result += '/>';
           }
-          break
+          break;
         }
         case 'plus': {
           const shapAdjst = getTextByPathList(node, [
@@ -1621,12 +1627,12 @@ export default function processPptx(
             'a:gd',
             'attrs',
             'fmla',
-          ])
-          let adj1 = 0.25
+          ]);
+          let adj1 = 0.25;
           if (shapAdjst !== undefined) {
-            adj1 = parseInt(shapAdjst.substr(4)) / 100000
+            adj1 = parseInt(shapAdjst.substr(4)) / 100000;
           }
-          const adj2 = 1 - adj1
+          const adj2 = 1 - adj1;
           result +=
             " <polygon points='" +
             adj1 * w +
@@ -1680,9 +1686,9 @@ export default function processPptx(
             border.width +
             "' stroke-dasharray='" +
             border.strokeDasharray +
-            "' />"
+            "' />";
           // console.log((!imgFillFlg?(grndFillFlg?"url(#linGrd_"+shpId+")":fillColor):"url(#imgPtrn_"+shpId+")"))
-          break
+          break;
         }
         case 'line':
         case 'straightConnector1':
@@ -1704,7 +1710,7 @@ export default function processPptx(
               border.width +
               "' stroke-dasharray='" +
               border.strokeDasharray +
-              "' "
+              "' ";
           } else {
             result +=
               "<line x1='0' y1='0' x2='" +
@@ -1717,24 +1723,24 @@ export default function processPptx(
               border.width +
               "' stroke-dasharray='" +
               border.strokeDasharray +
-              "' "
+              "' ";
           }
           if (
             headEndNodeAttrs !== undefined &&
             (headEndNodeAttrs['type'] === 'triangle' ||
               headEndNodeAttrs['type'] === 'arrow')
           ) {
-            result += "marker-start='url(#markerTriangle_" + shpId + ")' "
+            result += "marker-start='url(#markerTriangle_" + shpId + ")' ";
           }
           if (
             tailEndNodeAttrs !== undefined &&
             (tailEndNodeAttrs['type'] === 'triangle' ||
               tailEndNodeAttrs['type'] === 'arrow')
           ) {
-            result += "marker-end='url(#markerTriangle_" + shpId + ")' "
+            result += "marker-end='url(#markerTriangle_" + shpId + ")' ";
           }
-          result += '/>'
-          break
+          result += '/>';
+          break;
         }
         case 'rightArrow': {
           const shapAdjstArray = getTextByPathList(node, [
@@ -1742,31 +1748,31 @@ export default function processPptx(
             'a:prstGeom',
             'a:avLst',
             'a:gd',
-          ]) as Record<string, any>
-          let sAdj1: string = ''
-          let sAdj1Val = 0.5
-          let sAdj2
-          let sAdj2Val = 0.5
-          const maxSAdj2Const = w / h
+          ]) as Record<string, any>;
+          let sAdj1: string = '';
+          let sAdj1Val = 0.5;
+          let sAdj2;
+          let sAdj2Val = 0.5;
+          const maxSAdj2Const = w / h;
           if (shapAdjstArray !== undefined) {
             for (let i = 0; i < shapAdjstArray.length; i++) {
               const sAdjName = getTextByPathList(shapAdjstArray[i], [
                 'attrs',
                 'name',
-              ])
+              ]);
               if (sAdjName === 'adj1') {
                 sAdj1 = getTextByPathList(shapAdjstArray[i], [
                   'attrs',
                   'fmla',
-                ]) as string
-                sAdj1Val = 0.5 - parseInt(sAdj1.substr(4)) / 200000
+                ]) as string;
+                sAdj1Val = 0.5 - parseInt(sAdj1.substr(4)) / 200000;
               } else if (sAdjName === 'adj2') {
                 sAdj2 = getTextByPathList(shapAdjstArray[i], [
                   'attrs',
                   'fmla',
-                ]) as string
-                const sAdj2Val2 = parseInt(sAdj2.substr(4)) / 100000
-                sAdj2Val = 1 - sAdj2Val2 / maxSAdj2Const
+                ]) as string;
+                const sAdj2Val2 = parseInt(sAdj2.substr(4)) / 100000;
+                sAdj2Val = 1 - sAdj2Val2 / maxSAdj2Const;
               }
             }
           }
@@ -1807,8 +1813,8 @@ export default function processPptx(
             border.width +
             "' stroke-dasharray='" +
             border.strokeDasharray +
-            "' />"
-          break
+            "' />";
+          break;
         }
         case 'leftArrow': {
           const shapAdjstArray = getTextByPathList(node, [
@@ -1816,31 +1822,31 @@ export default function processPptx(
             'a:prstGeom',
             'a:avLst',
             'a:gd',
-          ]) as Record<string, any>
-          let sAdj1
-          let sAdj1Val = 0.5
-          let sAdj2
-          let sAdj2Val = 0.5
-          const maxSAdj2Const = w / h
+          ]) as Record<string, any>;
+          let sAdj1;
+          let sAdj1Val = 0.5;
+          let sAdj2;
+          let sAdj2Val = 0.5;
+          const maxSAdj2Const = w / h;
           if (shapAdjstArray !== undefined) {
             for (let i = 0; i < shapAdjstArray.length; i++) {
               const sAdjName = getTextByPathList(shapAdjstArray[i], [
                 'attrs',
                 'name',
-              ])
+              ]);
               if (sAdjName === 'adj1') {
                 sAdj1 = getTextByPathList(shapAdjstArray[i], [
                   'attrs',
                   'fmla',
-                ]) as string
-                sAdj1Val = 0.5 - parseInt(sAdj1.substr(4)) / 200000
+                ]) as string;
+                sAdj1Val = 0.5 - parseInt(sAdj1.substr(4)) / 200000;
               } else if (sAdjName === 'adj2') {
                 sAdj2 = getTextByPathList(shapAdjstArray[i], [
                   'attrs',
                   'fmla',
-                ]) as string
-                const sAdj2Val2 = parseInt(sAdj2.substr(4)) / 100000
-                sAdj2Val = sAdj2Val2 / maxSAdj2Const
+                ]) as string;
+                const sAdj2Val2 = parseInt(sAdj2.substr(4)) / 100000;
+                sAdj2Val = sAdj2Val2 / maxSAdj2Const;
               }
             }
           }
@@ -1883,8 +1889,8 @@ export default function processPptx(
             border.width +
             "' stroke-dasharray='" +
             border.strokeDasharray +
-            "' />"
-          break
+            "' />";
+          break;
         }
         case 'downArrow': {
           const shapAdjstArray = getTextByPathList(node, [
@@ -1892,31 +1898,31 @@ export default function processPptx(
             'a:prstGeom',
             'a:avLst',
             'a:gd',
-          ]) as Record<string, any>
-          let sAdj1
-          let sAdj1Val = 0.5
-          let sAdj2
-          let sAdj2Val = 0.5
-          const maxSAdj2Const = h / w
+          ]) as Record<string, any>;
+          let sAdj1;
+          let sAdj1Val = 0.5;
+          let sAdj2;
+          let sAdj2Val = 0.5;
+          const maxSAdj2Const = h / w;
           if (shapAdjstArray !== undefined) {
             for (let i = 0; i < shapAdjstArray.length; i++) {
               const sAdjName = getTextByPathList(shapAdjstArray[i], [
                 'attrs',
                 'name',
-              ])
+              ]);
               if (sAdjName === 'adj1') {
                 sAdj1 = getTextByPathList(shapAdjstArray[i], [
                   'attrs',
                   'fmla',
-                ]) as string
-                sAdj1Val = parseInt(sAdj1.substr(4)) / 200000
+                ]) as string;
+                sAdj1Val = parseInt(sAdj1.substr(4)) / 200000;
               } else if (sAdjName === 'adj2') {
                 sAdj2 = getTextByPathList(shapAdjstArray[i], [
                   'attrs',
                   'fmla',
-                ]) as string
-                const sAdj2Val2 = parseInt(sAdj2.substr(4)) / 100000
-                sAdj2Val = sAdj2Val2 / maxSAdj2Const
+                ]) as string;
+                const sAdj2Val2 = parseInt(sAdj2.substr(4)) / 100000;
+                sAdj2Val = sAdj2Val2 / maxSAdj2Const;
               }
             }
           }
@@ -1957,8 +1963,8 @@ export default function processPptx(
             border.width +
             "' stroke-dasharray='" +
             border.strokeDasharray +
-            "' />"
-          break
+            "' />";
+          break;
         }
         case 'upArrow': {
           const shapAdjstArray = getTextByPathList(node, [
@@ -1966,31 +1972,31 @@ export default function processPptx(
             'a:prstGeom',
             'a:avLst',
             'a:gd',
-          ]) as Record<string, any>
-          let sAdj1
-          let sAdj1Val = 0.5
-          let sAdj2
-          let sAdj2Val = 0.5
-          const maxSAdj2Const = h / w
+          ]) as Record<string, any>;
+          let sAdj1;
+          let sAdj1Val = 0.5;
+          let sAdj2;
+          let sAdj2Val = 0.5;
+          const maxSAdj2Const = h / w;
           if (shapAdjstArray !== undefined) {
             for (let i = 0; i < shapAdjstArray.length; i++) {
               const sAdjName = getTextByPathList(shapAdjstArray[i], [
                 'attrs',
                 'name',
-              ])
+              ]);
               if (sAdjName === 'adj1') {
                 sAdj1 = getTextByPathList(shapAdjstArray[i], [
                   'attrs',
                   'fmla',
-                ]) as string
-                sAdj1Val = parseInt(sAdj1.substr(4)) / 200000
+                ]) as string;
+                sAdj1Val = parseInt(sAdj1.substr(4)) / 200000;
               } else if (sAdjName === 'adj2') {
                 sAdj2 = getTextByPathList(shapAdjstArray[i], [
                   'attrs',
                   'fmla',
-                ]) as string
-                const sAdj2Val2 = parseInt(sAdj2.substr(4)) / 100000
-                sAdj2Val = sAdj2Val2 / maxSAdj2Const
+                ]) as string;
+                const sAdj2Val2 = parseInt(sAdj2.substr(4)) / 100000;
+                sAdj2Val = sAdj2Val2 / maxSAdj2Const;
               }
             }
           }
@@ -2031,8 +2037,8 @@ export default function processPptx(
             border.width +
             "' stroke-dasharray='" +
             border.strokeDasharray +
-            "' />"
-          break
+            "' />";
+          break;
         }
         case 'leftRightArrow': {
           const shapAdjstArray = getTextByPathList(node, [
@@ -2040,31 +2046,31 @@ export default function processPptx(
             'a:prstGeom',
             'a:avLst',
             'a:gd',
-          ]) as Record<string, any>
-          let sAdj1
-          let sAdj1Val = 0.5
-          let sAdj2
-          let sAdj2Val = 0.5
-          const maxSAdj2Const = w / h
+          ]) as Record<string, any>;
+          let sAdj1;
+          let sAdj1Val = 0.5;
+          let sAdj2;
+          let sAdj2Val = 0.5;
+          const maxSAdj2Const = w / h;
           if (shapAdjstArray !== undefined) {
             for (let i = 0; i < shapAdjstArray.length; i++) {
               const sAdjName = getTextByPathList(shapAdjstArray[i], [
                 'attrs',
                 'name',
-              ])
+              ]);
               if (sAdjName === 'adj1') {
                 sAdj1 = getTextByPathList(shapAdjstArray[i], [
                   'attrs',
                   'fmla',
-                ]) as string
-                sAdj1Val = 0.5 - parseInt(sAdj1.substr(4)) / 200000
+                ]) as string;
+                sAdj1Val = 0.5 - parseInt(sAdj1.substr(4)) / 200000;
               } else if (sAdjName === 'adj2') {
                 sAdj2 = getTextByPathList(shapAdjstArray[i], [
                   'attrs',
                   'fmla',
-                ]) as string
-                const sAdj2Val2 = parseInt(sAdj2.substr(4)) / 100000
-                sAdj2Val = sAdj2Val2 / maxSAdj2Const
+                ]) as string;
+                const sAdj2Val2 = parseInt(sAdj2.substr(4)) / 100000;
+                sAdj2Val = sAdj2Val2 / maxSAdj2Const;
               }
             }
           }
@@ -2117,8 +2123,8 @@ export default function processPptx(
             border.width +
             "' stroke-dasharray='" +
             border.strokeDasharray +
-            "' />"
-          break
+            "' />";
+          break;
         }
         case 'upDownArrow': {
           const shapAdjstArray = getTextByPathList(node, [
@@ -2126,31 +2132,31 @@ export default function processPptx(
             'a:prstGeom',
             'a:avLst',
             'a:gd',
-          ]) as Record<string, any>
-          let sAdj1
-          let sAdj1Val = 0.5
-          let sAdj2
-          let sAdj2Val = 0.5
-          const maxSAdj2Const = h / w
+          ]) as Record<string, any>;
+          let sAdj1;
+          let sAdj1Val = 0.5;
+          let sAdj2;
+          let sAdj2Val = 0.5;
+          const maxSAdj2Const = h / w;
           if (shapAdjstArray !== undefined) {
             for (let i = 0; i < shapAdjstArray.length; i++) {
               const sAdjName = getTextByPathList(shapAdjstArray[i], [
                 'attrs',
                 'name',
-              ])
+              ]);
               if (sAdjName === 'adj1') {
                 sAdj1 = getTextByPathList(shapAdjstArray[i], [
                   'attrs',
                   'fmla',
-                ]) as string
-                sAdj1Val = 0.5 - parseInt(sAdj1.substr(4)) / 200000
+                ]) as string;
+                sAdj1Val = 0.5 - parseInt(sAdj1.substr(4)) / 200000;
               } else if (sAdjName === 'adj2') {
                 sAdj2 = getTextByPathList(shapAdjstArray[i], [
                   'attrs',
                   'fmla',
-                ]) as string
-                const sAdj2Val2 = parseInt(sAdj2.substr(4)) / 100000
-                sAdj2Val = sAdj2Val2 / maxSAdj2Const
+                ]) as string;
+                const sAdj2Val2 = parseInt(sAdj2.substr(4)) / 100000;
+                sAdj2Val = sAdj2Val2 / maxSAdj2Const;
               }
             }
           }
@@ -2203,8 +2209,8 @@ export default function processPptx(
             border.width +
             "' stroke-dasharray='" +
             border.strokeDasharray +
-            "' />"
-          break
+            "' />";
+          break;
         }
         case 'bentArrow':
         case 'bentUpArrow':
@@ -2222,13 +2228,13 @@ export default function processPptx(
         case 'curvedUpArrow':
         case 'uturnArrow':
         case 'leftRightCircularArrow':
-          break
+          break;
         case undefined:
         default:
-          console.warn('Undefine shape type.')
+          console.warn('Undefine shape type.');
       }
 
-      result += '</svg>'
+      result += '</svg>';
 
       result +=
         "<div class='block content " +
@@ -2250,7 +2256,7 @@ export default function processPptx(
         'transform: rotate(' +
         rotate +
         'deg);' +
-        "'>"
+        "'>";
 
       // TextBody
       if (node['p:txBody'] !== undefined) {
@@ -2260,102 +2266,102 @@ export default function processPptx(
           slideMasterSpNode as Record<string, any>,
           type as string,
           warpObj,
-        )
+        );
       }
-      result += '</div>'
+      result += '</div>';
     } else if (custShapType !== undefined) {
       // custGeom here - Amir ///////////////////////////////////////////////////////
       // http://officeopenxml.com/drwSp-custGeom.php
       const pathLstNode = getTextByPathList(custShapType, [
         'a:pathLst',
-      ]) as Record<string, any>
+      ]) as Record<string, any>;
       // const pathNode = getTextByPathList(pathLstNode, ['a:path', 'attrs'])
       // const maxX = parseInt(pathNode['w']) * 96 / 914400
       // const maxY = parseInt(pathNode['h']) * 96 / 914400
       // console.log("w = "+w+"\nh = "+h+"\nmaxX = "+maxX +"\nmaxY = " + maxY);
       // cheke if it is close shape
-      const closeNode = getTextByPathList(pathLstNode, ['a:path', 'a:close'])
+      const closeNode = getTextByPathList(pathLstNode, ['a:path', 'a:close']);
       const startPoint = (getTextByPathList(pathLstNode, [
         'a:path',
         'a:moveTo',
         'a:pt',
         'attrs',
-      ]) as Record<string, any>) || { x: '0', y: '0' }
-      const spX = (parseInt(startPoint['x']) * 96) / 914400
-      const spY = (parseInt(startPoint['y']) * 96) / 914400
-      let d = 'M' + spX + ',' + spY
+      ]) as Record<string, any>) || { x: '0', y: '0' };
+      const spX = (parseInt(startPoint['x']) * 96) / 914400;
+      const spY = (parseInt(startPoint['y']) * 96) / 914400;
+      let d = 'M' + spX + ',' + spY;
       const pathNodes = getTextByPathList(pathLstNode, ['a:path']) as Record<
         string,
         any
-      >
-      const lnToNodes = pathNodes['a:lnTo']
-      const cubicBezToNodes = pathNodes['a:cubicBezTo']
-      const sortblAry: {}[] = []
+      >;
+      const lnToNodes = pathNodes['a:lnTo'];
+      const cubicBezToNodes = pathNodes['a:cubicBezTo'];
+      const sortblAry: {}[] = [];
       if (lnToNodes !== undefined) {
         Object.keys(lnToNodes).forEach(function (key) {
-          const lnToPtNode = lnToNodes[key]['a:pt']
+          const lnToPtNode = lnToNodes[key]['a:pt'];
           if (lnToPtNode !== undefined) {
             Object.keys(lnToPtNode).forEach(function (key2) {
-              const ptObj: Record<string, any> = {}
-              const lnToNoPt = lnToPtNode[key2]
-              const ptX = lnToNoPt['x']
-              const ptY = lnToNoPt['y']
-              const ptOrdr = lnToNoPt['order']
-              ptObj.type = 'lnto'
-              ptObj.order = ptOrdr
-              ptObj.x = ptX
-              ptObj.y = ptY
-              sortblAry.push(ptObj)
+              const ptObj: Record<string, any> = {};
+              const lnToNoPt = lnToPtNode[key2];
+              const ptX = lnToNoPt['x'];
+              const ptY = lnToNoPt['y'];
+              const ptOrdr = lnToNoPt['order'];
+              ptObj.type = 'lnto';
+              ptObj.order = ptOrdr;
+              ptObj.x = ptX;
+              ptObj.y = ptY;
+              sortblAry.push(ptObj);
               // console.log(key2, lnToNoPt);
-            })
+            });
           }
-        })
+        });
       }
       if (cubicBezToNodes !== undefined) {
         Object.keys(cubicBezToNodes).forEach(function (key) {
           // console.log("cubicBezTo["+key+"]:");
-          const cubicBezToPtNodes = cubicBezToNodes[key]['a:pt']
+          const cubicBezToPtNodes = cubicBezToNodes[key]['a:pt'];
           if (cubicBezToPtNodes !== undefined) {
             Object.keys(cubicBezToPtNodes).forEach(function (key2) {
               // console.log("cubicBezTo["+key+"]pt["+key2+"]:");
-              const cubBzPts = cubicBezToPtNodes[key2]
+              const cubBzPts = cubicBezToPtNodes[key2];
               Object.keys(cubBzPts).forEach(function (key3) {
                 // console.log(key3, cubBzPts[key3]);
-                const ptObj: Record<string, any> = {}
-                const cubBzPt = cubBzPts[key3]
-                const ptX = cubBzPt['x']
-                const ptY = cubBzPt['y']
-                const ptOrdr = cubBzPt['order']
-                ptObj.type = 'cubicBezTo'
-                ptObj.order = ptOrdr
-                ptObj.x = ptX
-                ptObj.y = ptY
-                sortblAry.push(ptObj)
-              })
-            })
+                const ptObj: Record<string, any> = {};
+                const cubBzPt = cubBzPts[key3];
+                const ptX = cubBzPt['x'];
+                const ptY = cubBzPt['y'];
+                const ptOrdr = cubBzPt['order'];
+                ptObj.type = 'cubicBezTo';
+                ptObj.order = ptOrdr;
+                ptObj.x = ptX;
+                ptObj.y = ptY;
+                sortblAry.push(ptObj);
+              });
+            });
           }
-        })
+        });
       }
-      const sortByOrder = sortblAry.slice(0) as Array<Record<string, any>>
+      const sortByOrder = sortblAry.slice(0) as Array<Record<string, any>>;
       sortByOrder.sort(function (a, b) {
-        return a.order - b.order
-      })
+        return a.order - b.order;
+      });
       // console.log(sortByOrder);
-      let k = 0
+      let k = 0;
       while (k < sortByOrder.length) {
         if (sortByOrder[k].type === 'lnto') {
-          const Lx = (parseInt(sortByOrder[k].x) * 96) / 914400
-          const Ly = (parseInt(sortByOrder[k].y) * 96) / 914400
-          d += 'L' + Lx + ',' + Ly
-          k++
+          const Lx = (parseInt(sortByOrder[k].x) * 96) / 914400;
+          const Ly = (parseInt(sortByOrder[k].y) * 96) / 914400;
+          d += 'L' + Lx + ',' + Ly;
+          k++;
         } else {
           // "cubicBezTo"
-          const Cx1 = (parseInt(sortByOrder[k].x) * 96) / 914400
-          const Cy1 = (parseInt(sortByOrder[k].y) * 96) / 914400
-          const Cx2 = (parseInt(sortByOrder[k + 1].x) * 96) / 914400
-          const Cy2 = (parseInt(sortByOrder[k + 1].y) * 96) / 914400
-          const Cx3 = (parseInt(sortByOrder[k + 2].x) * 96) / 914400
-          const Cy3 = (parseInt(sortByOrder[k + 2].y) * 96) / 914400
+          const Cx1 = (parseInt(sortByOrder[k].x) * 96) / 914400;
+          const Cy1 = (parseInt(sortByOrder[k].y) * 96) / 914400;
+          const Cx2 = (parseInt(sortByOrder[k + 1].x) * 96) / 914400;
+          const Cy2 = (parseInt(sortByOrder[k + 1].y) * 96) / 914400;
+          const Cx3 = (parseInt(sortByOrder[k + 2].x) * 96) / 914400;
+          const Cy3 = (parseInt(sortByOrder[k + 2].y) * 96) / 914400;
 
           d +=
             'C' +
@@ -2369,8 +2375,8 @@ export default function processPptx(
             ' ' +
             Cx3 +
             ',' +
-            Cy3
-          k += 3
+            Cy3;
+          k += 3;
         }
       }
       result +=
@@ -2388,10 +2394,10 @@ export default function processPptx(
         border.width +
         "' stroke-dasharray='" +
         border.strokeDasharray +
-        "' "
+        "' ";
       if (closeNode !== undefined) {
         // console.log("Close shape");
-        result += '/>'
+        result += '/>';
       } else {
         // console.log("Open shape");
         // check and add "marker-start" and "marker-end"
@@ -2400,19 +2406,19 @@ export default function processPptx(
           (headEndNodeAttrs['type'] === 'triangle' ||
             headEndNodeAttrs['type'] === 'arrow')
         ) {
-          result += "marker-start='url(#markerTriangle_" + shpId + ")' "
+          result += "marker-start='url(#markerTriangle_" + shpId + ")' ";
         }
         if (
           tailEndNodeAttrs !== undefined &&
           (tailEndNodeAttrs['type'] === 'triangle' ||
             tailEndNodeAttrs['type'] === 'arrow')
         ) {
-          result += "marker-end='url(#markerTriangle_" + shpId + ")' "
+          result += "marker-end='url(#markerTriangle_" + shpId + ")' ";
         }
-        result += '/>'
+        result += '/>';
       }
 
-      result += '</svg>'
+      result += '</svg>';
 
       result +=
         "<div class='block content " +
@@ -2434,7 +2440,7 @@ export default function processPptx(
         'transform: rotate(' +
         rotate +
         'deg);' +
-        "'>"
+        "'>";
 
       // TextBody
       if (node['p:txBody'] !== undefined) {
@@ -2444,9 +2450,9 @@ export default function processPptx(
           slideMasterSpNode as Record<string, any>,
           type as string,
           warpObj,
-        )
+        );
       }
-      result += '</div>'
+      result += '</div>';
 
       // result = "";
     } else {
@@ -2472,7 +2478,7 @@ export default function processPptx(
         'transform: rotate(' +
         rotate +
         'deg);' +
-        "'>"
+        "'>";
 
       // TextBody
       if (node['p:txBody'] !== undefined) {
@@ -2482,31 +2488,31 @@ export default function processPptx(
           slideMasterSpNode as Record<string, any>,
           (type = ''),
           warpObj,
-        )
+        );
       }
-      result += '</div>'
+      result += '</div>';
     }
 
-    return result
+    return result;
   }
 
   async function processPicNode(
     node: Record<string, any>,
     warpObj: Record<string, any>,
   ) {
-    const order = node['attrs']['order']
+    const order = node['attrs']['order'];
 
-    const rid = node['p:blipFill']['a:blip']['attrs']['r:embed']
-    const imgName = warpObj['slideResObj'][rid]['target']
-    const imgFileExt = extractFileExtension(imgName).toLowerCase()
-    const zip = warpObj['zip']
-    const imgArrayBuffer = await zip.file(imgName).async('arraybuffer')
-    let mimeType = ''
-    const xfrmNode = node['p:spPr']['a:xfrm']
+    const rid = node['p:blipFill']['a:blip']['attrs']['r:embed'];
+    const imgName = warpObj['slideResObj'][rid]['target'];
+    const imgFileExt = extractFileExtension(imgName).toLowerCase();
+    const zip = warpObj['zip'];
+    const imgArrayBuffer = await zip.file(imgName).async('arraybuffer');
+    let mimeType = '';
+    const xfrmNode = node['p:spPr']['a:xfrm'];
     // /////////////////////////////////////Amir//////////////////////////////
-    const rotate = angleToDegrees(node['p:spPr']['a:xfrm']['attrs']['rot'])
+    const rotate = angleToDegrees(node['p:spPr']['a:xfrm']['attrs']['rot']);
     // ////////////////////////////////////////////////////////////////////////
-    mimeType = getImageMimeType(imgFileExt)
+    mimeType = getImageMimeType(imgFileExt);
     return (
       "<div class='block content' style='" +
       getPosition(xfrmNode, undefined, undefined) +
@@ -2522,35 +2528,35 @@ export default function processPptx(
       ';base64,' +
       base64ArrayBuffer(imgArrayBuffer) +
       "' style='width: 100%; height: 100%'/></div>"
-    )
+    );
   }
 
   async function processGraphicFrameNode(
     node: Record<string, any>,
     warpObj: Record<string, any>,
   ) {
-    let result = ''
+    let result = '';
     const graphicTypeUri = getTextByPathList(node, [
       'a:graphic',
       'a:graphicData',
       'attrs',
       'uri',
-    ])
+    ]);
 
     switch (graphicTypeUri) {
       case 'http://schemas.openxmlformats.org/drawingml/2006/table':
-        result = await genTable(node, warpObj)
-        break
+        result = await genTable(node, warpObj);
+        break;
       case 'http://schemas.openxmlformats.org/drawingml/2006/chart':
-        result = await genChart(node, warpObj)
-        break
+        result = await genChart(node, warpObj);
+        break;
       case 'http://schemas.openxmlformats.org/drawingml/2006/diagram':
-        result = genDiagram(node)
-        break
+        result = genDiagram(node);
+        break;
       default:
     }
 
-    return result
+    return result;
   }
 
   async function genTextBody(
@@ -2560,23 +2566,23 @@ export default function processPptx(
     type?: string | undefined,
     warpObj?: Record<string, any>,
   ) {
-    let text = ''
-    const slideMasterTextStyles = warpObj && warpObj['slideMasterTextStyles']
+    let text = '';
+    const slideMasterTextStyles = warpObj && warpObj['slideMasterTextStyles'];
 
     if (textBodyNode === undefined) {
-      return text
+      return text;
     }
     // rtl : <p:txBody>
     //          <a:bodyPr wrap="square" rtlCol="1">
 
     // const rtlStr = "";
-    let pNode
-    let rNode
+    let pNode;
+    let rNode;
     if (textBodyNode['a:p'].constructor === Array) {
       // multi p
       for (let i = 0; i < textBodyNode['a:p'].length; i++) {
-        pNode = textBodyNode['a:p'][i]
-        rNode = pNode['a:r']
+        pNode = textBodyNode['a:p'][i];
+        rNode = pNode['a:r'];
 
         // const isRTL = getTextDirection(pNode, type, slideMasterTextStyles);
         // rtlStr = "";//"dir='"+isRTL+"'";
@@ -2590,14 +2596,14 @@ export default function processPptx(
             type,
             slideMasterTextStyles,
           ) +
-          "'>"
+          "'>";
         text += await genBuChar(
           pNode,
           slideLayoutSpNode,
           slideMasterSpNode,
           type,
           warpObj || {},
-        )
+        );
 
         if (rNode === undefined) {
           // without r
@@ -2607,7 +2613,7 @@ export default function processPptx(
             slideMasterSpNode,
             type,
             warpObj || {},
-          )
+          );
         } else if (rNode.constructor === Array) {
           // with multi r
           for (let j = 0; j < rNode.length; j++) {
@@ -2617,10 +2623,10 @@ export default function processPptx(
               slideMasterSpNode,
               type,
               warpObj || {},
-            )
+            );
             // ////////////////Amir////////////
             if (pNode['a:br'] !== undefined) {
-              text += '<br>'
+              text += '<br>';
             }
             // ////////////////////////////////
           }
@@ -2632,14 +2638,14 @@ export default function processPptx(
             slideMasterSpNode,
             type,
             warpObj || {},
-          )
+          );
         }
-        text += '</div>'
+        text += '</div>';
       }
     } else {
       // one p
-      pNode = textBodyNode['a:p']
-      rNode = pNode['a:r']
+      pNode = textBodyNode['a:p'];
+      rNode = pNode['a:r'];
 
       // const isRTL = getTextDirection(pNode, type, slideMasterTextStyles);
       // rtlStr = "";//"dir='"+isRTL+"'";
@@ -2653,14 +2659,14 @@ export default function processPptx(
           type,
           slideMasterTextStyles,
         ) +
-        "'>"
+        "'>";
       text += await genBuChar(
         pNode,
         slideLayoutSpNode,
         slideMasterSpNode,
         type,
         warpObj,
-      )
+      );
       if (rNode === undefined) {
         // without r
         text += genSpanElement(
@@ -2669,7 +2675,7 @@ export default function processPptx(
           slideMasterSpNode,
           type,
           warpObj || {},
-        )
+        );
       } else if (rNode.constructor === Array) {
         // with multi r
         for (let j = 0; j < rNode.length; j++) {
@@ -2679,10 +2685,10 @@ export default function processPptx(
             slideMasterSpNode,
             type,
             warpObj || {},
-          )
+          );
           // ////////////////Amir////////////
           if (pNode['a:br'] !== undefined) {
-            text += '<br>'
+            text += '<br>';
           }
           // ////////////////////////////////
         }
@@ -2694,12 +2700,12 @@ export default function processPptx(
           slideMasterSpNode,
           type,
           warpObj || {},
-        )
+        );
       }
-      text += '</div>'
+      text += '</div>';
     }
 
-    return text
+    return text;
   }
 
   async function genBuChar(
@@ -2710,137 +2716,140 @@ export default function processPptx(
     warpObj?: Record<string, any>,
   ) {
     // /////////////////////////////////////Amir///////////////////////////////
-    const sldMstrTxtStyles = warpObj && warpObj['slideMasterTextStyles']
+    const sldMstrTxtStyles = warpObj && warpObj['slideMasterTextStyles'];
 
-    const rNode = node['a:r']
-    let dfltBultColor, dfltBultSize, bultColor, bultSize
+    const rNode = node['a:r'];
+    let dfltBultColor, dfltBultSize, bultColor, bultSize;
     if (rNode !== undefined) {
-      dfltBultColor = getFontColor(rNode, type, sldMstrTxtStyles)
+      dfltBultColor = getFontColor(rNode, type, sldMstrTxtStyles);
       dfltBultSize = getFontSize(
         rNode,
         slideLayoutSpNode,
         slideMasterSpNode,
         type,
         sldMstrTxtStyles,
-      )
+      );
     } else {
-      dfltBultColor = getFontColor(node, type, sldMstrTxtStyles)
+      dfltBultColor = getFontColor(node, type, sldMstrTxtStyles);
       dfltBultSize = getFontSize(
         node,
         slideLayoutSpNode,
         slideMasterSpNode,
         type,
         sldMstrTxtStyles,
-      )
+      );
     }
     // console.log("Bullet Size: " + bultSize);
 
-    let bullet = ''
+    let bullet = '';
     // ///////////////////////////////////////////////////////////////
 
-    const pPrNode = node['a:pPr']
+    const pPrNode = node['a:pPr'];
 
     // ////////////////cheke if is rtl ///Amir ////////////////////////////////////
-    const getRtlVal = getTextByPathList(pPrNode, ['attrs', 'rtl'])
-    let isRTL = false
+    const getRtlVal = getTextByPathList(pPrNode, ['attrs', 'rtl']);
+    let isRTL = false;
     if (getRtlVal !== undefined && getRtlVal === '1') {
-      isRTL = true
+      isRTL = true;
     }
     // //////////////////////////////////////////////////////////
 
-    let lvl = parseInt(getTextByPathList(pPrNode, ['attrs', 'lvl']) as string)
+    let lvl = parseInt(getTextByPathList(pPrNode, ['attrs', 'lvl']) as string);
     if (isNaN(lvl)) {
-      lvl = 0
+      lvl = 0;
     }
 
-    const buChar = getTextByPathList(pPrNode, ['a:buChar', 'attrs', 'char'])
+    const buChar = getTextByPathList(pPrNode, ['a:buChar', 'attrs', 'char']);
     // ///////////////////////////////Amir///////////////////////////////////
-    let buType = 'TYPE_NONE'
-    const buNum = getTextByPathList(pPrNode, ['a:buAutoNum', 'attrs', 'type'])
+    let buType = 'TYPE_NONE';
+    const buNum = getTextByPathList(pPrNode, ['a:buAutoNum', 'attrs', 'type']);
     const buPic = getTextByPathList(pPrNode, ['a:buBlip']) as Record<
       string,
       any
-    >
+    >;
     if (buChar !== undefined) {
-      buType = 'TYPE_BULLET'
+      buType = 'TYPE_BULLET';
       // console.log("Bullet Chr to code: " + buChar.charCodeAt(0));
     }
     if (buNum !== undefined) {
-      buType = 'TYPE_NUMERIC'
+      buType = 'TYPE_NUMERIC';
     }
     if (buPic !== undefined) {
-      buType = 'TYPE_BULPIC'
+      buType = 'TYPE_BULPIC';
     }
 
-    let buFontAttrs: Record<string, any> = {}
+    let buFontAttrs: Record<string, any> = {};
     if (buType !== 'TYPE_NONE') {
       buFontAttrs = getTextByPathList(pPrNode, ['a:buFont', 'attrs']) as Record<
         string,
         any
-      >
+      >;
     }
     // console.log("Bullet Type: " + buType);
     // console.log("NumericTypr: " + buNum);
     // console.log("buChar: " + (buChar === undefined?'':buChar.charCodeAt(0)));
     // get definde bullet COLOR
-    let defBultColor = 'NoNe'
+    let defBultColor = 'NoNe';
 
     if (pPrNode) {
-      const buClrNode = pPrNode['a:buClr']
+      const buClrNode = pPrNode['a:buClr'];
       if (buClrNode !== undefined) {
-        defBultColor = getSolidFill(buClrNode) || ''
+        defBultColor = getSolidFill(buClrNode) || '';
       } else {
         // console.log("buClrNode: " + buClrNode);
       }
     }
 
     if (defBultColor === 'NoNe') {
-      bultColor = dfltBultColor
+      bultColor = dfltBultColor;
     } else {
-      bultColor = '#' + defBultColor
+      bultColor = '#' + defBultColor;
     }
     // get definde bullet SIZE
-    let buFontSize
+    let buFontSize;
     buFontSize = getTextByPathList(pPrNode, [
       'a:buSzPts',
       'attrs',
       'val',
-    ]) as string // pt
+    ]) as string; // pt
     if (buFontSize !== undefined) {
-      bultSize = parseInt(buFontSize) / 100 + 'pt'
+      bultSize = parseInt(buFontSize) / 100 + 'pt';
     } else {
       buFontSize = getTextByPathList(pPrNode, [
         'a:buSzPct',
         'attrs',
         'val',
-      ]) as string
+      ]) as string;
       if (buFontSize !== undefined) {
-        const prcnt = parseInt(buFontSize) / 100000
+        const prcnt = parseInt(buFontSize) / 100000;
         // dfltBultSize = XXpt
-        const dfltBultSizeNoPt = dfltBultSize.substr(0, dfltBultSize.length - 2)
-        bultSize = prcnt * parseInt(dfltBultSizeNoPt) + 'pt'
+        const dfltBultSizeNoPt = dfltBultSize.substr(
+          0,
+          dfltBultSize.length - 2,
+        );
+        bultSize = prcnt * parseInt(dfltBultSizeNoPt) + 'pt';
       } else {
-        bultSize = dfltBultSize
+        bultSize = dfltBultSize;
       }
     }
     // //////////////////////////////////////////////////////////////////////
-    let marginLeft
-    let marginRight
+    let marginLeft;
+    let marginRight;
     if (buType === 'TYPE_BULLET') {
       // const buFontAttrs = getTextByPathList(pPrNode, ["a:buFont", "attrs"]);
       if (buFontAttrs !== undefined) {
         marginLeft =
           (parseInt(getTextByPathList(pPrNode, ['attrs', 'marL']) as string) *
             96) /
-          914400
-        marginRight = parseInt(buFontAttrs['pitchFamily'])
+          914400;
+        marginRight = parseInt(buFontAttrs['pitchFamily']);
         if (isNaN(marginLeft)) {
-          marginLeft = (328600 * 96) / 914400
+          marginLeft = (328600 * 96) / 914400;
         }
         if (isNaN(marginRight)) {
-          marginRight = 0
+          marginRight = 0;
         }
-        const typeface = buFontAttrs['typeface']
+        const typeface = buFontAttrs['typeface'];
 
         bullet =
           "<span style='font-family: " +
@@ -2855,20 +2864,20 @@ export default function processPptx(
           bultColor +
           ';font-size:' +
           bultSize +
-          ';'
+          ';';
         if (isRTL) {
-          bullet += ' float: right;  direction:rtl'
+          bullet += ' float: right;  direction:rtl';
         }
-        bullet += "'>" + buChar + '</span>'
+        bullet += "'>" + buChar + '</span>';
       } else {
-        marginLeft = ((328600 * 96) / 914400) * lvl
+        marginLeft = ((328600 * 96) / 914400) * lvl;
 
         bullet =
           "<span style='margin-left: " +
           marginLeft +
           "px;'>" +
           buChar +
-          '</span>'
+          '</span>';
       }
     } else if (buType === 'TYPE_NUMERIC') {
       // /////////Amir///////////////////////////////
@@ -2876,14 +2885,14 @@ export default function processPptx(
         marginLeft =
           (parseInt(getTextByPathList(pPrNode, ['attrs', 'marL']) as string) *
             96) /
-          914400
-        marginRight = parseInt(buFontAttrs['pitchFamily'])
+          914400;
+        marginRight = parseInt(buFontAttrs['pitchFamily']);
 
         if (isNaN(marginLeft)) {
-          marginLeft = (328600 * 96) / 914400
+          marginLeft = (328600 * 96) / 914400;
         }
         if (isNaN(marginRight)) {
-          marginRight = 0
+          marginRight = 0;
         }
         // const typeface = buFontAttrs["typeface"];
 
@@ -2898,82 +2907,82 @@ export default function processPptx(
           bultColor +
           ';font-size:' +
           bultSize +
-          ';'
+          ';';
         if (isRTL) {
-          bullet += ' float: right; direction:rtl;'
+          bullet += ' float: right; direction:rtl;';
         } else {
-          bullet += ' float: left; direction:ltr;'
+          bullet += ' float: left; direction:ltr;';
         }
         bullet +=
           "' data-bulltname = '" +
           buNum +
           "' data-bulltlvl = '" +
           lvl +
-          "' class='numeric-bullet-style'></span>"
+          "' class='numeric-bullet-style'></span>";
       } else {
-        marginLeft = ((328600 * 96) / 914400) * lvl
-        bullet = "<span style='margin-left: " + marginLeft + 'px;'
+        marginLeft = ((328600 * 96) / 914400) * lvl;
+        bullet = "<span style='margin-left: " + marginLeft + 'px;';
         if (isRTL) {
-          bullet += ' float: right; direction:rtl;'
+          bullet += ' float: right; direction:rtl;';
         } else {
-          bullet += ' float: left; direction:ltr;'
+          bullet += ' float: left; direction:ltr;';
         }
         bullet +=
           "' data-bulltname = '" +
           buNum +
           "' data-bulltlvl = '" +
           lvl +
-          "' class='numeric-bullet-style'></span>"
+          "' class='numeric-bullet-style'></span>";
       }
     } else if (buType === 'TYPE_BULPIC') {
       // PIC BULLET
       marginLeft =
         (parseInt(getTextByPathList(pPrNode, ['attrs', 'marL']) as string) *
           96) /
-        914400
+        914400;
       marginRight =
         (parseInt(getTextByPathList(pPrNode, ['attrs', 'marR']) as string) *
           96) /
-        914400
+        914400;
 
       if (isNaN(marginRight)) {
-        marginRight = 0
+        marginRight = 0;
       }
       // console.log("marginRight: "+marginRight)
       // buPic
       if (isNaN(marginLeft)) {
-        marginLeft = (328600 * 96) / 914400
+        marginLeft = (328600 * 96) / 914400;
       } else {
-        marginLeft = 0
+        marginLeft = 0;
       }
       // const buPicId = getTextByPathList(buPic, ["a:blip","a:extLst","a:ext","asvg:svgBlip" , "attrs", "r:embed"]);
       const buPicId = getTextByPathList(buPic, [
         'a:blip',
         'attrs',
         'r:embed',
-      ]) as string
+      ]) as string;
       // const svgPicPath = ''
-      let buImg
+      let buImg;
       if (buPicId !== undefined) {
         // svgPicPath = warpObj["slideResObj"][buPicId]["target"];
         // buImg = warpObj["zip"].file(svgPicPath).asText();
         // }else{
         // buPicId = getTextByPathList(buPic, ["a:blip", "attrs", "r:embed"]);
-        const imgPath = warpObj && warpObj['slideResObj'][buPicId]['target']
+        const imgPath = warpObj && warpObj['slideResObj'][buPicId]['target'];
         const imgArrayBuffer =
-          warpObj && (await warpObj['zip'].file(imgPath).async('arraybuffer'))
-        const imgExt = imgPath.split('.').pop()
-        const imgMimeType = getImageMimeType(imgExt)
+          warpObj && (await warpObj['zip'].file(imgPath).async('arraybuffer'));
+        const imgExt = imgPath.split('.').pop();
+        const imgMimeType = getImageMimeType(imgExt);
         buImg =
           "<img src='data:" +
           imgMimeType +
           ';base64,' +
           base64ArrayBuffer(imgArrayBuffer) +
-          "' style='width: 100%; height: 100%'/>"
+          "' style='width: 100%; height: 100%'/>";
         // console.log("imgPath: "+imgPath+"\nimgMimeType: "+imgMimeType)
       }
       if (buPicId === undefined) {
-        buImg = '&#8227;'
+        buImg = '&#8227;';
       }
       bullet =
         "<span style='margin-left: " +
@@ -2984,11 +2993,11 @@ export default function processPptx(
         'px' +
         ';width:' +
         bultSize +
-        ';display: inline-block; '
+        ';display: inline-block; ';
       if (isRTL) {
-        bullet += ' float: right;direction:rtl'
+        bullet += ' float: right;direction:rtl';
       }
-      bullet += "'>" + buImg + '  </span>'
+      bullet += "'>" + buImg + '  </span>';
       // ////////////////////////////////////////////////////////////////////////////////////
     } else {
       bullet =
@@ -2997,10 +3006,10 @@ export default function processPptx(
         'px' +
         '; margin-right: ' +
         0 +
-        "px;'></span>"
+        "px;'></span>";
     }
 
-    return bullet
+    return bullet;
   }
 
   function genSpanElement(
@@ -3010,13 +3019,13 @@ export default function processPptx(
     type: any,
     warpObj: Record<string, any>,
   ) {
-    const slideMasterTextStyles = warpObj['slideMasterTextStyles']
+    const slideMasterTextStyles = warpObj['slideMasterTextStyles'];
 
-    let text = node['a:t']
+    let text = node['a:t'];
     if (typeof text !== 'string' && !(text instanceof String)) {
-      text = getTextByPathList(node, ['a:fld', 'a:t'])
+      text = getTextByPathList(node, ['a:fld', 'a:t']);
       if (typeof text !== 'string' && !(text instanceof String)) {
-        text = '&nbsp;'
+        text = '&nbsp;';
       }
     }
 
@@ -3043,27 +3052,27 @@ export default function processPptx(
       getTextHorizontalAlign(node, type, slideMasterTextStyles) +
       ';vertical-align:' +
       getTextVerticalAlign(node, type, slideMasterTextStyles) +
-      ';'
+      ';';
     // ////////////////Amir///////////////
     const highlight = getTextByPathList(node, [
       'a:rPr',
       'a:highlight',
-    ]) as Record<string, any>
+    ]) as Record<string, any>;
     if (highlight !== undefined) {
-      styleText += 'background-color:#' + getSolidFill(highlight) + ';'
-      styleText += 'Opacity:' + getColorOpacity(highlight) + ';'
+      styleText += 'background-color:#' + getSolidFill(highlight) + ';';
+      styleText += 'Opacity:' + getColorOpacity(highlight) + ';';
     }
     // /////////////////////////////////////////
-    let cssName = ''
+    let cssName = '';
 
     if (styleText in styleTable) {
-      cssName = styleTable[styleText]['name']
+      cssName = styleTable[styleText]['name'];
     } else {
-      cssName = '_css_' + (Object.keys(styleTable).length + 1)
+      cssName = '_css_' + (Object.keys(styleTable).length + 1);
       styleTable[styleText] = {
         name: cssName,
         text: styleText,
-      }
+      };
     }
 
     const linkID = getTextByPathList(node, [
@@ -3071,10 +3080,10 @@ export default function processPptx(
       'a:hlinkClick',
       'attrs',
       'r:id',
-    ]) as string
+    ]) as string;
     // get link colors : TODO
     if (linkID !== undefined) {
-      const linkURL = warpObj['slideResObj'][linkID]['target']
+      const linkURL = warpObj['slideResObj'][linkID]['target'];
       return (
         "<span class='text-block " +
         cssName +
@@ -3083,7 +3092,7 @@ export default function processPptx(
         "' target='_blank'>" +
         text.replace(/\s/, '&nbsp;') +
         '</a></span>'
-      )
+      );
     } else {
       return (
         "<span class='text-block " +
@@ -3091,55 +3100,55 @@ export default function processPptx(
         "'>" +
         text.replace(/\s/, '&nbsp;') +
         '</span>'
-      )
+      );
     }
   }
 
   function genGlobalCSS() {
-    let cssText = ''
+    let cssText = '';
     for (const key in styleTable) {
       cssText +=
         'section .' +
         styleTable[key]['name'] +
         '{' +
         styleTable[key]['text'] +
-        '}\n'
+        '}\n';
     }
-    return cssText
+    return cssText;
   }
 
   async function genTable(node: Record<string, any>, warpObj: any) {
-    const order = node['attrs']['order']
+    const order = node['attrs']['order'];
     const tableNode = getTextByPathList(node, [
       'a:graphic',
       'a:graphicData',
       'a:tbl',
-    ]) as Record<string, any>
-    const xfrmNode = getTextByPathList(node, ['p:xfrm']) as Record<string, any>
+    ]) as Record<string, any>;
+    const xfrmNode = getTextByPathList(node, ['p:xfrm']) as Record<string, any>;
     // ///////////////////////////////////////Amir////////////////////////////////////////////////
     const getTblPr = getTextByPathList(node, [
       'a:graphic',
       'a:graphicData',
       'a:tbl',
       'a:tblPr',
-    ]) as Record<string, any>
+    ]) as Record<string, any>;
     const getColsGrid = getTextByPathList(node, [
       'a:graphic',
       'a:graphicData',
       'a:tbl',
       'a:tblGrid',
       'a:gridCol',
-    ]) as Record<string, any>
-    let tblDir = ''
+    ]) as Record<string, any>;
+    let tblDir = '';
     if (getTblPr !== undefined) {
-      const isRTL = getTblPr['attrs']['rtl']
-      tblDir = isRTL === 1 ? 'dir=rtl' : 'dir=ltr'
+      const isRTL = getTblPr['attrs']['rtl'];
+      tblDir = isRTL === 1 ? 'dir=rtl' : 'dir=ltr';
     }
-    const firstRowAttr = getTblPr['attrs']['firstRow'] // associated element <a:firstRow> in the table styles
+    const firstRowAttr = getTblPr['attrs']['firstRow']; // associated element <a:firstRow> in the table styles
     // const firstColAttr = getTblPr['attrs']['firstCol'] // associated element <a:firstCol> in the table styles
     // const lastRowAttr = getTblPr['attrs']['lastRow'] // associated element <a:lastRow> in the table styles
     // const lastColAttr = getTblPr['attrs']['lastCol'] // associated element <a:lastCol> in the table styles
-    const bandRowAttr = getTblPr['attrs']['bandRow'] // associated element <a:band1H>, <a:band2H> in the table styles
+    const bandRowAttr = getTblPr['attrs']['bandRow']; // associated element <a:band1H>, <a:band2H> in the table styles
     // const bandColAttr = getTblPr['attrs']['bandCol'] // associated element <a:band1V>, <a:band2V> in the table styles
     // console.log(firstColAttr);
     // //////////////////////////////////////////////////////////////////////////////////////////
@@ -3151,50 +3160,50 @@ export default function processPptx(
       getSize(xfrmNode, undefined, undefined) +
       ' z-index: ' +
       order +
-      ";'>"
+      ";'>";
 
-    const trNodes = tableNode['a:tr']
+    const trNodes = tableNode['a:tr'];
     if (trNodes.constructor === Array) {
       for (let i = 0; i < trNodes.length; i++) {
         // ////////////rows Style ////////////Amir
-        const rowHeightParam = trNodes[i]['attrs']['h']
-        let rowHeight = 0
-        let rowsStyl = ''
+        const rowHeightParam = trNodes[i]['attrs']['h'];
+        let rowHeight = 0;
+        let rowsStyl = '';
         if (rowHeightParam !== undefined) {
-          rowHeight = (parseInt(rowHeightParam) * 96) / 914400
-          rowsStyl += 'height:' + rowHeight + 'px;'
+          rowHeight = (parseInt(rowHeightParam) * 96) / 914400;
+          rowsStyl += 'height:' + rowHeight + 'px;';
           // tableHtml += "<tr style='height:"+rowHeight+"px;'>";
         }
 
         // get from Theme (tableStyles.xml) TODO
         // get tableStyleId = a:tbl => a:tblPr => a:tableStyleId
-        let thisTblStyle: Record<string, any> = {}
-        const tbleStyleId = getTblPr['a:tableStyleId']
+        let thisTblStyle: Record<string, any> = {};
+        const tbleStyleId = getTblPr['a:tableStyleId'];
         if (tbleStyleId !== undefined) {
           // get Style from tableStyles.xml by {const tbleStyleId}
           // table style object : tableStyles
-          const tbleStylList = tableStyles['a:tblStyleLst']['a:tblStyle'] || []
+          const tbleStylList = tableStyles['a:tblStyleLst']['a:tblStyle'] || [];
 
           for (let k = 0; k < tbleStylList.length; k++) {
             if (tbleStylList[k]['attrs']['styleId'] === tbleStyleId) {
-              thisTblStyle = tbleStylList[k]
+              thisTblStyle = tbleStylList[k];
             }
           }
         }
         // console.log(thisTblStyle);
         if (i === 0 && firstRowAttr !== undefined) {
-          let fillColor = 'fff'
-          let colorOpacity = 1
+          let fillColor = 'fff';
+          let colorOpacity = 1;
           if (thisTblStyle['a:firstRow'] !== undefined) {
             const bgFillschemeClr = getTextByPathList(thisTblStyle, [
               'a:firstRow',
               'a:tcStyle',
               'a:fill',
               'a:solidFill',
-            ]) as Record<string, any>
+            ]) as Record<string, any>;
             if (bgFillschemeClr !== undefined) {
-              fillColor = getSolidFill(bgFillschemeClr) as string
-              colorOpacity = getColorOpacity(bgFillschemeClr) as number
+              fillColor = getSolidFill(bgFillschemeClr) as string;
+              colorOpacity = getColorOpacity(bgFillschemeClr) as number;
             }
             // console.log(thisTblStyle["a:firstRow"])
 
@@ -3204,10 +3213,10 @@ export default function processPptx(
               'a:firstRow',
               'a:tcStyle',
               'a:tcBdr',
-            ]) as Record<string, any>
+            ]) as Record<string, any>;
             if (borderStyl !== undefined) {
-              const rowBorders = getTableBorders(borderStyl)
-              rowsStyl += rowBorders
+              const rowBorders = getTableBorders(borderStyl);
+              rowsStyl += rowBorders;
             }
             // console.log(thisTblStyle["a:firstRow"])
 
@@ -3215,7 +3224,7 @@ export default function processPptx(
             const rowTxtStyl = getTextByPathList(thisTblStyle, [
               'a:firstRow',
               'a:tcTxStyle',
-            ])
+            ]);
             if (rowTxtStyl !== undefined) {
               /*
                     const styleText =
@@ -3237,10 +3246,10 @@ export default function processPptx(
             ';' +
             ' opacity:' +
             colorOpacity +
-            ';'
+            ';';
         } else if (i > 0 && bandRowAttr !== undefined) {
-          let fillColor = 'fff'
-          let colorOpacity = 1
+          let fillColor = 'fff';
+          let colorOpacity = 1;
           if (i % 2 === 0) {
             if (thisTblStyle['a:band2H'] !== undefined) {
               // console.log(thisTblStyle["a:band2H"]);
@@ -3249,10 +3258,10 @@ export default function processPptx(
                 'a:tcStyle',
                 'a:fill',
                 'a:solidFill',
-              ]) as Record<string, any>
+              ]) as Record<string, any>;
               if (bgFillschemeClr !== undefined) {
-                fillColor = getSolidFill(bgFillschemeClr) as string
-                colorOpacity = getColorOpacity(bgFillschemeClr) as number
+                fillColor = getSolidFill(bgFillschemeClr) as string;
+                colorOpacity = getColorOpacity(bgFillschemeClr) as number;
               }
               // borders color
               // borders Width
@@ -3260,10 +3269,10 @@ export default function processPptx(
                 'a:band2H',
                 'a:tcStyle',
                 'a:tcBdr',
-              ]) as Record<string, any>
+              ]) as Record<string, any>;
               if (borderStyl !== undefined) {
-                const rowBorders = getTableBorders(borderStyl)
-                rowsStyl += rowBorders
+                const rowBorders = getTableBorders(borderStyl);
+                rowsStyl += rowBorders;
               }
               // console.log(thisTblStyle["a:band2H"])
 
@@ -3271,7 +3280,7 @@ export default function processPptx(
               const rowTxtStyl = getTextByPathList(thisTblStyle, [
                 'a:band2H',
                 'a:tcTxStyle',
-              ])
+              ]);
               if (rowTxtStyl !== undefined) {
               }
               // console.log(i,thisTblStyle)
@@ -3303,10 +3312,10 @@ export default function processPptx(
                 'a:tcStyle',
                 'a:fill',
                 'a:solidFill',
-              ]) as Record<string, any>
+              ]) as Record<string, any>;
               if (bgFillschemeClr !== undefined) {
-                fillColor = getSolidFill(bgFillschemeClr) as string
-                colorOpacity = getColorOpacity(bgFillschemeClr) as number
+                fillColor = getSolidFill(bgFillschemeClr) as string;
+                colorOpacity = getColorOpacity(bgFillschemeClr) as number;
               }
               // borders color
               // borders Width
@@ -3314,10 +3323,10 @@ export default function processPptx(
                 'a:band1H',
                 'a:tcStyle',
                 'a:tcBdr',
-              ]) as Record<string, any>
+              ]) as Record<string, any>;
               if (borderStyl !== undefined) {
-                const rowBorders = getTableBorders(borderStyl)
-                rowsStyl += rowBorders
+                const rowBorders = getTableBorders(borderStyl);
+                rowsStyl += rowBorders;
               }
               // console.log(thisTblStyle["a:band1H"])
 
@@ -3325,7 +3334,7 @@ export default function processPptx(
               const rowTxtStyl = getTextByPathList(thisTblStyle, [
                 'a:band1H',
                 'a:tcTxStyle',
-              ])
+              ]);
               if (rowTxtStyl !== undefined) {
               }
             }
@@ -3336,12 +3345,12 @@ export default function processPptx(
             ';' +
             ' opacity:' +
             colorOpacity +
-            ';'
+            ';';
         }
-        tableHtml += "<tr style='" + rowsStyl + "'>"
+        tableHtml += "<tr style='" + rowsStyl + "'>";
         // //////////////////////////////////////////////
 
-        const tcNodes = trNodes[i]['a:tc']
+        const tcNodes = trNodes[i]['a:tc'];
 
         if (tcNodes.constructor === Array) {
           for (let j = 0; j < tcNodes.length; j++) {
@@ -3351,42 +3360,42 @@ export default function processPptx(
               undefined,
               undefined,
               warpObj,
-            )
+            );
             const rowSpan = getTextByPathList(tcNodes[j], [
               'attrs',
               'rowSpan',
-            ]) as string
+            ]) as string;
             const colSpan = getTextByPathList(tcNodes[j], [
               'attrs',
               'gridSpan',
-            ]) as string
-            const vMerge = getTextByPathList(tcNodes[j], ['attrs', 'vMerge'])
-            const hMerge = getTextByPathList(tcNodes[j], ['attrs', 'hMerge'])
+            ]) as string;
+            const vMerge = getTextByPathList(tcNodes[j], ['attrs', 'vMerge']);
+            const hMerge = getTextByPathList(tcNodes[j], ['attrs', 'hMerge']);
             // Cells Style : TODO /////////////Amir
             // console.log(tcNodes[j]);
             // if(j==0 && ())
-            const colWidthParam = getColsGrid[j]['attrs']['w']
-            let colStyl = ''
+            const colWidthParam = getColsGrid[j]['attrs']['w'];
+            let colStyl = '';
             if (colWidthParam !== undefined) {
-              const colWidth = (parseInt(colWidthParam) * 96) / 914400
-              colStyl += 'width:' + colWidth + 'px;'
+              const colWidth = (parseInt(colWidthParam) * 96) / 914400;
+              colStyl += 'width:' + colWidth + 'px;';
             }
-            const getFill = tcNodes[j]['a:tcPr']['a:solidFill']
-            let fillColor = ''
-            let colorOpacity = 1
+            const getFill = tcNodes[j]['a:tcPr']['a:solidFill'];
+            let fillColor = '';
+            let colorOpacity = 1;
             if (getFill !== undefined) {
               // console.log(getFill);
-              fillColor = getSolidFill(getFill) as string
-              colorOpacity = getColorOpacity(getFill) as number
+              fillColor = getSolidFill(getFill) as string;
+              colorOpacity = getColorOpacity(getFill) as number;
             } else {
               // get from Theme (tableStyles.xml) TODO
               // get tableStyleId = a:tbl => a:tblPr => a:tableStyleId
-              const tbleStyleId = getTblPr['a:tableStyleId']
+              const tbleStyleId = getTblPr['a:tableStyleId'];
               if (tbleStyleId !== undefined) {
                 // get Style from tableStyles.xml by {const tbleStyleId}
                 // table style object : tableStyles
                 const tbleStylList =
-                  tableStyles['a:tblStyleLst']['a:tblStyle'] || []
+                  tableStyles['a:tblStyleLst']['a:tblStyle'] || [];
 
                 for (let k = 0; k < tbleStylList.length; k++) {
                   if (tbleStylList[k]['attrs']['styleId'] === tbleStyleId) {
@@ -3397,8 +3406,8 @@ export default function processPptx(
               // console.log(tbleStyleId);
             }
             if (fillColor !== '') {
-              colStyl += ' background-color:#' + fillColor + ';'
-              colStyl += ' opacity' + colorOpacity + ';'
+              colStyl += ' background-color:#' + fillColor + ';';
+              colStyl += ' opacity' + colorOpacity + ';';
             }
             // console.log(fillColor);
             // //////////////////////////////////
@@ -3411,7 +3420,7 @@ export default function processPptx(
                 colStyl +
                 "'>" +
                 text +
-                '</td>'
+                '</td>';
             } else if (colSpan !== undefined) {
               tableHtml +=
                 "<td colspan='" +
@@ -3420,117 +3429,117 @@ export default function processPptx(
                 colStyl +
                 "'>" +
                 text +
-                '</td>'
+                '</td>';
             } else if (vMerge === undefined && hMerge === undefined) {
-              tableHtml += "<td style='" + colStyl + "'>" + text + '</td>'
+              tableHtml += "<td style='" + colStyl + "'>" + text + '</td>';
             }
           }
         } else {
-          const text = await genTextBody(tcNodes['a:txBody'])
+          const text = await genTextBody(tcNodes['a:txBody']);
           // Cells Style : TODO /////////////Amir
-          const colWidthParam = getColsGrid[0]['attrs']['w']
-          let colStyl = ''
+          const colWidthParam = getColsGrid[0]['attrs']['w'];
+          let colStyl = '';
           if (colWidthParam !== undefined) {
-            const colWidth = (parseInt(colWidthParam) * 96) / 914400
-            colStyl += 'width:' + colWidth + 'px;'
+            const colWidth = (parseInt(colWidthParam) * 96) / 914400;
+            colStyl += 'width:' + colWidth + 'px;';
           }
-          const getFill = tcNodes['a:tcPr']['a:solidFill']
-          let fillColor = ''
-          let colorOpacity = 1
+          const getFill = tcNodes['a:tcPr']['a:solidFill'];
+          let fillColor = '';
+          let colorOpacity = 1;
           if (getFill !== undefined) {
             // console.log(getFill);
-            fillColor = getSolidFill(getFill) as string
-            colorOpacity = getColorOpacity(getFill) as number
+            fillColor = getSolidFill(getFill) as string;
+            colorOpacity = getColorOpacity(getFill) as number;
           } else {
             // get from Theme TODO
           }
           if (fillColor !== '') {
-            colStyl += ' background-color:#' + fillColor + ';'
-            colStyl += ' opacity' + colorOpacity + ';'
+            colStyl += ' background-color:#' + fillColor + ';';
+            colStyl += ' opacity' + colorOpacity + ';';
           }
           // //////////////////////////////////
-          tableHtml += "<td style='" + colStyl + "'>" + text + '</td>'
+          tableHtml += "<td style='" + colStyl + "'>" + text + '</td>';
         }
-        tableHtml += '</tr>'
+        tableHtml += '</tr>';
       }
     } else {
       // ////////////row height ////////////Amir
-      const rowHeightParam = trNodes['attrs']['h']
-      let rowHeight = 0
+      const rowHeightParam = trNodes['attrs']['h'];
+      let rowHeight = 0;
       if (rowHeightParam !== undefined) {
-        rowHeight = (parseInt(rowHeightParam) * 96) / 914400
-        tableHtml += "<tr style='height:" + rowHeight + "px;'>"
+        rowHeight = (parseInt(rowHeightParam) * 96) / 914400;
+        tableHtml += "<tr style='height:" + rowHeight + "px;'>";
       } else {
-        tableHtml += '<tr>'
+        tableHtml += '<tr>';
       }
       // //////////////////////////////////////////////
-      const tcNodes = trNodes['a:tc']
+      const tcNodes = trNodes['a:tc'];
       if (tcNodes.constructor === Array) {
         for (let j = 0; j < tcNodes.length; j++) {
-          const text = await genTextBody(tcNodes[j]['a:txBody'])
+          const text = await genTextBody(tcNodes[j]['a:txBody']);
           // Cells Style : TODO /////////////Amir
-          const colWidthParam = getColsGrid[j]['attrs']['w']
-          let colStyl = ''
+          const colWidthParam = getColsGrid[j]['attrs']['w'];
+          let colStyl = '';
           if (colWidthParam !== undefined) {
-            const colWidth = (parseInt(colWidthParam) * 96) / 914400
-            colStyl += 'width:' + colWidth + 'px;'
+            const colWidth = (parseInt(colWidthParam) * 96) / 914400;
+            colStyl += 'width:' + colWidth + 'px;';
           }
-          const getFill = tcNodes[j]['a:tcPr']['a:solidFill']
-          let fillColor = ''
-          let colorOpacity = 1
+          const getFill = tcNodes[j]['a:tcPr']['a:solidFill'];
+          let fillColor = '';
+          let colorOpacity = 1;
           if (getFill !== undefined) {
-            fillColor = getSolidFill(getFill) as string
-            colorOpacity = getColorOpacity(getFill) as number
+            fillColor = getSolidFill(getFill) as string;
+            colorOpacity = getColorOpacity(getFill) as number;
           } else {
             // get from Theme TODO
             // get tableStyleId
             // a:tbl => a:tblPr => a:tableStyleId
           }
           if (fillColor !== '') {
-            colStyl += ' background-color:#' + fillColor + ';'
-            colStyl += ' opacity' + colorOpacity + ';'
+            colStyl += ' background-color:#' + fillColor + ';';
+            colStyl += ' opacity' + colorOpacity + ';';
           }
           // //////////////////////////////////
-          tableHtml += "<td style='" + colStyl + "'>" + text + '</td>'
+          tableHtml += "<td style='" + colStyl + "'>" + text + '</td>';
         }
       } else {
-        const text = await genTextBody(tcNodes['a:txBody'])
+        const text = await genTextBody(tcNodes['a:txBody']);
         // Cells Style : TODO /////////////Amir
-        const colWidthParam = getColsGrid[0]['attrs']['w']
-        let colStyl = ''
+        const colWidthParam = getColsGrid[0]['attrs']['w'];
+        let colStyl = '';
         if (colWidthParam !== undefined) {
-          const colWidth = (parseInt(colWidthParam) * 96) / 914400
-          colStyl += 'width:' + colWidth + 'px;'
+          const colWidth = (parseInt(colWidthParam) * 96) / 914400;
+          colStyl += 'width:' + colWidth + 'px;';
         }
-        const getFill = tcNodes['a:tcPr']['a:solidFill']
-        let fillColor = ''
-        let colorOpacity = 1
+        const getFill = tcNodes['a:tcPr']['a:solidFill'];
+        let fillColor = '';
+        let colorOpacity = 1;
         if (getFill !== undefined) {
           // console.log(getFill);
-          fillColor = getSolidFill(getFill) as string
-          colorOpacity = getColorOpacity(getFill) as number
+          fillColor = getSolidFill(getFill) as string;
+          colorOpacity = getColorOpacity(getFill) as number;
         } else {
           // get from Theme TODO
         }
         if (fillColor !== '') {
-          colStyl += ' background-color:#' + fillColor + ';'
-          colStyl += ' opacity' + colorOpacity + ';'
+          colStyl += ' background-color:#' + fillColor + ';';
+          colStyl += ' opacity' + colorOpacity + ';';
         }
         // //////////////////////////////////
-        tableHtml += "<td style='" + colStyl + "'>" + text + '</td>'
+        tableHtml += "<td style='" + colStyl + "'>" + text + '</td>';
       }
-      tableHtml += '</tr>'
+      tableHtml += '</tr>';
     }
 
-    return tableHtml
+    return tableHtml;
   }
 
   async function genChart(
     node: Record<string, any>,
     warpObj: Record<string, any>,
   ) {
-    const order = node['attrs']['order']
-    const xfrmNode = getTextByPathList(node, ['p:xfrm']) as Record<string, any>
+    const order = node['attrs']['order'];
+    const xfrmNode = getTextByPathList(node, ['p:xfrm']) as Record<string, any>;
     const result =
       "<div id='chart" +
       chartID +
@@ -3539,18 +3548,18 @@ export default function processPptx(
       getSize(xfrmNode, undefined, undefined) +
       ' z-index: ' +
       order +
-      ";'></div>"
+      ";'></div>";
 
-    const rid = node['a:graphic']['a:graphicData']['c:chart']['attrs']['r:id']
-    const refName = warpObj['slideResObj'][rid]['target']
-    const content = await readXmlFile(warpObj['zip'], refName)
+    const rid = node['a:graphic']['a:graphicData']['c:chart']['attrs']['r:id'];
+    const refName = warpObj['slideResObj'][rid]['target'];
+    const content = await readXmlFile(warpObj['zip'], refName);
     const plotArea = getTextByPathList(content, [
       'c:chartSpace',
       'c:chart',
       'c:plotArea',
-    ]) as Record<string, any>
+    ]) as Record<string, any>;
 
-    let chartData = null
+    let chartData = null;
     for (const key in plotArea) {
       switch (key) {
         case 'c:lineChart':
@@ -3561,8 +3570,8 @@ export default function processPptx(
               chartType: 'lineChart',
               chartData: extractChartData(plotArea[key]['c:ser']),
             },
-          }
-          break
+          };
+          break;
         case 'c:barChart':
           chartData = {
             type: 'createChart',
@@ -3571,8 +3580,8 @@ export default function processPptx(
               chartType: 'barChart',
               chartData: extractChartData(plotArea[key]['c:ser']),
             },
-          }
-          break
+          };
+          break;
         case 'c:pieChart':
           chartData = {
             type: 'createChart',
@@ -3581,8 +3590,8 @@ export default function processPptx(
               chartType: 'pieChart',
               chartData: extractChartData(plotArea[key]['c:ser']),
             },
-          }
-          break
+          };
+          break;
         case 'c:pie3DChart':
           chartData = {
             type: 'createChart',
@@ -3591,8 +3600,8 @@ export default function processPptx(
               chartType: 'pie3DChart',
               chartData: extractChartData(plotArea[key]['c:ser']),
             },
-          }
-          break
+          };
+          break;
         case 'c:areaChart':
           chartData = {
             type: 'createChart',
@@ -3601,8 +3610,8 @@ export default function processPptx(
               chartType: 'areaChart',
               chartData: extractChartData(plotArea[key]['c:ser']),
             },
-          }
-          break
+          };
+          break;
         case 'c:scatterChart':
           chartData = {
             type: 'createChart',
@@ -3611,33 +3620,33 @@ export default function processPptx(
               chartType: 'scatterChart',
               chartData: extractChartData(plotArea[key]['c:ser']),
             },
-          }
-          break
+          };
+          break;
         case 'c:catAx':
-          break
+          break;
         case 'c:valAx':
-          break
+          break;
         default:
       }
     }
 
     if (chartData != null) {
-      charts.push(chartData as ChartData)
+      charts.push(chartData as ChartData);
     }
 
-    chartID++
-    return result
+    chartID++;
+    return result;
   }
 
   function genDiagram(node: any) {
     // const order = node['attrs']['order']
-    const xfrmNode = getTextByPathList(node, ['p:xfrm']) as Record<string, any>
+    const xfrmNode = getTextByPathList(node, ['p:xfrm']) as Record<string, any>;
     return (
       "<div class='block content' style='border: 1px dotted;" +
       getPosition(xfrmNode, undefined, undefined) +
       getSize(xfrmNode, undefined, undefined) +
       "'>TODO: diagram</div>"
-    )
+    );
   }
 
   function getPosition(
@@ -3645,24 +3654,24 @@ export default function processPptx(
     slideLayoutSpNode: Record<string, any> | undefined,
     slideMasterSpNode: Record<string, any> | undefined,
   ) {
-    let off
-    let x = -1
-    let y = -1
+    let off;
+    let x = -1;
+    let y = -1;
 
     if (slideSpNode !== undefined) {
-      off = slideSpNode['a:off']['attrs']
+      off = slideSpNode['a:off']['attrs'];
     } else if (slideLayoutSpNode !== undefined) {
-      off = slideLayoutSpNode['a:off']['attrs']
+      off = slideLayoutSpNode['a:off']['attrs'];
     } else if (slideMasterSpNode !== undefined) {
-      off = slideMasterSpNode['a:off']['attrs']
+      off = slideMasterSpNode['a:off']['attrs'];
     }
 
     if (off === undefined) {
-      return ''
+      return '';
     } else {
-      x = (parseInt(off['x']) * 96) / 914400
-      y = (parseInt(off['y']) * 96) / 914400
-      return isNaN(x) || isNaN(y) ? '' : 'top:' + y + 'px; left:' + x + 'px;'
+      x = (parseInt(off['x']) * 96) / 914400;
+      y = (parseInt(off['y']) * 96) / 914400;
+      return isNaN(x) || isNaN(y) ? '' : 'top:' + y + 'px; left:' + x + 'px;';
     }
   }
 
@@ -3671,26 +3680,26 @@ export default function processPptx(
     slideLayoutSpNode: { [x: string]: { [x: string]: any } } | undefined,
     slideMasterSpNode: { [x: string]: { [x: string]: any } } | undefined,
   ) {
-    let ext
-    let w = -1
-    let h = -1
+    let ext;
+    let w = -1;
+    let h = -1;
 
     if (slideSpNode !== undefined) {
-      ext = slideSpNode['a:ext']['attrs']
+      ext = slideSpNode['a:ext']['attrs'];
     } else if (slideLayoutSpNode !== undefined) {
-      ext = slideLayoutSpNode['a:ext']['attrs']
+      ext = slideLayoutSpNode['a:ext']['attrs'];
     } else if (slideMasterSpNode !== undefined) {
-      ext = slideMasterSpNode['a:ext']['attrs']
+      ext = slideMasterSpNode['a:ext']['attrs'];
     }
 
     if (ext === undefined) {
-      return ''
+      return '';
     } else {
-      w = (parseInt(ext['cx']) * 96) / 914400
-      h = (parseInt(ext['cy']) * 96) / 914400
+      w = (parseInt(ext['cx']) * 96) / 914400;
+      h = (parseInt(ext['cy']) * 96) / 914400;
       return isNaN(w) || isNaN(h)
         ? ''
-        : 'width:' + w + 'px; height:' + h + 'px;'
+        : 'width:' + w + 'px; height:' + h + 'px;';
     }
   }
 
@@ -3701,7 +3710,7 @@ export default function processPptx(
     type: string | undefined,
     slideMasterTextStyles: Record<string, any>,
   ) {
-    let algn = getTextByPathList(node, ['a:pPr', 'attrs', 'algn'])
+    let algn = getTextByPathList(node, ['a:pPr', 'attrs', 'algn']);
     if (algn === undefined) {
       algn = getTextByPathList(slideLayoutSpNode, [
         'p:txBody',
@@ -3709,7 +3718,7 @@ export default function processPptx(
         'a:pPr',
         'attrs',
         'algn',
-      ])
+      ]);
       if (algn === undefined) {
         algn = getTextByPathList(slideMasterSpNode, [
           'p:txBody',
@@ -3717,7 +3726,7 @@ export default function processPptx(
           'a:pPr',
           'attrs',
           'algn',
-        ])
+        ]);
         if (algn === undefined) {
           switch (type) {
             case 'title':
@@ -3728,8 +3737,8 @@ export default function processPptx(
                 'a:lvl1pPr',
                 'attrs',
                 'alng',
-              ])
-              break
+              ]);
+              break;
             }
             default: {
               algn = getTextByPathList(slideMasterTextStyles, [
@@ -3737,7 +3746,7 @@ export default function processPptx(
                 'a:lvl1pPr',
                 'attrs',
                 'alng',
-              ])
+              ]);
             }
           }
         }
@@ -3746,12 +3755,12 @@ export default function processPptx(
     // TODO:
     if (algn === undefined) {
       if (type === 'title' || type === 'subTitle' || type === 'ctrTitle') {
-        return 'h-mid'
+        return 'h-mid';
       } else if (type === 'sldNum') {
-        return 'h-right'
+        return 'h-right';
       }
     }
-    return algn === 'ctr' ? 'h-mid' : algn === 'r' ? 'h-right' : 'h-left'
+    return algn === 'ctr' ? 'h-mid' : algn === 'r' ? 'h-right' : 'h-left';
   }
 
   function getVerticalAlign(
@@ -3767,25 +3776,25 @@ export default function processPptx(
       'a:bodyPr',
       'attrs',
       'anchor',
-    ])
+    ]);
     if (anchor === undefined) {
       anchor = getTextByPathList(slideLayoutSpNode, [
         'p:txBody',
         'a:bodyPr',
         'attrs',
         'anchor',
-      ])
+      ]);
       if (anchor === undefined) {
         anchor = getTextByPathList(slideMasterSpNode, [
           'p:txBody',
           'a:bodyPr',
           'attrs',
           'anchor',
-        ])
+        ]);
       }
     }
 
-    return anchor === 'ctr' ? 'v-mid' : anchor === 'b' ? 'v-down' : 'v-up'
+    return anchor === 'ctr' ? 'v-mid' : anchor === 'b' ? 'v-down' : 'v-up';
   }
 
   function getFontType(node: any, type: string, slideMasterTextStyles: any) {
@@ -3794,50 +3803,50 @@ export default function processPptx(
       'a:latin',
       'attrs',
       'typeface',
-    ])
+    ]);
 
     if (typeface === undefined) {
       const fontSchemeNode = getTextByPathList(
         themeContent as Record<string, any>,
         ['a:theme', 'a:themeElements', 'a:fontScheme'],
-      ) as Record<string, any>
+      ) as Record<string, any>;
       if (type === 'title' || type === 'subTitle' || type === 'ctrTitle') {
         typeface = getTextByPathList(fontSchemeNode, [
           'a:majorFont',
           'a:latin',
           'attrs',
           'typeface',
-        ])
+        ]);
       } else if (type === 'body') {
         typeface = getTextByPathList(fontSchemeNode, [
           'a:minorFont',
           'a:latin',
           'attrs',
           'typeface',
-        ])
+        ]);
       } else {
         typeface = getTextByPathList(fontSchemeNode, [
           'a:minorFont',
           'a:latin',
           'attrs',
           'typeface',
-        ])
+        ]);
       }
     }
 
-    return typeface === undefined ? 'inherit' : typeface
+    return typeface === undefined ? 'inherit' : typeface;
   }
 
   function getFontColor(node: any, type: any, slideMasterTextStyles: any) {
     const solidFillNode = getTextByPathStr(node, 'a:rPr a:solidFill') as Record<
       string,
       any
-    >
+    >;
 
-    const color = getSolidFill(solidFillNode)
+    const color = getSolidFill(solidFillNode);
     // console.log(themeContent)
     // const schemeClr = getTextByPathList(buClrNode ,["a:schemeClr", "attrs","val"]);
-    return color === undefined || color === 'FFF' ? '#000' : '#' + color
+    return color === undefined || color === 'FFF' ? '#000' : '#' + color;
   }
 
   function getFontSize(
@@ -3847,10 +3856,10 @@ export default function processPptx(
     type: string | undefined,
     slideMasterTextStyles: any,
   ) {
-    let fontSize = 16
-    let sz: string = ''
+    let fontSize = 16;
+    let sz: string = '';
     if (node['a:rPr'] !== undefined) {
-      fontSize = parseInt(node['a:rPr']['attrs']['sz']) / 100
+      fontSize = parseInt(node['a:rPr']['attrs']['sz']) / 100;
     }
 
     if (isNaN(fontSize) || fontSize === undefined) {
@@ -3861,8 +3870,8 @@ export default function processPptx(
         'a:defRPr',
         'attrs',
         'sz',
-      ]) as string
-      fontSize = parseInt(sz) / 100
+      ]) as string;
+      fontSize = parseInt(sz) / 100;
     }
 
     if (isNaN(fontSize) || fontSize === undefined) {
@@ -3873,7 +3882,7 @@ export default function processPptx(
           'a:defRPr',
           'attrs',
           'sz',
-        ]) as string
+        ]) as string;
       } else if (type === 'body') {
         sz = getTextByPathList(slideMasterTextStyles, [
           'p:bodyStyle',
@@ -3881,9 +3890,9 @@ export default function processPptx(
           'a:defRPr',
           'attrs',
           'sz',
-        ]) as string
+        ]) as string;
       } else if (type === 'dt' || type === 'sldNum') {
-        sz = '1200'
+        sz = '1200';
       } else if (type === undefined) {
         sz = getTextByPathList(slideMasterTextStyles, [
           'p:otherStyle',
@@ -3891,17 +3900,17 @@ export default function processPptx(
           'a:defRPr',
           'attrs',
           'sz',
-        ]) as string
+        ]) as string;
       }
-      fontSize = parseInt(sz) / 100
+      fontSize = parseInt(sz) / 100;
     }
 
-    const baseline = getTextByPathList(node, ['a:rPr', 'attrs', 'baseline'])
+    const baseline = getTextByPathList(node, ['a:rPr', 'attrs', 'baseline']);
     if (baseline !== undefined && !isNaN(fontSize)) {
-      fontSize -= 10
+      fontSize -= 10;
     }
 
-    return isNaN(fontSize) ? 'inherit' : fontSize + 'pt'
+    return isNaN(fontSize) ? 'inherit' : fontSize + 'pt';
   }
 
   function getFontBold(
@@ -3911,7 +3920,7 @@ export default function processPptx(
   ) {
     return node['a:rPr'] !== undefined && node['a:rPr']['attrs']['b'] === '1'
       ? 'bold'
-      : 'initial'
+      : 'initial';
   }
 
   function getFontItalic(
@@ -3921,7 +3930,7 @@ export default function processPptx(
   ) {
     return node['a:rPr'] !== undefined && node['a:rPr']['attrs']['i'] === '1'
       ? 'italic'
-      : 'normal'
+      : 'normal';
   }
 
   function getFontDecoration(
@@ -3934,24 +3943,24 @@ export default function processPptx(
       const underLine =
         node['a:rPr']['attrs']['u'] !== undefined
           ? node['a:rPr']['attrs']['u']
-          : 'none'
+          : 'none';
       const strikethrough =
         node['a:rPr']['attrs']['strike'] !== undefined
           ? node['a:rPr']['attrs']['strike']
-          : 'noStrike'
+          : 'noStrike';
       // console.log("strikethrough: "+strikethrough);
 
       if (underLine !== 'none' && strikethrough === 'noStrike') {
-        return 'underline'
+        return 'underline';
       } else if (underLine === 'none' && strikethrough !== 'noStrike') {
-        return 'line-through'
+        return 'line-through';
       } else if (underLine !== 'none' && strikethrough !== 'noStrike') {
-        return 'underline line-through'
+        return 'underline line-through';
       } else {
-        return 'initial'
+        return 'initial';
       }
     } else {
-      return 'initial'
+      return 'initial';
     }
     // ///////////////////////////////////////////////////////////////
     // return (node["a:rPr"] !== undefined && node["a:rPr"]["attrs"]["u"] === "sng") ? "underline" : "initial";
@@ -3963,35 +3972,35 @@ export default function processPptx(
     type: any,
     slideMasterTextStyles: any,
   ) {
-    const getAlgn = getTextByPathList(node, ['a:pPr', 'attrs', 'algn'])
-    let align = 'initial'
+    const getAlgn = getTextByPathList(node, ['a:pPr', 'attrs', 'algn']);
+    let align = 'initial';
     if (getAlgn !== undefined) {
       switch (getAlgn) {
         case 'l': {
-          align = 'left'
-          break
+          align = 'left';
+          break;
         }
         case 'r': {
-          align = 'right'
-          break
+          align = 'right';
+          break;
         }
         case 'ctr': {
-          align = 'center'
-          break
+          align = 'center';
+          break;
         }
         case 'just': {
-          align = 'justify'
-          break
+          align = 'justify';
+          break;
         }
         case 'dist': {
-          align = 'justify'
-          break
+          align = 'justify';
+          break;
         }
         default:
-          align = 'initial'
+          align = 'initial';
       }
     }
-    return align
+    return align;
   }
 
   // ///////////////////////////////////////////////////////////////////
@@ -4004,8 +4013,10 @@ export default function processPptx(
       'a:rPr',
       'attrs',
       'baseline',
-    ]) as string
-    return baseline === undefined ? 'baseline' : parseInt(baseline) / 1000 + '%'
+    ]) as string;
+    return baseline === undefined
+      ? 'baseline'
+      : parseInt(baseline) / 1000 + '%';
   }
 
   // /////////////////////////////////Amir/////////////////////////////
@@ -4032,47 +4043,47 @@ function getTextDirection (node, type, slideMasterTextStyles) {
 */
 
   function getTableBorders(node: { [x: string]: { [x: string]: any } }) {
-    let borderStyle = ''
-    let obj
-    let borders
+    let borderStyle = '';
+    let obj;
+    let borders;
     if (node['a:bottom'] !== undefined) {
       obj = {
         'p:spPr': {
           'a:ln': node['a:bottom']['a:ln'],
         },
-      }
-      borders = getBorder(obj, false)
-      borderStyle += borders.replace('border', 'border-bottom')
+      };
+      borders = getBorder(obj, false);
+      borderStyle += borders.replace('border', 'border-bottom');
     }
     if (node['a:top'] !== undefined) {
       obj = {
         'p:spPr': {
           'a:ln': node['a:top']['a:ln'],
         },
-      }
-      borders = getBorder(obj, false)
-      borderStyle += borders.replace('border', 'border-top')
+      };
+      borders = getBorder(obj, false);
+      borderStyle += borders.replace('border', 'border-top');
     }
     if (node['a:right'] !== undefined) {
       obj = {
         'p:spPr': {
           'a:ln': node['a:right']['a:ln'],
         },
-      }
-      borders = getBorder(obj, false)
-      borderStyle += borders.replace('border', 'border-right')
+      };
+      borders = getBorder(obj, false);
+      borderStyle += borders.replace('border', 'border-right');
     }
     if (node['a:left'] !== undefined) {
       obj = {
         'p:spPr': {
           'a:ln': node['a:left']['a:ln'],
         },
-      }
-      borders = getBorder(obj, false)
-      borderStyle += borders.replace('border', 'border-left')
+      };
+      borders = getBorder(obj, false);
+      borderStyle += borders.replace('border', 'border-left');
     }
 
-    return borderStyle
+    return borderStyle;
   }
 
   // ////////////////////////////////////////////////////////////////
@@ -4080,80 +4091,80 @@ function getTextDirection (node, type, slideMasterTextStyles) {
     node: Record<string, any>,
     isSvgMode: boolean,
   ): string | Record<string, any> {
-    let cssText = 'border: '
+    let cssText = 'border: ';
 
     // 1. presentationML
-    const lineNode = node['p:spPr']['a:ln']
+    const lineNode = node['p:spPr']['a:ln'];
 
     // Border width: 1pt = 12700, default = 0.75pt
     const borderWidth =
-      parseInt(getTextByPathList(lineNode, ['attrs', 'w']) as string) / 12700
+      parseInt(getTextByPathList(lineNode, ['attrs', 'w']) as string) / 12700;
     if (isNaN(borderWidth) || borderWidth < 1) {
-      cssText += '1pt '
+      cssText += '1pt ';
     } else {
-      cssText += borderWidth + 'pt '
+      cssText += borderWidth + 'pt ';
     }
     // Border type
     const borderType = getTextByPathList(lineNode, [
       'a:prstDash',
       'attrs',
       'val',
-    ])
-    let strokeDasharray = '0'
+    ]);
+    let strokeDasharray = '0';
     switch (borderType) {
       case 'solid': {
-        cssText += 'solid'
-        strokeDasharray = '0'
-        break
+        cssText += 'solid';
+        strokeDasharray = '0';
+        break;
       }
       case 'dash': {
-        cssText += 'dashed'
-        strokeDasharray = '5'
-        break
+        cssText += 'dashed';
+        strokeDasharray = '5';
+        break;
       }
       case 'dashDot': {
-        cssText += 'dashed'
-        strokeDasharray = '5, 5, 1, 5'
-        break
+        cssText += 'dashed';
+        strokeDasharray = '5, 5, 1, 5';
+        break;
       }
       case 'dot': {
-        cssText += 'dotted'
-        strokeDasharray = '1, 5'
-        break
+        cssText += 'dotted';
+        strokeDasharray = '1, 5';
+        break;
       }
       case 'lgDash': {
-        cssText += 'dashed'
-        strokeDasharray = '10, 5'
-        break
+        cssText += 'dashed';
+        strokeDasharray = '10, 5';
+        break;
       }
       case 'lgDashDotDot': {
-        cssText += 'dashed'
-        strokeDasharray = '10, 5, 1, 5, 1, 5'
-        break
+        cssText += 'dashed';
+        strokeDasharray = '10, 5, 1, 5, 1, 5';
+        break;
       }
       case 'sysDash': {
-        cssText += 'dashed'
-        strokeDasharray = '5, 2'
-        break
+        cssText += 'dashed';
+        strokeDasharray = '5, 2';
+        break;
       }
       case 'sysDashDot': {
-        cssText += 'dashed'
-        strokeDasharray = '5, 2, 1, 5'
-        break
+        cssText += 'dashed';
+        strokeDasharray = '5, 2, 1, 5';
+        break;
       }
       case 'sysDashDotDot': {
-        cssText += 'dashed'
-        strokeDasharray = '5, 2, 1, 5, 1, 5'
-        break
+        cssText += 'dashed';
+        strokeDasharray = '5, 2, 1, 5, 1, 5';
+        break;
       }
       case 'sysDot': {
-        cssText += 'dotted'
-        strokeDasharray = '2, 5'
-        break
+        cssText += 'dotted';
+        strokeDasharray = '2, 5';
+        break;
       }
       default: {
-        cssText += 'solid'
-        strokeDasharray = '0'
+        cssText += 'solid';
+        strokeDasharray = '0';
       }
     }
     // Border color
@@ -4162,16 +4173,16 @@ function getTextDirection (node, type, slideMasterTextStyles) {
       'a:srgbClr',
       'attrs',
       'val',
-    ])
+    ]);
     if (borderColor === undefined) {
       const schemeClrNode = getTextByPathList(lineNode, [
         'a:solidFill',
         'a:schemeClr',
-      ]) as Record<string, any>
+      ]) as Record<string, any>;
       if (schemeClrNode !== undefined) {
         const schemeClr =
-          'a:' + getTextByPathList(schemeClrNode, ['attrs', 'val'])
-        borderColor = getSchemeColorFromTheme(schemeClr, undefined)
+          'a:' + getTextByPathList(schemeClrNode, ['attrs', 'val']);
+        borderColor = getSchemeColorFromTheme(schemeClr, undefined);
       }
     }
 
@@ -4181,11 +4192,11 @@ function getTextDirection (node, type, slideMasterTextStyles) {
         'p:style',
         'a:lnRef',
         'a:schemeClr',
-      ]) as Record<string, any>
+      ]) as Record<string, any>;
       if (schemeClrNode !== undefined) {
         const schemeClr =
-          'a:' + getTextByPathList(schemeClrNode, ['attrs', 'val'])
-        borderColor = getSchemeColorFromTheme(schemeClr, undefined)
+          'a:' + getTextByPathList(schemeClrNode, ['attrs', 'val']);
+        borderColor = getSchemeColorFromTheme(schemeClr, undefined);
       }
 
       if (borderColor !== undefined) {
@@ -4193,26 +4204,26 @@ function getTextDirection (node, type, slideMasterTextStyles) {
           'a:shade',
           'attrs',
           'val',
-        ]) as string
+        ]) as string;
         if (shade !== undefined) {
-          shade = (parseInt(shade) / 100000).toString()
-          const color = new Color('#' + borderColor)
-          color.setLum(Number(color.hsl.l) * Number(shade))
-          borderColor = color.hex.replace('#', '')
+          shade = (parseInt(shade) / 100000).toString();
+          const color = new Color('#' + borderColor);
+          color.setLum(Number(color.hsl.l) * Number(shade));
+          borderColor = color.hex.replace('#', '');
         }
       }
     }
 
     if (borderColor === undefined) {
       if (isSvgMode) {
-        borderColor = 'none'
+        borderColor = 'none';
       } else {
-        borderColor = '#000'
+        borderColor = '#000';
       }
     } else {
-      borderColor = '#' + borderColor
+      borderColor = '#' + borderColor;
     }
-    cssText += ' ' + borderColor + ' '
+    cssText += ' ' + borderColor + ' ';
 
     if (isSvgMode) {
       return {
@@ -4220,9 +4231,9 @@ function getTextDirection (node, type, slideMasterTextStyles) {
         width: borderWidth,
         type: borderType,
         strokeDasharray: strokeDasharray,
-      }
+      };
     } else {
-      return cssText + ';'
+      return cssText + ';';
     }
   }
 
@@ -4239,76 +4250,80 @@ function getTextDirection (node, type, slideMasterTextStyles) {
       'p:cSld',
       'p:bg',
       'p:bgPr',
-    ]) as Record<string, any>
+    ]) as Record<string, any>;
     let bgRef = getTextByPathList(slideContent, [
       'p:sld',
       'p:cSld',
       'p:bg',
       'p:bgRef',
-    ]) as Record<string, any>
-    let bgcolor
+    ]) as Record<string, any>;
+    let bgcolor;
 
     if (bgPr !== undefined) {
       // bgcolor = "background-color: blue;";
-      const bgFillTyp = getFillType(bgPr)
+      const bgFillTyp = getFillType(bgPr);
 
       if (bgFillTyp === 'SOLID_FILL') {
-        const sldFill = bgPr['a:solidFill']
-        const bgColor = getSolidFill(sldFill)
-        const sldTint = getColorOpacity(sldFill)
+        const sldFill = bgPr['a:solidFill'];
+        const bgColor = getSolidFill(sldFill);
+        const sldTint = getColorOpacity(sldFill);
         bgcolor =
-          'background: rgba(' + hexToRgbNew(bgColor) + ',' + sldTint + ');'
+          'background: rgba(' + hexToRgbNew(bgColor) + ',' + sldTint + ');';
       } else if (bgFillTyp === 'GRADIENT_FILL') {
-        const grdFill = bgPr['a:gradFill']
+        const grdFill = bgPr['a:gradFill'];
         // const grdFillVals =  getGradientFill(grdFill);
         // console.log("grdFillVals",grdFillVals)
-        const gsLst = grdFill['a:gsLst']['a:gs']
+        const gsLst = grdFill['a:gsLst']['a:gs'];
         // get start color
         // let startColorNode
         // let endColorNode
-        const colorArray: Array<Record<string, any> | undefined | string> = []
-        const tintArray = []
+        const colorArray: Array<Record<string, any> | undefined | string> = [];
+        const tintArray = [];
         for (let i = 0; i < gsLst.length; i++) {
-          let loTint: string = ''
-          let loColor
+          let loTint: string = '';
+          let loColor;
           if (gsLst[i]['a:srgbClr'] !== undefined) {
-            loColor = getTextByPathList(gsLst[i], ['a:srgbClr', 'attrs', 'val']) // #...
+            loColor = getTextByPathList(gsLst[i], [
+              'a:srgbClr',
+              'attrs',
+              'val',
+            ]); // #...
             loTint = getTextByPathList(gsLst[i], [
               'a:srgbClr',
               'a:tint',
               'attrs',
               'val',
-            ]) as string
+            ]) as string;
           } else if (gsLst[i]['a:schemeClr'] !== undefined) {
             // a:schemeClr
             const schemeClr = getTextByPathList(gsLst[i], [
               'a:schemeClr',
               'attrs',
               'val',
-            ])
+            ]);
             loColor = getSchemeColorFromTheme(
               'a:' + schemeClr,
               slideMasterContent,
-            ) // #...
+            ); // #...
             loTint = getTextByPathList(gsLst[i], [
               'a:schemeClr',
               'a:tint',
               'attrs',
               'val',
-            ]) as string
+            ]) as string;
             // console.log("schemeClr",schemeClr,slideMasterContent)
           }
           // console.log("loColor",loColor)
-          colorArray[i] = loColor
-          tintArray[i] = loTint !== undefined ? parseInt(loTint) / 100000 : 1
+          colorArray[i] = loColor;
+          tintArray[i] = loTint !== undefined ? parseInt(loTint) / 100000 : 1;
         }
         // get rot
-        const lin = grdFill['a:lin']
-        let rot = 90
+        const lin = grdFill['a:lin'];
+        let rot = 90;
         if (lin !== undefined) {
-          rot = angleToDegrees(lin['attrs']['ang']) + 90
+          rot = angleToDegrees(lin['attrs']['ang']) + 90;
         }
-        bgcolor = 'background: linear-gradient(' + rot + 'deg,'
+        bgcolor = 'background: linear-gradient(' + rot + 'deg,';
         for (let i = 0; i < gsLst.length; i++) {
           if (i === gsLst.length - 1) {
             bgcolor +=
@@ -4317,7 +4332,7 @@ function getTextDirection (node, type, slideMasterTextStyles) {
               ',' +
               tintArray[i] +
               ')' +
-              ');'
+              ');';
           } else {
             bgcolor +=
               'rgba(' +
@@ -4325,7 +4340,7 @@ function getTextDirection (node, type, slideMasterTextStyles) {
               ',' +
               tintArray[i] +
               ')' +
-              ', '
+              ', ';
           }
         }
       } else if (bgFillTyp === 'PIC_FILL') {
@@ -4333,8 +4348,8 @@ function getTextDirection (node, type, slideMasterTextStyles) {
           'slideBg',
           bgPr['a:blipFill'],
           warpObj,
-        )
-        const ordr = bgPr['attrs']['order']
+        );
+        const ordr = bgPr['attrs']['order'];
         // a:srcRect
         // a:stretch => a:fillRect =>attrs (l:-17000, r:-17000)
         bgcolor =
@@ -4342,33 +4357,33 @@ function getTextDirection (node, type, slideMasterTextStyles) {
           picFillBase64 +
           ');  z-index: ' +
           ordr +
-          ';'
+          ';';
         // console.log(picFillBase64);
       }
       // console.log(slideContent,slideMasterContent,colorArray,tintArray,rot,bgcolor)
     } else if (bgRef !== undefined) {
       // console.log("slideContent",bgRef)
-      let phClr: string = ''
+      let phClr: string = '';
       if (bgRef['a:srgbClr'] !== undefined) {
         phClr = getTextByPathList(bgRef, [
           'a:srgbClr',
           'attrs',
           'val',
-        ]) as string // #...
+        ]) as string; // #...
       } else if (bgRef['a:schemeClr'] !== undefined) {
         // a:schemeClr
         const schemeClr = getTextByPathList(bgRef, [
           'a:schemeClr',
           'attrs',
           'val',
-        ])
+        ]);
         phClr = getSchemeColorFromTheme(
           'a:' + schemeClr,
           slideMasterContent,
-        ) as string // #...
+        ) as string; // #...
         // console.log("schemeClr",schemeClr,"phClr=",phClr)
       }
-      const idx = Number(bgRef['attrs']['idx'])
+      const idx = Number(bgRef['attrs']['idx']);
 
       if (idx === 0 || idx === 1000) {
         // no background
@@ -4379,73 +4394,73 @@ function getTextDirection (node, type, slideMasterTextStyles) {
       } else if (idx > 1000) {
         // bgFillStyleLst  in themeContent
         // themeContent["a:fmtScheme"]["a:bgFillStyleLst"]
-        const trueIdx = idx - 1000
+        const trueIdx = idx - 1000;
         const bgFillLst = (themeContent as Record<string, any>)['a:theme'][
           'a:themeElements'
-        ]['a:fmtScheme']['a:bgFillStyleLst']
-        const sortblAry: {}[] = []
+        ]['a:fmtScheme']['a:bgFillStyleLst'];
+        const sortblAry: {}[] = [];
         Object.keys(bgFillLst).forEach(function (key) {
-          const bgFillLstTyp = bgFillLst[key]
+          const bgFillLstTyp = bgFillLst[key];
           if (key !== 'attrs') {
             if (bgFillLstTyp.constructor === Array) {
               for (let i = 0; i < bgFillLstTyp.length; i++) {
-                const obj: Record<string, any> = {}
-                obj[key] = bgFillLstTyp[i]
-                obj['idex'] = bgFillLstTyp[i]['attrs']['order']
-                sortblAry.push(obj)
+                const obj: Record<string, any> = {};
+                obj[key] = bgFillLstTyp[i];
+                obj['idex'] = bgFillLstTyp[i]['attrs']['order'];
+                sortblAry.push(obj);
               }
             } else {
-              const obj: Record<string, any> = {}
-              obj[key] = bgFillLstTyp
-              obj['idex'] = bgFillLstTyp['attrs']['order']
-              sortblAry.push(obj)
+              const obj: Record<string, any> = {};
+              obj[key] = bgFillLstTyp;
+              obj['idex'] = bgFillLstTyp['attrs']['order'];
+              sortblAry.push(obj);
             }
           }
-        })
-        const sortByOrder: Array<Record<string, any>> = sortblAry.slice(0)
+        });
+        const sortByOrder: Array<Record<string, any>> = sortblAry.slice(0);
         sortByOrder.sort(function (a, b) {
-          return a.idex - b.idex
-        })
-        const bgFillLstIdx: Record<string, any> = sortByOrder[trueIdx - 1]
-        const bgFillTyp = getFillType(bgFillLstIdx)
+          return a.idex - b.idex;
+        });
+        const bgFillLstIdx: Record<string, any> = sortByOrder[trueIdx - 1];
+        const bgFillTyp = getFillType(bgFillLstIdx);
         if (bgFillTyp === 'SOLID_FILL') {
-          const sldFill = bgFillLstIdx['a:solidFill']
+          const sldFill = bgFillLstIdx['a:solidFill'];
           // const sldBgColor = getSolidFill(sldFill);
-          const sldTint = getColorOpacity(sldFill)
+          const sldTint = getColorOpacity(sldFill);
           bgcolor =
-            'background: rgba(' + hexToRgbNew(phClr) + ',' + sldTint + ');'
+            'background: rgba(' + hexToRgbNew(phClr) + ',' + sldTint + ');';
           // console.log("slideMasterContent - sldFill",sldFill)
         } else if (bgFillTyp === 'GRADIENT_FILL') {
-          const grdFill = bgFillLstIdx['a:gradFill']
-          const gsLst = grdFill['a:gsLst']['a:gs']
+          const grdFill = bgFillLstIdx['a:gradFill'];
+          const gsLst = grdFill['a:gsLst']['a:gs'];
           // get start color
           // let startColorNode
           // let endColorNode
-          const tintArray = []
+          const tintArray = [];
           for (let i = 0; i < gsLst.length; i++) {
             const loTint = getTextByPathList(gsLst[i], [
               'a:schemeClr',
               'a:tint',
               'attrs',
               'val',
-            ]) as string
-            tintArray[i] = loTint !== undefined ? parseInt(loTint) / 100000 : 1
+            ]) as string;
+            tintArray[i] = loTint !== undefined ? parseInt(loTint) / 100000 : 1;
           }
           // console.log("gsLst",gsLst)
           // get rot
-          const lin = grdFill['a:lin']
-          let rot = 90
+          const lin = grdFill['a:lin'];
+          let rot = 90;
           if (lin !== undefined) {
-            rot = angleToDegrees(lin['attrs']['ang']) + 90
+            rot = angleToDegrees(lin['attrs']['ang']) + 90;
           }
-          bgcolor = 'background: linear-gradient(' + rot + 'deg,'
+          bgcolor = 'background: linear-gradient(' + rot + 'deg,';
           for (let i = 0; i < gsLst.length; i++) {
             if (i === gsLst.length - 1) {
               bgcolor +=
-                'rgba(' + hexToRgbNew(phClr) + ',' + tintArray[i] + ')' + ');'
+                'rgba(' + hexToRgbNew(phClr) + ',' + tintArray[i] + ')' + ');';
             } else {
               bgcolor +=
-                'rgba(' + hexToRgbNew(phClr) + ',' + tintArray[i] + ')' + ', '
+                'rgba(' + hexToRgbNew(phClr) + ',' + tintArray[i] + ')' + ', ';
             }
           }
         }
@@ -4456,79 +4471,80 @@ function getTextDirection (node, type, slideMasterTextStyles) {
         'p:cSld',
         'p:bg',
         'p:bgPr',
-      ]) as Record<string, any>
+      ]) as Record<string, any>;
       bgRef = getTextByPathList(slideLayoutContent, [
         'p:sldLayout',
         'p:cSld',
         'p:bg',
         'p:bgRef',
-      ]) as Record<string, any>
+      ]) as Record<string, any>;
       // console.log("slideLayoutContent",bgPr,bgRef)
       if (bgPr !== undefined) {
-        const bgFillTyp = getFillType(bgPr)
+        const bgFillTyp = getFillType(bgPr);
         if (bgFillTyp === 'SOLID_FILL') {
-          const sldFill = bgPr['a:solidFill']
-          const bgColor = getSolidFill(sldFill)
-          const sldTint = getColorOpacity(sldFill)
+          const sldFill = bgPr['a:solidFill'];
+          const bgColor = getSolidFill(sldFill);
+          const sldTint = getColorOpacity(sldFill);
           bgcolor =
-            'background: rgba(' + hexToRgbNew(bgColor) + ',' + sldTint + ');'
+            'background: rgba(' + hexToRgbNew(bgColor) + ',' + sldTint + ');';
         } else if (bgFillTyp === 'GRADIENT_FILL') {
-          const grdFill = bgPr['a:gradFill']
+          const grdFill = bgPr['a:gradFill'];
           // const grdFillVals =  getGradientFill(grdFill);
           // console.log("grdFillVals",grdFillVals)
-          const gsLst = grdFill['a:gsLst']['a:gs']
+          const gsLst = grdFill['a:gsLst']['a:gs'];
           // get start color
           // let startColorNode
           // let endColorNode
-          const colorArray: Array<Record<string, any> | undefined | string> = []
-          const tintArray = []
+          const colorArray: Array<Record<string, any> | undefined | string> =
+            [];
+          const tintArray = [];
           for (let i = 0; i < gsLst.length; i++) {
-            let loTint = ''
-            let loColor
+            let loTint = '';
+            let loColor;
             if (gsLst[i]['a:srgbClr'] !== undefined) {
               loColor = getTextByPathList(gsLst[i], [
                 'a:srgbClr',
                 'attrs',
                 'val',
-              ]) // #...
+              ]); // #...
               loTint = getTextByPathList(gsLst[i], [
                 'a:srgbClr',
                 'a:tint',
                 'attrs',
                 'val',
-              ]) as string
+              ]) as string;
             } else if (gsLst[i]['a:schemeClr'] !== undefined) {
               // a:schemeClr
               const schemeClr = getTextByPathList(gsLst[i], [
                 'a:schemeClr',
                 'attrs',
                 'val',
-              ])
+              ]);
               loColor = getSchemeColorFromTheme(
                 'a:' + schemeClr,
                 slideMasterContent,
-              ) // #...
+              ); // #...
               loTint = getTextByPathList(gsLst[i], [
                 'a:schemeClr',
                 'a:tint',
                 'attrs',
                 'val',
-              ]) as string
+              ]) as string;
               // console.log("schemeClr",schemeClr,slideMasterContent)
             }
             // console.log("loColor",loColor)
-            colorArray[i] = loColor
-            tintArray[i] = loTint !== undefined ? parseInt(loTint) / 100000 : 1
+            colorArray[i] = loColor;
+            tintArray[i] = loTint !== undefined ? parseInt(loTint) / 100000 : 1;
           }
           // console.log("colorArray",colorArray,"tintArray",tintArray)
           // get rot
-          const lin = grdFill['a:lin']
-          let rot = 90
+          const lin = grdFill['a:lin'];
+          let rot = 90;
           if (lin !== undefined) {
-            rot = angleToDegrees(lin['attrs']['ang']) + 90
+            rot = angleToDegrees(lin['attrs']['ang']) + 90;
           }
 
-          bgcolor = 'background: linear-gradient(' + rot + 'deg,'
+          bgcolor = 'background: linear-gradient(' + rot + 'deg,';
           for (let i = 0; i < gsLst.length; i++) {
             if (i === gsLst.length - 1) {
               bgcolor +=
@@ -4537,7 +4553,7 @@ function getTextDirection (node, type, slideMasterTextStyles) {
                 ',' +
                 tintArray[i] +
                 ')' +
-                ');'
+                ');';
             } else {
               bgcolor +=
                 'rgba(' +
@@ -4545,7 +4561,7 @@ function getTextDirection (node, type, slideMasterTextStyles) {
                 ',' +
                 tintArray[i] +
                 ')' +
-                ', '
+                ', ';
             }
           }
         } else if (bgFillTyp === 'PIC_FILL') {
@@ -4554,8 +4570,8 @@ function getTextDirection (node, type, slideMasterTextStyles) {
             'layoutBg',
             bgPr['a:blipFill'],
             warpObj,
-          )
-          const ordr = bgPr['attrs']['order']
+          );
+          const ordr = bgPr['attrs']['order'];
           // a:srcRect
           // a:stretch => a:fillRect =>attrs (l:-17000, r:-17000)
           bgcolor =
@@ -4563,93 +4579,93 @@ function getTextDirection (node, type, slideMasterTextStyles) {
             picFillBase64 +
             ');  z-index: ' +
             ordr +
-            ';'
+            ';';
           // console.log(warpObj)
         }
         // console.log("slideLayoutContent",bgcolor)
       } else if (bgRef !== undefined) {
-        bgcolor = 'background: red;'
+        bgcolor = 'background: red;';
       } else {
         bgPr = getTextByPathList(slideMasterContent, [
           'p:sldMaster',
           'p:cSld',
           'p:bg',
           'p:bgPr',
-        ]) as Record<string, any>
+        ]) as Record<string, any>;
         bgRef = getTextByPathList(slideMasterContent, [
           'p:sldMaster',
           'p:cSld',
           'p:bg',
           'p:bgRef',
-        ]) as Record<string, any>
+        ]) as Record<string, any>;
 
         // console.log("bgRef",bgRef["a:schemeClr"]["attrs"]["val"])
         if (bgPr !== undefined) {
-          const bgFillTyp = getFillType(bgPr)
+          const bgFillTyp = getFillType(bgPr);
           if (bgFillTyp === 'SOLID_FILL') {
-            const sldFill = bgPr['a:solidFill']
-            const bgColor = getSolidFill(sldFill)
-            const sldTint = getColorOpacity(sldFill)
+            const sldFill = bgPr['a:solidFill'];
+            const bgColor = getSolidFill(sldFill);
+            const sldTint = getColorOpacity(sldFill);
             bgcolor =
-              'background: rgba(' + hexToRgbNew(bgColor) + ',' + sldTint + ');'
+              'background: rgba(' + hexToRgbNew(bgColor) + ',' + sldTint + ');';
           } else if (bgFillTyp === 'GRADIENT_FILL') {
-            const grdFill = bgPr['a:gradFill']
+            const grdFill = bgPr['a:gradFill'];
             // const grdFillVals =  getGradientFill(grdFill);
             // console.log("grdFillVals",grdFillVals)
-            const gsLst = grdFill['a:gsLst']['a:gs']
+            const gsLst = grdFill['a:gsLst']['a:gs'];
             // get start color
             // let startColorNode
             // let endColorNode
-            const colorArray = []
-            const tintArray = []
+            const colorArray = [];
+            const tintArray = [];
             for (let i = 0; i < gsLst.length; i++) {
-              let loTint = ''
-              let loColor
+              let loTint = '';
+              let loColor;
               if (gsLst[i]['a:srgbClr'] !== undefined) {
                 loColor = getTextByPathList(gsLst[i], [
                   'a:srgbClr',
                   'attrs',
                   'val',
-                ]) // #...
+                ]); // #...
                 loTint = getTextByPathList(gsLst[i], [
                   'a:srgbClr',
                   'a:tint',
                   'attrs',
                   'val',
-                ]) as string
+                ]) as string;
               } else if (gsLst[i]['a:schemeClr'] !== undefined) {
                 // a:schemeClr
                 const schemeClr = getTextByPathList(gsLst[i], [
                   'a:schemeClr',
                   'attrs',
                   'val',
-                ])
+                ]);
                 loColor = getSchemeColorFromTheme(
                   'a:' + schemeClr,
                   slideMasterContent,
-                ) // #...
+                ); // #...
                 loTint = getTextByPathList(gsLst[i], [
                   'a:schemeClr',
                   'a:tint',
                   'attrs',
                   'val',
-                ]) as string
+                ]) as string;
                 // console.log("schemeClr",schemeClr,slideMasterContent)
               }
               // console.log("loColor",loColor)
-              colorArray[i] = loColor
+              colorArray[i] = loColor;
               tintArray[i] =
-                loTint !== undefined ? parseInt(loTint) / 100000 : 1
+                loTint !== undefined ? parseInt(loTint) / 100000 : 1;
             }
             // console.log("colorArray",colorArray,"tintArray",tintArray)
             // get rot
-            const lin = grdFill['a:lin']
-            let rot = 90
+            const lin = grdFill['a:lin'];
+            let rot = 90;
             if (lin !== undefined) {
-              rot = angleToDegrees(lin['attrs']['ang']) + 90
+              rot = angleToDegrees(lin['attrs']['ang']) + 90;
             }
 
-            bgcolor = 'background: linear-gradient(' + rot + 'deg,'
+            bgcolor = 'background: linear-gradient(' + rot + 'deg,';
             for (let i = 0; i < gsLst.length; i++) {
               if (i === gsLst.length - 1) {
                 bgcolor +=
@@ -4658,7 +4674,7 @@ function getTextDirection (node, type, slideMasterTextStyles) {
                   ',' +
                   tintArray[i] +
                   ')' +
-                  ');'
+                  ');';
               } else {
                 bgcolor +=
                   'rgba(' +
@@ -4666,7 +4682,7 @@ function getTextDirection (node, type, slideMasterTextStyles) {
                   ',' +
                   tintArray[i] +
                   ')' +
-                  ', '
+                  ', ';
               }
             }
           } else if (bgFillTyp === 'PIC_FILL') {
@@ -4675,8 +4691,8 @@ function getTextDirection (node, type, slideMasterTextStyles) {
               'masterBg',
               bgPr['a:blipFill'],
               warpObj,
-            )
-            const ordr = bgPr['attrs']['order']
+            );
+            const ordr = bgPr['attrs']['order'];
             // a:srcRect
             // a:stretch => a:fillRect =>attrs (l:-17000, r:-17000)
             bgcolor =
@@ -4684,7 +4700,7 @@ function getTextDirection (node, type, slideMasterTextStyles) {
               picFillBase64 +
               ');  z-index: ' +
               ordr +
-              ';'
+              ';';
             // console.log(warpObj);
           }
         } else if (bgRef !== undefined) {
@@ -4692,28 +4708,28 @@ function getTextDirection (node, type, slideMasterTextStyles) {
           //    "a:solidFill": bgRef
           // }
           // const phClr = getSolidFill(bgRef);
-          let phClr = ''
+          let phClr = '';
           if (bgRef['a:srgbClr'] !== undefined) {
             phClr = getTextByPathList(bgRef, [
               'a:srgbClr',
               'attrs',
               'val',
-            ]) as string // #...
+            ]) as string; // #...
           } else if (bgRef['a:schemeClr'] !== undefined) {
             // a:schemeClr
             const schemeClr = getTextByPathList(bgRef, [
               'a:schemeClr',
               'attrs',
               'val',
-            ])
+            ]);
 
             phClr = getSchemeColorFromTheme(
               'a:' + schemeClr,
               slideMasterContent,
-            ) as string // #...
+            ) as string; // #...
             // console.log("phClr",phClr)
           }
-          const idx = Number(bgRef['attrs']['idx'])
+          const idx = Number(bgRef['attrs']['idx']);
           // console.log("phClr=",phClr,"idx=",idx)
 
           if (idx === 0 || idx === 1000) {
@@ -4725,67 +4741,67 @@ function getTextDirection (node, type, slideMasterTextStyles) {
           } else if (idx > 1000) {
             // bgFillStyleLst  in themeContent
             // themeContent["a:fmtScheme"]["a:bgFillStyleLst"]
-            const trueIdx = idx - 1000
+            const trueIdx = idx - 1000;
             const bgFillLst = (themeContent as Record<string, any>)['a:theme'][
               'a:themeElements'
-            ]['a:fmtScheme']['a:bgFillStyleLst']
-            const sortblAry: {}[] = []
+            ]['a:fmtScheme']['a:bgFillStyleLst'];
+            const sortblAry: {}[] = [];
             Object.keys(bgFillLst).forEach(function (key) {
               // console.log("cubicBezTo["+key+"]:");
-              const bgFillLstTyp = bgFillLst[key]
+              const bgFillLstTyp = bgFillLst[key];
               if (key !== 'attrs') {
                 if (bgFillLstTyp.constructor === Array) {
                   for (let i = 0; i < bgFillLstTyp.length; i++) {
-                    const obj: Record<string, any> = {}
-                    obj[key] = bgFillLstTyp[i]
-                    obj['idex'] = bgFillLstTyp[i]['attrs']['order']
-                    sortblAry.push(obj)
+                    const obj: Record<string, any> = {};
+                    obj[key] = bgFillLstTyp[i];
+                    obj['idex'] = bgFillLstTyp[i]['attrs']['order'];
+                    sortblAry.push(obj);
                   }
                 } else {
-                  const obj: Record<string, any> = {}
-                  obj[key] = bgFillLstTyp
-                  obj['idex'] = bgFillLstTyp['attrs']['order']
-                  sortblAry.push(obj)
+                  const obj: Record<string, any> = {};
+                  obj[key] = bgFillLstTyp;
+                  obj['idex'] = bgFillLstTyp['attrs']['order'];
+                  sortblAry.push(obj);
                 }
               }
-            })
-            const sortByOrder: Array<Record<string, any>> = sortblAry.slice(0)
+            });
+            const sortByOrder: Array<Record<string, any>> = sortblAry.slice(0);
             sortByOrder.sort(function (a, b) {
-              return a.idex - b.idex
-            })
-            const bgFillLstIdx = sortByOrder[trueIdx - 1]
-            const bgFillTyp = getFillType(bgFillLstIdx)
+              return a.idex - b.idex;
+            });
+            const bgFillLstIdx = sortByOrder[trueIdx - 1];
+            const bgFillTyp = getFillType(bgFillLstIdx);
             // console.log("bgFillLstIdx",bgFillLstIdx);
             if (bgFillTyp === 'SOLID_FILL') {
-              const sldFill = bgFillLstIdx['a:solidFill']
-              const sldTint = getColorOpacity(sldFill)
+              const sldFill = bgFillLstIdx['a:solidFill'];
+              const sldTint = getColorOpacity(sldFill);
               bgcolor =
-                'background: rgba(' + hexToRgbNew(phClr) + ',' + sldTint + ');'
+                'background: rgba(' + hexToRgbNew(phClr) + ',' + sldTint + ');';
             } else if (bgFillTyp === 'GRADIENT_FILL') {
-              const grdFill = bgFillLstIdx['a:gradFill']
-              const gsLst = grdFill['a:gsLst']['a:gs']
+              const grdFill = bgFillLstIdx['a:gradFill'];
+              const gsLst = grdFill['a:gsLst']['a:gs'];
               // get start color
               // let startColorNode
               // let endColorNode
-              const tintArray = []
+              const tintArray = [];
               for (let i = 0; i < gsLst.length; i++) {
                 const loTint = getTextByPathList(gsLst[i], [
                   'a:schemeClr',
                   'a:tint',
                   'attrs',
                   'val',
-                ]) as string
+                ]) as string;
                 tintArray[i] =
-                  loTint !== undefined ? parseInt(loTint) / 100000 : 1
+                  loTint !== undefined ? parseInt(loTint) / 100000 : 1;
               }
 
               // get rot
-              const lin = grdFill['a:lin']
-              let rot = 90
+              const lin = grdFill['a:lin'];
+              let rot = 90;
               if (lin !== undefined) {
-                rot = angleToDegrees(lin['attrs']['ang']) + 90
+                rot = angleToDegrees(lin['attrs']['ang']) + 90;
               }
-              bgcolor = 'background: linear-gradient(' + rot + 'deg,'
+              bgcolor = 'background: linear-gradient(' + rot + 'deg,';
               for (let i = 0; i < gsLst.length; i++) {
                 if (i === gsLst.length - 1) {
                   bgcolor +=
@@ -4794,7 +4810,7 @@ function getTextDirection (node, type, slideMasterTextStyles) {
                     ',' +
                     tintArray[i] +
                     ')' +
-                    ');'
+                    ');';
                 } else {
                   bgcolor +=
                     'rgba(' +
@@ -4802,7 +4818,7 @@ function getTextDirection (node, type, slideMasterTextStyles) {
                     ',' +
                     tintArray[i] +
                     ')' +
-                    ', '
+                    ', ';
                 }
               }
             } else {
@@ -4814,16 +4830,16 @@ function getTextDirection (node, type, slideMasterTextStyles) {
     }
 
     // console.log("bgcolor: ",bgcolor)
-    return bgcolor
+    return bgcolor;
   }
 
   function hexToRgbNew(hex = 'FFFFFF') {
-    const arrBuff = new ArrayBuffer(4)
-    const vw = new DataView(arrBuff)
-    vw.setUint32(0, parseInt(hex, 16), false)
-    const arrByte = new Uint8Array(arrBuff)
+    const arrBuff = new ArrayBuffer(4);
+    const vw = new DataView(arrBuff);
+    vw.setUint32(0, parseInt(hex, 16), false);
+    const arrByte = new Uint8Array(arrBuff);
 
-    return arrByte[1] + ',' + arrByte[2] + ',' + arrByte[3]
+    return arrByte[1] + ',' + arrByte[2] + ',' + arrByte[3];
   }
 
   async function getShapeFill(
@@ -4838,107 +4854,107 @@ function getTextDirection (node, type, slideMasterTextStyles) {
     // console.log("ShapeFill: ", node)
     const fillType = getFillType(
       getTextByPathList(node, ['p:spPr']) as Record<string, any>,
-    )
-    let fillColor
+    );
+    let fillColor;
     if (fillType === 'NO_FILL') {
-      return isSvgMode ? 'none' : 'background-color: initial;'
+      return isSvgMode ? 'none' : 'background-color: initial;';
     } else if (fillType === 'SOLID_FILL') {
-      const shpFill = node['p:spPr']['a:solidFill']
-      fillColor = getSolidFill(shpFill)
+      const shpFill = node['p:spPr']['a:solidFill'];
+      fillColor = getSolidFill(shpFill);
     } else if (fillType === 'GRADIENT_FILL') {
-      const shpFill = node['p:spPr']['a:gradFill']
+      const shpFill = node['p:spPr']['a:gradFill'];
       // fillColor = getSolidFill(shpFill);
-      fillColor = getGradientFill(shpFill)
+      fillColor = getGradientFill(shpFill);
       // console.log("shpFill",shpFill,grndColor.color)
     } else if (fillType === 'PATTERN_FILL') {
-      const shpFill = node['p:spPr']['a:pattFill']
-      fillColor = getPatternFill(shpFill)
+      const shpFill = node['p:spPr']['a:pattFill'];
+      fillColor = getPatternFill(shpFill);
     } else if (fillType === 'PIC_FILL') {
-      const shpFill = node['p:spPr']['a:blipFill']
-      fillColor = await getPicFill('slideBg', shpFill, warpObj)
+      const shpFill = node['p:spPr']['a:blipFill'];
+      fillColor = await getPicFill('slideBg', shpFill, warpObj);
     }
 
     // 2. drawingML namespace
     if (fillColor === undefined) {
-      const clrName = getTextByPathList(node, ['p:style', 'a:fillRef'])
-      fillColor = getSolidFill(clrName as Record<string, any>)
+      const clrName = getTextByPathList(node, ['p:style', 'a:fillRef']);
+      fillColor = getSolidFill(clrName as Record<string, any>);
     }
 
     if (fillColor !== undefined) {
       if (fillType === 'GRADIENT_FILL') {
         if (isSvgMode) {
           // console.log("GRADIENT_FILL color", fillColor.color[0])
-          return fillColor
+          return fillColor;
         } else {
-          const colorAry = (fillColor as Record<string, any>).color
-          const rot = (fillColor as Record<string, any>).rot
+          const colorAry = (fillColor as Record<string, any>).color;
+          const rot = (fillColor as Record<string, any>).rot;
 
-          let bgcolor = 'background: linear-gradient(' + rot + 'deg,'
+          let bgcolor = 'background: linear-gradient(' + rot + 'deg,';
           for (let i = 0; i < colorAry.length; i++) {
             if (i === colorAry.length - 1) {
-              bgcolor += colorAry[i] + ');'
+              bgcolor += colorAry[i] + ');';
             } else {
-              bgcolor += colorAry[i] + ', '
+              bgcolor += colorAry[i] + ', ';
             }
           }
-          return bgcolor
+          return bgcolor;
         }
       } else if (fillType === 'PIC_FILL') {
         if (isSvgMode) {
-          return fillColor
+          return fillColor;
         } else {
-          return 'background-image:url(' + fillColor + ');'
+          return 'background-image:url(' + fillColor + ');';
         }
       } else {
         if (isSvgMode) {
-          const color = new Color(fillColor as string)
-          fillColor = color.rgb.toString()
+          const color = new Color(fillColor as string);
+          fillColor = color.rgb.toString();
 
-          return fillColor
+          return fillColor;
         } else {
           // console.log(node,"fillColor: ",fillColor,"fillType: ",fillType,"isSvgMode: ",isSvgMode)
-          return 'background-color: #' + fillColor + ';'
+          return 'background-color: #' + fillColor + ';';
         }
       }
     } else {
       if (isSvgMode) {
-        return 'none'
+        return 'none';
       } else {
-        return 'background-color: initial;'
+        return 'background-color: initial;';
       }
     }
   }
   function getFillType(node: Record<string, any>) {
-    let fillType = ''
+    let fillType = '';
     if (node['a:noFill'] !== undefined) {
-      fillType = 'NO_FILL'
+      fillType = 'NO_FILL';
     }
     if (node['a:solidFill'] !== undefined) {
-      fillType = 'SOLID_FILL'
+      fillType = 'SOLID_FILL';
     }
     if (node['a:gradFill'] !== undefined) {
-      fillType = 'GRADIENT_FILL'
+      fillType = 'GRADIENT_FILL';
     }
     if (node['a:pattFill'] !== undefined) {
-      fillType = 'PATTERN_FILL'
+      fillType = 'PATTERN_FILL';
     }
     if (node['a:blipFill'] !== undefined) {
-      fillType = 'PIC_FILL'
+      fillType = 'PIC_FILL';
     }
 
-    return fillType
+    return fillType;
   }
 
   function getGradientFill(
     node: Record<string, any>,
   ): string | { color: (string | undefined)[]; rot: number } {
-    const gsLst = node['a:gsLst']['a:gs']
+    const gsLst = node['a:gsLst']['a:gs'];
     // get start color
-    const colorArray = []
+    const colorArray = [];
     // const tintArray = []
     for (let i = 0; i < gsLst.length; i++) {
       // let loTint
-      let loColor = getSolidFill(gsLst[i])
+      let loColor = getSolidFill(gsLst[i]);
       if (gsLst[i]['a:srgbClr'] !== undefined) {
         let lumMod =
           parseInt(
@@ -4948,7 +4964,7 @@ function getTextDirection (node, type, slideMasterTextStyles) {
               'attrs',
               'val',
             ]) as string,
-          ) / 100000
+          ) / 100000;
         let lumOff =
           parseInt(
             getTextByPathList(node, [
@@ -4957,15 +4973,15 @@ function getTextDirection (node, type, slideMasterTextStyles) {
               'attrs',
               'val',
             ]) as string,
-          ) / 100000
+          ) / 100000;
         if (isNaN(lumMod)) {
-          lumMod = 1.0
+          lumMod = 1.0;
         }
         if (isNaN(lumOff)) {
-          lumOff = 0
+          lumOff = 0;
         }
         // console.log([lumMod, lumOff]);
-        loColor = applyLumModify(loColor, lumMod, lumOff)
+        loColor = applyLumModify(loColor, lumMod, lumOff);
       } else if (gsLst[i]['a:schemeClr'] !== undefined) {
         // a:schemeClr
         let lumMod =
@@ -4976,7 +4992,7 @@ function getTextDirection (node, type, slideMasterTextStyles) {
               'attrs',
               'val',
             ]) as string,
-          ) / 100000
+          ) / 100000;
         let lumOff =
           parseInt(
             getTextByPathList(gsLst[i], [
@@ -4985,29 +5001,29 @@ function getTextDirection (node, type, slideMasterTextStyles) {
               'attrs',
               'val',
             ]) as string,
-          ) / 100000
+          ) / 100000;
         if (isNaN(lumMod)) {
-          lumMod = 1.0
+          lumMod = 1.0;
         }
         if (isNaN(lumOff)) {
-          lumOff = 0
+          lumOff = 0;
         }
         // console.log([lumMod, lumOff]);
-        loColor = applyLumModify(loColor, lumMod, lumOff)
+        loColor = applyLumModify(loColor, lumMod, lumOff);
       }
       // console.log("loColor",loColor)
-      colorArray[i] = loColor
+      colorArray[i] = loColor;
     }
     // get rot
-    const lin = node['a:lin']
-    let rot = 0
+    const lin = node['a:lin'];
+    let rot = 0;
     if (lin !== undefined) {
-      rot = angleToDegrees(lin['attrs']['ang']) + 90
+      rot = angleToDegrees(lin['attrs']['ang']) + 90;
     }
     return {
       color: colorArray,
       rot: rot,
-    }
+    };
   }
 
   async function getPicFill(
@@ -5016,149 +5032,153 @@ function getTextDirection (node, type, slideMasterTextStyles) {
     warpObj: {
       [x: string]: {
         file: (arg0: any) => {
-          (): any
-          new (): any
-          async: { (arg0: string): any; new (): any }
-        }
-      }
+          (): any;
+          new (): any;
+          async: { (arg0: string): any; new (): any };
+        };
+      };
     },
   ) {
-    const rId = node['a:blip']['attrs']['r:embed']
-    let imgPath
+    const rId = node['a:blip']['attrs']['r:embed'];
+    let imgPath;
     if (type === 'slideBg') {
-      imgPath = getTextByPathList(warpObj, ['slideResObj', rId, 'target'])
+      imgPath = getTextByPathList(warpObj, ['slideResObj', rId, 'target']);
     } else if (type === 'layoutBg') {
-      imgPath = getTextByPathList(warpObj, ['layoutResObj', rId, 'target'])
+      imgPath = getTextByPathList(warpObj, ['layoutResObj', rId, 'target']);
     } else if (type === 'masterBg') {
-      imgPath = getTextByPathList(warpObj, ['masterResObj', rId, 'target'])
+      imgPath = getTextByPathList(warpObj, ['masterResObj', rId, 'target']);
     }
     if (imgPath === undefined) {
-      return undefined
+      return undefined;
     }
-    const imgExt = imgPath.split('.').pop()
+    const imgExt = imgPath.split('.').pop();
     if (imgExt === 'xml') {
-      return undefined
+      return undefined;
     }
     const imgArrayBuffer = await warpObj['zip']
       .file(imgPath)
-      .async('arraybuffer')
-    const imgMimeType = getImageMimeType(imgExt)
+      .async('arraybuffer');
+    const imgMimeType = getImageMimeType(imgExt);
     const img =
-      'data:' + imgMimeType + ';base64,' + base64ArrayBuffer(imgArrayBuffer)
-    return img
+      'data:' + imgMimeType + ';base64,' + base64ArrayBuffer(imgArrayBuffer);
+    return img;
   }
 
   function getPatternFill(node: { [x: string]: any }) {
     // Need to test/////////////////////////////////////////////
-    const bgClr = node['a:bgClr']
-    return getSolidFill(bgClr)
+    const bgClr = node['a:bgClr'];
+    return getSolidFill(bgClr);
   }
 
   function getSolidFill(node: Record<string, any>) {
     if (node === undefined) {
-      return undefined
+      return undefined;
     }
 
-    let color = 'FFF'
+    let color = 'FFF';
 
     if (node['a:srgbClr'] !== undefined) {
-      color = getTextByPathList(node, ['a:srgbClr', 'attrs', 'val']) as string // #...
+      color = getTextByPathList(node, ['a:srgbClr', 'attrs', 'val']) as string; // #...
     } else if (node['a:schemeClr'] !== undefined) {
       // a:schemeClr
-      const schemeClr = getTextByPathList(node, ['a:schemeClr', 'attrs', 'val'])
+      const schemeClr = getTextByPathList(node, [
+        'a:schemeClr',
+        'attrs',
+        'val',
+      ]);
       // console.log(schemeClr)
-      color = getSchemeColorFromTheme('a:' + schemeClr, undefined) as string // #...
+      color = getSchemeColorFromTheme('a:' + schemeClr, undefined) as string; // #...
     } else if (node['a:scrgbClr'] !== undefined) {
       // <a:scrgbClr r="50%" g="50%" b="50%"/>  //Need to test/////////////////////////////////////////////
-      const defBultColorVals = node['a:scrgbClr']['attrs']
+      const defBultColorVals = node['a:scrgbClr']['attrs'];
       const red =
         defBultColorVals['r'].indexOf('%') !== -1
           ? defBultColorVals['r'].split('%').shift()
-          : defBultColorVals['r']
+          : defBultColorVals['r'];
       const green =
         defBultColorVals['g'].indexOf('%') !== -1
           ? defBultColorVals['g'].split('%').shift()
-          : defBultColorVals['g']
+          : defBultColorVals['g'];
       const blue =
         defBultColorVals['b'].indexOf('%') !== -1
           ? defBultColorVals['b'].split('%').shift()
-          : defBultColorVals['b']
+          : defBultColorVals['b'];
       // const scrgbClr = red + ',' + green + ',' + blue
       color =
         toHex(255 * (Number(red) / 100)) +
         toHex(255 * (Number(green) / 100)) +
-        toHex(255 * (Number(blue) / 100))
+        toHex(255 * (Number(blue) / 100));
       // console.log("scrgbClr: " + scrgbClr);
     } else if (node['a:prstClr'] !== undefined) {
       // <a:prstClr val="black"/>  //Need to test/////////////////////////////////////////////
-      const prstClr = node['a:prstClr']['attrs']['val']
-      color = getColorName2Hex(prstClr) as string
+      const prstClr = node['a:prstClr']['attrs']['val'];
+      color = getColorName2Hex(prstClr) as string;
       // console.log("prstClr: " + prstClr+" => hexClr: "+color);
     } else if (node['a:hslClr'] !== undefined) {
       // <a:hslClr hue="14400000" sat="100%" lum="50%"/>  //Need to test/////////////////////////////////////////////
-      const defBultColorVals = node['a:hslClr']['attrs']
-      const hue = Number(defBultColorVals['hue']) / 100000
+      const defBultColorVals = node['a:hslClr']['attrs'];
+      const hue = Number(defBultColorVals['hue']) / 100000;
       const sat =
         Number(
           defBultColorVals['sat'].indexOf('%') !== -1
             ? defBultColorVals['sat'].split('%').shift()
             : defBultColorVals['sat'],
-        ) / 100
+        ) / 100;
       const lum =
         Number(
           defBultColorVals['lum'].indexOf('%') !== -1
             ? defBultColorVals['lum'].split('%').shift()
             : defBultColorVals['lum'],
-        ) / 100
+        ) / 100;
       // const hslClr = defBultColorVals['hue'] + ',' + defBultColorVals['sat'] + ',' + defBultColorVals['lum']
-      const hsl2rgb = hslToRgb(hue, sat, lum)
-      color = toHex(hsl2rgb.r) + toHex(hsl2rgb.g) + toHex(hsl2rgb.b)
+      const hsl2rgb = hslToRgb(hue, sat, lum);
+      color = toHex(hsl2rgb.r) + toHex(hsl2rgb.g) + toHex(hsl2rgb.b);
       // defBultColor = cnvrtHslColor2Hex(hslClr); //TODO
       // console.log("hslClr: " + hslClr);
     } else if (node['a:sysClr'] !== undefined) {
       // <a:sysClr val="windowText" lastClr="000000"/>  //Need to test/////////////////////////////////////////////
-      const sysClr = getTextByPathList(node, ['a:sysClr', 'attrs', 'lastClr'])
+      const sysClr = getTextByPathList(node, ['a:sysClr', 'attrs', 'lastClr']);
       if (sysClr !== undefined) {
-        color = sysClr as string
+        color = sysClr as string;
       }
     }
-    return color
+    return color;
   }
 
   function toHex(n: number) {
-    let hex = n.toString(16)
+    let hex = n.toString(16);
     while (hex.length < 2) {
-      hex = '0' + hex
+      hex = '0' + hex;
     }
-    return hex
+    return hex;
   }
 
   function hslToRgb(hue: number, sat: number, light: number) {
-    let t2
-    hue = hue / 60
+    let t2;
+    hue = hue / 60;
     if (light <= 0.5) {
-      t2 = light * (sat + 1)
+      t2 = light * (sat + 1);
     } else {
-      t2 = light + sat - light * sat
+      t2 = light + sat - light * sat;
     }
-    const t1 = light * 2 - t2
-    const r = hueToRgb(t1, t2, hue + 2) * 255
-    const g = hueToRgb(t1, t2, hue) * 255
-    const b = hueToRgb(t1, t2, hue - 2) * 255
-    return { r: r, g: g, b: b }
+    const t1 = light * 2 - t2;
+    const r = hueToRgb(t1, t2, hue + 2) * 255;
+    const g = hueToRgb(t1, t2, hue) * 255;
+    const b = hueToRgb(t1, t2, hue - 2) * 255;
+    return { r: r, g: g, b: b };
   }
 
   function hueToRgb(t1: number, t2: number, hue: number) {
-    if (hue < 0) hue += 6
-    if (hue >= 6) hue -= 6
-    if (hue < 1) return (t2 - t1) * hue + t1
-    else if (hue < 3) return t2
-    else if (hue < 4) return (t2 - t1) * (4 - hue) + t1
-    else return t1
+    if (hue < 0) hue += 6;
+    if (hue >= 6) hue -= 6;
+    if (hue < 1) return (t2 - t1) * hue + t1;
+    else if (hue < 3) return t2;
+    else if (hue < 4) return (t2 - t1) * (4 - hue) + t1;
+    else return t1;
   }
 
   function getColorName2Hex(name: string) {
-    let hex
+    let hex;
     const colorName = [
       'AliceBlue',
       'AntiqueWhite',
@@ -5308,7 +5328,7 @@ function getTextDirection (node, type, slideMasterTextStyles) {
       'WhiteSmoke',
       'Yellow',
       'YellowGreen',
-    ]
+    ];
     const colorHex = [
       'f0f8ff',
       'faebd7',
@@ -5458,19 +5478,19 @@ function getTextDirection (node, type, slideMasterTextStyles) {
       'f5f5f5',
       'ffff00',
       '9acd32',
-    ]
-    const findIndx = colorName.indexOf(name)
+    ];
+    const findIndx = colorName.indexOf(name);
     if (findIndx !== -1) {
-      hex = colorHex[findIndx]
+      hex = colorHex[findIndx];
     }
-    return hex
+    return hex;
   }
 
   function getColorOpacity(solidFill: { [x: string]: undefined } | undefined) {
     if (solidFill === undefined) {
-      return undefined
+      return undefined;
     }
-    let opcity = 1
+    let opcity = 1;
 
     if (solidFill['a:srgbClr'] !== undefined) {
       const tint = getTextByPathList(solidFill, [
@@ -5478,9 +5498,9 @@ function getTextDirection (node, type, slideMasterTextStyles) {
         'a:tint',
         'attrs',
         'val',
-      ]) as string
+      ]) as string;
       if (tint !== undefined) {
-        opcity = parseInt(tint) / 100000
+        opcity = parseInt(tint) / 100000;
       }
     } else if (solidFill['a:schemeClr'] !== undefined) {
       const tint = getTextByPathList(solidFill, [
@@ -5488,9 +5508,9 @@ function getTextDirection (node, type, slideMasterTextStyles) {
         'a:tint',
         'attrs',
         'val',
-      ]) as string
+      ]) as string;
       if (tint !== undefined) {
-        opcity = parseInt(tint) / 100000
+        opcity = parseInt(tint) / 100000;
       }
     } else if (solidFill['a:scrgbClr'] !== undefined) {
       const tint = getTextByPathList(solidFill, [
@@ -5498,9 +5518,9 @@ function getTextDirection (node, type, slideMasterTextStyles) {
         'a:tint',
         'attrs',
         'val',
-      ]) as string
+      ]) as string;
       if (tint !== undefined) {
-        opcity = parseInt(tint) / 100000
+        opcity = parseInt(tint) / 100000;
       }
     } else if (solidFill['a:prstClr'] !== undefined) {
       const tint = getTextByPathList(solidFill, [
@@ -5508,9 +5528,9 @@ function getTextDirection (node, type, slideMasterTextStyles) {
         'a:tint',
         'attrs',
         'val',
-      ]) as string
+      ]) as string;
       if (tint !== undefined) {
-        opcity = parseInt(tint) / 100000
+        opcity = parseInt(tint) / 100000;
       }
     } else if (solidFill['a:hslClr'] !== undefined) {
       const tint = getTextByPathList(solidFill, [
@@ -5518,9 +5538,9 @@ function getTextDirection (node, type, slideMasterTextStyles) {
         'a:tint',
         'attrs',
         'val',
-      ]) as string
+      ]) as string;
       if (tint !== undefined) {
-        opcity = parseInt(tint) / 100000
+        opcity = parseInt(tint) / 100000;
       }
     } else if (solidFill['a:sysClr'] !== undefined) {
       const tint = getTextByPathList(solidFill, [
@@ -5528,13 +5548,13 @@ function getTextDirection (node, type, slideMasterTextStyles) {
         'a:tint',
         'attrs',
         'val',
-      ]) as string
+      ]) as string;
       if (tint !== undefined) {
-        opcity = parseInt(tint) / 100000
+        opcity = parseInt(tint) / 100000;
       }
     }
 
-    return opcity
+    return opcity;
   }
 
   function getSchemeColorFromTheme(
@@ -5550,10 +5570,10 @@ function getTextDirection (node, type, slideMasterTextStyles) {
           'p:sldMaster',
           'p:clrMap',
           'attrs',
-        ]) || {}
+        ]) || {};
     }
     // console.log(slideLayoutClrOvride);
-    const schmClrName = schemeClr.substr(2)
+    const schmClrName = schemeClr.substr(2);
     switch (schmClrName) {
       case 'tx1':
       case 'tx2':
@@ -5561,9 +5581,9 @@ function getTextDirection (node, type, slideMasterTextStyles) {
       case 'bg2': {
         schemeClr =
           'a:' +
-          (slideLayoutClrOvride as Record<string, any>)[schmClrName.toString()]
+          (slideLayoutClrOvride as Record<string, any>)[schmClrName.toString()];
         // console.log(schmClrName+ "=> "+schemeClr);
-        break
+        break;
       }
     }
 
@@ -5572,46 +5592,46 @@ function getTextDirection (node, type, slideMasterTextStyles) {
       'a:themeElements',
       'a:clrScheme',
       schemeClr,
-    ]) as Record<string, any>
-    let color = getTextByPathList(refNode, ['a:srgbClr', 'attrs', 'val'])
+    ]) as Record<string, any>;
+    let color = getTextByPathList(refNode, ['a:srgbClr', 'attrs', 'val']);
     if (color === undefined) {
-      color = getTextByPathList(refNode, ['a:sysClr', 'attrs', 'lastClr'])
+      color = getTextByPathList(refNode, ['a:sysClr', 'attrs', 'lastClr']);
     }
-    return color
+    return color;
   }
 
   function extractChartData(serNode: Record<string, any>) {
     // console.log('PARSING PPTX CHART:', serNode)
-    const dataMat: Array<Record<string, any>> = []
+    const dataMat: Array<Record<string, any>> = [];
 
     if (serNode === undefined) {
-      return dataMat
+      return dataMat;
     }
 
     if (serNode['c:xVal'] !== undefined) {
-      let dataRow: number[] = []
+      let dataRow: number[] = [];
       eachElement(
         serNode['c:xVal']['c:numRef']['c:numCache']['c:pt'],
         function (innerNode: { [x: string]: string }, index: any) {
-          dataRow.push(parseFloat(innerNode['c:v']))
-          return ''
+          dataRow.push(parseFloat(innerNode['c:v']));
+          return '';
         },
-      )
-      dataMat.push(dataRow)
-      dataRow = []
+      );
+      dataMat.push(dataRow);
+      dataRow = [];
       eachElement(
         serNode['c:yVal']['c:numRef']['c:numCache']['c:pt'],
         function (innerNode: { [x: string]: string }, index: any) {
-          dataRow.push(parseFloat(innerNode['c:v']))
-          return ''
+          dataRow.push(parseFloat(innerNode['c:v']));
+          return '';
         },
-      )
-      dataMat.push(dataRow)
+      );
+      dataMat.push(dataRow);
     } else {
       eachElement(
         serNode,
         function (innerNode: Record<string, any>, index: number) {
-          const dataRow: { x: any; y: number }[] = []
+          const dataRow: { x: any; y: number }[] = [];
           const colName =
             getTextByPathList(innerNode, [
               'c:tx',
@@ -5619,10 +5639,10 @@ function getTextDirection (node, type, slideMasterTextStyles) {
               'c:strCache',
               'c:pt',
               'c:v',
-            ]) || index
+            ]) || index;
 
           // Category (string or number)
-          const rowNames: Record<string, any> = {}
+          const rowNames: Record<string, any> = {};
           if (
             getTextByPathList(innerNode, [
               'c:cat',
@@ -5634,10 +5654,10 @@ function getTextDirection (node, type, slideMasterTextStyles) {
             eachElement(
               innerNode['c:cat']['c:strRef']['c:strCache']['c:pt'],
               function (innerNode: Record<string, any>, index: number) {
-                rowNames[innerNode['attrs']['idx']] = innerNode['c:v']
-                return ''
+                rowNames[innerNode['attrs']['idx']] = innerNode['c:v'];
+                return '';
               },
-            )
+            );
           } else if (
             getTextByPathList(innerNode, [
               'c:cat',
@@ -5649,10 +5669,10 @@ function getTextDirection (node, type, slideMasterTextStyles) {
             eachElement(
               innerNode['c:cat']['c:numRef']['c:numCache']['c:pt'],
               function (innerNode: Record<string, any>, index: number) {
-                rowNames[innerNode['attrs']['idx']] = innerNode['c:v']
-                return ''
+                rowNames[innerNode['attrs']['idx']] = innerNode['c:v'];
+                return '';
               },
-            )
+            );
           }
 
           // Value
@@ -5670,19 +5690,19 @@ function getTextDirection (node, type, slideMasterTextStyles) {
                 dataRow.push({
                   x: innerNode['attrs']['idx'],
                   y: parseFloat(innerNode['c:v']),
-                })
-                return ''
+                });
+                return '';
               },
-            )
+            );
           }
 
-          dataMat.push({ key: colName, values: dataRow, xlabels: rowNames })
-          return ''
+          dataMat.push({ key: colName, values: dataRow, xlabels: rowNames });
+          return '';
         },
-      )
+      );
     }
 
-    return dataMat
+    return dataMat;
   }
 
   // ===== Node functions =====
@@ -5692,7 +5712,7 @@ function getTextDirection (node, type, slideMasterTextStyles) {
    * @param {string} pathStr
    */
   function getTextByPathStr(node: any, pathStr: string) {
-    return getTextByPathList(node, pathStr.trim().split(/\s+/))
+    return getTextByPathList(node, pathStr.trim().split(/\s+/));
   }
 
   /**
@@ -5705,22 +5725,22 @@ function getTextDirection (node, type, slideMasterTextStyles) {
     path: Array<string>,
   ): Record<string, any> | string | undefined {
     if (path.constructor !== Array) {
-      throw Error('Error of path type! path is not array.')
+      throw Error('Error of path type! path is not array.');
     }
 
     if (node === undefined) {
-      return undefined
+      return undefined;
     }
 
-    const l = path.length
+    const l = path.length;
     for (let i = 0; i < l; i++) {
-      node = node[path[i]]
+      node = node[path[i]];
       if (node === undefined) {
-        return undefined
+        return undefined;
       }
     }
 
-    return node
+    return node;
   }
 
   /**
@@ -5731,28 +5751,28 @@ function getTextDirection (node, type, slideMasterTextStyles) {
   function eachElement(
     node: Record<string, any> | Array<string>,
     doFunction: {
-      (innerNode: any, index: any): string
-      (innerNode: any, index: any): string
-      (innerNode: any, index: any): string
-      (innerNode: any, index: any): string
-      (innerNode: any, index: any): string
-      (innerNode: any, index: any): string
-      (arg0: any, arg1: number): string
+      (innerNode: any, index: any): string;
+      (innerNode: any, index: any): string;
+      (innerNode: any, index: any): string;
+      (innerNode: any, index: any): string;
+      (innerNode: any, index: any): string;
+      (innerNode: any, index: any): string;
+      (arg0: any, arg1: number): string;
     },
   ) {
     if (node === undefined) {
-      return
+      return;
     }
-    let result = ''
+    let result = '';
     if (node.constructor === Array) {
-      const l = node.length
+      const l = node.length;
       for (let i = 0; i < l; i++) {
-        result += doFunction(node[i], i)
+        result += doFunction(node[i], i);
       }
     } else {
-      result += doFunction(node, 0)
+      result += doFunction(node, 0);
     }
-    return result
+    return result;
   }
 
   /*
@@ -5787,56 +5807,56 @@ function applyTint (rgbStr, tintValue) {
    * @param {number} offset
    */
   function applyLumModify(rgbStr = '#FFFFFF', factor: number, offset: number) {
-    const color = new Color(rgbStr)
+    const color = new Color(rgbStr);
     // color.setLum(color.hsl.l * factor);
-    color.setLum((color.hsl.l as number) * (1 + offset))
-    return color.rgb.toString()
+    color.setLum((color.hsl.l as number) * (1 + offset));
+    return color.rgb.toString();
   }
 
   // /////////////////////Amir////////////////
   function angleToDegrees(angle: number | string) {
     if (angle === '' || angle == null) {
-      return 0
+      return 0;
     }
-    return Math.round(Number(angle) / 60000)
+    return Math.round(Number(angle) / 60000);
   }
 
   function getImageMimeType(imgFileExt: string) {
-    let mimeType = ''
+    let mimeType = '';
     // console.log(imgFileExt)
     switch (imgFileExt.toLowerCase()) {
       case 'jpg':
       case 'jpeg': {
-        mimeType = 'image/jpeg'
-        break
+        mimeType = 'image/jpeg';
+        break;
       }
       case 'png': {
-        mimeType = 'image/png'
-        break
+        mimeType = 'image/png';
+        break;
       }
       case 'gif': {
-        mimeType = 'image/gif'
-        break
+        mimeType = 'image/gif';
+        break;
       }
       case 'emf': {
         // Not native support
-        mimeType = 'image/x-emf'
-        break
+        mimeType = 'image/x-emf';
+        break;
       }
       case 'wmf': {
         // Not native support
-        mimeType = 'image/x-wmf'
-        break
+        mimeType = 'image/x-wmf';
+        break;
       }
       case 'svg': {
-        mimeType = 'image/svg+xml'
-        break
+        mimeType = 'image/svg+xml';
+        break;
       }
       default: {
-        mimeType = 'image/*'
+        mimeType = 'image/*';
       }
     }
-    return mimeType
+    return mimeType;
   }
 
   function getSvgGradient(
@@ -5846,16 +5866,16 @@ function applyTint (rgbStr, tintValue) {
     colorArray: string | any[],
     shpId: string,
   ) {
-    const stopsArray = getMiddleStops(colorArray.length - 2) as Array<string>
+    const stopsArray = getMiddleStops(colorArray.length - 2) as Array<string>;
 
-    const xyArray = SVGangle(angl, h, w)
-    const x1 = xyArray[0]
-    const y1 = xyArray[1]
-    const x2 = xyArray[2]
-    const y2 = xyArray[3]
+    const xyArray = SVGangle(angl, h, w);
+    const x1 = xyArray[0];
+    const y1 = xyArray[1];
+    const x2 = xyArray[2];
+    const y2 = xyArray[3];
 
-    const sal = stopsArray.length
-    const sr = sal < 20 ? 100 : 1000
+    const sal = stopsArray.length;
+    const sr = sal < 20 ? 100 : 1000;
     const svgAngle =
       ' gradientUnits="userSpaceOnUse" x1="' +
       x1 +
@@ -5865,8 +5885,8 @@ function applyTint (rgbStr, tintValue) {
       x2 +
       '%" y2="' +
       y2 +
-      '%"'
-    let svg = '<linearGradient id="linGrd_' + shpId + '"' + svgAngle + '>\n'
+      '%"';
+    let svg = '<linearGradient id="linGrd_' + shpId + '"' + svgAngle + '>\n';
 
     for (let i = 0; i < sal; i++) {
       svg +=
@@ -5874,103 +5894,103 @@ function applyTint (rgbStr, tintValue) {
         Math.round((parseFloat(stopsArray[i]) / 100) * sr) / sr +
         '" stop-color="' +
         colorArray[i] +
-        '"'
-      svg += '/>\n'
+        '"';
+      svg += '/>\n';
     }
 
-    svg += '</linearGradient>\n' + ''
+    svg += '</linearGradient>\n' + '';
 
-    return svg
+    return svg;
   }
 
   function getMiddleStops(s: number): Array<string> | boolean {
-    const sArry = ['0%', '100%']
+    const sArry = ['0%', '100%'];
     if (s === 0) {
-      return true
+      return true;
     } else {
-      let i = s
+      let i = s;
       while (i--) {
-        const middleStop = 100 - (100 / (s + 1)) * (i + 1) // AM: Ex - For 3 middle stops, progression will be 25%, 50%, and 75%, plus 0% and 100% at the ends.
-        const middleStopString = middleStop + '%'
-        sArry.splice(-1, 0, middleStopString)
+        const middleStop = 100 - (100 / (s + 1)) * (i + 1); // AM: Ex - For 3 middle stops, progression will be 25%, 50%, and 75%, plus 0% and 100% at the ends.
+        const middleStopString = middleStop + '%';
+        sArry.splice(-1, 0, middleStopString);
       } // AM: add into stopsArray before 100%
     }
-    return sArry
+    return sArry;
   }
 
   function SVGangle(deg: string, svgHeight: string, svgWidth: string) {
-    const w = parseFloat(svgWidth)
-    const h = parseFloat(svgHeight)
-    const ang = parseFloat(deg)
-    let o = 2
-    let n = 2
-    const wc = w / 2
-    const hc = h / 2
-    let tx1 = 2
-    let ty1 = 2
-    let tx2 = 2
-    let ty2 = 2
-    const k = ((ang % 360) + 360) % 360
-    const j = ((360 - k) * Math.PI) / 180
-    const i = Math.tan(j)
-    const l = hc - i * wc
+    const w = parseFloat(svgWidth);
+    const h = parseFloat(svgHeight);
+    const ang = parseFloat(deg);
+    let o = 2;
+    let n = 2;
+    const wc = w / 2;
+    const hc = h / 2;
+    let tx1 = 2;
+    let ty1 = 2;
+    let tx2 = 2;
+    let ty2 = 2;
+    const k = ((ang % 360) + 360) % 360;
+    const j = ((360 - k) * Math.PI) / 180;
+    const i = Math.tan(j);
+    const l = hc - i * wc;
 
     if (k === 0) {
-      tx1 = w
-      ty1 = hc
-      tx2 = 0
-      ty2 = hc
+      tx1 = w;
+      ty1 = hc;
+      tx2 = 0;
+      ty2 = hc;
     } else if (k < 90) {
-      n = w
-      o = 0
+      n = w;
+      o = 0;
     } else if (k === 90) {
-      tx1 = wc
-      ty1 = 0
-      tx2 = wc
-      ty2 = h
+      tx1 = wc;
+      ty1 = 0;
+      tx2 = wc;
+      ty2 = h;
     } else if (k < 180) {
-      n = 0
-      o = 0
+      n = 0;
+      o = 0;
     } else if (k === 180) {
-      tx1 = 0
-      ty1 = hc
-      tx2 = w
-      ty2 = hc
+      tx1 = 0;
+      ty1 = hc;
+      tx2 = w;
+      ty2 = hc;
     } else if (k < 270) {
-      n = 0
-      o = h
+      n = 0;
+      o = h;
     } else if (k === 270) {
-      tx1 = wc
-      ty1 = h
-      tx2 = wc
-      ty2 = 0
+      tx1 = wc;
+      ty1 = h;
+      tx2 = wc;
+      ty2 = 0;
     } else {
-      n = w
-      o = h
+      n = w;
+      o = h;
     }
     // AM: I could not quite figure out what m, n, and o are supposed to represent from the original code on visualcsstools.com.
-    const m = o + n / i
-    tx1 = tx1 === 2 ? (i * (m - l)) / (Math.pow(i, 2) + 1) : tx1
-    ty1 = ty1 === 2 ? i * tx1 + l : ty1
-    tx2 = tx2 === 2 ? w - tx1 : tx2
-    ty2 = ty2 === 2 ? h - ty1 : ty2
-    const x1 = Math.round((tx2 / w) * 100 * 100) / 100
-    const y1 = Math.round((ty2 / h) * 100 * 100) / 100
-    const x2 = Math.round((tx1 / w) * 100 * 100) / 100
-    const y2 = Math.round((ty1 / h) * 100 * 100) / 100
-    return [x1, y1, x2, y2]
+    const m = o + n / i;
+    tx1 = tx1 === 2 ? (i * (m - l)) / (Math.pow(i, 2) + 1) : tx1;
+    ty1 = ty1 === 2 ? i * tx1 + l : ty1;
+    tx2 = tx2 === 2 ? w - tx1 : tx2;
+    ty2 = ty2 === 2 ? h - ty1 : ty2;
+    const x1 = Math.round((tx2 / w) * 100 * 100) / 100;
+    const y1 = Math.round((ty2 / h) * 100 * 100) / 100;
+    const x2 = Math.round((tx1 / w) * 100 * 100) / 100;
+    const y2 = Math.round((ty1 / h) * 100 * 100) / 100;
+    return [x1, y1, x2, y2];
   }
 
   function getSvgImagePattern(fillColor: Record<string, any>, shpId: string) {
     let ptrn =
       '<pattern id="imgPtrn_' +
       shpId +
-      '"  patternContentUnits="objectBoundingBox"  width="1" height="1">'
+      '"  patternContentUnits="objectBoundingBox"  width="1" height="1">';
     ptrn +=
       '<image  xlink:href="' +
       fillColor +
-      '" preserveAspectRatio="none" width="1" height="1"></image>'
-    ptrn += '</pattern>'
-    return ptrn
+      '" preserveAspectRatio="none" width="1" height="1"></image>';
+    ptrn += '</pattern>';
+    return ptrn;
   }
 }

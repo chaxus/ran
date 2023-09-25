@@ -13,11 +13,11 @@ TypeScript 类型系统没有加减乘除运算符，怎么做数值运算呢？
 比如：
 
 ```ts
-type num1 = [unknown]['length']
+type num1 = [unknown]['length'];
 // type num1 = 1
-type num2 = [unknown, unknown]['length']
+type num2 = [unknown, unknown]['length'];
 // type num1 = 2
-type num3 = [unknown, unknown, unknown]['length']
+type num3 = [unknown, unknown, unknown]['length'];
 // type num1 = 3
 ```
 
@@ -48,7 +48,7 @@ type BuildArray<
   Length extends number,
   Ele = unknown,
   Arr extends unknown[] = [],
-> = Arr['length'] extends Length ? Arr : BuildArray<Length, Ele, [...Arr, Ele]>
+> = Arr['length'] extends Length ? Arr : BuildArray<Length, Ele, [...Arr, Ele]>;
 ```
 
 类型参数 Length 是要构造的数组的长度。类型参数 Ele 是数组元素，默认为 unknown。类型参数 Arr 为构造出的数组，默认是 []。
@@ -61,13 +61,13 @@ type BuildArray<
 type Add<Num1 extends number, Num2 extends number> = [
   ...BuildArray<Num1>,
   ...BuildArray<Num2>,
-]['length']
+]['length'];
 ```
 
 我们拿大一点的数测试下：
 
 ```ts
-type AddResult = Add<32, 25>
+type AddResult = Add<32, 25>;
 // type AddResult = 57
 ```
 
@@ -89,7 +89,7 @@ type Subtract<
   Num2 extends number,
 > = BuildArray<Num1> extends [...arr1: BuildArray<Num2>, ...arr2: infer Rest]
   ? Rest['length']
-  : never
+  : never;
 ```
 
 类型参数 Num1、Num2 分别是被减数和减数，通过 extends 约束为 number。
@@ -117,7 +117,11 @@ type Multiplication<
   ResultArr extends unknown[] = [],
 > = Num2 extends 0
   ? ResultArr['length']
-  : Multiplication<Num1, Subtract<Num2, 1>, [...BuildArray<Num1>, ...ResultArr]>
+  : Multiplication<
+      Num1,
+      Subtract<Num2, 1>,
+      [...BuildArray<Num1>, ...ResultArr]
+    >;
 ```
 
 类型参数 Num1 和 Num2 分别是被加数和加数。
@@ -153,7 +157,7 @@ type Divide<
   CountArr extends unknown[] = [],
 > = Num1 extends 0
   ? CountArr['length']
-  : Divide<Subtract<Num1, Num2>, Num2, [unknown, ...CountArr]>
+  : Divide<Subtract<Num1, Num2>, Num2, [unknown, ...CountArr]>;
 ```
 
 类型参数 Num1 和 Num2 分别是被减数和减数。
@@ -184,7 +188,7 @@ type StrLen<
   CountArr extends unknown[] = [],
 > = Str extends `${string}${infer Rest}`
   ? StrLen<Rest, [...CountArr, unknown]>
-  : CountArr['length']
+  : CountArr['length'];
 ```
 
 类型参数 Str 是待处理的字符串。类型参数 CountArr 是做计数的数组，默认值 [] 代表从 0 开始。
@@ -212,7 +216,7 @@ type GreaterThan<
   ? true
   : CountArr['length'] extends Num1
   ? false
-  : GreaterThan<Num1, Num2, [...CountArr, unknown]>
+  : GreaterThan<Num1, Num2, [...CountArr, unknown]>;
 ```
 
 类型参数 Num1 和 Num2 是待比较的两个数。
@@ -254,9 +258,9 @@ type FibonacciLoop<
       [...PrevArr, ...CurrentArr],
       [...IndexArr, unknown],
       Num
-    >
+    >;
 
-type Fibonacci<Num extends number> = FibonacciLoop<[1], [], [], Num>
+type Fibonacci<Num extends number> = FibonacciLoop<[1], [], [], Num>;
 ```
 
 类型参数 PrevArr 是代表之前的累加值的数组。类型参数 CurrentArr 是代表当前数值的数组。

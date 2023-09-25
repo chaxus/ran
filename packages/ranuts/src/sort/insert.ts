@@ -9,12 +9,12 @@ const insert = (list: number[]):number[] => {
     const current = list[i]
     let preIndex = i - 1
     while (preIndex >= 0 && list[preIndex] > current) {
-      list[preIndex + 1] = list[preIndex]
-      preIndex--
+      list[preIndex + 1] = list[preIndex];
+      preIndex--;
     }
     list[preIndex+1] = current
   }
-  return list
-}
+  return list;
+};
 
-export default insert
+export default insert;

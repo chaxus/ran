@@ -5,7 +5,7 @@
 ## DOMContentLoaded
 
 ```js
-document.addEventListener('DOMContentLoaded', fun)
+document.addEventListener('DOMContentLoaded', fun);
 ```
 
 ## `<body onload="fun()">`
@@ -13,9 +13,9 @@ document.addEventListener('DOMContentLoaded', fun)
 ## readyState
 
 ```js
-document.readyState
+document.readyState;
 
-document.onreadystatechange
+document.onreadystatechange;
 ```
 
 一个文档的 readyState 可以是以下之一：

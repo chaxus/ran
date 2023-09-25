@@ -1,4 +1,4 @@
-import path from 'node:path'
+import path from 'node:path';
 
 // 无关的资源进行 external，不让 esbuild 处理，防止 Esbuild 报错
 export const EXTERNAL_TYPES = [
@@ -21,17 +21,17 @@ export const EXTERNAL_TYPES = [
   'ico',
   'webp',
   'avif',
-]
+];
 
-export const JS_TYPES_RE = /\.(?:j|t)sx?$|\.mjs$/
+export const JS_TYPES_RE = /\.(?:j|t)sx?$|\.mjs$/;
 // 将bare import的路径视作第三方包，推入 deps 集合中，esbuild可以处理的类型。
-export const BARE_IMPORT_RE = /^[\w@][^:]/
-export const QEURY_RE = /\?.*$/s
-export const HASH_RE = /#.*$/s
+export const BARE_IMPORT_RE = /^[\w@][^:]/;
+export const QEURY_RE = /\?.*$/s;
+export const HASH_RE = /#.*$/s;
 // 预构建产物默认存放在 node_modules 中的 .ranite 目录中
-export const PRE_BUNDLE_DIR = path.join('node_modules', '.ranite')
+export const PRE_BUNDLE_DIR = path.join('node_modules', '.ranite');
 
-export const DEFAULT_EXTENSIONS = ['.tsx', '.ts', '.jsx', 'js']
-export const HMR_HEADER = 'ranite-hmr'
-export const CLIENT_PUBLIC_PATH = '/@ranite/client'
-export const HMR_PORT = 24678
+export const DEFAULT_EXTENSIONS = ['.tsx', '.ts', '.jsx', 'js'];
+export const HMR_HEADER = 'ranite-hmr';
+export const CLIENT_PUBLIC_PATH = '/@ranite/client';
+export const HMR_PORT = 24678;

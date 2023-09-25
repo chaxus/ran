@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest'
-import type { MemberExpression, Program } from '../src/astParser/nodeTypes'
-import { NodeType, Tokenizer, parse } from '../src/astParser'
+import { describe, expect, it } from 'vitest';
+import type { MemberExpression, Program } from '../src/astParser/nodeTypes';
+import { NodeType, Tokenizer, parse } from '../src/astParser';
 
 describe('astParser', () => {
   /**
@@ -18,15 +18,15 @@ describe('astParser', () => {
       { type: 'RightParen', value: ')', start: 17, end: 18 },
       { type: 'LeftCurly', value: '{', start: 19, end: 20 },
       { type: 'RightCurly', value: '}', start: 20, end: 21 },
-    ]
-    const tokenizer = new Tokenizer('let a = function() {}')
-    expect(tokenizer.tokenize()).toEqual(result)
-  })
-})
+    ];
+    const tokenizer = new Tokenizer('let a = function() {}');
+    expect(tokenizer.tokenize()).toEqual(result);
+  });
+});
 
 describe('Parser', () => {
   it('test variable declaration', () => {
-    const input = 'let a = 1;'
+    const input = 'let a = 1;';
     const ast = {
       type: NodeType.Program,
       start: 0,
@@ -59,11 +59,11 @@ describe('Parser', () => {
           kind: 'let',
         },
       ],
-    }
-    expect(parse(input)).toEqual(ast)
-  })
+    };
+    expect(parse(input)).toEqual(ast);
+  });
   it('test member expression', () => {
-    const input = 'foo.bar'
+    const input = 'foo.bar';
     const memberExpression: MemberExpression = {
       type: NodeType.MemberExpression,
       object: {
@@ -81,7 +81,7 @@ describe('Parser', () => {
         end: 7,
       },
       computed: false,
-    }
+    };
     const ast: Program = {
       type: NodeType.Program,
       start: 0,
@@ -94,13 +94,13 @@ describe('Parser', () => {
           end: 7,
         },
       ],
-    }
+    };
 
-    expect(parse(input)).toEqual(ast)
-  })
+    expect(parse(input)).toEqual(ast);
+  });
 
   it('test nested member expression', () => {
-    const input = 'foo.bar.zoo'
+    const input = 'foo.bar.zoo';
     const memberExpression: MemberExpression = {
       type: NodeType.MemberExpression,
       object: {
@@ -130,7 +130,7 @@ describe('Parser', () => {
       start: 0,
       end: 11,
       computed: false,
-    }
+    };
     const ast: Program = {
       type: NodeType.Program,
       body: [
@@ -143,13 +143,13 @@ describe('Parser', () => {
       ],
       start: 0,
       end: 11,
-    }
+    };
 
-    expect(parse(input)).toEqual(ast)
-  })
+    expect(parse(input)).toEqual(ast);
+  });
 
   it('test function', () => {
-    const input = 'function foo(a, b) { return a.add(b); }'
+    const input = 'function foo(a, b) { return a.add(b); }';
     const ast: Program = {
       type: NodeType.Program,
       start: 0,
@@ -224,13 +224,13 @@ describe('Parser', () => {
           },
         },
       ],
-    }
-    expect(parse(input)).toEqual(ast)
-  })
+    };
+    expect(parse(input)).toEqual(ast);
+  });
 
   it('test import declaration', () => {
     const input = `import foo, { name1, name2 as bar } from 'foo';
-      import * as mod from 'mod';`
+      import * as mod from 'mod';`;
     const ast: Program = {
       type: NodeType.Program,
       start: 0,
@@ -321,12 +321,12 @@ describe('Parser', () => {
           },
         },
       ],
-    }
-    expect(parse(input)).toEqual(ast)
-  })
+    };
+    expect(parse(input)).toEqual(ast);
+  });
 
   it('test export declaration', () => {
-    let input = "export { foo, bar as ccc } from 'foo';"
+    let input = "export { foo, bar as ccc } from 'foo';";
     let ast: Program = {
       type: NodeType.Program,
       start: 0,
@@ -382,10 +382,10 @@ describe('Parser', () => {
           },
         },
       ],
-    }
-    expect(parse(input)).toEqual(ast)
+    };
+    expect(parse(input)).toEqual(ast);
 
-    input = "export * from 'foo';"
+    input = "export * from 'foo';";
     ast = {
       type: NodeType.Program,
       start: 0,
@@ -405,10 +405,10 @@ describe('Parser', () => {
           exported: null,
         },
       ],
-    }
-    expect(parse(input)).toEqual(ast)
+    };
+    expect(parse(input)).toEqual(ast);
 
-    input = 'export default function() {}'
+    input = 'export default function() {}';
     ast = {
       type: NodeType.Program,
       start: 0,
@@ -433,7 +433,7 @@ describe('Parser', () => {
           },
         },
       ],
-    }
-    expect(parse(input)).toEqual(ast)
-  })
-})
+    };
+    expect(parse(input)).toEqual(ast);
+  });
+});

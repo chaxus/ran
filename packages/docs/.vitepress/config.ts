@@ -27,7 +27,7 @@ export default defineConfig({
     template: {
       compilerOptions: {
         isCustomElement: (tag) => {
-          return tag.startsWith('r-')
+          return tag.startsWith('r-');
         },
       },
     },
@@ -167,4 +167,4 @@ export default defineConfig({
       ],
     },
   },
-})
+});

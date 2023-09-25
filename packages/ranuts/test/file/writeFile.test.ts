@@ -1,11 +1,11 @@
-import path from 'node:path'
-import { fileURLToPath } from 'node:url'
-import fs from 'node:fs'
-import { afterEach, describe, expect, it, vi } from 'vitest'
-import writeFile from '../../src/file/writeFile'
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import fs from 'node:fs';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import writeFile from '../../src/file/writeFile';
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 describe('functions', () => {
   it('write file', () => {
@@ -18,5 +18,5 @@ describe('functions', () => {
     //     console.log('write file', error)
     //   })
     // })
-  })
-})
+  });
+});

@@ -263,22 +263,22 @@ interface PepsiCola extends Cola {}
 const createColaWithType = (type: number) => {
   switch (type) {
     case 0:
-      return new CocaCola()
+      return new CocaCola();
     case 1:
-      return new PepsiCola()
+      return new PepsiCola();
     default:
-      return null
-      break
+      return null;
+      break;
   }
-}
+};
 ```
 
 ```ts
 // 0 生产可口可乐
-const cocaCola: CocaCola = createColaWithType(0)
+const cocaCola: CocaCola = createColaWithType(0);
 
 // 1 生产百事可乐
-const pepsiCola: PepsiCola = createColaWithType(1)
+const pepsiCola: PepsiCola = createColaWithType(1);
 ```
 
 **优点：**
@@ -314,8 +314,8 @@ class PepsiCola extends Cola {}
 
 ```ts
 // 根据不同的工厂类生产不同的产品
-const cocaCola = new CocaCola()
-const pepsiCola = new PepsiCola()
+const cocaCola = new CocaCola();
+const pepsiCola = new PepsiCola();
 ```
 
 **优点：**
@@ -366,33 +366,33 @@ const Factory = {
   createCola: () => new Cola(),
   createBottle: () => new Bottle(),
   createBox: () => new Box(),
-}
+};
 
 // 可口可乐主题工厂
 const CocaColaFactory = {
   createCola: () => new CocaCola(),
   createBottle: () => new CocaColaBottle(),
   createBox: () => new CocaColaBox(),
-}
+};
 
 // 百事可乐主题工厂
 const PepsiColaFactory = {
   createCola: () => new PepsiCola(),
   createBottle: () => new PepsiColaBottle(),
   createBox: () => new PepsiColaBox(),
-}
+};
 ```
 
 ```ts
 // 可口可乐主题
-const cocaCola = CocaColaFactory.createCola()
-const cocaColaBottle = CocaColaFactory.createBottle()
-const cocaColaBox = CocaColaFactory.createBox()
+const cocaCola = CocaColaFactory.createCola();
+const cocaColaBottle = CocaColaFactory.createBottle();
+const cocaColaBox = CocaColaFactory.createBox();
 
 // 百事可乐主题
-const pepsiCola = PepsiColaFactory.createCola()
-const pepsiColaBottle = PepsiColaFactory.createBottle()
-const pepsiColaBox = PepsiColaFactory.createBox()
+const pepsiCola = PepsiColaFactory.createCola();
+const pepsiColaBottle = PepsiColaFactory.createBottle();
+const pepsiColaBox = PepsiColaFactory.createBox();
 ```
 
 **优点：**
@@ -417,11 +417,11 @@ const pepsiColaBox = PepsiColaFactory.createBox()
 class Singleton {}
 
 function createSingleton() {
-  let instance
+  let instance;
   return function () {
-    if (!instance) return new Singleton()
-    return instance
-  }
+    if (!instance) return new Singleton();
+    return instance;
+  };
 }
 ```
 
@@ -456,18 +456,18 @@ function createSingleton() {
 ```ts
 // 抽象建造者
 abstract class Builder {
-  public abstract buildPartA(): void
-  public abstract buildPartB(): void
-  public abstract buildPartC(): void
-  public abstract buildProduct(): Product
+  public abstract buildPartA(): void;
+  public abstract buildPartB(): void;
+  public abstract buildPartC(): void;
+  public abstract buildProduct(): Product;
 }
 
 // 具体建造者
 class ConcreteBuilder extends Builder {
-  private product: Product
+  private product: Product;
   constructor(product: Product) {
-    super()
-    this.product = product
+    super();
+    this.product = product;
   }
 
   public buildPartA(): void {}
@@ -476,7 +476,7 @@ class ConcreteBuilder extends Builder {
 
   // 最终组建一个产品
   public buildProduct(): Product {
-    return this.product
+    return this.product;
   }
 }
 
@@ -489,28 +489,28 @@ class Product {
 
 // 指挥者
 class Director {
-  private _builder: Builder
+  private _builder: Builder;
   constructor(builder: Builder) {
-    this._builder = builder
+    this._builder = builder;
   }
 
   set builder(builder: Builder) {
-    this._builder = builder
+    this._builder = builder;
   }
 
   // 将处理建造的流程交给指挥者
   public constructorProduct() {
-    this._builder.buildPartA()
-    this._builder.buildPartB()
-    this._builder.buildPartC()
-    return this._builder.buildProduct()
+    this._builder.buildPartA();
+    this._builder.buildPartB();
+    this._builder.buildPartC();
+    return this._builder.buildProduct();
   }
 }
 
 // 使用
-const builder: Builder = new ConcreteBuilder(new Product())
-const director: Director = new Director(builder)
-const product: Product = director.constructorProduct()
+const builder: Builder = new ConcreteBuilder(new Product());
+const director: Director = new Director(builder);
+const product: Product = director.constructorProduct();
 ```
 
 **优点：**
@@ -540,35 +540,35 @@ const product: Product = director.constructorProduct()
 const car = {
   drive: function () {},
   name: '马自达 3',
-}
+};
 
 // 使用Object.create创建一个新车x
-const anotherCar = Object.create(someCar)
-anotherCar.name = '丰田佳美'
+const anotherCar = Object.create(someCar);
+anotherCar.name = '丰田佳美';
 ```
 
 ```ts
 const vehiclePrototype = {
   init: function (carModel) {
-    this.model = carModel
+    this.model = carModel;
   },
   getModel: function () {
-    console.log('车辆模具是：' + this.model)
+    console.log('车辆模具是：' + this.model);
   },
-}
+};
 
 function vehicle(model) {
   function F() {}
-  F.prototype = vehiclePrototype
+  F.prototype = vehiclePrototype;
 
-  const f = new F()
+  const f = new F();
 
-  f.init(model)
-  return f
+  f.init(model);
+  return f;
 }
 
-const car = vehicle('福特Escort')
-car.getModel()
+const car = vehicle('福特Escort');
+car.getModel();
 ```
 
 **优点：**
@@ -601,7 +601,7 @@ car.getModel()
 class MyClass {}
 
 function annotation(target) {
-  target.annotated = true
+  target.annotated = true;
 }
 ```
 
@@ -614,8 +614,8 @@ class MyClass {
 }
 
 function readonly(target, name, descriptor) {
-  descriptor.writable = false
-  return descriptor
+  descriptor.writable = false;
+  return descriptor;
 }
 ```
 
@@ -641,13 +641,13 @@ function readonly(target, name, descriptor) {
 ```js
 const addMyEvent = function (el, ev, fn) {
   if (el.addEventListener) {
-    el.addEventListener(ev, fn, false)
+    el.addEventListener(ev, fn, false);
   } else if (el.attachEvent) {
-    el.attachEvent('on' + ev, fn)
+    el.attachEvent('on' + ev, fn);
   } else {
-    el['on' + ev] = fn
+    el['on' + ev] = fn;
   }
-}
+};
 ```
 
 **优点：**
@@ -675,9 +675,9 @@ const addMyEvent = function (el, ev, fn) {
 /**
  * Response delegation.
  */
-const delegate = require('delegates')
+const delegate = require('delegates');
 
-const prototype = (module.exports = {})
+const prototype = (module.exports = {});
 
 delegate(prototype, 'response')
   .method('attachment')
@@ -696,15 +696,15 @@ delegate(prototype, 'response')
   .access('lastModified')
   .access('etag')
   .getter('headerSent')
-  .getter('writable')
+  .getter('writable');
 ```
 
 对`context`,`request`,`response`做一个代理，保护真正的`context`,`request`,`response`
 
 ```js
-this.context = Object.create(context)
-this.request = Object.create(request)
-this.response = Object.create(response)
+this.context = Object.create(context);
+this.request = Object.create(request);
+this.response = Object.create(response);
 ```
 
 **优点：**
@@ -795,59 +795,59 @@ const VipMusicService = {
 class Speed {
   // 运动模块
   constructor(x, y) {
-    this.x = x
-    this.y = y
+    this.x = x;
+    this.y = y;
   }
   run() {
-    console.log(`运动起来 ${this.x} + ${this.y}`)
+    console.log(`运动起来 ${this.x} + ${this.y}`);
   }
 }
 
 class Color {
   // 着色模块
   constructor(cl) {
-    this.color = cl
+    this.color = cl;
   }
   draw() {
-    console.log(`绘制颜色 ${this.color}`)
+    console.log(`绘制颜色 ${this.color}`);
   }
 }
 
 class Speak {
   constructor(wd) {
-    this.word = wd
+    this.word = wd;
   }
   say() {
-    console.log(`说话 ${this.word}`)
+    console.log(`说话 ${this.word}`);
   }
 }
 
 class Ball {
   // 创建球类，可以着色和运动
   constructor(x, y, cl) {
-    this.speed = new Speed(x, y)
-    this.color = new Color(cl)
+    this.speed = new Speed(x, y);
+    this.color = new Color(cl);
   }
   init() {
-    this.speed.run()
-    this.color.draw()
+    this.speed.run();
+    this.color.draw();
   }
 }
 
 class Man {
   // 人类，可以运动和说话
   constructor(x, y, wd) {
-    this.speed = new Speed(x, y)
-    this.speak = new Speak(wd)
+    this.speed = new Speed(x, y);
+    this.speak = new Speak(wd);
   }
   init() {
-    this.speed.run()
-    this.speak.say()
+    this.speed.run();
+    this.speak.say();
   }
 }
 
-const man = new Man(1, 2, 'hello ?')
-man.init() // 运动起来 1 + 2      说话 hello?
+const man = new Man(1, 2, 'hello ?');
+man.init(); // 运动起来 1 + 2      说话 hello?
 ```
 
 **优点：**
@@ -905,45 +905,45 @@ function addEvent(ele, event, callback) {
 ```js
 const order500 = function (orderType, pay, stock) {
   if (orderType === 1 && pay == true) {
-    console.log('500元定金预购，得到100元优惠劵')
+    console.log('500元定金预购，得到100元优惠劵');
   } else {
-    return 'nextSuccess'
+    return 'nextSuccess';
   }
-}
+};
 const order200 = function (orderType, pay, stock) {
   if (orderType === 2 && pay === true) {
-    console.log('200元定金预购，得到50元優惠卷')
+    console.log('200元定金预购，得到50元優惠卷');
   } else {
-    return 'nextSuccess'
+    return 'nextSuccess';
   }
-}
+};
 const orderCommon = function (orderType, pay, stock) {
   if (orderType == 3 && stock > 0) {
-    console.log('普通購買，无優惠卷')
+    console.log('普通購買，无優惠卷');
   } else {
-    console.log('库存不够')
+    console.log('库存不够');
   }
-}
+};
 //链路代码
 const chain = function (fn) {
-  this.fn = fn
-  this.successor = null
-}
+  this.fn = fn;
+  this.successor = null;
+};
 chain.prototype.setNext = function (successor) {
-  this.successor = successor
-}
+  this.successor = successor;
+};
 chain.prototype.init = function () {
-  const result = this.fn.apply(this, arguments)
+  const result = this.fn.apply(this, arguments);
   if (result == 'nextSuccess') {
-    this.successor.init.apply(this.successor, arguments)
+    this.successor.init.apply(this.successor, arguments);
   }
-}
-const order500New = new chain(order500)
-const order200New = new chain(order200)
-const orderCommonNew = new chain(orderCommon)
-order500New.setNext(order200New)
-order200New.setNext(orderCommonNew)
-order500New.init(3, true, 500) // 普通购买, 无优惠券
+};
+const order500New = new chain(order500);
+const order200New = new chain(order200);
+const orderCommonNew = new chain(orderCommon);
+order500New.setNext(order200New);
+order200New.setNext(orderCommonNew);
+order500New.init(3, true, 500); // 普通购买, 无优惠券
 ```
 
 **优点：**
@@ -980,38 +980,38 @@ order500New.init(3, true, 500) // 普通购买, 无优惠券
 class Receiver {
   // 接收者类
   execute() {
-    console.log('接收者执行请求')
+    console.log('接收者执行请求');
   }
 }
 
 class Command {
   // 命令对象类
   constructor(receiver) {
-    this.receiver = receiver
+    this.receiver = receiver;
   }
   execute() {
     // 调用接收者对应接口执行
-    console.log('命令对象->接收者->对应接口执行')
-    this.receiver.execute()
+    console.log('命令对象->接收者->对应接口执行');
+    this.receiver.execute();
   }
 }
 
 class Invoker {
   // 发布者类
   constructor(command) {
-    this.command = command
+    this.command = command;
   }
   invoke() {
     // 发布请求，调用命令对象
-    console.log('发布者发布请求')
-    this.command.execute()
+    console.log('发布者发布请求');
+    this.command.execute();
   }
 }
 
-const warehouse = new Receiver() // 仓库
-const order = new Command(warehouse) // 订单
-const client = new Invoker(order) // 客户
-client.invoke()
+const warehouse = new Receiver(); // 仓库
+const order = new Command(warehouse); // 订单
+const client = new Invoker(order); // 客户
+client.invoke();
 ```
 
 **优点：**
@@ -1038,52 +1038,52 @@ client.invoke()
 ```js
 class Context {
   constructor() {
-    this._list = [] // 存放 终结符表达式
-    this._sum = 0 // 存放 非终结符表达式(运算结果)
+    this._list = []; // 存放 终结符表达式
+    this._sum = 0; // 存放 非终结符表达式(运算结果)
   }
 
   get sum() {
-    return this._sum
+    return this._sum;
   }
   set sum(newValue) {
-    this._sum = newValue
+    this._sum = newValue;
   }
   add(expression) {
-    this._list.push(expression)
+    this._list.push(expression);
   }
   get list() {
-    return [...this._list]
+    return [...this._list];
   }
 }
 
 class PlusExpression {
   interpret(context) {
     if (!(context instanceof Context)) {
-      throw new Error('TypeError')
+      throw new Error('TypeError');
     }
-    context.sum = ++context.sum
+    context.sum = ++context.sum;
   }
 }
 class MinusExpression {
   interpret(context) {
     if (!(context instanceof Context)) {
-      throw new Error('TypeError')
+      throw new Error('TypeError');
     }
-    context.sum = --context.sum
+    context.sum = --context.sum;
   }
 }
 
 /** 以下是测试代码 **/
-const context = new Context()
+const context = new Context();
 
 // 依次添加: 加法 | 加法 | 减法 表达式
-context.add(new PlusExpression())
-context.add(new PlusExpression())
-context.add(new MinusExpression())
+context.add(new PlusExpression());
+context.add(new PlusExpression());
+context.add(new MinusExpression());
 
 // 依次执行: 加法 | 加法 | 减法 表达式
-context.list.forEach((expression) => expression.interpret(context))
-console.log(context.sum)
+context.list.forEach((expression) => expression.interpret(context));
+console.log(context.sum);
 ```
 
 **优点：**
@@ -1111,14 +1111,14 @@ console.log(context.sum)
 ```js
 var each = function (arr, callback) {
   for (var i = 0, len = arr.length; i < len; i++) {
-    callback.call(arr[i], i, arr[i])
+    callback.call(arr[i], i, arr[i]);
   }
-}
+};
 
 each([1, 2, 3, 4, 5], function (i, el) {
-  console.log('index: ', i)
-  console.log('item: ', el)
-})
+  console.log('index: ', i);
+  console.log('item: ', el);
+});
 ```
 
 **优点：**
@@ -1144,52 +1144,52 @@ each([1, 2, 3, 4, 5], function (i, el) {
 
 ```js
 const player = function (name) {
-  this.name = name
-  playerMiddle.add(name)
-}
+  this.name = name;
+  playerMiddle.add(name);
+};
 player.prototype.win = function () {
-  playerMiddle.win(this.name)
-}
+  playerMiddle.win(this.name);
+};
 player.prototype.lose = function () {
-  playerMiddle.lose(this.name)
-}
+  playerMiddle.lose(this.name);
+};
 const playerMiddle = (function () {
   //将就用下这个demo, 这个函数充当中介者
-  const players = []
-  const winArr = []
-  const loseArr = []
+  const players = [];
+  const winArr = [];
+  const loseArr = [];
   return {
     add: function (name) {
-      players.push(name)
+      players.push(name);
     },
     win: function (name) {
-      winArr.push(name)
+      winArr.push(name);
       if (winArr.length + loseArr.length === players.length) {
-        this.show()
+        this.show();
       }
     },
     lose: function (name) {
-      loseArr.push(name)
+      loseArr.push(name);
       if (winArr.length + loseArr.length === players.length) {
-        this.show()
+        this.show();
       }
     },
     show: function () {
       for (let winner of winArr) {
-        console.log(winner + '挑戰成功;')
+        console.log(winner + '挑戰成功;');
       }
       for (let loser of loseArr) {
-        console.log(loser + '挑战失败;')
+        console.log(loser + '挑战失败;');
       }
     },
-  }
-})()
-const a = new player('A选手')
-const b = new player('B选手')
-const c = new player('C选手')
-a.win()
-b.lose()
-c.win()
+  };
+})();
+const a = new player('A选手');
+const b = new player('B选手');
+const c = new player('C选手');
+a.win();
+b.lose();
+c.win();
 // A 选手挑战成功;
 // B 选手挑战成功;
 // C 选手挑战失败;
@@ -1220,19 +1220,19 @@ c.win()
 // 备忘录模式伪代码
 var Page = function () {
   // 通过cache对象缓存数据
-  var cache = {}
+  var cache = {};
   return function (page, fn) {
     if (cache[page]) {
-      showPage(page, cache[page])
+      showPage(page, cache[page]);
     } else {
       $.post('/url', function (data) {
-        showPage(page, data)
-        cache[page] = data
-      })
+        showPage(page, data);
+        cache[page] = data;
+      });
     }
-    fn && fn()
-  }
-}
+    fn && fn();
+  };
+};
 ```
 
 **优点：**
@@ -1259,13 +1259,13 @@ var Page = function () {
 ```js
 // 发布者
 var pub = function () {
-  console.log('欢迎订阅!')
-}
+  console.log('欢迎订阅!');
+};
 // 订阅者
-var sub = document.body
+var sub = document.body;
 
 // 订阅者实现订阅
-sub.addEventListener('click', pub, false)
+sub.addEventListener('click', pub, false);
 ```
 
 **优点：**
@@ -1298,33 +1298,33 @@ sub.addEventListener('click', pub, false)
 ```js
 class SuperMarry {
   constructor() {
-    this._currentState = []
+    this._currentState = [];
     this.states = {
       jump() {
-        console.log('跳跃!')
+        console.log('跳跃!');
       },
       move() {
-        console.log('移动!')
+        console.log('移动!');
       },
       shoot() {
-        console.log('射击!')
+        console.log('射击!');
       },
       squat() {
-        console.log('蹲下!')
+        console.log('蹲下!');
       },
-    }
+    };
   }
 
   change(arr) {
     // 更改当前动作
-    this._currentState = arr
-    return this
+    this._currentState = arr;
+    return this;
   }
 
   go() {
-    console.log('触发动作')
-    this._currentState.forEach((T) => this.states[T] && this.states[T]())
-    return this
+    console.log('触发动作');
+    this._currentState.forEach((T) => this.states[T] && this.states[T]());
+    return this;
   }
 }
 
@@ -1333,7 +1333,7 @@ new SuperMarry()
   .go() // 触发动作  跳跃!  射击!
   .go() // 触发动作  跳跃!  射击!
   .change(['squat'])
-  .go() // 触发动作  蹲下!
+  .go(); // 触发动作  蹲下!
 ```
 
 **优点：**
@@ -1365,22 +1365,22 @@ new SuperMarry()
 // 改为策略模式 分成两个函数来写
 const strategy = {
   S: function (experience) {
-    return 4 * experience
+    return 4 * experience;
   },
   A: function (experience) {
-    return 3 * experience
+    return 3 * experience;
   },
   B: function (experience) {
-    return 2 * experience
+    return 2 * experience;
   },
-}
+};
 // getExperience可以复用
 function getExperience(strategy, level, experience) {
-  return level in strategy ? strategy[level](experience) : experience
+  return level in strategy ? strategy[level](experience) : experience;
 }
-var s = getExperience(strategy, 'S', 100)
-var a = getExperience(strategy, 'A', 100)
-console.log(s, a) // 400 300
+var s = getExperience(strategy, 'S', 100);
+var a = getExperience(strategy, 'A', 100);
+console.log(s, a); // 400 300
 ```
 
 ```js
@@ -1461,28 +1461,28 @@ var compileUtil = {
 我们用 es5 来得到一杯香浓的咖啡吧：
 
 ```js
-var Coffee = function () {}
+var Coffee = function () {};
 Coffee.prototype.boilWater = function () {
-  console.log('水煮开了')
-}
+  console.log('水煮开了');
+};
 Coffee.prototype.brewCoffeeGriends = function () {
-  console.log('用沸水冲泡咖啡')
-}
+  console.log('用沸水冲泡咖啡');
+};
 Coffee.prototype.pourInCup = function () {
-  console.log('把咖啡倒进杯子')
-}
+  console.log('把咖啡倒进杯子');
+};
 Coffee.prototype.addSugarAndMilk = function () {
-  console.log('加糖和牛奶')
-}
+  console.log('加糖和牛奶');
+};
 // 封装 将实现的细节交给类的内部
 Coffee.prototype.init = function () {
-  this.boilWater()
-  this.brewCoffeeGriends()
-  this.pourInCup()
-  this.addSugarAndMilk()
-}
-var coffee = new Coffee()
-coffee.init()
+  this.boilWater();
+  this.brewCoffeeGriends();
+  this.pourInCup();
+  this.addSugarAndMilk();
+};
+var coffee = new Coffee();
+coffee.init();
 ```
 
 泡一壶茶
@@ -1503,26 +1503,26 @@ coffee.init()
 class Tea {
   constructor() {}
   boilWater() {
-    console.log('把水烧开')
+    console.log('把水烧开');
   }
   steepTeaBag() {
-    console.log('浸泡茶叶')
+    console.log('浸泡茶叶');
   }
   pourInCup() {
-    console.log('倒进杯子')
+    console.log('倒进杯子');
   }
   addLemon() {
-    console.log('加柠檬')
+    console.log('加柠檬');
   }
   init() {
-    this.boilWater()
-    this.steepTeaBag()
-    this.pourInCup()
-    this.addLemon()
+    this.boilWater();
+    this.steepTeaBag();
+    this.pourInCup();
+    this.addLemon();
   }
 }
-var tea = new Tea()
-tea.init()
+var tea = new Tea();
+tea.init();
 ```
 
 现在到了思考的时间，我们刚刚泡了一杯咖啡和一壶茶，有没有觉得这两个过程是大同小异的。我们能很容易的就找出他们的共同点，不同点就是原料不同嘛，茶和咖啡，我们可以把他们抽象为"饮料"哇；泡的方式不同嘛，一个是冲泡，一个是浸泡，我们可以把这个行为抽象为"泡"；加入的调料也不同咯，加糖和牛奶，加柠檬，它们也可以抽象为"调料"吖。
@@ -1548,41 +1548,41 @@ tea.init()
 泡饮料啦！
 
 ```js
-var Beverage = function () {}
+var Beverage = function () {};
 Beverage.prototype.boilWater = function () {
-  console.log('把水煮沸')
-}
-Beverage.prototype.brew = function () {}
-Beverage.prototype.pourInCup = function () {}
-Beverage.prototype.addCondiments = function () {}
+  console.log('把水煮沸');
+};
+Beverage.prototype.brew = function () {};
+Beverage.prototype.pourInCup = function () {};
+Beverage.prototype.addCondiments = function () {};
 // 抽象方法
 Beverage.prototype.init = function () {
-  this.boilWater()
-  this.brew()
-  this.pourInCup()
-  this.addCondiments()
-}
+  this.boilWater();
+  this.brew();
+  this.pourInCup();
+  this.addCondiments();
+};
 var Coffee = function () {
   // 将父类的构造方法拿来执行一下
-  Beverage.apply(this, arguments)
+  Beverage.apply(this, arguments);
   // 就像es6的super执行 执行后this才会有对象的属性
-}
-Coffee.prototype = new Beverage()
-var coffee = new Coffee()
-coffee.init()
-var Tea = function () {}
-Tea.prototype = new Beverage()
+};
+Coffee.prototype = new Beverage();
+var coffee = new Coffee();
+coffee.init();
+var Tea = function () {};
+Tea.prototype = new Beverage();
 Tea.prototype.brew = function () {
-  console.log('用沸水浸泡茶叶')
-}
+  console.log('用沸水浸泡茶叶');
+};
 Tea.prototype.pourInCup = function () {
-  console.log('把茶叶倒进杯子')
-}
+  console.log('把茶叶倒进杯子');
+};
 Tea.prototype.addCondiments = function () {
-  console.log('加柠檬')
-}
-var tea = new Tea()
-tea.init()
+  console.log('加柠檬');
+};
+var tea = new Tea();
+tea.init();
 ```
 
 这里既泡了咖啡又泡了茶，是不是没有之前那么繁琐呢，这里的代码可是很高级的呢。

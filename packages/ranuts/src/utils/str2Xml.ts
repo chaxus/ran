@@ -10,17 +10,17 @@ const str2Xml = (
 ): HTMLElement | undefined => {
   if (window.DOMParser)
     return new window.DOMParser().parseFromString(xmlStr, format)
-      .documentElement
+      .documentElement;
   if (
     typeof window.ActiveXObject !== 'undefined' &&
     new window.ActiveXObject('Microsoft.XMLDOM')
   ) {
-    const xmlDoc = new window.ActiveXObject('Microsoft.XMLDOM')
-    xmlDoc.async = 'false'
-    xmlDoc.loadXML(xmlStr)
-    return xmlDoc
+    const xmlDoc = new window.ActiveXObject('Microsoft.XMLDOM');
+    xmlDoc.async = 'false';
+    xmlDoc.loadXML(xmlStr);
+    return xmlDoc;
   }
-  return undefined
-}
+  return undefined;
+};
 
-export default str2Xml
+export default str2Xml;

@@ -23,20 +23,20 @@ class Heap {
       largest = right
     }
     if (largest !== i) {
-      this.swap(i, largest)
-      this.heapHandler(largest)
+      this.swap(i, largest);
+      this.heapHandler(largest);
     }
-  }
+  };
   buildMaxHeap = () => {
     for (let i = Math.floor(this.size / 2); i >= 0; i--) {
-      this.heapHandler(i)
+      this.heapHandler(i);
     }
     for (let i = this.size - 1; i >= 0; i--) {
-      this.swap(0, i)
-      this.size--
-      this.heapHandler(0)
+      this.swap(0, i);
+      this.size--;
+      this.heapHandler(0);
     }
-  }
+  };
 }
 
 /**
@@ -49,4 +49,4 @@ const heap = (list: Array<number>): Array<number> => {
   return value
 }
 
-export default heap
+export default heap;

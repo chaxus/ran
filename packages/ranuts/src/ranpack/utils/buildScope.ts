@@ -1,21 +1,21 @@
-import { Scope } from '../ast/Scope'
-import type { Statement } from '../statement'
+import { Scope } from '../ast/Scope';
+import type { Statement } from '../statement';
 import type {
   FunctionDeclaration,
   Node,
   VariableDeclaration,
   VariableDeclarator,
-} from '../../astParser'
-import { NodeType } from '../../astParser'
-import { walk } from './walk'
+} from '../../astParser';
+import { NodeType } from '../../astParser';
+import { walk } from './walk';
 /**
  * @description: 构建作用域链
  * @param {Statement} statement
  * @return {*}
  */
 export function buildScope(statement: Statement): void {
-  const { node, scope: initialScope } = statement
-  let scope = initialScope
+  const { node, scope: initialScope } = statement;
+  let scope = initialScope;
   // 遍历 AST
   walk(node, {
     // 遵循深度优先的原则，每进入和离开一个节点会触发 enter 和 leave 钩子
@@ -23,28 +23,28 @@ export function buildScope(statement: Statement): void {
     enter(node: Node) {
       // function foo () {...}
       if (node.type === NodeType.FunctionDeclaration) {
-        scope.addDeclaration(node, false)
+        scope.addDeclaration(node, false);
       }
       // var let const
       if (node.type === NodeType.VariableDeclaration) {
-        const currentNode = node as VariableDeclaration
-        const isBlockDeclaration = currentNode.kind !== 'var'
+        const currentNode = node as VariableDeclaration;
+        const isBlockDeclaration = currentNode.kind !== 'var';
         currentNode.declarations.forEach((declarator: VariableDeclarator) => {
-          scope.addDeclaration(declarator, isBlockDeclaration)
-        })
+          scope.addDeclaration(declarator, isBlockDeclaration);
+        });
       }
 
-      let newScope
+      let newScope;
 
       // function scope
       if (node.type === NodeType.FunctionDeclaration) {
-        const currentNode = node as FunctionDeclaration
+        const currentNode = node as FunctionDeclaration;
         newScope = new Scope({
           parent: scope,
           block: false,
           paramNodes: currentNode.params,
           statement,
-        })
+        });
       }
 
       // new block state
@@ -53,24 +53,24 @@ export function buildScope(statement: Statement): void {
           parent: scope,
           block: true,
           statement,
-        })
+        });
       }
       // 记录 Scope 父子关系
       if (newScope) {
         Object.defineProperty(node, '_scope', {
           value: newScope,
           configurable: true,
-        })
+        });
 
-        scope = newScope
+        scope = newScope;
       }
     },
     leave(node: Node) {
       // 更新当前作用域
       // 当前 scope 即 node._scope
       if (node._scope && scope.parent) {
-        scope = scope.parent
+        scope = scope.parent;
       }
     },
-  })
+  });
 }

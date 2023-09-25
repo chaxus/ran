@@ -18,7 +18,7 @@ const select = (list: number[]):number[] => {
       list[i] = list[i] ^ list[minIndex]
     }
   }
-  return list
-}
+  return list;
+};
 
-export default select
+export default select;

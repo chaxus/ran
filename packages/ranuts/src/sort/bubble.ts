@@ -14,7 +14,7 @@ const bubble = (list: number[]): number[] => {
       }
     }
   }
-  return list
-}
+  return list;
+};
 
-export default bubble
+export default bubble;

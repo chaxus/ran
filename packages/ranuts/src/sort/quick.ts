@@ -38,8 +38,8 @@ const combine = (list: number[], left: number, right: number) => {
     combine(list, partitionIndex + 1, right)
     combine(list, left, partitionIndex - 1)
   }
-  return list
-}
+  return list;
+};
 /**
  * @description: 快速排序
  * @param {Array} list
@@ -50,4 +50,4 @@ const quick = (list: number[] = []):number[] => {
   return combine(list, 0, size - 1)
 }
 
-export default quick
+export default quick;

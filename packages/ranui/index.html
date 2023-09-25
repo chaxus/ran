@@ -9,31 +9,31 @@
     <script async>
       // 添加资源到缓存
       const addResourcesToCache = async (resources) => {
-        const cache = await caches.open('v1')
-        await cache.addAll(resources)
-      }
+        const cache = await caches.open('v1');
+        await cache.addAll(resources);
+      };
       const putInCache = async (request, response) => {
-        const cache = await caches.open('v1')
-        await cache.put(request, response)
-      }
+        const cache = await caches.open('v1');
+        await cache.put(request, response);
+      };
       const cacheFirst = async (request) => {
         // 首先从缓存中获取资源
-        const responseFromCache = await caches.match(request)
+        const responseFromCache = await caches.match(request);
         if (responseFromCache) {
-          return responseFromCache
+          return responseFromCache;
         }
         // 然后尝试从网络中获取资源
         try {
-          const responseFromNetwork = await fetch(request)
+          const responseFromNetwork = await fetch(request);
           // 响应可能会被使用
           // 我们需要将它的拷贝放入缓存
           // 然后再返回该响应
-          putInCache(request, responseFromNetwork.clone())
-          return responseFromNetwork
+          putInCache(request, responseFromNetwork.clone());
+          return responseFromNetwork;
         } catch (error) {
-          const fallbackResponse = await caches.match(fallbackUrl)
+          const fallbackResponse = await caches.match(fallbackUrl);
           if (fallbackResponse) {
-            return fallbackResponse
+            return fallbackResponse;
           }
           // 当回落的响应也不可用时，
           // 我们便无能为力了，但我们始终需要
@@ -41,12 +41,12 @@
           return new Response('Network error happened', {
             status: 408,
             headers: { 'Content-Type': 'text/plain' },
-          })
+          });
         }
-      }
+      };
       const registerServiceWorker = async (paths = []) => {
         // 只有 https 可以开启service-work
-        if (!window.location.protocol.includes('https')) return
+        if (!window.location.protocol.includes('https')) return;
         if ('serviceWorker' in navigator) {
           try {
             const registration = await navigator.serviceWorker.register(
@@ -54,37 +54,37 @@
               {
                 scope: '/',
               },
-            )
+            );
             if (registration.installing) {
-              console.log('正在安装 Service worker')
+              console.log('正在安装 Service worker');
             } else if (registration.waiting) {
-              console.log('已安装 Service worker installed')
+              console.log('已安装 Service worker installed');
             } else if (registration.active) {
-              console.log('激活 Service worker')
+              console.log('激活 Service worker');
               registration.addEventListener('install', (event) => {
-                event.waitUntil(addResourcesToCache(paths))
-              })
+                event.waitUntil(addResourcesToCache(paths));
+              });
               registration.addEventListener('fetch', (event) => {
                 event.respondWith(
                   cacheFirst({
                     request: event.request,
                     fallbackUrl: '/',
                   }),
-                )
-              })
+                );
+              });
             }
           } catch (error) {
-            console.error(`注册失败：${error}`)
+            console.error(`注册失败：${error}`);
           }
         }
-      }
+      };
       const paths = [
         '/assets/js/pdf.js',
         '/assets/js/d3.js',
         '/assets/js/pdf-worker.js',
         '/assets/js/dimple.js',
-      ]
-      registerServiceWorker(paths)
+      ];
+      registerServiceWorker(paths);
     </script>
     <script src="./index.ts" type="module"></script>
   </head>
@@ -131,22 +131,22 @@
     >
     <r-preview id="preview"></r-preview>
     <script>
-      const inputDom = document.getElementById('input2')
+      const inputDom = document.getElementById('input2');
       const uploadFile = () => {
-        const preview = document.getElementById('preview')
-        const uploadFile = document.createElement('input')
-        uploadFile.setAttribute('type', 'file')
-        uploadFile.click()
+        const preview = document.getElementById('preview');
+        const uploadFile = document.createElement('input');
+        uploadFile.setAttribute('type', 'file');
+        uploadFile.click();
         uploadFile.onchange = (e) => {
-          const { files = [] } = uploadFile
+          const { files = [] } = uploadFile;
           if (files.length > 0) {
-            preview.setAttribute('src', '')
-            const file = files[0]
-            const url = URL.createObjectURL(file)
-            preview.setAttribute('src', url)
+            preview.setAttribute('src', '');
+            const file = files[0];
+            const url = URL.createObjectURL(file);
+            preview.setAttribute('src', url);
           }
-        }
-      }
+        };
+      };
     </script>
     <h2>message</h2>
     <r-button onclick="message.info('这是一条提示 info')">信息提示</r-button>

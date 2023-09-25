@@ -36,15 +36,15 @@ AST 是对源码的抽象，字面量、标识符、表达式、语句、模块�
 尝试分析一下，下面这一段代码里面有多少 `Identifier` 呢？
 
 ```js
-const name = 'value'
+const name = 'value';
 
 function say(name) {
-  console.log(name)
+  console.log(name);
 }
 
 const obj = {
   name: 'guang',
-}
+};
 ```
 
 答案是这些
@@ -89,15 +89,15 @@ with (a){}
 比如下面这些语句都是声明语句：
 
 ```js
-const a = 1
+const a = 1;
 function b() {}
 class C {}
 
-import d from 'e'
+import d from 'e';
 
-export default e = 1
-export { e }
-export * from 'e'
+export default e = 1;
+export { e };
+export * from 'e';
 ```
 
 它们对应的 AST 节点如下图：
@@ -139,8 +139,8 @@ a::b;
 有的表达式可以单独执行，符合语句的特点，所以也是语句，比如赋值表达式、数组表达式等。
 
 ```js
-a = 1
-;[1, 2, 3]
+a = 1;
+[1, 2, 3];
 ```
 
 但有的表达式不能单独执行，需要和其他类型的节点组合在一起构成语句。
@@ -155,8 +155,8 @@ class{}
 需要和其他部分一起构成一条语句，比如组成赋值语句：
 
 ```js
-a = function () {}
-b = class {}
+a = function () {};
+b = class {};
 ```
 
 这条赋值语句对应的 `AST` 是这样的：
@@ -175,7 +175,7 @@ b = class {}
 
 ```js
 class Guang extends Person {
-  name = 'guang'
+  name = 'guang';
   constructor() {}
   eat() {}
 }
@@ -197,19 +197,19 @@ class Guang extends Person {
 `named import`：
 
 ```js
-import { c, d } from 'c'
+import { c, d } from 'c';
 ```
 
 `default import`：
 
 ```js
-import a from 'a'
+import a from 'a';
 ```
 
 `namespaced import`:
 
 ```js
-import * as b from 'b'
+import * as b from 'b';
 ```
 
 这 3 种语法都对应 `ImportDeclaration` 节点，但是 `specifiers` 属性不同，分别对应 `ImportSpicifier` `、ImportDefaultSpecifier` `、ImportNamespaceSpcifier` 。
@@ -224,19 +224,19 @@ import * as b from 'b'
 `named export`：
 
 ```js
-export { b, d }
+export { b, d };
 ```
 
 `default export`：
 
 ```js
-export default a
+export default a;
 ```
 
 `all export`：
 
 ```js
-export * from 'c'
+export * from 'c';
 ```
 
 分别对应 `ExportNamedDeclaration` `、ExportDefaultDeclaration` `、ExportAllDeclaration` 的 `AST` 。
@@ -244,9 +244,9 @@ export * from 'c'
 比如这三种 `export`
 
 ```js
-export { b, d }
-export default a
-export * from 'c'
+export { b, d };
+export default a;
+export * from 'c';
 ```
 
 对应的 AST 节点为
@@ -327,13 +327,13 @@ export * from 'c'
 词法分析器，也叫分词器(`Tokenizer`)，它的作用是将代码划分为一个个词法单元，便于进行后续的语法分析。比如下面的这段代码:
 
 ```js
-let foo = function () {}
+let foo = function () {};
 ```
 
 在经过分词之后，代码会被切分为如下的 `token` 数组:
 
 ```js
-;['let', 'foo', '=', 'function', '(', ')', '{', '}']
+['let', 'foo', '=', 'function', '(', ')', '{', '}'];
 ```
 
 从中你可以看到，原本一行普通的代码字符串被拆分成了拥有语法属性的 `token` 列表，不同的 `token` 之间也存在千丝万缕的联系，而后面所要介绍的语法分析器，就是来梳理各个 `token` 之间的联系，整理出 `AST` 数据结构。
@@ -368,12 +368,12 @@ export enum TokenType {
 }
 
 export type Token = {
-  type: TokenType
-  value?: string
-  start: number
-  end: number
-  raw?: string
-}
+  type: TokenType;
+  value?: string;
+  start: number;
+  end: number;
+  raw?: string;
+};
 ```
 
 定义 Token 类型到规则的映射
@@ -381,10 +381,10 @@ export type Token = {
 ```ts
 const TOKENS_GENERATOR: Record<string, (...args: any[]) => Token> = {
   let(start: number) {
-    return { type: TokenType.Let, value: 'let', start, end: start + 3 }
+    return { type: TokenType.Let, value: 'let', start, end: start + 3 };
   },
   assign(start: number) {
-    return { type: TokenType.Assign, value: '=', start, end: start + 1 }
+    return { type: TokenType.Assign, value: '=', start, end: start + 1 };
   },
   function(start: number) {
     return {
@@ -392,19 +392,19 @@ const TOKENS_GENERATOR: Record<string, (...args: any[]) => Token> = {
       value: 'function',
       start,
       end: start + 8,
-    }
+    };
   },
   leftParen(start: number) {
-    return { type: TokenType.LeftParen, value: '(', start, end: start + 1 }
+    return { type: TokenType.LeftParen, value: '(', start, end: start + 1 };
   },
   rightParen(start: number) {
-    return { type: TokenType.RightParen, value: ')', start, end: start + 1 }
+    return { type: TokenType.RightParen, value: ')', start, end: start + 1 };
   },
   leftCurly(start: number) {
-    return { type: TokenType.LeftCurly, value: '{', start, end: start + 1 }
+    return { type: TokenType.LeftCurly, value: '{', start, end: start + 1 };
   },
   rightCurly(start: number) {
-    return { type: TokenType.RightCurly, value: '}', start, end: start + 1 }
+    return { type: TokenType.RightCurly, value: '}', start, end: start + 1 };
   },
   identifier(start: number, value: string) {
     return {
@@ -412,11 +412,11 @@ const TOKENS_GENERATOR: Record<string, (...args: any[]) => Token> = {
       value,
       start,
       end: start + value.length,
-    }
+    };
   },
-}
+};
 
-type SingleCharTokens = '(' | ')' | '{' | '}' | '='
+type SingleCharTokens = '(' | ')' | '{' | '}' | '=';
 
 // 单字符到 Token 生成器的映射
 const KNOWN_SINGLE_CHAR_TOKENS = new Map<
@@ -428,7 +428,7 @@ const KNOWN_SINGLE_CHAR_TOKENS = new Map<
   ['{', TOKENS_GENERATOR.leftCurly],
   ['}', TOKENS_GENERATOR.rightCurly],
   ['=', TOKENS_GENERATOR.assign],
-])
+]);
 ```
 
 有了 Token 类型和对应生成的规则，我们便可以去遍历分析代码，输出分析后的结果。
@@ -445,64 +445,64 @@ const KNOWN_SINGLE_CHAR_TOKENS = new Map<
 
 ```ts
 export class Tokenizer {
-  private _tokens: Token[] = []
-  private _currentIndex: number = 0
-  private _source: string
+  private _tokens: Token[] = [];
+  private _currentIndex: number = 0;
+  private _source: string;
   constructor(input: string) {
-    this._source = input
+    this._source = input;
   }
   tokenize(): Token[] {
     while (this._currentIndex < this._source.length) {
-      let currentChar = this._source[this._currentIndex]
-      const startIndex = this._currentIndex
+      let currentChar = this._source[this._currentIndex];
+      const startIndex = this._currentIndex;
 
       // 根据语法规则进行 token 分组
       // while 循环内部
-      let currentChar = this._source[this._currentIndex]
-      const startIndex = this._currentIndex
+      let currentChar = this._source[this._currentIndex];
+      const startIndex = this._currentIndex;
 
       const isAlpha = (char: string): boolean => {
-        return (char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z')
-      }
+        return (char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z');
+      };
 
       // 1. 处理空格
       if (currentChar === ' ') {
-        this._currentIndex++
-        continue
+        this._currentIndex++;
+        continue;
       }
       // 2. 处理字母
       else if (isAlpha(currentChar)) {
-        let identifier = ''
+        let identifier = '';
         while (isAlpha(currentChar)) {
-          identifier += currentChar
-          this._currentIndex++
-          currentChar = this._source[this._currentIndex]
+          identifier += currentChar;
+          this._currentIndex++;
+          currentChar = this._source[this._currentIndex];
         }
-        let token: Token
+        let token: Token;
         if (identifier in TOKENS_GENERATOR) {
           // 如果是关键字
           token =
             TOKENS_GENERATOR[identifier as keyof typeof TOKENS_GENERATOR](
               startIndex,
-            )
+            );
         } else {
           // 如果是普通标识符
-          token = TOKENS_GENERATOR['identifier'](startIndex, identifier)
+          token = TOKENS_GENERATOR['identifier'](startIndex, identifier);
         }
-        this._tokens.push(token)
-        continue
+        this._tokens.push(token);
+        continue;
       }
       // 3. 处理单字符
       else if (KNOWN_SINGLE_CHAR_TOKENS.has(currentChar as SingleCharTokens)) {
         const token = KNOWN_SINGLE_CHAR_TOKENS.get(
           currentChar as SingleCharTokens,
-        )!(startIndex)
-        this._tokens.push(token)
-        this._currentIndex++
-        continue
+        )!(startIndex);
+        this._tokens.push(token);
+        this._currentIndex++;
+        continue;
       }
     }
-    return this._tokens
+    return this._tokens;
   }
 }
 ```
@@ -510,7 +510,7 @@ export class Tokenizer {
 使用方式
 
 ```ts
-const tokenizer = new Tokenizer('let a = function() {}')
+const tokenizer = new Tokenizer('let a = function() {}');
 ```
 
 结果
@@ -525,7 +525,7 @@ const tokenizer = [
   { type: 'RightParen', value: ')', start: 17, end: 18 },
   { type: 'LeftCurly', value: '{', start: 19, end: 20 },
   { type: 'RightCurly', value: '}', start: 20, end: 21 },
-]
+];
 ```
 
 一个简易版本的分词器已经被我们开发出来了，不过目前的分词器还比较简陋，仅仅支持有限的语法，不过在明确了核心的开发步骤之后，后面继续完善的过程就比较简单了。

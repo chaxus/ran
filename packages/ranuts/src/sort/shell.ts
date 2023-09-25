@@ -16,7 +16,7 @@ const shell = (list: number[]):number[] => {
       list[preIndex + gap] = current
     }
   }
-  return list
-}
+  return list;
+};
 
-export default shell
+export default shell;

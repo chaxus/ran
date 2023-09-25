@@ -1,3 +1,3 @@
-import { a, add } from './utils'
+import { a, add } from './utils';
 
-export const c = add(a, 2)
+export const c = add(a, 2);

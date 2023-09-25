@@ -2,11 +2,11 @@ function Custom() {
   if (typeof window !== 'undefined' && !customElements.get('r-modal')) {
     class CustomModal extends HTMLElement {
       constructor() {
-        super()
+        super();
       }
     }
-    customElements.define('r-modal', CustomModal)
+    customElements.define('r-modal', CustomModal);
   }
 }
 
-export default Custom()
+export default Custom();

@@ -1,19 +1,19 @@
-import type { Plugin } from 'vite'
+import type { Plugin } from 'vite';
 interface Options {
-  ignore?: Array<string>
+  ignore?: Array<string>;
 }
 
 export default function loadStylePlugin(options?: Options): Plugin {
   return {
     name: 'vite-plugin-load-style',
     transform(code, id) {
-      const path = /ranui\/components\/[a-z|A-Z\d]+\/index.ts/
+      const path = /ranui\/components\/[a-z|A-Z\d]+\/index.ts/;
       const stylePath = new RegExp(
         /((this\.)?[a-zA-Z\d]+)\s*=\s*this\.attachShadow\(\{.*\}\)/,
-      )
-      const { ignore = [] } = options ?? {}
-      const [fragment, statement] = code.match(stylePath) ?? []
-      let result = code
+      );
+      const { ignore = [] } = options ?? {};
+      const [fragment, statement] = code.match(stylePath) ?? [];
+      let result = code;
       if (
         path.test(id) &&
         !ignore.some((item) => new RegExp(item).test(id)) &&
@@ -23,21 +23,21 @@ export default function loadStylePlugin(options?: Options): Plugin {
         const front = `import f7170ee498e0dd32cbdcb63fba8f75cc from '${id.replace(
           'index.ts',
           'index.less?inline',
-        )}';`
+        )}';`;
         result = result.replace(
           stylePath,
           `${fragment};
                     const F7170EE498E0DD32CBDCB63FBA8F75CC = document.createElement('style');
                     F7170EE498E0DD32CBDCB63FBA8F75CC.textContent = f7170ee498e0dd32cbdcb63fba8f75cc;
                     ${statement}.appendChild(F7170EE498E0DD32CBDCB63FBA8F75CC);`,
-        )
-        result = front + result
+        );
+        result = front + result;
       }
 
       return {
         code: result,
         map: null, // TODO
-      }
+      };
     },
-  }
+  };
 }

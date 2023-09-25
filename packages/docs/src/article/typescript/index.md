@@ -89,7 +89,7 @@ Java 就是这种类型系统。如果你看过 Java 代码，你会发现泛型
 
 ```ts
 function getPropValue<T>(obj: T, key): key对应的属性值类型 {
-  return obj[key]
+  return obj[key];
 }
 ```
 
@@ -112,7 +112,7 @@ function getPropValue<T extends object, Key extends keyof T>(
   obj: T,
   key: Key,
 ): T[Key] {
-  return obj[key]
+  return obj[key];
 }
 ```
 
@@ -127,17 +127,17 @@ TypeScript 的类型系统就是第三种，支持对类型参数做各种逻辑
 比如这个 ParseQueryString 的类型：
 
 ```ts
-type res = ParseQueryString<'a=1&b=2&c=3'>
+type res = ParseQueryString<'a=1&b=2&c=3'>;
 ```
 
 它可以对传入的字符串的类型参数做解析，返回解析以后的结果。等于
 
 ```ts
 type res = {
-  a: '1'
-  b: '2'
-  c: '3'
-}
+  a: '1';
+  b: '2';
+  c: '3';
+};
 ```
 
 如果是 Java 的只支持泛型的类型系统可以做到么？明显不能。但是 TypeScript 的类型系统就可以，因为它可以对泛型（类型参数）做各种逻辑处理。
@@ -148,15 +148,15 @@ type res = {
 type ParseParam<Param extends string> =
   Param extends `${infer Key}=${infer Value}`
     ? {
-        [K in Key]: Value
+        [K in Key]: Value;
       }
-    : {}
+    : {};
 
 type MergeValues<One, Other> = One extends Other
   ? One
   : Other extends unknown[]
   ? [One, ...Other]
-  : [One, Other]
+  : [One, Other];
 
 type MergeParams<
   OneParam extends Record<string, any>,
@@ -168,12 +168,12 @@ type MergeParams<
       : OneParam[Key]
     : Key extends keyof OtherParam
     ? OtherParam[Key]
-    : never
-}
+    : never;
+};
 type ParseQueryString<Str extends string> =
   Str extends `${infer Param}&${infer Rest}`
     ? MergeParams<ParseParam<Param>, ParseQueryString<Rest>>
-    : ParseParam<Str>
+    : ParseParam<Str>;
 ```
 
 TypeScript 的类型系统是图灵完备的，也就是能描述各种可计算逻辑。简单点来理解就是循环、条件等各种 JS 里面有的语法它都有，JS 能写的逻辑它都能写。
@@ -204,14 +204,14 @@ TypeScript 给 JavaScript 添加了一套静态类型系统，是为了保证类
 
 ```ts
 interface Animal {
-  name: string
-  age: number
+  name: string;
+  age: number;
 }
 
 interface Cat {
-  name: string
-  age: number
-  hobbies: string[]
+  name: string;
+  age: number;
+  hobbies: string[];
 }
 ```
 
@@ -221,15 +221,15 @@ interface Cat {
 let animal: Animal = {
   name: 'cat',
   age: 3,
-}
+};
 
 let cat: Cat = {
   name: 'Tony',
   age: 5,
   hobbies: ['run', 'swim'],
-}
+};
 
-animal = cat
+animal = cat;
 ```
 
 这并不会报错，虽然这俩类型不一样，但是依然是类型安全的。
@@ -249,17 +249,17 @@ animal = cat
 我们有这样两个函数：
 
 ```ts
-let printHobbies: (cat: Cat) => void
+let printHobbies: (cat: Cat) => void;
 
 printHobbies = (cat) => {
-  console.log(cat.hobbies)
-}
+  console.log(cat.hobbies);
+};
 
-let printName: (animal: Animal) => void
+let printName: (animal: Animal) => void;
 
 printName = (animal) => {
-  console.log(animal.name)
-}
+  console.log(animal.name);
+};
 ```
 
 printHobbies 的参数 Guang 是 printName 参数 Person 的子类型。
@@ -269,19 +269,19 @@ printHobbies 的参数 Guang 是 printName 参数 Person 的子类型。
 测试一下发现是这样的：
 
 ```ts
-let printHobbies: (cat: Cat) => void
+let printHobbies: (cat: Cat) => void;
 
 printHobbies = (cat) => {
-  console.log(cat.hobbies)
-}
+  console.log(cat.hobbies);
+};
 
-let printName: (animal: Animal) => void
+let printName: (animal: Animal) => void;
 
 printName = (animal) => {
-  console.log(animal.name)
-}
+  console.log(animal.name);
+};
 
-printHobbies = printName
+printHobbies = printName;
 ```
 
 printName 的参数 Person 不是 printHobbies 的参数 Guang 的父类型么，为啥能赋值给子类型？
@@ -307,9 +307,9 @@ printName 的参数 Person 不是 printHobbies 的参数 Guang 的父类型么�
 再举个逆变的例子，大家觉得下面这样的 ts 代码会报错么：
 
 ```ts
-type Func = (a: string) => void
+type Func = (a: string) => void;
 
-const func: Func = (a: 'hello') => undefined
+const func: Func = (a: 'hello') => undefined;
 ```
 
 答案是参数的位置会，返回值的位置不会：
@@ -353,7 +353,7 @@ const func: Func = (a: 'hello') => undefined
 元组（Tuple）就是元素个数和类型固定的数组类型：
 
 ```ts
-type Tuple = [number, string]
+type Tuple = [number, string];
 ```
 
 #### 接口
@@ -364,42 +364,42 @@ type Tuple = [number, string]
 
 ```ts
 interface IPerson {
-  name: string
-  age: number
+  name: string;
+  age: number;
 }
 
 class Person implements IPerson {
-  name: string
-  age: number
+  name: string;
+  age: number;
 }
 
 const obj: IPerson = {
   name: 'guang',
   age: 18,
-}
+};
 ```
 
 函数：
 
 ```ts
 interface SayHello {
-  (name: string): string
+  (name: string): string;
 }
 
 const func: SayHello = (name: string) => {
-  return 'hello,' + name
-}
+  return 'hello,' + name;
+};
 ```
 
 构造器：
 
 ```ts
 interface PersonConstructor {
-  new (name: string, age: number): IPerson
+  new (name: string, age: number): IPerson;
 }
 
 function createPerson(ctor: PersonConstructor): IPerson {
-  return new ctor('guang', 18)
+  return new ctor('guang', 18);
 }
 ```
 
@@ -407,11 +407,11 @@ function createPerson(ctor: PersonConstructor): IPerson {
 
 ```ts
 interface IPerson {
-  [prop: string]: string | number
+  [prop: string]: string | number;
 }
-const obj: IPerson = {}
-obj.name = 'guang'
-obj.age = 18
+const obj: IPerson = {};
+obj.name = 'guang';
+obj.age = 18;
 ```
 
 总之，接口可以用来描述函数、构造器、索引类型（对象、class、数组）等复合类型。
@@ -429,7 +429,7 @@ enum Transpiler {
   TypeScriptCompiler = 'tsc',
 }
 
-const transpiler = Transpiler.TypeScriptCompiler
+const transpiler = Transpiler.TypeScriptCompiler;
 ```
 
 此外，TypeScript 还支持字面量类型，也就是类似 1111、'aaaa'、{ a: 1} 这种值也可以做为类型。
@@ -441,9 +441,9 @@ const transpiler = Transpiler.TypeScriptCompiler
 ```ts
 function func(str: `#${string}`) {}
 
-func('aaaa') // error
+func('aaaa'); // error
 
-func('#aaaa') // true
+func('#aaaa'); // true
 ```
 
 还有四种特殊的类型：void、never、any、unknown：
@@ -461,11 +461,11 @@ func('#aaaa') // true
 
 ```ts
 interface IPerson {
-  readonly name: string
-  age?: number
+  readonly name: string;
+  age?: number;
 }
 
-type tuple = [string, number?]
+type tuple = [string, number?];
 ```
 
 ### 3.类型运算
@@ -477,7 +477,7 @@ type tuple = [string, number?]
 TypeScript 里的条件判断是 extends ? :，叫做条件类型（Conditional Type）比如：
 
 ```ts
-type res = 1 extends 2 ? true : false // type res = false
+type res = 1 extends 2 ? true : false; // type res = false
 ```
 
 这就是 TypeScript 类型系统里的 if else。
@@ -487,10 +487,10 @@ type res = 1 extends 2 ? true : false // type res = false
 所以，类型运算逻辑都是用来做一些动态的类型的运算的，也就是对类型参数的运算。
 
 ```ts
-type isTwo<T> = T extends 2 ? true : false
+type isTwo<T> = T extends 2 ? true : false;
 
-type res = isTwo<1> // type res = false
-type res2 = isTwo<2> // type res = true
+type res = isTwo<1>; // type res = false
+type res2 = isTwo<2>; // type res = true
 ```
 
 这种类型也叫做高级类型。
@@ -506,9 +506,9 @@ type res2 = isTwo<2> // type res = true
 ```ts
 type First<Tuple extends unknown[]> = Tuple extends [infer T, ...infer R]
   ? T
-  : never
+  : never;
 
-type res = First<[1, 2, 3]> // type res = 1
+type res = First<[1, 2, 3]>; // type res = 1
 ```
 
 注意，第一个 extends 不是条件，条件类型是 extends ? :，这里的 extends 是约束的意思，也就是约束类型参数只能是数组类型。
@@ -522,7 +522,7 @@ infer 在后面的章节会大量用到，这里先简单了解即可。
 联合类型（Union）类似 js 里的或运算符 |，但是作用于类型，代表类型可以是几个类型之一。
 
 ```ts
-type Union = 1 | 2 | 3
+type Union = 1 | 2 | 3;
 ```
 
 #### 交叉：&
@@ -530,7 +530,7 @@ type Union = 1 | 2 | 3
 交叉类型（Intersection）类似 js 中的与运算符 &，但是作用于类型，代表对类型做合并。
 
 ```ts
-type ObjType = { a: number } & { c: boolean }
+type ObjType = { a: number } & { c: boolean };
 ```
 
 注意，同一类型可以合并，不同的类型没法合并，会被舍弃：
@@ -538,15 +538,15 @@ type ObjType = { a: number } & { c: boolean }
 可以合并的
 
 ```ts
-type ObjType = { a: number } & { c: boolean }
+type ObjType = { a: number } & { c: boolean };
 
-type res = { a: number; c: boolean } extends ObjType ? true : false // type res = true
+type res = { a: number; c: boolean } extends ObjType ? true : false; // type res = true
 ```
 
 不可合并
 
 ```ts
-type res = 'aaaa' & 2222 // type res = never
+type res = 'aaaa' & 2222; // type res = never
 ```
 
 #### 映射类型
@@ -557,8 +557,8 @@ type res = 'aaaa' & 2222 // type res = never
 
 ```ts
 type MapType<T> = {
-  [Key in keyof T]?: T[Key]
-}
+  [Key in keyof T]?: T[Key];
+};
 ```
 
 keyof T 是查询索引类型中所有的索引，叫做索引查询。
@@ -571,10 +571,10 @@ in 是用于遍历联合类型的运算符。
 
 ```ts
 type MapType<T> = {
-  [Key in keyof T]: [T[Key], T[Key], T[Key]]
-}
+  [Key in keyof T]: [T[Key], T[Key], T[Key]];
+};
 
-type res = MapType<{ a: 1; b: 2 }> // type res = { a: [1, 1, 1]; b:[2, 2, 2]; }
+type res = MapType<{ a: 1; b: 2 }>; // type res = { a: [1, 1, 1]; b:[2, 2, 2]; }
 ```
 
 映射类型就相当于把一个集合映射到另一个集合，这是它名字的由来。
@@ -589,8 +589,8 @@ type MapType<T> = {
     T[Key],
     T[Key],
     T[Key],
-  ]
-}
+  ];
+};
 
 // type res = { aaa: [1, 1, 1]; bbb: [2, 2, 2]; }
 ```
@@ -610,7 +610,7 @@ any 类型与任何类型的交叉都是 any，也就是 1 & any 结果是 any�
 所以，可以这样写：
 
 ```ts
-type IsAny<T> = 'null' extends 'undefined' & T ? true : false
+type IsAny<T> = 'null' extends 'undefined' & T ? true : false;
 ```
 
 ### IsEqual
@@ -618,13 +618,14 @@ type IsAny<T> = 'null' extends 'undefined' & T ? true : false
 之前我们实现 IsEqual 是这样写的：
 
 ```ts
-type IsEqual<A, B> = (A extends B ? true : false) & (B extends A ? true : false)
+type IsEqual<A, B> = (A extends B ? true : false) &
+  (B extends A ? true : false);
 ```
 
 问题出在 any 的判断上：
 
 ```ts
-type IsEqualResult = IsEqual<'aaa', any>
+type IsEqualResult = IsEqual<'aaa', any>;
 // type IsEqualResult = false
 ```
 
@@ -637,7 +638,7 @@ type IsEqual<A, B> = (<T>() => T extends A ? 1 : 2) extends <T>() => T extends B
   ? 1
   : 2
   ? true
-  : false
+  : false;
 ```
 
 这样就能正常判断了：
@@ -658,7 +659,7 @@ type IsEqual<A, B> = (<T>() => T extends A ? 1 : 2) extends <T>() => T extends B
 还记得怎么判断 union 类型么？要根据它遇到条件类型时会分散成单个传入做计算的特性：
 
 ```ts
-type IsUnion<A, B = A> = A extends A ? ([B] extends [A] ? false : true) : never
+type IsUnion<A, B = A> = A extends A ? ([B] extends [A] ? false : true) : never;
 ```
 
 ### IsNever
@@ -666,35 +667,35 @@ type IsUnion<A, B = A> = A extends A ? ([B] extends [A] ? false : true) : never
 never 在条件类型中也比较特殊，如果条件类型左边是类型参数，并且传入的是 never，那么直接返回 never：
 
 ```ts
-type TestNever<T> = T extends number ? 1 : 2
+type TestNever<T> = T extends number ? 1 : 2;
 ```
 
 当 T 为 never 时：
 
 ```ts
-type TestNeverResult = TestNever<never>
+type TestNeverResult = TestNever<never>;
 // type TestNeverResult = never
 ```
 
 所以，要判断 never 类型，就不能直接 T extends number，可以这样写：
 
 ```ts
-type IsNever<T> = [T] extends [never] ? true : false
+type IsNever<T> = [T] extends [never] ? true : false;
 ```
 
 这样就能正常判断 never 类型了：
 
 ```ts
-type TestNeverResult = IsNever<never>
+type TestNeverResult = IsNever<never>;
 // type TestNeverResult = true
 ```
 
 除此以外，any 在条件类型中也比较特殊，如果类型参数为 any，会直接返回 trueType 和 falseType 的合并：
 
 ```ts
-type TestAny<T> = T extends number ? 1 : 2
+type TestAny<T> = T extends number ? 1 : 2;
 
-type TestAnyResult = TestAny<any>
+type TestAnyResult = TestAny<any>;
 // type TestAnyResult = 1 | 2
 ```
 
@@ -729,7 +730,7 @@ type UnionToIntersection<U> = (
   U extends U ? (x: U) => unknown : never
 ) extends (x: infer R) => unknown
   ? R
-  : never
+  : never;
 ```
 
 类型参数 U 是要转换的联合类型。
@@ -752,8 +753,8 @@ U extends U 是为了触发联合类型的 distributive 的性质，让每个类
 
 ```ts
 type GetOptional<Obj extends Record<string, any>> = {
-  [Key in keyof Obj as {} extends Pick<Obj, Key> ? Key : never]: Obj[Key]
-}
+  [Key in keyof Obj as {} extends Pick<Obj, Key> ? Key : never]: Obj[Key];
+};
 ```
 
 类型参数 Obj 为待处理的索引类型，类型约束为索引为 string、值为任意类型的索引类型 Record<string, any>。
@@ -765,7 +766,7 @@ type GetOptional<Obj extends Record<string, any>> = {
 这里的 Pick 是 ts 提供的内置高级类型，就是取出某个 Key 构造新的索引类型：
 
 ```ts
-type Pick<T, K extends keyof T> = { [P in K]: T[P] }
+type Pick<T, K extends keyof T> = { [P in K]: T[P] };
 ```
 
 比如单独取出 age 构造的新的索引类型是这样的：

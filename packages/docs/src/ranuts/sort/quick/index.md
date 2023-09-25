@@ -57,8 +57,8 @@ const combine = (list: number[], left: number, right: number) => {
     combine(list, partitionIndex + 1, right)
     combine(list, left, partitionIndex - 1)
   }
-  return list
-}
+  return list;
+};
 /**
  * @description: 快速排序
  * @param {Array} list

@@ -1,23 +1,23 @@
-import type { IncomingMessage, ServerResponse } from 'node:http'
-import type { Context, MiddlewareFunction, Next } from '@/server/server'
+import type { IncomingMessage, ServerResponse } from 'node:http';
+import type { Context, MiddlewareFunction, Next } from '@/server/server';
 
 type ConnectMiddleware = (
   req: IncomingMessage,
   res: ServerResponse,
   next?: Function,
-) => void
+) => void;
 
-const noop = () => {}
+const noop = () => {};
 
-const PARAM_LENGTH = 3
+const PARAM_LENGTH = 3;
 
 function noCallbackHandler(
   ctx: Context,
   connectMiddleware: ConnectMiddleware,
   next: Next,
 ): Promise<void> {
-  connectMiddleware(ctx.req, ctx.res, noop)
-  return next()
+  connectMiddleware(ctx.req, ctx.res, noop);
+  return next();
 }
 
 function withCallbackHandler(
@@ -27,19 +27,19 @@ function withCallbackHandler(
 ): Promise<void> {
   return new Promise((resolve, reject) => {
     connectMiddleware(ctx.req, ctx.res, (err: Error) => {
-      err ? reject(err) : resolve(next())
-    })
-  })
+      err ? reject(err) : resolve(next());
+    });
+  });
 }
 
 function connect(connectMiddleware: ConnectMiddleware): MiddlewareFunction {
   const handler =
     connectMiddleware.length < PARAM_LENGTH
       ? noCallbackHandler
-      : withCallbackHandler
+      : withCallbackHandler;
   return function connect(ctx: Context, next: Next) {
-    return handler(ctx, connectMiddleware, next)
-  }
+    return handler(ctx, connectMiddleware, next);
+  };
 }
 
-export default connect
+export default connect;

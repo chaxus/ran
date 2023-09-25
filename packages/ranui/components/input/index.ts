@@ -1,4 +1,4 @@
-import { createCustomError, falseList, isDisabled } from '@/utils/index'
+import { createCustomError, falseList, isDisabled } from '@/utils/index';
 
 function Custom() {
   if (typeof window !== 'undefined' && !customElements.get('r-input')) {
@@ -12,28 +12,28 @@ function Custom() {
           'type',
           'icon',
           'status',
-        ]
+        ];
       }
-      _container: HTMLDivElement
-      _label: HTMLLabelElement | undefined
-      _input: HTMLInputElement
-      _icon: HTMLElement | undefined
+      _container: HTMLDivElement;
+      _label: HTMLLabelElement | undefined;
+      _input: HTMLInputElement;
+      _icon: HTMLElement | undefined;
       constructor() {
-        super()
-        const shadowRoot = this.attachShadow({ mode: 'closed' })
-        this._container = document.createElement('div')
-        this._container.setAttribute('class', 'input')
-        this._input = document.createElement('input')
-        this._input.setAttribute('class', 'input-main')
-        this._container.appendChild(this._input)
-        shadowRoot.appendChild(this._container)
+        super();
+        const shadowRoot = this.attachShadow({ mode: 'closed' });
+        this._container = document.createElement('div');
+        this._container.setAttribute('class', 'input');
+        this._input = document.createElement('input');
+        this._input.setAttribute('class', 'input-main');
+        this._container.appendChild(this._input);
+        shadowRoot.appendChild(this._container);
       }
       /**
        * @description: 获取input的值
        * @return {String}
        */
       get value() {
-        return this.getAttribute('value')
+        return this.getAttribute('value');
       }
       /**
        * @description: 设置input的值
@@ -41,11 +41,11 @@ function Custom() {
        */
       set value(value) {
         if (!isDisabled(this) && value) {
-          this.setAttribute('value', value)
-          this._container.setAttribute('value', value)
+          this.setAttribute('value', value);
+          this._container.setAttribute('value', value);
         } else {
-          this.removeAttribute('value')
-          this._container.removeAttribute('value')
+          this.removeAttribute('value');
+          this._container.removeAttribute('value');
         }
       }
       /**
@@ -53,7 +53,7 @@ function Custom() {
        * @return {String}
        */
       get placeholder() {
-        return this.getAttribute('placeholder')
+        return this.getAttribute('placeholder');
       }
       /**
        * @description: 设置input的占位字符
@@ -61,9 +61,9 @@ function Custom() {
        */
       set placeholder(value) {
         if (value) {
-          this.setAttribute('placeholder', value)
+          this.setAttribute('placeholder', value);
         } else {
-          this.removeAttribute('placeholder')
+          this.removeAttribute('placeholder');
         }
       }
       /**
@@ -71,7 +71,7 @@ function Custom() {
        * @return {String}
        */
       get required() {
-        return this.getAttribute('required')
+        return this.getAttribute('required');
       }
       /**
        * @description: 设置input是否为必选，除非设置成false，否则都是必填
@@ -79,9 +79,9 @@ function Custom() {
        */
       set required(value) {
         if (!value || value === 'false') {
-          this.removeAttribute('required')
+          this.removeAttribute('required');
         } else {
-          this.setAttribute('required', '')
+          this.setAttribute('required', '');
         }
       }
       /**
@@ -89,7 +89,7 @@ function Custom() {
        * @return {String | null}
        */
       get disabled() {
-        return isDisabled(this)
+        return isDisabled(this);
       }
       /**
        * @description: 设置input的disabled属性
@@ -97,43 +97,43 @@ function Custom() {
        */
       set disabled(value) {
         if (falseList.includes(value)) {
-          this.removeAttribute('disabled')
-          this._container.removeAttribute('disabled')
-          this._input.removeAttribute('disabled')
+          this.removeAttribute('disabled');
+          this._container.removeAttribute('disabled');
+          this._input.removeAttribute('disabled');
         } else {
-          this.setAttribute('disabled', '')
-          this._container.setAttribute('disabled', '')
-          this._input.setAttribute('disabled', '')
+          this.setAttribute('disabled', '');
+          this._container.setAttribute('disabled', '');
+          this._input.setAttribute('disabled', '');
         }
       }
       /**
        * @description: 获取类似于Metiral Design的输入体验。
        */
       get label() {
-        return this.getAttribute('label') || ''
+        return this.getAttribute('label') || '';
       }
       /**
        * @description: 设置类似于Metiral Design的输入体验。
        */
       set label(value: string) {
-        this.setAttribute('label', value)
+        this.setAttribute('label', value);
       }
       /**
        * @description: 获取input框的状态
        */
       get status() {
-        return this.getAttribute('status') || ''
+        return this.getAttribute('status') || '';
       }
       /**
        * @description: 设置input框的状态
        */
       set status(value: string) {
         if (value) {
-          this.setAttribute('status', value)
-          this._container.setAttribute('status', value)
+          this.setAttribute('status', value);
+          this._container.setAttribute('status', value);
         } else {
-          this.removeAttribute('status')
-          this._container.removeAttribute('status')
+          this.removeAttribute('status');
+          this._container.removeAttribute('status');
         }
       }
       /**
@@ -141,63 +141,63 @@ function Custom() {
        * @return {String}
        */
       get name() {
-        return this.getAttribute('name') || ''
+        return this.getAttribute('name') || '';
       }
       /**
        * @description: 设置name属性
        * @param {string} value
        */
       set name(value: string) {
-        this.setAttribute('name', value)
+        this.setAttribute('name', value);
       }
       /**
        * @description: 当input类型为number类型时，可以获取min属性
        * @return {String}
        */
       get min() {
-        return this.getAttribute('min') || ''
+        return this.getAttribute('min') || '';
       }
       /**
        * @description: 当input类型为number类型时，设置min属性
        * @param {string} value
        */
       set min(value: string) {
-        if (this.type === 'number') this.setAttribute('min', value)
+        if (this.type === 'number') this.setAttribute('min', value);
       }
       /**
        * @description: 当input类型为number类型时，可以获取max属性
        * @return {String}
        */
       get max() {
-        return this.getAttribute('max') || ''
+        return this.getAttribute('max') || '';
       }
       /**
        * @description: 当input类型为number类型时，设置max属性
        * @param {string} value
        */
       set max(value: string) {
-        if (this.type === 'number') this.setAttribute('max', value)
+        if (this.type === 'number') this.setAttribute('max', value);
       }
       /**
        * @description: 当input类型为number类型时，可以获取step属性
        * @return {String}
        */
       get step() {
-        return this.getAttribute('step') || ''
+        return this.getAttribute('step') || '';
       }
       /**
        * @description: 当input类型为number类型时，设置step属性
        * @param {string} value
        */
       set step(value: string) {
-        if (this.type === 'number') this.setAttribute('step', value)
+        if (this.type === 'number') this.setAttribute('step', value);
       }
       /**
        * @description: 获取一个icon
        * @return {String}
        */
       get icon() {
-        return this.getAttribute('icon')
+        return this.getAttribute('icon');
       }
       /**
        * @description: 设置icon来表示标识
@@ -205,9 +205,9 @@ function Custom() {
        */
       set icon(value) {
         if (value) {
-          this.setAttribute('icon', value)
+          this.setAttribute('icon', value);
         } else {
-          this.removeAttribute('icon')
+          this.removeAttribute('icon');
         }
       }
       /**
@@ -215,7 +215,7 @@ function Custom() {
        * @return {string|null}
        */
       get type() {
-        return this.getAttribute('type')
+        return this.getAttribute('type');
       }
       /**
        * @description: 设置input的类型
@@ -223,9 +223,9 @@ function Custom() {
        */
       set type(value) {
         if (value) {
-          this.setAttribute('type', value)
+          this.setAttribute('type', value);
         } else {
-          this.removeAttribute('type')
+          this.removeAttribute('type');
         }
       }
       /**
@@ -233,11 +233,11 @@ function Custom() {
        * @param {Event} event
        */
       customInput = (event: Event) => {
-        event.stopPropagation()
-        const target = event.target as HTMLInputElement
-        this.value = target ? target.value : ''
+        event.stopPropagation();
+        const target = event.target as HTMLInputElement;
+        this.value = target ? target.value : '';
         // 增加onchange事件
-        this.customChange()
+        this.customChange();
         // 默认input事件
         this.dispatchEvent(
           new CustomEvent('input', {
@@ -245,15 +245,15 @@ function Custom() {
               value: this.value,
             },
           }),
-        )
+        );
         this.dispatchEvent(
           new CustomEvent('Input', {
             detail: {
               value: this.value,
             },
           }),
-        )
-      }
+        );
+      };
       /**
        * @description: 增加change方法，同时兼容大小写的情况
        */
@@ -264,15 +264,15 @@ function Custom() {
               value: this.value,
             },
           }),
-        )
+        );
         this.dispatchEvent(
           new CustomEvent('Change', {
             detail: {
               value: this.value,
             },
           }),
-        )
-      }
+        );
+      };
       /**
        * @description: 监听placeholder属性函数
        * @param {string} name
@@ -281,9 +281,9 @@ function Custom() {
       listenPlaceholder(name: string, value: string) {
         if (name === 'placeholder' && this._input) {
           if (value != null) {
-            this._input.setAttribute('placeholder', value)
+            this._input.setAttribute('placeholder', value);
           } else {
-            this._input.removeAttribute('placeholder')
+            this._input.removeAttribute('placeholder');
           }
         }
       }
@@ -296,18 +296,18 @@ function Custom() {
         if (name === 'label' && this._input) {
           if (value != null) {
             if (this._label) {
-              this._label.innerHTML = value
+              this._label.innerHTML = value;
             } else {
-              this._label = document.createElement('label')
-              this._label.innerHTML = value
-              this._label.setAttribute('class', 'input-label')
-              this._container.appendChild(this._label)
+              this._label = document.createElement('label');
+              this._label.innerHTML = value;
+              this._label.setAttribute('class', 'input-label');
+              this._container.appendChild(this._label);
             }
           } else {
-            this._container.removeAttribute('label')
+            this._container.removeAttribute('label');
             if (this._label) {
-              this._container.removeChild(this._label)
-              this._label = undefined
+              this._container.removeChild(this._label);
+              this._label = undefined;
             }
           }
         }
@@ -320,12 +320,12 @@ function Custom() {
       listenType(name: string, value: string) {
         if (name === 'type' && this._input) {
           if (value) {
-            this._input.setAttribute('type', value)
+            this._input.setAttribute('type', value);
           } else {
-            this._input.removeAttribute('type')
-            this._input.removeAttribute('min')
-            this._input.removeAttribute('max')
-            this._input.removeAttribute('step')
+            this._input.removeAttribute('type');
+            this._input.removeAttribute('min');
+            this._input.removeAttribute('max');
+            this._input.removeAttribute('step');
           }
         }
       }
@@ -337,9 +337,9 @@ function Custom() {
       listenStatus(name: string, value: string) {
         if (name === 'status' && this._container) {
           if (value) {
-            this._container.setAttribute('status', value)
+            this._container.setAttribute('status', value);
           } else {
-            this._container.removeAttribute('status')
+            this._container.removeAttribute('status');
           }
         }
       }
@@ -351,10 +351,10 @@ function Custom() {
       listenDisabled(name: string, value: string) {
         if (name === 'disabled' && this._container) {
           if (falseList.includes(value)) {
-            this._container.removeAttribute('disabled')
+            this._container.removeAttribute('disabled');
           } else {
-            this._container.setAttribute('disabled', '')
-            this._input.setAttribute('disabled', '')
+            this._container.setAttribute('disabled', '');
+            this._input.setAttribute('disabled', '');
           }
         }
       }
@@ -365,9 +365,9 @@ function Custom() {
        */
       listenIcon(name: string, value: string, oldValue: string) {
         if (name === 'icon' && value && value !== oldValue) {
-          this.removeAttribute('label')
-          this.setAttribute('icon', value)
-          this.dealIcon()
+          this.removeAttribute('label');
+          this.setAttribute('icon', value);
+          this.dealIcon();
         }
       }
       /**
@@ -375,14 +375,14 @@ function Custom() {
        */
       dealIcon = () => {
         if (!this._icon) {
-          this._icon = document.createElement('r-icon')
-          const { width, height } = this._input.getBoundingClientRect()
-          const size = Math.min(width, height)
-          this._icon.setAttribute('size', `${size}`)
-          this._input.insertAdjacentElement('beforebegin', this._icon)
+          this._icon = document.createElement('r-icon');
+          const { width, height } = this._input.getBoundingClientRect();
+          const size = Math.min(width, height);
+          this._icon.setAttribute('size', `${size}`);
+          this._input.insertAdjacentElement('beforebegin', this._icon);
         }
-        this.icon && this._icon.setAttribute('name', this.icon)
-      }
+        this.icon && this._icon.setAttribute('name', this.icon);
+      };
       /**
        * @description: 聚合监听事件
        * @param {string} name
@@ -390,49 +390,49 @@ function Custom() {
        * @param {string} newValue
        */
       listenEvent(name: string, oldValue: string, newValue: string) {
-        this.listenPlaceholder(name, newValue)
-        this.listenLabel(name, newValue)
-        this.listenStatus(name, newValue)
-        this.listenDisabled(name, newValue)
-        this.listenIcon(name, newValue, oldValue)
+        this.listenPlaceholder(name, newValue);
+        this.listenLabel(name, newValue);
+        this.listenStatus(name, newValue);
+        this.listenDisabled(name, newValue);
+        this.listenIcon(name, newValue, oldValue);
       }
       connectedCallback() {
         // 如果一开始就设置了input的值，则初始化input的值
         if (this.value) {
-          this._input.value = this.value
-          this._container.setAttribute('value', this.value)
+          this._input.value = this.value;
+          this._container.setAttribute('value', this.value);
         }
         if (this.status) {
-          this._container.setAttribute('status', this.status)
+          this._container.setAttribute('status', this.status);
         }
         if (isDisabled(this)) {
-          this._container.setAttribute('disabled', '')
-          this._input.setAttribute('disabled', '')
+          this._container.setAttribute('disabled', '');
+          this._input.setAttribute('disabled', '');
         }
         if (this.type) {
-          this._input.setAttribute('type', this.type)
+          this._input.setAttribute('type', this.type);
         }
-        this._input.addEventListener('input', this.customInput)
+        this._input.addEventListener('input', this.customInput);
         if (document.readyState === 'complete') {
-          this.dealIcon()
+          this.dealIcon();
         }
       }
       disconnectCallback() {
-        this._input.removeEventListener('input', this.customInput)
+        this._input.removeEventListener('input', this.customInput);
       }
       attributeChangedCallback(
         name: string,
         oldValue: string,
         newValue: string,
       ) {
-        this.listenEvent(name, oldValue, newValue)
+        this.listenEvent(name, oldValue, newValue);
       }
     }
-    customElements.define('r-input', CustomElement)
-    return CustomElement
+    customElements.define('r-input', CustomElement);
+    return CustomElement;
   } else {
-    return createCustomError('document is undefined or r-input is exist')
+    return createCustomError('document is undefined or r-input is exist');
   }
 }
 
-export default Custom()
+export default Custom();

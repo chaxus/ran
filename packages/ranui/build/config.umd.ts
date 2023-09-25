@@ -1,6 +1,6 @@
-import { defineConfig } from 'vite'
-import { umd, viteConfig } from '../vite.config'
+import { defineConfig } from 'vite';
+import { umd, viteConfig } from '../vite.config';
 
-viteConfig.build = umd
+viteConfig.build = umd;
 
-export default defineConfig(viteConfig)
+export default defineConfig(viteConfig);

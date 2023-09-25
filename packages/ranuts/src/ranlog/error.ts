@@ -1,4 +1,4 @@
-import { Noop } from './utils'
+import { Noop } from './utils';
 
 export const handleError = (
   hooks: (error: Error | PromiseRejectionEvent | ErrorEvent) => void = Noop,
@@ -7,17 +7,17 @@ export const handleError = (
     window.addEventListener(
       'unhandledrejection',
       (error) => {
-        hooks(error)
+        hooks(error);
       },
       true,
-    )
+    );
     window.addEventListener(
       'error',
       (error) => {
-        hooks(error)
-        return false // 取消默认事件
+        hooks(error);
+        return false; // 取消默认事件
       },
       true,
-    ) // 捕获阶段
+    ); // 捕获阶段
   }
-}
+};

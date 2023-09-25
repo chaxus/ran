@@ -840,16 +840,16 @@ export const MimeType = new Map<string, string>([
   ['.manifest', 'text/cache-manifest'],
   ['.mf', 'text/cache-manifest'],
   ['.appcache', 'text/cache-manifest'],
-])
+]);
 
 export const setMime = (ext: string, mimeType: string): Map<string, string> => {
-  MimeType.set(ext, mimeType)
-  return MimeType
-}
+  MimeType.set(ext, mimeType);
+  return MimeType;
+};
 
 export function getMime(ext: string): string | undefined {
-  const tmp = ('' + ext).trim().toLowerCase()
-  let idx = tmp.lastIndexOf('.')
-  const suffix = !~idx ? tmp : tmp.substring(++idx)
-  return MimeType.get(`.${suffix}`) || MimeType.get(suffix)
+  const tmp = ('' + ext).trim().toLowerCase();
+  let idx = tmp.lastIndexOf('.');
+  const suffix = !~idx ? tmp : tmp.substring(++idx);
+  return MimeType.get(`.${suffix}`) || MimeType.get(suffix);
 }

@@ -24,6 +24,6 @@ const FMT: Record<string, Array<string>> = {
   bgMagenta: ['\x1b[45m', '\x1b[49m'],
   bgCyan: ['\x1b[46m', '\x1b[49m'],
   bgWhite: ['\x1b[47m', '\x1b[49m'],
-}
+};
 
-export default FMT
+export default FMT;

@@ -11,11 +11,11 @@ const randomArray = (
   max: number = min + 100,
 ): Array<number> => {
   if (min > max) {
-    throw new Error('max must be max min')
+    throw new Error('max must be max min');
   }
   return Array.from({ length }, (_) =>
     Math.floor(Math.random() * (max - min) + min),
-  )
-}
+  );
+};
 
-export default randomArray
+export default randomArray;

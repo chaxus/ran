@@ -1,18 +1,18 @@
-import fs from './fs'
+import fs from './fs';
 
 interface Options {
-  dirPath: string
-  ignores?: Array<string>
+  dirPath: string;
+  ignores?: Array<string>;
 }
 
 const readDir = (options: Options): Array<string> => {
-  const { dirPath } = options
+  const { dirPath } = options;
   try {
-    return fs.readdirSync(dirPath)
+    return fs.readdirSync(dirPath);
   } catch (error) {
-    console.log('readDir error', error)
-    throw error
+    console.log('readDir error', error);
+    throw error;
   }
-}
+};
 
-export default readDir
+export default readDir;

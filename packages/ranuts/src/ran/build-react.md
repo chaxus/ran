@@ -31,7 +31,7 @@ Didact.render(
     <h2 />
   </div>,
   container,
-)
+);
 ```
 
 在 render 函数中，我们创建了根 fiber，并且设置它作为 nextUnitOfWork。剩下的工作放在 performUnitOfWork 中。它将为每一个 fiber 做三件事情：
@@ -60,10 +60,10 @@ fiber 这种数据结构的目标之一是为了方便的查找下一个执行�
 
 ```js
 if (!fiber.dom) {
-  fiber.dom = createElement(fiber)
+  fiber.dom = createElement(fiber);
 }
 if (fiber.parent) {
-  fiber.parent.dom.appendChild(fiber.dom)
+  fiber.parent.dom.appendChild(fiber.dom);
 }
 ```
 
@@ -89,24 +89,24 @@ const elements = fiber.props.children
 然后将它们添加到 fiber 树中，作为子节点还是兄弟节点。区别在于是否是第一个子节点
 
 ```js
-let index = 0
-let prevSibling
+let index = 0;
+let prevSibling;
 while (index < elements.length) {
-  const element = elements[index]
+  const element = elements[index];
   const newFiber: Fiber = {
     type: element.type,
     props: element.props,
     parent: fiber,
-  }
+  };
   if (index === 0) {
-    fiber.child = newFiber
+    fiber.child = newFiber;
   } else {
     if (prevSibling) {
-      prevSibling.sibling = newFiber
+      prevSibling.sibling = newFiber;
     }
   }
-  prevSibling = newFiber
-  index++
+  prevSibling = newFiber;
+  index++;
 }
 ```
 
@@ -114,14 +114,14 @@ while (index < elements.length) {
 
 ```js
 if (fiber.child) {
-  return fiber.child
+  return fiber.child;
 }
-let nextFiber = fiber
+let nextFiber = fiber;
 while (nextFiber) {
   if (nextFiber.sibling) {
-    return nextFiber.sibling
+    return nextFiber.sibling;
   }
-  nextFiber = nextFiber.parent
+  nextFiber = nextFiber.parent;
 }
 ```
 
@@ -135,7 +135,7 @@ while (nextFiber) {
 
 ```js
 if (fiber.parent) {
-  fiber.parent.dom.appendChild(fiber.dom)
+  fiber.parent.dom.appendChild(fiber.dom);
 }
 ```
 
