@@ -7,7 +7,7 @@ class Heap {
     this.buildMaxHeap();
   }
   swap = (i: number, j: number) => {
-    if (i === j) return;
+    if (this.value[i] === this.value[j]) return;
     this.value[i] = this.value[i] ^ this.value[j];
     this.value[j] = this.value[i] ^ this.value[j];
     this.value[i] = this.value[i] ^ this.value[j];
@@ -28,7 +28,7 @@ class Heap {
     }
   };
   buildMaxHeap = () => {
-    for (let i = Math.floor(this.size / 2); i >= 0; i--) {
+    for (let i = this.size >> 1; i >= 0; i--) {
       this.heapHandler(i);
     }
     for (let i = this.size - 1; i >= 0; i--) {

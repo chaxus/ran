@@ -22,10 +22,10 @@ const combine = (left: number[], right: number[]) => {
  */
 const merge = (list: Array<number>): Array<number> => {
   const { length } = list;
-  if (length < 2) {
+  if (length < 1) {
     return list;
   }
-  const middle = Math.floor(length / 2);
+  const middle = length >> 1;
   const left = list.slice(0, middle);
   const right = list.slice(middle);
   return combine(merge(left), merge(right));

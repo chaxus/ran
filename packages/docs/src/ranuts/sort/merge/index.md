@@ -19,17 +19,17 @@ const combine = (left: Array<number>, right: Array<number>) => {
   const list: Array<number> = [];
   while (left.length > 0 && right.length > 0) {
     if (left[0] <= right[0]) {
-      list.push(left.shift() as number);
+      list.push(left.shift()!);
     } else {
-      list.push(right.shift() as number);
+      list.push(right.shift()!);
     }
   }
 
   while (left.length) {
-    list.push(left.shift() as number);
+    list.push(left.shift()!);
   }
   while (right.length) {
-    list.push(right.shift() as number);
+    list.push(right.shift()!);
   }
   return list;
 };
@@ -40,10 +40,10 @@ const combine = (left: Array<number>, right: Array<number>) => {
  */
 const merge = (list: Array<number>): Array<number> => {
   const { length } = list;
-  if (length < 2) {
+  if (length <= 1) {
     return list;
   }
-  const middle = Math.floor(length / 2);
+  const middle = length >> 1;
   const left = list.slice(0, middle);
   const right = list.slice(middle);
   return combine(merge(left), merge(right));
