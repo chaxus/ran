@@ -78,8 +78,4 @@ export default defineConfig({
     url: DEV_SERVER,
     reuseExistingServer: !process.env.CI,
   },
-<<<<<<< HEAD
-})
-=======
 });
->>>>>>> main

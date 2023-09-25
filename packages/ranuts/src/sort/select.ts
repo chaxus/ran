@@ -3,19 +3,19 @@
  * @param {Array} list
  * @return {Array}
  */
-const select = (list: number[]):number[] => {
-  const size = list.length
+const select = (list: number[]): number[] => {
+  const size = list.length;
   for (let i = 0; i < size; i++) {
-    let minIndex = i
+    let minIndex = i;
     for (let j = i + 1; j < size; j++) {
       if (list[minIndex] >= list[j]) {
-        minIndex = j
+        minIndex = j;
       }
     }
     if (list[i] !== list[minIndex]) {
-      list[i] = list[i] ^ list[minIndex]
-      list[minIndex] = list[i] ^ list[minIndex]
-      list[i] = list[i] ^ list[minIndex]
+      list[i] = list[i] ^ list[minIndex];
+      list[minIndex] = list[i] ^ list[minIndex];
+      list[i] = list[i] ^ list[minIndex];
     }
   }
   return list;

@@ -19,26 +19,6 @@ function Component() {
           jsonData[key] =
             formData.getAll(key).length > 1
               ? formData.getAll(key)
-<<<<<<< HEAD
-              : formData.get(key)
-        }
-      })
-      this._form.addEventListener('submit', () => {
-        this.value = JSON.stringify(jsonData)
-      })
-      shadowRoot.appendChild(this._form)
-    }
-    get value() {
-      return this.getAttribute('value')
-    }
-    set value(value) {
-      if (value != null) this.setAttribute('value', value)
-    }
-  }
-  window.customElements.define('r-form', CustomElement)
-}
-export default Component()
-=======
               : formData.get(key);
         }
       });
@@ -57,4 +37,3 @@ export default Component()
   window.customElements.define('r-form', CustomElement);
 }
 export default Component();
->>>>>>> main

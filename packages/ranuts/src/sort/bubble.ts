@@ -4,13 +4,13 @@
  * @return {Array}
  */
 const bubble = (list: number[]): number[] => {
-  const size = list.length
+  const size = list.length;
   for (let i = 0; i < size; i++) {
     for (let j = 0; j < size; j++) {
       if (list[i] < list[j]) {
-        list[i] = list[i] ^ list[j]
-        list[j] = list[i] ^ list[j]
-        list[i] = list[i] ^ list[j]
+        list[i] = list[i] ^ list[j];
+        list[j] = list[i] ^ list[j];
+        list[i] = list[i] ^ list[j];
       }
     }
   }

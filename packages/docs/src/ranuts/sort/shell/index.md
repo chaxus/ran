@@ -22,17 +22,17 @@
  * @param {Array} list
  * @return {Array}
  */
-const shell = (list: number[]):number[] => {
-  const size = list.length
+const shell = (list: number[]): number[] => {
+  const size = list.length;
   for (let gap = size >> 1; gap > 0; gap >>= 1) {
     for (let i = gap; i < size; i += gap) {
-      const current = list[i]
-      let preIndex = i - gap
+      const current = list[i];
+      let preIndex = i - gap;
       while (preIndex >= 0 && list[preIndex] > current) {
-        list[preIndex + gap] = list[preIndex]
-        preIndex -= gap
+        list[preIndex + gap] = list[preIndex];
+        preIndex -= gap;
       }
-      list[preIndex + gap] = current
+      list[preIndex + gap] = current;
     }
   }
   return list;

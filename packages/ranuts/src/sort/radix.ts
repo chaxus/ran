@@ -1,4 +1,4 @@
-import count from '@/sort/count'
+import count from '@/sort/count';
 
 const getMax = (list: Array<number>) => {
   let max = list[0];
