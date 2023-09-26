@@ -1,5 +1,6 @@
 import reactify from '@/utils/reactify';
 import 'ranui/preview';
+import 'ranui/style'
 
 interface RPreview {
   src?: string | Blob | ArrayBuffer;

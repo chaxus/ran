@@ -1,4 +1,4 @@
-import * as d3 from './d3'
+import d3 from './d3.js'
 // Create the stub object
 const dimple = {
   version: '2.2.0',

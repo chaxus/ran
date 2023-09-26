@@ -61,7 +61,7 @@ export const viteConfig: UserConfig = {
       '@/assets': resolve(__dirname, 'assets/'),
       '@/utils': resolve(__dirname, 'utils/'),
     },
-    extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json'],
+    extensions: ['.mjs', '.js', '.cjs', '.ts', '.jsx', '.tsx', '.json'],
   },
   css: {
     preprocessorOptions: {

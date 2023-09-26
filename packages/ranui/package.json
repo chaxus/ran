@@ -1,6 +1,6 @@
 {
   "name": "ranui",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "UI Component library based on `Web Component`",
   "main": "dist/umd/index.umd.cjs",
   "module": "dist/index.js",

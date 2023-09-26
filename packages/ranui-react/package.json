@@ -53,13 +53,14 @@
     "@types/react": "^18.2.22",
     "prettier": "^2.8.1",
     "ranuts": "workspace:0.1.0-alpha.7",
+    "react-dom": "^18.2.0",
     "tsx": "^3.12.7",
     "vite": "^4.4.9",
     "vite-plugin-dts": "^3.5.3"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^4.0.4",
-    "ranui": "workspace:^0.1.5",
+    "ranui": "workspace:^0.1.6",
     "react": "^18.2.0"
   }
 }

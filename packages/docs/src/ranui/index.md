@@ -291,7 +291,8 @@ import 'ranui';
 ## Compatibility 兼容性
 
 - 不支持 `IE`，其他均有较好支持
-  ![](../../assets/ranui/customElements.png)
+
+![](../../assets/ranui/customElements.png)
 
 ## Contributors 贡献者
 
@@ -317,6 +318,6 @@ import 'ranui';
 
 ## 协议和标准
 
-1.  [RFCs](https://www.rfc-editor.org/)
-2.  [ECMA](https://www.ecma-international.org/)
-3.  [w3c](https://www.w3.org/)
+1. [RFCs](https://www.rfc-editor.org/)
+2. [ECMA](https://www.ecma-international.org/)
+3. [w3c](https://www.w3.org/)
