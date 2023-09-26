@@ -1,24 +1,25 @@
 class Heap {
-  arr: Array<number>;
+  value: Array<number>;
   size: number;
-  constructor(arr: Array<number>) {
-    this.arr = arr;
+  constructor(arr: Array<number> = []) {
+    this.value = [...arr];
     this.size = arr.length;
     this.buildMaxHeap();
   }
   swap = (i: number, j: number) => {
-    this.arr[i] = this.arr[i] ^ this.arr[j];
-    this.arr[j] = this.arr[i] ^ this.arr[j];
-    this.arr[i] = this.arr[i] ^ this.arr[j];
+    if (this.value[i] === this.value[j]) return;
+    this.value[i] = this.value[i] ^ this.value[j];
+    this.value[j] = this.value[i] ^ this.value[j];
+    this.value[i] = this.value[i] ^ this.value[j];
   };
   heapHandler = (i: number) => {
     const left = 2 * i + 1;
     const right = 2 * i + 2;
     let largest = i;
-    if (left < this.size && this.arr[left] > this.arr[largest]) {
+    if (left < this.size && this.value[left] > this.value[largest]) {
       largest = left;
     }
-    if (right < this.size && this.arr[right] > this.arr[largest]) {
+    if (right < this.size && this.value[right] > this.value[largest]) {
       largest = right;
     }
     if (largest !== i) {
@@ -27,7 +28,7 @@ class Heap {
     }
   };
   buildMaxHeap = () => {
-    for (let i = Math.floor(this.size / 2); i >= 0; i--) {
+    for (let i = this.size >> 1; i >= 0; i--) {
       this.heapHandler(i);
     }
     for (let i = this.size - 1; i >= 0; i--) {
@@ -44,8 +45,8 @@ class Heap {
  * @return {Array}
  */
 const heap = (list: Array<number>): Array<number> => {
-  const { arr } = new Heap(list);
-  return arr;
+  const { value } = new Heap(list);
+  return value;
 };
 
 export default heap;

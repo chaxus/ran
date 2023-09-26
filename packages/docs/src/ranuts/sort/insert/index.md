@@ -18,11 +18,11 @@
 ## 代码演示
 
 ```ts
-const insert = (list: Array<string>): Array<string> => {
-  const { length } = list;
-  for (let i = 1; i < length; i++) {
-    let preIndex = i - 1;
+const insert = (list: number[]): number[] => {
+  const size = list.length;
+  for (let i = 1; i < size; i++) {
     const current = list[i];
+    let preIndex = i - 1;
     while (preIndex >= 0 && list[preIndex] > current) {
       list[preIndex + 1] = list[preIndex];
       preIndex--;

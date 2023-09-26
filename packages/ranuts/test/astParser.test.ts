@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import type { MemberExpression, Program } from '../src/astParser/nodeTypes';
-import { NodeType, Tokenizer, parse } from '../src/astParser';
+import type { MemberExpression, Program } from '@/astParser/nodeTypes';
+import { NodeType, Tokenizer, parse } from '@/astParser';
 
 describe('astParser', () => {
   /**

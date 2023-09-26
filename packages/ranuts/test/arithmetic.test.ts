@@ -4,7 +4,7 @@ import { MinHeap } from '../src/arithmetic/index';
 
 describe('Heap', () => {
   it('Heap sort', () => {
-    const list = randomArray(20);
+    const list = randomArray();
     const { value } = new MinHeap(list);
     expect(value).toEqual([...list].sort((a, b) => a - b));
   });

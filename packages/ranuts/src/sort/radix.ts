@@ -1,4 +1,5 @@
 import count from '@/sort/count';
+
 const getMax = (list: Array<number>) => {
   let max = list[0];
   for (let i = 0; i < list.length; i++) {

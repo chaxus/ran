@@ -1,6 +1,6 @@
-const getMax = (list: Array<number>) => {
+const getMax = (list: number[]) => {
   let max = list[0];
-  for (let i = 0; i < list.length; i++) {
+  for (let i = 1; i < list.length; i++) {
     if (max < list[i]) {
       max = list[i];
     }
@@ -13,24 +13,25 @@ const getMax = (list: Array<number>) => {
  * @param {Array<number>} list
  * @return {Array<number>}
  */
-const count = (list: Array<number>, max?: number): Array<number> => {
-  if (list.length === 0) return list;
-  if (!max) max = getMax(list);
-  const countList = new Array(max + 1);
-  for (let i = 0; i < list.length; i++) {
-    if (!countList[list[i]]) {
-      countList[list[i]] = 0;
+const count = (list: number[]): number[] => {
+  if (list.length <= 1) return list;
+  const max = getMax(list);
+  const countList = new Array(max + 1).fill(0);
+  list.forEach((item) => {
+    if (!countList[item]) {
+      countList[item] = 1;
+    } else {
+      countList[item]++;
     }
-    countList[list[i]]++;
-  }
-  let startIndex = 0;
+  });
+  const result = [];
   for (let i = 0; i < countList.length; i++) {
-    while (countList[i] > 0) {
-      list[startIndex++] = i;
+    while (countList[i]) {
+      result.push(i);
       countList[i]--;
     }
   }
-  return list;
+  return result;
 };
 
 export default count;

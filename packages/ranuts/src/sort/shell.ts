@@ -3,17 +3,17 @@
  * @param {Array} list
  * @return {Array}
  */
-const shell = (list: Array<number>): Array<number> => {
-  const { length } = list;
-  for (let gap = Math.floor(length / 2); gap > 0; gap = Math.floor(gap / 2)) {
-    for (let i = gap; i < length; i++) {
-      let j = i;
+const shell = (list: number[]): number[] => {
+  const size = list.length;
+  for (let gap = size >> 1; gap > 0; gap >>= 1) {
+    for (let i = gap; i < size; i += gap) {
       const current = list[i];
-      while (j - gap >= 0 && current < list[j - gap]) {
-        list[j] = list[j - gap];
-        j = j - gap;
+      let preIndex = i - gap;
+      while (preIndex >= 0 && list[preIndex] > current) {
+        list[preIndex + gap] = list[preIndex];
+        preIndex -= gap;
       }
-      list[j] = current;
+      list[preIndex + gap] = current;
     }
   }
   return list;

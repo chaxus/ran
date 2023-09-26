@@ -1,8 +1,8 @@
 /*
  * @Author: chaxus nouo18@163.com
  * @Date: 2023-09-14 21:21:31
- * @LastEditors: chaxus nouo18@163.com
- * @LastEditTime: 2023-09-23 11:01:00
+ * @LastEditors: ran
+ * @LastEditTime: 2023-09-25 16:40:33
  * @FilePath: /ran/packages/ranuts/src/arithmetic/index.ts
  * @Description: 字符串 string
  * @Description: 链表

@@ -33,8 +33,5 @@
     "prettier": "^2.8.1",
     "terser": "^5.15.0",
     "typescript": "^5.2.2"
-  },
-  "dependencies": {
-    "tsup": "^7.2.0"
   }
 }
