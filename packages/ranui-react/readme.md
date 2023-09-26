@@ -47,7 +47,7 @@ const App = () => {
   const previewRef = useRef<Element>();
 
   const buttonClick = () => {
-      console.log('button click');
+    console.log('button click');
   };
 
   const uploadFile = () => {

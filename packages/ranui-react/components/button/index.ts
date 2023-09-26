@@ -6,6 +6,6 @@ interface RButton {
   onClick?: React.MouseEventHandler<HTMLDivElement> | undefined;
 }
 
-const Button = reactify('r-button')
+const Button = reactify('r-button');
 
 export default Button;

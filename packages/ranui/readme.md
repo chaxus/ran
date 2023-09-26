@@ -100,7 +100,6 @@ In react, it is recommended to use [@ranui/react](https://www.npmjs.com/package/
 However, `ranui` can still be used in any `js` or `ts` framework.
 
 ```jsx
-
 import 'ranui';
 
 const App = () => {
