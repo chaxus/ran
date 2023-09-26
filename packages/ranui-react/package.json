@@ -33,7 +33,12 @@
     "components",
     "ui",
     "design",
-    "react"
+    "react",
+    "ranui",
+    "@ranui/react",
+    "web-components",
+    "web components",
+    "webComponents"
   ],
   "publishConfig": {
     "access": "public"

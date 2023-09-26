@@ -32,7 +32,12 @@
     "component",
     "components",
     "ui",
-    "design"
+    "design",
+    "web-components",
+    "web components",
+    "webComponents",
+    "ranui",
+    "@ranui/react"
   ],
   "exports": {
     ".": {
