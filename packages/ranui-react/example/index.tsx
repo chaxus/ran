@@ -1,4 +1,4 @@
-import React, { createElement, useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Button, Preview, Radar, Tab, TabPane, message } from '../index';
 import './index.less';
