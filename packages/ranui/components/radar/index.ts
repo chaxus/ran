@@ -192,9 +192,9 @@ function Custom() {
           const y = this.mCenter + this.mRadius * Math.cos(this.mAngle * i);
           const backgroundColor =
             this.mData[i]?.backgroundColor || BACKGROUND_COLOR;
-          const fontColor = this.mData[i].fontColor || FONT_COLOR;
-          const fontFamily = this.mData[i].fontFamily || FONT_FAMILY;
-          const fontSize = this.mData[i].fontSize || defaultFontSize;
+          const fontColor = this.mData[i]?.fontColor || FONT_COLOR;
+          const fontFamily = this.mData[i]?.fontFamily || FONT_FAMILY;
+          const fontSize = this.mData[i]?.fontSize || defaultFontSize;
           ctx.font = `${fontSize}px ${fontFamily}`;
           if (this.mAngle * i >= 0 && this.mAngle * i < Math.PI / 2) {
             this.drawButton(
