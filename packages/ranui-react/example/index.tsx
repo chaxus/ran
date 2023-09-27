@@ -3,10 +3,9 @@ import { createRoot } from 'react-dom/client';
 import { Button, Input, Preview, Radar, Tab, TabPane, message } from '../index';
 import './index.less';
 
-
-
 const App = () => {
   const previewRef = useRef<Element>();
+
   const uploadFile = () => {
     const preview: Element | undefined = previewRef.current;
     if (!preview) return message.warning('previewRef.current is undefined');
@@ -27,7 +26,7 @@ const App = () => {
     console.log('fsdafdas');
   };
   const changeInput = (e) => {
-    console.log('input--->',e);
+    console.log('input--->', e);
   };
   // const abilitys =
   //   '[{"abilityName":"生命","scoreRate":"10","backgroundColor":"red","fontSize":"30","fontColor":"blue"},{"abilityName":"攻击","scoreRate":"90"},{"abilityName":"防御","scoreRate":"20"},{"abilityName":"元素精通","scoreRate":"50"},{"abilityName":"暴击率","scoreRate":"80"},{"abilityName":"暴击伤害","scoreRate":"50"}]';
@@ -68,9 +67,9 @@ const App = () => {
       </Button>
       <Preview ref={previewRef}></Preview>
       <h1>Radar</h1>
-      <Radar className="radar" abilitys={JSON.stringify(abilitys)}></Radar>
+      <Radar className="radar" abilitys={abilitys}></Radar>
       <h1>Input</h1>
-      <Input onChange={changeInput}/>
+      <Input className="input" onChange={changeInput} />
     </>
   );
 };

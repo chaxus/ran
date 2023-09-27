@@ -54,7 +54,12 @@ function Custom() {
       get abilitys() {
         const item = this.getAttribute('abilitys');
         if (typeof item === 'string') {
-          return JSON.parse(item);
+          try {
+            const result = JSON.parse(item);
+            return result;
+          } catch (error) {
+            return item;
+          }
         }
         return item;
       }

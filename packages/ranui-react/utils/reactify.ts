@@ -3,37 +3,57 @@
  * Change to Adaptive ranui
  * */
 import { Component, createElement, createRef, forwardRef } from 'react';
-import type { ForwardRefExoticComponent, RefAttributes } from 'react';
+import type {
+  DetailedHTMLProps,
+  ForwardRefExoticComponent,
+  ForwardedRef,
+  HTMLAttributes,
+  MutableRefObject,
+  ReactNode,
+  RefAttributes,
+  RefObject,
+} from 'react';
 
-type Props = React.DetailedHTMLProps<
-  React.HTMLAttributes<HTMLElement>,
-  HTMLElement
->;
-const reactifyWebComponent = (
+interface InnerRef {
+  innerRef:
+    | RefObject<Element & Record<string, unknown>>
+    | MutableRefObject<Element & Record<string, unknown>>;
+}
+
+type Props = DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> &
+  InnerRef;
+
+const reactifyWebComponent = <T = unknown>(
   WC: string,
-): ForwardRefExoticComponent<Omit<any, 'ref'> & RefAttributes<unknown>> => {
+): ForwardRefExoticComponent<RefAttributes<T>> => {
   class Reactified extends Component<Props> {
-    eventHandlers: any[];
+    eventHandlers: Array<[string, EventListenerOrEventListenerObject]>;
     ref;
-    constructor(props: any) {
+    constructor(props: Props) {
       super(props);
       this.eventHandlers = [];
       const { innerRef } = props;
       this.ref = innerRef || createRef();
     }
 
-    setEvent(event: string, val: Function) {
+    setEvent(event: string, val: EventListenerOrEventListenerObject) {
       this.eventHandlers.push([event, val]);
-      this.ref.current.addEventListener(event, val);
+      this.ref.current?.addEventListener(event, val);
     }
 
     setProperty(prop: string, val: any) {
-      this.ref.current[prop] = val;
+      if (this.ref.current) {
+        this.ref.current[prop] = val;
+      }
     }
 
     setAttribute(prop: string, val: string | boolean | number) {
-      if (val === false) return this.ref.current.removeAttribute(prop);
-      this.ref.current.setAttribute(prop, val.toString());
+      if (val === false) return this.ref.current?.removeAttribute(prop);
+      if (typeof val === 'string') {
+        this.ref.current?.setAttribute(prop, val);
+      } else {
+        this.ref.current?.setAttribute(prop, JSON.stringify(val));
+      }
     }
 
     update() {
@@ -45,8 +65,8 @@ const reactifyWebComponent = (
         // We haven't forced the type, so determine the correct typing and
         // assign the value to the right place
         if (prop === 'children') return undefined;
-        if (prop.toLowerCase() === 'classname') {
-          return (this.ref.current.className = val as string);
+        if (prop.toLowerCase() === 'classname' && this.ref.current) {
+          return (this.ref.current.className = val);
         }
         const valTypeList = ['string', 'number', 'boolean'];
         if (valTypeList.includes(typeof val)) {
@@ -78,7 +98,7 @@ const reactifyWebComponent = (
 
     clearEventHandlers() {
       this.eventHandlers.forEach(([event, handler]) => {
-        this.ref.current.removeEventListener(event, handler);
+        this.ref.current?.removeEventListener(event, handler);
       });
       this.eventHandlers = [];
     }
@@ -93,9 +113,11 @@ const reactifyWebComponent = (
     }
   }
 
-  return forwardRef((props: any, ref: any) => {
-    return createElement(Reactified, { ...props, innerRef: ref });
-  });
+  return forwardRef(
+    (props: RefAttributes<T>, ref: ForwardedRef<T>): ReactNode => {
+      return createElement<any>(Reactified, { ...props, innerRef: ref });
+    },
+  );
 };
 
 export default reactifyWebComponent;

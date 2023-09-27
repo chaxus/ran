@@ -51,7 +51,7 @@ const App = () => {
   };
 
   const changeInput = (e) => {
-    console.log('input--->',e);
+    console.log('input--->', e);
   };
 
   const uploadFile = () => {
@@ -109,9 +109,9 @@ const App = () => {
       </Button>
       <Preview ref={previewRef}></Preview>
       <h1>Radar</h1>
-      <Radar className="radar" abilitys={JSON.stringify(abilitys)}></Radar>
+      <Radar className="radar" abilitys={abilitys}></Radar>
       <h1>Input</h1>
-      <Input onChange={changeInput}/>
+      <Input onChange={changeInput} />
     </>
   );
 };
@@ -122,7 +122,6 @@ const App = () => {
 <a href="https://github.com/chaxus/ran/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=chaxus/ran" />
 </a>
-
 
 ## Meta
 
