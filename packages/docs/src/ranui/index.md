@@ -260,7 +260,7 @@ import 'ranui';
 
 ## Event 事件
 
-- `react`环境
+- `react`
 
 [@ranui/react](https://www.npmjs.com/package/@ranui/react) 是由`react`高阶函数封装[ranui](https://www.npmjs.com/package/ranui)而成，`Event` 事件遵循`react`事件规范。跟`W3C`标准略有不同。
 
