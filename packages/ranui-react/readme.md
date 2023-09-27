@@ -46,8 +46,12 @@ import { Button, Preview, Radar, Tab, TabPane, message } from '@ranui/react';
 const App = () => {
   const previewRef = useRef<Element>();
 
-  const buttonClick = () => {
+  const clickButton = () => {
     console.log('button click');
+  };
+
+  const changeInput = (e) => {
+    console.log('input--->',e);
   };
 
   const uploadFile = () => {
@@ -85,7 +89,7 @@ const App = () => {
   return (
     <>
       <h1>Button</h1>
-      <Button onClick={buttonClick}>this is button</Button>
+      <Button onClick={clickButton}>this is button</Button>
       <Button effect={false}>effect</Button>
       <Button icon="home">home icon</Button>
       <Button type="primary">this is button</Button>
@@ -106,6 +110,8 @@ const App = () => {
       <Preview ref={previewRef}></Preview>
       <h1>Radar</h1>
       <Radar className="radar" abilitys={JSON.stringify(abilitys)}></Radar>
+      <h1>Input</h1>
+      <Input onChange={changeInput}/>
     </>
   );
 };
