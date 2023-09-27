@@ -48,7 +48,6 @@ const reactifyWebComponent = <T = unknown>(
     }
 
     setAttribute(prop: string, val: string | boolean | number) {
-      if (val === false) return this.ref.current?.removeAttribute(prop);
       if (typeof val === 'string') {
         this.ref.current?.setAttribute(prop, val);
       } else {

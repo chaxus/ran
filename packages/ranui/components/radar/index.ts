@@ -191,7 +191,7 @@ function Custom() {
           const x = this.mCenter + this.mRadius * Math.sin(this.mAngle * i);
           const y = this.mCenter + this.mRadius * Math.cos(this.mAngle * i);
           const backgroundColor =
-            this.mData[i].backgroundColor || BACKGROUND_COLOR;
+            this.mData[i]?.backgroundColor || BACKGROUND_COLOR;
           const fontColor = this.mData[i].fontColor || FONT_COLOR;
           const fontFamily = this.mData[i].fontFamily || FONT_FAMILY;
           const fontSize = this.mData[i].fontSize || defaultFontSize;
