@@ -55,6 +55,12 @@ document.body.appendChild(Button);
 
 ### 3.`jsx`
 
+由于`react`有合成事件，为了更加方便的使用，通过`react`高阶组件进行封装`ranui`，形成了[@ranui/react](https://www.npmjs.com/package/@ranui/react)
+
+在`react`中，更建议使用[@ranui/react](https://www.npmjs.com/package/@ranui/react)
+
+然而，`ranui`仍然可以在任何`js`或者`ts`框架中使用。
+
 ```jsx
 import 'ranui';
 const App = () => {
@@ -78,6 +84,12 @@ import 'ranui';
 ```
 
 ### 5.`tsx`
+
+由于`react`有合成事件，为了更加方便的使用，通过`react`高阶组件进行封装`ranui`，形成了[@ranui/react](https://www.npmjs.com/package/@ranui/react)
+
+在`react`中，更建议使用[@ranui/react](https://www.npmjs.com/package/@ranui/react)
+
+然而，`ranui`仍然可以在任何`js`或者`ts`框架中使用。
 
 ```tsx
 // react 18
@@ -291,7 +303,8 @@ import 'ranui';
 ## Compatibility 兼容性
 
 - 不支持 `IE`，其他均有较好支持
-  ![](../../assets/ranui/customElements.png)
+
+![](../../assets/ranui/customElements.png)
 
 ## Contributors 贡献者
 
@@ -317,6 +330,6 @@ import 'ranui';
 
 ## 协议和标准
 
-1.  [RFCs](https://www.rfc-editor.org/)
-2.  [ECMA](https://www.ecma-international.org/)
-3.  [w3c](https://www.w3.org/)
+1. [RFCs](https://www.rfc-editor.org/)
+2. [ECMA](https://www.ecma-international.org/)
+3. [w3c](https://www.w3.org/)

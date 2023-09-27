@@ -15,6 +15,7 @@
     "useUnknownInCatchVariables": false,
     "inlineSourceMap": true,
     "baseUrl": ".",
+    "jsx": "react",
     "experimentalDecorators": true,
     "paths": {
       "@/components/*": ["components/*"],

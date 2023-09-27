@@ -29,6 +29,7 @@
     "tailwindcss",
     "vitepress",
     "vnode",
-    "vnodes"
+    "vnodes",
+    "xlabels"
   ]
 }

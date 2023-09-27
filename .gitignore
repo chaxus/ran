@@ -7,6 +7,7 @@ dist
 package-lock.json
 pnpm-lock.yaml
 npminstall-debug.log
+cache
 # vite
 vite.config.ts.timestamp*
 config.ts.timestamp*

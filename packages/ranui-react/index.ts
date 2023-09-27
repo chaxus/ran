@@ -1,11 +1,25 @@
-export * as reactify from '@/utils/reactify';
-export * as Button from '@/components/button';
-export * as Icon from '@/components/icon';
-export * as Image from '@/components/image';
-export * as Input from '@/components/input';
-export * as message from '@/components/message';
-export * as Preview from '@/components/preview';
-export * as Skeleton from '@/components/skeleton';
-export * as Tabpane from '@/components/tabpane';
-export * as Tab from '@/components/tab';
-export * as Radar from '@/components/radar';
+import Button from '@/components/button';
+import Radar from '@/components/radar';
+import Tab from '@/components/tab';
+import TabPane from '@/components/tabpane';
+import Skeleton from '@/components/skeleton';
+import Preview from '@/components/preview';
+import message from '@/components/message';
+import Input from '@/components/input';
+import Image from '@/components/image';
+import Icon from '@/components/icon';
+import reactify from '@/utils/reactify';
+
+export {
+  Button,
+  Radar,
+  Tab,
+  TabPane,
+  Skeleton,
+  Preview,
+  message,
+  Input,
+  Image,
+  Icon,
+  reactify,
+};

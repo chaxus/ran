@@ -5,5 +5,5 @@ import './styles/vars.less';
 
 export default {
   ...DefaultTheme,
-  enhanceApp({ app }) {},
+  enhanceApp({ app, router, siteData }) {},
 };

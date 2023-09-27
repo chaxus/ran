@@ -75,22 +75,29 @@
   &(:active) .btn::before {
     opacity: 0.2;
   }
-  &(:not([disabled],[effect]))::after {
-    content: '';
-    display: block;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    left: @clickX;
-    top: @clickY;
-    pointer-events: none;
-    background-image: radial-gradient(circle, #1890ff 10%, transparent 10.01%);
-    background-repeat: no-repeat;
-    background-position: 50%;
-    transform: translate(-50%, -50%) scale(10);
-    opacity: 0;
-    transition: transform 0.3s, opacity 0.8s;
+  @media (min-width: 1024px) {
+    &(:not([disabled],[effect]))::after {
+      content: '';
+      display: block;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: @clickX;
+      top: @clickY;
+      pointer-events: none;
+      background-image: radial-gradient(
+        circle,
+        #1890ff 10%,
+        transparent 10.01%
+      );
+      background-repeat: no-repeat;
+      background-position: 50%;
+      transform: translate(-50%, -50%) scale(10);
+      opacity: 0;
+      transition: transform 0.3s, opacity 0.8s;
+    }
   }
+
   .slot {
     display: block;
     // margin: 4px 15px;

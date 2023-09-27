@@ -1,4 +1,4 @@
-import * as d3 from '@/assets/js/d3';
+import d3 from '@/assets/js/d3.js';
 import processPptx from '@/components/preview/pptx/process_pptx';
 import dimple from '@/assets/js/dimple';
 

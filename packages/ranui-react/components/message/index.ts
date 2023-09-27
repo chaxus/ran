@@ -1,6 +1,5 @@
-import reactify from '@/utils/reactify';
 import 'ranui/message';
 
-const message = reactify('r-message');
+const message = window.message;
 
 export default message;

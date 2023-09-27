@@ -93,8 +93,15 @@ document.body.appendChild(Button);
 
 ### jsx
 
+Since `react` has composite events, for more convenient use, `ranui` is encapsulated through `react` high-level components to form [@ranui/react](https://www.npmjs.com/package/@ranui/react).
+
+In react, it is recommended to use [@ranui/react](https://www.npmjs.com/package/@ranui/react).
+
+However, `ranui` can still be used in any `js` or `ts` framework.
+
 ```jsx
 import 'ranui';
+
 const App = () => {
   return (
     <>
@@ -116,6 +123,12 @@ import 'ranui';
 ```
 
 ### tsx
+
+Since `react` has composite events, for more convenient use, `ranui` is encapsulated through `react` high-level components to form [@ranui/react](https://www.npmjs.com/package/@ranui/react).
+
+In react, it is recommended to use [@ranui/react](https://www.npmjs.com/package/@ranui/react).
+
+However, `ranui` can still be used in any `js` or `ts` framework.
 
 ```tsx
 // react 18
@@ -188,6 +201,12 @@ declare namespace JSX {
   }
 }
 ```
+
+## Contributors
+
+<a href="https://github.com/chaxus/ran/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=chaxus/ran" />
+</a>
 
 ## Meta
 
