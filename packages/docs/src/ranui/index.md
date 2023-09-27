@@ -55,11 +55,11 @@ document.body.appendChild(Button);
 
 ### 3.`jsx`
 
-由于`react`有合成事件，为了更加方便的使用，通过`react`高阶组件进行封装`ranui`，形成了[@ranui/react](https://www.npmjs.com/package/@ranui/react)
+由于`react`有合成事件，为了更加方便的使用，通过`react`高阶组件进行封装[ranui](https://www.npmjs.com/package/ranui)，输出了[@ranui/react](https://www.npmjs.com/package/@ranui/react)
 
-在`react`中，更建议使用[@ranui/react](https://www.npmjs.com/package/@ranui/react)
+在`react`中，使用[@ranui/react](https://www.npmjs.com/package/@ranui/react)会更加丝滑，通过高阶函数包裹后，与`react`生态系统完全融合。
 
-然而，`ranui`仍然可以在任何`js`或者`ts`框架中使用。
+然而，[ranui](https://www.npmjs.com/package/ranui)仍然可以在任何`js`或者`ts`中使用。
 
 ```jsx
 import 'ranui';
@@ -85,11 +85,11 @@ import 'ranui';
 
 ### 5.`tsx`
 
-由于`react`有合成事件，为了更加方便的使用，通过`react`高阶组件进行封装`ranui`，形成了[@ranui/react](https://www.npmjs.com/package/@ranui/react)
+由于`react`有合成事件，为了更加方便的使用，通过`react`高阶组件进行封装[ranui](https://www.npmjs.com/package/ranui)，于是有了[@ranui/react](https://www.npmjs.com/package/@ranui/react)
 
-在`react`中，更建议使用[@ranui/react](https://www.npmjs.com/package/@ranui/react)
+在`react`中，使用[@ranui/react](https://www.npmjs.com/package/@ranui/react)会更加丝滑，通过高阶函数包裹后，与`react`生态系统完全融合。
 
-然而，`ranui`仍然可以在任何`js`或者`ts`框架中使用。
+然而，[ranui](https://www.npmjs.com/package/ranui)仍然可以在任何`js`或者`ts`中使用。
 
 ```tsx
 // react 18
