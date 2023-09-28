@@ -29,9 +29,9 @@ pnpm install
 
 Based on `web components` UI library
 
-document：<https://chaxus.github.io/ran/src/ranui/>
+- [Document](https://chaxus.github.io/ran/src/ranui/)
 
-readme: <https://github.com/chaxus/ran/tree/main/packages/ranui>
+- [Readme](https://github.com/chaxus/ran/tree/main/packages/ranui)
 
 ## 2.@ranui/react
 
@@ -47,19 +47,19 @@ readme: <https://github.com/chaxus/ran/tree/main/packages/ranui>
 
 Not in the react framework, you can use [ranui](https://www.npmjs.com/package/ranui) directly.
 
-document：<https://chaxus.github.io/ran/src/ranui/>
+- [Document](https://chaxus.github.io/ran/src/ranui/)
 
-readme: <https://github.com/chaxus/ran/tree/main/packages/ranui-react>
+- [Readme](https://github.com/chaxus/ran/tree/main/packages/ranui-react)
 
-A collection of commonly used functions
+A collection of commonly used functions.
 
 ## 2.ranuts
 
-Some commonly used functions and tools
+Some commonly used functions and tools.
 
 ## 3.press
 
-Commonly used 'css' code, have 'sass' and 'less'
+Commonly used 'css' code, have 'sass' and 'less'.
 
 ## 4.ranite
 
