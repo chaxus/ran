@@ -19,7 +19,7 @@ pnpm install
 
 # introduction
 
-## 1.ranui
+## 1.`ranui`
 
 <a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/github/actions/workflow/status/chaxus/ran/ci.yml" alt="Build Status"></a>
 <a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/v/ranui.svg" alt="npm-v"></a>
@@ -33,7 +33,7 @@ Based on `web components` UI library
 
 - [Readme](https://github.com/chaxus/ran/tree/main/packages/ranui)
 
-## 2.@ranui/react
+## 2.`@ranui/react`
 
 <a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/github/actions/workflow/status/chaxus/ran/ci.yml" alt="Build Status"></a>
 <a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/v/@ranui/react.svg" alt="npm-v"></a>
@@ -51,15 +51,15 @@ Not in the react framework, you can use [ranui](https://www.npmjs.com/package/ra
 
 - [Readme](https://github.com/chaxus/ran/tree/main/packages/ranui-react)
 
-## 3.ranuts
+## 3.`ranuts`
 
 Some commonly used functions and tools.
 
-## 4.press
+## 4.`press`
 
 Commonly used 'css' code, have 'sass' and 'less'.
 
-## 5.ranite
+## 5.`ranite`
 
 Build and code analysis tools.
 
