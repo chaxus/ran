@@ -42,7 +42,7 @@ const App = () => {
     };
   };
   const clickButton = () => {
-    setState({ abilitys })
+    setState({ abilitys });
     console.log('fsdafdas');
   };
   const changeInput = (e) => {
