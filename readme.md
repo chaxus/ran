@@ -51,17 +51,15 @@ Not in the react framework, you can use [ranui](https://www.npmjs.com/package/ra
 
 - [Readme](https://github.com/chaxus/ran/tree/main/packages/ranui-react)
 
-A collection of commonly used functions.
-
-## 2.ranuts
+## 3.ranuts
 
 Some commonly used functions and tools.
 
-## 3.press
+## 4.press
 
 Commonly used 'css' code, have 'sass' and 'less'.
 
-## 4.ranite
+## 5.ranite
 
 Build and code analysis tools.
 
