@@ -2,10 +2,11 @@ import reactify from '@/utils/reactify';
 import 'ranui/button';
 
 interface RButton {
-  type?: string;
-  onClick?: React.MouseEventHandler<HTMLDivElement> | undefined;
+  type?: 'primary' | 'warning' | 'text';
+  onClick?: React.MouseEventHandler<HTMLDivElement>;
+  effect?: boolean
 }
 
-const Button = reactify('r-button');
+const Button = reactify<RButton>('r-button');
 
 export default Button;

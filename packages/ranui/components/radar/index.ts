@@ -54,7 +54,12 @@ function Custom() {
       get abilitys() {
         const item = this.getAttribute('abilitys');
         if (typeof item === 'string') {
-          return JSON.parse(item);
+          try {
+            const result = JSON.parse(item);
+            return result;
+          } catch (error) {
+            return item;
+          }
         }
         return item;
       }
@@ -186,10 +191,10 @@ function Custom() {
           const x = this.mCenter + this.mRadius * Math.sin(this.mAngle * i);
           const y = this.mCenter + this.mRadius * Math.cos(this.mAngle * i);
           const backgroundColor =
-            this.mData[i].backgroundColor || BACKGROUND_COLOR;
-          const fontColor = this.mData[i].fontColor || FONT_COLOR;
-          const fontFamily = this.mData[i].fontFamily || FONT_FAMILY;
-          const fontSize = this.mData[i].fontSize || defaultFontSize;
+            this.mData[i]?.backgroundColor || BACKGROUND_COLOR;
+          const fontColor = this.mData[i]?.fontColor || FONT_COLOR;
+          const fontFamily = this.mData[i]?.fontFamily || FONT_FAMILY;
+          const fontSize = this.mData[i]?.fontSize || defaultFontSize;
           ctx.font = `${fontSize}px ${fontFamily}`;
           if (this.mAngle * i >= 0 && this.mAngle * i < Math.PI / 2) {
             this.drawButton(

@@ -74,7 +74,7 @@ module.exports = defineConfig({
     ],
     '@typescript-eslint/no-this-alias': 'off',
     '@typescript-eslint/no-empty-interface': 'off',
-    '@typescript-eslint/no-explicit-any': 'off', // maybe we should turn this on in a new PR
+    '@typescript-eslint/no-explicit-any': 0, // maybe we should turn this on in a new PR ¡
     '@typescript-eslint/no-extra-semi': 'off', // conflicts with prettier
     '@typescript-eslint/no-inferrable-types': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off', // maybe we should turn this on in a new PR
