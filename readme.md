@@ -6,10 +6,22 @@ The project includes **web components library**, **packaging tool**, **function 
     <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="license">
 </a>
 <a href="https://github.com/chaxus/ran">
+    <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat" alt="PRs welcome!" />
+</a>
+<!-- <a href="https://github.com/chaxus/ran">
     <img src="https://img.shields.io/github/contributors/chaxus/ran" alt="contributors">
 </a>
+<a href="https://github.com/chaxus/ran">
+    <img src="https://img.shields.io/github/forks/chaxus/ran" alt="forks">
+</a>
+<a href="https://github.com/chaxus/ran">
+    <img src="https://img.shields.io/github/stars/chaxus/ran" alt="stars">
+</a>
+<a href="https://github.com/chaxus/ran">
+    <img src="https://img.shields.io/badge/module%20formats-umd%2C%20esm-green.svg" alt="module formats: umd, esm">
+</a> -->
 
-# start project
+# Quick start
 
 Install npm packages
 
@@ -17,17 +29,17 @@ Install npm packages
 pnpm install
 ```
 
-# introduction
+# Introduction
 
 ## 1.`ranui`
+
+Based on `web components` UI library
 
 <a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/github/actions/workflow/status/chaxus/ran/ci.yml" alt="Build Status"></a>
 <a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/v/ranui.svg" alt="npm-v"></a>
 <a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/dt/ranui.svg" alt="npm-d"></a>
 <a href="https://github.com/chaxus/ran"><img src="https://img.badgesize.io/https:/unpkg.com/ranui/dist/umd/index.umd.cjs?label=brotli&compression=brotli" alt="brotli"></a>
 <a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/badge/module%20formats-umd%2C%20esm-green.svg" alt="module formats: umd, esm"></a>
-
-Based on `web components` UI library
 
 - [Document](https://chaxus.github.io/ran/src/ranui/)
 
