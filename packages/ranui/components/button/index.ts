@@ -13,6 +13,7 @@ function Custom() {
       _iconElement?: HTMLElement;
       _slot: HTMLSlotElement;
       _shadowDom: ShadowRoot;
+      debounceTimeId?: NodeJS.Timeout;
       static get observedAttributes() {
         return ['disabled', 'icon', 'effect', 'iconSize', 'sheet'];
       }
@@ -109,17 +110,22 @@ function Custom() {
       mousedown = (event: MouseEvent) => {
         if (presentDevice !== 'pc') return;
         if (!this.disabled || this.disabled === 'false') {
+          clearTimeout(this.debounceTimeId)
+          this.debounceTimeId = undefined
           const { left, top } = this.getBoundingClientRect();
           this._container.style.setProperty('--ran-x', event.clientX - left + 'px');
           this._container.style.setProperty('--ran-y', event.clientY - top + 'px');
         }
       };
-      mouseLeave = () => {
+      mouseup = (event: MouseEvent) => {
         if (presentDevice !== 'pc') return;
-        setTimeout(() => {
+        if (this.debounceTimeId) return
+        this.debounceTimeId = setTimeout(() => {
           this._container.style.removeProperty('--ran-x');
           this._container.style.removeProperty('--ran-y');
-        }, 300);
+          clearTimeout(this.debounceTimeId)
+          this.debounceTimeId = undefined
+        }, 500);
       };
       handlerExternalCss() {
         if (this.sheet) {
@@ -136,13 +142,13 @@ function Custom() {
       }
       connectedCallback() {
         this._container.addEventListener('mousedown', this.mousedown);
-        this._container.addEventListener('mouseleave', this.mouseLeave);
+        this._container.addEventListener('mouseup', this.mouseup);
         this.handlerExternalCss();
         this.setIcon();
       }
       disconnectCallback() {
         this._container.removeEventListener('mousedown', this.mousedown);
-        this._container.removeEventListener('mouseleave', this.mouseLeave);
+        this._container.removeEventListener('mouseup', this.mouseup);
       }
       attributeChangedCallback(
         name: string,

@@ -108,11 +108,6 @@
       transition: 0s;
     }
   }
-  &(:active) {
-    .container {
-      opacity: 0.2;
-    }
-  }
   @media (min-width: 1024px) {
     &(:not([disabled],[effect])) {
       .container::after {
@@ -142,9 +137,6 @@
     display: block;
     // margin: 4px 15px;
   }
-}
-&(:active) .btn::before {
-  opacity: 0.2;
 }
 
 .btn {
