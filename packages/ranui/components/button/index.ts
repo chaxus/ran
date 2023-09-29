@@ -110,8 +110,7 @@ function Custom() {
       mousedown = (event: MouseEvent) => {
         if (presentDevice !== 'pc') return;
         if (!this.disabled || this.disabled === 'false') {
-          clearTimeout(this.debounceTimeId)
-          this.debounceTimeId = undefined
+          this.debounceMouseEvent()
           const { left, top } = this.getBoundingClientRect();
           this._container.style.setProperty('--ran-x', event.clientX - left + 'px');
           this._container.style.setProperty('--ran-y', event.clientY - top + 'px');
@@ -123,10 +122,13 @@ function Custom() {
         this.debounceTimeId = setTimeout(() => {
           this._container.style.removeProperty('--ran-x');
           this._container.style.removeProperty('--ran-y');
-          clearTimeout(this.debounceTimeId)
-          this.debounceTimeId = undefined
-        }, 500);
+          this.debounceMouseEvent()
+        }, 600);
       };
+      debounceMouseEvent = () => {
+        clearTimeout(this.debounceTimeId)
+        this.debounceTimeId = undefined
+      }
       handlerExternalCss() {
         if (this.sheet) {
           try {
