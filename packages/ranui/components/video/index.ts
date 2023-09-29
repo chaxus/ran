@@ -12,7 +12,7 @@ const fetchAB = (url: string) => {
 
 function Custom() {
   if (typeof document !== 'undefined' && !customElements.get('r-video')) {
-    class Video extends HTMLVideoElement {
+    class Video extends HTMLElement {
       static get observedAttributes() {
         return ['disabled', 'icon', 'effect'];
       }

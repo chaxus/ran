@@ -65,9 +65,9 @@ export default defineConfig({
       { httpEquiv: 'Permissions-Policy', content: 'interest-cohort=()' },
     ],
     // report
-    ['script', { src: GTAG }],
-    ['script', { defer: 'true' }, GOOGLE_ANALYSE],
-    ['script', { defer: 'true' }, BD_ANALYSE],
+    ['script', { defer: 'true', src: GTAG }],
+    ['script', {}, GOOGLE_ANALYSE],
+    ['script', {}, BD_ANALYSE],
     // preview component script
     ['script', {}, PREVIEW_CODE],
   ],
