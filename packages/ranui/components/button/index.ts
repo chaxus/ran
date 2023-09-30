@@ -8,23 +8,28 @@ import {
 function Custom() {
   if (typeof document !== 'undefined' && !customElements.get('r-button')) {
     class Button extends HTMLElement {
-      static get observedAttributes() {
-        return ['disabled', 'icon', 'effect', 'iconSize', 'sheet'];
-      }
+      _container: HTMLDivElement;
       _btn: HTMLDivElement;
       _iconElement?: HTMLElement;
       _slot: HTMLSlotElement;
       _shadowDom: ShadowRoot;
+      debounceTimeId?: NodeJS.Timeout;
+      static get observedAttributes() {
+        return ['disabled', 'icon', 'effect', 'iconSize', 'sheet'];
+      }
       constructor() {
         super();
         this._slot = document.createElement('slot');
         this._btn = document.createElement('div');
+        this._container = document.createElement('div')
+        this._container.setAttribute('class', 'container');
         this._btn.setAttribute('class', 'btn');
         this._btn.appendChild(this._slot);
         this._slot.setAttribute('class', 'slot');
         const shadowRoot = this.attachShadow({ mode: 'closed' });
         this._shadowDom = shadowRoot;
-        shadowRoot.appendChild(this._btn);
+        this._container.appendChild(this._btn)
+        shadowRoot.appendChild(this._container);
       }
       get sheet() {
         return this.getAttribute('sheet');
@@ -105,18 +110,25 @@ function Custom() {
       mousedown = (event: MouseEvent) => {
         if (presentDevice !== 'pc') return;
         if (!this.disabled || this.disabled === 'false') {
+          this.debounceMouseEvent()
           const { left, top } = this.getBoundingClientRect();
-          this.style.setProperty('--ran-x', event.clientX - left + 'px');
-          this.style.setProperty('--ran-y', event.clientY - top + 'px');
+          this._container.style.setProperty('--ran-x', event.clientX - left + 'px');
+          this._container.style.setProperty('--ran-y', event.clientY - top + 'px');
         }
       };
-      mouseLeave = () => {
+      mouseup = (event: MouseEvent) => {
         if (presentDevice !== 'pc') return;
-        setTimeout(() => {
-          this.style.removeProperty('--ran-x');
-          this.style.removeProperty('--ran-y');
-        }, 300);
+        if (this.debounceTimeId) return
+        this.debounceTimeId = setTimeout(() => {
+          this._container.style.removeProperty('--ran-x');
+          this._container.style.removeProperty('--ran-y');
+          this.debounceMouseEvent()
+        }, 600);
       };
+      debounceMouseEvent = () => {
+        clearTimeout(this.debounceTimeId)
+        this.debounceTimeId = undefined
+      }
       handlerExternalCss() {
         if (this.sheet) {
           try {
@@ -131,14 +143,14 @@ function Custom() {
         }
       }
       connectedCallback() {
-        this._btn.addEventListener('mousedown', this.mousedown);
-        this._btn.addEventListener('mouseleave', this.mouseLeave);
+        this._container.addEventListener('mousedown', this.mousedown);
+        this._container.addEventListener('mouseup', this.mouseup);
         this.handlerExternalCss();
         this.setIcon();
       }
       disconnectCallback() {
-        this._btn.removeEventListener('mousedown', this.mousedown);
-        this._btn.removeEventListener('mouseleave', this.mouseLeave);
+        this._container.removeEventListener('mousedown', this.mousedown);
+        this._container.removeEventListener('mouseup', this.mouseup);
       }
       attributeChangedCallback(
         name: string,

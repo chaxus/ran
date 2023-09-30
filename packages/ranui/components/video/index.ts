@@ -12,7 +12,7 @@ const fetchAB = (url: string) => {
 
 function Custom() {
   if (typeof document !== 'undefined' && !customElements.get('r-video')) {
-    class Video extends HTMLVideoElement {
+    class Video extends HTMLElement {
       static get observedAttributes() {
         return ['disabled', 'icon', 'effect'];
       }
@@ -90,6 +90,7 @@ function Custom() {
           console.error('Unsupported MIME type or codec: ', mimeCodec);
         }
       };
+      
       ranloadedmetadata = () => {
         this.totalTime = this._video.duration;
       };

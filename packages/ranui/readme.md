@@ -124,7 +124,7 @@ import 'ranui';
 
 ### tsx
 
-Since `react` has composite events, for more convenient use, [ranui](https://www.npmjs.com/package/ranui) is encapsulated through `react` high-level components, so there is  [@ranui/react](https://www.npmjs.com/package/@ranui/react).
+Since `react` has composite events, for more convenient use, [ranui](https://www.npmjs.com/package/ranui) is encapsulated through `react` high-level components, so there is [@ranui/react](https://www.npmjs.com/package/@ranui/react).
 
 In `react`, using [@ranui/react](https://www.npmjs.com/package/@ranui/react) is silky and fully integrated into the `react` ecosystem after being wrapped in higher-order functions.
 

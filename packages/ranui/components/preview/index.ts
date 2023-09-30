@@ -1,4 +1,5 @@
 import { requestFile } from '@/utils/index';
+// import { renderPdf } from '@/components/preview/pdf'
 import '../../base.less';
 import '@/components/icon';
 

@@ -1,113 +1,157 @@
 @clickX: var(--ran-x, 0);
 @clickY: var(--ran-y, 0);
 
+
+
 :host {
   position: relative;
   display: inline-block;
-  font-weight: 400;
-  white-space: nowrap;
-  text-align: center;
   background-image: none;
-  border: 1px solid transparent;
   box-shadow: 0 2px #00000004;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
   touch-action: manipulation;
-  line-height: 22px;
-  font-size: 14px;
-  border-radius: 2px;
-  color: #000000d9;
-  border-color: #d9d9d9;
-  background: #fff;
   overflow: hidden;
   pointer-events: auto;
+  .container {
+    position: relative;
+    display: inline-block;
+    background-image: none;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    touch-action: manipulation;
+
+    // border: 1px solid transparent;
+    // box-shadow: 0 2px #00000004;
+    // border-radius: 2px;
+    // color: #000000d9;
+    // border-color: #d9d9d9;
+    background: #fff;
+  }
   &,
   &(:active),
   &(:focus) {
     outline: 0;
+    .container {
+      outline: 0;
+    }
   }
   &(:not([disabled]):hover) {
-    border-color: #1890ff;
-    color: #1890ff;
+    .btn {
+      border-color: #1890ff;
+      color: #1890ff;
+    }
   }
   &([type="primary"]) {
-    border-color: #1890ff;
-    background-color: #1890ff;
-    color: #fff;
+    .btn {
+      border-color: #1890ff;
+      background-color: #1890ff;
+      color: #fff;
+    }
   }
-  &([type="primary"]:not([disabled]))::after {
-    background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+  &([type="primary"]:not([disabled])) {
+    .container::after {
+      background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+    }
   }
   &([type="primary"]:not([disabled]):hover) {
-    background-color: #40a9ff;
-    color: #fff;
+    .btn {
+      background-color: #40a9ff;
+      color: #fff;
+    }
   }
   &([type="warning"]) {
-    border-color: #ff4d4f;
-    background-color: #ff4d4f;
-    color: #fff;
+    .btn {
+      border-color: #ff4d4f;
+      background-color: #ff4d4f;
+      color: #fff;
+    }
   }
-  &([type="warning"]:not([disabled]))::after {
-    background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+  &([type="warning"]:not([disabled])) {
+    .container::after {
+      background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+    }
   }
   &([type="warning"]:not([disabled]):hover) {
-    border-color: #ff4d4f;
-    background-color: #ff4d4f;
-    color: #fff;
+    .btn {
+      border-color: #ff4d4f;
+      background-color: #ff4d4f;
+      color: #fff;
+    }
   }
   &([type="text"]) {
-    border: none;
+    .btn {
+      border: none;
+    }
   }
   &([disabled]) {
     cursor: not-allowed;
     pointer-events: all;
     opacity: 0.6;
+    .container {
+      cursor: not-allowed;
+      pointer-events: all;
+      opacity: 0.6;
+    }
   }
-  &(:not([disabled]):active)::after {
-    transform: translate(-50%, -50%) scale(0);
-    opacity: 0.3;
-    transition: 0s;
-  }
-  &(:active) .btn::before {
-    opacity: 0.2;
+  &(:not([disabled]):active) {
+    .container::after {
+      transform: translate(-50%, -50%) scale(0);
+      opacity: 0.3;
+      transition: 0s;
+    }
   }
   @media (min-width: 1024px) {
-    &(:not([disabled],[effect]))::after {
-      content: '';
-      display: block;
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      left: @clickX;
-      top: @clickY;
-      pointer-events: none;
-      background-image: radial-gradient(
-        circle,
-        #1890ff 10%,
-        transparent 10.01%
-      );
-      background-repeat: no-repeat;
-      background-position: 50%;
-      transform: translate(-50%, -50%) scale(10);
-      opacity: 0;
-      transition: transform 0.3s, opacity 0.8s;
+    &(:not([disabled],[effect])) {
+      .container::after {
+        content: "";
+        display: block;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: @clickX;
+        top: @clickY;
+        pointer-events: none;
+        background-image: radial-gradient(
+          circle,
+          #1890ff 10%,
+          transparent 10.01%
+        );
+        background-repeat: no-repeat;
+        background-position: 50%;
+        transform: translate(-50%, -50%) scale(10);
+        opacity: 0;
+        transition: transform 0.3s, opacity 0.8s;
+      }
     }
   }
 
   .slot {
     display: block;
-    // margin: 4px 15px;
   }
 }
+
 .btn {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 4px 15px;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  border-color: #d9d9d9;
+  color: #000000d9;
+  line-height: 22px;
+  font-size: 14px;
+  font-weight: 400;
+  white-space: nowrap;
+  text-align: center;
   .icon {
     margin-right: 2px;
   }
