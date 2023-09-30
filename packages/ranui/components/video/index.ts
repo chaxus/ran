@@ -90,7 +90,7 @@ function Custom() {
           console.error('Unsupported MIME type or codec: ', mimeCodec);
         }
       };
-      
+
       ranloadedmetadata = () => {
         this.totalTime = this._video.duration;
       };

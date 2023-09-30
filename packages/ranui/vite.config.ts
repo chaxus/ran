@@ -10,8 +10,55 @@ const __filename = fileURLToPath(import.meta.url);
 
 const __dirname = path.dirname(__filename);
 
-export const umd: BuildOptions = {
+type TreeshakingPreset = 'smallest' | 'safest' | 'recommended';
+
+type HasModuleSideEffects = (id: string, external: boolean) => boolean;
+
+type ModuleSideEffectsOption = boolean | 'no-external' | string[] | HasModuleSideEffects;
+
+interface NormalizedTreeshakingOptions {
+  annotations: boolean;
+  correctVarValueBeforeDeclaration: boolean;
+  manualPureFunctions: readonly string[];
+  moduleSideEffects: HasModuleSideEffects;
+  propertyReadSideEffects: boolean | 'always';
+  tryCatchDeoptimization: boolean;
+  unknownGlobalSideEffects: boolean;
+}
+
+interface TreeshakingOptions
+  extends Partial<Omit<NormalizedTreeshakingOptions, 'moduleSideEffects'>> {
+  moduleSideEffects?: ModuleSideEffectsOption;
+  preset?: TreeshakingPreset;
+}
+
+interface chunkOptimization {
+  reportCompressedSize: boolean,
+  rollupOptions: {
+    output: {
+      experimentalMinChunkSize?: number;
+    }
+    treeshake?: boolean | TreeshakingPreset | TreeshakingOptions;
+  }
+  minify: boolean | "terser" | "esbuild" | undefined
+}
+
+const chunkOptimization: chunkOptimization = {
+  reportCompressedSize: false,
+  rollupOptions: {
+    output: {
+      experimentalMinChunkSize: 1000
+    },
+    treeshake: {
+      preset: 'recommended',
+      manualPureFunctions: ['console.log'],
+    },
+  },
   minify: 'terser',
+}
+
+export const umd: BuildOptions = {
+  ...chunkOptimization,
   outDir: resolve(__dirname, 'dist/umd'),
   lib: {
     entry: resolve(__dirname, 'index.ts'),
@@ -22,7 +69,7 @@ export const umd: BuildOptions = {
 };
 
 export const es: BuildOptions = {
-  minify: 'terser',
+  ...chunkOptimization,
   lib: {
     entry: {
       index: resolve(__dirname, 'index.ts'),

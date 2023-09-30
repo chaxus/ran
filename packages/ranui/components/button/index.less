@@ -1,8 +1,6 @@
 @clickX: var(--ran-x, 0);
 @clickY: var(--ran-y, 0);
 
-
-
 :host {
   position: relative;
   display: inline-block;
@@ -111,7 +109,7 @@
   @media (min-width: 1024px) {
     &(:not([disabled],[effect])) {
       .container::after {
-        content: "";
+        content: '';
         display: block;
         position: absolute;
         width: 100%;
