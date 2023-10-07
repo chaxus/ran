@@ -3,7 +3,6 @@ import { readFile } from 'ranuts';
 import type { Config } from 'svgo';
 import { optimize } from 'svgo';
 
-// const { readFile } = ranuts
 interface Options {
   defaultImport?: string;
   svgoConfig?: Config;

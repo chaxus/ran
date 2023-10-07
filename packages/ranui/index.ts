@@ -10,7 +10,8 @@ export * as skeleton from '@/components/skeleton';
 export * as tabpane from '@/components/tabpane';
 export * as tab from '@/components/tab';
 export * as radar from '@/components/radar';
-export * as video from '@/components/video'
+export * as video from '@/components/video';
+export * as modal from '@/components/modal';
 
 if (typeof document !== 'undefined') {
   const style = document.createElement('style');

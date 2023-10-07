@@ -21,14 +21,14 @@ function Custom() {
         super();
         this._slot = document.createElement('slot');
         this._btn = document.createElement('div');
-        this._container = document.createElement('div')
+        this._container = document.createElement('div');
         this._container.setAttribute('class', 'container');
         this._btn.setAttribute('class', 'btn');
         this._btn.appendChild(this._slot);
         this._slot.setAttribute('class', 'slot');
         const shadowRoot = this.attachShadow({ mode: 'closed' });
         this._shadowDom = shadowRoot;
-        this._container.appendChild(this._btn)
+        this._container.appendChild(this._btn);
         shadowRoot.appendChild(this._container);
       }
       get sheet() {
@@ -110,25 +110,31 @@ function Custom() {
       mousedown = (event: MouseEvent) => {
         if (presentDevice !== 'pc') return;
         if (!this.disabled || this.disabled === 'false') {
-          this.debounceMouseEvent()
+          this.debounceMouseEvent();
           const { left, top } = this.getBoundingClientRect();
-          this._container.style.setProperty('--ran-x', event.clientX - left + 'px');
-          this._container.style.setProperty('--ran-y', event.clientY - top + 'px');
+          this._container.style.setProperty(
+            '--ran-x',
+            event.clientX - left + 'px',
+          );
+          this._container.style.setProperty(
+            '--ran-y',
+            event.clientY - top + 'px',
+          );
         }
       };
       mouseup = (event: MouseEvent) => {
         if (presentDevice !== 'pc') return;
-        if (this.debounceTimeId) return
+        if (this.debounceTimeId) return;
         this.debounceTimeId = setTimeout(() => {
           this._container.style.removeProperty('--ran-x');
           this._container.style.removeProperty('--ran-y');
-          this.debounceMouseEvent()
+          this.debounceMouseEvent();
         }, 600);
       };
       debounceMouseEvent = () => {
-        clearTimeout(this.debounceTimeId)
-        this.debounceTimeId = undefined
-      }
+        clearTimeout(this.debounceTimeId);
+        this.debounceTimeId = undefined;
+      };
       handlerExternalCss() {
         if (this.sheet) {
           try {
