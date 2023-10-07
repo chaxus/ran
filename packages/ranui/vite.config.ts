@@ -83,6 +83,7 @@ export const es: BuildOptions = {
       tabpane: resolve(__dirname, 'components/tabpane/index.ts'),
       tab: resolve(__dirname, 'components/tab/index.ts'),
       radar: resolve(__dirname, 'components/radar/index.ts'),
+      modal: resolve(__dirname, 'components/modal/index.ts'),
     },
     fileName: (_: string, name: string): string => {
       if (name === 'index') {

@@ -4,6 +4,7 @@ function Custom() {
       constructor() {
         super();
       }
+      
     }
     customElements.define('r-modal', CustomModal);
   }
