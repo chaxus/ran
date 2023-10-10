@@ -5,27 +5,24 @@
 import { Component, createElement, createRef, forwardRef } from 'react';
 import type {
   DetailedHTMLProps,
-  ForwardRefExoticComponent,
   ForwardedRef,
   HTMLAttributes,
   MutableRefObject,
-  ReactNode,
-  RefAttributes,
   RefObject,
 } from 'react';
 
 interface InnerRef {
   innerRef:
-    | RefObject<Element & Record<string, unknown>>
-    | MutableRefObject<Element & Record<string, unknown>>;
+  | RefObject<Element & Record<string, unknown>>
+  | MutableRefObject<Element & Record<string, unknown>>;
 }
 
 type Props = DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> &
   InnerRef;
 
-const reactifyWebComponent = <T = unknown>(
+export const reactifyWebComponent = <T = unknown>(
   WC: string,
-): ForwardRefExoticComponent<RefAttributes<T>> => {
+): any => {
   class Reactified extends Component<Props> {
     eventHandlers: Array<[string, EventListenerOrEventListenerObject]>;
     ref;
@@ -41,7 +38,7 @@ const reactifyWebComponent = <T = unknown>(
       this.ref.current?.addEventListener(event, val);
     }
 
-    setProperty(prop: string, val: any) {
+    setProperty(prop: string, val: unknown) {
       if (this.ref.current) {
         this.ref.current[prop] = val;
       }
@@ -113,10 +110,9 @@ const reactifyWebComponent = <T = unknown>(
   }
 
   return forwardRef(
-    (props: RefAttributes<T>, ref: ForwardedRef<T>): ReactNode => {
+    (props: any, ref: ForwardedRef<T>) => {
       return createElement<any>(Reactified, { ...props, innerRef: ref });
     },
   );
 };
-
 export default reactifyWebComponent;

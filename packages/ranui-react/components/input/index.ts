@@ -7,10 +7,6 @@ interface RInput {
   ref?: React.MutableRefObject<HTMLInputElement | null>;
 }
 
-const Input = reactify('r-input') as React.DetailedHTMLProps<
-  React.HTMLAttributes<HTMLInputElement>,
-  HTMLInputElement
-> &
-  RInput;
+const Input = reactify<RInput>('r-input');
 
 export default Input;
