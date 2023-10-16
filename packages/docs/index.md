@@ -11,7 +11,7 @@ hero:
     src: /home.svg
     alt: logo
   actions:
-    - theme: brand
+    - theme: alt
       text: 更多详情
       link: https://github.com/chaxus/ran
     - theme: alt
