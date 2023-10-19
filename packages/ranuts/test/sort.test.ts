@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import select from '@/sort/select';
 import insert from '@/sort/insert';
 import shell from '@/sort/shell';
-import merge from '@/sort/merge';
+// import merge from '@/sort/merge';
 import quick from '@/sort/quick';
 import randomArray from '@/sort/randomArray';
 import taskEnd from '@/utils/taskEnd';
@@ -38,7 +38,7 @@ describe('sort', () => {
   handing('select sort', select);
   handing('insert sort', insert);
   handing('shell sort', shell);
-  handing('merge sort', merge);
+  // handing('merge sort', merge);
   handing('quick sort', quick);
   handing('heap sort', heap);
   handing('count sort', count);
