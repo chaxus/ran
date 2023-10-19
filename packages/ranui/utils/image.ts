@@ -123,7 +123,6 @@ export const blur = (
     for (let i = 0; i < len; i += 4) {
         // 处理
     }
-    console.log(ImageData)
     ctx.putImageData(ImageData, 0, 0)
     return canvas
 }
