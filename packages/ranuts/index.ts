@@ -31,3 +31,5 @@ export {
   getMime,
   setMime,
 };
+
+export const Subscribe = EventEmitter;

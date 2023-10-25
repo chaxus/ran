@@ -47,6 +47,7 @@ function Custom() {
           // vite 对动态导入的一些限制 https://github.com/rollup/plugins/tree/master/packages/dynamic-import-vars#limitations
           import(`../../assets/icons/${this.name}.svg`)
             .then((result) => {
+              console.log('result---->',result);
               if (result && result.default && result.default._identification) {
                 const { data } = result.default;
                 this._icon && this._div.removeChild(this._icon);

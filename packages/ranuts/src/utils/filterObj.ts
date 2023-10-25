@@ -6,12 +6,12 @@
  */
 
 const filterObj = (
-  obj: Record<string | symbol, any>,
-  list: Array<string | symbol>,
-): Record<string | symbol, any> => {
-  const result: Record<string | symbol, any> = {};
+  obj: Record<string, unknown>,
+  list: Array<string>,
+): Record<string, unknown> => {
+  const result: Record<string, unknown> = {};
   Object.keys(obj).forEach((item) => {
-    if (!list.includes(obj[item])) {
+    if (!list.includes(item)) {
       result[item] = obj[item];
     }
   });
