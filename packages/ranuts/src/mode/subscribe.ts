@@ -11,11 +11,10 @@ type EventItem = {
 const NEW_LISTENER = 'NEW_LISTENER'
 
 export class SyncHook {
-  _events: Record<EventName, Array<EventItem>>;
+  private _events: Record<EventName, Array<EventItem>>;
   constructor() {
     this._events = {};
   }
-
   on = (eventName: EventName, eventItem: EventItem | Callback): void => {
     if (this._events[eventName] && eventName !== Symbol.for(NEW_LISTENER)) {
       // 注册一个 newListener 用于监听新的事件订阅
@@ -44,7 +43,7 @@ export class SyncHook {
     });
   };
 
-  onOnce = (eventName: EventName, eventItem: EventItem | Callback): void => {
+  once = (eventName: EventName, eventItem: EventItem | Callback): void => {
     let one: EventItem;
     if (typeof eventItem === 'function') {
       one = {

@@ -1,5 +1,6 @@
-import { Noop, replaceOld } from './utils';
+import { replaceOld } from './utils';
 import type { Hooks } from './utils';
+import { noop } from '@/utils';
 
 interface Options {
   requestHook: Hooks;
@@ -13,9 +14,9 @@ interface Options {
 export const handleFetchHook = (options: Partial<Options> = {}): void => {
   if (typeof window !== 'undefined') {
     const {
-      requestHook = Noop,
-      responseHook = Noop,
-      errorHook = Noop,
+      requestHook = noop,
+      responseHook = noop,
+      errorHook = noop,
     } = options;
     const replacement = (originalFetch: any) => {
       return (url: string, config?: any) => {
@@ -44,9 +45,9 @@ export const handleXhrHook = (options: Partial<Options> = {}): void => {
   if (typeof window !== 'undefined') {
     const originalXhrProto = XMLHttpRequest.prototype;
     const {
-      requestHook = Noop,
-      responseHook = Noop,
-      errorHook = Noop,
+      requestHook = noop,
+      responseHook = noop,
+      errorHook = noop,
     } = options;
     const replacementXhrOpen = (originalOpen: any) => {
       return function (this: XMLHttpRequest, ...args: unknown[]): void {

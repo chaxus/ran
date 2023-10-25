@@ -57,7 +57,7 @@
     "@playwright/test": "^1.36.2",
     "@types/react": "^18.2.22",
     "prettier": "^2.8.1",
-    "ranuts": "workspace:0.1.0-alpha.7",
+    "ranuts": "workspace:0.1.0-alpha.8",
     "react-dom": "^18.2.0",
     "tsx": "^3.12.7",
     "vite": "^4.4.9",

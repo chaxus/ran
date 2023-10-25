@@ -1,7 +1,7 @@
-import { Noop } from './utils';
+import { noop } from '@/utils';
 
 export const handleClick = (
-  hooks: (event: MouseEvent) => void = Noop,
+  hooks: (event: MouseEvent) => void = noop,
 ): void => {
   if (typeof document !== 'undefined') {
     document.addEventListener(
