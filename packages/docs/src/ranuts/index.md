@@ -15,4 +15,3 @@
 | getMime       | 根据文件格式后缀获取 mime type     | [getMime](./mimeType/mimeType.md)     |
 | getCookie     | 获取指定cookie的值     | [writeFile](./utils/getCookie.md)     |
 | formatJson     | 格式化JSON     | [formatJson](./utils/formatJson.md)     |
-| isMobile     | 判断是不是移动端     | [isMobile](./utils/isMobile.md)     |

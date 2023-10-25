@@ -65,7 +65,7 @@ Not in the react framework, you can use [ranui](https://www.npmjs.com/package/ra
 
 ## 3.`ranuts`
 
-Some commonly used functions and tools.
+[Some commonly used functions and tools](https://chaxus.github.io/ran/src/ranuts/utils/)
 
 ## 4.`press`
 
