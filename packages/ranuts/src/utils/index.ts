@@ -152,3 +152,7 @@ export const mergeExports = (obj: Object, exports: Object): Object => {
   }
   return Object.freeze(obj)
 };
+
+export const noop = (): void => {};
+
+export type Noop = () => void;

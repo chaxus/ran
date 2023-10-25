@@ -1,4 +1,4 @@
-import fs from './fs';
+import fs from '@/file/fs';
 
 type Error = NodeJS.ErrnoException | null;
 
@@ -14,8 +14,6 @@ const writeFile = (
   content: string,
 ): Promise<Ranuts.Identification> =>
   new Promise((resolve, reject) => {
-    if (!fs._identification)
-      return reject({ _identification: false, data: 'fs is not loaded' });
     fs.writeFile(
       path,
       content,
@@ -26,10 +24,10 @@ const writeFile = (
       },
       (err: Error) => {
         if (err) {
-          reject({ _identification: false, data: err });
+          reject({ success: false, _identification: false, data: err });
           throw err;
         } else {
-          resolve({ _identification: true, data: { path, content } });
+          resolve({ success: true, _identification: false, data: { path, content } });
         }
       },
     );

@@ -9,16 +9,18 @@ type EventItem = {
 };
 
 class Subscribe {
-  _events: Record<EventName, Array<EventItem>>;
+  private _events: Record<EventName, Array<EventItem>>;
   constructor() {
     this._events = {};
   }
 
   on = (eventName: EventName, eventItem: EventItem | Callback): void => {
+    
     if (this._events[eventName] && eventName !== Symbol.for('new-listener')) {
       // 注册一个 newListener 用于监听新的事件订阅
       this.emit(Symbol.for('new-listener'), eventName);
     }
+
     // 由于一个事件可能注册多个回调函数，所以使用数组来存储事件队列
     const callbacks = this._events[eventName] || [];
     if (typeof eventItem === 'function') {
@@ -29,6 +31,7 @@ class Subscribe {
     } else {
       callbacks.push(eventItem);
     }
+
     this._events[eventName] = callbacks;
   };
 

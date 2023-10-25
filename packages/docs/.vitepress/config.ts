@@ -75,7 +75,7 @@ export default defineConfig({
     logo: '/home.svg',
     nav: [
       { text: '首页', link: '/' },
-      { text: '函数', link: '/src/ranuts/utils/' },
+      { text: '函数', link: '/src/ranuts/' },
       { text: '组件', link: '/src/ranui/' },
       { text: '璀璨', link: '/src/article/designMode.md' },
     ],
@@ -93,30 +93,38 @@ export default defineConfig({
     sidebar: {
       '/src/ranuts/': [
         {
+          text: 'Overview 总览',
+          link: '/src/ranuts/',
+        },
+        {
           text: '通用函数',
           items: [
-            { text: '过滤对象', link: '/src/ranuts/utils/' },
-            { text: '统计执行时间', link: '/src/ranuts/utils/task' },
+            { text: '过滤对象', link: '/src/ranuts/utils/filterObj.md' },
+            { text: '统计执行时间', link: '/src/ranuts/utils/task.md' },
+            { text: '字符串转xml', link: '/src/ranuts/utils/str2xml.md' },
           ],
         },
         {
-          text: '文件操作',
-          items: [{ text: '监听文件是否改变', link: '/src/ranuts/file/' }],
+          text: '文件',
+          items: [
+            { text: '查询一个文件的详细信息', link: '/src/ranuts/file/watchFile.md' },
+            { text: '读取目录下的文件名称', link: '/src/ranuts/file/readDir.md' },
+            { text: '监听文件是否改变', link: '/src/ranuts/file/watchFile.md' },
+            { text: '读取文件内容', link: '/src/ranuts/file/readFile.md' },
+            { text: '追加文件内容', link: '/src/ranuts/file/appendFile.md' },
+            { text: '写入文件内容', link: '/src/ranuts/file/writeFile.md' },
+          ],
         },
         {
-          text: '排序算法',
+          text: '设计模式',
           items: [
-            { text: '概览', link: '/src/ranuts/sort/' },
-            { text: '冒泡排序', link: '/src/ranuts/sort/bubble/' },
-            { text: '选择排序', link: '/src/ranuts/sort/select/' },
-            { text: '插入排序', link: '/src/ranuts/sort/insert/' },
-            { text: '希尔排序', link: '/src/ranuts/sort/shell/' },
-            { text: '归并排序', link: '/src/ranuts/sort/merge/' },
-            { text: '快速排序', link: '/src/ranuts/sort/quick/' },
-            { text: '堆排序', link: '/src/ranuts/sort/heap/' },
-            { text: '计数排序', link: '/src/ranuts/sort/count/' },
-            { text: '桶排序', link: '/src/ranuts/sort/bucket/' },
-            { text: '基数排序', link: '/src/ranuts/sort/radix/' },
+            { text: '发布订阅模式', link: '/src/ranuts/mode/subscribe.md' },
+          ],
+        },
+        {
+          text: 'mime type',
+          items: [
+            { text: '通过文件后缀获取mime type', link: '/src/ranuts/mimeType/mimeType.md' },
           ],
         },
       ],
@@ -161,6 +169,22 @@ export default defineConfig({
             {
               text: '函数式编程',
               link: '/src/article/functionalProgramming.md',
+            },
+            {
+              text: '排序算法',
+              items: [
+                { text: '概览', link: '/src/ranuts/sort/' },
+                { text: '冒泡排序', link: '/src/ranuts/sort/bubble/' },
+                { text: '选择排序', link: '/src/ranuts/sort/select/' },
+                { text: '插入排序', link: '/src/ranuts/sort/insert/' },
+                { text: '希尔排序', link: '/src/ranuts/sort/shell/' },
+                { text: '归并排序', link: '/src/ranuts/sort/merge/' },
+                { text: '快速排序', link: '/src/ranuts/sort/quick/' },
+                { text: '堆排序', link: '/src/ranuts/sort/heap/' },
+                { text: '计数排序', link: '/src/ranuts/sort/count/' },
+                { text: '桶排序', link: '/src/ranuts/sort/bucket/' },
+                { text: '基数排序', link: '/src/ranuts/sort/radix/' },
+              ],
             },
           ],
         },

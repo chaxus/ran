@@ -1,9 +1,8 @@
-const fs = {};
-let fileSystem: any = fs;
-if (typeof process !== 'undefined' && typeof fileSystem.Stats === 'function') {
-  fileSystem._identification = true;
-} else {
-  fileSystem = { _identification: false, message: 'require is not defined' };
-}
+import fs from 'node:fs'
+import type { Noop } from '@/utils';
 
-export default fileSystem;
+export type FilePromiseResult = Promise<Ranuts.Identification> & { abort?: Noop  }
+
+export type Error = NodeJS.ErrnoException | null;
+
+export default fs;
