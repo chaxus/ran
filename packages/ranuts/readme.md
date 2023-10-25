@@ -23,7 +23,7 @@ npm install ranuts --save
 
 ## Document
 
-[Some commonly used functions and tools](https://chaxus.github.io/ran/src/ranuts/utils/)
+[Some commonly used functions and tools](https://chaxus.github.io/ran/src/ranuts/)
 
 
 
