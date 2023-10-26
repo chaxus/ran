@@ -1,15 +1,40 @@
-import writeFile from './src/file/writeFile';
-import readFile from './src/file/readFile';
-import watchFile from './src/file/watchFile';
-import EventEmitter from './src/mode/subscribe';
-import queryFileInfo from './src/file/fileInfo';
-import filterObj from './src/utils/filterObj';
-import readDir from './src/file/readDir';
-import str2Xml from './src/utils/str2Xml';
-import { init } from '@/vnode/init';
-import { h } from '@/vnode/h';
-import Monitor from '@/ranlog';
-import { MimeType, getMime, setMime } from '@/server/mimeType';
+import readFile from "@/file/readFile";
+import watchFile from "@/file/watchFile";
+import { SyncHook } from "@/mode/subscribe";
+import queryFileInfo from "@/file/fileInfo";
+import filterObj from "@/utils/filterObj";
+import readDir from "@/file/readDir";
+import str2Xml from "@/utils/str2Xml";
+import writeFile from "@/file/writeFile";
+import { init } from "@/vnode/init";
+import { h } from "@/vnode/h";
+import Monitor from "@/ranlog";
+import {
+  debounce,
+  formatJson,
+  getAllQueryString,
+  getCookie,
+  getFreshUrl,
+  isClient,
+  isImageSize,
+  isMobile,
+  isWeiXin,
+  judgeDevice,
+  memoize,
+  mergeExports,
+  noop,
+  querystring,
+  removeGhosting,
+  requestAnimation,
+  retain,
+  scriptOnLoad,
+  throttle,
+  timestampToTime
+} from "@/utils";
+import type { Noop } from "@/utils";
+import { MimeType, getMime, setMime } from "@/server/mimeType";
+
+export type { Noop };
 
 const vnode = {
   init,
@@ -20,7 +45,7 @@ export {
   writeFile,
   readFile,
   watchFile,
-  EventEmitter,
+  SyncHook,
   queryFileInfo,
   filterObj,
   str2Xml,
@@ -30,4 +55,26 @@ export {
   MimeType,
   getMime,
   setMime,
+  isClient,
+  isWeiXin,
+  judgeDevice,
+  noop,
+  mergeExports,
+  memoize,
+  debounce,
+  getAllQueryString,
+  getFreshUrl,
+  requestAnimation,
+  throttle,
+  scriptOnLoad,
+  isMobile,
+  formatJson,
+  getCookie,
+  querystring,
+  timestampToTime,
+  removeGhosting,
+  retain,
+  isImageSize
 };
+
+export const EventEmitter = SyncHook;

@@ -1,6 +1,6 @@
-import fs from './fs';
-
-type Error = NodeJS.ErrnoException | null;
+import type { Stats } from 'node:fs';
+import fs from '@/file/fs';
+import type { Error } from '@/file/fs';
 
 /**
  * @description: 查询一个文件的详细信息，一般用于区分文件还是目录（data.isDirectory()）
@@ -10,12 +10,10 @@ type Error = NodeJS.ErrnoException | null;
 
 const queryFileInfo = (path: string): Promise<Ranuts.Identification> =>
   new Promise((resolve, reject) => {
-    if (!fs._identification)
-      return reject({ _identification: false, data: 'fs is not loaded' });
-    fs.stat(path, (err: Error, data: string) => {
+    fs.stat(path, (err: Error, data: Stats) => {
       err
-        ? reject({ _identification: false, data: err })
-        : resolve({ _identification: true, data });
+        ? reject({ success: false, _identification: false, data: err })
+        : resolve({ success: true, _identification: true, data });
     });
   });
 

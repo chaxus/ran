@@ -1,4 +1,4 @@
-import fs from './fs';
+import fs from '@/file/fs';
 
 interface Options {
   dirPath: string;

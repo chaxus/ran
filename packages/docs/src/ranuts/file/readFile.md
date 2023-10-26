@@ -1,22 +1,24 @@
-# 文件操作函数
-
-## watchFile
+# ReadFile
 
 观察一个文件是否改变
 
-### API
+## API
 
-#### Return
+### Return
 
 - Promise
 
 | 参数   | 说明           | 类型      | 描述                         |
 | ------ | -------------- | --------- | ---------------------------- |
-| status | 文件是否被改变 | `boolean` | true 文件改变 false 文件没变 |
+| data | 文件是否被改变 | `boolean` | true 文件改变 false 文件没变 |
 
-#### Options
+### Options
 
 | 参数     | 说明                           | 类型     | 默认值    |
 | -------- | ------------------------------ | -------- | --------- |
 | path     | 文件路径，需要监听的文件       | `string` | undefined |
 | interval | 监听文件改变的时间，单位毫秒。 | `number` | `20`      |
+
+
+## Example 
+

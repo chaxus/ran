@@ -96,7 +96,6 @@ export const throttle = (fn: Function, wait: number = 500): Function => {
   };
 };
 
-export const Noop = (): void => {};
 
 export function changeHumpToLowerCase(str: string): string {
   const arr = str.split('');

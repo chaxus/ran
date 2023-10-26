@@ -1,6 +1,5 @@
-import fs from './fs';
-
-type Error = NodeJS.ErrnoException | null;
+import fs from '@/file/fs';
+import type { Error, FilePromiseResult } from '@/file/fs';
 
 /**
  * @description: 读取一个文件，读取成功返回状态码和文件内容
@@ -8,19 +7,28 @@ type Error = NodeJS.ErrnoException | null;
  * @param {string} format 读取格式，默认utf-8
  * @return {Promise}
  */
-
 const readFile = (
   path: string,
-  format: string = 'utf-8',
-): Promise<Ranuts.Identification> =>
-  new Promise((resolve, reject) => {
-    if (!fs._identification)
-      return reject({ _identification: false, data: 'fs is not loaded' });
-    fs.readFile(path, format, (err: Error, data: string) => {
-      err
-        ? reject({ _identification: false, data: err })
-        : resolve({ _identification: true, data });
-    });
+  format: BufferEncoding = 'utf-8',
+): FilePromiseResult => {
+  const controller = new AbortController();
+  const signal = controller.signal;
+  const result: FilePromiseResult = new Promise((resolve, reject) => {
+    fs.readFile(
+      path,
+      { encoding: format, signal },
+      (err: Error, data: string) => {
+        if (err) {
+          controller.abort();
+          reject({ success: false, _identification: false, data: err });
+        } else {
+          resolve({ success: true, _identification: true, data });
+        }
+      },
+    );
   });
+  result.abort = controller.abort;
+  return result;
+};
 
 export default readFile;

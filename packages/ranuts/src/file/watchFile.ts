@@ -1,5 +1,5 @@
 import type { Stats } from 'node:fs';
-import fs from './fs';
+import fs from '@/file/fs';
 
 /**
  * @description: 观察一个文件是否被改变，返回状态
@@ -13,16 +13,21 @@ const watchFile = (
   interval: number = 20,
 ): Promise<Ranuts.Identification> =>
   new Promise((resolve, reject) => {
-    if (!fs._identification)
-      return reject({ _identification: false, data: 'fs is not loaded' });
     fs.watchFile(path, { interval }, (curr: Stats, prev: Stats) => {
       if (curr.mtime !== prev.mtime) {
         fs.unwatchFile(path);
-        resolve({ _identification: true, data: { msg: 'file is changed' } });
+        resolve({
+          success: true,
+          _identification: true,
+          data: {},
+          message: 'file is changed',
+        });
       } else {
         resolve({
+          success: false,
           _identification: false,
-          data: { msg: 'file is not changed' },
+          data: {},
+          message: 'file is not changed',
         });
       }
     });
