@@ -8,6 +8,8 @@ The project includes **web components library**, **packaging tool**, **function 
 <a href="https://github.com/chaxus/ran">
     <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat" alt="PRs welcome!" />
 </a>
+<a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/github/actions/workflow/status/chaxus/ran/ci.yml" alt="Build Status"></a>
+
 <!-- <a href="https://github.com/chaxus/ran">
     <img src="https://img.shields.io/github/contributors/chaxus/ran" alt="contributors">
 </a>
@@ -35,7 +37,6 @@ pnpm install
 
 Based on `web components` UI library
 
-<a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/github/actions/workflow/status/chaxus/ran/ci.yml" alt="Build Status"></a>
 <a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/v/ranui.svg" alt="npm-v"></a>
 <a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/dt/ranui.svg" alt="npm-d"></a>
 <a href="https://github.com/chaxus/ran"><img src="https://img.badgesize.io/https:/unpkg.com/ranui/dist/umd/index.umd.cjs?label=brotli&compression=brotli" alt="brotli"></a>
@@ -47,7 +48,6 @@ Based on `web components` UI library
 
 ## 2.`@ranui/react`
 
-<a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/github/actions/workflow/status/chaxus/ran/ci.yml" alt="Build Status"></a>
 <a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/v/@ranui/react.svg" alt="npm-v"></a>
 <a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/dt/@ranui/react.svg" alt="npm-d"></a>
 <a href="https://github.com/chaxus/ran"><img src="https://img.badgesize.io/https:/unpkg.com/@ranui/react/dist/umd/index.umd.cjs?label=brotli&compression=brotli" alt="brotli"></a>
@@ -65,7 +65,14 @@ Not in the react framework, you can use [ranui](https://www.npmjs.com/package/ra
 
 ## 3.`ranuts`
 
-[Some commonly used functions and tools.](https://chaxus.github.io/ran/src/ranuts)
+<a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/v/ranuts.svg" alt="npm-v"></a>
+<a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/dt/ranuts.svg" alt="npm-d"></a>
+<a href="https://github.com/chaxus/ran"><img src="https://img.badgesize.io/https:/unpkg.com/ranuts/dist/index.umd.cjs?label=brotli&compression=brotli" alt="brotli"></a>
+<a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/badge/module%20formats-umd%2C%20esm-green.svg" alt="module formats: umd, esm"></a>
+
+
+- [Document](https://chaxus.github.io/ran/src/ranuts)
+- [Readme](https://github.com/chaxus/ran/tree/main/packages/ranuts)
 
 ## 4.`press`
 
