@@ -1,7 +1,6 @@
-
 # OCR
 
-传入图片和对应的语言类型，返回图片中的文本
+传入图片和对应的语言类型，返回图片中的文本。
 
 ## API
 
@@ -15,20 +14,32 @@
 
 ### Options
 
-| 参数      | 说明                                                  | 类型            | 默认值 |
-| --------- | ----------------------------------------------------- | --------------- | ------ |
-| images    | 图片的数组，支持`url`和`base64`                       | `Array<string>` | 无     |
-| languages | 指定生成文本的语言，具体参数见[lang-code](#lang-code) | `Array<string>` | 无     |
+| 参数     | 说明                                                                                                                       | 类型            | 默认值               |
+| -------- | -------------------------------------------------------------------------------------------------------------------------- | --------------- | -------------------- |
+| images   | 图片的数组，支持`url`和`base64`                                                                                            | `Array<string>` | 无                   |
+| language | 指定生成文本的语言，具体参数见[lang-code](#lang-code)                                                                      | `string`        | 无                   |
+| langPath | 使用的时候需要能访问`cdn.jsdelivr.net`，会下载对应的语言包，如果无法访问，也可以将语言包放在本地，传入对应的 **目录** 路径 | `string`        | 可选参数，默认走下载 |
 
 ## Example
 
 ```js
-import { ocr } from 'ranuts'
+import { ocr } from "ranuts";
 
-orc({ images:[],languages:['eng','chi_sim']  }).then(res=>{
-    console.log(res) 
-})
-
+const images = [
+  "https://chaxus.github.io/ran/ocr/eng.png",
+];
+const languages = "eng";
+ocr({ images, language }).then((res) => {
+  console.log(res.data?.[0].data.text);
+});
+// Mild Splendour of the various-vested Night!
+// Mother of wildly-working visions! hail
+// I watch thy gliding, while with watery light
+// Thy weak eye glimmers through a fleecy veil;
+// And when thou lovest thy pale orb to shroud
+// Behind the gather’d blackness lost on high;
+// And when thou dartest from the wind-rent cloud
+// Thy placid lightning o’er the awaken’d sky.
 ```
 
 ## Lang Code

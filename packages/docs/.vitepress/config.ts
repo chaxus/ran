@@ -174,7 +174,7 @@ export default defineConfig({
             },
             {
               text: '排序算法',
-              link: '/src/article/sort/',
+              link: '/src/article/sort/index.md',
               items: [
                 { text: '冒泡排序', link: '/src/article/sort/bubble/' },
                 { text: '选择排序', link: '/src/article/sort/select/' },

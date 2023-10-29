@@ -15,7 +15,8 @@
     "lint:ts": "eslint --cache .",
     "lint:fix": "eslint --cache --fix",
     "lint:prettier": "prettier --check --cache .",
-    "format": "prettier --write --cache ."
+    "format": "prettier --write --cache .",
+    "cpd":"jscpd --pattern packages/**/*.ts"
   },
   "homepage": "https://chaxus.github.io/ran/",
   "keywords": [],
@@ -30,6 +31,7 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-regexp": "^1.11.0",
+    "jscpd": "^3.5.10",
     "prettier": "^2.8.1",
     "terser": "^5.15.0",
     "typescript": "^5.2.2"
