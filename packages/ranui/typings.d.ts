@@ -27,12 +27,12 @@ declare namespace Ran {
 }
 
 interface Ranui {
-  message: Ran.Message;
+  message: Partial<Ran.Message>;
 }
 
 declare interface Window {
   ranui: Partial<Ranui>
-  message: Ran.Message;
+  message: Partial<Ran.Message>;
   pdfjsLib: any;
 }
 // ranuts 声明文件

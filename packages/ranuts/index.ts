@@ -10,11 +10,14 @@ import { init } from "@/vnode/init";
 import { h } from "@/vnode/h";
 import Monitor from "@/ranlog";
 import {
+  addClassToElement,
+  createObjectURL,
   debounce,
   formatJson,
   getAllQueryString,
   getCookie,
   getFreshUrl,
+  getPixelRatio,
   isClient,
   isImageSize,
   isMobile,
@@ -26,6 +29,7 @@ import {
   querystring,
   removeGhosting,
   requestAnimation,
+  requestUrlToBuffer,
   retain,
   scriptOnLoad,
   throttle,
@@ -74,7 +78,11 @@ export {
   timestampToTime,
   removeGhosting,
   retain,
-  isImageSize
+  isImageSize,
+  getPixelRatio,
+  requestUrlToBuffer,
+  createObjectURL,
+  addClassToElement
 };
 
 export const EventEmitter = SyncHook;

@@ -1,7 +1,7 @@
+import { addClassToElement } from 'ranuts'
 import {
-  deleteElementChildClass,
   isDisabled,
-  setElementClass,
+  removeClassToElementChild,
 } from '../../utils/index';
 
 function CustomElement() {
@@ -222,8 +222,8 @@ function CustomElement() {
           this.setAttribute('active', key);
           this.setTabLine(key);
           this.setTabContent(key);
-          deleteElementChildClass(this._nav, 'active');
-          setElementClass(tabHeader, 'active');
+          removeClassToElementChild(this._nav, 'active');
+          addClassToElement(tabHeader, 'active');
         }
       };
       /**
@@ -267,7 +267,7 @@ function CustomElement() {
         const key = initTabHeader?.getAttribute('r-key') || `${index}`;
         if (key != null) {
           this.setAttribute('active', `${key}`);
-          setElementClass(initTabHeader, 'active');
+          addClassToElement(initTabHeader, 'active');
           this.setTabContent(key);
           setTimeout(() => {
             // icon 渲染过慢的问题

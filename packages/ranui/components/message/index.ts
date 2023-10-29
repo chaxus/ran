@@ -142,6 +142,7 @@ function Custom() {
       toast: commonPrompt('toast'),
     };
   }
+  return {}
 }
 
 const message = Custom();

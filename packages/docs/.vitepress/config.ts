@@ -102,6 +102,8 @@ export default defineConfig({
             { text: '过滤对象', link: '/src/ranuts/utils/filterObj.md' },
             { text: '统计执行时间', link: '/src/ranuts/utils/task.md' },
             { text: '字符串转xml', link: '/src/ranuts/utils/str2xml.md' },
+            { text: '图片转base64', link: '/src/ranuts/utils/convertImageToBase64.md' },
+            { text: 'OCR文字识别`', link: '/src/ranuts/utils/ocr.md' },
           ],
         },
         {
