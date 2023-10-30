@@ -9,6 +9,7 @@ import writeFile from "@/file/writeFile";
 import { init } from "@/vnode/init";
 import { h } from "@/vnode/h";
 import Monitor from "@/ranlog";
+import { AudioRecorder } from "@/utils/audioRecorder";
 import {
   addClassToElement,
   createObjectURL,
@@ -82,7 +83,8 @@ export {
   getPixelRatio,
   requestUrlToBuffer,
   createObjectURL,
-  addClassToElement
+  addClassToElement,
+  AudioRecorder
 };
 
 export const EventEmitter = SyncHook;
