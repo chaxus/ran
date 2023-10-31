@@ -1,9 +1,5 @@
-import {
-  createCustomError,
-  falseList,
-  isDisabled,
-  presentDevice,
-} from '@/utils/index';
+import { judgeDevice } from 'ranuts';
+import { createCustomError, falseList, isDisabled } from '@/utils/index';
 
 function Custom() {
   if (typeof document !== 'undefined' && !customElements.get('r-button')) {
@@ -108,7 +104,7 @@ function Custom() {
         }
       };
       mousedown = (event: MouseEvent) => {
-        if (presentDevice !== 'pc') return;
+        if (judgeDevice() !== 'pc') return;
         if (!this.disabled || this.disabled === 'false') {
           this.debounceMouseEvent();
           const { left, top } = this.getBoundingClientRect();
@@ -123,7 +119,7 @@ function Custom() {
         }
       };
       mouseup = (event: MouseEvent) => {
-        if (presentDevice !== 'pc') return;
+        if (judgeDevice() !== 'pc') return;
         if (this.debounceTimeId) return;
         this.debounceTimeId = setTimeout(() => {
           this._container.style.removeProperty('--ran-x');

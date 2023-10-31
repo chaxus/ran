@@ -1,4 +1,5 @@
-import { createCustomError, getPixelRatio } from '@/utils/index';
+import { getPixelRatio } from 'ranuts';
+import { createCustomError } from '@/utils/index';
 
 interface AbilityTags {
   abilityName: string;

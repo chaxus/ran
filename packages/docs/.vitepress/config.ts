@@ -102,13 +102,24 @@ export default defineConfig({
             { text: '过滤对象', link: '/src/ranuts/utils/filterObj.md' },
             { text: '统计执行时间', link: '/src/ranuts/utils/task.md' },
             { text: '字符串转xml', link: '/src/ranuts/utils/str2xml.md' },
+            {
+              text: '图片转base64',
+              link: '/src/ranuts/utils/convertImageToBase64.md',
+            },
+            { text: 'OCR文字识别`', link: '/src/ranuts/utils/ocr.md' },
           ],
         },
         {
           text: '文件',
           items: [
-            { text: '查询一个文件的详细信息', link: '/src/ranuts/file/watchFile.md' },
-            { text: '读取目录下的文件名称', link: '/src/ranuts/file/readDir.md' },
+            {
+              text: '查询一个文件的详细信息',
+              link: '/src/ranuts/file/watchFile.md',
+            },
+            {
+              text: '读取目录下的文件名称',
+              link: '/src/ranuts/file/readDir.md',
+            },
             { text: '监听文件是否改变', link: '/src/ranuts/file/watchFile.md' },
             { text: '读取文件内容', link: '/src/ranuts/file/readFile.md' },
             { text: '追加文件内容', link: '/src/ranuts/file/appendFile.md' },
@@ -124,7 +135,10 @@ export default defineConfig({
         {
           text: 'mime type',
           items: [
-            { text: '通过文件后缀获取mime type', link: '/src/ranuts/mimeType/mimeType.md' },
+            {
+              text: '通过文件后缀获取mime type',
+              link: '/src/ranuts/mimeType/mimeType.md',
+            },
           ],
         },
       ],
@@ -172,18 +186,18 @@ export default defineConfig({
             },
             {
               text: '排序算法',
+              link: '/src/article/sort/index.md',
               items: [
-                { text: '概览', link: '/src/ranuts/sort/' },
-                { text: '冒泡排序', link: '/src/ranuts/sort/bubble/' },
-                { text: '选择排序', link: '/src/ranuts/sort/select/' },
-                { text: '插入排序', link: '/src/ranuts/sort/insert/' },
-                { text: '希尔排序', link: '/src/ranuts/sort/shell/' },
-                { text: '归并排序', link: '/src/ranuts/sort/merge/' },
-                { text: '快速排序', link: '/src/ranuts/sort/quick/' },
-                { text: '堆排序', link: '/src/ranuts/sort/heap/' },
-                { text: '计数排序', link: '/src/ranuts/sort/count/' },
-                { text: '桶排序', link: '/src/ranuts/sort/bucket/' },
-                { text: '基数排序', link: '/src/ranuts/sort/radix/' },
+                { text: '冒泡排序', link: '/src/article/sort/bubble/' },
+                { text: '选择排序', link: '/src/article/sort/select/' },
+                { text: '插入排序', link: '/src/article/sort/insert/' },
+                { text: '希尔排序', link: '/src/article/sort/shell/' },
+                { text: '归并排序', link: '/src/article/sort/merge/' },
+                { text: '快速排序', link: '/src/article/sort/quick/' },
+                { text: '堆排序', link: '/src/article/sort/heap/' },
+                { text: '计数排序', link: '/src/article/sort/count/' },
+                { text: '桶排序', link: '/src/article/sort/bucket/' },
+                { text: '基数排序', link: '/src/article/sort/radix/' },
               ],
             },
           ],

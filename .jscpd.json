@@ -1,0 +1,6 @@
+{
+  "threshold": 0,
+  "reporters": ["html", "console"],
+  "ignore": ["**/__snapshots__/**", "**.config.ts", "**.d.ts"],
+  "absolute": true
+}

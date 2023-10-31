@@ -1,7 +1,9 @@
-import { requestFile } from '@/utils/index';
-// import { renderPdf } from '@/components/preview/pdf'
+import { noop, requestUrlToBuffer } from 'ranuts';
 import '../../base.less';
 import '@/components/icon';
+import message from '@/components/message';
+
+const { warning = noop } = message;
 
 const PPTX =
   'application/vnd.openxmlformats-officedocument.presentationml.presentation';
@@ -129,18 +131,26 @@ async function Custom() {
       handleFile = async (file: string | File) => {
         try {
           if (typeof file === 'string') {
-            file = await requestFile(file, { onProgress: this.onProgress });
-          }
-          const { type } = file;
-          const handler = renderFileMap.get(type);
-          if (handler && this.previewContext) {
-            if (type === XLSX || type === XLS) {
-              this.previewContext.style.setProperty('width', '100%');
+            const { success, data, message } = await requestUrlToBuffer(file, {
+              onProgress: this.onProgress,
+              responseType: 'blob',
+            });
+            if (success) {
+              file = new File([data], data.name, { type: data.type });
+              const { type } = file;
+              const handler = renderFileMap.get(type);
+              if (handler && this.previewContext) {
+                if (type === XLSX || type === XLS) {
+                  this.previewContext.style.setProperty('width', '100%');
+                } else {
+                  this.previewContext.style.setProperty('width', '100%');
+                }
+                // document.body.style.overflow = 'hidden'
+                handler(file, this.previewContext);
+              }
             } else {
-              this.previewContext.style.setProperty('width', '100%');
+              warning(message);
             }
-            // document.body.style.overflow = 'hidden'
-            handler(file, this.previewContext);
           }
         } catch (error) {
           console.log('handleFile', error);

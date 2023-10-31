@@ -27,7 +27,11 @@ const writeFile = (
           reject({ success: false, _identification: false, data: err });
           throw err;
         } else {
-          resolve({ success: true, _identification: false, data: { path, content } });
+          resolve({
+            success: true,
+            _identification: false,
+            data: { path, content },
+          });
         }
       },
     );

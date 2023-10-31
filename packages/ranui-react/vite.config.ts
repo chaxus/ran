@@ -14,7 +14,7 @@ export const umd: BuildOptions = {
   outDir: resolve(__dirname, 'dist/umd'),
   lib: {
     entry: resolve(__dirname, 'index.ts'),
-    name: 'ranui',
+    name: 'ranuireact',
     fileName: 'index',
     formats: ['umd'],
   },

@@ -15,7 +15,11 @@ type TreeshakingPreset = 'smallest' | 'safest' | 'recommended';
 
 type HasModuleSideEffects = (id: string, external: boolean) => boolean;
 
-type ModuleSideEffectsOption = boolean | 'no-external' | string[] | HasModuleSideEffects;
+type ModuleSideEffectsOption =
+  | boolean
+  | 'no-external'
+  | string[]
+  | HasModuleSideEffects;
 
 interface NormalizedTreeshakingOptions {
   annotations: boolean;
@@ -32,25 +36,81 @@ interface TreeshakingOptions
   moduleSideEffects?: ModuleSideEffectsOption;
   preset?: TreeshakingPreset;
 }
+export interface CustomPluginOptions {
+  [plugin: string]: unknown;
+}
+interface ModuleOptions {
+  assertions: Record<string, string>;
+  meta: CustomPluginOptions;
+  moduleSideEffects: boolean | 'no-treeshake';
+  syntheticNamedExports: boolean | string;
+}
+interface AcornNode {
+  end: number;
+  start: number;
+  type: string;
+}
+export interface ResolvedId extends ModuleOptions {
+  external: boolean | 'absolute';
+  id: string;
+  resolvedBy: string;
+}
+interface ModuleInfo extends ModuleOptions {
+  ast: AcornNode | null;
+  code: string | null;
+  dynamicImporters: readonly string[];
+  dynamicallyImportedIdResolutions: readonly ResolvedId[];
+  dynamicallyImportedIds: readonly string[];
+  exportedBindings: Record<string, string[]> | null;
+  exports: string[] | null;
+  hasDefaultExport: boolean | null;
+  /** @deprecated Use `moduleSideEffects` instead */
+  hasModuleSideEffects: boolean | 'no-treeshake';
+  id: string;
+  implicitlyLoadedAfterOneOf: readonly string[];
+  implicitlyLoadedBefore: readonly string[];
+  importedIdResolutions: readonly ResolvedId[];
+  importedIds: readonly string[];
+  importers: readonly string[];
+  isEntry: boolean;
+  isExternal: boolean;
+  isIncluded: boolean | null;
+}
+type GetModuleInfo = (moduleId: string) => ModuleInfo | null;
+interface ManualChunkMeta {
+  getModuleIds: () => IterableIterator<string>;
+  getModuleInfo: GetModuleInfo;
+}
+type NullValue = null | undefined | void;
+
+type GetManualChunk = (id: string, meta: ManualChunkMeta) => string | NullValue;
+
+type ManualChunksOption = { [chunkAlias: string]: string[] } | GetManualChunk;
 
 interface chunkOptimization {
-  chunkSizeWarningLimit: number,
-  reportCompressedSize: boolean,
+  chunkSizeWarningLimit: number;
+  reportCompressedSize: boolean;
   rollupOptions: {
     output: {
       experimentalMinChunkSize?: number;
-    }
+    };
+    manualChunks: ManualChunksOption;
     treeshake?: boolean | TreeshakingPreset | TreeshakingOptions;
-  }
-  minify: boolean | "terser" | "esbuild" | undefined
+  };
+  minify: boolean | 'terser' | 'esbuild' | undefined;
 }
 
 const chunkOptimization: chunkOptimization = {
-  chunkSizeWarningLimit: 3000,// chunk 超过 2000kb 之后进行提示
+  chunkSizeWarningLimit: 3000,
   reportCompressedSize: false,
   rollupOptions: {
     output: {
-      experimentalMinChunkSize: 1000
+      experimentalMinChunkSize: 1000,
+    },
+    manualChunks: (id) => {
+      if (id.includes('node_modules')) {
+        return 'vendor';
+      }
     },
     treeshake: {
       preset: 'recommended',
@@ -58,7 +118,7 @@ const chunkOptimization: chunkOptimization = {
     },
   },
   minify: 'terser',
-}
+};
 
 export const umd: BuildOptions = {
   ...chunkOptimization,
@@ -107,8 +167,8 @@ export const viteConfig: UserConfig = {
     loadSvg({ svgo: false, defaultImport: 'raw' }),
     visualizer({
       emitFile: false,
-      filename: "report/build-stats.html",
-    })
+      filename: 'report/build-stats.html',
+    }),
   ],
   resolve: {
     alias: {
@@ -127,13 +187,6 @@ export const viteConfig: UserConfig = {
     },
     modules: {
       generateScopedName: '[name--[local]--[hash:base64:5]]',
-    },
-  },
-  server: {
-    port: 5124,
-    fs: {
-      strict: false,
-      allow: [],
     },
   },
 };

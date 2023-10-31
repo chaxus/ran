@@ -142,6 +142,7 @@ function Custom() {
       toast: commonPrompt('toast'),
     };
   }
+  return {};
 }
 
 const message = Custom();
@@ -149,9 +150,9 @@ const message = Custom();
 if (typeof window !== 'undefined' && message) {
   window.message = message;
   if (!window.ranui) {
-    window.ranui = {}
+    window.ranui = {};
   }
-  window.ranui.message = message
+  window.ranui.message = message;
 }
 
 export default message;

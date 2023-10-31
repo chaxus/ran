@@ -15,4 +15,7 @@ config.ts.timestamp*
 /test-results/
 /playwright-report/
 /playwright/.cache/
+# jscpd
 report
+# tesseract
+*.traineddata

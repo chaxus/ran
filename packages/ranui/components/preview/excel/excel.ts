@@ -1,9 +1,8 @@
 import * as Excel from 'exceljs/dist/exceljs';
 import tinycolor from 'tinycolor2';
 import { cloneDeep, find, get } from 'lodash';
-import dayjs from 'dayjs';
+import { timestampToTime } from 'ranuts';
 import { getDarkColor, getLightColor } from '@/components/preview/colz';
-import { createObjectURL } from '@/utils/index';
 
 const themeColor = [
   '#FFFFFF',
@@ -88,48 +87,6 @@ const indexedColor = [
 
 const defaultColWidth = 80;
 const defaultRowHeight = 24;
-
-export async function getData(
-  src: Blob | ArrayBuffer | Response,
-  options: RequestExcelOption,
-): Promise<unknown> {
-  const result = await createObjectURL(src);
-  return requestExcel(result, options);
-}
-
-interface RequestExcelOption {
-  responseType: XMLHttpRequestResponseType;
-  method: string;
-  withCredentials: boolean;
-  headers: Record<string, string>;
-  body: string;
-}
-
-function requestExcel(src: string, options: RequestExcelOption) {
-  return new Promise(function (resolve, reject) {
-    const xhr = new XMLHttpRequest();
-    xhr.open(options.method || 'GET', src, true);
-    xhr.responseType = options.responseType || 'arraybuffer';
-    xhr.onload = function () {
-      if (xhr.status === 200) {
-        resolve(xhr.response);
-      } else {
-        reject(xhr.status);
-      }
-    };
-    xhr.onerror = function () {
-      reject(xhr.status);
-    };
-    xhr.withCredentials = options.withCredentials || false;
-    if (options.headers) {
-      Object.keys(options.headers).forEach(function (key) {
-        xhr.setRequestHeader(key, options.headers[key]);
-      });
-    }
-
-    xhr.send(options.body);
-  });
-}
 
 export function readExcelData(buffer: ArrayBuffer | string): Promise<unknown> {
   try {
@@ -246,21 +203,21 @@ function getCellText(cell: Cell) {
       return value;
     case 4: //日期
       switch (numFmt) {
-        case 'yyyy-mm-dd;@':
-          return dayjs(value).format('YYYY-MM-DD');
         case 'mm-dd-yy':
-          return dayjs(value).format('YYYY/MM/DD');
+          return timestampToTime(value).format('YYYY/MM/DD');
         case '[$-F800]dddd, mmmm dd, yyyy':
-          return dayjs(value).format('YYYY年M月D日 ddd');
+          return timestampToTime(value).format('YYYY年M月D日 ddd');
         case 'm"月"d"日";@':
-          return dayjs(value).format('M月D日');
+          return timestampToTime(value).format('M月D日');
         case 'yyyy/m/d h:mm;@':
         case 'm/d/yy "h":mm':
-          return dayjs(value).subtract(8, 'hour').format('YYYY/M/DD HH:mm');
+          return timestampToTime(value)
+            .subtract(8, 'hour')
+            .format('YYYY/M/DD HH:mm');
         case 'h:mm;@':
-          return dayjs(value).format('HH:mm');
+          return timestampToTime(value).format('HH:mm');
         default:
-          return dayjs(value).format('YYYY-MM-DD');
+          return timestampToTime(value).format('YYYY-MM-DD');
       }
 
     case 5: //超链接
