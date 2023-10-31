@@ -1,12 +1,12 @@
 {
-  "threshold": 50,
+  "threshold": 20,
   "reporters": ["html", "console"],
   "ignore": [
     "**/__snapshots__/**",
     "**.config.ts",
     "**.md",
     "**.html",
-    "**tsconfig.json"
+    "tsconfig.json"
   ],
   "absolute": true,
   "gitignore": true
