@@ -36,7 +36,7 @@ interface TreeshakingOptions
   moduleSideEffects?: ModuleSideEffectsOption;
   preset?: TreeshakingPreset;
 }
-export interface CustomPluginOptions {
+interface CustomPluginOptions {
   [plugin: string]: unknown;
 }
 interface ModuleOptions {
@@ -50,7 +50,7 @@ interface AcornNode {
   start: number;
   type: string;
 }
-export interface ResolvedId extends ModuleOptions {
+interface ResolvedId extends ModuleOptions {
   external: boolean | 'absolute';
   id: string;
   resolvedBy: string;
@@ -93,8 +93,8 @@ interface chunkOptimization {
   rollupOptions: {
     output: {
       experimentalMinChunkSize?: number;
+      manualChunks: ManualChunksOption;
     };
-    manualChunks: ManualChunksOption;
     treeshake?: boolean | TreeshakingPreset | TreeshakingOptions;
   };
   minify: boolean | 'terser' | 'esbuild' | undefined;
@@ -106,11 +106,11 @@ const chunkOptimization: chunkOptimization = {
   rollupOptions: {
     output: {
       experimentalMinChunkSize: 1000,
-    },
-    manualChunks: (id) => {
-      if (id.includes('node_modules')) {
-        return 'vendor';
-      }
+      manualChunks: (id) => {
+        if (id.includes('node_modules')) {
+          return 'vendor';
+        }
+      },
     },
     treeshake: {
       preset: 'recommended',
