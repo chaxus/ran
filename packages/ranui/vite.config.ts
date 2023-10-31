@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url';
 import type { BuildOptions, UserConfig } from 'vite';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
+import { visualizer } from 'rollup-plugin-visualizer';
 import loadStyle from './plugins/load-style';
 import loadSvg from './plugins/load-svg';
 
@@ -33,6 +34,7 @@ interface TreeshakingOptions
 }
 
 interface chunkOptimization {
+  chunkSizeWarningLimit: number,
   reportCompressedSize: boolean,
   rollupOptions: {
     output: {
@@ -44,6 +46,7 @@ interface chunkOptimization {
 }
 
 const chunkOptimization: chunkOptimization = {
+  chunkSizeWarningLimit: 3000,// chunk 超过 2000kb 之后进行提示
   reportCompressedSize: false,
   rollupOptions: {
     output: {
@@ -102,6 +105,10 @@ export const viteConfig: UserConfig = {
     }),
     dts(),
     loadSvg({ svgo: false, defaultImport: 'raw' }),
+    visualizer({
+      emitFile: false,
+      filename: "report/build-stats.html",
+    })
   ],
   resolve: {
     alias: {
