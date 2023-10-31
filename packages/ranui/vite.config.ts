@@ -14,7 +14,11 @@ type TreeshakingPreset = 'smallest' | 'safest' | 'recommended';
 
 type HasModuleSideEffects = (id: string, external: boolean) => boolean;
 
-type ModuleSideEffectsOption = boolean | 'no-external' | string[] | HasModuleSideEffects;
+type ModuleSideEffectsOption =
+  | boolean
+  | 'no-external'
+  | string[]
+  | HasModuleSideEffects;
 
 interface NormalizedTreeshakingOptions {
   annotations: boolean;
@@ -33,21 +37,21 @@ interface TreeshakingOptions
 }
 
 interface chunkOptimization {
-  reportCompressedSize: boolean,
+  reportCompressedSize: boolean;
   rollupOptions: {
     output: {
       experimentalMinChunkSize?: number;
-    }
+    };
     treeshake?: boolean | TreeshakingPreset | TreeshakingOptions;
-  }
-  minify: boolean | "terser" | "esbuild" | undefined
+  };
+  minify: boolean | 'terser' | 'esbuild' | undefined;
 }
 
 const chunkOptimization: chunkOptimization = {
   reportCompressedSize: false,
   rollupOptions: {
     output: {
-      experimentalMinChunkSize: 1000
+      experimentalMinChunkSize: 1000,
     },
     treeshake: {
       preset: 'recommended',
@@ -55,7 +59,7 @@ const chunkOptimization: chunkOptimization = {
     },
   },
   minify: 'terser',
-}
+};
 
 export const umd: BuildOptions = {
   ...chunkOptimization,

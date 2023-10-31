@@ -4,7 +4,6 @@ import { cloneDeep, find, get } from 'lodash';
 import { timestampToTime } from 'ranuts';
 import { getDarkColor, getLightColor } from '@/components/preview/colz';
 
-
 const themeColor = [
   '#FFFFFF',
   '#000000',
@@ -88,7 +87,6 @@ const indexedColor = [
 
 const defaultColWidth = 80;
 const defaultRowHeight = 24;
-
 
 export function readExcelData(buffer: ArrayBuffer | string): Promise<unknown> {
   try {
@@ -213,7 +211,9 @@ function getCellText(cell: Cell) {
           return timestampToTime(value).format('M月D日');
         case 'yyyy/m/d h:mm;@':
         case 'm/d/yy "h":mm':
-          return timestampToTime(value).subtract(8, 'hour').format('YYYY/M/DD HH:mm');
+          return timestampToTime(value)
+            .subtract(8, 'hour')
+            .format('YYYY/M/DD HH:mm');
         case 'h:mm;@':
           return timestampToTime(value).format('HH:mm');
         default:

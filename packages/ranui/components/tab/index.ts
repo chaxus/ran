@@ -1,8 +1,5 @@
-import { addClassToElement } from 'ranuts'
-import {
-  isDisabled,
-  removeClassToElementChild,
-} from '../../utils/index';
+import { addClassToElement } from 'ranuts';
+import { isDisabled, removeClassToElementChild } from '../../utils/index';
 
 function CustomElement() {
   if (typeof window !== 'undefined' && !customElements.get('r-tabs')) {

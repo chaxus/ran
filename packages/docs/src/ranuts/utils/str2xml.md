@@ -23,7 +23,6 @@
 因此我们需要将字符串转换成`xml`，然后就可以将它加入到`xml`中。
 
 ```js
-
 import { str2Xml } from 'ranuts';
 
 // import 'assets/*.svg'
@@ -33,4 +32,3 @@ const icon = str2Xml(svg, 'image/svg+xml');
 
 document.body.appendChild(icon);
 ```
-

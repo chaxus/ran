@@ -11,7 +11,7 @@ declare module '@/server/*';
 declare namespace Ranuts {
   interface Identification {
     success: boolean;
-    _identification?: boolean,
+    _identification?: boolean;
     message?: string;
     data?: unknown;
   }

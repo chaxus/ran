@@ -38,5 +38,3 @@ Promise.prototype.catch;
 Promise.prototype.finally;
 
 Promise.prototype.then;
-
-

@@ -8,6 +8,6 @@ interface RPreview {
   ref?: React.MutableRefObject<HTMLDivElement | null>;
 }
 
-const Preview = reactify<RPreview>('r-preview')
+const Preview = reactify<RPreview>('r-preview');
 
 export default Preview;

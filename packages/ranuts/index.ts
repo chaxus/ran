@@ -1,15 +1,15 @@
-import readFile from "@/file/readFile";
-import watchFile from "@/file/watchFile";
-import { SyncHook } from "@/mode/subscribe";
-import queryFileInfo from "@/file/fileInfo";
-import filterObj from "@/utils/filterObj";
-import readDir from "@/file/readDir";
-import str2Xml from "@/utils/str2Xml";
-import writeFile from "@/file/writeFile";
-import { init } from "@/vnode/init";
-import { h } from "@/vnode/h";
-import Monitor from "@/ranlog";
-import { AudioRecorder } from "@/utils/audioRecorder";
+import readFile from '@/file/readFile';
+import watchFile from '@/file/watchFile';
+import { SyncHook } from '@/mode/subscribe';
+import queryFileInfo from '@/file/fileInfo';
+import filterObj from '@/utils/filterObj';
+import readDir from '@/file/readDir';
+import str2Xml from '@/utils/str2Xml';
+import writeFile from '@/file/writeFile';
+import { init } from '@/vnode/init';
+import { h } from '@/vnode/h';
+import Monitor from '@/ranlog';
+import { AudioRecorder } from '@/utils/audioRecorder';
 import {
   addClassToElement,
   createObjectURL,
@@ -34,10 +34,10 @@ import {
   retain,
   scriptOnLoad,
   throttle,
-  timestampToTime
-} from "@/utils";
-import type { Noop } from "@/utils";
-import { MimeType, getMime, setMime } from "@/server/mimeType";
+  timestampToTime,
+} from '@/utils';
+import type { Noop } from '@/utils';
+import { MimeType, getMime, setMime } from '@/server/mimeType';
 
 export type { Noop };
 
@@ -84,7 +84,7 @@ export {
   requestUrlToBuffer,
   createObjectURL,
   addClassToElement,
-  AudioRecorder
+  AudioRecorder,
 };
 
 export const EventEmitter = SyncHook;

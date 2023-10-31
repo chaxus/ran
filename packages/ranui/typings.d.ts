@@ -31,7 +31,7 @@ interface Ranui {
 }
 
 declare interface Window {
-  ranui: Partial<Ranui>
+  ranui: Partial<Ranui>;
   message: Partial<Ran.Message>;
   pdfjsLib: any;
 }

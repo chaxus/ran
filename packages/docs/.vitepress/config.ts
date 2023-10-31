@@ -102,15 +102,24 @@ export default defineConfig({
             { text: '过滤对象', link: '/src/ranuts/utils/filterObj.md' },
             { text: '统计执行时间', link: '/src/ranuts/utils/task.md' },
             { text: '字符串转xml', link: '/src/ranuts/utils/str2xml.md' },
-            { text: '图片转base64', link: '/src/ranuts/utils/convertImageToBase64.md' },
+            {
+              text: '图片转base64',
+              link: '/src/ranuts/utils/convertImageToBase64.md',
+            },
             { text: 'OCR文字识别`', link: '/src/ranuts/utils/ocr.md' },
           ],
         },
         {
           text: '文件',
           items: [
-            { text: '查询一个文件的详细信息', link: '/src/ranuts/file/watchFile.md' },
-            { text: '读取目录下的文件名称', link: '/src/ranuts/file/readDir.md' },
+            {
+              text: '查询一个文件的详细信息',
+              link: '/src/ranuts/file/watchFile.md',
+            },
+            {
+              text: '读取目录下的文件名称',
+              link: '/src/ranuts/file/readDir.md',
+            },
             { text: '监听文件是否改变', link: '/src/ranuts/file/watchFile.md' },
             { text: '读取文件内容', link: '/src/ranuts/file/readFile.md' },
             { text: '追加文件内容', link: '/src/ranuts/file/appendFile.md' },
@@ -126,7 +135,10 @@ export default defineConfig({
         {
           text: 'mime type',
           items: [
-            { text: '通过文件后缀获取mime type', link: '/src/ranuts/mimeType/mimeType.md' },
+            {
+              text: '通过文件后缀获取mime type',
+              link: '/src/ranuts/mimeType/mimeType.md',
+            },
           ],
         },
       ],

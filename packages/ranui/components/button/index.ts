@@ -1,9 +1,5 @@
-import { judgeDevice } from 'ranuts'
-import {
-  createCustomError,
-  falseList,
-  isDisabled,
-} from '@/utils/index';
+import { judgeDevice } from 'ranuts';
+import { createCustomError, falseList, isDisabled } from '@/utils/index';
 
 function Custom() {
   if (typeof document !== 'undefined' && !customElements.get('r-button')) {

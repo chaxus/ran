@@ -14,21 +14,19 @@
 
 ### Options
 
-| 参数     | 说明                                                                                                                       | 类型            | 默认值               |
-| -------- | -------------------------------------------------------------------------------------------------------------------------- | --------------- | -------------------- |
-| images   | 图片的数组，支持`url`和`base64`                                                                                            | `Array<string>` | 无                   |
-| language | 指定生成文本的语言，具体参数见[lang-code](#lang-code)                                                                      | `string`        | 无                   |
+| 参数     | 说明                                                                                                                       | 类型            | 默认值                   |
+| -------- | -------------------------------------------------------------------------------------------------------------------------- | --------------- | ------------------------ |
+| images   | 图片的数组，支持`url`和`base64`                                                                                            | `Array<string>` | 无                       |
+| language | 指定生成文本的语言，具体参数见[lang-code](#lang-code)                                                                      | `string`        | 无                       |
 | langPath | 使用的时候需要能访问`cdn.jsdelivr.net`，会下载对应的语言包，如果无法访问，也可以将语言包放在本地，传入对应的 **目录** 路径 | `string`        | 可选参数，默认走网络下载 |
 
 ## Example
 
 ```js
-import { ocr } from "ranuts";
+import { ocr } from 'ranuts';
 
-const images = [
-  "https://chaxus.github.io/ran/ocr/eng.png",
-];
-const languages = "eng";
+const images = ['https://chaxus.github.io/ran/ocr/eng.png'];
+const languages = 'eng';
 ocr({ images, language }).then((res) => {
   console.log(res.data?.[0].data.text);
 });

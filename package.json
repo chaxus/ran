@@ -16,7 +16,7 @@
     "lint:fix": "eslint --cache --fix",
     "lint:prettier": "prettier --check --cache .",
     "format": "prettier --write --cache .",
-    "cpd":"jscpd --pattern packages/**/*.ts"
+    "cpd": "jscpd --pattern packages/**/*.ts"
   },
   "homepage": "https://chaxus.github.io/ran/",
   "keywords": [],

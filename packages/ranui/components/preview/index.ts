@@ -1,9 +1,9 @@
-import { noop, requestUrlToBuffer } from 'ranuts'
+import { noop, requestUrlToBuffer } from 'ranuts';
 import '../../base.less';
 import '@/components/icon';
 import message from '@/components/message';
 
-const { warning = noop } = message
+const { warning = noop } = message;
 
 const PPTX =
   'application/vnd.openxmlformats-officedocument.presentationml.presentation';
@@ -131,7 +131,10 @@ async function Custom() {
       handleFile = async (file: string | File) => {
         try {
           if (typeof file === 'string') {
-            const { success, data, message } = await requestUrlToBuffer(file, { onProgress: this.onProgress, responseType: 'blob' });
+            const { success, data, message } = await requestUrlToBuffer(file, {
+              onProgress: this.onProgress,
+              responseType: 'blob',
+            });
             if (success) {
               file = new File([data], data.name, { type: data.type });
               const { type } = file;
@@ -146,7 +149,7 @@ async function Custom() {
                 handler(file, this.previewContext);
               }
             } else {
-              warning(message)
+              warning(message);
             }
           }
         } catch (error) {

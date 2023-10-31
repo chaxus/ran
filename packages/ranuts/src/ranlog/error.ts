@@ -1,6 +1,5 @@
 import { noop } from '@/utils';
 
-
 export const handleError = (
   hooks: (error: Error | PromiseRejectionEvent | ErrorEvent) => void = noop,
 ): void => {

@@ -13,16 +13,14 @@ import type {
 
 interface InnerRef {
   innerRef:
-  | RefObject<Element & Record<string, unknown>>
-  | MutableRefObject<Element & Record<string, unknown>>;
+    | RefObject<Element & Record<string, unknown>>
+    | MutableRefObject<Element & Record<string, unknown>>;
 }
 
 type Props = DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> &
   InnerRef;
 
-export const reactifyWebComponent = <T = unknown>(
-  WC: string,
-): any => {
+export const reactifyWebComponent = <T = unknown>(WC: string): any => {
   class Reactified extends Component<Props> {
     eventHandlers: Array<[string, EventListenerOrEventListenerObject]>;
     ref;
@@ -109,10 +107,8 @@ export const reactifyWebComponent = <T = unknown>(
     }
   }
 
-  return forwardRef(
-    (props: any, ref: ForwardedRef<T>) => {
-      return createElement<any>(Reactified, { ...props, innerRef: ref });
-    },
-  );
+  return forwardRef((props: any, ref: ForwardedRef<T>) => {
+    return createElement<any>(Reactified, { ...props, innerRef: ref });
+  });
 };
 export default reactifyWebComponent;

@@ -8,7 +8,7 @@ type EventItem = {
   initialCallback?: Callback;
 };
 
-const NEW_LISTENER = 'NEW_LISTENER'
+const NEW_LISTENER = 'NEW_LISTENER';
 
 export class SyncHook {
   private _events: Record<EventName, Array<EventItem>>;
@@ -96,8 +96,6 @@ export class SyncHook {
 // SyncWaterfallHook 是一个同步的、瀑布式类型的 Hook。瀑布类型的钩子就是如果前一个事件函数的结果 result !== undefined，则 result 会作为后一个事件函数的第一个参数（也就是上一个函数的执行结果会成为下一个函数的参数）
 
 // SyncLoopHook 是一个同步、循环类型的 Hook。循环类型的含义是不停的循环执行事件函数，直到所有函数结果 result === undefined，不符合条件就调头重新开始执行。
-
-
 
 // 异步的hook
 // 异步钩子需要通过tapAsync函数注册事件,同时也会多一个callback参数，执行callback告诉hook该注册事件已经执行完成

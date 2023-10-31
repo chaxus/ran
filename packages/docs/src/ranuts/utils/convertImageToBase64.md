@@ -21,9 +21,9 @@
 ## Example
 
 ```js
-import { convertImageToBase64 } from 'ranuts'
+import { convertImageToBase64 } from 'ranuts';
 
-convertImageToBase64(file).then(res=>{
-    console.log(result) 
-})
+convertImageToBase64(file).then((res) => {
+  console.log(result);
+});
 ```

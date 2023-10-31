@@ -1,7 +1,6 @@
 import { replaceOld } from './utils';
 import { noop } from '@/utils';
 
-
 export const handleConsole = (
   hooks: (...args: unknown[]) => void = noop,
 ): void => {
