@@ -93,7 +93,7 @@ interface chunkOptimization {
   rollupOptions: {
     output: {
       experimentalMinChunkSize?: number;
-      manualChunks: ManualChunksOption;
+      manualChunks?: ManualChunksOption;
     };
     treeshake?: boolean | TreeshakingPreset | TreeshakingOptions;
   };
@@ -106,11 +106,6 @@ const chunkOptimization: chunkOptimization = {
   rollupOptions: {
     output: {
       experimentalMinChunkSize: 1000,
-      manualChunks: (id) => {
-        if (id.includes('node_modules')) {
-          return 'vendor';
-        }
-      },
     },
     treeshake: {
       preset: 'recommended',
@@ -133,6 +128,20 @@ export const umd: BuildOptions = {
 
 export const es: BuildOptions = {
   ...chunkOptimization,
+  rollupOptions: {
+    output: {
+      experimentalMinChunkSize: 1000,
+      manualChunks: (id) => {
+        if (id.includes('node_modules')) {
+          return 'vendor';
+        }
+      },
+    },
+    treeshake: {
+      preset: 'recommended',
+      manualPureFunctions: ['console.log'],
+    },
+  },
   lib: {
     entry: {
       index: resolve(__dirname, 'index.ts'),

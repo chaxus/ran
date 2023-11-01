@@ -1,5 +1,5 @@
 {
-  "threshold": 20,
+  "threshold": 5,
   "reporters": ["html", "console"],
   "ignore": [
     "**/__snapshots__/**",
