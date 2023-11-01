@@ -156,6 +156,7 @@ export const es: BuildOptions = {
       tab: resolve(__dirname, 'components/tab/index.ts'),
       radar: resolve(__dirname, 'components/radar/index.ts'),
       modal: resolve(__dirname, 'components/modal/index.ts'),
+      select: resolve(__dirname, 'components/select/index.ts'),
     },
     fileName: (_: string, name: string): string => {
       if (name === 'index') {

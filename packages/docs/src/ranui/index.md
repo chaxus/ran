@@ -4,10 +4,10 @@
 
 ## Feature 特点
 
-1. 基于`Web Components`开发，跨框架复用，统一所有情况。
-2. `TypeScript`开发，有声明和类型文件。
+1. 基于`Web Components`，跨框架复用，统一所有情况。
+2. 基于`TypeScript`，具备声明和类型文件。
 3. 纯原生手写，基础组件无依赖。
-4. 文档基于`vitepress`，所有组件实例可交互。
+4. 文档所有组件实例可交互。
 5. `MIT`协议。
 
 ## Situation 项目情况
@@ -311,6 +311,30 @@ import 'ranui';
   }
 </script>
 ```
+
+## style 自定义样式
+
+- `::part`伪类
+
+```html
+<r-input id="input"></r-input>
+
+<style>
+  /* #input 指的是当前的自定义元素
+  ::part(input) 中的input指的是，当前自定义元素内部的 Shadow DOM 元素的类 */
+  #input::part(input) {
+    width:100px
+  }
+</style>
+```
+
+- 通过属性传入
+
+会在所有的组件上加一个`sheet`属性，传入`CSSStyleSheet`字符串。会直接插入到`Shadow DOM`中
+
+- `CSS`自定义属性`var`
+
+`CSS`自定义属性可以直接穿透到 `Shadow DOM`。但太定制化了。
 
 ## Compatibility 兼容性
 
