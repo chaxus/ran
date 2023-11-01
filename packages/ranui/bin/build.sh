@@ -1,4 +1,22 @@
 bin=./node_modules/.bin
+
+MODE=''
+ENV=''
+
+while getopts "m:e:p:s:" arg
+do
+    case $arg in
+        m)
+            MODE=$OPTARG
+            ;;
+        e)
+            ENV=$OPTARG
+            ;;
+        ?)
+            echo "unknown argument"
+    esac
+done
+
 # build es and splite bundle
 $bin/vite build -c ./build/config.es.ts
 # build umd

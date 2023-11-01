@@ -12,7 +12,9 @@ export default defineConfig({
   build: {
     minify: 'terser',
     rollupOptions: {
-      inlineDynamicImports: true,
+      output: {
+        inlineDynamicImports: true,
+      },
       external: ['node:fs', 'fs'],
     },
     lib: {
