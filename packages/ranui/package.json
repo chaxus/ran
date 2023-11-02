@@ -102,6 +102,11 @@
       "import": "./dist/components/modal/index.js",
       "require": "./dist/umd/index.umd.cjs"
     },
+    "./select": {
+      "types": "./dist/components/select/index.d.ts",
+      "import": "./dist/components/select/index.js",
+      "require": "./dist/umd/index.umd.cjs"
+    },
     "./style": {
       "types": "./dist/index.d.ts",
       "import": "./dist/style.css",
