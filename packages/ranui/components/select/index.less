@@ -6,9 +6,16 @@
 
 @theme-color: #1890ff;
 
-.select {
-  font-size: 14px;
+:host {
+  position: relative;
+  display: inline-block;
   height: 32px;
+}
+
+.select {
+  width: 100%;
+  height: 100%;
+  font-size: 14px;
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -49,7 +56,8 @@
       outline: none;
       appearance: none;
       font-family: inherit;
-      height: 30px;
+      width: 100%;
+      height: 100%;
       cursor: pointer;
     }
     .icon {

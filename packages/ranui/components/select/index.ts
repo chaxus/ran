@@ -68,27 +68,57 @@ function Custom() {
           }
         }
       }
-      createOption = () => {
-        if (!this._selectDropdown) {
-          this._selectDropdown = document.createElement('div');
+      selectFocus = (e: FocusEvent) => {
+        const rect = this.getBoundingClientRect();
+        this.createOption({ rect });
+      };
+      selectBlur = (e: FocusEvent) => {
+        if (this._selectDropdown) {
+          document.body.removeChild(this._selectDropdown);
+          //   this._selectDropdown.style.setProperty('display', 'none');
         }
-        const selectDropdown = document.createElement('div')
-        selectDropdown.setAttribute('class','ranui-select-dropdown')
-        const selectOptionItem = document.createElement('div')
-        selectOptionItem.setAttribute('class','ranui-select-dropdown-option-item')
-        const selectOptionItemContent = document.createElement('div')
-        selectOptionItemContent.setAttribute('class','ranui-select-dropdown-option-item-content')
-        selectOptionItemContent.innerText = 'Mike'
-        selectOptionItem.appendChild(selectOptionItemContent)
-        selectDropdown.appendChild(selectOptionItem)
-        this._selectDropdown.appendChild(selectDropdown)
+      };
+      createOption = ({ rect }: { rect: DOMRect }) => {
+        const { top, left, bottom, width, height, x, y } = rect;
+        // if (!this._selectDropdown) {
+        this._selectDropdown = document.createElement('div');
+        const selectDropdown = document.createElement('div');
+        selectDropdown.setAttribute('class', 'ranui-select-dropdown');
+        selectDropdown.style.setProperty('-ran-x', `${x}`);
+        selectDropdown.style.setProperty('-ran-y', `${y}`);
+        selectDropdown.style.setProperty('width', `${width}px`);
+        selectDropdown.style.setProperty(
+          'inset',
+          `${bottom + height * 0.67}px auto auto ${left}px`,
+        );
+        const selectOptionItem = document.createElement('div');
+        selectOptionItem.setAttribute(
+          'class',
+          'ranui-select-dropdown-option-item',
+        );
+        const selectOptionItemContent = document.createElement('div');
+        selectOptionItemContent.setAttribute(
+          'class',
+          'ranui-select-dropdown-option-item-content',
+        );
+        selectOptionItemContent.innerText = 'Mike';
+        selectOptionItem.appendChild(selectOptionItemContent);
+        selectDropdown.appendChild(selectOptionItem);
+        this._selectDropdown.appendChild(selectDropdown);
         document.body.appendChild(this._selectDropdown);
+        // } else {
+        //   this._selectDropdown.style.setProperty('display', 'block');
+        // }
       };
       connectedCallback() {
         this.handlerExternalCss();
-        this.createOption()
+        this.addEventListener('focus', this.selectFocus);
+        this.addEventListener('blur', this.selectBlur);
       }
-      disconnectCallback() {}
+      disconnectCallback() {
+        this.removeEventListener('focus', this.selectFocus);
+        this.removeEventListener('blur', this.selectBlur);
+      }
       attributeChangedCallback(
         name: string,
         oldValue: string,
