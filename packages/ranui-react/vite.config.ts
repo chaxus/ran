@@ -37,14 +37,7 @@ export const viteConfig: UserConfig = {
       '@/utils': resolve(__dirname, 'utils/'),
     },
     extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json'],
-  },
-  server: {
-    port: 5124,
-    fs: {
-      strict: false,
-      allow: [],
-    },
-  },
+  }
 };
 
 export default defineConfig(viteConfig);
