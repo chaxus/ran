@@ -157,6 +157,7 @@ export const es: BuildOptions = {
       radar: resolve(__dirname, 'components/radar/index.ts'),
       modal: resolve(__dirname, 'components/modal/index.ts'),
       select: resolve(__dirname, 'components/select/index.ts'),
+      option: resolve(__dirname, 'components/option/index.ts'),
     },
     fileName: (_: string, name: string): string => {
       if (name === 'index') {
