@@ -25,8 +25,10 @@ function Custom() {
       _optionLabelMapValue: Map<string, string>;
       _optionValueMapLabel: Map<string, string>;
       _activeOption?: HTMLElement;
+      _text: HTMLSpanElement;
+      _selector: HTMLDivElement;
       static get observedAttributes() {
-        return ['disabled', 'sheet'];
+        return ['disabled', 'sheet', 'clear', 'type'];
       }
       constructor() {
         super();
@@ -35,17 +37,22 @@ function Custom() {
         this._select.setAttribute('class', 'select');
         this._selection = document.createElement('div');
         this._selection.setAttribute('class', 'selection');
+        this._selector = document.createElement('div');
         this._search = document.createElement('input');
-        this._search.setAttribute('class', 'search');
+        this._search.setAttribute('class', 'selection-search');
         this._search.setAttribute('type', 'search');
         this._search.setAttribute('autocomplete', 'off');
+        this._text = document.createElement('span');
+        this._text.setAttribute('class', 'selection-item');
         this._icon = document.createElement('r-icon');
         this._icon.setAttribute('class', 'icon');
         this._icon.setAttribute('name', 'arrow-down');
         this._icon.setAttribute('color', '#d9d9d9');
         this._icon.setAttribute('size', '16');
-        this._selection.appendChild(this._search);
+        this._selector.appendChild(this._text);
+        this._selector.appendChild(this._search);
         this._selection.appendChild(this._icon);
+        this._selection.appendChild(this._selector);
         this._slot.setAttribute('class', 'slot');
         this._select.appendChild(this._selection);
         this._select.appendChild(this._slot);
@@ -62,13 +69,13 @@ function Custom() {
       set value(value) {
         if (!isDisabled(this) && value) {
           this.setAttribute('value', value);
-          this._search.setAttribute(
-            'value',
-            this._optionValueMapLabel.get(value) || '',
-          );
+          //   this._search.setAttribute(
+          //     'value',
+          //     this._optionValueMapLabel.get(value) || '',
+          //   );
         } else {
           this.removeAttribute('value');
-          this._search.removeAttribute('value');
+          //   this._search.removeAttribute('value');
         }
       }
       get sheet() {
@@ -118,7 +125,7 @@ function Custom() {
                 this._selectionDropdown,
                 'ran-select-dropdown-down-out',
               );
-            removeClassToElement(this._search, 'search-select');
+            // removeClassToElement(this._search, 'search-select');
             clearTimeout(this._selectDropDownOutTimeId);
             this._selectDropDownOutTimeId = undefined;
           }, 200);
@@ -130,7 +137,7 @@ function Custom() {
           this._selectionDropdown.style.display !== 'block'
         ) {
           if (this._selectDropDownInTimeId) return;
-          addClassToElement(this._search, 'search-select');
+          //   addClassToElement(this._search, 'search-select');
           addClassToElement(
             this._selectionDropdown,
             'ran-select-dropdown-down-in',
@@ -151,6 +158,7 @@ function Custom() {
         if (!this._selectionDropdown || !this._selectDropdown) return;
         const rect = this.getBoundingClientRect();
         const { top, left, bottom, width, height, x, y } = rect;
+        this._text.style.setProperty('line-height', `${height}px`);
         this._selectionDropdown.style.setProperty('-ran-x', `${x}`);
         this._selectionDropdown.style.setProperty('-ran-y', `${y}`);
         this._selectionDropdown.style.setProperty('width', `${width}px`);
@@ -186,8 +194,11 @@ function Custom() {
 
         if (value) {
           this.setAttribute('value', value);
-          this._search.value = label;
+          this._text.innerHTML = label;
+          this._text.setAttribute('title', label);
+          //   this._search.value = label;
         }
+        this.setSelectDropdownDisplayNone();
       };
       createOption = () => {
         if (!this._selectDropdown) {

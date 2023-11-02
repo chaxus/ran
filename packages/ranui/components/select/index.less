@@ -50,7 +50,14 @@
     &:hover {
       border: 1px solid @theme-color;
     }
-    .search {
+    &-search {
+      position: absolute;
+      opacity: 0;
+      top: 0;
+      inset-inline-start: 11px;
+      inset-inline-end: 11px;
+      bottom: 0;
+      opacity: 0;
       margin: 0;
       padding: 0;
       background: transparent;
@@ -66,7 +73,23 @@
         -webkit-appearance: none;
       }
     }
-    .search-select {
+    &-item {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      border: none;
+      outline: none;
+      appearance: none;
+      font-family: inherit;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+      user-select: none;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    &-select {
       color: rgba(0, 0, 0, 0.25);
     }
     .icon {
