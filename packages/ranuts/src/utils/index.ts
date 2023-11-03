@@ -660,3 +660,15 @@ export const addClassToElement = (element: Element, addClass: string): void => {
     classList.add(addClass);
   }
 };
+/**
+ * @description: 给指定的元素移除指定的class
+ * @param {Element} element
+ * @param {string} removeClass
+ */
+export const removeClassToElement = (element: Element, removeClass: string): void => {
+  const classList = element.classList;
+  if (classList.contains(removeClass)) {
+    classList.remove(removeClass);
+  }
+};
+

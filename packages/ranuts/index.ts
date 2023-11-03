@@ -28,13 +28,14 @@ import {
   mergeExports,
   noop,
   querystring,
+  removeClassToElement,
   removeGhosting,
   requestAnimation,
   requestUrlToBuffer,
   retain,
   scriptOnLoad,
   throttle,
-  timestampToTime,
+  timestampToTime
 } from '@/utils';
 import type { Noop } from '@/utils';
 import { MimeType, getMime, setMime } from '@/server/mimeType';
@@ -85,6 +86,7 @@ export {
   createObjectURL,
   addClassToElement,
   AudioRecorder,
+  removeClassToElement
 };
 
 export const EventEmitter = SyncHook;
