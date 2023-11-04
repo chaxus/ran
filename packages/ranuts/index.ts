@@ -35,7 +35,7 @@ import {
   retain,
   scriptOnLoad,
   throttle,
-  timestampToTime
+  timestampToTime,
 } from '@/utils';
 import type { Noop } from '@/utils';
 import { MimeType, getMime, setMime } from '@/server/mimeType';
@@ -86,7 +86,7 @@ export {
   createObjectURL,
   addClassToElement,
   AudioRecorder,
-  removeClassToElement
+  removeClassToElement,
 };
 
 export const EventEmitter = SyncHook;

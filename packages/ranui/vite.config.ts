@@ -1,11 +1,12 @@
 import path, { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import type { BuildOptions, UserConfig } from 'vite';
+import type { BuildOptions, PluginOption, UserConfig } from 'vite';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 import { visualizer } from 'rollup-plugin-visualizer';
 import loadStyle from './plugins/load-style';
 import loadSvg from './plugins/load-svg';
+import { PORT } from './build/config';
 
 const __filename = fileURLToPath(import.meta.url);
 
@@ -179,7 +180,7 @@ export const viteConfig: UserConfig = {
     visualizer({
       emitFile: false,
       filename: 'report/build-stats.html',
-    }),
+    }) as PluginOption,
   ],
   resolve: {
     alias: {
@@ -200,6 +201,9 @@ export const viteConfig: UserConfig = {
       generateScopedName: '[name--[local]--[hash:base64:5]]',
     },
   },
+  server: {
+    port: PORT
+  }
 };
 
 export default defineConfig(viteConfig);

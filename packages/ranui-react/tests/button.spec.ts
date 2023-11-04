@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { DEV_SERVER, TIME_OUT } from '../playwright.config';
+import { DEV_SERVER, TIME_OUT } from '../build/config';
 
 test('button', async ({ page }) => {
   setTimeout(async () => {

@@ -20,7 +20,7 @@
       "@/assets/*": ["assets/*"],
       "@/components/*": ["components/*"],
       "@/plugins/*": ["plugins/*"],
-      "@/utils/*": ["utils/*"]
+      "@/utils/*": ["utils/*"],
     }
   }
 }

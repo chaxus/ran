@@ -1,3 +1,4 @@
-npx playwright install
-npx playwright install-deps
-npx playwright test
+bin=./node_modules/.bin
+$bin/playwright install
+$bin/playwright install-deps
+$bin/playwright test

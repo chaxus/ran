@@ -1,4 +1,3 @@
-
 {
   "include": ["src", "test", "plugins", "**/*.ts"],
   "exclude": ["node_modules", "dist"],

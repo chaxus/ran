@@ -4,6 +4,7 @@ import type { BuildOptions, UserConfig } from 'vite';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 import react from '@vitejs/plugin-react';
+import { PORT } from './build/config';
 
 const __filename = fileURLToPath(import.meta.url);
 
@@ -37,6 +38,9 @@ export const viteConfig: UserConfig = {
       '@/utils': resolve(__dirname, 'utils/'),
     },
     extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json'],
+  },
+  server: {
+    port: PORT
   }
 };
 

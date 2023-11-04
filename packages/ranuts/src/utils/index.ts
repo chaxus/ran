@@ -665,10 +665,12 @@ export const addClassToElement = (element: Element, addClass: string): void => {
  * @param {Element} element
  * @param {string} removeClass
  */
-export const removeClassToElement = (element: Element, removeClass: string): void => {
+export const removeClassToElement = (
+  element: Element,
+  removeClass: string,
+): void => {
   const classList = element.classList;
   if (classList.contains(removeClass)) {
     classList.remove(removeClass);
   }
 };
-

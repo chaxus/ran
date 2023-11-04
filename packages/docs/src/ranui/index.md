@@ -323,7 +323,7 @@ import 'ranui';
   /* #input 指的是当前的自定义元素
   ::part(input) 中的input指的是，当前自定义元素内部的 Shadow DOM 元素的类 */
   #input::part(input) {
-    width:100px
+    width: 100px;
   }
 </style>
 ```

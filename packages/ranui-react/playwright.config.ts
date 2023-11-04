@@ -1,8 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
-
-export const TIME_OUT = 6000;
-
-export const DEV_SERVER = 'http://localhost:5124/';
+import { DEV_SERVER } from './build/config';
 
 /**
  * Read environment variables from file.
