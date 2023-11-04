@@ -7,3 +7,5 @@ export function createLotsOfTensors(): void {
         a.mul(b).print()
     }
 }
+
+export const cleanMemoryCreateLotsOfTensors = tf.tidy(createLotsOfTensors)

@@ -2,6 +2,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import * as tf from '@tensorflow/tfjs';
+import { createLotsOfTensors } from './lib';
 
 const App = () => {
   // Define a model for linear regression.

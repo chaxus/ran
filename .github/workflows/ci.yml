@@ -17,8 +17,8 @@ jobs:
           # Active LTS + other OS
           - os: macos-latest
             node_version: 18
-          # - os: windows-latest  @tensorflow/tfjs-node in window has problem
-          #   node_version: 18
+          - os: windows-latest
+            node_version: 18
       fail-fast: false
     name: "Build&Test: node-${{ matrix.node_version }}, ${{ matrix.os }}"
     steps:
@@ -38,6 +38,9 @@ jobs:
         shell: bash
         run: |
           echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - name: prepare
+        run: pnpm pre
 
       - name: Install deps
         run: pnpm install
