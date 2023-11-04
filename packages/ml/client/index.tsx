@@ -1,31 +1,58 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import * as tf from '@tensorflow/tfjs';
-import { createLotsOfTensors } from './lib';
+import * as tfvis from '@tensorflow/tfjs-vis'
+import type { Point2D } from '@tensorflow/tfjs-vis';
+import type { TensorContainerObject } from '@tensorflow/tfjs';
+const csv = '../assets/dataset/kc_house_data.csv'
+
+interface HouseSaleDataSet extends TensorContainerObject {
+  price: number,
+  sqft_living: number
+}
+
+const tfTensor = async () => {
+  const plot = (points: Point2D[], name: string) => {
+    tfvis.render.scatterplot(
+      { name: `${name} vs House Price` },
+      { values: [points], series: ["original"] },
+      {
+        xLabel: name,
+        yLabel: "Price"
+      }
+    )
+  }
+  const houseSaleDateSet = tf.data.csv(csv)
+  houseSaleDateSet.take(10).toArray().then(res => {
+    console.log('a', res);
+  })
+  const points = houseSaleDateSet.map((record: HouseSaleDataSet) => {
+    return {
+      x: record.sqft_living,
+      y: record.price
+    }
+  })
+  points.toArray().then((res: Point2D[]) => {
+    plot(res, 'Square feet')
+    console.log('points', res);
+  })
+  // Feature (inputs)
+  const featureValue = await points.map(p => p.x).toArray()
+  const featureTensor = tf.tensor2d(featureValue, [featureValue.length, 1])
+  // Labels (outputs)
+  const labelValue = await points.map(p => p.y).toArray()
+  const labelTensor = tf.tensor2d(labelValue, [labelValue.length, 1])
+
+  featureTensor.print()
+  labelTensor.print()
+}
 
 const App = () => {
-  // Define a model for linear regression.
-  const model = tf.sequential();
-  model.add(tf.layers.dense({ units: 1, inputShape: [1] }));
 
-  // Prepare the model for training: Specify the loss and the optimizer.
-  model.compile({ loss: 'meanSquaredError', optimizer: 'sgd' });
-
-  // Generate some synthetic data for training.
-  const xs = tf.tensor2d([1, 2, 3, 4], [4, 1]);
-  const ys = tf.tensor2d([1, 3, 5, 7], [4, 1]);
-
-  // Train the model using the data.
-  model.fit(xs, ys).then(() => {
-    // Use the model to do inference on a data point the model hasn't seen before:
-    const result = model.predict(tf.tensor2d([5], [1, 1]));
-    if (Array.isArray(result)) {
-      result.forEach((item) => item.print());
-    } else {
-      result.print();
-    }
-  });
+  useEffect(() => {
+    tfTensor()
+  }, [])
 
   return (
     <div>

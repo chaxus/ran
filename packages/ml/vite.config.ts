@@ -33,6 +33,7 @@ export const viteConfig: UserConfig = {
   plugins: [dts(), react()],
   build: {
     target: 'esnext',
+    assetsInlineLimit: 8 * 1024,
     manifest: true,
     rollupOptions: {
       input: 'views/index.html',
@@ -45,6 +46,11 @@ export const viteConfig: UserConfig = {
     },
     extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json'],
   },
+  server: {
+    fs: {
+      allow: [resolve(__dirname, '.')]
+    }
+  }
 };
 
 export default defineConfig(viteConfig);

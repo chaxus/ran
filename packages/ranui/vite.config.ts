@@ -4,6 +4,8 @@ import type { BuildOptions, PluginOption, UserConfig } from 'vite';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 import { visualizer } from 'rollup-plugin-visualizer';
+import viteImagemin from '@vheemstra/vite-plugin-imagemin'
+import imageminSvgo from 'imagemin-svgo'
 import loadStyle from './plugins/load-style';
 import loadSvg from './plugins/load-svg';
 import { PORT } from './build/config';
@@ -89,6 +91,7 @@ type GetManualChunk = (id: string, meta: ManualChunkMeta) => string | NullValue;
 type ManualChunksOption = { [chunkAlias: string]: string[] } | GetManualChunk;
 
 interface chunkOptimization {
+  assetsInlineLimit: number
   chunkSizeWarningLimit: number;
   reportCompressedSize: boolean;
   rollupOptions: {
@@ -101,8 +104,9 @@ interface chunkOptimization {
   minify: boolean | 'terser' | 'esbuild' | undefined;
 }
 
-const chunkOptimization: chunkOptimization = {
+const chunkOptimization: Partial<chunkOptimization> = {
   chunkSizeWarningLimit: 3000,
+  assetsInlineLimit: 8 * 1024,
   reportCompressedSize: false,
   rollupOptions: {
     output: {
@@ -181,6 +185,11 @@ export const viteConfig: UserConfig = {
       emitFile: false,
       filename: 'report/build-stats.html',
     }) as PluginOption,
+    viteImagemin({
+      plugins: {
+        svg: imageminSvgo(),
+      },
+    })
   ],
   resolve: {
     alias: {

@@ -1,5 +1,8 @@
 import { str2Xml } from 'ranuts';
 
+const X_LINKS_NS = 'http://www.w3.org/1999/xlink';
+const X_LINK_HREF = "xlink:href"
+
 function Custom() {
   if (typeof window !== 'undefined' && !customElements.get('r-icon')) {
     class CustomElement extends HTMLElement {
@@ -83,11 +86,10 @@ function Custom() {
         this._icon.setAttribute('viewBox', '0 0 1024 1024');
         this._icon.setAttribute('width', '100');
         this._icon.setAttribute('height', '100');
-        const xLinksNs = 'http://www.w3.org/1999/xlink';
-        const use = document.createElementNS(xLinksNs, 'use');
+        const use = document.createElementNS(X_LINKS_NS, 'use');
         use.setAttributeNS(
-          xLinksNs,
-          'xlink:href',
+          X_LINKS_NS,
+          X_LINK_HREF,
           `../../assets/iconfont/icon.svg#icon-${this.name}`,
         );
         this._icon.appendChild(use);
