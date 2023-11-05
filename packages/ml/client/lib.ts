@@ -1,6 +1,7 @@
 import * as tf from '@tensorflow/tfjs';
 import type { MemoryInfo } from '@tensorflow/tfjs'
-
+import * as tfvis from '@tensorflow/tfjs-vis'
+import type { Point2D } from '@tensorflow/tfjs-vis';
 /**
  * @description: 测试tf的内存管理
  * @return {*}
@@ -77,4 +78,21 @@ export const tfInfo = (): TfInfo => {
 
 export const csv2DataSet = (path: string): tf.data.CSVDataset => {
     return tf.data.csv(path)
+}
+
+/**
+ * @description: 绘制图形
+ * @param {Point2D} points
+ * @param {string} name
+ * @return {*}
+ */
+export const plot = (points: Point2D[], name: string): void => {
+    tfvis.render.scatterplot(
+        { name: `${name} vs House Price` },
+        { values: [points], series: ["original"] },
+        {
+            xLabel: name,
+            yLabel: "Price"
+        }
+    )
 }

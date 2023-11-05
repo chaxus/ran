@@ -4,7 +4,8 @@ import { BrowserRouter } from 'react-router-dom';
 import * as tf from '@tensorflow/tfjs';
 import * as tfvis from '@tensorflow/tfjs-vis'
 import type { Point2D } from '@tensorflow/tfjs-vis';
-import type { TensorContainerObject } from '@tensorflow/tfjs';
+import type { Rank, Tensor, TensorContainerObject } from '@tensorflow/tfjs';
+
 const csv = '../assets/dataset/kc_house_data.csv'
 
 interface HouseSaleDataSet extends TensorContainerObject {
@@ -12,40 +13,85 @@ interface HouseSaleDataSet extends TensorContainerObject {
   sqft_living: number
 }
 
-const tfTensor = async () => {
-  const plot = (points: Point2D[], name: string) => {
-    tfvis.render.scatterplot(
-      { name: `${name} vs House Price` },
-      { values: [points], series: ["original"] },
-      {
-        xLabel: name,
-        yLabel: "Price"
-      }
-    )
+const normalise = (tensor: Tensor) => {
+  const min = tensor.min()
+  const max = tensor.max()
+  return {
+    tensor: tensor.sub(min).div(max.sub(min)),
+    max,
+    min
   }
+}
+
+const denormalise = (tensor: Tensor, max: Tensor<Rank>, min: Tensor<Rank>) => {
+  return tensor.mul(max.sub(min)).add(min)
+}
+/**
+ * @description: 绘制图形
+ * @param {Point2D} points
+ * @param {string} name
+ * @return {*}
+ */
+const plot = (points: Point2D[], name: string) => {
+  tfvis.render.scatterplot(
+    { name: `${name} vs House Price` },
+    { values: [points], series: ["original"] },
+    {
+      xLabel: name,
+      yLabel: "Price"
+    }
+  )
+}
+
+const createModal = () => {
+  const model = tf.sequential()
+
+  model.add(tf.layers.dense({
+    units: 1,
+    useBias: true,
+    activation: 'linear',
+    inputDim: 1
+  }))
+  return model
+}
+const tfTensor = async () => {
+  // 导入数据
   const houseSaleDateSet = tf.data.csv(csv)
-  houseSaleDateSet.take(10).toArray().then(res => {
-    console.log('a', res);
-  })
-  const points = houseSaleDateSet.map((record: HouseSaleDataSet) => {
+  // 从数据中提取x,y值并绘制图形
+  const pointsDataSet = houseSaleDateSet.map((record: HouseSaleDataSet) => {
     return {
       x: record.sqft_living,
       y: record.price
     }
   })
-  points.toArray().then((res: Point2D[]) => {
-    plot(res, 'Square feet')
-    console.log('points', res);
-  })
-  // Feature (inputs)
-  const featureValue = await points.map(p => p.x).toArray()
+  const points: Point2D[] = await pointsDataSet.toArray()
+
+  if (points.length % 2 !== 0) {
+    // 如果张量是奇数，会导致无法平均分割，需要变成偶数
+    points.pop()
+  }
+  tf.util.shuffle(points)
+  plot(points, 'Square feet')
+  // Feature (inputs) 提取特征并存在张量中
+  const featureValue = points.map(p => p.x)
   const featureTensor = tf.tensor2d(featureValue, [featureValue.length, 1])
-  // Labels (outputs)
-  const labelValue = await points.map(p => p.y).toArray()
+  // Labels (outputs) 对标签做同样的操作
+  const labelValue = points.map(p => p.y)
   const labelTensor = tf.tensor2d(labelValue, [labelValue.length, 1])
 
-  featureTensor.print()
-  labelTensor.print()
+  // 标准化标签和特征
+  const normaliseFeatureTensor = normalise(featureTensor)
+  const normaliseLabelTensor = normalise(labelTensor)
+
+  normaliseFeatureTensor.tensor.print()
+  normaliseLabelTensor.tensor.print()
+  // 分割测试集和训练集
+  const [trainingFeatureTensor, testingFeatureTensor] = tf.split(normaliseFeatureTensor.tensor, 2)
+  const [trainingLabelTensor, testingLabelTensor] = tf.split(normaliseLabelTensor.tensor, 2)
+  // 创建模型
+  const modal = createModal()
+  modal.summary()
+  tfvis.show.modelSummary({ name: "Modal summary" }, modal)
 }
 
 const App = () => {
