@@ -92,7 +92,17 @@
   <body>
     <h1>Hello RanUI</h1>
     <h2>Select</h2>
-    <r-select style="width: 120px; height: 40px">
+    <r-select style="width: 120px; height: 40px" disabled defaultValue="185">
+      <r-option value="185">Mike</r-option>
+      <r-option value="186">Tom</r-option>
+      <r-option value="187">Lucy</r-option>
+    </r-select>
+    <r-select style="width: 120px; height: 40px" defaultValue="85">
+      <r-option value="185">Mike</r-option>
+      <r-option value="186">Tom</r-option>
+      <r-option value="187">Lucy</r-option>
+    </r-select>
+    <r-select style="width: 120px; height: 40px" showSearch>
       <r-option value="185">Mike</r-option>
       <r-option value="186">Tom</r-option>
       <r-option value="187">Lucy</r-option>
@@ -129,7 +139,7 @@
         justify-content: space-around;
       "
     >
-      <r-input label="user"></r-input>
+      <r-input label="user" ></r-input>
       <r-input icon="home" status="warning" disabled></r-input>
     </div>
     <h2>Preview</h2>

@@ -23,8 +23,10 @@ function Custom() {
         const shadowRoot = this.attachShadow({ mode: 'closed' });
         this._container = document.createElement('div');
         this._container.setAttribute('class', 'input');
+        this._container.setAttribute('part', 'input');
         this._input = document.createElement('input');
         this._input.setAttribute('class', 'input-main');
+        this._input.setAttribute('part', 'input-main');
         this._container.appendChild(this._input);
         shadowRoot.appendChild(this._container);
       }

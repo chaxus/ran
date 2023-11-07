@@ -2,6 +2,7 @@ import { addClassToElement, removeClassToElement } from 'ranuts';
 import { createCustomError, isDisabled } from '@/utils/index';
 import '@/components/option';
 import '@/components/icon';
+import '@/components/input';
 
 interface Option {
   label: string | number;
@@ -15,7 +16,7 @@ function Custom() {
       _shadowDom: ShadowRoot;
       _select: HTMLDivElement;
       _selection: HTMLDivElement;
-      _search: HTMLInputElement;
+      _search: HTMLElement;
       _icon: HTMLElement;
       _selectDropdown?: HTMLDivElement;
       _selectionDropdown?: HTMLDivElement;
@@ -28,7 +29,14 @@ function Custom() {
       _text: HTMLSpanElement;
       _selector: HTMLDivElement;
       static get observedAttributes() {
-        return ['disabled', 'sheet', 'clear', 'type'];
+        return [
+          'disabled',
+          'sheet',
+          'clear',
+          'type',
+          'defaultValue',
+          'showSearch',
+        ];
       }
       constructor() {
         super();
@@ -38,7 +46,7 @@ function Custom() {
         this._selection = document.createElement('div');
         this._selection.setAttribute('class', 'selection');
         this._selector = document.createElement('div');
-        this._search = document.createElement('input');
+        this._search = document.createElement('r-input');
         this._search.setAttribute('class', 'selection-search');
         this._search.setAttribute('type', 'search');
         this._search.setAttribute('autocomplete', 'off');
@@ -69,14 +77,21 @@ function Custom() {
       set value(value) {
         if (!isDisabled(this) && value) {
           this.setAttribute('value', value);
-          //   this._search.setAttribute(
-          //     'value',
-          //     this._optionValueMapLabel.get(value) || '',
-          //   );
         } else {
           this.removeAttribute('value');
-          //   this._search.removeAttribute('value');
         }
+      }
+      get defaultValue() {
+        return this.getAttribute('defaultValue');
+      }
+      set defaultValue(value) {
+        this.setAttribute('defaultValue', value || '');
+      }
+      get showSearch() {
+        return this.getAttribute('showSearch');
+      }
+      set showSearch(value) {
+        this.setAttribute('showSearch', value || '');
       }
       get sheet() {
         return this.getAttribute('sheet');
@@ -90,8 +105,10 @@ function Custom() {
       set disabled(value: boolean | string | undefined | null) {
         if (!value || value === 'false') {
           this.removeAttribute('disabled');
+          this._selection.removeAttribute('disabled');
         } else {
           this.setAttribute('disabled', '');
+          this._selection.setAttribute('disabled', '');
         }
       }
       handlerExternalCss() {
@@ -107,6 +124,10 @@ function Custom() {
           }
         }
       }
+      /**
+       * @description: 移除 select dropdown
+       * @return {*}
+       */
       setSelectDropdownDisplayNone = () => {
         if (
           this._selectionDropdown &&
@@ -125,19 +146,21 @@ function Custom() {
                 this._selectionDropdown,
                 'ran-select-dropdown-down-out',
               );
-            // removeClassToElement(this._search, 'search-select');
             clearTimeout(this._selectDropDownOutTimeId);
             this._selectDropDownOutTimeId = undefined;
           }, 200);
         }
       };
+      /**
+       * @description: 添加 select dropdown
+       * @return {*}
+       */
       setSelectDropdownDisplayBlock = () => {
         if (
           this._selectionDropdown &&
           this._selectionDropdown.style.display !== 'block'
         ) {
           if (this._selectDropDownInTimeId) return;
-          //   addClassToElement(this._search, 'search-select');
           addClassToElement(
             this._selectionDropdown,
             'ran-select-dropdown-down-in',
@@ -154,7 +177,12 @@ function Custom() {
           }, 200);
         }
       };
+      /**
+       * @description: 设置下拉框
+       * @return {*}
+       */
       selectMouseDown = () => {
+        if (isDisabled(this)) return;
         if (!this._selectionDropdown || !this._selectDropdown) return;
         const rect = this.getBoundingClientRect();
         const { top, left, bottom, width, height, x, y } = rect;
@@ -169,13 +197,37 @@ function Custom() {
         this.setSelectDropdownDisplayNone();
         this.setSelectDropdownDisplayBlock();
       };
+      /**
+       * @description: 焦点移除的情况，需要移除select 下拉框
+       * @return {*}
+       */
       selectBlur = () => {
         this.setSelectDropdownDisplayNone();
       };
+      /**
+       * @description: 选中一个选项的情况
+       * @param {MouseEvent} e
+       * @return {*}
+       */
       clickOption = (e: MouseEvent) => {
-        const element = e.target as HTMLElement;
+        let element = e.target as Element;
+        if (element.classList?.contains('ranui-select-dropdown-option-item')) {
+          element = element.children[0];
+        }
+        if (
+          !element.classList?.contains(
+            'ranui-select-dropdown-option-item-content',
+          )
+        )
+          return;
         const label = element.innerHTML;
         const value = this._optionLabelMapValue.get(label);
+        if (value) {
+          this.setAttribute('value', value);
+          this._text.innerHTML = label;
+          this._text.setAttribute('title', label);
+          this._search.setAttribute('placeholder', label);
+        }
         if (this._activeOption) {
           removeClassToElement(
             this._activeOption,
@@ -191,15 +243,16 @@ function Custom() {
             );
           }
         }, 200);
-
-        if (value) {
-          this.setAttribute('value', value);
-          this._text.innerHTML = label;
-          this._text.setAttribute('title', label);
-          //   this._search.value = label;
-        }
         this.setSelectDropdownDisplayNone();
+        // 点击后触发 onchange 事件
+        this.dispatchEvent(
+          new CustomEvent('change', { detail: { value, label } }),
+        );
       };
+      /**
+       * @description: 初始化创建选项下拉框
+       * @return {*}
+       */
       createOption = () => {
         if (!this._selectDropdown) {
           this._selectDropdown = document.createElement('div');
@@ -214,6 +267,10 @@ function Custom() {
           document.body.appendChild(this._selectDropdown);
         }
       };
+      /**
+       * @description: 移除选项下拉框
+       * @return {*}
+       */
       removeSelectDropdown = () => {
         try {
           if (this._selectDropdown) {
@@ -221,9 +278,14 @@ function Custom() {
           }
         } catch (error) {}
       };
+      /**
+       * @description: 当select中有option元素的时候，给dropdown添加元素
+       * @return {*}
+       */
       addOptionToSlot = () => {
         const slots = this._slot.assignedElements();
         slots.forEach((item) => {
+          if (item.tagName !== 'R-OPTION') return;
           const label = item.innerHTML;
           const value = item.getAttribute('value') || '';
           this._optionList?.push({ label, value });
@@ -256,6 +318,25 @@ function Custom() {
             this._selectionDropdown.appendChild(selectOptionItem);
           }
         });
+        this.setDefaultValue();
+      };
+      setDefaultValue = () => {
+        const defaultValue = this.getAttribute('defaultValue');
+        if (!defaultValue) return;
+        const label = this._optionValueMapLabel.get(defaultValue);
+        if (!label) return;
+        this.setAttribute('value', defaultValue);
+        const rect = this.getBoundingClientRect();
+        const { height } = rect;
+        this._text.style.setProperty('line-height', `${height}px`);
+        this._text.innerHTML = label;
+        this._text.setAttribute('title', label);
+      };
+      changeSearch = (e: Event) => {
+        console.log('e', e);
+      };
+      setShowSearch = () => {
+        this._search.addEventListener('change', this.changeSearch);
       };
       listenSlotChange = () => {
         this._slot.addEventListener('slotchange', this.addOptionToSlot);
@@ -269,11 +350,13 @@ function Custom() {
         this.addEventListener('blur', this.selectBlur);
         this.createOption();
         this.listenSlotChange();
+        this.setShowSearch();
       }
       disconnectCallback() {
         this.removeEventListener('mousedown', this.selectMouseDown);
         this.removeEventListener('blur', this.selectBlur);
         this.removeSelectDropdown();
+        this._selectDropdown?.removeEventListener('click', this.clickOption);
         this.removeListenSlotChange();
       }
       attributeChangedCallback(
@@ -284,12 +367,15 @@ function Custom() {
         if (name === 'disabled' && this._select) {
           if (!newValue || newValue === 'false') {
             this._select.setAttribute('disabled', '');
+            this._selection.setAttribute('disabled', '');
           } else {
             this._select.removeAttribute('disabled');
+            this._selection.removeAttribute('disabled');
           }
         }
-        if (name === 'sheet' && this._shadowDom && oldValue !== newValue)
+        if (name === 'sheet' && this._shadowDom && oldValue !== newValue) {
           this.handlerExternalCss();
+        }
       }
     }
     customElements.define('r-select', Select);
