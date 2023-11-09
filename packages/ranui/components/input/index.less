@@ -1,7 +1,8 @@
 .input {
   position: relative;
   display: flex;
-  width: calc(100% - 18px);
+  width: calc(100% - 16px);
+  height: calc(100% - 4px);
   min-width: 0;
   padding: 2px 8px;
   color: #000000d9;
@@ -112,6 +113,10 @@
     }
     &:focus ~ .input-label {
       transform: translateY(calc(-50% - 0.43em)) scale(0.8);
+    }
+    &::-webkit-search-cancel-button {
+      display: none;
+      -webkit-appearance: none;
     }
   }
 
