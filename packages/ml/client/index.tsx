@@ -71,6 +71,8 @@ const trainModel = async (model: tf.Sequential, trainingFeatureTensor: tf.Tensor
   return model.fit(trainingFeatureTensor, trainingLabelTensor, {
     batchSize: 512,
     epochs: 20,
+    // 验证集
+    validationSplit: 0.2,
     callbacks: {
       // onEpochEnd: (epoch, log) => {
       //   console.log(`Epoch ${epoch}: loss = ${log.loss}`);
@@ -121,14 +123,21 @@ const tfTensor = async () => {
     2
   );
   // 创建模型
-  const modal = createModal();
-  modal.summary();
-  tfvis.show.modelSummary({ name: "Modal summary" }, modal);
+  const model = createModal();
+  model.summary();
+  tfvis.show.modelSummary({ name: "Modal summary" }, model);
   // 了解 layer
-  const layer = modal.getLayer(undefined, 0);
+  const layer = model.getLayer(undefined, 0);
   tfvis.show.layer({ name: "Layer 1" }, layer);
 
-  await trainModel(modal, trainingFeatureTensor, trainingLabelTensor)
+  const result = await trainModel(model, trainingFeatureTensor, trainingLabelTensor)
+  const trainLoss = result.history.loss.pop()
+  const validationLoss = result.history.val_loss.pop()
+
+  const lossTensor = model.evaluate(testingFeatureTensor, testingLabelTensor)
+  const loss = Array.isArray(lossTensor) ? lossTensor.map(async item => await item.dataSync()) : await lossTensor.dataSync()
+  console.log('trainLoss, lossTensor', loss, trainLoss, validationLoss);
+
 };
 
 const App = () => {
