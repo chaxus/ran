@@ -129,11 +129,11 @@ const tfTensor = async () => {
   // 了解 layer
   const layer = model.getLayer(undefined, 0);
   tfvis.show.layer({ name: "Layer 1" }, layer);
-
+  // 训练模型
   const result = await trainModel(model, trainingFeatureTensor, trainingLabelTensor)
   const trainLoss = result.history.loss.pop()
   const validationLoss = result.history.val_loss.pop()
-
+  // 判断损失函数
   const lossTensor = model.evaluate(testingFeatureTensor, testingLabelTensor)
   const loss = Array.isArray(lossTensor) ? lossTensor.map(async item => await item.dataSync()) : await lossTensor.dataSync()
   console.log('trainLoss, lossTensor', loss, trainLoss, validationLoss);
