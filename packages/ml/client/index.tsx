@@ -21,7 +21,6 @@ const normalise = (tensor: Tensor, mi?: tf.Tensor<tf.Rank>, mx?: tf.Tensor<tf.Ra
 export class LineModel {
   normaliseFeature?: { tensor: tf.Tensor<tf.Rank>; max: tf.Tensor<tf.Rank>; min: tf.Tensor<tf.Rank>; };
   normaliseLabel?: { tensor: tf.Tensor<tf.Rank>; max: tf.Tensor<tf.Rank>; min: tf.Tensor<tf.Rank>; };
-  // model: tf.Sequential;
   testingFeatureTensor?: tf.Tensor<tf.Rank>;
   testingLabelTensor?: tf.Tensor<tf.Rank>;
   model?: tf.LayersModel;
