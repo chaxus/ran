@@ -1,4 +1,4 @@
-.input {
+.ran-input {
   position: relative;
   display: flex;
   width: calc(100% - 16px);
@@ -26,22 +26,22 @@
     border-color: #40a9ff;
     border-right-width: 1px;
   }
-  & > .input-main:hover ~ .input-label {
+  & > .ran-input-content:hover ~ .ran-input-label {
     color: #40a9ff;
   }
-  &[value] > .input-label {
+  &[value] > .ran-input-label {
     transform: translateY(calc(-50% - 0.43em)) scale(0.8);
     color: #00000040;
   }
   &[status='error'] {
     border-color: #ff4d4f;
-    & > .input-main ~ .input-label {
+    & > .ran-input-content ~ .ran-input-label {
       color: #ff4d4f;
     }
   }
   &[status='warning'] {
     border-color: #ff7875;
-    & > .input-main ~ .input-label {
+    & > .ran-input-content ~ .ran-input-label {
       color: #ff7875;
     }
   }
@@ -52,7 +52,7 @@
     box-shadow: none;
     cursor: not-allowed;
     opacity: 1;
-    & > .input-main {
+    & > .ran-input-content {
       color: #00000040;
       background-color: #f5f5f5;
       border-color: #d9d9d9;
@@ -60,18 +60,18 @@
       cursor: not-allowed;
       opacity: 1;
     }
-    & > .input-main ~ .input-label {
+    & > .ran-input-content ~ .ran-input-label {
       color: #00000040;
       background-color: #f5f5f5;
     }
-    & > .input-label {
+    & > .ran-input-label {
       color: #999;
       border-color: #d9d9d9;
       box-shadow: none;
       cursor: not-allowed;
     }
   }
-  &-main {
+  &-content {
     writing-mode: horizontal-tb;
     text-rendering: auto;
     letter-spacing: normal;
@@ -96,7 +96,7 @@
     min-width: 0;
     color: #000000d9;
     font-size: 14px;
-    line-height: 1.5715;
+    line-height: 1.48;
     background-color: #fff;
     background-image: none;
     transition: all 0.3s;
@@ -108,10 +108,10 @@
     &::placeholder {
       color: #999;
     }
-    &:placeholder-shown ~ .input-label {
+    &:placeholder-shown ~ .ran-input-label {
       transform: translateY(calc(-50% - 0.43em)) scale(0.8);
     }
-    &:focus ~ .input-label {
+    &:focus ~ .ran-input-label {
       transform: translateY(calc(-50% - 0.43em)) scale(0.8);
     }
     &::-webkit-search-cancel-button {

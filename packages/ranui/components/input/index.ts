@@ -14,21 +14,21 @@ function Custom() {
           'status',
         ];
       }
-      _container: HTMLDivElement;
+      _input: HTMLDivElement;
       _label: HTMLLabelElement | undefined;
-      _input: HTMLInputElement;
+      _inputContent: HTMLInputElement;
       _icon: HTMLElement | undefined;
       constructor() {
         super();
         const shadowRoot = this.attachShadow({ mode: 'closed' });
-        this._container = document.createElement('div');
-        this._container.setAttribute('class', 'input');
-        this._container.setAttribute('part', 'input');
-        this._input = document.createElement('input');
-        this._input.setAttribute('class', 'input-main');
-        this._input.setAttribute('part', 'input-main');
-        this._container.appendChild(this._input);
-        shadowRoot.appendChild(this._container);
+        this._input = document.createElement('div');
+        this._input.setAttribute('class', 'ran-input');
+        this._input.setAttribute('part', 'ran-input');
+        this._inputContent = document.createElement('input');
+        this._inputContent.setAttribute('class', 'ran-input-content');
+        this._inputContent.setAttribute('part', 'ran-input-content');
+        this._input.appendChild(this._inputContent);
+        shadowRoot.appendChild(this._input);
       }
       /**
        * @description: 获取input的值
@@ -44,10 +44,10 @@ function Custom() {
       set value(value) {
         if (!isDisabled(this) && value) {
           this.setAttribute('value', value);
-          this._container.setAttribute('value', value);
+          this._input.setAttribute('value', value);
         } else {
           this.removeAttribute('value');
-          this._container.removeAttribute('value');
+          this._input.removeAttribute('value');
         }
       }
       /**
@@ -100,12 +100,12 @@ function Custom() {
       set disabled(value) {
         if (falseList.includes(value)) {
           this.removeAttribute('disabled');
-          this._container.removeAttribute('disabled');
           this._input.removeAttribute('disabled');
+          this._inputContent.removeAttribute('disabled');
         } else {
           this.setAttribute('disabled', '');
-          this._container.setAttribute('disabled', '');
           this._input.setAttribute('disabled', '');
+          this._inputContent.setAttribute('disabled', '');
         }
       }
       /**
@@ -132,10 +132,10 @@ function Custom() {
       set status(value: string) {
         if (value) {
           this.setAttribute('status', value);
-          this._container.setAttribute('status', value);
+          this._input.setAttribute('status', value);
         } else {
           this.removeAttribute('status');
-          this._container.removeAttribute('status');
+          this._input.removeAttribute('status');
         }
       }
       /**
@@ -281,11 +281,11 @@ function Custom() {
        * @param {string} value
        */
       listenPlaceholder(name: string, value: string) {
-        if (name === 'placeholder' && this._input) {
+        if (name === 'placeholder' && this._inputContent) {
           if (value != null) {
-            this._input.setAttribute('placeholder', value);
+            this._inputContent.setAttribute('placeholder', value);
           } else {
-            this._input.removeAttribute('placeholder');
+            this._inputContent.removeAttribute('placeholder');
           }
         }
       }
@@ -295,20 +295,21 @@ function Custom() {
        * @param {string} value
        */
       listenLabel(name: string, value: string) {
-        if (name === 'label' && this._input) {
+        if (name === 'label' && this._inputContent) {
           if (value != null) {
             if (this._label) {
               this._label.innerHTML = value;
             } else {
               this._label = document.createElement('label');
               this._label.innerHTML = value;
-              this._label.setAttribute('class', 'input-label');
-              this._container.appendChild(this._label);
+              this._label.setAttribute('class', 'ran-input-label');
+              this._label.setAttribute('part', 'ran-input-label');
+              this._input.appendChild(this._label);
             }
           } else {
-            this._container.removeAttribute('label');
+            this._input.removeAttribute('label');
             if (this._label) {
-              this._container.removeChild(this._label);
+              this._input.removeChild(this._label);
               this._label = undefined;
             }
           }
@@ -320,14 +321,14 @@ function Custom() {
        * @param {string} value
        */
       listenType(name: string, value: string) {
-        if (name === 'type' && this._input) {
+        if (name === 'type' && this._inputContent) {
           if (value) {
-            this._input.setAttribute('type', value);
+            this._inputContent.setAttribute('type', value);
           } else {
-            this._input.removeAttribute('type');
-            this._input.removeAttribute('min');
-            this._input.removeAttribute('max');
-            this._input.removeAttribute('step');
+            this._inputContent.removeAttribute('type');
+            this._inputContent.removeAttribute('min');
+            this._inputContent.removeAttribute('max');
+            this._inputContent.removeAttribute('step');
           }
         }
       }
@@ -337,11 +338,11 @@ function Custom() {
        * @param {string} value
        */
       listenStatus(name: string, value: string) {
-        if (name === 'status' && this._container) {
+        if (name === 'status' && this._input) {
           if (value) {
-            this._container.setAttribute('status', value);
+            this._input.setAttribute('status', value);
           } else {
-            this._container.removeAttribute('status');
+            this._input.removeAttribute('status');
           }
         }
       }
@@ -351,12 +352,12 @@ function Custom() {
        * @param {string} value
        */
       listenDisabled(name: string, value: string) {
-        if (name === 'disabled' && this._container) {
+        if (name === 'disabled' && this._input) {
           if (falseList.includes(value)) {
-            this._container.removeAttribute('disabled');
+            this._input.removeAttribute('disabled');
           } else {
-            this._container.setAttribute('disabled', '');
             this._input.setAttribute('disabled', '');
+            this._inputContent.setAttribute('disabled', '');
           }
         }
       }
@@ -378,10 +379,10 @@ function Custom() {
       dealIcon = () => {
         if (!this._icon) {
           this._icon = document.createElement('r-icon');
-          const { width, height } = this._input.getBoundingClientRect();
+          const { width, height } = this._inputContent.getBoundingClientRect();
           const size = Math.min(width, height);
           this._icon.setAttribute('size', `${size}`);
-          this._input.insertAdjacentElement('beforebegin', this._icon);
+          this._inputContent.insertAdjacentElement('beforebegin', this._icon);
         }
         this.icon && this._icon.setAttribute('name', this.icon);
       };
@@ -401,26 +402,26 @@ function Custom() {
       connectedCallback() {
         // 如果一开始就设置了input的值，则初始化input的值
         if (this.value) {
-          this._input.value = this.value;
-          this._container.setAttribute('value', this.value);
+          this._inputContent.value = this.value;
+          this._input.setAttribute('value', this.value);
         }
         if (this.status) {
-          this._container.setAttribute('status', this.status);
+          this._input.setAttribute('status', this.status);
         }
         if (isDisabled(this)) {
-          this._container.setAttribute('disabled', '');
           this._input.setAttribute('disabled', '');
+          this._inputContent.setAttribute('disabled', '');
         }
         if (this.type) {
-          this._input.setAttribute('type', this.type);
+          this._inputContent.setAttribute('type', this.type);
         }
-        this._input.addEventListener('input', this.customInput);
+        this._inputContent.addEventListener('input', this.customInput);
         if (document.readyState === 'complete') {
           this.dealIcon();
         }
       }
       disconnectCallback() {
-        this._input.removeEventListener('input', this.customInput);
+        this._inputContent.removeEventListener('input', this.customInput);
       }
       attributeChangedCallback(
         name: string,
