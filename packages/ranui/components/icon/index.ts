@@ -14,7 +14,7 @@ function Custom() {
       constructor() {
         super();
         this._div = document.createElement('div');
-        this._div.setAttribute('class', 'icon');
+        this._div.setAttribute('class', 'ran-icon');
         const shadowRoot = this.attachShadow({ mode: 'closed' });
         shadowRoot.appendChild(this._div);
       }

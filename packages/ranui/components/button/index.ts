@@ -4,8 +4,8 @@ import { createCustomError, falseList, isDisabled } from '@/utils/index';
 function Custom() {
   if (typeof document !== 'undefined' && !customElements.get('r-button')) {
     class Button extends HTMLElement {
-      _container: HTMLDivElement;
       _btn: HTMLDivElement;
+      _btnContent: HTMLDivElement;
       _iconElement?: HTMLElement;
       _slot: HTMLSlotElement;
       _shadowDom: ShadowRoot;
@@ -16,16 +16,16 @@ function Custom() {
       constructor() {
         super();
         this._slot = document.createElement('slot');
+        this._btnContent = document.createElement('div');
         this._btn = document.createElement('div');
-        this._container = document.createElement('div');
-        this._container.setAttribute('class', 'container');
-        this._btn.setAttribute('class', 'btn');
-        this._btn.appendChild(this._slot);
+        this._btn.setAttribute('class', 'ran-btn');
+        this._btnContent.setAttribute('class', 'ran-btn-content');
+        this._btnContent.appendChild(this._slot);
         this._slot.setAttribute('class', 'slot');
         const shadowRoot = this.attachShadow({ mode: 'closed' });
         this._shadowDom = shadowRoot;
-        this._container.appendChild(this._btn);
-        shadowRoot.appendChild(this._container);
+        this._btn.appendChild(this._btnContent);
+        shadowRoot.appendChild(this._btn);
       }
       get sheet() {
         return this.getAttribute('sheet');
@@ -108,11 +108,11 @@ function Custom() {
         if (!this.disabled || this.disabled === 'false') {
           this.debounceMouseEvent();
           const { left, top } = this.getBoundingClientRect();
-          this._container.style.setProperty(
+          this._btn.style.setProperty(
             '--ran-x',
             event.clientX - left + 'px',
           );
-          this._container.style.setProperty(
+          this._btn.style.setProperty(
             '--ran-y',
             event.clientY - top + 'px',
           );
@@ -122,8 +122,8 @@ function Custom() {
         if (judgeDevice() !== 'pc') return;
         if (this.debounceTimeId) return;
         this.debounceTimeId = setTimeout(() => {
-          this._container.style.removeProperty('--ran-x');
-          this._container.style.removeProperty('--ran-y');
+          this._btn.style.removeProperty('--ran-x');
+          this._btn.style.removeProperty('--ran-y');
           this.debounceMouseEvent();
         }, 600);
       };
@@ -145,31 +145,31 @@ function Custom() {
         }
       }
       connectedCallback() {
-        this._container.addEventListener('mousedown', this.mousedown);
-        this._container.addEventListener('mouseup', this.mouseup);
+        this._btn.addEventListener('mousedown', this.mousedown);
+        this._btn.addEventListener('mouseup', this.mouseup);
         this.handlerExternalCss();
         this.setIcon();
       }
       disconnectCallback() {
-        this._container.removeEventListener('mousedown', this.mousedown);
-        this._container.removeEventListener('mouseup', this.mouseup);
+        this._btn.removeEventListener('mousedown', this.mousedown);
+        this._btn.removeEventListener('mouseup', this.mouseup);
       }
       attributeChangedCallback(
         name: string,
         oldValue: string,
         newValue: string,
       ) {
-        if (name === 'disabled' && this._btn) {
+        if (name === 'disabled' && this._btnContent) {
           if (!newValue || newValue === 'false') {
-            this._btn.setAttribute('disabled', '');
+            this._btnContent.setAttribute('disabled', '');
           } else {
-            this._btn.removeAttribute('disabled');
+            this._btnContent.removeAttribute('disabled');
           }
         }
-        if (name === 'icon' && this._btn && oldValue !== newValue)
+        if (name === 'icon' && this._btnContent && oldValue !== newValue)
           this.setIcon();
-        if (name === 'iconSize' && this._btn && oldValue !== newValue)
-          this._btn.setAttribute('iconSize', newValue);
+        if (name === 'iconSize' && this._btnContent && oldValue !== newValue)
+          this._btnContent.setAttribute('iconSize', newValue);
         if (name === 'sheet' && this._shadowDom && oldValue !== newValue)
           this.handlerExternalCss();
       }
