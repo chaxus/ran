@@ -1,0 +1,36 @@
+.ran-progress {
+  position: relative;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  &-wrap {
+    width: 100%;
+    height: 8px;
+    border-radius: 20px;
+    background: #5b5b5b;
+    position: relative;
+    overflow: hidden;
+    &-value {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      transform: scaleX(0);
+      transform-origin: 0 0;
+      will-change: transform;
+      background: linear-gradient(90deg, #0bc8bb 2.42%, #00d297 98.79%);
+      border-radius: 20px;
+    }
+  }
+  &-dot {
+    position: absolute;
+    top: -5px;
+    left: -2px;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    background: linear-gradient(90deg, #0bc8bb 2.42%, #00d297 98.79%);
+    cursor: pointer;
+  }
+}

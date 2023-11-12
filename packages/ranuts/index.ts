@@ -27,6 +27,7 @@ import {
   memoize,
   mergeExports,
   noop,
+  perToNum,
   querystring,
   removeClassToElement,
   removeGhosting,
@@ -87,6 +88,7 @@ export {
   addClassToElement,
   AudioRecorder,
   removeClassToElement,
+  perToNum
 };
 
 export const EventEmitter = SyncHook;

@@ -674,3 +674,17 @@ export const removeClassToElement = (
     classList.remove(removeClass);
   }
 };
+/**
+ * @description: 百分比字符串转数字
+ * @param {string} str
+ * @return {*}
+ */
+export const perToNum = (str: string = ''): number => {
+  if (str.length === 0) return 0;
+  if (str.endsWith('%')) {
+    const value = Number(str.replace('%', ''));
+    return value > 1 ? value / 100 : value;
+  } else {
+    return Number(str);
+  }
+};
