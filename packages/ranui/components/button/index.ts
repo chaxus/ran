@@ -19,12 +19,16 @@ function Custom() {
         this._btnContent = document.createElement('div');
         this._btn = document.createElement('div');
         this._btn.setAttribute('class', 'ran-btn');
+        this._btn.setAttribute('part', 'ran-btn');
         this._btnContent.setAttribute('class', 'ran-btn-content');
+        this._btnContent.setAttribute('part', 'ran-btn-content');
         this._btnContent.appendChild(this._slot);
         this._slot.setAttribute('class', 'slot');
         const shadowRoot = this.attachShadow({ mode: 'closed' });
         this._shadowDom = shadowRoot;
         this._btn.appendChild(this._btnContent);
+        this.setAttribute('role', 'button');
+        this.setAttribute('tabindex', '0');
         shadowRoot.appendChild(this._btn);
       }
       get sheet() {
@@ -39,8 +43,10 @@ function Custom() {
       set disabled(value: boolean | string | undefined | null) {
         if (!value || value === 'false') {
           this.removeAttribute('disabled');
+          this.removeAttribute('aria-disabled');
         } else {
           this.setAttribute('disabled', '');
+          this.setAttribute('aria-disabled', 'true');
         }
       }
       get iconSize() {
@@ -108,14 +114,8 @@ function Custom() {
         if (!this.disabled || this.disabled === 'false') {
           this.debounceMouseEvent();
           const { left, top } = this.getBoundingClientRect();
-          this._btn.style.setProperty(
-            '--ran-x',
-            event.clientX - left + 'px',
-          );
-          this._btn.style.setProperty(
-            '--ran-y',
-            event.clientY - top + 'px',
-          );
+          this._btn.style.setProperty('--ran-x', event.clientX - left + 'px');
+          this._btn.style.setProperty('--ran-y', event.clientY - top + 'px');
         }
       };
       mouseup = (event: MouseEvent) => {
