@@ -674,3 +674,4 @@ export const removeClassToElement = (
     classList.remove(removeClass);
   }
 };
+

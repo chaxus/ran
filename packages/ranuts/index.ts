@@ -10,6 +10,7 @@ import { init } from '@/vnode/init';
 import { h } from '@/vnode/h';
 import Monitor from '@/ranlog';
 import { AudioRecorder } from '@/utils/audioRecorder';
+import word from '@/word/index'
 import {
   addClassToElement,
   createObjectURL,
@@ -87,6 +88,7 @@ export {
   addClassToElement,
   AudioRecorder,
   removeClassToElement,
+  word
 };
 
 export const EventEmitter = SyncHook;

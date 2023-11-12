@@ -14,6 +14,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         inlineDynamicImports: true,
+        experimentalMinChunkSize: 1000,
       },
       external: ['node:fs', 'fs'],
     },
