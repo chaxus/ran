@@ -27,8 +27,6 @@ function Custom() {
         const shadowRoot = this.attachShadow({ mode: 'closed' });
         this._shadowDom = shadowRoot;
         this._btn.appendChild(this._btnContent);
-        this.setAttribute('role', 'button');
-        this.setAttribute('tabindex', '0');
         shadowRoot.appendChild(this._btn);
       }
       get sheet() {
@@ -149,6 +147,8 @@ function Custom() {
         this._btn.addEventListener('mouseup', this.mouseup);
         this.handlerExternalCss();
         this.setIcon();
+        this.setAttribute('role', 'button');
+        this.setAttribute('tabindex', '0');
       }
       disconnectCallback() {
         this._btn.removeEventListener('mousedown', this.mousedown);

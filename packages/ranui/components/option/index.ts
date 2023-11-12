@@ -14,9 +14,9 @@ function Custom() {
         super();
         this._slot = document.createElement('slot');
         this._option = document.createElement('div');
-        this._option.setAttribute('class', 'option');
+        this._option.setAttribute('class', 'ran-option');
         this._optionContent = document.createElement('div');
-        this._optionContent.setAttribute('class', 'option-content');
+        this._optionContent.setAttribute('class', 'ran-option-content');
         this._optionContent.appendChild(this._slot);
         this._option.appendChild(this._optionContent);
         const shadowRoot = this.attachShadow({ mode: 'closed' });

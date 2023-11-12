@@ -43,7 +43,7 @@ function Custom() {
       constructor() {
         super();
         this.abilityRadarChartContainer = document.createElement('div');
-        this.abilityRadarChartContainer.setAttribute('class', 'radar');
+        this.abilityRadarChartContainer.setAttribute('class', 'ran-radar');
         this.abilityRadarChart = document.createElement('canvas');
         this.abilityRadarChart.style.setProperty('width', '100%');
         this.abilityRadarChart.style.setProperty('height', '100%');

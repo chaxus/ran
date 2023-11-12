@@ -8,7 +8,7 @@ function Skeleton() {
       constructor() {
         super();
         this._div = document.createElement('div');
-        this._div.setAttribute('class', 'skeleton');
+        this._div.setAttribute('class', 'ran-skeleton');
         const shadowRoot = this.attachShadow({ mode: 'closed' });
         shadowRoot.appendChild(this._div);
       }

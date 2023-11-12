@@ -37,11 +37,11 @@ function Custom() {
       constructor() {
         super();
         this._notice = document.createElement('div');
-        this._notice.setAttribute('class', 'message-notice');
+        this._notice.setAttribute('class', 'ran-message-notice');
         this._content = document.createElement('div');
-        this._content.setAttribute('class', 'message-notice-content');
+        this._content.setAttribute('class', 'ran-message-notice-content');
         this._info = document.createElement('div');
-        this._info.setAttribute('class', 'message-notice-content-info');
+        this._info.setAttribute('class', 'ran-message-notice-content-info');
         this._icon = document.createElement('r-icon');
         this._span = document.createElement('span');
         this._info.appendChild(this._icon);

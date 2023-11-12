@@ -578,7 +578,7 @@ interface RequestUrlToArraybufferOption {
  */
 export const requestUrlToBuffer = (
   src: string,
-  options: RequestUrlToArraybufferOption,
+  options: Partial<RequestUrlToArraybufferOption>,
 ): Promise<requestUrlToArraybufferReturn> => {
   return new Promise(function (resolve, reject) {
     const xhr = new XMLHttpRequest();
@@ -604,7 +604,8 @@ export const requestUrlToBuffer = (
     xhr.withCredentials = options.withCredentials || false;
     if (options.headers) {
       Object.keys(options.headers).forEach(function (key) {
-        xhr.setRequestHeader(key, options.headers[key]);
+        options.headers?.[key] &&
+          xhr.setRequestHeader(key, options.headers[key]);
       });
     }
     xhr.send(options.body);
