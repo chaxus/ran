@@ -213,7 +213,9 @@ export class LineModel {
     // 标准化标签和特征
     this.normaliseFeature = normalise(featureTensor);
     this.normaliseLabel = normalise(labelTensor);
-    console.log(`load data success, normaliseFeature:${this.normaliseFeature}, normaliseLabel:${this.normaliseLabel}`);
+    console.log(
+      `load data success, normaliseFeature:${this.normaliseFeature}, normaliseLabel:${this.normaliseLabel}`,
+    );
   };
   train = async (): Promise<void> => {
     if (!this.normaliseFeature || !this.normaliseLabel) return;
@@ -243,7 +245,9 @@ export class LineModel {
     );
     const trainLoss = result.history.loss.pop();
     const validationLoss = result.history.val_loss.pop();
-    console.log(`train success trainLoss:${trainLoss}, validationLoss:${validationLoss}`);
+    console.log(
+      `train success trainLoss:${trainLoss}, validationLoss:${validationLoss}`,
+    );
   };
   test = async (): Promise<void> => {
     if (!this.testingFeatureTensor || !this.testingLabelTensor) return;
@@ -261,7 +265,10 @@ export class LineModel {
     storageID: string = 'kc-house-price-regression',
   ): Promise<void> => {
     const saveResults = await this.model?.save(`localstorage://${storageID}`);
-    console.log('save model success, current time is:', saveResults?.modelArtifactsInfo.dateSaved);
+    console.log(
+      'save model success, current time is:',
+      saveResults?.modelArtifactsInfo.dateSaved,
+    );
   };
   loadModel = async (
     storageID: string = 'kc-house-price-regression',
@@ -302,7 +309,7 @@ export class LineModel {
       const outputValue = outputTensor && outputTensor.dataSync()[0];
       console.log(
         'predict success, the result: ',
-        outputValue && (outputValue / 1000),
+        outputValue && outputValue / 1000,
       );
     });
   };
@@ -310,3 +317,7 @@ export class LineModel {
     tfvis.visor().toggle();
   };
 }
+
+export const tfMemory = (): number => {
+  return tf.memory().numTensors;
+};
