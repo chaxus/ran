@@ -167,17 +167,16 @@ const normalise = (
     min,
   };
 };
+
+interface Normalise {
+  tensor: tf.Tensor<tf.Rank>;
+  max: tf.Tensor<tf.Rank>;
+  min: tf.Tensor<tf.Rank>;
+}
+
 export class LineModel {
-  normaliseFeature?: {
-    tensor: tf.Tensor<tf.Rank>;
-    max: tf.Tensor<tf.Rank>;
-    min: tf.Tensor<tf.Rank>;
-  };
-  normaliseLabel?: {
-    tensor: tf.Tensor<tf.Rank>;
-    max: tf.Tensor<tf.Rank>;
-    min: tf.Tensor<tf.Rank>;
-  };
+  normaliseFeature?: Normalise
+  normaliseLabel?: Normalise
   testingFeatureTensor?: tf.Tensor<tf.Rank>;
   testingLabelTensor?: tf.Tensor<tf.Rank>;
   model?: tf.LayersModel;
