@@ -559,7 +559,7 @@ export const convertImageToBase64 = (
 };
 
 interface requestUrlToArraybufferReturn extends BaseReturn {
-  data: unknown;
+  data: Blob;
 }
 
 interface RequestUrlToArraybufferOption {
@@ -578,8 +578,8 @@ interface RequestUrlToArraybufferOption {
  */
 export const requestUrlToBuffer = (
   src: string,
-  options: RequestUrlToArraybufferOption,
-): Promise<requestUrlToArraybufferReturn> => {
+  options: Partial<RequestUrlToArraybufferOption>,
+): Promise<Partial<requestUrlToArraybufferReturn>> => {
   return new Promise(function (resolve, reject) {
     const xhr = new XMLHttpRequest();
     xhr.open(options.method || 'GET', src, true);
@@ -604,7 +604,7 @@ export const requestUrlToBuffer = (
     xhr.withCredentials = options.withCredentials || false;
     if (options.headers) {
       Object.keys(options.headers).forEach(function (key) {
-        xhr.setRequestHeader(key, options.headers[key]);
+        options?.headers && xhr.setRequestHeader(key, options.headers[key]);
       });
     }
     xhr.send(options.body);
