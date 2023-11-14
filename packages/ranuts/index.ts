@@ -13,6 +13,7 @@ import { AudioRecorder } from '@/utils/audioRecorder';
 import word from '@/word/index'
 import {
   addClassToElement,
+  createDocumentFragment,
   createObjectURL,
   debounce,
   formatJson,
@@ -28,7 +29,9 @@ import {
   memoize,
   mergeExports,
   noop,
+  perToNum,
   querystring,
+  range,
   removeClassToElement,
   removeGhosting,
   requestAnimation,
@@ -36,7 +39,8 @@ import {
   retain,
   scriptOnLoad,
   throttle,
-  timestampToTime,
+  timeFormat,
+  timestampToTime
 } from '@/utils';
 import type { Noop } from '@/utils';
 import { MimeType, getMime, setMime } from '@/server/mimeType';
@@ -88,7 +92,11 @@ export {
   addClassToElement,
   AudioRecorder,
   removeClassToElement,
-  word
+  word,
+  createDocumentFragment,
+  perToNum,
+  timeFormat,
+  range
 };
 
 export const EventEmitter = SyncHook;
