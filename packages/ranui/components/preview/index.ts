@@ -135,7 +135,7 @@ async function Custom() {
               onProgress: this.onProgress,
               responseType: 'blob',
             });
-            if (success) {
+            if (success && data) {
               file = new File([data], data.name, { type: data.type });
               const { type } = file;
               const handler = renderFileMap.get(type);

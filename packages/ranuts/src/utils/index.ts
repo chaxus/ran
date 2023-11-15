@@ -559,7 +559,7 @@ export const convertImageToBase64 = (
 };
 
 interface requestUrlToArraybufferReturn extends BaseReturn {
-  data: unknown;
+  data: Blob;
 }
 
 interface RequestUrlToArraybufferOption {
@@ -578,8 +578,8 @@ interface RequestUrlToArraybufferOption {
  */
 export const requestUrlToBuffer = (
   src: string,
-  options: RequestUrlToArraybufferOption,
-): Promise<requestUrlToArraybufferReturn> => {
+  options: Partial<RequestUrlToArraybufferOption>,
+): Promise<Partial<requestUrlToArraybufferReturn>> => {
   return new Promise(function (resolve, reject) {
     const xhr = new XMLHttpRequest();
     xhr.open(options.method || 'GET', src, true);
@@ -604,7 +604,7 @@ export const requestUrlToBuffer = (
     xhr.withCredentials = options.withCredentials || false;
     if (options.headers) {
       Object.keys(options.headers).forEach(function (key) {
-        xhr.setRequestHeader(key, options.headers[key]);
+        options?.headers && xhr.setRequestHeader(key, options.headers[key]);
       });
     }
     xhr.send(options.body);
@@ -674,4 +674,53 @@ export const removeClassToElement = (
     classList.remove(removeClass);
   }
 };
-
+/**
+ * @description: 时间秒，转化成:分割的时间
+ * @param {number} time
+ * @return {*}
+ */
+export const timeFormat = (time: number): string => {
+  if (!time) return ''
+  const hour = Math.trunc(time / 3600);
+  const minute = Math.trunc((time % 3600) / 60);
+  const second = formatDuration(Math.trunc(time - hour * 3600 - minute * 60));
+  if (hour === 0) {
+    return `${formatDuration(minute)}:${second}`;
+  }
+  return `${formatDuration(hour)}:${formatDuration(minute)}:${second}`;
+};
+/**
+ * @description: 百分比转换成数字
+ * @param {string} str
+ * @return {*}
+ */
+export const perToNum = (str: string = ''): number => {
+  if (str.length === 0) return 0;
+  if (str.endsWith('%')) {
+    const value = Number(str.replace('%', ''));
+    return value > 1 ? value / 100 : value;
+  } else {
+    return Number(str);
+  }
+};
+/**
+ * @description: 限制最大和最小值
+ * @return {*}
+ */
+export const range = (
+  num: number,
+  min: number = 0,
+  max: number = 1,
+): number => {
+  return Math.min(max, Math.max(min, num));
+};
+/**
+ * @description: 创建一个 Fragment
+ * @param {Element} list
+ * @return {*}
+ */
+export const createDocumentFragment = (list: Element[]): DocumentFragment => {
+  const Fragment = document.createDocumentFragment();
+  list.forEach((item) => Fragment.appendChild(item));
+  return Fragment;
+};

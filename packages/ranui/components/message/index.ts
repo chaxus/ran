@@ -99,13 +99,14 @@ function Custom() {
     container.appendChild(div);
 
     const commonPrompt = (type: string) => {
-      return (options: Ran.Prompt | string) => {
+      return (options: Ran.Prompt | string | undefined | null) => {
         const message = new CustomMessage();
         message.setAttribute('class', 'message');
         message.timeId && clearTimeout(message.timeId);
         message.setAttribute('type', type);
         let duration = defaultDuration;
         let close: Ran.Prompt['close'];
+        if (!options) return;
         if (typeof options === 'string') {
           message.setAttribute('content', options);
         } else {
