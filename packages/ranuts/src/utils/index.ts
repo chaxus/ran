@@ -559,7 +559,7 @@ export const convertImageToBase64 = (
 };
 
 interface requestUrlToArraybufferReturn extends BaseReturn {
-  data: unknown;
+  data: Blob;
 }
 
 interface RequestUrlToArraybufferOption {
@@ -606,6 +606,7 @@ export const requestUrlToBuffer = (
       Object.keys(options.headers).forEach(function (key) {
         options.headers?.[key] &&
           xhr.setRequestHeader(key, options.headers[key]);
+
       });
     }
     xhr.send(options.body);
@@ -688,4 +689,26 @@ export const perToNum = (str: string = ''): number => {
   } else {
     return Number(str);
   }
+};
+
+/**
+ * @description: 限制最大和最小值
+ * @return {*}
+ */
+export const range = (
+  num: number,
+  min: number = 0,
+  max: number = 1,
+): number => {
+  return Math.min(max, Math.max(min, num));
+};
+/**
+ * @description: 创建一个 Fragment
+ * @param {Element} list
+ * @return {*}
+ */
+export const createDocumentFragment = (list: Element[]): DocumentFragment => {
+  const Fragment = document.createDocumentFragment();
+  list.forEach((item) => Fragment.appendChild(item));
+  return Fragment;
 };

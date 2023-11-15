@@ -15,6 +15,7 @@
     "esbuild",
     "IIFE",
     "keyof",
+    "localstorage",
     "Metiral",
     "normalise",
     "nums",
@@ -47,6 +48,7 @@
     "vitepress",
     "vnode",
     "vnodes",
+    "wasmjieba",
     "xlabels"
   ]
 }

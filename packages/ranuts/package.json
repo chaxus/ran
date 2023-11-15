@@ -36,6 +36,7 @@
     "vitest": "^0.23.4"
   },
   "dependencies": {
+    "-": "^0.0.1",
     "magic-string": "^0.27.0",
     "tesseract.js": "^5.0.2",
     "vite": "^4.5.0",
