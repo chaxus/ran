@@ -1,12 +1,16 @@
 import * as tf from '@tensorflow/tfjs';
 import type {
+  Logs,
   MemoryInfo,
   Rank,
   Tensor,
   TensorContainerObject,
+  TypedArray
 } from '@tensorflow/tfjs';
 import * as tfvis from '@tensorflow/tfjs-vis';
 import type { Point2D } from '@tensorflow/tfjs-vis';
+
+export type TensorLike2D = TypedArray | number[] | number[][] | boolean[] | boolean[][] | string[] | string[][] | Uint8Array[] | Uint8Array[][];
 
 /**
  * @description: 测试tf的内存管理
@@ -92,10 +96,16 @@ export const csv2DataSet = (path: string): tf.data.CSVDataset => {
  * @param {string} name
  * @return {*}
  */
-export const plot = (points: Point2D[], name: string): void => {
+export const plot = (points: Point2D[], name: string, predictPoints?: Point2D[]): void => {
+  const values = [points]
+  const series = ['original']
+  if (Array.isArray(predictPoints)) {
+    values.push(predictPoints)
+    series.push('predicted')
+  }
   tfvis.render.scatterplot(
     { name: `${name} vs House Price` },
-    { values: [points], series: ['original'] },
+    { values, series },
     {
       xLabel: name,
       yLabel: 'Price',
@@ -103,15 +113,31 @@ export const plot = (points: Point2D[], name: string): void => {
   );
 };
 
-const createModal = () => {
+
+const createModel = () => {
   const model = tf.sequential();
 
   model.add(
     tf.layers.dense({
-      units: 1,
-      useBias: true,
-      activation: 'linear',
+      units: 10,
+      useBias: true, // 偏见 
+      activation: 'sigmoid',
       inputDim: 1,
+    }),
+  );
+  model.add(
+    tf.layers.dense({
+      units: 10,
+      useBias: true, // 偏见 
+      activation: 'sigmoid',
+    }),
+  );
+  // output
+  model.add(
+    tf.layers.dense({
+      units: 1,
+      useBias: true, // 偏见 
+      activation: 'sigmoid',
     }),
   );
 
@@ -131,6 +157,7 @@ const trainModel = async (
   model: tf.LayersModel,
   trainingFeatureTensor: tf.Tensor<tf.Rank>,
   trainingLabelTensor: tf.Tensor<tf.Rank>,
+  onEpochBegin = (epoch: number, logs?: Logs): void | Promise<void> => { }
 ) => {
   const { onEpochEnd, onBatchEnd } = tfvis.show.fitCallbacks(
     { name: 'Training Performance' },
@@ -148,6 +175,7 @@ const trainModel = async (
       // }
       onEpochEnd,
       onBatchEnd,
+      onEpochBegin
     },
   });
 };
@@ -180,6 +208,7 @@ export class LineModel {
   testingFeatureTensor?: tf.Tensor<tf.Rank>;
   testingLabelTensor?: tf.Tensor<tf.Rank>;
   model?: tf.LayersModel;
+  points?: Point2D[]
   /**
    * @description: 加载数据
    * @param {string} path
@@ -195,19 +224,19 @@ export class LineModel {
         y: record.price,
       };
     });
-    const points: Point2D[] = await pointsDataSet.toArray();
+    this.points = await pointsDataSet.toArray();
 
-    if (points.length % 2 !== 0) {
+    if (this.points.length % 2 !== 0) {
       // 如果张量是奇数，会导致无法平均分割，需要变成偶数
-      points.pop();
+      this.points.pop();
     }
-    tf.util.shuffle(points);
-    plot(points, 'Square feet');
+    tf.util.shuffle(this.points);
+    plot(this.points, 'Square feet');
     // Feature (inputs) 提取特征并存在张量中
-    const featureValue = points.map((p) => p.x);
+    const featureValue = this.points.map((p) => p.x);
     const featureTensor = tf.tensor2d(featureValue, [featureValue.length, 1]);
     // Labels (outputs) 对标签做同样的操作
-    const labelValue = points.map((p) => p.y);
+    const labelValue = this.points.map((p) => p.y);
     const labelTensor = tf.tensor2d(labelValue, [labelValue.length, 1]);
     // 标准化标签和特征
     this.normaliseFeature = normalise(featureTensor);
@@ -230,18 +259,29 @@ export class LineModel {
     );
     this.testingLabelTensor = testingLabelTensor;
     // 创建模型
-    this.model = createModal();
+    this.model = createModel();
     this.model.summary();
     tfvis.show.modelSummary({ name: 'Modal summary' }, this.model);
     // 了解 layer
     const layer = this.model.getLayer('', 0);
     tfvis.show.layer({ name: 'Layer 1' }, layer);
+
+    const onEpochBegin = async () => {
+      await this.predictionLine()
+      // 更新 layer
+      const layer = this.model.getLayer('', 0);
+      tfvis.show.layer({ name: 'Layer 1' }, layer);
+    }
     // 训练模型
     const result = await trainModel(
       this.model,
       trainingFeatureTensor,
       trainingLabelTensor,
+      onEpochBegin
     );
+
+    await this.predictionLine()
+
     const trainLoss = result.history.loss.pop();
     const validationLoss = result.history.val_loss.pop();
     console.log(
@@ -279,9 +319,11 @@ export class LineModel {
       this.model = await tf.loadLayersModel(storageKey);
       this.model.summary();
       tfvis.show.modelSummary({ name: 'Modal summary' }, this.model);
-      // 了解 layer
+      // 更新 layer
       const layer = this.model.getLayer('', 0);
       tfvis.show.layer({ name: 'Layer 1' }, layer);
+
+      await this.predictionLine()
       console.log('load model success');
     } else {
       console.log('no model', storageID);
@@ -312,6 +354,36 @@ export class LineModel {
       );
     });
   };
+  predictionLine = async (): Promise<void> => {
+    const [x, y] = tf.tidy(() => {
+      const normaliseXs = tf.linspace(0, 1, 100);
+      const normaliseYs = this.model.predict(normaliseXs.reshape([100, 1]))
+
+      const xs = denormalise(normaliseXs, this.normaliseFeature.min, this.normaliseFeature.max)
+      const ys = denormalise(normaliseYs as tf.Tensor<tf.Rank>, this.normaliseLabel.min, this.normaliseLabel.max)
+      return [xs.dataSync(), ys.dataSync()]
+    })
+    const predictPoints = Array.from(x).map((val, index) => {
+      return { x: val, y: y[index] }
+    })
+    await plot(this.points, "Square feet", predictPoints)
+  }
+  /**
+   * @description: 设置权重和偏见
+   * @param {TensorLike2D} weight
+   * @param {TensorLike2D} bias
+   * @return {*}
+   */  
+  plotParams = async (weight: TensorLike2D, bias: TensorLike2D): Promise<void> => {
+    this.model.getLayer(null, 0).setWeights([
+      tf.tensor2d(weight),
+      tf.tensor2d(bias)
+    ])
+    await this.predictionLine()
+    // 更新 layer
+    const layer = this.model.getLayer('', 0);
+    tfvis.show.layer({ name: 'Layer 1' }, layer);
+  }
   openTfvis = (): void => {
     tfvis.visor().toggle();
   };
