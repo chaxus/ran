@@ -16,7 +16,7 @@ export default defineConfig({
         inlineDynamicImports: true,
         experimentalMinChunkSize: 1000,
       },
-      external: ['node:fs', 'fs'],
+      external: ['node:fs', 'fs', 'react'],
     },
     lib: {
       entry: './index.ts',

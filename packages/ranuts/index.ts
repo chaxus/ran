@@ -11,6 +11,7 @@ import { h } from '@/vnode/h';
 import Monitor from '@/ranlog';
 import { AudioRecorder } from '@/utils/audioRecorder';
 import word from '@/word/index'
+import reactify from '@/utils/reactify'
 import {
   addClassToElement,
   createDocumentFragment,
@@ -96,7 +97,8 @@ export {
   createDocumentFragment,
   perToNum,
   timeFormat,
-  range
+  range,
+  reactify
 };
 
 export const EventEmitter = SyncHook;

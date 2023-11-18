@@ -67,7 +67,6 @@ interface ModuleInfo extends ModuleOptions {
   exportedBindings: Record<string, string[]> | null;
   exports: string[] | null;
   hasDefaultExport: boolean | null;
-  /** @deprecated Use `moduleSideEffects` instead */
   hasModuleSideEffects: boolean | 'no-treeshake';
   id: string;
   implicitlyLoadedAfterOneOf: readonly string[];
