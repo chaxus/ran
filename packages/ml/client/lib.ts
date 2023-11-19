@@ -1,11 +1,5 @@
 import * as tf from '@tensorflow/tfjs';
-import type {
-  History,
-  Logs,
-  MemoryInfo,
-  Rank,
-  Tensor,
-} from '@tensorflow/tfjs';
+import type { History, Logs, MemoryInfo, Rank, Tensor } from '@tensorflow/tfjs';
 import * as tfvis from '@tensorflow/tfjs-vis';
 import type { Point2D } from '@tensorflow/tfjs-vis';
 
@@ -26,14 +20,18 @@ export interface TfInfo {
   numTensors: number;
 }
 
-type TensorRank = Tensor<Rank> | Tensor<Rank>[]
+type TensorRank = Tensor<Rank> | Tensor<Rank>[];
 
-type Normal<T> = T extends Tensor<Rank> ? TensorRank : T extends Tensor<Rank>[] ? Tensor<Rank>[] : never
+type Normal<T> = T extends Tensor<Rank>
+  ? TensorRank
+  : T extends Tensor<Rank>[]
+  ? Tensor<Rank>[]
+  : never;
 
 export interface Normalise {
   tensor: Tensor<Rank>;
-  max: Tensor<Rank> | Tensor<Rank>[]
-  min: Tensor<Rank> | Tensor<Rank>[]
+  max: Tensor<Rank> | Tensor<Rank>[];
+  min: Tensor<Rank> | Tensor<Rank>[];
 }
 /**
  * @description: 测试tf的内存管理
@@ -102,12 +100,16 @@ export const csv2DataSet = (path: string): tf.data.CSVDataset => {
  * @param {string} name
  * @return {*}
  */
-export const plot = (points: Point2D[], name: string, predictPoints?: Point2D[]): void => {
-  const values = [points]
-  const series = ['original']
+export const plot = (
+  points: Point2D[],
+  name: string,
+  predictPoints?: Point2D[],
+): void => {
+  const values = [points];
+  const series = ['original'];
   if (Array.isArray(predictPoints)) {
-    values.push(predictPoints)
-    series.push('predicted')
+    values.push(predictPoints);
+    series.push('predicted');
   }
   tfvis.render.scatterplot(
     { name: `${name} vs House Price` },
@@ -119,14 +121,13 @@ export const plot = (points: Point2D[], name: string, predictPoints?: Point2D[])
   );
 };
 
-
 export const createModel = (): tf.LayersModel => {
   const model = tf.sequential();
 
   model.add(
     tf.layers.dense({
       units: 10,
-      useBias: true, // 偏见 
+      useBias: true, // 偏见
       activation: 'sigmoid',
       inputDim: 1,
     }),
@@ -134,7 +135,7 @@ export const createModel = (): tf.LayersModel => {
   model.add(
     tf.layers.dense({
       units: 10,
-      useBias: true, // 偏见 
+      useBias: true, // 偏见
       activation: 'sigmoid',
     }),
   );
@@ -142,7 +143,7 @@ export const createModel = (): tf.LayersModel => {
   model.add(
     tf.layers.dense({
       units: 1,
-      useBias: true, // 偏见 
+      useBias: true, // 偏见
       activation: 'sigmoid',
     }),
   );
@@ -155,13 +156,12 @@ export const createModel = (): tf.LayersModel => {
   return model;
 };
 
-
 export const trainModel = async (
   model: tf.LayersModel,
   trainingFeatureTensor: tf.Tensor<tf.Rank>,
   trainingLabelTensor: tf.Tensor<tf.Rank>,
-  onEpochBegin = (epoch: number, logs?: Logs): void | Promise<void> => { },
-  epochs: number = 20
+  onEpochBegin = (epoch: number, logs?: Logs): void | Promise<void> => {},
+  epochs: number = 100,
 ): Promise<History> => {
   const { onEpochEnd, onBatchEnd } = tfvis.show.fitCallbacks(
     { name: 'Training Performance' },
@@ -179,57 +179,71 @@ export const trainModel = async (
       // }
       onEpochEnd,
       onBatchEnd,
-      onEpochBegin
+      onEpochBegin,
     },
   });
 };
-export const denormalise = (tensor: Tensor, max: Tensor<Rank> | Tensor<Rank>[], min: Tensor<Rank> | Tensor<Rank>[]): Tensor<Rank> => {
-  const dimension = tensor.shape.length > 1 && tensor.shape[1]
+export const denormalise = (
+  tensor: Tensor,
+  max: Tensor<Rank> | Tensor<Rank>[],
+  min: Tensor<Rank> | Tensor<Rank>[],
+): Tensor<Rank> => {
+  const dimension = tensor.shape.length > 1 && tensor.shape[1];
 
   if (dimension && dimension > 1) {
     // more than one
-    const features = tf.split(tensor, dimension, 1)
+    const features = tf.split(tensor, dimension, 1);
     // normalise and find min/max values  for each one
     const denormalised = features.map((featuresTensor, i) => {
-      return denormalise(featuresTensor, arrayToItem(max, i), arrayToItem(min, i))
-    })
+      return denormalise(
+        featuresTensor,
+        arrayToItem(max, i),
+        arrayToItem(min, i),
+      );
+    });
     // prepare return values
-    const returnTensor = tf.concat(denormalised, 1)
-    return returnTensor
+    const returnTensor = tf.concat(denormalised, 1);
+    return returnTensor;
   }
   if (!(Array.isArray(max) || Array.isArray(min))) {
     return tensor.mul(max.sub(min)).add(min);
   }
 };
 
-type AItem<T> = T extends Array<infer R> ? R : T
-
+type AItem<T> = T extends Array<infer R> ? R : T;
 
 const arrayToItem = <T>(list: T[] | T, index?: number): T => {
-  if (!list) return undefined
-  if (Array.isArray(list)) return list[index]
-  return list
-}
+  if (!list) return undefined;
+  if (Array.isArray(list)) return list[index];
+  return list;
+};
 
 export const normalise = (
   tensor: Tensor,
   mi?: Tensor<Rank> | Tensor<Rank>[],
-  mx?: Tensor<Rank> | Tensor<Rank>[]
+  mx?: Tensor<Rank> | Tensor<Rank>[],
 ): Normalise => {
-  const dimension = tensor.shape.length > 1 && tensor.shape[1]
+  const dimension = tensor.shape.length > 1 && tensor.shape[1];
 
   if (dimension && dimension > 1) {
     // more than one
-    const features = tf.split(tensor, dimension, 1)
+    const features = tf.split(tensor, dimension, 1);
     // normalise and find min/max values  for each one
     const normalisedFeature = features.map((featuresTensor, i) => {
-      return normalise(featuresTensor, arrayToItem<Tensor<Rank>>(mi, i), arrayToItem<Tensor<Rank>>(mx, i))
-    })
+      return normalise(
+        featuresTensor,
+        arrayToItem<Tensor<Rank>>(mi, i),
+        arrayToItem<Tensor<Rank>>(mx, i),
+      );
+    });
     // prepare return values
-    const returnTensor = tf.concat(normalisedFeature.map(f => f.tensor), 1)
-    const max = normalisedFeature.map(f => f.max) as Tensor<Rank>[]
-    const min = normalisedFeature.map(f => f.min) as Tensor<Rank>[]
-    return { max, min, tensor: returnTensor }
+    const returnTensor = tf.concat(
+      normalisedFeature.map((f) => f.tensor),
+      1,
+    );
+    const max = normalisedFeature.map((f) => f.max) as Tensor<Rank>[];
+    const min = normalisedFeature.map((f) => f.min) as Tensor<Rank>[];
+    return { max, min, tensor: returnTensor };
   }
   const min = mi || tensor.min();
   const max = mx || tensor.max();
@@ -241,7 +255,6 @@ export const normalise = (
     };
   }
 };
-
 
 export const tfMemory = (): number => {
   return tf.memory().numTensors;

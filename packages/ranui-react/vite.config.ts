@@ -40,8 +40,8 @@ export const viteConfig: UserConfig = {
     extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json'],
   },
   server: {
-    port: PORT
-  }
+    port: PORT,
+  },
 };
 
 export default defineConfig(viteConfig);

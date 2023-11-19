@@ -10,8 +10,8 @@ import { init } from '@/vnode/init';
 import { h } from '@/vnode/h';
 import Monitor from '@/ranlog';
 import { AudioRecorder } from '@/utils/audioRecorder';
-import word from '@/word/index'
-import reactify from '@/utils/reactify'
+import word from '@/word/index';
+import reactify from '@/utils/reactify';
 import {
   addClassToElement,
   createDocumentFragment,
@@ -41,7 +41,7 @@ import {
   scriptOnLoad,
   throttle,
   timeFormat,
-  timestampToTime
+  timestampToTime,
 } from '@/utils';
 import type { Noop } from '@/utils';
 import { MimeType, getMime, setMime } from '@/server/mimeType';
@@ -98,7 +98,7 @@ export {
   perToNum,
   timeFormat,
   range,
-  reactify
+  reactify,
 };
 
 export const EventEmitter = SyncHook;

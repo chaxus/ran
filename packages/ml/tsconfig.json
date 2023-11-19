@@ -1,5 +1,5 @@
 {
-  "include": ["**/*.ts","**/*.tsx"],
+  "include": ["**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules/**", "dist/**"],
   "compilerOptions": {
     "module": "ESNext",
@@ -26,7 +26,7 @@
       "@/assets/*": ["assets/*"],
       "@/components/*": ["components/*"],
       "@/plugins/*": ["plugins/*"],
-      "@/utils/*": ["utils/*"],
+      "@/utils/*": ["utils/*"]
     }
   }
 }

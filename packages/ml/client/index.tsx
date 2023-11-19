@@ -4,7 +4,8 @@ import { BrowserRouter } from 'react-router-dom';
 import * as tf from '@tensorflow/tfjs';
 import { LineModelComponent } from './components/LineModel';
 import { Binary } from './components/BinaryModel';
-import { Emotion } from './components/Emotion'
+import { Multi } from './components/MultiModel';
+import { Emotion } from './components/Emotion';
 
 export const App = (): React.JSX.Element => {
   return (
@@ -19,7 +20,7 @@ export const App = (): React.JSX.Element => {
       <div>{JSON.stringify(tf.memory().numTensors)}</div>
       {/* <LineModelComponent />
       <Emotion /> */}
-      <Binary />
+      <Multi />
     </div>
   );
 };

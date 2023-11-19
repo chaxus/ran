@@ -1,19 +1,31 @@
 import React, { useState } from 'react';
 import { Input, message } from '@ranui/react';
-import type {
-  TensorContainerObject,
-  TypedArray
-} from '@tensorflow/tfjs';
+import type { TensorContainerObject, TypedArray } from '@tensorflow/tfjs';
 import type { Point2D } from '@tensorflow/tfjs-vis';
 import * as tfvis from '@tensorflow/tfjs-vis';
 import * as tf from '@tensorflow/tfjs';
-import { createModel , denormalise, normalise, plot, tfMemory, trainModel } from '../lib';
-import type { Normalise } from "../lib";
-
+import {
+  createModel,
+  denormalise,
+  normalise,
+  plot,
+  tfMemory,
+  trainModel,
+} from '../lib';
+import type { Normalise } from '../lib';
 
 const path = '../../assets/dataset/kc_house_data.csv';
 
-type TensorLike2D = TypedArray | number[] | number[][] | boolean[] | boolean[][] | string[] | string[][] | Uint8Array[] | Uint8Array[][];
+type TensorLike2D =
+  | TypedArray
+  | number[]
+  | number[][]
+  | boolean[]
+  | boolean[][]
+  | string[]
+  | string[][]
+  | Uint8Array[]
+  | Uint8Array[][];
 
 interface HouseSaleDataSet extends TensorContainerObject {
   price: number;
@@ -21,12 +33,12 @@ interface HouseSaleDataSet extends TensorContainerObject {
 }
 
 class LineModel {
-  normaliseFeature?: Normalise
-  normaliseLabel?: Normalise
+  normaliseFeature?: Normalise;
+  normaliseLabel?: Normalise;
   testingFeatureTensor?: tf.Tensor<tf.Rank>;
   testingLabelTensor?: tf.Tensor<tf.Rank>;
   model?: tf.LayersModel;
-  points?: Point2D[]
+  points?: Point2D[];
   /**
    * @description: 加载数据
    * @param {string} path
@@ -85,20 +97,20 @@ class LineModel {
     tfvis.show.layer({ name: 'Layer 1' }, layer);
 
     const onEpochBegin = async () => {
-      await this.predictionLine()
+      await this.predictionLine();
       // 更新 layer
       const layer = this.model.getLayer('', 0);
       tfvis.show.layer({ name: 'Layer 1' }, layer);
-    }
+    };
     // 训练模型
     const result = await trainModel(
       this.model,
       trainingFeatureTensor,
       trainingLabelTensor,
-      onEpochBegin
+      onEpochBegin,
     );
 
-    await this.predictionLine()
+    await this.predictionLine();
 
     const trainLoss = result.history.loss.pop();
     const validationLoss = result.history.val_loss.pop();
@@ -141,7 +153,7 @@ class LineModel {
       const layer = this.model.getLayer('', 0);
       tfvis.show.layer({ name: 'Layer 1' }, layer);
 
-      await this.predictionLine()
+      await this.predictionLine();
       console.log('load model success');
     } else {
       console.log('no model', storageID);
@@ -175,33 +187,43 @@ class LineModel {
   predictionLine = async (): Promise<void> => {
     const [x, y] = tf.tidy(() => {
       const normaliseXs = tf.linspace(0, 1, 100);
-      const normaliseYs = this.model.predict(normaliseXs.reshape([100, 1]))
+      const normaliseYs = this.model.predict(normaliseXs.reshape([100, 1]));
 
-      const xs = denormalise(normaliseXs, this.normaliseFeature.min, this.normaliseFeature.max)
-      const ys = denormalise(normaliseYs as tf.Tensor<tf.Rank>, this.normaliseLabel.min, this.normaliseLabel.max)
-      return [xs.dataSync(), ys.dataSync()]
-    })
+      const xs = denormalise(
+        normaliseXs,
+        this.normaliseFeature.min,
+        this.normaliseFeature.max,
+      );
+      const ys = denormalise(
+        normaliseYs as tf.Tensor<tf.Rank>,
+        this.normaliseLabel.min,
+        this.normaliseLabel.max,
+      );
+      return [xs.dataSync(), ys.dataSync()];
+    });
     const predictPoints = Array.from(x).map((val, index) => {
-      return { x: val, y: y[index] }
-    })
-    await plot(this.points, "Square feet", predictPoints)
-  }
+      return { x: val, y: y[index] };
+    });
+    await plot(this.points, 'Square feet', predictPoints);
+  };
   /**
    * @description: 设置权重和偏见
    * @param {TensorLike2D} weight
    * @param {TensorLike2D} bias
    * @return {*}
    */
-  plotParams = async (weight: TensorLike2D, bias: TensorLike2D): Promise<void> => {
-    this.model.getLayer(null, 0).setWeights([
-      tf.tensor2d(weight),
-      tf.tensor2d(bias)
-    ])
-    await this.predictionLine()
+  plotParams = async (
+    weight: TensorLike2D,
+    bias: TensorLike2D,
+  ): Promise<void> => {
+    this.model
+      .getLayer(null, 0)
+      .setWeights([tf.tensor2d(weight), tf.tensor2d(bias)]);
+    await this.predictionLine();
     // 更新 layer
     const layer = this.model.getLayer('', 0);
     tfvis.show.layer({ name: 'Layer 1' }, layer);
-  }
+  };
   openTfvis = (): void => {
     tfvis.visor().toggle();
   };
