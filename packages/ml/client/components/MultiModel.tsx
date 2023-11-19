@@ -18,10 +18,28 @@ type TensorLike2D = TypedArray | number[] | number[][] | boolean[] | boolean[][]
 interface HouseSaleDataSet extends TensorContainerObject {
     price: number;
     sqft_living: number;
-    waterfront: number
+    bedrooms: number | string
 }
 
-const plotClass = async (points: { x: number; y: number; class: number; }[], classKey: string, size: number = 0, equalizeClassSizes = false) => {
+const getClassIndex = (className: string | number): number => {
+    if (className === 1 || className === '1') {
+        return 0
+    } else if (className === 2 || className === '2') {
+        return 1
+    } else {
+        return 2
+    }
+}
+
+const getClassName = (index: number): string | number => {
+    if (index === 2) {
+        return '3+'
+    } else {
+        return index + 1
+    }
+}
+
+const plotClass = async (points: { x: number; y: number; class: number | string; }[], classKey: string, size: number = 0, equalizeClassSizes = false) => {
     const allSeries: Record<string, Point2D[]> = {}
     // add each class as series
     points.forEach((p) => {
@@ -55,7 +73,7 @@ const plotClass = async (points: { x: number; y: number; class: number; }[], cla
     tfvis.render.scatterplot(
         {
             name: `Square feet vs House Price`,
-            styles: { width: '1000px' }
+            styles: { width: `${size * 1.5}px` }
         },
         {
             values: Object.values(allSeries),
@@ -90,15 +108,15 @@ const createModel = (): tf.LayersModel => {
     // output
     model.add(
         tf.layers.dense({
-            units: 1,
+            units: 3,
             useBias: true, // 偏见 
-            activation: 'sigmoid',
+            activation: 'softmax',
         }),
     );
 
     const optimizer = tf.train.adam()
     model.compile({
-        loss: "binaryCrossentropy",
+        loss: "categoricalCrossentropy",
         optimizer,
     });
     return model;
@@ -110,7 +128,7 @@ class BinaryModel {
     testingFeatureTensor?: tf.Tensor<tf.Rank>;
     testingLabelTensor?: tf.Tensor<tf.Rank>;
     model?: tf.LayersModel;
-    points: { x: number; y: number; class: number; }[];
+    points: { x: number; y: number; class: string; }[];
     /**
      * @description: 加载数据
      * @param {string} path
@@ -124,9 +142,9 @@ class BinaryModel {
             return {
                 x: record.sqft_living,
                 y: record.price,
-                class: record.waterfront
+                class: Number(record.bedrooms) > 2 ? '3+' : `${record.bedrooms}`
             };
-        });
+        }).filter(r => Number(r.class) !== 0);
         this.points = await pointsDataSet.toArray();
 
         if (this.points.length % 2 !== 0) {
@@ -134,13 +152,13 @@ class BinaryModel {
             this.points.pop();
         }
         tf.util.shuffle(this.points);
-        plotClass(this.points, 'Waterfront', 800, true);
+        plotClass(this.points, 'Bedrooms', 800, true);
         // Feature (inputs) 提取特征并存在张量中
         const featureValue = this.points.map((p) => [p.x, p.y]);
         const featureTensor = tf.tensor2d(featureValue);
         // Labels (outputs) 对标签做同样的操作
-        const labelValue = this.points.map((p) => p.class);
-        const labelTensor = tf.tensor2d(labelValue, [labelValue.length, 1]);
+        const labelValue = this.points.map((p) => getClassIndex(p.class));
+        const labelTensor = tf.tidy(() => tf.oneHot(tf.tensor1d(labelValue, 'int32'), 3))
         // 标准化标签和特征
         this.normaliseFeature = normalise(featureTensor);
         this.normaliseLabel = normalise(labelTensor);
@@ -182,8 +200,7 @@ class BinaryModel {
             this.model,
             trainingFeatureTensor,
             trainingLabelTensor,
-            onEpochBegin,
-            300
+            onEpochBegin
         );
 
 
@@ -206,7 +223,7 @@ class BinaryModel {
         console.log(`test success, loss:${loss}`);
     };
     save = async (
-        storageID: string = 'kc-house-price-binary',
+        storageID: string = 'kc-house-price-multi',
     ): Promise<void> => {
         const saveResults = await this.model?.save(`localstorage://${storageID}`);
         console.log(
@@ -215,7 +232,7 @@ class BinaryModel {
         );
     };
     loadModel = async (
-        storageID: string = 'kc-house-price-binary',
+        storageID: string = 'kc-house-price-multi',
     ): Promise<void> => {
         const storageKey = `localstorage://${storageID}`;
         const models = await tf.io.listModels();
@@ -224,6 +241,7 @@ class BinaryModel {
             this.model = await tf.loadLayersModel(storageKey);
             this.model.summary();
             tfvis.show.modelSummary({ name: 'Modal summary' }, this.model);
+            await this.plotPredictionHotMap()
             // 更新 layer
             const layer = this.model.getLayer('', 0);
             tfvis.show.layer({ name: 'Layer 1' }, layer);
@@ -242,15 +260,16 @@ class BinaryModel {
                 this.normaliseFeature?.min,
                 this.normaliseLabel?.max,
             );
-            const normaliseOutputTensor = this.model?.predict(normaliseInput.tensor) as tf.Tensor<tf.Rank>
+            const normaliseOutputTensor = this.model?.predict(normaliseInput.tensor);
             const outputTensor =
-                normaliseOutputTensor && denormalise(
+                normaliseOutputTensor &&
+                !Array.isArray(normaliseOutputTensor) &&
+                denormalise(
                     normaliseOutputTensor,
                     this.normaliseLabel.min,
                     this.normaliseFeature.max,
                 );
             const outputValue = outputTensor && outputTensor.dataSync()[0];
-            console.log(outputValue); 
             console.log(
                 'predict success, the result: ',
                 outputValue && outputValue * 100,
@@ -279,30 +298,34 @@ class BinaryModel {
             const yTicksTensor = denormalise(normalisedTickTensor.reverse(), yF, yM)
             return [valuesTensor, xTicksTensor, yTicksTensor]
         })
-        const values = await valuesPromise.arraySync() as number[][]
+        const values = await valuesPromise.arraySync()
         const xTicks = await xTicksTensor.arraySync() as number[]
         const yTicks = await yTicksTensor.arraySync() as number[]
         const xTicksLabel = Array.isArray(xTicks) ? xTicks.map((v: number) => (v / 1000).toFixed(1) + "k sqft") : []
         const yTicksLabel = Array.isArray(yTicks) ? yTicks.map((v: number) => `$${(v / 1000).toFixed(0)}k`) : []
-        const data = {
-            values: values,
-            xTicksLabel,
-            yTicksLabel
-        }
-        tfvis.render.heatmap({
-            name: `${name} local`,
-            tab: 'Predictions'
-        }, data, {
-            height: size,
-            domain: [0, 1]
+
+        tf.unstack(values, 2).forEach((values:tf.Tensor2D, i) => {
+            const data = {
+                values: values,
+                xTicksLabel,
+                yTicksLabel
+            }
+            tfvis.render.heatmap({
+                name: `Bedrooms:${getClassName(i)} local`,
+                tab: 'Predictions'
+            }, data, {
+                height: size,
+                domain: [0, 1]
+            })
+            tfvis.render.heatmap({
+                name: `Bedrooms:${getClassName(i)} full domain`,
+                tab: 'Predictions'
+            }, data, {
+                height: size,
+                domain: [0, 1]
+            })
         })
-        tfvis.render.heatmap({
-            name: `${name} full domain`,
-            tab: 'Predictions'
-        }, data, {
-            height: size,
-            domain: [0, 1]
-        })
+
     }
     /**
      * @description: 设置权重和偏见
@@ -328,8 +351,8 @@ const { loadData, train, test, save, loadModel, predict, openTfvis } =
     new BinaryModel();
 
 export const Binary = (): JSX.Element => {
-    const [square, setSquare] = useState(`2000`);
-    const [price, setPrice] = useState(`1000000`);
+    const [square, setSquare] = useState('');
+    const [price, setPrice] = useState('');
 
     const memory = tfMemory();
     const changeSquare = (e: { target: { value: React.SetStateAction<string> } }) => {

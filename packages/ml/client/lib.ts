@@ -160,7 +160,8 @@ export const trainModel = async (
   model: tf.LayersModel,
   trainingFeatureTensor: tf.Tensor<tf.Rank>,
   trainingLabelTensor: tf.Tensor<tf.Rank>,
-  onEpochBegin = (epoch: number, logs?: Logs): void | Promise<void> => { }
+  onEpochBegin = (epoch: number, logs?: Logs): void | Promise<void> => { },
+  epochs: number = 20
 ): Promise<History> => {
   const { onEpochEnd, onBatchEnd } = tfvis.show.fitCallbacks(
     { name: 'Training Performance' },
@@ -168,7 +169,7 @@ export const trainModel = async (
   );
   return model.fit(trainingFeatureTensor, trainingLabelTensor, {
     batchSize: 512,
-    epochs: 100,
+    epochs,
     // 验证集
     validationSplit: 0.2,
     callbacks: {
@@ -185,12 +186,12 @@ export const trainModel = async (
 export const denormalise = (tensor: Tensor, max: Tensor<Rank> | Tensor<Rank>[], min: Tensor<Rank> | Tensor<Rank>[]): Tensor<Rank> => {
   const dimension = tensor.shape.length > 1 && tensor.shape[1]
 
-  if (dimension && dimension > 1 && Array.isArray(max) && Array.isArray(min)) {
+  if (dimension && dimension > 1) {
     // more than one
     const features = tf.split(tensor, dimension, 1)
     // normalise and find min/max values  for each one
     const denormalised = features.map((featuresTensor, i) => {
-      return denormalise(featuresTensor, max[i], min[i])
+      return denormalise(featuresTensor, arrayToItem(max, i), arrayToItem(min, i))
     })
     // prepare return values
     const returnTensor = tf.concat(denormalised, 1)
@@ -239,7 +240,6 @@ export const normalise = (
       min,
     };
   }
-
 };
 
 
