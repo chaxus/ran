@@ -1,17 +1,40 @@
 import * as tf from '@tensorflow/tfjs';
 import type {
+  History,
   Logs,
   MemoryInfo,
   Rank,
   Tensor,
-  TensorContainerObject,
-  TypedArray
 } from '@tensorflow/tfjs';
 import * as tfvis from '@tensorflow/tfjs-vis';
 import type { Point2D } from '@tensorflow/tfjs-vis';
 
-export type TensorLike2D = TypedArray | number[] | number[][] | boolean[] | boolean[][] | string[] | string[][] | Uint8Array[] | Uint8Array[][];
+export interface TfVersion {
+  'tfjs-core': string;
+  'tfjs-backend-cpu': string;
+  'tfjs-backend-webgl': string;
+  'tfjs-data': string;
+  'tfjs-layers': string;
+  'tfjs-converter': string;
+  tfjs: string;
+}
 
+export interface TfInfo {
+  version: TfVersion;
+  backend: string;
+  memory: MemoryInfo;
+  numTensors: number;
+}
+
+type TensorRank = Tensor<Rank> | Tensor<Rank>[]
+
+type Normal<T> = T extends Tensor<Rank> ? TensorRank : T extends Tensor<Rank>[] ? Tensor<Rank>[] : never
+
+export interface Normalise {
+  tensor: Tensor<Rank>;
+  max: Tensor<Rank> | Tensor<Rank>[]
+  min: Tensor<Rank> | Tensor<Rank>[]
+}
 /**
  * @description: 测试tf的内存管理
  * @return {*}
@@ -57,23 +80,6 @@ export const tfs = (): void => {
   });
 };
 
-interface TfVersion {
-  'tfjs-core': string;
-  'tfjs-backend-cpu': string;
-  'tfjs-backend-webgl': string;
-  'tfjs-data': string;
-  'tfjs-layers': string;
-  'tfjs-converter': string;
-  tfjs: string;
-}
-
-interface TfInfo {
-  version: TfVersion;
-  backend: string;
-  memory: MemoryInfo;
-  numTensors: number;
-}
-
 export const tfInfo = (): TfInfo => {
   const memory = tf.memory();
   const { numTensors } = memory;
@@ -114,7 +120,7 @@ export const plot = (points: Point2D[], name: string, predictPoints?: Point2D[])
 };
 
 
-const createModel = () => {
+export const createModel = (): tf.LayersModel => {
   const model = tf.sequential();
 
   model.add(
@@ -149,23 +155,20 @@ const createModel = () => {
   return model;
 };
 
-interface HouseSaleDataSet extends TensorContainerObject {
-  price: number;
-  sqft_living: number;
-}
-const trainModel = async (
+
+export const trainModel = async (
   model: tf.LayersModel,
   trainingFeatureTensor: tf.Tensor<tf.Rank>,
   trainingLabelTensor: tf.Tensor<tf.Rank>,
   onEpochBegin = (epoch: number, logs?: Logs): void | Promise<void> => { }
-) => {
+): Promise<History> => {
   const { onEpochEnd, onBatchEnd } = tfvis.show.fitCallbacks(
     { name: 'Training Performance' },
     ['loss'],
   );
   return model.fit(trainingFeatureTensor, trainingLabelTensor, {
     batchSize: 512,
-    epochs: 20,
+    epochs: 100,
     // 验证集
     validationSplit: 0.2,
     callbacks: {
@@ -179,215 +182,66 @@ const trainModel = async (
     },
   });
 };
-const denormalise = (tensor: Tensor, max: Tensor<Rank>, min: Tensor<Rank>) => {
-  return tensor.mul(max.sub(min)).add(min);
+export const denormalise = (tensor: Tensor, max: Tensor<Rank> | Tensor<Rank>[], min: Tensor<Rank> | Tensor<Rank>[]): Tensor<Rank> => {
+  const dimension = tensor.shape.length > 1 && tensor.shape[1]
+
+  if (dimension && dimension > 1 && Array.isArray(max) && Array.isArray(min)) {
+    // more than one
+    const features = tf.split(tensor, dimension, 1)
+    // normalise and find min/max values  for each one
+    const denormalised = features.map((featuresTensor, i) => {
+      return denormalise(featuresTensor, max[i], min[i])
+    })
+    // prepare return values
+    const returnTensor = tf.concat(denormalised, 1)
+    return returnTensor
+  }
+  if (!(Array.isArray(max) || Array.isArray(min))) {
+    return tensor.mul(max.sub(min)).add(min);
+  }
 };
-const normalise = (
+
+type AItem<T> = T extends Array<infer R> ? R : T
+
+
+const arrayToItem = <T>(list: T[] | T, index?: number): T => {
+  if (!list) return undefined
+  if (Array.isArray(list)) return list[index]
+  return list
+}
+
+export const normalise = (
   tensor: Tensor,
-  mi?: tf.Tensor<tf.Rank>,
-  mx?: tf.Tensor<tf.Rank>,
-) => {
+  mi?: Tensor<Rank> | Tensor<Rank>[],
+  mx?: Tensor<Rank> | Tensor<Rank>[]
+): Normalise => {
+  const dimension = tensor.shape.length > 1 && tensor.shape[1]
+
+  if (dimension && dimension > 1) {
+    // more than one
+    const features = tf.split(tensor, dimension, 1)
+    // normalise and find min/max values  for each one
+    const normalisedFeature = features.map((featuresTensor, i) => {
+      return normalise(featuresTensor, arrayToItem<Tensor<Rank>>(mi, i), arrayToItem<Tensor<Rank>>(mx, i))
+    })
+    // prepare return values
+    const returnTensor = tf.concat(normalisedFeature.map(f => f.tensor), 1)
+    const max = normalisedFeature.map(f => f.max) as Tensor<Rank>[]
+    const min = normalisedFeature.map(f => f.min) as Tensor<Rank>[]
+    return { max, min, tensor: returnTensor }
+  }
   const min = mi || tensor.min();
   const max = mx || tensor.max();
-  return {
-    tensor: tensor.sub(min).div(max.sub(min)),
-    max,
-    min,
-  };
+  if (!(Array.isArray(max) || Array.isArray(min))) {
+    return {
+      tensor: tensor.sub(min).div(max.sub(min)),
+      max,
+      min,
+    };
+  }
+
 };
 
-interface Normalise {
-  tensor: tf.Tensor<tf.Rank>;
-  max: tf.Tensor<tf.Rank>;
-  min: tf.Tensor<tf.Rank>;
-}
-
-export class LineModel {
-  normaliseFeature?: Normalise
-  normaliseLabel?: Normalise
-  testingFeatureTensor?: tf.Tensor<tf.Rank>;
-  testingLabelTensor?: tf.Tensor<tf.Rank>;
-  model?: tf.LayersModel;
-  points?: Point2D[]
-  /**
-   * @description: 加载数据
-   * @param {string} path
-   * @return {*}
-   */
-  loadData = async (path: string): Promise<void> => {
-    // 导入数据
-    const houseSaleDateSet = tf.data.csv(path);
-    // 从数据中提取x,y值并绘制图形
-    const pointsDataSet = houseSaleDateSet.map((record: HouseSaleDataSet) => {
-      return {
-        x: record.sqft_living,
-        y: record.price,
-      };
-    });
-    this.points = await pointsDataSet.toArray();
-
-    if (this.points.length % 2 !== 0) {
-      // 如果张量是奇数，会导致无法平均分割，需要变成偶数
-      this.points.pop();
-    }
-    tf.util.shuffle(this.points);
-    plot(this.points, 'Square feet');
-    // Feature (inputs) 提取特征并存在张量中
-    const featureValue = this.points.map((p) => p.x);
-    const featureTensor = tf.tensor2d(featureValue, [featureValue.length, 1]);
-    // Labels (outputs) 对标签做同样的操作
-    const labelValue = this.points.map((p) => p.y);
-    const labelTensor = tf.tensor2d(labelValue, [labelValue.length, 1]);
-    // 标准化标签和特征
-    this.normaliseFeature = normalise(featureTensor);
-    this.normaliseLabel = normalise(labelTensor);
-    console.log(
-      `load data success, normaliseFeature:${this.normaliseFeature}, normaliseLabel:${this.normaliseLabel}`,
-    );
-  };
-  train = async (): Promise<void> => {
-    if (!this.normaliseFeature || !this.normaliseLabel) return;
-    // 分割测试集和训练集
-    const [trainingFeatureTensor, testingFeatureTensor] = tf.split(
-      this.normaliseFeature.tensor,
-      2,
-    );
-    this.testingFeatureTensor = testingFeatureTensor;
-    const [trainingLabelTensor, testingLabelTensor] = tf.split(
-      this.normaliseLabel.tensor,
-      2,
-    );
-    this.testingLabelTensor = testingLabelTensor;
-    // 创建模型
-    this.model = createModel();
-    this.model.summary();
-    tfvis.show.modelSummary({ name: 'Modal summary' }, this.model);
-    // 了解 layer
-    const layer = this.model.getLayer('', 0);
-    tfvis.show.layer({ name: 'Layer 1' }, layer);
-
-    const onEpochBegin = async () => {
-      await this.predictionLine()
-      // 更新 layer
-      const layer = this.model.getLayer('', 0);
-      tfvis.show.layer({ name: 'Layer 1' }, layer);
-    }
-    // 训练模型
-    const result = await trainModel(
-      this.model,
-      trainingFeatureTensor,
-      trainingLabelTensor,
-      onEpochBegin
-    );
-
-    await this.predictionLine()
-
-    const trainLoss = result.history.loss.pop();
-    const validationLoss = result.history.val_loss.pop();
-    console.log(
-      `train success trainLoss:${trainLoss}, validationLoss:${validationLoss}`,
-    );
-  };
-  test = async (): Promise<void> => {
-    if (!this.testingFeatureTensor || !this.testingLabelTensor) return;
-    // 判断损失函数
-    const lossTensor = this.model?.evaluate(
-      this.testingFeatureTensor,
-      this.testingLabelTensor,
-    );
-    const loss = Array.isArray(lossTensor)
-      ? lossTensor.map(async (item) => await item.dataSync())
-      : await lossTensor?.dataSync();
-    console.log(`test success, loss:${loss}`);
-  };
-  save = async (
-    storageID: string = 'kc-house-price-regression',
-  ): Promise<void> => {
-    const saveResults = await this.model?.save(`localstorage://${storageID}`);
-    console.log(
-      'save model success, current time is:',
-      saveResults?.modelArtifactsInfo.dateSaved,
-    );
-  };
-  loadModel = async (
-    storageID: string = 'kc-house-price-regression',
-  ): Promise<void> => {
-    const storageKey = `localstorage://${storageID}`;
-    const models = await tf.io.listModels();
-    const modelInfo = models[storageKey];
-    if (modelInfo) {
-      this.model = await tf.loadLayersModel(storageKey);
-      this.model.summary();
-      tfvis.show.modelSummary({ name: 'Modal summary' }, this.model);
-      // 更新 layer
-      const layer = this.model.getLayer('', 0);
-      tfvis.show.layer({ name: 'Layer 1' }, layer);
-
-      await this.predictionLine()
-      console.log('load model success');
-    } else {
-      console.log('no model', storageID);
-    }
-  };
-  predict = async (input: number): Promise<void> => {
-    tf.tidy(() => {
-      if (!this.normaliseLabel || !this.normaliseFeature) return;
-      const inputTensor = tf.tensor1d([input]);
-      const normaliseInput = normalise(
-        inputTensor,
-        this.normaliseFeature?.min,
-        this.normaliseLabel?.max,
-      );
-      const normaliseOutputTensor = this.model?.predict(normaliseInput.tensor);
-      const outputTensor =
-        normaliseOutputTensor &&
-        !Array.isArray(normaliseOutputTensor) &&
-        denormalise(
-          normaliseOutputTensor,
-          this.normaliseLabel.min,
-          this.normaliseFeature.max,
-        );
-      const outputValue = outputTensor && outputTensor.dataSync()[0];
-      console.log(
-        'predict success, the result: ',
-        outputValue && outputValue / 1000,
-      );
-    });
-  };
-  predictionLine = async (): Promise<void> => {
-    const [x, y] = tf.tidy(() => {
-      const normaliseXs = tf.linspace(0, 1, 100);
-      const normaliseYs = this.model.predict(normaliseXs.reshape([100, 1]))
-
-      const xs = denormalise(normaliseXs, this.normaliseFeature.min, this.normaliseFeature.max)
-      const ys = denormalise(normaliseYs as tf.Tensor<tf.Rank>, this.normaliseLabel.min, this.normaliseLabel.max)
-      return [xs.dataSync(), ys.dataSync()]
-    })
-    const predictPoints = Array.from(x).map((val, index) => {
-      return { x: val, y: y[index] }
-    })
-    await plot(this.points, "Square feet", predictPoints)
-  }
-  /**
-   * @description: 设置权重和偏见
-   * @param {TensorLike2D} weight
-   * @param {TensorLike2D} bias
-   * @return {*}
-   */  
-  plotParams = async (weight: TensorLike2D, bias: TensorLike2D): Promise<void> => {
-    this.model.getLayer(null, 0).setWeights([
-      tf.tensor2d(weight),
-      tf.tensor2d(bias)
-    ])
-    await this.predictionLine()
-    // 更新 layer
-    const layer = this.model.getLayer('', 0);
-    tfvis.show.layer({ name: 'Layer 1' }, layer);
-  }
-  openTfvis = (): void => {
-    tfvis.visor().toggle();
-  };
-}
 
 export const tfMemory = (): number => {
   return tf.memory().numTensors;

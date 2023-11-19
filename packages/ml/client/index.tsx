@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import * as tf from '@tensorflow/tfjs';
 import { LineModelComponent } from './components/LineModel';
+import { Binary } from './components/BinaryModel';
 import { Emotion } from './components/Emotion'
 
 export const App = (): React.JSX.Element => {
@@ -16,8 +17,9 @@ export const App = (): React.JSX.Element => {
       <div>{JSON.stringify(tf.memory())}</div>
       <h3>tensor number in memory</h3>
       <div>{JSON.stringify(tf.memory().numTensors)}</div>
-      <LineModelComponent />
-      <Emotion />
+      {/* <LineModelComponent />
+      <Emotion /> */}
+      <Binary />
     </div>
   );
 };
