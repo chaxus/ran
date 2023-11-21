@@ -4,8 +4,8 @@ import type { BuildOptions, PluginOption, UserConfig } from 'vite';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 import { visualizer } from 'rollup-plugin-visualizer';
-import viteImagemin from '@vheemstra/vite-plugin-imagemin'
-import imageminSvgo from 'imagemin-svgo'
+import viteImagemin from '@vheemstra/vite-plugin-imagemin';
+import imageminSvgo from 'imagemin-svgo';
 import loadStyle from './plugins/load-style';
 import loadSvg from './plugins/load-svg';
 import { PORT } from './build/config';
@@ -67,7 +67,6 @@ interface ModuleInfo extends ModuleOptions {
   exportedBindings: Record<string, string[]> | null;
   exports: string[] | null;
   hasDefaultExport: boolean | null;
-  /** @deprecated Use `moduleSideEffects` instead */
   hasModuleSideEffects: boolean | 'no-treeshake';
   id: string;
   implicitlyLoadedAfterOneOf: readonly string[];
@@ -91,7 +90,7 @@ type GetManualChunk = (id: string, meta: ManualChunkMeta) => string | NullValue;
 type ManualChunksOption = { [chunkAlias: string]: string[] } | GetManualChunk;
 
 interface chunkOptimization {
-  assetsInlineLimit: number
+  assetsInlineLimit: number;
   chunkSizeWarningLimit: number;
   reportCompressedSize: boolean;
   rollupOptions: {
@@ -105,12 +104,12 @@ interface chunkOptimization {
 }
 
 const chunkOptimization: Partial<chunkOptimization> = {
-  chunkSizeWarningLimit: 3000,
+  chunkSizeWarningLimit: 500,
   assetsInlineLimit: 8 * 1024,
   reportCompressedSize: false,
   rollupOptions: {
     output: {
-      experimentalMinChunkSize: 1000,
+      experimentalMinChunkSize: 500,
     },
     treeshake: {
       preset: 'recommended',
@@ -135,7 +134,7 @@ export const es: BuildOptions = {
   ...chunkOptimization,
   rollupOptions: {
     output: {
-      experimentalMinChunkSize: 1000,
+      experimentalMinChunkSize: 500,
       manualChunks: (id) => {
         if (id.includes('node_modules')) {
           return 'vendor';
@@ -149,7 +148,6 @@ export const es: BuildOptions = {
   },
   lib: {
     entry: {
-      index: resolve(__dirname, 'index.ts'),
       button: resolve(__dirname, 'components/button/index.ts'),
       icon: resolve(__dirname, 'components/icon/index.ts'),
       image: resolve(__dirname, 'components/image/index.ts'),
@@ -163,6 +161,7 @@ export const es: BuildOptions = {
       modal: resolve(__dirname, 'components/modal/index.ts'),
       select: resolve(__dirname, 'components/select/index.ts'),
       option: resolve(__dirname, 'components/option/index.ts'),
+      index: resolve(__dirname, 'index.ts'),
     },
     fileName: (_: string, name: string): string => {
       if (name === 'index') {
@@ -189,7 +188,7 @@ export const viteConfig: UserConfig = {
       plugins: {
         svg: imageminSvgo(),
       },
-    })
+    }),
   ],
   resolve: {
     alias: {
@@ -211,8 +210,8 @@ export const viteConfig: UserConfig = {
     },
   },
   server: {
-    port: PORT
-  }
+    port: PORT,
+  },
 };
 
 export default defineConfig(viteConfig);

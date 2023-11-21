@@ -579,7 +579,13 @@ interface RequestUrlToArraybufferOption {
 export const requestUrlToBuffer = (
   src: string,
   options: Partial<RequestUrlToArraybufferOption>,
-): Promise<requestUrlToArraybufferReturn> => {
+): Promise<Partial<requestUrlToArraybufferReturn>> => {
+  if (typeof XMLHttpRequest === 'undefined') {
+    throw new Error('XMLHttpRequest is not defined');
+  }
+  if (typeof document === 'undefined') {
+    return Promise.reject('document is not defined');
+  }
   return new Promise(function (resolve, reject) {
     const xhr = new XMLHttpRequest();
     xhr.open(options.method || 'GET', src, true);
@@ -657,6 +663,7 @@ export const createObjectURL = async (
  * @param {string} addClass
  */
 export const addClassToElement = (element: Element, addClass: string): void => {
+  if (typeof document === 'undefined') return undefined;
   const classList = element.classList;
   if (!classList.contains(addClass)) {
     classList.add(addClass);
@@ -671,13 +678,29 @@ export const removeClassToElement = (
   element: Element,
   removeClass: string,
 ): void => {
+  if (typeof document === 'undefined') return undefined;
   const classList = element.classList;
   if (classList.contains(removeClass)) {
     classList.remove(removeClass);
   }
 };
 /**
- * @description: 百分比字符串转数字
+ * @description: 时间秒，转化成:分割的时间
+ * @param {number} time
+ * @return {*}
+ */
+export const timeFormat = (time: number): string => {
+  if (!time) return '';
+  const hour = Math.trunc(time / 3600);
+  const minute = Math.trunc((time % 3600) / 60);
+  const second = formatDuration(Math.trunc(time - hour * 3600 - minute * 60));
+  if (hour === 0) {
+    return `${formatDuration(minute)}:${second}`;
+  }
+  return `${formatDuration(hour)}:${formatDuration(minute)}:${second}`;
+};
+/**
+ * @description: 百分比转换成数字
  * @param {string} str
  * @return {*}
  */
@@ -707,7 +730,10 @@ export const range = (
  * @param {Element} list
  * @return {*}
  */
-export const createDocumentFragment = (list: Element[]): DocumentFragment => {
+export const createDocumentFragment = (
+  list: Element[],
+): DocumentFragment | undefined => {
+  if (typeof document === 'undefined') return undefined;
   const Fragment = document.createDocumentFragment();
   list.forEach((item) => Fragment.appendChild(item));
   return Fragment;

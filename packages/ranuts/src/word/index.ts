@@ -1,41 +1,50 @@
-import init, { TokenizeMode, addWord, cut, tokenize } from "../../assets/wasm/word/wasmjieba-web";
-import type { InitOutput } from '../../assets/wasm/word/wasmjieba-web'
-
+import init, {
+  TokenizeMode,
+  addWord,
+  cut,
+  tokenize,
+} from '../../assets/wasm/word/wasmjieba-web';
+import type { InitOutput } from '../../assets/wasm/word/wasmjieba-web';
 
 interface TokenWord {
-    word: string,
-    start: number,
-    end: number
+  word: string;
+  start: number;
+  end: number;
 }
 
 interface Word {
-    success: boolean,
-    data: InitOutput,
-    methods: {
-        tokenize: (str: string) => TokenWord[]
-        cut: (str: string) => string[]
-        addWord: (word: string, freq?: number, tag?: string) => number;
-    }
+  success: boolean;
+  data: InitOutput;
+  methods: {
+    tokenize: (str: string) => TokenWord[];
+    cut: (str: string) => string[];
+    addWord: (word: string, freq?: number, tag?: string) => number;
+  };
 }
-
 
 const token = (str: string) => {
-    return tokenize(str, TokenizeMode.Default, false)
-}
+  return tokenize(str, TokenizeMode.Default, false);
+};
 
 const cutWord = (str: string) => {
-    return cut(str, true)
-}
+  return cut(str, true);
+};
 
 const word = (): Promise<Word> => {
-    return new Promise((resolve, reject) => {
-        init().then((result) => {
-            resolve({ success: true, data: result, methods: { tokenize: token, cut: cutWord, addWord } })
-        }).catch(error => {
-            reject({ success: false, data: error })
-        })
-    })
-}
+  return new Promise((resolve, reject) => {
+    init()
+      .then((result) => {
+        resolve({
+          success: true,
+          data: result,
+          methods: { tokenize: token, cut: cutWord, addWord },
+        });
+      })
+      .catch((error) => {
+        reject({ success: false, data: error });
+      });
+  });
+};
 
 // init().then(() => {
 //     testCut("Wasm initialized.");
@@ -65,4 +74,4 @@ const word = (): Promise<Word> => {
 //     }
 // }
 
-export default word
+export default word;

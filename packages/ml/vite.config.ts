@@ -48,9 +48,9 @@ export const viteConfig: UserConfig = {
   },
   server: {
     fs: {
-      allow: [resolve(__dirname, '.')]
-    }
-  }
+      allow: [resolve(__dirname, '.')],
+    },
+  },
 };
 
 export default defineConfig(viteConfig);

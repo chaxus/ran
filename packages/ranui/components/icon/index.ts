@@ -1,7 +1,7 @@
 import { str2Xml } from 'ranuts';
 
 const X_LINKS_NS = 'http://www.w3.org/1999/xlink';
-const X_LINK_HREF = "xlink:href"
+const X_LINK_HREF = 'xlink:href';
 
 function Custom() {
   if (typeof window !== 'undefined' && !customElements.get('r-icon')) {

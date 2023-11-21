@@ -1,17 +1,10 @@
+import * as tf from '@tensorflow/tfjs';
 import React, { useState } from 'react';
 import { Input, message } from '@ranui/react';
 import type { TensorContainerObject, TypedArray } from '@tensorflow/tfjs';
 import type { Point2D } from '@tensorflow/tfjs-vis';
 import * as tfvis from '@tensorflow/tfjs-vis';
-import * as tf from '@tensorflow/tfjs';
-import {
-  createModel,
-  denormalise,
-  normalise,
-  plot,
-  tfMemory,
-  trainModel,
-} from '../lib';
+import { denormalise, normalise, tfMemory, trainModel } from '../lib';
 import type { Normalise } from '../lib';
 
 const path = '../../assets/dataset/kc_house_data.csv';
@@ -30,15 +23,107 @@ type TensorLike2D =
 interface HouseSaleDataSet extends TensorContainerObject {
   price: number;
   sqft_living: number;
+  waterfront: number;
 }
 
-class LineModel {
+const plotClass = async (
+  points: { x: number; y: number; class: number }[],
+  classKey: string,
+  size: number = 0,
+  equalizeClassSizes = false,
+) => {
+  const allSeries: Record<string, Point2D[]> = {};
+  // add each class as series
+  points.forEach((p) => {
+    // add each point to the series for the class it is in
+    const seriesName = `${classKey}:${p.class}`;
+    let series = allSeries[seriesName];
+    if (!series) {
+      series = [];
+      allSeries[seriesName] = series;
+    }
+    series.push(p);
+  });
+
+  if (equalizeClassSizes) {
+    // find smallest class
+    let maxLength: undefined | number = undefined;
+    Object.keys(allSeries).forEach((series) => {
+      if (
+        maxLength === undefined ||
+        (series.length < maxLength && series.length >= 100)
+      ) {
+        maxLength = series.length;
+      }
+    });
+    // limit each class to number of elements of smallest class
+    // Object.keys(allSeries).forEach(key => {
+    //     allSeries[key] = allSeries[key].slice(0, maxLength)
+    //     if (allSeries[key].length < 100) {
+    //         delete allSeries[key]
+    //     }
+    // })
+  }
+
+  tfvis.render.scatterplot(
+    {
+      name: `Square feet vs House Price`,
+      styles: { width: '1000px' },
+    },
+    {
+      values: Object.values(allSeries),
+      series: Object.keys(allSeries),
+    },
+    {
+      xLabel: 'Square feet',
+      yLabel: 'Price',
+      height: size * 1.5,
+    },
+  );
+};
+
+const createModel = (): tf.LayersModel => {
+  const model = tf.sequential();
+  // input
+  model.add(
+    tf.layers.dense({
+      units: 10,
+      useBias: true, // 偏见
+      activation: 'sigmoid',
+      inputDim: 2,
+    }),
+  );
+  model.add(
+    tf.layers.dense({
+      units: 10,
+      useBias: true, // 偏见
+      activation: 'sigmoid',
+    }),
+  );
+  // output
+  model.add(
+    tf.layers.dense({
+      units: 1,
+      useBias: true, // 偏见
+      activation: 'sigmoid',
+    }),
+  );
+
+  const optimizer = tf.train.adam();
+  model.compile({
+    loss: 'binaryCrossentropy',
+    optimizer,
+  });
+  return model;
+};
+
+class BinaryModel {
   normaliseFeature?: Normalise;
   normaliseLabel?: Normalise;
   testingFeatureTensor?: tf.Tensor<tf.Rank>;
   testingLabelTensor?: tf.Tensor<tf.Rank>;
   model?: tf.LayersModel;
-  points?: Point2D[];
+  points: { x: number; y: number; class: number }[];
   /**
    * @description: 加载数据
    * @param {string} path
@@ -52,6 +137,7 @@ class LineModel {
       return {
         x: record.sqft_living,
         y: record.price,
+        class: record.waterfront,
       };
     });
     this.points = await pointsDataSet.toArray();
@@ -61,16 +147,17 @@ class LineModel {
       this.points.pop();
     }
     tf.util.shuffle(this.points);
-    plot(this.points, 'Square feet');
+    plotClass(this.points, 'Waterfront', 800, true);
     // Feature (inputs) 提取特征并存在张量中
-    const featureValue = this.points.map((p) => p.x);
-    const featureTensor = tf.tensor2d(featureValue, [featureValue.length, 1]);
+    const featureValue = this.points.map((p) => [p.x, p.y]);
+    const featureTensor = tf.tensor2d(featureValue);
     // Labels (outputs) 对标签做同样的操作
-    const labelValue = this.points.map((p) => p.y);
+    const labelValue = this.points.map((p) => p.class);
     const labelTensor = tf.tensor2d(labelValue, [labelValue.length, 1]);
     // 标准化标签和特征
     this.normaliseFeature = normalise(featureTensor);
     this.normaliseLabel = normalise(labelTensor);
+    featureTensor.dispose();
     console.log(
       `load data success, normaliseFeature:${this.normaliseFeature}, normaliseLabel:${this.normaliseLabel}`,
     );
@@ -97,7 +184,7 @@ class LineModel {
     tfvis.show.layer({ name: 'Layer 1' }, layer);
 
     const onEpochBegin = async () => {
-      await this.predictionLine();
+      await this.plotPredictionHotMap();
       // 更新 layer
       const layer = this.model.getLayer('', 0);
       tfvis.show.layer({ name: 'Layer 1' }, layer);
@@ -108,9 +195,8 @@ class LineModel {
       trainingFeatureTensor,
       trainingLabelTensor,
       onEpochBegin,
+      300,
     );
-
-    await this.predictionLine();
 
     const trainLoss = result.history.loss.pop();
     const validationLoss = result.history.val_loss.pop();
@@ -130,9 +216,7 @@ class LineModel {
       : await lossTensor?.dataSync();
     console.log(`test success, loss:${loss}`);
   };
-  save = async (
-    storageID: string = 'kc-house-price-regression',
-  ): Promise<void> => {
+  save = async (storageID: string = 'kc-house-price-binary'): Promise<void> => {
     const saveResults = await this.model?.save(`localstorage://${storageID}`);
     console.log(
       'save model success, current time is:',
@@ -140,7 +224,7 @@ class LineModel {
     );
   };
   loadModel = async (
-    storageID: string = 'kc-house-price-regression',
+    storageID: string = 'kc-house-price-binary',
   ): Promise<void> => {
     const storageKey = `localstorage://${storageID}`;
     const models = await tf.io.listModels();
@@ -153,58 +237,102 @@ class LineModel {
       const layer = this.model.getLayer('', 0);
       tfvis.show.layer({ name: 'Layer 1' }, layer);
 
-      await this.predictionLine();
       console.log('load model success');
     } else {
       console.log('no model', storageID);
     }
   };
-  predict = async (input: number): Promise<void> => {
+  predict = async (square: number, price: number): Promise<void> => {
     tf.tidy(() => {
       if (!this.normaliseLabel || !this.normaliseFeature) return;
-      const inputTensor = tf.tensor1d([input]);
+      const inputTensor = tf.tensor2d([[square, price]]);
       const normaliseInput = normalise(
         inputTensor,
         this.normaliseFeature?.min,
         this.normaliseLabel?.max,
       );
-      const normaliseOutputTensor = this.model?.predict(normaliseInput.tensor);
+      const normaliseOutputTensor = this.model?.predict(
+        normaliseInput.tensor,
+      ) as tf.Tensor<tf.Rank>;
       const outputTensor =
         normaliseOutputTensor &&
-        !Array.isArray(normaliseOutputTensor) &&
         denormalise(
           normaliseOutputTensor,
           this.normaliseLabel.min,
           this.normaliseFeature.max,
         );
       const outputValue = outputTensor && outputTensor.dataSync()[0];
+      console.log(outputValue);
       console.log(
         'predict success, the result: ',
-        outputValue && outputValue / 1000,
+        outputValue && outputValue * 100,
       );
     });
   };
-  predictionLine = async (): Promise<void> => {
-    const [x, y] = tf.tidy(() => {
-      const normaliseXs = tf.linspace(0, 1, 100);
-      const normaliseYs = this.model.predict(normaliseXs.reshape([100, 1]));
-
-      const xs = denormalise(
-        normaliseXs,
-        this.normaliseFeature.min,
-        this.normaliseFeature.max,
-      );
-      const ys = denormalise(
-        normaliseYs as tf.Tensor<tf.Rank>,
-        this.normaliseLabel.min,
-        this.normaliseLabel.max,
-      );
-      return [xs.dataSync(), ys.dataSync()];
+  plotPredictionHotMap = async (name = 'Predict class', size = 400) => {
+    const [valuesPromise, xTicksTensor, yTicksTensor] = tf.tidy(() => {
+      const gridSize = 50;
+      const predictionColumns: tf.Tensor<tf.Rank>[] = [];
+      for (let colIndex = 0; colIndex < gridSize; colIndex++) {
+        const colInputs = [];
+        const x = colIndex / gridSize;
+        for (let rowIndex = 0; rowIndex < gridSize; rowIndex++) {
+          const y = (gridSize - rowIndex) / gridSize;
+          colInputs.push([x, y]);
+        }
+        const colPredictions = this.model.predict(
+          tf.tensor2d(colInputs),
+        ) as tf.Tensor<tf.Rank>;
+        predictionColumns.push(colPredictions);
+      }
+      const valuesTensor = tf.stack(predictionColumns);
+      const normalisedTickTensor = tf.linspace(0, 1, gridSize);
+      const [xF, yF] = Array.isArray(this.normaliseFeature.max)
+        ? this.normaliseFeature.max
+        : [];
+      const [xM, yM] = Array.isArray(this.normaliseFeature.min)
+        ? this.normaliseFeature.min
+        : [];
+      const xTicksTensor = denormalise(normalisedTickTensor, xF, xM);
+      const yTicksTensor = denormalise(normalisedTickTensor.reverse(), yF, yM);
+      return [valuesTensor, xTicksTensor, yTicksTensor];
     });
-    const predictPoints = Array.from(x).map((val, index) => {
-      return { x: val, y: y[index] };
-    });
-    await plot(this.points, 'Square feet', predictPoints);
+    const values = (await valuesPromise.arraySync()) as number[][];
+    const xTicks = (await xTicksTensor.arraySync()) as number[];
+    const yTicks = (await yTicksTensor.arraySync()) as number[];
+    const xTicksLabel = Array.isArray(xTicks)
+      ? xTicks.map((v: number) => (v / 1000).toFixed(1) + 'k sqft')
+      : [];
+    const yTicksLabel = Array.isArray(yTicks)
+      ? yTicks.map((v: number) => `$${(v / 1000).toFixed(0)}k`)
+      : [];
+    const data = {
+      values: values,
+      xTicksLabel,
+      yTicksLabel,
+    };
+    tfvis.render.heatmap(
+      {
+        name: `${name} local`,
+        tab: 'Predictions',
+      },
+      data,
+      {
+        height: size,
+        domain: [0, 1],
+      },
+    );
+    tfvis.render.heatmap(
+      {
+        name: `${name} full domain`,
+        tab: 'Predictions',
+      },
+      data,
+      {
+        height: size,
+        domain: [0, 1],
+      },
+    );
   };
   /**
    * @description: 设置权重和偏见
@@ -219,7 +347,6 @@ class LineModel {
     this.model
       .getLayer(null, 0)
       .setWeights([tf.tensor2d(weight), tf.tensor2d(bias)]);
-    await this.predictionLine();
     // 更新 layer
     const layer = this.model.getLayer('', 0);
     tfvis.show.layer({ name: 'Layer 1' }, layer);
@@ -230,24 +357,37 @@ class LineModel {
 }
 
 const { loadData, train, test, save, loadModel, predict, openTfvis } =
-  new LineModel();
+  new BinaryModel();
 
-export const LineModelComponent = (): JSX.Element => {
-  const [state, setState] = useState('');
+export const Binary = (): JSX.Element => {
+  const [square, setSquare] = useState(`2000`);
+  const [price, setPrice] = useState(`1000000`);
+
   const memory = tfMemory();
-  const input = (e: { target: { value: React.SetStateAction<string> } }) => {
-    setState(e.target.value);
+  const changeSquare = (e: {
+    target: { value: React.SetStateAction<string> };
+  }) => {
+    setSquare(e.target.value);
+  };
+  const changePrice = (e: {
+    target: { value: React.SetStateAction<string> };
+  }) => {
+    setPrice(e.target.value);
   };
   const predictOut = () => {
-    const num = Number(state);
+    const num = Number(square);
+    const priceNum = Number(price);
     if (Object.is(num, NaN)) {
-      return message.warning('please input number');
+      return message.warning('please input square');
     }
-    predict(Number(state));
+    if (Object.is(priceNum, NaN)) {
+      return message.warning('please input price');
+    }
+    predict(num, priceNum);
   };
   return (
     <div>
-      <h1>Line Model</h1>
+      <h1>Binary Model</h1>
       <div>{`current memory:${memory}`}</div>
       <h2>加载数据</h2>
       <button onClick={() => loadData(path)}>loadData</button>
@@ -260,7 +400,18 @@ export const LineModelComponent = (): JSX.Element => {
       <h2>加载模型</h2>
       <button onClick={() => loadModel()}>loadModel</button>
       <h2>预测</h2>
-      <Input onChange={input} />
+      <Input
+        label="Square feet of living space"
+        onChange={changeSquare}
+        placeholder="2000"
+        value="2000"
+      />
+      <Input
+        label="House price"
+        onChange={changePrice}
+        placeholder="1000000"
+        value="1000000"
+      />
       <button onClick={predictOut}>input number to predict result</button>
       <h2>打开tfvis视图</h2>
       <button onClick={openTfvis}>openTfvis</button>

@@ -1,9 +1,27 @@
-import { noop, requestUrlToBuffer } from 'ranuts';
+import { noop } from 'ranuts';
 import '../../base.less';
 import '@/components/icon';
 import message from '@/components/message';
 
 const { warning = noop } = message;
+
+export interface BaseReturn {
+  success: boolean;
+  message?: string;
+}
+
+interface RequestUrlToArraybufferOption {
+  responseType: XMLHttpRequestResponseType;
+  method: string;
+  withCredentials: boolean;
+  headers: Record<string, string>;
+  body: string;
+  onProgress?: Function;
+}
+
+interface requestUrlToArraybufferReturn extends BaseReturn {
+  data: Blob;
+}
 
 const PPTX =
   'application/vnd.openxmlformats-officedocument.presentationml.presentation';
@@ -16,12 +34,56 @@ const XLSX =
 const XLS = 'application/vnd.ms-excel';
 
 async function Custom() {
-  if (typeof window !== 'undefined' && !customElements.get('r-preview')) {
+  if (
+    typeof document !== 'undefined' &&
+    !customElements.get('r-preview') &&
+    !import.meta.env.SSR
+  ) {
     const { renderPptx } = await import('@/components/preview/pptx');
     const { renderDocx } = await import('@/components/preview/docx');
     const { renderPdf } = await import('@/components/preview/pdf');
     const { renderExcel } = await import('@/components/preview/excel');
 
+    const requestUrlToBuffer = (
+      src: string,
+      options: Partial<RequestUrlToArraybufferOption>,
+    ): Promise<Partial<requestUrlToArraybufferReturn>> => {
+      if (typeof XMLHttpRequest === 'undefined') {
+        throw new Error('XMLHttpRequest is not defined');
+      }
+      if (typeof document === 'undefined') {
+        return Promise.reject('document is not defined');
+      }
+      return new Promise(function (resolve, reject) {
+        const xhr = new XMLHttpRequest();
+        xhr.open(options.method || 'GET', src, true);
+        xhr.responseType = options.responseType || 'arraybuffer';
+        xhr.onload = function () {
+          if (xhr.status === 200) {
+            resolve({ success: true, data: xhr.response, message: '' });
+          } else {
+            reject({
+              success: false,
+              data: xhr.status,
+              message: `The request status is${xhr.status}`,
+            });
+          }
+        };
+        xhr.onerror = function (e) {
+          reject({ success: false, data: e, message: `` });
+        };
+        xhr.onprogress = (event) => {
+          options.onProgress && options.onProgress(event);
+        };
+        xhr.withCredentials = options.withCredentials || false;
+        if (options.headers) {
+          Object.keys(options.headers).forEach(function (key) {
+            options?.headers && xhr.setRequestHeader(key, options.headers[key]);
+          });
+        }
+        xhr.send(options.body);
+      });
+    };
     const renderPpt = (file: File, dom?: HTMLElement) => {
       return new Promise<void>((resolve, reject) => {
         const reader = new FileReader();

@@ -1,17 +1,17 @@
-const fetchAB = (url: string) => {
-  return new Promise((resolve) => {
-    const xhr = new XMLHttpRequest();
-    xhr.open('get', url);
-    xhr.responseType = 'blob';
-    xhr.onload = function () {
-      resolve(xhr.response);
-    };
-    xhr.send();
-  });
-};
-
 function Custom() {
   if (typeof document !== 'undefined' && !customElements.get('r-video')) {
+    const fetchAB = (url: string) => {
+      return new Promise((resolve) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('get', url);
+        xhr.responseType = 'blob';
+        xhr.onload = function () {
+          resolve(xhr.response);
+        };
+        xhr.send();
+      });
+    };
+
     class Video extends HTMLElement {
       static get observedAttributes() {
         return ['disabled', 'icon', 'effect'];
