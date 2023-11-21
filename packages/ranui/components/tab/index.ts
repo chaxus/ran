@@ -31,17 +31,17 @@ function CustomElement() {
          * </div>
          */
         this._container = document.createElement('div');
-        this._container.setAttribute('class', 'tab');
+        this._container.setAttribute('class', 'ran-tab');
         this._header = document.createElement('div');
-        this._header.setAttribute('class', 'tab-header');
+        this._header.setAttribute('class', 'ran-tab-header');
         this._nav = document.createElement('div');
-        this._nav.setAttribute('class', 'tab-header_nav');
+        this._nav.setAttribute('class', 'ran-tab-header-nav');
         this._line = document.createElement('div');
-        this._line.setAttribute('class', 'tab-header_line');
+        this._line.setAttribute('class', 'ran-tab-header-line');
         this._content = document.createElement('div');
-        this._content.setAttribute('class', 'tab-content');
+        this._content.setAttribute('class', 'ran-tab-content');
         this._wrap = document.createElement('div');
-        this._wrap.setAttribute('class', 'tab-content_wrap');
+        this._wrap.setAttribute('class', 'ran-tab-content-wrap');
         this._slot = document.createElement('slot');
         this._wrap.appendChild(this._slot);
         this._content.appendChild(this._wrap);
@@ -127,7 +127,7 @@ function CustomElement() {
         const type = tabPane.getAttribute('type') || 'text';
         this.initTabHeaderKeyMapIndex(key, index);
         const tabHeader = document.createElement('r-button');
-        tabHeader.setAttribute('class', 'tab-header_nav__item');
+        tabHeader.setAttribute('class', 'tab-header-nav-item');
         tabHeader.setAttribute('type', type);
         icon && tabHeader.setAttribute('icon', icon);
         iconSize && tabHeader.setAttribute('iconSize', iconSize);

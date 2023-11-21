@@ -14,7 +14,7 @@
   touch-action: manipulation;
   overflow: hidden;
   pointer-events: auto;
-  .container {
+  .ran-btn {
     position: relative;
     display: inline-block;
     background-image: none;
@@ -31,55 +31,55 @@
   &(:active),
   &(:focus) {
     outline: 0;
-    .container {
+    .ran-btn {
       outline: 0;
     }
   }
   &(:not([disabled]):hover) {
-    .btn {
+    .ran-btn-content {
       border-color: #1890ff;
       color: #1890ff;
     }
   }
   &([type="primary"]) {
-    .btn {
+    .ran-btn-content {
       border-color: #1890ff;
       background-color: #1890ff;
       color: #fff;
     }
   }
   &([type="primary"]:not([disabled])) {
-    .container::after {
+    .ran-btn::after {
       background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
     }
   }
   &([type="primary"]:not([disabled]):hover) {
-    .btn {
+    .ran-btn-content {
       background-color: #40a9ff;
       color: #fff;
     }
   }
   &([type="warning"]) {
-    .btn {
+    .ran-btn-content {
       border-color: #ff4d4f;
       background-color: #ff4d4f;
       color: #fff;
     }
   }
   &([type="warning"]:not([disabled])) {
-    .container::after {
+    .ran-btn::after {
       background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
     }
   }
   &([type="warning"]:not([disabled]):hover) {
-    .btn {
+    .ran-btn-content {
       border-color: #ff4d4f;
       background-color: #ff4d4f;
       color: #fff;
     }
   }
   &([type="text"]) {
-    .btn {
+    .ran-btn-content {
       border: none;
     }
   }
@@ -87,14 +87,14 @@
     cursor: not-allowed;
     pointer-events: all;
     opacity: 0.6;
-    .container {
+    .ran-btn {
       cursor: not-allowed;
       pointer-events: all;
       opacity: 0.6;
     }
   }
   &(:not([disabled]):active) {
-    .container::after {
+    .ran-btn::after {
       transform: translate(-50%, -50%) scale(0);
       opacity: 0.3;
       transition: 0s;
@@ -102,7 +102,7 @@
   }
   @media (min-width: 1024px) {
     &(:not([disabled],[effect])) {
-      .container::after {
+      .ran-btn::after {
         content: '';
         display: block;
         position: absolute;
@@ -130,7 +130,7 @@
   }
 }
 
-.btn {
+.ran-btn-content {
   display: flex;
   justify-content: space-between;
   align-items: center;

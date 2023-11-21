@@ -11,7 +11,7 @@ function Custom() {
       constructor() {
         super();
         this._container = document.createElement('div');
-        this._container.setAttribute('class', 'r-image');
+        this._container.setAttribute('class', 'ran-image');
         const shadowRoot = this.attachShadow({ mode: 'closed' });
         shadowRoot.appendChild(this._container);
       }

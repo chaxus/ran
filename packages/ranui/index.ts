@@ -13,6 +13,7 @@ export * as radar from '@/components/radar';
 export * as video from '@/components/video';
 export * as modal from '@/components/modal';
 export * as select from '@/components/select';
+export * as progress from '@/components/progress';
 
 if (typeof document !== 'undefined') {
   const style = document.createElement('style');

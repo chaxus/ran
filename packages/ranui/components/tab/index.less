@@ -3,7 +3,7 @@
 @borderColor: var(--border-color, rgba(0, 0, 0, 0.2));
 @borderRadius: var(--border-radius, 0.25em);
 
-.tab {
+.ran-tab {
   // 这个伪类选择器仅仅适用于 影子节点树 (Shadow Dom)。并且只会选择实际的元素节点，而不包括文本节点。
   ::slotted(r-tab) {
     box-sizing: border-box;
@@ -23,7 +23,7 @@
     position: relative;
     overflow: hidden;
     scroll-behavior: smooth;
-    &_nav {
+    &-nav {
       display: flex;
       flex-flow: row nowrap;
       justify-content: flex-start;
@@ -31,14 +31,14 @@
       &::-webkit-scrollbar {
         display: none;
       }
-      &__item {
+      &-item {
         flex-shrink: 0;
       }
       .active {
         color: @activeColor;
       }
     }
-    &_line {
+    &-line {
       position: absolute;
       width: 0;
       margin-top: -2px;
@@ -51,7 +51,7 @@
 
   &-content {
     overflow: hidden;
-    &_wrap {
+    &-wrap {
       display: flex;
       width: 100%;
       height: 100%;
@@ -60,10 +60,10 @@
   }
 }
 :host([type='line']) {
-  .tab {
+  .ran-tab {
     &-header {
-      &_nav {
-        &__item {
+      &-nav {
+        &-item {
           border: solid 1px transparent;
         }
         .active {
@@ -73,7 +73,7 @@
           border-radius: @borderRadius @borderRadius 0 0;
         }
       }
-      &_line {
+      &-line {
         transition: none;
         visibility: hidden;
         &::after,
@@ -97,24 +97,24 @@
   }
 }
 :host([align='center']) {
-  .tab {
+  .ran-tab {
     &-header {
-      &_nav {
+      &-nav {
         justify-content: center;
       }
-      &_line {
+      &-line {
         left: 50%;
       }
     }
   }
 }
 :host([align='end']) {
-  .tab {
+  .ran-tab {
     &-header {
-      &_nav {
+      &-nav {
         justify-content: flex-end;
       }
-      &_line {
+      &-line {
       }
     }
   }

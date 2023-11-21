@@ -610,7 +610,9 @@ export const requestUrlToBuffer = (
     xhr.withCredentials = options.withCredentials || false;
     if (options.headers) {
       Object.keys(options.headers).forEach(function (key) {
-        options?.headers && xhr.setRequestHeader(key, options.headers[key]);
+        options.headers?.[key] &&
+          xhr.setRequestHeader(key, options.headers[key]);
+
       });
     }
     xhr.send(options.body);
@@ -711,6 +713,7 @@ export const perToNum = (str: string = ''): number => {
     return Number(str);
   }
 };
+
 /**
  * @description: 限制最大和最小值
  * @return {*}
