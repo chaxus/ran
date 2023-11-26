@@ -1,6 +1,6 @@
 {
-  "include": ["components", "plugins", "utils", "assets", "test", "**/*.ts"],
-  "exclude": ["node_modules/**", "dist/**"],
+  "include": ["components", "plugins", "utils", "test", "**/*.ts"],
+  "exclude": ["node_modules/**", "dist/**", "assets"],
   "compilerOptions": {
     "module": "ESNext",
     "esModuleInterop": true,

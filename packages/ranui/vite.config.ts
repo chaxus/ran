@@ -174,6 +174,9 @@ export const es: BuildOptions = {
 };
 
 export const viteConfig: UserConfig = {
+  optimizeDeps: {
+    exclude: ["assets/hls"]
+  },
   plugins: [
     loadStyle({
       ignore: ['ranui/components/modal/index.ts'],

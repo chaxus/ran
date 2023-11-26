@@ -34,6 +34,7 @@ declare interface Window {
   ranui: Partial<Ranui>;
   message: Partial<Ran.Message>;
   pdfjsLib: any;
+  Hls: any;
 }
 // ranuts 声明文件
 declare module '@/file/*';

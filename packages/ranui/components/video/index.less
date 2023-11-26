@@ -1,11 +1,19 @@
 @number: 49;
+
+@font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji',
+'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+@box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.08),
+  0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+
 @keyframes loading {
   .circle(@index) when (@index < @number) {
     @i: @index+1;
     @x: round((@i / @number) * 100, 2);
-    @selector: e('@{x}%');
+    @selector: e("@{x}%");
     @{selector} {
-      background-image: url('../../assets/image/loading/1_@{i}.png');
+      background-image: url("../../assets/image/loading/1_@{i}.png");
     }
     .circle(@i);
   }
@@ -23,4 +31,314 @@
   background-repeat: no-repeat;
   background-size: contain;
   animation: loading 1s infinite;
+}
+
+.ran-player {
+  display: block;
+  height: 100%;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  &-contain {
+    width: 100%;
+    height: 100%;
+    &-video {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  /* 全屏按钮 */
+  video::-webkit-media-controls-fullscreen-button {
+    display: none;
+  }
+  /* 播放按钮 */
+  video::-webkit-media-controls-play-button {
+    display: none;
+  }
+  /* 进度条 */
+  video::-webkit-media-controls-timeline {
+    display: none;
+  }
+  /* 观看的当前时间 */
+  video::-webkit-media-controls-current-time-display {
+    display: none;
+  }
+  /* 剩余时间 */
+  video::-webkit-media-controls-time-remaining-display {
+    display: none;
+  }
+  /* 音量按钮 */
+  video::-webkit-media-controls-mute-button {
+    display: none;
+  }
+  video::-webkit-media-controls-toggle-closed-captions-button {
+    display: none;
+  }
+  /* 音量的控制条 */
+  video::-webkit-media-controls-volume-slider {
+    display: none;
+  }
+  /* 所有控件 */
+  video::-webkit-media-controls-enclosure {
+    display: none;
+  }
+  video {
+    outline: none;
+  }
+  .prism-player {
+    position: relative;
+  }
+  &-play-btn {
+    background: url(./img/bigplay.png) no-repeat;
+    background-size: contain;
+    width: 64px;
+    height: 64px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .prism-auto-stream-selector {
+    display: none;
+  }
+  &-controller {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background: linear-gradient(180deg, #5b5b5b 0%, #000 100%);
+    width: calc(100% - 32px);
+    height: 40px;
+    padding: 16px;
+    opacity: 0;
+    transition: opacity 0.5s;
+    box-sizing: content-box;
+    &-tip {
+      position: absolute;
+      top: -16px;
+      max-width: 80px;
+      min-height: 30px;
+      transform-origin: var(--ran-x, 50%) var(--ran-y, 50%);
+      box-sizing: border-box;
+      margin: 0;
+      padding: 4px 6px;
+      color: #fff;
+      font-size: 14px;
+      list-style: none;
+      font-family: @font-family;
+      z-index: 1000;
+      overflow: hidden;
+      font-variant: initial;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 8px;
+      outline: none;
+      box-shadow: @box-shadow;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      opacity: 0;
+      text-align: center;
+      &-time {
+        margin-top: 4px;
+        text-align: center;
+        max-width: 80px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        text-align: center;
+      }
+      &-text {
+        margin-top: 4px;
+        max-width: 80px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        text-align: center;
+        text-align: center;
+      }
+    }
+    &-progress {
+      position: relative;
+      width: 100%;
+      height: 8px;
+      cursor: pointer;
+      box-sizing: content-box;
+      &-wrap {
+        width: 100%;
+        height: 8px;
+        border-radius: 20px;
+        background: #5b5b5b;
+        position: relative;
+        overflow: hidden;
+        pointer-events: none;
+        box-sizing: content-box;
+        &-dot {
+          position: absolute;
+          top: 0px;
+          left: 0px;
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          background: #fff;
+          box-sizing: content-box;
+          cursor: pointer;
+          z-index: 8;
+        }
+        &-value {
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 100%;
+          width: 100%;
+          transform: scaleX(0);
+          transform-origin: 0 0;
+          will-change: transform;
+          background: linear-gradient(90deg, #0bc8bb 2.42%, #00d297 98.79%);
+          border-radius: 20px;
+          box-sizing: content-box;
+          cursor: pointer;
+        }
+      }
+      &-dot {
+        position: absolute;
+        top: -5px;
+        left: -2px;
+        border-radius: 50%;
+        z-index: 9;
+        width: 18px;
+        height: 18px;
+        background: linear-gradient(90deg, #0bc8bb 2.42%, #00d297 98.79%);
+        cursor: pointer;
+      }
+    }
+    &-bottom {
+      margin-top: 8px;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      &-left {
+        user-select: none;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        &-btn {
+          width: 24px;
+          height: 24px;
+          cursor: pointer;
+        }
+        &-btn-play {
+          background: url(./img/smallplay.png) no-repeat;
+          background-size: contain;
+        }
+        &-btn-pause {
+          background: url(./img/smallpause.png) no-repeat;
+          background-size: contain;
+        }
+        &-time {
+          margin-left: 16px;
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          &-current {
+            color: #fff;
+            font-family: PingFang SC;
+            font-size: 14px;
+            min-width: 40px;
+            height: 20px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+            text-align: center;
+          }
+          &-divide {
+            color: #fff;
+            font-family: PingFang SC;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+            margin: 0 2px;
+            text-align: center;
+          }
+          &-duration {
+            color: #fff;
+            font-family: PingFang SC;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+            min-width: 40px;
+            height: 20px;
+            text-align: center;
+          }
+        }
+      }
+      &-right {
+        user-select: none;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        &-volume {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          cursor: pointer;
+          &-icon-volume {
+            background: url(./img/volumenotmute.png) no-repeat;
+            background-size: contain;
+          }
+          &-icon-mute {
+            background: url(./img/volumemute.png) no-repeat;
+            background-size: contain;
+          }
+          &-icon {
+            width: 18px;
+            height: 14px;
+          }
+        }
+        &-speed {
+          width: 30px;
+          color: #fff;
+          font-family: PingFang SC;
+          font-size: 14px;
+          width: 30px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: normal;
+          margin-right: 24px;
+          cursor: pointer;
+        }
+        &-clarity {
+          width: 60px;
+          color: #fff;
+          font-family: PingFang SC;
+          font-size: 14px;
+          width: 30px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: normal;
+          margin-right: 24px;
+          cursor: pointer;
+        }
+        &-knowledge {
+          color: #fff;
+          font-family: PingFang SC;
+          font-size: 14px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: normal;
+          margin-right: 24px;
+          cursor: pointer;
+        }
+        &-full {
+          background: url("./img/fullscreenfig.png");
+          background-size: contain;
+          width: 20px;
+          height: 20px;
+          margin-left: 14px;
+          cursor: pointer;
+        }
+      }
+    }
+  }
 }
