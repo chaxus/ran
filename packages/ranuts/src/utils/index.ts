@@ -579,13 +579,7 @@ interface RequestUrlToArraybufferOption {
 export const requestUrlToBuffer = (
   src: string,
   options: Partial<RequestUrlToArraybufferOption>,
-): Promise<Partial<requestUrlToArraybufferReturn>> => {
-  if (typeof XMLHttpRequest === 'undefined') {
-    throw new Error('XMLHttpRequest is not defined');
-  }
-  if (typeof document === 'undefined') {
-    return Promise.reject('document is not defined');
-  }
+): Promise<requestUrlToArraybufferReturn> => {
   return new Promise(function (resolve, reject) {
     const xhr = new XMLHttpRequest();
     xhr.open(options.method || 'GET', src, true);
