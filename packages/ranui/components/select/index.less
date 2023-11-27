@@ -19,6 +19,14 @@
     pointer-events: all;
     opacity: 0.6;
   }
+  &([type="text"]) {
+    &::part(selection) {
+      border: none;
+    }
+    &::part(icon){
+      display: none;
+    }
+  }
   &(:not([disabled]):hover) {
     .select {
       cursor: pointer;

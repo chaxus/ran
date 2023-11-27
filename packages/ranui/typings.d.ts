@@ -47,10 +47,39 @@ interface Hls {
 
 type HLS = Hls & (new () => HlsPlayer);
 
+interface Viewport {
+  width: number;
+  height: number;
+  viewBox: Array<number>;
+}
+interface RenderContext {
+  canvasContext: CanvasRenderingContext2D | null;
+  transform: Array<number>;
+  viewport: Viewport;
+}
+
+interface PDFPageProxy {
+  pageNumber: number;
+  getViewport: () => Viewport;
+  render: (options: RenderContext) => void;
+}
+
+interface PDFDocumentProxy {
+  numPages: number;
+  getPage: (x: number) => Promise<PDFPageProxy>;
+}
+
 declare interface Window {
   ranui: Partial<Ranui>;
   message: Partial<Ran.Message>;
-  pdfjsLib: any;
+  pdfjsLib: {
+    GlobalWorkerOptions: {
+      workerSrc: string;
+    };
+    getDocument: (x: string | ArrayBuffer) => {
+      promise: Promise<PDFDocumentProxy>;
+    };
+  };
   Hls: HLS;
 }
 // ranuts 声明文件
@@ -65,6 +94,6 @@ declare namespace Ranuts {
   interface Identification {
     _identification: boolean;
     message?: string;
-    data?: any;
+    data?: unknown;
   }
 }

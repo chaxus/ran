@@ -1076,11 +1076,22 @@
   }
 }
 
+.animation(@animation, @animation-mode:forwards) {
+  animation: @animation 0.2s;
+  animation-fill-mode: @animation-mode;
+}
+
 .ran-select-dropdown-down-in {
-  animation: ranui-select-dropdown-up-in 0.2s;
+  .animation(ranui-select-dropdown-up-in);
 }
 .ran-select-dropdown-down-out {
-  animation: ranui-select-dropdown-up-out 0.2s;
+  .animation(ranui-select-dropdown-up-out);
+}
+.ran-select-dropdown-up-in {
+  .animation(ranui-select-dropdown-down-in);
+}
+.ran-select-dropdown-up-out {
+  .animation(ranui-select-dropdown-down-out);
 }
 
 .ranui-select-dropdown {

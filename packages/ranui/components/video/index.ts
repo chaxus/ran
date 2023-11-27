@@ -21,7 +21,7 @@ export interface HlsPlayer {
   destroy: () => void;
 }
 
-interface Level {
+export interface Level {
   audioCodec: string;
   bitrate: number;
   height: number;
@@ -31,7 +31,7 @@ interface Level {
   videoCodec: string;
 }
 
-interface Context {
+export interface Context {
   action: SyncHook;
   currentState: string;
   duration: number;

@@ -9,6 +9,21 @@ interface Option {
   value: string | number;
 }
 
+interface PlacementDirection {
+  [x: string]: Record<string, string>;
+}
+
+const placementDirection: PlacementDirection = {
+  bottom: {
+    add: 'ran-select-dropdown-down-in',
+    remove: 'ran-select-dropdown-down-out',
+  },
+  top: {
+    add: 'ran-select-dropdown-up-in',
+    remove: 'ran-select-dropdown-up-out',
+  },
+};
+
 function Custom() {
   if (typeof document !== 'undefined' && !customElements.get('r-select')) {
     class Select extends HTMLElement {
@@ -106,7 +121,7 @@ function Custom() {
         this.setAttribute('type', value || '');
       }
       get placement() {
-        return this.getAttribute('placement');
+        return this.getAttribute('placement') || 'bottom';
       }
       set placement(value) {
         this.setAttribute('placement', value || '');
@@ -147,26 +162,25 @@ function Custom() {
        * @return {*}
        */
       setSelectDropdownDisplayNone = () => {
+        if (this._selectDropDownOutTimeId) return;
         if (
           this._selectionDropdown &&
           this._selectionDropdown.style.display !== 'none'
         ) {
           addClassToElement(
             this._selectionDropdown,
-            'ran-select-dropdown-down-out',
+            placementDirection[this.placement].remove,
           );
-          if (this._selectDropDownOutTimeId) return;
           this._selectDropDownOutTimeId = setTimeout(() => {
-            this._selectionDropdown &&
-              this._selectionDropdown.style.setProperty('display', 'none');
+            this._selectionDropdown?.style.setProperty('display', 'none');
             this._selectionDropdown &&
               removeClassToElement(
                 this._selectionDropdown,
-                'ran-select-dropdown-down-out',
+                placementDirection[this.placement].remove,
               );
             clearTimeout(this._selectDropDownOutTimeId);
             this._selectDropDownOutTimeId = undefined;
-          }, 200);
+          }, 300);
         }
       };
       /**
@@ -174,33 +188,18 @@ function Custom() {
        * @return {*}
        */
       setSelectDropdownDisplayBlock = () => {
-        if (
-          this._selectionDropdown &&
-          this._selectionDropdown.style.display !== 'block'
-        ) {
-          if (this._selectDropDownInTimeId) return;
-          addClassToElement(
-            this._selectionDropdown,
-            'ran-select-dropdown-down-in',
-          );
-          this._selectionDropdown.style.setProperty('display', 'block');
+        if (this._selectDropDownInTimeId) return;
+        if (this._selectionDropdown && this._selectionDropdown.style.display !== 'block') {
+          addClassToElement(this._selectionDropdown,placementDirection[this.placement].add,);
+          this._selectionDropdown?.style.setProperty('display', 'block');
           this._selectDropDownInTimeId = setTimeout(() => {
-            this._selectionDropdown &&
-              removeClassToElement(
-                this._selectionDropdown,
-                'ran-select-dropdown-down-in',
-              );
+            this._selectionDropdown && removeClassToElement(this._selectionDropdown,placementDirection[this.placement].add);
             clearTimeout(this._selectDropDownInTimeId);
             this._selectDropDownInTimeId = undefined;
           }, 200);
         }
       };
-      /**
-       * @description: 设置下拉框
-       * @return {*}
-       */
-      selectMouseDown = (e: Event) => {
-        if (isDisabled(this)) return;
+      placementPosition = () => {
         if (!this._selectionDropdown || !this._selectDropdown) return;
         const rect = this.getBoundingClientRect();
         const { top, left, bottom, width, height, x, y } = rect;
@@ -217,12 +216,29 @@ function Custom() {
           `${y + window.scrollY}`,
         );
         this._selectionDropdown.style.setProperty('width', `${width}px`);
-        this._selectionDropdown.style.setProperty(
-          'inset',
-          `${bottom + window.scrollY}px auto auto ${left + window.scrollX}px`,
-        );
+        if (this.placement === 'top') {
+          this._selectionDropdown.style.setProperty(
+            'inset',
+            `${
+              top + window.scrollY - this._selectionDropdown.clientHeight
+            }px auto auto ${left + window.scrollX}px`,
+          );
+        } else {
+          this._selectionDropdown.style.setProperty(
+            'inset',
+            `${bottom + window.scrollY}px auto auto ${left + window.scrollX}px`,
+          );
+        }
+      };
+      /**
+       * @description: 设置下拉框
+       * @return {*}
+       */
+      selectMouseDown = (e: Event) => {
+        if (isDisabled(this)) return;
         this.setSelectDropdownDisplayNone();
         this.setSelectDropdownDisplayBlock();
+        this.placementPosition();
       };
       /**
        * @description: 焦点移除的情况，需要移除select 下拉框
