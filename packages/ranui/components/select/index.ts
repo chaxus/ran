@@ -36,6 +36,8 @@ function Custom() {
           'type',
           'defaultValue',
           'showSearch',
+          'placement', // 弹窗的方向
+          // 'getPopupContainer' // 挂载的节点
         ];
       }
       constructor() {
@@ -92,6 +94,18 @@ function Custom() {
       }
       set showSearch(value) {
         this.setAttribute('showSearch', value || '');
+      }
+      get type() {
+        return this.getAttribute('type');
+      }
+      set type(value) {
+        this.setAttribute('type', value || '');
+      }
+      get placement() {
+        return this.getAttribute('placement');
+      }
+      set placement(value) {
+        this.setAttribute('placement', value || '');
       }
       get sheet() {
         return this.getAttribute('sheet');
@@ -181,18 +195,24 @@ function Custom() {
        * @description: 设置下拉框
        * @return {*}
        */
-      selectMouseDown = () => {
+      selectMouseDown = (e: Event) => {
         if (isDisabled(this)) return;
         if (!this._selectionDropdown || !this._selectDropdown) return;
         const rect = this.getBoundingClientRect();
         const { top, left, bottom, width, height, x, y } = rect;
         this._text.style.setProperty('line-height', `${height}px`);
-        this._selectionDropdown.style.setProperty('-ran-x', `${x}`);
-        this._selectionDropdown.style.setProperty('-ran-y', `${y}`);
+        this._selectionDropdown.style.setProperty(
+          '-ran-x',
+          `${x + +window.scrollX}`,
+        );
+        this._selectionDropdown.style.setProperty(
+          '-ran-y',
+          `${y + window.scrollY}`,
+        );
         this._selectionDropdown.style.setProperty('width', `${width}px`);
         this._selectionDropdown.style.setProperty(
           'inset',
-          `${bottom}px auto auto ${left}px`,
+          `${bottom + window.scrollY}px auto auto ${left + window.scrollX}px`,
         );
         this.setSelectDropdownDisplayNone();
         this.setSelectDropdownDisplayBlock();
@@ -346,9 +366,9 @@ function Custom() {
       };
       connectedCallback() {
         this.handlerExternalCss();
+        this.createOption();
         this.addEventListener('mousedown', this.selectMouseDown);
         this.addEventListener('blur', this.selectBlur);
-        this.createOption();
         this.listenSlotChange();
         this.setShowSearch();
       }

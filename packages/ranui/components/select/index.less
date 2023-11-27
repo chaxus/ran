@@ -20,6 +20,9 @@
     opacity: 0.6;
   }
   &(:not([disabled]):hover) {
+    .select {
+      cursor: pointer;
+    }
     .selection {
       border: 1px solid @theme-color;
       &-search {
@@ -43,10 +46,15 @@
       }
     }
   }
+  .selection-search{
+    display: none;
+  }
   &([showSearch]:not([disabled])) {
+
     .selection {
       &-search {
         cursor: text;
+        display: block;
       }
       &-item {
         cursor: pointer;
@@ -56,6 +64,7 @@
   &([showSearch]:not([disabled]):focus) {
     .selection {
       &-search {
+        display: block;
         cursor: text;
         opacity: 1;
       }
