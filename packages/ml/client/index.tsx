@@ -18,9 +18,9 @@ export const App = (): React.JSX.Element => {
       <div>{JSON.stringify(tf.memory())}</div>
       <h3>tensor number in memory</h3>
       <div>{JSON.stringify(tf.memory().numTensors)}</div>
-      {/* <LineModelComponent />
-      <Emotion /> */}
-      <Multi />
+      {/* <LineModelComponent />*/}
+      {<Emotion />}
+      {/* <Multi /> */}
     </div>
   );
 };

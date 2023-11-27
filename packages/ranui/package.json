@@ -21,7 +21,8 @@
     "prepublish": "npm run build",
     "test": "sh ./bin/test.sh",
     "test:report": "playwright show-report",
-    "test:ui": "playwright test --ui"
+    "test:ui": "playwright test --ui",
+    "test:update":"playwright test --update-snapshots"
   },
   "files": [
     "dist/*"
