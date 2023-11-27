@@ -13,6 +13,20 @@ import './index.less';
 
 const PLAY_STATE_LIST = ['play', 'playing', 'timeupdate'];
 
+interface Hls {
+
+}
+
+interface Level {
+  audioCodec: string;
+  bitrate: number;
+  height: number;
+  width: number;
+  name: string;
+  url: string;
+  videoCodec: string;
+}
+
 interface Context {
   action: SyncHook;
   currentState: string;
@@ -21,6 +35,8 @@ interface Context {
   volume: number;
   playbackRate: number;
   fullScreen: boolean;
+  levels: Level[];
+  url: string;
 }
 
 const SPEED = [
@@ -61,12 +77,6 @@ function Custom() {
       private _playControllerBottomVolume: HTMLDivElement;
       private _playControllerBottomSpeedPopover: HTMLElement;
       private controllerBarTimeId?: NodeJS.Timeout;
-      private clarityList?: {
-        definition: string;
-        label: string;
-        value: string;
-        url: string;
-      }[];
       private _playerTip: HTMLDivElement;
       private _playerTipTime: HTMLDivElement;
       private _playerTipText: HTMLDivElement;
@@ -267,6 +277,8 @@ function Custom() {
           volume: 0.5,
           playbackRate: 1,
           fullScreen: false,
+          levels: [],
+          url: '',
         };
         this.moveProgress = {
           percentage: 0,
@@ -285,6 +297,16 @@ function Custom() {
       set volume(value: string) {
         this.setAttribute('volume', value || '');
       }
+      private manifestLoaded = (
+        type: string,
+        data: { levels: Level[]; url: string },
+      ) => {
+        if (type === 'hlsManifestLoaded') {
+          const { url, levels } = data;
+          this.ctx.levels = levels;
+          this.ctx.url = url;
+        }
+      };
       /**
        * @description: 初始化 video 和更新 video 方法
        * @return {*}
@@ -310,6 +332,8 @@ function Custom() {
         this._video.setAttribute('initial-time', '0.01');
         if (Hls?.isSupported() && this.src) {
           this._hls = new Hls();
+          this._hls.off(Hls.Events.MANIFEST_LOADED, this.manifestLoaded);
+          this._hls.on(Hls.Events.MANIFEST_LOADED, this.manifestLoaded);
           this._hls.loadSource(this.src);
           this._hls.attachMedia(this._video);
           this._container.appendChild(this._video);

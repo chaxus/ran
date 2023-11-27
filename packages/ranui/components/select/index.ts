@@ -44,18 +44,22 @@ function Custom() {
         super();
         this._slot = document.createElement('slot');
         this._select = document.createElement('div');
-        this._select.setAttribute('class', 'select');
+        this._select.setAttribute('class', 'ran-select');
+        this._select.setAttribute('part', 'select');
         this._selection = document.createElement('div');
         this._selection.setAttribute('class', 'selection');
+        this._selection.setAttribute('part', 'selection');
         this._selector = document.createElement('div');
         this._search = document.createElement('r-input');
         this._search.setAttribute('class', 'selection-search');
+        this._search.setAttribute('part', 'search');
         this._search.setAttribute('type', 'search');
         this._search.setAttribute('autocomplete', 'off');
         this._text = document.createElement('span');
         this._text.setAttribute('class', 'selection-item');
         this._icon = document.createElement('r-icon');
         this._icon.setAttribute('class', 'icon');
+        this._icon.setAttribute('part', 'icon');
         this._icon.setAttribute('name', 'arrow-down');
         this._icon.setAttribute('color', '#d9d9d9');
         this._icon.setAttribute('size', '16');
@@ -200,10 +204,13 @@ function Custom() {
         if (!this._selectionDropdown || !this._selectDropdown) return;
         const rect = this.getBoundingClientRect();
         const { top, left, bottom, width, height, x, y } = rect;
-        this._text.style.setProperty('line-height', `${height}px`);
+        this._text.style.setProperty(
+          'line-height',
+          `${Math.max(height - 2, 0)}px`,
+        );
         this._selectionDropdown.style.setProperty(
           '-ran-x',
-          `${x + +window.scrollX}`,
+          `${x + window.scrollX}`,
         );
         this._selectionDropdown.style.setProperty(
           '-ran-y',
