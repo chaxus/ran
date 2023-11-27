@@ -13,8 +13,12 @@ import './index.less';
 
 const PLAY_STATE_LIST = ['play', 'playing', 'timeupdate'];
 
-interface Hls {
-
+export interface HlsPlayer {
+  off: (s: string, f: Function) => void;
+  on: (s: string, f: Function) => void;
+  loadSource: (s: string) => void;
+  attachMedia: (v: HTMLVideoElement) => void;
+  destroy: () => void;
 }
 
 interface Level {
@@ -82,7 +86,7 @@ function Custom() {
       private _playerTipText: HTMLDivElement;
       private _volume?: number;
       private _video?: HTMLVideoElement;
-      private _hls: any;
+      private _hls?: HlsPlayer;
       static get observedAttributes(): string[] {
         return ['src', 'volume', 'playTime', 'playbackRate'];
       }
@@ -332,10 +336,12 @@ function Custom() {
         this._video.setAttribute('initial-time', '0.01');
         if (Hls?.isSupported() && this.src) {
           this._hls = new Hls();
-          this._hls.off(Hls.Events.MANIFEST_LOADED, this.manifestLoaded);
-          this._hls.on(Hls.Events.MANIFEST_LOADED, this.manifestLoaded);
-          this._hls.loadSource(this.src);
-          this._hls.attachMedia(this._video);
+          if (this._hls) {
+            this._hls.off(Hls.Events.MANIFEST_LOADED, this.manifestLoaded);
+            this._hls.on(Hls.Events.MANIFEST_LOADED, this.manifestLoaded);
+            this._hls.loadSource(this.src);
+            this._hls.attachMedia(this._video);
+          }
           this._container.appendChild(this._video);
           this._video.parentElement?.setAttribute(
             'class',

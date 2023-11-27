@@ -30,11 +30,28 @@ interface Ranui {
   message: Partial<Ran.Message>;
 }
 
+interface HlsPlayer {
+  off: (s: string, f: Function) => void;
+  on: (s: string, f: Function) => void;
+  loadSource: (s: string) => void;
+  attachMedia: (v: HTMLVideoElement) => void;
+  destroy: () => void;
+}
+
+interface Hls {
+  Events: {
+    MANIFEST_LOADED: 'hlsManifestLoaded';
+  };
+  isSupported: () => boolean;
+}
+
+type HLS = Hls & (new () => HlsPlayer);
+
 declare interface Window {
   ranui: Partial<Ranui>;
   message: Partial<Ran.Message>;
   pdfjsLib: any;
-  Hls: any;
+  Hls: HLS;
 }
 // ranuts 声明文件
 declare module '@/file/*';
