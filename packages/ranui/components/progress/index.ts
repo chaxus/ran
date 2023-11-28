@@ -1,6 +1,6 @@
 import { perToNum } from 'ranuts';
 import { createCustomError } from '@/utils/index';
-import './index.less'
+import './index.less';
 
 const attributes: string[] = ['percent', 'type', 'total', 'dot'];
 
@@ -18,10 +18,7 @@ export class Progress extends HTMLElement {
     this._progressWrap.setAttribute('class', 'ran-progress-wrap');
     this._progress.appendChild(this._progressWrap);
     this._progressWrapValue = document.createElement('div');
-    this._progressWrapValue.setAttribute(
-      'class',
-      'ran-progress-wrap-value',
-    );
+    this._progressWrapValue.setAttribute('class', 'ran-progress-wrap-value');
     this._progressWrap.appendChild(this._progressWrapValue);
     this._progressDot = document.createElement('div');
     this._progressDot.setAttribute('class', 'ran-progress-dot');
@@ -105,7 +102,7 @@ export class Progress extends HTMLElement {
       'transform',
       `translateX(${percentage * this._progress.offsetWidth}px)`,
     );
-    this.change()
+    this.change();
   };
   progressDotMouseDown = (): void => {
     this.moveProgress.mouseDown = true;
@@ -127,7 +124,7 @@ export class Progress extends HTMLElement {
       'transform',
       `translateX(${percentage * this._progress.offsetWidth}px)`,
     );
-    this.change()
+    this.change();
   };
   progressDotMouseUp = (e: MouseEvent): void => {
     if (!this.moveProgress.mouseDown) return;
@@ -145,16 +142,10 @@ export class Progress extends HTMLElement {
     );
   };
   appendProgressDot = (): void => {
-    if (
-      this.dot === 'true' &&
-      !this._progress.contains(this._progressDot)
-    ) {
+    if (this.dot === 'true' && !this._progress.contains(this._progressDot)) {
       this._progress.appendChild(this._progressDot);
     }
-    if (
-      this.dot === 'false' &&
-      this._progress.contains(this._progressDot)
-    ) {
+    if (this.dot === 'false' && this._progress.contains(this._progressDot)) {
       this._progress.removeChild(this._progressDot);
     }
   };
@@ -172,10 +163,7 @@ export class Progress extends HTMLElement {
   dragEvent = (): void => {
     if (this.type !== 'drag') return;
     this._progress.addEventListener('click', this.progressClick);
-    this._progressDot.addEventListener(
-      'mousedown',
-      this.progressDotMouseDown,
-    );
+    this._progressDot.addEventListener('mousedown', this.progressDotMouseDown);
     document.addEventListener('mousemove', this.progressDotMouseMove);
     document.addEventListener('mouseup', this.progressDotMouseUp);
   };
@@ -184,13 +172,13 @@ export class Progress extends HTMLElement {
       this.appendChild(this._progress);
       this._progress.appendChild(this._progressDot);
     }
-  }
+  };
   private resize = (): void => {
     this.updateCurrentProgress();
   };
   connectedCallback(): void {
     this.dragEvent();
-    this.updateCurrentProgress()
+    this.updateCurrentProgress();
     window.addEventListener('resize', this.resize);
   }
   disconnectCallback(): void {
@@ -206,13 +194,13 @@ export class Progress extends HTMLElement {
   attributeChangedCallback(k: string, o: string, n: string): void {
     if (o !== n) {
       if (k === 'type') {
-        this.createProgress()
+        this.createProgress();
       }
       if (k === 'dot') {
         this.appendProgressDot();
       }
       if (k === 'percent') {
-        this.updateCurrentProgress()
+        this.updateCurrentProgress();
       }
     }
   }

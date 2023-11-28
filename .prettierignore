@@ -5,3 +5,4 @@ pnpm-workspace.yaml
 assets
 .vscode
 report
+public

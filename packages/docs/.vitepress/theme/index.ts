@@ -5,8 +5,8 @@ import './styles/vars.less';
 declare global {
   interface ImportMeta {
     env: {
-      SSR: boolean
-    }
+      SSR: boolean;
+    };
   }
 }
 

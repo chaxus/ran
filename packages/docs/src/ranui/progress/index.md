@@ -5,11 +5,11 @@
 ## 代码演示
 
 <div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-     <r-progress type="drag" percent="30%"></r-button>
+     <r-progress type="drag" percent="30%"></r-progress>
 </div>
 
 ```xml
-<r-progress type="drag" percent="30%"></r-button>
+<r-progress type="drag" percent="30%"></r-progress>
 ```
 
 ## 属性

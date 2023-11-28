@@ -606,7 +606,6 @@ export const requestUrlToBuffer = (
       Object.keys(options.headers).forEach(function (key) {
         options.headers?.[key] &&
           xhr.setRequestHeader(key, options.headers[key]);
-
       });
     }
     xhr.send(options.body);

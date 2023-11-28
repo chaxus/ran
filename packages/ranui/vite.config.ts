@@ -175,7 +175,7 @@ export const es: BuildOptions = {
 
 export const viteConfig: UserConfig = {
   optimizeDeps: {
-    exclude: ["assets/hls"]
+    exclude: ['public'],
   },
   plugins: [
     loadStyle({

@@ -55,38 +55,38 @@ function Custom() {
   if (typeof document !== 'undefined' && !customElements.get('r-player')) {
     class RanPlayer extends HTMLElement {
       public ctx: Context;
-      private _player: HTMLDivElement;
-      private _container: HTMLDivElement;
-      private _slot: HTMLSlotElement;
-      private _playerController: HTMLDivElement;
-      private _playerBtn: HTMLDivElement;
-      private _progress: HTMLDivElement;
-      private _progressDot: HTMLDivElement;
-      private _progressWrap: HTMLDivElement;
-      private _progressWrapValue: HTMLDivElement;
-      private requestAnimationFrameId?: number;
-      private moveProgress: { percentage: number; mouseDown: boolean };
-      private _playerControllerBottom: HTMLDivElement;
-      private _playerControllerBottomRight: HTMLDivElement;
-      private _playerControllerBottomLeft: HTMLDivElement;
-      private _playerControllerBottomPlayBtn: HTMLDivElement;
-      private _playerControllerBottomTimeCurrent: HTMLDivElement;
-      private _playerControllerBottomTimeDuration: HTMLDivElement;
-      private _playerControllerBottomTimeDivide: HTMLDivElement;
-      private _playControllerBottomClarity: HTMLDivElement;
-      private _playControllerBottomSpeed: HTMLDivElement;
-      private _playControllerBottomSpeedIcon: HTMLDivElement;
-      private _playControllerBottomSpeedProgress: Progress;
-      private _playControllerBottomRightFullScreen: HTMLDivElement;
-      private _playControllerBottomVolume: HTMLDivElement;
-      private _playControllerBottomSpeedPopover: HTMLElement;
-      private controllerBarTimeId?: NodeJS.Timeout;
-      private _playerTip: HTMLDivElement;
-      private _playerTipTime: HTMLDivElement;
-      private _playerTipText: HTMLDivElement;
-      private _volume?: number;
-      private _video?: HTMLVideoElement;
-      private _hls?: HlsPlayer;
+      _player: HTMLDivElement;
+      _container: HTMLDivElement;
+      _slot: HTMLSlotElement;
+      _playerController: HTMLDivElement;
+      _playerBtn: HTMLDivElement;
+      _progress: HTMLDivElement;
+      _progressDot: HTMLDivElement;
+      _progressWrap: HTMLDivElement;
+      _progressWrapValue: HTMLDivElement;
+      requestAnimationFrameId?: number;
+      moveProgress: { percentage: number; mouseDown: boolean };
+      _playerControllerBottom: HTMLDivElement;
+      _playerControllerBottomRight: HTMLDivElement;
+      _playerControllerBottomLeft: HTMLDivElement;
+      _playerControllerBottomPlayBtn: HTMLDivElement;
+      _playerControllerBottomTimeCurrent: HTMLDivElement;
+      _playerControllerBottomTimeDuration: HTMLDivElement;
+      _playerControllerBottomTimeDivide: HTMLDivElement;
+      _playControllerBottomClarity: HTMLDivElement;
+      _playControllerBottomSpeed: HTMLDivElement;
+      _playControllerBottomSpeedIcon: HTMLDivElement;
+      _playControllerBottomSpeedProgress: Progress;
+      _playControllerBottomRightFullScreen: HTMLDivElement;
+      _playControllerBottomVolume: HTMLDivElement;
+      _playControllerBottomSpeedPopover: HTMLElement;
+      controllerBarTimeId?: NodeJS.Timeout;
+      _playerTip: HTMLDivElement;
+      _playerTipTime: HTMLDivElement;
+      _playerTipText: HTMLDivElement;
+      _volume?: number;
+      _video?: HTMLVideoElement;
+      _hls?: HlsPlayer;
       static get observedAttributes(): string[] {
         return ['src', 'volume', 'playTime', 'playbackRate'];
       }
@@ -301,7 +301,7 @@ function Custom() {
       set volume(value: string) {
         this.setAttribute('volume', value || '');
       }
-      private manifestLoaded = (
+      manifestLoaded = (
         type: string,
         data: { levels: Level[]; url: string },
       ) => {
@@ -315,7 +315,7 @@ function Custom() {
        * @description: 初始化 video 和更新 video 方法
        * @return {*}
        */
-      private updatePlayer = () => {
+      updatePlayer = () => {
         const { Hls } = window;
         if (!this.contains(this._player)) {
           this.appendChild(this._player);
@@ -347,11 +347,10 @@ function Custom() {
             'class',
             'ran-player-contain',
           );
-          this.resize();
         }
         this.listenEvent();
       };
-      private change = (name: string, value: unknown): void => {
+      change = (name: string, value: unknown): void => {
         const currentTime = this.getCurrentTime();
         const duration = this.getTotalTime();
         this.dispatchEvent(
@@ -366,7 +365,7 @@ function Custom() {
           }),
         );
       };
-      private onCanplay = (e: Event) => {
+      onCanplay = (e: Event) => {
         this.ctx.currentState = e.type;
         removeClassToElement(
           this._playerControllerBottomPlayBtn,
@@ -377,64 +376,65 @@ function Custom() {
           'ran-player-controller-bottom-left-btn-play',
         );
         this.change('canplay', e);
+        this.resize();
       };
-      private onCanplaythrough = (e: Event) => {
+      onCanplaythrough = (e: Event) => {
         this.ctx.currentState = e.type;
         this.change('canplaythrough', e);
       };
-      private onComplete = (e: Event) => {
+      onComplete = (e: Event) => {
         this.ctx.currentState = e.type;
         this.change('complete', e);
       };
-      private onDurationchange = (e: Event) => {
+      onDurationchange = (e: Event) => {
         this.ctx.currentState = e.type;
         this.change('durationchange', e);
       };
-      private onEmptied = (e: Event) => {
+      onEmptied = (e: Event) => {
         this.ctx.currentState = e.type;
         this.change('emptied', e);
       };
-      private onEnded = (e: Event) => {
+      onEnded = (e: Event) => {
         this.ctx.currentState = e.type;
         this.change('ended', e);
       };
-      private onError = (e: Event) => {
+      onError = (e: Event) => {
         this.ctx.currentState = e.type;
         this.change('error', e);
       };
-      private onLoadedmetadata = (e: Event) => {
+      onLoadedmetadata = (e: Event) => {
         this.ctx.currentState = e.type;
         this.change('loadedmetadata', e);
       };
-      private onLoadstart = (e: Event) => {
+      onLoadstart = (e: Event) => {
         this.ctx.currentState = e.type;
         this.change('loadstart', e);
       };
-      private onProgress = (e: Event) => {
+      onProgress = (e: Event) => {
         this.ctx.currentState = e.type;
         this.change('progress', e);
       };
-      private onRatechange = (e: Event) => {
+      onRatechange = (e: Event) => {
         this.ctx.currentState = e.type;
         this.change('ratechange', e);
       };
-      private onSeeked = (e: Event) => {
+      onSeeked = (e: Event) => {
         this.ctx.currentState = e.type;
         this.change('seeked', e);
       };
-      private onSeeking = (e: Event) => {
+      onSeeking = (e: Event) => {
         this.ctx.currentState = e.type;
         this.change('seeking', e);
       };
-      private onStalled = (e: Event) => {
+      onStalled = (e: Event) => {
         this.ctx.currentState = e.type;
         this.change('stalled', e);
       };
-      private onSuspend = (e: Event) => {
+      onSuspend = (e: Event) => {
         this.ctx.currentState = e.type;
         this.change('suspend', e);
       };
-      private onLoadeddata = (e: Event) => {
+      onLoadeddata = (e: Event) => {
         this.ctx.currentState = e.type;
         const duration = this.getTotalTime();
         this.ctx.duration = Math.floor(duration * 1000) / 1000;
@@ -445,19 +445,19 @@ function Custom() {
         );
         this.change('loadeddata', e);
       };
-      private onTimeupdate = (e: Event) => {
+      onTimeupdate = (e: Event) => {
         this.ctx.currentState = e.type;
         this.change('timeupdate', e);
       };
-      private onVolumechange = (e: Event) => {
+      onVolumechange = (e: Event) => {
         this.ctx.currentState = e.type;
         this.change('volumechange', e);
       };
-      private onWaiting = (e: Event) => {
+      onWaiting = (e: Event) => {
         this.ctx.currentState = e.type;
         this.change('waiting', e);
       };
-      private onPlay = (e: Event) => {
+      onPlay = (e: Event) => {
         this.ctx.currentState = e.type;
         this.requestAnimationFrame(this.updateCurrentProgress);
         removeClassToElement(
@@ -471,7 +471,7 @@ function Custom() {
         this.showControllerBar();
         this.change('play', e);
       };
-      private onPlaying = (e: Event) => {
+      onPlaying = (e: Event) => {
         this.ctx.currentState = e.type;
         this._playerBtn.style.setProperty('display', 'none');
         removeClassToElement(
@@ -486,7 +486,7 @@ function Custom() {
         this.showControllerBar();
         this.change('playing', e);
       };
-      private onPause = (e: Event) => {
+      onPause = (e: Event) => {
         this.ctx.currentState = e.type;
         this._playerBtn.style.setProperty('display', 'block');
         this.change('pause', e);
@@ -505,7 +505,7 @@ function Custom() {
           this.controllerBarTimeId = undefined;
         }
       };
-      private clearListenerEvent = () => {
+      clearListenerEvent = () => {
         if (!this._video) return;
         this._video.removeEventListener('canplay', this.onCanplay);
         this._video.removeEventListener(
@@ -543,7 +543,7 @@ function Custom() {
        * @description: 用户行为和 video 之间的交互
        * @return {*}
        */
-      private listenEvent = () => {
+      listenEvent = () => {
         if (!this._video) return;
         this.clearListenerEvent();
         this._video.addEventListener('canplay', this.onCanplay);
@@ -569,7 +569,7 @@ function Custom() {
         this._video.addEventListener('volumechange', this.onVolumechange);
         this._video.addEventListener('waiting', this.onWaiting);
       };
-      private showControllerBar = (e?: MouseEvent): void => {
+      showControllerBar = (e?: MouseEvent): void => {
         if (e) {
           const dom = e.target as HTMLElement;
           if (dom.classList.value.includes('ran-player-controller')) {
@@ -605,7 +605,7 @@ function Custom() {
        * @param {MouseEvent} e
        * @return {*}
        */
-      private progressClick = (e: MouseEvent): void => {
+      progressClick = (e: MouseEvent): void => {
         const rect = this._progressWrap.getBoundingClientRect();
         const offsetX = e.clientX - rect.left;
         const percentage = range(offsetX / this._progress.offsetWidth);
@@ -617,7 +617,7 @@ function Custom() {
        * @param {MouseEvent} e
        * @return {*}
        */
-      private progressDotMouseDown = (e: MouseEvent): void => {
+      progressDotMouseDown = (e: MouseEvent): void => {
         this._playerBtn.style.setProperty('display', 'none');
         this.moveProgress.mouseDown = true;
         this.cancelAnimationFrame();
@@ -627,7 +627,7 @@ function Custom() {
        * @param {MouseEvent} e
        * @return {*}
        */
-      private progressDotMouseMove = (e: MouseEvent): void => {
+      progressDotMouseMove = (e: MouseEvent): void => {
         this.showControllerBar(e);
         if (!this.moveProgress.mouseDown) return;
         const rect = this._progress.getBoundingClientRect();
@@ -648,7 +648,7 @@ function Custom() {
        * @param {MouseEvent} e
        * @return {*}
        */
-      private progressDotMouseUp = (e: MouseEvent): void => {
+      progressDotMouseUp = (e: MouseEvent): void => {
         if (!this.moveProgress.mouseDown) return;
         const percentage = this.moveProgress.percentage;
         this.setCurrentTIme(this.ctx.duration * percentage);
@@ -661,7 +661,7 @@ function Custom() {
        * @param {Function} fn
        * @return {*}
        */
-      private requestAnimationFrame = (fn: Function): void => {
+      requestAnimationFrame = (fn: Function): void => {
         if (this.requestAnimationFrameId) return;
         this.requestAnimationFrameId = window.requestAnimationFrame(() => {
           fn();
@@ -676,7 +676,7 @@ function Custom() {
        * @param {Function} fn
        * @return {*}
        */
-      private cancelAnimationFrame = (): void => {
+      cancelAnimationFrame = (): void => {
         if (!this.requestAnimationFrameId) return;
         cancelAnimationFrame(this.requestAnimationFrameId);
         this.requestAnimationFrameId = undefined;
@@ -686,7 +686,7 @@ function Custom() {
        * @param {*} void
        * @return {*}
        */
-      private updateCurrentProgress = (): void => {
+      updateCurrentProgress = (): void => {
         const currentTime = this.getCurrentTime();
         this.ctx.currentTime = currentTime;
         const { duration } = this.ctx;
@@ -696,14 +696,13 @@ function Custom() {
         );
         this._progressDot.style.setProperty(
           'transform',
-          `translateX(${
-            (currentTime / duration) * this._progress.offsetWidth
+          `translateX(${(currentTime / duration) * this._progress.offsetWidth
           }px)`,
         );
         this._playerControllerBottomTimeCurrent.innerText =
           timeFormat(currentTime);
       };
-      private changeAttribute = (
+      changeAttribute = (
         k: string,
         o: string,
         n: string,
@@ -717,7 +716,7 @@ function Custom() {
        * @param {*} void
        * @return {*}
        */
-      private dispatchClickPlayerContainerAction = (e: Event): void => {
+      dispatchClickPlayerContainerAction = (e: Event): void => {
         e.stopPropagation();
         e.preventDefault();
         if (PLAY_STATE_LIST.includes(this.ctx.currentState)) {
@@ -733,7 +732,7 @@ function Custom() {
        * @param {KeyboardEvent} e
        * @return {*}
        */
-      private SpaceKeyDown = (e: KeyboardEvent): void => {
+      SpaceKeyDown = (e: KeyboardEvent): void => {
         e.stopPropagation();
         e.preventDefault();
         const { currentTime, duration } = this.ctx;
@@ -766,7 +765,7 @@ function Custom() {
        * @param {*} void
        * @return {*}
        */
-      private dispatchClickPlayerBtnAction = (e: Event): void => {
+      dispatchClickPlayerBtnAction = (e: Event): void => {
         e.stopPropagation();
         e.preventDefault();
         if (PLAY_STATE_LIST.includes(this.ctx.currentState)) {
@@ -777,7 +776,7 @@ function Custom() {
           this._playerBtn.style.setProperty('display', 'none');
         }
       };
-      private changeSpeedProgress = (e: Event): void => {
+      changeSpeedProgress = (e: Event): void => {
         if (this._video) {
           this.setVolume((<CustomEvent>e).detail.value);
           this.change('volume', (<CustomEvent>e).detail.value);
@@ -786,7 +785,7 @@ function Custom() {
           }
         }
       };
-      private openFullScreen = (): void => {
+      openFullScreen = (): void => {
         if (!this.ctx.fullScreen) {
           this._player
             .requestFullscreen()
@@ -807,11 +806,11 @@ function Custom() {
             });
         }
       };
-      private changeSpeed = (e: CustomEvent): void => {
+      changeSpeed = (e: CustomEvent): void => {
         this.change('speed', e.detail.value);
         this.setPlaybackRate(e.detail.value);
       };
-      private progressMouseEnter = (e: MouseEvent): void => {
+      progressMouseEnter = (e: MouseEvent): void => {
         this._playerTip.style.setProperty('opacity', '1');
         const rect = this._progress.getBoundingClientRect();
         const offsetX = e.clientX - rect.left;
@@ -830,7 +829,7 @@ function Custom() {
           (offsetX / this._progress.clientWidth) * this.ctx.duration,
         );
       };
-      private progressMouseLeave = (e: MouseEvent): void => {
+      progressMouseLeave = (e: MouseEvent): void => {
         if (
           (e.target as HTMLElement).classList.contains(
             'ran-player-controller-progress-wrap-dot',
@@ -840,7 +839,7 @@ function Custom() {
         }
         this._playerTip.style.setProperty('opacity', '0');
       };
-      private progressMouseMove = (e: MouseEvent): void => {
+      progressMouseMove = (e: MouseEvent): void => {
         const rect = this._progress.getBoundingClientRect();
         this._playerTip.style.setProperty('opacity', '1');
         const offsetX = e.clientX - rect.left;
@@ -859,7 +858,7 @@ function Custom() {
           (offsetX / this._progress.clientWidth) * this.ctx.duration,
         );
       };
-      private changePlayerVolume = (): void => {
+      changePlayerVolume = (): void => {
         if (!this._video) return;
         const { volume } = this.ctx;
         if (volume > 0) {
@@ -891,7 +890,7 @@ function Custom() {
           this.change('volume', this._volume || 0.5);
         }
       };
-      private resize = (): void => {
+      resize = (): void => {
         if (this._video) {
           const { width, height } = this._player.getBoundingClientRect();
           this._video.style.setProperty('width', `${width}px`);
@@ -899,7 +898,7 @@ function Custom() {
         }
         this.updateCurrentProgress();
       };
-      private fullScreenChange = (): void => {
+      fullScreenChange = (): void => {
         if (document.fullscreenElement?.classList.contains('ran-player')) {
           this.change('fullscreen', true);
           this.ctx.fullScreen = true;
@@ -1053,7 +1052,7 @@ function Custom() {
         window.removeEventListener('resize', this.resize);
         document.removeEventListener('fullscreenchange', this.fullScreenChange);
       }
-      attributeChangedCallback(k: string, o: string, n: string): void {}
+      attributeChangedCallback(k: string, o: string, n: string): void { }
     }
     customElements.define('r-player', RanPlayer);
     return RanPlayer;

@@ -152,6 +152,8 @@ export default defineConfig({
           items: [
             { text: 'Button 按钮', link: '/src/ranui/button/' },
             { text: 'Icon 图标', link: '/src/ranui/icon/' },
+            { text: 'Player 视频播放器', link: '/src/ranui/video/' },
+            { text: 'Progress 进度条', link: '/src/ranui/progress/' },
           ],
         },
         {

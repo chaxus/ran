@@ -1,7 +1,6 @@
 interface Window {
   ran_docs: boolean | undefined;
   uploadFile: Function;
-  
 }
 
 declare namespace NodeJS {
@@ -9,4 +8,3 @@ declare namespace NodeJS {
     ran_docs: boolean | undefined;
   }
 }
-
