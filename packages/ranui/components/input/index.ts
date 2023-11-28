@@ -248,13 +248,6 @@ function Custom() {
             },
           }),
         );
-        this.dispatchEvent(
-          new CustomEvent('Input', {
-            detail: {
-              value: this.value,
-            },
-          }),
-        );
       };
       /**
        * @description: 增加change方法，同时兼容大小写的情况
@@ -262,13 +255,6 @@ function Custom() {
       customChange = () => {
         this.dispatchEvent(
           new CustomEvent('change', {
-            detail: {
-              value: this.value,
-            },
-          }),
-        );
-        this.dispatchEvent(
-          new CustomEvent('Change', {
             detail: {
               value: this.value,
             },

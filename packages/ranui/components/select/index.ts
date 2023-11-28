@@ -9,6 +9,21 @@ interface Option {
   value: string | number;
 }
 
+interface PlacementDirection {
+  [x: string]: Record<string, string>;
+}
+
+const placementDirection: PlacementDirection = {
+  bottom: {
+    add: 'ran-select-dropdown-down-in',
+    remove: 'ran-select-dropdown-down-out',
+  },
+  top: {
+    add: 'ran-select-dropdown-up-in',
+    remove: 'ran-select-dropdown-up-out',
+  },
+};
+
 function Custom() {
   if (typeof document !== 'undefined' && !customElements.get('r-select')) {
     class Select extends HTMLElement {
@@ -36,24 +51,30 @@ function Custom() {
           'type',
           'defaultValue',
           'showSearch',
+          'placement', // 弹窗的方向
+          // 'getPopupContainer' // 挂载的节点
         ];
       }
       constructor() {
         super();
         this._slot = document.createElement('slot');
         this._select = document.createElement('div');
-        this._select.setAttribute('class', 'select');
+        this._select.setAttribute('class', 'ran-select');
+        this._select.setAttribute('part', 'select');
         this._selection = document.createElement('div');
         this._selection.setAttribute('class', 'selection');
+        this._selection.setAttribute('part', 'selection');
         this._selector = document.createElement('div');
         this._search = document.createElement('r-input');
         this._search.setAttribute('class', 'selection-search');
+        this._search.setAttribute('part', 'search');
         this._search.setAttribute('type', 'search');
         this._search.setAttribute('autocomplete', 'off');
         this._text = document.createElement('span');
         this._text.setAttribute('class', 'selection-item');
         this._icon = document.createElement('r-icon');
         this._icon.setAttribute('class', 'icon');
+        this._icon.setAttribute('part', 'icon');
         this._icon.setAttribute('name', 'arrow-down');
         this._icon.setAttribute('color', '#d9d9d9');
         this._icon.setAttribute('size', '16');
@@ -93,6 +114,18 @@ function Custom() {
       set showSearch(value) {
         this.setAttribute('showSearch', value || '');
       }
+      get type() {
+        return this.getAttribute('type');
+      }
+      set type(value) {
+        this.setAttribute('type', value || '');
+      }
+      get placement() {
+        return this.getAttribute('placement') || 'bottom';
+      }
+      set placement(value) {
+        this.setAttribute('placement', value || '');
+      }
       get sheet() {
         return this.getAttribute('sheet');
       }
@@ -129,26 +162,25 @@ function Custom() {
        * @return {*}
        */
       setSelectDropdownDisplayNone = () => {
+        if (this._selectDropDownOutTimeId) return;
         if (
           this._selectionDropdown &&
           this._selectionDropdown.style.display !== 'none'
         ) {
           addClassToElement(
             this._selectionDropdown,
-            'ran-select-dropdown-down-out',
+            placementDirection[this.placement].remove,
           );
-          if (this._selectDropDownOutTimeId) return;
           this._selectDropDownOutTimeId = setTimeout(() => {
-            this._selectionDropdown &&
-              this._selectionDropdown.style.setProperty('display', 'none');
+            this._selectionDropdown?.style.setProperty('display', 'none');
             this._selectionDropdown &&
               removeClassToElement(
                 this._selectionDropdown,
-                'ran-select-dropdown-down-out',
+                placementDirection[this.placement].remove,
               );
             clearTimeout(this._selectDropDownOutTimeId);
             this._selectDropDownOutTimeId = undefined;
-          }, 200);
+          }, 300);
         }
       };
       /**
@@ -156,46 +188,57 @@ function Custom() {
        * @return {*}
        */
       setSelectDropdownDisplayBlock = () => {
-        if (
-          this._selectionDropdown &&
-          this._selectionDropdown.style.display !== 'block'
-        ) {
-          if (this._selectDropDownInTimeId) return;
-          addClassToElement(
-            this._selectionDropdown,
-            'ran-select-dropdown-down-in',
-          );
-          this._selectionDropdown.style.setProperty('display', 'block');
+        if (this._selectDropDownInTimeId) return;
+        if (this._selectionDropdown && this._selectionDropdown.style.display !== 'block') {
+          addClassToElement(this._selectionDropdown,placementDirection[this.placement].add,);
+          this._selectionDropdown?.style.setProperty('display', 'block');
           this._selectDropDownInTimeId = setTimeout(() => {
-            this._selectionDropdown &&
-              removeClassToElement(
-                this._selectionDropdown,
-                'ran-select-dropdown-down-in',
-              );
+            this._selectionDropdown && removeClassToElement(this._selectionDropdown,placementDirection[this.placement].add);
             clearTimeout(this._selectDropDownInTimeId);
             this._selectDropDownInTimeId = undefined;
           }, 200);
+        }
+      };
+      placementPosition = () => {
+        if (!this._selectionDropdown || !this._selectDropdown) return;
+        const rect = this.getBoundingClientRect();
+        const { top, left, bottom, width, height, x, y } = rect;
+        this._text.style.setProperty(
+          'line-height',
+          `${Math.max(height - 2, 0)}px`,
+        );
+        this._selectionDropdown.style.setProperty(
+          '-ran-x',
+          `${x + window.scrollX}`,
+        );
+        this._selectionDropdown.style.setProperty(
+          '-ran-y',
+          `${y + window.scrollY}`,
+        );
+        this._selectionDropdown.style.setProperty('width', `${width}px`);
+        if (this.placement === 'top') {
+          this._selectionDropdown.style.setProperty(
+            'inset',
+            `${
+              top + window.scrollY - this._selectionDropdown.clientHeight
+            }px auto auto ${left + window.scrollX}px`,
+          );
+        } else {
+          this._selectionDropdown.style.setProperty(
+            'inset',
+            `${bottom + window.scrollY}px auto auto ${left + window.scrollX}px`,
+          );
         }
       };
       /**
        * @description: 设置下拉框
        * @return {*}
        */
-      selectMouseDown = () => {
+      selectMouseDown = (e: Event) => {
         if (isDisabled(this)) return;
-        if (!this._selectionDropdown || !this._selectDropdown) return;
-        const rect = this.getBoundingClientRect();
-        const { top, left, bottom, width, height, x, y } = rect;
-        this._text.style.setProperty('line-height', `${height}px`);
-        this._selectionDropdown.style.setProperty('-ran-x', `${x}`);
-        this._selectionDropdown.style.setProperty('-ran-y', `${y}`);
-        this._selectionDropdown.style.setProperty('width', `${width}px`);
-        this._selectionDropdown.style.setProperty(
-          'inset',
-          `${bottom}px auto auto ${left}px`,
-        );
         this.setSelectDropdownDisplayNone();
         this.setSelectDropdownDisplayBlock();
+        this.placementPosition();
       };
       /**
        * @description: 焦点移除的情况，需要移除select 下拉框
@@ -346,9 +389,9 @@ function Custom() {
       };
       connectedCallback() {
         this.handlerExternalCss();
+        this.createOption();
         this.addEventListener('mousedown', this.selectMouseDown);
         this.addEventListener('blur', this.selectBlur);
-        this.createOption();
         this.listenSlotChange();
         this.setShowSearch();
       }
