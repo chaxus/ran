@@ -790,6 +790,7 @@ function Custom() {
           this._player
             .requestFullscreen()
             .then(() => {
+              this.resize()
               this.ctx.fullScreen = true;
             })
             .catch((error) => {
@@ -799,6 +800,7 @@ function Custom() {
           document
             .exitFullscreen()
             .then(() => {
+              this.resize()
               this.ctx.fullScreen = false;
             })
             .catch((error) => {
