@@ -1,28 +1,28 @@
-# 23 种经典设计模式
+# 23 classic design patterns
 
-> 设计模式 `Design Pattern` 是一套被反复使用、多数人知晓的、经过分类编目的、代码设计经验的总结，使用设计模式是为了可重用代码、让代码更容易被他人理解并且保证代码可靠性。。
+> The Design Pattern is a set of frequently used, widely known, cataloged code design experiences that are used in order to reuse code, make it easier for others to understand, and ensure code reliability.
 
-在《设计模式：可复用面向对象软件的基础》一书中所介绍的 23 种经典设计模式，不过设计模式并不仅仅只有这 23 种，随着软件开发行业的发展，越来越多的新模式不断诞生并得以应用。有经验的开发者在学习设计模式可以和过往的经验互相印证，更容易理解这些设计模式。
+In the book "Design Patterns: The Foundation of Reusable Object-Oriented Software" introduced 23 classic design patterns, but the design pattern is not only these 23, with the development of software development industry, more and more new patterns continue to be born and applied. Experienced developers learn design patterns that can be corroborated with past experience, making it easier to understand them.
 
-设计模式一般包含模式名称、问题、目的、解决方案、效果等组成要素。问题描述了应该在何时使用模式，它包含了设计中存在的问题以及问题存在的原因。解决方案描述了一个设计模式的组成成分，以及这些组成成分之间的相互关系，各自的职责和协作方式，通常解决方案通过 `UML` 类图和核心代码来进行描述。效果描述了模式的优缺点以及在使用模式时应权衡的问题。
+A design pattern generally contains elements such as the pattern name, problem, purpose, solution, and effect. The problem describes when patterns should be used, and it contains problems with the design and why they exist. A solution describes the components of a design pattern and how these components relate to each other, their respective responsibilities, and how they work together. Typically, the solution is described through UML class diagrams and core code. Effects describe the advantages and disadvantages of the pattern and the trade-offs that should be made when using the pattern.
 
-**为什么要学习设计模式**:
+**Why learn design patterns**:
 
-- 设计模式来源众多专家的经验和智慧，它们是从许多优秀的软件系统中总结出的成功的、能够实现可维护性复用的设计方案，使用这些方案将可以让我们避免做一些重复性的工作
+- Design patterns are derived from the experience and wisdom of many experts. They are successful and reusable design solutions from many excellent software systems. Using these solutions will allow us to avoid doing some repetitive work
 
-- 设计模式提供了一套通用的设计词汇和一种通用的形式来方便开发人员之间沟通和交流，使得设计方案更加通俗易懂
+- Design patterns provide a common set of design vocabulary and a common form to facilitate communication and exchange between developers, making design solutions more understandable
 
-- 大部分设计模式都兼顾了系统的可重用性和可扩展性，这使得我们可以更好地重用一些已有的设计方案、功能模块甚至一个完整的软件系统，避免我们经常做一些重复的设计、编写一些重复的代码
+- Most of the design patterns take into account the reusability and extensibility of the system, which enables us to better reuse some existing design schemes, functional modules and even a complete software system, so as to avoid us often doing some repetitive design and writing some repetitive code
 
-- 合理使用设计模式并对设计模式的使用情况进行文档化，将有助于别人更快地理解系统
+- Proper use of design patterns and documentation of their use will help others understand the system more quickly
 
-- 学习设计模式将有助于初学者更加深入地理解面向对象思想
+- Learning design patterns will help beginners understand object-oriented ideas more deeply
 
-**储备知识**：
+**Reserve knowledge**：
 
-- 抽象类：一般抽象类都是作为基类，比如说「电脑」就可以作为一个抽象类，根据抽象类派生出「台式电脑」和「笔记本电脑」2 种具体类。一般不对抽象类进行实例化。
+- Abstract class: The general abstract class is as a base class, for example, "computer" can be used as an abstract class, according to the abstract class derived "desktop computer" and "laptop computer" 2 concrete classes. Abstract classes are generally not instantiated.
 
-- 组合优于继承：不能滥用继承来拓展功能，配合组合会更灵活。同样拿「电脑」抽象类来举例，如果使用继承，区分不同类型的「电脑」我们可以派生出「台式电脑」和「笔记本电脑」，如果再增加一个维度，根据品牌又能继续细分出「联想台式电脑」、「联想笔记本电脑」、「苹果台式电脑」和「苹果笔记本电脑」等等，如果再增加一个维度继续细分下去，显然继承是无法胜任的。这个时候可以使用继承加组合方式，组合的对象也可以进行抽象化设计：
+- Combination is better than inheritance: inheritance cannot be abused to expand functionality, and combination is more flexible. Also take the "computer" abstract class for example, if we use inheritance to distinguish different types of "computer" we can derive "desktop computer" and "laptop computer", if we add another dimension, according to the brand can continue to subdivide "Lenovo desktop computer", "Lenovo laptop", "Apple desktop computer" and "Apple laptop" and so on. If you add another dimension and continue to subdivide, it is clear that inheritance is not adequate. At this time, you can use inheritance and composition, and the combined object can also be abstract design:
 
   ```ts
   // 品牌
@@ -54,27 +54,27 @@
   interface NotebookComputer extends Computer {}
   ```
 
-## 一、UML 类图
+## 一、UML class diagram
 
-每个模式都有相应的对象结构图，同时为了展示对象间的交互细节， 有些时候会用到 `UML` 图来介绍其如何运行。这里不会将 `UML` 的各种元素都提到，只想讲讲类图中各个类之间的关系， 能看懂类图中各个类之间的线条、箭头代表什么意思后，也就足够应对日常的工作和交流。同时，我们应该能将类图所表达的含义和最终的代码对应起来。有了这些知识，看后面章节的设计模式结构图就没有什么问题了。
+Each pattern has a corresponding object structure diagram, and in order to show the details of the interaction between objects, sometimes a 'UML' diagram is used to show how it works. Here will not be the various elements of 'UML' mentioned, just want to talk about the relationship between the classes in the class diagram, can understand the meaning of the lines and arrows between the classes in the class diagram, it is enough to deal with daily work and communication. At the same time, we should be able to match the meaning of the class diagram to the final code. With this knowledge, there is no problem looking at the design pattern structure diagram in the later sections.
 
 <!-- 本文中大部分是 UML 类图，也有个别简易流程图。由于文中部分模式并未配图，你可以在[这里](../../assets/article/designPattern/UML/创建型/单例.jpg)查看我在网络上收集的完整 23 种设计模式 UML 类图。 -->
 
-### 1.1 继承
+### 1.1 inherit
 
-继承用一条带空心箭头的直接表示。
+Inheritance is represented directly by a hollow arrow.
 
 ![](../../../assets/article/designPattern/继承.png)
 
-### 1.2 实现
+### 1.2 realize
 
-实现关系用一条带空心箭头的虚线表示。
+The implementation relationship is represented by a dashed line with a hollow arrow.
 
 ![](../../../assets/article/designPattern/实现.png)
 
-### 1.3 组合
+### 1.3 assembly
 
-与聚合关系一样，组合关系同样表示整体由部分构成的语义。比如公司由多个部门组成，但组合关系是一种强依赖的特殊聚合关系，如果整体不存在了，则部分也不存在了。例如，公司不存在了，部门也将不存在了。
+Like aggregation relations, composition relations also represent the semantics of a whole made up of parts. For example, a company is composed of multiple departments, but the combinatorial relationship is a special aggregation relationship of strong dependence, if the whole does not exist, then the part does not exist. For example, the company no longer exists, and the department will no longer exist.
 
 ![](../../../assets/article/designPattern/组合.png)
 
@@ -1686,13 +1686,13 @@ Visitor.splice(a,2);
 - 增加新的元素类很困难。在访问者模式中，每增加一个新的元素类都意味着要在抽象访问者角色中增加一个新的抽象操作，并在每一个具体访问者类中增加相应的具体操作，这违背了“开闭原则”的要求。
 - 破坏封装。访问者模式要求访问者对象访问并调用每一个元素对象的操作，这意味着元素对象有时候必须暴露一些自己的内部操作和内部状态，否则无法供访问者访问。
 
-## 总结
+## Sum up
 
-系统地学习设计模式后，你可以在过往的开发经历中发现，设计模式是无处不在的。在学习设计模式之前的很多时候我们是凭借过往经验和智慧来完善系统的设计，而这些经验很多和某个设计模式的思想不谋而合。
+After systematically studying design patterns, you can see in your past development experience that design patterns are everywhere. Before learning design patterns, we often rely on past experience and wisdom to improve the design of a system, and many of these experiences coincide with the idea of a certain design pattern.
 
-还有一些地方没有完全理解，文中有误之处还望不吝指出。
+There are still some places that are not fully understood, and I would like to point out the mistakes in the article.
 
-## 参考资料
+## Reference material
 
 - [Study-Plan](https://github.com/xietao3/Study-Plan)
 - [javaScript 设计模式统计](https://zhuanlan.zhihu.com/p/472719016)

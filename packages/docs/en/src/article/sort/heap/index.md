@@ -1,19 +1,19 @@
-# 堆排序（Heap Sort）
+# Heap Sort
 
-堆排序（Heapsort）是指利用堆这种数据结构所设计的一种排序算法。堆积是一个近似完全二叉树的结构，并同时满足堆积的性质：即子结点的键值或索引总是小于（或者大于）它的父节点。
+Heapsort (Heapsort) is a kind of sorting algorithm designed by using the heap data structure. A heap is an almost complete binary tree structure, but also satisfies the property of a heap: the key value or index of a child node is always less than (or greater than) its parent node.
 
-## 算法描述
+## Algorithm description
 
-- 将初始待排序关键字序列(R1,R2….Rn)构建成大顶堆，此堆为初始的无序区；
-- 将堆顶元素 R[1]与最后一个元素 R[n]交换，此时得到新的无序区(R1,R2,……Rn-1)和新的有序区(Rn),且满足 R[1,2…n-1]<=R[n]；
-- 由于交换后新的堆顶 R[1]可能违反堆的性质，因此需要对当前无序区(R1,R2,……Rn-1)调整为新堆，然后再次将 R[1]与无序区最后一个元素交换，得到新的无序区(R1,R2….Rn-2)和新的有序区(Rn-1,Rn)。不断重复此过程直到有序区的元素个数为 n-1，则整个排序过程完成。
-- 升序用大根堆，降序用小根堆
+- The initial sequence of keywords to be sorted (R1,R2... .Rn) builds a large top heap, which is the initial disordered region;
+- Swap the top element R[1] with the last element R[n] to get a new unordered region (R1,R2,... Rn-1) and a new ordered region (Rn), satisfying R[1,2... n-1]&lt; =R[n];
+- Since the new top R[1] may violate the nature of the heap after exchange, it is necessary to adjust the current disorder region (R1,R2,... Rn-1) adjusts to the new heap, then swaps R[1] again with the last element of the unordered area, giving a new unordered area (R1,R2... .Rn-2) and the new ordered region (RN-1,Rn). Repeat this process until the number of elements in the ordered area is n-1, then the sorting process is complete.
+- Use large root piles in ascending order and small root piles in descending order
 
-## 动图演示
+## GIF presentation
 
-![堆排序](../../../../../assets/ranuts/sort/heap.gif)
+![Heap Sort](../../../../../assets/ranuts/sort/heap.gif)
 
-## 代码演示
+## Code demonstration
 
 ```ts
 class Heap {
@@ -58,7 +58,7 @@ class Heap {
 }
 
 /**
- * @description: 堆排序
+ * @description: Heap Sort
  * @param {Array} list
  * @return {Array}
  */

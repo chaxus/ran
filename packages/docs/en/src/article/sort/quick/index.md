@@ -1,24 +1,24 @@
-# 快速排序（Quick Sort）
+# Quick Sort
 
-快速排序的基本思想：通过一趟排序将待排记录分隔成独立的两部分，其中一部分记录的关键字均比另一部分的关键字小，则可分别对这两部分记录继续进行排序，以达到整个序列有序。
+The basic idea of quick sorting is that the records to be sorted are separated into two independent parts through one sort. The keywords of one part of the records are smaller than those of the other part. Then the two parts of the records can be sorted separately to achieve the entire sequence.
 
-## 算法描述
+## Algorithm description
 
-快速排序使用分治法来把一个串（list）分为两个子串（sub-lists）。具体算法描述如下：
+Quicksort uses divide-and-conquer to divide a list into two sub-lists. The specific algorithm is described as follows:
 
-- 从数列中挑出一个元素，称为 “基准”（pivot）；
-- 重新排序数列，所有元素比基准值小的摆放在基准前面，所有元素比基准值大的摆在基准的后面（相同的数可以到任一边）。在这个分区退出之后，该基准就处于数列的中间位置。这个称为分区（partition）操作；
-- 递归地（recursive）把小于基准值元素的子数列和大于基准值元素的子数列排序。
+- Picking out an element from the sequence, called a "pivot";
+- Reorder the sequence so that all elements smaller than the base value are placed in front of the base value and all elements larger than the base value are placed behind the base value (the same number can go to either side). After the partition exits, the benchmark is in the middle of the sequence. This is called a partition operation;
+- Recursively sorts subsequences of elements less than the base value and subsequences of elements greater than the base value.
 
-## 动图演示
+## GIF presentation
 
-![快速排序](../../../../../assets/ranuts/sort/quick.gif)
+![Quick Sort](../../../../../assets/ranuts/sort/quick.gif)
 
-## 代码演示
+## Code demonstration
 
 ```ts
 /**
- * @description: 设置基准值pivot
+ * @description: Sets the base value pivot
  * @param {Array} list
  * @param {number} left
  * @param {number} right
@@ -45,7 +45,7 @@ const partition = (list: number[] = [], left: number, right: number) => {
   return index - 1;
 };
 /**
- * @description: 不断分区，设置基准值
+ * @description: Continuously partition, set the reference value
  * @param {Array} list
  * @param {number} left
  * @param {number} right
@@ -60,7 +60,7 @@ const combine = (list: number[], left: number, right: number) => {
   return list;
 };
 /**
- * @description: 快速排序
+ * @description: Quick sort
  * @param {Array} list
  * @return {Array}
  */

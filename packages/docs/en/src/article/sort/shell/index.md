@@ -1,24 +1,24 @@
-# 希尔排序（Shell Sort）
+# Shell Sort
 
-1959 年 Shell 发明，第一个突破 O(n2)的排序算法，是简单插入排序的改进版。它与插入排序的不同之处在于，它会优先比较距离较远的元素。希尔排序又叫缩小增量排序。
+Shell was invented in 1959, and the first breakthrough O(n2) sorting algorithm was an improved version of simple insertion sorting. It differs from insertion sort in that it gives preference to more distant elements. Hill sort is also called reduced increment sort.
 
-## 算法描述
+## Algorithm description
 
-先将整个待排序的记录序列分割成为若干子序列分别进行直接插入排序，具体算法描述：
+First, the whole record sequence to be sorted is divided into several sub-sequences for direct insertion sorting. The specific algorithm is described as follows:
 
-- 选择一个增量序列 t1，t2，…，tk，其中 ti>tj，tk=1；
-- 按增量序列个数 k，对序列进行 k 趟排序；
-- 每趟排序，根据对应的增量 ti，将待排序列分割成若干长度为 m 的子序列，分别对各子表进行直接插入排序。仅增量因子为 1 时，整个序列作为一个表来处理，表长度即为整个序列的长度。
+- Select an incremental sequence t1, t2,... tk, wherein ti&gt; tj, tk=1;
+- According to the number of incremental sequences k, the sequence is sorted by k passes.
+- For each sequence, according to the corresponding increment ti, the sequence to be sorted is divided into several sub-sequences with length m, and each sub-table is sorted by direct insertion. When the increment factor is only 1, the entire sequence is treated as a table, and the length of the table is the length of the entire sequence.
 
-## 动图演示
+## GIF presentation
 
-![希尔排序](../../../../../assets/ranuts/sort/shell.gif)
+![Shell Sort](../../../../../assets/ranuts/sort/shell.gif)
 
-## 代码实现
+## Code implementation
 
 ```js
 /**
- * @description: 希尔排序，是简单插入排序的改进版。它与插入排序的不同之处在于，它会优先比较距离较远的元素。希尔排序又叫缩小增量排序。
+ * @description: Hill sort is an improved version of simple insertion sort. It differs from insertion sort in that it gives preference to more distant elements. Hill sort is also called reduced increment sort.
  * @param {Array} list
  * @return {Array}
  */
@@ -39,6 +39,6 @@ const shell = (list: number[]): number[] => {
 };
 ```
 
-## 算法分析
+## Algorithm analysis
 
-希尔排序的核心在于间隔序列的设定。既可以提前设定好间隔序列，也可以动态的定义间隔序列。动态定义间隔序列的算法是《算法（第 4 版）》的合著者 Robert Sedgewick 提出的。
+The core of Hill sort is the setting of interval sequence. The interval sequence can be set in advance, and the interval sequence can be defined dynamically. The algorithm for dynamically defining interval sequences was developed by Robert Sedgewick, co-author of Algorithms (4th Edition).
