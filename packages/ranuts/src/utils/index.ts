@@ -157,7 +157,7 @@ export const mergeExports = (obj: Object, exports: Object): Object => {
   return Object.freeze(obj);
 };
 
-export const noop = (): void => {};
+export const noop = (): void => { };
 
 export type Noop = () => void;
 /**
@@ -379,9 +379,9 @@ export function querystring(data = {}): string {
         value === undefined || value === null
           ? searchParams
           : (searchParams.append(
-              decodeURIComponent(name),
-              decodeURIComponent(value),
-            ),
+            decodeURIComponent(name),
+            decodeURIComponent(value),
+          ),
             searchParams),
       new URLSearchParams(),
     )
@@ -390,7 +390,7 @@ export function querystring(data = {}): string {
 
 const transitionJsonToString = (
   jsonObj: string | JSON,
-  callback = (error: Error) => {},
+  callback = (error: Error) => { },
 ) => {
   // 转换后的jsonObj受体对象
   let _jsonObj: string = '';
@@ -421,7 +421,7 @@ const transitionJsonToString = (
   return _jsonObj;
 };
 // callback为数据格式化错误的时候处理函数
-export const formatJson = (jsonObj: string, callback = () => {}): string => {
+export const formatJson = (jsonObj: string, callback = () => { }): string => {
   // 转换后的字符串变量
   let formatted = '';
   // 换行缩进位数
@@ -683,6 +683,7 @@ export const removeClassToElement = (
  * @return {*}
  */
 export const timeFormat = (time: number): string => {
+  if (time === 0) return '00:00'
   if (!time) return '';
   const hour = Math.trunc(time / 3600);
   const minute = Math.trunc((time % 3600) / 60);
@@ -756,7 +757,7 @@ export class QuestQueue {
    * @description: 传入异步函数，添加到队列并执行
    * @param {Fun} asynchronous
    * @return {*}
-   */  
+   */
   add = (asynchronous: Fun): void => {
     if (typeof asynchronous !== 'function') return;
     const task = () => {
@@ -777,7 +778,7 @@ export class QuestQueue {
    * @description: 执行异步函数
    * @param {*} Promise
    * @return {*}
-   */  
+   */
   running = (): Promise<unknown> => {
     return new Promise((resolve, reject) => {
       if (this.current <= this.simultaneous && this.queue.length) {
@@ -799,7 +800,7 @@ export class QuestQueue {
    * @description: 并发执行所有的异步函数，并返回所有的结果
    * @param {*} Promise
    * @return {*}
-   */  
+   */
   allSettled = (): Promise<unknown> => {
     return new Promise((resolve, reject) => {
       const result: unknown[] = [];

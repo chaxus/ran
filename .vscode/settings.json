@@ -12,6 +12,7 @@
     "denormalise",
     "Deoptimization",
     "DOMAPI",
+    "dropdownclass",
     "esbuild",
     "IIFE",
     "keyof",

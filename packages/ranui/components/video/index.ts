@@ -9,11 +9,14 @@ import {
 } from 'ranuts';
 import '@/assets/js/hls.js';
 import type { Progress } from '@/components/progress';
+import type { Select } from '@/components/select';
+import '@/components/select'
 import './index.less';
 
 const PLAY_STATE_LIST = ['play', 'playing', 'timeupdate'];
 
 export interface HlsPlayer {
+  startLoad(): () => void;
   off: (s: string, f: Function) => void;
   on: (s: string, f: Function) => void;
   loadSource: (s: string) => void;
@@ -39,15 +42,16 @@ export interface Context {
   volume: number;
   playbackRate: number;
   fullScreen: boolean;
-  levels: Level[];
+  levels: Partial<Level>[];
   url: string;
+  levelMap: Map<string, string>
+  clarity: string;
 }
 
 const SPEED = [
   { label: '2.0X', value: 2.0 },
   { label: '1.5X', value: 1.5 },
   { label: '1.0X', value: 1 },
-  { label: '0.75X', value: 0.75 },
   { label: '0.5X', value: 0.5 },
 ];
 
@@ -73,10 +77,10 @@ function Custom() {
       _playerControllerBottomTimeCurrent: HTMLDivElement;
       _playerControllerBottomTimeDuration: HTMLDivElement;
       _playerControllerBottomTimeDivide: HTMLDivElement;
-      _playControllerBottomClarity: HTMLDivElement;
+      _playControllerBottomClarity: HTMLElement;
       _playControllerBottomSpeed: HTMLDivElement;
       _playControllerBottomSpeedIcon: HTMLDivElement;
-      _playControllerBottomSpeedProgress: Progress;
+      _playControllerBottomVolumeProgress: Progress;
       _playControllerBottomRightFullScreen: HTMLDivElement;
       _playControllerBottomVolume: HTMLDivElement;
       _playControllerBottomSpeedPopover: HTMLElement;
@@ -88,7 +92,7 @@ function Custom() {
       _video?: HTMLVideoElement;
       _hls?: HlsPlayer;
       static get observedAttributes(): string[] {
-        return ['src', 'volume', 'playTime', 'playbackRate'];
+        return ['src', 'volume', 'currentTime', 'playbackRate'];
       }
       /**
        * @description: 初始化view和video的全局上下文
@@ -159,22 +163,26 @@ function Custom() {
           'class',
           'ran-player-controller-bottom-left-time-duration',
         );
-        // clarity
-        this._playControllerBottomClarity = document.createElement('div');
-        this._playControllerBottomClarity.setAttribute(
-          'class',
-          'ran-player-controller-bottom-right-clarity',
-        );
         // speed
         this._playControllerBottomSpeed = document.createElement('div');
         this._playControllerBottomSpeed.setAttribute(
           'class',
           'ran-player-controller-bottom-right-speed',
         );
-        this._playControllerBottomSpeedPopover =
-          document.createElement('ran-popover');
+        this._playControllerBottomSpeedPopover = document.createElement('r-select');
         this._playControllerBottomSpeedPopover.setAttribute('value', '1');
+        this._playControllerBottomSpeedPopover.setAttribute('type', 'text');
+        this._playControllerBottomSpeedPopover.setAttribute('placement', 'top');
+        this._playControllerBottomSpeedPopover.setAttribute('dropdownclass', 'video-speed-dropdown');
+        this._playControllerBottomSpeedPopover.addEventListener('change', this.changeSpeed)
         const Fragment = document.createDocumentFragment();
+        SPEED.forEach(item => {
+          const { label, value } = item
+          const option = document.createElement('r-option')
+          option.innerHTML = label
+          option.setAttribute('value', `${value}`)
+          Fragment.appendChild(option)
+        })
         this._playControllerBottomSpeedPopover.appendChild(Fragment);
         this._playControllerBottomSpeed.appendChild(
           this._playControllerBottomSpeedPopover,
@@ -185,19 +193,25 @@ function Custom() {
           'class',
           'ran-player-controller-bottom-right-volume',
         );
-        this._playControllerBottomSpeedProgress = <Progress>(
+        this._playControllerBottomVolumeProgress = <Progress>(
           document.createElement('r-progress')
         );
-        this._playControllerBottomSpeedProgress.setAttribute(
+        this._playControllerBottomVolumeProgress.setAttribute(
           'class',
           'ran-player-controller-bottom-right-volume-progress',
         );
-        this._playControllerBottomSpeedProgress.setAttribute('percent', '0.5');
-        this._playControllerBottomSpeedProgress.setAttribute('type', 'drag');
+        this._playControllerBottomVolumeProgress.setAttribute('percent', '0.5');
+        this._playControllerBottomVolumeProgress.setAttribute('type', 'drag');
         this._playControllerBottomSpeedIcon = document.createElement('div');
         this._playControllerBottomSpeedIcon.setAttribute(
           'class',
           'ran-player-controller-bottom-right-volume-icon ran-player-controller-bottom-right-volume-icon-volume',
+        );
+        // clarity
+        this._playControllerBottomClarity = document.createElement('div');
+        this._playControllerBottomClarity.setAttribute(
+          'class',
+          'ran-player-controller-bottom-right-clarity',
         );
         // fullscreen
         this._playControllerBottomRightFullScreen =
@@ -261,7 +275,7 @@ function Custom() {
         this._playControllerBottomVolume.appendChild(
           createDocumentFragment([
             this._playControllerBottomSpeedIcon,
-            this._playControllerBottomSpeedProgress,
+            this._playControllerBottomVolumeProgress,
           ])!,
         );
         this._playerControllerBottomRight.appendChild(
@@ -274,15 +288,17 @@ function Custom() {
         );
         // ctx
         this.ctx = {
-          currentTime: 0,
-          duration: 0,
-          currentState: '',
-          action: new SyncHook(),
-          volume: 0.5,
-          playbackRate: 1,
-          fullScreen: false,
-          levels: [],
-          url: '',
+          currentTime: 0, // 当前时间
+          duration: 0, // 总时长
+          currentState: '', // 当前视频状态
+          action: new SyncHook(), // 不同时期触发的状态
+          volume: 0.5, // 当前音量
+          playbackRate: 1, // 当前倍速
+          clarity: '', // 当前清晰度
+          fullScreen: false, // 是否全屏
+          levels: [], // 清晰度列表
+          url: '', // 当前播放的地址
+          levelMap: new Map() // 清晰度和名字的映射关系
         };
         this.moveProgress = {
           percentage: 0,
@@ -301,14 +317,78 @@ function Custom() {
       set volume(value: string) {
         this.setAttribute('volume', value || '');
       }
+      get currentTime(): string {
+        return this.getAttribute('currentTime') || '';
+      }
+      set currentTime(value: string) {
+        this.setAttribute('currentTime', value || '');
+      }
+      get playbackRate(): string {
+        return this.getAttribute('playbackRate') || '';
+      }
+      set playbackRate(value: string) {
+        this.setAttribute('playbackRate', value || '');
+      }
+      changeClarityToSetVideo = () => {
+        const { currentTime, playbackRate, volume, currentState } = this.ctx
+        this.setCurrentTime(currentTime)
+        this.setPlaybackRate(playbackRate)
+        this.setVolume(volume)
+        if (PLAY_STATE_LIST.includes(currentState)) {
+          this.play()
+        } else {
+          this.pause()
+        }
+      }
+      changeClarity = (e: Event) => {
+        this.ctx.clarity = (<CustomEvent>e).detail.value
+        const url = this.ctx.levelMap.get((<CustomEvent>e).detail.value)
+        if (url && this._hls) {
+          this._hls.loadSource(url);
+          this._hls.startLoad()
+          this.changeClarityToSetVideo()
+        }
+      }
+      createClaritySelect = () => {
+        const { levels, url } = this.ctx
+        this._playControllerBottomClarity.innerHTML = ''
+        if (levels.length <= 0) return
+        const Fragment = document.createDocumentFragment()
+        levels.forEach(item => {
+          const { name, url } = item
+          if (!name || !url) return
+          this.ctx.levelMap.set(name, url)
+          const option = document.createElement('r-option')
+          option.setAttribute('value', name)
+          option.innerHTML = name
+          Fragment.appendChild(option)
+        })
+        const select = document.createElement('r-select')
+        select.setAttribute('value', this.ctx.clarity || 'Auto')
+        select.appendChild(Fragment)
+        select.setAttribute('type', 'text');
+        select.setAttribute('placement', 'top');
+        select.setAttribute('dropdownclass', 'video-clarity-dropdown');
+        select.addEventListener('change', this.changeClarity)
+        this._playControllerBottomClarity.appendChild(select)
+      }
       manifestLoaded = (
         type: string,
         data: { levels: Level[]; url: string },
       ) => {
         if (type === 'hlsManifestLoaded') {
-          const { url, levels } = data;
-          this.ctx.levels = levels;
+          const { url, levels = [] } = data;
+          if (levels.length <= 0) return
+          levels.forEach(item => {
+            if (this.ctx.levelMap.get(item.name) === item.url) return
+            this.ctx.levels.push(item)
+          })
+          if (!this.ctx.levelMap.get('Auto')) {
+            this.ctx.levels.push({ name: 'Auto', url })
+            this.ctx.levelMap.set('Auto', url)
+          }
           this.ctx.url = url;
+          this.createClaritySelect()
         }
       };
       /**
@@ -317,9 +397,7 @@ function Custom() {
        */
       updatePlayer = () => {
         const { Hls } = window;
-        if (!this.contains(this._player)) {
-          this.appendChild(this._player);
-        }
+        if (!this.contains(this._player)) this.appendChild(this._player);
         if (this._hls) {
           this._hls.destroy();
           this._hls = undefined;
@@ -437,8 +515,8 @@ function Custom() {
       onLoadeddata = (e: Event) => {
         this.ctx.currentState = e.type;
         const duration = this.getTotalTime();
-        this.ctx.duration = Math.floor(duration * 1000) / 1000;
-        this._playerControllerBottomTimeCurrent.innerText = '0.00';
+        this.ctx.duration = duration;
+        this._playerControllerBottomTimeCurrent.innerText = '00:00';
         this._playerControllerBottomTimeDivide.innerText = '/';
         this._playerControllerBottomTimeDuration.innerText = timeFormat(
           this.ctx.duration,
@@ -609,7 +687,7 @@ function Custom() {
         const rect = this._progressWrap.getBoundingClientRect();
         const offsetX = e.clientX - rect.left;
         const percentage = range(offsetX / this._progress.offsetWidth);
-        this.setCurrentTIme(this.ctx.duration * percentage);
+        this.setCurrentTime(this.ctx.duration * percentage);
         this.updateCurrentProgress();
       };
       /**
@@ -648,10 +726,10 @@ function Custom() {
        * @param {MouseEvent} e
        * @return {*}
        */
-      progressDotMouseUp = (e: MouseEvent): void => {
+      progressDotMouseUp = (): void => {
         if (!this.moveProgress.mouseDown) return;
         const percentage = this.moveProgress.percentage;
-        this.setCurrentTIme(this.ctx.duration * percentage);
+        this.setCurrentTime(this.ctx.duration * percentage);
         this.play();
         this.moveProgress.mouseDown = false;
         this.requestAnimationFrame(this.updateCurrentProgress);
@@ -699,8 +777,9 @@ function Custom() {
           `translateX(${(currentTime / duration) * this._progress.offsetWidth
           }px)`,
         );
-        this._playerControllerBottomTimeCurrent.innerText =
-          timeFormat(currentTime);
+        if (currentTime >= 0) {
+          this._playerControllerBottomTimeCurrent.innerText = timeFormat(currentTime);
+        }
       };
       changeAttribute = (
         k: string,
@@ -751,12 +830,12 @@ function Custom() {
         }
         if (e.code === 'ArrowLeft') {
           const time = range(currentTime - 5, 0, duration);
-          this.setCurrentTIme(time);
+          this.setCurrentTime(time);
           this.play();
         }
         if (e.code === 'ArrowRight') {
           const time = range(currentTime + 5, 0, duration);
-          this.setCurrentTIme(time);
+          this.setCurrentTime(time);
           this.play();
         }
       };
@@ -776,7 +855,7 @@ function Custom() {
           this._playerBtn.style.setProperty('display', 'none');
         }
       };
-      changeSpeedProgress = (e: Event): void => {
+      changeVolumeProgress = (e: Event): void => {
         if (this._video) {
           this.setVolume((<CustomEvent>e).detail.value);
           this.change('volume', (<CustomEvent>e).detail.value);
@@ -808,9 +887,9 @@ function Custom() {
             });
         }
       };
-      changeSpeed = (e: CustomEvent): void => {
-        this.change('speed', e.detail.value);
-        this.setPlaybackRate(e.detail.value);
+      changeSpeed = (e: Event): void => {
+        this.change('speed', (<CustomEvent>e).detail.value);
+        this.setPlaybackRate((<CustomEvent>e).detail.value);
       };
       progressMouseEnter = (e: MouseEvent): void => {
         this._playerTip.style.setProperty('opacity', '1');
@@ -872,7 +951,7 @@ function Custom() {
             this._playControllerBottomSpeedIcon,
             'ran-player-controller-bottom-right-volume-icon-volume',
           );
-          this._playControllerBottomSpeedProgress.setAttribute('percent', '0');
+          this._playControllerBottomVolumeProgress.setAttribute('percent', '0');
           this.setVolume(0);
           this.change('volume', 0);
         } else {
@@ -884,7 +963,7 @@ function Custom() {
             this._playControllerBottomSpeedIcon,
             'ran-player-controller-bottom-right-volume-icon-mute',
           );
-          this._playControllerBottomSpeedProgress.setAttribute(
+          this._playControllerBottomVolumeProgress.setAttribute(
             'percent',
             `${this._volume || 0.5}`,
           );
@@ -935,7 +1014,7 @@ function Custom() {
         }
         return this.ctx.volume;
       };
-      public setCurrentTIme = (n: number) => {
+      public setCurrentTime = (n: number) => {
         if (this._video) {
           this.ctx.currentTime = n;
           this._video.currentTime = n;
@@ -992,9 +1071,9 @@ function Custom() {
         this._progress.addEventListener('mouseleave', this.progressMouseLeave);
         this._player.addEventListener('mousemove', this.progressDotMouseMove);
         this._player.addEventListener('mouseup', this.progressDotMouseUp);
-        this._playControllerBottomSpeedProgress.addEventListener(
+        this._playControllerBottomVolumeProgress.addEventListener(
           'change',
-          this.changeSpeedProgress,
+          this.changeVolumeProgress,
         );
         this._playControllerBottomRightFullScreen.addEventListener(
           'click',
@@ -1043,9 +1122,9 @@ function Custom() {
           this.progressDotMouseMove,
         );
         this._player.removeEventListener('mouseup', this.progressDotMouseUp);
-        this._playControllerBottomSpeedProgress.removeEventListener(
+        this._playControllerBottomVolumeProgress.removeEventListener(
           'change',
-          this.changeSpeedProgress,
+          this.changeVolumeProgress,
         );
         this._playControllerBottomRightFullScreen.removeEventListener(
           'click',

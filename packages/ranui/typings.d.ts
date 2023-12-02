@@ -36,6 +36,7 @@ interface HlsPlayer {
   loadSource: (s: string) => void;
   attachMedia: (v: HTMLVideoElement) => void;
   destroy: () => void;
+  startLoad(): () => void;
 }
 
 interface Hls {

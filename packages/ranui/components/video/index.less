@@ -1,23 +1,54 @@
+@import url("../../base.less");
+
 @number: 49;
-
-@font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji',
-'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-
-@box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.08),
-  0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
 
 @keyframes loading {
   .circle(@index) when (@index < @number) {
     @i: @index+1;
     @x: round((@i / @number) * 100, 2);
-    @selector: e('@{x}%');
+    @selector: e("@{x}%");
     @{selector} {
-      background-image: url('../../assets/image/loading/1_@{i}.png');
+      background-image: url("../../assets/image/loading/1_@{i}.png");
     }
     .circle(@i);
   }
   .circle(0);
+}
+
+.video-speed-dropdown {
+  background-color: #595959;
+  .ranui-select-dropdown-option-item {
+    padding: 2px 4px;
+    .ranui-select-dropdown-option-item-content {
+      font-size: 12px;
+      color: #fff;
+      text-align: center;
+    }
+  }
+  .ranui-select-dropdown-option-active {
+    background-color: transparent;
+    .ranui-select-dropdown-option-item-content {
+      color: #1890ff;
+    }
+  }
+}
+
+.video-clarity-dropdown {
+  background-color: #595959;
+  .ranui-select-dropdown-option-item {
+    padding: 2px 4px;
+    .ranui-select-dropdown-option-item-content {
+      font-size: 12px;
+      color: #fff;
+      text-align: center;
+    }
+  }
+  .ranui-select-dropdown-option-active {
+    background-color: transparent;
+    .ranui-select-dropdown-option-item-content {
+      color: #1890ff;
+    }
+  }
 }
 
 .video-control_loading {
@@ -327,6 +358,17 @@
           line-height: normal;
           margin-right: 24px;
           cursor: pointer;
+          r-select {
+            width: 46px;
+            &::part(selection) {
+              background-color: transparent;
+            }
+            &::part(selection-item) {
+              top: 3px;
+              color: #fff;
+              font-size: 12px;
+            }
+          }
         }
         &-clarity {
           width: 60px;
@@ -339,6 +381,18 @@
           line-height: normal;
           margin-right: 24px;
           cursor: pointer;
+          margin-right: 14px;
+          r-select {
+            width: 46px;
+            &::part(selection) {
+              background-color: transparent;
+            }
+            &::part(selection-item) {
+              top: 3px;
+              color: #fff;
+              font-size: 12px;
+            }
+          }
         }
         &-knowledge {
           color: #fff;
@@ -351,7 +405,7 @@
           cursor: pointer;
         }
         &-full {
-          background: url('./img/fullscreenfig.png');
+          background: url("./img/fullscreenfig.png");
           background-size: contain;
           width: 16px;
           height: 16px;
