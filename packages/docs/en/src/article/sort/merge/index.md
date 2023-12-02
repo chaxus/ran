@@ -12,7 +12,7 @@ Merge sort is an effective sort algorithm based on merge operation. This algorit
 
 ![Merge Sort](../../../../../assets/ranuts/sort/merge.gif)
 
-## Code demonstration
+## Code demo
 
 ```ts
 const combine = (left: Array<number>, right: Array<number>) => {

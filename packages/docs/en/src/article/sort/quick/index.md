@@ -14,7 +14,7 @@ Quicksort uses divide-and-conquer to divide a list into two sub-lists. The speci
 
 ![Quick Sort](../../../../../assets/ranuts/sort/quick.gif)
 
-## Code demonstration
+## Code demo
 
 ```ts
 /**

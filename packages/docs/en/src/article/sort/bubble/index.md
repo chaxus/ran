@@ -13,7 +13,7 @@ Bubble sort is a simple sort algorithm. It repeatedly visits the sequence to be 
 
 ![Bubble Sort](../../../../../assets/ranuts/sort/bubble.gif)
 
-## Code demonstration
+## Code demo
 
 ```ts
 const bubble = (list: number[]) => {

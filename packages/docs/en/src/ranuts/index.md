@@ -2,7 +2,7 @@
 
 ## Method list
 
-| 方法          | 说明                                                                   | 详细内容                             |
+| Method          | description                                                                   | detail                             |
 | ------------- | ---------------------------------------------------------------------- | ------------------------------------ |
 | writeFile     | Write to file                                                          | [writeFile](./file//writeFile.md)    |
 | readFile      | Read file                                                              | [readFile](./file//readFile.md)      |

@@ -11,7 +11,7 @@ The key to efficiency is this bucket function. The data is divided into a limite
 
 <!-- ## GIF presentation -->
 
-## Code demonstration
+## Code demo
 ```ts
 const count = (list: Array<number>, max: number = 100): Array<number> => {
   const countList = new Array(max + 1);

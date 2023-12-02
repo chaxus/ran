@@ -14,7 +14,7 @@ Ordering results can be obtained by direct selection sorting of n records throug
 
 ![Selection Sort](../../../../../assets/ranuts/sort/select.gif)
 
-## Code demonstration
+## Code demo
 
 ```js
 const select = (list: number[]): number[] => {

@@ -15,7 +15,7 @@ Stable sorting algorithm, because no matter what data is entered is O(n2) time c
 
 ![Insert Sort](../../../../../assets/ranuts/sort/insert.gif)
 
-## Code demonstration
+## Code demo
 
 ```ts
 const insert = (list: number[]): number[] => {

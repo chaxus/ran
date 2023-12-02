@@ -13,7 +13,7 @@ Heapsort (Heapsort) is a kind of sorting algorithm designed by using the heap da
 
 ![Heap Sort](../../../../../assets/ranuts/sort/heap.gif)
 
-## Code demonstration
+## Code demo
 
 ```ts
 class Heap {

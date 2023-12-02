@@ -82,8 +82,6 @@ const themeCnConfig: DefaultTheme.Config = {
         items: [
           { text: 'Button 按钮', link: '/src/ranui/button/' },
           { text: 'Icon 图标', link: '/src/ranui/icon/' },
-          { text: 'Player 视频播放器', link: '/src/ranui/video/' },
-          { text: 'Progress 进度条', link: '/src/ranui/progress/' },
         ],
       },
       {
@@ -93,6 +91,9 @@ const themeCnConfig: DefaultTheme.Config = {
           { text: 'Tabs 标签页', link: '/src/ranui/tabs/' },
           { text: 'Preview 预览', link: '/src/ranui/preview/' },
           { text: 'Radar 雷达图', link: '/src/ranui/radar/' },
+          { text: 'Select 选择框', link: '/src/ranui/select/' },
+          { text: 'Player 视频播放器', link: '/src/ranui/player/' },
+          { text: 'Progress 进度条', link: '/src/ranui/progress/' },
         ],
       },
       {

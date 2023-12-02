@@ -1,16 +1,16 @@
 # ranui
 
-基于 `Web Components UI`组件库
+Based on the Web Components UI component library
 
-## Feature 特点
+## Feature
 
-1. 基于`Web Components`，跨框架复用，统一所有情况。
-2. 基于`TypeScript`，具备声明和类型文件。
-3. 纯原生手写，基础组件无依赖。
-4. 文档所有组件实例可交互。
-5. `MIT`协议。
+1. Based on 'Web Components', reuse across the framework and unify all cases.
+2. Based on 'TypeScript', with declaration and type files.
+3. Pure native handwriting, no dependence on basic components.
+4. All component instances of the document are interactive.
+5. 'MIT' protocol.
 
-## Situation 项目情况
+## Situation
 
 <a style="display:inline-block;margin-left: 4px;" href="https://github.com/chaxus/ran"><img src="https://img.shields.io/github/actions/workflow/status/chaxus/ran/ci.yml" alt="Build Status"></a>
 <a style="display:inline-block;margin-left: 4px;" href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/v/ranui.svg" alt="npm-v"></a>
@@ -21,11 +21,11 @@
 - `git`：<a href="https://github.com/chaxus/ran/tree/main/packages/ranui">`https://github.com/chaxus/ran/tree/main/packages/ranui`</a>
 - `npm`：<a href="https://www.npmjs.com/package/ranui">`https://www.npmjs.com/package/ranui`</a>
 
-## Usage 使用
+## Usage
 
-大多数情况都可以像原生的 `div` 标签一样使用。
+In most cases, you can use it just like a native 'div' tag.
 
-接下来是一些使用例子
+Here are some examples
 
 1. `html`
 2. `js`
@@ -55,11 +55,11 @@ document.body.appendChild(Button);
 
 ### 3.`jsx`
 
-由于`react`有合成事件，为了更加方便的使用，通过`react`高阶组件进行封装[ranui](https://www.npmjs.com/package/ranui)，输出了[@ranui/react](https://www.npmjs.com/package/@ranui/react)
+Because ` react ` synthetic events, in order to more convenient to use, by ` react ` higher-order components encapsulation [ranui] (https://www.npmjs.com/package/ranui), Output the [@ranui/react](https://www.npmjs.com/package/@ranui/react)
 
-在`react`中，使用[@ranui/react](https://www.npmjs.com/package/@ranui/react)会更加丝滑，通过高阶函数包裹后，与`react`生态系统完全融合。
+In ` react `, use the [@ranui/react](https://www.npmjs.com/package/@ranui/react) will be more smooth, by higher-order functions after package, and ` react ` ecosystem.
 
-然而，[ranui](https://www.npmjs.com/package/ranui)仍然可以在任何`js`或者`ts`中使用。
+[ranui](https://www.npmjs.com/package/ranui), however, still can be in any ` js ` or ` ts ` in use.
 
 ```jsx
 import 'ranui';
@@ -85,11 +85,11 @@ import 'ranui';
 
 ### 5.`tsx`
 
-由于`react`有合成事件，为了更加方便的使用，通过`react`高阶组件进行封装[ranui](https://www.npmjs.com/package/ranui)，于是有了[@ranui/react](https://www.npmjs.com/package/@ranui/react)
+Because ` react ` synthetic events, in order to more convenient to use, by ` react ` higher-order components encapsulation [ranui] (https://www.npmjs.com/package/ranui), Output the [@ranui/react](https://www.npmjs.com/package/@ranui/react)
 
-在`react`中，使用[@ranui/react](https://www.npmjs.com/package/@ranui/react)会更加丝滑，通过高阶函数包裹后，与`react`生态系统完全融合。
+In ` react `, use the [@ranui/react](https://www.npmjs.com/package/@ranui/react) will be more smooth, by higher-order functions after package, and ` react ` ecosystem.
 
-然而，[ranui](https://www.npmjs.com/package/ranui)仍然可以在任何`js`或者`ts`中使用。
+[ranui](https://www.npmjs.com/package/ranui), however, still can be in any ` js ` or ` ts ` in use.
 
 ```tsx
 // react 18
@@ -126,7 +126,7 @@ const FilePreview = () => {
 };
 ```
 
-`jsx`在`TypeScript`中定义了所有`html`原生组件的类型。`web component`类型不在`jsx`定义中。需要手动添加。否则会有类型问题，但它实际上是有效的。
+jsx defines the types of all HTML-native components in TypeScript. The type 'web component' is not in the jsx definition. You need to add it manually. Otherwise there is a type problem, but it actually works.
 
 ```ts
 // typings.d.ts
@@ -157,22 +157,22 @@ declare namespace JSX {
 }
 ```
 
-## Import 导入方式
+## Import 
 
-支持按需引入
+Support for on-demand import
 
 ```js
 import 'ranui/button';
 ```
 
-对于一些全局展示的组件，比如 `preview` 和 `message`，需要加载一些额外的样式
+For some globally displayed components, such as preview and message, additional styles need to be loaded
 
 ```js
 import 'ranui/preview';
 import 'ranui/style';
 ```
 
-也可以全局导入，更加方便，这样什么都不用考虑了，梭哈完事。
+It can also be imported globally, which is more convenient, so that there is no need to consider anything, so that it is done.
 
 - `ES module`
 
@@ -186,7 +186,7 @@ import 'ranui';
 <script src="./ranui/dist/umd/index.umd.cjs"></script>
 ```
 
-## Overview 组件总览
+## Overview
 
 - `Button`
 
@@ -262,26 +262,26 @@ import 'ranui';
 
 - `react`
 
-[@ranui/react](https://www.npmjs.com/package/@ranui/react) 是由`react`高阶函数封装[ranui](https://www.npmjs.com/package/ranui)而成，`Event` 事件遵循`react`事件规范。跟`W3C`标准略有不同。
+[@ranui/react](https://www.npmjs.com/package/@ranui/react)  By ` react ` higher-order functions encapsulated [ranui] (https://www.npmjs.com/package/ranui) and become, ` Event ` events follow ` react ` Event specification. It is slightly different from the W3C standard.
 
-- 现代`web`标准
+- Modern 'web' standards
 
-在`W3C`标准中，你可以使用`on`属性在`HTML`元素上定义事件处理程序。但这是旧的事件处理程序的方法。
+In the W3C standard, you can use the on attribute to define event handlers on HTML elements. But this is the old event handler approach.
 
-现代的`web`开发推荐使用`addEventListener`方法。
+Modern web development recommends the addEventListener method.
 
 ```html
-<r-button id="button">按钮</r-button>
+<r-button id="button">Button</r-button>
 
 <script>
   const button = document.getElementById('button');
   button.addEventListener('click', function (event) {
-    alert('新的点击事件！');
+    alert('New click event!');
   });
 </script>
 ```
 
-然而，如果你确实需要使用`on`属性，下面是一个示例：
+However, if you do need to use the 'on' attribute, here is an example:
 
 ```html
 <r-input onchange="change(this.value)"></r-input>
@@ -293,13 +293,13 @@ import 'ranui';
 </script>
 ```
 
-请注意，使用`on`属性来定义事件处理程序有一些限制和缺点。
+Note that using the 'on' attribute to define event handlers has some limitations and disadvantages.
 
-例如，你不能使用事件捕获或事件委托，而且每个事件类型都需要一个单独的属性。
+For example, you can't use event capture or event delegation, and each event type requires a separate attribute.
 
-这也是为什么现代的`web`开发推荐使用`addEventListener`方法的原因。
+This is why the addEventListener method is recommended for modern web development.
 
-还可以使用`property`的方式：
+You can also use the 'property' method:
 
 ```html
 <r-input id="input"></r-input>
@@ -312,43 +312,40 @@ import 'ranui';
 </script>
 ```
 
-## style 自定义样式
+## style 
 
-- `::part`伪类
+- `::part`
 
 ```html
 <r-input id="input"></r-input>
 
 <style>
-  /* #input 指的是当前的自定义元素
-  ::part(input) 中的input指的是，当前自定义元素内部的 Shadow DOM 元素的类 */
+/* #input refers to the current custom element
+input in ::part(input) refers to the class  of the Shadow DOM element inside the current custom element*/
   #input::part(input) {
     width: 100px;
   }
 </style>
 ```
 
-- 通过属性传入
+- Pass in by attribute
 
-会在所有的组件上加一个`sheet`属性，传入`CSSStyleSheet`字符串。会直接插入到`Shadow DOM`中
+A 'sheet' attribute is added to all components, passing in a 'CSSStyleSheet' string. It will be inserted directly into the Shadow DOM
 
-- `CSS`自定义属性`var`
 
-`CSS`自定义属性可以直接穿透到 `Shadow DOM`。但太定制化了。
+## Compatibility 
 
-## Compatibility 兼容性
-
-- 不支持 `IE`，其他均有较好支持
+- Do not support 'IE', others have better support
 
 ![](../../../assets/ranui/customElements.png)
 
-## Contributors 贡献者
+## Contributors 
 
 <a href="https://github.com/chaxus/ran/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=chaxus/ran" />
 </a>
 
-## Other 相关资源
+## Other 
 
 1. [优秀的组件设计](https://www.checklist.design/)
 2. [在线生成 CSS 渐变色](https://webgradients.com/)
@@ -359,12 +356,12 @@ import 'ranui';
 7. [element UI 中文网](https://element.eleme.cn/#/zh-CN)
 8. [Ant design 中文网](https://ant.design/index-cn)
 9. [在线绘制 CSS 动画](https://animista.net/)
-10. [tailwindcss 组件库](https://www.tailwindcss.cn/resources)
-11. [animate css 非常优秀的 css 动画](https://animate.style/)
-12. [can i use 检测兼容性 API 网站](https://caniuse.com/)
+10. [tailwindcss](https://www.tailwindcss.cn/resources)
+11. [animate css](https://animate.style/)
+12. [can i use](https://caniuse.com/)
 13. [figma](https://www.figma.com/)
 
-## 协议和标准
+## Protocols and standards
 
 1. [RFCs](https://www.rfc-editor.org/)
 2. [ECMA](https://www.ecma-international.org/)

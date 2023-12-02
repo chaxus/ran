@@ -1,22 +1,22 @@
-# Input 输入框
+# Input
 
-通过鼠标或键盘输入内容，是最基础的表单域的包装。
+Entering content via mouse or keyboard is the most basic form field packaging.
 
-## 代码演示
+## Code demo
 
 <div style="width:300px;">
-    输入框：<r-input></r-input>
+    Input field:<r-input></r-input>
 </div>
 
 ```xml
 <r-input></r-input>
 ```
 
-## 属性
+## Attribute
 
-### 标签`label`
+### `label`
 
-提供类似于 `Metiral Design` 的输入体验。
+Provide an input experience similar to Metiral Design.
 
 <r-input label="user"></r-input>
 
@@ -24,9 +24,9 @@
 <r-input label="user"></r-input>
 ```
 
-### 占位`placeholder`
+### `placeholder`
 
-与原生`placeholder`一致。
+Consistent with native 'placeholder'.
 
 <r-input placeholder="user"></r-input>
 
@@ -34,9 +34,9 @@
 <r-input placeholder="user"></r-input>
 ```
 
-### 禁用`disabled`
+### `disabled`
 
-通过`disabled`可以禁用输入框，禁用后该按钮上的事件失效。
+The input box can be disabled by disabled. After disabled, the events on the button become invalid.
 
 <r-input label="user" disabled></r-input>
 
@@ -44,19 +44,19 @@
 <r-input label="user" disabled></r-input>
 ```
 
-### 值`value`
+### `value`
 
-设置或返回输入框的`value`属性值。
+Sets or returns the value of the 'value' property of the input box.
 
 <r-input value="1234"></r-input>
 
-### 类型`type`
+### `type`
 
-目前支持`password`、`number`这几种类型，设置后会出现额外的`ui`控件。
+Currently support 'password', 'number' these types, set will appear additional 'ui' controls.
 
-#### 密码输入框
+#### Password entry field
 
-支持密码明文和密文切换。
+The password can be switched between plain text and ciphertext.
 
 <r-input icon="lock" type="password"></r-input>
 
@@ -64,9 +64,9 @@
 <r-input icon="lock" type="password"></r-input>
 ```
 
-### 图标`icon`
+### `icon`
 
-可以设置一个`icon`来表示标签标识。
+You can set an 'icon' to represent the tag identifier.
 
 <r-input icon="user"></r-input>
 
@@ -74,9 +74,9 @@
 <r-input icon="user"></r-input>
 ```
 
-#### 数字输入框
+#### Digital input box
 
-数字输入框，类似于原生`input[type=number]`，支持`min`、`max`、`step`属性，支持键盘上下键切换数字。
+Numeric input box, similar to the native 'input[type=number]', support 'min', 'max', 'step' attributes, support keyboard up and down keys to switch numbers.
 
 <r-input type="number" min="-10" max="10" step="0.5" ></r-input>
 
@@ -84,15 +84,15 @@
 <r-input type="number" min="-10" max="10" step="0.5"></r-input>
 ```
 
-### name 属性名
+### name
 
-跟 form 组件联动的时候有效，form 提交时收集的字段名字
+Valid when associated with the form component, the field name collected when the form is submitted
 
-### status 状态
+### status 
 
 - error
 
-默认色值: `#ff4d4f`
+Default color value: `#ff4d4f`
 
 <div>
  <r-input status="error"></r-input>
@@ -104,7 +104,7 @@
 
 - warning
 
-默认色值: `#ff7875`
+Default color value:`#ff7875`
 
 <div>
   <r-input status="warning"></r-input>
@@ -114,13 +114,13 @@
 <r-input  status="warning"></r-input>
 ```
 
-## 事件`event`
+## `event`
 
-常见的回调事件。
+Common callback events.
 
 ### onchange
 
-文本改变的时候触发。
+Triggered when text changes.
 
 <r-input onchange="console.log(this.value)"></r-input>
 
@@ -139,7 +139,8 @@ input.addEventListener('change', func);
 
 ### oninput
 
-输入时触发。
+Triggered when text changes.
+
 <r-input oninput="console.log(this.value)"></r-input>
 
 ```js
@@ -151,5 +152,6 @@ const func = (e) => {
 input.addEventListener('input', func);
 ```
 
-事件的`e`参数结构
-![input方法](../../../../assets/ranui/input-input.jpg)
+The e parameter structure of the event
+
+![input method](../../../../assets/ranui/input-input.jpg)

@@ -12,7 +12,7 @@ Radix sort is sorted by the lowest order first, and then collected; Then sort by
 
 ![Radix Sort](../../../../../assets/ranuts/sort/radix.gif)
 
-## Code demonstration
+## Code demo
 
 ```ts
 const getMax = (list: Array<number>) => {

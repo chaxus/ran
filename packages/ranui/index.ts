@@ -1,4 +1,4 @@
-import styles from './base.less?inline';
+import styles from './global.less?inline';
 
 export * as button from '@/components/button';
 export * as icon from '@/components/icon';
@@ -10,7 +10,7 @@ export * as skeleton from '@/components/skeleton';
 export * as tabpane from '@/components/tabpane';
 export * as tab from '@/components/tab';
 export * as radar from '@/components/radar';
-export * as video from '@/components/video';
+export * as player from '@/components/player';
 export * as modal from '@/components/modal';
 export * as select from '@/components/select';
 export * as progress from '@/components/progress';

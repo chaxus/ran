@@ -29,6 +29,12 @@ export default defineConfig({
       lang: 'en',
       themeConfig: themeEnConfig,
     },
+    // root: { label: 'English', lang: 'en' },
+    // cn: {
+    //   label: '简体中文',
+    //   lang: 'zh-CN',
+    //   themeConfig: themeCnConfig,
+    // },
   },
   vue: {
     template: {

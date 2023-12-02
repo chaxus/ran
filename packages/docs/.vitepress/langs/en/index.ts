@@ -6,7 +6,7 @@ const themeEnConfig: DefaultTheme.Config = {
   nav: [
     { text: 'Home', link: '/en/' },
     { text: 'Function', link: '/en/src/ranuts/' },
-    { text: 'Ranui', link: '/en/src/ranui/' },
+    { text: 'Component', link: '/en/src/ranui/' },
     { text: 'Article', link: '/en/src/article/designMode.md' },
   ],
   socialLinks: [{ icon: 'github', link: GITHUB }],
@@ -23,56 +23,56 @@ const themeEnConfig: DefaultTheme.Config = {
   sidebar: {
     '/en/src/ranuts/': [
       {
-        text: 'Overview 总览',
+        text: 'Overview',
         link: '/en/src/ranuts/',
       },
       {
-        text: '通用函数',
+        text: 'Universal function',
         items: [
-          { text: '过滤对象', link: '/en/src/ranuts/utils/filterObj.md' },
-          { text: '统计执行时间', link: '/en/src/ranuts/utils/task.md' },
-          { text: '字符串转xml', link: '/en/src/ranuts/utils/str2xml.md' },
+          { text: 'Filter object', link: '/en/src/ranuts/utils/filterObj.md' },
+          { text: 'Statistical execution time', link: '/en/src/ranuts/utils/task.md' },
+          { text: 'String to xml', link: '/en/src/ranuts/utils/str2xml.md' },
           {
-            text: '图片转base64',
+            text: 'Image to base64',
             link: '/en/src/ranuts/utils/convertImageToBase64.md',
           },
-          { text: 'OCR文字识别`', link: '/en/src/ranuts/utils/ocr.md' },
+          { text: 'OCR text recognition`', link: '/en/src/ranuts/utils/ocr.md' },
         ],
       },
       {
-        text: '文件',
+        text: 'document',
         items: [
           {
-            text: '查询一个文件的详细信息',
+            text: 'Example Query details about a file',
             link: '/en/src/ranuts/file/watchFile.md',
           },
           {
-            text: '读取目录下的文件名称',
+            text: 'Read the name of the file in the directory',
             link: '/en/src/ranuts/file/readDir.md',
           },
           {
-            text: '监听文件是否改变',
+            text: 'Listen for file changes',
             link: '/en/src/ranuts/file/watchFile.md',
           },
-          { text: '读取文件内容', link: '/en/src/ranuts/file/readFile.md' },
+          { text: 'Read file contents', link: '/en/src/ranuts/file/readFile.md' },
           {
-            text: '追加文件内容',
+            text: 'Append file content',
             link: '/en/src/ranuts/file/appendFile.md',
           },
-          { text: '写入文件内容', link: '/en/src/ranuts/file/writeFile.md' },
+          { text: 'Write to file content', link: '/en/src/ranuts/file/writeFile.md' },
         ],
       },
       {
-        text: '设计模式',
+        text: 'Design pattern',
         items: [
-          { text: '发布订阅模式', link: '/en/src/ranuts/mode/subscribe.md' },
+          { text: 'Publish-subscribe model', link: '/en/src/ranuts/mode/subscribe.md' },
         ],
       },
       {
         text: 'mime type',
         items: [
           {
-            text: '通过文件后缀获取mime type',
+            text: 'Get mime by file suffix type',
             link: '/en/src/ranuts/mimeType/mimeType.md',
           },
         ],
@@ -80,36 +80,37 @@ const themeEnConfig: DefaultTheme.Config = {
     ],
     '/en/src/ranui/': [
       {
-        text: 'Overview 总览',
+        text: 'Overview ',
         link: '/en/src/ranui/',
       },
       {
-        text: '通用',
+        text: 'Be common',
         items: [
-          { text: 'Button 按钮', link: '/en/src/ranui/button/' },
-          { text: 'Icon 图标', link: '/en/src/ranui/icon/' },
-          { text: 'Player 视频播放器', link: '/en/src/ranui/video/' },
-          { text: 'Progress 进度条', link: '/en/src/ranui/progress/' },
+          { text: 'Button ', link: '/en/src/ranui/button/' },
+          { text: 'Icon ', link: '/en/src/ranui/icon/' },
         ],
       },
       {
-        text: '数据展示',
+        text: 'Data presentation',
         items: [
-          { text: 'Image 图片', link: '/en/src/ranui/image/' },
-          { text: 'Tabs 标签页', link: '/en/src/ranui/tabs/' },
-          { text: 'Preview 预览', link: '/en/src/ranui/preview/' },
-          { text: 'Radar 雷达图', link: '/en/src/ranui/radar/' },
+          { text: 'Image ', link: '/en/src/ranui/image/' },
+          { text: 'Tabs ', link: '/en/src/ranui/tabs/' },
+          { text: 'Preview ', link: '/en/src/ranui/preview/' },
+          { text: 'Radar ', link: '/en/src/ranui/radar/' },
+          { text: 'Select ', link: '/en/src/ranui/select/' },
+          { text: 'Player ', link: '/en/src/ranui/player/' },
+          { text: 'Progress ', link: '/en/src/ranui/progress/' },
         ],
       },
       {
-        text: '数据录入',
-        items: [{ text: 'Input 输入框', link: '/en/src/ranui/input/' }],
+        text: 'Data entry',
+        items: [{ text: 'Input', link: '/en/src/ranui/input/' }],
       },
       {
-        text: '反馈',
+        text: 'feedback',
         items: [
-          { text: 'Message 全局提示', link: '/en/src/ranui/message/' },
-          { text: 'Skeleton 骨架屏', link: '/en/src/ranui/skeleton/' },
+          { text: 'Message', link: '/en/src/ranui/message/' },
+          { text: 'Skeleton', link: '/en/src/ranui/skeleton/' },
           // { text: 'Modal 对话框', link: '/src/ranui/modal/' },
         ],
       },
@@ -118,27 +119,27 @@ const themeEnConfig: DefaultTheme.Config = {
       {
         items: [
           {
-            text: '23 种经典设计模式',
+            text: '23 classic design patterns',
             link: '/en/src/article/designMode.md',
           },
           {
-            text: '函数式编程',
+            text: 'Functional programming',
             link: '/en/src/article/functionalProgramming.md',
           },
           {
-            text: '排序算法',
+            text: 'Sorting algorithm',
             link: '/en/src/article/sort/index.md',
             items: [
-              { text: '冒泡排序', link: '/en/src/article/sort/bubble/' },
-              { text: '选择排序', link: '/en/src/article/sort/select/' },
-              { text: '插入排序', link: '/en/src/article/sort/insert/' },
-              { text: '希尔排序', link: '/en/src/article/sort/shell/' },
-              { text: '归并排序', link: '/en/src/article/sort/merge/' },
-              { text: '快速排序', link: '/en/src/article/sort/quick/' },
-              { text: '堆排序', link: '/en/src/article/sort/heap/' },
-              { text: '计数排序', link: '/en/src/article/sort/count/' },
-              { text: '桶排序', link: '/en/src/article/sort/bucket/' },
-              { text: '基数排序', link: '/en/src/article/sort/radix/' },
+              { text: 'bubble sort', link: '/en/src/article/sort/bubble/' },
+              { text: 'selection sort', link: '/en/src/article/sort/select/' },
+              { text: 'insertion sort', link: '/en/src/article/sort/insert/' },
+              { text: 'shell sort', link: '/en/src/article/sort/shell/' },
+              { text: 'Merge sort', link: '/en/src/article/sort/merge/' },
+              { text: 'Quick sort', link: '/en/src/article/sort/quick/' },
+              { text: 'heapsort', link: '/en/src/article/sort/heap/' },
+              { text: 'Counting sort', link: '/en/src/article/sort/count/' },
+              { text: 'Bucket sort', link: '/en/src/article/sort/bucket/' },
+              { text: 'Radix sort', link: '/en/src/article/sort/radix/' },
             ],
           },
         ],

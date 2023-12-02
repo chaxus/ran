@@ -1,8 +1,8 @@
-# Icon 图标
+# Icon
 
-语义化的矢量图形
+Semantic vector graphics
 
-## 代码演示
+## Code demo
 
 <div style='display:flex'>
      <r-icon name="lock" size="50" ></r-icon>
@@ -16,11 +16,11 @@
  <r-icon name="user"  ></r-icon>
 ```
 
-## 属性
+## Attribute
 
-### 名称`name`
+### `name`
 
-根据名称选择不同的图标
+Select a different icon based on the name
 
 <div style='display:flex'>
  <r-icon name="lock" size="50" ></r-icon>
@@ -34,7 +34,7 @@
 <r-icon name="user"></r-icon>
 ```
 
-### 尺寸`size`
+### `size`
 
 <div style='display:flex;align-items: flex-end;'>
  <r-icon name="lock" size="30" ></r-icon>
@@ -48,7 +48,7 @@
 <r-icon name="lock" size="70"></r-icon>
 ```
 
-### 颜色`color`
+### `color`
 
 <div style='display:flex'>
  <r-icon name="lock" size="50" color="red" ></r-icon>
@@ -64,9 +64,9 @@
 <r-icon name="lock" size="50" color="#3F51B5"></r-icon>
 ```
 
-### 旋转`spin`
+### `spin`
 
-设置 spin 开启旋转，传入数字控制旋转的速度，数字越小旋转越快
+Set spin to turn on the rotation, and pass in a number to control the rotation speed. The smaller the number, the faster the rotation
 
 <div style='display:flex'>
  <r-icon name="loading" size="50" color="#1E90FF" spin='0.7'></r-icon>
@@ -80,7 +80,7 @@
 <r-icon name="loading" size="50" color="#1E90FF" spin="5"></r-icon>
 ```
 
-## 图标列表
+## Icon list
 
 <div style="display: flex;
     align-items: center;

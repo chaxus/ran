@@ -25,6 +25,7 @@ const placementDirection: PlacementDirection = {
 };
 
 export class Select extends HTMLElement {
+  removeTimeId?: NodeJS.Timeout;
   _slot: HTMLSlotElement;
   _shadowDom: ShadowRoot;
   _select: HTMLDivElement;
@@ -50,8 +51,9 @@ export class Select extends HTMLElement {
       'defaultValue',
       'showSearch',
       'placement', // 弹窗的方向
-      // 'getPopupContainer' // 挂载的节点
-      'dropdownclass' // 弹窗的类名
+      'getPopupContainerId', // 挂载的节点
+      'dropdownclass', // 弹窗的类名
+      'action' // 触发下拉框的行为，click还是hover
     ];
   }
   constructor() {
@@ -132,11 +134,23 @@ export class Select extends HTMLElement {
   set sheet(value: string) {
     this.setAttribute('sheet', value || '');
   }
+  get getPopupContainerId(): string {
+    return this.getAttribute('getPopupContainerId') || '';
+  }
+  set getPopupContainerId(value: string) {
+    this.setAttribute('getPopupContainerId', value || '');
+  }
   get dropdownclass(): string {
     return this.getAttribute('dropdownclass') || ""
   }
   set dropdownclass(value: string) {
     this.setAttribute('dropdownclass', value || '');
+  }
+  get action(): string {
+    return this.getAttribute('action') || "click"
+  }
+  set action(value: string) {
+    this.setAttribute('action', value || '');
   }
   get disabled(): boolean {
     return isDisabled(this);
@@ -208,11 +222,7 @@ export class Select extends HTMLElement {
   placementPosition = (): void => {
     if (!this._selectionDropdown || !this._selectDropdown) return;
     const rect = this.getBoundingClientRect();
-    const { top, left, bottom, width, height, x, y } = rect;
-    // this._text.style.setProperty(
-    //   'line-height',
-    //   `${Math.max(height - 2, 0)}px`,
-    // );
+    const { top, left, bottom, width, height, x, y, right } = rect;
     this._selectionDropdown.style.setProperty(
       '-ran-x',
       `${x + window.scrollX}`,
@@ -221,19 +231,18 @@ export class Select extends HTMLElement {
       '-ran-y',
       `${y + window.scrollY}`,
     );
+    let selectTop = bottom + window.scrollY
+    let selectLeft = left + window.scrollX
     this._selectionDropdown.style.setProperty('width', `${width}px`);
+    const root = document.getElementById(this.getPopupContainerId)
     if (this.placement === 'top') {
-      this._selectionDropdown.style.setProperty(
-        'inset',
-        `${top + window.scrollY - this._selectionDropdown.clientHeight
-        }px auto auto ${left + window.scrollX}px`,
-      );
-    } else {
-      this._selectionDropdown.style.setProperty(
-        'inset',
-        `${bottom + window.scrollY}px auto auto ${left + window.scrollX}px`,
-      );
+      selectTop = top + window.scrollY - this._selectionDropdown.clientHeight
+      if (this.getPopupContainerId && root) {
+        selectTop = top - root.getBoundingClientRect().top - this._selectionDropdown.clientHeight
+        selectLeft = left - root.getBoundingClientRect().left
+      }
     }
+    this._selectionDropdown.style.setProperty('inset', `${selectTop}px auto auto ${selectLeft}px`);
   };
   /**
    * @description: 设置下拉框
@@ -241,16 +250,29 @@ export class Select extends HTMLElement {
    */
   selectMouseDown = (): void => {
     if (isDisabled(this)) return;
+    this.removeDropDownTimeId()
     this.setSelectDropdownDisplayNone();
     this.setSelectDropdownDisplayBlock();
     this.placementPosition();
   };
+  removeDropDownTimeId = (): void => {
+    if (this.action.includes('hover')) {
+      clearTimeout(this.removeTimeId)
+      this.removeTimeId = undefined
+    }
+  }
   /**
    * @description: 焦点移除的情况，需要移除select 下拉框
    * @return {*}
    */
   selectBlur = (): void => {
-    this.setSelectDropdownDisplayNone();
+    if (this.removeTimeId) {
+      this.removeDropDownTimeId()
+    }
+    this.removeTimeId = setTimeout(() => {
+      this.removeDropDownTimeId()
+      this.setSelectDropdownDisplayNone();
+    }, 300);
   };
   /**
    * @description: 选中一个选项的情况
@@ -296,6 +318,7 @@ export class Select extends HTMLElement {
     this.dispatchEvent(
       new CustomEvent('change', { detail: { value, label } }),
     );
+    this.removeDropDownTimeId()
   };
   /**
    * @description: 初始化创建选项下拉框
@@ -303,6 +326,7 @@ export class Select extends HTMLElement {
    */
   createOption = (): void => {
     if (!this._selectDropdown) {
+      const container = document.getElementById(this.getPopupContainerId) || document.body
       this._selectDropdown = document.createElement('div');
       this._selectDropdown.addEventListener('click', this.clickOption);
       this._selectionDropdown = document.createElement('div');
@@ -311,9 +335,13 @@ export class Select extends HTMLElement {
       } else {
         this._selectionDropdown.setAttribute('class', 'ranui-select-dropdown');
       }
+      if (this.action.includes('hover')) {
+        this._selectDropdown.addEventListener('mouseleave', this.selectBlur);
+        this._selectDropdown.addEventListener('mouseenter', this.removeDropDownTimeId);
+      }
       this._selectDropdown.appendChild(this._selectionDropdown);
       this._selectionDropdown.style.setProperty('display', 'none');
-      document.body.appendChild(this._selectDropdown);
+      container.appendChild(this._selectDropdown);
     }
   };
   /**
@@ -323,7 +351,8 @@ export class Select extends HTMLElement {
   removeSelectDropdown = (): void => {
     try {
       if (this._selectDropdown) {
-        document.body.removeChild(this._selectDropdown);
+        const container = document.getElementById(this.getPopupContainerId) || document.body
+        container.removeChild(this._selectDropdown);
       }
     } catch (error) { }
   };
@@ -390,27 +419,42 @@ export class Select extends HTMLElement {
     this._text.innerHTML = label;
     this._text.setAttribute('title', label);
   };
-  changeSearch = (e: Event):void => {
+  changeSearch = (e: Event): void => {
     console.log('e', e);
   };
-  setShowSearch = ():void => {
+  setShowSearch = (): void => {
     this._search.addEventListener('change', this.changeSearch);
   };
-  listenSlotChange = ():void => {
+  listenSlotChange = (): void => {
     this._slot.addEventListener('slotchange', this.addOptionToSlot);
   };
-  removeListenSlotChange = ():void => {
+  removeListenSlotChange = (): void => {
     this._slot.removeEventListener('slotchange', this.addOptionToSlot);
   };
-  connectedCallback():void {
+  listenActionEvent = (): void => {
+    this.removeEventListener('mouseenter', this.selectMouseDown);
+    this.removeEventListener('mouseleave', this.selectBlur);
+    this.removeEventListener('mousedown', this.selectMouseDown);
+    this.removeEventListener('blur', this.selectBlur);
+    if (this.action.includes('hover')) {
+      this.addEventListener('mouseenter', this.selectMouseDown);
+      this.addEventListener('mouseleave', this.selectBlur);
+    }
+    if (this.action.includes('click')) {
+      this.addEventListener('mousedown', this.selectMouseDown);
+      this.addEventListener('blur', this.selectBlur);
+    }
+  }
+  connectedCallback(): void {
     this.handlerExternalCss();
     this.createOption();
-    this.addEventListener('mousedown', this.selectMouseDown);
-    this.addEventListener('blur', this.selectBlur);
+    this.listenActionEvent()
     this.listenSlotChange();
     this.setShowSearch();
   }
-  disconnectCallback():void {
+  disconnectCallback(): void {
+    this.removeEventListener('mouseenter', this.selectMouseDown);
+    this.removeEventListener('mouseleave', this.selectBlur);
     this.removeEventListener('mousedown', this.selectMouseDown);
     this.removeEventListener('blur', this.selectBlur);
     this.removeSelectDropdown();
@@ -421,7 +465,7 @@ export class Select extends HTMLElement {
     name: string,
     oldValue: string,
     newValue: string,
-  ):void {
+  ): void {
     if (name === 'disabled' && this._select) {
       if (!newValue || newValue === 'false') {
         this._select.setAttribute('disabled', '');

@@ -13,7 +13,7 @@ counting sort is a kind of sorting algorithm that sacrifices memory space for lo
 
 ![Count Sort](../../../../../assets/ranuts/sort/count.gif)
 
-## Code demonstration
+## Code demo
 
 ```ts
 const getMax = (list: number[]) => {

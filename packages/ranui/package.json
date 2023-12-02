@@ -113,6 +113,16 @@
       "import": "./dist/components/option/index.js",
       "require": "./dist/umd/index.umd.cjs"
     },
+    "./progress": {
+      "types": "./dist/components/progress/index.d.ts",
+      "import": "./dist/components/progress/index.js",
+      "require": "./dist/umd/index.umd.cjs"
+    },
+    "./player": {
+      "types": "./dist/components/player/index.d.ts",
+      "import": "./dist/components/player/index.js",
+      "require": "./dist/umd/index.umd.cjs"
+    },
     "./style": {
       "types": "./dist/index.d.ts",
       "import": "./dist/style.css",

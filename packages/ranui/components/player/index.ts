@@ -9,7 +9,6 @@ import {
 } from 'ranuts';
 import '@/assets/js/hls.js';
 import type { Progress } from '@/components/progress';
-import type { Select } from '@/components/select';
 import '@/components/select'
 import './index.less';
 
@@ -112,7 +111,7 @@ function Custom() {
         this._playerControllerBottomRight = document.createElement('div');
         this._playerControllerBottomLeft = document.createElement('div');
         this._player.setAttribute('class', 'ran-player');
-        this._player.setAttribute('data-growing-ignore', 'true');
+        this._player.setAttribute('id', 'ran-player' + `${performance.now()}`.replace('.', ''));
         // play and pause
         this._playerBtn.setAttribute('class', 'ran-player-play-btn');
         // progress
@@ -171,8 +170,11 @@ function Custom() {
         );
         this._playControllerBottomSpeedPopover = document.createElement('r-select');
         this._playControllerBottomSpeedPopover.setAttribute('value', '1');
+        this._playControllerBottomSpeedPopover.setAttribute('action', 'hover,click');
         this._playControllerBottomSpeedPopover.setAttribute('type', 'text');
         this._playControllerBottomSpeedPopover.setAttribute('placement', 'top');
+        const id = this._player.getAttribute('id')
+        id && this._playControllerBottomSpeedPopover.setAttribute('getPopupContainerId', id);
         this._playControllerBottomSpeedPopover.setAttribute('dropdownclass', 'video-speed-dropdown');
         this._playControllerBottomSpeedPopover.addEventListener('change', this.changeSpeed)
         const Fragment = document.createDocumentFragment();
@@ -367,7 +369,10 @@ function Custom() {
         select.setAttribute('value', this.ctx.clarity || 'Auto')
         select.appendChild(Fragment)
         select.setAttribute('type', 'text');
+        select.setAttribute('action', 'hover,click');
         select.setAttribute('placement', 'top');
+        const id = this._player.getAttribute('id')
+        id && select.setAttribute('getPopupContainerId', id);
         select.setAttribute('dropdownclass', 'video-clarity-dropdown');
         select.addEventListener('change', this.changeClarity)
         this._playControllerBottomClarity.appendChild(select)
@@ -438,7 +443,7 @@ function Custom() {
               data: value,
               currentTime,
               duration,
-              tag: this._video,
+              tag: this,
             },
           }),
         );

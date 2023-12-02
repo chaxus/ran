@@ -1,8 +1,8 @@
-# Radar 雷达图
+# Radar
 
-以二维形式综合对比多组数据的差异,常用于比较 2 组或更多组数据集
+Comprehensive comparison of differences between multiple sets of data in two-dimensional form, often used to compare 2 or more sets of data
 
-## 代码演示
+## Code demo
 
 <r-radar style="width:300px;height:300px;display: block;" abilitys='[{"abilityName":"生命","scoreRate":"10"},{"abilityName":"攻击","scoreRate":"90"},{"abilityName":"防御","scoreRate":"20"},{"abilityName":"元素精通","scoreRate":"50"},{"abilityName":"暴击率","scoreRate":"80"},{"abilityName":"暴击伤害","scoreRate":"50"}]'></r-radar>
 
@@ -14,20 +14,22 @@
 </r-radar>
 ```
 
-## 属性
+## Attribute
 
-### 需要展示的数据`abilitys`
+### `abilitys`
 
-一个数组对象，对象中属性如下
+Data that needs to be presented
 
-| 参数            | 说明                     | 类型             |
-| --------------- | ------------------------ | ---------------- |
-| abilityName     | 展示的属性名称           | 必传参数`string` |
-| scoreRate       | 展示维度的数值，最大 100 | 必传参数`number` |
-| backgroundColor | 属性名称的背景颜色       | 可选参数`string` |
-| fontSize        | 属性名称的字体大小       | 可选参数`number` |
-| fontFamily      | 属性名称的字体           | 可选参数`string` |
-| fontColor       | 属性名称的字体颜色       | 可选参数`string` |
+An array object with the following properties
+
+|                 | Description                                            | type                            |
+| --------------- | ------------------------------------------------------ | ------------------------------- |
+| abilityName     | Displays the attribute name                            | . 'string'                      | is mandatory                         |
+| scoreRate       | Displays the dimension value. The maximum value is 100 | . 'number'                      | is required                          |
+| backgroundColor | The background color of the                            | property                        | is an optional string                |
+| fontSize        | The font size for the attribute name                   | The optional parameter 'number' |
+| fontFamily      | The font for the attribute name                        | is optional with 'string'       |
+| fontColor       | The font color for the                                 | property                        | is an optional parameter with string |
 
 <r-radar style="width:300px;height:300px;display: block;" abilitys='[{"abilityName":"生命","scoreRate":"10","backgroundColor":"red","fontSize":"30","fontColor":"blue"},{"abilityName":"攻击","scoreRate":"90"},{"abilityName":"防御","scoreRate":"20"},{"abilityName":"元素精通","scoreRate":"50"},{"abilityName":"暴击率","scoreRate":"80"},{"abilityName":"暴击伤害","scoreRate":"50"}]'></r-radar>
 
@@ -39,7 +41,7 @@
 </r-radar>
 ```
 
-### 多边形颜色`colorPolygon`
+### `colorPolygon`
 
 <r-radar style="width:300px;height:300px;display: block;" colorPolygon="green" abilitys='[{"abilityName":"生命","scoreRate":"10"},{"abilityName":"攻击","scoreRate":"90"},{"abilityName":"防御","scoreRate":"20"},{"abilityName":"元素精通","scoreRate":"50"},{"abilityName":"暴击率","scoreRate":"80"},{"abilityName":"暴击伤害","scoreRate":"50"}]'></r-radar>
 
@@ -52,7 +54,7 @@
 </r-radar>
 ```
 
-### 顶点连线颜色`colorLine`
+### `colorLine`
 
 <r-radar style="width:300px;height:300px;display: block;" colorLine="blue" abilitys='[{"abilityName":"生命","scoreRate":"10"},{"abilityName":"攻击","scoreRate":"90"},{"abilityName":"防御","scoreRate":"20"},{"abilityName":"元素精通","scoreRate":"50"},{"abilityName":"暴击率","scoreRate":"80"},{"abilityName":"暴击伤害","scoreRate":"50"}]'></r-radar>
 
@@ -63,7 +65,7 @@
 ></r-radar>
 ```
 
-### 数据渲染处的颜色`fillColor`
+### `fillColor`
 
 <r-radar style="width:300px;height:300px;display: block;" fillColor="red" abilitys='[{"abilityName":"生命","scoreRate":"10"},{"abilityName":"攻击","scoreRate":"90"},{"abilityName":"防御","scoreRate":"20"},{"abilityName":"元素精通","scoreRate":"50"},{"abilityName":"暴击率","scoreRate":"80"},{"abilityName":"暴击伤害","scoreRate":"50"}]'></r-radar>
 
@@ -76,7 +78,7 @@
 </r-radar>
 ```
 
-### 数据渲染处线和点的颜色`strokeColor`
+### `strokeColor`
 
 <r-radar style="width:300px;height:300px;display: block;" strokeColor="blue" abilitys='[{"abilityName":"生命","scoreRate":"10"},{"abilityName":"攻击","scoreRate":"90"},{"abilityName":"防御","scoreRate":"20"},{"abilityName":"元素精通","scoreRate":"50"},{"abilityName":"暴击率","scoreRate":"80"},{"abilityName":"暴击伤害","scoreRate":"50"}]'></r-radar>
 
@@ -89,9 +91,9 @@
 </r-radar>
 ```
 
-### 使用的例子数据
+### Example data used
 
-由于`HTMl`的`attribute`只能获取`string`。因此需要传入的数据需要是`json`字符串格式，然后通过`JSON.parse`解析程数组对象，如果`JSON`格式有误，则无法解析。
+Because the 'attribute' of 'HTMl' can only get 'string'. Therefore, the data that needs to be passed in needs to be in the format of 'JSON' string, and then parsed by 'json.parse' array object, if the 'JSON' format is wrong, it cannot be parsed.
 
 ```json
 [

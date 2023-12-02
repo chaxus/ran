@@ -8,6 +8,10 @@ import message from '@/components/message';
 import Input from '@/components/input';
 import Image from '@/components/image';
 import Icon from '@/components/icon';
+import Progress from '@/components/progress';
+import Player from '@/components/player';
+import Select from '@/components/select';
+import Option from '@/components/option';
 import reactify from '@/utils/reactify';
 
 export {
@@ -22,4 +26,8 @@ export {
   Image,
   Icon,
   reactify,
+  Progress,
+  Player,
+  Select,
+  Option
 };

@@ -1,32 +1,26 @@
-# progress 进度条
+# progress
 
-可交互的进度条
+Interactive progress bar
 
-## 代码演示
+## Code demo
 
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-     <r-progress type="drag" ></r-progress>
-</div>
+<r-progress type="drag" ></r-progress>
 
 ```xml
 <r-progress type="drag" ></r-progress>
 ```
 
-## 属性
+## Attribute
 
-### 总进度`total`
+### `total`
 
-设置进度条总进度，允许百分比和数字。
+Set progress bar Total progress, allowed percentages and numbers.
 
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-     <r-progress percent="30" total="1000"></r-progress>
-</div>
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-     <r-progress percent="70" total="100"></r-progress>
-</div>
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-     <r-progress percent="10%" total="100%"></r-progress>
-</div>
+<r-progress percent="30" total="1000"></r-progress>
+<div style="height:20px;width:10px"></div>
+<r-progress percent="70" total="100"></r-progress>
+<div style="height:20px;width:10px"></div>
+<r-progress percent="10%" total="100%"></r-progress>
 
 ```html
 <r-progress percent="30" total="1000"></r-progress>
@@ -34,19 +28,15 @@
 <r-progress percent="10%" total="100%"></r-progress>
 ```
 
-### 当前进度`percent`
+### `percent`
 
-设置进度条的当前进度，可以设置百分比和数字，`percent`不能超过`total`。如果不设置`total`，默认`total`为`100%`也就是`1`。
+Set the current progress of the progress bar, you can set the percentage and number, 'percent' cannot exceed 'total'. If 'total' is not set, the default 'total' is' 100% ', that is, '1'.
 
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-     <r-progress type="primary" percent="30%"></r-progress>
-</div>
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-     <r-progress type="primary" percent="70%"></r-progress>
-</div>
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-     <r-progress type="primary" percent="100%"></r-progress>
-</div>
+<r-progress type="primary" percent="30%"></r-progress>
+<div style="height:20px;width:10px"></div>
+<r-progress type="primary" percent="70%"></r-progress>
+<div style="height:20px;width:10px"></div>
+<r-progress type="primary" percent="100%"></r-progress>
 
 ```html
 <r-progress type="primary" percent="30%"></r-progress>
@@ -54,19 +44,15 @@
 <r-progress type="primary" percent="100%"></r-progress>
 ```
 
-### 进度条的点`dot`
+### `dot`
 
-默认展示，设置成`false`可隐藏
+Point of the progress bar, Default display, set to 'false' can be hidden
 
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-     <r-progress type="drag" percent="30%" dot="false"></r-progress>
-</div>
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-     <r-progress type="primary" percent="40%" dot="true"></r-progress>
-</div>
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-     <r-progress type="primary" percent="40%" ></r-progress>
-</div>
+<r-progress type="drag" percent="30%" dot="false"></r-progress>
+<div style="height:20px;width:10px"></div>
+<r-progress type="primary" percent="40%" dot="true"></r-progress>
+<div style="height:20px;width:10px"></div>
+<r-progress type="primary" percent="40%" ></r-progress>
 
 ```html
 <r-progress type="drag" percent="30%" dot="false"></r-progress>
@@ -74,31 +60,28 @@
 <r-progress type="primary" percent="40%"></r-progress>
 ```
 
-### 类型`type`
+### `type`
 
-- `primary`: 默认的进度条，不设置`type`属性是默认
-- `drag`: 可拖动，可点击的进度条（拖动需要设置`dot`为`true`）
+- `primary`: Default progress bar, not setting the 'type' attribute is the default
+- `drag`: Draggable, clickable progress bar (dragging requires' dot 'to be' true ')
 
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-     <r-progress type="drag" percent="30%"></r-progress>
-</div>
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-     <r-progress type="primary" percent="40%"></r-progress>
-</div>
+<r-progress type="drag" percent="30%"></r-progress>
+<div style="height:20px;width:10px"></div>
+<r-progress type="primary" percent="40%"></r-progress>
 
 ```html
 <r-progress type="drag" percent="30%"></r-progress>
 <r-progress type="primary" percent="40%"></r-progress>
 ```
 
-## 方法
+## Method
 
 ### `change`
 
-当`percent`和`total`属性发生变化时，触发`change`事件。
+The 'change' event is triggered when the 'percent' and 'total' properties change.
 
-| 属性    | 说明     | 类型             |
-| ------- | -------- | ---------------- |
-| value   | 当前进度 | `string｜number` |
-| percent | 当前进度 | `string｜number` |
-| total   | 总进度   | `string｜number` |
+ | property | explains that    | type    |
+ | -------- | ---------------- | ------- |
+ | value    | Current progress | 'string | number' |
+ | percent  | Current progress | 'string | number' |
+ | total    | Total progress   | 'string | number' |

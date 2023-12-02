@@ -1,6 +1,6 @@
 # Tab
 
-## 代码展示
+## Code demo
 
 <r-tabs>
     <r-tab label="tab1">tab1</r-tab>
@@ -16,11 +16,11 @@
 </r-tabs>
 ```
 
-## 属性
+## Attribute
 
-### 名称`label`
+### `label`
 
-每个`r-tab`需要指定一个名称`label`，用于显示标签头。
+Each 'r-tab' needs to specify a name 'label', which is used to display the label header.
 
 <r-tabs>
     <r-tab label="tab1">tab1</r-tab>
@@ -36,9 +36,9 @@
 </r-tabs>
 ```
 
-### 禁用`disabled`
+### `disabled`
 
-每个`r-tab`可以指定`disabled`属性，用来禁用该标签页。
+Each 'r-tab' can be specified with the 'disabled' attribute to disable the TAB.
 
 <r-tabs>
     <r-tab label="tab1">tab1</r-tab>
@@ -54,11 +54,11 @@
 </r-tabs>
 ```
 
-### 标识`key`,`active`
+### Identifies' key ', 'active'
 
-每个`r-tab`需要指定一个标识`key`，没有会默认以序列号为`key`，
+Each 'r-tab' needs to specify an identifier 'key', no default sequence number is' key ',
 
-`active`作用在`r-tabs`上，可以指定切换到具体标签页，也可以指定初始值。
+'active' works on 'r-tabs' and can specify a switch to a specific TAB or an initial value.
 
 <r-tabs active="B">
     <r-tab label="tab1" r-key="A">tab1</r-tab>
@@ -74,9 +74,9 @@
 </r-tabs>
 ```
 
-### 图标`icon`
+### `icon`
 
-每个`r-tab`可以指定`icon`，配合`label`实现图标加文字的效果。
+Each 'r-tab' can specify 'icon', with 'label' to achieve the effect of icon plus text.
 
 <r-tabs>
     <r-tab label="home" icon="home">tab1</r-tab>
@@ -92,7 +92,7 @@
 </r-tabs>
 ```
 
-也可以单独指定`icon`，不使用`label`。但这种情况必须要设置`icon`的`size`，否则无法判断`icon`的大小
+It is also possible to specify 'icon' alone, without using 'label'. However, in this case, the size of the icon must be set, otherwise the size of the icon cannot be judged
 
 <r-tabs>
     <r-tab icon="home" iconSize='22'>tab1</r-tab>
@@ -108,14 +108,12 @@
 </r-tabs>
 ```
 
-### 风格`type`
+### 'type'
 
-风格有 text，clean,
+The style is text, clean,
 
-### 对齐`align`
-
-## 事件`event`
+## event '
 
 ### onchange
 
-切换完成时触发。
+Triggered when the switch is complete.
