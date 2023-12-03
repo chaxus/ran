@@ -161,6 +161,8 @@ export const es: BuildOptions = {
       modal: resolve(__dirname, 'components/modal/index.ts'),
       select: resolve(__dirname, 'components/select/index.ts'),
       option: resolve(__dirname, 'components/option/index.ts'),
+      player: resolve(__dirname, 'components/player/index.ts'),
+      progress: resolve(__dirname, 'components/progress/index.ts'),
       index: resolve(__dirname, 'index.ts'),
     },
     fileName: (_: string, name: string): string => {

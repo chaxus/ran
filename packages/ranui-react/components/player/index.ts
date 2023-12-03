@@ -4,7 +4,7 @@ import 'ranui/style';
 
 interface RPreview {
   src?: string | Blob | ArrayBuffer;
-  onChange?: React.MouseEventHandler<HTMLDivElement> | undefined;
+  onChange?: any;
   ref?: React.MutableRefObject<HTMLDivElement | null>;
   volume?: string | number;
   currentTime?: string | number;
@@ -14,3 +14,4 @@ interface RPreview {
 const Player = reactify<RPreview>('r-player');
 
 export default Player;
+ 
