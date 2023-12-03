@@ -14,4 +14,3 @@ interface RPreview {
 const Player = reactify<RPreview>('r-player');
 
 export default Player;
- 

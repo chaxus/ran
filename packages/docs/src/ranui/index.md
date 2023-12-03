@@ -256,7 +256,7 @@ import 'ranui';
 
 - `Radar`
 
-<r-radar style="width:300px;height:300px;display: block;" abilitys='[{"abilityName":"生命","scoreRate":"10"},{"abilityName":"攻击","scoreRate":"90"},{"abilityName":"防御","scoreRate":"20"},{"abilityName":"元素精通","scoreRate":"50"},{"abilityName":"暴击率","scoreRate":"80"},{"abilityName":"暴击伤害","scoreRate":"50"}]'></r-radar>
+<r-radar style="width:300px;height:300px;display: block;" abilitys='[{"abilityName":"HP","scoreRate":"10"},{"abilityName":"Attack","scoreRate":"90"},{"abilityName":"DEF","scoreRate":"20"},{"abilityName":"Element mastery","scoreRate":"50"},{"abilityName":"Critical Hit Chance","scoreRate":"80"},{"abilityName":"Critical hit damage","scoreRate":"50"}]'></r-radar>
 
 - `Progress`
 
@@ -268,7 +268,7 @@ import 'ranui';
 
 - `Select`
 
-<r-select style="width: 120px; height: 40px" action="click,hover">
+<r-select style="width: 120px; height: 40px" value="185" action="click">
 <r-option value="185">Mike</r-option>
 <r-option value="186">Tom</r-option>
 <r-option value="187">Lucy</r-option>
