@@ -74,8 +74,8 @@ Where 'type' type has
 | seeking                   | seek begins.                                                                                                                                                 |
 | stalled                   | The user agent is trying to obtain media data but it has not appeared unexpectedly.                                                                          |
 | suspend                   | Media data loading has been suspended.                                                                                                                       |
-| The first frame in        | loadeddata                                                                                                                                                   | media has loaded.                  |
-| The time specified by the | timeupdate                                                                                                                                                   | currentTime attribute has changed. |
+| loadeddata        |        The first frame in media has been added                                                                                                              | media has loaded.                  |
+| timeupdate|       The time specified by the currentTime property changes.                                                                                                   | currentTime attribute has changed. |
 | volumechange              | The volume changes.                                                                                                                                          |
 | waiting                   | Playing has stopped due to lack of data.                                                                                                                     |
 | play                      | Playback has started.                                                                                                                                        |
