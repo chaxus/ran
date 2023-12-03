@@ -258,6 +258,22 @@ import 'ranui';
 
 <r-radar style="width:300px;height:300px;display: block;" abilitys='[{"abilityName":"生命","scoreRate":"10"},{"abilityName":"攻击","scoreRate":"90"},{"abilityName":"防御","scoreRate":"20"},{"abilityName":"元素精通","scoreRate":"50"},{"abilityName":"暴击率","scoreRate":"80"},{"abilityName":"暴击伤害","scoreRate":"50"}]'></r-radar>
 
+- `Progress`
+
+<r-progress type="drag" ></r-progress>
+
+- `Player`
+
+<r-player style="display: block;width:600px;height:300px;" src="/ran/hls/example.m3u8"></r-player>
+
+- `Select`
+
+<r-select style="width: 120px; height: 40px" action="click,hover">
+<r-option value="185">Mike</r-option>
+<r-option value="186">Tom</r-option>
+<r-option value="187">Lucy</r-option>
+</r-select>
+
 ## Event 事件
 
 - `react`

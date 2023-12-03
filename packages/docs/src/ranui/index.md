@@ -191,16 +191,16 @@ import 'ranui';
 - `Button`
 
 <div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-     <r-button type="primary">主要按钮</r-button>
+     <r-button type="primary">Primary button</r-button>
 </div>
 <div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-     <r-button type="warning">警告按钮</r-button>
+     <r-button type="warning">Warning button</r-button>
 </div>
 <div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-    <r-button type="text">文本按钮</r-button>
+    <r-button type="text">Text button</r-button>
 </div>
 <div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-    <r-button >默认按钮</r-button>
+    <r-button >Default button</r-button>
 </div>
 
 - `Icon`
@@ -238,11 +238,11 @@ import 'ranui';
 
 - `message`
 
-<r-button onclick="message.info('这是一条提示')">信息提示</r-button>
-<r-button onclick="message.warning('这是一条提示')">警告提示</r-button>
-<r-button onclick="message.error('这是一条提示')">错误提示</r-button>
-<r-button onclick="message.success('这是一条提示')">成功提示</r-button>
-<r-button onclick="message.toast('这是一条提示')">toast 提示</r-button>
+<r-button onclick="message.info('This is a hint')">Information prompt</r-button>
+<r-button onclick="message.warning('This is a hint')">Warning prompt</r-button>
+<r-button onclick="message.error('This is a hint')">Error prompt</r-button>
+<r-button onclick="message.success('This is a hint')">Success tip</r-button>
+<r-button onclick="message.toast('This is a hint')">toast tip</r-button>
 
 - `Tab`
 
@@ -257,6 +257,22 @@ import 'ranui';
 - `Radar`
 
 <r-radar style="width:300px;height:300px;display: block;" abilitys='[{"abilityName":"生命","scoreRate":"10"},{"abilityName":"攻击","scoreRate":"90"},{"abilityName":"防御","scoreRate":"20"},{"abilityName":"元素精通","scoreRate":"50"},{"abilityName":"暴击率","scoreRate":"80"},{"abilityName":"暴击伤害","scoreRate":"50"}]'></r-radar>
+
+- `Progress`
+
+<r-progress type="drag" ></r-progress>
+
+- `Player`
+
+<r-player style="display: block;width:600px;height:300px;" src="/ran/hls/example.m3u8"></r-player>
+
+- `Select`
+
+<r-select style="width: 120px; height: 40px" action="click,hover">
+<r-option value="185">Mike</r-option>
+<r-option value="186">Tom</r-option>
+<r-option value="187">Lucy</r-option>
+</r-select>
 
 ## Event
 
