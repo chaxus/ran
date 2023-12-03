@@ -29,5 +29,5 @@ export {
   Progress,
   Player,
   Select,
-  Option
+  Option,
 };

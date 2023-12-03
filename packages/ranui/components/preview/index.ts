@@ -2,7 +2,7 @@ import { noop } from 'ranuts';
 import '../../base.less';
 import '@/components/icon';
 import message from '@/components/message';
-import './index.less'
+import './index.less';
 
 const { warning = noop } = message;
 

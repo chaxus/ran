@@ -1,21 +1,21 @@
-# 插入排序（Insert Sort）
+# Insert Sort
 
-表现稳定的排序算法，因为无论什么数据进去都是 O(n2)的时间复杂度，所以用到它的时候，数据规模越小越好。优点是不占用额外的内存空间。工作原理是通过构建有序序列，对于未排序数据，在已排序序列中从后向前扫描，找到相应位置并插入。
+Stable sorting algorithm, because no matter what data is entered is O(n2) time complexity, so when it is used, the smaller the data size, the better. The advantage is that no additional memory space is taken up. It works by building an ordered sequence and, for unsorted data, scanning from back to front in the sorted sequence, finding the appropriate position and inserting it.
 
-## 算法描述
+## Algorithm description
 
-- 从第一个元素开始，该元素可以认为已经被排序；
-- 取出下一个元素，在已经排序的元素序列中从后向前扫描；
-- 如果该元素（已排序）大于新元素，将该元素移到下一位置；
-- 重复步骤 3，直到找到已排序的元素小于或者等于新元素的位置；
-- 将新元素插入到该位置后；
-- 重复步骤 2~5。
+- Start with the first element, which can be considered to have been sorted;
+- Take the next element and scan it from back to front in the already sorted sequence of elements;
+- If the element (sorted) is larger than the new element, move the element to the next position;
+- Repeat step 3 until you find a position where the sorted element is less than or equal to the new element;
+- After inserting a new element into this position;
+- Repeat Steps 2 to 5.
 
-## 动图演示
+## GIF presentation
 
-![插入排序](../../../../assets/ranuts/sort/insert.gif)
+![Insert Sort](../../../../assets/ranuts/sort/insert.gif)
 
-## 代码演示
+## Code demo
 
 ```ts
 const insert = (list: number[]): number[] => {
@@ -33,6 +33,6 @@ const insert = (list: number[]): number[] => {
 };
 ```
 
-## 算法分析
+## Algorithm analysis
 
-插入排序在实现上，通常采用 in-place 排序（即只需用到 O(1)的额外空间的排序），因而在从后向前扫描过程中，需要反复把已排序元素逐步向后挪位，为最新元素提供插入空间。
+Insertion sort in the implementation, usually use in-place sort (that is, only need to use O(1) of the additional space of the sort), so in the process of scanning from back to forward, the sorted elements need to be repeatedly moved backward step by step, to provide insertion space for the latest elements.

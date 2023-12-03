@@ -10,9 +10,8 @@
   <body>
     <h1 id="select">Hello RanUI</h1>
     <h2>video</h2>
-    <div style="width: 600px; height: 300px;margin-left: 1000px;">
-      <r-player src="http://localhost:5173/hls/example.m3u8">
-      </r-player>
+    <div style="width: 600px; height: 300px; margin-left: 1000px">
+      <r-player src="http://localhost:5173/hls/example.m3u8"> </r-player>
     </div>
     <h2>Progress</h2>
     <r-progress type="drag"></r-progress>
@@ -33,7 +32,11 @@
       <r-option value="186">Tom</r-option>
       <r-option value="187">Lucy</r-option>
     </r-select>
-    <r-select style="width: 120px; height: 40px" defaultValue="185" getPopupContainerId="select">
+    <r-select
+      style="width: 120px; height: 40px"
+      defaultValue="185"
+      getPopupContainerId="select"
+    >
       <r-option value="185">Mike</r-option>
       <r-option value="186">Tom</r-option>
       <r-option value="187">Lucy</r-option>
@@ -133,7 +136,7 @@
     </script>
   </body>
   <script async>
-    function getPopupContainer(){
+    function getPopupContainer() {
       console.log('getPopupContainer');
     }
     // 添加资源到缓存

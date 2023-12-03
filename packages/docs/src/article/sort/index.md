@@ -1,19 +1,19 @@
-# 十大经典排序
+# Ten classic sorting algorithms
 
-十种常见排序算法可以分为两大类：
+The ten common sorting algorithms can be divided into two broad categories:
 
-- **比较类排序**：通过比较来决定元素间的相对次序，由于其时间复杂度不能突破 O(nlogn)，因此也称为非线性时间比较类排序。
-- **非比较类排序**：不通过比较来决定元素间的相对次序，它可以突破基于比较排序的时间下界，以线性时间运行，因此也称为线性时间非比较类排序。
+- **Comparator sort**：By comparison to determine the relative order between elements, because its time complexity can not break through O(nlogn), so it is also called nonlinear time comparison class sorting.
+- **Non-comparison sort**：Instead of determining the relative order between elements by comparison, it can break through the time lower bound based on comparison sort and run in linear time, so it is also called linear time non-comparison sort.
 
-![排序分类](../../../assets/ranuts/sort/sort.png)
+![Sorting algorithm classification](../../../assets/ranuts/sort/sort.png)
 
-## 算法复杂度
+## Algorithm complexity
 
-![算法复杂度](../../../assets/ranuts/sort/complexity.png)
+![Algorithm complexity](../../../assets/ranuts/sort/complexity.png)
 
-## 相关概念
+## Related concept
 
-- 稳定：如果 a 原本在 b 前面，而 a=b，排序之后 a 仍然在 b 的前面。
-- 不稳定：如果 a 原本在 b 的前面，而 a=b，排序之后 a 可能会出现在 b 的后面。
-- 时间复杂度：对排序数据的总的操作次数。反映当 n 变化时，操作次数呈现什么规律。
-- 空间复杂度：是指算法在计算机内执行时所需存储空间的度量，它也是数据规模 n 的函数。
+- Stable: If a was originally in front of b and a=b, a is still in front of b after sorting.
+- Unstable: If a originally comes before b and a=b, a may come after b after sorting.
+- Time complexity: The total number of operations on sorted data. Reflects what rule the number of operations presents when n changes.
+- Spatial complexity: refers to the measure of the storage space required when the algorithm is executed in the computer, and it is also a function of the data size n.

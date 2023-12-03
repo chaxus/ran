@@ -1,8 +1,8 @@
-# Select 下拉选择框
+# Select
 
-一个普通的下拉选择器。
+A regular pull-down selector.
 
-## 代码演示
+## Code demo
 
 <r-select style="width: 120px; height: 40px" defaultValue="185">
       <r-option value="185">Mike</r-option>
@@ -18,11 +18,11 @@
     </r-select>
 ```
 
-## 属性
+## Attribute
 
-### 默认值`defaultValue`
+### `defaultValue`
 
-设置当前选中的值
+Sets the currently selected value
 
 <r-select style="width: 120px; height: 40px" defaultValue="185">
       <r-option value="185">Mike</r-option>
@@ -38,9 +38,9 @@
     </r-select>
 ```
 
-### 不可用状态`disabled`
+### `disabled`
 
-添加 disabled 属性即可让选择框处于不可用状态，同时样式也会改变。
+Adding the disabled attribute makes the selection box unavailable and changes the style.
 
 <r-select style="width: 120px; height: 40px" disabled defaultValue="185">
       <r-option value="185">Mike</r-option>
@@ -56,9 +56,9 @@
     </r-select>
 ```
 
-### 类型`type`
+### `type`
 
-可以设置文本类型，不要边框和下拉图标
+You can set the text type without borders and drop-down ICONS
 
 <r-select
       style="width: 120px; height: 40px"
@@ -82,9 +82,9 @@
     </r-select>
 ```
 
-### 下拉框的展示方向`placement`
+### `placement`
 
-下拉框展示方向默认往下，设置成`top`可以往上
+Drop-down box display direction default down, set to 'top' can go up
 
 <r-select
       style="width: 120px; height: 40px"
@@ -109,34 +109,45 @@
       <r-option value="187">Lucy</r-option>
     </r-select>
 ```
-### 下拉框挂载元素的id`getPopupContainerId`
 
-下拉框默认挂载到`document.body`上，可以传入元素的`id`，挂载到指定的元素内
+### `getPopupContainerId`
+
+The drop-down box is mounted to document.body by default, and can be mounted to the specified element by passing in the element's id
 `
-<r-select style="width: 120px; height: 40px" getPopupContainerId="elementid">
+<r-select style="width: 120px; height: 40px">
 <r-option value="185">Mike</r-option>
 <r-option value="186">Tom</r-option>
 <r-option value="187">Lucy</r-option>
 </r-select>
 
 ```xml
-<r-select
-      style="width: 120px; height: 40px"
-      type="text"
-      defaultValue="185"
-    >
+<r-select getPopupContainerId="elementid">
       <r-option value="185">Mike</r-option>
       <r-option value="186">Tom</r-option>
       <r-option value="187">Lucy</r-option>
     </r-select>
 ```
 
-### 下拉框的class名`dropdownclass`
+### `dropdownclass`
 
-如果需要自定义下拉框的样式，可以传入一个 `class` 名，进行自定义
+If you need to customize the style of the drop-down box, you can pass in a 'class' name to customize
 
-### action 
+### action
 
-`select` 组件触发的方法。默认 `click` ，点击触发。可以设置`hover`，或者`click,hover`，表示点击和鼠标移入都触发。
+'select' The method that the component triggers. Default 'click', click trigger. You can set 'hover', or 'click,hover', which means that both click and mouse move trigger.
 
-如果设置成none，就不会触发。
+If it is set to none, it will not trigger.
+
+<r-select style="width: 120px; height: 40px" action="click,hover">
+<r-option value="185">Mike</r-option>
+<r-option value="186">Tom</r-option>
+<r-option value="187">Lucy</r-option>
+</r-select>
+
+```xml
+<r-select getPopupContainerId="elementid" action="click,hover">
+      <r-option value="185">Mike</r-option>
+      <r-option value="186">Tom</r-option>
+      <r-option value="187">Lucy</r-option>
+    </r-select>
+```

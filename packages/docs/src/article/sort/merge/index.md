@@ -1,18 +1,18 @@
-# 归并排序（Merge Sort）
+# Merge Sort
 
-归并排序是建立在归并操作上的一种有效的排序算法。该算法是采用分治法（Divide and Conquer）的一个非常典型的应用。将已有序的子序列合并，得到完全有序的序列；即先使每个子序列有序，再使子序列段间有序。若将两个有序表合并成一个有序表，称为 2-路归并。
+Merge sort is an effective sort algorithm based on merge operation. This algorithm is a very typical application of Divide and Conquer. By combining the ordered subsequences, a completely ordered sequence is obtained. That is, each subsequence is ordered first, and then the subsequence segments are ordered. If two ordered tables are merged into one ordered table, it is called a 2-way merge.
 
-## 算法描述
+## Algorithm description
 
-- 把长度为 n 的输入序列分成两个长度为 n/2 的子序列；
-- 对这两个子序列分别采用归并排序；
-- 将两个排序好的子序列合并成一个最终的排序序列。
+- Divide the input sequence of length n into two subsequences of length n/2;
+- The two subsequences were merged and sorted respectively.
+- Merge two sorted subsequences into one final sorted sequence.
 
-## 动图演示
+## GIF presentation
 
-![归并排序](../../../../assets/ranuts/sort/merge.gif)
+![Merge Sort](../../../../assets/ranuts/sort/merge.gif)
 
-## 代码演示
+## Code demo
 
 ```ts
 const combine = (left: Array<number>, right: Array<number>) => {
@@ -34,7 +34,7 @@ const combine = (left: Array<number>, right: Array<number>) => {
   return list;
 };
 /**
- * @description: 归并排序
+ * @description: Merge sort
  * @param {Array} list
  * @return {Array}
  */
@@ -50,6 +50,6 @@ const merge = (list: Array<number>): Array<number> => {
 };
 ```
 
-## 算法分析
+## Algorithm analysis
 
-归并排序是一种稳定的排序方法。和选择排序一样，归并排序的性能不受输入数据的影响，但表现比选择排序好的多，因为始终都是 O(nlogn）的时间复杂度。代价是需要额外的内存空间。
+Merge sort is a stable sort method. Like select sort, merge sort performs independently of the input data, but performs much better than select sort because it is always O(nlogn) in time complexity. The trade-off is extra memory space.

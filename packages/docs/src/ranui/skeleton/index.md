@@ -1,10 +1,10 @@
-# skeleton 骨架屏
+# skeleton
 
-在需要等待加载内容的位置提供一个占位图形组合。
+Provides a combination of placeholder graphics where you need to wait for content to load.
 
-## 代码演示
+## Code demo
 
-骨架长度跟随父级元素的长度
+The skeleton length follows the length of the parent element
 
 <div style="width: 100px;margin-top:10px">
     <r-skeleton ></r-skeleton>

@@ -1,4 +1,4 @@
-@import url("../../base.less");
+@import url('../../base.less');
 
 @number: 49;
 
@@ -6,9 +6,9 @@
   .circle(@index) when (@index < @number) {
     @i: @index+1;
     @x: round((@i / @number) * 100, 2);
-    @selector: e("@{x}%");
+    @selector: e('@{x}%');
     @{selector} {
-      background-image: url("../../assets/image/loading/1_@{i}.png");
+      background-image: url('../../assets/image/loading/1_@{i}.png');
     }
     .circle(@i);
   }
@@ -405,7 +405,7 @@
           cursor: pointer;
         }
         &-full {
-          background: url("./img/fullscreenfig.png");
+          background: url('./img/fullscreenfig.png');
           background-size: contain;
           width: 16px;
           height: 16px;

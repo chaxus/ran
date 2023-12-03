@@ -1,6 +1,6 @@
 import { defineConfig } from 'vitepress';
-import { themeEnConfig } from './langs/en'
-import { themeCnConfig } from './langs/cn'
+import { themeEnConfig } from './langs/en';
+import { themeCnConfig } from './langs/cn';
 import {
   GTAG,
   GOOGLE_ANALYSE,
@@ -23,18 +23,18 @@ export default defineConfig({
   base: BASE_PATH,
   lastUpdated: true,
   locales: {
-    root: { label: '简体中文', lang: 'zh-CN' },
-    en: {
-      label: 'English',
-      lang: 'en',
-      themeConfig: themeEnConfig,
-    },
-    // root: { label: 'English', lang: 'en' },
-    // cn: {
-    //   label: '简体中文',
-    //   lang: 'zh-CN',
-    //   themeConfig: themeCnConfig,
+    // root: { label: '简体中文', lang: 'zh-CN' },
+    // en: {
+    //   label: 'English',
+    //   lang: 'en',
+    //   themeConfig: themeEnConfig,
     // },
+    root: { label: 'English', lang: 'en' },
+    cn: {
+      label: '简体中文',
+      lang: 'zh-CN',
+      themeConfig: themeCnConfig,
+    },
   },
   vue: {
     template: {
@@ -84,5 +84,5 @@ export default defineConfig({
     // preview component script
     ['script', {}, PREVIEW_CODE],
   ],
-  themeConfig: themeCnConfig
+  themeConfig: themeEnConfig,
 });

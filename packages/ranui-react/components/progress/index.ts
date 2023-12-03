@@ -1,5 +1,5 @@
 import reactify from '@/utils/reactify';
-import 'ranui/progress'
+import 'ranui/progress';
 import 'ranui/style';
 
 interface RPreview {

@@ -1,19 +1,19 @@
-# 计数排序（ Count Sort ）
+# Count Sort
 
-计数排序（counting sort）就是一种牺牲内存空间来换取低时间复杂度的排序算法，同时它也是一种不基于比较的算法。这里的不基于比较指的是数组元素之间不存在比较大小的排序算法，我们知道，用分治法来解决排序问题最快也只能使算法的时间复杂度接近 Θ(nlogn)，即基于比较的时间复杂度存在下界 Ω(nlog⁡n)，而不基于比较的排序算法可以突破这一下界。
+counting sort is a kind of sorting algorithm that sacrifices memory space for low time complexity, and it is also a kind of algorithm that is not based on comparison. The non-comparison-based sorting algorithm here means that there is no comparison size between array elements. We know that the divide-and-conquer method to solve the sorting problem can only make the time complexity of the algorithm approach Θ(nlogn) at the fastest, that is, the time complexity based on comparison has a lower bound Ω(nlog⁡n), and the sorting algorithm based on no comparison can break through this lower bound.
 
-## 算法描述
+## Algorithm description
 
-- 找出待排序的数组中最大和最小的元素；
-- 统计数组中每个值为 i 的元素出现的次数，存入数组 C 的第 i 项；
-- 对所有的计数累加（从 C 中的第一个元素开始，每一项和前一项相加）；
-- 反向填充目标数组：将每个元素 i 放在新数组的第 C(i)项，每放一个元素就将 C(i)减去 1。
+- Find the largest and smallest elements of the array to be sorted;
+- Count the number of occurrences of each element with value i in the array, stored in the i - th item of the array C;
+- Add up all counts (starting with the first element in C and adding each term to the previous one);
+- Backfill the target array: Place each element i in the C(i) item of the new array, and subtract 1 from C(i) for each element.
 
-## 动图演示
+## GIF presentation
 
-![计数排序](../../../../assets/ranuts/sort/count.gif)
+![Count Sort](../../../../assets/ranuts/sort/count.gif)
 
-## 代码演示
+## Code demo
 
 ```ts
 const getMax = (list: number[]) => {
@@ -26,7 +26,7 @@ const getMax = (list: number[]) => {
   return max;
 };
 /**
- * @description: 计数排序
+ * @description: Count Sort
  * @param {Array<number>} list
  * @return {Array<number>}
  */
@@ -52,6 +52,6 @@ const count = (list: number[]): number[] => {
 };
 ```
 
-## 算法分析
+## Algorithm analysis
 
-计数排序是一个稳定的排序算法。当输入的元素是 n 个 0 到 k 之间的整数时，时间复杂度是 O(n+k)，空间复杂度也是 O(n+k)，其排序速度快于任何比较排序算法。当 k 不是很大并且序列比较集中时，计数排序是一个很有效的排序算法。
+Counting sort is a stable sorting algorithm. When the input elements are n integers between 0 and k, the time complexity is O(n+k) and the space complexity is also O(n+k), which sorts faster than any comparison sorting algorithm. Counting sort is an efficient sorting algorithm when k is not large and the sequence is concentrated.

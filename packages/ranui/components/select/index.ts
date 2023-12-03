@@ -53,7 +53,7 @@ export class Select extends HTMLElement {
       'placement', // 弹窗的方向
       'getPopupContainerId', // 挂载的节点
       'dropdownclass', // 弹窗的类名
-      'action' // 触发下拉框的行为，click还是hover
+      'action', // 触发下拉框的行为，click还是hover
     ];
   }
   constructor() {
@@ -141,13 +141,13 @@ export class Select extends HTMLElement {
     this.setAttribute('getPopupContainerId', value || '');
   }
   get dropdownclass(): string {
-    return this.getAttribute('dropdownclass') || ""
+    return this.getAttribute('dropdownclass') || '';
   }
   set dropdownclass(value: string) {
     this.setAttribute('dropdownclass', value || '');
   }
   get action(): string {
-    return this.getAttribute('action') || "click"
+    return this.getAttribute('action') || 'click';
   }
   set action(value: string) {
     this.setAttribute('action', value || '');
@@ -209,11 +209,21 @@ export class Select extends HTMLElement {
    */
   setSelectDropdownDisplayBlock = (): void => {
     if (this._selectDropDownInTimeId) return;
-    if (this._selectionDropdown && this._selectionDropdown.style.display !== 'block') {
-      addClassToElement(this._selectionDropdown, placementDirection[this.placement].add,);
+    if (
+      this._selectionDropdown &&
+      this._selectionDropdown.style.display !== 'block'
+    ) {
+      addClassToElement(
+        this._selectionDropdown,
+        placementDirection[this.placement].add,
+      );
       this._selectionDropdown?.style.setProperty('display', 'block');
       this._selectDropDownInTimeId = setTimeout(() => {
-        this._selectionDropdown && removeClassToElement(this._selectionDropdown, placementDirection[this.placement].add);
+        this._selectionDropdown &&
+          removeClassToElement(
+            this._selectionDropdown,
+            placementDirection[this.placement].add,
+          );
         clearTimeout(this._selectDropDownInTimeId);
         this._selectDropDownInTimeId = undefined;
       }, 200);
@@ -231,18 +241,24 @@ export class Select extends HTMLElement {
       '-ran-y',
       `${y + window.scrollY}`,
     );
-    let selectTop = bottom + window.scrollY
-    let selectLeft = left + window.scrollX
+    let selectTop = bottom + window.scrollY;
+    let selectLeft = left + window.scrollX;
     this._selectionDropdown.style.setProperty('width', `${width}px`);
-    const root = document.getElementById(this.getPopupContainerId)
+    const root = document.getElementById(this.getPopupContainerId);
     if (this.placement === 'top') {
-      selectTop = top + window.scrollY - this._selectionDropdown.clientHeight
+      selectTop = top + window.scrollY - this._selectionDropdown.clientHeight;
       if (this.getPopupContainerId && root) {
-        selectTop = top - root.getBoundingClientRect().top - this._selectionDropdown.clientHeight
-        selectLeft = left - root.getBoundingClientRect().left
+        selectTop =
+          top -
+          root.getBoundingClientRect().top -
+          this._selectionDropdown.clientHeight;
+        selectLeft = left - root.getBoundingClientRect().left;
       }
     }
-    this._selectionDropdown.style.setProperty('inset', `${selectTop}px auto auto ${selectLeft}px`);
+    this._selectionDropdown.style.setProperty(
+      'inset',
+      `${selectTop}px auto auto ${selectLeft}px`,
+    );
   };
   /**
    * @description: 设置下拉框
@@ -250,27 +266,27 @@ export class Select extends HTMLElement {
    */
   selectMouseDown = (): void => {
     if (isDisabled(this)) return;
-    this.removeDropDownTimeId()
+    this.removeDropDownTimeId();
     this.setSelectDropdownDisplayNone();
     this.setSelectDropdownDisplayBlock();
     this.placementPosition();
   };
   removeDropDownTimeId = (): void => {
     if (this.action.includes('hover')) {
-      clearTimeout(this.removeTimeId)
-      this.removeTimeId = undefined
+      clearTimeout(this.removeTimeId);
+      this.removeTimeId = undefined;
     }
-  }
+  };
   /**
    * @description: 焦点移除的情况，需要移除select 下拉框
    * @return {*}
    */
   selectBlur = (): void => {
     if (this.removeTimeId) {
-      this.removeDropDownTimeId()
+      this.removeDropDownTimeId();
     }
     this.removeTimeId = setTimeout(() => {
-      this.removeDropDownTimeId()
+      this.removeDropDownTimeId();
       this.setSelectDropdownDisplayNone();
     }, 300);
   };
@@ -285,9 +301,7 @@ export class Select extends HTMLElement {
       element = element.children[0];
     }
     if (
-      !element.classList?.contains(
-        'ranui-select-dropdown-option-item-content',
-      )
+      !element.classList?.contains('ranui-select-dropdown-option-item-content')
     )
       return;
     const label = element.innerHTML;
@@ -315,10 +329,8 @@ export class Select extends HTMLElement {
     }, 200);
     this.setSelectDropdownDisplayNone();
     // 点击后触发 onchange 事件
-    this.dispatchEvent(
-      new CustomEvent('change', { detail: { value, label } }),
-    );
-    this.removeDropDownTimeId()
+    this.dispatchEvent(new CustomEvent('change', { detail: { value, label } }));
+    this.removeDropDownTimeId();
   };
   /**
    * @description: 初始化创建选项下拉框
@@ -326,18 +338,25 @@ export class Select extends HTMLElement {
    */
   createOption = (): void => {
     if (!this._selectDropdown) {
-      const container = document.getElementById(this.getPopupContainerId) || document.body
+      const container =
+        document.getElementById(this.getPopupContainerId) || document.body;
       this._selectDropdown = document.createElement('div');
       this._selectDropdown.addEventListener('click', this.clickOption);
       this._selectionDropdown = document.createElement('div');
       if (this.dropdownclass) {
-        this._selectionDropdown.setAttribute('class', `${this.dropdownclass} ranui-select-dropdown`);
+        this._selectionDropdown.setAttribute(
+          'class',
+          `${this.dropdownclass} ranui-select-dropdown`,
+        );
       } else {
         this._selectionDropdown.setAttribute('class', 'ranui-select-dropdown');
       }
       if (this.action.includes('hover')) {
         this._selectDropdown.addEventListener('mouseleave', this.selectBlur);
-        this._selectDropdown.addEventListener('mouseenter', this.removeDropDownTimeId);
+        this._selectDropdown.addEventListener(
+          'mouseenter',
+          this.removeDropDownTimeId,
+        );
       }
       this._selectDropdown.appendChild(this._selectionDropdown);
       this._selectionDropdown.style.setProperty('display', 'none');
@@ -351,10 +370,11 @@ export class Select extends HTMLElement {
   removeSelectDropdown = (): void => {
     try {
       if (this._selectDropdown) {
-        const container = document.getElementById(this.getPopupContainerId) || document.body
+        const container =
+          document.getElementById(this.getPopupContainerId) || document.body;
         container.removeChild(this._selectDropdown);
       }
-    } catch (error) { }
+    } catch (error) {}
   };
   /**
    * @description: 当select中有option元素的时候，给dropdown添加元素
@@ -380,13 +400,14 @@ export class Select extends HTMLElement {
       if (this._selectionDropdown) {
         const { label, value } = item;
         const selectOptionItem = document.createElement('div');
-        const defaultValue = this.getAttribute('defaultValue') || this.getAttribute('value');
+        const defaultValue =
+          this.getAttribute('defaultValue') || this.getAttribute('value');
         if (defaultValue === value) {
           selectOptionItem.setAttribute(
             'class',
             'ranui-select-dropdown-option-active ranui-select-dropdown-option-item',
           );
-          this._activeOption = selectOptionItem
+          this._activeOption = selectOptionItem;
         } else {
           selectOptionItem.setAttribute(
             'class',
@@ -408,7 +429,8 @@ export class Select extends HTMLElement {
     this.setDefaultValue();
   };
   setDefaultValue = (): void => {
-    const defaultValue = this.getAttribute('defaultValue') || this.getAttribute('value');
+    const defaultValue =
+      this.getAttribute('defaultValue') || this.getAttribute('value');
     if (!defaultValue) return;
     const label = this._optionValueMapLabel.get(defaultValue);
     if (!label) return;
@@ -444,11 +466,11 @@ export class Select extends HTMLElement {
       this.addEventListener('mousedown', this.selectMouseDown);
       this.addEventListener('blur', this.selectBlur);
     }
-  }
+  };
   connectedCallback(): void {
     this.handlerExternalCss();
     this.createOption();
-    this.listenActionEvent()
+    this.listenActionEvent();
     this.listenSlotChange();
     this.setShowSearch();
   }
@@ -483,7 +505,6 @@ export class Select extends HTMLElement {
 
 function Custom() {
   if (typeof document !== 'undefined' && !customElements.get('r-select')) {
-
     customElements.define('r-select', Select);
     return Select;
   } else {

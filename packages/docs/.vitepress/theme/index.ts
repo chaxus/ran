@@ -16,5 +16,5 @@ export default {
     if (!import.meta.env.SSR) {
       import('ranui');
     }
-  }
+  },
 };

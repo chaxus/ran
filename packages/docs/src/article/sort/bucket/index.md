@@ -1,15 +1,17 @@
-# 桶排序 (Bucket Sort）
+# Bucket Sort
 
-高效与否的关键在于这个分桶函数。将数据分到有限数量的桶里，每个桶再分别排序（有可能再使用别的排序算法或是以递归方式继续使用桶排序进行排）。
+The key to efficiency is this bucket function. The data is divided into a limited number of buckets, and each bucket is sorted separately (it is possible to use another sorting algorithm or recursively continue to use bucket sorting).
 
-## 算法描述
+## Algorithm description
 
-- 设置一个定量的数组当作空桶；
-- 遍历输入数据，并且把数据一个一个放到对应的桶里去；
-- 对每个不是空的桶进行排序；
-- 从不是空的桶里把排好序的数据拼接起来。
+- Set a quantitative array as an empty bucket;
+- Iterate over the input data and place the data one by one into the corresponding bucket;
+- Sort each bucket that is not empty;
+- Piecing together sorted data from a bucket that is never empty.
 
-## 代码演示
+<!-- ## GIF presentation -->
+
+## Code demo
 
 ```ts
 const count = (list: Array<number>, max: number = 100): Array<number> => {
@@ -49,7 +51,7 @@ const getMin = (list: Array<number>) => {
 };
 
 /**
- * @description: 桶排序
+ * @description: Bucket Sort
  * @param {Array<number>} list
  * @return {Array<number>}
  */
@@ -76,6 +78,6 @@ const bucket = (
 };
 ```
 
-## 算法分析
+## Algorithm analysis
 
-桶排序最好情况下使用线性时间 O(n)，桶排序的时间复杂度，取决与对各个桶之间数据进行排序的时间复杂度，因为其它部分的时间复杂度都为 O(n)。很显然，桶划分的越小，各个桶之间的数据越少，排序所用的时间也会越少。但相应的空间消耗就会增大。
+Bucket sorting best uses linear time O(n), and the time complexity of bucket sorting depends on the time complexity of sorting data between buckets, because the time complexity of other parts is O(n). Obviously, the smaller the buckets, the less data there is between them, and the less time it takes to sort them. But the corresponding space consumption will increase.

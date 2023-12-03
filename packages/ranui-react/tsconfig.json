@@ -1,6 +1,6 @@
 {
   "include": ["components", "test", "**/*.ts"],
-  "exclude": ["node_modules/**", "dist/**","public"],
+  "exclude": ["node_modules/**", "dist/**", "public"],
   "compilerOptions": {
     "module": "ESNext",
     "esModuleInterop": true,

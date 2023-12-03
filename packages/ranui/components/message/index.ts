@@ -1,4 +1,4 @@
-import './index.less'
+import './index.less';
 
 const AnimationTime = 300; // message退出动画执行的时间
 const defaultDuration = 3000; // 默认message存在的时间

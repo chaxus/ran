@@ -1,17 +1,17 @@
 # ranuts overview
 
-## 方法列表
+## Method list
 
-| 方法          | 说明                               | 详细内容                             |
-| ------------- | ---------------------------------- | ------------------------------------ |
-| writeFile     | 写入文件                           | [writeFile](./file//writeFile.md)    |
-| readFile      | 读取文件                           | [readFile](./file//readFile.md)      |
-| readDir       | 读取目录，获取目录下所有文件的名字 | [readDir](./file//readDir.md)        |
-| watchFile     | 观察文件的内容是否发生变化         | [watchFile](./file//watchFile.md)    |
-| queryFileInfo | 查询文件信息                       | [queryFileInfo](./file//fileInfo.md) |
-| filterObj     | 过滤对象                           | [filterObj](./utils//filterObj.md)   |
-| EventEmitter  | 发布订阅类                         | [EventEmitter](./mode//subscribe.md) |
-| str2Xml       | 字符串转成`xml`                    | [str2Xml](./utils//str2xml.md)       |
-| getMime       | 根据文件格式后缀获取 mime type     | [getMime](./mimeType/mimeType.md)    |
-| getCookie     | 获取指定 cookie 的值               | [writeFile](./utils/getCookie.md)    |
-| formatJson    | 格式化 JSON                        | [formatJson](./utils/formatJson.md)  |
+| Method        | description                                                            | detail                               |
+| ------------- | ---------------------------------------------------------------------- | ------------------------------------ |
+| writeFile     | Write to file                                                          | [writeFile](./file//writeFile.md)    |
+| readFile      | Read file                                                              | [readFile](./file//readFile.md)      |
+| readDir       | Read the directory and get the names of all the files in the directory | [readDir](./file//readDir.md)        |
+| watchFile     | Check whether the contents of the file have changed                    | [watchFile](./file//watchFile.md)    |
+| queryFileInfo | Query file information                                                 | [queryFileInfo](./file//fileInfo.md) |
+| filterObj     | Filter object                                                          | [filterObj](./utils//filterObj.md)   |
+| EventEmitter  | Publish-subscribe class                                                | [EventEmitter](./mode//subscribe.md) |
+| str2Xml       | String is converted to `xml`                                           | [str2Xml](./utils//str2xml.md)       |
+| getMime       | Gets the `mime type` based on the file format suffix                   | [getMime](./mimeType/mimeType.md)    |
+| getCookie     | Gets the value of the specified cookie                                 | [writeFile](./utils/getCookie.md)    |
+| formatJson    | Formatted JSON                                                         | [formatJson](./utils/formatJson.md)  |

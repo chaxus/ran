@@ -4,10 +4,10 @@ import type { DefaultTheme } from 'vitepress';
 const themeEnConfig: DefaultTheme.Config = {
   logo: '/home.svg',
   nav: [
-    { text: 'Home', link: '/en/' },
-    { text: 'Function', link: '/en/src/ranuts/' },
-    { text: 'Component', link: '/en/src/ranui/' },
-    { text: 'Article', link: '/en/src/article/designMode.md' },
+    { text: 'Home', link: '/' },
+    { text: 'Function', link: '/src/ranuts/' },
+    { text: 'Component', link: '/src/ranui/' },
+    { text: 'Article', link: '/src/article/designMode.md' },
   ],
   socialLinks: [{ icon: 'github', link: GITHUB }],
   footer: {
@@ -21,22 +21,25 @@ const themeEnConfig: DefaultTheme.Config = {
     placeholder: 'search',
   },
   sidebar: {
-    '/en/src/ranuts/': [
+    '/src/ranuts/': [
       {
         text: 'Overview',
-        link: '/en/src/ranuts/',
+        link: '/src/ranuts/',
       },
       {
         text: 'Universal function',
         items: [
-          { text: 'Filter object', link: '/en/src/ranuts/utils/filterObj.md' },
-          { text: 'Statistical execution time', link: '/en/src/ranuts/utils/task.md' },
-          { text: 'String to xml', link: '/en/src/ranuts/utils/str2xml.md' },
+          { text: 'Filter object', link: '/src/ranuts/utils/filterObj.md' },
+          {
+            text: 'Statistical execution time',
+            link: '/src/ranuts/utils/task.md',
+          },
+          { text: 'String to xml', link: '/src/ranuts/utils/str2xml.md' },
           {
             text: 'Image to base64',
-            link: '/en/src/ranuts/utils/convertImageToBase64.md',
+            link: '/src/ranuts/utils/convertImageToBase64.md',
           },
-          { text: 'OCR text recognition`', link: '/en/src/ranuts/utils/ocr.md' },
+          { text: 'OCR text recognition`', link: '/src/ranuts/utils/ocr.md' },
         ],
       },
       {
@@ -44,28 +47,34 @@ const themeEnConfig: DefaultTheme.Config = {
         items: [
           {
             text: 'Example Query details about a file',
-            link: '/en/src/ranuts/file/watchFile.md',
+            link: '/src/ranuts/file/watchFile.md',
           },
           {
             text: 'Read the name of the file in the directory',
-            link: '/en/src/ranuts/file/readDir.md',
+            link: '/src/ranuts/file/readDir.md',
           },
           {
             text: 'Listen for file changes',
-            link: '/en/src/ranuts/file/watchFile.md',
+            link: '/src/ranuts/file/watchFile.md',
           },
-          { text: 'Read file contents', link: '/en/src/ranuts/file/readFile.md' },
+          { text: 'Read file contents', link: '/src/ranuts/file/readFile.md' },
           {
             text: 'Append file content',
-            link: '/en/src/ranuts/file/appendFile.md',
+            link: '/src/ranuts/file/appendFile.md',
           },
-          { text: 'Write to file content', link: '/en/src/ranuts/file/writeFile.md' },
+          {
+            text: 'Write to file content',
+            link: '/src/ranuts/file/writeFile.md',
+          },
         ],
       },
       {
         text: 'Design pattern',
         items: [
-          { text: 'Publish-subscribe model', link: '/en/src/ranuts/mode/subscribe.md' },
+          {
+            text: 'Publish-subscribe model',
+            link: '/src/ranuts/mode/subscribe.md',
+          },
         ],
       },
       {
@@ -73,73 +82,73 @@ const themeEnConfig: DefaultTheme.Config = {
         items: [
           {
             text: 'Get mime by file suffix type',
-            link: '/en/src/ranuts/mimeType/mimeType.md',
+            link: '/src/ranuts/mimeType/mimeType.md',
           },
         ],
       },
     ],
-    '/en/src/ranui/': [
+    '/src/ranui/': [
       {
         text: 'Overview ',
-        link: '/en/src/ranui/',
+        link: '/src/ranui/',
       },
       {
         text: 'Be common',
         items: [
-          { text: 'Button ', link: '/en/src/ranui/button/' },
-          { text: 'Icon ', link: '/en/src/ranui/icon/' },
+          { text: 'Button ', link: '/src/ranui/button/' },
+          { text: 'Icon ', link: '/src/ranui/icon/' },
         ],
       },
       {
         text: 'Data presentation',
         items: [
-          { text: 'Image ', link: '/en/src/ranui/image/' },
-          { text: 'Tabs ', link: '/en/src/ranui/tabs/' },
-          { text: 'Preview ', link: '/en/src/ranui/preview/' },
-          { text: 'Radar ', link: '/en/src/ranui/radar/' },
-          { text: 'Select ', link: '/en/src/ranui/select/' },
-          { text: 'Player ', link: '/en/src/ranui/player/' },
-          { text: 'Progress ', link: '/en/src/ranui/progress/' },
+          { text: 'Image ', link: '/src/ranui/image/' },
+          { text: 'Tabs ', link: '/src/ranui/tabs/' },
+          { text: 'Preview ', link: '/src/ranui/preview/' },
+          { text: 'Radar ', link: '/src/ranui/radar/' },
+          { text: 'Select ', link: '/src/ranui/select/' },
+          { text: 'Player ', link: '/src/ranui/player/' },
+          { text: 'Progress ', link: '/src/ranui/progress/' },
         ],
       },
       {
         text: 'Data entry',
-        items: [{ text: 'Input', link: '/en/src/ranui/input/' }],
+        items: [{ text: 'Input', link: '/src/ranui/input/' }],
       },
       {
         text: 'feedback',
         items: [
-          { text: 'Message', link: '/en/src/ranui/message/' },
-          { text: 'Skeleton', link: '/en/src/ranui/skeleton/' },
+          { text: 'Message', link: '/src/ranui/message/' },
+          { text: 'Skeleton', link: '/src/ranui/skeleton/' },
           // { text: 'Modal 对话框', link: '/src/ranui/modal/' },
         ],
       },
     ],
-    '/en/src/article/': [
+    '/src/article/': [
       {
         items: [
           {
             text: '23 classic design patterns',
-            link: '/en/src/article/designMode.md',
+            link: '/src/article/designMode.md',
           },
           {
             text: 'Functional programming',
-            link: '/en/src/article/functionalProgramming.md',
+            link: '/src/article/functionalProgramming.md',
           },
           {
             text: 'Sorting algorithm',
-            link: '/en/src/article/sort/index.md',
+            link: '/src/article/sort/index.md',
             items: [
-              { text: 'bubble sort', link: '/en/src/article/sort/bubble/' },
-              { text: 'selection sort', link: '/en/src/article/sort/select/' },
-              { text: 'insertion sort', link: '/en/src/article/sort/insert/' },
-              { text: 'shell sort', link: '/en/src/article/sort/shell/' },
-              { text: 'Merge sort', link: '/en/src/article/sort/merge/' },
-              { text: 'Quick sort', link: '/en/src/article/sort/quick/' },
-              { text: 'heapsort', link: '/en/src/article/sort/heap/' },
-              { text: 'Counting sort', link: '/en/src/article/sort/count/' },
-              { text: 'Bucket sort', link: '/en/src/article/sort/bucket/' },
-              { text: 'Radix sort', link: '/en/src/article/sort/radix/' },
+              { text: 'bubble sort', link: '/src/article/sort/bubble/' },
+              { text: 'selection sort', link: '/src/article/sort/select/' },
+              { text: 'insertion sort', link: '/src/article/sort/insert/' },
+              { text: 'shell sort', link: '/src/article/sort/shell/' },
+              { text: 'Merge sort', link: '/src/article/sort/merge/' },
+              { text: 'Quick sort', link: '/src/article/sort/quick/' },
+              { text: 'heapsort', link: '/src/article/sort/heap/' },
+              { text: 'Counting sort', link: '/src/article/sort/count/' },
+              { text: 'Bucket sort', link: '/src/article/sort/bucket/' },
+              { text: 'Radix sort', link: '/src/article/sort/radix/' },
             ],
           },
         ],

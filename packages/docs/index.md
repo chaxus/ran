@@ -5,26 +5,25 @@ title: Home
 
 hero:
   name: ran
-  text: 风起于青萍之末
-  tagline: A ship in harbor is safe, but that is not what ships are built for.
+  tagline: A Troupe of little vagrants of the world , leave your footprints in my words .
   image:
     src: /home.svg
     alt: logo
   actions:
     - theme: alt
-      text: 更多详情
+      text: More details
       link: https://github.com/chaxus/ran
     - theme: alt
-      text: 访问我的GitHub
+      text: Visit my GitHub
       link: https://github.com/chaxus/ran
 features:
   - icon: ⚡️
-    title: 记录
-    details: 每当遇到问题或者可以改进的事情的时候，会把想法先写下来，如果这是你遇到的问题，那么很可能有一群人也遇到同样的困难。
+    title: Records
+    details: Whenever you have a problem or something you can improve, you write it down first. If this is your problem, there are probably a lot of people out there who are having the same difficulty.
   - icon: 🖖
-    title: 解决
-    details: 过一段时间后，再回来看看这些问题是否还有意义。然后再研究这个问题，确定是否存在解决方案。
+    title: Work out
+    details: After a while, come back and see if these questions still make sense. Then look at the problem to determine if there is a solution.
   - icon: 🛠️
-    title: 改进
-    details: 通常会发现一个工具是为了解决一个问题，我会去考虑如何改进或者简化这个工具。创造一个更好的轮子。
+    title: improvement
+    details: I often find that a tool is designed to solve a problem, and I think about how to improve or simplify the tool. Create a better wheel.
 ---

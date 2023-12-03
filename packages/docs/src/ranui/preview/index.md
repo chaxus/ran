@@ -1,8 +1,8 @@
-# preview 文件预览
+# preview
 
-支持`docx`，`pptx`，`pdf`,`xlsx`文件的预览
+Support 'docx', 'pptx', 'pdf', 'xlsx' file preview
 
-## 代码演示
+## Code demo
 
 <div style="width: 100px; margin-top:10px">
     <r-preview id="preview"></r-preview>
@@ -34,19 +34,19 @@
 </script>
 ```
 
-## 属性
+## Attribute
 
-### 资源地址`src`
+### `src`
 
-有 `src` 地址即可打开弹窗，没有`src`就不展示
+If there is a 'src' address, the popup window will be opened, and if there is no 'src', it will not be displayed
 
 ```html
 <r-preview src=""></r-preview>
 ```
 
-### 是否可关闭`closeable`
+### `closeable`
 
-`closeable` 默认为 `true` ，可以关闭，设置成 `false` 时， 表示不可关闭，将不会展示右上角的关闭按钮
+'closeable' defaults to 'true' and can be closed, when set to 'false', it cannot be closed, and the close button in the upper right corner will not be displayed
 
 ```html
 <r-preview closeable="false"></r-preview>

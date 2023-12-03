@@ -9,7 +9,7 @@ import {
 } from 'ranuts';
 import '@/assets/js/hls.js';
 import type { Progress } from '@/components/progress';
-import '@/components/select'
+import '@/components/select';
 import './index.less';
 
 const PLAY_STATE_LIST = ['play', 'playing', 'timeupdate'];
@@ -43,7 +43,7 @@ export interface Context {
   fullScreen: boolean;
   levels: Partial<Level>[];
   url: string;
-  levelMap: Map<string, string>
+  levelMap: Map<string, string>;
   clarity: string;
 }
 
@@ -111,7 +111,10 @@ function Custom() {
         this._playerControllerBottomRight = document.createElement('div');
         this._playerControllerBottomLeft = document.createElement('div');
         this._player.setAttribute('class', 'ran-player');
-        this._player.setAttribute('id', 'ran-player' + `${performance.now()}`.replace('.', ''));
+        this._player.setAttribute(
+          'id',
+          'ran-player' + `${performance.now()}`.replace('.', ''),
+        );
         // play and pause
         this._playerBtn.setAttribute('class', 'ran-player-play-btn');
         // progress
@@ -168,23 +171,37 @@ function Custom() {
           'class',
           'ran-player-controller-bottom-right-speed',
         );
-        this._playControllerBottomSpeedPopover = document.createElement('r-select');
+        this._playControllerBottomSpeedPopover =
+          document.createElement('r-select');
         this._playControllerBottomSpeedPopover.setAttribute('value', '1');
-        this._playControllerBottomSpeedPopover.setAttribute('action', 'hover,click');
+        this._playControllerBottomSpeedPopover.setAttribute(
+          'action',
+          'hover,click',
+        );
         this._playControllerBottomSpeedPopover.setAttribute('type', 'text');
         this._playControllerBottomSpeedPopover.setAttribute('placement', 'top');
-        const id = this._player.getAttribute('id')
-        id && this._playControllerBottomSpeedPopover.setAttribute('getPopupContainerId', id);
-        this._playControllerBottomSpeedPopover.setAttribute('dropdownclass', 'video-speed-dropdown');
-        this._playControllerBottomSpeedPopover.addEventListener('change', this.changeSpeed)
+        const id = this._player.getAttribute('id');
+        id &&
+          this._playControllerBottomSpeedPopover.setAttribute(
+            'getPopupContainerId',
+            id,
+          );
+        this._playControllerBottomSpeedPopover.setAttribute(
+          'dropdownclass',
+          'video-speed-dropdown',
+        );
+        this._playControllerBottomSpeedPopover.addEventListener(
+          'change',
+          this.changeSpeed,
+        );
         const Fragment = document.createDocumentFragment();
-        SPEED.forEach(item => {
-          const { label, value } = item
-          const option = document.createElement('r-option')
-          option.innerHTML = label
-          option.setAttribute('value', `${value}`)
-          Fragment.appendChild(option)
-        })
+        SPEED.forEach((item) => {
+          const { label, value } = item;
+          const option = document.createElement('r-option');
+          option.innerHTML = label;
+          option.setAttribute('value', `${value}`);
+          Fragment.appendChild(option);
+        });
         this._playControllerBottomSpeedPopover.appendChild(Fragment);
         this._playControllerBottomSpeed.appendChild(
           this._playControllerBottomSpeedPopover,
@@ -300,7 +317,7 @@ function Custom() {
           fullScreen: false, // 是否全屏
           levels: [], // 清晰度列表
           url: '', // 当前播放的地址
-          levelMap: new Map() // 清晰度和名字的映射关系
+          levelMap: new Map(), // 清晰度和名字的映射关系
         };
         this.moveProgress = {
           percentage: 0,
@@ -332,68 +349,68 @@ function Custom() {
         this.setAttribute('playbackRate', value || '');
       }
       changeClarityToSetVideo = () => {
-        const { currentTime, playbackRate, volume, currentState } = this.ctx
-        this.setCurrentTime(currentTime)
-        this.setPlaybackRate(playbackRate)
-        this.setVolume(volume)
+        const { currentTime, playbackRate, volume, currentState } = this.ctx;
+        this.setCurrentTime(currentTime);
+        this.setPlaybackRate(playbackRate);
+        this.setVolume(volume);
         if (PLAY_STATE_LIST.includes(currentState)) {
-          this.play()
+          this.play();
         } else {
-          this.pause()
+          this.pause();
         }
-      }
+      };
       changeClarity = (e: Event) => {
-        this.ctx.clarity = (<CustomEvent>e).detail.value
-        const url = this.ctx.levelMap.get((<CustomEvent>e).detail.value)
+        this.ctx.clarity = (<CustomEvent>e).detail.value;
+        const url = this.ctx.levelMap.get((<CustomEvent>e).detail.value);
         if (url && this._hls) {
           this._hls.loadSource(url);
-          this._hls.startLoad()
-          this.changeClarityToSetVideo()
+          this._hls.startLoad();
+          this.changeClarityToSetVideo();
         }
-      }
+      };
       createClaritySelect = () => {
-        const { levels, url } = this.ctx
-        this._playControllerBottomClarity.innerHTML = ''
-        if (levels.length <= 0) return
-        const Fragment = document.createDocumentFragment()
-        levels.forEach(item => {
-          const { name, url } = item
-          if (!name || !url) return
-          this.ctx.levelMap.set(name, url)
-          const option = document.createElement('r-option')
-          option.setAttribute('value', name)
-          option.innerHTML = name
-          Fragment.appendChild(option)
-        })
-        const select = document.createElement('r-select')
-        select.setAttribute('value', this.ctx.clarity || 'Auto')
-        select.appendChild(Fragment)
+        const { levels, url } = this.ctx;
+        this._playControllerBottomClarity.innerHTML = '';
+        if (levels.length <= 0) return;
+        const Fragment = document.createDocumentFragment();
+        levels.forEach((item) => {
+          const { name, url } = item;
+          if (!name || !url) return;
+          this.ctx.levelMap.set(name, url);
+          const option = document.createElement('r-option');
+          option.setAttribute('value', name);
+          option.innerHTML = name;
+          Fragment.appendChild(option);
+        });
+        const select = document.createElement('r-select');
+        select.setAttribute('value', this.ctx.clarity || 'Auto');
+        select.appendChild(Fragment);
         select.setAttribute('type', 'text');
         select.setAttribute('action', 'hover,click');
         select.setAttribute('placement', 'top');
-        const id = this._player.getAttribute('id')
+        const id = this._player.getAttribute('id');
         id && select.setAttribute('getPopupContainerId', id);
         select.setAttribute('dropdownclass', 'video-clarity-dropdown');
-        select.addEventListener('change', this.changeClarity)
-        this._playControllerBottomClarity.appendChild(select)
-      }
+        select.addEventListener('change', this.changeClarity);
+        this._playControllerBottomClarity.appendChild(select);
+      };
       manifestLoaded = (
         type: string,
         data: { levels: Level[]; url: string },
       ) => {
         if (type === 'hlsManifestLoaded') {
           const { url, levels = [] } = data;
-          if (levels.length <= 0) return
-          levels.forEach(item => {
-            if (this.ctx.levelMap.get(item.name) === item.url) return
-            this.ctx.levels.push(item)
-          })
+          if (levels.length <= 0) return;
+          levels.forEach((item) => {
+            if (this.ctx.levelMap.get(item.name) === item.url) return;
+            this.ctx.levels.push(item);
+          });
           if (!this.ctx.levelMap.get('Auto')) {
-            this.ctx.levels.push({ name: 'Auto', url })
-            this.ctx.levelMap.set('Auto', url)
+            this.ctx.levels.push({ name: 'Auto', url });
+            this.ctx.levelMap.set('Auto', url);
           }
           this.ctx.url = url;
-          this.createClaritySelect()
+          this.createClaritySelect();
         }
       };
       /**
@@ -779,11 +796,13 @@ function Custom() {
         );
         this._progressDot.style.setProperty(
           'transform',
-          `translateX(${(currentTime / duration) * this._progress.offsetWidth
+          `translateX(${
+            (currentTime / duration) * this._progress.offsetWidth
           }px)`,
         );
         if (currentTime >= 0) {
-          this._playerControllerBottomTimeCurrent.innerText = timeFormat(currentTime);
+          this._playerControllerBottomTimeCurrent.innerText =
+            timeFormat(currentTime);
         }
       };
       changeAttribute = (
@@ -874,7 +893,7 @@ function Custom() {
           this._player
             .requestFullscreen()
             .then(() => {
-              this.resize()
+              this.resize();
               this.ctx.fullScreen = true;
             })
             .catch((error) => {
@@ -884,7 +903,7 @@ function Custom() {
           document
             .exitFullscreen()
             .then(() => {
-              this.resize()
+              this.resize();
               this.ctx.fullScreen = false;
             })
             .catch((error) => {
@@ -1138,7 +1157,7 @@ function Custom() {
         window.removeEventListener('resize', this.resize);
         document.removeEventListener('fullscreenchange', this.fullScreenChange);
       }
-      attributeChangedCallback(k: string, o: string, n: string): void { }
+      attributeChangedCallback(k: string, o: string, n: string): void {}
     }
     customElements.define('r-player', RanPlayer);
     return RanPlayer;
