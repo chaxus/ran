@@ -25,7 +25,9 @@ Do not use the 'new Player(options)' way to mount to the specified 'dom', view r
 
 ## Attribute
 
-### `src`
+### src
+
+Resource address of the video
 
 ### volume
 
