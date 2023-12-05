@@ -2,10 +2,10 @@ import {
   SyncHook,
   addClassToElement,
   createDocumentFragment,
+  generateThrottle,
   range,
   removeClassToElement,
-  throttle,
-  timeFormat,
+  timeFormat
 } from 'ranuts';
 import '@/assets/js/hls.js';
 import type { Progress } from '@/components/progress';
@@ -13,6 +13,8 @@ import '@/components/select';
 import './index.less';
 
 const PLAY_STATE_LIST = ['play', 'playing', 'timeupdate'];
+
+const throttle = generateThrottle()
 
 export interface HlsPlayer {
   startLoad(): () => void;

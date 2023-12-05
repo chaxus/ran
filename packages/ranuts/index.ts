@@ -18,6 +18,7 @@ import {
   createObjectURL,
   debounce,
   formatJson,
+  generateThrottle,
   getAllQueryString,
   getCookie,
   getFreshUrl,
@@ -41,7 +42,7 @@ import {
   scriptOnLoad,
   throttle,
   timeFormat,
-  timestampToTime,
+  timestampToTime
 } from '@/utils';
 import type { Noop } from '@/utils';
 import { MimeType, getMime, setMime } from '@/server/mimeType';
@@ -99,6 +100,7 @@ export {
   timeFormat,
   range,
   reactify,
+  generateThrottle
 };
 
 export const EventEmitter = SyncHook;

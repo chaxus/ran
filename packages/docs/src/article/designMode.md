@@ -288,85 +288,85 @@ const pepsiCola: PepsiCola = createColaWithType(1);
 
 ![](../../assets/article/designPattern/工厂方法.png)
 
-**举例：**
+**Example:**
 
-工厂方法和简单工厂有一些区别，简单工厂是由一个代工厂生产不同的产品，而工厂方法是对工厂进行抽象化，不同产品都由专门的具体工厂来生产。可口可乐工厂专门生产可口可乐，百事可乐工厂专门生产百事可乐。
+There are some differences between the factory method and the simple factory, the simple factory is the production of different products by a foundry, while the factory method is the abstraction of the factory, different products are produced by a specific factory. The Coca-Cola factory specializes in the production of Coca-Cola, and the Pepsi factory specializes in the production of Pepsi.
 
 ```ts
-// 工厂抽象类
+// Factory abstract class
 class Cola {}
 
-// 可口可乐工厂
+// The Coca-Cola Factory
 class CocaCola extends Cola {}
 
-// 百事可乐工厂
+// Pepsi Factory
 class PepsiCola extends Cola {}
 ```
 
 ```ts
-// 根据不同的工厂类生产不同的产品
+// Different products are produced according to different factory types
 const cocaCola = new CocaCola();
 const pepsiCola = new PepsiCola();
 ```
 
-**优点：**
+**Advantages:**
 
-- 用户只需要关心其所需产品对应的具体工厂是哪一个即可，不需要关心产品的创建细节，也不需要知道具体产品类的类名。
-- 当系统中加入新产品时，不需要修改抽象工厂和抽象产品提供的接口，也无须修改客户端和其他的具体工厂和具体产品，而只要添加一个具体工厂和与其对应的具体产品就可以了，符合了开闭原则。
+- Users only need to care about the specific factory corresponding to the product they need, do not need to care about the details of the creation of the product, do not need to know the class name of the specific product class.
+- When a new product is added to the system, it is not necessary to modify the interface provided by the abstract factory and the abstract product, nor to modify the client and other specific factories and specific products, but only to add a specific factory and its corresponding specific products, in line with the open and close principle.
 
-**缺点：**
+**Disadvantage:**
 
-- 当系统中加入新产品时，除了需要提供新的产品类之外，还要提供与其对应的具体工厂类。因此系统中类的个数将成对增加，增加了系统的复杂度。
+- When a new product is added to the system, in addition to the new product class, the corresponding specific factory class must be provided. Therefore, the number of classes in the system will be increased in pairs, increasing the complexity of the system.
 
-### 4.3 抽象工厂模式
+### 4.3 Abstract factory pattern
 
-抽象工厂模式并不直接生成实例， 而是用于对产品类簇的创建。
+The abstract factory pattern does not directly generate instances, but is used to create clusters of product classes.
 
-> 抽象工厂模式(Abstract Factory Pattern)：提供一个创建一系列相关或相互依赖对象的接口，而无须指定它们具体的类。
+> Abstract Factory Pattern: Provides an interface for creating a series of related or interdependent objects without specifying their concrete classes.
 
 ![](../../assets/article/designPattern/抽象工厂.png)
 
-**举例：**
+**Example:**
 
-抽象工厂和工厂方法不同的地方在于，生产产品的工厂是抽象的。举例，可口可乐公司生产可乐的同时，也需要生产装可乐的瓶子和箱子，瓶子和箱子也是可口可乐专属定制的，同样百事可乐公司也会有这个需求。这个时候我们的工厂不仅仅是生产可乐饮料的工厂，还必须同时生产同一主题的瓶子和箱子，所以它是一个抽象的主题工厂，专门生产同一主题的不同商品。
+The difference between the abstract factory and the factory method is that the factory that produces the product is abstract. For example, when Coca-Cola produces Coke, it also needs to produce bottles and boxes for Coke. The bottles and boxes are also customized by Coca-Cola, and Pepsi will also have this demand. At this time, our factory is not only a factory that produces cola drinks, but also has to produce bottles and boxes with the same theme at the same time, so it is an abstract theme factory, specializing in the production of different goods with the same theme.
 
 ```ts
-// 可乐抽象类和派生类
+// Coke abstract classes and derived classes
 class Cola {}
 
 class CocaCola extends Cola {}
 
 class PepsiCola extends Cola {}
 
-// 瓶子抽象类和派生类
+// Bottle abstract and derived classes
 class Bottle {}
 
 class CocaColaBottle extends Bottle {}
 
 class PepsiColaBottle extends Bottle {}
 
-// 箱子抽象类和派生类
+// Box abstract classes and derived classes
 class Box {}
 
 class CocaColaBox extends Box {}
 
 class PepsiColaBox extends Box {}
 
-// 工厂抽象类
+// Factory abstract class
 const Factory = {
   createCola: () => new Cola(),
   createBottle: () => new Bottle(),
   createBox: () => new Box(),
 };
 
-// 可口可乐主题工厂
+// Coca-Cola Theme Factory
 const CocaColaFactory = {
   createCola: () => new CocaCola(),
   createBottle: () => new CocaColaBottle(),
   createBox: () => new CocaColaBox(),
 };
 
-// 百事可乐主题工厂
+// Pepsi Theme Factory
 const PepsiColaFactory = {
   createCola: () => new PepsiCola(),
   createBottle: () => new PepsiColaBottle(),
@@ -375,34 +375,34 @@ const PepsiColaFactory = {
 ```
 
 ```ts
-// 可口可乐主题
+// Coca-Cola theme
 const cocaCola = CocaColaFactory.createCola();
 const cocaColaBottle = CocaColaFactory.createBottle();
 const cocaColaBox = CocaColaFactory.createBox();
 
-// 百事可乐主题
+// Pepsi theme
 const pepsiCola = PepsiColaFactory.createCola();
 const pepsiColaBottle = PepsiColaFactory.createBottle();
 const pepsiColaBox = PepsiColaFactory.createBox();
 ```
 
-**优点：**
+**Advantages:**
 
-- 具体产品在应用层代码隔离，不需要关心产品细节。只需要知道自己需要的产品是属于哪个工厂的即可 当一个产品族中的多个对象被设计成一起工作时，它能够保证客户端始终只使用同一个产品族中的对象。这对一些需要根据当前环境来决定其行为的软件系统来说，是一种非常实用的设计模式。
+- Product specific code isolation at the application layer, do not need to care about product details. When multiple objects in a product family are designed to work together, it ensures that the client always uses only objects in the same product family. This is a very practical design pattern for software systems that need to determine their behavior based on the current environment.
 
-**缺点：**
+**Disadvantage:**
 
-- 规定了所有可能被创建的产品集合，产品族中扩展新的产品困难，需要修改抽象工厂的接口。
+- Specifies the set of all products that can be created, the difficulty of extending new products in the product family, and the need to modify the interface of the abstract factory.
 
-### 4.4 单例模式
+### 4.4 Singleton pattern
 
-> 单例模式(`Singleton Pattern`)：单例模式确保某一个类只有一个实例，并提供一个访问它的全剧访问点。
+> Singleton Pattern：The singleton pattern ensures that there is only one instance of a class and provides a full access point to it.
 
 ![](../../assets/article/designPattern/UML/创建型/单例.jpg)
 
-**举例：**
+**Example:**
 
-单例模式下，对应类只能生成一个实例。就像一个王国只能有一个国王，一旦王国里的事务多起来，这唯一的国王也容易职责过重。
+In singleton mode, the corresponding class can generate only one instance. Just as a kingdom can only have one king, once the affairs of the kingdom are too many, this only king is easy to take on too much responsibility.
 
 ```ts
 class Singleton {}
@@ -416,36 +416,36 @@ function createSingleton() {
 }
 ```
 
-**优点：**
+**Advantages:**
 
-- 提供了对唯一实例的受控访问。因为单例类封装了它的唯一实例，所以它可以严格控制客户怎样以及何时访问它。
-- 因为该类在系统内存中只存在一个对象，所以可以节约系统资源。
+- Provides controlled access to unique instances. Because a singleton encapsulates its unique instance, it has tight control over how and when customers access it.
+- This class saves system resources because it has only one object in system memory.
 
-**缺点：**
+**Disadvantage:**
 
-- 由于单例模式中没有抽象层，因此单例类很难进行扩展。
-- 对于有垃圾回收系统的语言 Java，C# 来说，如果对象长时间不被利用，则可能会被回收。那么如果这个单例持有一些数据的话，在回收后重新实例化时就不复存在了。
+Since there is no abstraction layer in the singleton pattern, singleton classes are difficult to extend.
+- For languages that have garbage collection systems, such as Java and C#, objects may be recycled if they are not utilized for a long time. If the singleton holds some data, it will no longer exist when it is reinstantiated after collection.
 
-### 4.5 生成器模式
+### 4.5 Builder Pattern
 
-> 生成器模式(Builder Pattern)：也叫创建者模式，它将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。
+> Builder Pattern：Also known as the creator pattern, it separates the construction of a complex object from its representation, allowing the same construction process to create different representations.
 
-工厂模式主要是为了创建对象实例或者类簇（抽象工厂），关心的是最终产出(创建)的是什么，而不关心创建的过程。而建造者模式关心的是创建这个对象的整个过程，甚至于创建对象的每一个细节。
+The factory pattern is mainly for the creation of object instances or class clusters (abstract factories), concerned with the final output (creation) is what, not concerned with the creation process. The builder pattern is concerned with the entire process of creating the object, down to every detail of creating the object.
 
 ![](../../assets/article/designPattern/建造者.jpeg)
 
-**举例：**
+**Example:**
 
-生成器模式的主要角色如下：
+The main roles of the generator mode are as follows:
 
-1. 生成器：接口生命再所有类型生成器中通用的产品构造步骤
-2. 具体生成器：提供构造过程的不同实现。具体生成器也可以构造不遵循通用接口的产品
-3. 产品：是最终生成的对象。由不同生成器构造的产品无需属于同一类层次构造或接口
-4. 指挥者：定义调用构造步骤的顺序，这样你就可以创建和服用特定的产品配置
-5. 客户端：必须将某个生成器对象与主管类关联，一般情况下，你只需要通过指挥者类构造函数的参数进行一次性关联即可
+1. Generator: The product construction steps common to all types of generators in the interface life
+2. Concrete generator: Provides different implementations of the construction process. Concrete generators can also construct products that do not follow a generic interface
+3. Product: is the final generated object. Products constructed from different generators need not belong to the same class of hierarchical constructs or interfaces
+4. Conductor: Define the order in which construction steps are called so that you can create and consume specific product configurations
+5. Client side: You must associate a generator object with a supervisor class. In general, you only need to do a one-time association through the parameters of the supervisor class constructor
 
 ```ts
-// 抽象建造者
+// Abstract Builder
 abstract class Builder {
   public abstract buildPartA(): void;
   public abstract buildPartB(): void;
@@ -453,7 +453,7 @@ abstract class Builder {
   public abstract buildProduct(): Product;
 }
 
-// 具体建造者
+// Concrete builder
 class ConcreteBuilder extends Builder {
   private product: Product;
   constructor(product: Product) {
@@ -465,20 +465,20 @@ class ConcreteBuilder extends Builder {
   public buildPartB(): void {}
   public buildPartC(): void {}
 
-  // 最终组建一个产品
+  // Finally build a product
   public buildProduct(): Product {
     return this.product;
   }
 }
 
-// 产品角色
+// Product role
 class Product {
   public doSomething(): void {
-    // 独立业务
+    // Independent business
   }
 }
 
-// 指挥者
+// director
 class Director {
   private _builder: Builder;
   constructor(builder: Builder) {
@@ -489,7 +489,7 @@ class Director {
     this._builder = builder;
   }
 
-  // 将处理建造的流程交给指挥者
+  // Leave the process of handling the construction to the commander
   public constructorProduct() {
     this._builder.buildPartA();
     this._builder.buildPartB();
@@ -498,42 +498,42 @@ class Director {
   }
 }
 
-// 使用
+// Use
 const builder: Builder = new ConcreteBuilder(new Product());
 const director: Director = new Director(builder);
 const product: Product = director.constructorProduct();
 ```
 
-**优点：**
+**Advantages:**
 
-- 客户端不必知道产品内部组成的细节，将产品本身与产品的创建过程解耦，使得相同的创建过程可以创建不同的产品对象。
-- 每一个具体建造者都相对独立，而与其他的具体建造者无关，因此可以很方便地替换具体建造者或增加新的具体建造者， 用户使用不同的具体建造者即可得到不同的产品对象 。
-- 增加新的具体建造者无须修改原有类库的代码，指挥者类针对抽象建造者类编程，系统扩展方便，符合“开闭原则”。
-- 可以更加精细地控制产品的创建过程 。将复杂产品的创建步骤分解在不同的方法中，使得创建过程更加清晰，也更方便使用程序来控制创建过程。
+- The client does not have to know the details of the internal composition of the product, decoupling the product itself from the product creation process, so that the same creation process can create different product objects.
+- Each concrete builder is relatively independent, and has nothing to do with other concrete builders, so it is easy to replace concrete builders or add new concrete builders, and users can get different product objects using different concrete builders.
+- Adding new concrete builders does not need to modify the code of the original class library, the command class is programmed for the abstract builder class, the system is easy to expand, and conforms to the "open and close principle".
+- The product creation process can be more finely controlled. Breaking down the creation steps of complex products into different methods makes the creation process clearer and easier to use programs to control the creation process.
 
-**缺点：**
+**Disadvantage:**
 
-- 建造者模式所创建的产品一般具有较多的共同点，其组成部分相似，如果产品之间的差异性很大，则不适合使用建造者模式，因此其使用范围受到一定的限制。
-- 如果产品的内部变化复杂，可能会导致需要定义很多具体建造者类来实现这种变化，导致系统变得很庞大，增加系统的理解难度和运行成本。
+- The products created by the builder mode generally have more in common and their components are similar. If the differences between products are large, the builder mode is not suitable for use, so its scope of use is limited.
+If the internal changes of the product are complex, it may lead to the need to define many concrete constructor classes to achieve such changes, resulting in a large system, increasing the difficulty of understanding the system and the cost of operation.
 
-### 4.6 原型模式
+### 4.6 Prototype Pattern
 
-> 原型模式（`Prototype Pattern`）: 用原型实例指向创建对象的类，使用于创建新的对象的类的共享原型的属性与方法。
+> Prototype Pattern: A prototype instance points to the class that created the object, and uses the properties and methods of the shared prototype used by the class that created the new object.
 
 ![](../../assets/article/designPattern/UML/创建型/原型.jpg)
 
-**举例：**
+**Example:**
 
-原型模式就像复印技术，根据原对象复印出一个新对象，并根据需求对新对象进行微调。
+Prototype mode is like photocopying technology, copy a new object from the original object, and fine-tune the new object according to the needs.
 
 ```ts
-// 因为不是构造函数，所以不用大写
+// Because it's not a constructor, you don't use capitalization
 const car = {
   drive: function () {},
   name: '马自达 3',
 };
 
-// 使用Object.create创建一个新车x
+// Create a new car x using Object.create
 const anotherCar = Object.create(someCar);
 anotherCar.name = '丰田佳美';
 ```
@@ -562,30 +562,30 @@ const car = vehicle('福特Escort');
 car.getModel();
 ```
 
-**优点：**
+**Advantages:**
 
-- 可以利用原型模式简化对象的创建过程，尤其是对一些创建过程繁琐，包含对象层级比较多的对象来说，使用原型模式可以节约系统资源，提高对象生成的效率。
-- 可以很方便得通过改变值来生成新的对象：有些对象之间的差别可能只在于某些值的不同；用原型模式可以快速复制出新的对象并手动修改值即可。
+- The prototype mode can be used to simplify the object creation process, especially for some objects with complicated creation process and many object levels, the prototype mode can save system resources and improve the efficiency of object generation.
+- It is easy to generate new objects by changing the values: some objects may differ only from one another in certain values; Using prototype mode, you can quickly copy new objects and manually modify the values.
 
-**缺点：**
+**Disadvantage:**
 
-- 对象包含的所有对象都需要配备一个克隆的方法，这就使得在对象层级比较多的情况下，代码量会很大，也更加复杂。
+- All objects contained in an object need to be equipped with a clone method, which makes the amount of code in the case of more object levels will be large and more complex.
 
-## 五、结构型
+## Five, structural type
 
-### 5.1 装饰模式
+### 5.1 Decorative pattern
 
-> 装饰模式(`Decorator Pattern`) ：向一个现有的对象添加新的功能，同时又不改变其结构的设计模式被称为装饰器模式，它是作为现有的类的一个包装。
+> Decorator Pattern：The design pattern that adds new functionality to an existing object without changing its structure is called the decorator pattern, which acts as a wrapper around an existing class.
 
-可以将装饰器理解为游戏人物购买的装备，例如 LOL 中的英雄刚开始游戏时只有基础的攻击力和法强。但是在购买的装备后，在触发攻击和技能时，能够享受到装备带来的输出加成。我们可以理解为购买的装备给英雄的攻击和技能的相关方法进行了装饰。
+You can think of decorators as equipment purchased by game characters, such as heroes in LOL who start the game with only basic attack power and mana. However, after the purchase of equipment, you can enjoy the output bonus brought by the equipment when triggering attacks and skills. We can understand the purchase of equipment to give the hero's attack and skill related methods decorated.
 
 ![](../../assets/article/designPattern/装饰.jpg)
 
-**举例：**
+**Example:**
 
-装饰模式贴合开闭原则，在不改变原有类的情况下，对父类进行改造或新增功能。
+The decorative mode conforms to the open-close principle and transforms or adds new functions to the parent class without changing the original class.
 
-装饰类
+decoration
 
 ```ts
 @annotation
@@ -596,7 +596,7 @@ function annotation(target) {
 }
 ```
 
-装饰方法或属性
+Decorative method or attribute
 
 ```js
 class MyClass {
@@ -610,24 +610,24 @@ function readonly(target, name, descriptor) {
 }
 ```
 
-**优点：**
+**Advantages:**
 
-- 比继承更加灵活：不同于在编译期起作用的继承；装饰者模式可以在运行时扩展一个对象的功能。另外也可以通过配置文件在运行时选择不同的装饰器，从而实现不同的行为。也可以通过不同的组合，可以实现不同效果。
-- 符合“开闭原则”：装饰者和被装饰者可以独立变化。用户可以根据需要增加新的装饰类，在使用时再对其进行组合，原有代码无须改变。
+- More flexible than inheritance: unlike inheritance, which works at compile time; Decorator mode can extend the functionality of an object at run time. It is also possible to select different decorators at run time through configuration files to achieve different behavior. It can also achieve different effects through different combinations.
+- Comply with the "open and close principle" : the decorator and the decorator can vary independently. Users can add new decorative classes as needed, and then combine them when they are used, without changing the original code.
 
-**缺点：**
+**Disadvantage:**
 
-- 装饰者模式需要创建一些具体装饰类，会增加系统的复杂度。
+- Decorator mode requires the creation of some concrete decorator classes, which increases the complexity of the system.
 
 ### 5.2 外观模式
 
-> 外观模式(Facade Pattern)：外观模式定义了一个高层接口，为子系统中的一组接口提供一个统一的接口。使得子系统更容易使用，不仅简化类中的接口，而且实现调用者和接口的解耦。外观模式又称为门面模式，它是一种结构型设计模式模式。
+> Facade Pattern：A facade pattern defines a high-level interface that provides a unified interface for a set of interfaces in a subsystem. It makes the subsystem easier to use, not only simplifying the interfaces in the class, but also decoupling the caller from the interface. Appearance mode, also known as facade mode, is a structural design mode.
 
 ![](../../assets/article/designPattern/外观.png)
 
-**举例：**
+**Example:**
 
-外观模式提供了简单明确的接口，但是在内部众多子系统功能进行整合。就像图片缓存，内部包含了涉及到其他子系统的如缓存、下载等处理，外观模式将这些复杂的逻辑都隐藏了。在兼容浏览器事件绑定，你只需要调一个`addMyEvent`接口就可以了，达到解耦合的目的。
+Appearance patterns provide a simple and unambiguous interface, but integrate many subsystem functions internally. Just like the image cache, which contains processing involving other subsystems such as caching, downloading, etc., the appearance pattern hides the complex logic. In the compatible browser event binding, you only need to call an 'addMyEvent' interface can be, to achieve the purpose of decoupling.
 
 ```js
 const addMyEvent = function (el, ev, fn) {
@@ -641,26 +641,26 @@ const addMyEvent = function (el, ev, fn) {
 };
 ```
 
-**优点：**
+**Advantages:**
 
-- 实现了客户端与子系统间的解耦：客户端无需知道子系统的接口，简化了客户端调用子系统的调用过程，使得子系统使用起来更加容易。同时便于子系统的扩展和维护。
-- 符合迪米特法则（最少知道原则）：子系统只需要将需要外部调用的接口暴露给外观类即可，而且他的接口则可以隐藏起来。
+- Decoupling between the client and the subsystem is realized: the client does not need to know the interface of the subsystem, simplifying the process of the client calling the subsystem, making the subsystem easier to use. At the same time, it is easy to expand and maintain the subsystem.
+- Demeter's law (least know principle) : The subsystem only needs to expose the interface that needs external calls to the appearance class, and its interface can be hidden.
 
-**缺点：**
+**Disadvantage:**
 
-- 违背了开闭原则：在不引入抽象外观类的情况下，增加新的子系统可能需要修改外观类或客户端的代码。
+- Violates the open-close principle: Adding a new subsystem without introducing abstract facade classes may require changes to facade classes or client code.
 
 ### 5.3 代理模式
 
-> 代理模式(Proxy Pattern) ：为某个对象提供一个代理，并由这个代理对象控制对原对象的访问。
+> Proxy Pattern：Provide a proxy for an object, and this proxy object controls access to the original object.
 
 ![](../../assets/article/designPattern/代理.png)
 
-**举例：**
+**Example:**
 
-代理模式像一个房屋中介，买家只能通过中介来买房，代理具备被代理类的所有功能，就像房东有卖房功能，中介也具有卖房功能。此外代理实例还可以帮助被代理实例进行一些额外处理，比如中介可以帮助房东筛选优质买家的功能，帮助房东 pass 掉一些不符合条件的买家。还有消息队列也是该模式。
+The agent model is like a housing agent, the buyer can only buy a house through the intermediary, the agent has all the functions of the agent, just as the landlord has the function of selling the house, the intermediary also has the function of selling the house. In addition, the agent instance can also help the agent to carry out some additional processing, such as the function of the intermediary to help the landlord screen quality buyers, and help the landlord pass some unqualified buyers. The same pattern applies to message queues.
 
-参考`koa`中的代理模式，把`response`上的一些属性和方法代理出来，方便使用
+Reference 'koa' in the proxy mode, the 'response' on some properties and methods proxy out, easy to use
 
 ```js
 /**
@@ -690,7 +690,7 @@ delegate(prototype, 'response')
   .getter('writable');
 ```
 
-对`context`,`request`,`response`做一个代理，保护真正的`context`,`request`,`response`
+Make a proxy for 'context', 'request', 'response', protecting the real 'context', 'request', 'response'
 
 ```js
 this.context = Object.create(context);
@@ -698,79 +698,79 @@ this.request = Object.create(request);
 this.response = Object.create(response);
 ```
 
-**优点：**
+**Advantages:**
 
-- 降低系统的耦合度：代理模式能够协调调用者和被调用者，在一定程度上降低了系 统的耦合度。
-- 不同类型的代理可以对客户端对目标对象的访问进行不同的控制：
-  - 远程代理,使得客户端可以访问在远程机器上的对象，远程机器 可能具有更好的计算性能与处理速度，可以快速响应并处理客户端请求。
-  - 虚拟代理通过使用一个小对象来代表一个大对象，可以减少系统资源的消耗，对系统进行优化并提高运行速度。
-  - 保护代理可以控制客户端对真实对象的使用权限。
+- Reduce the coupling degree of the system: The proxy mode can coordinate the caller and the called, which reduces the coupling degree of the system to a certain extent.
+- Different types of proxies can have different controls on the client's access to the target object:
+- A remote agent that allows the client to access objects on a remote machine that may have better computational performance and processing speed and can respond and process client requests quickly.
+By using a small object to represent a large object, virtual agents can reduce the consumption of system resources, optimize the system, and increase the speed of operation.
+- The protection agent can control the client's permission to use real objects.
 
-**缺点：**
+**Disadvantage:**
 
-- 由于在客户端和被代理对象之间增加了代理对象，因此可能会让客户端请求的速度变慢。
+- Adding a proxy object between the client and the proxy object may slow down client requests.
 
-### 5.4 享元模式
+### 5.4 Flyweight Pattern
 
-> 享元模式(`Flyweight Pattern`)：享元模式是一种优化程序性能的模式, 本质为减少对象创建的个数。运用共享技术复用大量细粒度的对象,降低程序内存的占用,提高程序的性能。以下情况可以使用享元模式:有大量相似的对象, 占用了大量内存。对象中大部分状态可以抽离为外部状态。
+> Flyweight Pattern：The meta mode is a mode that optimizes program performance, essentially reducing the number of objects created. Using sharing technology to reuse a large number of fine-grained objects, reduce the program memory occupation, improve the performance of the program. Share metamode can be used when there are a large number of similar objects that occupy a large amount of memory. Most of the state in an object can be extrapolated to external state.
 
 ![](../../assets/article/designPattern/享元.png)
 
-**举例：**
+**Example:**
 
-举例，音乐服务根据收费划分出免费用户和会员用户，免费用户只能听部分免费音乐，会员用户可以听全部的音乐，并且可以下载。虽然权限上二者间有一些区别，但是他们所享受的音乐来是自于同一个音乐库，这样所有的音乐都只需要保存一份就可以了。另外如果出现音乐库里没有的音乐时，则需要新增该音乐，然后其他服务也可以享受新增的音乐，相当于享元池或缓存池的功能。
+For example, a music service can be divided into free users and member users based on fees. Free users can only listen to some free music, and member users can listen to all music and can download it. Although there are some differences in permissions between the two, the music they enjoy is from the same library, so all the music needs to be saved only one copy. In addition, if there is no music in the music library, you need to add the music, and then other services can also enjoy the new music, which is equivalent to the function of the share pool or cache pool.
 
-享元模式区保证共享内部状态如音乐库，而外部状态根据不同需求定制如各种访问权限，使用中不能去改变内部状态，以达到共享的目的。
+The share mode area ensures that the internal state is shared, such as the music library, while the external state is customized according to different needs, such as various access rights, and the internal state cannot be changed during use to achieve the purpose of sharing.
 
 ```ts
-// 音乐服务
+// Music service
 const MusicService = {}
 
-// 共享的音乐库
+// Shared music library
 const musicLibrary = {};
 
-// 听音乐
+// Listen to music
 const listenToMusic = (music) => {
     ...
 }
-// 下载音乐
+// Download music
 const downloadMusic = (music) => {
     ...
 }
 
 
-// 免费音乐服务
+// Free music service
 const FreeMusicService = {
     listenFreeMusic: (music)=>{
         if(isMusicFree(music)){
-            // 如果是免费则播放
+            // If it is free, play it
             listenToMusic()
         }else{
-    	    // 如果是收费音乐，则提示用户升级 Vip
+    	    // If it is paid music, the user is prompted to upgrade the Vip Vip
             console.log("please upgrade to Vip")
         }
     }
 }
 
 
-// Vip 音乐服务
+// Vip Music Service
 const VipMusicService = {
-    // 可以听全部的音乐
+    // You can listen to all the music
     listenMusic
-    // 可以下载音乐
+    // You can download music
     downloadMusic
 }
 ```
 
-**优点：**
+**Advantages:**
 
-- 使用享元模可以减少内存中对象的数量，使得相同对象或相似对象在内存中只保存一份，降低系统的使用内存，也可以提性能。
-- 享元模式的外部状态相对独立，而且不会影响其内部状态，从而使得享元对象可以在不同的环境中被共享。
+- The use of the share module can reduce the number of objects in memory, so that the same object or similar objects in memory only one copy, reduce the system memory usage, can also improve performance.
+- The external state of the share meta pattern is relatively independent and does not affect its internal state, so that share meta objects can be shared in different environments.
 
-**缺点：**
+**Disadvantage:**
 
-- 使用享元模式需要分离出内部状态和外部状态，这使得程序的逻辑复杂化。
-- 对象在缓冲池中的复用需要考虑线程问题。
+- Using the meta pattern requires the separation of internal and external states, which complicates the logic of the program.
+- Object reuse in buffer pools requires consideration of threading issues.
 
 ### 5.5 桥接模式
 
@@ -1375,22 +1375,22 @@ console.log(s, a); // 400 300
 ```
 
 ```js
-// 指令处理集合
+// Instruction processing set
 var compileUtil = {
-    // v-text更新视图原理
+    // v-text Works for updating views
     text: function(node, vm, exp) {
         this.bind(node, vm, exp, 'text');
     },
-    // v-html更新视图原理
+    // v-html update view principle
     html: function(node, vm, exp) {
         this.bind(node, vm, exp, 'html');
     },
-    // v-class绑定原理
+    // v-class binding principle
     class: function(node, vm, exp) {
         this.bind(node, vm, exp, 'class');
     },
     bind: function(node, vm, exp, dir) {
-        // 不同指令触发视图更新
+        // The same instruction triggers the view update
         var updaterFn = updater[dir + 'Updater'];
         updaterFn && updaterFn(node, this._getVMVal(vm, exp));
         new Watcher(vm, exp, function(value, oldValue) {
@@ -1401,71 +1401,71 @@ var compileUtil = {
 }
 ```
 
-**优点：**
+**Advantages:**
 
-- 策略模式提供了对“开闭原则”的完美支持，用户可以在不修改原有系统的基础上选择算法或行为，也可以灵活地增加新的算法或行为。
-- 策略模式提供了管理相关的算法族的办法。策略类的等级结构定义了一个算法或行为族，恰当使用继承可以把公共的代码移到抽象策略类中，从而避免重复的代码。
-- 策略模式提供了一种可以替换继承关系的办法。如果不使用策略模式，那么使用算法的环境类就可能会有一些子类，每一个子类提供一种不同的算法。但是，这样一来算法的使用就和算法本身混在一起，不符合“单一职责原则”，决定使用哪一种算法的逻辑和该算法本身混合在一起，从而不可能再独立演化；而且使用继承无法实现算法或行为在程序运行时的动态切换。
-- 使用策略模式可以避免多重条件选择语句。多重条件选择语句不易维护，它把采取哪一种算法或行为的逻辑与算法或行为本身的实现逻辑混合在一起，将它们全部硬编码(Hard Coding)在一个庞大的多重条件选择语句中，比直接继承环境类的办法还要原始和落后。
-- 策略模式提供了一种算法的复用机制，由于将算法单独提取出来封装在策略类中，因此不同的环境类可以方便地复用这些策略类。
+- Policy mode provides perfect support for the "open and close principle", users can choose algorithms or behaviors without modifying the original system, and can flexibly add new algorithms or behaviors.
+- The policy pattern provides a way to manage related algorithm families. The hierarchy of a policy class defines an algorithm or family of behaviors, and proper use of inheritance can move common code into an abstract policy class, thereby avoiding duplicate code.
+The policy pattern provides a way to replace inheritance relationships. Without the policy pattern, an environment class that uses algorithms might have several subclasses, each of which provides a different algorithm. However, in this way, the use of the algorithm is mixed with the algorithm itself, which does not conform to the "single responsibility principle", and the logic of deciding which algorithm to use is mixed with the algorithm itself, so that it is impossible to evolve independently. And using inheritance can not realize the dynamic switching of algorithms or behaviors during program running.
+- Use policy mode to avoid multiple conditional selection statements. Multiple conditional selection statement is not easy to maintain, it takes the logic of which algorithm or behavior to take and the implementation logic of the algorithm or behavior itself mixed together, Hard Coding them all in a huge multiple conditional selection statement, than the direct inheritance of the environment class method is more primitive and backward.
+- The policy pattern provides an algorithm reuse mechanism. Since algorithms are extracted separately and encapsulated in policy classes, different environment classes can reuse these policy classes easily.
 
-**缺点：**
+**Disadvantage:**
 
-- 客户端必须知道所有的策略类，并自行决定使用哪一个策略类。这就意味着客户端必须理解这些算法的区别，以便适时选择恰当的算法。换言之，策略模式只适用于客户端知道所有的算法或行为的情况。
-- 策略模式将造成系统产生很多具体策略类，任何细小的变化都将导致系统要增加一个新的具体策略类。
-- 无法同时在客户端使用多个策略类，也就是说，在使用策略模式时，客户端每次只能使用一个策略类，不支持使用一个策略类完成部分功能后再使用另一个策略类来完成剩余功能的情况。
+- The client must know all the policy classes and decide which one to use. This means that the client must understand the difference between these algorithms in order to choose the right one at the right time. In other words, the policy pattern only applies if the client knows all the algorithms or behaviors.
+- The policy mode will cause the system to generate many specific policy classes, and any small change will cause the system to add a new specific policy class.
+- Multiple policy classes cannot be used on the client at the same time. That is, when the policy mode is used, the client can use only one policy class at a time. One policy class cannot be used to complete some functions and then another policy class is used to complete the remaining functions.
 
-### 6.10 模板方法模式
+### 6.10 Template method pattern
 
-> 模板方法模式：定义一个操作中算法的框架，而将一些步骤延迟到子类中。模板方法模式使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤。
+> Template method pattern ：Define the framework of an algorithm in an operation, while deferring some steps to subclasses. The template method pattern allows subclasses to redefine certain steps of an algorithm without changing its structure.
 
 ![](../../assets/article/designPattern/模板.png)
 
-**举例：**
+**Example:**
 
-模板方法模式的使用场景
+Template method mode usage scenario
 
-- 模板方法模式常被架构师用于搭建项目的框架，架构师定好了框架的骨架，程序员继承框架的结构之后，负责往里面填空
-- 钩子方法：各种框架中的钩子函数往往在初始化时就规定各个钩子函数的名称以及执行时机，对于使用者只需要在钩子函数中注入自定义逻辑代码即可
-- 回调函数：回调函数在特定的时机执行，但是具体的操作交给具体的函数实现。把变化的部分封装成一个函数剩下的就成了模板
+The template approach pattern is often used by the architect to build the framework of the project. The architect defines the skeleton of the framework and the programmer inherits the structure of the framework and is responsible for filling in the blanks
+Hook method: Hook functions in various frameworks often specify the name of each hook function and the execution time at initialization, and users only need to inject custom logic code into the hook function
+- Callback function: The callback function is executed at a specific time, but the specific operation is implemented by the specific function. Encapsulate the changes into a function and the rest becomes a template
 
-模板方法模式具体应用又分为三类：
+The specific application of template method pattern is divided into three categories:
 
-- 抽象方法：一个抽象方法由抽象类声明、由其具体子类实现。
+- Abstract method: An abstract method is declared by an abstract class and implemented by its concrete subclasses.
 
-- 具体方法：一个具体方法由一个抽象类或具体类声明并实现，其子类可以进行覆盖也可以直接继承。
+- Concrete method: A concrete method is declared and implemented by an abstract or concrete class, and its subclasses can be overridden or directly inherited.
 
-- 钩子方法：一个钩子方法由一个抽象类或具体类声明并实现，而其子类可能会加以扩展。通常在父类中给出的实现是一个空实现，并以该空实现作为方法的默认实现，当然钩子方法也可以提供一个非空的默认实现。通过在子类中实现的钩子方法对父类方法的执行进行约束，实现子类对父类行为的反向控制。
+- Hook method: A hook method is declared and implemented by an abstract or concrete class, and its subclasses may extend it. Usually the implementation given in the parent class is an empty implementation that is used as the default implementation for the method, although the hook method can also provide a non-empty default implementation. The hook method implemented in the subclass constrains the execution of the parent class method, and realizes the reverse control of the subclass to the parent class behavior.
 
-泡一杯咖啡
+Make a cup of coffee
 
-先我们先来泡一杯咖啡，一般来说，泡咖啡的步骤通常如下：
+First let's make a cup of coffee, generally speaking, the steps of making coffee are usually as follows:
 
-1.先把水煮沸；
+1. Boil the water first.
 
-2.用沸水冲泡咖啡；
+2. Brew coffee with boiling water;
 
-3.把咖啡倒进杯子；
+3. Pour the coffee into the cup;
 
-4.加糖和牛奶。
+4. Add sugar and milk.
 
-我们用 es5 来得到一杯香浓的咖啡吧：
+Let's use es5 to get a cup of coffee:
 
 ```js
 var Coffee = function () {};
 Coffee.prototype.boilWater = function () {
-  console.log('水煮开了');
+  console.log('The water is boiling');
 };
 Coffee.prototype.brewCoffeeGriends = function () {
-  console.log('用沸水冲泡咖啡');
+  console.log('Brew coffee with boiling water');
 };
 Coffee.prototype.pourInCup = function () {
-  console.log('把咖啡倒进杯子');
+  console.log('Pour the coffee into the cup');
 };
 Coffee.prototype.addSugarAndMilk = function () {
-  console.log('加糖和牛奶');
+  console.log('Add sugar and milk');
 };
-// 封装 将实现的细节交给类的内部
+// Encapsulation hands over the implementation details to the internals of the class
 Coffee.prototype.init = function () {
   this.boilWater();
   this.brewCoffeeGriends();
@@ -1476,34 +1476,34 @@ var coffee = new Coffee();
 coffee.init();
 ```
 
-泡一壶茶
+Make a pot of tea
 
-其实呢，泡茶的步骤跟泡咖啡的步骤相差不大，大致是这样的：
+In fact, the steps for making tea are not very different from those for making coffee, which is roughly like this:
 
-1.把水煮沸；
+1. Boil the water;
 
-2.用沸水浸泡茶叶；
+2. Soak tea leaves in boiling water;
 
-3.把茶水倒进杯子；
+3. Pour the tea into the cup;
 
-4.加柠檬。
+4. Add lemon.
 
-来，咱用 es6 来泡茶：
+Here, let's make tea with es6:
 
 ```js
 class Tea {
   constructor() {}
   boilWater() {
-    console.log('把水烧开');
+    console.log('Bring water to a boil');
   }
   steepTeaBag() {
-    console.log('浸泡茶叶');
+    console.log('Soaked tea leaves');
   }
   pourInCup() {
-    console.log('倒进杯子');
+    console.log('Pour into a cup');
   }
   addLemon() {
-    console.log('加柠檬');
+    console.log('Add lemon');
   }
   init() {
     this.boilWater();
@@ -1516,37 +1516,37 @@ var tea = new Tea();
 tea.init();
 ```
 
-现在到了思考的时间，我们刚刚泡了一杯咖啡和一壶茶，有没有觉得这两个过程是大同小异的。我们能很容易的就找出他们的共同点，不同点就是原料不同嘛，茶和咖啡，我们可以把他们抽象为"饮料"哇；泡的方式不同嘛，一个是冲泡，一个是浸泡，我们可以把这个行为抽象为"泡"；加入的调料也不同咯，加糖和牛奶，加柠檬，它们也可以抽象为"调料"吖。
+Now it's time to think, we just made a cup of coffee and a pot of tea, do you think these two processes are much the same. We can easily find out what they have in common, the difference is the raw material, tea and coffee, we can abstract them as "drinks" wow; The way of soaking is different, one is brewing, the other is soaking, we can abstract this behavior as "soaking"; The spices added are also different, adding sugar and milk, adding lemon, they can also be abstracted as "seasoning".
 
-这么一分析，是不是很清楚了吖，我们整理一下就是：
+Such an analysis, is not very clear acriz, we sort it out is:
 
-1.把水煮沸；
+1. Boil the water;
 
-2.用沸水冲泡饮料；
+2. Brew drinks with boiling water;
 
-3.把饮料倒进杯子；
+3. Pour the drink into the glass;
 
-4.加调料。
+Step 4 Add seasoning.
 
-大家请注意！大家请注意！主角来了！之前我们已经扔出了概念，所以我们现在可以创建一个抽象父类来表示泡一杯饮料的过程。那么，抽象父类？
+Attention, everyone! Attention, everyone! Here comes the hero! We've thrown out the concept before, so we can now create an abstract superclass to represent the process of making a drink. So, abstract superclasses?
 
-抽象类？
+An abstract class?
 
-抽象类是不能被实例化的，一定是用来继承的。继承了抽象类的所有子类都将拥有跟抽象类一致的接口方法，抽象类的主要作用就是为它的子类定义这些公共接口。
+Abstract classes cannot be instantiated; they must be inherited. All subclasses that inherit an abstract class will have interface methods identical to those of the abstract class, and the main role of the abstract class is to define these public interfaces for its subclasses.
 
-通过上面分析，这里具体来说就是要把泡茶和泡咖啡的共同步骤共同点找出来，封装到父类，也就是抽象类中，然后不同的步骤写在子类中，也就是茶和咖啡中。抽象类既然不能被实例化，不怕啊，子类就是他的实例化。
+Through the above analysis, it is specifically to find out the common steps of making tea and making coffee, encapsulate them into the parent class, that is, the abstract class, and then write different steps in the subclass, that is, tea and coffee. Since an abstract class cannot be instantiated, no fear, a subclass is its instantiation.
 
-泡饮料啦！
+Make a drink!
 
 ```js
 var Beverage = function () {};
 Beverage.prototype.boilWater = function () {
-  console.log('把水煮沸');
+  console.log('Boil the water');
 };
 Beverage.prototype.brew = function () {};
 Beverage.prototype.pourInCup = function () {};
 Beverage.prototype.addCondiments = function () {};
-// 抽象方法
+// Abstract method
 Beverage.prototype.init = function () {
   this.boilWater();
   this.brew();
@@ -1554,9 +1554,9 @@ Beverage.prototype.init = function () {
   this.addCondiments();
 };
 var Coffee = function () {
-  // 将父类的构造方法拿来执行一下
+  // Take the constructor of the parent class and execute it
   Beverage.apply(this, arguments);
-  // 就像es6的super执行 执行后this才会有对象的属性
+  // Just like es6's super execution, this will only have the properties of the object after execution
 };
 Coffee.prototype = new Beverage();
 var coffee = new Coffee();
@@ -1564,49 +1564,49 @@ coffee.init();
 var Tea = function () {};
 Tea.prototype = new Beverage();
 Tea.prototype.brew = function () {
-  console.log('用沸水浸泡茶叶');
+  console.log('Soak the tea leaves in boiling water');
 };
 Tea.prototype.pourInCup = function () {
-  console.log('把茶叶倒进杯子');
+  console.log('Pour the tea into the cup');
 };
 Tea.prototype.addCondiments = function () {
-  console.log('加柠檬');
+  console.log('Add lemon');
 };
 var tea = new Tea();
 tea.init();
 ```
 
-这里既泡了咖啡又泡了茶，是不是没有之前那么繁琐呢，这里的代码可是很高级的呢。
+Both coffee and tea are made here, is it not as cumbersome as before, and the code here is very advanced.
 
-这里用一个父类 Beverage 来表示 Coffee 和 Tea，然后子类就是后面的 Coffee 和 Tea 啦，因为这里的 Beverage 是一个抽象的存在，需要子类来继承它。泡饮品的流程，可以理解为一个模板模式 ，抽象类 Beverage， 抽象方法 init()在子类中实现。js 的继承是基于原型链的继承，这里 prototype 就是类的原型链。这里由于 coffee 对象和 tea 对象的原型 prototype 上都没有对应的 init(),所以请求会顺着原型链，找到父类 Beverage 的 init()。子类寻找对应的属性和方法的时候会顺着原型链去查找，先找自己，没有找到会顺着去父类里面查找。
+Coffee and Tea are represented by the parent class Beverage, and then the subclass is Coffee and Tea, because Beverage is an abstract existence, and the subclass needs to inherit it. The process of brewing a drink can be understood as a template pattern, the abstract class Beverage, and the abstract method init() is implemented in the subclass. js inheritance is based on prototype chain inheritance, where prototype is the prototype chain of the class. Since there is no corresponding init() on the prototype of the coffee object and tea object, the request will follow the prototype chain to find the init() of the parent class Beverage. When subclasses look for corresponding properties and methods, they will follow the prototype chain to find them, first looking for themselves, and if they do not find them, they will follow the search inside the parent class.
 
-Beverage.prototype.init 被称为模板方法的原因是，该方法中封装了子类的算法框架，它作为一个算法的模板，指导子类以何种顺序去执行哪些方法。
+The reason why Beverage.prototype.init is called a template method is that it encapsulates the algorithm framework of the subclass, which serves as a template for the algorithm and instructs the subclass to execute which methods in which order.
 
-**优点：**
+**Advantages:**
 
-- 在父类中形式化地定义一个算法，而由它的子类来实现细节的处理，在子类实现详细的处理算法时并不会改变算法中步骤的执行次序。
-- 模板方法模式是一种代码复用技术，它在类库设计中尤为重要，它提取了类库中的公共行为，将公共行为放在父类中，而通过其子类来实现不同的行为，它鼓励我们恰当使用继承来实现代码复用。
-- 可实现一种反向控制结构，通过子类覆盖父类的钩子方法来决定某一特定步骤是否需要执行。
-- 在模板方法模式中可以通过子类来覆盖父类的基本方法，不同的子类可以提供基本方法的不同实现，更换和增加新的子类很方便，符合单一职责原则和开闭原则。
+- Formally define an algorithm in the parent class, and let its subclasses implement the details of the processing, and the subclasses implement the detailed processing algorithm without changing the order of execution of the steps in the algorithm.
+- Template method pattern is a code reuse technique, it is particularly important in class library design, it extracts the common behavior of the class library, puts the common behavior in the parent class, and through its subclasses to achieve different behavior, it encourages us to use inheritance properly to achieve code reuse.
+A reverse control structure can be implemented where subclasses override the hook methods of the parent class to decide whether a particular step needs to be performed.
+- In the template method pattern, the basic method of the parent class can be overridden by subclasses, different subclasses can provide different implementations of the basic method, and it is easy to replace and add new subclasses, which conforms to the principle of single responsibility and the principle of open and close.
 
-**缺点：**
+**Disadvantage:**
 
-- 需要为每一个基本方法的不同实现提供一个子类，如果父类中可变的基本方法太多，将会导致类的个数增加，系统更加庞大，设计也更加抽象，此时，可结合桥接模式来进行设计。
+- It is necessary to provide a subclass for different implementations of each basic method. If there are too many variable basic methods in the parent class, the number of classes will increase, the system will become larger, and the design will become more abstract. In this case, the bridge pattern can be combined to design.
+- 
+### 6.11 Visitor Pattern
 
-### 6.11 访问者模式
-
-> 访问者模式(`Visitor Pattern`):提供一个作用于某对象结构中的各元素的操作表示，它使我们可以在不改变各元素的类的前提下定义作用于这些元素的新操作。访问者模式是一种对象行为型模式。
+> Visitor Pattern:Provides a representation of operations that act on elements of an object structure, which allows us to define new operations on those elements without changing their class. Visitor pattern is an object behavior pattern.
 
 ![](../../assets/article/designPattern/访问者.png)
 
-**举例：**
+**Example:**
 
-访问者模式是一种较为复杂的行为型设计模式，它包含访问者和被访问元素两个主要组成部分，这些被访问的元素通常具有不同的类型，且不同的访问者可以对它们进行不同的访问操作。访问者模式使得用户可以在不修改现有系统的情况下扩展系统的功能，为这些不同类型的元素增加新的操作。
+Visitor pattern is a more complex behavioral design pattern, which consists of two main components: visitor and visited elements. These visited elements usually have different types, and different visitors can access them differently. The visitor pattern allows users to extend the functionality of the system without modifying the existing system, adding new operations to these different types of elements.
 
-在使用访问者模式时，被访问元素通常不是单独存在的，它们存储在一个集合中，这个集合被称为「对象结构」，访问者通过遍历对象结构实现对其中存储的元素的逐个操作。
+When using the visitor pattern, the accessed elements usually do not exist separately, they are stored in a collection called an "object structure", and the visitor iterates through the object structure to achieve a one-by-one operation on the elements stored in it.
 
 ```js
-// 访问者模式：DOM事件绑定
+// Visitor pattern: DOM event binding
 var bindEvent = function(dom, type, fn, data) {
     if (dom.addEventListener) {
         dom.addEventListener(type, fn, false);
@@ -1614,7 +1614,7 @@ var bindEvent = function(dom, type, fn, data) {
         // dom.attachEvent('on'+type, fn);
         var data = data || {};
         dom.attachEvent('on' + type, function(e) {
-            // 在IE中this指向 window，使用call改变this的指向
+            // In IE this points to window, use call to change the point of this
             fn.call(dom, e, data);
         });
     } else {
@@ -1626,7 +1626,7 @@ function $(id) {
 }
 ​
 bindEvent($(demo), 'click', function() {
-    // this 指向dom对象
+    // this points to the dom object
     this.style.background = 'red';
 });
 ​
@@ -1635,10 +1635,10 @@ bindEvent($('btn'), 'click', function(e, data) {
 }, { text: 'demo' });
 ```
 
-访问者模式的思想就是在不改变操作对象的同时，为它添加新的操作方法，以实现对操作对象的访问。我们知道，call 和 apply 的作用就是更改函数执行时的作用域，这正是访问者模式的精髓。通过 call、apply 这两种方式我们就可以让某个对象在其它作用域中运行。
+The idea of visitor pattern is to add new operation methods to the operand without changing it, so as to achieve access to the operand. We know that the purpose of call and apply is to change the scope of function execution, which is the essence of the visitor pattern. call and apply are two ways to make an object run in another scope.
 
 ```js
-// 数组方法封装
+// Array method encapsulation
 var Visitor = (function() {
     return {
         splice: function() {
@@ -1664,18 +1664,18 @@ Visitor.pop(a);
 Visitor.splice(a,2);
 ```
 
-访问者模式解决了数据与数据的操作方法之间的耦合，让数据的操作方法独立于数据，使其可以自由演变。因此，访问者模式更适合于那些数据稳定、但数据的操作方法易变的环境下。
+The visitor pattern solves the coupling between the data and the manipulation of the data, making the manipulation of the data independent of the data, so that it can freely evolve. Therefore, the visitor pattern is more suitable for those environments where the data is stable but the data manipulation method is variable.
 
-**优点：**
+**Advantages:**
 
-- 增加新的访问操作很方便。使用访问者模式，增加新的访问操作就意味着增加一个新的具体访问者类，实现简单，无须修改源代码，符合“开闭原则”。
-- 将有关元素对象的访问行为集中到一个访问者对象中，而不是分散在一个个的元素类中。类的职责更加清晰，有利于对象结构中元素对象的复用，相同的对象结构可以供多个不同的访问者访问。
-- 让用户能够在不修改现有元素类层次结构的情况下，定义作用于该层次结构的操作。
+- Easy to add new access operations. Using the visitor pattern, adding a new access operation means adding a new concrete visitor class, which is simple to implement without modifying the source code and conforms to the "open and closed principle".
+- Centralize access to element objects into a single visitor object, rather than spreading it across individual element classes. Class responsibilities are clearer, facilitating reuse of element objects in the object structure, and the same object structure can be accessed by multiple different visitors.
+- Enables users to define operations that act on an existing element class hierarchy without modifying it.
 
-**缺点：**
+**Disadvantage:**
 
-- 增加新的元素类很困难。在访问者模式中，每增加一个新的元素类都意味着要在抽象访问者角色中增加一个新的抽象操作，并在每一个具体访问者类中增加相应的具体操作，这违背了“开闭原则”的要求。
-- 破坏封装。访问者模式要求访问者对象访问并调用每一个元素对象的操作，这意味着元素对象有时候必须暴露一些自己的内部操作和内部状态，否则无法供访问者访问。
+- Adding new element classes is difficult. In the visitor pattern, adding a new element class means adding a new abstract operation to the abstract visitor role and a corresponding concrete operation to each concrete visitor class, which violates the "open closed principle".
+- Break the package. The visitor pattern requires the visitor object to access and invoke the operations of each element object, which means that the element object must sometimes expose some of its own internal operations and internal state, otherwise it cannot be accessed by the visitor.
 
 ## Sum up
 

@@ -82,6 +82,31 @@ export const throttle = (fn: any, wait = 300): any => {
   };
 };
 /**
+ * @description: 生成节流函数
+ * @param {*} Function
+ * @return {*}
+ */
+export const generateThrottle = (): Function => {
+  let timer: NodeJS.Timeout | undefined;
+  return function (fn: Function, wait = 300) {
+    return function (this: unknown, ...args: unknown[]) {
+      if (timer) {
+        clearTimeout(timer);
+        timer = undefined;
+      }
+      const context = this;
+      if (!timer) {
+        timer = setTimeout(() => {
+          fn.apply(context, args);
+          clearTimeout(timer);
+          timer = undefined;
+        }, wait);
+      }
+    };
+  }
+
+}
+/**
  * @description: requestAnimationFrame节流
  * @param {any} fn
  * @return {*}
@@ -157,7 +182,7 @@ export const mergeExports = (obj: Object, exports: Object): Object => {
   return Object.freeze(obj);
 };
 
-export const noop = (): void => {};
+export const noop = (): void => { };
 
 export type Noop = () => void;
 /**
@@ -379,9 +404,9 @@ export function querystring(data = {}): string {
         value === undefined || value === null
           ? searchParams
           : (searchParams.append(
-              decodeURIComponent(name),
-              decodeURIComponent(value),
-            ),
+            decodeURIComponent(name),
+            decodeURIComponent(value),
+          ),
             searchParams),
       new URLSearchParams(),
     )
@@ -390,7 +415,7 @@ export function querystring(data = {}): string {
 
 const transitionJsonToString = (
   jsonObj: string | JSON,
-  callback = (error: Error) => {},
+  callback = (error: Error) => { },
 ) => {
   // 转换后的jsonObj受体对象
   let _jsonObj: string = '';
@@ -421,7 +446,7 @@ const transitionJsonToString = (
   return _jsonObj;
 };
 // callback为数据格式化错误的时候处理函数
-export const formatJson = (jsonObj: string, callback = () => {}): string => {
+export const formatJson = (jsonObj: string, callback = () => { }): string => {
   // 转换后的字符串变量
   let formatted = '';
   // 换行缩进位数
