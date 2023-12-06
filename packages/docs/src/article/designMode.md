@@ -119,7 +119,7 @@ For example, if there are two classes, one is BaseClass, the other is SubClass, 
 
 Richter substitution principle is one of the important ways to achieve the open and close principle, because the use of base class objects can use subclass objects, so in the program to try to use the base class type to define the object, and then determine its subclass type at run time, with subclass objects to replace the parent object.
 
-** Advantages: You can test the correctness of the use of inheritance, and restrict the overflow of inheritance in use. **.
+**Advantages: You can test the correctness of the use of inheritance, and restrict the overflow of inheritance in use.**.
 
 2.3 Reliance on the inversion principle
 
@@ -151,7 +151,7 @@ Demeter's law requires that when designing a system, we should minimize the inte
 
 When applying Dimitter's rule to system design, we should pay attention to the following points: in the division of classes, we should try to create loosely coupled classes, the lower the degree of coupling between classes, the more conducive to reuse, and once a class in loose coupling is modified, it will not cause too much impact on the associated classes. In the structural design of the class, every class should minimize the access permissions of its member variables and member functions. In class design, whenever possible, a type should be designed as an invariant class. References to other classes from one object should be kept to a minimum.
 
-** Advantages: The practice of Demeter's rule can well reduce the coupling between classes, reduce the degree of correlation between classes, and make the collaboration between classes more direct. **.
+**Advantages: The practice of Demeter's rule can well reduce the coupling between classes, reduce the degree of correlation between classes, and make the collaboration between classes more direct.**.
 
 2.6 Interface Separation Rule
 
@@ -161,7 +161,7 @@ According to the principle of interface isolation, when an interface is too larg
 
 When using the interface isolation principle, you need to pay attention to the granularity of the control interface. If the interface is too small, the system may overflow interfaces, which is not conducive to maintenance. The interface can not be too large, too large interface will violate the interface isolation principle, poor flexibility, very inconvenient to use.
 
-** Advantages: Avoid the method of containing different responsibilities in the same interface, and the division of interface responsibilities is more clear, in line with the idea of high cohesion and low coupling. **.
+**Advantages: Avoid the method of containing different responsibilities in the same interface, and the division of interface responsibilities is more clear, in line with the idea of high cohesion and low coupling.**.
 
 ### 2.7 Principle of Synthetic reuse (outside the six)
 
@@ -171,7 +171,7 @@ The principle of composite reuse is to use some existing objects in a new object
 
 In object-oriented design, there are two ways to reuse existing designs and implementations in different environments, namely through composition/aggregation relationships or through inheritance, but the use of composition/aggregation should be considered first. Composition/aggregation can make the system more flexible and reduce the coupling degree between classes. Changes in a class have relatively little impact on other classes, and then inheritance is considered. When using inheritance, it is necessary to strictly follow the Richlist substitution principle. Effective use of inheritance will help to understand the problem and reduce complexity, while abuse of inheritance will increase the difficulty of system construction and maintenance as well as the complexity of the system, so inheritance reuse should be carefully used.
 
-** Advantages: Avoid abuse of inheritance when reuse, rational use of combination relations, increase flexibility. **.
+**Advantages: Avoid abuse of inheritance when reuse, rational use of combination relations, increase flexibility.**.
 
 2.8 Six principles - Learning experience
 
@@ -179,9 +179,9 @@ Among the six principles, the opening and closing principle, the Richter replace
 
 The principle of knowing the least can reduce coupling, reduce unnecessary interaction, advocate the design of interfaces and classes to be simple and easy to use, encapsulate complex logic and provide simple and easy-to-use interfaces.
 
-** Single Responsibility principle ** Divide the classes and methods in a project by responsibility to avoid overburdening a single class. The more responsibilities, the less likely they are to be reused or the more cumbersome they are to use.
+**Single Responsibility principle** Divide the classes and methods in a project by responsibility to avoid overburdening a single class. The more responsibilities, the less likely they are to be reused or the more cumbersome they are to use.
 
-** Interface separation principle ** The function of the complex interface is subdivided into a number of specific functions of the interface, only do the thing to do, reduce the coupling, but the granularity can not be too fine, easy to lead to too many interfaces. The single responsibility principle emphasizes the design of a single class according to the subdivision of responsibilities, and the interface separation principle emphasizes the coupling between classes to establish the least possible dependency.
+**Interface separation principle** The function of the complex interface is subdivided into a number of specific functions of the interface, only do the thing to do, reduce the coupling, but the granularity can not be too fine, easy to lead to too many interfaces. The single responsibility principle emphasizes the design of a single class according to the subdivision of responsibilities, and the interface separation principle emphasizes the coupling between classes to establish the least possible dependency.
 
 ## III. Pattern classification
 
@@ -424,6 +424,7 @@ function createSingleton() {
 **Disadvantage:**
 
 Since there is no abstraction layer in the singleton pattern, singleton classes are difficult to extend.
+
 - For languages that have garbage collection systems, such as Java and C#, objects may be recycled if they are not utilized for a long time. If the singleton holds some data, it will no longer exist when it is reinstantiated after collection.
 
 ### 4.5 Builder Pattern
@@ -530,12 +531,12 @@ Prototype mode is like photocopying technology, copy a new object from the origi
 // Because it's not a constructor, you don't use capitalization
 const car = {
   drive: function () {},
-  name: '马自达 3',
+  name: 'The Mazda 3',
 };
 
 // Create a new car x using Object.create
 const anotherCar = Object.create(someCar);
-anotherCar.name = '丰田佳美';
+anotherCar.name = 'Mike';
 ```
 
 ```ts
@@ -544,7 +545,7 @@ const vehiclePrototype = {
     this.model = carModel;
   },
   getModel: function () {
-    console.log('车辆模具是：' + this.model);
+    console.log('The vehicle mold is:' + this.model);
   },
 };
 
@@ -558,7 +559,7 @@ function vehicle(model) {
   return f;
 }
 
-const car = vehicle('福特Escort');
+const car = vehicle('Ford Escort');
 car.getModel();
 ```
 
@@ -746,7 +747,7 @@ const FreeMusicService = {
             // If it is free, play it
             listenToMusic()
         }else{
-    	    // If it is paid music, the user is prompted to upgrade the Vip Vip
+         // If it is paid music, the user is prompted to upgrade the Vip Vip
             console.log("please upgrade to Vip")
         }
     }
@@ -772,35 +773,35 @@ const VipMusicService = {
 - Using the meta pattern requires the separation of internal and external states, which complicates the logic of the program.
 - Object reuse in buffer pools requires consideration of threading issues.
 
-### 5.5 桥接模式
+### 5.5 Simple Factory Pattern
 
-> 桥接模式(`Simple Factory Pattern`)：将抽象部分与它的实现部分分离,使它们都可以独立地变化。
+> Simple Factory Pattern：Separate the abstract part from its implementation part so that they can both vary independently.
 
 ![](../../assets/article/designPattern/桥接.png)
 
-**举例：**
+**Example:**
 
-球和人都可以进行运动，但球有运动和颜色，人可以运动和说话。对共同部分进行抽象。
+Both balls and people can move, but balls have movement and colors, and people can move and talk. Abstract the common parts.
 
 ```js
 class Speed {
-  // 运动模块
+  // Motion module
   constructor(x, y) {
     this.x = x;
     this.y = y;
   }
   run() {
-    console.log(`运动起来 ${this.x} + ${this.y}`);
+    console.log(`Get into motion ${this.x} + ${this.y}`);
   }
 }
 
 class Color {
-  // 着色模块
+  // Coloring module
   constructor(cl) {
     this.color = cl;
   }
   draw() {
-    console.log(`绘制颜色 ${this.color}`);
+    console.log(`Draw color ${this.color}`);
   }
 }
 
@@ -809,12 +810,12 @@ class Speak {
     this.word = wd;
   }
   say() {
-    console.log(`说话 ${this.word}`);
+    console.log(`talk ${this.word}`);
   }
 }
 
 class Ball {
-  // 创建球类，可以着色和运动
+  // Create balls that can be colored and moved
   constructor(x, y, cl) {
     this.speed = new Speed(x, y);
     this.color = new Color(cl);
@@ -826,7 +827,7 @@ class Ball {
 }
 
 class Man {
-  // 人类，可以运动和说话
+  // Humans can move and talk
   constructor(x, y, wd) {
     this.speed = new Speed(x, y);
     this.speak = new Speak(wd);
@@ -838,26 +839,26 @@ class Man {
 }
 
 const man = new Man(1, 2, 'hello ?');
-man.init(); // 运动起来 1 + 2      说话 hello?
+man.init();
 ```
 
-**优点：**
+**Advantages:**
 
-- 扩展性好，符合开闭原则：将抽象与实现分离，让二者可以独立变化
+- Good scalability, in line with the principle of open and close: separation of abstraction and implementation, so that the two can change independently
 
-**缺点：**
+**Disadvantage:**
 
-- 在设计之前，需要识别出两个独立变化的维度。
+- Two independently varying dimensions need to be identified before design.
 
-### 5.6 适配器模式
+### 5.6 Adapter Pattern
 
-> 适配器模式(`Adapter Pattern`) ：适配器模式是用来解决两个接口不兼容的情况，不需要改变已有的接口，通过包装一层的方式，实现两个接口正常协作。当我们试图调用模块或者对象的某个接口时，却发现这个接口的格式并不符合目前的需求, 则可以用适配器模式。
+> Adapter Pattern：Adapter mode is used to solve the incompatibility of two interfaces, do not need to change the existing interface, through the packaging of a layer, to achieve normal cooperation between the two interfaces. When we try to call an interface of a module or object, but find that the format of the interface does not meet the current requirements, we can use the adapter pattern.
 
 ![](../../assets/article/designPattern/适配器.png)
 
-**举例：**
+**Example:**
 
-事件绑定兼容各浏览器
+Event binding is compatible with all browsers
 
 ```js
 function addEvent(ele, event, callback) {
@@ -872,50 +873,50 @@ function addEvent(ele, event, callback) {
 ​
 ```
 
-**优点：**
+**Advantages:**
 
-- 符合开闭原则：使用适配器而不需要改变现有类，提高类的复用性。
-- 目标类和适配器类解耦，提高程序扩展性。
+- Comply with the principle of open and close: use adapters without changing existing classes, improving class reusability.
+- Decouple the target class from the adapter class to improve program extensibility.
 
-**缺点：**
+**Disadvantage:**
 
-- 增加了系统的复杂性
+- Increased the complexity of the system
 
-## 六、行为型
+## Six. Behavior pattern
 
-### 6.1 职责链模式
+### 6.1 Chain of Responsibility Pattern
 
-> 职责链模式(Chain of Responsibility Pattern)：避免请求发送者与接收者耦合在一起，让多个对象都有可能接收请求，将这些对象连接成一条链，并且沿着这条链传递请求，直到有对象处理它为止。职责链模式是一种对象行为型模式。 类似多米诺骨牌, 通过请求第一个条件, 会持续执行后续的条件, 直到返回结果为止。
+> Chain of Responsibility Pattern：Avoid coupling the request sender with the receiver, make it possible for multiple objects to receive the request, connect those objects into a chain, and pass the request along the chain until an object handles it. The responsibility chain pattern is an object behavior pattern. Similar to dominoes, by requesting the first condition, subsequent conditions continue to be executed until a result is returned.
 
 ![](../../assets/article/designPattern/责任链.png)
 
-**举例：**
+**Example:**
 
-场景: 某电商针对已付过定金的用户有优惠政策, 在正式购买后, 已经支付过 500 元定金的用户会收到 100 元的优惠券, 200 元定金的用户可以收到 50 元优惠券, 没有支付过定金的用户只能正常购买。
+Scenario: An e-commerce has a preferential policy for users who have paid a deposit, after the formal purchase, users who have paid a deposit of 500 yuan will receive a coupon of 100 yuan, users who have paid a deposit of 200 yuan can receive a coupon of 50 yuan, and users who have not paid a deposit can only buy normally.
 
 ```js
 const order500 = function (orderType, pay, stock) {
   if (orderType === 1 && pay == true) {
-    console.log('500元定金预购，得到100元优惠劵');
+    console.log('500 yuan deposit advance purchase, get 100 yuan coupon');
   } else {
     return 'nextSuccess';
   }
 };
 const order200 = function (orderType, pay, stock) {
   if (orderType === 2 && pay === true) {
-    console.log('200元定金预购，得到50元優惠卷');
+    console.log('200 yuan deposit pre-order, get 50 yuan coupon');
   } else {
     return 'nextSuccess';
   }
 };
 const orderCommon = function (orderType, pay, stock) {
   if (orderType == 3 && stock > 0) {
-    console.log('普通購買，无優惠卷');
+    console.log('Regular purchase, no coupon');
   } else {
-    console.log('库存不够');
+    console.log('Insufficient stock');
   }
 };
-//链路代码
+// Link code
 const chain = function (fn) {
   this.fn = fn;
   this.successor = null;
@@ -934,103 +935,105 @@ const order200New = new chain(order200);
 const orderCommonNew = new chain(orderCommon);
 order500New.setNext(order200New);
 order200New.setNext(orderCommonNew);
-order500New.init(3, true, 500); // 普通购买, 无优惠券
+order500New.init(3, true, 500); // Regular purchase, no coupons
 ```
 
-**优点：**
+**Advantages:**
 
-- 职责链模式使得一个对象无须知道是其他哪一个对象处理其请求，对象仅需知道该请求会被处理即可，接收者和发送者都没有对方的明确信息，且链中的对象不需要知道链的结构，由客户端负责链的创建，降低了系统的耦合度。
-- 请求处理对象仅需维持一个指向其后继者的引用，而不需要维持它对所有的候选处理者的引用，可简化对象的相互连接。
-- 在给对象分派职责时，职责链可以给我们更多的灵活性，可以通过在运行时对该链进行动态的增加或修改来增加或改变处理一个请求的职责。
-- 在系统中增加一个新的具体请求处理者时无须修改原有系统的代码，只需要在客户端重新建链即可，从这一点来看是符合“开闭原则”的。
+The responsibility chain mode makes an object not need to know which other object handles its request, the object only needs to know that the request will be processed, the receiver and the sender have no clear information about each other, and the object in the chain does not need to know the chain structure, the client is responsible for the creation of the chain, reducing the coupling degree of the system.
 
-**缺点：**
+- The request processing object only needs to maintain a reference to its successor, rather than maintaining a reference to all of its candidate handlers, simplifying object interconnections.
+The responsibility chain gives us more flexibility when assigning responsibilities to objects. The responsibility for handling a request can be added or changed by dynamically adding or modifying the chain at runtime.
+- Adding a new specific request handler to the system does not need to modify the code of the original system, only needs to rebuild the chain on the client side, from this point of view is in line with the "open and closed principle".
 
-- 由于一个请求没有明确的接收者，那么就不能保证它一定会被处理，该请求可能一直到链的末端都得不到处理；一个请求也可能因职责链没有被正确配置而得不到处理。
-- 对于比较长的职责链，请求的处理可能涉及到多个处理对象，系统性能将受到一定影响，而且在进行代码调试时不太方便。
-- 如果建链不当，可能会造成循环调用，将导致系统陷入死循环。
+**Disadvantage:**
 
-### 6.2 命令模式
+Since a request has no clear recipient, there is no guarantee that it will be processed, and the request may not be processed until the end of the chain; A request may also not be processed because the chain of responsibility is not configured correctly.
 
-> 命令模式(`Command Pattern`)：将一个请求封装为一个对象，从而让我们可用不同的请求对客户进行参数化；命令模式是一种对象行为型模式，其别名为动作(`Action`)模式或事务(`Transaction`)模式。
+- For a long chain of responsibility, the processing of requests may involve multiple processing objects, which will affect system performance and make it inconvenient for code debugging.
+- If the chain is not properly built, circular calls may be caused, resulting in a dead loop of the system.
 
-命令模式由三种角色构成：
+### 6.2 Command Pattern
 
-1. 发布者 `invoker`（发出命令，调用命令对象，不知道如何执行与谁执行）；
-2. 接收者 `receiver` (提供对应接口处理请求，不知道谁发起请求）；
-3. 命令对象 `command`（接收命令，调用接收者对应接口处理发布者的请求）。
-   发布者 invoker 和接收者 receiver 各自独立，将请求封装成命令对象 command ，请求的具体执行由命令对象 command 调用接收者 receiver 对应接口执行。
+> Command Pattern：Encapsulating a request as an object allows us to parameterize customers with different requests; Command mode is an object behavior mode, which is alias' Action 'mode or' Transaction 'mode.
+
+The command mode consists of three roles:
+
+1. Publisher 'invoker' (issues command, calls command object, does not know how to execute and whom to execute);
+2. receiver 'receiver' (provides the corresponding interface to process the request, and does not know who initiates the request);
+3. The command object 'command' (receives the command and invokes the corresponding interface of the receiver to process the publisher's request).
+The publisher invoker and the receiver are independent and encapsulate the request into a command object command. The specific execution of the request is executed by the command object calling the corresponding interface of the receiver.
 
 ![](../../assets/article/designPattern/命令.png)
 
-**举例：**
+**Example:**
 
-和之前代理模式中的举例有些相似，不过命令模式的本质是对命令进行封装，将发出命令的责任和执行命令的责任分割开。例如遥控器是一个调用者，不同按钮代表不同的命令，而电视是接收者。
+Similar to the previous example in proxy mode, but the essence of command mode is to encapsulate commands, separating the responsibility for issuing commands from the responsibility for executing them. For example, the remote control is a caller, different buttons represent different commands, and the TV is the receiver.
 
 ```js
 class Receiver {
-  // 接收者类
+  // Receiver class
   execute() {
-    console.log('接收者执行请求');
+    console.log('Receiver execute request');
   }
 }
 
 class Command {
-  // 命令对象类
+  // Command object class
   constructor(receiver) {
     this.receiver = receiver;
   }
   execute() {
-    // 调用接收者对应接口执行
-    console.log('命令对象->接收者->对应接口执行');
+    // The call receiver executes against the interface
+    console.log('Command object -> Receiver -> Corresponding interface execution');
     this.receiver.execute();
   }
 }
 
 class Invoker {
-  // 发布者类
+  // Publisher class
   constructor(command) {
     this.command = command;
   }
   invoke() {
-    // 发布请求，调用命令对象
-    console.log('发布者发布请求');
+    // Issue a request, invoke a command object
+    console.log('The publisher publishes the request');
     this.command.execute();
   }
 }
 
-const warehouse = new Receiver(); // 仓库
-const order = new Command(warehouse); // 订单
-const client = new Invoker(order); // 客户
+const warehouse = new Receiver(); // Stash
+const order = new Command(warehouse); // Order for goods
+const client = new Invoker(order); // client
 client.invoke();
 ```
 
-**优点：**
+**Advantages:**
 
-- 降低系统的耦合度。由于请求者与接收者之间不存在直接引用，因此请求者与接收者之间实现完全解耦，相同的请求者可以对应不同的接收者，同样，相同的接收者也可以供不同的请求者使用，两者之间具有良好的独立性。
-- 新的命令可以很容易地加入到系统中。由于增加新的具体命令类不会影响到其他类，因此增加新的具体命令类很容易，无须修改原有系统源代码，甚至客户类代码，满足“开闭原则”的要求。
-- 可以比较容易地设计一个命令队列或宏命令（组合命令）。
-- 为请求的撤销(Undo)和恢复(Redo)操作提供了一种设计和实现方案。
+- Reduce the coupling degree of the system. Since there is no direct reference between the requester and the receiver, the requester and the receiver realize complete decoupling, the same requester can correspond to different receivers, similarly, the same receiver can also be used by different requesters, and there is good independence between the two.
+- New commands can be easily added to the system. Since the addition of new specific command classes does not affect other classes, it is easy to add new specific command classes without modifying the original system source code, or even the customer class code, to meet the requirements of the "open and close principle".
+- It is relatively easy to design a command queue or macro command (composite command).
+- Provides a design and implementation scheme for requested Undo and Redo operations.
 
-**缺点：**
+**Disadvantage:**
 
-- 使用命令模式可能会导致某些系统有过多的具体命令类。因为针对每一个对请求接收者的调用操作都需要设计一个具体命令类，因此在某些系统中可能需要提供大量的具体命令类，这将影响命令模式的使用。
+- Using command mode may cause some systems to have too many specific command classes. Because a concrete command class needs to be designed for each call to the receiver of the request, a large number of concrete command classes may need to be provided in some systems, which will affect the use of command patterns.
 
-### 6.3 解释器模式
+### 6.3 Interpreter Pattern
 
-> 解释器模式(`Interpreter Pattern`)：定义一个语言的文法，并且建立一个解释器来解释该语言中的句子，这里的“语言”是指使用规定格式和语法的代码。解释器模式是一种类行为型模式。
+> Interpreter Pattern：Define the grammar of a language and build an interpreter to interpret sentences in that language, where "language" means code that uses a specified format and syntax. The interpreter pattern is a kind of behavior pattern.
 
 ![](../../assets/article/designPattern/解释器.jpg)
 
-**举例：**
+**Example:**
 
-给定一个语言, 定义它的文法的一种表示，并定义一个解释器, 该解释器使用该表示来解释语言中的句子。
+Given a language, define a representation of its grammar and an interpreter that uses that representation to interpret sentences in the language.
 
 ```js
 class Context {
   constructor() {
-    this._list = []; // 存放 终结符表达式
-    this._sum = 0; // 存放 非终结符表达式(运算结果)
+    this._list = []; // Stores terminal expressions
+    this._sum = 0; // Store nonterminal expressions
   }
 
   get sum() {
@@ -1064,40 +1067,40 @@ class MinusExpression {
   }
 }
 
-/** 以下是测试代码 **/
+/** Here is the test code **/
 const context = new Context();
 
-// 依次添加: 加法 | 加法 | 减法 表达式
+// Add in order: Add | add | subtract expression
 context.add(new PlusExpression());
 context.add(new PlusExpression());
 context.add(new MinusExpression());
 
-// 依次执行: 加法 | 加法 | 减法 表达式
+// Execute the following: add | add | subtract expression
 context.list.forEach((expression) => expression.interpret(context));
 console.log(context.sum);
 ```
 
-**优点：**
+**Advantages:**
 
-- 易于改变和扩展文法。由于在解释器模式中使用类来表示语言的文法规则，因此可以通过继承等机制来改变或扩展文法。
-- 每一条文法规则都可以表示为一个类，因此可以方便地实现一个简单的语言。
-- 实现文法较为容易。在抽象语法树中每一个表达式节点类的实现方式都是相似的，这些类的代码编写都不会特别复杂，还可以通过一些工具自动生成节点类代码。
-- 增加新的解释表达式较为方便。如果用户需要增加新的解释表达式只需要对应增加一个新的终结符表达式或非终结符表达式类，原有表达式类代码无须修改，符合“开闭原则”。
+- Easy to change and extend grammar. Because classes are used in the interpreter schema to represent the grammar rules of the language, the grammar can be changed or extended through mechanisms such as inheritance.
+Each rule can be represented as a class, so it is easy to implement a simple language.
+- The grammar is easier to implement. Each expression node class in the abstract syntax tree is implemented in a similar way, the code for these classes is not particularly complicated, and some tools can automatically generate node class code.
+- It is easier to add new interpretation expressions. If the user needs to add a new interpretation expression, it only needs to add a new terminal expression or non-terminal expression class, and the original expression class code does not need to be modified, which conforms to the "open and closed principle".
 
-**缺点：**
+**Disadvantage:**
 
-- 对于复杂文法难以维护。在解释器模式中，每一条规则至少需要定义一个类，因此如果一个语言包含太多文法规则，类的个数将会急剧增加，导致系统难以管理和维护，此时可以考虑使用语法分析程序等方式来取代解释器模式。
-- 执行效率较低。由于在解释器模式中使用了大量的循环和递归调用，因此在解释较为复杂的句子时其速度很慢，而且代码的调试过程也比较麻烦。
+- Difficult to maintain for complex grammars. In the interpreter mode, each rule needs to define at least one class, so if a language contains too many grammar rules, the number of classes will increase dramatically, resulting in a system difficult to manage and maintain, at this time you can consider using a parser to replace the interpreter mode.
+- Low execution efficiency. Because of the large number of loops and recursive calls used in the interpreter mode, it is slow to interpret more complex sentences, and the debugging process of the code is cumbersome.
 
-### 6.4 迭代器模式
+### 6.4 Iterator Pattern
 
-> 迭代器模式(`Iterator Pattern`)：一个相对简单的模式，目前绝大多数语言都内置了迭代器，以至于大家都不觉得这是一种设计模式。迭代器并不只迭代数组，迭代器可以中止。提供一种方法来访问聚合对象，而不用暴露这个对象的内部表示，其别名为游标(`Cursor`)。迭代器模式是一种对象行为型模式。
+> Iterator Pattern：A relatively simple pattern, most languages now have iterators built in, so that people don't think of it as a design pattern. Iterators don't just iterate over arrays; iterators can be aborted. Provides a way to access aggregate objects without exposing the internal representation of the object, which is alias a Cursor. The iterator pattern is an object behavior pattern.
 
 ![](../../assets/article/designPattern/迭代器.png)
 
-**举例：**
+**Example:**
 
-迭代器帮助请求方获取数据，避免直接操作数据聚合类，使数据聚合类专注存储数据。具体应用有分页等功能，分页功能的迭代器将专门负责操作分页数据，将操作逻辑和数据源分离。
+Iterators help requesters get the data, avoiding direct manipulation of the data aggregation class and allowing the data aggregation class to focus on storing the data. The specific application has pagination and other functions, and the iterator of the pagination function will be specially responsible for operating the pagination data, separating the operation logic from the data source.
 
 ```js
 var each = function (arr, callback) {
@@ -1112,26 +1115,27 @@ each([1, 2, 3, 4, 5], function (i, el) {
 });
 ```
 
-**优点：**
+**Advantages:**
 
-- 它支持以不同的方式遍历一个聚合对象，在同一个聚合对象上可以定义多种遍历方式。在迭代器模式中只需要用一个不同的迭代器来替换原有迭代器即可改变遍历算法，我们也可以自己定义迭代器的子类以支持新的遍历方式。
-- 迭代器简化了聚合类。由于引入了迭代器，在原有的聚合对象中不需要再自行提供数据遍历等方法，这样可以简化聚合类的设计。
-- 在迭代器模式中，由于引入了抽象层，增加新的聚合类和迭代器类都很方便，无须修改原有代码，满足“开闭原则”的要求。
+- It supports traversing an aggregate object in different ways, and multiple traversing modes can be defined on the same aggregate object. Iterator mode can be changed by simply replacing the iterator with a different iterator, or we can define our own iterator subclasses to support the new iterator.
+- Iterators simplify aggregate classes. Due to the introduction of iterators, it is no longer necessary to provide data traversal methods in the original aggregate object, which can simplify the design of the aggregate class.
+- In the iterator mode, due to the introduction of the abstraction layer, it is convenient to add new aggregate classes and iterator classes without modifying the original code, which meets the requirements of the "open and closed principle".
 
-**缺点：**
+**Disadvantage:**
 
-- 由于迭代器模式将存储数据和遍历数据的职责分离，增加新的聚合类需要对应增加新的迭代器类，类的个数成对增加，这在一定程度上增加了系统的复杂性。
-- 抽象迭代器的设计难度较大，需要充分考虑到系统将来的扩展，例如 JDK 内置迭代器 Iterator 就无法实现逆向遍历，如果需要实现逆向遍历，只能通过其子类 ListIterator 等来实现，而 ListIterator 迭代器无法用于操作 Set 类型的聚合对象。在自定义迭代器时，创建一个考虑全面的抽象迭代器并不是件很容易的事情。
+Because the iterator pattern separates the responsibility of storing data and traversing data, adding new aggregate classes requires adding new iterator classes, and the number of classes increases in pairs, which increases the complexity of the system to some extent.
 
-### 6.5 中介者模式
+- The design of the abstract Iterator is more difficult and needs to fully consider the future extension of the system, for example, the JDK built-in iterator cannot achieve reverse traversal, if you need to achieve reverse traversal, it can only be achieved through its subclass ListIterator, etc. ListIterator iterators cannot be used to manipulate aggregate objects of type Set. When customizing iterators, it is not easy to create an abstract iterator that considers all aspects.
 
-> 中介者模式`(Mediator Pattern`)：对象和对象之间借助第三方中介者进行通信。用一个中介对象（中介者）来封装一系列的对象交互，中介者使各对象不需要显式地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。中介者模式又称为调停者模式，它是一种对象行为型模式。
+### 6.5 Mediator Pattern
+
+> Mediator Pattern：Objects communicate with each other through third-party intermediaries. Encapsulate a set of object interactions with a mediator, which allows objects to be loosely coupled without explicitly referring to each other, and can change their interactions independently. The mediator model, also known as the mediator model, is an object behavior model.
 
 ![](../../assets/article/designPattern/中介者.png)
 
-**举例：**
+**Example:**
 
-中介者模式将一个网状的系统结构变成一个以中介者对象为中心的星形结构，在这个星型结构中，使用中介者对象与其他对象的一对多关系来取代原有对象之间的多对多关系。所有成员通过中介者交互，方便拓展新的成员，例如下面的例子，一场测试结束后, 公布结果: 告知解答出题目的人挑战成功, 否则挑战失败。在这段代码中 A、B、C 之间没有直接发生关系, 而是通过另外的 playerMiddle 对象建立链接, 姑且将之当成是中介者模式了。
+The broker pattern turns a network system structure into a star structure centered on broker objects, where one-to-many relationships between broker objects and other objects replace many-to-many relationships between objects. All members interact through intermediaries to facilitate the expansion of new members, such as the following example, after the end of a test, the result is announced: tell the person who solved the challenge successfully, otherwise the challenge fails. In this code, there is no direct relationship between A, B, and C, but a link is established through another playerMiddle object, which is considered the mediator pattern.
 
 ```js
 const player = function (name) {
@@ -1145,7 +1149,7 @@ player.prototype.lose = function () {
   playerMiddle.lose(this.name);
 };
 const playerMiddle = (function () {
-  //将就用下这个demo, 这个函数充当中介者
+  // We're going to use this demo, this function as a mediator
   const players = [];
   const winArr = [];
   const loseArr = [];
@@ -1167,50 +1171,52 @@ const playerMiddle = (function () {
     },
     show: function () {
       for (let winner of winArr) {
-        console.log(winner + '挑戰成功;');
+        console.log(winner + 'Challenge success;');
       }
       for (let loser of loseArr) {
-        console.log(loser + '挑战失败;');
+        console.log(loser + 'Challenge failure;');
       }
     },
   };
 })();
-const a = new player('A选手');
-const b = new player('B选手');
-const c = new player('C选手');
+const a = new player('A-player');
+const b = new player('B-player');
+const c = new player('C-player');
 a.win();
 b.lose();
 c.win();
-// A 选手挑战成功;
-// B 选手挑战成功;
-// C 选手挑战失败;
+// A Contestant successfully challenged;
+// B Contestant successfully challenged;
+// C Player fails to challenge;
 ```
 
-**优点：**
+**Advantages:**
 
-- 中介者模式简化了对象之间的交互，它用中介者和同事的一对多交互代替了原来同事之间的多对多交互，一对多关系更容易理解、维护和扩展，将原本难以理解的网状结构转换成相对简单的星型结构。
-- 中介者模式可将各同事对象解耦。中介者有利于各同事之间的松耦合，我们可以独立的改变和复用每一个同事和中介者，增加新的中介者和新的同事类都比较方便，更好地符合“开闭原则”。
-- 可以减少子类生成，中介者将原本分布于多个对象间的行为集中在一起，改变这些行为只需生成新的中介者子类即可，这使各个同事类可被重用，无须对同事类进行扩展。
+The -mediator pattern simplifies interactions between objects. It replaces many-to-many interactions between colleagues with one-to-many interactions between intermediaries and colleagues. One-to-many relationships are easier to understand, maintain, and extend, transforming the previously difficult network structure into a relatively simple star structure.
 
-**缺点：**
+- Mediator mode decouples colleague objects. Intermediaries are conducive to the loose coupling between colleagues, we can independently change and reuse each colleague and intermediary, adding new intermediaries and new colleague classes are more convenient, better in line with the "open and close principle".
+- Can reduce subclass generation, intermediaries will be distributed across multiple objects in a group of behaviors, change these behaviors only need to generate new intermediary subclasses, this allows individual colleague classes can be reused without the need to extend the colleague classes.
 
-- 在具体中介者类中包含了大量同事之间的交互细节，可能会导致具体中介者类非常复杂，使得系统难以维护。
+**Disadvantage:**
 
-### 6.6 备忘录模式
+The inclusion of a large number of details about interactions between colleagues in a specific broker class can make the specific broker class very complex and make the system difficult to maintain.
 
-> 备忘录模式(`Memento Pattern`)：在不破坏封装的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态，以便日后对象使用或者对象恢复到以前的某个状态。它是一种对象行为型模式，其别名为 Token。
+### 6.6 Memento Pattern
+
+> Memento Pattern：Capture the internal state of an object, without breaking the encapsulation, and save that state outside the object for later use or for the object to revert to a previous state. It is an object behavior pattern that is alias Token.
 
 ![](../../assets/article/designPattern/UML/行为型/备忘录.jpg)
-**举例：**
 
-备忘录模式提供了一种状态恢复的实现机制，使得用户可以方便地回到一个特定的历史步骤，当新的状态无效或者存在问题时，可以使用暂时存储起来的备忘录将状态复原，当前很多软件都提供了撤销操作，其中就使用了备忘录模式。
+**Example:**
 
-当我们开发一个分页组件的时候，点击下一页获取新的数据，但是当点击上一页时，又重新获取数据，造成无谓的流量浪费，这时可以对数据进行缓存。
+Memo mode provides a state recovery implementation mechanism, so that users can easily return to a specific historical step, when the new state is invalid or there is a problem, you can use the temporary storage of the memo to restore the state, many software provides undo operations, which uses the memo mode.
+
+When we develop a paging component, click on the next page to get new data, but when click on the previous page, and get data again, resulting in unnecessary traffic waste, then the data can be cached.
 
 ```js
-// 备忘录模式伪代码
+// Memo mode pseudo-code
 var Page = function () {
-  // 通过cache对象缓存数据
+  // cache objects are used to cache data
   var cache = {};
   return function (page, fn) {
     if (cache[page]) {
@@ -1226,65 +1232,67 @@ var Page = function () {
 };
 ```
 
-**优点：**
+**Advantages:**
 
-- 它提供了一种状态恢复的实现机制，使得用户可以方便地回到一个特定的历史步骤，当新的状态无效或者存在问题时，可以使用暂时存储起来的备忘录将状态复原。
-- 备忘录实现了对信息的封装，一个备忘录对象是一种原发器对象状态的表示，不会被其他代码所改动。备忘录保存了原发器的状态，采用列表、堆栈等集合来存储备忘录对象可以实现多次撤销操作。
+- It provides a state recovery implementation mechanism, so that users can easily go back to a specific historical step, when the new state is invalid or there is a problem, you can use a temporary stored memo to restore the state.
+- Memos encapsulate information. A memos object is a representation of the state of the originator object and cannot be changed by other code. Memos save the state of the originator, using lists, stacks and other collections to store memos can achieve multiple undo operations.
 
-**缺点：**
+**Disadvantage:**
 
-- 资源消耗过大，如果需要保存的原发器类的成员变量太多，就不可避免需要占用大量的存储空间，每保存一次对象的状态都需要消耗一定的系统资源。
+- Excessive resource consumption. If too many member variables of the originator class need to be saved, a large amount of storage space is inevitably required. Each time the state of an object is saved, certain system resources are consumed.
 
-### 6.7 观察者模式
+### 6.7 Observer Pattern
 
-> 观察者模式(`Observer Pattern)`：定义对象之间的一种一对多依赖关系，使得每当一个对象状态发生改变时，其相关依赖对象皆得到通知并被自动更新。观察者模式的别名包括发布-订阅（`Publish/Subscribe`）模式、模型-视图（`Model/View`）模式、源-监听器（`Source/Listener`）模式或从属者（`Dependents`）模式。观察者模式是一种对象行为型模式。
+> Observer Pattern：Define a one-to-many dependency relationship between objects so that each time an object's state changes, its dependent objects are notified and automatically updated. Aliases for the observer pattern include the 'Publish/Subscribe' pattern, the model-view (' Model/View ') pattern, the Source/Listener (' source/listener ') pattern, or the 'Dependents' pattern. The observer pattern is an object behavior pattern.
 
 ![](../../assets/article/designPattern/观察者.png)
 
-**举例：**
+**Example:**
 
-观察者模式是使用频率最高的设计模式之一，它用于建立一种对象与对象之间的依赖关系，一个对象发生改变时将自动通知其他对象，其他对象将相应作出反应。
+The observer pattern is one of the most frequently used design patterns, and it is used to establish a dependency relationship between objects. When one object changes, the other objects are automatically notified, and the other objects react accordingly.
 
-在`JavaScript`中观察者模式的实现主要用事件模型，`DOM`事件。
+The implementation of the observer pattern in JavaScript uses the event model, the DOM event.
 
 ```js
-// 发布者
+// publisher
 var pub = function () {
-  console.log('欢迎订阅!');
+  console.log('Welcome to subscribe!');
 };
-// 订阅者
+// Subscribers
 var sub = document.body;
 
-// 订阅者实现订阅
+// Subscribers implement subscriptions
 sub.addEventListener('click', pub, false);
 ```
 
-**优点：**
+**Advantages:**
 
-- 观察者模式可以实现表示层和数据逻辑层的分离，定义了稳定的消息更新传递机制，并抽象了更新接口，使得可以有各种各样不同的表示层充当具体观察者角色。
-- 观察者模式在观察目标和观察者之间建立一个抽象的耦合。观察目标只需要维持一个抽象观察者的集合，无须了解其具体观察者。由于观察目标和观察者没有紧密地耦合在一起，因此它们可以属于不同的抽象化层次。
-- 观察者模式支持广播通信，观察目标会向所有已注册的观察者对象发送通知，简化了一对多系统设计的难度。
-- 观察者模式满足“开闭原则”的要求，增加新的具体观察者无须修改原有系统代码，在具体观察者与观察目标之间不存在关联关系的情况下，增加新的观察目标也很方便。
+The observer pattern can realize the separation of the presentation layer and the data logic layer, define a stable message update delivery mechanism, and abstract the update interface, so that there can be a variety of different presentation layers to act as a concrete observer role.
 
-**缺点：**
+- Observer mode establishes an abstract coupling between the object of observation and the observer. The object of observation needs only to maintain a set of abstract observers, without knowing its concrete observers. Because the object of observation and the observer are not tightly coupled, they can belong to different levels of abstraction.
+Observer mode supports broadcast communication, and the observer will send notifications to all registered observer objects, simplifying the difficulty of one-to-many system design.
+- Observer mode meets the requirements of the "open and close principle", adding new specific observers does not require modifying the original system code, and it is also convenient to add new observation targets when there is no correlation between specific observers and observation targets.
 
-- 如果一个观察目标对象有很多直接和间接观察者，将所有的观察者都通知到会花费很多时间。
-- 如果在观察者和观察目标之间存在循环依赖，观察目标会触发它们之间进行循环调用，可能导致系统崩溃。
-- 观察者模式没有相应的机制让观察者知道所观察的目标对象是怎么发生变化的，而仅仅只是知道观察目标发生了变化。
+**Disadvantage:**
 
-### 6.8 状态模式
+If an observation target has many direct and indirect observers, it takes a lot of time to notify all of them.
 
-> 状态模式(`State Pattern`)：允许一个对象在其内部状态改变时改变它的行为，对象看起来似乎修改了它的类。其别名为状态对象(`Objects for States`)，其实就是用一个对象或者数组记录一组状态，每个状态对应一个实现，实现的时候根据状态挨个去运行实现。状态模式是一种对象行为型模式。
+- If there is a cyclic dependency between the observer and the observing target, the observing target will trigger a cyclic call between them, possibly causing the system to crash.
+The observer mode has no mechanism for the observer to know how the object being observed has changed, but only to know that the object being observed has changed.
+
+### 6.8 State Pattern
+
+> State Pattern：By allowing an object to change its behavior when its internal state changes, the object appears to modify its class. Its alias is the state object (' Objects for States'), in fact, is to use an object or array to record a set of states, each state corresponds to an implementation, the implementation according to the state to run the implementation. The state pattern is an object behavior pattern.
 
 ![](../../assets/article/designPattern/状态.png)
 
-**举例：**
+**Example:**
 
-状态模式用于解决复杂对象的状态转换以及不同状态下行为的封装问题。当系统中某个对象存在多个状态，这些状态之间可以进行转换，所以对象在不同状态下具有不同行为时可以使用状态模式。状态模式将一个对象的状态从该对象中分离出来，封装到专门的状态类中，使得对象状态可以灵活变化。
+State mode is used to solve the problem of state transition of complex objects and encapsulation of behavior in different states. When an object in the system has multiple states, these states can be transformed between, so objects in different states have different behaviors can be used when the state mode. The state mode separates the state of an object from the object and encapsulates it into a special state class, making the state of the object flexible.
 
-比如超级玛丽，就可能同时有好几个状态比如 跳跃，移动，射击，蹲下 等，如果对这些动作一个个进行处理判断，需要多个 if-else 或者 switch 不仅丑陋不说，而且在遇到有组合动作的时候，实现就会变的更为复杂，这里可以使用状态模式来实现。
+For example, Super Mary may have several states at the same time, such as jumping, moving, shooting, squatting, etc. if these actions are processed and judged one by one, multiple if-else or switch are required. Not only is it ugly, but when there are combined actions, the implementation will become more complicated. This can be done using the state mode.
 
-状态模式的思路是：首先创建一个状态对象或者数组，内部保存状态变量，然后内部封装好每种动作对应的状态，然后状态对象返回一个接口对象，它可以对内部的状态修改或者调用。
+The idea of state mode is: first create a state object or array, store state variables inside, and then internally encapsulate the corresponding state of each action, and then the state object returns an interface object, which can modify or call the internal state.
 
 ```js
 class SuperMarry {
@@ -1292,28 +1300,28 @@ class SuperMarry {
     this._currentState = [];
     this.states = {
       jump() {
-        console.log('跳跃!');
+        console.log('Jumping!');
       },
       move() {
-        console.log('移动!');
+        console.log('Move!');
       },
       shoot() {
-        console.log('射击!');
+        console.log('Shoot!');
       },
       squat() {
-        console.log('蹲下!');
+        console.log('Keep down!');
       },
     };
   }
 
   change(arr) {
-    // 更改当前动作
+    // Change current action
     this._currentState = arr;
     return this;
   }
 
   go() {
-    console.log('触发动作');
+    console.log('Trigger action');
     this._currentState.forEach((T) => this.states[T] && this.states[T]());
     return this;
   }
@@ -1321,39 +1329,39 @@ class SuperMarry {
 
 new SuperMarry()
   .change(['jump', 'shoot'])
-  .go() // 触发动作  跳跃!  射击!
-  .go() // 触发动作  跳跃!  射击!
+  .go() // Trigger action jump! Shoot!
+  .go() // Trigger action jump! Shoot!
   .change(['squat'])
-  .go(); // 触发动作  蹲下!
+  .go(); // Trigger action Crouch!
 ```
 
-**优点：**
+**Advantages:**
 
-- 封装了状态的转换规则，在状态模式中可以将状态的转换代码封装在环境类或者具体状态类中，可以对状态转换代码进行集中管理，而不是分散在一个个业务方法中。
-- 将所有与某个状态有关的行为放到一个类中，只需要注入一个不同的状态对象即可使环境对象拥有不同的行为。
-- 允许状态转换逻辑与状态对象合成一体，而不是提供一个巨大的条件语句块，状态模式可以让我们避免使用庞大的条件语句来将业务方法和状态转换代码交织在一起。
-- 可以让多个环境对象共享一个状态对象，从而减少系统中对象的个数。
+- Encapsulates the state transition rules. In the state mode, the state transition code can be encapsulated in the environment class or specific state class, and the state transition code can be centrally managed, rather than dispersed in one business method.
+- Put all the behavior related to a state into a class, just inject a different state object to make the environment object have different behavior.
+- Allowing state transition logic to be integrated with state objects, rather than providing a huge block of conditional statements, state patterns allow us to avoid using huge conditional statements to interweave business methods and state transition code.
+- Multiple environment objects can share a state object, thereby reducing the number of objects in the system.
 
-**缺点：**
+**Disadvantage:**
 
-- 状态模式的使用必然会增加系统中类和对象的个数，导致系统运行开销增大。
-- 状态模式的结构与实现都较为复杂，如果使用不当将导致程序结构和代码的混乱，增加系统设计的难度。
-- 状态模式对“开闭原则”的支持并不太好，增加新的状态类需要修改那些负责状态转换的源代码，否则无法转换到新增状态；而且修改某个状态类的行为也需修改对应类的源代码。
+- The use of state mode will inevitably increase the number of classes and objects in the system, resulting in increased system operating overhead.
+- The structure and implementation of the state mode are relatively complex, if used improperly will lead to the program structure and code confusion, increase the difficulty of system design.
+- The state mode does not support the "open and closed principle" very well, adding a new state class needs to modify the source code responsible for the state transition, otherwise it cannot be converted to the new state; And modifying the behavior of a state class also requires modifying the source code of the corresponding class.
 
-### 6.9 策略模式
+### 6.9 Strategy Pattern
 
-> 策略模式(`Strategy Pattern`)：定义一些列算法，把他们封装起来，并且可以相互替换。就是把看似毫无联系的代码提取封装、复用，使之更容易被理解和拓展。常见的用于一次 if 判断、switch 枚举、数据字典等流程判断语句中。也称为政策模式(`Policy`)。策略模式是一种对象行为型模式。
+> Strategy Pattern：Define a list of algorithms, wrap them up, and be interchangeable. It is to extract and encapsulate seemingly unrelated code and reuse it to make it easier to understand and expand. It is commonly used in process judgment statements such as if judgment, switch enumeration, and data dictionary. Also known as the Policy model (' policy '). Policy pattern is an object behavior pattern.
 
 ![](../../assets/article/designPattern/策略.png)
 
-**举例：**
+**Example:**
 
-使用策略模式时，我们可以定义一些策略类，每一个策略类中封装一种具体的算法。在这里，每一个封装算法的类我们都可以称之为一种策略，根据传入不同的策略类，使环境类执行不同策略类中的算法。
+When using the policy pattern, we can define several policy classes, each of which encapsulates a specific algorithm. Here, each class that encapsulates an algorithm can be called a policy, and depending on which policy class is passed in, the environment class executes the algorithm in a different policy class.
 
-在游戏中，我们每玩完一局游戏都有对用户进行等级评价，比如 S 级 4 倍经验，A 级 3 倍经验，B 级 2 倍经验，其他 1 倍经验，用函数来表达如下：
+In the game, we have A level evaluation of the user after each game, such as level S 4 times experience, level A 3 times experience, level B 2 times experience, and other 1 times experience, expressed by the function as follows:
 
 ```js
-// 改为策略模式 分成两个函数来写
+// Instead, the policy pattern is written as two functions
 const strategy = {
   S: function (experience) {
     return 4 * experience;
@@ -1365,7 +1373,7 @@ const strategy = {
     return 2 * experience;
   },
 };
-// getExperience可以复用
+// getExperience can be reused
 function getExperience(strategy, level, experience) {
   return level in strategy ? strategy[level](experience) : experience;
 }
@@ -1427,6 +1435,7 @@ Template method mode usage scenario
 
 The template approach pattern is often used by the architect to build the framework of the project. The architect defines the skeleton of the framework and the programmer inherits the structure of the framework and is responsible for filling in the blanks
 Hook method: Hook functions in various frameworks often specify the name of each hook function and the execution time at initialization, and users only need to inject custom logic code into the hook function
+
 - Callback function: The callback function is executed at a specific time, but the specific operation is implemented by the specific function. Encapsulate the changes into a function and the rest becomes a template
 
 The specific application of template method pattern is divided into three categories:
@@ -1592,7 +1601,8 @@ A reverse control structure can be implemented where subclasses override the hoo
 **Disadvantage:**
 
 - It is necessary to provide a subclass for different implementations of each basic method. If there are too many variable basic methods in the parent class, the number of classes will increase, the system will become larger, and the design will become more abstract. In this case, the bridge pattern can be combined to design.
-- 
+-
+
 ### 6.11 Visitor Pattern
 
 > Visitor Pattern:Provides a representation of operations that act on elements of an object structure, which allows us to define new operations on those elements without changing their class. Visitor pattern is an object behavior pattern.
@@ -1686,9 +1696,9 @@ There are still some places that are not fully understood, and I would like to p
 ## Reference material
 
 - [Study-Plan](https://github.com/xietao3/Study-Plan)
-- [javaScript 设计模式统计](https://zhuanlan.zhihu.com/p/472719016)
-- [ES6 系列之我们来聊聊装饰器](https://juejin.cn/post/6844903713866252296)
-- [设计模式之生成器模式](https://segmentfault.com/a/1190000038250020)
+- [javaScript Design pattern statistics](https://zhuanlan.zhihu.com/p/472719016)
+- [ES6 series Let's talk about decorators](https://juejin.cn/post/6844903713866252296)
+- [The generator pattern of design patterns](https://segmentfault.com/a/1190000038250020)
 - [https://juejin.im/user/57f8ffda2e958a005581e3c0/posts](https://juejin.im/user/57f8ffda2e958a005581e3c0/posts)
 - [https://design-patterns.readthedocs.io/zh_CN/latest/index.html](https://design-patterns.readthedocs.io/zh_CN/latest/index.html)
 - [https://blog.csdn.net/lovelion/article/details/17517213](https://blog.csdn.net/lovelion/article/details/17517213)
