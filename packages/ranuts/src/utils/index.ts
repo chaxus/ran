@@ -866,7 +866,7 @@ export const performanceTime = (): number => {
 }
 
 /**
- * @description: 计算帧率
+ * @description: 计算每毫秒的帧率，每秒的帧率需要乘1000
  * @return {*}
  */
 export const getFrame = (n: number = 10): Promise<number> => {
