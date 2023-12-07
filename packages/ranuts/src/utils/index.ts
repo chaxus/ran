@@ -764,7 +764,10 @@ interface QuestQueueOptions {
 }
 
 type Fun = Function | Func;
-
+/**
+ * @description: 控制并发的请求
+ * @return {*}
+ */
 export class QuestQueue {
   current: number;
   queue: Fun[];
@@ -846,3 +849,52 @@ export class QuestQueue {
     });
   };
 }
+/**
+ * @description: 获取当前时间戳
+ * @return {*}
+ */
+export const performanceTime = (): number => {
+  if (typeof document !== 'undefined') {
+    return performance.now()
+  }
+  if (typeof process !== 'undefined') {
+    // process.hrtime.bigint()
+    const [seconds, nanosecond] = process.hrtime()
+    return seconds * 1000 + nanosecond / 1000000
+  }
+  return Date.now()
+}
+
+/**
+ * @description: 计算帧率
+ * @return {*}
+ */
+export const getFrame = (n: number = 10): Promise<number> => {
+  const frameList: number[] = []
+  let lastFrame = 0
+  let requestAnimationFrameRef: number
+  return new Promise((resolve) => {
+    const a = () => {
+      const now = performanceTime()
+      const frame = now - lastFrame;
+      if (lastFrame !== 0) {
+        frameList.push(frame);
+      }
+      lastFrame = now;
+      if (frameList.length > n) {
+        const num = frameList.reduce((i, j) => i + j)
+        // 帧率就是 1 / time 
+        // time是每次 requestAnimationFrame 执行的间隔
+        resolve(1 / (num / n))
+        cancelAnimationFrame(requestAnimationFrameRef)
+      }
+      requestAnimationFrameRef = requestAnimationFrame(a);
+    }
+    if (frameList.length <= n) {
+      requestAnimationFrameRef = requestAnimationFrame(a);
+    }
+  })
+}
+
+
+
