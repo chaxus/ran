@@ -21,6 +21,7 @@ import {
   generateThrottle,
   getAllQueryString,
   getCookie,
+  getFrame,
   getFreshUrl,
   getPixelRatio,
   isClient,
@@ -32,6 +33,7 @@ import {
   mergeExports,
   noop,
   perToNum,
+  performanceTime,
   querystring,
   range,
   removeClassToElement,
@@ -100,7 +102,9 @@ export {
   timeFormat,
   range,
   reactify,
-  generateThrottle
+  generateThrottle,
+  getFrame,
+  performanceTime
 };
 
 export const EventEmitter = SyncHook;
