@@ -70,6 +70,20 @@ interface PDFDocumentProxy {
   getPage: (x: number) => Promise<PDFPageProxy>;
 }
 
+interface HTMLElement {
+  mozRequestFullScreen: (options?: FullscreenOptions) => Promise<void>;
+  msRequestFullscreen: (options?: FullscreenOptions) => Promise<void>;
+  oRequestFullscreen: (options?: FullscreenOptions) => Promise<void>;
+  webkitRequestFullscreen: (options?: FullscreenOptions) => Promise<void>;
+  webkitEnterFullscreen: (options?: FullscreenOptions) => Promise<void>;
+}
+declare interface Document {
+  msExitFullscreen: () => Promise<void>;
+  mozCancelFullScreen: () => Promise<void>;
+  oCancelFullScreen: () => Promise<void>;
+  webkitExitFullscreen: () => Promise<void>;
+}
+
 declare interface Window {
   ranui: Partial<Ranui>;
   message: Partial<Ran.Message>;
@@ -83,18 +97,18 @@ declare interface Window {
   };
   Hls: HLS;
 }
-// ranuts 声明文件
-declare module '@/file/*';
-declare module '@/designMode/*';
-declare module '@/node/*';
-declare module '@/sort/*';
-declare module '@/astParser/*';
-declare module '@/utils/*';
+// // ranuts 声明文件
+// declare module '@/file/*';
+// declare module '@/designMode/*';
+// declare module '@/node/*';
+// declare module '@/sort/*';
+// declare module '@/astParser/*';
+// declare module '@/utils/*';
 
-declare namespace Ranuts {
-  interface Identification {
-    _identification: boolean;
-    message?: string;
-    data?: unknown;
-  }
-}
+// declare namespace Ranuts {
+//   interface Identification {
+//     _identification: boolean;
+//     message?: string;
+//     data?: unknown;
+//   }
+// }

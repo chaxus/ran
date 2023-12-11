@@ -1,4 +1,4 @@
-import { addClassToElement } from 'ranuts';
+import { addClassToElement, createDocumentFragment } from 'ranuts';
 import { isDisabled, removeClassToElementChild } from '../../utils/index';
 
 function CustomElement() {
@@ -45,11 +45,12 @@ function CustomElement() {
         this._slot = document.createElement('slot');
         this._wrap.appendChild(this._slot);
         this._content.appendChild(this._wrap);
-        this._header.appendChild(this._nav);
-        this._header.appendChild(this._line);
-        this._container.appendChild(this._header);
-        this._container.appendChild(this._content);
-
+        this._header.appendChild(
+          createDocumentFragment([this._nav, this._line]),
+        );
+        this._container.appendChild(
+          createDocumentFragment([this._header, this._content]),
+        );
         this.tabHeaderKeyMapIndex = {};
 
         const shadowRoot = this.attachShadow({ mode: 'closed' });
@@ -97,7 +98,6 @@ function CustomElement() {
           this.setAttribute('effect', value);
         }
       }
-
       /**
        * @description: 构建tabPane组件key值和index的映射，同时判断一个tabs下的tabPane key值不能重复
        * @param {string} key

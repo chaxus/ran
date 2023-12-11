@@ -55,7 +55,7 @@ document.body.appendChild(Button);
 
 ### 3.`jsx`
 
-Because `react` synthetic events, in order to more convenient to use, by `react` higher-order components encapsulation [ranui] (https://www.npmjs.com/package/ranui), Output the [@ranui/react](https://www.npmjs.com/package/@ranui/react)
+Because `react` synthetic events, in order to more convenient to use, by `react` higher-order components encapsulation [ranui](https://www.npmjs.com/package/ranui), Output the [@ranui/react](https://www.npmjs.com/package/@ranui/react)
 
 In `react`, use the [@ranui/react](https://www.npmjs.com/package/@ranui/react) will be more smooth, by higher-order functions after package, and `react` ecosystem.
 
@@ -85,7 +85,7 @@ import 'ranui';
 
 ### 5.`tsx`
 
-Because `react` synthetic events, in order to more convenient to use, by `react` higher-order components encapsulation [ranui] (https://www.npmjs.com/package/ranui), Output the [@ranui/react](https://www.npmjs.com/package/@ranui/react)
+Because `react` synthetic events, in order to more convenient to use, by `react` higher-order components encapsulation [ranui](https://www.npmjs.com/package/ranui), Output the [@ranui/react](https://www.npmjs.com/package/@ranui/react)
 
 In `react`, use the [@ranui/react](https://www.npmjs.com/package/@ranui/react) will be more smooth, by higher-order functions after package, and `react` ecosystem.
 
@@ -264,21 +264,22 @@ import 'ranui';
 
 - `Player`
 
-<r-player style="display: block;width:600px;height:300px;" src="/ran/hls/example.m3u8"></r-player>
+<r-player style="display: block;width:100%;max-width:600px;height:300px;" src="/ran/hls/example.m3u8"></r-player>
+
 
 - `Select`
 
 <r-select style="width: 120px; height: 40px" value="185" action="click">
-<r-option value="185">Mike</r-option>
-<r-option value="186">Tom</r-option>
-<r-option value="187">Lucy</r-option>
+  <r-option value="185">Mike</r-option>
+  <r-option value="186">Tom</r-option>
+  <r-option value="187">Lucy</r-option>
 </r-select>
 
 ## Event
 
 - `react`
 
-[@ranui/react](https://www.npmjs.com/package/@ranui/react) By `react` higher-order functions encapsulated [ranui] (https://www.npmjs.com/package/ranui) and become, `Event` events follow `react` Event specification. It is slightly different from the W3C standard.
+[@ranui/react](https://www.npmjs.com/package/@ranui/react) By `react` higher-order functions encapsulated [ranui](https://www.npmjs.com/package/ranui) and become, `Event` events follow `react` Event specification. It is slightly different from the W3C standard.
 
 - Modern 'web' standards
 

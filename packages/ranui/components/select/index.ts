@@ -1,4 +1,4 @@
-import { addClassToElement, removeClassToElement } from 'ranuts';
+import { addClassToElement, isMobile, removeClassToElement } from 'ranuts';
 import { createCustomError, isDisabled } from '@/utils/index';
 import '@/components/option';
 import '@/components/icon';
@@ -53,7 +53,7 @@ export class Select extends HTMLElement {
       'placement', // 弹窗的方向
       'getPopupContainerId', // 挂载的节点
       'dropdownclass', // 弹窗的类名
-      'action', // 触发下拉框的行为，click还是hover
+      'action', // 触发下拉框的行为， click 还是 hover ，hover 在 isMobile 移动端无效
     ];
   }
   constructor() {
@@ -272,7 +272,7 @@ export class Select extends HTMLElement {
     this.placementPosition();
   };
   removeDropDownTimeId = (): void => {
-    if (this.action.includes('hover')) {
+    if (this.action.includes('hover') && !isMobile()) {
       clearTimeout(this.removeTimeId);
       this.removeTimeId = undefined;
     }
@@ -341,8 +341,12 @@ export class Select extends HTMLElement {
       const container =
         document.getElementById(this.getPopupContainerId) || document.body;
       this._selectDropdown = document.createElement('div');
+      this._selectDropdown.style.setProperty('-webkit-tap-highlight-color', 'transparent');
+      this._selectDropdown.style.setProperty('outline', '0');
       this._selectDropdown.addEventListener('click', this.clickOption);
       this._selectionDropdown = document.createElement('div');
+      this._selectionDropdown.style.setProperty('-webkit-tap-highlight-color', 'transparent');
+      this._selectionDropdown.style.setProperty('outline', '0');
       if (this.dropdownclass) {
         this._selectionDropdown.setAttribute(
           'class',
@@ -351,7 +355,7 @@ export class Select extends HTMLElement {
       } else {
         this._selectionDropdown.setAttribute('class', 'ranui-select-dropdown');
       }
-      if (this.action.includes('hover')) {
+      if (this.action.includes('hover') && !isMobile()) {
         this._selectDropdown.addEventListener('mouseleave', this.selectBlur);
         this._selectDropdown.addEventListener(
           'mouseenter',
@@ -456,14 +460,14 @@ export class Select extends HTMLElement {
   listenActionEvent = (): void => {
     this.removeEventListener('mouseenter', this.selectMouseDown);
     this.removeEventListener('mouseleave', this.selectBlur);
-    this.removeEventListener('mousedown', this.selectMouseDown);
+    this.removeEventListener('click', this.selectMouseDown);
     this.removeEventListener('blur', this.selectBlur);
-    if (this.action.includes('hover')) {
+    if (this.action.includes('hover') && !isMobile()) {
       this.addEventListener('mouseenter', this.selectMouseDown);
       this.addEventListener('mouseleave', this.selectBlur);
     }
     if (this.action.includes('click')) {
-      this.addEventListener('mousedown', this.selectMouseDown);
+      this.addEventListener('click', this.selectMouseDown);
       this.addEventListener('blur', this.selectBlur);
     }
   };
@@ -477,7 +481,7 @@ export class Select extends HTMLElement {
   disconnectCallback(): void {
     this.removeEventListener('mouseenter', this.selectMouseDown);
     this.removeEventListener('mouseleave', this.selectBlur);
-    this.removeEventListener('mousedown', this.selectMouseDown);
+    this.removeEventListener('click', this.selectMouseDown);
     this.removeEventListener('blur', this.selectBlur);
     this.removeSelectDropdown();
     this._selectDropdown?.removeEventListener('click', this.clickOption);
