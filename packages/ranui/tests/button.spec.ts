@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { DEV_SERVER, TIME_OUT } from '../build/config';
+import { DEV_SERVER } from '../build/config';
 
 test('button', async ({ page }) => {
   await page.goto(DEV_SERVER, { waitUntil: 'load' });

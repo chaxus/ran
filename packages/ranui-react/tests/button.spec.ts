@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 import { DEV_SERVER, TIME_OUT } from '../build/config';
 
 test('button', async ({ page }) => {
-  setTimeout(async () => {
+  // setTimeout(async () => {
     // await page.waitForURL(DEV_SERVER, { timeout: TIME_OUT })
     await page.goto(DEV_SERVER);
     await page.waitForLoadState('domcontentloaded');
@@ -17,5 +17,5 @@ test('button', async ({ page }) => {
     });
     await page.getByRole('button', { name: /submit/i }).click();
     await expect(page.getByRole('button', { name: /submit/i })).toBeVisible();
-  }, TIME_OUT);
+  // }, TIME_OUT);
 });

@@ -9,6 +9,14 @@
   display: inline-block;
   cursor: pointer;
   height: 32px;
+  outline: 0;
+  -webkit-tap-highlight-color: transparent;
+  &,
+  &(:focus),
+  &(:active) {
+    outline: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
   ::slotted(r-option) {
     display: none;
   }
