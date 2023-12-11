@@ -5,8 +5,8 @@
 ## 代码演示
 
 <div style="width: 100px; margin-top:10px">
-    <r-preview id="preview"></r-preview>
-    <r-button type="primary" onclick="uploadFile('preview')">choose file to preview</r-button>
+    <r-preview id="fhdjskafk"></r-preview>
+    <r-button type="primary" onclick="uploadFile('fhdjskafk')">choose file to preview</r-button>
 </div>
 
 ```html

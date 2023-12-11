@@ -5,15 +5,13 @@ Support 'docx', 'pptx', 'pdf', 'xlsx' file preview
 ## Code demo
 
 <div style="width: 100px; margin-top:10px">
-    <r-preview id="preview"></r-preview>
-    <r-button type="primary" onclick="uploadFile('preview')">choose file to preview</r-button>
+    <r-preview id="fdsafdsafdsafdsaf"></r-preview>
+    <r-button type="primary" onclick="uploadFile('fdsafdsafdsafdsaf')">choose file to preview</r-button>
 </div>
 
 ```html
 <r-preview id="preview"></r-preview>
-<r-button type="primary" onclick="uploadFile()"
-  >choose file to preview</r-button
->
+<r-button type="primary" onclick="uploadFile()">choose file to preview</r-button>
 
 <script>
   const uploadFile = () => {
