@@ -1,8 +1,14 @@
-import { addClassToElement, isMobile, removeClassToElement } from 'ranuts';
+import {
+  addClassToElement,
+  generateThrottle,
+  isMobile,
+  removeClassToElement,
+} from 'ranuts';
 import { createCustomError, isDisabled } from '@/utils/index';
 import '@/components/option';
 import '@/components/icon';
 import '@/components/input';
+import type { Input } from '@/components/input';
 
 interface Option {
   label: string | number;
@@ -24,13 +30,15 @@ const placementDirection: PlacementDirection = {
   },
 };
 
+const searchThrottle = generateThrottle();
+
 export class Select extends HTMLElement {
   removeTimeId?: NodeJS.Timeout;
   _slot: HTMLSlotElement;
   _shadowDom: ShadowRoot;
   _select: HTMLDivElement;
   _selection: HTMLDivElement;
-  _search: HTMLElement;
+  _search: Input;
   _icon: HTMLElement;
   _selectDropdown?: HTMLDivElement;
   _selectionDropdown?: HTMLDivElement;
@@ -42,6 +50,7 @@ export class Select extends HTMLElement {
   _activeOption?: HTMLElement;
   _text: HTMLSpanElement;
   _selector: HTMLDivElement;
+  onSearch: any;
   static get observedAttributes(): string[] {
     return [
       'disabled',
@@ -66,7 +75,7 @@ export class Select extends HTMLElement {
     this._selection.setAttribute('class', 'selection');
     this._selection.setAttribute('part', 'selection');
     this._selector = document.createElement('div');
-    this._search = document.createElement('r-input');
+    this._search = <Input>document.createElement('r-input');
     this._search.setAttribute('class', 'selection-search');
     this._search.setAttribute('part', 'search');
     this._search.setAttribute('type', 'search');
@@ -272,6 +281,7 @@ export class Select extends HTMLElement {
     this.placementPosition();
   };
   removeDropDownTimeId = (): void => {
+    this._search.setAttribute('value', '');
     if (this.action.includes('hover') && !isMobile()) {
       clearTimeout(this.removeTimeId);
       this.removeTimeId = undefined;
@@ -312,6 +322,9 @@ export class Select extends HTMLElement {
       this._text.setAttribute('title', label);
       this._search.setAttribute('placeholder', label);
     }
+    const rect = this.getBoundingClientRect();
+    const { height } = rect;
+    this._text.style.setProperty('line-height', `${height}px`);
     if (this._activeOption) {
       removeClassToElement(
         this._activeOption,
@@ -341,11 +354,17 @@ export class Select extends HTMLElement {
       const container =
         document.getElementById(this.getPopupContainerId) || document.body;
       this._selectDropdown = document.createElement('div');
-      this._selectDropdown.style.setProperty('-webkit-tap-highlight-color', 'transparent');
+      this._selectDropdown.style.setProperty(
+        '-webkit-tap-highlight-color',
+        'transparent',
+      );
       this._selectDropdown.style.setProperty('outline', '0');
       this._selectDropdown.addEventListener('click', this.clickOption);
       this._selectionDropdown = document.createElement('div');
-      this._selectionDropdown.style.setProperty('-webkit-tap-highlight-color', 'transparent');
+      this._selectionDropdown.style.setProperty(
+        '-webkit-tap-highlight-color',
+        'transparent',
+      );
       this._selectionDropdown.style.setProperty('outline', '0');
       if (this.dropdownclass) {
         this._selectionDropdown.setAttribute(
@@ -400,7 +419,15 @@ export class Select extends HTMLElement {
       this._optionLabelMapValue.set(label, value);
       this._optionValueMapLabel.set(value, label);
     });
-    this._optionList.forEach((item) => {
+    this.createSelectDropdownContent(this._optionList);
+  };
+  createSelectDropdownContent = (options: Option[] = []): void => {
+    if (options.length === 0) {
+      this._selectDropdown?.style.setProperty('display', 'none');
+    } else {
+      this._selectDropdown?.style.setProperty('display', 'block');
+    }
+    options.forEach((item) => {
       if (this._selectionDropdown) {
         const { label, value } = item;
         const selectOptionItem = document.createElement('div');
@@ -446,10 +473,38 @@ export class Select extends HTMLElement {
     this._text.setAttribute('title', label);
   };
   changeSearch = (e: Event): void => {
-    console.log('e', e);
+    const value = (<CustomEvent>e).detail.value || '';
+    this.dispatchEvent(
+      new CustomEvent('search', {
+        detail: { value },
+      }),
+    );
+    if (this._selectionDropdown) {
+      this._selectionDropdown.innerHTML = '';
+    }
+    if (value.length > 0) {
+      const options = this._optionList
+        .map((item) => {
+          const { label } = item;
+          if (`${label}`.toLowerCase().includes(value)) {
+            return { label, value: item.value };
+          }
+          return undefined;
+        })
+        .filter((item) => item);
+      this.createSelectDropdownContent(options as Option[]);
+    } else {
+      this.createSelectDropdownContent(this._optionList);
+    }
   };
   setShowSearch = (): void => {
-    this._search.addEventListener('change', this.changeSearch);
+    this.onSearch = searchThrottle(this.changeSearch);
+    this._search.addEventListener('change', this.onSearch);
+    this._search.addEventListener('click', this.onSearch);
+  };
+  removeShowSearch = (): void => {
+    this._search.removeEventListener('change', this.onSearch);
+    this._search.removeEventListener('click', this.onSearch);
   };
   listenSlotChange = (): void => {
     this._slot.addEventListener('slotchange', this.addOptionToSlot);

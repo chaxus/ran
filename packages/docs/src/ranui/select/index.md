@@ -110,6 +110,25 @@ Drop-down box display direction default down, set to 'top' can go up
     </r-select>
 ```
 
+
+### `showSearch`
+
+Expand to search for options
+
+<r-select style="width: 120px; height: 40px" showSearch>
+<r-option value="185">Mike</r-option>
+<r-option value="186">Tom</r-option>
+<r-option value="187">Lucy</r-option>
+</r-select>
+
+```xml
+<r-select style="width: 120px; height: 40px" showSearch>
+<r-option value="185">Mike</r-option>
+<r-option value="186">Tom</r-option>
+<r-option value="187">Lucy</r-option>
+</r-select>
+```
+
 ### `getPopupContainerId`
 
 The drop-down box is mounted to document.body by default, and can be mounted to the specified element by passing in the element's id
