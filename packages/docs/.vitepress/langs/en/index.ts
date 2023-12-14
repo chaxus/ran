@@ -27,7 +27,7 @@ const themeEnConfig: DefaultTheme.Config = {
         link: '/src/ranuts/',
       },
       {
-        text: 'Universal function',
+        text: 'Universal Function',
         items: [
           { text: 'Filter object', link: '/src/ranuts/utils/filterObj.md' },
           {
@@ -43,7 +43,7 @@ const themeEnConfig: DefaultTheme.Config = {
         ],
       },
       {
-        text: 'document',
+        text: 'Document',
         items: [
           {
             text: 'Example Query details about a file',
@@ -69,7 +69,7 @@ const themeEnConfig: DefaultTheme.Config = {
         ],
       },
       {
-        text: 'Design pattern',
+        text: 'Design Pattern',
         items: [
           {
             text: 'Publish-subscribe model',
@@ -93,14 +93,14 @@ const themeEnConfig: DefaultTheme.Config = {
         link: '/src/ranui/',
       },
       {
-        text: 'Be common',
+        text: 'Common',
         items: [
           { text: 'Button ', link: '/src/ranui/button/' },
           { text: 'Icon ', link: '/src/ranui/icon/' },
         ],
       },
       {
-        text: 'Data presentation',
+        text: 'Data Presentation',
         items: [
           { text: 'Image ', link: '/src/ranui/image/' },
           { text: 'Tabs ', link: '/src/ranui/tabs/' },
@@ -112,11 +112,11 @@ const themeEnConfig: DefaultTheme.Config = {
         ],
       },
       {
-        text: 'Data entry',
+        text: 'Data Entry',
         items: [{ text: 'Input', link: '/src/ranui/input/' }],
       },
       {
-        text: 'feedback',
+        text: 'Feedback',
         items: [
           { text: 'Message', link: '/src/ranui/message/' },
           { text: 'Skeleton', link: '/src/ranui/skeleton/' },

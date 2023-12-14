@@ -110,6 +110,24 @@
     </r-select>
 ```
 
+### 带搜索框 `showSearch`
+
+展开后可对选项进行搜索
+
+<r-select style="width: 120px; height: 40px" showSearch>
+<r-option value="185">Mike</r-option>
+<r-option value="186">Tom</r-option>
+<r-option value="187">Lucy</r-option>
+</r-select>
+
+```xml
+<r-select style="width: 120px; height: 40px" showSearch>
+<r-option value="185">Mike</r-option>
+<r-option value="186">Tom</r-option>
+<r-option value="187">Lucy</r-option>
+</r-select>
+```
+
 ### 下拉框挂载元素的 id`getPopupContainerId`
 
 下拉框默认挂载到`document.body`上，可以传入元素的`id`，挂载到指定的元素内

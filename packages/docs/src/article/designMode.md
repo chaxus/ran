@@ -51,7 +51,7 @@ A design pattern generally contains elements such as the pattern name, problem, 
   interface NotebookComputer extends Computer {}
   ```
 
-## 一、UML class diagram
+## I、UML class diagram
 
 Each pattern has a corresponding object structure diagram, and in order to show the details of the interaction between objects, sometimes a 'UML' diagram is used to show how it works. Here will not be the various elements of 'UML' mentioned, just want to talk about the relationship between the classes in the class diagram, can understand the meaning of the lines and arrows between the classes in the class diagram, it is enough to deal with daily work and communication. At the same time, we should be able to match the meaning of the class diagram to the final code. With this knowledge, there is no problem looking at the design pattern structure diagram in the later sections.
 
@@ -97,7 +97,7 @@ Unlike an association relationship, it is a temporary relationship that usually 
 
 ![](../../assets/article/designPattern/依赖.png)
 
-## Two, six principles
+## II, six principles
 
 ### 2.1 Open and Close principle
 
@@ -231,7 +231,7 @@ Behavioral patterns are abstractions that divide responsibilities and algorithms
 10. Template Method mode
 11. Visitor pattern
 
-## Four, create type
+## IV, create type
 
 ### 4.1 Simple Factory mode
 
@@ -572,7 +572,7 @@ car.getModel();
 
 - All objects contained in an object need to be equipped with a clone method, which makes the amount of code in the case of more object levels will be large and more complex.
 
-## Five, structural type
+## V, structural type
 
 ### 5.1 Decorative pattern
 
@@ -882,7 +882,7 @@ function addEvent(ele, event, callback) {
 
 - Increased the complexity of the system
 
-## Six. Behavior pattern
+## VI. Behavior pattern
 
 ### 6.1 Chain of Responsibility Pattern
 
@@ -1687,13 +1687,13 @@ The visitor pattern solves the coupling between the data and the manipulation of
 - Adding new element classes is difficult. In the visitor pattern, adding a new element class means adding a new abstract operation to the abstract visitor role and a corresponding concrete operation to each concrete visitor class, which violates the "open closed principle".
 - Break the package. The visitor pattern requires the visitor object to access and invoke the operations of each element object, which means that the element object must sometimes expose some of its own internal operations and internal state, otherwise it cannot be accessed by the visitor.
 
-## Sum up
+## VII.Sum up
 
 After systematically studying design patterns, you can see in your past development experience that design patterns are everywhere. Before learning design patterns, we often rely on past experience and wisdom to improve the design of a system, and many of these experiences coincide with the idea of a certain design pattern.
 
 There are still some places that are not fully understood, and I would like to point out the mistakes in the article.
 
-## Reference material
+## VIII.Reference material
 
 - [Study-Plan](https://github.com/xietao3/Study-Plan)
 - [javaScript Design pattern statistics](https://zhuanlan.zhihu.com/p/472719016)
