@@ -145,7 +145,7 @@ const themeEnConfig: DefaultTheme.Config = {
               { text: 'shell sort', link: '/src/article/sort/shell/' },
               { text: 'Merge sort', link: '/src/article/sort/merge/' },
               { text: 'Quick sort', link: '/src/article/sort/quick/' },
-              { text: 'heapsort', link: '/src/article/sort/heap/' },
+              { text: 'Heap Sort', link: '/src/article/sort/heap/' },
               { text: 'Counting sort', link: '/src/article/sort/count/' },
               { text: 'Bucket sort', link: '/src/article/sort/bucket/' },
               { text: 'Radix sort', link: '/src/article/sort/radix/' },
