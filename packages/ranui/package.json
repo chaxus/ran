@@ -144,8 +144,8 @@
     "rollup-plugin-visualizer": "^5.9.2",
     "svgo": "^3.0.0",
     "tsx": "^3.12.7",
-    "vite": "^4.4.9",
-    "vite-plugin-dts": "^3.6.3"
+    "vite": "^5.0.9",
+    "vite-plugin-dts": "^3.6.4"
   },
   "dependencies": {
     "dayjs": "^1.11.9",
@@ -153,8 +153,8 @@
     "exceljs": "^4.3.0",
     "jszip": "^3.10.1",
     "lodash": "^4.17.21",
+    "ranuts": "workspace:0.1.0-alpha.10",
     "tinycolor2": "^1.6.0",
-    "x-data-spreadsheet": "^1.1.9",
-    "ranuts": "workspace:0.1.0-alpha.10"
+    "x-data-spreadsheet": "^1.1.9"
   }
 }

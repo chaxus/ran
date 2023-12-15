@@ -234,8 +234,8 @@ export class Input extends HTMLElement {
    * @param {Event} event
    */
   customInput = (event: Event): void => {
-    const target = event.target as HTMLInputElement;
-    this.value = target ? target.value : '';
+    const { target, data = '' } = <InputEvent>event;
+    this.value = (<HTMLInputElement>target)?.value || data || '';
     // 增加onchange事件
     this.customChange();
     // 默认input事件
