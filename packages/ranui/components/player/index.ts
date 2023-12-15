@@ -836,8 +836,6 @@ export class RanPlayer extends HTMLElement {
    * @return {*}
    */
   SpaceKeyDown = (e: KeyboardEvent): void => {
-    e.stopPropagation();
-    e.preventDefault();
     const { currentTime, duration } = this.ctx;
     if (e.code === 'Space') {
       this.dispatchClickPlayerBtnAction(e);
@@ -1109,7 +1107,7 @@ export class RanPlayer extends HTMLElement {
       'click',
       this.dispatchClickPlayerBtnAction,
     );
-    document.body.addEventListener('keydown', this.SpaceKeyDown);
+    this.addEventListener('keydown', this.SpaceKeyDown);
     this._progressDot.addEventListener(
       'mousedown',
       this.progressDotMouseDown,
@@ -1132,7 +1130,6 @@ export class RanPlayer extends HTMLElement {
       'click',
       this.openFullScreen,
     );
-    // this._playControllerBottomSpeedPopover.addEventListener('change', this.changeSpeed);
     this._playControllerBottomSpeedIcon.addEventListener(
       'click',
       this.changePlayerVolume,
@@ -1155,7 +1152,7 @@ export class RanPlayer extends HTMLElement {
       this.dispatchClickPlayerBtnAction,
     );
     this.cancelAnimationFrame();
-    document.removeEventListener('keydown', this.SpaceKeyDown);
+    this.removeEventListener('keydown', this.SpaceKeyDown);
     this._progress.removeEventListener('click', this.progressClick);
     this._progress.removeEventListener(
       'mouseenter',
