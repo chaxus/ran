@@ -234,7 +234,6 @@ export class Input extends HTMLElement {
    * @param {Event} event
    */
   customInput = (event: Event): void => {
-    event.stopPropagation();
     const target = event.target as HTMLInputElement;
     this.value = target ? target.value : '';
     // 增加onchange事件
@@ -383,7 +382,7 @@ export class Input extends HTMLElement {
     this.listenStatus(name, newValue);
     this.listenDisabled(name, newValue);
     this.listenIcon(name, newValue, oldValue);
-    if (name === 'value') {
+    if (name === 'value' && oldValue !== newValue) {
       this._inputContent.value = newValue;
       this._input.setAttribute('value', newValue);
     }
