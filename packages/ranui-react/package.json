@@ -24,9 +24,6 @@
   "files": [
     "dist/*"
   ],
-  "engines": {
-    "node": ">=14.20.0"
-  },
   "keywords": [
     "ran",
     "component",
