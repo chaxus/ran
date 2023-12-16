@@ -44,7 +44,7 @@ import {
   scriptOnLoad,
   throttle,
   timeFormat,
-  timestampToTime
+  timestampToTime,
 } from '@/utils';
 import type { Noop } from '@/utils';
 import { MimeType, getMime, setMime } from '@/server/mimeType';
@@ -104,7 +104,7 @@ export {
   reactify,
   generateThrottle,
   getFrame,
-  performanceTime
+  performanceTime,
 };
 
 export const EventEmitter = SyncHook;

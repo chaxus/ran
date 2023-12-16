@@ -139,7 +139,7 @@ export class Button extends HTMLElement {
         );
       }
     }
-  }
+  };
   connectedCallback(): void {
     this._btn.addEventListener('mousedown', this.mousedown);
     this._btn.addEventListener('mouseup', this.mouseup);

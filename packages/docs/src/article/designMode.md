@@ -515,7 +515,7 @@ const product: Product = director.constructorProduct();
 **Disadvantage:**
 
 - The products created by the builder mode generally have more in common and their components are similar. If the differences between products are large, the builder mode is not suitable for use, so its scope of use is limited.
-If the internal changes of the product are complex, it may lead to the need to define many concrete constructor classes to achieve such changes, resulting in a large system, increasing the difficulty of understanding the system and the cost of operation.
+  If the internal changes of the product are complex, it may lead to the need to define many concrete constructor classes to achieve such changes, resulting in a large system, increasing the difficulty of understanding the system and the cost of operation.
 
 ### 4.6 Prototype Pattern
 
@@ -704,7 +704,7 @@ this.response = Object.create(response);
 - Reduce the coupling degree of the system: The proxy mode can coordinate the caller and the called, which reduces the coupling degree of the system to a certain extent.
 - Different types of proxies can have different controls on the client's access to the target object:
 - A remote agent that allows the client to access objects on a remote machine that may have better computational performance and processing speed and can respond and process client requests quickly.
-By using a small object to represent a large object, virtual agents can reduce the consumption of system resources, optimize the system, and increase the speed of operation.
+  By using a small object to represent a large object, virtual agents can reduce the consumption of system resources, optimize the system, and increase the speed of operation.
 - The protection agent can control the client's permission to use real objects.
 
 **Disadvantage:**
@@ -943,7 +943,7 @@ order500New.init(3, true, 500); // Regular purchase, no coupons
 The responsibility chain mode makes an object not need to know which other object handles its request, the object only needs to know that the request will be processed, the receiver and the sender have no clear information about each other, and the object in the chain does not need to know the chain structure, the client is responsible for the creation of the chain, reducing the coupling degree of the system.
 
 - The request processing object only needs to maintain a reference to its successor, rather than maintaining a reference to all of its candidate handlers, simplifying object interconnections.
-The responsibility chain gives us more flexibility when assigning responsibilities to objects. The responsibility for handling a request can be added or changed by dynamically adding or modifying the chain at runtime.
+  The responsibility chain gives us more flexibility when assigning responsibilities to objects. The responsibility for handling a request can be added or changed by dynamically adding or modifying the chain at runtime.
 - Adding a new specific request handler to the system does not need to modify the code of the original system, only needs to rebuild the chain on the client side, from this point of view is in line with the "open and closed principle".
 
 **Disadvantage:**
@@ -962,7 +962,7 @@ The command mode consists of three roles:
 1. Publisher 'invoker' (issues command, calls command object, does not know how to execute and whom to execute);
 2. receiver 'receiver' (provides the corresponding interface to process the request, and does not know who initiates the request);
 3. The command object 'command' (receives the command and invokes the corresponding interface of the receiver to process the publisher's request).
-The publisher invoker and the receiver are independent and encapsulate the request into a command object command. The specific execution of the request is executed by the command object calling the corresponding interface of the receiver.
+   The publisher invoker and the receiver are independent and encapsulate the request into a command object command. The specific execution of the request is executed by the command object calling the corresponding interface of the receiver.
 
 ![](../../assets/article/designPattern/命令.png)
 
@@ -985,7 +985,9 @@ class Command {
   }
   execute() {
     // The call receiver executes against the interface
-    console.log('Command object -> Receiver -> Corresponding interface execution');
+    console.log(
+      'Command object -> Receiver -> Corresponding interface execution',
+    );
     this.receiver.execute();
   }
 }
@@ -1083,7 +1085,7 @@ console.log(context.sum);
 **Advantages:**
 
 - Easy to change and extend grammar. Because classes are used in the interpreter schema to represent the grammar rules of the language, the grammar can be changed or extended through mechanisms such as inheritance.
-Each rule can be represented as a class, so it is easy to implement a simple language.
+  Each rule can be represented as a class, so it is easy to implement a simple language.
 - The grammar is easier to implement. Each expression node class in the abstract syntax tree is implemented in a similar way, the code for these classes is not particularly complicated, and some tools can automatically generate node class code.
 - It is easier to add new interpretation expressions. If the user needs to add a new interpretation expression, it only needs to add a new terminal expression or non-terminal expression class, and the original expression class code does not need to be modified, which conforms to the "open and closed principle".
 
@@ -1270,7 +1272,7 @@ sub.addEventListener('click', pub, false);
 The observer pattern can realize the separation of the presentation layer and the data logic layer, define a stable message update delivery mechanism, and abstract the update interface, so that there can be a variety of different presentation layers to act as a concrete observer role.
 
 - Observer mode establishes an abstract coupling between the object of observation and the observer. The object of observation needs only to maintain a set of abstract observers, without knowing its concrete observers. Because the object of observation and the observer are not tightly coupled, they can belong to different levels of abstraction.
-Observer mode supports broadcast communication, and the observer will send notifications to all registered observer objects, simplifying the difficulty of one-to-many system design.
+  Observer mode supports broadcast communication, and the observer will send notifications to all registered observer objects, simplifying the difficulty of one-to-many system design.
 - Observer mode meets the requirements of the "open and close principle", adding new specific observers does not require modifying the original system code, and it is also convenient to add new observation targets when there is no correlation between specific observers and observation targets.
 
 **Disadvantage:**
@@ -1278,7 +1280,7 @@ Observer mode supports broadcast communication, and the observer will send notif
 If an observation target has many direct and indirect observers, it takes a lot of time to notify all of them.
 
 - If there is a cyclic dependency between the observer and the observing target, the observing target will trigger a cyclic call between them, possibly causing the system to crash.
-The observer mode has no mechanism for the observer to know how the object being observed has changed, but only to know that the object being observed has changed.
+  The observer mode has no mechanism for the observer to know how the object being observed has changed, but only to know that the object being observed has changed.
 
 ### 6.8 State Pattern
 
@@ -1413,7 +1415,7 @@ var compileUtil = {
 
 - Policy mode provides perfect support for the "open and close principle", users can choose algorithms or behaviors without modifying the original system, and can flexibly add new algorithms or behaviors.
 - The policy pattern provides a way to manage related algorithm families. The hierarchy of a policy class defines an algorithm or family of behaviors, and proper use of inheritance can move common code into an abstract policy class, thereby avoiding duplicate code.
-The policy pattern provides a way to replace inheritance relationships. Without the policy pattern, an environment class that uses algorithms might have several subclasses, each of which provides a different algorithm. However, in this way, the use of the algorithm is mixed with the algorithm itself, which does not conform to the "single responsibility principle", and the logic of deciding which algorithm to use is mixed with the algorithm itself, so that it is impossible to evolve independently. And using inheritance can not realize the dynamic switching of algorithms or behaviors during program running.
+  The policy pattern provides a way to replace inheritance relationships. Without the policy pattern, an environment class that uses algorithms might have several subclasses, each of which provides a different algorithm. However, in this way, the use of the algorithm is mixed with the algorithm itself, which does not conform to the "single responsibility principle", and the logic of deciding which algorithm to use is mixed with the algorithm itself, so that it is impossible to evolve independently. And using inheritance can not realize the dynamic switching of algorithms or behaviors during program running.
 - Use policy mode to avoid multiple conditional selection statements. Multiple conditional selection statement is not easy to maintain, it takes the logic of which algorithm or behavior to take and the implementation logic of the algorithm or behavior itself mixed together, Hard Coding them all in a huge multiple conditional selection statement, than the direct inheritance of the environment class method is more primitive and backward.
 - The policy pattern provides an algorithm reuse mechanism. Since algorithms are extracted separately and encapsulated in policy classes, different environment classes can reuse these policy classes easily.
 
@@ -1595,7 +1597,7 @@ The reason why Beverage.prototype.init is called a template method is that it en
 
 - Formally define an algorithm in the parent class, and let its subclasses implement the details of the processing, and the subclasses implement the detailed processing algorithm without changing the order of execution of the steps in the algorithm.
 - Template method pattern is a code reuse technique, it is particularly important in class library design, it extracts the common behavior of the class library, puts the common behavior in the parent class, and through its subclasses to achieve different behavior, it encourages us to use inheritance properly to achieve code reuse.
-A reverse control structure can be implemented where subclasses override the hook methods of the parent class to decide whether a particular step needs to be performed.
+  A reverse control structure can be implemented where subclasses override the hook methods of the parent class to decide whether a particular step needs to be performed.
 - In the template method pattern, the basic method of the parent class can be overridden by subclasses, different subclasses can provide different implementations of the basic method, and it is easy to replace and add new subclasses, which conforms to the principle of single responsibility and the principle of open and close.
 
 **Disadvantage:**

@@ -266,7 +266,6 @@ import 'ranui';
 
 <r-player style="display: block;width:100%;max-width:600px;height:300px;" src="/ran/hls/example.m3u8"></r-player>
 
-
 - `Select`
 
 <r-select style="width: 120px; height: 40px" value="185" action="click">
@@ -274,7 +273,6 @@ import 'ranui';
   <r-option value="186">Tom</r-option>
   <r-option value="187">Lucy</r-option>
 </r-select>
-
 
 ## Event
 

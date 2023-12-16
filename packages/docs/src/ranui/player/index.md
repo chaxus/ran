@@ -61,8 +61,8 @@ Live by 'type' to judge different event types, perform different operations
 
 Where 'type' type has
 
-| Name | Description |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Name           | Description                                                                                                                                                  |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------- |
 | canplay        | Your browser is ready to play the media file, but it probably doesn't have enough data to play it to the end without pausing to buffer the content further.  |
 | canplaythrough | The browser estimates that it canplay media until the end without stopping content buffering.                                                                |
 | complete       | OfflineAudioContext The rendering is complete.                                                                                                               |

@@ -11,7 +11,9 @@ Support 'docx', 'pptx', 'pdf', 'xlsx' file preview
 
 ```html
 <r-preview id="preview"></r-preview>
-<r-button type="primary" onclick="uploadFile()">choose file to preview</r-button>
+<r-button type="primary" onclick="uploadFile()"
+  >choose file to preview</r-button
+>
 
 <script>
   const uploadFile = () => {

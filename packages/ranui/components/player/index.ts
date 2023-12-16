@@ -159,8 +159,7 @@ export class RanPlayer extends HTMLElement {
       'class',
       'ran-player-controller-bottom-left-time-divide',
     );
-    this._playerControllerBottomTimeDuration =
-      document.createElement('div');
+    this._playerControllerBottomTimeDuration = document.createElement('div');
     this._playerControllerBottomTimeDuration.setAttribute(
       'class',
       'ran-player-controller-bottom-left-time-duration',
@@ -171,8 +170,7 @@ export class RanPlayer extends HTMLElement {
       'class',
       'ran-player-controller-bottom-right-speed',
     );
-    this._playControllerBottomSpeedPopover =
-      document.createElement('r-select');
+    this._playControllerBottomSpeedPopover = document.createElement('r-select');
     this._playControllerBottomSpeedPopover.setAttribute('value', '1');
     this._playControllerBottomSpeedPopover.setAttribute(
       'action',
@@ -233,8 +231,7 @@ export class RanPlayer extends HTMLElement {
       'ran-player-controller-bottom-right-clarity',
     );
     // fullscreen
-    this._playControllerBottomRightFullScreen =
-      document.createElement('div');
+    this._playControllerBottomRightFullScreen = document.createElement('div');
     this._playControllerBottomRightFullScreen.setAttribute(
       'class',
       'ran-player-controller-bottom-right-full',
@@ -245,15 +242,9 @@ export class RanPlayer extends HTMLElement {
     this._playerTip = document.createElement('div');
     this._playerTip.setAttribute('class', 'ran-player-controller-tip');
     this._playerTipTime = document.createElement('div');
-    this._playerTipTime.setAttribute(
-      'class',
-      'ran-player-controller-tip-time',
-    );
+    this._playerTipTime.setAttribute('class', 'ran-player-controller-tip-time');
     this._playerTipText = document.createElement('div');
-    this._playerTipText.setAttribute(
-      'class',
-      'ran-player-controller-tip-text',
-    );
+    this._playerTipText.setAttribute('class', 'ran-player-controller-tip-text');
     this._playerTip.appendChild(
       createDocumentFragment([this._playerTipTime, this._playerTipText])!,
     );
@@ -348,7 +339,7 @@ export class RanPlayer extends HTMLElement {
   set playbackRate(value: string) {
     this.setAttribute('playbackRate', value || '');
   }
-  changeClarityToSetVideo = ():void => {
+  changeClarityToSetVideo = (): void => {
     const { currentTime, playbackRate, volume, currentState } = this.ctx;
     this.setCurrentTime(currentTime);
     this.setPlaybackRate(playbackRate);
@@ -359,7 +350,7 @@ export class RanPlayer extends HTMLElement {
       this.pause();
     }
   };
-  changeClarity = (e: Event):void => {
+  changeClarity = (e: Event): void => {
     this.ctx.clarity = (<CustomEvent>e).detail.value;
     const url = this.ctx.levelMap.get((<CustomEvent>e).detail.value);
     if (url && this._hls) {
@@ -368,7 +359,7 @@ export class RanPlayer extends HTMLElement {
       this.changeClarityToSetVideo();
     }
   };
-  createClaritySelect = ():void => {
+  createClaritySelect = (): void => {
     const { levels, url } = this.ctx;
     this._playControllerBottomClarity.innerHTML = '';
     if (levels.length <= 0) return;
@@ -397,7 +388,7 @@ export class RanPlayer extends HTMLElement {
   manifestLoaded = (
     type: string,
     data: { levels: Level[]; url: string },
-  ):void => {
+  ): void => {
     if (type === 'hlsManifestLoaded') {
       const { url, levels = [] } = data;
       if (levels.length <= 0) return;
@@ -417,7 +408,7 @@ export class RanPlayer extends HTMLElement {
    * @description: 初始化 video 和更新 video 方法
    * @return {*}
    */
-  updatePlayer = ():void => {
+  updatePlayer = (): void => {
     const { Hls } = window;
     if (!this.contains(this._player)) this.appendChild(this._player);
     if (this._hls) {
@@ -443,10 +434,7 @@ export class RanPlayer extends HTMLElement {
         this._hls.attachMedia(this._video);
       }
       this._container.appendChild(this._video);
-      this._video.parentElement?.setAttribute(
-        'class',
-        'ran-player-contain',
-      );
+      this._video.parentElement?.setAttribute('class', 'ran-player-contain');
     }
     this.listenEvent();
   };
@@ -465,7 +453,7 @@ export class RanPlayer extends HTMLElement {
       }),
     );
   };
-  onCanplay = (e: Event):void => {
+  onCanplay = (e: Event): void => {
     this.ctx.currentState = e.type;
     removeClassToElement(
       this._playerControllerBottomPlayBtn,
@@ -478,63 +466,63 @@ export class RanPlayer extends HTMLElement {
     this.change('canplay', e);
     this.resize();
   };
-  onCanplaythrough = (e: Event):void => {
+  onCanplaythrough = (e: Event): void => {
     this.ctx.currentState = e.type;
     this.change('canplaythrough', e);
   };
-  onComplete = (e: Event):void => {
+  onComplete = (e: Event): void => {
     this.ctx.currentState = e.type;
     this.change('complete', e);
   };
-  onDurationchange = (e: Event):void => {
+  onDurationchange = (e: Event): void => {
     this.ctx.currentState = e.type;
     this.change('durationchange', e);
   };
-  onEmptied = (e: Event):void => {
+  onEmptied = (e: Event): void => {
     this.ctx.currentState = e.type;
     this.change('emptied', e);
   };
-  onEnded = (e: Event):void => {
+  onEnded = (e: Event): void => {
     this.ctx.currentState = e.type;
     this.change('ended', e);
   };
-  onError = (e: Event):void => {
+  onError = (e: Event): void => {
     this.ctx.currentState = e.type;
     this.change('error', e);
   };
-  onLoadedmetadata = (e: Event):void => {
+  onLoadedmetadata = (e: Event): void => {
     this.ctx.currentState = e.type;
     this.change('loadedmetadata', e);
   };
-  onLoadstart = (e: Event):void => {
+  onLoadstart = (e: Event): void => {
     this.ctx.currentState = e.type;
     this.change('loadstart', e);
   };
-  onProgress = (e: Event):void => {
+  onProgress = (e: Event): void => {
     this.ctx.currentState = e.type;
     this.change('progress', e);
   };
-  onRatechange = (e: Event):void => {
+  onRatechange = (e: Event): void => {
     this.ctx.currentState = e.type;
     this.change('ratechange', e);
   };
-  onSeeked = (e: Event):void => {
+  onSeeked = (e: Event): void => {
     this.ctx.currentState = e.type;
     this.change('seeked', e);
   };
-  onSeeking = (e: Event):void => {
+  onSeeking = (e: Event): void => {
     this.ctx.currentState = e.type;
     this.change('seeking', e);
   };
-  onStalled = (e: Event):void => {
+  onStalled = (e: Event): void => {
     this.ctx.currentState = e.type;
     this.change('stalled', e);
   };
-  onSuspend = (e: Event):void => {
+  onSuspend = (e: Event): void => {
     this.ctx.currentState = e.type;
     this.change('suspend', e);
   };
-  onLoadeddata = (e: Event):void => {
+  onLoadeddata = (e: Event): void => {
     this.ctx.currentState = e.type;
     const duration = this.getTotalTime();
     this.ctx.duration = duration;
@@ -545,19 +533,19 @@ export class RanPlayer extends HTMLElement {
     );
     this.change('loadeddata', e);
   };
-  onTimeupdate = (e: Event):void => {
+  onTimeupdate = (e: Event): void => {
     this.ctx.currentState = e.type;
     this.change('timeupdate', e);
   };
-  onVolumechange = (e: Event):void => {
+  onVolumechange = (e: Event): void => {
     this.ctx.currentState = e.type;
     this.change('volumechange', e);
   };
-  onWaiting = (e: Event):void => {
+  onWaiting = (e: Event): void => {
     this.ctx.currentState = e.type;
     this.change('waiting', e);
   };
-  onPlay = (e: Event):void => {
+  onPlay = (e: Event): void => {
     this.ctx.currentState = e.type;
     this.requestAnimationFrame(this.updateCurrentProgress);
     removeClassToElement(
@@ -571,7 +559,7 @@ export class RanPlayer extends HTMLElement {
     this.showControllerBar();
     this.change('play', e);
   };
-  onPlaying = (e: Event):void => {
+  onPlaying = (e: Event): void => {
     this.ctx.currentState = e.type;
     this._playerBtn.style.setProperty('display', 'none');
     removeClassToElement(
@@ -586,7 +574,7 @@ export class RanPlayer extends HTMLElement {
     this.showControllerBar();
     this.change('playing', e);
   };
-  onPause = (e: Event):void => {
+  onPause = (e: Event): void => {
     this.ctx.currentState = e.type;
     this._playerBtn.style.setProperty('display', 'block');
     this.change('pause', e);
@@ -605,26 +593,17 @@ export class RanPlayer extends HTMLElement {
       this.controllerBarTimeId = undefined;
     }
   };
-  clearListenerEvent = ():void => {
+  clearListenerEvent = (): void => {
     if (!this._video) return;
     this._video.removeEventListener('canplay', this.onCanplay);
-    this._video.removeEventListener(
-      'canplaythrough',
-      this.onCanplaythrough,
-    );
+    this._video.removeEventListener('canplaythrough', this.onCanplaythrough);
     this._video.removeEventListener('complete', this.onComplete);
-    this._video.removeEventListener(
-      'durationchange',
-      this.onDurationchange,
-    );
+    this._video.removeEventListener('durationchange', this.onDurationchange);
     this._video.removeEventListener('emptied', this.onEmptied);
     this._video.removeEventListener('ended', this.onEnded);
     this._video.removeEventListener('error', this.onError);
     this._video.removeEventListener('loadeddata', this.onLoadeddata);
-    this._video.removeEventListener(
-      'loadedmetadata',
-      this.onLoadedmetadata,
-    );
+    this._video.removeEventListener('loadedmetadata', this.onLoadedmetadata);
     this._video.removeEventListener('loadstart', this.onLoadstart);
     this._video.removeEventListener('pause', this.onPause);
     this._video.removeEventListener('play', this.onPlay);
@@ -643,7 +622,7 @@ export class RanPlayer extends HTMLElement {
    * @description: 用户行为和 video 之间的交互
    * @return {*}
    */
-  listenEvent = ():void => {
+  listenEvent = (): void => {
     if (!this._video) return;
     this.clearListenerEvent();
     this._video.addEventListener('canplay', this.onCanplay);
@@ -796,9 +775,7 @@ export class RanPlayer extends HTMLElement {
     );
     this._progressDot.style.setProperty(
       'transform',
-      `translateX(${
-        (currentTime / duration) * this._progress.offsetWidth
-      }px)`,
+      `translateX(${(currentTime / duration) * this._progress.offsetWidth}px)`,
     );
     if (currentTime >= 0) {
       this._playerControllerBottomTimeCurrent.innerText =
@@ -811,7 +788,7 @@ export class RanPlayer extends HTMLElement {
     n: string,
     attribute: string,
     callback: Function,
-  ):void => {
+  ): void => {
     if (k === attribute && o !== n) throttle(callback)();
   };
   /**
@@ -885,9 +862,7 @@ export class RanPlayer extends HTMLElement {
       }
     }
   };
-  customRequestFullscreen = (
-    options?: FullscreenOptions,
-  ): Promise<void> => {
+  customRequestFullscreen = (options?: FullscreenOptions): Promise<void> => {
     return (
       this._player.requestFullscreen() ||
       this._player.mozRequestFullScreen() ||
@@ -1017,15 +992,9 @@ export class RanPlayer extends HTMLElement {
       this._video.style.setProperty('width', `${width}px`);
       this._video.style.setProperty('height', `${height}px`);
       if (document.body.clientWidth < 500) {
-        this._playControllerBottomVolume.style.setProperty(
-          'display',
-          'none',
-        );
+        this._playControllerBottomVolume.style.setProperty('display', 'none');
       } else {
-        this._playControllerBottomVolume.style.setProperty(
-          'display',
-          'flex',
-        );
+        this._playControllerBottomVolume.style.setProperty('display', 'flex');
       }
     }
     this.updateCurrentProgress();
@@ -1039,33 +1008,33 @@ export class RanPlayer extends HTMLElement {
       this.ctx.fullScreen = false;
     }
   };
-  public getPlaybackRate = ():number => {
+  public getPlaybackRate = (): number => {
     if (this._video) {
       this.ctx.playbackRate = this._video.playbackRate || 0;
     }
     return this.ctx.playbackRate;
   };
-  public setPlaybackRate = (n: number):number => {
+  public setPlaybackRate = (n: number): number => {
     if (this._video) {
       this.ctx.playbackRate = n;
       this._video.playbackRate = n;
     }
     return this.ctx.playbackRate;
   };
-  public setVolume = (n: number):number => {
+  public setVolume = (n: number): number => {
     if (this._video) {
       this.ctx.volume = n;
       this._video.volume = n;
     }
     return this.ctx.volume;
   };
-  public getVolume = ():number => {
+  public getVolume = (): number => {
     if (this._video) {
       this.ctx.volume = this._video.volume || 0;
     }
     return this.ctx.volume;
   };
-  public setCurrentTime = (n: number):number => {
+  public setCurrentTime = (n: number): number => {
     if (this._video) {
       this.ctx.currentTime = n;
       this._video.currentTime = n;
@@ -1093,7 +1062,7 @@ export class RanPlayer extends HTMLElement {
       this._video.play();
     }
   };
-  public pause = ():void => {
+  public pause = (): void => {
     if (this._video) {
       this._video.pause();
     }
@@ -1108,10 +1077,7 @@ export class RanPlayer extends HTMLElement {
       this.dispatchClickPlayerBtnAction,
     );
     this.addEventListener('keydown', this.SpaceKeyDown);
-    this._progressDot.addEventListener(
-      'mousedown',
-      this.progressDotMouseDown,
-    );
+    this._progressDot.addEventListener('mousedown', this.progressDotMouseDown);
     this._playerControllerBottomPlayBtn.addEventListener(
       'click',
       this.dispatchClickPlayerBtnAction,
@@ -1154,23 +1120,14 @@ export class RanPlayer extends HTMLElement {
     this.cancelAnimationFrame();
     this.removeEventListener('keydown', this.SpaceKeyDown);
     this._progress.removeEventListener('click', this.progressClick);
-    this._progress.removeEventListener(
-      'mouseenter',
-      this.progressMouseEnter,
-    );
+    this._progress.removeEventListener('mouseenter', this.progressMouseEnter);
     this._progress.removeEventListener('mousemove', this.progressMouseMove);
-    this._progress.removeEventListener(
-      'mouseleave',
-      this.progressMouseLeave,
-    );
+    this._progress.removeEventListener('mouseleave', this.progressMouseLeave);
     this._progressDot.removeEventListener(
       'mousedown',
       this.progressDotMouseDown,
     );
-    this._player.removeEventListener(
-      'mousemove',
-      this.progressDotMouseMove,
-    );
+    this._player.removeEventListener('mousemove', this.progressDotMouseMove);
     this._player.removeEventListener('mouseup', this.progressDotMouseUp);
     this._playControllerBottomVolumeProgress.removeEventListener(
       'change',
@@ -1188,7 +1145,6 @@ export class RanPlayer extends HTMLElement {
 
 function Custom() {
   if (typeof document !== 'undefined' && !customElements.get('r-player')) {
-
     customElements.define('r-player', RanPlayer);
     return RanPlayer;
   }

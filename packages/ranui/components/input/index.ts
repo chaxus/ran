@@ -2,7 +2,16 @@ import { createCustomError, falseList, isDisabled } from '@/utils/index';
 
 export class Input extends HTMLElement {
   static get observedAttributes(): string[] {
-    return ['label', 'disabled', 'name', 'placeholder', 'type', 'icon', 'value', 'status'];
+    return [
+      'label',
+      'disabled',
+      'name',
+      'placeholder',
+      'type',
+      'icon',
+      'value',
+      'status',
+    ];
   }
   _input: HTMLDivElement;
   _label: HTMLLabelElement | undefined;
@@ -225,8 +234,8 @@ export class Input extends HTMLElement {
    * @param {Event} event
    */
   customInput = (event: Event): void => {
-    event.stopPropagation()
-    event.preventDefault()
+    event.stopPropagation();
+    event.preventDefault();
     const { target, data = '' } = <InputEvent>event;
     this.value = (<HTMLInputElement>target)?.value || data || '';
     // 增加onchange事件

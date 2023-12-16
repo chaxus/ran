@@ -1,4 +1,3 @@
-
 class ScratchTicket extends HTMLElement {
   scratchTicketContainer: HTMLDivElement;
   scratchTicket: HTMLCanvasElement;

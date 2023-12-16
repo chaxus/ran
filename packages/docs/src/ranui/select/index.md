@@ -110,7 +110,6 @@ Drop-down box display direction default down, set to 'top' can go up
     </r-select>
 ```
 
-
 ### `showSearch`
 
 Expand to search for options

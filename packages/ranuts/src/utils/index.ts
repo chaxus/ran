@@ -103,9 +103,8 @@ export const generateThrottle = (): Function => {
         }, wait);
       }
     };
-  }
-
-}
+  };
+};
 /**
  * @description: requestAnimationFrame节流
  * @param {any} fn
@@ -182,7 +181,7 @@ export const mergeExports = (obj: Object, exports: Object): Object => {
   return Object.freeze(obj);
 };
 
-export const noop = (): void => { };
+export const noop = (): void => {};
 
 export type Noop = () => void;
 /**
@@ -404,9 +403,9 @@ export function querystring(data = {}): string {
         value === undefined || value === null
           ? searchParams
           : (searchParams.append(
-            decodeURIComponent(name),
-            decodeURIComponent(value),
-          ),
+              decodeURIComponent(name),
+              decodeURIComponent(value),
+            ),
             searchParams),
       new URLSearchParams(),
     )
@@ -415,7 +414,7 @@ export function querystring(data = {}): string {
 
 const transitionJsonToString = (
   jsonObj: string | JSON,
-  callback = (error: Error) => { },
+  callback = (error: Error) => {},
 ) => {
   // 转换后的jsonObj受体对象
   let _jsonObj: string = '';
@@ -446,7 +445,7 @@ const transitionJsonToString = (
   return _jsonObj;
 };
 // callback为数据格式化错误的时候处理函数
-export const formatJson = (jsonObj: string, callback = () => { }): string => {
+export const formatJson = (jsonObj: string, callback = () => {}): string => {
   // 转换后的字符串变量
   let formatted = '';
   // 换行缩进位数
@@ -855,46 +854,43 @@ export class QuestQueue {
  */
 export const performanceTime = (): number => {
   if (typeof document !== 'undefined') {
-    return performance.now()
+    return performance.now();
   }
   if (typeof process !== 'undefined') {
     // process.hrtime.bigint()
-    const [seconds, nanosecond] = process.hrtime()
-    return seconds * 1000 + nanosecond / 1000000
+    const [seconds, nanosecond] = process.hrtime();
+    return seconds * 1000 + nanosecond / 1000000;
   }
-  return Date.now()
-}
+  return Date.now();
+};
 
 /**
  * @description: 计算每毫秒的帧率，每秒的帧率需要乘1000
  * @return {*}
  */
 export const getFrame = (n: number = 10): Promise<number> => {
-  const frameList: number[] = []
-  let lastFrame = 0
-  let requestAnimationFrameRef: number
+  const frameList: number[] = [];
+  let lastFrame = 0;
+  let requestAnimationFrameRef: number;
   return new Promise((resolve) => {
     const a = () => {
-      const now = performanceTime()
+      const now = performanceTime();
       const frame = now - lastFrame;
       if (lastFrame !== 0) {
         frameList.push(frame);
       }
       lastFrame = now;
       if (frameList.length > n) {
-        const num = frameList.reduce((i, j) => i + j)
-        // 帧率就是 1 / time 
+        const num = frameList.reduce((i, j) => i + j);
+        // 帧率就是 1 / time
         // time是每次 requestAnimationFrame 执行的间隔
-        resolve(1 / (num / n))
-        cancelAnimationFrame(requestAnimationFrameRef)
+        resolve(1 / (num / n));
+        cancelAnimationFrame(requestAnimationFrameRef);
       }
       requestAnimationFrameRef = requestAnimationFrame(a);
-    }
+    };
     if (frameList.length <= n) {
       requestAnimationFrameRef = requestAnimationFrame(a);
     }
-  })
-}
-
-
-
+  });
+};
