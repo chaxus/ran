@@ -13,6 +13,7 @@ import { AudioRecorder } from '@/utils/audioRecorder';
 import word from '@/word/index';
 import reactify from '@/utils/reactify';
 import {
+  Mathjs,
   addClassToElement,
   createDocumentFragment,
   createObjectURL,
@@ -29,6 +30,7 @@ import {
   isMobile,
   isWeiXin,
   judgeDevice,
+  mathjs,
   memoize,
   mergeExports,
   noop,
@@ -44,7 +46,7 @@ import {
   scriptOnLoad,
   throttle,
   timeFormat,
-  timestampToTime,
+  timestampToTime
 } from '@/utils';
 import type { Noop } from '@/utils';
 import { MimeType, getMime, setMime } from '@/server/mimeType';
@@ -105,6 +107,8 @@ export {
   generateThrottle,
   getFrame,
   performanceTime,
+  Mathjs,
+  mathjs
 };
 
 export const EventEmitter = SyncHook;

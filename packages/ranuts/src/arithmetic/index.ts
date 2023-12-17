@@ -1,8 +1,8 @@
 /*
  * @Author: chaxus nouo18@163.com
  * @Date: 2023-09-14 21:21:31
- * @LastEditors: ran
- * @LastEditTime: 2023-09-25 16:40:33
+ * @LastEditors: chaxus nouo18@163.com
+ * @LastEditTime: 2023-12-18 00:05:29
  * @FilePath: /ran/packages/ranuts/src/arithmetic/index.ts
  * @Description: 字符串 string
  * @Description: 链表
@@ -421,3 +421,121 @@ export const heap = (list: Array<number>): Array<number> => {
   const { value } = new MinHeap(list);
   return value;
 };
+
+// 手写promise
+
+const PENDING = "pending";
+const RESOLVED = "resolved";
+const REJECTED = "rejected";
+
+class CustomPromise {
+  status: string;
+  successValue: unknown;
+  failValue: unknown;
+  onResolvedCallbacks: Function[];
+  onRejectedCallbacks: Function[];
+  constructor(cb: unknown) {
+    // 初始化状态
+    this.status = PENDING
+    // 初始化成功的值
+    this.successValue = undefined
+    // 初始化失败的值
+    this.failValue = undefined
+    // 存储成功状态的回调函数
+    this.onResolvedCallbacks = [];
+    // 存储失败状态的回调函数
+    this.onRejectedCallbacks = [];
+    const resolve = (value: unknown) => {
+      if (this.status === PENDING) {
+        this.status = RESOLVED
+        this.successValue = value
+        this.onResolvedCallbacks.forEach(cb => cb())
+      }
+    }
+    const reject = (value: unknown) => {
+      if (this.status === PENDING) {
+        this.status = REJECTED
+        this.failValue = value
+        this.onRejectedCallbacks.forEach(cb => cb())
+      }
+    }
+    // 调用回调函数，将 resolve 和 reject 传递给它
+    if (typeof cb === 'function') {
+      cb(resolve, reject)
+    }
+  }
+  then = (r: unknown, j: unknown) => {
+    return new CustomPromise((resolve: Function, reject: Function) => {
+      if (this.status === RESOLVED) {
+        try {
+          if (typeof r === 'function') {
+            resolve(r())
+          }
+        } catch (error) {
+          reject(error)
+        }
+      }
+      if (this.status === REJECTED) {
+        try {
+          if (typeof j === 'function') {
+            resolve(j())
+          }
+        } catch (error) {
+          reject(error)
+        }
+      }
+      if (this.status === PENDING) {
+        if (typeof r === 'function') {
+          this.onResolvedCallbacks.push(() => {
+            try {
+              resolve(r(this.successValue))
+            } catch (error) {
+              reject(error)
+            }
+          })
+        }
+        if (typeof j === 'function') {
+          this.onRejectedCallbacks.push(() => {
+            try {
+              resolve(j(this.failValue))
+            } catch (error) {
+              reject(error)
+            }
+          })
+        }
+      } else {
+        // 存储成功状态的回调函数
+        this.onResolvedCallbacks = [];
+        // 存储失败状态的回调函数
+        this.onRejectedCallbacks = [];
+      }
+    })
+  }
+  catch = (r: Function) => {
+    return this.then(undefined, r)
+  }
+}
+/**
+ * @description: 自定义 call
+ * @return {*}
+ */
+const CustomCall = () => {
+  (Function.prototype as any).CustomCall = function (ctx: any) {
+    if (typeof this !== 'function') {
+      throw new Error('is not func')
+    }
+    const context = ctx || window
+    const args = [...arguments].slice(1)
+    context.fn = this
+    const result = context.fn(...args)
+    delete context.fn
+    return result
+  }
+}
+
+export const curry = (fn: Function, ...args: unknown[]): Function => {
+  const recursion = (...args: unknown[]) => {
+    return fn.length <= args.length ? fn(...args) : (...arg: unknown[]) => recursion(...args, ...arg)
+  }
+  return recursion(...args)
+}
