@@ -61,7 +61,7 @@
   },
   "dependencies": {
     "@vitejs/plugin-react": "^4.0.4",
-    "ranui": "workspace:^0.1.8",
+    "ranui": "workspace:^0.1.9",
     "react": "^18.2.0",
     "ranuts": "workspace:0.1.0-alpha.10"
   }

@@ -18,6 +18,6 @@
     "vitepress": "1.0.0-rc.29"
   },
   "dependencies": {
-    "ranui": "workspace:0.1.8"
+    "ranui": "workspace:0.1.9"
   }
 }
