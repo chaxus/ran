@@ -2,7 +2,7 @@ import reactify from '@/utils/reactify';
 import 'ranui/select';
 import 'ranui/style';
 
-interface RPreview {
+interface TypeSelect {
   value?: string | Blob | ArrayBuffer;
   defaultValue?: string | number;
   showSearch?: string | number;
@@ -14,9 +14,10 @@ interface RPreview {
   sheet?: string;
   disabled?: string;
   onClick?: React.MouseEventHandler<HTMLDivElement> | undefined;
+  onChange?: React.MouseEventHandler<HTMLDivElement> | undefined;
   ref?: React.MutableRefObject<HTMLDivElement | null>;
 }
 
-const Select = reactify<RPreview>('r-select');
+const Select = reactify<TypeSelect>('r-select');
 
 export default Select;
