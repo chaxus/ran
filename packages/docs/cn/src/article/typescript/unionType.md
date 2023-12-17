@@ -11,9 +11,7 @@ type Union = 'a' | 'b' | 'c';
 我们想把其中的 a 大写，就可以这样写：
 
 ```ts
-type UppercaseA<Item extends string> = Item extends 'a'
-  ? Uppercase<Item>
-  : Item;
+type UppercaseA<Item extends string> = Item extends 'a' ? Uppercase<Item> : Item;
 ```
 
 ```ts
@@ -38,10 +36,9 @@ TypeScript 之所以这样处理联合类型也很容易理解，因为联合类
 Camelcase 我们实现过，就是提取字符串中的字符，首字母大写以后重新构造一个新的。
 
 ```ts
-type Camelcase<Str extends string> =
-  Str extends `${infer Left}_${infer Right}${infer Rest}`
-    ? `${Left}${Uppercase<Right>}${Camelcase<Rest>}`
-    : Str;
+type Camelcase<Str extends string> = Str extends `${infer Left}_${infer Right}${infer Rest}`
+  ? `${Left}${Uppercase<Right>}${Camelcase<Rest>}`
+  : Str;
 ```
 
 提取 \_ 左右的字符，把右边字符大写之后构造成新的字符串，余下的字符串递归处理。
@@ -54,10 +51,7 @@ type CamelcaseResult = Camelcase<'aa_aa_aa'>;
 如果是对字符串数组做 Camelcase，那就要递归处理每一个元素：
 
 ```ts
-type CamelcaseArr<Arr extends unknown[]> = Arr extends [
-  infer Item,
-  ...infer RestArr,
-]
+type CamelcaseArr<Arr extends unknown[]> = Arr extends [infer Item, ...infer RestArr]
   ? [Camelcase<Item & string>, ...CamelcaseArr<RestArr>]
   : [];
 ```
@@ -71,10 +65,9 @@ type CamelcaseArr<Arr extends unknown[]> = Arr extends [
 联合类型不需要递归提取每个元素，TypeScript 内部会把每一个元素传入单独做计算，之后把每个元素的计算结果合并成联合类型。
 
 ```ts
-type CamelcaseUnion<Item extends string> =
-  Item extends `${infer Left}_${infer Right}${infer Rest}`
-    ? `${Left}${Uppercase<Right>}${CamelcaseUnion<Rest>}`
-    : Item;
+type CamelcaseUnion<Item extends string> = Item extends `${infer Left}_${infer Right}${infer Rest}`
+  ? `${Left}${Uppercase<Right>}${CamelcaseUnion<Rest>}`
+  : Item;
 ```
 
 这不和单个字符串的处理没区别么？
@@ -210,11 +203,7 @@ type RemResult = BEM<'a', ['b', 'c'], ['d', 'e']>;
 任何两个类型的组合有四种：A、B、AB、BA
 
 ```ts
-type Combination<A extends string, B extends string> =
-  | A
-  | B
-  | `${A}${B}`
-  | `${B}${A}`;
+type Combination<A extends string, B extends string> = A | B | `${A}${B}` | `${B}${A}`;
 ```
 
 然后构造出来的字符串再和其他字符串组合。

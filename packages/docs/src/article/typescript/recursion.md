@@ -25,9 +25,7 @@ type ttt = Promise<Promise<Promise<Record<string, any>>>>;
 所以高级类型是这样的：
 
 ```ts
-type DeepPromiseValueType<P extends Promise<unknown>> = P extends Promise<
-  infer ValueType
->
+type DeepPromiseValueType<P extends Promise<unknown>> = P extends Promise<infer ValueType>
   ? ValueType extends Promise<unknown>
     ? DeepPromiseValueType<ValueType>
     : ValueType
@@ -47,9 +45,7 @@ type DeepPromiseValueType<P extends Promise<unknown>> = P extends Promise<
 其实这个类型的实现可以进一步的简化：
 
 ```ts
-type DeepPromiseValueType2<T> = T extends Promise<infer ValueType>
-  ? DeepPromiseValueType2<ValueType>
-  : T;
+type DeepPromiseValueType2<T> = T extends Promise<infer ValueType> ? DeepPromiseValueType2<ValueType> : T;
 ```
 
 不再约束类型参数必须是 Promise，这样就可以少一层判断。
@@ -75,13 +71,7 @@ type arr = [5, 4, 3, 2, 1];
 这个学完了提取和构造很容易写出来：
 
 ```ts
-type ReverseArr<Arr extends unknown[]> = Arr extends [
-  infer One,
-  infer Two,
-  infer Three,
-  infer Four,
-  infer Five,
-]
+type ReverseArr<Arr extends unknown[]> = Arr extends [infer One, infer Two, infer Three, infer Four, infer Five]
   ? [Five, Four, Three, Two, One]
   : never;
 ```
@@ -93,12 +83,7 @@ type ReverseArr<Arr extends unknown[]> = Arr extends [
 我们每次只处理一个类型，剩下的递归做，直到满足结束条件。
 
 ```ts
-type ReverseArr<Arr extends unknown[]> = Arr extends [
-  infer First,
-  ...infer Rest,
-]
-  ? [...ReverseArr<Rest>, First]
-  : Arr;
+type ReverseArr<Arr extends unknown[]> = Arr extends [infer First, ...infer Rest] ? [...ReverseArr<Rest>, First] : Arr;
 ```
 
 类型参数 Arr 为待处理的数组类型，元素类型不确定，也就是 unknown。
@@ -118,17 +103,13 @@ type ReverseArr<Arr extends unknown[]> = Arr extends [
 从长度不固定的数组中查找某个元素，数量不确定，这时候就应该想到递归。
 
 ```ts
-type Includes<Arr extends unknown[], FindItem> = Arr extends [
-  infer First,
-  ...infer Rest,
-]
+type Includes<Arr extends unknown[], FindItem> = Arr extends [infer First, ...infer Rest]
   ? IsEqual<First, FindItem> extends true
     ? true
     : Includes<Rest, FindItem>
   : false;
 
-type IsEqual<A, B> = (A extends B ? true : false) &
-  (B extends A ? true : false);
+type IsEqual<A, B> = (A extends B ? true : false) & (B extends A ? true : false);
 ```
 
 类型参数 Arr 是待查找的数组类型，元素类型任意，也就是 unknown。FindItem 待查找的元素类型。
@@ -148,18 +129,13 @@ type IsEqual<A, B> = (A extends B ? true : false) &
 可以查找自然就可以删除，只需要改下返回结果，构造一个新的数组返回。
 
 ```ts
-type RemoveItem<
-  Arr extends unknown[],
-  Item,
-  Result extends unknown[] = [],
-> = Arr extends [infer First, ...infer Rest]
+type RemoveItem<Arr extends unknown[], Item, Result extends unknown[] = []> = Arr extends [infer First, ...infer Rest]
   ? IsEqual<First, Item> extends true
     ? RemoveItem<Rest, Item, Result>
     : RemoveItem<Rest, Item, [...Result, First]>
   : Result;
 
-type IsEqual<A, B> = (A extends B ? true : false) &
-  (B extends A ? true : false);
+type IsEqual<A, B> = (A extends B ? true : false) & (B extends A ? true : false);
 ```
 
 类型参数 Arr 是待处理的数组，元素类型任意，也就是 unknown[]。类型参数 Item 为待查找的元素类型。类型参数 Result 是构造出的新数组，默认值是 []。
@@ -179,11 +155,9 @@ type IsEqual<A, B> = (A extends B ? true : false) &
 比如传入 5 和元素类型，构造一个长度为 5 的该元素类型构成的数组。
 
 ```ts
-type BuildArray<
-  Length extends number,
-  Ele = unknown,
-  Arr extends unknown[] = [],
-> = Arr['length'] extends Length ? Arr : BuildArray<Length, Ele, [...Arr, Ele]>;
+type BuildArray<Length extends number, Ele = unknown, Arr extends unknown[] = []> = Arr['length'] extends Length
+  ? Arr
+  : BuildArray<Length, Ele, [...Arr, Ele]>;
 ```
 
 类型参数 Length 为数组长度，约束为 number。类型参数 Ele 为元素类型，默认值为 unknown。类型参数 Arr 为构造出的数组，默认值是 []。
@@ -203,9 +177,7 @@ type ReplaceStr<
   Str extends string,
   From extends string,
   To extends string,
-> = Str extends `${infer Prefix}${From}${infer Suffix}`
-  ? `${Prefix}${To}${Suffix}`
-  : Str;
+> = Str extends `${infer Prefix}${From}${infer Suffix}` ? `${Prefix}${To}${Suffix}` : Str;
 ```
 
 它能把一个字符串中的某个字符替换成另一个：
@@ -223,9 +195,7 @@ type ReplaceAll<
   Str extends string,
   From extends string,
   To extends string,
-> = Str extends `${infer Left}${From}${infer Right}`
-  ? `${Left}${To}${ReplaceAll<Right, From, To>}`
-  : Str;
+> = Str extends `${infer Left}${From}${infer Right}` ? `${Left}${To}${ReplaceAll<Right, From, To>}` : Str;
 ```
 
 类型参数 Str 是待处理的字符串类型，From 是待替换的字符，To 是替换到的字符。
@@ -247,10 +217,9 @@ type ReplaceAll<
 很明显也是提取和构造：
 
 ```ts
-type StringToUnion<Str extends string> =
-  Str extends `${infer One}${infer Two}${infer Three}${infer Four}`
-    ? One | Two | Three | Four
-    : never;
+type StringToUnion<Str extends string> = Str extends `${infer One}${infer Two}${infer Three}${infer Four}`
+  ? One | Two | Three | Four
+  : never;
 ```
 
 但如果字符串长度不确定呢？
@@ -258,10 +227,9 @@ type StringToUnion<Str extends string> =
 数量不确定，在类型体操中就要条件反射的想到递归。
 
 ```ts
-type StringToUnion<Str extends string> =
-  Str extends `${infer First}${infer Rest}`
-    ? First | StringToUnion<Rest>
-    : never;
+type StringToUnion<Str extends string> = Str extends `${infer First}${infer Rest}`
+  ? First | StringToUnion<Rest>
+  : never;
 ```
 
 类型参数 Str 为待处理的字符串类型，通过 extends 约束为 string。
@@ -279,10 +247,7 @@ type StringToUnion<Str extends string> =
 同样是递归提取和构造。
 
 ```ts
-type ReverseStr<
-  Str extends string,
-  Result extends string = '',
-> = Str extends `${infer First}${infer Rest}`
+type ReverseStr<Str extends string, Result extends string = ''> = Str extends `${infer First}${infer Rest}`
   ? ReverseStr<Rest, `${First}${Result}`>
   : Result;
 ```

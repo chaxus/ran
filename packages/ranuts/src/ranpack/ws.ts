@@ -104,10 +104,7 @@ function Event(this: any) {
     if (e && i !== -1) e.splice(i, 1);
   };
   this.emit = (event: string | number, param: any) => {
-    if (listeners[event])
-      listeners[event].forEach((callback: (arg0: any) => any) =>
-        callback(param),
-      );
+    if (listeners[event]) listeners[event].forEach((callback: (arg0: any) => any) => callback(param));
   };
 }
 interface DateList {
@@ -148,10 +145,7 @@ function WSS(this: any, server: http.Server) {
         'Sec-WebSocket-Accept: ' +
           crypto
             .createHash('sha1')
-            .update(
-              req.headers['sec-websocket-key'] +
-                '258EAFA5-E914-47DA-95CA-C5AB0DC85B11',
-            )
+            .update(req.headers['sec-websocket-key'] + '258EAFA5-E914-47DA-95CA-C5AB0DC85B11')
             .digest('base64'),
       ].join('\n') + '\n\n',
     );
@@ -199,10 +193,7 @@ function WSS(this: any, server: http.Server) {
             f: (d: Uint8Array) => {
               // consume `meta.len` bytes
 
-              messageData = Buffer.concat([
-                messageData,
-                iMask(d, meta.maskKey),
-              ]); // message += inverse masked data
+              messageData = Buffer.concat([messageData, iMask(d, meta.maskKey)]); // message += inverse masked data
               frameEnd = true; // set true to start processing a new frame when next `data` comes
               if (meta.fin) {
                 // sometimes you get fragments, before `fin(al)` is true, the message is not completely processed.

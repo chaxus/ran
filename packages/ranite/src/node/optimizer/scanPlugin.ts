@@ -9,17 +9,14 @@ export function scanPlugin(deps: Set<string>): Plugin {
     name: 'esbuild:scan-deps',
     setup(build) {
       // 忽略的文件类型
-      build.onResolve(
-        { filter: new RegExp(`\\.(${EXTERNAL_TYPES.join('|')})$`) },
-        (resolveInfo) => {
-          return {
-            // 模块路径
-            path: resolveInfo.path,
-            // 不让esbuild去处理
-            external: true,
-          };
-        },
-      );
+      build.onResolve({ filter: new RegExp(`\\.(${EXTERNAL_TYPES.join('|')})$`) }, (resolveInfo) => {
+        return {
+          // 模块路径
+          path: resolveInfo.path,
+          // 不让esbuild去处理
+          external: true,
+        };
+      });
       // 记录依赖
       build.onResolve(
         {

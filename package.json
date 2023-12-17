@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Monorepo",
   "type": "module",
+  "engines": {
+    "node": ">=12.20.0"
+  },
   "scripts": {
     "pre": "sh ./bin/preinstall.sh",
     "preinstall": "npx only-allow pnpm",

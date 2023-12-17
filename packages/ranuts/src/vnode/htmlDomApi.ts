@@ -6,15 +6,8 @@ export interface Fragment extends DocumentFragment {
 
 export interface DOMAPI {
   // 创建元素节点
-  createElement: (
-    tagName: any,
-    options?: ElementCreationOptions,
-  ) => HTMLElement;
-  createElementNS: (
-    namespaceURI: string,
-    qualifiedName: string,
-    options?: ElementCreationOptions,
-  ) => Element;
+  createElement: (tagName: any, options?: ElementCreationOptions) => HTMLElement;
+  createElementNS: (namespaceURI: string, qualifiedName: string, options?: ElementCreationOptions) => Element;
   /**
    * @experimental
    * @todo Make it required when the fragment is considered stable.
@@ -25,11 +18,7 @@ export interface DOMAPI {
   // 创建注释节点
   createComment: (text: string) => Comment;
   // 在指定的已有子节点之前插入新的子节点。
-  insertBefore: (
-    parentNode: Node,
-    newNode: Node,
-    referenceNode: Node | null,
-  ) => void;
+  insertBefore: (parentNode: Node, newNode: Node, referenceNode: Node | null) => void;
   // 删除子节点
   removeChild: (node: Node, child: Node) => void;
   // 添加子节点
@@ -57,18 +46,11 @@ export interface DOMAPI {
   isDocumentFragment?: (node: Node) => node is DocumentFragment;
 }
 
-function createElement(
-  tagName: any,
-  options?: ElementCreationOptions,
-): HTMLElement {
+function createElement(tagName: any, options?: ElementCreationOptions): HTMLElement {
   return document.createElement(tagName, options);
 }
 
-function createElementNS(
-  namespaceURI: string,
-  qualifiedName: string,
-  options?: ElementCreationOptions,
-): Element {
+function createElementNS(namespaceURI: string, qualifiedName: string, options?: ElementCreationOptions): Element {
   return document.createElementNS(namespaceURI, qualifiedName, options);
 }
 
@@ -84,11 +66,7 @@ function createComment(text: string): Comment {
   return document.createComment(text);
 }
 
-function insertBefore(
-  parentNode: Node,
-  newNode: Node,
-  referenceNode: Node | null,
-): void {
+function insertBefore(parentNode: Node, newNode: Node, referenceNode: Node | null): void {
   if (isDocumentFragment(parentNode)) {
     let node: Node | null = parentNode;
     while (node && isDocumentFragment(node)) {
@@ -170,10 +148,7 @@ function isDocumentFragment(node: Node): node is DocumentFragment {
   return node.nodeType === 11;
 }
 
-function parseFragment(
-  fragmentNode: DocumentFragment,
-  parentNode?: Node | null,
-): Fragment {
+function parseFragment(fragmentNode: DocumentFragment, parentNode?: Node | null): Fragment {
   const fragment = fragmentNode as Fragment;
   fragment.parent ??= parentNode ?? null;
   fragment.firstChildNode ??= fragmentNode.firstChild;

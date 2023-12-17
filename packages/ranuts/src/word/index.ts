@@ -1,9 +1,4 @@
-import init, {
-  TokenizeMode,
-  addWord,
-  cut,
-  tokenize,
-} from '../../assets/wasm/word/wasmjieba-web';
+import init, { TokenizeMode, addWord, cut, tokenize } from '../../assets/wasm/word/wasmjieba-web';
 import type { InitOutput } from '../../assets/wasm/word/wasmjieba-web';
 
 interface TokenWord {

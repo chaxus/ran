@@ -44,10 +44,7 @@ const newSvg = (parentSelector: string, width: string, height: string) => {
       "' selector did not match any elements.  Please prefix with '#' to select by id or '.' to select by class"
     );
   }
-  return selectedShape
-    .append('svg')
-    .attr('width', width)
-    .attr('height', height);
+  return selectedShape.append('svg').attr('width', width).attr('height', height);
 };
 
 /**
@@ -74,11 +71,7 @@ export const renderPptx = (options: Options): Promise<any> | undefined => {
             wrapper.appendChild(div);
             break;
           case 'pptx-thumb':
-            if (thumbElement)
-              thumbElement?.setAttribute(
-                'src',
-                `data:image/jpeg;base64,${msg.data}`,
-              );
+            if (thumbElement) thumbElement?.setAttribute('src', `data:image/jpeg;base64,${msg.data}`);
             break;
           case 'slideSize':
             break;
@@ -126,12 +119,7 @@ export const renderPptx = (options: Options): Promise<any> | undefined => {
             .map((s) => (s as HTMLElement).offsetWidth),
         );
         const wrapperWidth = (wrapper.children[0] as HTMLElement).offsetWidth;
-        wrapper.setAttribute(
-          'style',
-          `transform: scale(${
-            wrapperWidth / slidesWidth
-          }),transform-origin': 'top left'`,
-        );
+        wrapper.setAttribute('style', `transform: scale(${wrapperWidth / slidesWidth}),transform-origin': 'top left'`);
       };
       resize();
       window.addEventListener('resize', resize);
@@ -174,16 +162,10 @@ export const renderPptx = (options: Options): Promise<any> | undefined => {
 
     switch (chartType) {
       case 'lineChart': {
-        const {
-          data: data_,
-          xLabels,
-          groupLabels,
-        } = convertChartData(chartData);
+        const { data: data_, xLabels, groupLabels } = convertChartData(chartData);
         data = data_;
         const container = document.getElementById(chartID) || document.body;
-        const svg =
-          container &&
-          newSvg(`#${chartID}`, container.style.width, container.style.height);
+        const svg = container && newSvg(`#${chartID}`, container.style.width, container.style.height);
 
         const myChart = new dimple.chart(svg, data);
         const xAxis = myChart.addCategoryAxis('x', 'name');
@@ -199,18 +181,10 @@ export const renderPptx = (options: Options): Promise<any> | undefined => {
         break;
       }
       case 'barChart': {
-        const {
-          data: data_,
-          xLabels,
-          groupLabels,
-        } = convertChartData(chartData);
+        const { data: data_, xLabels, groupLabels } = convertChartData(chartData);
         data = data_;
         const container = document.getElementById(chartID) || document.body;
-        const svg = newSvg(
-          '#' + chartID,
-          container.style.width,
-          container.style.height,
-        );
+        const svg = newSvg('#' + chartID, container.style.width, container.style.height);
 
         const myChart = new dimple.chart(svg, data);
         const xAxis = myChart.addCategoryAxis('x', ['name', 'group']);
@@ -232,11 +206,7 @@ export const renderPptx = (options: Options): Promise<any> | undefined => {
         const { data: data_, groupLabels } = convertChartData(chartData);
         data = data_;
         const container = document.getElementById(chartID) || document.body;
-        const svg = newSvg(
-          `#${chartID}`,
-          container.style.width,
-          container.style.height,
-        );
+        const svg = newSvg(`#${chartID}`, container.style.width, container.style.height);
 
         const myChart = new dimple.chart(svg, data);
         const pieAxis = myChart.addMeasureAxis('p', 'value');
@@ -247,18 +217,10 @@ export const renderPptx = (options: Options): Promise<any> | undefined => {
         break;
       }
       case 'areaChart': {
-        const {
-          data: data_,
-          xLabels,
-          groupLabels,
-        } = convertChartData(chartData);
+        const { data: data_, xLabels, groupLabels } = convertChartData(chartData);
         data = data_;
         const container = document.getElementById(chartID) || document.body;
-        const svg = newSvg(
-          '#' + chartID,
-          container.style.width,
-          container.style.height,
-        );
+        const svg = newSvg('#' + chartID, container.style.width, container.style.height);
 
         const myChart = new dimple.chart(svg, data);
         const xAxis = myChart.addCategoryAxis('x', 'name');
@@ -309,10 +271,7 @@ export const renderPptx = (options: Options): Promise<any> | undefined => {
     const paragraphsArray = Array.from(elem);
     for (let i = 0; i < paragraphsArray.length; i++) {
       // innerHTML
-      const buSpan = findElementClass(
-        paragraphsArray[i],
-        'numeric-bullet-style',
-      );
+      const buSpan = findElementClass(paragraphsArray[i], 'numeric-bullet-style');
       if (buSpan.length > 0) {
         // console.log("DIV-"+i+":");
         let prevBultTyp: string | null = '';
@@ -338,30 +297,21 @@ export const renderPptx = (options: Options): Promise<any> | undefined => {
               buletIndex++;
               tmpArry[tmpArryIndx] = buletIndex;
               buletTypSrry[tmpArryIndx] = bulletType;
-            } else if (
-              bulletType !== prevBultTyp &&
-              bulletLvl === prevBultLvl
-            ) {
+            } else if (bulletType !== prevBultTyp && bulletLvl === prevBultLvl) {
               prevBultTyp = bulletType;
               prevBultLvl = bulletLvl;
               tmpArryIndx++;
               tmpArry[tmpArryIndx] = buletIndex;
               buletTypSrry[tmpArryIndx] = bulletType;
               buletIndex = 1;
-            } else if (
-              bulletType !== prevBultTyp &&
-              Number(bulletLvl) > Number(prevBultLvl)
-            ) {
+            } else if (bulletType !== prevBultTyp && Number(bulletLvl) > Number(prevBultLvl)) {
               prevBultTyp = bulletType;
               prevBultLvl = bulletLvl;
               tmpArryIndx++;
               tmpArry[tmpArryIndx] = buletIndex;
               buletTypSrry[tmpArryIndx] = bulletType;
               buletIndex = 1;
-            } else if (
-              bulletType !== prevBultTyp &&
-              Number(bulletLvl) < Number(prevBultLvl)
-            ) {
+            } else if (bulletType !== prevBultTyp && Number(bulletLvl) < Number(prevBultLvl)) {
               prevBultTyp = bulletType;
               prevBultLvl = bulletLvl;
               tmpArryIndx--;
@@ -503,21 +453,16 @@ export const renderPptx = (options: Options): Promise<any> | undefined => {
     };
   }
 
-  function alphaNumeric(
-    num: number | string,
-    upperLower: 'upperCase' | 'lowerCase',
-  ) {
+  function alphaNumeric(num: number | string, upperLower: 'upperCase' | 'lowerCase') {
     num = Number(num) - 1;
     let aNum = '';
     if (upperLower === 'upperCase') {
       aNum = (
-        (num / 26 >= 1 ? String.fromCharCode(num / 26 + 64) : '') +
-        String.fromCharCode((num % 26) + 65)
+        (num / 26 >= 1 ? String.fromCharCode(num / 26 + 64) : '') + String.fromCharCode((num % 26) + 65)
       ).toUpperCase();
     } else if (upperLower === 'lowerCase') {
       aNum = (
-        (num / 26 >= 1 ? String.fromCharCode(num / 26 + 64) : '') +
-        String.fromCharCode((num % 26) + 65)
+        (num / 26 >= 1 ? String.fromCharCode(num / 26 + 64) : '') + String.fromCharCode((num % 26) + 65)
       ).toLowerCase();
     }
     return aNum;

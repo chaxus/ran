@@ -16,10 +16,7 @@ export const isDisabled = (element: Element): boolean => {
  * @param {Element} parent
  * @param {string} deleteClass
  */
-export const removeClassToElementChild = (
-  parent: Element,
-  deleteClass: string,
-): void => {
+export const removeClassToElementChild = (parent: Element, deleteClass: string): void => {
   const pre = parent.querySelectorAll(`.${deleteClass}`);
   if (pre.length > 0) {
     pre.forEach((item) => item.classList.remove(deleteClass));

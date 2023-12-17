@@ -67,10 +67,7 @@ const plotClass = async (
     // find smallest class
     let maxLength: undefined | number = undefined;
     Object.keys(allSeries).forEach((series) => {
-      if (
-        maxLength === undefined ||
-        (series.length < maxLength && series.length >= 100)
-      ) {
+      if (maxLength === undefined || (series.length < maxLength && series.length >= 100)) {
         maxLength = series.length;
       }
     });
@@ -173,29 +170,19 @@ class MultiModel {
     const featureTensor = tf.tensor2d(featureValue);
     // Labels (outputs) 对标签做同样的操作
     const labelValue = this.points.map((p) => getClassIndex(p.class));
-    const labelTensor = tf.tidy(() =>
-      tf.oneHot(tf.tensor1d(labelValue, 'int32'), 3),
-    );
+    const labelTensor = tf.tidy(() => tf.oneHot(tf.tensor1d(labelValue, 'int32'), 3));
     // 标准化标签和特征
     this.normaliseFeature = normalise(featureTensor);
     this.normaliseLabel = normalise(labelTensor);
     featureTensor.dispose();
-    console.log(
-      `load data success, normaliseFeature:${this.normaliseFeature}, normaliseLabel:${this.normaliseLabel}`,
-    );
+    console.log(`load data success, normaliseFeature:${this.normaliseFeature}, normaliseLabel:${this.normaliseLabel}`);
   };
   train = async (): Promise<void> => {
     if (!this.normaliseFeature || !this.normaliseLabel) return;
     // 分割测试集和训练集
-    const [trainingFeatureTensor, testingFeatureTensor] = tf.split(
-      this.normaliseFeature.tensor,
-      2,
-    );
+    const [trainingFeatureTensor, testingFeatureTensor] = tf.split(this.normaliseFeature.tensor, 2);
     this.testingFeatureTensor = testingFeatureTensor;
-    const [trainingLabelTensor, testingLabelTensor] = tf.split(
-      this.normaliseLabel.tensor,
-      2,
-    );
+    const [trainingLabelTensor, testingLabelTensor] = tf.split(this.normaliseLabel.tensor, 2);
     this.testingLabelTensor = testingLabelTensor;
     // 创建模型
     this.model = createModel();
@@ -212,26 +199,16 @@ class MultiModel {
       tfvis.show.layer({ name: 'Layer 1' }, layer);
     };
     // 训练模型
-    const result = await trainModel(
-      this.model,
-      trainingFeatureTensor,
-      trainingLabelTensor,
-      onEpochBegin,
-    );
+    const result = await trainModel(this.model, trainingFeatureTensor, trainingLabelTensor, onEpochBegin);
 
     const trainLoss = result.history.loss.pop();
     const validationLoss = result.history.val_loss.pop();
-    console.log(
-      `train success trainLoss:${trainLoss}, validationLoss:${validationLoss}`,
-    );
+    console.log(`train success trainLoss:${trainLoss}, validationLoss:${validationLoss}`);
   };
   test = async (): Promise<void> => {
     if (!this.testingFeatureTensor || !this.testingLabelTensor) return;
     // 判断损失函数
-    const lossTensor = this.model?.evaluate(
-      this.testingFeatureTensor,
-      this.testingLabelTensor,
-    );
+    const lossTensor = this.model?.evaluate(this.testingFeatureTensor, this.testingLabelTensor);
     const loss = Array.isArray(lossTensor)
       ? lossTensor.map(async (item) => await item.dataSync())
       : await lossTensor?.dataSync();
@@ -239,14 +216,9 @@ class MultiModel {
   };
   save = async (storageID: string = 'kc-house-price-multi'): Promise<void> => {
     const saveResults = await this.model?.save(`localstorage://${storageID}`);
-    console.log(
-      'save model success, current time is:',
-      saveResults?.modelArtifactsInfo.dateSaved,
-    );
+    console.log('save model success, current time is:', saveResults?.modelArtifactsInfo.dateSaved);
   };
-  loadModel = async (
-    storageID: string = 'kc-house-price-multi',
-  ): Promise<void> => {
+  loadModel = async (storageID: string = 'kc-house-price-multi'): Promise<void> => {
     const storageKey = `localstorage://${storageID}`;
     const models = await tf.io.listModels();
     const modelInfo = models[storageKey];
@@ -268,20 +240,12 @@ class MultiModel {
     tf.tidy(() => {
       if (!this.normaliseLabel || !this.normaliseFeature) return;
       const inputTensor = tf.tensor2d([[square, price]]);
-      const normaliseInput = normalise(
-        inputTensor,
-        this.normaliseFeature?.min,
-        this.normaliseLabel?.max,
-      );
+      const normaliseInput = normalise(inputTensor, this.normaliseFeature?.min, this.normaliseLabel?.max);
       const normaliseOutputTensor = this.model?.predict(normaliseInput.tensor);
       const outputTensor =
         normaliseOutputTensor &&
         !Array.isArray(normaliseOutputTensor) &&
-        denormalise(
-          normaliseOutputTensor,
-          this.normaliseLabel.min,
-          this.normaliseFeature.max,
-        );
+        denormalise(normaliseOutputTensor, this.normaliseLabel.min, this.normaliseFeature.max);
       const outputValue = outputTensor && outputTensor.dataSync();
       console.log('predict success, the result: ', outputValue);
     });
@@ -297,19 +261,13 @@ class MultiModel {
           const y = (gridSize - rowIndex) / gridSize;
           colInputs.push([x, y]);
         }
-        const colPredictions = this.model.predict(
-          tf.tensor2d(colInputs),
-        ) as tf.Tensor<tf.Rank>;
+        const colPredictions = this.model.predict(tf.tensor2d(colInputs)) as tf.Tensor<tf.Rank>;
         predictionColumns.push(colPredictions);
       }
       const valuesTensor = tf.stack(predictionColumns);
       const normalisedTickTensor = tf.linspace(0, 1, gridSize);
-      const [xF, yF] = Array.isArray(this.normaliseFeature.max)
-        ? this.normaliseFeature.max
-        : [];
-      const [xM, yM] = Array.isArray(this.normaliseFeature.min)
-        ? this.normaliseFeature.min
-        : [];
+      const [xF, yF] = Array.isArray(this.normaliseFeature.max) ? this.normaliseFeature.max : [];
+      const [xM, yM] = Array.isArray(this.normaliseFeature.min) ? this.normaliseFeature.min : [];
       const xTicksTensor = denormalise(normalisedTickTensor, xF, xM);
       const yTicksTensor = denormalise(normalisedTickTensor.reverse(), yF, yM);
       return [valuesTensor, xTicksTensor, yTicksTensor];
@@ -317,12 +275,8 @@ class MultiModel {
     const values = await valuesPromise.arraySync();
     const xTicks = (await xTicksTensor.arraySync()) as number[];
     const yTicks = (await yTicksTensor.arraySync()) as number[];
-    const xTicksLabel = Array.isArray(xTicks)
-      ? xTicks.map((v: number) => (v / 1000).toFixed(1) + 'k sqft')
-      : [];
-    const yTicksLabel = Array.isArray(yTicks)
-      ? yTicks.map((v: number) => `$${(v / 1000).toFixed(0)}k`)
-      : [];
+    const xTicksLabel = Array.isArray(xTicks) ? xTicks.map((v: number) => (v / 1000).toFixed(1) + 'k sqft') : [];
+    const yTicksLabel = Array.isArray(yTicks) ? yTicks.map((v: number) => `$${(v / 1000).toFixed(0)}k`) : [];
 
     tf.unstack(values, 2).forEach((values: tf.Tensor2D, i) => {
       const data = {
@@ -360,13 +314,8 @@ class MultiModel {
    * @param {TensorLike2D} bias
    * @return {*}
    */
-  plotParams = async (
-    weight: TensorLike2D,
-    bias: TensorLike2D,
-  ): Promise<void> => {
-    this.model
-      .getLayer(null, 0)
-      .setWeights([tf.tensor2d(weight), tf.tensor2d(bias)]);
+  plotParams = async (weight: TensorLike2D, bias: TensorLike2D): Promise<void> => {
+    this.model.getLayer(null, 0).setWeights([tf.tensor2d(weight), tf.tensor2d(bias)]);
     // 更新 layer
     const layer = this.model.getLayer('', 0);
     tfvis.show.layer({ name: 'Layer 1' }, layer);
@@ -376,22 +325,17 @@ class MultiModel {
   };
 }
 
-const { loadData, train, test, save, loadModel, predict, openTfvis } =
-  new MultiModel();
+const { loadData, train, test, save, loadModel, predict, openTfvis } = new MultiModel();
 
 export const Multi = (): JSX.Element => {
   const [square, setSquare] = useState('');
   const [price, setPrice] = useState('');
 
   const memory = tfMemory();
-  const changeSquare = (e: {
-    target: { value: React.SetStateAction<string> };
-  }) => {
+  const changeSquare = (e: { target: { value: React.SetStateAction<string> } }) => {
     setSquare(e.target.value);
   };
-  const changePrice = (e: {
-    target: { value: React.SetStateAction<string> };
-  }) => {
+  const changePrice = (e: { target: { value: React.SetStateAction<string> } }) => {
     setPrice(e.target.value);
   };
   const predictOut = () => {
@@ -420,18 +364,8 @@ export const Multi = (): JSX.Element => {
       <h2>加载模型</h2>
       <button onClick={() => loadModel()}>loadModel</button>
       <h2>预测</h2>
-      <Input
-        label="Square feet of living space"
-        onChange={changeSquare}
-        placeholder="2000"
-        value="2000"
-      />
-      <Input
-        label="House price"
-        onChange={changePrice}
-        placeholder="1000000"
-        value="1000000"
-      />
+      <Input label="Square feet of living space" onChange={changeSquare} placeholder="2000" value="2000" />
+      <Input label="House price" onChange={changePrice} placeholder="1000000" value="1000000" />
       <button onClick={predictOut}>input number to predict result</button>
       <h2>打开tfvis视图</h2>
       <button onClick={openTfvis}>openTfvis</button>

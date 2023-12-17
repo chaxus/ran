@@ -12,10 +12,7 @@ type WalkOperate = (node: Node, parent?: Node, prop?: string) => void;
  * @param {object} param2
  * @return {*}
  */
-export function walk(
-  ast: Statement,
-  { enter, leave }: { enter: WalkOperate; leave: WalkOperate },
-): void {
+export function walk(ast: Statement, { enter, leave }: { enter: WalkOperate; leave: WalkOperate }): void {
   shouldAbort = false;
   visit(ast, undefined, enter, leave);
 }
@@ -33,13 +30,7 @@ function isArray(thing: any) {
   return toString.call(thing) === '[object Array]';
 }
 
-function visit(
-  node: Node,
-  parent: Node | undefined,
-  enter: WalkOperate,
-  leave: WalkOperate,
-  prop?: string,
-) {
+function visit(node: Node, parent: Node | undefined, enter: WalkOperate, leave: WalkOperate, prop?: string) {
   if (!node || shouldAbort) return;
 
   if (enter) {
@@ -50,9 +41,7 @@ function visit(
 
   const keys =
     childKeys[node.type] ||
-    (childKeys[node.type] = Object.keys(node).filter(
-      (key) => typeof node[key as keyof Node] === 'object',
-    ));
+    (childKeys[node.type] = Object.keys(node).filter((key) => typeof node[key as keyof Node] === 'object'));
 
   let key, value: any;
 

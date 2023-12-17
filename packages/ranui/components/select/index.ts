@@ -1,9 +1,4 @@
-import {
-  addClassToElement,
-  generateThrottle,
-  isMobile,
-  removeClassToElement,
-} from 'ranuts';
+import { addClassToElement, generateThrottle, isMobile, removeClassToElement } from 'ranuts';
 import { createCustomError, isDisabled } from '@/utils/index';
 import '@/components/option';
 import '@/components/icon';
@@ -180,9 +175,7 @@ export class Select extends HTMLElement {
         sheet.insertRule(this.sheet);
         this._shadowDom.adoptedStyleSheets = [sheet];
       } catch (error) {
-        console.error(
-          `Failed to parse the rule in CSSStyleSheet: ${this.sheet}`,
-        );
+        console.error(`Failed to parse the rule in CSSStyleSheet: ${this.sheet}`);
       }
     }
   }
@@ -192,21 +185,12 @@ export class Select extends HTMLElement {
    */
   setSelectDropdownDisplayNone = (): void => {
     if (this._selectDropDownOutTimeId) return;
-    if (
-      this._selectionDropdown &&
-      this._selectionDropdown.style.display !== 'none'
-    ) {
-      addClassToElement(
-        this._selectionDropdown,
-        placementDirection[this.placement].remove,
-      );
+    if (this._selectionDropdown && this._selectionDropdown.style.display !== 'none') {
+      addClassToElement(this._selectionDropdown, placementDirection[this.placement].remove);
       this._selectDropDownOutTimeId = setTimeout(() => {
         this._selectionDropdown?.style.setProperty('display', 'none');
         this._selectionDropdown &&
-          removeClassToElement(
-            this._selectionDropdown,
-            placementDirection[this.placement].remove,
-          );
+          removeClassToElement(this._selectionDropdown, placementDirection[this.placement].remove);
         clearTimeout(this._selectDropDownOutTimeId);
         this._selectDropDownOutTimeId = undefined;
       }, 300);
@@ -218,21 +202,12 @@ export class Select extends HTMLElement {
    */
   setSelectDropdownDisplayBlock = (): void => {
     if (this._selectDropDownInTimeId) return;
-    if (
-      this._selectionDropdown &&
-      this._selectionDropdown.style.display !== 'block'
-    ) {
-      addClassToElement(
-        this._selectionDropdown,
-        placementDirection[this.placement].add,
-      );
+    if (this._selectionDropdown && this._selectionDropdown.style.display !== 'block') {
+      addClassToElement(this._selectionDropdown, placementDirection[this.placement].add);
       this._selectionDropdown?.style.setProperty('display', 'block');
       this._selectDropDownInTimeId = setTimeout(() => {
         this._selectionDropdown &&
-          removeClassToElement(
-            this._selectionDropdown,
-            placementDirection[this.placement].add,
-          );
+          removeClassToElement(this._selectionDropdown, placementDirection[this.placement].add);
         clearTimeout(this._selectDropDownInTimeId);
         this._selectDropDownInTimeId = undefined;
       }, 200);
@@ -242,14 +217,8 @@ export class Select extends HTMLElement {
     if (!this._selectionDropdown || !this._selectDropdown) return;
     const rect = this.getBoundingClientRect();
     const { top, left, bottom, width, height, x, y, right } = rect;
-    this._selectionDropdown.style.setProperty(
-      '-ran-x',
-      `${x + window.scrollX}`,
-    );
-    this._selectionDropdown.style.setProperty(
-      '-ran-y',
-      `${y + window.scrollY}`,
-    );
+    this._selectionDropdown.style.setProperty('-ran-x', `${x + window.scrollX}`);
+    this._selectionDropdown.style.setProperty('-ran-y', `${y + window.scrollY}`);
     let selectTop = bottom + window.scrollY;
     let selectLeft = left + window.scrollX;
     this._selectionDropdown.style.setProperty('width', `${width}px`);
@@ -257,17 +226,11 @@ export class Select extends HTMLElement {
     if (this.placement === 'top') {
       selectTop = top + window.scrollY - this._selectionDropdown.clientHeight;
       if (this.getPopupContainerId && root) {
-        selectTop =
-          top -
-          root.getBoundingClientRect().top -
-          this._selectionDropdown.clientHeight;
+        selectTop = top - root.getBoundingClientRect().top - this._selectionDropdown.clientHeight;
         selectLeft = left - root.getBoundingClientRect().left;
       }
     }
-    this._selectionDropdown.style.setProperty(
-      'inset',
-      `${selectTop}px auto auto ${selectLeft}px`,
-    );
+    this._selectionDropdown.style.setProperty('inset', `${selectTop}px auto auto ${selectLeft}px`);
   };
   /**
    * @description: 设置下拉框
@@ -310,10 +273,7 @@ export class Select extends HTMLElement {
     if (element.classList?.contains('ranui-select-dropdown-option-item')) {
       element = element.children[0];
     }
-    if (
-      !element.classList?.contains('ranui-select-dropdown-option-item-content')
-    )
-      return;
+    if (!element.classList?.contains('ranui-select-dropdown-option-item-content')) return;
     const label = element.innerHTML;
     const value = this._optionLabelMapValue.get(label);
     if (value) {
@@ -326,18 +286,12 @@ export class Select extends HTMLElement {
     const { height } = rect;
     this._text.style.setProperty('line-height', `${height}px`);
     if (this._activeOption) {
-      removeClassToElement(
-        this._activeOption,
-        'ranui-select-dropdown-option-active',
-      );
+      removeClassToElement(this._activeOption, 'ranui-select-dropdown-option-active');
     }
     setTimeout(() => {
       this._activeOption = element?.parentElement || undefined;
       if (this._activeOption) {
-        addClassToElement(
-          this._activeOption,
-          'ranui-select-dropdown-option-active',
-        );
+        addClassToElement(this._activeOption, 'ranui-select-dropdown-option-active');
       }
     }, 200);
     this.setSelectDropdownDisplayNone();
@@ -351,35 +305,22 @@ export class Select extends HTMLElement {
    */
   createOption = (): void => {
     if (!this._selectDropdown) {
-      const container =
-        document.getElementById(this.getPopupContainerId) || document.body;
+      const container = document.getElementById(this.getPopupContainerId) || document.body;
       this._selectDropdown = document.createElement('div');
-      this._selectDropdown.style.setProperty(
-        '-webkit-tap-highlight-color',
-        'transparent',
-      );
+      this._selectDropdown.style.setProperty('-webkit-tap-highlight-color', 'transparent');
       this._selectDropdown.style.setProperty('outline', '0');
       this._selectDropdown.addEventListener('click', this.clickOption);
       this._selectionDropdown = document.createElement('div');
-      this._selectionDropdown.style.setProperty(
-        '-webkit-tap-highlight-color',
-        'transparent',
-      );
+      this._selectionDropdown.style.setProperty('-webkit-tap-highlight-color', 'transparent');
       this._selectionDropdown.style.setProperty('outline', '0');
       if (this.dropdownclass) {
-        this._selectionDropdown.setAttribute(
-          'class',
-          `${this.dropdownclass} ranui-select-dropdown`,
-        );
+        this._selectionDropdown.setAttribute('class', `${this.dropdownclass} ranui-select-dropdown`);
       } else {
         this._selectionDropdown.setAttribute('class', 'ranui-select-dropdown');
       }
       if (this.action.includes('hover') && !isMobile()) {
         this._selectDropdown.addEventListener('mouseleave', this.selectBlur);
-        this._selectDropdown.addEventListener(
-          'mouseenter',
-          this.removeDropDownTimeId,
-        );
+        this._selectDropdown.addEventListener('mouseenter', this.removeDropDownTimeId);
       }
       this._selectDropdown.appendChild(this._selectionDropdown);
       this._selectionDropdown.style.setProperty('display', 'none');
@@ -393,8 +334,7 @@ export class Select extends HTMLElement {
   removeSelectDropdown = (): void => {
     try {
       if (this._selectDropdown) {
-        const container =
-          document.getElementById(this.getPopupContainerId) || document.body;
+        const container = document.getElementById(this.getPopupContainerId) || document.body;
         container.removeChild(this._selectDropdown);
       }
     } catch (error) {}
@@ -431,8 +371,7 @@ export class Select extends HTMLElement {
       if (this._selectionDropdown) {
         const { label, value } = item;
         const selectOptionItem = document.createElement('div');
-        const defaultValue =
-          this.getAttribute('defaultValue') || this.getAttribute('value');
+        const defaultValue = this.getAttribute('defaultValue') || this.getAttribute('value');
         if (defaultValue === value) {
           selectOptionItem.setAttribute(
             'class',
@@ -440,16 +379,10 @@ export class Select extends HTMLElement {
           );
           this._activeOption = selectOptionItem;
         } else {
-          selectOptionItem.setAttribute(
-            'class',
-            'ranui-select-dropdown-option-item',
-          );
+          selectOptionItem.setAttribute('class', 'ranui-select-dropdown-option-item');
         }
         const selectOptionItemContent = document.createElement('div');
-        selectOptionItemContent.setAttribute(
-          'class',
-          'ranui-select-dropdown-option-item-content',
-        );
+        selectOptionItemContent.setAttribute('class', 'ranui-select-dropdown-option-item-content');
         selectOptionItemContent.innerHTML = `${label}`;
         selectOptionItemContent.setAttribute('value', `${value}`);
         selectOptionItemContent.setAttribute('title', `${label}`);
@@ -460,8 +393,7 @@ export class Select extends HTMLElement {
     this.setDefaultValue();
   };
   setDefaultValue = (): void => {
-    const defaultValue =
-      this.getAttribute('defaultValue') || this.getAttribute('value');
+    const defaultValue = this.getAttribute('defaultValue') || this.getAttribute('value');
     if (!defaultValue) return;
     const label = this._optionValueMapLabel.get(defaultValue);
     if (!label) return;
@@ -542,11 +474,7 @@ export class Select extends HTMLElement {
     this._selectDropdown?.removeEventListener('click', this.clickOption);
     this.removeListenSlotChange();
   }
-  attributeChangedCallback(
-    name: string,
-    oldValue: string,
-    newValue: string,
-  ): void {
+  attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     if (name === 'disabled' && this._select) {
       if (!newValue || newValue === 'false') {
         this._select.setAttribute('disabled', '');

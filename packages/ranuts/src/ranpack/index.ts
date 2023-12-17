@@ -47,11 +47,7 @@ interface WriteFileInfo {
  * @param {BufferEncoding} format
  * @return {*}
  */
-export const writeFile = (
-  path: string,
-  content: string,
-  format: BufferEncoding = 'utf-8',
-): Promise<WriteFileInfo> =>
+export const writeFile = (path: string, content: string, format: BufferEncoding = 'utf-8'): Promise<WriteFileInfo> =>
   new Promise((resolve, reject) => {
     fs.writeFile(
       path,
@@ -83,10 +79,7 @@ export function build(options: Options): Promise<Build> {
       if (!existsSync(dirname(output))) {
         await createDir(output);
       }
-      return Promise.all([
-        writeFile(output, code),
-        writeFile(output + '.map', map.toString()),
-      ]);
+      return Promise.all([writeFile(output, code), writeFile(output + '.map', map.toString())]);
     } catch (error) {
       console.warn('write bundle error', error);
     }

@@ -45,12 +45,8 @@ function CustomElement() {
         this._slot = document.createElement('slot');
         this._wrap.appendChild(this._slot);
         this._content.appendChild(this._wrap);
-        this._header.appendChild(
-          createDocumentFragment([this._nav, this._line]),
-        );
-        this._container.appendChild(
-          createDocumentFragment([this._header, this._content]),
-        );
+        this._header.appendChild(createDocumentFragment([this._nav, this._line]));
+        this._container.appendChild(createDocumentFragment([this._header, this._content]));
         this.tabHeaderKeyMapIndex = {};
 
         const shadowRoot = this.attachShadow({ mode: 'closed' });
@@ -106,9 +102,7 @@ function CustomElement() {
       initTabHeaderKeyMapIndex = (key: string, index: number) => {
         const value = this.tabHeaderKeyMapIndex[key];
         if (value) {
-          throw new Error(
-            'tab 组件的 key 值存在重复, 或者某个 tab 组件缺少 key 属性',
-          );
+          throw new Error('tab 组件的 key 值存在重复, 或者某个 tab 组件缺少 key 属性');
         } else {
           this.tabHeaderKeyMapIndex[key] = index;
         }
@@ -184,10 +178,7 @@ function CustomElement() {
             distance += width;
           }
           // 设置移动的距离
-          this._line.style.setProperty(
-            'transform',
-            `translateX(${distance}px)`,
-          );
+          this._line.style.setProperty('transform', `translateX(${distance}px)`);
         }
       };
       /**
@@ -196,10 +187,7 @@ function CustomElement() {
       setTabContent = (key: string) => {
         if (key) {
           const index = this.tabHeaderKeyMapIndex[key];
-          this._wrap.style.setProperty(
-            'transform',
-            `translateX(${index * -100}%)`,
-          );
+          this._wrap.style.setProperty('transform', `translateX(${index * -100}%)`);
         }
       };
       /**
@@ -228,11 +216,7 @@ function CustomElement() {
        * @param {string} key
        * @param {string} value
        */
-      updateAttribute = (
-        key: string,
-        attribute: string,
-        value: string | null = '',
-      ) => {
+      updateAttribute = (key: string, attribute: string, value: string | null = '') => {
         const index = this.tabHeaderKeyMapIndex[key];
         if (key && value && this._nav.children[index]) {
           this._nav.children[index]?.setAttribute(attribute, value);
@@ -249,9 +233,7 @@ function CustomElement() {
         let initTabHeader: Element | undefined;
         // 如果有active，找到active对应的标签，设置活跃标签
         if (this.active != null) {
-          initTabHeader = initTabList.find(
-            (item) => item.getAttribute('r-key') === this.active,
-          );
+          initTabHeader = initTabList.find((item) => item.getAttribute('r-key') === this.active);
           initTabHeader?.setAttribute('r-key', this.active);
         }
         // 如果没有active，则默认第一个标签为活跃标签
@@ -311,11 +293,7 @@ function CustomElement() {
         this.unloadTab();
       }
 
-      attributeChangedCallback(
-        name: string,
-        oldValue: string,
-        newValue: string,
-      ) {
+      attributeChangedCallback(name: string, oldValue: string, newValue: string) {
         if (oldValue !== newValue) {
           this.dispatchEvent(
             new CustomEvent('change', {

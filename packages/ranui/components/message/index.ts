@@ -77,11 +77,7 @@ function Custom() {
           color && this._icon?.setAttribute('color', color);
         }
       };
-      attributeChangedCallback(
-        name: string,
-        oldValue: string,
-        newValue: string,
-      ) {
+      attributeChangedCallback(name: string, oldValue: string, newValue: string) {
         if (name === 'content' && oldValue !== newValue) {
           this._span.textContent = newValue;
         }

@@ -122,9 +122,7 @@ export const blur = (img: ImgType, radius: number): ImgType => {
   return canvas;
 };
 
-export const getBase64Image = (
-  imageFile: File,
-): Promise<{ base64: string | ArrayBuffer | null }> => {
+export const getBase64Image = (imageFile: File): Promise<{ base64: string | ArrayBuffer | null }> => {
   return new Promise((resolve) => {
     const reader = new FileReader();
     reader.readAsDataURL(imageFile);

@@ -985,9 +985,7 @@ class Command {
   }
   execute() {
     // The call receiver executes against the interface
-    console.log(
-      'Command object -> Receiver -> Corresponding interface execution',
-    );
+    console.log('Command object -> Receiver -> Corresponding interface execution');
     this.receiver.execute();
   }
 }

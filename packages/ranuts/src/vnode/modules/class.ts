@@ -26,10 +26,7 @@ function updateClass(oldVnode: VNode, vnode: VNode): void {
   // 遍历旧VNode的class
   for (name in oldClass) {
     // 如果当前class旧VNode上有但新VNode没有，则删除该VNode
-    if (
-      oldClass[name] &&
-      !Object.prototype.hasOwnProperty.call(className, name)
-    ) {
+    if (oldClass[name] && !Object.prototype.hasOwnProperty.call(className, name)) {
       elm.classList.remove(name);
     }
   }

@@ -61,9 +61,7 @@ const themeCnConfig: DefaultTheme.Config = {
       },
       {
         text: '设计模式',
-        items: [
-          { text: '发布订阅模式', link: '/cn/src/ranuts/mode/subscribe.md' },
-        ],
+        items: [{ text: '发布订阅模式', link: '/cn/src/ranuts/mode/subscribe.md' }],
       },
       {
         text: 'mime type',

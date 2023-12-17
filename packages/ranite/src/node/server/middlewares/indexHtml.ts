@@ -3,9 +3,7 @@ import type { NextHandleFunction } from 'connect';
 import { pathExists, readFile } from 'fs-extra';
 import type { ServerContext } from '../index';
 
-export function indexHtmlMiddleware(
-  serverContext: ServerContext,
-): NextHandleFunction {
+export function indexHtmlMiddleware(serverContext: ServerContext): NextHandleFunction {
   return async (req, res, next) => {
     if (req.url === '/') {
       const { root } = serverContext;

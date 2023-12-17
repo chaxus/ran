@@ -41,10 +41,7 @@ describe('status', function () {
     });
 
     it('should throw for unknown status code', function () {
-      assert.throws(
-        getStatus.bind(null, 299),
-        '[Error: invalid status message: "299"]',
-      );
+      assert.throws(getStatus.bind(null, 299), '[Error: invalid status message: "299"]');
       assert.throws(getStatus.bind(null, 310), /invalid status code/);
     });
 
@@ -73,36 +70,20 @@ describe('status', function () {
     });
 
     it('should throw for unknown status message', function () {
-      assert.throws(
-        getStatus.bind(null, 'too many bugs'),
-        /invalid status message/,
-      );
-      assert.throws(
-        getStatus.bind(null, 'constructor'),
-        /invalid status message/,
-      );
-      assert.throws(
-        getStatus.bind(null, '__proto__'),
-        /invalid status message/,
-      );
+      assert.throws(getStatus.bind(null, 'too many bugs'), /invalid status message/);
+      assert.throws(getStatus.bind(null, 'constructor'), /invalid status message/);
+      assert.throws(getStatus.bind(null, '__proto__'), /invalid status message/);
     });
 
     it('should throw for unknown status code', function () {
-      assert.throws(
-        getStatus.bind(null, '299'),
-        '[Error: invalid status message: "299"]',
-      );
+      assert.throws(getStatus.bind(null, '299'), '[Error: invalid status message: "299"]');
     });
   });
 
   describe('.codes', function () {
     it('should include codes from Node.js', function () {
       Object.keys(http.STATUS_CODES).forEach(function forEachCode(code) {
-        assert.notStrictEqual(
-          status.codes.indexOf(Number(code)),
-          -1,
-          'contains ' + code,
-        );
+        assert.notStrictEqual(status.codes.indexOf(Number(code)), -1, 'contains ' + code);
       });
     });
   });

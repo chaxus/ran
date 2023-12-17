@@ -1,9 +1,7 @@
 import { replaceOld } from './utils';
 import { noop } from '@/utils';
 
-export const handleConsole = (
-  hooks: (...args: unknown[]) => void = noop,
-): void => {
+export const handleConsole = (hooks: (...args: unknown[]) => void = noop): void => {
   const consoleTypeList = ['log', 'info', 'warn', 'error', 'assert'];
   consoleTypeList.forEach((type: string) => {
     const replacement = (originalConsole: any) => {

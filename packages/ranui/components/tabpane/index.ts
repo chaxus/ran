@@ -1,9 +1,5 @@
 interface ExtendParentNode {
-  updateAttribute: (
-    key: string,
-    attribute: string,
-    value?: string | null,
-  ) => void;
+  updateAttribute: (key: string, attribute: string, value?: string | null) => void;
 }
 
 function CustomElement() {
@@ -85,10 +81,8 @@ function CustomElement() {
       initAttribute = () => {
         this.parent = this.parentNode as ParentNode & ExtendParentNode;
         this.key && this.parent?.updateAttribute(this.key, 'icon', this.icon);
-        this.key &&
-          this.parent?.updateAttribute(this.key, 'iconSize', this.iconSize);
-        this.key &&
-          this.parent?.updateAttribute(this.key, 'effect', this.effect);
+        this.key && this.parent?.updateAttribute(this.key, 'iconSize', this.iconSize);
+        this.key && this.parent?.updateAttribute(this.key, 'effect', this.effect);
       };
       connectedCallback() {
         this._div.addEventListener('click', this.onClick);
@@ -97,20 +91,12 @@ function CustomElement() {
       disconnectCallback() {
         document.removeEventListener('DOMContentLoaded', this.initAttribute);
       }
-      attributeChangedCallback(
-        name: string,
-        oldValue: string,
-        newValue: string,
-      ) {
+      attributeChangedCallback(name: string, oldValue: string, newValue: string) {
         if (oldValue !== newValue && this.key && this.parent?.updateAttribute) {
-          if (name === 'icon')
-            this.parent?.updateAttribute(this.key, 'icon', newValue);
-          if (name === 'iconSize')
-            this.parent?.updateAttribute(this.key, 'iconSize', newValue);
-          if (name === 'effect')
-            this.parent?.updateAttribute(this.key, 'effect', newValue);
-          if (name === 'disabled')
-            this.parent?.updateAttribute(this.key, 'disabled', newValue);
+          if (name === 'icon') this.parent?.updateAttribute(this.key, 'icon', newValue);
+          if (name === 'iconSize') this.parent?.updateAttribute(this.key, 'iconSize', newValue);
+          if (name === 'effect') this.parent?.updateAttribute(this.key, 'effect', newValue);
+          if (name === 'disabled') this.parent?.updateAttribute(this.key, 'disabled', newValue);
         }
       }
     }

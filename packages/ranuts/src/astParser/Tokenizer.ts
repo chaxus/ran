@@ -202,10 +202,7 @@ const TOKENS_GENERATOR: Record<string, (...args: any[]) => Token> = {
 type SingleCharTokens = '(' | ')' | '{' | '}' | '.' | ';' | ',' | '*' | '=';
 
 // 单字符到 Token 生成器的映射
-const KNOWN_SINGLE_CHAR_TOKENS = new Map<
-  SingleCharTokens,
-  typeof TOKENS_GENERATOR[keyof typeof TOKENS_GENERATOR]
->([
+const KNOWN_SINGLE_CHAR_TOKENS = new Map<SingleCharTokens, typeof TOKENS_GENERATOR[keyof typeof TOKENS_GENERATOR]>([
   ['(', TOKENS_GENERATOR.leftParen],
   [')', TOKENS_GENERATOR.rightParen],
   ['{', TOKENS_GENERATOR.leftCurly],
@@ -219,19 +216,7 @@ const KNOWN_SINGLE_CHAR_TOKENS = new Map<
 // 引号token
 const QUOTATION_TOKENS = ["'", '"', '`'];
 // 操作符token
-const OPERATOR_TOKENS = [
-  '+',
-  '-',
-  '*',
-  '/',
-  '%',
-  '^',
-  '&',
-  '|',
-  '~',
-  '<<',
-  '>>',
-];
+const OPERATOR_TOKENS = ['+', '-', '*', '/', '%', '^', '&', '|', '~', '<<', '>>'];
 
 /**
  * @description: 词法分析器，分词器
@@ -279,21 +264,14 @@ export class Tokenizer {
         if (currentChar === '*') {
           // 前瞻，如果是非 import/export，则认为是二元运算符，避免误判
           const previousToken = this._getPreviousToken();
-          if (
-            previousToken.type !== TokenType.Import &&
-            previousToken.type !== TokenType.Export
-          ) {
-            this._tokens.push(
-              TOKENS_GENERATOR.operator(startIndex, currentChar),
-            );
+          if (previousToken.type !== TokenType.Import && previousToken.type !== TokenType.Export) {
+            this._tokens.push(TOKENS_GENERATOR.operator(startIndex, currentChar));
             this._currentIndex++;
             continue;
           }
           // 否则按照 import/export 中的 * 处理
         }
-        const token = KNOWN_SINGLE_CHAR_TOKENS.get(
-          currentChar as SingleCharTokens,
-        )!(startIndex);
+        const token = KNOWN_SINGLE_CHAR_TOKENS.get(currentChar as SingleCharTokens)!(startIndex);
         this._tokens.push(token);
         this._currentIndex++;
       }
@@ -306,23 +284,12 @@ export class Tokenizer {
         continue;
       }
       // 5. 判断二元计算符
-      else if (
-        OPERATOR_TOKENS.includes(currentChar) &&
-        this._scanMode === ScanMode.Normal
-      ) {
+      else if (OPERATOR_TOKENS.includes(currentChar) && this._scanMode === ScanMode.Normal) {
         this._tokens.push(TOKENS_GENERATOR.operator(startIndex, currentChar));
         this._currentIndex++;
         continue;
-      } else if (
-        OPERATOR_TOKENS.includes(currentChar + this._getNextChar()) &&
-        this._scanMode === ScanMode.Normal
-      ) {
-        this._tokens.push(
-          TOKENS_GENERATOR.operator(
-            startIndex,
-            currentChar + this._getNextChar(),
-          ),
-        );
+      } else if (OPERATOR_TOKENS.includes(currentChar + this._getNextChar()) && this._scanMode === ScanMode.Normal) {
+        this._tokens.push(TOKENS_GENERATOR.operator(startIndex, currentChar + this._getNextChar()));
         this._currentIndex += 2;
         continue;
       }
@@ -357,11 +324,7 @@ export class Tokenizer {
     let currentChar = this._getCurrentChar();
     const startIndex = this._currentIndex;
     // 如果是字母，数字，下划线，收集成字符
-    while (
-      isAlpha(currentChar) ||
-      isDigit(currentChar) ||
-      isUnderline(currentChar)
-    ) {
+    while (isAlpha(currentChar) || isDigit(currentChar) || isUnderline(currentChar)) {
       identifier += currentChar;
       this._currentIndex++;
       currentChar = this._getCurrentChar();
@@ -369,10 +332,7 @@ export class Tokenizer {
     let token;
     // 1. 结果为关键字
     if (identifier in TOKENS_GENERATOR) {
-      token =
-        TOKENS_GENERATOR[identifier as keyof typeof TOKENS_GENERATOR](
-          startIndex,
-        );
+      token = TOKENS_GENERATOR[identifier as keyof typeof TOKENS_GENERATOR](startIndex);
     }
     // 2. 结果为标识符
     else {
@@ -398,11 +358,7 @@ export class Tokenizer {
       this._currentIndex++;
       currentChar = this._getCurrentChar();
     }
-    const token = TOKENS_GENERATOR.stringLiteral(
-      startIndex,
-      str,
-      `${startQuotation}${str}${startQuotation}`,
-    );
+    const token = TOKENS_GENERATOR.stringLiteral(startIndex, str, `${startQuotation}${str}${startQuotation}`);
     // 词法分析加入this._tokens
     this._tokens.push(token);
     this._resetScanMode();

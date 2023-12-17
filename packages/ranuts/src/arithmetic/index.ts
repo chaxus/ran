@@ -59,9 +59,7 @@ const isNumber = function (s: string) {
   // 整数：[\+\-]?\d+
   // 小数：[\+\-]?(\d+\.|\d+\.\d+|\.\d+)
   // [eE][\+\-]?\d+
-  return /^\s*(?:[+\-]?\d+|[+\-]?(?:\d+\.|\d+\.\d+|\.\d+))(?:[eE][+\-]?\d+)?\s*$/.test(
-    s,
-  );
+  return /^\s*(?:[+\-]?\d+|[+\-]?(?:\d+\.|\d+\.\d+|\.\d+))(?:[eE][+\-]?\d+)?\s*$/.test(s);
 };
 
 /**
@@ -254,10 +252,7 @@ const mergeTwoLists = function (l1: ListNode | null, l2: ListNode | null) {
  * @param {*} headB
  * @return {*}
  */
-const getIntersectionNode = function (
-  headA: ListNode | null,
-  headB: ListNode | null,
-) {
+const getIntersectionNode = function (headA: ListNode | null, headB: ListNode | null) {
   if (headA === null || headB === null) {
     return null;
   }

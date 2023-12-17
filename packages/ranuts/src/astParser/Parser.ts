@@ -71,25 +71,13 @@ export class Parser {
    */
   private _parseStatement(): Statement {
     // TokenType 来自 Tokenizer 的实现中
-    if (this._checkCurrentTokenType(TokenType.Function))
-      return this._parseFunctionDeclaration();
-    if (this._checkCurrentTokenType(TokenType.Identifier))
-      return this._parseExpressionStatement();
-    if (this._checkCurrentTokenType(TokenType.LeftCurly))
-      return this._parseBlockStatement();
-    if (this._checkCurrentTokenType(TokenType.Return))
-      return this._parseReturnStatement();
-    if (this._checkCurrentTokenType(TokenType.Import))
-      return this._parseImportDeclaration();
-    if (this._checkCurrentTokenType(TokenType.Export))
-      return this._parseExportDeclaration();
-    if (
-      this._checkCurrentTokenType([
-        TokenType.Let,
-        TokenType.Var,
-        TokenType.Const,
-      ])
-    )
+    if (this._checkCurrentTokenType(TokenType.Function)) return this._parseFunctionDeclaration();
+    if (this._checkCurrentTokenType(TokenType.Identifier)) return this._parseExpressionStatement();
+    if (this._checkCurrentTokenType(TokenType.LeftCurly)) return this._parseBlockStatement();
+    if (this._checkCurrentTokenType(TokenType.Return)) return this._parseReturnStatement();
+    if (this._checkCurrentTokenType(TokenType.Import)) return this._parseImportDeclaration();
+    if (this._checkCurrentTokenType(TokenType.Export)) return this._parseExportDeclaration();
+    if (this._checkCurrentTokenType([TokenType.Let, TokenType.Var, TokenType.Const]))
       return this._parseVariableDeclaration();
     console.log('Unexpected token:', this._getCurrentToken());
     throw new Error('Unexpected token');
@@ -243,13 +231,7 @@ export class Parser {
       };
     }
     // export const/let/var
-    else if (
-      this._checkCurrentTokenType([
-        TokenType.Const,
-        TokenType.Let,
-        TokenType.Var,
-      ])
-    ) {
+    else if (this._checkCurrentTokenType([TokenType.Const, TokenType.Let, TokenType.Var])) {
       const declaration = this._parseVariableDeclaration();
       exportDeclaration = {
         type: NodeType.ExportNamedDeclaration,
@@ -263,8 +245,7 @@ export class Parser {
     }
     // export function
     else if (this._checkCurrentTokenType(TokenType.Function)) {
-      const declaration =
-        this._parseFunctionDeclaration() as FunctionDeclaration;
+      const declaration = this._parseFunctionDeclaration() as FunctionDeclaration;
       exportDeclaration = {
         type: NodeType.ExportNamedDeclaration,
         declaration,
@@ -330,12 +311,7 @@ export class Parser {
       let init = null;
       if (this._checkCurrentTokenType(TokenType.Assign)) {
         this._goNext(TokenType.Assign);
-        if (
-          this._checkCurrentTokenType([
-            TokenType.Number,
-            TokenType.StringLiteral,
-          ])
-        ) {
+        if (this._checkCurrentTokenType([TokenType.Number, TokenType.StringLiteral])) {
           init = this._parseLiteral();
         } else {
           init = this._parseExpression();
@@ -397,9 +373,7 @@ export class Parser {
       // 解析函数表达式
       return this._parseFunctionExpression();
     }
-    if (
-      this._checkCurrentTokenType([TokenType.Number, TokenType.StringLiteral])
-    ) {
+    if (this._checkCurrentTokenType([TokenType.Number, TokenType.StringLiteral])) {
       return this._parseLiteral();
     }
     // 拿到标识符，如 a
@@ -409,9 +383,7 @@ export class Parser {
         expression = this._parseCallExpression(expression);
       } else if (this._checkCurrentTokenType(TokenType.Dot)) {
         // 继续解析，a.b
-        expression = this._parseMemberExpression(
-          expression as MemberExpression,
-        );
+        expression = this._parseMemberExpression(expression as MemberExpression);
       } else if (this._checkCurrentTokenType(TokenType.Operator)) {
         // 解析 a + b
         expression = this.__parseBinaryOperatorExpression(expression);
@@ -422,9 +394,7 @@ export class Parser {
     return expression;
   }
 
-  private __parseBinaryOperatorExpression(
-    expression: Expression,
-  ): BinaryExpression {
+  private __parseBinaryOperatorExpression(expression: Expression): BinaryExpression {
     const { start } = this._getCurrentToken();
     const operator = this._getCurrentToken().value!;
     this._goNext(TokenType.Operator);
@@ -440,9 +410,7 @@ export class Parser {
     return node;
   }
 
-  private _parseMemberExpression(
-    object: Identifier | MemberExpression,
-  ): MemberExpression {
+  private _parseMemberExpression(object: Identifier | MemberExpression): MemberExpression {
     this._goNext(TokenType.Dot);
     const property = this._parseIdentifier();
     const node: MemberExpression = {
@@ -517,9 +485,7 @@ export class Parser {
    * @description: 解析函数参数
    *
    */
-  private _parseParams(
-    mode: FunctionType = FunctionType.FunctionDeclaration,
-  ): Identifier[] | Expression[] {
+  private _parseParams(mode: FunctionType = FunctionType.FunctionDeclaration): Identifier[] | Expression[] {
     // 消费 "("
     this._goNext(TokenType.LeftParen);
     const params = [];
@@ -628,9 +594,7 @@ export class Parser {
     // 断言当前 Token 的类型，如果不能匹配，则抛出错误
     if (Array.isArray(type)) {
       if (!type.includes(currentToken.type)) {
-        throw new Error(
-          `Expect ${type.join(',')}, but got ${currentToken.type}`,
-        );
+        throw new Error(`Expect ${type.join(',')}, but got ${currentToken.type}`);
       }
     } else {
       if (currentToken.type !== type) {

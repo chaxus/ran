@@ -30,14 +30,7 @@ export class Scope {
     this.paramNodes = paramNodes || [];
     this.statement = statement;
     this.isBlockScope = !!block;
-    this.paramNodes.forEach(
-      (node) =>
-        (this.declarations[node.name] = new Declaration(
-          node,
-          true,
-          this.statement,
-        )),
-    );
+    this.paramNodes.forEach((node) => (this.declarations[node.name] = new Declaration(node, true, this.statement)));
   }
 
   addDeclaration(node: any, isBlockDeclaration: boolean): void {
@@ -72,9 +65,6 @@ export class Scope {
   }
 
   findDeclaration(name: string): Declaration {
-    return (
-      this.declarations[name] ||
-      (this.parent && this.parent.findDeclaration(name))
-    );
+    return this.declarations[name] || (this.parent && this.parent.findDeclaration(name));
   }
 }

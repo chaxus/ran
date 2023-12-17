@@ -100,13 +100,10 @@ function applyRemoveStyle(vnode: VNode, rm: () => void): void {
   for (; i < props.length; ++i) {
     if (applied.indexOf(props[i]) !== -1) amount++;
   }
-  (elm as any).addEventListener(
-    'transitionend',
-    function (ev: TransitionEvent) {
-      if (ev.target === elm) --amount;
-      if (amount === 0) rm();
-    },
-  );
+  (elm as any).addEventListener('transitionend', function (ev: TransitionEvent) {
+    if (ev.target === elm) --amount;
+    if (amount === 0) rm();
+  });
 }
 
 export const styleModule = {

@@ -188,16 +188,8 @@ interface RPreview {
 
 declare namespace JSX {
   interface IntrinsicElements {
-    'r-preview': React.DetailedHTMLProps<
-      React.HTMLAttributes<HTMLDivElement>,
-      HTMLDivElement
-    > &
-      RPreview;
-    'r-button': React.DetailedHTMLProps<
-      React.HTMLAttributes<HTMLDivElement>,
-      HTMLDivElement
-    > &
-      RButton;
+    'r-preview': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & RPreview;
+    'r-button': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & RButton;
   }
 }
 ```

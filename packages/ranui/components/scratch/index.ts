@@ -95,13 +95,7 @@ class ScratchTicket extends HTMLElement {
     const revealImg = new Image();
     revealImg.src = '';
     revealImg.onload = () => {
-      ctx.drawImage(
-        revealImg,
-        0,
-        0,
-        this.scratchTicket.width,
-        this.scratchTicket.height,
-      );
+      ctx.drawImage(revealImg, 0, 0, this.scratchTicket.width, this.scratchTicket.height);
     };
     this.scratchTicket.addEventListener('touchstart', this.touchStartScratch);
     this.scratchTicket.addEventListener('touchmove', this.touchMoveScratch);
@@ -109,11 +103,7 @@ class ScratchTicket extends HTMLElement {
   };
   connectedCallback(): void {}
   disconnectCallback(): void {}
-  attributeChangedCallback(
-    name: string,
-    oldValue: string,
-    newValue: string,
-  ): void {
+  attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     this.appendChild(this.scratchTicketContainer);
     this.drawScratchTicket();
   }

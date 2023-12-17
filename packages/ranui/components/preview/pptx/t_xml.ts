@@ -136,10 +136,7 @@ function simplefy(children?: Children): Record<string, any> {
     return {};
   }
 
-  if (
-    children.length === 1 &&
-    (typeof children[0] === 'string' || children[0] instanceof String)
-  ) {
+  if (children.length === 1 && (typeof children[0] === 'string' || children[0] instanceof String)) {
     return new String(children[0]);
   }
 
@@ -167,9 +164,7 @@ function simplefy(children?: Children): Record<string, any> {
 
   for (const i in node) {
     if (node[i].length === 1) {
-      node[i] = node[i][0] as Array<
-        { length: number } | Record<string, Attrs> | undefined
-      >;
+      node[i] = node[i][0] as Array<{ length: number } | Record<string, Attrs> | undefined>;
     }
   }
 

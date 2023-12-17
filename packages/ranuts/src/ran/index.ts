@@ -83,18 +83,12 @@ function createTextInventedElement(text: string): InventedElement {
  * @param {array} children
  * @return {VirtualDom}
  */
-function createElement(
-  type: string,
-  config: InventedElementProps,
-  children: Array<InventedElement>,
-): InventedElement {
+function createElement(type: string, config: InventedElementProps, children: Array<InventedElement>): InventedElement {
   const props = {
     ...config,
     // children也要放到props里面去，这样我们在组件里面就能通过this.props.children拿到子元素
     children: children.map((child) => {
-      return typeof child === 'object'
-        ? child
-        : createTextInventedElement(child);
+      return typeof child === 'object' ? child : createTextInventedElement(child);
     }),
   };
   // 核心逻辑不复杂，将参数都塞到一个对象上返回就行
@@ -206,10 +200,7 @@ function reconcileChildren(fiber: Fiber) {
     while (index < children.length && alternateChildFiber) {
       const element = children[index];
       // 对比oldFiber和当前element
-      const sameType =
-        alternateChildFiber &&
-        element &&
-        alternateChildFiber.type === element.type; //检测类型是不是一样
+      const sameType = alternateChildFiber && element && alternateChildFiber.type === element.type; //检测类型是不是一样
       // 先比较元素类型
       if (sameType) {
         // 如果类型一样，复用节点，更新props

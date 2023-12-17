@@ -419,10 +419,7 @@ const TOKENS_GENERATOR: Record<string, (...args: any[]) => Token> = {
 type SingleCharTokens = '(' | ')' | '{' | '}' | '=';
 
 // 单字符到 Token 生成器的映射
-const KNOWN_SINGLE_CHAR_TOKENS = new Map<
-  SingleCharTokens,
-  typeof TOKENS_GENERATOR[keyof typeof TOKENS_GENERATOR]
->([
+const KNOWN_SINGLE_CHAR_TOKENS = new Map<SingleCharTokens, typeof TOKENS_GENERATOR[keyof typeof TOKENS_GENERATOR]>([
   ['(', TOKENS_GENERATOR.leftParen],
   [')', TOKENS_GENERATOR.rightParen],
   ['{', TOKENS_GENERATOR.leftCurly],
@@ -481,10 +478,7 @@ export class Tokenizer {
         let token: Token;
         if (identifier in TOKENS_GENERATOR) {
           // 如果是关键字
-          token =
-            TOKENS_GENERATOR[identifier as keyof typeof TOKENS_GENERATOR](
-              startIndex,
-            );
+          token = TOKENS_GENERATOR[identifier as keyof typeof TOKENS_GENERATOR](startIndex);
         } else {
           // 如果是普通标识符
           token = TOKENS_GENERATOR['identifier'](startIndex, identifier);
@@ -494,9 +488,7 @@ export class Tokenizer {
       }
       // 3. 处理单字符
       else if (KNOWN_SINGLE_CHAR_TOKENS.has(currentChar as SingleCharTokens)) {
-        const token = KNOWN_SINGLE_CHAR_TOKENS.get(
-          currentChar as SingleCharTokens,
-        )!(startIndex);
+        const token = KNOWN_SINGLE_CHAR_TOKENS.get(currentChar as SingleCharTokens)!(startIndex);
         this._tokens.push(token);
         this._currentIndex++;
         continue;

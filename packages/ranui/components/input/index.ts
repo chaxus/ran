@@ -2,16 +2,7 @@ import { createCustomError, falseList, isDisabled } from '@/utils/index';
 
 export class Input extends HTMLElement {
   static get observedAttributes(): string[] {
-    return [
-      'label',
-      'disabled',
-      'name',
-      'placeholder',
-      'type',
-      'icon',
-      'value',
-      'status',
-    ];
+    return ['label', 'disabled', 'name', 'placeholder', 'type', 'icon', 'value', 'status'];
   }
   _input: HTMLDivElement;
   _label: HTMLLabelElement | undefined;
@@ -413,11 +404,7 @@ export class Input extends HTMLElement {
   disconnectCallback(): void {
     this._inputContent.removeEventListener('input', this.customInput);
   }
-  attributeChangedCallback(
-    name: string,
-    oldValue: string,
-    newValue: string,
-  ): void {
+  attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     this.listenEvent(name, oldValue, newValue);
   }
 }

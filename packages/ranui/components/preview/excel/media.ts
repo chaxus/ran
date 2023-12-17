@@ -56,11 +56,7 @@ const defaultColWidth = 80;
 const defaultRowHeight = 24;
 const devicePixelRatio = window.devicePixelRatio;
 
-function calcPosition(
-  sheet: Sheet,
-  range: Range,
-  offset: { scroll: { x: number; y: number } },
-) {
+function calcPosition(sheet: Sheet, range: Range, offset: { scroll: { x: number; y: number } }) {
   const { tl = {}, br = {} } = range;
   const { nativeCol, nativeColOff, nativeRow, nativeRowOff } = tl as Tl;
 
@@ -85,9 +81,7 @@ function calcPosition(
   if (nativeCol === nativeColEnd) {
     width = (nativeColOffEnd - nativeColOff) / 12700;
   } else {
-    width =
-      (sheet?._columns?.[nativeCol]?.width * 6 || defaultColWidth) -
-      nativeColOff / 12700;
+    width = (sheet?._columns?.[nativeCol]?.width * 6 || defaultColWidth) - nativeColOff / 12700;
 
     for (let i = nativeCol + 1; i < nativeColEnd; i++) {
       width += sheet?._columns?.[i]?.width * 6 || defaultColWidth;
@@ -98,9 +92,7 @@ function calcPosition(
   if (nativeRow === nativeRowEnd) {
     height = (nativeRowOffEnd - nativeRowOff) / 12700;
   } else {
-    height =
-      (sheet?._rows?.[nativeRow]?.height || defaultRowHeight) -
-      nativeRowOff / 12700;
+    height = (sheet?._rows?.[nativeRow]?.height || defaultRowHeight) - nativeRowOff / 12700;
     for (let i = nativeRow + 1; i < nativeRowEnd; i++) {
       height += sheet?._rows?.[i]?.height || defaultRowHeight;
     }

@@ -8,10 +8,7 @@ import fs from '@/file/fs';
  * @return {Promise}
  */
 
-const watchFile = (
-  path: string,
-  interval: number = 20,
-): Promise<Ranuts.Identification> =>
+const watchFile = (path: string, interval: number = 20): Promise<Ranuts.Identification> =>
   new Promise((resolve, reject) => {
     fs.watchFile(path, { interval }, (curr: Stats, prev: Stats) => {
       if (curr.mtime !== prev.mtime) {

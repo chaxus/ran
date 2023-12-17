@@ -132,9 +132,7 @@ export interface ImportNamespaceSpecifier extends Node {
   local: Identifier;
 }
 
-export type ImportSpecifiers = Array<
-  ImportSpecifier | ImportDefaultSpecifier | ImportNamespaceSpecifier
->;
+export type ImportSpecifiers = Array<ImportSpecifier | ImportDefaultSpecifier | ImportNamespaceSpecifier>;
 
 export interface ImportDeclaration extends Node {
   type: NodeType.ImportDeclaration;
@@ -173,10 +171,7 @@ export interface ExportAllDeclaration extends Node {
   exported: Identifier | null;
 }
 
-export type ExportDeclaration =
-  | ExportNamedDeclaration
-  | ExportDefaultDeclaration
-  | ExportAllDeclaration;
+export type ExportDeclaration = ExportNamedDeclaration | ExportDefaultDeclaration | ExportAllDeclaration;
 
 export interface BinaryExpression extends Node {
   type: NodeType.BinaryExpression;

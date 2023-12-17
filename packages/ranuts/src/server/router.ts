@@ -93,9 +93,7 @@ class Router {
       // 方法和地址都不存在
       if (!this.methods.has(method) && !this.paths.has(path)) {
         res.statusCode = 501;
-        res.end(
-          '501, not support the functionality needed to satisfy the request',
-        );
+        res.end('501, not support the functionality needed to satisfy the request');
       }
     };
   }

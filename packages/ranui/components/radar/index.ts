@@ -28,13 +28,7 @@ function Custom() {
       mRadius?: number;
       mAngle?: number;
       static get observedAttributes() {
-        return [
-          'abilitys',
-          'colorPolygon',
-          'colorLine',
-          'fillColor',
-          'strokeColor',
-        ];
+        return ['abilitys', 'colorPolygon', 'colorLine', 'fillColor', 'strokeColor'];
       }
       abilityRadarChartContainer: HTMLDivElement;
       abilityRadarChart: HTMLCanvasElement;
@@ -122,8 +116,7 @@ function Custom() {
         this.drawCircle(ctx);
       }
       drawSide(ctx: CanvasRenderingContext2D) {
-        if (!this.mRadius || !this.mCount || !this.mCenter || !this.mAngle)
-          return;
+        if (!this.mRadius || !this.mCount || !this.mCenter || !this.mAngle) return;
         ctx.save();
         ctx.strokeStyle = this.colorLine;
         const r = this.mRadius;
@@ -137,8 +130,7 @@ function Custom() {
       }
       // 绘制多边形边
       drawPolygon(ctx: CanvasRenderingContext2D) {
-        if (!this.mRadius || !this.mCount || !this.mCenter || !this.mAngle)
-          return;
+        if (!this.mRadius || !this.mCount || !this.mCenter || !this.mAngle) return;
         ctx.save();
         ctx.strokeStyle = this.colorPolygon;
         const r = this.mRadius / 4; // 单位半径
@@ -160,8 +152,7 @@ function Custom() {
 
       // 顶点连线
       drawLines(ctx: CanvasRenderingContext2D) {
-        if (!this.mRadius || !this.mCount || !this.mCenter || !this.mAngle)
-          return;
+        if (!this.mRadius || !this.mCount || !this.mCenter || !this.mAngle) return;
         ctx.save();
         ctx.beginPath();
         ctx.strokeStyle = this.colorLine;
@@ -177,22 +168,14 @@ function Custom() {
 
       // 绘制文本
       drawText(ctx: CanvasRenderingContext2D) {
-        if (
-          !this.mRadius ||
-          !this.mCount ||
-          !this.mCenter ||
-          !this.mAngle ||
-          !this.mData
-        )
-          return;
+        if (!this.mRadius || !this.mCount || !this.mCenter || !this.mAngle || !this.mData) return;
         ctx.save();
         const radio = getPixelRatio(ctx);
         const defaultFontSize = this.mCenter / 12;
         for (let i = 0; i < this.mCount; i++) {
           const x = this.mCenter + this.mRadius * Math.sin(this.mAngle * i);
           const y = this.mCenter + this.mRadius * Math.cos(this.mAngle * i);
-          const backgroundColor =
-            this.mData[i]?.backgroundColor || BACKGROUND_COLOR;
+          const backgroundColor = this.mData[i]?.backgroundColor || BACKGROUND_COLOR;
           const fontColor = this.mData[i]?.fontColor || FONT_COLOR;
           const fontFamily = this.mData[i]?.fontFamily || FONT_FAMILY;
           const fontSize = this.mData[i]?.fontSize || defaultFontSize;
@@ -211,10 +194,7 @@ function Custom() {
               fontFamily,
               fontSize,
             );
-          } else if (
-            this.mAngle * i >= Math.PI / 2 &&
-            this.mAngle * i < Math.PI
-          ) {
+          } else if (this.mAngle * i >= Math.PI / 2 && this.mAngle * i < Math.PI) {
             this.drawButton(
               ctx,
               backgroundColor,
@@ -228,10 +208,7 @@ function Custom() {
               fontFamily,
               fontSize,
             );
-          } else if (
-            this.mAngle * i >= Math.PI &&
-            this.mAngle * i < (Math.PI * 3) / 2
-          ) {
+          } else if (this.mAngle * i >= Math.PI && this.mAngle * i < (Math.PI * 3) / 2) {
             this.drawButton(
               ctx,
               backgroundColor,
@@ -283,21 +260,9 @@ function Custom() {
         ctx.fillStyle = color;
         ctx.moveTo(x + radius, y);
         ctx.lineTo(x + width - radius, y);
-        ctx.arc(
-          x + width - radius,
-          y + radius,
-          radius,
-          (Math.PI * 3) / 2,
-          Math.PI * 2,
-        );
+        ctx.arc(x + width - radius, y + radius, radius, (Math.PI * 3) / 2, Math.PI * 2);
         ctx.lineTo(x + width, y + height - radius);
-        ctx.arc(
-          x + width - radius,
-          y + height - radius,
-          radius,
-          Math.PI,
-          Math.PI / 2,
-        );
+        ctx.arc(x + width - radius, y + height - radius, radius, Math.PI, Math.PI / 2);
         ctx.lineTo(x + radius, y + height);
         ctx.arc(x + radius, y + height - radius, radius, Math.PI / 2, Math.PI);
         ctx.lineTo(x, y + radius);
@@ -313,30 +278,13 @@ function Custom() {
       }
       // 绘制数据区域
       drawRegion(ctx: CanvasRenderingContext2D) {
-        if (
-          !this.mRadius ||
-          !this.mCount ||
-          !this.mCenter ||
-          !this.mAngle ||
-          !this.mData
-        )
-          return;
+        if (!this.mRadius || !this.mCount || !this.mCenter || !this.mAngle || !this.mData) return;
         const radio = getPixelRatio(ctx);
         ctx.save();
         ctx.beginPath();
         for (let i = 0; i < this.mCount; i++) {
-          const x =
-            this.mCenter +
-            (this.mRadius *
-              Math.sin(this.mAngle * i) *
-              this.mData[i].scoreRate) /
-              100;
-          const y =
-            this.mCenter +
-            (this.mRadius *
-              Math.cos(this.mAngle * i) *
-              this.mData[i].scoreRate) /
-              100;
+          const x = this.mCenter + (this.mRadius * Math.sin(this.mAngle * i) * this.mData[i].scoreRate) / 100;
+          const y = this.mCenter + (this.mRadius * Math.cos(this.mAngle * i) * this.mData[i].scoreRate) / 100;
           ctx.lineTo(x, y);
         }
         ctx.closePath();
@@ -350,29 +298,12 @@ function Custom() {
 
       // 画点
       drawCircle(ctx: CanvasRenderingContext2D) {
-        if (
-          !this.mRadius ||
-          !this.mCount ||
-          !this.mCenter ||
-          !this.mAngle ||
-          !this.mData
-        )
-          return;
+        if (!this.mRadius || !this.mCount || !this.mCenter || !this.mAngle || !this.mData) return;
         const radio = getPixelRatio(ctx);
         ctx.save();
         for (let i = 0; i < this.mCount; i++) {
-          const x =
-            this.mCenter +
-            (this.mRadius *
-              Math.sin(this.mAngle * i) *
-              this.mData[i].scoreRate) /
-              100;
-          const y =
-            this.mCenter +
-            (this.mRadius *
-              Math.cos(this.mAngle * i) *
-              this.mData[i].scoreRate) /
-              100;
+          const x = this.mCenter + (this.mRadius * Math.sin(this.mAngle * i) * this.mData[i].scoreRate) / 100;
+          const y = this.mCenter + (this.mRadius * Math.cos(this.mAngle * i) * this.mData[i].scoreRate) / 100;
           ctx.beginPath();
           ctx.arc(x, y, 3, 0, Math.PI * 2);
           ctx.lineWidth = 1.5 * radio;
@@ -386,23 +317,9 @@ function Custom() {
         this.refreshData();
       }
       disconnectCallback() {}
-      attributeChangedCallback(
-        name: string,
-        oldValue: string,
-        newValue: string,
-      ) {
-        const attribute = [
-          'abilitys',
-          'colorPolygon',
-          'colorLine',
-          'fillColor',
-          'strokeColor',
-        ];
-        if (
-          attribute.includes(name) &&
-          this.abilityRadarChartContainer &&
-          oldValue !== newValue
-        ) {
+      attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+        const attribute = ['abilitys', 'colorPolygon', 'colorLine', 'fillColor', 'strokeColor'];
+        if (attribute.includes(name) && this.abilityRadarChartContainer && oldValue !== newValue) {
           this.refreshData();
         }
       }

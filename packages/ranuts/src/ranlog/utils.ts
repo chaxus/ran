@@ -9,11 +9,7 @@ export function querystring(data = {}): string {
       (searchParams, [name, value]) =>
         value === undefined || value == null
           ? searchParams
-          : (searchParams.append(
-              decodeURIComponent(name),
-              decodeURIComponent(value),
-            ),
-            searchParams),
+          : (searchParams.append(decodeURIComponent(name), decodeURIComponent(value)), searchParams),
       new URLSearchParams(),
     )
     .toString();
@@ -31,9 +27,7 @@ export function randomString(len: number = 8): string {
 
 export function getCookie(name: string): string {
   if (typeof window !== 'undefined') {
-    const cookieList = document.cookie.match(
-      new RegExp(`(^| )${name}(?:=([^;]*))?(;|$)`),
-    );
+    const cookieList = document.cookie.match(new RegExp(`(^| )${name}(?:=([^;]*))?(;|$)`));
     if (cookieList && cookieList[2]) return cookieList[2];
   }
   return '';
@@ -60,9 +54,7 @@ export const getWindow = (): ClientRatio => {
   };
 };
 
-export function createData(
-  params: Record<string, unknown> = {},
-): Record<string, unknown> {
+export function createData(params: Record<string, unknown> = {}): Record<string, unknown> {
   if (typeof window !== 'undefined') {
     const { width, height } = getWindow();
     return Object.assign(
@@ -146,11 +138,7 @@ export function getIPAdress(): string | undefined {
     const iface: any = interfaces[name];
     for (let i = 0; i < iface.length; i++) {
       const alias = iface[i];
-      if (
-        alias.family === 'IPv4' &&
-        alias.address !== '127.0.0.1' &&
-        !alias.internal
-      ) {
+      if (alias.family === 'IPv4' && alias.address !== '127.0.0.1' && !alias.internal) {
         return alias.address;
       }
     }

@@ -8,9 +8,7 @@ const builtins =
   );
 
 export default function makeLegalIdentifier(str: string): string {
-  str = str
-    .replace(/-(\w)/g, (_, letter) => letter.toUpperCase())
-    .replace(/[^$\w]/g, '_');
+  str = str.replace(/-(\w)/g, (_, letter) => letter.toUpperCase()).replace(/[^$\w]/g, '_');
   if (reservedWords.concat(builtins).includes(str)) {
     str = `_${str}`;
   }

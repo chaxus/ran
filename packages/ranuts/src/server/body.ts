@@ -13,9 +13,7 @@ interface ClearStrOption {
 const clearStr = (str: string, options: ClearStrOption = {}): string => {
   const { urlencoded = true } = options;
   const s = String.prototype.trim.call(str);
-  return urlencoded
-    ? decodeURIComponent(s).replace(/"|'/g, '')
-    : s.replace(/"|'/g, '');
+  return urlencoded ? decodeURIComponent(s).replace(/"|'/g, '') : s.replace(/"|'/g, '');
 };
 
 /**
@@ -53,15 +51,8 @@ interface ServerBody {
   json: boolean; // Parse JSON bodies, default true
 }
 
-const bodyMiddleware = (
-  options: Partial<ServerBody> = {},
-): MiddlewareFunction => {
-  const {
-    uploadDir = '.',
-    encoding = '',
-    urlencoded = true,
-    json = true,
-  } = options;
+const bodyMiddleware = (options: Partial<ServerBody> = {}): MiddlewareFunction => {
+  const { uploadDir = '.', encoding = '', urlencoded = true, json = true } = options;
   return (ctx: Context, next: Next) => {
     const { req, res } = ctx;
     const { url, method } = req;
@@ -101,9 +92,7 @@ const bodyMiddleware = (
     }
     // multipart/form-data
     if (contentType?.includes('multipart/form-data;')) {
-      const [contentType, boundaryStr] =
-        req.headers['content-type']?.split(';').map((item) => item.trim()) ||
-        [];
+      const [contentType, boundaryStr] = req.headers['content-type']?.split(';').map((item) => item.trim()) || [];
       const [_, boundary] = boundaryStr.split('=');
       // const fileSize = req.headers['content-length']
       if (encoding) {
@@ -127,29 +116,18 @@ const bodyMiddleware = (
             Object.assign(payload, strParse(item, ';', /=|:/));
           });
         const fileContentType = payload['Content-Type'];
-        const fileName = Buffer.from(payload['filename'], 'latin1').toString(
-          'utf8',
-        );
-        const fileDataIndex =
-          body.indexOf(fileContentType) + fileContentType.length;
+        const fileName = Buffer.from(payload['filename'], 'latin1').toString('utf8');
+        const fileDataIndex = body.indexOf(fileContentType) + fileContentType.length;
         const fileData = body.substring(fileDataIndex).replace(/^\s+/, '');
-        const finalData = fileData.substring(
-          0,
-          fileData.indexOf(`--${boundary}--`),
-        );
-        fs.writeFile(
-          `${uploadDir}/${fileName}`,
-          finalData,
-          { encoding: 'binary' },
-          (error) => {
-            if (!error) {
-              res.setHeader('content-type', 'application/json;charset=UTF-8');
-              next();
-            } else {
-              throw error;
-            }
-          },
-        );
+        const finalData = fileData.substring(0, fileData.indexOf(`--${boundary}--`));
+        fs.writeFile(`${uploadDir}/${fileName}`, finalData, { encoding: 'binary' }, (error) => {
+          if (!error) {
+            res.setHeader('content-type', 'application/json;charset=UTF-8');
+            next();
+          } else {
+            throw error;
+          }
+        });
       });
     }
     // TODO

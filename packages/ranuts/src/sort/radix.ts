@@ -37,9 +37,7 @@ const radix = (list: Array<number>, maxDigit?: number): Array<number> => {
   return list;
 };
 
-const a = radix([
-  39, 1, 80, 28, 0, 19, 42, 37, 27, 93, 63, 65, 99, 31, 19, 72, 40, 20, 24, 89,
-]);
+const a = radix([39, 1, 80, 28, 0, 19, 42, 37, 27, 93, 63, 65, 99, 31, 19, 72, 40, 20, 24, 89]);
 console.log('a', a);
 
 export default radix;

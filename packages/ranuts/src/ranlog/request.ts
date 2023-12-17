@@ -13,11 +13,7 @@ interface Options {
  */
 export const handleFetchHook = (options: Partial<Options> = {}): void => {
   if (typeof window !== 'undefined') {
-    const {
-      requestHook = noop,
-      responseHook = noop,
-      errorHook = noop,
-    } = options;
+    const { requestHook = noop, responseHook = noop, errorHook = noop } = options;
     const replacement = (originalFetch: any) => {
       return (url: string, config?: any) => {
         requestHook(url, config);
@@ -44,11 +40,7 @@ export const handleFetchHook = (options: Partial<Options> = {}): void => {
 export const handleXhrHook = (options: Partial<Options> = {}): void => {
   if (typeof window !== 'undefined') {
     const originalXhrProto = XMLHttpRequest.prototype;
-    const {
-      requestHook = noop,
-      responseHook = noop,
-      errorHook = noop,
-    } = options;
+    const { requestHook = noop, responseHook = noop, errorHook = noop } = options;
     const replacementXhrOpen = (originalOpen: any) => {
       return function (this: XMLHttpRequest, ...args: unknown[]): void {
         requestHook(args);

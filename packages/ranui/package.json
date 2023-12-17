@@ -13,6 +13,9 @@
   },
   "author": "chaxus",
   "license": "MIT",
+  "engines": {
+    "node": ">=12.20.0"
+  },
   "scripts": {
     "dev": "vite",
     "build": "sh ./bin/build.sh",
@@ -130,7 +133,7 @@
     "@babel/core": "^7.20.5",
     "@babel/preset-env": "^7.22.7",
     "@babel/preset-typescript": "^7.22.5",
-    "@playwright/test": "^1.36.2",
+    "@playwright/test": "^1.40.1",
     "@types/imagemin-svgo": "^10.0.4",
     "@types/lodash": "^4.14.197",
     "@types/tinycolor2": "^1.4.3",

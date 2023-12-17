@@ -9,10 +9,7 @@ import type { Error } from '@/file/fs';
  * @return {Promise}
  */
 
-const appendFile = (
-  path: string,
-  content: string,
-): Promise<Ranuts.Identification> =>
+const appendFile = (path: string, content: string): Promise<Ranuts.Identification> =>
   new Promise((resolve, reject) => {
     fs.appendFile(path, content, (err: Error) => {
       err

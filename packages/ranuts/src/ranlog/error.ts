@@ -1,8 +1,6 @@
 import { noop } from '@/utils';
 
-export const handleError = (
-  hooks: (error: Error | PromiseRejectionEvent | ErrorEvent) => void = noop,
-): void => {
+export const handleError = (hooks: (error: Error | PromiseRejectionEvent | ErrorEvent) => void = noop): void => {
   if (typeof window !== 'undefined') {
     window.addEventListener(
       'unhandledrejection',

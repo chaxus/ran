@@ -62,9 +62,7 @@ function Custom() {
                 }
               } else {
                 this.loadNs();
-                reject(
-                  `\n couldn't be loaded by r-icon, message: ${this.name} icon is undefined`,
-                );
+                reject(`\n couldn't be loaded by r-icon, message: ${this.name} icon is undefined`);
               }
             })
             .catch((error) => {
@@ -87,11 +85,7 @@ function Custom() {
         this._icon.setAttribute('width', '100');
         this._icon.setAttribute('height', '100');
         const use = document.createElementNS(X_LINKS_NS, 'use');
-        use.setAttributeNS(
-          X_LINKS_NS,
-          X_LINK_HREF,
-          `../../assets/iconfont/icon.svg#icon-${this.name}`,
-        );
+        use.setAttributeNS(X_LINKS_NS, X_LINK_HREF, `../../assets/iconfont/icon.svg#icon-${this.name}`);
         this._icon.appendChild(use);
         this._div.appendChild(this._icon);
       };
@@ -119,9 +113,7 @@ function Custom() {
        */
       setColor = () => {
         if (this._icon) {
-          this.color
-            ? this._icon.setAttribute('fill', this.color)
-            : this._icon.setAttribute('fill', 'currentColor');
+          this.color ? this._icon.setAttribute('fill', this.color) : this._icon.setAttribute('fill', 'currentColor');
         }
       };
       /**
@@ -135,11 +127,7 @@ function Custom() {
       connectedCallback() {
         this.setIcon();
       }
-      attributeChangedCallback(
-        name: string,
-        oldValue: string,
-        newValue: string,
-      ) {
+      attributeChangedCallback(name: string, oldValue: string, newValue: string) {
         if (newValue !== oldValue) {
           if (name === 'name') this.setIcon();
           if (name === 'size') this.setSize();

@@ -7,11 +7,7 @@ interface BeaconPayload {
   payload: Record<string, unknown>;
 }
 
-const sendBeacon = ({
-  url = '',
-  type = 'application/json; charset=UTF-8',
-  payload = {},
-}: BeaconPayload) => {
+const sendBeacon = ({ url = '', type = 'application/json; charset=UTF-8', payload = {} }: BeaconPayload) => {
   const requestUrl = url ? url : getHost();
   if (navigator.sendBeacon && requestUrl) {
     // 判断sendBeacon是否支持可用

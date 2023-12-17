@@ -183,10 +183,7 @@ describe('escapeHtml(string)', function () {
 
   describe('when escaped character mixed', function () {
     it('should escape all occurrances', function () {
-      assert.strictEqual(
-        escapeHtml('&foo <> bar "fizz" l\'a'),
-        '&amp;foo &lt;&gt; bar &quot;fizz&quot; l&#39;a',
-      );
+      assert.strictEqual(escapeHtml('&foo <> bar "fizz" l\'a'), '&amp;foo &lt;&gt; bar &quot;fizz&quot; l&#39;a');
     });
   });
 });

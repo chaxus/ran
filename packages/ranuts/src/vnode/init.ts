@@ -32,11 +32,7 @@ function isVnode(vnode: any): vnode is VNode {
 }
 
 // 根据children item的key属性，创建Key Map
-function createKeyToOldIdx(
-  children: VNode[],
-  beginIdx: number,
-  endIdx: number,
-): KeyToIndexMap {
+function createKeyToOldIdx(children: VNode[], beginIdx: number, endIdx: number): KeyToIndexMap {
   const map: KeyToIndexMap = {};
   for (let i = beginIdx; i <= endIdx; ++i) {
     const key = children[i]?.key;
@@ -80,13 +76,7 @@ export function init(): (oldVnode: VNode | Element, vnode: VNode) => VNode {
   function emptyNodeAt(elm: Element) {
     const id = elm.id ? '#' + elm.id : '';
     const c = elm.className ? '.' + elm.className.split(' ').join('.') : '';
-    return vnode(
-      api.tagName(elm).toLowerCase() + id + c,
-      {},
-      [],
-      undefined,
-      elm,
-    );
+    return vnode(api.tagName(elm).toLowerCase() + id + c, {}, [], undefined, elm);
   }
 
   // 判断是否为undefined
@@ -125,17 +115,13 @@ export function init(): (oldVnode: VNode | Element, vnode: VNode) => VNode {
       // 缓存 . 的位置
       const dot = dotIdx > 0 ? dotIdx : sel.length;
       // 缓存标签
-      const tag =
-        hashIdx !== -1 || dotIdx !== -1
-          ? sel.slice(0, Math.min(hash, dot))
-          : sel;
+      const tag = hashIdx !== -1 || dotIdx !== -1 ? sel.slice(0, Math.min(hash, dot)) : sel;
       // 创建dom
       const elm = (vnode.elm = api.createElement(tag));
       // dom设置id
       if (hash < dot) elm.setAttribute('id', sel.slice(hash + 1, dot));
       // dom设置class
-      if (dotIdx > 0)
-        elm.setAttribute('class', sel.slice(dot + 1).replace(/\./g, ' '));
+      if (dotIdx > 0) elm.setAttribute('class', sel.slice(dot + 1).replace(/\./g, ' '));
       // 触发各个模块的create钩子函数
       for (i = 0; i < cbs.create.length; ++i) {
         cbs.create[i](emptyNode, vnode);
@@ -161,13 +147,7 @@ export function init(): (oldVnode: VNode | Element, vnode: VNode) => VNode {
   }
 
   // 根据VNode新增dom
-  function addVnodes(
-    parentElm: Node,
-    before: Node | null,
-    vnodes: VNode[],
-    startIdx: number,
-    endIdx: number,
-  ) {
+  function addVnodes(parentElm: Node, before: Node | null, vnodes: VNode[], startIdx: number, endIdx: number) {
     // 遍历传入的VNode数组，创建对应的dom，再将dom插入到指定的dom元素之前
     for (; startIdx <= endIdx; ++startIdx) {
       const ch = vnodes[startIdx];
@@ -189,11 +169,7 @@ export function init(): (oldVnode: VNode | Element, vnode: VNode) => VNode {
       if (vnode.children !== undefined) {
         for (let j = 0; j < vnode.children.length; ++j) {
           const child = vnode.children[j];
-          if (
-            child != null &&
-            typeof child !== 'string' &&
-            typeof child !== 'number'
-          ) {
+          if (child != null && typeof child !== 'string' && typeof child !== 'number') {
             invokeDestroyHook(child);
           }
         }
@@ -211,12 +187,7 @@ export function init(): (oldVnode: VNode | Element, vnode: VNode) => VNode {
   }
 
   // 删除VNode对应dom
-  function removeVnodes(
-    parentElm: Node,
-    vnodes: VNode[],
-    startIdx: number,
-    endIdx: number,
-  ): void {
+  function removeVnodes(parentElm: Node, vnodes: VNode[], startIdx: number, endIdx: number): void {
     for (; startIdx <= endIdx; ++startIdx) {
       // 用于缓存删除dom的方法
       let rm: () => void;
@@ -301,11 +272,7 @@ export function init(): (oldVnode: VNode | Element, vnode: VNode) => VNode {
          * 最后将旧头索引后移，新尾索引前移
          */
         patchVnode(oldStartVnode, newEndVnode);
-        api.insertBefore(
-          parentElm,
-          oldStartVnode.elm!,
-          api.nextSibling(oldEndVnode.elm!),
-        );
+        api.insertBefore(parentElm, oldStartVnode.elm!, api.nextSibling(oldEndVnode.elm!));
         oldStartVnode = oldCh[++oldStartIdx];
         newEndVnode = newCh[--newEndIdx];
       } else if (sameVnode(oldEndVnode, newStartVnode)) {
@@ -327,21 +294,13 @@ export function init(): (oldVnode: VNode | Element, vnode: VNode) => VNode {
 
         if (isUndef(idxInOld)) {
           // 如果没有设置key属性，直接根据新头VNode创建dom元素，插入到旧头VNode对应dom之前
-          api.insertBefore(
-            parentElm,
-            createElm(newStartVnode),
-            oldStartVnode.elm!,
-          );
+          api.insertBefore(parentElm, createElm(newStartVnode), oldStartVnode.elm!);
         } else {
           // 如果设置key属性，获取到key对应的旧VNode
           elmToMove = oldCh[idxInOld];
           if (elmToMove.sel !== newStartVnode.sel) {
             // 如果旧VNode和新VNode的sel属性不同，则直接创建新VNode对应的dom，插入到旧头VNode对应dom之前
-            api.insertBefore(
-              parentElm,
-              createElm(newStartVnode),
-              oldStartVnode.elm!,
-            );
+            api.insertBefore(parentElm, createElm(newStartVnode), oldStartVnode.elm!);
           } else {
             // 如果sel属性相同，则将新VNode数据更新到旧VNode上
             patchVnode(elmToMove, newStartVnode);

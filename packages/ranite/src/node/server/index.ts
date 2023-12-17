@@ -68,10 +68,7 @@ export async function startDevServer(): Promise<void> {
 
   app.listen(3000, async () => {
     await optimize(root);
-    console.log(
-      green('🚀 No-Bundle 服务已经成功启动!'),
-      `耗时: ${Date.now() - startTime}ms`,
-    );
+    console.log(green('🚀 No-Bundle 服务已经成功启动!'), `耗时: ${Date.now() - startTime}ms`);
     console.log(`> 本地访问路径: ${blue('http://localhost:3000')}`);
   });
 }

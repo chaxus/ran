@@ -134,9 +134,7 @@ export class Button extends HTMLElement {
         sheet.insertRule(this.sheet);
         this._shadowDom.adoptedStyleSheets = [sheet];
       } catch (error) {
-        console.error(
-          `Failed to parse the rule in CSSStyleSheet: ${this.sheet}`,
-        );
+        console.error(`Failed to parse the rule in CSSStyleSheet: ${this.sheet}`);
       }
     }
   };
@@ -152,11 +150,7 @@ export class Button extends HTMLElement {
     this._btn.removeEventListener('mousedown', this.mousedown);
     this._btn.removeEventListener('mouseup', this.mouseup);
   }
-  attributeChangedCallback(
-    name: string,
-    oldValue: string,
-    newValue: string,
-  ): void {
+  attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     if (name === 'disabled' && this._btnContent) {
       if (!newValue || newValue === 'false') {
         this._btnContent.setAttribute('disabled', '');
@@ -164,12 +158,10 @@ export class Button extends HTMLElement {
         this._btnContent.removeAttribute('disabled');
       }
     }
-    if (name === 'icon' && this._btnContent && oldValue !== newValue)
-      this.setIcon();
+    if (name === 'icon' && this._btnContent && oldValue !== newValue) this.setIcon();
     if (name === 'iconSize' && this._btnContent && oldValue !== newValue)
       this._btnContent.setAttribute('iconSize', newValue);
-    if (name === 'sheet' && this._shadowDom && oldValue !== newValue)
-      this.handlerExternalCss();
+    if (name === 'sheet' && this._shadowDom && oldValue !== newValue) this.handlerExternalCss();
   }
 }
 

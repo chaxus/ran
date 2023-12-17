@@ -38,10 +38,7 @@ const imageRequest = (url?: string): Promise<number> => {
  * @param {array} params
  */
 const durationHandler =
-  <T, U>(
-    handler: (...args: T[]) => U,
-    ...params: T[]
-  ): ((a: number) => Promise<U>) =>
+  <T, U>(handler: (...args: T[]) => U, ...params: T[]): ((a: number) => Promise<U>) =>
   (duration: number): Promise<U> =>
     new Promise((resolve, reject) => {
       setTimeout(async () => {

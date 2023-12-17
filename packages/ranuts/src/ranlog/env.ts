@@ -17,9 +17,7 @@ export const getHost = (env?: string): string | undefined => {
         host = '';
       }
     } else {
-      const env = /\w(\.trunk|\.neibu|\.release|test)\./.exec(
-        window.location.hostname,
-      );
+      const env = /\w(\.trunk|\.neibu|\.release|test)\./.exec(window.location.hostname);
       if (env) {
         host = env[1];
       }

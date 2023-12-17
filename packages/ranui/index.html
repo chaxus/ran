@@ -17,13 +17,7 @@
     <h2>Progress</h2>
     <r-progress type="drag"></r-progress>
     <h2>Select</h2>
-    <r-select
-      style="width: 120px; height: 40px"
-      type="text"
-      defaultValue="185"
-      placement="top"
-      action="hover,click"
-    >
+    <r-select style="width: 120px; height: 40px" type="text" defaultValue="185" placement="top" action="hover,click">
       <r-option value="185">Mike</r-option>
       <r-option value="186">Tom</r-option>
       <r-option value="187">Lucy</r-option>
@@ -33,11 +27,7 @@
       <r-option value="186">Tom</r-option>
       <r-option value="187">Lucy</r-option>
     </r-select>
-    <r-select
-      style="width: 120px; height: 40px"
-      defaultValue="185"
-      getPopupContainerId="select"
-    >
+    <r-select style="width: 120px; height: 40px" defaultValue="185" getPopupContainerId="select">
       <r-option value="185">Mike</r-option>
       <r-option value="186">Tom</r-option>
       <r-option value="187">Lucy</r-option>
@@ -50,9 +40,7 @@
     <h2>Button</h2>
     <r-button type="primary">主要按钮</r-button>
     <r-button type="warning" effect="false">警告按钮</r-button>
-    <r-button type="default" icon="user" sheet=".btn { width: 100px; }"
-      >默认按钮</r-button
-    >
+    <r-button type="default" icon="user" sheet=".btn { width: 100px; }">默认按钮</r-button>
     <r-button type="primary" disabled>disable按钮</r-button>
     <h2>Icon</h2>
     <r-icon name="home" size="40" color="#1E90FF"></r-icon>
@@ -70,23 +58,13 @@
       <r-tab label="tab7777777">77777</r-tab>
     </r-tabs>
     <h2>Input</h2>
-    <div
-      style="
-        width: 40%;
-        height: 200px;
-        display: flex;
-        flex-flow: column;
-        justify-content: space-around;
-      "
-    >
+    <div style="width: 40%; height: 200px; display: flex; flex-flow: column; justify-content: space-around">
       <r-input label="user"></r-input>
       <r-input label="user" placeholder="user"></r-input>
       <r-input icon="home" status="warning" disabled></r-input>
     </div>
     <h2>Preview</h2>
-    <r-button type="primary" onclick="uploadFile()"
-      >choose file to preview</r-button
-    >
+    <r-button type="primary" onclick="uploadFile()">choose file to preview</r-button>
     <r-preview id="preview"></r-preview>
     <script>
       const inputDom = document.getElementById('input2');
@@ -108,13 +86,9 @@
     </script>
     <h2>message</h2>
     <r-button onclick="message.info('这是一条提示 info')">信息提示</r-button>
-    <r-button onclick="message.warning('这是一条提示 warning')"
-      >警告提示</r-button
-    >
+    <r-button onclick="message.warning('这是一条提示 warning')">警告提示</r-button>
     <r-button onclick="message.error('这是一条提示 error')">错误提示</r-button>
-    <r-button onclick="message.success('这是一条提示 success')"
-      >成功提示</r-button
-    >
+    <r-button onclick="message.success('这是一条提示 success')">成功提示</r-button>
     <r-button onclick="message.toast('这是一条提示 toast')">成功提示</r-button>
     <h2>Radar</h2>
     <r-radar
@@ -183,12 +157,9 @@
       if (!window.location.protocol.includes('https')) return;
       if ('serviceWorker' in navigator) {
         try {
-          const registration = await navigator.serviceWorker.register(
-            'service-worker.js',
-            {
-              scope: '/',
-            },
-          );
+          const registration = await navigator.serviceWorker.register('service-worker.js', {
+            scope: '/',
+          });
           if (registration.installing) {
             console.log('正在安装 Service worker');
           } else if (registration.waiting) {
@@ -212,12 +183,7 @@
         }
       }
     };
-    const paths = [
-      '/assets/js/pdf.js',
-      '/assets/js/d3.js',
-      '/assets/js/pdf-worker.js',
-      '/assets/js/dimple.js',
-    ];
+    const paths = ['/assets/js/pdf.js', '/assets/js/d3.js', '/assets/js/pdf-worker.js', '/assets/js/dimple.js'];
     registerServiceWorker(paths);
   </script>
 </html>

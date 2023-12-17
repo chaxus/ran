@@ -84,10 +84,7 @@ export function reactHMRPlugin(): Plugin {
     },
     async load(id) {
       if (id === RUNTIME_PUBLIC_PATH) {
-        return runtimeCode.replace(
-          'process.env.NODE_ENV',
-          JSON.stringify('development'),
-        );
+        return runtimeCode.replace('process.env.NODE_ENV', JSON.stringify('development'));
       }
     },
     async transform(code, id) {
@@ -97,19 +94,13 @@ export function reactHMRPlugin(): Plugin {
           plugins: [reactRefreshPlugin],
         });
         return {
-          code:
-            header.replace('__SOURCE__', JSON.stringify(id)) +
-            transformedCode!.code +
-            footer,
+          code: header.replace('__SOURCE__', JSON.stringify(id)) + transformedCode!.code + footer,
         };
       }
       return null;
     },
     transformIndexHtml(raw) {
-      return raw.replace(
-        /(<head[^>]*>)/i,
-        `$1<script type="module">${preambleCode}</script>`,
-      );
+      return raw.replace(/(<head[^>]*>)/i, `$1<script type="module">${preambleCode}</script>`);
     },
   };
 }

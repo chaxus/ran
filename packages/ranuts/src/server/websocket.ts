@@ -98,10 +98,7 @@ class WebSocket extends EventEmitter {
         'Sec-WebSocket-Accept: ' +
           crypto
             .createHash('sha1')
-            .update(
-              req.headers['sec-websocket-key'] +
-                '258EAFA5-E914-47DA-95CA-C5AB0DC85B11',
-            )
+            .update(req.headers['sec-websocket-key'] + '258EAFA5-E914-47DA-95CA-C5AB0DC85B11')
             .digest('base64'),
       ].join('\n') + '\n\n',
     );
@@ -190,9 +187,7 @@ class WebSocket extends EventEmitter {
       fin: src[0] >= 128,
       opcode: src[0] & 15,
       mask: masked,
-      maskKey: masked
-        ? src.subarray(metaSize, metaSize + (masked ? 4 : 0))
-        : null,
+      maskKey: masked ? src.subarray(metaSize, metaSize + (masked ? 4 : 0)) : null,
       payloadSize,
       size,
       metaSize: metaSize + (masked ? 4 : 0),

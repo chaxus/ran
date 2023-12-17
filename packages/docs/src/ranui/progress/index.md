@@ -74,8 +74,7 @@ Point of the progress bar, Default display, set to 'false' can be hidden
 <r-progress type="primary" percent="40%"></r-progress>
 
 ```html
-<r-progress type="drag" percent="30%"></r-progress>
-<r-progress type="primary" percent="40%"></r-progress>
+<r-progress type="drag" percent="30%"></r-progress> <r-progress type="primary" percent="40%"></r-progress>
 ```
 
 ## Method

@@ -18,11 +18,7 @@ type TreeshakingPreset = 'smallest' | 'safest' | 'recommended';
 
 type HasModuleSideEffects = (id: string, external: boolean) => boolean;
 
-type ModuleSideEffectsOption =
-  | boolean
-  | 'no-external'
-  | string[]
-  | HasModuleSideEffects;
+type ModuleSideEffectsOption = boolean | 'no-external' | string[] | HasModuleSideEffects;
 
 interface NormalizedTreeshakingOptions {
   annotations: boolean;
@@ -34,8 +30,7 @@ interface NormalizedTreeshakingOptions {
   unknownGlobalSideEffects: boolean;
 }
 
-interface TreeshakingOptions
-  extends Partial<Omit<NormalizedTreeshakingOptions, 'moduleSideEffects'>> {
+interface TreeshakingOptions extends Partial<Omit<NormalizedTreeshakingOptions, 'moduleSideEffects'>> {
   moduleSideEffects?: ModuleSideEffectsOption;
   preset?: TreeshakingPreset;
 }

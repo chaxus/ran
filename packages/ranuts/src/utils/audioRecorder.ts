@@ -315,9 +315,7 @@ class WebmFloat extends WebmBase<number> {
   }
 
   getFloatArrayType() {
-    return this.source && this.source.length === 4
-      ? Float32Array
-      : Float64Array;
+    return this.source && this.source.length === 4 ? Float32Array : Float64Array;
   }
   updateBySource() {
     const byteArray = this.source!.reverse();
@@ -364,11 +362,7 @@ class WebmContainer extends WebmBase<ContainerData[]> {
   updateBySource() {
     let end: number | undefined = undefined;
     this.data = [];
-    for (
-      this.offset = 0;
-      this.offset < this.source!.length;
-      this.offset = end
-    ) {
+    for (this.offset = 0; this.offset < this.source!.length; this.offset = end) {
       const id = this.readUint();
       const len = this.readUint();
       end = Math.min(this.offset + len, this.source!.length);
@@ -463,9 +457,7 @@ class WebmFile extends WebmContainer {
       return false;
     }
 
-    const infoSection = segmentSection.getSectionById(
-      0x549a966,
-    ) as WebmContainer;
+    const infoSection = segmentSection.getSectionById(0x549a966) as WebmContainer;
     if (!infoSection) {
       return false;
     }
@@ -506,11 +498,7 @@ class WebmFile extends WebmContainer {
   }
 }
 
-export const webmFixDuration = (
-  blob: Blob,
-  duration: number,
-  type = 'video/webm',
-): Promise<Blob> => {
+export const webmFixDuration = (blob: Blob, duration: number, type = 'video/webm'): Promise<Blob> => {
   return new Promise((resolve, reject) => {
     try {
       const reader = new FileReader();
@@ -539,13 +527,7 @@ export const webmFixDuration = (
 };
 
 function getMimeType() {
-  const types = [
-    'audio/webm',
-    'audio/mp4',
-    'audio/ogg',
-    'audio/wav',
-    'audio/aac',
-  ];
+  const types = ['audio/webm', 'audio/mp4', 'audio/ogg', 'audio/wav', 'audio/aac'];
   for (let i = 0; i < types.length; i++) {
     if (MediaRecorder.isTypeSupported(types[i])) {
       return types[i];
@@ -590,11 +572,7 @@ export class AudioRecorder {
         // Received a stop event
         this.blob = new Blob(this.chunks, { type: mimeType });
         if (mimeType === 'audio/webm') {
-          this.blob = await webmFixDuration(
-            this.blob,
-            duration,
-            this.blob.type,
-          );
+          this.blob = await webmFixDuration(this.blob, duration, this.blob.type);
         }
         this.chunks = [];
       }

@@ -78,9 +78,7 @@ export class SyncHook {
     const callbacks = this._events[eventName] || [];
     const newCallbacks = callbacks.filter((item) => {
       if (typeof eventItem === 'function') {
-        return (
-          item.callback !== eventItem && item.initialCallback !== eventItem
-        );
+        return item.callback !== eventItem && item.initialCallback !== eventItem;
       } else {
         const { callback } = eventItem;
         /* 用于once的取消订阅 */

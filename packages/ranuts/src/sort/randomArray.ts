@@ -5,17 +5,11 @@
  * @param {number} max
  * @return {Array<number>}
  */
-const randomArray = (
-  length: number = 20,
-  min: number = 0,
-  max: number = min + 100,
-): Array<number> => {
+const randomArray = (length: number = 20, min: number = 0, max: number = min + 100): Array<number> => {
   if (min > max) {
     throw new Error('max must be max min');
   }
-  return Array.from({ length }, (_) =>
-    Math.floor(Math.random() * (max - min) + min),
-  );
+  return Array.from({ length }, (_) => Math.floor(Math.random() * (max - min) + min));
 };
 
 export default randomArray;

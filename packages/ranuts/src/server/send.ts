@@ -43,10 +43,7 @@ const staticMiddleware = (option: Partial<Option> = {}): MiddlewareFunction => {
         } else if (!extension) {
           try {
             // 检测文件是否允许访问
-            fs.accessSync(
-              path.join(root, req.url + '.html'),
-              fs.constants.F_OK,
-            );
+            fs.accessSync(path.join(root, req.url + '.html'), fs.constants.F_OK);
             // 当允许访问时，则返回对应的页面
             fileName = req.url + '.html';
           } catch (e) {
@@ -56,9 +53,7 @@ const staticMiddleware = (option: Partial<Option> = {}): MiddlewareFunction => {
         }
         // 有文件名且访问的文件类型也允许访问
         const filePath = path.join(root, fileName);
-        const isPathUnderRoot = path
-          .normalize(path.resolve(filePath))
-          .startsWith(root);
+        const isPathUnderRoot = path.normalize(path.resolve(filePath)).startsWith(root);
 
         if (!isPathUnderRoot) {
           res.writeHead(404, { 'Content-Type': 'text/html' });

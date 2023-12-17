@@ -97,9 +97,7 @@ async function fetchUpdate({ path, timestamp }: Update) {
       const [path, query] = dep.split(`?`);
       try {
         // 通过动态 import 拉取最新模块
-        const newMod = await import(
-          path + `?t=${timestamp}${query ? `&${query}` : ''}`
-        );
+        const newMod = await import(path + `?t=${timestamp}${query ? `&${query}` : ''}`);
         moduleMap.set(dep, newMod);
       } catch (e) {}
     }),

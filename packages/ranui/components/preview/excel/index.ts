@@ -1,10 +1,7 @@
 import Spreadsheet from 'x-data-spreadsheet';
 import { debounce } from 'lodash';
 import type { Media } from '@/components/preview/excel/media';
-import {
-  readExcelData,
-  transferExcelToSpreadSheet,
-} from '@/components/preview/excel/excel';
+import { readExcelData, transferExcelToSpreadSheet } from '@/components/preview/excel/excel';
 import { clearCache, renderImage } from '@/components/preview/excel/media';
 
 interface JsExcelPreviewOptions {
@@ -101,12 +98,7 @@ class JsExcelPreview {
         setTimeout(() => {
           this.xs?.reRender && this.xs?.reRender();
           if (this.mediasSource && this.ctx && this.offset) {
-            renderImage(
-              this.ctx,
-              this.mediasSource,
-              this.workbookDataSource._worksheets[this.sheetIndex],
-              this.offset,
-            );
+            renderImage(this.ctx, this.mediasSource, this.workbookDataSource._worksheets[this.sheetIndex], this.offset);
           }
         });
       };
@@ -118,12 +110,7 @@ class JsExcelPreview {
 
         setTimeout(() => {
           if (this.ctx && this.mediasSource && this.offset) {
-            renderImage(
-              this.ctx,
-              this.mediasSource,
-              this.workbookDataSource._worksheets[this.sheetIndex],
-              this.offset,
-            );
+            renderImage(this.ctx, this.mediasSource, this.workbookDataSource._worksheets[this.sheetIndex], this.offset);
           }
         });
       };
@@ -134,12 +121,7 @@ class JsExcelPreview {
           this.offset = args.shift();
         }
         if (this.ctx && this.mediasSource && this.offset) {
-          renderImage(
-            this.ctx,
-            this.mediasSource,
-            this.workbookDataSource._worksheets[this.sheetIndex],
-            this.offset,
-          );
+          renderImage(this.ctx, this.mediasSource, this.workbookDataSource._worksheets[this.sheetIndex], this.offset);
         }
       };
     }
@@ -156,8 +138,7 @@ class JsExcelPreview {
         if (!workbook._worksheets || workbook._worksheets.length === 0) {
           throw new Error('未获取到数据，可能文件格式不正确或文件已损坏');
         }
-        const { workbookData, medias, workbookSource } =
-          transferExcelToSpreadSheet(workbook, this.options);
+        const { workbookData, medias, workbookSource } = transferExcelToSpreadSheet(workbook, this.options);
         this.mediasSource = medias;
         this.workbookDataSource = workbookSource;
         this.offset = undefined;
@@ -165,12 +146,7 @@ class JsExcelPreview {
         clearCache();
         this.xs?.loadData(workbookData);
         if (this.ctx && this.mediasSource && this.offset) {
-          renderImage(
-            this.ctx,
-            this.mediasSource,
-            this.workbookDataSource._worksheets[this.sheetIndex],
-            this.offset,
-          );
+          renderImage(this.ctx, this.mediasSource, this.workbookDataSource._worksheets[this.sheetIndex], this.offset);
         }
       })
       .catch((e) => {
@@ -185,10 +161,7 @@ class JsExcelPreview {
   }
   hack() {
     if (!this.wrapper) return;
-    const observerCallback = debounce(readOnlyInput, 200).bind(
-      this,
-      this.wrapper,
-    );
+    const observerCallback = debounce(readOnlyInput, 200).bind(this, this.wrapper);
     this.observer = new MutationObserver(observerCallback);
     const observerConfig = { attributes: true, childList: true, subtree: true };
     this.observer.observe(this.wrapper, observerConfig);

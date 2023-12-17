@@ -39,10 +39,8 @@ interface BasicType {
 
 export function getPerformance(): BasicType | undefined {
   if (typeof window !== 'undefined') {
-    const [performanceNavigationTiming] =
-      performance.getEntriesByType('navigation');
-    const [firstPaint = {}, firstContentfulPaint = {}] =
-      performance.getEntriesByType('paint');
+    const [performanceNavigationTiming] = performance.getEntriesByType('navigation');
+    const [firstPaint = {}, firstContentfulPaint = {}] = performance.getEntriesByType('paint');
     const { startTime: fp } = firstPaint as PerformancePaintTiming;
     // First Contentful paint
     const { startTime: fcp } = firstContentfulPaint as PerformancePaintTiming;

@@ -13,20 +13,14 @@ type Caller = (relPath: string, absPath: string, stats: Stats) => any;
  * @param {Caller} callback
  * @param {*} pre
  */
-export async function traverse(
-  dir: string,
-  callback: Caller,
-  pre = '',
-): Promise<any> {
+export async function traverse(dir: string, callback: Caller, pre = ''): Promise<any> {
   dir = resolve('.', dir);
   await toRead(dir).then((arr) => {
     return Promise.all(
       arr.map((str) => {
         const abs = join(dir, str);
         return toStats(abs).then((stats) => {
-          return stats.isDirectory()
-            ? traverse(abs, callback, join(pre, str))
-            : callback(join(pre, str), abs, stats);
+          return stats.isDirectory() ? traverse(abs, callback, join(pre, str)) : callback(join(pre, str), abs, stats);
         });
       }),
     );
@@ -47,8 +41,6 @@ export function traverseSync(dir: string, callback: Caller, pre = ''): void {
   for (; i < arr.length; i++) {
     abs = join(dir, arr[i]);
     stats = statSync(abs);
-    stats.isDirectory()
-      ? traverseSync(abs, callback, join(pre, arr[i]))
-      : callback(join(pre, arr[i]), abs, stats);
+    stats.isDirectory() ? traverseSync(abs, callback, join(pre, arr[i])) : callback(join(pre, arr[i]), abs, stats);
   }
 }

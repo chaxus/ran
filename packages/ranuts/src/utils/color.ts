@@ -151,17 +151,9 @@ export const randomColor = function (): Color {
   return new Color(r);
 };
 
-export const hexToRgb = function (
-  hex: string,
-): RegExpExecArray | null | Array<number> {
+export const hexToRgb = function (hex: string): RegExpExecArray | null | Array<number> {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result
-    ? [
-        parseInt(result[1], 16),
-        parseInt(result[2], 16),
-        parseInt(result[3], 16),
-      ]
-    : null;
+  return result ? [parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16)] : null;
 };
 
 export const componentToHex = function (c: string | number): string {
@@ -182,11 +174,7 @@ export const rgbToHex = function (
   return '#' + componentToHex(r) + componentToHex(g) + componentToHex(b);
 };
 
-export const rgbToHsl = function (
-  r: number | number[],
-  g: number = 0,
-  b: number = 0,
-): Array<number> {
+export const rgbToHsl = function (r: number | number[], g: number = 0, b: number = 0): Array<number> {
   if (r instanceof Array) {
     b = r[2];
     g = r[1];
@@ -402,23 +390,12 @@ export class ColorScheme {
     return this.palette;
   }
 
-  createFromAngles(
-    colorVal: string | number | (string | number)[],
-    angleArray: number[],
-  ): Color[] {
+  createFromAngles(colorVal: string | number | (string | number)[], angleArray: number[]): Color[] {
     this.palette.push(new Color(colorVal));
     for (const i in angleArray) {
       if (Object.prototype.hasOwnProperty.call(angleArray, i)) {
         const tempHue = (Number(this.palette[0].h) + angleArray[i]) % 360;
-        this.palette.push(
-          new Color(
-            hslToRgb(
-              tempHue,
-              Number(this.palette[0].s),
-              Number(this.palette[0].l),
-            ),
-          ),
-        );
+        this.palette.push(new Color(hslToRgb(tempHue, Number(this.palette[0].s), Number(this.palette[0].l))));
       }
     }
     return this.palette;

@@ -47,7 +47,6 @@ export const RANUI_PATH = `${HOME}src/ranui/`;
 
 export const ARTICLE_PATH = `${HOME}src/article/designMode.html`;
 
-export const KEY_WORDS =
-  'ran,component,components,ui,design,ranui,web-components,javascript,typescript,js';
+export const KEY_WORDS = 'ran,component,components,ui,design,ranui,web-components,javascript,typescript,js';
 
 export const GITHUB = 'https://github.com/chaxus/ran';

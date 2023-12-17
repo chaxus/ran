@@ -8,21 +8,16 @@ type ComposedMiddleware<T> = (context: T, next?: Next) => Promise<void>;
  * @param {Array} middleware
  * @return {*}
  */
-export function compose<T>(
-  middleware: Array<Middleware<T>>,
-): ComposedMiddleware<T> {
-  if (!Array.isArray(middleware))
-    throw new TypeError('Middleware stack must be an array!');
+export function compose<T>(middleware: Array<Middleware<T>>): ComposedMiddleware<T> {
+  if (!Array.isArray(middleware)) throw new TypeError('Middleware stack must be an array!');
   for (const fn of middleware) {
-    if (typeof fn !== 'function')
-      throw new TypeError('Middleware must be composed of functions!');
+    if (typeof fn !== 'function') throw new TypeError('Middleware must be composed of functions!');
   }
   return function (context, next) {
     let index = -1;
     return dispatch(0);
     function dispatch(i: number): Promise<never> | Promise<void> {
-      if (i <= index)
-        return Promise.reject(new Error('next() called multiple times'));
+      if (i <= index) return Promise.reject(new Error('next() called multiple times'));
       index = i;
       let fn = middleware[i];
       if (i === middleware.length && next) fn = next;

@@ -73,10 +73,7 @@ export default defineConfig({
     // keywords
     ['meta', { name: 'keywords', content: KEY_WORDS }],
     // chrome
-    [
-      'meta',
-      { httpEquiv: 'Permissions-Policy', content: 'interest-cohort=()' },
-    ],
+    ['meta', { httpEquiv: 'Permissions-Policy', content: 'interest-cohort=()' }],
     // report
     ['script', { defer: 'true', src: GTAG }],
     ['script', {}, GOOGLE_ANALYSE],

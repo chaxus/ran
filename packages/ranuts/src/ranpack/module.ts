@@ -4,10 +4,7 @@ import type { Bundle } from './bundle';
 import { Statement } from './statement';
 import type { ModuleLoader } from './moduleLoader';
 import type { Declaration } from './ast/Declaration';
-import {
-  SyntheticDefaultDeclaration,
-  SyntheticNamespaceDeclaration,
-} from './ast/Declaration';
+import { SyntheticDefaultDeclaration, SyntheticNamespaceDeclaration } from './ast/Declaration';
 import { keys } from './utils/object';
 
 export interface ModuleOptions {
@@ -134,11 +131,7 @@ export class Module {
       const isDefault = specifier.type === 'ImportDefaultSpecifier';
       const isNamespace = specifier.type === 'ImportNamespaceSpecifier';
       const localName = specifier.local.name;
-      const name = isDefault
-        ? 'default'
-        : isNamespace
-        ? '*'
-        : specifier.imported.name;
+      const name = isDefault ? 'default' : isNamespace ? '*' : specifier.imported.name;
       this.imports[localName] = { source, name, localName };
     });
     this.addDependencies(source);
@@ -201,11 +194,7 @@ export class Module {
         localName: identifier,
         name: 'default',
       };
-      this.declarations['default'] = new SyntheticDefaultDeclaration(
-        node,
-        identifier,
-        statement,
-      );
+      this.declarations['default'] = new SyntheticDefaultDeclaration(node, identifier, statement);
     } else if (node.type === 'ExportAllDeclaration') {
       // export * from 'mod'
       if (source) {
@@ -221,18 +210,12 @@ export class Module {
   }
 
   bindImportSpecifiers(): void {
-    [...Object.values(this.imports), ...Object.values(this.reexports)].forEach(
-      (specifier) => {
-        specifier.module = this._getModuleBySource(specifier.source!);
-      },
-    );
-    this.exportAllModules = this.exportAllSources.map(
-      this._getModuleBySource.bind(this),
-    );
+    [...Object.values(this.imports), ...Object.values(this.reexports)].forEach((specifier) => {
+      specifier.module = this._getModuleBySource(specifier.source!);
+    });
+    this.exportAllModules = this.exportAllSources.map(this._getModuleBySource.bind(this));
     // 建立模块依赖图
-    this.dependencyModules = this.dependencies.map(
-      this._getModuleBySource.bind(this),
-    );
+    this.dependencyModules = this.dependencies.map(this._getModuleBySource.bind(this));
     this.dependencyModules.forEach((module) => {
       module.referencedModules.push(this);
     });
@@ -243,18 +226,14 @@ export class Module {
     if (this.declarations['default'] && this.exports['default'].localName) {
       const declaration = this.trace(this.exports['default'].localName);
       if (declaration) {
-        (this.declarations['default'] as SyntheticDefaultDeclaration).bind(
-          declaration,
-        );
+        (this.declarations['default'] as SyntheticDefaultDeclaration).bind(declaration);
       }
     }
     this.statements.forEach((statement) => {
       statement.references.forEach((reference) => {
         // 根据引用寻找声明的位置
         // 寻找顺序: 1. statement 2. 当前模块 3. 依赖模块
-        const declaration =
-          reference.scope.findDeclaration(reference.name) ||
-          this.trace(reference.name);
+        const declaration = reference.scope.findDeclaration(reference.name) || this.trace(reference.name);
         if (declaration) {
           declaration.addReference(reference);
         }
@@ -294,14 +273,12 @@ export class Module {
     if (reexportDeclaration) {
       // 说明是从其它模块 reexport 出来的
       // 经过 bindImportSpecifier 方法处理，现已绑定 module
-      const declaration = reexportDeclaration.module!.traceExport(
-        reexportDeclaration.localName,
-      );
+      const declaration = reexportDeclaration.module!.traceExport(reexportDeclaration.localName);
       if (!declaration) {
         throw new Error(
-          `${reexportDeclaration.localName} is not exported by module ${
-            reexportDeclaration.module!.path
-          }(imported by ${this.path})`,
+          `${reexportDeclaration.localName} is not exported by module ${reexportDeclaration.module!.path}(imported by ${
+            this.path
+          })`,
         );
       }
       return declaration;
@@ -345,10 +322,7 @@ export class Module {
       // 3. 擦除/重写 export 相关的代码
       if (statement.isExportDeclaration && !this.isEntry) {
         // export { foo, bar }
-        if (
-          statement.node.type === 'ExportNamedDeclaration' &&
-          statement.node.specifiers.length
-        ) {
+        if (statement.node.type === 'ExportNamedDeclaration' && statement.node.specifiers.length) {
           source.remove(statement.start, statement.next);
         }
         // remove `export` from `export const foo = 42`
@@ -357,10 +331,7 @@ export class Module {
           (statement.node.declaration!.type === 'VariableDeclaration' ||
             statement.node.declaration!.type === 'FunctionDeclaration')
         ) {
-          source.remove(
-            statement.node.start,
-            statement.node.declaration!.start,
-          );
+          source.remove(statement.node.start, statement.node.declaration!.start);
         }
         // remove `export * from './mod'`
         else if (statement.node.type === 'ExportAllDeclaration') {
@@ -375,35 +346,21 @@ export class Module {
           if (statement.node.declaration.type === 'FunctionDeclaration') {
             if (statement.node.declaration.id) {
               // export default function foo() {} -> const a = function foo() {}
-              source.overwrite(
-                statement.node.start,
-                statement.node.declaration.start,
-                `const ${defaultName} = `,
-              );
+              source.overwrite(statement.node.start, statement.node.declaration.start, `const ${defaultName} = `);
             } else {
-              source.overwrite(
-                statement.node.start,
-                statement.node.declaration.start + 8,
-                `function ${defaultName}`,
-              );
+              source.overwrite(statement.node.start, statement.node.declaration.start + 8, `function ${defaultName}`);
             }
           } else {
             // export default () => {}
             // export default Foo;
-            source.overwrite(
-              statement.node.start,
-              statement.node.declaration.start,
-              `const ${defaultName} = `,
-            );
+            source.overwrite(statement.node.start, statement.node.declaration.start, `const ${defaultName} = `);
           }
         }
       }
     });
     // 4. 单独处理 namespace 导出
     if (this.declarations['*']) {
-      const namespaceDeclaration = this.declarations[
-        '*'
-      ] as SyntheticNamespaceDeclaration;
+      const namespaceDeclaration = this.declarations['*'] as SyntheticNamespaceDeclaration;
       if (namespaceDeclaration.needsNamespaceBlock) {
         source.append(`\n\n${namespaceDeclaration.renderBlock()}\n`);
       }
@@ -415,11 +372,7 @@ export class Module {
     return [
       ...keys(this.exports),
       ...keys(this.reexports),
-      ...this.exportAllModules
-        .map((module) =>
-          module.getExports().filter((name: string) => name !== 'default'),
-        )
-        .flat(),
+      ...this.exportAllModules.map((module) => module.getExports().filter((name: string) => name !== 'default')).flat(),
     ];
   }
 

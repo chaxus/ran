@@ -12,13 +12,10 @@ export function isFunctionDeclaration(node: Declaration): boolean {
     // function foo() {}
     node.type === 'FunctionDeclaration' ||
     // const foo = function() {}
-    (node.type === NodeType.VariableDeclarator &&
-      node.init &&
-      node.init.type === NodeType.FunctionExpression) ||
+    (node.type === NodeType.VariableDeclarator && node.init && node.init.type === NodeType.FunctionExpression) ||
     // export function ...
     // export default function
-    ((node.type === NodeType.ExportNamedDeclaration ||
-      node.type === NodeType.ExportDefaultDeclaration) &&
+    ((node.type === NodeType.ExportNamedDeclaration || node.type === NodeType.ExportDefaultDeclaration) &&
       !!node.declaration &&
       node.declaration.type === NodeType.FunctionDeclaration)
   );

@@ -16,10 +16,7 @@ function Component() {
       const formData = new FormData(this._form);
       formData.forEach((value, key) => {
         if (!jsonData[key]) {
-          jsonData[key] =
-            formData.getAll(key).length > 1
-              ? formData.getAll(key)
-              : formData.get(key);
+          jsonData[key] = formData.getAll(key).length > 1 ? formData.getAll(key) : formData.get(key);
         }
       });
       this._form.addEventListener('submit', () => {

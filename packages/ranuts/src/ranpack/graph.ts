@@ -35,11 +35,7 @@ export class Graph {
 
   async build(): Promise<void> {
     // 1. 获取并解析模块信息，返回入口模块对象
-    const entryModule = await this.moduleLoader.fetchModule(
-      this.entryPath,
-      '',
-      true,
-    );
+    const entryModule = await this.moduleLoader.fetchModule(this.entryPath, '', true);
     // 2. 构建依赖关系图
     this.modules.forEach((module) => module.bind());
     // 3. 模块拓扑排序

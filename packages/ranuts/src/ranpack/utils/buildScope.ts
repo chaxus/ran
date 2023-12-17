@@ -1,11 +1,6 @@
 import { Scope } from '../ast/Scope';
 import type { Statement } from '../statement';
-import type {
-  FunctionDeclaration,
-  Node,
-  VariableDeclaration,
-  VariableDeclarator,
-} from '../../astParser';
+import type { FunctionDeclaration, Node, VariableDeclaration, VariableDeclarator } from '../../astParser';
 import { NodeType } from '../../astParser';
 import { walk } from './walk';
 /**

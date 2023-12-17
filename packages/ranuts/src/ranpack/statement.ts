@@ -9,11 +9,7 @@ import type {
 import type { Reference } from './ast/Reference';
 import { findReference } from './utils/findReference';
 import { buildScope } from './utils/buildScope';
-import {
-  isExportDeclaration,
-  isFunctionDeclaration,
-  isImportDeclaration,
-} from './utils/isFunctionDeclaration';
+import { isExportDeclaration, isFunctionDeclaration, isImportDeclaration } from './utils/isFunctionDeclaration';
 import { Scope } from './ast/Scope';
 import type { Module } from './module';
 
@@ -49,11 +45,8 @@ export class Statement {
     this.isImportDeclaration = isImportDeclaration(node);
     this.isExportDeclaration = isExportDeclaration(node as ExportDeclaration);
     this.isReexportDeclaration =
-      this.isExportDeclaration &&
-      !!(node as ExportAllDeclaration | ExportNamedDeclaration).source;
-    this.isFunctionDeclaration = isFunctionDeclaration(
-      node as FunctionDeclaration,
-    );
+      this.isExportDeclaration && !!(node as ExportAllDeclaration | ExportNamedDeclaration).source;
+    this.isFunctionDeclaration = isFunctionDeclaration(node as FunctionDeclaration);
   }
 
   analyze(): void {
@@ -69,8 +62,6 @@ export class Statement {
       return;
     }
     this.isIncluded = true;
-    this.references.forEach(
-      (ref: Reference) => ref.declaration && ref.declaration.use(),
-    );
+    this.references.forEach((ref: Reference) => ref.declaration && ref.declaration.use());
   }
 }

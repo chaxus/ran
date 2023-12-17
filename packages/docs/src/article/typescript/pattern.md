@@ -47,9 +47,7 @@ type arr = [1, 2, 3];
 用它来匹配一个模式类型，提取第一个元素的类型到通过 infer 声明的局部变量里返回。
 
 ```ts
-type GetFirst<Arr extends unknown[]> = Arr extends [infer First, ...unknown[]]
-  ? First
-  : never;
+type GetFirst<Arr extends unknown[]> = Arr extends [infer First, ...unknown[]] ? First : never;
 ```
 
 类型参数 Arr 通过 extends 约束为只能是数组类型，数组元素是 unkown 也就是可以是任何值。
@@ -61,9 +59,7 @@ type GetFirst<Arr extends unknown[]> = Arr extends [infer First, ...unknown[]]
 当类型参数 Arr 为 [1,2,3] 时：
 
 ```ts
-type GetFirst<Arr extends unknown[]> = Arr extends [infer First, ...unknown[]]
-  ? First
-  : never;
+type GetFirst<Arr extends unknown[]> = Arr extends [infer First, ...unknown[]] ? First : never;
 type GetFirstValue = GetFirst<[1, 2, 3]>;
 // type GetFirstValue = 1
 ```
@@ -80,9 +76,7 @@ type GetFirstResult = GetFirst<[]>;
 可以提取第一个元素，当然也可以提取最后一个元素，修改下模式类型就行：
 
 ```ts
-type GetLastValue<Arr extends unknown[]> = Arr extends [...unknown, infer Last]
-  ? Last
-  : never;
+type GetLastValue<Arr extends unknown[]> = Arr extends [...unknown, infer Last] ? Last : never;
 ```
 
 当类型参数 Arr 为 [1,2,3]时：
@@ -97,9 +91,7 @@ type GetLastResult = GetFirst<[1, 2, 3]>;
 我们分别取了首尾元素，当然也可以取剩余的数组，比如取去掉了最后一个元素的数组：
 
 ```ts
-type PopArr<Arr extends unknown[]> = Arr extends [...infer Rest, unknown]
-  ? Rest
-  : never;
+type PopArr<Arr extends unknown[]> = Arr extends [...infer Rest, unknown] ? Rest : never;
 ```
 
 如果是空数组，就直接返回，否则匹配剩余的元素，放到 infer 声明的局部变量 Rest 里，返回 Rest。
@@ -123,9 +115,7 @@ type PopResult = PopArr<[]>;
 同理可得 ShiftArr 的实现：
 
 ```ts
-type ShiftArr<Arr extends unknown[]> = Arr extends [unknown, ...infer Rest]
-  ? Rest
-  : never;
+type ShiftArr<Arr extends unknown[]> = Arr extends [unknown, ...infer Rest] ? Rest : never;
 ```
 
 当类型参数 Arr 为 [1,2,3]时：
@@ -144,10 +134,7 @@ type ShiftResult = ShiftArr<[1, 2, 3]>;
 判断字符串是否以某个前缀开头，也是通过模式匹配：
 
 ```ts
-type StartWith<
-  str extends string,
-  Prefix extends string,
-> = Str extends `${Prefix}${string}` ? true : false;
+type StartWith<str extends string, Prefix extends string> = Str extends `${Prefix}${string}` ? true : false;
 ```
 
 需要声明字符串 Str、匹配的前缀 Prefix 两个类型参数，它们都是 string。
@@ -179,9 +166,7 @@ type ReplaceStr<
   Str extends string,
   From extends string,
   To extends string,
-> = Str extends `${infer Prefix}${From}${infer Suffix}`
-  ? `${Prefix}${To}${Suffix}`
-  : Str;
+> = Str extends `${infer Prefix}${From}${infer Suffix}` ? `${Prefix}${To}${Suffix}` : Str;
 ```
 
 声明要替换的字符串 Str、待替换的字符串 From、替换成的字符串 3 个类型参数，通过 extends 约束为都是 string 类型。
@@ -248,11 +233,7 @@ type Trim<Str extends string> = TrimRight<TrimLeft<Str>>;
 函数类型可以通过模式匹配来提取参数的类型：
 
 ```ts
-type GetParameters<Func extends Function> = Func extends (
-  ...args: infer Args
-) => unknown
-  ? Args
-  : never;
+type GetParameters<Func extends Function> = Func extends (...args: infer Args) => unknown ? Args : never;
 ```
 
 类型参数 Func 是要匹配的函数类型，通过 extends 约束为 Function。
@@ -271,11 +252,7 @@ type GetParametersResult = GetParameters<(name: string, age: number) => string>;
 能提取参数类型，同样也可以提取返回值类型：
 
 ```ts
-type GetReturnType<Func extends Function> = Func extends (
-  ...args: unknown[]
-) => infer ReturnType
-  ? ReturnType
-  : never;
+type GetReturnType<Func extends Function> = Func extends (...args: unknown[]) => infer ReturnType ? ReturnType : never;
 ```
 
 Func 和模式类型做匹配，提取返回值到通过 infer 声明的局部变量 ReturnType 里返回。
@@ -356,12 +333,7 @@ class Dong {
 这里的 this 类型同样也可以通过模式匹配提取出来：
 
 ```ts
-type GetThisParameterType<T> = T extends (
-  this: infer This,
-  ...args: unknown[]
-) => unknown
-  ? This
-  : unknown;
+type GetThisParameterType<T> = T extends (this: infer This, ...args: unknown[]) => unknown ? This : unknown;
 ```
 
 类型参数 T 是待处理的类型。
@@ -397,10 +369,11 @@ interface PersonConstructor {
 这里的 PersonConstructor 返回的是 Person 类型的实例对象，这个也可以通过模式匹配取出来。
 
 ```ts
-type GetInstanceType<ConstructorType extends new (...args: any) => any> =
-  ConstructorType extends new (...args: any) => infer InstanceType
-    ? InstanceType
-    : any;
+type GetInstanceType<ConstructorType extends new (...args: any) => any> = ConstructorType extends new (
+  ...args: any
+) => infer InstanceType
+  ? InstanceType
+  : any;
 ```
 
 类型参数 ConstructorType 是待处理的类型，通过 extends 约束为构造器类型。
@@ -423,9 +396,9 @@ type GetInstanceTypeResult = GetInstanceType<PersonConstructor>;
 GetInstanceType 是提取构造器返回值类型，那同样也可以提取构造器的参数类型：
 
 ```ts
-type GetConstructorParameters<
-  ConstructorType extends new (...args: any) => any,
-> = ConstructorType extends new (...args: infer ParametersType) => any
+type GetConstructorParameters<ConstructorType extends new (...args: any) => any> = ConstructorType extends new (
+  ...args: infer ParametersType
+) => any
   ? ParametersType
   : never;
 ```
@@ -441,8 +414,7 @@ interface PersonConstructor {
   new (name: string): Person;
 }
 
-type GetConstructorParametersResult =
-  GetConstructorParameters<PersonConstructor>;
+type GetConstructorParametersResult = GetConstructorParameters<PersonConstructor>;
 // type GetConstructorParametersResult = [name:string]
 ```
 

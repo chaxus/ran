@@ -23,22 +23,15 @@ interface requestUrlToArraybufferReturn extends BaseReturn {
   data: Blob;
 }
 
-const PPTX =
-  'application/vnd.openxmlformats-officedocument.presentationml.presentation';
+const PPTX = 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
 const PDF = 'application/pdf';
-const DOCX =
-  'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+const DOCX = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
-const XLSX =
-  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+const XLSX = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 const XLS = 'application/vnd.ms-excel';
 
 async function Custom() {
-  if (
-    typeof document !== 'undefined' &&
-    !customElements.get('r-preview') &&
-    !import.meta.env.SSR
-  ) {
+  if (typeof document !== 'undefined' && !customElements.get('r-preview') && !import.meta.env.SSR) {
     const { renderPptx } = await import('@/components/preview/pptx');
     const { renderDocx } = await import('@/components/preview/docx');
     const { renderPdf } = await import('@/components/preview/pdf');
@@ -109,15 +102,10 @@ async function Custom() {
     };
 
     const renderWord = (file: File, dom?: HTMLElement) => {
-      return Promise.resolve().then(() =>
-        renderDocx({ buffer: file, bodyContainer: dom }),
-      );
+      return Promise.resolve().then(() => renderDocx({ buffer: file, bodyContainer: dom }));
     };
 
-    const renderFileMap = new Map<
-      string,
-      (file: File, dom?: HTMLElement) => Promise<void>
-    >([
+    const renderFileMap = new Map<string, (file: File, dom?: HTMLElement) => Promise<void>>([
       [PDF, renderPdf],
       [PPTX, renderPpt],
       [DOCX, renderWord],
@@ -238,10 +226,7 @@ async function Custom() {
             previewOption.setAttribute('class', 'r-preview-options');
             if (this.closeable !== 'false') {
               const previewCloseButton = document.createElement('r-icon');
-              previewCloseButton.setAttribute(
-                'class',
-                'r-preview-options-close',
-              );
+              previewCloseButton.setAttribute('class', 'r-preview-options-close');
               previewCloseButton.setAttribute('name', 'close-circle-fill');
               previewCloseButton.setAttribute('size', '40');
               previewCloseButton.addEventListener('click', this.closePreview);
@@ -268,11 +253,7 @@ async function Custom() {
       disconnectedCallback() {
         this.removeEventListener('click', this.showPreview);
       }
-      attributeChangedCallback(
-        name: string,
-        oldValue: string,
-        newValue: string,
-      ) {
+      attributeChangedCallback(name: string, oldValue: string, newValue: string) {
         if (newValue !== oldValue) {
           if (name === 'src' && newValue) {
             this.setAttribute('src', newValue);

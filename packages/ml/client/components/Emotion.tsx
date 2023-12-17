@@ -5,14 +5,7 @@ import type { Point2D } from '@tensorflow/tfjs-vis';
 import * as tfvis from '@tensorflow/tfjs-vis';
 import * as tf from '@tensorflow/tfjs';
 import { word } from 'ranuts';
-import {
-  createModel,
-  denormalise,
-  normalise,
-  plot,
-  tfMemory,
-  trainModel,
-} from '../lib';
+import { createModel, denormalise, normalise, plot, tfMemory, trainModel } from '../lib';
 import type { Normalise } from '../lib';
 
 const path = '../../assets/dataset/ChnSentiCorp_htl_all.csv';
@@ -76,9 +69,7 @@ class EmotionModel {
     // 标准化标签和特征
     this.normaliseFeature = normalise(featureTensor);
     this.normaliseLabel = normalise(labelTensor);
-    console.log(
-      `load data success, normaliseFeature:${this.normaliseFeature}, normaliseLabel:${this.normaliseLabel}`,
-    );
+    console.log(`load data success, normaliseFeature:${this.normaliseFeature}, normaliseLabel:${this.normaliseLabel}`);
   };
 }
 const { loadData } = new EmotionModel();

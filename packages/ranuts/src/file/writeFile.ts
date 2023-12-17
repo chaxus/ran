@@ -9,10 +9,7 @@ type Error = NodeJS.ErrnoException | null;
  * @return {Promise}
  */
 
-const writeFile = (
-  path: string,
-  content: string,
-): Promise<Ranuts.Identification> =>
+const writeFile = (path: string, content: string): Promise<Ranuts.Identification> =>
   new Promise((resolve, reject) => {
     fs.writeFile(
       path,

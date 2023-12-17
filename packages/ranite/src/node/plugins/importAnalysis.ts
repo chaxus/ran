@@ -1,17 +1,8 @@
 import path from 'node:path';
 import { init, parse } from 'es-module-lexer';
 import MagicString from 'magic-string';
-import {
-  BARE_IMPORT_RE,
-  CLIENT_PUBLIC_PATH,
-  PRE_BUNDLE_DIR,
-} from '../constants';
-import {
-  cleanUrl,
-  getShortName,
-  isInternalRequest,
-  isJSRequest,
-} from '../utils';
+import { BARE_IMPORT_RE, CLIENT_PUBLIC_PATH, PRE_BUNDLE_DIR } from '../constants';
+import { cleanUrl, getShortName, isInternalRequest, isJSRequest } from '../utils';
 import type { Plugin } from '../plugin';
 import type { ServerContext } from '../server/index';
 
@@ -33,10 +24,7 @@ export function importAnalysisPlugin(): Plugin {
       const { moduleGraph } = serverContext;
       const curMod = moduleGraph.getModuleById(id)!;
       const resolve = async (id: string, importer?: string) => {
-        const resolved = await serverContext.pluginContainer.resolveId(
-          id,
-          importer,
-        );
+        const resolved = await serverContext.pluginContainer.resolveId(id, importer);
         if (!resolved) {
           return;
         }
@@ -61,11 +49,7 @@ export function importAnalysisPlugin(): Plugin {
         }
         // 第三方库: 路径重写到预构建产物的路径
         if (BARE_IMPORT_RE.test(modSource)) {
-          const bundlePath = path.join(
-            serverContext.root,
-            PRE_BUNDLE_DIR,
-            `${modSource}.js`,
-          );
+          const bundlePath = path.join(serverContext.root, PRE_BUNDLE_DIR, `${modSource}.js`);
           ms.overwrite(modStart, modEnd, bundlePath);
           importedModules.add(bundlePath);
         } else if (modSource.startsWith('.') || modSource.startsWith('/')) {
@@ -81,9 +65,7 @@ export function importAnalysisPlugin(): Plugin {
         // 注入 HMR 相关的工具函数
         ms.prepend(
           `import { createHotContext as __ranite__createHotContext } from "${CLIENT_PUBLIC_PATH}";` +
-            `import.meta.hot = __ranite__createHotContext(${JSON.stringify(
-              cleanUrl(curMod.url),
-            )});`,
+            `import.meta.hot = __ranite__createHotContext(${JSON.stringify(cleanUrl(curMod.url))});`,
         );
       }
 

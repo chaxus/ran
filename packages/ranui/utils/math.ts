@@ -13,10 +13,7 @@ export const getAngle = (deg: number): number => {
  * @param { number } r 半径
  * @return { Array<number> } 坐标[x, y]
  */
-export const getArcPointerByDeg = (
-  deg: number,
-  r: number,
-): [number, number] => {
+export const getArcPointerByDeg = (deg: number, r: number): [number, number] => {
   return [+(Math.cos(deg) * r).toFixed(8), +(Math.sin(deg) * r).toFixed(8)];
 };
 
@@ -53,21 +50,13 @@ export const fanShapedByArc = (
   // if (minEnd > minStart) {
   //   ctx.arc(0, 0, minRadius, minEnd, minStart, true)
   // } else {
-  ctx.lineTo(
-    ...getArcPointerByDeg(
-      (start + end) / 2,
-      gutter / 2 / Math.abs(Math.sin((start - end) / 2)),
-    ),
-  );
+  ctx.lineTo(...getArcPointerByDeg((start + end) / 2, gutter / 2 / Math.abs(Math.sin((start - end) / 2))));
   // }
   ctx.closePath();
 };
 
 // 使用 arc 绘制圆角矩形
-export const roundRectByArc = (
-  ctx: CanvasRenderingContext2D,
-  ...[x, y, w, h, r]: number[]
-): void => {
+export const roundRectByArc = (ctx: CanvasRenderingContext2D, ...[x, y, w, h, r]: number[]): void => {
   const min = Math.min(w, h),
     PI = Math.PI;
   if (r > min / 2) r = min / 2;
@@ -106,22 +95,14 @@ export const getLinearGradient = (
     deg = deg.slice(0, -3) % 360;
     // 根据4个象限定义起点坐标, 根据45度划分8个区域计算终点坐标
     const getLenOfTanDeg = (deg: number) => Math.tan((deg / 180) * Math.PI);
-    if (deg >= 0 && deg < 45)
-      direction = [x, y + h, x + w, y + h - w * getLenOfTanDeg(deg - 0)];
-    else if (deg >= 45 && deg < 90)
-      direction = [x, y + h, x + w - h * getLenOfTanDeg(deg - 45), y];
-    else if (deg >= 90 && deg < 135)
-      direction = [x + w, y + h, x + w - h * getLenOfTanDeg(deg - 90), y];
-    else if (deg >= 135 && deg < 180)
-      direction = [x + w, y + h, x, y + w * getLenOfTanDeg(deg - 135)];
-    else if (deg >= 180 && deg < 225)
-      direction = [x + w, y, x, y + w * getLenOfTanDeg(deg - 180)];
-    else if (deg >= 225 && deg < 270)
-      direction = [x + w, y, x + h * getLenOfTanDeg(deg - 225), y + h];
-    else if (deg >= 270 && deg < 315)
-      direction = [x, y, x + h * getLenOfTanDeg(deg - 270), y + h];
-    else if (deg >= 315 && deg < 360)
-      direction = [x, y, x + w, y + h - w * getLenOfTanDeg(deg - 315)];
+    if (deg >= 0 && deg < 45) direction = [x, y + h, x + w, y + h - w * getLenOfTanDeg(deg - 0)];
+    else if (deg >= 45 && deg < 90) direction = [x, y + h, x + w - h * getLenOfTanDeg(deg - 45), y];
+    else if (deg >= 90 && deg < 135) direction = [x + w, y + h, x + w - h * getLenOfTanDeg(deg - 90), y];
+    else if (deg >= 135 && deg < 180) direction = [x + w, y + h, x, y + w * getLenOfTanDeg(deg - 135)];
+    else if (deg >= 180 && deg < 225) direction = [x + w, y, x, y + w * getLenOfTanDeg(deg - 180)];
+    else if (deg >= 225 && deg < 270) direction = [x + w, y, x + h * getLenOfTanDeg(deg - 225), y + h];
+    else if (deg >= 270 && deg < 315) direction = [x, y, x + h * getLenOfTanDeg(deg - 270), y + h];
+    else if (deg >= 315 && deg < 360) direction = [x, y, x + w, y + h - w * getLenOfTanDeg(deg - 315)];
   }
   // 创建四个简单的方向坐标
   else if (deg.includes('top')) direction = [x, y + h, x, y];
@@ -129,9 +110,7 @@ export const getLinearGradient = (
   else if (deg.includes('left')) direction = [x + w, y, x, y];
   else if (deg.includes('right')) direction = [x, y, x + w, y];
   // 创建线性渐变必须使用整数坐标
-  const gradient = ctx.createLinearGradient(
-    ...(direction.map((n) => n >> 0) as typeof direction),
-  );
+  const gradient = ctx.createLinearGradient(...(direction.map((n) => n >> 0) as typeof direction));
   // 这里后期重构, 先用any代替
   return context.reduce((gradient: any, item: any, index: any) => {
     const info = item.split(' ');

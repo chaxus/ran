@@ -111,87 +111,38 @@ export class RanPlayer extends HTMLElement {
     this._playerControllerBottomRight = document.createElement('div');
     this._playerControllerBottomLeft = document.createElement('div');
     this._player.setAttribute('class', 'ran-player');
-    this._player.setAttribute(
-      'id',
-      'ran-player' + `${performance.now()}`.replace('.', ''),
-    );
+    this._player.setAttribute('id', 'ran-player' + `${performance.now()}`.replace('.', ''));
     // play and pause
     this._playerBtn.setAttribute('class', 'ran-player-play-btn');
     // progress
     this._progress.setAttribute('class', 'ran-player-controller-progress');
-    this._progressWrap.setAttribute(
-      'class',
-      'ran-player-controller-progress-wrap',
-    );
-    this._progressWrapValue.setAttribute(
-      'class',
-      'ran-player-controller-progress-wrap-value',
-    );
-    this._progressDot.setAttribute(
-      'class',
-      'ran-player-controller-progress-dot',
-    );
+    this._progressWrap.setAttribute('class', 'ran-player-controller-progress-wrap');
+    this._progressWrapValue.setAttribute('class', 'ran-player-controller-progress-wrap-value');
+    this._progressDot.setAttribute('class', 'ran-player-controller-progress-dot');
     // play and pause btn, current / total time
-    this._playerControllerBottom.setAttribute(
-      'class',
-      'ran-player-controller-bottom',
-    );
-    this._playerControllerBottomRight.setAttribute(
-      'class',
-      'ran-player-controller-bottom-right',
-    );
-    this._playerControllerBottomLeft.setAttribute(
-      'class',
-      'ran-player-controller-bottom-left',
-    );
+    this._playerControllerBottom.setAttribute('class', 'ran-player-controller-bottom');
+    this._playerControllerBottomRight.setAttribute('class', 'ran-player-controller-bottom-right');
+    this._playerControllerBottomLeft.setAttribute('class', 'ran-player-controller-bottom-left');
     this._playerControllerBottomPlayBtn = document.createElement('div');
-    this._playerControllerBottomPlayBtn.setAttribute(
-      'class',
-      'ran-player-controller-bottom-left-btn',
-    );
+    this._playerControllerBottomPlayBtn.setAttribute('class', 'ran-player-controller-bottom-left-btn');
     this._playerControllerBottomTimeCurrent = document.createElement('div');
-    this._playerControllerBottomTimeCurrent.setAttribute(
-      'class',
-      'ran-player-controller-bottom-left-time-current',
-    );
+    this._playerControllerBottomTimeCurrent.setAttribute('class', 'ran-player-controller-bottom-left-time-current');
     this._playerControllerBottomTimeDivide = document.createElement('div');
-    this._playerControllerBottomTimeDivide.setAttribute(
-      'class',
-      'ran-player-controller-bottom-left-time-divide',
-    );
+    this._playerControllerBottomTimeDivide.setAttribute('class', 'ran-player-controller-bottom-left-time-divide');
     this._playerControllerBottomTimeDuration = document.createElement('div');
-    this._playerControllerBottomTimeDuration.setAttribute(
-      'class',
-      'ran-player-controller-bottom-left-time-duration',
-    );
+    this._playerControllerBottomTimeDuration.setAttribute('class', 'ran-player-controller-bottom-left-time-duration');
     // speed
     this._playControllerBottomSpeed = document.createElement('div');
-    this._playControllerBottomSpeed.setAttribute(
-      'class',
-      'ran-player-controller-bottom-right-speed',
-    );
+    this._playControllerBottomSpeed.setAttribute('class', 'ran-player-controller-bottom-right-speed');
     this._playControllerBottomSpeedPopover = document.createElement('r-select');
     this._playControllerBottomSpeedPopover.setAttribute('value', '1');
-    this._playControllerBottomSpeedPopover.setAttribute(
-      'action',
-      'hover,click',
-    );
+    this._playControllerBottomSpeedPopover.setAttribute('action', 'hover,click');
     this._playControllerBottomSpeedPopover.setAttribute('type', 'text');
     this._playControllerBottomSpeedPopover.setAttribute('placement', 'top');
     const id = this._player.getAttribute('id');
-    id &&
-      this._playControllerBottomSpeedPopover.setAttribute(
-        'getPopupContainerId',
-        id,
-      );
-    this._playControllerBottomSpeedPopover.setAttribute(
-      'dropdownclass',
-      'video-speed-dropdown',
-    );
-    this._playControllerBottomSpeedPopover.addEventListener(
-      'change',
-      this.changeSpeed,
-    );
+    id && this._playControllerBottomSpeedPopover.setAttribute('getPopupContainerId', id);
+    this._playControllerBottomSpeedPopover.setAttribute('dropdownclass', 'video-speed-dropdown');
+    this._playControllerBottomSpeedPopover.addEventListener('change', this.changeSpeed);
     const Fragment = document.createDocumentFragment();
     SPEED.forEach((item) => {
       const { label, value } = item;
@@ -201,18 +152,11 @@ export class RanPlayer extends HTMLElement {
       Fragment.appendChild(option);
     });
     this._playControllerBottomSpeedPopover.appendChild(Fragment);
-    this._playControllerBottomSpeed.appendChild(
-      this._playControllerBottomSpeedPopover,
-    );
+    this._playControllerBottomSpeed.appendChild(this._playControllerBottomSpeedPopover);
     // volume
     this._playControllerBottomVolume = document.createElement('div');
-    this._playControllerBottomVolume.setAttribute(
-      'class',
-      'ran-player-controller-bottom-right-volume',
-    );
-    this._playControllerBottomVolumeProgress = <Progress>(
-      document.createElement('r-progress')
-    );
+    this._playControllerBottomVolume.setAttribute('class', 'ran-player-controller-bottom-right-volume');
+    this._playControllerBottomVolumeProgress = <Progress>document.createElement('r-progress');
     this._playControllerBottomVolumeProgress.setAttribute(
       'class',
       'ran-player-controller-bottom-right-volume-progress',
@@ -226,16 +170,10 @@ export class RanPlayer extends HTMLElement {
     );
     // clarity
     this._playControllerBottomClarity = document.createElement('div');
-    this._playControllerBottomClarity.setAttribute(
-      'class',
-      'ran-player-controller-bottom-right-clarity',
-    );
+    this._playControllerBottomClarity.setAttribute('class', 'ran-player-controller-bottom-right-clarity');
     // fullscreen
     this._playControllerBottomRightFullScreen = document.createElement('div');
-    this._playControllerBottomRightFullScreen.setAttribute(
-      'class',
-      'ran-player-controller-bottom-right-full',
-    );
+    this._playControllerBottomRightFullScreen.setAttribute('class', 'ran-player-controller-bottom-right-full');
     // controller
     this._playerController = document.createElement('div');
     this._playerController.setAttribute('class', 'ran-player-controller');
@@ -245,34 +183,18 @@ export class RanPlayer extends HTMLElement {
     this._playerTipTime.setAttribute('class', 'ran-player-controller-tip-time');
     this._playerTipText = document.createElement('div');
     this._playerTipText.setAttribute('class', 'ran-player-controller-tip-text');
-    this._playerTip.appendChild(
-      createDocumentFragment([this._playerTipTime, this._playerTipText])!,
-    );
+    this._playerTip.appendChild(createDocumentFragment([this._playerTipTime, this._playerTipText])!);
     this._playerController.appendChild(
-      createDocumentFragment([
-        this._playerTip,
-        this._progress,
-        this._playerControllerBottom,
-      ])!,
+      createDocumentFragment([this._playerTip, this._progress, this._playerControllerBottom])!,
     );
     // container
     this._player.appendChild(
-      createDocumentFragment([
-        this._container,
-        this._slot,
-        this._playerBtn,
-        this._playerController,
-      ])!,
+      createDocumentFragment([this._container, this._slot, this._playerBtn, this._playerController])!,
     );
     this._progressWrap.appendChild(this._progressWrapValue);
-    this._progress.appendChild(
-      createDocumentFragment([this._progressWrap, this._progressDot])!,
-    );
+    this._progress.appendChild(createDocumentFragment([this._progressWrap, this._progressDot])!);
     this._playerControllerBottom.appendChild(
-      createDocumentFragment([
-        this._playerControllerBottomLeft,
-        this._playerControllerBottomRight,
-      ])!,
+      createDocumentFragment([this._playerControllerBottomLeft, this._playerControllerBottomRight])!,
     );
     this._playerControllerBottomLeft.appendChild(
       createDocumentFragment([
@@ -283,10 +205,7 @@ export class RanPlayer extends HTMLElement {
       ])!,
     );
     this._playControllerBottomVolume.appendChild(
-      createDocumentFragment([
-        this._playControllerBottomSpeedIcon,
-        this._playControllerBottomVolumeProgress,
-      ])!,
+      createDocumentFragment([this._playControllerBottomSpeedIcon, this._playControllerBottomVolumeProgress])!,
     );
     this._playerControllerBottomRight.appendChild(
       createDocumentFragment([
@@ -385,10 +304,7 @@ export class RanPlayer extends HTMLElement {
     select.addEventListener('change', this.changeClarity);
     this._playControllerBottomClarity.appendChild(select);
   };
-  manifestLoaded = (
-    type: string,
-    data: { levels: Level[]; url: string },
-  ): void => {
+  manifestLoaded = (type: string, data: { levels: Level[]; url: string }): void => {
     if (type === 'hlsManifestLoaded') {
       const { url, levels = [] } = data;
       if (levels.length <= 0) return;
@@ -455,14 +371,8 @@ export class RanPlayer extends HTMLElement {
   };
   onCanplay = (e: Event): void => {
     this.ctx.currentState = e.type;
-    removeClassToElement(
-      this._playerControllerBottomPlayBtn,
-      'ran-player-controller-bottom-left-btn-pause',
-    );
-    addClassToElement(
-      this._playerControllerBottomPlayBtn,
-      'ran-player-controller-bottom-left-btn-play',
-    );
+    removeClassToElement(this._playerControllerBottomPlayBtn, 'ran-player-controller-bottom-left-btn-pause');
+    addClassToElement(this._playerControllerBottomPlayBtn, 'ran-player-controller-bottom-left-btn-play');
     this.change('canplay', e);
     this.resize();
   };
@@ -528,9 +438,7 @@ export class RanPlayer extends HTMLElement {
     this.ctx.duration = duration;
     this._playerControllerBottomTimeCurrent.innerText = '00:00';
     this._playerControllerBottomTimeDivide.innerText = '/';
-    this._playerControllerBottomTimeDuration.innerText = timeFormat(
-      this.ctx.duration,
-    );
+    this._playerControllerBottomTimeDuration.innerText = timeFormat(this.ctx.duration);
     this.change('loadeddata', e);
   };
   onTimeupdate = (e: Event): void => {
@@ -548,28 +456,16 @@ export class RanPlayer extends HTMLElement {
   onPlay = (e: Event): void => {
     this.ctx.currentState = e.type;
     this.requestAnimationFrame(this.updateCurrentProgress);
-    removeClassToElement(
-      this._playerControllerBottomPlayBtn,
-      'ran-player-controller-bottom-left-btn-play',
-    );
-    addClassToElement(
-      this._playerControllerBottomPlayBtn,
-      'ran-player-controller-bottom-left-btn-pause',
-    );
+    removeClassToElement(this._playerControllerBottomPlayBtn, 'ran-player-controller-bottom-left-btn-play');
+    addClassToElement(this._playerControllerBottomPlayBtn, 'ran-player-controller-bottom-left-btn-pause');
     this.showControllerBar();
     this.change('play', e);
   };
   onPlaying = (e: Event): void => {
     this.ctx.currentState = e.type;
     this._playerBtn.style.setProperty('display', 'none');
-    removeClassToElement(
-      this._playerControllerBottomPlayBtn,
-      'ran-player-controller-bottom-left-btn-play',
-    );
-    addClassToElement(
-      this._playerControllerBottomPlayBtn,
-      'ran-player-controller-bottom-left-btn-pause',
-    );
+    removeClassToElement(this._playerControllerBottomPlayBtn, 'ran-player-controller-bottom-left-btn-play');
+    addClassToElement(this._playerControllerBottomPlayBtn, 'ran-player-controller-bottom-left-btn-pause');
     this.requestAnimationFrame(this.updateCurrentProgress);
     this.showControllerBar();
     this.change('playing', e);
@@ -578,14 +474,8 @@ export class RanPlayer extends HTMLElement {
     this.ctx.currentState = e.type;
     this._playerBtn.style.setProperty('display', 'block');
     this.change('pause', e);
-    removeClassToElement(
-      this._playerControllerBottomPlayBtn,
-      'ran-player-controller-bottom-left-btn-pause',
-    );
-    addClassToElement(
-      this._playerControllerBottomPlayBtn,
-      'ran-player-controller-bottom-left-btn-play',
-    );
+    removeClassToElement(this._playerControllerBottomPlayBtn, 'ran-player-controller-bottom-left-btn-pause');
+    addClassToElement(this._playerControllerBottomPlayBtn, 'ran-player-controller-bottom-left-btn-play');
     this.cancelAnimationFrame();
     this._playerController.style.setProperty('opacity', '1');
     if (this.controllerBarTimeId) {
@@ -712,14 +602,8 @@ export class RanPlayer extends HTMLElement {
     const rect = this._progress.getBoundingClientRect();
     const offsetX = e.clientX - rect.left - 9;
     const percentage = range(offsetX / this._progress.offsetWidth);
-    this._progressWrapValue.style.setProperty(
-      'transform',
-      `scaleX(${percentage})`,
-    );
-    this._progressDot.style.setProperty(
-      'transform',
-      `translateX(${percentage * this._progress.offsetWidth}px)`,
-    );
+    this._progressWrapValue.style.setProperty('transform', `scaleX(${percentage})`);
+    this._progressDot.style.setProperty('transform', `translateX(${percentage * this._progress.offsetWidth}px)`);
     this.moveProgress.percentage = Math.floor(percentage * 100) / 100;
   };
   /**
@@ -744,8 +628,7 @@ export class RanPlayer extends HTMLElement {
     if (this.requestAnimationFrameId) return;
     this.requestAnimationFrameId = window.requestAnimationFrame(() => {
       fn();
-      this.requestAnimationFrameId &&
-        cancelAnimationFrame(this.requestAnimationFrameId);
+      this.requestAnimationFrameId && cancelAnimationFrame(this.requestAnimationFrameId);
       this.requestAnimationFrameId = undefined;
       this.requestAnimationFrame(fn);
     });
@@ -769,26 +652,16 @@ export class RanPlayer extends HTMLElement {
     const currentTime = this.getCurrentTime();
     this.ctx.currentTime = currentTime;
     const { duration } = this.ctx;
-    this._progressWrapValue.style.setProperty(
-      'transform',
-      `scaleX(${currentTime / duration})`,
-    );
+    this._progressWrapValue.style.setProperty('transform', `scaleX(${currentTime / duration})`);
     this._progressDot.style.setProperty(
       'transform',
       `translateX(${(currentTime / duration) * this._progress.offsetWidth}px)`,
     );
     if (currentTime >= 0) {
-      this._playerControllerBottomTimeCurrent.innerText =
-        timeFormat(currentTime);
+      this._playerControllerBottomTimeCurrent.innerText = timeFormat(currentTime);
     }
   };
-  changeAttribute = (
-    k: string,
-    o: string,
-    n: string,
-    attribute: string,
-    callback: Function,
-  ): void => {
+  changeAttribute = (k: string, o: string, n: string, attribute: string, callback: Function): void => {
     if (k === attribute && o !== n) throttle(callback)();
   };
   /**
@@ -911,26 +784,14 @@ export class RanPlayer extends HTMLElement {
     const rect = this._progress.getBoundingClientRect();
     const offsetX = e.clientX - rect.left;
     if (this._playerTipText.innerText) {
-      this._playerTip.style.setProperty(
-        'transform',
-        `translate(calc(${offsetX}px - 50%),-20px)`,
-      );
+      this._playerTip.style.setProperty('transform', `translate(calc(${offsetX}px - 50%),-20px)`);
     } else {
-      this._playerTip.style.setProperty(
-        'transform',
-        `translateX(calc(${offsetX}px - 50%))`,
-      );
+      this._playerTip.style.setProperty('transform', `translateX(calc(${offsetX}px - 50%))`);
     }
-    this._playerTipTime.innerText = timeFormat(
-      (offsetX / this._progress.clientWidth) * this.ctx.duration,
-    );
+    this._playerTipTime.innerText = timeFormat((offsetX / this._progress.clientWidth) * this.ctx.duration);
   };
   progressMouseLeave = (e: MouseEvent): void => {
-    if (
-      (e.target as HTMLElement).classList.contains(
-        'ran-player-controller-progress-wrap-dot',
-      )
-    ) {
+    if ((e.target as HTMLElement).classList.contains('ran-player-controller-progress-wrap-dot')) {
       return;
     }
     this._playerTip.style.setProperty('opacity', '0');
@@ -940,28 +801,17 @@ export class RanPlayer extends HTMLElement {
     this._playerTip.style.setProperty('opacity', '1');
     const offsetX = e.clientX - rect.left;
     if (this._playerTipText.innerText) {
-      this._playerTip.style.setProperty(
-        'transform',
-        `translate(calc(${offsetX}px - 50%),-20px)`,
-      );
+      this._playerTip.style.setProperty('transform', `translate(calc(${offsetX}px - 50%),-20px)`);
     } else {
-      this._playerTip.style.setProperty(
-        'transform',
-        `translateX(calc(${offsetX}px - 50%))`,
-      );
+      this._playerTip.style.setProperty('transform', `translateX(calc(${offsetX}px - 50%))`);
     }
-    this._playerTipTime.innerText = timeFormat(
-      (offsetX / this._progress.clientWidth) * this.ctx.duration,
-    );
+    this._playerTipTime.innerText = timeFormat((offsetX / this._progress.clientWidth) * this.ctx.duration);
   };
   changePlayerVolume = (): void => {
     if (!this._video) return;
     const { volume } = this.ctx;
     if (volume > 0) {
-      addClassToElement(
-        this._playControllerBottomSpeedIcon,
-        'ran-player-controller-bottom-right-volume-icon-mute',
-      );
+      addClassToElement(this._playControllerBottomSpeedIcon, 'ran-player-controller-bottom-right-volume-icon-mute');
       removeClassToElement(
         this._playControllerBottomSpeedIcon,
         'ran-player-controller-bottom-right-volume-icon-volume',
@@ -970,18 +820,9 @@ export class RanPlayer extends HTMLElement {
       this.setVolume(0);
       this.change('volume', 0);
     } else {
-      addClassToElement(
-        this._playControllerBottomSpeedIcon,
-        'ran-player-controller-bottom-right-volume-icon-volume',
-      );
-      removeClassToElement(
-        this._playControllerBottomSpeedIcon,
-        'ran-player-controller-bottom-right-volume-icon-mute',
-      );
-      this._playControllerBottomVolumeProgress.setAttribute(
-        'percent',
-        `${this._volume || 0.5}`,
-      );
+      addClassToElement(this._playControllerBottomSpeedIcon, 'ran-player-controller-bottom-right-volume-icon-volume');
+      removeClassToElement(this._playControllerBottomSpeedIcon, 'ran-player-controller-bottom-right-volume-icon-mute');
+      this._playControllerBottomVolumeProgress.setAttribute('percent', `${this._volume || 0.5}`);
       this.setVolume(0.5);
       this.change('volume', this._volume || 0.5);
     }
@@ -1068,75 +909,39 @@ export class RanPlayer extends HTMLElement {
     }
   };
   connectedCallback(): void {
-    this._container.addEventListener(
-      'click',
-      this.dispatchClickPlayerContainerAction,
-    );
-    this._playerBtn.addEventListener(
-      'click',
-      this.dispatchClickPlayerBtnAction,
-    );
+    this._container.addEventListener('click', this.dispatchClickPlayerContainerAction);
+    this._playerBtn.addEventListener('click', this.dispatchClickPlayerBtnAction);
     this.addEventListener('keydown', this.SpaceKeyDown);
     this._progressDot.addEventListener('mousedown', this.progressDotMouseDown);
-    this._playerControllerBottomPlayBtn.addEventListener(
-      'click',
-      this.dispatchClickPlayerBtnAction,
-    );
+    this._playerControllerBottomPlayBtn.addEventListener('click', this.dispatchClickPlayerBtnAction);
     this._progress.addEventListener('click', this.progressClick);
     this._progress.addEventListener('mouseenter', this.progressMouseEnter);
     this._progress.addEventListener('mousemove', this.progressMouseMove);
     this._progress.addEventListener('mouseleave', this.progressMouseLeave);
     this._player.addEventListener('mousemove', this.progressDotMouseMove);
     this._player.addEventListener('mouseup', this.progressDotMouseUp);
-    this._playControllerBottomVolumeProgress.addEventListener(
-      'change',
-      this.changeVolumeProgress,
-    );
-    this._playControllerBottomRightFullScreen.addEventListener(
-      'click',
-      this.openFullScreen,
-    );
-    this._playControllerBottomSpeedIcon.addEventListener(
-      'click',
-      this.changePlayerVolume,
-    );
+    this._playControllerBottomVolumeProgress.addEventListener('change', this.changeVolumeProgress);
+    this._playControllerBottomRightFullScreen.addEventListener('click', this.openFullScreen);
+    this._playControllerBottomSpeedIcon.addEventListener('click', this.changePlayerVolume);
     document.addEventListener('fullscreenchange', this.fullScreenChange);
     window.addEventListener('resize', this.resize);
     this.updatePlayer();
   }
   disconnectCallback(): void {
-    this._container.removeEventListener(
-      'click',
-      this.dispatchClickPlayerContainerAction,
-    );
-    this._playerBtn.removeEventListener(
-      'click',
-      this.dispatchClickPlayerBtnAction,
-    );
-    this._playerControllerBottomPlayBtn.removeEventListener(
-      'click',
-      this.dispatchClickPlayerBtnAction,
-    );
+    this._container.removeEventListener('click', this.dispatchClickPlayerContainerAction);
+    this._playerBtn.removeEventListener('click', this.dispatchClickPlayerBtnAction);
+    this._playerControllerBottomPlayBtn.removeEventListener('click', this.dispatchClickPlayerBtnAction);
     this.cancelAnimationFrame();
     this.removeEventListener('keydown', this.SpaceKeyDown);
     this._progress.removeEventListener('click', this.progressClick);
     this._progress.removeEventListener('mouseenter', this.progressMouseEnter);
     this._progress.removeEventListener('mousemove', this.progressMouseMove);
     this._progress.removeEventListener('mouseleave', this.progressMouseLeave);
-    this._progressDot.removeEventListener(
-      'mousedown',
-      this.progressDotMouseDown,
-    );
+    this._progressDot.removeEventListener('mousedown', this.progressDotMouseDown);
     this._player.removeEventListener('mousemove', this.progressDotMouseMove);
     this._player.removeEventListener('mouseup', this.progressDotMouseUp);
-    this._playControllerBottomVolumeProgress.removeEventListener(
-      'change',
-      this.changeVolumeProgress,
-    );
-    this._playControllerBottomRightFullScreen.removeEventListener(
-      'click',
-      this.openFullScreen,
-    );
+    this._playControllerBottomVolumeProgress.removeEventListener('change', this.changeVolumeProgress);
+    this._playControllerBottomRightFullScreen.removeEventListener('click', this.openFullScreen);
     window.removeEventListener('resize', this.resize);
     document.removeEventListener('fullscreenchange', this.fullScreenChange);
   }

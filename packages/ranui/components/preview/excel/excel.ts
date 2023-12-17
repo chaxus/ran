@@ -118,18 +118,13 @@ function transferColumns(
   for (let i = 0; i < (excelSheet.columns || []).length; i++) {
     spreadSheet.cols[i.toString()] = {};
     if (excelSheet.columns[i].width) {
-      spreadSheet.cols[i.toString()].width =
-        excelSheet.columns[i].width * 6 + (options.widthOffset || 0);
+      spreadSheet.cols[i.toString()].width = excelSheet.columns[i].width * 6 + (options.widthOffset || 0);
     } else {
-      spreadSheet.cols[i.toString()].width =
-        defaultColWidth + (options.widthOffset || 0);
+      spreadSheet.cols[i.toString()].width = defaultColWidth + (options.widthOffset || 0);
     }
   }
 
-  (spreadSheet.cols.len as number) = Math.max(
-    Object.keys(spreadSheet.cols).length,
-    options.minColLength || 0,
-  );
+  (spreadSheet.cols.len as number) = Math.max(Object.keys(spreadSheet.cols).length, options.minColLength || 0);
 }
 type Style = any;
 
@@ -171,8 +166,7 @@ function getCellText(cell: Cell) {
               precision = 0;
             }
 
-            let result: string | string[] =
-              Number(value).toFixed(precision) + '';
+            let result: string | string[] = Number(value).toFixed(precision) + '';
             if (cell.style.numFmt.includes('#,##')) {
               //千分位
               result = result.split('.');
@@ -180,11 +174,7 @@ function getCellText(cell: Cell) {
               const newNumber = [];
               for (let i = 0; i < number.length; i++) {
                 newNumber.push(number[i]);
-                if (
-                  (i + 1) % 3 === 0 &&
-                  i < number.length - 1 &&
-                  number[i + 1] !== '-'
-                ) {
+                if ((i + 1) % 3 === 0 && i < number.length - 1 && number[i + 1] !== '-') {
                   newNumber.push(',');
                 }
               }
@@ -211,9 +201,7 @@ function getCellText(cell: Cell) {
           return timestampToTime(value).format('M月D日');
         case 'yyyy/m/d h:mm;@':
         case 'm/d/yy "h":mm':
-          return timestampToTime(value)
-            .subtract(8, 'hour')
-            .format('YYYY/M/DD HH:mm');
+          return timestampToTime(value).subtract(8, 'hour').format('YYYY/M/DD HH:mm');
         case 'h:mm;@':
           return timestampToTime(value).format('HH:mm');
         default:
@@ -285,17 +273,12 @@ function transferArgbColor(originColor: string) {
   originColor = originColor.trim().toLowerCase(); //去掉前后空格
   const color: Partial<Color> = {};
   try {
-    const argb =
-      /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(
-        originColor,
-      ) || '';
+    const argb = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(originColor) || '';
     color.r = parseInt(argb[2], 16);
     color.g = parseInt(argb[3], 16);
     color.b = parseInt(argb[4], 16);
     color.a = parseInt(argb[1], 16) / 255;
-    return tinycolor(
-      `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})`,
-    ).toHexString();
+    return tinycolor(`rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})`).toHexString();
   } catch (e) {
     console.warn(e);
   }
@@ -320,16 +303,10 @@ function getStyle(cell: Cell) {
     // 8位字符颜色先转rgb再转16进制颜色
     if (cell.style.fill.fgColor.argb) {
       backGroundColor = transferArgbColor(cell.style.fill.fgColor.argb);
-    } else if (
-      Object.prototype.hasOwnProperty.call(cell.style.fill.fgColor, 'theme')
-    ) {
-      backGroundColor = transferThemeColor(
-        cell.style.fill.fgColor.theme,
-        cell.style.fill.fgColor.tint,
-      );
+    } else if (Object.prototype.hasOwnProperty.call(cell.style.fill.fgColor, 'theme')) {
+      backGroundColor = transferThemeColor(cell.style.fill.fgColor.theme, cell.style.fill.fgColor.tint);
     } else if (cell.style.fill.fgColor.indexed) {
-      backGroundColor =
-        indexedColor[cell.style.fill.fgColor.indexed] || '#C7C9CC';
+      backGroundColor = indexedColor[cell.style.fill.fgColor.indexed] || '#C7C9CC';
     } else {
       backGroundColor = '#C7C9CC';
     }
@@ -343,13 +320,8 @@ function getStyle(cell: Cell) {
   if (cell.style.font && cell.style.font.color) {
     if (cell.style.font.color.argb) {
       fontColor = transferArgbColor(cell.style.font.color.argb);
-    } else if (
-      Object.prototype.hasOwnProperty.call(cell.style.font.color, 'theme')
-    ) {
-      fontColor = transferThemeColor(
-        cell.style.font.color.theme,
-        cell.style.font.color.tint,
-      );
+    } else if (Object.prototype.hasOwnProperty.call(cell.style.font.color, 'theme')) {
+      fontColor = transferThemeColor(cell.style.font.color.theme, cell.style.font.color.tint);
     } else if (cell.style.font.color.indexed) {
       fontColor = indexedColor[cell.style.font.color.indexed] || '#000000';
     } else {
@@ -384,13 +356,8 @@ function getStyle(cell: Cell) {
       } else if (originBorder.color) {
         if (originBorder.color.argb) {
           bordColor = transferArgbColor(originBorder.color.argb) || '';
-        } else if (
-          Object.prototype.hasOwnProperty.call(originBorder.color, 'theme')
-        ) {
-          bordColor = transferThemeColor(
-            originBorder.color.theme,
-            originBorder.color.tint,
-          );
+        } else if (Object.prototype.hasOwnProperty.call(originBorder.color, 'theme')) {
+          bordColor = transferThemeColor(originBorder.color.theme, originBorder.color.tint);
         } else if (originBorder.color.indexed) {
           bordColor = indexedColor[originBorder.color.indexed];
         }
@@ -426,13 +393,9 @@ export function transferExcelToSpreadSheet(workbook: any, options: any): any {
       // 合并单元格终止地址
       mergeAddress.endAddress = sheet._merges[mergeRange].br;
       // Y轴方向跨度
-      mergeAddress.YRange =
-        sheet._merges[mergeRange].model.bottom -
-        sheet._merges[mergeRange].model.top;
+      mergeAddress.YRange = sheet._merges[mergeRange].model.bottom - sheet._merges[mergeRange].model.top;
       // X轴方向跨度
-      mergeAddress.XRange =
-        sheet._merges[mergeRange].model.right -
-        sheet._merges[mergeRange].model.left;
+      mergeAddress.XRange = sheet._merges[mergeRange].model.right - sheet._merges[mergeRange].model.left;
       mergeAddressData.push(mergeAddress);
     }
 
@@ -442,11 +405,9 @@ export function transferExcelToSpreadSheet(workbook: any, options: any): any {
       sheetData.rows[spreadSheetRowIndex] = { cells: {} };
 
       if (row.height) {
-        sheetData.rows[spreadSheetRowIndex].height =
-          row.height + (options.heightOffset || 0);
+        sheetData.rows[spreadSheetRowIndex].height = row.height + (options.heightOffset || 0);
       } else {
-        sheetData.rows[spreadSheetRowIndex].height =
-          defaultRowHeight + (options.heightOffset || 0);
+        sheetData.rows[spreadSheetRowIndex].height = defaultRowHeight + (options.heightOffset || 0);
       }
       //includeEmpty = false 不包含空白单元格
       (row._cells || []).forEach((cell: any, spreadSheetColIndex: number) => {
@@ -459,14 +420,14 @@ export function transferExcelToSpreadSheet(workbook: any, options: any): any {
           return;
         }
         if (mergeAddress) {
-          sheetData.rows[spreadSheetRowIndex].cells[spreadSheetColIndex].merge =
-            [mergeAddress.YRange, mergeAddress.XRange];
+          sheetData.rows[spreadSheetRowIndex].cells[spreadSheetColIndex].merge = [
+            mergeAddress.YRange,
+            mergeAddress.XRange,
+          ];
         }
-        sheetData.rows[spreadSheetRowIndex].cells[spreadSheetColIndex].text =
-          getCellText(cell);
+        sheetData.rows[spreadSheetRowIndex].cells[spreadSheetColIndex].text = getCellText(cell);
         sheetData.styles.push(getStyle(cell));
-        sheetData.rows[spreadSheetRowIndex].cells[spreadSheetColIndex].style =
-          sheetData.styles.length - 1;
+        sheetData.rows[spreadSheetRowIndex].cells[spreadSheetColIndex].style = sheetData.styles.length - 1;
       });
     });
     if (sheetData._media) {

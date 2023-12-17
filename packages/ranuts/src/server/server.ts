@@ -5,10 +5,7 @@ import os from 'node:os';
 
 export type Next = () => Promise<never> | Promise<void>;
 
-export type MiddlewareFunction = (
-  ctx: Context,
-  next: Next,
-) => void | Promise<void>;
+export type MiddlewareFunction = (ctx: Context, next: Next) => void | Promise<void>;
 
 export interface Context {
   [x: string]: any;
@@ -24,11 +21,7 @@ function ipv4(): string | undefined {
     if (iface) {
       for (let i = 0; i < iface.length; i++) {
         const alias = iface[i];
-        if (
-          alias.family === 'IPv4' &&
-          alias.address !== '127.0.0.1' &&
-          !alias.internal
-        ) {
+        if (alias.family === 'IPv4' && alias.address !== '127.0.0.1' && !alias.internal) {
           return alias.address;
         }
       }
@@ -74,17 +67,14 @@ function onerror(err: Error) {
 }
 
 function compose(middleware: Array<MiddlewareFunction>) {
-  if (!Array.isArray(middleware))
-    throw new TypeError('Middleware stack must be an array!');
+  if (!Array.isArray(middleware)) throw new TypeError('Middleware stack must be an array!');
   for (const fn of middleware) {
-    if (typeof fn !== 'function')
-      throw new TypeError('Middleware must be composed of functions!');
+    if (typeof fn !== 'function') throw new TypeError('Middleware must be composed of functions!');
   }
   return function (ctx: Context, next?: Next) {
     let index = -1;
     function dispatch(i: number): Promise<never> | Promise<void> {
-      if (i <= index)
-        return Promise.reject(new Error('next() called multiple times'));
+      if (i <= index) return Promise.reject(new Error('next() called multiple times'));
       index = i;
       let fn = middleware[i];
       if (i === middleware.length && next) fn = next;

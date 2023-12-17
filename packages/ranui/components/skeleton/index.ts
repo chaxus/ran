@@ -14,11 +14,7 @@ function Skeleton() {
       }
       connectedCallback() {}
       disconnectCallback() {}
-      attributeChangedCallback(
-        name: string,
-        oldValue: string,
-        newValue: string,
-      ) {}
+      attributeChangedCallback(name: string, oldValue: string, newValue: string) {}
     }
 
     window.customElements.define('r-skeleton', CustomElement);

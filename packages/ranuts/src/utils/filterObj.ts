@@ -5,10 +5,7 @@
  * @return {Object}
  */
 
-const filterObj = (
-  obj: Record<string, unknown>,
-  list: Array<string>,
-): Record<string, unknown> => {
+const filterObj = (obj: Record<string, unknown>, list: Array<string>): Record<string, unknown> => {
   const result: Record<string, unknown> = {};
   Object.keys(obj).forEach((item) => {
     if (!list.includes(item)) {

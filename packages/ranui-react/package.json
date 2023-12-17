@@ -13,6 +13,9 @@
   },
   "author": "chaxus",
   "license": "MIT",
+  "engines": {
+    "node": ">=12.20.0"
+  },
   "scripts": {
     "dev": "vite",
     "build": "sh ./bin/build.sh",

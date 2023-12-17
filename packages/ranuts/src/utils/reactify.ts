@@ -3,22 +3,13 @@
  * Change to Adaptive ranui
  * */
 import { Component, createElement, createRef, forwardRef } from 'react';
-import type {
-  DetailedHTMLProps,
-  ForwardedRef,
-  HTMLAttributes,
-  MutableRefObject,
-  RefObject,
-} from 'react';
+import type { DetailedHTMLProps, ForwardedRef, HTMLAttributes, MutableRefObject, RefObject } from 'react';
 
 interface InnerRef {
-  innerRef:
-    | RefObject<Element & Record<string, unknown>>
-    | MutableRefObject<Element & Record<string, unknown>>;
+  innerRef: RefObject<Element & Record<string, unknown>> | MutableRefObject<Element & Record<string, unknown>>;
 }
 
-type Props = DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> &
-  InnerRef;
+type Props = DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> & InnerRef;
 
 export const reactifyWebComponent = <T = unknown>(WC: string): any => {
   class Reactified extends Component<Props> {
@@ -99,11 +90,7 @@ export const reactifyWebComponent = <T = unknown>(WC: string): any => {
 
     render() {
       const { children, className, ...rest } = this.props;
-      return createElement(
-        WC,
-        { class: className, ...rest, ref: this.ref },
-        children,
-      );
+      return createElement(WC, { class: className, ...rest, ref: this.ref }, children);
     }
   }
 

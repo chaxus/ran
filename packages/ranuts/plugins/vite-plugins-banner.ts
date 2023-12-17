@@ -16,10 +16,7 @@ export default function vitePluginBanner(): Plugin {
     closeBundle() {
       fs.readFile(indexPath, 'utf-8', (error, data) => {
         if (!error) {
-          const code = data.replace(
-            'const fs = {};\n',
-            'import fs from "node:fs";\n',
-          );
+          const code = data.replace('const fs = {};\n', 'import fs from "node:fs";\n');
           fs.writeFile(
             indexPath,
             code,

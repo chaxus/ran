@@ -27,10 +27,7 @@ const startDevServer = (): void => {
 
   server.listen(8080, async () => {
     const { port } = server.address() as ClientRequestArgs; // { address: '::', family: 'IPv6', port: 8080 }
-    console.log(
-      green('🚀 No-Bundle 服务已经成功启动!'),
-      `耗时: ${Date.now() - startTime}ms`,
-    );
+    console.log(green('🚀 No-Bundle 服务已经成功启动!'), `耗时: ${Date.now() - startTime}ms`);
     console.log(`> 本地访问路径: ${blue(`http://localhost:${port}`)}`);
   });
 };

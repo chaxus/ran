@@ -99,10 +99,10 @@ type tuple = [[1, 'name'], [2, 'value']];
 思路很容易想到，提取元组中的两个元素，构造成新的元组：
 
 ```ts
-type Zip<
-  One extends [unknown, unknown],
-  Other extends [unknown, unknown],
-> = One extends [infer OneFirst, infer OneSecond]
+type Zip<One extends [unknown, unknown], Other extends [unknown, unknown]> = One extends [
+  infer OneFirst,
+  infer OneSecond,
+]
   ? Other extends [infer OtherFirst, infer OtherSecond]
     ? [[OneFirst, OtherFirst], [OneSecond, OtherSecond]]
     : []
@@ -125,10 +125,7 @@ type ZipResult = Zip<[1, 2], ['name', 'value']>;
 那就得用递归了：
 
 ```ts
-type Zip<One extends unknown[], Other extends unknown[]> = One extends [
-  infer OneFirst,
-  ...infer OneRest,
-]
+type Zip<One extends unknown[], Other extends unknown[]> = One extends [infer OneFirst, ...infer OneRest]
   ? Other extends [infer OtherFirst, ...infer OtherRest]
     ? [[OneFirst, OtherFirst], ...Zip<OneRest, OtherRest>]
     : []
@@ -144,10 +141,7 @@ type Zip<One extends unknown[], Other extends unknown[]> = One extends [
 这样，就能处理任意个数元组的合并：
 
 ```ts
-type ZipResult = Zip<
-  [1, 2, 3, 4, 5],
-  ['name', 'value', 'three', 'four', 'five']
->;
+type ZipResult = Zip<[1, 2, 3, 4, 5], ['name', 'value', 'three', 'four', 'five']>;
 // type ZipResult = [[1, 'name'], [2, 'value'], [3, 'three'], [4, 'four'], [5, 'five']];
 ```
 
@@ -162,10 +156,7 @@ type ZipResult = Zip<
 需要用到字符串类型的提取和重新构造：
 
 ```ts
-type CapitalizeStr<Str extends string> =
-  Str extends `${infer First}${infer Rest}`
-    ? `${Uppercase<First>}${Rest}`
-    : Str;
+type CapitalizeStr<Str extends string> = Str extends `${infer First}${infer Rest}` ? `${Uppercase<First>}${Rest}` : Str;
 ```
 
 我们声明了类型参数 Str 是要处理的字符串类型，通过 extends 约束为 string。
@@ -183,10 +174,9 @@ type CapitalizeStr<Str extends string> =
 同样是提取和重新构造：
 
 ```ts
-type CamelCase<Str extends string> =
-  Str extends `${infer Left}_${infer Right}${infer Rest}`
-    ? `${Left}${Uppercase<Right>}${CamelCase<Rest>}`
-    : Str;
+type CamelCase<Str extends string> = Str extends `${infer Left}_${infer Right}${infer Rest}`
+  ? `${Left}${Uppercase<Right>}${CamelCase<Rest>}`
+  : Str;
 ```
 
 类型参数 Str 是待处理的字符串类型，约束为 string。
@@ -202,10 +192,7 @@ type CamelCase<Str extends string> =
 可以修改自然也可以删除，我们再来做一个删除一段字符串的案例：删除字符串中的某个子串
 
 ```ts
-type DropSubStr<
-  Str extends string,
-  SubStr extends string,
-> = Str extends `${infer Prefix}${SubStr}${infer Suffix}`
+type DropSubStr<Str extends string, SubStr extends string> = Str extends `${infer Prefix}${SubStr}${infer Suffix}`
   ? DropSubStr<`${Prefix}${Suffix}`, SubStr>
   : Str;
 ```
@@ -229,9 +216,7 @@ type DropSubStr<
 比如在已有的函数类型上添加一个参数:
 
 ```ts
-type AppendArgument<Func extends Function, Arg> = Func extends (
-  ...args: infer Args
-) => infer ReturnType
+type AppendArgument<Func extends Function, Arg> = Func extends (...args: infer Args) => infer ReturnType
   ? (...args: [...Args, Arg]) => ReturnType
   : never;
 ```

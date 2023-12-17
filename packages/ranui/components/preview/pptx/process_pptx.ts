@@ -15,9 +15,7 @@ interface InputByType {
   stream: NodeJS.ReadableStream;
 }
 
-type InputFileFormat =
-  | InputByType[keyof InputByType]
-  | Promise<InputByType[keyof InputByType]>;
+type InputFileFormat = InputByType[keyof InputByType] | Promise<InputByType[keyof InputByType]>;
 
 interface ChartData {
   type: string;
@@ -85,9 +83,7 @@ export default function processPptx(
     const dateBefore = Date.now();
 
     if (zip.file('docProps/thumbnail.jpeg')) {
-      const pptxThumbImg = await zip
-        .file('docProps/thumbnail.jpeg')
-        ?.async('base64');
+      const pptxThumbImg = await zip.file('docProps/thumbnail.jpeg')?.async('base64');
       postMessage({
         type: 'pptx-thumb',
         data: pptxThumbImg,
@@ -171,10 +167,7 @@ export default function processPptx(
   }
 
   async function loadTheme(zip: JSZip) {
-    const preResContent = await readXmlFile(
-      zip,
-      'ppt/_rels/presentation.xml.rels',
-    );
+    const preResContent = await readXmlFile(zip, 'ppt/_rels/presentation.xml.rels');
     const relationshipArray = preResContent['Relationships']['Relationship'];
     let themeURI;
     if (relationshipArray.constructor === Array) {
@@ -188,8 +181,7 @@ export default function processPptx(
         }
       }
     } else if (
-      relationshipArray['attrs']['Type'] ===
-      'http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme'
+      relationshipArray['attrs']['Type'] === 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme'
     ) {
       themeURI = relationshipArray['attrs']['Target'];
     }
@@ -212,8 +204,7 @@ export default function processPptx(
       data: 'Processing slide' + (index + 1),
     });
 
-    const resName =
-      sldFileName.replace('slides/slide', 'slides/_rels/slide') + '.rels';
+    const resName = sldFileName.replace('slides/slide', 'slides/_rels/slide') + '.rels';
     const resContent = await readXmlFile(zip, resName);
     let RelationshipArray = resContent['Relationships']['Relationship'];
     let layoutFilename = '';
@@ -222,10 +213,7 @@ export default function processPptx(
       for (let i = 0; i < RelationshipArray.length; i++) {
         switch (RelationshipArray[i]['attrs']['Type']) {
           case 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout':
-            layoutFilename = RelationshipArray[i]['attrs']['Target'].replace(
-              '../',
-              'ppt/',
-            );
+            layoutFilename = RelationshipArray[i]['attrs']['Target'].replace('../', 'ppt/');
             break;
           case 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/notesSlide':
           case 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/image':
@@ -237,39 +225,26 @@ export default function processPptx(
                 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/',
                 '',
               ),
-              target: RelationshipArray[i]['attrs']['Target'].replace(
-                '../',
-                'ppt/',
-              ),
+              target: RelationshipArray[i]['attrs']['Target'].replace('../', 'ppt/'),
             };
           }
         }
       }
     } else {
-      layoutFilename = RelationshipArray['attrs']['Target'].replace(
-        '../',
-        'ppt/',
-      );
+      layoutFilename = RelationshipArray['attrs']['Target'].replace('../', 'ppt/');
     }
     // console.log(slideResObj);
     // Open slideLayoutXX.xml
     const slideLayoutContent = await readXmlFile(zip, layoutFilename);
     const slideLayoutTables = indexNodes(slideLayoutContent);
-    const sldLayoutClrOvr =
-      slideLayoutContent['p:sldLayout']['p:clrMapOvr']['a:overrideClrMapping'];
+    const sldLayoutClrOvr = slideLayoutContent['p:sldLayout']['p:clrMapOvr']['a:overrideClrMapping'];
 
     if (sldLayoutClrOvr !== undefined) {
       slideLayoutClrOvride = sldLayoutClrOvr['attrs'];
     }
     const slideLayoutResFilename =
-      layoutFilename.replace(
-        'slideLayouts/slideLayout',
-        'slideLayouts/_rels/slideLayout',
-      ) + '.rels';
-    const slideLayoutResContent = await readXmlFile(
-      zip,
-      slideLayoutResFilename,
-    );
+      layoutFilename.replace('slideLayouts/slideLayout', 'slideLayouts/_rels/slideLayout') + '.rels';
+    const slideLayoutResContent = await readXmlFile(zip, slideLayoutResFilename);
     RelationshipArray = slideLayoutResContent['Relationships']['Relationship'];
     let masterFilename = '';
     const layoutResObj: Record<string, unknown> = {};
@@ -277,10 +252,7 @@ export default function processPptx(
       for (let i = 0; i < RelationshipArray.length; i++) {
         switch (RelationshipArray[i]['attrs']['Type']) {
           case 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideMaster':
-            masterFilename = RelationshipArray[i]['attrs']['Target'].replace(
-              '../',
-              'ppt/',
-            );
+            masterFilename = RelationshipArray[i]['attrs']['Target'].replace('../', 'ppt/');
             break;
           default:
             layoutResObj[RelationshipArray[i]['attrs']['Id']] = {
@@ -288,35 +260,20 @@ export default function processPptx(
                 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/',
                 '',
               ),
-              target: RelationshipArray[i]['attrs']['Target'].replace(
-                '../',
-                'ppt/',
-              ),
+              target: RelationshipArray[i]['attrs']['Target'].replace('../', 'ppt/'),
             };
         }
       }
     } else {
-      masterFilename = RelationshipArray['attrs']['Target'].replace(
-        '../',
-        'ppt/',
-      );
+      masterFilename = RelationshipArray['attrs']['Target'].replace('../', 'ppt/');
     }
     const slideMasterContent = await readXmlFile(zip, masterFilename);
-    const slideMasterTextStyles = getTextByPathList(slideMasterContent, [
-      'p:sldMaster',
-      'p:txStyles',
-    ]);
+    const slideMasterTextStyles = getTextByPathList(slideMasterContent, ['p:sldMaster', 'p:txStyles']);
     const slideMasterTables = indexNodes(slideMasterContent);
 
     const slideMasterResFilename =
-      masterFilename.replace(
-        'slideMasters/slideMaster',
-        'slideMasters/_rels/slideMaster',
-      ) + '.rels';
-    const slideMasterResContent = await readXmlFile(
-      zip,
-      slideMasterResFilename,
-    );
+      masterFilename.replace('slideMasters/slideMaster', 'slideMasters/_rels/slideMaster') + '.rels';
+    const slideMasterResContent = await readXmlFile(zip, slideMasterResFilename);
     RelationshipArray = slideMasterResContent['Relationships']['Relationship'];
     let themeFilename = '';
     const masterResObj: Record<string, unknown> = {};
@@ -324,10 +281,7 @@ export default function processPptx(
       for (let i = 0; i < RelationshipArray.length; i++) {
         switch (RelationshipArray[i]['attrs']['Type']) {
           case 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme':
-            themeFilename = RelationshipArray[i]['attrs']['Target'].replace(
-              '../',
-              'ppt/',
-            );
+            themeFilename = RelationshipArray[i]['attrs']['Target'].replace('../', 'ppt/');
             break;
           default:
             masterResObj[RelationshipArray[i]['attrs']['Id']] = {
@@ -335,18 +289,12 @@ export default function processPptx(
                 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/',
                 '',
               ),
-              target: RelationshipArray[i]['attrs']['Target'].replace(
-                '../',
-                'ppt/',
-              ),
+              target: RelationshipArray[i]['attrs']['Target'].replace('../', 'ppt/'),
             };
         }
       }
     } else {
-      themeFilename = RelationshipArray['attrs']['Target'].replace(
-        '../',
-        'ppt/',
-      );
+      themeFilename = RelationshipArray['attrs']['Target'].replace('../', 'ppt/');
     }
 
     if (themeFilename !== undefined) {
@@ -364,32 +312,16 @@ export default function processPptx(
       masterResObj: masterResObj,
     };
 
-    const bgColor = await getSlideBackgroundFill(
-      slideContent,
-      slideLayoutContent,
-      slideMasterContent,
-      warpObj,
-    );
+    const bgColor = await getSlideBackgroundFill(slideContent, slideLayoutContent, slideMasterContent, warpObj);
     const slideSizeWidth = Math.min(slideSize.width, document.body.clientWidth);
     const base = slideSize.width / slideSizeWidth;
     const slideSizeHeight = slideSize.height / base;
-    let result =
-      "<section style='width:" +
-      slideSizeWidth +
-      'px; height:' +
-      slideSizeHeight +
-      'px;' +
-      bgColor +
-      "'>";
+    let result = "<section style='width:" + slideSizeWidth + 'px; height:' + slideSizeHeight + 'px;' + bgColor + "'>";
 
     for (const nodeKey in nodes) {
       if (nodes[nodeKey].constructor === Array) {
         for (let i = 0; i < nodes[nodeKey].length; i++) {
-          result += await processNodesInSlide(
-            nodeKey,
-            nodes[nodeKey][i],
-            warpObj,
-          );
+          result += await processNodesInSlide(nodeKey, nodes[nodeKey][i], warpObj);
         }
       } else {
         result += await processNodesInSlide(nodeKey, nodes[nodeKey], warpObj);
@@ -417,23 +349,9 @@ export default function processPptx(
       if (targetNode.constructor === Array) {
         for (let i = 0; i < targetNode.length; i++) {
           const nvSpPrNode = targetNode[i]['p:nvSpPr'];
-          const id = getTextByPathList(nvSpPrNode, [
-            'p:cNvPr',
-            'attrs',
-            'id',
-          ]) as string;
-          const idx = getTextByPathList(nvSpPrNode, [
-            'p:nvPr',
-            'p:ph',
-            'attrs',
-            'idx',
-          ]) as string;
-          const type = getTextByPathList(nvSpPrNode, [
-            'p:nvPr',
-            'p:ph',
-            'attrs',
-            'type',
-          ]) as string;
+          const id = getTextByPathList(nvSpPrNode, ['p:cNvPr', 'attrs', 'id']) as string;
+          const idx = getTextByPathList(nvSpPrNode, ['p:nvPr', 'p:ph', 'attrs', 'idx']) as string;
+          const type = getTextByPathList(nvSpPrNode, ['p:nvPr', 'p:ph', 'attrs', 'type']) as string;
 
           if (id !== undefined) {
             idTable[id] = targetNode[i];
@@ -447,23 +365,9 @@ export default function processPptx(
         }
       } else {
         const nvSpPrNode = targetNode['p:nvSpPr'];
-        const id = getTextByPathList(nvSpPrNode, [
-          'p:cNvPr',
-          'attrs',
-          'id',
-        ]) as string;
-        const idx = getTextByPathList(nvSpPrNode, [
-          'p:nvPr',
-          'p:ph',
-          'attrs',
-          'idx',
-        ]) as string;
-        const type = getTextByPathList(nvSpPrNode, [
-          'p:nvPr',
-          'p:ph',
-          'attrs',
-          'type',
-        ]) as string;
+        const id = getTextByPathList(nvSpPrNode, ['p:cNvPr', 'attrs', 'id']) as string;
+        const idx = getTextByPathList(nvSpPrNode, ['p:nvPr', 'p:ph', 'attrs', 'idx']) as string;
+        const type = getTextByPathList(nvSpPrNode, ['p:nvPr', 'p:ph', 'attrs', 'type']) as string;
 
         if (id !== undefined) {
           idTable[id] = targetNode;
@@ -480,11 +384,7 @@ export default function processPptx(
     return { idTable: idTable, idxTable: idxTable, typeTable: typeTable };
   }
 
-  async function processNodesInSlide(
-    nodeKey: string,
-    nodeValue: Record<string, any>,
-    warpObj: Record<string, any>,
-  ) {
+  async function processNodesInSlide(nodeKey: string, nodeValue: Record<string, any>, warpObj: Record<string, any>) {
     let result = '';
 
     switch (nodeKey) {
@@ -509,10 +409,7 @@ export default function processPptx(
     return result;
   }
 
-  async function processGroupSpNode(
-    node: Record<string, any>,
-    warpObj: Record<string, any>,
-  ) {
+  async function processGroupSpNode(node: Record<string, any>, warpObj: Record<string, any>) {
     const factor = 96 / 914400;
 
     const xfrmNode = node['p:grpSpPr']['a:xfrm'];
@@ -543,11 +440,7 @@ export default function processPptx(
     for (const nodeKey in node) {
       if (node[nodeKey].constructor === Array) {
         for (let i = 0; i < node[nodeKey].length; i++) {
-          result += await processNodesInSlide(
-            nodeKey,
-            node[nodeKey][i],
-            warpObj,
-          );
+          result += await processNodesInSlide(nodeKey, node[nodeKey][i], warpObj);
         }
       } else {
         result += await processNodesInSlide(nodeKey, node[nodeKey], warpObj);
@@ -559,10 +452,7 @@ export default function processPptx(
     return result;
   }
 
-  async function processSpNode(
-    node: Record<string, any>,
-    warpObj: Record<string, any>,
-  ) {
+  async function processSpNode(node: Record<string, any>, warpObj: Record<string, any>) {
     /*
      *  958    <xsd:complexType name="CT_GvmlShape">
      *  959   <xsd:sequence>
@@ -578,9 +468,7 @@ export default function processPptx(
     const id = node['p:nvSpPr']['p:cNvPr']['attrs']['id'];
     const name = node['p:nvSpPr']['p:cNvPr']['attrs']['name'];
     const idx =
-      node['p:nvSpPr']['p:nvPr']['p:ph'] === undefined
-        ? undefined
-        : node['p:nvSpPr']['p:nvPr']['p:ph']['attrs']['idx'];
+      node['p:nvSpPr']['p:nvPr']['p:ph'] === undefined ? undefined : node['p:nvSpPr']['p:nvPr']['p:ph']['attrs']['idx'];
     let type =
       node['p:nvSpPr']['p:nvPr']['p:ph'] === undefined
         ? undefined
@@ -608,41 +496,16 @@ export default function processPptx(
     }
 
     if (type === undefined) {
-      type = getTextByPathList(slideLayoutSpNode, [
-        'p:nvSpPr',
-        'p:nvPr',
-        'p:ph',
-        'attrs',
-        'type',
-      ]);
+      type = getTextByPathList(slideLayoutSpNode, ['p:nvSpPr', 'p:nvPr', 'p:ph', 'attrs', 'type']);
       if (type === undefined) {
-        type = getTextByPathList(slideMasterSpNode, [
-          'p:nvSpPr',
-          'p:nvPr',
-          'p:ph',
-          'attrs',
-          'type',
-        ]);
+        type = getTextByPathList(slideMasterSpNode, ['p:nvSpPr', 'p:nvPr', 'p:ph', 'attrs', 'type']);
       }
     }
 
-    return await genShape(
-      node,
-      slideLayoutSpNode,
-      slideMasterSpNode,
-      id,
-      name,
-      idx,
-      type,
-      order,
-      warpObj,
-    );
+    return await genShape(node, slideLayoutSpNode, slideMasterSpNode, id, name, idx, type, order, warpObj);
   }
 
-  async function processCxnSpNode(
-    node: Record<string, any>,
-    warpObj: Record<string, any>,
-  ) {
+  async function processCxnSpNode(node: Record<string, any>, warpObj: Record<string, any>) {
     const id = node['p:nvCxnSpPr']['p:cNvPr']['attrs']['id'];
     const name = node['p:nvCxnSpPr']['p:cNvPr']['attrs']['name'];
     // const idx = (node["p:nvCxnSpPr"]["p:nvPr"]["p:ph"] === undefined) ? undefined : node["p:nvSpPr"]["p:nvPr"]["p:ph"]["attrs"]["idx"];
@@ -650,17 +513,7 @@ export default function processPptx(
     // <p:cNvCxnSpPr>(<p:cNvCxnSpPr>, <a:endCxn>)
     const order = node['attrs']['order'];
 
-    return await genShape(
-      node,
-      undefined,
-      undefined,
-      id,
-      name,
-      undefined,
-      undefined,
-      order,
-      warpObj,
-    );
+    return await genShape(node, undefined, undefined, id, name, undefined, undefined, order, warpObj);
   }
 
   async function genShape(
@@ -675,34 +528,23 @@ export default function processPptx(
     warpObj: any,
   ) {
     const xfrmList = ['p:spPr', 'a:xfrm'];
-    const slideXfrmNode = getTextByPathList(node, xfrmList) as Record<
+    const slideXfrmNode = getTextByPathList(node, xfrmList) as Record<string, any>;
+    const slideLayoutXfrmNode = getTextByPathList(slideLayoutSpNode as Record<string, any>, xfrmList) as Record<
       string,
       any
     >;
-    const slideLayoutXfrmNode = getTextByPathList(
-      slideLayoutSpNode as Record<string, any>,
-      xfrmList,
-    ) as Record<string, any>;
-    const slideMasterXfrmNode = getTextByPathList(
-      slideMasterSpNode as Record<string, any>,
-      xfrmList,
-    ) as Record<string, any>;
+    const slideMasterXfrmNode = getTextByPathList(slideMasterSpNode as Record<string, any>, xfrmList) as Record<
+      string,
+      any
+    >;
 
     let result = '';
     const shpId = getTextByPathList(node, ['attrs', 'order']) as string;
     // console.log("shpId: ",shpId)
-    const shapType = getTextByPathList(node, [
-      'p:spPr',
-      'a:prstGeom',
-      'attrs',
-      'prst',
-    ]);
+    const shapType = getTextByPathList(node, ['p:spPr', 'a:prstGeom', 'attrs', 'prst']);
 
     // custGeom - Amir
-    const custShapType = getTextByPathList(node, [
-      'p:spPr',
-      'a:custGeom',
-    ]) as Record<string, any>;
+    const custShapType = getTextByPathList(node, ['p:spPr', 'a:custGeom']) as Record<string, any>;
 
     let isFlipV = false;
     if (
@@ -713,9 +555,7 @@ export default function processPptx(
     }
     // ///////////////////////Amir////////////////////////
     // rotate
-    const rotate = angleToDegrees(
-      getTextByPathList(slideXfrmNode, ['attrs', 'rot']) as string,
-    );
+    const rotate = angleToDegrees(getTextByPathList(slideXfrmNode, ['attrs', 'rot']) as string);
     // console.log("rotate: "+rotate);
     // ////////////////////////////////////////////////
     let w = 0;
@@ -731,10 +571,7 @@ export default function processPptx(
       // const x = parseInt(off['x']) * 96 / 914400
       // const y = parseInt(off['y']) * 96 / 914400
 
-      const ext = getTextByPathList(slideXfrmNode, [
-        'a:ext',
-        'attrs',
-      ]) as Record<string, any>;
+      const ext = getTextByPathList(slideXfrmNode, ['a:ext', 'attrs']) as Record<string, any>;
       w = (parseInt(ext['cx']) * 96) / 914400;
       h = (parseInt(ext['cy']) * 96) / 914400;
 
@@ -759,25 +596,14 @@ export default function processPptx(
         "'>";
       result += '<defs>';
       // Fill Color
-      fillColor = (await getShapeFill(node, true, warpObj)) as Record<
-        string,
-        any
-      >;
-      const clrFillType = getFillType(
-        getTextByPathList(node, ['p:spPr']) as Record<string, any>,
-      );
+      fillColor = (await getShapeFill(node, true, warpObj)) as Record<string, any>;
+      const clrFillType = getFillType(getTextByPathList(node, ['p:spPr']) as Record<string, any>);
       // ///////////////////////////////////////
       if (clrFillType === 'GRADIENT_FILL') {
         grndFillFlg = true;
         const colorArray = fillColor.color;
         const angl = fillColor.rot;
-        const svgGrdnt = getSvgGradient(
-          w.toString(),
-          h.toString(),
-          angl,
-          colorArray,
-          shpId,
-        );
+        const svgGrdnt = getSvgGradient(w.toString(), h.toString(), angl, colorArray, shpId);
         // fill="url(#linGrd)"
         result += svgGrdnt;
       } else if (clrFillType === 'PIC_FILL') {
@@ -790,27 +616,15 @@ export default function processPptx(
       // Border Color
       border = getBorder(node, true) as Record<string, any>;
 
-      headEndNodeAttrs = getTextByPathList(node, [
-        'p:spPr',
-        'a:ln',
-        'a:headEnd',
-        'attrs',
-      ]) as Record<string, any>;
-      tailEndNodeAttrs = getTextByPathList(node, [
-        'p:spPr',
-        'a:ln',
-        'a:tailEnd',
-        'attrs',
-      ]) as Record<string, any>;
+      headEndNodeAttrs = getTextByPathList(node, ['p:spPr', 'a:ln', 'a:headEnd', 'attrs']) as Record<string, any>;
+      tailEndNodeAttrs = getTextByPathList(node, ['p:spPr', 'a:ln', 'a:tailEnd', 'attrs']) as Record<string, any>;
       // type: none, triangle, stealth, diamond, oval, arrow
 
       if (
         (headEndNodeAttrs !== undefined &&
-          (headEndNodeAttrs['type'] === 'triangle' ||
-            headEndNodeAttrs['type'] === 'arrow')) ||
+          (headEndNodeAttrs['type'] === 'triangle' || headEndNodeAttrs['type'] === 'arrow')) ||
         (tailEndNodeAttrs !== undefined &&
-          (tailEndNodeAttrs['type'] === 'triangle' ||
-            tailEndNodeAttrs['type'] === 'arrow'))
+          (tailEndNodeAttrs['type'] === 'triangle' || tailEndNodeAttrs['type'] === 'arrow'))
       ) {
         const triangleMarker =
           "<marker id='markerTriangle_" +
@@ -973,11 +787,7 @@ export default function processPptx(
             "' height='" +
             h +
             "' fill='" +
-            (!imgFillFlg
-              ? grndFillFlg
-                ? 'url(#linGrd_' + shpId + ')'
-                : fillColor
-              : 'url(#imgPtrn_' + shpId + ')') +
+            (!imgFillFlg ? (grndFillFlg ? 'url(#linGrd_' + shpId + ')' : fillColor) : 'url(#imgPtrn_' + shpId + ')') +
             "' stroke='" +
             border.color +
             "' stroke-width='" +
@@ -998,11 +808,7 @@ export default function processPptx(
             "' ry='" +
             h / 2 +
             "' fill='" +
-            (!imgFillFlg
-              ? grndFillFlg
-                ? 'url(#linGrd_' + shpId + ')'
-                : fillColor
-              : 'url(#imgPtrn_' + shpId + ')') +
+            (!imgFillFlg ? (grndFillFlg ? 'url(#linGrd_' + shpId + ')' : fillColor) : 'url(#imgPtrn_' + shpId + ')') +
             "' stroke='" +
             border.color +
             "' stroke-width='" +
@@ -1019,11 +825,7 @@ export default function processPptx(
             "' height='" +
             h +
             "' rx='7' ry='7' fill='" +
-            (!imgFillFlg
-              ? grndFillFlg
-                ? 'url(#linGrd_' + shpId + ')'
-                : fillColor
-              : 'url(#imgPtrn_' + shpId + ')') +
+            (!imgFillFlg ? (grndFillFlg ? 'url(#linGrd_' + shpId + ')' : fillColor) : 'url(#imgPtrn_' + shpId + ')') +
             "' stroke='" +
             border.color +
             "' stroke-width='" +
@@ -1053,15 +855,13 @@ export default function processPptx(
             "' fill='none' ";
           if (
             headEndNodeAttrs !== undefined &&
-            (headEndNodeAttrs['type'] === 'triangle' ||
-              headEndNodeAttrs['type'] === 'arrow')
+            (headEndNodeAttrs['type'] === 'triangle' || headEndNodeAttrs['type'] === 'arrow')
           ) {
             result += "marker-start='url(#markerTriangle_" + shpId + ")' ";
           }
           if (
             tailEndNodeAttrs !== undefined &&
-            (tailEndNodeAttrs['type'] === 'triangle' ||
-              tailEndNodeAttrs['type'] === 'arrow')
+            (tailEndNodeAttrs['type'] === 'triangle' || tailEndNodeAttrs['type'] === 'arrow')
           ) {
             result += "marker-end='url(#markerTriangle_" + shpId + ")' ";
           }
@@ -1077,11 +877,7 @@ export default function processPptx(
             ' ' +
             h +
             "' fill='" +
-            (!imgFillFlg
-              ? grndFillFlg
-                ? 'url(#linGrd_' + shpId + ')'
-                : fillColor
-              : 'url(#imgPtrn_' + shpId + ')') +
+            (!imgFillFlg ? (grndFillFlg ? 'url(#linGrd_' + shpId + ')' : fillColor) : 'url(#imgPtrn_' + shpId + ')') +
             "' stroke='" +
             border.color +
             "' stroke-width='" +
@@ -1092,14 +888,7 @@ export default function processPptx(
           break;
         }
         case 'triangle': {
-          const shapAdjst = getTextByPathList(node, [
-            'p:spPr',
-            'a:prstGeom',
-            'a:avLst',
-            'a:gd',
-            'attrs',
-            'fmla',
-          ]);
+          const shapAdjst = getTextByPathList(node, ['p:spPr', 'a:prstGeom', 'a:avLst', 'a:gd', 'attrs', 'fmla']);
           let shapAdjstVal = 0.5;
           if (shapAdjst !== undefined) {
             shapAdjstVal = (parseInt(shapAdjst.substr(4)) * 96) / 9144000;
@@ -1115,11 +904,7 @@ export default function processPptx(
             ' ' +
             h +
             "' fill='" +
-            (!imgFillFlg
-              ? grndFillFlg
-                ? 'url(#linGrd_' + shpId + ')'
-                : fillColor
-              : 'url(#imgPtrn_' + shpId + ')') +
+            (!imgFillFlg ? (grndFillFlg ? 'url(#linGrd_' + shpId + ')' : fillColor) : 'url(#imgPtrn_' + shpId + ')') +
             "' stroke='" +
             border.color +
             "' stroke-width='" +
@@ -1144,11 +929,7 @@ export default function processPptx(
             ' ' +
             h / 2 +
             "' fill='" +
-            (!imgFillFlg
-              ? grndFillFlg
-                ? 'url(#linGrd_' + shpId + ')'
-                : fillColor
-              : 'url(#imgPtrn_' + shpId + ')') +
+            (!imgFillFlg ? (grndFillFlg ? 'url(#linGrd_' + shpId + ')' : fillColor) : 'url(#imgPtrn_' + shpId + ')') +
             "' stroke='" +
             border.color +
             "' stroke-width='" +
@@ -1159,14 +940,7 @@ export default function processPptx(
           break;
         }
         case 'trapezoid': {
-          const shapAdjst = getTextByPathList(node, [
-            'p:spPr',
-            'a:prstGeom',
-            'a:avLst',
-            'a:gd',
-            'attrs',
-            'fmla',
-          ]);
+          const shapAdjst = getTextByPathList(node, ['p:spPr', 'a:prstGeom', 'a:avLst', 'a:gd', 'attrs', 'fmla']);
           let adjstVal = 0.25;
           const maxAdjConst = 0.7407;
           if (shapAdjst !== undefined) {
@@ -1186,11 +960,7 @@ export default function processPptx(
             ',' +
             (1 - adjstVal) * w +
             " 0' fill='" +
-            (!imgFillFlg
-              ? grndFillFlg
-                ? 'url(#linGrd_' + shpId + ')'
-                : fillColor
-              : 'url(#imgPtrn_' + shpId + ')') +
+            (!imgFillFlg ? (grndFillFlg ? 'url(#linGrd_' + shpId + ')' : fillColor) : 'url(#imgPtrn_' + shpId + ')') +
             "' stroke='" +
             border.color +
             "' stroke-width='" +
@@ -1201,14 +971,7 @@ export default function processPptx(
           break;
         }
         case 'parallelogram': {
-          const shapAdjst = getTextByPathList(node, [
-            'p:spPr',
-            'a:prstGeom',
-            'a:avLst',
-            'a:gd',
-            'attrs',
-            'fmla',
-          ]);
+          const shapAdjst = getTextByPathList(node, ['p:spPr', 'a:prstGeom', 'a:avLst', 'a:gd', 'attrs', 'fmla']);
           let adjstVal = 0.25;
           let maxAdjConst;
           if (w > h) {
@@ -1233,11 +996,7 @@ export default function processPptx(
             ',' +
             w +
             " 0' fill='" +
-            (!imgFillFlg
-              ? grndFillFlg
-                ? 'url(#linGrd_' + shpId + ')'
-                : fillColor
-              : 'url(#imgPtrn_' + shpId + ')') +
+            (!imgFillFlg ? (grndFillFlg ? 'url(#linGrd_' + shpId + ')' : fillColor) : 'url(#imgPtrn_' + shpId + ')') +
             "' stroke='" +
             border.color +
             "' stroke-width='" +
@@ -1266,11 +1025,7 @@ export default function processPptx(
             ' ' +
             0.375 * h +
             "' fill='" +
-            (!imgFillFlg
-              ? grndFillFlg
-                ? 'url(#linGrd_' + shpId + ')'
-                : fillColor
-              : 'url(#imgPtrn_' + shpId + ')') +
+            (!imgFillFlg ? (grndFillFlg ? 'url(#linGrd_' + shpId + ')' : fillColor) : 'url(#imgPtrn_' + shpId + ')') +
             "' stroke='" +
             border.color +
             "' stroke-width='" +
@@ -1282,21 +1037,11 @@ export default function processPptx(
         }
         case 'hexagon': {
           const shapAdjstArray =
-            (getTextByPathList(node, [
-              'p:spPr',
-              'a:prstGeom',
-              'a:avLst',
-              'a:gd',
-            ]) as Array<Record<string, any>>) || [];
+            (getTextByPathList(node, ['p:spPr', 'a:prstGeom', 'a:avLst', 'a:gd']) as Array<Record<string, any>>) || [];
           let shapAdjst;
           for (let i = 0; i < shapAdjstArray.length; i++) {
-            if (
-              getTextByPathList(shapAdjstArray[i], ['attrs', 'name']) === 'adj'
-            ) {
-              shapAdjst = getTextByPathList(shapAdjstArray[i], [
-                'attrs',
-                'fmla',
-              ]);
+            if (getTextByPathList(shapAdjstArray[i], ['attrs', 'name']) === 'adj') {
+              shapAdjst = getTextByPathList(shapAdjstArray[i], ['attrs', 'fmla']);
             }
           }
           let adjstVal = 0.25;
@@ -1327,11 +1072,7 @@ export default function processPptx(
             ',' +
             (1 - adjstVal) * w +
             " 0' fill='" +
-            (!imgFillFlg
-              ? grndFillFlg
-                ? 'url(#linGrd_' + shpId + ')'
-                : fillColor
-              : 'url(#imgPtrn_' + shpId + ')') +
+            (!imgFillFlg ? (grndFillFlg ? 'url(#linGrd_' + shpId + ')' : fillColor) : 'url(#imgPtrn_' + shpId + ')') +
             "' stroke='" +
             border.color +
             "' stroke-width='" +
@@ -1368,11 +1109,7 @@ export default function processPptx(
             ' ' +
             h / 4 +
             "' fill='" +
-            (!imgFillFlg
-              ? grndFillFlg
-                ? 'url(#linGrd_' + shpId + ')'
-                : fillColor
-              : 'url(#imgPtrn_' + shpId + ')') +
+            (!imgFillFlg ? (grndFillFlg ? 'url(#linGrd_' + shpId + ')' : fillColor) : 'url(#imgPtrn_' + shpId + ')') +
             "' stroke='" +
             border.color +
             "' stroke-width='" +
@@ -1383,14 +1120,7 @@ export default function processPptx(
           break;
         }
         case 'octagon': {
-          const shapAdjst = getTextByPathList(node, [
-            'p:spPr',
-            'a:prstGeom',
-            'a:avLst',
-            'a:gd',
-            'attrs',
-            'fmla',
-          ]);
+          const shapAdjst = getTextByPathList(node, ['p:spPr', 'a:prstGeom', 'a:avLst', 'a:gd', 'attrs', 'fmla']);
           let adj1 = 0.25;
           if (shapAdjst !== undefined) {
             adj1 = parseInt(shapAdjst.substr(4)) / 100000;
@@ -1423,11 +1153,7 @@ export default function processPptx(
             ',' +
             adj2 * w +
             " 0' fill='" +
-            (!imgFillFlg
-              ? grndFillFlg
-                ? 'url(#linGrd_' + shpId + ')'
-                : fillColor
-              : 'url(#imgPtrn_' + shpId + ')') +
+            (!imgFillFlg ? (grndFillFlg ? 'url(#linGrd_' + shpId + ')' : fillColor) : 'url(#imgPtrn_' + shpId + ')') +
             "' stroke='" +
             border.color +
             "' stroke-width='" +
@@ -1475,11 +1201,7 @@ export default function processPptx(
             ',' +
             (5 / 8) * w +
             " 0' fill='" +
-            (!imgFillFlg
-              ? grndFillFlg
-                ? 'url(#linGrd_' + shpId + ')'
-                : fillColor
-              : 'url(#imgPtrn_' + shpId + ')') +
+            (!imgFillFlg ? (grndFillFlg ? 'url(#linGrd_' + shpId + ')' : fillColor) : 'url(#imgPtrn_' + shpId + ')') +
             "' stroke='" +
             border.color +
             "' stroke-width='" +
@@ -1532,11 +1254,7 @@ export default function processPptx(
             ',' +
             (5 / 8) * w +
             " 0' fill='" +
-            (!imgFillFlg
-              ? grndFillFlg
-                ? 'url(#linGrd_' + shpId + ')'
-                : fillColor
-              : 'url(#imgPtrn_' + shpId + ')') +
+            (!imgFillFlg ? (grndFillFlg ? 'url(#linGrd_' + shpId + ')' : fillColor) : 'url(#imgPtrn_' + shpId + ')') +
             "' stroke='" +
             border.color +
             "' stroke-width='" +
@@ -1547,14 +1265,7 @@ export default function processPptx(
           break;
         }
         case 'bentConnector3': {
-          const shapAdjst = getTextByPathList(node, [
-            'p:spPr',
-            'a:prstGeom',
-            'a:avLst',
-            'a:gd',
-            'attrs',
-            'fmla',
-          ]);
+          const shapAdjst = getTextByPathList(node, ['p:spPr', 'a:prstGeom', 'a:avLst', 'a:gd', 'attrs', 'fmla']);
           // console.log("isFlipV: "+String(isFlipV)+"\nshapAdjst: "+shapAdjst)
           let shapAdjstVal = 0.5;
           if (shapAdjst !== undefined) {
@@ -1603,15 +1314,13 @@ export default function processPptx(
             }
             if (
               headEndNodeAttrs !== undefined &&
-              (headEndNodeAttrs['type'] === 'triangle' ||
-                headEndNodeAttrs['type'] === 'arrow')
+              (headEndNodeAttrs['type'] === 'triangle' || headEndNodeAttrs['type'] === 'arrow')
             ) {
               result += "marker-start='url(#markerTriangle_" + shpId + ")' ";
             }
             if (
               tailEndNodeAttrs !== undefined &&
-              (tailEndNodeAttrs['type'] === 'triangle' ||
-                tailEndNodeAttrs['type'] === 'arrow')
+              (tailEndNodeAttrs['type'] === 'triangle' || tailEndNodeAttrs['type'] === 'arrow')
             ) {
               result += "marker-end='url(#markerTriangle_" + shpId + ")' ";
             }
@@ -1620,14 +1329,7 @@ export default function processPptx(
           break;
         }
         case 'plus': {
-          const shapAdjst = getTextByPathList(node, [
-            'p:spPr',
-            'a:prstGeom',
-            'a:avLst',
-            'a:gd',
-            'attrs',
-            'fmla',
-          ]);
+          const shapAdjst = getTextByPathList(node, ['p:spPr', 'a:prstGeom', 'a:avLst', 'a:gd', 'attrs', 'fmla']);
           let adj1 = 0.25;
           if (shapAdjst !== undefined) {
             adj1 = parseInt(shapAdjst.substr(4)) / 100000;
@@ -1675,11 +1377,7 @@ export default function processPptx(
             ',' +
             adj2 * w +
             " 0' fill='" +
-            (!imgFillFlg
-              ? grndFillFlg
-                ? 'url(#linGrd_' + shpId + ')'
-                : fillColor
-              : 'url(#imgPtrn_' + shpId + ')') +
+            (!imgFillFlg ? (grndFillFlg ? 'url(#linGrd_' + shpId + ')' : fillColor) : 'url(#imgPtrn_' + shpId + ')') +
             "' stroke='" +
             border.color +
             "' stroke-width='" +
@@ -1727,15 +1425,13 @@ export default function processPptx(
           }
           if (
             headEndNodeAttrs !== undefined &&
-            (headEndNodeAttrs['type'] === 'triangle' ||
-              headEndNodeAttrs['type'] === 'arrow')
+            (headEndNodeAttrs['type'] === 'triangle' || headEndNodeAttrs['type'] === 'arrow')
           ) {
             result += "marker-start='url(#markerTriangle_" + shpId + ")' ";
           }
           if (
             tailEndNodeAttrs !== undefined &&
-            (tailEndNodeAttrs['type'] === 'triangle' ||
-              tailEndNodeAttrs['type'] === 'arrow')
+            (tailEndNodeAttrs['type'] === 'triangle' || tailEndNodeAttrs['type'] === 'arrow')
           ) {
             result += "marker-end='url(#markerTriangle_" + shpId + ")' ";
           }
@@ -1743,12 +1439,10 @@ export default function processPptx(
           break;
         }
         case 'rightArrow': {
-          const shapAdjstArray = getTextByPathList(node, [
-            'p:spPr',
-            'a:prstGeom',
-            'a:avLst',
-            'a:gd',
-          ]) as Record<string, any>;
+          const shapAdjstArray = getTextByPathList(node, ['p:spPr', 'a:prstGeom', 'a:avLst', 'a:gd']) as Record<
+            string,
+            any
+          >;
           let sAdj1: string = '';
           let sAdj1Val = 0.5;
           let sAdj2;
@@ -1756,21 +1450,12 @@ export default function processPptx(
           const maxSAdj2Const = w / h;
           if (shapAdjstArray !== undefined) {
             for (let i = 0; i < shapAdjstArray.length; i++) {
-              const sAdjName = getTextByPathList(shapAdjstArray[i], [
-                'attrs',
-                'name',
-              ]);
+              const sAdjName = getTextByPathList(shapAdjstArray[i], ['attrs', 'name']);
               if (sAdjName === 'adj1') {
-                sAdj1 = getTextByPathList(shapAdjstArray[i], [
-                  'attrs',
-                  'fmla',
-                ]) as string;
+                sAdj1 = getTextByPathList(shapAdjstArray[i], ['attrs', 'fmla']) as string;
                 sAdj1Val = 0.5 - parseInt(sAdj1.substr(4)) / 200000;
               } else if (sAdjName === 'adj2') {
-                sAdj2 = getTextByPathList(shapAdjstArray[i], [
-                  'attrs',
-                  'fmla',
-                ]) as string;
+                sAdj2 = getTextByPathList(shapAdjstArray[i], ['attrs', 'fmla']) as string;
                 const sAdj2Val2 = parseInt(sAdj2.substr(4)) / 100000;
                 sAdj2Val = 1 - sAdj2Val2 / maxSAdj2Const;
               }
@@ -1802,11 +1487,7 @@ export default function processPptx(
             ' ' +
             h +
             "' fill='" +
-            (!imgFillFlg
-              ? grndFillFlg
-                ? 'url(#linGrd_' + shpId + ')'
-                : fillColor
-              : 'url(#imgPtrn_' + shpId + ')') +
+            (!imgFillFlg ? (grndFillFlg ? 'url(#linGrd_' + shpId + ')' : fillColor) : 'url(#imgPtrn_' + shpId + ')') +
             "' stroke='" +
             border.color +
             "' stroke-width='" +
@@ -1817,12 +1498,10 @@ export default function processPptx(
           break;
         }
         case 'leftArrow': {
-          const shapAdjstArray = getTextByPathList(node, [
-            'p:spPr',
-            'a:prstGeom',
-            'a:avLst',
-            'a:gd',
-          ]) as Record<string, any>;
+          const shapAdjstArray = getTextByPathList(node, ['p:spPr', 'a:prstGeom', 'a:avLst', 'a:gd']) as Record<
+            string,
+            any
+          >;
           let sAdj1;
           let sAdj1Val = 0.5;
           let sAdj2;
@@ -1830,21 +1509,12 @@ export default function processPptx(
           const maxSAdj2Const = w / h;
           if (shapAdjstArray !== undefined) {
             for (let i = 0; i < shapAdjstArray.length; i++) {
-              const sAdjName = getTextByPathList(shapAdjstArray[i], [
-                'attrs',
-                'name',
-              ]);
+              const sAdjName = getTextByPathList(shapAdjstArray[i], ['attrs', 'name']);
               if (sAdjName === 'adj1') {
-                sAdj1 = getTextByPathList(shapAdjstArray[i], [
-                  'attrs',
-                  'fmla',
-                ]) as string;
+                sAdj1 = getTextByPathList(shapAdjstArray[i], ['attrs', 'fmla']) as string;
                 sAdj1Val = 0.5 - parseInt(sAdj1.substr(4)) / 200000;
               } else if (sAdjName === 'adj2') {
-                sAdj2 = getTextByPathList(shapAdjstArray[i], [
-                  'attrs',
-                  'fmla',
-                ]) as string;
+                sAdj2 = getTextByPathList(shapAdjstArray[i], ['attrs', 'fmla']) as string;
                 const sAdj2Val2 = parseInt(sAdj2.substr(4)) / 100000;
                 sAdj2Val = sAdj2Val2 / maxSAdj2Const;
               }
@@ -1878,11 +1548,7 @@ export default function processPptx(
             ', ' +
             sAdj2Val * w +
             " 0' fill='" +
-            (!imgFillFlg
-              ? grndFillFlg
-                ? 'url(#linGrd_' + shpId + ')'
-                : fillColor
-              : 'url(#imgPtrn_' + shpId + ')') +
+            (!imgFillFlg ? (grndFillFlg ? 'url(#linGrd_' + shpId + ')' : fillColor) : 'url(#imgPtrn_' + shpId + ')') +
             "' stroke='" +
             border.color +
             "' stroke-width='" +
@@ -1893,12 +1559,10 @@ export default function processPptx(
           break;
         }
         case 'downArrow': {
-          const shapAdjstArray = getTextByPathList(node, [
-            'p:spPr',
-            'a:prstGeom',
-            'a:avLst',
-            'a:gd',
-          ]) as Record<string, any>;
+          const shapAdjstArray = getTextByPathList(node, ['p:spPr', 'a:prstGeom', 'a:avLst', 'a:gd']) as Record<
+            string,
+            any
+          >;
           let sAdj1;
           let sAdj1Val = 0.5;
           let sAdj2;
@@ -1906,21 +1570,12 @@ export default function processPptx(
           const maxSAdj2Const = h / w;
           if (shapAdjstArray !== undefined) {
             for (let i = 0; i < shapAdjstArray.length; i++) {
-              const sAdjName = getTextByPathList(shapAdjstArray[i], [
-                'attrs',
-                'name',
-              ]);
+              const sAdjName = getTextByPathList(shapAdjstArray[i], ['attrs', 'name']);
               if (sAdjName === 'adj1') {
-                sAdj1 = getTextByPathList(shapAdjstArray[i], [
-                  'attrs',
-                  'fmla',
-                ]) as string;
+                sAdj1 = getTextByPathList(shapAdjstArray[i], ['attrs', 'fmla']) as string;
                 sAdj1Val = parseInt(sAdj1.substr(4)) / 200000;
               } else if (sAdjName === 'adj2') {
-                sAdj2 = getTextByPathList(shapAdjstArray[i], [
-                  'attrs',
-                  'fmla',
-                ]) as string;
+                sAdj2 = getTextByPathList(shapAdjstArray[i], ['attrs', 'fmla']) as string;
                 const sAdj2Val2 = parseInt(sAdj2.substr(4)) / 100000;
                 sAdj2Val = sAdj2Val2 / maxSAdj2Const;
               }
@@ -1952,11 +1607,7 @@ export default function processPptx(
             ', ' +
             (0.5 + sAdj1Val) * w +
             " 0' fill='" +
-            (!imgFillFlg
-              ? grndFillFlg
-                ? 'url(#linGrd_' + shpId + ')'
-                : fillColor
-              : 'url(#imgPtrn_' + shpId + ')') +
+            (!imgFillFlg ? (grndFillFlg ? 'url(#linGrd_' + shpId + ')' : fillColor) : 'url(#imgPtrn_' + shpId + ')') +
             "' stroke='" +
             border.color +
             "' stroke-width='" +
@@ -1967,12 +1618,10 @@ export default function processPptx(
           break;
         }
         case 'upArrow': {
-          const shapAdjstArray = getTextByPathList(node, [
-            'p:spPr',
-            'a:prstGeom',
-            'a:avLst',
-            'a:gd',
-          ]) as Record<string, any>;
+          const shapAdjstArray = getTextByPathList(node, ['p:spPr', 'a:prstGeom', 'a:avLst', 'a:gd']) as Record<
+            string,
+            any
+          >;
           let sAdj1;
           let sAdj1Val = 0.5;
           let sAdj2;
@@ -1980,21 +1629,12 @@ export default function processPptx(
           const maxSAdj2Const = h / w;
           if (shapAdjstArray !== undefined) {
             for (let i = 0; i < shapAdjstArray.length; i++) {
-              const sAdjName = getTextByPathList(shapAdjstArray[i], [
-                'attrs',
-                'name',
-              ]);
+              const sAdjName = getTextByPathList(shapAdjstArray[i], ['attrs', 'name']);
               if (sAdjName === 'adj1') {
-                sAdj1 = getTextByPathList(shapAdjstArray[i], [
-                  'attrs',
-                  'fmla',
-                ]) as string;
+                sAdj1 = getTextByPathList(shapAdjstArray[i], ['attrs', 'fmla']) as string;
                 sAdj1Val = parseInt(sAdj1.substr(4)) / 200000;
               } else if (sAdjName === 'adj2') {
-                sAdj2 = getTextByPathList(shapAdjstArray[i], [
-                  'attrs',
-                  'fmla',
-                ]) as string;
+                sAdj2 = getTextByPathList(shapAdjstArray[i], ['attrs', 'fmla']) as string;
                 const sAdj2Val2 = parseInt(sAdj2.substr(4)) / 100000;
                 sAdj2Val = sAdj2Val2 / maxSAdj2Const;
               }
@@ -2026,11 +1666,7 @@ export default function processPptx(
             ' ' +
             sAdj2Val * h +
             "' fill='" +
-            (!imgFillFlg
-              ? grndFillFlg
-                ? 'url(#linGrd_' + shpId + ')'
-                : fillColor
-              : 'url(#imgPtrn_' + shpId + ')') +
+            (!imgFillFlg ? (grndFillFlg ? 'url(#linGrd_' + shpId + ')' : fillColor) : 'url(#imgPtrn_' + shpId + ')') +
             "' stroke='" +
             border.color +
             "' stroke-width='" +
@@ -2041,12 +1677,10 @@ export default function processPptx(
           break;
         }
         case 'leftRightArrow': {
-          const shapAdjstArray = getTextByPathList(node, [
-            'p:spPr',
-            'a:prstGeom',
-            'a:avLst',
-            'a:gd',
-          ]) as Record<string, any>;
+          const shapAdjstArray = getTextByPathList(node, ['p:spPr', 'a:prstGeom', 'a:avLst', 'a:gd']) as Record<
+            string,
+            any
+          >;
           let sAdj1;
           let sAdj1Val = 0.5;
           let sAdj2;
@@ -2054,21 +1688,12 @@ export default function processPptx(
           const maxSAdj2Const = w / h;
           if (shapAdjstArray !== undefined) {
             for (let i = 0; i < shapAdjstArray.length; i++) {
-              const sAdjName = getTextByPathList(shapAdjstArray[i], [
-                'attrs',
-                'name',
-              ]);
+              const sAdjName = getTextByPathList(shapAdjstArray[i], ['attrs', 'name']);
               if (sAdjName === 'adj1') {
-                sAdj1 = getTextByPathList(shapAdjstArray[i], [
-                  'attrs',
-                  'fmla',
-                ]) as string;
+                sAdj1 = getTextByPathList(shapAdjstArray[i], ['attrs', 'fmla']) as string;
                 sAdj1Val = 0.5 - parseInt(sAdj1.substr(4)) / 200000;
               } else if (sAdjName === 'adj2') {
-                sAdj2 = getTextByPathList(shapAdjstArray[i], [
-                  'attrs',
-                  'fmla',
-                ]) as string;
+                sAdj2 = getTextByPathList(shapAdjstArray[i], ['attrs', 'fmla']) as string;
                 const sAdj2Val2 = parseInt(sAdj2.substr(4)) / 100000;
                 sAdj2Val = sAdj2Val2 / maxSAdj2Const;
               }
@@ -2112,11 +1737,7 @@ export default function processPptx(
             ',' +
             sAdj2Val * w +
             " 0' fill='" +
-            (!imgFillFlg
-              ? grndFillFlg
-                ? 'url(#linGrd_' + shpId + ')'
-                : fillColor
-              : 'url(#imgPtrn_' + shpId + ')') +
+            (!imgFillFlg ? (grndFillFlg ? 'url(#linGrd_' + shpId + ')' : fillColor) : 'url(#imgPtrn_' + shpId + ')') +
             "' stroke='" +
             border.color +
             "' stroke-width='" +
@@ -2127,12 +1748,10 @@ export default function processPptx(
           break;
         }
         case 'upDownArrow': {
-          const shapAdjstArray = getTextByPathList(node, [
-            'p:spPr',
-            'a:prstGeom',
-            'a:avLst',
-            'a:gd',
-          ]) as Record<string, any>;
+          const shapAdjstArray = getTextByPathList(node, ['p:spPr', 'a:prstGeom', 'a:avLst', 'a:gd']) as Record<
+            string,
+            any
+          >;
           let sAdj1;
           let sAdj1Val = 0.5;
           let sAdj2;
@@ -2140,21 +1759,12 @@ export default function processPptx(
           const maxSAdj2Const = h / w;
           if (shapAdjstArray !== undefined) {
             for (let i = 0; i < shapAdjstArray.length; i++) {
-              const sAdjName = getTextByPathList(shapAdjstArray[i], [
-                'attrs',
-                'name',
-              ]);
+              const sAdjName = getTextByPathList(shapAdjstArray[i], ['attrs', 'name']);
               if (sAdjName === 'adj1') {
-                sAdj1 = getTextByPathList(shapAdjstArray[i], [
-                  'attrs',
-                  'fmla',
-                ]) as string;
+                sAdj1 = getTextByPathList(shapAdjstArray[i], ['attrs', 'fmla']) as string;
                 sAdj1Val = 0.5 - parseInt(sAdj1.substr(4)) / 200000;
               } else if (sAdjName === 'adj2') {
-                sAdj2 = getTextByPathList(shapAdjstArray[i], [
-                  'attrs',
-                  'fmla',
-                ]) as string;
+                sAdj2 = getTextByPathList(shapAdjstArray[i], ['attrs', 'fmla']) as string;
                 const sAdj2Val2 = parseInt(sAdj2.substr(4)) / 100000;
                 sAdj2Val = sAdj2Val2 / maxSAdj2Const;
               }
@@ -2198,11 +1808,7 @@ export default function processPptx(
             ' ' +
             sAdj2Val * h +
             "' fill='" +
-            (!imgFillFlg
-              ? grndFillFlg
-                ? 'url(#linGrd_' + shpId + ')'
-                : fillColor
-              : 'url(#imgPtrn_' + shpId + ')') +
+            (!imgFillFlg ? (grndFillFlg ? 'url(#linGrd_' + shpId + ')' : fillColor) : 'url(#imgPtrn_' + shpId + ')') +
             "' stroke='" +
             border.color +
             "' stroke-width='" +
@@ -2272,28 +1878,21 @@ export default function processPptx(
     } else if (custShapType !== undefined) {
       // custGeom here - Amir ///////////////////////////////////////////////////////
       // http://officeopenxml.com/drwSp-custGeom.php
-      const pathLstNode = getTextByPathList(custShapType, [
-        'a:pathLst',
-      ]) as Record<string, any>;
+      const pathLstNode = getTextByPathList(custShapType, ['a:pathLst']) as Record<string, any>;
       // const pathNode = getTextByPathList(pathLstNode, ['a:path', 'attrs'])
       // const maxX = parseInt(pathNode['w']) * 96 / 914400
       // const maxY = parseInt(pathNode['h']) * 96 / 914400
       // console.log("w = "+w+"\nh = "+h+"\nmaxX = "+maxX +"\nmaxY = " + maxY);
       // cheke if it is close shape
       const closeNode = getTextByPathList(pathLstNode, ['a:path', 'a:close']);
-      const startPoint = (getTextByPathList(pathLstNode, [
-        'a:path',
-        'a:moveTo',
-        'a:pt',
-        'attrs',
-      ]) as Record<string, any>) || { x: '0', y: '0' };
+      const startPoint = (getTextByPathList(pathLstNode, ['a:path', 'a:moveTo', 'a:pt', 'attrs']) as Record<
+        string,
+        any
+      >) || { x: '0', y: '0' };
       const spX = (parseInt(startPoint['x']) * 96) / 914400;
       const spY = (parseInt(startPoint['y']) * 96) / 914400;
       let d = 'M' + spX + ',' + spY;
-      const pathNodes = getTextByPathList(pathLstNode, ['a:path']) as Record<
-        string,
-        any
-      >;
+      const pathNodes = getTextByPathList(pathLstNode, ['a:path']) as Record<string, any>;
       const lnToNodes = pathNodes['a:lnTo'];
       const cubicBezToNodes = pathNodes['a:cubicBezTo'];
       const sortblAry: {}[] = [];
@@ -2363,19 +1962,7 @@ export default function processPptx(
           const Cx3 = (parseInt(sortByOrder[k + 2].x) * 96) / 914400;
           const Cy3 = (parseInt(sortByOrder[k + 2].y) * 96) / 914400;
 
-          d +=
-            'C' +
-            Cx1 +
-            ',' +
-            Cy1 +
-            ' ' +
-            Cx2 +
-            ',' +
-            Cy2 +
-            ' ' +
-            Cx3 +
-            ',' +
-            Cy3;
+          d += 'C' + Cx1 + ',' + Cy1 + ' ' + Cx2 + ',' + Cy2 + ' ' + Cx3 + ',' + Cy3;
           k += 3;
         }
       }
@@ -2383,11 +1970,7 @@ export default function processPptx(
         "<path d='" +
         d +
         "' fill='" +
-        (!imgFillFlg
-          ? grndFillFlg
-            ? 'url(#linGrd_' + shpId + ')'
-            : fillColor
-          : 'url(#imgPtrn_' + shpId + ')') +
+        (!imgFillFlg ? (grndFillFlg ? 'url(#linGrd_' + shpId + ')' : fillColor) : 'url(#imgPtrn_' + shpId + ')') +
         "' stroke='" +
         border.color +
         "' stroke-width='" +
@@ -2403,15 +1986,13 @@ export default function processPptx(
         // check and add "marker-start" and "marker-end"
         if (
           headEndNodeAttrs !== undefined &&
-          (headEndNodeAttrs['type'] === 'triangle' ||
-            headEndNodeAttrs['type'] === 'arrow')
+          (headEndNodeAttrs['type'] === 'triangle' || headEndNodeAttrs['type'] === 'arrow')
         ) {
           result += "marker-start='url(#markerTriangle_" + shpId + ")' ";
         }
         if (
           tailEndNodeAttrs !== undefined &&
-          (tailEndNodeAttrs['type'] === 'triangle' ||
-            tailEndNodeAttrs['type'] === 'arrow')
+          (tailEndNodeAttrs['type'] === 'triangle' || tailEndNodeAttrs['type'] === 'arrow')
         ) {
           result += "marker-end='url(#markerTriangle_" + shpId + ")' ";
         }
@@ -2496,10 +2077,7 @@ export default function processPptx(
     return result;
   }
 
-  async function processPicNode(
-    node: Record<string, any>,
-    warpObj: Record<string, any>,
-  ) {
+  async function processPicNode(node: Record<string, any>, warpObj: Record<string, any>) {
     const order = node['attrs']['order'];
 
     const rid = node['p:blipFill']['a:blip']['attrs']['r:embed'];
@@ -2531,17 +2109,9 @@ export default function processPptx(
     );
   }
 
-  async function processGraphicFrameNode(
-    node: Record<string, any>,
-    warpObj: Record<string, any>,
-  ) {
+  async function processGraphicFrameNode(node: Record<string, any>, warpObj: Record<string, any>) {
     let result = '';
-    const graphicTypeUri = getTextByPathList(node, [
-      'a:graphic',
-      'a:graphicData',
-      'attrs',
-      'uri',
-    ]);
+    const graphicTypeUri = getTextByPathList(node, ['a:graphic', 'a:graphicData', 'attrs', 'uri']);
 
     switch (graphicTypeUri) {
       case 'http://schemas.openxmlformats.org/drawingml/2006/table':
@@ -2589,41 +2159,17 @@ export default function processPptx(
 
         text +=
           "<div  class='" +
-          getHorizontalAlign(
-            pNode,
-            slideLayoutSpNode || {},
-            slideMasterSpNode || {},
-            type,
-            slideMasterTextStyles,
-          ) +
+          getHorizontalAlign(pNode, slideLayoutSpNode || {}, slideMasterSpNode || {}, type, slideMasterTextStyles) +
           "'>";
-        text += await genBuChar(
-          pNode,
-          slideLayoutSpNode,
-          slideMasterSpNode,
-          type,
-          warpObj || {},
-        );
+        text += await genBuChar(pNode, slideLayoutSpNode, slideMasterSpNode, type, warpObj || {});
 
         if (rNode === undefined) {
           // without r
-          text += genSpanElement(
-            pNode,
-            slideLayoutSpNode,
-            slideMasterSpNode,
-            type,
-            warpObj || {},
-          );
+          text += genSpanElement(pNode, slideLayoutSpNode, slideMasterSpNode, type, warpObj || {});
         } else if (rNode.constructor === Array) {
           // with multi r
           for (let j = 0; j < rNode.length; j++) {
-            text += genSpanElement(
-              rNode[j],
-              slideLayoutSpNode,
-              slideMasterSpNode,
-              type,
-              warpObj || {},
-            );
+            text += genSpanElement(rNode[j], slideLayoutSpNode, slideMasterSpNode, type, warpObj || {});
             // ////////////////Amir////////////
             if (pNode['a:br'] !== undefined) {
               text += '<br>';
@@ -2632,13 +2178,7 @@ export default function processPptx(
           }
         } else {
           // with one r
-          text += genSpanElement(
-            rNode,
-            slideLayoutSpNode,
-            slideMasterSpNode,
-            type,
-            warpObj || {},
-          );
+          text += genSpanElement(rNode, slideLayoutSpNode, slideMasterSpNode, type, warpObj || {});
         }
         text += '</div>';
       }
@@ -2652,40 +2192,16 @@ export default function processPptx(
 
       text +=
         "<div class='slide-prgrph " +
-        getHorizontalAlign(
-          pNode,
-          slideLayoutSpNode || {},
-          slideMasterSpNode || {},
-          type,
-          slideMasterTextStyles,
-        ) +
+        getHorizontalAlign(pNode, slideLayoutSpNode || {}, slideMasterSpNode || {}, type, slideMasterTextStyles) +
         "'>";
-      text += await genBuChar(
-        pNode,
-        slideLayoutSpNode,
-        slideMasterSpNode,
-        type,
-        warpObj,
-      );
+      text += await genBuChar(pNode, slideLayoutSpNode, slideMasterSpNode, type, warpObj);
       if (rNode === undefined) {
         // without r
-        text += genSpanElement(
-          pNode,
-          slideLayoutSpNode,
-          slideMasterSpNode,
-          type,
-          warpObj || {},
-        );
+        text += genSpanElement(pNode, slideLayoutSpNode, slideMasterSpNode, type, warpObj || {});
       } else if (rNode.constructor === Array) {
         // with multi r
         for (let j = 0; j < rNode.length; j++) {
-          text += genSpanElement(
-            rNode[j],
-            slideLayoutSpNode,
-            slideMasterSpNode,
-            type,
-            warpObj || {},
-          );
+          text += genSpanElement(rNode[j], slideLayoutSpNode, slideMasterSpNode, type, warpObj || {});
           // ////////////////Amir////////////
           if (pNode['a:br'] !== undefined) {
             text += '<br>';
@@ -2694,13 +2210,7 @@ export default function processPptx(
         }
       } else {
         // with one r
-        text += genSpanElement(
-          rNode,
-          slideLayoutSpNode,
-          slideMasterSpNode,
-          type,
-          warpObj || {},
-        );
+        text += genSpanElement(rNode, slideLayoutSpNode, slideMasterSpNode, type, warpObj || {});
       }
       text += '</div>';
     }
@@ -2722,22 +2232,10 @@ export default function processPptx(
     let dfltBultColor, dfltBultSize, bultColor, bultSize;
     if (rNode !== undefined) {
       dfltBultColor = getFontColor(rNode, type, sldMstrTxtStyles);
-      dfltBultSize = getFontSize(
-        rNode,
-        slideLayoutSpNode,
-        slideMasterSpNode,
-        type,
-        sldMstrTxtStyles,
-      );
+      dfltBultSize = getFontSize(rNode, slideLayoutSpNode, slideMasterSpNode, type, sldMstrTxtStyles);
     } else {
       dfltBultColor = getFontColor(node, type, sldMstrTxtStyles);
-      dfltBultSize = getFontSize(
-        node,
-        slideLayoutSpNode,
-        slideMasterSpNode,
-        type,
-        sldMstrTxtStyles,
-      );
+      dfltBultSize = getFontSize(node, slideLayoutSpNode, slideMasterSpNode, type, sldMstrTxtStyles);
     }
     // console.log("Bullet Size: " + bultSize);
 
@@ -2763,10 +2261,7 @@ export default function processPptx(
     // ///////////////////////////////Amir///////////////////////////////////
     let buType = 'TYPE_NONE';
     const buNum = getTextByPathList(pPrNode, ['a:buAutoNum', 'attrs', 'type']);
-    const buPic = getTextByPathList(pPrNode, ['a:buBlip']) as Record<
-      string,
-      any
-    >;
+    const buPic = getTextByPathList(pPrNode, ['a:buBlip']) as Record<string, any>;
     if (buChar !== undefined) {
       buType = 'TYPE_BULLET';
       // console.log("Bullet Chr to code: " + buChar.charCodeAt(0));
@@ -2780,10 +2275,7 @@ export default function processPptx(
 
     let buFontAttrs: Record<string, any> = {};
     if (buType !== 'TYPE_NONE') {
-      buFontAttrs = getTextByPathList(pPrNode, ['a:buFont', 'attrs']) as Record<
-        string,
-        any
-      >;
+      buFontAttrs = getTextByPathList(pPrNode, ['a:buFont', 'attrs']) as Record<string, any>;
     }
     // console.log("Bullet Type: " + buType);
     // console.log("NumericTypr: " + buNum);
@@ -2807,26 +2299,15 @@ export default function processPptx(
     }
     // get definde bullet SIZE
     let buFontSize;
-    buFontSize = getTextByPathList(pPrNode, [
-      'a:buSzPts',
-      'attrs',
-      'val',
-    ]) as string; // pt
+    buFontSize = getTextByPathList(pPrNode, ['a:buSzPts', 'attrs', 'val']) as string; // pt
     if (buFontSize !== undefined) {
       bultSize = parseInt(buFontSize) / 100 + 'pt';
     } else {
-      buFontSize = getTextByPathList(pPrNode, [
-        'a:buSzPct',
-        'attrs',
-        'val',
-      ]) as string;
+      buFontSize = getTextByPathList(pPrNode, ['a:buSzPct', 'attrs', 'val']) as string;
       if (buFontSize !== undefined) {
         const prcnt = parseInt(buFontSize) / 100000;
         // dfltBultSize = XXpt
-        const dfltBultSizeNoPt = dfltBultSize.substr(
-          0,
-          dfltBultSize.length - 2,
-        );
+        const dfltBultSizeNoPt = dfltBultSize.substr(0, dfltBultSize.length - 2);
         bultSize = prcnt * parseInt(dfltBultSizeNoPt) + 'pt';
       } else {
         bultSize = dfltBultSize;
@@ -2838,10 +2319,7 @@ export default function processPptx(
     if (buType === 'TYPE_BULLET') {
       // const buFontAttrs = getTextByPathList(pPrNode, ["a:buFont", "attrs"]);
       if (buFontAttrs !== undefined) {
-        marginLeft =
-          (parseInt(getTextByPathList(pPrNode, ['attrs', 'marL']) as string) *
-            96) /
-          914400;
+        marginLeft = (parseInt(getTextByPathList(pPrNode, ['attrs', 'marL']) as string) * 96) / 914400;
         marginRight = parseInt(buFontAttrs['pitchFamily']);
         if (isNaN(marginLeft)) {
           marginLeft = (328600 * 96) / 914400;
@@ -2872,20 +2350,12 @@ export default function processPptx(
       } else {
         marginLeft = ((328600 * 96) / 914400) * lvl;
 
-        bullet =
-          "<span style='margin-left: " +
-          marginLeft +
-          "px;'>" +
-          buChar +
-          '</span>';
+        bullet = "<span style='margin-left: " + marginLeft + "px;'>" + buChar + '</span>';
       }
     } else if (buType === 'TYPE_NUMERIC') {
       // /////////Amir///////////////////////////////
       if (buFontAttrs !== undefined) {
-        marginLeft =
-          (parseInt(getTextByPathList(pPrNode, ['attrs', 'marL']) as string) *
-            96) /
-          914400;
+        marginLeft = (parseInt(getTextByPathList(pPrNode, ['attrs', 'marL']) as string) * 96) / 914400;
         marginRight = parseInt(buFontAttrs['pitchFamily']);
 
         if (isNaN(marginLeft)) {
@@ -2914,11 +2384,7 @@ export default function processPptx(
           bullet += ' float: left; direction:ltr;';
         }
         bullet +=
-          "' data-bulltname = '" +
-          buNum +
-          "' data-bulltlvl = '" +
-          lvl +
-          "' class='numeric-bullet-style'></span>";
+          "' data-bulltname = '" + buNum + "' data-bulltlvl = '" + lvl + "' class='numeric-bullet-style'></span>";
       } else {
         marginLeft = ((328600 * 96) / 914400) * lvl;
         bullet = "<span style='margin-left: " + marginLeft + 'px;';
@@ -2928,22 +2394,12 @@ export default function processPptx(
           bullet += ' float: left; direction:ltr;';
         }
         bullet +=
-          "' data-bulltname = '" +
-          buNum +
-          "' data-bulltlvl = '" +
-          lvl +
-          "' class='numeric-bullet-style'></span>";
+          "' data-bulltname = '" + buNum + "' data-bulltlvl = '" + lvl + "' class='numeric-bullet-style'></span>";
       }
     } else if (buType === 'TYPE_BULPIC') {
       // PIC BULLET
-      marginLeft =
-        (parseInt(getTextByPathList(pPrNode, ['attrs', 'marL']) as string) *
-          96) /
-        914400;
-      marginRight =
-        (parseInt(getTextByPathList(pPrNode, ['attrs', 'marR']) as string) *
-          96) /
-        914400;
+      marginLeft = (parseInt(getTextByPathList(pPrNode, ['attrs', 'marL']) as string) * 96) / 914400;
+      marginRight = (parseInt(getTextByPathList(pPrNode, ['attrs', 'marR']) as string) * 96) / 914400;
 
       if (isNaN(marginRight)) {
         marginRight = 0;
@@ -2956,11 +2412,7 @@ export default function processPptx(
         marginLeft = 0;
       }
       // const buPicId = getTextByPathList(buPic, ["a:blip","a:extLst","a:ext","asvg:svgBlip" , "attrs", "r:embed"]);
-      const buPicId = getTextByPathList(buPic, [
-        'a:blip',
-        'attrs',
-        'r:embed',
-      ]) as string;
+      const buPicId = getTextByPathList(buPic, ['a:blip', 'attrs', 'r:embed']) as string;
       // const svgPicPath = ''
       let buImg;
       if (buPicId !== undefined) {
@@ -2969,8 +2421,7 @@ export default function processPptx(
         // }else{
         // buPicId = getTextByPathList(buPic, ["a:blip", "attrs", "r:embed"]);
         const imgPath = warpObj && warpObj['slideResObj'][buPicId]['target'];
-        const imgArrayBuffer =
-          warpObj && (await warpObj['zip'].file(imgPath).async('arraybuffer'));
+        const imgArrayBuffer = warpObj && (await warpObj['zip'].file(imgPath).async('arraybuffer'));
         const imgExt = imgPath.split('.').pop();
         const imgMimeType = getImageMimeType(imgExt);
         buImg =
@@ -3001,12 +2452,7 @@ export default function processPptx(
       // ////////////////////////////////////////////////////////////////////////////////////
     } else {
       bullet =
-        "<span style='margin-left: " +
-        ((328600 * 96) / 914400) * lvl +
-        'px' +
-        '; margin-right: ' +
-        0 +
-        "px;'></span>";
+        "<span style='margin-left: " + ((328600 * 96) / 914400) * lvl + 'px' + '; margin-right: ' + 0 + "px;'></span>";
     }
 
     return bullet;
@@ -3033,13 +2479,7 @@ export default function processPptx(
       'color:' +
       getFontColor(node, type, slideMasterTextStyles) +
       ';font-size:' +
-      getFontSize(
-        node,
-        slideLayoutSpNode,
-        slideMasterSpNode,
-        type,
-        slideMasterTextStyles,
-      ) +
+      getFontSize(node, slideLayoutSpNode, slideMasterSpNode, type, slideMasterTextStyles) +
       ';font-family:' +
       getFontType(node, type, slideMasterTextStyles) +
       ';font-weight:' +
@@ -3054,10 +2494,7 @@ export default function processPptx(
       getTextVerticalAlign(node, type, slideMasterTextStyles) +
       ';';
     // ////////////////Amir///////////////
-    const highlight = getTextByPathList(node, [
-      'a:rPr',
-      'a:highlight',
-    ]) as Record<string, any>;
+    const highlight = getTextByPathList(node, ['a:rPr', 'a:highlight']) as Record<string, any>;
     if (highlight !== undefined) {
       styleText += 'background-color:#' + getSolidFill(highlight) + ';';
       styleText += 'Opacity:' + getColorOpacity(highlight) + ';';
@@ -3075,12 +2512,7 @@ export default function processPptx(
       };
     }
 
-    const linkID = getTextByPathList(node, [
-      'a:rPr',
-      'a:hlinkClick',
-      'attrs',
-      'r:id',
-    ]) as string;
+    const linkID = getTextByPathList(node, ['a:rPr', 'a:hlinkClick', 'attrs', 'r:id']) as string;
     // get link colors : TODO
     if (linkID !== undefined) {
       const linkURL = warpObj['slideResObj'][linkID]['target'];
@@ -3094,44 +2526,24 @@ export default function processPptx(
         '</a></span>'
       );
     } else {
-      return (
-        "<span class='text-block " +
-        cssName +
-        "'>" +
-        text.replace(/\s/, '&nbsp;') +
-        '</span>'
-      );
+      return "<span class='text-block " + cssName + "'>" + text.replace(/\s/, '&nbsp;') + '</span>';
     }
   }
 
   function genGlobalCSS() {
     let cssText = '';
     for (const key in styleTable) {
-      cssText +=
-        'section .' +
-        styleTable[key]['name'] +
-        '{' +
-        styleTable[key]['text'] +
-        '}\n';
+      cssText += 'section .' + styleTable[key]['name'] + '{' + styleTable[key]['text'] + '}\n';
     }
     return cssText;
   }
 
   async function genTable(node: Record<string, any>, warpObj: any) {
     const order = node['attrs']['order'];
-    const tableNode = getTextByPathList(node, [
-      'a:graphic',
-      'a:graphicData',
-      'a:tbl',
-    ]) as Record<string, any>;
+    const tableNode = getTextByPathList(node, ['a:graphic', 'a:graphicData', 'a:tbl']) as Record<string, any>;
     const xfrmNode = getTextByPathList(node, ['p:xfrm']) as Record<string, any>;
     // ///////////////////////////////////////Amir////////////////////////////////////////////////
-    const getTblPr = getTextByPathList(node, [
-      'a:graphic',
-      'a:graphicData',
-      'a:tbl',
-      'a:tblPr',
-    ]) as Record<string, any>;
+    const getTblPr = getTextByPathList(node, ['a:graphic', 'a:graphicData', 'a:tbl', 'a:tblPr']) as Record<string, any>;
     const getColsGrid = getTextByPathList(node, [
       'a:graphic',
       'a:graphicData',
@@ -3209,11 +2621,10 @@ export default function processPptx(
 
             // borders color
             // borders Width
-            const borderStyl = getTextByPathList(thisTblStyle, [
-              'a:firstRow',
-              'a:tcStyle',
-              'a:tcBdr',
-            ]) as Record<string, any>;
+            const borderStyl = getTextByPathList(thisTblStyle, ['a:firstRow', 'a:tcStyle', 'a:tcBdr']) as Record<
+              string,
+              any
+            >;
             if (borderStyl !== undefined) {
               const rowBorders = getTableBorders(borderStyl);
               rowsStyl += rowBorders;
@@ -3221,10 +2632,7 @@ export default function processPptx(
             // console.log(thisTblStyle["a:firstRow"])
 
             // Text Style - TODO
-            const rowTxtStyl = getTextByPathList(thisTblStyle, [
-              'a:firstRow',
-              'a:tcTxStyle',
-            ]);
+            const rowTxtStyl = getTextByPathList(thisTblStyle, ['a:firstRow', 'a:tcTxStyle']);
             if (rowTxtStyl !== undefined) {
               /*
                     const styleText =
@@ -3240,13 +2648,7 @@ export default function processPptx(
                         */
             }
           }
-          rowsStyl +=
-            ' background-color:#' +
-            fillColor +
-            ';' +
-            ' opacity:' +
-            colorOpacity +
-            ';';
+          rowsStyl += ' background-color:#' + fillColor + ';' + ' opacity:' + colorOpacity + ';';
         } else if (i > 0 && bandRowAttr !== undefined) {
           let fillColor = 'fff';
           let colorOpacity = 1;
@@ -3265,11 +2667,10 @@ export default function processPptx(
               }
               // borders color
               // borders Width
-              const borderStyl = getTextByPathList(thisTblStyle, [
-                'a:band2H',
-                'a:tcStyle',
-                'a:tcBdr',
-              ]) as Record<string, any>;
+              const borderStyl = getTextByPathList(thisTblStyle, ['a:band2H', 'a:tcStyle', 'a:tcBdr']) as Record<
+                string,
+                any
+              >;
               if (borderStyl !== undefined) {
                 const rowBorders = getTableBorders(borderStyl);
                 rowsStyl += rowBorders;
@@ -3277,10 +2678,7 @@ export default function processPptx(
               // console.log(thisTblStyle["a:band2H"])
 
               // Text Style - TODO
-              const rowTxtStyl = getTextByPathList(thisTblStyle, [
-                'a:band2H',
-                'a:tcTxStyle',
-              ]);
+              const rowTxtStyl = getTextByPathList(thisTblStyle, ['a:band2H', 'a:tcTxStyle']);
               if (rowTxtStyl !== undefined) {
               }
               // console.log(i,thisTblStyle)
@@ -3319,11 +2717,10 @@ export default function processPptx(
               }
               // borders color
               // borders Width
-              const borderStyl = getTextByPathList(thisTblStyle, [
-                'a:band1H',
-                'a:tcStyle',
-                'a:tcBdr',
-              ]) as Record<string, any>;
+              const borderStyl = getTextByPathList(thisTblStyle, ['a:band1H', 'a:tcStyle', 'a:tcBdr']) as Record<
+                string,
+                any
+              >;
               if (borderStyl !== undefined) {
                 const rowBorders = getTableBorders(borderStyl);
                 rowsStyl += rowBorders;
@@ -3331,21 +2728,12 @@ export default function processPptx(
               // console.log(thisTblStyle["a:band1H"])
 
               // Text Style - TODO
-              const rowTxtStyl = getTextByPathList(thisTblStyle, [
-                'a:band1H',
-                'a:tcTxStyle',
-              ]);
+              const rowTxtStyl = getTextByPathList(thisTblStyle, ['a:band1H', 'a:tcTxStyle']);
               if (rowTxtStyl !== undefined) {
               }
             }
           }
-          rowsStyl +=
-            ' background-color:#' +
-            fillColor +
-            ';' +
-            ' opacity:' +
-            colorOpacity +
-            ';';
+          rowsStyl += ' background-color:#' + fillColor + ';' + ' opacity:' + colorOpacity + ';';
         }
         tableHtml += "<tr style='" + rowsStyl + "'>";
         // //////////////////////////////////////////////
@@ -3354,21 +2742,9 @@ export default function processPptx(
 
         if (tcNodes.constructor === Array) {
           for (let j = 0; j < tcNodes.length; j++) {
-            const text = await genTextBody(
-              tcNodes[j]['a:txBody'],
-              undefined,
-              undefined,
-              undefined,
-              warpObj,
-            );
-            const rowSpan = getTextByPathList(tcNodes[j], [
-              'attrs',
-              'rowSpan',
-            ]) as string;
-            const colSpan = getTextByPathList(tcNodes[j], [
-              'attrs',
-              'gridSpan',
-            ]) as string;
+            const text = await genTextBody(tcNodes[j]['a:txBody'], undefined, undefined, undefined, warpObj);
+            const rowSpan = getTextByPathList(tcNodes[j], ['attrs', 'rowSpan']) as string;
+            const colSpan = getTextByPathList(tcNodes[j], ['attrs', 'gridSpan']) as string;
             const vMerge = getTextByPathList(tcNodes[j], ['attrs', 'vMerge']);
             const hMerge = getTextByPathList(tcNodes[j], ['attrs', 'hMerge']);
             // Cells Style : TODO /////////////Amir
@@ -3394,8 +2770,7 @@ export default function processPptx(
               if (tbleStyleId !== undefined) {
                 // get Style from tableStyles.xml by {const tbleStyleId}
                 // table style object : tableStyles
-                const tbleStylList =
-                  tableStyles['a:tblStyleLst']['a:tblStyle'] || [];
+                const tbleStylList = tableStyles['a:tblStyleLst']['a:tblStyle'] || [];
 
                 for (let k = 0; k < tbleStylList.length; k++) {
                   if (tbleStylList[k]['attrs']['styleId'] === tbleStyleId) {
@@ -3413,23 +2788,9 @@ export default function processPptx(
             // //////////////////////////////////
 
             if (rowSpan !== undefined) {
-              tableHtml +=
-                "<td rowspan='" +
-                parseInt(rowSpan) +
-                "' style='" +
-                colStyl +
-                "'>" +
-                text +
-                '</td>';
+              tableHtml += "<td rowspan='" + parseInt(rowSpan) + "' style='" + colStyl + "'>" + text + '</td>';
             } else if (colSpan !== undefined) {
-              tableHtml +=
-                "<td colspan='" +
-                parseInt(colSpan) +
-                "' style='" +
-                colStyl +
-                "'>" +
-                text +
-                '</td>';
+              tableHtml += "<td colspan='" + parseInt(colSpan) + "' style='" + colStyl + "'>" + text + '</td>';
             } else if (vMerge === undefined && hMerge === undefined) {
               tableHtml += "<td style='" + colStyl + "'>" + text + '</td>';
             }
@@ -3534,10 +2895,7 @@ export default function processPptx(
     return tableHtml;
   }
 
-  async function genChart(
-    node: Record<string, any>,
-    warpObj: Record<string, any>,
-  ) {
+  async function genChart(node: Record<string, any>, warpObj: Record<string, any>) {
     const order = node['attrs']['order'];
     const xfrmNode = getTextByPathList(node, ['p:xfrm']) as Record<string, any>;
     const result =
@@ -3553,11 +2911,7 @@ export default function processPptx(
     const rid = node['a:graphic']['a:graphicData']['c:chart']['attrs']['r:id'];
     const refName = warpObj['slideResObj'][rid]['target'];
     const content = await readXmlFile(warpObj['zip'], refName);
-    const plotArea = getTextByPathList(content, [
-      'c:chartSpace',
-      'c:chart',
-      'c:plotArea',
-    ]) as Record<string, any>;
+    const plotArea = getTextByPathList(content, ['c:chartSpace', 'c:chart', 'c:plotArea']) as Record<string, any>;
 
     let chartData = null;
     for (const key in plotArea) {
@@ -3697,9 +3051,7 @@ export default function processPptx(
     } else {
       w = (parseInt(ext['cx']) * 96) / 914400;
       h = (parseInt(ext['cy']) * 96) / 914400;
-      return isNaN(w) || isNaN(h)
-        ? ''
-        : 'width:' + w + 'px; height:' + h + 'px;';
+      return isNaN(w) || isNaN(h) ? '' : 'width:' + w + 'px; height:' + h + 'px;';
     }
   }
 
@@ -3712,41 +3064,19 @@ export default function processPptx(
   ) {
     let algn = getTextByPathList(node, ['a:pPr', 'attrs', 'algn']);
     if (algn === undefined) {
-      algn = getTextByPathList(slideLayoutSpNode, [
-        'p:txBody',
-        'a:p',
-        'a:pPr',
-        'attrs',
-        'algn',
-      ]);
+      algn = getTextByPathList(slideLayoutSpNode, ['p:txBody', 'a:p', 'a:pPr', 'attrs', 'algn']);
       if (algn === undefined) {
-        algn = getTextByPathList(slideMasterSpNode, [
-          'p:txBody',
-          'a:p',
-          'a:pPr',
-          'attrs',
-          'algn',
-        ]);
+        algn = getTextByPathList(slideMasterSpNode, ['p:txBody', 'a:p', 'a:pPr', 'attrs', 'algn']);
         if (algn === undefined) {
           switch (type) {
             case 'title':
             case 'subTitle':
             case 'ctrTitle': {
-              algn = getTextByPathList(slideMasterTextStyles, [
-                'p:titleStyle',
-                'a:lvl1pPr',
-                'attrs',
-                'alng',
-              ]);
+              algn = getTextByPathList(slideMasterTextStyles, ['p:titleStyle', 'a:lvl1pPr', 'attrs', 'alng']);
               break;
             }
             default: {
-              algn = getTextByPathList(slideMasterTextStyles, [
-                'p:otherStyle',
-                'a:lvl1pPr',
-                'attrs',
-                'alng',
-              ]);
+              algn = getTextByPathList(slideMasterTextStyles, ['p:otherStyle', 'a:lvl1pPr', 'attrs', 'alng']);
             }
           }
         }
@@ -3771,26 +3101,11 @@ export default function processPptx(
     slideMasterTextStyles?: undefined,
   ) {
     // 上中下對齊: X, <a:bodyPr anchor="ctr">, <a:bodyPr anchor="b">
-    let anchor = getTextByPathList(node, [
-      'p:txBody',
-      'a:bodyPr',
-      'attrs',
-      'anchor',
-    ]);
+    let anchor = getTextByPathList(node, ['p:txBody', 'a:bodyPr', 'attrs', 'anchor']);
     if (anchor === undefined) {
-      anchor = getTextByPathList(slideLayoutSpNode, [
-        'p:txBody',
-        'a:bodyPr',
-        'attrs',
-        'anchor',
-      ]);
+      anchor = getTextByPathList(slideLayoutSpNode, ['p:txBody', 'a:bodyPr', 'attrs', 'anchor']);
       if (anchor === undefined) {
-        anchor = getTextByPathList(slideMasterSpNode, [
-          'p:txBody',
-          'a:bodyPr',
-          'attrs',
-          'anchor',
-        ]);
+        anchor = getTextByPathList(slideMasterSpNode, ['p:txBody', 'a:bodyPr', 'attrs', 'anchor']);
       }
     }
 
@@ -3798,39 +3113,20 @@ export default function processPptx(
   }
 
   function getFontType(node: any, type: string, slideMasterTextStyles: any) {
-    let typeface = getTextByPathList(node, [
-      'a:rPr',
-      'a:latin',
-      'attrs',
-      'typeface',
-    ]);
+    let typeface = getTextByPathList(node, ['a:rPr', 'a:latin', 'attrs', 'typeface']);
 
     if (typeface === undefined) {
-      const fontSchemeNode = getTextByPathList(
-        themeContent as Record<string, any>,
-        ['a:theme', 'a:themeElements', 'a:fontScheme'],
-      ) as Record<string, any>;
+      const fontSchemeNode = getTextByPathList(themeContent as Record<string, any>, [
+        'a:theme',
+        'a:themeElements',
+        'a:fontScheme',
+      ]) as Record<string, any>;
       if (type === 'title' || type === 'subTitle' || type === 'ctrTitle') {
-        typeface = getTextByPathList(fontSchemeNode, [
-          'a:majorFont',
-          'a:latin',
-          'attrs',
-          'typeface',
-        ]);
+        typeface = getTextByPathList(fontSchemeNode, ['a:majorFont', 'a:latin', 'attrs', 'typeface']);
       } else if (type === 'body') {
-        typeface = getTextByPathList(fontSchemeNode, [
-          'a:minorFont',
-          'a:latin',
-          'attrs',
-          'typeface',
-        ]);
+        typeface = getTextByPathList(fontSchemeNode, ['a:minorFont', 'a:latin', 'attrs', 'typeface']);
       } else {
-        typeface = getTextByPathList(fontSchemeNode, [
-          'a:minorFont',
-          'a:latin',
-          'attrs',
-          'typeface',
-        ]);
+        typeface = getTextByPathList(fontSchemeNode, ['a:minorFont', 'a:latin', 'attrs', 'typeface']);
       }
     }
 
@@ -3838,10 +3134,7 @@ export default function processPptx(
   }
 
   function getFontColor(node: any, type: any, slideMasterTextStyles: any) {
-    const solidFillNode = getTextByPathStr(node, 'a:rPr a:solidFill') as Record<
-      string,
-      any
-    >;
+    const solidFillNode = getTextByPathStr(node, 'a:rPr a:solidFill') as Record<string, any>;
 
     const color = getSolidFill(solidFillNode);
     // console.log(themeContent)
@@ -3918,9 +3211,7 @@ export default function processPptx(
     type: any,
     slideMasterTextStyles: any,
   ) {
-    return node['a:rPr'] !== undefined && node['a:rPr']['attrs']['b'] === '1'
-      ? 'bold'
-      : 'initial';
+    return node['a:rPr'] !== undefined && node['a:rPr']['attrs']['b'] === '1' ? 'bold' : 'initial';
   }
 
   function getFontItalic(
@@ -3928,9 +3219,7 @@ export default function processPptx(
     type: any,
     slideMasterTextStyles: any,
   ) {
-    return node['a:rPr'] !== undefined && node['a:rPr']['attrs']['i'] === '1'
-      ? 'italic'
-      : 'normal';
+    return node['a:rPr'] !== undefined && node['a:rPr']['attrs']['i'] === '1' ? 'italic' : 'normal';
   }
 
   function getFontDecoration(
@@ -3940,14 +3229,9 @@ export default function processPptx(
   ) {
     // /////////////////////////////Amir///////////////////////////////
     if (node['a:rPr'] !== undefined) {
-      const underLine =
-        node['a:rPr']['attrs']['u'] !== undefined
-          ? node['a:rPr']['attrs']['u']
-          : 'none';
+      const underLine = node['a:rPr']['attrs']['u'] !== undefined ? node['a:rPr']['attrs']['u'] : 'none';
       const strikethrough =
-        node['a:rPr']['attrs']['strike'] !== undefined
-          ? node['a:rPr']['attrs']['strike']
-          : 'noStrike';
+        node['a:rPr']['attrs']['strike'] !== undefined ? node['a:rPr']['attrs']['strike'] : 'noStrike';
       // console.log("strikethrough: "+strikethrough);
 
       if (underLine !== 'none' && strikethrough === 'noStrike') {
@@ -3967,11 +3251,7 @@ export default function processPptx(
   }
 
   // //////////////////////////////////Amir/////////////////////////////////////
-  function getTextHorizontalAlign(
-    node: any,
-    type: any,
-    slideMasterTextStyles: any,
-  ) {
+  function getTextHorizontalAlign(node: any, type: any, slideMasterTextStyles: any) {
     const getAlgn = getTextByPathList(node, ['a:pPr', 'attrs', 'algn']);
     let align = 'initial';
     if (getAlgn !== undefined) {
@@ -4004,19 +3284,9 @@ export default function processPptx(
   }
 
   // ///////////////////////////////////////////////////////////////////
-  function getTextVerticalAlign(
-    node: any,
-    type: any,
-    slideMasterTextStyles: any,
-  ) {
-    const baseline = getTextByPathList(node, [
-      'a:rPr',
-      'attrs',
-      'baseline',
-    ]) as string;
-    return baseline === undefined
-      ? 'baseline'
-      : parseInt(baseline) / 1000 + '%';
+  function getTextVerticalAlign(node: any, type: any, slideMasterTextStyles: any) {
+    const baseline = getTextByPathList(node, ['a:rPr', 'attrs', 'baseline']) as string;
+    return baseline === undefined ? 'baseline' : parseInt(baseline) / 1000 + '%';
   }
 
   // /////////////////////////////////Amir/////////////////////////////
@@ -4087,29 +3357,21 @@ function getTextDirection (node, type, slideMasterTextStyles) {
   }
 
   // ////////////////////////////////////////////////////////////////
-  function getBorder(
-    node: Record<string, any>,
-    isSvgMode: boolean,
-  ): string | Record<string, any> {
+  function getBorder(node: Record<string, any>, isSvgMode: boolean): string | Record<string, any> {
     let cssText = 'border: ';
 
     // 1. presentationML
     const lineNode = node['p:spPr']['a:ln'];
 
     // Border width: 1pt = 12700, default = 0.75pt
-    const borderWidth =
-      parseInt(getTextByPathList(lineNode, ['attrs', 'w']) as string) / 12700;
+    const borderWidth = parseInt(getTextByPathList(lineNode, ['attrs', 'w']) as string) / 12700;
     if (isNaN(borderWidth) || borderWidth < 1) {
       cssText += '1pt ';
     } else {
       cssText += borderWidth + 'pt ';
     }
     // Border type
-    const borderType = getTextByPathList(lineNode, [
-      'a:prstDash',
-      'attrs',
-      'val',
-    ]);
+    const borderType = getTextByPathList(lineNode, ['a:prstDash', 'attrs', 'val']);
     let strokeDasharray = '0';
     switch (borderType) {
       case 'solid': {
@@ -4168,43 +3430,25 @@ function getTextDirection (node, type, slideMasterTextStyles) {
       }
     }
     // Border color
-    let borderColor = getTextByPathList(lineNode, [
-      'a:solidFill',
-      'a:srgbClr',
-      'attrs',
-      'val',
-    ]);
+    let borderColor = getTextByPathList(lineNode, ['a:solidFill', 'a:srgbClr', 'attrs', 'val']);
     if (borderColor === undefined) {
-      const schemeClrNode = getTextByPathList(lineNode, [
-        'a:solidFill',
-        'a:schemeClr',
-      ]) as Record<string, any>;
+      const schemeClrNode = getTextByPathList(lineNode, ['a:solidFill', 'a:schemeClr']) as Record<string, any>;
       if (schemeClrNode !== undefined) {
-        const schemeClr =
-          'a:' + getTextByPathList(schemeClrNode, ['attrs', 'val']);
+        const schemeClr = 'a:' + getTextByPathList(schemeClrNode, ['attrs', 'val']);
         borderColor = getSchemeColorFromTheme(schemeClr, undefined);
       }
     }
 
     // 2. drawingML namespace
     if (borderColor === undefined) {
-      const schemeClrNode = getTextByPathList(node, [
-        'p:style',
-        'a:lnRef',
-        'a:schemeClr',
-      ]) as Record<string, any>;
+      const schemeClrNode = getTextByPathList(node, ['p:style', 'a:lnRef', 'a:schemeClr']) as Record<string, any>;
       if (schemeClrNode !== undefined) {
-        const schemeClr =
-          'a:' + getTextByPathList(schemeClrNode, ['attrs', 'val']);
+        const schemeClr = 'a:' + getTextByPathList(schemeClrNode, ['attrs', 'val']);
         borderColor = getSchemeColorFromTheme(schemeClr, undefined);
       }
 
       if (borderColor !== undefined) {
-        let shade = getTextByPathList(schemeClrNode, [
-          'a:shade',
-          'attrs',
-          'val',
-        ]) as string;
+        let shade = getTextByPathList(schemeClrNode, ['a:shade', 'attrs', 'val']) as string;
         if (shade !== undefined) {
           shade = (parseInt(shade) / 100000).toString();
           const color = new Color('#' + borderColor);
@@ -4245,18 +3489,8 @@ function getTextDirection (node, type, slideMasterTextStyles) {
   ) {
     // console.log(slideContent)
     // getFillType(node)
-    let bgPr = getTextByPathList(slideContent, [
-      'p:sld',
-      'p:cSld',
-      'p:bg',
-      'p:bgPr',
-    ]) as Record<string, any>;
-    let bgRef = getTextByPathList(slideContent, [
-      'p:sld',
-      'p:cSld',
-      'p:bg',
-      'p:bgRef',
-    ]) as Record<string, any>;
+    let bgPr = getTextByPathList(slideContent, ['p:sld', 'p:cSld', 'p:bg', 'p:bgPr']) as Record<string, any>;
+    let bgRef = getTextByPathList(slideContent, ['p:sld', 'p:cSld', 'p:bg', 'p:bgRef']) as Record<string, any>;
     let bgcolor;
 
     if (bgPr !== undefined) {
@@ -4267,8 +3501,7 @@ function getTextDirection (node, type, slideMasterTextStyles) {
         const sldFill = bgPr['a:solidFill'];
         const bgColor = getSolidFill(sldFill);
         const sldTint = getColorOpacity(sldFill);
-        bgcolor =
-          'background: rgba(' + hexToRgbNew(bgColor) + ',' + sldTint + ');';
+        bgcolor = 'background: rgba(' + hexToRgbNew(bgColor) + ',' + sldTint + ');';
       } else if (bgFillTyp === 'GRADIENT_FILL') {
         const grdFill = bgPr['a:gradFill'];
         // const grdFillVals =  getGradientFill(grdFill);
@@ -4283,34 +3516,13 @@ function getTextDirection (node, type, slideMasterTextStyles) {
           let loTint: string = '';
           let loColor;
           if (gsLst[i]['a:srgbClr'] !== undefined) {
-            loColor = getTextByPathList(gsLst[i], [
-              'a:srgbClr',
-              'attrs',
-              'val',
-            ]); // #...
-            loTint = getTextByPathList(gsLst[i], [
-              'a:srgbClr',
-              'a:tint',
-              'attrs',
-              'val',
-            ]) as string;
+            loColor = getTextByPathList(gsLst[i], ['a:srgbClr', 'attrs', 'val']); // #...
+            loTint = getTextByPathList(gsLst[i], ['a:srgbClr', 'a:tint', 'attrs', 'val']) as string;
           } else if (gsLst[i]['a:schemeClr'] !== undefined) {
             // a:schemeClr
-            const schemeClr = getTextByPathList(gsLst[i], [
-              'a:schemeClr',
-              'attrs',
-              'val',
-            ]);
-            loColor = getSchemeColorFromTheme(
-              'a:' + schemeClr,
-              slideMasterContent,
-            ); // #...
-            loTint = getTextByPathList(gsLst[i], [
-              'a:schemeClr',
-              'a:tint',
-              'attrs',
-              'val',
-            ]) as string;
+            const schemeClr = getTextByPathList(gsLst[i], ['a:schemeClr', 'attrs', 'val']);
+            loColor = getSchemeColorFromTheme('a:' + schemeClr, slideMasterContent); // #...
+            loTint = getTextByPathList(gsLst[i], ['a:schemeClr', 'a:tint', 'attrs', 'val']) as string;
             // console.log("schemeClr",schemeClr,slideMasterContent)
           }
           // console.log("loColor",loColor)
@@ -4326,38 +3538,17 @@ function getTextDirection (node, type, slideMasterTextStyles) {
         bgcolor = 'background: linear-gradient(' + rot + 'deg,';
         for (let i = 0; i < gsLst.length; i++) {
           if (i === gsLst.length - 1) {
-            bgcolor +=
-              'rgba(' +
-              hexToRgbNew(colorArray[i] as string) +
-              ',' +
-              tintArray[i] +
-              ')' +
-              ');';
+            bgcolor += 'rgba(' + hexToRgbNew(colorArray[i] as string) + ',' + tintArray[i] + ')' + ');';
           } else {
-            bgcolor +=
-              'rgba(' +
-              hexToRgbNew(colorArray[i] as string) +
-              ',' +
-              tintArray[i] +
-              ')' +
-              ', ';
+            bgcolor += 'rgba(' + hexToRgbNew(colorArray[i] as string) + ',' + tintArray[i] + ')' + ', ';
           }
         }
       } else if (bgFillTyp === 'PIC_FILL') {
-        const picFillBase64 = await getPicFill(
-          'slideBg',
-          bgPr['a:blipFill'],
-          warpObj,
-        );
+        const picFillBase64 = await getPicFill('slideBg', bgPr['a:blipFill'], warpObj);
         const ordr = bgPr['attrs']['order'];
         // a:srcRect
         // a:stretch => a:fillRect =>attrs (l:-17000, r:-17000)
-        bgcolor =
-          'background-image: url(' +
-          picFillBase64 +
-          ');  z-index: ' +
-          ordr +
-          ';';
+        bgcolor = 'background-image: url(' + picFillBase64 + ');  z-index: ' + ordr + ';';
         // console.log(picFillBase64);
       }
       // console.log(slideContent,slideMasterContent,colorArray,tintArray,rot,bgcolor)
@@ -4365,22 +3556,11 @@ function getTextDirection (node, type, slideMasterTextStyles) {
       // console.log("slideContent",bgRef)
       let phClr: string = '';
       if (bgRef['a:srgbClr'] !== undefined) {
-        phClr = getTextByPathList(bgRef, [
-          'a:srgbClr',
-          'attrs',
-          'val',
-        ]) as string; // #...
+        phClr = getTextByPathList(bgRef, ['a:srgbClr', 'attrs', 'val']) as string; // #...
       } else if (bgRef['a:schemeClr'] !== undefined) {
         // a:schemeClr
-        const schemeClr = getTextByPathList(bgRef, [
-          'a:schemeClr',
-          'attrs',
-          'val',
-        ]);
-        phClr = getSchemeColorFromTheme(
-          'a:' + schemeClr,
-          slideMasterContent,
-        ) as string; // #...
+        const schemeClr = getTextByPathList(bgRef, ['a:schemeClr', 'attrs', 'val']);
+        phClr = getSchemeColorFromTheme('a:' + schemeClr, slideMasterContent) as string; // #...
         // console.log("schemeClr",schemeClr,"phClr=",phClr)
       }
       const idx = Number(bgRef['attrs']['idx']);
@@ -4395,9 +3575,9 @@ function getTextDirection (node, type, slideMasterTextStyles) {
         // bgFillStyleLst  in themeContent
         // themeContent["a:fmtScheme"]["a:bgFillStyleLst"]
         const trueIdx = idx - 1000;
-        const bgFillLst = (themeContent as Record<string, any>)['a:theme'][
-          'a:themeElements'
-        ]['a:fmtScheme']['a:bgFillStyleLst'];
+        const bgFillLst = (themeContent as Record<string, any>)['a:theme']['a:themeElements']['a:fmtScheme'][
+          'a:bgFillStyleLst'
+        ];
         const sortblAry: {}[] = [];
         Object.keys(bgFillLst).forEach(function (key) {
           const bgFillLstTyp = bgFillLst[key];
@@ -4427,8 +3607,7 @@ function getTextDirection (node, type, slideMasterTextStyles) {
           const sldFill = bgFillLstIdx['a:solidFill'];
           // const sldBgColor = getSolidFill(sldFill);
           const sldTint = getColorOpacity(sldFill);
-          bgcolor =
-            'background: rgba(' + hexToRgbNew(phClr) + ',' + sldTint + ');';
+          bgcolor = 'background: rgba(' + hexToRgbNew(phClr) + ',' + sldTint + ');';
           // console.log("slideMasterContent - sldFill",sldFill)
         } else if (bgFillTyp === 'GRADIENT_FILL') {
           const grdFill = bgFillLstIdx['a:gradFill'];
@@ -4438,12 +3617,7 @@ function getTextDirection (node, type, slideMasterTextStyles) {
           // let endColorNode
           const tintArray = [];
           for (let i = 0; i < gsLst.length; i++) {
-            const loTint = getTextByPathList(gsLst[i], [
-              'a:schemeClr',
-              'a:tint',
-              'attrs',
-              'val',
-            ]) as string;
+            const loTint = getTextByPathList(gsLst[i], ['a:schemeClr', 'a:tint', 'attrs', 'val']) as string;
             tintArray[i] = loTint !== undefined ? parseInt(loTint) / 100000 : 1;
           }
           // console.log("gsLst",gsLst)
@@ -4456,28 +3630,19 @@ function getTextDirection (node, type, slideMasterTextStyles) {
           bgcolor = 'background: linear-gradient(' + rot + 'deg,';
           for (let i = 0; i < gsLst.length; i++) {
             if (i === gsLst.length - 1) {
-              bgcolor +=
-                'rgba(' + hexToRgbNew(phClr) + ',' + tintArray[i] + ')' + ');';
+              bgcolor += 'rgba(' + hexToRgbNew(phClr) + ',' + tintArray[i] + ')' + ');';
             } else {
-              bgcolor +=
-                'rgba(' + hexToRgbNew(phClr) + ',' + tintArray[i] + ')' + ', ';
+              bgcolor += 'rgba(' + hexToRgbNew(phClr) + ',' + tintArray[i] + ')' + ', ';
             }
           }
         }
       }
     } else {
-      bgPr = getTextByPathList(slideLayoutContent, [
-        'p:sldLayout',
-        'p:cSld',
-        'p:bg',
-        'p:bgPr',
-      ]) as Record<string, any>;
-      bgRef = getTextByPathList(slideLayoutContent, [
-        'p:sldLayout',
-        'p:cSld',
-        'p:bg',
-        'p:bgRef',
-      ]) as Record<string, any>;
+      bgPr = getTextByPathList(slideLayoutContent, ['p:sldLayout', 'p:cSld', 'p:bg', 'p:bgPr']) as Record<string, any>;
+      bgRef = getTextByPathList(slideLayoutContent, ['p:sldLayout', 'p:cSld', 'p:bg', 'p:bgRef']) as Record<
+        string,
+        any
+      >;
       // console.log("slideLayoutContent",bgPr,bgRef)
       if (bgPr !== undefined) {
         const bgFillTyp = getFillType(bgPr);
@@ -4485,8 +3650,7 @@ function getTextDirection (node, type, slideMasterTextStyles) {
           const sldFill = bgPr['a:solidFill'];
           const bgColor = getSolidFill(sldFill);
           const sldTint = getColorOpacity(sldFill);
-          bgcolor =
-            'background: rgba(' + hexToRgbNew(bgColor) + ',' + sldTint + ');';
+          bgcolor = 'background: rgba(' + hexToRgbNew(bgColor) + ',' + sldTint + ');';
         } else if (bgFillTyp === 'GRADIENT_FILL') {
           const grdFill = bgPr['a:gradFill'];
           // const grdFillVals =  getGradientFill(grdFill);
@@ -4495,41 +3659,19 @@ function getTextDirection (node, type, slideMasterTextStyles) {
           // get start color
           // let startColorNode
           // let endColorNode
-          const colorArray: Array<Record<string, any> | undefined | string> =
-            [];
+          const colorArray: Array<Record<string, any> | undefined | string> = [];
           const tintArray = [];
           for (let i = 0; i < gsLst.length; i++) {
             let loTint = '';
             let loColor;
             if (gsLst[i]['a:srgbClr'] !== undefined) {
-              loColor = getTextByPathList(gsLst[i], [
-                'a:srgbClr',
-                'attrs',
-                'val',
-              ]); // #...
-              loTint = getTextByPathList(gsLst[i], [
-                'a:srgbClr',
-                'a:tint',
-                'attrs',
-                'val',
-              ]) as string;
+              loColor = getTextByPathList(gsLst[i], ['a:srgbClr', 'attrs', 'val']); // #...
+              loTint = getTextByPathList(gsLst[i], ['a:srgbClr', 'a:tint', 'attrs', 'val']) as string;
             } else if (gsLst[i]['a:schemeClr'] !== undefined) {
               // a:schemeClr
-              const schemeClr = getTextByPathList(gsLst[i], [
-                'a:schemeClr',
-                'attrs',
-                'val',
-              ]);
-              loColor = getSchemeColorFromTheme(
-                'a:' + schemeClr,
-                slideMasterContent,
-              ); // #...
-              loTint = getTextByPathList(gsLst[i], [
-                'a:schemeClr',
-                'a:tint',
-                'attrs',
-                'val',
-              ]) as string;
+              const schemeClr = getTextByPathList(gsLst[i], ['a:schemeClr', 'attrs', 'val']);
+              loColor = getSchemeColorFromTheme('a:' + schemeClr, slideMasterContent); // #...
+              loTint = getTextByPathList(gsLst[i], ['a:schemeClr', 'a:tint', 'attrs', 'val']) as string;
               // console.log("schemeClr",schemeClr,slideMasterContent)
             }
             // console.log("loColor",loColor)
@@ -4547,57 +3689,32 @@ function getTextDirection (node, type, slideMasterTextStyles) {
           bgcolor = 'background: linear-gradient(' + rot + 'deg,';
           for (let i = 0; i < gsLst.length; i++) {
             if (i === gsLst.length - 1) {
-              bgcolor +=
-                'rgba(' +
-                hexToRgbNew(colorArray[i] as string) +
-                ',' +
-                tintArray[i] +
-                ')' +
-                ');';
+              bgcolor += 'rgba(' + hexToRgbNew(colorArray[i] as string) + ',' + tintArray[i] + ')' + ');';
             } else {
-              bgcolor +=
-                'rgba(' +
-                hexToRgbNew(colorArray[i] as string) +
-                ',' +
-                tintArray[i] +
-                ')' +
-                ', ';
+              bgcolor += 'rgba(' + hexToRgbNew(colorArray[i] as string) + ',' + tintArray[i] + ')' + ', ';
             }
           }
         } else if (bgFillTyp === 'PIC_FILL') {
           // console.log("bgPr",bgPr,"bgFillTyp",bgFillTyp)
-          const picFillBase64 = await getPicFill(
-            'layoutBg',
-            bgPr['a:blipFill'],
-            warpObj,
-          );
+          const picFillBase64 = await getPicFill('layoutBg', bgPr['a:blipFill'], warpObj);
           const ordr = bgPr['attrs']['order'];
           // a:srcRect
           // a:stretch => a:fillRect =>attrs (l:-17000, r:-17000)
-          bgcolor =
-            'background-image: url(' +
-            picFillBase64 +
-            ');  z-index: ' +
-            ordr +
-            ';';
+          bgcolor = 'background-image: url(' + picFillBase64 + ');  z-index: ' + ordr + ';';
           // console.log(warpObj)
         }
         // console.log("slideLayoutContent",bgcolor)
       } else if (bgRef !== undefined) {
         bgcolor = 'background: red;';
       } else {
-        bgPr = getTextByPathList(slideMasterContent, [
-          'p:sldMaster',
-          'p:cSld',
-          'p:bg',
-          'p:bgPr',
-        ]) as Record<string, any>;
-        bgRef = getTextByPathList(slideMasterContent, [
-          'p:sldMaster',
-          'p:cSld',
-          'p:bg',
-          'p:bgRef',
-        ]) as Record<string, any>;
+        bgPr = getTextByPathList(slideMasterContent, ['p:sldMaster', 'p:cSld', 'p:bg', 'p:bgPr']) as Record<
+          string,
+          any
+        >;
+        bgRef = getTextByPathList(slideMasterContent, ['p:sldMaster', 'p:cSld', 'p:bg', 'p:bgRef']) as Record<
+          string,
+          any
+        >;
 
         // console.log("bgRef",bgRef["a:schemeClr"]["attrs"]["val"])
         if (bgPr !== undefined) {
@@ -4606,8 +3723,7 @@ function getTextDirection (node, type, slideMasterTextStyles) {
             const sldFill = bgPr['a:solidFill'];
             const bgColor = getSolidFill(sldFill);
             const sldTint = getColorOpacity(sldFill);
-            bgcolor =
-              'background: rgba(' + hexToRgbNew(bgColor) + ',' + sldTint + ');';
+            bgcolor = 'background: rgba(' + hexToRgbNew(bgColor) + ',' + sldTint + ');';
           } else if (bgFillTyp === 'GRADIENT_FILL') {
             const grdFill = bgPr['a:gradFill'];
             // const grdFillVals =  getGradientFill(grdFill);
@@ -4622,40 +3738,18 @@ function getTextDirection (node, type, slideMasterTextStyles) {
               let loTint = '';
               let loColor;
               if (gsLst[i]['a:srgbClr'] !== undefined) {
-                loColor = getTextByPathList(gsLst[i], [
-                  'a:srgbClr',
-                  'attrs',
-                  'val',
-                ]); // #...
-                loTint = getTextByPathList(gsLst[i], [
-                  'a:srgbClr',
-                  'a:tint',
-                  'attrs',
-                  'val',
-                ]) as string;
+                loColor = getTextByPathList(gsLst[i], ['a:srgbClr', 'attrs', 'val']); // #...
+                loTint = getTextByPathList(gsLst[i], ['a:srgbClr', 'a:tint', 'attrs', 'val']) as string;
               } else if (gsLst[i]['a:schemeClr'] !== undefined) {
                 // a:schemeClr
-                const schemeClr = getTextByPathList(gsLst[i], [
-                  'a:schemeClr',
-                  'attrs',
-                  'val',
-                ]);
-                loColor = getSchemeColorFromTheme(
-                  'a:' + schemeClr,
-                  slideMasterContent,
-                ); // #...
-                loTint = getTextByPathList(gsLst[i], [
-                  'a:schemeClr',
-                  'a:tint',
-                  'attrs',
-                  'val',
-                ]) as string;
+                const schemeClr = getTextByPathList(gsLst[i], ['a:schemeClr', 'attrs', 'val']);
+                loColor = getSchemeColorFromTheme('a:' + schemeClr, slideMasterContent); // #...
+                loTint = getTextByPathList(gsLst[i], ['a:schemeClr', 'a:tint', 'attrs', 'val']) as string;
                 // console.log("schemeClr",schemeClr,slideMasterContent)
               }
               // console.log("loColor",loColor)
               colorArray[i] = loColor;
-              tintArray[i] =
-                loTint !== undefined ? parseInt(loTint) / 100000 : 1;
+              tintArray[i] = loTint !== undefined ? parseInt(loTint) / 100000 : 1;
             }
             // console.log("colorArray",colorArray,"tintArray",tintArray)
             // get rot
@@ -4668,39 +3762,18 @@ function getTextDirection (node, type, slideMasterTextStyles) {
             bgcolor = 'background: linear-gradient(' + rot + 'deg,';
             for (let i = 0; i < gsLst.length; i++) {
               if (i === gsLst.length - 1) {
-                bgcolor +=
-                  'rgba(' +
-                  hexToRgbNew(colorArray[i] as string) +
-                  ',' +
-                  tintArray[i] +
-                  ')' +
-                  ');';
+                bgcolor += 'rgba(' + hexToRgbNew(colorArray[i] as string) + ',' + tintArray[i] + ')' + ');';
               } else {
-                bgcolor +=
-                  'rgba(' +
-                  hexToRgbNew(colorArray[i] as string) +
-                  ',' +
-                  tintArray[i] +
-                  ')' +
-                  ', ';
+                bgcolor += 'rgba(' + hexToRgbNew(colorArray[i] as string) + ',' + tintArray[i] + ')' + ', ';
               }
             }
           } else if (bgFillTyp === 'PIC_FILL') {
             // console.log("bgPr",bgPr,"bgFillTyp",bgFillTyp)
-            const picFillBase64 = await getPicFill(
-              'masterBg',
-              bgPr['a:blipFill'],
-              warpObj,
-            );
+            const picFillBase64 = await getPicFill('masterBg', bgPr['a:blipFill'], warpObj);
             const ordr = bgPr['attrs']['order'];
             // a:srcRect
             // a:stretch => a:fillRect =>attrs (l:-17000, r:-17000)
-            bgcolor =
-              'background-image: url(' +
-              picFillBase64 +
-              ');  z-index: ' +
-              ordr +
-              ';';
+            bgcolor = 'background-image: url(' + picFillBase64 + ');  z-index: ' + ordr + ';';
             // console.log(warpObj);
           }
         } else if (bgRef !== undefined) {
@@ -4710,23 +3783,12 @@ function getTextDirection (node, type, slideMasterTextStyles) {
           // const phClr = getSolidFill(bgRef);
           let phClr = '';
           if (bgRef['a:srgbClr'] !== undefined) {
-            phClr = getTextByPathList(bgRef, [
-              'a:srgbClr',
-              'attrs',
-              'val',
-            ]) as string; // #...
+            phClr = getTextByPathList(bgRef, ['a:srgbClr', 'attrs', 'val']) as string; // #...
           } else if (bgRef['a:schemeClr'] !== undefined) {
             // a:schemeClr
-            const schemeClr = getTextByPathList(bgRef, [
-              'a:schemeClr',
-              'attrs',
-              'val',
-            ]);
+            const schemeClr = getTextByPathList(bgRef, ['a:schemeClr', 'attrs', 'val']);
 
-            phClr = getSchemeColorFromTheme(
-              'a:' + schemeClr,
-              slideMasterContent,
-            ) as string; // #...
+            phClr = getSchemeColorFromTheme('a:' + schemeClr, slideMasterContent) as string; // #...
             // console.log("phClr",phClr)
           }
           const idx = Number(bgRef['attrs']['idx']);
@@ -4742,9 +3804,9 @@ function getTextDirection (node, type, slideMasterTextStyles) {
             // bgFillStyleLst  in themeContent
             // themeContent["a:fmtScheme"]["a:bgFillStyleLst"]
             const trueIdx = idx - 1000;
-            const bgFillLst = (themeContent as Record<string, any>)['a:theme'][
-              'a:themeElements'
-            ]['a:fmtScheme']['a:bgFillStyleLst'];
+            const bgFillLst = (themeContent as Record<string, any>)['a:theme']['a:themeElements']['a:fmtScheme'][
+              'a:bgFillStyleLst'
+            ];
             const sortblAry: {}[] = [];
             Object.keys(bgFillLst).forEach(function (key) {
               // console.log("cubicBezTo["+key+"]:");
@@ -4775,8 +3837,7 @@ function getTextDirection (node, type, slideMasterTextStyles) {
             if (bgFillTyp === 'SOLID_FILL') {
               const sldFill = bgFillLstIdx['a:solidFill'];
               const sldTint = getColorOpacity(sldFill);
-              bgcolor =
-                'background: rgba(' + hexToRgbNew(phClr) + ',' + sldTint + ');';
+              bgcolor = 'background: rgba(' + hexToRgbNew(phClr) + ',' + sldTint + ');';
             } else if (bgFillTyp === 'GRADIENT_FILL') {
               const grdFill = bgFillLstIdx['a:gradFill'];
               const gsLst = grdFill['a:gsLst']['a:gs'];
@@ -4785,14 +3846,8 @@ function getTextDirection (node, type, slideMasterTextStyles) {
               // let endColorNode
               const tintArray = [];
               for (let i = 0; i < gsLst.length; i++) {
-                const loTint = getTextByPathList(gsLst[i], [
-                  'a:schemeClr',
-                  'a:tint',
-                  'attrs',
-                  'val',
-                ]) as string;
-                tintArray[i] =
-                  loTint !== undefined ? parseInt(loTint) / 100000 : 1;
+                const loTint = getTextByPathList(gsLst[i], ['a:schemeClr', 'a:tint', 'attrs', 'val']) as string;
+                tintArray[i] = loTint !== undefined ? parseInt(loTint) / 100000 : 1;
               }
 
               // get rot
@@ -4804,21 +3859,9 @@ function getTextDirection (node, type, slideMasterTextStyles) {
               bgcolor = 'background: linear-gradient(' + rot + 'deg,';
               for (let i = 0; i < gsLst.length; i++) {
                 if (i === gsLst.length - 1) {
-                  bgcolor +=
-                    'rgba(' +
-                    hexToRgbNew(phClr) +
-                    ',' +
-                    tintArray[i] +
-                    ')' +
-                    ');';
+                  bgcolor += 'rgba(' + hexToRgbNew(phClr) + ',' + tintArray[i] + ')' + ');';
                 } else {
-                  bgcolor +=
-                    'rgba(' +
-                    hexToRgbNew(phClr) +
-                    ',' +
-                    tintArray[i] +
-                    ')' +
-                    ', ';
+                  bgcolor += 'rgba(' + hexToRgbNew(phClr) + ',' + tintArray[i] + ')' + ', ';
                 }
               }
             } else {
@@ -4842,19 +3885,13 @@ function getTextDirection (node, type, slideMasterTextStyles) {
     return arrByte[1] + ',' + arrByte[2] + ',' + arrByte[3];
   }
 
-  async function getShapeFill(
-    node: Record<string, any>,
-    isSvgMode: boolean,
-    warpObj: any,
-  ) {
+  async function getShapeFill(node: Record<string, any>, isSvgMode: boolean, warpObj: any) {
     // 1. presentationML
     // p:spPr [a:noFill, solidFill, gradFill, blipFill, pattFill, grpFill]
     // From slide
     // Fill Type:
     // console.log("ShapeFill: ", node)
-    const fillType = getFillType(
-      getTextByPathList(node, ['p:spPr']) as Record<string, any>,
-    );
+    const fillType = getFillType(getTextByPathList(node, ['p:spPr']) as Record<string, any>);
     let fillColor;
     if (fillType === 'NO_FILL') {
       return isSvgMode ? 'none' : 'background-color: initial;';
@@ -4945,9 +3982,7 @@ function getTextDirection (node, type, slideMasterTextStyles) {
     return fillType;
   }
 
-  function getGradientFill(
-    node: Record<string, any>,
-  ): string | { color: (string | undefined)[]; rot: number } {
+  function getGradientFill(node: Record<string, any>): string | { color: (string | undefined)[]; rot: number } {
     const gsLst = node['a:gsLst']['a:gs'];
     // get start color
     const colorArray = [];
@@ -4956,24 +3991,8 @@ function getTextDirection (node, type, slideMasterTextStyles) {
       // let loTint
       let loColor = getSolidFill(gsLst[i]);
       if (gsLst[i]['a:srgbClr'] !== undefined) {
-        let lumMod =
-          parseInt(
-            getTextByPathList(node, [
-              'a:srgbClr',
-              'a:lumMod',
-              'attrs',
-              'val',
-            ]) as string,
-          ) / 100000;
-        let lumOff =
-          parseInt(
-            getTextByPathList(node, [
-              'a:srgbClr',
-              'a:lumOff',
-              'attrs',
-              'val',
-            ]) as string,
-          ) / 100000;
+        let lumMod = parseInt(getTextByPathList(node, ['a:srgbClr', 'a:lumMod', 'attrs', 'val']) as string) / 100000;
+        let lumOff = parseInt(getTextByPathList(node, ['a:srgbClr', 'a:lumOff', 'attrs', 'val']) as string) / 100000;
         if (isNaN(lumMod)) {
           lumMod = 1.0;
         }
@@ -4985,23 +4004,9 @@ function getTextDirection (node, type, slideMasterTextStyles) {
       } else if (gsLst[i]['a:schemeClr'] !== undefined) {
         // a:schemeClr
         let lumMod =
-          parseInt(
-            getTextByPathList(gsLst[i], [
-              'a:schemeClr',
-              'a:lumMod',
-              'attrs',
-              'val',
-            ]) as string,
-          ) / 100000;
+          parseInt(getTextByPathList(gsLst[i], ['a:schemeClr', 'a:lumMod', 'attrs', 'val']) as string) / 100000;
         let lumOff =
-          parseInt(
-            getTextByPathList(gsLst[i], [
-              'a:schemeClr',
-              'a:lumOff',
-              'attrs',
-              'val',
-            ]) as string,
-          ) / 100000;
+          parseInt(getTextByPathList(gsLst[i], ['a:schemeClr', 'a:lumOff', 'attrs', 'val']) as string) / 100000;
         if (isNaN(lumMod)) {
           lumMod = 1.0;
         }
@@ -5055,12 +4060,9 @@ function getTextDirection (node, type, slideMasterTextStyles) {
     if (imgExt === 'xml') {
       return undefined;
     }
-    const imgArrayBuffer = await warpObj['zip']
-      .file(imgPath)
-      .async('arraybuffer');
+    const imgArrayBuffer = await warpObj['zip'].file(imgPath).async('arraybuffer');
     const imgMimeType = getImageMimeType(imgExt);
-    const img =
-      'data:' + imgMimeType + ';base64,' + base64ArrayBuffer(imgArrayBuffer);
+    const img = 'data:' + imgMimeType + ';base64,' + base64ArrayBuffer(imgArrayBuffer);
     return img;
   }
 
@@ -5081,33 +4083,20 @@ function getTextDirection (node, type, slideMasterTextStyles) {
       color = getTextByPathList(node, ['a:srgbClr', 'attrs', 'val']) as string; // #...
     } else if (node['a:schemeClr'] !== undefined) {
       // a:schemeClr
-      const schemeClr = getTextByPathList(node, [
-        'a:schemeClr',
-        'attrs',
-        'val',
-      ]);
+      const schemeClr = getTextByPathList(node, ['a:schemeClr', 'attrs', 'val']);
       // console.log(schemeClr)
       color = getSchemeColorFromTheme('a:' + schemeClr, undefined) as string; // #...
     } else if (node['a:scrgbClr'] !== undefined) {
       // <a:scrgbClr r="50%" g="50%" b="50%"/>  //Need to test/////////////////////////////////////////////
       const defBultColorVals = node['a:scrgbClr']['attrs'];
       const red =
-        defBultColorVals['r'].indexOf('%') !== -1
-          ? defBultColorVals['r'].split('%').shift()
-          : defBultColorVals['r'];
+        defBultColorVals['r'].indexOf('%') !== -1 ? defBultColorVals['r'].split('%').shift() : defBultColorVals['r'];
       const green =
-        defBultColorVals['g'].indexOf('%') !== -1
-          ? defBultColorVals['g'].split('%').shift()
-          : defBultColorVals['g'];
+        defBultColorVals['g'].indexOf('%') !== -1 ? defBultColorVals['g'].split('%').shift() : defBultColorVals['g'];
       const blue =
-        defBultColorVals['b'].indexOf('%') !== -1
-          ? defBultColorVals['b'].split('%').shift()
-          : defBultColorVals['b'];
+        defBultColorVals['b'].indexOf('%') !== -1 ? defBultColorVals['b'].split('%').shift() : defBultColorVals['b'];
       // const scrgbClr = red + ',' + green + ',' + blue
-      color =
-        toHex(255 * (Number(red) / 100)) +
-        toHex(255 * (Number(green) / 100)) +
-        toHex(255 * (Number(blue) / 100));
+      color = toHex(255 * (Number(red) / 100)) + toHex(255 * (Number(green) / 100)) + toHex(255 * (Number(blue) / 100));
       // console.log("scrgbClr: " + scrgbClr);
     } else if (node['a:prstClr'] !== undefined) {
       // <a:prstClr val="black"/>  //Need to test/////////////////////////////////////////////
@@ -5493,62 +4482,32 @@ function getTextDirection (node, type, slideMasterTextStyles) {
     let opcity = 1;
 
     if (solidFill['a:srgbClr'] !== undefined) {
-      const tint = getTextByPathList(solidFill, [
-        'a:srgbClr',
-        'a:tint',
-        'attrs',
-        'val',
-      ]) as string;
+      const tint = getTextByPathList(solidFill, ['a:srgbClr', 'a:tint', 'attrs', 'val']) as string;
       if (tint !== undefined) {
         opcity = parseInt(tint) / 100000;
       }
     } else if (solidFill['a:schemeClr'] !== undefined) {
-      const tint = getTextByPathList(solidFill, [
-        'a:schemeClr',
-        'a:tint',
-        'attrs',
-        'val',
-      ]) as string;
+      const tint = getTextByPathList(solidFill, ['a:schemeClr', 'a:tint', 'attrs', 'val']) as string;
       if (tint !== undefined) {
         opcity = parseInt(tint) / 100000;
       }
     } else if (solidFill['a:scrgbClr'] !== undefined) {
-      const tint = getTextByPathList(solidFill, [
-        'a:scrgbClr',
-        'a:tint',
-        'attrs',
-        'val',
-      ]) as string;
+      const tint = getTextByPathList(solidFill, ['a:scrgbClr', 'a:tint', 'attrs', 'val']) as string;
       if (tint !== undefined) {
         opcity = parseInt(tint) / 100000;
       }
     } else if (solidFill['a:prstClr'] !== undefined) {
-      const tint = getTextByPathList(solidFill, [
-        'a:prstClr',
-        'a:tint',
-        'attrs',
-        'val',
-      ]) as string;
+      const tint = getTextByPathList(solidFill, ['a:prstClr', 'a:tint', 'attrs', 'val']) as string;
       if (tint !== undefined) {
         opcity = parseInt(tint) / 100000;
       }
     } else if (solidFill['a:hslClr'] !== undefined) {
-      const tint = getTextByPathList(solidFill, [
-        'a:hslClr',
-        'a:tint',
-        'attrs',
-        'val',
-      ]) as string;
+      const tint = getTextByPathList(solidFill, ['a:hslClr', 'a:tint', 'attrs', 'val']) as string;
       if (tint !== undefined) {
         opcity = parseInt(tint) / 100000;
       }
     } else if (solidFill['a:sysClr'] !== undefined) {
-      const tint = getTextByPathList(solidFill, [
-        'a:sysClr',
-        'a:tint',
-        'attrs',
-        'val',
-      ]) as string;
+      const tint = getTextByPathList(solidFill, ['a:sysClr', 'a:tint', 'attrs', 'val']) as string;
       if (tint !== undefined) {
         opcity = parseInt(tint) / 100000;
       }
@@ -5557,20 +4516,13 @@ function getTextDirection (node, type, slideMasterTextStyles) {
     return opcity;
   }
 
-  function getSchemeColorFromTheme(
-    schemeClr: string,
-    sldMasterNode?: Record<string, any>,
-  ) {
+  function getSchemeColorFromTheme(schemeClr: string, sldMasterNode?: Record<string, any>) {
     // <p:clrMap ...> in slide master
     // e.g. tx2="dk2" bg2="lt2" tx1="dk1" bg1="lt1" slideLayoutClrOvride
 
     if (slideLayoutClrOvride === '' || slideLayoutClrOvride === undefined) {
       slideLayoutClrOvride =
-        getTextByPathList(sldMasterNode as Record<string, any>, [
-          'p:sldMaster',
-          'p:clrMap',
-          'attrs',
-        ]) || {};
+        getTextByPathList(sldMasterNode as Record<string, any>, ['p:sldMaster', 'p:clrMap', 'attrs']) || {};
     }
     // console.log(slideLayoutClrOvride);
     const schmClrName = schemeClr.substr(2);
@@ -5579,9 +4531,7 @@ function getTextDirection (node, type, slideMasterTextStyles) {
       case 'tx2':
       case 'bg1':
       case 'bg2': {
-        schemeClr =
-          'a:' +
-          (slideLayoutClrOvride as Record<string, any>)[schmClrName.toString()];
+        schemeClr = 'a:' + (slideLayoutClrOvride as Record<string, any>)[schmClrName.toString()];
         // console.log(schmClrName+ "=> "+schemeClr);
         break;
       }
@@ -5628,78 +4578,47 @@ function getTextDirection (node, type, slideMasterTextStyles) {
       );
       dataMat.push(dataRow);
     } else {
-      eachElement(
-        serNode,
-        function (innerNode: Record<string, any>, index: number) {
-          const dataRow: { x: any; y: number }[] = [];
-          const colName =
-            getTextByPathList(innerNode, [
-              'c:tx',
-              'c:strRef',
-              'c:strCache',
-              'c:pt',
-              'c:v',
-            ]) || index;
+      eachElement(serNode, function (innerNode: Record<string, any>, index: number) {
+        const dataRow: { x: any; y: number }[] = [];
+        const colName = getTextByPathList(innerNode, ['c:tx', 'c:strRef', 'c:strCache', 'c:pt', 'c:v']) || index;
 
-          // Category (string or number)
-          const rowNames: Record<string, any> = {};
-          if (
-            getTextByPathList(innerNode, [
-              'c:cat',
-              'c:strRef',
-              'c:strCache',
-              'c:pt',
-            ]) !== undefined
-          ) {
-            eachElement(
-              innerNode['c:cat']['c:strRef']['c:strCache']['c:pt'],
-              function (innerNode: Record<string, any>, index: number) {
-                rowNames[innerNode['attrs']['idx']] = innerNode['c:v'];
-                return '';
-              },
-            );
-          } else if (
-            getTextByPathList(innerNode, [
-              'c:cat',
-              'c:numRef',
-              'c:numCache',
-              'c:pt',
-            ]) !== undefined
-          ) {
-            eachElement(
-              innerNode['c:cat']['c:numRef']['c:numCache']['c:pt'],
-              function (innerNode: Record<string, any>, index: number) {
-                rowNames[innerNode['attrs']['idx']] = innerNode['c:v'];
-                return '';
-              },
-            );
-          }
+        // Category (string or number)
+        const rowNames: Record<string, any> = {};
+        if (getTextByPathList(innerNode, ['c:cat', 'c:strRef', 'c:strCache', 'c:pt']) !== undefined) {
+          eachElement(
+            innerNode['c:cat']['c:strRef']['c:strCache']['c:pt'],
+            function (innerNode: Record<string, any>, index: number) {
+              rowNames[innerNode['attrs']['idx']] = innerNode['c:v'];
+              return '';
+            },
+          );
+        } else if (getTextByPathList(innerNode, ['c:cat', 'c:numRef', 'c:numCache', 'c:pt']) !== undefined) {
+          eachElement(
+            innerNode['c:cat']['c:numRef']['c:numCache']['c:pt'],
+            function (innerNode: Record<string, any>, index: number) {
+              rowNames[innerNode['attrs']['idx']] = innerNode['c:v'];
+              return '';
+            },
+          );
+        }
 
-          // Value
-          if (
-            getTextByPathList(innerNode, [
-              'c:val',
-              'c:numRef',
-              'c:numCache',
-              'c:pt',
-            ]) !== undefined
-          ) {
-            eachElement(
-              innerNode['c:val']['c:numRef']['c:numCache']['c:pt'],
-              function (innerNode: Record<string, any>, index: number) {
-                dataRow.push({
-                  x: innerNode['attrs']['idx'],
-                  y: parseFloat(innerNode['c:v']),
-                });
-                return '';
-              },
-            );
-          }
+        // Value
+        if (getTextByPathList(innerNode, ['c:val', 'c:numRef', 'c:numCache', 'c:pt']) !== undefined) {
+          eachElement(
+            innerNode['c:val']['c:numRef']['c:numCache']['c:pt'],
+            function (innerNode: Record<string, any>, index: number) {
+              dataRow.push({
+                x: innerNode['attrs']['idx'],
+                y: parseFloat(innerNode['c:v']),
+              });
+              return '';
+            },
+          );
+        }
 
-          dataMat.push({ key: colName, values: dataRow, xlabels: rowNames });
-          return '';
-        },
-      );
+        dataMat.push({ key: colName, values: dataRow, xlabels: rowNames });
+        return '';
+      });
     }
 
     return dataMat;
@@ -5720,10 +4639,7 @@ function getTextDirection (node, type, slideMasterTextStyles) {
    * @param {Object} node
    * @param {Array.<string>} path
    */
-  function getTextByPathList(
-    node: Record<string, any>,
-    path: Array<string>,
-  ): Record<string, any> | string | undefined {
+  function getTextByPathList(node: Record<string, any>, path: Array<string>): Record<string, any> | string | undefined {
     if (path.constructor !== Array) {
       throw Error('Error of path type! path is not array.');
     }
@@ -5859,13 +4775,7 @@ function applyTint (rgbStr, tintValue) {
     return mimeType;
   }
 
-  function getSvgGradient(
-    w: string,
-    h: string,
-    angl: any,
-    colorArray: string | any[],
-    shpId: string,
-  ) {
+  function getSvgGradient(w: string, h: string, angl: any, colorArray: string | any[], shpId: string) {
     const stopsArray = getMiddleStops(colorArray.length - 2) as Array<string>;
 
     const xyArray = SVGangle(angl, h, w);
@@ -5877,15 +4787,7 @@ function applyTint (rgbStr, tintValue) {
     const sal = stopsArray.length;
     const sr = sal < 20 ? 100 : 1000;
     const svgAngle =
-      ' gradientUnits="userSpaceOnUse" x1="' +
-      x1 +
-      '%" y1="' +
-      y1 +
-      '%" x2="' +
-      x2 +
-      '%" y2="' +
-      y2 +
-      '%"';
+      ' gradientUnits="userSpaceOnUse" x1="' + x1 + '%" y1="' + y1 + '%" x2="' + x2 + '%" y2="' + y2 + '%"';
     let svg = '<linearGradient id="linGrd_' + shpId + '"' + svgAngle + '>\n';
 
     for (let i = 0; i < sal; i++) {
@@ -5982,14 +4884,8 @@ function applyTint (rgbStr, tintValue) {
   }
 
   function getSvgImagePattern(fillColor: Record<string, any>, shpId: string) {
-    let ptrn =
-      '<pattern id="imgPtrn_' +
-      shpId +
-      '"  patternContentUnits="objectBoundingBox"  width="1" height="1">';
-    ptrn +=
-      '<image  xlink:href="' +
-      fillColor +
-      '" preserveAspectRatio="none" width="1" height="1"></image>';
+    let ptrn = '<pattern id="imgPtrn_' + shpId + '"  patternContentUnits="objectBoundingBox"  width="1" height="1">';
+    ptrn += '<image  xlink:href="' + fillColor + '" preserveAspectRatio="none" width="1" height="1"></image>';
     ptrn += '</pattern>';
     return ptrn;
   }

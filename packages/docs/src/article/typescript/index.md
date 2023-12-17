@@ -108,10 +108,7 @@ function getPropValue<T>(obj: T, key): key对应的属性值类型 {
 比如上面那个 getProps 的函数，类型可以这样写：
 
 ```ts
-function getPropValue<T extends object, Key extends keyof T>(
-  obj: T,
-  key: Key,
-): T[Key] {
+function getPropValue<T extends object, Key extends keyof T>(obj: T, key: Key): T[Key] {
   return obj[key];
 }
 ```
@@ -145,23 +142,15 @@ type res = {
 只不过，这个类型的类型逻辑的代码比较多（下面的 ts 类型暂时看不懂没关系，在顺口溜那节会有详解，这里只是用来直观感受下类型编程的复杂度的，等学完以后大家也能实现这样的复杂高级类型的）：
 
 ```ts
-type ParseParam<Param extends string> =
-  Param extends `${infer Key}=${infer Value}`
-    ? {
-        [K in Key]: Value;
-      }
-    : {};
+type ParseParam<Param extends string> = Param extends `${infer Key}=${infer Value}`
+  ? {
+      [K in Key]: Value;
+    }
+  : {};
 
-type MergeValues<One, Other> = One extends Other
-  ? One
-  : Other extends unknown[]
-  ? [One, ...Other]
-  : [One, Other];
+type MergeValues<One, Other> = One extends Other ? One : Other extends unknown[] ? [One, ...Other] : [One, Other];
 
-type MergeParams<
-  OneParam extends Record<string, any>,
-  OtherParam extends Record<string, any>,
-> = {
+type MergeParams<OneParam extends Record<string, any>, OtherParam extends Record<string, any>> = {
   [Key in keyof OneParam | keyof OtherParam]: Key extends keyof OneParam
     ? Key extends keyof OtherParam
       ? MergeValues<OneParam[Key], OtherParam[Key]>
@@ -170,10 +159,9 @@ type MergeParams<
     ? OtherParam[Key]
     : never;
 };
-type ParseQueryString<Str extends string> =
-  Str extends `${infer Param}&${infer Rest}`
-    ? MergeParams<ParseParam<Param>, ParseQueryString<Rest>>
-    : ParseParam<Str>;
+type ParseQueryString<Str extends string> = Str extends `${infer Param}&${infer Rest}`
+  ? MergeParams<ParseParam<Param>, ParseQueryString<Rest>>
+  : ParseParam<Str>;
 ```
 
 TypeScript 的类型系统是图灵完备的，也就是能描述各种可计算逻辑。简单点来理解就是循环、条件等各种 JS 里面有的语法它都有，JS 能写的逻辑它都能写。
@@ -504,9 +492,7 @@ type res2 = isTwo<2>; // type res = true
 比如提取元组类型的第一个元素：
 
 ```ts
-type First<Tuple extends unknown[]> = Tuple extends [infer T, ...infer R]
-  ? T
-  : never;
+type First<Tuple extends unknown[]> = Tuple extends [infer T, ...infer R] ? T : never;
 
 type res = First<[1, 2, 3]>; // type res = 1
 ```
@@ -585,11 +571,7 @@ type res = MapType<{ a: 1; b: 2 }>; // type res = { a: [1, 1, 1]; b:[2, 2, 2]; }
 
 ```ts
 type MapType<T> = {
-  [Key in keyof T as `${Key & string}${Key & string}${Key & string}`]: [
-    T[Key],
-    T[Key],
-    T[Key],
-  ];
+  [Key in keyof T as `${Key & string}${Key & string}${Key & string}`]: [T[Key], T[Key], T[Key]];
 };
 
 // type res = { aaa: [1, 1, 1]; bbb: [2, 2, 2]; }
@@ -618,8 +600,7 @@ type IsAny<T> = 'null' extends 'undefined' & T ? true : false;
 之前我们实现 IsEqual 是这样写的：
 
 ```ts
-type IsEqual<A, B> = (A extends B ? true : false) &
-  (B extends A ? true : false);
+type IsEqual<A, B> = (A extends B ? true : false) & (B extends A ? true : false);
 ```
 
 问题出在 any 的判断上：
@@ -634,11 +615,7 @@ type IsEqualResult = IsEqual<'aaa', any>;
 所以，我们会这样写：
 
 ```ts
-type IsEqual<A, B> = (<T>() => T extends A ? 1 : 2) extends <T>() => T extends B
-  ? 1
-  : 2
-  ? true
-  : false;
+type IsEqual<A, B> = (<T>() => T extends A ? 1 : 2) extends <T>() => T extends B ? 1 : 2 ? true : false;
 ```
 
 这样就能正常判断了：
@@ -726,11 +703,7 @@ type len
 所以联合转交叉可以这样实现 ：
 
 ```ts
-type UnionToIntersection<U> = (
-  U extends U ? (x: U) => unknown : never
-) extends (x: infer R) => unknown
-  ? R
-  : never;
+type UnionToIntersection<U> = (U extends U ? (x: U) => unknown : never) extends (x: infer R) => unknown ? R : never;
 ```
 
 类型参数 U 是要转换的联合类型。

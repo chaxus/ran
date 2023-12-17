@@ -64,14 +64,8 @@ module.exports = defineConfig({
 
     '@typescript-eslint/ban-ts-comment': 'off', // TODO: we should turn this on in a new PR
     '@typescript-eslint/ban-types': 'off', // TODO: we should turn this on in a new PR
-    '@typescript-eslint/explicit-module-boundary-types': [
-      'error',
-      { allowArgumentsExplicitlyTypedAsAny: true },
-    ],
-    '@typescript-eslint/no-empty-function': [
-      'error',
-      { allow: ['arrowFunctions'] },
-    ],
+    '@typescript-eslint/explicit-module-boundary-types': ['error', { allowArgumentsExplicitlyTypedAsAny: true }],
+    '@typescript-eslint/no-empty-function': ['error', { allow: ['arrowFunctions'] }],
     '@typescript-eslint/no-this-alias': 'off',
     '@typescript-eslint/no-empty-interface': 'off',
     '@typescript-eslint/no-explicit-any': 0, // maybe we should turn this on in a new PR ¡
@@ -80,15 +74,9 @@ module.exports = defineConfig({
     '@typescript-eslint/no-non-null-assertion': 'off', // maybe we should turn this on in a new PR
     '@typescript-eslint/no-unused-vars': 'off', // maybe we should turn this on in a new PR
     '@typescript-eslint/no-var-requires': 'off',
-    '@typescript-eslint/consistent-type-imports': [
-      'error',
-      { prefer: 'type-imports' },
-    ],
+    '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
     'prefer-rest-params': 'off',
-    'import/no-nodejs-modules': [
-      'error',
-      { allow: builtinModules.map((mod) => `node:${mod}`) },
-    ],
+    'import/no-nodejs-modules': ['error', { allow: builtinModules.map((mod) => `node:${mod}`) }],
     'import/no-duplicates': 'error',
     'import/order': 'error',
     'sort-imports': [

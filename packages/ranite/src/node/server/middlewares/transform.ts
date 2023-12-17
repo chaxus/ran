@@ -1,21 +1,12 @@
 import type { NextHandleFunction } from 'connect';
 import createDebug from 'debug';
 import { CLIENT_PUBLIC_PATH } from '../../constants';
-import {
-  cleanUrl,
-  isCSSRequest,
-  isImportRequest,
-  isInternalRequest,
-  isJSRequest,
-} from '../../utils';
+import { cleanUrl, isCSSRequest, isImportRequest, isInternalRequest, isJSRequest } from '../../utils';
 import type { ServerContext } from '../index';
 
 const debug = createDebug('dev');
 
-export async function transformRequest(
-  url: string,
-  serverContext: ServerContext,
-): Promise<any> {
+export async function transformRequest(url: string, serverContext: ServerContext): Promise<any> {
   const { moduleGraph, pluginContainer } = serverContext;
   url = cleanUrl(url);
   let mod = await moduleGraph.getModuleByUrl(url);
@@ -31,10 +22,7 @@ export async function transformRequest(
     }
     mod = await moduleGraph.ensureEntryFromUrl(url);
     if (code) {
-      transformResult = await pluginContainer.transform(
-        code as string,
-        resolvedResult?.id,
-      );
+      transformResult = await pluginContainer.transform(code as string, resolvedResult?.id);
     }
   }
   if (mod) {
@@ -43,9 +31,7 @@ export async function transformRequest(
   return transformResult;
 }
 
-export function transformMiddleware(
-  serverContext: ServerContext,
-): NextHandleFunction {
+export function transformMiddleware(serverContext: ServerContext): NextHandleFunction {
   return async (req, res, next) => {
     if (req.method !== 'GET' || !req.url) {
       return next();

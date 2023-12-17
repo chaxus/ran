@@ -89,19 +89,10 @@ export class Progress extends HTMLElement {
   progressClick = (e: MouseEvent): void => {
     const rect = this._progress.getBoundingClientRect();
     const offsetX = e.clientX - rect.left;
-    const percentage = Math.min(
-      1,
-      Math.max(0, offsetX / this._progress.offsetWidth),
-    );
+    const percentage = Math.min(1, Math.max(0, offsetX / this._progress.offsetWidth));
     this.percent = percentage * this.total;
-    this._progressWrapValue.style.setProperty(
-      'transform',
-      `scaleX(${percentage})`,
-    );
-    this._progressDot.style.setProperty(
-      'transform',
-      `translateX(${percentage * this._progress.offsetWidth}px)`,
-    );
+    this._progressWrapValue.style.setProperty('transform', `scaleX(${percentage})`);
+    this._progressDot.style.setProperty('transform', `translateX(${percentage * this._progress.offsetWidth}px)`);
     this.change();
   };
   progressDotMouseDown = (): void => {
@@ -111,19 +102,10 @@ export class Progress extends HTMLElement {
     if (!this.moveProgress.mouseDown) return;
     const rect = this._progress.getBoundingClientRect();
     const offsetX = e.clientX - rect.left;
-    const percentage = Math.min(
-      1,
-      Math.max(0, offsetX / this._progress.offsetWidth),
-    );
+    const percentage = Math.min(1, Math.max(0, offsetX / this._progress.offsetWidth));
     this.percent = percentage * this.total;
-    this._progressWrapValue.style.setProperty(
-      'transform',
-      `scaleX(${percentage})`,
-    );
-    this._progressDot.style.setProperty(
-      'transform',
-      `translateX(${percentage * this._progress.offsetWidth}px)`,
-    );
+    this._progressWrapValue.style.setProperty('transform', `scaleX(${percentage})`);
+    this._progressDot.style.setProperty('transform', `translateX(${percentage * this._progress.offsetWidth}px)`);
     this.change();
   };
   progressDotMouseUp = (e: MouseEvent): void => {
@@ -151,14 +133,8 @@ export class Progress extends HTMLElement {
   };
   updateCurrentProgress = (): void => {
     const percent = this.percent / this.total;
-    this._progressWrapValue.style.setProperty(
-      'transform',
-      `scaleX(${percent})`,
-    );
-    this._progressDot.style.setProperty(
-      'transform',
-      `translateX(${percent * this._progress.offsetWidth}px)`,
-    );
+    this._progressWrapValue.style.setProperty('transform', `scaleX(${percent})`);
+    this._progressDot.style.setProperty('transform', `translateX(${percent * this._progress.offsetWidth}px)`);
   };
   dragEvent = (): void => {
     if (this.type !== 'drag') return;
@@ -183,10 +159,7 @@ export class Progress extends HTMLElement {
   }
   disconnectCallback(): void {
     this._progress.removeEventListener('click', this.progressClick);
-    this._progressDot.removeEventListener(
-      'mousedown',
-      this.progressDotMouseDown,
-    );
+    this._progressDot.removeEventListener('mousedown', this.progressDotMouseDown);
     document.removeEventListener('mousemove', this.progressDotMouseMove);
     document.removeEventListener('mouseup', this.progressDotMouseUp);
     window.removeEventListener('resize', this.resize);

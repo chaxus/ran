@@ -14,10 +14,7 @@ const getFileType = (val: string): string => {
  * @param {string} id
  * @param {string} importer
  */
-export function defaultResolver(
-  id: string,
-  importer: string | null,
-): string | false {
+export function defaultResolver(id: string, importer: string | null): string | false {
   // // 处理文件名不以js结尾的情况，补全.js
   if (getFileType(id) !== 'js') {
     id += '.js';

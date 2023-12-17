@@ -53,19 +53,13 @@ function Custom() {
             sheet.insertRule(this.sheet);
             this._shadowDom.adoptedStyleSheets = [sheet];
           } catch (error) {
-            console.error(
-              `Failed to parse the rule in CSSStyleSheet: ${this.sheet}`,
-            );
+            console.error(`Failed to parse the rule in CSSStyleSheet: ${this.sheet}`);
           }
         }
       }
       connectedCallback() {}
       disconnectCallback() {}
-      attributeChangedCallback(
-        name: string,
-        oldValue: string,
-        newValue: string,
-      ) {
+      attributeChangedCallback(name: string, oldValue: string, newValue: string) {
         if (name === 'disabled' && this._option) {
           if (!newValue || newValue === 'false') {
             this._option.setAttribute('disabled', '');
@@ -73,8 +67,7 @@ function Custom() {
             this._option.removeAttribute('disabled');
           }
         }
-        if (name === 'sheet' && this._shadowDom && oldValue !== newValue)
-          this.handlerExternalCss();
+        if (name === 'sheet' && this._shadowDom && oldValue !== newValue) this.handlerExternalCss();
       }
     }
     return Option;

@@ -22,11 +22,7 @@ export interface TfInfo {
 
 type TensorRank = Tensor<Rank> | Tensor<Rank>[];
 
-type Normal<T> = T extends Tensor<Rank>
-  ? TensorRank
-  : T extends Tensor<Rank>[]
-  ? Tensor<Rank>[]
-  : never;
+type Normal<T> = T extends Tensor<Rank> ? TensorRank : T extends Tensor<Rank>[] ? Tensor<Rank>[] : never;
 
 export interface Normalise {
   tensor: Tensor<Rank>;
@@ -100,11 +96,7 @@ export const csv2DataSet = (path: string): tf.data.CSVDataset => {
  * @param {string} name
  * @return {*}
  */
-export const plot = (
-  points: Point2D[],
-  name: string,
-  predictPoints?: Point2D[],
-): void => {
+export const plot = (points: Point2D[], name: string, predictPoints?: Point2D[]): void => {
   const values = [points];
   const series = ['original'];
   if (Array.isArray(predictPoints)) {
@@ -163,10 +155,7 @@ export const trainModel = async (
   onEpochBegin = (epoch: number, logs?: Logs): void | Promise<void> => {},
   epochs: number = 100,
 ): Promise<History> => {
-  const { onEpochEnd, onBatchEnd } = tfvis.show.fitCallbacks(
-    { name: 'Training Performance' },
-    ['loss'],
-  );
+  const { onEpochEnd, onBatchEnd } = tfvis.show.fitCallbacks({ name: 'Training Performance' }, ['loss']);
   return model.fit(trainingFeatureTensor, trainingLabelTensor, {
     batchSize: 512,
     epochs,
@@ -195,11 +184,7 @@ export const denormalise = (
     const features = tf.split(tensor, dimension, 1);
     // normalise and find min/max values  for each one
     const denormalised = features.map((featuresTensor, i) => {
-      return denormalise(
-        featuresTensor,
-        arrayToItem(max, i),
-        arrayToItem(min, i),
-      );
+      return denormalise(featuresTensor, arrayToItem(max, i), arrayToItem(min, i));
     });
     // prepare return values
     const returnTensor = tf.concat(denormalised, 1);
@@ -230,11 +215,7 @@ export const normalise = (
     const features = tf.split(tensor, dimension, 1);
     // normalise and find min/max values  for each one
     const normalisedFeature = features.map((featuresTensor, i) => {
-      return normalise(
-        featuresTensor,
-        arrayToItem<Tensor<Rank>>(mi, i),
-        arrayToItem<Tensor<Rank>>(mx, i),
-      );
+      return normalise(featuresTensor, arrayToItem<Tensor<Rank>>(mi, i), arrayToItem<Tensor<Rank>>(mx, i));
     });
     // prepare return values
     const returnTensor = tf.concat(

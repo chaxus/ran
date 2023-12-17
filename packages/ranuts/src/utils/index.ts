@@ -31,10 +31,7 @@ export const getAllQueryString = (url: string): Record<string, string> => {
  * @description: 将一个对象转换成querystring，拼接到url后面
  * @return {*}
  */
-export function getFreshUrl(
-  url: string,
-  params: Record<string, string> = {},
-): string {
+export function getFreshUrl(url: string, params: Record<string, string> = {}): string {
   let _url = url;
   if (_url.indexOf('//') === 0) {
     _url = _url.replace('//', 'https://');
@@ -173,9 +170,7 @@ export const mergeExports = (obj: Object, exports: Object): Object => {
         value: mergeExports({}, descriptor.value),
       });
     } else {
-      throw new Error(
-        'Exposed values must be either a getter or an nested object',
-      );
+      throw new Error('Exposed values must be either a getter or an nested object');
     }
   }
   return Object.freeze(obj);
@@ -239,11 +234,7 @@ export const clearBr = (str = ''): string => {
  * @param {Element} append 插入的父元素 默认body
  * @param {Function} callback 所有script onload回调 也可通过返回的promise执行回调
  */
-export const scriptOnLoad = (
-  urls: string[],
-  append?: HTMLElement,
-  callback?: Function,
-): Promise<void> => {
+export const scriptOnLoad = (urls: string[], append?: HTMLElement, callback?: Function): Promise<void> => {
   urls = Array.isArray(urls) ? urls : [urls];
   const array = urls.map((src) => {
     const cssReg = /\w*.css$/;
@@ -294,11 +285,7 @@ export const isMobile = (): boolean => {
  * @param {File} file
  * @return {*}
  */
-export const isImageSize = (
-  file: File,
-  width?: number,
-  height?: number,
-): Promise<boolean> => {
+export const isImageSize = (file: File, width?: number, height?: number): Promise<boolean> => {
   return new Promise((resolve) => {
     const _URL = window.URL || window.webkitURL;
     const img = new Image();
@@ -343,8 +330,7 @@ export const retain = (callback = noop): void => {
 // dragDom.addEventListener('drag', removeGhosting);
 export const removeGhosting = (event: DragEvent): void => {
   const dragIcon = document.createElement('img');
-  const url =
-    'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+  const url = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
   dragIcon.src = url;
   dragIcon.width = 0;
   dragIcon.height = 0;
@@ -363,9 +349,7 @@ function formatDuration(time: number): string | number {
  * @param {*} returnType
  * @return {*}
  */
-export function timestampToTime(
-  timestamp?: number | string,
-): Date & { format?: Function } {
+export function timestampToTime(timestamp?: number | string): Date & { format?: Function } {
   let date: Date & { format?: Function } = new Date();
   if (timestamp) {
     date = new Date(timestamp);
@@ -402,20 +386,13 @@ export function querystring(data = {}): string {
       (searchParams, [name, value]) =>
         value === undefined || value === null
           ? searchParams
-          : (searchParams.append(
-              decodeURIComponent(name),
-              decodeURIComponent(value),
-            ),
-            searchParams),
+          : (searchParams.append(decodeURIComponent(name), decodeURIComponent(value)), searchParams),
       new URLSearchParams(),
     )
     .toString();
 }
 
-const transitionJsonToString = (
-  jsonObj: string | JSON,
-  callback = (error: Error) => {},
-) => {
+const transitionJsonToString = (jsonObj: string | JSON, callback = (error: Error) => {}) => {
   // 转换后的jsonObj受体对象
   let _jsonObj: string = '';
   // 判断传入的jsonObj对象是不是字符串，如果是字符串需要先转换为对象，再转换为字符串，这样做是为了保证转换后的字符串为双引号
@@ -430,10 +407,7 @@ const transitionJsonToString = (
     }
   } else {
     try {
-      jsonObj =
-        typeof jsonObj === 'string'
-          ? jsonObj.replace(/(')/g, '"')
-          : JSON.stringify(jsonObj);
+      jsonObj = typeof jsonObj === 'string' ? jsonObj.replace(/(')/g, '"') : JSON.stringify(jsonObj);
       _jsonObj = JSON.stringify(JSON.parse(jsonObj));
     } catch (error) {
       // 转换失败错误信息
@@ -521,12 +495,7 @@ export const formatJson = (jsonObj: string, callback = () => {}): string => {
     if (item.match(/\{$/) || item.match(/\[$/)) {
       // 匹配到以{和[结尾的时候indent加1
       indent += 1;
-    } else if (
-      item.match(/\}$/) ||
-      item.match(/\]$/) ||
-      item.match(/\},$/) ||
-      item.match(/\],$/)
-    ) {
+    } else if (item.match(/\}$/) || item.match(/\]$/) || item.match(/\},$/) || item.match(/\],$/)) {
       // 匹配到以}和]结尾的时候indent减1
       if (pad !== 0) {
         pad -= 1;
@@ -567,9 +536,7 @@ interface convertImageToBase64Return extends BaseReturn {
  * @param {File} file
  * @return {*}
  */
-export const convertImageToBase64 = (
-  file: File,
-): Promise<convertImageToBase64Return> => {
+export const convertImageToBase64 = (file: File): Promise<convertImageToBase64Return> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = function () {
@@ -628,8 +595,7 @@ export const requestUrlToBuffer = (
     xhr.withCredentials = options.withCredentials || false;
     if (options.headers) {
       Object.keys(options.headers).forEach(function (key) {
-        options.headers?.[key] &&
-          xhr.setRequestHeader(key, options.headers[key]);
+        options.headers?.[key] && xhr.setRequestHeader(key, options.headers[key]);
       });
     }
     xhr.send(options.body);
@@ -644,9 +610,7 @@ interface Context {
   oBackingStorePixelRatio: number;
 }
 
-export const getPixelRatio = (
-  context: CanvasRenderingContext2D & Partial<Context>,
-): number => {
+export const getPixelRatio = (context: CanvasRenderingContext2D & Partial<Context>): number => {
   const backingStore =
     context.backingStorePixelRatio ||
     context.webkitBackingStorePixelRatio ||
@@ -657,9 +621,7 @@ export const getPixelRatio = (
   return (window.devicePixelRatio || 1) / backingStore;
 };
 
-export const createObjectURL = async (
-  src: Blob | ArrayBuffer | Response,
-): Promise<string> => {
+export const createObjectURL = async (src: Blob | ArrayBuffer | Response): Promise<string> => {
   if (typeof src === 'string') {
     return src;
   } else if (src instanceof Blob) {
@@ -691,10 +653,7 @@ export const addClassToElement = (element: Element, addClass: string): void => {
  * @param {Element} element
  * @param {string} removeClass
  */
-export const removeClassToElement = (
-  element: Element,
-  removeClass: string,
-): void => {
+export const removeClassToElement = (element: Element, removeClass: string): void => {
   if (typeof document === 'undefined') return undefined;
   const classList = element.classList;
   if (classList.contains(removeClass)) {
@@ -736,11 +695,7 @@ export const perToNum = (str: string = ''): number => {
  * @description: 限制最大和最小值
  * @return {*}
  */
-export const range = (
-  num: number,
-  min: number = 0,
-  max: number = 1,
-): number => {
+export const range = (num: number, min: number = 0, max: number = 1): number => {
   return Math.min(max, Math.max(min, num));
 };
 /**
@@ -748,9 +703,7 @@ export const range = (
  * @param {Element} list
  * @return {*}
  */
-export const createDocumentFragment = (
-  list: Element[],
-): DocumentFragment | undefined => {
+export const createDocumentFragment = (list: Element[]): DocumentFragment | undefined => {
   if (typeof document === 'undefined') return undefined;
   const Fragment = document.createDocumentFragment();
   list.forEach((item) => Fragment.appendChild(item));

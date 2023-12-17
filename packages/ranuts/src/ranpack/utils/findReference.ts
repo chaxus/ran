@@ -9,8 +9,7 @@ function isReference(node: any, parent: any): boolean {
   }
   if (node.type === 'Identifier') {
     // export { foo as bar }
-    if (parent.type === 'ExportSpecifier' && node !== parent.local)
-      return false;
+    if (parent.type === 'ExportSpecifier' && node !== parent.local) return false;
     return true;
   }
   return false;

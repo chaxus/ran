@@ -55,12 +55,7 @@ const getMin = (list: Array<number>) => {
  * @param {Array<number>} list
  * @return {Array<number>}
  */
-const bucket = (
-  list: Array<number>,
-  bucketSize: number = 5,
-  max?: number,
-  min?: number,
-): Array<number> => {
+const bucket = (list: Array<number>, bucketSize: number = 5, max?: number, min?: number): Array<number> => {
   if (list.length === 0) return list;
   if (!max) max = getMax(list);
   if (!min) min = getMin(list);

@@ -1,10 +1,4 @@
-import type {
-  VNode,
-  VNodeChildElement,
-  VNodeChildren,
-  VNodeData,
-  VNodes,
-} from './vnode';
+import type { VNode, VNodeChildElement, VNodeChildren, VNodeData, VNodes } from './vnode';
 import { vnode } from './vnode';
 // 类型判断
 import * as is from './is';
@@ -31,16 +25,8 @@ export function addNS(
 export function h(sel: string): VNode;
 export function h(sel: string, data: VNodeData | null): VNode;
 export function h(sel: string, children: VNodeChildren): VNode;
-export function h(
-  sel: string,
-  data: VNodeData | null,
-  children: VNodeChildren,
-): VNode;
-export function h(
-  sel: string,
-  b?: VNodeData | null | VNodeChildren,
-  c?: VNodeChildren,
-): VNode {
+export function h(sel: string, data: VNodeData | null, children: VNodeChildren): VNode;
+export function h(sel: string, b?: VNodeData | null | VNodeChildren, c?: VNodeChildren): VNode {
   // 缓存 VNode 数据
   let data: VNodeData = {};
   // 缓存 children 数据
@@ -95,12 +81,7 @@ export function h(
       }
     }
   }
-  if (
-    sel[0] === 's' &&
-    sel[1] === 'v' &&
-    sel[2] === 'g' &&
-    (sel.length === 3 || sel[3] === '.' || sel[3] === '#')
-  ) {
+  if (sel[0] === 's' && sel[1] === 'v' && sel[2] === 'g' && (sel.length === 3 || sel[3] === '.' || sel[3] === '#')) {
     addNS(data, children, sel);
   }
   // 符合VNode

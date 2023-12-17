@@ -36,11 +36,7 @@ export interface ExistingRawSourceMap {
   version: number;
 }
 
-export type SourceMapInput =
-  | ExistingRawSourceMap
-  | string
-  | null
-  | { mappings: '' };
+export type SourceMapInput = ExistingRawSourceMap | string | null | { mappings: '' };
 
 interface AcornNode {
   end: number;
@@ -157,16 +153,10 @@ export class ModuleGraph {
     return mod;
   }
 
-  async updateModuleInfo(
-    mod: ModuleNode,
-    importedModules: Set<string | ModuleNode>,
-  ): Promise<void> {
+  async updateModuleInfo(mod: ModuleNode, importedModules: Set<string | ModuleNode>): Promise<void> {
     const prevImports = mod.importedModules;
     for (const curImports of importedModules) {
-      const dep =
-        typeof curImports === 'string'
-          ? await this.ensureEntryFromUrl(cleanUrl(curImports))
-          : curImports;
+      const dep = typeof curImports === 'string' ? await this.ensureEntryFromUrl(cleanUrl(curImports)) : curImports;
       if (dep) {
         mod.importedModules.add(dep);
         dep.importers.add(mod);
@@ -192,9 +182,7 @@ export class ModuleGraph {
     }
   }
 
-  private async _resolve(
-    url: string,
-  ): Promise<{ url: string; resolvedId: string }> {
+  private async _resolve(url: string): Promise<{ url: string; resolvedId: string }> {
     const resolved = await this.resolveId(url);
     const resolvedId = resolved?.id || url;
     return { url, resolvedId };

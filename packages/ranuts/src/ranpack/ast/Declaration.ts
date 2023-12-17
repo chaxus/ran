@@ -17,11 +17,7 @@ export class Declaration {
       if (node.type === 'FunctionDeclaration') {
         this.isFunctionDeclaration = true;
         this.functionNode = node;
-      } else if (
-        node.type === 'VariableDeclarator' &&
-        node.init &&
-        /FunctionExpression/.test(node.init.type)
-      ) {
+      } else if (node.type === 'VariableDeclarator' && node.init && /FunctionExpression/.test(node.init.type)) {
         this.isFunctionDeclaration = true;
         this.functionNode = node.init;
       }

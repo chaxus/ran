@@ -4,14 +4,7 @@ import type { TensorContainerObject, TypedArray } from '@tensorflow/tfjs';
 import type { Point2D } from '@tensorflow/tfjs-vis';
 import * as tfvis from '@tensorflow/tfjs-vis';
 import * as tf from '@tensorflow/tfjs';
-import {
-  createModel,
-  denormalise,
-  normalise,
-  plot,
-  tfMemory,
-  trainModel,
-} from '../lib';
+import { createModel, denormalise, normalise, plot, tfMemory, trainModel } from '../lib';
 import type { Normalise } from '../lib';
 
 const path = '../../assets/dataset/kc_house_data.csv';
@@ -71,22 +64,14 @@ class LineModel {
     // 标准化标签和特征
     this.normaliseFeature = normalise(featureTensor);
     this.normaliseLabel = normalise(labelTensor);
-    console.log(
-      `load data success, normaliseFeature:${this.normaliseFeature}, normaliseLabel:${this.normaliseLabel}`,
-    );
+    console.log(`load data success, normaliseFeature:${this.normaliseFeature}, normaliseLabel:${this.normaliseLabel}`);
   };
   train = async (): Promise<void> => {
     if (!this.normaliseFeature || !this.normaliseLabel) return;
     // 分割测试集和训练集
-    const [trainingFeatureTensor, testingFeatureTensor] = tf.split(
-      this.normaliseFeature.tensor,
-      2,
-    );
+    const [trainingFeatureTensor, testingFeatureTensor] = tf.split(this.normaliseFeature.tensor, 2);
     this.testingFeatureTensor = testingFeatureTensor;
-    const [trainingLabelTensor, testingLabelTensor] = tf.split(
-      this.normaliseLabel.tensor,
-      2,
-    );
+    const [trainingLabelTensor, testingLabelTensor] = tf.split(this.normaliseLabel.tensor, 2);
     this.testingLabelTensor = testingLabelTensor;
     // 创建模型
     this.model = createModel();
@@ -103,45 +88,28 @@ class LineModel {
       tfvis.show.layer({ name: 'Layer 1' }, layer);
     };
     // 训练模型
-    const result = await trainModel(
-      this.model,
-      trainingFeatureTensor,
-      trainingLabelTensor,
-      onEpochBegin,
-    );
+    const result = await trainModel(this.model, trainingFeatureTensor, trainingLabelTensor, onEpochBegin);
 
     await this.predictionLine();
 
     const trainLoss = result.history.loss.pop();
     const validationLoss = result.history.val_loss.pop();
-    console.log(
-      `train success trainLoss:${trainLoss}, validationLoss:${validationLoss}`,
-    );
+    console.log(`train success trainLoss:${trainLoss}, validationLoss:${validationLoss}`);
   };
   test = async (): Promise<void> => {
     if (!this.testingFeatureTensor || !this.testingLabelTensor) return;
     // 判断损失函数
-    const lossTensor = this.model?.evaluate(
-      this.testingFeatureTensor,
-      this.testingLabelTensor,
-    );
+    const lossTensor = this.model?.evaluate(this.testingFeatureTensor, this.testingLabelTensor);
     const loss = Array.isArray(lossTensor)
       ? lossTensor.map(async (item) => await item.dataSync())
       : await lossTensor?.dataSync();
     console.log(`test success, loss:${loss}`);
   };
-  save = async (
-    storageID: string = 'kc-house-price-regression',
-  ): Promise<void> => {
+  save = async (storageID: string = 'kc-house-price-regression'): Promise<void> => {
     const saveResults = await this.model?.save(`localstorage://${storageID}`);
-    console.log(
-      'save model success, current time is:',
-      saveResults?.modelArtifactsInfo.dateSaved,
-    );
+    console.log('save model success, current time is:', saveResults?.modelArtifactsInfo.dateSaved);
   };
-  loadModel = async (
-    storageID: string = 'kc-house-price-regression',
-  ): Promise<void> => {
+  loadModel = async (storageID: string = 'kc-house-price-regression'): Promise<void> => {
     const storageKey = `localstorage://${storageID}`;
     const models = await tf.io.listModels();
     const modelInfo = models[storageKey];
@@ -163,25 +131,14 @@ class LineModel {
     tf.tidy(() => {
       if (!this.normaliseLabel || !this.normaliseFeature) return;
       const inputTensor = tf.tensor1d([input]);
-      const normaliseInput = normalise(
-        inputTensor,
-        this.normaliseFeature?.min,
-        this.normaliseLabel?.max,
-      );
+      const normaliseInput = normalise(inputTensor, this.normaliseFeature?.min, this.normaliseLabel?.max);
       const normaliseOutputTensor = this.model?.predict(normaliseInput.tensor);
       const outputTensor =
         normaliseOutputTensor &&
         !Array.isArray(normaliseOutputTensor) &&
-        denormalise(
-          normaliseOutputTensor,
-          this.normaliseLabel.min,
-          this.normaliseFeature.max,
-        );
+        denormalise(normaliseOutputTensor, this.normaliseLabel.min, this.normaliseFeature.max);
       const outputValue = outputTensor && outputTensor.dataSync()[0];
-      console.log(
-        'predict success, the result: ',
-        outputValue && outputValue / 1000,
-      );
+      console.log('predict success, the result: ', outputValue && outputValue / 1000);
     });
   };
   predictionLine = async (): Promise<void> => {
@@ -189,16 +146,8 @@ class LineModel {
       const normaliseXs = tf.linspace(0, 1, 100);
       const normaliseYs = this.model.predict(normaliseXs.reshape([100, 1]));
 
-      const xs = denormalise(
-        normaliseXs,
-        this.normaliseFeature.min,
-        this.normaliseFeature.max,
-      );
-      const ys = denormalise(
-        normaliseYs as tf.Tensor<tf.Rank>,
-        this.normaliseLabel.min,
-        this.normaliseLabel.max,
-      );
+      const xs = denormalise(normaliseXs, this.normaliseFeature.min, this.normaliseFeature.max);
+      const ys = denormalise(normaliseYs as tf.Tensor<tf.Rank>, this.normaliseLabel.min, this.normaliseLabel.max);
       return [xs.dataSync(), ys.dataSync()];
     });
     const predictPoints = Array.from(x).map((val, index) => {
@@ -212,13 +161,8 @@ class LineModel {
    * @param {TensorLike2D} bias
    * @return {*}
    */
-  plotParams = async (
-    weight: TensorLike2D,
-    bias: TensorLike2D,
-  ): Promise<void> => {
-    this.model
-      .getLayer(null, 0)
-      .setWeights([tf.tensor2d(weight), tf.tensor2d(bias)]);
+  plotParams = async (weight: TensorLike2D, bias: TensorLike2D): Promise<void> => {
+    this.model.getLayer(null, 0).setWeights([tf.tensor2d(weight), tf.tensor2d(bias)]);
     await this.predictionLine();
     // 更新 layer
     const layer = this.model.getLayer('', 0);
@@ -229,8 +173,7 @@ class LineModel {
   };
 }
 
-const { loadData, train, test, save, loadModel, predict, openTfvis } =
-  new LineModel();
+const { loadData, train, test, save, loadModel, predict, openTfvis } = new LineModel();
 
 export const LineModelComponent = (): JSX.Element => {
   const [state, setState] = useState('');

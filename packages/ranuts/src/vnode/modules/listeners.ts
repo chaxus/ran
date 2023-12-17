@@ -7,16 +7,12 @@ const isFunction = (handler: unknown): handler is Function => {
 type Listener<T> = (this: VNode, ev: T, vnode: VNode) => void;
 
 export type On = {
-  [N in keyof HTMLElementEventMap]?:
-    | Listener<HTMLElementEventMap[N]>
-    | Array<Listener<HTMLElementEventMap[N]>>;
+  [N in keyof HTMLElementEventMap]?: Listener<HTMLElementEventMap[N]> | Array<Listener<HTMLElementEventMap[N]>>;
 } & {
   [event: string]: Listener<any> | Array<Listener<any>>;
 };
 
-type SomeListener<N extends keyof HTMLElementEventMap> =
-  | Listener<HTMLElementEventMap[N]>
-  | Listener<any>;
+type SomeListener<N extends keyof HTMLElementEventMap> = Listener<HTMLElementEventMap[N]> | Listener<any>;
 
 function invokeHandler<N extends keyof HTMLElementEventMap>(
   handler: SomeListener<N> | Array<SomeListener<N>>,
