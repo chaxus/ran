@@ -176,7 +176,7 @@ export const mergeExports = (obj: Object, exports: Object): Object => {
   return Object.freeze(obj);
 };
 
-export const noop = (): void => { };
+export const noop = (): void => {};
 
 export type Noop = () => void;
 /**
@@ -392,7 +392,7 @@ export function querystring(data = {}): string {
     .toString();
 }
 
-const transitionJsonToString = (jsonObj: string | JSON, callback = (error: Error) => { }) => {
+const transitionJsonToString = (jsonObj: string | JSON, callback = (error: Error) => {}) => {
   // 转换后的jsonObj受体对象
   let _jsonObj: string = '';
   // 判断传入的jsonObj对象是不是字符串，如果是字符串需要先转换为对象，再转换为字符串，这样做是为了保证转换后的字符串为双引号
@@ -419,7 +419,7 @@ const transitionJsonToString = (jsonObj: string | JSON, callback = (error: Error
   return _jsonObj;
 };
 // callback为数据格式化错误的时候处理函数
-export const formatJson = (jsonObj: string, callback = () => { }): string => {
+export const formatJson = (jsonObj: string, callback = () => {}): string => {
   // 转换后的字符串变量
   let formatted = '';
   // 换行缩进位数
@@ -782,21 +782,21 @@ export class QuestQueue {
    * @return {*}
    */
   allSettled = (): Promise<unknown> => {
-    let index = 0
+    let index = 0;
     return new Promise((resolve, reject) => {
       const result: unknown[] = [];
       if (this.current < this.simultaneous && this.queue.length) {
         const task = this.queue.pop();
-        index++
+        index++;
         if (task) {
           task()
             .then((x: unknown) => {
-              result[index] = x
-              resolve(x)
+              result[index] = x;
+              resolve(x);
             })
             .catch((x: unknown) => {
-              result[index] = x
-              reject(x)
+              result[index] = x;
+              reject(x);
             })
             .finally(() => {
               this.executed++;
@@ -857,8 +857,8 @@ export const getFrame = (n: number = 10): Promise<number> => {
 };
 
 interface ComputeNumberResult {
-  result: number,
-  next: (a: string, b: number) => ComputeNumberResult
+  result: number;
+  next: (a: string, b: number) => ComputeNumberResult;
 }
 
 /**
@@ -866,7 +866,7 @@ interface ComputeNumberResult {
  * @param {number} a 前面的值
  * @param {"+"|"-"|"*"|"/"} type 计算方式
  * @param {number} b 后面的值
- * @example 
+ * @example
  * ```js
  * // 可链式调用
  * const res = computeNumber(1.3, "-", 1.2).next("+", 1.5).next("*", 2.3).next("/", 0.2).result;
@@ -875,46 +875,46 @@ interface ComputeNumberResult {
  */
 export class Mathjs {
   /**
- * 获取数字小数点的长度
- * @param {number} n 数字
- */
+   * 获取数字小数点的长度
+   * @param {number} n 数字
+   */
   getDecimalLength = (n: number): number => {
-    const [_, decimal] = n.toString().split(".");
+    const [_, decimal] = n.toString().split('.');
     return decimal ? decimal.length : 0;
-  }
+  };
   amend = (n: number, precision = 15): number => parseFloat(Number(n).toPrecision(precision));
   power = (a: number, b: number): number => Math.pow(10, Math.max(this.getDecimalLength(a), this.getDecimalLength(b)));
-  static handleMethod = (l: number, r: number): (type: string) => number | undefined => {
-    const mathjs = new Mathjs()
-    const { power, amend } = mathjs
-    const pow = power(l, r)
+  static handleMethod = (l: number, r: number): ((type: string) => number | undefined) => {
+    const mathjs = new Mathjs();
+    const { power, amend } = mathjs;
+    const pow = power(l, r);
     const a = amend(l * pow);
     const b = amend(r * pow);
     return (type: string) => {
       switch (type) {
-        case "+":
+        case '+':
           return (a + b) / pow;
-        case "-":
+        case '-':
           return (a - b) / pow;
-        case "*":
+        case '*':
           return (a * b) / (pow * pow);
-        case "/":
+        case '/':
           return a / b;
       }
-    }
-  }
+    };
+  };
   static add = (a: number, b: number): number | undefined => {
-    return this.handleMethod(a, b)('+')
-  }
+    return this.handleMethod(a, b)('+');
+  };
   static divide = (a: number, b: number): number | undefined => {
-    return this.handleMethod(a, b)('/')
-  }
+    return this.handleMethod(a, b)('/');
+  };
   static multiply = (a: number, b: number): number | undefined => {
-    return this.handleMethod(a, b)('*')
-  }
+    return this.handleMethod(a, b)('*');
+  };
   static subtract = (a: number, b: number): number | undefined => {
-    return this.handleMethod(a, b)('-')
-  }
+    return this.handleMethod(a, b)('-');
+  };
 }
 
 export function mathjs(a: number, type: string, b: number): ComputeNumberResult {
@@ -923,7 +923,7 @@ export function mathjs(a: number, type: string, b: number): ComputeNumberResult 
    * @param {number} n 数字
    */
   function getDecimalLength(n: number) {
-    const [_, decimal] = n.toString().split(".");
+    const [_, decimal] = n.toString().split('.');
     return decimal ? decimal.length : 0;
   }
   /**
@@ -939,16 +939,16 @@ export function mathjs(a: number, type: string, b: number): ComputeNumberResult 
   b = amend(b * power);
 
   switch (type) {
-    case "+":
+    case '+':
       result = (a + b) / power;
       break;
-    case "-":
+    case '-':
       result = (a - b) / power;
       break;
-    case "*":
+    case '*':
       result = (a * b) / (power * power);
       break;
-    case "/":
+    case '/':
       result = a / b;
       break;
   }
@@ -965,6 +965,6 @@ export function mathjs(a: number, type: string, b: number): ComputeNumberResult 
      */
     next: (nextType: string, nextValue: number) => {
       return mathjs(result, nextType, nextValue);
-    }
-  }
+    },
+  };
 }

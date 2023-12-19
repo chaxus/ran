@@ -424,9 +424,9 @@ export const heap = (list: Array<number>): Array<number> => {
 
 // 手写promise
 
-const PENDING = "pending";
-const RESOLVED = "resolved";
-const REJECTED = "rejected";
+const PENDING = 'pending';
+const RESOLVED = 'resolved';
+const REJECTED = 'rejected';
 
 class CustomPromise {
   status: string;
@@ -436,32 +436,32 @@ class CustomPromise {
   onRejectedCallbacks: Function[];
   constructor(cb: unknown) {
     // 初始化状态
-    this.status = PENDING
+    this.status = PENDING;
     // 初始化成功的值
-    this.successValue = undefined
+    this.successValue = undefined;
     // 初始化失败的值
-    this.failValue = undefined
+    this.failValue = undefined;
     // 存储成功状态的回调函数
     this.onResolvedCallbacks = [];
     // 存储失败状态的回调函数
     this.onRejectedCallbacks = [];
     const resolve = (value: unknown) => {
       if (this.status === PENDING) {
-        this.status = RESOLVED
-        this.successValue = value
-        this.onResolvedCallbacks.forEach(cb => cb())
+        this.status = RESOLVED;
+        this.successValue = value;
+        this.onResolvedCallbacks.forEach((cb) => cb());
       }
-    }
+    };
     const reject = (value: unknown) => {
       if (this.status === PENDING) {
-        this.status = REJECTED
-        this.failValue = value
-        this.onRejectedCallbacks.forEach(cb => cb())
+        this.status = REJECTED;
+        this.failValue = value;
+        this.onRejectedCallbacks.forEach((cb) => cb());
       }
-    }
+    };
     // 调用回调函数，将 resolve 和 reject 传递给它
     if (typeof cb === 'function') {
-      cb(resolve, reject)
+      cb(resolve, reject);
     }
   }
   then = (r: unknown, j: unknown) => {
@@ -469,39 +469,39 @@ class CustomPromise {
       if (this.status === RESOLVED) {
         try {
           if (typeof r === 'function') {
-            resolve(r())
+            resolve(r());
           }
         } catch (error) {
-          reject(error)
+          reject(error);
         }
       }
       if (this.status === REJECTED) {
         try {
           if (typeof j === 'function') {
-            resolve(j())
+            resolve(j());
           }
         } catch (error) {
-          reject(error)
+          reject(error);
         }
       }
       if (this.status === PENDING) {
         if (typeof r === 'function') {
           this.onResolvedCallbacks.push(() => {
             try {
-              resolve(r(this.successValue))
+              resolve(r(this.successValue));
             } catch (error) {
-              reject(error)
+              reject(error);
             }
-          })
+          });
         }
         if (typeof j === 'function') {
           this.onRejectedCallbacks.push(() => {
             try {
-              resolve(j(this.failValue))
+              resolve(j(this.failValue));
             } catch (error) {
-              reject(error)
+              reject(error);
             }
-          })
+          });
         }
       } else {
         // 存储成功状态的回调函数
@@ -509,11 +509,11 @@ class CustomPromise {
         // 存储失败状态的回调函数
         this.onRejectedCallbacks = [];
       }
-    })
-  }
+    });
+  };
   catch = (r: Function) => {
-    return this.then(undefined, r)
-  }
+    return this.then(undefined, r);
+  };
 }
 /**
  * @description: 自定义 call
@@ -522,20 +522,20 @@ class CustomPromise {
 const CustomCall = () => {
   (Function.prototype as any).CustomCall = function (ctx: any) {
     if (typeof this !== 'function') {
-      throw new Error('is not func')
+      throw new Error('is not func');
     }
-    const context = ctx || window
-    const args = [...arguments].slice(1)
-    context.fn = this
-    const result = context.fn(...args)
-    delete context.fn
-    return result
-  }
-}
+    const context = ctx || window;
+    const args = [...arguments].slice(1);
+    context.fn = this;
+    const result = context.fn(...args);
+    delete context.fn;
+    return result;
+  };
+};
 
 export const curry = (fn: Function, ...args: unknown[]): Function => {
   const recursion = (...args: unknown[]) => {
-    return fn.length <= args.length ? fn(...args) : (...arg: unknown[]) => recursion(...args, ...arg)
-  }
-  return recursion(...args)
-}
+    return fn.length <= args.length ? fn(...args) : (...arg: unknown[]) => recursion(...args, ...arg);
+  };
+  return recursion(...args);
+};
