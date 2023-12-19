@@ -22,14 +22,14 @@ Data that needs to be presented
 
 An array object with the following properties
 
-| key             | Description                                            | type                            |
-| --------------- | ------------------------------------------------------ | ------------------------------- | ------------------------------------ |
-| abilityName     | Displays the attribute name                            | 'string'                        | is mandatory                         |
-| scoreRate       | Displays the dimension value. The maximum value is 100 | 'number'                        | is required                          |
-| backgroundColor | The background color of the                            | property                        | is an optional string                |
-| fontSize        | The font size for the attribute name                   | The optional parameter 'number' |
-| fontFamily      | The font for the attribute name                        | is optional with 'string'       |
-| fontColor       | The font color for the                                 | property                        | is an optional parameter with string |
+| key             | Description                                            | type                                          |
+| --------------- | ------------------------------------------------------ | --------------------------------------------- |
+| abilityName     | Displays the attribute name                            | 'string'                                      |
+| scoreRate       | Displays the dimension value. The maximum value is 100 | 'number'                                      |
+| backgroundColor | The background color of the                            | property is an optional string                |
+| fontSize        | The font size for the attribute name                   | The optional parameter 'number'               |
+| fontFamily      | The font for the attribute name                        | is optional with 'string'                     |
+| fontColor       | The font color for the                                 | property is an optional parameter with string |
 
 <r-radar style="width:300px;height:300px;display: block;" abilitys='[{"abilityName":"HP","scoreRate":"10","backgroundColor":"red","fontSize":"30","fontColor":"blue"},{"abilityName":"Attack","scoreRate":"90"},{"abilityName":"DEF","scoreRate":"20"},{"abilityName":"Element mastery","scoreRate":"50"},{"abilityName":"Critical Hit Chance","scoreRate":"80"},{"abilityName":"Critical hit damage","scoreRate":"50"}]'></r-radar>
 

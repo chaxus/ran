@@ -61,12 +61,12 @@ Live by 'type' to judge different event types, perform different operations
 
 Where 'type' type has
 
-| Name | Description |
-| ---- | ---------- |  
+| Name           | Description                                                                                                                                                  |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | canplay        | Your browser is ready to play the media file, but it probably doesn't have enough data to play it to the end without pausing to buffer the content further.  |
 | canplaythrough | The browser estimates that it canplay media until the end without stopping content buffering.                                                                |
 | complete       | OfflineAudioContext The rendering is complete.                                                                                                               |
-| durationchange | duration is triggered when the value of the                                                                                                                  | duration property changes.         |
+| durationchange | duration is triggered when the value of the duration property changes.                                                                                       |
 | emptied        | Media content emptied; For example, when the media is already loaded (or partially loaded), this event is sent and the load() method is called to reload it. |
 | ended          | The video stops playing because the media has reached the end point.                                                                                         |
 | loadedmetadata | The metadata is loaded.                                                                                                                                      |
@@ -76,8 +76,8 @@ Where 'type' type has
 | seeking        | seek begins.                                                                                                                                                 |
 | stalled        | The user agent is trying to obtain media data but it has not appeared unexpectedly.                                                                          |
 | suspend        | Media data loading has been suspended.                                                                                                                       |
-| loadeddata     | The first frame in media has been added                                                                                                                      | media has loaded.                  |
-| timeupdate     | The time specified by the currentTime property changes.                                                                                                      | currentTime attribute has changed. |
+| loadeddata     | The first frame in media has been added. media has loaded.                                                                                                   |
+| timeupdate     | The time specified by the currentTime property changes. currentTime attribute has changed.                                                                   |
 | volumechange   | The volume changes.                                                                                                                                          |
 | waiting        | Playing has stopped due to lack of data.                                                                                                                     |
 | play           | Playback has started.                                                                                                                                        |

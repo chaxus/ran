@@ -6,5 +6,3 @@ assets
 .vscode
 report
 public
-# issue: prettier format md table
-packages/docs/src/ranui/player/index.md

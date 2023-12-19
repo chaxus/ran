@@ -83,8 +83,8 @@ Point of the progress bar, Default display, set to 'false' can be hidden
 
 The 'change' event is triggered when the 'percent' and 'total' properties change.
 
-| property | explains that    | type    |
-| -------- | ---------------- | ------- | ------- |
-| value    | Current progress | 'string | number' |
-| percent  | Current progress | 'string | number' |
-| total    | Total progress   | 'string | number' |
+| property | explains that    | type               |
+| -------- | ---------------- | ------------------ |
+| value    | Current progress | 'string or number' |
+| percent  | Current progress | 'string or number' |
+| total    | Total progress   | 'string or number' |
