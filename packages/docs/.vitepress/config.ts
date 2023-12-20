@@ -16,6 +16,7 @@ import {
   GITHUB,
   BASE_PATH,
 } from './common/index';
+import { pagefindPlugin } from 'vitepress-plugin-pagefind'
 
 export default defineConfig({
   title: 'ran',
@@ -35,6 +36,34 @@ export default defineConfig({
       lang: 'zh-CN',
       themeConfig: themeCnConfig,
     },
+  },
+  vite: {
+    plugins: [pagefindPlugin(
+      {
+        locales: {
+          root:{
+            btnPlaceholder: 'Search',
+            placeholder: 'Search Docs...',
+            emptyText: 'No results',
+            heading: 'Total: {{searchResult}} search results.',
+          },
+          zh: {
+            customSearchQuery(input){
+              // 将搜索的每个中文单字两侧加上空格
+              return input.replace(/[\u4e00-\u9fa5]/g, ' $& ')
+              .replace(/\s+/g,' ')
+              .trim();
+            },
+            btnPlaceholder: '搜索',
+            placeholder: '搜索文档',
+            emptyText: '空空如也',
+            heading: '共: {{searchResult}} 条结果',
+            // 搜索结果不展示最后修改日期日期
+            showDate: false
+          }
+        }
+      }
+    )],
   },
   vue: {
     template: {
