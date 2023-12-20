@@ -14,12 +14,12 @@ const themeEnConfig: DefaultTheme.Config = {
     message: 'Released under the MIT License.',
     copyright: 'Copyright © 2022-11-11',
   },
-  algolia: {
-    appId: 'RDX0Y4AQW1',
-    apiKey: 'c7b6e28f95335eddc66c5a1b54ad9834',
-    indexName: 'chaxus_ran',
-    placeholder: 'search',
-  },
+  // algolia: {
+  //   appId: 'RDX0Y4AQW1',
+  //   apiKey: 'c7b6e28f95335eddc66c5a1b54ad9834',
+  //   indexName: 'chaxus_ran',
+  //   placeholder: 'search',
+  // },
   sidebar: {
     '/src/ranuts/': [
       {
