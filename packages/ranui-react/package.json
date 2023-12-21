@@ -48,6 +48,11 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/umd/index.umd.cjs"
+    },
+    "./style": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/style.css",
+      "require": "./dist/umd/index.umd.cjs"
     }
   },
   "devDependencies": {

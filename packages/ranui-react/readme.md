@@ -38,6 +38,12 @@ Support for on-demand import, which can reduce the size of loaded js
 import { Button } '@ranui/react'
 ```
 
+For global components like `preview` and `message`, you need to import global styles
+
+```js
+import '@ranui/react/style';
+```
+
 ## Usage
 
 some example:
