@@ -91,7 +91,7 @@ export class RanPlayer extends HTMLElement {
   _video?: HTMLVideoElement;
   _hls?: HlsPlayer;
   static get observedAttributes(): string[] {
-    return ['src', 'volume', 'currentTime', 'playbackRate'];
+    return ['src', 'volume', 'currentTime', 'playbackRate', 'debug'];
   }
   /**
    * @description: 初始化view和video的全局上下文
@@ -240,6 +240,12 @@ export class RanPlayer extends HTMLElement {
   set src(value: string) {
     this.setAttribute('src', value || '');
   }
+  get debug(): string {
+    return this.getAttribute('debug') || '';
+  }
+  set debug(value: string) {
+    this.setAttribute('debug', value || '');
+  }
   get volume(): string {
     return this.getAttribute('volume') || '';
   }
@@ -318,6 +324,7 @@ export class RanPlayer extends HTMLElement {
       }
       this.ctx.url = url;
       this.createClaritySelect();
+      this.change('hlsManifestLoaded', { data });
     }
   };
   /**
@@ -341,11 +348,15 @@ export class RanPlayer extends HTMLElement {
     this._video.setAttribute('controls', 'false');
     this._video.controls = false;
     this._video.setAttribute('initial-time', '0.01');
-    if (Hls?.isSupported() && this.src) {
+    if (this._video.canPlayType('application/vnd.apple.mpegurl') && this.src) {
+      this._video.src = this.src;
+    } else if (Hls?.isSupported() && this.src) {
       this._hls = new Hls();
       if (this._hls) {
         this._hls.off(Hls.Events.MANIFEST_LOADED, this.manifestLoaded);
         this._hls.on(Hls.Events.MANIFEST_LOADED, this.manifestLoaded);
+        this._hls.off(Hls.Events.ERROR, this.hlsError);
+        this._hls.on(Hls.Events.ERROR, this.hlsError);
         this._hls.loadSource(this.src);
         this._hls.attachMedia(this._video);
       }
@@ -354,9 +365,16 @@ export class RanPlayer extends HTMLElement {
     }
     this.listenEvent();
   };
+  hlsError = (event: unknown, data: unknown): void => {
+    this.change('hlsError', { event, data });
+    if (this._video) {
+      this._video.src = this.src;
+    }
+  };
   change = (name: string, value: unknown): void => {
     const currentTime = this.getCurrentTime();
     const duration = this.getTotalTime();
+    this.debug && console.log(name, value);
     this.dispatchEvent(
       new CustomEvent('change', {
         detail: {

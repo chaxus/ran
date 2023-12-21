@@ -1,6 +1,6 @@
 {
   "name": "@ranui/react",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "UI Component library based on `Web Component`",
   "main": "dist/umd/index.umd.cjs",
   "module": "dist/index.js",
@@ -64,7 +64,7 @@
     "vite-plugin-dts": "^3.6.4"
   },
   "dependencies": {
-    "ranui": "workspace:^0.1.9",
+    "ranui": "workspace:^0.1.10",
     "ranuts": "workspace:0.1.0-alpha.10",
     "react": "^17.0.2"
   }

@@ -58,7 +58,9 @@ const App = () => {
     console.log('input--->', e);
   };
 
-  const uploadFile = () => {
+  const uploadFile = (e: Event) => {
+    e.preventDefault();
+    e.stopPropagation();
     const preview: Element | undefined = previewRef.current;
     if (!preview) return message.warning('previewRef.current is undefined');
     const uploadFile = document.createElement('input');

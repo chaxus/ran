@@ -3,7 +3,7 @@ import React, { useRef, useState } from 'react';
 // import { createRoot } from 'react-dom/client';
 // react 17
 import { render } from 'react-dom';
-import { Button, Input, Option, Preview, Radar, Select, Tab, TabPane, message } from '../index';
+import { Button, Input, Option, Player, Preview, Radar, Select, Tab, TabPane, message } from '../index';
 import './index.less';
 
 const abilitys = [
@@ -20,7 +20,6 @@ const abilitys = [
   { abilityName: '暴击率', scoreRate: '80' },
   { abilityName: '暴击伤害', scoreRate: '50' },
 ];
-
 
 const App = () => {
   const [state, setState] = useState<any>({ abilitys });
@@ -96,6 +95,8 @@ const App = () => {
         <Option value="2">Tony</Option>
         <Option value="3">Job</Option>
       </Select>
+      <h1>Player</h1>
+      <Player src="https://guonei-cos.koocdn.com/video-manage/2023/06/05/d7808b30e6114e419359586cdc65164a.mp4" />
     </>
   );
 };
