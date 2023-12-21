@@ -28,6 +28,10 @@ npm install ranui --save
 
 [See components and use examples](https://chaxus.github.io/ran/src/ranui/)
 
+## Example
+
+<https://github.com/chaxus/ran/blob/main/packages/ranui/index.html>
+
 ## Import
 
 Support for on-demand import, which can reduce the size of loaded js

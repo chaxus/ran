@@ -33,7 +33,7 @@ export const reactifyWebComponent = <T = unknown>(WC: string): any => {
       }
     }
 
-    setAttribute(prop: string, val: string | boolean | number) {
+    setAttribute(prop: string, val: unknown) {
       if (typeof val === 'string') {
         this.ref.current?.setAttribute(prop, val);
       } else {
@@ -46,7 +46,7 @@ export const reactifyWebComponent = <T = unknown>(WC: string): any => {
       Object.entries(this.props).forEach(([prop, val]: [string, any]) => {
         // Check to see if we're forcing the value into a type, and don't
         // proceed if we force
-        if (prop === 'style') return;
+        if (prop === 'style' && typeof val !== 'string') return;
         // We haven't forced the type, so determine the correct typing and
         // assign the value to the right place
         if (prop === 'children') return undefined;

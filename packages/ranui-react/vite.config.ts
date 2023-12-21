@@ -31,6 +31,15 @@ export const es: BuildOptions = {
 };
 
 export const viteConfig: UserConfig = {
+  build: {
+    rollupOptions: {
+      output: {
+        inlineDynamicImports: true,
+        experimentalMinChunkSize: 1000,
+      },
+      external: ['react'],
+    },
+  },
   plugins: [dts(), react()],
   resolve: {
     alias: {

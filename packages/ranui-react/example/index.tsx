@@ -1,6 +1,9 @@
 import React, { useRef, useState } from 'react';
-import { createRoot } from 'react-dom/client';
-import { Button, Input, Preview, Radar, Tab, TabPane, message } from '../index';
+// react 18
+// import { createRoot } from 'react-dom/client';
+// react 17
+import { render } from 'react-dom';
+import { Button, Input, Option, Preview, Radar, Select, Tab, TabPane, message } from '../index';
 import './index.less';
 
 const abilitys = [
@@ -18,15 +21,15 @@ const abilitys = [
   { abilityName: '暴击伤害', scoreRate: '50' },
 ];
 
+
 const App = () => {
-  const [state, setState] = useState<any>({
-    abilitys: [],
-  });
+  const [state, setState] = useState<any>({ abilitys });
   const previewRef = useRef<Element>();
 
-  const uploadFile = () => {
+  const uploadFile = (e: Event) => {
+    e.preventDefault();
+    e.stopPropagation();
     const preview: Element | undefined = previewRef.current;
-
     if (!preview) return message.warning('previewRef.current is undefined');
     const uploadFile = document.createElement('input');
     uploadFile.setAttribute('type', 'file');
@@ -76,9 +79,27 @@ const App = () => {
       <h1>Radar</h1>
       <Radar className="radar" abilitys={state.abilitys}></Radar>
       <h1>Input</h1>
-      <Input className="input" onChange={changeInput} />
+      <Input className="input" label="home" onChange={changeInput} />
+      <h1>Select</h1>
+      <Select style={{ width: '120px', height: '40px' }}>
+        <Option value="1">Mike</Option>
+        <Option value="2">Tony</Option>
+        <Option value="3">Job</Option>
+      </Select>
+      <Select style={{ width: '120px', height: '40px' }} showSearch>
+        <Option value="1">Mike</Option>
+        <Option value="2">Tony</Option>
+        <Option value="3">Job</Option>
+      </Select>
+      <Select style={{ width: '120px', height: '40px' }} defaultValue="1">
+        <Option value="1">Mike</Option>
+        <Option value="2">Tony</Option>
+        <Option value="3">Job</Option>
+      </Select>
     </>
   );
 };
-
-createRoot(document.getElementById('app')).render(<App />);
+// react 18
+// createRoot(document.getElementById('app')).render(<App />);
+// react 17
+render(<App />, document.getElementById('app'));
