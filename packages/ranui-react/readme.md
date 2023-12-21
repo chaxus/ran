@@ -26,6 +26,10 @@ npm install @ranui/react --save
 
 [See components and use examples](https://chaxus.github.io/ran/src/ranui/)
 
+## Example
+
+<https://github.com/chaxus/ran/blob/main/packages/ranui-react/example/index.tsx>
+
 ## Import
 
 Support for on-demand import, which can reduce the size of loaded js
