@@ -11,6 +11,13 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export const umd: BuildOptions = {
+  rollupOptions: {
+    output: {
+      inlineDynamicImports: true,
+      experimentalMinChunkSize: 1000,
+    },
+    external: ['react'],
+  },
   minify: 'terser',
   outDir: resolve(__dirname, 'dist/umd'),
   lib: {
@@ -22,6 +29,13 @@ export const umd: BuildOptions = {
 };
 
 export const es: BuildOptions = {
+  rollupOptions: {
+    output: {
+      inlineDynamicImports: true,
+      experimentalMinChunkSize: 1000,
+    },
+    external: ['react'],
+  },
   minify: 'terser',
   lib: {
     entry: resolve(__dirname, 'index.ts'),
@@ -31,15 +45,6 @@ export const es: BuildOptions = {
 };
 
 export const viteConfig: UserConfig = {
-  build: {
-    rollupOptions: {
-      output: {
-        inlineDynamicImports: true,
-        experimentalMinChunkSize: 1000,
-      },
-      external: ['react'],
-    },
-  },
   plugins: [dts(), react()],
   resolve: {
     alias: {
