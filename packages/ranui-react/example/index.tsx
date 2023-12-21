@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react';
 // react 18
-import { createRoot } from 'react-dom/client';
+// import { createRoot } from 'react-dom/client';
 // react 17
-// import { render } from 'react-dom';
+import { render } from 'react-dom';
 import { Button, Input, Option, Preview, Radar, Select, Tab, TabPane, message } from '../index';
 import './index.less';
 
@@ -21,10 +21,9 @@ const abilitys = [
   { abilityName: '暴击伤害', scoreRate: '50' },
 ];
 
+
 const App = () => {
-  const [state, setState] = useState<any>({
-    abilitys,
-  });
+  const [state, setState] = useState<any>({ abilitys });
   const previewRef = useRef<Element>();
 
   const uploadFile = (e: Event) => {
@@ -101,6 +100,6 @@ const App = () => {
   );
 };
 // react 18
-createRoot(document.getElementById('app')).render(<App />);
+// createRoot(document.getElementById('app')).render(<App />);
 // react 17
-// render(<App />, document.getElementById('app'));
+render(<App />, document.getElementById('app'));
