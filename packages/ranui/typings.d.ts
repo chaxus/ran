@@ -42,6 +42,7 @@ interface HlsPlayer {
 interface Hls {
   Events: {
     MANIFEST_LOADED: 'hlsManifestLoaded';
+    ERROR: 'error'
   };
   isSupported: () => boolean;
 }

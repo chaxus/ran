@@ -41,6 +41,10 @@ Set the initial playback time. By default, the playback starts from the beginnin
 
 Set the double speed. The default is 1.0
 
+### debug
+
+console.log some info
+
 ## `event`
 
 ### onchange

@@ -3,7 +3,7 @@ import React, { useRef, useState } from 'react';
 // import { createRoot } from 'react-dom/client';
 // react 17
 import { render } from 'react-dom';
-import { Button, Input, Option, Preview, Radar, Select, Tab, TabPane, message } from '../index';
+import { Button, Input, Option, Player, Preview, Radar, Select, Tab, TabPane, message } from '../index';
 import './index.less';
 
 const abilitys = [
@@ -96,6 +96,8 @@ const App = () => {
         <Option value="2">Tony</Option>
         <Option value="3">Job</Option>
       </Select>
+      <h1>Player</h1>
+      <Player src="" />
     </>
   );
 };
