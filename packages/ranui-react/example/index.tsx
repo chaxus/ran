@@ -21,6 +21,7 @@ const abilitys = [
   { abilityName: '暴击伤害', scoreRate: '50' },
 ];
 
+
 const App = () => {
   const [state, setState] = useState<any>({ abilitys });
   const previewRef = useRef<Element>();
