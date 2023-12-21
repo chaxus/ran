@@ -20,6 +20,6 @@
     "vitepress-plugin-pagefind": "^0.2.10"
   },
   "dependencies": {
-    "ranui": "workspace:0.1.9"
+    "ranui": "workspace:0.1.10"
   }
 }
