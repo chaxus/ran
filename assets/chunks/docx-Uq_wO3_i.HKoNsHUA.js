@@ -1,0 +1,1 @@
+import{j as c}from"./index._2s3gAae.js";import"./framework.AX6sllpn.js";const p=d=>{if(typeof window<"u"){const{bodyContainer:n,styleContainer:e,buffer:o,docxOptions:r={}}=d,t=Object.assign({},{className:"docx"},r);if(n)return c(o,n,e,t);{const i=document.createElement("div");return document.body.appendChild(i),c(o,i,e,t)}}};export{p as renderDocx};
