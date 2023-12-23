@@ -2,7 +2,7 @@ A repository for all kinds of solutions.
 
 The project includes **web components library**, **packaging tool**, **function library** and so on.
 
-thanks to star...
+Thanks to star...
 
 <a href="https://github.com/chaxus/ran">
     <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="license">
