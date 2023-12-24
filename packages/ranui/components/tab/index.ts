@@ -45,8 +45,8 @@ function CustomElement() {
         this._slot = document.createElement('slot');
         this._wrap.appendChild(this._slot);
         this._content.appendChild(this._wrap);
-        this._header.appendChild(createDocumentFragment([this._nav, this._line]));
-        this._container.appendChild(createDocumentFragment([this._header, this._content]));
+        this._header.appendChild(createDocumentFragment([this._nav, this._line])!);
+        this._container.appendChild(createDocumentFragment([this._header, this._content])!);
         this.tabHeaderKeyMapIndex = {};
 
         const shadowRoot = this.attachShadow({ mode: 'closed' });

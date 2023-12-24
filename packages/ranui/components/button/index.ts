@@ -1,7 +1,7 @@
 import { judgeDevice } from 'ranuts';
-import { createCustomError, falseList, isDisabled } from '@/utils/index';
+import { HTMLElementSSR, createCustomError, falseList, isDisabled } from '@/utils/index';
 
-export class Button extends HTMLElement {
+export class Button extends (HTMLElementSSR()!) {
   _btn: HTMLDivElement;
   _btnContent: HTMLDivElement;
   _iconElement?: HTMLElement;
@@ -27,6 +27,7 @@ export class Button extends HTMLElement {
     this._btn.appendChild(this._btnContent);
     shadowRoot.appendChild(this._btn);
   }
+
   get sheet(): string {
     return this.getAttribute('sheet') || '';
   }

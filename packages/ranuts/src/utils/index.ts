@@ -350,11 +350,11 @@ function formatDuration(time: number): string | number {
  * @return {*}
  */
 export function timestampToTime(timestamp?: number | string): Date & { format?: Function } {
-  let date: Date & { format?: Function } = new Date();
+  let date = new Date();
   if (timestamp) {
     date = new Date(timestamp);
   }
-  date.format = (format = 'YYYY-MM-DD HH:mm:ss'): string => {
+  (<Date & { format?: Function }>date).format = (format = 'YYYY-MM-DD HH:mm:ss'): string => {
     const year = date.getFullYear();
     const month = formatDuration(date.getMonth() + 1);
     const day = formatDuration(date.getDate());

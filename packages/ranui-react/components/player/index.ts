@@ -2,7 +2,7 @@ import reactify from '@/utils/reactify';
 import 'ranui/player';
 import 'ranui/style';
 
-interface RPreview {
+interface RPlayer {
   src?: string | Blob | ArrayBuffer;
   onChange?: any;
   ref?: React.MutableRefObject<HTMLDivElement | null>;
@@ -11,6 +11,6 @@ interface RPreview {
   playbackRate?: string | number;
 }
 
-const Player = reactify<RPreview>('r-player');
+const Player = reactify<RPlayer>('r-player');
 
 export default Player;

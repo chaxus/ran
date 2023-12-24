@@ -1,4 +1,4 @@
-import JSZip from 'jszip';
+import type JSZip from 'jszip';
 import t_xml from '@/components/preview/pptx/t_xml';
 import { Color } from '@/components/preview/colz';
 import type { Msg } from '@/components/preview/pptx';
@@ -79,7 +79,8 @@ export default function processPptx(
   });
 
   async function processPPTX(data: InputFileFormat) {
-    const zip = await JSZip.loadAsync(data);
+    const jsZip = await import('jszip');
+    const zip = await jsZip.loadAsync(data);
     const dateBefore = Date.now();
 
     if (zip.file('docProps/thumbnail.jpeg')) {

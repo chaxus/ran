@@ -1,5 +1,5 @@
 import { addClassToElement, generateThrottle, isMobile, removeClassToElement } from 'ranuts';
-import { createCustomError, isDisabled } from '@/utils/index';
+import { HTMLElementSSR, createCustomError, isDisabled } from '@/utils/index';
 import '@/components/option';
 import '@/components/icon';
 import '@/components/input';
@@ -27,7 +27,7 @@ const placementDirection: PlacementDirection = {
 
 const searchThrottle = generateThrottle();
 
-export class Select extends HTMLElement {
+export class Select extends (HTMLElementSSR()!) {
   removeTimeId?: NodeJS.Timeout;
   _slot: HTMLSlotElement;
   _shadowDom: ShadowRoot;

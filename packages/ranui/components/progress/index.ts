@@ -1,10 +1,10 @@
 import { perToNum } from 'ranuts';
-import { createCustomError } from '@/utils/index';
+import { HTMLElementSSR, createCustomError } from '@/utils/index';
 import './index.less';
 
 const attributes: string[] = ['percent', 'type', 'total', 'dot'];
 
-export class Progress extends HTMLElement {
+class Progress extends (HTMLElementSSR()!) {
   _progress: HTMLDivElement;
   _progressWrap: HTMLDivElement;
   _progressWrapValue: HTMLDivElement;
@@ -181,10 +181,12 @@ export class Progress extends HTMLElement {
 
 function Custom() {
   if (typeof document !== 'undefined' && !customElements.get('r-progress')) {
-    customElements.define('r-progress', Progress);
+    Progress && customElements.define('r-progress', Progress);
+    return Progress;
   } else {
     return createCustomError('document is undefined or r-progress is exist');
   }
 }
 
 export default Custom();
+export { Progress };

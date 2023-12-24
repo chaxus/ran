@@ -10,6 +10,7 @@ import {
 import '@/assets/js/hls.js';
 import type { Progress } from '@/components/progress';
 import '@/components/select';
+import { HTMLElementSSR } from '@/utils/index';
 import './index.less';
 
 const PLAY_STATE_LIST = ['play', 'playing', 'timeupdate'];
@@ -56,7 +57,7 @@ const SPEED = [
   { label: '0.5X', value: 0.5 },
 ];
 
-export class RanPlayer extends HTMLElement {
+export class RanPlayer extends (HTMLElementSSR()!) {
   public ctx: Context;
   _player: HTMLDivElement;
   _container: HTMLDivElement;

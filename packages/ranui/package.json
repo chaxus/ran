@@ -149,12 +149,10 @@
   },
   "dependencies": {
     "dayjs": "^1.11.9",
-    "docx-preview": "^0.1.18",
     "exceljs": "^4.3.0",
     "jszip": "^3.10.1",
     "lodash": "^4.17.21",
     "ranuts": "workspace:0.1.0-alpha.10",
-    "tinycolor2": "^1.6.0",
-    "x-data-spreadsheet": "^1.1.9"
+    "tinycolor2": "^1.6.0"
   }
 }

@@ -1,4 +1,4 @@
-import { renderAsync } from 'docx-preview';
+import { renderAsync } from '@/assets/js/docx-preview/index.js';
 
 interface DocxOptions {
   bodyContainer?: HTMLElement | null;
@@ -7,8 +7,8 @@ interface DocxOptions {
   docxOptions?: Partial<Record<string, string | boolean>>;
 }
 
-export const renderDocx = (options: DocxOptions): Promise<void> | undefined => {
-  if (typeof window !== 'undefined') {
+export const renderDocx = async (options: DocxOptions): Promise<void | undefined> => {
+  if (typeof document !== 'undefined') {
     const { bodyContainer, styleContainer, buffer, docxOptions = {} } = options;
     const defaultOptions = {
       className: 'docx',

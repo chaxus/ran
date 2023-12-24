@@ -1,5 +1,5 @@
-import Spreadsheet from 'x-data-spreadsheet';
 import { debounce } from 'lodash';
+import Spreadsheet from '@/assets/js/x-data-spreadsheet';
 import type { Media } from '@/components/preview/excel/media';
 import { readExcelData, transferExcelToSpreadSheet } from '@/components/preview/excel/excel';
 import { clearCache, renderImage } from '@/components/preview/excel/media';
@@ -64,9 +64,9 @@ class JsExcelPreview {
     this.wrapper.className = 'r-preview-excel-main';
     this.container.appendChild(this.wrapper);
   }
-  initSpreadsheet() {
-    if (!this.wrapper) return;
-    this.xs = new Spreadsheet(this.wrapper, {
+  async initSpreadsheet() {
+    if (!this.wrapper && typeof window !== 'undefined') return;
+    this.xs = new Spreadsheet(this.wrapper!, {
       mode: 'read',
       showToolbar: false,
       showContextmenu: this.options.showContextmenu || false,
@@ -126,7 +126,7 @@ class JsExcelPreview {
       };
     }
 
-    const canvas = this.wrapper.querySelector('canvas');
+    const canvas = this.wrapper && this.wrapper.querySelector('canvas');
     if (canvas) {
       this.ctx = canvas.getContext('2d');
     }

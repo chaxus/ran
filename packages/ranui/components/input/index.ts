@@ -1,6 +1,6 @@
-import { createCustomError, falseList, isDisabled } from '@/utils/index';
+import { HTMLElementSSR, createCustomError, falseList, isDisabled } from '@/utils/index';
 
-export class Input extends HTMLElement {
+export class Input extends (HTMLElementSSR()!) {
   static get observedAttributes(): string[] {
     return ['label', 'disabled', 'name', 'placeholder', 'type', 'icon', 'value', 'status'];
   }

@@ -1,4 +1,6 @@
-class ScratchTicket extends HTMLElement {
+import { HTMLElementSSR } from '@/utils/index';
+
+class ScratchTicket extends (HTMLElementSSR()!) {
   scratchTicketContainer: HTMLDivElement;
   scratchTicket: HTMLCanvasElement;
   state: { touchStart: boolean; scratchArea: number };
