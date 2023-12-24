@@ -419,7 +419,7 @@ const TOKENS_GENERATOR: Record<string, (...args: any[]) => Token> = {
 type SingleCharTokens = '(' | ')' | '{' | '}' | '=';
 
 // 单字符到 Token 生成器的映射
-const KNOWN_SINGLE_CHAR_TOKENS = new Map<SingleCharTokens, (typeof TOKENS_GENERATOR)[keyof typeof TOKENS_GENERATOR]>([
+const KNOWN_SINGLE_CHAR_TOKENS = new Map<SingleCharTokens, typeof TOKENS_GENERATOR[keyof typeof TOKENS_GENERATOR]>([
   ['(', TOKENS_GENERATOR.leftParen],
   [')', TOKENS_GENERATOR.rightParen],
   ['{', TOKENS_GENERATOR.leftCurly],
