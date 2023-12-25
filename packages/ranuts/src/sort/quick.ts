@@ -1,4 +1,18 @@
 /**
+ * @description: 交换元素
+ * @param {number} list
+ * @param {number} left
+ * @param {number} right
+ * @return {*}
+ */
+const swap = (list: number[], left: number, right: number) => {
+  if (list[left] !== list[right]) {
+    list[left] = list[left] ^ list[right];
+    list[right] = list[left] ^ list[right];
+    list[left] = list[left] ^ list[right];
+  }
+};
+/**
  * @description: 设置基准值pivot
  * @param {Array} list
  * @param {number} left
@@ -10,19 +24,11 @@ const partition = (list: number[], left: number, right: number) => {
   let index = pivot + 1;
   for (let i = index; i <= right; i++) {
     if (list[i] < list[pivot]) {
-      if (list[i] !== list[index]) {
-        list[i] = list[i] ^ list[index];
-        list[index] = list[i] ^ list[index];
-        list[i] = list[i] ^ list[index];
-      }
+      swap(list, i, index);
       index++;
     }
   }
-  if (list[index - 1] !== list[pivot]) {
-    list[index - 1] = list[pivot] ^ list[index - 1];
-    list[pivot] = list[pivot] ^ list[index - 1];
-    list[index - 1] = list[pivot] ^ list[index - 1];
-  }
+  swap(list, index - 1, pivot);
   return index - 1;
 };
 /**
