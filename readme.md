@@ -75,7 +75,7 @@ Not in the react framework, you can use [ranui](https://www.npmjs.com/package/ra
 
 ## 4.`press`
 
-Commonly used 'css' code, have 'sass' and 'less'.
+Commonly used `css` code, have `sass` and `less`.
 
 ## 5.`ranite`
 
