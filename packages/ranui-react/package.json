@@ -22,7 +22,9 @@
     "prepublish": "npm run build",
     "test": "sh ./bin/test.sh",
     "test:report": "playwright show-report",
-    "test:ui": "playwright test --ui"
+    "test:ui": "playwright test --ui",
+    "preview": "vite preview --port=30104 --strictPort",
+    "federation": "sh ./bin/federation.sh"
   },
   "files": [
     "dist/*"
@@ -59,6 +61,7 @@
     "@babel/core": "^7.20.5",
     "@babel/preset-env": "^7.22.7",
     "@babel/preset-typescript": "^7.22.5",
+    "@originjs/vite-plugin-federation": "^1.3.3",
     "@playwright/test": "^1.36.2",
     "@types/react": "^17.0.73",
     "@vitejs/plugin-react": "^4.2.1",

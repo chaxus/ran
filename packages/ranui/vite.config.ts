@@ -116,6 +116,11 @@ const chunkOptimization: Partial<chunkOptimization> = {
 
 export const umd: BuildOptions = {
   ...chunkOptimization,
+  rollupOptions: {
+    output: {
+      experimentalMinChunkSize: 500,
+    },
+  },
   outDir: resolve(__dirname, 'dist/umd'),
   lib: {
     entry: resolve(__dirname, 'index.ts'),
@@ -130,11 +135,11 @@ export const es: BuildOptions = {
   rollupOptions: {
     output: {
       experimentalMinChunkSize: 500,
-      manualChunks: (id) => {
-        if (id.includes('node_modules')) {
-          return 'vendor';
-        }
-      },
+      // manualChunks: (id) => {
+      //   if (id.includes('node_modules')) {
+      //     return 'vendor';
+      //   }
+      // },
     },
     treeshake: {
       preset: 'recommended',

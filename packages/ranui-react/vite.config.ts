@@ -13,7 +13,6 @@ const __dirname = path.dirname(__filename);
 export const umd: BuildOptions = {
   rollupOptions: {
     output: {
-      inlineDynamicImports: true,
       experimentalMinChunkSize: 1000,
     },
     external: ['react'],
@@ -31,7 +30,6 @@ export const umd: BuildOptions = {
 export const es: BuildOptions = {
   rollupOptions: {
     output: {
-      inlineDynamicImports: true,
       experimentalMinChunkSize: 1000,
     },
     external: ['react'],
@@ -45,7 +43,10 @@ export const es: BuildOptions = {
 };
 
 export const viteConfig: UserConfig = {
-  plugins: [dts(), react()],
+  plugins: [
+    dts(),
+    react(),
+  ],
   resolve: {
     alias: {
       '@/components': resolve(__dirname, 'components/'),
