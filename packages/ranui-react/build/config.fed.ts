@@ -10,6 +10,7 @@ viteConfig.plugins?.push(federation({
     name: 'ranui',
     filename: 'ranui.js',
     exposes: {
+        './utils': './utils/index.ts',
         './button': './components/button/index.ts',
         './input': './components/input/index.ts',
         './player': './components/player/index.ts',
