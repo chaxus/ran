@@ -10,8 +10,8 @@ hero:
     src: /home.svg
     alt: logo
   actions:
-    - theme: alt
-      text: More details
+    - theme: brand
+      text: Thanks to star
       link: https://github.com/chaxus/ran
     - theme: alt
       text: Visit my GitHub
