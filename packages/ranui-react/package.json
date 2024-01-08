@@ -24,7 +24,7 @@
     "test:report": "playwright show-report",
     "test:ui": "playwright test --ui",
     "preview": "vite preview --port=30104 --strictPort",
-    "federation": "sh ./bin/federation.sh"
+    "fed": "sh ./bin/federation.sh"
   },
   "files": [
     "dist/*"
