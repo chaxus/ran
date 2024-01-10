@@ -96,7 +96,7 @@ const App = () => {
         <Option value="3">Job</Option>
       </Select>
       <h1>Player</h1>
-      <Player src="" />
+      <Player src="https://guonei-cos.koocdn.com/video-manage/2023/06/05/d7808b30e6114e419359586cdc65164a.mp4" />
     </>
   );
 };
