@@ -1,5 +1,6 @@
 import 'ranui/message';
+import 'ranui/style'
 
-const message = typeof window !== 'undefined' ? window.message : {};
+const message = window.message
 
 export default message;

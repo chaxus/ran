@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Input, message } from '@ranui/react';
+import '@ranui/react/style'
 import type { TensorContainerObject, TypedArray } from '@tensorflow/tfjs';
 import type { Point2D } from '@tensorflow/tfjs-vis';
 import * as tfvis from '@tensorflow/tfjs-vis';
@@ -154,11 +155,11 @@ class EmotionModel {
     // 标准化标签和特征
     this.normaliseFeature = normalise(featureTensor);
     this.normaliseLabel = normalise(labelTensor);
-    console.log(
-      `load data success, normaliseFeature:${JSON.stringify(this.normaliseFeature)}, normaliseLabel:${JSON.stringify(
-        this.normaliseLabel,
-      )}`,
-    );
+    const successMessage = `load data success, normaliseFeature:${JSON.stringify(this.normaliseFeature)}, normaliseLabel:${JSON.stringify(
+      this.normaliseLabel,
+    )}`
+    message.success(successMessage)
+    console.log(successMessage);
   };
   /**
    * @description: 训练模型
@@ -191,7 +192,9 @@ class EmotionModel {
 
     const trainLoss = result.history.loss.pop();
     const validationLoss = result.history.val_loss.pop();
-    console.log(`train success trainLoss:${trainLoss}, validationLoss:${validationLoss}`);
+    const successMessage = `train success trainLoss:${trainLoss}, validationLoss:${validationLoss}`
+    console.log(successMessage);
+    message.success(successMessage)
   };
   test = async (): Promise<void> => {
     if (!this.testingFeatureTensor || !this.testingLabelTensor) return;
@@ -200,11 +203,15 @@ class EmotionModel {
     const loss = Array.isArray(lossTensor)
       ? lossTensor.map(async (item) => await item.dataSync())
       : await lossTensor?.dataSync();
-    console.log(`test success, loss:${loss}`);
+    const successMessage = `test success, loss:${loss}`
+    console.log(successMessage);
+    message.success(successMessage)
   };
   save = async (storageID: string = 'emotion'): Promise<void> => {
     const saveResults = await this.model?.save(`localstorage://${storageID}`);
-    console.log('save model success, current time is:', saveResults?.modelArtifactsInfo.dateSaved);
+    const successMessage = `save model success, current time is:, ${saveResults?.modelArtifactsInfo.dateSaved}`
+    console.log(successMessage);
+    message.success(successMessage)
   };
   loadModel = async (storageID: string = 'emotion'): Promise<void> => {
     const storageKey = `localstorage://${storageID}`;
@@ -218,8 +225,10 @@ class EmotionModel {
       const layer = this.model.getLayer('', 0);
       tfvis.show.layer({ name: 'Layer 1' }, layer);
       console.log('load model success');
+      message.success('load model success')
     } else {
       console.log('no model', storageID);
+      message.success(`no model:${storageID}`)
     }
   };
   predict = async (input: number): Promise<void> => {
