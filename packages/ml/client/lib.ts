@@ -155,7 +155,7 @@ export const trainModel = async (
   onEpochBegin = (epoch: number, logs?: Logs): void | Promise<void> => {},
   epochs: number = 100,
 ): Promise<History> => {
-  const { onEpochEnd, onBatchEnd } = tfvis.show.fitCallbacks({ name: 'Training Performance' }, ['loss']);
+  // const { onEpochEnd, onBatchEnd } = tfvis.show.fitCallbacks({ name: 'Training Performance' }, ['loss']);
   return model.fit(trainingFeatureTensor, trainingLabelTensor, {
     batchSize: 512,
     epochs,
@@ -166,8 +166,8 @@ export const trainModel = async (
       //   console.log(`Epoch ${epoch}: loss = ${log.loss}`);
 
       // }
-      onEpochEnd,
-      onBatchEnd,
+      // onEpochEnd,
+      // onBatchEnd,
       onEpochBegin,
     },
   });

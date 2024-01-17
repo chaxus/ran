@@ -203,7 +203,7 @@ class EmotionModel {
     const loss = Array.isArray(lossTensor)
       ? lossTensor.map(async (item) => await item.dataSync())
       : await lossTensor?.dataSync();
-    const successMessage = `test success, loss:${loss}`
+    const successMessage = `test success, loss:${JSON.stringify(loss)}`
     console.log(successMessage);
     message.success(successMessage)
   };
@@ -231,7 +231,7 @@ class EmotionModel {
       message.success(`no model:${storageID}`)
     }
   };
-  predict = async (input: number): Promise<void> => {
+  predict = async (input: string): Promise<void> => {
     tf.tidy(() => {
       if (!this.normaliseLabel || !this.normaliseFeature) return;
       const inputTensor = tf.tensor1d([input]);
@@ -254,11 +254,10 @@ export const Emotion = (): JSX.Element => {
     setState(e.target.value);
   };
   const predictOut = () => {
-    const num = Number(state);
-    if (Object.is(num, NaN)) {
-      return message.warning('please input number');
-    }
-    // predict(Number(state));
+    // if (Object.is(num, NaN)) {
+    //   return message.warning('please input number');
+    // }
+    predict(state);
   };
   return (
     <div>
