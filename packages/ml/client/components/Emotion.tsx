@@ -9,7 +9,7 @@ import { word } from 'ranuts';
 import { denormalise, normalise, plot, tfMemory, trainModel } from '../lib';
 import type { Normalise } from '../lib';
 
-const path = '../../assets/dataset/ChnSentiCorp_htl_all.csv';
+const path = '../../assets/dataset/min_label_review.csv';
 
 // 1. 先进行单词的分类，那先单词是好单词，那些单词是不好的单词
 // 2.
