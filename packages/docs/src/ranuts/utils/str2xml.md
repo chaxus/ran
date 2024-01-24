@@ -1,26 +1,26 @@
 # str2Xml
 
-传入字符串，转成`xml`
+Pass in a string and convert it to 'xml'
 
 ## API
 
 ### Return
 
-| 参数          | 说明                  | 类型          |
+| argument          | Instructions                  | type          |
 | ------------- | --------------------- | ------------- |
 | `HTMLElement` | 返回一个`HTMLElement` | `HTMLElement` |
 
 ### Options
 
-| 参数   | 说明                               | 类型                     | 默认值 |
+| argument   | Instructions                               | type                     | Default value  |
 | ------ | ---------------------------------- | ------------------------ | ------ |
-| xmlStr | 传入的参数                         | `string`                 | 无     |
-| format | 设置需要转换的格式，默认`text/xml` | `DOMParserSupportedType` | 无     |
+| xmlStr | Incoming parameter                         | `string`                 | null     |
+| format | Set the format to be converted. The default is' text/xml '|' DOMParserSupportedType ' | null     |
 
 ## Example
 
-比如在做图标库的时候，我们需要动态导入目录下的所有`icon`。这时候导入的是字符串，但字符串无法添加到`xml`中。
-因此我们需要将字符串转换成`xml`，然后就可以将它加入到`xml`中。
+For example, when doing icon library, we need to dynamically import all the 'ICONS' in the directory. In this case, strings are imported, but strings cannot be added to 'xml'.
+So we need to convert the string to 'xml', and then we can add it to 'xml'.
 
 ```js
 import { str2Xml } from 'ranuts';

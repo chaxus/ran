@@ -1,20 +1,20 @@
 # getCookie
 
-传入字符串，获取指定名字的 cookie 的值
+Pass in a string to get the value of the cookie with the specified name
 
 ## API
 
 ### Return
 
-| 参数    | 说明                             | 类型     |
+| argument    | Instructions                             | type     |
 | ------- | -------------------------------- | -------- |
-| `sting` | 返回的一个指定名称的 cookie 的值 | `string` |
+| `sting` | Returns the value of a cookie with the specified name | `string` |
 
 ### Options
 
-| 参数 | 说明                       | 类型     | 默认值 |
+| argument | Instructions                       | type     | Default value |
 | ---- | -------------------------- | -------- | ------ |
-| name | 指定获取 cookie 的名称的值 | `object` | 无     |
+| name | Specifies the value of the name that gets the cookie | `object` | 无     |
 
 ## Example
 

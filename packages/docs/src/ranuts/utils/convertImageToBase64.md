@@ -1,22 +1,22 @@
 # convertImageToBase64
 
-图片转`base64`
+Picture turn 'base64'
 
 ## API
 
 ### Return
 
-| 参数      | 说明                 | 类型                            |
+| argument      | Instructions                 | type                            |
 | --------- | -------------------- | ------------------------------- |
-| `success` | 是否转换成功         | `boolean`                       |
-| `data`    | 转换成功后的值       | `string`,`ArrayBuffer` , `null` |
-| `message` | 转换成功或失败的原因 | `string`                        |
+| `success` | Whether the conversion is successful         | `boolean`                       |
+| `data`    | The value after successful conversion       | `string`,`ArrayBuffer` , `null` |
+| `message` | The reasons why the conversion succeeds or fails | `string`                        |
 
 ### Options
 
-| 参数 | 说明       | 类型   | 默认值 |
+| argument | Instructions       | type   | Default value |
 | ---- | ---------- | ------ | ------ |
-| file | 传入的文件 | `File` | 无     |
+| file | Incoming file | `File` | null     |
 
 ## Example
 

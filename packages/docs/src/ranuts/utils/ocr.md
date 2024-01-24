@@ -1,24 +1,24 @@
 # OCR
 
-传入图片和对应的语言类型，返回图片中的文本。
+Pass in the image and the corresponding language type, and return the text in the image.
 
 ## API
 
 ### Return
 
-| 参数      | 说明                 | 类型      |
+| argument      | Instructions                 | type      |
 | --------- | -------------------- | --------- |
-| `success` | 是否解析成功         | `boolean` |
-| `data`    | 解析成功后的对象     | `obj`     |
-| `message` | 解析成功或失败的原因 | `string`  |
+| `success` | Whether the resolution is successful         | `boolean` |
+| `data`    | The object is parsed successfully     | `obj`     |
+| `message` | Analyze the reasons for success or failure | `string`  |
 
 ### Options
 
-| 参数     | 说明                                                                                                                       | 类型            | 默认值                   |
+| argument     | Instructions                                                                                                                       | type            | Default value                   |
 | -------- | -------------------------------------------------------------------------------------------------------------------------- | --------------- | ------------------------ |
-| images   | 图片的数组，支持`url`和`base64`                                                                                            | `Array<string>` | 无                       |
-| language | 指定生成文本的语言，具体参数见[lang-code](#lang-code)                                                                      | `string`        | 无                       |
-| langPath | 使用的时候需要能访问`cdn.jsdelivr.net`，会下载对应的语言包，如果无法访问，也可以将语言包放在本地，传入对应的 **目录** 路径 | `string`        | 可选参数，默认走网络下载 |
+| images   | An array of images, supporting 'url' and 'base64'                                                                                            | `Array<string>` | null                       |
+| language | Specify the language in which the text will be generated[lang-code](#lang-code)                                                                      | `string`        | 无                       |
+| langPath | When using it, you need to be able to access cdn.jsdelivr.net, which will download the corresponding language package, if you cannot access it, you can also put the language package locally, passing the corresponding **directory** path | `string`        | This parameter is optional. By default, download from the network |
 
 ## Example
 
