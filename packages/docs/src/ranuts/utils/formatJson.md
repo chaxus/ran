@@ -1,21 +1,21 @@
 # formatJson
 
-传入一个 JSON 或者 JSON 的字符串，添加空格和换行进行返回一个格式化的 JSON 字符串
+Pass in a JSON or JSON string, add Spaces and newlines to return a formatted JSON string
 
 ## API
 
 ### Return
 
-| 参数     | 说明           | 类型     |
+| argument     | Instructions           | type     |
 | -------- | -------------- | -------- |
-| `string` | 返回的一个对象 | `Object` |
+| `string` | Return an object | `Object` |
 
 ### Options
 
-| 参数     | 说明                   | 类型              | 默认值 |
+| argument     | Instructions                   | type              | Default value |
 | -------- | ---------------------- | ----------------- | ------ |
-| json     | 需要格式化的 JSON 对象 | `object`,`string` | 无     |
-| callback | 错误回调，可选         | `function`        | 无     |
+| json     | JSON objects that need to be formatted | `object`,`string` | null     |
+| callback | Error callback, optional         | `function`        | null     |
 
 ## Example
 

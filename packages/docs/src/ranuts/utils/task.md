@@ -1,16 +1,16 @@
-# 统计执行时间
+# Statistical execution time
 
-有的时候，我们需要统计一个函数的执行时间，用于分析性能。因此封装了`startTask`和`taskEnd`函数。同时介绍其他三种统计方法
+Sometimes, we need statistics on the execution time of a function to analyze performance. Therefore, the 'startTask' and 'taskEnd' functions are wrapped. Three other statistical methods are also introduced
 
 1. `new Date().getTime()`,
-2. `console.time()` 和 `console.timeEnd()`,
+2. `console.time()` , `console.timeEnd()`,
 3. `performance.now()`
 
 ## 一.`startTask`,`taskEnd`
 
 ### 1.startTask
 
-任务开始之前执行
+Execute before the task begins
 
 #### Return
 

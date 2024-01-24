@@ -1,21 +1,21 @@
 # filterObj
 
-过滤对象的属性，去除对象中在 list 数组里面有的属性，返回一个新对象，一般是用于去除空字符和 null
+Filter the properties of the object, remove the properties of the object in the list array, return a new object, usually used to remove null characters and null
 
 ## API
 
 ### Return
 
-| 参数     | 说明           | 类型     |
+| argument     | Instructions           | type     |
 | -------- | -------------- | -------- |
-| `Object` | 返回的一个对象 | `Object` |
+| `Object` | Return an object | `Object` |
 
 ### Options
 
-| 参数 | 说明               | 类型     | 默认值 |
+| argument | Instructions               | type     | Default value |
 | ---- | ------------------ | -------- | ------ |
-| obj  | 需要过滤的对象     | `object` | 无     |
-| list | 需要过滤的熟悉数组 | `array`  | 无     |
+| obj  | Objects to be filtered     | `object` | 无     |
+| list | Familiar array to filter | `array`  | 无     |
 
 ## Example
 
