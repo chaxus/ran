@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Input, message } from '@ranui/react';
-import '@ranui/react/style'
+import '@ranui/react/style';
 import type { TensorContainerObject, TypedArray } from '@tensorflow/tfjs';
 import type { Point2D } from '@tensorflow/tfjs-vis';
 import * as tfvis from '@tensorflow/tfjs-vis';
@@ -148,17 +148,17 @@ class EmotionModel {
     tf.util.shuffle(this.points);
     // Feature (inputs) 提取特征并存在张量中
     const featureValue = this.points.map((p) => p.x);
-    const featureTensor = tf.tensor2d(featureValue, [this.points.length, this.maxLength]); // 这里不对
+    const featureTensor = tf.tensor2d(featureValue, [this.points.length, this.maxLength]);
     // Labels (outputs) 对标签做同样的操作
     const labelValue = this.points.map((p) => p.label);
     const labelTensor = tf.tensor2d(labelValue, [labelValue.length, 1]);
     // 标准化标签和特征
     this.normaliseFeature = normalise(featureTensor);
     this.normaliseLabel = normalise(labelTensor);
-    const successMessage = `load data success, normaliseFeature:${JSON.stringify(this.normaliseFeature)}, normaliseLabel:${JSON.stringify(
-      this.normaliseLabel,
-    )}`
-    message.success(successMessage)
+    const successMessage = `load data success, normaliseFeature:${JSON.stringify(
+      this.normaliseFeature,
+    )}, normaliseLabel:${JSON.stringify(this.normaliseLabel)}`;
+    message.success(successMessage);
     console.log(successMessage);
   };
   /**
@@ -192,9 +192,9 @@ class EmotionModel {
 
     const trainLoss = result.history.loss.pop();
     const validationLoss = result.history.val_loss.pop();
-    const successMessage = `train success trainLoss:${trainLoss}, validationLoss:${validationLoss}`
+    const successMessage = `train success trainLoss:${trainLoss}, validationLoss:${validationLoss}`;
     console.log(successMessage);
-    message.success(successMessage)
+    message.success(successMessage);
   };
   test = async (): Promise<void> => {
     if (!this.testingFeatureTensor || !this.testingLabelTensor) return;
@@ -203,15 +203,15 @@ class EmotionModel {
     const loss = Array.isArray(lossTensor)
       ? lossTensor.map(async (item) => await item.dataSync())
       : await lossTensor?.dataSync();
-    const successMessage = `test success, loss:${JSON.stringify(loss)}`
+    const successMessage = `test success, loss:${JSON.stringify(loss)}`;
     console.log(successMessage);
-    message.success(successMessage)
+    message.success(successMessage);
   };
   save = async (storageID: string = 'emotion'): Promise<void> => {
     const saveResults = await this.model?.save(`localstorage://${storageID}`);
-    const successMessage = `save model success, current time is:, ${saveResults?.modelArtifactsInfo.dateSaved}`
+    const successMessage = `save model success, current time is:, ${saveResults?.modelArtifactsInfo.dateSaved}`;
     console.log(successMessage);
-    message.success(successMessage)
+    message.success(successMessage);
   };
   loadModel = async (storageID: string = 'emotion'): Promise<void> => {
     const storageKey = `localstorage://${storageID}`;
@@ -225,16 +225,33 @@ class EmotionModel {
       const layer = this.model.getLayer('', 0);
       tfvis.show.layer({ name: 'Layer 1' }, layer);
       console.log('load model success');
-      message.success('load model success')
+      message.success('load model success');
     } else {
       console.log('no model', storageID);
-      message.success(`no model:${storageID}`)
+      message.success(`no model:${storageID}`);
     }
   };
   predict = async (input: string): Promise<void> => {
+    const { success, methods } = await word();
+    if (!success) return;
     tf.tidy(() => {
       if (!this.normaliseLabel || !this.normaliseFeature) return;
-      const inputTensor = tf.tensor1d([input]);
+      const { cut } = methods;
+      const list = cut(input);
+      let index = Object.keys(this.words).length + 1;
+      const text = [];
+      list.forEach((item: string) => {
+        if (!this.words[item]) {
+          this.words[item] = index++;
+        }
+        text.push(this.words[item]);
+      });
+      if (text.length < this.maxLength) {
+        for (let i = text.length; i < this.maxLength; i++) {
+          text.push(0);
+        }
+      }
+      const inputTensor = tf.tensor1d(text);
       const normaliseInput = normalise(inputTensor, this.normaliseFeature?.min, this.normaliseLabel?.max);
       const normaliseOutputTensor = this.model?.predict(normaliseInput.tensor);
       const outputTensor =
@@ -242,7 +259,8 @@ class EmotionModel {
         !Array.isArray(normaliseOutputTensor) &&
         denormalise(normaliseOutputTensor, this.normaliseLabel.min, this.normaliseFeature.max);
       const outputValue = outputTensor && outputTensor.dataSync()[0];
-      console.log('predict success, the result: ', outputValue && outputValue / 1000);
+      console.log('predict success, the result: ', outputValue);
+      message.success(`predict success, the result: ${outputValue}`)
     });
   };
 }
