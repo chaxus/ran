@@ -13,9 +13,9 @@
   "author": "chaxus",
   "license": "ISC",
   "devDependencies": {
-    "less": "^4.1.3",
+    "less": "^4.2.0",
     "pagefind": "^1.0.4",
-    "vite": "^5.0.0",
+    "vite": "^5.0.12",
     "vitepress": "1.0.0-rc.29",
     "vitepress-plugin-pagefind": "^0.2.10"
   },
