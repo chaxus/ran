@@ -12,21 +12,24 @@ export class Checkbox extends (HTMLElementSSR()!) {
     checkInner: HTMLSpanElement;
     context: Context;
     static get observedAttributes(): string[] {
-        return ['disabled', 'icon', 'effect', 'iconSize', 'sheet'];
+        return ['disabled', 'checked'];
     }
     constructor() {
         super();
-        this.setAttribute('class', 'ran-checkbox')
         this.checkInput = document.createElement('input')
         this.checkInput.setAttribute('class', 'ran-checkbox-input')
         this.checkInput.setAttribute('type', 'checkbox')
         this.checkInner = document.createElement('span')
         this.checkInner.setAttribute('class', 'ran-checkbox-inner')
-        this.appendChild(this.checkInput)
-        this.appendChild(this.checkInner)
         this.context = {
             checked: false
         }
+    }
+    get disabled(): string {
+        return this.getAttribute('disabled') || ''
+    }
+    set disabled(value: string) {
+        this.setAttribute('disabled', value);
     }
     get checked(): boolean {
         return this.context.checked
@@ -60,6 +63,9 @@ export class Checkbox extends (HTMLElementSSR()!) {
         this.update()
     }
     connectedCallback(): void {
+        this.setAttribute('class', 'ran-checkbox')
+        this.appendChild(this.checkInput)
+        this.appendChild(this.checkInner)
         this.addEventListener('click', this.onChange)
     }
     disconnectCallback(): void {

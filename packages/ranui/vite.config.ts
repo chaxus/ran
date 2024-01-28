@@ -163,6 +163,10 @@ export const es: BuildOptions = {
       option: resolve(__dirname, 'components/option/index.ts'),
       player: resolve(__dirname, 'components/player/index.ts'),
       progress: resolve(__dirname, 'components/progress/index.ts'),
+      checkbox: resolve(__dirname, 'components/checkbox/index.ts'),
+      colorpicker: resolve(__dirname, 'components/colorpicker/index.ts'),
+      popover: resolve(__dirname, 'components/popover/index.ts'),
+      content: resolve(__dirname, 'components/content/index.ts'),
       index: resolve(__dirname, 'index.ts'),
     },
     fileName: (_: string, name: string): string => {

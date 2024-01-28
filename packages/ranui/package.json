@@ -123,6 +123,21 @@
       "import": "./dist/components/player/index.js",
       "require": "./dist/umd/index.umd.cjs"
     },
+    "./popover": {
+      "types": "./dist/components/popover/index.d.ts",
+      "import": "./dist/components/popover/index.js",
+      "require": "./dist/umd/index.umd.cjs"
+    },
+    "./content": {
+      "types": "./dist/components/content/index.d.ts",
+      "import": "./dist/components/content/index.js",
+      "require": "./dist/umd/index.umd.cjs"
+    },
+    "./colorpicker": {
+      "types": "./dist/components/colorpicker/index.d.ts",
+      "import": "./dist/components/colorpicker/index.js",
+      "require": "./dist/umd/index.umd.cjs"
+    },
     "./style": {
       "types": "./dist/index.d.ts",
       "import": "./dist/style.css",

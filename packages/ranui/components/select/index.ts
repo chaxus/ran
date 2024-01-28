@@ -217,8 +217,8 @@ export class Select extends (HTMLElementSSR()!) {
     if (!this._selectionDropdown || !this._selectDropdown) return;
     const rect = this.getBoundingClientRect();
     const { top, left, bottom, width, height, x, y, right } = rect;
-    this._selectionDropdown.style.setProperty('-ran-x', `${x + window.scrollX}`);
-    this._selectionDropdown.style.setProperty('-ran-y', `${y + window.scrollY}`);
+    this._selectionDropdown.style.setProperty('--ran-x', `${top + window.scrollX}`);
+    this._selectionDropdown.style.setProperty('--ran-y', `${left + window.scrollY}`);
     let selectTop = bottom + window.scrollY;
     let selectLeft = left + window.scrollX;
     this._selectionDropdown.style.setProperty('width', `${width}px`);

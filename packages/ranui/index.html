@@ -1,190 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <link rel="icon" href="data:;" />
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ranui</title>
-    <script src="./index.ts" type="module"></script>
-  </head>
-  <body>
-    <h1 id="select">Hello RanUI</h1>
-    <button>fdsaf</button>
-    <h2>video</h2>
-    <r-checkbox></r-checkbox>
-    <div style="width: 100vw; max-width: 600px; height: 300px">
-      <r-player debug="true" src=""> </r-player>
-    </div>
-    <h2>Progress</h2>
-    <r-progress type="drag"></r-progress>
-    <h2>Select</h2>
-    <r-select style="width: 120px; height: 40px" type="text" defaultValue="185" placement="top" action="hover,click">
-      <r-option value="185">Mike</r-option>
-      <r-option value="186">Tom</r-option>
-      <r-option value="187">Lucy</r-option>
-    </r-select>
-    <r-select style="width: 120px; height: 40px" disabled defaultValue="185">
-      <r-option value="185">Mike</r-option>
-      <r-option value="186">Tom</r-option>
-      <r-option value="187">Lucy</r-option>
-    </r-select>
-    <r-select style="width: 120px; height: 40px" defaultValue="185" getPopupContainerId="select">
-      <r-option value="185">Mike</r-option>
-      <r-option value="186">Tom</r-option>
-      <r-option value="187">Lucy</r-option>
-    </r-select>
-    <r-select style="width: 120px; height: 40px" showSearch>
-      <r-option value="185">Mike</r-option>
-      <r-option value="186">Tom</r-option>
-      <r-option value="187">Lucy</r-option>
-    </r-select>
-    <h2>Button</h2>
-    <r-button type="primary">主要按钮</r-button>
-    <r-button type="warning" effect="false">警告按钮</r-button>
-    <r-button type="default" icon="user" sheet=".btn { width: 100px; }">默认按钮</r-button>
-    <r-button type="primary" disabled>disable按钮</r-button>
-    <h2>Icon</h2>
-    <r-icon name="home" size="40" color="#1E90FF"></r-icon>
-    <r-icon name="close-circle-fill" size="40" color="rgba(0,0,0,.1)"></r-icon>
-    <r-icon name="loading" size="40" color="#1E90FF" spin></r-icon>
-    <h2>Tab</h2>
-    <r-tabs type="text">
-      <r-tab label="重名" icon="home">tab1</r-tab>
-      <r-tab label="tab2">tab2</r-tab>
-      <r-tab label="tab3">tab3</r-tab>
-      <r-tab label="重名" key="a" disabled>11111</r-tab>
-      <r-tab label="tab5" icon="home" r-key="aaa">22222</r-tab>
-      <r-tab label="tab6" ranKey="10">33333</r-tab>
-      <r-tab label="tab7">22222</r-tab>
-      <r-tab label="tab7777777">77777</r-tab>
-    </r-tabs>
-    <h2>Input</h2>
-    <div style="width: 40%; height: 200px; display: flex; flex-flow: column; justify-content: space-around">
-      <r-input label="user"></r-input>
-      <r-input label="user" placeholder="user"></r-input>
-      <r-input icon="home" status="warning" disabled></r-input>
-    </div>
-    <h2>Preview</h2>
-    <r-button type="primary" onclick="uploadFile()">choose file to preview</r-button>
-    <r-preview id="preview"></r-preview>
-    <script>
-      const inputDom = document.getElementById('input2');
-      const uploadFile = () => {
-        const preview = document.getElementById('preview');
-        const uploadFile = document.createElement('input');
-        uploadFile.setAttribute('type', 'file');
-        uploadFile.click();
-        uploadFile.onchange = (e) => {
-          const { files = [] } = uploadFile;
-          if (files.length > 0) {
-            preview.setAttribute('src', '');
-            const file = files[0];
-            const url = URL.createObjectURL(file);
-            preview.setAttribute('src', url);
-          }
-        };
-      };
-    </script>
-    <h2>message</h2>
-    <r-button onclick="message.info('这是一条提示 info')">信息提示</r-button>
-    <r-button onclick="message.warning('这是一条提示 warning')">警告提示</r-button>
-    <r-button onclick="message.error('这是一条提示 error')">错误提示</r-button>
-    <r-button onclick="message.success('这是一条提示 success')">成功提示</r-button>
-    <r-button onclick="message.toast('这是一条提示 toast')">成功提示</r-button>
-    <h2>Radar</h2>
-    <r-radar
-      style="width: 300px; height: 300px; display: block"
-      fillColor="red"
-      strokeColor="blue"
-      colorPolygon="green"
-      colorLine="blue"
-      abilitys='[{"abilityName":"生命","scoreRate":"10","backgroundColor":"red","fontSize":"30","fontColor":"blue"},{"abilityName":"攻击","scoreRate":"90"},{"abilityName":"防御","scoreRate":"20"},{"abilityName":"元素精通","scoreRate":"50"},{"abilityName":"暴击率","scoreRate":"80"},{"abilityName":"暴击伤害","scoreRate":"50"}]'
-    ></r-radar>
-    <h2>Video</h2>
-    <!-- <r-video src=""></r-video> -->
-    <h2>Modal</h2>
-    <r-modal id="modal"></r-modal>
-    <r-button onclick="openModal()">弹窗的开关</r-button>
-    <script>
-      const openModal = () => {
-        const modal = document.getElementById('modal');
-        modal.setAttribute('open', 'true');
-      };
-    </script>
-  </body>
-  <script async>
-    function getPopupContainer() {
-      console.log('getPopupContainer');
-    }
-    // 添加资源到缓存
-    const addResourcesToCache = async (resources) => {
-      const cache = await caches.open('v1');
-      await cache.addAll(resources);
-    };
-    const putInCache = async (request, response) => {
-      const cache = await caches.open('v1');
-      await cache.put(request, response);
-    };
-    const cacheFirst = async (request) => {
-      // 首先从缓存中获取资源
-      const responseFromCache = await caches.match(request);
-      if (responseFromCache) {
-        return responseFromCache;
-      }
-      // 然后尝试从网络中获取资源
-      try {
-        const responseFromNetwork = await fetch(request);
-        // 响应可能会被使用
-        // 我们需要将它的拷贝放入缓存
-        // 然后再返回该响应
-        putInCache(request, responseFromNetwork.clone());
-        return responseFromNetwork;
-      } catch (error) {
-        const fallbackResponse = await caches.match(fallbackUrl);
-        if (fallbackResponse) {
-          return fallbackResponse;
+
+<head>
+  <link rel="icon" href="data:;" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ranui</title>
+  <script src="./index.ts" type="module"></script>
+</head>
+
+<body>
+  <h1 id="select">Hello RanUI</h1>
+  <h2>checkbox</h2>
+  <r-checkbox></r-checkbox>
+  <h2>popover</h2>
+  <r-popover trigger="hover" placement="bottom">
+    <r-button>popover</r-button>
+    <r-content>
+      <div>这是内容</div>
+    </r-content>
+  </r-popover>
+  <h2>colorpicker</h2>
+  <span>1111111111111</span><r-colorpicker value="rgb(73, 108, 156)"></r-colorpicker>
+  <h2>video</h2>
+  <div style="width: 100vw; max-width: 600px; height: 300px">
+    <r-player debug="true" src=""> </r-player>
+  </div>
+  <h2>Progress</h2>
+  <r-progress type="drag"></r-progress>
+  <h2>Select</h2>
+  <r-select style="width: 120px; height: 40px" type="text" defaultValue="185" placement="top" action="hover,click">
+    <r-option value="185">Mike</r-option>
+    <r-option value="186">Tom</r-option>
+    <r-option value="187">Lucy</r-option>
+  </r-select>
+  <r-select style="width: 120px; height: 40px" disabled defaultValue="185">
+    <r-option value="185">Mike</r-option>
+    <r-option value="186">Tom</r-option>
+    <r-option value="187">Lucy</r-option>
+  </r-select>
+  <r-select style="width: 120px; height: 40px" defaultValue="185" getPopupContainerId="select">
+    <r-option value="185">Mike</r-option>
+    <r-option value="186">Tom</r-option>
+    <r-option value="187">Lucy</r-option>
+  </r-select>
+  <r-select style="width: 120px; height: 40px" showSearch>
+    <r-option value="185">Mike</r-option>
+    <r-option value="186">Tom</r-option>
+    <r-option value="187">Lucy</r-option>
+  </r-select>
+  <h2>Button</h2>
+  <r-button type="primary">主要按钮</r-button>
+  <r-button type="warning" effect="false">警告按钮</r-button>
+  <r-button type="default" icon="user" sheet=".btn { width: 100px; }">默认按钮</r-button>
+  <r-button type="primary" disabled>disable按钮</r-button>
+  <h2>Icon</h2>
+  <r-icon name="home" size="40" color="#1E90FF"></r-icon>
+  <r-icon name="close-circle-fill" size="40" color="rgba(0,0,0,.1)"></r-icon>
+  <r-icon name="loading" size="40" color="#1E90FF" spin></r-icon>
+  <h2>Tab</h2>
+  <r-tabs type="text">
+    <r-tab label="重名" icon="home">tab1</r-tab>
+    <r-tab label="tab2">tab2</r-tab>
+    <r-tab label="tab3">tab3</r-tab>
+    <r-tab label="重名" key="a" disabled>11111</r-tab>
+    <r-tab label="tab5" icon="home" r-key="aaa">22222</r-tab>
+    <r-tab label="tab6" ranKey="10">33333</r-tab>
+    <r-tab label="tab7">22222</r-tab>
+    <r-tab label="tab7777777">77777</r-tab>
+  </r-tabs>
+  <h2>Input</h2>
+  <div style="width: 40%; height: 200px; display: flex; flex-flow: column; justify-content: space-around">
+    <r-input label="user"></r-input>
+    <r-input label="user" placeholder="user"></r-input>
+    <r-input icon="home" status="warning" disabled></r-input>
+  </div>
+  <h2>Preview</h2>
+  <r-button type="primary" onclick="uploadFile()">choose file to preview</r-button>
+  <r-preview id="preview"></r-preview>
+  <script>
+    const inputDom = document.getElementById('input2');
+    const uploadFile = () => {
+      const preview = document.getElementById('preview');
+      const uploadFile = document.createElement('input');
+      uploadFile.setAttribute('type', 'file');
+      uploadFile.click();
+      uploadFile.onchange = (e) => {
+        const { files = [] } = uploadFile;
+        if (files.length > 0) {
+          preview.setAttribute('src', '');
+          const file = files[0];
+          const url = URL.createObjectURL(file);
+          preview.setAttribute('src', url);
         }
-        // 当回落的响应也不可用时，
-        // 我们便无能为力了，但我们始终需要
-        // 返回 Response 对象
-        return new Response('Network error happened', {
-          status: 408,
-          headers: { 'Content-Type': 'text/plain' },
-        });
-      }
+      };
     };
-    const registerServiceWorker = async (paths = []) => {
-      // 只有 https 可以开启service-work
-      if (!window.location.protocol.includes('https')) return;
-      if ('serviceWorker' in navigator) {
-        try {
-          const registration = await navigator.serviceWorker.register('service-worker.js', {
-            scope: '/',
-          });
-          if (registration.installing) {
-            console.log('正在安装 Service worker');
-          } else if (registration.waiting) {
-            console.log('已安装 Service worker installed');
-          } else if (registration.active) {
-            console.log('激活 Service worker');
-            registration.addEventListener('install', (event) => {
-              event.waitUntil(addResourcesToCache(paths));
-            });
-            registration.addEventListener('fetch', (event) => {
-              event.respondWith(
-                cacheFirst({
-                  request: event.request,
-                  fallbackUrl: '/',
-                }),
-              );
-            });
-          }
-        } catch (error) {
-          console.error(`注册失败：${error}`);
-        }
-      }
-    };
-    const paths = ['/assets/js/pdf.js', '/assets/js/d3.js', '/assets/js/pdf-worker.js', '/assets/js/dimple.js'];
-    registerServiceWorker(paths);
   </script>
+  <h2>message</h2>
+  <r-button onclick="message.info('这是一条提示 info')">信息提示</r-button>
+  <r-button onclick="message.warning('这是一条提示 warning')">警告提示</r-button>
+  <r-button onclick="message.error('这是一条提示 error')">错误提示</r-button>
+  <r-button onclick="message.success('这是一条提示 success')">成功提示</r-button>
+  <r-button onclick="message.toast('这是一条提示 toast')">成功提示</r-button>
+  <h2>Radar</h2>
+  <r-radar style="width: 300px; height: 300px; display: block" fillColor="red" strokeColor="blue" colorPolygon="green"
+    colorLine="blue"
+    abilitys='[{"abilityName":"生命","scoreRate":"10","backgroundColor":"red","fontSize":"30","fontColor":"blue"},{"abilityName":"攻击","scoreRate":"90"},{"abilityName":"防御","scoreRate":"20"},{"abilityName":"元素精通","scoreRate":"50"},{"abilityName":"暴击率","scoreRate":"80"},{"abilityName":"暴击伤害","scoreRate":"50"}]'></r-radar>
+  <h2>Video</h2>
+  <!-- <r-video src=""></r-video> -->
+  <h2>Modal</h2>
+  <r-modal id="modal"></r-modal>
+  <r-button onclick="openModal()">弹窗的开关</r-button>
+  <script>
+    const openModal = () => {
+      const modal = document.getElementById('modal');
+      modal.setAttribute('open', 'true');
+    };
+  </script>
+</body>
+<script async>
+  function getPopupContainer() {
+    console.log('getPopupContainer');
+  }
+  // 添加资源到缓存
+  const addResourcesToCache = async (resources) => {
+    const cache = await caches.open('v1');
+    await cache.addAll(resources);
+  };
+  const putInCache = async (request, response) => {
+    const cache = await caches.open('v1');
+    await cache.put(request, response);
+  };
+  const cacheFirst = async (request) => {
+    // 首先从缓存中获取资源
+    const responseFromCache = await caches.match(request);
+    if (responseFromCache) {
+      return responseFromCache;
+    }
+    // 然后尝试从网络中获取资源
+    try {
+      const responseFromNetwork = await fetch(request);
+      // 响应可能会被使用
+      // 我们需要将它的拷贝放入缓存
+      // 然后再返回该响应
+      putInCache(request, responseFromNetwork.clone());
+      return responseFromNetwork;
+    } catch (error) {
+      const fallbackResponse = await caches.match(fallbackUrl);
+      if (fallbackResponse) {
+        return fallbackResponse;
+      }
+      // 当回落的响应也不可用时，
+      // 我们便无能为力了，但我们始终需要
+      // 返回 Response 对象
+      return new Response('Network error happened', {
+        status: 408,
+        headers: { 'Content-Type': 'text/plain' },
+      });
+    }
+  };
+  const registerServiceWorker = async (paths = []) => {
+    // 只有 https 可以开启service-work
+    if (!window.location.protocol.includes('https')) return;
+    if ('serviceWorker' in navigator) {
+      try {
+        const registration = await navigator.serviceWorker.register('service-worker.js', {
+          scope: '/',
+        });
+        if (registration.installing) {
+          console.log('正在安装 Service worker');
+        } else if (registration.waiting) {
+          console.log('已安装 Service worker installed');
+        } else if (registration.active) {
+          console.log('激活 Service worker');
+          registration.addEventListener('install', (event) => {
+            event.waitUntil(addResourcesToCache(paths));
+          });
+          registration.addEventListener('fetch', (event) => {
+            event.respondWith(
+              cacheFirst({
+                request: event.request,
+                fallbackUrl: '/',
+              }),
+            );
+          });
+        }
+      } catch (error) {
+        console.error(`注册失败：${error}`);
+      }
+    }
+  };
+  const paths = ['/assets/js/pdf.js', '/assets/js/d3.js', '/assets/js/pdf-worker.js', '/assets/js/dimple.js'];
+  registerServiceWorker(paths);
+</script>
+
 </html>

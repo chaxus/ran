@@ -1,0 +1,33 @@
+.ran-colorpicker {
+  box-sizing: border-box;
+  min-width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: 1px solid #d9d9d9;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  background: #ffffff;
+  padding: 3px;
+  &-block {
+    position: relative;
+    border-radius: 4px;
+    width: 24px;
+    height: 24px;
+    box-shadow: inset 0 0 1px 0 rgba(0, 0, 0, 0.25);
+    background-image: conic-gradient(
+      rgba(0, 0, 0, 0.06) 0 25%,
+      transparent 0 50%,
+      rgba(0, 0, 0, 0.06) 0 75%,
+      transparent 0
+    );
+    background-size: 50% 50%;
+  }
+  &-inner {
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+  }
+}
