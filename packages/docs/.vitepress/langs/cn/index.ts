@@ -89,6 +89,7 @@ const themeCnConfig: DefaultTheme.Config = {
         text: '数据展示',
         items: [
           { text: 'Image 图片', link: '/cn/src/ranui/image/' },
+          { text: 'CheckBox 多选框', link: '/cn/src/ranui/checkbox/' },
           { text: 'Tabs 标签页', link: '/cn/src/ranui/tabs/' },
           { text: 'Preview 预览', link: '/cn/src/ranui/preview/' },
           { text: 'Radar 雷达图', link: '/cn/src/ranui/radar/' },

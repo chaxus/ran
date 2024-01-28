@@ -103,6 +103,7 @@ const themeEnConfig: DefaultTheme.Config = {
         text: 'Data Presentation',
         items: [
           { text: 'Image ', link: '/src/ranui/image/' },
+          { text: 'CheckBox ', link: '/src/ranui/checkbox/' },
           { text: 'Tabs ', link: '/src/ranui/tabs/' },
           { text: 'Preview ', link: '/src/ranui/preview/' },
           { text: 'Radar ', link: '/src/ranui/radar/' },

@@ -14,6 +14,7 @@ export * as player from '@/components/player';
 export * as modal from '@/components/modal';
 export * as select from '@/components/select';
 export * as progress from '@/components/progress';
+export * as checkbox from '@/components/checkbox'
 
 if (typeof document !== 'undefined') {
   const style = document.createElement('style');

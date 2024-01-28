@@ -81,7 +81,7 @@ export const loadScript = (src: string): Promise<{ success: boolean }> => {
 };
 
 export interface CustomErrorType {
-  new (m: string): void;
+  new(m: string): void;
 }
 
 export function createCustomError(msg: string = ''): CustomErrorType {
@@ -134,9 +134,50 @@ export const vod = {
   },
 };
 
-export const HTMLElementSSR = (): { new (): HTMLElement; prototype: HTMLElement } | null => {
+export const HTMLElementSSR = (): { new(): HTMLElement; prototype: HTMLElement } | null => {
   if (typeof document !== 'undefined') {
     return HTMLElement;
   }
   return null;
 };
+
+export const createSignal = <T = unknown>(
+  value: T,
+  options: { subscriber: Function, equals?: boolean | ((prev: T | undefined, next: T) => boolean) },
+): [() => T | undefined, (newValue: T) => void] => {
+  const signal = {
+    value,
+    // 订阅者
+    subscribers: new Set<Function>(),
+    comparator: options?.equals,
+  }
+  const getter = () => {
+    const { subscriber } = options
+    // 订阅
+    if (!signal.subscribers.has(subscriber)) {
+      signal.subscribers.add(subscriber)
+    }
+    return signal.value
+  }
+  const updateSignal = (newValue: T) => {
+    if (signal.value !== newValue) {
+      signal.value = newValue
+      // 通知订阅者
+      signal.subscribers.forEach((subscriber) => subscriber())
+    }
+  }
+  const setter = (newValue: T) => {
+    const { comparator } = signal
+    if (comparator instanceof Function) {
+      return !comparator(signal.value, newValue) && updateSignal(newValue)
+    }
+    if (comparator === undefined) {
+      if (signal.value !== newValue) {
+        updateSignal(newValue)
+      }
+    } else {
+      !comparator && updateSignal(newValue)
+    }
+  }
+  return [getter, setter]
+}
