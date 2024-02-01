@@ -24,6 +24,7 @@ interface Window {
     cname: string;
   };
   ranlog: boolean | undefined;
+  webkitOfflineAudioContext: OfflineAudioContext;
 }
 
 declare namespace NodeJS {
