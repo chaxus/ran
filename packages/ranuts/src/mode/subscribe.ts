@@ -15,10 +15,10 @@ export class SyncHook {
   constructor() {
     this._events = {};
   }
-  on = (eventName: EventName, eventItem: EventItem | Callback): void => {
+  tap = (eventName: EventName, eventItem: EventItem | Callback): void => {
     if (this._events[eventName] && eventName !== Symbol.for(NEW_LISTENER)) {
       // 注册一个 newListener 用于监听新的事件订阅
-      this.emit(Symbol.for(NEW_LISTENER), eventName);
+      this.call(Symbol.for(NEW_LISTENER), eventName);
     }
 
     // 由于一个事件可能注册多个回调函数，所以使用数组来存储事件队列
@@ -35,12 +35,20 @@ export class SyncHook {
     this._events[eventName] = callbacks;
   };
 
-  emit = (eventName: EventName, ...args: Array<unknown>): void => {
+  call = (eventName: EventName, ...args: Array<unknown>): void => {
     const callbacks = this._events[eventName] || [];
     callbacks.forEach((item) => {
       const { callback } = item;
       callback(...args);
     });
+  };
+
+  callSync = async (eventName: EventName, ...args: Array<unknown>): Promise<void> => {
+    const callbacks = this._events[eventName] || [];
+    for (const item of callbacks) {
+      const { callback } = item;
+      await callback(...args);
+    }
   };
 
   once = (eventName: EventName, eventItem: EventItem | Callback): void => {
@@ -70,7 +78,7 @@ export class SyncHook {
     // 考虑：如果当前事件在未执行，被用户取消订阅，能否取消？
     // 由于：我们订阅事件的时候，修改了原回调函数的引用，所以，用户触发 off 的时候不能找到对应的回调函数
     // 所以，我们需要在当前函数与用户传入的回调函数做一个绑定，我们通过自定义属性来实现
-    this.on(eventName, one);
+    this.tap(eventName, one);
   };
 
   off = (eventName: EventName, eventItem: EventItem | Callback): void => {
