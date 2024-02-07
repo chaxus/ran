@@ -148,7 +148,7 @@
     "@babel/core": "^7.23.9",
     "@babel/preset-env": "^7.23.9",
     "@babel/preset-typescript": "^7.23.3",
-    "@playwright/test": "^1.41.1",
+    "@playwright/test": "^1.41.2",
     "@types/imagemin-svgo": "^10.0.5",
     "@types/lodash": "^4.14.202",
     "@types/tinycolor2": "^1.4.6",
