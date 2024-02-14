@@ -17,6 +17,7 @@
     "DOMAPI",
     "dropdownclass",
     "esbuild",
+    "exceljs",
     "IIFE",
     "keyof",
     "localstorage",

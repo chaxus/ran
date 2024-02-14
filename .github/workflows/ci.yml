@@ -7,7 +7,7 @@ on:
 jobs:
   lint:
     if: github.repository == 'chaxus/ran'
-    timeout-minutes: 20
+    timeout-minutes: 30
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -17,8 +17,6 @@ jobs:
           # Active LTS + other OS
           - os: macos-latest
             node_version: 20
-          # - os: windows-latest @tensorflow/tfjs-node have some problem
-          #   node_version: 18.16.1
       fail-fast: false
     name: "Build&Test: node-${{ matrix.node_version }}, ${{ matrix.os }}"
     steps:
