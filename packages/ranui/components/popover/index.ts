@@ -21,6 +21,7 @@ export class Popover extends (HTMLElementSSR()!) {
         this._slot = document.createElement('slot');
         this.popoverBlock = document.createElement('div')
         this.popoverBlock.setAttribute('class', 'ran-popover-block')
+        this.popoverBlock.setAttribute("role", "tooltip")
         this.popoverBlock.appendChild(this._slot)
     }
     get placement(): string {
@@ -73,6 +74,7 @@ export class Popover extends (HTMLElementSSR()!) {
         const { type, value } = (<CustomEvent>e).detail
         if (type === "childList") {
             this.createContent(value.content)
+            this.placementPosition()
         }
     }
     placementPosition = (): void => {

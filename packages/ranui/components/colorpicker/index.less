@@ -31,3 +31,54 @@
     border-radius: inherit;
   }
 }
+.ran {
+  &-color {
+    &-picker {
+      box-sizing: border-box;
+      &-inner {
+        &-content {
+          box-sizing: border-box;
+          display: flex;
+          flex-direction: column;
+          width: 234px;
+        }
+      }
+      &-panel {
+        box-sizing: border-box;
+      }
+      &-input {
+        &-container {
+        }
+      }
+      &-select {
+      }
+      &-palette {
+        position: relative;
+        min-height: 160px;
+        overflow: hidden;
+        border-radius: 4px;
+        &-dot {
+          position: absolute;
+          z-index: 1;
+          width: 16px;
+          height: 16px;
+          border: 2px solid #fff;
+          border-radius: 50%;
+          cursor: pointer;
+          box-shadow: inset 0 0 1px 0 rgba(0, 0, 0, 0.25),
+            0 0 0 1px rgba(0, 0, 0, 0.06);
+          background-color: rgb(22, 119, 255);
+        }
+      }
+      &-saturation {
+        background-color: rgb(0, 106, 255);
+        background-image: linear-gradient(0deg, rgb(0, 0, 0), transparent),
+          linear-gradient(90deg, rgb(255, 255, 255), rgba(255, 255, 255, 0));
+        position: absolute;
+        border-radius: inherit;
+        box-shadow: inset 0 0 1px 0 rgba(0, 0, 0, 0.25);
+        inset: 0;
+      }
+    }
+  }
+}
