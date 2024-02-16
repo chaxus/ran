@@ -1,7 +1,14 @@
 {
   "threshold": 10,
   "reporters": ["html", "console"],
-  "ignore": ["**/__snapshots__/**", "**.config.ts", "**.md", "**.html", "tsconfig.json"],
+  "ignore": [
+    "**/__snapshots__/**",
+    "**.config.ts",
+    "**.md",
+    "**.html",
+    "tsconfig.json",
+    "node_modules"
+  ],
   "absolute": true,
   "gitignore": true
 }
