@@ -54,6 +54,7 @@ export class Popover extends (HTMLElementSSR()!) {
             const div = document.createElement('div')
             this.popoverContent = document.createElement('div')
             this.popoverContent.setAttribute('class', 'ran-popover-content')
+            this.popoverContent.addEventListener('click',this.clickContent)
             this.popoverArrow = document.createElement('div')
             this.popoverArrow.setAttribute('class', 'ran-popover-content-arrow')
             this.popoverInner = document.createElement('div')
@@ -91,7 +92,7 @@ export class Popover extends (HTMLElementSSR()!) {
         const arrowHeight = 8
         let popoverArrowTransform = `translateX(-50%) translateY(-40%) rotate(0deg)`
         let popoverArrowTop = -arrowHeight
-        let popoverArrowLeft = left + this.popoverContent.clientWidth / 2
+        let popoverArrowLeft = left + this.popoverContent.clientWidth / 2 - arrowHeight / 2
         if (this.placement === 'top') {
             popoverTop = top + window.scrollY - this.popoverContent.clientHeight - arrowHeight;
             if (this.getPopupContainerId && root) {
@@ -112,13 +113,30 @@ export class Popover extends (HTMLElementSSR()!) {
             this.removePopoverTimeId = undefined
         }
     }
+    clickContent = (e: Event): void => {
+        e.stopPropagation()
+        e.preventDefault()
+    }
+    clickPopover = (e: Event): void => {
+        e.stopPropagation()
+        e.preventDefault()
+        this.placementPosition()
+    }
+    clickRemovePopover = (): void => {
+        this.hoverRemovePopover()
+    }
     popoverTrigger = (): void => {
         this.removeEventListener('mouseenter', this.hoverPopover);
         this.removeEventListener('click', this.hoverPopover);
+        this.removeEventListener('mouseleave', this.hoverRemovePopover);
+        this.removeEventListener('click', this.clickPopover);
+        document.removeEventListener('click', this.clickRemovePopover)
         if (this.trigger === 'hover') {
             this.addEventListener('mouseenter', this.placementPosition);
+            this.addEventListener('mouseleave', this.hoverRemovePopover);
         } else {
-            this.addEventListener('click', this.placementPosition);
+            this.addEventListener('click', this.clickPopover);
+            document.addEventListener('click', this.clickRemovePopover)
         }
     }
     hoverRemovePopover = (): void => {
@@ -131,7 +149,7 @@ export class Popover extends (HTMLElementSSR()!) {
             setTimeout(() => {
                 this.popoverContent?.style.setProperty('display', 'none')
             }, 300);
-        }, 2500);
+        }, 100);
     }
     connectedCallback(): void {
         this.setAttribute('class', 'ran-popover')
@@ -143,13 +161,14 @@ export class Popover extends (HTMLElementSSR()!) {
             }
         }
         this.popoverTrigger()
-        this.addEventListener('mouseenter', this.hoverPopover);
-        this.addEventListener('mouseleave', this.hoverRemovePopover);
     }
     disconnectCallback(): void {
         this.removeEventListener('mouseenter', this.hoverPopover);
         this.removeEventListener('mouseleave', this.hoverRemovePopover);
         this.removeEventListener('click', this.hoverPopover);
+        this.removeEventListener('click', this.placementPosition);
+        document.removeEventListener('click', this.clickRemovePopover)
+        this.popoverContent?.removeEventListener('click',this.clickContent)
     }
     attributeChangedCallback(n: string, o: string, v: string): void {
         if (o !== v) {

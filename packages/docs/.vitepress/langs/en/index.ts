@@ -110,6 +110,7 @@ const themeEnConfig: DefaultTheme.Config = {
           { text: 'Select ', link: '/src/ranui/select/' },
           { text: 'Player ', link: '/src/ranui/player/' },
           { text: 'Progress ', link: '/src/ranui/progress/' },
+          { text: 'Popover ', link: '/src/ranui/popover/' },
         ],
       },
       {

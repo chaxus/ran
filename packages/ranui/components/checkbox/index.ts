@@ -1,5 +1,5 @@
 import { addClassToElement, removeClassToElement } from 'ranuts';
-import { HTMLElementSSR, createCustomError } from '@/utils/index';
+import { HTMLElementSSR, createCustomError, falseList } from '@/utils/index';
 import './index.less'
 
 
@@ -32,11 +32,20 @@ export class Checkbox extends (HTMLElementSSR()!) {
         this.setAttribute('disabled', value);
     }
     get checked(): boolean {
+        const checked = this.getAttribute('checked')
+        if (falseList.includes(checked)) {
+            this.context.checked = false
+        }
         return this.context.checked
     }
     set checked(value: string) {
-        this.setAttribute('checked', value);
-        this.context.checked = !!value
+        if (falseList.includes(value)) {
+            this.setAttribute('checked', "false");
+            this.context.checked = false
+        } else {
+            this.setAttribute('checked', "true");
+            this.context.checked = true
+        }
         this.updateChecked()
     }
     updateChecked = (): void => {

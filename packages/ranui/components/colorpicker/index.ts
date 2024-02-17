@@ -5,6 +5,7 @@ import '@/components/content'
 import '@/components/input'
 import '@/components/select'
 import '@/components/option'
+import '@/components/progress'
 import './index.less'
 
 // RGBA： red、green、blue, 透明度 
@@ -166,10 +167,10 @@ export class ColorPicker extends (HTMLElementSSR()!) {
         }
     }
     connectedCallback(): void {
-        this.addEventListener('click', this.openColorPicker)
+        this.popoverBlock.addEventListener('click', this.openColorPicker)
     }
     disconnectCallback(): void {
-        this.removeEventListener('click', this.openColorPicker)
+        this.popoverBlock.removeEventListener('click', this.openColorPicker)
     }
     attributeChangedCallback(n: string, o: string, v: string): void {
         if (o !== v) {

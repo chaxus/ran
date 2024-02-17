@@ -96,6 +96,7 @@ const themeCnConfig: DefaultTheme.Config = {
           { text: 'Select 选择框', link: '/cn/src/ranui/select/' },
           { text: 'Player 视频播放器', link: '/cn/src/ranui/player/' },
           { text: 'Progress 进度条', link: '/cn/src/ranui/progress/' },
+          { text: 'Popover 气泡卡片', link: '/cn/src/ranui/popover/' },
         ],
       },
       {
