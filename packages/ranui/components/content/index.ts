@@ -24,7 +24,7 @@ export class Content extends (HTMLElementSSR()!) {
             new CustomEvent('change', {
                 detail: {
                     type: mutation.type,
-                    value: { content: this.innerHTML, mutation }
+                    value: { content: this.children, mutation }
                 },
             }),
         );

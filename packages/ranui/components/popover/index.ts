@@ -48,13 +48,13 @@ export class Popover extends (HTMLElementSSR()!) {
     set getPopupContainerId(value: string) {
         this.setAttribute('getPopupContainerId', value);
     }
-    createContent = (content: string): void => {
+    createContent = (content: HTMLCollection): void => {
         if (!content) return
         if (!this.popoverContent) {
             const div = document.createElement('div')
             this.popoverContent = document.createElement('div')
             this.popoverContent.setAttribute('class', 'ran-popover-content')
-            this.popoverContent.addEventListener('click',this.clickContent)
+            this.popoverContent.addEventListener('click', this.clickContent)
             this.popoverArrow = document.createElement('div')
             this.popoverArrow.setAttribute('class', 'ran-popover-content-arrow')
             this.popoverInner = document.createElement('div')
@@ -67,16 +67,19 @@ export class Popover extends (HTMLElementSSR()!) {
             div.appendChild(this.popoverContent)
             document.body.appendChild(div)
         }
-        if (this.popoverInnerBlock) {
-            this.popoverInnerBlock.innerHTML = content
+        if (this.popoverInnerBlock && content.length > 0) {
+            this.popoverInnerBlock.innerHTML = ''
+            const Fragment = document.createDocumentFragment()
+            for(const child of content){
+                Fragment.appendChild(child)
+            }
+            this.popoverInnerBlock.appendChild(Fragment)
         }
     }
     watchContent = (e: Event): void => {
-        const { type, value } = (<CustomEvent>e).detail
-        if (type === "childList") {
-            this.createContent(value.content)
-            this.placementPosition()
-        }
+        const { value } = (<CustomEvent>e).detail
+        this.createContent(value.content)
+        this.placementPosition()
     }
     placementPosition = (): void => {
         if (!this.popoverInnerBlock || !this.popoverContent) return;
@@ -115,11 +118,9 @@ export class Popover extends (HTMLElementSSR()!) {
     }
     clickContent = (e: Event): void => {
         e.stopPropagation()
-        e.preventDefault()
     }
     clickPopover = (e: Event): void => {
         e.stopPropagation()
-        e.preventDefault()
         this.placementPosition()
     }
     clickRemovePopover = (): void => {
@@ -157,7 +158,7 @@ export class Popover extends (HTMLElementSSR()!) {
         for (const element of this.children) {
             if (element.tagName === 'R-CONTENT') {
                 element.addEventListener('change', this.watchContent)
-                this.createContent(element.innerHTML)
+                this.createContent(element.children)
             }
         }
         this.popoverTrigger()
@@ -168,7 +169,7 @@ export class Popover extends (HTMLElementSSR()!) {
         this.removeEventListener('click', this.hoverPopover);
         this.removeEventListener('click', this.placementPosition);
         document.removeEventListener('click', this.clickRemovePopover)
-        this.popoverContent?.removeEventListener('click',this.clickContent)
+        this.popoverContent?.removeEventListener('click', this.clickContent)
     }
     attributeChangedCallback(n: string, o: string, v: string): void {
         if (o !== v) {

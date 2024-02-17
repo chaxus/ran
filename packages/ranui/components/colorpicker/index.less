@@ -92,16 +92,14 @@
           flex: 1;
           box-sizing: border-box;
           &-hue {
+            display: block;
             margin-bottom: 12px;
-            &-palette {
+            .ran-progress {
               position: relative;
               height: 8px;
               &-dot {
-                position: absolute;
-                left: 109.873px;
-                top: -4px;
                 z-index: 1;
-                background-color: rgb(0, 106, 255);
+                background: rgb(0, 106, 255);
                 width: 12px;
                 height: 12px;
                 border: 2px solid #fff;
@@ -110,7 +108,7 @@
                 box-shadow: inset 0 0 1px 0 rgba(0, 0, 0, 0.25),
                   0 0 0 1px rgba(0, 0, 0, 0.06);
               }
-              &-gradient {
+              &-wrap {
                 position: absolute;
                 inset: 0px;
                 background: linear-gradient(
@@ -125,6 +123,9 @@
                 );
                 border-radius: calc(8px / 2);
                 box-shadow: inset 0 0 1px 0 rgba(0, 0, 0, 0.25);
+                &-value {
+                  background: transparent;
+                }
               }
             }
           }
@@ -138,15 +139,12 @@
             background-size: 8px 8px;
             border-radius: calc(8px / 2);
             box-sizing: border-box;
-            &-palette {
+            .ran-progress {
               position: relative;
               height: 8px;
               &-dot {
-                position: absolute;
-                left: 188px;
-                top: -4px;
                 z-index: 1;
-                background-color: rgb(22, 119, 255);
+                background: rgb(22, 119, 255);
                 width: 12px;
                 height: 12px;
                 border: 2px solid #fff;
@@ -156,7 +154,7 @@
                 box-shadow: inset 0 0 1px 0 rgba(0, 0, 0, 0.25),
                   0 0 0 1px rgba(0, 0, 0, 0.06);
               }
-              &-gradient {
+              &-wrap {
                 position: absolute;
                 inset: 0px;
                 background: linear-gradient(
@@ -165,7 +163,10 @@
                   rgb(22, 119, 255)
                 );
                 border-radius: calc(8px / 2);
-                box-shadow: inset 0 0 1px 0 var(--ant-color-text-quaternary);
+                box-shadow: inset 0 0 1px 0 rgba(0, 0, 0, 0.25);
+                &-value {
+                  background: transparent;
+                }
               }
             }
           }

@@ -31,14 +31,8 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     colorPickerPanelDot?: HTMLDivElement;
     colorPickerPanelSliderContainer?: HTMLDivElement;
     colorPickerPanelSliderGroup?: HTMLDivElement;
-    colorPickerPanelSliderHue?: HTMLDivElement;
-    colorPickerPanelSliderAlpha?: HTMLDivElement;
-    colorPickerPanelSliderHuePalette?: HTMLDivElement;
-    colorPickerPanelSliderAlphaPalette?: HTMLDivElement;
-    colorPickerPanelSliderHuePaletteDot?: HTMLDivElement;
-    colorPickerPanelSliderHuePaletteGradient?: HTMLDivElement;
-    colorPickerPanelSliderHueAlphaDot?: HTMLDivElement;
-    colorPickerPanelSliderHueAlphaGradient?: HTMLDivElement;
+    colorPickerPanelSliderHue?: HTMLElement;
+    colorPickerPanelSliderAlpha?: HTMLElement;
     colorPickerColorBlockInner?: HTMLDivElement;
     colorPickerColorBlock?: HTMLDivElement;
     colorPickerInnerContentSelect?: HTMLDivElement;
@@ -97,29 +91,13 @@ export class ColorPicker extends (HTMLElementSSR()!) {
         this.colorPickerPanelSliderContainer.setAttribute('class', 'ran-color-picker-slider-container')
         this.colorPickerPanelSliderGroup = document.createElement('div')
         this.colorPickerPanelSliderGroup.setAttribute('class', 'ran-color-picker-slider-container-group')
-        this.colorPickerPanelSliderHue = document.createElement('div')
+        this.colorPickerPanelSliderHue = document.createElement('r-progress')
+        this.colorPickerPanelSliderHue.setAttribute('type','drag')
         this.colorPickerPanelSliderHue.setAttribute('class', 'ran-color-picker-slider-container-group-hue')
-        this.colorPickerPanelSliderHuePalette = document.createElement('div')
-        this.colorPickerPanelSliderHuePalette.setAttribute('class', 'ran-color-picker-slider-container-group-hue-palette')
-        this.colorPickerPanelSliderAlpha = document.createElement('div')
+        this.colorPickerPanelSliderAlpha = document.createElement('r-progress')
+        this.colorPickerPanelSliderAlpha.setAttribute('type','drag')
         this.colorPickerPanelSliderAlpha.setAttribute('class', 'ran-color-picker-slider-container-group-alpha')
-        this.colorPickerPanelSliderAlphaPalette = document.createElement('div')
-        this.colorPickerPanelSliderAlphaPalette.setAttribute('class', 'ran-color-picker-slider-container-group-alpha-palette')
-        this.colorPickerPanelSliderHuePaletteDot = document.createElement('div')
-        this.colorPickerPanelSliderHuePaletteDot.setAttribute('class', 'ran-color-picker-slider-container-group-hue-palette-dot')
-        this.colorPickerPanelSliderHuePaletteGradient = document.createElement('div')
-        this.colorPickerPanelSliderHuePaletteGradient.setAttribute('class', 'ran-color-picker-slider-container-group-hue-palette-gradient')
-        this.colorPickerPanelSliderHueAlphaDot = document.createElement('div')
-        this.colorPickerPanelSliderHueAlphaDot.setAttribute('class', 'ran-color-picker-slider-container-group-alpha-palette-dot')
-        this.colorPickerPanelSliderHueAlphaGradient = document.createElement('div')
-        this.colorPickerPanelSliderHueAlphaGradient.setAttribute('class', 'ran-color-picker-slider-container-group-alpha-palette-gradient')
-        this.colorPickerPanelSliderHuePalette.appendChild(this.colorPickerPanelSliderHuePaletteDot)
-        this.colorPickerPanelSliderHuePalette.appendChild(this.colorPickerPanelSliderHuePaletteGradient)
-        this.colorPickerPanelSliderHue.appendChild(this.colorPickerPanelSliderHuePalette)
         this.colorPickerPanelSliderGroup.appendChild(this.colorPickerPanelSliderHue)
-        this.colorPickerPanelSliderAlphaPalette.appendChild(this.colorPickerPanelSliderHueAlphaDot)
-        this.colorPickerPanelSliderAlphaPalette.appendChild(this.colorPickerPanelSliderHueAlphaGradient)
-        this.colorPickerPanelSliderAlpha.appendChild(this.colorPickerPanelSliderAlphaPalette)
         this.colorPickerPanelSliderGroup.appendChild(this.colorPickerPanelSliderAlpha)
         this.colorPickerPanelSliderContainer.appendChild(this.colorPickerPanelSliderGroup)
         this.colorPickerColorBlock = document.createElement('div')
@@ -159,12 +137,6 @@ export class ColorPicker extends (HTMLElementSSR()!) {
         this.colorPickerInnerContent.appendChild(this.colorPickerInputContainer)
         this.colorPickerInner.appendChild(this.colorPickerInnerContent)
         this.popoverContent.appendChild(this.colorPickerInner)
-    }
-    changePopoverContent = (e: Event): void => {
-        const { type, value } = (<CustomEvent>e).detail
-        if (type === "childList") {
-            // this.createContent(value.content)
-        }
     }
     connectedCallback(): void {
         this.popoverBlock.addEventListener('click', this.openColorPicker)
