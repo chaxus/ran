@@ -92,10 +92,10 @@ export class ColorPicker extends (HTMLElementSSR()!) {
         this.colorPickerPanelSliderGroup = document.createElement('div')
         this.colorPickerPanelSliderGroup.setAttribute('class', 'ran-color-picker-slider-container-group')
         this.colorPickerPanelSliderHue = document.createElement('r-progress')
-        this.colorPickerPanelSliderHue.setAttribute('type','drag')
+        this.colorPickerPanelSliderHue.setAttribute('type', 'drag')
         this.colorPickerPanelSliderHue.setAttribute('class', 'ran-color-picker-slider-container-group-hue')
         this.colorPickerPanelSliderAlpha = document.createElement('r-progress')
-        this.colorPickerPanelSliderAlpha.setAttribute('type','drag')
+        this.colorPickerPanelSliderAlpha.setAttribute('type', 'drag')
         this.colorPickerPanelSliderAlpha.setAttribute('class', 'ran-color-picker-slider-container-group-alpha')
         this.colorPickerPanelSliderGroup.appendChild(this.colorPickerPanelSliderHue)
         this.colorPickerPanelSliderGroup.appendChild(this.colorPickerPanelSliderAlpha)
@@ -122,8 +122,18 @@ export class ColorPicker extends (HTMLElementSSR()!) {
         // 
         this.colorPickerInputContainer = document.createElement('div')
         this.colorPickerInputContainer.setAttribute('class', 'ran-color-picker-input-container')
+        // select
         this.colorPickerInputContainerSelect = document.createElement('r-select')
         this.colorPickerInputContainerSelect.setAttribute('class', 'ran-color-picker-input-container-select')
+        const colorSelectOption = ['HEX', 'HSB', 'RGB']
+        const Fragment = document.createDocumentFragment()
+        colorSelectOption.forEach(item => {
+            const Option = document.createElement('r-option')
+            Option.setAttribute('value', item)
+            Option.innerText = item
+            Fragment.appendChild(Option)
+        })
+        this.colorPickerInputContainerSelect.appendChild(Fragment)
         this.colorPickerInputContainerInputColor = document.createElement('r-input')
         this.colorPickerInputContainerInputColor.setAttribute('class', 'ran-color-picker-input-container-input-color')
         this.colorPickerInputContainerInputNumber = document.createElement('r-input')
