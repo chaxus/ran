@@ -41,6 +41,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     colorPickerInputContainerSelect?: HTMLElement;
     colorPickerInputContainerInputColor?: HTMLElement;
     colorPickerInputContainerInputNumber?: HTMLElement;
+    colorPickerInputContainerSelectItem?: HTMLElement;
     static get observedAttributes(): string[] {
         return ['disabled', 'value'];
     }
@@ -122,9 +123,15 @@ export class ColorPicker extends (HTMLElementSSR()!) {
         // 
         this.colorPickerInputContainer = document.createElement('div')
         this.colorPickerInputContainer.setAttribute('class', 'ran-color-picker-input-container')
+        const colorPickerInputContainerId = `${performance.now()}`.replace('.', '')
         // select
-        this.colorPickerInputContainerSelect = document.createElement('r-select')
+        this.colorPickerInputContainerSelect = document.createElement('div')
         this.colorPickerInputContainerSelect.setAttribute('class', 'ran-color-picker-input-container-select')
+        this.colorPickerInputContainerSelect.setAttribute('id', colorPickerInputContainerId)
+        this.colorPickerInputContainerSelectItem = document.createElement('r-select')
+        this.colorPickerInputContainerSelectItem.setAttribute('value', 'HEX')
+        this.colorPickerInputContainerSelectItem.setAttribute('class', 'ran-color-picker-input-container-select-item')
+        this.colorPickerInputContainerSelectItem.setAttribute('getPopupContainerId', colorPickerInputContainerId)
         const colorSelectOption = ['HEX', 'HSB', 'RGB']
         const Fragment = document.createDocumentFragment()
         colorSelectOption.forEach(item => {
@@ -133,12 +140,13 @@ export class ColorPicker extends (HTMLElementSSR()!) {
             Option.innerText = item
             Fragment.appendChild(Option)
         })
-        this.colorPickerInputContainerSelect.appendChild(Fragment)
+        this.colorPickerInputContainerSelectItem.appendChild(Fragment)
+        this.colorPickerInputContainerSelect.appendChild(this.colorPickerInputContainerSelectItem)
+        this.colorPickerInputContainer.appendChild(this.colorPickerInputContainerSelect)
         this.colorPickerInputContainerInputColor = document.createElement('r-input')
         this.colorPickerInputContainerInputColor.setAttribute('class', 'ran-color-picker-input-container-input-color')
         this.colorPickerInputContainerInputNumber = document.createElement('r-input')
         this.colorPickerInputContainerInputNumber.setAttribute('class', 'ran-color-picker-input-container-input-number')
-        this.colorPickerInputContainer.appendChild(this.colorPickerInputContainerSelect)
         this.colorPickerInputContainer.appendChild(this.colorPickerInputContainerInputColor)
         this.colorPickerInputContainer.appendChild(this.colorPickerInputContainerInputNumber)
         // 

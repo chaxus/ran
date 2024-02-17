@@ -217,18 +217,22 @@ export class Select extends (HTMLElementSSR()!) {
     if (!this._selectionDropdown || !this._selectDropdown) return;
     const rect = this.getBoundingClientRect();
     const { top, left, bottom, width, height, x, y, right } = rect;
+    const root = document.getElementById(this.getPopupContainerId);
     this._selectionDropdown.style.setProperty('--ran-x', `${top + window.scrollX}`);
     this._selectionDropdown.style.setProperty('--ran-y', `${left + window.scrollY}`);
     let selectTop = bottom + window.scrollY;
     let selectLeft = left + window.scrollX;
     this._selectionDropdown.style.setProperty('width', `${width}px`);
-    const root = document.getElementById(this.getPopupContainerId);
     if (this.placement === 'top') {
       selectTop = top + window.scrollY - this._selectionDropdown.clientHeight;
-      if (this.getPopupContainerId && root) {
+    }
+    if (this.getPopupContainerId && root) {
+      if (this.placement === 'top') {
         selectTop = top - root.getBoundingClientRect().top - this._selectionDropdown.clientHeight;
-        selectLeft = left - root.getBoundingClientRect().left;
+      }else{
+        selectTop = root.getBoundingClientRect().height;
       }
+      selectLeft = 0;
     }
     this._selectionDropdown.style.setProperty('inset', `${selectTop}px auto auto ${selectLeft}px`);
   };

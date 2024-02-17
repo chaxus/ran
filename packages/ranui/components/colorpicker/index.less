@@ -50,10 +50,58 @@
       &-input {
         &-container {
           display: flex;
+          width: 100%;
+          align-items: center;
+          justify-content: space-between;
           &-select {
             display: block;
             width: 42px;
             height: 24px;
+            position: relative;
+            &-item {
+              display: block;
+              width: 42px;
+              height: 24px;
+              &::part(selection) {
+                border: none;
+                padding: 0px;
+              }
+              &::part(selection-item) {
+                font-size: 12px;
+                left: 0px;
+              }
+              &::part(icon) {
+                margin-top: -6px;
+                left: 24px;
+              }
+            }
+            .ranui-select-dropdown {
+              &-option {
+                &-item {
+                  padding: 2px 2px;
+                  &-content {
+                    font-size: 12px;
+                    text-align: center;
+                  }
+                }
+              }
+            }
+          }
+          &-input {
+            &-color {
+              width: 138px;
+              height: 24px;
+              &::part(ran-input) {
+                border-radius: 6px;
+              }
+            }
+            &-number {
+              width: 42px;
+              height: 24px;
+              &::part(ran-input) {
+                border-radius: 6px;
+              }
+            }
           }
         }
       }
