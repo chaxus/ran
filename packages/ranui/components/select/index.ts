@@ -236,7 +236,8 @@ export class Select extends (HTMLElementSSR()!) {
    * @description: 设置下拉框
    * @return {*}
    */
-  selectMouseDown = (): void => {
+  selectMouseDown = (e: Event): void => {
+    e.stopPropagation()
     if (isDisabled(this)) return;
     this.removeDropDownTimeId();
     this.setSelectDropdownDisplayNone();
@@ -261,7 +262,7 @@ export class Select extends (HTMLElementSSR()!) {
     this.removeTimeId = setTimeout(() => {
       this.removeDropDownTimeId();
       this.setSelectDropdownDisplayNone();
-    }, 300);
+    }, 100);
   };
   /**
    * @description: 选中一个选项的情况
@@ -269,6 +270,7 @@ export class Select extends (HTMLElementSSR()!) {
    * @return {*}
    */
   clickOption = (e: MouseEvent): void => {
+    e.stopPropagation()
     let element = e.target as Element;
     if (element.classList?.contains('ranui-select-dropdown-option-item')) {
       element = element.children[0];
@@ -337,7 +339,7 @@ export class Select extends (HTMLElementSSR()!) {
         const container = document.getElementById(this.getPopupContainerId) || document.body;
         container.removeChild(this._selectDropdown);
       }
-    } catch (error) {}
+    } catch (error) { }
   };
   /**
    * @description: 当select中有option元素的时候，给dropdown添加元素
@@ -458,12 +460,17 @@ export class Select extends (HTMLElementSSR()!) {
       this.addEventListener('blur', this.selectBlur);
     }
   };
+  clickRemoveSelect = (e: Event): void => {
+    e.stopPropagation()
+    this.setSelectDropdownDisplayNone()
+  }
   connectedCallback(): void {
     this.handlerExternalCss();
     this.createOption();
     this.listenActionEvent();
     this.listenSlotChange();
     this.setShowSearch();
+    document.addEventListener('click', this.clickRemoveSelect)
   }
   disconnectCallback(): void {
     this.removeEventListener('mouseenter', this.selectMouseDown);
@@ -473,6 +480,7 @@ export class Select extends (HTMLElementSSR()!) {
     this.removeSelectDropdown();
     this._selectDropdown?.removeEventListener('click', this.clickOption);
     this.removeListenSlotChange();
+    document.removeEventListener('click', this.clickRemoveSelect)
   }
   attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     if (name === 'disabled' && this._select) {
