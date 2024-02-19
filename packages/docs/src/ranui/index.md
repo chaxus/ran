@@ -4,11 +4,12 @@ Based on the Web Components UI component library
 
 ## Feature
 
-1. Based on 'Web Components', reuse across the framework and unify all cases.
-2. Based on 'TypeScript', with declaration and type files.
+1. Based on `Web Components`, reuse across the framework and unify all cases.
+2. Based on `TypeScript`, with declaration and type files.
 3. Pure native handwriting, no dependence on basic components.
 4. All component instances of the document are interactive.
-5. 'MIT' protocol.
+5. `MIT` protocol.
+6. No need to rely on `npm`, `React/Vue` framework and `Webpack/Vite` and other build tools, return to the essence of `Web` technology, reduce the complexity of the project and learning costs.
 
 ## Situation
 

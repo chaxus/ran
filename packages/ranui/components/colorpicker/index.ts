@@ -78,8 +78,12 @@ export class ColorPicker extends (HTMLElementSSR()!) {
             this.context.value = value
         }
     }
+    clickColorPalette = (e: MouseEvent): void => {
+        const { offsetX, offsetY } = e
+        this.colorPickerPanelDot?.style.setProperty('top', `${offsetY}px`)
+        this.colorPickerPanelDot?.style.setProperty('left', `${offsetX}px`)
+    }
     openColorPicker = (): void => {
-        // this.popoverContent.innerHTML = '1111'
         if (this.colorPickerInner) return
         this.colorPickerInner = document.createElement('div')
         this.colorPickerInner.setAttribute('class', 'ran-color-picker-inner')
@@ -87,7 +91,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
         this.colorPickerInnerContent.setAttribute('class', 'ran-color-picker-inner-content')
         this.colorPickerPanel = document.createElement('div')
         this.colorPickerPanel.setAttribute('class', 'ran-color-picker-panel')
-        // 
+        // progress
         this.colorPickerPanelSliderContainer = document.createElement('div')
         this.colorPickerPanelSliderContainer.setAttribute('class', 'ran-color-picker-slider-container')
         this.colorPickerPanelSliderGroup = document.createElement('div')
@@ -120,6 +124,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
         this.colorPickerPanelDot.setAttribute('class', 'ran-color-picker-palette-dot')
         this.colorPickerPanelPalette.appendChild(this.colorPickerPanelDot)
         this.colorPickerPanelPalette.appendChild(this.colorPickerPanelSaturation)
+        this.colorPickerPanelPalette.addEventListener('click', this.clickColorPalette)
         // 
         this.colorPickerInputContainer = document.createElement('div')
         this.colorPickerInputContainer.setAttribute('class', 'ran-color-picker-input-container')

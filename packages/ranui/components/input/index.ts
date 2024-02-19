@@ -220,6 +220,42 @@ export class Input extends HTMLElementSSR()! {
     }
   }
   /**
+   * @description: 获取前面的icon
+   * @return {String}
+   */
+  get prefix(): string | null {
+    return this.getAttribute("prefix");
+  }
+  /**
+   * @description: 设置前面的icon来表示标识
+   * @param {string|null} value
+   */
+  set prefix(value: string) {
+    if (value) {
+      this.setAttribute("prefix", value);
+    } else {
+      this.removeAttribute("prefix");
+    }
+  }
+  /**
+   * @description: 获取后面的icon
+   * @return {String}
+   */
+  get suffix(): string | null {
+    return this.getAttribute("suffix");
+  }
+  /**
+   * @description: 设置后面的icon来表示标识
+   * @param {string|null} value
+   */
+  set suffix(value: string) {
+    if (value) {
+      this.setAttribute("suffix", value);
+    } else {
+      this.removeAttribute("suffix");
+    }
+  }
+  /**
    * @description: 获取input的类型
    * @return {string|null}
    */
