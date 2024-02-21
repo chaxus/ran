@@ -20,7 +20,7 @@ interface RequestUrlToArraybufferOption {
 }
 
 interface requestUrlToArraybufferReturn extends BaseReturn {
-  data: Blob;
+  data: Blob & { name: string };
 }
 
 const PPTX = 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
