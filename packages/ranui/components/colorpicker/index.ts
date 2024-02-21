@@ -73,7 +73,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
             disabled: false,
             h: 0,
             s: 0,
-            v: 0,
+            v: 1,
             a: 0
         }
     }
@@ -102,8 +102,12 @@ export class ColorPicker extends (HTMLElementSSR()!) {
         const limitX = range(offsetX - 8, -8, width - 8)
         this.context.s = limitX / width // 饱和度
         this.context.v = limitY / height
+        this.colorPickerPanelSliderHue?.style.setProperty('--ran-progress-wrap', this.generateColorPickerProgress())
+        this.colorPickerPanelSliderAlpha?.style.setProperty('--ran-progress-wrap', this.generateColorPickerProgress())
+        this.colorPickerPanelSliderAlpha?.style.setProperty('--ran-progress-dot', this.generateColorPickerPanelSaturationRgba())
+        this.colorPickerPanelSliderHue?.style.setProperty('--ran-progress-dot', this.generateColorPickerPanelSaturationRgba())
         this.colorPickerColorBlockInner?.style.setProperty('background', this.generateColorPickerColorBlockInner())
-        this.colorPickerPanelDotInner?.style.setProperty('background-color', this.generateColorPickerPanelDotInnerRgba())
+        // this.colorPickerPanelDotInner?.style.setProperty('background-color', this.generateColorPickerPanelDotInnerRgba())
         this.colorPickerPanelSaturation?.style.setProperty('background-color', this.generateColorPickerPanelSaturationRgba())
         window.requestAnimationFrame(() => {
             this.colorPickerPanelDot?.style.setProperty('top', `${offsetY - 8}px`)
@@ -117,10 +121,14 @@ export class ColorPicker extends (HTMLElementSSR()!) {
         this.colorPickerPanelSliderGroup = document.createElement('div')
         this.colorPickerPanelSliderGroup.setAttribute('class', 'ran-color-picker-slider-container-group')
         this.colorPickerPanelSliderHue = document.createElement('r-progress')
+        this.colorPickerPanelSliderHue.style.setProperty('--ran-progress-dot', this.generateColorPickerPanelSaturationRgba())
+        this.colorPickerPanelSliderHue.style.setProperty('--ran-progress-wrap', this.generateColorPickerProgress())
         this.colorPickerPanelSliderHue.addEventListener('change', this.changeColorPickerHue)
         this.colorPickerPanelSliderHue.setAttribute('type', 'drag')
         this.colorPickerPanelSliderHue.setAttribute('class', 'ran-color-picker-slider-container-group-hue')
         this.colorPickerPanelSliderAlpha = document.createElement('r-progress')
+        this.colorPickerPanelSliderAlpha.style.setProperty('--ran-progress-dot', this.generateColorPickerPanelSaturationRgba())
+        this.colorPickerPanelSliderAlpha.style.setProperty('--ran-progress-wrap', this.generateColorPickerProgress())
         this.colorPickerPanelSliderAlpha.addEventListener('change', this.changeColorPickerAlpha)
         this.colorPickerPanelSliderAlpha.setAttribute('type', 'drag')
         this.colorPickerPanelSliderAlpha.setAttribute('class', 'ran-color-picker-slider-container-group-alpha')
@@ -137,14 +145,22 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     }
     changeColorPickerHue = (e: Event): void => {
         this.context.h = (<CustomEvent>e).detail.value * 360
+        this.colorPickerPanelSliderHue?.style.setProperty('--ran-progress-wrap', this.generateColorPickerProgress())
+        this.colorPickerPanelSliderAlpha?.style.setProperty('--ran-progress-wrap', this.generateColorPickerProgress())
+        this.colorPickerPanelSliderAlpha?.style.setProperty('--ran-progress-dot', this.generateColorPickerPanelSaturationRgba())
+        this.colorPickerPanelSliderHue?.style.setProperty('--ran-progress-dot', this.generateColorPickerPanelSaturationRgba())
         this.colorPickerColorBlockInner?.style.setProperty('background', this.generateColorPickerColorBlockInner())
-        this.colorPickerPanelDotInner?.style.setProperty('background-color', this.generateColorPickerPanelDotInnerRgba())
+        // this.colorPickerPanelDotInner?.style.setProperty('background-color', this.generateColorPickerPanelDotInnerRgba())
         this.colorPickerPanelSaturation?.style.setProperty('background-color', this.generateColorPickerPanelSaturationRgba())
     }
     changeColorPickerAlpha = (e: Event): void => {
         this.context.a = (<CustomEvent>e).detail.value
+        this.colorPickerPanelSliderHue?.style.setProperty('--ran-progress-wrap', this.generateColorPickerProgress())
+        this.colorPickerPanelSliderAlpha?.style.setProperty('--ran-progress-wrap', this.generateColorPickerProgress())
+        this.colorPickerPanelSliderAlpha?.style.setProperty('--ran-progress-dot', this.generateColorPickerPanelSaturationRgba())
+        this.colorPickerPanelSliderHue?.style.setProperty('--ran-progress-dot', this.generateColorPickerPanelSaturationRgba())
         this.colorPickerColorBlockInner?.style.setProperty('background', this.generateColorPickerColorBlockInner())
-        this.colorPickerPanelDotInner?.style.setProperty('background-color', this.generateColorPickerPanelDotInnerRgba())
+        // this.colorPickerPanelDotInner?.style.setProperty('background-color', this.generateColorPickerPanelDotInnerRgba())
         this.colorPickerPanelSaturation?.style.setProperty('background-color', this.generateColorPickerPanelSaturationRgba())
     }
     createColorPickerSelect = (): void => {
@@ -163,7 +179,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
         this.colorPickerPanelDotInner = document.createElement('div')
         this.colorPickerPanelDotInner.setAttribute('class', 'ran-color-picker-palette-dot-inner')
         this.colorPickerPanelDot.setAttribute('class', 'ran-color-picker-palette-dot')
-        this.colorPickerPanelDotInner.style.setProperty('background-color', this.generateColorPickerPanelDotInnerRgba())
+        // this.colorPickerPanelDotInner.style.setProperty('background-color', this.generateColorPickerPanelDotInnerRgba())
         this.colorPickerPanelDot.addEventListener('mousedown', this.mouseDownColorPickerPalette)
         document.body.addEventListener('mousemove', this.mouseMoveColorPickerPalette)
         this.colorPickerPanelDot.addEventListener('mouseup', this.mouseUpColorPickerPalette)
@@ -225,8 +241,12 @@ export class ColorPicker extends (HTMLElementSSR()!) {
         const limitX = range(pageX - left - 8, -8, width - 8)
         this.context.s = limitX / width // 饱和度
         this.context.v = limitY / height
+        this.colorPickerPanelSliderHue?.style.setProperty('--ran-progress-wrap', this.generateColorPickerProgress())
+        this.colorPickerPanelSliderAlpha?.style.setProperty('--ran-progress-wrap', this.generateColorPickerProgress())
+        this.colorPickerPanelSliderAlpha?.style.setProperty('--ran-progress-dot', this.generateColorPickerPanelSaturationRgba())
+        this.colorPickerPanelSliderHue?.style.setProperty('--ran-progress-dot', this.generateColorPickerPanelSaturationRgba())
         this.colorPickerColorBlockInner?.style.setProperty('background', this.generateColorPickerColorBlockInner())
-        this.colorPickerPanelDotInner?.style.setProperty('background-color', this.generateColorPickerPanelDotInnerRgba())
+        // this.colorPickerPanelDotInner?.style.setProperty('background-color', this.generateColorPickerPanelDotInnerRgba())
         this.colorPickerPanelSaturation?.style.setProperty('background-color', this.generateColorPickerPanelSaturationRgba())
         window.requestAnimationFrame(() => {
             this.colorPickerPanelDot?.style.setProperty('top', `${limitY}px`)
@@ -247,6 +267,11 @@ export class ColorPicker extends (HTMLElementSSR()!) {
         const { h, s, v, a } = this.context
         const { r, g, b } = hsv2rgb(h, s * 100, v * 100)
         return `rgb(${r}, ${g}, ${b}, ${a})`
+    }
+    generateColorPickerProgress = (): string => {
+        const { h, s, v} = this.context
+        const { r, g, b } = hsv2rgb(h, s * 100, v * 100)
+        return `linear-gradient(to right, rgba(255, 0, 4, 0), rgb(${r}, ${g}, ${b}))`
     }
     mouseDownColorPickerPalette = (e: MouseEvent): void => {
         e.stopPropagation()
