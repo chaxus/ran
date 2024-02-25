@@ -25,7 +25,7 @@ Development scheme based on `Web Components`
 
 ## Usage
 
-In most cases, you can use it just like a native 'div' tag.
+In most cases, you can use it just like a native `div` tag.
 
 Here are some examples
 
@@ -324,7 +324,7 @@ You can also use the 'property' method:
 
 ## style
 
-- `::part`
+### `::part`
 
 ```html
 <r-input id="input"></r-input>
@@ -338,13 +338,29 @@ input in ::part(input) refers to the class  of the Shadow DOM element inside the
 </style>
 ```
 
-- Pass in by attribute
+For specific pseudo-class names(`::part`), please refer to the specific introduction.
 
-A 'sheet' attribute is added to all components, passing in a 'CSSStyleSheet' string. It will be inserted directly into the Shadow DOM
+### Pass in by attribute
+
+A `sheet` attribute is added to all components, passing in a `CSSStyleSheet` string. It will be inserted directly into the `Shadow DOM`.
+
+### `CSS3` variable `var`
+
+By setting the `CSS3` variable for a component, you can customize the specified styles within the component, such as:
+
+<r-progress percent="70" total="100"></r-progress>
+<r-progress percent="70" total="100" style="--ran-progress-wrap:linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);"></r-progress>
+
+```html
+<r-progress percent="70" total="100"></r-progress>
+<r-progress percent="70" total="100" style="--ran-progress-wrap:linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);"></r-progress>
+```
+
+For specific `CSS3` variable names, refer to the introduction and description of each component.
 
 ## Compatibility
 
-- Do not support 'IE', others have better support
+- Do not support `IE`, others have better support
 
 ![](../../assets/ranui/customElements.png)
 

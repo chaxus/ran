@@ -324,7 +324,7 @@ import 'ranui';
 
 ## style 自定义样式
 
-- `::part`伪类
+### `::part`伪类
 
 ```html
 <r-input id="input"></r-input>
@@ -340,11 +340,11 @@ import 'ranui';
 
 具体的伪类名称可以查看具体的具体介绍
 
-- 通过`sheet`属性传入
+### 通过`sheet`属性传入
 
 会在所有的组件上加一个`sheet`属性，传入`CSSStyleSheet`字符串。会直接插入到`Shadow DOM`中
 
-- `css3`变量`var`
+### `css3`变量`var`
 
 通过给组件设置`css3`变量，从而自定义组件内部的指定样式，比如：
 
