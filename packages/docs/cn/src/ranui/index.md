@@ -1,6 +1,6 @@
 # ranui
 
-基于 `Web Components UI`组件库
+基于 `Web Components`开发方案
 
 ## Feature 特点
 

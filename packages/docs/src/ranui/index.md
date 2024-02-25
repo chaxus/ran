@@ -1,6 +1,6 @@
 # ranui
 
-Based on the Web Components UI component library
+Development scheme based on `Web Components`
 
 ## Feature
 
