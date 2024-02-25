@@ -1,21 +1,18 @@
 .ran-input {
   position: relative;
   display: flex;
-  width: calc(100% - 16px);
-  height: calc(100% - 4px);
+  width: var(--ran-input-width, calc(100% - 16px));
+  height: var(--ran-input-height, calc(100% - 4px));
   min-width: 0;
-  padding: 2px 8px;
+  padding: var(--ran-input-padding, 2px 8px);
   color: #000000d9;
-  font-size: 12px;
-  line-height: 1.5715;
-  background-color: #fff;
-  background-image: none;
-  border-width: 1px;
-  border-style: solid;
-  border-color: #d9d9d9;
-  // border: 1px solid #d9d9d9;
-  border-radius: 2px;
-  transition: all 0.3s;
+  font-size: var(--ran-input-font-size, 12px);
+  line-height: var(--ran-input-line-height, 1.5715);
+  background-color: var(--ran-input-background-color, #fff);
+  background-image: var(--ran-input-background-image, none);
+  border: var(--ran-input-border, 1px solid #d9d9d9);
+  border-radius: var(--ran-input-border-radius, 2px);
+  transition: var(--ran-input-transition, all 0.3s);
   &:active {
     border-color: #40a9ff;
     box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
@@ -33,13 +30,13 @@
     transform: translateY(calc(-50% - 0.43em)) scale(0.8);
     color: #00000040;
   }
-  &[status='error'] {
+  &[status="error"] {
     border-color: #ff4d4f;
     & > .ran-input-content ~ .ran-input-label {
       color: #ff4d4f;
     }
   }
-  &[status='warning'] {
+  &[status="warning"] {
     border-color: #ff7875;
     & > .ran-input-content ~ .ran-input-label {
       color: #ff7875;
@@ -89,7 +86,7 @@
     margin: 0;
     font-variant: tabular-nums;
     list-style: none;
-    font-feature-settings: 'tnum';
+    font-feature-settings: "tnum";
     position: relative;
     border: none;
     width: 100%;
@@ -126,12 +123,12 @@
     position: absolute;
     font-size: 14px;
     left: 8px;
-    transition: transform 0.3s, color 0.3s, background-color 0.3s, backdrop-filter 0.3s;
+    transition: transform 0.3s, color 0.3s, background-color 0.3s,
+      backdrop-filter 0.3s;
     transform-origin: left;
     padding: 0 0.2em;
     color: #999;
     background: #fff;
-    // backdrop-filter: blur(50px);
     opacity: 0.9;
   }
 }

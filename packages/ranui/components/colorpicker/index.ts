@@ -102,7 +102,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
         const limitX = range(offsetX - 8, -8, width - 8)
         this.context.s = limitX / width // 饱和度
         this.context.v = limitY / height
-        this.colorPickerPanelSliderHue?.style.setProperty('--ran-progress-wrap', this.generateColorPickerProgress())
+        // this.colorPickerPanelSliderHue?.style.setProperty('--ran-progress-wrap', this.generateColorPickerProgress())
         this.colorPickerPanelSliderAlpha?.style.setProperty('--ran-progress-wrap', this.generateColorPickerProgress())
         this.colorPickerPanelSliderAlpha?.style.setProperty('--ran-progress-dot', this.generateColorPickerPanelSaturationRgba())
         this.colorPickerPanelSliderHue?.style.setProperty('--ran-progress-dot', this.generateColorPickerPanelSaturationRgba())
@@ -121,7 +121,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
         this.colorPickerPanelSliderGroup.setAttribute('class', 'ran-color-picker-slider-container-group')
         this.colorPickerPanelSliderHue = document.createElement('r-progress')
         this.colorPickerPanelSliderHue.style.setProperty('--ran-progress-dot', this.generateColorPickerPanelSaturationRgba())
-        this.colorPickerPanelSliderHue.style.setProperty('--ran-progress-wrap', this.generateColorPickerProgress())
+        this.colorPickerPanelSliderHue.style.setProperty('--ran-progress-wrap', 'linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000)')
         this.colorPickerPanelSliderHue.addEventListener('change', this.changeColorPickerHue)
         this.colorPickerPanelSliderHue.setAttribute('type', 'drag')
         this.colorPickerPanelSliderHue.setAttribute('class', 'ran-color-picker-slider-container-group-hue')
@@ -144,7 +144,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     }
     changeColorPickerHue = (e: Event): void => {
         this.context.h = (<CustomEvent>e).detail.value * 360
-        this.colorPickerPanelSliderHue?.style.setProperty('--ran-progress-wrap', this.generateColorPickerProgress())
+        // this.colorPickerPanelSliderHue?.style.setProperty('--ran-progress-wrap', this.generateColorPickerProgress())
         this.colorPickerPanelSliderAlpha?.style.setProperty('--ran-progress-wrap', this.generateColorPickerProgress())
         this.colorPickerPanelSliderAlpha?.style.setProperty('--ran-progress-dot', this.generateColorPickerPanelSaturationRgba())
         this.colorPickerPanelSliderHue?.style.setProperty('--ran-progress-dot', this.generateColorPickerPanelSaturationRgba())
@@ -153,7 +153,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     }
     changeColorPickerAlpha = (e: Event): void => {
         this.context.a = (<CustomEvent>e).detail.value
-        this.colorPickerPanelSliderHue?.style.setProperty('--ran-progress-wrap', this.generateColorPickerProgress())
+        // this.colorPickerPanelSliderHue?.style.setProperty('--ran-progress-wrap', this.generateColorPickerProgress())
         this.colorPickerPanelSliderAlpha?.style.setProperty('--ran-progress-wrap', this.generateColorPickerProgress())
         this.colorPickerPanelSliderAlpha?.style.setProperty('--ran-progress-dot', this.generateColorPickerPanelSaturationRgba())
         this.colorPickerPanelSliderHue?.style.setProperty('--ran-progress-dot', this.generateColorPickerPanelSaturationRgba())
@@ -237,7 +237,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
         const limitX = range(pageX - left - 8, -8, width - 8)
         this.context.s = limitX / width // 饱和度
         this.context.v = limitY / height
-        this.colorPickerPanelSliderHue?.style.setProperty('--ran-progress-wrap', this.generateColorPickerProgress())
+        // this.colorPickerPanelSliderHue?.style.setProperty('--ran-progress-wrap', this.generateColorPickerProgress())
         this.colorPickerPanelSliderAlpha?.style.setProperty('--ran-progress-wrap', this.generateColorPickerProgress())
         this.colorPickerPanelSliderAlpha?.style.setProperty('--ran-progress-dot', this.generateColorPickerPanelSaturationRgba())
         this.colorPickerPanelSliderHue?.style.setProperty('--ran-progress-dot', this.generateColorPickerPanelSaturationRgba())

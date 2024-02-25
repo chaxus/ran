@@ -1,6 +1,7 @@
 {
   "cSpell.words": [
     "abilitys",
+    "allowclear",
     "ANALYSE",
     "analysed",
     "binarystring",
@@ -21,7 +22,10 @@
     "IIFE",
     "keyof",
     "localstorage",
+    "maxlength",
+    "maxrows",
     "Metiral",
+    "minrows",
     "normalise",
     "normalised",
     "nums",
@@ -43,6 +47,7 @@
     "ranuts",
     "Reactified",
     "scatterplot",
+    "showcount",
     "simplefy",
     "skipsvgo",
     "slotchange",

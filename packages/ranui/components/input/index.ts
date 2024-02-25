@@ -15,10 +15,17 @@ export class Input extends HTMLElementSSR()! {
       "type",
       "icon",
       "value",
-      "status",
+      "status", // error warning
       "prefix", // 前缀
       "suffix", // 后缀
-      "allowClear", // 清除 icon
+      "allowclear", // 清除 icon
+      "count", // 计算输入的数量
+      "maxlength", 
+      "showcount", 
+      "onPressEnter", // 按下回车的回调
+      "variant", // filled borderless
+      "minrows", // 当 type 等于 TextArea 时
+      "maxrows"
     ];
   }
   _input: HTMLDivElement;

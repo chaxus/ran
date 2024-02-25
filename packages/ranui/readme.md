@@ -12,9 +12,13 @@ UI Component library based on `Web Component`
 
 ## Feature
 
-- **Across the frame**: It works with `react`, `vue`, or native projects.
-- **Componentization**: The `shadow dom` actually implements componentization of style and functionality.
-- **native**: A component is like using a `div`tag.
+1. **High Cross-Framework Compatibility**: Our solution seamlessly adapts to a wide array of leading front-end frameworks, including `React`, `Vue`, `Preact`, `SolidJS`, `Svelte`, and more. It also integrates smoothly with any project built on `JavaScript` and adhering to `W3C` standards. No matter your choice of technology stack, we guarantee consistent and reliable support.
+2. **Pure Native Experience**: Our solution eliminates the need for dependencies on front-end frameworks like `npm`, `React`/`Vue`, or complex build tools such as `webpack`/`vite`. It truly embodies the essence of Web technology. You can get started effortlessly, just like manipulating native `div` tags, immediately experiencing the purity and intuitiveness of the technology. This design not only simplifies project structure but also reduces the cost of learning and usage, enabling every developer to appreciate the native charm of Web technology.
+3. **Ultimate Modular Design**: Utilizing the principle of minimal modularization, we carefully dismantle large and complex systems or applications into extremely small, functionally independent, and easily reusable component units. This approach significantly enhances code maintainability, scalability, and reusability.
+4. **Fully Open-Source for Free Learning**: Our project fully adheres to the `MIT` open-source license, granting unrestricted access to all source code. This means you are free to access, learn from, reference, and even modify our code, whether for personal development or commercial applications. We firmly believe that open-source is a vital pathway for technological advancement and innovation.
+5. **Interactive and Comprehensive Documentation**: We provide detailed and highly interactive documentation, where all component examples are live and interactive. This allows you to directly experience the component functionality while reading, deepening your understanding and enabling quick hands-on learning. This design is aimed at providing you with the most intuitive and efficient learning experience possible.
+6. **Type-Checking Support**: Our development environment is fully built on `TypeScript`, equipped with comprehensive declaration files and type definitions, ensuring smooth integration for both `JavaScript` and `TypeScript` projects. With powerful type-checking capabilities, we significantly enhance code readability, maintainability, and project robustness, bringing unprecedented convenience and peace of mind to development work.
+7. **Enhanced Durability and Stability**: Our solution offers exceptional stability, eliminating concerns about disruptive updates encountered during version upgrades, such as `React` from version `15` to `16` (with `fiber`) or `Vue` from version `2` to `3` (with `hooks`). We ensure that your components won't be forced into unnecessary updates or redevelopments, thus avoiding potential project interruptions and additional workloads. This translates into a continuous and hassle-free project operation.
 
 ## Install
 
