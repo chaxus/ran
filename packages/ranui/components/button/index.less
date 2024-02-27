@@ -2,31 +2,27 @@
 @clickY: var(--ran-y, 0);
 
 :host {
-  position: relative;
-  display: inline-block;
-  background-image: none;
-  box-shadow: 0 2px #00000004;
-  cursor: pointer;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  touch-action: manipulation;
-  overflow: hidden;
-  pointer-events: auto;
+  position: var(--ran-btn-position, relative);
+  display: var(--ran-btn-display, inline-block);
+  background-image: var(--ran-btn-background-image, none);
+  box-shadow: var(--ran-btn-box-shadow, 0 2px #00000004);
+  cursor: var(--ran-btn-cursor, pointer);
+  user-select: var(--ran-btn-user-select, none);
+  touch-action: var(--ran-btn-touch-action, manipulation);
+  overflow: var(--ran-btn-overflow, hidden);
+  pointer-events: var(--ran-btn-pointer-events, auto);
+
   .ran-btn {
     position: relative;
     display: inline-block;
     background-image: none;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
     touch-action: manipulation;
     background: #fff;
   }
+
   &,
   &(:active),
   &(:focus) {
@@ -36,30 +32,36 @@
       outline: 0;
     }
   }
+
   &(:not([disabled]):hover) {
     .ran-btn-content {
-      border-color: #1890ff;
-      color: #1890ff;
+      border-color: var(--ran-btn-content-hover-border-color, #1890ff);
+      color: var(--ran-btn-content-hover-color, #1890ff);
     }
   }
+
   &([type="primary"]) {
     .ran-btn-content {
-      border-color: #1890ff;
-      background-color: #1890ff;
-      color: #fff;
+      background-color: var(--ran-btn-content-background-color, #1890ff);
+      border-color: var(--ran-btn-content-border-color, #1890ff);
+      color: var(--ran-btn-content-color, #fff);
     }
   }
+
   &([type="primary"]:not([disabled])) {
     .ran-btn::after {
-      background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+      background-image: var(--ran-btn-after-background-image, radial-gradient(circle, #fff 10%, transparent 10.01%));
     }
   }
+
   &([type="primary"]:not([disabled]):hover) {
     .ran-btn-content {
-      background-color: #40a9ff;
-      color: #fff;
+      background-color: var(--ran-btn-content-hover-background-color, #40a9ff); ;
+      color: var(--ran-btn-content-hover-color, #fff);
+
     }
   }
+
   &([type="warning"]) {
     .ran-btn-content {
       border-color: #ff4d4f;
@@ -67,11 +69,13 @@
       color: #fff;
     }
   }
+
   &([type="warning"]:not([disabled])) {
     .ran-btn::after {
       background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
     }
   }
+
   &([type="warning"]:not([disabled]):hover) {
     .ran-btn-content {
       border-color: #ff4d4f;
@@ -79,21 +83,25 @@
       color: #fff;
     }
   }
+
   &([type="text"]) {
     .ran-btn-content {
       border: none;
     }
   }
+
   &([disabled]) {
     cursor: not-allowed;
     pointer-events: all;
     opacity: 0.6;
+
     .ran-btn {
       cursor: not-allowed;
       pointer-events: all;
       opacity: 0.6;
     }
   }
+
   &(:not([disabled]):active) {
     .ran-btn::after {
       transform: translate(-50%, -50%) scale(0);
@@ -101,8 +109,9 @@
       transition: 0s;
     }
   }
+
   @media (min-width: 1024px) {
-    &(:not([disabled],[effect])) {
+    &(:not([disabled], [effect])) {
       .ran-btn::after {
         content: '';
         display: block;
@@ -141,6 +150,7 @@
   font-weight: 400;
   white-space: nowrap;
   text-align: center;
+
   .icon {
     margin-right: 2px;
   }
