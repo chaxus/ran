@@ -415,7 +415,7 @@ export class Input extends HTMLElementSSR()! {
    */
   dealIcon = (): void => {
     if (!this._icon) {
-      this._icon = document.createElement("r-icon");
+      this._icon = document.createElement("ra-icon");
       const { width, height } = this._inputContent.getBoundingClientRect();
       const size = Math.min(width, height);
       this._icon.setAttribute("size", `${size}`);
