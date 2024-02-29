@@ -9,7 +9,8 @@
   "homepage": "https://chaxus.github.io/ran/src/ranui-react/",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/chaxus/ran/tree/main/packages/ranui-react"
+    "url": "git+https://github.com/chaxus/ran",
+    "directory": "packages/ranui-react"
   },
   "author": "chaxus",
   "license": "MIT",
