@@ -21,6 +21,9 @@
     "url": "git+https://github.com/chaxus/ran",
     "directory": "packages/ranuts"
   },
+  "bugs": {
+    "url": "https://github.com/chaxus/ran/issues"
+  },
   "homepage": "https://github.com/chaxus/ran/tree/main/packages/ranuts/docs",
   "scripts": {
     "build": "tsc --noEmit && vite build",
