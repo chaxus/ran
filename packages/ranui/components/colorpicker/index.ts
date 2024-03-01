@@ -1,5 +1,5 @@
 import { addClassToElement, range, removeClassToElement } from 'ranuts';
-import { HTMLElementSSR, createCustomError } from '@/utils/index';
+import { HTMLElementSSR, createCustomError, createSignal } from '@/utils/index';
 import { hsv2rgb } from '@/utils/color';
 import '@/components/popover';
 import '@/components/content';
@@ -14,13 +14,22 @@ import './index.less';
 // HSB： 色相、饱和度、明度，透明度
 // HSV： 色相、饱和度、明度，透明度
 
+const BOT_WIDTH = 8;
+
+const HUE = 360;
+
 interface Context {
   disabled: boolean;
-  value: string;
-  h: number;
-  s: number;
-  v: number;
+  value: Signal;
+  h: number; // 0 - 360 色相
+  s: number; // 0 - 100 饱和度
+  v: number; // 0 - 100 亮度
   a: number;
+}
+
+interface Signal {
+  getter: () => string | undefined;
+  setter: (newValue: string) => void;
 }
 
 export class ColorPicker extends (HTMLElementSSR()!) {
@@ -68,26 +77,35 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     this.colorpicker.appendChild(this.colorpickerInner);
     this.appendChild(this.popoverBlock);
     this.colorPickerPaletteSelect = false;
-    this.context = {
-      value: '',
-      disabled: false,
-      h: 0,
-      s: 0,
-      v: 1,
-      a: 0.8,
-    };
+    // this.context = {
+    //   value: '',
+    //   disabled: false,
+    //   h: 0,
+    //   s: 0,
+    //   v: 0,
+    //   a: 0.8,
+    // };
   }
   get value(): string {
-    return this.context.value;
+    return this.context.value.getter() || '';
   }
   set value(value: string) {
     this.setAttribute('value', value);
     this.updateColorValue(value);
   }
+  createContext = (): void => {
+    this.context = {
+      value: this.createColorValueSignal(),
+    };
+  };
+  createColorValueSignal = (): Signal => {
+    const [getter, setter] = createSignal('', { subscriber: this.updateColorValue });
+    return { getter, setter };
+  };
   updateColorValue = (value: string): void => {
-    if (value !== this.context.value) {
+    if (value !== this.context.value.getter()) {
       this.colorpickerInner.style.setProperty('background', value);
-      this.context.value = value;
+      this.context.value.setter(value)
     }
   };
   update = (): void => {
@@ -110,19 +128,33 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     e.stopPropagation();
     e.preventDefault();
   };
-  clickColorPalette = (e: MouseEvent): void => {
+  changeColorPalettePositionByContext = (): void => {
+    window.requestAnimationFrame(() => {
+      if (!this.colorPickerPanelPalette) return;
+      const { width, height } = this.colorPickerPanelPalette?.getBoundingClientRect() || {};
+      const limitY = this.context.v * height;
+      const limitX = this.context.s * width;
+      this.colorPickerPanelDot?.style.setProperty('top', `${limitY - BOT_WIDTH}px`);
+      this.colorPickerPanelDot?.style.setProperty('left', `${limitX - BOT_WIDTH}px`);
+      this.update();
+    });
+  };
+  changeColorPalettePosition = (offsetX: number, offsetY: number): void => {
     if (!this.colorPickerPanelPalette) return;
-    const { offsetX, offsetY } = e;
     const { width, height } = this.colorPickerPanelPalette?.getBoundingClientRect() || {};
-    const limitY = range(offsetX - 8, -8, height - 8);
-    const limitX = range(offsetX - 8, -8, width - 8);
+    const limitY = range(offsetY - BOT_WIDTH, -BOT_WIDTH, height - BOT_WIDTH);
+    const limitX = range(offsetX - BOT_WIDTH, -BOT_WIDTH, width - BOT_WIDTH);
     this.context.s = limitX / width; // 饱和度
     this.context.v = limitY / height;
     this.update();
     window.requestAnimationFrame(() => {
-      this.colorPickerPanelDot?.style.setProperty('top', `${offsetY - 8}px`);
-      this.colorPickerPanelDot?.style.setProperty('left', `${offsetX - 8}px`);
+      this.colorPickerPanelDot?.style.setProperty('top', `${offsetY - BOT_WIDTH}px`);
+      this.colorPickerPanelDot?.style.setProperty('left', `${offsetX - BOT_WIDTH}px`);
     });
+  };
+  clickColorPalette = (e: MouseEvent): void => {
+    const { offsetX, offsetY } = e;
+    this.changeColorPalettePosition(offsetX, offsetY);
   };
   createColorPickerProgress = (): void => {
     // progress
@@ -143,8 +175,11 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     this.colorPickerPanelSliderHue.setAttribute('type', 'drag');
     this.colorPickerPanelSliderHue.setAttribute('class', 'ran-color-picker-slider-container-group-hue');
     this.colorPickerPanelSliderAlpha = document.createElement('r-progress');
-    this.colorPickerPanelSliderAlpha.style.setProperty('--ran-progress-dot',this.generateColorPickerPanelSaturationRgba(),);
-    this.colorPickerPanelSliderAlpha.setAttribute('value',`${this.context.a}`)
+    this.colorPickerPanelSliderAlpha.style.setProperty(
+      '--ran-progress-dot',
+      this.generateColorPickerPanelSaturationRgba(),
+    );
+    this.colorPickerPanelSliderAlpha.setAttribute('percent', `${this.context.a}`);
     this.colorPickerPanelSliderAlpha.style.setProperty('--ran-progress-wrap', this.generateColorPickerProgress());
     this.colorPickerPanelSliderAlpha.addEventListener('change', this.changeColorPickerAlpha);
     this.colorPickerPanelSliderAlpha.setAttribute('type', 'drag');
@@ -161,7 +196,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     this.colorPickerPanelSliderContainer.appendChild(this.colorPickerColorBlock);
   };
   changeColorPickerHue = (e: Event): void => {
-    this.context.h = (<CustomEvent>e).detail.value * 360;
+    this.context.h = (<CustomEvent>e).detail.value * HUE;
     this.update();
   };
   changeColorPickerAlpha = (e: Event): void => {
@@ -224,6 +259,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     this.colorPickerInputContainerInputNumber.setAttribute('class', 'ran-color-picker-input-container-input-number');
     this.colorPickerInputContainer.appendChild(this.colorPickerInputContainerInputColor);
     this.colorPickerInputContainer.appendChild(this.colorPickerInputContainerInputNumber);
+    this.changeColorPalettePositionByContext();
   };
   openColorPicker = (): void => {
     if (this.colorPickerInner) return;
@@ -245,11 +281,11 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     if (!this.colorPickerPanelPalette || !this.colorPickerPaletteSelect) return;
     const { pageX, pageY } = e;
     const { top = 0, left = 0, width, height } = this.colorPickerPanelPalette?.getBoundingClientRect() || {};
-    const limitY = range(pageY - top - 8, -8, height - 8);
-    const limitX = range(pageX - left - 8, -8, width - 8);
+    const limitY = range(pageY - top - BOT_WIDTH, -BOT_WIDTH, height - BOT_WIDTH);
+    const limitX = range(pageX - left - BOT_WIDTH, -BOT_WIDTH, width - BOT_WIDTH);
     this.context.s = limitX / width; // 饱和度
     this.context.v = limitY / height;
-    this.update()
+    this.update();
     window.requestAnimationFrame(() => {
       this.colorPickerPanelDot?.style.setProperty('top', `${limitY}px`);
       this.colorPickerPanelDot?.style.setProperty('left', `${limitX}px`);
@@ -273,6 +309,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
   generateColorPickerProgress = (): string => {
     const { h, s, v } = this.context;
     const { r, g, b } = hsv2rgb(h, s * 100, v * 100);
+    console.log('h,s,v', h, s, v, r, g, b);
     return `linear-gradient(to right, rgba(255, 0, 4, 0), rgb(${r}, ${g}, ${b}))`;
   };
   mouseDownColorPickerPalette = (e: MouseEvent): void => {
