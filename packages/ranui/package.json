@@ -12,6 +12,9 @@
     "url": "git+https://github.com/chaxus/ran",
     "directory": "packages/ranui"
   },
+  "bugs": {
+    "url": "https://github.com/chaxus/ran/issues"
+  },
   "author": "chaxus",
   "license": "MIT",
   "engines": {
@@ -29,7 +32,8 @@
     "test:update": "playwright test --update-snapshots"
   },
   "files": [
-    "dist/*"
+    "dist",
+    "typings.d.ts"
   ],
   "keywords": [
     "ran",
