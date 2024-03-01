@@ -57,7 +57,7 @@ export class Select extends (HTMLElementSSR()!) {
       'placement', // 弹窗的方向
       'getPopupContainerId', // 挂载的节点
       'dropdownclass', // 弹窗的类名
-      'action', // 触发下拉框的行为， click 还是 hover ，hover 在 isMobile 移动端无效
+      'trigger', // 触发下拉框的行为， click 还是 hover ，hover 在 isMobile 移动端无效
     ];
   }
   constructor() {
@@ -78,7 +78,7 @@ export class Select extends (HTMLElementSSR()!) {
     this._text = document.createElement('span');
     this._text.setAttribute('class', 'selection-item');
     this._text.setAttribute('part', 'selection-item');
-    this._icon = document.createElement('r-icon');
+    this._icon = document.createElement('ra-icon');
     this._icon.setAttribute('class', 'icon');
     this._icon.setAttribute('part', 'icon');
     this._icon.setAttribute('name', 'arrow-down');
@@ -150,11 +150,11 @@ export class Select extends (HTMLElementSSR()!) {
   set dropdownclass(value: string) {
     this.setAttribute('dropdownclass', value || '');
   }
-  get action(): string {
-    return this.getAttribute('action') || 'click';
+  get trigger(): string {
+    return this.getAttribute('trigger') || 'click';
   }
-  set action(value: string) {
-    this.setAttribute('action', value || '');
+  set trigger(value: string) {
+    this.setAttribute('trigger', value || '');
   }
   get disabled(): boolean {
     return isDisabled(this);
@@ -250,7 +250,7 @@ export class Select extends (HTMLElementSSR()!) {
   };
   removeDropDownTimeId = (): void => {
     this._search.setAttribute('value', '');
-    if (this.action.includes('hover') && !isMobile()) {
+    if (this.trigger.includes('hover') && !isMobile()) {
       clearTimeout(this.removeTimeId);
       this.removeTimeId = undefined;
     }
@@ -324,7 +324,7 @@ export class Select extends (HTMLElementSSR()!) {
       } else {
         this._selectionDropdown.setAttribute('class', 'ranui-select-dropdown');
       }
-      if (this.action.includes('hover') && !isMobile()) {
+      if (this.trigger.includes('hover') && !isMobile()) {
         this._selectDropdown.addEventListener('mouseleave', this.selectBlur);
         this._selectDropdown.addEventListener('mouseenter', this.removeDropDownTimeId);
       }
@@ -455,11 +455,11 @@ export class Select extends (HTMLElementSSR()!) {
     this.removeEventListener('mouseleave', this.selectBlur);
     this.removeEventListener('click', this.selectMouseDown);
     this.removeEventListener('blur', this.selectBlur);
-    if (this.action.includes('hover') && !isMobile()) {
+    if (this.trigger.includes('hover') && !isMobile()) {
       this.addEventListener('mouseenter', this.selectMouseDown);
       this.addEventListener('mouseleave', this.selectBlur);
     }
-    if (this.action.includes('click')) {
+    if (this.trigger.includes('click')) {
       this.addEventListener('click', this.selectMouseDown);
       this.addEventListener('blur', this.selectBlur);
     }

@@ -12,6 +12,9 @@
     "url": "git+https://github.com/chaxus/ran",
     "directory": "packages/ranui-react"
   },
+  "bugs": {
+    "url": "https://github.com/chaxus/ran/issues"
+  },
   "author": "chaxus",
   "license": "MIT",
   "engines": {
