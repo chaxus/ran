@@ -19,23 +19,23 @@ const BOT_WIDTH = 8;
 const HUE = 360;
 
 interface Context {
-  disabled: boolean;
-  value: Signal;
-  h: number; // 0 - 360 色相
-  s: number; // 0 - 100 饱和度
-  v: number; // 0 - 100 亮度
-  a: number;
+  disabled: Signal<boolean>;
+  value: Signal<string>;
+  h: Signal<number>; // 0 - 360 色相
+  s: Signal<number>; // 0 - 100 饱和度
+  v: Signal<number>; // 0 - 100 亮度
+  a: Signal<number>;
 }
 
-interface Signal {
-  getter: () => string | undefined;
-  setter: (newValue: string) => void;
+interface Signal<T> {
+  getter: () => T;
+  setter: (newValue: T) => void;
 }
 
 export class ColorPicker extends (HTMLElementSSR()!) {
   colorpicker: HTMLDivElement;
   colorpickerInner: HTMLDivElement;
-  context: Context;
+  context?: Context;
   popoverBlock: HTMLElement;
   popoverContent: HTMLElement;
   colorPickerInner?: HTMLDivElement;
@@ -77,6 +77,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     this.colorpicker.appendChild(this.colorpickerInner);
     this.appendChild(this.popoverBlock);
     this.colorPickerPaletteSelect = false;
+    this.createContext()
     // this.context = {
     //   value: '',
     //   disabled: false,
@@ -87,7 +88,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     // };
   }
   get value(): string {
-    return this.context.value.getter() || '';
+    return this.context?.value.getter() || '';
   }
   set value(value: string) {
     this.setAttribute('value', value);
@@ -96,16 +97,41 @@ export class ColorPicker extends (HTMLElementSSR()!) {
   createContext = (): void => {
     this.context = {
       value: this.createColorValueSignal(),
+      disabled: this.createColorDisabled(),
+      h: this.createColorHex(),
+      s: this.createColorS(),
+      v: this.createColorV(),
+      a: this.createColorA()
     };
   };
-  createColorValueSignal = (): Signal => {
-    const [getter, setter] = createSignal('', { subscriber: () => {} });
+  createColorHex = (): Signal<number> => {
+    const [getter, setter] = createSignal<number>(0, { subscriber: () => { } });
+    return { getter, setter };
+  }
+  createColorS = (): Signal<number> => {
+    const [getter, setter] = createSignal(0, { subscriber: () => { } });
+    return { getter, setter };
+  }
+  createColorV = (): Signal<number> => {
+    const [getter, setter] = createSignal(0, { subscriber: () => { } });
+    return { getter, setter };
+  }
+  createColorA = (): Signal<number> => {
+    const [getter, setter] = createSignal(0, { subscriber: () => { } });
+    return { getter, setter };
+  }
+  createColorDisabled = (): Signal<boolean> => {
+    const [getter, setter] = createSignal(true, { subscriber: () => { } });
+    return { getter, setter };
+  }
+  createColorValueSignal = (): Signal<string> => {
+    const [getter, setter] = createSignal('', { subscriber: () => { } });
     return { getter, setter };
   };
   updateColorValue = (value: string): void => {
-    if (value !== this.context.value.getter()) {
+    if (value !== this.context?.value.getter()) {
       this.colorpickerInner.style.setProperty('background', value);
-      this.context.value.setter(value)
+      this.context?.value.setter(value)
     }
   };
   update = (): void => {
@@ -131,9 +157,10 @@ export class ColorPicker extends (HTMLElementSSR()!) {
   changeColorPalettePositionByContext = (): void => {
     window.requestAnimationFrame(() => {
       if (!this.colorPickerPanelPalette) return;
+      if(!this.context?.v.getter || !this.context?.s.getter) return  
       const { width, height } = this.colorPickerPanelPalette?.getBoundingClientRect() || {};
-      const limitY = this.context.v * height;
-      const limitX = this.context.s * width;
+      const limitY = this.context.v.getter() * height;
+      const limitX = this.context.s.getter() * width;
       this.colorPickerPanelDot?.style.setProperty('top', `${limitY - BOT_WIDTH}px`);
       this.colorPickerPanelDot?.style.setProperty('left', `${limitX - BOT_WIDTH}px`);
       this.update();

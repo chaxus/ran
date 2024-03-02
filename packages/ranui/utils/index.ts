@@ -144,7 +144,7 @@ export const HTMLElementSSR = (): { new(): HTMLElement; prototype: HTMLElement }
 export const createSignal = <T = unknown>(
   value: T,
   options?: { subscriber?: Function, equals?: boolean | ((prev: T | undefined, next: T) => boolean) },
-): [() => T | undefined, (newValue: T) => void] => {
+): [() => T, (newValue: T) => void] => {
   const signal = {
     value,
     // 订阅者
