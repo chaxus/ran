@@ -165,3 +165,9 @@ export const rgba2rgb = (
         b: parseInt(`${(1 - a) * 255 + a * b}`, 10),
     };
 }
+
+export const hexColorRegex = /^#([\da-fA-F]{6}|[\da-fA-F]{3})$/;
+
+export const rgbRegex = /^rgb\((\d{1,3}),(\d{1,3}),(\d{1,3})\)$/;
+
+export const rgbaRegex = /^rgba\((\d{1,3}),(\d{1,3}),(\d{1,3}),(\d{1,3}(\.\d+)?)\)$/; 

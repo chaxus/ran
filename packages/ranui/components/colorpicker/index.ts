@@ -99,7 +99,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     };
   };
   createColorValueSignal = (): Signal => {
-    const [getter, setter] = createSignal('', { subscriber: this.updateColorValue });
+    const [getter, setter] = createSignal('', { subscriber: () => {} });
     return { getter, setter };
   };
   updateColorValue = (value: string): void => {
