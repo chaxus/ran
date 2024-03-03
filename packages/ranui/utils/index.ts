@@ -143,7 +143,7 @@ export const HTMLElementSSR = (): { new(): HTMLElement; prototype: HTMLElement }
 
 export const createSignal = <T = unknown>(
   value: T,
-  options?: { subscriber?: Function, equals?: boolean | ((prev: T | undefined, next: T) => boolean) },
+  options?: { subscriber?: Function[], equals?: boolean | ((prev: T | undefined, next: T) => boolean) },
 ): [() => T, (newValue: T) => void] => {
   const signal = {
     value,
@@ -154,8 +154,12 @@ export const createSignal = <T = unknown>(
   const getter = () => {
     const { subscriber } = options || {}
     // 订阅
-    if (subscriber && !signal.subscribers.has(subscriber)) {
-      signal.subscribers.add(subscriber)
+    if (subscriber && Array.isArray(subscriber)) {
+      subscriber.forEach(item => {
+        if (typeof item === 'function' && !signal.subscribers.has(item)) {
+          signal.subscribers.add(item)
+        }
+      })
     }
     return signal.value
   }

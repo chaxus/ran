@@ -1,6 +1,6 @@
 import { addClassToElement, range, removeClassToElement } from 'ranuts';
 import { HTMLElementSSR, createCustomError, createSignal } from '@/utils/index';
-import { hsv2rgb } from '@/utils/color';
+import { HEX_COLOR_REGEX, RGBA_REGEX, RGB_REGEX, hex2hsv, hsv2rgb, rgb2hsv } from '@/utils/color';
 import '@/components/popover';
 import '@/components/content';
 import '@/components/input';
@@ -21,10 +21,10 @@ const HUE = 360;
 interface Context {
   disabled: Signal<boolean>;
   value: Signal<string>;
-  h: Signal<number>; // 0 - 360 色相
-  s: Signal<number>; // 0 - 100 饱和度
-  v: Signal<number>; // 0 - 100 亮度
-  a: Signal<number>;
+  hue: Signal<number>; // 0 - 360 色相 hue
+  saturation: Signal<number>; // 0 - 100 饱和度 x
+  lightness: Signal<number>; // 0 - 100 亮度 y
+  transparency: Signal<number>; // 0 - 100 透明度
 }
 
 interface Signal<T> {
@@ -35,7 +35,7 @@ interface Signal<T> {
 export class ColorPicker extends (HTMLElementSSR()!) {
   colorpicker: HTMLDivElement;
   colorpickerInner: HTMLDivElement;
-  context?: Context;
+  context!: Context;
   popoverBlock: HTMLElement;
   popoverContent: HTMLElement;
   colorPickerInner?: HTMLDivElement;
@@ -78,14 +78,6 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     this.appendChild(this.popoverBlock);
     this.colorPickerPaletteSelect = false;
     this.createContext()
-    // this.context = {
-    //   value: '',
-    //   disabled: false,
-    //   h: 0,
-    //   s: 0,
-    //   v: 0,
-    //   a: 0.8,
-    // };
   }
   get value(): string {
     return this.context?.value.getter() || '';
@@ -98,38 +90,81 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     this.context = {
       value: this.createColorValueSignal(),
       disabled: this.createColorDisabled(),
-      h: this.createColorHex(),
-      s: this.createColorS(),
-      v: this.createColorV(),
-      a: this.createColorA()
+      hue: this.createColorHue(),
+      saturation: this.createColorSaturation(),
+      lightness: this.createColorLightness(),
+      transparency: this.createColorTransparency()
     };
   };
-  createColorHex = (): Signal<number> => {
-    const [getter, setter] = createSignal<number>(0, { subscriber: () => { } });
+  /**
+   * @description:  0 - 360 色相 hue
+   * @param {*} Signal
+   * @return {*}
+   */
+  createColorHue = (): Signal<number> => {
+    const [getter, setter] = createSignal<number>(0, { subscriber: [] });
     return { getter, setter };
   }
-  createColorS = (): Signal<number> => {
-    const [getter, setter] = createSignal(0, { subscriber: () => { } });
+  /**
+   * @description: 0 - 100 饱和度 x
+   * @param {*} Signal
+   * @return {*}
+   */
+  createColorSaturation = (): Signal<number> => {
+    const [getter, setter] = createSignal(1, { subscriber: [] });
     return { getter, setter };
   }
-  createColorV = (): Signal<number> => {
-    const [getter, setter] = createSignal(0, { subscriber: () => { } });
+  /**
+   * @description: 0 - 100 亮度 y
+   * @param {*} Signal
+   * @return {*}
+   */
+  createColorLightness = (): Signal<number> => {
+    const [getter, setter] = createSignal(0, { subscriber: [] });
     return { getter, setter };
   }
-  createColorA = (): Signal<number> => {
-    const [getter, setter] = createSignal(0, { subscriber: () => { } });
+  /**
+   * @description:  0 - 100 透明度
+   * @param {*} Signal
+   * @return {*}
+   */
+  createColorTransparency = (): Signal<number> => {
+    const [getter, setter] = createSignal(0.8, { subscriber: [] });
     return { getter, setter };
   }
   createColorDisabled = (): Signal<boolean> => {
-    const [getter, setter] = createSignal(true, { subscriber: () => { } });
+    const [getter, setter] = createSignal(true, { subscriber: [] });
     return { getter, setter };
   }
   createColorValueSignal = (): Signal<string> => {
-    const [getter, setter] = createSignal('', { subscriber: () => { } });
+    const [getter, setter] = createSignal('', { subscriber: [] });
     return { getter, setter };
   };
   updateColorValue = (value: string): void => {
     if (value !== this.context?.value.getter()) {
+      const hex = HEX_COLOR_REGEX.exec(value) // #1677FF #fff #FFF
+      const rga = RGB_REGEX.exec(value.replace(/\s+/g, '')) // rgba(255, 255, 255, 0)
+      const rgba = RGBA_REGEX.exec(value.replace(/\s+/g, '')) // rgb(255, 255, 255, 0)
+      if (hex) {
+        const { h, s, v } = hex2hsv(hex[0])
+        this.context.hue.setter(h)
+        this.context.saturation.setter(s)
+        this.context.lightness.setter(v)
+      } else if (rgba) {
+        const { h, s, v } = rgb2hsv(Number(rgba[1]), Number(rgba[2]), Number(rgba[3]))
+        this.context.hue.setter(h)
+        this.context.saturation.setter(s)
+        this.context.lightness.setter(v)
+        this.context.transparency.setter(Number(rgba[4]))
+      } else if (rga) {
+        const { h, s, v } = rgb2hsv(Number(rga[1]), Number(rga[2]), Number(rga[3]))
+        this.context.hue.setter(h)
+        this.context.saturation.setter(s)
+        this.context.lightness.setter(v)
+      } else {
+        return
+      }
+      this.setAttribute('value', value);
       this.colorpickerInner.style.setProperty('background', value);
       this.context?.value.setter(value)
     }
@@ -157,22 +192,23 @@ export class ColorPicker extends (HTMLElementSSR()!) {
   changeColorPalettePositionByContext = (): void => {
     window.requestAnimationFrame(() => {
       if (!this.colorPickerPanelPalette) return;
-      if(!this.context?.v.getter || !this.context?.s.getter) return  
+      if (!this.context?.lightness.getter || !this.context?.saturation.getter) return
       const { width, height } = this.colorPickerPanelPalette?.getBoundingClientRect() || {};
-      const limitY = this.context.v.getter() * height;
-      const limitX = this.context.s.getter() * width;
-      this.colorPickerPanelDot?.style.setProperty('top', `${limitY - BOT_WIDTH}px`);
-      this.colorPickerPanelDot?.style.setProperty('left', `${limitX - BOT_WIDTH}px`);
+      const limitY = height - this.context.lightness.getter() / 100 * height;
+      const limitX = this.context.saturation.getter() / 100 * width;
+      this.colorPickerPanelDot?.style.setProperty('top', `${limitY}px`);
+      this.colorPickerPanelDot?.style.setProperty('left', `${limitX}px`);
       this.update();
     });
   };
   changeColorPalettePosition = (offsetX: number, offsetY: number): void => {
     if (!this.colorPickerPanelPalette) return;
+    if (!this.context?.lightness.getter || !this.context?.saturation.getter) return
     const { width, height } = this.colorPickerPanelPalette?.getBoundingClientRect() || {};
-    const limitY = range(offsetY - BOT_WIDTH, -BOT_WIDTH, height - BOT_WIDTH);
-    const limitX = range(offsetX - BOT_WIDTH, -BOT_WIDTH, width - BOT_WIDTH);
-    this.context.s = limitX / width; // 饱和度
-    this.context.v = limitY / height;
+    const limitY = height - range(offsetY, 0, height);
+    const limitX = range(offsetX, 0, width);
+    this.context.saturation.setter(limitX / width); // 饱和度
+    this.context.lightness.setter(limitY / height);
     this.update();
     window.requestAnimationFrame(() => {
       this.colorPickerPanelDot?.style.setProperty('top', `${offsetY - BOT_WIDTH}px`);
@@ -206,7 +242,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
       '--ran-progress-dot',
       this.generateColorPickerPanelSaturationRgba(),
     );
-    this.colorPickerPanelSliderAlpha.setAttribute('percent', `${this.context.a}`);
+    this.colorPickerPanelSliderAlpha.setAttribute('percent', `${this.context.transparency.getter()}`);
     this.colorPickerPanelSliderAlpha.style.setProperty('--ran-progress-wrap', this.generateColorPickerProgress());
     this.colorPickerPanelSliderAlpha.addEventListener('change', this.changeColorPickerAlpha);
     this.colorPickerPanelSliderAlpha.setAttribute('type', 'drag');
@@ -223,11 +259,11 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     this.colorPickerPanelSliderContainer.appendChild(this.colorPickerColorBlock);
   };
   changeColorPickerHue = (e: Event): void => {
-    this.context.h = (<CustomEvent>e).detail.value * HUE;
+    this.context.hue.setter((<CustomEvent>e).detail.value * HUE);
     this.update();
   };
   changeColorPickerAlpha = (e: Event): void => {
-    this.context.a = (<CustomEvent>e).detail.value;
+    this.context.transparency.setter((<CustomEvent>e).detail.value);
     this.update();
   };
   createColorPickerSelect = (): void => {
@@ -286,7 +322,6 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     this.colorPickerInputContainerInputNumber.setAttribute('class', 'ran-color-picker-input-container-input-number');
     this.colorPickerInputContainer.appendChild(this.colorPickerInputContainerInputColor);
     this.colorPickerInputContainer.appendChild(this.colorPickerInputContainerInputNumber);
-    this.changeColorPalettePositionByContext();
   };
   openColorPicker = (): void => {
     if (this.colorPickerInner) return;
@@ -303,6 +338,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     this.colorPickerInputContainer && this.colorPickerInnerContent.appendChild(this.colorPickerInputContainer);
     this.colorPickerInner.appendChild(this.colorPickerInnerContent);
     this.popoverContent.appendChild(this.colorPickerInner);
+    this.changeColorPalettePositionByContext();
   };
   mouseMoveColorPickerPalette = (e: MouseEvent): void => {
     if (!this.colorPickerPanelPalette || !this.colorPickerPaletteSelect) return;
@@ -310,8 +346,8 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     const { top = 0, left = 0, width, height } = this.colorPickerPanelPalette?.getBoundingClientRect() || {};
     const limitY = range(pageY - top - BOT_WIDTH, -BOT_WIDTH, height - BOT_WIDTH);
     const limitX = range(pageX - left - BOT_WIDTH, -BOT_WIDTH, width - BOT_WIDTH);
-    this.context.s = limitX / width; // 饱和度
-    this.context.v = limitY / height;
+    this.context.saturation.setter(limitX / width); // 饱和度
+    this.context.lightness.setter(limitY / height);
     this.update();
     window.requestAnimationFrame(() => {
       this.colorPickerPanelDot?.style.setProperty('top', `${limitY}px`);
@@ -319,25 +355,25 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     });
   };
   generateColorPickerPanelSaturationRgba = (): string => {
-    const { h, s, v, a } = this.context;
-    const { r, g, b } = hsv2rgb(h, 100, 100);
+    const { hue, saturation, lightness } = this.context;
+    console.log('hsv2rgb(hue.getter(), saturation.getter() * 100, lightness.getter() * 100);', hue.getter(), saturation.getter(), lightness.getter());
+    const { r, g, b } = hsv2rgb(hue.getter(), saturation.getter() * 100, lightness.getter() * 100);
     return `rgb(${r}, ${g}, ${b})`;
   };
   generateColorPickerPanelDotInnerRgba = (): string => {
-    const { h, s, v } = this.context;
-    const { r, g, b } = hsv2rgb(h, s * 100, v * 100);
+    const { hue, saturation, lightness } = this.context;
+    const { r, g, b } = hsv2rgb(hue.getter(), saturation.getter() * 100, lightness.getter() * 100);
     return `rgb(${r}, ${g}, ${b})`;
   };
   generateColorPickerColorBlockInner = (): string => {
-    const { h, s, v, a } = this.context;
-    const { r, g, b } = hsv2rgb(h, s * 100, v * 100);
-    return `rgb(${r}, ${g}, ${b}, ${a})`;
+    const { hue, saturation, lightness, transparency } = this.context;
+    const { r, g, b } = hsv2rgb(hue.getter(), saturation.getter() * 100, lightness.getter() * 100);
+    return `rgb(${r}, ${g}, ${b}, ${transparency.getter()})`;
   };
   generateColorPickerProgress = (): string => {
-    const { h, s, v } = this.context;
-    const { r, g, b } = hsv2rgb(h, s * 100, v * 100);
-    console.log('h,s,v', h, s, v, r, g, b);
-    return `linear-gradient(to right, rgba(255, 0, 4, 0), rgb(${r}, ${g}, ${b}))`;
+    const { hue, saturation, lightness } = this.context;
+    const { r, g, b } = hsv2rgb(hue.getter(), saturation.getter() * 100, lightness.getter() * 100);
+    return `linear-gradient(to right, rgba(255, 0, 4, 0), rgba(${r}, ${g}, ${b}, 1))`;
   };
   mouseDownColorPickerPalette = (e: MouseEvent): void => {
     e.stopPropagation();

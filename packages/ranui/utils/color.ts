@@ -166,8 +166,8 @@ export const rgba2rgb = (
     };
 }
 
-export const hexColorRegex = /^#([\da-fA-F]{6}|[\da-fA-F]{3})$/;
+export const HEX_COLOR_REGEX = /^#([\da-fA-F]{6}|[\da-fA-F]{3})$/;
 
-export const rgbRegex = /^rgb\((\d{1,3}),(\d{1,3}),(\d{1,3})\)$/;
+export const RGB_REGEX = /^rgb\((\d{1,3}),(\d{1,3}),(\d{1,3})\)$/;
 
-export const rgbaRegex = /^rgba\((\d{1,3}),(\d{1,3}),(\d{1,3}),(\d{1,3}(\.\d+)?)\)$/; 
+export const RGBA_REGEX = /^rgba\((\d{1,3}),(\d{1,3}),(\d{1,3}),(\d{1,3}(\.\d+)?)\)$/; 
