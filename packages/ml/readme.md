@@ -30,7 +30,7 @@ node_modules/.pnpm/@tensorflow+tfjs-node@4.17.0/node_modules/@tensorflow/tfjs-no
 │ }
 │ Node.js v19.6.0
 ```
-- slove
+- solve
 ```sh
 cnpm install @tensorflow/tfjs-node
 ```

@@ -45,7 +45,7 @@ export class Select extends (HTMLElementSSR()!) {
   _activeOption?: HTMLElement;
   _text: HTMLSpanElement;
   _selector: HTMLDivElement;
-  onSearch: any;
+  onSearch?: ((this: HTMLElement, ev: Event) => unknown);
   static get observedAttributes(): string[] {
     return [
       'disabled',
@@ -96,7 +96,7 @@ export class Select extends (HTMLElementSSR()!) {
     this._optionValueMapLabel = new Map();
     const shadowRoot = this.attachShadow({ mode: 'closed' });
     this._shadowDom = shadowRoot;
-    shadowRoot.appendChild(this._select);
+    this._shadowDom.appendChild(this._select);
   }
   get value(): string {
     return this.getAttribute('value') || '';
@@ -229,7 +229,7 @@ export class Select extends (HTMLElementSSR()!) {
     if (this.getPopupContainerId && root) {
       if (this.placement === 'top') {
         selectTop = top - root.getBoundingClientRect().top - this._selectionDropdown.clientHeight;
-      }else{
+      } else {
         selectTop = root.getBoundingClientRect().height;
       }
       selectLeft = 0;
@@ -437,12 +437,12 @@ export class Select extends (HTMLElementSSR()!) {
   };
   setShowSearch = (): void => {
     this.onSearch = searchThrottle(this.changeSearch);
-    this._search.addEventListener('change', this.onSearch);
-    this._search.addEventListener('click', this.onSearch);
+    this.onSearch && this._search.addEventListener('change', this.onSearch);
+    this.onSearch && this._search.addEventListener('click', this.onSearch);
   };
   removeShowSearch = (): void => {
-    this._search.removeEventListener('change', this.onSearch);
-    this._search.removeEventListener('click', this.onSearch);
+    this.onSearch && this._search.removeEventListener('change', this.onSearch);
+    this.onSearch && this._search.removeEventListener('click', this.onSearch);
   };
   listenSlotChange = (): void => {
     this._slot.addEventListener('slotchange', this.addOptionToSlot);
@@ -502,9 +502,15 @@ export class Select extends (HTMLElementSSR()!) {
   }
 }
 
+
 function Custom() {
   if (typeof document !== 'undefined' && !customElements.get('r-select')) {
+    // has shadowRoot
     customElements.define('r-select', Select);
+    // if (!customElements.get('ra-select')) {
+    //   // has not shadowRoot
+    //   customElements.define('ra-select', RaSelect);
+    // }
     return Select;
   } else {
     return createCustomError('document is undefined or r-select is exist');
