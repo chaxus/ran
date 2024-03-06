@@ -1,5 +1,4 @@
-
-# 查看ip地址
+# 查看 ip 地址
 
 `https://tool.chinaz.com/speedtest/storage.googleapis.com`
 
@@ -30,7 +29,9 @@ node_modules/.pnpm/@tensorflow+tfjs-node@4.17.0/node_modules/@tensorflow/tfjs-no
 │ }
 │ Node.js v19.6.0
 ```
+
 - solve
+
 ```sh
 cnpm install @tensorflow/tfjs-node
 ```

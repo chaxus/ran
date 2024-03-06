@@ -6,15 +6,15 @@ Pass in a string to get the value of the cookie with the specified name
 
 ### Return
 
-| argument    | Instructions                             | type     |
-| ------- | -------------------------------- | -------- |
-| `sting` | Returns the value of a cookie with the specified name | `string` |
+| argument | Instructions                                          | type     |
+| -------- | ----------------------------------------------------- | -------- |
+| `sting`  | Returns the value of a cookie with the specified name | `string` |
 
 ### Options
 
-| argument | Instructions                       | type     | Default value |
-| ---- | -------------------------- | -------- | ------ |
-| name | Specifies the value of the name that gets the cookie | `object` | 无     |
+| argument | Instructions                                         | type     | Default value |
+| -------- | ---------------------------------------------------- | -------- | ------------- |
+| name     | Specifies the value of the name that gets the cookie | `object` | 无            |
 
 ## Example
 

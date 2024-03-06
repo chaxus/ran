@@ -123,7 +123,7 @@ function Custom() {
         }
       };
       connectedCallback() {
-        this.appendChild(this._div)
+        this.appendChild(this._div);
         this.setIcon();
       }
       attributeChangedCallback(name: string, oldValue: string, newValue: string) {

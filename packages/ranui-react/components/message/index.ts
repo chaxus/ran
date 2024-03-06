@@ -1,6 +1,6 @@
 import 'ranui/message';
-import 'ranui/style'
+import 'ranui/style';
 
-const message = window.message
+const message = window.message;
 
 export default message;

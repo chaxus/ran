@@ -19,11 +19,11 @@ hero:
 features:
   - icon: ⚡️
     title: record
-    details: 
+    details:
   - icon: 🛠️
     title: solve
-    details: 
+    details:
   - icon: 🖖
     title: share
-    details: 
+    details:
 ---

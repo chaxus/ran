@@ -7,6 +7,7 @@
 ```xml
  <r-checkbox ></r-checkbox>
 ```
+
 ## Attribute
 
 ### `checked`

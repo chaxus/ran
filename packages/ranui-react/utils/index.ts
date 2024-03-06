@@ -1,14 +1,8 @@
 export const moduleMap = {
-    input: {
-        type:'input',
-        methods:{
-
-        },
-        props:{
-            
-        }
-    },
-    button: {
-
-    }
-}
+  input: {
+    type: 'input',
+    methods: {},
+    props: {},
+  },
+  button: {},
+};

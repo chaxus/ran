@@ -1,31 +1,26 @@
-import {
-  HTMLElementSSR,
-  createCustomError,
-  falseList,
-  isDisabled,
-} from "@/utils/index";
+import { HTMLElementSSR, createCustomError, falseList, isDisabled } from '@/utils/index';
 
-export class Input extends HTMLElementSSR()! {
+export class Input extends (HTMLElementSSR()!) {
   static get observedAttributes(): string[] {
     return [
-      "label",
-      "disabled",
-      "name",
-      "placeholder",
-      "type",
-      "icon",
-      "value",
-      "status", // error warning
-      "prefix", // 前缀
-      "suffix", // 后缀
-      "allowclear", // 清除 icon
-      "count", // 计算输入的数量
-      "maxlength", 
-      "showcount", 
-      "onPressEnter", // 按下回车的回调
-      "variant", // filled borderless
-      "minrows", // 当 type 等于 TextArea 时
-      "maxrows"
+      'label',
+      'disabled',
+      'name',
+      'placeholder',
+      'type',
+      'icon',
+      'value',
+      'status', // error warning
+      'prefix', // 前缀
+      'suffix', // 后缀
+      'allowclear', // 清除 icon
+      'count', // 计算输入的数量
+      'maxlength',
+      'showcount',
+      'onPressEnter', // 按下回车的回调
+      'variant', // filled borderless
+      'minrows', // 当 type 等于 TextArea 时
+      'maxrows',
     ];
   }
   _input: HTMLDivElement;
@@ -34,13 +29,13 @@ export class Input extends HTMLElementSSR()! {
   _icon: HTMLElement | undefined;
   constructor() {
     super();
-    const shadowRoot = this.attachShadow({ mode: "closed" });
-    this._input = document.createElement("div");
-    this._input.setAttribute("class", "ran-input");
-    this._input.setAttribute("part", "ran-input");
-    this._inputContent = document.createElement("input");
-    this._inputContent.setAttribute("class", "ran-input-content");
-    this._inputContent.setAttribute("part", "ran-input-content");
+    const shadowRoot = this.attachShadow({ mode: 'closed' });
+    this._input = document.createElement('div');
+    this._input.setAttribute('class', 'ran-input');
+    this._input.setAttribute('part', 'ran-input');
+    this._inputContent = document.createElement('input');
+    this._inputContent.setAttribute('class', 'ran-input-content');
+    this._inputContent.setAttribute('part', 'ran-input-content');
     this._input.appendChild(this._inputContent);
     shadowRoot.appendChild(this._input);
   }
@@ -49,7 +44,7 @@ export class Input extends HTMLElementSSR()! {
    * @return {String}
    */
   get value(): string | null {
-    return this.getAttribute("value");
+    return this.getAttribute('value');
   }
   /**
    * @description: 设置input的值
@@ -57,11 +52,11 @@ export class Input extends HTMLElementSSR()! {
    */
   set value(value: string) {
     if (!isDisabled(this) && value) {
-      this.setAttribute("value", value);
-      this._input.setAttribute("value", value);
+      this.setAttribute('value', value);
+      this._input.setAttribute('value', value);
     } else {
-      this.removeAttribute("value");
-      this._input.removeAttribute("value");
+      this.removeAttribute('value');
+      this._input.removeAttribute('value');
     }
   }
   /**
@@ -69,7 +64,7 @@ export class Input extends HTMLElementSSR()! {
    * @return {String}
    */
   get placeholder(): string | null {
-    return this.getAttribute("placeholder");
+    return this.getAttribute('placeholder');
   }
   /**
    * @description: 设置input的占位字符
@@ -77,9 +72,9 @@ export class Input extends HTMLElementSSR()! {
    */
   set placeholder(value: string) {
     if (value) {
-      this.setAttribute("placeholder", value);
+      this.setAttribute('placeholder', value);
     } else {
-      this.removeAttribute("placeholder");
+      this.removeAttribute('placeholder');
     }
   }
   /**
@@ -87,17 +82,17 @@ export class Input extends HTMLElementSSR()! {
    * @return {String}
    */
   get required(): string | null {
-    return this.getAttribute("required");
+    return this.getAttribute('required');
   }
   /**
    * @description: 设置input是否为必选，除非设置成false，否则都是必填
    * @param {*} value
    */
   set required(value: string) {
-    if (!value || value === "false") {
-      this.removeAttribute("required");
+    if (!value || value === 'false') {
+      this.removeAttribute('required');
     } else {
-      this.setAttribute("required", "");
+      this.setAttribute('required', '');
     }
   }
   /**
@@ -113,43 +108,43 @@ export class Input extends HTMLElementSSR()! {
    */
   set disabled(value: string) {
     if (falseList.includes(value)) {
-      this.removeAttribute("disabled");
-      this._input.removeAttribute("disabled");
-      this._inputContent.removeAttribute("disabled");
+      this.removeAttribute('disabled');
+      this._input.removeAttribute('disabled');
+      this._inputContent.removeAttribute('disabled');
     } else {
-      this.setAttribute("disabled", "");
-      this._input.setAttribute("disabled", "");
-      this._inputContent.setAttribute("disabled", "");
+      this.setAttribute('disabled', '');
+      this._input.setAttribute('disabled', '');
+      this._inputContent.setAttribute('disabled', '');
     }
   }
   /**
    * @description: 获取类似于Metiral Design的输入体验。
    */
   get label(): string {
-    return this.getAttribute("label") || "";
+    return this.getAttribute('label') || '';
   }
   /**
    * @description: 设置类似于Metiral Design的输入体验。
    */
   set label(value: string) {
-    this.setAttribute("label", value);
+    this.setAttribute('label', value);
   }
   /**
    * @description: 获取input框的状态
    */
   get status(): string {
-    return this.getAttribute("status") || "";
+    return this.getAttribute('status') || '';
   }
   /**
    * @description: 设置input框的状态
    */
   set status(value: string) {
     if (value) {
-      this.setAttribute("status", value);
-      this._input.setAttribute("status", value);
+      this.setAttribute('status', value);
+      this._input.setAttribute('status', value);
     } else {
-      this.removeAttribute("status");
-      this._input.removeAttribute("status");
+      this.removeAttribute('status');
+      this._input.removeAttribute('status');
     }
   }
   /**
@@ -157,63 +152,63 @@ export class Input extends HTMLElementSSR()! {
    * @return {String}
    */
   get name(): string {
-    return this.getAttribute("name") || "";
+    return this.getAttribute('name') || '';
   }
   /**
    * @description: 设置name属性
    * @param {string} value
    */
   set name(value: string) {
-    this.setAttribute("name", value);
+    this.setAttribute('name', value);
   }
   /**
    * @description: 当input类型为number类型时，可以获取min属性
    * @return {String}
    */
   get min(): string {
-    return this.getAttribute("min") || "";
+    return this.getAttribute('min') || '';
   }
   /**
    * @description: 当input类型为number类型时，设置min属性
    * @param {string} value
    */
   set min(value: string) {
-    if (this.type === "number") this.setAttribute("min", value);
+    if (this.type === 'number') this.setAttribute('min', value);
   }
   /**
    * @description: 当input类型为number类型时，可以获取max属性
    * @return {String}
    */
   get max(): string {
-    return this.getAttribute("max") || "";
+    return this.getAttribute('max') || '';
   }
   /**
    * @description: 当input类型为number类型时，设置max属性
    * @param {string} value
    */
   set max(value: string) {
-    if (this.type === "number") this.setAttribute("max", value);
+    if (this.type === 'number') this.setAttribute('max', value);
   }
   /**
    * @description: 当input类型为number类型时，可以获取step属性
    * @return {String}
    */
   get step(): string {
-    return this.getAttribute("step") || "";
+    return this.getAttribute('step') || '';
   }
   /**
    * @description: 当input类型为number类型时，设置step属性
    * @param {string} value
    */
   set step(value: string) {
-    if (this.type === "number") this.setAttribute("step", value);
+    if (this.type === 'number') this.setAttribute('step', value);
   }
   /**
    * @description: 获取一个icon
    * @return {String}
    */
   get icon(): string | null {
-    return this.getAttribute("icon");
+    return this.getAttribute('icon');
   }
   /**
    * @description: 设置icon来表示标识
@@ -221,9 +216,9 @@ export class Input extends HTMLElementSSR()! {
    */
   set icon(value: string) {
     if (value) {
-      this.setAttribute("icon", value);
+      this.setAttribute('icon', value);
     } else {
-      this.removeAttribute("icon");
+      this.removeAttribute('icon');
     }
   }
   /**
@@ -231,7 +226,7 @@ export class Input extends HTMLElementSSR()! {
    * @return {String}
    */
   get prefix(): string | null {
-    return this.getAttribute("prefix");
+    return this.getAttribute('prefix');
   }
   /**
    * @description: 设置前面的icon来表示标识
@@ -239,9 +234,9 @@ export class Input extends HTMLElementSSR()! {
    */
   set prefix(value: string) {
     if (value) {
-      this.setAttribute("prefix", value);
+      this.setAttribute('prefix', value);
     } else {
-      this.removeAttribute("prefix");
+      this.removeAttribute('prefix');
     }
   }
   /**
@@ -249,7 +244,7 @@ export class Input extends HTMLElementSSR()! {
    * @return {String}
    */
   get suffix(): string | null {
-    return this.getAttribute("suffix");
+    return this.getAttribute('suffix');
   }
   /**
    * @description: 设置后面的icon来表示标识
@@ -257,9 +252,9 @@ export class Input extends HTMLElementSSR()! {
    */
   set suffix(value: string) {
     if (value) {
-      this.setAttribute("suffix", value);
+      this.setAttribute('suffix', value);
     } else {
-      this.removeAttribute("suffix");
+      this.removeAttribute('suffix');
     }
   }
   /**
@@ -267,7 +262,7 @@ export class Input extends HTMLElementSSR()! {
    * @return {string|null}
    */
   get type(): string | null {
-    return this.getAttribute("type");
+    return this.getAttribute('type');
   }
   /**
    * @description: 设置input的类型
@@ -275,9 +270,9 @@ export class Input extends HTMLElementSSR()! {
    */
   set type(value: string) {
     if (value) {
-      this.setAttribute("type", value);
+      this.setAttribute('type', value);
     } else {
-      this.removeAttribute("type");
+      this.removeAttribute('type');
     }
   }
   /**
@@ -287,17 +282,17 @@ export class Input extends HTMLElementSSR()! {
   customInput = (event: Event): void => {
     event.stopPropagation();
     event.preventDefault();
-    const { target, data = "" } = <InputEvent>event;
-    this.value = (<HTMLInputElement>target)?.value || data || "";
+    const { target, data = '' } = <InputEvent>event;
+    this.value = (<HTMLInputElement>target)?.value || data || '';
     // 增加onchange事件
     this.customChange();
     // 默认input事件
     this.dispatchEvent(
-      new CustomEvent("input", {
+      new CustomEvent('input', {
         detail: {
           value: this.value,
         },
-      })
+      }),
     );
   };
   /**
@@ -305,11 +300,11 @@ export class Input extends HTMLElementSSR()! {
    */
   customChange = (): void => {
     this.dispatchEvent(
-      new CustomEvent("change", {
+      new CustomEvent('change', {
         detail: {
           value: this.value,
         },
-      })
+      }),
     );
   };
   /**
@@ -318,11 +313,11 @@ export class Input extends HTMLElementSSR()! {
    * @param {string} value
    */
   listenPlaceholder = (name: string, value: string): void => {
-    if (name === "placeholder" && this._inputContent) {
+    if (name === 'placeholder' && this._inputContent) {
       if (value != null) {
-        this._inputContent.setAttribute("placeholder", value);
+        this._inputContent.setAttribute('placeholder', value);
       } else {
-        this._inputContent.removeAttribute("placeholder");
+        this._inputContent.removeAttribute('placeholder');
       }
     }
   };
@@ -332,19 +327,19 @@ export class Input extends HTMLElementSSR()! {
    * @param {string} value
    */
   listenLabel = (name: string, value: string): void => {
-    if (name === "label" && this._inputContent) {
+    if (name === 'label' && this._inputContent) {
       if (value != null) {
         if (this._label) {
           this._label.innerHTML = value;
         } else {
-          this._label = document.createElement("label");
+          this._label = document.createElement('label');
           this._label.innerHTML = value;
-          this._label.setAttribute("class", "ran-input-label");
-          this._label.setAttribute("part", "ran-input-label");
+          this._label.setAttribute('class', 'ran-input-label');
+          this._label.setAttribute('part', 'ran-input-label');
           this._input.appendChild(this._label);
         }
       } else {
-        this._input.removeAttribute("label");
+        this._input.removeAttribute('label');
         if (this._label) {
           this._input.removeChild(this._label);
           this._label = undefined;
@@ -358,14 +353,14 @@ export class Input extends HTMLElementSSR()! {
    * @param {string} value
    */
   listenType = (name: string, value: string): void => {
-    if (name === "type" && this._inputContent) {
+    if (name === 'type' && this._inputContent) {
       if (value) {
-        this._inputContent.setAttribute("type", value);
+        this._inputContent.setAttribute('type', value);
       } else {
-        this._inputContent.removeAttribute("type");
-        this._inputContent.removeAttribute("min");
-        this._inputContent.removeAttribute("max");
-        this._inputContent.removeAttribute("step");
+        this._inputContent.removeAttribute('type');
+        this._inputContent.removeAttribute('min');
+        this._inputContent.removeAttribute('max');
+        this._inputContent.removeAttribute('step');
       }
     }
   };
@@ -375,11 +370,11 @@ export class Input extends HTMLElementSSR()! {
    * @param {string} value
    */
   listenStatus = (name: string, value: string): void => {
-    if (name === "status" && this._input) {
+    if (name === 'status' && this._input) {
       if (value) {
-        this._input.setAttribute("status", value);
+        this._input.setAttribute('status', value);
       } else {
-        this._input.removeAttribute("status");
+        this._input.removeAttribute('status');
       }
     }
   };
@@ -389,12 +384,12 @@ export class Input extends HTMLElementSSR()! {
    * @param {string} value
    */
   listenDisabled = (name: string, value: string): void => {
-    if (name === "disabled" && this._input) {
+    if (name === 'disabled' && this._input) {
       if (falseList.includes(value)) {
-        this._input.removeAttribute("disabled");
+        this._input.removeAttribute('disabled');
       } else {
-        this._input.setAttribute("disabled", "");
-        this._inputContent.setAttribute("disabled", "");
+        this._input.setAttribute('disabled', '');
+        this._inputContent.setAttribute('disabled', '');
       }
     }
   };
@@ -404,9 +399,9 @@ export class Input extends HTMLElementSSR()! {
    * @param {string} value
    */
   listenIcon = (name: string, value: string, oldValue: string): void => {
-    if (name === "icon" && value && value !== oldValue) {
-      this.removeAttribute("label");
-      this.setAttribute("icon", value);
+    if (name === 'icon' && value && value !== oldValue) {
+      this.removeAttribute('label');
+      this.setAttribute('icon', value);
       this.dealIcon();
     }
   };
@@ -415,13 +410,13 @@ export class Input extends HTMLElementSSR()! {
    */
   dealIcon = (): void => {
     if (!this._icon) {
-      this._icon = document.createElement("ra-icon");
+      this._icon = document.createElement('ra-icon');
       const { width, height } = this._inputContent.getBoundingClientRect();
       const size = Math.min(width, height);
-      this._icon.setAttribute("size", `${size}`);
-      this._inputContent.insertAdjacentElement("beforebegin", this._icon);
+      this._icon.setAttribute('size', `${size}`);
+      this._inputContent.insertAdjacentElement('beforebegin', this._icon);
     }
-    this.icon && this._icon.setAttribute("name", this.icon);
+    this.icon && this._icon.setAttribute('name', this.icon);
   };
   /**
    * @description: 聚合监听事件
@@ -435,50 +430,46 @@ export class Input extends HTMLElementSSR()! {
     this.listenStatus(name, newValue);
     this.listenDisabled(name, newValue);
     this.listenIcon(name, newValue, oldValue);
-    if (name === "value" && oldValue !== newValue) {
+    if (name === 'value' && oldValue !== newValue) {
       this._inputContent.value = newValue;
-      this._input.setAttribute("value", newValue);
+      this._input.setAttribute('value', newValue);
     }
   };
   connectedCallback(): void {
     // 如果一开始就设置了input的值，则初始化input的值
     if (this.value) {
       this._inputContent.value = this.value;
-      this._input.setAttribute("value", this.value);
+      this._input.setAttribute('value', this.value);
     }
     if (this.status) {
-      this._input.setAttribute("status", this.status);
+      this._input.setAttribute('status', this.status);
     }
     if (isDisabled(this)) {
-      this._input.setAttribute("disabled", "");
-      this._inputContent.setAttribute("disabled", "");
+      this._input.setAttribute('disabled', '');
+      this._inputContent.setAttribute('disabled', '');
     }
     if (this.type) {
-      this._inputContent.setAttribute("type", this.type);
+      this._inputContent.setAttribute('type', this.type);
     }
-    this._inputContent.addEventListener("input", this.customInput);
-    if (document.readyState === "complete") {
+    this._inputContent.addEventListener('input', this.customInput);
+    if (document.readyState === 'complete') {
       this.dealIcon();
     }
   }
   disconnectCallback(): void {
-    this._inputContent.removeEventListener("input", this.customInput);
+    this._inputContent.removeEventListener('input', this.customInput);
   }
-  attributeChangedCallback(
-    name: string,
-    oldValue: string,
-    newValue: string
-  ): void {
+  attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     this.listenEvent(name, oldValue, newValue);
   }
 }
 
 function Custom() {
-  if (typeof window !== "undefined" && !customElements.get("r-input")) {
-    customElements.define("r-input", Input);
+  if (typeof window !== 'undefined' && !customElements.get('r-input')) {
+    customElements.define('r-input', Input);
     return Input;
   } else {
-    return createCustomError("document is undefined or r-input is exist");
+    return createCustomError('document is undefined or r-input is exist');
   }
 }
 

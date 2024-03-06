@@ -353,7 +353,11 @@ import 'ranui';
 
 ```html
 <r-progress percent="70" total="100"></r-progress>
-<r-progress percent="70" total="100" style="--ran-progress-wrap:linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);"></r-progress>
+<r-progress
+  percent="70"
+  total="100"
+  style="--ran-progress-wrap:linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);"
+></r-progress>
 ```
 
 具体`css3`变量名称可以参考每个组件的介绍和说明

@@ -14,7 +14,7 @@ class Progress extends (HTMLElementSSR()!) {
     super();
     this._progress = document.createElement('div');
     this._progress.setAttribute('class', 'ran-progress');
-    this._progress.setAttribute('role', 'progressbar')
+    this._progress.setAttribute('role', 'progressbar');
     this._progressWrap = document.createElement('div');
     this._progressWrap.setAttribute('class', 'ran-progress-wrap');
     this._progress.appendChild(this._progressWrap);
@@ -41,7 +41,7 @@ class Progress extends (HTMLElementSSR()!) {
   }
   set percent(value: number) {
     this.setAttribute('percent', `${value || 0}`);
-    this.setAttribute('aria-valuenow', `${value || 0}`)
+    this.setAttribute('aria-valuenow', `${value || 0}`);
   }
   get total(): number {
     const total = this.getAttribute('total');
@@ -145,7 +145,7 @@ class Progress extends (HTMLElementSSR()!) {
     document.addEventListener('mouseup', this.progressDotMouseUp);
   };
   createProgress = (): void => {
-    if (!(this.children.length > 0 && [...this.children].some(item => item.className === 'ran-progress'))) {
+    if (!(this.children.length > 0 && [...this.children].some((item) => item.className === 'ran-progress'))) {
       this.appendChild(this._progress);
       this._progress.appendChild(this._progressDot);
     }
@@ -154,9 +154,9 @@ class Progress extends (HTMLElementSSR()!) {
     this.updateCurrentProgress();
   };
   connectedCallback(): void {
-    const type = this.getAttribute('type')
+    const type = this.getAttribute('type');
     if (!type) {
-      this.setAttribute('type', 'primary')
+      this.setAttribute('type', 'primary');
     }
     this.dragEvent();
     this.updateCurrentProgress();

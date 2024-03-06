@@ -6,16 +6,16 @@ Pass in a JSON or JSON string, add Spaces and newlines to return a formatted JSO
 
 ### Return
 
-| argument     | Instructions           | type     |
-| -------- | -------------- | -------- |
+| argument | Instructions     | type     |
+| -------- | ---------------- | -------- |
 | `string` | Return an object | `Object` |
 
 ### Options
 
-| argument     | Instructions                   | type              | Default value |
-| -------- | ---------------------- | ----------------- | ------ |
-| json     | JSON objects that need to be formatted | `object`,`string` | null     |
-| callback | Error callback, optional         | `function`        | null     |
+| argument | Instructions                           | type              | Default value |
+| -------- | -------------------------------------- | ----------------- | ------------- |
+| json     | JSON objects that need to be formatted | `object`,`string` | null          |
+| callback | Error callback, optional               | `function`        | null          |
 
 ## Example
 

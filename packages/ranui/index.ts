@@ -14,10 +14,10 @@ export * as player from '@/components/player';
 export * as modal from '@/components/modal';
 export * as select from '@/components/select';
 export * as progress from '@/components/progress';
-export * as checkbox from '@/components/checkbox'
-export * as colorpicker from '@/components/colorpicker'
-export * as popover from '@/components/popover'
-export * as content from '@/components/content'
+export * as checkbox from '@/components/checkbox';
+export * as colorpicker from '@/components/colorpicker';
+export * as popover from '@/components/popover';
+export * as content from '@/components/content';
 
 if (typeof document !== 'undefined') {
   const style = document.createElement('style');

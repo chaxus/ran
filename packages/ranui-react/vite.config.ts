@@ -43,10 +43,7 @@ export const es: BuildOptions = {
 };
 
 export const viteConfig: UserConfig = {
-  plugins: [
-    dts(),
-    react(),
-  ],
+  plugins: [dts(), react()],
   resolve: {
     alias: {
       '@/components': resolve(__dirname, 'components/'),

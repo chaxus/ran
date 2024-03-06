@@ -353,7 +353,11 @@ By setting the `CSS3` variable for a component, you can customize the specified 
 
 ```html
 <r-progress percent="70" total="100"></r-progress>
-<r-progress percent="70" total="100" style="--ran-progress-wrap:linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);"></r-progress>
+<r-progress
+  percent="70"
+  total="100"
+  style="--ran-progress-wrap:linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);"
+></r-progress>
 ```
 
 For specific `CSS3` variable names, refer to the introduction and description of each component.

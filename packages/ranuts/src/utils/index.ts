@@ -1049,7 +1049,6 @@ enum AudioCompressor {
  * @description: 音频指纹，1.生成音频信息流(三角波)，对其进行FFT变换，计算SHA值作为指纹。2.生成音频信息流（正弦波），进行动态压缩处理，计算MD5值。
  */
 export const audioVendor = (): Promise<string> => {
-
   return new Promise((resolve, reject) => {
     const each = function (
       obj: Array<[AudioCompressor, number]>,

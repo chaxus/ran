@@ -260,7 +260,7 @@ class EmotionModel {
         denormalise(normaliseOutputTensor, this.normaliseLabel.min, this.normaliseFeature.max);
       const outputValue = outputTensor && outputTensor.dataSync()[0];
       console.log('predict success, the result: ', outputValue);
-      message.success(`predict success, the result: ${outputValue}`)
+      message.success(`predict success, the result: ${outputValue}`);
     });
   };
 }

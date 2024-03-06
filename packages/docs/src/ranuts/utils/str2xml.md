@@ -6,16 +6,16 @@ Pass in a string and convert it to 'xml'
 
 ### Return
 
-| argument          | Instructions                  | type          |
+| argument      | Instructions          | type          |
 | ------------- | --------------------- | ------------- |
 | `HTMLElement` | 返回一个`HTMLElement` | `HTMLElement` |
 
 ### Options
 
-| argument   | Instructions                               | type                     | Default value  |
-| ------ | ---------------------------------- | ------------------------ | ------ |
-| xmlStr | Incoming parameter                         | `string`                 | null     |
-| format | Set the format to be converted. The default is' text/xml '|' DOMParserSupportedType ' | null     |
+| argument | Instructions                                               | type                       | Default value |
+| -------- | ---------------------------------------------------------- | -------------------------- | ------------- |
+| xmlStr   | Incoming parameter                                         | `string`                   | null          |
+| format   | Set the format to be converted. The default is' text/xml ' | ' DOMParserSupportedType ' | null          |
 
 ## Example
 

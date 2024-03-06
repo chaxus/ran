@@ -6,16 +6,16 @@ Filter the properties of the object, remove the properties of the object in the 
 
 ### Return
 
-| argument     | Instructions           | type     |
-| -------- | -------------- | -------- |
+| argument | Instructions     | type     |
+| -------- | ---------------- | -------- |
 | `Object` | Return an object | `Object` |
 
 ### Options
 
-| argument | Instructions               | type     | Default value |
-| ---- | ------------------ | -------- | ------ |
-| obj  | Objects to be filtered     | `object` | 无     |
-| list | Familiar array to filter | `array`  | 无     |
+| argument | Instructions             | type     | Default value |
+| -------- | ------------------------ | -------- | ------------- |
+| obj      | Objects to be filtered   | `object` | 无            |
+| list     | Familiar array to filter | `array`  | 无            |
 
 ## Example
 

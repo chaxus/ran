@@ -20,11 +20,11 @@ hero:
 features:
   - icon: ⚡️
     title: 记录
-    details: 
+    details:
   - icon: 🛠️
     title: 解决
-    details: 
-  - icon: 🖖 
+    details:
+  - icon: 🖖
     title: 分享
-    details: 
+    details:
 ---

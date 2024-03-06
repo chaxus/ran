@@ -6,18 +6,18 @@ Pass in the image and the corresponding language type, and return the text in th
 
 ### Return
 
-| argument      | Instructions                 | type      |
-| --------- | -------------------- | --------- |
-| `success` | Whether the resolution is successful         | `boolean` |
-| `data`    | The object is parsed successfully     | `obj`     |
+| argument  | Instructions                               | type      |
+| --------- | ------------------------------------------ | --------- |
+| `success` | Whether the resolution is successful       | `boolean` |
+| `data`    | The object is parsed successfully          | `obj`     |
 | `message` | Analyze the reasons for success or failure | `string`  |
 
 ### Options
 
-| argument     | Instructions                                                                                                                       | type            | Default value                   |
-| -------- | -------------------------------------------------------------------------------------------------------------------------- | --------------- | ------------------------ |
-| images   | An array of images, supporting 'url' and 'base64'                                                                                            | `Array<string>` | null                       |
-| language | Specify the language in which the text will be generated[lang-code](#lang-code)                                                                      | `string`        | 无                       |
+| argument | Instructions                                                                                                                                                                                                                                | type            | Default value                                                     |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- | ----------------------------------------------------------------- |
+| images   | An array of images, supporting 'url' and 'base64'                                                                                                                                                                                           | `Array<string>` | null                                                              |
+| language | Specify the language in which the text will be generated[lang-code](#lang-code)                                                                                                                                                             | `string`        | 无                                                                |
 | langPath | When using it, you need to be able to access cdn.jsdelivr.net, which will download the corresponding language package, if you cannot access it, you can also put the language package locally, passing the corresponding **directory** path | `string`        | This parameter is optional. By default, download from the network |
 
 ## Example
