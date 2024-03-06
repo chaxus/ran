@@ -151,23 +151,23 @@ export const createSignal = <T = unknown>(
     subscribers: new Set<Function>(),
     comparator: options?.equals,
   }
+  const { subscriber } = options || {}
+  // 订阅
+  if (subscriber && Array.isArray(subscriber)) {
+    subscriber.forEach(item => {
+      if (typeof item === 'function' && !signal.subscribers.has(item)) {
+        signal.subscribers.add(item)
+      }
+    })
+  }
   const getter = () => {
-    const { subscriber } = options || {}
-    // 订阅
-    if (subscriber && Array.isArray(subscriber)) {
-      subscriber.forEach(item => {
-        if (typeof item === 'function' && !signal.subscribers.has(item)) {
-          signal.subscribers.add(item)
-        }
-      })
-    }
     return signal.value
   }
   const updateSignal = (newValue: T) => {
     if (signal.value !== newValue) {
       signal.value = newValue
       // 通知订阅者
-      signal.subscribers.forEach((subscriber) => subscriber())
+      signal.subscribers.forEach((subscriber) => subscriber(newValue))
     }
   }
   const setter = (newValue: T) => {

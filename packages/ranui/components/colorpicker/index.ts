@@ -102,7 +102,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
    * @return {*}
    */
   createColorHue = (): Signal<number> => {
-    const [getter, setter] = createSignal<number>(0, { subscriber: [] });
+    const [getter, setter] = createSignal<number>(0, { subscriber: [this.updateColorPickerPanelSliderHueProgress] });
     return { getter, setter };
   }
   /**
@@ -129,7 +129,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
    * @return {*}
    */
   createColorTransparency = (): Signal<number> => {
-    const [getter, setter] = createSignal(80, { subscriber: [] });
+    const [getter, setter] = createSignal(80, { subscriber: [this.updateColorPickerPanelSliderAlphaProgress] });
     return { getter, setter };
   }
   createColorDisabled = (): Signal<boolean> => {
@@ -150,6 +150,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
         this.context.hue.setter(h)
         this.context.saturation.setter(s)
         this.context.lightness.setter(v)
+        this.context.transparency.setter(100)
       } else if (rgba) {
         const { h, s, v } = rgb2hsv(Number(rgba[1]), Number(rgba[2]), Number(rgba[3]))
         this.context.hue.setter(h)
@@ -161,6 +162,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
         this.context.hue.setter(h)
         this.context.saturation.setter(s)
         this.context.lightness.setter(v)
+        this.context.transparency.setter(100)
       } else {
         return
       }
@@ -169,6 +171,12 @@ export class ColorPicker extends (HTMLElementSSR()!) {
       this.context?.value.setter(value)
     }
   };
+  updateColorPickerPanelSliderHueProgress = (hue: number): void => {
+    this.colorPickerPanelSliderHue?.setAttribute('percent', `${hue / 360}`)
+  }
+  updateColorPickerPanelSliderAlphaProgress = (alpha: number): void => {
+    this.colorPickerPanelSliderHue?.setAttribute('percent', `${alpha / 100}`)
+  }
   update = (): void => {
     this.colorPickerPanelSliderAlpha?.style.setProperty('--ran-progress-wrap', this.generateColorPickerProgress());
     this.colorPickerPanelSliderAlpha?.style.setProperty(
@@ -191,6 +199,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
   };
   changeColorPalettePositionByContext = (): void => {
     window.requestAnimationFrame(() => {
+      this.updateColorValue(this.value);
       if (!this.colorPickerPanelPalette) return;
       if (!this.context?.lightness.getter || !this.context?.saturation.getter) return
       const { width, height } = this.colorPickerPanelPalette?.getBoundingClientRect() || {};
@@ -240,6 +249,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
       '--ran-progress-wrap',
       'linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000)',
     );
+    this.colorPickerPanelSliderHue.setAttribute('percent', `${this.context.hue.getter() / 360}`);
     this.colorPickerPanelSliderHue.addEventListener('change', this.changeColorPickerHue);
     this.colorPickerPanelSliderHue.setAttribute('type', 'drag');
     this.colorPickerPanelSliderHue.setAttribute('class', 'ran-color-picker-slider-container-group-hue');
