@@ -202,6 +202,7 @@ export const viteConfig: UserConfig = {
   resolve: {
     alias: {
       '@/components': resolve(__dirname, 'components/'),
+      '@/shadowless': resolve(__dirname, 'shadowless/'),
       '@/assets': resolve(__dirname, 'assets/'),
       '@/utils': resolve(__dirname, 'utils/'),
     },

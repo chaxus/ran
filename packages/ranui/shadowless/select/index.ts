@@ -4,6 +4,7 @@ import '@/components/option';
 import '@/components/icon';
 import '@/components/input';
 import type { Input } from '@/components/input';
+import './index.less'
 
 interface Option {
   label: string | number;
@@ -29,7 +30,6 @@ const searchThrottle = generateThrottle();
 
 export class Select extends (HTMLElementSSR()!) {
   removeTimeId?: NodeJS.Timeout;
-  _slot: HTMLSlotElement;
   _select: HTMLDivElement;
   _selection: HTMLDivElement;
   _search: Input;
@@ -61,7 +61,6 @@ export class Select extends (HTMLElementSSR()!) {
   }
   constructor() {
     super();
-    this._slot = document.createElement('slot');
     this._select = document.createElement('div');
     this._select.setAttribute('class', 'ran-select');
     this._select.setAttribute('part', 'select');
@@ -87,9 +86,7 @@ export class Select extends (HTMLElementSSR()!) {
     this._selector.appendChild(this._search);
     this._selection.appendChild(this._icon);
     this._selection.appendChild(this._selector);
-    this._slot.setAttribute('class', 'slot');
     this._select.appendChild(this._selection);
-    this._select.appendChild(this._slot);
     this._optionList = [];
     this._optionLabelMapValue = new Map();
     this._optionValueMapLabel = new Map();
@@ -296,6 +293,7 @@ export class Select extends (HTMLElementSSR()!) {
    */
   createOption = (): void => {
     if (!this._selectDropdown) {
+      this.setAttribute('class', 'ra-select')
       this.appendChild(this._select);
       const container = document.getElementById(this.getPopupContainerId) || document.body;
       this._selectDropdown = document.createElement('div');
@@ -318,6 +316,7 @@ export class Select extends (HTMLElementSSR()!) {
       this._selectionDropdown.style.setProperty('display', 'none');
       container.appendChild(this._selectDropdown);
     }
+    this.addOptionToSlot()
   };
   /**
    * @description: 移除选项下拉框
@@ -329,28 +328,31 @@ export class Select extends (HTMLElementSSR()!) {
         const container = document.getElementById(this.getPopupContainerId) || document.body;
         container.removeChild(this._selectDropdown);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log('removeSelectDropdown error',error)
+    }
   };
   /**
    * @description: 当select中有option元素的时候，给dropdown添加元素
    * @return {*}
    */
   addOptionToSlot = (): void => {
-    const slots = this._slot.assignedElements();
-    slots.forEach((item) => {
-      if (item.tagName !== 'R-OPTION') return;
-      const label = item.innerHTML;
-      const value = item.getAttribute('value') || '';
-      this._optionList?.push({ label, value });
-      if (this._optionLabelMapValue.get(label)) {
-        console.warn(`${label} is repeat option`);
+    const child = this.children || []
+    for (const item of child) {
+      if (item.tagName === 'R-OPTION') {
+        const label = item.innerHTML;
+        const value = item.getAttribute('value') || '';
+        this._optionList?.push({ label, value });
+        if (this._optionLabelMapValue.get(label)) {
+          console.warn(`${label} is repeat option`);
+        }
+        if (this._optionValueMapLabel.get(value)) {
+          console.warn(`${value} is repeat option`);
+        }
+        this._optionLabelMapValue.set(label, value);
+        this._optionValueMapLabel.set(value, label);
       }
-      if (this._optionValueMapLabel.get(value)) {
-        console.warn(`${value} is repeat option`);
-      }
-      this._optionLabelMapValue.set(label, value);
-      this._optionValueMapLabel.set(value, label);
-    });
+    }
     this.createSelectDropdownContent(this._optionList);
   };
   createSelectDropdownContent = (options: Option[] = []): void => {
@@ -430,12 +432,12 @@ export class Select extends (HTMLElementSSR()!) {
     this.onSearch && this._search.removeEventListener('change', this.onSearch);
     this.onSearch && this._search.removeEventListener('click', this.onSearch);
   };
-  listenSlotChange = (): void => {
-    this._slot.addEventListener('slotchange', this.addOptionToSlot);
-  };
-  removeListenSlotChange = (): void => {
-    this._slot.removeEventListener('slotchange', this.addOptionToSlot);
-  };
+  // listenSlotChange = (): void => {
+  //   this._slot.addEventListener('slotchange', this.addOptionToSlot);
+  // };
+  // removeListenSlotChange = (): void => {
+  //   this._slot.removeEventListener('slotchange', this.addOptionToSlot);
+  // };
   listenActionEvent = (): void => {
     this.removeEventListener('mouseenter', this.selectMouseDown);
     this.removeEventListener('mouseleave', this.selectBlur);
@@ -457,7 +459,6 @@ export class Select extends (HTMLElementSSR()!) {
   connectedCallback(): void {
     this.createOption();
     this.listenActionEvent();
-    this.listenSlotChange();
     this.setShowSearch();
     document.addEventListener('click', this.clickRemoveSelect);
   }
@@ -468,7 +469,6 @@ export class Select extends (HTMLElementSSR()!) {
     this.removeEventListener('blur', this.selectBlur);
     this.removeSelectDropdown();
     this._selectDropdown?.removeEventListener('click', this.clickOption);
-    this.removeListenSlotChange();
     document.removeEventListener('click', this.clickRemoveSelect);
   }
   attributeChangedCallback(name: string, oldValue: string, newValue: string): void {

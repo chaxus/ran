@@ -4,13 +4,13 @@
 
 @theme-color: #1890ff;
 
-r-select {
+ra-select {
   position: relative;
   width: 120px;
   height: 40px;
 }
 
-:host {
+.ra-select {
   position: relative;
   display: inline-block;
   cursor: pointer;
@@ -23,7 +23,7 @@ r-select {
     outline: 0;
     -webkit-tap-highlight-color: transparent;
   }
-  ::slotted(r-option) {
+  r-option {
     display: none;
   }
   &([disabled]) {

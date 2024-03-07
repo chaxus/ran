@@ -13,6 +13,7 @@ export * as radar from '@/components/radar';
 export * as player from '@/components/player';
 export * as modal from '@/components/modal';
 export * as select from '@/components/select';
+export * as selectShadowless from '@/shadowless/select';
 export * as progress from '@/components/progress';
 export * as checkbox from '@/components/checkbox';
 export * as colorpicker from '@/components/colorpicker';

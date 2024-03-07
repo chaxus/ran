@@ -4,7 +4,7 @@ import { HEX_COLOR_REGEX, RGBA_REGEX, RGB_REGEX, hex2hsv, hsv2rgb, rgb2hsv } fro
 import '@/components/popover';
 import '@/components/content';
 import '@/components/input';
-import '@/components/select';
+import '@/shadowless/select';
 import '@/components/option';
 import '@/components/progress';
 import './index.less';
@@ -358,7 +358,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     this.colorPickerInputContainerSelect = document.createElement('div');
     this.colorPickerInputContainerSelect.setAttribute('class', 'ran-color-picker-input-container-select');
     this.colorPickerInputContainerSelect.setAttribute('id', colorPickerInputContainerId);
-    this.colorPickerInputContainerSelectItem = document.createElement('r-select');
+    this.colorPickerInputContainerSelectItem = document.createElement('ra-select');
     this.colorPickerInputContainerSelectItem.setAttribute('value', 'HEX');
     this.colorPickerInputContainerSelectItem.setAttribute('class', 'ran-color-picker-input-container-select-item');
     this.colorPickerInputContainerSelectItem.setAttribute('getPopupContainerId', colorPickerInputContainerId);
