@@ -4,34 +4,29 @@
 
 @theme-color: #1890ff;
 
-ra-select {
+.ra-select {
+  display: inline-block;
+  cursor: pointer;
   position: relative;
   width: 120px;
   height: 40px;
-}
-
-.ra-select {
-  position: relative;
-  display: inline-block;
-  cursor: pointer;
-  height: 32px;
   outline: 0;
   -webkit-tap-highlight-color: transparent;
   &,
-  &(:focus),
-  &(:active) {
+  &:focus,
+  &:active {
     outline: 0;
     -webkit-tap-highlight-color: transparent;
   }
   r-option {
     display: none;
   }
-  &([disabled]) {
+  &[disabled] {
     cursor: not-allowed;
     pointer-events: all;
     opacity: 0.6;
   }
-  &([type="text"]) {
+  &[type="text"] {
     &::part(selection) {
       border: none;
     }
@@ -39,7 +34,7 @@ ra-select {
       display: none;
     }
   }
-  &(:not([disabled]):hover) {
+  &:not([disabled]):hover {
     .select {
       cursor: pointer;
     }
@@ -54,7 +49,7 @@ ra-select {
       }
     }
   }
-  &(:not([disabled]):focus) {
+  &:not([disabled]):focus {
     .selection {
       border: 1px solid @theme-color;
       &-search {
@@ -69,7 +64,7 @@ ra-select {
   .selection-search {
     display: none;
   }
-  &([showSearch]:not([disabled])) {
+  &[showSearch]:not([disabled]) {
     .selection {
       &-search {
         cursor: text;
@@ -80,7 +75,7 @@ ra-select {
       }
     }
   }
-  &([showSearch]:not([disabled]):focus) {
+  &[showSearch]:not([disabled]):focus {
     .selection {
       &-search {
         display: block;

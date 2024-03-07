@@ -150,8 +150,10 @@ export const es: BuildOptions = {
     entry: {
       button: resolve(__dirname, 'components/button/index.ts'),
       icon: resolve(__dirname, 'components/icon/index.ts'),
+      iconShadowless: resolve(__dirname, 'shadowless/icon/index.ts'),
       image: resolve(__dirname, 'components/image/index.ts'),
       input: resolve(__dirname, 'components/input/index.ts'),
+      inputShadowless: resolve(__dirname, 'shadowless/input/index.ts'),
       message: resolve(__dirname, 'components/message/index.ts'),
       preview: resolve(__dirname, 'components/preview/index.ts'),
       skeleton: resolve(__dirname, 'components/skeleton/index.ts'),
@@ -160,6 +162,7 @@ export const es: BuildOptions = {
       radar: resolve(__dirname, 'components/radar/index.ts'),
       modal: resolve(__dirname, 'components/modal/index.ts'),
       select: resolve(__dirname, 'components/select/index.ts'),
+      selectShadowless: resolve(__dirname, 'shadowless/select/index.ts'),
       option: resolve(__dirname, 'components/option/index.ts'),
       player: resolve(__dirname, 'components/player/index.ts'),
       progress: resolve(__dirname, 'components/progress/index.ts'),
@@ -168,12 +171,16 @@ export const es: BuildOptions = {
       popover: resolve(__dirname, 'components/popover/index.ts'),
       content: resolve(__dirname, 'components/content/index.ts'),
       index: resolve(__dirname, 'index.ts'),
+      shadowless: resolve(__dirname, 'shadowless.ts'),
     },
     fileName: (_: string, name: string): string => {
-      if (name === 'index') {
-        return `${name}.js`;
+      if (name.includes('components')) {
+        return `components/${name}/index.js`;
       }
-      return `components/${name}/index.js`;
+      if (name.includes('shadowless')) {
+        return `shadowless/${name}/index.js`;
+      }
+      return `${name}.js`
     },
     formats: ['es'],
   },

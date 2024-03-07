@@ -432,12 +432,6 @@ export class Select extends (HTMLElementSSR()!) {
     this.onSearch && this._search.removeEventListener('change', this.onSearch);
     this.onSearch && this._search.removeEventListener('click', this.onSearch);
   };
-  // listenSlotChange = (): void => {
-  //   this._slot.addEventListener('slotchange', this.addOptionToSlot);
-  // };
-  // removeListenSlotChange = (): void => {
-  //   this._slot.removeEventListener('slotchange', this.addOptionToSlot);
-  // };
   listenActionEvent = (): void => {
     this.removeEventListener('mouseenter', this.selectMouseDown);
     this.removeEventListener('mouseleave', this.selectBlur);
