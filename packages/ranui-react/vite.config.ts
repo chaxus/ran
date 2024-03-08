@@ -20,20 +20,20 @@ interface chunkOptimization {
 }
 
 const chunkOptimization: Partial<chunkOptimization> = {
-chunkSizeWarningLimit: 500,
-assetsInlineLimit: 1024,
-reportCompressedSize: false,
-rollupOptions: {
-  external: ['react'],
-  output: {
-    experimentalMinChunkSize: 500,
+  chunkSizeWarningLimit: 500,
+  assetsInlineLimit: 1024,
+  reportCompressedSize: false,
+  rollupOptions: {
+    external: ['react'],
+    output: {
+      experimentalMinChunkSize: 500,
+    },
+    treeshake: {
+      preset: 'recommended',
+      manualPureFunctions: ['console.log'],
+    },
   },
-  treeshake: {
-    preset: 'recommended',
-    manualPureFunctions: ['console.log'],
-  },
-},
-minify: 'terser',
+  minify: 'terser',
 };
 
 export const umd: BuildOptions = {
