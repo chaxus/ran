@@ -1,12 +1,5 @@
 {
-  "include": [
-    "components",
-    "plugins",
-    "utils",
-    "test",
-    "shadowless",
-    "**/*.ts"
-  ],
+  "include": ["components", "plugins", "utils", "test", "shadowless", "**/*.ts"],
   "exclude": ["node_modules/**", "dist/**", "assets", "public"],
   "compilerOptions": {
     "module": "ESNext",
@@ -19,6 +12,7 @@
     "noFallthroughCasesInSwitch": true,
     "isolatedModules": false,
     "strict": true,
+    "skipLibCheck": true,
     "noImplicitAny": true,
     "useUnknownInCatchVariables": false,
     "inlineSourceMap": true,

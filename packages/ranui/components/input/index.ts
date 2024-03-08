@@ -43,8 +43,8 @@ export class Input extends (HTMLElementSSR()!) {
    * @description: 获取input的值
    * @return {String}
    */
-  get value(): string | null {
-    return this.getAttribute('value');
+  get value(): string {
+    return this.getAttribute('value') || '';
   }
   /**
    * @description: 设置input的值
@@ -63,8 +63,8 @@ export class Input extends (HTMLElementSSR()!) {
    * @description: 获取input的占位字符
    * @return {String}
    */
-  get placeholder(): string | null {
-    return this.getAttribute('placeholder');
+  get placeholder(): string {
+    return this.getAttribute('placeholder') || '';
   }
   /**
    * @description: 设置input的占位字符
@@ -81,8 +81,8 @@ export class Input extends (HTMLElementSSR()!) {
    * @description: input是否为必选
    * @return {String}
    */
-  get required(): string | null {
-    return this.getAttribute('required');
+  get required(): string {
+    return this.getAttribute('required') || '';
   }
   /**
    * @description: 设置input是否为必选，除非设置成false，否则都是必填
@@ -99,8 +99,8 @@ export class Input extends (HTMLElementSSR()!) {
    * @description: 获取input上disabled属性
    * @return {String | null}
    */
-  get disabled(): boolean {
-    return isDisabled(this);
+  get disabled(): string {
+    return `${isDisabled(this)}`;
   }
   /**
    * @description: 设置input的disabled属性
@@ -207,8 +207,8 @@ export class Input extends (HTMLElementSSR()!) {
    * @description: 获取一个icon
    * @return {String}
    */
-  get icon(): string | null {
-    return this.getAttribute('icon');
+  get icon(): string {
+    return this.getAttribute('icon') || '';
   }
   /**
    * @description: 设置icon来表示标识
@@ -225,8 +225,8 @@ export class Input extends (HTMLElementSSR()!) {
    * @description: 获取前面的icon
    * @return {String}
    */
-  get prefix(): string | null {
-    return this.getAttribute('prefix');
+  get prefix(): string {
+    return this.getAttribute('prefix') || '';
   }
   /**
    * @description: 设置前面的icon来表示标识
@@ -243,8 +243,8 @@ export class Input extends (HTMLElementSSR()!) {
    * @description: 获取后面的icon
    * @return {String}
    */
-  get suffix(): string | null {
-    return this.getAttribute('suffix');
+  get suffix(): string {
+    return this.getAttribute('suffix') || '';
   }
   /**
    * @description: 设置后面的icon来表示标识
@@ -261,8 +261,8 @@ export class Input extends (HTMLElementSSR()!) {
    * @description: 获取input的类型
    * @return {string|null}
    */
-  get type(): string | null {
-    return this.getAttribute('type');
+  get type(): string {
+    return this.getAttribute('type') || '';
   }
   /**
    * @description: 设置input的类型

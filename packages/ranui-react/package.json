@@ -31,7 +31,8 @@
     "fed": "sh ./bin/federation.sh"
   },
   "files": [
-    "dist/*"
+    "dist",
+    "typings.d.ts"
   ],
   "keywords": [
     "ran",
@@ -54,6 +55,11 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/umd/index.umd.cjs"
+    },
+    "./shadowless": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/shadowless/shadowless/index.js",
+      "require": "./dist/umd/shadowless/shadowless.umd.cjs"
     },
     "./style": {
       "types": "./dist/index.d.ts",

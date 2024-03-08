@@ -30,12 +30,12 @@ export class Checkbox extends (HTMLElementSSR()!) {
   set disabled(value: string) {
     this.setAttribute('disabled', value);
   }
-  get checked(): boolean {
+  get checked(): string {
     const checked = this.getAttribute('checked');
     if (falseList.includes(checked)) {
       this.context.checked = false;
     }
-    return this.context.checked;
+    return `${this.context.checked}`;
   }
   set checked(value: string) {
     if (falseList.includes(value)) {

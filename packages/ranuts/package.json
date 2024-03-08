@@ -25,8 +25,12 @@
     "url": "https://github.com/chaxus/ran/issues"
   },
   "homepage": "https://github.com/chaxus/ran/tree/main/packages/ranuts/docs",
+  "files": [
+    "dist",
+    "typings.d.ts"
+  ],
   "scripts": {
-    "build": "tsc --noEmit && vite build",
+    "build": "sh ./bin/build.sh",
     "test": "vitest run",
     "prepublish": "npm run build"
   },

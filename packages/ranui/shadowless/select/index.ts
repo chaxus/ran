@@ -1,10 +1,10 @@
 import { addClassToElement, generateThrottle, isMobile, removeClassToElement } from 'ranuts';
 import { HTMLElementSSR, createCustomError, isDisabled } from '@/utils/index';
 import '@/components/option';
-import '@/components/icon';
-import '@/components/input';
-import type { Input } from '@/components/input';
-import './index.less'
+import '@/shadowless/icon';
+import '@/shadowless/input';
+import type { Input } from '@/shadowless/input';
+import './index.less';
 
 interface Option {
   label: string | number;
@@ -68,7 +68,7 @@ export class Select extends (HTMLElementSSR()!) {
     this._selection.setAttribute('class', 'selection');
     this._selection.setAttribute('part', 'selection');
     this._selector = document.createElement('div');
-    this._search = <Input>document.createElement('r-input');
+    this._search = <Input>document.createElement('ra-input');
     this._search.setAttribute('class', 'selection-search');
     this._search.setAttribute('part', 'search');
     this._search.setAttribute('type', 'search');
@@ -293,7 +293,6 @@ export class Select extends (HTMLElementSSR()!) {
    */
   createOption = (): void => {
     if (!this._selectDropdown) {
-      this.setAttribute('class', 'ra-select')
       this.appendChild(this._select);
       const container = document.getElementById(this.getPopupContainerId) || document.body;
       this._selectDropdown = document.createElement('div');
@@ -316,7 +315,7 @@ export class Select extends (HTMLElementSSR()!) {
       this._selectionDropdown.style.setProperty('display', 'none');
       container.appendChild(this._selectDropdown);
     }
-    this.addOptionToSlot()
+    this.addOptionToSlot();
   };
   /**
    * @description: 移除选项下拉框
@@ -329,7 +328,7 @@ export class Select extends (HTMLElementSSR()!) {
         container.removeChild(this._selectDropdown);
       }
     } catch (error) {
-      console.log('removeSelectDropdown error',error)
+      console.log('removeSelectDropdown error', error);
     }
   };
   /**
@@ -337,18 +336,13 @@ export class Select extends (HTMLElementSSR()!) {
    * @return {*}
    */
   addOptionToSlot = (): void => {
-    const child = this.children || []
+    const child = this.children || [];
+    this._optionList = [];
     for (const item of child) {
       if (item.tagName === 'R-OPTION') {
         const label = item.innerHTML;
         const value = item.getAttribute('value') || '';
         this._optionList?.push({ label, value });
-        if (this._optionLabelMapValue.get(label)) {
-          console.warn(`${label} is repeat option`);
-        }
-        if (this._optionValueMapLabel.get(value)) {
-          console.warn(`${value} is repeat option`);
-        }
         this._optionLabelMapValue.set(label, value);
         this._optionValueMapLabel.set(value, label);
       }
@@ -360,6 +354,9 @@ export class Select extends (HTMLElementSSR()!) {
       this._selectDropdown?.style.setProperty('display', 'none');
     } else {
       this._selectDropdown?.style.setProperty('display', 'block');
+    }
+    if (this._selectionDropdown) {
+      this._selectionDropdown.innerHTML = '';
     }
     options.forEach((item) => {
       if (this._selectionDropdown) {

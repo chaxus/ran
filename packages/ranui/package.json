@@ -53,6 +53,11 @@
       "import": "./dist/index.js",
       "require": "./dist/umd/index.umd.cjs"
     },
+    "./shadowless": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/shadowless/shadowless/index.js",
+      "require": "./dist/umd/shadowless/shadowless.umd.cjs"
+    },
     "./button": {
       "types": "./dist/components/button/index.d.ts",
       "import": "./dist/components/button/index.js",

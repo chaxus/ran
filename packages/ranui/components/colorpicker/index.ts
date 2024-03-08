@@ -361,6 +361,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     this.colorPickerInputContainerSelectItem = document.createElement('ra-select');
     this.colorPickerInputContainerSelectItem.setAttribute('value', 'HEX');
     this.colorPickerInputContainerSelectItem.setAttribute('class', 'ran-color-picker-input-container-select-item');
+    this.colorPickerInputContainerSelectItem.setAttribute('type', 'text');
     this.colorPickerInputContainerSelectItem.setAttribute('getPopupContainerId', colorPickerInputContainerId);
     const colorSelectOption = ['HEX', 'HSB', 'RGB'];
     const Fragment = document.createDocumentFragment();

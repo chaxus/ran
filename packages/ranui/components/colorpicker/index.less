@@ -62,17 +62,19 @@
               display: block;
               width: 42px;
               height: 24px;
-              &::part(selection) {
+              .selection {
                 border: none;
                 padding: 0px;
               }
-              &::part(selection-item) {
+              .selection-item {
                 font-size: 12px;
                 left: 0px;
               }
-              &::part(icon) {
-                margin-top: -6px;
-                left: 24px;
+              .icon {
+                .ran-icon {
+                  position: relative;
+                  left: 6px;
+                }
               }
             }
             .ranui-select-dropdown {

@@ -1,11 +1,11 @@
 import path, { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import type { BuildOptions, PluginOption, UserConfig } from 'vite';
 import { defineConfig } from 'vite';
-import dts from 'vite-plugin-dts';
+import type { BuildOptions, PluginOption, UserConfig } from 'vite';
 import { visualizer } from 'rollup-plugin-visualizer';
 import viteImagemin from '@vheemstra/vite-plugin-imagemin';
 import imageminSvgo from 'imagemin-svgo';
+import type { RollupOptions } from 'rollup';
 import loadStyle from './plugins/load-style';
 import loadSvg from './plugins/load-svg';
 import { PORT } from './build/config';
@@ -14,95 +14,20 @@ const __filename = fileURLToPath(import.meta.url);
 
 const __dirname = path.dirname(__filename);
 
-type TreeshakingPreset = 'smallest' | 'safest' | 'recommended';
-
-type HasModuleSideEffects = (id: string, external: boolean) => boolean;
-
-type ModuleSideEffectsOption = boolean | 'no-external' | string[] | HasModuleSideEffects;
-
-interface NormalizedTreeshakingOptions {
-  annotations: boolean;
-  correctVarValueBeforeDeclaration: boolean;
-  manualPureFunctions: readonly string[];
-  moduleSideEffects: HasModuleSideEffects;
-  propertyReadSideEffects: boolean | 'always';
-  tryCatchDeoptimization: boolean;
-  unknownGlobalSideEffects: boolean;
-}
-
-interface TreeshakingOptions extends Partial<Omit<NormalizedTreeshakingOptions, 'moduleSideEffects'>> {
-  moduleSideEffects?: ModuleSideEffectsOption;
-  preset?: TreeshakingPreset;
-}
-interface CustomPluginOptions {
-  [plugin: string]: unknown;
-}
-interface ModuleOptions {
-  assertions: Record<string, string>;
-  meta: CustomPluginOptions;
-  moduleSideEffects: boolean | 'no-treeshake';
-  syntheticNamedExports: boolean | string;
-}
-interface AcornNode {
-  end: number;
-  start: number;
-  type: string;
-}
-interface ResolvedId extends ModuleOptions {
-  external: boolean | 'absolute';
-  id: string;
-  resolvedBy: string;
-}
-interface ModuleInfo extends ModuleOptions {
-  ast: AcornNode | null;
-  code: string | null;
-  dynamicImporters: readonly string[];
-  dynamicallyImportedIdResolutions: readonly ResolvedId[];
-  dynamicallyImportedIds: readonly string[];
-  exportedBindings: Record<string, string[]> | null;
-  exports: string[] | null;
-  hasDefaultExport: boolean | null;
-  hasModuleSideEffects: boolean | 'no-treeshake';
-  id: string;
-  implicitlyLoadedAfterOneOf: readonly string[];
-  implicitlyLoadedBefore: readonly string[];
-  importedIdResolutions: readonly ResolvedId[];
-  importedIds: readonly string[];
-  importers: readonly string[];
-  isEntry: boolean;
-  isExternal: boolean;
-  isIncluded: boolean | null;
-}
-type GetModuleInfo = (moduleId: string) => ModuleInfo | null;
-interface ManualChunkMeta {
-  getModuleIds: () => IterableIterator<string>;
-  getModuleInfo: GetModuleInfo;
-}
-type NullValue = null | undefined | void;
-
-type GetManualChunk = (id: string, meta: ManualChunkMeta) => string | NullValue;
-
-type ManualChunksOption = { [chunkAlias: string]: string[] } | GetManualChunk;
-
 interface chunkOptimization {
   assetsInlineLimit: number;
   chunkSizeWarningLimit: number;
   reportCompressedSize: boolean;
-  rollupOptions: {
-    output: {
-      experimentalMinChunkSize?: number;
-      manualChunks?: ManualChunksOption;
-    };
-    treeshake?: boolean | TreeshakingPreset | TreeshakingOptions;
-  };
+  rollupOptions: RollupOptions;
   minify: boolean | 'terser' | 'esbuild' | undefined;
 }
 
 const chunkOptimization: Partial<chunkOptimization> = {
   chunkSizeWarningLimit: 500,
-  assetsInlineLimit: 8 * 1024,
+  assetsInlineLimit: 1024,
   reportCompressedSize: false,
   rollupOptions: {
+    external: ['react'],
     output: {
       experimentalMinChunkSize: 500,
     },
@@ -116,11 +41,6 @@ const chunkOptimization: Partial<chunkOptimization> = {
 
 export const umd: BuildOptions = {
   ...chunkOptimization,
-  rollupOptions: {
-    output: {
-      experimentalMinChunkSize: 500,
-    },
-  },
   outDir: resolve(__dirname, 'dist/umd'),
   lib: {
     entry: resolve(__dirname, 'index.ts'),
@@ -130,22 +50,19 @@ export const umd: BuildOptions = {
   },
 };
 
+export const umdShadowless: BuildOptions = {
+  ...chunkOptimization,
+  outDir: resolve(__dirname, 'dist/umd/shadowless'),
+  lib: {
+    entry: resolve(__dirname, 'shadowless.ts'),
+    name: 'ranui',
+    fileName: 'shadowless',
+    formats: ['umd'],
+  },
+};
+
 export const es: BuildOptions = {
   ...chunkOptimization,
-  rollupOptions: {
-    output: {
-      experimentalMinChunkSize: 500,
-      // manualChunks: (id) => {
-      //   if (id.includes('node_modules')) {
-      //     return 'vendor';
-      //   }
-      // },
-    },
-    treeshake: {
-      preset: 'recommended',
-      manualPureFunctions: ['console.log'],
-    },
-  },
   lib: {
     entry: {
       button: resolve(__dirname, 'components/button/index.ts'),
@@ -180,7 +97,7 @@ export const es: BuildOptions = {
       if (name.includes('shadowless')) {
         return `shadowless/${name}/index.js`;
       }
-      return `${name}.js`
+      return `${name}.js`;
     },
     formats: ['es'],
   },
@@ -194,7 +111,6 @@ export const viteConfig: UserConfig = {
     loadStyle({
       ignore: ['ranui/components/modal/index.ts'],
     }),
-    dts(),
     loadSvg({ svgo: false, defaultImport: 'raw' }),
     visualizer({
       emitFile: false,

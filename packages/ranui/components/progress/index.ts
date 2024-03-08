@@ -30,23 +30,23 @@ class Progress extends (HTMLElementSSR()!) {
   static get observedAttributes(): string[] {
     return attributes;
   }
-  get percent(): number {
+  get percent(): string {
     const percent = this.getAttribute('percent') || '';
     const num = perToNum(percent);
-    if (num > this.total) {
+    if (Number(num) > Number(this.total)) {
       console.error('percent must be < total');
       return this.total;
     }
-    return perToNum(percent);
+    return `${perToNum(percent)}`;
   }
-  set percent(value: number) {
+  set percent(value: string) {
     this.setAttribute('percent', `${value || 0}`);
     this.setAttribute('aria-valuenow', `${value || 0}`);
   }
-  get total(): number {
+  get total(): string {
     const total = this.getAttribute('total');
-    if (!total) return 1;
-    return perToNum(total);
+    if (!total) return '1';
+    return `${perToNum(total)}`;
   }
   set total(value: string) {
     this.setAttribute('total', value || '');
@@ -91,7 +91,7 @@ class Progress extends (HTMLElementSSR()!) {
     const rect = this._progress.getBoundingClientRect();
     const offsetX = e.clientX - rect.left;
     const percentage = Math.min(1, Math.max(0, offsetX / this._progress.offsetWidth));
-    this.percent = percentage * this.total;
+    this.percent = `${percentage * Number(this.total)}`;
     this._progressWrapValue.style.setProperty('transform', `scaleX(${percentage})`);
     this._progressDot.style.setProperty('transform', `translateX(${percentage * this._progress.offsetWidth}px)`);
     this.change();
@@ -104,7 +104,7 @@ class Progress extends (HTMLElementSSR()!) {
     const rect = this._progress.getBoundingClientRect();
     const offsetX = e.clientX - rect.left;
     const percentage = Math.min(1, Math.max(0, offsetX / this._progress.offsetWidth));
-    this.percent = percentage * this.total;
+    this.percent = `${percentage * Number(this.total)}`;
     this._progressWrapValue.style.setProperty('transform', `scaleX(${percentage})`);
     this._progressDot.style.setProperty('transform', `translateX(${percentage * this._progress.offsetWidth}px)`);
     this.change();
@@ -133,7 +133,7 @@ class Progress extends (HTMLElementSSR()!) {
     }
   };
   updateCurrentProgress = (): void => {
-    const percent = this.percent / this.total;
+    const percent = Number(this.percent) / Number(this.total);
     this._progressWrapValue.style.setProperty('transform', `scaleX(${percent})`);
     this._progressDot.style.setProperty('transform', `translateX(${percent * this._progress.offsetWidth}px)`);
   };
@@ -146,8 +146,8 @@ class Progress extends (HTMLElementSSR()!) {
   };
   createProgress = (): void => {
     if (!(this.children.length > 0 && [...this.children].some((item) => item.className === 'ran-progress'))) {
-      this.appendChild(this._progress);
       this._progress.appendChild(this._progressDot);
+      this.appendChild(this._progress);
     }
   };
   private resize = (): void => {

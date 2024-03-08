@@ -61,7 +61,7 @@ function Custom() {
                 }
               } else {
                 this.loadNs();
-                reject(`\n couldn't be loaded by r-icon, message: ${this.name} icon is undefined`);
+                reject(`\n couldn't be loaded by ra-icon, message: ${this.name} icon is undefined`);
               }
             })
             .catch((error) => {

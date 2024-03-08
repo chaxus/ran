@@ -4,20 +4,40 @@ import type { BuildOptions, UserConfig } from 'vite';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 import react from '@vitejs/plugin-react';
+import type { RollupOptions } from 'rollup';
 import { PORT } from './build/config';
 
 const __filename = fileURLToPath(import.meta.url);
 
 const __dirname = path.dirname(__filename);
 
-export const umd: BuildOptions = {
-  rollupOptions: {
-    output: {
-      experimentalMinChunkSize: 1000,
-    },
-    external: ['react'],
+interface chunkOptimization {
+  assetsInlineLimit: number;
+  chunkSizeWarningLimit: number;
+  reportCompressedSize: boolean;
+  rollupOptions: RollupOptions;
+  minify: boolean | 'terser' | 'esbuild' | undefined;
+}
+
+const chunkOptimization: Partial<chunkOptimization> = {
+chunkSizeWarningLimit: 500,
+assetsInlineLimit: 1024,
+reportCompressedSize: false,
+rollupOptions: {
+  external: ['react'],
+  output: {
+    experimentalMinChunkSize: 500,
   },
-  minify: 'terser',
+  treeshake: {
+    preset: 'recommended',
+    manualPureFunctions: ['console.log'],
+  },
+},
+minify: 'terser',
+};
+
+export const umd: BuildOptions = {
+  ...chunkOptimization,
   outDir: resolve(__dirname, 'dist/umd'),
   lib: {
     entry: resolve(__dirname, 'index.ts'),
@@ -28,13 +48,7 @@ export const umd: BuildOptions = {
 };
 
 export const es: BuildOptions = {
-  rollupOptions: {
-    output: {
-      experimentalMinChunkSize: 1000,
-    },
-    external: ['react'],
-  },
-  minify: 'terser',
+  ...chunkOptimization,
   lib: {
     entry: resolve(__dirname, 'index.ts'),
     fileName: 'index',
