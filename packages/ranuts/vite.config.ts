@@ -11,7 +11,6 @@ export default defineConfig({
     minify: 'terser',
     rollupOptions: {
       output: {
-        // inlineDynamicImports: true,
         experimentalMinChunkSize: 1000,
       },
       external: ['node:fs', 'fs', 'react', 'node:os', 'os'],

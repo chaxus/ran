@@ -1,16 +1,14 @@
-import readFile from '@/file/readFile';
-import watchFile from '@/file/watchFile';
 import { SyncHook } from '@/mode/subscribe';
-import queryFileInfo from '@/file/fileInfo';
+
 import filterObj from '@/utils/filterObj';
-import readDir from '@/file/readDir';
+
 import str2Xml from '@/utils/str2Xml';
-import writeFile from '@/file/writeFile';
+
 import { init } from '@/vnode/init';
 import { h } from '@/vnode/h';
 import Monitor from '@/ranlog';
 import { AudioRecorder } from '@/utils/audioRecorder';
-import word from '@/word/index';
+import word from '@/wasm/word';
 import reactify from '@/utils/reactify';
 import {
   Mathjs,
@@ -59,14 +57,9 @@ const vnode = {
 };
 
 export {
-  writeFile,
-  readFile,
-  watchFile,
   SyncHook,
-  queryFileInfo,
   filterObj,
   str2Xml,
-  readDir,
   vnode,
   Monitor,
   MimeType,
