@@ -17,6 +17,24 @@ const PLAY_STATE_LIST = ['play', 'playing', 'timeupdate'];
 
 const throttle = generateThrottle();
 
+type Callback = (...args: unknown[]) => unknown;
+type EventName = string | symbol;
+type EventItem = {
+    name?: string | symbol;
+    callback: Callback;
+    initialCallback?: Callback;
+};
+
+export declare class SHook {
+  private _events;
+  constructor();
+  tap: (eventName: EventName, eventItem: EventItem | Callback) => void;
+  call: (eventName: EventName, ...args: Array<unknown>) => void;
+  callSync: (eventName: EventName, ...args: Array<unknown>) => Promise<void>;
+  once: (eventName: EventName, eventItem: EventItem | Callback) => void;
+  off: (eventName: EventName, eventItem: EventItem | Callback) => void;
+}
+
 export interface HlsPlayer {
   startLoad(): () => void;
   off: (s: string, f: Function) => void;
@@ -37,7 +55,7 @@ export interface Level {
 }
 
 export interface Context {
-  action: SyncHook;
+  action: SHook;
   currentState: string;
   duration: number;
   currentTime: number;

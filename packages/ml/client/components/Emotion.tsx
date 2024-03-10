@@ -5,7 +5,7 @@ import type { TensorContainerObject, TypedArray } from '@tensorflow/tfjs';
 import type { Point2D } from '@tensorflow/tfjs-vis';
 import * as tfvis from '@tensorflow/tfjs-vis';
 import * as tf from '@tensorflow/tfjs';
-import { word } from 'ranuts';
+import { word } from 'ranuts/wasm';
 import { denormalise, normalise, plot, tfMemory, trainModel } from '../lib';
 import type { Normalise } from '../lib';
 

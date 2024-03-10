@@ -8,7 +8,7 @@ declare module '@/assets/*';
 declare module '@/components/*';
 declare module '@/plugins/*';
 declare module '@/utils/*';
-declare module 'ranuts/utils';
+declare module 'ranuts/*';
 
 declare namespace Ran {
   interface Prompt {
