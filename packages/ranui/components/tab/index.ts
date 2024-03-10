@@ -1,4 +1,4 @@
-import { addClassToElement, createDocumentFragment } from 'ranuts';
+import { addClassToElement, createDocumentFragment } from 'ranuts/utils';
 import { isDisabled, removeClassToElementChild } from '../../utils/index';
 
 function CustomElement() {

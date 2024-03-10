@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import Server from '@/server/server';
 import bodyMiddleware from '@/server/body';
-import colors from '@/colors';
-import type { Context, Next } from '@/server/server';
-import Router from '@/server/router';
+import colors from '@/node/color';
+import type { Context, Next } from '@/node/server';
+import Router from '@/node/router';
 
 const app = new Server();
 const PORT = 30103;

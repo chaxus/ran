@@ -6,7 +6,7 @@ import {
   range,
   removeClassToElement,
   timeFormat,
-} from 'ranuts';
+} from 'ranuts/utils';
 import '@/assets/js/hls.js';
 import type { Progress } from '@/components/progress';
 import '@/components/select';

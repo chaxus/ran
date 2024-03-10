@@ -1,7 +1,7 @@
 import path, { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { ocr } from '@/utils/ocr';
+import { ocr } from '@/ml/ocr';
 // https://cdn.jsdelivr.net/npm/@tesseract.js-data/fra/4.0.0_best_int/fra.traineddata.gz
 
 const __filename = fileURLToPath(import.meta.url);

@@ -1,11 +1,11 @@
-import path, { resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+// import path, { resolve } from 'node:path';
+// import { fileURLToPath } from 'node:url';
 import { createScheduler, createWorker } from 'tesseract.js';
-import type { BaseReturn } from '@/utils/index';
+import type { BaseReturn } from '@/utils/bom';
 
-const __filename = fileURLToPath(import.meta.url);
+// const __filename = fileURLToPath(import.meta.url);
 
-const __dirname = path.dirname(__filename);
+// const __dirname = path.dirname(__filename);
 
 interface Options {
   images: string[];

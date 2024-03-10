@@ -1,4 +1,4 @@
-import { perToNum } from 'ranuts';
+import { perToNum } from 'ranuts/utils';
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
 import './index.less';
 

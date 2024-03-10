@@ -1,7 +1,7 @@
 import type { ClientRequestArgs } from 'node:http';
 import http from 'node:http';
 import url from 'node:url';
-import colors from '@/colors';
+import colors from '@/node/color';
 
 const { blue, green } = colors;
 

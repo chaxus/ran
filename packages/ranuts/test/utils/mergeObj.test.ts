@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import merge from '../../src/utils/mergeObj';
+import { merge } from '@/utils/obj';
 
 describe('merge', function () {
   describe('an object', function () {

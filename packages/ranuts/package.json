@@ -1,6 +1,6 @@
 {
   "name": "ranuts",
-  "version": "0.1.0-alpha.10",
+  "version": "0.1.0-alpha.11",
   "description": "lib",
   "main": "dist/index.umd.cjs",
   "module": "dist/index.js",
@@ -13,7 +13,32 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "require": "./dist/index.umd.cjs"
+      "require": "./dist/umd/index.umd.cjs"
+    },
+    "./react": {
+      "types": "./dist/src/react/index.d.ts",
+      "import": "./dist/react.js",
+      "require": "./dist/umd/react/react.umd.cjs"
+    },
+    "./node": {
+      "types": "./dist/src/node/index.d.ts",
+      "import": "./dist/node.js",
+      "require": "./dist/umd/node/node.umd.cjs"
+    },
+    "./utils": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/utils.js",
+      "require": "./dist/umd/utils/utils.umd.cjs"
+    },
+    "./wasm": {
+      "types": "./dist/src/wasm/index.d.ts",
+      "import": "./dist/wasm.js",
+      "require": "./dist/umd/wasm/wasm.umd.cjs"
+    },
+    "./ml": {
+      "types": "./dist/src/ml/index.d.ts",
+      "import": "./dist/ml.js",
+      "require": "./dist/umd/ml/ml.umd.cjs"
     }
   },
   "repository": {
@@ -43,7 +68,6 @@
     "@types/react": "^18.2.53",
     "react": "^18.2.0",
     "vite": "^5.0.12",
-    "vite-plugin-dts": "^3.7.2",
     "vitest": "^1.2.2"
   },
   "dependencies": {

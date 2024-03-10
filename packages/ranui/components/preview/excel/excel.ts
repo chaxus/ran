@@ -1,7 +1,7 @@
 import * as Excel from 'exceljs/dist/exceljs';
 import tinycolor from 'tinycolor2';
 import { cloneDeep, find, get } from 'lodash';
-import { timestampToTime } from 'ranuts';
+import { timestampToTime } from 'ranuts/utils';
 import { getDarkColor, getLightColor } from '@/components/preview/colz';
 
 const themeColor = [

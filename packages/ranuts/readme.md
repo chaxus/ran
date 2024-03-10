@@ -7,7 +7,7 @@ Some commonly used functions and tools
 <a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/github/actions/workflow/status/chaxus/ran/ci.yml" alt="Build Status"></a>
 <a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/v/ranuts.svg" alt="npm-v"></a>
 <a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/dt/ranuts.svg" alt="npm-d"></a>
-<a href="https://github.com/chaxus/ran"><img src="https://img.badgesize.io/https:/unpkg.com/ranuts/dist/index.umd.cjs?label=brotli&compression=brotli" alt="brotli"></a>
+<a href="https://github.com/chaxus/ran"><img src="https://img.badgesize.io/https:/unpkg.com/ranuts/dist/index.js?label=brotli&compression=brotli" alt="brotli"></a>
 <a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/badge/module%20formats-umd%2C%20esm-green.svg" alt="module formats: umd, esm"></a>
 
 ---
@@ -26,6 +26,24 @@ npm install ranuts --save
 
 ## Usage
 
+Import as required. You can select:
+
+- ranuts/utils
+- ranuts/wasm
+- ranuts/node
+- ranuts/react
+- ranuts/ml
+
+```js
+import { str2Xml } from 'ranuts/utils';
+import { readFile } from 'ranuts/node';
+import { word } from 'ranuts/wasm';
+import { reactify } from 'ranuts/react';
+import { ocr } from 'ranuts/ml';
+
+```
+Full import，(Full import will introduce many unnecessary modules. You are advised to import them on demand)
+
 - ESM
 
 ```js
@@ -43,7 +61,7 @@ document.body.appendChild(html);
 - UMD, IIFE, CJS
 
 ```html
-<script src="./ranuts/dist/index.umd.cjs"></script>
+<script src="./ranuts/dist/umd/index.umd.cjs"></script>
 
 <script>
     const { str2Xml } = require('ranuts')

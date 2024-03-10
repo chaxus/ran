@@ -1,4 +1,4 @@
-import { noop } from 'ranuts';
+import { noop } from 'ranuts/utils';
 import '@/components/icon';
 import message from '@/components/message';
 import './index.less';

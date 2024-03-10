@@ -1,5 +1,5 @@
 import type { Plugin } from 'vite';
-import { readFile } from 'ranuts';
+import { readFile } from 'ranuts/node';
 import type { Config } from 'svgo';
 import { optimize } from 'svgo';
 

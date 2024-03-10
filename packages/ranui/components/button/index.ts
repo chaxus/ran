@@ -1,4 +1,4 @@
-import { judgeDevice } from 'ranuts';
+import { currentDevice } from 'ranuts/utils';
 import { HTMLElementSSR, createCustomError, falseList, isDisabled } from '@/utils/index';
 
 export class Button extends (HTMLElementSSR()!) {
@@ -107,7 +107,7 @@ export class Button extends (HTMLElementSSR()!) {
     }
   };
   mousedown = (event: MouseEvent): void => {
-    if (judgeDevice() !== 'pc') return;
+    if (currentDevice() !== 'pc') return;
     if (!this.disabled || this.disabled === 'false') {
       this.debounceMouseEvent();
       const { left, top } = this.getBoundingClientRect();
@@ -116,7 +116,7 @@ export class Button extends (HTMLElementSSR()!) {
     }
   };
   mouseup = (event: MouseEvent): void => {
-    if (judgeDevice() !== 'pc') return;
+    if (currentDevice() !== 'pc') return;
     if (this.debounceTimeId) return;
     this.debounceTimeId = setTimeout(() => {
       this._btn.style.removeProperty('--ran-x');

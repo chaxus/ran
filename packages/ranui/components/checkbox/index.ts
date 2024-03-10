@@ -1,4 +1,4 @@
-import { addClassToElement, removeClassToElement } from 'ranuts';
+import { addClassToElement, removeClassToElement } from 'ranuts/utils';
 import { HTMLElementSSR, createCustomError, falseList } from '@/utils/index';
 import './index.less';
 

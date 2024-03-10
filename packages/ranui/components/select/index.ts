@@ -1,4 +1,4 @@
-import { addClassToElement, generateThrottle, isMobile, removeClassToElement } from 'ranuts';
+import { addClassToElement, generateThrottle, isMobile, removeClassToElement } from 'ranuts/utils';
 import { HTMLElementSSR, createCustomError, isDisabled } from '@/utils/index';
 import '@/components/option';
 import '@/components/icon';
