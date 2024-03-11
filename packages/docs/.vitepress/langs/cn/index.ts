@@ -125,7 +125,7 @@ const themeCnConfig: DefaultTheme.Config = {
             link: '/cn/src/article/sort/index.md',
             items: [
               { text: '冒泡排序', link: '/cn/src/article/sort/bubble/' },
-              { text: '选择排序', link: '/src/article/sort/select/' },
+              { text: '选择排序', link: '/cn/src/article/sort/select/' },
               { text: '插入排序', link: '/cn/src/article/sort/insert/' },
               { text: '希尔排序', link: '/cn/src/article/sort/shell/' },
               { text: '归并排序', link: '/cn/src/article/sort/merge/' },
