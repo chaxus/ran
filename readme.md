@@ -1,9 +1,25 @@
-A repository for all kinds of solutions.
+<p align="center">
+  <a href="https://chaxus.github.io/ran/" target="_blank" rel="noopener noreferrer">
+    <img width="180" src="https://chaxus.github.io/ran/home.svg" alt="ran logo">
+  </a>
+</p>
+<br/>
 
-The project includes **web components library**, **packaging tool**, **function library** and so on.
+> Manage code assets like managing money, and enjoy the compounding interest of time.
+
+This is reflected in the fact that in the face of new requirements, I can quickly identify possible potholes and find the previous code, customize, modify, rather than starting from scratch.
+
+So it's not that I'm running faster, it's that I'm standing near the finish line.
+
+About a year or two ago, I began to realize the importance of this strategy, and since then, I have committed to implementing this philosophy in my daily work, and gradually improved the code management system.
+
+The project includes **web components library**, **machine learning**, **function library** and so on.
+
+Meanwhile, I have also made these codes open-source, hoping that they can be helpful to everyone.
 
 Thanks to star...
 
+<p align="center">
 <a href="https://github.com/chaxus/ran">
     <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="license">
 </a>
@@ -17,62 +33,16 @@ Thanks to star...
 <a href="https://github.com/chaxus/ran">
     <img src="https://img.shields.io/github/stars/chaxus/ran" alt="stars">
 </a>
+</p>
+<br/>
 
-# Quick start
+## Packages
 
-Install npm packages
-
-```console
-pnpm install
-```
-
-# Introduction
-
-## 1.`ranui`
-
-Based on `web components` UI library
-
-<a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/v/ranui.svg" alt="npm-v"></a>
-<a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/dt/ranui.svg" alt="npm-d"></a>
-<a href="https://github.com/chaxus/ran"><img src="https://img.badgesize.io/https:/unpkg.com/ranui/dist/umd/index.umd.cjs?label=brotli&compression=brotli" alt="brotli"></a>
-<a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/badge/module%20formats-umd%2C%20esm-green.svg" alt="module formats: umd, esm"></a>
-
-- [document](https://chaxus.github.io/ran/src/ranui/): https://chaxus.github.io/ran/src/ranui/
-- [readme](https://github.com/chaxus/ran/tree/main/packages/ranui): https://github.com/chaxus/ran/tree/main/packages/ranui
-
-## 2.`@ranui/react`
-
-<a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/v/@ranui/react.svg" alt="npm-v"></a>
-<a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/dt/@ranui/react.svg" alt="npm-d"></a>
-<a href="https://github.com/chaxus/ran"><img src="https://img.badgesize.io/https:/unpkg.com/@ranui/react/dist/umd/index.umd.cjs?label=brotli&compression=brotli" alt="brotli"></a>
-<a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/badge/module%20formats-umd%2C%20esm-green.svg" alt="module formats: umd, esm"></a>
-
-[Ranui-based](https://www.npmjs.com/package/ranui) component library, encapsulated by `react` higher-order functions, for easy use in `react`.
-
-[ranui](https://www.npmjs.com/package/ranui) can still be used in react, but [@ranui/react](https://www.npmjs.com/package/@ranui/react). is more convenient.
-
-Not in the react framework, you can use [ranui](https://www.npmjs.com/package/ranui) directly.
-
-- [document](https://chaxus.github.io/ran/src/ranui/): https://chaxus.github.io/ran/src/ranui/
-- [readme](https://github.com/chaxus/ran/tree/main/packages/ranui-react): https://github.com/chaxus/ran/tree/main/packages/ranui-react
-
-## 3.`ranuts`
-
-<a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/v/ranuts.svg" alt="npm-v"></a>
-<a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/dt/ranuts.svg" alt="npm-d"></a>
-<a href="https://github.com/chaxus/ran"><img src="https://img.badgesize.io/https:/unpkg.com/ranuts/dist/index.js?label=brotli&compression=brotli" alt="brotli"></a>
-<a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/badge/module%20formats-umd%2C%20esm-green.svg" alt="module formats: umd, esm"></a>
-
-- [document](https://chaxus.github.io/ran/src/ranuts): https://chaxus.github.io/ran/src/ranuts
-- [readme](https://github.com/chaxus/ran/tree/main/packages/ranuts): https://github.com/chaxus/ran/tree/main/packages/ranuts
-
-## 4.`press`
-
-Commonly used `css` code, have `sass` and `less`.
-
-## 5.`ranite`
-
-Build and code analysis tools.
+| Package                               | Version (click for readme)                                                                                          | npm-download                                                                                           |
+| ------------------------------------- | :------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
+| [ranui](packages/ranui)               | [![ranui version](https://img.shields.io/npm/v/ranui.svg?label=%20)](packages/ranui/readme.md)                      | [![npm-d](https://img.shields.io/npm/dt/ranui.svg)](https://www.npmjs.com/package/ranui)               |
+| [@ranui/react](packages/@ranui/react) | [![@ranui/react version](https://img.shields.io/npm/v/@ranui/react.svg?label=%20)](packages/@ranui/react/readme.md) | [![npm-d](https://img.shields.io/npm/dt/@ranui/react.svg)](https://www.npmjs.com/package/@ranui/react) |
+| [ranuts](packages/ranuts)             | [![ranuts version](https://img.shields.io/npm/v/ranuts.svg?label=%20)](packages/ranuts/readme.md)                   | [![npm-d](https://img.shields.io/npm/dt/ranuts.svg)](https://www.npmjs.com/package/ranuts)             |
 
 # Contributors
 
@@ -80,6 +50,6 @@ Build and code analysis tools.
   <img src="https://contrib.rocks/image?repo=chaxus/ran" />
 </a>
 
-# Meta
+# License
 
-[LICENSE (MIT)](/LICENSE)
+[MIT](/LICENSE)
