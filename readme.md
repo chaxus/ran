@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://chaxus.github.io/ran/" target="_blank" rel="noopener noreferrer">
-    <img width="180" src="https://chaxus.github.io/ran/home.svg" alt="ran logo">
+    <img width="180" src="https://chaxus.github.io/ran/icon.png" alt="ran logo">
   </a>
 </p>
 <br/>
@@ -32,7 +32,7 @@ Thanks to star...
 
 ## Packages
 
-| Package                               | Version (click for readme)                                                                                          | npm-download                                                                                           |
+| package                               | version (click for readme)                                                                                          | npm-d(click for npm)                                                                                           |
 | ------------------------------------- | :------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
 | [ranui](packages/ranui)               | [![ranui version](https://img.shields.io/npm/v/ranui.svg?label=%20)](packages/ranui/readme.md)                      | [![npm-d](https://img.shields.io/npm/dt/ranui.svg)](https://www.npmjs.com/package/ranui)               |
 | [@ranui/react](packages/@ranui/react) | [![@ranui/react version](https://img.shields.io/npm/v/@ranui/react.svg?label=%20)](packages/@ranui/react/readme.md) | [![npm-d](https://img.shields.io/npm/dt/@ranui/react.svg)](https://www.npmjs.com/package/@ranui/react) |
