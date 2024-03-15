@@ -5,20 +5,6 @@
 </p>
 <br/>
 
-> Manage code assets like managing money, and enjoy the compounding interest of time.
-
-This is reflected in the fact that in the face of new requirements, I can quickly identify possible potholes and find the previous code, customize, modify, rather than starting from scratch.
-
-So it's not that I'm running faster, it's that I'm standing near the finish line.
-
-About a year or two ago, I began to realize the importance of this strategy, and since then, I have committed to implementing this philosophy in my daily work, and gradually improved the code management system.
-
-The project includes **web components library**, **machine learning**, **function library** and so on.
-
-Meanwhile, I have also made these codes open-source, hoping that they can be helpful to everyone.
-
-Thanks to star...
-
 <p align="center">
 <a href="https://github.com/chaxus/ran">
     <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="license">
@@ -35,6 +21,14 @@ Thanks to star...
 </a>
 </p>
 <br/>
+
+> Manage code assets like managing money, and enjoy the compounding interest of time.
+
+The project includes **web components library**, **machine learning**, **function library** and so on.
+
+Meanwhile, I have also made these codes open-source, hoping that they can be helpful to everyone.
+
+Thanks to star...
 
 ## Packages
 
