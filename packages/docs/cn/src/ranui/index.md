@@ -348,14 +348,15 @@ import 'ranui';
 
 通过给组件设置`css3`变量，从而自定义组件内部的指定样式，比如：
 
-<r-progress percent="70" total="100"></r-progress>
-<r-progress percent="70" total="100" style="--ran-progress-wrap:linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);"></r-progress>
+<r-progress percent="0.7" type="drag"></r-progress>
+<br />
+<r-progress percent="0.7" type="drag" style="--ran-progress-wrap:linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);"></r-progress>
 
 ```html
-<r-progress percent="70" total="100"></r-progress>
+<r-progress percent="0.7" type="drag"></r-progress>
 <r-progress
-  percent="70"
-  total="100"
+  percent="0.70"
+  type="drag"
   style="--ran-progress-wrap:linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);"
 ></r-progress>
 ```

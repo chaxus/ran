@@ -32,7 +32,7 @@ Thanks to star...
 
 ## Packages
 
-| package                               | version (click for readme)                                                                                          | npm-d(click for npm)                                                                                           |
+| package                               | version (click for readme)                                                                                          | npm-d(click for npm)                                                                                   |
 | ------------------------------------- | :------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
 | [ranui](packages/ranui)               | [![ranui version](https://img.shields.io/npm/v/ranui.svg?label=%20)](packages/ranui/readme.md)                      | [![npm-d](https://img.shields.io/npm/dt/ranui.svg)](https://www.npmjs.com/package/ranui)               |
 | [@ranui/react](packages/@ranui/react) | [![@ranui/react version](https://img.shields.io/npm/v/@ranui/react.svg?label=%20)](packages/@ranui/react/readme.md) | [![npm-d](https://img.shields.io/npm/dt/@ranui/react.svg)](https://www.npmjs.com/package/@ranui/react) |

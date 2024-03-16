@@ -20,9 +20,9 @@ const throttle = generateThrottle();
 type Callback = (...args: unknown[]) => unknown;
 type EventName = string | symbol;
 type EventItem = {
-    name?: string | symbol;
-    callback: Callback;
-    initialCallback?: Callback;
+  name?: string | symbol;
+  callback: Callback;
+  initialCallback?: Callback;
 };
 
 export declare class SHook {

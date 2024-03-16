@@ -1,1 +1,1 @@
-declare module 'ranuts/*'
+declare module 'ranuts/*';
