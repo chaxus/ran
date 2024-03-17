@@ -1,3 +1,4 @@
+import '@/components/icon'
 import './index.less';
 
 const AnimationTime = 300; // message退出动画执行的时间
@@ -119,7 +120,7 @@ function Custom() {
 
         message.timeId = setTimeout(() => {
           message.classList.remove('message-leave');
-          div.removeChild(message);
+          // div.removeChild(message);
           if (close) close();
         }, duration);
 

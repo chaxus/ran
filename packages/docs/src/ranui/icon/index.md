@@ -100,6 +100,10 @@ const createIconList = () => {
     'user']
     if (typeof document !== "undefined") {
       const dom = document.getElementById('icon-list')
+      const com = document.createElement('div')
+      com.style.setProperty('display', 'grid')
+      com.style.setProperty('grid-template-columns', 'repeat(3, 200px)')
+      com.style.setProperty('grid-template-rows', 'repeat(3, 200px);')
       list.forEach(item => {
         const container = document.createElement('div')
         container.style.setProperty('display', 'flex')
@@ -114,8 +118,9 @@ const createIconList = () => {
         const span = document.createElement('span')
         span.innerHTML = item
         container.appendChild(span)
-        dom?.appendChild(container)
+        com?.appendChild(container)
       })
+      dom?.appendChild(com)
     }
   }, 0)
 }
