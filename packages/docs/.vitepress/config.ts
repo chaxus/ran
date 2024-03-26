@@ -13,8 +13,8 @@ import {
   RANUI_PATH,
   ARTICLE_PATH,
   KEY_WORDS,
-  GITHUB,
   BASE_PATH,
+  SERVICE_WORK
 } from './common/index';
 import { pagefindPlugin } from 'vitepress-plugin-pagefind';
 
@@ -78,6 +78,7 @@ export default defineConfig({
   head: [
     // base
     ['link', { rel: 'icon', href: `${BASE_PATH}favicon.ico` }],
+    ['link', { rel: 'manifest', href: `${BASE_PATH}manifest.json` }],
     ['meta', { name: 'theme-color', content: '#646cff' }],
     // og
     ['meta', { property: 'og:title', content: 'ran' }],
@@ -110,6 +111,7 @@ export default defineConfig({
     ['script', {}, BD_ANALYSE],
     // preview component script
     ['script', {}, PREVIEW_CODE],
+    ['script', {}, SERVICE_WORK],
   ],
   themeConfig: themeEnConfig,
 });

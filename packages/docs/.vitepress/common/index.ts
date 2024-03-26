@@ -1,3 +1,4 @@
+
 export const GTAG = 'https://www.googletagmanager.com/gtag/js?id=G-0MPS5WH1C0';
 
 export const GOOGLE_ANALYSE = `;window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);};gtag('js', new Date());gtag('config', 'G-0MPS5WH1C0');`;
@@ -50,3 +51,31 @@ export const ARTICLE_PATH = `${HOME}src/article/designMode.html`;
 export const KEY_WORDS = 'ran,component,components,ui,design,ranui,web-components,javascript,typescript,js';
 
 export const GITHUB = 'https://github.com/chaxus/ran';
+
+export const SERVICE_WORK = `
+// 注册 Service worker
+const registerServiceWorker = async () => {
+    if ("serviceWorker" in window.navigator) {
+      window.addEventListener('load', async function () {
+        try {
+          const registration = await navigator.serviceWorker.register("/ran/sw.js", {
+            scope: "/ran/",
+          });
+          console.log('install scope',registration.scope);
+          if (registration.installing) {
+            console.log("installing Service worker");
+          } else if (registration.waiting) {
+            console.log("Service worker installed");
+          } else if (registration.active) {
+            console.log("Service worker active");
+          }
+        } catch (error) {
+          console.error("service work register error:", JSON.stringify(error));
+        }
+      })
+  
+    }
+  };
+  
+  registerServiceWorker();
+`
