@@ -46,7 +46,7 @@ const updateCache = (fetchedResponse, request) => {
         caches.open(cacheName).then(cache => {
             // 将请求到的资源添加到缓存中
             // 判断下只有 fetch 的请求才有 clone 方法，才可以被缓存，从 cache 中获取的响应没有 clone
-            if(fetchedResponse?.clone){
+            if (fetchedResponse?.clone) {
                 cache.put(request, fetchedResponse.clone());
             }
         }).catch(error => {
@@ -74,8 +74,8 @@ const cacheFirst = async (request) => {
         }
         // 如果缓存中没有，就从网络中请求
         const responseFromServer = await fetch(request);
-        updateCache(responseFromCache, request)
-        return responseFromServer;
+        updateCache(responseFromServer, request)
+        return responseFromServer
     } catch (error) {
         console.log('cacheFirst', error)
     }
@@ -83,7 +83,14 @@ const cacheFirst = async (request) => {
 
 self.addEventListener("fetch", (event) => {
     // 拦截请求
-    event.respondWith(cacheFirst(event.request));
+    try {
+        const responseFromServer = cacheFirst(event.request)
+        if (responseFromServer?.clone) {
+            event.respondWith(responseFromServer);
+        }
+    } catch (error) {
+        console.log('service work self fetch error:', error, event)
+    }
 });
 
 const deleteCache = async (key) => {
