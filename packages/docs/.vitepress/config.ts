@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitepress';
 import { themeEnConfig } from './langs/en';
 import { themeCnConfig } from './langs/cn';
+import vitePluginOutput from '../plugins/vite-plugin-output'
 import {
   GTAG,
   GOOGLE_ANALYSE,
@@ -64,6 +65,7 @@ export default defineConfig({
           },
         },
       }),
+      vitePluginOutput()
     ],
   },
   vue: {

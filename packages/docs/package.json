@@ -31,6 +31,7 @@
     "vitepress-plugin-pagefind": "^0.2.10"
   },
   "dependencies": {
-    "ranui": "workspace:0.1.10"
+    "ranui": "workspace:0.1.10",
+    "ranuts": "workspace:0.1.0-alpha.11"
   }
 }
