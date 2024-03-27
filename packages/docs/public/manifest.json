@@ -2,7 +2,7 @@
     "name": "ran", 
     "short_name": "ran",
     "id":"/ran/",
-    "start_url": "chaxus.github.io/ran/",
+    "start_url": "/ran/",
     "display": "standalone", 
     "background_color": "#fff",
     "description": "A Troupe of little vagrants of the world, leave your footprints in my words .",
