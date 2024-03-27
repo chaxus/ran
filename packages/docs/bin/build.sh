@@ -1,4 +1,4 @@
-#!/bin/bash
+
 
 bin=./node_modules/.bin
 
