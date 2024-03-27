@@ -1,4 +1,5 @@
-#!/bin/bash 
+#!/bin/bash
+
 bin=./node_modules/.bin
 
 $bin/vitepress build
@@ -16,7 +17,7 @@ find "$dir" -type f > "$tmpfile"
   
 # 从临时文件中读取文件路径并存储到数组中  
 while IFS= read -r file; do  
-    file_paths+="$file"
+    file_paths+=("$file")
 done < "$tmpfile"  
   
 # 删除临时文件  
