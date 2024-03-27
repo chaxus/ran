@@ -1,4 +1,4 @@
-import '@/components/icon'
+import '@/components/icon';
 import './index.less';
 
 const AnimationTime = 300; // message退出动画执行的时间

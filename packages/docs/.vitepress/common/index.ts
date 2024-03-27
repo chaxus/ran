@@ -1,4 +1,3 @@
-
 export const GTAG = 'https://www.googletagmanager.com/gtag/js?id=G-0MPS5WH1C0';
 
 export const GOOGLE_ANALYSE = `;window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);};gtag('js', new Date());gtag('config', 'G-0MPS5WH1C0');`;
@@ -78,4 +77,4 @@ const registerServiceWorker = async () => {
   };
   
   registerServiceWorker();
-`
+`;

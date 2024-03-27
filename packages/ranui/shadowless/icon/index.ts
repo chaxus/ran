@@ -1,5 +1,5 @@
 import { str2Xml } from 'ranuts/utils';
-import './index.less'
+import './index.less';
 
 const X_LINKS_NS = 'http://www.w3.org/1999/xlink';
 const X_LINK_HREF = 'xlink:href';
