@@ -1,7 +1,6 @@
 import { defineConfig } from 'vitepress';
 import { themeEnConfig } from './langs/en';
 import { themeCnConfig } from './langs/cn';
-import vitePluginOutput from '../plugins/vite-plugin-output'
 import {
   GTAG,
   GOOGLE_ANALYSE,
@@ -15,7 +14,7 @@ import {
   ARTICLE_PATH,
   KEY_WORDS,
   BASE_PATH,
-  SERVICE_WORK
+  SERVICE_WORK,
 } from './common/index';
 import { pagefindPlugin } from 'vitepress-plugin-pagefind';
 
@@ -59,13 +58,12 @@ export default defineConfig({
             btnPlaceholder: '搜索',
             placeholder: '搜索文档',
             emptyText: '空空如也',
-            heading: '共: {{searchResult}} 条结果',
+            heading: '共：{{searchResult}} 条结果',
             // 搜索结果不展示最后修改日期日期
             showDate: false,
           },
         },
       }),
-      vitePluginOutput()
     ],
   },
   vue: {

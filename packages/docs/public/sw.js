@@ -1,24 +1,24 @@
+
+const cacheName = 0
+
 self.addEventListener('install', function (event) {
     // 确保 Service Worker 不会在 waitUntil() 里面的代码执行完毕之前安装完成
     event.waitUntil(
         // 创建了叫做 v1 的新缓存
-        caches.open('v1').then(function (cache) {
-            cache.addAll([
-                './index.html', // 相对于 sw.js 的路径 缓存 index.html
-            ]);
+        caches.open(cacheName).then(function (cache) {
+            // 从bin/build.sh中生成注入
+            cache.addAll(serviceWorkCacheFilePaths);
         })
     );
 });
-
 /**
  * 缓存优先
  * @param {*} request 
  * @returns 
  */
 const cacheFirst = async (request) => {
-    // 从缓存中读取 respondWith表示拦截请求并返回自定义的响应
+    // 从缓存中读取 respondWith 表示拦截请求并返回自定义的响应
     const responseFromCache = await caches.match(request);
-    console.log('responseFromCache', responseFromCache);
     if (responseFromCache) {
         return responseFromCache
     }
@@ -32,8 +32,6 @@ const cacheFirst = async (request) => {
 
 self.addEventListener("fetch", (event) => {
     // 拦截请求
-    console.log('caches match',);
-    console.log('fetch', event.request.url);
     event.respondWith(cacheFirst(event.request));
 });
 
