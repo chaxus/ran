@@ -45,9 +45,12 @@ const updateCache = (fetchedResponse, request) => {
     if (!ignoreRequest.some(item => url.includes(item)) && method === 'GET') {
         caches.open(cacheName).then(cache => {
             // 将请求到的资源添加到缓存中
-            cache.put(request, fetchedResponse.clone());
+            // 判断下只有 fetch 的请求才有 clone 方法，才可以被缓存，从 cache 中获取的响应没有 clone
+            if(fetchedResponse?.clone){
+                cache.put(request, fetchedResponse.clone());
+            }
         }).catch(error => {
-            console.log('service work update cache error:', error)
+            console.log('service work update cache error:', error, request)
         })
     }
 }
