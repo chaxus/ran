@@ -6,7 +6,6 @@ const registerServiceWorker = async () => {
         const registration = await navigator.serviceWorker.register('/ran/sw.js', {
           scope: '/ran/',
         });
-        console.log('install scope', registration.scope);
         if (registration.installing) {
           console.log('installing Service worker');
         } else if (registration.waiting) {
