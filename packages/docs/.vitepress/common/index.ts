@@ -1,4 +1,3 @@
-
 export const GTAG = 'https://www.googletagmanager.com/gtag/js?id=G-0MPS5WH1C0';
 
 export const GOOGLE_ANALYSE = `;window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);};gtag('js', new Date());gtag('config', 'G-0MPS5WH1C0');`;
@@ -61,7 +60,6 @@ const registerServiceWorker = async () => {
           const registration = await navigator.serviceWorker.register("/ran/sw.js", {
             scope: "/ran/",
           });
-          console.log('install scope',registration.scope);
           if (registration.installing) {
             console.log("installing Service worker");
           } else if (registration.waiting) {
@@ -78,4 +76,4 @@ const registerServiceWorker = async () => {
   };
   
   registerServiceWorker();
-`
+`;
