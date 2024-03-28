@@ -43,6 +43,3 @@ rm "$output"
 echo "service work file paths have been generate for $target"
 # 关闭调试模式
 # set +x
-
-
-
