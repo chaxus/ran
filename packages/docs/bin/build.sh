@@ -6,7 +6,7 @@ $bin/vitepress build
 # 开启调试模式
 set -x
 # 指定目录  
-dir=".vitepress/dist"
+dir="./.vitepress/dist"
 # 使用find命令将文件路径输出到一个临时文件  
 tmpfile=$(mktemp)
 find "$dir" -type f > "$tmpfile"
@@ -20,9 +20,9 @@ rm "$tmpfile"
 # 关闭调试模式
 set +x
 # 临时缓存文件
-output=".vitepress/dist/sw-file.js"
+output="./.vitepress/dist/sw-file.js"
 # 生成的目标文件
-target=".vitepress/dist/sw.js"
+target="./.vitepress/dist/sw.js"
 # 拼接字符串
 echo "const serviceWorkCacheFilePaths = [" > "$output"
 # 根路径
@@ -30,7 +30,7 @@ ran="/ran"
 # 打印数组中的文件路径  
 for path in "${file_paths[@]}"; do
     if [[ $path != *".DS_Store"* ]]; then
-        str="${path##.vitepress/dist}"
+        str="${path##./.vitepress/dist}"
         echo "\"$ran$str\"," >> "$output"
     fi
 done
