@@ -24,17 +24,17 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^20.11.16",
-    "@typescript-eslint/eslint-plugin": "^6.20.0",
-    "@typescript-eslint/parser": "^6.20.0",
-    "eslint": "^8.56.0",
+    "@types/node": "^20.11.30",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "eslint": "^8.57.0",
     "eslint-define-config": "^2.1.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-regexp": "^1.15.0",
     "jscpd": "^3.5.10",
     "prettier": "^2.8.8",
-    "terser": "^5.27.0",
-    "typescript": "^5.3.3"
+    "terser": "^5.30.0",
+    "typescript": "^5.4.3"
   }
 }
