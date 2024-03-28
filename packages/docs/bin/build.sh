@@ -10,6 +10,7 @@ dir=".vitepress/dist"
 # 使用find命令将文件路径输出到一个临时文件  
 tmpfile=$(mktemp)
 find "$dir" -type f > "$tmpfile"
+cat $tmpfile
 # 从临时文件中读取文件路径并存储到数组中  
 while read -r file; do
     file_paths+=("$file")
