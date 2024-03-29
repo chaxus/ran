@@ -2,7 +2,6 @@ import path, { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { BuildOptions, UserConfig } from 'vite';
 import { defineConfig } from 'vite';
-import dts from 'vite-plugin-dts';
 import react from '@vitejs/plugin-react';
 import type { RollupOptions } from 'rollup';
 import { PORT } from './build/config';
@@ -57,7 +56,7 @@ export const es: BuildOptions = {
 };
 
 export const viteConfig: UserConfig = {
-  plugins: [dts(), react()],
+  plugins: [react()],
   resolve: {
     alias: {
       '@/components': resolve(__dirname, 'components/'),

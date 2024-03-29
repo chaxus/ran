@@ -15,7 +15,7 @@ output="./.vitepress/dist/sw-file.js"
 # 生成的目标文件
 target="./.vitepress/dist/sw.js"
 # 拼接字符串
-echo "const serviceWorkCacheFilePaths = [" > "$output"
+echo "const SERVICE_WORK_CACHE_FILE_PATHS = [" > "$output"
 # 根路径
 ran="/ran"
 

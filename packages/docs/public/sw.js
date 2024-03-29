@@ -1,14 +1,16 @@
 
-const cacheName = 'chaxus_ran'
+const VERSION = 1
+const CACHE_NAME = 'chaxus_ran_' + VERSION
 
-self.addEventListener('install', function (event) {
+this.addEventListener('install', function (event) {
     // 确保 Service Worker 不会在 waitUntil() 里面的代码执行完毕之前安装完成
     event.waitUntil(
         // 创建了叫做 chaxus_ran 的新缓存
-        caches.open(cacheName).then(function (cache) {
-            // serviceWorkCacheFilePaths 从 bin/build.sh 中生成注入，会去缓存所有的资源
+        caches.open(CACHE_NAME).then(function (cache) {
+            // SERVICE_WORK_CACHE_FILE_PATHS 从 bin/build.sh 中生成注入，会去缓存所有的资源
             // 不用 cache.addAll 避免一个请求失败，全部缓存失败
-            return serviceWorkCacheFilePaths.map(url =>
+            // 可以使用 cache.add 
+            return SERVICE_WORK_CACHE_FILE_PATHS.map(url =>
                 fetch(url).then(response => {
                     // 检查响应是否成功  
                     if (!response.ok) {
@@ -43,11 +45,11 @@ const updateCache = (fetchedResponse, request) => {
     ]
     // 只缓存 get 请求
     if (!ignoreRequest.some(item => url.includes(item)) && method === 'GET') {
-        caches.open(cacheName).then(cache => {
+        caches.open(CACHE_NAME).then(cache => {
             // 将请求到的资源添加到缓存中
             // 判断下只有 fetch 的请求才有 clone 方法，才可以被缓存，从 cache 中获取的响应没有 clone
             if (fetchedResponse?.clone) {
-                cache.put(request, fetchedResponse.clone());
+                cache.put(url, fetchedResponse.clone());
             }
         }).catch(error => {
             console.log('service work update cache error:', error, request)
@@ -81,7 +83,7 @@ const cacheFirst = async (request) => {
     }
 }
 
-self.addEventListener("fetch", (event) => {
+this.addEventListener("fetch", (event) => {
     // 拦截请求
     try {
         const responseFromServer = cacheFirst(event.request)
@@ -102,7 +104,7 @@ const deleteCache = async (key) => {
 };
 
 const deleteOldCaches = async () => {
-    const cacheKeepList = ["v2"];
+    const cacheKeepList = [CACHE_NAME];
     try {
         const keyList = await caches.keys();
         const cachesToDelete = keyList.filter((key) => !cacheKeepList.includes(key));
@@ -113,7 +115,7 @@ const deleteOldCaches = async () => {
 
 };
 
-self.addEventListener("activate", (event) => {
+this.addEventListener("activate", (event) => {
     event.waitUntil(deleteOldCaches());
 });
 
