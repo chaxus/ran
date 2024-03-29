@@ -9,10 +9,10 @@ import '@/components/option';
 import '@/components/progress';
 import './index.less';
 
-// RGBA： red、green、blue, 透明度
-// HSL： 色相、饱和度、亮度，透明度
-// HSB： 色相、饱和度、明度，透明度
-// HSV： 色相、饱和度、明度，透明度
+// RGBA：red、green、blue, 透明度
+// HSL：色相、饱和度、亮度，透明度
+// HSB：色相、饱和度、明度，透明度
+// HSV：色相、饱和度、明度，透明度
 
 const BOT_WIDTH = 8;
 

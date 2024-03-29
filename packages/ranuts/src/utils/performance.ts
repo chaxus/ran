@@ -64,7 +64,7 @@ export function getPerformance(): BasicType | undefined {
       redirectCount,
     } = performanceNavigationTiming as PerformanceNavigationTiming;
     return {
-      // DNS 
+      // DNS
       dnsSearch: domainLookupEnd - domainLookupStart,
       // TCP
       tcpConnect: connectEnd - connectStart,
