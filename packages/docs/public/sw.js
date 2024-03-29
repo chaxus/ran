@@ -30,10 +30,10 @@ const updateCache = (fetchedResponse, request) => {
     }
 }
 
-/** 
+/**
  * 缓存优先
- * @param {*} request 
- * @returns 
+ * @param {*} request
+ * @returns
  */
 const cacheFirst = async (request) => {
     // 从缓存中读取 respondWith 表示拦截请求并返回自定义的响应
@@ -41,11 +41,11 @@ const cacheFirst = async (request) => {
         const responseFromCache = await caches.match(request);
         // 如果缓存中有，依然去请求，异步更新缓存资源，同步返回已经缓存的资源
         if (responseFromCache) {
-            fetch(request).then(fetchedResponse => {
-                updateCache(fetchedResponse, request)
-            }).catch(error => {
-                console.log('cache first fetch error:', error);
-            })
+            // fetch(request).then(fetchedResponse => {
+            //     updateCache(fetchedResponse, request)
+            // }).catch(error => {
+            //     console.log('cache first fetch error:', error);
+            // })
             return responseFromCache
         }
         // 如果缓存中没有，就从网络中请求
@@ -85,14 +85,14 @@ this.addEventListener('install', function (event) {
         caches.open(CACHE_NAME).then(function (cache) {
             // SERVICE_WORK_CACHE_FILE_PATHS 从 bin/build.sh 中生成注入，会去缓存所有的资源
             // 不用 cache.addAll 避免一个请求失败，全部缓存失败
-            // 可以使用 cache.add 
+            // 可以使用 cache.add
             return SERVICE_WORK_CACHE_FILE_PATHS.map(url =>
                 fetch(url).then(response => {
-                    // 检查响应是否成功  
+                    // 检查响应是否成功
                     if (!response.ok) {
                         console.log('service work fetch response error:', url)
                     }
-                    // 将响应添加到缓存  
+                    // 将响应添加到缓存
                     return cache.put(url, response);
                 }).catch(error => {
                     console.log('service work fetch error:', url, error);
