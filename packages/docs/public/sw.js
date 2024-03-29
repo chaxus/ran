@@ -1,31 +1,4 @@
-
-
 const CACHE_NAME = 'chaxus_ran_' + VERSION
-
-this.addEventListener('install', function (event) {
-    // 确保 Service Worker 不会在 waitUntil() 里面的代码执行完毕之前安装完成
-    event.waitUntil(
-        // 创建了叫做 chaxus_ran 的新缓存
-        caches.open(CACHE_NAME).then(function (cache) {
-            // SERVICE_WORK_CACHE_FILE_PATHS 从 bin/build.sh 中生成注入，会去缓存所有的资源
-            // 不用 cache.addAll 避免一个请求失败，全部缓存失败
-            // 可以使用 cache.add 
-            return SERVICE_WORK_CACHE_FILE_PATHS.map(url =>
-                fetch(url).then(response => {
-                    // 检查响应是否成功  
-                    if (!response.ok) {
-                        console.log('service work fetch response error:', url)
-                    }
-                    // 将响应添加到缓存  
-                    return cache.put(url, response);
-                }).catch(error => {
-                    console.log('service work fetch error:', url, error);
-                })
-            )
-        })
-    );
-});
-
 
 /**
  * @description: 更新缓存
@@ -56,6 +29,7 @@ const updateCache = (fetchedResponse, request) => {
         })
     }
 }
+
 /** 
  * 缓存优先
  * @param {*} request 
@@ -83,17 +57,6 @@ const cacheFirst = async (request) => {
     }
 }
 
-this.addEventListener("fetch", (event) => {
-    // 拦截请求
-    try {
-        const responseFromServer = cacheFirst(event.request)
-        if (responseFromServer?.clone) {
-            event.respondWith(responseFromServer);
-        }
-    } catch (error) {
-        console.log('service work self fetch error:', error, event)
-    }
-});
 
 const deleteCache = async (key) => {
     try {
@@ -114,6 +77,42 @@ const deleteOldCaches = async () => {
     }
 
 };
+
+this.addEventListener('install', function (event) {
+    // 确保 Service Worker 不会在 waitUntil() 里面的代码执行完毕之前安装完成
+    event.waitUntil(
+        // 创建了叫做 chaxus_ran 的新缓存
+        caches.open(CACHE_NAME).then(function (cache) {
+            // SERVICE_WORK_CACHE_FILE_PATHS 从 bin/build.sh 中生成注入，会去缓存所有的资源
+            // 不用 cache.addAll 避免一个请求失败，全部缓存失败
+            // 可以使用 cache.add 
+            return SERVICE_WORK_CACHE_FILE_PATHS.map(url =>
+                fetch(url).then(response => {
+                    // 检查响应是否成功  
+                    if (!response.ok) {
+                        console.log('service work fetch response error:', url)
+                    }
+                    // 将响应添加到缓存  
+                    return cache.put(url, response);
+                }).catch(error => {
+                    console.log('service work fetch error:', url, error);
+                })
+            )
+        })
+    );
+});
+
+this.addEventListener("fetch", (event) => {
+    // 拦截请求
+    try {
+        const responseFromServer = cacheFirst(event.request)
+        if (responseFromServer?.clone) {
+            event.respondWith(responseFromServer);
+        }
+    } catch (error) {
+        console.log('service work self fetch error:', error, event)
+    }
+});
 
 this.addEventListener("activate", (event) => {
     event.waitUntil(deleteOldCaches());
