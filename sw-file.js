@@ -1,3 +1,0 @@
-const SERVICE_WORK_CACHE_FILE_PATHS = [
-];
-const VERSION = "1711702246";

@@ -1,6 +1,6 @@
 const SERVICE_WORK_CACHE_FILE_PATHS = [
 ];
-const VERSION = "1711702246";
+const VERSION = "1711702579";
 
 
 const CACHE_NAME = 'chaxus_ran_' + VERSION
