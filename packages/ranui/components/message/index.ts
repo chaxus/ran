@@ -1,10 +1,10 @@
 import '@/components/icon';
 import './index.less';
 
-const AnimationTime = 300; // message退出动画执行的时间
-const defaultDuration = 3000; // 默认message存在的时间
+const AnimationTime = 300; // message 退出动画执行的时间
+const defaultDuration = 3000; // 默认 message 存在的时间
 
-// message类型映射icon的类型
+// message 类型映射 icon 的类型
 const typeMapIcon = new Map([
   ['success', 'check-circle-fill'],
   ['warning', 'warning-circle-fill'],
@@ -13,7 +13,7 @@ const typeMapIcon = new Map([
   ['toast', null],
 ]);
 
-// message类型映射icon的颜色
+// message 类型映射 icon 的颜色
 const typeMapColor = new Map([
   ['success', '#52c41a'],
   ['warning', '#faad14'],
@@ -120,7 +120,7 @@ function Custom() {
 
         message.timeId = setTimeout(() => {
           message.classList.remove('message-leave');
-          // div.removeChild(message);
+          div.removeChild(message);
           if (close) close();
         }, duration);
 

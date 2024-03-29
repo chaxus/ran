@@ -1,27 +1,27 @@
-// 首屏加载时间First Contentful Paint（FCP）：首次内容绘制时间，指浏览器首次绘制页面中至少一个文本、
-// 图像、非白色背景色的canvas/svg元素等的时间，代表页面首屏加载的时间点。
+// 首屏加载时间 First Contentful Paint（FCP）：首次内容绘制时间，指浏览器首次绘制页面中至少一个文本、
+// 图像、非白色背景色的 canvas/svg 元素等的时间，代表页面首屏加载的时间点。
 
-// 首次绘制时间First Paint（FP）：首次绘制时间，指浏览器首次在屏幕上渲染像素的时间，代表页面开始渲染的时间点。(白屏时间）
+// 首次绘制时间 First Paint（FP）：首次绘制时间，指浏览器首次在屏幕上渲染像素的时间，代表页面开始渲染的时间点。(白屏时间）
 
-// 最大内容绘制时间Largest Contentful Paint（LCP）：最大内容绘制时间，指页面上最大的可见元素（文本、图像、视频等）绘制完成的时间，
+// 最大内容绘制时间 Largest Contentful Paint（LCP）：最大内容绘制时间，指页面上最大的可见元素（文本、图像、视频等）绘制完成的时间，
 // 代表用户视觉上感知到页面加载完成的时间点。
 
-// 用户可交互时间Time to Interactive（TTI）：可交互时间，指页面加载完成并且用户能够与页面进行交互的时间，代表用户可以开始操作页面的时间点。
+// 用户可交互时间 Time to Interactive（TTI）：可交互时间，指页面加载完成并且用户能够与页面进行交互的时间，代表用户可以开始操作页面的时间点。
 
-// 页面总阻塞时间Total Blocking Time (TBT)：页面上出现阻塞的时间，指在页面变得完全交互之前，用户与页面上的元素交互时出现阻塞的时间。
-// TBT应该尽可能小，通常应该在300毫秒以内。
+// 页面总阻塞时间 Total Blocking Time (TBT)：页面上出现阻塞的时间，指在页面变得完全交互之前，用户与页面上的元素交互时出现阻塞的时间。
+// TBT 应该尽可能小，通常应该在 300 毫秒以内。
 
-// 搜索引擎优化Search Engine Optimization (SEO)：网站在搜索引擎中的排名和可见性。评分范围从0到100，100分表示网站符合所有SEO最佳实践。
+// 搜索引擎优化 Search Engine Optimization (SEO)：网站在搜索引擎中的排名和可见性。评分范围从 0 到 100，100 分表示网站符合所有 SEO 最佳实践。
 
-// TTFB指代从资源的请求到响应第一个字节的时间跨度。
+// TTFB 指代从资源的请求到响应第一个字节的时间跨度。
 
 // DCL (DOMContentLoaded)
-// DCL指代当HTML 文档被完全加载和解析完成之后，DOMContentLoaded 事件被触发，无需等待样式，图像和子框架的完成加载的时间。
+// DCL 指代当 HTML 文档被完全加载和解析完成之后，DOMContentLoaded 事件被触发，无需等待样式，图像和子框架的完成加载的时间。
 interface BasicType {
   [x: string]: number | undefined;
   dnsSearch: number; // DNS 解析耗时
   tcpConnect: number; // TCP 连接耗时
-  sslConnect: number; // SSL安全连接耗时
+  sslConnect: number; // SSL 安全连接耗时
   request: number; // TTFB 网络请求耗时
   response: number; // 数据传输耗时
   parseDomTree: number; // DOM 解析耗时
@@ -42,7 +42,6 @@ export function getPerformance(): BasicType | undefined {
     const [performanceNavigationTiming] = performance.getEntriesByType('navigation');
     const [firstPaint = {}, firstContentfulPaint = {}] = performance.getEntriesByType('paint');
     const { startTime: fp } = firstPaint as PerformancePaintTiming;
-    // First Contentful paint
     const { startTime: fcp } = firstContentfulPaint as PerformancePaintTiming;
     const {
       domainLookupEnd,
@@ -65,7 +64,9 @@ export function getPerformance(): BasicType | undefined {
       redirectCount,
     } = performanceNavigationTiming as PerformanceNavigationTiming;
     return {
+      // DNS 
       dnsSearch: domainLookupEnd - domainLookupStart,
+      // TCP
       tcpConnect: connectEnd - connectStart,
       sslConnect: connectEnd - secureConnectionStart,
       request: responseStart - requestStart,
@@ -77,6 +78,7 @@ export function getPerformance(): BasicType | undefined {
       complete: loadEventStart - fetchStart,
       httpHead: transferSize - encodedBodySize,
       redirect: redirectCount,
+      // redirect
       redirectTime: redirectEnd - redirectStart,
       duration,
       fp,
