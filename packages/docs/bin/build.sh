@@ -41,8 +41,8 @@ cat "$target" >> "$tmpfile"
 
 mv "$tmpfile" "$target"
 
-# rm "$output"
+rm "$output"
 # # 打印完成消息  
-# echo "service work file paths have been generate for $target"
+echo "service work file paths have been generate for $target"
 # 关闭调试模式
 # set +x
