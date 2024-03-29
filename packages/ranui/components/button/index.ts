@@ -79,24 +79,24 @@ export class Button extends (HTMLElementSSR()!) {
     }
   }
   /**
-   * @description: 设置button的icon
+   * @description: 设置 button 的 icon
    * @return {*}
    */
   setIcon = (): void => {
     if (this.icon) {
-      // 获取button的尺寸
+      // 获取 button 的尺寸
       const { width, height } = this._slot.getBoundingClientRect();
       const size = Math.min(width, height);
       if (this._iconElement) {
-        // 如果有_iconElement，只用设置name和size
+        // 如果有_iconElement，只用设置 name 和 size
         this._iconElement.setAttribute('name', this.icon);
       } else {
-        // 创建icon，设置name,size,color
+        // 创建 icon，设置 name,size,color
         this._iconElement = document.createElement('r-icon');
         this._iconElement.setAttribute('name', this.icon);
         this._iconElement.setAttribute('color', 'currentColor');
         this._iconElement.setAttribute('class', 'icon');
-        // 添加到btn元素的首位
+        // 添加到 btn 元素的首位
         this._slot.insertAdjacentElement('beforebegin', this._iconElement);
       }
       if (this.iconSize) {

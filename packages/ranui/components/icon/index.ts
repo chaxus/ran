@@ -44,7 +44,7 @@ function Custom() {
         if (value != null) this.setAttribute('spin', value);
       }
       /**
-       * @description: 本地加载icon
+       * @description: 本地加载 icon
        */
       loadLocal = () => {
         return new Promise<void>((resolve, reject) => {
@@ -73,7 +73,7 @@ function Custom() {
         });
       };
       /**
-       * @description: NS加载icon
+       * @description: NS 加载 icon
        */
       loadNs = () => {
         // https://www.iconfont.cn/collections/detail?spm=a313x.7781069.1998910419.dc64b3430&cid=9402
@@ -91,7 +91,7 @@ function Custom() {
         this._div.appendChild(this._icon);
       };
       /**
-       * @description: 根据name属性加载对应的svg
+       * @description: 根据 name 属性加载对应的 svg
        */
       setIcon = async () => {
         if (this.name) {
@@ -101,7 +101,7 @@ function Custom() {
         }
       };
       /**
-       * @description: 设置icon的大小
+       * @description: 设置 icon 的大小
        */
       setSize = () => {
         if (this._icon && this.size) {
@@ -110,7 +110,7 @@ function Custom() {
         }
       };
       /**
-       * @description: 设置icon的颜色
+       * @description: 设置 icon 的颜色
        */
       setColor = () => {
         if (this._icon) {
@@ -177,7 +177,7 @@ function Custom() {
         if (value != null) this.setAttribute('spin', value);
       }
       /**
-       * @description: 本地加载icon
+       * @description: 本地加载 icon
        */
       loadLocal = () => {
         return new Promise<void>((resolve, reject) => {
@@ -205,7 +205,7 @@ function Custom() {
         });
       };
       /**
-       * @description: NS加载icon
+       * @description: NS 加载 icon
        */
       loadNs = () => {
         // https://www.iconfont.cn/collections/detail?spm=a313x.7781069.1998910419.dc64b3430&cid=9402
@@ -223,7 +223,7 @@ function Custom() {
         this._div.appendChild(this._icon);
       };
       /**
-       * @description: 根据name属性加载对应的svg
+       * @description: 根据 name 属性加载对应的 svg
        */
       setIcon = async () => {
         if (this.name) {
@@ -233,7 +233,7 @@ function Custom() {
         }
       };
       /**
-       * @description: 设置icon的大小
+       * @description: 设置 icon 的大小
        */
       setSize = () => {
         if (this._icon && this.size) {
@@ -242,7 +242,7 @@ function Custom() {
         }
       };
       /**
-       * @description: 设置icon的颜色
+       * @description: 设置 icon 的颜色
        */
       setColor = () => {
         if (this._icon) {
