@@ -1,7 +1,8 @@
 const SERVICE_WORK_CACHE_FILE_PATHS = [
 ];
+const VERSION = "1711702246";
 
-const VERSION = '2024_03_29'
+
 const CACHE_NAME = 'chaxus_ran_' + VERSION
 
 this.addEventListener('install', function (event) {
