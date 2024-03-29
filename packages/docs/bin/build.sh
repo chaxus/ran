@@ -14,6 +14,7 @@ find "$dir" -type f > "$tmpfile"
 output="./.vitepress/dist/sw-file.js"
 # 生成的目标文件
 target="./.vitepress/dist/sw.js"
+
 # 拼接字符串
 echo "const SERVICE_WORK_CACHE_FILE_PATHS = [" > "$output"
 # 根路径
@@ -27,6 +28,8 @@ while read -r file; do
 done < "$tmpfile"
 # 拼接字符串
 echo "];" >> "$output"
+# 更新 sw 的版本号
+echo "const VERSION = \"$(date +%s)\";" >> "$output"
 # 删除临时文件
 rm "$tmpfile"
 
@@ -38,8 +41,8 @@ cat "$target" >> "$tmpfile"
 
 mv "$tmpfile" "$target"
 
-rm "$output"
-# 打印完成消息  
-echo "service work file paths have been generate for $target"
+# rm "$output"
+# # 打印完成消息  
+# echo "service work file paths have been generate for $target"
 # 关闭调试模式
 # set +x

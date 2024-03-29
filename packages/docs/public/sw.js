@@ -1,5 +1,5 @@
 
-const VERSION = '2024_03_29'
+
 const CACHE_NAME = 'chaxus_ran_' + VERSION
 
 this.addEventListener('install', function (event) {
