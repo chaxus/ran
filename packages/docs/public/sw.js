@@ -8,14 +8,18 @@ const CACHE_NAME = 'chaxus_ran_' + VERSION
  */
 const updateCache = (fetchedResponse, request) => {
     const { url, method } = request
+    const { status } = fetchedResponse
     const ignoreRequest = [
         // google 上报不需要缓存
         'google',
         // 插件请求不用缓存
         'chrome-extension',
         // 百度的请求不用缓存
-        'baidu.com'
+        'baidu.com',
+        'blob:',
     ]
+    // 只缓存状态码为 200 的请求
+    if(status !== 200) return
     // 只缓存 get 请求
     if (!ignoreRequest.some(item => url.includes(item)) && method === 'GET') {
         caches.open(CACHE_NAME).then(cache => {
