@@ -17,10 +17,10 @@ echo "const SERVICE_WORK_CACHE_FILE_PATHS = [" > "$output"
 # 根路径
 ran="/ran"
 while read -r file; do
-    if [[ $file != *".DS_Store"* ]]; then
-        str="${file##./.vitepress/dist}"
-        echo "\"$ran$str\"," >> "$output"
-    fi
+  if [[ $file != *".DS_Store"* ]]; then
+    str="${file##./.vitepress/dist}"
+    echo "\"$ran$str\"," >> "$output"
+  fi
 done < "$tmpfile"
 # 拼接字符串
 echo "];" >> "$output"
