@@ -113,7 +113,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     return ['src', 'volume', 'currentTime', 'playbackRate', 'debug'];
   }
   /**
-   * @description: 初始化view和video的全局上下文
+   * @description: 初始化 view 和 video 的全局上下文
    * @return {*}
    */
   constructor() {
@@ -367,22 +367,26 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     this._video.setAttribute('controls', 'false');
     this._video.controls = false;
     this._video.setAttribute('initial-time', '0.01');
-    if (this._video.canPlayType('application/vnd.apple.mpegurl') && this.src) {
-      this._video.src = this.src;
-    } else if (Hls?.isSupported() && this.src) {
-      this._hls = new Hls();
-      if (this._hls) {
-        this._hls.off(Hls.Events.MANIFEST_LOADED, this.manifestLoaded);
-        this._hls.on(Hls.Events.MANIFEST_LOADED, this.manifestLoaded);
-        this._hls.off(Hls.Events.ERROR, this.hlsError);
-        this._hls.on(Hls.Events.ERROR, this.hlsError);
-        this._hls.loadSource(this.src);
-        this._hls.attachMedia(this._video);
+    try {
+      if (this._video.canPlayType('application/vnd.apple.mpegurl') && this.src) {
+        this._video.src = this.src;
+      } else if (Hls?.isSupported() && this.src) {
+        this._hls = new Hls();
+        if (this._hls) {
+          this._hls.off(Hls.Events.MANIFEST_LOADED, this.manifestLoaded);
+          this._hls.on(Hls.Events.MANIFEST_LOADED, this.manifestLoaded);
+          this._hls.off(Hls.Events.ERROR, this.hlsError);
+          this._hls.on(Hls.Events.ERROR, this.hlsError);
+          this._hls.loadSource(this.src);
+          this._hls.attachMedia(this._video);
+        }
+        this._container.appendChild(this._video);
+        this._video.parentElement?.setAttribute('class', 'ran-player-contain');
       }
-      this._container.appendChild(this._video);
-      this._video.parentElement?.setAttribute('class', 'ran-player-contain');
+      this.listenEvent();
+    } catch (error) {
+      console.log('r-player update player error:', error);
     }
-    this.listenEvent();
   };
   hlsError = (event: unknown, data: unknown): void => {
     this.change('hlsError', { event, data });
@@ -748,7 +752,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     }
   };
   /**
-   * @description: 点击player-btn，触发的事件
+   * @description: 点击 player-btn，触发的事件
    * @param {*} void
    * @return {*}
    */
