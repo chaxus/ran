@@ -57,7 +57,7 @@ const cacheFirst = async (request) => {
         updateCache(responseFromServer, request)
         return responseFromServer
     } catch (error) {
-        console.log('cacheFirst', error)
+        console.log('cacheFirst', error, request)
     }
 }
 

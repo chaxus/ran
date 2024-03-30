@@ -72,6 +72,7 @@ const SPEED = [
   { label: '2.0X', value: 2.0 },
   { label: '1.5X', value: 1.5 },
   { label: '1.0X', value: 1 },
+  { label: '0.8X', value: 0.8 },
   { label: '0.5X', value: 0.5 },
 ];
 
@@ -352,6 +353,8 @@ export class RanPlayer extends (HTMLElementSSR()!) {
    */
   updatePlayer = (): void => {
     const { Hls } = window;
+    // 如果有子元素，进行置空
+    this.innerHTML = ''
     if (!this.contains(this._player)) this.appendChild(this._player);
     if (this._hls) {
       this._hls.destroy();
