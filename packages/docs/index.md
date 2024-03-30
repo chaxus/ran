@@ -19,11 +19,11 @@ hero:
 features:
   - icon: ⚡️
     title: record
-    details:
+    details: Every journey has its final day.
   - icon: 🛠️
     title: solve
-    details:
+    details: If you can't measure it, you can't improve it.
   - icon: 🖖
     title: share
-    details:
+    details: If you want to go fast, go alone. If you want to go far, go together. 
 ---

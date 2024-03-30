@@ -120,7 +120,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   constructor() {
     super();
     // 如果有子元素，进行置空
-    this.innerHTML = ''
+    this.innerHTML = '';
     this._player = document.createElement('div');
     this._container = document.createElement('div');
     this._slot = document.createElement('slot');
@@ -356,7 +356,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   updatePlayer = (): void => {
     const { Hls } = window;
     // 如果有子元素，进行置空
-    this.innerHTML = ''
+    this.innerHTML = '';
     if (!this.contains(this._player)) this.appendChild(this._player);
     if (this._hls) {
       this._hls.destroy();
@@ -991,7 +991,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     window.removeEventListener('resize', this.resize);
     document.removeEventListener('fullscreenchange', this.fullScreenChange);
   }
-  attributeChangedCallback(k: string, o: string, n: string): void { }
+  attributeChangedCallback(k: string, o: string, n: string): void {}
 }
 
 function Custom() {

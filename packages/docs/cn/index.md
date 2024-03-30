@@ -20,11 +20,11 @@ hero:
 features:
   - icon: ⚡️
     title: 记录
-    details:
+    details: 每段旅程都有终点
   - icon: 🛠️
     title: 解决
-    details:
+    details: 无法衡量，无法改进
   - icon: 🖖
     title: 分享
-    details:
+    details: 一个人可以走得很快，一群人可以走的很远
 ---
