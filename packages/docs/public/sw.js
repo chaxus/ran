@@ -1,6 +1,6 @@
 const CACHE_NAME = 'chaxus_ran_' + VERSION
 
-const ignoreRequest = [
+const IGNORE_REQUEST_LIST = [
     // google 上报不需要缓存
     'google',
     // 插件请求不用缓存
@@ -11,6 +11,20 @@ const ignoreRequest = [
     'www.google-analytics.com'
 ]
 
+// 请求方法
+const REQUEST_METHOD = {
+    GET: 'GET'
+}
+// 响应状态码
+const RESPONSE_STATUS = {
+    SUCCESS: 200
+}
+// service worker 状态
+const SERVICE_WORK = {
+    INSTALL: 'install',
+    FETCH: 'fetch',
+    ACTIVATE: 'activate'
+}
 /**
  * @description: 更新缓存
  * @param {*} fetchedResponse
@@ -18,12 +32,11 @@ const ignoreRequest = [
  * @return {*}
  */
 const updateCache = (fetchedResponse, request) => {
-    const { url, method } = request
+    const { url } = request
     const { status } = fetchedResponse
     // 只缓存状态码为 200 的请求
-    if (status !== 200) return
-    // 只缓存 get 请求
-    if (!ignoreRequest.some(item => url.includes(item)) && method === 'GET') {
+    if (status !== RESPONSE_STATUS.SUCCESS) return
+    if (ignoreQuestUrl(request)) {
         caches.open(CACHE_NAME).then(cache => {
             // 将请求到的资源添加到缓存中
             // 判断下只有 fetch 的请求才有 clone 方法，才可以被缓存，从 cache 中获取的响应没有 clone
@@ -31,9 +44,18 @@ const updateCache = (fetchedResponse, request) => {
                 cache.put(url, fetchedResponse.clone());
             }
         }).catch(error => {
-            console.log('service work update cache error:', error, request)
+            console.log('service worker update cache error:', error, request)
         })
     }
+}
+/**
+ * @description: 忽略 IGNORE_REQUEST_LIST 列表中的请求和非GET方法的请求
+ * @param {*} request
+ * @return {*}
+ */
+const ignoreQuestUrl = (request) => {
+    const { url, method } = request
+    return !IGNORE_REQUEST_LIST.some(item => url.includes(item)) && method === REQUEST_METHOD.GET
 }
 
 /**
@@ -59,7 +81,7 @@ const cacheFirst = async (request) => {
         updateCache(responseFromServer, request)
         return responseFromServer
     } catch (error) {
-        console.log('cacheFirst', error, request)
+        console.log('service worker cacheFirst error:', error, request)
     }
 }
 
@@ -68,7 +90,7 @@ const deleteCache = async (key) => {
     try {
         await caches.delete(key);
     } catch (error) {
-        console.log('deleteCache', error)
+        console.log('service worker deleteCache error:', error, key)
     }
 };
 
@@ -79,12 +101,12 @@ const deleteOldCaches = async () => {
         const cachesToDelete = keyList.filter((key) => !cacheKeepList.includes(key));
         await Promise.all(cachesToDelete.map(deleteCache));
     } catch (error) {
-        console.log('deleteOldCaches', deleteOldCaches)
+        console.log('service worker deleteOldCaches error:', deleteOldCaches, cacheKeepList)
     }
 
 };
 
-this.addEventListener('install', function (event) {
+this.addEventListener(SERVICE_WORK.INSTALL, function (event) {
     // 确保 Service Worker 不会在 waitUntil() 里面的代码执行完毕之前安装完成
     event.waitUntil(
         // 创建了叫做 chaxus_ran 的新缓存
@@ -96,34 +118,35 @@ this.addEventListener('install', function (event) {
                 fetch(url).then(response => {
                     // 检查响应是否成功
                     if (!response.ok) {
-                        console.log('service work fetch response error:', url)
+                        console.log('service worker fetch response error:', url)
                     }
                     // 将响应添加到缓存
                     return cache.put(url, response);
                 }).catch(error => {
-                    console.log('service work fetch error:', url, error);
+                    console.log('service worker self installed error:', url, error);
                 })
             )
         })
     );
 });
 
-this.addEventListener("fetch", (event) => {
+this.addEventListener(SERVICE_WORK.FETCH, (event) => {
     // 拦截请求
     try {
-        // 忽略 ignoreRequest 中的请求，不进行拦截
-        if (!ignoreRequest.some(item => event.request.url.includes(item))) {
-            const responseFromServer = cacheFirst(event.request)
+        const { request } = event
+        // 忽略 IGNORE_REQUEST_LIST 中的请求，不进行拦截
+        if (ignoreQuestUrl(request)) {
+            const responseFromServer = cacheFirst(request)
             if (responseFromServer?.clone) {
                 event.respondWith(responseFromServer);
             }
         }
     } catch (error) {
-        console.log('service work self fetch error:', error, event)
+        console.log('service worker self fetch error:', error, event)
     }
 });
 
-this.addEventListener("activate", (event) => {
+this.addEventListener(SERVICE_WORK.ACTIVATE, (event) => {
     event.waitUntil(deleteOldCaches());
 });
 
