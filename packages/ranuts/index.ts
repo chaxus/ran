@@ -95,6 +95,7 @@ import { reactify } from '@/react';
 import {
   Router,
   Server,
+  WSS,
   appendFile,
   body,
   colors,
@@ -116,7 +117,6 @@ import {
   traverseSync,
   watchFile,
   writeStream,
-  wss,
 } from '@/node';
 import { ocr } from '@/ml';
 
@@ -237,5 +237,5 @@ export {
   traverseSync,
   watchFile,
   writeStream,
-  wss,
+  WSS,
 };
