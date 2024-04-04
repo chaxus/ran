@@ -1,3 +1,3 @@
-import { reactify } from 'ranuts/react';
+import { reactify } from 'ranuts';
 
 export default reactify;
