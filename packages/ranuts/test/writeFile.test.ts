@@ -2,7 +2,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import fs from 'node:fs';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import writeFile from '@/node/writeFile';
+import { writeFile } from '@/node';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

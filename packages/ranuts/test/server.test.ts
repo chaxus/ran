@@ -1,9 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import Server from '@/server/server';
-import bodyMiddleware from '@/server/body';
-import colors from '@/node/color';
+import { Router, Server, body, colors } from '@/node';
 import type { Context, Next } from '@/node/server';
-import Router from '@/node/router';
 
 const app = new Server();
 const PORT = 30103;
@@ -34,7 +31,7 @@ const requestMiddleWare = (ctx: Context, next: Next) => {
     }
   }
 };
-app.use(bodyMiddleware());
+app.use(body());
 
 app.use(router.routes());
 // app.use(requestMiddleWare)

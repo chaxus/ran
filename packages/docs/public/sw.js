@@ -19,11 +19,14 @@ const REQUEST_METHOD = {
 const RESPONSE_STATUS = {
     SUCCESS: 200
 }
-// service worker 状态
+// service worker 可监听的事件
 const SERVICE_WORK = {
     INSTALL: 'install',
     FETCH: 'fetch',
-    ACTIVATE: 'activate'
+    ACTIVATE: 'activate',
+    MESSAGE: 'message',
+    SYNC: 'sync',
+    PUSH: 'push'
 }
 /**
  * @description: 更新缓存
@@ -149,7 +152,7 @@ this.addEventListener(SERVICE_WORK.FETCH, (event) => {
 this.addEventListener(SERVICE_WORK.ACTIVATE, (event) => {
     // 启用导航预加载，其将在发出 fetch 请求后，立即开始下载资源，并同时激活 service worker。
     // 这确保了在导航到一个页面时，立即开始下载，而不是等到 service worker 被激活。这种延迟发生的次数相对较少，但是一旦发生就不可避免，而且可能很重要。
-    if(self.registration?.navigationPreload){
+    if (self.registration?.navigationPreload) {
         event.waitUntil(self.registration?.navigationPreload.enable());
     }
     event.waitUntil(deleteOldCaches());

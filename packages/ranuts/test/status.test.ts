@@ -1,7 +1,7 @@
 import http from 'node:http';
 import assert from 'node:assert';
 import { describe, it } from 'vitest';
-import status, { getStatus } from '@/server/status';
+import { getStatus, status } from '@/utils';
 
 describe('status', function () {
   describe('arguments', function () {
