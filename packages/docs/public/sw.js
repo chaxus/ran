@@ -67,21 +67,21 @@ const cacheFirst = async (request) => {
     // 从缓存中读取 respondWith 表示拦截请求并返回自定义的响应
     try {
         const responseFromCache = await caches.match(request);
-        // 如果缓存中有，依然去请求，异步更新缓存资源，同步返回已经缓存的资源
-        if (responseFromCache) {
-            // fetch(request).then(fetchedResponse => {
-            //     updateCache(fetchedResponse, request)
-            // }).catch(error => {
-            //     console.log('cache first fetch error:', error);
-            // })
-            return responseFromCache
-        }
-        // 如果缓存中没有，就从网络中请求
+        // 如果缓存中有，返回已经缓存的资源
+        if (responseFromCache) return responseFromCache
+        // 如果缓存中没有，就从网络中请求，并更新到缓存中
         const responseFromServer = await fetch(request);
         updateCache(responseFromServer, request)
         return responseFromServer
     } catch (error) {
+        // 当缓存中也没有，请求也不可用的时候
+        // 始终需要一个一个响应
+        // 甚至可以设置回落的请求，在catch中继续发起请求
         console.log('service worker cacheFirst error:', error, request)
+        return new Response("Network error happened", {
+            status: 408,
+            headers: { "Content-Type": "text/plain" },
+        });
     }
 }
 
@@ -147,6 +147,11 @@ this.addEventListener(SERVICE_WORK.FETCH, (event) => {
 });
 
 this.addEventListener(SERVICE_WORK.ACTIVATE, (event) => {
+    // 启用导航预加载，其将在发出 fetch 请求后，立即开始下载资源，并同时激活 service worker。
+    // 这确保了在导航到一个页面时，立即开始下载，而不是等到 service worker 被激活。这种延迟发生的次数相对较少，但是一旦发生就不可避免，而且可能很重要。
+    if(self.registration?.navigationPreload){
+        event.waitUntil(self.registration?.navigationPreload.enable());
+    }
     event.waitUntil(deleteOldCaches());
 });
 
