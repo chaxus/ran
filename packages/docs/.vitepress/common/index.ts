@@ -1,3 +1,5 @@
+import { SERVICE_WORK_VERSION } from '../../variable/SERVICE_WORK_VERSION'
+
 export const GTAG = 'https://www.googletagmanager.com/gtag/js?id=G-0MPS5WH1C0';
 
 export const GOOGLE_ANALYSE = `;window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);};gtag('js', new Date());gtag('config', 'G-0MPS5WH1C0');`;
@@ -56,7 +58,7 @@ export const SERVICE_WORK = `
 const registerServiceWorker = async () => {
   if ('serviceWorker' in window.navigator) {
     try {
-      const registration = await navigator.serviceWorker.register('/ran/sw.js', {
+      const registration = await navigator.serviceWorker.register('/ran/sw${SERVICE_WORK_VERSION}.js', {
         scope: '/ran/',
       });
       if (registration.installing) {

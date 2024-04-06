@@ -39,7 +39,7 @@ const updateCache = (fetchedResponse, request) => {
     const { status } = fetchedResponse
     // 只缓存状态码为 200 的请求
     if (status !== RESPONSE_STATUS.SUCCESS) return
-    if (ignoreQuestUrl(request)) {
+    if (filterRequest(request)) {
         caches.open(CACHE_NAME).then(cache => {
             // 将请求到的资源添加到缓存中
             // 判断下只有 fetch 的请求才有 clone 方法，才可以被缓存，从 cache 中获取的响应没有 clone
@@ -56,7 +56,7 @@ const updateCache = (fetchedResponse, request) => {
  * @param {*} request
  * @return {*}
  */
-const ignoreQuestUrl = (request) => {
+const filterRequest = (request) => {
     const { url, method } = request
     return !IGNORE_REQUEST_LIST.some(item => url.includes(item)) && method === REQUEST_METHOD.GET
 }
@@ -69,7 +69,8 @@ const ignoreQuestUrl = (request) => {
 const cacheFirst = async (request) => {
     // 从缓存中读取 respondWith 表示拦截请求并返回自定义的响应
     try {
-        const responseFromCache = await caches.match(request);
+        const { url } = request
+        const responseFromCache = await caches.match(url);
         // 如果缓存中有，返回已经缓存的资源
         if (responseFromCache) return responseFromCache
         // 如果缓存中没有，就从网络中请求，并更新到缓存中
@@ -115,8 +116,9 @@ this.addEventListener(SERVICE_WORK.INSTALL, function (event) {
         // 创建了叫做 chaxus_ran 的新缓存
         caches.open(CACHE_NAME).then(function (cache) {
             // SERVICE_WORK_CACHE_FILE_PATHS 从 bin/build.sh 中生成注入，会去缓存所有的资源
-            // 不用 cache.addAll 避免一个请求失败，全部缓存失败
-            // 可以使用 cache.add
+            // 不用 cache.addAll 避免一个请求失败，全部缓存失败，类似Promise.all
+            // 可以使用 cache.add 但 Cache.add/Cache.addAll 不会缓存 Response.status 值不在 200 范围内的响应，
+            // 而 cache.put 允许你存储任何请求/响应对。因此，Cache.add/Cache.addAll 不能用于不透明的响应，而 Cache.put 可以。
             return SERVICE_WORK_CACHE_FILE_PATHS.map(url =>
                 fetch(url).then(response => {
                     // 检查响应是否成功
@@ -138,7 +140,7 @@ this.addEventListener(SERVICE_WORK.FETCH, (event) => {
     try {
         const { request } = event
         // 忽略 IGNORE_REQUEST_LIST 中的请求，不进行拦截
-        if (ignoreQuestUrl(request)) {
+        if (filterRequest(request)) {
             const responseFromServer = cacheFirst(request)
             if (responseFromServer?.clone) {
                 event.respondWith(responseFromServer);
@@ -150,11 +152,6 @@ this.addEventListener(SERVICE_WORK.FETCH, (event) => {
 });
 
 this.addEventListener(SERVICE_WORK.ACTIVATE, (event) => {
-    // 启用导航预加载，其将在发出 fetch 请求后，立即开始下载资源，并同时激活 service worker。
-    // 这确保了在导航到一个页面时，立即开始下载，而不是等到 service worker 被激活。这种延迟发生的次数相对较少，但是一旦发生就不可避免，而且可能很重要。
-    if (self.registration?.navigationPreload) {
-        event.waitUntil(self.registration?.navigationPreload.enable());
-    }
     event.waitUntil(deleteOldCaches());
 });
 
