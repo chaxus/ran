@@ -12,6 +12,12 @@ $bin/vitepress build
 # set -x
 # 指定输出的目录
 dir="./.vitepress/dist"
+# 生成的目标文件
+target="./.vitepress/dist/sw.js"
+# 改名
+mv "$target" "./.vitepress/dist/sw$version.js"
+
+target="./.vitepress/dist/sw$version.js"
 # 创建一个临时文件
 tmpfile=$(mktemp)
 # 将目录 dir 下的文件名追加到临时文件中
@@ -21,8 +27,7 @@ find "$dir" -type f > "$tmpfile"
 # VERSION （时间戳）
 # 的临时文件
 SERVICE_WORK_VARABLE="./.vitepress/dist/sw-file.js"
-# 生成的目标文件
-target="./.vitepress/dist/sw.js"
+
 # 拼接字符串
 echo "const SERVICE_WORK_CACHE_FILE_PATHS = [" > "$SERVICE_WORK_VARABLE"
 # 根路径
@@ -49,9 +54,6 @@ cat "$target" >> "$tmpfile"
 mv "$tmpfile" "$target"
 
 rm "$SERVICE_WORK_VARABLE"
-
-# 改名
-mv "$target" "./.vitepress/dist/sw$version.js"
 
 # # 打印完成消息
 echo "service work file paths have been generate for $target"
