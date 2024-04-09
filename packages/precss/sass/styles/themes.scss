@@ -428,18 +428,13 @@ $lbthemes: (
   @return false;
 }
 
-// 多主题样式
-$themes: (
-  light: (
-    oa_ic_front: 'https://pub.lbkrs.com/files/202105/HhKkkivb6r9HJh3j/front_light.png',
-    oa_ic_back_cn: 'https://pub.lbkrs.com/files/202105/xuJ9ZphRxas2Q3Be/back__cn_light.png',
-    oa_ic_back_hk: 'https://pub.lbkrs.com/files/202105/4zoVeu6nyhZXSbt8/back_hk_light.png',
-    oa_ic_back_other: 'https://pub.lbkrs.com/files/202105/XnFcZmkXaHsPmPMg/back_other_light.png',
-  ),
-  dark: (
-    oa_ic_front: 'https://pub.lbkrs.com/files/202105/Lap3MYoPAbtWEozr/front_dark.png',
-    oa_ic_back_cn: 'https://pub.lbkrs.com/files/202105/P78mPM67Ump3gNi4/back_cn_dark.png',
-    oa_ic_back_hk: 'https://pub.lbkrs.com/files/202105/d8vEqyU2NrJjbLBY/back_hk_dark.png',
-    oa_ic_back_other: 'https://pub.lbkrs.com/files/202105/rKr1ep6t2QxH1H3M/back_other_dark.png',
-  ),
-);
+// 食用栗子：
+// position: fixed;
+// bottom: 0px;
+// left: 0px;
+// padding: 0px px2rem(20) px2rem(36) px2rem(20);
+// @include themify($lbthemes) {
+//   background-color: themed('neutral-30');
+// }
+// height: px2rem(90);
+
