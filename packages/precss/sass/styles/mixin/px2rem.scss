@@ -26,8 +26,10 @@ $device-widths: 240px, 320px, 360px, 375px, 390px, 428px, 430px;
   }
 }
 
+
 // 在根文件下进行引入即可，比如 App.vue, app.jsx
 // @include html-font-size();
+
 
 // PC 端屏幕固宽
 $pc-max-width: 540px;
@@ -43,6 +45,7 @@ $ui-width: 375px;
 @function px2vw($px) {
   @return $px / $ui-width * 100vw;
 }
+
 
 // 食用栗子：
 // position: fixed;
