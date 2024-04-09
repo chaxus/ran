@@ -1,0 +1,42 @@
+@use 'sass:math';
+
+/**
+ * @description: H5 自适应缩放
+ */
+
+// 计算 rem 的基准字体
+$rem-base-font-size: 16px;
+
+// UI 设计图的分辨率宽度
+$UI-resolution-width: 375px;
+
+// 需要适配的屏幕宽度
+// iphone 14 pro max 已经到 430 px ，需要追加
+$device-widths: 240px, 320px, 360px, 375px, 390px, 428px, 430px;
+
+@mixin html-font-size() {
+  @each $current-width in $device-widths {
+    @media only screen and (min-width: $current-width) {
+      html {
+        $x: math.div($UI-resolution-width, $current-width);
+        $size: math.div($rem-base-font-size, $x);
+        font-size: $size; // 修改成适应的情况
+      }
+    }
+  }
+}
+
+// PC 端屏幕固宽
+$pc-max-width: 540px;
+
+// 设计稿以 375 为标准
+@function px2rem($px) {
+  $x: math.div($px * 1px, $rem-base-font-size);
+  @return #{$x}rem;
+}
+
+$ui-width: 375px;
+
+@function px2vw($px) {
+  @return $px / $ui-width * 100vw;
+}
