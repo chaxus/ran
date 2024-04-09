@@ -1,0 +1,56 @@
+// zindex 层级列表
+$zindex-newspace: 1 !default;
+$zindex-dropdown: 1000 !default;
+$zindex-sticky: 1020 !default;
+$zindex-fixed: 1030 !default;
+$zindex-modal-mask: 1040 !default;
+$zindex-modal: 1050 !default;
+$zindex-popover: 1060 !default;
+$zindex-tooltip: 1070 !default;
+$zindex-router: 1080 !default;
+
+// 主题色
+$color-red: #ff5000;
+$color-green: #19ccaf;
+$color-equal: #82888d;
+$marketSortSH: #fd6b67;
+$marketSortSZ: #fd6b67;
+$marketSortVNM: #5bff86;
+$marketSortUS: #4781ff;
+$marketSortHK: #ff8aca;
+$marketSortLN: #d756ff;
+$marketSortSG: #56daff;
+$marketSortAU: #7f5cff;
+
+// 灰度
+$color-0: #000;
+$color-1: #111;
+$color-3: rgb(223, 210, 210);
+$color-6: #666;
+$color-7: #777;
+$color-9: #999;
+$color-255: #fff;
+
+// Font Size
+$text-assist: 12px;
+$text-main: 14px;
+$text-small-title: 16px;
+$text-normal-title: 18px;
+$text-large-title: 22px;
+$text-digital-title: 36px;
+
+// guideline 字体大小定义
+$text-10: 10px;
+$text-12: 12px;
+$text-14: 14px;
+$text-16: 16px;
+$text-18: 18px;
+$text-20: 20px;
+$text-22: 22px;
+$text-24: 24px;
+$text-26: 26px;
+$text-28: 28px;
+$text-30: 30px;
+$text-32: 32px;
+$text-34: 34px;
+$text-36: 36px;

@@ -1,0 +1,144 @@
+@use 'sass:math';
+
+/**
+* {List}: 多个方向边框，默认值为 bottom，可以根据需要传入 (top, left, bottom, right) 4 个方向;
+* {Color} 边框的颜色，默认#ccc;
+* {List} 4 个圆角半径，默认 0;
+* {Number} ratio 像素比，可以无视媒体查询，强制设置 ratio
+* {String} 指定使用:after 还是:before，默认 after;
+*/
+@mixin thinBorder(
+  $directionMaps: bottom,
+  $color: #ccc,
+  $radius: (
+    0,
+    0,
+    0,
+    0,
+  ),
+  $ratio: 0,
+  $position: after
+) {
+  // 是否只有一个方向
+  $isOnlyOneDir: string==type-of($directionMaps);
+
+  @if ($isOnlyOneDir) {
+    $directionMaps: ($directionMaps);
+  }
+
+  @each $directionMap in $directionMaps {
+    border-#{$directionMap}: 1px solid $color;
+  }
+
+  // 判断圆角是 list 还是 number
+  @if (list==type-of($radius)) {
+    border-radius: nth($radius, 1) nth($radius, 2) nth($radius, 3) nth($radius, 4);
+  } @else if($radius != inherit) {
+    border-radius: $radius;
+  }
+
+  @if ($ratio==0) {
+    @media only screen and (-webkit-min-device-pixel-ratio: 2) {
+      & {
+        position: relative;
+
+        // 删除 1 像素密度比下的边框
+        @each $directionMap in $directionMaps {
+          border-#{$directionMap}: none;
+        }
+      }
+
+      &:#{$position} {
+        position: absolute;
+        top: 0;
+        left: 0;
+        box-sizing: border-box;
+        display: block;
+        width: 200%;
+        height: 200%;
+        padding: 1px;
+        pointer-events: none;
+        content: '';
+        border: 0 solid $color;
+        transform: scale(0.5);
+        transform-origin: 0 0;
+
+        @each $directionMap in $directionMaps {
+          border-#{$directionMap}-width: 1px;
+        }
+
+        // 判断圆角是 list 还是 number
+        @if (list==type-of($radius)) {
+          border-radius: nth($radius, 1) * 2 nth($radius, 2) * 2 nth($radius, 3) * 2 nth($radius, 4) * 2;
+        } @else if($radius == inherit) {
+          border-radius: inherit;
+        } @else {
+          border-radius: $radius * 2;
+        }
+      }
+    }
+
+    @media only screen and (-webkit-min-device-pixel-ratio: 3) {
+      &:#{$position} {
+        // 判断圆角是 list 还是 number
+        @if (list==type-of($radius)) {
+          border-radius: nth($radius, 1) * 3 nth($radius, 2) * 3 nth($radius, 3) * 3 nth($radius, 4) * 3;
+        } @else if($radius == inherit) {
+          border-radius: inherit;
+        } @else {
+          border-radius: $radius * 3;
+        }
+
+        width: 300%;
+        height: 300%;
+        transform: scale(0.3333);
+      }
+    }
+  } @else {
+    & {
+      position: relative;
+
+      // 删除 1 像素密度比下的边框
+      @each $directionMap in $directionMaps {
+        border-#{$directionMap}: none;
+      }
+    }
+
+    $scale: math.div(1, $ratio);
+    &:#{$position} {
+      position: absolute;
+      top: 0;
+      left: 0;
+      box-sizing: border-box;
+      display: block;
+      width: 100% * $ratio;
+      height: 100% * $ratio;
+      padding: 1px;
+      pointer-events: none;
+      content: '';
+      border: 0 solid $color;
+      transform: scale(#{$scale});
+      transform-origin: 0 0;
+
+      @each $directionMap in $directionMaps {
+        border-#{$directionMap}-width: 1px;
+      }
+
+      // 判断圆角是 list 还是 number
+      @if (list==type-of($radius)) {
+        border-radius: nth($radius, 1) *
+          $ratio
+          nth($radius, 2) *
+          $ratio
+          nth($radius, 3) *
+          $ratio
+          nth($radius, 4) *
+          $ratio;
+      } @else if($radius == inherit) {
+        border-radius: inherit;
+      } @else {
+        border-radius: $radius * $ratio;
+      }
+    }
+  }
+}

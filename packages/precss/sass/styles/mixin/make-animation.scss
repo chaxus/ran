@@ -1,0 +1,23 @@
+$animation-timing-fun: cubic-bezier(0.55, 0.085, 0.68, 0.53) !default;
+$animation-duration: 0.2s !default;
+
+@mixin make-animation($keyframeName, $timingFun: $animation-timing-fun, $duration: $animation-duration) {
+  .#{$keyframeName}-enter-active,
+  .#{$keyframeName}In,
+  .#{$keyframeName}-leave-active,
+  .#{$keyframeName}Out {
+    animation-duration: $duration;
+    animation-fill-mode: both;
+    animation-timing-function: $timingFun;
+  }
+
+  .#{$keyframeName}-enter-active,
+  .#{$keyframeName}In {
+    animation-name: #{$keyframeName}In;
+  }
+
+  .#{$keyframeName}-leave-active,
+  .#{$keyframeName}Out {
+    animation-name: #{$keyframeName}Out;
+  }
+}

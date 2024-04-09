@@ -1,0 +1,63 @@
+// 间隔
+.spacing {
+  height: px2rem(8);
+  @include themify($lbthemes) {
+    background-color: themed('neutral-10');
+  }
+}
+.lb-link {
+  @include themify($lbthemes) {
+    color: themed('link_text_color');
+  }
+}
+.lb-primary-text {
+  @include themify($lbthemes) {
+    color: themed('brand_color');
+  }
+}
+.lb-overflow-hidden {
+  overflow: hidden;
+}
+.lb-body-fixed {
+  position: fixed;
+  left: 0;
+  width: 100%;
+}
+input {
+  caret-color: #37a0ff;
+}
+:root {
+  --market-SH: #fd6b67;
+  --market-SZ: #fd6b67;
+  --market-VNM: #5bff86;
+  --market-US: #4781ff;
+  --market-HK: #ff8aca;
+  --market-LN: #d756ff;
+  --market-SG: #56daff;
+}
+.market-us {
+  color: var(--market-US);
+}
+.market-hk {
+  color: var(--market-HK);
+}
+.market-ln {
+  color: var(--market-LN);
+}
+.market-sh {
+  color: var(--market-SH);
+}
+.market-sz {
+  color: var(--market-SZ);
+}
+.market-vnm {
+  color: var(--market-VNM);
+}
+.market-sg {
+  color: var(--market-SG);
+}
+.half-border-bottom {
+  @include themify($lbthemes) {
+    @include thinBorder((bottom), themed('line_color'), 0, 2);
+  }
+}

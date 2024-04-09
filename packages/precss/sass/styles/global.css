@@ -1,0 +1,369 @@
+/* stylelint-disable rule-empty-line-before */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+div,
+ul,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+dl,
+dt,
+dd,
+ol,
+form,
+input,
+textarea,
+th,
+td,
+select {
+  padding: 0;
+  margin: 0;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+em,
+strong {
+  font-style: normal;
+  font-weight: normal;
+}
+
+/* 去除 ios 点击阴影 */
+* {
+  user-select: none;
+  -webkit-tap-highlight-color: rgb(0 0 0 / 0%);
+  -webkit-tap-highlight-color: transparent;
+}
+
+a {
+  text-decoration: none;
+}
+
+input,
+textarea {
+  user-select: auto;
+}
+
+.fb {
+  font-weight: bold;
+}
+
+.fb-m {
+  font-weight: 500;
+}
+
+.fb-n {
+  font-weight: normal;
+}
+
+.fb-r {
+  font-weight: 300;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.flex-2 {
+  flex: 2;
+}
+
+.flex-3 {
+  flex: 3;
+}
+
+.aic {
+  align-items: center !important;
+}
+
+.aib {
+  align-items: baseline !important;
+}
+
+.jcc {
+  justify-content: center !important;
+}
+
+.jcsb {
+  justify-content: space-between !important;
+}
+
+.jcsa {
+  justify-content: space-around !important;
+}
+
+.theme-light .lb-text_color_1 {
+  color: #000;
+}
+
+.theme-dark .lb-text_color_1 {
+  color: #fff;
+}
+
+.lb-text_color_2 {
+  color: #82888d;
+}
+
+.theme-light .lb-text_color_3 {
+  color: #afb3b6;
+}
+
+.theme-dark .lb-text_color_3 {
+  color: #cfd1d3;
+}
+
+.theme-light .lb-text_color_1_supplement {
+  color: #464f56;
+}
+
+.theme-dark .lb-text_color_1_supplement {
+  color: #cfd1d3;
+}
+
+.theme-light [data-theme='dark'] {
+  display: none;
+}
+
+.theme-dark [data-theme='light'] {
+  display: none;
+}
+
+.theme-light .lb-front_bg_1 {
+  background-color: #fff;
+}
+
+.theme-dark .lb-front_bg_1 {
+  background-color: #1a252e;
+}
+
+.theme-light .lb_front_bg_color {
+  background-color: #f5f6f6;
+}
+
+.theme-dark .lb_front_bg_color {
+  background-color: #2a343c;
+}
+
+/* 品牌色 */
+.color-brand {
+  color: #37a0ff;
+}
+
+/* 品牌色 橙色 */
+.color-brand-orange {
+  color: #ff5000;
+}
+
+/* 链接色 */
+.color-link,
+.color-link:active {
+  color: #37a0ff;
+}
+
+/* 失败 */
+.color-error {
+  color: #ff4040;
+}
+
+.m-16 {
+  margin: 16px !important;
+}
+
+.mh-16 {
+  margin-right: 16px !important;
+  margin-left: 16px !important;
+}
+
+.mh-20 {
+  margin-right: 20px !important;
+  margin-left: 20px !important;
+}
+
+.mh-40 {
+  margin-right: 40px !important;
+  margin-left: 40px !important;
+}
+
+.mv-8 {
+  margin-top: 8px !important;
+  margin-bottom: 8px !important;
+}
+
+.mv-16 {
+  margin-top: 16px !important;
+  margin-bottom: 16px !important;
+}
+
+.mb-4 {
+  margin-bottom: 4px !important;
+}
+
+.mb-8 {
+  margin-bottom: 8px !important;
+}
+
+.mt-8 {
+  margin-top: 8px !important;
+}
+
+.mb-12 {
+  margin-bottom: 12px !important;
+}
+
+.mb-16 {
+  margin-bottom: 16px !important;
+}
+
+.mt-16 {
+  margin-top: 16px !important;
+}
+
+.mb-20 {
+  margin-bottom: 20px !important;
+}
+
+.mt-20 {
+  margin-top: 20px !important;
+}
+.mt-24 {
+  margin-top: 24px !important;
+}
+.mt-60 {
+  margin-top: 60px !important;
+}
+.mb-24 {
+  margin-bottom: 24px !important;
+}
+
+.mb-40 {
+  margin-bottom: 40px !important;
+}
+
+.mb-60 {
+  margin-bottom: 60px !important;
+}
+
+.mr-4 {
+  margin-right: 4px !important;
+}
+
+.pb-8 {
+  padding-bottom: 8px !important;
+}
+
+.pb-12 {
+  padding-bottom: 12px !important;
+}
+
+.pv-0 {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.pv-8 {
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+}
+
+.ph-16 {
+  padding-right: 16px !important;
+  padding-left: 16px !important;
+}
+
+.ph-20 {
+  padding-right: 20px !important;
+  padding-left: 20px !important;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.text-align-center {
+  text-align: center;
+}
+
+.flex-basis-100 {
+  flex-basis: 100%;
+}
+
+.flex-basis-45 {
+  flex-basis: 45%;
+}
+
+.f-8 {
+  font-size: 8px !important;
+}
+
+.f-10 {
+  font-size: 10px !important;
+  line-height: 14px !important;
+}
+
+.f-12 {
+  font-size: 12px !important;
+  line-height: 18px !important;
+}
+
+.f-14 {
+  font-size: 14px !important;
+  line-height: 20px !important;
+}
+
+.f-16 {
+  font-size: 16px !important;
+  line-height: 24px !important;
+}
+
+.f-18 {
+  font-size: 18px !important;
+  line-height: 26px !important;
+}
+
+.f-20 {
+  font-size: 20px !important;
+  line-height: 30px !important;
+}
+
+.f-24 {
+  font-size: 24px !important;
+  line-height: 36px !important;
+}
+
+.relative {
+  position: relative;
+}
+
+.w-full {
+  width: 100% !important;
+}
+
+.w-screen {
+  width: 100vw;
+}
+
+.h-full {
+  height: 100% !important;
+}
+
+.h-screen {
+  height: 100vh;
+}

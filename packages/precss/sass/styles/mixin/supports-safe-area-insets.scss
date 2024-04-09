@@ -1,0 +1,31 @@
+/**
+* @description: 异形屏增加安全区域
+* @example: @include supports-safe-area-insets('padding-bottom');
+* @example: @include supports-safe-area-insets('padding-top', '66px');
+*/
+@mixin supports-safe-area-insets($attr, $var: 0) {
+  $safe: safe-area-inset-top;
+  @if $attr == padding-bottom {
+    $safe: safe-area-inset-bottom;
+  } @else if $attr == padding-left {
+    $safe: safe-area-inset-left;
+  } @else if $attr == padding-right {
+    $safe: safe-area-inset-right;
+  }
+
+  #{$attr}: #{$var};
+  @supports (padding-top: constant(safe-area-inset-top)) {
+    @if $var == 0 {
+      #{$attr}: constant(#{$safe});
+    } @else {
+      #{$attr}: calc(#{$var} + constant(#{$safe}));
+    }
+  }
+  @supports (padding-top: env(safe-area-inset-top)) {
+    @if $var == 0 {
+      #{$attr}: env(#{$safe});
+    } @else {
+      #{$attr}: calc(#{$var} + env(#{$safe}));
+    }
+  }
+}

@@ -1,0 +1,55 @@
+/**
+ * @description: 媒体查询，支持 5 种尺寸
+ */
+$screen-xs: 0;
+$screen-sm: 640px;
+$screen-md: 900px;
+$screen-lg: 1280px;
+$screen-xl: 1920px;
+
+// 0-600
+@mixin screen-xs() {
+  @media (max-width: $screen-sm) {
+    @content;
+  }
+}
+
+// 600-900
+@mixin screen-sm() {
+  @media (min-width: $screen-sm) and (max-width: $screen-md) {
+    @content;
+  }
+}
+
+// 900-1280
+@mixin screen-md() {
+  @media (min-width: $screen-md) and (max-width: $screen-lg) {
+    @content;
+  }
+}
+
+// 1280-1920
+@mixin screen-lg() {
+  @media (min-width: $screen-lg) and (max-width: $screen-xl) {
+    @content;
+  }
+}
+
+// 1920++
+@mixin screen-xl() {
+  @media (min-width: $screen-xl) {
+    @content;
+  }
+}
+
+@mixin ipad() {
+  @media (min-width: $screen-sm) {
+    @content;
+  }
+}
+
+@mixin ipadWrap() {
+  max-width: 540px;
+  margin-right: auto;
+  margin-left: auto;
+}
