@@ -61,14 +61,14 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
-    "@babel/parser": "^7.24.1",
-    "@types/node": "^20.11.30",
-    "@types/react": "^18.2.73",
+    "@babel/parser": "^7.24.4",
+    "@types/node": "^20.12.7",
+    "@types/react": "^18.2.77",
     "react": "^18.2.0",
-    "vite": "^5.2.6",
-    "vitest": "^1.4.0"
+    "vite": "^5.2.8",
+    "vitest": "^1.5.0"
   },
   "dependencies": {
     "magic-string": "^0.27.0",

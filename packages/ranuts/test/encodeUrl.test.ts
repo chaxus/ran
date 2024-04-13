@@ -1,6 +1,6 @@
 import assert from 'node:assert';
 import { describe, it } from 'vitest';
-import {encodeUrl} from '@/utils';
+import { encodeUrl } from '@/utils';
 
 describe('encodeUrl(url)', function () {
   describe('when url contains only allowed characters', function () {

@@ -1,6 +1,6 @@
 import assert from 'node:assert';
 import { describe, it } from 'vitest';
-import {escapeHtml} from '@/utils';
+import { escapeHtml } from '@/utils';
 
 describe('escapeHtml(string)', function () {
   describe('when string is undefined', function () {

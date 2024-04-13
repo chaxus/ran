@@ -1,4 +1,4 @@
-import { SERVICE_WORK_VERSION } from '../../variable/SERVICE_WORK_VERSION'
+import { SERVICE_WORK_VERSION } from '../../variable/SERVICE_WORK_VERSION';
 
 export const GTAG = 'https://www.googletagmanager.com/gtag/js?id=G-0MPS5WH1C0';
 

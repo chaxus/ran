@@ -25,5 +25,5 @@ features:
     details: If you can't measure it, you can't improve it.
   - icon: 🖖
     title: share
-    details: If you want to go fast, go alone. If you want to go far, go together. 
+    details: If you want to go fast, go alone. If you want to go far, go together.
 ---

@@ -1,5 +1,6 @@
 import { AudioRecorder } from '@/utils/audioRecorder';
 import { audioVendor, canvasVendor, webglVendor } from '@/utils/behavior';
+import { TOTP } from '@/utils/totp/totp';
 import {
   appendUrl,
   connection,
@@ -154,4 +155,5 @@ export {
   imageRequest,
   durationHandler,
   networkSpeed,
+  TOTP,
 };

@@ -19,7 +19,7 @@ import taskEnd from '@/node/taskEnd';
 import { traverse, traverseSync } from '@/node/traverse';
 import watchFile from '@/node/watchFile';
 import WSS from '@/node/ws';
-import writeFile from '@/node/writeFile'
+import writeFile from '@/node/writeFile';
 export {
   appendFile,
   colors,
@@ -45,5 +45,5 @@ export {
   traverseSync,
   watchFile,
   WSS,
-  writeFile
+  writeFile,
 };

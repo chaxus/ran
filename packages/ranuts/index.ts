@@ -12,6 +12,7 @@ import {
   Rgb,
   Rgba,
   SyncHook,
+  TOTP,
   addClassToElement,
   appendUrl,
   audioVendor,
@@ -238,4 +239,5 @@ export {
   watchFile,
   writeStream,
   WSS,
+  TOTP,
 };
