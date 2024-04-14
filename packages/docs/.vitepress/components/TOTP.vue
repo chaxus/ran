@@ -1,32 +1,27 @@
 <template>
   <div>
-    <r-input
-      :label="t('components_totp_2')"
-      class="m-6"
-      :status="inputStatus"
-      @input="onChange"
-    ></r-input>
+    <r-input :label="t('components_totp_2')" class="m-6" :status="inputStatus" @input="onChange"></r-input>
     <div v-if="inputStatus === INPUT_STATUS.ERROR">{{ errorMessage }}</div>
-    <r-button @click="clickButton">{{ t("components_totp_1") }}</r-button>
+    <r-button @click="clickButton">{{ t('components_totp_1') }}</r-button>
     <div>{{ outputValue }}</div>
   </div>
 </template>
 <script lang="ts" setup>
-import { INPUT_STATUS } from "../lib/constant";
-import { ref } from "vue";
-import useBasic from "../composition/useBasic";
-import { TOTP, timestampToTime } from "ranuts/utils";
+import { INPUT_STATUS } from '../lib/constant';
+import { ref } from 'vue';
+import useBasic from '../composition/useBasic';
+import { TOTP, timestampToTime } from 'ranuts/utils';
 
 const { t, $env, locale } = useBasic();
 
 // 输入框的值
-const inputValue = ref("");
+const inputValue = ref('');
 // 输入框的状态
 const inputStatus = ref(INPUT_STATUS.NORMAL);
 // 错误的文本提示
-const errorMessage = ref("");
+const errorMessage = ref('');
 // 点击按钮输出的结果
-const outputValue = ref("");
+const outputValue = ref('');
 /**
  * @description: 监听输入框的变化
  * @param {*} e
@@ -48,9 +43,7 @@ const clickButton = () => {
   } else {
     try {
       const { otp, expires } = TOTP.generate(inputValue.value);
-      outputValue.value = `code: ${otp} ${t('components_totp_4')}: ${timestampToTime(
-        expires
-      ).format()}`;
+      outputValue.value = `code: ${otp} ${t('components_totp_4')}: ${timestampToTime(expires).format()}`;
     } catch (error) {
       errorMessage.value = t('components_totp_5');
       inputStatus.value = INPUT_STATUS.ERROR;

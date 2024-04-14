@@ -1,17 +1,17 @@
-import { jsSHABase, packedLEConcat, sha_variant_error, mac_rounds_error, TWO_PWR_32, parseInputOption } from './common';
-import {
-  packedValue,
-  CSHAKEOptionsNoEncodingType,
+import { TWO_PWR_32, jsSHABase, mac_rounds_error, packedLEConcat, parseInputOption, sha_variant_error } from './common';
+import type {
   CSHAKEOptionsEncodingType,
-  SHAKEOptionsNoEncodingType,
-  SHAKEOptionsEncodingType,
-  KMACOptionsNoEncodingType,
-  KMACOptionsEncodingType,
+  CSHAKEOptionsNoEncodingType,
   FixedLengthOptionsEncodingType,
   FixedLengthOptionsNoEncodingType,
   FormatNoTextType,
+  KMACOptionsEncodingType,
+  KMACOptionsNoEncodingType,
   ResolvedCSHAKEOptionsNoEncodingType,
   ResolvedKMACOptionsNoEncodingType,
+  SHAKEOptionsEncodingType,
+  SHAKEOptionsNoEncodingType,
+  packedValue,
 } from './custom_types';
 import { getStrConverter } from './converters';
 import { Int_64, rotl_64, xor_64_2, xor_64_5 } from './primitives_64';
@@ -354,7 +354,6 @@ export default class jsSHA extends jsSHABase<Int_64[][], VariantType> {
   isVariableLen: boolean;
   HMACSupported: boolean;
 
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   converterFunc: (input: any, existingBin: number[], existingBinLen: number) => packedValue;
   roundFunc: (block: number[], H: Int_64[][]) => Int_64[][];
   finalizeFunc: (
@@ -380,7 +379,7 @@ export default class jsSHA extends jsSHABase<Int_64[][], VariantType> {
   constructor(variant: 'CSHAKE128' | 'CSHAKE256', inputFormat: FormatNoTextType, options?: CSHAKEOptionsNoEncodingType);
   constructor(variant: 'KMAC128' | 'KMAC256', inputFormat: 'TEXT', options: KMACOptionsEncodingType);
   constructor(variant: 'KMAC128' | 'KMAC256', inputFormat: FormatNoTextType, options: KMACOptionsNoEncodingType);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   constructor(variant: any, inputFormat: any, options?: any) {
     let delimiter = 0x06,
       variantBlockSize = 0;
@@ -410,28 +409,28 @@ export default class jsSHA extends jsSHABase<Int_64[][], VariantType> {
         this.variantBlockSize = variantBlockSize = 1152;
         this.outputBinLen = 224;
         this.HMACSupported = true;
-        // eslint-disable-next-line @typescript-eslint/unbound-method
+
         this.getMAC = this._getHMAC;
         break;
       case 'SHA3-256':
         this.variantBlockSize = variantBlockSize = 1088;
         this.outputBinLen = 256;
         this.HMACSupported = true;
-        // eslint-disable-next-line @typescript-eslint/unbound-method
+
         this.getMAC = this._getHMAC;
         break;
       case 'SHA3-384':
         this.variantBlockSize = variantBlockSize = 832;
         this.outputBinLen = 384;
         this.HMACSupported = true;
-        // eslint-disable-next-line @typescript-eslint/unbound-method
+
         this.getMAC = this._getHMAC;
         break;
       case 'SHA3-512':
         this.variantBlockSize = variantBlockSize = 576;
         this.outputBinLen = 512;
         this.HMACSupported = true;
-        // eslint-disable-next-line @typescript-eslint/unbound-method
+
         this.getMAC = this._getHMAC;
         break;
       case 'SHAKE128':
@@ -460,7 +459,7 @@ export default class jsSHA extends jsSHABase<Int_64[][], VariantType> {
         this.outputBinLen = -1;
         this.isVariableLen = true;
         this.HMACSupported = false;
-        // eslint-disable-next-line @typescript-eslint/unbound-method
+
         this.getMAC = this._getKMAC;
         break;
       case 'KMAC256':
@@ -471,7 +470,7 @@ export default class jsSHA extends jsSHABase<Int_64[][], VariantType> {
         this.outputBinLen = -1;
         this.isVariableLen = true;
         this.HMACSupported = false;
-        // eslint-disable-next-line @typescript-eslint/unbound-method
+
         this.getMAC = this._getKMAC;
         break;
       case 'CSHAKE128':
@@ -574,7 +573,7 @@ export default class jsSHA extends jsSHABase<Int_64[][], VariantType> {
    * @param options Hashmap of extra outputs options. `outputLen` must be specified.
    * @returns The KMAC in the format specified.
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   protected _getKMAC(options: { outputLen: number }): number[] {
     const concatedRemainder = packedLEConcat(
       { value: this.remainder.slice(), binLen: this.remainderLen },

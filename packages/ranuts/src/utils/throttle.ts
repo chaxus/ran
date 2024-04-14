@@ -1,4 +1,4 @@
-import { isClient } from '@/utils/device'
+import { isClient } from '@/utils/device';
 
 /**
  * @description: 节流
@@ -51,7 +51,7 @@ export const generateThrottle = (): Function => {
  * @return {*}
  */
 export const requestAnimation = (fn: any): any => {
-  if(!isClient) return 
+  if (!isClient) return;
   let ticking = false;
   return function (this: any) {
     const context = this;

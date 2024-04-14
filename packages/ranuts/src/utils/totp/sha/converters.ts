@@ -1,4 +1,4 @@
-import { packedValue, EncodingType, FormatType } from './custom_types';
+import type { EncodingType, FormatType, packedValue } from './custom_types';
 /**
  * Return type for all the *2packed functions
  */
@@ -212,7 +212,7 @@ function b642packed(
     shiftModifier = bigEndianMod === -1 ? 3 : 0,
     firstEqual = str.indexOf('=');
 
-  if (-1 === str.search(/^[a-zA-Z0-9=+/]+$/)) {
+  if (-1 === str.search(/^[a-zA-Z\d=+/]+$/)) {
     throw new Error('Invalid character in base-64 string');
   }
 
@@ -309,7 +309,6 @@ export function getStrConverter(
   format: FormatType,
   utfType: EncodingType,
   bigEndianMod: -1 | 1,
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 ): (input: any, existingBin?: number[], existingBinLen?: number) => packedValue {
   /* Validate encoding */
   switch (utfType) {
@@ -574,7 +573,7 @@ export function getOutputConverter(
   bigEndianMod: -1 | 1,
   outputOptions: { outputUpper: boolean; b64Pad: string },
 ): (binarray: number[]) => Uint8Array;
-/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+
 export function getOutputConverter(format: any, outputBinLen: any, bigEndianMod: any, outputOptions: any): any {
   switch (format) {
     case 'HEX':

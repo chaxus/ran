@@ -235,11 +235,11 @@ export const mergeExports = (obj: Object, exports: Object): Object => {
  * @param {string} value
  * @return {*}
  */
-export const setAttributeByGlobal = (name: string, value: unknown):void => {
-  if (typeof window !== "undefined") {
+export const setAttributeByGlobal = (name: string, value: unknown): void => {
+  if (typeof window !== 'undefined') {
     window[name as any] = value as any;
   }
-  if (typeof global !== "undefined") {
+  if (typeof global !== 'undefined') {
     // @ts-ignore
     global[name as any as keyof typeof global] = value as any;
   }

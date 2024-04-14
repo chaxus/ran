@@ -1,17 +1,11 @@
-import {
-  getAllQueryString,
-  currentDevice,
-  isWeiXin,
-  isMobile,
-  isBangDevice,
-} from "ranuts/utils";
-import { LANGS_DICT } from "../lib/constant";
+import { getAllQueryString, currentDevice, isWeiXin, isMobile, isBangDevice } from 'ranuts/utils';
+import { LANGS_DICT } from '../lib/constant';
 
 // env 信息
-const isDev = process.env.NODE_ENV !== "production";
+const isDev = process.env.NODE_ENV !== 'production';
 
 // debug 开关信息
-const { debug = "" } = getAllQueryString() || {};
+const { debug = '' } = getAllQueryString() || {};
 
 export const $env = {
   isDev,
@@ -26,6 +20,6 @@ export const $env = {
 export default {
   install: (app) => {
     app.config.globalProperties.$env = $env;
-    app.provide("$env", $env);
+    app.provide('$env', $env);
   },
 };

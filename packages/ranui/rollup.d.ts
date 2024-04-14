@@ -1039,7 +1039,7 @@ export type WatchChangeHook = (this: PluginContext, id: string, change: { event:
  * const myPlugin: PluginImpl<Options> = (options = {}) => { ... }
  * ```
  */
-// eslint-disable-next-line @typescript-eslint/ban-types
+
 export type PluginImpl<O extends object = object, A = any> = (options?: O) => Plugin<A>;
 
 export interface OutputBundle {
@@ -1142,13 +1142,11 @@ type MakeAsync<Function_> = Function_ extends (this: infer This, ...parameters: 
   ? (this: This, ...parameters: Arguments) => Return | Promise<Return>
   : never;
 
-// eslint-disable-next-line @typescript-eslint/ban-types
 type ObjectHook<T, O = {}> = T | ({ handler: T; order?: 'pre' | 'post' | null } & O);
 
 export type PluginHooks = {
   [K in keyof FunctionPluginHooks]: ObjectHook<
     K extends AsyncPluginHooks ? MakeAsync<FunctionPluginHooks[K]> : FunctionPluginHooks[K],
-    // eslint-disable-next-line @typescript-eslint/ban-types
     K extends ParallelPluginHooks ? { sequential?: boolean } : {}
   >;
 };

@@ -1,13 +1,13 @@
-import { getStrConverter, getOutputConverter } from './converters';
+import { getOutputConverter, getStrConverter } from './converters';
 
-import {
-  FormatType,
+import type {
   EncodingType,
   FixedLengthOptionsEncodingType,
   FixedLengthOptionsNoEncodingType,
   FormatNoTextType,
-  packedValue,
+  FormatType,
   GenericInputType,
+  packedValue,
 } from './custom_types';
 
 export const TWO_PWR_32 = 4294967296;
@@ -144,7 +144,7 @@ export function parseInputOption(
 
   return getStrConverter(
     value['format'],
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
     // @ts-ignore - the value of encoding gets value checked by getStrConverter
     value['encoding'] || 'UTF8',
     bigEndianMod,
@@ -181,7 +181,7 @@ export abstract class jsSHABase<StateT, VariantT> {
   protected abstract readonly HMACSupported: boolean;
 
   /* Functions */
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+
   protected abstract readonly converterFunc: (input: any, existingBin: number[], existingBinLen: number) => packedValue;
   protected abstract readonly roundFunc: (block: number[], H: StateT) => StateT;
   protected abstract readonly finalizeFunc: (
@@ -197,7 +197,7 @@ export abstract class jsSHABase<StateT, VariantT> {
 
   protected constructor(variant: VariantT, inputFormat: 'TEXT', options?: FixedLengthOptionsEncodingType);
   protected constructor(variant: VariantT, inputFormat: FormatNoTextType, options?: FixedLengthOptionsNoEncodingType);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   protected constructor(variant: any, inputFormat: any, options?: any) {
     const inputOptions = options || {};
     this.inputFormat = inputFormat;
@@ -205,7 +205,6 @@ export abstract class jsSHABase<StateT, VariantT> {
     this.utfType = inputOptions['encoding'] || 'UTF8';
     this.numRounds = inputOptions['numRounds'] || 1;
 
-    /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
     // @ts-ignore - The spec actually says ToString is called on the first parseInt argument so it's OK to use it here
     // to check if an arugment is an integer. This cheat would break if it's used to get the value of the argument.
     if (isNaN(this.numRounds) || this.numRounds !== parseInt(this.numRounds, 10) || 1 > this.numRounds) {
@@ -264,7 +263,7 @@ export abstract class jsSHABase<StateT, VariantT> {
   getHash(format: 'BYTES', options?: { outputLen?: number; shakeLen?: number }): string;
   getHash(format: 'UINT8ARRAY', options?: { outputLen?: number; shakeLen?: number }): Uint8Array;
   getHash(format: 'ARRAYBUFFER', options?: { outputLen?: number; shakeLen?: number }): ArrayBuffer;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   getHash(format: any, options?: any): any {
     let i,
       finalizedState,
@@ -319,7 +318,7 @@ export abstract class jsSHABase<StateT, VariantT> {
   setHMACKey(key: string, inputFormat: 'B64' | 'HEX' | 'BYTES'): void;
   setHMACKey(key: ArrayBuffer, inputFormat: 'ARRAYBUFFER'): void;
   setHMACKey(key: Uint8Array, inputFormat: 'UINT8ARRAY'): void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   setHMACKey(key: any, inputFormat: any, options?: any): void {
     if (!this.HMACSupported) {
       throw new Error('Variant does not support HMAC');
@@ -390,7 +389,7 @@ export abstract class jsSHABase<StateT, VariantT> {
   getHMAC(format: 'BYTES'): string;
   getHMAC(format: 'UINT8ARRAY'): Uint8Array;
   getHMAC(format: 'ARRAYBUFFER'): ArrayBuffer;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   getHMAC(format: any, options?: any): any {
     const outputOptions = getOutputOpts(options),
       formatFunc = getOutputConverter(format, this.outputBinLen, this.bigEndianMod, outputOptions);

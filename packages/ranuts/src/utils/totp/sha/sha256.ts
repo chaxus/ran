@@ -1,9 +1,9 @@
-import { jsSHABase, TWO_PWR_32, H_full, H_trunc, K_sha2, sha_variant_error, parseInputOption } from './common';
-import {
-  packedValue,
+import { H_full, H_trunc, K_sha2, TWO_PWR_32, jsSHABase, parseInputOption, sha_variant_error } from './common';
+import type {
   FixedLengthOptionsEncodingType,
   FixedLengthOptionsNoEncodingType,
   FormatNoTextType,
+  packedValue,
 } from './custom_types';
 import { getStrConverter } from './converters';
 import {
@@ -152,7 +152,6 @@ export default class jsSHA extends jsSHABase<number[], VariantType> {
   isVariableLen: boolean;
   HMACSupported: boolean;
 
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   converterFunc: (input: any, existingBin: number[], existingBinLen: number) => packedValue;
   roundFunc: (block: number[], H: number[]) => number[];
   finalizeFunc: (remainder: number[], remainderBinLen: number, processedBinLen: number, H: number[]) => number[];
@@ -162,7 +161,7 @@ export default class jsSHA extends jsSHABase<number[], VariantType> {
 
   constructor(variant: VariantType, inputFormat: 'TEXT', options?: FixedLengthOptionsEncodingType);
   constructor(variant: VariantType, inputFormat: FormatNoTextType, options?: FixedLengthOptionsNoEncodingType);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   constructor(variant: any, inputFormat: any, options?: any) {
     if (!('SHA-224' === variant || 'SHA-256' === variant)) {
       throw new Error(sha_variant_error);
@@ -170,7 +169,6 @@ export default class jsSHA extends jsSHABase<number[], VariantType> {
     super(variant, inputFormat, options);
     const resolvedOptions = options || {};
 
-    // eslint-disable-next-line @typescript-eslint/unbound-method
     this.getMAC = this._getHMAC;
     this.HMACSupported = true;
     this.bigEndianMod = -1;

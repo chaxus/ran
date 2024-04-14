@@ -1,7 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { TOTP } from '@/utils/totp/totp';
 
-
 describe('totp generation', () => {
   beforeEach(() => {
     vi.useFakeTimers();

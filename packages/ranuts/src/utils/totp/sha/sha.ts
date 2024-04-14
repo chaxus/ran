@@ -1,15 +1,15 @@
 import { sha_variant_error } from './common';
-import {
+import type {
   CSHAKEOptionsEncodingType,
   CSHAKEOptionsNoEncodingType,
-  SHAKEOptionsEncodingType,
-  SHAKEOptionsNoEncodingType,
   EncodingType,
   FixedLengthOptionsEncodingType,
   FixedLengthOptionsNoEncodingType,
   FormatNoTextType,
-  KMACOptionsNoEncodingType,
   KMACOptionsEncodingType,
+  KMACOptionsNoEncodingType,
+  SHAKEOptionsEncodingType,
+  SHAKEOptionsNoEncodingType,
 } from './custom_types';
 import jsSHA1 from './sha1';
 import jsSHA256 from './sha256';
@@ -58,7 +58,7 @@ export default class jsSHA {
   constructor(variant: 'CSHAKE128' | 'CSHAKE256', inputFormat: FormatNoTextType, options?: CSHAKEOptionsNoEncodingType);
   constructor(variant: 'KMAC128' | 'KMAC256', inputFormat: 'TEXT', options: KMACOptionsEncodingType);
   constructor(variant: 'KMAC128' | 'KMAC256', inputFormat: FormatNoTextType, options: KMACOptionsNoEncodingType);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   constructor(variant: any, inputFormat: any, options?: any) {
     if ('SHA-1' == variant) {
       this.shaObj = new jsSHA1(variant, inputFormat, options);
@@ -111,7 +111,7 @@ export default class jsSHA {
   getHash(format: 'BYTES', options?: { outputLen?: number; shakeLen?: number }): string;
   getHash(format: 'UINT8ARRAY', options?: { outputLen?: number; shakeLen?: number }): Uint8Array;
   getHash(format: 'ARRAYBUFFER', options?: { outputLen?: number; shakeLen?: number }): ArrayBuffer;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   getHash(format: any, options?: any): any {
     return this.shaObj.getHash(format, options);
   }
@@ -129,7 +129,7 @@ export default class jsSHA {
   setHMACKey(key: string, inputFormat: 'B64' | 'HEX' | 'BYTES'): void;
   setHMACKey(key: ArrayBuffer, inputFormat: 'ARRAYBUFFER'): void;
   setHMACKey(key: Uint8Array, inputFormat: 'UINT8ARRAY'): void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   setHMACKey(key: any, inputFormat: any, options?: any): void {
     this.shaObj.setHMACKey(key, inputFormat, options);
   }
@@ -148,7 +148,7 @@ export default class jsSHA {
   getHMAC(format: 'BYTES'): string;
   getHMAC(format: 'UINT8ARRAY'): Uint8Array;
   getHMAC(format: 'ARRAYBUFFER'): ArrayBuffer;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   getHMAC(format: any, options?: any): any {
     return this.shaObj.getHMAC(format, options);
   }

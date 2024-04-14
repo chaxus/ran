@@ -4,19 +4,19 @@
  * @return {*}
  */
 
-type JudgeDeviceReturn = "ipad" | "android" | "iphone" | "pc";
+type JudgeDeviceReturn = 'ipad' | 'android' | 'iphone' | 'pc';
 export const currentDevice = (): JudgeDeviceReturn => {
-  if (typeof window !== "undefined") {
+  if (typeof window !== 'undefined') {
     const ua = navigator.userAgent.toLowerCase();
-    if (/ipad|ipod/.test(ua)) return "ipad";
-    if (/android/.test(ua)) return "android";
-    if (/iphone/.test(ua)) return "iphone";
-    return "pc";
+    if (/ipad|ipod/.test(ua)) return 'ipad';
+    if (/android/.test(ua)) return 'android';
+    if (/iphone/.test(ua)) return 'iphone';
+    return 'pc';
   }
-  return "pc";
+  return 'pc';
 };
 
-export const isClient = typeof window !== "undefined";
+export const isClient = typeof window !== 'undefined';
 
 /**
  * @description: 判断是否是微信浏览器的函数
@@ -29,7 +29,7 @@ export const isWeiXin = (): boolean => {
     const ua = window.navigator.userAgent.toLowerCase();
     // alert(ua)
     // 通过正则表达式匹配ua中是否含有MicroMessenger字符串
-    return ua.includes("micromessenger");
+    return ua.includes('micromessenger');
   }
   return false;
 };
@@ -38,7 +38,7 @@ export const isWeiXin = (): boolean => {
  * 是否是移动端
  */
 export const isMobile = (): boolean => {
-  if(!isClient) return false
+  if (!isClient) return false;
   const ua = window.navigator.userAgent;
   if (/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(ua)) {
     return true;
@@ -48,8 +48,8 @@ export const isMobile = (): boolean => {
 
 // 判断是否是刘海屏机型
 export const isBangDevice = (): boolean => {
-  if(!isClient) return false
-  const iphone = /iphone/gi.test(window.navigator.userAgent); // 是否 iphone 机型
+  if (!isClient) return false;
+  const iphone = /iphone/i.test(window.navigator.userAgent); // 是否 iphone 机型
   const ratio2 = window.devicePixelRatio && window.devicePixelRatio === 2; // 像素比是否为 2
   const ratio3 = window.devicePixelRatio && window.devicePixelRatio === 3; // 像素比是否为 3
 

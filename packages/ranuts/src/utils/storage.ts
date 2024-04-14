@@ -1,4 +1,4 @@
-import { isClient } from "@/utils/device";
+import { isClient } from '@/utils/device';
 
 export const localStorageSetItem = (name: string, value: string): void => {
   if (!isClient) return;
@@ -6,6 +6,6 @@ export const localStorageSetItem = (name: string, value: string): void => {
 };
 
 export const localStorageGetItem = (name: string): string => {
-  if (!isClient) return "";
-  return localStorage.getItem(name) || "";
+  if (!isClient) return '';
+  return localStorage.getItem(name) || '';
 };

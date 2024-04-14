@@ -9,8 +9,8 @@ test('button', async ({ page }) => {
     component.role = 'button';
     component.innerText = 'Submit';
     component.onclick = () => {
-      console.log('click success')
-    }
+      console.log('click success');
+    };
     document.body.appendChild(component);
   });
   // await page.getByRole('button', { name: /submit/i }).click();

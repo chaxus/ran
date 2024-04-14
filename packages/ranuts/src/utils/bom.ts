@@ -1,7 +1,7 @@
 import { noop } from '@/utils/noop';
 import { performanceTime } from '@/utils/time';
 import { isString } from '@/utils/str';
-import { isClient } from '@/utils/device'
+import { isClient } from '@/utils/device';
 
 /**
  * @description: 覆盖浏览器的后退事件
@@ -116,7 +116,7 @@ export const getPixelRatio = (context: CanvasRenderingContext2D & Partial<Contex
     context.msBackingStorePixelRatio ||
     context.oBackingStorePixelRatio ||
     1;
-  return (isClient && window.devicePixelRatio || 1) / backingStore;
+  return ((isClient && window.devicePixelRatio) || 1) / backingStore;
 };
 
 export const createObjectURL = async (src: Blob | ArrayBuffer | Response): Promise<string> => {

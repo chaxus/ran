@@ -94,7 +94,7 @@ import {
   throttle,
   timeFormat,
   timestampToTime,
-  webglVendor
+  webglVendor,
 } from '@/utils';
 import { reactify } from '@/react';
 import {
@@ -247,5 +247,5 @@ export {
   isBangDevice,
   localStorageGetItem,
   localStorageSetItem,
-  setAttributeByGlobal
+  setAttributeByGlobal,
 };
