@@ -1,6 +1,6 @@
 {
   "lang": "English",
-  "components_totp_1": "Generate result",
+  "components_totp_1": "Generate",
   "components_totp_2": "Please enter the key of 2FA",
   "components_totp_3": "You haven't entered the key for 2FA",
   "components_totp_4": "expires",

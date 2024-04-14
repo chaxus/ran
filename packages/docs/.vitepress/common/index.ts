@@ -85,7 +85,11 @@ function initFontSize() {
   let timer;
   let standardRatio = 667 / 375;
   const ua = navigator.userAgent.toLowerCase();
-  if ((/ipad|ipod/.test(ua))) {
+  const ipad = /ipad|ipod/.test(ua)
+  const android = /android/.test(ua)
+  const iphone = /iphone/.test(ua)
+  if(!ipad && !android && !iphone) return 
+  if (ipad) {
     standardRatio = 1024 / 768;
     base = 768;
   }

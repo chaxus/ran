@@ -5,7 +5,7 @@
       <div class="relative h-14">
         <r-input
           :label="t('components_totp_2')"
-          class="w-48 h-8 rounded-lg block text-lg"
+          class="w-64 h-8 rounded-lg block text-lg"
           :status="inputStatus"
           @input="onChange"
         ></r-input>
@@ -13,7 +13,7 @@
           {{ errorMessage }}
         </div>
       </div>
-      <r-button class="ml-4 h-8" @click="clickButton">{{ t('components_totp_1') }}</r-button>
+      <r-button class="ml-1 h-8" @click="clickButton">{{ t('components_totp_1') }}</r-button>
     </div>
 
     <div class="text-[#3451b2] text-base">
