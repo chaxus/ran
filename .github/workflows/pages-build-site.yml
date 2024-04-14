@@ -49,7 +49,7 @@ jobs:
         run: pnpm -F docs build
 
       - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.RAN_ACTIONS_TOKEN }}
           exclude_assets: ""
