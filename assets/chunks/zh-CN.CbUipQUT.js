@@ -1,0 +1,1 @@
+const t="简体中文",o="生成结果",n="请输入 2FA 的 key",p="你还没有输入 2FA 的 key",_="有效期",s="输入的 key 值无效",c={lang:t,components_totp_1:o,components_totp_2:n,components_totp_3:p,components_totp_4:_,components_totp_5:s};export{o as components_totp_1,n as components_totp_2,p as components_totp_3,_ as components_totp_4,s as components_totp_5,c as default,t as lang};
