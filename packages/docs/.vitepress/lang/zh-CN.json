@@ -4,5 +4,6 @@
   "components_totp_2": "请输入 2FA 的 key",
   "components_totp_3": "你还没有输入 2FA 的 key",
   "components_totp_4": "有效期",
-  "components_totp_5": "输入的 key 值无效"
+  "components_totp_5": "输入的 key 值无效",
+  "components_totp_6": "2FA 验证"
 }
