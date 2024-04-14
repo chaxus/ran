@@ -6,7 +6,7 @@ import DefaultTheme from "vitepress/theme";
 import { useData } from "vitepress";
 import useBasic from "../composition/useBasic";
 import { watchEffect } from "vue";
-import { isClient, localStorageSetItem } from "ranuts/utils";
+import { localStorageSetItem } from "ranuts/utils";
 import { RAN_CHAXUS_LANG, LANGS_DICT } from "../lib/constant";
 import { loadLanguageAsync } from "../lang";
 const { $env, locale } = useBasic();

@@ -5,16 +5,17 @@ import {
   isMobile,
   isBangDevice,
 } from "ranuts/utils";
+import { LANGS_DICT } from "../lib/constant";
 
 // env 信息
 const isDev = process.env.NODE_ENV !== "production";
-
-const isDesktop = () => !!window.$LB_DESKTOP;
 
 // debug 开关信息
 const { debug = "" } = getAllQueryString() || {};
 
 export const $env = {
+  isDev,
+  locale: LANGS_DICT.EN,
   currentDevice: currentDevice(),
   isWeiXin: isWeiXin(),
   isMobile: isMobile(),

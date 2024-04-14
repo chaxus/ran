@@ -9,6 +9,7 @@ const i18n = createI18n({
   locale,
   fallbackLocale: LANGS_DICT.EN,
   messages:LANG_MESSAGES,
+  devtools:false
 });
 
 export const setI18nLanguage = (lang) => {

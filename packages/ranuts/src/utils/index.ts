@@ -72,6 +72,7 @@ import {
   mergeExports,
   querystring,
   replaceOld,
+  setAttributeByGlobal
 } from "@/utils/obj";
 import { getPerformance } from "@/utils/performance";
 import { QuestQueue } from "@/utils/queue";
@@ -186,4 +187,5 @@ export {
   isBangDevice,
   localStorageGetItem,
   localStorageSetItem,
+  setAttributeByGlobal
 };

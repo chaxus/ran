@@ -228,3 +228,19 @@ export const mergeExports = (obj: Object, exports: Object): Object => {
   }
   return Object.freeze(obj);
 };
+
+/**
+ * @description: 给全局对象上增加属性
+ * @param {string} name
+ * @param {string} value
+ * @return {*}
+ */
+export const setAttributeByGlobal = (name: string, value: unknown):void => {
+  if (typeof window !== "undefined") {
+    window[name as any] = value as any;
+  }
+  if (typeof global !== "undefined") {
+    // @ts-ignore
+    global[name as any as keyof typeof global] = value as any;
+  }
+};

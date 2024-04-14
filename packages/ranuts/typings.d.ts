@@ -18,6 +18,7 @@ declare namespace Ranuts {
 }
 
 interface Window {
+  [key:any]:any
   returnCitySN: {
     cid: string;
     cip: string;
@@ -28,6 +29,9 @@ interface Window {
 }
 
 declare namespace NodeJS {
+  interface global {
+    [key:any]:any
+  }
   interface Process {
     ranlog: boolean | undefined;
   }
