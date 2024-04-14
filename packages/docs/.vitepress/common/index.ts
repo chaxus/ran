@@ -86,14 +86,19 @@ function initFontSize() {
   let standardRatio = 667 / 375;
   const ua = navigator.userAgent.toLowerCase();
   const ipad = /ipad|ipod/.test(ua)
-  const android = /android/.test(ua)
-  const iphone = /iphone/.test(ua)
-  if(!ipad && !android && !iphone) return 
   if (ipad) {
     standardRatio = 1024 / 768;
     base = 768;
   }
   function setFontSize() {
+    const ua = navigator.userAgent.toLowerCase();
+    const ipad = /ipad|ipod/.test(ua)
+    const android = /android/.test(ua)
+    const iphone = /iphone/.test(ua)
+    if(!ipad && !android && !iphone) {
+      documentElement.style.fontSize = '';
+      return 
+    } 
     const isLandscape = !mediaQuery.matches;
     let screenWidth = window.screen.width;
     let screenHeight = window.screen.height;
