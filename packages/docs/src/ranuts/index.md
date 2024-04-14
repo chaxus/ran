@@ -15,3 +15,7 @@
 | getMime       | Gets the `mime type` based on the file format suffix                   | [getMime](./mimeType/mimeType.md)   |
 | getCookie     | Gets the value of the specified cookie                                 | [writeFile](./utils/getCookie.md)   |
 | formatJson    | Formatted JSON                                                         | [formatJson](./utils/formatJson.md) |
+
+# TOTP
+
+<TOTP />

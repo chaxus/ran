@@ -22,16 +22,19 @@
   },
   "keywords": [],
   "author": "chaxus",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "less": "^4.2.0",
-    "pagefind": "^1.0.4",
-    "vite": "^5.2.6",
-    "vitepress": "^1.0.1",
+    "pagefind": "^1.1.0",
+    "tailwindcss": "^3.4.3",
+    "vite": "^5.2.8",
+    "vitepress": "^1.1.0",
     "vitepress-plugin-pagefind": "^0.2.14"
   },
   "dependencies": {
     "ranui": "workspace:*",
-    "ranuts": "workspace:0.1.0-alpha.11"
+    "ranuts": "workspace:0.1.0-alpha.11",
+    "vue": "^3.4.21",
+    "vue-i18n": "^9.12.0"
   }
 }

@@ -26,7 +26,7 @@
       "require": "./dist/umd/node/node.umd.cjs"
     },
     "./utils": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/src/utils/index.d.ts",
       "import": "./dist/utils.js",
       "require": "./dist/umd/utils/utils.umd.cjs"
     },

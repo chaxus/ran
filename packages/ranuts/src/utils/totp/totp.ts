@@ -58,7 +58,6 @@ export class TOTP {
     let hex = '';
 
     const _base32 = base32.replace(/=+$/, '');
-
     for (let i = 0; i < _base32.length; i++) {
       const val = base32chars.indexOf(base32.charAt(i).toUpperCase());
       if (val === -1) throw new Error('Invalid base32 character in key');

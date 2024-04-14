@@ -1,4 +1,5 @@
 import { noop } from '@/utils/noop';
+import { isClient } from '@/utils/device'
 
 export const handleClick = (hooks: (event: MouseEvent) => void = noop): void => {
   if (typeof document !== 'undefined') {
@@ -93,6 +94,7 @@ enum AudioCompressor {
  */
 export const audioVendor = (): Promise<string> => {
   return new Promise((resolve, reject) => {
+    if(!isClient) reject('window is undefined')
     const each = function (
       obj: Array<[AudioCompressor, number]>,
       iterator: (value: [AudioCompressor, number], index: number, array: Array<[AudioCompressor, number]>) => void,
@@ -111,7 +113,7 @@ export const audioVendor = (): Promise<string> => {
         }
       }
     };
-    const AudioContext = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+    const AudioContext = window.OfflineAudioContext || window.webkitOfflineAudioContext
     const context = new AudioContext(1, 44100, 44100);
     const oscillator = context.createOscillator();
     oscillator.type = 'triangle';

@@ -1,6 +1,7 @@
-import { AudioRecorder } from '@/utils/audioRecorder';
-import { audioVendor, canvasVendor, webglVendor } from '@/utils/behavior';
-import { TOTP } from '@/utils/totp/totp';
+import { AudioRecorder } from "@/utils/audioRecorder";
+import { audioVendor, canvasVendor, webglVendor } from "@/utils/behavior";
+import { TOTP } from "@/utils/totp/totp";
+import { localStorageGetItem, localStorageSetItem } from "@/utils/storage";
 import {
   appendUrl,
   connection,
@@ -19,7 +20,7 @@ import {
   removeGhosting,
   requestUrlToBuffer,
   retain,
-} from '@/utils/bom';
+} from "@/utils/bom";
 import {
   Color,
   ColorScheme,
@@ -39,30 +40,56 @@ import {
   rgbToHex,
   rgbToHsb,
   rgbToHsl,
-} from '@/utils/color';
-import { compose } from '@/utils/compose';
-import { handleConsole } from '@/utils/console';
-import { debounce } from '@/utils/debounce';
-import { currentDevice, isClient, isMobile, isWeiXin } from '@/utils/device';
-import { addClassToElement, createDocumentFragment, escapeHtml, removeClassToElement } from '@/utils/dom';
-import { handleError } from '@/utils/error';
-import { convertImageToBase64, isImageSize } from '@/utils/img';
-import { memoize } from '@/utils/memoize';
-import { MimeType, getMime, setMime } from '@/utils/mimeType';
-import { Monitor } from '@/utils/monitor';
-import { getStatus, status } from '@/utils/network';
-import { noop } from '@/utils/noop';
-import { Mathjs, mathjs, perToNum, range } from '@/utils/number';
-import { filterObj, formatJson, merge, mergeExports, querystring, replaceOld } from '@/utils/obj';
-import { getPerformance } from '@/utils/performance';
-import { QuestQueue } from '@/utils/queue';
-import { createData, report } from '@/utils/report';
-import { handleFetchHook } from '@/utils/request';
-import { scriptOnLoad } from '@/utils/script';
-import { changeHumpToLowerCase, clearBr, clearStr, isString, randomString, str2Xml, strParse } from '@/utils/str';
-import { SyncHook } from '@/utils/subscribe';
-import { generateThrottle, requestAnimation, throttle } from '@/utils/throttle';
-import { performanceTime, timeFormat, timestampToTime } from '@/utils/time';
+} from "@/utils/color";
+import { compose } from "@/utils/compose";
+import { handleConsole } from "@/utils/console";
+import { debounce } from "@/utils/debounce";
+import {
+  currentDevice,
+  isBangDevice,
+  isClient,
+  isMobile,
+  isWeiXin,
+} from "@/utils/device";
+import {
+  addClassToElement,
+  createDocumentFragment,
+  escapeHtml,
+  removeClassToElement,
+} from "@/utils/dom";
+import { handleError } from "@/utils/error";
+import { convertImageToBase64, isImageSize } from "@/utils/img";
+import { memoize } from "@/utils/memoize";
+import { MimeType, getMime, setMime } from "@/utils/mimeType";
+import { Monitor } from "@/utils/monitor";
+import { getStatus, status } from "@/utils/network";
+import { noop } from "@/utils/noop";
+import { Mathjs, mathjs, perToNum, range } from "@/utils/number";
+import {
+  filterObj,
+  formatJson,
+  merge,
+  mergeExports,
+  querystring,
+  replaceOld,
+} from "@/utils/obj";
+import { getPerformance } from "@/utils/performance";
+import { QuestQueue } from "@/utils/queue";
+import { createData, report } from "@/utils/report";
+import { handleFetchHook } from "@/utils/request";
+import { scriptOnLoad } from "@/utils/script";
+import {
+  changeHumpToLowerCase,
+  clearBr,
+  clearStr,
+  isString,
+  randomString,
+  str2Xml,
+  strParse,
+} from "@/utils/str";
+import { SyncHook } from "@/utils/subscribe";
+import { generateThrottle, requestAnimation, throttle } from "@/utils/throttle";
+import { performanceTime, timeFormat, timestampToTime } from "@/utils/time";
 export {
   performanceTime,
   timeFormat,
@@ -156,4 +183,7 @@ export {
   durationHandler,
   networkSpeed,
   TOTP,
+  isBangDevice,
+  localStorageGetItem,
+  localStorageSetItem,
 };

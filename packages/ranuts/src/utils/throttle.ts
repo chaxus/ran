@@ -1,3 +1,5 @@
+import { isClient } from '@/utils/device'
+
 /**
  * @description: 节流
  * @param {any} fn
@@ -49,6 +51,7 @@ export const generateThrottle = (): Function => {
  * @return {*}
  */
 export const requestAnimation = (fn: any): any => {
+  if(!isClient) return 
   let ticking = false;
   return function (this: any) {
     const context = this;

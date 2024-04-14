@@ -10,7 +10,7 @@ export class Input extends (HTMLElementSSR()!) {
       'type',
       'icon',
       'value',
-      'status', // error warning
+      'status', // error warning normal
       'prefix', // 前缀
       'suffix', // 后缀
       'allowclear', // 清除 icon

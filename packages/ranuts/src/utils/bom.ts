@@ -1,6 +1,7 @@
 import { noop } from '@/utils/noop';
 import { performanceTime } from '@/utils/time';
 import { isString } from '@/utils/str';
+import { isClient } from '@/utils/device'
 
 /**
  * @description: 覆盖浏览器的后退事件
@@ -10,13 +11,13 @@ import { isString } from '@/utils/str';
 export const retain = (callback = noop): void => {
   const historyReturnCb = () => {
     callback();
-    window.removeEventListener('popstate', historyReturnCb);
+    isClient && window.removeEventListener('popstate', historyReturnCb);
   };
 
   // 向history栈中推入两个和当前页面一样的历史记录，用来在页面发生跳转的时候区分返回和前进动作
-  window.history.pushState(null, '', window.location.href);
+  isClient && window.history.pushState(null, '', window.location.href);
   setTimeout(() => {
-    window.addEventListener('popstate', historyReturnCb);
+    isClient && window.addEventListener('popstate', historyReturnCb);
   }, 500);
 };
 
@@ -115,7 +116,7 @@ export const getPixelRatio = (context: CanvasRenderingContext2D & Partial<Contex
     context.msBackingStorePixelRatio ||
     context.oBackingStorePixelRatio ||
     1;
-  return (window.devicePixelRatio || 1) / backingStore;
+  return (isClient && window.devicePixelRatio || 1) / backingStore;
 };
 
 export const createObjectURL = async (src: Blob | ArrayBuffer | Response): Promise<string> => {
@@ -269,7 +270,7 @@ interface ClientRatio {
  * 跨浏览器获取可视窗口大小
  */
 export const getWindow = (): ClientRatio => {
-  if (typeof window.innerWidth !== 'undefined') {
+  if (typeof window !== 'undefined') {
     return {
       width: window.innerWidth,
       height: window.innerHeight,

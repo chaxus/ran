@@ -1,12 +1,15 @@
 import type { BaseReturn } from '@/utils/bom';
+import { isClient } from '@/utils/device'
+
 /**
  * @description: 校验图片尺寸
  * @param {File} file
  * @return {*}
  */
 export const isImageSize = (file: File, width?: number, height?: number): Promise<boolean> => {
-  return new Promise((resolve) => {
-    const _URL = window.URL || window.webkitURL;
+  return new Promise((resolve, reject) => {
+    if(!isClient) reject('window is undefined')
+    const _URL = window.URL || window.webkitURL
     const img = new Image();
     img.onload = function () {
       let valid = false;

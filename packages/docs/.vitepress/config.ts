@@ -17,6 +17,7 @@ import {
   SERVICE_WORK,
 } from './common/index';
 import { pagefindPlugin } from 'vitepress-plugin-pagefind';
+import { LANGS_DICT } from './lib/constant'
 
 export default defineConfig({
   title: 'ran',
@@ -30,10 +31,10 @@ export default defineConfig({
     //   lang: 'en',
     //   themeConfig: themeEnConfig,
     // },
-    root: { label: 'English', lang: 'en' },
+    root: { label: 'English', lang: LANGS_DICT.EN },
     cn: {
       label: '简体中文',
-      lang: 'zh-CN',
+      lang: LANGS_DICT.ZH_CN,
       themeConfig: themeCnConfig,
     },
   },
