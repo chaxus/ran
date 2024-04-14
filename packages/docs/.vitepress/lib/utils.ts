@@ -42,29 +42,7 @@ function parseFileSync(fileName, options) {
 }
 
 function themeReplacements() {
-  const fileName = path.resolve(__dirname, "./_theme.scss");
-  const variables = parseFileSync(fileName, {
-    parser: "postcss-scss",
-  });
-  return Object.entries(variables).reduce((memo, e) => {
-    memo[`var(--${e[0]})`] = e[1];
-    return memo;
-  }, {});
-}
-
-function borderReplacements() {
-  const fileName = path.resolve(__dirname, "./_border_radius.scss");
-  const variables = parseFileSync(fileName, {
-    parser: "postcss-scss",
-  });
-  return Object.entries(variables).reduce((memo, e) => {
-    memo[`var(--${e[0]})`] = e[1];
-    return memo;
-  }, {});
-}
-
-function widthReplacements() {
-  const fileName = path.resolve(__dirname, "./_width.scss");
+  const fileName = path.resolve(__dirname, "../theme/theme.less");
   const variables = parseFileSync(fileName, {
     parser: "postcss-scss",
   });
