@@ -1,3 +1,4 @@
+import { DEVICE, currentDevice } from '@/utils/device'
 /**
  * @description: 给指定的元素添加指定的class
  * @param {Element} element
@@ -80,4 +81,71 @@ export function escapeHtml(string?: string | number | null): string {
   }
 
   return lastIndex !== index ? html + str.substring(lastIndex, index) : html;
+}
+/**
+ * @description: 根据 UI 稿宽度设置 rem
+ * @param {*} void
+ * @return {*}
+ */
+export const setFontSize2html = (designWidth: number = 375): void => {
+  let base = designWidth
+  const { documentElement } = document;
+  const mediaQuery = window.matchMedia('(orientation: portrait)'); // 检测是否为竖屏
+  let timer: string | number | NodeJS.Timeout | undefined;
+  let standardRatio = 667 / 375; // 设计稿宽高比
+  if (currentDevice() === DEVICE.IPAD) {
+    standardRatio = 1024 / 768; // iPad设计稿宽高比
+    base = 768;
+  }
+  function setFontSize() {
+    const isLandscape = !mediaQuery.matches;
+    let screenWidth = window.screen.width;
+    let screenHeight = window.screen.height;
+
+    if (screenWidth < screenHeight) {
+      [screenWidth, screenHeight] = [screenHeight, screenWidth];
+    }
+
+    let width = documentElement.clientWidth;
+    let height = screenHeight;
+
+    const realRatio = width / height;
+
+    // 根据相对设计稿更小的宽或者高来计算fontSize
+    if (realRatio >= standardRatio) {
+      width = height * standardRatio;
+      documentElement.classList.remove('adjustHeight');
+      documentElement.classList.add('adjustWidth');
+    } else {
+      height = width / standardRatio;
+      documentElement.classList.remove('adjustWidth');
+      documentElement.classList.add('adjustHeight');
+    }
+
+    // window.adjustWidth = width;
+    // window.adjustHeight = height;
+    // fontSize = 自适应宽与原来宽度比 * 初始fontSize
+    let target = width / base * 16;
+    if (isLandscape) {
+      target /= standardRatio;
+    }
+    documentElement.style.fontSize = `${target}px`;
+    const currentSize = window.getComputedStyle(documentElement).fontSize.replace('px', '') || 0
+    if (target !== currentSize) {
+      documentElement.style.fontSize = `${target / Number(currentSize) * target}px`;
+    }
+  }
+  window.addEventListener('resize', function () {
+    clearTimeout(timer);
+    timer = setTimeout(setFontSize, 300);
+  }, !1);
+  window.addEventListener('pageshow', function (e) {
+    e.persisted && (clearTimeout(timer), timer = setTimeout(setFontSize, 300));
+  }, !1);
+
+  window.addEventListener('orientationchange', function () {
+    console.log('改变了手机方向');
+    setFontSize();
+  }, false);
+  setFontSize();
 }

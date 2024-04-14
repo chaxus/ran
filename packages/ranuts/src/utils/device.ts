@@ -3,7 +3,12 @@
  * @param {*} function
  * @return {*}
  */
-
+export enum DEVICE {
+  IPAD = 'ipad',
+  ANDROID = 'android',
+  IPhONE = 'iphone',
+  PC = 'pc'
+}
 type JudgeDeviceReturn = 'ipad' | 'android' | 'iphone' | 'pc';
 export const currentDevice = (): JudgeDeviceReturn => {
   if (typeof window !== 'undefined') {

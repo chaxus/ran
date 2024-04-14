@@ -76,3 +76,68 @@ const registerServiceWorker = async () => {
 
 registerServiceWorker();
 `;
+
+export const SET_FONT_SIZE = `
+function initFontSize() {
+  let base = 375;
+  const { documentElement } = document;
+  const mediaQuery = window.matchMedia('(orientation: portrait)');
+  let timer;
+  let standardRatio = 667 / 375;
+  const ua = navigator.userAgent.toLowerCase();
+  if ((/ipad|ipod/.test(ua))) {
+    standardRatio = 1024 / 768;
+    base = 768;
+  }
+  function setFontSize() {
+    const isLandscape = !mediaQuery.matches;
+    let screenWidth = window.screen.width;
+    let screenHeight = window.screen.height;
+
+    if (screenWidth < screenHeight) {
+      [ screenWidth, screenHeight ] = [ screenHeight, screenWidth ];
+    }
+
+    let width = documentElement.clientWidth;
+    let height = screenHeight;
+
+    const realRatio = width / height;
+
+    if (realRatio >= standardRatio) {
+      width = height * standardRatio;
+      documentElement.classList.remove('adjustHeight');
+      documentElement.classList.add('adjustWidth');
+    } else {
+      height = width / standardRatio;
+      documentElement.classList.remove('adjustWidth');
+      documentElement.classList.add('adjustHeight');
+    }
+
+    window.adjustWidth = width;
+    window.adjustHeight = height;
+    let target = width / base * 16;
+    if (isLandscape) {
+      target /= standardRatio;
+    }
+    documentElement.style.fontSize = target + 'px';
+    const currentSize = window.getComputedStyle(documentElement).fontSize.replace('px', '');
+    if (target !== currentSize) {
+      documentElement.style.fontSize = target / currentSize * target + 'px';
+    }
+  }
+  window.addEventListener('resize', function() {
+    clearTimeout(timer);
+    timer = setTimeout(setFontSize, 300);
+  }, !1);
+  window.addEventListener('pageshow', function(e) {
+    e.persisted && (clearTimeout(timer), timer = setTimeout(setFontSize, 300));
+  }, !1);
+
+  window.addEventListener('orientationchange', function() {
+    console.log('改变了手机方向');
+    setFontSize();
+  }, false);
+  setFontSize();
+};
+initFontSize();
+`

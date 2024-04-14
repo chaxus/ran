@@ -15,6 +15,7 @@ import {
   KEY_WORDS,
   BASE_PATH,
   SERVICE_WORK,
+  SET_FONT_SIZE
 } from './common/index';
 import { pagefindPlugin } from 'vitepress-plugin-pagefind';
 import { LANGS_DICT } from './lib/constant';
@@ -109,6 +110,8 @@ export default defineConfig({
     ['meta', { name: 'keywords', content: KEY_WORDS }],
     // chrome
     ['meta', { httpEquiv: 'Permissions-Policy', content: 'interest-cohort=()' }],
+    // set font size
+    ['script', {}, SET_FONT_SIZE],
     // report
     ['script', { defer: 'true', src: GTAG }],
     ['script', {}, GOOGLE_ANALYSE],

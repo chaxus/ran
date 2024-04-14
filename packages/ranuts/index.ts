@@ -87,6 +87,7 @@ import {
   rgbToHsl,
   scriptOnLoad,
   setAttributeByGlobal,
+  setFontSize2html,
   setMime,
   status,
   str2Xml,
@@ -94,7 +95,7 @@ import {
   throttle,
   timeFormat,
   timestampToTime,
-  webglVendor,
+  webglVendor
 } from '@/utils';
 import { reactify } from '@/react';
 import {
@@ -248,4 +249,5 @@ export {
   localStorageGetItem,
   localStorageSetItem,
   setAttributeByGlobal,
+  setFontSize2html
 };

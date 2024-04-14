@@ -5,8 +5,8 @@
 import DefaultTheme from 'vitepress/theme';
 import { useData } from 'vitepress';
 import useBasic from '../composition/useBasic';
-import { watchEffect } from 'vue';
-import { localStorageSetItem } from 'ranuts/utils';
+import { watchEffect, onMounted } from 'vue';
+import { localStorageSetItem, setFontSize2html } from 'ranuts/utils';
 import { RAN_CHAXUS_LANG, LANGS_DICT } from '../lib/constant';
 import { loadLanguageAsync } from '../lang';
 const { $env, locale } = useBasic();
@@ -25,4 +25,9 @@ const setLang = () => {
 watchEffect(() => {
   setLang();
 });
+
+onMounted(() => {
+  setFontSize2html()
+})
+
 </script>
