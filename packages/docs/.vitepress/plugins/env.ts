@@ -1,4 +1,5 @@
 import { getAllQueryString, currentDevice, isWeiXin, isMobile, isBangDevice } from 'ranuts/utils';
+import type { CurrentDevice } from 'ranuts/utils'
 import { LANGS_DICT } from '../lib/constant';
 
 // env 信息
@@ -7,7 +8,16 @@ const isDev = process.env.NODE_ENV !== 'production';
 // debug 开关信息
 const { debug = '' } = getAllQueryString() || {};
 
-export const $env = {
+export interface Env {
+  isDev: boolean,
+  locale: LANGS_DICT | string,
+  currentDevice: CurrentDevice,
+  isWeiXin:boolean,
+  isMobile:boolean,
+  isBang:boolean
+}
+
+export const $env:Env = {
   isDev,
   locale: LANGS_DICT.EN,
   currentDevice: currentDevice(),

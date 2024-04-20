@@ -9,8 +9,8 @@ export enum DEVICE {
   IPhONE = 'iphone',
   PC = 'pc'
 }
-type JudgeDeviceReturn = 'ipad' | 'android' | 'iphone' | 'pc';
-export const currentDevice = (): JudgeDeviceReturn => {
+export type CurrentDevice = 'ipad' | 'android' | 'iphone' | 'pc';
+export const currentDevice = (): CurrentDevice => {
   if (typeof window !== 'undefined') {
     const ua = navigator.userAgent.toLowerCase();
     if (/ipad|ipod/.test(ua)) return 'ipad';

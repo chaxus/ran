@@ -27,7 +27,7 @@ export const mergeCommonMessage = (message, lang = locale) => {
 };
 
 // 异步加载语言词条
-export const loadLanguageAsync = (lang = locale) => {
+export const loadLanguageAsync = (lang) => {
   if (!lang) return Promise.reject('lang is undefined');
   // 如果语言相同
   if (i18n.global.locale === lang) {

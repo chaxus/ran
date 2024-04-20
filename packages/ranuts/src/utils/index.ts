@@ -45,6 +45,7 @@ import { compose } from '@/utils/compose';
 import { handleConsole } from '@/utils/console';
 import { debounce } from '@/utils/debounce';
 import { currentDevice, isBangDevice, isClient, isMobile, isWeiXin } from '@/utils/device';
+import type { CurrentDevice } from '@/utils/device';
 import { addClassToElement, createDocumentFragment, escapeHtml, removeClassToElement, setFontSize2html } from '@/utils/dom';
 import { handleError } from '@/utils/error';
 import { convertImageToBase64, isImageSize } from '@/utils/img';
@@ -163,3 +164,7 @@ export {
   setAttributeByGlobal,
   setFontSize2html
 };
+
+export type {
+  CurrentDevice
+}

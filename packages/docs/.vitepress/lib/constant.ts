@@ -11,7 +11,7 @@ export enum LANGS_DICT {
 // localStorage 中的多语言标识
 export const RAN_CHAXUS_LANG = 'ran_chaxus_lang';
 
-export const LOADED_LOCALES = [];
+export const LOADED_LOCALES:string[] = [];
 
 export const LANG_MESSAGES = {
   'zh-CN': {

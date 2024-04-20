@@ -97,6 +97,7 @@ import {
   timestampToTime,
   webglVendor
 } from '@/utils';
+import type { CurrentDevice } from '@/utils'
 import { reactify } from '@/react';
 import {
   Router,
@@ -251,3 +252,7 @@ export {
   setAttributeByGlobal,
   setFontSize2html
 };
+
+export type {
+  CurrentDevice
+}
