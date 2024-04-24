@@ -3,11 +3,12 @@ import env from '../plugins/env';
 import TOTP from '../components/TOTP.vue';
 import Layout from '../components/Layout.vue';
 import i18n, { loadLanguageAsync } from '../lang';
-import { RAN_CHAXUS_LANG, LANGS_DICT } from '../lib/constant';
+import { RAN_CHAXUS_LANG, LANGS_DICT, PWA_INSTALL_ID, PWA_ELEMENT_NAME, MANIFEST_PATH_ROOT } from '../lib/constant';
 import { localStorageGetItem, setAttributeByGlobal } from 'ranuts/utils';
 import './styles/index.less';
 import './styles/vars.less';
 import './tailwind.less';
+
 
 declare global {
   interface ImportMeta {
@@ -16,6 +17,20 @@ declare global {
     };
   }
 }
+/**
+ * @description: pwa引导安装
+ */
+const pwaInstall = () => {
+  import('@khmyznikov/pwa-install').then(() => {
+    let pwaInstall = document.getElementById(PWA_INSTALL_ID);
+    if (!pwaInstall) {
+      pwaInstall = document.createElement(PWA_ELEMENT_NAME);
+      pwaInstall.setAttribute('manifest-url', MANIFEST_PATH_ROOT);
+      pwaInstall.setAttribute('id', PWA_INSTALL_ID);
+      document.body.appendChild(pwaInstall);
+    }
+  });
+};
 
 export default {
   extends: DefaultTheme,
@@ -23,6 +38,7 @@ export default {
   enhanceApp({ app, router, siteData }) {
     if (!import.meta.env.SSR) {
       import('ranui');
+      pwaInstall()
     }
     app.use(env);
     const locale = localStorageGetItem(RAN_CHAXUS_LANG) || LANGS_DICT.EN;
