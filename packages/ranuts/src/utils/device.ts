@@ -7,7 +7,7 @@ export enum DEVICE {
   IPAD = 'ipad',
   ANDROID = 'android',
   IPhONE = 'iphone',
-  PC = 'pc'
+  PC = 'pc',
 }
 export type CurrentDevice = 'ipad' | 'android' | 'iphone' | 'pc';
 export const currentDevice = (): CurrentDevice => {

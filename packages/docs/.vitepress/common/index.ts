@@ -149,4 +149,4 @@ function initFontSize() {
   setFontSize();
 };
 initFontSize();
-`
+`;

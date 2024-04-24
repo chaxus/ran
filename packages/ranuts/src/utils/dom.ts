@@ -1,4 +1,4 @@
-import { DEVICE, currentDevice } from '@/utils/device'
+import { DEVICE, currentDevice } from '@/utils/device';
 /**
  * @description: 给指定的元素添加指定的class
  * @param {Element} element
@@ -88,7 +88,7 @@ export function escapeHtml(string?: string | number | null): string {
  * @return {*}
  */
 export const setFontSize2html = (designWidth: number = 375): void => {
-  let base = designWidth
+  let base = designWidth;
   const { documentElement } = document;
   const mediaQuery = window.matchMedia('(orientation: portrait)'); // 检测是否为竖屏
   let timer: string | number | NodeJS.Timeout | undefined;
@@ -125,27 +125,39 @@ export const setFontSize2html = (designWidth: number = 375): void => {
     // window.adjustWidth = width;
     // window.adjustHeight = height;
     // fontSize = 自适应宽与原来宽度比 * 初始fontSize
-    let target = width / base * 16;
+    let target = (width / base) * 16;
     if (isLandscape) {
       target /= standardRatio;
     }
     documentElement.style.fontSize = `${target}px`;
-    const currentSize = window.getComputedStyle(documentElement).fontSize.replace('px', '') || 0
+    const currentSize = window.getComputedStyle(documentElement).fontSize.replace('px', '') || 0;
     if (target !== currentSize) {
-      documentElement.style.fontSize = `${target / Number(currentSize) * target}px`;
+      documentElement.style.fontSize = `${(target / Number(currentSize)) * target}px`;
     }
   }
-  window.addEventListener('resize', function () {
-    clearTimeout(timer);
-    timer = setTimeout(setFontSize, 300);
-  }, !1);
-  window.addEventListener('pageshow', function (e) {
-    e.persisted && (clearTimeout(timer), timer = setTimeout(setFontSize, 300));
-  }, !1);
+  window.addEventListener(
+    'resize',
+    function () {
+      clearTimeout(timer);
+      timer = setTimeout(setFontSize, 300);
+    },
+    !1,
+  );
+  window.addEventListener(
+    'pageshow',
+    function (e) {
+      e.persisted && (clearTimeout(timer), (timer = setTimeout(setFontSize, 300)));
+    },
+    !1,
+  );
 
-  window.addEventListener('orientationchange', function () {
-    console.log('改变了手机方向');
-    setFontSize();
-  }, false);
+  window.addEventListener(
+    'orientationchange',
+    function () {
+      console.log('改变了手机方向');
+      setFontSize();
+    },
+    false,
+  );
   setFontSize();
-}
+};

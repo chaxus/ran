@@ -9,7 +9,6 @@ import './styles/index.less';
 import './styles/vars.less';
 import './tailwind.less';
 
-
 declare global {
   interface ImportMeta {
     env: {
@@ -38,7 +37,7 @@ export default {
   enhanceApp({ app, router, siteData }) {
     if (!import.meta.env.SSR) {
       import('ranui');
-      pwaInstall()
+      pwaInstall();
     }
     app.use(env);
     const locale = localStorageGetItem(RAN_CHAXUS_LANG) || LANGS_DICT.EN;

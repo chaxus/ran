@@ -11,7 +11,7 @@ export enum LANGS_DICT {
 // localStorage 中的多语言标识
 export const RAN_CHAXUS_LANG = 'ran_chaxus_lang';
 
-export const LOADED_LOCALES:string[] = [];
+export const LOADED_LOCALES: string[] = [];
 
 export const LANG_MESSAGES = {
   'zh-CN': {
@@ -27,5 +27,5 @@ export enum I18N_MODE {
 }
 
 export const PWA_INSTALL_ID = 'PWA_INSTALL_ID';
-export const PWA_ELEMENT_NAME = 'pwa-install'
-export const MANIFEST_PATH_ROOT = '/ran/manifest.json'
+export const PWA_ELEMENT_NAME = 'pwa-install';
+export const MANIFEST_PATH_ROOT = '/ran/manifest.json';
