@@ -15,7 +15,7 @@ import {
   KEY_WORDS,
   BASE_PATH,
   SERVICE_WORK,
-  SET_FONT_SIZE
+  SET_FONT_SIZE,
 } from './common/index';
 import { pagefindPlugin } from 'vitepress-plugin-pagefind';
 import { LANGS_DICT } from './lib/constant';

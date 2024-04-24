@@ -46,7 +46,13 @@ import { handleConsole } from '@/utils/console';
 import { debounce } from '@/utils/debounce';
 import { currentDevice, isBangDevice, isClient, isMobile, isWeiXin } from '@/utils/device';
 import type { CurrentDevice } from '@/utils/device';
-import { addClassToElement, createDocumentFragment, escapeHtml, removeClassToElement, setFontSize2html } from '@/utils/dom';
+import {
+  addClassToElement,
+  createDocumentFragment,
+  escapeHtml,
+  removeClassToElement,
+  setFontSize2html,
+} from '@/utils/dom';
 import { handleError } from '@/utils/error';
 import { convertImageToBase64, isImageSize } from '@/utils/img';
 import { memoize } from '@/utils/memoize';
@@ -162,9 +168,7 @@ export {
   localStorageGetItem,
   localStorageSetItem,
   setAttributeByGlobal,
-  setFontSize2html
+  setFontSize2html,
 };
 
-export type {
-  CurrentDevice
-}
+export type { CurrentDevice };

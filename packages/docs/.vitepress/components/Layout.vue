@@ -27,7 +27,6 @@ watchEffect(() => {
 });
 
 onMounted(() => {
-  setFontSize2html()
-})
-
+  setFontSize2html();
+});
 </script>

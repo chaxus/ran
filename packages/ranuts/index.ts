@@ -95,9 +95,9 @@ import {
   throttle,
   timeFormat,
   timestampToTime,
-  webglVendor
+  webglVendor,
 } from '@/utils';
-import type { CurrentDevice } from '@/utils'
+import type { CurrentDevice } from '@/utils';
 import { reactify } from '@/react';
 import {
   Router,
@@ -250,9 +250,7 @@ export {
   localStorageGetItem,
   localStorageSetItem,
   setAttributeByGlobal,
-  setFontSize2html
+  setFontSize2html,
 };
 
-export type {
-  CurrentDevice
-}
+export type { CurrentDevice };
