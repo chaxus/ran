@@ -1,0 +1,18 @@
+{
+  "name": "solidity",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "compile": "sh ./bin/compile.sh",
+    "test": "sh ./bin/test.sh"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox-viem": "^3.0.0",
+    "@types/chai-as-promised": "^7.1.8",
+    "hardhat": "^2.22.3"
+  }
+}
