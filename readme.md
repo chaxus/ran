@@ -22,13 +22,13 @@
 </p>
 <br/>
 
-> Manage code assets like managing money, and enjoy the compounding interest of time.
+Manage code assets meticulously, akin to handling finances, and reap the rewards of time's compounding interest.
 
-The project includes **web components library**, **machine learning**, **function library** and so on.
+The project encompasses a diverse range of codes, encompassing web component libraries, machine learning capabilities, function libraries, select CSS fragments, web3 smart contracts, and numerous other elements.
 
-Meanwhile, I have also made these codes open-source, hoping that they can be helpful to everyone.
+Moreover, I have kindly made these codes available as open-source, hoping that they will prove to be a beneficial resource for everyone.
 
-Thanks to star...
+Thank you for showing interest by starring...
 
 ## Packages
 
