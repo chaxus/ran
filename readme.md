@@ -22,7 +22,7 @@
 </p>
 <br/>
 
-Manage code assets meticulously, akin to handling finances, and reap the rewards of time's compounding interest.
+> Manage code assets meticulously, akin to handling finances, and reap the rewards of time's compounding interest.
 
 The project encompasses a diverse range of codes, encompassing web component libraries, machine learning capabilities, function libraries, select CSS fragments, web3 smart contracts, and numerous other elements.
 
