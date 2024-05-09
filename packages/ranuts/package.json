@@ -63,16 +63,16 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@babel/parser": "^7.24.4",
-    "@types/node": "^20.12.7",
-    "@types/react": "^18.2.77",
-    "react": "^18.2.0",
-    "typescript": "^5.4.3",
-    "vite": "^5.2.8",
-    "vitest": "^1.5.0"
+    "@babel/parser": "^7.24.5",
+    "@types/node": "^20.12.11",
+    "@types/react": "^18.3.1",
+    "react": "^18.3.1",
+    "typescript": "^5.4.5",
+    "vite": "^5.2.11",
+    "vitest": "^1.6.0"
   },
   "dependencies": {
     "magic-string": "^0.27.0",
-    "tesseract.js": "^5.0.5"
+    "tesseract.js": "^5.1.0"
   }
 }
