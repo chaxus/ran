@@ -3,11 +3,11 @@ on:
   pull_request:
     branches: main
     paths:
-      - 'packages/docs/**'
+      - "packages/docs/**"
   push:
     branches: main
     paths:
-      - 'packages/docs/**'
+      - "packages/docs/**"
 jobs:
   lint:
     if: github.repository == 'chaxus/ran'

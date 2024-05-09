@@ -4,7 +4,7 @@ on:
     branches:
       - main
     paths:
-      - 'packages/docs/**'
+      - "packages/docs/**"
 jobs:
   deploy:
     runs-on: ubuntu-latest
