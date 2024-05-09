@@ -35,7 +35,7 @@ Thank you for showing interest by starring...
 | package                               | version (click for readme)                                                                                          | npm-d(click for npm)                                                                                   |
 | ------------------------------------- | :------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
 | [ranui](packages/ranui)               | [![ranui version](https://img.shields.io/npm/v/ranui.svg?label=%20)](packages/ranui/readme.md)                      | [![npm-d](https://img.shields.io/npm/dt/ranui.svg)](https://www.npmjs.com/package/ranui)               |
-| [@ranui/react](packages/@ranui/react) | [![@ranui/react version](https://img.shields.io/npm/v/@ranui/react.svg?label=%20)](packages/@ranui/react/readme.md) | [![npm-d](https://img.shields.io/npm/dt/@ranui/react.svg)](https://www.npmjs.com/package/@ranui/react) |
+| [@ranui/react](packages/ranui-react) | [![@ranui/react version](https://img.shields.io/npm/v/@ranui/react.svg?label=%20)](packages/@ranui/react/readme.md) | [![npm-d](https://img.shields.io/npm/dt/@ranui/react.svg)](https://www.npmjs.com/package/@ranui/react) |
 | [ranuts](packages/ranuts)             | [![ranuts version](https://img.shields.io/npm/v/ranuts.svg?label=%20)](packages/ranuts/readme.md)                   | [![npm-d](https://img.shields.io/npm/dt/ranuts.svg)](https://www.npmjs.com/package/ranuts)             |
 
 # Contributors
