@@ -82,6 +82,10 @@ document.body.appendChild(html);
   <img src="https://contrib.rocks/image?repo=chaxus/ran" />
 </a>
 
+## Visitors
+
+![](http://profile-counter.glitch.me/chaxus-ranuts/count.svg)
+
 ## Meta
 
 [LICENSE (MIT)](/LICENSE)
