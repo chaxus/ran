@@ -135,6 +135,10 @@ const App = () => {
   <img src="https://contrib.rocks/image?repo=chaxus/ran" />
 </a>
 
+## Visitors
+
+![](http://profile-counter.glitch.me/chaxus-ranui-react/count.svg)
+
 ## Meta
 
 [LICENSE (MIT)](/LICENSE)
