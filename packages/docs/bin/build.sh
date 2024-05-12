@@ -15,9 +15,9 @@ dir="./.vitepress/dist"
 # 生成的目标文件
 target="./.vitepress/dist/sw.js"
 # 改名
-mv "$target" "./.vitepress/dist/sw$version.js"
+# mv "$target" "./.vitepress/dist/sw$version.js"
 
-target="./.vitepress/dist/sw$version.js"
+# target="./.vitepress/dist/sw$version.js"
 # 创建一个临时文件
 tmpfile=$(mktemp)
 # 将目录 dir 下的文件名追加到临时文件中

@@ -58,7 +58,7 @@ export const SERVICE_WORK = `
 const registerServiceWorker = async () => {
   if ('serviceWorker' in window.navigator) {
     try {
-      const registration = await navigator.serviceWorker.register('/ran/sw${SERVICE_WORK_VERSION}.js', {
+      const registration = await navigator.serviceWorker.register('/ran/sw.js', {
         scope: '/ran/',
       });
       if (registration.installing) {
