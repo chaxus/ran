@@ -31,7 +31,7 @@ jobs:
         with:
           python-version: "3.10"
 
-      - uses: pnpm/action-setup@v3
+      - uses: pnpm/action-setup@v4
         name: Install pnpm
         id: pnpm-install
         with:
