@@ -79,12 +79,8 @@ type AddResult = Add<32, 25>;
 所以减法的实现是这样的：
 
 ```ts
-type Subtract<Num1 extends number, Num2 extends number> = BuildArray<Num1> extends [
-  ...arr1: BuildArray<Num2>,
-  ...arr2: infer Rest,
-]
-  ? Rest['length']
-  : never;
+type Subtract<Num1 extends number, Num2 extends number> =
+  BuildArray<Num1> extends [...arr1: BuildArray<Num2>, ...arr2: infer Rest] ? Rest['length'] : never;
 ```
 
 类型参数 Num1、Num2 分别是被减数和减数，通过 extends 约束为 number。
@@ -189,10 +185,10 @@ type StrLen<Str extends string, CountArr extends unknown[] = []> = Str extends `
 type GreaterThan<Num1 extends number, Num2 extends number, CountArr extends unknown[] = []> = Num1 extends Num2
   ? false
   : CountArr['length'] extends Num2
-  ? true
-  : CountArr['length'] extends Num1
-  ? false
-  : GreaterThan<Num1, Num2, [...CountArr, unknown]>;
+    ? true
+    : CountArr['length'] extends Num1
+      ? false
+      : GreaterThan<Num1, Num2, [...CountArr, unknown]>;
 ```
 
 类型参数 Num1 和 Num2 是待比较的两个数。

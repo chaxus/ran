@@ -11,7 +11,7 @@ const uint8array_error = 'UINT8ARRAY not supported by this environment';
  * Convert a string to an array of words.
  *
  * There is a known bug with an odd number of existing bytes and using a UTF-16 encoding.  However, this function is
- * used such that the existing bytes are always a result of a previous UTF-16 str2packed call and therefore there 
+ * used such that the existing bytes are always a result of a previous UTF-16 str2packed call and therefore there
  * should never be an odd number of existing bytes.
 
  * @param str Unicode string to be converted to binary representation.
@@ -212,7 +212,7 @@ function b642packed(
     shiftModifier = bigEndianMod === -1 ? 3 : 0,
     firstEqual = str.indexOf('=');
 
-  if (-1 === str.search(/^[a-zA-Z\d=+/]+$/)) {
+  if (-1 === str.search(/^[a-z\d=+/]+$/i)) {
     throw new Error('Invalid character in base-64 string');
   }
 

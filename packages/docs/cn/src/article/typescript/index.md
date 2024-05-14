@@ -156,8 +156,8 @@ type MergeParams<OneParam extends Record<string, any>, OtherParam extends Record
       ? MergeValues<OneParam[Key], OtherParam[Key]>
       : OneParam[Key]
     : Key extends keyof OtherParam
-    ? OtherParam[Key]
-    : never;
+      ? OtherParam[Key]
+      : never;
 };
 type ParseQueryString<Str extends string> = Str extends `${infer Param}&${infer Rest}`
   ? MergeParams<ParseParam<Param>, ParseQueryString<Rest>>

@@ -25,11 +25,12 @@ type ttt = Promise<Promise<Promise<Record<string, any>>>>;
 所以高级类型是这样的：
 
 ```ts
-type DeepPromiseValueType<P extends Promise<unknown>> = P extends Promise<infer ValueType>
-  ? ValueType extends Promise<unknown>
-    ? DeepPromiseValueType<ValueType>
-    : ValueType
-  : never;
+type DeepPromiseValueType<P extends Promise<unknown>> =
+  P extends Promise<infer ValueType>
+    ? ValueType extends Promise<unknown>
+      ? DeepPromiseValueType<ValueType>
+      : ValueType
+    : never;
 ```
 
 类型参数 P 是待处理的 Promise，通过 extends 约束为 Promise 类型，value 类型不确定，设为 unknown。

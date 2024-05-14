@@ -1,8 +1,8 @@
 /*
  * @Author: chaxus nouo18@163.com
  * @Date: 2023-09-14 21:21:31
- * @LastEditors: chaxus nouo18@163.com
- * @LastEditTime: 2023-12-18 00:05:29
+ * @LastEditors: ranzhouhang zhouhang.ran@longbridge-inc.com
+ * @LastEditTime: 2024-05-14 11:57:06
  * @FilePath: /ran/packages/ranuts/src/arithmetic/index.ts
  * @Description: 字符串 string
  * @Description: 链表
@@ -59,7 +59,7 @@ const isNumber = function (s: string) {
   // 整数：[\+\-]?\d+
   // 小数：[\+\-]?(\d+\.|\d+\.\d+|\.\d+)
   // [eE][\+\-]?\d+
-  return /^\s*(?:[+\-]?\d+|[+\-]?(?:\d+\.|\d+\.\d+|\.\d+))(?:[eE][+\-]?\d+)?\s*$/.test(s);
+  return /^\s*(?:[+\-]?\d+|[+\-]?(?:\d+\.|\d+\.\d+|\.\d+))(?:e[+\-]?\d+)?\s*$/i.test(s);
 };
 
 /**
