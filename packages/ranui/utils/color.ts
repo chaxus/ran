@@ -141,7 +141,7 @@ export const rgba2rgb = (r: number, g: number, b: number, a: number): { r: numbe
   };
 };
 
-export const HEX_COLOR_REGEX = /^#([\da-fA-F]{6}|[\da-fA-F]{3})$/;
+export const HEX_COLOR_REGEX = /^#([\da-f]{6}|[\da-f]{3})$/i;
 
 export const RGB_REGEX = /^rgb\((\d{1,3}),(\d{1,3}),(\d{1,3})\)$/;
 

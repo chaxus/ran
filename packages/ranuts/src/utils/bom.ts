@@ -296,8 +296,7 @@ export const connection = (): number | undefined => {
  * and including invalid escape sequences.
  */
 
-const ENCODE_CHARS_REGEXP =
-  /(?:[^\x21\x25\x26-\x3B\x3D\x3F-\x5B\x5D\x5F\x61-\x7A\x7E]|%(?:[^\dA-Fa-f]|[\dA-Fa-f][^\dA-Fa-f]|$))+/g;
+const ENCODE_CHARS_REGEXP = /(?:[^\x21\x25\x26-\x3B\x3D\x3F-\x5B\x5D\x5F\x7E]|%(?:[^\da-f]|[\da-f][^\da-f]|$))+/gi;
 
 /**
  * RegExp to match unmatched surrogate pair.
