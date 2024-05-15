@@ -1,6 +1,6 @@
 {
   "name": "ranui",
-  "version": "0.1.10-alpha.1",
+  "version": "0.1.10-alpha.2",
   "description": "UI Component library based on `Web Component`",
   "main": "dist/umd/index.umd.cjs",
   "module": "dist/index.js",
@@ -141,6 +141,11 @@
     "./content": {
       "types": "./dist/components/content/index.d.ts",
       "import": "./dist/components/content/index.js",
+      "require": "./dist/umd/index.umd.cjs"
+    },
+    "./loading": {
+      "types": "./dist/components/loading/index.d.ts",
+      "import": "./dist/components/loading/index.js",
       "require": "./dist/umd/index.umd.cjs"
     },
     "./colorpicker": {

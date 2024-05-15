@@ -8,6 +8,7 @@ import { localStorageGetItem, setAttributeByGlobal } from 'ranuts/utils';
 import './styles/index.less';
 import './styles/vars.less';
 import './tailwind.less';
+import 'ranui/style';
 
 declare global {
   interface ImportMeta {

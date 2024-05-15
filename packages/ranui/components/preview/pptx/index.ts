@@ -1,6 +1,7 @@
 import d3 from '@/assets/js/d3.js';
 import processPptx from '@/components/preview/pptx/process_pptx';
 import dimple from '@/assets/js/dimple';
+import type { BaseReturn } from '@/components/preview/types';
 
 type ChartData = Array<{
   key: string;
@@ -25,6 +26,8 @@ interface Options {
   pptx: ArrayBuffer | string;
   resultElement: HTMLElement;
   thumbElement?: HTMLElement;
+  onError?: (msg: BaseReturn) => void;
+  onLoad?: (msg: BaseReturn) => void;
 }
 
 interface Worker {
@@ -54,7 +57,7 @@ const newSvg = (parentSelector: string, width: string, height: string) => {
  */
 export const renderPptx = (options: Options): Promise<any> | undefined => {
   if (typeof window !== 'undefined') {
-    const { pptx, resultElement, thumbElement } = options;
+    const { pptx, resultElement, thumbElement, onError, onLoad } = options;
     const wrapper = document.createElement('div');
     wrapper.setAttribute('class', 'r-preview-pptx-main');
     resultElement.innerHTML = '';
@@ -82,6 +85,7 @@ export const renderPptx = (options: Options): Promise<any> | undefined => {
           case 'Done':
             isDone = true;
             processCharts(msg.data.charts);
+            onLoad && onLoad({ success: true, data: msg });
             resolve(msg.data.time);
             break;
           case 'WARN':
@@ -90,6 +94,7 @@ export const renderPptx = (options: Options): Promise<any> | undefined => {
           case 'ERROR':
             isDone = true;
             console.error('PPTX processing error: ', msg.data);
+            onError && onError({ success: false, data: msg });
             reject(new Error(msg.data));
             break;
           case 'DEBUG':

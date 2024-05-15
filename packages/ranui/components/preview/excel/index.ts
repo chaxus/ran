@@ -3,6 +3,7 @@ import Spreadsheet from '@/assets/js/x-data-spreadsheet';
 import type { Media } from '@/components/preview/excel/media';
 import { readExcelData, transferExcelToSpreadSheet } from '@/components/preview/excel/excel';
 import { clearCache, renderImage } from '@/components/preview/excel/media';
+import type { BaseReturn, RenderOptions } from '@/components/preview/types';
 
 interface JsExcelPreviewOptions {
   minColLength: number;
@@ -131,11 +132,16 @@ class JsExcelPreview {
       this.ctx = canvas.getContext('2d');
     }
   }
-  renderExcel(buffer: ArrayBuffer | string) {
+  renderExcel(
+    buffer: ArrayBuffer | string,
+    onError: ((msg: BaseReturn) => void) | undefined,
+    onLoad: ((msg: BaseReturn) => void) | undefined,
+  ) {
     this.fileData = buffer;
     return readExcelData(buffer)
       .then((workbook: any) => {
         if (!workbook._worksheets || workbook._worksheets.length === 0) {
+          onError && onError({ success: false, data: null, message: '未获取到数据，可能文件格式不正确或文件已损坏' });
           throw new Error('未获取到数据，可能文件格式不正确或文件已损坏');
         }
         const { workbookData, medias, workbookSource } = transferExcelToSpreadSheet(workbook, this.options);
@@ -148,6 +154,7 @@ class JsExcelPreview {
         if (this.ctx && this.mediasSource && this.offset) {
           renderImage(this.ctx, this.mediasSource, this.workbookDataSource._worksheets[this.sheetIndex], this.offset);
         }
+        onLoad && onLoad({ success: true, data: workbook });
       })
       .catch((e) => {
         this.mediasSource = [];
@@ -156,6 +163,7 @@ class JsExcelPreview {
         };
         clearCache();
         this.xs?.loadData({});
+        onError && onError({ success: false, message: '未获取到数据，可能文件格式不正确或文件已损坏' });
         return Promise.reject(e);
       });
   }
@@ -169,7 +177,8 @@ class JsExcelPreview {
   }
 }
 
-export const renderExcel = (file: File, dom?: HTMLElement): Promise<void> => {
+export const renderExcel = (file: File, options: RenderOptions): Promise<void> => {
+  const { dom, onError, onLoad } = options;
   if (!dom) return Promise.reject();
   const Preview = new JsExcelPreview(dom);
   const file2Array = (): Promise<ArrayBuffer | string> =>
@@ -185,6 +194,6 @@ export const renderExcel = (file: File, dom?: HTMLElement): Promise<void> => {
       };
     });
   return file2Array().then((res) => {
-    Preview.renderExcel(res);
+    Preview.renderExcel(res, onError, onLoad);
   });
 };

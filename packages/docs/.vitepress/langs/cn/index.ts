@@ -83,6 +83,7 @@ const themeCnConfig: DefaultTheme.Config = {
         items: [
           { text: 'Button 按钮', link: '/cn/src/ranui/button/' },
           { text: 'Icon 图标', link: '/cn/src/ranui/icon/' },
+          { text: 'Loading 加载中', link: '/cn/src/ranui/loading/' },
         ],
       },
       {

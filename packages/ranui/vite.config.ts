@@ -84,6 +84,7 @@ export const es: BuildOptions = {
       colorpicker: resolve(__dirname, 'components/colorpicker/index.ts'),
       popover: resolve(__dirname, 'components/popover/index.ts'),
       content: resolve(__dirname, 'components/content/index.ts'),
+      loading: resolve(__dirname, 'components/loading/index.ts'),
       index: resolve(__dirname, 'index.ts'),
       inputShadowless: resolve(__dirname, 'shadowless/input/index.ts'),
       iconShadowless: resolve(__dirname, 'shadowless/icon/index.ts'),
