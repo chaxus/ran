@@ -150,13 +150,13 @@ The drop-down box is mounted to document.body by default, and can be mounted to 
 
 If you need to customize the style of the drop-down box, you can pass in a 'class' name to customize
 
-### action
+### trigger
 
 'select' The method that the component triggers. Default 'click', click trigger. You can set 'hover', or 'click,hover', which means that both click and mouse move trigger.
 
 If it is set to none, it will not trigger.
 
-<r-select style="width: 120px; height: 40px" action="click,hover">
+<r-select style="width: 120px; height: 40px" trigger="click,hover">
 <r-option value="185">Mike</r-option>
 <r-option value="186">Tom</r-option>
 <r-option value="187">Lucy</r-option>
