@@ -158,7 +158,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     this._playControllerBottomSpeed.setAttribute('class', 'ran-player-controller-bottom-right-speed');
     this._playControllerBottomSpeedPopover = document.createElement('r-select');
     this._playControllerBottomSpeedPopover.setAttribute('value', '1');
-    this._playControllerBottomSpeedPopover.setAttribute('action', 'hover,click');
+    this._playControllerBottomSpeedPopover.setAttribute('trigger', 'hover,click');
     this._playControllerBottomSpeedPopover.setAttribute('type', 'text');
     this._playControllerBottomSpeedPopover.setAttribute('placement', 'top');
     const id = this._player.getAttribute('id');
@@ -324,7 +324,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     select.setAttribute('value', this.ctx.clarity || 'Auto');
     select.appendChild(Fragment);
     select.setAttribute('type', 'text');
-    select.setAttribute('action', 'hover,click');
+    select.setAttribute('trigger', 'hover,click');
     select.setAttribute('placement', 'top');
     const id = this._player.getAttribute('id');
     id && select.setAttribute('getPopupContainerId', id);
