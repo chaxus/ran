@@ -1,14 +1,11 @@
 import { noop } from 'ranuts/utils';
 import '@/components/icon';
 import message from '@/components/message';
+import { DOCX, PDF, PPTX, XLS, XLSX } from '@/components/preview/constant';
+import type { BaseReturn, RenderOptions } from '@/components/preview/types';
 import './index.less';
 
 const { warning = noop } = message;
-
-export interface BaseReturn {
-  success: boolean;
-  message?: string;
-}
 
 interface RequestUrlToArraybufferOption {
   responseType: XMLHttpRequestResponseType;
@@ -17,18 +14,13 @@ interface RequestUrlToArraybufferOption {
   headers: Record<string, string>;
   body: string;
   onProgress?: Function;
+  onError?: Function;
+  onLoad?: Function;
 }
 
 interface requestUrlToArraybufferReturn extends BaseReturn {
   data: Blob & { name: string };
 }
-
-const PPTX = 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
-const PDF = 'application/pdf';
-const DOCX = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-
-const XLSX = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-const XLS = 'application/vnd.ms-excel';
 
 async function Custom() {
   if (typeof document !== 'undefined' && !customElements.get('r-preview') && !import.meta.env.SSR) {
@@ -53,17 +45,19 @@ async function Custom() {
         xhr.responseType = options.responseType || 'arraybuffer';
         xhr.onload = function () {
           if (xhr.status === 200) {
-            resolve({ success: true, data: xhr.response, message: '' });
+            const event = { success: true, data: xhr.response, message: '' };
+            options.onLoad && options.onLoad(event);
+            resolve(event);
           } else {
-            reject({
-              success: false,
-              data: xhr.status,
-              message: `The request status is${xhr.status}`,
-            });
+            const error = { success: false, data: xhr.status, message: `The request status is${xhr.status}` };
+            options.onError && options.onError(error);
+            reject(error);
           }
         };
         xhr.onerror = function (e) {
-          reject({ success: false, data: e, message: `` });
+          const error = { success: false, data: e, message: `` };
+          options.onError && options.onError(error);
+          reject(error);
         };
         xhr.onprogress = (event) => {
           options.onProgress && options.onProgress(event);
@@ -77,7 +71,9 @@ async function Custom() {
         xhr.send(options.body);
       });
     };
-    const renderPpt = (file: File, dom?: HTMLElement) => {
+
+    const renderPpt = (file: File, options: RenderOptions) => {
+      const { dom, onError, onLoad } = options;
       return new Promise<void>((resolve, reject) => {
         const reader = new FileReader();
         reader.readAsArrayBuffer(file);
@@ -86,6 +82,8 @@ async function Custom() {
             const param = {
               pptx: reader.result,
               resultElement: dom,
+              onError,
+              onLoad,
             };
             renderPptx(param)?.then(() => {
               resolve();
@@ -101,11 +99,19 @@ async function Custom() {
       });
     };
 
-    const renderWord = (file: File, dom?: HTMLElement) => {
-      return Promise.resolve().then(() => renderDocx({ buffer: file, bodyContainer: dom }));
+    const renderWord = (file: File, options: RenderOptions) => {
+      const { dom, onError, onLoad } = options;
+      return Promise.resolve()
+        .then(() => renderDocx({ buffer: file, bodyContainer: dom }))
+        .then(() => {
+          onLoad && onLoad({ success: true, message: '' });
+        })
+        .catch((error) => {
+          onError && onError({ success: true, data: error, message: '' });
+        });
     };
 
-    const renderFileMap = new Map<string, (file: File, dom?: HTMLElement) => Promise<void>>([
+    const renderFileMap = new Map<string, (file: File, options: RenderOptions) => Promise<void>>([
       [PDF, renderPdf],
       [PPTX, renderPpt],
       [DOCX, renderWord],
@@ -173,16 +179,23 @@ async function Custom() {
           this._loadingText.innerText = `Loading ${progress}`;
           if (num >= 100) {
             setTimeout(() => {
-              this.preview?.removeChild(this._loadingElement!);
+              this._loadingText.innerText = `Loading success: 100%, rendering...`;
             }, 300);
           }
         }
+      };
+      onError = () => {
+        this.preview?.removeChild(this._loadingElement!);
+      };
+      onLoad = () => {
+        this.preview?.removeChild(this._loadingElement!);
       };
       handleFile = async (file: string | File) => {
         try {
           if (typeof file === 'string') {
             const { success, data, message } = await requestUrlToBuffer(file, {
               onProgress: this.onProgress,
+              onError: this.onError,
               responseType: 'blob',
             });
             if (success && data) {
@@ -196,7 +209,12 @@ async function Custom() {
                   this.previewContext.style.setProperty('width', '100%');
                 }
                 // document.body.style.overflow = 'hidden'
-                handler(file, this.previewContext);
+                const options = {
+                  dom: this.previewContext,
+                  onError: this.onError,
+                  onLoad: this.onLoad,
+                };
+                handler(file, options);
               }
             } else {
               warning(message);

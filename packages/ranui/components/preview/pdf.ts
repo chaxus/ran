@@ -1,9 +1,10 @@
 import { pdfjsLib } from '@/assets/js/pdf';
 import { worker } from '@/assets/js/pdf-worker';
 import { loadScript } from '@/utils/index';
+import type { BaseReturn, RenderOptions } from '@/components/preview/types';
 
-const pdfjs: any = `data:text/javascript;base64,${pdfjsLib}`;
-const pdfjsWorker: any = `data:text/javascript;base64,${worker}`;
+const pdfjs: string = `data:text/javascript;base64,${pdfjsLib}`;
+const pdfjsWorker: string = `data:text/javascript;base64,${worker}`;
 
 interface Viewport {
   width: number;
@@ -34,12 +35,17 @@ class PdfPreview {
   total: number;
   dom: HTMLElement;
   pdf: string | ArrayBuffer;
-  constructor(pdf: string | ArrayBuffer, dom: HTMLElement | undefined) {
+  onError: ((msg: BaseReturn) => void) | undefined;
+  onLoad: ((msg: BaseReturn) => void) | undefined;
+  constructor(pdf: string | ArrayBuffer, options: RenderOptions) {
+    const { dom, onError, onLoad } = options;
     this.pageNumber = 1;
     this.total = 0;
     this.pdfDoc = undefined;
     this.pdf = pdf;
     this.dom = dom ? dom : document.body;
+    this.onError = onError;
+    this.onLoad = onLoad;
   }
   private getPdfPage = (number: number) => {
     return new Promise((resolve, reject) => {
@@ -72,16 +78,21 @@ class PdfPreview {
     });
   };
   pdfPreview = () => {
-    loadScript(pdfjs).then(() => {
-      window.pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
-      window.pdfjsLib.getDocument(this.pdf).promise.then(async (doc: PDFDocumentProxy) => {
-        this.pdfDoc = doc;
-        this.total = doc.numPages;
-        for (let i = 1; i <= this.total; i++) {
-          await this.getPdfPage(i);
-        }
+    loadScript(pdfjs)
+      .then(() => {
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
+        window.pdfjsLib.getDocument(this.pdf).promise.then(async (doc: PDFDocumentProxy) => {
+          this.pdfDoc = doc;
+          this.total = doc.numPages;
+          this.onLoad && this.onLoad({ success: true, data: this.pdfDoc });
+          for (let i = 1; i <= this.total; i++) {
+            await this.getPdfPage(i);
+          }
+        });
+      })
+      .catch((error) => {
+        this.onError && this.onError({ success: false, data: error, message: error });
       });
-    });
   };
   prevPage = () => {
     if (this.pageNumber > 1) {
@@ -117,12 +128,12 @@ const createReader = (file: File): Promise<string | ArrayBuffer | null> => {
   });
 };
 
-export const renderPdf = async (file: File, dom?: HTMLElement): Promise<void> => {
+export const renderPdf = async (file: File, options: RenderOptions): Promise<void> => {
   try {
     if (typeof window !== 'undefined') {
       const pdf = await createReader(file);
       if (pdf) {
-        const PDF = new PdfPreview(pdf, dom);
+        const PDF = new PdfPreview(pdf, options);
         PDF.pdfPreview();
       }
     }
