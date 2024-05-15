@@ -179,7 +179,7 @@ async function Custom() {
           this._loadingText.innerText = `Loading ${progress}`;
           if (num >= 100) {
             setTimeout(() => {
-              this._loadingText.innerText = `Loading success: 100%, rendering...`;
+              this._loadingText.innerText = `Loading...`;
             }, 300);
           }
         }

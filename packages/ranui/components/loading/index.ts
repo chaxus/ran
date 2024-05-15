@@ -23,8 +23,8 @@ export class Loading extends (HTMLElementSSR()!) {
     this.contain.setAttribute('class', 'ran-loading');
   }
   get name(): string {
-    const name = this.getAttribute('name');
-    if (!name) return '1';
+    const name = this.getAttribute('name') || '';
+    if (!name) return NAME_AMP.CIRCLE;
     return name;
   }
   set name(value: string) {
@@ -32,12 +32,12 @@ export class Loading extends (HTMLElementSSR()!) {
   }
   rotateLoading = (): void => {
     const loading = document.createElement('div');
-    loading.setAttribute('class', 'rotate');
+    loading.setAttribute('class', NAME_AMP.ROTATE);
     this.contain.appendChild(loading);
   };
   stretchLoading = (): void => {
     const loading = document.createElement('div');
-    loading.setAttribute('class', 'stretch');
+    loading.setAttribute('class', NAME_AMP.STRETCH);
     const arr = [1, 2, 3, 4, 5];
     arr.forEach((i) => {
       const rect = document.createElement('div');
@@ -48,7 +48,7 @@ export class Loading extends (HTMLElementSSR()!) {
   };
   doubleBounceLoading = (): void => {
     const loading = document.createElement('div');
-    loading.setAttribute('class', 'double-bounce');
+    loading.setAttribute('class', NAME_AMP.DOUBLE_BOUNCE);
     const arr = [1, 2];
     arr.forEach((i) => {
       const rect = document.createElement('div');
@@ -59,7 +59,7 @@ export class Loading extends (HTMLElementSSR()!) {
   };
   cubeLoading = (): void => {
     const loading = document.createElement('div');
-    loading.setAttribute('class', 'cube');
+    loading.setAttribute('class', NAME_AMP.CUBE);
     const arr = [1, 2];
     arr.forEach((i) => {
       const rect = document.createElement('div');
@@ -70,7 +70,7 @@ export class Loading extends (HTMLElementSSR()!) {
   };
   dotLoading = (): void => {
     const loading = document.createElement('div');
-    loading.setAttribute('class', 'dot');
+    loading.setAttribute('class', NAME_AMP.DOT);
     const arr = [1, 2];
     arr.forEach((i) => {
       const rect = document.createElement('div');
@@ -81,7 +81,7 @@ export class Loading extends (HTMLElementSSR()!) {
   };
   tripleBounceLoading = (): void => {
     const loading = document.createElement('div');
-    loading.setAttribute('class', 'triple-bounce');
+    loading.setAttribute('class', NAME_AMP.TRIPLE_BOUNCE);
     const arr = [1, 2, 3];
     arr.forEach((i) => {
       const rect = document.createElement('div');
