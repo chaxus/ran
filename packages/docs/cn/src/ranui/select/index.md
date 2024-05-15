@@ -150,20 +150,20 @@
 
 如果需要自定义下拉框的样式，可以传入一个 `class` 名，进行自定义
 
-### action
+### trigger
 
 `select` 组件触发的方法。默认 `click` ，点击触发。可以设置`hover`，或者`click,hover`，表示点击和鼠标移入都触发。
 
 如果设置成 none，就不会触发。
 
-<r-select style="width: 120px; height: 40px" action="click,hover">
+<r-select style="width: 120px; height: 40px" trigger="click,hover">
 <r-option value="185">Mike</r-option>
 <r-option value="186">Tom</r-option>
 <r-option value="187">Lucy</r-option>
 </r-select>
 
 ```xml
-<r-select getPopupContainerId="elementid" action="click,hover">
+<r-select getPopupContainerId="elementid" trigger="click,hover">
       <r-option value="185">Mike</r-option>
       <r-option value="186">Tom</r-option>
       <r-option value="187">Lucy</r-option>
