@@ -143,6 +143,11 @@
       "import": "./dist/components/content/index.js",
       "require": "./dist/umd/index.umd.cjs"
     },
+    "./loading": {
+      "types": "./dist/components/loading/index.d.ts",
+      "import": "./dist/components/loading/index.js",
+      "require": "./dist/umd/index.umd.cjs"
+    },
     "./colorpicker": {
       "types": "./dist/components/colorpicker/index.d.ts",
       "import": "./dist/components/colorpicker/index.js",
