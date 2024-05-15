@@ -1,5 +1,5 @@
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
-import './index.less'
+import './index.less';
 
 enum NAME_AMP {
   DOUBLE_BOUNCE = 'double-bounce',
@@ -34,7 +34,7 @@ export class Loading extends (HTMLElementSSR()!) {
     const loading = document.createElement('div');
     loading.setAttribute('class', 'rotate');
     this.contain.appendChild(loading);
-  }
+  };
   stretchLoading = (): void => {
     const loading = document.createElement('div');
     loading.setAttribute('class', 'stretch');
@@ -45,7 +45,7 @@ export class Loading extends (HTMLElementSSR()!) {
       loading.appendChild(rect);
     });
     this.contain.appendChild(loading);
-  }
+  };
   doubleBounceLoading = (): void => {
     const loading = document.createElement('div');
     loading.setAttribute('class', 'double-bounce');
@@ -56,7 +56,7 @@ export class Loading extends (HTMLElementSSR()!) {
       loading.appendChild(rect);
     });
     this.contain.appendChild(loading);
-  }
+  };
   cubeLoading = (): void => {
     const loading = document.createElement('div');
     loading.setAttribute('class', 'cube');
@@ -67,7 +67,7 @@ export class Loading extends (HTMLElementSSR()!) {
       loading.appendChild(rect);
     });
     this.contain.appendChild(loading);
-  }
+  };
   dotLoading = (): void => {
     const loading = document.createElement('div');
     loading.setAttribute('class', 'dot');
@@ -78,7 +78,7 @@ export class Loading extends (HTMLElementSSR()!) {
       loading.appendChild(rect);
     });
     this.contain.appendChild(loading);
-  }
+  };
   tripleBounceLoading = (): void => {
     const loading = document.createElement('div');
     loading.setAttribute('class', 'triple-bounce');
@@ -89,18 +89,22 @@ export class Loading extends (HTMLElementSSR()!) {
       loading.appendChild(rect);
     });
     this.contain.appendChild(loading);
-  }
+  };
   scaleOutLoading = (): void => {
     const loading = document.createElement('div');
     loading.setAttribute('class', 'scale-out');
     this.contain.appendChild(loading);
-  }
+  };
   circleLoading = (): void => {
     const loading = document.createElement('div');
     loading.setAttribute('class', 'circle');
-    [[1,2,3,4], [1,2,3,4], [1,2,3,4]].forEach((i,index) => {
+    [
+      [1, 2, 3, 4],
+      [1, 2, 3, 4],
+      [1, 2, 3, 4],
+    ].forEach((i, index) => {
       const container = document.createElement('div');
-      container.setAttribute('class', `circle-container container${index+1}`);
+      container.setAttribute('class', `circle-container container${index + 1}`);
       i.forEach((j) => {
         const rect = document.createElement('div');
         rect.setAttribute('class', `circle${j}`);
@@ -109,7 +113,7 @@ export class Loading extends (HTMLElementSSR()!) {
       loading.appendChild(container);
     });
     this.contain.appendChild(loading);
-  }
+  };
   createLoading = (): void => {
     this.contain.innerHTML = '';
     const NAME_MAP: Record<string, () => void> = {
@@ -121,18 +125,14 @@ export class Loading extends (HTMLElementSSR()!) {
       [NAME_AMP.TRIPLE_BOUNCE]: this.tripleBounceLoading,
       [NAME_AMP.SCALE_OUT]: this.scaleOutLoading,
       [NAME_AMP.CIRCLE]: this.circleLoading,
-    }
+    };
     const handler = NAME_MAP[this.name];
-    handler && handler()
+    handler && handler();
     if (this.contains(this.contain)) return;
     this.appendChild(this.contain);
-  }
-  connectedCallback(): void {
-
-  }
-  disconnectCallback(): void {
-
-  }
+  };
+  connectedCallback(): void {}
+  disconnectCallback(): void {}
   attributeChangedCallback(k: string, o: string, n: string): void {
     if (o !== n) {
       if (k === 'name') {
@@ -141,7 +141,6 @@ export class Loading extends (HTMLElementSSR()!) {
     }
   }
 }
-
 
 function Custom() {
   if (typeof document !== 'undefined' && !customElements.get('r-loading')) {
