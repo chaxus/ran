@@ -7,8 +7,6 @@
   <title>Sankey Diagram with Canvas</title>
   <style>
     canvas {
-      width: 800px;
-      height: 400px;
       border: 1px solid #ccc;
     }
   </style>
@@ -18,113 +16,6 @@
   <canvas id="sankeyCanvas"></canvas>
 
   <script>
-    const canvas = document.getElementById("sankeyCanvas")
-    const ctx = canvas.getContext("2d")
-    const dpr = window.devicePixelRatio || 1
-    canvas.width = 800 * dpr
-    canvas.height = 400 * dpr
-    ctx.scale(dpr, dpr)
-    const sourceData = {
-      title: "2020 一季报",
-      nodes: [
-        {
-          label: "Iphone",
-          key: "Iphone",
-          value: "1.77 亿",
-          rate: 3,
-        },
-        {
-          label: "Services",
-          key: "services",
-          value: "1.39 亿",
-          rate: 3,
-        },
-        {
-          label: "MAC",
-          key: "MAC",
-          value: "1.21 亿",
-          rate: 2,
-        },
-        {
-          label: "Ipad",
-          key: "Ipad",
-          value: "1.21 亿",
-          rate: 1,
-        },
-        {
-          label: "Other",
-          key: "Other",
-          value: "1.21 亿",
-          rate: 1,
-        },
-        {
-          label: "营业收入",
-          key: "营业收入",
-          value: "1.77 亿",
-          rate: 10,
-        },
-        {
-          label: "营业成本",
-          key: "营业成本",
-          value: "1.39 亿",
-          rate: 3,
-        },
-        {
-          label: "毛利",
-          key: "毛利",
-          value: "1.21 亿",
-          rate: 7,
-        },
-      ],
-      // 链接可能是一对多的关系，所以需要单独定义
-      links: [
-        {
-          source: "Iphone",
-          target: "营业收入",
-        },
-        {
-          source: "Services",
-          target: "营业收入",
-        },
-        {
-          source: "MAC",
-          target: "营业收入",
-        },
-        {
-          source: "Ipad",
-          target: "营业收入",
-        },
-        {
-          source: "Other",
-          target: "营业收入",
-        },
-        {
-          source: "营业收入",
-          target: "营业成本",
-        },
-        {
-          source: "营业成本",
-          target: "毛利",
-        },
-      ],
-    }
-    // 绘制长方形节点
-    const createRctAngularNode = (params) => {
-      const { x, y, width, height, color } = params
-      ctx.fillStyle = color
-      ctx.fillRect(x, y, width, height)
-    }
-
-    // 绘制文本
-    const createText = (params) => {
-      const { x, y, text, color, textAlign = "", fontSize = FONT_SIZE_DEFAULT, fontWeight = "" } = params
-      ctx.fillStyle = color
-      textAlign && (ctx.textAlign = textAlign)
-      if (fontSize || fontWeight) {
-        ctx.font = `${fontWeight} ${fontSize}`
-      }
-      ctx.fillText(text, x, y)
-    }
     const layersOne = [
       {
         // 一个 label 是一行文本
@@ -238,13 +129,15 @@
         textPosition: "left", // 文字在节点的位置
       },
     ]
+
     const BASE_WIDTH = 8 // 节点基础宽度
     const BASE_HEIGHT = 6 // 节点基础高度
-    const BASE_CROSS_SPACE = 2 // 节点横向间距
-    const BASE_VERTICAL_SPACE = 2 // 节点纵向间距
+    const BASE_CROSS_SPACE = 2 // 字体横向间距
+    const BASE_VERTICAL_SPACE = 2 // 字体纵向间距
     const FONT_SIZE_DEFAULT = `12px` // 文本字体大小
-
+    const NODE_VERTICAL_SPACE = 30 // 节点纵向间距
     const LAYER_SPACE = 80 // 层级间距
+
     const layersTwo = [
       {
         text: [
@@ -317,37 +210,120 @@
       RTL: "rtl",
       LTR: "ltr",
     }
+    const layersThree = [
+      {
+        text: [
+          {
+            label: [
+              { name: "营业成本", color: "#000000", fontSize: "12px" },
+            ],
+            textAlign: "center", // 每一行文字对齐方式
+            direction: "ltr"
+          },
+          {
+            label: [
+              { name: "1.39 亿", color: "#37A0FF", fontSize: "14px", fontWeight: "500" },
+            ],
+            textAlign: "center", // 每一行文字对齐方式
+          }
+        ],
+        key: "营业成本",
+        radio: 3,
+        backgroundColor: "#37A0FF", // 节点的颜色
+        textPosition: "right", // 文字在节点的位置
+      },
+      {
+        text: [
+          {
+            label: [
+              { name: "毛利", color: "#000000", fontSize: "12px" },
+            ],
+            textAlign: "left", // 每一行文字对齐方式
+            direction: "ltr"
+          },
+          {
+            label: [
+              { name: "1.39 亿", color: "#37A0FF", fontSize: "14px", fontWeight: "500" },
+            ],
+            textAlign: "left", // 每一行文字对齐方式
+          }
+        ],
+        key: "毛利",
+        radio: 7,
+        backgroundColor: "#37A0FF", // 节点的颜色
+        textPosition: "right", // 文字在节点的位置
+      }
+    ]
+    // 计算 canvas 的宽高
+    const calculateTheCanvasWidthAndHeight = () => {
+      const layers = [layersOne, layersTwo, layersThree]
+      let width = 0
+      let height = 0
+      layers.forEach(layer => {
+        let layerWidth = 0
+        let layerHeight = 0
+        layer.forEach(item => {
+          const { text = [], key, value, radio, backgroundColor, nodeBaseWidth = 1, textPosition } = item
+          // 绘制节点
+          const nodeHeight = radio * BASE_HEIGHT
+          const nodeWidth = BASE_WIDTH * nodeBaseWidth
+          // 计算文本总的高度
+          let textWidth = 0
+          let textHeight = 0
+          text.forEach(v => {
+            const { label = [] } = v
+            let labelHeight = 0
+            let labelWidth = 0
+            label.forEach(n => {
+              const { name, fontSize = FONT_SIZE_DEFAULT } = n
+              const font2num = fontSize.replace(/[px|rem]/g, "")
+              labelHeight += Math.max(Number(font2num) + BASE_VERTICAL_SPACE, labelHeight)
+              labelWidth = labelWidth + ctx.measureText(name).width + BASE_CROSS_SPACE
+            })
+            textWidth = Math.max(textWidth, labelWidth)
+            textHeight = BASE_VERTICAL_SPACE + textHeight + labelHeight + BASE_VERTICAL_SPACE
+          })
+          layerWidth = Math.max(layerWidth, nodeWidth + textWidth + LAYER_SPACE)
+          layerHeight = layerHeight + nodeHeight + textHeight
+        })
+        width = width + layerWidth
+        height = Math.max(height, layerHeight)
+      })
+      console.log('width', width, 'height', height);
+      // ctx.fillRect(0, 0, width, height)
+      return { width, height }
+    }
+    const canvas = document.getElementById("sankeyCanvas")
+    const ctx = canvas.getContext("2d")
+    const dpr = window.devicePixelRatio || 1
+    const rect = calculateTheCanvasWidthAndHeight()
+    canvas.style.width = `${rect.width}px`
+    canvas.style.height = `${rect.height}px`
+    canvas.width = rect.width * dpr
+    canvas.height = rect.height * dpr
+    ctx.scale(dpr, dpr)
+    // 绘制长方形节点
+    const createRctAngularNode = (params) => {
+      const { x, y, width, height, color } = params
+      ctx.fillStyle = color
+      ctx.fillRect(x, y, width, height)
+    }
+
+    // 绘制文本
+    const createText = (params) => {
+      const { x, y, text, color, textAlign = "", fontSize = FONT_SIZE_DEFAULT, fontWeight = "" } = params
+      ctx.fillStyle = color
+      textAlign && (ctx.textAlign = textAlign)
+      if (fontSize || fontWeight) {
+        ctx.font = `${fontWeight} ${fontSize}`
+      }
+      ctx.fillText(text, x, y)
+    }
     // 绘制层级
     const createNode = (startX, startY, layer) => {
       // 按照从大到小的顺序绘制
       const layers = layer
-      // 计算当前层文本最大的宽度
-      let maxWidth = 0
-      // 节点的高度
-      let maxNodeHeight = 0
-      // 文本高度
-      let maxTextHeight = 0
-      layers.forEach((item) => {
-        const { text = [], radio } = item
-        if (Array.isArray(text)) {
-          text.forEach((v) => {
-            // 计算文本宽度
-            let textWidth = 0
-            // 计算文本高度
-            let maxFontSize = 0
-            const { label } = v
-            label.forEach(n => {
-              const { name, fontSize = FONT_SIZE_DEFAULT } = n
-              textWidth += ctx.measureText(name).width + BASE_CROSS_SPACE
-              const font2num = fontSize.replace(/[px|rem]/g, "")
-              maxFontSize = Math.max(maxFontSize, font2num)
-            })
-            maxWidth = Math.max(maxWidth, textWidth)
-            maxTextHeight += maxFontSize + BASE_VERTICAL_SPACE
-          })
-          maxNodeHeight = Math.max(maxNodeHeight, radio * BASE_HEIGHT)
-        }
-      })
+
       let currentLayerStartX = startX + BASE_CROSS_SPACE
       let currentLayerStartY = startY + BASE_VERTICAL_SPACE
       let currentX = currentLayerStartX
@@ -518,57 +494,13 @@
         }
       })
     }
-    const layersThree = [
-      {
-        text: [
-          {
-            label: [
-              { name: "营业成本", color: "#000000", fontSize: "12px" },
-            ],
-            textAlign: "center", // 每一行文字对齐方式
-            direction: "ltr"
-          },
-          {
-            label: [
-              { name: "1.39 亿", color: "#37A0FF", fontSize: "14px", fontWeight: "500" },
-            ],
-            textAlign: "center", // 每一行文字对齐方式
-          }
-        ],
-        key: "营业成本",
-        radio: 3,
-        backgroundColor: "#37A0FF", // 节点的颜色
-        textPosition: "right", // 文字在节点的位置
-      },
-      {
-        text: [
-          {
-            label: [
-              { name: "毛利", color: "#000000", fontSize: "12px" },
-            ],
-            textAlign: "left", // 每一行文字对齐方式
-            direction: "ltr"
-          },
-          {
-            label: [
-              { name: "1.39 亿", color: "#37A0FF", fontSize: "14px", fontWeight: "500" },
-            ],
-            textAlign: "left", // 每一行文字对齐方式
-          }
-        ],
-        key: "毛利",
-        radio: 7,
-        backgroundColor: "#37A0FF", // 节点的颜色
-        textPosition: "right", // 文字在节点的位置
-      }
-    ]
     // 绘制第一层级
-    createNode(120, 30, layersOne)
+    createNode(100, 30, layersOne)
     // 绘制第二层级
     // ctx.fillRect(150, 30, dpr, dpr)
-    createNode(250, 100, layersTwo)
+    createNode(220, 100, layersTwo)
     // 绘制第三个层级
-    createNode(400, 80, layersThree)
+    createNode(340, 80, layersThree)
     // 绘制连线
     createLink()
     // y 从 30 开始
