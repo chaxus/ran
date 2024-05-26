@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sankey Diagram with Canvas</title>
+  <style>
+    canvas {
+      width: 800px;
+      height: 400px;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="sankeyCanvas"></canvas>
+
+  <script>
+    const canvas = document.getElementById("sankeyCanvas")
+    const ctx = canvas.getContext("2d")
+    const dpr = window.devicePixelRatio || 1
+    canvas.width = 800 * dpr
+    canvas.height = 400 * dpr
+    ctx.scale(dpr, dpr)
+    const sourceData = {
+      title: "2020 一季报",
+      nodes: [
+        {
+          label: "Iphone",
+          key: "Iphone",
+          value: "1.77 亿",
+          rate: 3,
+        },
+        {
+          label: "Services",
+          key: "services",
+          value: "1.39 亿",
+          rate: 3,
+        },
+        {
+          label: "MAC",
+          key: "MAC",
+          value: "1.21 亿",
+          rate: 2,
+        },
+        {
+          label: "Ipad",
+          key: "Ipad",
+          value: "1.21 亿",
+          rate: 1,
+        },
+        {
+          label: "Other",
+          key: "Other",
+          value: "1.21 亿",
+          rate: 1,
+        },
+        {
+          label: "营业收入",
+          key: "营业收入",
+          value: "1.77 亿",
+          rate: 10,
+        },
+        {
+          label: "营业成本",
+          key: "营业成本",
+          value: "1.39 亿",
+          rate: 3,
+        },
+        {
+          label: "毛利",
+          key: "毛利",
+          value: "1.21 亿",
+          rate: 7,
+        },
+      ],
+      // 链接可能是一对多的关系，所以需要单独定义
+      links: [
+        {
+          source: "Iphone",
+          target: "营业收入",
+        },
+        {
+          source: "Services",
+          target: "营业收入",
+        },
+        {
+          source: "MAC",
+          target: "营业收入",
+        },
+        {
+          source: "Ipad",
+          target: "营业收入",
+        },
+        {
+          source: "Other",
+          target: "营业收入",
+        },
+        {
+          source: "营业收入",
+          target: "营业成本",
+        },
+        {
+          source: "营业成本",
+          target: "毛利",
+        },
+      ],
+    }
+    // 绘制长方形节点
+    const createRctAngularNode = (params) => {
+      const { x, y, width, height, color } = params
+      ctx.fillStyle = color
+      ctx.fillRect(x, y, width, height)
+    }
+
+    // 绘制文本
+    const createText = (params) => {
+      const { x, y, text, color, textAlign = "", fontSize = FONT_SIZE_DEFAULT, fontWeight = "" } = params
+      ctx.fillStyle = color
+      textAlign && (ctx.textAlign = textAlign)
+      if (fontSize || fontWeight) {
+        ctx.font = `${fontWeight} ${fontSize}`
+      }
+      ctx.fillText(text, x, y)
+    }
+    const layersOne = [
+      {
+        // 一个 label 是一行文本
+        text: [
+          {
+            label: [
+              { name: "Iphone", color: "#000000", fontSize: "12px" },
+              { name: "+3%", color: "#AFB3B6", fontSize: "12px" },
+            ],
+            direction: "rtl", // 绘制文字方向。rtl 从右到左 ltr 从左到右
+            textAlign: "right", // 每一行文字对齐方式
+          },
+          {
+            label: [
+              { name: "1.77 亿", color: "#37A0FF", fontSize: "14px", fontWeight: "500" },
+            ],
+            textAlign: "right", // 每一行文字对齐方式
+          },
+        ],
+        key: "Iphone",
+        radio: 3, // 占比
+        backgroundColor: "#37A0FF", // 节点的颜色
+        textPosition: "left", // 文字在节点的位置
+      },
+      {
+        text: [
+          {
+            label: [
+              { name: "Services", color: "#000000", fontSize: "12px" },
+              { name: "+3%", color: "#AFB3B6", fontSize: "12px" },
+            ],
+            direction: "rtl", // 绘制文字方向。rtl 从右到左 ltr 从左到右
+            textAlign: "right", // 每一行文字对齐方式
+          },
+          {
+            label: [
+              { name: "1.39 亿", color: "#37A0FF", fontSize: "14px", fontWeight: "500" },
+            ],
+            textAlign: "right", // 每一行文字对齐方式
+          },
+        ],
+        key: "services",
+        radio: 3,
+        backgroundColor: "#37A0FF", // 节点的颜色
+        textPosition: "left", // 文字在节点的位置
+      },
+      {
+        text: [
+          {
+            label: [
+              { name: "MAC", color: "#000000", fontSize: "12px" },
+              { name: "+3%", color: "#AFB3B6", fontSize: "12px" },
+            ],
+            direction: "rtl", // 绘制文字方向。rtl 从右到左 ltr 从左到右
+            textAlign: "right", // 每一行文字对齐方式
+          },
+          {
+            label: [
+              { name: "1.21 亿", color: "#37A0FF", fontSize: "14px", fontWeight: "500" },
+            ],
+            textAlign: "right", // 每一行文字对齐方式
+          },
+        ],
+        key: "MAC",
+        radio: 2,
+        backgroundColor: "#37A0FF", // 节点的颜色
+        textPosition: "left", // 文字在节点的位置
+      },
+      {
+        text: [
+          {
+            label: [
+              { name: "Ipad", color: "#000000", fontSize: "12px" },
+              { name: "+3%", color: "#AFB3B6", fontSize: "12px" },
+            ],
+            direction: "rtl", // 绘制文字方向。rtl 从右到左 ltr 从左到右
+            textAlign: "right", // 每一行文字对齐方式
+          },
+          {
+            label: [
+              { name: "1.21 亿", color: "#37A0FF", fontSize: "14px", fontWeight: "500" },
+            ],
+            textAlign: "right", // 每一行文字对齐方式
+          },
+        ],
+        key: "Ipad",
+        radio: 1,
+        backgroundColor: "#37A0FF", // 节点的颜色
+        textPosition: "left", // 文字在节点的位置
+      },
+      {
+        text: [
+          {
+            label: [
+              { name: "Other", color: "#000000", fontSize: "12px" },
+              { name: "+3%", color: "#AFB3B6", fontSize: "12px" },
+            ],
+            direction: "rtl", // 绘制文字方向。rtl 从右到左 ltr 从左到右
+            textAlign: "right", // 每一行文字对齐方式
+          },
+          {
+            label: [
+              { name: "1.21 亿", color: "#37A0FF", fontSize: "14px", fontWeight: "500" },
+            ],
+            textAlign: "right", // 每一行文字对齐方式
+          },
+        ],
+        key: "Other",
+        radio: 1,
+        backgroundColor: "#37A0FF", // 节点的颜色
+        textPosition: "left", // 文字在节点的位置
+      },
+    ]
+    const BASE_WIDTH = 8 // 节点基础宽度
+    const BASE_HEIGHT = 6 // 节点基础高度
+    const BASE_CROSS_SPACE = 2 // 节点横向间距
+    const BASE_VERTICAL_SPACE = 2 // 节点纵向间距
+    const FONT_SIZE_DEFAULT = `12px` // 文本字体大小
+
+    const LAYER_SPACE = 80 // 层级间距
+    const layersTwo = [
+      {
+        text: [
+          {
+            label: [
+              { name: "营业收入", color: "#000000", fontSize: "12px" },
+              { name: "+3%", color: "#AFB3B6", fontSize: "12px" },
+            ],
+            textAlign: "center", // 每一行文字对齐方式
+            direction: "ltr"
+          },
+          {
+            label: [
+              { name: "1.77 亿", color: "#37A0FF", fontSize: "14px", fontWeight: "500" },
+            ],
+            textAlign: "center", // 每一行文字对齐方式
+          }
+        ],
+        key: "营业收入",
+        radio: 10,
+        backgroundColor: "#37A0FF", // 节点的颜色
+        textPosition: "top", // 文字在节点的位置
+        nodeBaseWidth: 2,
+      }
+    ]
+
+    // 连线
+    const links = [
+      {
+        source: "Iphone",
+        target: "营业收入",
+        color: "#37A0FF88",
+      },
+      {
+        source: "Services",
+        target: "营业收入",
+        color: "#37A0FF88",
+      },
+      {
+        source: "MAC",
+        target: "营业收入",
+        color: "#37A0FF88",
+      },
+      {
+        source: "Ipad",
+        target: "营业收入",
+        color: "#37A0FF88",
+      },
+      {
+        source: "Other",
+        target: "营业收入",
+        color: "#37A0FF88",
+      },
+      {
+        source: "营业收入",
+        target: "营业成本",
+        color: "#37A0FF88",
+      },
+      {
+        source: "营业成本",
+        target: "毛利",
+        color: "#37A0FF88",
+      },
+    ]
+    // 文本方向
+    const TEXT_DIRECTION = {
+      RTL: "rtl",
+      LTR: "ltr",
+    }
+    // 绘制层级
+    const createNode = (startX, startY, layer) => {
+      // 按照从大到小的顺序绘制
+      const layers = layer.sort((a, b) => b.radio - a.radio)
+      // 计算当前层文本最大的宽度
+      let maxWidth = 0
+      // 节点的高度
+      let maxNodeHeight = 0
+      // 文本高度
+      let maxTextHeight = 0
+      layers.forEach((item) => {
+        const { text = [], radio } = item
+        if (Array.isArray(text)) {
+          text.forEach((v) => {
+            // 计算文本宽度
+            let textWidth = 0
+            // 计算文本高度
+            let maxFontSize = 0
+            const { label } = v
+            label.forEach(n => {
+              const { name, fontSize = FONT_SIZE_DEFAULT } = n
+              textWidth += ctx.measureText(name).width + BASE_CROSS_SPACE
+              const font2num = fontSize.replace(/[px|rem]/g, "")
+              maxFontSize = Math.max(maxFontSize, font2num)
+            })
+            maxWidth = Math.max(maxWidth, textWidth)
+            maxTextHeight += maxFontSize + BASE_VERTICAL_SPACE
+          })
+          maxNodeHeight = Math.max(maxNodeHeight, radio * BASE_HEIGHT)
+        }
+      })
+      let currentLayerStartX = startX + BASE_CROSS_SPACE
+      let currentLayerStartY = startY + BASE_VERTICAL_SPACE
+      let currentX = currentLayerStartX
+      let currentY = currentLayerStartY
+      // 绘制层级
+      layers.forEach((item) => {
+        const { text = [], key, value, radio, backgroundColor, nodeBaseWidth = 1, textPosition } = item
+        // 绘制文本
+        let textHeight = 0
+        text.forEach(v => {
+          const { label = [], direction, textAlign } = v
+          // 文本绘制的方向
+          if (direction === TEXT_DIRECTION.RTL) {
+            label.reverse()
+          }
+          if (textAlign === 'right') {
+            currentX = maxWidth + currentLayerStartX + BASE_CROSS_SPACE
+          }
+          // 绘制文本
+          // 计算文本高度
+          let labelHeight = 0
+          // textAlign === center 时，计算文本绘制的起点
+          let textAlignCenterStartX = 0
+          // 绘制第一行文本
+          label.forEach((text) => {
+            const { name, fontSize = FONT_SIZE_DEFAULT } = text
+            const font2num = fontSize.replace(/[px|rem]/g, "")
+            labelHeight = Math.max(labelHeight, font2num)
+            if (textAlign === 'right') {
+              currentX = currentX - BASE_CROSS_SPACE - ctx.measureText(name).width
+            }
+            if (textAlign === 'center') {
+              textAlignCenterStartX += ctx.measureText(name).width + BASE_CROSS_SPACE
+            }
+          })
+          if (textAlign === 'center') {
+            currentX = currentLayerStartX + (maxWidth - textAlignCenterStartX) / 2
+          }
+          // ctx.fillRect(currentX, currentY, dpr, dpr)
+          textHeight += labelHeight + BASE_VERTICAL_SPACE + BASE_VERTICAL_SPACE
+          currentY += labelHeight
+          label.forEach((text) => {
+            const { name, color, fontSize = FONT_SIZE_DEFAULT } = text
+            createText({
+              x: currentX,
+              y: currentY,
+              text: name,
+              color,
+            })
+            currentX += BASE_CROSS_SPACE + ctx.measureText(name).width + BASE_CROSS_SPACE
+          })
+        })
+        // 绘制节点
+        const nodeHeight = radio * BASE_HEIGHT
+        const nodeWidth = BASE_WIDTH * nodeBaseWidth
+        if (textPosition === 'left') {
+          currentX = currentLayerStartX + maxWidth + BASE_CROSS_SPACE + BASE_CROSS_SPACE + BASE_CROSS_SPACE
+          currentY = currentLayerStartY + (textHeight - nodeHeight) / 2
+        }
+        if(textPosition === 'top'){
+          currentX = currentLayerStartX + (maxWidth - nodeWidth) / 2
+          currentY = currentLayerStartY + textHeight
+        }
+        createRctAngularNode({
+          x: currentX,
+          y: currentY,
+          width: nodeWidth,
+          height: nodeHeight,
+          color: backgroundColor,
+        })
+        // 下一个循环
+        currentY = currentLayerStartY + Math.max(textHeight, nodeHeight) + BASE_VERTICAL_SPACE
+        currentLayerStartY = currentY
+      })
+    }
+    // 绘制第一层级
+    ctx.fillRect(0, 0, dpr, dpr)
+    createNode(0, 0, layersOne)
+    // 绘制第二层级
+    ctx.fillRect(150, 30, dpr, dpr)
+    createNode(150, 30, layersTwo)
+    // 绘制连线
+
+    // y 从 30 开始
+    // x 从 10 开始
+    // 第一个节点
+    // createText({
+    //   x: 10,
+    //   y: 30,
+    //   text: "+3%",
+    //   color: "#AFB3B6",
+    // })
+    // createText({
+    //   x: 36,
+    //   y: 30,
+    //   text: "Iphone",
+    //   color: "#000000",
+    // })
+    // createText({
+    //   x: 36,
+    //   y: 44,
+    //   text: "1.77 亿",
+    //   font: "500 14px",
+    //   color: "#37A0FF",
+    // })
+    // createRctAngularNode({
+    //   x: 70,
+    //   y: 26,
+    //   width: 8,
+    //   height: 18,
+    //   color: "#37A0FF",
+    // })
+    // 第二个节点
+    // createText({
+    //   x: 1,
+    //   y: 70,
+    //   text: "+3%",
+    //   color: "#AFB3B6",
+    // })
+    // createText({
+    //   x: 26,
+    //   y: 70,
+    //   text: "Services",
+    //   color: "#000000",
+    // })
+    // createText({
+    //   x: 36,
+    //   y: 84,
+    //   text: "1.39 亿",
+    //   font: "500 14px",
+    //   color: "#37A0FF",
+    // })
+    // createRctAngularNode({
+    //   x: 70,
+    //   y: 64,
+    //   width: 8,
+    //   height: 18,
+    //   color: "#37A0FF",
+    // })
+    // 第三个节点
+    // createText({
+    //   x: 16,
+    //   y: 110,
+    //   text: "+3%",
+    //   color: "#AFB3B6",
+    // })
+    // createText({
+    //   x: 40,
+    //   y: 110,
+    //   text: "MAC",
+    //   color: "#000000",
+    // })
+    // createText({
+    //   x: 36,
+    //   y: 124,
+    //   text: "1.21 亿",
+    //   font: "500 14px",
+    //   color: "#37A0FF",
+    // })
+    // createRctAngularNode({
+    //   x: 70,
+    //   y: 104,
+    //   width: 8,
+    //   height: 18,
+    //   color: "#37A0FF",
+    // })
+    // 第四个节点
+    // createText({
+    //   x: 16,
+    //   y: 150,
+    //   text: "+3%",
+    //   color: "#AFB3B6",
+    // })
+    // createText({
+    //   x: 40,
+    //   y: 150,
+    //   text: "Ipad",
+    //   color: "#000000",
+    // })
+    // createText({
+    //   x: 36,
+    //   y: 164,
+    //   text: "1.21 亿",
+    //   font: "500 14px",
+    //   color: "#37A0FF",
+    // })
+    // createRctAngularNode({
+    //   x: 70,
+    //   y: 144,
+    //   width: 8,
+    //   height: 18,
+    //   color: "#37A0FF",
+    // })
+    // 第五个节点
+    // createText({
+    //   x: 16,
+    //   y: 190,
+    //   text: "+3%",
+    //   color: "#AFB3B6",
+    // })
+    // createText({
+    //   x: 40,
+    //   y: 190,
+    //   text: "Other",
+    //   color: "#000000",
+    // })
+    // createText({
+    //   x: 36,
+    //   y: 204,
+    //   text: "1.21 亿",
+    //   font: "500 14px",
+    //   color: "#37A0FF",
+    // })
+    // createRctAngularNode({
+    //   x: 70,
+    //   y: 184,
+    //   width: 8,
+    //   height: 18,
+    //   color: "#37A0FF",
+    // })
+    // 链接节点
+    // createText({
+    //   x: 206,
+    //   y: 74,
+    //   text: "营业收入",
+    //   font: "500 14px",
+    //   color: "#000000",
+    // })
+    // createText({
+    //   x: 250,
+    //   y: 74,
+    //   text: "+3%",
+    //   font: "500 14px",
+    //   color: "#AFB3B6",
+    // })
+    // createText({
+    //   x: 224,
+    //   y: 90,
+    //   text: "1.77 亿",
+    //   font: "500 16px",
+    //   color: "#37A0FF",
+    // })
+    // createRctAngularNode({
+    //   x: 224,
+    //   y: 96,
+    //   width: 16,
+    //   height: 42,
+    //   color: "#37A0FF",
+    // })
+    // 绘制贝塞尔曲线上半部分
+    const drawUpperHalfOfBezierCurve = (n1, n2) => {
+      const GOLDEN_RATIO = 0.382
+      const startX = n1.x + n1.width
+      const startY = n1.y
+      const endX = n2.x
+      const endY = n2.y
+      const controlX1 = (endX - startX) * 0.382 + startX // 150
+      const controlY1 = startY // 50
+      // ctx.fillRect(controlX1, controlY1, dpr, dpr);
+      // 三阶贝塞尔曲线第二个控制点：将节点距离分成三段，第二段的终点
+      const controlX2 = (endX - startX) * 0.618 + startX // 350
+      const controlY2 = endY // 250
+      ctx.bezierCurveTo(controlX1, controlY1, controlX2, controlY2, endX, endY)
+    }
+    // 绘制贝塞尔曲线下半部分
+    const drawLowerHalfOfBezierCurve = (n1, n2) => {
+      const GOLDEN_RATIO = 0.382
+      const height = Math.min(n1.height, n2.height)
+      const startX = n2.x
+      const startY = n2.y + height
+      const endX = n1.x + n1.width
+      const endY = n1.y + height
+      const controlX3 = startX - (startX - endX) * 0.382 // 100
+      const controlY3 = startY // 120
+      // ctx.fillRect(controlX3, controlY3, dpr, dpr);
+      const controlX4 = (startX - endX) * 0.382 + endX // 178
+      const controlY4 = endY - (startY - endY) / 9 // 50
+      ctx.bezierCurveTo(controlX3, controlY3, controlX4, controlY4, endX, endY)
+    }
+    // 绘制两个节点的连接线
+    // node = {x,y,width,height}
+    const drawLinkLine = (n1, n2) => {
+      const height = Math.min(n1.height, n2.height)
+      ctx.strokeStyle = "transparent"
+      ctx.beginPath()
+      ctx.moveTo(n1.x, n1.y)
+      // 绘制上半部分曲线
+      drawUpperHalfOfBezierCurve(n1, n2)
+      ctx.lineTo(n2.x, n2.y + height)
+      // 绘制下半部分曲线
+      drawLowerHalfOfBezierCurve(n1, n2)
+      ctx.lineTo(n1.x, n1.y)
+      // 绘制封闭区域
+      ctx.closePath()
+      ctx.fillStyle = "#37A0FF88" // 填充颜色
+      // 填充颜色
+      ctx.fill()
+      ctx.stroke()
+    }
+    drawLinkLine({ x: 70, y: 26, width: 8, height: 18 }, { x: 224, y: 96, width: 16, height: 42 })
+  </script>
+</body>
+
+</html>
