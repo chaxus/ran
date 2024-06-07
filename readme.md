@@ -22,13 +22,15 @@
 </p>
 <br/>
 
+This is a personal project. When deploying it to a production environment, please take caution on your own. The source code is fully open-sourced and can be freely accessed or modified. Contributions to issues and pull requests are greatly welcomed.
+
 > Manage code assets meticulously, akin to handling finances, and reap the rewards of time's compounding interest.
 
 The project encompasses a diverse range of codes, encompassing web component libraries, machine learning capabilities, function libraries, select CSS fragments, web3 smart contracts, and numerous other elements.
 
 Moreover, I have kindly made these codes available as open-source, hoping that they will prove to be a beneficial resource for everyone.
 
-Thank you for showing interest by starring...
+Thank you for showing interest by `star`...
 
 ## Packages
 
