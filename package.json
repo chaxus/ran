@@ -4,7 +4,7 @@
   "description": "Monorepo",
   "type": "module",
   "engines": {
-    "node": ">=12.20.0"
+    "node": "^18.0.0 || >=20.0.0"
   },
   "scripts": {
     "pre": "sh ./bin/preinstall.sh",
@@ -24,17 +24,15 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^20.12.11",
-    "@typescript-eslint/eslint-plugin": "^7.9.0",
-    "@typescript-eslint/parser": "^7.9.0",
-    "eslint": "^8.57.0",
-    "eslint-define-config": "^2.1.0",
-    "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-regexp": "^2.5.0",
-    "jscpd": "^3.5.10",
-    "prettier": "^3.2.5",
-    "terser": "^5.31.0",
-    "typescript": "^5.4.5"
+    "@types/node": "^20.14.2",
+    "eslint-plugin-i": "^2.29.1",
+    "eslint-plugin-n": "^17.8.1",
+    "eslint-plugin-regexp": "^2.6.0",
+    "globals": "^15.4.0",
+    "jscpd": "^4.0.4",
+    "prettier": "^3.3.1",
+    "terser": "^5.31.1",
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^7.12.0"
   }
 }

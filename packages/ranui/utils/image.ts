@@ -45,7 +45,7 @@ export const opacity = (img: ImgType, opacity: number): ImgType => {
   const { width, height } = img;
   canvas.width = width;
   canvas.height = height;
-  // 绘制图片, 部分浏览器不支持 filter 属性, 需要处理兼容
+  // 绘制图片，部分浏览器不支持 filter 属性，需要处理兼容
   if (typeof ctx.filter === 'string') {
     ctx.filter = `opacity(${opacity * 100}%)`;
     ctx.drawImage(img, 0, 0, width, height);

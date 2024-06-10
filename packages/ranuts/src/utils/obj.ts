@@ -1,6 +1,6 @@
 import { memoize } from '@/utils/memoize';
 /**
- * @description: 对象转url字符串
+ * @description: 对象转 url 字符串
  * @param {*} data
  * @return {*}
  */
@@ -20,15 +20,15 @@ export function querystring(data = {}): string {
 }
 
 const transitionJsonToString = (jsonObj: string | JSON, callback = (error: Error) => {}) => {
-  // 转换后的jsonObj受体对象
+  // 转换后的 jsonObj 受体对象
   let _jsonObj: string = '';
-  // 判断传入的jsonObj对象是不是字符串，如果是字符串需要先转换为对象，再转换为字符串，这样做是为了保证转换后的字符串为双引号
+  // 判断传入的 jsonObj 对象是不是字符串，如果是字符串需要先转换为对象，再转换为字符串，这样做是为了保证转换后的字符串为双引号
   if (Object.prototype.toString.call(jsonObj) !== '[object String]') {
     try {
       _jsonObj = JSON.stringify(jsonObj);
     } catch (error) {
       // 转换失败错误信息
-      // console.error('您传递的json数据格式有误，请核对...');
+      // console.error('您传递的 json 数据格式有误，请核对...');
       // console.error(error);
       callback(error);
     }
@@ -38,22 +38,22 @@ const transitionJsonToString = (jsonObj: string | JSON, callback = (error: Error
       _jsonObj = JSON.stringify(JSON.parse(jsonObj));
     } catch (error) {
       // 转换失败错误信息
-      // console.error('您传递的json数据格式有误，请核对...');
+      // console.error('您传递的 json 数据格式有误，请核对...');
       // console.error(error);
       callback(error);
     }
   }
   return _jsonObj;
 };
-// callback为数据格式化错误的时候处理函数
+// callback 为数据格式化错误的时候处理函数
 export const formatJson = (jsonObj: string, callback = () => {}): string => {
   // 转换后的字符串变量
   let formatted = '';
   // 换行缩进位数
   let pad = 0;
-  // 一个tab对应空格位数
+  // 一个 tab 对应空格位数
   const PADDING = '    ';
-  // json对象转换为字符串变量
+  // json 对象转换为字符串变量
   let jsonString = transitionJsonToString(jsonObj, callback);
   if (!jsonString) {
     return jsonString;
@@ -64,24 +64,24 @@ export const formatJson = (jsonObj: string, callback = () => {}): string => {
   let _indexStart: number | null = null;
   // 存储需要特殊处理的“再数组中的结束位置变量索引
   let _indexEnd: number | null = null;
-  // 将jsonString字符串内容通过\r\n符分割成数组
+  // 将 jsonString 字符串内容通过\r\n符分割成数组
   let jsonArray: string[] = [];
   // 正则匹配到{,}符号则在两边添加回车换行
   jsonString = jsonString.replace(/([{}])/g, '\r\n$1\r\n');
-  // 正则匹配到[,]符号则在两边添加回车换行
+  // 正则匹配到 [,] 符号则在两边添加回车换行
   jsonString = jsonString.replace(/([[\]])/g, '\r\n$1\r\n');
-  // 正则匹配到,符号则在两边添加回车换行
+  // 正则匹配到，符号则在两边添加回车换行
   jsonString = jsonString.replace(/(,)/g, '$1\r\n');
   // 正则匹配到要超过一行的换行需要改为一行
   jsonString = jsonString.replace(/(\r\n\r\n)/g, '\r\n');
-  // 正则匹配到单独处于一行的,符号时需要去掉换行，将,置于同行
+  // 正则匹配到单独处于一行的，符号时需要去掉换行，将，置于同行
   jsonString = jsonString.replace(/\r\n,/g, ',');
   // 特殊处理双引号中的内容
   jsonArray = jsonString.split('\r\n');
   jsonArray.forEach(function (node, index) {
     // 获取当前字符串段中"的数量
     const num = node.match(/"/g) ? node.match(/"/g)?.length || 0 : 0;
-    // 判断num是否为奇数来确定是否需要特殊处理
+    // 判断 num 是否为奇数来确定是否需要特殊处理
     if (num % 2 && !_indexStart) {
       _indexStart = index;
     }
@@ -105,25 +105,25 @@ export const formatJson = (jsonObj: string, callback = () => {}): string => {
   });
   // 奖处理后的数组通过\r\n连接符重组为字符串
   jsonString = jsonArray.join('\r\n');
-  // 将匹配到:后为回车换行加大括号替换为冒号加大括号
+  // 将匹配到：后为回车换行加大括号替换为冒号加大括号
   jsonString = jsonString.replace(/:\r\n\{/g, ':{');
-  // 将匹配到:后为回车换行加中括号替换为冒号加中括号
+  // 将匹配到：后为回车换行加中括号替换为冒号加中括号
   jsonString = jsonString.replace(/:\r\n\[/g, ':[');
   // 将上述转换后的字符串再次以\r\n分割成数组
   jsonArray = jsonString.split('\r\n');
-  // 将转换完成的字符串根据PADDING值来组合成最终的形态
+  // 将转换完成的字符串根据 PADDING 值来组合成最终的形态
   jsonArray.forEach(function (item, index) {
     // console.log(item)
     let i = 0;
-    // 表示缩进的位数，以tab作为计数单位
+    // 表示缩进的位数，以 tab 作为计数单位
     let indent = 0;
     // 表示缩进的位数，以空格作为计数单位
     let padding = '';
     if (item.match(/\{$/) || item.match(/\[$/)) {
-      // 匹配到以{和[结尾的时候indent加1
+      // 匹配到以{和 [结尾的时候 indent 加 1
       indent += 1;
     } else if (item.match(/\}$/) || item.match(/\]$/) || item.match(/\},$/) || item.match(/\],$/)) {
-      // 匹配到以}和]结尾的时候indent减1
+      // 匹配到以}和] 结尾的时候 indent 减 1
       if (pad !== 0) {
         pad -= 1;
       }
@@ -178,7 +178,7 @@ export const merge = (a: Obj, b?: Obj): Obj => {
  *
  * @export
  * @param {IAnyObject} source 需要被重写的对象
- * @param {string} name 需要被重写对象的key
+ * @param {string} name 需要被重写对象的 key
  * @param {(...args: any[]) => any} replacement 以原有的函数作为参数，执行并重写原有函数
  * @param {boolean} isForced 是否强制重写（可能原先没有该属性）
  */
@@ -199,7 +199,7 @@ export function replaceOld(
 }
 
 /**
- * @description: 将exports对象拼接到obj上，并冻结obj
+ * @description: 将 exports 对象拼接到 obj 上，并冻结 obj
  * @param {Object} obj
  * @param {Object} exports
  * @return {Object}
