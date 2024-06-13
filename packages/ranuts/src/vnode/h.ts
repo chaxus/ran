@@ -33,10 +33,10 @@ export function h(sel: string, b?: VNodeData | null | VNodeChildren, c?: VNodeCh
   let children: VNodeChildElement[] | undefined = undefined;
   // 缓存文本数据
   let text: string | number | undefined;
-  // 用于缓存遍历children的index
+  // 用于缓存遍历 children 的 index
   let i: number;
 
-  // 处理参数,实现重载的机制
+  // 处理参数，实现重载的机制
   if (c !== undefined) {
     // 处理三个参数的情况
     // sel、data、children/text
@@ -45,23 +45,23 @@ export function h(sel: string, b?: VNodeData | null | VNodeChildren, c?: VNodeCh
     }
     if (is.array(c)) {
       children = c;
-      // 如果c是字符串或者数字
+      // 如果 c 是字符串或者数字
     } else if (is.primitive(c)) {
       text = c;
-      // 如果c是VNode
+      // 如果 c 是 VNode
     } else if (c && c.sel) {
       children = [c];
     }
   } else if (b !== undefined && b != null) {
     // 处理两个参数的情况
-    // 如果b是数组
+    // 如果 b 是数组
     if (is.array(b)) {
       children = b;
-      // 如果b是字符串或数字
+      // 如果 b 是字符串或数字
     } else if (is.primitive(b)) {
       text = b;
     } else {
-      // 这里由于b没有使用any类型，所以需要进一步判断b是否为VNode
+      // 这里由于 b 没有使用 any 类型，所以需要进一步判断 b 是否为 VNode
       if (is.isVnode(b)) {
         children = [b];
       } else {
@@ -69,12 +69,12 @@ export function h(sel: string, b?: VNodeData | null | VNodeChildren, c?: VNodeCh
       }
     }
   }
-  // 处理 children 中的原始值(string/number)
+  // 处理 children 中的原始值 (string/number)
   if (typeof children !== 'undefined') {
     for (i = 0; i < children.length; ++i) {
-      // 如果 child 是string/number,创建文本节点
-      // 这里由于children没有使用any类型，所以需要进一步判断children[i]是否为string | number
-      // 不能直接使用children[i],所以使用msg缓存
+      // 如果 child 是 string/number，创建文本节点
+      // 这里由于 children 没有使用 any 类型，所以需要进一步判断 children[i] 是否为 string | number
+      // 不能直接使用 children[i],所以使用 msg 缓存
       const msg = children[i];
       if (is.primitive(msg)) {
         children[i] = vnode(undefined, undefined, undefined, msg, undefined);
@@ -84,6 +84,6 @@ export function h(sel: string, b?: VNodeData | null | VNodeChildren, c?: VNodeCh
   if (sel[0] === 's' && sel[1] === 'v' && sel[2] === 'g' && (sel.length === 3 || sel[3] === '.' || sel[3] === '#')) {
     addNS(data, children, sel);
   }
-  // 符合VNode
+  // 符合 VNode
   return vnode(sel, data, children, text, undefined);
 }
