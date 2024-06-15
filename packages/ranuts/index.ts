@@ -96,6 +96,8 @@ import {
   timeFormat,
   timestampToTime,
   webglVendor,
+  Chain,
+  create
 } from '@/utils';
 import type { CurrentDevice } from '@/utils';
 import { reactify } from '@/react';
@@ -251,6 +253,8 @@ export {
   localStorageSetItem,
   setAttributeByGlobal,
   setFontSize2html,
+  Chain,
+  create
 };
 
 export type { CurrentDevice };

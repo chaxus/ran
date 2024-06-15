@@ -1,6 +1,6 @@
 import { DEVICE, currentDevice } from '@/utils/device';
 /**
- * @description: 给指定的元素添加指定的class
+ * @description: 给指定的元素添加指定的 class
  * @param {Element} element
  * @param {string} addClass
  */
@@ -12,7 +12,7 @@ export const addClassToElement = (element: Element, addClass: string): void => {
   }
 };
 /**
- * @description: 给指定的元素移除指定的class
+ * @description: 给指定的元素移除指定的 class
  * @param {Element} element
  * @param {string} removeClass
  */
@@ -124,7 +124,7 @@ export const setFontSize2html = (designWidth: number = 375): void => {
 
     // window.adjustWidth = width;
     // window.adjustHeight = height;
-    // fontSize = 自适应宽与原来宽度比 * 初始fontSize
+    // fontSize = 自适应宽与原来宽度比 * 初始 fontSize
     let target = (width / base) * 16;
     if (isLandscape) {
       target /= standardRatio;
@@ -161,3 +161,74 @@ export const setFontSize2html = (designWidth: number = 375): void => {
   );
   setFontSize();
 };
+
+
+/**
+ * @description: 链式调用的 dom 操作
+ * @return {HTMLElement}
+ */
+export class Chain {
+  public element: HTMLElement;
+  constructor(tagName: string, options?: ElementCreationOptions) {
+    this.element = this.create(tagName, options);
+  }
+  /**
+   * @description: 创建元素
+   * @param {string} tagName
+   * @param {ElementCreationOptions} options
+   * @return {Chain}
+   */
+  public create = (tagName: string, options?: ElementCreationOptions) => {
+    return document.createElement(tagName, options);
+  }
+  /**
+   * @description: 设置当前元素的属性
+   * @param {string} name
+   * @param {string} value
+   * @return {Chain}
+   */
+  public setAttribute = (name: string, value: string): Chain => {
+    this.element.setAttribute(name, value);
+    return this;
+  }
+  /**
+   * @description: 移除当前元素的属性
+   * @param {string} name
+   * @return {Chain}
+   */
+  public removeAttribute = (name: string): Chain => {
+    this.element.removeAttribute(name);
+    return this;
+  }
+  /**
+   * @description: 当前元素添加子元素
+   * @param {HTMLElement} child
+   * @return {ChainElement}
+   */
+  public append = (child: HTMLElement): Chain => {
+    this.element.appendChild(child);
+    return this;
+  }
+  /**
+   * @description: 当前元素移除子元素
+   * @param {HTMLElement} child
+   * @return {Chain}
+   */
+  public remove = (child: HTMLElement): Chain => {
+    this.element.removeChild(child);
+    return this;
+  }
+  /**
+   * @description: 给当前元素设置文本内容
+   * @param {string} text
+   * @return {Chain}
+   */
+  public setTextContent = (text: string): Chain => {
+    this.element.textContent = text;
+    return this;
+  }
+}
+
+export const create = (tagName: string, options?: ElementCreationOptions) => {
+  return new Chain(tagName, options);
+}

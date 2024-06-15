@@ -19,7 +19,7 @@ import {
   networkSpeed,
   removeGhosting,
   requestUrlToBuffer,
-  retain,
+  retain
 } from '@/utils/bom';
 import {
   Color,
@@ -52,6 +52,8 @@ import {
   escapeHtml,
   removeClassToElement,
   setFontSize2html,
+  Chain,
+  create
 } from '@/utils/dom';
 import { handleError } from '@/utils/error';
 import { convertImageToBase64, isImageSize } from '@/utils/img';
@@ -169,6 +171,7 @@ export {
   localStorageSetItem,
   setAttributeByGlobal,
   setFontSize2html,
+  Chain, create
 };
 
 export type { CurrentDevice };
