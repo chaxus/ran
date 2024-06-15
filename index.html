@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sankey Diagram with Canvas</title>
+    <style>
+      canvas {
+        width: 800px;
+        height: 400px;
+        border: 1px solid #ccc;
+      }
+    </style>
+  </head>
+
+  <body>
+    <canvas id="sankeyCanvas"></canvas>
+
+    <script>
+      const canvas = document.getElementById('sankeyCanvas');
+      const ctx = canvas.getContext('2d');
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = 800 * dpr;
+      canvas.height = 400 * dpr;
+      ctx.scale(dpr, dpr);
+      const sourceData = {
+        title: '2020 一季报',
+        nodes: [
+          {
+            label: 'Iphone',
+            key: 'Iphone',
+            value: '1.77亿',
+            rate: 3,
+          },
+          {
+            label: 'Services',
+            key: 'services',
+            value: '1.39亿',
+            rate: 3,
+          },
+          {
+            label: 'MAC',
+            key: 'MAC',
+            value: '1.21亿',
+            rate: 2,
+          },
+          {
+            label: 'Ipad',
+            key: 'Ipad',
+            value: '1.21亿',
+            rate: 1,
+          },
+          {
+            label: 'Other',
+            key: 'Other',
+            value: '1.21亿',
+            rate: 1,
+          },
+          {
+            label: '营业收入',
+            key: '营业收入',
+            value: '1.77亿',
+            rate: 10,
+          },
+          {
+            label: '营业成本',
+            key: '营业成本',
+            value: '1.39亿',
+            rate: 3,
+          },
+          {
+            label: '毛利',
+            key: '毛利',
+            value: '1.21亿',
+            rate: 7,
+          },
+        ],
+        // 链接可能是一对多的关系，所以需要单独定义
+        links: [
+          {
+            source: 'Iphone',
+            target: '营业收入',
+          },
+          {
+            source: 'Services',
+            target: '营业收入',
+          },
+          {
+            source: 'MAC',
+            target: '营业收入',
+          },
+          {
+            source: 'Ipad',
+            target: '营业收入',
+          },
+          {
+            source: 'Other',
+            target: '营业收入',
+          },
+          {
+            source: '营业收入',
+            target: '营业成本',
+          },
+          {
+            source: '营业成本',
+            target: '毛利',
+          },
+        ],
+      };
+      // 绘制长方形节点
+      const createRctAngularNode = (params) => {
+        const { x, y, width, height, color } = params;
+        ctx.fillStyle = color;
+        ctx.fillRect(x, y, width, height);
+      };
+
+      // 绘制文本
+      const createText = (params) => {
+        const { x, y, text, color, textAlign, font } = params;
+        ctx.fillStyle = color;
+        textAlign && (ctx.textAlign = textAlign);
+        font && (ctx.font = font);
+        ctx.fillText(text, x, y);
+      };
+      // y 从30开始
+      // x 从10开始
+      // 第一个节点
+      createText({
+        x: 10,
+        y: 30,
+        text: '+3%',
+        color: '#AFB3B6',
+      });
+      createText({
+        x: 36,
+        y: 30,
+        text: 'Iphone',
+        color: '#000000',
+      });
+      createText({
+        x: 36,
+        y: 44,
+        text: '1.77亿',
+        font: '500 14px',
+        color: '#37A0FF',
+      });
+      createRctAngularNode({
+        x: 70,
+        y: 26,
+        width: 8,
+        height: 18,
+        color: '#37A0FF',
+      });
+      // 第二个节点
+      createText({
+        x: 1,
+        y: 70,
+        text: '+3%',
+        color: '#AFB3B6',
+      });
+      createText({
+        x: 26,
+        y: 70,
+        text: 'Services',
+        color: '#000000',
+      });
+      createText({
+        x: 36,
+        y: 84,
+        text: '1.39亿',
+        font: '500 14px',
+        color: '#37A0FF',
+      });
+      createRctAngularNode({
+        x: 70,
+        y: 64,
+        width: 8,
+        height: 18,
+        color: '#37A0FF',
+      });
+      // 第三个节点
+      createText({
+        x: 16,
+        y: 110,
+        text: '+3%',
+        color: '#AFB3B6',
+      });
+      createText({
+        x: 40,
+        y: 110,
+        text: 'MAC',
+        color: '#000000',
+      });
+      createText({
+        x: 36,
+        y: 124,
+        text: '1.21亿',
+        font: '500 14px',
+        color: '#37A0FF',
+      });
+      createRctAngularNode({
+        x: 70,
+        y: 104,
+        width: 8,
+        height: 18,
+        color: '#37A0FF',
+      });
+      // 第四个节点
+      createText({
+        x: 16,
+        y: 150,
+        text: '+3%',
+        color: '#AFB3B6',
+      });
+      createText({
+        x: 40,
+        y: 150,
+        text: 'Ipad',
+        color: '#000000',
+      });
+      createText({
+        x: 36,
+        y: 164,
+        text: '1.21亿',
+        font: '500 14px',
+        color: '#37A0FF',
+      });
+      createRctAngularNode({
+        x: 70,
+        y: 144,
+        width: 8,
+        height: 18,
+        color: '#37A0FF',
+      });
+      // 第五个节点
+      createText({
+        x: 16,
+        y: 190,
+        text: '+3%',
+        color: '#AFB3B6',
+      });
+      createText({
+        x: 40,
+        y: 190,
+        text: 'Other',
+        color: '#000000',
+      });
+      createText({
+        x: 36,
+        y: 204,
+        text: '1.21亿',
+        font: '500 14px',
+        color: '#37A0FF',
+      });
+      createRctAngularNode({
+        x: 70,
+        y: 184,
+        width: 8,
+        height: 18,
+        color: '#37A0FF',
+      });
+      // 链接节点
+      createText({
+        x: 206,
+        y: 74,
+        text: '营业收入',
+        font: '500 14px',
+        color: '#000000',
+      });
+      createText({
+        x: 250,
+        y: 74,
+        text: '+3%',
+        font: '500 14px',
+        color: '#AFB3B6',
+      });
+      createText({
+        x: 224,
+        y: 90,
+        text: '1.77亿',
+        font: '500 16px',
+        color: '#37A0FF',
+      });
+      createRctAngularNode({
+        x: 224,
+        y: 96,
+        width: 16,
+        height: 42,
+        color: '#37A0FF',
+      });
+      // 连线
+      ctx.beginPath();
+      // 从第一个节点的长方形x，y开始
+      ctx.strokeStyle = '#37A0FF'; // 线条颜色
+      ctx.lineWidth = 2; // 线条宽度
+      // const startX = 78;
+      // const startY = 26;
+      // const endX = 224;
+      // const endY = 96;
+      // ctx.moveTo(startX, startY);
+      // // 第一段三次贝塞尔曲线
+      // ctx.bezierCurveTo(208, 96, 350, 200, (startX + endX) / 2, (startY + endY) / 2);
+      // // 第二段三次贝塞尔曲线
+      // ctx.bezierCurveTo(140, 70, 160, 90, endX, endY);
+      // ctx.stroke();
+
+      // 起点和终点坐标
+      var startX = 78; // 50
+      var startY = 26; // 150
+      var endX = 224; // 450
+      var endY = 96; // 150
+
+      // 控制点坐标
+      var controlX1 = 190; // 150
+      var controlY1 = 30; // 50
+      var controlX2 = 98; // 350
+      var controlY2 = 110; // 250
+
+      // 绘制S形曲线
+      ctx.beginPath();
+      ctx.moveTo(startX, startY);
+      // 绘制上半部分曲线
+      ctx.bezierCurveTo(controlX1, controlY1, controlX2, controlY2, endX, endY);
+      ctx.lineTo(endX, endY + 12);
+      // 绘制下半部分曲线
+      ctx.bezierCurveTo(100, 120, 178, 50, startX, startY + 18);
+      ctx.lineTo(startX, startY);
+      // 绘制封闭区域
+      ctx.closePath();
+      ctx.fillStyle = '#37A0FF88'; // 填充颜色
+      // 填充颜色
+      ctx.fill();
+      ctx.stroke();
+    </script>
+  </body>
+</html>

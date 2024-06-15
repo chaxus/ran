@@ -4,7 +4,7 @@ import fs from '@/node/fs';
 /**
  * @description: 观察一个文件是否被改变，返回状态
  * @param {string} path 监听的文件路径
- * @param {number} interval 监听的时间，单位毫秒，默认20毫秒
+ * @param {number} interval 监听的时间，单位毫秒，默认 20 毫秒
  * @return {Promise}
  */
 

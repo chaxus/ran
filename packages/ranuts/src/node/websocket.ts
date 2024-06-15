@@ -85,7 +85,7 @@ class WebSocket extends EventEmitter {
     this.clients.forEach((client) => client.send(data));
   }
   /**
-   * @description: 创建client
+   * @description: 创建 client
    * @param {http} req
    * @param {internal} socket
    */
@@ -110,7 +110,7 @@ class WebSocket extends EventEmitter {
     let buf = Buffer.allocUnsafe(0);
     let data = Buffer.allocUnsafe(0);
     /**
-     * @description: 处理帧meta
+     * @description: 处理帧 meta
      * @param {FrameMeta} meta
      */
     const handleFrameMeta = (meta: FrameMeta) => {
@@ -163,7 +163,7 @@ class WebSocket extends EventEmitter {
     });
   }
   /**
-   * @description: 解析帧meta
+   * @description: 解析帧 meta
    * @param {Buffer} source
    * @return {FrameMeta}
    */

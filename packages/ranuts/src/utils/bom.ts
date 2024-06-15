@@ -14,7 +14,7 @@ export const retain = (callback = noop): void => {
     isClient && window.removeEventListener('popstate', historyReturnCb);
   };
 
-  // 向history栈中推入两个和当前页面一样的历史记录，用来在页面发生跳转的时候区分返回和前进动作
+  // 向 history 栈中推入两个和当前页面一样的历史记录，用来在页面发生跳转的时候区分返回和前进动作
   isClient && window.history.pushState(null, '', window.location.href);
   setTimeout(() => {
     isClient && window.addEventListener('popstate', historyReturnCb);
@@ -22,7 +22,7 @@ export const retain = (callback = noop): void => {
 };
 
 /**
- * @description: 获取指定的cookie
+ * @description: 获取指定的 cookie
  * @param {string} objName
  * @return {*}
  */
@@ -56,7 +56,7 @@ export interface BaseReturn {
 }
 
 /**
- * @description: url转arrayBuffer
+ * @description: url 转 arrayBuffer
  * @param {string} src
  * @param {RequestUrlToArraybufferOption} options
  * @return {*}
@@ -135,7 +135,7 @@ export const createObjectURL = async (src: Blob | ArrayBuffer | Response): Promi
 };
 
 /**
- * @description: 计算每毫秒的帧率，每秒的帧率需要乘1000
+ * @description: 计算每毫秒的帧率，每秒的帧率需要乘 1000
  * @return {*}
  */
 export const getFrame = (n: number = 10): Promise<number> => {
@@ -153,7 +153,7 @@ export const getFrame = (n: number = 10): Promise<number> => {
       if (frameList.length > n) {
         const num = frameList.reduce((i, j) => i + j);
         // 帧率就是 1 / time
-        // time是每次 requestAnimationFrame 执行的间隔
+        // time 是每次 requestAnimationFrame 执行的间隔
         resolve(1 / (num / n));
         cancelAnimationFrame(requestAnimationFrameRef);
       }
@@ -193,7 +193,7 @@ export const getHost = (env?: string): string | undefined => {
   }
 };
 /**
- * @description: 将url上的字符串转换成对象
+ * @description: 将 url 上的字符串转换成对象
  * @param {string} url
  * @param {*} string
  * @return {*}
@@ -218,7 +218,7 @@ export const getAllQueryString = (url: string): Record<string, string> => {
 };
 
 /**
- * @description: 将一个对象转换成querystring，拼接到url后面
+ * @description: 将一个对象转换成 querystring，拼接到 url 后面
  * @return {*}
  */
 export function appendUrl(url: string, params: Record<string, string> = {}): string {
@@ -356,7 +356,7 @@ export const imageRequest = (url?: string): Promise<number> => {
   return new Promise((resolve, reject) => {
     const img = new Image();
     const startTime = new Date().getTime();
-    // 此处选择加载 github 的 favicon，大小为2.2kB
+    // 此处选择加载 github 的 favicon，大小为 2.2kB
     img.src = url ? url : `https://github.com/favicon.ico?d=${startTime}`;
     img.onload = () => {
       const endTime = new Date().getTime();
@@ -390,16 +390,16 @@ export const durationHandler =
     });
 
 /**
- * @description: 通过请求来测试当前网络的ping值
+ * @description: 通过请求来测试当前网络的 ping 值
  * @param {*} options
  */
 export const networkSpeed = async (options: Options): Promise<ReturnType> => {
   const { url, duration = 3000, count = 5 } = options;
   // 抖动，用来描述网络的波动情况。比如每秒测量一次 ping 值，5s 后取五次测量结果的最大最小值求差，可以看出网络的波动情况，差值越小代表网络越稳定；
   let jitter = 0;
-  // 平均的ping值
+  // 平均的 ping 值
   let ping = 0;
-  // ping值的数组
+  // ping 值的数组
   const pingList: Array<number> = [];
   for (let i = 0; i < count; i++) {
     const handler = durationHandler(imageRequest, url);

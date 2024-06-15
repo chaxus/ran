@@ -4,7 +4,7 @@ interface FT {
   prototype: Object;
 }
 /**
- * @description: 实现object.create，将传入的对象作为原型
+ * @description: 实现 object.create，将传入的对象作为原型
  * @param {*} obj
  * @return {*}
  */
@@ -29,7 +29,7 @@ const instanceOf = (obj: Object, cst: Function) => {
   }
 };
 /**
- * @description: 实现new操作符
+ * @description: 实现 new 操作符
  * @param {*} 构造函数
  * @param {*} 参数
  * @return {*} Object
@@ -81,7 +81,7 @@ function throttle(fn: Function, wait: number = 3000) {
 }
 
 /**
- * @description: 实现call函数
+ * @description: 实现 call 函数
  * @param {unknown} this
  * @return {*}
  */
