@@ -10,7 +10,7 @@ export const isStr = (str: unknown): str is string => {
 export function primitive(s: unknown): s is string | number {
   return typeof s === 'string' || typeof s === 'number';
 }
-// 判断是否为vnode
+// 判断是否为 vnode
 export function isVnode(s: any): s is VNode {
   return !!s?.sel;
 }

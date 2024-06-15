@@ -1,7 +1,7 @@
-// 虚拟dom
+// 虚拟 dom
 import type { VNode } from './vnode';
 import { vnode } from './vnode';
-// 引入操作的dom api的相关方法
+// 引入操作的 dom api 的相关方法
 import type { DOMAPI } from './htmlDomApi';
 import { htmlDomApi } from './htmlDomApi';
 // 类型判断
@@ -21,17 +21,17 @@ interface Cbs {
   destroy: Array<(oldVnode: VNode, vnode?: VNode) => void>;
 }
 
-// 如果2个VNode节点的key和sel属性都相同，我们就认为它们是相同的VNode节点
+// 如果 2 个 VNode 节点的 key 和 sel 属性都相同，我们就认为它们是相同的 VNode 节点
 function sameVnode(vnode1: VNode, vnode2: VNode): boolean {
   return vnode1.key === vnode2.key && vnode1.sel === vnode2.sel;
 }
 
-// 判断是否为Vnode
+// 判断是否为 Vnode
 function isVnode(vnode: any): vnode is VNode {
   return vnode.sel !== undefined;
 }
 
-// 根据children item的key属性，创建Key Map
+// 根据 children item 的 key 属性，创建 Key Map
 function createKeyToOldIdx(children: VNode[], beginIdx: number, endIdx: number): KeyToIndexMap {
   const map: KeyToIndexMap = {};
   for (let i = beginIdx; i <= endIdx; ++i) {
@@ -47,7 +47,7 @@ function createKeyToOldIdx(children: VNode[], beginIdx: number, endIdx: number):
 const emptyNode = vnode('', {}, [], undefined, undefined);
 
 export function init(): (oldVnode: VNode | Element, vnode: VNode) => VNode {
-  // 获取操作html dom的api
+  // 获取操作 html dom 的 api
   const api: DOMAPI = htmlDomApi;
 
   // 用于缓存各个模块的钩子函数
@@ -56,48 +56,48 @@ export function init(): (oldVnode: VNode | Element, vnode: VNode) => VNode {
     update: [],
     destroy: [],
   };
-  // 遍历cbs
+  // 遍历 cbs
   for (const key of Object.keys(cbs)) {
     // 初始化为数组
     cbs[key] = [];
-    // 遍历modules
+    // 遍历 modules
     for (const module of Object.keys(modules)) {
       // 获取模块中对应的生命周期
       const hook = modules[module][key];
       // 如果生命周期有值
       if (hook !== undefined) {
-        // 将其加入cbs对应的属性中
+        // 将其加入 cbs 对应的属性中
         cbs[key].push(hook);
       }
     }
   }
 
-  // 创建一个只有标签名和选择器的空白VNode
+  // 创建一个只有标签名和选择器的空白 VNode
   function emptyNodeAt(elm: Element) {
     const id = elm.id ? '#' + elm.id : '';
     const c = elm.className ? '.' + elm.className.split(' ').join('.') : '';
     return vnode(api.tagName(elm).toLowerCase() + id + c, {}, [], undefined, elm);
   }
 
-  // 判断是否为undefined
+  // 判断是否为 undefined
   function isUndef(s: unknown): boolean {
     return s === undefined;
   }
 
-  // 判断是否为defined
+  // 判断是否为 defined
   function isDef<A>(s: A): s is NonUndefined<A> {
     return s !== undefined;
   }
 
-  // 根据VNode创建dom
+  // 根据 VNode 创建 dom
   function createElm(vnode: VNode): Node {
-    // 缓存循环children中的index
+    // 缓存循环 children 中的 index
     let i: number;
-    // 缓存VNode的children
+    // 缓存 VNode 的 children
     const children = vnode.children;
-    // 缓存VNode的选择器
+    // 缓存 VNode 的选择器
     const sel = vnode.sel;
-    // 把 vnode 转化成真实DOM对象（没有渲染到页面）
+    // 把 vnode 转化成真实 DOM 对象（没有渲染到页面）
     if (sel === '!') {
       // 如果选择器是！，创建注释节点
       if (isUndef(vnode.text)) {
@@ -106,9 +106,9 @@ export function init(): (oldVnode: VNode | Element, vnode: VNode) => VNode {
       vnode.elm = api.createComment(`${vnode.text!}`);
     } else if (sel !== undefined) {
       // 如果选择器不为空，解析选择器
-      // 缓存id
+      // 缓存 id
       const hashIdx = sel.indexOf('#');
-      // 缓存class
+      // 缓存 class
       const dotIdx = sel.indexOf('.', hashIdx);
       // 缓存 # 的位置
       const hash = hashIdx > 0 ? hashIdx : sel.length;
@@ -116,13 +116,13 @@ export function init(): (oldVnode: VNode | Element, vnode: VNode) => VNode {
       const dot = dotIdx > 0 ? dotIdx : sel.length;
       // 缓存标签
       const tag = hashIdx !== -1 || dotIdx !== -1 ? sel.slice(0, Math.min(hash, dot)) : sel;
-      // 创建dom
+      // 创建 dom
       const elm = (vnode.elm = api.createElement(tag));
-      // dom设置id
+      // dom 设置 id
       if (hash < dot) elm.setAttribute('id', sel.slice(hash + 1, dot));
       // dom设置class
       if (dotIdx > 0) elm.setAttribute('class', sel.slice(dot + 1).replace(/\./g, ' '));
-      // 触发各个模块的create钩子函数
+      // 触发各个模块的 create 钩子函数
       for (i = 0; i < cbs.create.length; ++i) {
         cbs.create[i](emptyNode, vnode);
       }
@@ -195,10 +195,10 @@ export function init(): (oldVnode: VNode | Element, vnode: VNode) => VNode {
       const ch = vnodes[startIdx];
       if (ch != null) {
         if (isDef(ch.sel)) {
-          // 触发destroy钩子函数
+          // 触发 destroy 钩子函数
           invokeDestroyHook(ch);
           /*
-           * 在dom中这里需要判断remove钩子函数是否全部调用,而我们dom没有remove钩子函数,所以
+           * 在 dom 中这里需要判断 remove 钩子函数是否全部调用，而我们 dom 没有 remove 钩子函数，所以
            * 不需要判断
            */
           rm = createRmCb(ch.elm!);
@@ -212,34 +212,34 @@ export function init(): (oldVnode: VNode | Element, vnode: VNode) => VNode {
     }
   }
 
-  // 更新children
+  // 更新 children
   function updateChildren(parentElm: Node, oldCh: VNode[], newCh: VNode[]) {
-    // 旧VNode的children头索引
+    // 旧 VNode 的 children 头索引
     let oldStartIdx = 0;
-    // 新VNode的children头索引
+    // 新 VNode 的 children 头索引
     let newStartIdx = 0;
-    // 旧VNode的children尾索引
+    // 旧 VNode 的 children 尾索引
     let oldEndIdx = oldCh.length - 1;
-    // 新VNode的children尾索引
+    // 新 VNode 的 children 尾索引
     let newEndIdx = newCh.length - 1;
-    // 旧VNode的children的头VNode
+    // 旧 VNode 的 children 的头 VNode
     let oldStartVnode = oldCh[0];
-    // 旧VNode的children的尾VNode
+    // 旧 VNode 的 children 的尾 VNode
     let oldEndVnode = oldCh[oldEndIdx];
-    // 新VNode的children的头VNode
+    // 新 VNode 的 children 的头 VNode
     let newStartVnode = newCh[0];
-    // 新VNode的children的尾VNode
+    // 新 VNode 的 children 的尾 VNode
     let newEndVnode = newCh[newEndIdx];
-    // 旧VNode的children的Key Map
+    // 旧 VNode 的 children 的 Key Map
     let oldKeyToIdx: KeyToIndexMap | undefined;
-    // 用于缓存key相同的新旧VNode
+    // 用于缓存 key 相同的新旧 VNode
     let idxInOld: number;
-    // 用于缓存将要移动的旧VNode
+    // 用于缓存将要移动的旧 VNode
     let elmToMove: VNode;
-    // 用于缓存将要插入新增VNode的位置之前的VNode
+    // 用于缓存将要插入新增 VNode 的位置之前的 VNode
     let before: any;
 
-    // 遍历新旧children数组，直到其中之一遍历完
+    // 遍历新旧 children 数组，直到其中之一遍历完
     while (oldStartIdx <= oldEndIdx && newStartIdx <= newEndIdx) {
       // 我们之后可能会对oldStartVnode、oldEndVnode、newStartVnode、newEndVnode重新赋值，可能会出现等于null的情况
       if (oldStartVnode == null) {
@@ -318,40 +318,40 @@ export function init(): (oldVnode: VNode | Element, vnode: VNode) => VNode {
     if (oldStartIdx <= oldEndIdx || newStartIdx <= newEndIdx) {
       // 如果存在旧头索引大于旧尾索引情况，说明新children中新增了VNode
       if (oldStartIdx > oldEndIdx) {
-        // 获取新增VNode后一位的VNode对应的dom
+        // 获取新增 VNode 后一位的 VNode 对应的 dom
         before = newCh[newEndIdx + 1] == null ? null : newCh[newEndIdx + 1].elm;
-        // 将新增VNode对应dom插入对应dom树位置
+        // 将新增 VNode 对应 dom 插入对应 dom 树位置
         addVnodes(parentElm, before, newCh, newStartIdx, newEndIdx);
       } else {
-        // 删除多余dom节点
+        // 删除多余 dom 节点
         removeVnodes(parentElm, oldCh, oldStartIdx, oldEndIdx);
       }
     }
   }
 
-  // 对比新旧vnode差异,将差异更新到旧VNode上。
+  // 对比新旧 vnode 差异，将差异更新到旧 VNode 上。
   function patchVnode(oldVnode: VNode, vnode: VNode) {
-    // 当VNode的data属性存在时,触发update钩子函数
+    // 当 VNode 的 data 属性存在时，触发 update 钩子函数
     if (vnode.data !== undefined) {
       for (let i = 0; i < cbs.update.length; ++i) {
         cbs.update[i](oldVnode, vnode);
       }
     }
 
-    // 由于是相同的VNode节点，使用新旧VNode的真实dom元素相同
+    // 由于是相同的 VNode 节点，使用新旧 VNode 的真实 dom 元素相同
     const elm = (vnode.elm = oldVnode.elm!);
-    // 获取旧VNode的children
+    // 获取旧 VNode 的 children
     const oldCh = oldVnode.children as VNode[];
-    // 获取新VNode的children
+    // 获取新 VNode 的 children
     const ch = vnode.children as VNode[];
 
     // 如果新旧节点完全相同，直接返回
     if (oldVnode === vnode) return;
-    // 判断VNode是否为文本节点
+    // 判断 VNode 是否为文本节点
     if (isUndef(vnode.text)) {
-      // 如果不是文本节点，判断新旧VNode是否同时有children
+      // 如果不是文本节点，判断新旧 VNode 是否同时有 children
       if (isDef(oldCh) && isDef(ch)) {
-        // 如果同时有children属性，且children属性不相同就更新children
+        // 如果同时有 children 属性，且 children 属性不相同就更新 children
         if (oldCh !== ch) {
           updateChildren(elm, oldCh, ch);
         }
@@ -360,30 +360,30 @@ export function init(): (oldVnode: VNode | Element, vnode: VNode) => VNode {
   }
 
   return function patch(oldVnode: VNode | Element, vnode: VNode): VNode {
-    // 缓存dom节点和父dom节点
+    // 缓存 dom 节点和父 dom 节点
     let elm: Node, parent: Node;
 
-    // 当oldVnode不是VNode时，说明是初次加载，创建一个空白VNode
+    // 当 oldVnode 不是 VNode 时，说明是初次加载，创建一个空白 VNode
     if (!isVnode(oldVnode)) {
       oldVnode = emptyNodeAt(oldVnode);
     }
 
-    // 判断是否为相同VNode节点
+    // 判断是否为相同 VNode 节点
     if (sameVnode(oldVnode, vnode)) {
-      // 更新VNode节点差异
+      // 更新 VNode 节点差异
       patchVnode(oldVnode, vnode);
     } else {
-      // 获取旧VNode的dom
+      // 获取旧 VNode 的 dom
       elm = oldVnode.elm!;
-      // 获取父节点dom
+      // 获取父节点 dom
       parent = api.parentNode(elm) as Node;
-      // 创建dom元素
+      // 创建 dom 元素
       createElm(vnode);
       // 当父节点不为空时
       if (parent != null) {
-        // 将新创建的dom插入dom树
+        // 将新创建的 dom 插入 dom 树
         api.insertBefore(parent, vnode.elm!, api.nextSibling(elm));
-        // 删除旧VNode节点
+        // 删除旧 VNode 节点
         removeVnodes(parent, [oldVnode], 0, 0);
       }
     }
