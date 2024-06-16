@@ -13,6 +13,7 @@
     <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat" alt="PRs welcome!" />
 </a>
 <a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/github/actions/workflow/status/chaxus/ran/ci.yml" alt="Build Status"></a>
+<img src="https://badgen.net/npm/types/ranui" alt="Types Included">
 <a href="https://github.com/chaxus/ran">
     <img src="https://img.shields.io/github/forks/chaxus/ran" alt="forks">
 </a>
