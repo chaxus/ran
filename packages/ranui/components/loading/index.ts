@@ -18,7 +18,16 @@ enum NAME_AMP {
   CIRCLE_FOLD = 'circle-fold',
   CUBE_GRID = 'cube-grid',
   CIRCLE_TURN = 'circle-turn',
-  CIRCLE_ROTATE = 'circle-rotate'
+  CIRCLE_ROTATE = 'circle-rotate',
+  CIRCLE_SPIN = 'circle-spin',
+  DOT_BAR = 'dot-bar',
+  DOT_CIRCLE = 'dot-circle',
+  LINE = 'line',
+  DOT_PULSE = 'dot-pulse',
+  LINE_SCALE = 'line-scale',
+  TEXT = 'text',
+  CUBE_DIM = 'cube-dim',
+  DOT_LINE = 'dot-line',
 }
 
 export class Loading extends (HTMLElementSSR()!) {
@@ -49,10 +58,9 @@ export class Loading extends (HTMLElementSSR()!) {
   stretchLoading = (): void => {
     const loading = document.createElement('div');
     loading.setAttribute('class', NAME_AMP.STRETCH);
-    const arr = [1, 2, 3, 4, 5];
-    arr.forEach((i) => {
+    Array(5).fill(1).forEach((_, i) => {
       const rect = document.createElement('div');
-      rect.setAttribute('class', `rect${i}`);
+      rect.setAttribute('class', `rect${i + 1}`);
       loading.appendChild(rect);
     });
     this.contain.appendChild(loading);
@@ -60,10 +68,9 @@ export class Loading extends (HTMLElementSSR()!) {
   doubleBounceLoading = (): void => {
     const loading = document.createElement('div');
     loading.setAttribute('class', NAME_AMP.DOUBLE_BOUNCE);
-    const arr = [1, 2];
-    arr.forEach((i) => {
+    Array(2).fill(1).forEach((_, i) => {
       const rect = document.createElement('div');
-      rect.setAttribute('class', `double-bounce${i}`);
+      rect.setAttribute('class', `double-bounce${i + 1}`);
       loading.appendChild(rect);
     });
     this.contain.appendChild(loading);
@@ -71,10 +78,9 @@ export class Loading extends (HTMLElementSSR()!) {
   cubeLoading = (): void => {
     const loading = document.createElement('div');
     loading.setAttribute('class', NAME_AMP.CUBE);
-    const arr = [1, 2];
-    arr.forEach((i) => {
+    Array(2).fill(1).forEach((_, i) => {
       const rect = document.createElement('div');
-      rect.setAttribute('class', `cube${i}`);
+      rect.setAttribute('class', `cube${i + 1}`);
       loading.appendChild(rect);
     });
     this.contain.appendChild(loading);
@@ -82,10 +88,9 @@ export class Loading extends (HTMLElementSSR()!) {
   dotLoading = (): void => {
     const loading = document.createElement('div');
     loading.setAttribute('class', NAME_AMP.DOT);
-    const arr = [1, 2];
-    arr.forEach((i) => {
+    Array(2).fill(1).forEach((_, i) => {
       const rect = document.createElement('div');
-      rect.setAttribute('class', `dot${i}`);
+      rect.setAttribute('class', `dot${i + 1}`);
       loading.appendChild(rect);
     });
     this.contain.appendChild(loading);
@@ -93,10 +98,9 @@ export class Loading extends (HTMLElementSSR()!) {
   tripleBounceLoading = (): void => {
     const loading = document.createElement('div');
     loading.setAttribute('class', NAME_AMP.TRIPLE_BOUNCE);
-    const arr = [1, 2, 3];
-    arr.forEach((i) => {
+    Array(3).fill(1).forEach((_, i) => {
       const rect = document.createElement('div');
-      rect.setAttribute('class', `triple-bounce${i}`);
+      rect.setAttribute('class', `triple-bounce${i + 1}`);
       loading.appendChild(rect);
     });
     this.contain.appendChild(loading);
@@ -109,16 +113,12 @@ export class Loading extends (HTMLElementSSR()!) {
   circleLoading = (): void => {
     const loading = document.createElement('div');
     loading.setAttribute('class', 'circle');
-    [
-      [1, 2, 3, 4],
-      [1, 2, 3, 4],
-      [1, 2, 3, 4],
-    ].forEach((i, index) => {
+    Array(3).fill(1).map(() => new Array(4).fill(1)).forEach((i, index) => {
       const container = document.createElement('div');
       container.setAttribute('class', `circle-container container${index + 1}`);
-      i.forEach((j) => {
+      i.forEach((_, j) => {
         const rect = document.createElement('div');
-        rect.setAttribute('class', `circle${j}`);
+        rect.setAttribute('class', `circle${j + 1}`);
         container.appendChild(rect);
       });
       loading.appendChild(container);
@@ -140,8 +140,7 @@ export class Loading extends (HTMLElementSSR()!) {
   }
   pulseLoading = (): void => {
     const pulse = create('div').setAttribute('class', 'pulse')
-    const arr = [1, 2, 3];
-    arr.forEach((_, index) => {
+    Array(3).fill(1).forEach((_, index) => {
       const { element: bubble } = create('div').setAttribute('class', `pulse-bubble pulse-bubble-${index + 1}`)
       pulse.append(bubble)
     })
@@ -160,8 +159,7 @@ export class Loading extends (HTMLElementSSR()!) {
   }
   cubeFoldLoading = (): void => {
     const { element: cubeFold } = create('div').setAttribute('class', 'cube-fold')
-    const arr = [1, 2, 3, 4]
-    arr.forEach((_, index) => {
+    Array(4).fill(1).forEach((_, index) => {
       const { element: cube } = create('div').setAttribute('class', `cube-fold-item cube-fold-item-${index + 1}`)
       cubeFold.appendChild(cube)
     })
@@ -187,15 +185,93 @@ export class Loading extends (HTMLElementSSR()!) {
     const { element: circleTurn } = create('div').setAttribute('class', 'circle-turn')
     this.contain.appendChild(circleTurn)
   }
-  circleRotateLoading = ():void => {
+  circleRotateLoading = (): void => {
     const { element: circleRotate } = create('div').setAttribute('class', 'circle-rotate')
-    const { element: circleInner } = create('div').setAttribute('class','circle-rotate-inner')
-    const { element: circleOuter } = create('div').setAttribute('class','circle-rotate-outer')
+    const { element: circleInner } = create('div').setAttribute('class', 'circle-rotate-inner')
+    const { element: circleOuter } = create('div').setAttribute('class', 'circle-rotate-outer')
     circleRotate.appendChild(circleOuter)
     circleRotate.appendChild(circleInner)
     this.contain.appendChild(circleRotate)
   }
-  
+  circleSpinLoading = (): void => {
+    const { element: circleSpin } = create('div').setAttribute('class', 'circle-spin')
+    const { element: circleInner } = create('div').setAttribute('class', 'circle-spin-inner')
+    const { element: circleOuter } = create('div').setAttribute('class', 'circle-spin-outer')
+    circleSpin.appendChild(circleOuter)
+    circleSpin.appendChild(circleInner)
+    this.contain.appendChild(circleSpin)
+  }
+  dotBarLoading = (): void => {
+    const { element: dotBar } = create('div').setAttribute('class', 'dot-bar')
+    Array(5).fill(1).forEach((_, index) => {
+      const { element } = create('div').setAttribute('class', `dot-bar-item dot-bar-item-${index + 1}`)
+      dotBar.appendChild(element)
+    })
+    this.contain.appendChild(dotBar)
+  }
+  dotCircleLoading = (): void => {
+    const { element: dotCircle } = create('div').setAttribute('class', 'dot-circle')
+    Array(5).fill(1).forEach((_, index) => {
+      const { element } = create('div').setAttribute('class', `dot-circle-item dot-circle-item-${index + 1}`)
+      dotCircle.appendChild(element)
+    })
+    this.contain.appendChild(dotCircle)
+  }
+  lineLoading = (): void => {
+    const { element: line } = create('div').setAttribute('class', 'line')
+    Array(3).fill(1).forEach(() => {
+      const { element } = create('div').setAttribute('class', `line-item`)
+      line.appendChild(element)
+    })
+    this.contain.appendChild(line)
+  }
+  dotPulseLoading = (): void => {
+    const { element: dotPulse } = create('div').setAttribute('class', 'dot-pulse')
+    Array(5).fill(1).forEach((_, index) => {
+      const { element: pulse } = create('div').setAttribute('class', `dot-pulse-item`)
+      const { element: dot } = create('div').setAttribute('class', `dot-pulse-item-dot dot-pulse-item-dot-${index + 1}`)
+      const { element: ball } = create('div').setAttribute('class', `dot-pulse-item-ball dot-pulse-item-ball-${index + 1}`)
+      pulse.appendChild(dot)
+      pulse.appendChild(ball)
+      dotPulse.appendChild(pulse)
+    })
+    this.contain.appendChild(dotPulse)
+  }
+  lineScaleLoading = (): void => {
+    const { element: lineScale } = create('div').setAttribute('class', 'line-scale')
+    Array(5).fill(1).forEach((_, index) => {
+      const { element } = create('div').setAttribute('class', `line-scale-item`)
+      lineScale.appendChild(element)
+    })
+    this.contain.appendChild(lineScale)
+  }
+  textLoading = (): void => {
+    const { element: text } = create('div').setAttribute('class', 'text')
+    const arr = ['L', 'o', 'a', 'd', 'i', 'n', 'g']
+    arr.forEach((i) => {
+      const { element } = create('span').setAttribute('class', `text-item`).setTextContent(i)
+      text.appendChild(element)
+    })
+    this.contain.appendChild(text)
+  }
+  cubeDimLoading = (): void => {
+    const { element: cubeDim } = create('div').setAttribute('class', 'cube-dim')
+    Array(9).fill(1).forEach((_, index) => {
+      const { element } = create('div').setAttribute('class', `cube-dim-item`)
+      cubeDim.appendChild(element)
+    })
+    this.contain.appendChild(cubeDim)
+  }
+  dotLineLoading = (): void => {
+    const { element: dotLine } = create('div').setAttribute('class', 'dot-line')
+    Array(2).fill(1).forEach((_, index) => {
+      const { element: line } = create('div').setAttribute('class', `dot-line-item`)
+      const { element } = create('div').setAttribute('class', `dot-line-item-circle`)
+      line.appendChild(element)
+      dotLine.appendChild(line)
+    })
+    this.contain.appendChild(dotLine)
+  }
   createLoading = (): void => {
     this.contain.innerHTML = '';
     const NAME_MAP: Record<NAME_AMP, () => void> = {
@@ -215,7 +291,16 @@ export class Loading extends (HTMLElementSSR()!) {
       [NAME_AMP.CIRCLE_FOLD]: this.circleFoldLoading,
       [NAME_AMP.CUBE_GRID]: this.cubeGridLoading,
       [NAME_AMP.CIRCLE_TURN]: this.circleTurnLoading,
-      [NAME_AMP.CIRCLE_ROTATE]: this.circleRotateLoading
+      [NAME_AMP.CIRCLE_ROTATE]: this.circleRotateLoading,
+      [NAME_AMP.CIRCLE_SPIN]: this.circleSpinLoading,
+      [NAME_AMP.DOT_BAR]: this.dotBarLoading,
+      [NAME_AMP.DOT_CIRCLE]: this.dotCircleLoading,
+      [NAME_AMP.LINE]: this.lineLoading,
+      [NAME_AMP.DOT_PULSE]: this.dotPulseLoading,
+      [NAME_AMP.LINE_SCALE]: this.lineScaleLoading,
+      [NAME_AMP.TEXT]: this.textLoading,
+      [NAME_AMP.CUBE_DIM]: this.cubeDimLoading,
+      [NAME_AMP.DOT_LINE]: this.dotLineLoading,
     };
     const handler = NAME_MAP[this.name];
     handler && handler();
