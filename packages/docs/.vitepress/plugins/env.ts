@@ -1,4 +1,5 @@
-import { getAllQueryString, currentDevice, isWeiXin, isMobile, isBangDevice } from 'ranuts/utils';
+import { currentDevice, getAllQueryString, isBangDevice, isMobile, isWeiXin } from 'ranuts/utils';
+import type { App } from 'vue';
 import type { CurrentDevice } from 'ranuts/utils';
 import { LANGS_DICT } from '../lib/constant';
 
@@ -28,7 +29,7 @@ export const $env: Env = {
 };
 
 export default {
-  install: (app) => {
+  install: (app: App): void => {
     app.config.globalProperties.$env = $env;
     app.provide('$env', $env);
   },

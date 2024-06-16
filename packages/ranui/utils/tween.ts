@@ -77,11 +77,11 @@ export const sine: SpeedType = {
 export const expo: SpeedType = {
   easeIn: function (t, b, c, d) {
     if (t >= d) t = d;
-    return t == 0 ? b : c * Math.pow(2, 10 * (t / d - 1)) + b;
+    return t === 0 ? b : c * Math.pow(2, 10 * (t / d - 1)) + b;
   },
   easeOut: function (t, b, c, d) {
     if (t >= d) t = d;
-    return t == d ? b + c : c * (-Math.pow(2, (-10 * t) / d) + 1) + b;
+    return t === d ? b + c : c * (-Math.pow(2, (-10 * t) / d) + 1) + b;
   },
 };
 

@@ -1,8 +1,8 @@
 /*
  * @Author: chaxus nouo18@163.com
  * @Date: 2023-09-14 21:21:31
- * @LastEditors: ranzhouhang zhouhang.ran@longbridge-inc.com
- * @LastEditTime: 2024-05-14 11:57:06
+ * @LastEditors: chaxus nouo18@163.com
+ * @LastEditTime: 2024-06-16 12:24:17
  * @FilePath: /ran/packages/ranuts/src/arithmetic/index.ts
  * @Description: 字符串 string
  * @Description: 链表
@@ -41,7 +41,7 @@ const replaceSpace = function (s: string) {
  * @description: 左旋转字符串
  * 字符串的左旋转操作是把字符串前面的若干个字符转移到字符串的尾部。
  * 请定义一个函数实现字符串左旋转操作的功能。
- * 比如，输入字符串"abcdefg"和数字2，该函数将返回左旋转两位得到的结果"cdefgab"。
+ * 比如，输入字符串"abcdefg"和数字 2，该函数将返回左旋转两位得到的结果"cdefgab"。
  * @param {*} s
  * @param {*} n
  * @return {*}
@@ -209,7 +209,7 @@ const deleteNode = function (head: ListNode, val: number) {
   return head;
 };
 /**
- * @description: 剑指 Offer 22. 链表中倒数第k个节点
+ * @description: 剑指 Offer 22. 链表中倒数第 k 个节点
  * @param {ListNode} head
  * @param {number} k
  * @return {*}
@@ -253,14 +253,14 @@ const mergeTwoLists = function (l1: ListNode | null, l2: ListNode | null) {
  * @return {*}
  */
 const getIntersectionNode = function (headA: ListNode | null, headB: ListNode | null) {
-  if (headA === null || headB === null) {
+  if (headA == null || headB == null) {
     return null;
   }
   let p1: ListNode | null = headA,
     p2: ListNode | null = headB;
   while (p1 !== p2) {
-    p1 = p1 === null ? headB : p1.next;
-    p2 = p2 === null ? headA : p2.next;
+    p1 = p1 == null ? headB : p1.next;
+    p2 = p2 == null ? headA : p2.next;
   }
   return p1;
 };
@@ -422,7 +422,7 @@ export const heap = (list: Array<number>): Array<number> => {
   return value;
 };
 
-// 手写promise
+// 手写 promise
 
 const PENDING = 'pending';
 const RESOLVED = 'resolved';

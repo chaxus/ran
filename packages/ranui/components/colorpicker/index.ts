@@ -321,10 +321,10 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     this.colorPickerPanelSliderContainer.appendChild(this.colorPickerColorBlock);
   };
   changeColorPickerHue = (e: Event): void => {
-    this.context.hue.setter((<CustomEvent>e).detail.value * HUE);
+    this.context.hue.setter((e as CustomEvent).detail.value * HUE);
   };
   changeColorPickerAlpha = (e: Event): void => {
-    this.context.transparency.setter((<CustomEvent>e).detail.value * 100);
+    this.context.transparency.setter((e as CustomEvent).detail.value * 100);
   };
   createColorPickerSelect = (): void => {
     this.colorPickerPanel = document.createElement('div');

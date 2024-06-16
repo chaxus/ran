@@ -145,7 +145,7 @@ export function parseInputOption(
   return getStrConverter(
     value['format'],
 
-    // @ts-ignore - the value of encoding gets value checked by getStrConverter
+    // @ts-expect-error - the value of encoding gets value checked by getStrConverter
     value['encoding'] || 'UTF8',
     bigEndianMod,
   )(value['value']);
@@ -205,7 +205,7 @@ export abstract class jsSHABase<StateT, VariantT> {
     this.utfType = inputOptions['encoding'] || 'UTF8';
     this.numRounds = inputOptions['numRounds'] || 1;
 
-    // @ts-ignore - The spec actually says ToString is called on the first parseInt argument so it's OK to use it here
+    // @ts-expect-error - The spec actually says ToString is called on the first parseInt argument so it's OK to use it here
     // to check if an arugment is an integer. This cheat would break if it's used to get the value of the argument.
     if (isNaN(this.numRounds) || this.numRounds !== parseInt(this.numRounds, 10) || 1 > this.numRounds) {
       throw new Error('numRounds must a integer >= 1');

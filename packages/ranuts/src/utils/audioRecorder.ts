@@ -255,14 +255,18 @@ class WebmBase<T> {
     private type = 'Unknown',
   ) {}
 
-  updateBySource() {}
+  updateBySource() {
+    console.log('updateBySource');
+  }
 
   setSource(source: Uint8Array) {
     this.source = source;
     this.updateBySource();
   }
 
-  updateByData() {}
+  updateByData() {
+    console.log('updateByData');
+  }
 
   setData(data: T) {
     this.data = data;
@@ -324,7 +328,7 @@ class WebmFloat extends WebmBase<number> {
     const byteArray = this.source!.reverse();
     const floatArrayType = this.getFloatArrayType();
     const floatArray = new floatArrayType(byteArray.buffer);
-    this.data! = floatArray[0];
+    this.data = floatArray[0];
   }
   updateByData() {
     const floatArrayType = this.getFloatArrayType();

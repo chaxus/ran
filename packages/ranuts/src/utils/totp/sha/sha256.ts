@@ -29,7 +29,7 @@ type VariantType = 'SHA-224' | 'SHA-256';
 function getNewState256(variant: VariantType): number[] {
   let retVal;
 
-  if ('SHA-224' == variant) {
+  if ('SHA-224' === variant) {
     retVal = H_trunc.slice();
   } else {
     /* "SHA-256" */

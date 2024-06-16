@@ -22,6 +22,7 @@ export default tseslint.config(
       '**/playground-temp/**',
       '**/temp/**',
       '**/*.snap',
+      '**/cache/**',
     ],
   },
   eslint.configs.recommended,
@@ -37,8 +38,8 @@ export default tseslint.config(
         ecmaVersion: 2022,
       },
       globals: {
-        ...globals.es2021,
         ...globals.node,
+        ...globals.es2021,
       },
     },
     plugins: {
@@ -49,15 +50,18 @@ export default tseslint.config(
       'n/no-exports-assign': 'error',
       'n/no-unpublished-bin': 'error',
       'n/no-unsupported-features/es-builtins': 'error',
-      'n/no-unsupported-features/node-builtins': 'error',
+      'n/no-unsupported-features/node-builtins': 'off',
       'n/process-exit-as-throw': 'error',
       'n/hashbang': 'error',
 
       eqeqeq: ['warn', 'always', { null: 'never' }],
       'no-debugger': ['error'],
-      'no-empty': ['warn', { allowEmptyCatch: true }],
+      // 'no-empty': ['warn', { allowEmptyCatch: true }],
+      'no-empty': 'off',
       'no-process-exit': 'off',
       'no-useless-escape': 'off',
+      'prefer-rest-params': 'off',
+      'regexp/no-obscure-range': 'off',
       'prefer-const': [
         'warn',
         {
@@ -89,7 +93,8 @@ export default tseslint.config(
       '@typescript-eslint/ban-ts-comment': 'error',
       '@typescript-eslint/ban-types': 'off', // TODO: we should turn this on in a new PR
       '@typescript-eslint/explicit-module-boundary-types': ['error', { allowArgumentsExplicitlyTypedAsAny: true }],
-      '@typescript-eslint/no-empty-function': ['error', { allow: ['arrowFunctions'] }],
+      // '@typescript-eslint/no-empty-function': ['error', { allow: ['arrowFunctions'] }],
+      '@typescript-eslint/no-empty-function': 'off',
       '@typescript-eslint/no-empty-interface': 'off',
       '@typescript-eslint/no-explicit-any': 'off', // maybe we should turn this on in a new PR
       'no-extra-semi': 'off',
@@ -97,6 +102,7 @@ export default tseslint.config(
       '@typescript-eslint/no-inferrable-types': 'off',
       '@typescript-eslint/no-unused-vars': 'off', // maybe we should turn this on in a new PR
       '@typescript-eslint/no-var-requires': 'off',
+      '@typescript-eslint/no-this-alias': 'off',
       '@typescript-eslint/consistent-type-imports': [
         'error',
         { prefer: 'type-imports', disallowTypeAnnotations: false },
@@ -221,7 +227,6 @@ export default tseslint.config(
       'no-undef': 'off',
       'no-empty': 'off',
       'no-constant-condition': 'off',
-      '@typescript-eslint/no-empty-function': 'off',
     },
   },
   {

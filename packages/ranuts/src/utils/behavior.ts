@@ -140,7 +140,7 @@ export const audioVendor = (): Promise<string> => {
     oscillator.start(0);
     context.startRendering();
     const audioTimeoutId = setTimeout(function () {
-      context.oncomplete = function () {};
+      context.oncomplete = () => {};
       reject('audioTimeout');
       return 'audioTimeout';
     }, 100);

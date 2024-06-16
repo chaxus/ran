@@ -1,5 +1,6 @@
 import {
   AudioRecorder,
+  Chain,
   Color,
   ColorScheme,
   FMT,
@@ -24,6 +25,7 @@ import {
   compose,
   connection,
   convertImageToBase64,
+  create,
   createData,
   createDocumentFragment,
   createObjectURL,
@@ -96,8 +98,6 @@ import {
   timeFormat,
   timestampToTime,
   webglVendor,
-  Chain,
-  create
 } from '@/utils';
 import type { CurrentDevice } from '@/utils';
 import { reactify } from '@/react';
@@ -254,7 +254,7 @@ export {
   setAttributeByGlobal,
   setFontSize2html,
   Chain,
-  create
+  create,
 };
 
 export type { CurrentDevice };

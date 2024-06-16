@@ -13,7 +13,7 @@ import { BARE_IMPORT_RE } from '../constants';
 
 const debug = createDebug('dev');
 /**
- * @description: 处理预编译收集到的依赖，将cjs转化为esm，同时将esm规范化
+ * @description: 处理预编译收集到的依赖，将 cjs 转化为 esm，同时将 esm 规范化
  * @param {Set} deps
  */
 export function preBundlePlugin(deps: Set<string>): Plugin {
@@ -63,14 +63,15 @@ export function preBundlePlugin(deps: Set<string>): Plugin {
           // imports 和 exports 都是一个数组，其中每个元素（对象）代表一个导入语句的解析后的结果，具体会包含导入或导出的模块的名称、在源代码中的位置等信息。
           const [imports, exports] = await parse(code);
           const proxyModule = [];
-          // 如果没有imports分析和exports分析，说明是一个cjs模块，进入cjs模块导入
+          // 如果没有 imports 分析和 exports 分析，说明是一个 cjs 模块，进入 cjs 模块导入
           if (!imports.length && !exports.length) {
             // 构造代理模块
             // 通过 require 拿到模块的导出对象
+            // eslint-disable-next-line
             const res = require(entryPath);
             // 用 Object.keys 拿到所有的具名导出
             const specifiers = Object.keys(res);
-            // 构造 export 语句交给 Esbuild 打包，将cjs模块转化为esm
+            // 构造 export 语句交给 Esbuild 打包，将 cjs 模块转化为 esm
             proxyModule.push(
               `export { ${specifiers.join(',')} } from "${entryPath}"`,
               `export default require("${entryPath}")`,
@@ -82,7 +83,7 @@ export function preBundlePlugin(deps: Set<string>): Plugin {
             }
             proxyModule.push(`export * from "${entryPath}"`);
           }
-          debug('代理模块内容: %o', proxyModule.join('\n'));
+          debug('代理模块内容：%o', proxyModule.join('\n'));
           // 指定 loader，如`js`、`ts`、`jsx`、`tsx`、`json`等等
           const loader = extname(entryPath).slice(1);
           return {

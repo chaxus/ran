@@ -30,7 +30,7 @@ export const getCookie = (objName: string): string => {
   const arrStr = document.cookie.split('; ');
   for (let i = 0; i < arrStr.length; i++) {
     const item = arrStr[i].split('=');
-    if (item[0] == objName) {
+    if (item[0] === objName) {
       return decodeURIComponent(item[1]);
     }
   }

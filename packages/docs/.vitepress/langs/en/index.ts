@@ -1,5 +1,5 @@
-import { GITHUB } from '../../common/index';
 import type { DefaultTheme } from 'vitepress';
+import { GITHUB } from '../../common/index';
 
 const themeEnConfig: DefaultTheme.Config = {
   logo: '/home.svg',

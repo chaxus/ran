@@ -68,7 +68,7 @@ export class Select extends (HTMLElementSSR()!) {
     this._selection.setAttribute('class', 'selection');
     this._selection.setAttribute('part', 'selection');
     this._selector = document.createElement('div');
-    this._search = <Input>document.createElement('ra-input');
+    this._search = document.createElement('ra-input') as Input;
     this._search.setAttribute('class', 'selection-search');
     this._search.setAttribute('part', 'search');
     this._search.setAttribute('type', 'search');
@@ -396,7 +396,7 @@ export class Select extends (HTMLElementSSR()!) {
     this._text.setAttribute('title', label);
   };
   changeSearch = (e: Event): void => {
-    const value = (<CustomEvent>e).detail.value || '';
+    const value = (e as CustomEvent).detail.value || '';
     this.dispatchEvent(
       new CustomEvent('search', {
         detail: { value },

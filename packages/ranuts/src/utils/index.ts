@@ -19,7 +19,7 @@ import {
   networkSpeed,
   removeGhosting,
   requestUrlToBuffer,
-  retain
+  retain,
 } from '@/utils/bom';
 import {
   Color,
@@ -47,13 +47,13 @@ import { debounce } from '@/utils/debounce';
 import { currentDevice, isBangDevice, isClient, isMobile, isWeiXin } from '@/utils/device';
 import type { CurrentDevice } from '@/utils/device';
 import {
+  Chain,
   addClassToElement,
+  create,
   createDocumentFragment,
   escapeHtml,
   removeClassToElement,
   setFontSize2html,
-  Chain,
-  create
 } from '@/utils/dom';
 import { handleError } from '@/utils/error';
 import { convertImageToBase64, isImageSize } from '@/utils/img';
@@ -171,7 +171,8 @@ export {
   localStorageSetItem,
   setAttributeByGlobal,
   setFontSize2html,
-  Chain, create
+  Chain,
+  create,
 };
 
 export type { CurrentDevice };

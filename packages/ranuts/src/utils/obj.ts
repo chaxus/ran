@@ -11,7 +11,7 @@ export function querystring(data = {}): string {
   return Object.entries(data)
     .reduce(
       (searchParams, [name, value]) =>
-        value === undefined || value === null
+        value === undefined || value == null
           ? searchParams
           : (searchParams.append(decodeURIComponent(name), decodeURIComponent(value)), searchParams),
       new URLSearchParams(),
@@ -85,7 +85,7 @@ export const formatJson = (jsonObj: string, callback = () => {}): string => {
     if (num % 2 && !_indexStart) {
       _indexStart = index;
     }
-    if (num % 2 && _indexStart && _indexStart != index) {
+    if (num % 2 && _indexStart && _indexStart !== index) {
       _indexEnd = index;
     }
     // 将需要特殊处理的字符串段的其实位置和结束位置信息存入，并对应重置开始时和结束变量
@@ -240,7 +240,7 @@ export const setAttributeByGlobal = (name: string, value: unknown): void => {
     window[name as any] = value as any;
   }
   if (typeof global !== 'undefined') {
-    // @ts-ignore
+    // @ts-expect-error global
     global[name as any as keyof typeof global] = value as any;
   }
 };

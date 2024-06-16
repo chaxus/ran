@@ -1,23 +1,23 @@
 import { defineConfig } from 'vitepress';
+import { pagefindPlugin } from 'vitepress-plugin-pagefind';
 import { themeEnConfig } from './langs/en';
 import { themeCnConfig } from './langs/cn';
 import {
-  GTAG,
-  GOOGLE_ANALYSE,
+  ARTICLE_PATH,
+  BASE_PATH,
   BD_ANALYSE,
-  PREVIEW_CODE,
   DESCRIPTION,
+  GOOGLE_ANALYSE,
+  GTAG,
   HOME,
   HOME_ICON,
-  UTILS_PATH,
-  RANUI_PATH,
-  ARTICLE_PATH,
   KEY_WORDS,
-  BASE_PATH,
+  PREVIEW_CODE,
+  RANUI_PATH,
   SERVICE_WORK,
   SET_FONT_SIZE,
+  UTILS_PATH,
 } from './common/index';
-import { pagefindPlugin } from 'vitepress-plugin-pagefind';
 import { LANGS_DICT } from './lib/constant';
 
 export default defineConfig({

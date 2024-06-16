@@ -1,10 +1,11 @@
 import DefaultTheme from 'vitepress/theme';
+import type { EnhanceAppContext } from 'vitepress';
+import { localStorageGetItem, setAttributeByGlobal } from 'ranuts/utils';
 import env from '../plugins/env';
 import TOTP from '../components/TOTP.vue';
 import Layout from '../components/Layout.vue';
 import i18n, { loadLanguageAsync } from '../lang';
-import { RAN_CHAXUS_LANG, LANGS_DICT, PWA_INSTALL_ID, PWA_ELEMENT_NAME, MANIFEST_PATH_ROOT } from '../lib/constant';
-import { localStorageGetItem, setAttributeByGlobal } from 'ranuts/utils';
+import { LANGS_DICT, MANIFEST_PATH_ROOT, PWA_ELEMENT_NAME, PWA_INSTALL_ID, RAN_CHAXUS_LANG } from '../lib/constant';
 import './styles/index.less';
 import './styles/vars.less';
 import './tailwind.less';
@@ -18,7 +19,7 @@ declare global {
   }
 }
 /**
- * @description: pwa引导安装
+ * @description: pwa 引导安装
  */
 const pwaInstall = () => {
   import('@khmyznikov/pwa-install').then(() => {
@@ -35,7 +36,7 @@ const pwaInstall = () => {
 export default {
   extends: DefaultTheme,
   // Layout,
-  enhanceApp({ app, router, siteData }) {
+  enhanceApp({ app, router, siteData }: EnhanceAppContext): void {
     if (!import.meta.env.SSR) {
       import('ranui');
       pwaInstall();

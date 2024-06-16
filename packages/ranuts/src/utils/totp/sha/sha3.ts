@@ -100,7 +100,7 @@ function roundSHA3(block: number[] | null, state: Int_64[][]): Int_64[][] {
   const C = [],
     D = [];
 
-  if (null !== block) {
+  if (null != block) {
     for (x = 0; x < block.length; x += 2) {
       state[(x >>> 1) % 5][((x >>> 1) / 5) | 0] = xor_64_2(
         state[(x >>> 1) % 5][((x >>> 1) / 5) | 0],

@@ -60,23 +60,23 @@ export default class jsSHA {
   constructor(variant: 'KMAC128' | 'KMAC256', inputFormat: FormatNoTextType, options: KMACOptionsNoEncodingType);
 
   constructor(variant: any, inputFormat: any, options?: any) {
-    if ('SHA-1' == variant) {
+    if ('SHA-1' === variant) {
       this.shaObj = new jsSHA1(variant, inputFormat, options);
-    } else if ('SHA-224' == variant || 'SHA-256' == variant) {
+    } else if ('SHA-224' === variant || 'SHA-256' === variant) {
       this.shaObj = new jsSHA256(variant, inputFormat, options);
-    } else if ('SHA-384' == variant || 'SHA-512' == variant) {
+    } else if ('SHA-384' === variant || 'SHA-512' === variant) {
       this.shaObj = new jsSHA512(variant, inputFormat, options);
     } else if (
-      'SHA3-224' == variant ||
-      'SHA3-256' == variant ||
-      'SHA3-384' == variant ||
-      'SHA3-512' == variant ||
-      'SHAKE128' == variant ||
-      'SHAKE256' == variant ||
-      'CSHAKE128' == variant ||
-      'CSHAKE256' == variant ||
-      'KMAC128' == variant ||
-      'KMAC256' == variant
+      'SHA3-224' === variant ||
+      'SHA3-256' === variant ||
+      'SHA3-384' === variant ||
+      'SHA3-512' === variant ||
+      'SHAKE128' === variant ||
+      'SHAKE256' === variant ||
+      'CSHAKE128' === variant ||
+      'CSHAKE256' === variant ||
+      'KMAC128' === variant ||
+      'KMAC256' === variant
     ) {
       this.shaObj = new jsSHA3(variant, inputFormat, options);
     } else {

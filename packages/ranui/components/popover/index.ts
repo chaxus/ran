@@ -77,7 +77,7 @@ export class Popover extends (HTMLElementSSR()!) {
     }
   };
   watchContent = (e: Event): void => {
-    const { value } = (<CustomEvent>e).detail;
+    const { value } = (e as CustomEvent).detail;
     this.createContent(value.content);
     this.placementPosition();
   };

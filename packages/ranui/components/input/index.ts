@@ -282,8 +282,8 @@ export class Input extends (HTMLElementSSR()!) {
   customInput = (event: Event): void => {
     event.stopPropagation();
     event.preventDefault();
-    const { target, data = '' } = <InputEvent>event;
-    this.value = (<HTMLInputElement>target)?.value || data || '';
+    const { target, data = '' } = event as InputEvent;
+    this.value = (target as HTMLInputElement)?.value || data || '';
     // 增加 onchange 事件
     this.customChange();
     // 默认 input 事件

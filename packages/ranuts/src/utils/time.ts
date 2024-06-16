@@ -12,7 +12,7 @@ export function timestampToTime(timestamp?: number | string): Date & { format?: 
   if (timestamp) {
     date = new Date(timestamp);
   }
-  (<Date & { format?: Function }>date).format = (format = 'YYYY-MM-DD HH:mm:ss'): string => {
+  (date as Date & { format?: Function }).format = (format = 'YYYY-MM-DD HH:mm:ss'): string => {
     const year = date.getFullYear();
     const month = formatDuration(date.getMonth() + 1);
     const day = formatDuration(date.getDate());

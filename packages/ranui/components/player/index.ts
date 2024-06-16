@@ -178,7 +178,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     // volume
     this._playControllerBottomVolume = document.createElement('div');
     this._playControllerBottomVolume.setAttribute('class', 'ran-player-controller-bottom-right-volume');
-    this._playControllerBottomVolumeProgress = <Progress>document.createElement('r-progress');
+    this._playControllerBottomVolumeProgress = document.createElement('r-progress') as Progress;
     this._playControllerBottomVolumeProgress.setAttribute(
       'class',
       'ran-player-controller-bottom-right-volume-progress',
@@ -298,8 +298,8 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     }
   };
   changeClarity = (e: Event): void => {
-    this.ctx.clarity = (<CustomEvent>e).detail.value;
-    const url = this.ctx.levelMap.get((<CustomEvent>e).detail.value);
+    this.ctx.clarity = (e as CustomEvent).detail.value;
+    const url = this.ctx.levelMap.get((e as CustomEvent).detail.value);
     if (url && this._hls) {
       this._hls.loadSource(url);
       this._hls.startLoad();
@@ -774,10 +774,10 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   };
   changeVolumeProgress = (e: Event): void => {
     if (this._video) {
-      this.setVolume((<CustomEvent>e).detail.value);
-      this.change('volume', (<CustomEvent>e).detail.value);
-      if ((<CustomEvent>e).detail.value > 0) {
-        this._volume = (<CustomEvent>e).detail.value;
+      this.setVolume((e as CustomEvent).detail.value);
+      this.change('volume', (e as CustomEvent).detail.value);
+      if ((e as CustomEvent).detail.value > 0) {
+        this._volume = (e as CustomEvent).detail.value;
       }
     }
   };
@@ -822,8 +822,8 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     }
   };
   changeSpeed = (e: Event): void => {
-    this.change('speed', (<CustomEvent>e).detail.value);
-    this.setPlaybackRate((<CustomEvent>e).detail.value);
+    this.change('speed', (e as CustomEvent).detail.value);
+    this.setPlaybackRate((e as CustomEvent).detail.value);
   };
   progressMouseEnter = (e: MouseEvent): void => {
     this._playerTip.style.setProperty('opacity', '1');

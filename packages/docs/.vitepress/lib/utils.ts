@@ -1,6 +1,11 @@
 import fs from 'node:fs';
-import path from 'node:path';
+import path, { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import postcss from 'postcss';
+
+const __filename = fileURLToPath(import.meta.url);
+
+const __dirname = path.dirname(__filename);
 
 function isInsideRoot(rule) {
   return rule.selectors.length !== 1 || rule.selectors[0] !== ':root' || rule.parent.type !== 'root';
@@ -37,7 +42,7 @@ function parseFileSync(fileName, options) {
   return parse(css, { ...options, from: fileName });
 }
 
-function themeReplacements() {
+function themeReplacements(): Record<string, string> {
   const fileName = path.resolve(__dirname, '../theme/theme.less');
   const variables = parseFileSync(fileName, {
     parser: 'postcss-scss',
@@ -48,7 +53,7 @@ function themeReplacements() {
   }, {});
 }
 
-function normalize(config) {
+function normalize(config: Record<string, string>): Record<string, string> {
   const r = {};
   Object.keys(config).forEach((firKey) => {
     const colorVal = config[firKey];

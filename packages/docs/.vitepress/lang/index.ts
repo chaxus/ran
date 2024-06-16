@@ -1,6 +1,6 @@
 import { createI18n } from 'vue-i18n';
 import { $env } from '../plugins/env';
-import { LANGS_DICT, LOADED_LOCALES, LANG_MESSAGES, I18N_MODE } from '../lib/constant';
+import { I18N_MODE, LANGS_DICT, LANG_MESSAGES, LOADED_LOCALES } from '../lib/constant';
 
 const locale = $env.locale;
 
@@ -12,7 +12,7 @@ const i18n = createI18n({
   devtools: false,
 });
 
-export const setI18nLanguage = (lang) => {
+export const setI18nLanguage = (lang: string): string => {
   if (i18n.mode === I18N_MODE.LEGACY) {
     i18n.global.locale = lang;
   } else {
@@ -22,12 +22,12 @@ export const setI18nLanguage = (lang) => {
 };
 
 // 合并公共语言词条
-export const mergeCommonMessage = (message, lang = locale) => {
+export const mergeCommonMessage = (message: string, lang = locale): void => {
   i18n.global.mergeLocaleMessage(lang, message);
 };
 
 // 异步加载语言词条
-export const loadLanguageAsync = (lang) => {
+export const loadLanguageAsync = (lang: string): Promise<string> => {
   if (!lang) return Promise.reject('lang is undefined');
   // 如果语言相同
   if (i18n.global.locale === lang) {
