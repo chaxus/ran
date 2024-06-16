@@ -31,6 +31,7 @@
     "nums",
     "originjs",
     "Ovride",
+    "pacman",
     "pagefind",
     "picocolors",
     "playsinline",
@@ -67,5 +68,6 @@
     "vnodes",
     "wasmjieba",
     "xlabels"
-  ]
+  ],
+  "liveServer.settings.port": 5556
 }
