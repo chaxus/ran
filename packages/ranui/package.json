@@ -21,7 +21,7 @@
     "node": "^18.0.0 || >=20.0.0"
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "sh ./bin/build.sh",
     "build:es": "vite build -c ./build/config.es.ts",
     "build:umd": "vite build -c ./build/config.umd.ts",
@@ -166,6 +166,7 @@
     "@playwright/test": "^1.44.0",
     "@types/imagemin-svgo": "^10.0.5",
     "@types/lodash": "^4.17.1",
+    "@types/react": "^18.3.1",
     "@types/tinycolor2": "^1.4.6",
     "@vheemstra/vite-plugin-imagemin": "^1.2.1",
     "imagemin-svgo": "^10.0.1",
