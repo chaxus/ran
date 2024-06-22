@@ -1,7 +1,7 @@
 import { create } from 'ranuts/utils';
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
 
-enum NAME_AMP {
+export enum NAME_AMP {
   DOUBLE_BOUNCE = 'double-bounce',
   ROTATE = 'rotate',
   STRETCH = 'stretch',
@@ -30,7 +30,7 @@ enum NAME_AMP {
   DOT_LINE = 'dot-line',
   ARC = 'arc',
   DROP = 'drop',
-  PACMAN = 'pacman'
+  PACMAN = 'pacman',
 }
 
 export class Loading extends (HTMLElementSSR()!) {
@@ -42,7 +42,7 @@ export class Loading extends (HTMLElementSSR()!) {
     super();
     this.contain = document.createElement('div');
     this.contain.setAttribute('class', 'ran-loading');
-    const shadowRoot = this.attachShadow({ mode: 'closed' });
+    const shadowRoot = this.attachShadow({ mode: 'open' });
     shadowRoot.appendChild(this.contain);
   }
   get name(): NAME_AMP {
@@ -332,34 +332,27 @@ export class Loading extends (HTMLElementSSR()!) {
     const { element: h1 } = create('h1').append(span);
     arc.appendChild(h1);
     this.contain.appendChild(arc);
-  }
+  };
   dropLoading = (): void => {
-    const id = 'ran-loading-drop'
     const { element: span } = create('span').setTextContent('LOADING');
     const { element: dropItemBg } = create('div').setAttribute('class', 'drop-item-bg').append(span);
     const { element: dropDot1 } = create('div').setAttribute('class', 'drop-dot-1');
     const { element: dropDot2 } = create('div').setAttribute('class', 'drop-dot-2');
     const { element: dropDot } = create('div').setAttribute('class', 'drop-dot').append(dropDot1).append(dropDot2);
     const { element: dropItem } = create('div').setAttribute('class', 'drop-item').append(dropItemBg).append(dropDot);
-    const svgId = document.getElementById(id);
-    if (!svgId) {
-      const { element: feGaussianBlur } = create('feGaussianBlur').setAttribute('in', 'SourceGraphic').setAttribute('stdDeviation', '10').setAttribute('result', 'blur');
-      const { element: feColorMatrix } = create('feColorMatrix').setAttribute('mode', 'matrix').setAttribute('values', '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7').setAttribute('result', id).setAttribute('in', 'blur');
-      const { element: filter } = create('filter').setAttribute('id', id).append(feGaussianBlur).append(feColorMatrix);
-      const { element: svg } = create('svg').append(filter);
-      document.body.appendChild(svg);
-    }
-    const { element: drop } = create('div').setAttribute('class', 'drop').append(dropItem).append(dropDot)
+    const { element: drop } = create('div').setAttribute('class', 'drop').append(dropItem).append(dropDot);
     this.contain.appendChild(drop);
-  }
+  };
   pacmanLoading = (): void => {
     const { element: pacman } = create('div').setAttribute('class', 'pacman');
-    Array(5).fill(1).forEach(() => {
-      const { element: dot } = create('div')
-      pacman.append(dot);
-    })
+    Array(5)
+      .fill(1)
+      .forEach(() => {
+        const { element: dot } = create('div');
+        pacman.append(dot);
+      });
     this.contain.appendChild(pacman);
-  }
+  };
   createLoading = (): void => {
     this.contain.innerHTML = '';
     const NAME_MAP: Record<NAME_AMP, () => void> = {
@@ -391,7 +384,7 @@ export class Loading extends (HTMLElementSSR()!) {
       [NAME_AMP.DOT_LINE]: this.dotLineLoading,
       [NAME_AMP.ARC]: this.arcLoading,
       [NAME_AMP.DROP]: this.dropLoading,
-      [NAME_AMP.PACMAN]: this.pacmanLoading
+      [NAME_AMP.PACMAN]: this.pacmanLoading,
     };
     const handler = NAME_MAP[this.name];
     handler && handler();
@@ -399,7 +392,7 @@ export class Loading extends (HTMLElementSSR()!) {
   connectedCallback(): void {
     this.createLoading();
   }
-  disconnectCallback(): void { }
+  disconnectCallback(): void {}
   attributeChangedCallback(k: string, o: string, n: string): void {
     if (o !== n) {
       if (k === 'name') {
