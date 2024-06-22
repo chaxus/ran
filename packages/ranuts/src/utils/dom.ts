@@ -162,7 +162,34 @@ export const setFontSize2html = (designWidth: number = 375): void => {
   setFontSize();
 };
 const SVG_NS = 'http://www.w3.org/2000/svg';
-const SVG_TAG_NAMES = ['svg', 'path', 'g', 'circle', 'rect', 'line', 'polyline', 'polygon', 'ellipse', 'text', 'tspan', 'textPath', 'defs', 'marker', 'radialGradient', 'stop', 'linearGradient', 'clipPath', 'mask', 'pattern', 'image', 'use', 'symbol', 'foreignObject', 'feGaussianBlur', 'feColorMatrix'];
+const SVG_TAG_NAMES = [
+  'svg',
+  'path',
+  'g',
+  'circle',
+  'rect',
+  'line',
+  'polyline',
+  'polygon',
+  'ellipse',
+  'text',
+  'tspan',
+  'textPath',
+  'defs',
+  'marker',
+  'radialGradient',
+  'stop',
+  'linearGradient',
+  'clipPath',
+  'mask',
+  'pattern',
+  'image',
+  'use',
+  'symbol',
+  'foreignObject',
+  'feGaussianBlur',
+  'feColorMatrix',
+];
 /**
  * @description: 链式调用的 dom 操作
  * @return {HTMLElement}
@@ -180,7 +207,7 @@ export class Chain {
    */
   public create = (tagName: string, options?: ElementCreationOptions): HTMLElement => {
     if (SVG_TAG_NAMES.includes(tagName)) {
-      return document.createElementNS(SVG_NS, tagName, options) as HTMLElement
+      return document.createElementNS(SVG_NS, tagName, options) as HTMLElement;
     }
     return document.createElement(tagName, options);
   };
@@ -233,7 +260,7 @@ export class Chain {
   public setStyle = (name: string, value: string): Chain => {
     this.element.style.setProperty(name, value);
     return this;
-  }
+  };
 }
 
 export const create = (tagName: string, options?: ElementCreationOptions): Chain => {

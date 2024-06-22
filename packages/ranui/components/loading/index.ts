@@ -30,7 +30,7 @@ export enum NAME_AMP {
   DOT_LINE = 'dot-line',
   ARC = 'arc',
   DROP = 'drop',
-  PACMAN = 'pacman'
+  PACMAN = 'pacman',
 }
 
 export class Loading extends (HTMLElementSSR()!) {
@@ -332,7 +332,7 @@ export class Loading extends (HTMLElementSSR()!) {
     const { element: h1 } = create('h1').append(span);
     arc.appendChild(h1);
     this.contain.appendChild(arc);
-  }
+  };
   dropLoading = (): void => {
     const { element: span } = create('span').setTextContent('LOADING');
     const { element: dropItemBg } = create('div').setAttribute('class', 'drop-item-bg').append(span);
@@ -340,17 +340,19 @@ export class Loading extends (HTMLElementSSR()!) {
     const { element: dropDot2 } = create('div').setAttribute('class', 'drop-dot-2');
     const { element: dropDot } = create('div').setAttribute('class', 'drop-dot').append(dropDot1).append(dropDot2);
     const { element: dropItem } = create('div').setAttribute('class', 'drop-item').append(dropItemBg).append(dropDot);
-    const { element: drop } = create('div').setAttribute('class', 'drop').append(dropItem).append(dropDot)
+    const { element: drop } = create('div').setAttribute('class', 'drop').append(dropItem).append(dropDot);
     this.contain.appendChild(drop);
-  }
+  };
   pacmanLoading = (): void => {
     const { element: pacman } = create('div').setAttribute('class', 'pacman');
-    Array(5).fill(1).forEach(() => {
-      const { element: dot } = create('div')
-      pacman.append(dot);
-    })
+    Array(5)
+      .fill(1)
+      .forEach(() => {
+        const { element: dot } = create('div');
+        pacman.append(dot);
+      });
     this.contain.appendChild(pacman);
-  }
+  };
   createLoading = (): void => {
     this.contain.innerHTML = '';
     const NAME_MAP: Record<NAME_AMP, () => void> = {
@@ -382,7 +384,7 @@ export class Loading extends (HTMLElementSSR()!) {
       [NAME_AMP.DOT_LINE]: this.dotLineLoading,
       [NAME_AMP.ARC]: this.arcLoading,
       [NAME_AMP.DROP]: this.dropLoading,
-      [NAME_AMP.PACMAN]: this.pacmanLoading
+      [NAME_AMP.PACMAN]: this.pacmanLoading,
     };
     const handler = NAME_MAP[this.name];
     handler && handler();
@@ -390,7 +392,7 @@ export class Loading extends (HTMLElementSSR()!) {
   connectedCallback(): void {
     this.createLoading();
   }
-  disconnectCallback(): void { }
+  disconnectCallback(): void {}
   attributeChangedCallback(k: string, o: string, n: string): void {
     if (o !== n) {
       if (k === 'name') {
