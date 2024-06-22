@@ -95,20 +95,20 @@ function CustomElement() {
         }
       }
       /**
-       * @description: 构建tabPane组件key值和index的映射，同时判断一个tabs下的tabPane key值不能重复
+       * @description: 构建 tabPane 组件 key 值和 index 的映射，同时判断一个 tabs 下的 tabPane key 值不能重复
        * @param {string} key
        * @param {number} index
        */
       initTabHeaderKeyMapIndex = (key: string, index: number) => {
         const value = this.tabHeaderKeyMapIndex[key];
         if (value) {
-          throw new Error('tab 组件的 key 值存在重复, 或者某个 tab 组件缺少 key 属性');
+          throw new Error('tab 组件的 key 值存在重复，或者某个 tab 组件缺少 key 属性');
         } else {
           this.tabHeaderKeyMapIndex[key] = index;
         }
       };
       /**
-       * @description: 根据传入的tabPane生成tabs的头部
+       * @description: 根据传入的 tabPane 生成 tabs 的头部
        * @param {Element} tabPane
        * @param {number} index
        * @return {Element}
@@ -136,7 +136,7 @@ function CustomElement() {
         return tabHeader;
       }
       /**
-       * @description: 初始化tabLine的位置，主要是当tabs的align属性为center时需要处理
+       * @description: 初始化 tabLine 的位置，主要是当 tabs 的 align 属性为 center 时需要处理
        */
       initTabLineAlignCenter = () => {
         const { length } = this._nav.children;
@@ -166,11 +166,11 @@ function CustomElement() {
       setTabLine = (key: string) => {
         if (key) {
           const index = this.tabHeaderKeyMapIndex[key];
-          // 计算tabHeader的宽度，给tabLine赋值
+          // 计算 tabHeader 的宽度，给 tabLine 赋值
           const TabHeader = this._nav.children[index];
           const { width = 0 } = TabHeader.getBoundingClientRect();
           this._line.style.setProperty('width', `${width}px`);
-          // 计算tabLine的移动距离
+          // 计算 tabLine 的移动距离
           let distance = 0;
           for (let i = 0; i < index; i++) {
             const item = this._nav.children[i];
@@ -191,7 +191,7 @@ function CustomElement() {
         }
       };
       /**
-       * @description: 根据点击设置tabLine的位置
+       * @description: 根据点击设置 tabLine 的位置
        * @param {Event} e
        * @param {number} index
        * @param {number} width
@@ -200,7 +200,7 @@ function CustomElement() {
         const tabHeader = e.target as Element;
         // 移动元素到可视区域内
         // tabHeader.scrollIntoView({ block: "center", inline: "center" });
-        // TODO: tab超出屏幕滚动问题
+        // TODO: tab 超出屏幕滚动问题
         const key = tabHeader.getAttribute('r-key');
         const disabled = isDisabled(tabHeader);
         if (!disabled && key) {
@@ -225,18 +225,18 @@ function CustomElement() {
         }
       };
       /**
-       * @description: 初始化tabs的active属性和tabLine,tabContent
+       * @description: 初始化 tabs 的 active 属性和 tabLine,tabContent
        */
       initActive = () => {
         const tabHeaderList = [...this._nav.children];
         const initTabList = tabHeaderList.filter((item) => !isDisabled(item));
         let initTabHeader: Element | undefined;
-        // 如果有active，找到active对应的标签，设置活跃标签
+        // 如果有 active，找到 active 对应的标签，设置活跃标签
         if (this.active != null) {
           initTabHeader = initTabList.find((item) => item.getAttribute('r-key') === this.active);
           initTabHeader?.setAttribute('r-key', this.active);
         }
-        // 如果没有active，则默认第一个标签为活跃标签
+        // 如果没有 active，则默认第一个标签为活跃标签
         if (!initTabHeader) {
           initTabHeader = initTabList.shift();
         }
@@ -255,7 +255,7 @@ function CustomElement() {
         }
       };
       /**
-       * @description: 监听slot组件的添加/删除/替换操作，进行tabs初始化
+       * @description: 监听 slot 组件的添加/删除/替换操作，进行 tabs 初始化
        * @return {*}
        */
       listenSlotChange = () => {
@@ -266,20 +266,20 @@ function CustomElement() {
           tabPane.addEventListener('click', this.clickTabHead);
         });
         this.initActive();
-        // 如果存在align属性，进行设置tabLine的初始位置
+        // 如果存在 align 属性，进行设置 tabLine 的初始位置
         if (this.align) {
           if (this.align === 'center') this.initTabLineAlignCenter();
           if (this.align === 'end') this.initTabLineAlignEnd();
         }
       };
       /**
-       * @description: 初始化tab
+       * @description: 初始化 tab
        */
       initTab = () => {
         this._slot.addEventListener('slotchange', this.listenSlotChange);
       };
       /**
-       * @description: 卸载tab
+       * @description: 卸载 tab
        */
       unloadTab = () => {
         this._slot.removeEventListener('slotchange', this.listenSlotChange);
@@ -302,7 +302,7 @@ function CustomElement() {
               },
             }),
           );
-          // 改变align属性，进行设置tabLine的初始位置
+          // 改变 align 属性，进行设置 tabLine 的初始位置
           if (name === 'align') {
             if (newValue === 'center') this.initTabLineAlignCenter();
             if (newValue === 'end') this.initTabLineAlignEnd();

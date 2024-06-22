@@ -106,7 +106,7 @@ function Custom() {
         this.mData = this.abilitys;
         this.mCount = this.mData?.length || 1; // 边数
         this.mCenter = this.mW / 2; // 中心点
-        this.mRadius = this.mCenter - 50 * radio; // 半径(减去的值用于给绘制的文本留空间)
+        this.mRadius = this.mCenter - 50 * radio; // 半径 (减去的值用于给绘制的文本留空间)
         this.mAngle = (Math.PI * 2) / this.mCount; // 角度
         this.drawPolygon(ctx);
         this.drawSide(ctx);
