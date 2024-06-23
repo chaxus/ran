@@ -26,12 +26,13 @@
       height: var(--loading-stretch-div-height, 100%);
       width: var(--loading-stretch-div-width, 0.4em);
       animation: var(--loading-stretch-div-animation, ran-loading-stretch 1.2s infinite ease-in-out);
+      animation-play-state: var(--loading-stretch-div-animation-play-state, running);
     }
     @animation-delay-base: -1.3s;
     .set-animation-delay(@index) when (@index > 1) {
       @animation-delay: @animation-delay-base + (@index * 0.1s);
       .rect@{index} {
-        animation-delay: var(--loading-stretch-rect-animation-delay, ~'@{animation-delay}');
+        animation-delay: var(--loading-stretch-rect-animation-delay, ~"@{animation-delay}");
       }
       .set-animation-delay(@index - 1);
     }
@@ -53,6 +54,7 @@
     height: var(--loading-rotate-height, 4em);
     background: var(--loading-rotate-background, @blue-1);
     animation: var(--loading-rotate-animation, ran-loading-rotate 1.2s infinite ease-in-out);
+    animation-play-state: var(--loading-rotate-div-animation-play-state, running);
   }
   .double-bounce {
     width: var(--loading-double-bounce-width, 4em);
@@ -68,6 +70,7 @@
       top: var(--loading-double-bounce1-top, 0);
       left: var(--loading-double-bounce1-left, 0);
       animation: var(--loading-double-bounce1-animation, ran-loading-bounce 2s infinite ease-in-out);
+      animation-play-state: var(--loading-double-bounce1-animation-play-state, running);
     }
     .double-bounce2 {
       width: var(--loading-double-bounce2-width, 100%);
@@ -80,6 +83,7 @@
       left: var(--loading-double-bounce2-left, 0);
       animation: var(--loading-double-bounce2-animation, ran-loading-bounce 2s infinite ease-in-out);
       animation-delay: var(--loading-double-bounce2-animation-delay, -1s);
+      animation-play-state: var(--loading-double-bounce2-animation-play-state, running);
     }
     @keyframes ran-loading-bounce {
       0%,
@@ -103,6 +107,7 @@
       top: var(--loading-cube1-top, 0);
       left: var(--loading-cube1-left, 0);
       animation: var(--loading-cube1-animation, ran-loading-cube 1.8s infinite ease-in-out);
+      animation-play-state: var(--loading-cube1-animation-play-state, running);
     }
     .cube2 {
       background: var(--loading-cube2-background, @blue-1);
@@ -113,6 +118,7 @@
       left: var(--loading-cube2-left, 0);
       animation: var(--loading-cube2-animation, ran-loading-cube 1.8s infinite ease-in-out);
       animation-delay: var(--loading-cube2-animation-delay, -0.9s);
+      animation-play-state: var(--loading-cube2-animation-play-state, running);
     }
     @keyframes ran-loading-cube {
       25% {
@@ -138,6 +144,7 @@
     position: var(--loading-dot-position, relative);
     text-align: var(--loading-dot-text-align, center);
     animation: var(--loading-dot-animation, ran-loading-dot-rotate 2s infinite linear);
+    animation-play-state: var(--loading-dot-animation-play-state, running);
     .dot1 {
       width: var(--loading-dot1-width, 60%);
       height: var(--loading-dot1-height, 60%);
@@ -147,6 +154,7 @@
       background: var(--loading-dot1-background, @blue-1);
       border-radius: var(--loading-dot1-border-radius, 100%);
       animation: var(--loading-dot1-animation, ran-loading-dot-bounce 2s infinite ease-in-out);
+      animation-play-state: var(--loading-dot1-animation-play-state, running);
     }
     .dot2 {
       width: var(--loading-dot2-width, 60%);
@@ -159,6 +167,7 @@
       top: var(--loading-dot2-top, auto);
       bottom: var(--loading-dot2-bottom, 0px);
       animation-delay: var(--loading-dot2-animation-delay, -1s);
+      animation-play-state: var(--loading-dot2-animation-play-state, running);
     }
     @keyframes ran-loading-dot-rotate {
       100% {
@@ -185,6 +194,7 @@
       border-radius: var(--loading-triple-bounce-div-border-radius, 100%);
       display: var(--loading-triple-bounce-div-display, inline-block);
       animation: var(--loading-triple-bounce-div-animation, ran-loading-triple-bounce 1.4s infinite ease-in-out);
+      animation-play-state: var(--loading-triple-bounce-div-animation-play-state, running);
       animation-fill-mode: var(--loading-triple-bounce-div-animation-fill-mode, both);
     }
     .triple-bounce1 {
@@ -210,6 +220,7 @@
     background: var(--loading-scale-out-background, @blue-1);
     border-radius: var(--loading-scale-out-border-radius, 100%);
     animation: var(--loading-scale-out-animation, ran-loading-scale-out 1s infinite ease-in-out);
+    animation-play-state: var(--loading-scale-out-animation-play-state, running);
     @keyframes ran-loading-scale-out {
       0% {
         transform: var(--loading-scale-out-keyframes-0-transform, scale(0));
@@ -235,6 +246,7 @@
         border-radius: var(--loading-circle-container-div-border-radius, 100%);
         position: var(--loading-circle-container-div-position, absolute);
         animation: var(--loading-circle-container-div-animation, ran-loading-circle 1.2s infinite ease-in-out);
+        animation-play-state: var(--loading-circle-container-div-animation-play-state, running);
         animation-fill-mode: var(--loading-circle-container-div-animation-fill-mode, both);
       }
     }
@@ -328,6 +340,7 @@
         linear-gradient(0deg, rgba(63, 249, 220, 0.1) 33%, rgba(63, 249, 220, 1) 100%)
       );
       animation: var(--loading-circle-line-border-animation, circle-line 0.8s linear 0s infinite);
+      animation-play-state: var(--loading-circle-line-border-animation-play-state, running);
     }
     &-core {
       width: var(--loading-circle-line-core-width, 100%);
@@ -382,6 +395,7 @@
       align-items: var(--loading-square-box1-align-items, center);
       background: var(--loading-square-box1-background, #ffab91);
       animation: var(--loading-square-box1-animation, square-box1 3s ease-in-out 0s infinite alternate);
+      animation-play-state: var(--loading-square-box1-animation-play-state, running);
     }
 
     &-box2 {
@@ -395,6 +409,7 @@
       background: var(--loading-square-box2-background, rgb(63, 249, 220));
       transform: var(--loading-square-box2-transform, rotate(45deg));
       animation: var(--loading-square-box2-animation, square-box2 3s ease-in-out 0s infinite alternate);
+      animation-play-state: var(--loading-square-box2-animation-play-state, running);
     }
 
     &-core {
@@ -426,12 +441,15 @@
       }
       &-1 {
         animation: var(--loading-pulse-bubble-1-animation, pulse 0.4s ease 0s infinite alternate);
+        animation-play-state: var(--loading-pulse-bubble-1-animation-play-state, running);
       }
       &-2 {
         animation: var(--loading-pulse-bubble-2-animation, pulse 0.4s ease 0.2s infinite alternate);
+        animation-play-state: var(--loading-pulse-bubble-2-animation-play-state, running);
       }
       &-3 {
         animation: var(--loading-pulse-bubble-3-animation, pulse 0.4s ease 0.4s infinite alternate);
+        animation-play-state: var(--loading-pulse-bubble-3-animation-play-state, running);
       }
     }
   }
@@ -464,18 +482,21 @@
       width: var(--loading-solar-earth-orbit-width, 165px);
       height: var(--loading-solar-earth-orbit-height, 165px);
       animation: var(--loading-solar-earth-orbit-animation, solar 12s linear 0s infinite);
+      animation-play-state: var(--loading-solar-earth-orbit-animation-play-state, running);
     }
 
     .venus-orbit {
       width: var(--loading-solar-venus-orbit-width, 120px);
       height: var(--loading-solar-venus-orbit-height, 120px);
       animation: var(--loading-solar-venus-orbit-width, solar 7.4s linear 0s infinite);
+      animation-play-state: var(--loading-solar-venus-orbit-animation-play-state, running);
     }
 
     .mercury-orbit {
       width: var(--loading-solar-mercury-orbit-width, 90px);
       height: var(--loading-solar-mercury-orbit-height, 90px);
       animation: var(--loading-solar-mercury-orbit-animation, solar 3s linear 0s infinite);
+      animation-play-state: var(--loading-solar-mercury-orbit-animation-play-state, running);
     }
 
     .planet {
@@ -524,7 +545,7 @@
       position: var(--loading-cube-fold-item-position, relative);
       transform: var(--loading-cube-fold-item-transform, scale(1.1));
       &::before {
-        content: var(--loading-cube-fold-item-before-content, ' ');
+        content: var(--loading-cube-fold-item-before-content, " ");
         position: var(--loading-cube-fold-item-before-position, absolute);
         top: var(--loading-cube-fold-item-before-top, 0);
         left: var(--loading-cube-fold-item-before-left, 0);
@@ -532,6 +553,7 @@
         height: var(--loading-cube-fold-item-before-height, 100%);
         background: var(--loading-cube-fold-item-before-background, #337ab7);
         animation: var(--loading-cube-fold-item-before-animation, cube-fold 2.4s infinite linear both);
+        animation-play-state: var(--loading-cube-fold-item-before-animation-play-state, running);
         transform-origin: var(--loading-cube-fold-item-before-transform-origin, 100% 100%);
       }
       &-2 {
@@ -576,7 +598,7 @@
       left: var(--loading-circle-fold-item-left, 0);
       top: var(--loading-circle-fold-item-top, 0);
       &::before {
-        content: var(--loading-circle-fold-item-before-content, ' ');
+        content: var(--loading-circle-fold-item-before-content, " ");
         display: var(--loading-circle-fold-item-before-display, block);
         margin: var(--loading-circle-fold-item-before-margin, 0 auto);
         width: var(--loading-circle-fold-item-before-width, 15%);
@@ -584,6 +606,7 @@
         background: var(--loading-circle-fold-item-before-background, #337ab7);
         border-radius: var(--loading-circle-fold-item-before-border-radius, 100%);
         animation: var(--loading-circle-fold-item-before-animation, circle-fold 1.2s infinite ease-in-out both);
+        animation-play-state: var(--loading-circle-fold-item-before-animation-play-state, running);
       }
       &-2 {
         transform: var(--loading-circle-fold-item-2-transform, rotate(30deg));
@@ -673,6 +696,7 @@
       background: var(--loading-cube-grid-item-background, #337ab7);
       float: var(--loading-cube-grid-item-float, left);
       animation: var(--loading-cube-grid-item-animation, cube-grid 1.3s infinite ease-in-out);
+      animation-play-state: var(--loading-cube-grid-item-animation-play-state, running);
       &-1 {
         animation-delay: var(--loading-cube-grid-item-1-animation-delay, 0.2s);
       }
@@ -713,6 +737,7 @@
     border-color: var(--loading-circle-turn-border-color, #f00);
     color: var(--loading-circle-turn-color, #cc0000);
     animation: var(--loading-circle-turn-animation, circle-turn 1s linear infinite normal);
+    animation-play-state: var(--loading-circle-turn-animation-play-state, running);
     animation-delay: var(--loading-circle-turn-animation-delay, 0);
     margin: var(--loading-circle-turn-margin, 30px auto 0);
     @keyframes circle-turn {
@@ -735,7 +760,7 @@
       height: var(--loading-circle-turn-after-height, 13px);
       margin: var(--loading-circle-turn-after-margin, 3px);
       border: var(--loading-circle-turn-after-border, 6px solid #f00);
-      content: var(--loading-circle-turn-after-content, ' ');
+      content: var(--loading-circle-turn-after-content, " ");
       border-radius: var(--loading-circle-turn-after-border-radius, 50%);
       border-left-color: var(--loading-circle-turn-after-border-left-color, transparent);
       border-bottom-color: var(--loading-circle-turn-after-border-bottom-color, transparent);
@@ -784,6 +809,7 @@
       border-radius: var(--loading-circle-rotate-outer-border-radius, 50%);
       box-shadow: var(--loading-circle-rotate-outer-box-shadow, 0 0 35px rgba(0, 61, 76, 0.9));
       animation: var(--loading-circle-rotate-outer-animation, spin-right 0.5s linear infinite normal);
+      animation-play-state: var(--loading-circle-rotate-outer-animation-play-state, running);
       animation-delay: var(--loading-circle-rotate-outer-animation-delay, 0);
       margin: var(--loading-circle-rotate-outer-margin, 0 auto);
     }
@@ -801,6 +827,7 @@
       top: var(--loading-circle-rotate-inner-top, -50px);
       margin: var(--loading-circle-rotate-inner-margin, 0 auto);
       animation: var(--loading-circle-rotate-inner-animation, spin-left 0.5s linear infinite normal);
+      animation-play-state: var(--loading-circle-rotate-inner-animation-play-state, running);
       animation-delay: var(--loading-circle-rotate-inner-animation-delay, 0);
     }
   }
@@ -847,6 +874,7 @@
       top: var(--loading-circle-spin-inner-top, -50px);
       margin: var(--loading-circle-spin-inner-margin, 0 auto);
       animation: var(--loading-circle-spin-inner-animation, spin-right 1s linear infinite normal);
+      animation-play-state: var(--loading-circle-spin-inner-animation-play-state, running);
       animation-delay: var(--loading-circle-spin-inner-animation-delay, 0);
     }
     &-outer {
@@ -860,6 +888,7 @@
       border-radius: var(--loading-circle-spin-inner-border, 50%);
       box-shadow: var(--loading-circle-spin-inner-border, 0 0 35px rgba(0, 76, 61, 0.9));
       animation: var(--loading-circle-spin-inner-border, spin-pulse 1s linear infinite normal);
+      animation-play-state: var(--loading-circle-spin-outer-animation-play-state, running);
       animation-delay: var(--loading-circle-spin-inner-border, 0);
     }
   }
@@ -886,6 +915,7 @@
       margin-left: var(--loading-dot-bar-item-margin-left, 5px);
       opacity: var(--loading-dot-bar-item-opacity, 0.1);
       animation: var(--loading-dot-bar-item-animation, pulse 1s linear infinite normal);
+      animation-play-state: var(--loading-dot-bar-item-animation-play-state, running);
       animation-delay: var(--loading-dot-bar-item-animation-delay, 0);
       &-1 {
         animation-delay: var(--loading-dot-bar-item-1-animation-delay, 0.3s);
@@ -937,6 +967,7 @@
       margin: var(--loading-dot-circle-item-margin, 0 auto);
       position: var(--loading-dot-circle-item-position, relative);
       animation: var(--loading-dot-circle-item-animation, dot-circle 2s infinite cubic-bezier(0, 0, 0.35, 1) normal);
+      animation-play-state: var(--loading-dot-circle-item-animation-play-state, running);
       &-1 {
         animation-delay: var(--loading-dot-circle-item-1-animation-delay, 0);
       }
@@ -998,6 +1029,7 @@
       width: var(--loading-line-item-width, 6px);
       height: var(--loading-line-item-height, 18px);
       animation: var(--loading-line-item-animation, line 1s linear infinite normal);
+      animation-play-state: var(--loading-line-item-animation-play-state, running);
       animation-delay: var(--loading-line-item-animation-delay, 0);
       &:nth-child(2) {
         animation-delay: var(--loading-line-nth-child-2-animation-delay, 0.1s);
@@ -1060,6 +1092,7 @@
         border-radius: var(--loading-dot-pulse-item-dot-border-radius, 50px);
         transform: var(--loading-dot-pulse-item-dot-transform, scale(0));
         animation: var(--loading-dot-pulse-item-dot-animation, dot-pulse 1s linear forwards normal);
+        animation-play-state: var(--loading-dot-pulse-item-dot-animation-play-state, running);
         animation-delay: var(--loading-dot-pulse-item-dot-animation-delay, 0);
         &-1 {
           animation-delay: var(--loading-dot-pulse-item-dot-1-animation-delay, 0.5s);
@@ -1088,6 +1121,7 @@
         left: var(--loading-dot-pulse-item-ball-left, -1px);
         transform: var(--loading-dot-pulse-item-ball-transform, scale(0));
         animation: var(--loading-dot-pulse-item-ball-animation, dot-pulse-glow 3s infinite ease-out normal);
+        animation-play-state: var(--loading-dot-pulse-item-ball-animation-play-state, running);
         animation-delay: var(--loading-dot-pulse-item-ball-animation-delay, 0);
         &-1 {
           animation-delay: var(--loading-dot-pulse-item-ball-1-animation-delay, 1.5s);
@@ -1134,6 +1168,7 @@
         1px 1px 1px 0 rgba(0, 0, 0, 0)
       );
       animation: var(--loading-line-scale-item-animation, pound 0.7s ease-in-out infinite alternate);
+      animation-play-state: var(--loading-line-scale-item-animation-play-state, running);
       animation-delay: var(--loading-line-scale-item-animation-delay, 0.05s);
       transform-origin: var(--loading-line-scale-item-transform-origin, center bottom);
       &:nth-child(2) {
@@ -1153,7 +1188,7 @@
   .text {
     text-align: var(--loading-text-text-align, center);
     text-transform: var(--loading-text-text-transform, uppercase);
-    font-family: var(--loading-text-font-family, 'Nunito', sans-serif);
+    font-family: var(--loading-text-font-family, "Nunito", sans-serif);
     font-size: var(--loading-text-font-size, 4em);
     color: var(--loading-text-color, transparent);
     letter-spacing: var(--loading-text-letter-spacing, 0.4em);
@@ -1183,6 +1218,7 @@
         0 0 20px rgba(22, 22, 22, 0.45)
       );
       animation: var(--loading-text-item-animation, letters 0.85s ease-in-out infinite alternate);
+      animation-play-state: var(--loading-text-item-animation-play-state, running);
       animation-delay: var(--loading-text-item-animation-delay, 0);
       &:nth-child(2) {
         animation-delay: var(--loading-text-item-nth-child-2-animation-delay, 0.15s);
@@ -1223,6 +1259,7 @@
       transition: var(--loading-cube-dim-item-transition, 0.25s);
       box-shadow: var(--loading-cube-dim-item-box-shadow, 13em 13em 1.5em rgba(0, 0, 0, 0.1));
       animation: var(--loading-cube-dim-item-animation, anim 1s infinite);
+      animation-play-state: var(--loading-cube-dim-item-animation-play-state, running);
       float: var(--loading-cube-dim-item-float, left);
       height: var(--loading-cube-dim-item-height, 3em);
       width: var(--loading-cube-dim-item-width, 3em);
@@ -1254,7 +1291,7 @@
         animation-delay: var(--loading-cube-dim-item-nth-child-9-animation-delay, 0.45s);
       }
       &::before {
-        content: var(--loading-cube-dim-item-before-content, '');
+        content: var(--loading-cube-dim-item-before-content, "");
         float: var(--loading-cube-dim-item-before-float, left);
         height: var(--loading-cube-dim-item-before-height, 3em);
         position: var(--loading-cube-dim-item-before-position, absolute);
@@ -1264,7 +1301,7 @@
         transform-origin: var(--loading-cube-dim-item-before-transform-origin, 100% 0);
       }
       &::after {
-        content: var(--loading-cube-dim-item-after-content, '');
+        content: var(--loading-cube-dim-item-after-content, "");
         float: var(--loading-cube-dim-item-after-float, left);
         height: var(--loading-cube-dim-item-after-height, 3em);
         position: var(--loading-cube-dim-item-after-position, absolute);
@@ -1293,6 +1330,7 @@
       border-radius: var(--loading-dot-line-item-border-radius, 50%);
       border-style: var(--loading-dot-line-item-order-style, solid);
       animation: var(--loading-dot-line-item-animation, dot-line 3s linear infinite);
+      animation-play-state: var(--loading-dot-line-item-animation-play-state, running);
       &:nth-child(1) {
         width: var(--loading-dot-line-item-nth-child-1-width, 100%);
         height: var(--loading-dot-line-item-nth-child-1-height, 100%);
@@ -1330,7 +1368,7 @@
           position: var(--loading-dot-line-item-circle-before-position, absolute);
           top: var(--loading-dot-line-item-circle-before-top, -0.5em);
           right: var(--loading-dot-line-item-circle-before-right, -0.5em);
-          content: var(--loading-dot-line-item-circle-before-content, '');
+          content: var(--loading-dot-line-item-circle-before-content, "");
           width: var(--loading-dot-line-item-circle-before-width, 1em);
           height: var(--loading-dot-line-item-circle-before-height, 1em);
           background-color: var(--loading-dot-line-item-circle-before-background-color, currentColor);
@@ -1349,6 +1387,7 @@
     }
   }
   .arc {
+    position: relative;
     @keyframes rt {
       100% {
         transform: var(--loading-arc-keyframes-rt, rotate(360deg));
@@ -1370,13 +1409,13 @@
     }
     @keyframes txt {
       0% {
-        content: var(--loading-arc-keyframes-txt-0-content, 'LOADING.');
+        content: var(--loading-arc-keyframes-txt-0-content, "LOADING.");
       }
       50% {
-        content: var(--loading-arc-keyframes-txt-50-content, 'LOADING..');
+        content: var(--loading-arc-keyframes-txt-50-content, "LOADING..");
       }
       100% {
-        content: var(--loading-arc-keyframes-txt-100-content, 'LOADING...');
+        content: var(--loading-arc-keyframes-txt-100-content, "LOADING...");
       }
     }
     &-item {
@@ -1393,6 +1432,7 @@
       border-left: var(--loading-arc-item-border-left, 1px solid transparent);
       border-right: var(--loading-arc-item-border-right, 1px solid transparent);
       animation: var(--loading-arc-item-animation, rt 2s infinite linear);
+      animation-play-state: var(--loading-arc-item-animation-play-state, running);
       &::before {
         position: var(--loading-arc-item-before-position, absolute);
         margin: var(--loading-arc-item-before-margin, auto);
@@ -1407,7 +1447,8 @@
         border-left: var(--loading-arc-item-before-border-left, 1px solid transparent);
         border-right: var(--loading-arc-item-before-border-right, 1px solid transparent);
         animation: var(--loading-arc-item-before-animation, rt 4s infinite linear reverse);
-        content: var(--loading-arc-item-before-content, '');
+        animation-play-state: var(--loading-arc-item-before-animation-play-state, running);
+        content: var(--loading-arc-item-before-content, "");
       }
       &::after {
         position: var(--loading-arc-item-after-position, absolute);
@@ -1423,7 +1464,8 @@
         border-left: var(--loading-arc-item-after-border-left, initial);
         border-right: var(--loading-arc-item-after-border-right, initial);
         animation: var(--loading-arc-item-after-animation, cw 1s infinite);
-        content: var(--loading-arc-item-after-content, '');
+        animation-play-state: var(--loading-arc-item-after-animation-play-state, running);
+        content: var(--loading-arc-item-after-content, "");
         background: var(--loading-arc-item-after-background, snow);
       }
     }
@@ -1443,8 +1485,9 @@
       color: var(--loading-arc-h1-color, white);
       &::after {
         animation: var(--loading-arc-h1-after-animation, txt 5s infinite);
-        content: var(--loading-arc-h1-after-content, '');
-        font-family: var(--loading-arc-h1-after-font-family, 'Inconsolata', monospace);
+        animation-play-state: var(--loading-arc-h1-after-animation-play-state, running);
+        content: var(--loading-arc-h1-after-content, "");
+        font-family: var(--loading-arc-h1-after-font-family, "Inconsolata", monospace);
       }
     }
     span {
@@ -1503,10 +1546,11 @@
       background: var(
         --loading-drop-item-background,
         transparent repeat-x 0 100px/150px 300px
-          url('data:image/png;base64,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')
+          url("data:image/png;base64,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")
       );
       z-index: var(--loading-drop-item-z-index, 2);
       animation: var(--loading-drop-item-animation, wave 1s ease-out forwards);
+      animation-play-state: var(--loading-drop-item-animation-play-state, running);
       &-bg {
         text-align: var(--loading-drop-item-text-align, center);
         line-height: var(--loading-drop-item-line-height, 120px);
@@ -1524,9 +1568,10 @@
       z-index: var(--loading-drop-dot-z-index, 1);
       opacity: var(--loading-drop-dot-opacity, 0);
       animation: var(--loading-drop-dot-animation, fade-in 0.1s linear 0.4s forwards);
+      animation-play-state: var(--loading-drop-dot-animation-play-state, running);
       filter: var(
         --loading-drop-dot-filter,
-        url('data:image/svg+xml;charset=utf-8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSI+CiAgICA8ZGVmcz4KICAgICAgPGZpbHRlciBpZD0icmFuLWxvYWRpbmctZHJvcCI+CiAgICAgICAgPGZlR2F1c3NpYW5CbHVyIGluPSJTb3VyY2VHcmFwaGljIiBzdGREZXZpYXRpb249IjEwIiByZXN1bHQ9ImJsdXIiIC8+CiAgICAgICAgPGZlQ29sb3JNYXRyaXggaW49ImJsdXIiIG1vZGU9Im1hdHJpeCIgdmFsdWVzPSIxIDAgMCAwIDAgIDAgMSAwIDAgMCAgMCAwIDEgMCAwICAwIDAgMCAxOCAtNyIgcmVzdWx0PSJyYW4tbG9hZGluZy1kcm9wIiAvPgogICAgICA8L2ZpbHRlcj4KICAgIDwvZGVmcz4KICA8L3N2Zz4=#ran-loading-drop')
+        url("data:image/svg+xml;charset=utf-8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSI+CiAgICA8ZGVmcz4KICAgICAgPGZpbHRlciBpZD0icmFuLWxvYWRpbmctZHJvcCI+CiAgICAgICAgPGZlR2F1c3NpYW5CbHVyIGluPSJTb3VyY2VHcmFwaGljIiBzdGREZXZpYXRpb249IjEwIiByZXN1bHQ9ImJsdXIiIC8+CiAgICAgICAgPGZlQ29sb3JNYXRyaXggaW49ImJsdXIiIG1vZGU9Im1hdHJpeCIgdmFsdWVzPSIxIDAgMCAwIDAgIDAgMSAwIDAgMCAgMCAwIDEgMCAwICAwIDAgMCAxOCAtNyIgcmVzdWx0PSJyYW4tbG9hZGluZy1kcm9wIiAvPgogICAgICA8L2ZpbHRlcj4KICAgIDwvZGVmcz4KICA8L3N2Zz4=#ran-loading-drop")
       );
       &-1 {
         position: var(--loading-drop-dot-1-position, absolute);
@@ -1551,6 +1596,7 @@
         margin: var(--loading-drop-dot-2-margin, auto);
         background-color: var(--loading-drop-dot-2-background-color, #10a7c1);
         animation: var(--loading-drop-dot-2-animation, drop 1.3s cubic-bezier(1, 0.19, 0.66, 0.12) 0.5s infinite);
+        animation-play-state: var(--loading-drop-dot-2-animation-play-state, running);
       }
     }
   }
@@ -1601,6 +1647,7 @@
         border-radius: var(--loading-pacman-div-nth-child-2-border-radius, 25px);
         margin-top: var(--loading-pacman-div-nth-child-2-margin-top, -50px);
         animation: var(--loading-pacman-div-nth-child-2-animation, rotate_pacman_half_down 0.5s 0s infinite);
+        animation-play-state: var(--loading-pacman-div-nth-child-2-animation-play-state, running);
       }
       &:nth-child(3) {
         background-color: var(--loading-pacman-div-nth-child-3-background-color, #279fcf);
@@ -1613,6 +1660,7 @@
         top: var(--loading-pacman-div-nth-child-3-top, 25px);
         left: var(--loading-pacman-div-nth-child-3-left, 100px);
         animation: var(--loading-pacman-div-nth-child-3-animation, pacman-balls 1s 0.33s infinite linear);
+        animation-play-state: var(--loading-pacman-div-nth-child-3-animation-play-state, running);
       }
       &:nth-child(4) {
         background-color: var(--loading-pacman-div-nth-child-4-background-color, #279fcf);
@@ -1625,6 +1673,7 @@
         top: var(--loading-pacman-div-nth-child-4-top, 25px);
         left: var(--loading-pacman-div-nth-child-4-left, 100px);
         animation: var(--loading-pacman-div-nth-child-4-animation, pacman-balls 1s 0.66s infinite linear);
+        animation-play-state: var(--loading-pacman-div-nth-child-4-animation-play-state, running);
       }
       &:nth-child(5) {
         background-color: var(--loading-pacman-div-nth-child-5-background-color, #279fcf);
@@ -1636,7 +1685,8 @@
         transform: var(--loading-pacman-div-nth-child-5-transform, translate(0, -6.25px));
         top: var(--loading-pacman-div-nth-child-5-top, 25px);
         left: var(--loading-pacman-div-nth-child-5-left, 100px);
-        animation: var(--loading-pacman-div-nth-child-5-maranimationgin, pacman-balls 1s 0.99s infinite linear);
+        animation: var(--loading-pacman-div-nth-child-5-animation, pacman-balls 1s 0.99s infinite linear);
+        animation-play-state: var(--loading-pacman-div-nth-child-5-animation-play-state, running);
       }
       &:first-of-type {
         width: var(--loading-pacman-div-first-of-type-width, 0px);
@@ -1647,6 +1697,7 @@
         border-bottom: var(--loading-pacman-div-first-of-type-border-bottom, 25px solid #279fcf);
         border-radius: var(--loading-pacman-div-first-of-type-border-radius, 25px);
         animation: var(--loading-pacman-div-first-of-type-animation, rotate_pacman_half_up 0.5s 0s infinite);
+        animation-play-state: var(--loading-pacman-div-first-of-type-animation-play-state, running);
       }
     }
   }

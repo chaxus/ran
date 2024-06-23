@@ -39,14 +39,14 @@ export class Input extends (HTMLElementSSR()!) {
     this._input.appendChild(this._inputContent);
   }
   /**
-   * @description: 获取input的值
+   * @description: 获取 input 的值
    * @return {String}
    */
   get value(): string {
     return this.getAttribute('value') || '';
   }
   /**
-   * @description: 设置input的值
+   * @description: 设置 input 的值
    * @param {String} value
    */
   set value(value: string) {
@@ -59,14 +59,14 @@ export class Input extends (HTMLElementSSR()!) {
     }
   }
   /**
-   * @description: 获取input的占位字符
+   * @description: 获取 input 的占位字符
    * @return {String}
    */
   get placeholder(): string {
     return this.getAttribute('placeholder') || '';
   }
   /**
-   * @description: 设置input的占位字符
+   * @description: 设置 input 的占位字符
    * @param {String} value
    */
   set placeholder(value: string) {
@@ -77,14 +77,14 @@ export class Input extends (HTMLElementSSR()!) {
     }
   }
   /**
-   * @description: input是否为必选
+   * @description: input 是否为必选
    * @return {String}
    */
   get required(): string {
     return this.getAttribute('required') || '';
   }
   /**
-   * @description: 设置input是否为必选，除非设置成false，否则都是必填
+   * @description: 设置 input 是否为必选，除非设置成 false，否则都是必填
    * @param {*} value
    */
   set required(value: string) {
@@ -95,14 +95,14 @@ export class Input extends (HTMLElementSSR()!) {
     }
   }
   /**
-   * @description: 获取input上disabled属性
+   * @description: 获取 input 上 disabled 属性
    * @return {String | null}
    */
   get disabled(): string {
     return `${isDisabled(this)}`;
   }
   /**
-   * @description: 设置input的disabled属性
+   * @description: 设置 input 的 disabled 属性
    * @param {String} value
    */
   set disabled(value: string) {
@@ -117,25 +117,25 @@ export class Input extends (HTMLElementSSR()!) {
     }
   }
   /**
-   * @description: 获取类似于Metiral Design的输入体验。
+   * @description: 获取类似于 Metiral Design 的输入体验。
    */
   get label(): string {
     return this.getAttribute('label') || '';
   }
   /**
-   * @description: 设置类似于Metiral Design的输入体验。
+   * @description: 设置类似于 Metiral Design 的输入体验。
    */
   set label(value: string) {
     this.setAttribute('label', value);
   }
   /**
-   * @description: 获取input框的状态
+   * @description: 获取 input 框的状态
    */
   get status(): string {
     return this.getAttribute('status') || '';
   }
   /**
-   * @description: 设置input框的状态
+   * @description: 设置 input 框的状态
    */
   set status(value: string) {
     if (value) {
@@ -147,70 +147,70 @@ export class Input extends (HTMLElementSSR()!) {
     }
   }
   /**
-   * @description: 与form组件联动时，收集的属性名
+   * @description: 与 form 组件联动时，收集的属性名
    * @return {String}
    */
   get name(): string {
     return this.getAttribute('name') || '';
   }
   /**
-   * @description: 设置name属性
+   * @description: 设置 name 属性
    * @param {string} value
    */
   set name(value: string) {
     this.setAttribute('name', value);
   }
   /**
-   * @description: 当input类型为number类型时，可以获取min属性
+   * @description: 当 input 类型为 number 类型时，可以获取 min 属性
    * @return {String}
    */
   get min(): string {
     return this.getAttribute('min') || '';
   }
   /**
-   * @description: 当input类型为number类型时，设置min属性
+   * @description: 当 input 类型为 number 类型时，设置 min 属性
    * @param {string} value
    */
   set min(value: string) {
     if (this.type === 'number') this.setAttribute('min', value);
   }
   /**
-   * @description: 当input类型为number类型时，可以获取max属性
+   * @description: 当 input 类型为 number 类型时，可以获取 max 属性
    * @return {String}
    */
   get max(): string {
     return this.getAttribute('max') || '';
   }
   /**
-   * @description: 当input类型为number类型时，设置max属性
+   * @description: 当 input 类型为 number 类型时，设置 max 属性
    * @param {string} value
    */
   set max(value: string) {
     if (this.type === 'number') this.setAttribute('max', value);
   }
   /**
-   * @description: 当input类型为number类型时，可以获取step属性
+   * @description: 当 input 类型为 number 类型时，可以获取 step 属性
    * @return {String}
    */
   get step(): string {
     return this.getAttribute('step') || '';
   }
   /**
-   * @description: 当input类型为number类型时，设置step属性
+   * @description: 当 input 类型为 number 类型时，设置 step 属性
    * @param {string} value
    */
   set step(value: string) {
     if (this.type === 'number') this.setAttribute('step', value);
   }
   /**
-   * @description: 获取一个icon
+   * @description: 获取一个 icon
    * @return {String}
    */
   get icon(): string {
     return this.getAttribute('icon') || '';
   }
   /**
-   * @description: 设置icon来表示标识
+   * @description: 设置 icon 来表示标识
    * @param {string|null} value
    */
   set icon(value: string) {
@@ -221,14 +221,14 @@ export class Input extends (HTMLElementSSR()!) {
     }
   }
   /**
-   * @description: 获取前面的icon
+   * @description: 获取前面的 icon
    * @return {String}
    */
   get prefix(): string {
     return this.getAttribute('prefix') || '';
   }
   /**
-   * @description: 设置前面的icon来表示标识
+   * @description: 设置前面的 icon 来表示标识
    * @param {string|null} value
    */
   set prefix(value: string) {
@@ -239,14 +239,14 @@ export class Input extends (HTMLElementSSR()!) {
     }
   }
   /**
-   * @description: 获取后面的icon
+   * @description: 获取后面的 icon
    * @return {String}
    */
   get suffix(): string {
     return this.getAttribute('suffix') || '';
   }
   /**
-   * @description: 设置后面的icon来表示标识
+   * @description: 设置后面的 icon 来表示标识
    * @param {string|null} value
    */
   set suffix(value: string) {
@@ -257,14 +257,14 @@ export class Input extends (HTMLElementSSR()!) {
     }
   }
   /**
-   * @description: 获取input的类型
+   * @description: 获取 input 的类型
    * @return {string|null}
    */
   get type(): string {
     return this.getAttribute('type') || '';
   }
   /**
-   * @description: 设置input的类型
+   * @description: 设置 input 的类型
    * @param {string|null} value
    */
   set type(value: string) {
@@ -275,7 +275,7 @@ export class Input extends (HTMLElementSSR()!) {
     }
   }
   /**
-   * @description: 原生的input方法
+   * @description: 原生的 input 方法
    * @param {Event} event
    */
   customInput = (event: Event): void => {
@@ -283,9 +283,9 @@ export class Input extends (HTMLElementSSR()!) {
     event.preventDefault();
     const { target, data = '' } = event as InputEvent;
     this.value = (target as HTMLInputElement)?.value || data || '';
-    // 增加onchange事件
+    // 增加 onchange 事件
     this.customChange();
-    // 默认input事件
+    // 默认 input 事件
     this.dispatchEvent(
       new CustomEvent('input', {
         detail: {
@@ -295,7 +295,7 @@ export class Input extends (HTMLElementSSR()!) {
     );
   };
   /**
-   * @description: 增加change方法，同时兼容大小写的情况
+   * @description: 增加 change 方法，同时兼容大小写的情况
    */
   customChange = (): void => {
     this.dispatchEvent(
@@ -307,7 +307,7 @@ export class Input extends (HTMLElementSSR()!) {
     );
   };
   /**
-   * @description: 监听placeholder属性函数
+   * @description: 监听 placeholder 属性函数
    * @param {string} name
    * @param {string} value
    */
@@ -321,7 +321,7 @@ export class Input extends (HTMLElementSSR()!) {
     }
   };
   /**
-   * @description: 监听label属性函数
+   * @description: 监听 label 属性函数
    * @param {string} name
    * @param {string} value
    */
@@ -347,7 +347,7 @@ export class Input extends (HTMLElementSSR()!) {
     }
   };
   /**
-   * @description: 监听type属性
+   * @description: 监听 type 属性
    * @param {string} name
    * @param {string} value
    */
@@ -364,7 +364,7 @@ export class Input extends (HTMLElementSSR()!) {
     }
   };
   /**
-   * @description: 监听status属性
+   * @description: 监听 status 属性
    * @param {string} name
    * @param {string} value
    */
@@ -378,7 +378,7 @@ export class Input extends (HTMLElementSSR()!) {
     }
   };
   /**
-   * @description: 监听disabled属性
+   * @description: 监听 disabled 属性
    * @param {string} name
    * @param {string} value
    */
@@ -393,7 +393,7 @@ export class Input extends (HTMLElementSSR()!) {
     }
   };
   /**
-   * @description:  监听icon属性
+   * @description:  监听 icon 属性
    * @param {string} name
    * @param {string} value
    */
@@ -405,7 +405,7 @@ export class Input extends (HTMLElementSSR()!) {
     }
   };
   /**
-   * @description: 处理icon属性的问题
+   * @description: 处理 icon 属性的问题
    */
   dealIcon = (): void => {
     if (!this._icon) {
@@ -435,7 +435,7 @@ export class Input extends (HTMLElementSSR()!) {
     }
   };
   connectedCallback(): void {
-    // 如果一开始就设置了input的值，则初始化input的值
+    // 如果一开始就设置了 input 的值，则初始化 input 的值
     if (this.value) {
       this._inputContent.value = this.value;
       this._input.setAttribute('value', this.value);
