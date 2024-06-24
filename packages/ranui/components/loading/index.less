@@ -935,9 +935,45 @@
     }
   }
   .dot-circle {
-    margin: var(--loading-dot-circle-margin, 30px auto 0);
-    overflow: var(--loading-dot-circle-overflow, hidden);
-    height: var(--loading-dot-circle-height, 50px);
+    &-item {
+      background-color: var(--loading-dot-circle-item-background-color, #f00);
+      background-image: var(--loading-dot-circle-item-background-image, linear-gradient(90deg, #f00 25%, #ff9999));
+      width: var(--loading-dot-circle-item-width, 3px);
+      height: var(--loading-dot-circle-item-height, 3px);
+      border-radius: var(--loading-dot-circle-item-border-radius, 50%);
+      box-shadow: var(--loading-dot-circle-item-box-shadow, 0 0 5px #cc0000);
+      margin: var(--loading-dot-circle-item-margin, 0 auto);
+      position: var(--loading-dot-circle-item-position, relative);
+      animation: var(--loading-dot-circle-item-animation, dot-circle 2s infinite cubic-bezier(0, 0, 0.35, 1) normal);
+      &-1 {
+        animation-play-state: var(--loading-dot-circle-item-1-animation-play-state, running);
+        animation-delay: var(--loading-dot-circle-item-1-animation-delay, 0);
+      }
+      &-2 {
+        opacity: var(--loading-dot-circle-item-2-opacity, 0.7);
+        top: var(--loading-dot-circle-item-2-top, 1px);
+        animation-play-state: var(--loading-dot-circle-item-2-animation-play-state, running);
+        animation-delay: var(--loading-dot-circle-item-2-animation-delay, 0.1s);
+      }
+      &-3 {
+        opacity: var(--loading-dot-circle-item-3-opacity, 0.5);
+        top: var(--loading-dot-circle-item-3-top, 2px);
+        animation-play-state: var(--loading-dot-circle-item-3-animation-play-state, running);
+        animation-delay: var(--loading-dot-circle-item-3-animation-delay, 0.2s);
+      }
+      &-4 {
+        opacity: var(--loading-dot-circle-item-4-opacity, 0.3);
+        top: var(--loading-dot-circle-item-4-top, 3px);
+        animation-play-state: var(--loading-dot-circle-item-4-animation-play-state, running);
+        animation-delay: var(--loading-dot-circle-item-4-animation-delay, 0.3s);
+      }
+      &-5 {
+        opacity: var(--loading-dot-circle-item-5-opacity, 0.1);
+        top: var(--loading-dot-circle-item-5-top, 4px);
+        animation-play-state: var(--loading-dot-circle-item-5-animation-play-state, running);
+        animation-delay: var(--loading-dot-circle-item-5-animation-delay, 0.4s);
+      }
+    }
     @keyframes dot-circle {
       from {
         transform: var(--loading-dot-circle-keyframes-from-transform, translateX(0px));
@@ -955,50 +991,6 @@
       }
       to {
         transform: var(--loading-dot-circle-keyframes-to-transform, translateX(0px));
-      }
-    }
-    &-item {
-      background-color: var(--loading-dot-circle-item-background-color, #f00);
-      background-image: var(--loading-dot-circle-item-background-image, linear-gradient(90deg, #f00 25%, #ff9999));
-      width: var(--loading-dot-circle-item-width, 3px);
-      height: var(--loading-dot-circle-item-height, 3px);
-      border-radius: var(--loading-dot-circle-item-border-radius, 50%);
-      box-shadow: var(--loading-dot-circle-item-box-shadow, 0 0 5px #cc0000);
-      margin: var(--loading-dot-circle-item-margin, 0 auto);
-      position: var(--loading-dot-circle-item-position, relative);
-      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@color1', endColorstr='@color2');
-      &-1 {
-        animation: var(--loading-dot-circle-item-animation, dot-circle 2s infinite cubic-bezier(0, 0, 0.35, 1) normal);
-        animation-play-state: var(--loading-dot-circle-item-1-animation-play-state, running);
-        animation-delay: var(--loading-dot-circle-item-1-animation-delay, 0);
-      }
-      &-2 {
-        opacity: 0.7;
-        top: 1px;
-        animation: var(--loading-dot-circle-item-animation, dot-circle 2s infinite cubic-bezier(0, 0, 0.35, 1) normal);
-        animation-play-state: var(--loading-dot-circle-item-2-animation-play-state, running);
-        animation-delay: var(--loading-dot-circle-item-2-animation-delay, 0.1s);
-      }
-      &-3 {
-        opacity: 0.5;
-        top: 2px;
-        animation: var(--loading-dot-circle-item-animation, dot-circle 2s infinite cubic-bezier(0, 0, 0.35, 1) normal);
-        animation-play-state: var(--loading-dot-circle-item-3-animation-play-state, running);
-        animation-delay: var(--loading-dot-circle-item-3-animation-delay, 0.2s);
-      }
-      &-4 {
-        opacity: 0.3;
-        top: 3px;
-        animation: var(--loading-dot-circle-item-animation, dot-circle 2s infinite cubic-bezier(0, 0, 0.35, 1) normal);
-        animation-play-state: var(--loading-dot-circle-item-4-animation-play-state, running);
-        animation-delay: var(--loading-dot-circle-item-4-animation-delay, 0.3s);
-      }
-      &-5 {
-        opacity: 0.1;
-        top: 4px;
-        animation: var(--loading-dot-circle-item-animation, dot-circle 2s infinite cubic-bezier(0, 0, 0.35, 1) normal);
-        animation-play-state: var(--loading-dot-circle-item-5-animation-play-state, running);
-        animation-delay: var(--loading-dot-circle-item-5-animation-delay, 0.4s);
       }
     }
   }
