@@ -12,40 +12,40 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
-import 'ranui';
+import { ref } from "vue"
+import "ranui"
 
 const list = ref([
-  'stretch',
-  'rotate',
-  'double-bounce',
-  'cube',
-  'dot',
-  'triple-bounce',
-  'scale-out',
-  'circle',
-  'circle-line',
-  'square',
-  'pulse',
-  'solar',
-  'cube-fold',
-  'circle-fold',
-  'cube-grid',
-  'circle-turn',
-  'circle-rotate',
-  'circle-spin',
-  'dot-bar',
-  'dot-circle',
-  'line',
-  'dot-pulse',
-  'line-scale',
-  'text',
-  'cube-dim',
-  'dot-line',
-  'arc',
-  'drop',
-  'pacman',
-]);
+  "stretch",
+  "rotate",
+  "double-bounce",
+  "cube",
+  "dot",
+  "triple-bounce",
+  "scale-out",
+  "circle",
+  "circle-line",
+  "square",
+  "pulse",
+  "solar",
+  "cube-fold",
+  "circle-fold",
+  "cube-grid",
+  "circle-turn",
+  "circle-rotate",
+  "circle-spin",
+  "dot-bar",
+  "dot-circle",
+  "line",
+  "dot-pulse",
+  "line-scale",
+  "text",
+  "cube-dim",
+  "dot-line",
+  "arc",
+  "drop",
+  "pacman",
+])
 </script>
 <style lang="less">
 .loading {
