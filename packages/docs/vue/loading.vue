@@ -12,40 +12,40 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
-import 'ranui';
+import { ref } from "vue"
+import "ranui"
 
 const list = ref([
-  'stretch',
-  'rotate',
-  'double-bounce',
-  'cube',
-  'dot',
-  'triple-bounce',
-  'scale-out',
-  'circle',
-  'circle-line',
-  'square',
-  'pulse',
-  'solar',
-  'cube-fold',
-  'circle-fold',
-  'cube-grid',
-  'circle-turn',
-  'circle-rotate',
-  'circle-spin',
-  'dot-bar',
-  'dot-circle',
-  'line',
-  'dot-pulse',
-  'line-scale',
-  'text',
-  'cube-dim',
-  'dot-line',
-  'arc',
-  'drop',
-  'pacman',
-]);
+  "stretch",
+  "rotate",
+  "double-bounce",
+  "cube",
+  "dot",
+  "triple-bounce",
+  "scale-out",
+  "circle",
+  "circle-line",
+  "square",
+  "pulse",
+  "solar",
+  "cube-fold",
+  "circle-fold",
+  "cube-grid",
+  "circle-turn",
+  "circle-rotate",
+  "circle-spin",
+  "dot-bar",
+  "dot-circle",
+  "line",
+  "dot-pulse",
+  "line-scale",
+  "text",
+  "cube-dim",
+  "dot-line",
+  "arc",
+  "drop",
+  "pacman",
+])
 </script>
 <style lang="less">
 .loading {
@@ -90,7 +90,11 @@ const list = ref([
       --loading-circle-spin-inner-animation-play-state: paused;
       --loading-circle-spin-outer-animation-play-state: paused;
       --loading-dot-bar-item-animation-play-state: paused;
-      --loading-dot-circle-item-animation-play-state: paused;
+      --loading-dot-circle-item-1-animation-play-state: paused;
+      --loading-dot-circle-item-2-animation-play-state: paused;
+      --loading-dot-circle-item-3-animation-play-state: paused;
+      --loading-dot-circle-item-4-animation-play-state: paused;
+      --loading-dot-circle-item-5-animation-play-state: paused;
       --loading-line-item-animation-play-state: paused;
       --loading-dot-pulse-item-dot-animation-play-state: paused;
       --loading-dot-pulse-item-ball-animation-play-state: paused;
@@ -143,7 +147,11 @@ const list = ref([
         --loading-circle-spin-inner-animation-play-state: running;
         --loading-circle-spin-outer-animation-play-state: running;
         --loading-dot-bar-item-animation-play-state: running;
-        --loading-dot-circle-item-animation-play-state: running;
+        --loading-dot-circle-item-1-animation-play-state: running;
+        --loading-dot-circle-item-2-animation-play-state: running;
+        --loading-dot-circle-item-3-animation-play-state: running;
+        --loading-dot-circle-item-4-animation-play-state: running;
+        --loading-dot-circle-item-5-animation-play-state: running;
         --loading-line-item-animation-play-state: running;
         --loading-dot-pulse-item-dot-animation-play-state: running;
         --loading-dot-pulse-item-ball-animation-play-state: running;
