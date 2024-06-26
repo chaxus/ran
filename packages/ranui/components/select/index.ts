@@ -57,7 +57,7 @@ export class Select extends (HTMLElementSSR()!) {
       'placement', // 弹窗的方向
       'getPopupContainerId', // 挂载的节点
       'dropdownclass', // 弹窗的类名
-      'trigger', // 触发下拉框的行为， click 还是 hover ，hover 在 isMobile 移动端无效
+      'trigger', // 触发下拉框的行为，click 还是 hover，hover 在 isMobile 移动端无效
     ];
   }
   constructor() {
@@ -255,7 +255,7 @@ export class Select extends (HTMLElementSSR()!) {
     }
   };
   /**
-   * @description: 焦点移除的情况，需要移除select 下拉框
+   * @description: 焦点移除的情况，需要移除 select 下拉框
    * @return {*}
    */
   selectBlur = (): void => {
@@ -345,7 +345,7 @@ export class Select extends (HTMLElementSSR()!) {
     } catch (error) {}
   };
   /**
-   * @description: 当select中有option元素的时候，给dropdown添加元素
+   * @description: 当 select 中有 option 元素的时候，给 dropdown 添加元素
    * @return {*}
    */
   addOptionToSlot = (): void => {

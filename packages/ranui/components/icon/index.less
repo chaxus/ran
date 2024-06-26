@@ -1,24 +1,19 @@
 :host {
-  display: inline-flex;
+  display: var(--ran-icon-host-display, inline-flex);
 }
 :host([spin]) {
-  animation-name: rotate;
-  animation-duration: 1.4s;
+  animation-name: var(--ran-icon-host-spin-animation-name, rotate);
+  animation-duration: var(--ran-icon-host-spin-animation-name, 1.4s);
   animation-timing-function: linear;
-  animation-iteration-count: infinite;
+  animation-iteration-count: var(--ran-icon-host-spin-animation-name, infinite);
 }
 .ran-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: var(--ran-icon-display, flex);
+  align-items: var(--ran-icon-align-items, center);
+  justify-content: var(--ran-icon-justify-content, center);
 }
 @keyframes rotate {
   to {
-    transform: rotate(360deg);
-  }
-}
-@keyframes rotate {
-  to {
-    transform: rotate(360deg);
+    transform: var(--ran-icon-keyframes-to-transform, rotate(360deg));
   }
 }
