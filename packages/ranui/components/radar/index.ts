@@ -238,7 +238,6 @@ function Custom() {
             );
           }
         }
-
         ctx.restore();
       }
 
