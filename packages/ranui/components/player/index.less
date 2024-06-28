@@ -1,4 +1,4 @@
-@import url('../../base.less');
+@import url("../../base.less");
 
 @number: 49;
 
@@ -6,9 +6,9 @@
   .circle(@index) when (@index < @number) {
     @i: @index+1;
     @x: round((@i / @number) * 100, 2);
-    @selector: e('@{x}%');
+    @selector: e("@{x}%");
     @{selector} {
-      background-image: url('../../assets/image/loading/1_@{i}.png');
+      background-image: url("../../assets/image/loading/1_@{i}.png");
     }
     .circle(@i);
   }
@@ -16,7 +16,7 @@
 }
 
 .video-speed-dropdown {
-  background-color: #595959;
+  background-color: var(--video-speed-dropdown-background-color, #595959);
   .ranui-select-dropdown-option-item {
     padding: 2px 4px;
     .ranui-select-dropdown-option-item-content {
@@ -34,7 +34,7 @@
 }
 
 .video-clarity-dropdown {
-  background-color: #595959;
+  background-color: var(--video-clarity-dropdown-background-color, #595959);
   .ranui-select-dropdown-option-item {
     padding: 2px 4px;
     .ranui-select-dropdown-option-item-content {
@@ -52,30 +52,30 @@
 }
 
 .video-control_loading {
-  z-index: 10;
-  top: calc(50vh - 60px);
-  left: calc(50vw - 60px);
-  position: fixed;
-  width: 120px;
-  height: 120px;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
-  animation: loading 1s infinite;
+  z-index: var(--video-control-loading-z-index, 10);
+  top: var(--video-control-loading-top, calc(50vh - 60px));
+  left: var(--video-control-loading-left, calc(50vw - 60px));
+  position: var(--video-control-loading-position, fixed);
+  width: var(--video-control-loading-width, 120px);
+  height: var(--video-control-loading-height, 120px);
+  background-position: var(--video-control-loading-background-position, center);
+  background-repeat: var(--video-control-loading-background-repeat, no-repeat);
+  background-size: var(--video-control-loading-background-size, contain);
+  animation: var(--video-control-loading-animation, loading 1s infinite);
 }
 
 .ran-player {
-  display: block;
-  height: 100%;
-  width: 100%;
-  position: relative;
-  overflow: hidden;
+  display: var(--ran-player-display, block);
+  height: var(--ran-player-height, 100%);
+  width: var(--ran-player-width, 100%);
+  position: var(--ran-player-position, relative);
+  overflow: var(--ran-player-overflow, hidden);
   &-contain {
-    width: 100%;
-    height: 100%;
+    width: var(--ran-player-contain-width, 100%);
+    height: var(--ran-player-contain-height, 100%);
     &-video {
-      width: 100%;
-      height: 100%;
+      width: var(--ran-player-contain-video-width, 100%);
+      height: var(--ran-player-contain-video-height, 100%);
     }
   }
   /* 全屏按钮 */
@@ -117,222 +117,236 @@
     outline: none;
   }
   .prism-player {
-    position: relative;
+    position: var(--ran-player-prism-position, relative);
   }
   &-play-btn {
-    background: url(./img/bigplay.png) no-repeat;
-    background-size: contain;
-    width: 64px;
-    height: 64px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    background: var(--ran-player-play-btn-background, url(./img/bigplay.png) no-repeat);
+    background-size: var(--ran-player-play-btn-background-size, contain);
+    width: var(--ran-player-play-btn-width, 64px);
+    height: var(--ran-player-play-btn-height, 64px);
+    position: var(--ran-player-play-btn-position, absolute);
+    top: var(--ran-player-play-btn-top, 50%);
+    left: var(--ran-player-play-btn-left, 50%);
+    transform: var(--ran-player-play-btn-transform, translate(-50%, -50%));
   }
   .prism-auto-stream-selector {
-    display: none;
+    display: var(--ran-player-prism-auto-stream-selector-display, none);
   }
   &-controller {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    background: linear-gradient(180deg, rgba(217, 217, 217, 0.5) 0%, rgba(91, 91, 91, 0.5) 100%);
-    width: calc(100% - 32px);
-    height: 34px;
-    padding: 16px;
-    opacity: 0;
-    transition: opacity 0.5s;
-    box-sizing: content-box;
+    position: var(--ran-player-controller-position, absolute);
+    bottom: var(--ran-player-controller-bottom, 0);
+    left: var(--ran-player-controller-left, 0);
+    background: var(
+      --ran-player-controller-background,
+      linear-gradient(180deg, rgba(217, 217, 217, 0.5) 0%, rgba(91, 91, 91, 0.5) 100%)
+    );
+    width: var(--ran-player-controller-width, calc(100% - 32px));
+    height: var(--ran-player-controller-height, 34px);
+    padding: var(--ran-player-controller-padding, 16px);
+    opacity: var(--ran-player-controller-opacity, 0);
+    transition: var(--ran-player-controller-transition, opacity 0.5s);
+    box-sizing: var(--ran-player-controller-box-sizing, content-box);
     &-tip {
-      position: absolute;
-      top: -12px;
-      max-width: 60px;
-      height: 24px;
-      line-height: 9px;
+      position: var(--ran-player-controller-tip-position, absolute);
+      top: var(--ran-player-controller-tip-top, -12px);
+      max-width: var(--ran-player-controller-tip-max-width, 60px);
+      height: var(--ran-player-controller-tip-height, 24px);
+      line-height: var(--ran-player-controller-tip-line-height, 9px);
       transform-origin: var(--ran-x, 50%) var(--ran-y, 50%);
-      box-sizing: border-box;
-      margin: 0;
-      padding: 4px 6px;
-      color: #fff;
-      font-size: 10px;
-      list-style: none;
-      font-family: @font-family;
-      z-index: 1000;
-      font-variant: initial;
-      background: rgba(0, 0, 0, 0.5);
-      border-radius: 8px;
-      outline: none;
-      box-shadow: @box-shadow;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      opacity: 0;
-      text-align: center;
+      box-sizing: var(--ran-player-controller-tip-box-sizing, border-box);
+      margin: var(--ran-player-controller-tip-margin, 0);
+      padding: var(--ran-player-controller-tip-padding, 4px 6px);
+      color: var(--ran-player-controller-tip-color, #fff);
+      font-size: var(--ran-player-controller-tip-font-size, 10px);
+      list-style: var(--ran-player-controller-tip-list-style, none);
+      font-family: var(--ran-player-controller-tip-font-family, @font-family);
+      z-index: var(--ran-player-controller-tip-z-index, 1000);
+      font-variant: var(--ran-player-controller-tip-font-variant, initial);
+      background: var(--ran-player-controller-tip-background, rgba(0, 0, 0, 0.5));
+      border-radius: var(--ran-player-controller-tip-border-radius, 8px);
+      outline: var(--ran-player-controller-tip-outline, none);
+      box-shadow: var(--ran-player-controller-tip-box-shadow, @box-shadow);
+      overflow: var(--ran-player-controller-tip-overflow, hidden);
+      white-space: var(--ran-player-controller-tip-white-space, nowrap);
+      text-overflow: var(--ran-player-controller-tip-text-overflow, ellipsis);
+      opacity: var(--ran-player-controller-tip-opacity, 0);
+      text-align: var(--ran-player-controller-tip-text-align, center);
       &-time {
-        margin-top: 4px;
-        text-align: center;
-        max-width: 80px;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        text-align: center;
+        margin-top: var(--ran-player-controller-tip-time-margin-top, 4px);
+        text-align: var(--ran-player-controller-tip-time-text-align, center);
+        max-width: var(--ran-player-controller-tip-time-max-width, 80px);
+        overflow: var(--ran-player-controller-tip-time-overflow, hidden);
+        white-space: var(--ran-player-controller-tip-time-white-space, nowrap);
+        text-overflow: var(--ran-player-controller-tip-time-text-overflow, ellipsis);
+        text-align: var(--ran-player-controller-tip-time-text-align, center);
       }
       &-text {
-        margin-top: 4px;
-        max-width: 80px;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        text-align: center;
-        text-align: center;
+        margin-top: var(--ran-player-controller-tip-text-margin-top, 4px);
+        max-width: var(--ran-player-controller-tip-text-max-width, 80px);
+        overflow: var(--ran-player-controller-tip-text-overflow, hidden);
+        white-space: var(--ran-player-controller-tip-text-white-space, nowrap);
+        text-overflow: var(--ran-player-controller-tip-text-text-overflow, ellipsis);
+        text-align: var(--ran-player-controller-tip-text-text-align, center);
       }
     }
     &-progress {
-      position: relative;
-      width: 100%;
-      height: 4px;
-      cursor: pointer;
-      box-sizing: content-box;
+      position: var(--ran-player-controller-progress-position, relative);
+      width: var(--ran-player-controller-progress-width, 100%);
+      height: var(--ran-player-controller-progress-height, 4px);
+      cursor: var(--ran-player-controller-progress-cursor, pointer);
+      box-sizing: var(--ran-player-controller-progress-box-sizing, content-box);
       &:focus {
-        outline: 0;
+        outline: var(--ran-player-controller-progress-focus-outline, 0);
         -webkit-tap-highlight-color: transparent;
       }
       &:active {
-        outline: 0;
+        outline: var(--ran-player-controller-progress-active-outline, 0);
         -webkit-tap-highlight-color: transparent;
       }
       &-wrap {
-        width: 100%;
-        height: 100%;
-        border-radius: 20px;
-        background: rgba(255, 255, 255, 0.3);
-        position: relative;
-        overflow: hidden;
-        pointer-events: none;
-        box-sizing: content-box;
+        width: var(--ran-player-controller-progress-wrap-width, 100%);
+        height: var(--ran-player-controller-progress-wrap-height, 100%);
+        border-radius: var(--ran-player-controller-progress-wrap-border-radius, 20px);
+        background: var(--ran-player-controller-progress-wrap-background, rgba(255, 255, 255, 0.3));
+        position: var(--ran-player-controller-progress-wrap-position, relative);
+        overflow: var(--ran-player-controller-progress-wrap-overflow, hidden);
+        pointer-events: var(--ran-player-controller-progress-wrap-pointer-events, none);
+        box-sizing: var(--ran-player-controller-progress-wrap-box-sizing, content-box);
         &-value {
-          position: absolute;
-          top: 0px;
-          left: 0;
-          height: 100%;
-          width: 100%;
-          transform: scaleX(0);
-          transform-origin: 0 0;
-          will-change: transform;
-          background: rgba(255, 255, 255, 0.8);
-          border-radius: 20px;
-          box-sizing: content-box;
-          cursor: pointer;
+          position: var(--ran-player-controller-progress-wrap-value-position, absolute);
+          top: var(--ran-player-controller-progress-wrap-value-top, 0px);
+          left: var(--ran-player-controller-progress-wrap-value-left, 0);
+          height: var(--ran-player-controller-progress-wrap-value-height, 100%);
+          width: var(--ran-player-controller-progress-wrap-value-width, 100%);
+          transform: var(--ran-player-controller-progress-wrap-value-transform, scaleX(0));
+          transform-origin: var(--ran-player-controller-progress-wrap-value-transform-origin, 0 0);
+          will-change: var(--ran-player-controller-progress-wrap-value-will-change, transform);
+          background: var(--ran-player-controller-progress-wrap-value-background, rgba(255, 255, 255, 0.8));
+          border-radius: var(--ran-player-controller-progress-wrap-value-border-radius, 20px);
+          box-sizing: var(--ran-player-controller-progress-wrap-value-box-sizing, content-box);
+          cursor: var(--ran-player-controller-progress-wrap-value-cursor, pointer);
         }
       }
       &-dot {
-        position: absolute;
-        top: -2px;
-        left: -2px;
-        border-radius: 50%;
-        z-index: 9;
-        width: 8px;
-        height: 8px;
-        background: rgba(255, 255, 255, 1);
-        cursor: pointer;
+        position: var(--ran-player-controller-progress-dot-position, absolute);
+        top: var(--ran-player-controller-progress-dot-top, -2px);
+        left: var(--ran-player-controller-progress-dot-left, -2px);
+        border-radius: var(--ran-player-controller-progress-dot-border-radius, 50%);
+        z-index: var(--ran-player-controller-progress-dot-z-index, 9);
+        width: var(--ran-player-controller-progress-dot-width, 8px);
+        height: var(--ran-player-controller-progress-dot-height, 8px);
+        background: var(--ran-player-controller-progress-dot-background, rgba(255, 255, 255, 1));
+        cursor: var(--ran-player-controller-progress-dot-cursor, pointer);
       }
     }
     &-bottom {
-      margin-top: 8px;
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      margin-top: var(--ran-player-controller-bottom-margin-top, 8px);
+      width: var(--ran-player-controller-bottom-width, 100%);
+      display: var(--ran-player-controller-bottom-display, flex);
+      justify-content: var(--ran-player-controller-bottom-justify-content, space-between);
+      align-items: var(--ran-player-controller-bottom-align-items, center);
       &-left {
-        user-select: none;
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
+        user-select: var(--ran-player-controller-bottom-left-user-select, none);
+        display: var(--ran-player-controller-bottom-left-display, flex);
+        justify-content: var(--ran-player-controller-bottom-left-justify-content, flex-start);
+        align-items: var(--ran-player-controller-bottom-left-align-items, center);
         &-btn {
-          width: 20px;
-          height: 20px;
-          cursor: pointer;
-          outline: 0;
+          width: var(--ran-player-controller-bottom-left-btn-width, 20px);
+          height: var(--ran-player-controller-bottom-left-btn-height, 20px);
+          cursor: var(--ran-player-controller-bottom-left-btn-cursor, pointer);
+          outline: var(--ran-player-controller-bottom-left-btn-outline, 0);
           -webkit-tap-highlight-color: transparent;
           &:active,
           &:focus {
-            outline: 0;
+            outline: var(--ran-player-controller-bottom-left-btn-focus-outline, 0);
             -webkit-tap-highlight-color: transparent;
           }
         }
         &-btn-play {
-          background: url(./img/smallplay.png) no-repeat;
-          background-size: contain;
+          background: var(--ran-player-controller-bottom-left-btn-play-background, url(./img/smallplay.png) no-repeat);
+          background-size: var(--ran-player-controller-bottom-left-btn-play-background-size, contain);
         }
         &-btn-pause {
-          background: url(./img/smallpause.png) no-repeat;
-          background-size: contain;
+          background: var(
+            --ran-player-controller-bottom-left-btn-pause-background,
+            url(./img/smallpause.png) no-repeat
+          );
+          background-size: var(--ran-player-controller-bottom-left-btn-pause-background-size, contain);
         }
         &-time {
-          margin-left: 16px;
-          display: flex;
-          justify-content: flex-start;
-          align-items: center;
+          margin-left: var(--ran-player-controller-bottom-left-time-margin-left, 16px);
+          display: var(--ran-player-controller-bottom-left-time-display, flex);
+          justify-content: var(--ran-player-controller-bottom-left-time-justify-content, flex-start);
+          align-items: var(--ran-player-controller-bottom-left-time-align-items, center);
           &-current {
-            color: #fff;
-            font-family: PingFang SC;
-            font-size: 12px;
-            min-width: 40px;
-            font-style: normal;
-            font-weight: 400;
-            line-height: normal;
-            text-align: center;
-            position: relative;
-            top: 2px;
+            color: var(--ran-player-controller-bottom-left-time-current-color, #fff);
+            font-family: var(--ran-player-controller-bottom-left-time-current-font-family, PingFang SC);
+            font-size: var(--ran-player-controller-bottom-left-time-current-font-size, 12px);
+            min-width: var(--ran-player-controller-bottom-left-time-current-min-width, 40px);
+            font-style: var(--ran-player-controller-bottom-left-time-current-font-style, normal);
+            font-weight: var(--ran-player-controller-bottom-left-time-current-font-weight, 400);
+            line-height: var(--ran-player-controller-bottom-left-time-current-line-height, normal);
+            text-align: var(--ran-player-controller-bottom-left-time-current-text-align, center);
+            position: var(--ran-player-controller-bottom-left-time-current-position, relative);
+            top: var(--ran-player-controller-bottom-left-time-current-top, 2px);
           }
           &-divide {
-            color: #fff;
-            font-family: PingFang SC;
-            font-size: 12px;
-            font-style: normal;
-            font-weight: 400;
-            line-height: normal;
-            margin: 0 2px;
-            text-align: center;
-            position: relative;
-            top: 2px;
+            color: var(--ran-player-controller-bottom-left-time-divide-color, #fff);
+            font-family: var(--ran-player-controller-bottom-left-time-divide-font-family, PingFang SC);
+            font-size: var(--ran-player-controller-bottom-left-time-divide-font-size, 12px);
+            font-style: var(--ran-player-controller-bottom-left-time-divide-font-style, normal);
+            font-weight: var(--ran-player-controller-bottom-left-time-divide-font-weight, 400);
+            line-height: var(--ran-player-controller-bottom-left-time-divide-line-height, normal);
+            margin: var(--ran-player-controller-bottom-left-time-divide-margin, 0 2px);
+            text-align: var(--ran-player-controller-bottom-left-time-divide-text-align, center);
+            position: var(--ran-player-controller-bottom-left-time-divide-position, relative);
+            top: var(--ran-player-controller-bottom-left-time-divide-top, 2px);
           }
           &-duration {
-            color: #fff;
-            font-family: PingFang SC;
-            font-size: 12px;
-            font-style: normal;
-            font-weight: 400;
-            line-height: normal;
-            min-width: 40px;
-            text-align: center;
-            position: relative;
-            top: 2px;
+            color: var(--ran-player-controller-bottom-left-time-duration-color, #fff);
+            font-family: var(--ran-player-controller-bottom-left-time-duration-font-family, PingFang SC);
+            font-size: var(--ran-player-controller-bottom-left-time-duration-font-size, 12px);
+            font-style: var(--ran-player-controller-bottom-left-time-duration-font-style, normal);
+            font-weight: var(--ran-player-controller-bottom-left-time-duration-font-weight, 400);
+            line-height: var(--ran-player-controller-bottom-left-time-duration-line-height, normal);
+            min-width: var(--ran-player-controller-bottom-left-time-duration-min-width, 40px);
+            text-align: var(--ran-player-controller-bottom-left-time-duration-text-align, center);
+            position: var(--ran-player-controller-bottom-left-time-duration-position, relative);
+            top: var(--ran-player-controller-bottom-left-time-duration-top, 2px);
           }
         }
       }
       &-right {
-        user-select: none;
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
+        user-select: var(--ran-player-controller-bottom-right-user-select, none);
+        display: var(--ran-player-controller-bottom-right-display, flex);
+        justify-content: var(--ran-player-controller-bottom-right-justify-content, flex-end);
+        align-items: var(--ran-player-controller-bottom-right-align-items, center);
         &-volume {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-right: 12px;
-          cursor: pointer;
+          display: var(--ran-player-controller-bottom-right-volume-display, flex);
+          justify-content: var(--ran-player-controller-bottom-right-volume-justify-content, space-between);
+          align-items: var(--ran-player-controller-bottom-right-volume-align-items, center);
+          margin-right: var(--ran-player-controller-bottom-right-volume-margin-right, 12px);
+          cursor: var(--ran-player-controller-bottom-right-align-volume-cursor, pointer);
           &-icon-volume {
-            background: url(./img/volumenotmute.svg) no-repeat;
-            background-size: contain;
+            background: var(
+              --ran-player-controller-bottom-right-align-volume-icon-volume-background,
+              url(./img/volumenotmute.svg) no-repeat
+            );
+            background-size: var(
+              --ran-player-controller-bottom-right-align-volume-icon-volume-background-size,
+              contain
+            );
           }
           &-icon-mute {
-            background: url(./img/volumemute.svg) no-repeat;
-            background-size: contain;
+            background: var(
+              --ran-player-controller-bottom-right-align-volume-icon-mute-background,
+              url(./img/volumemute.svg) no-repeat
+            );
+            background-size: var(--ran-player-controller-bottom-right-align-volume-icon-mute-background-size, contain);
           }
           &-icon {
-            width: 18px;
-            height: 18px;
+            width: var(--ran-player-controller-bottom-right-align-volume-icon-width, 18px);
+            height: var(--ran-player-controller-bottom-right-align-volume-icon-height, 18px);
             margin-right: 6px;
           }
           &-progress {
@@ -454,11 +468,10 @@
           cursor: pointer;
         }
         &-full {
-          background: url('./img/fullscreenfig.png');
+          background: url("./img/fullscreenfig.png");
           background-size: contain;
           width: 16px;
           height: 16px;
-          // margin-left: 12px;
           cursor: pointer;
         }
       }

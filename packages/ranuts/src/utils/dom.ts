@@ -192,12 +192,15 @@ const SVG_TAG_NAMES = [
 ];
 /**
  * @description: 链式调用的 dom 操作
+ * (tag) (key value) (children)
  * @return {HTMLElement}
  */
 export class Chain {
   public element: HTMLElement;
+  public listener: Map<keyof HTMLElementEventMap, Map<string, (this: HTMLElement, ev: HTMLElementEventMap[K]) => unknown>>;
   constructor(tagName: string, options?: ElementCreationOptions) {
     this.element = this.create(tagName, options);
+    this.listener = new Map()
   }
   /**
    * @description: 创建元素
@@ -257,10 +260,78 @@ export class Chain {
     this.element.textContent = text;
     return this;
   };
+  /**
+   * @description: 给当前元素设置样式
+   * @param {string} name
+   * @param {string} value
+   * @return {Chain}
+   */
   public setStyle = (name: string, value: string): Chain => {
     this.element.style.setProperty(name, value);
     return this;
   };
+  /**
+   * @description: 给当前元素添加子元素
+   * @return {Chain}
+   */
+  public addChild = (child: Chain | Chain[]) => {
+    if (Array.isArray(child)) {
+      const Fragment = document.createDocumentFragment();
+      child.forEach((item) => Fragment.appendChild(item.element));
+      this.element.appendChild(Fragment);
+    } else {
+      this.element.appendChild(child.element);
+    }
+    return this;
+  }
+  /**
+   * @description: 给当前元素添加事件监听
+   * @param {string} type
+   * @param {EventListener} listener
+   * @return {Chain}
+   */
+  public listen = <K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => unknown, options?: boolean | AddEventListenerOptions) => {
+    let event = this.listener.get(type)
+    if (!event) {
+      event = new Map()
+      this.listener.set(type, event)
+    }
+    const value = event.get(listener.name)
+    if (value === listener) {
+      console.warn(`${value.name} listener has been added to ${type} event, please remove it first.`)
+    }
+    this.element.addEventListener(type, listener, options);
+    event.set(listener.name, listener)
+    return this;
+  }
+  /**
+   * @description: 移除当前元素的事件监听
+   * @param {string} type
+   * @return {Chain}
+   */
+  public clearListener = <K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => unknown, options?: boolean | AddEventListenerOptions) => {
+    this.element.removeEventListener(type, listener, options);
+    const event = this.listener.get(type)
+    if (event) {
+      event.delete(listener.name)
+    }else{
+      console.warn(`No ${type} event listener has been added.`)
+    }
+    return this;
+  }
+  /**
+   * @description: 移除当前元素的所有事件监听
+   * @return {Chain}
+   */
+  public clearAllListener = () => {
+    for (let [key, value] of this.listener) {
+      for (let [k, v] of value) {
+        this.element.removeEventListener(key, v)
+        value.delete(k)
+      }
+      this.listener.delete(key)
+    }
+  }
 }
 
 export const create = (tagName: string, options?: ElementCreationOptions): Chain => {
