@@ -350,7 +350,7 @@
             margin-right: 6px;
           }
           &-progress {
-            width: 50px;
+            width: var(--ran-player-controller-bottom-right-align-volume-progress-width, 50px);
             .ran-progress {
               position: relative;
               &-wrap {
@@ -380,22 +380,21 @@
           }
         }
         &-speed {
-          width: 30px;
-          color: #fff;
-          font-family: PingFang SC;
-          font-size: 14px;
-          width: 30px;
-          height: 20px;
-          font-style: normal;
-          font-weight: 400;
-          line-height: normal;
-          margin-right: 22px;
-          cursor: pointer;
-          outline: 0;
+          width: var(--ran-player-controller-bottom-right-align-speed-width, 30px);
+          height: var(--ran-player-controller-bottom-right-align-speed-height, 20px);
+          color: var(--ran-player-controller-bottom-right-align-speed-color, #fff);
+          font-family: var(--ran-player-controller-bottom-right-align-speed-font-family, PingFang SC);
+          font-size: var(--ran-player-controller-bottom-right-align-speed-font-size, 14px);
+          font-style: var(--ran-player-controller-bottom-right-align-speed-font-style, normal);
+          font-weight: var(--ran-player-controller-bottom-right-align-speed-font-weight, 400);
+          line-height: var(--ran-player-controller-bottom-right-align-speed-line-height, normal);
+          margin-right: var(--ran-player-controller-bottom-right-align-speed-margin-right, 22px);
+          cursor: var(--ran-player-controller-bottom-right-align-speed-cursor, pointer);
+          outline: var(--ran-player-controller-bottom-right-align-speed-outline, 0);
           -webkit-tap-highlight-color: transparent;
           &:active,
           &:focus {
-            outline: 0;
+            outline: var(--ran-player-controller-bottom-right-align-speed-focus-outline, 0);
             -webkit-tap-highlight-color: transparent;
           }
           r-select {
@@ -419,22 +418,21 @@
           }
         }
         &-clarity {
-          width: 60px;
-          color: #fff;
-          font-family: PingFang SC;
-          font-size: 14px;
-          width: 30px;
-          height: 20px;
-          font-style: normal;
-          font-weight: 400;
-          line-height: normal;
-          cursor: pointer;
-          margin-right: 12px;
-          outline: 0;
+          color: var(--ran-player-controller-bottom-right-align-clarity-color, #fff);
+          font-family: var(--ran-player-controller-bottom-right-align-clarity-font-family, PingFang SC);
+          font-size: var(--ran-player-controller-bottom-right-align-clarity-font-size, 14px);
+          width: var(--ran-player-controller-bottom-right-align-clarity-width, 30px);
+          height: var(--ran-player-controller-bottom-right-align-clarity-height, 20px);
+          font-style: var(--ran-player-controller-bottom-right-align-clarity-font-style, normal);
+          font-weight: var(--ran-player-controller-bottom-right-align-clarity-font-weight, 400);
+          line-height: var(--ran-player-controller-bottom-right-align-clarity-line-height, normal);
+          cursor: var(--ran-player-controller-bottom-right-align-clarity-cursor, pointer);
+          margin-right: var(--ran-player-controller-bottom-right-align-clarity-margin-right, 12px);
+          outline: var(--ran-player-controller-bottom-right-align-clarity-outline, 0);
           -webkit-tap-highlight-color: transparent;
           &:active,
           &:focus {
-            outline: 0;
+            outline: var(--ran-player-controller-bottom-right-align-clarity-focus-outline, 0);
             -webkit-tap-highlight-color: transparent;
           }
           r-select {
@@ -458,21 +456,21 @@
           }
         }
         &-knowledge {
-          color: #fff;
-          font-family: PingFang SC;
-          font-size: 14px;
-          font-style: normal;
-          font-weight: 400;
-          line-height: normal;
-          margin-right: 24px;
-          cursor: pointer;
+          color: var(--ran-player-controller-bottom-right-align-knowledge-color, #fff);
+          font-family: var(--ran-player-controller-bottom-right-align-knowledge-font-family, PingFang SC);
+          font-size: var(--ran-player-controller-bottom-right-align-knowledge-font-size, 14px);
+          font-style: var(--ran-player-controller-bottom-right-align-knowledge-font-style, normal);
+          font-weight: var(--ran-player-controller-bottom-right-align-knowledge-font-weight, 400);
+          line-height: var(--ran-player-controller-bottom-right-align-knowledge-line-height, normal);
+          margin-right: var(--ran-player-controller-bottom-right-align-knowledge-margin-right, 24px);
+          cursor: var(--ran-player-controller-bottom-right-align-knowledge-cursor, pointer);
         }
         &-full {
-          background: url("./img/fullscreenfig.png");
-          background-size: contain;
-          width: 16px;
-          height: 16px;
-          cursor: pointer;
+          background: var(--ran-player-controller-bottom-right-align-full-background, url("./img/fullscreenfig.png"));
+          background-size: var(--ran-player-controller-bottom-right-align-full-background-size, contain);
+          width: var(--ran-player-controller-bottom-right-align-full-width, 16px);
+          height: var(--ran-player-controller-bottom-right-align-full-height, 16px);
+          cursor: var(--ran-player-controller-bottom-right-align-full-cursor, pointer);
         }
       }
     }
