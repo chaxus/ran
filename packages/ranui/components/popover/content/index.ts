@@ -1,10 +1,17 @@
+import { create } from 'ranuts/utils';
+import less from './index.less?inline';
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
-import './index.less';
+
 
 export class Content extends (HTMLElementSSR()!) {
   observer: MutationObserver;
+  _shadowDom: ShadowRoot;
   constructor() {
     super();
+    const shadowRoot = this.attachShadow({ mode: "closed" })
+    this._shadowDom = shadowRoot
+    const style = create("style").setTextContent(less)
+    shadowRoot.appendChild(style.element)
     this.observer = new MutationObserver(this.callback);
   }
   callback = (mutations: MutationRecord[], observer: MutationObserver): void => {
@@ -29,7 +36,6 @@ export class Content extends (HTMLElementSSR()!) {
     );
   };
   connectedCallback(): void {
-    this.setAttribute('class', 'ran-content');
     this.observer.observe(this, { attributes: true, childList: true, subtree: true });
   }
   disconnectCallback(): void {

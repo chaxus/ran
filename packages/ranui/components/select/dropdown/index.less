@@ -75,7 +75,6 @@
 }
 
 .ranui-select-dropdown {
-  position: absolute;
   transform-origin: var(--ran-x, 50%) var(--ran-y, 50%);
   box-sizing: border-box;
   margin: 0;
@@ -93,36 +92,4 @@
   box-shadow: @box-shadow;
   cursor: pointer;
   width: 100%;
-  &-option-item {
-    position: relative;
-    display: block;
-    padding: 5px 12px;
-    color: rgba(0, 0, 0, 0.88);
-    font-weight: normal;
-    font-size: 14px;
-    transition: background 0.3s ease;
-    border-radius: 4px;
-    &:hover {
-      background-color: rgba(0, 0, 0, 0.04);
-    }
-    &-content {
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      color: rgba(0, 0, 0, 0.88);
-      font-size: 14px;
-      line-height: 1.5714285714285714;
-      box-sizing: border-box;
-      list-style: none;
-      font-family: @font-family;
-      font-variant: initial;
-    }
-  }
-  &-option-active {
-    background-color: #e6f7ff;
-    font-weight: bold;
-    &:hover {
-      background-color: #e6f7ff;
-    }
-  }
 }

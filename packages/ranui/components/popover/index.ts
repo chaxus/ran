@@ -1,6 +1,8 @@
-import { addClassToElement, removeClassToElement } from 'ranuts/utils';
+import { create } from 'ranuts/utils';
+import less from './index.less?inline';
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
-import './index.less';
+import '@/components/popover/content'
+import '@/components/popover/dropdown'
 
 // index.ts:29 Uncaught DOMException: Failed to construct 'CustomElement': The result must not have children
 // index.ts:31 Uncaught DOMException: Failed to construct 'CustomElement': The result must not have attributes
@@ -8,11 +10,12 @@ import './index.less';
 export class Popover extends (HTMLElementSSR()!) {
   _slot: HTMLSlotElement;
   popoverBlock: HTMLDivElement;
-  popoverContent?: HTMLDivElement;
+  popoverContent?: HTMLElement;
   popoverArrow?: HTMLDivElement;
   popoverInner?: HTMLDivElement;
   popoverInnerBlock?: HTMLDivElement;
   removePopoverTimeId?: NodeJS.Timeout;
+  _shadowDom: ShadowRoot;
   static get observedAttributes(): string[] {
     return ['placement', 'arrow', 'trigger'];
   }
@@ -23,6 +26,11 @@ export class Popover extends (HTMLElementSSR()!) {
     this.popoverBlock.setAttribute('class', 'ran-popover-block');
     this.popoverBlock.setAttribute('role', 'tooltip');
     this.popoverBlock.appendChild(this._slot);
+    const shadowRoot = this.attachShadow({ mode: "closed" })
+    this._shadowDom = shadowRoot
+    const style = create("style").setTextContent(less)
+    shadowRoot.appendChild(style.element)
+    shadowRoot.appendChild(this.popoverBlock);
   }
   get placement(): string {
     return this.getAttribute('placement') || 'top';
@@ -52,28 +60,17 @@ export class Popover extends (HTMLElementSSR()!) {
     if (!content) return;
     if (!this.popoverContent) {
       const div = document.createElement('div');
-      this.popoverContent = document.createElement('div');
-      this.popoverContent.setAttribute('class', 'ran-popover-content');
-      this.popoverContent.addEventListener('click', this.clickContent);
-      this.popoverArrow = document.createElement('div');
-      this.popoverArrow.setAttribute('class', 'ran-popover-content-arrow');
-      this.popoverInner = document.createElement('div');
-      this.popoverInner.setAttribute('class', 'ran-popover-content-inner');
-      this.popoverInnerBlock = document.createElement('div');
-      this.popoverInnerBlock.setAttribute('class', 'ran-popover-content-inner-block');
-      this.popoverContent.appendChild(this.popoverArrow);
-      this.popoverContent.appendChild(this.popoverInner);
-      this.popoverInner.appendChild(this.popoverInnerBlock);
+      this.popoverContent = document.createElement('r-popover-dropdown');
       div.appendChild(this.popoverContent);
       document.body.appendChild(div);
     }
-    if (this.popoverInnerBlock && content.length > 0) {
-      this.popoverInnerBlock.innerHTML = '';
+    if (this.popoverContent && content.length > 0) {
+      this.popoverContent.innerHTML = '';
       const Fragment = document.createDocumentFragment();
       for (const child of content) {
         Fragment.appendChild(child);
       }
-      this.popoverInnerBlock.appendChild(Fragment);
+      this.popoverContent.appendChild(Fragment);
     }
   };
   watchContent = (e: Event): void => {
@@ -82,7 +79,7 @@ export class Popover extends (HTMLElementSSR()!) {
     this.placementPosition();
   };
   placementPosition = (): void => {
-    if (!this.popoverInnerBlock || !this.popoverContent) return;
+    if (!this.popoverContent) return;
     this.popoverContent?.style.setProperty('display', 'block');
     this.popoverContent?.style.setProperty('opacity', '1');
     const rect = this.getBoundingClientRect();

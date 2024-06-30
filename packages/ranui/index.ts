@@ -17,7 +17,6 @@ export * as progress from '@/components/progress';
 export * as checkbox from '@/components/checkbox';
 export * as colorpicker from '@/components/colorpicker';
 export * as popover from '@/components/popover';
-export * as content from '@/components/content';
 export * as loading from '@/components/loading';
 
 if (typeof document !== 'undefined') {

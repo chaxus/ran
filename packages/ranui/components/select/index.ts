@@ -2,6 +2,7 @@ import { addClassToElement, generateThrottle, isMobile, removeClassToElement } f
 import { HTMLElementSSR, createCustomError, isDisabled } from '@/utils/index';
 import '@/components/select/option';
 import '@/components/select/dropdown';
+import '@/components/select/dropdown-item';
 import '@/components/icon';
 import '@/components/input';
 import type { Input } from '@/components/input';
@@ -27,6 +28,8 @@ const placementDirection: PlacementDirection = {
 };
 
 const searchThrottle = generateThrottle();
+
+const animationTime = 300;
 
 export class Select extends (HTMLElementSSR()!) {
   removeTimeId?: NodeJS.Timeout;
@@ -187,14 +190,13 @@ export class Select extends (HTMLElementSSR()!) {
   setSelectDropdownDisplayNone = (): void => {
     if (this._selectDropDownOutTimeId) return;
     if (this._selectionDropdown && this._selectionDropdown.style.display !== 'none') {
-      addClassToElement(this._selectionDropdown, placementDirection[this.placement].remove);
+      this._selectionDropdown.setAttribute('transit', placementDirection[this.placement].remove)
       this._selectDropDownOutTimeId = setTimeout(() => {
         this._selectionDropdown?.style.setProperty('display', 'none');
-        this._selectionDropdown &&
-          removeClassToElement(this._selectionDropdown, placementDirection[this.placement].remove);
+        this._selectionDropdown && this._selectionDropdown.removeAttribute('transit')
         clearTimeout(this._selectDropDownOutTimeId);
         this._selectDropDownOutTimeId = undefined;
-      }, 300);
+      }, animationTime);
     }
   };
   /**
@@ -204,14 +206,13 @@ export class Select extends (HTMLElementSSR()!) {
   setSelectDropdownDisplayBlock = (): void => {
     if (this._selectDropDownInTimeId) return;
     if (this._selectionDropdown && this._selectionDropdown.style.display !== 'block') {
-      addClassToElement(this._selectionDropdown, placementDirection[this.placement].add);
+      this._selectionDropdown.setAttribute('transit', placementDirection[this.placement].add)
       this._selectionDropdown?.style.setProperty('display', 'block');
       this._selectDropDownInTimeId = setTimeout(() => {
-        this._selectionDropdown &&
-          removeClassToElement(this._selectionDropdown, placementDirection[this.placement].add);
+        this._selectionDropdown && this._selectionDropdown.removeAttribute('transit')
         clearTimeout(this._selectDropDownInTimeId);
         this._selectDropDownInTimeId = undefined;
-      }, 200);
+      }, animationTime);
     }
   };
   placementPosition = (): void => {
@@ -276,11 +277,7 @@ export class Select extends (HTMLElementSSR()!) {
    */
   clickOption = (e: MouseEvent): void => {
     e.stopPropagation();
-    let element = e.target as Element;
-    if (element.classList?.contains('ranui-select-dropdown-option-item')) {
-      element = element.children[0];
-    }
-    if (!element.classList?.contains('ranui-select-dropdown-option-item-content')) return;
+    const element = e.target as Element;
     const label = element.innerHTML;
     const value = this._optionLabelMapValue.get(label);
     if (value) {
@@ -293,14 +290,12 @@ export class Select extends (HTMLElementSSR()!) {
     const { height } = rect;
     this._text.style.setProperty('line-height', `${height}px`);
     if (this._activeOption) {
-      removeClassToElement(this._activeOption, 'ranui-select-dropdown-option-active');
+      this._activeOption.removeAttribute('active');
     }
-    setTimeout(() => {
-      this._activeOption = element?.parentElement || undefined;
-      if (this._activeOption) {
-        addClassToElement(this._activeOption, 'ranui-select-dropdown-option-active');
-      }
-    }, 200);
+    this._activeOption = element as HTMLElement;
+    if (this._activeOption) {
+      this._activeOption.setAttribute('active', value || '');
+    }
     this.setSelectDropdownDisplayNone();
     // 点击后触发 onchange 事件
     this.dispatchEvent(new CustomEvent('change', { detail: { value, label } }));
@@ -370,23 +365,17 @@ export class Select extends (HTMLElementSSR()!) {
     options.forEach((item) => {
       if (this._selectionDropdown) {
         const { label, value } = item;
-        const selectOptionItem = document.createElement('div');
+        const selectOptionItem = document.createElement('r-select-dropdown-item');
         const defaultValue = this.getAttribute('defaultValue') || this.getAttribute('value');
         if (defaultValue === value) {
-          selectOptionItem.setAttribute(
-            'class',
-            'ranui-select-dropdown-option-active ranui-select-dropdown-option-item',
-          );
+          selectOptionItem.setAttribute('active', value)
           this._activeOption = selectOptionItem;
         } else {
-          selectOptionItem.setAttribute('class', 'ranui-select-dropdown-option-item');
+          selectOptionItem.removeAttribute('active')
         }
-        const selectOptionItemContent = document.createElement('div');
-        selectOptionItemContent.setAttribute('class', 'ranui-select-dropdown-option-item-content');
-        selectOptionItemContent.innerHTML = `${label}`;
-        selectOptionItemContent.setAttribute('value', `${value}`);
-        selectOptionItemContent.setAttribute('title', `${label}`);
-        selectOptionItem.appendChild(selectOptionItemContent);
+        selectOptionItem.innerHTML = `${label}`;
+        selectOptionItem.setAttribute('value', `${value}`);
+        selectOptionItem.setAttribute('title', `${label}`);
         this._selectionDropdown.appendChild(selectOptionItem);
       }
     });

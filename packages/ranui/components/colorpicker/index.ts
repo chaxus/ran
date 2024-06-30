@@ -2,7 +2,6 @@ import { range } from 'ranuts/utils';
 import { HTMLElementSSR, createCustomError, createSignal } from '@/utils/index';
 import { HEX_COLOR_REGEX, RGBA_REGEX, RGB_REGEX, hex2hsv, hsv2rgb, rgb2hsv } from '@/utils/color';
 import '@/components/popover';
-import '@/components/content';
 import '@/shadowless/input';
 import '@/shadowless/select';
 import '@/components/progress';

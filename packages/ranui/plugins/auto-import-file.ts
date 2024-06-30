@@ -17,7 +17,7 @@
 //   output?: string
 // }
 // /**
-//  * @description: 用于生成assets/icon目录下的文件名列表
+//  * @description: 用于生成 assets/icon 目录下的文件名列表
 //  */
 // const loadIcons = async () => {
 //   const dirPath = resolve(__dirname, '../assets/icons')
@@ -70,7 +70,7 @@
 //   }
 // }
 
-// // 当初始目录中没有index的时候，不会主动生成，需要至少增加一个空index.js
+// // 当初始目录中没有 index 的时候，不会主动生成，需要至少增加一个空 index.js
 // export default function autoImportFilePlugin(options: Options): Plugin {
 //   // const autoImportRegex = /\|importFile(\?(raw|skipsvgo|dir))?$/
 //   return {
