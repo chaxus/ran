@@ -1,5 +1,4 @@
 import { createCustomError, isDisabled } from '@/utils/index';
-import './index.less';
 
 function Custom() {
   if (typeof document !== 'undefined' && !customElements.get('r-option')) {

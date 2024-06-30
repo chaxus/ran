@@ -1,6 +1,7 @@
 import { addClassToElement, generateThrottle, isMobile, removeClassToElement } from 'ranuts/utils';
 import { HTMLElementSSR, createCustomError, isDisabled } from '@/utils/index';
-import '@/components/option';
+import '@/components/select/option';
+import '@/components/select/dropdown';
 import '@/components/icon';
 import '@/components/input';
 import type { Input } from '@/components/input';
@@ -36,7 +37,7 @@ export class Select extends (HTMLElementSSR()!) {
   _search: Input;
   _icon: HTMLElement;
   _selectDropdown?: HTMLDivElement;
-  _selectionDropdown?: HTMLDivElement;
+  _selectionDropdown?: HTMLElement;
   _selectDropDownInTimeId?: NodeJS.Timeout;
   _selectDropDownOutTimeId?: NodeJS.Timeout;
   _optionList: Option[];
@@ -218,6 +219,7 @@ export class Select extends (HTMLElementSSR()!) {
     const rect = this.getBoundingClientRect();
     const { top, left, bottom, width, height, x, y, right } = rect;
     const root = document.getElementById(this.getPopupContainerId);
+    this._selectionDropdown.style.setProperty('position', `absolute`);
     this._selectionDropdown.style.setProperty('--ran-x', `${top + window.scrollX}`);
     this._selectionDropdown.style.setProperty('--ran-y', `${left + window.scrollY}`);
     let selectTop = bottom + window.scrollY;
@@ -315,14 +317,7 @@ export class Select extends (HTMLElementSSR()!) {
       this._selectDropdown.style.setProperty('-webkit-tap-highlight-color', 'transparent');
       this._selectDropdown.style.setProperty('outline', '0');
       this._selectDropdown.addEventListener('click', this.clickOption);
-      this._selectionDropdown = document.createElement('div');
-      this._selectionDropdown.style.setProperty('-webkit-tap-highlight-color', 'transparent');
-      this._selectionDropdown.style.setProperty('outline', '0');
-      if (this.dropdownclass) {
-        this._selectionDropdown.setAttribute('class', `${this.dropdownclass} ranui-select-dropdown`);
-      } else {
-        this._selectionDropdown.setAttribute('class', 'ranui-select-dropdown');
-      }
+      this._selectionDropdown = document.createElement('r-select-dropdown');
       if (this.trigger.includes('hover') && !isMobile()) {
         this._selectDropdown.addEventListener('mouseleave', this.selectBlur);
         this._selectDropdown.addEventListener('mouseenter', this.removeDropDownTimeId);
@@ -342,7 +337,7 @@ export class Select extends (HTMLElementSSR()!) {
         const container = document.getElementById(this.getPopupContainerId) || document.body;
         container.removeChild(this._selectDropdown);
       }
-    } catch (error) {}
+    } catch (error) { }
   };
   /**
    * @description: 当 select 中有 option 元素的时候，给 dropdown 添加元素

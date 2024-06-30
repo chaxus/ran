@@ -124,7 +124,10 @@ export const es: BuildOptions = {
       index: resolve(__dirname, 'index.ts'),
     },
     fileName: (_: string, name: string): string => {
-      return `${name}.js`;
+      if(name === 'index'){
+        return `${name}.js`
+      }
+      return `src/${name}/index.js`;
     },
     formats: ['es'],
   },

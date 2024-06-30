@@ -17,7 +17,6 @@ viteConfig.plugins?.push(
       './player': './components/player/index.ts',
       './icon': './components/icon/index.ts',
       './image': './components/image/index.ts',
-      './option': './components/option/index.ts',
       './preview': './components/preview/index.ts',
       './progress': './components/progress/index.ts',
       './radar': './components/radar/index.ts',

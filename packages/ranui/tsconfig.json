@@ -3,9 +3,9 @@
   "exclude": ["node_modules/**", "dist/**", "assets", "public"],
   "compilerOptions": {
     "module": "ESNext",
+    "moduleResolution": "bundler",
     "esModuleInterop": true,
     "target": "ESNext",
-    "moduleResolution": "node",
     "outDir": "dist",
     "types": ["vite/client"],
     "forceConsistentCasingInFileNames": true,

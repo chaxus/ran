@@ -17,27 +17,27 @@
     },
     "./react": {
       "types": "./dist/src/react/index.d.ts",
-      "import": "./dist/react.js",
+      "import": "./dist/react/index.js",
       "require": "./dist/umd/react/react.umd.cjs"
     },
     "./node": {
       "types": "./dist/src/node/index.d.ts",
-      "import": "./dist/node.js",
+      "import": "./dist/src/node/index.js",
       "require": "./dist/umd/node/node.umd.cjs"
     },
     "./utils": {
       "types": "./dist/src/utils/index.d.ts",
-      "import": "./dist/utils.js",
+      "import": "./dist/src/utils/index.js",
       "require": "./dist/umd/utils/utils.umd.cjs"
     },
     "./wasm": {
       "types": "./dist/src/wasm/index.d.ts",
-      "import": "./dist/wasm.js",
+      "import": "./dist/src/wasm/index.js",
       "require": "./dist/umd/wasm/wasm.umd.cjs"
     },
     "./ml": {
       "types": "./dist/src/ml/index.d.ts",
-      "import": "./dist/ml.js",
+      "import": "./dist/src/ml/index.js",
       "require": "./dist/umd/ml/ml.umd.cjs"
     }
   },

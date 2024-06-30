@@ -196,8 +196,8 @@ const SVG_TAG_NAMES = [
  * @return {HTMLElement}
  */
 export class Chain {
+  public listener: Map<string, Map<string, EventListener>>;
   public element: HTMLElement;
-  public listener: Map<keyof HTMLElementEventMap, Map<string, (this: HTMLElement, ev: HTMLElementEventMap[K]) => unknown>>;
   constructor(tagName: string, options?: ElementCreationOptions) {
     this.element = this.create(tagName, options);
     this.listener = new Map()
@@ -274,7 +274,7 @@ export class Chain {
    * @description: 给当前元素添加子元素
    * @return {Chain}
    */
-  public addChild = (child: Chain | Chain[]) => {
+  public addChild = (child: Chain | Chain[]): Chain => {
     if (Array.isArray(child)) {
       const Fragment = document.createDocumentFragment();
       child.forEach((item) => Fragment.appendChild(item.element));
@@ -290,7 +290,7 @@ export class Chain {
    * @param {EventListener} listener
    * @return {Chain}
    */
-  public listen = <K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => unknown, options?: boolean | AddEventListenerOptions) => {
+  public listen = <K extends keyof HTMLElementEventMap>(type: K, listener: EventListener, options?: boolean | AddEventListenerOptions): Chain => {
     let event = this.listener.get(type)
     if (!event) {
       event = new Map()
@@ -309,12 +309,12 @@ export class Chain {
    * @param {string} type
    * @return {Chain}
    */
-  public clearListener = <K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => unknown, options?: boolean | AddEventListenerOptions) => {
+  public clearListener = <K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => unknown, options?: boolean | AddEventListenerOptions): Chain => {
     this.element.removeEventListener(type, listener, options);
     const event = this.listener.get(type)
     if (event) {
       event.delete(listener.name)
-    }else{
+    } else {
       console.warn(`No ${type} event listener has been added.`)
     }
     return this;
@@ -323,14 +323,15 @@ export class Chain {
    * @description: 移除当前元素的所有事件监听
    * @return {Chain}
    */
-  public clearAllListener = () => {
-    for (let [key, value] of this.listener) {
-      for (let [k, v] of value) {
+  public clearAllListener = (): Chain => {
+    for (const [key, value] of this.listener) {
+      for (const [k, v] of value) {
         this.element.removeEventListener(key, v)
         value.delete(k)
       }
       this.listener.delete(key)
     }
+    return this
   }
 }
 

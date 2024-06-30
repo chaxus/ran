@@ -11,7 +11,6 @@ import Icon from '@/components/icon';
 import Progress from '@/components/progress';
 import Player from '@/components/player';
 import Select from '@/components/select';
-import Option from '@/components/option';
 import reactify from '@/utils/reactify';
 
 export {
@@ -29,5 +28,4 @@ export {
   Progress,
   Player,
   Select,
-  Option,
 };

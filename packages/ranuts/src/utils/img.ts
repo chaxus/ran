@@ -29,7 +29,7 @@ export interface convertImageToBase64Return extends BaseReturn {
   data: string | ArrayBuffer | null;
 }
 /**
- * @description: 图片转base64
+ * @description: 图片转 base64
  * @param {File} file
  * @return {*}
  */

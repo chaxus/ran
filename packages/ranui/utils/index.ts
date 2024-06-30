@@ -1,6 +1,6 @@
 export const falseList = [false, 'false', null, undefined];
 /**
- * @description: 判断这个元素上是否有disabled属性
+ * @description: 判断这个元素上是否有 disabled 属性
  * @param {Element} element
  * @return {*}
  */
@@ -12,7 +12,7 @@ export const isDisabled = (element: Element): boolean => {
 };
 
 /**
- * @description: 查询指定元素的子级元素，删除他们的某一个指定class
+ * @description: 查询指定元素的子级元素，删除他们的某一个指定 class
  * @param {Element} parent
  * @param {string} deleteClass
  */
@@ -24,7 +24,7 @@ export const removeClassToElementChild = (parent: Element, deleteClass: string):
 };
 
 /**
- * @description: 创建icon的文档示例
+ * @description: 创建 icon 的文档示例
  */
 export const createIconList = (): void => {
   setTimeout(() => {

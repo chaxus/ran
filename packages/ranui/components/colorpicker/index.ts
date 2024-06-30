@@ -5,7 +5,6 @@ import '@/components/popover';
 import '@/components/content';
 import '@/shadowless/input';
 import '@/shadowless/select';
-import '@/components/option';
 import '@/components/progress';
 import './index.less';
 

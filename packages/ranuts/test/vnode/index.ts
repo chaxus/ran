@@ -1,7 +1,6 @@
-import Application from '@/server/server';
-import send from '@/server/send';
+import { Server, staticMiddleware } from '@/node';
 
-const app = new Application();
+const app = new Server();
 
 // 允许访问的文件类型
 const fileTypes: Record<string, string> = {
@@ -18,7 +17,7 @@ const fileTypes: Record<string, string> = {
 };
 
 // app.use(send({ fileTypes }))
-app.use(send());
+app.use(staticMiddleware());
 
 app.listen(8088, () => {
   console.log(`Server port is http://localhost:8088`);

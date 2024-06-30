@@ -118,11 +118,6 @@
       "import": "./dist/components/select/index.js",
       "require": "./dist/umd/index.umd.cjs"
     },
-    "./option": {
-      "types": "./dist/components/option/index.d.ts",
-      "import": "./dist/components/option/index.js",
-      "require": "./dist/umd/index.umd.cjs"
-    },
     "./progress": {
       "types": "./dist/components/progress/index.d.ts",
       "import": "./dist/components/progress/index.js",
