@@ -8,6 +8,40 @@ const __filename = fileURLToPath(import.meta.url);
 
 const __dirname = path.dirname(__filename);
 
+const external = [
+  'react',
+  'os',
+  'fs',
+  'child_process',
+  'http',
+  'https',
+  'tty',
+  'process',
+  'path',
+  'net',
+  'stream',
+  'util',
+  'crypto',
+  'events',
+  'buffer',
+  'readline',
+  'node:os',
+  'node:fs',
+  'node:child_process',
+  'node:http',
+  'node:https',
+  'node:tty',
+  'node:process',
+  'node:path',
+  'node:net',
+  'node:stream',
+  'node:util',
+  'node:crypto',
+  'node:events',
+  'node:buffer',
+  'node:readline',
+]
+
 interface chunkOptimization {
   assetsInlineLimit: number;
   chunkSizeWarningLimit: number;
@@ -21,24 +55,7 @@ const chunkOptimization: Partial<chunkOptimization> = {
   assetsInlineLimit: 1024,
   reportCompressedSize: false,
   rollupOptions: {
-    external: [
-      'react',
-      'node:os',
-      'node:fs',
-      'node:child_process',
-      'node:http',
-      'node:https',
-      'node:tty',
-      'node:process',
-      'node:path',
-      'node:net',
-      'node:stream',
-      'node:util',
-      'node:crypto',
-      'node:events',
-      'node:buffer',
-      'node:readline',
-    ],
+    external,
     output: {
       experimentalMinChunkSize: 500,
     },
@@ -124,7 +141,7 @@ export const es: BuildOptions = {
       index: resolve(__dirname, 'index.ts'),
     },
     fileName: (_: string, name: string): string => {
-      if(name === 'index'){
+      if (name === 'index') {
         return `${name}.js`
       }
       return `src/${name}/index.js`;
