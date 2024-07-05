@@ -4,23 +4,23 @@ export enum ShapeType {
   Polygon = 'polygon',
   Circle = 'circle',
   Ellipse = 'ellipse',
-  RoundedRectangle = 'rounded rectangle',
+  RoundedRectangle = 'rounded rectangle'
 }
 
 export enum LineCap {
   Butt = 'butt',
   Round = 'round',
-  Square = 'square',
+  Square = 'square'
 }
 
 export enum LineJoin {
   Miter = 'miter',
   Bevel = 'bevel',
-  Round = 'round',
+  Round = 'round'
 }
 
 // 渲染器类型
 export enum RendererType {
   WebGl = 'webgl',
-  Canvas = 'canvas',
+  Canvas = 'canvas'
 }
