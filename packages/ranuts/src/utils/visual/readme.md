@@ -79,4 +79,3 @@ Application 类的 stage 属性是一个 Container，要把节点添加到 stage
 
 
 
-

@@ -57,6 +57,7 @@
   "scripts": {
     "build": "sh ./bin/build.sh",
     "test": "vitest run",
+    "dev": "vite --host",
     "prepublish": "npm run build"
   },
   "keywords": [],
