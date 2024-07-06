@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <link rel="icon" href="data:;" />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>node and hierarchy</title>
+  </head>
+
+  <body>
+    <div id="app">
+      <canvas id="drag" width="600" height="600"></canvas>
+      <canvas id="hierarchy" width="500" height="500"></canvas>
+      <canvas id="graphics" width="1200" height="600"></canvas>
+      <canvas id="graphics2" width="1200" height="600"></canvas>
+      <canvas id="clickEventContainer" width="1200" height="600"></canvas>
+    </div>
+    <script type="module">
+      import { Application, Graphics, Container, Point } from './src/utils/visual/index.ts';
+      // 节点与层级的关系 hierarchy
+      // const createHierarchy = () => {
+      //   const hierarchy = new Application({
+      //     view: document.getElementById('hierarchy')
+      //   })
+      //   const blackGraphic = new Graphics()
+      //   blackGraphic.beginFill('black')
+      //   blackGraphic.drawRect(0, 0, 300, 300)
+
+      //   const redGraphic = new Graphics()
+      //   redGraphic.beginFill('red')
+      //   redGraphic.drawRect(0, 0, 200, 200)
+
+      //   const container1 = new Container()
+      //   container1.addChild(blackGraphic)
+      //   container1.addChild(redGraphic)
+
+      //   const container2 = new Container()
+      //   container2.addChild(container1)
+
+      //   const greenGraphic = new Graphics()
+      //   greenGraphic.beginFill('green')
+      //   greenGraphic.drawRect(150, 0, 180, 180)
+
+      //   container2.addChild(greenGraphic)
+
+      //   const yellowGraphic = new Graphics()
+      //   yellowGraphic.beginFill('yellow')
+      //   yellowGraphic.drawRect(0, 0, 250, 150)
+
+      //   hierarchy.stage.addChild(container2)
+      //   hierarchy.stage.addChild(yellowGraphic)
+      //   hierarchy.render()
+      //   setTimeout(() => {
+      //     yellowGraphic.position.set(200, 0)
+      //     hierarchy.render()
+      //   }, 1000)
+      // }
+      // createHierarchy()
+      // // 绘制多边形 graphics
+      // const createGraphics = () => {
+      //   const graphics = new Application({
+      //     view: document.getElementById('graphics')
+      //   })
+      //   const graphic = new Graphics()
+      //     .beginFill('red')
+      //     .drawRect(100, 100, 100, 100)
+      //     .beginFill('green')
+      //     .drawCircle(100, 300, 100)
+      //     .beginFill('pink')
+      //     .drawEllipse(400, 200, 200, 100)
+      //     .beginFill('brown')
+      //     .drawRoundedRect(300, 400, 200, 100, 100)
+      //     .beginFill('purple')
+      //     .drawPolygon([
+      //       600, 300, 700, 100, 800, 200, 1000, 100, 900, 400, 700, 600
+      //     ])
+      //   graphics.stage.addChild(graphic)
+      // }
+      // createGraphics()
+      // // 绘制路径 path
+      // const createPath = () => {
+      //   const graphics2 = new Application({
+      //     view: document.getElementById('graphics2')
+      //   })
+      //   const path = new Graphics()
+      //     .lineStyle(3, 'purple')
+      //     .beginFill('pink', 0.6)
+      //     .moveTo(100, 100)
+      //     .lineTo(300, 100)
+      //     .arc(300, 300, 200, Math.PI * 1.5, Math.PI * 2)
+      //     .bezierCurveTo(500, 400, 600, 500, 700, 500)
+      //     .lineTo(600, 300)
+      //     .arcTo(700, 100, 800, 300, 150)
+      //     .quadraticCurveTo(900, 100, 1100, 200)
+      //     .closePath()
+      //   graphics2.stage.addChild(path)
+      // }
+      // createPath()
+      // // 点击事件
+      // const createClickEvent = () => {
+      //   const clickEventContainer = new Application({
+      //     view: document.getElementById('clickEventContainer')
+      //   })
+      //   const c = new Container()
+      //   const redRect = new Graphics()
+      //     .beginFill('red')
+      //     .drawRect(400, 300, 200, 200)
+      //     .tap('click', () => {
+      //       console.log('点击了红色的矩形');
+      //     })
+      //   c.addChild(redRect)
+      //   const bluePoly = new Graphics()
+      //     .beginFill('blue', 0.7)
+      //     .moveTo(100, 200)
+      //     .lineTo(400, 0)
+      //     .lineTo(1000, 300)
+      //     .lineTo(900, 600)
+      //     .closePath()
+      //     .tap('click', () => {
+      //       console.log('点击了蓝色的多边形');
+      //     })
+      //   c.addChild(bluePoly)
+
+      //   const path2 = new Graphics()
+      //     .lineStyle(3, 'purple')
+      //     .beginFill('pink', 0.6)
+      //     .moveTo(100, 100)
+      //     .lineTo(300, 100)
+      //     .arc(300, 300, 200, Math.PI * 1.5, Math.PI * 2)
+      //     .bezierCurveTo(500, 400, 600, 500, 700, 500)
+      //     .lineTo(600, 300)
+      //     .arcTo(700, 100, 800, 300, 150)
+      //     .quadraticCurveTo(900, 100, 1100, 200)
+      //     .closePath()
+      //     .tap('click', () => {
+      //       console.log('点击了粉色的多边形');
+      //     })
+
+      //   const greenCircle = new Graphics()
+      //     .beginFill('green')
+      //     .drawCircle(200, 400, 200)
+      //     .tap('click', () => {
+      //       console.log('点击了绿色的圆');
+      //     })
+
+      //   clickEventContainer.stage.addChild(c)
+      //   clickEventContainer.stage.addChild(path2)
+      //   clickEventContainer.stage.addChild(greenCircle)
+      // }
+      // createClickEvent()
+      // // 拖拽事件
+      const createDargEvent = () => {
+        const drag = new Application({
+          view: document.getElementById('drag'),
+        });
+        const g = new Graphics()
+          .beginFill('gold')
+          .moveTo(200, 200)
+          .lineTo(400, 100)
+          .lineTo(600, 200)
+          .lineTo(700, 100)
+          .lineTo(600, 500);
+        g.cursor = 'pointer';
+        g.scale.set(0.3, 0.8);
+        g.position.set(100, 50);
+        drag.stage.addChild(g);
+        let dragging = false;
+        let mouseDownPoint;
+        let startPoint;
+        g.addEventListener('mousedown', (e) => {
+          dragging = true;
+          mouseDownPoint = e.global.clone();
+          startPoint = new Point(g.x, g.y);
+        });
+
+        drag.stage.addEventListener('mousemove', (e) => {
+          if (!dragging) {
+            return;
+          }
+          const newP = e.global.clone();
+          const diffX = newP.x - mouseDownPoint.x;
+          const diffY = newP.y - mouseDownPoint.y;
+          g.position.set(startPoint.x + diffX, startPoint.y + diffY);
+          drag.render();
+        });
+        drag.stage.addEventListener('mouseup', (e) => {
+          dragging = false;
+        });
+        drag.render();
+      };
+      createDargEvent();
+    </script>
+  </body>
+</html>

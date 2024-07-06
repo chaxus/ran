@@ -200,7 +200,7 @@ export class Chain {
   public element: HTMLElement;
   constructor(tagName: string, options?: ElementCreationOptions) {
     this.element = this.create(tagName, options);
-    this.listener = new Map()
+    this.listener = new Map();
   }
   /**
    * @description: 创建元素
@@ -283,42 +283,50 @@ export class Chain {
       this.element.appendChild(child.element);
     }
     return this;
-  }
+  };
   /**
    * @description: 给当前元素添加事件监听
    * @param {string} type
    * @param {EventListener} listener
    * @return {Chain}
    */
-  public listen = <K extends keyof HTMLElementEventMap>(type: K, listener: EventListener, options?: boolean | AddEventListenerOptions): Chain => {
-    let event = this.listener.get(type)
+  public listen = <K extends keyof HTMLElementEventMap>(
+    type: K,
+    listener: EventListener,
+    options?: boolean | AddEventListenerOptions,
+  ): Chain => {
+    let event = this.listener.get(type);
     if (!event) {
-      event = new Map()
-      this.listener.set(type, event)
+      event = new Map();
+      this.listener.set(type, event);
     }
-    const value = event.get(listener.name)
+    const value = event.get(listener.name);
     if (value === listener) {
-      console.warn(`${value.name} listener has been added to ${type} event, please remove it first.`)
+      console.warn(`${value.name} listener has been added to ${type} event, please remove it first.`);
     }
     this.element.addEventListener(type, listener, options);
-    event.set(listener.name, listener)
+    event.set(listener.name, listener);
     return this;
-  }
+  };
   /**
    * @description: 移除当前元素的事件监听
    * @param {string} type
    * @return {Chain}
    */
-  public clearListener = <K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => unknown, options?: boolean | AddEventListenerOptions): Chain => {
+  public clearListener = <K extends keyof HTMLElementEventMap>(
+    type: K,
+    listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => unknown,
+    options?: boolean | AddEventListenerOptions,
+  ): Chain => {
     this.element.removeEventListener(type, listener, options);
-    const event = this.listener.get(type)
+    const event = this.listener.get(type);
     if (event) {
-      event.delete(listener.name)
+      event.delete(listener.name);
     } else {
-      console.warn(`No ${type} event listener has been added.`)
+      console.warn(`No ${type} event listener has been added.`);
     }
     return this;
-  }
+  };
   /**
    * @description: 移除当前元素的所有事件监听
    * @return {Chain}
@@ -326,13 +334,13 @@ export class Chain {
   public clearAllListener = (): Chain => {
     for (const [key, value] of this.listener) {
       for (const [k, v] of value) {
-        this.element.removeEventListener(key, v)
-        value.delete(k)
+        this.element.removeEventListener(key, v);
+        value.delete(k);
       }
-      this.listener.delete(key)
+      this.listener.delete(key);
     }
-    return this
-  }
+    return this;
+  };
 }
 
 export const create = (tagName: string, options?: ElementCreationOptions): Chain => {
