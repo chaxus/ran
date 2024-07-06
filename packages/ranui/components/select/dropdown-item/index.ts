@@ -1,30 +1,30 @@
-import type { Chain } from "ranuts/utils";
-import { addClassToElement, create, removeClassToElement } from "ranuts/utils"
-import less from "./index.less?inline"
-import { HTMLElementSSR, createCustomError, isDisabled } from "@/utils/index"
+import type { Chain } from 'ranuts/utils';
+import { addClassToElement, create, removeClassToElement } from 'ranuts/utils';
+import less from './index.less?inline';
+import { HTMLElementSSR, createCustomError, isDisabled } from '@/utils/index';
 
-export class SelectionDropdownItem extends HTMLElementSSR()!{
-  _selectionDropdownItem: Chain
-  _slot: Chain
-  _shadowDom: ShadowRoot
+export class SelectionDropdownItem extends (HTMLElementSSR()!) {
+  _selectionDropdownItem: Chain;
+  _slot: Chain;
+  _shadowDom: ShadowRoot;
   _selectionDropdownItemContent: Chain;
   static get observedAttributes(): string[] {
     return ['active', 'value', 'title'];
   }
   constructor() {
-    super()
-    this._slot = create("slot").setAttribute('class', 'slot')
-    this._selectionDropdownItemContent = create("div")
-      .setAttribute("class", "ranui-select-dropdown-option-item-content")
-      .addChild(this._slot)
-    this._selectionDropdownItem = create("div")
-      .setAttribute("class", "ranui-select-dropdown-option-item")
-      .addChild([this._selectionDropdownItemContent])
-    const shadowRoot = this.attachShadow({ mode: "closed" })
-    this._shadowDom = shadowRoot
-    const style = create("style").setTextContent(less)
-    shadowRoot.appendChild(style.element)
-    shadowRoot.appendChild(this._selectionDropdownItem.element)
+    super();
+    this._slot = create('slot').setAttribute('class', 'slot');
+    this._selectionDropdownItemContent = create('div')
+      .setAttribute('class', 'ranui-select-dropdown-option-item-content')
+      .addChild(this._slot);
+    this._selectionDropdownItem = create('div')
+      .setAttribute('class', 'ranui-select-dropdown-option-item')
+      .addChild([this._selectionDropdownItemContent]);
+    const shadowRoot = this.attachShadow({ mode: 'closed' });
+    this._shadowDom = shadowRoot;
+    const style = create('style').setTextContent(less);
+    shadowRoot.appendChild(style.element);
+    shadowRoot.appendChild(this._selectionDropdownItem.element);
   }
   get value(): string {
     return this.getAttribute('value') || '';
@@ -57,7 +57,7 @@ export class SelectionDropdownItem extends HTMLElementSSR()!{
     }
   }
   connectedCallback(): void {
-    if(this.active) {
+    if (this.active) {
       addClassToElement(this._selectionDropdownItem.element, 'ranui-select-dropdown-option-active');
     }
   }
@@ -71,12 +71,12 @@ export class SelectionDropdownItem extends HTMLElementSSR()!{
 }
 
 function Custom() {
-  if (typeof document !== "undefined" && !customElements.get("r-select-dropdown-item")) {
-    customElements.define("r-select-dropdown-item", SelectionDropdownItem)
-    return SelectionDropdownItem
+  if (typeof document !== 'undefined' && !customElements.get('r-select-dropdown-item')) {
+    customElements.define('r-select-dropdown-item', SelectionDropdownItem);
+    return SelectionDropdownItem;
   } else {
-    return createCustomError("document is undefined or r-select is exist")
+    return createCustomError('document is undefined or r-select is exist');
   }
 }
 
-export default Custom()
+export default Custom();

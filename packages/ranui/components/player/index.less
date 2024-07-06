@@ -1,4 +1,4 @@
-@import url("../../base.less");
+@import url('../../base.less');
 
 @number: 49;
 
@@ -6,9 +6,9 @@
   .circle(@index) when (@index < @number) {
     @i: @index+1;
     @x: round((@i / @number) * 100, 2);
-    @selector: e("@{x}%");
+    @selector: e('@{x}%');
     @{selector} {
-      background-image: url("../../assets/image/loading/1_@{i}.png");
+      background-image: url('../../assets/image/loading/1_@{i}.png');
     }
     .circle(@i);
   }
@@ -466,7 +466,7 @@
           cursor: var(--ran-player-controller-bottom-right-align-knowledge-cursor, pointer);
         }
         &-full {
-          background: var(--ran-player-controller-bottom-right-align-full-background, url("./img/fullscreenfig.png"));
+          background: var(--ran-player-controller-bottom-right-align-full-background, url('./img/fullscreenfig.png'));
           background-size: var(--ran-player-controller-bottom-right-align-full-background-size, contain);
           width: var(--ran-player-controller-bottom-right-align-full-width, 16px);
           height: var(--ran-player-controller-bottom-right-align-full-height, 16px);

@@ -1,4 +1,4 @@
-type Callback = (...args: unknown[]) => unknown;
+type Callback = Function;
 
 type EventName = string | symbol;
 
@@ -21,7 +21,7 @@ export class SyncHook {
    * @param {EventItem} eventItem
    * @return {void}
    */
-  tap = (eventName: EventName, eventItem: EventItem | Callback): void => {
+  tap = (eventName: EventName, eventItem: EventItem | Callback): SyncHook => {
     if (this._events[eventName] && eventName !== Symbol.for(NEW_LISTENER)) {
       // 注册一个 newListener 用于监听新的事件订阅
       this.call(Symbol.for(NEW_LISTENER), eventName);
@@ -39,6 +39,7 @@ export class SyncHook {
     }
 
     this._events[eventName] = callbacks;
+    return this;
   };
   /**
    * @description: 触发事件
@@ -72,7 +73,7 @@ export class SyncHook {
    * @param {EventItem} eventItem
    * @return {void}
    */
-  once = (eventName: EventName, eventItem: EventItem | Callback): void => {
+  once = (eventName: EventName, eventItem: EventItem | Callback): SyncHook => {
     let one: EventItem;
     if (typeof eventItem === 'function') {
       one = {
@@ -99,6 +100,7 @@ export class SyncHook {
     // 由于：我们订阅事件的时候，修改了原回调函数的引用，所以，用户触发 off 的时候不能找到对应的回调函数
     // 所以，我们需要在当前函数与用户传入的回调函数做一个绑定，我们通过自定义属性来实现
     this.tap(eventName, one);
+    return this;
   };
   /**
    * @description: 移除订阅的事件
@@ -106,7 +108,7 @@ export class SyncHook {
    * @param {EventItem} eventItem
    * @return {void}
    */
-  off = (eventName: EventName, eventItem: EventItem | Callback): void => {
+  off = (eventName: EventName, eventItem: EventItem | Callback): SyncHook => {
     // 找到事件对应的回调函数，删除对应的回调函数
     const callbacks = this._events[eventName] || [];
     const newCallbacks = callbacks.filter((item) => {
@@ -119,6 +121,7 @@ export class SyncHook {
       }
     });
     this._events[eventName] = newCallbacks;
+    return this;
   };
 }
 

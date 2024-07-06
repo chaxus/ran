@@ -40,7 +40,7 @@ const external = [
   'node:events',
   'node:buffer',
   'node:readline',
-]
+];
 
 interface chunkOptimization {
   assetsInlineLimit: number;
@@ -142,7 +142,7 @@ export const es: BuildOptions = {
     },
     fileName: (_: string, name: string): string => {
       if (name === 'index') {
-        return `${name}.js`
+        return `${name}.js`;
       }
       return `src/${name}/index.js`;
     },

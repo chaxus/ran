@@ -1,8 +1,8 @@
 import { create } from 'ranuts/utils';
 import less from './index.less?inline';
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
-import '@/components/popover/content'
-import '@/components/popover/dropdown'
+import '@/components/popover/content';
+import '@/components/popover/dropdown';
 
 // index.ts:29 Uncaught DOMException: Failed to construct 'CustomElement': The result must not have children
 // index.ts:31 Uncaught DOMException: Failed to construct 'CustomElement': The result must not have attributes
@@ -26,10 +26,10 @@ export class Popover extends (HTMLElementSSR()!) {
     this.popoverBlock.setAttribute('class', 'ran-popover-block');
     this.popoverBlock.setAttribute('role', 'tooltip');
     this.popoverBlock.appendChild(this._slot);
-    const shadowRoot = this.attachShadow({ mode: "closed" })
-    this._shadowDom = shadowRoot
-    const style = create("style").setTextContent(less)
-    shadowRoot.appendChild(style.element)
+    const shadowRoot = this.attachShadow({ mode: 'closed' });
+    this._shadowDom = shadowRoot;
+    const style = create('style').setTextContent(less);
+    shadowRoot.appendChild(style.element);
     shadowRoot.appendChild(this.popoverBlock);
   }
   get placement(): string {

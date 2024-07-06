@@ -190,10 +190,10 @@ export class Select extends (HTMLElementSSR()!) {
   setSelectDropdownDisplayNone = (): void => {
     if (this._selectDropDownOutTimeId) return;
     if (this._selectionDropdown && this._selectionDropdown.style.display !== 'none') {
-      this._selectionDropdown.setAttribute('transit', placementDirection[this.placement].remove)
+      this._selectionDropdown.setAttribute('transit', placementDirection[this.placement].remove);
       this._selectDropDownOutTimeId = setTimeout(() => {
         this._selectionDropdown?.style.setProperty('display', 'none');
-        this._selectionDropdown && this._selectionDropdown.removeAttribute('transit')
+        this._selectionDropdown && this._selectionDropdown.removeAttribute('transit');
         clearTimeout(this._selectDropDownOutTimeId);
         this._selectDropDownOutTimeId = undefined;
       }, animationTime);
@@ -206,10 +206,10 @@ export class Select extends (HTMLElementSSR()!) {
   setSelectDropdownDisplayBlock = (): void => {
     if (this._selectDropDownInTimeId) return;
     if (this._selectionDropdown && this._selectionDropdown.style.display !== 'block') {
-      this._selectionDropdown.setAttribute('transit', placementDirection[this.placement].add)
+      this._selectionDropdown.setAttribute('transit', placementDirection[this.placement].add);
       this._selectionDropdown?.style.setProperty('display', 'block');
       this._selectDropDownInTimeId = setTimeout(() => {
-        this._selectionDropdown && this._selectionDropdown.removeAttribute('transit')
+        this._selectionDropdown && this._selectionDropdown.removeAttribute('transit');
         clearTimeout(this._selectDropDownInTimeId);
         this._selectDropDownInTimeId = undefined;
       }, animationTime);
@@ -332,7 +332,7 @@ export class Select extends (HTMLElementSSR()!) {
         const container = document.getElementById(this.getPopupContainerId) || document.body;
         container.removeChild(this._selectDropdown);
       }
-    } catch (error) { }
+    } catch (error) {}
   };
   /**
    * @description: 当 select 中有 option 元素的时候，给 dropdown 添加元素
@@ -368,10 +368,10 @@ export class Select extends (HTMLElementSSR()!) {
         const selectOptionItem = document.createElement('r-select-dropdown-item');
         const defaultValue = this.getAttribute('defaultValue') || this.getAttribute('value');
         if (defaultValue === value) {
-          selectOptionItem.setAttribute('active', value)
+          selectOptionItem.setAttribute('active', value);
           this._activeOption = selectOptionItem;
         } else {
-          selectOptionItem.removeAttribute('active')
+          selectOptionItem.removeAttribute('active');
         }
         selectOptionItem.innerHTML = `${label}`;
         selectOptionItem.setAttribute('value', `${value}`);
