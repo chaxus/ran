@@ -1,5 +1,4 @@
-import type { Container } from '@/utils/visual/container';
-import type { Point } from '@/utils/visual/point';
+import type { Container, Point } from '@/utils/visual/vertex';
 import type { Cursor, FederatedMouseEvent } from '@/utils/visual/event/types';
 import { EventPhase } from '@/utils/visual/event/types';
 

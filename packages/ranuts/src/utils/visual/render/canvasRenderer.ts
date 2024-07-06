@@ -1,6 +1,6 @@
 import { Renderer } from '@/utils/visual/render/render';
 import type { IApplicationOptions } from '@/utils/visual/types';
-import type { Container } from '@/utils/visual/container';
+import type { Container } from '@/utils/visual/vertex';
 
 export class CanvasRenderer extends Renderer {
   public ctx: CanvasRenderingContext2D;

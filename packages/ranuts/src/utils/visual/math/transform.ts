@@ -1,5 +1,5 @@
 import { Matrix } from '@/utils/visual/math/matrix';
-import { ObservablePoint } from '@/utils/visual/point';
+import { ObservablePoint } from '@/utils/visual/vertex';
 // 节点的线性变换类
 export class Transform {
   public localTransform = new Matrix(); // 当前节点相对于父节点的线性变换

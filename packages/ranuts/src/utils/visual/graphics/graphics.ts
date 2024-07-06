@@ -1,16 +1,12 @@
-import { Container } from '@/utils/visual/container';
-import { Polygon } from '@/utils/visual/shape/polygon';
-import { Rectangle, RoundedRectangle } from '@/utils/visual/shape/rectangle';
-import { getBezierLength, getQuadraticBezierLength } from '@/utils/visual/math/bezier';
-import { Circle } from '@/utils/visual/shape/circle';
-import { Ellipse } from '@/utils/visual/shape/ellipse';
-import type { Shape } from '@/utils/visual/shape/shape';
-import { Fill } from '@/utils/visual/style/fill';
-import { Line } from '@/utils/visual/style/line';
+import { Container } from '@/utils/visual/vertex';
+import { Circle, Ellipse, Polygon, Rectangle, RoundedRectangle } from '@/utils/visual/shape';
+import { getBezierLength, getQuadraticBezierLength } from '@/utils/visual/math';
+import type { Shape } from '@/utils/visual/shape';
+import { Fill, Line } from '@/utils/visual/style';
 import { GraphicsGeometry } from '@/utils/visual/graphics/graphicsGeometry';
-import type { CanvasRenderer } from '@/utils/visual/render/canvasRenderer';
+import type { CanvasRenderer } from '@/utils/visual/render';
 import type { ILineStyleOptions } from '@/utils/visual/types';
-import type { Point } from '@/utils/visual/point';
+import type { Point } from '@/utils/visual/vertex';
 
 // Graphics 类继承自 Container 类，表示绘制各种图形的容器
 export class Graphics extends Container {

@@ -15,3 +15,7 @@ export const getRenderer = (options: IApplicationOptions): Renderer => {
       return new CanvasRenderer(options);
   }
 };
+
+export * from '@/utils/visual/render/canvasRenderer';
+export * from '@/utils/visual/render/render';
+export * from '@/utils/visual/render/webGlRenderer';

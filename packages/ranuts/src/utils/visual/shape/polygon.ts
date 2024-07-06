@@ -1,6 +1,6 @@
 import { Shape } from '@/utils/visual/shape/shape';
 import { ShapeType } from '@/utils/visual/enums';
-import type { Point } from '@/utils/visual/point';
+import type { Point } from '@/utils/visual/vertex';
 
 // 多边形
 export class Polygon extends Shape {

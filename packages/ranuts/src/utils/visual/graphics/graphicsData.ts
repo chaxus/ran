@@ -1,6 +1,5 @@
-import type { Shape } from '@/utils/visual/shape/shape';
-import type { Fill } from '@/utils/visual/style/fill';
-import type { Line } from '@/utils/visual/style/line';
+import type { Shape } from '@/utils/visual/shape';
+import type { Fill, Line } from '@/utils/visual/style';
 
 export class GraphicsData {
   public shape: Shape;

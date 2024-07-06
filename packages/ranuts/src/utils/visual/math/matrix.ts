@@ -1,4 +1,4 @@
-import { Point } from '@/utils/visual/point';
+import { Point } from '@/utils/visual/vertex';
 // 矩阵的操作
 export class Matrix {
   public a: number;

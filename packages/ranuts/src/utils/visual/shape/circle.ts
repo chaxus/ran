@@ -1,6 +1,6 @@
 import { Shape } from '@/utils/visual/shape/shape';
 import { ShapeType } from '@/utils/visual/enums';
-import type { Point } from '@/utils/visual/point';
+import type { Point } from '@/utils/visual/vertex';
 
 // 完整的圆形类，继承自 Shape 类
 export class Circle extends Shape {

@@ -1,11 +1,12 @@
 import { SyncHook } from '@/utils/subscribe';
-import type { Container } from '@/utils/visual/container';
+import type { Container } from '@/utils/visual/vertex/container';
+import type { ObservablePoint } from '@/utils/visual/vertex/point';
 import { Transform } from '@/utils/visual/math/transform';
-import type { ObservablePoint } from '@/utils/visual/point';
 import type { Matrix } from '@/utils/visual/math/matrix';
-import type { Cursor, FederatedEventMap } from '@/utils/visual/event/types';
-import { DEG_TO_RAD, RAD_TO_DEG } from '@/utils/visual/math/enums';
-import type { Shape } from '@/utils/visual/shape/shape';
+import type { Cursor, FederatedEventMap } from '@/utils/visual/event';
+import { DEG_TO_RAD, RAD_TO_DEG } from '@/utils/visual/math';
+import type { Shape } from '@/utils/visual/shape';
+
 export abstract class Vertex extends SyncHook {
   protected _zIndex = 0; // 节点的层级关系
   public parent: Container | undefined = undefined; // 节点的父子关系

@@ -1,8 +1,8 @@
-import type { Renderer } from '@/utils/visual/render/render';
-import { getRenderer } from '@/utils/visual/render/index';
-import { Container } from '@/utils/visual/container';
+import type { Renderer } from '@/utils/visual/render';
+import { getRenderer } from '@/utils/visual/render';
+import { Container } from '@/utils/visual/vertex/container';
 import type { IApplicationOptions } from '@/utils/visual/types';
-import { EventSystem } from '@/utils/visual/event/event';
+import { EventSystem } from '@/utils/visual/event';
 
 // let hasFoundTarget = false
 // let hitTarget: Container | null = null

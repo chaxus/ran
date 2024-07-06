@@ -1,8 +1,7 @@
-import type { Shape } from '@/utils/visual/shape/shape';
-import type { Fill } from '@/utils/visual/style/fill';
-import type { Line } from '@/utils/visual/style/line';
+import type { Shape } from '@/utils/visual/shape';
+import type { Fill, Line } from '@/utils/visual/style';
 import { GraphicsData } from '@/utils/visual/graphics/graphicsData';
-import type { Point } from '@/utils/visual/point';
+import type { Point } from '@/utils/visual/vertex';
 
 export class GraphicsGeometry {
   public graphicsData: GraphicsData[] = [];

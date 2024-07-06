@@ -1,5 +1,5 @@
-import type { Container } from '@/utils/visual/container';
-import { Rectangle } from '@/utils/visual/shape/rectangle';
+import type { Container } from '@/utils/visual/vertex';
+import { Rectangle } from '@/utils/visual/shape';
 import type { IApplicationOptions } from '@/utils/visual/types';
 
 export class Renderer {

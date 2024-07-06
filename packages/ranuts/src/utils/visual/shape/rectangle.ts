@@ -1,6 +1,6 @@
 import { Shape } from '@/utils/visual/shape/shape';
 import { ShapeType } from '@/utils/visual/enums';
-import type { Point } from '@/utils/visual/point';
+import type { Point } from '@/utils/visual/vertex';
 
 // 矩形
 export class Rectangle extends Shape {

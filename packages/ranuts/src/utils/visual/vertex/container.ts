@@ -1,7 +1,7 @@
-import { Vertex } from '@/utils/visual/vertex';
-import type { CanvasRenderer } from '@/utils/visual/render/canvasRenderer';
-import { Transform } from '@/utils/visual/math/transform';
-import type { Point } from '@/utils/visual/point';
+import { Vertex } from '@/utils/visual/vertex/vertex';
+import type { CanvasRenderer } from '@/utils/visual/render';
+import { Transform } from '@/utils/visual/math';
+import type { Point } from '@/utils/visual/vertex/point';
 
 export class Container extends Vertex {
   public readonly children: Container[] = [];
