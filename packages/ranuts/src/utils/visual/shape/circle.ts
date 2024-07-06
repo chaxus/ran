@@ -1,6 +1,6 @@
 import { Shape } from '@/utils/visual/shape/shape'
 import { ShapeType } from '@/utils/visual/enums'
-import { Point } from '@/utils/visual/point'
+import type { Point } from '@/utils/visual/point'
 
 
 export class Circle extends Shape {

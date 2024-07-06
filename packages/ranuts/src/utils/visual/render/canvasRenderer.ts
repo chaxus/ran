@@ -1,6 +1,6 @@
 import { Renderer } from '@/utils/visual/render/render'
-import { IApplicationOptions } from '@/utils/visual/types'
-import { Container } from '@/utils/visual/container'
+import type { IApplicationOptions } from '@/utils/visual/types'
+import type { Container } from '@/utils/visual/container'
 
 export class CanvasRenderer extends Renderer {
   public ctx: CanvasRenderingContext2D
@@ -11,7 +11,7 @@ export class CanvasRenderer extends Renderer {
     this.background = backgroundColor
     this.ctx = this.canvasEle.getContext('2d') as CanvasRenderingContext2D
   }
-  public render(container: Container) {
+  public render(container: Container):void {
     container.updateTransform()
 
     this.ctx.save()

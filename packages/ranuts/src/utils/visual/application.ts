@@ -1,7 +1,7 @@
-import { Renderer } from '@/utils/visual/render/render'
+import type { Renderer } from '@/utils/visual/render/render'
 import { getRenderer } from '@/utils/visual/render/index'
 import { Container } from '@/utils/visual/container'
-import { IApplicationOptions } from '@/utils/visual/types'
+import type { IApplicationOptions } from '@/utils/visual/types'
 
 export class Application {
   private renderer: Renderer

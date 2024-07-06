@@ -1,11 +1,11 @@
 import { Container } from "@/utils/visual/container";
 import { Polygon } from "@/utils/visual/shape/polygon";
 import { Rectangle } from "@/utils/visual/shape/rectangle";
-import { Shape } from "@/utils/visual/shape/shape";
+import type { Shape } from "@/utils/visual/shape/shape";
 import { Fill } from "@/utils/visual/style/fill";
 import { Line } from "@/utils/visual/style/line";
 import { GraphicsGeometry } from "@/utils/visual/graphics/graphicsGeometry";
-import { CanvasRenderer } from '@/utils/visual/render/canvasRenderer'
+import type { CanvasRenderer } from '@/utils/visual/render/canvasRenderer'
 
 // Graphics 类继承自 Container 类，表示绘制各种图形的容器
 export class Graphics extends Container {
@@ -17,7 +17,7 @@ export class Graphics extends Container {
   constructor() {
     super()
   }
-  protected drawShape(shape: Shape) {
+  protected drawShape(shape: Shape): Graphics{
     this._geometry.drawShape(
       shape,
       this._fillStyle.clone(),
@@ -41,7 +41,7 @@ export class Graphics extends Container {
     this.currentPath = new Polygon()
   }
   // 填充图形前，给画笔设置填充色
-  public beginFill(color = '#000000', alpha = 1) {
+  public beginFill(color = '#000000', alpha = 1):Graphics {
     if (this.currentPath) {
       // 在填充参数变化之前，先将已有的 path 画出来
       this.startPoly()
@@ -57,10 +57,10 @@ export class Graphics extends Container {
     return this
   }
   // 绘制矩形
-  public drawRect(x: number, y: number, width: number, height: number): this {
+  public drawRect(x: number, y: number, width: number, height: number): Graphics {
     return this.drawShape(new Rectangle(x, y, width, height))
   }
-  protected renderCanvas(render: CanvasRenderer) {
+  protected renderCanvas(render: CanvasRenderer): void{
     const ctx = render.ctx
     const { a, b, c, d, tx, ty } = this.transform.worldTransform
 

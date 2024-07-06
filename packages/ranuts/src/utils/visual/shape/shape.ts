@@ -1,5 +1,5 @@
-import { ShapeType } from "@/utils/visual/enums"
-import { Point } from "@/utils/visual/point"
+import type { ShapeType } from "@/utils/visual/enums"
+import type { Point } from "@/utils/visual/point"
 
 export abstract class Shape {
   // 支持的所有几何图形都会继承自这个 Shape 基类

@@ -15,7 +15,7 @@ export class Matrix {
     this.ty = ty
   }
 
-  set(a: number, b: number, c: number, d: number, tx: number, ty: number) {
+  set(a: number, b: number, c: number, d: number, tx: number, ty: number): Matrix{
     this.a = a
     this.b = b
     this.c = c
@@ -29,7 +29,7 @@ export class Matrix {
   /**
    * 将当前矩阵右乘一个矩阵
    */
-  public append(m: Matrix) {
+  public append(m: Matrix): Matrix{
     const { a: a0, b: b0, c: c0, d: d0, tx: tx0, ty: ty0 } = this
     const { a: a1, b: b1, c: c1, d: d1, tx: tx1, ty: ty1 } = m
     this.a = a0 * a1 + c0 * b1
@@ -45,7 +45,7 @@ export class Matrix {
   /**
    * 将当前矩阵左乘一个矩阵
    */
-  public prepend(m: Matrix) {
+  public prepend(m: Matrix): Matrix{
     const { a: a0, b: b0, c: c0, d: d0, tx: tx0, ty: ty0 } = m
     const { a: a1, b: b1, c: c1, d: d1, tx: tx1, ty: ty1 } = this
     this.a = a0 * a1 + c0 * b1
@@ -58,7 +58,7 @@ export class Matrix {
     return this
   }
 
-  public clone() {
+  public clone(): Matrix{
     const matrix = new Matrix()
 
     matrix.a = this.a

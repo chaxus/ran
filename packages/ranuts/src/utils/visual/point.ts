@@ -6,7 +6,7 @@ export class Point {
     this.y = y
   }
 
-  set(x = 0, y = x) {
+  set(x = 0, y = x):void {
     this.x = x
     this.y = y
   }
@@ -22,7 +22,7 @@ export class ObservablePoint {
     this.cb = cb
   }
 
-  set(x = 0, y = x) {
+  set(x = 0, y = x):void {
     this._x = x
     this._y = y
     this.cb()

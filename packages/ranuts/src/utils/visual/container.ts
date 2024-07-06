@@ -1,5 +1,5 @@
 import { Vertex } from '@/utils/visual/vertex';
-import { CanvasRenderer } from '@/utils/visual/render/canvasRenderer';
+import type { CanvasRenderer } from '@/utils/visual/render/canvasRenderer';
 import { Transform } from '@/utils/visual/math/transform';
 
 export class Container extends Vertex {
@@ -49,13 +49,13 @@ export class Container extends Vertex {
   /**
   * 渲染自身，在 container 上面没有东西要渲染，所以这个函数的内容为空
   */
-  protected renderCanvas(render: CanvasRenderer) {
+  protected renderCanvas(render: CanvasRenderer):void {
     // nothing
   }
   /**
   * 递归渲染以自身为根的整棵节点树
   */
-  public renderCanvasRecursive(render: CanvasRenderer) {
+  public renderCanvasRecursive(render: CanvasRenderer):void {
     if (!this.visible) {
       return
     }
@@ -70,7 +70,7 @@ export class Container extends Vertex {
   /**
   * 递归更新当前元素以及所有子元素的 transform
   */
-  public updateTransform() {
+  public updateTransform():void {
     this.sortChildren()
 
     const parentTransform = this.parent?.transform || new Transform()

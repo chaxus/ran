@@ -21,7 +21,7 @@ export class Transform {
     this.skew = new ObservablePoint(this.onChange)
   }
 
-  get rotation() {
+  get rotation(): number{
     return this._rotation
   }
 
@@ -108,7 +108,7 @@ export class Transform {
     return true
   }
 
-  public setFromMatrix(matrix: Matrix) {
+  public setFromMatrix(matrix: Matrix): void{
     this.transformMatrix = matrix
     this.shouldUpdateLocalTransform = true
   }
