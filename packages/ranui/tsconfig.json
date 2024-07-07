@@ -20,6 +20,7 @@
     "experimentalDecorators": true,
     "paths": {
       "@/assets/*": ["assets/*"],
+      "@/public/*": ["public/*"],
       "@/components/*": ["components/*"],
       "@/shadowless/*": ["shadowless/*"],
       "@/plugins/*": ["plugins/*"],

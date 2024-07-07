@@ -127,6 +127,7 @@ export const viteConfig: UserConfig = {
       '@/components': resolve(__dirname, 'components/'),
       '@/shadowless': resolve(__dirname, 'shadowless/'),
       '@/assets': resolve(__dirname, 'assets/'),
+      '@/public': resolve(__dirname, 'public/'),
       '@/utils': resolve(__dirname, 'utils/'),
     },
     extensions: ['.mjs', '.js', '.cjs', '.ts', '.jsx', '.tsx', '.json'],

@@ -7,6 +7,10 @@ export default function loadStylePlugin(options?: Options): Plugin {
   return {
     name: 'vite-plugin-load-style',
     transform(code, id) {
+      if(id.endsWith('katex.js')) return {
+        code,
+        map: null
+      }
       const path = /ranui\/components\/[a-z|A-Z\d]+\/index.ts/;
       const stylePath = new RegExp(/((this\.)?[a-zA-Z\d]+)\s*=\s*this\.attachShadow\(\{.*\}\)/);
       const { ignore = [] } = options ?? {};
