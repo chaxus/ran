@@ -4,7 +4,6 @@ import { Container } from '@/utils/visual/vertex/container';
 import type { IApplicationOptions } from '@/utils/visual/types';
 import { EventSystem } from '@/utils/visual/event';
 
-
 export class Application {
   private renderer: Renderer;
   public stage: Container;

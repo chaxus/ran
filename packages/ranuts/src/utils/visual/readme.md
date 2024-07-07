@@ -20,6 +20,7 @@
 # 二。基础图形库：
 
 常见的基础图形有：
+
 1. 圆
 2. 椭圆
 3. 多边形
@@ -49,14 +50,46 @@ export enum ShapeType {
 }
 ```
 
+其中，我们只实现基础图形类的**数据部分**，渲染到逻辑统一到一个地方。尽量分离数据和实际的 UI 渲染操作。
+
 ## 1.圆
 
+要绘制一个圆，只需要知道圆心和半径即可
 
+```ts
+export class Circle extends Shape {
+  public x: number;
+  public y: number;
+  public radius: number;
+  public readonly type = ShapeType.Circle;
+  constructor(x = 0, y = 0, radius = 0) {
+    super();
+    this.x = x;
+    this.y = y;
+    this.radius = radius;
+  }
+}
+```
+
+## 2.椭圆
+
+```ts
+export class Ellipse extends Shape {
+  public x: number;
+  public y: number;
+  public radiusX: number;
+  public radiusY: number;
+  public readonly type = ShapeType.Ellipse;
+  constructor(x = 0, y = 0, radiusX = 0, radiusY = 0) {
+    super();
+    this.x = x;
+    this.y = y;
+    this.radiusX = radiusX;
+    this.radiusY = radiusY;
+  }
+}
+```
 
 ## 1。层级和节点
 
 层级的管理非常简单，在 canvas 绘图环境中，先绘制的图形会被后绘制的图形所覆盖，因此，层级的管理就自然地通过绘制顺序来实现。在这种情况下，最先被绘制的图形将位于最底层，而随后绘制的图形则逐层叠加，直至最上层。
-
-
-
-

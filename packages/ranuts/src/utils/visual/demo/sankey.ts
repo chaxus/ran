@@ -1,4 +1,2 @@
 // 桑基图
-export class Sankey {
-
-}
+export class Sankey {}

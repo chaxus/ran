@@ -148,6 +148,11 @@
       "import": "./dist/components/colorpicker/index.js",
       "require": "./dist/umd/index.umd.cjs"
     },
+    "./math": {
+      "types": "./dist/components/math/index.d.ts",
+      "import": "./dist/components/math/index.js",
+      "require": "./dist/umd/index.umd.cjs"
+    },
     "./style": {
       "types": "./dist/index.d.ts",
       "import": "./dist/style.css",

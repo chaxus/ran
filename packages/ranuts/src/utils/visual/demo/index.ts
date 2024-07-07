@@ -1,1 +1,1 @@
-export * from '@/utils/visual/demo/sankey'
+export * from '@/utils/visual/demo/sankey';

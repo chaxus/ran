@@ -84,9 +84,16 @@ declare interface Document {
   webkitExitFullscreen: () => Promise<void>;
 }
 
+interface MathJax {
+  texReset: () => void;
+  getMetricsFor: (x: HTMLElement) => object;
+  tex2chtmlPromise: (x: string, y: object) => Promise<Element>;
+}
+
 declare interface Window {
   ranui: Partial<Ranui>;
   message: Partial<Ran.Message>;
+  MathJax: MathJax;
   pdfjsLib: {
     GlobalWorkerOptions: {
       workerSrc: string;

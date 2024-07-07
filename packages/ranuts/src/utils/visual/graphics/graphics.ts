@@ -427,7 +427,7 @@ export class Graphics extends Container {
     ctx.setTransform(a, b, c, d, tx, ty);
 
     const graphicsData = this._geometry.graphicsData;
-    
+
     for (let i = 0; i < graphicsData.length; i++) {
       const data = graphicsData[i];
       const { lineStyle, fillStyle, shape } = data;
