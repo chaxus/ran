@@ -4,7 +4,7 @@
 
 鉴于此，意识到，需要从更高层次的业务逻辑和设计理念出发，构建一个更为底层且灵活的图表绘制引擎。这样的引擎应能够抽象出绘制操作的核心要素，不仅服务于当前应用层的定制化需求，更应具备良好的扩展性和复用性，以便在未来面对更多样化的业务场景时，能够迅速响应并高效实现定制化图表的绘制需求。这样的策略转变，旨在从根本上提升图表定制化的开发效率和图表的维护性，确保业务迭代的顺畅进行。
 
-# 一。技术设计
+## 一 技术设计
 
 针对常见的绘制需求进行详尽的功能分析后，我们系统性地规划了高效且灵活的图表绘制引擎的核心构成要素。这些精心设计的组件旨在确保引擎不仅能够灵活应对多样化的定制需求，还具备出色的可维护性和可扩展性。具体而言，设计蓝图涵盖以下关键方面：
 
@@ -17,7 +17,7 @@
 
 在上述绘制引擎架构中，各架构设计存在明确的依赖链：基础图形支撑图形组与层级管理；图形组与层级管理又是变换矩阵与事件系统的基础；最终，所有组件共同作用于应用的呈现，确保高效协同与用户体验。
 
-# 二。基础图形库：
+## 二 基础图形库：
 
 常见的基础图形有：
 
@@ -52,9 +52,11 @@ export enum ShapeType {
 
 其中，我们只实现基础图形类的**数据部分**，渲染到逻辑统一到一个地方。尽量分离数据和实际的 UI 渲染操作。
 
-## 1.圆
+### 1.圆
 
 要绘制一个圆，只需要知道圆心和半径即可
+
+数据类：
 
 ```ts
 export class Circle extends Shape {
@@ -71,7 +73,30 @@ export class Circle extends Shape {
 }
 ```
 
-## 2.椭圆
+绘制方法：
+
+```ts
+const { x, y, radius } = circle;
+
+ctx.arc(x, y, radius, 0, 2 * Math.PI);
+
+if (fillStyle.visible) {
+  ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
+  ctx.fill();
+}
+if (lineStyle.visible) {
+  ctx.globalAlpha = lineStyle.alpha * this.worldAlpha;
+  ctx.stroke();
+}
+```
+
+### 2.椭圆
+
+椭圆的标准方程是：
+
+<r-math latex="\frac{x^2}{a^2} + \frac{y^2}{b^2} = 1 \quad (a > b > 0)"></r-math>
+
+因此只需要圆心，长轴，短轴就可以确定一个圆，因此
 
 ```ts
 export class Ellipse extends Shape {
@@ -90,6 +115,148 @@ export class Ellipse extends Shape {
 }
 ```
 
-## 1。层级和节点
+绘制方法：
+
+```ts
+const { x, y, radiusX, radiusY } = ellipse;
+
+ctx.ellipse(x, y, radiusX, radiusY, 0, 0, Math.PI * 2);
+
+if (fillStyle.visible) {
+  ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
+  ctx.fill();
+}
+
+if (lineStyle.visible) {
+  ctx.globalAlpha = lineStyle.alpha * this.worldAlpha;
+  ctx.stroke();
+}
+```
+
+### 3.多边形
+
+多边形是由三条或三条以上不在同一直线上的线段首尾顺次连接所组成的封闭图形。这样的图形由多个点（称为顶点）和连接这些点的线段（称为边）构成，且所有边均在同一平面内。
+
+简单来说，就是一个数组，里面很多个点的坐标，把点连起来，就是多边形了。
+
+```ts
+export class Polygon extends Shape {
+  public points: number[]; // 多边形由多个点构成，points 数组每 2 个元素代表一个点的坐标
+  public closeStroke = false;
+  public readonly type = ShapeType.Polygon;
+  constructor(points: number[] = []) {
+    super();
+    this.points = points;
+  }
+}
+```
+
+绘制方法：
+
+```ts
+const { points, closeStroke } = polygon;
+
+ctx.moveTo(points[0], points[1]);
+
+for (let i = 2; i < points.length; i += 2) {
+  ctx.lineTo(points[i], points[i + 1]);
+}
+
+if (closeStroke) {
+  ctx.closePath();
+}
+
+if (fillStyle.visible) {
+  ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
+  ctx.fill();
+}
+
+if (lineStyle.visible) {
+  ctx.globalAlpha = lineStyle.alpha * this.worldAlpha;
+  ctx.stroke();
+}
+```
+
+### 4.矩形
+
+```ts
+export class Rectangle extends Shape {
+  public x: number;
+  public y: number;
+  public width: number;
+  public height: number;
+  public type = ShapeType.Rectangle;
+  constructor(x = 0, y = 0, width = 0, height = 0) {
+    super();
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+  }
+}
+```
+
+绘制方法：
+
+```ts
+const { x, y, width, height } = rectangle;
+if (fillStyle.visible) {
+  ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
+  ctx.fillRect(x, y, width, height);
+}
+if (lineStyle.visible) {
+  ctx.globalAlpha = lineStyle.alpha * this.worldAlpha;
+  ctx.strokeRect(x, y, width, height);
+}
+```
+
+### 5.圆角矩形
+
+```ts
+export class RoundedRectangle extends Shape {
+  public x: number;
+  public y: number;
+  public width: number;
+  public height: number;
+  public radius: number;
+  public readonly type = ShapeType.RoundedRectangle;
+  constructor(x = 0, y = 0, width = 0, height = 0, radius = 20) {
+    super();
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+
+    const r = Math.min(width, height) / 2;
+    this.radius = radius > r ? r : radius;
+  }
+}
+```
+
+绘制方法：
+
+```ts
+const { x, y, width, height, radius } = roundedRectangle;
+ctx.moveTo(x + radius, y);
+ctx.arc(x + radius, y + radius, radius, Math.PI * 1.5, Math.PI, true);
+ctx.lineTo(x, y + height - radius);
+ctx.arc(x + radius, y + height - radius, radius, Math.PI, Math.PI / 2, true);
+ctx.lineTo(x + width - radius, y + height);
+ctx.arc(x + width - radius, y + height - radius, radius, Math.PI / 2, 0, true);
+ctx.lineTo(x + width, y + radius);
+ctx.arc(x + width - radius, y + radius, radius, 0, Math.PI * 1.5, true);
+ctx.closePath();
+
+if (fillStyle.visible) {
+  ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
+  ctx.fill();
+}
+if (lineStyle.visible) {
+  ctx.globalAlpha = lineStyle.alpha * this.worldAlpha;
+  ctx.stroke();
+}
+```
+
+## 三 层级和节点
 
 层级的管理非常简单，在 canvas 绘图环境中，先绘制的图形会被后绘制的图形所覆盖，因此，层级的管理就自然地通过绘制顺序来实现。在这种情况下，最先被绘制的图形将位于最底层，而随后绘制的图形则逐层叠加，直至最上层。
