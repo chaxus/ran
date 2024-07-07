@@ -94,6 +94,9 @@ declare interface Window {
   ranui: Partial<Ranui>;
   message: Partial<Ran.Message>;
   MathJax: MathJax;
+  katex: {
+    render: (x: string, y: HTMLElement, z: object) => void;
+  };
   pdfjsLib: {
     GlobalWorkerOptions: {
       workerSrc: string;

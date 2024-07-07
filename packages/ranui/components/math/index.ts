@@ -21,14 +21,13 @@ export class Math extends (HTMLElementSSR()!) {
   }
   render(): void {
     if (!this.latex) return;
-    import('@/assets/js/math.js')
+    import('@/assets/js/katex.js')
       .then(() => {
-        const { MathJax } = window;
-        if (!MathJax) return;
-        MathJax.texReset();
         this.contain.innerHTML = '';
-        const options = MathJax.getMetricsFor(this.contain);
-        MathJax.tex2chtmlPromise(this.latex, options).then((node: Element) => this.contain.appendChild(node));
+        const { katex } = window;
+        katex.render(this.latex, this.contain, {
+          throwOnError: true
+      });
       })
       .catch(function (err: Error) {
         console.warn(`ranui math component: ${err.message}\n${err}`);
