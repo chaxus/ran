@@ -9,7 +9,7 @@ export class CanvasRenderer extends Renderer {
     super(options);
     const { backgroundColor } = options;
     this.background = backgroundColor;
-    this.ctx = this.canvasEle.getContext('2d') as CanvasRenderingContext2D;
+    this.ctx = this.canvasEle.getContext('2d')!;
   }
   public render = (container: Container): void => {
     container.updateTransform();

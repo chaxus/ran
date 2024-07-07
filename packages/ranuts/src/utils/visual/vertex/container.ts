@@ -36,7 +36,7 @@ export class Container extends Vertex {
     }
   };
   /**
-   * @description: 排序子元素
+   * @description: 根据 z-index 排序子元素
    * @return {*}
    */
   public sortChildren(): void {
@@ -71,8 +71,9 @@ export class Container extends Vertex {
    * 递归更新当前元素以及所有子元素的 transform
    */
   public updateTransform(): void {
+    // 根据 z-index 排序子元素
     this.sortChildren();
-
+    // 获取父元素的 transform，如果没有，则创建一个默认的 transform
     const parentTransform = this.parent?.transform || new Transform();
     const hasWorldTransformChanged = this.transform.updateTransform(parentTransform);
 

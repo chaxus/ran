@@ -94,4 +94,7 @@ export class RoundedRectangle extends Shape {
 
     return true;
   }
+  public render(){
+    
+  }
 }
