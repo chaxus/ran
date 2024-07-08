@@ -20,17 +20,16 @@ export class Math extends (HTMLElementSSR()!) {
   }
   render(): void {
     if (!this.latex) return;
-    import('@/public/js/katex.js')
-      .then(() => {
+    import('@/assets/js/katex/katex-es.js')
+      .then((katex) => {
         this.contain.innerHTML = '';
-        const { katex } = window;
-        if (!katex) return
-        katex.render(this.latex, this.contain, {
-          throwOnError: true
-        });
+        const span = create('span').setTextContent(`$$${this.latex}$$`).element
+        this.contain.appendChild(span)
+        if (!katex) return;
+        katex.renderMathInElement(this.contain);
       })
       .catch(function (err: Error) {
-        console.warn(`ranui math component: ${err.message}\n${err}`);
+        console.warn(`ranui math component warning: ${err.message}\n${err}`);
       });
   }
   connectedCallback(): void {
