@@ -23,8 +23,8 @@ export class Math extends (HTMLElementSSR()!) {
     import('@/assets/js/katex/katex-es.js')
       .then((katex) => {
         this.contain.innerHTML = '';
-        const span = create('span').setTextContent(`$$${this.latex}$$`).element
-        this.contain.appendChild(span)
+        const span = create('span').setTextContent(`$$${this.latex}$$`).element;
+        this.contain.appendChild(span);
         if (!katex) return;
         katex.renderMathInElement(this.contain);
       })
@@ -35,7 +35,7 @@ export class Math extends (HTMLElementSSR()!) {
   connectedCallback(): void {
     this.render();
   }
-  disconnectCallback(): void { }
+  disconnectCallback(): void {}
   attributeChangedCallback(k: string, o: string, n: string): void {
     if (o !== n) {
       if (k === 'latex') {
