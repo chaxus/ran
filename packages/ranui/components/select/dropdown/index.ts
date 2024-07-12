@@ -19,6 +19,7 @@ export class SelectionDropdown extends (HTMLElementSSR()!) {
       .setStyle('-webkit-tap-highlight-color', 'transparent')
       .setStyle('outline', '0')
       .setAttribute('class', 'ranui-select-dropdown')
+      .setAttribute('part', 'ranui-select-dropdown')
       .addChild([this._slot]);
     const shadowRoot = this.attachShadow({ mode: 'closed' });
     this._shadowDom = shadowRoot;

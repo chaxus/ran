@@ -16,9 +16,11 @@ export class SelectionDropdownItem extends (HTMLElementSSR()!) {
     this._slot = create('slot').setAttribute('class', 'slot');
     this._selectionDropdownItemContent = create('div')
       .setAttribute('class', 'ranui-select-dropdown-option-item-content')
+      .setAttribute('part', 'ranui-select-dropdown-option-item-content')
       .addChild(this._slot);
     this._selectionDropdownItem = create('div')
       .setAttribute('class', 'ranui-select-dropdown-option-item')
+      .setAttribute('part', 'ranui-select-dropdown-option-item')
       .addChild([this._selectionDropdownItemContent]);
     const shadowRoot = this.attachShadow({ mode: 'closed' });
     this._shadowDom = shadowRoot;

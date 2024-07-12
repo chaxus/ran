@@ -1,34 +1,34 @@
 .ranui-select-dropdown {
   &-option-item {
-    position: relative;
-    display: block;
-    padding: 5px 12px;
-    color: rgba(0, 0, 0, 0.88);
-    font-weight: normal;
-    font-size: 14px;
-    transition: background 0.3s ease;
-    border-radius: 4px;
+    position: var(--ranui-select-dropdown-option-item-position, relative);
+    display: var(--ranui-select-dropdown-option-item-display, block);
+    padding: var(--ranui-select-dropdown-option-item-padding, 5px 12px);
+    color: var(--ranui-select-dropdown-option-item-color, rgba(0, 0, 0, 0.88));
+    font-weight: var(--ranui-select-dropdown-option-item-font-weight, normal);
+    font-size: var(--ranui-select-dropdown-option-item-font-size, 14px);
+    transition: var(--ranui-select-dropdown-option-item-transition, background 0.3s ease);
+    border-radius: var(--ranui-select-dropdown-option-item-border-radius, 4px);
     &:hover {
-      background-color: rgba(0, 0, 0, 0.04);
+      background-color: var(--ranui-select-dropdown-option-item-hover-background-color, rgba(0, 0, 0, 0.04));
     }
     &-content {
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      color: rgba(0, 0, 0, 0.88);
-      font-size: 14px;
-      line-height: 1.5714285714285714;
-      box-sizing: border-box;
-      list-style: none;
-      font-family: @font-family;
-      font-variant: initial;
+      overflow: var(--ranui-select-dropdown-content-overflow, hidden);
+      white-space: var(--ranui-select-dropdown-content-white-space, nowrap);
+      text-overflow: var(--ranui-select-dropdown-content-text-overflow, ellipsis);
+      color: var(--ranui-select-dropdown-content-color, rgba(0, 0, 0, 0.88));
+      font-size: var(--ranui-select-dropdown-content-font-size, 14px);
+      line-height: var(--ranui-select-dropdown-content-line-height, 1.5714285714285714);
+      box-sizing: var(--ranui-select-dropdown-content-box-sizing, border-box);
+      list-style: var(--ranui-select-dropdown-content-list-style, none);
+      font-family: var(--ranui-select-dropdown-content-font-family, @font-family);
+      font-variant: var(--ranui-select-dropdown-content-font-variant, initial);
     }
   }
   &-option-active {
-    background-color: #e6f7ff;
-    font-weight: bold;
+    background-color: var(--ranui-select-dropdown-option-active-background-color, #e6f7ff);
+    font-weight: var(--ranui-select-dropdown-option-active-font-weight, bold);
     &:hover {
-      background-color: #e6f7ff;
+      background-color: var(--ranui-select-dropdown-option-active-hover-background-color, #e6f7ff);
     }
   }
 }

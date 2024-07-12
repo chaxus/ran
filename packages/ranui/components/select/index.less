@@ -1,35 +1,35 @@
-@import url('../../base.less');
+@import url("../../base.less");
 
 @transition:all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
 
 @theme-color: #1890ff;
 
 r-select {
-  position: relative;
-  width: 120px;
-  height: 40px;
+  position: var(--ran-select, relative);
+  width: var(--ran-select, 120px);
+  height: var(--ran-select, 40px);
 }
 
 :host {
-  position: relative;
-  display: inline-block;
-  cursor: pointer;
-  height: 32px;
-  outline: 0;
-  -webkit-tap-highlight-color: transparent;
+  position: var(--ran-select-host, relative);
+  display: var(--ran-select-host, inline-block);
+  cursor: var(--ran-select-host, pointer);
+  height: var(--ran-select-host, 32px);
+  outline: var(--ran-select-host, 0);
+  -webkit-tap-highlight-color: var(--ran-select-host-highlight-color, transparent);
   &,
   &(:focus),
   &(:active) {
-    outline: 0;
+    outline: var(--ran-select-host-focus-outline, 0);
     -webkit-tap-highlight-color: transparent;
   }
   ::slotted(r-option) {
     display: none;
   }
   &([disabled]) {
-    cursor: not-allowed;
-    pointer-events: all;
-    opacity: 0.6;
+    cursor: var(--ran-select-host-disabled-cursor, not-allowed);
+    pointer-events: var(--ran-select-host-disabled-pointer-events, all);
+    opacity: var(--ran-select-host-disabled-opacity, 0.6);
   }
   &([type="text"]) {
     &::part(selection) {
@@ -41,104 +41,102 @@ r-select {
   }
   &(:not([disabled]):hover) {
     .select {
-      cursor: pointer;
+      cursor: var(--ran-select-host-hover-cursor, pointer);
     }
     .selection {
-      border: 1px solid @theme-color;
+      border: var(--ran-select-host-selection-border, 1px solid @theme-color);
       &-search {
-        cursor: pointer;
+        cursor: var(--ran-select-host-selection-search-cursor, pointer);
       }
       &-item {
-        cursor: pointer;
-        color: #bfbfbf;
+        cursor: var(--ran-select-host-selection-item-cursor, pointer);
+        color: var(--ran-select-host-selection-item-color, #bfbfbf);
       }
     }
   }
   &(:not([disabled]):focus) {
     .selection {
-      border: 1px solid @theme-color;
+      border: var(--ran-select-host-selection-focus-border, 1px solid @theme-color);
       &-search {
-        cursor: pointer;
+        cursor: var(--ran-select-host-selection-focus-search-cursor, pointer);
       }
       &-item {
-        cursor: pointer;
-        color: #bfbfbf;
+        cursor: var(--ran-select-host-selection-focus-item-cursor, pointer);
+        color: var(--ran-select-host-selection-focus-item-color, #bfbfbf);
       }
     }
   }
   .selection-search {
-    display: none;
+    display: var(--ran-select-host-selection-search-display, none);
   }
   &([showSearch]:not([disabled])) {
     .selection {
       &-search {
-        cursor: text;
-        display: block;
+        cursor: var(--ran-select-host-showSearch-selection-search-cursor, text);
+        display: var(--ran-select-host-showSearch-selection-search-display, block);
       }
       &-item {
-        cursor: pointer;
+        cursor: var(--ran-select-host-showSearch-selection-item-cursor, pointer);
       }
     }
   }
   &([showSearch]:not([disabled]):focus) {
     .selection {
       &-search {
-        display: block;
-        cursor: text;
-        opacity: 1;
+        display: var(--ran-select-host-showSearch-selection-search-display, block);
+        cursor: var(--ran-select-host-showSearch-selection-search-cursor, text);
+        opacity: var(--ran-select-host-showSearch-selection-search-opacity, 1);
       }
     }
   }
 }
 
 .ran-select {
-  width: 100%;
-  height: 100%;
-  font-size: 14px;
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  color: rgba(0, 0, 0, 0.88);
-  font-size: 14px;
-  line-height: 1.5714285714285714;
-  list-style: none;
-  font-family: @font-family;
-  position: relative;
-  display: inline-block;
+  width: var(--ran-select-width, 100%);
+  height: var(--ran-select-width, 100%);
+  font-size: var(--ran-select-font-size, 14px);
+  box-sizing: var(--ran-select-box-sizing, border-box);
+  margin: var(--ran-select-margin, 0);
+  padding: var(--ran-select-padding, 0);
+  color: var(--ran-select-color, rgba(0, 0, 0, 0.88));
+  line-height: var(--ran-select-line-height, 1.5714285714285714);
+  list-style: var(--ran-select-list-style, none);
+  font-family: var(--ran-select-font-family, @font-family);
+  position: var(--ran-select-position, relative);
+  display: var(--ran-select-display, inline-block);
   .selection {
-    position: relative;
-    background-color: #ffffff;
-    border: 1px solid #d9d9d9;
-    transition: @transition;
-    width: 100%;
-    height: 100%;
-    padding: 0 11px;
-    box-sizing: border-box;
-    margin: 0;
-    color: rgba(0, 0, 0, 0.88);
-    font-size: 14px;
-    line-height: 1.5714285714285714;
-    list-style: none;
-    font-family: inherit;
-    display: flex;
-    border-radius: 6px;
+    position: var(--ran-select-selection-position, relative);
+    background-color: var(--ran-select-selection-background-color, #ffffff);
+    border: var(--ran-select-selection-border, 1px solid #d9d9d9);
+    transition: var(--ran-select-selection-transition, @transition);
+    width: var(--ran-select-selection-width, 100%);
+    height: var(--ran-select-selection-height, 100%);
+    padding: var(--ran-select-selection-padding, 0 11px);
+    box-sizing: var(--ran-select-selection-box-sizing, border-box);
+    margin: var(--ran-select-selection-margin, 0);
+    color: var(--ran-select-selection-color, rgba(0, 0, 0, 0.88));
+    font-size: var(--ran-select-selection-font-size, 14px);
+    line-height: var(--ran-select-selection-line-height, 1.5714285714285714);
+    list-style: var(--ran-select-selection-list-style, none);
+    font-family: var(--ran-select-selection-font-family, inherit);
+    display: var(--ran-select-selection-display, flex);
+    border-radius: var(--ran-select-selection-border-radius, 6px);
     &-search {
-      position: absolute;
-      opacity: 0;
-      top: 0;
-      left: 0;
-      height: 100%;
-      inset-inline-start: 11px;
-      inset-inline-end: 11px;
-      opacity: 0;
-      margin: 0;
-      padding: 0;
-      background: transparent;
-      border: none;
-      outline: none;
-      appearance: none;
-      font-family: inherit;
-      cursor: not-allowed;
+      position: var(--ran-select-selection-search-position, absolute);
+      opacity: var(--ran-select-selection-search-opacity, 0);
+      top: var(--ran-select-selection-search-top, 0);
+      left: var(--ran-select-selection-search-left, 0);
+      height: var(--ran-select-selection-search-height, 100%);
+      inset-inline-start: var(--ran-select-selection-search-inset-inline-start, 11px);
+      inset-inline-end: var(--ran-select-selection-search-inset-inline-end, 11px);
+      margin: var(--ran-select-selection-search-margin, 0);
+      padding: var(--ran-select-selection-search-padding, 0);
+      background: var(--ran-select-selection-search-background, transparent);
+      border: var(--ran-select-selection-search-border, none);
+      outline: var(--ran-select-selection-search-outline, none);
+      appearance: var(--ran-select-selection-search-appearance, none);
+      font-family: var(--ran-select-selection-search-font-family, inherit);
+      cursor: var(--ran-select-selection-search-cursor, not-allowed);
       &::-webkit-search-cancel-button {
         display: none;
         -webkit-appearance: none;
@@ -160,44 +158,44 @@ r-select {
       }
     }
     &-item {
-      position: absolute;
-      top: 0;
-      left: 12px;
-      margin: 0;
-      padding: 0;
-      background: transparent;
-      border: none;
-      outline: none;
-      appearance: none;
-      font-family: inherit;
-      height: 100%;
-      user-select: none;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      cursor: pointer;
+      position: var(--ran-select-selection-item-position, absolute);
+      top: var(--ran-select-selection-item-top, 0);
+      left: var(--ran-select-selection-item-left, 12px);
+      margin: var(--ran-select-selection-item-margin, 0);
+      padding: var(--ran-select-selection-item-padding, 0);
+      background: var(--ran-select-selection-item-background, transparent);
+      border: var(--ran-select-selection-item-border, none);
+      outline: var(--ran-select-selection-item-outline, none);
+      appearance: var(--ran-select-selection-item-appearance, none);
+      font-family: var(--ran-select-selection-item-font-family, inherit);
+      height: var(--ran-select-selection-item-height, 100%);
+      user-select: var(--ran-select-selection-item-user-select, none);
+      overflow: var(--ran-select-selection-item-overflow, hidden);
+      white-space: var(--ran-select-selection-item-white-space, nowrap);
+      text-overflow: var(--ran-select-selection-item-text-overflow, ellipsis);
+      cursor: var(--ran-select-selection-item-cursor, pointer);
     }
     &-select {
-      color: rgba(0, 0, 0, 0.25);
+      color: var(--ran-select-selection-select-color, rgba(0, 0, 0, 0.25));
     }
     .icon {
-      display: flex;
-      align-items: center;
-      color: rgba(0, 0, 0, 0.25);
-      font-style: normal;
-      text-align: center;
-      text-transform: none;
-      text-rendering: optimizeLegibility;
+      display: var(--ran-select-selection-icon-display, flex);
+      align-items: var(--ran-select-selection-icon-align-items, center);
+      color: var(--ran-select-selection-icon-color, rgba(0, 0, 0, 0.25));
+      font-style: var(--ran-select-selection-icon-font-style, normal);
+      text-align: var(--ran-select-selection-icon-text-align, center);
+      text-transform: var(--ran-select-selection-icon-text-transform, none);
+      text-rendering: var(--ran-select-selection-icon-text-rendering, optimizeLegibility);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-      position: absolute;
-      top: 50%;
-      inset-inline-start: auto;
-      inset-inline-end: 8px;
-      height: 12px;
-      margin-top: -3px;
-      font-size: 12px;
-      pointer-events: none;
+      position: var(--ran-select-selection-icon-position, absolute);
+      top: var(--ran-select-selection-icon-top, 50%);
+      inset-inline-start: var(--ran-select-selection-icon-inset-inline-start, auto);
+      inset-inline-end: var(--ran-select-selection-icon-inset-inline-end, 8px);
+      height: var(--ran-select-selection-icon-height, 12px);
+      margin-top: var(--ran-select-selection-icon-margin-top, -3px);
+      font-size: var(--ran-select-selection-icon-font-size, 12px);
+      pointer-events: var(--ran-select-selection-icon-color, pointer-events);
     }
   }
 }

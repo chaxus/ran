@@ -1,12 +1,12 @@
-@import url('../../theme/font.less');
+@import url("../../theme/font.less");
 
 :host {
-  position: relative;
-  display: block;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  list-style: none;
+  position: var(--ran-checkbox-position, relative);
+  display: var(--ran-checkbox-display, block);
+  margin: var(--ran-checkbox-margin, 0);
+  padding: var(--ran-checkbox-padding, 0);
+  box-sizing: var(--ran-checkbox-box-sizing, border-box);
+  list-style: var(--ran-checkbox-ist-style, none);
 }
 .ran-checkbox {
   position: relative;
@@ -55,10 +55,8 @@
       border-inline-start: 0;
       transform: rotate(45deg) scale(0) translate(-50%, -50%);
       opacity: 0;
-      content: '';
-      transition:
-        all 0.1s cubic-bezier(0.71, -0.46, 0.88, 0.6),
-        opacity 0.1s;
+      content: "";
+      transition: all 0.1s cubic-bezier(0.71, -0.46, 0.88, 0.6), opacity 0.1s;
       transform: rotate(45deg) scale(1) translate(-50%, -50%);
     }
   }

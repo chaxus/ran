@@ -313,6 +313,9 @@ export class Select extends (HTMLElementSSR()!) {
       this._selectDropdown.style.setProperty('outline', '0');
       this._selectDropdown.addEventListener('click', this.clickOption);
       this._selectionDropdown = document.createElement('r-select-dropdown');
+      if(this.dropdownclass){
+        this._selectionDropdown.setAttribute('class', this.dropdownclass);
+      }
       if (this.trigger.includes('hover') && !isMobile()) {
         this._selectDropdown.addEventListener('mouseleave', this.selectBlur);
         this._selectDropdown.addEventListener('mouseenter', this.removeDropDownTimeId);

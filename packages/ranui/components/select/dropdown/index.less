@@ -1,4 +1,4 @@
-@import url('../../../base.less');
+@import url("../../../base.less");
 
 @keyframes ranui-select-dropdown-down-in {
   0% {
@@ -76,20 +76,20 @@
 
 .ranui-select-dropdown {
   transform-origin: var(--ran-x, 50%) var(--ran-y, 50%);
-  box-sizing: border-box;
-  margin: 0;
-  padding: 4px;
-  color: rgba(0, 0, 0, 0.88);
-  font-size: 14px;
-  list-style: none;
-  font-family: @font-family;
-  z-index: 1050;
-  overflow: hidden;
-  font-variant: initial;
-  background: #ffffff;
-  border-radius: 8px;
-  outline: none;
-  box-shadow: @box-shadow;
-  cursor: pointer;
-  width: 100%;
+  box-sizing: var(--ranui-select-dropdown-box-sizing, border-box);
+  margin: var(--ranui-select-dropdown-margin, 0);
+  padding: var(--ranui-select-dropdown-padding, 4px);
+  color: var(--ranui-select-dropdown-color, rgba(0, 0, 0, 0.88));
+  font-size: var(--ranui-select-dropdown-font-size, 14px);
+  list-style: var(--ranui-select-dropdown-list-style, none);
+  font-family: var(--ranui-select-dropdown-font-family, @font-family);
+  z-index: var(--ranui-select-dropdown-z-index, 1050);
+  overflow: var(--ranui-select-dropdown-overflow, hidden);
+  font-variant: var(--ranui-select-dropdown-font-variant, initial);
+  background: var(--ranui-select-dropdown-background, #ffffff);
+  border-radius: var(--ranui-select-dropdown-border-radius, 8px);
+  outline: var(--ranui-select-dropdown-outline, none);
+  box-shadow: var(--ranui-select-dropdown-box-shadow, @box-shadow);
+  cursor: var(--ranui-select-dropdown-cursor, pointer);
+  width: var(--ranui-select-dropdown-width, 100%);
 }
