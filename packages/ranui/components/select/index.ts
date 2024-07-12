@@ -490,12 +490,7 @@ export class Select extends (HTMLElementSSR()!) {
 
 function Custom() {
   if (typeof document !== 'undefined' && !customElements.get('r-select')) {
-    // has shadowRoot
     customElements.define('r-select', Select);
-    // if (!customElements.get('ra-select')) {
-    //   // has not shadowRoot
-    //   customElements.define('ra-select', RaSelect);
-    // }
     return Select;
   } else {
     return createCustomError('document is undefined or r-select is exist');
