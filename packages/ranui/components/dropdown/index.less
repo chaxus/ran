@@ -1,4 +1,4 @@
-@import url("../../base.less");
+@import url('../../base.less');
 
 @arrow-size: 16px;
 
@@ -78,26 +78,26 @@
 
 .ranui-dropdown {
   transform-origin: var(--ran-x, 50%) var(--ran-y, 50%);
-  box-sizing: var(--ranui-dropdown-box-sizing, border-box);
-  margin: var(--ranui-dropdown-margin, 0);
-  padding: var(--ranui-dropdown-padding, 4px);
-  color: var(--ranui-dropdown-color, rgba(0, 0, 0, 0.88));
-  font-size: var(--ranui-dropdown-font-size, 14px);
-  list-style: var(--ranui-dropdown-list-style, none);
-  font-family: var(--ranui-dropdown-font-family, @font-family);
-  z-index: var(--ranui-dropdown-z-index, 1050);
-  overflow: var(--ranui-dropdown-overflow, hidden);
-  font-variant: var(--ranui-dropdown-font-variant, initial);
-  background: var(--ranui-dropdown-background, #ffffff);
-  border-radius: var(--ranui-dropdown-border-radius, 8px);
-  outline: var(--ranui-dropdown-outline, none);
-  box-shadow: var(--ranui-dropdown-box-shadow, @box-shadow);
-  cursor: var(--ranui-dropdown-cursor, pointer);
-  width: var(--ranui-dropdown-width, 100%);
+  box-sizing: var(--ran-dropdown-box-sizing, border-box);
+  margin: var(--ran-dropdown-margin, 0);
+  padding: var(--ran-dropdown-padding, 4px);
+  color: var(--ran-dropdown-color, rgba(0, 0, 0, 0.88));
+  font-size: var(--ran-dropdown-font-size, 14px);
+  list-style: var(--ran-dropdown-list-style, none);
+  font-family: var(--ran-dropdown-font-family, @font-family);
+  z-index: var(--ran-dropdown-z-index, 1050);
+  overflow: var(--ran-dropdown-overflow, hidden);
+  font-variant: var(--ran-dropdown-font-variant, initial);
+  background: var(--ran-dropdown-background, #ffffff);
+  border-radius: var(--ran-dropdown-border-radius, 8px);
+  outline: var(--ran-dropdown-outline, none);
+  box-shadow: var(--ran-dropdown-box-shadow, @box-shadow);
+  cursor: var(--ran-dropdown-cursor, pointer);
+  width: var(--ran-dropdown-width, 100%);
   &-container {
-    position: var(--ranui-dropdown-container-position, relative);
-    display: var(--ranui-dropdown-container-display, inline-block);
-    width: var(--ranui-dropdown-container-width, 100%);
+    position: var(--ran-dropdown-container-position, relative);
+    display: var(--ran-dropdown-container-display, inline-block);
+    width: var(--ran-dropdown-container-width, 100%);
     .top {
       transform: translateX(calc(var(--ran-popover-width) / 2 - calc(@arrow-size / 2))) translateY(-16px) rotate(0deg);
       top: 0px;
@@ -108,38 +108,38 @@
     }
   }
   &-arrow {
-    position: var(--ranui-dropdown-arrow-position, absolute);
-    z-index: var(--ranui-dropdown-arrow-z-index, 1);
-    display: var(--ranui-dropdown-arrow-display, block);
-    pointer-events: var(--ranui-dropdown-arrow-pointer-events, none);
-    width: var(--ranui-dropdown-arrow-width, @arrow-size);
-    height: var(--ranui-dropdown-arrow-height, @arrow-size);
-    overflow: var(--ranui-dropdown-arrow-overflow, hidden);
+    position: var(--ran-dropdown-arrow-position, absolute);
+    z-index: var(--ran-dropdown-arrow-z-index, 1);
+    display: var(--ran-dropdown-arrow-display, block);
+    pointer-events: var(--ran-dropdown-arrow-pointer-events, none);
+    width: var(--ran-dropdown-arrow-width, @arrow-size);
+    height: var(--ran-dropdown-arrow-height, @arrow-size);
+    overflow: var(--ran-dropdown-arrow-overflow, hidden);
     &::before {
-      background: #fff;
-      position: absolute;
-      bottom: 0;
+      background: var(--ran-dropdown-arrow-before-background, #fff);
+      position: var(--ran-dropdown-arrow-before-position, absolute);
+      bottom: var(--ran-dropdown-arrow-before-bottom, 0);
       inset-inline-start: 0;
-      width: @arrow-size;
-      height: calc(@arrow-size / 2);
+      width: var(--ran-dropdown-arrow-before-width, @arrow-size);
+      height: var(--ran-dropdown-arrow-before-height, calc(@arrow-size / 2));
       clip-path: path(
-        "M 0 8 A 4 4 0 0 0 2.82842712474619 6.82842712474619 L 6.585786437626905 3.0710678118654755 A 2 2 0 0 1 9.414213562373096 3.0710678118654755 L 13.17157287525381 6.82842712474619 A 4 4 0 0 0 16 8 Z"
+        'M 0 8 A 4 4 0 0 0 2.82842712474619 6.82842712474619 L 6.585786437626905 3.0710678118654755 A 2 2 0 0 1 9.414213562373096 3.0710678118654755 L 13.17157287525381 6.82842712474619 A 4 4 0 0 0 16 8 Z'
       );
-      content: "";
+      content: var(--ran-dropdown-arrow-before-content, '');
     }
     &::after {
-      content: "";
-      position: absolute;
-      width: 8.970562748477143px;
-      height: 8.970562748477143px;
-      bottom: 0;
+      content: var(--ran-dropdown-arrow-after-content, '');
+      position: var(--ran-dropdown-arrow-after-position, absolute);
+      width: var(--ran-dropdown-arrow-after-width, 9px);
+      height: var(--ran-dropdown-arrow-after-height, 9px);
+      bottom: var(--ran-dropdown-arrow-after-bottom, 0);
       inset-inline: 0;
-      margin: auto;
-      border-radius: 0 0 2px 0;
-      transform: translateY(50%) rotate(-135deg);
-      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
-      z-index: 0;
-      background: transparent;
+      margin: var(--ran-dropdown-arrow-after-margin, auto);
+      border-radius: var(--ran-dropdown-arrow-after-border-radius, 0 0 2px 0);
+      transform: var(--ran-dropdown-arrow-after-transform, translateY(50%) rotate(-135deg));
+      box-shadow: var(--ran-dropdown-arrow-after-box-shadow, 2px 2px 5px rgba(0, 0, 0, 0.05));
+      z-index: var(--ran-dropdown-arrow-after-z-index, 0);
+      background: var(--ran-dropdown-arrow-after-background, transparent);
     }
   }
 }

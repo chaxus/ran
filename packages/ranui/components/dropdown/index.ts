@@ -91,7 +91,7 @@ export class Dropdown extends (HTMLElementSSR()!) {
   };
   stopPropagation = (e: Event): void => {
     e.stopPropagation();
-  }
+  };
   connectedCallback(): void {
     this.handlerTransit();
     this.handlerArrow();
