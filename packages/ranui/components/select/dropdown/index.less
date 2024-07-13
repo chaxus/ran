@@ -1,6 +1,6 @@
 @import url("../../../base.less");
 
-@keyframes ranui-select-dropdown-down-in {
+@keyframes ranui-dropdown-down-in {
   0% {
     transform: scaleY(0.8);
     transform-origin: 100% 100%;
@@ -14,7 +14,7 @@
   }
 }
 
-@keyframes ranui-select-dropdown-down-out {
+@keyframes ranui-dropdown-down-out {
   0% {
     transform: scaleY(1);
     transform-origin: 100% 100%;
@@ -28,7 +28,7 @@
   }
 }
 
-@keyframes ranui-select-dropdown-up-in {
+@keyframes ranui-dropdown-up-in {
   0% {
     transform: scaleY(0.8);
     transform-origin: 0% 0%;
@@ -42,7 +42,7 @@
   }
 }
 
-@keyframes ranui-select-dropdown-up-out {
+@keyframes ranui-dropdown-up-out {
   0% {
     transform: scaleY(1);
     transform-origin: 0% 0%;
@@ -61,35 +61,35 @@
   animation-fill-mode: @animation-mode;
 }
 
-.ran-select-dropdown-down-in {
-  .animation(ranui-select-dropdown-up-in);
+.ran-dropdown-down-in {
+  .animation(ranui-dropdown-up-in);
 }
-.ran-select-dropdown-down-out {
-  .animation(ranui-select-dropdown-up-out);
+.ran-dropdown-down-out {
+  .animation(ranui-dropdown-up-out);
 }
-.ran-select-dropdown-up-in {
-  .animation(ranui-select-dropdown-down-in);
+.ran-dropdown-up-in {
+  .animation(ranui-dropdown-down-in);
 }
-.ran-select-dropdown-up-out {
-  .animation(ranui-select-dropdown-down-out);
+.ran-dropdown-up-out {
+  .animation(ranui-dropdown-down-out);
 }
 
-.ranui-select-dropdown {
+.ranui-dropdown {
   transform-origin: var(--ran-x, 50%) var(--ran-y, 50%);
-  box-sizing: var(--ranui-select-dropdown-box-sizing, border-box);
-  margin: var(--ranui-select-dropdown-margin, 0);
-  padding: var(--ranui-select-dropdown-padding, 4px);
-  color: var(--ranui-select-dropdown-color, rgba(0, 0, 0, 0.88));
-  font-size: var(--ranui-select-dropdown-font-size, 14px);
-  list-style: var(--ranui-select-dropdown-list-style, none);
-  font-family: var(--ranui-select-dropdown-font-family, @font-family);
-  z-index: var(--ranui-select-dropdown-z-index, 1050);
-  overflow: var(--ranui-select-dropdown-overflow, hidden);
-  font-variant: var(--ranui-select-dropdown-font-variant, initial);
-  background: var(--ranui-select-dropdown-background, #ffffff);
-  border-radius: var(--ranui-select-dropdown-border-radius, 8px);
-  outline: var(--ranui-select-dropdown-outline, none);
-  box-shadow: var(--ranui-select-dropdown-box-shadow, @box-shadow);
-  cursor: var(--ranui-select-dropdown-cursor, pointer);
-  width: var(--ranui-select-dropdown-width, 100%);
+  box-sizing: var(--ranui-dropdown-box-sizing, border-box);
+  margin: var(--ranui-dropdown-margin, 0);
+  padding: var(--ranui-dropdown-padding, 4px);
+  color: var(--ranui-dropdown-color, rgba(0, 0, 0, 0.88));
+  font-size: var(--ranui-dropdown-font-size, 14px);
+  list-style: var(--ranui-dropdown-list-style, none);
+  font-family: var(--ranui-dropdown-font-family, @font-family);
+  z-index: var(--ranui-dropdown-z-index, 1050);
+  overflow: var(--ranui-dropdown-overflow, hidden);
+  font-variant: var(--ranui-dropdown-font-variant, initial);
+  background: var(--ranui-dropdown-background, #ffffff);
+  border-radius: var(--ranui-dropdown-border-radius, 8px);
+  outline: var(--ranui-dropdown-outline, none);
+  box-shadow: var(--ranui-dropdown-box-shadow, @box-shadow);
+  cursor: var(--ranui-dropdown-cursor, pointer);
+  width: var(--ranui-dropdown-width, 100%);
 }
