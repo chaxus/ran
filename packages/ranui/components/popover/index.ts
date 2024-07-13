@@ -1,7 +1,7 @@
 import { create } from 'ranuts/utils';
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
 import '@/components/popover/content';
-import '@/components/popover/dropdown';
+import '@/components/dropdown';
 
 // index.ts:29 Uncaught DOMException: Failed to construct 'CustomElement': The result must not have children
 // index.ts:31 Uncaught DOMException: Failed to construct 'CustomElement': The result must not have attributes
@@ -58,7 +58,7 @@ export class Popover extends (HTMLElementSSR()!) {
     if (!content) return;
     if (!this.popoverContent) {
       const div = document.createElement('div');
-      this.popoverContent = document.createElement('r-popover-dropdown');
+      this.popoverContent = document.createElement('r-dropdown');
       div.appendChild(this.popoverContent);
       document.body.appendChild(div);
     }
