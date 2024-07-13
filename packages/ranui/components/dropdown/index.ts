@@ -29,9 +29,7 @@ export class Dropdown extends (HTMLElementSSR()!) {
       .setAttribute('class', 'ranui-dropdown')
       .setAttribute('part', 'ranui-dropdown')
       .addChild([this._slot]);
-    this.container = create('div')
-      .setAttribute('class', 'ranui-dropdown-container')
-      .addChild([this.dropdown]);
+    this.container = create('div').setAttribute('class', 'ranui-dropdown-container').addChild([this.dropdown]);
     const shadowRoot = this.attachShadow({ mode: 'closed' });
     this._shadowDom = shadowRoot;
     shadowRoot.appendChild(this.container.element);
@@ -73,17 +71,13 @@ export class Dropdown extends (HTMLElementSSR()!) {
         removeClassToElement(this.dropdown.element, this.transit);
       }, animationTime);
     }
-  }
-  arrowUp = (): void => {
-
-  }
-  arrowDown = (): void => {
-
-  }
+  };
+  arrowUp = (): void => {};
+  arrowDown = (): void => {};
   handlerArrow = (): void => {
-    if (!this.arrow) return
+    if (!this.arrow) return;
     if (!this.arrowIcon) {
-      this.arrowIcon = create('div').setAttribute('class', `ranui-dropdown-arrow ${this.arrow}`)
+      this.arrowIcon = create('div').setAttribute('class', `ranui-dropdown-arrow ${this.arrow}`);
       this.container.addChild([this.arrowIcon]);
     }
     const ARROW_TYPE_FUN = {
@@ -91,13 +85,20 @@ export class Dropdown extends (HTMLElementSSR()!) {
       [ARROW_TYPE.BOTTOM]: this.arrowDown,
       [ARROW_TYPE.LEFT]: noop,
       [ARROW_TYPE.RIGHT]: noop,
-    }
+    };
     const fun = ARROW_TYPE_FUN[this.arrow as ARROW_TYPE] || noop;
-    fun()
+    fun();
+  };
+  stopPropagation = (e: Event): void => {
+    e.stopPropagation();
   }
   connectedCallback(): void {
     this.handlerTransit();
     this.handlerArrow();
+    this.addEventListener('click', this.stopPropagation);
+  }
+  disconnectedCallback(): void {
+    this.removeEventListener('click', this.stopPropagation);
   }
   attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     if (name === 'transit' && newValue) {

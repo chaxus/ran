@@ -108,13 +108,13 @@
     }
   }
   &-arrow {
-    position: absolute;
-    z-index: 1;
-    display: block;
-    pointer-events: none;
-    width: @arrow-size;
-    height: @arrow-size;
-    overflow: hidden;
+    position: var(--ranui-dropdown-arrow-position, absolute);
+    z-index: var(--ranui-dropdown-arrow-z-index, 1);
+    display: var(--ranui-dropdown-arrow-display, block);
+    pointer-events: var(--ranui-dropdown-arrow-pointer-events, none);
+    width: var(--ranui-dropdown-arrow-width, @arrow-size);
+    height: var(--ranui-dropdown-arrow-height, @arrow-size);
+    overflow: var(--ranui-dropdown-arrow-overflow, hidden);
     &::before {
       background: #fff;
       position: absolute;
