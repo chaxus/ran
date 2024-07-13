@@ -1,5 +1,4 @@
 import { create } from 'ranuts/utils';
-import less from './index.less?inline';
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
 import '@/components/popover/content';
 import '@/components/popover/dropdown';
@@ -22,14 +21,13 @@ export class Popover extends (HTMLElementSSR()!) {
   constructor() {
     super();
     this._slot = document.createElement('slot');
+    this._slot.setAttribute('class', 'slot');
     this.popoverBlock = document.createElement('div');
     this.popoverBlock.setAttribute('class', 'ran-popover-block');
     this.popoverBlock.setAttribute('role', 'tooltip');
     this.popoverBlock.appendChild(this._slot);
     const shadowRoot = this.attachShadow({ mode: 'closed' });
     this._shadowDom = shadowRoot;
-    const style = create('style').setTextContent(less);
-    shadowRoot.appendChild(style.element);
     shadowRoot.appendChild(this.popoverBlock);
   }
   get placement(): string {
@@ -150,15 +148,13 @@ export class Popover extends (HTMLElementSSR()!) {
     }, 100);
   };
   connectedCallback(): void {
-    this.setAttribute('class', 'ran-popover');
-    this.appendChild(this.popoverBlock);
     for (const element of this.children) {
       if (element.tagName === 'R-CONTENT') {
         element.addEventListener('change', this.watchContent);
         this.createContent(element.children);
       }
     }
-    this.popoverTrigger();
+    // this.popoverTrigger();
   }
   disconnectCallback(): void {
     this.removeEventListener('mouseenter', this.hoverPopover);
@@ -171,7 +167,7 @@ export class Popover extends (HTMLElementSSR()!) {
   attributeChangedCallback(n: string, o: string, v: string): void {
     if (o !== v) {
       if (n === 'trigger') {
-        this.popoverTrigger();
+        // this.popoverTrigger();
       }
     }
   }
