@@ -5,7 +5,7 @@ import '@/components/dropdown';
 
 // index.ts:29 Uncaught DOMException: Failed to construct 'CustomElement': The result must not have children
 // index.ts:31 Uncaught DOMException: Failed to construct 'CustomElement': The result must not have attributes
-const arrowHeight = 8;
+const arrowHeight = 4;
 
 const animationTime = 300;
 
@@ -28,7 +28,6 @@ export class Popover extends (HTMLElementSSR()!) {
   _slot: HTMLSlotElement;
   popoverBlock: HTMLDivElement;
   popoverContent?: HTMLElement;
-  popoverArrow?: HTMLDivElement;
   popoverInner?: HTMLDivElement;
   popoverInnerBlock?: HTMLDivElement;
   _shadowDom: ShadowRoot;
@@ -157,26 +156,21 @@ export class Popover extends (HTMLElementSSR()!) {
     let popoverTop = bottom + window.scrollY + arrowHeight
     let popoverLeft = left + window.scrollX;
     const root = document.getElementById(this.getPopupContainerId);
-    let popoverArrowTransform = `translateX(-50%) translateY(-40%) rotate(0deg)`;
-    let popoverArrowTop = popoverTop - arrowHeight;
-    let popoverArrowLeft = left + this.popoverContent.clientWidth / 2 - arrowHeight / 2;
+    const popoverContentRect = this.popoverContent.getBoundingClientRect();
     if (this.placement === 'top') {
-      popoverTop = top + window.scrollY - this.popoverContent.clientHeight - arrowHeight;
+      popoverTop = top + window.scrollY - popoverContentRect.height - arrowHeight;
       if (this.getPopupContainerId && root) {
         const rootRect = root.getBoundingClientRect();
         popoverLeft = left - rootRect.left;
-        popoverTop = top - root.getBoundingClientRect().top - this.popoverContent.clientHeight;
+        popoverTop = top - root.getBoundingClientRect().top - this.popoverContent.clientHeight - arrowHeight;
         popoverLeft = left - root.getBoundingClientRect().left;
       }
-      popoverArrowTransform = 'translateX(-50%) translateY(40%) rotate(180deg)';
-      popoverArrowTop = this.popoverContent.clientHeight - arrowHeight;
-      popoverArrowLeft = width / 2;
     }
-    this.popoverArrow?.style.setProperty('inset', `${popoverArrowTop}px auto auto ${popoverArrowLeft}px`);
-    this.popoverArrow?.style.setProperty('transform', popoverArrowTransform);
     this.popoverContent.style.setProperty('inset', `${popoverTop}px auto auto ${popoverLeft}px`);
     this.popoverContent.style.setProperty('--ran-x', `${popoverLeft}px`);
     this.popoverContent.style.setProperty('--ran-y', `${popoverTop}px`);
+    this.popoverContent.style.setProperty('--ran-popover-width', `${width}px`);
+    this.popoverContent.style.setProperty('--ran-popover-height', `${popoverContentRect.height}px`);
   };
   hoverPopover = (): void => {
 
@@ -208,6 +202,12 @@ export class Popover extends (HTMLElementSSR()!) {
   hoverRemovePopover = (): void => {
     this.setDropdownDisplayNone()
   };
+  changePlacement = (): void => {
+    if (this.placement) {
+      const arrow = this.placement === 'bottom' ? 'top' : 'bottom';
+      this.popoverContent?.setAttribute('arrow', arrow);
+    }
+  }
   connectedCallback(): void {
     for (const element of this.children) {
       if (element.tagName === 'R-CONTENT') {
@@ -216,6 +216,7 @@ export class Popover extends (HTMLElementSSR()!) {
       }
     }
     this.popoverTrigger();
+    this.changePlacement();
     document.addEventListener('click', this.clickRemovePopover);
   }
   disconnectCallback(): void {
@@ -228,6 +229,9 @@ export class Popover extends (HTMLElementSSR()!) {
     if (o !== v) {
       if (n === 'trigger') {
         this.popoverTrigger();
+      }
+      if (n === 'placement') {
+        this.changePlacement();
       }
     }
   }

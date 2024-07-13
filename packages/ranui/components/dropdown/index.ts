@@ -1,15 +1,24 @@
 import type { Chain } from 'ranuts/utils';
-import { addClassToElement, create, removeClassToElement } from 'ranuts/utils';
+import { addClassToElement, create, noop, removeClassToElement } from 'ranuts/utils';
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
 
 const animationTime = 300;
+
+enum ARROW_TYPE {
+  TOP = 'top',
+  BOTTOM = 'bottom',
+  LEFT = 'left',
+  RIGHT = 'right',
+}
 
 export class Dropdown extends (HTMLElementSSR()!) {
   dropdown: Chain;
   _slot: Chain;
   _shadowDom: ShadowRoot;
+  arrowIcon?: Chain;
+  container: Chain;
   static get observedAttributes(): string[] {
-    return ['transit'];
+    return ['transit', 'arrow'];
   }
   constructor() {
     super();
@@ -20,9 +29,12 @@ export class Dropdown extends (HTMLElementSSR()!) {
       .setAttribute('class', 'ranui-dropdown')
       .setAttribute('part', 'ranui-dropdown')
       .addChild([this._slot]);
+    this.container = create('div')
+      .setAttribute('class', 'ranui-dropdown-container')
+      .addChild([this.dropdown]);
     const shadowRoot = this.attachShadow({ mode: 'closed' });
     this._shadowDom = shadowRoot;
-    shadowRoot.appendChild(this.dropdown.element);
+    shadowRoot.appendChild(this.container.element);
   }
   get transit(): string {
     return this.getAttribute('transit') || '';
@@ -34,7 +46,27 @@ export class Dropdown extends (HTMLElementSSR()!) {
       this.removeAttribute('transit');
     }
   }
-  connectedCallback(): void {
+  get arrow(): string {
+    return this.getAttribute('arrow') || '';
+  }
+  set arrow(value: string) {
+    if (value) {
+      this.setAttribute('arrow', value);
+    } else {
+      this.removeAttribute('arrow');
+    }
+  }
+  get show(): string {
+    return this.getAttribute('show') || '';
+  }
+  set show(value: string) {
+    if (value) {
+      this.setAttribute('show', value);
+    } else {
+      this.removeAttribute('show');
+    }
+  }
+  handlerTransit = (): void => {
     if (this.transit) {
       addClassToElement(this.dropdown.element, this.transit);
       setTimeout(() => {
@@ -42,12 +74,40 @@ export class Dropdown extends (HTMLElementSSR()!) {
       }, animationTime);
     }
   }
+  arrowUp = (): void => {
+
+  }
+  arrowDown = (): void => {
+
+  }
+  handlerArrow = (): void => {
+    if (!this.arrow) return
+    if (!this.arrowIcon) {
+      this.arrowIcon = create('div').setAttribute('class', `ranui-dropdown-arrow ${this.arrow}`)
+      this.container.addChild([this.arrowIcon]);
+    }
+    const ARROW_TYPE_FUN = {
+      [ARROW_TYPE.TOP]: this.arrowUp,
+      [ARROW_TYPE.BOTTOM]: this.arrowDown,
+      [ARROW_TYPE.LEFT]: noop,
+      [ARROW_TYPE.RIGHT]: noop,
+    }
+    const fun = ARROW_TYPE_FUN[this.arrow as ARROW_TYPE] || noop;
+    fun()
+  }
+  connectedCallback(): void {
+    this.handlerTransit();
+    this.handlerArrow();
+  }
   attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     if (name === 'transit' && newValue) {
       addClassToElement(this.dropdown.element, this.transit);
       setTimeout(() => {
         removeClassToElement(this.dropdown.element, this.transit);
       }, animationTime);
+    }
+    if (name === 'arrow') {
+      this.handlerArrow();
     }
   }
 }
