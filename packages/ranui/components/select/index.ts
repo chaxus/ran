@@ -224,12 +224,14 @@ export class Select extends (HTMLElementSSR()!) {
     this._selectionDropdown.style.setProperty('--ran-x', `${top + window.scrollX}`);
     this._selectionDropdown.style.setProperty('--ran-y', `${left + window.scrollY}`);
     let selectTop = bottom + window.scrollY;
-    const selectLeft = left + window.scrollX;
+    let selectLeft = left + window.scrollX;
     this._selectionDropdown.style.setProperty('width', `${width}px`);
     if (this.placement === 'top') {
       selectTop = top + window.scrollY - this._selectionDropdown.clientHeight;
     }
     if (this.getPopupContainerId && root) {
+      const rootRect = root.getBoundingClientRect();
+      selectLeft = left - rootRect.left;
       if (this.placement === 'top') {
         selectTop = top - root.getBoundingClientRect().top - this._selectionDropdown.clientHeight;
       } else {
@@ -313,7 +315,7 @@ export class Select extends (HTMLElementSSR()!) {
       this._selectDropdown.style.setProperty('outline', '0');
       this._selectDropdown.addEventListener('click', this.clickOption);
       this._selectionDropdown = document.createElement('r-select-dropdown');
-      if(this.dropdownclass){
+      if (this.dropdownclass) {
         this._selectionDropdown.setAttribute('class', this.dropdownclass);
       }
       if (this.trigger.includes('hover') && !isMobile()) {
@@ -335,7 +337,7 @@ export class Select extends (HTMLElementSSR()!) {
         const container = document.getElementById(this.getPopupContainerId) || document.body;
         container.removeChild(this._selectDropdown);
       }
-    } catch (error) {}
+    } catch (error) { }
   };
   /**
    * @description: 当 select 中有 option 元素的时候，给 dropdown 添加元素

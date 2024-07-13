@@ -1,4 +1,4 @@
-@import url('../../base.less');
+@import url("../../base.less");
 
 @number: 49;
 
@@ -6,9 +6,9 @@
   .circle(@index) when (@index < @number) {
     @i: @index+1;
     @x: round((@i / @number) * 100, 2);
-    @selector: e('@{x}%');
+    @selector: e("@{x}%");
     @{selector} {
-      background-image: url('../../assets/image/loading/1_@{i}.png');
+      background-image: url("../../assets/image/loading/1_@{i}.png");
     }
     .circle(@i);
   }
@@ -16,39 +16,29 @@
 }
 
 .video-speed-dropdown {
-  background-color: var(--video-speed-dropdown-background-color, #595959);
-  .ranui-select-dropdown-option-item {
-    padding: 2px 4px;
-    .ranui-select-dropdown-option-item-content {
-      font-size: 12px;
-      color: #fff;
-      text-align: center;
-    }
-  }
-  .ranui-select-dropdown-option-active {
-    background-color: transparent;
-    .ranui-select-dropdown-option-item-content {
-      color: #1890ff;
-    }
-  }
+  --ranui-select-dropdown-padding: 0px;
+  --ranui-select-dropdown-background: rgba(91, 91, 91, 0.6);
+  --ranui-select-dropdown-option-item-hover-background-color: #595959;
+  --ranui-select-dropdown-option-active-hover-background-color: #595959;
+  --ranui-select-dropdown-option-active-hover-background-color: #595959;
+  --ranui-select-dropdown-option-item-padding: 2px 4px;
+  --ranui-select-dropdown-content-color: #fff;
+  --ranui-select-dropdown-content-font-size: 12px;
+  --ranui-select-dropdown-option-active-background-color: transparent;
+  --ranui-select-dropdown-option-active-hover-background-color: transparent;
+  // --ranui-select-dropdown-option-item-color: #1890ff;
 }
 
 .video-clarity-dropdown {
-  background-color: var(--video-clarity-dropdown-background-color, #595959);
-  .ranui-select-dropdown-option-item {
-    padding: 2px 4px;
-    .ranui-select-dropdown-option-item-content {
-      font-size: 12px;
-      color: #fff;
-      text-align: center;
-    }
-  }
-  .ranui-select-dropdown-option-active {
-    background-color: transparent;
-    .ranui-select-dropdown-option-item-content {
-      color: #1890ff;
-    }
-  }
+  --ranui-select-dropdown-padding: 0px;
+  --ranui-select-dropdown-background: rgba(91, 91, 91, 0.6);
+  --ranui-select-dropdown-option-item-hover-background-color: #595959;
+  --ranui-select-dropdown-option-active-hover-background-color: #595959;
+  --ranui-select-dropdown-option-active-hover-background-color: #595959;
+  --ranui-select-dropdown-option-item-padding: 2px 4px;
+  --ranui-select-dropdown-content-color: #fff;
+  --ranui-select-dropdown-content-font-size: 12px;
+  --ranui-select-dropdown-option-active-background-color: transparent;
 }
 
 .video-control_loading {
@@ -466,7 +456,7 @@
           cursor: var(--ran-player-controller-bottom-right-align-knowledge-cursor, pointer);
         }
         &-full {
-          background: var(--ran-player-controller-bottom-right-align-full-background, url('./img/fullscreenfig.png'));
+          background: var(--ran-player-controller-bottom-right-align-full-background, url("./img/fullscreenfig.png"));
           background-size: var(--ran-player-controller-bottom-right-align-full-background-size, contain);
           width: var(--ran-player-controller-bottom-right-align-full-width, 16px);
           height: var(--ran-player-controller-bottom-right-align-full-height, 16px);
