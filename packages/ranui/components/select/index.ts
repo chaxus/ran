@@ -1,7 +1,7 @@
 import { addClassToElement, generateThrottle, isMobile, removeClassToElement } from 'ranuts/utils';
 import { HTMLElementSSR, createCustomError, isDisabled } from '@/utils/index';
 import '@/components/select/option';
-import '@/components/select/dropdown';
+import '@/components/dropdown';
 import '@/components/select/dropdown-item';
 import '@/components/icon';
 import '@/components/input';

@@ -1,6 +1,5 @@
 import type { Chain } from 'ranuts/utils';
 import { addClassToElement, create, removeClassToElement } from 'ranuts/utils';
-import less from './index.less?inline';
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
 
 const animationTime = 300;
@@ -23,8 +22,6 @@ export class Dropdown extends (HTMLElementSSR()!) {
       .addChild([this._slot]);
     const shadowRoot = this.attachShadow({ mode: 'closed' });
     this._shadowDom = shadowRoot;
-    const style = create('style').setTextContent(less);
-    shadowRoot.appendChild(style.element);
     shadowRoot.appendChild(this.dropdown.element);
   }
   get transit(): string {
