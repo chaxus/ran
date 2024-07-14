@@ -27,7 +27,7 @@ const chunkOptimization: Partial<chunkOptimization> = {
   assetsInlineLimit: 1024,
   reportCompressedSize: false,
   rollupOptions: {
-    external: ['react'],
+    external: ['react', 'react-dom', 'vue'],
     output: {
       experimentalMinChunkSize: 500,
     },

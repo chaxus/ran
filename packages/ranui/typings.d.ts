@@ -108,3 +108,62 @@ declare interface Window {
   };
   Hls: HLS;
 }
+
+
+declare module 'react' {
+  namespace JSX {
+    interface IntrinsicElements {
+      'r-loading': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
+        name: NAME_AMP;
+      };
+      'r-math': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
+        latex: string;
+      };
+      'r-button': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
+        sheet: string;
+        disabled: boolean | string;
+        iconSize: string;
+        icon: string;
+        effect: boolean | string;
+      };
+      'r-checkbox': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
+        disabled: boolean | string;
+        checked: boolean | string;
+      };
+      'r-img': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
+        fallback: string;
+        src: string;
+      };
+      'r-input': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
+        value: string;
+        placeholder: string;
+        label: string;
+        status: string;
+        name: string;
+        icon: string;
+        prefix: string;
+        suffix: string;
+        type: string;
+        required: boolean | string;
+        disabled: boolean | string;
+        min: number | string;
+        max: number | string;
+        step: number | string;
+      };
+      'r-player': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
+        src: string;
+        debug: boolean | string;
+        volume: number | string;
+        currentTime: number | string;
+        playbackRate: number | string;
+      };
+      'r-popover': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
+        placement: string;
+        trigger: string;
+        getPopupContainerId: string;
+        arrow: boolean | string;
+      };
+    }
+  }
+}
+
