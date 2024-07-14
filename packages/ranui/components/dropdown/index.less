@@ -1,4 +1,4 @@
-@import url('../../base.less');
+@import url("../../base.less");
 
 @arrow-size: 16px;
 
@@ -76,6 +76,10 @@
   .animation(ranui-dropdown-down-out);
 }
 
+:host {
+  text-align: var(--ran-dropdown-host-text-align, left);
+}
+
 .ranui-dropdown {
   transform-origin: var(--ran-x, 50%) var(--ran-y, 50%);
   box-sizing: var(--ran-dropdown-box-sizing, border-box);
@@ -98,6 +102,7 @@
     position: var(--ran-dropdown-container-position, relative);
     display: var(--ran-dropdown-container-display, inline-block);
     width: var(--ran-dropdown-container-width, 100%);
+    min-width: var(--ran-popover-width);
     .top {
       transform: translateX(calc(var(--ran-popover-width) / 2 - calc(@arrow-size / 2))) translateY(-16px) rotate(0deg);
       top: 0px;
@@ -123,12 +128,12 @@
       width: var(--ran-dropdown-arrow-before-width, @arrow-size);
       height: var(--ran-dropdown-arrow-before-height, calc(@arrow-size / 2));
       clip-path: path(
-        'M 0 8 A 4 4 0 0 0 2.82842712474619 6.82842712474619 L 6.585786437626905 3.0710678118654755 A 2 2 0 0 1 9.414213562373096 3.0710678118654755 L 13.17157287525381 6.82842712474619 A 4 4 0 0 0 16 8 Z'
+        "M 0 8 A 4 4 0 0 0 2.82842712474619 6.82842712474619 L 6.585786437626905 3.0710678118654755 A 2 2 0 0 1 9.414213562373096 3.0710678118654755 L 13.17157287525381 6.82842712474619 A 4 4 0 0 0 16 8 Z"
       );
-      content: var(--ran-dropdown-arrow-before-content, '');
+      content: var(--ran-dropdown-arrow-before-content, "");
     }
     &::after {
-      content: var(--ran-dropdown-arrow-after-content, '');
+      content: var(--ran-dropdown-arrow-after-content, "");
       position: var(--ran-dropdown-arrow-after-position, absolute);
       width: var(--ran-dropdown-arrow-after-width, 9px);
       height: var(--ran-dropdown-arrow-after-height, 9px);

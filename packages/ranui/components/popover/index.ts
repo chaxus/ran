@@ -50,7 +50,7 @@ export class Popover extends (HTMLElementSSR()!) {
     shadowRoot.appendChild(this.popoverBlock);
   }
   get placement(): string {
-    return this.getAttribute('placement') || 'bottom';
+    return this.getAttribute('placement') || 'top';
   }
   set placement(value: string) {
     this.setAttribute('placement', value);

@@ -72,22 +72,12 @@ export class Dropdown extends (HTMLElementSSR()!) {
       }, animationTime);
     }
   };
-  arrowUp = (): void => {};
-  arrowDown = (): void => {};
   handlerArrow = (): void => {
     if (!this.arrow) return;
     if (!this.arrowIcon) {
       this.arrowIcon = create('div').setAttribute('class', `ranui-dropdown-arrow ${this.arrow}`);
       this.container.addChild([this.arrowIcon]);
     }
-    const ARROW_TYPE_FUN = {
-      [ARROW_TYPE.TOP]: this.arrowUp,
-      [ARROW_TYPE.BOTTOM]: this.arrowDown,
-      [ARROW_TYPE.LEFT]: noop,
-      [ARROW_TYPE.RIGHT]: noop,
-    };
-    const fun = ARROW_TYPE_FUN[this.arrow as ARROW_TYPE] || noop;
-    fun();
   };
   stopPropagation = (e: Event): void => {
     e.stopPropagation();

@@ -82,7 +82,7 @@
   },
   "dependencies": {
     "ranui": "workspace:^",
-    "ranuts": "workspace:0.1.0-alpha.11",
+    "ranuts": "workspace:^",
     "react": "^18.3.1"
   }
 }

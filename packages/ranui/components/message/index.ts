@@ -2,7 +2,6 @@ import { create } from 'ranuts/utils';
 import '@/components/icon';
 import less from './index.less?inline';
 
-
 const AnimationTime = 300; // message 退出动画执行的时间
 const defaultDuration = 3000; // 默认 message 存在的时间
 

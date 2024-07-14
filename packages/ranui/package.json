@@ -1,6 +1,6 @@
 {
   "name": "ranui",
-  "version": "0.1.10-alpha.3",
+  "version": "0.1.10-alpha.4",
   "description": "UI Component library based on `Web Component`",
   "main": "dist/umd/index.umd.cjs",
   "module": "dist/index.js",
@@ -183,7 +183,7 @@
     "exceljs": "^4.4.0",
     "jszip": "^3.10.1",
     "lodash": "^4.17.21",
-    "ranuts": "workspace:0.1.0-alpha.11",
+    "ranuts": "workspace:^",
     "tinycolor2": "^1.6.0"
   }
 }
