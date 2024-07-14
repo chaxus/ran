@@ -62,7 +62,7 @@ export class Popover extends (HTMLElementSSR()!) {
     this.setAttribute('arrow', value);
   }
   get trigger(): string {
-    return this.getAttribute('trigger') || '';
+    return this.getAttribute('trigger') || 'hover';
   }
   set trigger(value: string) {
     this.setAttribute('trigger', value);
