@@ -153,6 +153,11 @@
       "import": "./dist/components/math/index.js",
       "require": "./dist/umd/index.umd.cjs"
     },
+    "./checkbox": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/components/checkbox/index.js",
+      "require": "./dist/umd/index.umd.cjs"
+    },
     "./style": {
       "types": "./dist/index.d.ts",
       "import": "./dist/style.css",

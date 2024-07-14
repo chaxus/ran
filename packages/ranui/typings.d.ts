@@ -108,8 +108,6 @@ declare interface Window {
   };
   Hls: HLS;
 }
-
-
 declare module 'react' {
   namespace JSX {
     interface IntrinsicElements {
@@ -163,7 +161,52 @@ declare module 'react' {
         getPopupContainerId: string;
         arrow: boolean | string;
       };
+      'r-preview': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
+        src: string;
+        closeable: boolean | string;
+      };
+      'r-progress': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
+        percent: number | string;
+        total: number | string;
+        type: string;
+        animation: string;
+        dot: boolean | string;
+      };
+      'r-radar': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
+        abilitys: string;
+        colorPolygon?: string;
+        colorLine?: string;
+        fillColor?: string;
+        strokeColor?: string;
+      };
+      'r-select': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
+        value: string;
+        defaultValue?: string;
+        showSearch?: boolean | string;
+        type?: string;
+        placement?: string;
+        sheet?: string;
+        getPopupContainerId?: string;
+        dropdownclass?: string;
+        trigger?: string;
+        trigger?: string;
+        disabled?: boolean | string;
+      };
+      'r-skeleton': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {};
+      'r-tab': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
+        label: string;
+        icon: string;
+        iconSize: string;
+        key: string;
+        disabled: boolean | string;
+        effect: boolean | string;
+      };
+      'r-tabs': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
+        align: string;
+        type: string;
+        active: string;
+        effect: string;
+      };
     }
   }
 }
-
