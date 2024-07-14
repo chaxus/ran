@@ -1,5 +1,3 @@
-import styles from './global.less?inline';
-
 export * as button from '@/components/button';
 export * as icon from '@/components/icon';
 export * as image from '@/components/image';
@@ -19,9 +17,3 @@ export * as colorpicker from '@/components/colorpicker';
 export * as popover from '@/components/popover';
 export * as loading from '@/components/loading';
 export * as math from '@/components/math';
-
-if (typeof document !== 'undefined') {
-  const style = document.createElement('style');
-  style.textContent = styles;
-  document.body.appendChild(style);
-}
