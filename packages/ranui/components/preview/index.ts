@@ -1,9 +1,9 @@
-import { noop } from 'ranuts/utils';
+import { create, noop } from 'ranuts/utils';
 import '@/components/icon';
+import less from './index.less?inline';
 import message from '@/components/message';
 import { DOCX, PDF, PPTX, XLS, XLSX } from '@/components/preview/constant';
 import type { BaseReturn, RenderOptions } from '@/components/preview/types';
-import './index.less';
 
 const { warning = noop } = message;
 
@@ -280,7 +280,11 @@ async function Custom() {
         }
       }
     }
-    customElements.define('r-preview', CustomElement);
+    if (typeof document !== 'undefined' && !customElements.get('r-preview')) {
+      customElements.define('r-preview', CustomElement);
+      const style = create('style').setTextContent(less);
+      document.body.appendChild(style.element);
+    }
   }
 }
 

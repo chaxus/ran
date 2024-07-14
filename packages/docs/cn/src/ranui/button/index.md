@@ -80,7 +80,7 @@
 
 ### 特效 effect
 
-如果需要纯净的 Button ，可以加上 effect = false ，屏蔽点击时候的水波纹特效
+如果需要纯净的 Button，可以加上 effect = false，屏蔽点击时候的水波纹特效
 
 <r-button type="default" effect="fase" icon="user">默认按钮</r-button>
 <r-button type="primary" effect="fase" icon="home">主要按钮</r-button>

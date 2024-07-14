@@ -20,6 +20,7 @@
     "esbuild",
     "exceljs",
     "IIFE",
+    "katex",
     "keyof",
     "localstorage",
     "maxlength",

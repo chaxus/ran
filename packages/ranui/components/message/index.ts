@@ -1,5 +1,6 @@
+import { create } from 'ranuts/utils';
 import '@/components/icon';
-import './index.less';
+import less from './index.less?inline';
 
 const AnimationTime = 300; // message 退出动画执行的时间
 const defaultDuration = 3000; // 默认 message 存在的时间
@@ -90,9 +91,11 @@ function Custom() {
     customElements.define('r-message', CustomMessage);
 
     const container = document.createElement('div');
+    const style = create('style').setTextContent(less);
     const div = document.createElement('div');
     div.setAttribute('class', 'ranui-message');
     document.body.appendChild(container);
+    container.appendChild(style.element);
     container.appendChild(div);
 
     const commonPrompt = (type: string) => {

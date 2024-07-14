@@ -1,41 +1,72 @@
 :host {
   &([type="toast"]) {
-    --ranui-message-background: rgba(0, 0, 0, 0.7);
-    --ranui-message-color: #fff;
-    --ranui-message-border-radius: 7px;
+    .ran-message {
+      &-notice {
+        padding: 8px;
+        text-align: center;
+        max-width: 90%;
+        margin: 0 auto;
+        word-break: break-all;
+        &-content {
+          display: inline-block;
+          padding: 10px 16px;
+          background: rgba(0, 0, 0, 0.7);
+          border-radius: 7px;
+          pointer-events: all;
+          &-info {
+            align-items: center;
+            display: flex;
+            span {
+              margin: 0;
+              padding: 0;
+              font-size: 14px;
+              font-variant: tabular-nums;
+              list-style: none;
+              font-feature-settings: 'tnum';
+              z-index: 1010;
+              width: 100%;
+              pointer-events: none;
+              color: #fff;
+            }
+          }
+        }
+      }
+    }
   }
 }
 .ran-message {
   &-notice {
-    padding: 8px;
-    text-align: center;
-    max-width: 90%;
-    margin: 0 auto;
-    word-break: break-all;
+    padding: var(--ran-message-notice-padding, 8px);
+    text-align: var(--ran-message-notice-text-align, center);
+    max-width: var(--ran-message-notice-max-width, 90%);
+    margin: var(--ran-message-notice-margin, 0 auto);
+    word-break: var(--ran-message-notice-word-break, break-all);
     &-content {
-      display: inline-block;
-      padding: 10px 16px;
-      background: var(--ranui-message-background, #fff);
-      border-radius: var(--ranui-message-border-radius, 8px);
-      box-shadow:
+      display: var(--ran-message-notice-content-display, inline-block);
+      padding: var(--ran-message-notice-content-padding, 10px 16px);
+      background: var(--ran-message-notice-content-background, #fff);
+      border-radius: var(--ran-message-notice-content-border-radius, 8px);
+      box-shadow: var(
+        --ran-message-notice-content-box-shadow,
         0 3px 6px -4px #0000001f,
         0 6px 16px #00000014,
-        0 9px 28px 8px #0000000d;
-      pointer-events: all;
+        0 9px 28px 8px #0000000d
+      );
+      pointer-events: var(--ran-message-notice-content-pointer-events, all);
       &-info {
-        align-items: center;
-        display: flex;
+        align-items: var(--ran-message-notice-content-info-align-items, center);
+        display: var(--ran-message-notice-content-info-display, flex);
         span {
-          margin: 0;
-          padding: 0;
-          color: var(--ranui-message-color, #000000d9);
-          font-size: 14px;
-          font-variant: tabular-nums;
-          list-style: none;
-          font-feature-settings: 'tnum';
-          z-index: 1010;
-          width: 100%;
-          pointer-events: none;
+          margin: var(--ran-message-notice-content-info-span-margin, 0);
+          padding: var(--ran-message-notice-content-info-span-padding, 0);
+          color: var(--ran-message-notice-content-info-span-color, #000000d9);
+          font-size: var(--ran-message-notice-content-info-span-font-size, 14px);
+          font-variant: var(--ran-message-notice-content-info-span-font-variant, tabular-nums);
+          list-style: var(--ran-message-notice-content-info-span-list-style, none);
+          font-feature-settings: var(--ran-message-notice-content-info-span-font-feature-settings, 'tnum');
+          z-index: var(--ran-message-notice-content-info-span-z-index, 1010);
+          width: var(--ran-message-notice-content-info-span-width, 100%);
+          pointer-events: var(--ran-message-notice-content-info-span-pointer-events, none);
         }
       }
     }
@@ -74,30 +105,29 @@
 }
 
 .ranui-message {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  color: #000000d9;
-  font-size: 14px;
-  font-variant: tabular-nums;
-  line-height: 1.5715;
-  list-style: none;
-  font-feature-settings: 'tnum';
-  position: fixed;
-  top: 8px;
-  left: 0;
-  z-index: 1010;
-  width: 100%;
-  pointer-events: none;
-
+  box-sizing: var(--ran-message-box-sizing, border-box);
+  margin: var(--ran-message-margin, 0);
+  padding: var(--ran-message-padding, 0);
+  color: var(--ran-message-color, #000000d9);
+  font-size: var(--ran-message-font-size, 14px);
+  font-variant: var(--ran-message-font-variant, tabular-nums);
+  line-height: var(--ran-message-line-height, 1.5715);
+  list-style: var(--ran-message-ist-style, none);
+  font-feature-settings: var(--ran-message-font-feature-settings, 'tnum');
+  position: var(--ran-message-position, fixed);
+  top: var(--ran-message-top, 8px);
+  left: var(--ran-message-left, 0);
+  z-index: var(--ran-message-z-index, 1010);
+  width: var(--ran-message-width, 100%);
+  pointer-events: var(--ran-message-pointer-events, none);
   .message-in {
-    animation-name: MessageMoveIn;
-    animation-duration: 0.3s;
-    animation-timing-function: cubic-bezier(0.78, 0.14, 0.15, 0.86);
+    animation-name: var(--ran-message-in-animation-name, MessageMoveIn);
+    animation-duration: var(--ran-message-in-animation-duration, 0.3s);
+    animation-timing-function: var(--ran-message-in-animation-timing-function, cubic-bezier(0.78, 0.14, 0.15, 0.86));
   }
   .message-leave {
-    animation-name: MessageMoveOut;
-    animation-duration: 0.3s;
-    animation-timing-function: cubic-bezier(0.78, 0.14, 0.15, 0.86);
+    animation-name: var(--ran-message-leave-animation-name, MessageMoveOut);
+    animation-duration: var(--ran-message-leave-animation-duration, 0.3s);
+    animation-timing-function: var(--ran-message-leave-animation-timing-function, cubic-bezier(0.78, 0.14, 0.15, 0.86));
   }
 }

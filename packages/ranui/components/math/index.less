@@ -1,3 +1,12 @@
 :host {
-  position: relative;
+  position: var(--ran-math-position, relative);
+}
+.ran-math {
+  display: var(--ran-math-display, flex);
+  justify-content: var(--ran-math-justify-content, space-around);
+  align-items: var(--ran-math-align-items, center);
+}
+
+.katex-html {
+  display: var(--ran-math-katex-display, none);
 }

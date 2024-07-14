@@ -1,35 +1,52 @@
-import { create } from 'ranuts/utils';
-import less from './index.less?inline';
+import { create, isMobile } from 'ranuts/utils';
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
 import '@/components/popover/content';
-import '@/components/popover/dropdown';
+import '@/components/dropdown';
 
 // index.ts:29 Uncaught DOMException: Failed to construct 'CustomElement': The result must not have children
 // index.ts:31 Uncaught DOMException: Failed to construct 'CustomElement': The result must not have attributes
+const arrowHeight = 4;
+
+const animationTime = 300;
+
+interface PlacementDirection {
+  [x: string]: Record<string, string>;
+}
+
+const placementDirection: PlacementDirection = {
+  bottom: {
+    add: 'ran-dropdown-down-in',
+    remove: 'ran-dropdown-down-out',
+  },
+  top: {
+    add: 'ran-dropdown-up-in',
+    remove: 'ran-dropdown-up-out',
+  },
+};
 
 export class Popover extends (HTMLElementSSR()!) {
   _slot: HTMLSlotElement;
   popoverBlock: HTMLDivElement;
   popoverContent?: HTMLElement;
-  popoverArrow?: HTMLDivElement;
   popoverInner?: HTMLDivElement;
   popoverInnerBlock?: HTMLDivElement;
-  removePopoverTimeId?: NodeJS.Timeout;
   _shadowDom: ShadowRoot;
+  dropDownInTimeId?: NodeJS.Timeout;
+  dropDownOutTimeId?: NodeJS.Timeout;
+  removeTimeId?: NodeJS.Timeout;
   static get observedAttributes(): string[] {
     return ['placement', 'arrow', 'trigger'];
   }
   constructor() {
     super();
     this._slot = document.createElement('slot');
+    this._slot.setAttribute('class', 'slot');
     this.popoverBlock = document.createElement('div');
     this.popoverBlock.setAttribute('class', 'ran-popover-block');
     this.popoverBlock.setAttribute('role', 'tooltip');
     this.popoverBlock.appendChild(this._slot);
     const shadowRoot = this.attachShadow({ mode: 'closed' });
     this._shadowDom = shadowRoot;
-    const style = create('style').setTextContent(less);
-    shadowRoot.appendChild(style.element);
     shadowRoot.appendChild(this.popoverBlock);
   }
   get placement(): string {
@@ -45,7 +62,7 @@ export class Popover extends (HTMLElementSSR()!) {
     this.setAttribute('arrow', value);
   }
   get trigger(): string {
-    return this.getAttribute('trigger') || '';
+    return this.getAttribute('trigger') || 'hover';
   }
   set trigger(value: string) {
     this.setAttribute('trigger', value);
@@ -60,8 +77,15 @@ export class Popover extends (HTMLElementSSR()!) {
     if (!content) return;
     if (!this.popoverContent) {
       const div = document.createElement('div');
-      this.popoverContent = document.createElement('r-popover-dropdown');
-      div.appendChild(this.popoverContent);
+      this.popoverContent = create('r-dropdown')
+        .setAttribute('class', 'ran-popover-dropdown')
+        .setStyle('display', 'none')
+        .setStyle('position', 'absolute').element;
+      this.popoverContent && div.appendChild(this.popoverContent);
+      if (this.trigger.includes('hover') && !isMobile()) {
+        this.popoverContent?.addEventListener('mouseleave', this.blur);
+        this.popoverContent?.addEventListener('mouseenter', this.removeDropDownTimeId);
+      }
       document.body.appendChild(div);
     }
     if (this.popoverContent && content.length > 0) {
@@ -76,82 +100,117 @@ export class Popover extends (HTMLElementSSR()!) {
   watchContent = (e: Event): void => {
     const { value } = (e as CustomEvent).detail;
     this.createContent(value.content);
-    this.placementPosition();
+  };
+  /**
+   * @description: 焦点移除的情况，需要移除下拉框
+   * @return {*}
+   */
+  blur = (): void => {
+    if (this.removeTimeId) {
+      this.removeDropDownTimeId();
+    }
+    this.removeTimeId = setTimeout(() => {
+      this.removeDropDownTimeId();
+      this.setDropdownDisplayNone();
+    }, 300);
+  };
+  removeDropDownTimeId = (): void => {
+    if (this.trigger.includes('hover') && !isMobile()) {
+      clearTimeout(this.removeTimeId);
+      this.removeTimeId = undefined;
+    }
+  };
+  /**
+   * @description: 添加 dropdown
+   * @return {*}
+   */
+  setDropdownDisplayBlock = (): void => {
+    if (this.dropDownInTimeId) return;
+    if (this.popoverContent && this.popoverContent.style.display !== 'block') {
+      this.popoverContent.setAttribute('transit', placementDirection[this.placement].add);
+      this.popoverContent?.style.setProperty('display', 'block');
+      this.dropDownInTimeId = setTimeout(() => {
+        this.popoverContent && this.popoverContent.removeAttribute('transit');
+        clearTimeout(this.dropDownInTimeId);
+        this.dropDownInTimeId = undefined;
+      }, animationTime);
+    }
+  };
+  /**
+   * @description: 移除 select dropdown
+   * @return {*}
+   */
+  setDropdownDisplayNone = (): void => {
+    if (this.dropDownOutTimeId) return;
+    if (this.popoverContent && this.popoverContent.style.display !== 'none') {
+      this.popoverContent.setAttribute('transit', placementDirection[this.placement].remove);
+      this.dropDownOutTimeId = setTimeout(() => {
+        this.popoverContent?.style.setProperty('display', 'none');
+        this.popoverContent && this.popoverContent.removeAttribute('transit');
+        clearTimeout(this.dropDownOutTimeId);
+        this.dropDownOutTimeId = undefined;
+      }, animationTime);
+    }
   };
   placementPosition = (): void => {
     if (!this.popoverContent) return;
-    this.popoverContent?.style.setProperty('display', 'block');
-    this.popoverContent?.style.setProperty('opacity', '1');
     const rect = this.getBoundingClientRect();
-    const { top, left, bottom, width } = rect;
-    this.popoverContent.style.setProperty('--ran-x', `${(left + window.scrollX).toFixed(2)}px`);
-    this.popoverContent.style.setProperty('--ran-y', `${(top + window.scrollY).toFixed(2)}px`);
-    let popoverTop = bottom + window.scrollY;
+    const { top, left, bottom, width, height } = rect;
+    let popoverTop = bottom + window.scrollY + arrowHeight;
     let popoverLeft = left + window.scrollX;
     const root = document.getElementById(this.getPopupContainerId);
-    const arrowHeight = 8;
-    let popoverArrowTransform = `translateX(-50%) translateY(-40%) rotate(0deg)`;
-    let popoverArrowTop = -arrowHeight;
-    let popoverArrowLeft = left + this.popoverContent.clientWidth / 2 - arrowHeight / 2;
+    const popoverContentRect = this.popoverContent.getBoundingClientRect();
     if (this.placement === 'top') {
-      popoverTop = top + window.scrollY - this.popoverContent.clientHeight - arrowHeight;
+      popoverTop = top + window.scrollY - popoverContentRect.height - arrowHeight;
       if (this.getPopupContainerId && root) {
-        popoverTop = top - root.getBoundingClientRect().top - this.popoverContent.clientHeight;
+        const rootRect = root.getBoundingClientRect();
+        popoverLeft = left - rootRect.left;
+        popoverTop = top - root.getBoundingClientRect().top - this.popoverContent.clientHeight - arrowHeight;
         popoverLeft = left - root.getBoundingClientRect().left;
       }
-      popoverArrowTransform = 'translateX(-50%) translateY(40%) rotate(180deg)';
-      popoverArrowTop = this.popoverContent.clientHeight - arrowHeight;
-      popoverArrowLeft = width / 2;
     }
-    this.popoverArrow?.style.setProperty('inset', `${popoverArrowTop}px auto auto ${popoverArrowLeft}px`);
-    this.popoverArrow?.style.setProperty('transform', popoverArrowTransform);
     this.popoverContent.style.setProperty('inset', `${popoverTop}px auto auto ${popoverLeft}px`);
+    this.popoverContent.style.setProperty('--ran-x', `${popoverLeft}px`);
+    this.popoverContent.style.setProperty('--ran-y', `${popoverTop}px`);
+    this.popoverContent.style.setProperty('--ran-popover-width', `${width}px`);
+    this.popoverContent.style.setProperty('--ran-popover-height', `${popoverContentRect.height}px`);
   };
-  hoverPopover = (): void => {
-    if (this.removePopoverTimeId) {
-      clearTimeout(this.removePopoverTimeId);
-      this.removePopoverTimeId = undefined;
-    }
+  hoverPopover = (e: Event): void => {
+    this.clickPopover(e);
   };
   clickContent = (e: Event): void => {
     e.stopPropagation();
   };
   clickPopover = (e: Event): void => {
     e.stopPropagation();
+    e.preventDefault();
+    this.setDropdownDisplayBlock();
     this.placementPosition();
   };
-  clickRemovePopover = (): void => {
-    this.hoverRemovePopover();
+  clickRemovePopover = (e: Event): void => {
+    this.hoverRemovePopover(e);
   };
   popoverTrigger = (): void => {
     this.removeEventListener('mouseenter', this.hoverPopover);
-    this.removeEventListener('click', this.hoverPopover);
-    this.removeEventListener('mouseleave', this.hoverRemovePopover);
+    this.removeEventListener('mouseleave', this.blur);
     this.removeEventListener('click', this.clickPopover);
-    document.removeEventListener('click', this.clickRemovePopover);
-    if (this.trigger === 'hover') {
-      this.addEventListener('mouseenter', this.placementPosition);
-      this.addEventListener('mouseleave', this.hoverRemovePopover);
-    } else {
-      this.addEventListener('click', this.clickPopover);
-      document.addEventListener('click', this.clickRemovePopover);
+    if (this.trigger.includes('hover')) {
+      this.addEventListener('mouseenter', this.hoverPopover);
+      this.addEventListener('mouseleave', this.blur);
     }
+    this.addEventListener('click', this.clickPopover);
   };
-  hoverRemovePopover = (): void => {
-    if (this.removePopoverTimeId) {
-      clearTimeout(this.removePopoverTimeId);
-      this.removePopoverTimeId = undefined;
+  hoverRemovePopover = (e: Event): void => {
+    e.stopPropagation();
+    this.setDropdownDisplayNone();
+  };
+  changePlacement = (): void => {
+    if (this.placement) {
+      const arrow = this.placement === 'bottom' ? 'top' : 'bottom';
+      this.popoverContent?.setAttribute('arrow', arrow);
     }
-    this.removePopoverTimeId = setTimeout(() => {
-      this.popoverContent?.style.setProperty('opacity', '0');
-      setTimeout(() => {
-        this.popoverContent?.style.setProperty('display', 'none');
-      }, 300);
-    }, 100);
   };
   connectedCallback(): void {
-    this.setAttribute('class', 'ran-popover');
-    this.appendChild(this.popoverBlock);
     for (const element of this.children) {
       if (element.tagName === 'R-CONTENT') {
         element.addEventListener('change', this.watchContent);
@@ -159,19 +218,22 @@ export class Popover extends (HTMLElementSSR()!) {
       }
     }
     this.popoverTrigger();
+    this.changePlacement();
+    document.addEventListener('click', this.clickRemovePopover);
   }
   disconnectCallback(): void {
     this.removeEventListener('mouseenter', this.hoverPopover);
     this.removeEventListener('mouseleave', this.hoverRemovePopover);
     this.removeEventListener('click', this.hoverPopover);
-    this.removeEventListener('click', this.placementPosition);
     document.removeEventListener('click', this.clickRemovePopover);
-    this.popoverContent?.removeEventListener('click', this.clickContent);
   }
   attributeChangedCallback(n: string, o: string, v: string): void {
     if (o !== v) {
       if (n === 'trigger') {
         this.popoverTrigger();
+      }
+      if (n === 'placement') {
+        this.changePlacement();
       }
     }
   }

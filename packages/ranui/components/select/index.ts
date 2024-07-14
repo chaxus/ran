@@ -1,7 +1,7 @@
 import { addClassToElement, generateThrottle, isMobile, removeClassToElement } from 'ranuts/utils';
 import { HTMLElementSSR, createCustomError, isDisabled } from '@/utils/index';
 import '@/components/select/option';
-import '@/components/select/dropdown';
+import '@/components/dropdown';
 import '@/components/select/dropdown-item';
 import '@/components/icon';
 import '@/components/input';
@@ -18,12 +18,12 @@ interface PlacementDirection {
 
 const placementDirection: PlacementDirection = {
   bottom: {
-    add: 'ran-select-dropdown-down-in',
-    remove: 'ran-select-dropdown-down-out',
+    add: 'ran-dropdown-down-in',
+    remove: 'ran-dropdown-down-out',
   },
   top: {
-    add: 'ran-select-dropdown-up-in',
-    remove: 'ran-select-dropdown-up-out',
+    add: 'ran-dropdown-up-in',
+    remove: 'ran-dropdown-up-out',
   },
 };
 
@@ -224,12 +224,14 @@ export class Select extends (HTMLElementSSR()!) {
     this._selectionDropdown.style.setProperty('--ran-x', `${top + window.scrollX}`);
     this._selectionDropdown.style.setProperty('--ran-y', `${left + window.scrollY}`);
     let selectTop = bottom + window.scrollY;
-    const selectLeft = left + window.scrollX;
+    let selectLeft = left + window.scrollX;
     this._selectionDropdown.style.setProperty('width', `${width}px`);
     if (this.placement === 'top') {
       selectTop = top + window.scrollY - this._selectionDropdown.clientHeight;
     }
     if (this.getPopupContainerId && root) {
+      const rootRect = root.getBoundingClientRect();
+      selectLeft = left - rootRect.left;
       if (this.placement === 'top') {
         selectTop = top - root.getBoundingClientRect().top - this._selectionDropdown.clientHeight;
       } else {
@@ -312,7 +314,10 @@ export class Select extends (HTMLElementSSR()!) {
       this._selectDropdown.style.setProperty('-webkit-tap-highlight-color', 'transparent');
       this._selectDropdown.style.setProperty('outline', '0');
       this._selectDropdown.addEventListener('click', this.clickOption);
-      this._selectionDropdown = document.createElement('r-select-dropdown');
+      this._selectionDropdown = document.createElement('r-dropdown');
+      if (this.dropdownclass) {
+        this._selectionDropdown.setAttribute('class', this.dropdownclass);
+      }
       if (this.trigger.includes('hover') && !isMobile()) {
         this._selectDropdown.addEventListener('mouseleave', this.selectBlur);
         this._selectDropdown.addEventListener('mouseenter', this.removeDropDownTimeId);
@@ -365,7 +370,7 @@ export class Select extends (HTMLElementSSR()!) {
     options.forEach((item) => {
       if (this._selectionDropdown) {
         const { label, value } = item;
-        const selectOptionItem = document.createElement('r-select-dropdown-item');
+        const selectOptionItem = document.createElement('r-dropdown-item');
         const defaultValue = this.getAttribute('defaultValue') || this.getAttribute('value');
         if (defaultValue === value) {
           selectOptionItem.setAttribute('active', value);
@@ -487,12 +492,7 @@ export class Select extends (HTMLElementSSR()!) {
 
 function Custom() {
   if (typeof document !== 'undefined' && !customElements.get('r-select')) {
-    // has shadowRoot
     customElements.define('r-select', Select);
-    // if (!customElements.get('ra-select')) {
-    //   // has not shadowRoot
-    //   customElements.define('ra-select', RaSelect);
-    // }
     return Select;
   } else {
     return createCustomError('document is undefined or r-select is exist');

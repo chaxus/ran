@@ -1,6 +1,5 @@
 import { perToNum } from 'ranuts/utils';
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
-import './index.less';
 
 const attributes: string[] = ['percent', 'type', 'total', 'dot'];
 
@@ -10,6 +9,7 @@ class Progress extends (HTMLElementSSR()!) {
   _progressWrapValue: HTMLDivElement;
   _progressDot: HTMLDivElement;
   moveProgress: { mouseDown: boolean };
+  _shadowDom: ShadowRoot;
   constructor() {
     super();
     this._progress = document.createElement('div');
@@ -26,6 +26,10 @@ class Progress extends (HTMLElementSSR()!) {
     this.moveProgress = {
       mouseDown: false,
     };
+    this._progress.appendChild(this._progressDot);
+    const shadowRoot = this.attachShadow({ mode: 'closed' });
+    this._shadowDom = shadowRoot;
+    shadowRoot.appendChild(this._progress);
   }
   static get observedAttributes(): string[] {
     return attributes;
@@ -144,12 +148,6 @@ class Progress extends (HTMLElementSSR()!) {
     document.addEventListener('mousemove', this.progressDotMouseMove);
     document.addEventListener('mouseup', this.progressDotMouseUp);
   };
-  createProgress = (): void => {
-    if (!(this.children.length > 0 && [...this.children].some((item) => item.className === 'ran-progress'))) {
-      this._progress.appendChild(this._progressDot);
-      this.appendChild(this._progress);
-    }
-  };
   private resize = (): void => {
     this.updateCurrentProgress();
   };
@@ -171,9 +169,6 @@ class Progress extends (HTMLElementSSR()!) {
   }
   attributeChangedCallback(k: string, o: string, n: string): void {
     if (o !== n) {
-      if (k === 'type') {
-        this.createProgress();
-      }
       if (k === 'dot') {
         this.appendProgressDot();
       }

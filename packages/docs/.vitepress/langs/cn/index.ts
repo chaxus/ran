@@ -31,12 +31,12 @@ const themeCnConfig: DefaultTheme.Config = {
         items: [
           { text: '过滤对象', link: '/cn/src/ranuts/utils/filterObj.md' },
           { text: '统计执行时间', link: '/cn/src/ranuts/utils/task.md' },
-          { text: '字符串转xml', link: '/cn/src/ranuts/utils/str2xml.md' },
+          { text: '字符串转 xml', link: '/cn/src/ranuts/utils/str2xml.md' },
           {
-            text: '图片转base64',
+            text: '图片转 base64',
             link: '/cn/src/ranuts/utils/convertImageToBase64.md',
           },
-          { text: 'OCR文字识别`', link: '/cn/src/ranuts/utils/ocr.md' },
+          { text: 'OCR 文字识别`', link: '/cn/src/ranuts/utils/ocr.md' },
         ],
       },
       {
@@ -67,7 +67,7 @@ const themeCnConfig: DefaultTheme.Config = {
         text: 'mime type',
         items: [
           {
-            text: '通过文件后缀获取mime type',
+            text: '通过文件后缀获取 mime type',
             link: '/cn/src/ranuts/mimeType/mimeType.md',
           },
         ],
@@ -90,6 +90,7 @@ const themeCnConfig: DefaultTheme.Config = {
         text: '数据展示',
         items: [
           { text: 'Image 图片', link: '/cn/src/ranui/image/' },
+          { text: 'Math 数学公式', link: '/cn/src/ranui/math/' },
           { text: 'CheckBox 多选框', link: '/cn/src/ranui/checkbox/' },
           { text: 'Tabs 标签页', link: '/cn/src/ranui/tabs/' },
           { text: 'Preview 预览', link: '/cn/src/ranui/preview/' },
@@ -136,6 +137,10 @@ const themeCnConfig: DefaultTheme.Config = {
               { text: '桶排序', link: '/cn/src/article/sort/bucket/' },
               { text: '基数排序', link: '/cn/src/article/sort/radix/' },
             ],
+          },
+          {
+            text: '可视化渲染引擎',
+            link: '/cn/src/article/visual.md',
           },
         ],
       },

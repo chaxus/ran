@@ -5,7 +5,7 @@
     "module": "ESNext",
     "esModuleInterop": true,
     "target": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "outDir": "dist",
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,

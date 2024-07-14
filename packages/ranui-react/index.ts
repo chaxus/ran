@@ -12,6 +12,10 @@ import Progress from '@/components/progress';
 import Player from '@/components/player';
 import Select from '@/components/select';
 import reactify from '@/utils/reactify';
+import Loading from '@/components/loading';
+import Math from '@/components/math';
+import Popover, { PopoverContent } from '@/components/popover';
+import Checkbox from '@/components/checkbox';
 
 export {
   Button,
@@ -28,4 +32,9 @@ export {
   Progress,
   Player,
   Select,
+  Loading,
+  Math,
+  Popover,
+  PopoverContent,
+  Checkbox
 };

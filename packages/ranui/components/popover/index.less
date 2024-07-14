@@ -1,7 +1,13 @@
+:host {
+  display: var(--ran-popover-host-display, inline-block);
+}
 .ran-popover {
-  box-sizing: border-box;
-  position: relative;
-  display: inline-block;
-  margin: 0;
-  padding: 0;
+  box-sizing: var(--ran-popover-box-sizing, border-box);
+  position: var(--ran-popover-position, relative);
+  display: var(--ran-popover-display, inline-block);
+  margin: var(--ran-popover-margin, 0);
+  padding: var(--ran-popover-padding, 0);
+  &-block {
+    display: var(--ran-popover-block-display, inline-block);
+  }
 }

@@ -1,6 +1,6 @@
 {
   "name": "ranui",
-  "version": "0.1.10-alpha.3",
+  "version": "0.1.10-alpha.4",
   "description": "UI Component library based on `Web Component`",
   "main": "dist/umd/index.umd.cjs",
   "module": "dist/index.js",
@@ -59,98 +59,103 @@
       "require": "./dist/umd/shadowless/shadowless.umd.cjs"
     },
     "./button": {
-      "types": "./dist/components/button/index.d.ts",
+      "types": "./dist/index.d.ts",
       "import": "./dist/components/button/index.js",
       "require": "./dist/umd/index.umd.cjs"
     },
     "./icon": {
-      "types": "./dist/components/icon/index.d.ts",
+      "types": "./dist/index.d.ts",
       "import": "./dist/components/icon/index.js",
       "require": "./dist/umd/index.umd.cjs"
     },
     "./image": {
-      "types": "./dist/components/image/index.d.ts",
+      "types": "./dist/index.d.ts",
       "import": "./dist/components/image/index.js",
       "require": "./dist/umd/index.umd.cjs"
     },
     "./input": {
-      "types": "./dist/components/input/index.d.ts",
+      "types": "./dist/index.d.ts",
       "import": "./dist/components/input/index.js",
       "require": "./dist/umd/index.umd.cjs"
     },
     "./message": {
-      "types": "./dist/components/message/index.d.ts",
+      "types": "./dist/index.d.ts",
       "import": "./dist/components/message/index.js",
       "require": "./dist/umd/index.umd.cjs"
     },
     "./preview": {
-      "types": "./dist/components/preview/index.d.ts",
+      "types": "./dist/index.d.ts",
       "import": "./dist/components/preview/index.js",
       "require": "./dist/umd/index.umd.cjs"
     },
     "./skeleton": {
-      "types": "./dist/components/skeleton/index.d.ts",
+      "types": "./dist/index.d.ts",
       "import": "./dist/components/skeleton/index.js",
       "require": "./dist/umd/index.umd.cjs"
     },
     "./tab": {
-      "types": "./dist/components/tab/index.d.ts",
+      "types": "./dist/index.d.ts",
       "import": "./dist/components/tab/index.js",
       "require": "./dist/umd/index.umd.cjs"
     },
     "./tabpane": {
-      "types": "./dist/components/tabpane/index.d.ts",
+      "types": "./dist/index.d.ts",
       "import": "./dist/components/tabpane/index.js",
       "require": "./dist/umd/index.umd.cjs"
     },
     "./radar": {
-      "types": "./dist/components/radar/index.d.ts",
+      "types": "./dist/index.d.ts",
       "import": "./dist/components/radar/index.js",
       "require": "./dist/umd/index.umd.cjs"
     },
     "./modal": {
-      "types": "./dist/components/modal/index.d.ts",
+      "types": "./dist/index.d.ts",
       "import": "./dist/components/modal/index.js",
       "require": "./dist/umd/index.umd.cjs"
     },
     "./select": {
-      "types": "./dist/components/select/index.d.ts",
+      "types": "./dist/index.d.ts",
       "import": "./dist/components/select/index.js",
       "require": "./dist/umd/index.umd.cjs"
     },
     "./progress": {
-      "types": "./dist/components/progress/index.d.ts",
+      "types": "./dist/index.d.ts",
       "import": "./dist/components/progress/index.js",
       "require": "./dist/umd/index.umd.cjs"
     },
     "./player": {
-      "types": "./dist/components/player/index.d.ts",
+      "types": "./dist/index.d.ts",
       "import": "./dist/components/player/index.js",
       "require": "./dist/umd/index.umd.cjs"
     },
     "./popover": {
-      "types": "./dist/components/popover/index.d.ts",
+      "types": "./dist/index.d.ts",
       "import": "./dist/components/popover/index.js",
       "require": "./dist/umd/index.umd.cjs"
     },
     "./content": {
-      "types": "./dist/components/content/index.d.ts",
+      "types": "./dist/index.d.ts",
       "import": "./dist/components/content/index.js",
       "require": "./dist/umd/index.umd.cjs"
     },
     "./loading": {
-      "types": "./dist/components/loading/index.d.ts",
+      "types": "./dist/index.d.ts",
       "import": "./dist/components/loading/index.js",
       "require": "./dist/umd/index.umd.cjs"
     },
     "./colorpicker": {
-      "types": "./dist/components/colorpicker/index.d.ts",
+      "types": "./dist/index.d.ts",
       "import": "./dist/components/colorpicker/index.js",
       "require": "./dist/umd/index.umd.cjs"
     },
     "./math": {
-      "types": "./dist/components/math/index.d.ts",
+      "types": "./dist/index.d.ts",
       "import": "./dist/components/math/index.js",
+      "require": "./dist/umd/index.umd.cjs"
+    },
+    "./checkbox": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/components/checkbox/index.js",
       "require": "./dist/umd/index.umd.cjs"
     },
     "./style": {
@@ -172,9 +177,12 @@
     "imagemin-svgo": "^10.0.1",
     "less": "^4.2.0",
     "prettier": "^2.8.8",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "rollup-plugin-visualizer": "^5.12.0",
     "svgo": "^3.3.0",
     "tsx": "^3.14.0",
+    "typescript": "^5.4.5",
     "vite": "^5.2.11"
   },
   "dependencies": {
@@ -182,7 +190,7 @@
     "exceljs": "^4.4.0",
     "jszip": "^3.10.1",
     "lodash": "^4.17.21",
-    "ranuts": "workspace:0.1.0-alpha.11",
+    "ranuts": "workspace:^",
     "tinycolor2": "^1.6.0"
   }
 }

@@ -1,6 +1,5 @@
 import { create } from 'ranuts/utils';
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
-
 export class Math extends (HTMLElementSSR()!) {
   contain: HTMLDivElement;
   static get observedAttributes(): string[] {
@@ -21,17 +20,16 @@ export class Math extends (HTMLElementSSR()!) {
   }
   render(): void {
     if (!this.latex) return;
-    import('@/assets/js/math.js')
-      .then(() => {
-        const { MathJax } = window;
-        if (!MathJax) return;
-        MathJax.texReset();
+    import('@/assets/js/katex/katex-es.js')
+      .then((katex) => {
         this.contain.innerHTML = '';
-        const options = MathJax.getMetricsFor(this.contain);
-        MathJax.tex2chtmlPromise(this.latex, options).then((node: Element) => this.contain.appendChild(node));
+        const span = create('span').setTextContent(`$$${this.latex}$$`).element;
+        this.contain.appendChild(span);
+        if (!katex) return;
+        katex.renderMathInElement(this.contain);
       })
       .catch(function (err: Error) {
-        console.warn(`ranui math component: ${err.message}\n${err}`);
+        console.warn(`ranui math component warning: ${err.message}\n${err}`);
       });
   }
   connectedCallback(): void {
