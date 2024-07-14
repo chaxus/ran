@@ -42,7 +42,7 @@ import { reactify } from 'ranuts/react';
 import { ocr } from 'ranuts/ml';
 ```
 
-Full import，(Full import will introduce many unnecessary modules. You are advised to import them on demand)
+Full import,(Full import will introduce many unnecessary modules. You are advised to import them on demand)
 
 - ESM
 

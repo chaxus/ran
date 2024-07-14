@@ -237,13 +237,13 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     this.colorPickerPanelSliderAlpha?.setAttribute('percent', `${alpha / 100}`);
   };
   updateColorPickerPanelSliderAlphaProgressWrap = (): void => {
-    this.colorPickerPanelSliderAlpha?.style.setProperty('--ran-progress-wrap', this.generateColorPickerProgress());
+    this.colorPickerPanelSliderAlpha?.style.setProperty('--ran-progress-wrap-background', this.generateColorPickerProgress());
   };
   updateColorPickerPanelSliderAlphaProgressDot = (): void => {
-    this.colorPickerPanelSliderAlpha?.style.setProperty('--ran-progress-dot', this.generateHsv2RgbaValue());
+    this.colorPickerPanelSliderAlpha?.style.setProperty('--ran-progress-dot-background', this.generateHsv2RgbaValue());
   };
   updateColorPickerPanelSliderHueProgressDot = (): void => {
-    this.colorPickerPanelSliderHue?.style.setProperty('--ran-progress-dot', this.generateHue2rgb());
+    this.colorPickerPanelSliderHue?.style.setProperty('--ran-progress-dot-background', this.generateHue2rgb());
   };
   updateColorPickerColorBlockInnerBackground = (): void => {
     this.colorPickerColorBlockInner?.style.setProperty('background', this.generateHsv2RgbaValue());
@@ -293,7 +293,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     this.colorPickerPanelSliderHue = document.createElement('r-progress');
     this.updateColorPickerPanelSliderHueProgressDot();
     this.colorPickerPanelSliderHue.style.setProperty(
-      '--ran-progress-wrap',
+      '--ran-progress-wrap-background',
       'linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000)',
     );
     this.colorPickerPanelSliderHue.setAttribute('percent', `${this.context.hue.getter() / 360}`);

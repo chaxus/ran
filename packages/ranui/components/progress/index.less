@@ -8,41 +8,41 @@
 .ran-progress {
   position: var(--ran-progress-position, relative);
   cursor: var(--ran-progress-cursor, pointer);
-  width: 100%;
-  height: 100%;
+  width: var(--ran-progress-width, 100%);
+  height: var(--ran-progress-height, 100%);
   &:active,
   &:focus {
     outline: 0;
     -webkit-tap-highlight-color: transparent;
   }
   &-wrap {
-    width: 100%;
-    height: 8px;
-    border-radius: 20px;
-    background: var(--ran-progress-wrap, #5b5b5b);
-    position: relative;
-    overflow: hidden;
+    width: var(--ran-progress-wrap-width, 100%);
+    height: var(--ran-progress-wrap-height, 8px);
+    border-radius: var(--ran-progress-wrap-border-radius, 20px);
+    background: var(--ran-progress-wrap-background, #5b5b5b);
+    position: var(--ran-progress-wrap-position, relative);
+    overflow: var(--ran-progress-wrap-overflow, hidden);
     &-value {
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 100%;
-      transform: scaleX(0);
-      transform-origin: 0 0;
-      will-change: transform;
-      background: var(--ran-progress-wrap-value, linear-gradient(90deg, #0bc8bb 2.42%, #00d297 98.79%));
-      border-radius: 20px;
+      position: var(--ran-progress-wrap-value-position, absolute);
+      top: var(--ran-progress-wrap-value-top, 0);
+      left: var(--ran-progress-wrap-value-left, 0);
+      height: var(--ran-progress-wrap-value-height, 100%);
+      width: var(--ran-progress-wrap-value-width, 100%);
+      transform: var(--ran-progress-wrap-value-transform, scaleX(0));
+      transform-origin: var(--ran-progress-wrap-value-transform-origin, 0 0);
+      will-change: var(--ran-progress-wrap-value-will-change, transform);
+      background: var(--ran-progress-wrap-value-background, linear-gradient(90deg, #0bc8bb 2.42%, #00d297 98.79%));
+      border-radius: var(--ran-progress-wrap-value-border-radius, 20px);
     }
   }
   &-dot {
-    position: absolute;
-    top: -5px;
-    left: -9px;
-    border-radius: 50%;
-    width: 18px;
-    height: 18px;
-    background: var(--ran-progress-dot, linear-gradient(90deg, #0bc8bb 2.42%, #00d297 98.79%));
-    cursor: pointer;
+    position: var(--ran-progress-dot-position, absolute);
+    top: var(--ran-progress-dot-top, -5px);
+    left: var(--ran-progress-dot-left, -9px);
+    border-radius: var(--ran-progress-dot-border-radius, 50%);
+    width: var(--ran-progress-dot-width, 18px);
+    height: var(--ran-progress-dot-height, 18px);
+    background: var(--ran-progress-dot-background, linear-gradient(90deg, #0bc8bb 2.42%, #00d297 98.79%));
+    cursor: var(--ran-progress-dot-cursor, pointer);
   }
 }

@@ -247,12 +247,13 @@ export class Select extends (HTMLElementSSR()!) {
   selectMouseDown = (e: Event): void => {
     e.stopPropagation();
     if (isDisabled(this)) return;
-    this.removeDropDownTimeId();
+    this.removeDropDownTimeId(e);
     this.setSelectDropdownDisplayNone();
     this.setSelectDropdownDisplayBlock();
     this.placementPosition();
   };
-  removeDropDownTimeId = (): void => {
+  removeDropDownTimeId = (e: Event): void => {
+    e.stopPropagation();
     this._search.setAttribute('value', '');
     if (this.trigger.includes('hover') && !isMobile()) {
       clearTimeout(this.removeTimeId);
@@ -263,14 +264,15 @@ export class Select extends (HTMLElementSSR()!) {
    * @description: 焦点移除的情况，需要移除 select 下拉框
    * @return {*}
    */
-  selectBlur = (): void => {
+  selectBlur = (e: Event): void => {
+    e.stopPropagation();
     if (this.removeTimeId) {
-      this.removeDropDownTimeId();
+      this.removeDropDownTimeId(e);
     }
     this.removeTimeId = setTimeout(() => {
-      this.removeDropDownTimeId();
+      this.removeDropDownTimeId(e);
       this.setSelectDropdownDisplayNone();
-    }, 100);
+    }, 300);
   };
   /**
    * @description: 选中一个选项的情况
@@ -301,7 +303,7 @@ export class Select extends (HTMLElementSSR()!) {
     this.setSelectDropdownDisplayNone();
     // 点击后触发 onchange 事件
     this.dispatchEvent(new CustomEvent('change', { detail: { value, label } }));
-    this.removeDropDownTimeId();
+    this.removeDropDownTimeId(e);
   };
   /**
    * @description: 初始化创建选项下拉框
@@ -337,7 +339,7 @@ export class Select extends (HTMLElementSSR()!) {
         const container = document.getElementById(this.getPopupContainerId) || document.body;
         container.removeChild(this._selectDropdown);
       }
-    } catch (error) {}
+    } catch (error) { }
   };
   /**
    * @description: 当 select 中有 option 元素的时候，给 dropdown 添加元素
