@@ -339,7 +339,7 @@ export class Select extends (HTMLElementSSR()!) {
         const container = document.getElementById(this.getPopupContainerId) || document.body;
         container.removeChild(this._selectDropdown);
       }
-    } catch (error) { }
+    } catch (error) {}
   };
   /**
    * @description: 当 select 中有 option 元素的时候，给 dropdown 添加元素

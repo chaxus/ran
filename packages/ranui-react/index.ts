@@ -36,5 +36,5 @@ export {
   Math,
   Popover,
   PopoverContent,
-  Checkbox
+  Checkbox,
 };

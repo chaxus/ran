@@ -237,7 +237,10 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     this.colorPickerPanelSliderAlpha?.setAttribute('percent', `${alpha / 100}`);
   };
   updateColorPickerPanelSliderAlphaProgressWrap = (): void => {
-    this.colorPickerPanelSliderAlpha?.style.setProperty('--ran-progress-wrap-background', this.generateColorPickerProgress());
+    this.colorPickerPanelSliderAlpha?.style.setProperty(
+      '--ran-progress-wrap-background',
+      this.generateColorPickerProgress(),
+    );
   };
   updateColorPickerPanelSliderAlphaProgressDot = (): void => {
     this.colorPickerPanelSliderAlpha?.style.setProperty('--ran-progress-dot-background', this.generateHsv2RgbaValue());
