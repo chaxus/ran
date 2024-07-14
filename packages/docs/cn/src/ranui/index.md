@@ -57,12 +57,6 @@ document.body.appendChild(Button);
 
 ### 3.`jsx`
 
-由于`react`有合成事件，为了更加方便的使用，通过`react`高阶组件进行封装[ranui](https://www.npmjs.com/package/ranui)，输出了[@ranui/react](https://www.npmjs.com/package/@ranui/react)
-
-在`react`中，使用[@ranui/react](https://www.npmjs.com/package/@ranui/react)会更加丝滑，通过高阶函数包裹后，与`react`生态系统完全融合。
-
-然而，[ranui](https://www.npmjs.com/package/ranui)仍然可以在任何`js`或者`ts`中使用。
-
 ```jsx
 import 'ranui';
 const App = () => {
@@ -86,12 +80,6 @@ import 'ranui';
 ```
 
 ### 5.`tsx`
-
-由于`react`有合成事件，为了更加方便的使用，通过`react`高阶组件进行封装[ranui](https://www.npmjs.com/package/ranui)，于是有了[@ranui/react](https://www.npmjs.com/package/@ranui/react)
-
-在`react`中，使用[@ranui/react](https://www.npmjs.com/package/@ranui/react)会更加丝滑，通过高阶函数包裹后，与`react`生态系统完全融合。
-
-然而，[ranui](https://www.npmjs.com/package/ranui)仍然可以在任何`js`或者`ts`中使用。
 
 ```tsx
 // react 18
@@ -126,29 +114,6 @@ const FilePreview = () => {
     </div>
   );
 };
-```
-
-`jsx`在`TypeScript`中定义了所有`html`原生组件的类型。`web component`类型不在`jsx`定义中。需要手动添加。否则会有类型问题，但它实际上是有效的。
-
-```ts
-// typings.d.ts
-interface RButton {
-  type?: string;
-  onClick?: React.MouseEventHandler<HTMLDivElement> | undefined;
-}
-
-interface RPreview {
-  src?: string | Blob | ArrayBuffer;
-  onClick?: React.MouseEventHandler<HTMLDivElement> | undefined;
-  ref?: React.MutableRefObject<HTMLDivElement | null>;
-}
-
-declare namespace JSX {
-  interface IntrinsicElements {
-    'r-preview': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & RPreview;
-    'r-button': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & RButton;
-  }
-}
 ```
 
 ## Import 导入方式
@@ -268,6 +233,14 @@ import 'ranui';
 <r-option value="187">Lucy</r-option>
 </r-select>
 
+- `Loading`
+
+<r-loading name="circle-fold"></r-loading>
+
+- `math`
+
+<r-math latex="x = {-b \pm \sqrt{b^2-4ac} \over 2a}"></r-math>
+
 ## Event 事件
 
 - `react`
@@ -331,7 +304,7 @@ import 'ranui';
 
 <style>
   /* #input 指的是当前的自定义元素
-  ::part(input) 中的input指的是，当前自定义元素内部的 Shadow DOM 元素的类 */
+  ::part(input) 中的 input 指的是，当前自定义元素内部的 Shadow DOM 元素的类 */
   #input::part(input) {
     width: 100px;
   }

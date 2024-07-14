@@ -4,13 +4,13 @@ Development scheme based on `Web Components`
 
 ## Feature
 
-1. **High Cross-Framework Compatibility**: Our solution seamlessly adapts to a wide array of leading front-end frameworks, including `React`, `Vue`, `Preact`, `SolidJS`, `Svelte`, and more. It also integrates smoothly with any project built on `JavaScript` and adhering to `W3C` standards. No matter your choice of technology stack, we guarantee consistent and reliable support.
-2. **Pure Native Experience**: Our solution eliminates the need for dependencies on front-end frameworks like `npm`, `React`/`Vue`, or complex build tools such as `webpack`/`vite`. It truly embodies the essence of Web technology. You can get started effortlessly, just like manipulating native `div` tags, immediately experiencing the purity and intuitiveness of the technology. This design not only simplifies project structure but also reduces the cost of learning and usage, enabling every developer to appreciate the native charm of Web technology.
-3. **Ultimate Modular Design**: Utilizing the principle of minimal modularization, we carefully dismantle large and complex systems or applications into extremely small, functionally independent, and easily reusable component units. This approach significantly enhances code maintainability, scalability, and reusability.
-4. **Fully Open-Source for Free Learning**: Our project fully adheres to the `MIT` open-source license, granting unrestricted access to all source code. This means you are free to access, learn from, reference, and even modify our code, whether for personal development or commercial applications. We firmly believe that open-source is a vital pathway for technological advancement and innovation.
-5. **Interactive and Comprehensive Documentation**: We provide detailed and highly interactive documentation, where all component examples are live and interactive. This allows you to directly experience the component functionality while reading, deepening your understanding and enabling quick hands-on learning. This design is aimed at providing you with the most intuitive and efficient learning experience possible.
-6. **Type-Checking Support**: Our development environment is fully built on `TypeScript`, equipped with comprehensive declaration files and type definitions, ensuring smooth integration for both `JavaScript` and `TypeScript` projects. With powerful type-checking capabilities, we significantly enhance code readability, maintainability, and project robustness, bringing unprecedented convenience and peace of mind to development work.
-7. **Enhanced Durability and Stability**: Our solution offers exceptional stability, eliminating concerns about disruptive updates encountered during version upgrades, such as `React` from version `15` to `16` (with `fiber`) or `Vue` from version `2` to `3` (with `hooks`). We ensure that your components won't be forced into unnecessary updates or redevelopments, thus avoiding potential project interruptions and additional workloads. This translates into a continuous and hassle-free project operation.
+1. **Cross-Framework Compatibility**: Works seamlessly with React, Vue, Preact, SolidJS, Svelte, and more. Integrates with any JavaScript project following W3C standards.
+2. **Pure Native Experience**: No need for npm, React/Vue, or build tools. Easy to start, like using native div tags, simplifying structure and reducing learning costs.
+3. **Modular Design**: Breaks systems into small, reusable components for enhanced maintainability and scalability.
+4. **Open-Source**: Licensed under MIT, providing free access to all source code for personal or commercial use.
+5. **Interactive Documentation**: Offers detailed, interactive documentation with live examples for efficient learning.
+6. **Type-Checking**: Built on TypeScript with full type support, ensuring robust and maintainable code.
+7. **Stability and Durability**: Provides exceptional stability, avoiding disruptive updates and ensuring continuous project operation.
 
 ## Situation
 
@@ -57,12 +57,6 @@ document.body.appendChild(Button);
 
 ### 3.`jsx`
 
-Because `react` synthetic events, in order to more convenient to use, by `react` higher-order components encapsulation [ranui](https://www.npmjs.com/package/ranui), Output the [@ranui/react](https://www.npmjs.com/package/@ranui/react)
-
-In `react`, use the [@ranui/react](https://www.npmjs.com/package/@ranui/react) will be more smooth, by higher-order functions after package, and `react` ecosystem.
-
-[ranui](https://www.npmjs.com/package/ranui), however, still can be in any `js` or `ts` in use.
-
 ```jsx
 import 'ranui';
 const App = () => {
@@ -86,12 +80,6 @@ import 'ranui';
 ```
 
 ### 5.`tsx`
-
-Because `react` synthetic events, in order to more convenient to use, by `react` higher-order components encapsulation [ranui](https://www.npmjs.com/package/ranui), Output the [@ranui/react](https://www.npmjs.com/package/@ranui/react)
-
-In `react`, use the [@ranui/react](https://www.npmjs.com/package/@ranui/react) will be more smooth, by higher-order functions after package, and `react` ecosystem.
-
-[ranui](https://www.npmjs.com/package/ranui), however, still can be in any `js` or `ts` in use.
 
 ```tsx
 // react 18
@@ -126,29 +114,6 @@ const FilePreview = () => {
     </div>
   );
 };
-```
-
-jsx defines the types of all HTML-native components in TypeScript. The type 'web component' is not in the jsx definition. You need to add it manually. Otherwise there is a type problem, but it actually works.
-
-```ts
-// typings.d.ts
-interface RButton {
-  type?: string;
-  onClick?: React.MouseEventHandler<HTMLDivElement> | undefined;
-}
-
-interface RPreview {
-  src?: string | Blob | ArrayBuffer;
-  onClick?: React.MouseEventHandler<HTMLDivElement> | undefined;
-  ref?: React.MutableRefObject<HTMLDivElement | null>;
-}
-
-declare namespace JSX {
-  interface IntrinsicElements {
-    'r-preview': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & RPreview;
-    'r-button': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & RButton;
-  }
-}
 ```
 
 ## Import
@@ -267,6 +232,14 @@ import 'ranui';
   <r-option value="186">Tom</r-option>
   <r-option value="187">Lucy</r-option>
 </r-select>
+
+- `Loading`
+
+<r-loading name="circle-fold"></r-loading>
+
+- `math`
+
+<r-math latex="x = {-b \pm \sqrt{b^2-4ac} \over 2a}"></r-math>
 
 ## Event
 
