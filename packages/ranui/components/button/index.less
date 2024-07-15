@@ -33,13 +33,6 @@
     }
   }
 
-  &(:not([disabled]):hover) {
-    .ran-btn-content {
-      border-color: var(--ran-btn-content-hover-border-color, #1890ff);
-      color: var(--ran-btn-content-hover-color, #1890ff);
-    }
-  }
-
   &([type="primary"]) {
     .ran-btn-content {
       background-color: var(--ran-btn-content-background-color, #1890ff);
@@ -54,10 +47,28 @@
     }
   }
 
-  &([type="primary"]:not([disabled]):hover) {
-    .ran-btn-content {
-      background-color: var(--ran-btn-content-hover-background-color, #40a9ff);
-      color: var(--ran-btn-content-hover-color, #fff);
+  /* 媒体查询，针对屏幕宽度大于或等于 1024px 的设备（这里假设这是电脑屏幕的最小宽度） */
+  @media (min-width: 1024px) {
+    &(:not([disabled]):hover) {
+      .ran-btn-content {
+        border-color: var(--ran-btn-content-hover-border-color, #1890ff);
+        color: var(--ran-btn-content-hover-color, #1890ff);
+      }
+    }
+
+    &([type="primary"]:not([disabled]):hover) {
+      .ran-btn-content {
+        background-color: var(--ran-btn-content-hover-background-color, #40a9ff);
+        color: var(--ran-btn-content-hover-color, #fff);
+      }
+    }
+
+    &([type="warning"]:not([disabled]):hover) {
+      .ran-btn-content {
+        border-color: var(--ran-btn-content-warning-border-color, #ff4d4f);
+        background-color: var(--ran-btn-content-warning-background-color, #ff4d4f);
+        color: var(--ran-btn-content-warning-color, #fff);
+      }
     }
   }
 
@@ -72,14 +83,6 @@
   &([type="warning"]:not([disabled])) {
     .ran-btn::after {
       background-image: var(--ran-btn-after-background-image, radial-gradient(circle, #fff 10%, transparent 10.01%));
-    }
-  }
-
-  &([type="warning"]:not([disabled]):hover) {
-    .ran-btn-content {
-      border-color: var(--ran-btn-content-warning-border-color, #ff4d4f);
-      background-color: var(--ran-btn-content-warning-background-color, #ff4d4f);
-      color: var(--ran-btn-content-warning-color, #fff);
     }
   }
 
@@ -112,7 +115,7 @@
   @media (min-width: 1024px) {
     &(:not([disabled], [effect])) {
       .ran-btn::after {
-        content: '';
+        content: "";
         display: block;
         position: absolute;
         width: 100%;
@@ -125,9 +128,7 @@
         background-position: 50%;
         transform: translate(-50%, -50%) scale(10);
         opacity: 0;
-        transition:
-          transform 0.3s,
-          opacity 0.8s;
+        transition: transform 0.3s, opacity 0.8s;
       }
     }
   }
