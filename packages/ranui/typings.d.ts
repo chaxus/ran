@@ -108,105 +108,104 @@ declare interface Window {
   };
   Hls: HLS;
 }
-declare module 'react' {
-  namespace JSX {
-    interface IntrinsicElements {
-      'r-loading': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
-        name: NAME_AMP;
-      };
-      'r-math': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
-        latex: string;
-      };
-      'r-button': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
-        sheet: string;
-        disabled: boolean | string;
-        iconSize: string;
-        icon: string;
-        effect: boolean | string;
-      };
-      'r-checkbox': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
-        disabled: boolean | string;
-        checked: boolean | string;
-      };
-      'r-img': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
-        fallback: string;
-        src: string;
-      };
-      'r-input': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
-        value: string;
-        placeholder: string;
-        label: string;
-        status: string;
-        name: string;
-        icon: string;
-        prefix: string;
-        suffix: string;
-        type: string;
-        required: boolean | string;
-        disabled: boolean | string;
-        min: number | string;
-        max: number | string;
-        step: number | string;
-      };
-      'r-player': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
-        src: string;
-        debug: boolean | string;
-        volume: number | string;
-        currentTime: number | string;
-        playbackRate: number | string;
-      };
-      'r-popover': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
-        placement: string;
-        trigger: string;
-        getPopupContainerId: string;
-        arrow: boolean | string;
-      };
-      'r-preview': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
-        src: string;
-        closeable: boolean | string;
-      };
-      'r-progress': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
-        percent: number | string;
-        total: number | string;
-        type: string;
-        animation: string;
-        dot: boolean | string;
-      };
-      'r-radar': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
-        abilitys: string;
-        colorPolygon?: string;
-        colorLine?: string;
-        fillColor?: string;
-        strokeColor?: string;
-      };
-      'r-select': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
-        value: string;
-        defaultValue?: string;
-        showSearch?: boolean | string;
-        type?: string;
-        placement?: string;
-        sheet?: string;
-        getPopupContainerId?: string;
-        dropdownclass?: string;
-        trigger?: string;
-        trigger?: string;
-        disabled?: boolean | string;
-      };
-      'r-skeleton': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {};
-      'r-tab': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
-        label: string;
-        icon: string;
-        iconSize: string;
-        key: string;
-        disabled: boolean | string;
-        effect: boolean | string;
-      };
-      'r-tabs': React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
-        align: string;
-        type: string;
-        active: string;
-        effect: string;
-      };
-    }
+
+namespace JSX {
+  interface IntrinsicElements {
+    'r-loading': any & {
+      name: NAME_AMP;
+    };
+    'r-math': any & {
+      latex: string;
+    };
+    'r-button': any & {
+      sheet: string;
+      disabled: boolean | string;
+      iconSize: string;
+      icon: string;
+      effect: boolean | string;
+    };
+    'r-checkbox': any & {
+      disabled: boolean | string;
+      checked: boolean | string;
+    };
+    'r-img': any & {
+      fallback: string;
+      src: string;
+    };
+    'r-input': any & {
+      value: string;
+      placeholder: string;
+      label: string;
+      status: string;
+      name: string;
+      icon: string;
+      prefix: string;
+      suffix: string;
+      type: string;
+      required: boolean | string;
+      disabled: boolean | string;
+      min: number | string;
+      max: number | string;
+      step: number | string;
+    };
+    'r-player': any & {
+      src: string;
+      debug: boolean | string;
+      volume: number | string;
+      currentTime: number | string;
+      playbackRate: number | string;
+    };
+    'r-popover': any & {
+      placement: string;
+      trigger: string;
+      getPopupContainerId: string;
+      arrow: boolean | string;
+    };
+    'r-preview': any & {
+      src: string;
+      closeable: boolean | string;
+    };
+    'r-progress': any & {
+      percent: number | string;
+      total: number | string;
+      type: string;
+      animation: string;
+      dot: boolean | string;
+    };
+    'r-radar': any & {
+      abilitys: string;
+      colorPolygon?: string;
+      colorLine?: string;
+      fillColor?: string;
+      strokeColor?: string;
+    };
+    'r-select': any & {
+      value: string;
+      defaultValue?: string;
+      showSearch?: boolean | string;
+      type?: string;
+      placement?: string;
+      sheet?: string;
+      getPopupContainerId?: string;
+      dropdownclass?: string;
+      trigger?: string;
+      trigger?: string;
+      disabled?: boolean | string;
+    };
+    'r-skeleton': any;
+    'r-tab': any & {
+      label: string;
+      icon: string;
+      iconSize: string;
+      key: string;
+      disabled: boolean | string;
+      effect: boolean | string;
+    };
+    'r-tabs': any & {
+      align: string;
+      type: string;
+      active: string;
+      effect: string;
+    };
   }
 }

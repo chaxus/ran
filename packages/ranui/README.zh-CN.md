@@ -1,6 +1,6 @@
 # ranui
 
-UI Component library based on `Web Component`
+基于 `Web Components` 组件方案
 
 ---
 
@@ -10,57 +10,56 @@ UI Component library based on `Web Component`
 <a href="https://github.com/chaxus/ran"><img src="https://img.badgesize.io/https:/unpkg.com/ranui/dist/umd/shadowless/shadowless.umd.cjs?label=brotli&compression=brotli" alt="brotli"></a>
 <a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/badge/module%20formats-umd%2C%20esm-green.svg" alt="module formats: umd, esm"></a>
 
-**English** | [中文](./README.zh-CN.md)
+**中文** | [English](./README.md)
 
-## Feature
+## 特点
 
-1. **Cross-Framework Compatibility**: Works seamlessly with React, Vue, Preact, SolidJS, Svelte, and more. Integrates with any JavaScript project following W3C standards.
-2. **Pure Native Experience**: No need for npm, React/Vue, or build tools. Easy to start, like using native div tags, simplifying structure and reducing learning costs.
-3. **Modular Design**: Breaks systems into small, reusable components for enhanced maintainability and scalability.
-4. **Open-Source**: Licensed under MIT, providing free access to all source code for personal or commercial use.
-5. **Interactive Documentation**: Offers detailed, interactive documentation with live examples for efficient learning.
-6. **Type-Checking**: Built on TypeScript with full type support, ensuring robust and maintainable code.
-7. **Stability and Durability**: Framework independent (React/vue), avoid disruptive updates, and ensure continuous project operation.
+1. **跨框架兼容：** 与 React, Vue, Preact, SolidJS, Svelte 等兼容。可以和遵循 W3C 标准的任何 JavaScript 项目集成。
+2. **原生体验：** 易于入门，像使用本地 div 标签，简化项目大小和减少学习成本。
+3. **模块化设计：** 可选导入和全量导入，以增强可维护性和可伸缩性。
+4. **交互式丰富文档：** 提供详细的交互式文档，并附有有效的示例子。
+5. **支持类型校验：** 基于 TypeScript 构建，具有类型支持，确保代码的健壮性和可维护性。
+6. **持久和稳定：** 与框架 (React/vue) 无关，避免破坏性的更新，并确保持续的项目运行。
 
-## Install
+## 安装
 
-Using npm:
+使用 npm:
 
 ```console
 npm install ranui --save
 ```
 
-## Document and Example
+## 文档和示例
 
-[See components and use examples](https://chaxus.github.io/ran/src/ranui/)
+[See components and use examples](https://chaxus.github.io/ran/cn/src/ranui/)
 
-## Import
+## 引入方式
 
-Support for on-demand import, which can reduce the size of loaded js
+支持按需导入，以显著减少包体积大小
 
 ```js
 import 'ranui/button';
 ```
 
-If there is a style problem, you can import the style manually
+如果遇到样式问题，可以选择手动导入样式文件
 
 ```js
 import 'ranui/style';
 ```
 
-If there is a type problem, you can manually import the type
+如果遇到类型问题，可以选择手动导入类型文件
 
 ```ts
 import 'ranui/types';
 ```
 
-Or
+或者
 
 ```ts
 import 'ranui/dist/typings';
 ```
 
-Support global import
+也支持全量导入
 
 ```ts
 import 'ranui';
@@ -72,7 +71,7 @@ import 'ranui';
 import 'ranui';
 ```
 
-Or
+或者
 
 ```js
 import 'ranui/button';
@@ -84,13 +83,13 @@ import 'ranui/button';
 <script src="./ranui/dist/umd/index.umd.cjs"></script>
 ```
 
-## Usage
+## 使用方式
 
-It is based on the `Web Component`, you can use it without focusing on the framework.
+它是基于`Web Components`的组件，你可以不用关注框架就可以使用它。
 
-In most cases, you can use it just like a native `div` tag
+在大多数情况下，您可以像使用本地 `div` 标签一样使用它
 
-Here are some examples:
+下面是一些例子：
 
 - html
 - js
@@ -180,15 +179,11 @@ const FilePreview = () => {
 };
 ```
 
-## Contributors
+## 贡献者
 
 <a href="https://github.com/chaxus/ran/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=chaxus/ran" />
 </a>
-
-## Visitors
-
-![](http://profile-counter.glitch.me/chaxus-ranui/count.svg)
 
 ## Meta
 
