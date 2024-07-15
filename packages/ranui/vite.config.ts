@@ -91,12 +91,6 @@ export const es: BuildOptions = {
       shadowless: resolve(__dirname, 'shadowless.ts'),
     },
     fileName: (_: string, name: string): string => {
-      if (name.includes('components')) {
-        return `components/${name}/index.js`;
-      }
-      if (name.includes('shadowless')) {
-        return `shadowless/${name}/index.js`;
-      }
       return `${name}.js`;
     },
     formats: ['es'],

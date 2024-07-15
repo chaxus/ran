@@ -6,6 +6,7 @@
     "moduleResolution": "bundler",
     "esModuleInterop": true,
     "target": "ESNext",
+    "declaration": true,
     "outDir": "dist",
     "types": ["vite/client", "./typings.d.ts"],
     "forceConsistentCasingInFileNames": true,
