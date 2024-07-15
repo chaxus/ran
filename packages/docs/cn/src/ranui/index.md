@@ -2,40 +2,92 @@
 
 基于 `Web Components`开发方案
 
-## Feature 特点
+## 特点
 
-1. **高度跨框架兼容**: 能够轻松适配多种主流前端框架，包括`React`、`Vue`、`Preact`、`SolidJS`、`Svelte`等，甚至任何基于`JavaScript`并遵循`W3C`标准的项目也能无缝集成。无论您的技术栈如何选择，我们都能提供稳定且一致的支持。
-2. **原生纯粹的体验**: 无需依赖`npm`、`React/Vue`等前端框架，也无需`webpack/vite`等复杂的构建工具，真正回归`Web`技术的最本质。您可以像操作原生`div`标签一样轻松上手，即刻感受技术的纯粹与直观。这样的设计不仅简化了项目的结构，更降低了学习和使用的成本，让每一个开发者都能体验到`Web`技术的原生魅力。
-3. **极致模块化设计**: 采用最小模块化原则，将庞大复杂的系统或应用程序精心拆解为尺寸极小、功能独立且易于复用的组件单元。有助于提高代码的可维护性、可扩展性和可重用性
-4. **全面开源自由学习**: 项目完全遵循`MIT`开源协议，所有源代码毫无保留地对外开放。这意味着可以自由地访问、学习、参考甚至修改我们的代码，无论是为了个人提升还是商业应用，我们都为您提供了一个开放、透明的平台。坚信，**开源是促进技术进步和创新的重要途径**。
-5. **交互式丰富文档**: 提供详尽且互动性强的文档，其中所有组件实例均可进行实时交互，让您在阅读的同时能够直接体验组件功能，加深理解并快速上手。这样的设计旨在为您提供最直观、最高效的学习体验。
-6. **支持类型校验**: 开发环境完全基于`TypeScript`构建，配备了完整的声明文件和类型定义，确保无论是`JavaScript`还是`TypeScript`项目都能得到顺畅的集成。通过强大的类型检查功能，我们极大地提升了代码的可读性、可维护性，以及项目的稳健性，为开发工作带来前所未有的便捷与安心。
-7. **更加持久和稳定**：具备出色的稳定性，无需担忧类似于`React`从`15`版升级到`16`版（`fiber`），或`Vue`从`2`版升级到`3`版时（`hooks`）可能遭遇的破坏性更新问题。我们确保您的组件不会因此被迫进行不必要的更新或重新开发，从而避免了潜在的项目中断和额外工作量。意味着选择了持续、无忧的项目运行。
+1. **跨框架兼容：** 与 React, Vue, Preact, SolidJS, Svelte 等兼容。可以和遵循 W3C 标准的任何 JavaScript 项目集成。
+2. **原生体验：** 易于入门，像使用本地 div 标签，简化项目大小和减少学习成本。
+3. **模块化设计：** 可选导入和全量导入，以增强可维护性和可伸缩性。
+4. **交互式丰富文档：** 提供详细的交互式文档，并附有有效的示例子。
+5. **支持类型校验：** 基于 TypeScript 构建，具有类型支持，确保代码的健壮性和可维护性。
+6. **持久和稳定：** 与框架 (React/vue) 无关，避免破坏性的更新，并确保持续的项目运行。
 
-## Situation 项目情况
+## 安装
 
-<a style="display:inline-block;margin-left: 4px;" href="https://github.com/chaxus/ran"><img src="https://img.shields.io/github/actions/workflow/status/chaxus/ran/ci.yml" alt="Build Status"></a>
-<a style="display:inline-block;margin-left: 4px;" href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/v/ranui.svg" alt="npm-v"></a>
-<a style="display:inline-block;margin-left: 4px;" href="https://github.com/chaxus/ran"><img src="https://img.shields.io/npm/dt/ranui.svg" alt="npm-d"></a>
-<a style="display:inline-block;margin-left: 4px;" href="https://github.com/chaxus/ran"><img src="https://img.badgesize.io/https:/unpkg.com/ranui/dist/umd/shadowless/shadowless.umd.cjs?label=brotli&compression=brotli" alt="brotli"></a>
-<a style="display:inline-block;margin-left: 4px;" href="https://github.com/chaxus/ran"><img src="https://img.shields.io/badge/module%20formats-umd%2C%20esm-green.svg" alt="module formats: umd, esm"></a>
+使用 npm:
 
-- `git`：<a href="https://github.com/chaxus/ran/tree/main/packages/ranui">`https://github.com/chaxus/ran/tree/main/packages/ranui`</a>
-- `npm`：<a href="https://www.npmjs.com/package/ranui">`https://www.npmjs.com/package/ranui`</a>
+```console
+npm install ranui --save
+```
 
-## Usage 使用
+## 文档和示例
 
-大多数情况都可以像原生的 `div` 标签一样使用。
+[See components and use examples](https://chaxus.github.io/ran/cn/src/ranui/)
 
-接下来是一些使用例子
+## 引入方式
 
-1. `html`
-2. `js`
-3. `jsx`
-4. `vue`
-5. `tsx`
+支持按需导入，以显著减少包体积大小
 
-### 1.`html`
+```js
+import 'ranui/button';
+```
+
+如果遇到样式问题，可以选择手动导入样式文件
+
+```js
+import 'ranui/style';
+```
+
+如果遇到类型问题，可以选择手动导入类型文件
+
+```ts
+import 'ranui/types';
+```
+
+或者
+
+```ts
+import 'ranui/dist/typings';
+```
+
+也支持全量导入
+
+```ts
+import 'ranui';
+```
+
+- ES module
+
+```js
+import 'ranui';
+```
+
+或者
+
+```js
+import 'ranui/button';
+```
+
+- UMD, IIFE, CJS
+
+```html
+<script src="./ranui/dist/umd/index.umd.cjs"></script>
+```
+
+## 使用方式
+
+它是基于`Web Components`的组件，你可以不用关注框架就可以使用它。
+
+在大多数情况下，您可以像使用本地 `div` 标签一样使用它
+
+下面是一些例子：
+
+- html
+- js
+- jsx
+- vue
+- tsx
+
+### html
 
 ```html
 <script src="./ranui/dist/umd/index.umd.cjs"></script>
@@ -45,7 +97,7 @@
 </body>
 ```
 
-### 2.`js`
+### js
 
 ```js
 import 'ranui';
@@ -55,10 +107,11 @@ Button.appendChild('this is button text');
 document.body.appendChild(Button);
 ```
 
-### 3.`jsx`
+### jsx
 
 ```jsx
 import 'ranui';
+
 const App = () => {
   return (
     <>
@@ -68,18 +121,18 @@ const App = () => {
 };
 ```
 
-### 4.`vue`
+### vue
 
 ```vue
 <template>
-  <r-button>Button</r-button>
+  <r-button></r-button>
 </template>
 <script>
 import 'ranui';
 </script>
 ```
 
-### 5.`tsx`
+### tsx
 
 ```tsx
 // react 18
@@ -114,35 +167,6 @@ const FilePreview = () => {
     </div>
   );
 };
-```
-
-## Import 导入方式
-
-支持按需引入
-
-```js
-import 'ranui/button';
-```
-
-对于一些全局展示的组件，比如 `preview` 和 `message`，需要加载一些额外的样式
-
-```js
-import 'ranui/preview';
-import 'ranui/style';
-```
-
-也可以全局导入，更加方便，这样什么都不用考虑了，梭哈完事。
-
-- `ES module`
-
-```js
-import 'ranui';
-```
-
-- `UMD`, `IIFE`, `CJS`
-
-```html
-<script src="./ranui/dist/umd/index.umd.cjs"></script>
 ```
 
 ## Overview 组件总览

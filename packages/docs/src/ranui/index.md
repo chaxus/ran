@@ -124,11 +124,22 @@ Support for on-demand import
 import 'ranui/button';
 ```
 
-For some globally displayed components, such as preview and message, additional styles need to be loaded
+If there is a style problem, you can import the style manually
 
 ```js
-import 'ranui/preview';
 import 'ranui/style';
+```
+
+If there is a type problem, you can manually import the type
+
+```ts
+import 'ranui/types';
+```
+
+Or
+
+```ts
+import 'ranui/dist/typings';
 ```
 
 It can also be imported globally, which is more convenient, so that there is no need to consider anything, so that it is done.
