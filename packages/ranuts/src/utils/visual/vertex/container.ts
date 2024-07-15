@@ -1,5 +1,5 @@
 import { Vertex } from '@/utils/visual/vertex/vertex';
-import type { CanvasRenderer } from '@/utils/visual/render';
+import type { CanvasRenderer } from '@/utils/visual/render/canvasRenderer';
 import { Transform } from '@/utils/visual/math';
 import type { Point } from '@/utils/visual/vertex/point';
 

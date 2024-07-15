@@ -1,4 +1,4 @@
-import type { Renderer } from '@/utils/visual/render';
+import type { Renderer } from '@/utils/visual/render/render';
 import { getRenderer } from '@/utils/visual/render';
 import { Container } from '@/utils/visual/vertex/container';
 import type { IApplicationOptions } from '@/utils/visual/types';

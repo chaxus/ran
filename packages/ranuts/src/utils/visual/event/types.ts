@@ -1,4 +1,5 @@
-import { Container, Point } from '@/utils/visual/vertex';
+import { Point } from '@/utils/visual/vertex/point';
+import { Container } from '@/utils/visual/vertex/container';
 
 export enum EventPhase {
   NONE = 0,

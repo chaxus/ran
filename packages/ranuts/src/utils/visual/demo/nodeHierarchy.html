@@ -1,47 +1,45 @@
 <!doctype html>
 <html lang="en">
+  <head>
+    <link rel="icon" href="data:;" />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>node and hierarchy</title>
+    <script src="../index.ts" type="module"></script>
+  </head>
 
-<head>
-  <link rel="icon" href="data:;" />
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>node and hierarchy</title>
-  <script src="../index.ts" type="module"></script>
-</head>
+  <body>
+    <div id="app"></div>
+    <script>
+      const app = new Application();
+      const blackGraphic = new Graphics();
+      blackGraphic.beginFill('black');
+      blackGraphic.drawRect(0, 0, 300, 300);
 
-<body>
-  <div id="app"></div>
-  <script>
-    const app = new Application()
-    const blackGraphic = new Graphics()
-    blackGraphic.beginFill('black')
-    blackGraphic.drawRect(0, 0, 300, 300)
+      const redGraphic = new Graphics();
+      redGraphic.beginFill('red');
+      redGraphic.drawRect(0, 0, 200, 200);
 
-    const redGraphic = new Graphics()
-    redGraphic.beginFill('red')
-    redGraphic.drawRect(0, 0, 200, 200)
+      const container1 = new Container();
+      container1.addChild(blackGraphic);
+      container1.addChild(redGraphic);
 
-    const container1 = new Container()
-    container1.addChild(blackGraphic)
-    container1.addChild(redGraphic)
+      const container2 = new Container();
+      container2.addChild(container1);
 
-    const container2 = new Container()
-    container2.addChild(container1)
+      const greenGraphic = new Graphics();
+      greenGraphic.beginFill('green');
+      greenGraphic.drawRect(150, 0, 180, 180);
 
-    const greenGraphic = new Graphics()
-    greenGraphic.beginFill('green')
-    greenGraphic.drawRect(150, 0, 180, 180)
+      container2.addChild(greenGraphic);
 
-    container2.addChild(greenGraphic)
+      const yellowGraphic = new Graphics();
+      yellowGraphic.beginFill('yellow');
+      yellowGraphic.drawRect(0, 0, 250, 150);
 
-    const yellowGraphic = new Graphics()
-    yellowGraphic.beginFill('yellow')
-    yellowGraphic.drawRect(0, 0, 250, 150)
-
-    app.stage.addChild(container2)
-    app.stage.addChild(yellowGraphic)
-  </script>
-</body>
-
+      app.stage.addChild(container2);
+      app.stage.addChild(yellowGraphic);
+    </script>
+  </body>
 </html>
