@@ -85,10 +85,10 @@ export class Dropdown extends (HTMLElementSSR()!) {
   connectedCallback(): void {
     this.handlerTransit();
     this.handlerArrow();
-    this.addEventListener('click', this.stopPropagation);
+    // this.addEventListener('click', this.stopPropagation);
   }
   disconnectedCallback(): void {
-    this.removeEventListener('click', this.stopPropagation);
+    // this.removeEventListener('click', this.stopPropagation);
   }
   attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     if (name === 'transit' && newValue) {

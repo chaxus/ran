@@ -238,7 +238,7 @@ import 'ranui';
 
 - `Select`
 
- <r-select style="width: 120px; height: 40px" disabled defaultValue="185">
+ <r-select style="width: 120px; height: 40px" defaultValue="185">
       <r-option value="185">Mike</r-option>
       <r-option value="186">Tom</r-option>
       <r-option value="187">Lucy</r-option>
