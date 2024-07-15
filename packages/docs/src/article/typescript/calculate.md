@@ -143,7 +143,7 @@ type Divide<Num1 extends number, Num2 extends number, CountArr extends unknown[]
 
 类型参数 CountArr 是用来记录减了几次的累加数组。
 
-如果 Num1 减到了 0 ，那么这时候减了几次就是除法结果，也就是 CountArr['length']。
+如果 Num1 减到了 0，那么这时候减了几次就是除法结果，也就是 CountArr['length']。
 
 否则继续递归的减，让 Num1 减去 Num2，并且 CountArr 多加一个元素代表又减了一次。
 
@@ -213,7 +213,7 @@ type GreaterThan<Num1 extends number, Num2 extends number, CountArr extends unkn
 
 Fibonacci 数列是 1、1、2、3、5、8、13、21、34、…… 这样的数列，有当前的数是前两个数的和的规律。
 
-F(0) = 1，F(1) = 1, F(n) = F(n - 1) + F(n - 2)（n ≥ 2，n ∈ N\*）
+F(0) = 1, F(1) = 1, F(n) = F(n - 1) + F(n - 2)(n ≥ 2, n ∈ N\*)
 
 也就是递归的加法，在 TypeScript 类型编程里用构造数组来实现这种加法：
 

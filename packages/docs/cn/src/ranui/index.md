@@ -247,11 +247,11 @@ const FilePreview = () => {
 
 - `Select`
 
-<r-select style="width: 120px; height: 40px" action="click,hover">
-<r-option value="185">Mike</r-option>
-<r-option value="186">Tom</r-option>
-<r-option value="187">Lucy</r-option>
-</r-select>
+ <r-select style="width: 120px; height: 40px" disabled defaultValue="185">
+      <r-option value="185">Mike</r-option>
+      <r-option value="186">Tom</r-option>
+      <r-option value="187">Lucy</r-option>
+    </r-select>
 
 - `Loading`
 

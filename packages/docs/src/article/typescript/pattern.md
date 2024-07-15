@@ -52,7 +52,7 @@ type GetFirst<Arr extends unknown[]> = Arr extends [infer First, ...unknown[]] ?
 
 类型参数 Arr 通过 extends 约束为只能是数组类型，数组元素是 unkown 也就是可以是任何值。
 
-> any 和 unknown 的区别： any 和 unknown 都代表任意类型，但是 unknown 只能接收任意类型的值，而 any 除了可以接收任意类型的值，也可以赋值给任意类型（除了 never）。类型体操中经常用 unknown 接受和匹配任何类型，而很少把任何类型赋值给某个类型变量。
+> any 和 unknown 的区别：any 和 unknown 都代表任意类型，但是 unknown 只能接收任意类型的值，而 any 除了可以接收任意类型的值，也可以赋值给任意类型（除了 never）。类型体操中经常用 unknown 接受和匹配任何类型，而很少把任何类型赋值给某个类型变量。
 
 对 Arr 做模式匹配，把我们要提取的第一个元素的类型放到通过 infer 声明的 First 局部变量里，后面的元素可以是任何类型，用 unknown 接收，然后把局部变量 First 返回。
 
@@ -285,7 +285,7 @@ const dong = new Dong();
 dong.hello();
 ```
 
-用对象.方法名的方式调用的时候，this 就指向那个对象。
+用对象。方法名的方式调用的时候，this 就指向那个对象。
 
 但是方法也可以用 call 或者 apply 调用：
 
@@ -380,7 +380,7 @@ type GetInstanceType<ConstructorType extends new (...args: any) => any> = Constr
 
 用 ConstructorType 匹配一个模式类型，提取返回的实例类型到 infer 声明的局部变量 InstanceType 里，返回 InstanceType。
 
-这样就能取出构造器对应的实例类型:
+这样就能取出构造器对应的实例类型：
 
 ```ts
 interface PersonConstructor {
