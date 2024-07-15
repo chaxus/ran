@@ -73,6 +73,9 @@ export class Popover extends (HTMLElementSSR()!) {
   set getPopupContainerId(value: string) {
     this.setAttribute('getPopupContainerId', value);
   }
+  stopPropagation = (e: Event): void => {
+    e.stopPropagation();
+  };
   createContent = (content: HTMLCollection): void => {
     if (!content) return;
     if (!this.popoverContent) {
@@ -81,6 +84,7 @@ export class Popover extends (HTMLElementSSR()!) {
         .setAttribute('class', 'ran-popover-dropdown')
         .setStyle('display', 'none')
         .setStyle('position', 'absolute').element;
+      this.popoverContent?.addEventListener('click', this.stopPropagation);
       this.popoverContent && div.appendChild(this.popoverContent);
       if (this.trigger.includes('hover') && !isMobile()) {
         this.popoverContent?.addEventListener('mouseleave', this.blur);

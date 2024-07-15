@@ -109,8 +109,6 @@ declare interface Window {
   Hls: HLS;
 }
 
-
-
 namespace JSX {
   interface IntrinsicElements {
     'r-loading': any & {
