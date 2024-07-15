@@ -1,6 +1,6 @@
 {
   "name": "@ranui/react",
-  "version": "0.1.5-alpha.1",
+  "version": "0.1.5-alpha.2",
   "description": "UI Component library based on `Web Component`",
   "main": "dist/umd/index.umd.cjs",
   "module": "dist/index.js",
@@ -18,7 +18,7 @@
   "author": "chaxus",
   "license": "MIT",
   "engines": {
-    "node": "^18.0.0 || >=20.0.0"
+    "node": "^16.20.2 || >=18.0.0"
   },
   "scripts": {
     "dev": "vite",

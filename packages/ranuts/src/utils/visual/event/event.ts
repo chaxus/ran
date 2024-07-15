@@ -1,6 +1,6 @@
 import { FederatedMouseEvent } from '@/utils/visual/event/types';
 import { EventBoundary } from '@/utils/visual/event/boundary';
-import type { Container } from '@/utils/visual/vertex';
+import type { Container } from '@/utils/visual/vertex/container';
 import type { FederatedEventMap } from '@/utils/visual/event/types';
 
 export class EventSystem {
