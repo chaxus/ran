@@ -19,10 +19,6 @@
 npm install ranui --save
 ```
 
-## 文档和示例
-
-[See components and use examples](https://chaxus.github.io/ran/cn/src/ranui/)
-
 ## 引入方式
 
 支持按需导入，以显著减少包体积大小

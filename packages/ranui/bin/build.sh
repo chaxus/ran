@@ -25,7 +25,6 @@ $bin/vite build -c ./build/config.es.ts
 # TODO: splite bundle
 $bin/vite build -c ./build/config.umd.ts
 $bin/vite build -c ./build/config.sha.ts
-
 cp tsconfig.json ./dist
 cp typings.d.ts ./dist
 
