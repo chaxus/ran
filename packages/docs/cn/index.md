@@ -15,7 +15,7 @@ hero:
       text: 更多详情
       link: https://github.com/chaxus/ran
     - theme: alt
-      text: 访问我的GitHub
+      text: 访问我的 GitHub
       link: https://github.com/chaxus/ran
 features:
   - icon: ⚡️

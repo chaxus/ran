@@ -51,11 +51,11 @@ A design pattern generally contains elements such as the pattern name, problem, 
   interface NotebookComputer extends Computer {}
   ```
 
-## I、UML class diagram
+## I, UML class diagram
 
 Each pattern has a corresponding object structure diagram, and in order to show the details of the interaction between objects, sometimes a 'UML' diagram is used to show how it works. Here will not be the various elements of 'UML' mentioned, just want to talk about the relationship between the classes in the class diagram, can understand the meaning of the lines and arrows between the classes in the class diagram, it is enough to deal with daily work and communication. At the same time, we should be able to match the meaning of the class diagram to the final code. With this knowledge, there is no problem looking at the design pattern structure diagram in the later sections.
 
-<!-- 本文中大部分是 UML 类图，也有个别简易流程图。由于文中部分模式并未配图，你可以在[这里](../../assets/article/designPattern/UML/创建型/单例.jpg)查看我在网络上收集的完整 23 种设计模式 UML 类图。 -->
+<!-- 本文中大部分是 UML 类图，也有个别简易流程图。由于文中部分模式并未配图，你可以在 [这里](../../assets/article/designPattern/UML/创建型/单例.jpg) 查看我在网络上收集的完整 23 种设计模式 UML 类图。 -->
 
 ### 1.1 inherit
 
@@ -396,7 +396,7 @@ const pepsiColaBox = PepsiColaFactory.createBox();
 
 ### 4.4 Singleton pattern
 
-> Singleton Pattern：The singleton pattern ensures that there is only one instance of a class and provides a full access point to it.
+> Singleton Pattern: The singleton pattern ensures that there is only one instance of a class and provides a full access point to it.
 
 ![](../../assets/article/designPattern/UML/创建型/单例.jpg)
 
@@ -429,7 +429,7 @@ Since there is no abstraction layer in the singleton pattern, singleton classes 
 
 ### 4.5 Builder Pattern
 
-> Builder Pattern：Also known as the creator pattern, it separates the construction of a complex object from its representation, allowing the same construction process to create different representations.
+> Builder Pattern: Also known as the creator pattern, it separates the construction of a complex object from its representation, allowing the same construction process to create different representations.
 
 The factory pattern is mainly for the creation of object instances or class clusters (abstract factories), concerned with the final output (creation) is what, not concerned with the creation process. The builder pattern is concerned with the entire process of creating the object, down to every detail of creating the object.
 
@@ -576,7 +576,7 @@ car.getModel();
 
 ### 5.1 Decorative pattern
 
-> Decorator Pattern：The design pattern that adds new functionality to an existing object without changing its structure is called the decorator pattern, which acts as a wrapper around an existing class.
+> Decorator Pattern: The design pattern that adds new functionality to an existing object without changing its structure is called the decorator pattern, which acts as a wrapper around an existing class.
 
 You can think of decorators as equipment purchased by game characters, such as heroes in LOL who start the game with only basic attack power and mana. However, after the purchase of equipment, you can enjoy the output bonus brought by the equipment when triggering attacks and skills. We can understand the purchase of equipment to give the hero's attack and skill related methods decorated.
 
@@ -622,7 +622,7 @@ function readonly(target, name, descriptor) {
 
 ### 5.2 外观模式
 
-> Facade Pattern：A facade pattern defines a high-level interface that provides a unified interface for a set of interfaces in a subsystem. It makes the subsystem easier to use, not only simplifying the interfaces in the class, but also decoupling the caller from the interface. Appearance mode, also known as facade mode, is a structural design mode.
+> Facade Pattern: A facade pattern defines a high-level interface that provides a unified interface for a set of interfaces in a subsystem. It makes the subsystem easier to use, not only simplifying the interfaces in the class, but also decoupling the caller from the interface. Appearance mode, also known as facade mode, is a structural design mode.
 
 ![](../../assets/article/designPattern/外观.png)
 
@@ -653,7 +653,7 @@ const addMyEvent = function (el, ev, fn) {
 
 ### 5.3 代理模式
 
-> Proxy Pattern：Provide a proxy for an object, and this proxy object controls access to the original object.
+> Proxy Pattern: Provide a proxy for an object, and this proxy object controls access to the original object.
 
 ![](../../assets/article/designPattern/代理.png)
 
@@ -713,7 +713,7 @@ this.response = Object.create(response);
 
 ### 5.4 Flyweight Pattern
 
-> Flyweight Pattern：The meta mode is a mode that optimizes program performance, essentially reducing the number of objects created. Using sharing technology to reuse a large number of fine-grained objects, reduce the program memory occupation, improve the performance of the program. Share metamode can be used when there are a large number of similar objects that occupy a large amount of memory. Most of the state in an object can be extrapolated to external state.
+> Flyweight Pattern: The meta mode is a mode that optimizes program performance, essentially reducing the number of objects created. Using sharing technology to reuse a large number of fine-grained objects, reduce the program memory occupation, improve the performance of the program. Share metamode can be used when there are a large number of similar objects that occupy a large amount of memory. Most of the state in an object can be extrapolated to external state.
 
 ![](../../assets/article/designPattern/享元.png)
 
@@ -775,7 +775,7 @@ const VipMusicService = {
 
 ### 5.5 Simple Factory Pattern
 
-> Simple Factory Pattern：Separate the abstract part from its implementation part so that they can both vary independently.
+> Simple Factory Pattern: Separate the abstract part from its implementation part so that they can both vary independently.
 
 ![](../../assets/article/designPattern/桥接.png)
 
@@ -852,7 +852,7 @@ man.init();
 
 ### 5.6 Adapter Pattern
 
-> Adapter Pattern：Adapter mode is used to solve the incompatibility of two interfaces, do not need to change the existing interface, through the packaging of a layer, to achieve normal cooperation between the two interfaces. When we try to call an interface of a module or object, but find that the format of the interface does not meet the current requirements, we can use the adapter pattern.
+> Adapter Pattern: Adapter mode is used to solve the incompatibility of two interfaces, do not need to change the existing interface, through the packaging of a layer, to achieve normal cooperation between the two interfaces. When we try to call an interface of a module or object, but find that the format of the interface does not meet the current requirements, we can use the adapter pattern.
 
 ![](../../assets/article/designPattern/适配器.png)
 
@@ -886,7 +886,7 @@ function addEvent(ele, event, callback) {
 
 ### 6.1 Chain of Responsibility Pattern
 
-> Chain of Responsibility Pattern：Avoid coupling the request sender with the receiver, make it possible for multiple objects to receive the request, connect those objects into a chain, and pass the request along the chain until an object handles it. The responsibility chain pattern is an object behavior pattern. Similar to dominoes, by requesting the first condition, subsequent conditions continue to be executed until a result is returned.
+> Chain of Responsibility Pattern: Avoid coupling the request sender with the receiver, make it possible for multiple objects to receive the request, connect those objects into a chain, and pass the request along the chain until an object handles it. The responsibility chain pattern is an object behavior pattern. Similar to dominoes, by requesting the first condition, subsequent conditions continue to be executed until a result is returned.
 
 ![](../../assets/article/designPattern/责任链.png)
 
@@ -955,7 +955,7 @@ Since a request has no clear recipient, there is no guarantee that it will be pr
 
 ### 6.2 Command Pattern
 
-> Command Pattern：Encapsulating a request as an object allows us to parameterize customers with different requests; Command mode is an object behavior mode, which is alias' Action 'mode or' Transaction 'mode.
+> Command Pattern: Encapsulating a request as an object allows us to parameterize customers with different requests; Command mode is an object behavior mode, which is alias' Action 'mode or' Transaction 'mode.
 
 The command mode consists of three roles:
 
@@ -1021,7 +1021,7 @@ client.invoke();
 
 ### 6.3 Interpreter Pattern
 
-> Interpreter Pattern：Define the grammar of a language and build an interpreter to interpret sentences in that language, where "language" means code that uses a specified format and syntax. The interpreter pattern is a kind of behavior pattern.
+> Interpreter Pattern: Define the grammar of a language and build an interpreter to interpret sentences in that language, where "language" means code that uses a specified format and syntax. The interpreter pattern is a kind of behavior pattern.
 
 ![](../../assets/article/designPattern/解释器.jpg)
 
@@ -1094,7 +1094,7 @@ console.log(context.sum);
 
 ### 6.4 Iterator Pattern
 
-> Iterator Pattern：A relatively simple pattern, most languages now have iterators built in, so that people don't think of it as a design pattern. Iterators don't just iterate over arrays; iterators can be aborted. Provides a way to access aggregate objects without exposing the internal representation of the object, which is alias a Cursor. The iterator pattern is an object behavior pattern.
+> Iterator Pattern: A relatively simple pattern, most languages now have iterators built in, so that people don't think of it as a design pattern. Iterators don't just iterate over arrays; iterators can be aborted. Provides a way to access aggregate objects without exposing the internal representation of the object, which is alias a Cursor. The iterator pattern is an object behavior pattern.
 
 ![](../../assets/article/designPattern/迭代器.png)
 
@@ -1129,7 +1129,7 @@ Because the iterator pattern separates the responsibility of storing data and tr
 
 ### 6.5 Mediator Pattern
 
-> Mediator Pattern：Objects communicate with each other through third-party intermediaries. Encapsulate a set of object interactions with a mediator, which allows objects to be loosely coupled without explicitly referring to each other, and can change their interactions independently. The mediator model, also known as the mediator model, is an object behavior model.
+> Mediator Pattern: Objects communicate with each other through third-party intermediaries. Encapsulate a set of object interactions with a mediator, which allows objects to be loosely coupled without explicitly referring to each other, and can change their interactions independently. The mediator model, also known as the mediator model, is an object behavior model.
 
 ![](../../assets/article/designPattern/中介者.png)
 
@@ -1203,7 +1203,7 @@ The inclusion of a large number of details about interactions between colleagues
 
 ### 6.6 Memento Pattern
 
-> Memento Pattern：Capture the internal state of an object, without breaking the encapsulation, and save that state outside the object for later use or for the object to revert to a previous state. It is an object behavior pattern that is alias Token.
+> Memento Pattern: Capture the internal state of an object, without breaking the encapsulation, and save that state outside the object for later use or for the object to revert to a previous state. It is an object behavior pattern that is alias Token.
 
 ![](../../assets/article/designPattern/UML/行为型/备忘录.jpg)
 
@@ -1243,7 +1243,7 @@ var Page = function () {
 
 ### 6.7 Observer Pattern
 
-> Observer Pattern：Define a one-to-many dependency relationship between objects so that each time an object's state changes, its dependent objects are notified and automatically updated. Aliases for the observer pattern include the 'Publish/Subscribe' pattern, the model-view (' Model/View ') pattern, the Source/Listener (' source/listener ') pattern, or the 'Dependents' pattern. The observer pattern is an object behavior pattern.
+> Observer Pattern: Define a one-to-many dependency relationship between objects so that each time an object's state changes, its dependent objects are notified and automatically updated. Aliases for the observer pattern include the 'Publish/Subscribe' pattern, the model-view (' Model/View ') pattern, the Source/Listener (' source/listener ') pattern, or the 'Dependents' pattern. The observer pattern is an object behavior pattern.
 
 ![](../../assets/article/designPattern/观察者.png)
 
@@ -1282,7 +1282,7 @@ If an observation target has many direct and indirect observers, it takes a lot 
 
 ### 6.8 State Pattern
 
-> State Pattern：By allowing an object to change its behavior when its internal state changes, the object appears to modify its class. Its alias is the state object (' Objects for States'), in fact, is to use an object or array to record a set of states, each state corresponds to an implementation, the implementation according to the state to run the implementation. The state pattern is an object behavior pattern.
+> State Pattern: By allowing an object to change its behavior when its internal state changes, the object appears to modify its class. Its alias is the state object (' Objects for States'), in fact, is to use an object or array to record a set of states, each state corresponds to an implementation, the implementation according to the state to run the implementation. The state pattern is an object behavior pattern.
 
 ![](../../assets/article/designPattern/状态.png)
 
@@ -1350,7 +1350,7 @@ new SuperMarry()
 
 ### 6.9 Strategy Pattern
 
-> Strategy Pattern：Define a list of algorithms, wrap them up, and be interchangeable. It is to extract and encapsulate seemingly unrelated code and reuse it to make it easier to understand and expand. It is commonly used in process judgment statements such as if judgment, switch enumeration, and data dictionary. Also known as the Policy model (' policy '). Policy pattern is an object behavior pattern.
+> Strategy Pattern: Define a list of algorithms, wrap them up, and be interchangeable. It is to extract and encapsulate seemingly unrelated code and reuse it to make it easier to understand and expand. It is commonly used in process judgment statements such as if judgment, switch enumeration, and data dictionary. Also known as the Policy model (' policy '). Policy pattern is an object behavior pattern.
 
 ![](../../assets/article/designPattern/策略.png)
 
@@ -1425,7 +1425,7 @@ var compileUtil = {
 
 ### 6.10 Template method pattern
 
-> Template method pattern ：Define the framework of an algorithm in an operation, while deferring some steps to subclasses. The template method pattern allows subclasses to redefine certain steps of an algorithm without changing its structure.
+> Template method pattern : Define the framework of an algorithm in an operation, while deferring some steps to subclasses. The template method pattern allows subclasses to redefine certain steps of an algorithm without changing its structure.
 
 ![](../../assets/article/designPattern/模板.png)
 

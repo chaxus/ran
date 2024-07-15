@@ -2,7 +2,7 @@
 
 类型编程主要的目的就是对类型做各种转换，那么如何对类型做修改呢？
 
-TypeScript 类型系统支持 3 种可以声明任意类型的变量： type、infer、类型参数。
+TypeScript 类型系统支持 3 种可以声明任意类型的变量：type、infer、类型参数。
 
 type 叫做类型别名，其实就是声明一个变量存储某个类型：
 
@@ -197,7 +197,7 @@ type DropSubStr<Str extends string, SubStr extends string> = Str extends `${infe
   : Str;
 ```
 
-类型参数 Str 是待处理的字符串， SubStr 是要删除的字符串，都通过 extends 约束为 string 类型。
+类型参数 Str 是待处理的字符串，SubStr 是要删除的字符串，都通过 extends 约束为 string 类型。
 
 通过模式匹配提取 SubStr 之前和之后的字符串到 infer 声明的局部变量 Prefix、Suffix 中。
 
@@ -213,7 +213,7 @@ type DropSubStr<Str extends string, SubStr extends string> = Str extends `${infe
 
 之前我们分别实现了参数和返回值的提取，那么重新构造就是用这些提取出的类型做下修改，构造一个新的类型即可。
 
-比如在已有的函数类型上添加一个参数:
+比如在已有的函数类型上添加一个参数：
 
 ```ts
 type AppendArgument<Func extends Function, Arg> = Func extends (...args: infer Args) => infer ReturnType
@@ -367,7 +367,7 @@ type ToRequired<T> = {
 };
 ```
 
-给索引类型 T 的索引去掉 ? 的修饰 ，其余保持不变。
+给索引类型 T 的索引去掉 ? 的修饰，其余保持不变。
 
 ### FilterByValueType
 

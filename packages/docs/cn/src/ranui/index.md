@@ -19,10 +19,6 @@
 npm install ranui --save
 ```
 
-## 文档和示例
-
-[See components and use examples](https://chaxus.github.io/ran/cn/src/ranui/)
-
 ## 引入方式
 
 支持按需导入，以显著减少包体积大小
@@ -251,11 +247,11 @@ const FilePreview = () => {
 
 - `Select`
 
-<r-select style="width: 120px; height: 40px" action="click,hover">
-<r-option value="185">Mike</r-option>
-<r-option value="186">Tom</r-option>
-<r-option value="187">Lucy</r-option>
-</r-select>
+ <r-select style="width: 120px; height: 40px" disabled defaultValue="185">
+      <r-option value="185">Mike</r-option>
+      <r-option value="186">Tom</r-option>
+      <r-option value="187">Lucy</r-option>
+    </r-select>
 
 - `Loading`
 

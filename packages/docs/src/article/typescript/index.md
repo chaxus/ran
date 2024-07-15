@@ -1,6 +1,6 @@
 # TypeScript 的类型系统
 
-## 一.类型是什么
+## 一。类型是什么
 
 类型具体点来说就是指 number、boolean、string 等基础类型和 Object、Function 等复合类型，它们是编程语言提供的对不同内容的抽象：
 
@@ -16,7 +16,7 @@
 
 两种类型检查各有优缺点。动态类型检查 在源码中不保留类型信息，对某个变量赋什么值、做什么操作都是允许的，写代码很灵活。但这也埋下了类型不安全的隐患，比如对 string 做了乘除，对 Date 对象调用了 exec 方法，这些都是运行时才能检查出来的错误。
 
-其中，最常见的错误应该是 “null is not an object”、“undefined is not a function” 之类的了，写代码时没发现类型不匹配，到了运行的时候才发现，就会有很多这种报错。
+其中，最常见的错误应该是“null is not an object”、“undefined is not a function”之类的了，写代码时没发现类型不匹配，到了运行的时候才发现，就会有很多这种报错。
 
 所以，动态类型虽然代码写起来简单，但代码中很容易藏着一些类型不匹配的隐患。
 
@@ -36,7 +36,7 @@
 
 所以，大型项目注定会用静态类型语言开发。
 
-## 二.类型系统的分类
+## 二。类型系统的分类
 
 ### 1.简单的类型系统
 
@@ -186,7 +186,7 @@ TypeScript 给 JavaScript 添加了一套静态类型系统，是为了保证类
 
 #### 协变（covariant）
 
-对具体成员的输出参数进行一次类型转换，且类型转换的准则是 “里氏替换原则”。
+对具体成员的输出参数进行一次类型转换，且类型转换的准则是“里氏替换原则”。
 
 其中协变是很好理解的，比如我们有两个 interface：
 
@@ -581,7 +581,7 @@ type MapType<T> = {
 
 因为索引类型（对象、class 等）可以用 string、number 和 symbol 作为 key，这里 keyof T 取出的索引就是 string | number | symbol 的联合类型，和 string 取交叉部分就只剩下 string 了。就像前面所说，交叉类型会把同一类型做合并，不同类型舍弃。
 
-## 四.判断类型的类型
+## 四。判断类型的类型
 
 ### IsAny
 
@@ -700,7 +700,7 @@ type len
 
 在 TypeScript 中有函数参数是有逆变的性质的，也就是如果参数可能是多个类型，参数类型会变成它们的交叉类型。
 
-所以联合转交叉可以这样实现 ：
+所以联合转交叉可以这样实现：
 
 ```ts
 type UnionToIntersection<U> = (U extends U ? (x: U) => unknown : never) extends (x: infer R) => unknown ? R : never;
