@@ -343,14 +343,14 @@ const FilePreview = () => {
 
 <r-progress percent="0.7" type="drag"></r-progress>
 <br />
-<r-progress percent="0.7" type="drag" style="--ran-progress-wrap:linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);"></r-progress>
+<r-progress percent="0.7" type="drag" style="--ran-progress-wrap-background:linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);"></r-progress>
 
 ```html
 <r-progress percent="0.7" type="drag"></r-progress>
 <r-progress
   percent="0.70"
   type="drag"
-  style="--ran-progress-wrap:linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);"
+  style="--ran-progress-wrap-background:linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);"
 ></r-progress>
 ```
 

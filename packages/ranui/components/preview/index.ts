@@ -23,7 +23,7 @@ interface requestUrlToArraybufferReturn extends BaseReturn {
 }
 
 async function Custom() {
-  if (typeof document !== 'undefined' && !customElements.get('r-preview') && !import.meta.env.SSR) {
+  if (typeof document !== 'undefined' && !customElements.get('r-preview')) {
     const { renderPptx } = await import('@/components/preview/pptx');
     const { renderDocx } = await import('@/components/preview/docx');
     const { renderPdf } = await import('@/components/preview/pdf');
