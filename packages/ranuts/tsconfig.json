@@ -6,7 +6,6 @@
     "esModuleInterop": true,
     "target": "ESNext",
     "moduleResolution": "bundler",
-    "types": ["./typings.d.ts"],
     "outDir": "dist",
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,

@@ -7,6 +7,30 @@
   padding: var(--ran-checkbox-host-padding, 0);
   box-sizing: var(--ran-checkbox-host-box-sizing, border-box);
   list-style: var(--ran-checkbox-host-list-style, none);
+  &([disabled]) {
+    .ran-checkbox-input {
+      cursor: var(--ran-checkbox-disabled-cursor, not-allowed);
+      pointer-events: var(--ran-checkbox-disabled-pointer-events, all);
+    }
+    opacity: var(--ran-checkbox-disabled-opacity, 0.6);
+    .ran-checkbox-inner {
+      background-color: var(--ran-checkbox-checked-background-color, #d9d9d9);
+      border: 1px solid #d9d9d9;
+      &::after {
+        cursor: not-allowed;
+        pointer-events: none;
+        opacity: var(--ran-checkbox-checked-after-opacity, 1);
+      }
+    }
+    .ran-checkbox-checked {
+      .ran-checkbox-inner {
+        background-color: var(--ran-checkbox-checked-background-color, #d9d9d9);
+        &::after {
+          opacity: var(--ran-checkbox-checked-after-opacity, 0);
+        }
+      }
+    }
+  }
 }
 .ran-checkbox {
   position: var(--ran-checkbox-position, relative);

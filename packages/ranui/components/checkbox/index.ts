@@ -1,6 +1,6 @@
-import { addClassToElement, removeClassToElement } from 'ranuts/utils';
+import { addClassToElement, create, removeClassToElement } from 'ranuts/utils';
+import type { Chain } from 'ranuts/utils';
 import { HTMLElementSSR, createCustomError, falseList } from '@/utils/index';
-import './index.less';
 
 interface Context {
   checked: boolean;
@@ -10,8 +10,10 @@ export class Checkbox extends (HTMLElementSSR()!) {
   checkInput: HTMLInputElement;
   checkInner: HTMLSpanElement;
   context: Context;
+  container: Chain;
+  _shadowDom: ShadowRoot;
   static get observedAttributes(): string[] {
-    return ['disabled', 'checked'];
+    return ['disabled', 'checked', 'value'];
   }
   constructor() {
     super();
@@ -20,6 +22,12 @@ export class Checkbox extends (HTMLElementSSR()!) {
     this.checkInput.setAttribute('type', 'checkbox');
     this.checkInner = document.createElement('span');
     this.checkInner.setAttribute('class', 'ran-checkbox-inner');
+    this.container = create('div')
+      .setAttribute('class', 'ran-checkbox')
+      .addChild([this.checkInput, this.checkInner]).element;
+    const shadowRoot = this.attachShadow({ mode: 'closed' });
+    this._shadowDom = shadowRoot;
+    shadowRoot.appendChild(this.container);
     this.context = {
       checked: false,
     };
@@ -29,6 +37,23 @@ export class Checkbox extends (HTMLElementSSR()!) {
   }
   set disabled(value: string) {
     this.setAttribute('disabled', value);
+  }
+  get value(): string {
+    const checked = this.getAttribute('value');
+    if (falseList.includes(checked)) {
+      this.context.checked = false;
+    }
+    return `${this.context.checked}`;
+  }
+  set value(value: string) {
+    if (falseList.includes(value)) {
+      this.setAttribute('value', 'false');
+      this.context.checked = false;
+    } else {
+      this.setAttribute('value', 'true');
+      this.context.checked = true;
+    }
+    this.updateChecked();
   }
   get checked(): string {
     const checked = this.getAttribute('checked');
@@ -50,15 +75,21 @@ export class Checkbox extends (HTMLElementSSR()!) {
   updateChecked = (): void => {
     const { checked } = this.context;
     if (checked) {
-      addClassToElement(this, 'ran-checkbox-checked');
+      this.setAttribute('checked', 'true');
+      this.setAttribute('value', 'true');
+      addClassToElement(this.container, 'ran-checkbox-checked');
     } else {
-      removeClassToElement(this, 'ran-checkbox-checked');
+      this.setAttribute('checked', 'false');
+      this.setAttribute('value', 'false');
+      removeClassToElement(this.container, 'ran-checkbox-checked');
     }
   };
   update = (): void => {
     this.updateChecked();
   };
   onChange = (): void => {
+    if (falseList.includes(this.disabled)) return;
+    if (this.hasAttribute('disabled')) return;
     const { checked } = this.context;
     this.context.checked = !checked;
     this.dispatchEvent(
@@ -71,15 +102,23 @@ export class Checkbox extends (HTMLElementSSR()!) {
     this.update();
   };
   connectedCallback(): void {
-    this.setAttribute('class', 'ran-checkbox');
-    this.appendChild(this.checkInput);
-    this.appendChild(this.checkInner);
     this.addEventListener('click', this.onChange);
   }
   disconnectCallback(): void {
     this.removeEventListener('click', this.onChange);
   }
-  attributeChangedCallback(name: string, oldValue: string, newValue: string): void {}
+  attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
+    if (oldValue !== newValue) {
+      if (name === 'checked') {
+        this.checked = newValue;
+        this.value = newValue;
+      }
+      if (name === 'value') {
+        this.checked = newValue;
+        this.value = newValue;
+      }
+    }
+  }
 }
 
 function Custom() {
