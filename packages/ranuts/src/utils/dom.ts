@@ -270,6 +270,15 @@ export class Chain {
     this.element.style.setProperty(name, value);
     return this;
   };
+  // 根据不同的子元素类型，添加元素
+  private addElementByType = (item: Chain | HTMLElement, parent: Element | DocumentFragment): void => {
+    if (item instanceof Chain) {
+      parent.appendChild(item.element);
+    }
+    if (item instanceof HTMLElement) {
+      parent.appendChild(item);
+    }
+  };
   /**
    * @description: 给当前元素添加子元素
    * @return {Chain}
@@ -277,10 +286,12 @@ export class Chain {
   public addChild = (child: Chain | Chain[]): Chain => {
     if (Array.isArray(child)) {
       const Fragment = document.createDocumentFragment();
-      child.forEach((item) => Fragment.appendChild(item.element));
+      child.forEach((item) => {
+        this.addElementByType(item, Fragment);
+      });
       this.element.appendChild(Fragment);
     } else {
-      this.element.appendChild(child.element);
+      this.addElementByType(child, this.element);
     }
     return this;
   };
