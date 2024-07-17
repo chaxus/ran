@@ -12,10 +12,10 @@ export abstract class Vertex extends SyncHook {
   public parent: Container | undefined = undefined; // 节点的父子关系
   public visible = true;
   public transform = new Transform();
-  public alpha = 1;
-  public worldAlpha = 1;
+  public alpha = 1; // 节点当前的透明度
+  public worldAlpha = 1; // 透明度会受到父节点的透明度影响，因此需要一个全局的透明度
   public hitArea: Shape | null = null;
-  public cursor: Cursor = 'auto';
+  public cursor: Cursor = 'auto'; // 鼠标样式
 
   get zIndex(): number {
     return this._zIndex;

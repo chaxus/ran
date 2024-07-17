@@ -6,9 +6,9 @@ export class Transform {
   public worldTransform = new Matrix(); // 当前节点相对于 canvas 视窗的线性变换
   public position: ObservablePoint; // 平移
   public scale: ObservablePoint; // 缩放
-  public pivot: ObservablePoint; // 对标 DOM 的 transform-origin
-  public skew: ObservablePoint; // 对标 DOM 的 skew
-  public _rotation = 0;
+  public pivot: ObservablePoint; // 对标 DOM 的 transform-origin，锚点的概念
+  public skew: ObservablePoint; // 对标 DOM 的 skew，斜切的概念
+  public _rotation = 0; // 旋转角度
   private transformMatrix: Matrix | null = null;
 
   public shouldUpdateLocalTransform = false;
@@ -27,6 +27,8 @@ export class Transform {
 
   set rotation(r: number) {
     this._rotation = r;
+    // 旋转角度发生变化，一定会影响到子元素，
+    // 所以要触发更新，通过 shouldUpdateLocalTransform 进行标识需要更新
     this.onChange();
   }
 
