@@ -17,7 +17,7 @@ Some commonly used functions and tools
 Using npm:
 
 ```console
-npm install ranuts --save
+npm install ranuts@latest --save
 ```
 
 ## Document
