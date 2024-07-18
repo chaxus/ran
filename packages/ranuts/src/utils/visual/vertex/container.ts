@@ -97,6 +97,10 @@ export class Container extends Vertex {
   // Container 类上挂载一个 containsPoint 函数，这个函数是用来判断某个点是否与当前类的实例产生了碰撞，Container 类的子类也会实现这个函数。
   // 由于 Container 自身没有可以碰撞的内容，所以它直接返回 false。
   public containsPoint(p: Point): boolean {
-    return false;
+    if (!this.hitArea) {
+      return false;
+    }
+
+    return this.hitArea.contains(p);
   }
 }

@@ -6,6 +6,7 @@ import { Fill } from '@/utils/visual/style/fill';
 import { Line } from '@/utils/visual/style/line';
 import { GraphicsGeometry } from '@/utils/visual/graphics/graphicsGeometry';
 import type { CanvasRenderer } from '@/utils/visual/render/canvasRenderer';
+import type { Point } from '@/utils/visual/vertex/point';
 
 // Graphics 类继承自 Container 类，表示绘制各种图形的容器
 export class Graphics extends Container {
@@ -13,9 +14,11 @@ export class Graphics extends Container {
   private _fillStyle = new Fill();
   private _geometry = new GraphicsGeometry();
   public currentPath: Polygon | null = null;
+  type: string;
 
   constructor() {
     super();
+    this.type = 'graphics';
   }
   protected drawShape(shape: Shape): Graphics {
     this._geometry.drawShape(shape, this._fillStyle.clone(), this._lineStyle.clone());
@@ -86,5 +89,13 @@ export class Graphics extends Container {
         }
       }
     }
+  }
+  public containsPoint(p: Point): boolean {
+    // 如果设置了 hitArea 则只判断 hitArea
+    if (this.hitArea) {
+      return this.hitArea.contains(p);
+    }
+
+    return this._geometry.containsPoint(p);
   }
 }

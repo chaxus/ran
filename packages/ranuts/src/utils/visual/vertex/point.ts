@@ -1,3 +1,4 @@
+// 设置普通的二维数据点
 export class Point {
   public x: number;
   public y: number;
@@ -14,7 +15,7 @@ export class Point {
     return new Point(this.x, this.y);
   };
 }
-
+// 当二维的数据点发生变化时，需要通知并执行回调函数
 export class ObservablePoint {
   private _x: number;
   private _y: number;
