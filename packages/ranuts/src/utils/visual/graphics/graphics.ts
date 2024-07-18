@@ -18,7 +18,7 @@ export class Graphics extends Container {
 
   constructor() {
     super();
-    this.type = 'graphics'
+    this.type = 'graphics';
   }
   protected drawShape(shape: Shape): Graphics {
     this._geometry.drawShape(shape, this._fillStyle.clone(), this._lineStyle.clone());
@@ -93,9 +93,9 @@ export class Graphics extends Container {
   public containsPoint(p: Point): boolean {
     // 如果设置了 hitArea 则只判断 hitArea
     if (this.hitArea) {
-      return this.hitArea.contains(p)
+      return this.hitArea.contains(p);
     }
 
-    return this._geometry.containsPoint(p)
+    return this._geometry.containsPoint(p);
   }
 }

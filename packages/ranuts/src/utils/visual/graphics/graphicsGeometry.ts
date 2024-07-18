@@ -20,15 +20,15 @@ export class GraphicsGeometry {
    */
   public containsPoint(p: Point): boolean {
     for (let i = 0; i < this.graphicsData.length; i++) {
-      const { shape, fillStyle } = this.graphicsData[i]
+      const { shape, fillStyle } = this.graphicsData[i];
       if (!fillStyle.visible) {
-        continue
+        continue;
       }
       if (shape.contains(p)) {
-        return true
+        return true;
       }
     }
 
-    return false
+    return false;
   }
 }

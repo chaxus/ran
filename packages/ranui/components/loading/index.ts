@@ -56,11 +56,13 @@ export class Loading extends (HTMLElementSSR()!) {
   rotateLoading = (): void => {
     const loading = document.createElement('div');
     loading.setAttribute('class', NAME_AMP.ROTATE);
+    loading.setAttribute('part', NAME_AMP.ROTATE);
     this.contain.appendChild(loading);
   };
   stretchLoading = (): void => {
     const loading = document.createElement('div');
     loading.setAttribute('class', NAME_AMP.STRETCH);
+    loading.setAttribute('part', NAME_AMP.STRETCH);
     Array(5)
       .fill(1)
       .forEach((_, i) => {
@@ -73,6 +75,7 @@ export class Loading extends (HTMLElementSSR()!) {
   doubleBounceLoading = (): void => {
     const loading = document.createElement('div');
     loading.setAttribute('class', NAME_AMP.DOUBLE_BOUNCE);
+    loading.setAttribute('part', NAME_AMP.DOUBLE_BOUNCE);
     Array(2)
       .fill(1)
       .forEach((_, i) => {
@@ -85,6 +88,7 @@ export class Loading extends (HTMLElementSSR()!) {
   cubeLoading = (): void => {
     const loading = document.createElement('div');
     loading.setAttribute('class', NAME_AMP.CUBE);
+    loading.setAttribute('part', NAME_AMP.CUBE);
     Array(2)
       .fill(1)
       .forEach((_, i) => {
@@ -97,6 +101,7 @@ export class Loading extends (HTMLElementSSR()!) {
   dotLoading = (): void => {
     const loading = document.createElement('div');
     loading.setAttribute('class', NAME_AMP.DOT);
+    loading.setAttribute('part', NAME_AMP.DOT);
     Array(2)
       .fill(1)
       .forEach((_, i) => {
@@ -109,6 +114,7 @@ export class Loading extends (HTMLElementSSR()!) {
   tripleBounceLoading = (): void => {
     const loading = document.createElement('div');
     loading.setAttribute('class', NAME_AMP.TRIPLE_BOUNCE);
+    loading.setAttribute('part', NAME_AMP.TRIPLE_BOUNCE);
     Array(3)
       .fill(1)
       .forEach((_, i) => {
@@ -120,12 +126,14 @@ export class Loading extends (HTMLElementSSR()!) {
   };
   scaleOutLoading = (): void => {
     const loading = document.createElement('div');
-    loading.setAttribute('class', 'scale-out');
+    loading.setAttribute('class', NAME_AMP.SCALE_OUT);
+    loading.setAttribute('part', NAME_AMP.SCALE_OUT);
     this.contain.appendChild(loading);
   };
   circleLoading = (): void => {
     const loading = document.createElement('div');
-    loading.setAttribute('class', 'circle');
+    loading.setAttribute('class', NAME_AMP.CIRCLE);
+    loading.setAttribute('part', NAME_AMP.CIRCLE);
     Array(3)
       .fill(1)
       .map(() => new Array(4).fill(1))
@@ -144,18 +152,25 @@ export class Loading extends (HTMLElementSSR()!) {
   circleLineLoading = (): void => {
     const { element: core } = create('div').setAttribute('class', 'circle-line-core');
     const { element: border } = create('div').setAttribute('class', 'circle-line-border').append(core);
-    const { element: loading } = create('div').setAttribute('class', 'circle-line').append(border);
+    const { element: loading } = create('div')
+      .setAttribute('class', NAME_AMP.CIRCLE_LINE)
+      .setAttribute('part', NAME_AMP.CIRCLE_LINE)
+      .append(border);
     this.contain.appendChild(loading);
   };
   squareLoading = (): void => {
     const { element: core } = create('div').setAttribute('class', 'square-core');
     const { element: box1 } = create('div').setAttribute('class', 'square-box1').append(core);
     const { element: box2 } = create('div').setAttribute('class', 'square-box2').append(core);
-    const { element: square } = create('div').setAttribute('class', 'square').append(box1).append(box2);
+    const { element: square } = create('div')
+      .setAttribute('class', NAME_AMP.SQUARE)
+      .setAttribute('part', NAME_AMP.SQUARE)
+      .append(box1)
+      .append(box2);
     this.contain.appendChild(square);
   };
   pulseLoading = (): void => {
-    const pulse = create('div').setAttribute('class', 'pulse');
+    const pulse = create('div').setAttribute('class', NAME_AMP.PULSE).setAttribute('part', NAME_AMP.PULSE);
     Array(3)
       .fill(1)
       .forEach((_, index) => {
@@ -165,7 +180,7 @@ export class Loading extends (HTMLElementSSR()!) {
     this.contain.appendChild(pulse.element);
   };
   solarLoading = (): void => {
-    const { element: sun } = create('div').setAttribute('class', 'sun');
+    const { element: sun } = create('div').setAttribute('class', 'sun').setAttribute('part', 'sun');
     const { element: mercury } = create('div').setAttribute('class', 'planet mercury');
     const { element: mercuryOrbit } = create('div')
       .setAttribute('class', 'mercury-orbit orbit')
@@ -181,11 +196,16 @@ export class Loading extends (HTMLElementSSR()!) {
       .setAttribute('class', 'earth-orbit orbit')
       .append(earth)
       .append(venusOrbit);
-    const { element: solar } = create('div').setAttribute('class', 'solar').append(earthOrbit);
+    const { element: solar } = create('div')
+      .setAttribute('class', NAME_AMP.SOLAR)
+      .setAttribute('part', NAME_AMP.SOLAR)
+      .append(earthOrbit);
     this.contain.appendChild(solar);
   };
   cubeFoldLoading = (): void => {
-    const { element: cubeFold } = create('div').setAttribute('class', 'cube-fold');
+    const { element: cubeFold } = create('div')
+      .setAttribute('class', NAME_AMP.CUBE_FOLD)
+      .setAttribute('part', NAME_AMP.CUBE_FOLD);
     Array(4)
       .fill(1)
       .forEach((_, index) => {
@@ -195,7 +215,9 @@ export class Loading extends (HTMLElementSSR()!) {
     this.contain.appendChild(cubeFold);
   };
   circleFoldLoading = (): void => {
-    const circleFold = create('div').setAttribute('class', 'circle-fold');
+    const circleFold = create('div')
+      .setAttribute('class', NAME_AMP.CIRCLE_FOLD)
+      .setAttribute('part', NAME_AMP.CIRCLE_FOLD);
     Array(12)
       .fill(1)
       .forEach((_, index) => {
@@ -205,7 +227,7 @@ export class Loading extends (HTMLElementSSR()!) {
     this.contain.appendChild(circleFold.element);
   };
   cubeGridLoading = (): void => {
-    const cubeGrid = create('div').setAttribute('class', 'cube-grid');
+    const cubeGrid = create('div').setAttribute('class', NAME_AMP.CUBE_GRID).setAttribute('part', NAME_AMP.CUBE_GRID);
     Array(9)
       .fill(1)
       .forEach((_, index) => {
@@ -215,11 +237,15 @@ export class Loading extends (HTMLElementSSR()!) {
     this.contain.appendChild(cubeGrid.element);
   };
   circleTurnLoading = (): void => {
-    const { element: circleTurn } = create('div').setAttribute('class', 'circle-turn');
+    const { element: circleTurn } = create('div')
+      .setAttribute('class', NAME_AMP.CIRCLE_TURN)
+      .setAttribute('part', NAME_AMP.CIRCLE_TURN);
     this.contain.appendChild(circleTurn);
   };
   circleRotateLoading = (): void => {
-    const { element: circleRotate } = create('div').setAttribute('class', 'circle-rotate');
+    const { element: circleRotate } = create('div')
+      .setAttribute('class', NAME_AMP.CIRCLE_ROTATE)
+      .setAttribute('part', NAME_AMP.CIRCLE_ROTATE);
     const { element: circleInner } = create('div').setAttribute('class', 'circle-rotate-inner');
     const { element: circleOuter } = create('div').setAttribute('class', 'circle-rotate-outer');
     circleRotate.appendChild(circleOuter);
@@ -227,7 +253,9 @@ export class Loading extends (HTMLElementSSR()!) {
     this.contain.appendChild(circleRotate);
   };
   circleSpinLoading = (): void => {
-    const { element: circleSpin } = create('div').setAttribute('class', 'circle-spin');
+    const { element: circleSpin } = create('div')
+      .setAttribute('class', NAME_AMP.CIRCLE_SPIN)
+      .setAttribute('part', NAME_AMP.CIRCLE_SPIN);
     const { element: circleInner } = create('div').setAttribute('class', 'circle-spin-inner');
     const { element: circleOuter } = create('div').setAttribute('class', 'circle-spin-outer');
     circleSpin.appendChild(circleOuter);
@@ -235,7 +263,9 @@ export class Loading extends (HTMLElementSSR()!) {
     this.contain.appendChild(circleSpin);
   };
   dotBarLoading = (): void => {
-    const { element: dotBar } = create('div').setAttribute('class', 'dot-bar');
+    const { element: dotBar } = create('div')
+      .setAttribute('class', NAME_AMP.DOT_BAR)
+      .setAttribute('part', NAME_AMP.DOT_BAR);
     Array(5)
       .fill(1)
       .forEach((_, index) => {
@@ -245,7 +275,9 @@ export class Loading extends (HTMLElementSSR()!) {
     this.contain.appendChild(dotBar);
   };
   dotCircleLoading = (): void => {
-    const { element: dotCircle } = create('div').setAttribute('class', 'dot-circle');
+    const { element: dotCircle } = create('div')
+      .setAttribute('class', NAME_AMP.DOT_CIRCLE)
+      .setAttribute('part', NAME_AMP.DOT_CIRCLE);
     Array(5)
       .fill(1)
       .forEach((_, index) => {
@@ -255,7 +287,7 @@ export class Loading extends (HTMLElementSSR()!) {
     this.contain.appendChild(dotCircle);
   };
   lineLoading = (): void => {
-    const { element: line } = create('div').setAttribute('class', 'line');
+    const { element: line } = create('div').setAttribute('class', NAME_AMP.LINE).setAttribute('part', NAME_AMP.LINE);
     Array(3)
       .fill(1)
       .forEach(() => {
@@ -265,7 +297,9 @@ export class Loading extends (HTMLElementSSR()!) {
     this.contain.appendChild(line);
   };
   dotPulseLoading = (): void => {
-    const { element: dotPulse } = create('div').setAttribute('class', 'dot-pulse');
+    const { element: dotPulse } = create('div')
+      .setAttribute('class', NAME_AMP.DOT_PULSE)
+      .setAttribute('class', NAME_AMP.DOT_PULSE);
     Array(5)
       .fill(1)
       .forEach((_, index) => {
@@ -285,7 +319,9 @@ export class Loading extends (HTMLElementSSR()!) {
     this.contain.appendChild(dotPulse);
   };
   lineScaleLoading = (): void => {
-    const { element: lineScale } = create('div').setAttribute('class', 'line-scale');
+    const { element: lineScale } = create('div')
+      .setAttribute('class', NAME_AMP.LINE_SCALE)
+      .setAttribute('part', NAME_AMP.LINE_SCALE);
     Array(5)
       .fill(1)
       .forEach((_, index) => {
@@ -295,7 +331,7 @@ export class Loading extends (HTMLElementSSR()!) {
     this.contain.appendChild(lineScale);
   };
   textLoading = (): void => {
-    const { element: text } = create('div').setAttribute('class', 'text');
+    const { element: text } = create('div').setAttribute('class', NAME_AMP.TEXT).setAttribute('part', NAME_AMP.TEXT);
     const arr = ['L', 'o', 'a', 'd', 'i', 'n', 'g'];
     arr.forEach((i) => {
       const { element } = create('span').setAttribute('class', `text-item`).setTextContent(i);
@@ -304,7 +340,9 @@ export class Loading extends (HTMLElementSSR()!) {
     this.contain.appendChild(text);
   };
   cubeDimLoading = (): void => {
-    const { element: cubeDim } = create('div').setAttribute('class', 'cube-dim');
+    const { element: cubeDim } = create('div')
+      .setAttribute('class', NAME_AMP.CUBE_DIM)
+      .setAttribute('part', NAME_AMP.CUBE_DIM);
     Array(9)
       .fill(1)
       .forEach((_, index) => {
@@ -314,7 +352,9 @@ export class Loading extends (HTMLElementSSR()!) {
     this.contain.appendChild(cubeDim);
   };
   dotLineLoading = (): void => {
-    const { element: dotLine } = create('div').setAttribute('class', 'dot-line');
+    const { element: dotLine } = create('div')
+      .setAttribute('class', NAME_AMP.DOT_LINE)
+      .setAttribute('part', NAME_AMP.DOT_LINE);
     Array(2)
       .fill(1)
       .forEach((_, index) => {
@@ -327,7 +367,10 @@ export class Loading extends (HTMLElementSSR()!) {
   };
   arcLoading = (): void => {
     const { element: arcItem } = create('div').setAttribute('class', 'arc-item');
-    const { element: arc } = create('div').setAttribute('class', 'arc').append(arcItem);
+    const { element: arc } = create('div')
+      .setAttribute('class', NAME_AMP.ARC)
+      .setAttribute('part', NAME_AMP.ARC)
+      .append(arcItem);
     const { element: span } = create('span').setTextContent('LOADING');
     const { element: h1 } = create('h1').append(span);
     arc.appendChild(h1);
@@ -340,11 +383,17 @@ export class Loading extends (HTMLElementSSR()!) {
     const { element: dropDot2 } = create('div').setAttribute('class', 'drop-dot-2');
     const { element: dropDot } = create('div').setAttribute('class', 'drop-dot').append(dropDot1).append(dropDot2);
     const { element: dropItem } = create('div').setAttribute('class', 'drop-item').append(dropItemBg).append(dropDot);
-    const { element: drop } = create('div').setAttribute('class', 'drop').append(dropItem).append(dropDot);
+    const { element: drop } = create('div')
+      .setAttribute('class', NAME_AMP.DROP)
+      .setAttribute('part', NAME_AMP.DROP)
+      .append(dropItem)
+      .append(dropDot);
     this.contain.appendChild(drop);
   };
   pacmanLoading = (): void => {
-    const { element: pacman } = create('div').setAttribute('class', 'pacman');
+    const { element: pacman } = create('div')
+      .setAttribute('class', NAME_AMP.PACMAN)
+      .setAttribute('part', NAME_AMP.PACMAN);
     Array(5)
       .fill(1)
       .forEach(() => {

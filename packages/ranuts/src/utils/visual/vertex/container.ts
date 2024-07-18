@@ -98,9 +98,9 @@ export class Container extends Vertex {
   // 由于 Container 自身没有可以碰撞的内容，所以它直接返回 false。
   public containsPoint(p: Point): boolean {
     if (!this.hitArea) {
-      return false
+      return false;
     }
 
-    return this.hitArea.contains(p)
+    return this.hitArea.contains(p);
   }
 }
