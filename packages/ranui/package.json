@@ -172,7 +172,7 @@
     "./dist/*": {
       "types": "./dist/*",
       "import": "./dist/*",
-      "require": "./dist/index.js"
+      "require": "./dist/*"
     }
   },
   "devDependencies": {
