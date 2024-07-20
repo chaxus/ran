@@ -42,22 +42,17 @@ Support for on-demand import, which can reduce the size of loaded js
 import 'ranui/button';
 ```
 
-If there is a style problem, you can import the style manually
+If there is a `style` problem, you can import the style manually
 
 ```js
 import 'ranui/style';
 ```
 
-If there is a type problem, you can manually import the type
+If there is a `type` problem, you can manually import the type
+
 
 ```ts
-import 'ranui/types';
-```
-
-Or
-
-```ts
-import 'ranui/dist/typings';
+import 'ranui/dist/index.d.ts';
 ```
 
 Support global import

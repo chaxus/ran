@@ -1,6 +1,6 @@
 {
   "name": "ranui",
-  "version": "0.1.10-alpha.9",
+  "version": "0.1.10-alpha.12",
   "description": "UI Component library based on `Web Component`",
   "main": "dist/umd/index.umd.cjs",
   "module": "dist/index.js",
@@ -45,7 +45,8 @@
     "web components",
     "webComponents",
     "ranui",
-    "@ranui/react"
+    "@ranui/react",
+    "lib"
   ],
   "exports": {
     ".": {
@@ -163,10 +164,15 @@
       "import": "./dist/style.css",
       "require": "./dist/umd/index.umd.cjs"
     },
-    "./types": {
+    "./type": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.d.ts",
-      "require": "./dist/index.d.ts"
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    },
+    "./dist/*": {
+      "types": "./dist/*",
+      "import": "./dist/*",
+      "require": "./dist/index.js"
     }
   },
   "devDependencies": {
@@ -182,8 +188,6 @@
     "imagemin-svgo": "^10.0.1",
     "less": "^4.2.0",
     "prettier": "^2.8.8",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
     "rollup-plugin-visualizer": "^5.12.0",
     "svgo": "^3.3.0",
     "tsx": "^3.14.0",
