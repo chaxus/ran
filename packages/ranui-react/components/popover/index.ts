@@ -1,6 +1,5 @@
 import reactify from '@/utils/reactify';
 import 'ranui/popover';
-import 'ranui/content';
 
 const Popover = reactify('r-popover');
 

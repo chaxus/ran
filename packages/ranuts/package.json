@@ -1,6 +1,6 @@
 {
   "name": "ranuts",
-  "version": "0.1.0-alpha.16",
+  "version": "0.1.0-alpha.17",
   "description": "lib",
   "main": "dist/index.umd.cjs",
   "module": "dist/index.js",
@@ -17,7 +17,7 @@
     },
     "./react": {
       "types": "./dist/src/react/index.d.ts",
-      "import": "./dist/react/index.js",
+      "import": "./dist/src/react/index.js",
       "require": "./dist/umd/react/react.umd.cjs"
     },
     "./node": {

@@ -9,6 +9,7 @@
     "outDir": "dist",
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
     "isolatedModules": false,
     "strict": true,
     "noImplicitAny": true,
