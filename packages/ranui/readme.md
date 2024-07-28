@@ -27,7 +27,7 @@ UI Component library based on `Web Component`
 Using npm:
 
 ```console
-npm install ranui --save
+npm install ranui@latest --save
 ```
 
 ## Document and Example
