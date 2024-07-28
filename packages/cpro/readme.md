@@ -1,10 +1,13 @@
 # C++
 
-如果要为 macOS 进行 C++ 开发，建议安装 Clang 编译器。只需在“终端”窗口 (Ctrl+Shift+ `) 中运行以下命令即可安装命令行开发人员工具：
+如果要为 macOS 进行 C++ 开发，建议安装 Clang 编译器。只需在“终端”窗口中运行以下命令即可安装命令行开发人员工具：
+
 ```sh
 xcode-select --install
 ```
+
 然后，要验证已安装 clang，请在“终端”窗口中运行以下命令。你应该会看到一条消息，其中包含有关所使用的 Clang 版本的信息。
+
 ```sh
 clang --version
 ```
@@ -81,7 +84,10 @@ emcc main.cpp -o main.html
 emcc -g main.cpp -o main.html
 ```
 
-默认情况下 `Emscripten` 编译 `WebAssembly` 模块时会为我们优化掉大部分调试信息，添加 `-g` 指令后，`Emscripten` 将不再为我们优化调试信息。
+参数解释：
+
+- `-g`: 编译 + 链接，同时保留调试信息。当编译为目标文件时，这与 Clang 和 gcc 中的相同，它将 DWARF 调试信息添加到目标文件中。
+- `-o`: 链接可执行文件时，目标文件扩展名定义要生成的输出类型，默认是 `JavaScript`。如果指定是`html`,会生成一个`html`加`JavaScript`的可运行文件。
 
 接着你需要为你的谷歌浏览器安装一个插件 [`C/C++ DevTools Support (DWARF)`](https://chrome.google.com/webstore/detail/cc%20%20-devtools-support-dwa/pdcpmagijalfljmkmjngeonclgbbannb) ，这是 `Chrome DevTools` 开发团队为开发者提供的专门用于调试 `WebAssembly` 的浏览器插件，注意安装过程中要保持良好的网络环境。
 
@@ -101,9 +107,32 @@ emcc -g main.cpp -o main.html
 
 如果需要调用一个在 C 语言自定义的函数，你可以使用 Emscripten 中的 ccall() 函数，以及 EMSCRIPTEN_KEEPALIVE 声明
 
+> Emscripten 会消除未从编译代码中调用的函数的死代码。虽然这确实最大限度地减少了代码大小，但它可以删除您计划自己调用的函数（在已编译的代码之外）。比如通过  EMSCRIPTEN_KEEPALIVE 和 EXPORTED_FUNCTIONS 去指定需要导出的函数。EMSCRIPTEN_KEEPALIVE 的作用是告诉编译器和链接器保留符号并将其导出，就像将其添加到 EXPORTED_FUNCTIONS 中一样。
+
 默认情况下，Emscripten 生成的代码只会调用 main() 函数，其他的函数将被视为无用代码。在一个函数名之前添加 EMSCRIPTEN_KEEPALIVE 能够防止这样的事情发生。你需要导入 emscripten.h 库来使用 EMSCRIPTEN_KEEPALIVE。
 
+EMSCRIPTEN_KEEPALIVE:
+
+```c++
+
+// EMSCRIPTEN_KEEPALIVE
+
+void EMSCRIPTEN_KEEPALIVE my_function() { printf("I am being kept alive\n"); }
+
+```
+
+EXPORTED_FUNCTIONS:
+
+```sh
+# EXPORTED_FUNCTIONS
+
+emcc -sEXPORTED_FUNCTIONS=_main,_my_func  ...
+```
+
+> 如果您有 main() 函数，则_main 应该位于导出列表中，如该示例所示。否则，它将作为死代码被删除；默认情况下没有特殊的逻辑来保持 main() 的活动。
+
 ```html
+
 <button id="wasm">运行自定义函数</button>
 
 <script type='text/javascript'>
@@ -117,12 +146,555 @@ emcc -g main.cpp -o main.html
       );
     });
   </script>
+
 ```
 [](https://emscripten.org/docs/porting/connecting_cpp_and_javascript/Interacting-with-code.html)
 
 ```sh
 emcc -v main.cpp -o main.html -sEXPORTED_FUNCTIONS=_quick_sort,_main -sEXPORTED_RUNTIME_METHODS=ccall,cwrap
 ```
+
+EXPORTED_RUNTIME_METHODS 是 Emscripten 中一个用于指定哪些运行时方法可以在生成的 JavaScript 文件中被访问的选项。
+
+通过设置 EXPORTED_RUNTIME_METHODS，你可以控制哪些 Emscripten 运行时的 API 函数被导出，使其可以从生成的 JavaScript 文件中访问和调用。这对于需要在 JavaScript 中调用特定 Emscripten 提供的功能非常有用。
+
+假设你有一个简单的 C 文件 hello.c：
+
+```c++
+#include <stdio.h>
+
+void say_hello() {
+    printf("Hello, World!\n");
+}
+```
+
+你可以使用以下命令编译这个文件，同时导出 cwrap 和 ccall 方法：
+
+```c++
+emcc hello.c -o hello.js -s EXPORTED_RUNTIME_METHODS=['cwrap','ccall']
+```
+
+在这个例子中，我们导出了 cwrap 和 ccall 方法，这两个方法在 Emscripten 中常用于从 JavaScript 调用 C 函数。生成的 hello.js 文件可以在浏览器中使用。
+
+接下来，你可以在 JavaScript 中这样使用这些导出的方法：
+
+```html
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hello Emscripten</title>
+</head>
+<body>
+    <script src="hello.js"></script>
+    <script>
+        // 在模块加载完成后调用
+        Module.onRuntimeInitialized = () => {
+            // 使用 cwrap 创建一个 JavaScript 包装函数
+            const sayHello = Module.cwrap('say_hello', null, []);
+
+            // 调用包装函数
+            sayHello();
+        };
+    </script>
+</body>
+</html>
+
+```
+
+在这个例子中，我们通过 Module.cwrap 方法创建了一个 JavaScript 包装函数 sayHello，并调用了它。由于 say_hello 是一个无返回值且无参数的 C 函数，因此我们在 cwrap 中传入了 null 和一个空数组 []。
+
+使用 EXPORTED_RUNTIME_METHODS 可以确保 cwrap 和 ccall 方法在生成的 JavaScript 文件中被导出，并且可以在 JavaScript 中访问和使用这些方法。
+
+### Emscripten 运行时的 API 函数
+
+Emscripten 运行时的 API 函数是指在生成的 JavaScript 文件中提供的用于与编译后的 WebAssembly 或 asm.js 代码交互的函数。Emscripten 提供了多种运行时 API 函数，方便开发者在 JavaScript 中调用 C/C++ 代码，处理内存，进行文件系统操作等。
+
+下面是一些常用的 Emscripten 运行时 API 函数及其用途：
+
+#### 1. cwrap:
+
+- 用于创建一个 JavaScript 函数，该函数可以调用编译后的 WebAssembly 函数。
+- 语法：
+
+```js
+Module.cwrap('function_name', 'return_type', ['arg_type1', 'arg_type2', ...])
+```
+
+#### 2. ccall:
+
+- 用于直接调用编译后的 WebAssembly 函数。
+语法：
+
+```js
+Module.ccall('function_name', 'return_type', ['arg_type1', 'arg_type2', ...], [arg1, arg2, ...])
+```
+
+#### 3. UTF8ToString:
+
+- 将指向 UTF-8 编码字符串的指针转换为 JavaScript 字符串。
+语法：
+
+```js
+UTF8ToString(ptr)
+```
+
+#### 4. allocate:
+
+- 在 Emscripten 堆中分配内存。
+语法：
+
+```js
+Module._malloc(size)
+```
+
+#### 5. HEAP8 / HEAP16 / HEAP32 / HEAPU8 / HEAPU16 / HEAPU32 / HEAPF32 / HEAPF64:
+
+- 直接访问 Emscripten 堆内存的视图，允许读取和写入不同类型的数据。
+例如：Module.HEAP32[ptr >> 2] 读取 ptr 位置的 32 位整数。
+
+Emscripten 提供了一系列 API 函数和视图，用于直接访问和操作 WebAssembly 内存。这些 API 和视图在处理复杂的数据结构、字符串、数组等方面非常有用。下面是 allocate 和各种 HEAP 视图的用法。
+
+allocate 函数用于在 Emscripten 堆中分配内存。该函数在较新的 Emscripten 版本中已经不推荐使用，通常推荐使用 _malloc 代替。
+
+```js
+// 分配 1024 字节的内存
+var ptr = Module._malloc(1024);
+
+// 使用完毕后释放内存
+Module._free(ptr);
+```
+
+HEAP 视图
+Emscripten 提供了多个 HEAP 视图，用于访问 WebAssembly 内存中的数据。这些视图本质上是 TypedArray，它们允许你读取和写入不同类型的数据。
+
+- HEAP8: 8-bit signed integer (Int8Array)
+- HEAPU8: 8-bit unsigned integer (Uint8Array)
+- HEAP16: 16-bit signed integer (Int16Array)
+- HEAPU16: 16-bit unsigned integer (Uint16Array)
+- HEAP32: 32-bit signed integer (Int32Array)
+- HEAPU32: 32-bit unsigned integer (Uint32Array)
+- HEAPF32: 32-bit floating point (Float32Array)
+- HEAPF64: 64-bit floating point (Float64Array)
+
+以下是一个完整的示例，展示如何使用 _malloc 分配内存，并使用 HEAPU8 视图操作数据：
+
+```c++
+#include <emscripten.h>
+#include <string.h>
+
+EMSCRIPTEN_KEEPALIVE
+void set_memory(char* ptr, int size) {
+    memset(ptr, 42, size); // 将内存区域设置为 42 (即 '*')
+}
+```
+
+编译：
+
+```sh
+emcc memory.c -o memory.js -s EXPORTED_RUNTIME_METHODS=['_malloc', '_free', 'ccall']
+```
+
+JavaScript 代码
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Emscripten Memory Example</title>
+</head>
+<body>
+    <script src="memory.js"></script>
+    <script>
+        // 在模块加载完成后调用
+        Module.onRuntimeInitialized = () => {
+            // 分配 10 字节的内存
+            var size = 10;
+            var ptr = Module._malloc(size);
+
+            // 调用 C 函数来设置内存
+            Module.ccall('set_memory', null, ['number', 'number'], [ptr, size]);
+
+            // 使用 HEAPU8 视图读取内存
+            var view = new Uint8Array(Module.HEAPU8.buffer, ptr, size);
+            for (var i = 0; i < size; i++) {
+                console.log(view[i]); // 输出 42
+            }
+
+            // 释放内存
+            Module._free(ptr);
+        };
+    </script>
+</body>
+</html>
+```
+
+更复杂的示例
+假设你需要传递一个数组到 C 函数，并且函数会修改这个数组。
+
+C 代码 (假设文件名为 array.c)
+
+```c++
+
+#include <emscripten.h>
+
+EMSCRIPTEN_KEEPALIVE
+void double_values(int* array, int size) {
+    for (int i = 0; i < size; i++) {
+        array[i] *= 2;
+    }
+}
+
+```
+
+编译
+
+```sh
+emcc array.c -o array.js -s EXPORTED_RUNTIME_METHODS=['_malloc', '_free', 'ccall']
+```
+
+JavaScript 代码
+
+```html
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Emscripten Array Example</title>
+</head>
+<body>
+    <script src="array.js"></script>
+    <script>
+        // 在模块加载完成后调用
+        Module.onRuntimeInitialized = () => {
+            // 创建一个 JavaScript 数组
+            var array = [1, 2, 3, 4, 5];
+            var size = array.length;
+
+            // 分配足够的内存来存储数组
+            var ptr = Module._malloc(size * 4); // 每个整数占 4 字节
+
+            // 使用 HEAP32 视图将数组复制到 Emscripten 堆
+            Module.HEAP32.set(array, ptr / 4);
+
+            // 调用 C 函数来修改数组
+            Module.ccall('double_values', null, ['number', 'number'], [ptr, size]);
+
+            // 使用 HEAP32 视图读取修改后的数组
+            var doubledArray = new Int32Array(Module.HEAP32.buffer, ptr, size);
+            console.log(doubledArray); // 输出：[2, 4, 6, 8, 10]
+
+            // 释放内存
+            Module._free(ptr);
+        };
+    </script>
+</body>
+</html>
+
+```
+
+在这个示例中，我们分配了一块足够大的内存以存储一个整数数组，并使用 HEAP32 视图将 JavaScript 数组复制到 Emscripten 堆中。然后，我们调用 C 函数修改数组，并使用 HEAP32 视图读取修改后的数组。
+
+#### 6. addFunction:
+
+将 JavaScript 函数指针添加到 WebAssembly 表中，使其可以从 WebAssembly 代码中调用。
+
+语法：
+
+```js
+Module.addFunction(func, 'sig')
+```
+
+#### 7. removeFunction:
+
+- 从 WebAssembly 表中移除函数指针。
+语法：
+
+```js
+Module.removeFunction(func_ptr)
+```
+
+下面是一个完整的示例，演示如何使用 addFunction 和 removeFunction：
+
+假设你有一个简单的 C 文件 call_js.c：
+
+```c++
+#include <emscripten.h>
+
+// 声明一个外部函数指针
+typedef int (*func_ptr)(int, int);
+
+EM_JS(int, call_js_function, (func_ptr f, int a, int b), {
+    return f(a, b);
+});
+
+int main() {
+    return 0;
+}
+
+```
+
+编译这个文件：
+
+```sh
+emcc call_js.c -o call_js.js -s EXPORTED_RUNTIME_METHODS=['addFunction','removeFunction']
+```
+
+在 JavaScript 中调用这个函数：
+
+```html
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Emscripten addFunction Example</title>
+</head>
+<body>
+    <script src="call_js.js"></script>
+    <script>
+        // 在模块加载完成后调用
+        Module.onRuntimeInitialized = () => {
+            // 定义一个 JavaScript 函数
+            function add(a, b) {
+                return a + b;
+            }
+
+            // 将 JavaScript 函数添加到 WebAssembly 表中
+            var addPtr = Module.addFunction(add, 'iii');
+
+            // 调用 WebAssembly 函数
+            var result = Module._call_js_function(addPtr, 5, 7);
+            console.log(result); // 输出：12
+
+            // 从 WebAssembly 表中移除函数指针
+            Module.removeFunction(addPtr);
+        };
+    </script>
+</body>
+</html>
+
+```
+
+在这个示例中，我们首先定义了一个 JavaScript 函数 add，并使用 Module.addFunction 将其添加到 WebAssembly 表中。然后，我们调用 WebAssembly 函数 _call_js_function，传入函数指针和参数。最后，我们使用 Module.removeFunction 从 WebAssembly 表中移除了函数指针。
+
+#### 8. getValue 和 setValue:
+
+- 用于读取和写入 Emscripten 堆内存中的值。
+语法：
+
+```js
+Module.getValue(ptr, type) 和 Module.setValue(ptr, value, type)
+```
+
+getValue 和 setValue 是 Emscripten 提供的两个 API，用于读取和写入 WebAssembly 内存中的值。这些函数可以处理不同类型的数据，如整数、浮点数和指针。
+
+getValue 用于从指定内存地址读取值。其语法如下：
+
+```js
+var value = Module.getValue(ptr, type);
+```
+
+ptr 是内存地址（指针）。
+type 是值的类型，可以是 'i8', 'i16', 'i32', 'i64', 'float', 'double', 'i8*', 'i16*', 'i32*' 等。
+
+setValue 用于向指定内存地址写入值。其语法如下：
+
+Module.setValue(ptr, value, type);
+
+ptr 是内存地址（指针）。
+value 是要写入的值。
+type 是值的类型，可以是 'i8', 'i16', 'i32', 'i64', 'float', 'double', 'i8*', 'i16*', 'i32*' 等。
+
+下面是一个示例，展示如何使用 getValue 和 setValue 读取和写入内存中的值。
+
+```c++
+#include <emscripten.h>
+
+EMSCRIPTEN_KEEPALIVE
+int get_value_from_memory(int* ptr) {
+    return *ptr;
+}
+
+EMSCRIPTEN_KEEPALIVE
+void set_value_in_memory(int* ptr, int value) {
+    *ptr = value;
+}
+```
+
+编译
+
+```sh
+emcc values.c -o values.js -s EXPORTED_RUNTIME_METHODS=['getValue', 'setValue', '_malloc', '_free']
+```
+
+JavaScript 代码
+
+```js
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Emscripten getValue and setValue Example</title>
+</head>
+<body>
+    <script src="values.js"></script>
+    <script>
+        // 在模块加载完成后调用
+        Module.onRuntimeInitialized = () => {
+            // 分配 4 字节的内存
+            var ptr = Module._malloc(4);
+
+            // 使用 setValue 写入值
+            Module.setValue(ptr, 42, 'i32');
+
+            // 使用 getValue 读取值
+            var value = Module.getValue(ptr, 'i32');
+            console.log(value); // 输出：42
+
+            // 调用 C 函数读取值
+            var cValue = Module.ccall('get_value_from_memory', 'number', ['number'], [ptr]);
+            console.log(cValue); // 输出：42
+
+            // 调用 C 函数写入值
+            Module.ccall('set_value_in_memory', null, ['number', 'number'], [ptr, 84]);
+
+            // 使用 getValue 读取新的值
+            var newValue = Module.getValue(ptr, 'i32');
+            console.log(newValue); // 输出：84
+
+            // 释放内存
+            Module._free(ptr);
+        };
+    </script>
+</body>
+</html>
+```
+
+在这个示例中，我们分配了一块 4 字节的内存（用于存储一个 32 位整数），并使用 setValue 写入值 42，然后使用 getValue 读取这个值。接着，我们调用 C 函数 get_value_from_memory 来读取内存中的值，并调用 C 函数 set_value_in_memory 来修改内存中的值。最后，我们使用 getValue 再次读取修改后的值。
+
+假设你需要在 WebAssembly 中处理更复杂的数据结构，如结构体。你可以使用 getValue 和 setValue 来操作结构体的成员。
+
+```c++
+#include <emscripten.h>
+
+typedef struct {
+    int x;
+    float y;
+} Point;
+
+EMSCRIPTEN_KEEPALIVE
+void set_point(Point* p, int x, float y) {
+    p->x = x;
+    p->y = y;
+}
+
+EMSCRIPTEN_KEEPALIVE
+void get_point(Point* p, int* x, float* y) {
+    *x = p->x;
+    *y = p->y;
+}
+```
+
+编译
+
+```sh
+emcc struct.c -o struct.js -s EXPORTED_RUNTIME_METHODS=['getValue', 'setValue', '_malloc', '_free', 'ccall']
+```
+
+JavaScript 代码
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Emscripten Struct Example</title>
+</head>
+<body>
+    <script src="struct.js"></script>
+    <script>
+        // 在模块加载完成后调用
+        Module.onRuntimeInitialized = () => {
+            // 分配 Point 结构体的内存
+            var pointSize = 8; // 假设 int 和 float 各占 4 字节
+            var ptr = Module._malloc(pointSize);
+
+            // 调用 C 函数设置结构体
+            Module.ccall('set_point', null, ['number', 'number', 'number'], [ptr, 3, 4.5]);
+
+            // 使用 getValue 读取结构体成员
+            var x = Module.getValue(ptr, 'i32');
+            var y = Module.getValue(ptr + 4, 'float');
+            console.log(x, y); // 输出：3 4.5
+
+            // 调用 C 函数读取结构体
+            var xPtr = Module._malloc(4);
+            var yPtr = Module._malloc(4);
+            Module.ccall('get_point', null, ['number', 'number', 'number'], [ptr, xPtr, yPtr]);
+            var xValue = Module.getValue(xPtr, 'i32');
+            var yValue = Module.getValue(yPtr, 'float');
+            console.log(xValue, yValue); // 输出：3 4.5
+
+            // 释放内存
+            Module._free(ptr);
+            Module._free(xPtr);
+            Module._free(yPtr);
+        };
+    </script>
+</body>
+</html>
+```
+
+在这个示例中，我们使用 set_point 函数设置结构体 Point 的值，并使用 get_point 函数读取结构体的值。我们还展示了如何使用 getValue 和 setValue 操作结构体的成员。
+
+#### 9. FS (File System API):
+
+- 用于在 Emscripten 虚拟文件系统中操作文件。
+常用方法包括：FS.createDataFile, FS.readFile, FS.writeFile, FS.unlink 等。
+
+#### 10. stackSave, stackRestore, stackAlloc:
+
+用于管理 Emscripten 堆栈指针，帮助分配和释放堆栈空间。
+语法：stackSave(), stackRestore(ptr), stackAlloc(size)
+
+以下是一个使用 ccall 和 UTF8ToString 的示例：
+
+```c++
+#include <emscripten.h>
+
+EMSCRIPTEN_KEEPALIVE
+const char* get_hello() {
+    return "Hello from C!";
+}
+```
+
+编译这个文件：
+
+```sh
+emcc hello.c -o hello.js -s EXPORTED_RUNTIME_METHODS=['ccall','UTF8ToString']
+```
+
+在 JavaScript 中调用这个函数：
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hello Emscripten</title>
+</head>
+<body>
+    <script src="hello.js"></script>
+    <script>
+        Module.onRuntimeInitialized = () => {
+            // 调用 C 函数 get_hello
+            const helloPtr = Module.ccall('get_hello', 'number', [], []);
+            const helloStr = UTF8ToString(helloPtr);
+            console.log(helloStr); // 输出："Hello from C!"
+        };
+    </script>
+</body>
+</html>
+```
+
+这个例子展示了如何使用 Emscripten 运行时 API 函数 ccall 调用 C 函数，并使用 UTF8ToString 将返回的指针转换为 JavaScript 字符串。
 
 ### cwrap
 
@@ -871,3 +1443,5 @@ extern "C" {
 ```
 
 通过注意上述多线程编程中的注意事项，可以有效地利用 WebAssembly 和 Emscripten 提供的多线程功能，实现高性能和高效的并发处理。确保正确处理数据竞争、同步和资源管理，以避免常见的多线程问题。
+
+[emcc 指令参考](https://emscripten.org/docs/tools_reference/settings_reference.html)
