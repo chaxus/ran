@@ -142,6 +142,14 @@ const themeCnConfig: DefaultTheme.Config = {
             text: '可视化渲染引擎',
             link: '/cn/src/article/visual.md',
           },
+          {
+            text: 'web 端文档预览方案',
+            link: '/cn/src/article/docPreview.md',
+          },
+          {
+            text: '实现自适应码率 Web 视频加密播放：前后端的挑战与解决方案',
+            link: '/cn/src/article/video.md',
+          },
         ],
       },
     ],

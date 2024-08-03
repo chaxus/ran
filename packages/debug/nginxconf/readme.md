@@ -1,4 +1,3 @@
-
 1. 使用命令行参数指定配置文件路径
 
 ```sh
@@ -12,7 +11,9 @@ nginx -c /path/to/your/nginx.conf
 ```sh
 nginx -t -c /path/to/your/nginx.conf
 ```
+
 重启
+
 ```sh
 nginx -s reload
 ```
@@ -55,13 +56,17 @@ brew services restart nginx
 你也可以直接使用 Nginx 的-s 参数来停止服务。有两种停止方式：
 
 快速停止（不等待处理完当前请求）：
+
 ```sh
 sudo nginx -s stop
 ```
+
 优雅停止（等待处理完当前请求后再停止）：
+
 ```sh
 sudo nginx -s quit
 ```
+
 4. 关闭
 
 进入 Nginx 安装目录的 sbin 文件夹（如果尚未进入）。
@@ -70,9 +75,11 @@ sudo nginx -s quit
 在某些情况下，你可能需要手动停止 Nginx 服务。这通常涉及到找到 Nginx 的主进程号（PID），并使用 kill 命令发送相应的信号来停止进程。
 
 查找 Nginx 主进程的 PID：可以使用 ps 命令结合 grep 来查找，如：
+
 ```sh
 ps -ef | grep nginx
 ```
+
 发送停止信号：根据找到的 PID，使用 kill 命令发送 TERM（快速停止）或 INT（优雅停止）信号。例如，kill -TERM <pid>或 kill -INT <pid>。此外，kill -HUP <pid>也可以用于平滑重启 Nginx，但这实际上是发送了一个挂起信号，而不是停止信号。
 
 使用 brew 服务命令：

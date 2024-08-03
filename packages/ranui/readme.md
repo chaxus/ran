@@ -50,7 +50,6 @@ import 'ranui/style';
 
 If there is a `type` problem, you can manually import the type
 
-
 ```ts
 import 'ranui/dist/index.d.ts';
 ```
