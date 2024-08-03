@@ -123,11 +123,11 @@ const themeCnConfig: DefaultTheme.Config = {
             link: '/cn/src/article/functionalProgramming.md',
           },
           {
-            text: 'web 端文档预览方案',
+            text: 'web 文档预览方案',
             link: '/cn/src/article/docPreview.md',
           },
           {
-            text: 'Web 端视频加密动态播放方案',
+            text: 'Web 视频加密动态方案',
             link: '/cn/src/article/video.md',
           },
           {
