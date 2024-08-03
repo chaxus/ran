@@ -123,6 +123,18 @@ const themeCnConfig: DefaultTheme.Config = {
             link: '/cn/src/article/functionalProgramming.md',
           },
           {
+            text: 'web 端文档预览方案',
+            link: '/cn/src/article/docPreview.md',
+          },
+          {
+            text: 'Web 端视频加密动态播放方案',
+            link: '/cn/src/article/video.md',
+          },
+          {
+            text: '可视化渲染引擎',
+            link: '/cn/src/article/visual.md',
+          },
+          {
             text: '排序算法',
             link: '/cn/src/article/sort/index.md',
             items: [
@@ -137,18 +149,6 @@ const themeCnConfig: DefaultTheme.Config = {
               { text: '桶排序', link: '/cn/src/article/sort/bucket/' },
               { text: '基数排序', link: '/cn/src/article/sort/radix/' },
             ],
-          },
-          {
-            text: '可视化渲染引擎',
-            link: '/cn/src/article/visual.md',
-          },
-          {
-            text: 'web 端文档预览方案',
-            link: '/cn/src/article/docPreview.md',
-          },
-          {
-            text: 'Web 视频加密播放方案',
-            link: '/cn/src/article/video.md',
           },
         ],
       },
