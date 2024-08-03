@@ -31,15 +31,15 @@
 
 demo 地址：https://chaxus.github.io/ran/src/ranui/player/
 
-源码地址：https://github.com/chaxus/ran/tree/main/packages/ranui
+源码地址：https://github.com/chaxus/ran
 
 `demo`文档做了国际化，可切换到中文
 
 任何一个项目，立项肯定先是技术调研，我们先看看一些大公司的视频播放方案
 
-# 一。一些知名公司的 web 视频播放方案
+## 一：一些知名公司的 web 视频播放方案
 
-## 1.B 站
+### 1.B 站
 
 我们先看看 B 站的，毕竟 B 站的主营业务就是视频弹幕网站，简直专业对口。
 
@@ -65,7 +65,7 @@ Range: bytes = 3171375 - 3203867;
 
 我们可以检查这个链接请求`https://upos-sz-mirror08c.bilivideo.com/upgcxcode/67/92/1008149267/1008149267-1-30064.m4s`的请求头，就能发现，B 站采用的是，即分片加载，同时还用了`range`的方式。
 
-## 2. 爱奇艺：（爱奇艺、土豆、优酷）
+### 2. 爱奇艺：（爱奇艺、土豆、优酷）
 
 爱奇艺这里就不贴视频链接了，因为随便点一个视频，都要先看广告。
 
@@ -81,7 +81,7 @@ Range: bytes = 3171375 - 3203867;
 
 `https://v-6fce1712.71edge.com/videos/other/20231113/6b/bb/3f3fe83b89124248c3216156dfe2f4c3.f4v?dis_k=2ba39ee8c55c4d23781e3fb9f91fa7a46&dis_t=1701439831&dis_dz=CNC-BeiJing&dis_st=46&src=iqiyi.com&dis_hit=0&dis_tag=01010000&uuid=72713f52-6569e957-351&cross-domain=1&ssl=1&pv=0.1&cphc=arta&range=0-9000`
 
-## 3.抖音：
+### 3.抖音：
 
 抖音的方案简单粗暴，访问的链接是这个：
 https://m.ixigua.com/douyin/share/video/7206914252840370721?aweme_type=107&schema_type=1&utm_source=copy&utm_campaign=client_share&utm_medium=android&app=aweme
@@ -102,7 +102,7 @@ https://m.ixigua.com/douyin/share/video/7206914252840370721?aweme_type=107&schem
 
 但 B 站和爱奇艺却不能这样，因为他们采用的`m4s`和`f4v`都不是一种通用的视频格式，需要使用专门的软件或工具才能打开和编辑。
 
-## 4.小红书：
+### 4.小红书：
 
 测试用的例子链接：https://www.xiaohongshu.com/discovery/item/63b286d1000000001f00b495
 
@@ -110,7 +110,7 @@ https://m.ixigua.com/douyin/share/video/7206914252840370721?aweme_type=107&schem
 
 ![image.png](../../../assets/article/video/red_book.webp)
 
-## 5.总结
+### 5.总结
 
 看完了以上的各家大厂的方案，我们可以看到，基本原理都是边播放边加载，减少直接加载大视频文本的成本。并且通过分片传输，还能动态控制视频码率（清晰度）。做到根据网速，加载不同码率的分片文件，做到动态码率适应。
 
@@ -118,7 +118,7 @@ https://m.ixigua.com/douyin/share/video/7206914252840370721?aweme_type=107&schem
 
 如果没有强要求，也可以直接采用`mp4`，或者直接用`video`播放一个视频文件地址。
 
-# 二。常见的视频格式与协议
+## 二：常见的视频格式与协议
 
 我们知道视频的常见格式有`mp4`，同时上面介绍了 B 站播放用的`m4s`格式，爱奇艺用的`f4v`格式
 
@@ -126,7 +126,7 @@ https://m.ixigua.com/douyin/share/video/7206914252840370721?aweme_type=107&schem
 - 为什么有这么多视频格式，有哪些不同点呢？
 - 为什么这些公司会采用这种格式来播放视频呢？
 
-## 1. B 站用的`m4s`
+### 1. B 站用的`m4s`
 
 `M4S`格式不是一种通用的视频格式，需要使用专门的软件或工具才能打开和编辑。
 
@@ -135,7 +135,7 @@ https://m.ixigua.com/douyin/share/video/7206914252840370721?aweme_type=107&schem
 `MPEG-DASH` 是一种自适应比特率流媒体技术，通过将内容分解为一系列不同码率的`M4S`片段，然后根据当前网络带宽进行自动调整。如果想在在`web`音视频中采用`DASH`技术，可以看下
 https://github.com/Dash-Industry-Forum/dash.js
 
-## 2. 爱奇艺的`f4v`
+### 2. 爱奇艺的`f4v`
 
 `F4V`是一种流媒体格式，它是由`Adobe`公司推出的，继`FLV`格式之后支持`H.264`编码的流媒体格式。`F4V`格式的视频不是一种通用的视频格式，**但通常情况下**，都可以将文件后缀改为`FLV`，这样就可以使用支持`FLV`的播放器进行观看。
 
@@ -158,33 +158,33 @@ https://github.com/Dash-Industry-Forum/dash.js
 
 接下来是一些其他的视频格式，简单介绍一下：
 
-## 3.`AVI`
+### 3.`AVI`
 
 文件名以`.avi`结尾，`AVI` 最初由 `Microsoft` 于 `1992` 年开发，是 `Windows` 的标准视频格式。`AVI` 文件使用较少的压缩来存储文件，并且比许多其他视频格式占用更多空间，这导致文件大小非常大，每分钟视频大约 `2-3 GB`。
 
 无损文件不会随着时间的推移而降低质量，无论您打开或保存文件多少次。此外，这允许在不使用任何编解码器的情况下播放。参考资料：[Audio Video Interleave](https://en.wikipedia.org/wiki/Audio_Video_Interleave)
 
-## 4.`MPEG`
+### 4.`MPEG`
 
 文件名以“.mpg”或“.mpeg”结尾，MPEG 是由 ISO 和 IEC 联合成立的工作组联盟，旨在制定媒体编码标准，包括音频、视频、图形和基因组数据的压缩编码;以及各种应用程序的传输和文件格式。MPEG 格式用于各种多媒体系统。最广为人知的旧 MPEG 媒体格式通常使用 MPEG-1、MPEG-2 和 MPEG-4 AVC 媒体编码，MPEG-2 系统传输流和节目流。较新的系统通常使用 MPEG 基本媒体文件格式和动态流式处理（又名 .MPEG-DASH）。参考资料：[Moving Picture Experts Group](https://en.wikipedia.org/wiki/Moving_Picture_Experts_Group)
 
-## 5.`MP4`
+### 5.`MP4`
 
 带有音频和视频的 MPEG-4 文件通常使用标准的 .mp4 扩展名。纯音频 MPEG-4 文件通常具有 .m4a 扩展名，原始 MPEG-4 可视比特流命名为 .m4v。Apple iPhone 使用 MPEG-4 音频作为其铃声，但使用.m4r 扩展名而不是.m4a 扩展名。参考资料：[MPEG-4 Part 14](https://en.wikipedia.org/wiki/MP4_file_format)
 
-## 6.`QuickTime`
+### 6.`QuickTime`
 
 文件名以“.mov”结尾，QuickTime 能够包含媒体数据的抽象数据引用，并将媒体数据与媒体偏移和轨道编辑列表分离，这意味着 QuickTime 特别适合编辑，因为它能够就地导入和编辑（无需数据复制）。由于 QuickTime 和 MP4 容器格式都可以使用相同的 MPEG-4 格式，因此在仅限 QuickTime 的环境中，它们大多可以互换。MP4 作为国际标准，得到了更多的支持。参考资料：[QuickTime File Format](https://en.wikipedia.org/wiki/QuickTime_File_Format)
 
-## 7.`TS`
+### 7.`TS`
 
 TS 是 MPEG2-TS 的简称，是一种音视频封装格式。TS 流的后缀通常是.ts、.mpg 或者.mpeg，多数播放器直接支持这种格式的播放。TS 格式主要用于直播的码流结构，具有很好的容错能力。
 
-# 三。浏览器对各种视频格式的兼容性
+## 三：浏览器对各种视频格式的兼容性
 
 上面了解常用的视频格式，和适用范围之后，还需要看一下当前浏览器，对各种视频格式的支持程度，然后制定技术方案。
 
-## 1. Chrome
+### 1. Chrome
 
 支持的视频格式从官方文档可以查到，主要有以下这些
 
@@ -196,7 +196,7 @@ TS 是 MPEG2-TS 的简称，是一种音视频封装格式。TS 流的后缀通�
 
 官方文档如下：https://www.chromium.org/audio-video/
 
-## 2. Safari
+### 2. Safari
 
 支持的视频格式有这些：
 
@@ -204,7 +204,7 @@ TS 是 MPEG2-TS 的简称，是一种音视频封装格式。TS 流的后缀通�
 
 官方文档：https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/Using_HTML5_Audio_Video/Device-SpecificConsiderations/Device-SpecificConsiderations.html
 
-## 3.Firefox
+### 3.Firefox
 
 支持的视频格式：
 
@@ -212,7 +212,7 @@ TS 是 MPEG2-TS 的简称，是一种音视频封装格式。TS 流的后缀通�
 
 官方文档：https://support.mozilla.org/en-US/kb/html5-audio-and-video-firefox
 
-# 四.MediaSource 和视频编码，解码，封装介绍
+## 四：MediaSource 和视频编码，解码，封装介绍
 
 上面介绍了一些视频格式，和目前浏览器的一些兼容性问题。就能发现，在`web`上播放音视频其实限制还是很大的。如何解决这些限制，就会用到`MediaSource`。
 
@@ -261,13 +261,13 @@ if (this._firstParse) {
 }
 ```
 
-## 1.MediaSource 兼容性
+### 1.MediaSource 兼容性
 
 ![image.png](../../../assets/article/video/ms_support.webp)
 
 由此可见，基本都是绿色，但有一个特殊情况，就是`Safari on IOS`。这部分支持程度还是棕色。
 
-# 五。HLS 播放方案
+## 五：HLS 播放方案
 
 采用`HLS`技术方案，有以下几个原因：
 
@@ -288,13 +288,13 @@ if (this._firstParse) {
 3. `HLS`协议自带支持分片传输和动态码率自适应播放。
 4. ~~有现成的技术方案，Hls.js~~
 
-# 六。服务端开发
+## 六：服务端开发
 
 选择了采用`HLS`协议的播放方式，那么首先需要处理视频，这部分目前是在服务端进行处理。利用`ffmpeg`的能力。
 
 ~~如果以后能将`ffmpeg`搬上浏览器，且没有性能问题就好了。现在有类似的`webassembly`的`npm`包，但性能有点小问题~~
 
-## 1.视频的转码
+### 1.视频的转码
 
 视频的转码的`ffmpeg`命令如下：
 
@@ -362,7 +362,7 @@ const exec = ({ params, data }: ExecOption): Promise<ExecResult> => {
 
 ```
 
-## 2.视频的标准加密
+### 2.视频的标准加密
 
 `HLS`协议标准加密采用的是`AES`对称加密方案。先来实现一个最标准的加密：
 
@@ -426,7 +426,7 @@ ffmpeg -i input.mp4 -hls_time 10 -hls_list_size 0 -c:v h264 -b:v 2M -hls_key_inf
 
 上述加密方式，虽然视频确实加密了，但会把密钥地址写在`m3u8`里。等于把房间上锁，然后在锁上贴一个纸条，上面写了密码。
 
-## 3.更好的安全方案
+### 3.更好的安全方案
 
 - 有加密，必然需要解密
 
@@ -446,7 +446,7 @@ ffmpeg -i input.mp4 -hls_time 10 -hls_list_size 0 -c:v h264 -b:v 2M -hls_key_inf
 
 1. 采用私有加密方式，比如`m3u8`里的`METHOD`，可能不再是`AES`这种对称加密。自定义一套加密规则，这种方式安全性会极大提高，但同时就不遵守`HLS`协议的标准了。但大多数浏览器支持`MediaSource`。可以读取文件内容，进行自定义加密和解密。根据上文的兼容性调研，`MediaSource`在`IOS`上将会有兼容性问题，所以这种方案在`IOS`上也会有兼容性问题。
 
-## 4.自适应码率播放
+### 4.自适应码率播放
 
 这里先介绍一下码率和清晰度的关系：
 
@@ -514,11 +514,11 @@ async generateMasterPlayList(ctx: Context): Promise<void> {
 
 其实是根据`BANDWIDTH`这个字段，因为我们给不同的视频设置了不同的`BANDWIDTH`。那么就可以根据当前的网速，进行动态切换。
 
-# 七.web 端的实现
+## 七：web 端的实现
 
 上面做了大量的工作，主要是生成了`HLS`协议的视频播放的地址。接下来就是如何在`web`端进行播放。
 
-## 1.技术选型
+### 1.技术选型
 
 我首先是看了现有的播放器`npm`，比较知名的
 
@@ -554,7 +554,7 @@ async generateMasterPlayList(ctx: Context): Promise<void> {
 4. 尽量适配前端的各种框架
 5. 方便接入，实现价值
 
-## 2.播放器设计
+### 2.播放器设计
 
 由于现在既有`react`项目，也有`vue`项目，甚至还有一些老的`jquery`项目。为了做到一次开发，任何项目都可以使用和接入。采用了`web components`技术方案。
 
@@ -567,7 +567,7 @@ async generateMasterPlayList(ctx: Context): Promise<void> {
 3. `video`属性：总时长，当前时长，音量大小，倍速等
 4. `video`交互：暂停，播放，知识点，清晰度，倍速，全屏，进度控制，音量控制等
 
-### (1).video 的生命周期
+#### (1).video 的生命周期
 
 对于 video 的生命周期，我们期望做到两件事情：
 
@@ -803,7 +803,7 @@ player.action.off('ended',endedEvent)
 player.action.on('ended',endedEvent)
 ```
 
-### (2).video 的状态和属性
+#### (2).video 的状态和属性
 
 需要在全局上下文中记录下播放器的状态和属性：
 
@@ -823,7 +823,7 @@ this.ctx = {
 };
 ```
 
-### (3).自定义 video
+#### (3).自定义 video
 
 默认长这个样子
 
@@ -831,7 +831,7 @@ this.ctx = {
 
 demo 地址：https://chaxus.github.io/ran/src/ranui/player/
 
-源码地址：https://github.com/chaxus/ran/tree/main/packages/ranui
+源码地址：https://github.com/chaxus/ran
 
 如果不喜欢控制器或者按钮，直接样式覆盖，更符合直觉，没有学习成本。
 
@@ -851,7 +851,7 @@ demo 地址：https://chaxus.github.io/ran/src/ranui/player/
 
 所以，这就解决配置项，长达好几页的问题，同时看到也就知道怎么配置，怎么开发了。
 
-# 八。总结
+## 八：总结
 
 目前已经从前后端的角度，实现了
 
@@ -869,6 +869,6 @@ demo 地址：https://chaxus.github.io/ran/src/ranui/player/
 
 `demo`和文档地址：https://chaxus.github.io/ran/src/ranui/player/
 
-源码地址：https://github.com/chaxus/ran/tree/main/packages/ranui
+源码地址：https://github.com/chaxus/ran
 
 `demo`文档做了国际化，可切换到中文

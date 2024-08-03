@@ -24,9 +24,9 @@
 
 基本涵盖了所有解决方案。因此，标题写上 **最全** 的文件预览方案调研总结，应该不为过吧。
 
-# 一。市面上现有的文件预览服务
+## 一：市面上现有的文件预览服务
 
-## 1.微软
+### 1.微软
 
 `docx`,`pptx`,`xlsx`可以说是`office`三件套，那自然得看一下 **微软官方** 提供的文件预览服务。使用方法特别简单，只需要将文件链接，拼接到参数后面即可。
 
@@ -36,28 +36,28 @@
 https://view.officeapps.live.com/op/view.aspx?src=${encodeURIComponent(url)}
 ```
 
-### (1).PPTX 预览效果：
+#### (1).PPTX 预览效果：
 
 ![image.png](../../../assets/article/docPreview/ms_ppt.webp)
 
 - 优点：还原度很高，功能很丰富，可以选择翻页，甚至支持点击播放动画。
 - 缺点：不知道是不是墙的原因，加载稍慢。
 
-### (2).Excel 预览效果：
+#### (2).Excel 预览效果：
 
 ![image.png](../../../assets/article/docPreview/ms_excel.webp)
 
-### (3).Doxc 预览效果
+#### (3).Doxc 预览效果
 
 ![image.png](../../../assets/article/docPreview/ms_word.webp)
 
-### (4).PDF 预览效果
+#### (4).PDF 预览效果
 
 这个我测试没有成功，返回了一个错误，其他人可以试试。
 
 ![image.png](../../../assets/article/docPreview/ms_file_not.webp)
 
-### (5).总的来说
+#### (5).总的来说
 
 对于`docx`,`pptx`,`xlsx`都有较好的支持，`pdf`不行。
 
@@ -77,7 +77,7 @@ https://view.officeapps.live.com/op/view.aspx?src=${encodeURIComponent(url)}
 
 使用了微软的文件预览服务，然后删除了文件地址，仍然可访问，但过一段时间会失效。
 
-## 2.Google Drive 查看器
+### 2.Google Drive 查看器
 
 接入简单，同 `Office Web Viewer`，只需要把 `src` 改为`https://drive.google.com/viewer?url=${encodeURIComponent(url)}`即可。
 
@@ -89,7 +89,7 @@ https://view.officeapps.live.com/op/view.aspx?src=${encodeURIComponent(url)}
 
 **由于某些众所周知的原因，不可用**
 
-## 3.阿里云 IMM
+### 3.阿里云 IMM
 
 官方文档如下：https://help.aliyun.com/document_detail/63273.html
 
@@ -97,7 +97,7 @@ https://view.officeapps.live.com/op/view.aspx?src=${encodeURIComponent(url)}
 
 付费使用
 
-## 4.XDOC 文档预览
+### 4.XDOC 文档预览
 
 说了一些大厂的，在介绍一些其他的，**需要自行分辨**
 
@@ -105,7 +105,7 @@ https://view.officeapps.live.com/op/view.aspx?src=${encodeURIComponent(url)}
 
 ![image.png](../../../assets/article/docPreview/xdoc.webp)
 
-## 5.Office Web 365
+### 5.Office Web 365
 
 需要注意的是，虽然名字很像`office`，但我们看网页的`Copyright`可以发现，其实是一个西安的公司，**不是微软**。
 
@@ -115,7 +115,7 @@ https://view.officeapps.live.com/op/view.aspx?src=${encodeURIComponent(url)}
 
 ![image.png](../../../assets/article/docPreview/ow365.webp)
 
-## 6.WPS 开放平台
+### 6.WPS 开放平台
 
 官方地址：https://solution.wps.cn/
 
@@ -125,9 +125,9 @@ https://view.officeapps.live.com/op/view.aspx?src=${encodeURIComponent(url)}
 
 ![image.png](../../../assets/article/docPreview/wps_office_price.webp)
 
-# 二。前端处理方案
+## 二：前端处理方案
 
-## 1.pptx 的预览方案
+### 1.pptx 的预览方案
 
 先查一下有没有现成的轮子，目前`pptx`的开源预览方案能找到的只有这个：https://github.com/g21589/PPTX2HTML。但已经六七年没有更新，也没有维护，笔者使用的时候发现有很多兼容性问题。
 
@@ -277,9 +277,9 @@ Part | Description |
 
 使用文档：[preview 组件](https://chaxus.github.io/ran/src/ranui/preview/)
 
-## 2.pdf 的预览方案
+### 2.pdf 的预览方案
 
-### (1).iframe 和 embed
+#### (1).iframe 和 embed
 
 `pdf`比较特别，一般的浏览器默认支持预览`pdf`。因此，我们可以使用浏览器的能力：
 
@@ -291,7 +291,7 @@ Part | Description |
 
 `embed`的解析方式也是一样，这里不举例子了
 
-### (2)pdfjs
+#### (2)pdfjs
 
 npm: <https://www.npmjs.com/package/pdfjs-dist>
 
@@ -445,7 +445,7 @@ export const renderPdf = async (file: File, dom?: HTMLElement): Promise<void> =>
 };
 ```
 
-## 3.docx 的预览方案
+### 3.docx 的预览方案
 
 我们可以去查看`docx`的国际标准，去解析文件格式，渲染成`html`和`canvas`，不过比较好的是，已经有人这么做了，还开源了
 
@@ -482,7 +482,7 @@ export const renderDocx = (options: DocxOptions): Promise<void> | undefined => {
 };
 ```
 
-## 4.xlsx 的预览方案
+### 4.xlsx 的预览方案
 
 我们可以使用这个：
 
@@ -492,7 +492,7 @@ export const renderDocx = (options: DocxOptions): Promise<void> | undefined => {
 
 对于`xlsx`的预览方案，这个是找到最好用的了。
 
-## 5.前端预览方案总结
+### 5.前端预览方案总结
 
 我们对以上找到的优秀的解决方案，进行改进和总结，并封装成一个`web components`组件：[preview 组件](https://chaxus.github.io/ran/src/ranui/preview/)
 
@@ -507,9 +507,9 @@ export const renderDocx = (options: DocxOptions): Promise<void> | undefined => {
 
 目前`docx`,`pdf`,`xlsx`预览基本可以了，都是最好的方案。`pptx`预览效果不太好，因为需要自行解析。不过**源码完全公开**，需要的可以提`issue`，`pr`或者干脆自取或修改，源码地址：https://github.com/chaxus/ran/tree/main/packages/ranui
 
-# 三。服务端预览方案
+## 三：服务端预览方案
 
-## 1.openOffice
+### 1.openOffice
 
 由于浏览器不能直接打开`docx`,`pptx`,`xlsx`等格式文件，但可以直接打开`pdf`和图片。因此，我们可以换一个思路，用服务端去转换下文件的格式，转换成浏览器能识别的格式，然后再让浏览器打开，这不就 OK 了吗，甚至不需要前端处理了。
 
@@ -595,7 +595,7 @@ public class OfficeUtil {
 
 ```
 
-## 2.kkFileView
+### 2.kkFileView
 
 `github`地址：https://github.com/kekingcn/kkFileView
 
@@ -668,7 +668,7 @@ mvn clean install -DskipTests
 
 预览效果非常好
 
-## 3.onlyOffice
+### 3.onlyOffice
 
 官网地址：https://www.onlyoffice.com/zh
 
@@ -678,14 +678,14 @@ mvn clean install -DskipTests
 
 预览的文件种类没有`kkFileView`多，但对`office`三件套有很好的支持，甚至支持多人编辑。
 
-# 四。总结
+## 四：总结
 
 1. 外部服务，推荐微软的`view.officeapps.live.com/op/view.aspx`，但只建议预览一些互联网公开的文件，不建议使用在要求保密性和稳定性的文件。
 2. 对保密性和稳定性有要求，且不差钱的，可以试试大厂服务，阿里云解决方案。
 3. 服务端技术比较给力的，使用服务端预览方案。目前最好最全的效果是服务端预览方案。
 4. 不想花钱，没有服务器的，使用前端预览方案，客户端渲染零成本。
 
-# 五。参考文档：
+## 五：参考文档：
 
 1. [在 java 中如何使用 openOffice 进行格式转换](https://blog.csdn.net/Li_Zhongxin/article/details/132105957)
 2. [MAC 搭建 OpenOffice 完整教程 - 保姆级](https://blog.51cto.com/u_15899048/5902747)
