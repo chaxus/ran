@@ -147,7 +147,7 @@ const themeCnConfig: DefaultTheme.Config = {
             link: '/cn/src/article/docPreview.md',
           },
           {
-            text: '实现自适应码率 Web 视频加密播放：前后端的挑战与解决方案',
+            text: 'Web 视频加密播放方案',
             link: '/cn/src/article/video.md',
           },
         ],
