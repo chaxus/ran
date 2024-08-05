@@ -1,6 +1,6 @@
 {
   "name": "ranui",
-  "version": "0.1.10-alpha.12",
+  "version": "0.1.10-alpha.15",
   "description": "UI Component library based on `Web Component`",
   "main": "dist/umd/index.umd.cjs",
   "module": "dist/index.js",
@@ -17,9 +17,6 @@
   },
   "author": "chaxus",
   "license": "MIT",
-  "engines": {
-    "node": "^16.20.2 || >=18.0.0"
-  },
   "scripts": {
     "dev": "vite --host",
     "build": "sh ./bin/build.sh",
