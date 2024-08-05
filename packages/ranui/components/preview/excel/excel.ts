@@ -118,7 +118,7 @@ function transferColumns(
   for (let i = 0; i < (excelSheet.columns || []).length; i++) {
     spreadSheet.cols[i.toString()] = {};
     if (excelSheet.columns[i].width) {
-      spreadSheet.cols[i.toString()].width = excelSheet.columns[i].width * 6 + (options.widthOffset || 0);
+      spreadSheet.cols[i.toString()].width =defaultColWidth + excelSheet.columns[i].width * 6 + (options.widthOffset || 0);
     } else {
       spreadSheet.cols[i.toString()].width = defaultColWidth + (options.widthOffset || 0);
     }
@@ -333,12 +333,12 @@ function getStyle(cell: Cell) {
   }
 
   // exceljs 对齐的格式转成 x-date-spreedsheet 能识别的对齐格式
-  if (cell.style.alignment) {
+  if (cell.style.alignment) { 
     if (cell.style.alignment.horizontal) {
-      cell.style.align = cell.style.alignment.horizontal;
+      cell.style.align = "middle";
     }
     if (cell.style.alignment.vertical) {
-      cell.style.valign = cell.style.alignment.vertical;
+      cell.style.valign = "top";
     }
   }
   if (cell.style.alignment && cell.style.alignment.wrapText) {
@@ -405,7 +405,7 @@ export function transferExcelToSpreadSheet(workbook: any, options: any): any {
       sheetData.rows[spreadSheetRowIndex] = { cells: {} };
 
       if (row.height) {
-        sheetData.rows[spreadSheetRowIndex].height = row.height + (options.heightOffset || 0);
+        sheetData.rows[spreadSheetRowIndex].height =defaultRowHeight + row.height + (options.heightOffset || 0);
       } else {
         sheetData.rows[spreadSheetRowIndex].height = defaultRowHeight + (options.heightOffset || 0);
       }
