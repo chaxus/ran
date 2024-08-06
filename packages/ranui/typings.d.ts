@@ -9,6 +9,7 @@ declare module '@/public/*';
 declare module '@/components/*';
 declare module '@/plugins/*';
 
+
 declare namespace Ran {
   interface Prompt {
     content: string;
@@ -92,14 +93,16 @@ interface MathJax {
   tex2chtmlPromise: (x: string, y: object) => Promise<Element>;
 }
 
-declare global {
-  interface Window {
-    Hls: HLS;
-    ranui: Partial<Ranui>;
-    message: Partial<Ran.Message>;
-    MathJax: MathJax;
-    katex: {
-      render: (x: string, y: HTMLElement, z: object) => void;
+declare interface Window {
+  ranui: Partial<Ranui>;
+  message: Partial<Ran.Message>;
+  MathJax: MathJax;
+  katex: {
+    render: (x: string, y: HTMLElement, z: object) => void;
+  };
+  pdfjsLib: {
+    GlobalWorkerOptions: {
+      workerSrc: string;
     };
     pdfjsLib: {
       GlobalWorkerOptions: {
