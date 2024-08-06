@@ -91,22 +91,24 @@ interface MathJax {
   tex2chtmlPromise: (x: string, y: object) => Promise<Element>;
 }
 
-declare interface Window {
-  ranui: Partial<Ranui>;
-  message: Partial<Ran.Message>;
-  MathJax: MathJax;
-  katex: {
-    render: (x: string, y: HTMLElement, z: object) => void;
-  };
-  pdfjsLib: {
-    GlobalWorkerOptions: {
-      workerSrc: string;
+declare global {
+  interface Window {
+    ranui: Partial<Ranui>;
+    message: Partial<Ran.Message>;
+    MathJax: MathJax;
+    katex: {
+      render: (x: string, y: HTMLElement, z: object) => void;
     };
-    getDocument: (x: string | ArrayBuffer) => {
-      promise: Promise<PDFDocumentProxy>;
+    pdfjsLib: {
+      GlobalWorkerOptions: {
+        workerSrc: string;
+      };
+      getDocument: (x: string | ArrayBuffer) => {
+        promise: Promise<PDFDocumentProxy>;
+      };
     };
-  };
-  Hls: HLS;
+    Hls: HLS;
+  }
 }
 
 namespace JSX {
