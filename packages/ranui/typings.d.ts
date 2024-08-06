@@ -9,7 +9,7 @@ declare module '@/public/*';
 declare module '@/components/*';
 declare module '@/plugins/*';
 
-export declare namespace Ran {
+declare namespace Ran {
   interface Prompt {
     content: string;
     duration?: number;
@@ -26,11 +26,11 @@ export declare namespace Ran {
   }
 }
 
-export interface Ranui {
+interface Ranui {
   message: Partial<Ran.Message>;
 }
 
-export interface HlsPlayer {
+interface HlsPlayer {
   off: (s: string, f: Function) => void;
   on: (s: string, f: Function) => void;
   loadSource: (s: string) => void;
@@ -39,7 +39,7 @@ export interface HlsPlayer {
   startLoad(): () => void;
 }
 
-export interface Hls {
+interface Hls {
   Events: {
     MANIFEST_LOADED: 'hlsManifestLoaded';
     ERROR: 'error';
@@ -47,69 +47,71 @@ export interface Hls {
   isSupported: () => boolean;
 }
 
-export type HLS = Hls & (new () => HlsPlayer);
+type HLS = Hls & (new () => HlsPlayer);
 
-export interface Viewport {
+interface Viewport {
   width: number;
   height: number;
   viewBox: Array<number>;
 }
-export interface RenderContext {
+interface RenderContext {
   canvasContext: CanvasRenderingContext2D | null;
   transform: Array<number>;
   viewport: Viewport;
 }
 
-export interface PDFPageProxy {
+interface PDFPageProxy {
   pageNumber: number;
   getViewport: () => Viewport;
   render: (options: RenderContext) => void;
 }
 
-export interface PDFDocumentProxy {
+interface PDFDocumentProxy {
   numPages: number;
   getPage: (x: number) => Promise<PDFPageProxy>;
 }
 
-export interface HTMLElement {
+interface HTMLElement {
   mozRequestFullScreen: (options?: FullscreenOptions) => Promise<void>;
   msRequestFullscreen: (options?: FullscreenOptions) => Promise<void>;
   oRequestFullscreen: (options?: FullscreenOptions) => Promise<void>;
   webkitRequestFullscreen: (options?: FullscreenOptions) => Promise<void>;
   webkitEnterFullscreen: (options?: FullscreenOptions) => Promise<void>;
 }
-export declare interface Document {
+declare interface Document {
   msExitFullscreen: () => Promise<void>;
   mozCancelFullScreen: () => Promise<void>;
   oCancelFullScreen: () => Promise<void>;
   webkitExitFullscreen: () => Promise<void>;
 }
 
-export interface MathJax {
+interface MathJax {
   texReset: () => void;
   getMetricsFor: (x: HTMLElement) => object;
   tex2chtmlPromise: (x: string, y: object) => Promise<Element>;
 }
 
-export declare interface Window {
-  ranui: Partial<Ranui>;
-  message: Partial<Ran.Message>;
-  MathJax: MathJax;
-  katex: {
-    render: (x: string, y: HTMLElement, z: object) => void;
-  };
-  pdfjsLib: {
-    GlobalWorkerOptions: {
-      workerSrc: string;
+declare global {
+  interface Window {
+    ranui: Partial<Ranui>;
+    message: Partial<Ran.Message>;
+    MathJax: MathJax;
+    katex: {
+      render: (x: string, y: HTMLElement, z: object) => void;
     };
-    getDocument: (x: string | ArrayBuffer) => {
-      promise: Promise<PDFDocumentProxy>;
+    pdfjsLib: {
+      GlobalWorkerOptions: {
+        workerSrc: string;
+      };
+      getDocument: (x: string | ArrayBuffer) => {
+        promise: Promise<PDFDocumentProxy>;
+      };
     };
-  };
-  Hls: HLS;
+    Hls: HLS;
+  }
 }
 
-export namespace JSX {
+namespace JSX {
   interface IntrinsicElements {
     'r-loading': any & {
       name: NAME_AMP;

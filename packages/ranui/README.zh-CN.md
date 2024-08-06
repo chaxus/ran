@@ -50,14 +50,16 @@ import 'ranui/style';
 如果遇到类型问题，可以选择手动导入类型文件
 
 ```ts
-import 'ranui/types';
-```
-
-或者
-
-```ts
+import 'ranui/typings';
+// 或者
+import 'ranui/dist/index.d.ts';
+// 或者
+import 'ranui/type';
+// 或者
 import 'ranui/dist/typings';
 ```
+
+并不是都要，选一个能生效的就行
 
 也支持全量导入
 

@@ -6,6 +6,7 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import viteImagemin from '@vheemstra/vite-plugin-imagemin';
 import imageminSvgo from 'imagemin-svgo';
 import type { RollupOptions } from 'rollup';
+import { babel } from '@rollup/plugin-babel';
 import loadStyle from './plugins/load-style';
 import loadSvg from './plugins/load-svg';
 import { PORT } from './build/config';
@@ -115,6 +116,7 @@ export const viteConfig: UserConfig = {
         svg: imageminSvgo(),
       },
     }),
+    babel()
   ],
   resolve: {
     alias: {

@@ -1,6 +1,6 @@
 {
   "name": "ranui",
-  "version": "0.1.10-alpha.12",
+  "version": "0.1.10-alpha.18",
   "description": "UI Component library based on `Web Component`",
   "main": "dist/umd/index.umd.cjs",
   "module": "dist/index.js",
@@ -177,9 +177,11 @@
   },
   "devDependencies": {
     "@babel/core": "^7.24.5",
+    "@babel/plugin-transform-nullish-coalescing-operator": "^7.24.7",
     "@babel/preset-env": "^7.24.5",
     "@babel/preset-typescript": "^7.24.1",
     "@playwright/test": "^1.44.0",
+    "@rollup/plugin-babel": "^6.0.4",
     "@types/imagemin-svgo": "^10.0.5",
     "@types/lodash": "^4.17.1",
     "@types/react": "^18.3.1",

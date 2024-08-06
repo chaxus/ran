@@ -51,8 +51,16 @@ import 'ranui/style';
 If there is a `type` problem, you can manually import the type
 
 ```ts
+import 'ranui/typings';
+// or
 import 'ranui/dist/index.d.ts';
+// or
+import 'ranui/type';
+// or
+import 'ranui/dist/typings';
 ```
+
+Not all of them. Just pick one that works
 
 Support global import
 
