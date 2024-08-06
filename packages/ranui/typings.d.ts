@@ -93,16 +93,13 @@ interface MathJax {
   tex2chtmlPromise: (x: string, y: object) => Promise<Element>;
 }
 
-declare interface Window {
-  ranui: Partial<Ranui>;
-  message: Partial<Ran.Message>;
-  MathJax: MathJax;
-  katex: {
-    render: (x: string, y: HTMLElement, z: object) => void;
-  };
-  pdfjsLib: {
-    GlobalWorkerOptions: {
-      workerSrc: string;
+declare global {
+  interface Window {
+    ranui: Partial<Ranui>;
+    message: Partial<Ran.Message>;
+    MathJax: MathJax;
+    katex: {
+      render: (x: string, y: HTMLElement, z: object) => void;
     };
     pdfjsLib: {
       GlobalWorkerOptions: {
