@@ -9,6 +9,8 @@ declare module '@/public/*';
 declare module '@/components/*';
 declare module '@/plugins/*';
 
+import type { NAME_AMP } from '@/components/Loading';
+
 declare namespace Ran {
   interface Prompt {
     content: string;
@@ -190,7 +192,6 @@ namespace JSX {
       sheet?: string;
       getPopupContainerId?: string;
       dropdownclass?: string;
-      trigger?: string;
       trigger?: string;
       disabled?: boolean | string;
     };
