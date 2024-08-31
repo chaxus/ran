@@ -203,7 +203,6 @@ function convertToPDF() {
 在 autogen.input 中，进一步禁用不必要的组件和功能。例如：
 
 --disable-dbus
---disable-xmlsec
 --disable-odk
 --disable-postgresql-sdbc
 --disable-firebird-sdbc
@@ -220,21 +219,16 @@ function convertToPDF() {
 --disable-python
 --disable-pdfimport
 --disable-lpsolve
---disable-collada
---disable-gltf
---disable-wmf
 --disable-sdremote
 --disable-scripting
 --disable-avmedia
 --disable-coinmp
 --disable-report-builder
---disable-systray
---disable-mozilla
 --disable-odk
 --disable-pch
 --disable-skia
 --disable-scripting
-3. 使用 Emscripten 优化选项
+1. 使用 Emscripten 优化选项
 Emscripten 提供了多种优化选项，可以帮助减小生成的 WebAssembly 文件的体积：
 
 使用 -O3 或 -Oz 进行最大化优化。
@@ -271,7 +265,6 @@ wasm-opt -Oz -o optimized.wasm original.wasm
 --with-main-module=writer
 --with-package-format=emscripten
 --disable-dbus
---disable-xmlsec
 --disable-odk
 --disable-postgresql-sdbc
 --disable-firebird-sdbc
@@ -288,16 +281,11 @@ wasm-opt -Oz -o optimized.wasm original.wasm
 --disable-python
 --disable-pdfimport
 --disable-lpsolve
---disable-collada
---disable-gltf
---disable-wmf
 --disable-sdremote
 --disable-scripting
 --disable-avmedia
 --disable-coinmp
 --disable-report-builder
---disable-systray
---disable-mozilla
 --disable-odk
 --disable-pch
 --disable-skia
@@ -432,7 +420,7 @@ make clean
 步骤 6：重新运行 configure 脚本
 重新运行 configure 脚本，以确保它能找到新的 OpenSSL 版本：
 
-emconfigure ./configure --disable-debug --enable-sal-log --disable-crashdump --host=wasm32-local-emscripten --disable-gui --with-main-module=writer --with-package-format=emscripten --disable-dbus --disable-odk --disable-postgresql-sdbc --disable-firebird-sdbc --disable-coinmp --disable-cve-tests --disable-gtk3 --disable-gstreamer-1-0 --disable-kf5 --disable-scripting-beanshell --disable-scripting-javascript --disable-extensions --disable-epm --disable-online-update --disable-python --disable-pdfimport --disable-lpsolve --disable-sdremote --disable-scripting --disable-avmedia --disable-coinmp --disable-report-builder --disable-odk --disable-pch --disable-skia --disable-scripting --srcdir=/home/core --enable-option-checking=fatal
+emconfigure ./configure --disable-debug --enable-sal-log --disable-crashdump --host=wasm32-local-emscripten --disable-gui --with-main-module=writer --with-package-format=emscripten --disable-dbus --disable-odk --disable-postgresql-sdbc --disable-firebird-sdbc --disable-coinmp --disable-cve-tests --disable-gtk3 --disable-gstreamer-1-0 --disable-kf5 --disable-scripting-beanshell --disable-scripting-javascript --disable-extensions --disable-epm --disable-online-update --disable-python --disable-pdfimport --disable-lpsolve --disable-sdremote --disable-scripting --disable-avmedia --disable-coinmp --disable-report-builder --disable-odk --disable-pch --disable-skia --disable-scripting --srcdir=/home/core --enable-option-checking=fatal --disable-pthreads
 步骤 7：检查 config.log
 如果配置仍然失败，请检查 config.log 文件以获取更多详细信息：
 
@@ -441,6 +429,5 @@ cat config.log | grep openssl
 
 
 emconfigure ./configure --disable-debug --enable-sal-log --disable-crashdump --host=wasm32-local-emscripten --disable-gui --with-main-module=writer --with-package-format=emscripten --disable-dbus --disable-odk --disable-postgresql-sdbc --disable-firebird-sdbc --disable-coinmp --disable-cve-tests --disable-gtk3 --disable-gstreamer-1-0 --disable-kf5 --disable-scripting-beanshell --disable-scripting-javascript --disable-extensions --disable-epm --disable-online-update --disable-python --disable-pdfimport --disable-lpsolve --disable-sdremote --disable-scripting --disable-avmedia --disable-coinmp --disable-report-builder --disable-odk --disable-pch --disable-skia --disable-scripting --srcdir=/home/core --enable-option-checking=fatal
-
 
 emmake make CXXFLAGS="-I/usr/local/ssl/include -O3 -g0 -msimd128" LDFLAGS="-L/usr/local/ssl/lib -lssl -lcrypto -O3 -g0"
