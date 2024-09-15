@@ -431,3 +431,14 @@ cat config.log | grep openssl
 emconfigure ./configure --disable-debug --enable-sal-log --disable-crashdump --host=wasm32-local-emscripten --disable-gui --with-main-module=writer --with-package-format=emscripten --disable-dbus --disable-odk --disable-postgresql-sdbc --disable-firebird-sdbc --disable-coinmp --disable-cve-tests --disable-gtk3 --disable-gstreamer-1-0 --disable-kf5 --disable-scripting-beanshell --disable-scripting-javascript --disable-extensions --disable-epm --disable-online-update --disable-python --disable-pdfimport --disable-lpsolve --disable-sdremote --disable-scripting --disable-avmedia --disable-coinmp --disable-report-builder --disable-odk --disable-pch --disable-skia --disable-scripting --srcdir=/home/core --enable-option-checking=fatal
 
 emmake make CXXFLAGS="-I/usr/local/ssl/include -O3 -g0 -msimd128" LDFLAGS="-L/usr/local/ssl/lib -lssl -lcrypto -O3 -g0"
+
+
+
+ emconfigure ./configure --disable-cups --disable-dbus --without-system-fontconfig --with-system-zlib --disable-dynamic-loading --disable-gui CXXFLAGS=-std=c++20 --host=wasm32-unknown-emscripten
+
+
+root@8cb3480a4441:/home/core/instsetoo_native# vim CustomTarget_emscripten-install.mk
+
+使用 file_packager.py 工具将文件预加载到虚拟文件系统中。确保 Emscripten 的环境变量已经正确设置，然后运行以下命令：
+
+python3 /home/emsdk/upstream/emscripten/tools/file_packager.py preload.data --preload /home/core/instdir/share@/instdir/share --js-output=preload.js

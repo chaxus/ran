@@ -13,6 +13,12 @@ const PORT = 5555;
 
 const STATIC_DIR = 'dist';
 
+app.use(async (ctx, next) => {
+  ctx.set('Cross-Origin-Opener-Policy', 'same-origin');
+  ctx.set('Cross-Origin-Embedder-Policy', 'require-corp');
+  await next();
+});
+
 // Serve static files from the 'dist' directory
 app.use(serve(path.join(__dirname, STATIC_DIR)));
 
