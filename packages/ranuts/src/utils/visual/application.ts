@@ -11,9 +11,7 @@ export class Application {
   constructor(options: IApplicationOptions) {
     const { view } = options;
     this.view = view;
-
     this.renderer = getRenderer(options);
-
     this.start();
   }
 

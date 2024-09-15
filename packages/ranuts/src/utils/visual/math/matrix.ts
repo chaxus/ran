@@ -1,12 +1,22 @@
 import { Point } from '@/utils/visual/vertex/point';
+import { PI_2 } from '@/utils/visual/math/enums';
+
+interface TransformableObject {
+  position: Point;
+  scale: Point;
+  pivot: Point;
+  skew: Point;
+  rotation: number;
+}
 // 矩阵的操作
 export class Matrix {
-  public a: number;
-  public b: number;
-  public c: number;
-  public d: number;
-  public tx: number;
-  public ty: number;
+  public a: number; // x scale
+  public b: number; // y skew
+  public c: number; // x skew
+  public d: number; //  y scale
+  public tx: number; // x translation
+  public ty: number; // y translation
+  public array: Float32Array | null = null; // An array of the current matrix. Only populated when `toArray` is called
   constructor(a = 1, b = 0, c = 0, d = 1, tx = 0, ty = 0) {
     this.a = a;
     this.b = b;
@@ -43,6 +53,175 @@ export class Matrix {
     return this;
   }
 
+  /**
+   * Creates a Matrix object based on the given array. The Element to Matrix mapping order is as follows:
+   *
+   * a = array[0]
+   * b = array[1]
+   * c = array[3]
+   * d = array[4]
+   * tx = array[2]
+   * ty = array[5]
+   * @param array - The array that the matrix will be populated from.
+   */
+  public fromArray(array: number[]): void {
+    this.a = array[0];
+    this.b = array[1];
+    this.c = array[3];
+    this.d = array[4];
+    this.tx = array[2];
+    this.ty = array[5];
+  }
+  /**
+   * Translates the matrix on the x and y.
+   * @param x - How much to translate x by
+   * @param y - How much to translate y by
+   * @returns This matrix. Good for chaining method calls.
+   */
+  public translate(x: number, y: number): this {
+    this.tx += x;
+    this.ty += y;
+
+    return this;
+  }
+  /**
+   * Applies a scale transformation to the matrix.
+   * @param x - The amount to scale horizontally
+   * @param y - The amount to scale vertically
+   * @returns This matrix. Good for chaining method calls.
+   */
+  public scale(x: number, y: number): this {
+    this.a *= x;
+    this.d *= y;
+    this.c *= x;
+    this.b *= y;
+    this.tx *= x;
+    this.ty *= y;
+
+    return this;
+  }
+  /**
+   * Sets the matrix based on all the available properties
+   * @param x - Position on the x axis
+   * @param y - Position on the y axis
+   * @param pivotX - Pivot on the x axis
+   * @param pivotY - Pivot on the y axis
+   * @param scaleX - Scale on the x axis
+   * @param scaleY - Scale on the y axis
+   * @param rotation - Rotation in radians
+   * @param skewX - Skew on the x axis
+   * @param skewY - Skew on the y axis
+   * @returns This matrix. Good for chaining method calls.
+   */
+  public setTransform(
+    x: number,
+    y: number,
+    pivotX: number,
+    pivotY: number,
+    scaleX: number,
+    scaleY: number,
+    rotation: number,
+    skewX: number,
+    skewY: number,
+  ): this {
+    this.a = Math.cos(rotation + skewY) * scaleX;
+    this.b = Math.sin(rotation + skewY) * scaleX;
+    this.c = -Math.sin(rotation - skewX) * scaleY;
+    this.d = Math.cos(rotation - skewX) * scaleY;
+
+    this.tx = x - (pivotX * this.a + pivotY * this.c);
+    this.ty = y - (pivotX * this.b + pivotY * this.d);
+
+    return this;
+  }
+  /**
+   * Applies a rotation transformation to the matrix.
+   * @param angle - The angle in radians.
+   * @returns This matrix. Good for chaining method calls.
+   */
+  public rotate(angle: number): this {
+    const cos = Math.cos(angle);
+    const sin = Math.sin(angle);
+
+    const a1 = this.a;
+    const c1 = this.c;
+    const tx1 = this.tx;
+
+    this.a = a1 * cos - this.b * sin;
+    this.b = a1 * sin + this.b * cos;
+    this.c = c1 * cos - this.d * sin;
+    this.d = c1 * sin + this.d * cos;
+    this.tx = tx1 * cos - this.ty * sin;
+    this.ty = tx1 * sin + this.ty * cos;
+
+    return this;
+  }
+  /**
+   * check to see if two matrices are the same
+   * @param matrix - The matrix to compare to.
+   */
+  public equals(matrix: Matrix): boolean {
+    return (
+      matrix.a === this.a &&
+      matrix.b === this.b &&
+      matrix.c === this.c &&
+      matrix.d === this.d &&
+      matrix.tx === this.tx &&
+      matrix.ty === this.ty
+    );
+  }
+  /**
+   * Resets this Matrix to an identity (default) matrix.
+   * @returns This matrix. Good for chaining method calls.
+   */
+  public identity(): this {
+    this.a = 1;
+    this.b = 0;
+    this.c = 0;
+    this.d = 1;
+    this.tx = 0;
+    this.ty = 0;
+
+    return this;
+  }
+
+  /**
+   * Decomposes the matrix (x, y, scaleX, scaleY, and rotation) and sets the properties on to a transform.
+   * @param transform - The transform to apply the properties to.
+   * @returns The transform with the newly applied properties
+   */
+  public decompose(transform: TransformableObject): TransformableObject {
+    // sort out rotation / skew..
+    const a = this.a;
+    const b = this.b;
+    const c = this.c;
+    const d = this.d;
+    const pivot = transform.pivot;
+
+    const skewX = -Math.atan2(-c, d);
+    const skewY = Math.atan2(b, a);
+
+    const delta = Math.abs(skewX + skewY);
+
+    if (delta < 0.00001 || Math.abs(PI_2 - delta) < 0.00001) {
+      transform.rotation = skewY;
+      transform.skew.x = transform.skew.y = 0;
+    } else {
+      transform.rotation = 0;
+      transform.skew.x = skewX;
+      transform.skew.y = skewY;
+    }
+
+    // next set scale
+    transform.scale.x = Math.sqrt(a * a + b * b);
+    transform.scale.y = Math.sqrt(c * c + d * d);
+
+    // next set position
+    transform.position.x = this.tx + (pivot.x * a + pivot.y * c);
+    transform.position.y = this.ty + (pivot.x * b + pivot.y * d);
+
+    return transform;
+  }
   /**
    * 对某个点应用当前的变换矩阵
    * @param p 某个点
@@ -106,5 +285,43 @@ export class Matrix {
     matrix.ty = this.ty;
 
     return matrix;
+  }
+
+  /**
+   * Creates an array from the current Matrix object.
+   * @param transpose - Whether we need to transpose the matrix or not
+   * @param [out=new Float32Array(9)] - If provided the array will be assigned to out
+   * @returns The newly created array which contains the matrix
+   */
+  public toArray(transpose?: boolean, out?: Float32Array): Float32Array {
+    if (!this.array) {
+      this.array = new Float32Array(9);
+    }
+
+    const array = out || this.array;
+
+    if (transpose) {
+      array[0] = this.a;
+      array[1] = this.b;
+      array[2] = 0;
+      array[3] = this.c;
+      array[4] = this.d;
+      array[5] = 0;
+      array[6] = this.tx;
+      array[7] = this.ty;
+      array[8] = 1;
+    } else {
+      array[0] = this.a;
+      array[1] = this.c;
+      array[2] = this.tx;
+      array[3] = this.b;
+      array[4] = this.d;
+      array[5] = this.ty;
+      array[6] = 0;
+      array[7] = 0;
+      array[8] = 1;
+    }
+
+    return array;
   }
 }

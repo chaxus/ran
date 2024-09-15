@@ -95,9 +95,7 @@ export abstract class Vertex extends SyncHook {
     options?: boolean | AddEventListenerOptions,
   ): void => {
     const capture = (typeof options === 'boolean' && options) || (typeof options === 'object' && options.capture);
-
     const realType = capture ? `${type}capture` : type;
-
     if (typeof options === 'object' && options.once) {
       this.once(realType, listener);
     } else {
