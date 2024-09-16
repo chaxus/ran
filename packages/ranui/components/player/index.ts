@@ -84,7 +84,6 @@ declare global {
   }
 }
 
-
 const SPEED = [
   { label: '2.0X', value: 2.0 },
   { label: '1.5X', value: 1.5 },
@@ -1008,7 +1007,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     window.removeEventListener('resize', this.resize);
     document.removeEventListener('fullscreenchange', this.fullScreenChange);
   }
-  attributeChangedCallback(k: string, o: string, n: string): void { }
+  attributeChangedCallback(k: string, o: string, n: string): void {}
 }
 
 function Custom() {

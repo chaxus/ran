@@ -5,7 +5,6 @@ import message from '@/components/message';
 import { DOCX, PDF, PPTX, XLS, XLSX } from '@/components/preview/constant';
 import type { BaseReturn, RenderOptions } from '@/components/preview/types';
 
-
 interface RequestUrlToArraybufferOption {
   responseType: XMLHttpRequestResponseType;
   method: string;

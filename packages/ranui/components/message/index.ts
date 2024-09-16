@@ -149,12 +149,12 @@ function Custom() {
 const message = Custom();
 
 declare global {
- interface Window {
+  interface Window {
     message: Ran.Message;
     ranui: {
       message?: Ran.Message;
     };
- }
+  }
 }
 
 if (typeof window !== 'undefined' && message) {
