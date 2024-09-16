@@ -89,6 +89,7 @@ export default tseslint.config(
           allowModules: ['vite'],
         },
       ],
+      '@typescript-eslint/no-wrapper-object-types': 'off',
       '@typescript-eslint/no-unused-expressions': 'off',
       '@typescript-eslint/no-unsafe-function-type': 'off',
       '@typescript-eslint/ban-ts-comment': 'error',

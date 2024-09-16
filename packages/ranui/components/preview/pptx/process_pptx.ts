@@ -1896,7 +1896,7 @@ export default function processPptx(
       const pathNodes = getTextByPathList(pathLstNode, ['a:path']) as Record<string, any>;
       const lnToNodes = pathNodes['a:lnTo'];
       const cubicBezToNodes = pathNodes['a:cubicBezTo'];
-      const sortblAry: {}[] = [];
+      const sortblAry: Object[] = [];
       if (lnToNodes !== undefined) {
         Object.keys(lnToNodes).forEach(function (key) {
           const lnToPtNode = lnToNodes[key]['a:pt'];
@@ -3579,7 +3579,7 @@ function getTextDirection (node, type, slideMasterTextStyles) {
         const bgFillLst = (themeContent as Record<string, any>)['a:theme']['a:themeElements']['a:fmtScheme'][
           'a:bgFillStyleLst'
         ];
-        const sortblAry: {}[] = [];
+        const sortblAry: Object[] = [];
         Object.keys(bgFillLst).forEach(function (key) {
           const bgFillLstTyp = bgFillLst[key];
           if (key !== 'attrs') {
@@ -3808,7 +3808,7 @@ function getTextDirection (node, type, slideMasterTextStyles) {
             const bgFillLst = (themeContent as Record<string, any>)['a:theme']['a:themeElements']['a:fmtScheme'][
               'a:bgFillStyleLst'
             ];
-            const sortblAry: {}[] = [];
+            const sortblAry: Object[] = [];
             Object.keys(bgFillLst).forEach(function (key) {
               // console.log("cubicBezTo["+key+"]:");
               const bgFillLstTyp = bgFillLst[key];

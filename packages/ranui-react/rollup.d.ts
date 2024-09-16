@@ -122,6 +122,7 @@ export type Statement =
   | ForOfStatement
   | Declaration;
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface BaseStatement extends BaseNode {}
 
 export interface EmptyStatement extends BaseStatement {
@@ -231,6 +232,7 @@ export interface DebuggerStatement extends BaseStatement {
 
 export type Declaration = FunctionDeclaration | VariableDeclaration | ClassDeclaration;
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface BaseDeclaration extends BaseStatement {}
 
 export interface MaybeNamedFunctionDeclaration extends BaseFunction, BaseDeclaration {
@@ -286,6 +288,7 @@ export interface ExpressionMap {
 
 export type Expression = ExpressionMap[keyof ExpressionMap];
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface BaseExpression extends BaseNode {}
 
 export type ChainElement = SimpleCallExpression | MemberExpression;
@@ -410,6 +413,7 @@ export interface MemberExpression extends BaseExpression, BasePattern {
 
 export type Pattern = Identifier | ObjectPattern | ArrayPattern | RestElement | AssignmentPattern | MemberExpression;
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface BasePattern extends BaseNode {}
 
 export interface SwitchCase extends BaseNode {
@@ -623,6 +627,7 @@ export type ModuleDeclaration =
   | ExportNamedDeclaration
   | ExportDefaultDeclaration
   | ExportAllDeclaration;
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface BaseModuleDeclaration extends BaseNode {}
 
 export type ModuleSpecifier = ImportSpecifier | ImportDefaultSpecifier | ImportNamespaceSpecifier | ExportSpecifier;
@@ -886,6 +891,7 @@ export type ParseAst = (input: string, options?: { allowReturnOutsideFunction?: 
 
 // declare AbortSignal here for environments without DOM lib or @types/node
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   interface AbortSignal {}
 }
 
@@ -1142,11 +1148,13 @@ type MakeAsync<Function_> = Function_ extends (this: infer This, ...parameters: 
   ? (this: This, ...parameters: Arguments) => Return | Promise<Return>
   : never;
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 type ObjectHook<T, O = {}> = T | ({ handler: T; order?: 'pre' | 'post' | null } & O);
 
 export type PluginHooks = {
   [K in keyof FunctionPluginHooks]: ObjectHook<
     K extends AsyncPluginHooks ? MakeAsync<FunctionPluginHooks[K]> : FunctionPluginHooks[K],
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     K extends ParallelPluginHooks ? { sequential?: boolean } : {}
   >;
 };
