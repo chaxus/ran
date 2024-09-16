@@ -29,6 +29,19 @@ interface PDFDocumentProxy {
   getPage: (x: number) => Promise<PDFPageProxy>;
 }
 
+declare global {
+  interface Window {
+    pdfjsLib: {
+      GlobalWorkerOptions: {
+        workerSrc: string;
+      };
+      getDocument: (x: string | ArrayBuffer) => {
+        promise: Promise<PDFDocumentProxy>;
+      };
+    };
+  }
+}
+
 class PdfPreview {
   private pdfDoc: PDFDocumentProxy | undefined;
   pageNumber: number;

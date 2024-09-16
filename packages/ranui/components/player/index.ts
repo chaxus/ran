@@ -68,6 +68,23 @@ export interface Context {
   clarity: string;
 }
 
+interface Hls {
+  Events: {
+    MANIFEST_LOADED: 'hlsManifestLoaded';
+    ERROR: 'error';
+  };
+  isSupported: () => boolean;
+}
+
+type HLS = Hls & (new () => HlsPlayer);
+
+declare global {
+  interface Window {
+    Hls: HLS;
+  }
+}
+
+
 const SPEED = [
   { label: '2.0X', value: 2.0 },
   { label: '1.5X', value: 1.5 },
@@ -354,7 +371,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
    * @return {*}
    */
   updatePlayer = (): void => {
-    const { Hls } = window;
+    const Hls = window.Hls;
     // 如果有子元素，进行置空
     this.innerHTML = '';
     if (!this.contains(this._player)) this.appendChild(this._player);
@@ -991,7 +1008,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     window.removeEventListener('resize', this.resize);
     document.removeEventListener('fullscreenchange', this.fullScreenChange);
   }
-  attributeChangedCallback(k: string, o: string, n: string): void {}
+  attributeChangedCallback(k: string, o: string, n: string): void { }
 }
 
 function Custom() {

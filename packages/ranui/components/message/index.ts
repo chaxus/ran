@@ -143,10 +143,19 @@ function Custom() {
       toast: commonPrompt('toast'),
     };
   }
-  return {};
+  return null;
 }
 
 const message = Custom();
+
+declare global {
+ interface Window {
+    message: Ran.Message;
+    ranui: {
+      message?: Ran.Message;
+    };
+ }
+}
 
 if (typeof window !== 'undefined' && message) {
   window.message = message;

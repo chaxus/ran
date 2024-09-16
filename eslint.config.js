@@ -89,7 +89,8 @@ export default tseslint.config(
           allowModules: ['vite'],
         },
       ],
-
+      '@typescript-eslint/no-unused-expressions': 'off',
+      '@typescript-eslint/no-unsafe-function-type':'off',
       '@typescript-eslint/ban-ts-comment': 'error',
       '@typescript-eslint/ban-types': 'off', // TODO: we should turn this on in a new PR
       '@typescript-eslint/explicit-module-boundary-types': ['error', { allowArgumentsExplicitlyTypedAsAny: true }],

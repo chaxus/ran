@@ -5,7 +5,6 @@ import message from '@/components/message';
 import { DOCX, PDF, PPTX, XLS, XLSX } from '@/components/preview/constant';
 import type { BaseReturn, RenderOptions } from '@/components/preview/types';
 
-const { warning = noop } = message;
 
 interface RequestUrlToArraybufferOption {
   responseType: XMLHttpRequestResponseType;
@@ -24,6 +23,8 @@ interface requestUrlToArraybufferReturn extends BaseReturn {
 
 async function Custom() {
   if (typeof document !== 'undefined' && !customElements.get('r-preview')) {
+    const { warning = noop } = message!;
+
     const { renderPptx } = await import('@/components/preview/pptx');
     const { renderDocx } = await import('@/components/preview/docx');
     const { renderPdf } = await import('@/components/preview/pdf');

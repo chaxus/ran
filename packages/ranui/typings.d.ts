@@ -9,15 +9,14 @@ declare module '@/public/*';
 declare module '@/components/*';
 declare module '@/plugins/*';
 
-import type { NAME_AMP } from '@/components/Loading';
-
 declare namespace Ran {
   interface Prompt {
     content: string;
     duration?: number;
     close?: () => void;
   }
-  type Hint = (options: Prompt | string) => void;
+
+  type Hint = (options: Prompt | string | undefined | null) => void;
 
   interface Message {
     info: Hint;
@@ -95,6 +94,7 @@ interface MathJax {
 
 declare global {
   interface Window {
+    Hls: HLS;
     ranui: Partial<Ranui>;
     message: Partial<Ran.Message>;
     MathJax: MathJax;
@@ -109,8 +109,39 @@ declare global {
         promise: Promise<PDFDocumentProxy>;
       };
     };
-    Hls: HLS;
   }
+}
+
+enum NAME_AMP {
+  DOUBLE_BOUNCE = 'double-bounce',
+  ROTATE = 'rotate',
+  STRETCH = 'stretch',
+  CUBE = 'cube',
+  DOT = 'dot',
+  TRIPLE_BOUNCE = 'triple-bounce',
+  SCALE_OUT = 'scale-out',
+  CIRCLE = 'circle',
+  CIRCLE_LINE = 'circle-line',
+  SQUARE = 'square',
+  PULSE = 'pulse',
+  SOLAR = 'solar',
+  CUBE_FOLD = 'cube-fold',
+  CIRCLE_FOLD = 'circle-fold',
+  CUBE_GRID = 'cube-grid',
+  CIRCLE_TURN = 'circle-turn',
+  CIRCLE_ROTATE = 'circle-rotate',
+  CIRCLE_SPIN = 'circle-spin',
+  DOT_BAR = 'dot-bar',
+  DOT_CIRCLE = 'dot-circle',
+  LINE = 'line',
+  DOT_PULSE = 'dot-pulse',
+  LINE_SCALE = 'line-scale',
+  TEXT = 'text',
+  CUBE_DIM = 'cube-dim',
+  DOT_LINE = 'dot-line',
+  ARC = 'arc',
+  DROP = 'drop',
+  PACMAN = 'pacman',
 }
 
 namespace JSX {
