@@ -23,37 +23,37 @@
 </p>
 <br/>
 
-English · [中文](./readme-zh_CN.md)
+[English](./readme.md) · 中文
 
-This is a personal project. Before deploying to production, please be cautious.
+这是一个兴趣爱好项目，在用到生产环境之前，还请谨慎❤️
 
-The source code is fully open-sourced and modifiable. Contributions to issues and pull requests are welcome.
+基于 `MIT` 协议，源码完全开源，可供使用和修改。非常欢迎提供 `pr` 和`issue`，来者不拒🐶。
 
-I aspire to extend the benefits of open-sourcing my code, as I myself have been greatly influenced and aided by numerous open-source projects throughout my development and learning journey. By doing so, I hope to contribute to a wider community where everyone can learn, grow, and benefit.
+希望通过开源代码这种方式，让大家都能受益。因为在我的开发和学习过程中，自己也受到了许多开源项目的极大影响和帮助💗。
 
-The project encompasses a diverse range of codes, encompassing web component libraries, machine learning capabilities, function libraries, select CSS fragments, web3 smart contracts, and numerous other elements.
+该项目包含了各种各样的代码，包括 web 原生组件库、机器学习的代码、函数库、一些 CSS 片段、web3 智能合约开发和许多其他东西，通过 Monorepo 进行管理。
 
-Thank you for expressing your interest by giving our repository a `star`—it means a lot to us and fuels our passion to continue creating valuable content.
+感谢您通过给我们的仓库`star`来表达您的兴趣，这对我们来说意义重大，并激发了我们继续创造有价值内容的热情。
 
-## Packages
+## 项目列表
 
 | package                              | version (click for readme)                                                                                          | npm-d(click for npm)                                                                                                                                                                                 | description(click for document website)                                     |
 | ------------------------------------ | :------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
 | [ranui](packages/ranui)              | [![ranui version](https://img.shields.io/npm/v/ranui.svg?label=%20)](packages/ranui/readme.md)                      | [![npm-d](https://img.shields.io/npm/dt/ranui.svg)](https://www.npmjs.com/package/ranui) [![npm-md](https://img.shields.io/npm/dm/ranui.svg?style=flat-square)](https://www.npmjs.com/package/ranui) | [UI library](https://chaxus.github.io/ran/src/ranui/)                       |
 | [@ranui/react](packages/ranui-react) | [![@ranui/react version](https://img.shields.io/npm/v/@ranui/react.svg?label=%20)](packages/@ranui/react/readme.md) | [![npm-d](https://img.shields.io/npm/dt/@ranui/react.svg)](https://www.npmjs.com/package/@ranui/react)                                                                                               | [React UI library](https://chaxus.github.io/ran/src/ranui/)                 |
 | [ranuts](packages/ranuts)            | [![ranuts version](https://img.shields.io/npm/v/ranuts.svg?label=%20)](packages/ranuts/readme.md)                   | [![npm-d](https://img.shields.io/npm/dt/ranuts.svg)](https://www.npmjs.com/package/ranuts)                                                                                                           | [Util library](https://chaxus.github.io/ran/src/ranuts/)                    |
-| [docs](packages/docs)                |                                                                                                                     |                                                                                                                                                                                                      | [Documentation website](https://chaxus.github.io/ran/) for current project. |
+| [docs](packages/docs)                |                                                                                                                     |                                                                                                                                                                                                      | [文档](https://chaxus.github.io/ran/) for current project. |
 
-# Contributors
+# 感谢贡献的朋友
 
 <a href="https://github.com/chaxus/ran/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=chaxus/ran" />
 </a>
 
-# Visitors
+# 路过看一看，点一点
 
 ![](http://profile-counter.glitch.me/chaxus-ran/count.svg)
 
-# License
+# 开源协议
 
 [MIT](/LICENSE)
