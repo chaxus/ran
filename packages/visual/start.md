@@ -39,4 +39,3 @@ Shader 格式化（可选）
 在插件中搜索 glsl-canvas，安装即可。
 
 # 首先，编写 Shader 的主体。
-
