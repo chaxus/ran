@@ -19,18 +19,18 @@
     "scope": "markdown",
     "prefix": "sup",
     "body": ["[<sup>[$2]</sup>]($1)。"],
-    "description": "生成参考文献的角标"
+    "description": "生成参考文献的角标",
   },
   "生成链接": {
     "scope": "markdown",
     "prefix": "[]",
     "body": ["[$2]($1)。"],
-    "description": "生成链接"
+    "description": "生成链接",
   },
   "生成图片引用": {
     "scope": "markdown",
     "prefix": "[]",
     "body": ["![$2]($1)。"],
-    "description": "生成图片引用"
-  }
+    "description": "生成图片引用",
+  },
 }

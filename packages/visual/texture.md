@@ -210,7 +210,6 @@ vec4 transition(vec2 uv){
 
 ![](./assets/image/texture-slider.webp)
 
-
 我们得到了一个像帘子一般的左右滑动的转场效果。原理见下图：
 
 ![](./assets/image/texture-progress.webp)
@@ -220,4 +219,3 @@ vec4 transition(vec2 uv){
 ### 遮罩转场
 
 接下来，我们来换一种形式。在 progress 变量的下方新增一个 ratio 变量，表示画布的比例。
-

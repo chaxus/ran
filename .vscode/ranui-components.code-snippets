@@ -48,27 +48,27 @@
       "   }",
       "window.customElements.define('r-$1', CustomElement)",
       "}",
-      "export default Component()"
+      "export default Component()",
       // $通过tab切换
     ],
-    "description": "ranui component template"
+    "description": "ranui component template",
   },
   "Print sort function": {
     "scope": "javascript,typescript",
     "prefix": "sf",
     "body": ["const $1 = ($2) => {", "", "}", "", "export default $1"],
-    "description": "Log output to console"
+    "description": "Log output to console",
   },
   "Print to return": {
     "scope": "javascript,typescript",
     "prefix": "rt",
     "body": ["return"],
-    "description": "Log output to console"
+    "description": "Log output to console",
   },
   "Print to for": {
     "scope": "javascript,typescript",
     "prefix": "for",
     "body": ["for(let i = 0; i < $1; i++) {", "", "}"],
-    "description": "Log output to console"
-  }
+    "description": "Log output to console",
+  },
 }

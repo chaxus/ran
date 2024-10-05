@@ -23,6 +23,7 @@ export default tseslint.config(
       '**/temp/**',
       '**/*.snap',
       '**/cache/**',
+      '**/CMakeFiles/**',
     ],
   },
   eslint.configs.recommended,

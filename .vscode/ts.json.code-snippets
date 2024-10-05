@@ -19,13 +19,13 @@
     "scope": "javascript,typescript",
     "prefix": "clg",
     "body": ["console.log('$1');"],
-    "description": "Log output to console"
+    "description": "Log output to console",
   },
   "web components class": {
     "scope": "typescript",
     "prefix": "wc",
     "body": [
-      "import { isDisabled } from '@/utils/index';"
+      "import { isDisabled } from '@/utils/index';",
       "",
       "class Option extends HTMLElement {",
       "  _option: HTMLDivElement;",
@@ -50,7 +50,7 @@
       "    return this.getAttribute('sheet');",
       "  }",
       "  set sheet(value) {",
-      "    this.setAttribute('sheet', value || "");",
+      "    this.setAttribute('sheet', value || '');",
       "  }",
       "  get disabled() {",
       "    return isDisabled(this);",
@@ -88,11 +88,8 @@
       "    if (name === 'sheet' && this._shadowDom && oldValue !== newValue)",
       "      this.handlerExternalCss();",
       "  }",
-      "}"
-
-
-
+      "}",
     ],
-    "description": "generate web components ts code"
-  }
+    "description": "generate web components ts code",
+  },
 }
