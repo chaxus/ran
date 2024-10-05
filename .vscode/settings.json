@@ -105,5 +105,6 @@
     "stdio.h": "c",
     "gmodule.h": "c",
     "glib.h": "c"
-  }
+  },
+  "cmake.ignoreCMakeListsMissing": true
 }
