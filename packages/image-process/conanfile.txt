@@ -1,0 +1,7 @@
+[requires]
+glib/2.78.3
+libvips/8.15.2
+
+[generators]
+CMakeDeps
+CMakeToolchain

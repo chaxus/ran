@@ -96,5 +96,14 @@
     "wasmjieba",
     "xlabels"
   ],
-  "liveServer.settings.port": 5556
+  "liveServer.settings.port": 5556,
+  "files.associations": {
+    "*.cjson": "jsonc",
+    "*.wxss": "css",
+    "*.wxs": "javascript",
+    "vips.h": "c",
+    "stdio.h": "c",
+    "gmodule.h": "c",
+    "glib.h": "c"
+  }
 }

@@ -4,7 +4,8 @@
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/opt/homebrew/Cellar/emscripten/3.1.59/libexec/system/include"
+                "/usr/local/include/**",
+                "/opt/homebrew/include/glib-2.0/**"
             ],
             "defines": [],
             "macFrameworkPath": [
