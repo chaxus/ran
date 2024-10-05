@@ -3,11 +3,9 @@
     {
       "name": "Mac",
       "includePath": [
-        "${workspaceFolder}/**",
+        "${workspaceFolder}/packages/image-process/src/**",
         "/usr/local/include/**",
-        "${env:chaxus}/.conan2/p/b/libvic605da2cdc04b/b/build-release/libvips/include",
-        "${env:chaxus}/.conan2/p/b/libvic605da2cdc04b/b/src/libvips/include",
-        "${env:chaxus}/.conan2/p/libvi6bda2a423e65b/s/src/libvips/include"
+        "${env:chaxus}/.conan2/p/b/**"
       ],
       "defines": [],
       "macFrameworkPath": ["/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks"],

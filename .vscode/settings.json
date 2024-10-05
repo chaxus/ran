@@ -104,7 +104,8 @@
     "vips.h": "c",
     "stdio.h": "c",
     "gmodule.h": "c",
-    "glib.h": "c"
+    "glib.h": "c",
+    "image_processing.h": "c"
   },
   "cmake.ignoreCMakeListsMissing": true
 }
