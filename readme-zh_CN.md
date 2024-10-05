@@ -57,3 +57,7 @@
 # 开源协议
 
 [MIT](/LICENSE)
+
+# 星星历史
+
+![Star History Chart](https://api.star-history.com/svg?repos=chaxus/ran&type=Date)

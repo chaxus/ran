@@ -57,3 +57,7 @@ Thank you for expressing your interest by giving our repository a `star`—it me
 # License
 
 [MIT](/LICENSE)
+
+# Star History
+
+![Star History Chart](https://api.star-history.com/svg?repos=chaxus/ran&type=Date)
