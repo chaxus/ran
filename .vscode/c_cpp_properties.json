@@ -5,7 +5,7 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "/usr/local/include/**",
-                "/opt/homebrew/include/glib-2.0/**"
+                "~/.conan2/p/**"
             ],
             "defines": [],
             "macFrameworkPath": [
