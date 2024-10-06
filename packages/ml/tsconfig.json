@@ -22,6 +22,7 @@
     "declaration": true,
     "noUnusedParameters": false,
     "experimentalDecorators": true,
+    "skipLibCheck": true,
     "paths": {
       "@/assets/*": ["assets/*"],
       "@/components/*": ["components/*"],

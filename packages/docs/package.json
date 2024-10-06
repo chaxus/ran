@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "vitepress dev",
     "build": "sh ./bin/build.sh",
+    "tsc": "tsc --noEmit",
     "serve": "vitepress serve"
   },
   "repository": {

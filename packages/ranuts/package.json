@@ -57,7 +57,7 @@
   "scripts": {
     "build": "sh ./bin/build.sh",
     "test": "vitest run",
-    "test:tsc": "tsc --noEmit",
+    "tsc": "tsc --noEmit",
     "dev": "vite --host",
     "prepublish": "npm run build"
   },

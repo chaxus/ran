@@ -5,15 +5,16 @@
   "main": "index.js",
   "scripts": {
     "dev": "vite",
-    "build": "sh ./bin/build.sh"
+    "build": "sh ./bin/build.sh",
+    "tsc": "tsc --noEmit"
   },
   "keywords": [],
   "author": "chaxus",
   "dependencies": {
     "@ranui/react": "workspace:^",
+    "ranuts": "workspace:^",
     "@tensorflow/tfjs": "^4.19.0",
     "@tensorflow/tfjs-vis": "^1.5.1",
-    "ranuts": "workspace:^",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.23.0"

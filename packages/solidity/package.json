@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "compile": "sh ./bin/compile.sh",
-    "test": "sh ./bin/test.sh"
+    "test": "sh ./bin/test.sh",
+    "tsc": "tsc --noEmit"
   },
   "engines": {
     "node": "^18.0.0 || >=20.0.0"
@@ -14,8 +15,11 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@nomicfoundation/hardhat-ignition": "^0.15.6",
+    "@nomicfoundation/hardhat-ignition-ethers": "^0.15.6",
     "@nomicfoundation/hardhat-toolbox-viem": "^3.0.0",
     "@types/chai-as-promised": "^7.1.8",
+    "ethers": "^6.13.3",
     "hardhat": "^2.22.3",
     "viem": "^2.10.2"
   }

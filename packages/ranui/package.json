@@ -30,7 +30,7 @@
     "test:report": "playwright show-report",
     "test:ui": "playwright test --ui",
     "test:update": "playwright test --update-snapshots",
-    "test:tsc": "tsc --noEmit"
+    "tsc": "tsc --noEmit"
   },
   "files": [
     "dist",
