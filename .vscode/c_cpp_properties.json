@@ -3,9 +3,9 @@
     {
       "name": "Mac",
       "includePath": [
-        "${workspaceFolder}/packages/image-process/src/**",
-        "/usr/local/include/**",
-        "${env:chaxus}/.conan2/p/b/**"
+        "${workspaceFolder}/**",
+        "${env:chaxus}/.conan2/**",
+        "/usr/local/include/**"
       ],
       "defines": [],
       "macFrameworkPath": ["/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks"],
