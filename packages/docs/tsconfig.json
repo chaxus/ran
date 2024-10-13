@@ -6,7 +6,6 @@
     "target": "ESNext",
     "moduleResolution": "NodeNext",
     "outDir": "dist",
-    // "types": ["vite/client"],
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "isolatedModules": false,

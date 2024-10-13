@@ -2,11 +2,7 @@
   "configurations": [
     {
       "name": "Mac",
-      "includePath": [
-        "${workspaceFolder}/**",
-        "${env:chaxus}/.conan2/**",
-        "/usr/local/include/**"
-      ],
+      "includePath": ["${workspaceFolder}/**", "${env:chaxus}/.conan2/**", "/usr/local/include/**"],
       "defines": [],
       "macFrameworkPath": ["/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks"],
       "compilerPath": "/usr/bin/clang",

@@ -2,6 +2,8 @@
 bin=./node_modules/.bin
 $bin/prettier --check --cache .
 $bin/eslint --cache . && $bin/prettier --check --cache .
+# before lint, make sure all packages are built
+# pnpm build
 pnpm -F docs tsc
 pnpm -F image-process tsc
 pnpm -F ml tsc
