@@ -37,6 +37,8 @@ Thank you for expressing your interest by giving our repository a `star`—it me
 
 ## Packages
 
+As a monorepo project, it encompasses the following items:
+
 | package                              | version (click for readme)                                                                                          | npm-d(click for npm)                                                                                                                                                                                 | description(click for document website)                                     |
 | ------------------------------------ | :------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
 | [ranui](packages/ranui)              | [![ranui version](https://img.shields.io/npm/v/ranui.svg?label=%20)](packages/ranui/readme.md)                      | [![npm-d](https://img.shields.io/npm/dt/ranui.svg)](https://www.npmjs.com/package/ranui) [![npm-md](https://img.shields.io/npm/dm/ranui.svg?style=flat-square)](https://www.npmjs.com/package/ranui) | [UI library](https://chaxus.github.io/ran/src/ranui/)                       |
