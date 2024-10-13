@@ -42,7 +42,14 @@
 | [ranui](packages/ranui)              | [![ranui version](https://img.shields.io/npm/v/ranui.svg?label=%20)](packages/ranui/readme.md)                      | [![npm-d](https://img.shields.io/npm/dt/ranui.svg)](https://www.npmjs.com/package/ranui) [![npm-md](https://img.shields.io/npm/dm/ranui.svg?style=flat-square)](https://www.npmjs.com/package/ranui) | [UI library](https://chaxus.github.io/ran/src/ranui/)       |
 | [@ranui/react](packages/ranui-react) | [![@ranui/react version](https://img.shields.io/npm/v/@ranui/react.svg?label=%20)](packages/@ranui/react/readme.md) | [![npm-d](https://img.shields.io/npm/dt/@ranui/react.svg)](https://www.npmjs.com/package/@ranui/react)                                                                                               | [React UI library](https://chaxus.github.io/ran/src/ranui/) |
 | [ranuts](packages/ranuts)            | [![ranuts version](https://img.shields.io/npm/v/ranuts.svg?label=%20)](packages/ranuts/readme.md)                   | [![npm-d](https://img.shields.io/npm/dt/ranuts.svg)](https://www.npmjs.com/package/ranuts)                                                                                                           | [Util library](https://chaxus.github.io/ran/src/ranuts/)    |
-| [docs](packages/docs)                |                                                                                                                     |                                                                                                                                                                                                      | [文档](https://chaxus.github.io/ran/) for current project.  |
+
+#### docs:
+
+一个记笔记的地方，一些觉得很不错的博客和文章，以及一些当前项目的说明和使用文档。
+
+- `blog`: https://chaxus.github.io/ran/src/article/designMode.html
+- `ranui 项目文档`: https://chaxus.github.io/ran/cn/src/ranui/
+- `ranuts 项目文档`: https://chaxus.github.io/ran/cn/src/ranuts/
 
 # 感谢贡献的朋友
 
