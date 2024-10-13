@@ -44,7 +44,7 @@ Thank you for expressing your interest by giving our repository a `star`—it me
 | [ranuts](packages/ranuts)            | [![ranuts version](https://img.shields.io/npm/v/ranuts.svg?label=%20)](packages/ranuts/readme.md)                   | [![npm-d](https://img.shields.io/npm/dt/ranuts.svg)](https://www.npmjs.com/package/ranuts)                                                                                                           | [Util library](https://chaxus.github.io/ran/src/ranuts/)                    |
 #### docs: 
 
-A place to take notes, some blogs and articles, and some instructions and usage documentation for the current project.
+A place to take notes, some good blogs and articles, and some instructions and documentation for current projects.
 
 - `blog`: https://chaxus.github.io/ran/src/article/designMode.html
 - `ranui document`: https://chaxus.github.io/ran/src/ranui/
