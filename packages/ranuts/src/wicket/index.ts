@@ -34,14 +34,14 @@ interface ActionOption {
   viewStyle?: Record<string, string>; // 窗口的样式
 }
 // 通过 key，找到对应的 iframe 实例，链接等信息
-interface viewMap {
+interface wicketMap {
   url: string;
   instance: HTMLIFrameElement; // iframe 实例
   key: string; // 唯一索引
   zIndex: number; // 层级
 }
 
-interface WebViewOption {
+interface WicketOption {
   id?: string; // 当前 webview 的唯一 id
   size?: number; // 最大的 iframe 数量
 }
@@ -49,9 +49,9 @@ interface WebViewOption {
 class WebView {
   public container!: HTMLElement;
   private id: string;
-  private keyMapInstance: Map<string, viewMap>;
+  private keyMapInstance: Map<string, wicketMap>;
   private keyList: Set<string>; // 用于记录当前存在的 key
-  constructor(options: WebViewOption) {
+  constructor(options: WicketOption) {
     const { id = generateRandomId(), size = 5 } = options;
     this.id = id;
     this.size = this.initSize(size);
