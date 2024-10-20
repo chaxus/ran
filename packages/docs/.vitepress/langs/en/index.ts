@@ -3,6 +3,9 @@ import { GITHUB } from '../../common/index';
 
 const themeEnConfig: DefaultTheme.Config = {
   logo: '/home.svg',
+  search: {
+    provider: 'local',
+  },
   nav: [
     { text: 'Home', link: '/' },
     { text: 'Function', link: '/src/ranuts/' },
@@ -142,6 +145,7 @@ const themeEnConfig: DefaultTheme.Config = {
           {
             text: 'Sorting algorithm',
             link: '/src/article/sort/index.md',
+            collapsed: true,
             items: [
               { text: 'bubble sort', link: '/src/article/sort/bubble/' },
               { text: 'selection sort', link: '/src/article/sort/select/' },
