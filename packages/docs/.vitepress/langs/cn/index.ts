@@ -3,6 +3,9 @@ import { GITHUB } from '../../common/index';
 
 const themeCnConfig: DefaultTheme.Config = {
   logo: '/home.svg',
+  search: {
+    provider: 'local',
+  },
   nav: [
     { text: '首页', link: '/cn/' },
     { text: '函数', link: '/cn/src/ranuts/' },
@@ -137,6 +140,7 @@ const themeCnConfig: DefaultTheme.Config = {
           {
             text: '排序算法',
             link: '/cn/src/article/sort/index.md',
+            collapsed: true,
             items: [
               { text: '冒泡排序', link: '/cn/src/article/sort/bubble/' },
               { text: '选择排序', link: '/cn/src/article/sort/select/' },
