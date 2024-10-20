@@ -2052,3 +2052,273 @@ contract EventExample {
 indexed 关键字是为了在事件中能根据该参数高效的搜索某个事件。
 
 ## Enum
+
+在 Solidity 中，"enum"（枚举）是一种用户定义的数据类型，用于创建一组命名的常量。枚举通常用于为合约状态或其他固定值集合定义清晰和易读的名称。
+
+在定义枚举类型时，需要使用 enum 关键字，其后是枚举的名字，随后用{}将枚举变量括起来，每个枚举值之间用，分隔。例如在这里我们定义了一个名为 City 的枚举类型，其中有 Beijing，HangZhou，ChengDu 三个枚举值。
+
+```solidity
+pragma solidity ^0.8.0;
+
+contract Example {
+  //定义了一个枚举类型City
+  enum City {
+    BeiJing,
+    HangZhou,
+    ChengDu
+  }
+}
+```
+
+枚举类型的使用可以带来以下好处：
+1. 可读性：枚举为取值提供了有意义的名称，使得代码更易读、理解。
+2. 可维护性：枚举定义了取值的固定范围，使得代码更易于维护和修改。
+3. 类型安全：枚举类型限制了变量的取值范围，避免了无效或不一致的取值，提高了代码的安全性和可靠性。
+
+在上一节中，我们学习了如何定义一个枚举类型。现在我们来学习 solidity 中的枚举类型是如何赋值的。和之前讲过的变量赋值一样，枚举变量赋值意味着将枚举集合中的某个值放到你的变量容器里。这种机制提供了一种结构化和易读的方式来管理和表达合约内部的状态或其他固定值集合。它确保只能从已经定义的集合中赋予有效值，为代码增加了额外的安全性和可读性。
+
+要将值分配给枚举，请引用枚举名称，后跟点。运算符，然后是所需的值。
+
+```solidity
+enum State { Waiting, Ready, Active }
+State s = State.Active;
+```
+
+枚举类型可以与整数进行显式转换，但不能进行隐式转换。
+
+```solidity
+Season public season = 1;  // 隐式转换，报错
+Season public season = Season(1);  // 显式转换
+```
+显式转换在运行时会检查数值范围（0-255），如果不匹配，将引发异常。
+
+一个枚举类型最多有多少个值？
+
+256 个。因为枚举类型是以 uint8 存储的，而 uint8 的最大值为 2 的 8 次方就是 0-255。所以一个枚举类型最多可以定义 256 个值，分别对应到 uint8 的 0 到 255。
+
+```solidity
+pragma solidity ^0.8.0;
+
+contract Example {
+  enum City {
+    BeiJing,
+    HangZhou,
+    ChengDu
+  }
+
+  City public selectedCity;
+
+  constructor() {
+    selectedCity = City.BeiJing;
+  }
+
+  //赋值，其实是通过数字传递的
+  function changeCity1(City _newCity) public {
+    selectedCity = _newCity;
+  }
+
+  //显式类型转换
+  function changeCity2(uint8 _newCity) public {
+    selectedCity = City(_newCity);
+  }
+}
+```
+
+在上一节中，我们学习了枚举类型是如何赋值的。在这一节中，我们接着学习枚举类型的两个自带值——min/max。使用 type(NameOfEnum).minandtype(NameOfEnum).max 可以获得给定枚举的第一个值和最后一个值。
+
+使用 type(枚举名).min/max 的语法来获取一个枚举的最小值和最大值。
+
+```solidity
+//我们使用type(枚举名).max的语法获取到了Color这个枚举的最大值。
+Color a = type(Color).max;
+Color b = type(Color).min;
+```
+
+这是因为在 Solidity 底层是使用 unit8 来存储信息的，而 min 是 0，max 则是这个枚举变量里最大的合法值。由于枚举类型的整数值是从左到右依次递增的，0 是第一个，最大的合法值就是最后一个。
+
+```solidity
+pragma solidity ^0.8.0;
+
+contract EnumExample {
+  enum ExampleEnum {
+    Value1,
+    Value2,
+    Value3
+  }
+
+  function getMinMax() public pure returns (uint, uint) {
+    uint minValue = uint(type(ExampleEnum).min);
+    uint maxValue = uint(type(ExampleEnum).max);
+
+    return (minValue, maxValue);
+  }
+}
+```
+
+## modifier
+
+在这一节中，我们将开始学习 solidity 特有的语法——函数修饰符（modifier）。函数修饰符允许开发人员在函数执行前后或期间插入代码，以便修改函数的行为或确保特定的条件得到满足，函数修饰符内的代码的不能被独立执行。
+
+![](../assets/doc/image/eth-solidity-modify.webp)
+
+函数修饰符在修饰的函数执行之前被调用，允许在函数执行之前进行额外的检查或操作。
+
+在定义函数修饰符时，我们可以通过 modifier 关键字来定义，其定义方式和函数一样，唯一的区别在于 modifier 关键字取代了 function 关键字。modifier 相较于 function 而言，没有关键字，返回值，可见性的概念。
+
+```solidity
+//例如在这里我们定义了一个名为onlyOwner的函数修饰符。
+modifier onlyOwner(uint a, bool b) {
+
+}
+```
+
+函数修饰符在 Solidity 中主要用于封装重复的逻辑和进行权限控制，以简化代码并提高可维护性。常用于多个函数需要执行相同的前置检查或条件验证时。
+
+```solidity
+pragma solidity ^0.8.0;
+
+contract Example {
+  address public owner;
+  uint public value;
+
+  // 定义了一个名为onlyOwner的函数修饰符（如果没有参数，可以省略()
+  modifier onlyOwner {
+    require(msg.sender == owner, "Only the contract owner can call this function.");
+    _; // 继续执行被修饰的函数（在下一节中会讲）
+  }
+
+  constructor() {
+    owner = msg.sender;
+  }
+  // 被onlyOwner修饰的函数（后面会讲）
+  function setValue(uint _newValue) public onlyOwner {
+    value = _newValue;
+  }
+}
+```
+
+在上一节中，我们学习了函数修饰符 modifier 的定义，并且在 Example 中提到了一个语法_;在这一节中，我们将深入探讨该语法的作用。modifier 的执行是在函数执行之前的。_; 表示继续执行被修饰的函数。
+
+_;被用来在 modifier 中指定一个地方执行被修饰的函数的代码。
+
+```solidity
+modifier lock() {
+	require(locked == 0);
+	locked = 1;
+	_;
+	locked = 0;
+}
+```
+
+这样的设计也让 modifier 能够在函数执行结束后执行一段代码，只需要将需要执行的代码放在_;之后即可。如下代码：
+
+```solidity
+modifier demo() {
+  ...  // 函数执行前执行的代码
+  _;   // 执行被修饰的函数
+  ...  // 函数执行结束后执行的代码
+}
+```
+
+```solidity
+pragma solidity ^0.8.0;
+
+contract Example {
+  uint256 public locked;
+
+  modifier lock() {
+    require(locked == 0);
+    locked = 1;
+    _;
+    locked = 0;
+  }
+  //该函数使用了lock修饰符
+  function dosome1() public lock {
+    //该调用会失败
+    dosome2();
+  }
+  //该函数也使用了lock修饰符，且这两个函数之间不能相互调用。
+  //因为在一个函数执行时，locked 变量会置为1，导致lock中的require过不了。
+  function dosome2() public lock {
+
+  }
+}
+```
+
+在前面两节的学习中，我们了解了函数修饰符（modifier）的基础语法，了解了它是如何定义的以及它的一些基础特性。那么接下来，我们将会学习 modifier 的使用方法和应用场景。
+
+修饰符在智能合约中经常被用于实现一些安全和访问控制的功能。通过添加修饰符，你可以在执行函数之前添加一些预设条件，从而使得函数的使用更加安全和可控。
+
+作为关键字出现在函数参数和{}之间，无参数型不需要括号。
+
+```solidity
+//在这里我们使用 lock 这个  modifier修饰了 transfer 这个函数。
+function transfer(address to, uint256 amount) public lock {
+
+}
+
+//作为关键字出现在函数参数和{}之间，有参数型把参数放在括号里即可。
+function transfer2(address to, uint256 tokenId) public lock(tokenId) {
+
+}
+```
+
+是的，一旦函数被 modifier 修饰，在调用该函数之前，都会进入此 modifier 中执行代码。
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract Example {
+  uint256 public number;
+
+  modifier add() {
+    number++;
+    _;
+    number++;
+  }
+  //调用一次该函数 number 的值会增加2，且该函数的返回值总是比number的值小1
+  //这是因为 number++ 在函数执行前后都执行了一次
+  function doSomething() public add returns (uint256) {
+    return number;
+  }
+}
+```
+
+单个“函数”可以有多个“修饰符”。修饰符按照它们出现的顺序执行。
+
+当一个“函数”有多个“修饰符”时，它们以空格分隔，并按它们出现的顺序应用。
+
+```solidity
+function bid() public payable aboveMinimumBid beforeAuctionEnd {
+    // Place the bid
+}
+```
+
+当函数有多个修饰符时，它们按照它们在函数声明中出现的顺序应用。每个修饰符必须在函数执行之前成功验证，从而创建一系列条件来共同确定函数是否可以继续。
+
+```solidity
+pragma solidity ^0.8.0;
+
+contract MyContract {
+  address public owner;
+
+  constructor() {
+    owner = msg.sender;
+  }
+
+  modifier onlyOwner() {
+    require(msg.sender == owner, "Only owner can call this function.");
+    _;
+  }
+
+  modifier notNull(address newOwner) {
+    require(newOwner != address(0), "New owner's address must not be zero.");
+    _;
+  }
+
+  function changeOwner(address newOwner) public onlyOwner notNull(newOwner) {
+    owner = newOwner;
+  }
+}
+```
