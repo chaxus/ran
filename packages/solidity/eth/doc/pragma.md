@@ -1054,7 +1054,9 @@ contract MemoryExample {
     }
 }
 ```
+
 与 storage 相比，memory 在 gas 成本方面更小，在 memory 中读写数据会划算很多。
+
 ```solidity
 pragma solidity ^0.8.4;
 
@@ -1280,6 +1282,7 @@ contract Example {
   }
 }
 ```
+
 到目前为止，我们已经讨论了结构体的定义，初始化和访问。
 
 结构体通常在创建后需要修改其属性的值。
@@ -1291,6 +1294,7 @@ contract Example {
 ```solidity
 student.name = "Thomas";
 ```
+
 这里我们将 student 实例的 name 属性修改为了“Thomas”。
 
 在结构体的属性修改时，要修改的值和属性的类型必须相同。
@@ -1325,6 +1329,7 @@ contract Example {
 ```solidity
 uint256[] arr;
 ```
+
 在这里我们定义了一个名为 arr 的 uint256 类型的动态数组。
 
 ```solidity
@@ -1397,6 +1402,7 @@ contract Example {
   }
 }
 ```
+
 在前面的章节中，我们学习了动态数组的定义以及增添删除的方式。
 
 在这章中，你将会学习如何查看动态数组的长度，在 Solidity 中，数组的长度是指数组中元素的数量。
@@ -1780,6 +1786,7 @@ contract Example {
   }
 }
 ```
+
 ## break
 
 在讨论了 continue 之后，本节我们将讨论 break。break 允许我们在满足特定条件时完全终止循环，然后继续执行循环后面的代码。
@@ -1820,6 +1827,7 @@ contract Example {
   }
 }
 ```
+
 ## msg.value
 
 我们之前在 Solidity 101 已经学习了 msg.sender，它们用于获取与当前函数交互的地址信息。现在让我们继续学习 msg 的另一个全局变量：msg.value。
@@ -1832,6 +1840,7 @@ msg.value 作为全局变量，直接使用。
 //在这里我们使用msg.value获取到了调用者附加的以太币价值，并将值赋值给了value变量。
 uint256 value = msg.value;
 ```
+
 msg.value 的单位是 Wei，是以太坊最小的货币单位。1 Eth = 10^18 Wei。
 
 ```solidity
@@ -1859,6 +1868,7 @@ contract Example {
 //这里在调用deposit的时候附加了5wei的ETH。
 deposit{value: 5}();
 ```
+
 要允许用户在调用某个函数时发送以太币。则该函数应为 payable 函数。
 
 用成功的前提是：在调用该函数时，合约 B 中有大于 5 wei 的余额。
@@ -1908,7 +1918,9 @@ contract User {
 //通过block.number返回当前区块的高度，并赋值给了变量blockNumber。
 uint256 blockNumber = block.number;
 ```
+
 在 Truffle 或者 Hardhat 这种框架中，都有专门的修改方式，而在 Remix 里面，你可以通过修改合约状态变量来增加 block.number。
+
 ```solidity
 pragma solidity ^0.8.0;
 
@@ -2071,6 +2083,7 @@ contract Example {
 ```
 
 枚举类型的使用可以带来以下好处：
+
 1. 可读性：枚举为取值提供了有意义的名称，使得代码更易读、理解。
 2. 可维护性：枚举定义了取值的固定范围，使得代码更易于维护和修改。
 3. 类型安全：枚举类型限制了变量的取值范围，避免了无效或不一致的取值，提高了代码的安全性和可靠性。
@@ -2090,6 +2103,7 @@ State s = State.Active;
 Season public season = 1;  // 隐式转换，报错
 Season public season = Season(1);  // 显式转换
 ```
+
 显式转换在运行时会检查数值范围（0-255），如果不匹配，将引发异常。
 
 一个枚举类型最多有多少个值？
@@ -2197,9 +2211,9 @@ contract Example {
 }
 ```
 
-在上一节中，我们学习了函数修饰符 modifier 的定义，并且在 Example 中提到了一个语法_;在这一节中，我们将深入探讨该语法的作用。modifier 的执行是在函数执行之前的。_; 表示继续执行被修饰的函数。
+在上一节中，我们学习了函数修饰符 modifier 的定义，并且在 Example 中提到了一个语法*;在这一节中，我们将深入探讨该语法的作用。modifier 的执行是在函数执行之前的。*; 表示继续执行被修饰的函数。
 
-_;被用来在 modifier 中指定一个地方执行被修饰的函数的代码。
+\_;被用来在 modifier 中指定一个地方执行被修饰的函数的代码。
 
 ```solidity
 modifier lock() {
@@ -2210,7 +2224,7 @@ modifier lock() {
 }
 ```
 
-这样的设计也让 modifier 能够在函数执行结束后执行一段代码，只需要将需要执行的代码放在_;之后即可。如下代码：
+这样的设计也让 modifier 能够在函数执行结束后执行一段代码，只需要将需要执行的代码放在\_;之后即可。如下代码：
 
 ```solidity
 modifier demo() {
