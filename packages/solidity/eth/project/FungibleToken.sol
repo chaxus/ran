@@ -1,4 +1,5 @@
-pragma solidity ^0.8.7;
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.28;
 
 // 定义一个合约，名为 FungibleToken
 contract FungibleToken {
