@@ -1,5 +1,14 @@
 {
-  "include": ["components", "plugins", "utils", "test", "shadowless", "**/*.ts", "typing.d.ts"],
+  "include": [
+    "components",
+    "plugins",
+    "utils",
+    "test",
+    "shadowless",
+    "**/*.ts",
+    "typing.d.ts",
+    "../ranuts/src/wicket/bridge.ts"
+  ],
   "exclude": ["node_modules/**", "dist/**", "assets", "public"],
   "compilerOptions": {
     "module": "ESNext",
