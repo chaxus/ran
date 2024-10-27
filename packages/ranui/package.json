@@ -1,6 +1,6 @@
 {
   "name": "ranui",
-  "version": "0.1.10-alpha.18",
+  "version": "0.1.10-alpha.19",
   "description": "UI Component library based on `Web Component`",
   "main": "dist/umd/index.umd.cjs",
   "module": "dist/index.js",
@@ -168,6 +168,11 @@
     "./type": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    },
+    "./typings": {
+      "types": "./dist/typings.d.ts",
+      "import": "./dist/typings.d.ts",
       "require": "./dist/index.js"
     },
     "./dist/*": {

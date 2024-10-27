@@ -9,6 +9,7 @@ declare module '@/public/*';
 declare module '@/components/*';
 declare module '@/plugins/*';
 
+
 declare namespace Ran {
   interface Prompt {
     content: string;
@@ -94,7 +95,6 @@ interface MathJax {
 
 declare global {
   interface Window {
-    Hls: HLS;
     ranui: Partial<Ranui>;
     message: Partial<Ran.Message>;
     MathJax: MathJax;
