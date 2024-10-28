@@ -3,6 +3,9 @@ import type { CanvasRenderer } from '@/utils/visual/render/canvasRenderer';
 import { Transform } from '@/utils/visual/math';
 import type { Point } from '@/utils/visual/vertex/point';
 
+// 这个类代表了‘组’的概念，它提供了添加子元素，移除子元素等的方法；
+// 后续的要被渲染的一些类 (如 Graphics，Text，Sprite 等) 会继承于这个类；这个类本身不会被渲染 (因为它只是一个‘组’，它本身没有内容可以渲染)。
+// 这个类继承于 Vertex 类，‘组’也算作‘节点’。
 export class Container extends Vertex {
   public readonly children: Container[] = [];
   public isSort: boolean = false;

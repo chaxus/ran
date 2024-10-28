@@ -4,6 +4,8 @@ import { Container } from '@/utils/visual/vertex/container';
 import type { IApplicationOptions } from '@/utils/visual/types';
 import { EventSystem } from '@/utils/visual/event';
 
+// 这是渲染引擎的入口，将 canvas 元素等参数传给这个类，然后这个类就会启动渲染引擎，开始渲染。
+// Application 类的 stage 属性是一个 Container，要把节点添加到 stage 上，渲染引擎才会渲染这些节点，stage 是一切待渲染元素的祖先元素。
 export class Application {
   private renderer: Renderer;
   public stage: Container;

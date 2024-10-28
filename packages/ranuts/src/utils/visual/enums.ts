@@ -1,10 +1,10 @@
 // 支持的形状类型
 export enum ShapeType {
-  Rectangle = 'rectangle',
-  Polygon = 'polygon',
-  Circle = 'circle',
-  Ellipse = 'ellipse',
-  RoundedRectangle = 'rounded rectangle',
+  Rectangle = 'rectangle', // 矩形
+  Polygon = 'polygon', // 多边形
+  Circle = 'circle', // 圆形
+  Ellipse = 'ellipse', // 椭圆
+  RoundedRectangle = 'rounded rectangle', // 圆角矩形
 }
 
 export enum LineCap {

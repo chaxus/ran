@@ -1,9 +1,12 @@
 import { Matrix } from '@/utils/visual/math/matrix';
 import { ObservablePoint } from '@/utils/visual/vertex/point';
+// Transform 类就类似 CSS 的 transform，它提供了一些更清晰、更符合人类直觉的变换，而不用直接使用矩阵变换，当然，这些变换最终会转换成矩阵变换。
 // 节点的线性变换类
 export class Transform {
-  public localTransform = new Matrix(); // 当前节点相对于父节点的线性变换
-  public worldTransform = new Matrix(); // 当前节点相对于 canvas 视窗的线性变换
+  // 当前节点相对于父节点的线性变换
+  public localTransform = new Matrix();
+  // 当前节点相对于 canvas 视窗的线性变换，我们只需要将节点自身的 localTransform 左乘父节点的 worldTransform，就得到了自身的 worldTransform。
+  public worldTransform = new Matrix();
   public position: ObservablePoint; // 平移
   public scale: ObservablePoint; // 缩放
   public pivot: ObservablePoint; // 对标 DOM 的 transform-origin，锚点的概念

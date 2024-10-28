@@ -34,7 +34,7 @@ export const getBezierLength = (
 
   return length;
 };
-
+// 求二阶贝塞尔曲线的弧长
 export const getQuadraticBezierLength = (
   P0X: number,
   P0Y: number,

@@ -13,7 +13,11 @@ export class Circle extends Shape {
     this.y = y;
     this.radius = radius;
   }
-  public contains(point: Point): boolean {
-    return true;
+  public contains(p: Point): boolean {
+    if ((p.x - this.x) * (p.x - this.x) + (p.y - this.y) * (p.y - this.y) < this.radius * this.radius) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
