@@ -42,7 +42,7 @@ export class Transform {
   /**
    * 更新 localTransform
    */
-  private updateLocalTransform() {
+  public updateLocalTransform(): void {
     if (!this.shouldUpdateLocalTransform) {
       return;
     }

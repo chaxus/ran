@@ -23,4 +23,10 @@ export enum LineJoin {
 export enum RendererType {
   WebGl = 'webgl',
   Canvas = 'canvas',
+  WEB_GPU = 'webgpu',
 }
+
+export const MAX_VERTEX_COUNT = 65536; // 支持的最大的顶点数量
+
+// 顶点位置 2 个 Float32，顶点颜色 4 个 Unsigned Byte，一共 12 个 byte
+export const BYTES_PER_VERTEX = 12; // 每个顶点占多少字节
