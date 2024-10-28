@@ -11,9 +11,6 @@ export class GraphicsGeometry {
     const data = new GraphicsData(shape, fillStyle, lineStyle);
     this.graphicsData.push(data);
   }
-  public clear(): void {
-    this.graphicsData = [];
-  }
   /**
    * @param p 待检测点
    * @returns {boolean} 待检测点是否落在某一个子图形内
@@ -30,5 +27,8 @@ export class GraphicsGeometry {
     }
 
     return false;
+  }
+  public clear(): void {
+    this.graphicsData = [];
   }
 }
