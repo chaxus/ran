@@ -8,6 +8,11 @@ interface TransformableObject {
   skew: Point;
   rotation: number;
 }
+// 在渲染引擎中，一切变换 (平移、旋转、缩放等) 都会转化成变换矩阵 (matrix)，
+// 因为 canvas 只接受矩阵变换，虽然 canvas 为了开发的便捷，也提供了 ctx.rotate,ctx.scale 等操作，
+// 但是 canvas 中的这些操作会直接转换成变换矩阵，而不像 DOM 那样，有锚点的概念，
+// 所以 canvas 提供的 rotate，scale 等操作，和 DOM 提供的 rotate，scale 的表现是不一样的。
+// Matrix 类将会提供各种各样的与矩阵操作相关的函数 (矩阵相乘，矩阵求逆等)，任何变换的叠加都将会转换成 matrix，方便我们调用 canvas 的指令。
 // 矩阵的操作
 export class Matrix {
   public a: number; // x scale

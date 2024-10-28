@@ -20,6 +20,7 @@ export class EventBoundary {
     this.eventHandlerMap.mousedown = this.fireMouseDown;
     this.eventHandlerMap.mouseup = this.fireMouseUp;
   }
+  // 引入了层级关系的碰撞检测
   private hitTestRecursive = (curTarget: Container, globalPos: Point) => {
     // 如果对象不可见则返回
     if (!curTarget.visible) {

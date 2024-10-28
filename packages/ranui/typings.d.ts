@@ -9,7 +9,6 @@ declare module '@/public/*';
 declare module '@/components/*';
 declare module '@/plugins/*';
 
-
 declare namespace Ran {
   interface Prompt {
     content: string;

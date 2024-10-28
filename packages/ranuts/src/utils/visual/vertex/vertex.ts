@@ -7,6 +7,9 @@ import type { Cursor, FederatedEventMap } from '@/utils/visual/event';
 import { DEG_TO_RAD, RAD_TO_DEG } from '@/utils/visual/math';
 import type { Shape } from '@/utils/visual/shape';
 
+// 这个类代表了最原始的‘节点’的概念，所有可以被展示到 canvas 画布上的、各种类型的节点都会继承于这个类，这是一个抽象类，我们并不会直接实例化这个类。
+// 这个类上面挂载了‘节点’的各种属性，比如：父元素、透明度、旋转角度、缩放、平移、节点是否可见等。
+// 这个类还继承了 SyncHook 类，这个类是一个自定义的事件订阅/发布类，用于实现事件的订阅和发布。
 export abstract class Vertex extends SyncHook {
   protected _zIndex = 0; // 节点的层级关系
   public parent: Container | undefined = undefined; // 节点的父子关系

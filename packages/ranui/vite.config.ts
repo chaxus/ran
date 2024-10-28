@@ -116,7 +116,7 @@ export const viteConfig: UserConfig = {
         svg: imageminSvgo(),
       },
     }),
-    babel()
+    babel(),
   ],
   resolve: {
     alias: {
