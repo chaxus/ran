@@ -3,25 +3,27 @@ import { ObservablePoint } from '@/utils/visual/vertex/point';
 // Transform 类就类似 CSS 的 transform，它提供了一些更清晰、更符合人类直觉的变换，而不用直接使用矩阵变换，当然，这些变换最终会转换成矩阵变换。
 // 节点的线性变换类
 export class Transform {
-  // 当前节点相对于父节点的线性变换
   public localTransform = new Matrix();
-  // 当前节点相对于 canvas 视窗的线性变换，我们只需要将节点自身的 localTransform 左乘父节点的 worldTransform，就得到了自身的 worldTransform。
   public worldTransform = new Matrix();
-  public position: ObservablePoint; // 平移
-  public scale: ObservablePoint; // 缩放
-  public pivot: ObservablePoint; // 对标 DOM 的 transform-origin，锚点的概念
-  public skew: ObservablePoint; // 对标 DOM 的 skew，斜切的概念
-  public _rotation = 0; // 旋转角度
-  private transformMatrix: Matrix | null = null;
+  public position: ObservablePoint;
+  public scale: ObservablePoint;
+  public pivot: ObservablePoint;
+  public skew: ObservablePoint;
+  public _rotation = 0;
+  private rotateMatrix = new Matrix();
+  private skewMatrix = new Matrix();
+  private scaleMatrix = new Matrix();
+  private localMatrix = new Matrix(); // 不包含平移的 localTransform
 
   public shouldUpdateLocalTransform = false;
-  public shouldUpdateWorldTransform = false;
+  public worldId = 0;
+  private parentId = 0;
 
   constructor() {
     this.position = new ObservablePoint(this.onChange);
-    this.scale = new ObservablePoint(this.onChange, 1, 1);
+    this.scale = new ObservablePoint(this.onScaleChange, 1, 1);
     this.pivot = new ObservablePoint(this.onChange);
-    this.skew = new ObservablePoint(this.onChange);
+    this.skew = new ObservablePoint(this.onSkewChange);
   }
 
   get rotation(): number {
@@ -30,10 +32,29 @@ export class Transform {
 
   set rotation(r: number) {
     this._rotation = r;
-    // 旋转角度发生变化，一定会影响到子元素，
-    // 所以要触发更新，通过 shouldUpdateLocalTransform 进行标识需要更新
-    this.onChange();
+    this.rotateMatrix.set(
+      Math.cos(this.rotation),
+      Math.sin(this.rotation),
+      -Math.sin(this.rotation),
+      Math.cos(this.rotation),
+      0,
+      0,
+    );
+
+    this.shouldUpdateLocalTransform = true;
   }
+
+  private onSkewChange = (skewX: number, skewY: number) => {
+    this.skewMatrix.set(Math.cos(skewY), Math.sin(skewY), Math.sin(skewX), Math.cos(skewX), 0, 0);
+
+    this.shouldUpdateLocalTransform = true;
+  };
+
+  private onScaleChange = (scaleX: number, scaleY: number) => {
+    this.scaleMatrix.set(scaleX, 0, 0, scaleY, 0, 0);
+
+    this.shouldUpdateLocalTransform = true;
+  };
 
   private onChange = () => {
     this.shouldUpdateLocalTransform = true;
@@ -47,33 +68,19 @@ export class Transform {
       return;
     }
 
-    if (this.transformMatrix) {
-      this.localTransform = this.transformMatrix;
-      return;
-    }
-
     /**
      * 旋转，斜切 (skew)，缩放不会影响矩阵第三列的值，我们先处理这 3 个操作
      * | cos(rotation)  -sin(rotation)  0 |   | cos(skewY)  sin(skewX)  0 |   | scaleX  0       0 |
      * | sin(rotation)  cos(rotation)   0 | x | sin(skewY)  cos(skewX)  0 | x | 0       scaleY  0 |
      * | 0              0               1 |   | 0           0           1 |   | 0       0       1 |
      */
-    const rotateMatrix = new Matrix(
-      Math.cos(this.rotation),
-      Math.sin(this.rotation),
-      -Math.sin(this.rotation),
-      Math.cos(this.rotation),
-    );
-    const skewMatrix = new Matrix(
-      Math.cos(this.skew.y),
-      Math.sin(this.skew.y),
-      Math.sin(this.skew.x),
-      Math.cos(this.skew.x),
-    );
-    const scaleMatrix = new Matrix(this.scale.x, 0, 0, this.scale.y);
 
     // 朴实无华的 3 个矩阵相乘
-    const { a, b, c, d } = rotateMatrix.append(skewMatrix).append(scaleMatrix);
+    const { a, b, c, d } = this.localMatrix
+      .set(1, 0, 0, 1, 0, 0)
+      .append(this.rotateMatrix)
+      .append(this.skewMatrix)
+      .append(this.scaleMatrix);
 
     /**
      * 接下来要处理平移操作了，因为要实现锚点，所以并不能简单地将平移的变换矩阵与上面那个矩阵相乘
@@ -90,29 +97,31 @@ export class Transform {
     this.shouldUpdateLocalTransform = false;
 
     // 更新了 localTransform 那么一定要更新 worldTransform
-    this.shouldUpdateWorldTransform = true;
+    this.parentId = -1;
   }
 
-  /**
-   * @returns {boolean} true 说明 worldTransform 发生了改变，false 说明 worldTransform 没有发生改变
-   */
-  public updateTransform(parentTransform: Transform): boolean {
+  public updateTransform(parentTransform: Transform): void {
     this.updateLocalTransform();
 
-    if (!this.shouldUpdateWorldTransform) {
-      return false;
+    // 若当父元素的 worldTransform 改变了 or 当前元素的 localTransform 改变了，那么当前元素的 worldTransform 需要重新计算
+    if (this.parentId !== parentTransform.worldId) {
+      // 自身的 localTransform 左乘父元素的 worldTransform 就得到了自身的 worldTransform
+
+      const { a: a0, b: b0, c: c0, d: d0, tx: tx0, ty: ty0 } = parentTransform.worldTransform;
+      const { a: a1, b: b1, c: c1, d: d1, tx: tx1, ty: ty1 } = this.localTransform;
+
+      this.worldTransform.set(
+        a0 * a1 + c0 * b1,
+        b0 * a1 + d0 * b1,
+        a0 * c1 + c0 * d1,
+        b0 * c1 + d0 * d1,
+        a0 * tx1 + c0 * ty1 + tx0,
+        b0 * tx1 + d0 * ty1 + ty0,
+      );
+
+      this.parentId = parentTransform.worldId;
+
+      this.worldId++;
     }
-
-    // 自身的 localTransform 左乘父元素的 worldTransform 就得到了自身的 worldTransform
-    this.worldTransform = this.localTransform.clone().prepend(parentTransform.worldTransform);
-
-    this.shouldUpdateWorldTransform = false;
-
-    return true;
-  }
-
-  public setFromMatrix(matrix: Matrix): void {
-    this.transformMatrix = matrix;
-    this.shouldUpdateLocalTransform = true;
   }
 }

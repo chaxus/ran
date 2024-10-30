@@ -1,5 +1,5 @@
 import { BYTES_PER_VERTEX, MAX_VERTEX_COUNT } from '@/utils/visual/enums';
-import type { WebGLRenderer } from '@/utils/visual/render/webGlRenderer';
+import type { WebGLRenderer } from '@/utils/visual/render/webGLRenderer';
 
 export interface Batch {
   vertices: Float32Array; // 顶点数组
