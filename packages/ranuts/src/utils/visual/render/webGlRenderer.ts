@@ -15,9 +15,7 @@ export class WebGLRenderer extends Renderer {
   };
   constructor(options: IApplicationOptions) {
     console.log('正在使用 %c webGL ', 'color: #881910; background-color: #ffffff;font-size: 20px;', '渲染');
-
     super(options);
-
     const opts: WebGLContextAttributes = {
       antialias: true,
     };

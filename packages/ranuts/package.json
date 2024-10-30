@@ -66,14 +66,17 @@
   "license": "MIT",
   "devDependencies": {
     "@babel/parser": "^7.24.5",
+    "@types/earcut": "^2.1.4",
     "@types/node": "^20.12.11",
     "@types/react": "^18.3.1",
+    "@webgpu/types": "^0.1.49",
     "react": "^18.3.1",
     "typescript": "^5.4.5",
     "vite": "^5.2.11",
     "vitest": "^2.1.1"
   },
   "dependencies": {
+    "earcut": "^3.0.0",
     "magic-string": "^0.27.0",
     "tesseract.js": "^5.1.0"
   }

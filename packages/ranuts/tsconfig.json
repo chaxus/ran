@@ -17,6 +17,7 @@
     "inlineSourceMap": true,
     "baseUrl": ".",
     "experimentalDecorators": true,
+    "types": ["@webgpu/types"],
     "paths": {
       "@/*": ["src/*"]
     }

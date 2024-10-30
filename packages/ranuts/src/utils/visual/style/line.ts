@@ -1,10 +1,11 @@
-import { LineCap, LineJoin } from '@/utils/visual/enums';
+import { LINE_CAP, LINE_JOIN } from '@/utils/visual/enums';
 import { Fill } from '@/utils/visual/style/fill';
 
 export class Line extends Fill {
   public width = 0;
-  public cap = LineCap.Butt;
-  public join = LineJoin.Miter;
+  public cap = LINE_CAP.BUTT;
+  public join = LINE_JOIN.MITER;
+  public miterLimit = 10;
 
   public clone(): Line {
     const obj = new Line();
@@ -15,6 +16,7 @@ export class Line extends Fill {
     obj.width = this.width;
     obj.cap = this.cap;
     obj.join = this.join;
+    obj.miterLimit = this.miterLimit;
 
     return obj;
   }
@@ -24,7 +26,8 @@ export class Line extends Fill {
 
     this.color = '#ffffff';
     this.width = 0;
-    this.cap = LineCap.Butt;
-    this.join = LineJoin.Miter;
+    this.cap = LINE_CAP.BUTT;
+    this.join = LINE_JOIN.MITER;
+    this.miterLimit = 10;
   }
 }

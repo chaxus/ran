@@ -12,12 +12,16 @@ import type { ILineStyleOptions } from '@/utils/visual/types';
 import { Circle } from '@/utils/visual/shape/circle';
 import { RoundedRectangle } from '@/utils/visual/shape/roundedRectangle';
 import { Ellipse } from '@/utils/visual/shape/ellipse';
+import type { BatchRenderer } from '@/utils/visual/render/batchRenderer';
+import { toRgbaLittleEndian } from '@/utils/visual/render/utils';
+import { batchPool } from '@/utils/visual/render/utils/batch';
+import type { GraphicsBatch } from '@/utils/visual/render/utils/batch';
 
 // Graphics 类继承自 Container 类，表示绘制各种图形的容器
 export class Graphics extends Container {
   private _lineStyle = new Line();
   private _fillStyle = new Fill();
-  private _geometry = new GraphicsGeometry();
+  public geometry = new GraphicsGeometry();
   public currentPath = new Polygon();
   public type: string;
 
@@ -43,7 +47,7 @@ export class Graphics extends Container {
     this._lineStyle.reset();
   }
   protected drawShape(shape: Shape): Graphics {
-    this._geometry.drawShape(shape, this._fillStyle.clone(), this._lineStyle.clone());
+    this.geometry.drawShape(shape, this._fillStyle.clone(), this._lineStyle.clone());
     return this;
   }
   /**
@@ -175,7 +179,7 @@ export class Graphics extends Container {
       return this.hitArea.contains(p);
     }
 
-    return this._geometry.containsPoint(p);
+    return this.geometry.containsPoint(p);
   }
   // 二阶贝塞尔曲线
   // 采样多个点，然后连成一个近似于二阶贝塞尔曲线的直边多边形
@@ -388,7 +392,7 @@ export class Graphics extends Container {
     return this.arc(cx + x1, cy + y1, radius, startAngle, endAngle, anticlockwise);
   }
   public clear(): Graphics {
-    this._geometry.clear();
+    this.geometry.clear();
     this._lineStyle.reset();
     this._fillStyle.reset();
     this.currentPath = new Polygon();
@@ -406,7 +410,7 @@ export class Graphics extends Container {
 
     ctx.setTransform(a, b, c, d, tx, ty);
 
-    const graphicsData = this._geometry.graphicsData;
+    const graphicsData = this.geometry.graphicsData;
 
     for (let i = 0; i < graphicsData.length; i++) {
       const data = graphicsData[i];
@@ -520,6 +524,49 @@ export class Graphics extends Container {
           ctx.stroke();
         }
       }
+    }
+  }
+
+  public buildBatches(batchRenderer: BatchRenderer): void {
+    this.startPoly();
+
+    this.worldId = this.transform.worldId;
+
+    this.geometry.buildVerticesAndTriangulate();
+
+    const batchParts = this.geometry.batchParts;
+
+    for (let i = 0; i < batchParts.length; i++) {
+      const { style, vertexStart, vertexCount, indexStart, indexCount } = batchParts[i];
+
+      const { color, alpha } = style;
+
+      const rgba = toRgbaLittleEndian(color, alpha * this.worldAlpha);
+
+      const batch = batchPool.get(this.type) as GraphicsBatch;
+      batch.vertexCount = vertexCount;
+      batch.indexCount = indexCount;
+      batch.rgba = rgba;
+      batch.vertexOffset = vertexStart;
+      batch.indexOffset = indexStart;
+      batch.graphics = this;
+
+      this.batches[i] = batch;
+      batchRenderer.addBatch(this.batches[i]);
+    }
+
+    this.batchCount = batchParts.length;
+  }
+
+  public updateBatches(floatView: Float32Array): void {
+    if (this.worldId === this.transform.worldId) {
+      return;
+    }
+
+    this.worldId = this.transform.worldId;
+
+    for (let i = 0; i < this.batchCount; i++) {
+      this.batches[i].updateVertices(floatView);
     }
   }
 }
