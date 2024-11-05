@@ -66,9 +66,3 @@ A place to take notes, some good blogs and articles, and some instructions and d
 # License
 
 [MIT](/LICENSE)
-
-<!--
-# Star History
-
-![Star History Chart](https://api.star-history.com/svg?repos=chaxus/ran&type=Date)
--->
