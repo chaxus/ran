@@ -6,7 +6,9 @@
   "scripts": {
     "compile": "sh ./bin/compile.sh",
     "test": "sh ./bin/test.sh",
-    "tsc": "tsc --noEmit"
+    "tsc": "tsc --noEmit",
+    "remixd": "remixd",
+    "eth": "sh ./bin/eth.sh"
   },
   "engines": {
     "node": "^18.0.0 || >=20.0.0"
