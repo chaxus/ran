@@ -59,6 +59,30 @@
 				],
 				"stateMutability": "view",
 				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "recipient",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "transfer",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
 			}
 		],
 		"devdoc": {
@@ -89,11 +113,11 @@
 	},
 	"sources": {
 		"contracts/FungibleToken.sol": {
-			"keccak256": "0xd0520e745c9df74c483638041fb70c823147faf96d9f6f276d922d86be1b08ae",
+			"keccak256": "0x2636ab381fbe03e12f9178e1aa5e155871db813b7aaf2475735de3b2f2c3ffe6",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://3bc9802b1e61c01a6c70ba36afb47a0fcea63baa37e1ddf201ed108f2a391d45",
-				"dweb:/ipfs/QmXX8F1mhjLswFQzKyh4eTsDwvAxM9YsmhPtpj8eM8X8VP"
+				"bzz-raw://d21a0b04c2bdfd4a1c6f7c55864479464b718fb1807d1c3013e7d62b45d927bd",
+				"dweb:/ipfs/QmerDt7kgZhbYb8peV8c7FttibyRCbkQHc3cYFFwqyzB6W"
 			]
 		}
 	},
