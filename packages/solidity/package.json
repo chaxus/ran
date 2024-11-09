@@ -18,6 +18,7 @@
     "@nomicfoundation/hardhat-ignition": "^0.15.6",
     "@nomicfoundation/hardhat-ignition-ethers": "^0.15.6",
     "@nomicfoundation/hardhat-toolbox-viem": "^3.0.0",
+    "@remix-project/remixd": "^0.6.40",
     "@types/chai-as-promised": "^7.1.8",
     "ethers": "^6.13.3",
     "hardhat": "^2.22.3",
