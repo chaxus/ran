@@ -114,7 +114,6 @@ remixd -s ./eth/project/fungibleToken -u https://remix.ethereum.org
 
 在连接钱包后，我们准备开始将合约部署上链。本教程使用 Sepolia 测试链做演示，要完成接下来的步骤，请确保您的钱包配置并切换到了 Sepolia，且与 IDE 连接的钱包账户中拥有一定的测试币。（例如，我们可以在 [chainlink 的水龙头](https://faucets.chain.link/)领取）
 
-
 选择测试网络进行部署，部署到主链上需要花费`GAS`,成本非常高
 
 ![](./assets/remixd-eth-sepolia.jpg)
@@ -127,8 +126,6 @@ remixd -s ./eth/project/fungibleToken -u https://remix.ethereum.org
 ```sh
 creation of FungibleToken pending...
 ```
-
-
 
 ### 查询合约信息
 

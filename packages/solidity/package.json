@@ -2,6 +2,7 @@
   "name": "solidity",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "compile": "sh ./bin/compile.sh",
@@ -22,7 +23,7 @@
     "@nomicfoundation/hardhat-toolbox-viem": "^3.0.0",
     "@remix-project/remixd": "^0.6.40",
     "@types/chai-as-promised": "^7.1.8",
-    "ethers": "^6.13.3",
+    "ethers": "^6.13.4",
     "hardhat": "^2.22.3",
     "viem": "^2.10.2"
   }
