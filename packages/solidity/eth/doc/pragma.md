@@ -2336,3 +2336,555 @@ contract MyContract {
   }
 }
 ```
+
+## revert
+
+当在 Solidity 合约中发生异常情况时，revert 语句的作用是立即停止当前函数的执行，并撤销所有对状态的更改。
+
+在 solidity 中，require 通常用来对函数的参数进行条件判断，确保函数调用的参数符合预期。而当我们需要处理像 if-else 这样复杂的判断异常情况时，就需要使用到 revert 来更灵活的处理异常了。
+
+在 gas 消耗方面，两者一样都会将剩余的 gas 费返还给调用者。
+
+```solidity
+if (num == 1) {
+		revert(‘Something bad happened’);
+}
+
+require(num == 1, ‘Something bad happened’);
+```
+
+## error
+
+用于表示合约执行过程中的异常情况。它可以让开发者定义特定的错误状态，以便在合约的执行过程中进行特定的异常处理。
+
+在 Solidity 中，定义错误类型使用关键字 error，随后是参数。
+
+```solidity
+//使用error关键字定义了一个名为MyCustomError的自定义错误类型
+//并指定错误消息类型为string 和 uint。
+error MyCustomError(string message, uint number);
+
+function process(uint256 value) public pure {
+
+		//检查value是否超过了100。如果超过了限制，我们使用revert语句抛出自定义错误
+		//并传递错误消息"Value exceeds limit" 和value。
+		if (value >100) revert MyCustomError("Value exceeds limit",value);
+
+}
+```
+
+## assert
+
+assert 语句应用于检查一些被认为永远不应该发生的情况（例如除数为 0），如果发生这种情况，则说明你的合约中存在错误，你应该修复。
+
+在 Solidity 中，使用 assert 关键字来检查内部错误和不变式（invariant），以确保代码的正确性。
+
+```solidity
+//确认a 和 b在任何情况下都相等
+assert(a == b);
+```
+
+require，revert，和 assert 的使用场景分别是什么样的？
+
+● require() 用法：
+
+1. 验证用户输入，例如：require(input < 20);
+2. 验证外部合约的调用，例如：require(external.send(amount));
+3. 在执行之前验证状态条件，例如：require(balance[msg.sender] >= amount)
+
+● revert() 用法：
+
+1. 处理与 require() 类似但逻辑更复杂的情况
+2. 当存在复杂的嵌套 if/else 逻辑流时，可以使用 revert() 代替 require()
+3. 请注意，复杂的逻辑可能是代码质量不佳的一个迹象，所以在开发中请尽量避免使用 revert。
+
+● assert() 用法：
+
+1. 检查溢出/下溢，例如：c = a + b; assert(c > b);
+2. 检查不变量，例如：assert(this.balance >= totalSupply);
+3. 在更改后验证状态
+4. 防止永远不可能发生的情况
+
+## try catch
+
+前面我们学习了 require，revert 和 assert。这些都是终止函数执行的错误处理机制。
+
+然而，有时我们希望能够在处理错误时执行其他逻辑，而不仅仅是终止函数执行。这就需要使用 try-catch 语句了。
+
+在 Solidity 中，使用 try-catch 语句来处理可能存在的错误。并且可以使用 catch (error err) 语句来捕获特定的错误类型：
+
+```solidity
+try recipient.send(amount) {
+    // 正常执行的处理逻辑
+} catch Error(string memory err) {
+    // 捕获特定错误类型为Error的处理逻辑
+    // 可以根据错误信息err进行相应的处理
+} catch (bytes memory) {
+    // 捕获其他错误类型的处理逻辑
+    // 处理除了已声明的特定类型之外的所有错误
+}
+```
+
+## library-define
+
+这是一种特殊的合约。
+
+库与合约类似，但主要用于重用代码。
+
+库包含其他合约可以调用的函数。我们把可以反复利用的代码独立出来，成为一个库。
+
+我们可以使用 library 关键字来定义库。库的定义类似于合约的定义，但没有状态变量。
+
+```solidity
+//定义MathLibrary 库
+library MathLibrary {
+		//库中可以定义函数
+    function square(uint256 x) external pure returns (uint256) {
+        return x * x;
+    }
+}
+```
+
+Solidity 对库的使用有一定的限制。以下是 Solidity 库的主要特征。
+
+1. 库不能定义状态变量；
+2. 库不能发送接收以太币；
+3. 库不可以被销毁，因为它是无状态的。
+4. 库不能继承和被继承；
+
+使用 LibraryName.functionName() 的方式调用库合约的函数。
+
+```solidity
+library MathLibrary {
+    function square(uint256 x) external pure returns (uint256) {
+        return x * x;
+    }
+}
+
+contract ExampleContract {
+    function calculateSquare(uint256 y) external pure returns (uint256) {
+        // 调用库合约的函数
+        uint256 result = MathLibrary.square(y);
+        return result;
+    }
+}
+```
+
+将库合约中的函数附加到任何类型中。
+
+实际上就是给一个普通的类型增加了一些库合约中的函数的功能，让它变得更加强大和有趣。
+
+指令 using A for B;可用于将库 A 的所有函数附加到到任何类型 B。添加完指令后，库 A 中的函数会自动添加为 B 类型变量的成员，可以直接使用 B.functionName() 调用。
+
+```solidity
+pragma solidity ^0.8.0;
+
+library MathLibrary {
+    function square(uint256 x) external pure returns (uint256) {
+        return x * x;
+    }
+}
+
+contract ExampleContract {
+    using MathLibrary for uint256;
+
+    function calculateSquare(uint256 y) external pure returns (uint256) {
+        // 调用库合约的函数，y 变量将默认作为第一个参数传入square函数。
+        return y.square();
+    }
+}
+```
+
+## import
+
+它用于在一个 Solidity 合约中导入其他合约或库。
+
+举个例子，假如你想使用名为 MathLibrary 的库中的函数，但它在另一个.sol 文件中。编译器无法知道你要调用的函数是什么。
+
+这时，你可以使用 import 将库合约导入合约。使编译器知道你要调用的库合约长什么样。
+
+```solidity
+import "./MathLibrary.sol"
+```
+
+## is
+
+继承可以理解为一种家族关系，就像父母将自己的特征传给孩子一样，一个合约（父合约）可以将自己的属性和函数传递给另一个合约（子合约）。
+
+继承的合约可以访问所有非 private 的成员。
+
+使用 is 关键字可以继承任意一个合约或接口。
+
+```solidity
+contract ChildContract is ParentContract { }
+```
+
+正确初始化被继承合约的构造函数。
+
+设想一个情景，合约 A 继承了合约 B，这意味着合约 B 的代码被复制到了合约 A 中。这样一来，合约 A 中可能会存在两个构造函数的情况。
+
+为了解决这个问题，Solidity 引入了一个机制——在继承时，继承合约需要在自己的构造函数中初始化被继承合约的构造函数。
+
+我们只需要在构造函数参数字段结束后使用被继承合约的 ContractName(ParameterList) 就可以正确初始化被继承合约的构造函数。
+
+```solidity
+pragma solidity ^0.8.0;
+
+// 合约B
+contract B {
+    uint public bValue;
+
+    constructor(uint _value) {
+        bValue = _value;
+    }
+}
+
+// 合约A 继承合约B
+contract A is B {
+    uint public aValue;
+		// _valueA用于初始化aValue，
+		// _valueB用于调用合约B的构造函数初始化bValue
+    constructor(uint _valueA, uint _valueB) B(_valueB) {
+        aValue = _valueA;
+    }
+}
+```
+
+## override
+
+函数覆盖是指在子合约中重新实现从父合约继承的函数。
+
+这意味着子合约可以在自己的代码中提供新的函数实现，以替换父合约中原有的函数实现。
+
+```solidity
+pragma solidity ^0.8.0;
+
+contract Animal {
+    function makeSound() public virtual returns (string memory) {
+        return "Animal sound";
+    }
+}
+
+contract Cat is Animal {
+		//覆盖父函数的makeSound函数
+    function makeSound() public override returns (string memory) {
+        return "Meow";
+    }
+}
+
+contract Dog is Animal {
+		//覆盖父函数的makeSound函数
+    function makeSound() public override returns (string memory) {
+        return "Woof";
+    }
+}
+
+contract AnimalSounds {
+    Animal public animal;
+
+    constructor(Animal _animal) {
+        animal = _animal;
+    }
+
+    function makeAnimalSound() public returns (string memory) {
+        return animal.makeSound();
+    }
+}
+```
+
+## virtual
+
+在父合约中，我们可以使用 virtual 关键字来标记函数为可重写的，然后在子合约中使用 override 关键字对其进行覆盖。
+
+如果一个函数没有被 virtual 标记，则不能被重写。
+
+```solidity
+pragma solidity ^0.8.0;
+
+
+//定义了一个基础的Shape合约
+contract Shape {
+    uint public sides;
+
+    constructor() {
+        sides = 0;
+    }
+		//定义为virtual，可以被继承的计算面积的函数
+		//子合约可以根据需要
+    function getArea() public virtual returns (uint) {
+        return 0;
+    }
+}
+//正方形
+contract Square is Shape {
+    uint private sideLength;
+
+    constructor(uint _sideLength) {
+        sideLength = _sideLength;
+        sides = 4;
+    }
+		//正方形的面积计算公式是边*边
+    function getArea() public virtual override returns (uint) {
+        return sideLength * sideLength;
+    }
+}
+//三角形
+contract Triangle is Shape {
+    uint private base;
+    uint private height;
+
+    constructor(uint _base, uint _height) {
+        base = _base;
+        height = _height;
+        sides = 3;
+    }
+		//三角形的计算公式是底*高/2
+    function getArea() public virtual override returns (uint) {
+        return (base * height) / 2;
+    }
+}
+```
+
+## super
+
+这是用于在子合约中用于调用父合约的函数和变量。
+
+在函数内使用 super.functionName 即可调用父合约中的函数。
+
+```solidity
+pragma solidity ^0.8.0;
+
+contract Parent {
+    uint public value_Parent;
+
+    function setValue(uint _newValue) public virtual {
+        value_Parent = _newValue;
+    }
+}
+
+contract Child is Parent {
+    uint public value_Child;
+		//调用完该函数后，value_Child应该被赋值为1，而value_Parent应该被赋值为2。
+    function setValue(uint _newValue) public override {
+				value_Child = _newValue;
+        // 调用父合约的函数
+        super.setValue(_newValue * 2);
+    }
+}
+```
+
+多重继承是指一个合约可以从多个父合约继承功能和属性。当一个合约通过多重继承从多个父合约继承功能和属性时，它可以像拼图一样将这些不同的功能和属性组合在一起，形成一个更为复杂和功能丰富的合约。
+
+在多重继承中使用 is 关键字，将要继承的合约写在后面，用，分隔即可。
+
+```solidity
+pragma solidity ^0.8.0;
+
+contract Parent1 {
+    function foo() public virtual returns (string memory) {
+        return "Parent1";
+    }
+}
+
+contract Parent2 {
+    function foo() public virtual returns (string memory) {
+        return "Parent2";
+    }
+}
+
+contract Child is Parent1, Parent2 {
+		//在这里会返回Parent2。
+    function foo() public override(Parent1, Parent2) returns (string memory) {
+        return super.foo();
+    }
+}
+```
+
+## interface
+
+可以将接口比喻为一个合约的一种规范，它指定了合约应该提供哪些功能和行为，但并不涉及具体实现的细节。接口定义了一组函数头，包括函数的名称、参数类型和返回类型，但没有函数体。
+
+```solidity
+pragma solidity ^0.8.0;
+
+// 定义接口
+interface MyInterface {
+		//接口中的函数必须定义为external，因为设计接口的目的是提供给外部调用。
+		//函数接口中，参数名可以省略，myFunction(uint256)的写法也是可以的。
+    function myFunction(uint256 x) external returns (uint256);
+}
+
+// 实现接口的合约
+contract MyContract {
+    function myFunction(uint256 x) external returns (uint256) {
+        // 实现函数的具体逻辑
+        return x * 2;
+    }
+}
+
+// 使用接口调用函数的合约
+contract CallerContract {
+    MyInterface public myContract;
+
+		//传入MyContract的地址
+    constructor(address contractAddress) {
+        myContract = MyInterface(contractAddress);
+    }
+		//通过接口调用MyContract中的myFunction函数（接口调用我们会在下一节中详细讲解）
+    function callInterface(uint256 value) public returns (uint256) {
+        uint256 result = myContract.myFunction(value);
+        return result;
+    }
+}
+```
+
+一旦我们定义好了接口，就可以使用 interfaceName(address).functionName() 的方式与其他合约进行交互。
+
+```solidity
+pragma solidity ^0.8.0;
+
+// 定义接口
+interface OtherContractInterface {
+    function getValue() external view returns (uint256);
+    function setValue(uint256 newValue) external;
+}
+
+// 合约A
+contract ContractA {
+    uint256 public value;
+
+    function setValue(uint256 newValue) public {
+        value = newValue;
+    }
+		//参数为B合约地址,随后使用接口调用B合约
+    function callGetValue(address contractAAddress) public view returns (uint256) {
+        ContractB contractB = ContractB(contractAAddress);
+        return contractB.getOtherContractValue();
+    }
+}
+
+// 合约B
+contract ContractB {
+		//接口类型的变量，类似与合约变量
+    OtherContractInterface public otherContract;
+
+		//在构造函数中为其赋值
+    constructor(address otherContractAddress) {
+        otherContract = OtherContractInterface(otherContractAddress);
+    }
+		//使用接口调用setValue函数
+    function callSetValue(uint256 newValue) public {
+        otherContract.setValue(newValue);
+    }
+
+    function getOtherContractValue() public view returns (uint256) {
+        return 5;
+    }
+}
+```
+
+合约的继承是指子合约继承了父合约的状态变量和函数，子合约可以直接使用父合约的资源和功能。而接口的继承完全不同——它不提供任何功能和变量，而是定义了一组等待在子合约中实现的函数。
+
+我们可以使用 is 关键字继承一个接口。
+
+```solidity
+pragma solidity ^0.8.0;
+
+// 定义接口：可转账接口
+interface Transferable {
+    function transfer(address recipient, uint256 amount) external returns (bool);
+    function getBalance() external view returns (uint256);
+}
+
+// 合约：银行账户
+//继承了Transferable接口，这意味着我们合约中必须包含transfer和getBalance函数。
+contract BankAccount is Transferable {
+    mapping(address => uint256) private balances;
+
+    constructor(uint256 amount){
+        balances[msg.sender] = amount;
+    }
+
+		//实现transfer函数
+    function transfer(address recipient, uint256 amount) external override returns (bool) {
+        require(balances[msg.sender] >= amount, "Insufficient balance");
+        balances[msg.sender] -= amount;
+        balances[recipient] += amount;
+        return true;
+    }
+		//实现getBalance函数
+    function getBalance() external view override returns (uint256) {
+        return balances[msg.sender];
+    }
+}
+```
+
+## abstract
+
+抽象合约是一种不能被实例化的合约，只能被继承并作为其他合约的基类。它定义了一些函数和状态变量，并且实现了一些通用的功能。
+
+可以使用 abstract 关键字定义一个抽象合约。
+
+```solidity
+pragma solidity ^0.8.0;
+
+// 抽象合约
+abstract contract Animal {
+    //抽象合约可以有变量的定义
+    string public name;
+    bool public hasEaten;
+
+    event EatEvent(string name);
+    //也可以有构造函数
+    constructor(string memory _name) {
+        name = _name;
+    }
+
+    function speak() public virtual returns (string memory);
+
+    function eat() public virtual {
+        // 抽象合约可以包含实现
+        // 具体的逻辑可以在子合约中重写
+        hasEaten = true;
+    }
+
+}
+
+// 实现抽象合约的合约
+contract Cat is Animal {
+    constructor(string memory _name) Animal(_name) {}
+
+    function speak() public override returns (string memory) {
+        return "Meow";
+    }
+
+    function eat() public override {
+        // 重写抽象合约中的 eat 函数
+        // 提供猫的具体进食逻辑
+        super.eat();
+        emit EatEvent(name);
+        // 进行其他猫的进食操作
+    }
+}
+```
+
+## 哈希计算
+
+哈希计算是一种将任意长度的数据转换为固定长度哈希值的过程。而哈希的特点是——不同的字符串哈希出来的结果几乎不可能相同。
+
+keccak256 是一个全局函数，可以在函数中直接使用该函数进行哈希计算。
+
+● 输入：只接受 bytes 类型的输入。
+● 输出：bytes32 长度的字节。
+
+```solidity
+pragma solidity ^0.8.0;
+
+contract KeccakExample {
+		//接收一个字符串参数 _message，并返回一个32字节的哈希值（bytes32类型）。
+		//在函数内部，我们使用keccak256函数来对输入字符串进行哈希运算，并将结果返回。
+    function hash(string memory _message) public pure returns (bytes32) {
+        return keccak256(bytes(_message));
+    }
+}
+```
