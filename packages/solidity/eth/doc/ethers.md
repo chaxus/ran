@@ -761,7 +761,7 @@ console.log('Congratulation! Transaction confirmed.');
 因此，我们需要等待交易确认的返回消息。本课程到此结束。恭喜你完成了！你可能会想知道，如果 CryptoKittie 的所有者没有发送 NFT 怎么办。你的担忧是合理的。有一些高阶方法可以处理这个问题，这将是另一个课程。敬请关注。
 
 ```ts
-import { ethers } from "ethers";
+import { ethers } from 'ethers';
 
 const { JsonRpcProvider, parseEther, parseUnits } = ethers;
 
@@ -775,25 +775,25 @@ const recipientAddress = 'the address you want to send';
 const amountToSend = '0.001'; // In ETH
 
 async function main() {
-    const tx = {
-        to: recipientAddress,
-        // Convert ETH to Wei
-        value: parseEther(amountToSend),
-        gasLimit: 21000,
-        gasPrice: parseUnits('10', 'gwei'),
-    };
+  const tx = {
+    to: recipientAddress,
+    // Convert ETH to Wei
+    value: parseEther(amountToSend),
+    gasLimit: 21000,
+    gasPrice: parseUnits('10', 'gwei'),
+  };
 
-    try {
-        console.log('Sending transaction...');
-        const txResponse = await wallet.sendTransaction(tx);
-        console.log(`Transaction hash: ${txResponse.hash}`);
+  try {
+    console.log('Sending transaction...');
+    const txResponse = await wallet.sendTransaction(tx);
+    console.log(`Transaction hash: ${txResponse.hash}`);
 
-        // Wait for the transaction to be mined
-        const receipt = await txResponse.wait();
-        console.log('Transaction confirmed in block:', receipt.blockNumber);
-    } catch (error) {
-        console.error('Transaction failed:', error);
-    }
+    // Wait for the transaction to be mined
+    const receipt = await txResponse.wait();
+    console.log('Transaction confirmed in block:', receipt.blockNumber);
+  } catch (error) {
+    console.error('Transaction failed:', error);
+  }
 }
 
 main();

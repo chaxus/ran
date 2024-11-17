@@ -1,6 +1,7 @@
 
+// SPDX-License-Identifier: MIT
 // 我们要做的CryptoKitty其实是一个遵循ERC721的NFT，只是在ERC721的基础上添加了自己的功能，例如创建初代小猫。
-pragma solidity ^0.8.28;
+pragma solidity ^0.8.26;
 // 引入 ERC721 的标准库, 需安装 Solidity+Hardhat Extension 即可解决导入的错误。
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 // 定义一个 SimpleCryptoKitties 合约，并继承 ERC721 合约

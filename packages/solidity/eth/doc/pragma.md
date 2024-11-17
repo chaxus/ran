@@ -2996,7 +2996,7 @@ uint256 day= 1 days;
 uint256 week= 1 weeks;
 ```
 
-由于月份存在 30 或者 31 天，年也存在闰年，所以这两种时间表示方式在 solidity 当中被禁用了。要表示 year，一般用 365*day 来表示。
+由于月份存在 30 或者 31 天，年也存在闰年，所以这两种时间表示方式在 solidity 当中被禁用了。要表示 year，一般用 365\*day 来表示。
 
 ```solidity
 pragma solidity ^0.8.0;
@@ -3029,6 +3029,7 @@ ABI (Application Binary Interface，应用二进制接口) 是与以太坊智能
 ```solidity
 bytes memory encodedData = abi.encode(param1, param2);
 ```
+
 ● param1 和 param2：这是要编码的参数。根据参数的类型，它们将被编码为字节数组。
 
 ● encodedData：这是一个 bytes 类型的变量，用于存储通过 abi.encode(param1, param2) 对参数进行编码后的数据。编码后的数据将按照参数的类型和顺序进行紧凑的编码，形成一个动态字节数组。
@@ -3054,7 +3055,7 @@ abi.encode 是 Solidity 提供的一个非常有用的工具，用于将多个�
 3. 安全性：手动编码数据可能会导致错误，而 abi.encode 提供了一种安全、一致的方法来编码数据，从而减少了出错的可能性。
 4. 灵活性：abi.encode 可以用于编码各种不同的数据类型，包括结构体、数组和基本数据类型，这为开发者提供了很大的灵活性。
 5. 与其他函数和库的兼容性：许多 Ethereum 的函数和库都期望数据以特定的 ABI 格式进行编码。使用 abi.encode 可以确保与这些函数和库的兼容性。
-abi.encode 是一个强大的工具，它简化了与智能合约交互的过程，确保了数据的正确性和一致性。
+   abi.encode 是一个强大的工具，它简化了与智能合约交互的过程，确保了数据的正确性和一致性。
 
 对于所有使用 abi.encode 编码的内容，我们都可以使用 abi.decode 解码。
 
@@ -3482,5 +3483,4 @@ abstract contract Context {
 }
 ```
 
-在 Context 合约中，通过_msgData 函数提供了一个间接的方式来获取这些数据，这样可以为将来的扩展或修改提供更大的灵活性，例如处理元交易。
-
+在 Context 合约中，通过\_msgData 函数提供了一个间接的方式来获取这些数据，这样可以为将来的扩展或修改提供更大的灵活性，例如处理元交易。
