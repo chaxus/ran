@@ -11,6 +11,54 @@ interface IERC20 {
   function transferFrom(address, address, uint256) external returns (bool);
 }
 
+contract MockToken is IERC20 {
+    string public constant name = "MockToken";
+    string public constant symbol = "MCK";
+    uint8 public constant decimals = 18;
+
+    mapping(address => uint256) balances;
+    mapping(address => mapping(address => uint256)) allowed;
+    uint256 totalSupply_ = 1000000 ether;
+
+    constructor() {
+        balances[msg.sender] = totalSupply_;
+    }
+
+    function totalSupply() public view  returns (uint256) {
+        return totalSupply_;
+    }
+
+    function balanceOf(address tokenOwner) public view  returns (uint256) {
+        return balances[tokenOwner];
+    }
+
+    function transfer(address receiver, uint256 numTokens) public override returns (bool) {
+        require(numTokens <= balances[msg.sender], "Insufficient balance");
+        balances[msg.sender] -= numTokens;
+        balances[receiver] += numTokens;
+        return true;
+    }
+
+    function approve(address delegate, uint256 numTokens) public  returns (bool) {
+        allowed[msg.sender][delegate] = numTokens;
+        return true;
+    }
+
+    function allowance(address owner, address delegate) public view returns (uint256) {
+        return allowed[owner][delegate];
+    }
+
+    function transferFrom(address owner, address buyer, uint256 numTokens) public override returns (bool) {
+        require(numTokens <= balances[owner], "Insufficient balance");
+        require(numTokens <= allowed[owner][msg.sender], "Insufficient allowance");
+
+        balances[owner] -= numTokens;
+        allowed[owner][msg.sender] -= numTokens;
+        balances[buyer] += numTokens;
+        return true;
+    }
+}
+
 contract CrowdFund {
   // 众筹活动的发起事件，用于记录众筹活动的发起者、目标金额、活动开始时间和活动结束时间。
   event Launch(uint256 id, address indexed creator, uint256 goal, uint32 startAt, uint32 endAt);
