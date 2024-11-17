@@ -2888,3 +2888,599 @@ contract KeccakExample {
     }
 }
 ```
+
+## Receive
+
+receive 函数只用于处理接收 ETH，一个合约最多只有一个，而且不能有任何的参数，不能返回任何值，必须包含 external 和 payable。
+
+```solidity
+pragma solidity ^0.8.0;
+
+contract ContractA {
+  bool public flag;
+  //receive 函数
+  receive() external payable {
+    flag = true;
+  }
+}
+
+contract ContractB {
+  function callReceive(address _contract) external payable {
+    //receive会被执行，是因为我们发送了Eth，并且没有带任何数据（“”为空）
+		(bool suc,) = _contract.call{value: 1}("");
+    require(suc, "call fail");
+  }
+}
+```
+
+receive 函数不是必须的，可以选择定义 receive 也可以不定义，但是如果不定义，在合约收到转账时可能会报错。
+
+receive 限制只能消耗 2300 gas，这个数量的 gas 基本就只能收个 Ether
+
+## fallback
+
+fallback 函数充当了合约的默认处理函数，用于处理没有明确定义处理方式的消息。fallback 函数会在三种情况下被调用
+
+1. 调用者尝试调用一个合约中不存在的函数时
+2. 用户给合约发 Ether 但是 receive 函数不存在
+3. 用户发 Ether，receive 存在，但是同时用户还发了别的数据（msg.data 不为空）
+
+fallback 是 solidity 中的特殊函数，定义方式为 fallback() 关键字。需要注意的是 fallback 需要被定义为 external。
+
+```solidity
+pragma solidity ^0.8.0;
+
+contract ContractA {
+    bool public flag;
+
+    fallback() external {
+        flag = true;
+    }
+}
+
+contract ContractB {
+    function callFallback(address _contract) external payable {
+        // 调用ContractA中不存在的函数
+        bytes memory encodedData = abi.encodeWithSignature("nonExistentFunction()");
+        (bool suc,) = _contract.call(encodedData);
+        require(suc, "call fail");
+    }
+}
+```
+
+并不是每个合约都必须编写 fallback 函数。fallback 和 receive 一样都不是必须的。
+
+fallback 和 receive 都是处理 solidity 中默认逻辑的函数。fallback 可以不用被 payable 修饰，而 receive 必须被 payable 修饰。当 fallback 被定义为 payable 时，也可以充当 receive 的作用来接收 ETH。receive 像一个专门接收现金的收银员。当客户只是想付现金，而不需要任何其他服务时，他们就会去找这个收银员。
+
+receive 不会默认存在在合约中。
+
+![](../../assets/eth-fallback.webp)
+
+简单来说，合约接收 ETH 时，msg.data 为空且存在 receive() 时，会触发 receive()；msg.data 不为空或不存在 receive() 时，会触发 fallback() ，此时 fallback() 必须为 payable。需要注意的是，如果合约中既没有 receive 函数，也没有 payable 修饰的 fallback 函数，那么直接向合约发送以太币的操作将会失败，合约会拒绝接收以太币。但是，你仍然可以通过调用带有 payable 修饰的其他函数来向合约发送以太币。
+
+## selfdestruct
+
+顾名思义，selfdestruct 函数即自毁。这是 solidity 当中一个内置的特殊函数，调用该函数后，将触发合约的自毁，自毁将该合约从区块链中删除，在删除前，他还会将合约中存储的剩余 ETH 转移给指定的账户。
+
+```solidity
+contract DigitalWallet {
+    address payable public targetAddress;
+
+		//可以在部署时指定一个自毁时转移资产的地址
+    constructor(address payable _targetAddress) payable {
+        targetAddress = _targetAddress;
+    }
+
+		//自毁，会将合约剩余的所有ETH转给targetAddress地址。
+    function destroy() external {
+        selfdestruct(targetAddress);
+    }
+}
+```
+
+这就相当于你有一个数字钱包，里面存有一定数量的加密货币（比如以太币）。你决定销毁这个数字钱包，并且将其中的余额转移到你的另一个钱包地址上。你可以使用类似于 selfdestruct 函数的操作来实现这个过程。
+
+## Time
+
+在 Solidity 中，时间戳是以秒为单位表示时间的，当我们想要表示一分钟时，可能还可以很快地意识到它是 60 秒，但是如果是一周、一个月或一年呢？
+
+在编写代码时花费时间计算这些时间是不划算的。此外，直接使用秒数表示长时间间隔会降低代码的可读性。因此，Solidity 提供了一些全局变量，如 days，weeks，供开发者使用，以便更方便地表示一段时间。
+
+使用 minutes，hours，days，weeks 这样的时间单位时，需要在前面指定单位的数量。
+
+```solidity
+uint256 minute = 1 minutes;
+uint256 minute = minutes; // 错误用法
+uint256 hour= 1 hours;
+uint256 day= 1 days;
+uint256 week= 1 weeks;
+```
+
+由于月份存在 30 或者 31 天，年也存在闰年，所以这两种时间表示方式在 solidity 当中被禁用了。要表示 year，一般用 365*day 来表示。
+
+```solidity
+pragma solidity ^0.8.0;
+
+contract TokenLock {
+    uint256 public releaseTime;
+    uint256 public lockDuration;
+
+    constructor() {
+        lockDuration = 30 days; // 锁定期为30天
+        releaseTime = block.timestamp + lockDuration; // 根据当前时间计算释放时间
+    }
+
+    function isLocked() public view returns (bool) {
+        return block.timestamp < releaseTime; // 检查当前时间是否在锁定期内
+    }
+}
+```
+
+## abi
+
+Solidity 当中特殊的全局变量 abi。
+
+首先，我们将学习全局函数 abi.encode，它用于对给定的参数进行 ABI 编码，返回一个字节数组。
+
+ABI (Application Binary Interface，应用二进制接口) 是与以太坊智能合约交互的标准。在 EVM 处理数据时，所有的数据根据 ABI 标准进行编码。
+
+可以直接在函数中调用 abi.encode() 函数对数据进行编码。
+
+```solidity
+bytes memory encodedData = abi.encode(param1, param2);
+```
+● param1 和 param2：这是要编码的参数。根据参数的类型，它们将被编码为字节数组。
+
+● encodedData：这是一个 bytes 类型的变量，用于存储通过 abi.encode(param1, param2) 对参数进行编码后的数据。编码后的数据将按照参数的类型和顺序进行紧凑的编码，形成一个动态字节数组。
+
+```solidity
+pragma solidity ^0.8.0;
+
+contract AbiEncodeExample {
+
+    function encodeParameters(uint256 param1, string memory param2) public pure returns (bytes memory) {
+        //对函数的两个参数进行编码。
+				bytes memory encodedData = abi.encode(param1, param2);
+				//将编码的结果作为函数返回值返回。
+        return encodedData;
+    }
+}
+```
+
+abi.encode 是 Solidity 提供的一个非常有用的工具，用于将多个参数或变量编码为一个连续的字节数组，这在与智能合约交互时尤为重要。以下是使用 abi.encode 的几个主要原因：
+
+1. 标准化编码：当与智能合约交互时，需要确保数据以特定的格式进行编码和解码。abi.encode 确保了数据按照 Ethereum 的 ABI 规范进行编码，从而确保数据的正确性和一致性。
+2. 提高代码可读性：直接使用 abi.encode 可以使代码更加简洁和可读，因为开发者不需要手动进行复杂的编码操作。
+3. 安全性：手动编码数据可能会导致错误，而 abi.encode 提供了一种安全、一致的方法来编码数据，从而减少了出错的可能性。
+4. 灵活性：abi.encode 可以用于编码各种不同的数据类型，包括结构体、数组和基本数据类型，这为开发者提供了很大的灵活性。
+5. 与其他函数和库的兼容性：许多 Ethereum 的函数和库都期望数据以特定的 ABI 格式进行编码。使用 abi.encode 可以确保与这些函数和库的兼容性。
+abi.encode 是一个强大的工具，它简化了与智能合约交互的过程，确保了数据的正确性和一致性。
+
+对于所有使用 abi.encode 编码的内容，我们都可以使用 abi.decode 解码。
+
+使用 abi.decode() 函数可以对编码后的数据进行解码。第一个参数是编码数据的字节数组，第二个参数是解码后的数据类型。
+
+```solidity
+address decodedAddress = abi.decode(encodedData, (address));
+
+//多个参数
+(uint256 decodedUint, address decodedAddress, string memory decodedString) = abi.decode(encodedData, (uint256, address, string));
+```
+
+在上述代码中，我们使用了 abi.decode 函数对编码后的数据 encodedData 进行了解码，将其解码为一个 address 类型。
+
+```solidity
+pragma solidity ^0.8.0;
+
+contract DecodeExample {
+    function decodeAddress(bytes memory encodedData) public pure returns (address) {
+        // 解码编码数据为 address 类型
+        address decodedAddress = abi.decode(encodedData, (address));
+
+        // 返回解码结果
+        return decodedAddress;
+    }
+}
+```
+
+当我们与智能合约交互或在合约之间传递数据时，为了确保数据的完整性和一致性，我们经常使用 abi.encode 对数据进行编码。编码后的数据是一个字节数组，它代表了原始数据的 ABI 编码形式。abi.decode 的使用场景主要包括：
+
+1. 数据验证：当我们从外部源（如其他合约或外部调用）接收到编码的数据并需要验证其内容时，我们会使用 abi.decode。
+2. 事件日志解析：当我们从智能合约的事件日志中获取编码的数据并希望解析它以获取具体的参数值时。
+3. 跨合约调用：当一个合约向另一个合约发送编码的数据，并且接收方合约需要解码这些数据以进行进一步的处理。
+4. 存储和恢复：当我们在合约的存储中保存编码的数据并在以后需要恢复原始数据时。
+
+当我们面对已经被 abi.encode 编码的数据并需要访问其原始形式时，我们就会使用 abi.decode。
+
+### abi.encodePacked
+
+这是一个与 abi.encode 类似但有所不同的全局函数。它也用于将参数编码为符合 ABI 标准的字节数组，但不会为每个参数添加其类型的长度信息，也不会在参数之间添加分隔符，结果是一个紧密打包的字节数组。
+
+可以直接在函数中调用 abi.encodePacked() 函数对数据进行编码。
+
+```solidity
+bytes memory encodedData = abi.encodePacked(param1, param2);
+```
+
+和 abi.encode 有什么区别？
+
+主要区别在于数据的压缩。
+
+![](../../assets/eth-encoded-packed.webp)
+
+● abi.encodePacked 将参数紧密打包，就像将物品紧密地放在一起，没有任何额外的填充物或间隔。这种打包方式可以节省空间，但在解包时需要小心处理，因为物品之间没有明确的分隔符。
+
+● 相比之下，abi.encode 使用标准的分隔符和填充物进行组织。就像将物品放入不同的袋子，并每个袋子都有标签和规范，以确保物品的结构和类型完整性。尽管可能需要更多的空间，但在解包时更容易处理和识别每个物品。
+
+由于紧密打包的特点，abi.encodePacked 不能编码结构体和嵌套数组。
+
+abi.encodePacked 一般用在 hash 上。因为 abi.encodePacked 会比 abi.encode 编码出来的数据更短，所消耗的 gas 成本更低。
+
+如果需要编码的数据中有两个动态数组，abi.encodePacked 可能会将两组数据编码成同一个字符串，这种时候应该使用 abi.encode 而不是 abi.encodePacked。
+
+```solidity
+pragma solidity ^0.8.0;
+
+contract AbiEncodeExample {
+
+    function encodeParameters(uint256 param1, string memory param2) public pure returns (bytes memory) {
+        //对函数的两个参数进行编码。
+				bytes memory encodedData = abi.encodePacked(param1, param2);
+				//将编码的结果作为函数返回值返回。
+        return encodedData;
+    }
+}
+```
+
+## 函数签名
+
+函数签名是一个函数的唯一标识符，它由函数名和参数类型组成。在 Solidity 中，所有函数调用都通过函数签名作为唯一标识。
+
+函数签名是函数名 + 参数字段类型的字符串。没有空格，不用缩写。
+
+```solidity
+function hello(uint256 a, address b, bool c) {...}
+signature = "hello(uint256,address,bool)"；
+```
+
+在同一个合约里不可能两个不同的函数的函数签名相同，Solidity 不允许同一个合约里面有两个函数有相同的函数签名因为 Solidity 通过函数签名的哈希值前四位定位需要调用的函数，如果函数签名一样，那哈希值前四位也会一样，这样的话没有办法确定到底调用哪个。
+
+在不同的合约里则可能。只要函数名，参数类型和顺序一致就 OK。
+
+```solidity
+pragma solidity ^0.8.0;
+
+contract FunctionSignature {
+  function dosome(uint256 num, string memory text) public pure returns (string memory signature) {
+    // 计算函数签名
+    signature = "dosome(uint256,string)";
+  }
+}
+```
+
+## 函数选择器
+
+函数选择器是函数签名的哈希前四个字节，用于在编码后的数据中唯一标识函数。
+
+在 Solidity 中，所有函数调用其实是通过函数选择器作为唯一标识。
+
+函数选择器是函数签名的哈希前 4 个字节。在这里我们直接取函数签名的前 4 个字节即可，或者也可以直接使用 functionName.selector
+
+```solidity
+bytes4 selector = bytes4(keccak256(signature));
+bytes4 selector = myFunction.selector;
+```
+
+函数选择器只需要四个字节，大大节省了存储空间，这样会使链上的部署和调用都更加省 gas。
+
+选择器碰撞是指两个不同的函数他们的函数选择器是一样的。例如 transferFrom(address,address,uint256) 的函数签名哈希为：
+
+0x23b872dd7302113369cda2901243429419bec145408fa8b352b3dd92b66c680b
+
+而 gasprice_bit_ether(int128) 的函数签名哈希为：
+
+0x23b872ddd9b96c46b307d87a34b44cc03080be64e7bd1bf7c26e93b854ffbc75
+
+他们的函数签名哈希其实是不同的，但是却有着相同的选择器：0x23b872dd
+
+```solidity
+pragma solidity ^0.8.0;
+
+contract FunctionSignature {
+  function dosome(uint256 num, string memory text) public pure returns (bytes4 selector1, bytes4 selector) {
+    selector = bytes4(keccak256("dosome(uint256,string)"));
+    selector1 = this.dosome.selector;
+  }
+}
+```
+
+## abi.encodeWithSignature 和 abi.encodeWithSelector
+
+有的时候，我们知道函数调用可能会失败，但是我们不希望调用失败后交易直接回滚。这时候，我们就需要 abi.encodeWithSignature 去和底层 EVM 交互。具体交互方式，会在后续的 low level call 中讲解。但是 encodeWithSignature 提供了一种编码方式可以快捷的将调用函数需要的信息打包。
+
+假设我们有一个合约，该合约允许用户存储他们的消息。但是，我们不希望任何人都可以更改这些消息，所以我们要求用户签署他们的消息。为了验证这个签名，我们需要知道是哪个函数被调用以及传递了哪些参数。这就是 abi.encodeWithSignature 派上用场的地方。考虑以下合约：
+
+```solidity
+
+pragma solidity ^0.8.0;
+
+contract MessageStore {
+    mapping(address => string) public messages;
+
+    function storeMessage(string memory message) public {
+        // 生成函数签名和参数的编码
+        bytes memory encodedData = abi.encodeWithSignature("storeMessage(string)", message);
+
+        // 在这里，我们可以使用encodedData来验证用户的签名（这部分代码被省略）
+        // 如果签名验证成功，我们存储消息
+        messages[msg.sender] = message;
+    }
+}
+```
+
+在这个真实用例中，我们使用 abi.encodeWithSignature 函数来编码 storeMessage 函数和用户提供的消息。然后，我们可以使用这个编码数据来验证用户的签名，确保只有签名正确的用户才能存储他们的消息。
+
+可以直接在函数中调用 abi.encodeWithSignature 函数对数据进行编码。需要两种参数
+
+1. 函数签名
+2. 函数具体参数
+
+```solidity
+abi.encodeWithSignature("myFunction(uint256,string)", 123, "Hello");
+```
+
+abi.encodeWithSignature 函数和 abi.encode 函数以及 abi.encodePacked 函数有什么区别？
+
+● abi.encodeWithSignature 编码函数的签名和参数。类似于在菜谱上写下菜名（函数签名）和制作材料（参数），这样厨师就知道该做哪道菜以及需要哪些材料。
+● abi.encode 和 abi.encodePacked 编码函数的参数，但不包括函数的签名。类似于菜谱上写下了制作材料（参数），没有写菜名（函数签名）。这种情况下，厨师知道需要使用哪些材料，但不知道应该制作哪道菜。
+
+![](../../assets/eth-encode-with-signature.webp)
+
+abi.encode 和 abi.encodePacked 更多的用途是在数据的存储和哈希上，而 abi.encodeWithSignature 则是用于低级调用。
+
+```solidity
+pragma solidity ^0.8.0;
+
+contract SignatureExample {
+    function dosome(uint256 number, string memory message) public pure {
+        // 在这里执行一些操作
+    }
+
+    function getEncodedSignature() public pure returns (bytes memory) {
+        // 使用 abi.encodeWithSignature() 编码dosome函数签名和参数
+        bytes memory encodedData = abi.encodeWithSignature("dosome(uint256,string)", 123, "Hello");
+
+        // 返回编码结果作为函数的返回值
+        return encodedData;
+    }
+}
+```
+
+### abi.encodeWithSelector
+
+可以直接在函数中调用 abi.encodeWithSelector 函数对数据进行编码。并通过 bytes4(keccak256("函数名 (参数列表)")) 的方式获取函数的选择器。
+
+```solidity
+abi.encodeWithSelector(bytes4(keccak256("myFunction(uint256,string)")),123, "Hello");
+
+//可以通过函数名.selector()的方式获取函数的选择器。
+bytes4 selector = this.myFunction.selector;
+abi.encodeWithSelector(selector, 123, "Hello");
+```
+
+● abi.encodeWithSelector 函数需要手动提供函数的选择器作为第一个参数。选择器是为函数签名哈希后的前 4 个字节，由函数名称和参数类型进行计算得到的。
+
+● abi.encodeWithSignature 函数只需要提供函数签名的字符串形式作为第一个参数，不需要手动提供选择器。
+
+使用 abi.encodeWithSelector 就像是你已经知道了菜名的简写（函数选择器），并把制作材料（参数）写在菜谱上。
+
+![](../../assets/eth-encode-with-selector.webp)
+
+```solidity
+pragma solidity ^0.8.0;
+
+contract EncodeWithSelectorExample {
+    function getEncodedData() public pure returns (bytes memory) {
+        // 使用 functionName.selector 获取函数选择器
+        bytes4 selector = this.myFunction.selector;
+
+        // 使用 abi.encodeWithSelector() 编码函数调用数据
+        bytes memory encodedData = abi.encodeWithSelector(selector, 123, "Hello");
+
+        // 返回编码结果作为函数的返回值
+        return encodedData;
+    }
+
+    function myFunction(uint256 amount, string memory message) public pure {
+        // 函数逻辑
+    }
+}
+```
+
+## 低级调用
+
+低级调用其实是直接和 EVM（以太坊虚拟机）交互的一种调用方式，因此它具有更高的灵活性。
+
+最基础的低级调用通常使用 address.call 函数来实现。
+
+```solidity
+//abiEncodedData为我们上一章中提到的abi.encodeWithSignature
+//和abi.encodeWithSelector的结果
+(bool success, bytes memory data) = address(targetAddress).call{value: amount}(abiEncodedData);
+```
+
+在上述语法中：
+
+● targetAddress：是目标合约的地址。
+● value：是可选参数，用于向目标合约发送以太币。
+● abiEncodedData：是目标合约函数的 ABI 编码数据（通过 abi.encodeWithSignature 或者 abi.encodeWithSelector 编码）。
+
+低级调用更加灵活，它的优势主要体现在：
+
+1. 灵活的交互：低级调用允许你仅通过合约的链上地址与其进行交互，而无需提供接口或合约变量等详细信息。这使得与其他合约的交互更加简便，你只需关注目标合约的地址即可。
+
+```solidity
+contract ContractA {
+	function aa() public {
+		//function body
+	}
+}
+contract B {
+	function bb(address contractAddress) public {
+		//正常调用
+		ContractA(contractAddress).aa();
+		//低级调用不需要知道合约
+		contractAddress.call(data);
+	}
+}
+```
+
+2. 非回滚性调用：使用低级调用进行函数调用时，如果调用失败并出现异常，不会导致整个交易的回滚。相反，它会返回一个布尔值来指示调用是否成功。这种设计使得开发者可以更加灵活地处理调用的结果，根据需要采取适当的措施。
+
+回滚性调用如下图：
+
+![](../../assets/eth-low-call.webp)
+
+```solidity
+pragma solidity ^0.8.0;
+//目标合约
+contract TargetContract {
+    uint256 public value;
+
+    function setValue(uint256 newValue) external {
+        value = newValue;
+    }
+}
+
+contract CallerContract {
+
+    function callTargetContract(address targetAddress, uint256 newValue) external {
+				//构造函数调用的ABI编码数据字段，
+        bytes memory payload = abi.encodeWithSignature("setValue(uint256)", newValue);
+        //如果不使用bytes data返回值，可以不接收该返回值。
+        (bool success, ) = targetAddress.call(payload);
+				//判断调用是否成功。
+        require(success, "Call to target contract failed");
+    }
+}
+```
+
+参考 OpenZeppelin 的 ReentrancyMock 合约。这个合约是为了测试和演示重入攻击的防护机制而设计的。在这个合约中，有一个名为 countThisRecursive 的函数，它使用了低级的 address.call 函数来递归地调用自己：
+
+```solidity
+function countThisRecursive(uint256 n) public nonReentrant {
+    if (n > 0) {
+        _count();
+        (bool success, ) = address(this).call(abi.encodeCall(this.countThisRecursive, (n - 1)));
+        require(success, "ReentrancyMock: failed call");
+    }
+}
+```
+
+在这个函数中，我们首先检查 n 是否大于 0。如果是，我们增加计数器的值，并使用 address.call 方法调用 countThisRecursive 函数，其中 n 的值减少了 1。这样，我们可以递归地调用这个函数，直到 n 变为 0。
+
+这个例子展示了如何在合约内部进行低级函数调用。这种方法提供了更多的灵活性，允许我们在运行时决定调用哪个函数，而不是在编写代码时硬编码函数名。
+
+## delegatecall
+
+delegatecall 的语法与 call 语法一致，使用 address.delegatecall() 来实现。
+
+```solidity
+(bool success, bytes memory data) = address(targetAddress).delegatecall(abiEncodedData);
+```
+
+在上述语法中：
+
+● targetAddress：是目标合约的地址。
+● abiEncodedData：是目标合约函数的 ABI 编码数据。
+
+当使用 delegatecall 时，它实际上是将要调用的函数的代码复制到当前合约中进行执行。这意味着被调用的函数将在当前合约的上下文环境下执行，允许外部合约来改变当前合约的存储布局。
+
+> 这种调用模式非常危险！在以太坊的历史上，由于对 delegatecall 的错误使用而引发了许多安全漏洞和黑客攻击。
+
+由于部署的 Solidity 合约不可更改，那我们希望更新函数功能的话怎么办呢？我们先部署一个代理合约 A，在里面 delegatecall 合约 B 的功能。
+
+更新时，只需要更改合约 B 的地址变成合约 C，这样合约 A 就可以使用新版合约 C 的功能。
+
+```solidity
+pragma solidity ^0.8.0;
+
+contract StorageContract {
+    uint public data;
+
+    function setData(uint _data) external {
+        data = _data;
+    }
+}
+
+contract DelegateCallContract {
+    uint public storedData;
+    address public storageContract;
+
+		//StorageContract的地址
+    constructor(address _storageContract) {
+        storageContract = _storageContract;
+    }
+
+    function dosome(uint _data) external {
+        // 使用delegatecall在本合约的上下文中中执行setData函数逻辑
+        (bool success, ) = storageContract.delegatecall(abi.encodeWithSignature("setData(uint256)", _data));
+        require(success, "DelegateCall failed");
+
+        //执行结束后可以发现StorageContract中的data字段并没有被赋值，而本合约的storedData字段被赋值了。
+        //这就是因为delegatecall执行代码的上下文在本合约中，访问的是本合约的存储空间，而data对应着第一个参数(slot0)
+        //刚好对应本合约的storedData变量。
+    }
+}
+```
+
+## msg.data
+
+msg.data 是一个 bytes 类型，它包含了函数调用的原始数据。通过使用 msg.data，您可以访问传递给函数的原始字节数据，进而进行解析和处理。
+
+![](../../assets/eth-msg-data.webp)
+
+在 Solidity 中，我们可以通过 msg.data 全局变量获取函数调用的原始数据。
+
+```solidity
+bytes memory data = msg.data;
+```
+
+当你调用合约的函数时，除了传递以太币外，还可以在函数调用中传递其他数据。这些数据可以是任何类型，包括字符串、字节数组等。通过使用 msg.data，您可以访问这些传递的数据，并在合约中执行相应的逻辑。
+
+```solidity
+pragma solidity ^0.8.0;
+
+contract DataContract {
+		bytes data;
+    function process() public returns (bytes memory) {
+				// 获取函数调用的原始数据
+		    data = msg.data;
+
+		    // 执行对data的处理逻辑
+		    // ...
+
+		    // 如果需要，可以将data解析为函数签名和参数
+		    // ...
+
+		    return data;
+		}
+}
+```
+
+参考 [OpenZeppelin](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/9ef69c03d13230aeff24d91cb54c9d24c4de7c8b/contracts/utils/Address.sol#L105) 的 Context 合约。
+
+```solidity
+abstract contract Context {
+    function _msgSender() internal view virtual returns (address) {
+        return msg.sender;
+    }
+
+    function _msgData() internal view virtual returns (bytes calldata) {
+        return msg.data;
+    }
+}
+```
+
+在 Context 合约中，通过_msgData 函数提供了一个间接的方式来获取这些数据，这样可以为将来的扩展或修改提供更大的灵活性，例如处理元交易。
+
