@@ -14,6 +14,8 @@ Foundry 是一个 Solidity 框架，用于构建、测试、模糊、调试和�
 
 使用 Foundryup 安装
 
+官网：https://getfoundry.sh
+
 Foundryup 是 foundry 工具包的安装器，通过它我们来完成 foundry 的安装，首先，在终端执行如下命令：
 
 ```sh
@@ -35,6 +37,14 @@ forge --version
 这会显示 Forge 的版本号，确认 Forge 是否已成功安装在您的系统上。
 
 ℹ️ 如果是 Windows 操作系统，需要安装使用 Git BASH 或者 WSL 作为命令终端，因为 Foundryup 当前并不支持 Powershell 或 Cmd.
+
+如果安装的时候遇到：
+
+```sh
+curl: (7) Failed to connect to raw.githubusercontent.com port 443: Connection refused
+```
+
+可以把系统的 DNS 设置成：114.114.114.114 或者 8.8.8.8，再尝试下载
 
 ## Forge init：初始化项目
 
@@ -888,4 +898,164 @@ Genesis Timestamp
 1714205976
 
 Listening on 127.0.0.1:8545
+```
+
+### Anvil 基本配置选项
+
+#### 访问 Anvil 的配置选项
+
+通过在命令行中执行 `anvil -h`，你可以查看所有 Anvil 提供的配置选项。这些选项涵盖了从账户管理到节点性能等多个方面，使得 Anvil 成为一个高度灵活和可配置的开发工具。
+
+```sh
+anvil -h
+```
+
+执行此命令后，你将看到一个详细的帮助菜单，列出了所有可用的命令和参数，以及它们的用途和默认值。
+
+![](../../assets/foundry-anvil.webp)
+
+#### 基本配置选项
+
+Anvil 的配置选项允许开发者定制本地测试环境，以下是一些基本的配置参数：
+
+#### 生成和配置开发账户数量
+
+默认情况下，Anvil 生成 10 个开发账户，但你可以通过以下命令指定生成更多或更少的账户：
+
+```sh
+anvil -a  <NUM>
+          Number of dev accounts to generate and configure
+          [default: 10]
+```
+
+例如，如果你需要 20 个开发账户，可以使用：
+
+```sh
+anvil -a 20
+```
+
+#### 设置使用的 EVM 硬分叉版本
+
+虽然默认情况下 Anvil 使用最新的 EVM 硬分叉版本，但开发者可能需要针对特定的硬分叉版本进行测试，这可以通过以下命令完成：
+
+```sh
+anvil --hardfork <HARDFORK>
+```
+
+例如，如果你需要设置为“istanbul”硬分叉，可以使用：
+
+```sh
+anvil --hardfork istanbul
+```
+
+设置节点监听的端口号
+默认端口为 8545，但如果该端口已被占用或你需要运行多个节点实例，可以通过以下命令更改端口号：
+
+```sh
+anvil -p, --port <PORT>
+```
+
+例如，设置为端口 8546：
+
+```sh
+anvil -p 8546
+```
+
+## Chisel
+
+Chisel 是一个 Solidity REPL（"读取 - 评估 - 打印 循环 "的缩写），它允许开发人员编写和测试 Solidity 代码片段。它提供了一个交互式环境，用于编写和执行 Solidity 代码，同时还提供了一组内置命令，用于处理和调试您的代码。这种工具特别适合进行快速的代码实验和问题调试。
+
+### Chisel 的功能和重要性
+
+作为 Foundry 套件的一部分，Chisel 与 Forge、Cast 和 Anvil 一同安装，形成了一套完整的智能合约开发和测试工具。Chisel 的交互式环境允许开发者即时运行 Solidity 代码并获取反馈，这大大加速了开发和测试流程。
+
+### 安装 Foundry 和 Chisel
+
+如果你还未安装 Foundry，需要首先进行安装，以便可以使用 Chisel 及其它工具。如果你已经安装了 Foundry 的旧版本，可能需要运行 foundryup 命令来更新至最新版本，以确保包括 Chisel 在内的所有组件都是最新的。
+
+### Chisel 的使用方法
+
+#### 启动 Chisel
+
+启动 Chisel 非常简单，只需在命令行中输入 chisel 即可。启动后，你可以直接在命令行中编写和测试 Solidity 代码。
+
+```sh
+chisel
+```
+
+在 Chisel 环境中，每次输入代码后，Chisel 都会提供详细的执行反馈，帮助你理解代码的行为和潜在问题。
+
+#### Chisel 中的输入方式
+
+在 Chisel 中，你可以通过两种主要方式输入代码：表达式和语句。
+
+#### 表达式
+
+表达式是可以求值的代码片段，它们返回一个值但不改变会话状态。表达式在计算后不会留在会话中。
+
+#### 示例
+
+● 获取地址余额：
+
+```solidity
+address(0).balance
+```
+
+● 编码多个参数：
+
+```solidity
+abi.encode(256, bytes32(0), "Chisel!")
+```
+
+● 调用视图函数：
+
+```solidity
+myViewFunc(128)
+```
+
+● 位运算示例：
+
+```solidity
+1 << 8  // 输出结果为 256 的 uint256
+```
+
+#### 语句
+
+语句是指那些旨在保持或修改会话状态的代码片段。这包括变量定义、不改变状态的函数调用以及合约、函数、事件、错误、映射或结构体的定义。要将表达式作为语句执行，可以在其末尾添加分号（;）。
+
+#### 示例
+
+● 定义变量：
+
+```solidity
+uint256 a = 0xa57b;
+```
+
+● 调用状态修改函数或多个函数：
+
+```solidity
+myStateMutatingFunc(128) || myViewFunc(128);
+```
+
+● 定义内部函数：
+
+```solidity
+function hash64(bytes32 _a, bytes32 _b) internal pure returns (bytes32 _hash) {
+  assembly {
+    // Store the 64 bytes we want to hash in scratch space
+    mstore(0x00, _a)
+    mstore(0x20, _b)
+
+    // Hash the memory in scratch space
+    // and assign the result to `_hash`
+    _hash := keccak256(0x00, 0x40)
+  }
+}
+```
+
+● 定义事件和结构体：
+
+```solidity
+event ItHappened(bytes32 indexed hash);
+struct Complex256 { uint256 re; uint256 im; }
 ```
