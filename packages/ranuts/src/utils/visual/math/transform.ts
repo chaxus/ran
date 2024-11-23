@@ -1,5 +1,6 @@
 import { Matrix } from '@/utils/visual/math/matrix';
 import { ObservablePoint } from '@/utils/visual/vertex/point';
+
 // Transform 类就类似 CSS 的 transform，它提供了一些更清晰、更符合人类直觉的变换，而不用直接使用矩阵变换，当然，这些变换最终会转换成矩阵变换。
 // 节点的线性变换类
 export class Transform {

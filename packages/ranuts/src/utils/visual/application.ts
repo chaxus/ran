@@ -12,10 +12,11 @@ export class Application {
     const { view } = options;
     this.view = view;
     this.renderer = getRenderer(options);
-    this.start();
+    // this.start();
+    this.render();
   }
 
-  private render() {
+  public render(): void {
     this.renderer.render(this.stage);
   }
 

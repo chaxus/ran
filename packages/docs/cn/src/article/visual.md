@@ -1,10 +1,6 @@
-在业务需求的持续演进中，遇到了高度定制化图表的需求，为了寻求解决方案，我们首先寻找了一下目前的开源图表库。确实能解决大部分的场景。但在一些定制化设计就难以实现，但 UI 层的定制化又是十分常见的。
+可视化渲染引擎
 
-为了完美的复现设计愿景，我们打算自己去实现绘制，然后就发现 canvas，webGL，webGPU 的 API 实在太过于底层。开发起来几乎像是命令式编程。能实现需求，但代码就非常不好维护。
-
-因此需要设计一个对于当前业务场景的绘制引擎。
-
-## 一 系统设计
+## 一：系统设计
 
 系统设计的过程中，我们需要明确使用场景，约束条件，边界情况。描述出最主要实现的功能，将这些功能进行高层级的设计，分类，链接。
 
@@ -14,14 +10,113 @@
 
 最后是一些业务场景的具体实现。
 
-一个通用的绘制设计引擎，主要需要考虑以下几个方面：
+因此，对于可视化绘制引擎，需要考虑以下几个方面：
 
-1. **层级管理：**对于 2D 图形来说，必然需要层级关系的处理，定义元素之间的堆叠顺序，如确保文字总是绘制在图表的上方。层级管理将确保视觉呈现符合预期。
-2. **组的管理：**将多个图形元素组织成一个整体（即“组”）。这样的设计使得对组进行整体移动、缩放或变形时，组内所有元素都能响应，简化了复杂场景下的操作和管理。
-3. **变换矩阵：**对一个图形组执行平移、旋转、缩放等变形操作，从而以动态和灵活的方式调整图形的展示效果。为了实现这些变形操作，变形操作类通常会采用矩阵变换的原理。通过维护一个变换矩阵，并在绘制图形组之前应用该矩阵，可以一次性完成所有变形操作的计算，提高绘制效率。
-4. **事件系统：**允许用户将事件监听器绑定到单个图形元素或整个组上。实现用户交互（如点击、拖动）。
-5. **应用层封装：**构建丰富的基础图形类库，提供便捷的 API 来绘制常见的几何形状，如矩形、圆形、多边形、曲线等。这些基础图形应支持自定义样式和属性，以满足多样化的设计需求。
+1. **组的管理：**将多个图形元素组织成一个整体（即“组”）。这样的设计使得对组进行整体移动、缩放或变形时，组内所有元素都能响应，简化了复杂场景下的操作和管理。
+2. **层级管理：**对于 2D 图形来说，必然需要层级关系的处理，定义元素之间的堆叠顺序，如确保文字总是绘制在图表的上方。层级管理将确保视觉呈现符合预期。
+3. **基础图形封装：**构建丰富的基础图形类库，提供便捷的 API 来绘制常见的几何形状，如矩形、圆形、多边形、曲线等。这些基础图形应支持自定义样式和属性，以满足多样化的设计需求。
+4. **变换矩阵：**对一个图形组执行平移、旋转、缩放等变形操作，从而以动态和灵活的方式调整图形的展示效果。为了实现这些变形操作，变形操作类通常会采用矩阵变换的原理。通过维护一个变换矩阵，并在绘制图形组之前应用该矩阵，可以一次性完成所有变形操作的计算，提高绘制效率。
+5. **事件系统：**允许用户将事件监听器绑定到单个图形元素或整个组上。实现用户交互（如点击、拖动）。
 6. **扩展设计：**明确整个渲染过程的生命周期，并且允许开发者在对应的生命周期中插入自定义的代码，从而实现对渲染流程，事件处理，资源控制等方面的控制。
+7. **应用层封装：**实现条形图，折线图，饼图，桑基图等应用层图形，满足业务和产品的多样化需求。
+
+首先我们实现第一个，组的管理：
+
+## 二：组的管理：
+
+为了进行图形组的管理，会继续实现一个容器类 Container，这个类代表了‘组’的概念，它提供了添加子元素，移除子元素等的方法；后续的要被渲染的一些类 (如 Graphics，Text，Sprite 等) 会继承于这个类；这个类本身不会被渲染 (因为它只是一个‘组’，它本身没有内容可以渲染)。
+
+属性：
+
+- children: 表示所有的子元素
+- isSort: 添加或者删除元素后，需要表示，当前组需要更新
+- parent: 表示当前组的父节点
+
+方法：
+
+- addChild: 添加子元素
+- removeChild: 移除子元素
+
+因此，实现如下：
+
+```ts
+class Container {
+  public readonly children: Container[] = [];
+  public isSort: boolean = false;
+  public parent: Container | undefined = undefined;
+  addChild = (child: Container) => {
+    child.parent?.removeChild(child);
+    this.children.push(child);
+    this.isSort = true;
+    child.parent = this;
+  };
+  removeChild = (child: Container) => {
+    for (let i = 0; i < this.children.length; i++) {
+      if (this.children[i] === child) {
+        this.children.splice(i, 1);
+        child.parent = undefined;
+        return;
+      }
+    }
+  };
+}
+```
+
+## 三：层级管理
+
+在 canvas 绘图环境中，先绘制的图形会被后绘制的图形所覆盖，因此，层级的管理就自然地通过绘制顺序来实现。在这种情况下，最先被绘制的图形将位于最底层，而随后绘制的图形则逐层叠加，直至最上层。
+
+层级属性并不只在`Container`类上实现，`Container`类表示组，实际上，任何元素节点都需要层级概念，包括`Container`类。
+
+所以，我们需要实现一个通用的节点类 `Vertex`，这个类代表了最原始的‘节点’的概念，所有可以被展示到 `canvas` 画布上的、各种类型的节点都会继承于这个类，这是一个抽象类，我们并不会直接实例化这个类。
+
+这个类上面挂载了‘节点’的各种通用属性，比如：父元素、层级、节点是否可见等。
+
+同时，`Container`类继承于 Vertex 类，‘组’也算作‘节点’。
+
+Vertex 类实现如下：
+
+```ts
+class Vertex {
+  protected _zIndex = 0; // 节点的层级关系
+  public parent: Container | undefined = undefined; // 节点的父子关系
+  public visible = true;
+}
+```
+
+同时要对 Container 类进行改造，增加根据 zIndex 的排序方法，实现如下：
+
+```ts
+class Container extends Vertex {
+  public readonly children: Container[] = [];
+  public isSort: boolean = false; // true 的时候表示需要更新排序
+  public parent: Container | undefined = undefined;
+  public addChild = (child: Container) => {
+    child.parent?.removeChild(child);
+    this.children.push(child);
+    this.isSort = true;
+    child.parent = this;
+  };
+  public removeChild = (child: Container) => {
+    for (let i = 0; i < this.children.length; i++) {
+      if (this.children[i] === child) {
+        this.children.splice(i, 1);
+        child.parent = undefined;
+        return;
+      }
+    }
+  };
+  public sortChildren = (): void => {
+    if (!this.isSort) return;
+    this.children.sort((a, b) => a.zIndex - b.zIndex);
+    this.isSort = false;
+  };
+}
+```
+
+## 四：基础图形的封装
+
+
 
 在应用层，我们需要封装绘制引擎提供的底层功能，使其更加贴近业务需求。这包括提供易于使用的 API 接口、优化性能、处理异常和错误等。同时，通过持续的应用层反馈，不断优化和调整绘制引擎，确保其能够更好地服务于业务的发展。
 

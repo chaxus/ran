@@ -1,5 +1,5 @@
 import { Shape } from '@/utils/visual/shape/shape';
-import { ShapeType } from '@/utils/visual/enums';
+import { SHAPE_TYPE } from '@/utils/visual/enums';
 import type { Point } from '@/utils/visual/vertex/point';
 
 // Rectangle 类继承自 Shape 类，表示矩形
@@ -8,7 +8,7 @@ export class Rectangle extends Shape {
   public y: number;
   public width: number;
   public height: number;
-  public type = ShapeType.Rectangle;
+  public type = SHAPE_TYPE.RECTANGLE;
   constructor(x = 0, y = 0, width = 0, height = 0) {
     super();
     this.x = x;
