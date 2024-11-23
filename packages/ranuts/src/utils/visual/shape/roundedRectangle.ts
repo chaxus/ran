@@ -1,5 +1,5 @@
 import { Shape } from '@/utils/visual/shape/shape';
-import { ShapeType } from '@/utils/visual/enums';
+import { SHAPE_TYPE } from '@/utils/visual/enums';
 import type { Point } from '@/utils/visual/vertex/point';
 
 export class RoundedRectangle extends Shape {
@@ -8,7 +8,7 @@ export class RoundedRectangle extends Shape {
   public width: number;
   public height: number;
   public radius: number;
-  public readonly type = ShapeType.RoundedRectangle;
+  public readonly type = SHAPE_TYPE.ROUNDED_RECTANGLE;
   constructor(x = 0, y = 0, width = 0, height = 0, radius = 20) {
     super();
     this.x = x;

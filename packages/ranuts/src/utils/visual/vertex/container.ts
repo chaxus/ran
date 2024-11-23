@@ -5,18 +5,14 @@ import type { Point } from '@/utils/visual/vertex/point';
 import type { WebGLRenderer } from '@/utils/visual/render/webGLRenderer';
 import type { BatchRenderer } from '@/utils/visual/render/batchRenderer';
 import type { Batch } from '@/utils/visual/render/utils/batch/index';
+import { CONTAINER } from '@/utils/visual/enums';
 
 // 这个类代表了‘组’的概念，它提供了添加子元素，移除子元素等的方法；
 // 后续的要被渲染的一些类 (如 Graphics，Text，Sprite 等) 会继承于这个类；这个类本身不会被渲染 (因为它只是一个‘组’，它本身没有内容可以渲染)。
 // 这个类继承于 Vertex 类，‘组’也算作‘节点’。
 export class Container extends Vertex {
   public isSort: boolean = false;
-  public type = 'container';
-
-  /**
-   * 是否需要对 children 排序
-   */
-  public sortDirty = false;
+  public type = CONTAINER;
 
   /**
    * 所有子元素
@@ -70,13 +66,13 @@ export class Container extends Vertex {
    * @description: 根据 z-index 排序子元素
    * @return {*}
    */
-  public sortChildren(): void {
+  public sortChildren = (): void => {
     if (!this.isSort) {
       return;
     }
     this.children.sort((a, b) => a.zIndex - b.zIndex);
     this.isSort = false;
-  }
+  };
   /**
    * 渲染自身，在 container 上面没有东西要渲染，所以这个函数的内容为空
    */
