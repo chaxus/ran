@@ -1,8 +1,8 @@
 import { BatchRenderer } from '@/utils/visual/render/batchRenderer';
-import type { IApplicationOptions } from '@/utils/visual/types';
 import { BYTES_PER_VERTEX } from '@/utils/visual//enums';
 import { fragmentShaderSource, vertexShaderSource } from '@/utils/visual/render/utils/webgpu/shaders';
 import { toRgbArray } from '@/utils/visual/render/utils/index';
+import type { IApplicationOptions } from '@/utils/visual/types';
 
 export class WebGPURenderer extends BatchRenderer {
   private gpu: GPUCanvasContext;

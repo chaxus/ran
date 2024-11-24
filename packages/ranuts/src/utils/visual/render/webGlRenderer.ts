@@ -1,9 +1,9 @@
 import { Renderer } from '@/utils/visual/render/render';
-import type { IApplicationOptions } from '@/utils/visual/types';
-import type { Container } from '@/utils/visual/vertex/container';
 import { BatchPool } from '@/utils/visual/render/utils/webgl/batchPool';
 import { initShader } from '@/utils/visual/render/utils/webgl/initShader';
 import { toRgbArray } from '@/utils/visual/render/utils/index';
+import type { IApplicationOptions } from '@/utils/visual/types';
+import type { Container } from '@/utils/visual/vertex/container';
 
 export class WebGLRenderer extends Renderer {
   public gl: WebGLRenderingContext;

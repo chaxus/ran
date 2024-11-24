@@ -1,9 +1,9 @@
 import { Renderer } from '@/utils/visual/render/render';
+import { BYTES_PER_VERTEX } from '@/utils/visual/enums';
+import { batchPool, buildArray, updateArray } from '@/utils/visual/render/utils/batch';
+import type { Container } from '@/utils/visual/vertex/container';
 import type { Batch } from '@/utils/visual/render/utils/batch';
 import type { IApplicationOptions } from '@/utils/visual/types';
-import { BYTES_PER_VERTEX } from '@/utils/visual/enums';
-import type { Container } from '@/utils/visual/vertex/container';
-import { batchPool, buildArray, updateArray } from '@/utils/visual/render/utils/batch';
 
 export abstract class BatchRenderer extends Renderer {
   /**

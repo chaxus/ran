@@ -1,2 +1,4 @@
-export * from '@/utils/visual/style/fill';
-export * from '@/utils/visual/style/line';
+import { Fill } from '@/utils/visual/style/fill';
+import { Line } from '@/utils/visual/style/line';
+
+export { Fill, Line };
