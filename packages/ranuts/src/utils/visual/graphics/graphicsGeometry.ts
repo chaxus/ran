@@ -15,7 +15,6 @@ export class GraphicsGeometry {
    * 每个 batchPart 代表一个 fill 或者一个 stroke
    */
   public batchParts: BatchPart[] = [];
-
   /**
    * 顶点数组，每 2 个元素代表一个顶点
    */
@@ -49,9 +48,7 @@ export class GraphicsGeometry {
    * 将所有子图形都转化成顶点并且进行三角剖分
    */
   public buildVerticesAndTriangulate(): void {
-    if (!this.dirty) {
-      return;
-    }
+    if (!this.dirty) return;
     this.dirty = false;
     for (let i = this.shapeIndex; i < this.graphicsData.length; i++) {
       const data = this.graphicsData[i];

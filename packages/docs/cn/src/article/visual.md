@@ -116,9 +116,152 @@ class Container extends Vertex {
 
 ## 四：基础图形的封装
 
-在多数二维绘图业务场景中，复杂图形往往可以简化为基础图形的巧妙组合。核心的基础元素包括圆形、多边形以及贝塞尔曲线，它们是实现图形构建的基本单位。
+在多数二维绘图业务场景中，复杂图形往往可以简化为基础图形的组合。核心的基础元素包括圆形、多边形以及贝塞尔曲线，它们是实现图形构建的基本单位。
 
-此外，还有一些频繁使用的基础图形，如矩形、圆角矩形和椭圆，同样不可或缺。我们将这些统称为“基础图形库”，通过它们的灵活组合，能够轻松构建出满足各种业务需求的图形场景。
+此外，还有一些常用的基础图形，如矩形、圆角矩形和椭圆。我们将这些统称为“基础图形库”，通过它们的灵活组合，能够轻松构建出满足各种需求的二维场景。
+
+首先我们定一个`Graphics`类，继承自 `Container` 类，表示绘制各种图形的容器。
+
+```ts
+class Graphics extends Container {}
+```
+
+绘制的过程中，我们需要考虑是填充还是描边图形。因此，需要定义两个属性：
+`lineStyle`和`fillStyle`,用来表示 line 的属性，和 fill 的属性。
+
+line 的属性有：color,alpha,visible,width,[cap](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineCap),[join](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineJoin),[miterLimit](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/miterLimit)
+
+填充的属性有：color,alpha,visible
+
+我们可以用两个类去描述这些数据，Fill 类：
+
+```ts
+class Fill {
+  public color = '#ffffff';
+  public alpha = 1.0;
+  public visible = false;
+
+  constructor() {
+    this.reset();
+  }
+
+  public clone(): Fill {
+    const obj = new Fill();
+    obj.color = this.color;
+    obj.alpha = this.alpha;
+    obj.visible = this.visible;
+    return obj;
+  }
+
+  public reset(): void {
+    this.color = '#ffffff';
+    this.alpha = 1;
+    this.visible = false;
+  }
+}
+```
+
+Line 类既有 Fill 类的所有属性，还有些其他的属性，所以可以继承 Fill 类：
+
+```ts
+class Line extends Fill {
+  public width = 0;
+  public cap = LINE_CAP.BUTT;
+  public join = LINE_JOIN.MITER;
+  public miterLimit = 10;
+
+  public clone(): Line {
+    const obj = new Line();
+    obj.color = this.color;
+    obj.alpha = this.alpha;
+    obj.visible = this.visible;
+    obj.width = this.width;
+    obj.cap = this.cap;
+    obj.join = this.join;
+    obj.miterLimit = this.miterLimit;
+    return obj;
+  }
+
+  public reset(): void {
+    super.reset();
+    this.color = '#ffffff';
+    this.width = 0;
+    this.cap = LINE_CAP.BUTT;
+    this.join = LINE_JOIN.MITER;
+    this.miterLimit = 10;
+  }
+}
+```
+
+因此，`Graphics`类的属性如下：
+
+```ts
+class Graphics extends Container {
+  private _lineStyle = new Line();
+  private _fillStyle = new Fill();
+  constructor() {
+    super();
+    this.type = GRAPHICS;
+  }
+}
+```
+
+还需要增加一些画线的方法和填充的方法：
+
+```ts
+class Graphics extends Container {
+  private _lineStyle = new Line();
+  private _fillStyle = new Fill();
+  constructor() {
+    super();
+    this.type = GRAPHICS;
+  }
+  public lineStyle(width: number, color?: string, alpha?: number): Graphics;
+  public lineStyle(options: ILineStyleOptions): Graphics;
+  public lineStyle(options: ILineStyleOptions | number, color: string = '0x000000', alpha: number = 1): Graphics {
+    this.startPoly();
+    if (typeof options === 'object') {
+      Object.assign(this._lineStyle, options);
+    } else {
+      const opts: ILineStyleOptions = { width: options, color, alpha };
+      Object.assign(this._lineStyle, opts);
+    }
+    this._lineStyle.visible = true;
+    return this;
+  }
+  // 如果要填充图形，则需要先调用这个函数给画笔设置填充色
+  public beginFill(color = '#000000', alpha = 1): Graphics {
+    this._fillStyle.color = color;
+    this._fillStyle.alpha = alpha;
+    if (this._fillStyle.alpha > 0) {
+      this._fillStyle.visible = true;
+    }
+    return this;
+  }
+  /**
+   * 结束填充模式
+   */
+  public endFill = (): Graphics => {
+    this.startPoly();
+    this._fillStyle.reset();
+    return this;
+  };
+}
+```
+
+接下来是绘制各种基础图形了，先从最简单的圆形开始。Graphics 类事绘制各种图形的容器，因此所有的基础图形绘制方法都在 Graphics 类上。增加绘制圆形的方法：
+
+```ts
+  /**
+   * 画圆
+   * @param x 圆心 X 坐标
+   * @param y 圆心 Y 坐标
+   * @param radius 半径
+   */
+  public drawCircle = (x: number, y: number, radius: number): Graphics => {
+    return this.drawShape(new Circle(x, y, radius));
+  };
+```
 
 
 

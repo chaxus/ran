@@ -2,7 +2,7 @@ import type { LINE_CAP, LINE_JOIN, RENDERER_TYPE } from '@/utils/visual/enums';
 
 export interface IApplicationOptions {
   prefer?: RENDERER_TYPE.CANVAS | RENDERER_TYPE.WEB_GL | RENDERER_TYPE.WEB_GPU; // 使用哪种 renderer
-  view: HTMLCanvasElement;
+  view?: HTMLCanvasElement;
   backgroundColor?: string;
   backgroundAlpha?: number;
 }

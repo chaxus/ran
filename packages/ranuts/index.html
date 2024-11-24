@@ -17,8 +17,9 @@
       const app = new Application({
         view: document.getElementById('hierarchy'),
       });
+      console.log('app', app);
       const blackGraphic = new Graphics();
-      blackGraphic.beginFill('black');
+      blackGraphic.beginFill('white');
       blackGraphic.drawRect(0, 0, 300, 300);
 
       const redGraphic = new Graphics();
@@ -39,13 +40,18 @@
       container2.addChild(greenGraphic);
 
       const yellowGraphic = new Graphics();
-      yellowGraphic.beginFill('yellow');
+      // yellowGraphic.beginFill('yellow');
+      yellowGraphic.lineStyle({ width: 30, color: 'yellow', cap: 'round', join: 'round' });
       yellowGraphic.drawRect(0, 0, 250, 150);
 
       app.stage.addChild(container2);
       app.stage.addChild(yellowGraphic);
+
+      app.render();
+
       setTimeout(() => {
         yellowGraphic.position.set(200, 0);
+        app.render();
       }, 1000);
     </script>
   </body>

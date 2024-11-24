@@ -9,11 +9,9 @@ export class Fill {
 
   public clone(): Fill {
     const obj = new Fill();
-
     obj.color = this.color;
     obj.alpha = this.alpha;
     obj.visible = this.visible;
-
     return obj;
   }
 
