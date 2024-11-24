@@ -1,21 +1,21 @@
 import { Container } from '@/utils/visual/vertex/container';
 import { Polygon } from '@/utils/visual/shape/polygon';
 import { Rectangle } from '@/utils/visual/shape/rectangle';
-import type { Shape } from '@/utils/visual/shape/shape';
 import { Fill } from '@/utils/visual/style/fill';
 import { Line } from '@/utils/visual/style/line';
 import { GraphicsGeometry } from '@/utils/visual/graphics/graphicsGeometry';
-import type { CanvasRenderer } from '@/utils/visual/render/canvasRenderer';
-import type { Point } from '@/utils/visual/vertex/point';
 import { getBezierLength, getQuadraticBezierLength } from '@/utils/visual/math/bezier';
-import type { ILineStyleOptions } from '@/utils/visual/types';
 import { Circle } from '@/utils/visual/shape/circle';
 import { RoundedRectangle } from '@/utils/visual/shape/roundedRectangle';
 import { Ellipse } from '@/utils/visual/shape/ellipse';
-import type { BatchRenderer } from '@/utils/visual/render/batchRenderer';
 import { toRgbaLittleEndian } from '@/utils/visual/render/utils';
 import { batchPool } from '@/utils/visual/render/utils/batch';
 import type { GraphicsBatch } from '@/utils/visual/render/utils/batch';
+import type { Shape } from '@/utils/visual/shape/shape';
+import type { BatchRenderer } from '@/utils/visual/render/batchRenderer';
+import type { ILineStyleOptions } from '@/utils/visual/types';
+import type { CanvasRenderer } from '@/utils/visual/render/canvasRenderer';
+import type { Point } from '@/utils/visual/vertex/point';
 
 // Graphics 类继承自 Container 类，表示绘制各种图形的容器
 export class Graphics extends Container {

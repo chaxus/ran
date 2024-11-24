@@ -1,7 +1,7 @@
-import type { Renderer } from '@/utils/visual/render/render';
 import { getRenderer } from '@/utils/visual/render/index';
 import { Container } from '@/utils/visual/vertex/container';
 import type { IApplicationOptions } from '@/utils/visual/types';
+import type { Renderer } from '@/utils/visual/render/render';
 
 export class Application {
   private renderer: Renderer;
