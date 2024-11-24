@@ -9,7 +9,6 @@ export class Line extends Fill {
 
   public clone(): Line {
     const obj = new Line();
-
     obj.color = this.color;
     obj.alpha = this.alpha;
     obj.visible = this.visible;
@@ -17,13 +16,11 @@ export class Line extends Fill {
     obj.cap = this.cap;
     obj.join = this.join;
     obj.miterLimit = this.miterLimit;
-
     return obj;
   }
 
   public reset(): void {
     super.reset();
-
     this.color = '#ffffff';
     this.width = 0;
     this.cap = LINE_CAP.BUTT;

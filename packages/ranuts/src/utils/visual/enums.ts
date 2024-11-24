@@ -32,3 +32,7 @@ export const MAX_VERTEX_COUNT = 65536; // 支持的最大的顶点数量
 export const BYTES_PER_VERTEX = 12; // 每个顶点占多少字节
 
 export const CONTAINER = 'container';
+
+export const GRAPHICS = 'graphics';
+
+export const OBJECT = 'object';
