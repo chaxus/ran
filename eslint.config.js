@@ -1,8 +1,6 @@
-// @ts-check
 import { builtinModules, createRequire } from 'node:module';
 import eslint from '@eslint/js';
 import pluginN from 'eslint-plugin-n';
-import * as pluginI from 'eslint-plugin-i';
 import pluginRegExp from 'eslint-plugin-regexp';
 import tsParser from '@typescript-eslint/parser';
 import tseslint from 'typescript-eslint';
@@ -45,7 +43,6 @@ export default tseslint.config(
     },
     plugins: {
       n: pluginN,
-      i: pluginI,
     },
     rules: {
       'n/no-exports-assign': 'error',
@@ -120,9 +117,9 @@ export default tseslint.config(
       '@typescript-eslint/prefer-for-of': 'off',
       '@typescript-eslint/prefer-function-type': 'off',
 
-      'i/no-nodejs-modules': ['error', { allow: builtinModules.map((mod) => `node:${mod}`) }],
-      'i/no-duplicates': 'error',
-      'i/order': 'error',
+      // 'i/no-nodejs-modules': ['error', { allow: builtinModules.map((mod) => `node:${mod}`) }],
+      // 'i/no-duplicates': 'error',
+      // 'i/order': 'error',
       'sort-imports': [
         'error',
         {
@@ -160,7 +157,7 @@ export default tseslint.config(
       'playground/tailwind/**', // blocked by https://github.com/postcss/postcss-load-config/issues/239
     ],
     rules: {
-      'i/no-commonjs': 'error',
+      // 'i/no-commonjs': 'error',
     },
   },
   {

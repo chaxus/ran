@@ -28,7 +28,6 @@
     "@types/node": "^22.10.1",
     "@typescript-eslint/parser": "^8.17.0",
     "eslint": "^9.16.0",
-    "eslint-plugin-i": "^2.29.1",
     "eslint-plugin-n": "^17.14.0",
     "eslint-plugin-regexp": "^2.7.0",
     "jscpd": "^4.0.5",
@@ -36,8 +35,8 @@
     "terser": "^5.37.0",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.17.0",
-    "vite": "^5.4.11",
-    "vitest": "^1.6.0"
+    "vite": "^6.0.3",
+    "vitest": "^2.1.8"
   },
   "dependencies": {
     "globals": "^15.13.0"
