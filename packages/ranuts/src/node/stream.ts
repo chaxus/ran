@@ -1,6 +1,5 @@
 import { createReadStream, createWriteStream } from 'node:fs';
 import type { ReadStream, WriteStream } from 'node:fs';
-import { Duplex } from 'node:stream';
 
 interface ReadOption {
   path: string;
@@ -14,8 +13,6 @@ interface WriteOption {
   path: string;
   encoding: string;
 }
-
-class Stream extends Duplex {}
 
 export const readStream = (option: ReadOption): ReadStream => {
   const { path } = option;

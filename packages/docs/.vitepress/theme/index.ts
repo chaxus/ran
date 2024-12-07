@@ -36,7 +36,7 @@ const pwaInstall = () => {
 export default {
   extends: DefaultTheme,
   // Layout,
-  enhanceApp({ app, router, siteData }: EnhanceAppContext): void {
+  enhanceApp({ app }: EnhanceAppContext): void {
     if (!import.meta.env.SSR) {
       import('ranui');
       pwaInstall();

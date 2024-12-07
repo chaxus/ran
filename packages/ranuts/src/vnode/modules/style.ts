@@ -3,39 +3,39 @@ import type { VNode, VNodeData } from '../vnode';
 export type VNodeStyle = Record<string, any>;
 
 /**
- *  在snabbdom中style有三个额外的生命周期delayed, remove和destroy，主要是方便我们css动画的使用，而我们terdom是为了学习虚拟dom
+ *  在 snabbdom 中 style 有三个额外的生命周期 delayed, remove 和 destroy，主要是方便我们 css 动画的使用，而我们 terdom 是为了学习虚拟 dom
  * 的原理，所以这里我删除这两个生命周期，方便源码的阅读。
  * */
 
 let reflowForced = false;
 
 function updateStyle(oldVnode: VNode, vnode: VNode): void {
-  // 缓存遍历中当前新VNode中的style
+  // 缓存遍历中当前新 VNode 中的 style
   let cur: any;
-  // 缓存遍历中当前style的name
+  // 缓存遍历中当前 style 的 name
   let name: string;
-  // 获取dom节点
+  // 获取 dom 节点
   const elm = vnode.elm;
-  // 获取旧VNode的style
+  // 获取旧 VNode 的 style
   let oldStyle = (oldVnode.data as VNodeData).style;
-  // 获取新VNode的style
+  // 获取新 VNode 的 style
   let style = (vnode.data as VNodeData).style;
 
-  // 如果新旧VNode都没有设置style，直接返回
+  // 如果新旧 VNode 都没有设置 style，直接返回
   if (!oldStyle && !style) return;
-  // 如果新旧VNode的style完全相同，直接返回
+  // 如果新旧 VNode 的 style 完全相同，直接返回
   if (oldStyle === style) return;
-  // 如果没有旧VNode的style，设置为空对象
+  // 如果没有旧 VNode 的 style，设置为空对象
   oldStyle = oldStyle || {};
-  // 如果没有新VNode的style，设置为空对象
+  // 如果没有新 VNode 的 style，设置为空对象
   style = style || {};
 
-  // 遍历旧VNode的style
+  // 遍历旧 VNode 的 style
   for (name in oldStyle) {
-    // 如果新VNode中没有相同name的style
+    // 如果新 VNode 中没有相同 name 的 style
     if (!style[name]) {
       if (name[0] === '-' && name[1] === '-') {
-        // 如果是以 -- 开头,代表是css变量,使用removeProperty删除
+        // 如果是以 -- 开头，代表是 css 变量，使用 removeProperty 删除
         (elm as any).style.removeProperty(name);
       } else {
         // 否则直接设为空
@@ -44,13 +44,13 @@ function updateStyle(oldVnode: VNode, vnode: VNode): void {
     }
   }
 
-  // 遍历新VNode中的style
+  // 遍历新 VNode 中的 style
   for (name in style) {
-    // 缓存当前style的值
+    // 缓存当前 style 的值
     cur = style[name];
     if (cur !== oldStyle[name]) {
       if (name[0] === '-' && name[1] === '-') {
-        // 如果是以 -- 开头,代表是css变量,使用setProperty设置
+        // 如果是以 -- 开头，代表是 css 变量，使用 setProperty 设置
         (elm as any).style.setProperty(name, cur);
       } else {
         // 否则直接设置
@@ -82,7 +82,7 @@ function applyRemoveStyle(vnode: VNode, rm: () => void): void {
     return;
   }
   if (!reflowForced) {
-    (vnode.elm as any).offsetLeft;
+    // (vnode.elm as any).offsetLeft;
     reflowForced = true;
   }
   let name: string;

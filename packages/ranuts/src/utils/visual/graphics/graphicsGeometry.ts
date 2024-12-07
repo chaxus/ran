@@ -23,7 +23,6 @@ export class GraphicsGeometry {
    * 顶点下标数组，每个元素代表一个顶点下标
    */
   public indices = new CustomIntArray();
-  constructor() {}
   public drawShape(shape: Shape, fillStyle: Fill, lineStyle: Line): void {
     const data = new GraphicsData(shape, fillStyle, lineStyle);
     this.graphicsData.push(data);

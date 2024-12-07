@@ -1,4 +1,4 @@
-import { isClient } from '@/utils/device';
+type ThrottleFunc<T extends (...args: any[]) => void> = (...args: Parameters<T>) => any;
 
 /**
  * @description: 节流
@@ -6,19 +6,31 @@ import { isClient } from '@/utils/device';
  * @param {*} wait
  * @return {*}
  */
-export const throttle = (fn: any, wait = 300): any => {
-  let timer: NodeJS.Timeout | null;
-  return function (this: any) {
-    const context = this;
-    const args = arguments;
-    if (!timer) {
-      timer = setTimeout(() => {
-        timer = null;
-        fn.apply(context, args);
-      }, wait);
+export function throttle<T extends (...args: any[]) => any>(func: T, delay: number = 300): ThrottleFunc<T> {
+  let lastCallTime: number = 0;
+  let timeoutId: number | null = null;
+  return function (this: unknown, ...args: Parameters<T>): void {
+    const now = Date.now();
+    if (now - lastCallTime >= delay) {
+      if (timeoutId != null) {
+        clearTimeout(timeoutId);
+        timeoutId = null;
+      }
+
+      lastCallTime = now;
+      func.apply(this, args);
+    } else if (timeoutId == null) {
+      timeoutId = window.setTimeout(
+        () => {
+          lastCallTime = Date.now();
+          func.apply(this, args);
+          timeoutId = null;
+        },
+        delay - (now - lastCallTime),
+      );
     }
   };
-};
+}
 
 /**
  * @description: 生成节流函数
@@ -26,42 +38,28 @@ export const throttle = (fn: any, wait = 300): any => {
  * @return {*}
  */
 export const generateThrottle = (): Function => {
-  let timer: NodeJS.Timeout | undefined;
-  return function (fn: Function, wait = 300) {
+  let lastCallTime: number = 0;
+  let timeoutId: number | null = null;
+  return function (func: Function, delay = 300) {
     return function (this: unknown, ...args: unknown[]) {
-      if (timer) {
-        clearTimeout(timer);
-        timer = undefined;
-      }
-      const context = this;
-      if (!timer) {
-        timer = setTimeout(() => {
-          fn.apply(context, args);
-          clearTimeout(timer);
-          timer = undefined;
-        }, wait);
+      const now = Date.now();
+      if (now - lastCallTime >= delay) {
+        if (timeoutId != null) {
+          clearTimeout(timeoutId);
+          timeoutId = null;
+        }
+        lastCallTime = now;
+        func.apply(this, args);
+      } else if (timeoutId == null) {
+        timeoutId = window.setTimeout(
+          () => {
+            lastCallTime = Date.now();
+            func.apply(this, args);
+            timeoutId = null;
+          },
+          delay - (now - lastCallTime),
+        );
       }
     };
-  };
-};
-
-/**
- * @description: requestAnimationFrame节流
- * @param {any} fn
- * @return {*}
- */
-export const requestAnimation = (fn: any): any => {
-  if (!isClient) return;
-  let ticking = false;
-  return function (this: any) {
-    const context = this;
-    const args = arguments;
-    if (!ticking) {
-      window.requestAnimationFrame(function () {
-        fn.apply(context, args);
-        ticking = false;
-      });
-      ticking = true;
-    }
   };
 };

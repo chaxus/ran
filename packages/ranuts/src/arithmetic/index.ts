@@ -2,7 +2,7 @@
  * @Author: chaxus nouo18@163.com
  * @Date: 2023-09-14 21:21:31
  * @LastEditors: chaxus nouo18@163.com
- * @LastEditTime: 2024-06-16 12:24:17
+ * @LastEditTime: 2024-12-07 21:33:10
  * @FilePath: /ran/packages/ranuts/src/arithmetic/index.ts
  * @Description: 字符串 string
  * @Description: 链表
@@ -34,7 +34,7 @@ interface TreeNode {
  * @param {string} s
  * @return {string}
  */
-const replaceSpace = function (s: string) {
+export const replaceSpace = function (s: string): string {
   return s.split(' ').join('%20');
 };
 /**
@@ -46,7 +46,7 @@ const replaceSpace = function (s: string) {
  * @param {*} n
  * @return {*}
  */
-const reverseLeftWords = function (s: string, n: number) {
+export const reverseLeftWords = function (s: string, n: number): string {
   return s.slice(n) + s.slice(0, n);
 };
 
@@ -55,11 +55,11 @@ const reverseLeftWords = function (s: string, n: number) {
  * @param {string} s
  * @return {boolean}
  */
-const isNumber = function (s: string) {
+export const isNumber = function (s: string): boolean {
   // 整数：[\+\-]?\d+
   // 小数：[\+\-]?(\d+\.|\d+\.\d+|\.\d+)
   // [eE][\+\-]?\d+
-  return /^\s*(?:[+\-]?\d+|[+\-]?(?:\d+\.|\d+\.\d+|\.\d+))(?:e[+\-]?\d+)?\s*$/i.test(s);
+  return /^\s*(?:[+-]?\d+|[+-]?(?:\d+\.|\d+\.\d+|\.\d+))(?:e[+-]?\d+)?\s*$/i.test(s);
 };
 
 /**
@@ -67,8 +67,8 @@ const isNumber = function (s: string) {
  * @param {string} str
  * @return {number}
  */
-const strToInt = function (str: string) {
-  const [item] = /^\s*([+\-]?\d+)/.exec(str) || [0];
+export const strToInt = function (str: string): number | string {
+  const [item] = /^\s*([+-]?\d+)/.exec(str) || [0];
   if (Number(item) >= Math.pow(2, 31) - 1) {
     return Math.pow(2, 31) - 1;
   }
@@ -85,7 +85,7 @@ const strToInt = function (str: string) {
  * @return {Array<number>}
  */
 
-const reversePrint = function (head: ListNode | null) {
+export const reversePrint = function (head: ListNode | null): number[] {
   const result = [];
   while (head) {
     result.unshift(head.val);
@@ -99,7 +99,7 @@ const reversePrint = function (head: ListNode | null) {
  * @param {ListNode} head
  * @return {ListNode}
  */
-const reverseList = function (head: ListNode | null) {
+export const reverseList = function (head: ListNode | null): ListNode | null {
   // prev curr next
   let prev = null;
   let curr = head;
@@ -118,7 +118,7 @@ const reverseList = function (head: ListNode | null) {
  * @return {*}
  */
 
-const copyRandomList = function (head?: HeadNode, cacheNode = new Map()) {
+export const copyRandomList = function (head?: HeadNode, cacheNode = new Map()): HeadNode | null {
   if (head == null) {
     return null;
   }
@@ -138,7 +138,7 @@ const copyRandomList = function (head?: HeadNode, cacheNode = new Map()) {
  * @description: 二叉树的前序遍历
  * @return {*}
  */
-const preOrderTraversal = (root?: TreeNode, res: Array<number> = []) => {
+export const preOrderTraversal = (root?: TreeNode, res: Array<number> = []): number[] | void => {
   if (!root) return;
   res.push(root.val);
   preOrderTraversal(root.left, res);
@@ -150,7 +150,7 @@ const preOrderTraversal = (root?: TreeNode, res: Array<number> = []) => {
  * @description: 二叉树的中序遍历
  * @return {*}
  */
-const inOrderTraversal = (root?: TreeNode, res: Array<number> = []) => {
+export const inOrderTraversal = (root?: TreeNode, res: Array<number> = []): number[] | void => {
   if (!root) return;
   preOrderTraversal(root.left, res);
   res.push(root.val);
@@ -162,7 +162,7 @@ const inOrderTraversal = (root?: TreeNode, res: Array<number> = []) => {
  * @description: 二叉树的后序遍历
  * @return {*}
  */
-const postOrderTraversal = (root?: TreeNode, res: Array<number> = []) => {
+export const postOrderTraversal = (root?: TreeNode, res: Array<number> = []): number[] | void => {
   if (!root) return;
   preOrderTraversal(root.left, res);
   preOrderTraversal(root.right, res);
@@ -174,7 +174,7 @@ const postOrderTraversal = (root?: TreeNode, res: Array<number> = []) => {
  * @description: 二叉树的层序遍历
  * @return {*}
  */
-const leverOrderTraversal = (root?: TreeNode, res: Array<number> = []) => {
+export const leverOrderTraversal = (root?: TreeNode, res: Array<number> = []): number[] | void => {
   if (!root) return;
   preOrderTraversal(root.left, res);
   preOrderTraversal(root.right, res);
@@ -190,7 +190,7 @@ const leverOrderTraversal = (root?: TreeNode, res: Array<number> = []) => {
  * @param {number} val
  * @return {*}
  */
-const deleteNode = function (head: ListNode, val: number) {
+export const deleteNode = function (head: ListNode, val: number): ListNode | null {
   let prev = head;
   let cur = head.next;
   if (head.val === val) {
@@ -214,7 +214,7 @@ const deleteNode = function (head: ListNode, val: number) {
  * @param {number} k
  * @return {*}
  */
-const getKthFromEnd = function (head: ListNode, k: number) {
+export const getKthFromEnd = function (head: ListNode, k: number): ListNode | null {
   let pre: ListNode | null = head;
   let cur: ListNode | null = head;
   while (cur) {
@@ -233,7 +233,7 @@ const getKthFromEnd = function (head: ListNode, k: number) {
  * @param {ListNode} l2
  * @return {*}
  */
-const mergeTwoLists = function (l1: ListNode | null, l2: ListNode | null) {
+export const mergeTwoLists = function (l1: ListNode | null, l2: ListNode | null): ListNode | null {
   if (l1 == null) {
     return l2;
   } else if (l2 == null) {
@@ -252,7 +252,7 @@ const mergeTwoLists = function (l1: ListNode | null, l2: ListNode | null) {
  * @param {*} headB
  * @return {*}
  */
-const getIntersectionNode = function (headA: ListNode | null, headB: ListNode | null) {
+export const getIntersectionNode = function (headA: ListNode | null, headB: ListNode | null): ListNode | null {
   if (headA == null || headB == null) {
     return null;
   }
@@ -269,7 +269,7 @@ const getIntersectionNode = function (headA: ListNode | null, headB: ListNode | 
  * @param {*} nums
  * @return {*}
  */
-const exchange = function (nums: Array<number>) {
+export const exchange = function (nums: Array<number>): Array<number> {
   let left = 0,
     right = nums.length - 1;
   while (left < right) {
@@ -295,7 +295,7 @@ const exchange = function (nums: Array<number>) {
  * @param {number} target
  * @return {*}
  */
-const twoSum = function (nums: Array<number>, target: number) {
+export const twoSum = function (nums: Array<number>, target: number): Array<number> {
   let l = 0,
     r = nums.length - 1;
   while (l < r) {
@@ -318,7 +318,7 @@ export class MinHeap {
     this.size = this.value.length;
     this.buildMaxHeap();
   }
-  private swap = (i: number, j: number) => {
+  private swap = (i: number, j: number): void => {
     if (i === j) return;
     this.value[i] = this.value[i] ^ this.value[j];
     this.value[j] = this.value[i] ^ this.value[j];
@@ -329,7 +329,7 @@ export class MinHeap {
    * @param {number} i 父节点
    * @return {*}
    */
-  private heapHandler = (i: number) => {
+  private heapHandler = (i: number): void => {
     // i 是当前节点，left 和 right 是左节点和右节点
     const left = 2 * i + 1;
     const right = 2 * i + 2;
@@ -350,7 +350,7 @@ export class MinHeap {
    * @param {number} i
    * @return {*}
    */
-  private heapHand = (i: number) => {
+  private heapHand = (i: number): void => {
     let largest = i;
     if (i % 2 === 0) {
       largest = (i - 2) / 2;
@@ -368,7 +368,7 @@ export class MinHeap {
    * @description: 堆排序
    * @return {*}
    */
-  private buildMaxHeap = () => {
+  private buildMaxHeap = (): void => {
     for (let i = Math.floor(this.size / 2); i >= 0; i--) {
       this.heapHandler(i);
     }
@@ -395,7 +395,7 @@ export class MinHeap {
    * @param {number} item
    * @return {*}
    */
-  select = (item: number): number => {
+  select = (): number => {
     if (this.value.length <= 0) return -1;
     return 0;
   };
@@ -428,7 +428,7 @@ const PENDING = 'pending';
 const RESOLVED = 'resolved';
 const REJECTED = 'rejected';
 
-class CustomPromise {
+export class CustomPromise {
   status: string;
   successValue: unknown;
   failValue: unknown;
@@ -464,7 +464,7 @@ class CustomPromise {
       cb(resolve, reject);
     }
   }
-  then = (r: unknown, j: unknown) => {
+  then = (r: unknown, j: unknown): CustomPromise => {
     return new CustomPromise((resolve: Function, reject: Function) => {
       if (this.status === RESOLVED) {
         try {
@@ -511,7 +511,7 @@ class CustomPromise {
       }
     });
   };
-  catch = (r: Function) => {
+  catch = (r: Function): CustomPromise => {
     return this.then(undefined, r);
   };
 }
@@ -519,13 +519,13 @@ class CustomPromise {
  * @description: 自定义 call
  * @return {*}
  */
-const CustomCall = () => {
+export const CustomCall = (...arg: unknown[]): void => {
   (Function.prototype as any).CustomCall = function (ctx: any) {
     if (typeof this !== 'function') {
       throw new Error('is not func');
     }
     const context = ctx || window;
-    const args = [...arguments].slice(1);
+    const args = arg.slice(1);
     context.fn = this;
     const result = context.fn(...args);
     delete context.fn;

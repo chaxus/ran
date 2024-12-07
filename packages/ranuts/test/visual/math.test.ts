@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { Matrix, Transform } from '@/utils/visual/math';
+import { Matrix } from '@/utils/visual/math';
 
 describe('visual math', () => {
   it('Heap sort', () => {

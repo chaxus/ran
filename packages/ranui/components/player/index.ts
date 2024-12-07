@@ -323,7 +323,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     }
   };
   createClaritySelect = (): void => {
-    const { levels, url } = this.ctx;
+    const { levels } = this.ctx;
     this._playControllerBottomClarity.innerHTML = '';
     if (levels.length <= 0) return;
     const Fragment = document.createDocumentFragment();
@@ -648,7 +648,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
    * @param {MouseEvent} e
    * @return {*}
    */
-  progressDotMouseDown = (e: MouseEvent): void => {
+  progressDotMouseDown = (): void => {
     this._playerBtn.style.setProperty('display', 'none');
     this.moveProgress.mouseDown = true;
     this.cancelAnimationFrame();
@@ -797,7 +797,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
       }
     }
   };
-  customRequestFullscreen = (options?: FullscreenOptions): Promise<void> => {
+  customRequestFullscreen = (): Promise<void> => {
     return (
       this._player.requestFullscreen() ||
       this._player.mozRequestFullScreen() ||
@@ -1007,7 +1007,6 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     window.removeEventListener('resize', this.resize);
     document.removeEventListener('fullscreenchange', this.fullScreenChange);
   }
-  attributeChangedCallback(k: string, o: string, n: string): void {}
 }
 
 function Custom() {

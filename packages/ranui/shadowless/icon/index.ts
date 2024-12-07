@@ -66,6 +66,7 @@ function Custom() {
               }
             })
             .catch((error) => {
+              console.log('error', error);
               this.loadNs();
             });
         });

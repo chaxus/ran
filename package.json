@@ -4,7 +4,7 @@
   "description": "Monorepo",
   "type": "module",
   "engines": {
-    "node": "^16.20.2 || >=18.0.0"
+    "node": "^22.9.0"
   },
   "scripts": {
     "pre": "sh ./bin/preinstall.sh",
@@ -28,6 +28,7 @@
     "@types/node": "^22.10.1",
     "@typescript-eslint/parser": "^8.17.0",
     "eslint": "^9.16.0",
+    "eslint-plugin-import-x": "^4.5.0",
     "eslint-plugin-n": "^17.14.0",
     "eslint-plugin-regexp": "^2.7.0",
     "jscpd": "^4.0.5",

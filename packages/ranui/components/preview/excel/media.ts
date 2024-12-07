@@ -145,7 +145,7 @@ function drawImage(
       }
       ctx.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
     })
-    .catch((e) => {});
+    .catch(() => {});
 }
 function getImage(
   index: number,
@@ -157,6 +157,7 @@ function getImage(
     }
     const { buffer, extension } = data.buffer;
     const blob = new Blob([buffer], { type: 'image/' + extension });
+    // eslint-disable-next-line n/no-unsupported-features/node-builtins
     const url = URL.createObjectURL(blob);
     const image = new Image();
     image.src = url;

@@ -9,9 +9,7 @@ const arrowHeight = 4;
 
 const animationTime = 300;
 
-interface PlacementDirection {
-  [x: string]: Record<string, string>;
-}
+type PlacementDirection = Record<string, Record<string, string>>;
 
 const placementDirection: PlacementDirection = {
   bottom: {
@@ -159,7 +157,7 @@ export class Popover extends (HTMLElementSSR()!) {
   placementPosition = (): void => {
     if (!this.popoverContent) return;
     const rect = this.getBoundingClientRect();
-    const { top, left, bottom, width, height } = rect;
+    const { top, left, bottom, width } = rect;
     let popoverTop = bottom + window.scrollY + arrowHeight;
     let popoverLeft = left + window.scrollX;
     const root = document.getElementById(this.getPopupContainerId);

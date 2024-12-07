@@ -33,11 +33,12 @@ const App = () => {
     const uploadFile = document.createElement('input');
     uploadFile.setAttribute('type', 'file');
     uploadFile.click();
-    uploadFile.onchange = (e) => {
+    uploadFile.onchange = () => {
       const { files = [] } = uploadFile;
       if (files && files.length > 0) {
         preview.setAttribute('src', '');
         const file = files[0];
+        // eslint-disable-next-line n/no-unsupported-features/node-builtins
         const url = URL.createObjectURL(file);
         preview.setAttribute('src', url);
       }

@@ -115,7 +115,7 @@ export class Button extends (HTMLElementSSR()!) {
       this._btn.style.setProperty('--ran-y', event.clientY - top + 'px');
     }
   };
-  mouseup = (event: MouseEvent): void => {
+  mouseup = (): void => {
     if (currentDevice() !== 'pc') return;
     if (this.debounceTimeId) return;
     this.debounceTimeId = setTimeout(() => {
@@ -135,7 +135,7 @@ export class Button extends (HTMLElementSSR()!) {
         sheet.insertRule(this.sheet);
         this._shadowDom.adoptedStyleSheets = [sheet];
       } catch (error) {
-        console.error(`Failed to parse the rule in CSSStyleSheet: ${this.sheet}`);
+        console.error(`Failed to parse the rule in CSSStyleSheet: ${this.sheet}, error: ${error}`);
       }
     }
   };

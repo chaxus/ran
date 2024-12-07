@@ -9,7 +9,7 @@ import fs from '@/node/fs';
  */
 
 const watchFile = (path: string, interval: number = 20): Promise<Ranuts.Identification> =>
-  new Promise((resolve, reject) => {
+  new Promise((resolve) => {
     fs.watchFile(path, { interval }, (curr: Stats, prev: Stats) => {
       if (curr.mtime !== prev.mtime) {
         fs.unwatchFile(path);

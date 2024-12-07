@@ -52,12 +52,10 @@ function Custom() {
             sheet.insertRule(this.sheet);
             this._shadowDom.adoptedStyleSheets = [sheet];
           } catch (error) {
-            console.error(`Failed to parse the rule in CSSStyleSheet: ${this.sheet}`);
+            console.error(`Failed to parse the rule in CSSStyleSheet: ${this.sheet}, error: ${error}`);
           }
         }
       }
-      connectedCallback() {}
-      disconnectCallback() {}
       attributeChangedCallback(name: string, oldValue: string, newValue: string) {
         if (name === 'disabled' && this._option) {
           if (!newValue || newValue === 'false') {

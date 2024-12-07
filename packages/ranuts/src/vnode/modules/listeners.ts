@@ -1,4 +1,4 @@
-import type { VNode, VNodeData } from '../vnode';
+import type { VNode } from '../vnode';
 
 const isFunction = (handler: unknown): handler is Function => {
   return typeof handler === 'function';
@@ -8,9 +8,7 @@ type Listener<T> = (this: VNode, ev: T, vnode: VNode) => void;
 
 export type On = {
   [N in keyof HTMLElementEventMap]?: Listener<HTMLElementEventMap[N]> | Array<Listener<HTMLElementEventMap[N]>>;
-} & {
-  [event: string]: Listener<any> | Array<Listener<any>>;
-};
+} & Record<string, Listener<any> | Array<Listener<any>>>;
 
 type SomeListener<N extends keyof HTMLElementEventMap> = Listener<HTMLElementEventMap[N]> | Listener<any>;
 

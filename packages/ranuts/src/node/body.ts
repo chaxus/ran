@@ -13,7 +13,7 @@ interface ServerBody {
 }
 
 const bodyMiddleware = (options: Partial<ServerBody> = {}): MiddlewareFunction => {
-  const { uploadDir = '.', encoding = '', urlencoded = true, json = true } = options;
+  const { uploadDir = '.', encoding = '', json = true } = options;
   return (ctx: Context, next: Next) => {
     const { req, res } = ctx;
     const { url, method } = req;
@@ -45,7 +45,7 @@ const bodyMiddleware = (options: Partial<ServerBody> = {}): MiddlewareFunction =
         res.setHeader('content-type', 'application/json;charset=UTF-8');
         try {
           ctx.request.body = json ? JSON.parse(body) : body;
-        } catch (error) {
+        } catch (_error) {
           ctx.request.body = body;
         }
         next();
@@ -53,7 +53,7 @@ const bodyMiddleware = (options: Partial<ServerBody> = {}): MiddlewareFunction =
     }
     // multipart/form-data
     if (contentType?.includes('multipart/form-data;')) {
-      const [contentType, boundaryStr] = req.headers['content-type']?.split(';').map((item) => item.trim()) || [];
+      const [__, boundaryStr] = req.headers['content-type']?.split(';').map((item) => item.trim()) || [];
       const [_, boundary] = boundaryStr.split('=');
       // const fileSize = req.headers['content-length']
       if (encoding) {

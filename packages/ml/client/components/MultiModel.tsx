@@ -251,6 +251,7 @@ class MultiModel {
     });
   };
   plotPredictionHotMap = async (name = 'Predict class', size = 400) => {
+    console.log(name);
     const [valuesPromise, xTicksTensor, yTicksTensor] = tf.tidy(() => {
       const gridSize = 50;
       const predictionColumns: tf.Tensor<tf.Rank>[] = [];

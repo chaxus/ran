@@ -54,6 +54,7 @@ export function resolvePlugin(): Plugin {
                 return { id: resolvedId };
               }
             } catch (e) {
+              console.log(e);
               continue;
             }
           }

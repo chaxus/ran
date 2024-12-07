@@ -324,7 +324,7 @@ export class Loading extends (HTMLElementSSR()!) {
       .setAttribute('part', NAME_AMP.LINE_SCALE);
     Array(5)
       .fill(1)
-      .forEach((_, index) => {
+      .forEach(() => {
         const { element } = create('div').setAttribute('class', `line-scale-item`);
         lineScale.appendChild(element);
       });
@@ -345,7 +345,7 @@ export class Loading extends (HTMLElementSSR()!) {
       .setAttribute('part', NAME_AMP.CUBE_DIM);
     Array(9)
       .fill(1)
-      .forEach((_, index) => {
+      .forEach(() => {
         const { element } = create('div').setAttribute('class', `cube-dim-item`);
         cubeDim.appendChild(element);
       });
@@ -357,7 +357,7 @@ export class Loading extends (HTMLElementSSR()!) {
       .setAttribute('part', NAME_AMP.DOT_LINE);
     Array(2)
       .fill(1)
-      .forEach((_, index) => {
+      .forEach(() => {
         const { element: line } = create('div').setAttribute('class', `dot-line-item`);
         const { element } = create('div').setAttribute('class', `dot-line-item-circle`);
         line.appendChild(element);
@@ -441,7 +441,6 @@ export class Loading extends (HTMLElementSSR()!) {
   connectedCallback(): void {
     this.createLoading();
   }
-  disconnectCallback(): void {}
   attributeChangedCallback(k: string, o: string, n: string): void {
     if (o !== n) {
       if (k === 'name') {

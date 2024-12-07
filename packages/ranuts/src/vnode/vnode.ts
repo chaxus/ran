@@ -13,8 +13,6 @@ export type VNodeChildren = ArrayOrElement<VNodeChildElement>;
 // key 属性类型
 export type Key = string | number;
 
-type Listener<T> = (this: VNode, ev: T, vnode: VNode) => void;
-
 // VNode 接口
 export interface VNode {
   // dom 节点的选择器，

@@ -1,4 +1,4 @@
-import { addClassToElement, generateThrottle, isMobile, removeClassToElement } from 'ranuts/utils';
+import { generateThrottle, isMobile } from 'ranuts/utils';
 import { HTMLElementSSR, createCustomError, isDisabled } from '@/utils/index';
 import '@/components/select/option';
 import '@/components/dropdown';
@@ -12,9 +12,7 @@ interface Option {
   value: string | number;
 }
 
-interface PlacementDirection {
-  [x: string]: Record<string, string>;
-}
+type PlacementDirection = Record<string, Record<string, string>>;
 
 const placementDirection: PlacementDirection = {
   bottom: {
@@ -179,7 +177,7 @@ export class Select extends (HTMLElementSSR()!) {
         sheet.insertRule(this.sheet);
         this._shadowDom.adoptedStyleSheets = [sheet];
       } catch (error) {
-        console.error(`Failed to parse the rule in CSSStyleSheet: ${this.sheet}`);
+        console.error(`Failed to parse the rule in CSSStyleSheet: ${this.sheet}, error: ${error}`);
       }
     }
   }
@@ -218,7 +216,7 @@ export class Select extends (HTMLElementSSR()!) {
   placementPosition = (): void => {
     if (!this._selectionDropdown || !this._selectDropdown) return;
     const rect = this.getBoundingClientRect();
-    const { top, left, bottom, width, height, x, y, right } = rect;
+    const { top, left, bottom, width } = rect;
     const root = document.getElementById(this.getPopupContainerId);
     this._selectionDropdown.style.setProperty('position', `absolute`);
     this._selectionDropdown.style.setProperty('--ran-x', `${top + window.scrollX}`);
@@ -339,7 +337,9 @@ export class Select extends (HTMLElementSSR()!) {
         const container = document.getElementById(this.getPopupContainerId) || document.body;
         container.removeChild(this._selectDropdown);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.error('removeSelectDropdown error', error);
+    }
   };
   /**
    * @description: 当 select 中有 option 元素的时候，给 dropdown 添加元素

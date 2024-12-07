@@ -78,6 +78,7 @@ export class Container extends Vertex {
    */
   protected renderCanvas(render: CanvasRenderer): void {
     // nothing
+    console.log('Container renderCanvas', render);
   }
   /**
    * 递归渲染以自身为根的整棵节点树
@@ -129,6 +130,7 @@ export class Container extends Vertex {
    */
   protected renderWebGL(renderer: WebGLRenderer): void {
     // nothing
+    console.log('Container renderWebGL', renderer);
   }
 
   /**
@@ -150,6 +152,7 @@ export class Container extends Vertex {
    */
   public buildBatches(batchRenderer: BatchRenderer): void {
     // nothing
+    console.log('Container buildBatches', batchRenderer);
   }
 
   /**
@@ -157,5 +160,6 @@ export class Container extends Vertex {
    */
   public updateBatches(floatView: Float32Array): void {
     // nothing
+    console.log('Container updateBatches', floatView);
   }
 }

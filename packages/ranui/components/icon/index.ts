@@ -67,6 +67,7 @@ function Custom() {
               }
             })
             .catch((error) => {
+              console.log(error);
               this.loadNs();
               // reject(`\n couldn't be loaded by r-icon, message: ${error}`)
             });
@@ -200,6 +201,7 @@ function Custom() {
               }
             })
             .catch((error) => {
+              console.log(error);
               this.loadNs();
             });
         });

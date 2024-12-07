@@ -104,7 +104,7 @@ const status = {
  * @return {Record<string, number>}
  */
 function createMessageToStatusCodeMap(codes: Map<number, string>) {
-  const map: Map<string, number> = new Map();
+  const map: Map<string, number> = new Map<string, number>();
   for (const [status, message] of codes) {
     map.set(message.toLowerCase(), status);
   }

@@ -10,7 +10,8 @@ export default function loadStylePlugin(options?: Options): Plugin {
       const path = /ranui\/components\/[a-z|A-Z\d]+\/index.ts/;
       const stylePath = new RegExp(/((this\.)?[a-zA-Z\d]+)\s*=\s*this\.attachShadow\(\{.*\}\)/);
       const { ignore = [] } = options ?? {};
-      const [fragment, statement] = code.match(stylePath) ?? [];
+      const match = stylePath.exec(code) ?? [];
+      const [fragment, statement] = match;
       let result = code;
       if (path.test(id) && !ignore.some((item) => new RegExp(item).test(id)) && fragment && statement) {
         const front = `import f7170ee498e0dd32cbdcb63fba8f75cc from '${id.replace('index.ts', 'index.less?inline')}';`;

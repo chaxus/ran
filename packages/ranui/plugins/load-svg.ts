@@ -11,21 +11,21 @@ interface Options {
 
 export default function loadSvgPlugin(options: Options = {}): Plugin {
   const { svgoConfig, defaultImport, svgo = true } = options;
-
+  // eslint-disable-next-line regexp/no-unused-capturing-group
   const svgRegex = /\.svg(\?(raw|skipsvgo))?$/;
   return {
     name: 'vite-plugin-load-svg',
     enforce: 'pre',
     async load(id) {
-      if (!id.match(svgRegex)) return;
+      if (!svgRegex.test(id)) return;
       const [path, query] = id.split('?', 2);
       const importType = query || defaultImport;
       if (importType === 'url') return;
       let svg: any;
       try {
         svg = await readFile(path, 'utf-8');
-      } catch (ex) {
-        console.warn('\n', `${id} couldn't be loaded by vite-plugin-load-svg`);
+      } catch (error) {
+        console.warn('\n', `${id} couldn't be loaded by vite-plugin-load-svg,error:${error}`);
         return;
       }
       if (importType === 'raw') {

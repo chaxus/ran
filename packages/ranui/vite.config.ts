@@ -3,8 +3,8 @@ import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import type { BuildOptions, PluginOption, UserConfig } from 'vite';
 import { visualizer } from 'rollup-plugin-visualizer';
-import viteImagemin from '@vheemstra/vite-plugin-imagemin';
-import imageminSvgo from 'imagemin-svgo';
+// import viteImagemin from '@vheemstra/vite-plugin-imagemin';
+// import imageminSvgo from 'imagemin-svgo';
 import type { RollupOptions } from 'rollup';
 import { babel } from '@rollup/plugin-babel';
 import loadStyle from './plugins/load-style';
@@ -111,12 +111,14 @@ export const viteConfig: UserConfig = {
       emitFile: false,
       filename: 'report/build-stats.html',
     }) as PluginOption,
-    viteImagemin({
-      plugins: {
-        svg: imageminSvgo(),
-      },
-    }),
-    babel(),
+    // viteImagemin({
+    //   plugins: {
+    //     svg: imageminSvgo(),
+    //   },
+    // }),
+    babel({
+      babelHelpers: 'bundled'
+    })
   ],
   resolve: {
     alias: {

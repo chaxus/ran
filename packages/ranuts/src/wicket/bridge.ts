@@ -6,22 +6,22 @@
 // Platform
 // 一对一通信
 // 发送信息
-const sendMessage = (message: string, target = '*') => {
+export const sendMessage = (message: string, target = '*'): void => {
   window.postMessage(message, target);
 };
 // 接收信息
-const receiveMessage = (callback: (message: string) => void) => {
+export const receiveMessage = (callback: (message: string) => void): void => {
   window.addEventListener('message', (event) => {
     callback(event.data);
   });
 };
 // 广播通信
 // 发送信息
-const broadcastMessage = (message: string) => {
+export const broadcastMessage = (message: string): void => {
   window.postMessage(message, '*');
 };
 // 接收信息
-const receiveBroadcastMessage = (callback: (message: string) => void) => {
+export const receiveBroadcastMessage = (callback: (message: string) => void): void => {
   window.addEventListener('message', (event) => {
     callback(event.data);
   });

@@ -46,7 +46,7 @@ interface WicketOption {
   size?: number; // 最大的 iframe 数量
 }
 
-class WebView {
+export class WebView {
   public container!: HTMLElement;
   private id: string;
   private keyMapInstance: Map<string, wicketMap>;
@@ -92,7 +92,7 @@ class WebView {
     }
   };
   // 添加 iframe
-  public add = (options: ActionOption) => {
+  public add = (options: ActionOption): void => {
     const { key, url, viewOption = {}, viewStyle = {} } = options;
     // 如果 key 已经存在，则不添加，并提示
     if (this.keyList.has(key)) {
@@ -135,7 +135,7 @@ class WebView {
     this.container.appendChild(iframe);
   };
   // 传入 key，展示对应的 iframe
-  public show = (options: ActionOption) => {
+  public show = (options: ActionOption): void => {
     const { key } = options;
     if (!this.keyList.has(key)) {
       throw new Error('key 不存在');
@@ -148,7 +148,7 @@ class WebView {
     element?.instance.style.setProperty('display', 'block');
   };
   // 传入 key，只展示当前 key 对应的 iframe，隐藏其他的 iframe
-  public showOnly = (options: ActionOption) => {
+  public showOnly = (options: ActionOption): void => {
     const { key } = options;
     if (!this.keyList.has(key)) {
       throw new Error('key 不存在');
@@ -166,7 +166,7 @@ class WebView {
     }
   };
   // 隐藏 iframe
-  public hidden = (options: ActionOption) => {
+  public hidden = (options: ActionOption): void => {
     const { key } = options;
     if (!this.keyList.has(key)) {
       throw new Error('key 不存在');
@@ -176,14 +176,14 @@ class WebView {
     element?.instance.style.setProperty('display', 'none');
   };
   // 隐藏所有的 iframe
-  public hiddenAll = () => {
+  public hiddenAll = (): void => {
     this.keyList.forEach((key) => {
       const element = this.keyMapInstance.get(key);
       element?.instance.style.setProperty('display', 'none');
     });
   };
   // 销毁指定 key 对应的 iframe
-  public destroy = (options: ActionOption) => {
+  public destroy = (options: ActionOption): Error | void => {
     const { key } = options;
     const element = this.keyMapInstance.get(key);
     if (!element?.instance) {
@@ -194,7 +194,7 @@ class WebView {
     this.keyList.delete(key);
   };
   // 销毁所有的 iframe
-  public destroyAll = () => {
+  public destroyAll = (): void => {
     this.keyList.forEach((key) => {
       const element = this.keyMapInstance.get(key);
       if (!element?.instance) return new Error('key 不存在');

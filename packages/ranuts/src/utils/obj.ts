@@ -19,7 +19,7 @@ export function querystring(data = {}): string {
     .toString();
 }
 
-const transitionJsonToString = (jsonObj: string | JSON, callback = (error: Error) => {}) => {
+const transitionJsonToString = (jsonObj: string | JSON, callback: (error: Error) => void = () => {}) => {
   // 转换后的 jsonObj 受体对象
   let _jsonObj: string = '';
   // 判断传入的 jsonObj 对象是不是字符串，如果是字符串需要先转换为对象，再转换为字符串，这样做是为了保证转换后的字符串为双引号
@@ -99,7 +99,7 @@ export const formatJson = (jsonObj: string, callback = () => {}): string => {
     }
   });
   // 开始处理双引号中的内容，将多余的"去除
-  _index.reverse().forEach(function (item, index) {
+  _index.reverse().forEach(function (item) {
     const newArray = jsonArray.slice(item.start, item.end + 1);
     jsonArray.splice(item.start, item.end + 1 - item.start, newArray.join(''));
   });
@@ -112,7 +112,7 @@ export const formatJson = (jsonObj: string, callback = () => {}): string => {
   // 将上述转换后的字符串再次以\r\n分割成数组
   jsonArray = jsonString.split('\r\n');
   // 将转换完成的字符串根据 PADDING 值来组合成最终的形态
-  jsonArray.forEach(function (item, index) {
+  jsonArray.forEach(function (item) {
     // console.log(item)
     let i = 0;
     // 表示缩进的位数，以 tab 作为计数单位
@@ -204,7 +204,7 @@ export function replaceOld(
  * @param {Object} exports
  * @return {Object}
  */
-export const mergeExports = (obj: Object, exports: Object): Object => {
+export const mergeExports = (obj: Record<string, string>, exports: Record<string, string>): Record<string, string> => {
   const descriptors = Object.getOwnPropertyDescriptors(exports);
   for (const name of Object.keys(descriptors)) {
     const descriptor = descriptors[name];

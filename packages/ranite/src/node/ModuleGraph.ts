@@ -53,9 +53,8 @@ type NullValue = null | undefined | void;
 
 export type TransformResult = string | NullValue | Partial<SourceDescription>;
 
-export interface CustomPluginOptions {
-  [plugin: string]: any;
-}
+type CustomPluginOptions = Record<string, any>;
+
 interface ModuleOptions {
   assertions: Record<string, string>;
   meta: CustomPluginOptions;

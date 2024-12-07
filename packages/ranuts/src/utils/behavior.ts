@@ -13,19 +13,20 @@ export const handleClick = (hooks: (event: MouseEvent) => void = noop): void => 
   }
 };
 
-const fingerprinting = () => {
-  // userAgent(用户代理) 浏览器的语言 设备能够支持的最大同时触摸的点数 可用的逻辑处理器核心数
-  const { userAgent, language, maxTouchPoints, hardwareConcurrency } = navigator;
-  const { width, height, colorDepth } = screen;
-  // 格林威治时间和本地时间之间的时差
-  const timezone = new Date().getTimezoneOffset();
-};
+// const fingerprinting = () => {
+//   // userAgent(用户代理) 浏览器的语言 设备能够支持的最大同时触摸的点数 可用的逻辑处理器核心数
+//   const { userAgent, language, maxTouchPoints, hardwareConcurrency } = navigator;
+//   const { width, height, colorDepth } = screen;
+//   // 格林威治时间和本地时间之间的时差
+//   const timezone = new Date().getTimezoneOffset();
+// };
 /**
  * @description: 获取地区经纬度（会弹出提示让用户授权）
  * @return {*}
  */
-const getRegionalLatitudeAndLongitude = () => {
+export const getRegionalLatitudeAndLongitude = (): Promise<GeolocationPosition> => {
   return new Promise((resolve, reject) => {
+    // eslint-disable-next-line n/no-unsupported-features/node-builtins
     navigator.geolocation.getCurrentPosition(
       function (position) {
         resolve(position);

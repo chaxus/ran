@@ -16,7 +16,7 @@ export class Content extends (HTMLElementSSR()!) {
     shadowRoot.appendChild(this._slot);
     this.observer = new MutationObserver(this.callback);
   }
-  callback = (mutations: MutationRecord[], observer: MutationObserver): void => {
+  callback = (mutations: MutationRecord[]): void => {
     for (const mutation of mutations) {
       if (mutation.type === 'childList') {
         // A child node has been added or removed.

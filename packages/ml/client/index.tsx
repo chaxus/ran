@@ -2,9 +2,6 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import * as tf from '@tensorflow/tfjs';
-import { LineModelComponent } from './components/LineModel';
-import { Binary } from './components/BinaryModel';
-import { Multi } from './components/MultiModel';
 import { Emotion } from './components/Emotion';
 
 export const App = (): React.JSX.Element => {

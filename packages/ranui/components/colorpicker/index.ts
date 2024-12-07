@@ -417,7 +417,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     e.preventDefault();
     this.colorPickerPaletteSelect = true;
   };
-  mouseUpColorPickerPalette = (e: MouseEvent): void => {
+  mouseUpColorPickerPalette = (): void => {
     this.colorPickerPaletteSelect = false;
   };
   connectedCallback(): void {
