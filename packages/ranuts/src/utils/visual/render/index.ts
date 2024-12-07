@@ -1,6 +1,6 @@
 import { RENDERER_TYPE } from '@/utils/visual/enums';
 import { CanvasRenderer } from '@/utils/visual/render/canvasRenderer';
-import { WebGLRenderer } from '@/utils/visual/render/webGLRenderer';
+import { WebGLRenderer } from '@/utils/visual/render/webGlRenderer';
 import type { Renderer } from '@/utils/visual/render/render';
 import type { IApplicationOptions } from '@/utils/visual/types';
 

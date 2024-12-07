@@ -3,7 +3,7 @@ import { Transform } from '@/utils/visual/math';
 import { CONTAINER } from '@/utils/visual/enums';
 import type { CanvasRenderer } from '@/utils/visual/render/canvasRenderer';
 import type { Point } from '@/utils/visual/vertex/point';
-import type { WebGLRenderer } from '@/utils/visual/render/webGLRenderer';
+import type { WebGLRenderer } from '@/utils/visual/render/webGlRenderer';
 import type { BatchRenderer } from '@/utils/visual/render/batchRenderer';
 import type { Batch } from '@/utils/visual/render/utils/batch/index';
 
