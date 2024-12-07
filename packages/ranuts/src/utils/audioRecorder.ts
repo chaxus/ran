@@ -554,6 +554,7 @@ export class AudioRecorder {
   constructor() {
     this.startTime = Date.now();
     this.chunks = [];
+    // eslint-disable-next-line n/no-unsupported-features/node-builtins
     navigator.mediaDevices
       .getUserMedia({
         audio: true,

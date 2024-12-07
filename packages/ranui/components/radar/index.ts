@@ -53,6 +53,7 @@ function Custom() {
             const result = JSON.parse(item);
             return result;
           } catch (error) {
+            console.error(`Failed to parse the rule in JSON.parse: ${item}, error: ${error}`);
             return item;
           }
         }
@@ -315,7 +316,6 @@ function Custom() {
       connectedCallback() {
         this.refreshData();
       }
-      disconnectCallback() {}
       attributeChangedCallback(name: string, oldValue: string, newValue: string) {
         const attribute = ['abilitys', 'colorPolygon', 'colorLine', 'fillColor', 'strokeColor'];
         if (attribute.includes(name) && this.abilityRadarChartContainer && oldValue !== newValue) {

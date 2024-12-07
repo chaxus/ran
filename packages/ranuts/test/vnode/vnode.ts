@@ -3,10 +3,10 @@ import { h } from '@/vnode/h';
 // 2. 注册模块
 const patch = init();
 
-// 3. 使用h()函数的第二个参数传入模块需要的数据(对象)
+// 3. 使用 h() 函数的第二个参数传入模块需要的数据 (对象)
 const content = h('div', [
-  h('h1', '欢迎使用vnode'),
-  h('p', '掘金博文:'),
+  h('h1', '欢迎使用 vnode'),
+  h('p', '掘金博文：'),
   h(
     'a',
     {
@@ -16,7 +16,7 @@ const content = h('div', [
     },
     'https://juejin.cn/user/2981531263964718',
   ),
-  h('p', '源码地址:'),
+  h('p', '源码地址：'),
   h(
     'a',
     {
@@ -44,4 +44,6 @@ const vnode = h(
 
 const app = document.querySelector('#app');
 
-app && patch(app, vnode);
+if (app) {
+  patch(app, vnode);
+}

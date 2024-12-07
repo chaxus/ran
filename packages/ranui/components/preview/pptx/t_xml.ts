@@ -9,14 +9,9 @@ type Children = Array<
   | string
 >;
 
-interface Attrs {
-  [x: string]: string | number | undefined;
-  order?: number;
-}
+type Attrs = Record<string, string | number | undefined>;
 
-interface Node {
-  [x: string]: Array<{ length: number } | Record<string, Attrs> | undefined>;
-}
+type Node = Record<string, Array<{ length: number } | Record<string, Attrs> | undefined>>;
 
 export default function t_xml(S: string): Record<string, any> {
   const openBracket = '<';
@@ -58,7 +53,9 @@ export default function t_xml(S: string): Record<string, any> {
             }
           } else {
             pos += 2;
-            for (; S.charCodeAt(pos) !== closeBracketCC; pos++) {}
+            while (S.charCodeAt(pos) !== closeBracketCC) {
+              pos++;
+            }
           }
           pos++;
           continue;
@@ -69,16 +66,19 @@ export default function t_xml(S: string): Record<string, any> {
         }
         pos++;
         let startNamePos = pos;
-        for (; nameSpacer.indexOf(S[pos]) === -1; pos++) {}
+        while (nameSpacer.indexOf(S[pos]) === -1) {
+          pos++;
+        }
         const nodeTagName = S.slice(startNamePos, pos);
-
         let attrFound = false;
         let nodeAttributes: Record<string, string> = {};
         for (; S.charCodeAt(pos) !== closeBracketCC; pos++) {
           const c = S.charCodeAt(pos);
           if ((c > 64 && c < 91) || (c > 96 && c < 123)) {
             startNamePos = pos;
-            for (; nameSpacer.indexOf(S[pos]) === -1; pos++) {}
+            while (nameSpacer.indexOf(S[pos]) === -1) {
+              pos++;
+            }
             const name = S.slice(startNamePos, pos);
             let code = S.charCodeAt(pos);
             while (code !== singleQuoteCC && code !== doubleQuoteCC) {

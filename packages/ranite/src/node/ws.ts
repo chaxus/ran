@@ -18,7 +18,7 @@ export function createWebSocketServer(): {
   });
 
   return {
-    send(payload: Object) {
+    send(payload: string) {
       const stringified = JSON.stringify(payload);
       wss.clients.forEach((client) => {
         if (client.readyState === WebSocket.OPEN) {

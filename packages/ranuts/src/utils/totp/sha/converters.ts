@@ -368,7 +368,7 @@ export function getStrConverter(
     case 'ARRAYBUFFER':
       try {
         new ArrayBuffer(0);
-      } catch (ignore) {
+      } catch (_ignore) {
         throw new Error(arraybuffer_error);
       }
       /**
@@ -383,7 +383,7 @@ export function getStrConverter(
     case 'UINT8ARRAY':
       try {
         new Uint8Array(0);
-      } catch (ignore) {
+      } catch (_ignore) {
         throw new Error(uint8array_error);
       }
       /**
@@ -592,7 +592,7 @@ export function getOutputConverter(format: any, outputBinLen: any, bigEndianMod:
       try {
         /* Need to test ArrayBuffer support */
         new ArrayBuffer(0);
-      } catch (ignore) {
+      } catch (_ignore) {
         throw new Error(arraybuffer_error);
       }
       return function (binarray: number[]): ArrayBuffer {
@@ -602,7 +602,7 @@ export function getOutputConverter(format: any, outputBinLen: any, bigEndianMod:
       try {
         /* Need to test Uint8Array support */
         new Uint8Array(0);
-      } catch (ignore) {
+      } catch (_ignore) {
         throw new Error(uint8array_error);
       }
       return function (binarray: number[]): Uint8Array {

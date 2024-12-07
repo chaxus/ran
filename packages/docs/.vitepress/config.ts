@@ -41,7 +41,7 @@ export default defineConfig({
   vue: {
     template: {
       compilerOptions: {
-        isCustomElement: (tag) => {
+        isCustomElement: (tag: string) => {
           return tag.startsWith('r-');
         },
       },

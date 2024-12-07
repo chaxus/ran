@@ -69,7 +69,7 @@ export const opacity = (img: ImgType, opacity: number): ImgType => {
  * @param sigma
  * @returns 返回一个权重和为1的矩阵
  */
-const getMatrix = (radius: number, sigma?: number): number[] => {
+export const getMatrix = (radius: number, sigma?: number): number[] => {
   sigma = sigma || radius / 3;
   const r = Math.ceil(radius);
   const sigma_2 = sigma * sigma;
@@ -99,7 +99,7 @@ const getMatrix = (radius: number, sigma?: number): number[] => {
  * @param radius 模糊半径
  * @returns 返回一个离屏 canvas 用于渲染
  */
-export const blur = (img: ImgType, radius: number): ImgType => {
+export const blur = (img: ImgType): ImgType => {
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d')!;
   const { width, height } = img;
@@ -109,12 +109,12 @@ export const blur = (img: ImgType, radius: number): ImgType => {
   ctx.drawImage(img, 0, 0, width, height);
   const ImageData = ctx.getImageData(0, 0, width, height);
   const { data } = ImageData;
-  const matrix = getMatrix(radius);
-  const r = Math.ceil(radius);
-  const w = width * 4;
-  const cols = r * 2 + 1;
-  const len = data.length,
-    matrixLen = matrix.length;
+  // const matrix = getMatrix(radius);
+  // const r = Math.ceil(radius);
+  // const w = width * 4;
+  // const cols = r * 2 + 1;
+  const len = data.length;
+  // matrixLen = matrix.length;
   for (let i = 0; i < len; i += 4) {
     // 处理
   }

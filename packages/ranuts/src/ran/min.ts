@@ -1,8 +1,8 @@
 /*
  * @Author: ran
  * @Date: 2023-04-24 15:47:17
- * @LastEditors: ran
- * @LastEditTime: 2023-04-24 18:12:57
+ * @LastEditors: chaxus nouo18@163.com
+ * @LastEditTime: 2024-12-07 21:04:15
  * @docs: https://pomb.us/build-your-own-react/
  */
 
@@ -18,7 +18,7 @@ interface Fiber {
   };
 }
 /**
- * @description: 创建真正的dom
+ * @description: 创建真正的 dom
  * @param {Fiber} element
  * @return {HTMLElement | Text}
  */
@@ -29,14 +29,14 @@ const createElement = (element: Fiber): HTMLElement | Text => {
   return document.createElement(element.type);
 };
 /**
- * @description: 过滤一些props上的属性
+ * @description: 过滤一些 props 上的属性
  * @param {string} key
  * @return {Boolean}
  */
 const filterProps = (key: string) => key !== 'children';
 
 /**
- * @description: 过滤文本dom
+ * @description: 过滤文本 dom
  * @param {HTMLElement} dom
  * @return {Boolean}
  */
@@ -45,27 +45,27 @@ const filterText = (dom: HTMLElement | Text) => {
 };
 
 /**
- * @description: render函数
+ * @description: render 函数
  * @param {RanElement} element
  * @param {HTMLElement} container
  */
 const render = (element: Fiber, container: HTMLElement): void => {
-  // 创建一个真实的DOM
+  // 创建一个真实的 DOM
   const dom = createElement(element);
-  // 将元素上的props属性追加到真实的dom上面
+  // 将元素上的 props 属性追加到真实的 dom 上面
   Object.keys(element.props)
     .filter(filterProps)
     .forEach((name) => {
       if (filterText(dom)) {
         // https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty
         Object.defineProperty(dom, name, {
-          // 该属性对应的值。可以是任何有效的 JavaScript 值（数值，对象，函数等）。 默认为 undefined。
+          // 该属性对应的值。可以是任何有效的 JavaScript 值（数值，对象，函数等）。默认为 undefined。
           value: element.props[name],
-          // 当且仅当该属性的 writable 键值为 true 时，属性的值，也就是上面的 value，才能被赋值运算符 (en-US)改变。 默认为 false。
+          // 当且仅当该属性的 writable 键值为 true 时，属性的值，也就是上面的 value，才能被赋值运算符 (en-US) 改变。默认为 false。
           //   writable: false,
-          // 当且仅当该属性的 configurable 键值为 true 时，该属性的描述符才能够被改变，同时该属性也能从对应的对象上被删除。 默认为 false
+          // 当且仅当该属性的 configurable 键值为 true 时，该属性的描述符才能够被改变，同时该属性也能从对应的对象上被删除。默认为 false
           //   configurable: false,
-          // 当且仅当该属性的 enumerable 键值为 true 时，该属性才会出现在对象的枚举属性中。 默认为 false。
+          // 当且仅当该属性的 enumerable 键值为 true 时，该属性才会出现在对象的枚举属性中。默认为 false。
           //   enumerable: false,
           // get, set
           // 如果一个描述符不具有 value、writable、get 和 set 中的任意一个键，那么它将被认为是一个数据描述符。
@@ -73,7 +73,7 @@ const render = (element: Fiber, container: HTMLElement): void => {
         });
       }
     });
-  // 如果有children，递归render
+  // 如果有 children，递归 render
   if (element.props?.children) {
     element.props.children.forEach((child) => {
       if (dom instanceof HTMLElement) {
@@ -81,13 +81,11 @@ const render = (element: Fiber, container: HTMLElement): void => {
       }
     });
   }
-  // 最终将真实的dom添加到指定的dom里面
+  // 最终将真实的 dom 添加到指定的 dom 里面
   container.appendChild(dom);
 };
 
-const createFiber = () => {};
-
-class Concurrent {
+export class Concurrent {
   nextUnitOfWork: Fiber | undefined;
   wipRoot: Fiber | undefined;
   constructor(element: Fiber, container: HTMLElement) {
@@ -100,7 +98,7 @@ class Concurrent {
     };
     this.nextUnitOfWork = this.wipRoot;
   }
-  workLoop(deadline: IdleDeadline) {
+  workLoop(deadline: IdleDeadline): void {
     let shouldYield = false;
     // 我们需要在空闲的时间循环执行任务单元
     while (this.nextUnitOfWork && !shouldYield) {
@@ -117,7 +115,7 @@ class Concurrent {
    * @description: 执行一个任务单元，并返回下一个任务单元
    * @return {*}
    */
-  performUnitOfWork(fiber: Fiber) {
+  performUnitOfWork(fiber: Fiber): Fiber | undefined {
     // 然后对于当前元素的子元素，会对每一个子元素创建一个 fiber
     if (!fiber.dom) {
       fiber.dom = createElement(fiber);
@@ -158,14 +156,14 @@ class Concurrent {
       nextFiber = nextFiber.parent;
     }
   }
-  startWork() {
+  startWork(): void {
     requestIdleCallback(this.workLoop);
   }
-  commitRoot() {
+  commitRoot(): void {
     this.commitWork(this.wipRoot?.child);
     this.wipRoot = undefined;
   }
-  commitWork(fiber: Fiber | undefined) {
+  commitWork(fiber: Fiber | undefined): void {
     if (!fiber) {
       return;
     }

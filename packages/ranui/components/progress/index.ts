@@ -113,7 +113,7 @@ class Progress extends (HTMLElementSSR()!) {
     this._progressDot.style.setProperty('transform', `translateX(${percentage * this._progress.offsetWidth}px)`);
     this.change();
   };
-  progressDotMouseUp = (e: MouseEvent): void => {
+  progressDotMouseUp = (): void => {
     if (!this.moveProgress.mouseDown) return;
     this.moveProgress.mouseDown = false;
   };

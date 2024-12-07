@@ -437,8 +437,8 @@ export const renderPptx = (options: Options): Promise<any> | undefined => {
     [1, 'א'],
     [/יה/, 'ט״ו'],
     [/יו/, 'ט״ז'],
-    [/([א-ת])([א-ת])$/, '$1״$2'],
-    [/^([א-ת])$/, '$1׳'],
+    // [/([א-ת])([א-ת])$/, '$1״$2'],
+    // [/^([א-ת])$/, '$1׳'],
   ]);
 
   function archaicNumbers(arr: ((string | number)[] | (string | RegExp)[])[]) {

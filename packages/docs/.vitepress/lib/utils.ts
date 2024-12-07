@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-import path, { resolve } from 'node:path';
+import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import postcss from 'postcss';
 
@@ -18,7 +18,7 @@ function isVariableDeclaration(decl) {
 function parse(css, options) {
   const root = postcss.parse(css, {
     from: options.from,
-    parser: options.parser,
+    // parser: options.parser,
   });
 
   const variables = {};
@@ -28,7 +28,7 @@ function parse(css, options) {
     }
 
     rule.each((decl) => {
-      if (isVariableDeclaration(decl)) {
+      if (decl.type === 'decl' && isVariableDeclaration(decl)) {
         const name = decl.prop.slice(2);
         variables[name] = decl.value;
       }
@@ -69,4 +69,4 @@ function normalize(config: Record<string, string>): Record<string, string> {
   return r;
 }
 
-export { themeReplacements, normalize, borderReplacements, widthReplacements };
+export { themeReplacements, normalize };

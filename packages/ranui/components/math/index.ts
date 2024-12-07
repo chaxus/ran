@@ -35,7 +35,6 @@ export class Math extends (HTMLElementSSR()!) {
   connectedCallback(): void {
     this.render();
   }
-  disconnectCallback(): void {}
   attributeChangedCallback(k: string, o: string, n: string): void {
     if (o !== n) {
       if (k === 'latex') {

@@ -142,8 +142,9 @@ enum NAME_AMP {
   DROP = 'drop',
   PACMAN = 'pacman',
 }
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace JSX {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface IntrinsicElements {
     'r-loading': any & {
       name: NAME_AMP;

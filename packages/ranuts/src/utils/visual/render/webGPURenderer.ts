@@ -263,6 +263,7 @@ export class WebGPURenderer extends BatchRenderer {
         entryPoint: 'main',
         targets: [
           {
+            // eslint-disable-next-line n/no-unsupported-features/node-builtins
             format: navigator.gpu.getPreferredCanvasFormat(),
             blend: {
               alpha: {
@@ -289,12 +290,14 @@ export class WebGPURenderer extends BatchRenderer {
    * 初始化 device
    */
   private async initDevice() {
-    const adapter = (await navigator.gpu.requestAdapter()) as GPUAdapter;
+    // eslint-disable-next-line n/no-unsupported-features/node-builtins
+    const adapter = await navigator.gpu.requestAdapter();
 
-    const device = await adapter.requestDevice();
-
+    const device = await adapter?.requestDevice();
+    if (!device) return;
     this.gpu.configure({
       device,
+      // eslint-disable-next-line n/no-unsupported-features/node-builtins
       format: navigator.gpu.getPreferredCanvasFormat(),
       alphaMode: 'premultiplied',
     });
@@ -306,11 +309,11 @@ export class WebGPURenderer extends BatchRenderer {
    * 初始化 renderPassDescriptor
    */
   private initRenderPassDescriptor() {
-    const { backgroundColor, backgroundAlpha } = this.options;
+    const { backgroundColor = '', backgroundAlpha = 1 } = this.options;
 
-    const a = backgroundAlpha as number;
+    const a = backgroundAlpha;
 
-    const [r, g, b] = toRgbArray(backgroundColor as string).map((n) => n * a);
+    const [r, g, b] = toRgbArray(backgroundColor).map((n) => n * a);
 
     this.renderPassDescriptor = {
       label: 'my-render-pass-descriptor',

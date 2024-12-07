@@ -2,6 +2,7 @@
 const registerServiceWorker = async () => {
   if ('serviceWorker' in window.navigator) {
     try {
+      // eslint-disable-next-line n/no-unsupported-features/node-builtins
       const registration = await navigator.serviceWorker.register('/ran/sw.js', {
         scope: '/ran/',
       });

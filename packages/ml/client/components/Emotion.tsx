@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { Button, Input, message } from '@ranui/react';
+import { Input, message } from '@ranui/react';
 import '@ranui/react/style';
-import type { TensorContainerObject, TypedArray } from '@tensorflow/tfjs';
-import type { Point2D } from '@tensorflow/tfjs-vis';
+import type { TensorContainerObject } from '@tensorflow/tfjs';
 import * as tfvis from '@tensorflow/tfjs-vis';
 import * as tf from '@tensorflow/tfjs';
 import { word } from 'ranuts/wasm';
-import { denormalise, normalise, plot, tfMemory, trainModel } from '../lib';
+import { denormalise, normalise, tfMemory, trainModel } from '../lib';
 import type { Normalise } from '../lib';
 
 const path = '../../assets/dataset/min_label_review.csv';
@@ -27,13 +26,13 @@ const path = '../../assets/dataset/min_label_review.csv';
 //     }),
 //   );
 
-//   // 添加一个LSTM层
-//   // 以下是一个使用RNN（具体来说是LSTM）进行情感分析的示例。这个模型首先使用嵌入层将词语转换为向量，然后使用LSTM层处理序列，最后使用全连接层进行分类：
-//   // 这个模型可以考虑词语的顺序，因为LSTM层会处理输入序列中的每一个词语，并记住序列中的上下文信息。因此，这个模型不仅可以根据词语本身的意义进行情感分析，还可以根据词语的位置和上下文进行情感分析。
+//   // 添加一个 LSTM 层
+//   // 以下是一个使用 RNN（具体来说是 LSTM）进行情感分析的示例。这个模型首先使用嵌入层将词语转换为向量，然后使用 LSTM 层处理序列，最后使用全连接层进行分类：
+//   // 这个模型可以考虑词语的顺序，因为 LSTM 层会处理输入序列中的每一个词语，并记住序列中的上下文信息。因此，这个模型不仅可以根据词语本身的意义进行情感分析，还可以根据词语的位置和上下文进行情感分析。
 //   model.add(
 //     tf.layers.lstm({
 //       units: 32,
-//       returnSequences: false, // 因为后面没有其他的RNN层，所以这里为false
+//       returnSequences: false, // 因为后面没有其他的 RNN 层，所以这里为 false
 //     }),
 //   );
 
@@ -112,7 +111,7 @@ class EmotionModel {
     const { success, methods } = await word();
     if (!success) return;
     const { cut } = methods;
-    // 从数据中提取x,y值并绘制图形
+    // 从数据中提取 x,y 值并绘制图形
     const pointsDataSet = textEmotionDataSet.map((record: TextEmotionData) => {
       const { label, review = '' } = record;
       const list = cut(review);
@@ -294,8 +293,8 @@ export const Emotion = (): JSX.Element => {
       <h2>预测</h2>
       <Input onChange={input} />
       <button onClick={predictOut}>输入文本去预测结果</button>
-      <h2>打开tfvis视图</h2>
-      {/* <button onClick={openTfvis}>打开tfvis视图</button> */}
+      <h2>打开 tfvis 视图</h2>
+      {/* <button onClick={openTfvis}>打开 tfvis 视图</button> */}
     </div>
   );
 };

@@ -20,9 +20,9 @@ export interface TfInfo {
   numTensors: number;
 }
 
-type TensorRank = Tensor<Rank> | Tensor<Rank>[];
+// type TensorRank = Tensor<Rank> | Tensor<Rank>[];
 
-type Normal<T> = T extends Tensor<Rank> ? TensorRank : T extends Tensor<Rank>[] ? Tensor<Rank>[] : never;
+// type Normal<T> = T extends Tensor<Rank> ? TensorRank : T extends Tensor<Rank>[] ? Tensor<Rank>[] : never;
 
 export interface Normalise {
   tensor: Tensor<Rank>;
@@ -30,7 +30,7 @@ export interface Normalise {
   min: Tensor<Rank> | Tensor<Rank>[];
 }
 /**
- * @description: 测试tf的内存管理
+ * @description: 测试 tf 的内存管理
  * @return {*}
  */
 export function createLotsOfTensors(): void {
@@ -152,7 +152,9 @@ export const trainModel = async (
   model: tf.LayersModel,
   trainingFeatureTensor: tf.Tensor<tf.Rank>,
   trainingLabelTensor: tf.Tensor<tf.Rank>,
-  onEpochBegin = (epoch: number, logs?: Logs): void | Promise<void> => {},
+  onEpochBegin = (epoch: number, logs?: Logs): void | Promise<void> => {
+    console.log(`Epoch ${epoch}: loss = ${logs.loss}`);
+  },
   epochs: number = 100,
 ): Promise<History> => {
   // const { onEpochEnd, onBatchEnd } = tfvis.show.fitCallbacks({ name: 'Training Performance' }, ['loss']);
@@ -195,7 +197,7 @@ export const denormalise = (
   }
 };
 
-type AItem<T> = T extends Array<infer R> ? R : T;
+// type AItem<T> = T extends Array<infer R> ? R : T;
 
 const arrayToItem = <T>(list: T[] | T, index?: number): T => {
   if (!list) return undefined;

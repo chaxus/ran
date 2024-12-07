@@ -13,6 +13,7 @@ export function esbuildTransformPlugin(): Plugin {
           const code = await readFile(id, 'utf-8');
           return code;
         } catch (e) {
+          console.error(e);
           return null;
         }
       }

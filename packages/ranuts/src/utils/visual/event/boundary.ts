@@ -8,10 +8,8 @@ export class EventBoundary {
   private hasFoundTarget = false;
   private hitTarget: Container | null = null;
   public cursor: Cursor = 'auto';
-  private eventHandlerMap: {
-    [anyKey: string]: (e: FederatedMouseEvent) => any;
-  } = {};
-  private pressTargetsMap: { [anyKey: number]: Container[] } = {};
+  private eventHandlerMap: Record<string, (e: FederatedMouseEvent) => void> = {};
+  private pressTargetsMap: Record<number, Container[]> = {};
   public overTargets: Container[] = [];
   constructor(stage: Container) {
     this.rootContainer = stage;

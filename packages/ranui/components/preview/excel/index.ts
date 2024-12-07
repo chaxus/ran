@@ -89,8 +89,6 @@ class JsExcelPreview {
     }).loadData({});
 
     if (!this.xs) return;
-
-    const that = this;
     if (this.xs.bottombar) {
       const swapFunc = this.xs.bottombar.swapFunc;
       this.xs.bottombar.swapFunc = (index) => {

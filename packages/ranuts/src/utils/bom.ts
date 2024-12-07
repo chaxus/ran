@@ -123,11 +123,14 @@ export const createObjectURL = async (src: Blob | ArrayBuffer | Response): Promi
   if (typeof src === 'string') {
     return src;
   } else if (src instanceof Blob) {
+    // eslint-disable-next-line n/no-unsupported-features/node-builtins
     return URL.createObjectURL(src);
   } else if (src instanceof ArrayBuffer) {
+    // eslint-disable-next-line n/no-unsupported-features/node-builtins
     return URL.createObjectURL(new Blob([src]));
   } else if (src instanceof Response) {
     const result = await src.blob();
+    // eslint-disable-next-line n/no-unsupported-features/node-builtins
     return URL.createObjectURL(result);
   } else {
     return src;
@@ -189,7 +192,7 @@ export const getHost = (env?: string): string | undefined => {
       }
     }
     // return host ? `https://log${host}.chaxus.com` : 'https://log.chaxus.com'
-    return '//log.chaxus.com';
+    return `//log.${host}`;
   }
 };
 /**
@@ -229,7 +232,9 @@ export function appendUrl(url: string, params: Record<string, string> = {}): str
   const urlObj = new URL(_url);
   if (params) {
     Object.keys(params).forEach((key) => {
-      params[key] && urlObj.searchParams.set(key, params[key]);
+      if (params[key]) {
+        urlObj.searchParams.set(key, params[key]);
+      }
     });
   }
   return urlObj.href;

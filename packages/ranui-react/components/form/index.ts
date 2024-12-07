@@ -13,8 +13,9 @@ function Component() {
       this._form = form.cloneNode(true) as HTMLFormElement;
       const shadowRoot = this.attachShadow({ mode: 'closed' });
       const jsonData: Record<string, any> = {};
+      // eslint-disable-next-line n/no-unsupported-features/node-builtins
       const formData = new FormData(this._form);
-      formData.forEach((value, key) => {
+      formData.forEach((_, key) => {
         if (!jsonData[key]) {
           jsonData[key] = formData.getAll(key).length > 1 ? formData.getAll(key) : formData.get(key);
         }

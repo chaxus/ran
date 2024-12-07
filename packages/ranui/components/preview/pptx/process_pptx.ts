@@ -59,7 +59,7 @@ export default function processPptx(
   const styleTable: Record<string, any> = {};
 
   let tableStyles: Record<string, any>;
-  // 设置postMessage方法
+  // 设置 postMessage 方法
   setOnMessage(async (e: { type: string; data: InputFileFormat }) => {
     switch (e.type) {
       case 'processPPTX': {
@@ -518,7 +518,7 @@ export default function processPptx(
   }
 
   async function genShape(
-    node: { [x: string]: any },
+    node: Record<string, any>,
     slideLayoutSpNode: Record<string, any> | undefined,
     slideMasterSpNode: Record<string, any> | undefined,
     id: string,
@@ -1845,7 +1845,7 @@ export default function processPptx(
 
       result +=
         "<div class='block content " +
-        getVerticalAlign(node, slideLayoutSpNode, slideMasterSpNode, type) +
+        getVerticalAlign(node, slideLayoutSpNode, slideMasterSpNode) +
         "' _id='" +
         id +
         "' _idx='" +
@@ -1896,7 +1896,7 @@ export default function processPptx(
       const pathNodes = getTextByPathList(pathLstNode, ['a:path']) as Record<string, any>;
       const lnToNodes = pathNodes['a:lnTo'];
       const cubicBezToNodes = pathNodes['a:cubicBezTo'];
-      const sortblAry: Object[] = [];
+      const sortblAry: Record<string, string>[] = [];
       if (lnToNodes !== undefined) {
         Object.keys(lnToNodes).forEach(function (key) {
           const lnToPtNode = lnToNodes[key]['a:pt'];
@@ -2004,7 +2004,7 @@ export default function processPptx(
 
       result +=
         "<div class='block content " +
-        getVerticalAlign(node, slideLayoutSpNode, slideMasterSpNode, type) +
+        getVerticalAlign(node, slideLayoutSpNode, slideMasterSpNode) +
         "' _id='" +
         id +
         "' _idx='" +
@@ -2040,7 +2040,7 @@ export default function processPptx(
     } else {
       result +=
         "<div class='block content " +
-        getVerticalAlign(node, slideLayoutSpNode, slideMasterSpNode, type) +
+        getVerticalAlign(node, slideLayoutSpNode, slideMasterSpNode) +
         "' _id='" +
         id +
         "' _idx='" +
@@ -2131,7 +2131,7 @@ export default function processPptx(
   }
 
   async function genTextBody(
-    textBodyNode: { [x: string]: any } | undefined,
+    textBodyNode: Record<string, any> | undefined,
     slideLayoutSpNode?: Record<string, any> | undefined,
     slideMasterSpNode?: Record<string, any> | undefined,
     type?: string | undefined,
@@ -2220,7 +2220,7 @@ export default function processPptx(
   }
 
   async function genBuChar(
-    node: { [x: string]: any },
+    node: Record<string, any>,
     slideLayoutSpNode?: Record<string, any>,
     slideMasterSpNode?: Record<string, any>,
     type?: string,
@@ -2232,10 +2232,10 @@ export default function processPptx(
     const rNode = node['a:r'];
     let dfltBultColor, dfltBultSize, bultColor, bultSize;
     if (rNode !== undefined) {
-      dfltBultColor = getFontColor(rNode, type, sldMstrTxtStyles);
+      dfltBultColor = getFontColor(rNode);
       dfltBultSize = getFontSize(rNode, slideLayoutSpNode, slideMasterSpNode, type, sldMstrTxtStyles);
     } else {
-      dfltBultColor = getFontColor(node, type, sldMstrTxtStyles);
+      dfltBultColor = getFontColor(node);
       dfltBultSize = getFontSize(node, slideLayoutSpNode, slideMasterSpNode, type, sldMstrTxtStyles);
     }
     // console.log("Bullet Size: " + bultSize);
@@ -2460,7 +2460,7 @@ export default function processPptx(
   }
 
   function genSpanElement(
-    node: { [x: string]: any },
+    node: Record<string, any>,
     slideLayoutSpNode: any,
     slideMasterSpNode: any,
     type: any,
@@ -2478,21 +2478,21 @@ export default function processPptx(
 
     let styleText =
       'color:' +
-      getFontColor(node, type, slideMasterTextStyles) +
+      getFontColor(node) +
       ';font-size:' +
       getFontSize(node, slideLayoutSpNode, slideMasterSpNode, type, slideMasterTextStyles) +
       ';font-family:' +
-      getFontType(node, type, slideMasterTextStyles) +
+      getFontType(node, type) +
       ';font-weight:' +
-      getFontBold(node, type, slideMasterTextStyles) +
+      getFontBold(node) +
       ';font-style:' +
-      getFontItalic(node, type, slideMasterTextStyles) +
+      getFontItalic(node) +
       ';text-decoration:' +
-      getFontDecoration(node, type, slideMasterTextStyles) +
+      getFontDecoration(node) +
       ';text-align:' +
-      getTextHorizontalAlign(node, type, slideMasterTextStyles) +
+      getTextHorizontalAlign(node) +
       ';vertical-align:' +
-      getTextVerticalAlign(node, type, slideMasterTextStyles) +
+      getTextVerticalAlign(node) +
       ';';
     // ////////////////Amir///////////////
     const highlight = getTextByPathList(node, ['a:rPr', 'a:highlight']) as Record<string, any>;
@@ -2679,9 +2679,9 @@ export default function processPptx(
               // console.log(thisTblStyle["a:band2H"])
 
               // Text Style - TODO
-              const rowTxtStyl = getTextByPathList(thisTblStyle, ['a:band2H', 'a:tcTxStyle']);
-              if (rowTxtStyl !== undefined) {
-              }
+              // const rowTxtStyl = getTextByPathList(thisTblStyle, ['a:band2H', 'a:tcTxStyle']);
+              // if (rowTxtStyl !== undefined) {
+              // }
               // console.log(i,thisTblStyle)
             }
             /* else{
@@ -2729,9 +2729,9 @@ export default function processPptx(
               // console.log(thisTblStyle["a:band1H"])
 
               // Text Style - TODO
-              const rowTxtStyl = getTextByPathList(thisTblStyle, ['a:band1H', 'a:tcTxStyle']);
-              if (rowTxtStyl !== undefined) {
-              }
+              // const rowTxtStyl = getTextByPathList(thisTblStyle, ['a:band1H', 'a:tcTxStyle']);
+              // if (rowTxtStyl !== undefined) {
+              // }
             }
           }
           rowsStyl += ' background-color:#' + fillColor + ';' + ' opacity:' + colorOpacity + ';';
@@ -3032,8 +3032,8 @@ export default function processPptx(
 
   function getSize(
     slideSpNode: Record<string, any> | undefined,
-    slideLayoutSpNode: { [x: string]: { [x: string]: any } } | undefined,
-    slideMasterSpNode: { [x: string]: { [x: string]: any } } | undefined,
+    slideLayoutSpNode: Record<string, any> | undefined,
+    slideMasterSpNode: Record<string, any> | undefined,
   ) {
     let ext;
     let w = -1;
@@ -3094,14 +3094,8 @@ export default function processPptx(
     return algn === 'ctr' ? 'h-mid' : algn === 'r' ? 'h-right' : 'h-left';
   }
 
-  function getVerticalAlign(
-    node: any,
-    slideLayoutSpNode: any,
-    slideMasterSpNode: any,
-    type: any,
-    slideMasterTextStyles?: undefined,
-  ) {
-    // 上中下對齊: X, <a:bodyPr anchor="ctr">, <a:bodyPr anchor="b">
+  function getVerticalAlign(node: any, slideLayoutSpNode: any, slideMasterSpNode: any) {
+    // 上中下對齊：X, <a:bodyPr anchor="ctr">, <a:bodyPr anchor="b">
     let anchor = getTextByPathList(node, ['p:txBody', 'a:bodyPr', 'attrs', 'anchor']);
     if (anchor === undefined) {
       anchor = getTextByPathList(slideLayoutSpNode, ['p:txBody', 'a:bodyPr', 'attrs', 'anchor']);
@@ -3109,11 +3103,10 @@ export default function processPptx(
         anchor = getTextByPathList(slideMasterSpNode, ['p:txBody', 'a:bodyPr', 'attrs', 'anchor']);
       }
     }
-
     return anchor === 'ctr' ? 'v-mid' : anchor === 'b' ? 'v-down' : 'v-up';
   }
 
-  function getFontType(node: any, type: string, slideMasterTextStyles: any) {
+  function getFontType(node: any, type: string) {
     let typeface = getTextByPathList(node, ['a:rPr', 'a:latin', 'attrs', 'typeface']);
 
     if (typeface === undefined) {
@@ -3134,7 +3127,7 @@ export default function processPptx(
     return typeface === undefined ? 'inherit' : typeface;
   }
 
-  function getFontColor(node: any, type: any, slideMasterTextStyles: any) {
+  function getFontColor(node: any) {
     const solidFillNode = getTextByPathStr(node, 'a:rPr a:solidFill') as Record<string, any>;
 
     const color = getSolidFill(solidFillNode);
@@ -3144,9 +3137,9 @@ export default function processPptx(
   }
 
   function getFontSize(
-    node: { [x: string]: { [x: string]: { [x: string]: string } } },
+    node: Record<string, any>,
     slideLayoutSpNode: any,
-    slideMasterSpNode: any,
+    _slideMasterSpNode: any,
     type: string | undefined,
     slideMasterTextStyles: any,
   ) {
@@ -3207,33 +3200,20 @@ export default function processPptx(
     return isNaN(fontSize) ? 'inherit' : fontSize + 'pt';
   }
 
-  function getFontBold(
-    node: { [x: string]: { [x: string]: { [x: string]: string } } },
-    type: any,
-    slideMasterTextStyles: any,
-  ) {
+  function getFontBold(node: Record<string, any>) {
     return node['a:rPr'] !== undefined && node['a:rPr']['attrs']['b'] === '1' ? 'bold' : 'initial';
   }
 
-  function getFontItalic(
-    node: { [x: string]: { [x: string]: { [x: string]: string } } },
-    type: any,
-    slideMasterTextStyles: any,
-  ) {
+  function getFontItalic(node: Record<string, any>) {
     return node['a:rPr'] !== undefined && node['a:rPr']['attrs']['i'] === '1' ? 'italic' : 'normal';
   }
 
-  function getFontDecoration(
-    node: { [x: string]: { [x: string]: { [x: string]: any } } },
-    type: any,
-    slideMasterTextStyles: any,
-  ) {
+  function getFontDecoration(node: Record<string, any>) {
     // /////////////////////////////Amir///////////////////////////////
     if (node['a:rPr'] !== undefined) {
       const underLine = node['a:rPr']['attrs']['u'] !== undefined ? node['a:rPr']['attrs']['u'] : 'none';
       const strikethrough =
         node['a:rPr']['attrs']['strike'] !== undefined ? node['a:rPr']['attrs']['strike'] : 'noStrike';
-      // console.log("strikethrough: "+strikethrough);
 
       if (underLine !== 'none' && strikethrough === 'noStrike') {
         return 'underline';
@@ -3252,7 +3232,7 @@ export default function processPptx(
   }
 
   // //////////////////////////////////Amir/////////////////////////////////////
-  function getTextHorizontalAlign(node: any, type: any, slideMasterTextStyles: any) {
+  function getTextHorizontalAlign(node: any) {
     const getAlgn = getTextByPathList(node, ['a:pPr', 'attrs', 'algn']);
     let align = 'initial';
     if (getAlgn !== undefined) {
@@ -3285,7 +3265,7 @@ export default function processPptx(
   }
 
   // ///////////////////////////////////////////////////////////////////
-  function getTextVerticalAlign(node: any, type: any, slideMasterTextStyles: any) {
+  function getTextVerticalAlign(node: any) {
     const baseline = getTextByPathList(node, ['a:rPr', 'attrs', 'baseline']) as string;
     return baseline === undefined ? 'baseline' : parseInt(baseline) / 1000 + '%';
   }
@@ -3313,7 +3293,7 @@ function getTextDirection (node, type, slideMasterTextStyles) {
 }
 */
 
-  function getTableBorders(node: { [x: string]: { [x: string]: any } }) {
+  function getTableBorders(node: Record<string, any>) {
     let borderStyle = '';
     let obj;
     let borders;
@@ -3483,9 +3463,9 @@ function getTextDirection (node, type, slideMasterTextStyles) {
   }
 
   async function getSlideBackgroundFill(
-    slideContent: String | Record<string, any>,
-    slideLayoutContent: String | Record<string, any>,
-    slideMasterContent: String | Record<string, any>,
+    slideContent: Record<string, any>,
+    slideLayoutContent: Record<string, any>,
+    slideMasterContent: Record<string, any>,
     warpObj: Record<string, any>,
   ) {
     // console.log(slideContent)
@@ -3579,7 +3559,7 @@ function getTextDirection (node, type, slideMasterTextStyles) {
         const bgFillLst = (themeContent as Record<string, any>)['a:theme']['a:themeElements']['a:fmtScheme'][
           'a:bgFillStyleLst'
         ];
-        const sortblAry: Object[] = [];
+        const sortblAry: Record<string, any>[] = [];
         Object.keys(bgFillLst).forEach(function (key) {
           const bgFillLstTyp = bgFillLst[key];
           if (key !== 'attrs') {
@@ -3808,7 +3788,7 @@ function getTextDirection (node, type, slideMasterTextStyles) {
             const bgFillLst = (themeContent as Record<string, any>)['a:theme']['a:themeElements']['a:fmtScheme'][
               'a:bgFillStyleLst'
             ];
-            const sortblAry: Object[] = [];
+            const sortblAry: Record<string, any>[] = [];
             Object.keys(bgFillLst).forEach(function (key) {
               // console.log("cubicBezTo["+key+"]:");
               const bgFillLstTyp = bgFillLst[key];
@@ -4032,19 +4012,7 @@ function getTextDirection (node, type, slideMasterTextStyles) {
     };
   }
 
-  async function getPicFill(
-    type: string,
-    node: { [x: string]: { [x: string]: { [x: string]: any } } },
-    warpObj: {
-      [x: string]: {
-        file: (arg0: any) => {
-          (): any;
-          new (): any;
-          async: { (arg0: string): any; new (): any };
-        };
-      };
-    },
-  ) {
+  async function getPicFill(type: string, node: Record<string, any>, warpObj: Record<string, any>) {
     const rId = node['a:blip']['attrs']['r:embed'];
     let imgPath;
     if (type === 'slideBg') {
@@ -4067,7 +4035,7 @@ function getTextDirection (node, type, slideMasterTextStyles) {
     return img;
   }
 
-  function getPatternFill(node: { [x: string]: any }) {
+  function getPatternFill(node: Record<string, any>) {
     // Need to test/////////////////////////////////////////////
     const bgClr = node['a:bgClr'];
     return getSolidFill(bgClr);
@@ -4476,7 +4444,7 @@ function getTextDirection (node, type, slideMasterTextStyles) {
     return hex;
   }
 
-  function getColorOpacity(solidFill: { [x: string]: undefined } | undefined) {
+  function getColorOpacity(solidFill: Record<string, any>) {
     if (solidFill === undefined) {
       return undefined;
     }
@@ -4561,22 +4529,16 @@ function getTextDirection (node, type, slideMasterTextStyles) {
 
     if (serNode['c:xVal'] !== undefined) {
       let dataRow: number[] = [];
-      eachElement(
-        serNode['c:xVal']['c:numRef']['c:numCache']['c:pt'],
-        function (innerNode: { [x: string]: string }, index: any) {
-          dataRow.push(parseFloat(innerNode['c:v']));
-          return '';
-        },
-      );
+      eachElement(serNode['c:xVal']['c:numRef']['c:numCache']['c:pt'], function (innerNode: Record<string, string>) {
+        dataRow.push(parseFloat(innerNode['c:v']));
+        return '';
+      });
       dataMat.push(dataRow);
       dataRow = [];
-      eachElement(
-        serNode['c:yVal']['c:numRef']['c:numCache']['c:pt'],
-        function (innerNode: { [x: string]: string }, index: any) {
-          dataRow.push(parseFloat(innerNode['c:v']));
-          return '';
-        },
-      );
+      eachElement(serNode['c:yVal']['c:numRef']['c:numCache']['c:pt'], function (innerNode: Record<string, string>) {
+        dataRow.push(parseFloat(innerNode['c:v']));
+        return '';
+      });
       dataMat.push(dataRow);
     } else {
       eachElement(serNode, function (innerNode: Record<string, any>, index: number) {
@@ -4586,35 +4548,26 @@ function getTextDirection (node, type, slideMasterTextStyles) {
         // Category (string or number)
         const rowNames: Record<string, any> = {};
         if (getTextByPathList(innerNode, ['c:cat', 'c:strRef', 'c:strCache', 'c:pt']) !== undefined) {
-          eachElement(
-            innerNode['c:cat']['c:strRef']['c:strCache']['c:pt'],
-            function (innerNode: Record<string, any>, index: number) {
-              rowNames[innerNode['attrs']['idx']] = innerNode['c:v'];
-              return '';
-            },
-          );
+          eachElement(innerNode['c:cat']['c:strRef']['c:strCache']['c:pt'], function (innerNode: Record<string, any>) {
+            rowNames[innerNode['attrs']['idx']] = innerNode['c:v'];
+            return '';
+          });
         } else if (getTextByPathList(innerNode, ['c:cat', 'c:numRef', 'c:numCache', 'c:pt']) !== undefined) {
-          eachElement(
-            innerNode['c:cat']['c:numRef']['c:numCache']['c:pt'],
-            function (innerNode: Record<string, any>, index: number) {
-              rowNames[innerNode['attrs']['idx']] = innerNode['c:v'];
-              return '';
-            },
-          );
+          eachElement(innerNode['c:cat']['c:numRef']['c:numCache']['c:pt'], function (innerNode: Record<string, any>) {
+            rowNames[innerNode['attrs']['idx']] = innerNode['c:v'];
+            return '';
+          });
         }
 
         // Value
         if (getTextByPathList(innerNode, ['c:val', 'c:numRef', 'c:numCache', 'c:pt']) !== undefined) {
-          eachElement(
-            innerNode['c:val']['c:numRef']['c:numCache']['c:pt'],
-            function (innerNode: Record<string, any>, index: number) {
-              dataRow.push({
-                x: innerNode['attrs']['idx'],
-                y: parseFloat(innerNode['c:v']),
-              });
-              return '';
-            },
-          );
+          eachElement(innerNode['c:val']['c:numRef']['c:numCache']['c:pt'], function (innerNode: Record<string, any>) {
+            dataRow.push({
+              x: innerNode['attrs']['idx'],
+              y: parseFloat(innerNode['c:v']),
+            });
+            return '';
+          });
         }
 
         dataMat.push({ key: colName, values: dataRow, xlabels: rowNames });
@@ -4723,7 +4676,7 @@ function applyTint (rgbStr, tintValue) {
    * @param {number} factor
    * @param {number} offset
    */
-  function applyLumModify(rgbStr = '#FFFFFF', factor: number, offset: number) {
+  function applyLumModify(rgbStr = '#FFFFFF', _factor: number, offset: number) {
     const color = new Color(rgbStr);
     // color.setLum(color.hsl.l * factor);
     color.setLum((color.hsl.l as number) * (1 + offset));

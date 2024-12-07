@@ -10,9 +10,11 @@ interface BeaconPayload {
 
 const sendBeacon = ({ url = '', type = 'application/json; charset=UTF-8', payload = {} }: BeaconPayload) => {
   const requestUrl = url ? url : getHost();
+  // eslint-disable-next-line n/no-unsupported-features/node-builtins
   if (navigator.sendBeacon && requestUrl) {
-    // 判断sendBeacon是否支持可用
+    // 判断 sendBeacon 是否支持可用
     const param = new Blob([JSON.stringify(payload)], { type });
+    // eslint-disable-next-line n/no-unsupported-features/node-builtins
     return navigator.sendBeacon(requestUrl, param);
   }
 };
@@ -33,8 +35,9 @@ export const report = ({
   payload = {},
 }: BeaconPayload): boolean | undefined | void => {
   const requestUrl = url ? url : getHost();
+  // eslint-disable-next-line n/no-unsupported-features/node-builtins
   if (typeof navigator !== 'undefined') {
-    // 判断sendBeacon是否支持可用
+    // 判断 sendBeacon 是否支持可用
     return sendBeacon({ url: requestUrl, type, payload });
   }
   return sendImage({ url: requestUrl, payload });

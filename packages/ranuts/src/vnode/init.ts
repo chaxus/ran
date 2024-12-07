@@ -12,7 +12,7 @@ import { modules } from './modules';
 
 type NonUndefined<T> = T extends undefined ? never : T;
 
-type KeyToIndexMap = { [key: string]: number };
+type KeyToIndexMap = Record<string, number>;
 
 interface Cbs {
   [key: string]: ModuleHook[];

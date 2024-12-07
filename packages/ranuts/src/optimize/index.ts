@@ -1,25 +1,25 @@
-interface FT {
-  new (): Object;
-  (): void;
-  prototype: Object;
-}
+// interface FT {
+//   new (): Record<string, unknown>;
+//   (): void;
+//   prototype: Record<string, unknown>;
+// }
 /**
  * @description: 实现 object.create，将传入的对象作为原型
  * @param {*} obj
  * @return {*}
  */
-const objectCreate = (obj: Object) => {
-  function F() {}
-  F.prototype = obj;
-  return new (F as FT)();
-};
+// export const objectCreate = (obj: Record<string, unknown>): Record<string, any> => {
+//   function F() {}
+//   F.prototype = obj;
+//   return new (F as FT)();
+// };
 /**
  * @description: 实现 instanceof: object instanceof constructor
  * @param {*} left
  * @param {*} right
  * @return {*}
  */
-const instanceOf = (obj: Object, cst: Function) => {
+export const instanceOf = (obj: Record<string, unknown>, cst: Function): boolean => {
   let proto = Object.getPrototypeOf(obj); // 获取对象的 prototype
   const prototype = cst.prototype; // 获取构造函数的 prototype
   while (true) {
@@ -34,13 +34,13 @@ const instanceOf = (obj: Object, cst: Function) => {
  * @param {*} 参数
  * @return {*} Object
  */
-function customNew() {
-  const constructor = Array.prototype.shift.call(arguments);
+export function customNew(...args: unknown[]): Record<string, unknown> {
+  const constructor = Array.prototype.shift.call(args);
   if (typeof constructor !== 'function') {
     throw new Error('constructor must be function');
   }
   const newObject = Object.create(constructor.prototype);
-  const result = constructor.apply(newObject, arguments);
+  const result = constructor.apply(newObject, args);
   const flag = result && result instanceof Object;
   return flag ? result : newObject;
 }
@@ -50,32 +50,36 @@ function customNew() {
  * @param {number} wait
  * @return {*}
  */
-function debounce(fn: Function, wait: number = 2000) {
-  let timeId: NodeJS.Timeout | null = null;
-  return function (this: unknown) {
-    const context = this;
-    const args = arguments;
-    if (timeId) {
-      clearTimeout(timeId);
-      timeId = null;
+
+export function debounce<T extends (...args: any[]) => any>(
+  ms: number,
+  callback: T,
+): (...args: Parameters<T>) => Promise<ReturnType<T>> {
+  let timer: NodeJS.Timeout | undefined;
+
+  return (...args: Parameters<T>) => {
+    if (timer) {
+      clearTimeout(timer);
     }
-    timeId = setTimeout(() => {
-      fn.apply(context, args);
-      timeId = null;
-    }, wait);
+    return new Promise<ReturnType<T>>((resolve) => {
+      timer = setTimeout(() => {
+        const returnValue = callback(...args) as ReturnType<T>;
+        resolve(returnValue);
+      }, ms);
+    });
   };
 }
 /**
  * @description: 首节流
  * @return {*}
  */
-function throttle(fn: Function, wait: number = 3000) {
+export function throttle(fn: Function, wait: number = 3000): Function {
   let curTime = Date.now();
-  return function (this: unknown) {
+  return function (this: unknown, ...args: unknown[]) {
     const nowTime = Date.now();
     if (nowTime - curTime >= wait) {
       curTime = nowTime;
-      return fn.apply(this, arguments);
+      return fn.apply(this, args);
     }
   };
 }
@@ -85,18 +89,16 @@ function throttle(fn: Function, wait: number = 3000) {
  * @param {unknown} this
  * @return {*}
  */
-function call() {
-  Function.prototype.call = function () {
-    if (typeof this !== 'function') {
-      throw new Error('type is error');
-    }
-    let [context, ...args] = [...arguments];
-    context = context || window;
-    context.fn = this;
-    const result = context.fn(...args);
-    delete context.fn;
-    return result;
-  };
-}
-
-function apply() {}
+// export function call(): void {
+//   Function.prototype.call = function () {
+//     if (typeof this !== 'function') {
+//       throw new Error('type is error');
+//     }
+//     let [context, ...args] = [...arguments];
+//     context = context || window;
+//     context.fn = this;
+//     const result = context.fn(...args);
+//     delete context.fn;
+//     return result;
+//   };
+// }

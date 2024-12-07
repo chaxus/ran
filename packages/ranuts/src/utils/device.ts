@@ -12,6 +12,7 @@ export enum DEVICE {
 export type CurrentDevice = 'ipad' | 'android' | 'iphone' | 'pc';
 export const currentDevice = (): CurrentDevice => {
   if (typeof window !== 'undefined') {
+    // eslint-disable-next-line n/no-unsupported-features/node-builtins
     const ua = navigator.userAgent.toLowerCase();
     if (/ipad|ipod/.test(ua)) return 'ipad';
     if (/android/.test(ua)) return 'android';

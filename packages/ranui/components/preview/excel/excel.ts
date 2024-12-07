@@ -103,11 +103,7 @@ interface ExcelSheet {
 }
 
 interface spreadSheet {
-  cols: {
-    [x: string]: Partial<{
-      width: number;
-    }>;
-  };
+  cols: Record<string, any>;
 }
 
 function transferColumns(
@@ -187,6 +183,7 @@ function getCellText(cell: Cell) {
         }
         return value + '';
       } catch (e) {
+        console.warn(e);
         return value;
       }
 

@@ -63,7 +63,7 @@ export class DropdownItem extends (HTMLElementSSR()!) {
       addClassToElement(this.ionDropdownItem.element, 'ranui-dropdown-option-active');
     }
   }
-  attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
+  attributeChangedCallback(name: string, _: string, newValue: string): void {
     if (name === 'active' && newValue) {
       addClassToElement(this.ionDropdownItem.element, 'ranui-dropdown-option-active');
     } else {

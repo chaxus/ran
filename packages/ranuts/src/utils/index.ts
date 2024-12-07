@@ -71,14 +71,13 @@ import { handleFetchHook } from '@/utils/request';
 import { scriptOnLoad } from '@/utils/script';
 import { changeHumpToLowerCase, clearBr, clearStr, isString, randomString, str2Xml, strParse } from '@/utils/str';
 import { SyncHook } from '@/utils/subscribe';
-import { generateThrottle, requestAnimation, throttle } from '@/utils/throttle';
+import { generateThrottle, throttle } from '@/utils/throttle';
 import { performanceTime, timeFormat, timestampToTime } from '@/utils/time';
 export {
   performanceTime,
   timeFormat,
   timestampToTime,
   generateThrottle,
-  requestAnimation,
   throttle,
   SyncHook,
   changeHumpToLowerCase,

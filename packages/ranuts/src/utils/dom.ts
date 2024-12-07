@@ -146,7 +146,10 @@ export const setFontSize2html = (designWidth: number = 375): void => {
   window.addEventListener(
     'pageshow',
     function (e) {
-      e.persisted && (clearTimeout(timer), (timer = setTimeout(setFontSize, 300)));
+      if (e.persisted) {
+        clearTimeout(timer);
+        timer = setTimeout(setFontSize, 300);
+      }
     },
     !1,
   );

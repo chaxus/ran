@@ -11,9 +11,7 @@ interface Option {
   value: string | number;
 }
 
-interface PlacementDirection {
-  [x: string]: Record<string, string>;
-}
+type PlacementDirection = Record<string, Record<string, string>>;
 
 const placementDirection: PlacementDirection = {
   bottom: {
@@ -198,7 +196,7 @@ export class Select extends (HTMLElementSSR()!) {
   placementPosition = (): void => {
     if (!this._selectionDropdown || !this._selectDropdown) return;
     const rect = this.getBoundingClientRect();
-    const { top, left, bottom, width, height, x, y, right } = rect;
+    const { top, left, bottom, width } = rect;
     const root = document.getElementById(this.getPopupContainerId);
     this._selectionDropdown.style.setProperty('--ran-x', `${top + window.scrollX}`);
     this._selectionDropdown.style.setProperty('--ran-y', `${left + window.scrollY}`);
@@ -462,7 +460,7 @@ export class Select extends (HTMLElementSSR()!) {
     this._selectDropdown?.removeEventListener('click', this.clickOption);
     document.removeEventListener('click', this.clickRemoveSelect);
   }
-  attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
+  attributeChangedCallback(name: string, _: string, newValue: string): void {
     if (name === 'disabled' && this._select) {
       if (!newValue || newValue === 'false') {
         this._select.setAttribute('disabled', '');

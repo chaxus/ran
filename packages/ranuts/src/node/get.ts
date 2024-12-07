@@ -5,7 +5,7 @@ interface Request {
 }
 
 interface Response {
-  success: Boolean;
+  success: boolean;
   data: unknown;
   message: string;
 }

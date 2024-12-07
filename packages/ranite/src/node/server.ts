@@ -18,15 +18,15 @@ const startDevServer = (): void => {
   });
 
   server.on('clientError', (err, socket) => {
-    socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
+    socket.end(`HTTP/1.1 400 Bad Request\r\n\r\n, err:${err}`);
   });
 
   server.listen(8080, async () => {
     const { port } = server.address() as ClientRequestArgs; // { address: '::', family: 'IPv6', port: 8080 }
     const root = process.cwd();
     await optimize(root);
-    console.log(green('🚀 No-Bundle 服务已经成功启动!'), `耗时: ${Date.now() - startTime}ms`);
-    console.log(`> 本地访问路径: ${blue(`http://localhost:${port}`)}`);
+    console.log(green('🚀 No-Bundle 服务已经成功启动！'), `耗时：${Date.now() - startTime}ms`);
+    console.log(`> 本地访问路径：${blue(`http://localhost:${port}`)}`);
   });
 };
 

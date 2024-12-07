@@ -195,7 +195,6 @@ class BatchPools {
   private batchesMap: Record<string, BatchPool> = {
     graphics: new GraphicsBatchPool(),
   };
-  constructor() {}
   public get(type: string) {
     return this.batchesMap[type].getOne();
   }

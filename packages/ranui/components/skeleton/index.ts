@@ -12,9 +12,6 @@ function Skeleton() {
         const shadowRoot = this.attachShadow({ mode: 'closed' });
         shadowRoot.appendChild(this._div);
       }
-      connectedCallback() {}
-      disconnectCallback() {}
-      attributeChangedCallback(name: string, oldValue: string, newValue: string) {}
     }
 
     window.customElements.define('r-skeleton', CustomElement);

@@ -1,4 +1,4 @@
-import { currentDevice, getAllQueryString, isBangDevice, isMobile, isWeiXin } from 'ranuts/utils';
+import { currentDevice, isBangDevice, isMobile, isWeiXin } from 'ranuts/utils';
 import type { App } from 'vue';
 import type { CurrentDevice } from 'ranuts/utils';
 import { LANGS_DICT } from '../lib/constant';
@@ -7,7 +7,7 @@ import { LANGS_DICT } from '../lib/constant';
 const isDev = process.env.NODE_ENV !== 'production';
 
 // debug 开关信息
-const { debug = '' } = getAllQueryString() || {};
+// const { debug = '' } = getAllQueryString() || {};
 
 export interface Env {
   isDev: boolean;

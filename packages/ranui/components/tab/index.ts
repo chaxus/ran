@@ -296,6 +296,7 @@ function CustomElement() {
       attributeChangedCallback(name: string, oldValue: string, newValue: string) {
         if (oldValue !== newValue) {
           this.dispatchEvent(
+            // eslint-disable-next-line  n/no-unsupported-features/node-builtins
             new CustomEvent('change', {
               detail: {
                 active: this.active,

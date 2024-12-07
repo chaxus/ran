@@ -67,7 +67,6 @@ export function preBundlePlugin(deps: Set<string>): Plugin {
           if (!imports.length && !exports.length) {
             // 构造代理模块
             // 通过 require 拿到模块的导出对象
-            // eslint-disable-next-line
             const res = require(entryPath);
             // 用 Object.keys 拿到所有的具名导出
             const specifiers = Object.keys(res);

@@ -287,6 +287,7 @@ export class Input extends (HTMLElementSSR()!) {
     this.customChange();
     // 默认 input 事件
     this.dispatchEvent(
+      // eslint-disable-next-line  n/no-unsupported-features/node-builtins
       new CustomEvent('input', {
         detail: {
           value: this.value,
@@ -299,6 +300,7 @@ export class Input extends (HTMLElementSSR()!) {
    */
   customChange = (): void => {
     this.dispatchEvent(
+      // eslint-disable-next-line  n/no-unsupported-features/node-builtins
       new CustomEvent('change', {
         detail: {
           value: this.value,

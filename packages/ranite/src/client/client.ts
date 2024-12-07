@@ -1,5 +1,5 @@
 console.log('[ranite] connecting...');
-
+// eslint-disable-next-line n/no-unsupported-features/node-builtins
 const socket = new WebSocket(`ws://localhost:__HMR_PORT__`, 'ranite-hmr');
 
 socket.addEventListener('message', async ({ data }) => {
@@ -99,7 +99,9 @@ async function fetchUpdate({ path, timestamp }: Update) {
         // 通过动态 import 拉取最新模块
         const newMod = await import(path + `?t=${timestamp}${query ? `&${query}` : ''}`);
         moduleMap.set(dep, newMod);
-      } catch (e) {}
+      } catch (e) {
+        console.error(e);
+      }
     }),
   );
 

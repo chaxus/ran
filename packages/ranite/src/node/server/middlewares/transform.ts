@@ -1,7 +1,6 @@
 import type { NextHandleFunction } from 'connect';
 import createDebug from 'debug';
-import { CLIENT_PUBLIC_PATH } from '../../constants';
-import { cleanUrl, isCSSRequest, isImportRequest, isInternalRequest, isJSRequest } from '../../utils';
+import { cleanUrl, isCSSRequest, isImportRequest, isJSRequest } from '../../utils';
 import type { ServerContext } from '../index';
 
 const debug = createDebug('dev');

@@ -21,14 +21,14 @@ const startDevServer = (): void => {
     res.end('<div id="app">Not Found</div>');
   });
 
-  server.on('clientError', (err, socket) => {
+  server.on('clientError', (_, socket) => {
     socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
   });
 
   server.listen(8080, async () => {
     const { port } = server.address() as ClientRequestArgs; // { address: '::', family: 'IPv6', port: 8080 }
-    console.log(green('🚀 No-Bundle 服务已经成功启动!'), `耗时: ${Date.now() - startTime}ms`);
-    console.log(`> 本地访问路径: ${blue(`http://localhost:${port}`)}`);
+    console.log(green('🚀 No-Bundle 服务已经成功启动！'), `耗时：${Date.now() - startTime}ms`);
+    console.log(`> 本地访问路径：${blue(`http://localhost:${port}`)}`);
   });
 };
 

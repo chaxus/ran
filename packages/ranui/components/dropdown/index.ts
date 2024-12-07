@@ -1,10 +1,10 @@
 import type { Chain } from 'ranuts/utils';
-import { addClassToElement, create, noop, removeClassToElement } from 'ranuts/utils';
+import { addClassToElement, create, removeClassToElement } from 'ranuts/utils';
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
 
 const animationTime = 300;
 
-enum ARROW_TYPE {
+export enum ARROW_TYPE {
   TOP = 'top',
   BOTTOM = 'bottom',
   LEFT = 'left',
@@ -90,7 +90,7 @@ export class Dropdown extends (HTMLElementSSR()!) {
   disconnectedCallback(): void {
     // this.removeEventListener('click', this.stopPropagation);
   }
-  attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
+  attributeChangedCallback(name: string, _: string, newValue: string): void {
     if (name === 'transit' && newValue) {
       addClassToElement(this.dropdown.element, this.transit);
       setTimeout(() => {

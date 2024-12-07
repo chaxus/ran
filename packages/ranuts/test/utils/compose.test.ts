@@ -12,7 +12,7 @@ describe('utils', () => {
     function wait(ms: number) {
       return new Promise((resolve) => setTimeout(resolve, ms || 1));
     }
-    const arr: Array<Number> = [];
+    const arr: Array<number> = [];
     const stack = [];
 
     stack.push(async (_context: unknown, next: Next) => {
@@ -54,6 +54,7 @@ describe('utils', () => {
         await next();
         arr.push(7);
       } catch (err) {
+        console.log('err', err);
         arr.push(2);
       }
       arr.push(3);

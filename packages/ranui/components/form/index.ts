@@ -14,7 +14,7 @@ function Component() {
       const shadowRoot = this.attachShadow({ mode: 'closed' });
       const jsonData: Record<string, any> = {};
       const formData = new FormData(this._form);
-      formData.forEach((value, key) => {
+      formData.forEach((_, key) => {
         if (!jsonData[key]) {
           jsonData[key] = formData.getAll(key).length > 1 ? formData.getAll(key) : formData.get(key);
         }

@@ -65,10 +65,10 @@ class ScratchTicket extends (HTMLElementSSR()!) {
     console.log('eeeeee', e);
     this.state.touchStart = true;
   };
-  touchMoveScratch = (e: TouchEvent): void => {
+  touchMoveScratch = (): void => {
     // debugger;
     if (this.state.touchStart) {
-      const rect = this.scratchTicket.getBoundingClientRect();
+      // const rect = this.scratchTicket.getBoundingClientRect();
       const ctx = this.scratchTicket.getContext('2d');
       if (!ctx) return;
       //   const x = e.touches[0].clientX - rect.left;
@@ -103,9 +103,7 @@ class ScratchTicket extends (HTMLElementSSR()!) {
     this.scratchTicket.addEventListener('touchmove', this.touchMoveScratch);
     this.scratchTicket.addEventListener('touchend', this.touchEndScratch);
   };
-  connectedCallback(): void {}
-  disconnectCallback(): void {}
-  attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
+  attributeChangedCallback(): void {
     this.appendChild(this.scratchTicketContainer);
     this.drawScratchTicket();
   }

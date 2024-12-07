@@ -1,8 +1,6 @@
 import type { ServerContext } from './server/index';
 
-export interface CustomPluginOptions {
-  [plugin: string]: any;
-}
+type CustomPluginOptions = Record<string, any>;
 
 export interface ModuleOptions {
   assertions: Record<string, string>;

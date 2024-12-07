@@ -32,7 +32,7 @@ export const getTangentByPointer = (x: number, y: number): Array<number> => {
 // 使用 arc 绘制扇形
 export const fanShapedByArc = (
   ctx: CanvasRenderingContext2D,
-  minRadius: number,
+  // minRadius: number,
   maxRadius: number,
   start: number,
   end: number,
@@ -40,11 +40,11 @@ export const fanShapedByArc = (
 ): void => {
   ctx.beginPath();
   const maxGutter = getAngle((90 / Math.PI / maxRadius) * gutter);
-  const minGutter = getAngle((90 / Math.PI / minRadius) * gutter);
+  // const minGutter = getAngle((90 / Math.PI / minRadius) * gutter);
   const maxStart = start + maxGutter;
   const maxEnd = end - maxGutter;
-  const minStart = start + minGutter;
-  const minEnd = end - minGutter;
+  // const minStart = start + minGutter;
+  // const minEnd = end - minGutter;
   ctx.arc(0, 0, maxRadius, maxStart, maxEnd, false);
   // 如果 getter 比按钮短就绘制圆弧，反之计算新的坐标点
   // if (minEnd > minStart) {

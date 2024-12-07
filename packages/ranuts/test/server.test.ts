@@ -1,36 +1,35 @@
 import { describe, expect, it } from 'vitest';
 import { Router, Server, body, colors } from '@/node';
-import type { Context, Next } from '@/node/server';
 
 const app = new Server();
 const PORT = 30103;
 
 const router = new Router();
 
-router.get('/api/test', (ctx, next) => {
+router.get('/api/test', (ctx) => {
   const { query } = ctx.request;
   ctx.res.end(JSON.stringify(query));
 });
 
-router.post('/api/test', (ctx, next) => {
+router.post('/api/test', (ctx) => {
   const { body } = ctx.request;
   ctx.res.end(JSON.stringify(body));
 });
 
-const requestMiddleWare = (ctx: Context, next: Next) => {
-  const { query, method, path, body } = ctx.request;
-  const { res } = ctx;
-  if (method === 'POST') {
-    // application/json
-    if (path === '/api/test') {
-      res.end(JSON.stringify(body));
-    }
-    // file
-    if (path === '/api/upload') {
-      res.end(JSON.stringify(body));
-    }
-  }
-};
+// const requestMiddleWare = (ctx: Context, next: Next) => {
+//   const { method, path, body } = ctx.request;
+//   const { res } = ctx;
+//   if (method === 'POST') {
+//     // application/json
+//     if (path === '/api/test') {
+//       res.end(JSON.stringify(body));
+//     }
+//     // file
+//     if (path === '/api/upload') {
+//       res.end(JSON.stringify(body));
+//     }
+//   }
+// };
 app.use(body());
 
 app.use(router.routes());
