@@ -117,8 +117,8 @@ export const viteConfig: UserConfig = {
     //   },
     // }),
     babel({
-      babelHelpers: 'bundled'
-    })
+      babelHelpers: 'bundled',
+    }),
   ],
   resolve: {
     alias: {
