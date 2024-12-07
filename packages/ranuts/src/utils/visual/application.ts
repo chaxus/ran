@@ -13,8 +13,6 @@ export class Application {
     const { view = document.createElement('canvas') } = options || {};
     this.view = view;
     this.renderer = getRenderer(options);
-    // this.start();
-    // this.render();
   }
   public render = (): void => {
     this.renderer.render(this.stage);
