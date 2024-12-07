@@ -1,5 +1,5 @@
 import { BYTES_PER_VERTEX } from '@/utils/visual/enums';
-import type { WebGLRenderer } from '@/utils/visual/render/webGLRenderer';
+import type { WebGLRenderer } from '@/utils/visual/render/webGlRenderer';
 import { fragmentShaderSource, vertexShaderSource } from '@/utils/visual/render/utils/webgl/shaders';
 
 const createShader = (gl: WebGLRenderingContext, type: number, source: string): WebGLShader => {

@@ -42,6 +42,13 @@ const external = [
   'node:readline',
 ];
 
+const list2map = (list: string[]): Record<string, string> => {
+  return list.reduce((acc: Record<string, string>, cur) => {
+    acc[cur] = cur;
+    return acc;
+  }, {});
+};
+
 interface chunkOptimization {
   assetsInlineLimit: number;
   chunkSizeWarningLimit: number;
@@ -58,6 +65,9 @@ const chunkOptimization: Partial<chunkOptimization> = {
     external,
     output: {
       experimentalMinChunkSize: 500,
+      globals: {
+        ...list2map(external),
+      },
     },
     treeshake: {
       preset: 'recommended',
