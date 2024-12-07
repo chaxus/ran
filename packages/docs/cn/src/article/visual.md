@@ -13,8 +13,8 @@
 因此，对于可视化绘制引擎，需要考虑以下几个方面：
 
 1. **组的管理：**将多个图形元素组织成一个整体（即“组”）。这样的设计使得对组进行整体移动、缩放或变形时，组内所有元素都能响应，简化了复杂场景下的操作和管理。
-2. **层级管理：**对于 2D 图形来说，必然需要层级关系的处理，定义元素之间的堆叠顺序，如确保文字总是绘制在图表的上方。层级管理将确保视觉呈现符合预期。
-3. **基础图形封装：**构建丰富的基础图形类库，提供便捷的 API 来绘制常见的几何形状，如矩形、圆形、多边形、曲线等。这些基础图形应支持自定义样式和属性，以满足多样化的设计需求。
+2. **层级管理：**对于 `2D` 图形来说，必然需要层级关系的处理，定义元素之间的堆叠顺序，如确保文字总是绘制在图表的上方。层级管理将确保视觉呈现符合预期。
+3. **基础图形封装：**构建丰富的基础图形类库，提供便捷的 `API` 来绘制常见的几何形状，如矩形、圆形、多边形、曲线等。这些基础图形应支持自定义样式和属性，以满足多样化的设计需求。
 4. **变换矩阵：**对一个图形组执行平移、旋转、缩放等变形操作，从而以动态和灵活的方式调整图形的展示效果。为了实现这些变形操作，变形操作类通常会采用矩阵变换的原理。通过维护一个变换矩阵，并在绘制图形组之前应用该矩阵，可以一次性完成所有变形操作的计算，提高绘制效率。
 5. **事件系统：**允许用户将事件监听器绑定到单个图形元素或整个组上。实现用户交互（如点击、拖动）。
 6. **扩展设计：**明确整个渲染过程的生命周期，并且允许开发者在对应的生命周期中插入自定义的代码，从而实现对渲染流程，事件处理，资源控制等方面的控制。
@@ -24,18 +24,18 @@
 
 ## 二：组的管理：
 
-为了进行图形组的管理，会继续实现一个容器类 Container，这个类代表了‘组’的概念，它提供了添加子元素，移除子元素等的方法；后续的要被渲染的一些类 (如 Graphics，Text，Sprite 等) 会继承于这个类；这个类本身不会被渲染 (因为它只是一个‘组’，它本身没有内容可以渲染)。
+为了进行图形组的管理，会继续实现一个容器类 `Container`，这个类代表了‘组’的概念，它提供了添加子元素，移除子元素等的方法；后续的要被渲染的一些类 (如 `Graphics`，`Text`，`Sprite` 等) 会继承于这个类；这个类本身不会被渲染 (因为它只是一个‘组’，它本身没有内容可以渲染)。
 
 属性：
 
-- children: 表示所有的子元素
-- isSort: 添加或者删除元素后，需要表示，当前组需要更新
-- parent: 表示当前组的父节点
+- `children`: 表示所有的子元素
+- `isSort`: 添加或者删除元素后，需要表示，当前组需要更新
+- `parent`: 表示当前组的父节点
 
 方法：
 
-- addChild: 添加子元素
-- removeChild: 移除子元素
+- `addChild`: 添加子元素
+- `removeChild`: 移除子元素
 
 因此，实现如下：
 
@@ -64,7 +64,7 @@ class Container {
 
 ## 三：层级管理
 
-在 canvas 绘图环境中，先绘制的图形会被后绘制的图形所覆盖，因此，层级的管理就自然地通过绘制顺序来实现。在这种情况下，最先被绘制的图形将位于最底层，而随后绘制的图形则逐层叠加，直至最上层。
+在 `canvas` 绘图环境中，先绘制的图形会被后绘制的图形所覆盖，因此，层级的管理就自然地通过绘制顺序来实现。在这种情况下，最先被绘制的图形将位于最底层，而随后绘制的图形则逐层叠加，直至最上层。
 
 层级属性并不只在`Container`类上实现，`Container`类表示组的概念，实际上，任何元素节点都需要层级概念，包括`Container`类。
 
@@ -127,13 +127,13 @@ class Graphics extends Container {}
 ```
 
 绘制的过程中，我们需要考虑是填充还是描边图形。因此，需要定义两个属性：
-`lineStyle`和`fillStyle`,用来表示 line 的属性，和 fill 的属性。
+`lineStyle`和`fillStyle`,用来表示 `line` 的属性，和 `fill` 的属性。
 
-line 的属性有：color,alpha,visible,width,[cap](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineCap),[join](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineJoin),[miterLimit](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/miterLimit)
+`line` 的属性有：`color`,`alpha`,`visible`,`width`,[cap](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineCap),[join](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineJoin),[miterLimit](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/miterLimit)
 
-填充的属性有：color,alpha,visible
+填充的属性有：`color`,`alpha`,`visible`
 
-我们可以用两个类去描述这些数据，Fill 类：
+我们可以用两个类去描述这些数据，`Fill` 类：
 
 ```ts
 class Fill {
@@ -161,7 +161,7 @@ class Fill {
 }
 ```
 
-Line 类既有 Fill 类的所有属性，还有些其他的属性，所以可以继承 Fill 类：
+`Line` 类既有 `Fill` 类的所有属性，还有些其他的属性，所以可以继承 `Fill` 类：
 
 ```ts
 class Line extends Fill {
@@ -249,7 +249,7 @@ class Graphics extends Container {
 }
 ```
 
-接下来是绘制各种基础图形了，先从最简单的圆形开始。Graphics 类事绘制各种图形的容器，因此所有的基础图形绘制方法都在 Graphics 类上。增加绘制圆形的方法：
+接下来是绘制各种基础图形了，先从最简单的圆形开始。`Graphics` 类事绘制各种图形的容器，因此所有的基础图形绘制方法都在 `Graphics` 类上。增加绘制圆形的方法：
 
 ```ts
   /**
