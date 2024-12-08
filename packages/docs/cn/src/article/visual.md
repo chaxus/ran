@@ -365,7 +365,7 @@ class Graphics extends Container {
 
 实现绘制一个圆锁需要的数据，由圆的数据公式可知，绘制一个圆只需要知道圆点，半径即可：
 
-<r-math latex="(x - h)^{2} + (y - k)^{2} = r^{2}"></r-math>
+<r-math latex="(x - a)^{2} + (y - b)^{2} = r^{2}"></r-math>
 
 因此实现如下：
 
@@ -391,14 +391,406 @@ const circle = shape
 const { x, y, radius } = circle
 ctx.arc(x, y, radius, 0, 2 * Math.PI)
 if (fillStyle.visible) {
-  ctx.globalAlpha = fillStyle.alpha * this.worldAlpha
   ctx.fill()
 }
 if (lineStyle.visible) {
-  ctx.globalAlpha = lineStyle.alpha * this.worldAlpha
   ctx.stroke()
 }
 ```
+
+### 2.矩形
+
+矩形数据的实现是：
+
+```ts
+export class Rectangle extends Shape {
+  public x: number
+  public y: number
+  public width: number
+  public height: number
+  public type = SHAPE_TYPE.RECTANGLE
+  constructor(x = 0, y = 0, width = 0, height = 0) {
+    super()
+    this.x = x
+    this.y = y
+    this.width = width
+    this.height = height
+  }
+}
+```
+
+绘制方法：
+
+```ts
+const rectangle = shape
+const { x, y, width, height } = rectangle
+if (fillStyle.visible) {
+  ctx.fillRect(x, y, width, height)
+}
+if (lineStyle.visible) {
+  ctx.strokeRect(x, y, width, height)
+}
+```
+
+在`Graphics`类上，添加数据的方法：
+
+```ts
+  /**
+   * 画矩形
+   * @param x x 坐标
+   * @param y y 坐标
+   * @param width 宽度
+   * @param height 高度
+   */
+  public drawRect = (x: number, y: number, width: number, height: number): Graphics => {
+    return this.drawShape(new Rectangle(x, y, width, height));
+  };
+```
+
+### 3.椭圆
+
+如何确定一个椭圆呢，由椭圆的标准方程可知：
+
+<r-math latex="\frac{x^2}{a^2} + \frac{y^2}{b^2} = 1"></r-math>
+
+我们只要知道椭圆的长轴和短轴即可：
+
+```ts
+export class Ellipse extends Shape {
+  public x: number
+  public y: number
+  public radiusX: number
+  public radiusY: number
+  public readonly type = SHAPE_TYPE.ELLIPSE
+  constructor(x = 0, y = 0, radiusX = 0, radiusY = 0) {
+    super()
+    this.x = x
+    this.y = y
+    this.radiusX = radiusX
+    this.radiusY = radiusY
+  }
+}
+```
+
+最后是绘制的方法：
+
+```ts
+const ellipse = shape
+const { x, y, radiusX, radiusY } = ellipse
+ctx.ellipse(x, y, radiusX, radiusY, 0, 0, Math.PI * 2)
+if (fillStyle.visible) {
+  ctx.fill()
+}
+if (lineStyle.visible) {
+  ctx.stroke()
+}
+```
+
+### 4.多边形
+
+多边形由多个点构成，因此，用一个 `points` 数组表示，每 `2` 个元素代表一个点的坐标
+
+用`closeStroke`属性表示该多边形是否闭合
+
+```ts
+export class Polygon extends Shape {
+  public points: number[] = []
+  public closeStroke = false
+  public type = SHAPE_TYPE.POLYGON
+  constructor(points: number[] = []) {
+    super()
+    this.points = points
+  }
+}
+```
+
+绘制方法如下：
+
+```ts
+const polygon = shape
+const { points, closeStroke } = polygon
+ctx.moveTo(points[0], points[1])
+for (let i = 2; i < points.length; i += 2) {
+  ctx.lineTo(points[i], points[i + 1])
+}
+if (closeStroke) {
+  ctx.closePath()
+}
+if (fillStyle.visible) {
+  ctx.fill()
+}
+if (lineStyle.visible) {
+  ctx.stroke()
+}
+```
+
+### 5.圆角矩形
+
+圆角矩形的实现相比起矩形，需要多一个`radius`属性：
+
+```ts
+export class RoundedRectangle extends Shape {
+  public x: number
+  public y: number
+  public width: number
+  public height: number
+  public radius: number
+  public readonly type = SHAPE_TYPE.ROUNDED_RECTANGLE
+  constructor(x = 0, y = 0, width = 0, height = 0, radius = 20) {
+    super()
+    this.x = x
+    this.y = y
+    this.width = width
+    this.height = height
+    const r = Math.min(width, height) / 2
+    this.radius = radius > r ? r : radius
+  }
+}
+```
+
+实现绘制方法时，需要在四个角绘制圆弧
+
+```ts
+const roundedRectangle = shape
+const { x, y, width, height, radius } = roundedRectangle
+ctx.moveTo(x + radius, y)
+ctx.arc(x + radius, y + radius, radius, Math.PI * 1.5, Math.PI, true)
+ctx.lineTo(x, y + height - radius)
+ctx.arc(x + radius, y + height - radius, radius, Math.PI, Math.PI / 2, true)
+ctx.lineTo(x + width - radius, y + height)
+ctx.arc(x + width - radius, y + height - radius, radius, Math.PI / 2, 0, true)
+ctx.lineTo(x + width, y + radius)
+ctx.arc(x + width - radius, y + radius, radius, 0, Math.PI * 1.5, true)
+ctx.closePath()
+if (fillStyle.visible) {
+  ctx.fill()
+}
+if (lineStyle.visible) {
+  ctx.stroke()
+}
+```
+
+## 四：层级管理
+
+在 `canvas` 绘图环境中，先绘制的图形会被后绘制的图形所覆盖，因此，层级的管理就自然地通过绘制顺序来实现。在这种情况下，最先被绘制的图形将位于最底层，而随后绘制的图形则逐层叠加，直至最上层。
+
+因此，我们需要考虑两个部分：
+
+1. 如何标识当前层级
+2. 如何根据层级来绘制图形
+
+首先是第一个问题：如何标识层级
+
+### 1.层级标识
+
+层级属性并不只在`Container`类上实现，`Container`类表示组的概念，实际上，任何元素节点都需要层级概念，包括`Container`类。
+
+所以，我们需要实现一个通用的节点类 `Vertex`，这个类代表了最原始的‘节点’的概念，所有可以被展示到 `canvas` 画布上的、各种类型的节点都会继承于这个类，这是一个抽象类，我们并不会直接实例化这个类。
+
+这个类上面挂载了‘节点’的各种通用属性，比如：父元素、层级、节点是否可见等。
+
+同时，`Container`类继承于 `Vertex` 类，‘组’也算作‘节点’。
+
+`Vertex` 类实现如下：
+
+```ts
+class Vertex {
+  protected _zIndex = 0 // 节点的层级关系
+  public parent: Container | undefined = undefined // 节点的父子关系
+  public visible = true
+}
+```
+
+同时要对 `Container` 类进行改造，增加根据 `zIndex` 的排序方法，实现如下：
+
+```ts
+class Container extends Vertex {
+  public readonly children: Container[] = []
+  public isSort: boolean = false // true 的时候表示需要更新排序
+  public parent: Container | undefined = undefined
+  public addChild = (child: Container) => {
+    child.parent?.removeChild(child)
+    this.children.push(child)
+    this.isSort = true
+    child.parent = this
+  }
+  public removeChild = (child: Container) => {
+    for (let i = 0; i < this.children.length; i++) {
+      if (this.children[i] === child) {
+        this.children.splice(i, 1)
+        child.parent = undefined
+        return
+      }
+    }
+  }
+  public sortChildren = (): void => {
+    if (!this.isSort) return
+    this.children.sort((a, b) => a.zIndex - b.zIndex)
+    this.isSort = false
+  }
+}
+```
+
+### 2.根据层级来绘制图形
+
+目前，我们已经实现了基础图形，也实现了组的功能，接下来我们会按照层级和嵌套关系去渲染，比如如下代码：
+
+```html
+<body>
+  <div id="app">
+    <canvas id="hierarchy" width="500" height="500"></canvas>
+  </div>
+  <script type="module">
+    import { Application, Graphics, Container } from "./src/utils/visual/index.ts"
+    const app = new Application({
+      view: document.getElementById("hierarchy"),
+    })
+
+    const blackGraphic = new Graphics()
+    blackGraphic.beginFill("black")
+    blackGraphic.drawRect(0, 0, 300, 300)
+
+    const redGraphic = new Graphics()
+    redGraphic.beginFill("red")
+    redGraphic.drawRect(0, 0, 200, 200)
+
+    const container1 = new Container()
+    container1.addChild(blackGraphic)
+    container1.addChild(redGraphic)
+
+    const container2 = new Container()
+    container2.addChild(container1)
+
+    const greenGraphic = new Graphics()
+    greenGraphic.beginFill("green")
+    greenGraphic.drawRect(150, 0, 180, 180)
+
+    container2.addChild(greenGraphic)
+
+    const yellowGraphic = new Graphics()
+    // yellowGraphic.beginFill('yellow');
+    yellowGraphic.lineStyle({ width: 30, color: "yellow", cap: "round", join: "round" })
+    yellowGraphic.drawRect(0, 0, 250, 150)
+
+    const blueGraphic = new Graphics()
+    blueGraphic.beginFill("blue")
+
+    const grayGraphic = new Graphics()
+    grayGraphic.beginFill("gray")
+
+    app.stage.addChild(container2)
+    app.stage.addChild(yellowGraphic)
+    app.stage.addChild(blueGraphic)
+    app.stage.addChild(grayGraphic)
+
+    app.render()
+  </script>
+</body>
+```
+
+那么根据层级和嵌套关系，我们会构造出一个树结构：
+
+```
+Application
+├── yellowGraphic
+├── container2
+|   ├── greenGraphic
+|   └── container1
+|       ├── blackGraphic
+|       └── redGraphic
+├── blueGraphic
+└── grayGraphic
+```
+
+前面说了，我们的渲染策略是：子节点在父节点之上 (先绘制父节点，再绘制子节点)，相同层级的兄弟节点，zIndex 越大，层级越高，相同 zIndex，则按照添加顺序来决定，后添加的节点，层级更高 (越晚绘制)。
+
+也就是说我们期望的渲染顺序是这样的：
+
+```sh
+Application->container2->container1->blackGraphics->redGraphics->greenGraphics->yellowGraphics->blueGraphic->grayGraphic
+```
+
+也就是：
+
+```
+(1)Application
+├── (7)yellowGraphic
+├── (2)container2
+|   ├── (6)greenGraphic
+|   └── (3)container1
+|       ├── (4)blackGraphic
+|       └── (5)redGraphic
+├── (8)blueGraphic
+└── (9)grayGraphic
+```
+
+可以得出：我们要**先序遍历**这棵对象树，也就是说我们会先处理根节点，再递归处理子节点，直至所有节点处理完毕，退出递归。
+
+在不断深入这棵对象树的同时，我们还要根据 `zIndex` 给每个节点的子节点进行排序。
+
+```ts
+/**
+ * @description: 根据 z-index 排序子元素
+ * @return {*}
+ */
+public sortChildren = (): void => {
+    if (!this.isSort) {
+      return;
+    }
+    this.children.sort((a, b) => a.zIndex - b.zIndex);
+    this.isSort = false;
+};
+/**
+ * 递归渲染以自身为根的整棵节点树
+ */
+public renderCanvasRecursive(render: CanvasRenderer) {
+  if (!this.visible) return
+  this.renderCanvas(render) // 先渲染自身
+  // 渲染子节点
+  for (let i = 0; i < this.children.length; i++) {
+    const child = this.children[i]
+    child.renderCanvasRecursive(render)
+  }
+}
+```
+
+既然是有嵌套结构，那么自然就会思考一个问题：如何解决循环嵌套的问题？
+
+这个时候，我们就能发现，根据层级和父子关系组成的渲染链，不是树结构，而是图结构。即任意两个节点之间都可能有关系。
+
+所以问题就可以转换成，如何解决有向图中的回环问题。
+
+这时候就要进行有向图的拓扑排序，如果一个图能够完成拓扑排序，则图中不存在回环。否则，提示回环的节点。
+
+## 五：变换矩阵
+
+在组的管理，层级管理，基础图形都实现了后，我们需要封装一些常用的图形变换方法。比如平移，旋转，缩放等。
+
+虽然 canvas 为了开发的便捷，也提供了 ctx.rotate,ctx.scale 等方法，但 ctx.rotate() 和 ctx.scale() 方法是对当前 CanvasRenderingContext2D 对象的变换矩阵进行操作的。这些变换会影响之后的所有绘制操作。
+
+我们更希望的是，比如我们添加了一个矩形，然后对它进行缩放和旋转，同时期望这些变化只对当前这个图形生效。再添加一个圆形，希望圆形能是最基本的样式，这样方便对当前图形进行变化操作。
+
+我们有两种方式去解决这个问题，一种是，每次变化完成后，都进行 ctx.resetTransform() 重置变换矩阵。第二种是，构建直观的变换矩阵，通过矩阵运算，应用到对应的组上。
+
+明显第二种方式更加合理。做到了高内聚，解耦合。可以对一个组进行仿射变换，同时不影响其他组。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 在应用层，我们需要封装绘制引擎提供的底层功能，使其更加贴近业务需求。这包括提供易于使用的 API 接口、优化性能、处理异常和错误等。同时，通过持续的应用层反馈，不断优化和调整绘制引擎，确保其能够更好地服务于业务的发展。
 
@@ -461,69 +853,6 @@ pixijs 的 skew:
 仿射变换不能光通过矩阵乘法来实现，还得有加法。
 
 主要用途是，通过高纬度的线性变换，模拟低维度的仿射变换。从而把平移操作也数据化。
-
-## 三：层级管理
-
-在 `canvas` 绘图环境中，先绘制的图形会被后绘制的图形所覆盖，因此，层级的管理就自然地通过绘制顺序来实现。在这种情况下，最先被绘制的图形将位于最底层，而随后绘制的图形则逐层叠加，直至最上层。
-
-因此，我们需要考虑两个部分：
-
-1. 如何标识当前层级
-2. 如何根据层级来绘制图形
-
-首先是第一个问题：如何标识层级
-
-### 1.层级标识
-
-层级属性并不只在`Container`类上实现，`Container`类表示组的概念，实际上，任何元素节点都需要层级概念，包括`Container`类。
-
-所以，我们需要实现一个通用的节点类 `Vertex`，这个类代表了最原始的‘节点’的概念，所有可以被展示到 `canvas` 画布上的、各种类型的节点都会继承于这个类，这是一个抽象类，我们并不会直接实例化这个类。
-
-这个类上面挂载了‘节点’的各种通用属性，比如：父元素、层级、节点是否可见等。
-
-同时，`Container`类继承于 `Vertex` 类，‘组’也算作‘节点’。
-
-`Vertex` 类实现如下：
-
-```ts
-class Vertex {
-  protected _zIndex = 0 // 节点的层级关系
-  public parent: Container | undefined = undefined // 节点的父子关系
-  public visible = true
-}
-```
-
-同时要对 `Container` 类进行改造，增加根据 `zIndex` 的排序方法，实现如下：
-
-```ts
-class Container extends Vertex {
-  public readonly children: Container[] = []
-  public isSort: boolean = false // true 的时候表示需要更新排序
-  public parent: Container | undefined = undefined
-  public addChild = (child: Container) => {
-    child.parent?.removeChild(child)
-    this.children.push(child)
-    this.isSort = true
-    child.parent = this
-  }
-  public removeChild = (child: Container) => {
-    for (let i = 0; i < this.children.length; i++) {
-      if (this.children[i] === child) {
-        this.children.splice(i, 1)
-        child.parent = undefined
-        return
-      }
-    }
-  }
-  public sortChildren = (): void => {
-    if (!this.isSort) return
-    this.children.sort((a, b) => a.zIndex - b.zIndex)
-    this.isSort = false
-  }
-}
-```
-
-### 2.根据层级来绘制图形
 
 # 实现曲线
 

@@ -452,6 +452,7 @@ export class Graphics extends Container {
         }
       }
     }
+    
   };
 
   public buildBatches = (batchRenderer: BatchRenderer): void => {

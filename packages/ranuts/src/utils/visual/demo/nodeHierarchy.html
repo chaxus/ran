@@ -6,13 +6,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>node and hierarchy</title>
-    <script src="../index.ts" type="module"></script>
   </head>
 
   <body>
-    <div id="app"></div>
-    <script>
-      const app = new Application();
+    <div>
+      <canvas id="hierarchy" width="500" height="500"></canvas>
+    </div>
+    <script type="module">
+      import { Application, Graphics, Container } from '../index.ts';
+      const app = new Application({
+        view: document.getElementById('hierarchy'),
+      });
       const blackGraphic = new Graphics();
       blackGraphic.beginFill('black');
       blackGraphic.drawRect(0, 0, 300, 300);
@@ -40,6 +44,12 @@
 
       app.stage.addChild(container2);
       app.stage.addChild(yellowGraphic);
+
+      app.view.style.width = '500px';
+      app.view.style.height = '500px';
+
+      app.render();
+      document.body.appendChild(app.view);
     </script>
   </body>
 </html>
