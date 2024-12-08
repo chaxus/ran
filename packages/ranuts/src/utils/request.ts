@@ -18,16 +18,19 @@ export const handleFetchHook = (options: Partial<Options> = {}): void => {
     const replacement = (originalFetch: any) => {
       return (url: string, config?: any) => {
         requestHook(url, config);
-        return originalFetch
-          .apply(window, [url, config])
-          .then((response: Response) => {
-            responseHook(url, config, response);
-            return response;
-          })
-          .catch((error: Error) => {
-            errorHook(url, error);
-            throw error;
-          });
+        return (
+          originalFetch
+            .apply(window, [url, config])
+            // eslint-disable-next-line n/no-unsupported-features/node-builtins
+            .then((response: Response) => {
+              responseHook(url, config, response);
+              return response;
+            })
+            .catch((error: Error) => {
+              errorHook(url, error);
+              throw error;
+            })
+        );
       };
     };
     replaceOld(window, 'fetch', replacement);

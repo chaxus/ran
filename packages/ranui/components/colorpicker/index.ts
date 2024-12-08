@@ -322,9 +322,11 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     this.colorPickerPanelSliderContainer.appendChild(this.colorPickerColorBlock);
   };
   changeColorPickerHue = (e: Event): void => {
+    // eslint-disable-next-line n/no-unsupported-features/node-builtins
     this.context.hue.setter((e as CustomEvent).detail.value * HUE);
   };
   changeColorPickerAlpha = (e: Event): void => {
+    // eslint-disable-next-line n/no-unsupported-features/node-builtins
     this.context.transparency.setter((e as CustomEvent).detail.value * 100);
   };
   createColorPickerSelect = (): void => {

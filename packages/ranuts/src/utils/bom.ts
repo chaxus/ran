@@ -262,7 +262,7 @@ export const removeGhosting = (event: DragEvent): void => {
 
 export function getCookieByName(name: string): string {
   if (typeof window !== 'undefined') {
-    const cookieList = document.cookie.match(new RegExp(`(^| )${name}(?:=([^;]*))?(;|$)`));
+    const cookieList = new RegExp(`(^| )${name}(?:=([^;]*))?(;|$)`).exec(document.cookie);
     if (cookieList && cookieList[2]) return cookieList[2];
   }
   return '';

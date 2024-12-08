@@ -100,6 +100,7 @@ export class Popover extends (HTMLElementSSR()!) {
     }
   };
   watchContent = (e: Event): void => {
+    // eslint-disable-next-line n/no-unsupported-features/node-builtins
     const { value } = (e as CustomEvent).detail;
     this.createContent(value.content);
   };
