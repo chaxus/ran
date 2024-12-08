@@ -15,7 +15,6 @@ export class RoundedRectangle extends Shape {
     this.y = y;
     this.width = width;
     this.height = height;
-
     const r = Math.min(width, height) / 2;
     this.radius = radius > r ? r : radius;
   }
