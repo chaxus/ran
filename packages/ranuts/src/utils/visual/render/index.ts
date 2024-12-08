@@ -1,6 +1,7 @@
 import { RENDERER_TYPE } from '@/utils/visual/enums';
 import { CanvasRenderer } from '@/utils/visual/render/canvasRenderer';
 import { WebGLRenderer } from '@/utils/visual/render/webGlRenderer';
+import { WebGPURenderer } from '@/utils/visual/render/webGPURenderer';
 import type { Renderer } from '@/utils/visual/render/render';
 import type { IApplicationOptions } from '@/utils/visual/types';
 
@@ -11,6 +12,8 @@ export const getRenderer = (options: IApplicationOptions): Renderer => {
       return new CanvasRenderer(options);
     case RENDERER_TYPE.WEB_GL:
       return new WebGLRenderer(options);
+    case RENDERER_TYPE.WEB_GPU:
+      return new WebGPURenderer(options);
     default:
       return new CanvasRenderer(options);
   }

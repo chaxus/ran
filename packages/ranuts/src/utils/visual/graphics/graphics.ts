@@ -25,7 +25,6 @@ export class Graphics extends Container {
   public geometry = new GraphicsGeometry();
   public currentPath = new Polygon();
   public type: string;
-
   constructor() {
     super();
     this.type = GRAPHICS;

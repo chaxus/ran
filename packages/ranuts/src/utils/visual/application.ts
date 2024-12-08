@@ -17,7 +17,7 @@ export class Application {
     const { view = document.createElement('canvas') } = options;
     this.view = view;
     // 根据参数，判断是用什么渲染模式
-    this.renderer = getRenderer(options);
+    this.renderer = getRenderer({ ...options, view });
     // 创建一个根容器
     this.stage = new Container();
     this.eventSystem = new EventSystem(this.view, this.stage);
