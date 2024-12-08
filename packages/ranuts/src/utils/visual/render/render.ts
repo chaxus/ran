@@ -10,10 +10,10 @@ export abstract class Renderer {
   public canvasEle: HTMLCanvasElement;
   public screen = new Rectangle();
   constructor(options: IApplicationOptions) {
-    const { view = document.createElement('canvas') } = options;
-    this.canvasEle = view;
-    this.screen.width = view.width;
-    this.screen.height = view.height;
+    const { view } = options;
+    this.canvasEle = view!;
+    this.screen.width = view!.width;
+    this.screen.height = view!.height;
   }
   public resizeView(width: number, height: number): void {
     this.canvasEle.width = width;

@@ -13,7 +13,7 @@ export class CanvasRenderer extends Renderer {
     const { backgroundColor, backgroundAlpha } = options;
     this.backgroundColor = backgroundColor;
     this.backgroundAlpha = backgroundAlpha;
-    this.ctx = this.canvasEle.getContext('2d') as CanvasRenderingContext2D;
+    this.ctx = this.canvasEle.getContext('2d')!;
   }
   public render(container: Container): void {
     container.updateTransform();
