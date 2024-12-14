@@ -31,7 +31,7 @@ export class Matrix {
     this.ty = ty;
   }
 
-  set(a: number, b: number, c: number, d: number, tx: number, ty: number): Matrix {
+  set = (a: number, b: number, c: number, d: number, tx: number, ty: number): Matrix => {
     this.a = a;
     this.b = b;
     this.c = c;
@@ -40,12 +40,12 @@ export class Matrix {
     this.ty = ty;
 
     return this;
-  }
+  };
 
   /**
    * 将当前矩阵右乘一个矩阵
    */
-  public append(m: Matrix): Matrix {
+  public append = (m: Matrix): Matrix => {
     const { a: a0, b: b0, c: c0, d: d0, tx: tx0, ty: ty0 } = this;
     const { a: a1, b: b1, c: c1, d: d1, tx: tx1, ty: ty1 } = m;
     this.a = a0 * a1 + c0 * b1;
@@ -56,7 +56,7 @@ export class Matrix {
     this.ty = b0 * tx1 + d0 * ty1 + ty0;
 
     return this;
-  }
+  };
 
   /**
    * Creates a Matrix object based on the given array. The Element to Matrix mapping order is as follows:
@@ -68,34 +68,37 @@ export class Matrix {
    * tx = array[2]
    * ty = array[5]
    * @param array - The array that the matrix will be populated from.
+   *
+   * a,b,tx
+   * c,d,ty
    */
-  public fromArray(array: number[]): void {
+  public fromArray = (array: number[]): void => {
     this.a = array[0];
     this.b = array[1];
     this.c = array[3];
     this.d = array[4];
     this.tx = array[2];
     this.ty = array[5];
-  }
+  };
   /**
    * Translates the matrix on the x and y.
    * @param x - How much to translate x by
    * @param y - How much to translate y by
    * @returns This matrix. Good for chaining method calls.
    */
-  public translate(x: number, y: number): this {
+  public translate = (x: number, y: number): Matrix => {
     this.tx += x;
     this.ty += y;
 
     return this;
-  }
+  };
   /**
    * Applies a scale transformation to the matrix.
    * @param x - The amount to scale horizontally
    * @param y - The amount to scale vertically
    * @returns This matrix. Good for chaining method calls.
    */
-  public scale(x: number, y: number): this {
+  public scale = (x: number, y: number): Matrix => {
     this.a *= x;
     this.d *= y;
     this.c *= x;
@@ -104,7 +107,7 @@ export class Matrix {
     this.ty *= y;
 
     return this;
-  }
+  };
   /**
    * Sets the matrix based on all the available properties
    * @param x - Position on the x axis
@@ -118,7 +121,7 @@ export class Matrix {
    * @param skewY - Skew on the y axis
    * @returns This matrix. Good for chaining method calls.
    */
-  public setTransform(
+  public setTransform = (
     x: number,
     y: number,
     pivotX: number,
@@ -128,7 +131,7 @@ export class Matrix {
     rotation: number,
     skewX: number,
     skewY: number,
-  ): this {
+  ): Matrix => {
     this.a = Math.cos(rotation + skewY) * scaleX;
     this.b = Math.sin(rotation + skewY) * scaleX;
     this.c = -Math.sin(rotation - skewX) * scaleY;
@@ -138,13 +141,13 @@ export class Matrix {
     this.ty = y - (pivotX * this.b + pivotY * this.d);
 
     return this;
-  }
+  };
   /**
    * Applies a rotation transformation to the matrix.
    * @param angle - The angle in radians.
    * @returns This matrix. Good for chaining method calls.
    */
-  public rotate(angle: number): this {
+  public rotate = (angle: number): Matrix => {
     const cos = Math.cos(angle);
     const sin = Math.sin(angle);
 
@@ -160,12 +163,12 @@ export class Matrix {
     this.ty = tx1 * sin + this.ty * cos;
 
     return this;
-  }
+  };
   /**
    * check to see if two matrices are the same
    * @param matrix - The matrix to compare to.
    */
-  public equals(matrix: Matrix): boolean {
+  public equals = (matrix: Matrix): boolean => {
     return (
       matrix.a === this.a &&
       matrix.b === this.b &&
@@ -174,12 +177,12 @@ export class Matrix {
       matrix.tx === this.tx &&
       matrix.ty === this.ty
     );
-  }
+  };
   /**
    * Resets this Matrix to an identity (default) matrix.
    * @returns This matrix. Good for chaining method calls.
    */
-  public identity(): this {
+  public identity = (): Matrix => {
     this.a = 1;
     this.b = 0;
     this.c = 0;
@@ -188,14 +191,14 @@ export class Matrix {
     this.ty = 0;
 
     return this;
-  }
+  };
 
   /**
    * Decomposes the matrix (x, y, scaleX, scaleY, and rotation) and sets the properties on to a transform.
    * @param transform - The transform to apply the properties to.
    * @returns The transform with the newly applied properties
    */
-  public decompose(transform: TransformableObject): TransformableObject {
+  public decompose = (transform: TransformableObject): TransformableObject => {
     // sort out rotation / skew..
     const a = this.a;
     const b = this.b;
@@ -226,13 +229,13 @@ export class Matrix {
     transform.position.y = this.ty + (pivot.x * b + pivot.y * d);
 
     return transform;
-  }
+  };
   /**
    * 对某个点应用当前的变换矩阵
    * @param p 某个点
    * @returns {Point} 点 p 应用当前变换矩阵后得到的一个新的点
    */
-  apply(p: Point): Point {
+  apply = (p: Point): Point => {
     const newPos = new Point();
 
     const x = p.x;
@@ -242,14 +245,14 @@ export class Matrix {
     newPos.y = this.b * x + this.d * y + this.ty;
 
     return newPos;
-  }
+  };
 
   /**
    * 对某个点应用当前的变换矩阵的逆矩阵
    * @param p 某个点
    * @returns {Point} 点 p 应用当前变换矩阵的逆矩阵后得到的一个新的点
    */
-  applyInverse(p: Point): Point {
+  applyInverse = (p: Point): Point => {
     const newPos = new Point();
 
     const id = 1 / (this.a * this.d + this.c * -this.b);
@@ -261,12 +264,12 @@ export class Matrix {
     newPos.y = this.a * id * y + -this.b * id * x + (-this.ty * this.a + this.tx * this.b) * id;
 
     return newPos;
-  }
+  };
 
   /**
    * 将当前矩阵左乘一个矩阵
    */
-  public prepend(m: Matrix): Matrix {
+  public prepend = (m: Matrix): Matrix => {
     const { a: a0, b: b0, c: c0, d: d0, tx: tx0, ty: ty0 } = m;
     const { a: a1, b: b1, c: c1, d: d1, tx: tx1, ty: ty1 } = this;
     this.a = a0 * a1 + c0 * b1;
@@ -277,9 +280,9 @@ export class Matrix {
     this.ty = b0 * tx1 + d0 * ty1 + ty0;
 
     return this;
-  }
+  };
 
-  public clone(): Matrix {
+  public clone = (): Matrix => {
     const matrix = new Matrix();
 
     matrix.a = this.a;
@@ -290,7 +293,7 @@ export class Matrix {
     matrix.ty = this.ty;
 
     return matrix;
-  }
+  };
 
   /**
    * Creates an array from the current Matrix object.
@@ -298,7 +301,7 @@ export class Matrix {
    * @param [out=new Float32Array(9)] - If provided the array will be assigned to out
    * @returns The newly created array which contains the matrix
    */
-  public toArray(transpose?: boolean, out?: Float32Array): Float32Array {
+  public toArray = (transpose?: boolean, out?: Float32Array): Float32Array => {
     if (!this.array) {
       this.array = new Float32Array(9);
     }
@@ -328,5 +331,5 @@ export class Matrix {
     }
 
     return array;
-  }
+  };
 }

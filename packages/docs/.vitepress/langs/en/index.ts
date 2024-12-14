@@ -10,7 +10,7 @@ const themeEnConfig: DefaultTheme.Config = {
     { text: 'Home', link: '/' },
     { text: 'Function', link: '/src/ranuts/' },
     { text: 'Component', link: '/src/ranui/' },
-    { text: 'Article', link: '/src/article/designMode.md' },
+    { text: 'Article', link: '/src/article/design_mode.md' },
   ],
   socialLinks: [{ icon: 'github', link: GITHUB }],
   footer: {
@@ -32,7 +32,7 @@ const themeEnConfig: DefaultTheme.Config = {
       {
         text: 'Universal Function',
         items: [
-          { text: 'Filter object', link: '/src/ranuts/utils/filterObj.md' },
+          { text: 'Filter object', link: '/src/ranuts/utils/filter_obj.md' },
           {
             text: 'Statistical execution time',
             link: '/src/ranuts/utils/task.md',
@@ -40,7 +40,7 @@ const themeEnConfig: DefaultTheme.Config = {
           { text: 'String to xml', link: '/src/ranuts/utils/str2xml.md' },
           {
             text: 'Image to base64',
-            link: '/src/ranuts/utils/convertImageToBase64.md',
+            link: '/src/ranuts/utils/convert_image_to_base64.md',
           },
           { text: 'OCR text recognition`', link: '/src/ranuts/utils/ocr.md' },
         ],
@@ -50,24 +50,24 @@ const themeEnConfig: DefaultTheme.Config = {
         items: [
           {
             text: 'Example Query details about a file',
-            link: '/src/ranuts/file/watchFile.md',
+            link: '/src/ranuts/file/watch_file.md',
           },
           {
             text: 'Read the name of the file in the directory',
-            link: '/src/ranuts/file/readDir.md',
+            link: '/src/ranuts/file/read_dir.md',
           },
           {
             text: 'Listen for file changes',
-            link: '/src/ranuts/file/watchFile.md',
+            link: '/src/ranuts/file/watch_file.md',
           },
-          { text: 'Read file contents', link: '/src/ranuts/file/readFile.md' },
+          { text: 'Read file contents', link: '/src/ranuts/file/read_file.md' },
           {
             text: 'Append file content',
-            link: '/src/ranuts/file/appendFile.md',
+            link: '/src/ranuts/file/append_file.md',
           },
           {
             text: 'Write to file content',
-            link: '/src/ranuts/file/writeFile.md',
+            link: '/src/ranuts/file/write_file.md',
           },
         ],
       },
@@ -85,7 +85,7 @@ const themeEnConfig: DefaultTheme.Config = {
         items: [
           {
             text: 'Get mime by file suffix type',
-            link: '/src/ranuts/mimeType/mimeType.md',
+            link: '/src/ranuts/mimeType/mime_type.md',
           },
         ],
       },
@@ -136,11 +136,11 @@ const themeEnConfig: DefaultTheme.Config = {
         items: [
           {
             text: '23 classic design patterns',
-            link: '/src/article/designMode.md',
+            link: '/src/article/design_mode.md',
           },
           {
             text: 'Functional programming',
-            link: '/src/article/functionalProgramming.md',
+            link: '/src/article/functional_programming.md',
           },
           {
             text: 'Sorting algorithm',

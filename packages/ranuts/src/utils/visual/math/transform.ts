@@ -7,19 +7,17 @@ export class Transform {
   public localTransform = new Matrix();
   public worldTransform = new Matrix();
   public position: ObservablePoint;
-  public scale: ObservablePoint;
+  public scale: ObservablePoint<number>;
   public pivot: ObservablePoint;
-  public skew: ObservablePoint;
+  public skew: ObservablePoint<number>;
   public _rotation = 0;
   private rotateMatrix = new Matrix();
   private skewMatrix = new Matrix();
   private scaleMatrix = new Matrix();
   private localMatrix = new Matrix(); // 不包含平移的 localTransform
-
   public shouldUpdateLocalTransform = false;
   public worldId = 0;
   private parentId = 0;
-
   constructor() {
     this.position = new ObservablePoint(this.onChange);
     this.scale = new ObservablePoint(this.onScaleChange, 1, 1);
@@ -47,13 +45,11 @@ export class Transform {
 
   private onSkewChange = (skewX: number, skewY: number) => {
     this.skewMatrix.set(Math.cos(skewY), Math.sin(skewY), Math.sin(skewX), Math.cos(skewX), 0, 0);
-
     this.shouldUpdateLocalTransform = true;
   };
 
   private onScaleChange = (scaleX: number, scaleY: number) => {
     this.scaleMatrix.set(scaleX, 0, 0, scaleY, 0, 0);
-
     this.shouldUpdateLocalTransform = true;
   };
 
@@ -103,14 +99,11 @@ export class Transform {
 
   public updateTransform(parentTransform: Transform): void {
     this.updateLocalTransform();
-
     // 若当父元素的 worldTransform 改变了 or 当前元素的 localTransform 改变了，那么当前元素的 worldTransform 需要重新计算
     if (this.parentId !== parentTransform.worldId) {
       // 自身的 localTransform 左乘父元素的 worldTransform 就得到了自身的 worldTransform
-
       const { a: a0, b: b0, c: c0, d: d0, tx: tx0, ty: ty0 } = parentTransform.worldTransform;
       const { a: a1, b: b1, c: c1, d: d1, tx: tx1, ty: ty1 } = this.localTransform;
-
       this.worldTransform.set(
         a0 * a1 + c0 * b1,
         b0 * a1 + d0 * b1,
@@ -119,9 +112,7 @@ export class Transform {
         a0 * tx1 + c0 * ty1 + tx0,
         b0 * tx1 + d0 * ty1 + ty0,
       );
-
       this.parentId = parentTransform.worldId;
-
       this.worldId++;
     }
   }
