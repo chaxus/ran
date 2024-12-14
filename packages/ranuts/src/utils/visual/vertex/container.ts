@@ -88,7 +88,7 @@ export class Container extends Vertex {
       const child = this.children[i];
       child.renderCanvasRecursive(render);
     }
-  }
+  };
   /**
    * 递归更新当前元素以及所有子元素的 transform
    */
@@ -103,13 +103,13 @@ export class Container extends Vertex {
     for (let i = 0; i < this.children.length; i++) {
       this.children[i].updateTransform();
     }
-  }
+  };
   // Container 类上挂载一个 containsPoint 函数，这个函数是用来判断某个点是否与当前类的实例产生了碰撞，Container 类的子类也会实现这个函数。
   // 由于 Container 自身没有可以碰撞的内容，所以它直接返回 false。
   public containsPoint = (p: Point): boolean => {
     if (!this.hitArea) return false;
     return this.hitArea.contains(p);
-  }
+  };
 
   /**
    * 使用 webGL，渲染自身，在 container 上面没有东西要渲染，所以这个函数的内容为空

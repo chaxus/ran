@@ -10,7 +10,7 @@ const themeCnConfig: DefaultTheme.Config = {
     { text: '首页', link: '/cn/' },
     { text: '函数', link: '/cn/src/ranuts/' },
     { text: '组件', link: '/cn/src/ranui/' },
-    { text: '璀璨', link: '/cn/src/article/designMode.md' },
+    { text: '璀璨', link: '/cn/src/article/design_mode.md' },
   ],
   socialLinks: [{ icon: 'github', link: GITHUB }],
   footer: {
@@ -32,12 +32,12 @@ const themeCnConfig: DefaultTheme.Config = {
       {
         text: '通用函数',
         items: [
-          { text: '过滤对象', link: '/cn/src/ranuts/utils/filterObj.md' },
+          { text: '过滤对象', link: '/cn/src/ranuts/utils/filter_obj.md' },
           { text: '统计执行时间', link: '/cn/src/ranuts/utils/task.md' },
           { text: '字符串转 xml', link: '/cn/src/ranuts/utils/str2xml.md' },
           {
             text: '图片转 base64',
-            link: '/cn/src/ranuts/utils/convertImageToBase64.md',
+            link: '/cn/src/ranuts/utils/convert_image_to_base64.md',
           },
           { text: 'OCR 文字识别`', link: '/cn/src/ranuts/utils/ocr.md' },
         ],
@@ -47,19 +47,19 @@ const themeCnConfig: DefaultTheme.Config = {
         items: [
           {
             text: '查询一个文件的详细信息',
-            link: '/cn/src/ranuts/file/watchFile.md',
+            link: '/cn/src/ranuts/file/watch_file.md',
           },
           {
             text: '读取目录下的文件名称',
-            link: '/cn/src/ranuts/file/readDir.md',
+            link: '/cn/src/ranuts/file/read_dir.md',
           },
           {
             text: '监听文件是否改变',
-            link: '/cn/src/ranuts/file/watchFile.md',
+            link: '/cn/src/ranuts/file/watch_file.md',
           },
-          { text: '读取文件内容', link: '/cn/src/ranuts/file/readFile.md' },
-          { text: '追加文件内容', link: '/cn/src/ranuts/file/appendFile.md' },
-          { text: '写入文件内容', link: '/cn/src/ranuts/file/writeFile.md' },
+          { text: '读取文件内容', link: '/cn/src/ranuts/file/read_file.md' },
+          { text: '追加文件内容', link: '/cn/src/ranuts/file/append_file.md' },
+          { text: '写入文件内容', link: '/cn/src/ranuts/file/write_file.md' },
         ],
       },
       {
@@ -71,7 +71,7 @@ const themeCnConfig: DefaultTheme.Config = {
         items: [
           {
             text: '通过文件后缀获取 mime type',
-            link: '/cn/src/ranuts/mimeType/mimeType.md',
+            link: '/cn/src/ranuts/mimeType/mime_type.md',
           },
         ],
       },
@@ -120,14 +120,14 @@ const themeCnConfig: DefaultTheme.Config = {
     '/cn/src/article/': [
       {
         items: [
-          { text: '23 种经典设计模式', link: '/cn/src/article/designMode.md' },
+          { text: '23 种经典设计模式', link: '/cn/src/article/design-mode.md' },
           {
             text: '函数式编程',
-            link: '/cn/src/article/functionalProgramming.md',
+            link: '/cn/src/article/functional-programming.md',
           },
           {
             text: 'web 文档预览方案',
-            link: '/cn/src/article/docPreview.md',
+            link: '/cn/src/article/doc-preview.md',
           },
           {
             text: 'Web 视频加密动态方案',
@@ -153,6 +153,11 @@ const themeCnConfig: DefaultTheme.Config = {
               { text: '桶排序', link: '/cn/src/article/sort/bucket/' },
               { text: '基数排序', link: '/cn/src/article/sort/radix/' },
             ],
+          },
+          {
+            text: '数学',
+            collapsed: true,
+            items: [{ text: '线性代数', link: '/cn/src/article/math/linear_algebra.md' }],
           },
         ],
       },

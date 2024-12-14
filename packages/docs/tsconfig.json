@@ -1,6 +1,6 @@
 {
   "exclude": ["node_modules/**", "dist/**", "public"],
-  "include": ["**/*.ts", "**/*.d.ts"],
+  "include": ["**/*.ts", "**/*.d.ts", ".vitepress/**/*.ts"],
   "compilerOptions": {
     "module": "ESNext",
     "moduleResolution": "bundler",

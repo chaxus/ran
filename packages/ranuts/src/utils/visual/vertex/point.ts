@@ -16,11 +16,11 @@ export class Point {
   };
 }
 // 当二维的数据点发生变化时，需要通知并执行回调函数
-export class ObservablePoint {
+export class ObservablePoint<T = never> {
   private _x: number;
   private _y: number;
-  private cb: (...anyArgs: any[]) => any;
-  constructor(cb: (...anyArgs: any[]) => any, x = 0, y = 0) {
+  private cb: (...args: T[]) => void;
+  constructor(cb: (...args: T[]) => void, x = 0, y = 0) {
     this._x = x;
     this._y = y;
     this.cb = cb;

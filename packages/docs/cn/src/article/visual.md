@@ -41,24 +41,24 @@
 
 ```ts
 class Container {
-  public readonly children: Container[] = []
-  public isSort: boolean = false
-  public parent: Container | undefined = undefined
+  public readonly children: Container[] = [];
+  public isSort: boolean = false;
+  public parent: Container | undefined = undefined;
   addChild = (child: Container) => {
-    child.parent?.removeChild(child)
-    this.children.push(child)
-    this.isSort = true
-    child.parent = this
-  }
+    child.parent?.removeChild(child);
+    this.children.push(child);
+    this.isSort = true;
+    child.parent = this;
+  };
   removeChild = (child: Container) => {
     for (let i = 0; i < this.children.length; i++) {
       if (this.children[i] === child) {
-        this.children.splice(i, 1)
-        child.parent = undefined
-        return
+        this.children.splice(i, 1);
+        child.parent = undefined;
+        return;
       }
     }
-  }
+  };
 }
 ```
 
@@ -68,14 +68,14 @@ class Container {
 
 ```ts
 export class Application {
-  public readonly stage: Container // stage 是一切待渲染元素的祖先元素。
-  public readonly view: HTMLCanvasElement // canvas 元素
+  public readonly stage: Container; // stage 是一切待渲染元素的祖先元素。
+  public readonly view: HTMLCanvasElement; // canvas 元素
 
   constructor(options: IApplicationOptions) {
-    const { view = document.createElement("canvas") } = options
-    this.view = view
+    const { view = document.createElement('canvas') } = options;
+    this.view = view;
     // 创建一个根容器
-    this.stage = new Container()
+    this.stage = new Container();
   }
 }
 ```
@@ -95,36 +95,36 @@ export class Application {
 
 ```ts
 export const getRenderer = (options: IApplicationOptions): Renderer => {
-  const { prefer: renderType } = options
+  const { prefer: renderType } = options;
   switch (renderType) {
     case RENDERER_TYPE.CANVAS:
-      return new CanvasRenderer(options)
+      return new CanvasRenderer(options);
     case RENDERER_TYPE.WEB_GL:
-      return new WebGLRenderer(options)
+      return new WebGLRenderer(options);
     case RENDERER_TYPE.WEB_GPU:
-      return new WebGPURenderer(options)
+      return new WebGPURenderer(options);
     default:
-      return new CanvasRenderer(options)
+      return new CanvasRenderer(options);
   }
-}
+};
 ```
 
 `CanvasRenderer`实现就非常简单，只有一个`render`方法，从根`container`开始，递归渲染所有的元素：
 
 ```ts
 export class CanvasRenderer extends Renderer {
-  public ctx: CanvasRenderingContext2D
+  public ctx: CanvasRenderingContext2D;
   constructor(options: IApplicationOptions) {
-    super(options)
-    console.log("正在使用 %c canvas2D ", "color: #05aa6d; background-color: #ffffff;font-size: 20px;", "渲染")
-    this.ctx = this.canvasEle.getContext("2d")!
+    super(options);
+    console.log('正在使用 %c canvas2D ', 'color: #05aa6d; background-color: #ffffff;font-size: 20px;', '渲染');
+    this.ctx = this.canvasEle.getContext('2d')!;
   }
   public render(container: Container): void {
-    this.ctx.save()
-    this.ctx.clearRect(0, 0, this.screen.width, this.screen.height)
-    this.ctx.fillRect(0, 0, this.screen.width, this.screen.height)
-    container.renderCanvasRecursive(this)
-    this.ctx.restore()
+    this.ctx.save();
+    this.ctx.clearRect(0, 0, this.screen.width, this.screen.height);
+    this.ctx.fillRect(0, 0, this.screen.width, this.screen.height);
+    container.renderCanvasRecursive(this);
+    this.ctx.restore();
   }
 }
 ```
@@ -133,35 +133,35 @@ export class CanvasRenderer extends Renderer {
 
 ```ts
 export class Application {
-  private readonly renderer: Renderer
-  private animationFrameId: number | undefined
-  public readonly stage: Container // stage 是一切待渲染元素的祖先元素。
-  public readonly view: HTMLCanvasElement
+  private readonly renderer: Renderer;
+  private animationFrameId: number | undefined;
+  public readonly stage: Container; // stage 是一切待渲染元素的祖先元素。
+  public readonly view: HTMLCanvasElement;
   constructor(options: IApplicationOptions) {
-    const { view = document.createElement("canvas") } = options
-    this.view = view
+    const { view = document.createElement('canvas') } = options;
+    this.view = view;
     // 根据参数，判断是用什么渲染模式
-    this.renderer = getRenderer({ ...options, view })
+    this.renderer = getRenderer({ ...options, view });
     // 创建一个根容器
-    this.stage = new Container()
+    this.stage = new Container();
   }
 
   public render(): void {
-    this.renderer.render(this.stage)
+    this.renderer.render(this.stage);
   }
   // 立即渲染模式
   public start(): void {
     const func = () => {
-      this.render()
-      this.animationFrameId = requestAnimationFrame(func)
-    }
-    func()
+      this.render();
+      this.animationFrameId = requestAnimationFrame(func);
+    };
+    func();
   }
 
   public stop(): void {
     if (this.animationFrameId) {
-      cancelAnimationFrame(this.animationFrameId)
-      this.animationFrameId = undefined
+      cancelAnimationFrame(this.animationFrameId);
+      this.animationFrameId = undefined;
     }
   }
 }
@@ -196,13 +196,13 @@ class Graphics extends Container {}
 
 ```ts
 export class GraphicsData {
-  public shape: Shape
-  public lineStyle: Line
-  public fillStyle: Fill
+  public shape: Shape;
+  public lineStyle: Line;
+  public fillStyle: Fill;
   constructor(shape: Shape, fillStyle: Fill, lineStyle: Line) {
-    this.shape = shape
-    this.lineStyle = lineStyle
-    this.fillStyle = fillStyle
+    this.shape = shape;
+    this.lineStyle = lineStyle;
+    this.fillStyle = fillStyle;
   }
 }
 ```
@@ -217,26 +217,26 @@ export class GraphicsData {
 
 ```ts
 class Fill {
-  public color = "#ffffff"
-  public alpha = 1.0
-  public visible = false
+  public color = '#ffffff';
+  public alpha = 1.0;
+  public visible = false;
 
   constructor() {
-    this.reset()
+    this.reset();
   }
 
   public clone(): Fill {
-    const obj = new Fill()
-    obj.color = this.color
-    obj.alpha = this.alpha
-    obj.visible = this.visible
-    return obj
+    const obj = new Fill();
+    obj.color = this.color;
+    obj.alpha = this.alpha;
+    obj.visible = this.visible;
+    return obj;
   }
 
   public reset(): void {
-    this.color = "#ffffff"
-    this.alpha = 1
-    this.visible = false
+    this.color = '#ffffff';
+    this.alpha = 1;
+    this.visible = false;
   }
 }
 ```
@@ -245,30 +245,30 @@ class Fill {
 
 ```ts
 class Line extends Fill {
-  public width = 0
-  public cap = LINE_CAP.BUTT
-  public join = LINE_JOIN.MITER
-  public miterLimit = 10
+  public width = 0;
+  public cap = LINE_CAP.BUTT;
+  public join = LINE_JOIN.MITER;
+  public miterLimit = 10;
 
   public clone(): Line {
-    const obj = new Line()
-    obj.color = this.color
-    obj.alpha = this.alpha
-    obj.visible = this.visible
-    obj.width = this.width
-    obj.cap = this.cap
-    obj.join = this.join
-    obj.miterLimit = this.miterLimit
-    return obj
+    const obj = new Line();
+    obj.color = this.color;
+    obj.alpha = this.alpha;
+    obj.visible = this.visible;
+    obj.width = this.width;
+    obj.cap = this.cap;
+    obj.join = this.join;
+    obj.miterLimit = this.miterLimit;
+    return obj;
   }
 
   public reset(): void {
-    super.reset()
-    this.color = "#ffffff"
-    this.width = 0
-    this.cap = LINE_CAP.BUTT
-    this.join = LINE_JOIN.MITER
-    this.miterLimit = 10
+    super.reset();
+    this.color = '#ffffff';
+    this.width = 0;
+    this.cap = LINE_CAP.BUTT;
+    this.join = LINE_JOIN.MITER;
+    this.miterLimit = 10;
   }
 }
 ```
@@ -286,11 +286,11 @@ class Line extends Fill {
 
 ```ts
 class Graphics extends Container {
-  private _lineStyle = new Line()
-  private _fillStyle = new Fill()
+  private _lineStyle = new Line();
+  private _fillStyle = new Fill();
   constructor() {
-    super()
-    this.type = GRAPHICS
+    super();
+    this.type = GRAPHICS;
   }
 }
 ```
@@ -299,42 +299,42 @@ class Graphics extends Container {
 
 ```ts
 class Graphics extends Container {
-  private _lineStyle = new Line()
-  private _fillStyle = new Fill()
+  private _lineStyle = new Line();
+  private _fillStyle = new Fill();
   constructor() {
-    super()
-    this.type = GRAPHICS
+    super();
+    this.type = GRAPHICS;
   }
-  public lineStyle(width: number, color?: string, alpha?: number): Graphics
-  public lineStyle(options: ILineStyleOptions): Graphics
-  public lineStyle(options: ILineStyleOptions | number, color: string = "0x000000", alpha: number = 1): Graphics {
-    this.startPoly()
-    if (typeof options === "object") {
-      Object.assign(this._lineStyle, options)
+  public lineStyle(width: number, color?: string, alpha?: number): Graphics;
+  public lineStyle(options: ILineStyleOptions): Graphics;
+  public lineStyle(options: ILineStyleOptions | number, color: string = '0x000000', alpha: number = 1): Graphics {
+    this.startPoly();
+    if (typeof options === 'object') {
+      Object.assign(this._lineStyle, options);
     } else {
-      const opts: ILineStyleOptions = { width: options, color, alpha }
-      Object.assign(this._lineStyle, opts)
+      const opts: ILineStyleOptions = { width: options, color, alpha };
+      Object.assign(this._lineStyle, opts);
     }
-    this._lineStyle.visible = true
-    return this
+    this._lineStyle.visible = true;
+    return this;
   }
   // 如果要填充图形，则需要先调用这个函数给画笔设置填充色
-  public beginFill(color = "#000000", alpha = 1): Graphics {
-    this._fillStyle.color = color
-    this._fillStyle.alpha = alpha
+  public beginFill(color = '#000000', alpha = 1): Graphics {
+    this._fillStyle.color = color;
+    this._fillStyle.alpha = alpha;
     if (this._fillStyle.alpha > 0) {
-      this._fillStyle.visible = true
+      this._fillStyle.visible = true;
     }
-    return this
+    return this;
   }
   /**
    * 结束填充模式
    */
   public endFill = (): Graphics => {
-    this.startPoly()
-    this._fillStyle.reset()
-    return this
-  }
+    this.startPoly();
+    this._fillStyle.reset();
+    return this;
+  };
 }
 ```
 
@@ -371,15 +371,15 @@ class Graphics extends Container {
 
 ```ts
 export class Circle extends Shape {
-  public x: number
-  public y: number
-  public radius: number
-  public readonly type = SHAPE_TYPE.CIRCLE
+  public x: number;
+  public y: number;
+  public radius: number;
+  public readonly type = SHAPE_TYPE.CIRCLE;
   constructor(x = 0, y = 0, radius = 0) {
-    super()
-    this.x = x
-    this.y = y
-    this.radius = radius
+    super();
+    this.x = x;
+    this.y = y;
+    this.radius = radius;
   }
 }
 ```
@@ -387,14 +387,14 @@ export class Circle extends Shape {
 最后是绘制的方法：
 
 ```ts
-const circle = shape
-const { x, y, radius } = circle
-ctx.arc(x, y, radius, 0, 2 * Math.PI)
+const circle = shape;
+const { x, y, radius } = circle;
+ctx.arc(x, y, radius, 0, 2 * Math.PI);
 if (fillStyle.visible) {
-  ctx.fill()
+  ctx.fill();
 }
 if (lineStyle.visible) {
-  ctx.stroke()
+  ctx.stroke();
 }
 ```
 
@@ -404,17 +404,17 @@ if (lineStyle.visible) {
 
 ```ts
 export class Rectangle extends Shape {
-  public x: number
-  public y: number
-  public width: number
-  public height: number
-  public type = SHAPE_TYPE.RECTANGLE
+  public x: number;
+  public y: number;
+  public width: number;
+  public height: number;
+  public type = SHAPE_TYPE.RECTANGLE;
   constructor(x = 0, y = 0, width = 0, height = 0) {
-    super()
-    this.x = x
-    this.y = y
-    this.width = width
-    this.height = height
+    super();
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
   }
 }
 ```
@@ -422,13 +422,13 @@ export class Rectangle extends Shape {
 绘制方法：
 
 ```ts
-const rectangle = shape
-const { x, y, width, height } = rectangle
+const rectangle = shape;
+const { x, y, width, height } = rectangle;
 if (fillStyle.visible) {
-  ctx.fillRect(x, y, width, height)
+  ctx.fillRect(x, y, width, height);
 }
 if (lineStyle.visible) {
-  ctx.strokeRect(x, y, width, height)
+  ctx.strokeRect(x, y, width, height);
 }
 ```
 
@@ -457,17 +457,17 @@ if (lineStyle.visible) {
 
 ```ts
 export class Ellipse extends Shape {
-  public x: number
-  public y: number
-  public radiusX: number
-  public radiusY: number
-  public readonly type = SHAPE_TYPE.ELLIPSE
+  public x: number;
+  public y: number;
+  public radiusX: number;
+  public radiusY: number;
+  public readonly type = SHAPE_TYPE.ELLIPSE;
   constructor(x = 0, y = 0, radiusX = 0, radiusY = 0) {
-    super()
-    this.x = x
-    this.y = y
-    this.radiusX = radiusX
-    this.radiusY = radiusY
+    super();
+    this.x = x;
+    this.y = y;
+    this.radiusX = radiusX;
+    this.radiusY = radiusY;
   }
 }
 ```
@@ -475,14 +475,14 @@ export class Ellipse extends Shape {
 最后是绘制的方法：
 
 ```ts
-const ellipse = shape
-const { x, y, radiusX, radiusY } = ellipse
-ctx.ellipse(x, y, radiusX, radiusY, 0, 0, Math.PI * 2)
+const ellipse = shape;
+const { x, y, radiusX, radiusY } = ellipse;
+ctx.ellipse(x, y, radiusX, radiusY, 0, 0, Math.PI * 2);
 if (fillStyle.visible) {
-  ctx.fill()
+  ctx.fill();
 }
 if (lineStyle.visible) {
-  ctx.stroke()
+  ctx.stroke();
 }
 ```
 
@@ -494,12 +494,12 @@ if (lineStyle.visible) {
 
 ```ts
 export class Polygon extends Shape {
-  public points: number[] = []
-  public closeStroke = false
-  public type = SHAPE_TYPE.POLYGON
+  public points: number[] = [];
+  public closeStroke = false;
+  public type = SHAPE_TYPE.POLYGON;
   constructor(points: number[] = []) {
-    super()
-    this.points = points
+    super();
+    this.points = points;
   }
 }
 ```
@@ -507,20 +507,20 @@ export class Polygon extends Shape {
 绘制方法如下：
 
 ```ts
-const polygon = shape
-const { points, closeStroke } = polygon
-ctx.moveTo(points[0], points[1])
+const polygon = shape;
+const { points, closeStroke } = polygon;
+ctx.moveTo(points[0], points[1]);
 for (let i = 2; i < points.length; i += 2) {
-  ctx.lineTo(points[i], points[i + 1])
+  ctx.lineTo(points[i], points[i + 1]);
 }
 if (closeStroke) {
-  ctx.closePath()
+  ctx.closePath();
 }
 if (fillStyle.visible) {
-  ctx.fill()
+  ctx.fill();
 }
 if (lineStyle.visible) {
-  ctx.stroke()
+  ctx.stroke();
 }
 ```
 
@@ -530,20 +530,20 @@ if (lineStyle.visible) {
 
 ```ts
 export class RoundedRectangle extends Shape {
-  public x: number
-  public y: number
-  public width: number
-  public height: number
-  public radius: number
-  public readonly type = SHAPE_TYPE.ROUNDED_RECTANGLE
+  public x: number;
+  public y: number;
+  public width: number;
+  public height: number;
+  public radius: number;
+  public readonly type = SHAPE_TYPE.ROUNDED_RECTANGLE;
   constructor(x = 0, y = 0, width = 0, height = 0, radius = 20) {
-    super()
-    this.x = x
-    this.y = y
-    this.width = width
-    this.height = height
-    const r = Math.min(width, height) / 2
-    this.radius = radius > r ? r : radius
+    super();
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+    const r = Math.min(width, height) / 2;
+    this.radius = radius > r ? r : radius;
   }
 }
 ```
@@ -551,22 +551,22 @@ export class RoundedRectangle extends Shape {
 实现绘制方法时，需要在四个角绘制圆弧
 
 ```ts
-const roundedRectangle = shape
-const { x, y, width, height, radius } = roundedRectangle
-ctx.moveTo(x + radius, y)
-ctx.arc(x + radius, y + radius, radius, Math.PI * 1.5, Math.PI, true)
-ctx.lineTo(x, y + height - radius)
-ctx.arc(x + radius, y + height - radius, radius, Math.PI, Math.PI / 2, true)
-ctx.lineTo(x + width - radius, y + height)
-ctx.arc(x + width - radius, y + height - radius, radius, Math.PI / 2, 0, true)
-ctx.lineTo(x + width, y + radius)
-ctx.arc(x + width - radius, y + radius, radius, 0, Math.PI * 1.5, true)
-ctx.closePath()
+const roundedRectangle = shape;
+const { x, y, width, height, radius } = roundedRectangle;
+ctx.moveTo(x + radius, y);
+ctx.arc(x + radius, y + radius, radius, Math.PI * 1.5, Math.PI, true);
+ctx.lineTo(x, y + height - radius);
+ctx.arc(x + radius, y + height - radius, radius, Math.PI, Math.PI / 2, true);
+ctx.lineTo(x + width - radius, y + height);
+ctx.arc(x + width - radius, y + height - radius, radius, Math.PI / 2, 0, true);
+ctx.lineTo(x + width, y + radius);
+ctx.arc(x + width - radius, y + radius, radius, 0, Math.PI * 1.5, true);
+ctx.closePath();
 if (fillStyle.visible) {
-  ctx.fill()
+  ctx.fill();
 }
 if (lineStyle.visible) {
-  ctx.stroke()
+  ctx.stroke();
 }
 ```
 
@@ -595,9 +595,9 @@ if (lineStyle.visible) {
 
 ```ts
 class Vertex {
-  protected _zIndex = 0 // 节点的层级关系
-  public parent: Container | undefined = undefined // 节点的父子关系
-  public visible = true
+  protected _zIndex = 0; // 节点的层级关系
+  public parent: Container | undefined = undefined; // 节点的父子关系
+  public visible = true;
 }
 ```
 
@@ -605,29 +605,29 @@ class Vertex {
 
 ```ts
 class Container extends Vertex {
-  public readonly children: Container[] = []
-  public isSort: boolean = false // true 的时候表示需要更新排序
-  public parent: Container | undefined = undefined
+  public readonly children: Container[] = [];
+  public isSort: boolean = false; // true 的时候表示需要更新排序
+  public parent: Container | undefined = undefined;
   public addChild = (child: Container) => {
-    child.parent?.removeChild(child)
-    this.children.push(child)
-    this.isSort = true
-    child.parent = this
-  }
+    child.parent?.removeChild(child);
+    this.children.push(child);
+    this.isSort = true;
+    child.parent = this;
+  };
   public removeChild = (child: Container) => {
     for (let i = 0; i < this.children.length; i++) {
       if (this.children[i] === child) {
-        this.children.splice(i, 1)
-        child.parent = undefined
-        return
+        this.children.splice(i, 1);
+        child.parent = undefined;
+        return;
       }
     }
-  }
+  };
   public sortChildren = (): void => {
-    if (!this.isSort) return
-    this.children.sort((a, b) => a.zIndex - b.zIndex)
-    this.isSort = false
-  }
+    if (!this.isSort) return;
+    this.children.sort((a, b) => a.zIndex - b.zIndex);
+    this.isSort = false;
+  };
 }
 ```
 
@@ -641,49 +641,49 @@ class Container extends Vertex {
     <canvas id="hierarchy" width="500" height="500"></canvas>
   </div>
   <script type="module">
-    import { Application, Graphics, Container } from "./src/utils/visual/index.ts"
+    import { Application, Graphics, Container } from './src/utils/visual/index.ts';
     const app = new Application({
-      view: document.getElementById("hierarchy"),
-    })
+      view: document.getElementById('hierarchy'),
+    });
 
-    const blackGraphic = new Graphics()
-    blackGraphic.beginFill("black")
-    blackGraphic.drawRect(0, 0, 300, 300)
+    const blackGraphic = new Graphics();
+    blackGraphic.beginFill('black');
+    blackGraphic.drawRect(0, 0, 300, 300);
 
-    const redGraphic = new Graphics()
-    redGraphic.beginFill("red")
-    redGraphic.drawRect(0, 0, 200, 200)
+    const redGraphic = new Graphics();
+    redGraphic.beginFill('red');
+    redGraphic.drawRect(0, 0, 200, 200);
 
-    const container1 = new Container()
-    container1.addChild(blackGraphic)
-    container1.addChild(redGraphic)
+    const container1 = new Container();
+    container1.addChild(blackGraphic);
+    container1.addChild(redGraphic);
 
-    const container2 = new Container()
-    container2.addChild(container1)
+    const container2 = new Container();
+    container2.addChild(container1);
 
-    const greenGraphic = new Graphics()
-    greenGraphic.beginFill("green")
-    greenGraphic.drawRect(150, 0, 180, 180)
+    const greenGraphic = new Graphics();
+    greenGraphic.beginFill('green');
+    greenGraphic.drawRect(150, 0, 180, 180);
 
-    container2.addChild(greenGraphic)
+    container2.addChild(greenGraphic);
 
-    const yellowGraphic = new Graphics()
+    const yellowGraphic = new Graphics();
     // yellowGraphic.beginFill('yellow');
-    yellowGraphic.lineStyle({ width: 30, color: "yellow", cap: "round", join: "round" })
-    yellowGraphic.drawRect(0, 0, 250, 150)
+    yellowGraphic.lineStyle({ width: 30, color: 'yellow', cap: 'round', join: 'round' });
+    yellowGraphic.drawRect(0, 0, 250, 150);
 
-    const blueGraphic = new Graphics()
-    blueGraphic.beginFill("blue")
+    const blueGraphic = new Graphics();
+    blueGraphic.beginFill('blue');
 
-    const grayGraphic = new Graphics()
-    grayGraphic.beginFill("gray")
+    const grayGraphic = new Graphics();
+    grayGraphic.beginFill('gray');
 
-    app.stage.addChild(container2)
-    app.stage.addChild(yellowGraphic)
-    app.stage.addChild(blueGraphic)
-    app.stage.addChild(grayGraphic)
+    app.stage.addChild(container2);
+    app.stage.addChild(yellowGraphic);
+    app.stage.addChild(blueGraphic);
+    app.stage.addChild(grayGraphic);
 
-    app.render()
+    app.render();
   </script>
 </body>
 ```
@@ -707,7 +707,7 @@ Application
 也就是说我们期望的渲染顺序是这样的：
 
 ```sh
-Application->container2->container1->blackGraphics->redGraphics->greenGraphics->yellowGraphics->blueGraphic->grayGraphic
+Application --> container2 --> container1 --> blackGraphics --> redGraphics --> greenGraphics --> yellowGraphics --> blueGraphic --> grayGraphic
 ```
 
 也就是：
@@ -754,43 +754,36 @@ public renderCanvasRecursive(render: CanvasRenderer) {
 }
 ```
 
-既然是有嵌套结构，那么自然就会思考一个问题：如何解决循环嵌套的问题？
+既然是有嵌套结构，那么自然就会思考一个问题：循环嵌套怎么办？
 
-这个时候，我们就能发现，根据层级和父子关系组成的渲染链，不是树结构，而是图结构。即任意两个节点之间都可能有关系。
+这个时候，我们就能发现，根据层级和父子关系组成的渲染链，不是树结构，而是图结构。即任意两个节点之间都可能存在关系。
 
 所以问题就可以转换成，如何解决有向图中的回环问题。
 
-这时候就要进行有向图的拓扑排序，如果一个图能够完成拓扑排序，则图中不存在回环。否则，提示回环的节点。
+这时候就要进行有向图的拓扑排序，如果一个图能够完成拓扑排序，则图中不存在回环。否则，找到回环的节点，并进行提示，避免内存泄漏。
 
 ## 五：变换矩阵
 
 在组的管理，层级管理，基础图形都实现了后，我们需要封装一些常用的图形变换方法。比如平移，旋转，缩放等。
 
-虽然 canvas 为了开发的便捷，也提供了 ctx.rotate,ctx.scale 等方法，但 ctx.rotate() 和 ctx.scale() 方法是对当前 CanvasRenderingContext2D 对象的变换矩阵进行操作的。这些变换会影响之后的所有绘制操作。
+虽然 canvas 为了开发的便捷，也提供了 ctx.rotate,ctx.scale 等方法，但 ctx.rotate() 和 ctx.scale() 方法是对当前 CanvasRenderingContext2D 对象的变换矩阵进行操作的。这些变换会影响之后的所有变换。
 
 我们更希望的是，比如我们添加了一个矩形，然后对它进行缩放和旋转，同时期望这些变化只对当前这个图形生效。再添加一个圆形，希望圆形能是最基本的样式，这样方便对当前图形进行变化操作。
 
-我们有两种方式去解决这个问题，一种是，每次变化完成后，都进行 ctx.resetTransform() 重置变换矩阵。第二种是，构建直观的变换矩阵，通过矩阵运算，应用到对应的组上。
+我们有两种方式去解决这个问题，一种是，每次变化完成后，都进行 ctx.resetTransform() 重置变换矩阵，非常依赖开发本人的自觉性。第二种是，构建直观的变换矩阵，通过矩阵运算，应用到对应的组上。这种操作明显正常些。
 
-明显第二种方式更加合理。做到了高内聚，解耦合。可以对一个组进行仿射变换，同时不影响其他组。
+因此，我们来构建`Transform`类，添加旋转，平移，斜切 (skew)，同时要实现这些效果，就要增加锚点的概念。
 
+> 很遗憾，矩阵是什么是说不清的，你必须得自己亲眼看看 --墨菲斯
+> Unfortunately, no one can be told what the Matrix is. You have to see it for yourself. --Morpheus
 
+线性变换和矩阵乘法：
 
+每一个线性变换都对应一个矩阵，矩阵背后也同样是线性变换的概念
 
+<r-math latex="\begin{bmatrix} a & c & tx \\ b & d & ty \\ 0 & 0 & 1 \end{bmatrix}"></r-math>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+<r-math latex="\begin{bmatrix} \text{x scale} & \text{x skew} & \text{x translation} \\ \text{y skew} & \text{y scale} & \text{y translation} \\ 0 & 0 & 1 \end{bmatrix}"></r-math>
 
 在应用层，我们需要封装绘制引擎提供的底层功能，使其更加贴近业务需求。这包括提供易于使用的 API 接口、优化性能、处理异常和错误等。同时，通过持续的应用层反馈，不断优化和调整绘制引擎，确保其能够更好地服务于业务的发展。
 
@@ -799,6 +792,7 @@ public renderCanvasRecursive(render: CanvasRenderer) {
 这个类上面挂载了‘节点’的各种通用属性，比如：父元素、透明度、旋转角度、缩放、平移、节点是否可见等。
 
 ```ts
+
 ```
 
 为了进行图形组的管理，会继续实现一个容器类 Container，这个类代表了‘组’的概念，它提供了添加子元素，移除子元素等的方法；后续的要被渲染的一些类 (如 Graphics，Text，Sprite 等) 会继承于这个类；这个类本身不会被渲染 (因为它只是一个‘组’，它本身没有内容可以渲染)。
@@ -879,7 +873,7 @@ pixijs 的 skew:
 ```ts
 export abstract class Shape {
   // 支持的所有几何图形都会继承自这个 Shape 基类
-  public abstract type: ShapeType
+  public abstract type: ShapeType;
   constructor() {}
 }
 ```
@@ -889,11 +883,11 @@ export abstract class Shape {
 ```ts
 // 支持的形状类型
 export enum ShapeType {
-  Rectangle = "rectangle",
-  Polygon = "polygon",
-  Circle = "circle",
-  Ellipse = "ellipse",
-  RoundedRectangle = "rounded rectangle",
+  Rectangle = 'rectangle',
+  Polygon = 'polygon',
+  Circle = 'circle',
+  Ellipse = 'ellipse',
+  RoundedRectangle = 'rounded rectangle',
 }
 ```
 
@@ -907,15 +901,15 @@ export enum ShapeType {
 
 ```ts
 export class Circle extends Shape {
-  public x: number
-  public y: number
-  public radius: number
-  public readonly type = ShapeType.Circle
+  public x: number;
+  public y: number;
+  public radius: number;
+  public readonly type = ShapeType.Circle;
   constructor(x = 0, y = 0, radius = 0) {
-    super()
-    this.x = x
-    this.y = y
-    this.radius = radius
+    super();
+    this.x = x;
+    this.y = y;
+    this.radius = radius;
   }
 }
 ```
@@ -923,17 +917,17 @@ export class Circle extends Shape {
 绘制方法：
 
 ```ts
-const { x, y, radius } = circle
+const { x, y, radius } = circle;
 
-ctx.arc(x, y, radius, 0, 2 * Math.PI)
+ctx.arc(x, y, radius, 0, 2 * Math.PI);
 
 if (fillStyle.visible) {
-  ctx.globalAlpha = fillStyle.alpha * this.worldAlpha
-  ctx.fill()
+  ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
+  ctx.fill();
 }
 if (lineStyle.visible) {
-  ctx.globalAlpha = lineStyle.alpha * this.worldAlpha
-  ctx.stroke()
+  ctx.globalAlpha = lineStyle.alpha * this.worldAlpha;
+  ctx.stroke();
 }
 ```
 
@@ -947,17 +941,17 @@ if (lineStyle.visible) {
 
 ```ts
 export class Ellipse extends Shape {
-  public x: number
-  public y: number
-  public radiusX: number
-  public radiusY: number
-  public readonly type = ShapeType.Ellipse
+  public x: number;
+  public y: number;
+  public radiusX: number;
+  public radiusY: number;
+  public readonly type = ShapeType.Ellipse;
   constructor(x = 0, y = 0, radiusX = 0, radiusY = 0) {
-    super()
-    this.x = x
-    this.y = y
-    this.radiusX = radiusX
-    this.radiusY = radiusY
+    super();
+    this.x = x;
+    this.y = y;
+    this.radiusX = radiusX;
+    this.radiusY = radiusY;
   }
 }
 ```
@@ -965,18 +959,18 @@ export class Ellipse extends Shape {
 绘制方法：
 
 ```ts
-const { x, y, radiusX, radiusY } = ellipse
+const { x, y, radiusX, radiusY } = ellipse;
 
-ctx.ellipse(x, y, radiusX, radiusY, 0, 0, Math.PI * 2)
+ctx.ellipse(x, y, radiusX, radiusY, 0, 0, Math.PI * 2);
 
 if (fillStyle.visible) {
-  ctx.globalAlpha = fillStyle.alpha * this.worldAlpha
-  ctx.fill()
+  ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
+  ctx.fill();
 }
 
 if (lineStyle.visible) {
-  ctx.globalAlpha = lineStyle.alpha * this.worldAlpha
-  ctx.stroke()
+  ctx.globalAlpha = lineStyle.alpha * this.worldAlpha;
+  ctx.stroke();
 }
 ```
 
@@ -988,12 +982,12 @@ if (lineStyle.visible) {
 
 ```ts
 export class Polygon extends Shape {
-  public points: number[] // 多边形由多个点构成，points 数组每 2 个元素代表一个点的坐标
-  public closeStroke = false
-  public readonly type = ShapeType.Polygon
+  public points: number[]; // 多边形由多个点构成，points 数组每 2 个元素代表一个点的坐标
+  public closeStroke = false;
+  public readonly type = ShapeType.Polygon;
   constructor(points: number[] = []) {
-    super()
-    this.points = points
+    super();
+    this.points = points;
   }
 }
 ```
@@ -1001,26 +995,26 @@ export class Polygon extends Shape {
 绘制方法：
 
 ```ts
-const { points, closeStroke } = polygon
+const { points, closeStroke } = polygon;
 
-ctx.moveTo(points[0], points[1])
+ctx.moveTo(points[0], points[1]);
 
 for (let i = 2; i < points.length; i += 2) {
-  ctx.lineTo(points[i], points[i + 1])
+  ctx.lineTo(points[i], points[i + 1]);
 }
 
 if (closeStroke) {
-  ctx.closePath()
+  ctx.closePath();
 }
 
 if (fillStyle.visible) {
-  ctx.globalAlpha = fillStyle.alpha * this.worldAlpha
-  ctx.fill()
+  ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
+  ctx.fill();
 }
 
 if (lineStyle.visible) {
-  ctx.globalAlpha = lineStyle.alpha * this.worldAlpha
-  ctx.stroke()
+  ctx.globalAlpha = lineStyle.alpha * this.worldAlpha;
+  ctx.stroke();
 }
 ```
 
@@ -1028,17 +1022,17 @@ if (lineStyle.visible) {
 
 ```ts
 export class Rectangle extends Shape {
-  public x: number
-  public y: number
-  public width: number
-  public height: number
-  public type = ShapeType.Rectangle
+  public x: number;
+  public y: number;
+  public width: number;
+  public height: number;
+  public type = ShapeType.Rectangle;
   constructor(x = 0, y = 0, width = 0, height = 0) {
-    super()
-    this.x = x
-    this.y = y
-    this.width = width
-    this.height = height
+    super();
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
   }
 }
 ```
@@ -1046,14 +1040,14 @@ export class Rectangle extends Shape {
 绘制方法：
 
 ```ts
-const { x, y, width, height } = rectangle
+const { x, y, width, height } = rectangle;
 if (fillStyle.visible) {
-  ctx.globalAlpha = fillStyle.alpha * this.worldAlpha
-  ctx.fillRect(x, y, width, height)
+  ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
+  ctx.fillRect(x, y, width, height);
 }
 if (lineStyle.visible) {
-  ctx.globalAlpha = lineStyle.alpha * this.worldAlpha
-  ctx.strokeRect(x, y, width, height)
+  ctx.globalAlpha = lineStyle.alpha * this.worldAlpha;
+  ctx.strokeRect(x, y, width, height);
 }
 ```
 
@@ -1061,21 +1055,21 @@ if (lineStyle.visible) {
 
 ```ts
 export class RoundedRectangle extends Shape {
-  public x: number
-  public y: number
-  public width: number
-  public height: number
-  public radius: number
-  public readonly type = ShapeType.RoundedRectangle
+  public x: number;
+  public y: number;
+  public width: number;
+  public height: number;
+  public radius: number;
+  public readonly type = ShapeType.RoundedRectangle;
   constructor(x = 0, y = 0, width = 0, height = 0, radius = 20) {
-    super()
-    this.x = x
-    this.y = y
-    this.width = width
-    this.height = height
+    super();
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
 
-    const r = Math.min(width, height) / 2
-    this.radius = radius > r ? r : radius
+    const r = Math.min(width, height) / 2;
+    this.radius = radius > r ? r : radius;
   }
 }
 ```
@@ -1083,24 +1077,24 @@ export class RoundedRectangle extends Shape {
 绘制方法：
 
 ```ts
-const { x, y, width, height, radius } = roundedRectangle
-ctx.moveTo(x + radius, y)
-ctx.arc(x + radius, y + radius, radius, Math.PI * 1.5, Math.PI, true)
-ctx.lineTo(x, y + height - radius)
-ctx.arc(x + radius, y + height - radius, radius, Math.PI, Math.PI / 2, true)
-ctx.lineTo(x + width - radius, y + height)
-ctx.arc(x + width - radius, y + height - radius, radius, Math.PI / 2, 0, true)
-ctx.lineTo(x + width, y + radius)
-ctx.arc(x + width - radius, y + radius, radius, 0, Math.PI * 1.5, true)
-ctx.closePath()
+const { x, y, width, height, radius } = roundedRectangle;
+ctx.moveTo(x + radius, y);
+ctx.arc(x + radius, y + radius, radius, Math.PI * 1.5, Math.PI, true);
+ctx.lineTo(x, y + height - radius);
+ctx.arc(x + radius, y + height - radius, radius, Math.PI, Math.PI / 2, true);
+ctx.lineTo(x + width - radius, y + height);
+ctx.arc(x + width - radius, y + height - radius, radius, Math.PI / 2, 0, true);
+ctx.lineTo(x + width, y + radius);
+ctx.arc(x + width - radius, y + radius, radius, 0, Math.PI * 1.5, true);
+ctx.closePath();
 
 if (fillStyle.visible) {
-  ctx.globalAlpha = fillStyle.alpha * this.worldAlpha
-  ctx.fill()
+  ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
+  ctx.fill();
 }
 if (lineStyle.visible) {
-  ctx.globalAlpha = lineStyle.alpha * this.worldAlpha
-  ctx.stroke()
+  ctx.globalAlpha = lineStyle.alpha * this.worldAlpha;
+  ctx.stroke();
 }
 ```
 
