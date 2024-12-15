@@ -17,17 +17,14 @@ export class Container extends Vertex {
    * 所有子元素
    */
   public readonly children: Container[] = [];
-
   /**
    * 用来标记 worldTransform 是否发生了改变
    */
   protected worldId = 0;
-
   /**
    * 所有 batch
    */
   protected batches: Batch[] = [];
-
   /**
    * batch 总数
    */
