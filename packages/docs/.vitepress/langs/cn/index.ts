@@ -120,14 +120,14 @@ const themeCnConfig: DefaultTheme.Config = {
     '/cn/src/article/': [
       {
         items: [
-          { text: '23 种经典设计模式', link: '/cn/src/article/design-mode.md' },
+          { text: '23 种经典设计模式', link: '/cn/src/article/design_mode.md' },
           {
             text: '函数式编程',
-            link: '/cn/src/article/functional-programming.md',
+            link: '/cn/src/article/functional_programming.md',
           },
           {
             text: 'web 文档预览方案',
-            link: '/cn/src/article/doc-preview.md',
+            link: '/cn/src/article/doc_preview.md',
           },
           {
             text: 'Web 视频加密动态方案',
