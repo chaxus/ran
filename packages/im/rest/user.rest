@@ -1,0 +1,48 @@
+# REST Client
+@baseurl = http://localhost:30102
+@contentType = application/json
+@authorization = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbmNKc29uIjoiVlRKR2MyUkhWbXRZTVRsWVZucFZTVzQ0WjI1NWFUazBlRXRsVm00M1RtWk5OVEJHT0VndmJsRTNWV2wwV0c1WFNFVjVjbHBHTkZoUE0zSnlZazl5TUVaUGJtWlVWbTlDYTI1YWMxSm1TamN2TlN0dk56aHpSRFZJVVZwWFVWVXpibXQyTUVSMGJETmtjVzl6U1hGdFJEVmtXVmdyUkZKdlYzVnJNamhZVjNSRVIyNVZiREpXZEVWNlN5ODRVR0l4T1RFMVZITkVZV05JWTJRMmJGQkpORGxCYzJwMmJ6bFZSekZaUFE9PSIsImxvZ2luVGltZSI6MTY4MTIxMjcyMjI4NCwiaWF0IjoxNjgxMjEyNzIyLCJleHAiOjE2ODE4MTc1MjJ9.5t9WJ1h65mU6CWC8gVs3-D7z63_0hR0wydoEAT1-L1c
+@cookie = chaxus_local=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbmNKc29uIjoiVlRKR2MyUkhWbXRZTVRsWVZucFZTVzQ0WjI1NWFUazBlRXRsVm00M1RtWk5OVEJHT0VndmJsRTNWV2wwV0c1WFNFVjVjbHBHTkZoUE0zSnlZazl5TUVaUGJtWlVWbTlDYTI1YWMxSm1TamN2TlN0dk56aHpSRFZJVVZwWFVWVXpibXQyTUVSMGJETmtjVzl6U1hGdFJEVmtXVmdyUkZKdlYzVnJNamhZVjNSRVIyNVZiREpXZEVWNlN5ODRVR0l4T1RFMVZITkVZV05JWTJRMmJGQkpORGxCYzJwMmJ6bFZSekZaUFE9PSIsImxvZ2luVGltZSI6MTY4MTIxMjcyMjI4NCwiaWF0IjoxNjgxMjEyNzIyLCJleHAiOjE2ODE4MTc1MjJ9.5t9WJ1h65mU6CWC8gVs3-D7z63_0hR0wydoEAT1-L1c
+
+
+### 用户列表
+GET {{baseurl}}/api/v1/users/list?limit=10&offset=0
+Authorization: {{authorization}}
+
+### 创建用户
+POST {{baseurl}}/api/v1/users/create
+Content-Type: {{contentType}}
+Authorization: {{authorization}}
+
+{
+    "name":"chaxus",
+    "password":"Rzh.971124"
+}
+
+### 更新用户
+PUT {{baseurl}}/api/v1/users/update/624c223430493b767fe05e7a
+Content-Type: {{contentType}}
+Authorization: {{authorization}}
+Cookie: {{cookie}}
+
+{
+    "email": "chaxus1",
+    "is_delete": 1
+}
+
+### 通过id获取特定用户
+POST {{baseurl}}/api/v1/users/find/624c223430493b767fe05e7a
+Authorization: {{authorization}}
+
+### 通过id删除特定用户
+POST {{baseurl}}/api/v1/users/delete/624c223430493b767fe05e7a
+Authorization: {{authorization}}
+
+### 登陆
+POST {{baseurl}}/api/v1/users/login
+Content-Type: {{contentType}}
+
+{
+    "username":"chaxus",
+    "password":"Rzh.971124"
+}
