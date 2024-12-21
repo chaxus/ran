@@ -11,7 +11,6 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/koa": "^2.15.0",
     "@types/react": "^19.0.2",
     "@types/react-dom": "^19.0.2",
     "@vitejs/plugin-react": "^4.2.1",
@@ -23,7 +22,6 @@
     "vite": "^6.0.4"
   },
   "dependencies": {
-    "koa": "^2.15.3",
     "ranuts": "0.1.0-alpha.17"
   }
 }

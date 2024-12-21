@@ -24,3 +24,18 @@ export const DEVELOPMENT_DIR = '../../dist/views/';
 
 export const PORT = 30102;
 export const LOCAL_URL = `http://localhost:${PORT}`;
+export const TYPE_OPJECT = '[object Object]';
+export const TYPE_FUNCTION = '[object Function]';
+
+export const MIME_TYPES: Record<string, string> = {
+  '.html': 'text/html',
+  '.js': 'application/javascript',
+  '.css': 'text/css',
+  '.json': 'application/json',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.gif': 'image/gif',
+  '.svg': 'image/svg+xml',
+  '.ico': 'image/x-icon',
+  '.txt': 'text/plain',
+};
