@@ -9,6 +9,8 @@
 const serverRender = {
   // 获取主页
   'get=>#/^(?!/api).*$/#': 'home#index',
+  // 用户
+  'post=>/api/user/login': 'user#login',
 };
 
 export default {

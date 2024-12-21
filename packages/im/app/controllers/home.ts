@@ -1,11 +1,11 @@
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import type { Context } from 'koa';
 import { getMime } from 'ranuts';
 import { ssr } from '@/app/lib/vite';
 import { HtmlWritable, getEnv } from '@/app/lib/index';
 import { FORMAT, HTML_PATH_MAP, RENDER_PATH_MAP, TEMPLATE_REPLACE } from '@/app/lib/constant';
+import type { Context } from '@/app/types/index';
 
 const env = getEnv();
 
@@ -15,7 +15,7 @@ export default class ServerRender {
   async index(ctx: Context): Promise<void> {
     try {
       const fsTemplate = fs.readFileSync(path.resolve(__dirname, HTML_PATH_MAP[env]), FORMAT);
-      const template = await ssr.transformIndexHtml(ctx.path, fsTemplate);
+      const template = await ssr.transformIndexHtml(ctx.request.path, fsTemplate);
       const { render } = await ssr.ssrLoadModule(path.resolve(__dirname, RENDER_PATH_MAP[env]));
       const writable = new HtmlWritable();
       const stream = render(ctx, {
@@ -26,15 +26,16 @@ export default class ServerRender {
           ctx.res.write('<h1>Something went wrong</h1>');
         },
         onError(error: Error) {
-          ctx.errorHandler({ error });
+          // ctx.errorHandler({ error });
+          console.log('home:', error);
         },
         onAllReady() {
-          const type = getMime(ctx.url);
+          const type = getMime(ctx.request.url) || 'text/html';
           if (type) {
-            ctx.type = type;
+            ctx.response.setHeader('Content-Type', type);
           } else {
-            ctx.res.setHeader('Content-Type', 'text/html');
-            ctx.res.setHeader('Transfer-Encoding', 'chunked');
+            ctx.response.setHeader('Content-Type', 'text/html');
+            ctx.response.setHeader('Transfer-Encoding', 'chunked');
           }
         },
       });
