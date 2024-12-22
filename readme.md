@@ -49,7 +49,7 @@ As a monorepo project, it encompasses the following items:
 
 A place to take notes, some good blogs and articles, and some instructions and documentation for current projects.
 
-- `blog`: https://chaxus.github.io/ran/src/article/designMode.html
+- `blog`: https://chaxus.github.io/ran/src/article/design_mode.html
 - `ranui document`: https://chaxus.github.io/ran/src/ranui/
 - `ranuts document`: https://chaxus.github.io/ran/src/ranuts/
 
