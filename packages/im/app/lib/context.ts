@@ -20,7 +20,10 @@ export const createController = async (dir: string): Promise<Controller> => {
 };
 // 处理请求的 body 数据
 export const createRequestBody = (ctx: Context): Promise<RequestBody> => {
-  const { req } = ctx;
+  const { req } = ctx || {}
+  // const { headers } = req || {}
+  // const contentType = headers['content-type'] || ''
+  // if (!contentType.includes('application/json')) return Promise.resolve({});
   return new Promise((resolve) => {
     let body = '';
     req.on('data', (chunk) => {
@@ -33,6 +36,7 @@ export const createRequestBody = (ctx: Context): Promise<RequestBody> => {
       try {
         const parsedBody = JSON.parse(body);
         ctx.request.body = parsedBody;
+        console.log('parsedBody:', parsedBody);
         resolve(parsedBody);
       } catch (error) {
         console.error('Error parsing JSON:', error);

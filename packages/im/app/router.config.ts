@@ -8,12 +8,12 @@
  */
 const serverRender = {
   // 获取 client 端页面
-  // 'get=>#/^(?!/api).*$/#': 'home#index',
-  'get=>/home': 'home#index',
+  'get=>#^(?!/api).*$#': 'home#index',
+  // 'get=>/home': 'home#index',
   // 用户
-  'post=>/api/user/login': 'user#login',
+  'post=>#/api/user/login#': 'user#login',
   // IM 消息通信
-  'post=>/api/im/dialog': 'im#dialog',
+  'post=>#/api/im/dialog#': 'im#dialog',
 };
 
 export default {

@@ -1,18 +1,28 @@
-import React, { } from 'react';
+import React, { useState } from 'react';
 import { EventStreamFetch } from '@/client/lib/eventSource';
 
+interface IMResponse {
+  dialog_id: number;
+  create_time: number;
+  question: string;
+  answer: string;
+}
 
 export const Home = (): React.JSX.Element => {
+  const [state, setState] = useState<string>('');
 
-  const { fetchStream } = new EventStreamFetch()
+  const { fetchStream } = new EventStreamFetch();
 
   const sendMessage = (params: Record<string, string> = {}) => {
-    fetchStream('/api/im/dialog', params)
-  }
+    fetchStream('/api/im/dialog', params, (data: IMResponse) => {
+      const { answer } = data;
+      setState(answer);
+    });
+  };
 
   const click = () => {
-    sendMessage({ chat_id: '1', question: 'hello' })
-  }
+    sendMessage({ chat_id: '1', question: 'hello' });
+  };
 
   return (
     <div>
@@ -21,7 +31,7 @@ export const Home = (): React.JSX.Element => {
       <input type="text" />
       <button onClick={click}>发送消息</button>
       <div>回答</div>
-      <textarea></textarea>
+      <pre>{state}</pre>
     </div>
   );
 };
