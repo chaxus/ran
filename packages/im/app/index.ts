@@ -19,25 +19,25 @@ const createStaticDir = () => {
 // 静态服务
 const createStaticServer =
   (dirStatic: string) =>
-    (ctx: Context, callback = noop): void => {
-      const { req, res } = ctx;
-      const filePath = path.join(dirStatic, req.url || '/');
-      const extname = String(path.extname(filePath)).toLowerCase();
-      const contentType = MIME_TYPES[extname] || 'application/octet-stream';
-      fs.readFile(filePath, (error, content) => {
-        if (error) {
-          if (error.code === 'ENOENT') {
-            callback(ctx);
-          } else {
-            res.writeHead(500);
-            res.end(`Server Error: ${error.code}`);
-          }
+  (ctx: Context, callback = noop): void => {
+    const { req, res } = ctx;
+    const filePath = path.join(dirStatic, req.url || '/');
+    const extname = String(path.extname(filePath)).toLowerCase();
+    const contentType = MIME_TYPES[extname] || 'application/octet-stream';
+    fs.readFile(filePath, (error, content) => {
+      if (error) {
+        if (error.code === 'ENOENT') {
+          callback(ctx);
         } else {
-          res.writeHead(200, { 'Content-Type': contentType });
-          res.end(content, 'utf-8');
+          res.writeHead(500);
+          res.end(`Server Error: ${error.code}`);
         }
-      });
-    };
+      } else {
+        res.writeHead(200, { 'Content-Type': contentType });
+        res.end(content, 'utf-8');
+      }
+    });
+  };
 // controller 目录
 const createControllerDir = () => {
   const __filename = fileURLToPath(import.meta.url);
@@ -61,9 +61,8 @@ createController(dirController).then((controller) => {
       const handlers = [
         (ctx: Context, next: () => void) => createStaticServer(createStaticDir())(ctx, next),
         (_: Context, next: () => void) => vite.middlewares(req, res, next),
-        (ctx: Context) => routing(ctx)
+        (ctx: Context) => routing(ctx),
       ];
-
       // 开始处理请求
       handleRequest(handlers);
     });

@@ -34,7 +34,7 @@ export default class HomeController {
           if (type) {
             ctx.res.setHeader('Content-Type', type);
           } else {
-             // 如果 `getMime` 返回 `null` 或 `undefined`，你可以手动设置 `Content-Type`
+            // 如果 `getMime` 返回 `null` 或 `undefined`，你可以手动设置 `Content-Type`
             //  ctx.res.setHeader('Content-Type', 'application/javascript');
             // ctx.response.setHeader('Content-Type', 'text/html');
             // ctx.response.setHeader('Transfer-Encoding', 'chunked');

@@ -3,7 +3,7 @@ import routes from '@/app/router.config';
 import type { Context } from '@/app/types/index';
 // import { notMatchResponse } from '@/app/lib/response';
 
-const regex = /#\/(.*?)\/#/;
+const regex = /#([^#]*)#?/;
 
 // 根据 url 处理请求的 params 和 query
 
