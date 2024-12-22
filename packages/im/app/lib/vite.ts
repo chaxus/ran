@@ -7,4 +7,4 @@ const viteServer = async () => {
   });
 };
 
-export const ssr = await viteServer();
+export const vite = await viteServer();

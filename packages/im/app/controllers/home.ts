@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { getMime } from 'ranuts';
-import { ssr } from '@/app/lib/vite';
+import { vite } from '@/app/lib/vite';
 import { HtmlWritable, getEnv } from '@/app/lib/index';
 import { FORMAT, HTML_PATH_MAP, RENDER_PATH_MAP, TEMPLATE_REPLACE } from '@/app/lib/constant';
 import type { Context } from '@/app/types/index';
@@ -11,12 +11,12 @@ const env = getEnv();
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-export default class ServerRender {
+export default class HomeController {
   async index(ctx: Context): Promise<void> {
     try {
       const fsTemplate = fs.readFileSync(path.resolve(__dirname, HTML_PATH_MAP[env]), FORMAT);
-      const template = await ssr.transformIndexHtml(ctx.request.path, fsTemplate);
-      const { render } = await ssr.ssrLoadModule(path.resolve(__dirname, RENDER_PATH_MAP[env]));
+      const template = await vite.transformIndexHtml(ctx.request.path, fsTemplate);
+      const { render } = await vite.ssrLoadModule(path.resolve(__dirname, RENDER_PATH_MAP[env]));
       const writable = new HtmlWritable();
       const stream = render(ctx, {
         onShellReady() {
@@ -32,10 +32,12 @@ export default class ServerRender {
         onAllReady() {
           const type = getMime(ctx.request.url) || 'text/html';
           if (type) {
-            ctx.response.setHeader('Content-Type', type);
+            ctx.res.setHeader('Content-Type', type);
           } else {
-            ctx.response.setHeader('Content-Type', 'text/html');
-            ctx.response.setHeader('Transfer-Encoding', 'chunked');
+             // 如果 `getMime` 返回 `null` 或 `undefined`，你可以手动设置 `Content-Type`
+            //  ctx.res.setHeader('Content-Type', 'application/javascript');
+            // ctx.response.setHeader('Content-Type', 'text/html');
+            // ctx.response.setHeader('Transfer-Encoding', 'chunked');
           }
         },
       });

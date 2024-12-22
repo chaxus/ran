@@ -1,7 +1,7 @@
 import { noop } from 'ranuts';
 import routes from '@/app/router.config';
 import type { Context } from '@/app/types/index';
-import { notMatchResponse } from '@/app/lib/response';
+// import { notMatchResponse } from '@/app/lib/response';
 
 const regex = /#\/(.*?)\/#/;
 
@@ -21,7 +21,7 @@ export const routing = (ctx: Context): void => {
       return;
     } else {
       // 处理匹配不上的情况
-      notMatchResponse(ctx);
+      // notMatchResponse(ctx);
     }
   }
 };

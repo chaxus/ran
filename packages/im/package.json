@@ -4,6 +4,9 @@
   "description": "",
   "type": "module",
   "main": "index.js",
+  "engines": {
+    "node": "^22.9.0"
+  },
   "scripts": {
     "dev": "sh ./bin/dev.sh"
   },
