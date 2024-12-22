@@ -67,3 +67,4 @@ export const randomGeneratePolygon = (number: number = 3, maxSides: number = 10)
     };
   });
 };
+
