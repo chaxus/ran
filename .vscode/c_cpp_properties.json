@@ -2,8 +2,18 @@
   "configurations": [
     {
       "name": "Mac",
-      // 需要设置环境变量 .conan2 的路径，一般是在当前用户目录下，比如 /Users/chaxus/.conan2
-      "includePath": ["${workspaceFolder}/**", "${env:chaxus}/.conan2/**", "/usr/local/include/**"],
+      "includePath": [
+        "${workspaceFolder}/**",
+        // 需要设置环境变量 .conan2 的路径，一般是在当前用户目录下，比如 /Users/chaxus/.conan2
+        // conan install 会将依赖库安装到这个目录下
+        // 其中 echo $chaxus 可以查看环境变量 chaxus 的值
+        // export chaxus=/path/to/chaxus 可以设置环境变量 chaxus 的值
+        "${env:chaxus}/.conan2/**",
+        "/usr/local/include/**",
+        // 将 Emscripten 的头文件路径添加到 includePath 中
+        "/opt/homebrew/Cellar/emscripten/3.1.74/libexec/system/include/**",
+        "/opt/homebrew/include/**"
+      ],
       "defines": [],
       "macFrameworkPath": ["/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks"],
       "compilerPath": "/usr/bin/clang",
