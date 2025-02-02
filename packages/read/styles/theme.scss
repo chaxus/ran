@@ -1,0 +1,26 @@
+:root {
+  --front-bg-color-1: #f4f5f7;
+  --front-bg-color-2: #edeef0;
+  --front-bg-color-3: #fff;
+  --brand-blue-color-1: #1b88ee;
+  --text-color-1: #212832;
+  --text-color-2: #717882;
+}
+
+:root[theme="dark"] {
+  --front-bg-color-1: #f4f5f7;
+  --front-bg-color-2: #edeef0;
+  --front-bg-color-3: #fff;
+  --brand-blue-color-1: #1b88ee;
+  --text-color-1: #212832;
+  --text-color-2: #717882;
+}
+
+@theme {
+  --color-front-bg-color-1: var(--front-bg-color-1);
+  --color-front-bg-color-2: var(--front-bg-color-2);
+  --color-front-bg-color-3: var(--front-bg-color-3);
+  --color-brand-blue-color-1: var(--brand-blue-color-1);
+  --color-text-color-1: var(--text-color-1);
+  --color-text-color-2: var(--text-color-2);
+}

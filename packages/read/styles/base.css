@@ -1,0 +1,33 @@
+@import "tailwindcss";
+@import "./theme.scss";
+
+html,
+body {
+  height: 100%;
+}
+
+a {
+  color: unset;
+}
+
+input {
+  outline: unset;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  width: 0px;
+  display: none;
+}
+
+
+:root {
+  --text_color_1: #000;
+}
+
+:root[theme="dark"] {
+  --text_color_1: #fff;
+}
+
+@theme {
+  --color-text_color_1: var(--text_color_1);
+}

@@ -54,6 +54,7 @@ export default tseslint.config(
       'n/no-unsupported-features/node-builtins': 'error',
       'n/process-exit-as-throw': 'error',
       '@typescript-eslint/no-unused-expressions': 'off',
+      '@typescript-eslint/no-namespace':'off',
       'n/hashbang': 'error',
 
       eqeqeq: ['warn', 'always', { null: 'never' }],

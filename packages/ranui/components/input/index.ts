@@ -1,4 +1,5 @@
 import { HTMLElementSSR, createCustomError, falseList, isDisabled } from '@/utils/index';
+import '@/components/icon/index';
 
 export class Input extends (HTMLElementSSR()!) {
   static get observedAttributes(): string[] {
@@ -412,10 +413,8 @@ export class Input extends (HTMLElementSSR()!) {
    */
   dealIcon = (): void => {
     if (!this._icon) {
-      this._icon = document.createElement('ra-icon');
-      const { width, height } = this._inputContent.getBoundingClientRect();
-      const size = Math.min(width, height);
-      this._icon.setAttribute('size', `${size}`);
+      this._icon = document.createElement('r-icon');
+      this._icon.setAttribute('class', 'ran-icon');
       this._inputContent.insertAdjacentElement('beforebegin', this._icon);
     }
     this.icon && this._icon.setAttribute('name', this.icon);

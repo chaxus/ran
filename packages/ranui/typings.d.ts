@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 declare module '*.less';
 declare module '*.less?inline';
 declare module '*.ts';
@@ -142,104 +143,116 @@ enum NAME_AMP {
   DROP = 'drop',
   PACMAN = 'pacman',
 }
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace JSX {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  interface IntrinsicElements {
-    'r-loading': any & {
-      name: NAME_AMP;
-    };
-    'r-math': any & {
-      latex: string;
-    };
-    'r-button': any & {
-      sheet: string;
-      disabled: boolean | string;
-      iconSize: string;
-      icon: string;
-      effect: boolean | string;
-    };
-    'r-checkbox': any & {
-      disabled: boolean | string;
-      checked: boolean | string;
-    };
-    'r-img': any & {
-      fallback: string;
-      src: string;
-    };
-    'r-input': any & {
-      value: string;
-      placeholder: string;
-      label: string;
-      status: string;
-      name: string;
-      icon: string;
-      prefix: string;
-      suffix: string;
-      type: string;
-      required: boolean | string;
-      disabled: boolean | string;
-      min: number | string;
-      max: number | string;
-      step: number | string;
-    };
-    'r-player': any & {
-      src: string;
-      debug: boolean | string;
-      volume: number | string;
-      currentTime: number | string;
-      playbackRate: number | string;
-    };
-    'r-popover': any & {
-      placement: string;
-      trigger: string;
-      getPopupContainerId: string;
-      arrow: boolean | string;
-    };
-    'r-preview': any & {
-      src: string;
-      closeable: boolean | string;
-    };
-    'r-progress': any & {
-      percent: number | string;
-      total: number | string;
-      type: string;
-      animation: string;
-      dot: boolean | string;
-    };
-    'r-radar': any & {
-      abilitys: string;
-      colorPolygon?: string;
-      colorLine?: string;
-      fillColor?: string;
-      strokeColor?: string;
-    };
-    'r-select': any & {
-      value: string;
-      defaultValue?: string;
-      showSearch?: boolean | string;
-      type?: string;
-      placement?: string;
-      sheet?: string;
-      getPopupContainerId?: string;
-      dropdownclass?: string;
-      trigger?: string;
-      disabled?: boolean | string;
-    };
-    'r-skeleton': any;
-    'r-tab': any & {
-      label: string;
-      icon: string;
-      iconSize: string;
-      key: string;
-      disabled: boolean | string;
-      effect: boolean | string;
-    };
-    'r-tabs': any & {
-      align: string;
-      type: string;
-      active: string;
-      effect: string;
-    };
+interface BaseIntrinsicElements {
+  'r-loading': any & {
+    name: NAME_AMP;
+  };
+  'r-math': any & {
+    latex: string;
+  };
+  'r-button': any & {
+    sheet: string;
+    disabled: boolean | string;
+    iconSize: string;
+    icon: string;
+    effect: boolean | string;
+  };
+  'r-checkbox': any & {
+    disabled: boolean | string;
+    checked: boolean | string;
+  };
+  'r-img': any & {
+    fallback: string;
+    src: string;
+  };
+  'r-input': any & {
+    value: string;
+    placeholder: string;
+    label: string;
+    status: string;
+    name: string;
+    icon: string;
+    prefix: string;
+    suffix: string;
+    type: string;
+    required: boolean | string;
+    disabled: boolean | string;
+    min: number | string;
+    max: number | string;
+    step: number | string;
+  };
+  'r-player': any & {
+    src: string;
+    debug: boolean | string;
+    volume: number | string;
+    currentTime: number | string;
+    playbackRate: number | string;
+  };
+  'r-popover': any & {
+    placement: string;
+    trigger: string;
+    getPopupContainerId: string;
+    arrow: boolean | string;
+  };
+  'r-preview': any & {
+    src: string;
+    closeable: boolean | string;
+  };
+  'r-progress': any & {
+    percent: number | string;
+    total: number | string;
+    type: string;
+    animation: string;
+    dot: boolean | string;
+  };
+  'r-radar': any & {
+    abilitys: string;
+    colorPolygon?: string;
+    colorLine?: string;
+    fillColor?: string;
+    strokeColor?: string;
+  };
+  'r-select': any & {
+    value: string;
+    defaultValue?: string;
+    showSearch?: boolean | string;
+    type?: string;
+    placement?: string;
+    sheet?: string;
+    getPopupContainerId?: string;
+    dropdownclass?: string;
+    trigger?: string;
+    disabled?: boolean | string;
+  };
+  'r-skeleton': any;
+  'r-tab': any & {
+    label: string;
+    icon: string;
+    iconSize: string;
+    key: string;
+    disabled: boolean | string;
+    effect: boolean | string;
+  };
+  'r-tabs': any & {
+    align: string;
+    type: string;
+    active: string;
+    effect: string;
+  };
+  'r-icon': any & {
+    name?: string;
+    size?: string;
+    color?: string;
   }
 }
+namespace JSX {
+  interface IntrinsicElements extends BaseIntrinsicElements { }
+}
+
+namespace React {
+  namespace JSX {
+    interface IntrinsicElements extends BaseIntrinsicElements { }
+  }
+}
+
+
