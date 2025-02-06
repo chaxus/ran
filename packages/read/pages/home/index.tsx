@@ -5,6 +5,7 @@ import { BookCard } from '@/components/BookCard'
 import { addBook, getAllBooks } from '@/store/books';
 import { checkEncoding, createReader } from '@/lib/transformText';
 import type { BookInfo } from '@/store/books';
+import { resumeDB } from '@/store';
 
 const inputStyle = {
   '--ran-input-border-radius': '2rem',
@@ -56,9 +57,9 @@ export const Home = (): React.JSX.Element => {
 
   useEffect(() => {
     getAllBooks<BookInfo>().then((res) => {
-      if (!res.error) {
-        setBookList(res.data)
-      }
+      if (!res.error) setBookList(res.data)
+    }).catch(() => {
+      resumeDB()
     })
   }, [])
 
@@ -66,7 +67,7 @@ export const Home = (): React.JSX.Element => {
   return (
     <div>
       <div className="w-full h-72 bg-front-bg-color-2 justify-center items-center flex flex-col">
-        <div className='text-5xl mb-7'>Read Book</div>
+        {/* <div className='text-5xl mb-7'>Read Book</div> */}
         <r-input className="w-1/2 min-w-2xs h-14 block" icon="search" style={inputStyle} placeholder="搜索"></r-input>
       </div>
       <div className="w-full bg-front-bg-color-1 min-h-svh">
@@ -77,7 +78,7 @@ export const Home = (): React.JSX.Element => {
           </div>
         </div>
         <div className='max-w-7xl mx-auto flex flex-row flex-wrap justify-start items-center'>
-          {bookList.map((book) => <BookCard book={book} key={book.id}/>)}
+          {bookList.map((book) => <BookCard book={book} key={book.id} />)}
           <div className='w-2xs h-40 bg-front-bg-color-3 p-5 cursor-pointer justify-center rounded-xl mr-6 items-center flex hover:scale-110 transition-all mt-5'>
             <r-icon name="plus" style={plusIconStyle} onClick={add}></r-icon>
           </div>

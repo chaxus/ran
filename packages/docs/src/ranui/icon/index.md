@@ -97,7 +97,7 @@ const createIconList = () => {
     'lock', 'message',
     'power-off', 'setting',
     'team', 'unlock',
-    'user','more','plus','search']
+    'user','more','plus','search','menu']
     if (typeof document !== "undefined") {
       const dom = document.getElementById('icon-list')
       const com = document.createElement('div')

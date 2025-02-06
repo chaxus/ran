@@ -19,15 +19,7 @@ input {
   display: none;
 }
 
-
-:root {
-  --text_color_1: #000;
+h2 {
+  font-size: 1.5rem;
 }
 
-:root[theme="dark"] {
-  --text_color_1: #fff;
-}
-
-@theme {
-  --color-text_color_1: var(--text_color_1);
-}
