@@ -7,6 +7,9 @@
   "scripts": {
     "dev": "vite --host --force"
   },
+  "engines": {
+    "node": "^22.9.0"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -14,6 +17,7 @@
     "@tailwindcss/oxide-darwin-arm64": "^4.0.2",
     "@tailwindcss/postcss": "^4.0.3",
     "@tailwindcss/vite": "^4.0.3",
+    "@types/crypto-js": "^4.2.2",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
     "@vitejs/plugin-react": "^4.3.4",
@@ -28,6 +32,8 @@
     "vite": "^6.0.11"
   },
   "dependencies": {
+    "crypto-js": "^4.2.0",
+    "jschardet": "^3.1.4",
     "ranui": "workspace:^"
   }
 }

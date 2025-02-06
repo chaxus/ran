@@ -15,6 +15,8 @@ export default defineConfig({
     alias: {
       '@/components': resolve(__dirname, '/components'),
       '@/router': resolve(__dirname, '/router'),
+      '@/lib': resolve(__dirname, '/lib'),
+      '@/store': resolve(__dirname, '/store'),
     },
     extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json'],
   },

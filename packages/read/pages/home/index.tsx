@@ -1,5 +1,8 @@
 import 'ranui/input'
 import 'ranui/icon'
+import jschardet from 'jschardet';
+import { BookCard } from '@/components/BookCard'
+import { addBook } from '@/store/books';
 
 const inputStyle = {
   '--ran-input-border-radius': '2rem',
@@ -21,6 +24,24 @@ const plusIconStyle = {
   '--ran-icon-color': '#bfbfbf',
   '--ran-icon-margin': '0px',
 }
+
+const createReader = (file: File): Promise<string | ArrayBuffer> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsArrayBuffer(file);
+    reader.onload = () => {
+      if (reader.result) {
+        resolve(reader.result);
+      }
+    };
+    reader.onerror = (error) => {
+      reject(error);
+    };
+    reader.onabort = (abort) => {
+      reject(abort);
+    };
+  });
+};
 
 export const Home = (): React.JSX.Element => {
 
@@ -46,6 +67,37 @@ export const Home = (): React.JSX.Element => {
 
   ]
 
+  const add = () => {
+    console.log('add')
+    const uploadFile = document.createElement('input');
+    uploadFile.setAttribute('type', 'file');
+    uploadFile.click();
+    uploadFile.onchange = () => {
+      const { files = [] } = uploadFile;
+      if (files && files?.length > 0) {
+        const file = files[0];
+        createReader(file).then((result) => {
+          if (result instanceof ArrayBuffer) {
+            const uint8Array = new Uint8Array(result);
+            const asciiString = String.fromCharCode.apply(null, uint8Array as unknown as number[]);
+            const detected = jschardet.detect(asciiString);
+            const encoding = detected.encoding || 'utf-8';
+            const text = new TextDecoder(encoding).decode(result);
+            if(detected.encoding && text){
+              addBook({
+                title: file.name,
+                encoding: detected.encoding,
+                content: text,
+              })
+            }
+          } else {
+            console.error('Unexpected result type:', typeof result);
+          }
+        });
+      }
+    };
+  }
+
   return (
     <div>
       <div className="w-full h-72 bg-front-bg-color-2 justify-center items-center flex flex-col">
@@ -58,28 +110,11 @@ export const Home = (): React.JSX.Element => {
             <div className='cursor-pointer text-text-color-1 text-2xl font-medium'>我的书架</div>
             <r-icon className="-rotate-90 cursor-pointer" name="more" style={moreIconStyle}></r-icon>
           </div>
-          <div>
-            <div className='cursor-pointer'>添加书籍</div>
-          </div>
         </div>
         <div className='max-w-7xl mx-auto flex flex-row flex-wrap justify-start items-center'>
-          {
-            bookList.map((book, index) => {
-              return (
-                <div key={index} className='w-2xs h-40 bg-front-bg-color-3 p-5 cursor-pointer rounded-xl mr-6 items-center flex hover:scale-110 transition-all mt-5'>
-                  <div>
-                    <img className='w-24 h-28 object-cover' src={book.image} alt={book.title}></img>
-                  </div>
-                  <div className='ml-5 grow shrink basis-0 w-36'>
-                    <div className='text-text-color-1 font-medium truncate break-all w-36'>{book.title}</div>
-                    <div className='text-sm text-text-color-2 mt-2'>{book.author}</div>
-                  </div>
-                </div>
-              )
-            })
-          }
+          {bookList.map((book) => <BookCard book={book} key={book.id} />)}
           <div className='w-2xs h-40 bg-front-bg-color-3 p-5 cursor-pointer justify-center rounded-xl mr-6 items-center flex hover:scale-110 transition-all mt-5'>
-            <r-icon name="plus" style={plusIconStyle}></r-icon>
+            <r-icon name="plus" style={plusIconStyle} onClick={add}></r-icon>
           </div>
         </div>
       </div>
