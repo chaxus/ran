@@ -16,18 +16,18 @@ export interface IDBResult<T = unknown> {
 
 export class WebDB {
   db?: IDBDatabase;
-  storeMap: Map<string, IDBObjectStore>;
-  constructor() {
-    this.storeMap = new Map<string, IDBObjectStore>();
+  version: number;
+  dbName: string;
+  constructor({ dbName, version }: { dbName: string, version?: number }) {
+    this.dbName = dbName;
+    this.version = version || 1;
   }
-  openDataBase = ({ dbName, version }: {
-    dbName: string,
-    version?: number
-  }): Promise<IDBResult<{ db: IDBDatabase }>> => {
+  openDataBase = (): Promise<IDBResult<{ db: IDBDatabase }>> => {
     return new Promise<IDBResult<{ db: IDBDatabase }>>((resolve, reject) => {
-      const request = indexedDB.open(dbName, version);
+      const request = indexedDB.open(this.dbName, this.version);
       request.onsuccess = () => {
         this.db = request.result;
+        this.version = this.db.version
         resolve({
           status: 'success',
           data: {
@@ -38,16 +38,36 @@ export class WebDB {
         });
       };
       request.onerror = () => {
-        reject({
-          status: 'error',
-          data: request.error,
-          code: 1,
-          message: 'open database error',
-          error: true
-        });
+        // 打开低版本数据库导致失败
+        if (request.error && request.error.name === 'VersionError') {
+          try {
+            const message = request.error.message || '';
+            const regexp =
+              /The requested version \(\d+\) is less than the existing version \(\d\)/;
+            const isVersionLowError = message.search(regexp);
+            if (isVersionLowError > -1) {
+              const [_, existVersion] = message.match(/\d+/g) || [];
+              if (+existVersion > this.version) {
+                this.version = +existVersion;
+                this.refreshDatabase()
+              }
+            }
+          } catch (e) {
+            console.log(e);
+          }
+        } else {
+          reject({
+            status: 'error',
+            data: request.error,
+            code: 1,
+            message: 'open database error',
+            error: true
+          });
+        }
       };
       request.onupgradeneeded = () => {
         this.db = request.result;
+        this.version = this.db.version
         resolve({
           status: 'success',
           data: {
@@ -84,15 +104,24 @@ export class WebDB {
       };
     });
   }
+  getObjectStore(storeName: string, mode: IDBTransactionMode = 'readonly'): IDBObjectStore | undefined {
+    if (!this.db) {
+      console.error('Database is not open');
+      return undefined;
+    }
+    const transaction = this.db.transaction([storeName], mode);
+    return transaction.objectStore(storeName);
+  }
   createObjectStore = ({ storeName, options }: {
     storeName: string,
     options: IDBObjectStoreParameters
-  }): IDBObjectStore | undefined => {
-    const store = this.db?.createObjectStore(storeName, options);
-    if (!this.storeMap.has(storeName) && store) {
-      this.storeMap.set(storeName, store);
-    }
-    return store;
+  }): void => {
+    if (this.db?.objectStoreNames.contains(storeName)) return;
+    this.db?.createObjectStore(storeName, options);
+  }
+  refreshDatabase = (): Promise<IDBResult<{ db: IDBDatabase }>> => {
+    this.closeDataBase();
+    return this.openDataBase();
   }
   createObjectStoreIndex = ({ storeName, indexName, keyPath, options }: {
     storeName: string,
@@ -100,7 +129,7 @@ export class WebDB {
     keyPath: string | string[],
     options?: IDBIndexParameters
   }): void => {
-    const store = this.storeMap.get(storeName);
+    const store = this.getObjectStore(storeName);
     if (store) {
       store.createIndex(indexName, keyPath, options)
     }
@@ -108,8 +137,8 @@ export class WebDB {
   add = <T = unknown>({ storeName, data }: {
     storeName: string,
     data: T
-  }): Promise<IDBResult> => {
-    return new Promise<IDBResult>((resolve, reject) => {
+  }): Promise<IDBResult<T>> => {
+    return new Promise<IDBResult<T>>((resolve, reject) => {
       const transaction = this.db?.transaction(storeName, 'readwrite');
       const store = transaction?.objectStore(storeName);
       const request = store?.add(data);
@@ -118,7 +147,7 @@ export class WebDB {
           resolve({
             status: 'success',
             code: 0,
-            data: null,
+            data,
             error: false
           });
         };
@@ -179,11 +208,11 @@ export class WebDB {
       }
     });
   }
-  readByKey = ({ storeName, key }: {
+  readByKey = <T = unknown>({ storeName, key }: {
     storeName: string,
     key: IDBValidKey
-  }): Promise<IDBResult> => {
-    return new Promise<IDBResult>((resolve, reject) => {
+  }): Promise<IDBResult<T>> => {
+    return new Promise<IDBResult<T>>((resolve, reject) => {
       const transaction = this.db?.transaction(storeName, 'readonly');
       const store = transaction?.objectStore(storeName);
       const request = store?.get(key);
@@ -216,26 +245,27 @@ export class WebDB {
       }
     });
   }
-  readByCursor = ({ storeName, keyRange, direction }: {
+  readByCursor = <T = unknown>({ storeName, keyRange, direction }: {
     storeName: string,
     keyRange?: IDBKeyRange,
     direction?: IDBCursorDirection
-  }): Promise<IDBResult> => {
-    return new Promise<IDBResult>((resolve, reject) => {
+  }): Promise<IDBResult<T[]>> => {
+    return new Promise<IDBResult<T[]>>((resolve, reject) => {
       const transaction = this.db?.transaction(storeName, 'readonly');
       const store = transaction?.objectStore(storeName);
       const request = store?.openCursor(keyRange, direction);
+      const result: T[] = []
       if (request) {
         request.onsuccess = () => {
           const cursor = request.result;
           if (cursor) {
-            console.log(cursor.value);
+            result.push(cursor.value);
             cursor.continue();
           } else {
             resolve({
               status: 'success',
               code: 0,
-              data: null,
+              data: result,
               error: false
             });
           }
@@ -286,7 +316,7 @@ export class WebDB {
             error: true
           });
         };
-      }else{
+      } else {
         reject({
           status: 'error',
           data: null,

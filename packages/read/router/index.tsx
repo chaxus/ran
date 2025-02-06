@@ -38,6 +38,10 @@ export const Routes = (): ReactElement | null => {
       element: page('home'),
     },
     {
+      path: '/book-detail/:id',
+      element: page('book-detail'),
+    },
+    {
       path: '/loading',
       element: <Loading />,
     },

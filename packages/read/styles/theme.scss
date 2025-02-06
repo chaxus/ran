@@ -5,6 +5,8 @@
   --brand-blue-color-1: #1b88ee;
   --text-color-1: #212832;
   --text-color-2: #717882;
+  --text-color-3: #858c96;
+  --border-color-1:rgba(0,0,0,.1);
 }
 
 :root[theme="dark"] {
@@ -14,6 +16,8 @@
   --brand-blue-color-1: #1b88ee;
   --text-color-1: #212832;
   --text-color-2: #717882;
+  --text-color-3: #858c96;
+  --border-color-1:rgba(0,0,0,.1);
 }
 
 @theme {
@@ -23,4 +27,7 @@
   --color-brand-blue-color-1: var(--brand-blue-color-1);
   --color-text-color-1: var(--text-color-1);
   --color-text-color-2: var(--text-color-2);
+  --color-text-color-3: var(--text-color-3);
+  --color-border-color-1: var(--border-color-1);
+
 }
