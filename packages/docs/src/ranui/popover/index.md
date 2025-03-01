@@ -4,7 +4,7 @@ Click/mouse to move into the element and pop up a bubbling card layer.
 
 ## Code demo
 
-<r-popover>
+<r-popover style="display: inline-block;">
     <r-button>popover</r-button>
     <r-content>
       <div>this is content</div>
@@ -12,7 +12,7 @@ Click/mouse to move into the element and pop up a bubbling card layer.
   </r-popover>
 
 ```xml
-<r-popover>
+<r-popover style="display: inline-block;">
     <r-button>popover</r-button>
     <r-content>
       <div>this is content</div>
@@ -28,7 +28,7 @@ Trigger mode:
 
 - `hover`
 
-<r-popover trigger="hover">
+<r-popover trigger="hover" style="display: inline-block;">
     <r-button>hover</r-button>
     <r-content>
       <div>hover</div>
@@ -36,7 +36,7 @@ Trigger mode:
   </r-popover>
 
 ```xml
-<r-popover trigger="hover">
+<r-popover trigger="hover" style="display: inline-block;">
     <r-button>hover</r-button>
     <r-content>
       <div>hover</div>
@@ -46,7 +46,7 @@ Trigger mode:
 
 - `click`
 
-<r-popover trigger="click">
+<r-popover trigger="click" style="display: inline-block;">
     <r-button>click</r-button>
     <r-content>
       <div>click</div>
@@ -54,7 +54,7 @@ Trigger mode:
   </r-popover>
 
 ```xml
-<r-popover trigger="click">
+<r-popover trigger="click" style="display: inline-block;">
     <r-button>click</r-button>
     <r-content>
       <div>click</div>
@@ -68,7 +68,7 @@ Display location
 
 - `bottom`
 
-<r-popover trigger="hover" placement="bottom">
+<r-popover trigger="hover" placement="bottom" style="display: inline-block;">
     <r-button>bottom</r-button>
     <r-content>
       <div>bottom</div>
@@ -76,7 +76,7 @@ Display location
   </r-popover>
 
 ```xml
-<r-popover trigger="hover" placement="bottom">
+<r-popover trigger="hover" placement="bottom" style="display: inline-block;">
     <r-button>bottom</r-button>
     <r-content>
       <div>bottom</div>
@@ -86,7 +86,7 @@ Display location
 
 - `top`
 
-<r-popover trigger="hover" placement="top">
+<r-popover trigger="hover" placement="top" style="display: inline-block;">
     <r-button>top</r-button>
     <r-content>
       <div>top</div>
@@ -94,7 +94,7 @@ Display location
   </r-popover>
 
 ```xml
-<r-popover trigger="hover" placement="top">
+<r-popover trigger="hover" placement="top" style="display: inline-block;">
     <r-button>top</r-button>
     <r-content>
       <div>top</div>
@@ -104,7 +104,7 @@ Display location
 
 - `left`
 
-<r-popover trigger="hover" placement="left">
+<r-popover trigger="hover" placement="left" style="display: inline-block;">
     <r-button>top</r-button>
     <r-content>
       <div>top</div>
@@ -112,7 +112,7 @@ Display location
   </r-popover>
 
 ```xml
-<r-popover trigger="hover" placement="left">
+<r-popover trigger="hover" placement="left" style="display: inline-block;">
     <r-button>top</r-button>
     <r-content>
       <div>top</div>
@@ -122,7 +122,7 @@ Display location
 
 - `right`
 
-<r-popover trigger="hover" placement="right">
+<r-popover trigger="hover" placement="right" style="display: inline-block;">
     <r-button>top</r-button>
     <r-content>
       <div>top</div>
@@ -130,7 +130,7 @@ Display location
   </r-popover>
 
 ```xml
-<r-popover trigger="hover" placement="right">
+<r-popover trigger="hover" placement="right" style="display: inline-block;">
     <r-button>top</r-button>
     <r-content>
       <div>top</div>

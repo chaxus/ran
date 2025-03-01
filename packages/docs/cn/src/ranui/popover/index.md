@@ -4,15 +4,15 @@
 
 ## 代码演示
 
-<r-popover>
-    <r-button style="display:inline-block">popover</r-button>
+<r-popover style="display: inline-block;">
+    <r-button>popover</r-button>
     <r-content>
       <div>this is content</div>
     </r-content>
   </r-popover>
 
 ```xml
-<r-popover>
+<r-popover style="display: inline-block;">
     <r-button>popover</r-button>
     <r-content>
       <div>this is content</div>
@@ -28,7 +28,7 @@
 
 - `hover`
 
-<r-popover trigger="hover">
+<r-popover trigger="hover" style="display: inline-block;">
     <r-button>hover</r-button>
     <r-content>
       <div>hover</div>
@@ -36,7 +36,7 @@
   </r-popover>
 
 ```xml
-<r-popover trigger="hover">
+<r-popover trigger="hover" style="display: inline-block;">
     <r-button>hover</r-button>
     <r-content>
       <div>hover</div>
@@ -46,7 +46,7 @@
 
 - `click`
 
-<r-popover trigger="click">
+<r-popover trigger="click" style="display: inline-block;">
     <r-button>click</r-button>
     <r-content>
       <div>click</div>
@@ -54,7 +54,7 @@
   </r-popover>
 
 ```xml
-<r-popover trigger="click">
+<r-popover trigger="click" style="display: inline-block;">
     <r-button>click</r-button>
     <r-content>
       <div>click</div>
@@ -68,7 +68,7 @@
 
 - `bottom`
 
-<r-popover trigger="hover" placement="bottom">
+<r-popover trigger="hover" placement="bottom" style="display: inline-block;">
     <r-button>bottom</r-button>
     <r-content>
       <div>bottom</div>
@@ -76,7 +76,7 @@
   </r-popover>
 
 ```xml
-<r-popover trigger="hover" placement="bottom">
+<r-popover trigger="hover" placement="bottom" style="display: inline-block;">
     <r-button>bottom</r-button>
     <r-content>
       <div>bottom</div>
@@ -86,7 +86,7 @@
 
 - `top`
 
-<r-popover trigger="hover" placement="top">
+<r-popover trigger="hover" placement="top" style="display: inline-block;">
     <r-button>top</r-button>
     <r-content>
       <div>top</div>
@@ -94,7 +94,7 @@
   </r-popover>
 
 ```xml
-<r-popover trigger="hover" placement="top">
+<r-popover trigger="hover" placement="top" style="display: inline-block;">
     <r-button>top</r-button>
     <r-content>
       <div>top</div>
