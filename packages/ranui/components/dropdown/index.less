@@ -2,44 +2,16 @@
 
 @arrow-size: 16px;
 
-@keyframes ranui-dropdown-down-in {
-  0% {
-    transform: scaleY(0.8);
-    transform-origin: 100% 100%;
-    opacity: 0;
-  }
-
-  100% {
-    transform: scaleY(1);
-    transform-origin: 100% 100%;
-    opacity: 1;
-  }
-}
-
-@keyframes ranui-dropdown-down-out {
-  0% {
-    transform: scaleY(1);
-    transform-origin: 100% 100%;
-    opacity: 1;
-  }
-
-  100% {
-    transform: scaleY(0.8);
-    transform-origin: 100% 100%;
-    opacity: 0;
-  }
-}
-
 @keyframes ranui-dropdown-up-in {
   0% {
     transform: scaleY(0.8);
-    transform-origin: 0% 0%;
+    transform-origin: 100% 100%;
     opacity: 0;
   }
 
   100% {
     transform: scaleY(1);
-    transform-origin: 0% 0%;
+    transform-origin: 100% 100%;
     opacity: 1;
   }
 }
@@ -47,12 +19,94 @@
 @keyframes ranui-dropdown-up-out {
   0% {
     transform: scaleY(1);
+    transform-origin: 100% 100%;
+    opacity: 1;
+  }
+
+  100% {
+    transform: scaleY(0.8);
+    transform-origin: 100% 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes ranui-dropdown-down-in {
+  0% {
+    transform: scaleY(0.8);
+    transform-origin: 0% 0%;
+    opacity: 0;
+  }
+
+  100% {
+    transform: scaleY(1);
+    transform-origin: 0% 0%;
+    opacity: 1;
+  }
+}
+
+@keyframes ranui-dropdown-down-out {
+  0% {
+    transform: scaleY(1);
     transform-origin: 0% 0%;
     opacity: 1;
   }
 
   100% {
     transform: scaleY(0.8);
+    transform-origin: 0% 0%;
+    opacity: 0;
+  }
+}
+@keyframes ranui-dropdown-left-in {
+  0% {
+    transform: scaleX(0.8);
+    transform-origin: 100% 0%;
+    opacity: 0;
+  }
+
+  100% {
+    transform: scaleX(1);
+    transform-origin: 100% 0%;
+    opacity: 1;
+  }
+}
+
+@keyframes ranui-dropdown-left-out {
+  0% {
+    transform: scaleX(1);
+    transform-origin: 100% 0%;
+    opacity: 1;
+  }
+
+  100% {
+    transform: scaleX(0.8);
+    transform-origin: 100% 0%;
+    opacity: 0;
+  }
+}
+@keyframes ranui-dropdown-right-in {
+  0% {
+    transform: scaleX(0.8);
+    transform-origin: 0% 0%;
+    opacity: 0;
+  }
+
+  100% {
+    transform: scaleX(1);
+    transform-origin: 0% 0%;
+    opacity: 1;
+  }
+}
+
+@keyframes ranui-dropdown-right-out {
+  0% {
+    transform: scaleX(1);
+    transform-origin: 0% 0%;
+    opacity: 1;
+  }
+
+  100% {
+    transform: scaleX(0.8);
     transform-origin: 0% 0%;
     opacity: 0;
   }
@@ -64,16 +118,28 @@
 }
 
 .ran-dropdown-down-in {
-  .animation(ranui-dropdown-up-in);
-}
-.ran-dropdown-down-out {
-  .animation(ranui-dropdown-up-out);
-}
-.ran-dropdown-up-in {
   .animation(ranui-dropdown-down-in);
 }
-.ran-dropdown-up-out {
+.ran-dropdown-down-out {
   .animation(ranui-dropdown-down-out);
+}
+.ran-dropdown-up-in {
+  .animation(ranui-dropdown-up-in);
+}
+.ran-dropdown-up-out {
+  .animation(ranui-dropdown-up-out);
+}
+.ran-dropdown-left-in {
+  .animation(ranui-dropdown-left-in);
+}
+.ran-dropdown-left-out {
+  .animation(ranui-dropdown-left-out);
+}
+.ran-dropdown-right-in {
+  .animation(ranui-dropdown-right-in);
+}
+.ran-dropdown-right-out {
+  .animation(ranui-dropdown-right-out);
 }
 
 :host {
@@ -111,6 +177,15 @@
     .bottom {
       transform: translateX(calc(var(--ran-popover-width) / 2 - calc(@arrow-size / 2))) translateY(0px) rotate(180deg);
       top: calc(var(--ran-popover-height) - calc(@arrow-size / 4), 0px);
+    }
+    .left {
+      transform: translateX(-16px) translateY(calc(var(--ran-popover-height) / 2 - calc(@arrow-size / 2)))
+        rotate(270deg);
+      top: calc(var(--ran-popover-height) - calc(@arrow-size / 4), 0px);
+    }
+    .right {
+      transform: translateX(0px) translateY(calc(var(--ran-popover-height) / 2 - calc(@arrow-size / 2))) rotate(90deg);
+      top: 0;
     }
   }
   &-arrow {

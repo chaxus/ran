@@ -26,7 +26,6 @@ const Redirect: Redirect = ({ to, replace, state }) => {
   return null;
 };
 
-
 export const Routes = (): ReactElement | null => {
   const defaultRoute = [
     {
@@ -47,7 +46,5 @@ export const Routes = (): ReactElement | null => {
     },
   ];
   const routes = [...defaultRoute];
-  return useRoutes(routes)
-}
-
-
+  return useRoutes(routes);
+};

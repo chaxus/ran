@@ -1,4 +1,3 @@
-
 interface RequestOption {
   onopen?: () => void;
   onmessage?: (data: string) => void;

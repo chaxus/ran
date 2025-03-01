@@ -14,6 +14,6 @@ export * as select from '@/components/select';
 export * as progress from '@/components/progress';
 export * as checkbox from '@/components/checkbox';
 export * as colorpicker from '@/components/colorpicker';
-export * as popover from '@/components/popover';
 export * as loading from '@/components/loading';
 export * as math from '@/components/math';
+export * as popover from '@/components/popover';

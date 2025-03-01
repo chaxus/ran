@@ -282,7 +282,6 @@ export class Select extends (HTMLElementSSR()!) {
     }, 200);
     this.setSelectDropdownDisplayNone();
     // 点击后触发 onchange 事件
-    // eslint-disable-next-line n/no-unsupported-features/node-builtins
     this.dispatchEvent(new CustomEvent('change', { detail: { value, label } }));
     this.removeDropDownTimeId();
   };
@@ -395,10 +394,8 @@ export class Select extends (HTMLElementSSR()!) {
     this._text.setAttribute('title', label);
   };
   changeSearch = (e: Event): void => {
-    // eslint-disable-next-line n/no-unsupported-features/node-builtins
     const value = (e as CustomEvent).detail.value || '';
     this.dispatchEvent(
-      // eslint-disable-next-line n/no-unsupported-features/node-builtins
       new CustomEvent('search', {
         detail: { value },
       }),

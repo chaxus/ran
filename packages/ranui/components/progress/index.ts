@@ -119,7 +119,6 @@ class Progress extends (HTMLElementSSR()!) {
   };
   change = (): void => {
     this.dispatchEvent(
-      // eslint-disable-next-line n/no-unsupported-features/node-builtins
       new CustomEvent('change', {
         detail: {
           value: this.percent,

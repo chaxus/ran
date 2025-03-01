@@ -6,10 +6,10 @@
   --text-color-1: #212832;
   --text-color-2: #717882;
   --text-color-3: #858c96;
-  --border-color-1:rgba(0,0,0,.1);
+  --border-color-1: rgba(0, 0, 0, 0.1);
 }
 
-:root[theme="dark"] {
+:root[theme='dark'] {
   --front-bg-color-1: #f4f5f7;
   --front-bg-color-2: #edeef0;
   --front-bg-color-3: #fff;
@@ -17,7 +17,7 @@
   --text-color-1: #212832;
   --text-color-2: #717882;
   --text-color-3: #858c96;
-  --border-color-1:rgba(0,0,0,.1);
+  --border-color-1: rgba(0, 0, 0, 0.1);
 }
 
 @theme {
@@ -29,5 +29,4 @@
   --color-text-color-2: var(--text-color-2);
   --color-text-color-3: var(--text-color-3);
   --color-border-color-1: var(--border-color-1);
-
 }

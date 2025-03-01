@@ -44,14 +44,14 @@ function Custom() {
         if (value != null) this.setAttribute('spin', value);
       }
       /**
-      * @description: 设置 icon 的大小
-      */
+       * @description: 设置 icon 的大小
+       */
       setSize = () => {
         if (this._icon) {
-          if(this.size){
+          if (this.size) {
             this._icon.setAttribute('width', this.size);
             this._icon.setAttribute('height', this.size);
-          }else{
+          } else {
             this._icon.setAttribute('width', '1em');
             this._icon.setAttribute('height', '1em');
           }

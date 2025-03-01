@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { Routes } from './router/index';
-import 'ranui/button'
+import 'ranui/button';
 import { closeDB, initDB, resumeDB } from '@/store';
 
 export const App = (): React.JSX.Element => {
@@ -11,18 +11,18 @@ export const App = (): React.JSX.Element => {
     } else {
       console.log('Page is hidden');
     }
-  }, [])
+  }, []);
   useEffect(() => {
-    initDB()
+    initDB();
     document.addEventListener('visibilitychange', onVisibilityChange, false);
     return () => {
-      closeDB()
+      closeDB();
       document.removeEventListener('visibilitychange', onVisibilityChange);
-    }
-  }, [])
+    };
+  }, []);
   return (
-    <div className='w-full h-full'>
+    <div className="w-full h-full">
       <Routes />
     </div>
   );
-}
+};

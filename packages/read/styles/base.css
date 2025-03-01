@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "./theme.scss";
+@import 'tailwindcss';
+@import './theme.scss';
 
 html,
 body {
@@ -22,4 +22,3 @@ input {
 h2 {
   font-size: 1.5rem;
 }
-

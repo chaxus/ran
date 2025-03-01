@@ -5,7 +5,7 @@
 ## 代码演示
 
 <r-popover>
-    <r-button>popover</r-button>
+    <r-button style="display:inline-block">popover</r-button>
     <r-content>
       <div>this is content</div>
     </r-content>

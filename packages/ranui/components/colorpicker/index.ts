@@ -16,7 +16,7 @@ const BOT_WIDTH = 8;
 
 const HUE = 360;
 
-interface Context {
+export interface Context {
   disabled: Signal<boolean>;
   value: Signal<string>;
   hue: Signal<number>; // 0 - 360 色相 hue
@@ -25,14 +25,14 @@ interface Context {
   transparency: Signal<number>; // 0 - 100 透明度
 }
 
-interface RGBA {
+export interface RGBA {
   r: number;
   g: number;
   b: number;
   a: number;
 }
 
-interface Signal<T> {
+export interface Signal<T> {
   getter: () => T;
   setter: (newValue: T) => void;
 }
@@ -322,11 +322,9 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     this.colorPickerPanelSliderContainer.appendChild(this.colorPickerColorBlock);
   };
   changeColorPickerHue = (e: Event): void => {
-    // eslint-disable-next-line n/no-unsupported-features/node-builtins
     this.context.hue.setter((e as CustomEvent).detail.value * HUE);
   };
   changeColorPickerAlpha = (e: Event): void => {
-    // eslint-disable-next-line n/no-unsupported-features/node-builtins
     this.context.transparency.setter((e as CustomEvent).detail.value * 100);
   };
   createColorPickerSelect = (): void => {

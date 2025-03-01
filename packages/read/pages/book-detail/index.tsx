@@ -1,62 +1,63 @@
-import { useParams } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
-import { getBookById } from "@/store/books";
-import type { BookInfo } from "@/store/books";
-import { arrayBufferToString, extractChapters, pagingText } from "@/lib/transformText";
-import 'ranui/icon'
+import { useParams } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { getBookById } from '@/store/books';
+import type { BookInfo } from '@/store/books';
+import { arrayBufferToString, extractChapters, pagingText } from '@/lib/transformText';
+import 'ranui/icon';
 
 const ICON_STYLE = {
   '--ran-icon-font-size': '14px',
   '--ran-icon-color': '#8c8c8c',
-}
+};
 
 const MENU_ICON_STYLE = {
   '--ran-icon-font-size': '24px',
   '--ran-icon-color': '#8c8c8c',
-}
+};
 
 export const BookDetail = (): React.JSX.Element => {
-
   const { id } = useParams();
   const showContainerRef = useRef<HTMLDivElement>(null);
 
   const [bookDetail, setBookDetail] = useState<BookInfo>();
-  const [bookContentList, setBookContentList] = useState<{ text: string, h2: string }[]>([]);
+  const [bookContentList, setBookContentList] = useState<{ text: string; h2: string }[]>([]);
   const [pageNum, setPageNum] = useState(0);
 
   const pre = () => {
     if (pageNum === 0) return;
     setPageNum(Math.max(pageNum - 2, 0));
-  }
+  };
 
   const next = () => {
-    const size = bookContentList.length
+    const size = bookContentList.length;
     setPageNum(Math.min(pageNum + 2, size));
-  }
+  };
 
   const toHome = () => {
     window.location.href = '/';
-  }
+  };
 
   useEffect(() => {
     if (!id) return;
-    getBookById<BookInfo>(id).then((res) => {
-      if (res.error) return;
-      setBookDetail(res.data);
-      const { content } = res.data;
-      let text = arrayBufferToString(content).replace(/(?:\r\n|\r|\n)+/g, '\n') || ''
-      const extractedChapters = extractChapters(text);
-      extractedChapters.forEach((chapter) => {
-        const { title } = chapter;
-        text = text.replace(title, `<h2>${title}</h2>`);
+    getBookById<BookInfo>(id)
+      .then((res) => {
+        if (res.error) return;
+        setBookDetail(res.data);
+        const { content } = res.data;
+        let text = arrayBufferToString(content).replace(/(?:\r\n|\r|\n)+/g, '\n') || '';
+        const extractedChapters = extractChapters(text);
+        extractedChapters.forEach((chapter) => {
+          const { title } = chapter;
+          text = text.replace(title, `<h2>${title}</h2>`);
+        });
+        if (showContainerRef.current) {
+          const result = pagingText(text, showContainerRef.current);
+          setBookContentList(result);
+        }
+      })
+      .catch(() => {
+        toHome();
       });
-      if (showContainerRef.current) {
-        const result = pagingText(text, showContainerRef.current);
-        setBookContentList(result);
-      }
-    }).catch(() => {
-      toHome();
-    })
   }, []);
 
   return (
@@ -64,31 +65,49 @@ export const BookDetail = (): React.JSX.Element => {
       <div className="w-full h-full flex flex-col">
         <div className="h-16 flex items-center justify-between flex-row flex-nowrap shrink-0">
           <div>
-            <div className="text-text-color-2 font-medium hover:text-text-color-1 cursor-pointer">{bookDetail?.title}</div>
+            <div className="text-text-color-2 font-medium hover:text-text-color-1 cursor-pointer">
+              {bookDetail?.title}
+            </div>
           </div>
           <div>
-            <div className="text-text-color-2 font-normal cursor-pointer hover:text-text-color-1" onClick={toHome}>首页</div>
+            <div className="text-text-color-2 font-normal cursor-pointer hover:text-text-color-1" onClick={toHome}>
+              首页
+            </div>
           </div>
         </div>
         <div className="bg-front-bg-color-3 rounded-2xl flex-grow pt-7 px-16 flex flex-col text-base">
           <div className="text-text-color-3 text-sm font-light">
             {bookContentList[pageNum]?.h2.replace(/<h2>|<\/h2>/g, '')}
           </div>
-          <div className="mt-5 cursor-auto flex flex-row flex-nowrap justify-between items-center font-normal tracking-wide whitespace-pre-wrap text-text-color-1 text-lg leading-10 w-full" style={{
-            height: 'calc(100vh - var(--spacing) * 63)',
-          }}>
-            <div className="h-full w-4/9 overflow-hidden" ref={showContainerRef} dangerouslySetInnerHTML={{ __html: bookContentList[pageNum]?.text }}></div>
-            <div className="h-full w-4/9 overflow-hidden" dangerouslySetInnerHTML={
-              { __html: bookContentList[pageNum + 1]?.text }
-            }></div>
+          <div
+            className="mt-5 cursor-auto flex flex-row flex-nowrap justify-between items-center font-normal tracking-wide whitespace-pre-wrap text-text-color-1 text-lg leading-10 w-full"
+            style={{
+              height: 'calc(100vh - var(--spacing) * 63)',
+            }}
+          >
+            <div
+              className="h-full w-4/9 overflow-hidden"
+              ref={showContainerRef}
+              dangerouslySetInnerHTML={{ __html: bookContentList[pageNum]?.text }}
+            ></div>
+            <div
+              className="h-full w-4/9 overflow-hidden"
+              dangerouslySetInnerHTML={{ __html: bookContentList[pageNum + 1]?.text }}
+            ></div>
           </div>
           <div className="h-16">
             <div className="flex justify-between items-center h-full">
-              <div className="text-text-color-2 text-sm font-light border-1 border-border-color-1 pl-2 pr-3 rounded-4xl h-8 flex items-center justify-center cursor-pointer" onClick={pre}>
+              <div
+                className="text-text-color-2 text-sm font-light border-1 border-border-color-1 pl-2 pr-3 rounded-4xl h-8 flex items-center justify-center cursor-pointer"
+                onClick={pre}
+              >
                 <r-icon className="rotate-90 cursor-pointer" name="more" style={ICON_STYLE}></r-icon>
                 <span>上一章</span>
               </div>
-              <div className="text-text-color-2 text-sm font-light border-1 border-border-color-1 pr-2 pl-3 rounded-4xl h-8 flex items-center justify-center cursor-pointer" onClick={next}>
+              <div
+                className="text-text-color-2 text-sm font-light border-1 border-border-color-1 pr-2 pl-3 rounded-4xl h-8 flex items-center justify-center cursor-pointer"
+                onClick={next}
+              >
                 <span>下一章</span>
                 <r-icon className="-rotate-90 cursor-pointer" name="more" style={ICON_STYLE}></r-icon>
               </div>
@@ -103,7 +122,7 @@ export const BookDetail = (): React.JSX.Element => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default BookDetail;

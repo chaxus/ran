@@ -18,7 +18,7 @@
   "author": "chaxus",
   "license": "MIT",
   "engines": {
-    "node": "^22.9.0"
+    "node": "^23.8.0"
   },
   "scripts": {
     "dev": "vite --host",
@@ -190,6 +190,7 @@
     "@rollup/plugin-babel": "^6.0.4",
     "@types/imagemin-svgo": "^10.0.5",
     "@types/lodash": "^4.17.13",
+    "@types/lodash-es": "^4.17.12",
     "@types/react": "^19.0.1",
     "@types/tinycolor2": "^1.4.6",
     "imagemin-svgo": "^11.0.1",
@@ -206,6 +207,7 @@
     "exceljs": "^4.4.0",
     "jszip": "^3.10.1",
     "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
     "ranuts": "workspace:^",
     "tinycolor2": "^1.6.0"
   }

@@ -24,7 +24,7 @@ Click/mouse to move into the element and pop up a bubbling card layer.
 
 ### `trigger`
 
-Trigger mode：
+Trigger mode:
 
 - `hover`
 
@@ -95,6 +95,42 @@ Display location
 
 ```xml
 <r-popover trigger="hover" placement="top">
+    <r-button>top</r-button>
+    <r-content>
+      <div>top</div>
+    </r-content>
+  </r-popover>
+```
+
+- `left`
+
+<r-popover trigger="hover" placement="left">
+    <r-button>top</r-button>
+    <r-content>
+      <div>top</div>
+    </r-content>
+  </r-popover>
+
+```xml
+<r-popover trigger="hover" placement="left">
+    <r-button>top</r-button>
+    <r-content>
+      <div>top</div>
+    </r-content>
+  </r-popover>
+```
+
+- `right`
+
+<r-popover trigger="hover" placement="right">
+    <r-button>top</r-button>
+    <r-content>
+      <div>top</div>
+    </r-content>
+  </r-popover>
+
+```xml
+<r-popover trigger="hover" placement="right">
     <r-button>top</r-button>
     <r-content>
       <div>top</div>

@@ -21,7 +21,7 @@ export const transformText = (content: string | ArrayBuffer): TransformText | un
   } else {
     console.error('Unexpected result type:', typeof content);
   }
-}
+};
 
 export const arrayBufferToString = (arrayBuffer: ArrayBuffer | Uint8Array<ArrayBuffer>): string => {
   const uint8Array = new Uint8Array(arrayBuffer);
@@ -32,11 +32,12 @@ export const arrayBufferToString = (arrayBuffer: ArrayBuffer | Uint8Array<ArrayB
 
 export const checkEncoding = (uint8Array: Uint8Array): string => {
   // 将 Uint8Array 转换为字符串
-  const asciiString = Array.from(uint8Array).map(byte => String.fromCharCode(byte)).join('');
+  const asciiString = Array.from(uint8Array)
+    .map((byte) => String.fromCharCode(byte))
+    .join('');
   const detected = jschardet.detect(asciiString);
   return detected.encoding || 'utf-8';
 };
-
 
 export const createReader = (file: File): Promise<Uint8Array<ArrayBuffer>> => {
   return new Promise((resolve, reject) => {
@@ -57,8 +58,8 @@ export const createReader = (file: File): Promise<Uint8Array<ArrayBuffer>> => {
   });
 };
 
-export const pagingText = (content: string, container: HTMLElement): { text: string, h2: string }[] => {
-  const text = content.replace(/(?:\r\n|\r|\n)+/g, '\n') || ''
+export const pagingText = (content: string, container: HTMLElement): { text: string; h2: string }[] => {
+  const text = content.replace(/(?:\r\n|\r|\n)+/g, '\n') || '';
   const total = text.length;
   if (container) {
     const { clientHeight, clientWidth } = container;
@@ -72,12 +73,12 @@ export const pagingText = (content: string, container: HTMLElement): { text: str
     const lines = Math.floor(clientHeight / lineHeight); // 总行数
     const pageTotalChar = charsPerLine * lines; // 每页总字符数
     let useChar = 0;
-    const result: { text: string, h2: string }[] = [];
+    const result: { text: string; h2: string }[] = [];
     let h2 = '';
     while (total > useChar) {
       let currentLine = 0;
       let currentChart = 0;
-      let currentText = ''
+      let currentText = '';
       while (currentLine < lines && currentChart < pageTotalChar) {
         if (text[useChar] === '<' && text[useChar + 1] === 'h' && text[useChar + 2] === '2') {
           const end = text.indexOf('</h2>', useChar);
@@ -109,9 +110,9 @@ export const pagingText = (content: string, container: HTMLElement): { text: str
     return result;
   }
   return [{ text: '', h2: '' }];
-}
+};
 
-export const extractChapters = (text: string): { title: string, startIndex: number }[] => {
+export const extractChapters = (text: string): { title: string; startIndex: number }[] => {
   const chapterRegex = /(?:第[一二三四五六七八九十百千万]+章|Chapter\s+\d+|CHAPTER\s+\d+|第\d+章)\s*.+/g;
   const chapters = [];
   let match;

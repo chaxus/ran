@@ -1,4 +1,12 @@
+/*
+ * @Author: chaxus nouo18@163.com
+ * @Date: 2024-12-08 17:58:20
+ * @LastEditors: chaxus nouo18@163.com
+ * @LastEditTime: 2025-02-22 02:23:50
+ * @FilePath: /ran/packages/ranui/components/popover/index.ts
+ */
 import { create, isMobile } from 'ranuts/utils';
+import { debounce } from 'lodash-es';
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
 import '@/components/popover/content';
 import '@/components/dropdown';
@@ -9,7 +17,9 @@ const arrowHeight = 4;
 
 const animationTime = 300;
 
-type PlacementDirection = Record<string, Record<string, string>>;
+const HOVER_TIME = 16;
+
+export type PlacementDirection = Record<string, Record<string, string>>;
 
 const placementDirection: PlacementDirection = {
   bottom: {
@@ -20,7 +30,22 @@ const placementDirection: PlacementDirection = {
     add: 'ran-dropdown-up-in',
     remove: 'ran-dropdown-up-out',
   },
+  left: {
+    add: 'ran-dropdown-left-in',
+    remove: 'ran-dropdown-left-out',
+  },
+  right: {
+    add: 'ran-dropdown-right-in',
+    remove: 'ran-dropdown-right-out',
+  },
 };
+
+export enum PLACEMENT_TYPE {
+  TOP = 'top',
+  BOTTOM = 'bottom',
+  LEFT = 'left',
+  RIGHT = 'right',
+}
 
 export class Popover extends (HTMLElementSSR()!) {
   _slot: HTMLSlotElement;
@@ -74,6 +99,11 @@ export class Popover extends (HTMLElementSSR()!) {
   stopPropagation = (e: Event): void => {
     e.stopPropagation();
   };
+  /**
+   * @description: 创建下拉框
+   * @param {HTMLCollection} content
+   * @return {*}
+   */
   createContent = (content: HTMLCollection): void => {
     if (!content) return;
     if (!this.popoverContent) {
@@ -99,8 +129,12 @@ export class Popover extends (HTMLElementSSR()!) {
       this.popoverContent.appendChild(Fragment);
     }
   };
+  /**
+   * @description: 观察内容变化
+   * @param {Event} e
+   * @return {*}
+   */
   watchContent = (e: Event): void => {
-    // eslint-disable-next-line n/no-unsupported-features/node-builtins
     const { value } = (e as CustomEvent).detail;
     this.createContent(value.content);
   };
@@ -108,62 +142,80 @@ export class Popover extends (HTMLElementSSR()!) {
    * @description: 焦点移除的情况，需要移除下拉框
    * @return {*}
    */
-  blur = (): void => {
+  blur = debounce((): void => {
     if (this.removeTimeId) {
       this.removeDropDownTimeId();
     }
     this.removeTimeId = setTimeout(() => {
       this.removeDropDownTimeId();
       this.setDropdownDisplayNone();
-    }, 300);
-  };
-  removeDropDownTimeId = (): void => {
+    }, animationTime);
+  }, HOVER_TIME);
+  /**
+   * @description: 移除下拉框
+   * @return {*}
+   */
+  removeDropDownTimeId = debounce((): void => {
     if (this.trigger.includes('hover') && !isMobile()) {
       clearTimeout(this.removeTimeId);
       this.removeTimeId = undefined;
     }
-  };
+  }, HOVER_TIME);
   /**
    * @description: 添加 dropdown
    * @return {*}
    */
-  setDropdownDisplayBlock = (): void => {
+  setDropdownDisplayBlock = debounce((): void => {
     if (this.dropDownInTimeId) return;
+    clearTimeout(this.dropDownInTimeId);
+    this.dropDownInTimeId = undefined;
+    clearTimeout(this.dropDownOutTimeId);
+    this.dropDownOutTimeId = undefined;
     if (this.popoverContent && this.popoverContent.style.display !== 'block') {
       this.popoverContent.setAttribute('transit', placementDirection[this.placement].add);
       this.popoverContent?.style.setProperty('display', 'block');
+      this.placementPosition();
       this.dropDownInTimeId = setTimeout(() => {
         this.popoverContent && this.popoverContent.removeAttribute('transit');
         clearTimeout(this.dropDownInTimeId);
         this.dropDownInTimeId = undefined;
       }, animationTime);
     }
-  };
+  }, HOVER_TIME);
   /**
    * @description: 移除 select dropdown
    * @return {*}
    */
-  setDropdownDisplayNone = (): void => {
+  setDropdownDisplayNone = debounce((): void => {
     if (this.dropDownOutTimeId) return;
+    clearTimeout(this.dropDownInTimeId);
+    this.dropDownInTimeId = undefined;
+    clearTimeout(this.dropDownOutTimeId);
+    this.dropDownOutTimeId = undefined;
     if (this.popoverContent && this.popoverContent.style.display !== 'none') {
       this.popoverContent.setAttribute('transit', placementDirection[this.placement].remove);
       this.dropDownOutTimeId = setTimeout(() => {
-        this.popoverContent?.style.setProperty('display', 'none');
+        // this.popoverContent?.style.setProperty('display', 'none');
         this.popoverContent && this.popoverContent.removeAttribute('transit');
         clearTimeout(this.dropDownOutTimeId);
         this.dropDownOutTimeId = undefined;
       }, animationTime);
     }
-  };
+  }, HOVER_TIME);
+  /**
+   * @description: 设置 popover 位置
+   * @param {*} void
+   * @return {*}
+   */
   placementPosition = (): void => {
     if (!this.popoverContent) return;
     const rect = this.getBoundingClientRect();
-    const { top, left, bottom, width } = rect;
+    const { top, left, bottom, width, height } = rect;
     let popoverTop = bottom + window.scrollY + arrowHeight;
     let popoverLeft = left + window.scrollX;
     const root = document.getElementById(this.getPopupContainerId);
     const popoverContentRect = this.popoverContent.getBoundingClientRect();
-    if (this.placement === 'top') {
+    if (this.placement === PLACEMENT_TYPE.TOP) {
       popoverTop = top + window.scrollY - popoverContentRect.height - arrowHeight;
       if (this.getPopupContainerId && root) {
         const rootRect = root.getBoundingClientRect();
@@ -172,15 +224,31 @@ export class Popover extends (HTMLElementSSR()!) {
         popoverLeft = left - root.getBoundingClientRect().left;
       }
     }
+    if (this.placement === PLACEMENT_TYPE.LEFT) {
+      popoverLeft = left - popoverContentRect.width - arrowHeight;
+      popoverTop = top + window.scrollY;
+    }
+    if (this.placement === PLACEMENT_TYPE.RIGHT) {
+      popoverLeft = left + width + arrowHeight;
+      popoverTop = top + window.scrollY;
+    }
     this.popoverContent.style.setProperty('inset', `${popoverTop}px auto auto ${popoverLeft}px`);
     this.popoverContent.style.setProperty('--ran-x', `${popoverLeft}px`);
     this.popoverContent.style.setProperty('--ran-y', `${popoverTop}px`);
     this.popoverContent.style.setProperty('--ran-popover-width', `${width}px`);
-    this.popoverContent.style.setProperty('--ran-popover-height', `${popoverContentRect.height}px`);
+    this.popoverContent.style.setProperty('--ran-popover-height', `${height}px`);
+    this.popoverContent.style.setProperty('--ran-popover-content-width', `${popoverContentRect.width}px`);
+    this.popoverContent.style.setProperty('--ran-popover-content-height', `${popoverContentRect.height}px`);
   };
+  /**
+   * @description: 鼠标移入
+   * @param {Event} e
+   * @return {*}
+   */
   hoverPopover = (e: Event): void => {
     this.clickPopover(e);
   };
+
   clickContent = (e: Event): void => {
     e.stopPropagation();
   };
@@ -188,8 +256,7 @@ export class Popover extends (HTMLElementSSR()!) {
     e.stopPropagation();
     e.preventDefault();
     this.setDropdownDisplayBlock();
-    this.placementPosition();
-  };
+  }
   clickRemovePopover = (e: Event): void => {
     this.hoverRemovePopover(e);
   };
@@ -202,17 +269,25 @@ export class Popover extends (HTMLElementSSR()!) {
       this.addEventListener('mouseleave', this.blur);
     }
     this.addEventListener('click', this.clickPopover);
-  };
+  }
   hoverRemovePopover = (e: Event): void => {
     e.stopPropagation();
     this.setDropdownDisplayNone();
   };
-  changePlacement = (): void => {
-    if (this.placement) {
-      const arrow = this.placement === 'bottom' ? 'top' : 'bottom';
-      this.popoverContent?.setAttribute('arrow', arrow);
+  changePlacement = debounce((): void => {
+    if (this.placement === PLACEMENT_TYPE.TOP) {
+      this.popoverContent?.setAttribute('arrow', PLACEMENT_TYPE.BOTTOM);
     }
-  };
+    if (this.placement === PLACEMENT_TYPE.BOTTOM) {
+      this.popoverContent?.setAttribute('arrow', PLACEMENT_TYPE.TOP);
+    }
+    if (this.placement === PLACEMENT_TYPE.LEFT) {
+      this.popoverContent?.setAttribute('arrow', PLACEMENT_TYPE.RIGHT);
+    }
+    if (this.placement === PLACEMENT_TYPE.RIGHT) {
+      this.popoverContent?.setAttribute('arrow', PLACEMENT_TYPE.LEFT);
+    }
+  }, HOVER_TIME);
   connectedCallback(): void {
     for (const element of this.children) {
       if (element.tagName === 'R-CONTENT') {

@@ -7,18 +7,18 @@
 // 主键集合：IDBKeyRange 对象，主键是默认建立索引的属性，可以取当前层级的某个属性，也可以指定下一层对象的属性，还可以是一个递增的整数
 
 export interface IDBResult<T = unknown> {
-  status: 'success' | 'error',
-  data: T,
-  code: number
-  error: boolean,
-  message?: string
+  status: 'success' | 'error';
+  data: T;
+  code: number;
+  error: boolean;
+  message?: string;
 }
 
 export class WebDB {
   db?: IDBDatabase;
   version: number;
   dbName: string;
-  constructor({ dbName, version }: { dbName: string, version?: number }) {
+  constructor({ dbName, version }: { dbName: string; version?: number }) {
     this.dbName = dbName;
     this.version = version || 1;
   }
@@ -27,14 +27,14 @@ export class WebDB {
       const request = indexedDB.open(this.dbName, this.version);
       request.onsuccess = () => {
         this.db = request.result;
-        this.version = this.db.version
+        this.version = this.db.version;
         resolve({
           status: 'success',
           data: {
-            db: this.db
+            db: this.db,
           },
           code: 0,
-          error: false
+          error: false,
         });
       };
       request.onerror = () => {
@@ -42,14 +42,13 @@ export class WebDB {
         if (request.error && request.error.name === 'VersionError') {
           try {
             const message = request.error.message || '';
-            const regexp =
-              /The requested version \(\d+\) is less than the existing version \(\d\)/;
+            const regexp = /The requested version \(\d+\) is less than the existing version \(\d\)/;
             const isVersionLowError = message.search(regexp);
             if (isVersionLowError > -1) {
               const [_, existVersion] = message.match(/\d+/g) || [];
               if (+existVersion > this.version) {
                 this.version = +existVersion;
-                this.refreshDatabase()
+                this.refreshDatabase();
               }
             }
           } catch (e) {
@@ -61,27 +60,27 @@ export class WebDB {
             data: request.error,
             code: 1,
             message: 'open database error',
-            error: true
+            error: true,
           });
         }
       };
       request.onupgradeneeded = () => {
         this.db = request.result;
-        this.version = this.db.version
+        this.version = this.db.version;
         resolve({
           status: 'success',
           data: {
-            db: this.db
+            db: this.db,
           },
           code: 0,
-          error: false
+          error: false,
         });
       };
     });
-  }
+  };
   closeDataBase = (): void => {
     this.db?.close();
-  }
+  };
   deleteDatabase = ({ dbName }: { dbName: string }): Promise<IDBResult> => {
     return new Promise<IDBResult>((resolve, reject) => {
       const request = indexedDB.deleteDatabase(dbName);
@@ -90,7 +89,7 @@ export class WebDB {
           status: 'success',
           code: 0,
           data: null,
-          error: false
+          error: false,
         });
       };
       request.onerror = () => {
@@ -99,11 +98,11 @@ export class WebDB {
           data: request.error,
           code: 1,
           message: 'delete database error',
-          error: true
+          error: true,
         });
       };
     });
-  }
+  };
   getObjectStore(storeName: string, mode: IDBTransactionMode = 'readonly'): IDBObjectStore | undefined {
     if (!this.db) {
       console.error('Database is not open');
@@ -112,32 +111,31 @@ export class WebDB {
     const transaction = this.db.transaction([storeName], mode);
     return transaction.objectStore(storeName);
   }
-  createObjectStore = ({ storeName, options }: {
-    storeName: string,
-    options: IDBObjectStoreParameters
-  }): void => {
+  createObjectStore = ({ storeName, options }: { storeName: string; options: IDBObjectStoreParameters }): void => {
     if (this.db?.objectStoreNames.contains(storeName)) return;
     this.db?.createObjectStore(storeName, options);
-  }
+  };
   refreshDatabase = (): Promise<IDBResult<{ db: IDBDatabase }>> => {
     this.closeDataBase();
     return this.openDataBase();
-  }
-  createObjectStoreIndex = ({ storeName, indexName, keyPath, options }: {
-    storeName: string,
-    indexName: string,
-    keyPath: string | string[],
-    options?: IDBIndexParameters
+  };
+  createObjectStoreIndex = ({
+    storeName,
+    indexName,
+    keyPath,
+    options,
+  }: {
+    storeName: string;
+    indexName: string;
+    keyPath: string | string[];
+    options?: IDBIndexParameters;
   }): void => {
     const store = this.getObjectStore(storeName);
     if (store) {
-      store.createIndex(indexName, keyPath, options)
+      store.createIndex(indexName, keyPath, options);
     }
-  }
-  add = <T = unknown>({ storeName, data }: {
-    storeName: string,
-    data: T
-  }): Promise<IDBResult<T>> => {
+  };
+  add = <T = unknown>({ storeName, data }: { storeName: string; data: T }): Promise<IDBResult<T>> => {
     return new Promise<IDBResult<T>>((resolve, reject) => {
       const transaction = this.db?.transaction(storeName, 'readwrite');
       const store = transaction?.objectStore(storeName);
@@ -148,7 +146,7 @@ export class WebDB {
             status: 'success',
             code: 0,
             data,
-            error: false
+            error: false,
           });
         };
         request.onerror = () => {
@@ -157,7 +155,7 @@ export class WebDB {
             data: request.error,
             code: 1,
             message: 'add error',
-            error: true
+            error: true,
           });
         };
       } else {
@@ -166,15 +164,12 @@ export class WebDB {
           data: null,
           code: 1,
           message: 'add error',
-          error: true
-        })
+          error: true,
+        });
       }
     });
-  }
-  update = <T = unknown>({ storeName, data }: {
-    storeName: string,
-    data: T
-  }): Promise<IDBResult> => {
+  };
+  update = <T = unknown>({ storeName, data }: { storeName: string; data: T }): Promise<IDBResult> => {
     return new Promise<IDBResult>((resolve, reject) => {
       const transaction = this.db?.transaction(storeName, 'readwrite');
       const store = transaction?.objectStore(storeName);
@@ -185,7 +180,7 @@ export class WebDB {
             status: 'success',
             code: 0,
             data: null,
-            error: false
+            error: false,
           });
         };
         request.onerror = () => {
@@ -194,7 +189,7 @@ export class WebDB {
             data: request.error,
             code: 1,
             message: 'update error',
-            error: true
+            error: true,
           });
         };
       } else {
@@ -203,15 +198,12 @@ export class WebDB {
           data: null,
           code: 1,
           message: 'update error',
-          error: true
-        })
+          error: true,
+        });
       }
     });
-  }
-  readByKey = <T = unknown>({ storeName, key }: {
-    storeName: string,
-    key: IDBValidKey
-  }): Promise<IDBResult<T>> => {
+  };
+  readByKey = <T = unknown>({ storeName, key }: { storeName: string; key: IDBValidKey }): Promise<IDBResult<T>> => {
     return new Promise<IDBResult<T>>((resolve, reject) => {
       const transaction = this.db?.transaction(storeName, 'readonly');
       const store = transaction?.objectStore(storeName);
@@ -222,7 +214,7 @@ export class WebDB {
             status: 'success',
             code: 0,
             data: request.result,
-            error: false
+            error: false,
           });
         };
         request.onerror = () => {
@@ -231,7 +223,7 @@ export class WebDB {
             data: request.error,
             code: 1,
             message: 'read error',
-            error: true
+            error: true,
           });
         };
       } else {
@@ -240,21 +232,25 @@ export class WebDB {
           data: null,
           code: 1,
           message: 'read error',
-          error: true
-        })
+          error: true,
+        });
       }
     });
-  }
-  readByCursor = <T = unknown>({ storeName, keyRange, direction }: {
-    storeName: string,
-    keyRange?: IDBKeyRange,
-    direction?: IDBCursorDirection
+  };
+  readByCursor = <T = unknown>({
+    storeName,
+    keyRange,
+    direction,
+  }: {
+    storeName: string;
+    keyRange?: IDBKeyRange;
+    direction?: IDBCursorDirection;
   }): Promise<IDBResult<T[]>> => {
     return new Promise<IDBResult<T[]>>((resolve, reject) => {
       const transaction = this.db?.transaction(storeName, 'readonly');
       const store = transaction?.objectStore(storeName);
       const request = store?.openCursor(keyRange, direction);
-      const result: T[] = []
+      const result: T[] = [];
       if (request) {
         request.onsuccess = () => {
           const cursor = request.result;
@@ -266,7 +262,7 @@ export class WebDB {
               status: 'success',
               code: 0,
               data: result,
-              error: false
+              error: false,
             });
           }
         };
@@ -276,7 +272,7 @@ export class WebDB {
             data: request.error,
             code: 1,
             message: 'read cursor error',
-            error: true
+            error: true,
           });
         };
       } else {
@@ -285,15 +281,12 @@ export class WebDB {
           data: null,
           code: 1,
           message: 'read cursor error',
-          error: true
-        })
+          error: true,
+        });
       }
     });
-  }
-  delete = ({ storeName, key }: {
-    storeName: string,
-    key: IDBValidKey
-  }): Promise<IDBResult> => {
+  };
+  delete = ({ storeName, key }: { storeName: string; key: IDBValidKey }): Promise<IDBResult> => {
     return new Promise<IDBResult>((resolve, reject) => {
       const transaction = this.db?.transaction(storeName, 'readwrite');
       const store = transaction?.objectStore(storeName);
@@ -304,7 +297,7 @@ export class WebDB {
             status: 'success',
             code: 0,
             data: null,
-            error: false
+            error: false,
           });
         };
         request.onerror = () => {
@@ -313,7 +306,7 @@ export class WebDB {
             data: request.error,
             code: 1,
             message: 'delete error',
-            error: true
+            error: true,
           });
         };
       } else {
@@ -322,9 +315,9 @@ export class WebDB {
           data: null,
           code: 1,
           message: 'delete error',
-          error: true
-        })
+          error: true,
+        });
       }
     });
-  }
+  };
 }

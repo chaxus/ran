@@ -112,7 +112,7 @@ declare global {
   }
 }
 
-enum NAME_AMP {
+enum ICON_NAME_AMP {
   DOUBLE_BOUNCE = 'double-bounce',
   ROTATE = 'rotate',
   STRETCH = 'stretch',
@@ -145,7 +145,7 @@ enum NAME_AMP {
 }
 interface BaseIntrinsicElements {
   'r-loading': any & {
-    name: NAME_AMP;
+    name: ICON_NAME_AMP;
   };
   'r-math': any & {
     latex: string;
@@ -243,16 +243,14 @@ interface BaseIntrinsicElements {
     name?: string;
     size?: string;
     color?: string;
-  }
+  };
 }
 namespace JSX {
-  interface IntrinsicElements extends BaseIntrinsicElements { }
+  interface IntrinsicElements extends BaseIntrinsicElements {}
 }
 
 namespace React {
   namespace JSX {
-    interface IntrinsicElements extends BaseIntrinsicElements { }
+    interface IntrinsicElements extends BaseIntrinsicElements {}
   }
 }
-
-

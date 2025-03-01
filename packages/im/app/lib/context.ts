@@ -20,7 +20,7 @@ export const createController = async (dir: string): Promise<Controller> => {
 };
 // 处理请求的 body 数据
 export const createRequestBody = (ctx: Context): Promise<RequestBody> => {
-  const { req } = ctx || {}
+  const { req } = ctx || {};
   // const { headers } = req || {}
   // const contentType = headers['content-type'] || ''
   // if (!contentType.includes('application/json')) return Promise.resolve({});
