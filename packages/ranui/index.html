@@ -18,7 +18,14 @@
   <div id="solidjs"></div>
   <h1>Hello RanUI</h1>
   <h2>popover</h2>
+
   <div style="padding-left: 1000px">
+    <r-popover trigger="hover" placement="right" style="display: inline-block;">
+      <r-button style="height: 100px;width: 100px;">right</r-button>
+      <r-content>
+        <div>right</div>
+      </r-content>
+    </r-popover>
     <r-popover trigger="click,hover" placement="bottom" style="display: inline-block;">
       <r-button style="margin: 0px">popover</r-button>
       <r-content>

@@ -1,6 +1,6 @@
 @import url("../../base.less");
 
-@arrow-size: 16px;
+@arrow-size: var(--ran-dropdown-arrow-width, 16px);
 
 @keyframes ranui-dropdown-up-in {
   0% {
@@ -165,11 +165,15 @@
   box-shadow: var(--ran-dropdown-box-shadow, @box-shadow);
   cursor: var(--ran-dropdown-cursor, pointer);
   width: var(--ran-dropdown-width, 100%);
+  height: var(--ran-dropdown-height, 100%);
+  min-height: var(--ran-popover-height, 100%);
+  min-width: var(--ran-popover-width, 100%);
   &-container {
     position: var(--ran-dropdown-container-position, relative);
-    display: var(--ran-dropdown-container-display, inline-block);
+    display: var(--ran-dropdown-container-display, block);
     width: var(--ran-dropdown-container-width, 100%);
-    min-width: var(--ran-popover-width);
+    height: var(--ran-dropdown-container-height, 100%);
+    box-sizing: var(--ran-dropdown-container-box-sizing, border-box);
     .top {
       transform: translateX(calc(var(--ran-popover-width) / 2 - calc(@arrow-size / 2))) translateY(-16px) rotate(0deg);
       top: 0px;
@@ -179,18 +183,18 @@
       top: calc(var(--ran-popover-height) - calc(@arrow-size / 4), 0px);
     }
     .left {
-      transform: translateX(-16px) translateY(calc(var(--ran-popover-height) / 2 - calc(@arrow-size / 2)))
-        rotate(270deg);
+      transform: translateX(calc(0px - var(--ran-dropdown-arrow-width, 16px))) translateY(calc(var(--ran-dropdown-arrow-width, 16px) / 2)) rotate(270deg);
       top: calc(max(0px, calc(var(--ran-popover-height) / 2 - calc(@arrow-size))));
     }
     .right {
       left: 100%;
       transform: translateX(0) translateY(calc(var(--ran-popover-height) / 2 - calc(@arrow-size / 2))) rotate(90deg);
-      top: calc(max(0px, calc(var(--ran-popover-height) / 2 - calc(@arrow-size))));
+      top: 0px;
     }
   }
   &-arrow {
     position: var(--ran-dropdown-arrow-position, absolute);
+    box-sizing: var(--ran-dropdown-arrow-box-sizing, border-box);
     z-index: var(--ran-dropdown-arrow-z-index, 1);
     display: var(--ran-dropdown-arrow-display, block);
     pointer-events: var(--ran-dropdown-arrow-pointer-events, none);

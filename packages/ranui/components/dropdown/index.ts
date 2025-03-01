@@ -85,7 +85,6 @@ export class Dropdown extends (HTMLElementSSR()!) {
   connectedCallback(): void {
     this.handlerTransit();
     this.handlerArrow();
-    // this.addEventListener('click', this.stopPropagation);
   }
   disconnectedCallback(): void {
     // this.removeEventListener('click', this.stopPropagation);

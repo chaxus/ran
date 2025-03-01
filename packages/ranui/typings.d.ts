@@ -194,6 +194,7 @@ interface BaseIntrinsicElements {
     getPopupContainerId: string;
     arrow: boolean | string;
   };
+  'r-content': any
   'r-preview': any & {
     src: string;
     closeable: boolean | string;

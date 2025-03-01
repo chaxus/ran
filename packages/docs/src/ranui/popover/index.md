@@ -105,17 +105,17 @@ Display location
 - `left`
 
 <r-popover trigger="hover" placement="left" style="display: inline-block;">
-    <r-button>top</r-button>
+    <r-button>left</r-button>
     <r-content>
-      <div>top</div>
+      <div>left</div>
     </r-content>
   </r-popover>
 
 ```xml
 <r-popover trigger="hover" placement="left" style="display: inline-block;">
-    <r-button>top</r-button>
+    <r-button>left</r-button>
     <r-content>
-      <div>top</div>
+      <div>left</div>
     </r-content>
   </r-popover>
 ```
@@ -123,17 +123,17 @@ Display location
 - `right`
 
 <r-popover trigger="hover" placement="right" style="display: inline-block;">
-    <r-button>top</r-button>
+    <r-button>right</r-button>
     <r-content>
-      <div>top</div>
+      <div>right</div>
     </r-content>
   </r-popover>
 
 ```xml
 <r-popover trigger="hover" placement="right" style="display: inline-block;">
-    <r-button>top</r-button>
+    <r-button>right</r-button>
     <r-content>
-      <div>top</div>
+      <div>right</div>
     </r-content>
   </r-popover>
 ```

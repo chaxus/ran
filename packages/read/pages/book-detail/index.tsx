@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { getBookById } from '@/store/books';
 import type { BookInfo } from '@/store/books';
 import { arrayBufferToString, extractChapters, pagingText } from '@/lib/transformText';
+import { Popover } from '@/components/popover';
 import 'ranui/icon';
 
 const ICON_STYLE = {
@@ -117,9 +118,11 @@ export const BookDetail = (): React.JSX.Element => {
         <div className="h-14 w-full"></div>
       </div>
       <div className="absolute top-16 right-22">
-        <div className="w-12 h-12 bg-front-bg-color-3 rounded-4xl flex items-center justify-center cursor-pointer">
-          <r-icon name="menu" style={MENU_ICON_STYLE}></r-icon>
-        </div>
+        <Popover placement='left' trigger='hover' overlay={<div>菜单</div>}>
+          <div className="w-12 h-12 bg-front-bg-color-3 rounded-4xl flex items-center justify-center cursor-pointer">
+            <r-icon name="menu" style={MENU_ICON_STYLE}></r-icon>
+          </div>
+        </Popover>
       </div>
     </div>
   );

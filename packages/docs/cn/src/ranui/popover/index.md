@@ -101,3 +101,40 @@
     </r-content>
   </r-popover>
 ```
+
+
+- `left`
+
+<r-popover trigger="hover" placement="left" style="display: inline-block;">
+    <r-button>left</r-button>
+    <r-content>
+      <div>left</div>
+    </r-content>
+  </r-popover>
+
+```xml
+<r-popover trigger="hover" placement="left" style="display: inline-block;">
+    <r-button>left</r-button>
+    <r-content>
+      <div>left</div>
+    </r-content>
+  </r-popover>
+```
+
+- `right`
+
+<r-popover trigger="hover" placement="right" style="display: inline-block;">
+    <r-button>right</r-button>
+    <r-content>
+      <div>right</div>
+    </r-content>
+  </r-popover>
+
+```xml
+<r-popover trigger="hover" placement="right" style="display: inline-block;">
+    <r-button>right</r-button>
+    <r-content>
+      <div>right</div>
+    </r-content>
+  </r-popover>
+```

@@ -2,6 +2,9 @@
 @clickY: var(--ran-y, 0);
 
 :host {
+  box-sizing: var(--ran-btn-box-sizing, border-box);
+  height: var(--ran-btn-height, 100%);
+  width: var(--ran-btn-width, 100%);
   position: var(--ran-btn-position, relative);
   display: var(--ran-btn-display, block);
   background-image: var(--ran-btn-background-image, none);
@@ -13,6 +16,9 @@
   pointer-events: var(--ran-btn-pointer-events, auto);
 
   .ran-btn {
+    box-sizing: var(--ran-btn-contain-box-sizing, border-box);
+    height: var(--ran-btn-contain-height, 100%);
+    width: var(--ran-btn-contain-width, 100%);
     position: var(--ran-btn-contain-position, relative);
     display: var(--ran-btn-contain-display, block);
     background-image: var(--ran-btn-contain-background-image, none);
@@ -115,7 +121,7 @@
   @media (min-width: 1024px) {
     &(:not([disabled], [effect])) {
       .ran-btn::after {
-        content: '';
+        content: "";
         display: block;
         position: absolute;
         width: 100%;
@@ -128,9 +134,7 @@
         background-position: 50%;
         transform: translate(-50%, -50%) scale(10);
         opacity: 0;
-        transition:
-          transform 0.3s,
-          opacity 0.8s;
+        transition: transform 0.3s, opacity 0.8s;
       }
     }
   }
@@ -154,7 +158,9 @@
   font-weight: var(--ran-btn-content-font-weight, 400);
   white-space: var(--ran-btn-content-white-space, nowrap);
   text-align: var(--ran-btn-content-text-align, center);
-
+  box-sizing: var(--ran-btn-content-box-sizing, border-box);
+  height: var(--ran-btn-content-height, 100%);
+  width: var(--ran-btn-content-width, 100%);
   .icon {
     margin-right: var(--ran-btn-icon-margin-right, 2px);
   }
