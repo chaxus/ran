@@ -2,7 +2,7 @@
  * @Author: chaxus nouo18@163.com
  * @Date: 2024-12-08 17:58:20
  * @LastEditors: chaxus nouo18@163.com
- * @LastEditTime: 2025-02-22 02:23:50
+ * @LastEditTime: 2025-03-01 17:34:11
  * @FilePath: /ran/packages/ranui/components/popover/index.ts
  */
 import { create, isMobile } from 'ranuts/utils';
@@ -13,7 +13,7 @@ import '@/components/dropdown';
 
 // index.ts:29 Uncaught DOMException: Failed to construct 'CustomElement': The result must not have children
 // index.ts:31 Uncaught DOMException: Failed to construct 'CustomElement': The result must not have attributes
-const arrowHeight = 4;
+const arrowHeight = 8;
 
 const animationTime = 300;
 
@@ -195,7 +195,7 @@ export class Popover extends (HTMLElementSSR()!) {
     if (this.popoverContent && this.popoverContent.style.display !== 'none') {
       this.popoverContent.setAttribute('transit', placementDirection[this.placement].remove);
       this.dropDownOutTimeId = setTimeout(() => {
-        // this.popoverContent?.style.setProperty('display', 'none');
+        this.popoverContent?.style.setProperty('display', 'none');
         this.popoverContent && this.popoverContent.removeAttribute('transit');
         clearTimeout(this.dropDownOutTimeId);
         this.dropDownOutTimeId = undefined;
