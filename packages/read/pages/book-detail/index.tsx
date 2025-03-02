@@ -1,21 +1,25 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { getBookById } from '@/store/books';
-import type { BookInfo } from '@/store/books';
 import { arrayBufferToString, extractChapters, pagingText } from '@/lib/transformText';
 import { Popover } from '@/components/popover';
+import type { BookInfo } from '@/store/books';
 import 'ranui/icon';
 import 'ranui/input';
+import './index.scss';
 
 const ICON_STYLE = {
   '--ran-icon-font-size': '14px',
-  '--ran-icon-color': '#8c8c8c',
+  '--ran-icon-color': 'var(--icon-color-1)',
 };
 
 const MENU_ICON_STYLE = {
   '--ran-icon-font-size': '24px',
-  '--ran-icon-color': '#8c8c8c',
 };
+
+const SORT_ICON_STYLE = {
+  '--ran-icon-font-size': '20px',
+}
 
 const inputStyle = {
   '--ran-input-border-radius': '2rem',
@@ -24,17 +28,22 @@ const inputStyle = {
   '--ran-input-content-font-size': '14px',
   '--ran-input-content-font-weight': '400',
   '--ran-icon-font-size': '16px',
-  '--ran-icon-color': '#212832',
+  '--ran-icon-color': 'var(--icon-color-1)',
   '--ran-icon-margin': '2px 0px 0px 12px',
   '--ran-input-background-color': 'rgba(13,20,30,.04)',
   '--ran-input-content-background-color': 'transparent',
   '--ran-input-border': 'none',
 };
 
-const Menu = () => {
+interface MenuProps {
+  bookDetail?: BookInfo;
+}
+
+const Menu = ({ bookDetail }: MenuProps) => {
+  const { title, author, image } = bookDetail || {};
   return (
     <div
-      className="w-md"
+      className="w-md flex flex-col"
       style={{
         height: 'calc(100vh - calc(var(--spacing) * 32))',
       }}
@@ -42,16 +51,38 @@ const Menu = () => {
       <div className="px-6 py-7">
         <r-input className="h-10" icon="search" style={inputStyle} placeholder="搜索"></r-input>
       </div>
+      <div className="px-7 py-2 flex flex-row flex-nowrap items-center shrink-0">
+        <img className="w-14 mr-5" src={image} />
+        <div>
+          <div className="text-lg text-text-color-1 font-medium break-all">{title}</div>
+          <div className="text-sm text-text-color-2 font-medium mt-1 break-all">{author}</div>
+        </div>
+      </div>
+      <div className='mx-9 basis-10 flex items-center justify-end shrink-0'>
+        <r-icon className="cursor-pointer hover-icon" name="sort" style={SORT_ICON_STYLE}></r-icon>
+      </div>
+      <div className='overflow-y-auto flex-auto'>
+        <div className='px-7 h-12 text-text-color-2 font-normal text-base  hover:bg-blue-50 cursor-pointer'>
+          <div className='border-t border-front-bg-color-1 h-full w-full flex items-center'>扉页</div>
+        </div>
+        <div className='px-7 h-12 text-text-color-2 font-normal text-base hover:bg-blue-50 cursor-pointer'>
+          <div className='border-t border-front-bg-color-1 h-full w-full flex items-center'>扉页</div>
+        </div>
+      </div>
     </div>
   );
 };
 
-const BookDetailOperate = () => {
+interface BookDetailOperateProps {
+  bookDetail?: BookInfo;
+}
+
+const BookDetailOperate = ({ bookDetail }: BookDetailOperateProps) => {
   return (
     <div className="absolute top-16 right-22">
-      <Popover placement="left" trigger="click" overlay={<Menu />}>
+      <Popover placement="left" trigger="click" overlay={<Menu bookDetail={bookDetail} />}>
         <div className="w-12 h-12 bg-front-bg-color-3 rounded-4xl flex items-center justify-center cursor-pointer">
-          <r-icon name="menu" style={MENU_ICON_STYLE}></r-icon>
+          <r-icon className="hover-icon" name="menu" style={MENU_ICON_STYLE}></r-icon>
         </div>
       </Popover>
     </div>
@@ -159,7 +190,7 @@ export const BookDetail = (): React.JSX.Element => {
         </div>
         <div className="h-14 w-full"></div>
       </div>
-      <BookDetailOperate />
+      <BookDetailOperate bookDetail={bookDetail} />
     </div>
   );
 };

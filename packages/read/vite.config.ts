@@ -15,6 +15,7 @@ export default defineConfig({
       '@/router': resolve(__dirname, '/router'),
       '@/lib': resolve(__dirname, '/lib'),
       '@/store': resolve(__dirname, '/store'),
+      '@/assets': resolve(__dirname, '/assets'),
     },
     extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json'],
   },

@@ -1,11 +1,13 @@
-import 'ranui/input';
-import 'ranui/icon';
 import { useEffect, useState } from 'react';
 import { BookCard } from '@/components/BookCard';
 import { addBook, getAllBooks } from '@/store/books';
 import { checkEncoding, createReader } from '@/lib/transformText';
-import type { BookInfo } from '@/store/books';
 import { resumeDB } from '@/store';
+import { BOOKS_ADD_BY_DEFAULT, ensampleConfigs } from '@/lib/ensample';
+import type { EnBook } from '@/lib/ensample';
+import type { BookInfo } from '@/store/books';
+import 'ranui/input';
+import 'ranui/icon';
 
 const inputStyle = {
   '--ran-input-border-radius': '2rem',
@@ -14,17 +16,17 @@ const inputStyle = {
   '--ran-input-content-font-size': '16px',
   '--ran-input-content-font-weight': '400',
   '--ran-icon-font-size': '24px',
-  '--ran-icon-color': '#8c8c8c',
+  '--ran-icon-color': 'var(--icon-color-1)',
   '--ran-icon-margin': '4px 0px 0px 16px',
 };
 const moreIconStyle = {
   '--ran-icon-font-size': '24px',
-  '--ran-icon-color': '#8c8c8c',
+  '--ran-icon-color': 'var(--icon-color-1)',
 };
 
 const plusIconStyle = {
   '--ran-icon-font-size': '64px',
-  '--ran-icon-color': '#bfbfbf',
+  '--ran-icon-color': 'var(--icon-color-2)',
   '--ran-icon-margin': '0px',
 };
 
@@ -55,7 +57,35 @@ export const Home = (): React.JSX.Element => {
     };
   };
 
+  const addFromUrl = async ({ url, title, image, author }: EnBook) => {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    const file = new File([blob], title, { type: blob.type });
+    createReader(file).then((result) => {
+      addBook({
+        title: file.name,
+        encoding: checkEncoding(new Uint8Array(result)),
+        content: result,
+        image,
+        author,
+      }).then((res) => {
+        if (!res.error) {
+          bookList.push(res.data as BookInfo);
+          setBookList([...bookList]);
+        }
+      });
+    });
+  };
+
   useEffect(() => {
+    // 默认添加的书籍，只添加一次
+    if (!localStorage.getItem(BOOKS_ADD_BY_DEFAULT)) {
+      ensampleConfigs.forEach((config: EnBook) => {
+        addFromUrl(config);
+      });
+      localStorage.setItem(BOOKS_ADD_BY_DEFAULT, 'true');
+    }
+    // 查询所有书籍，进行展示
     getAllBooks<BookInfo>()
       .then((res) => {
         if (!res.error) setBookList(res.data);
