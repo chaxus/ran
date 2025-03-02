@@ -5,6 +5,7 @@ import type { BookInfo } from '@/store/books';
 import { arrayBufferToString, extractChapters, pagingText } from '@/lib/transformText';
 import { Popover } from '@/components/popover';
 import 'ranui/icon';
+import 'ranui/input';
 
 const ICON_STYLE = {
   '--ran-icon-font-size': '14px',
@@ -15,6 +16,44 @@ const MENU_ICON_STYLE = {
   '--ran-icon-font-size': '24px',
   '--ran-icon-color': '#8c8c8c',
 };
+
+const inputStyle = {
+  '--ran-input-border-radius': '2rem',
+  '--ran-input-content-border-radius': '2rem',
+  '--ran-input-content-padding': '10px',
+  '--ran-input-content-font-size': '14px',
+  '--ran-input-content-font-weight': '400',
+  '--ran-icon-font-size': '16px',
+  '--ran-icon-color': '#212832',
+  '--ran-icon-margin': '2px 0px 0px 12px',
+  '--ran-input-background-color': 'rgba(13,20,30,.04)',
+  '--ran-input-content-background-color': 'transparent',
+  '--ran-input-border': 'none',
+};
+
+const Menu = () => {
+  return (
+    <div className='w-md' style={{
+      height: 'calc(100vh - calc(var(--spacing) * 32))',
+    }}>
+      <div className='px-6 py-7'>
+        <r-input className="h-10" icon="search" style={inputStyle} placeholder="搜索"></r-input>
+      </div>
+    </div>
+  )
+}
+
+const BookDetailOperate = () => {
+  return (
+    <div className="absolute top-16 right-22">
+      <Popover placement='left' trigger='click' overlay={<Menu />}>
+        <div className="w-12 h-12 bg-front-bg-color-3 rounded-4xl flex items-center justify-center cursor-pointer">
+          <r-icon name="menu" style={MENU_ICON_STYLE}></r-icon>
+        </div>
+      </Popover>
+    </div>
+  )
+}
 
 export const BookDetail = (): React.JSX.Element => {
   const { id } = useParams();
@@ -117,13 +156,7 @@ export const BookDetail = (): React.JSX.Element => {
         </div>
         <div className="h-14 w-full"></div>
       </div>
-      <div className="absolute top-16 right-22">
-        <Popover placement='left' trigger='hover' overlay={<div>菜单</div>}>
-          <div className="w-12 h-12 bg-front-bg-color-3 rounded-4xl flex items-center justify-center cursor-pointer">
-            <r-icon name="menu" style={MENU_ICON_STYLE}></r-icon>
-          </div>
-        </Popover>
-      </div>
+      <BookDetailOperate />
     </div>
   );
 };

@@ -1,8 +1,14 @@
+:host {
+  position: relative;
+  display: block;
+  box-sizing: border-box;
+}
 .ran-input {
+  box-sizing: var(--ran-input-box-sizing, border-box);
   position: var(--ran-input-position, relative);
   display: var(--ran-input-display, flex);
-  width: var(--ran-input-width, calc(100% - 16px));
-  height: var(--ran-input-height, calc(100% - 4px));
+  width: var(--ran-input-width, 100%);
+  height: var(--ran-input-height, 100%);
   min-width: 0;
   padding: var(--ran-input-padding, 2px 8px);
   color: #000000d9;
@@ -74,6 +80,7 @@
     }
   }
   &-content {
+    box-sizing: var(--ran-input-content-box-sizing, border-box);
     writing-mode: var(--ran-input-content-writing-mode, horizontal-tb);
     text-rendering: var(--ran-input-content-text-rendering, auto);
     letter-spacing: var(--ran-input-content-letter-spacing, normal);
@@ -94,6 +101,7 @@
     position: var(--ran-input-content-position, relative);
     border: var(--ran-input-content-border, none);
     width: var(--ran-input-content-width, 100%);
+    height: var(--ran-input-content-height, 100%);
     min-width: var(--ran-input-content-min-width, 0);
     color: var(--ran-input-content-color, #000000d9);
     font-size: var(--ran-input-content-font-size, 14px);
@@ -126,6 +134,7 @@
   }
 
   &-label {
+    box-sizing: var(--ran-input-label-box-sizing, border-box);
     pointer-events: var(--ran-input-label-pointer-events, none);
     position: var(--ran-input-label-position, absolute);
     font-size: var(--ran-input-label-font-size, 14px);
