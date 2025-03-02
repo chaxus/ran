@@ -2,7 +2,7 @@
  * @Author: chaxus nouo18@163.com
  * @Date: 2024-12-08 17:58:20
  * @LastEditors: chaxus nouo18@163.com
- * @LastEditTime: 2025-03-01 23:40:55
+ * @LastEditTime: 2025-03-02 23:48:16
  * @FilePath: /ran/packages/ranui/components/popover/index.ts
  */
 import { create, isMobile } from 'ranuts/utils';

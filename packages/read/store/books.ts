@@ -15,8 +15,10 @@ export interface BookInfo {
 
 const STORE_NAME_BOOKS_INFO_KEY = 'books_info';
 
+const ID = 'id';
+
 export const createBookStore = (): void => {
-  db.createObjectStore({ storeName: STORE_NAME_BOOKS_INFO_KEY, options: { keyPath: 'id' } });
+  db.createObjectStore({ storeName: STORE_NAME_BOOKS_INFO_KEY, options: { keyPath: ID } });
 };
 
 export const addBook = (data: {

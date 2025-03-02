@@ -1,123 +1,224 @@
-import jschardet from 'jschardet';
+import jschardet from "jschardet"
 
 export interface TransformText {
-  encoding: string;
-  content: string;
+  encoding: string
+  content: string
 }
 
 export const transformText = (content: string | ArrayBuffer): TransformText | undefined => {
   if (content instanceof ArrayBuffer) {
-    const uint8Array = new Uint8Array(content);
-    const asciiString = String.fromCharCode.apply(null, uint8Array as unknown as number[]);
-    const detected = jschardet.detect(asciiString);
-    const encoding = detected.encoding || 'utf-8';
-    const text = new TextDecoder(encoding).decode(content);
+    const uint8Array = new Uint8Array(content)
+    const asciiString = String.fromCharCode.apply(null, (uint8Array as unknown) as number[])
+    const detected = jschardet.detect(asciiString)
+    const encoding = detected.encoding || "utf-8"
+    const text = new TextDecoder(encoding).decode(content)
     if (detected.encoding && text) {
       return {
         encoding: detected.encoding,
         content: text,
-      };
+      }
     }
   } else {
-    console.error('Unexpected result type:', typeof content);
+    console.error("Unexpected result type:", typeof content)
   }
-};
+}
 
 export const arrayBufferToString = (arrayBuffer: ArrayBuffer | Uint8Array<ArrayBuffer>): string => {
-  const uint8Array = new Uint8Array(arrayBuffer);
-  const encoding = checkEncoding(uint8Array);
-  const textDecoder = new TextDecoder(encoding);
-  return textDecoder.decode(uint8Array);
-};
+  const uint8Array = new Uint8Array(arrayBuffer)
+  const encoding = checkEncoding(uint8Array)
+  const textDecoder = new TextDecoder(encoding)
+  return textDecoder.decode(uint8Array)
+}
 
 export const checkEncoding = (uint8Array: Uint8Array): string => {
   // 将 Uint8Array 转换为字符串
   const asciiString = Array.from(uint8Array)
     .map((byte) => String.fromCharCode(byte))
-    .join('');
-  const detected = jschardet.detect(asciiString);
-  return detected.encoding || 'utf-8';
-};
+    .join("")
+  const detected = jschardet.detect(asciiString)
+  return detected.encoding || "utf-8"
+}
 
 export const createReader = (file: File): Promise<Uint8Array<ArrayBuffer>> => {
   return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsArrayBuffer(file);
+    const reader = new FileReader()
+    reader.readAsArrayBuffer(file)
     reader.onload = () => {
       if (reader.result) {
-        const uint8Array = new Uint8Array(reader.result as ArrayBuffer);
-        resolve(uint8Array);
+        const uint8Array = new Uint8Array(reader.result as ArrayBuffer)
+        resolve(uint8Array)
       }
-    };
+    }
     reader.onerror = (error) => {
-      reject(error);
-    };
+      reject(error)
+    }
     reader.onabort = (abort) => {
-      reject(abort);
-    };
-  });
-};
+      reject(abort)
+    }
+  })
+}
 
-export const pagingText = (content: string, container: HTMLElement): { text: string; h2: string }[] => {
-  const text = content.replace(/(?:\r\n|\r|\n)+/g, '\n') || '';
-  const total = text.length;
+export interface PagingText {
+  total: number
+  totalLine: number
+  fontSize: number
+  lineHeight: number
+  letterSpacing: number
+  charWidth: number
+  charsPerLine: number
+  pageTotalChar: number
+}
+
+export interface PagingTextItem extends PagingText {
+  text: string
+  start: number
+  end: number
+  index: number
+}
+
+export interface PagingTextResult extends PagingText {
+  program: PagingTextItem[]
+}
+
+export const pagingText = (content: string, container: HTMLElement): PagingTextResult => {
+  const text = content.replace(/(?:\r\n|\r|\n)+/g, "\n") || ""
+  const total = text.length
   if (container) {
-    const { clientHeight, clientWidth } = container;
+    const { clientHeight, clientWidth } = container
     // 字体大小，字体行高，字体间距，字体宽度
-    const rootFontSize = 16;
-    const fontSize = 1.125 * rootFontSize; // 字体大小 text-lg
-    const lineHeight = 0.25 * 10 * rootFontSize; // 行高（倍数）leading-10
-    const letterSpacing = 0.025 * rootFontSize; // 字符间距（em）tracking-wide
-    const charWidth = fontSize + letterSpacing; // 每个字符的宽度（px）
-    const charsPerLine = Math.floor(clientWidth / charWidth); // 每行能容纳的字符数
-    const lines = Math.floor(clientHeight / lineHeight); // 总行数
-    const pageTotalChar = charsPerLine * lines; // 每页总字符数
-    let useChar = 0;
-    const result: { text: string; h2: string }[] = [];
-    let h2 = '';
+    const rootFontSize = 16
+    const fontSize = 1.125 * rootFontSize // 字体大小 text-lg
+    const lineHeight = 0.25 * 10 * rootFontSize // 行高（倍数）leading-10
+    const letterSpacing = 0.025 * rootFontSize // 字符间距（em）tracking-wide
+    const charWidth = fontSize + letterSpacing // 每个字符的宽度（px）
+    const charsPerLine = Math.floor(clientWidth / charWidth) // 每行能容纳的字符数
+    const totalLine = Math.floor(clientHeight / lineHeight) // 总行数
+    const pageTotalChar = charsPerLine * totalLine // 每页总字符数
+    let useChar = 0
+    const result: PagingTextItem[] = []
     while (total > useChar) {
-      let currentLine = 0;
-      let currentChart = 0;
-      let currentText = '';
-      while (currentLine < lines && currentChart < pageTotalChar) {
-        if (text[useChar] === '<' && text[useChar + 1] === 'h' && text[useChar + 2] === '2') {
-          const end = text.indexOf('</h2>', useChar);
-          if (end > 0) {
-            h2 = text.substring(useChar, end + 5);
-          }
+      let currentLine = 0
+      let currentChart = 0
+      let currentText = ""
+      while (currentLine < totalLine && currentChart < pageTotalChar) {
+        if (text[useChar] === "\n") {
+          currentLine++
+          currentChart = 0
         }
-        if (text[useChar] === '\n') {
-          currentLine++;
-          currentChart = 0;
-        }
-        if (text[useChar] === '\r') {
-          currentLine++;
-          currentChart = 0;
+        if (text[useChar] === "\r") {
+          currentLine++
+          currentChart = 0
         }
         if (currentChart >= charsPerLine) {
-          currentLine++;
-          currentChart = 0;
+          currentLine++
+          currentChart = 0
         }
-        currentText += text[useChar];
-        useChar++;
-        currentChart++;
+        currentText += text[useChar]
+        useChar++
+        currentChart++
       }
+      const size = result.length
       result.push({
         text: currentText,
-        h2,
-      });
+        start: useChar - currentText.length,
+        end: useChar,
+        index: size,
+        total,
+        totalLine,
+        fontSize,
+        lineHeight,
+        letterSpacing,
+        charWidth,
+        charsPerLine,
+        pageTotalChar,
+      })
     }
-    return result;
+    result.forEach((item, index) => {
+      if(index === 0){
+        item.start = 0
+      }
+      item.start = result[index - 1]?.end || 0
+    })
+    return {
+      program: result,
+      total,
+      totalLine,
+      fontSize,
+      lineHeight,
+      letterSpacing,
+      charWidth,
+      charsPerLine,
+      pageTotalChar,
+    }
   }
-  return [{ text: '', h2: '' }];
-};
+  return { program: [], total, totalLine: 0, fontSize: 0, lineHeight: 0, letterSpacing: 0, charWidth: 0, charsPerLine: 0, pageTotalChar: 0 }
+}
 
 export const extractChapters = (text: string): { title: string; startIndex: number }[] => {
-  const chapterRegex = /(?:第[一二三四五六七八九十百千万]+章|Chapter\s+\d+|CHAPTER\s+\d+|第\d+章)\s*.+/g;
-  const chapters = [];
-  let match;
+  const chapterRegex = /(?:第 [一二三四五六七八九十百千万]+章|Chapter\s+\d+|CHAPTER\s+\d+|第\d+ 章)\s*.+/g
+  const chapters = []
+  let match
   while ((match = chapterRegex.exec(text)) != null) {
-    chapters.push({ title: match[0], startIndex: match.index });
+    chapters.push({ title: match[0], startIndex: match.index })
   }
-  return chapters;
-};
+  return chapters
+}
+
+export interface ChapterItem {
+  title: string
+  start: number
+  end?: number
+  pageNum?: number
+}
+
+export const extractRomanChapters = (text: string): ChapterItem[] => {
+  const romanRegex = /(?:\s|^)(I{1,3}|IV|V|VI|VII|VIII|IX|X|XI|XII|XIII|XIV|XV|XVI|XVII|XVIII|XIX|XX)(?:\s|$)/g
+  const chapters: ChapterItem[] = []
+  let match
+  while ((match = romanRegex.exec(text)) != null) {
+    chapters.push({ title: match[1], start: match.index })
+  }
+  chapters.forEach((chapter, index) => {
+    const nextChapter = chapters[index + 1]
+    chapter.end = nextChapter ? nextChapter.start : text.length
+  })
+  return chapters
+}
+/**
+ * @description: 罗马数字转阿拉伯数字
+ * @param {string} roman
+ * @return {number}
+ */
+export const romanToArabic = (roman: string): number => {
+  const romanNumeralMap: Record<string, number> = {
+    I: 1,
+    IV: 4,
+    V: 5,
+    IX: 9,
+    X: 10,
+    XL: 40,
+    L: 50,
+    XC: 90,
+    C: 100,
+    CD: 400,
+    D: 500,
+    CM: 900,
+    M: 1000,
+  }
+
+  let arabic = 0
+  let i = 0
+
+  while (i < roman.length) {
+    const twoChar = roman[i] + (roman[i + 1] || "")
+    if (romanNumeralMap[twoChar]) {
+      arabic += romanNumeralMap[twoChar]
+      i += 2
+    } else {
+      arabic += romanNumeralMap[roman[i]]
+      i += 1
+    }
+  }
+
+  return arabic
+}
