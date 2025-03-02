@@ -1,6 +1,4 @@
-
-
-import 'ranui/popover'
+import 'ranui/popover';
 
 interface PopoverProps {
   children: React.ReactNode;
@@ -20,4 +18,4 @@ export const Popover = ({ children, overlay, placement, trigger }: PopoverProps)
       </r-popover>
     </div>
   );
-}
+};

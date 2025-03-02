@@ -121,7 +121,7 @@
   @media (min-width: 1024px) {
     &(:not([disabled], [effect])) {
       .ran-btn::after {
-        content: "";
+        content: '';
         display: block;
         position: absolute;
         width: 100%;
@@ -134,7 +134,9 @@
         background-position: 50%;
         transform: translate(-50%, -50%) scale(10);
         opacity: 0;
-        transition: transform 0.3s, opacity 0.8s;
+        transition:
+          transform 0.3s,
+          opacity 0.8s;
       }
     }
   }

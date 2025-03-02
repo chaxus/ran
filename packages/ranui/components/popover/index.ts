@@ -256,7 +256,7 @@ export class Popover extends (HTMLElementSSR()!) {
     e.stopPropagation();
     e.preventDefault();
     this.setDropdownDisplayBlock();
-  }
+  };
   clickRemovePopover = (e: Event): void => {
     this.hoverRemovePopover(e);
   };
@@ -269,7 +269,7 @@ export class Popover extends (HTMLElementSSR()!) {
       this.addEventListener('mouseleave', this.blur);
     }
     this.addEventListener('click', this.clickPopover);
-  }
+  };
   hoverRemovePopover = (e: Event): void => {
     e.stopPropagation();
     this.setDropdownDisplayNone();

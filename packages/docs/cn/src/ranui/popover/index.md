@@ -102,7 +102,6 @@
   </r-popover>
 ```
 
-
 - `left`
 
 <r-popover trigger="hover" placement="left" style="display: inline-block;">
