@@ -22,7 +22,7 @@ LE PETIT PRINCE
 
 小 王 子
 
-   I
+<caption-title>  I </caption-title>
 
     当我还只有六岁的时候，在一本描写原始森林的名叫《真实的故事》的书中，
 
@@ -80,7 +80,7 @@ LE PETIT PRINCE
 
 是大人们就十分高兴能认识我这样一个通情达理的人。
 
-   II
+ <caption-title>  II </caption-title>
 
     我就这样孤独地生活着，没有一个能真正谈得来的人，一直到六年前在撒哈
 
@@ -96,7 +96,7 @@ LE PETIT PRINCE
 
 你们可以想见我当时是多么吃惊。这小小的声音说道：
 
-    “请你给我画一只羊，好吗？”      
+    “请你给我画一只羊，好吗？”
 
     “啊！”
 
@@ -122,7 +122,7 @@ LE PETIT PRINCE
 
     “唉，你在这儿干什么？”
 
-     
+
 
     可是他却不慌不忙地好象有一件重要的事一般，对我重复地说道：
 
@@ -150,7 +150,7 @@ LE PETIT PRINCE
 
     我就给他画了。
 
- 
+
 
     他专心地看着，随后又说：
 
@@ -190,7 +190,7 @@ LE PETIT PRINCE
 
     就这样，我认识了小王子。
 
-   III
+<caption-title>   III</caption-title>
 
     我费了好长时间才弄清楚他是从哪里来的。小王子向我提出了很多问题，可
 
@@ -269,7 +269,7 @@ LE PETIT PRINCE
 
     “一直朝前走，也不会走出多远…”
 
-   IV
+ <caption-title>  IV </caption-title>
 
     我还了解到另一件重要的事，就是他老家所在的那个星球比一座房子大不了
 
@@ -358,7 +358,7 @@ LE PETIT PRINCE
 
 人们差不多。我一定是变老了。
 
-   V
+    <caption-title> V  </caption-title>
 
     每天我都了解到一些关于小王子的星球，他的出走和旅行等事情。这些都是
 
@@ -446,7 +446,7 @@ LE PETIT PRINCE
 
 一种急切的心情在激励着我。
 
-   VI
+<caption-title>   VI </caption-title>
 
     啊！小王子，就这样，我逐渐懂得了你那忧郁的生活。过去相当长的时间里
 
@@ -482,7 +482,7 @@ LE PETIT PRINCE
 
     小王子没有回答。
 
-   VII
+ <caption-title>  VII </caption-title>
 
     第五天，还是羊的事，把小王子的生活秘密向我揭开了。好象默默地思索了
 
@@ -589,7 +589,7 @@ LE PETIT PRINCE
 
 达到他的境界，怎样才能再进入他的境界…唉，泪水的世界是多么神秘啊！
 
-  VIII
+<caption-title>  VIII </caption-title>
 
     很快我就进一步了解了这朵花儿。在小王子的星球上，过去一直都生长着一
 
@@ -685,9 +685,9 @@ LE PETIT PRINCE
 
 的花招后面所隐藏的温情。花是多么自相矛盾！我当时太年青，还不懂得爱她。”
 
-  
 
-   IX
+
+ <caption-title>  IX </caption-title>
 
     我想小王子大概是利用一群候鸟迁徙的机会跑出来的。在他出发的那天早上，
 
@@ -741,7 +741,7 @@ LE PETIT PRINCE
 
     她是怕小王子看见她在哭。她是一朵非常骄傲的花…
 
-   X
+    <caption-title> X  </caption-title>
 
     在附近的宇宙中，还有 325、326、327、328、329、330 等几颗小行星。他
 
@@ -911,7 +911,7 @@ LE PETIT PRINCE
 
     小王子在旅途中自言自语地说：“这些大人真奇怪。”
 
-   XI
+ <caption-title>  XI </caption-title>
 
     第二个行星上住着一个爱虚荣的人。
 
@@ -963,7 +963,7 @@ LE PETIT PRINCE
 
     小王子在路上自言自语地说了一句：“这些大人，肯定是十分古怪的。”
 
-   XII
+<caption-title>   XII </caption-title>
 
     小王子所访问的下一个星球上住着一个酒鬼。访问时间非常短，可是它却使
 
@@ -987,13 +987,13 @@ LE PETIT PRINCE
 
     “我羞愧我喝酒。”酒鬼说完以后就再也不开口了。
 
-   
+
 
     小王子迷惑不解地离开了。
 
     在旅途中，他自言自语地说道：“这些大人确实真叫怪。”
 
-  XIII
+<caption-title>  XIII </caption-title>
 
     第四个行星是一个实业家的星球。这个人忙得不可开交，小王子到来的时候，
 
@@ -1115,7 +1115,7 @@ LE PETIT PRINCE
 
     “这就是说，我把星星的数目写在一片小纸头上，然后把这片纸头锁在一个
 
-抽屉里。”  
+抽屉里。”
 
     “这就算完事了吗？”
 
@@ -1135,7 +1135,7 @@ LE PETIT PRINCE
 
     在旅途中，小王子只是自言自语地说了一句：“这些大人们真是奇怪极了。”
 
-   XIV
+<caption-title>   XIV </caption-title>
 
     第五颗行星非常奇怪，是这些星星中最小的一颗。行星上刚好能容得下一盏
 
@@ -1245,7 +1245,7 @@ LE PETIT PRINCE
 
 每二十四小时就有一千四百四十次日落！
 
-   XV
+    <caption-title> XV  </caption-title>
 
     第六颗行星则要大十倍。上面住着一位老先生，他在写作大部头的书。
 
@@ -1378,7 +1378,7 @@ LE PETIT PRINCE
 
     于是小王子就走了，他一边走一边想着他的花。
 
-   XVI
+   <caption-title> XVI </caption-title>
 
     第七个行星，于是就是地球了。
 
@@ -1410,7 +1410,7 @@ LE PETIT PRINCE
 
 过着闲逸、懒散的生活：他们每年只工作两次。
 
-  XVII
+  <caption-title> XVII </caption-title>
 
     当人们想要说得俏皮些的时候，说话就可能会不大实在。在给你们讲点灯人
 
@@ -1496,15 +1496,15 @@ LE PETIT PRINCE
 
     于是他们又都沉默起来。
 
- XVIII
+<caption-title> XVIII </caption-title>
 
     小王子穿过沙漠。他只见过一朵花，一个有着三枚花瓣的花朵，一朵很不起
 
 眼的小花…
 
- 
 
-   
+
+
 
     “你好。”小王子说。
 
@@ -1524,7 +1524,7 @@ LE PETIT PRINCE
 
     “再见。”花说。
 
-   XIX
+  <caption-title> XIX </caption-title>
 
     小王子爬上一座高山。过去他所见过的山就是那三座只有他膝盖那么高的火
 
@@ -1552,7 +1552,7 @@ LE PETIT PRINCE
 
 朵花。她总是自己先说话…”
 
-   XX
+    <caption-title> XX  </caption-title>
 
     在沙漠、岩石、雪地上行走了很长的时间以后，小王子终于发现了一条大路。
 
@@ -1590,7 +1590,7 @@ LE PETIT PRINCE
 
 泣起来。
 
-   XXI
+   <caption-title> XXI </caption-title>
 
     就在这当儿，跑来了一只狐狸。
 
@@ -1658,7 +1658,7 @@ LE PETIT PRINCE
 
     “没有十全十美的。”狐狸叹息地说道。
 
- 
+
 
     可是，狐狸又把话题拉回来：
 
@@ -1792,7 +1792,7 @@ LE PETIT PRINCE
 
     “我要对我的玫瑰负责…”小王子又重复着……
 
-  XXII
+  <caption-title> XXII </caption-title>
 
     “你好。”小王子说道。
 
@@ -1836,7 +1836,7 @@ LE PETIT PRINCE
 
     “他们真幸运。”扳道工说。
 
-  XXIII
+  <caption-title> XXIII </caption-title>
 
     “你好。”小王子说。
 
@@ -1858,7 +1858,7 @@ LE PETIT PRINCE
 
 泉走去…”
 
-  XXIV
+  <caption-title> XXIV </caption-title>
 
     这是我在沙漠上出了事故的第八天。我听着有关这个商人的故事，喝完了我
 
@@ -1924,7 +1924,7 @@ LE PETIT PRINCE
 
     “使沙漠更加美丽的，就是在某个角落里，藏着一口井…”
 
-  
+
 
     我很惊讶，突然明白了为什么沙漠放着光芒。当我还是一个小孩子的时候，
 
@@ -1960,7 +1960,7 @@ LE PETIT PRINCE
 
     于是，就这样走着，我在黎明时发现了水井。
 
-   XXV
+    <caption-title> XXV  </caption-title>
 
     “那些人们，他们往快车里拥挤，但是他们却不知道要寻找什么。于是，他
 
@@ -2086,7 +2086,7 @@ LE PETIT PRINCE
 
     但是，我放心不下。我想起了狐狸的话。如果被人驯服了，就可能会要哭的…
 
-  XXVI
+  <caption-title> XXVI </caption-title>
 
     在井旁边有一堵残缺的石墙。第二天晚上我工作回来的时候，我远远地看见
 
@@ -2273,7 +2273,7 @@ LE PETIT PRINCE
 
     “对了，它咬第二口的时候就没有毒液了…”
 
- 
+
 
     这天夜里，我没有看到他起程。他不声不响地跑了。当我终于赶上他的时候，
 
@@ -2309,7 +2309,7 @@ LE PETIT PRINCE
 
     “就是这儿。让我自个儿走一步吧。”
 
- 
+
 
     他这时坐下来，因为他害怕了。他却仍然说道：
 
@@ -2329,7 +2329,7 @@ LE PETIT PRINCE
 
 有。
 
-  XXVII
+  <caption-title> XXVII </caption-title>
 
     到现在，一点不错，已经有六年了…我还从未讲过这个故事。同伴们重新见
 
@@ -2435,62 +2435,44 @@ LE PETIT PRINCE
 
 SAINT-EXUPERY, Antoine de  (1900-44). An adventurous pilot and a lyrical
 
-poet, Antoine de Saint-Exupery conveyed in his books the solitude and mystic 
+poet, Antoine de Saint-Exupery conveyed in his books the solitude and mystic
 
-grandeur of the early days of flight. He described dangerous adventures in the 
+grandeur of the early days of flight. He described dangerous adventures in the
 
 skies and also wrote the whimsical children's fable 'The Little Prince'.
 
-Antoine-Marie-Roger de Saint-Exupery was born on June 29, 1900, in Lyon, France. 
+Antoine-Marie-Roger de Saint-Exupery was born on June 29, 1900, in Lyon, France.
 
-In the 1920s he helped establish airmail routes overseas. During World War II he 
+In the 1920s he helped establish airmail routes overseas. During World War II he
 
-flew as a military reconnaissance pilot. After the Germans occupied France in 1940, 
+flew as a military reconnaissance pilot. After the Germans occupied France in 1940,
 
-he escaped to the United States. He rejoined the air force in North Africa in 1943. 
+he escaped to the United States. He rejoined the air force in North Africa in 1943.
 
-During what was to have been his final reconnaissance mission over the Mediterranean 
+During what was to have been his final reconnaissance mission over the Mediterranean
 
 Sea, he died when his plane was shot down on July 31, 1944.
 
-Saint-Exupery's first book, 'Southern Mail', was about the life and death of an 
+Saint-Exupery's first book, 'Southern Mail', was about the life and death of an
 
-airmail pilot. It was published in French in 1929. Other books include 'Night 
+airmail pilot. It was published in French in 1929. Other books include 'Night
 
-Flight' (1931), about the first airline pilots, and 'Wind, Sand, and Stars' (1939), 
+Flight' (1931), about the first airline pilots, and 'Wind, Sand, and Stars' (1939),
 
 in which he describes his feelings during flights over the desert.
 
-'The Little Prince' (1943), which in a way is really a children's book for 
+'The Little Prince' (1943), which in a way is really a children's book for
 
-grown-ups, was written during Saint-Exupery's stay in the United States. 
+grown-ups, was written during Saint-Exupery's stay in the United States.
 
-A gentle and thoughtful book, it tells the story of a boy who lives alone on a 
+A gentle and thoughtful book, it tells the story of a boy who lives alone on a
 
 tiny planet.
 
-A final volume of reflections, which provides an insight into the author's views 
+A final volume of reflections, which provides an insight into the author's views
 
-on the meaning of life, is 'The Wisdom of the Sands' (1948). This book was published 
+on the meaning of life, is 'The Wisdom of the Sands' (1948). This book was published
 
 after the pilot's death.
 
 -- From Compton's Interactive Encyclopedia
-
-◎◎◎◎◎◎◎◎
-
- 录  入  后  记
-
-    这篇文字是录自商务印书馆出版的一本法汉对照的《小王子》的中文部分。
-
-个别字句有所改动，原文中有大量精美的插图，可是商务版只有几副。如果有插
-
-图，可以制作一份 WWW 版的《小王子》主页，那就更好了。
-
-    《小王子》是他作品中比较独特的一篇，也是最著名的一篇。是一本“为大
-
-人们写的童话故事”。我很喜欢它，从小学看到大学。确实，它给大人们看的，
-
-理解它必须是“大人”才行。可是，我多么希望我还是一个小王子一样的孩子…
-
-更多精彩，更多好书，尽在www.qis123.com

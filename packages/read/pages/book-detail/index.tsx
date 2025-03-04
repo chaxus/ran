@@ -1,10 +1,16 @@
 import { useParams } from 'react-router-dom';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { getBookById } from '@/store/books';
-import { arrayBufferToString, extractRomanChapters, pagingText } from '@/lib/transformText';
+import {
+  CHAPTER_TITLE_END,
+  CHAPTER_TITLE_START,
+  arrayBufferToString,
+  extractCaptionTitleChapters,
+  pagingText,
+} from '@/lib/transformText';
 import { Popover } from '@/components/popover';
 import type { BookInfo } from '@/store/books';
-import type { ChapterItem, PagingTextResult } from '@/lib/transformText';
+import type { PagingTextItem, PagingTextResult } from '@/lib/transformText';
 import 'ranui/icon';
 import 'ranui/input';
 import './index.scss';
@@ -20,7 +26,7 @@ const MENU_ICON_STYLE = {
 
 const SORT_ICON_STYLE = {
   '--ran-icon-font-size': '20px',
-}
+};
 
 const inputStyle = {
   '--ran-input-border-radius': '2rem',
@@ -38,34 +44,54 @@ const inputStyle = {
 
 interface MenuProps {
   bookDetail?: BookInfo;
-  catalogue?: ChapterItem[];
   setPageNum?: (num: number) => void;
+  textSyntaxTree: TextSyntaxTree;
 }
 
-const Menu = ({ bookDetail, catalogue, setPageNum }: MenuProps) => {
+enum SORT_DIRECTION {
+  UP = 'UP',
+  DOWN = 'DOWN',
+}
+
+const Menu = ({ bookDetail, setPageNum, textSyntaxTree }: MenuProps) => {
   const { title, author, image } = bookDetail || {};
+  const { titleIdTitle = [], titleIdPage = {} } = textSyntaxTree || {};
   const scrollRef = useRef<HTMLDivElement>(null);
+  const sortRef = useRef<HTMLDivElement>(null);
+  const [sortDirection, setSortDirection] = useState(SORT_DIRECTION.DOWN);
 
-  const toPage = useCallback((e: Event) => {
-    // const { start, end } = item || {};
-    const start = (e.target as HTMLElement)?.getAttribute('title') || {}
-    if (!start) return;
-    const item = catalogue?.find((i) => i.start === Number(start));
-    if (!item) return;
-    if (setPageNum && item.pageNum !== undefined) {
-      setPageNum(item.pageNum);
+  const toPage = useCallback(
+    (e: Event) => {
+      const index = (e.target as HTMLElement)?.getAttribute('title') || '';
+      if (index === undefined) return;
+      const page = titleIdPage[index];
+      if (setPageNum && page !== undefined) {
+        setPageNum(page);
+      }
+    },
+    [textSyntaxTree],
+  );
+
+  const toSort = useCallback(() => {
+    if (sortDirection === SORT_DIRECTION.DOWN) {
+      const bottom = scrollRef.current?.scrollHeight;
+      scrollRef.current?.scrollTo({ top: bottom, behavior: 'smooth' });
+      setSortDirection(SORT_DIRECTION.UP);
     }
-    console.log('item', item);
-
-  }, [catalogue])
+    if (sortDirection === SORT_DIRECTION.UP) {
+      scrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+      setSortDirection(SORT_DIRECTION.DOWN);
+    }
+  }, [sortDirection]);
 
   useEffect(() => {
-    scrollRef.current?.addEventListener('click', toPage)
+    scrollRef.current?.addEventListener('click', toPage);
+    sortRef.current?.addEventListener('click', toSort);
     return () => {
-      scrollRef.current?.removeEventListener('click', toPage)
-    }
-  }, [catalogue])
-
+      scrollRef.current?.removeEventListener('click', toPage);
+      sortRef.current?.removeEventListener('click', toSort);
+    };
+  }, [textSyntaxTree, sortDirection]);
 
   return (
     <div
@@ -84,14 +110,24 @@ const Menu = ({ bookDetail, catalogue, setPageNum }: MenuProps) => {
           <div className="text-sm text-text-color-2 font-medium mt-1 break-all">{author}</div>
         </div>
       </div>
-      <div className='mx-9 basis-10 flex items-center justify-end shrink-0'>
-        <r-icon className="cursor-pointer hover-icon" name="sort" style={SORT_ICON_STYLE}></r-icon>
+      <div className="mx-9 basis-10 flex items-center justify-end shrink-0" ref={sortRef}>
+        <r-icon
+          className={`cursor-pointer hover-icon rotate-180 ${sortDirection}`}
+          name="sort"
+          style={SORT_ICON_STYLE}
+        ></r-icon>
       </div>
-      <div className='overflow-y-auto flex-auto' ref={scrollRef}>
-        {catalogue?.map((item) => {
+      <div className="overflow-y-auto flex-auto" ref={scrollRef}>
+        {titleIdTitle?.map((item, index) => {
           return (
-            <div className='px-7 h-12 text-text-color-2 font-normal text-base hover:bg-blue-50 cursor-pointer' title={`${item.start}`} key={item.start} >
-              <div className='border-t border-front-bg-color-1 h-full w-full flex items-center' title={`${item.start}`} >{item.title}</div>
+            <div
+              className="px-7 h-12 text-text-color-2 font-normal text-base hover:bg-blue-50 cursor-pointer"
+              title={`${index}`}
+              key={index}
+            >
+              <div className="border-t border-front-bg-color-1 h-full w-full flex items-center" title={`${index}`}>
+                {item}
+              </div>
             </div>
           );
         })}
@@ -101,15 +137,19 @@ const Menu = ({ bookDetail, catalogue, setPageNum }: MenuProps) => {
 };
 
 interface BookDetailOperateProps {
-  bookDetail?: BookInfo;
-  catalogue?: ChapterItem[];
   setPageNum?: (num: number) => void;
+  textSyntaxTree: TextSyntaxTree;
+  bookDetail?: BookInfo;
 }
 
-const BookDetailOperate = ({ bookDetail, catalogue, setPageNum }: BookDetailOperateProps) => {
+const BookDetailOperate = ({ bookDetail, setPageNum, textSyntaxTree }: BookDetailOperateProps) => {
   return (
     <div className="absolute top-16 right-22">
-      <Popover placement="left" trigger="click" overlay={<Menu bookDetail={bookDetail} catalogue={catalogue} setPageNum={setPageNum} />}>
+      <Popover
+        placement="left"
+        trigger="click"
+        overlay={<Menu bookDetail={bookDetail} setPageNum={setPageNum} textSyntaxTree={textSyntaxTree} />}
+      >
         <div className="w-12 h-12 bg-front-bg-color-3 rounded-4xl flex items-center justify-center cursor-pointer">
           <r-icon className="hover-icon" name="menu" style={MENU_ICON_STYLE}></r-icon>
         </div>
@@ -118,13 +158,39 @@ const BookDetailOperate = ({ bookDetail, catalogue, setPageNum }: BookDetailOper
   );
 };
 
+interface Section {
+  title: string;
+  section: string;
+}
+
+interface Sequence {
+  title: string;
+  result: PagingTextResult;
+  titleId: number;
+}
+
+interface TextSyntaxTree {
+  sequences: Sequence[];
+  totalPage: number;
+  pageText: PagingTextItem[];
+  pageTitleId: number[];
+  titleIdTitle: string[];
+  titleIdPage: Record<string, number>;
+}
+
 export const BookDetail = (): React.JSX.Element => {
   const { id } = useParams();
   const showContainerRef = useRef<HTMLDivElement>(null);
 
   const [bookDetail, setBookDetail] = useState<BookInfo>();
-  const [bookContentList, setBookContentList] = useState<{ text: string; title: string }[]>([]);
-  const [catalogue, setCatalogue] = useState<ChapterItem[]>([]);
+  const [textSyntaxTree, setTextSyntaxTree] = useState<TextSyntaxTree>({
+    sequences: [],
+    totalPage: 0,
+    pageText: [],
+    pageTitleId: [],
+    titleIdTitle: [],
+    titleIdPage: {},
+  });
   const [pageNum, setPageNum] = useState(0);
 
   const pre = () => {
@@ -133,12 +199,17 @@ export const BookDetail = (): React.JSX.Element => {
   };
 
   const next = () => {
-    const size = bookContentList.length;
+    const size = textSyntaxTree.totalPage;
     setPageNum(Math.min(pageNum + 2, size));
   };
 
   const toHome = () => {
     window.location.href = '/';
+  };
+
+  const getTitle = () => {
+    const titleId = textSyntaxTree.pageTitleId[pageNum];
+    return textSyntaxTree.titleIdTitle[titleId];
   };
 
   useEffect(() => {
@@ -148,32 +219,57 @@ export const BookDetail = (): React.JSX.Element => {
         if (res.error) return;
         setBookDetail(res.data);
         const { content } = res.data;
+        // 1. 过滤空格换行
         const text = arrayBufferToString(content).replace(/(?:\r\n|\r|\n)+/g, '\n') || '';
-        const extractedChapters = extractRomanChapters(text);
-        const chapters = JSON.parse(JSON.stringify(extractedChapters));
-        if (showContainerRef.current) {
-          const result: PagingTextResult = pagingText(text, showContainerRef.current);
-          const { program = [] } = result || {}
-          const bookContents = program.map((item) => {
-            const { text, index, start } = item;
-            if (start > chapters[0]?.end) {
-              const chapterItem = chapters.shift();
-              const value = extractedChapters.findIndex(i => i.start === chapterItem?.start)
-              extractedChapters[value + 1].pageNum = index
-            }
-            extractedChapters[0].pageNum = 0;
-            const title = chapters[0]?.title || '';
-            return {
-              text,
-              title,
-              pageNum: index,
-            };
-          });
-          console.log('bookContents', bookContents);
+        // 2. 提取章节标题
+        const extractedChapters = extractCaptionTitleChapters(text);
+        // 3. 把文本按章节划分
+        const sections: Section[] = [];
+        extractedChapters.forEach((item, index) => {
+          const { start, end, title } = item;
+          if (index === 0) {
+            const section = text.slice(0, start);
+            sections.push({ title: '前言', section });
+          }
+          const section = text.slice(start, end);
+          sections.push({ title, section });
+        });
+        // 4. 把章节按页划分
+        const sequences: Sequence[] = [];
+        sections.forEach((item, index) => {
+          const { title, section } = item;
+          if (showContainerRef.current) {
+            const result = pagingText(
+              section.replace(CHAPTER_TITLE_START, '').replace(CHAPTER_TITLE_END, ''),
+              showContainerRef.current,
+            );
+            sequences.push({ title, result, titleId: index });
+          }
+        });
 
-          setCatalogue(extractedChapters);
-          setBookContentList(bookContents);
-        }
+        // 5. 输出文本语法树
+        let totalPage = 0;
+        // 通过空间换时间，构建 page -> text 的映射
+        const pageText: PagingTextItem[] = [];
+        // page -> titleId 的映射
+        const pageTitleId: number[] = [];
+        // titleId -> title 的映射
+        const titleIdTitle: string[] = [];
+        // titleId -> page 的映射
+        const titleIdPage: Record<string, number> = {};
+
+        sequences.forEach((item) => {
+          totalPage += item.result.program.length;
+          item.result.program.forEach((page) => {
+            if (!titleIdPage[item.titleId]) {
+              titleIdPage[item.titleId] = pageText.length;
+            }
+            pageTitleId.push(item.titleId);
+            pageText.push(page);
+          });
+          titleIdTitle.push(item.title);
+        });
+        setTextSyntaxTree({ sequences, totalPage, pageText, pageTitleId, titleIdTitle, titleIdPage });
       })
       .catch(() => {
         toHome();
@@ -196,24 +292,19 @@ export const BookDetail = (): React.JSX.Element => {
           </div>
         </div>
         <div className="bg-front-bg-color-3 rounded-2xl flex-grow pt-7 px-16 flex flex-col text-base">
-          <div className="text-text-color-3 text-sm font-light">
-            {bookContentList[pageNum]?.title}
-          </div>
+          <div className="text-text-color-3 text-sm font-light">{getTitle()}</div>
           <div
             className="mt-5 cursor-auto flex flex-row flex-nowrap justify-between items-center font-normal tracking-wide whitespace-pre-wrap text-text-color-1 text-lg leading-10 w-full"
             style={{
               height: 'calc(100vh - var(--spacing) * 63)',
             }}
           >
-            <div
-              className="h-full w-4/9 overflow-hidden"
-              ref={showContainerRef}
-              dangerouslySetInnerHTML={{ __html: bookContentList[pageNum]?.text }}
-            ></div>
-            <div
-              className="h-full w-4/9 overflow-hidden"
-              dangerouslySetInnerHTML={{ __html: bookContentList[pageNum + 1]?.text }}
-            ></div>
+            <div className="h-full w-4/9 overflow-hidden break-words whitespace-pre-wrap" ref={showContainerRef}>
+              {textSyntaxTree.pageText[pageNum]?.text}
+            </div>
+            <div className="h-full w-4/9 overflow-hidden break-words whitespace-pre-wrap">
+              {textSyntaxTree.pageText[pageNum + 1]?.text}
+            </div>
           </div>
           <div className="h-16">
             <div className="flex justify-between items-center h-full">
@@ -222,13 +313,13 @@ export const BookDetail = (): React.JSX.Element => {
                 onClick={pre}
               >
                 <r-icon className="rotate-90 cursor-pointer" name="more" style={ICON_STYLE}></r-icon>
-                <span>上一章</span>
+                <span>上一页</span>
               </div>
               <div
                 className="text-text-color-2 text-sm font-light border-1 border-border-color-1 pr-2 pl-3 rounded-4xl h-8 flex items-center justify-center cursor-pointer hover:bg-gray-100"
                 onClick={next}
               >
-                <span>下一章</span>
+                <span>下一页</span>
                 <r-icon className="-rotate-90 cursor-pointer" name="more" style={ICON_STYLE}></r-icon>
               </div>
             </div>
@@ -236,7 +327,7 @@ export const BookDetail = (): React.JSX.Element => {
         </div>
         <div className="h-14 w-full"></div>
       </div>
-      <BookDetailOperate bookDetail={bookDetail} catalogue={catalogue} setPageNum={setPageNum} />
+      <BookDetailOperate bookDetail={bookDetail} setPageNum={setPageNum} textSyntaxTree={textSyntaxTree} />
     </div>
   );
 };

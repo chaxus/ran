@@ -1,6 +1,14 @@
 .hover-icon {
   --ran-icon-color: #5d646e;
-  &:hover{
+  --tw-duration: 200ms;
+  @apply transition-transform;
+  &:hover {
     --ran-icon-color: #1b88ee;
+  }
+  &.DOWN {
+    transform: rotate(0deg);
+  }
+  &.UP {
+    transform: rotate(180deg);
   }
 }
