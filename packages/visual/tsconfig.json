@@ -1,28 +1,27 @@
 {
-    "exclude": ["node_modules/**", "dist/**", "public"],
-    "include": ["**/*.ts", "**/*.d.ts", "**/*.tsx", "tailwind.config.ts"],
-    "compilerOptions": {
-      "module": "ESNext",
-      "moduleResolution": "bundler",
-      "esModuleInterop": true,
-      "target": "ESNext",
-      "declaration": true,
-      "outDir": "dist",
-      "forceConsistentCasingInFileNames": true,
-      "noFallthroughCasesInSwitch": true,
-      "isolatedModules": false,
-      "strict": true,
-      "skipLibCheck": true,
-      "noImplicitAny": true,
-      "useUnknownInCatchVariables": false,
-      "inlineSourceMap": true,
-      "baseUrl": ".",
-      "experimentalDecorators": true,
-      "paths": {
-        "@/*": ["./*"],
-        "@/types/*": ["./types/*"],
-        "@/src/*": ["./src/*"]
-      }
+  "exclude": ["node_modules/**", "dist/**", "public"],
+  "include": ["**/*.ts", "**/*.d.ts", "**/*.tsx", "tailwind.config.ts"],
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "target": "ESNext",
+    "declaration": true,
+    "outDir": "dist",
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "isolatedModules": false,
+    "strict": true,
+    "skipLibCheck": true,
+    "noImplicitAny": true,
+    "useUnknownInCatchVariables": false,
+    "inlineSourceMap": true,
+    "baseUrl": ".",
+    "experimentalDecorators": true,
+    "paths": {
+      "@/*": ["./*"],
+      "@/types/*": ["./types/*"],
+      "@/src/*": ["./src/*"]
     }
   }
-  
+}
