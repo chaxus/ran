@@ -30,7 +30,7 @@ void mainImage(out vec4 fragColor,in vec2 fragCoord){
 
 如果你能看到屏幕上显示的图片，那就说明你成功地采样了纹理。
 
-![](./assets/image/texture-demo.jpg)
+![](../assets/image/texture-demo.jpg)
 
 将纹理搬到屏幕上后，我们就要开始对它做一些有意思的操作了~
 
@@ -78,7 +78,7 @@ void mainImage(out vec4 fragColor,in vec2 fragCoord){
 }
 ```
 
-![](./assets/image/texture-wrap.jpg)
+![](../assets/image/texture-wrap.jpg)
 
 哇哦，可以看到图片被极其夸张地扭曲成了上面的形状。扭曲程度太大了，我们需要对扭曲量进行调整。
 
@@ -88,21 +88,21 @@ void mainImage(out vec4 fragColor,in vec2 fragCoord){
 
 进入网站时，它默认展示了好几张函数的图像，点击右上方的 Clear 将它们清空。
 
-![](./assets/image/texture-graphtoy.jpg)
+![](../assets/image/texture-graphtoy.jpg)
 
 在 f1(x,t) =后面的输入框中输入 sin(x)。
 
-![](./assets/image/texture-sin.jpg)
+![](../assets/image/texture-sin.jpg)
 
 可以看到 sin 函数默认的变化幅度是挺大的，我们要将这种幅度缩小。
 
 先给 x 乘上 10，相当于增加了 sin 函数的频率（frequency）。
 
-![](./assets/image/texture-sin10x.jpg)
+![](../assets/image/texture-sin10x.jpg)
 
 再外面整体除以 50，相当于减小了 sin 函数的振幅（amplitude）。
 
-![](./assets/image/texture-sin10x:50.jpg)
+![](../assets/image/texture-sin10x:50.jpg)
 
 把这些操作转换成 Shader 代码吧。
 
@@ -122,7 +122,7 @@ void mainImage(out vec4 fragColor,in vec2 fragCoord){
 }
 ```
 
-![](./assets/image/texture-warpsinx.jpg)
+![](../assets/image/texture-warpsinx.jpg)
 
 嗯，效果看上去比之前好多了。
 
@@ -193,7 +193,7 @@ void mainImage(out vec4 fragColor,in vec2 fragCoord){
 }
 ```
 
-![](./assets/image/texture-zhuan.webp)
+![](../assets/image/texture-zhuan.webp)
 
 左右拖拽鼠标，就能看见最基本的转场效果——淡入淡出转场。
 
@@ -208,11 +208,11 @@ vec4 transition(vec2 uv){
 }
 ```
 
-![](./assets/image/texture-slider.webp)
+![](../assets/image/texture-slider.webp)
 
 我们得到了一个像帘子一般的左右滑动的转场效果。原理见下图：
 
-![](./assets/image/texture-progress.webp)
+![](../assets/image/texture-progress.webp)
 
 将画布分成 2 个部分，位于鼠标左边的部分（左半部分）和位于鼠标右边的部分（右半部分），左半部分的 uv.x 是小于 progress 的，step 函数会返回 0，混合程度则返回 1，表示第二张图片；右半部分的 uv.x 是大于 progress 的，step 函数会返回 1，混合程度则返回 0，表示第一张图片。
 
