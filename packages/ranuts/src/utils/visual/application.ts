@@ -8,9 +8,9 @@ import type { IApplicationOptions } from '@/utils/visual/types';
 // Application 类的 stage 属性是一个 Container，要把节点添加到 stage 上，渲染引擎才会渲染这些节点，stage 是一切待渲染元素的祖先元素。
 export class Application {
   private readonly renderer: Renderer;
-  private animationFrameId: number | undefined;
   public readonly stage: Container; // stage 是一切待渲染元素的祖先元素。
   public readonly view: HTMLCanvasElement;
+  private animationFrameId: number | undefined;
   public eventSystem: EventSystem;
 
   constructor(options: IApplicationOptions) {

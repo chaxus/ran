@@ -10,15 +10,10 @@ export default defineConfig({
   plugins: [],
   resolve: {
     alias: {
-      '@/components': resolve(__dirname, '/components'),
       '@/lib': resolve(__dirname, '/lib'),
+      '@/src': resolve(__dirname, '/src'),
       '@/assets': resolve(__dirname, '/assets'),
     },
     extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json'],
-  },
-  css: {
-    modules: {
-      generateScopedName: '[name--[local]--[hash:base64:5]]',
-    },
   },
 });

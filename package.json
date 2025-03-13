@@ -42,5 +42,12 @@
   "dependencies": {
     "globals": "^15.14.0",
     "ranui": "0.1.10-alpha.19"
+  },
+  "pnpm": {
+    "ignoredBuiltDependencies": [
+      "fsevents",
+      "keccak",
+      "secp256k1"
+    ]
   }
 }

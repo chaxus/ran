@@ -1,27 +1,24 @@
-type Callback = Function;
+export type Callback = Function;
 
-type EventName = string | symbol;
+export type EventName = string | symbol;
 
-type EventItem = {
+export type EventItem = {
   name?: string | symbol;
   callback: Callback;
   initialCallback?: Callback;
 };
 
-const NEW_LISTENER = 'NEW_LISTENER';
+export const NEW_LISTENER = 'NEW_LISTENER';
 
 export class SyncHook {
-  private _events: Record<EventName, Array<EventItem>>;
-  constructor() {
-    this._events = {};
-  }
+  private _events: Record<EventName, Array<EventItem>> = {};
   /**
    * @description: 订阅事件
    * @param {EventName} eventName
    * @param {EventItem} eventItem
    * @return {void}
    */
-  tap = (eventName: EventName, eventItem: EventItem | Callback): SyncHook => {
+  public tap = (eventName: EventName, eventItem: EventItem | Callback): this => {
     if (this._events[eventName] && eventName !== Symbol.for(NEW_LISTENER)) {
       // 注册一个 newListener 用于监听新的事件订阅
       this.call(Symbol.for(NEW_LISTENER), eventName);
@@ -47,12 +44,13 @@ export class SyncHook {
    * @param {array} args
    * @return {void}
    */
-  call = (eventName: EventName, ...args: Array<unknown>): void => {
+  public call = (eventName: EventName, ...args: Array<unknown>): this => {
     const callbacks = this._events[eventName] || [];
     callbacks.forEach((item) => {
       const { callback } = item;
       callback(...args);
     });
+    return this;
   };
   /**
    * @description: 同步触发事件
@@ -60,12 +58,13 @@ export class SyncHook {
    * @param {array} args
    * @return {Promise<void>}
    */
-  callSync = async (eventName: EventName, ...args: Array<unknown>): Promise<void> => {
+  public callSync = async (eventName: EventName, ...args: Array<unknown>): Promise<this> => {
     const callbacks = this._events[eventName] || [];
     for (const item of callbacks) {
       const { callback } = item;
       await callback(...args);
     }
+    return this;
   };
   /**
    * @description: 只订阅一次事件，触发后就移除事件
@@ -73,7 +72,7 @@ export class SyncHook {
    * @param {EventItem} eventItem
    * @return {void}
    */
-  once = (eventName: EventName, eventItem: EventItem | Callback): SyncHook => {
+  public once = (eventName: EventName, eventItem: EventItem | Callback): this => {
     let one: EventItem;
     if (typeof eventItem === 'function') {
       one = {
@@ -108,7 +107,7 @@ export class SyncHook {
    * @param {EventItem} eventItem
    * @return {void}
    */
-  off = (eventName: EventName, eventItem: EventItem | Callback): SyncHook => {
+  public off = (eventName: EventName, eventItem: EventItem | Callback): this => {
     // 找到事件对应的回调函数，删除对应的回调函数
     const callbacks = this._events[eventName] || [];
     const newCallbacks = callbacks.filter((item) => {
