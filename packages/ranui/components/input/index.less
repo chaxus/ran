@@ -1,7 +1,8 @@
 :host {
-  position: relative;
-  display: block;
-  box-sizing: border-box;
+  position: var(--ran-input-host-position, relative);
+  display: var(--ran-input-host-display, block);
+  box-sizing: var(--ran-input-host-box-sizing, border-box);
+  min-height: var(--ran-input-host-min-height, 32px);
 }
 .ran-input {
   box-sizing: var(--ran-input-box-sizing, border-box);
@@ -9,9 +10,9 @@
   display: var(--ran-input-display, flex);
   width: var(--ran-input-width, 100%);
   height: var(--ran-input-height, 100%);
-  min-width: 0;
+  min-width: var(--ran-input-min-width, 0);
   padding: var(--ran-input-padding, 2px 8px);
-  color: #000000d9;
+  color: var(--ran-input-color, #000000d9);
   font-size: var(--ran-input-font-size, 12px);
   line-height: var(--ran-input-line-height, 1.5715);
   background-color: var(--ran-input-background-color, #fff);

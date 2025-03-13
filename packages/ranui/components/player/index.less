@@ -7,11 +7,14 @@
     @i: @index+1;
     @x: round((@i / @number) * 100, 2);
     @selector: e('@{x}%');
+
     @{selector} {
       background-image: url('../../assets/image/loading/1_@{i}.png');
     }
+
     .circle(@i);
   }
+
   .circle(0);
 }
 
@@ -60,55 +63,69 @@
   width: var(--ran-player-width, 100%);
   position: var(--ran-player-position, relative);
   overflow: var(--ran-player-overflow, hidden);
+
   &-contain {
     width: var(--ran-player-contain-width, 100%);
     height: var(--ran-player-contain-height, 100%);
+
     &-video {
       width: var(--ran-player-contain-video-width, 100%);
       height: var(--ran-player-contain-video-height, 100%);
     }
   }
+
   /* 全屏按钮 */
   video::-webkit-media-controls-fullscreen-button {
     display: none;
   }
+
   /* 播放按钮 */
   video::-webkit-media-controls-play-button {
     display: none;
   }
+
   /* 进度条 */
   video::-webkit-media-controls-timeline {
     display: none;
   }
+
   /* 观看的当前时间 */
   video::-webkit-media-controls-current-time-display {
     display: none;
   }
+
   /* 剩余时间 */
   video::-webkit-media-controls-time-remaining-display {
     display: none;
   }
+
   /* 音量按钮 */
   video::-webkit-media-controls-mute-button {
     display: none;
   }
+
   video::-webkit-media-controls-toggle-closed-captions-button {
     display: none;
   }
+
   /* 音量的控制条 */
   video::-webkit-media-controls-volume-slider {
     display: none;
   }
+
   /* 所有控件 */
   video::-webkit-media-controls-enclosure {
     display: none;
   }
+
   video {
     outline: none;
   }
+
   .prism-player {
     position: var(--ran-player-prism-position, relative);
   }
+
   &-play-btn {
     background: var(--ran-player-play-btn-background, url(./img/bigplay.png) no-repeat);
     background-size: var(--ran-player-play-btn-background-size, contain);
@@ -119,9 +136,11 @@
     left: var(--ran-player-play-btn-left, 50%);
     transform: var(--ran-player-play-btn-transform, translate(-50%, -50%));
   }
+
   .prism-auto-stream-selector {
     display: var(--ran-player-prism-auto-stream-selector-display, none);
   }
+
   &-controller {
     position: var(--ran-player-controller-position, absolute);
     bottom: var(--ran-player-controller-bottom, 0);
@@ -136,6 +155,7 @@
     opacity: var(--ran-player-controller-opacity, 0);
     transition: var(--ran-player-controller-transition, opacity 0.5s);
     box-sizing: var(--ran-player-controller-box-sizing, content-box);
+
     &-tip {
       position: var(--ran-player-controller-tip-position, absolute);
       top: var(--ran-player-controller-tip-top, -12px);
@@ -161,6 +181,7 @@
       text-overflow: var(--ran-player-controller-tip-text-overflow, ellipsis);
       opacity: var(--ran-player-controller-tip-opacity, 0);
       text-align: var(--ran-player-controller-tip-text-align, center);
+
       &-time {
         margin-top: var(--ran-player-controller-tip-time-margin-top, 4px);
         text-align: var(--ran-player-controller-tip-time-text-align, center);
@@ -170,6 +191,7 @@
         text-overflow: var(--ran-player-controller-tip-time-text-overflow, ellipsis);
         text-align: var(--ran-player-controller-tip-time-text-align, center);
       }
+
       &-text {
         margin-top: var(--ran-player-controller-tip-text-margin-top, 4px);
         max-width: var(--ran-player-controller-tip-text-max-width, 80px);
@@ -179,20 +201,24 @@
         text-align: var(--ran-player-controller-tip-text-text-align, center);
       }
     }
+
     &-progress {
       position: var(--ran-player-controller-progress-position, relative);
       width: var(--ran-player-controller-progress-width, 100%);
       height: var(--ran-player-controller-progress-height, 4px);
       cursor: var(--ran-player-controller-progress-cursor, pointer);
       box-sizing: var(--ran-player-controller-progress-box-sizing, content-box);
+
       &:focus {
         outline: var(--ran-player-controller-progress-focus-outline, 0);
         -webkit-tap-highlight-color: transparent;
       }
+
       &:active {
         outline: var(--ran-player-controller-progress-active-outline, 0);
         -webkit-tap-highlight-color: transparent;
       }
+
       &-wrap {
         width: var(--ran-player-controller-progress-wrap-width, 100%);
         height: var(--ran-player-controller-progress-wrap-height, 100%);
@@ -202,6 +228,7 @@
         overflow: var(--ran-player-controller-progress-wrap-overflow, hidden);
         pointer-events: var(--ran-player-controller-progress-wrap-pointer-events, none);
         box-sizing: var(--ran-player-controller-progress-wrap-box-sizing, content-box);
+
         &-value {
           position: var(--ran-player-controller-progress-wrap-value-position, absolute);
           top: var(--ran-player-controller-progress-wrap-value-top, 0px);
@@ -217,6 +244,7 @@
           cursor: var(--ran-player-controller-progress-wrap-value-cursor, pointer);
         }
       }
+
       &-dot {
         position: var(--ran-player-controller-progress-dot-position, absolute);
         top: var(--ran-player-controller-progress-dot-top, -2px);
@@ -229,33 +257,39 @@
         cursor: var(--ran-player-controller-progress-dot-cursor, pointer);
       }
     }
+
     &-bottom {
       margin-top: var(--ran-player-controller-bottom-margin-top, 8px);
       width: var(--ran-player-controller-bottom-width, 100%);
       display: var(--ran-player-controller-bottom-display, flex);
       justify-content: var(--ran-player-controller-bottom-justify-content, space-between);
       align-items: var(--ran-player-controller-bottom-align-items, center);
+
       &-left {
         user-select: var(--ran-player-controller-bottom-left-user-select, none);
         display: var(--ran-player-controller-bottom-left-display, flex);
         justify-content: var(--ran-player-controller-bottom-left-justify-content, flex-start);
         align-items: var(--ran-player-controller-bottom-left-align-items, center);
+
         &-btn {
           width: var(--ran-player-controller-bottom-left-btn-width, 20px);
           height: var(--ran-player-controller-bottom-left-btn-height, 20px);
           cursor: var(--ran-player-controller-bottom-left-btn-cursor, pointer);
           outline: var(--ran-player-controller-bottom-left-btn-outline, 0);
           -webkit-tap-highlight-color: transparent;
+
           &:active,
           &:focus {
             outline: var(--ran-player-controller-bottom-left-btn-focus-outline, 0);
             -webkit-tap-highlight-color: transparent;
           }
         }
+
         &-btn-play {
           background: var(--ran-player-controller-bottom-left-btn-play-background, url(./img/smallplay.png) no-repeat);
           background-size: var(--ran-player-controller-bottom-left-btn-play-background-size, contain);
         }
+
         &-btn-pause {
           background: var(
             --ran-player-controller-bottom-left-btn-pause-background,
@@ -263,11 +297,13 @@
           );
           background-size: var(--ran-player-controller-bottom-left-btn-pause-background-size, contain);
         }
+
         &-time {
           margin-left: var(--ran-player-controller-bottom-left-time-margin-left, 16px);
           display: var(--ran-player-controller-bottom-left-time-display, flex);
           justify-content: var(--ran-player-controller-bottom-left-time-justify-content, flex-start);
           align-items: var(--ran-player-controller-bottom-left-time-align-items, center);
+
           &-current {
             color: var(--ran-player-controller-bottom-left-time-current-color, #fff);
             font-family: var(--ran-player-controller-bottom-left-time-current-font-family, PingFang SC);
@@ -280,6 +316,7 @@
             position: var(--ran-player-controller-bottom-left-time-current-position, relative);
             top: var(--ran-player-controller-bottom-left-time-current-top, 2px);
           }
+
           &-divide {
             color: var(--ran-player-controller-bottom-left-time-divide-color, #fff);
             font-family: var(--ran-player-controller-bottom-left-time-divide-font-family, PingFang SC);
@@ -292,6 +329,7 @@
             position: var(--ran-player-controller-bottom-left-time-divide-position, relative);
             top: var(--ran-player-controller-bottom-left-time-divide-top, 2px);
           }
+
           &-duration {
             color: var(--ran-player-controller-bottom-left-time-duration-color, #fff);
             font-family: var(--ran-player-controller-bottom-left-time-duration-font-family, PingFang SC);
@@ -306,17 +344,20 @@
           }
         }
       }
+
       &-right {
         user-select: var(--ran-player-controller-bottom-right-user-select, none);
         display: var(--ran-player-controller-bottom-right-display, flex);
         justify-content: var(--ran-player-controller-bottom-right-justify-content, flex-end);
         align-items: var(--ran-player-controller-bottom-right-align-items, center);
+
         &-volume {
           display: var(--ran-player-controller-bottom-right-volume-display, flex);
           justify-content: var(--ran-player-controller-bottom-right-volume-justify-content, space-between);
           align-items: var(--ran-player-controller-bottom-right-volume-align-items, center);
           margin-right: var(--ran-player-controller-bottom-right-volume-margin-right, 12px);
           cursor: var(--ran-player-controller-bottom-right-align-volume-cursor, pointer);
+
           &-icon-volume {
             background: var(
               --ran-player-controller-bottom-right-align-volume-icon-volume-background,
@@ -327,6 +368,7 @@
               contain
             );
           }
+
           &-icon-mute {
             background: var(
               --ran-player-controller-bottom-right-align-volume-icon-mute-background,
@@ -334,11 +376,13 @@
             );
             background-size: var(--ran-player-controller-bottom-right-align-volume-icon-mute-background-size, contain);
           }
+
           &-icon {
             width: var(--ran-player-controller-bottom-right-align-volume-icon-width, 18px);
             height: var(--ran-player-controller-bottom-right-align-volume-icon-height, 18px);
             margin-right: 6px;
           }
+
           &-progress {
             width: var(--ran-player-controller-bottom-right-align-volume-progress-width, 50px);
             --ran-progress-wrap-height: 4px;
@@ -349,14 +393,17 @@
             --ran-progress-dot-width: 8px;
             --ran-progress-dot-height: 8px;
             --ran-progress-dot-background: rgba(255, 255, 255, 1);
+
             .ran-progress {
               &-wrap {
                 --ran-progress-wrap-height: 4px;
                 --ran-progress-wrap-background: rgba(255, 255, 255, 0.3);
+
                 &-value {
                   --ran-progress-wrap-value-background: rgba(255, 255, 255, 0.8);
                 }
               }
+
               &-dot {
                 --ran-progress-dot-top: -2px;
                 --ran-progress-dot-left: -4px;
@@ -367,6 +414,7 @@
             }
           }
         }
+
         &-speed {
           width: var(--ran-player-controller-bottom-right-align-speed-width, 30px);
           height: var(--ran-player-controller-bottom-right-align-speed-height, 20px);
@@ -380,24 +428,38 @@
           cursor: var(--ran-player-controller-bottom-right-align-speed-cursor, pointer);
           outline: var(--ran-player-controller-bottom-right-align-speed-outline, 0);
           -webkit-tap-highlight-color: transparent;
+
           &:active,
           &:focus {
             outline: var(--ran-player-controller-bottom-right-align-speed-focus-outline, 0);
             -webkit-tap-highlight-color: transparent;
           }
+
           r-select {
             width: 46px;
             height: 20px;
             outline: 0;
             -webkit-tap-highlight-color: transparent;
+
             &:active,
             &:focus {
               outline: 0;
               -webkit-tap-highlight-color: transparent;
             }
+
+            &:hover {
+              border: none;
+            }
+
             &::part(selection) {
               background-color: transparent;
             }
+
+
+            &::part(icon) {
+              display: none;
+            }
+
             &::part(selection-item) {
               top: 1px;
               color: #fff;
@@ -405,6 +467,7 @@
             }
           }
         }
+
         &-clarity {
           color: var(--ran-player-controller-bottom-right-align-clarity-color, #fff);
           font-family: var(--ran-player-controller-bottom-right-align-clarity-font-family, PingFang SC);
@@ -418,24 +481,33 @@
           margin-right: var(--ran-player-controller-bottom-right-align-clarity-margin-right, 12px);
           outline: var(--ran-player-controller-bottom-right-align-clarity-outline, 0);
           -webkit-tap-highlight-color: transparent;
+
           &:active,
           &:focus {
             outline: var(--ran-player-controller-bottom-right-align-clarity-focus-outline, 0);
             -webkit-tap-highlight-color: transparent;
           }
+
           r-select {
             width: 46px;
             height: 20px;
             outline: 0;
             -webkit-tap-highlight-color: transparent;
+
             &:active,
             &:focus {
               outline: 0;
               -webkit-tap-highlight-color: transparent;
             }
+
             &::part(selection) {
               background-color: transparent;
             }
+
+            &::part(icon) {
+              display: none;
+            }
+
             &::part(selection-item) {
               top: 1px;
               color: #fff;
@@ -443,6 +515,7 @@
             }
           }
         }
+
         &-knowledge {
           color: var(--ran-player-controller-bottom-right-align-knowledge-color, #fff);
           font-family: var(--ran-player-controller-bottom-right-align-knowledge-font-family, PingFang SC);
@@ -453,6 +526,7 @@
           margin-right: var(--ran-player-controller-bottom-right-align-knowledge-margin-right, 24px);
           cursor: var(--ran-player-controller-bottom-right-align-knowledge-cursor, pointer);
         }
+
         &-full {
           background: var(--ran-player-controller-bottom-right-align-full-background, url('./img/fullscreenfig.png'));
           background-size: var(--ran-player-controller-bottom-right-align-full-background-size, contain);

@@ -80,7 +80,7 @@ export class Select extends (HTMLElementSSR()!) {
     this._text = document.createElement('span');
     this._text.setAttribute('class', 'selection-item');
     this._text.setAttribute('part', 'selection-item');
-    this._icon = document.createElement('ra-icon');
+    this._icon = document.createElement('r-icon');
     this._icon.setAttribute('class', 'icon');
     this._icon.setAttribute('part', 'icon');
     this._icon.setAttribute('name', 'arrow-down');
