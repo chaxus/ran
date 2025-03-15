@@ -36,10 +36,10 @@
 
 ### onchange
 
-<r-checkbox onchange="console.log(this.checked)"></r-checkbox>
-<r-checkbox onchange="console.log(this.checked)"></r-checkbox>
+ <r-checkbox onchange="message.info(this)"></r-checkbox>
+ <r-checkbox onchange="message.info(this)"></r-checkbox>
 
 ```xml
- <r-checkbox onchange="console.log(this.checked)"></r-checkbox>
- <r-checkbox onchange="console.log(this.checked)"></r-checkbox>
+ <r-checkbox onchange="message.info(this)"></r-checkbox>
+ <r-checkbox onchange="message.info(this)"></r-checkbox>
 ```
