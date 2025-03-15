@@ -18,6 +18,7 @@ export default defineConfig({
       '@/assets': resolve(__dirname, '/assets'),
       '@/types': resolve(__dirname, '/types'),
       '@/styles': resolve(__dirname, '/styles'),
+      '@/pages': resolve(__dirname, '/pages'),
     },
     extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json'],
   },

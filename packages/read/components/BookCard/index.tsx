@@ -12,7 +12,7 @@ export const BookCard = ({ book }: BookCardProps): React.JSX.Element => {
     if (event.currentTarget.title === id) {
       document.startViewTransition(() => {
         navigate(`/book-detail/${id}`);
-      })
+      });
     }
   };
 

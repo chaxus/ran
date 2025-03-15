@@ -36,8 +36,8 @@
 
 ### onchange
 
- <r-checkbox onchange="message.info(this)"></r-checkbox>
- <r-checkbox onchange="message.info(this)"></r-checkbox>
+<r-checkbox onchange="message.info(this)"></r-checkbox>
+<r-checkbox onchange="message.info(this)"></r-checkbox>
 
 ```xml
  <r-checkbox onchange="message.info(this)"></r-checkbox>

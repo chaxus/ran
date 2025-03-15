@@ -2,6 +2,8 @@ import { Suspense, lazy, useEffect } from 'react';
 import { useNavigate, useRoutes } from 'react-router-dom';
 import type { ReactElement } from 'react';
 import { Loading } from '@/components/Loading/index';
+import { Home } from '@/pages/home/index';
+import { BookDetail } from '@/pages/book-detail/index';
 
 export enum ROUTE_PATH {
   HOME = '/home',
@@ -14,9 +16,8 @@ export interface Redirect {
   (param: { to: string; replace?: boolean; state?: object }): null;
 }
 
-const page = (component: string) => {
+export const Page = ({ component }: { component: string }): ReactElement => {
   const Element = lazy(() => import(`../pages/${component}/index.tsx`));
-
   return (
     <Suspense fallback={<Loading />}>
       <Element />
@@ -37,18 +38,22 @@ export const Routes = (): ReactElement | null => {
   const defaultRoute = [
     {
       path: '/',
+      exact: true,
       element: <Redirect to={ROUTE_PATH.HOME} />,
     },
     {
       path: ROUTE_PATH.HOME,
-      element: page('home'),
+      exact: true,
+      element: <Home />,
     },
     {
       path: ROUTE_PATH.BOOK_DETAIL_ID,
-      element: page('book-detail'),
+      exact: true,
+      element: <BookDetail />,
     },
     {
       path: ROUTE_PATH.LOADING,
+      exact: true,
       element: <Loading />,
     },
   ];

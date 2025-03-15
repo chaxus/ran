@@ -29,6 +29,7 @@
       "@/lib/*": ["./lib/*"],
       "@/store/*": ["./store/*"],
       "@/assets/*": ["./assets/*"],
+      "@/pages/*": ["./pages/*"]
     }
   }
 }
