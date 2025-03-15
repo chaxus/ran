@@ -11,6 +11,7 @@ import {
 import { Popover } from '@/components/popover';
 import type { BookInfo } from '@/store/books';
 import type { PagingTextItem, PagingTextResult } from '@/lib/transformText';
+import { ROUTE_PATH } from '@/router';
 import 'ranui/icon';
 import 'ranui/input';
 import './index.scss';
@@ -66,7 +67,16 @@ const Menu = ({ bookDetail, setPageNum, textSyntaxTree }: MenuProps) => {
       if (index === undefined) return;
       const page = titleIdPage[index];
       if (setPageNum && page !== undefined) {
-        setPageNum(page);
+        // Fallback for browsers that don't support View Transitions API
+        if (!document.startViewTransition) {
+          setPageNum(page);
+          return;
+        }
+
+        // With View Transition
+        document.startViewTransition(() => {
+          setPageNum(page);
+        });
       }
     },
     [textSyntaxTree],
@@ -181,7 +191,6 @@ interface TextSyntaxTree {
 export const BookDetail = (): React.JSX.Element => {
   const { id } = useParams();
   const showContainerRef = useRef<HTMLDivElement>(null);
-
   const [bookDetail, setBookDetail] = useState<BookInfo>();
   const [textSyntaxTree, setTextSyntaxTree] = useState<TextSyntaxTree>({
     sequences: [],
@@ -195,21 +204,36 @@ export const BookDetail = (): React.JSX.Element => {
 
   const pre = () => {
     if (pageNum === 0) return;
-    setPageNum(Math.max(pageNum - 2, 0));
+    // 开始视图变换
+    if (document.startViewTransition) {
+      document.startViewTransition(() => {
+        setPageNum(Math.max(pageNum - 2, 0));
+      });
+    } else {
+      setPageNum(Math.max(pageNum - 2, 0));
+    }
+
   };
 
   const next = () => {
     const size = textSyntaxTree.totalPage;
-    setPageNum(Math.min(pageNum + 2, size));
-  };
-
-  const toHome = () => {
-    window.location.href = '/';
+    // 开始视图变换
+    if (document.startViewTransition) {
+      document.startViewTransition(() => {
+        setPageNum(Math.min(pageNum + 2, size));
+      });
+    } else {
+      setPageNum(Math.min(pageNum + 2, size));
+    }
   };
 
   const getTitle = () => {
     const titleId = textSyntaxTree.pageTitleId[pageNum];
     return textSyntaxTree.titleIdTitle[titleId];
+  };
+
+  const bookInfoStyle: Record<string, string> = {
+    '--view-transition-name': `${id}`,
   };
 
   useEffect(() => {
@@ -272,7 +296,7 @@ export const BookDetail = (): React.JSX.Element => {
         setTextSyntaxTree({ sequences, totalPage, pageText, pageTitleId, titleIdTitle, titleIdPage });
       })
       .catch(() => {
-        toHome();
+        window.location.href = ROUTE_PATH.HOME;
       });
   }, []);
 
@@ -281,17 +305,19 @@ export const BookDetail = (): React.JSX.Element => {
       <div className="w-full h-full flex flex-col">
         <div className="h-16 flex items-center justify-between flex-row flex-nowrap shrink-0">
           <div>
-            <div className="text-text-color-2 font-medium hover:text-text-color-1 cursor-pointer" onClick={toHome}>
+            <a className="text-text-color-2 font-medium hover:text-text-color-1 cursor-pointer" href={ROUTE_PATH.HOME}>
               {bookDetail?.title}
-            </div>
+            </a>
           </div>
           <div>
-            <div className="text-text-color-2 font-normal cursor-pointer hover:text-text-color-1" onClick={toHome}>
+            <a className="text-text-color-2 font-normal cursor-pointer hover:text-text-color-1" href={ROUTE_PATH.HOME}>
               首页
-            </div>
+            </a>
           </div>
         </div>
-        <div className="bg-front-bg-color-3 rounded-2xl flex-grow pt-7 px-16 flex flex-col text-base">
+        <div className="bg-front-bg-color-3 rounded-2xl flex-grow pt-7 px-16 flex flex-col text-base book-info"
+          style={bookInfoStyle}
+        >
           <div className="text-text-color-3 text-sm font-light">{getTitle()}</div>
           <div
             className="mt-5 cursor-auto flex flex-row flex-nowrap justify-between items-center font-normal tracking-wide whitespace-pre-wrap text-text-color-1 text-lg leading-10 w-full"

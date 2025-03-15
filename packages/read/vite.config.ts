@@ -16,6 +16,8 @@ export default defineConfig({
       '@/lib': resolve(__dirname, '/lib'),
       '@/store': resolve(__dirname, '/store'),
       '@/assets': resolve(__dirname, '/assets'),
+      '@/types': resolve(__dirname, '/types'),
+      '@/styles': resolve(__dirname, '/styles'),
     },
     extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json'],
   },

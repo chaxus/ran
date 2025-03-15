@@ -19,14 +19,16 @@
     "baseUrl": ".",
     "experimentalDecorators": true,
     "jsx": "react-jsx",
-    // "jsx": "preserve",
-    // "jsxFactory": "h",
-    // "jsxFragmentFactory": "Fragment",
-    // "jsxImportSource": "@",
     "paths": {
       "@/*": ["./*"],
       "@/types/*": ["./types/*"],
-      "@/src/*": ["./src/*"]
+      "@/src/*": ["./src/*"],
+      "@/styles/*": ["./styles/*"],
+      "@/components/*": ["./components/*"],
+      "@/router/*": ["./router/*"],
+      "@/lib/*": ["./lib/*"],
+      "@/store/*": ["./store/*"],
+      "@/assets/*": ["./assets/*"],
     }
   }
 }

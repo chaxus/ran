@@ -3,6 +3,13 @@ import { useNavigate, useRoutes } from 'react-router-dom';
 import type { ReactElement } from 'react';
 import { Loading } from '@/components/Loading/index';
 
+export enum ROUTE_PATH {
+  HOME = '/home',
+  BOOK_DETAIL = '/book-detail',
+  BOOK_DETAIL_ID = '/book-detail/:id',
+  LOADING = '/loading',
+}
+
 export interface Redirect {
   (param: { to: string; replace?: boolean; state?: object }): null;
 }
@@ -30,18 +37,18 @@ export const Routes = (): ReactElement | null => {
   const defaultRoute = [
     {
       path: '/',
-      element: <Redirect to="/home" />,
+      element: <Redirect to={ROUTE_PATH.HOME} />,
     },
     {
-      path: '/home',
+      path: ROUTE_PATH.HOME,
       element: page('home'),
     },
     {
-      path: '/book-detail/:id',
+      path: ROUTE_PATH.BOOK_DETAIL_ID,
       element: page('book-detail'),
     },
     {
-      path: '/loading',
+      path: ROUTE_PATH.LOADING,
       element: <Loading />,
     },
   ];
