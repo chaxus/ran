@@ -2,7 +2,21 @@
   position: var(--ran-input-host-position, relative);
   display: var(--ran-input-host-display, block);
   box-sizing: var(--ran-input-host-box-sizing, border-box);
-  min-height: var(--ran-input-host-min-height, 32px);
+  &([placeholder]) {
+    .ran-input {
+      &-label {
+        transform: var(--ran-input-label-placeholder-transform, translateY(calc(-50% - 0.43em)) scale(0.8));
+        top: var(--ran-input-label-placeholder-top, 0);
+      }
+    }
+  }
+  .ran-input {
+    &-label {
+      transform: var(--ran-input-label-transform, translateY(-50%));
+      top: var(--ran-input-label-top, 50%);
+      transition: var(--ran-input-label-transition, all 0.3s);
+    }
+  }
 }
 .ran-input {
   box-sizing: var(--ran-input-box-sizing, border-box);
@@ -11,7 +25,7 @@
   width: var(--ran-input-width, 100%);
   height: var(--ran-input-height, 100%);
   min-width: var(--ran-input-min-width, 0);
-  padding: var(--ran-input-padding, 2px 8px);
+  padding: var(--ran-input-padding, 0px 0px 0px 4px);
   color: var(--ran-input-color, #000000d9);
   font-size: var(--ran-input-font-size, 12px);
   line-height: var(--ran-input-line-height, 1.5715);
@@ -20,6 +34,8 @@
   border: var(--ran-input-border, 1px solid #d9d9d9);
   border-radius: var(--ran-input-border-radius, 2px);
   transition: var(--ran-input-transition, all 0.3s);
+  // overflow: var(--ran-input-overflow, hidden);
+  min-height: var(--ran-input-min-height, 32px);
   .ran-icon {
     display: var(--ran-input-icon-display, flex);
     align-items: var(--ran-input-icon-align-items, center);
@@ -112,7 +128,7 @@
     transition: var(--ran-input-content-transition, all 0.3s);
     outline: var(--ran-input-content-outline, none);
     border-radius: var(--ran-input-content-border-radius, 2px);
-    padding: var(--ran-input-content-padding, 0);
+    padding: var(--ran-input-content-padding, 0 0 0 2px);
     font-weight: var(--ran-input-content-font-weight, 400);
     &:focus,
     &:hover {
@@ -127,6 +143,7 @@
     }
     &:focus ~ .ran-input-label {
       transform: var(--ran-input-content-focus-label-transform, translateY(calc(-50% - 0.43em)) scale(0.8));
+      top: var(--ran-input-content-focus-label-top, 0px);
     }
     &::-webkit-search-cancel-button {
       display: none;
@@ -148,9 +165,10 @@
       backdrop-filter 0.3s
     );
     transform-origin: var(--ran-input-label-transform-origin, left);
-    padding: var(--ran-input-label-padding, 0 0.2em);
+    padding: var(--ran-input-label-padding, 0 0);
     color: var(--ran-input-label-color, #999);
     background: var(--ran-input-label-background, #fff);
     opacity: var(--ran-input-label-opacity, 0.9);
+    transition: var(--ran-input-label-transition, all 0.3s);
   }
 }

@@ -34,9 +34,9 @@
         </r-content>
       </r-popover>
       <r-popover trigger="click,hover" placement="top" style="display: inline-block">
-        <r-button style="margin: 0px">popover</r-button>
+        <r-button style="margin: 0px">top</r-button>
         <r-content>
-          <div style="width: 100vw; max-width: 600px; height: 300px">
+          <div>
             <r-progress type="drag"></r-progress>
           </div>
         </r-content>
@@ -147,9 +147,9 @@
     </r-tabs>
     <h2>Input</h2>
     <div style="width: 40%; height: 200px; display: flex; flex-flow: column; justify-content: space-around">
-      <ra-input label="user"></ra-input>
-      <r-input label="user" placeholder="user"></r-input>
-      <r-input icon="home" status="warning" disabled></r-input>
+      <r-input label="user"></r-input>
+      <r-input label="user" placeholder="name"></r-input>
+      <r-input icon="home" status="warning"></r-input>
     </div>
     <h2>Preview</h2>
     <r-button type="primary" onclick="uploadFile()">choose file to preview</r-button>

@@ -2,7 +2,7 @@
  * @Author: chaxus nouo18@163.com
  * @Date: 2024-12-08 17:58:20
  * @LastEditors: chaxus nouo18@163.com
- * @LastEditTime: 2025-03-02 23:48:16
+ * @LastEditTime: 2025-03-15 13:26:36
  * @FilePath: /ran/packages/ranui/components/popover/index.ts
  */
 import { create, isMobile } from 'ranuts/utils';
@@ -216,7 +216,7 @@ export class Popover extends (HTMLElementSSR()!) {
     const root = document.getElementById(this.getPopupContainerId);
     const popoverContentRect = this.popoverContent.getBoundingClientRect();
     if (this.placement === PLACEMENT_TYPE.TOP) {
-      popoverTop = top + window.scrollY - popoverContentRect.height - arrowHeight;
+      popoverTop = top + window.scrollY - Math.max(popoverContentRect.height, height) - arrowHeight;
       if (this.getPopupContainerId && root) {
         const rootRect = root.getBoundingClientRect();
         popoverLeft = left - rootRect.left;

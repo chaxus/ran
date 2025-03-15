@@ -10,7 +10,7 @@ import {
   GTAG,
   HOME,
   HOME_ICON,
-  KEY_WORDS,
+  // KEY_WORDS,
   PREVIEW_CODE,
   RANUI_PATH,
   SERVICE_WORK,
@@ -87,7 +87,7 @@ export default defineConfig({
     ['meta', { property: 'article:ranuts', content: UTILS_PATH }],
     ['meta', { property: 'article:section', content: ARTICLE_PATH }],
     // keywords
-    ['meta', { name: 'keywords', content: KEY_WORDS }],
+    // ['meta', { name: 'keywords', content: KEY_WORDS }],
     // chrome
     ['meta', { httpEquiv: 'Permissions-Policy', content: 'interest-cohort=()' }],
     // set font size
