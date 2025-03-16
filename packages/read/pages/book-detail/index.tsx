@@ -12,6 +12,7 @@ import { Popover } from '@/components/popover';
 import type { BookInfo } from '@/store/books';
 import type { PagingTextItem, PagingTextResult } from '@/lib/transformText';
 import { ROUTE_PATH } from '@/router';
+import { EVENT_NAME, synchook } from '@/lib/subscribe';
 import 'ranui/icon';
 import 'ranui/input';
 import './index.scss';
@@ -77,6 +78,7 @@ const Menu = ({ bookDetail, setPageNum, textSyntaxTree }: MenuProps) => {
           setPageNum(page);
         });
       }
+      synchook.call(EVENT_NAME.CLOSE_POPOVER);
     },
     [textSyntaxTree],
   );
@@ -150,7 +152,6 @@ interface BookDetailOperateProps {
   textSyntaxTree: TextSyntaxTree;
   bookDetail?: BookInfo;
 }
-
 const BookDetailOperate = ({ bookDetail, setPageNum, textSyntaxTree }: BookDetailOperateProps) => {
   return (
     <div className="absolute top-16 right-22">
@@ -329,7 +330,7 @@ export const BookDetail = (): React.JSX.Element => {
           style={{
             viewTransitionName: 'book-info',
           }}
-          className="bg-front-bg-color-3 rounded-2xl flex-grow pt-7 px-16 flex flex-col text-base"
+          className="bg-front-bg-color-3 rounded-2xl flex-grow pt-7 px-16 flex flex-col text-base book-info-container"
         >
           <div className="text-text-color-3 text-sm font-light">{getTitle()}</div>
           <div

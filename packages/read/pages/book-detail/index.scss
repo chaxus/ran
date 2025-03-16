@@ -1,9 +1,20 @@
-$name: var(--view-transition-name);
 
-// ::view-transition-old(book-info) {
-//   animation-duration: 12s;
+// @keyframes clip {
+//   from {
+//     clip-path: circle(0%);
+//   }
+//   to{
+//     clip-path: circle(100%);
+//   }
 // }
 
+::view-transition-old(book-info) {
+  // display: none;
+  // animation: none;
+  animation-duration: 0.2s;
+}
 ::view-transition-new(book-info) {
-  animation-duration: 22s;
+  animation-duration: 0.2s;
+  // mix-blend-mode: normal;
+  // animation: clip .5s ease-in;
 }

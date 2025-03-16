@@ -193,6 +193,7 @@ interface BaseIntrinsicElements {
     trigger: string;
     getPopupContainerId: string;
     arrow: boolean | string;
+    closePopover: () => void;
   };
   'r-content': any;
   'r-preview': any & {

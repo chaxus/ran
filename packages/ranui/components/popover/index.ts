@@ -2,7 +2,7 @@
  * @Author: chaxus nouo18@163.com
  * @Date: 2024-12-08 17:58:20
  * @LastEditors: chaxus nouo18@163.com
- * @LastEditTime: 2025-03-15 13:26:36
+ * @LastEditTime: 2025-03-16 12:55:22
  * @FilePath: /ran/packages/ranui/components/popover/index.ts
  */
 import { create, isMobile } from 'ranuts/utils';
@@ -59,6 +59,9 @@ export class Popover extends (HTMLElementSSR()!) {
   removeTimeId?: NodeJS.Timeout;
   static get observedAttributes(): string[] {
     return ['placement', 'arrow', 'trigger'];
+  }
+  public readonly closePopover = (): void => {
+    this.setDropdownDisplayNone()
   }
   constructor() {
     super();

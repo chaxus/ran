@@ -34,6 +34,7 @@
   "dependencies": {
     "crypto-js": "^4.2.0",
     "jschardet": "^3.1.4",
-    "ranui": "workspace:^"
+    "ranui": "workspace:^",
+    "ranuts": "workspace:^"
   }
 }
