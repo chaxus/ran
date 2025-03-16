@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { BookInfo } from '@/store/books';
 import './index.scss';
@@ -8,23 +9,30 @@ interface BookCardProps {
 export const BookCard = ({ book }: BookCardProps): React.JSX.Element => {
   const { id, image, title = '', author = '' } = book || {};
   const navigate = useNavigate();
-  const toDetail = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    if (event.currentTarget.title === id) {
-      document.startViewTransition(() => {
+  const ref = useRef<HTMLAnchorElement>(null);
+  const toDetail = () => {
+      if (document.startViewTransition) {
+        ref.current?.style.setProperty('view-transition-name', 'book-info');
+        document.startViewTransition(() => {
+          ref.current?.style.setProperty('view-transition-name', "");
+          navigate(`/book-detail/${id}`);
+        });
+      } else {
         navigate(`/book-detail/${id}`);
-      });
-    }
+      }
   };
 
-  const style: Record<string, string> = {
-    '--view-transition-name': id,
-  };
+  useEffect(() => {
+    ref.current?.style.setProperty('view-transition-name', 'book-info');
+  }, []);
 
   return (
     <a
-      title={id}
+      ref={ref}
       onClick={toDetail}
-      style={style}
+      style={{
+        viewTransitionName: 'book-info',
+      }}
       className="w-2xs h-40 bg-front-bg-color-3 p-5 cursor-pointer rounded-xl mr-6 items-center flex hover:scale-110 transition-all mt-5"
     >
       <div className="grow-0">{image && <img className="h-28 object-cover mr-5" src={image} alt={title}></img>}</div>

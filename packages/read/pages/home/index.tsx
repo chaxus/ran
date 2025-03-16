@@ -77,6 +77,17 @@ export const Home = (): React.JSX.Element => {
     });
   };
 
+  const getBooks = () => {
+    getAllBooks<BookInfo>()
+      .then((res) => {
+        if (!res.error) setBookList(res.data);
+      })
+      .catch(() => {
+        resumeDB().then(() => {
+          getBooks();
+        });
+      });
+  };
   useEffect(() => {
     // 默认添加的书籍，只添加一次
     if (!localStorage.getItem(BOOKS_ADD_BY_DEFAULT)) {
@@ -86,13 +97,7 @@ export const Home = (): React.JSX.Element => {
       localStorage.setItem(BOOKS_ADD_BY_DEFAULT, 'true');
     }
     // 查询所有书籍，进行展示
-    getAllBooks<BookInfo>()
-      .then((res) => {
-        if (!res.error) setBookList(res.data);
-      })
-      .catch(() => {
-        resumeDB();
-      });
+    getBooks();
   }, []);
 
   return (

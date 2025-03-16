@@ -1,3 +1,9 @@
-a {
-  view-transition-name: var(--view-transition-name);
+$name: var(--view-transition-name);
+
+::view-transition-old(book-info) {
+  animation-duration: 22s;
 }
+
+// ::view-transition-new(book-info) {
+//   animation-duration: 12s;
+// }

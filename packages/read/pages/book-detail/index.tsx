@@ -72,7 +72,6 @@ const Menu = ({ bookDetail, setPageNum, textSyntaxTree }: MenuProps) => {
           setPageNum(page);
           return;
         }
-
         // With View Transition
         document.startViewTransition(() => {
           setPageNum(page);
@@ -192,6 +191,7 @@ export const BookDetail = (): React.JSX.Element => {
   const { id } = useParams();
   const showContainerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const ref = useRef<HTMLDivElement>(null);
   const [bookDetail, setBookDetail] = useState<BookInfo>();
   const [textSyntaxTree, setTextSyntaxTree] = useState<TextSyntaxTree>({
     sequences: [],
@@ -230,10 +230,6 @@ export const BookDetail = (): React.JSX.Element => {
   const getTitle = () => {
     const titleId = textSyntaxTree.pageTitleId[pageNum];
     return textSyntaxTree.titleIdTitle[titleId];
-  };
-
-  const bookInfoStyle: Record<string, string> = {
-    '--view-transition-name': `${id}`,
   };
 
   useEffect(() => {
@@ -294,6 +290,7 @@ export const BookDetail = (): React.JSX.Element => {
           titleIdTitle.push(item.title);
         });
         setTextSyntaxTree({ sequences, totalPage, pageText, pageTitleId, titleIdTitle, titleIdPage });
+        ref.current?.style.setProperty('view-transition-name',  'book-info');
       })
       .catch(() => {
         navigate(ROUTE_PATH.HOME);
@@ -301,7 +298,15 @@ export const BookDetail = (): React.JSX.Element => {
   }, []);
 
   const toHome = () => {
-    navigate(ROUTE_PATH.HOME);
+    if (document.startViewTransition) {
+      ref.current?.style.setProperty('view-transition-name',  'book-info');
+      document.startViewTransition(() => {
+        ref.current?.style.setProperty('view-transition-name', "");
+        navigate(ROUTE_PATH.HOME);
+      });
+    } else {
+      navigate(ROUTE_PATH.HOME);
+    }
   };
 
   return (
@@ -320,8 +325,11 @@ export const BookDetail = (): React.JSX.Element => {
           </div>
         </div>
         <div
-          className="bg-front-bg-color-3 rounded-2xl flex-grow pt-7 px-16 flex flex-col text-base book-info"
-          style={bookInfoStyle}
+          ref={ref}
+          style={{
+            viewTransitionName: 'book-info',
+          }}
+          className="bg-front-bg-color-3 rounded-2xl flex-grow pt-7 px-16 flex flex-col text-base"
         >
           <div className="text-text-color-3 text-sm font-light">{getTitle()}</div>
           <div

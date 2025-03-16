@@ -12,8 +12,13 @@ export const closeDB = (): void => {
   db.closeDataBase();
 };
 
-export const resumeDB = (): void => {
-  db.refreshDatabase().then(() => {
-    createBookStore();
+export const resumeDB = (): Promise<boolean> => {
+  return new Promise((resolve, reject) => {
+    db.refreshDatabase().then(() => {
+      createBookStore();
+      resolve(true);
+    }).catch(() => {
+      reject(false);
+    });
   });
 };
