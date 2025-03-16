@@ -21,6 +21,7 @@ import {
   changeHumpToLowerCase,
   clearBr,
   clearStr,
+  cloneDeep,
   componentToHex,
   compose,
   connection,
@@ -29,6 +30,7 @@ import {
   createData,
   createDocumentFragment,
   createObjectURL,
+  createSignal,
   currentDevice,
   debounce,
   durationHandler,
@@ -59,6 +61,7 @@ import {
   imageRequest,
   isBangDevice,
   isClient,
+  isEqual,
   isImageSize,
   isMobile,
   isString,
@@ -93,6 +96,7 @@ import {
   status,
   str2Xml,
   strParse,
+  subscribers,
   throttle,
   timeFormat,
   timestampToTime,
@@ -253,6 +257,10 @@ export {
   setFontSize2html,
   Chain,
   create,
+  isEqual,
+  cloneDeep,
+  createSignal,
+  subscribers,
 };
 
 export type { CurrentDevice };

@@ -1,4 +1,5 @@
 import { AudioRecorder } from '@/utils/audioRecorder';
+import { createSignal, subscribers } from '@/utils/signal';
 import { audioVendor, canvasVendor, webglVendor } from '@/utils/behavior';
 import { TOTP } from '@/utils/totp/totp';
 import { localStorageGetItem, localStorageSetItem } from '@/utils/storage';
@@ -63,7 +64,17 @@ import { Monitor } from '@/utils/monitor';
 import { getStatus, status } from '@/utils/network';
 import { noop } from '@/utils/noop';
 import { Mathjs, mathjs, perToNum, range } from '@/utils/number';
-import { filterObj, formatJson, merge, mergeExports, querystring, replaceOld, setAttributeByGlobal } from '@/utils/obj';
+import {
+  cloneDeep,
+  filterObj,
+  formatJson,
+  isEqual,
+  merge,
+  mergeExports,
+  querystring,
+  replaceOld,
+  setAttributeByGlobal,
+} from '@/utils/obj';
 import { getPerformance } from '@/utils/performance';
 import { QuestQueue } from '@/utils/queue';
 import { createData, report } from '@/utils/report';
@@ -172,6 +183,10 @@ export {
   setFontSize2html,
   Chain,
   create,
+  isEqual,
+  cloneDeep,
+  createSignal,
+  subscribers,
 };
 
 export type { CurrentDevice };

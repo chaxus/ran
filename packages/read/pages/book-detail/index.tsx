@@ -1,11 +1,13 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
+import { debounce } from 'ranuts/utils';
 import { getBookById } from '@/store/books';
 import { transformTextToExpectedFormat } from '@/lib/transformText';
 import type { BookInfo } from '@/store/books';
 import type { TextSyntaxTree } from '@/lib/transformText';
 import { ROUTE_PATH } from '@/router';
 import { BookDetailOperate } from '@/components/DetailOperate';
+import { EVENT_NAME, synchook } from '@/lib/subscribe';
 import 'ranui/icon';
 import 'ranui/input';
 import './index.scss';
@@ -20,6 +22,7 @@ export const BookDetail = (): React.JSX.Element => {
   const showContainerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const ref = useRef<HTMLDivElement>(null);
+  const [_, update] = useState(0);
   const [bookDetail, setBookDetail] = useState<BookInfo>();
   const [textSyntaxTree, setTextSyntaxTree] = useState<TextSyntaxTree>({
     sequences: [],
@@ -55,6 +58,12 @@ export const BookDetail = (): React.JSX.Element => {
     }
   };
 
+  const updateUI = () => {
+    debounce(() => {
+      update((prev) => prev + 1);
+    }, 16)();
+  };
+
   const getTitle = () => {
     const titleId = textSyntaxTree.pageTitleId[pageNum];
     return textSyntaxTree.titleIdTitle[titleId];
@@ -77,7 +86,8 @@ export const BookDetail = (): React.JSX.Element => {
     getBookById<BookInfo>(id)
       .then((res) => {
         if (res.error) return;
-        setBookDetail(res.data);
+        // setBookDetail(res.data);
+        synchook.call(EVENT_NAME.SET_CURRENT_BOOK_DETAIL, res.data);
         const { content } = res.data;
         const textSyntaxTree = transformTextToExpectedFormat(content, showContainerRef.current!);
         setTextSyntaxTree(textSyntaxTree);
@@ -87,6 +97,21 @@ export const BookDetail = (): React.JSX.Element => {
         navigate(ROUTE_PATH.HOME);
       });
   }, []);
+
+  useEffect(() => {
+    synchook.tap(EVENT_NAME.SET_CURRENT_BOOK_PAGE, setPageNum);
+    return () => {
+      synchook.off(EVENT_NAME.SET_CURRENT_BOOK_PAGE, setPageNum);
+    };
+  }, [pageNum]);
+
+  useEffect(() => {
+    // 书籍详情变更，更新 UI
+    synchook.tap(EVENT_NAME.SET_CURRENT_BOOK_DETAIL, updateUI);
+    return () => {
+      synchook.off(EVENT_NAME.SET_CURRENT_BOOK_DETAIL, updateUI);
+    };
+  }, [_]);
 
   return (
     <div className="px-44 bg-front-bg-color-1 h-screen relative">
@@ -145,7 +170,7 @@ export const BookDetail = (): React.JSX.Element => {
         </div>
         <div className="h-14 w-full"></div>
       </div>
-      <BookDetailOperate bookDetail={bookDetail} setPageNum={setPageNum} textSyntaxTree={textSyntaxTree} />
+      <BookDetailOperate bookDetail={bookDetail} textSyntaxTree={textSyntaxTree} />
     </div>
   );
 };

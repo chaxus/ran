@@ -57,7 +57,7 @@ export default tseslint.config(
       '@typescript-eslint/no-namespace': 'off',
       'n/hashbang': 'error',
 
-      eqeqeq: ['warn', 'always', { null: 'never' }],
+      eqeqeq: 'off',
       'no-debugger': ['error'],
       'no-empty': ['warn', { allowEmptyCatch: true }],
       'no-process-exit': 'off',

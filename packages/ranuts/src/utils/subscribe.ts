@@ -11,7 +11,7 @@ export type EventItem = {
 export const NEW_LISTENER = 'NEW_LISTENER';
 
 export class SyncHook {
-  private _events: Record<EventName, Array<EventItem>> = {};
+  public readonly _events = new Map<EventName, Set<EventItem>>();
   /**
    * @description: 订阅事件
    * @param {EventName} eventName
@@ -19,23 +19,23 @@ export class SyncHook {
    * @return {void}
    */
   public tap = (eventName: EventName, eventItem: EventItem | Callback): this => {
-    if (this._events[eventName] && eventName !== Symbol.for(NEW_LISTENER)) {
+    if (this._events.get(eventName) && eventName !== Symbol.for(NEW_LISTENER)) {
       // 注册一个 newListener 用于监听新的事件订阅
       this.call(Symbol.for(NEW_LISTENER), eventName);
     }
 
     // 由于一个事件可能注册多个回调函数，所以使用数组来存储事件队列
-    const callbacks = this._events[eventName] || [];
+    const callbacks = this._events.get(eventName) || new Set<EventItem>();
     if (typeof eventItem === 'function') {
-      callbacks.push({
+      callbacks.add({
         name: eventName,
         callback: eventItem,
       });
     } else {
-      callbacks.push(eventItem);
+      callbacks.add(eventItem);
     }
 
-    this._events[eventName] = callbacks;
+    this._events.set(eventName, callbacks);
     return this;
   };
   /**
@@ -45,7 +45,7 @@ export class SyncHook {
    * @return {void}
    */
   public call = (eventName: EventName, ...args: Array<unknown>): this => {
-    const callbacks = this._events[eventName] || [];
+    const callbacks = this._events.get(eventName) || new Set<EventItem>();
     callbacks.forEach((item) => {
       const { callback } = item;
       callback(...args);
@@ -59,7 +59,7 @@ export class SyncHook {
    * @return {Promise<void>}
    */
   public callSync = async (eventName: EventName, ...args: Array<unknown>): Promise<this> => {
-    const callbacks = this._events[eventName] || [];
+    const callbacks = this._events.get(eventName) || new Set<EventItem>();
     for (const item of callbacks) {
       const { callback } = item;
       await callback(...args);
@@ -109,8 +109,8 @@ export class SyncHook {
    */
   public off = (eventName: EventName, eventItem: EventItem | Callback): this => {
     // 找到事件对应的回调函数，删除对应的回调函数
-    const callbacks = this._events[eventName] || [];
-    const newCallbacks = callbacks.filter((item) => {
+    const callbacks = this._events.get(eventName) || new Set<EventItem>();
+    const newCallbacks = [...callbacks].filter((item) => {
       if (typeof eventItem === 'function') {
         return item.callback !== eventItem && item.initialCallback !== eventItem;
       } else {
@@ -119,7 +119,7 @@ export class SyncHook {
         return item.callback !== callback && item.initialCallback !== callback;
       }
     });
-    this._events[eventName] = newCallbacks;
+    this._events.set(eventName, new Set(newCallbacks));
     return this;
   };
 }
