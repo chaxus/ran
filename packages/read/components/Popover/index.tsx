@@ -11,15 +11,13 @@ interface PopoverProps {
 }
 
 export const Popover = ({ children, overlay, placement, trigger }: PopoverProps): React.JSX.Element => {
-
   const ref = useRef<BaseIntrinsicElements['r-popover']>(null);
 
   useEffect(() => {
     synchook.tap(EVENT_NAME.CLOSE_POPOVER, () => {
-      ref.current?.closePopover(); 
+      ref.current?.closePopover();
     });
   }, []);
-
 
   return (
     <div>

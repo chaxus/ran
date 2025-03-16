@@ -1,4 +1,4 @@
-import { SyncHook } from "ranuts/utils";
+import { SyncHook } from 'ranuts/utils';
 
 export const synchook = new SyncHook();
 

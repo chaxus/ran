@@ -61,8 +61,8 @@ export class Popover extends (HTMLElementSSR()!) {
     return ['placement', 'arrow', 'trigger'];
   }
   public readonly closePopover = (): void => {
-    this.setDropdownDisplayNone()
-  }
+    this.setDropdownDisplayNone();
+  };
   constructor() {
     super();
     this._slot = document.createElement('slot');

@@ -14,11 +14,13 @@ export const closeDB = (): void => {
 
 export const resumeDB = (): Promise<boolean> => {
   return new Promise((resolve, reject) => {
-    db.refreshDatabase().then(() => {
-      createBookStore();
-      resolve(true);
-    }).catch(() => {
-      reject(false);
-    });
+    db.refreshDatabase()
+      .then(() => {
+        createBookStore();
+        resolve(true);
+      })
+      .catch(() => {
+        reject(false);
+      });
   });
 };

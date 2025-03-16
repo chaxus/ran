@@ -1,4 +1,3 @@
-
 // @keyframes clip {
 //     from {
 //       clip-path: circle(0%);
@@ -7,13 +6,13 @@
 //       clip-path: circle(100%);
 //     }
 //   }
-  
-  ::view-transition-old(book-info) {
-    display: none;
-    animation: none;
-    animation-duration: 0.5s;
-  }
-  ::view-transition-new(book-info) {
-    mix-blend-mode: normal;
-    animation: clip .5s ease-in;
-  }
+
+::view-transition-old(book-info) {
+  display: none;
+  animation: none;
+  animation-duration: 0.5s;
+}
+::view-transition-new(book-info) {
+  mix-blend-mode: normal;
+  animation: clip 0.5s ease-in;
+}

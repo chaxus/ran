@@ -11,15 +11,15 @@ export const BookCard = ({ book }: BookCardProps): React.JSX.Element => {
   const navigate = useNavigate();
   const ref = useRef<HTMLAnchorElement>(null);
   const toDetail = () => {
-      if (document.startViewTransition) {
-        ref.current?.style.setProperty('view-transition-name', 'book-info');
-        document.startViewTransition(() => {
-          ref.current?.style.setProperty('view-transition-name', "");
-          navigate(`/book-detail/${id}`);
-        });
-      } else {
+    if (document.startViewTransition) {
+      ref.current?.style.setProperty('view-transition-name', 'book-info');
+      document.startViewTransition(() => {
+        ref.current?.style.setProperty('view-transition-name', '');
         navigate(`/book-detail/${id}`);
-      }
+      });
+    } else {
+      navigate(`/book-detail/${id}`);
+    }
   };
 
   useEffect(() => {
