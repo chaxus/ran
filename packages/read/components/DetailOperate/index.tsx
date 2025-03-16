@@ -1,6 +1,6 @@
 import { Popover } from '@/components/popover';
 import { BookDetailMenu } from '@/components/DetailMenu';
-import type { TextSyntaxTree } from '@/pages/book-detail';
+import type { TextSyntaxTree } from '@/lib/transformText';
 import type { BookInfo } from '@/store/books';
 
 export interface BookDetailOperateProps {

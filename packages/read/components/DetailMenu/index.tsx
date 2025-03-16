@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { EVENT_NAME, synchook } from '@/lib/subscribe';
 import type { BookInfo } from '@/store/books';
-import type { TextSyntaxTree } from '@/pages/book-detail';
+import type { TextSyntaxTree } from '@/lib/transformText';
 
 export interface MenuProps {
   bookDetail?: BookInfo;

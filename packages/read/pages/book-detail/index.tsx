@@ -1,15 +1,9 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { getBookById } from '@/store/books';
-import {
-  CHAPTER_TITLE_END,
-  CHAPTER_TITLE_START,
-  arrayBufferToString,
-  extractCaptionTitleChapters,
-  pagingText,
-} from '@/lib/transformText';
+import { transformTextToExpectedFormat } from '@/lib/transformText';
 import type { BookInfo } from '@/store/books';
-import type { PagingTextItem, PagingTextResult } from '@/lib/transformText';
+import type { TextSyntaxTree } from '@/lib/transformText';
 import { ROUTE_PATH } from '@/router';
 import { BookDetailOperate } from '@/components/DetailOperate';
 import 'ranui/icon';
@@ -20,26 +14,6 @@ const ICON_STYLE = {
   '--ran-icon-font-size': '14px',
   '--ran-icon-color': 'var(--icon-color-1)',
 };
-
-export interface Section {
-  title: string;
-  section: string;
-}
-
-export interface Sequence {
-  title: string;
-  result: PagingTextResult;
-  titleId: number;
-}
-
-export interface TextSyntaxTree {
-  sequences: Sequence[];
-  totalPage: number;
-  pageText: PagingTextItem[];
-  pageTitleId: number[];
-  titleIdTitle: string[];
-  titleIdPage: Record<string, number>;
-}
 
 export const BookDetail = (): React.JSX.Element => {
   const { id } = useParams();
@@ -105,57 +79,8 @@ export const BookDetail = (): React.JSX.Element => {
         if (res.error) return;
         setBookDetail(res.data);
         const { content } = res.data;
-        // 1. 过滤空格换行
-        const text = arrayBufferToString(content).replace(/(?:\r\n|\r|\n)+/g, '\n') || '';
-        // 2. 提取章节标题
-        const extractedChapters = extractCaptionTitleChapters(text);
-        // 3. 把文本按章节划分
-        const sections: Section[] = [];
-        extractedChapters.forEach((item, index) => {
-          const { start, end, title } = item;
-          if (index === 0) {
-            const section = text.slice(0, start);
-            sections.push({ title: '前言', section });
-          }
-          const section = text.slice(start, end);
-          sections.push({ title, section });
-        });
-        // 4. 把章节按页划分
-        const sequences: Sequence[] = [];
-        sections.forEach((item, index) => {
-          const { title, section } = item;
-          if (showContainerRef.current) {
-            const result = pagingText(
-              section.replace(CHAPTER_TITLE_START, '').replace(CHAPTER_TITLE_END, ''),
-              showContainerRef.current,
-            );
-            sequences.push({ title, result, titleId: index });
-          }
-        });
-
-        // 5. 输出文本语法树
-        let totalPage = 0;
-        // 通过空间换时间，构建 page -> text 的映射
-        const pageText: PagingTextItem[] = [];
-        // page -> titleId 的映射
-        const pageTitleId: number[] = [];
-        // titleId -> title 的映射
-        const titleIdTitle: string[] = [];
-        // titleId -> page 的映射
-        const titleIdPage: Record<string, number> = {};
-
-        sequences.forEach((item) => {
-          totalPage += item.result.program.length;
-          item.result.program.forEach((page) => {
-            if (!titleIdPage[item.titleId]) {
-              titleIdPage[item.titleId] = pageText.length;
-            }
-            pageTitleId.push(item.titleId);
-            pageText.push(page);
-          });
-          titleIdTitle.push(item.title);
-        });
-        setTextSyntaxTree({ sequences, totalPage, pageText, pageTitleId, titleIdTitle, titleIdPage });
+        const textSyntaxTree = transformTextToExpectedFormat(content, showContainerRef.current!);
+        setTextSyntaxTree(textSyntaxTree);
         ref.current?.style.setProperty('view-transition-name', 'book-info');
       })
       .catch(() => {

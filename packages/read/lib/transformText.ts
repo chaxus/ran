@@ -270,3 +270,86 @@ export const extractCaptionTitleChapters = (text: string): ChapterItem[] => {
 
   return chapters;
 };
+
+export interface Section {
+  title: string;
+  section: string;
+}
+
+export interface Sequence {
+  title: string;
+  result: PagingTextResult;
+  titleId: number;
+}
+
+export interface TextSyntaxTree {
+  sequences: Sequence[];
+  totalPage: number;
+  pageText: PagingTextItem[];
+  pageTitleId: number[];
+  titleIdTitle: string[];
+  titleIdPage: Record<string, number>;
+}
+
+// 处理文本成期望的格式：
+export const transformTextToExpectedFormat = (
+  content: ArrayBuffer | Uint8Array<ArrayBuffer>,
+  container: HTMLElement,
+): TextSyntaxTree => {
+  // 1. 过滤空格换行
+  const text = arrayBufferToString(content).replace(/(?:\r\n|\r|\n)+/g, '\n') || '';
+  // 2. 提取章节标题
+  const extractedChapters = extractCaptionTitleChapters(text);
+  // 3. 把文本按章节划分
+  const sections: Section[] = [];
+  extractedChapters.forEach((item, index) => {
+    const { start, end, title } = item;
+    if (index === 0) {
+      const section = text.slice(0, start);
+      sections.push({ title: '前言', section });
+    }
+    const section = text.slice(start, end);
+    sections.push({ title, section });
+  });
+  // 4. 把章节按页划分
+  const sequences: Sequence[] = [];
+  sections.forEach((item, index) => {
+    const { title, section } = item;
+    if (container) {
+      const result = pagingText(section.replace(CHAPTER_TITLE_START, '').replace(CHAPTER_TITLE_END, ''), container);
+      sequences.push({ title, result, titleId: index });
+    }
+  });
+
+  // 5. 输出文本语法树
+  let totalPage = 0;
+  // 通过空间换时间，构建 page -> text 的映射
+  const pageText: PagingTextItem[] = [];
+  // page -> titleId 的映射
+  const pageTitleId: number[] = [];
+  // titleId -> title 的映射
+  const titleIdTitle: string[] = [];
+  // titleId -> page 的映射
+  const titleIdPage: Record<string, number> = {};
+
+  sequences.forEach((item) => {
+    totalPage += item.result.program.length;
+    item.result.program.forEach((page) => {
+      if (!titleIdPage[item.titleId]) {
+        titleIdPage[item.titleId] = pageText.length;
+      }
+      pageTitleId.push(item.titleId);
+      pageText.push(page);
+    });
+    titleIdTitle.push(item.title);
+  });
+
+  return {
+    sequences,
+    totalPage,
+    pageText,
+    pageTitleId,
+    titleIdTitle,
+    titleIdPage,
+  };
+};
