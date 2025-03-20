@@ -64,7 +64,6 @@ export const BookDetailMenu = (): React.JSX.Element => {
     if (pageSearchResult.length <= 0) {
       return;
     }
-    console.log('pageSearchResult', pageSearchResult);
     setSearchResult(pageSearchResult);
   }, 500);
 
