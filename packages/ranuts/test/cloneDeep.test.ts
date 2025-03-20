@@ -27,13 +27,13 @@ describe('cloneDeep 函数测试', () => {
   // 测试嵌套数组
   test('嵌套数组克隆', () => {
     const original = [1, [2, 3], [4, [5, 6]]];
-    const cloned:any = cloneDeep(original);
+    const cloned: any = cloneDeep(original);
 
     expect(cloned).toEqual(original);
     expect(cloned[1]).not.toBe(original[1]); // 确保嵌套数组也被克隆
 
     // 修改嵌套数组
-    (cloned[2])[1] = [7, 8];
+    cloned[2][1] = [7, 8];
     expect((original[2] as number[])[1]).toEqual([5, 6]);
   });
 
@@ -142,7 +142,7 @@ describe('cloneDeep 函数测试', () => {
 
   // 测试复杂嵌套结构
   test('复杂嵌套结构克隆', () => {
-    const original:any = {
+    const original: any = {
       a: 1,
       b: [2, 3, { c: 4 }],
       d: { e: 5, f: [6, 7] },

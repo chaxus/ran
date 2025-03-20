@@ -4,6 +4,7 @@ import { trim } from '@/lib/transformText';
 import type { BookInfo } from '@/store/books';
 import type { PagingTextItem, TextSyntaxTree } from '@/lib/transformText';
 import { Catalogue } from '@/components/Catalogue';
+import { getTextSyntaxTree } from '@/lib/subscribe';
 
 export interface MenuProps {
   bookDetail?: BookInfo;
@@ -30,13 +31,15 @@ export enum SORT_DIRECTION {
   DOWN = 'DOWN',
 }
 
-export const BookDetailMenu = ({ bookDetail, setPageNum, textSyntaxTree }: MenuProps): React.JSX.Element => {
+export const BookDetailMenu = (): React.JSX.Element => {
   const searchRef = useRef<HTMLInputElement>(null);
   const [showSearchResult, setShowSearchResult] = useState(false);
-  const [searchResult, setSearchResult] = useState<{
-    title: { item: string; index: number }[];
-    page: { item: PagingTextItem; index: number }[];
-  }>({ title: [], page: [] });
+  // const [searchResult, setSearchResult] = useState<{
+  //   title: { item: string; index: number }[];
+  //   page: { item: PagingTextItem; index: number }[];
+  // }>({ title: [], page: [] });
+  // const bookDetail = getCurrentBookDetail();
+  const textSyntaxTree = getTextSyntaxTree();
 
   const onSearch = useCallback(
     debounce((e: Event) => {
@@ -48,7 +51,7 @@ export const BookDetailMenu = ({ bookDetail, setPageNum, textSyntaxTree }: MenuP
         return;
       }
       setShowSearchResult(true);
-      console.log('value---->', value, textSyntaxTree, searchResult);
+      const textSyntaxTree:TextSyntaxTree = getTextSyntaxTree();
       const { titleIdTitle = [], pageText = [] } = textSyntaxTree || {};
       const titleSearchResult: { item: string; index: number }[] = [];
       titleIdTitle.forEach((item, index) => {
@@ -66,7 +69,7 @@ export const BookDetailMenu = ({ bookDetail, setPageNum, textSyntaxTree }: MenuP
       if (titleSearchResult.length <= 0 && pageSearchResult.length <= 0) {
         return;
       }
-      setSearchResult({ title: titleSearchResult, page: pageSearchResult });
+      // setSearchResult({ title: titleSearchResult, page: pageSearchResult });
     }, 500),
     [textSyntaxTree],
   );
@@ -88,11 +91,7 @@ export const BookDetailMenu = ({ bookDetail, setPageNum, textSyntaxTree }: MenuP
       <div className="px-6 py-7">
         <r-input className="h-10" icon="search" style={inputStyle} placeholder="搜索" ref={searchRef}></r-input>
       </div>
-      {!showSearchResult ? (
-        <Catalogue bookDetail={bookDetail} textSyntaxTree={textSyntaxTree} setPageNum={setPageNum} />
-      ) : (
-        <div></div>
-      )}
+      {!showSearchResult ? <Catalogue /> : <div></div>}
     </div>
   );
 };

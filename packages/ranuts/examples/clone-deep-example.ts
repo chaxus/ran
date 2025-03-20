@@ -27,7 +27,7 @@ console.log('修改后的克隆数组：', clonedArr);
 // 嵌套数组克隆
 console.log('\n=== 嵌套数组克隆 ===');
 const nestedArr = [1, [2, 3], [4, [5, 6]]];
-const clonedNestedArr:any = cloneDeep(nestedArr);
+const clonedNestedArr: any = cloneDeep(nestedArr);
 console.log('原始嵌套数组：', nestedArr);
 console.log('克隆嵌套数组：', clonedNestedArr);
 console.log('引用相同？', nestedArr === clonedNestedArr); // false
@@ -126,7 +126,7 @@ console.log('克隆对象的自引用 === 原始对象？', clonedCircular.self 
 
 // 复杂嵌套结构克隆
 console.log('\n=== 复杂嵌套结构克隆 ===');
-const complex:any = {
+const complex: any = {
   a: 1,
   b: [2, 3, { c: 4 }],
   d: { e: 5, f: [6, 7] },
@@ -137,7 +137,7 @@ const complex:any = {
   ]),
   l: new Set([12, [13, 14], { m: 15 }]),
 };
-const clonedComplex:any = cloneDeep(complex);
+const clonedComplex: any = cloneDeep(complex);
 
 console.log('克隆复杂对象成功！');
 console.log('修改前原始复杂对象的嵌套值：', complex.b[2].c); // 4

@@ -7,7 +7,16 @@ import type { BookInfo } from '@/store/books';
 import type { TextSyntaxTree } from '@/lib/transformText';
 import { ROUTE_PATH } from '@/router';
 import { BookDetailOperate } from '@/components/DetailOperate';
-import { EVENT_NAME, synchook } from '@/lib/subscribe';
+import {
+  EVENT_NAME,
+  getCurrentBookDetail,
+  getPageNum,
+  getTextSyntaxTree,
+  setCurrentBookDetail,
+  setPageNum,
+  setTextSyntaxTree,
+  syncHook,
+} from '@/lib/subscribe';
 import 'ranui/icon';
 import 'ranui/input';
 import './index.scss';
@@ -17,46 +26,42 @@ const ICON_STYLE = {
   '--ran-icon-color': 'var(--icon-color-1)',
 };
 
+const pre = () => {
+  const pageNum: number = getPageNum();
+  if (pageNum === 0) return;
+  // 开始视图变换
+  if (document.startViewTransition) {
+    document.startViewTransition(() => {
+      setPageNum(Math.max(pageNum - 2, 0));
+    });
+  } else {
+    setPageNum(Math.max(pageNum - 2, 0));
+  }
+};
+
+const next = () => {
+  const pageNum: number = getPageNum();
+  const textSyntaxTree: TextSyntaxTree = getTextSyntaxTree();
+  const size: number = textSyntaxTree?.totalPage;
+  // 开始视图变换
+  if (document.startViewTransition) {
+    document.startViewTransition(() => {
+      setPageNum(Math.min(pageNum + 2, size));
+    });
+  } else {
+    setPageNum(Math.min(pageNum + 2, size));
+  }
+};
+
 export const BookDetail = (): React.JSX.Element => {
   const { id } = useParams();
   const showContainerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const ref = useRef<HTMLDivElement>(null);
   const [_, update] = useState(0);
-  const [bookDetail, setBookDetail] = useState<BookInfo>();
-  const [textSyntaxTree, setTextSyntaxTree] = useState<TextSyntaxTree>({
-    sequences: [],
-    totalPage: 0,
-    pageText: [],
-    pageTitleId: [],
-    titleIdTitle: [],
-    titleIdPage: {},
-  });
-  const [pageNum, setPageNum] = useState(0);
-
-  const pre = () => {
-    if (pageNum === 0) return;
-    // 开始视图变换
-    if (document.startViewTransition) {
-      document.startViewTransition(() => {
-        setPageNum(Math.max(pageNum - 2, 0));
-      });
-    } else {
-      setPageNum(Math.max(pageNum - 2, 0));
-    }
-  };
-
-  const next = () => {
-    const size = textSyntaxTree.totalPage;
-    // 开始视图变换
-    if (document.startViewTransition) {
-      document.startViewTransition(() => {
-        setPageNum(Math.min(pageNum + 2, size));
-      });
-    } else {
-      setPageNum(Math.min(pageNum + 2, size));
-    }
-  };
+  const bookDetail: BookInfo = getCurrentBookDetail();
+  const textSyntaxTree: TextSyntaxTree = getTextSyntaxTree();
+  const pageNum: number = getPageNum();
 
   const updateUI = () => {
     debounce(() => {
@@ -65,6 +70,8 @@ export const BookDetail = (): React.JSX.Element => {
   };
 
   const getTitle = () => {
+    const textSyntaxTree: TextSyntaxTree = getTextSyntaxTree();
+    const pageNum: number = getPageNum();
     const titleId = textSyntaxTree.pageTitleId[pageNum];
     return textSyntaxTree.titleIdTitle[titleId];
   };
@@ -86,10 +93,9 @@ export const BookDetail = (): React.JSX.Element => {
     getBookById<BookInfo>(id)
       .then((res) => {
         if (res.error) return;
-        // setBookDetail(res.data);
-        synchook.call(EVENT_NAME.SET_CURRENT_BOOK_DETAIL, res.data);
+        setCurrentBookDetail(res.data);
         const { content } = res.data;
-        const textSyntaxTree = transformTextToExpectedFormat(content, showContainerRef.current!);
+        const textSyntaxTree: TextSyntaxTree = transformTextToExpectedFormat(content, showContainerRef.current!);
         setTextSyntaxTree(textSyntaxTree);
         ref.current?.style.setProperty('view-transition-name', 'book-info');
       })
@@ -99,17 +105,12 @@ export const BookDetail = (): React.JSX.Element => {
   }, []);
 
   useEffect(() => {
-    synchook.tap(EVENT_NAME.SET_CURRENT_BOOK_PAGE, setPageNum);
-    return () => {
-      synchook.off(EVENT_NAME.SET_CURRENT_BOOK_PAGE, setPageNum);
-    };
-  }, [pageNum]);
-
-  useEffect(() => {
     // 书籍详情变更，更新 UI
-    synchook.tap(EVENT_NAME.SET_CURRENT_BOOK_DETAIL, updateUI);
+    syncHook.tap(EVENT_NAME.SET_CURRENT_BOOK_DETAIL, updateUI);
+    syncHook.tap(EVENT_NAME.SET_CURRENT_BOOK_PAGE, updateUI);
     return () => {
-      synchook.off(EVENT_NAME.SET_CURRENT_BOOK_DETAIL, updateUI);
+      syncHook.off(EVENT_NAME.SET_CURRENT_BOOK_DETAIL, updateUI);
+      syncHook.off(EVENT_NAME.SET_CURRENT_BOOK_PAGE, updateUI);
     };
   }, [_]);
 
@@ -170,7 +171,7 @@ export const BookDetail = (): React.JSX.Element => {
         </div>
         <div className="h-14 w-full"></div>
       </div>
-      <BookDetailOperate bookDetail={bookDetail} textSyntaxTree={textSyntaxTree} />
+      <BookDetailOperate />
     </div>
   );
 };

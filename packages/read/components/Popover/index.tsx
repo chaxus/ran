@@ -1,6 +1,6 @@
 import 'ranui/popover';
 import { useCallback, useEffect, useRef } from 'react';
-import { EVENT_NAME, synchook } from '@/lib/subscribe';
+import { EVENT_NAME, syncHook } from '@/lib/subscribe';
 
 interface PopoverProps {
   children: React.ReactNode;
@@ -18,9 +18,9 @@ export const Popover = ({ children, overlay, placement, trigger }: PopoverProps)
   }, []);
 
   useEffect(() => {
-    synchook.tap(EVENT_NAME.CLOSE_POPOVER, closePopover);
+    syncHook.tap(EVENT_NAME.CLOSE_POPOVER, closePopover);
     return () => {
-      synchook.off(EVENT_NAME.CLOSE_POPOVER, closePopover);
+      syncHook.off(EVENT_NAME.CLOSE_POPOVER, closePopover);
     };
   }, []);
 

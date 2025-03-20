@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { BookInfo } from '@/store/books';
 import type { TextSyntaxTree } from '@/lib/transformText';
-import { EVENT_NAME, synchook } from '@/lib/subscribe';
+import { EVENT_NAME, getCurrentBookDetail, getTextSyntaxTree, syncHook } from '@/lib/subscribe';
 
 export enum SORT_DIRECTION {
   UP = 'UP',
@@ -12,36 +12,31 @@ const SORT_ICON_STYLE = {
   '--ran-icon-font-size': '20px',
 };
 
-export interface CatalogueProps {
-  bookDetail?: BookInfo;
-  textSyntaxTree: TextSyntaxTree;
-  setPageNum?: (page: number) => void;
-}
+const toPage = (e: Event) => {
+  const index = (e.target as HTMLElement)?.getAttribute('title') || '';
+  if (index === undefined) return;
+  const textSyntaxTree: TextSyntaxTree = getTextSyntaxTree();
+  const page = textSyntaxTree?.titleIdPage[index];
+  if (page !== undefined) {
+    // Fallback for browsers that don't support View Transitions API
+    if (!document.startViewTransition) {
+      syncHook.call(EVENT_NAME.SET_CURRENT_BOOK_PAGE, page);
+      return;
+    }
+    // With View Transition
+    document.startViewTransition(() => {
+      syncHook.call(EVENT_NAME.SET_CURRENT_BOOK_PAGE, page);
+    });
+  }
+  syncHook.call(EVENT_NAME.CLOSE_POPOVER);
+};
 
-export const Catalogue = ({ bookDetail, textSyntaxTree }: CatalogueProps): React.JSX.Element => {
-  const { title, author, image } = bookDetail || {};
-  const { titleIdTitle = [], titleIdPage } = textSyntaxTree || {};
+export const Catalogue = (): React.JSX.Element => {
   const sortRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [sortDirection, setSortDirection] = useState(SORT_DIRECTION.DOWN);
-
-  const toPage = (e: Event) => {
-    const index = (e.target as HTMLElement)?.getAttribute('title') || '';
-    if (index === undefined) return;
-    const page = titleIdPage[index];
-    if (page !== undefined) {
-      // Fallback for browsers that don't support View Transitions API
-      if (!document.startViewTransition) {
-        synchook.call(EVENT_NAME.SET_CURRENT_BOOK_PAGE, page);
-        return;
-      }
-      // With View Transition
-      document.startViewTransition(() => {
-        synchook.call(EVENT_NAME.SET_CURRENT_BOOK_PAGE, page);
-      });
-    }
-    synchook.call(EVENT_NAME.CLOSE_POPOVER);
-  };
+  const bookDetail: BookInfo = getCurrentBookDetail();
+  const textSyntaxTree: TextSyntaxTree = getTextSyntaxTree();
 
   const toSort = useCallback(() => {
     setSortDirection(SORT_DIRECTION.UP);
@@ -63,15 +58,15 @@ export const Catalogue = ({ bookDetail, textSyntaxTree }: CatalogueProps): React
       scrollRef.current?.removeEventListener('click', toPage);
       sortRef.current?.removeEventListener('click', toSort);
     };
-  }, [textSyntaxTree, bookDetail, sortDirection]);
+  }, [sortDirection]);
 
   return (
     <>
       <div className="px-7 py-2 flex flex-row flex-nowrap items-center shrink-0">
-        <img className="w-14 mr-5" src={image} />
+        <img className="w-14 mr-5" src={bookDetail.image} />
         <div>
-          <div className="text-lg text-text-color-1 font-medium break-all">{title}</div>
-          <div className="text-sm text-text-color-2 font-medium mt-1 break-all">{author}</div>
+          <div className="text-lg text-text-color-1 font-medium break-all">{bookDetail.title}</div>
+          <div className="text-sm text-text-color-2 font-medium mt-1 break-all">{bookDetail.author}</div>
         </div>
       </div>
       <div className="mx-9 basis-10 flex items-center justify-end shrink-0" ref={sortRef}>
@@ -82,7 +77,7 @@ export const Catalogue = ({ bookDetail, textSyntaxTree }: CatalogueProps): React
         ></r-icon>
       </div>
       <div className="overflow-y-auto flex-auto" ref={scrollRef}>
-        {titleIdTitle?.map((item, index) => {
+        {textSyntaxTree?.titleIdTitle?.map((item: string, index: number) => {
           return (
             <div
               className="px-7 h-12 text-text-color-2 font-normal text-base hover:bg-blue-50 cursor-pointer"
