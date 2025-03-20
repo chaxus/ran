@@ -2,11 +2,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import type { BookInfo } from '@/store/books';
 import type { TextSyntaxTree } from '@/lib/transformText';
 import { EVENT_NAME, getCurrentBookDetail, getTextSyntaxTree, setPageNum, syncHook } from '@/lib/subscribe';
+import { SORT_DIRECTION } from '@/lib/enums';
 
-export enum SORT_DIRECTION {
-  UP = 'UP',
-  DOWN = 'DOWN',
-}
 
 const SORT_ICON_STYLE = {
   '--ran-icon-font-size': '20px',

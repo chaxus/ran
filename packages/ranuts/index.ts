@@ -101,6 +101,7 @@ import {
   timeFormat,
   timestampToTime,
   webglVendor,
+  getMatchingSentences
 } from '@/utils';
 import type { CurrentDevice } from '@/utils';
 import { reactify } from '@/react';
@@ -261,6 +262,7 @@ export {
   cloneDeep,
   createSignal,
   subscribers,
+  getMatchingSentences
 };
 
 export type { CurrentDevice };

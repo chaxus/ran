@@ -1,16 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { debounce } from 'ranuts/utils';
+import { useEffect, useRef, useState } from 'react';
+import { debounce, getMatchingSentences } from 'ranuts/utils';
 import { trim } from '@/lib/transformText';
-import type { BookInfo } from '@/store/books';
-import type { PagingTextItem, TextSyntaxTree } from '@/lib/transformText';
+import type { TextSyntaxTree } from '@/lib/transformText';
 import { Catalogue } from '@/components/Catalogue';
-import { getTextSyntaxTree } from '@/lib/subscribe';
-
-export interface MenuProps {
-  bookDetail?: BookInfo;
-  setPageNum?: (num: number) => void;
-  textSyntaxTree: TextSyntaxTree;
-}
+import { getTextSyntaxTree, setPageNum } from '@/lib/subscribe';
 
 const inputStyle = {
   '--ran-input-border-radius': '2rem',
@@ -26,22 +19,15 @@ const inputStyle = {
   '--ran-input-border': 'none',
 };
 
-export enum SORT_DIRECTION {
-  UP = 'UP',
-  DOWN = 'DOWN',
-}
+interface SearchResult { text: { pre: string; value: string; next: string, index: number }[]; index: number; title: string }
 
 export const BookDetailMenu = (): React.JSX.Element => {
   const searchRef = useRef<HTMLInputElement>(null);
   const [showSearchResult, setShowSearchResult] = useState(false);
-  // const [searchResult, setSearchResult] = useState<{
-  //   title: { item: string; index: number }[];
-  //   page: { item: PagingTextItem; index: number }[];
-  // }>({ title: [], page: [] });
-  // const bookDetail = getCurrentBookDetail();
-  const textSyntaxTree = getTextSyntaxTree();
+  const [searchResult, setSearchResult] = useState<SearchResult[]>([]);
+  const searchResultRef = useRef<HTMLDivElement>(null);
 
-  const onSearch = useCallback(
+  const onSearch =
     debounce((e: Event) => {
       const value = (e.target as HTMLInputElement)?.value || '';
       const searchValue = trim(value);
@@ -50,36 +36,53 @@ export const BookDetailMenu = (): React.JSX.Element => {
         setShowSearchResult(false);
         return;
       }
+      // 展示搜索结果
       setShowSearchResult(true);
-      const textSyntaxTree:TextSyntaxTree = getTextSyntaxTree();
-      const { titleIdTitle = [], pageText = [] } = textSyntaxTree || {};
-      const titleSearchResult: { item: string; index: number }[] = [];
-      titleIdTitle.forEach((item, index) => {
-        if (item.includes(searchValue)) {
-          titleSearchResult.push({ item, index });
-        }
-      });
-      const pageSearchResult: { item: PagingTextItem; index: number }[] = [];
+      const textSyntaxTree: TextSyntaxTree = getTextSyntaxTree();
+      const { pageText = [], pageTitleId, titleIdTitle } = textSyntaxTree || {};
+      const pageSearchResult: SearchResult[] = [];
       pageText.forEach((item, index) => {
         if (item.text.includes(searchValue)) {
-          pageSearchResult.push({ item, index });
+          const text = getMatchingSentences(item.text, searchValue)
+          const textList = text.map((str: string) => {
+            const [pre, next] = str.split(searchValue)
+            return { pre, value: searchValue, next, index }
+          })
+          const title = titleIdTitle[pageTitleId[index]]
+          const pageSearchResultItem = pageSearchResult.find(i => i.title === titleIdTitle[pageTitleId[index]])
+          if (pageSearchResultItem) {
+            pageSearchResultItem.text.push(...textList)
+          } else {
+            pageSearchResult.push({ text: textList, index, title });
+          }
         }
       });
       // 没有搜索结果
-      if (titleSearchResult.length <= 0 && pageSearchResult.length <= 0) {
+      if (pageSearchResult.length <= 0) {
         return;
       }
-      // setSearchResult({ title: titleSearchResult, page: pageSearchResult });
-    }, 500),
-    [textSyntaxTree],
-  );
+      console.log('pageSearchResult', pageSearchResult);
+      setSearchResult(pageSearchResult);
+    }, 500)
+
+  const onSearchResult = (e: Event) => {
+    const title = (e.target as HTMLDivElement).title;
+    setPageNum(Number(title));
+  }
 
   useEffect(() => {
     searchRef.current?.addEventListener('change', onSearch);
     return () => {
       searchRef.current?.removeEventListener('change', onSearch);
     };
-  }, [textSyntaxTree]);
+  }, []);
+
+  useEffect(() => {
+    searchResultRef.current?.addEventListener('click', onSearchResult);
+    return () => {
+      searchResultRef.current?.removeEventListener('click', onSearchResult);
+    };
+  }, [searchResult]);
 
   return (
     <div
@@ -91,7 +94,26 @@ export const BookDetailMenu = (): React.JSX.Element => {
       <div className="px-6 py-7">
         <r-input className="h-10" icon="search" style={inputStyle} placeholder="搜索" ref={searchRef}></r-input>
       </div>
-      {!showSearchResult ? <Catalogue /> : <div></div>}
+      {!showSearchResult ? <Catalogue /> : <div ref={searchResultRef} className='pb-7 overflow-y-auto flex-auto'>
+        {searchResult.map(item => {
+          const { text = [], index, title } = item;
+          return (
+            <div key={index} title={`${index}`}>
+              <div className='text-text-color-1 font-normal text-base px-6 py-2 cursor-pointer'>{title}</div>
+              {text.map((str, i) => {
+                const { pre, value, next } = str
+                return (
+                  <div title={`${str.index}`} className='text-text-color-2 font-normal text-base py-4 px-6 cursor-pointer hover:bg-blue-50' key={pre + value + next + i}>
+                    {pre}
+                    <span className='text-brand-blue-color-1'>{value}</span>
+                    {next}
+                  </div>
+                )
+              })}
+            </div>
+          )
+        })}
+      </div>}
     </div>
   );
 };
