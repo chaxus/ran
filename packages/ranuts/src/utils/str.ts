@@ -94,7 +94,6 @@ export const clearStr = (str: string, options: ClearStrOption = {}): string => {
   return urlencoded ? decodeURIComponent(s).replace(/"|'/g, '') : s.replace(/"|'/g, '');
 };
 
-
 /**
  * 获取文本中包含搜索关键词的完整句子，对于重复的句子只保留最长的一个
  * @param text 原文本
@@ -112,14 +111,14 @@ export function getMatchingSentences(text: string, searchValue: string): string[
     start: number;
     end: number;
   }
-  
+
   const sentencesInfo: SentenceInfo[] = [];
   const searchRegex = new RegExp(searchValue, 'gi');
   let match;
 
   while ((match = searchRegex.exec(text)) !== null) {
     const matchStart = match.index;
-    
+
     // 向左搜索句子开始（句号、换行符或文本开始）
     let sentenceStart = matchStart;
     while (sentenceStart > 0) {
@@ -147,7 +146,7 @@ export function getMatchingSentences(text: string, searchValue: string): string[
       sentencesInfo.push({
         sentence,
         start: sentenceStart,
-        end: sentenceEnd
+        end: sentenceEnd,
       });
     }
   }
@@ -161,15 +160,13 @@ export function getMatchingSentences(text: string, searchValue: string): string[
 
   for (const info of sentencesInfo) {
     // 检查当前句子是否与已使用的范围重叠
-    const hasOverlap = usedRanges.some(range => 
-      !(info.end <= range.start || info.start >= range.end)
-    );
+    const hasOverlap = usedRanges.some((range) => !(info.end <= range.start || info.start >= range.end));
 
     if (!hasOverlap) {
       filteredSentences.push(info.sentence);
       usedRanges.push({
         start: info.start,
-        end: info.end
+        end: info.end,
       });
     }
   }

@@ -4,7 +4,6 @@ import type { TextSyntaxTree } from '@/lib/transformText';
 import { EVENT_NAME, getCurrentBookDetail, getTextSyntaxTree, setPageNum, syncHook } from '@/lib/subscribe';
 import { SORT_DIRECTION } from '@/lib/enums';
 
-
 const SORT_ICON_STYLE = {
   '--ran-icon-font-size': '20px',
 };

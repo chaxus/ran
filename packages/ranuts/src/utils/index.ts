@@ -80,7 +80,16 @@ import { QuestQueue } from '@/utils/queue';
 import { createData, report } from '@/utils/report';
 import { handleFetchHook } from '@/utils/request';
 import { scriptOnLoad } from '@/utils/script';
-import { changeHumpToLowerCase, clearBr, clearStr, getMatchingSentences, isString, randomString, str2Xml, strParse } from '@/utils/str';
+import {
+  changeHumpToLowerCase,
+  clearBr,
+  clearStr,
+  getMatchingSentences,
+  isString,
+  randomString,
+  str2Xml,
+  strParse,
+} from '@/utils/str';
 import { SyncHook } from '@/utils/subscribe';
 import { generateThrottle, throttle } from '@/utils/throttle';
 import { performanceTime, timeFormat, timestampToTime } from '@/utils/time';

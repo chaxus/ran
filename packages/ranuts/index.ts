@@ -44,6 +44,7 @@ import {
   getCookieByName,
   getFrame,
   getHost,
+  getMatchingSentences,
   getMime,
   getPerformance,
   getPixelRatio,
@@ -101,7 +102,6 @@ import {
   timeFormat,
   timestampToTime,
   webglVendor,
-  getMatchingSentences
 } from '@/utils';
 import type { CurrentDevice } from '@/utils';
 import { reactify } from '@/react';
@@ -262,7 +262,7 @@ export {
   cloneDeep,
   createSignal,
   subscribers,
-  getMatchingSentences
+  getMatchingSentences,
 };
 
 export type { CurrentDevice };

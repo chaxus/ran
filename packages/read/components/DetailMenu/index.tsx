@@ -19,7 +19,11 @@ const inputStyle = {
   '--ran-input-border': 'none',
 };
 
-interface SearchResult { text: { pre: string; value: string; next: string, index: number }[]; index: number; title: string }
+interface SearchResult {
+  text: { pre: string; value: string; next: string; index: number }[];
+  index: number;
+  title: string;
+}
 
 export const BookDetailMenu = (): React.JSX.Element => {
   const searchRef = useRef<HTMLInputElement>(null);
@@ -27,48 +31,47 @@ export const BookDetailMenu = (): React.JSX.Element => {
   const [searchResult, setSearchResult] = useState<SearchResult[]>([]);
   const searchResultRef = useRef<HTMLDivElement>(null);
 
-  const onSearch =
-    debounce((e: Event) => {
-      const value = (e.target as HTMLInputElement)?.value || '';
-      const searchValue = trim(value);
-      // 没有输入内容，则不进行搜索
-      if (!searchValue) {
-        setShowSearchResult(false);
-        return;
-      }
-      // 展示搜索结果
-      setShowSearchResult(true);
-      const textSyntaxTree: TextSyntaxTree = getTextSyntaxTree();
-      const { pageText = [], pageTitleId, titleIdTitle } = textSyntaxTree || {};
-      const pageSearchResult: SearchResult[] = [];
-      pageText.forEach((item, index) => {
-        if (item.text.includes(searchValue)) {
-          const text = getMatchingSentences(item.text, searchValue)
-          const textList = text.map((str: string) => {
-            const [pre, next] = str.split(searchValue)
-            return { pre, value: searchValue, next, index }
-          })
-          const title = titleIdTitle[pageTitleId[index]]
-          const pageSearchResultItem = pageSearchResult.find(i => i.title === titleIdTitle[pageTitleId[index]])
-          if (pageSearchResultItem) {
-            pageSearchResultItem.text.push(...textList)
-          } else {
-            pageSearchResult.push({ text: textList, index, title });
-          }
+  const onSearch = debounce((e: Event) => {
+    const value = (e.target as HTMLInputElement)?.value || '';
+    const searchValue = trim(value);
+    // 没有输入内容，则不进行搜索
+    if (!searchValue) {
+      setShowSearchResult(false);
+      return;
+    }
+    // 展示搜索结果
+    setShowSearchResult(true);
+    const textSyntaxTree: TextSyntaxTree = getTextSyntaxTree();
+    const { pageText = [], pageTitleId, titleIdTitle } = textSyntaxTree || {};
+    const pageSearchResult: SearchResult[] = [];
+    pageText.forEach((item, index) => {
+      if (item.text.includes(searchValue)) {
+        const text = getMatchingSentences(item.text, searchValue);
+        const textList = text.map((str: string) => {
+          const [pre, next] = str.split(searchValue);
+          return { pre, value: searchValue, next, index };
+        });
+        const title = titleIdTitle[pageTitleId[index]];
+        const pageSearchResultItem = pageSearchResult.find((i) => i.title === titleIdTitle[pageTitleId[index]]);
+        if (pageSearchResultItem) {
+          pageSearchResultItem.text.push(...textList);
+        } else {
+          pageSearchResult.push({ text: textList, index, title });
         }
-      });
-      // 没有搜索结果
-      if (pageSearchResult.length <= 0) {
-        return;
       }
-      console.log('pageSearchResult', pageSearchResult);
-      setSearchResult(pageSearchResult);
-    }, 500)
+    });
+    // 没有搜索结果
+    if (pageSearchResult.length <= 0) {
+      return;
+    }
+    console.log('pageSearchResult', pageSearchResult);
+    setSearchResult(pageSearchResult);
+  }, 500);
 
   const onSearchResult = (e: Event) => {
     const title = (e.target as HTMLDivElement).title;
     setPageNum(Number(title));
-  }
+  };
 
   useEffect(() => {
     searchRef.current?.addEventListener('change', onSearch);
@@ -94,26 +97,34 @@ export const BookDetailMenu = (): React.JSX.Element => {
       <div className="px-6 py-7">
         <r-input className="h-10" icon="search" style={inputStyle} placeholder="搜索" ref={searchRef}></r-input>
       </div>
-      {!showSearchResult ? <Catalogue /> : <div ref={searchResultRef} className='pb-7 overflow-y-auto flex-auto'>
-        {searchResult.map(item => {
-          const { text = [], index, title } = item;
-          return (
-            <div key={index} title={`${index}`}>
-              <div className='text-text-color-1 font-normal text-base px-6 py-2 cursor-pointer'>{title}</div>
-              {text.map((str, i) => {
-                const { pre, value, next } = str
-                return (
-                  <div title={`${str.index}`} className='text-text-color-2 font-normal text-base py-4 px-6 cursor-pointer hover:bg-blue-50' key={pre + value + next + i}>
-                    {pre}
-                    <span className='text-brand-blue-color-1'>{value}</span>
-                    {next}
-                  </div>
-                )
-              })}
-            </div>
-          )
-        })}
-      </div>}
+      {!showSearchResult ? (
+        <Catalogue />
+      ) : (
+        <div ref={searchResultRef} className="pb-7 overflow-y-auto flex-auto">
+          {searchResult.map((item) => {
+            const { text = [], index, title } = item;
+            return (
+              <div key={index} title={`${index}`}>
+                <div className="text-text-color-1 font-normal text-base px-6 py-2 cursor-pointer">{title}</div>
+                {text.map((str, i) => {
+                  const { pre, value, next } = str;
+                  return (
+                    <div
+                      title={`${str.index}`}
+                      className="text-text-color-2 font-normal text-base py-4 px-6 cursor-pointer hover:bg-blue-50"
+                      key={pre + value + next + i}
+                    >
+                      {pre}
+                      <span className="text-brand-blue-color-1">{value}</span>
+                      {next}
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };
