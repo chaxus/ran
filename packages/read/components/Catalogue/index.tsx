@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { BookInfo } from '@/store/books';
 import type { TextSyntaxTree } from '@/lib/transformText';
-import { EVENT_NAME, getCurrentBookDetail, getTextSyntaxTree, syncHook } from '@/lib/subscribe';
+import { EVENT_NAME, getCurrentBookDetail, getTextSyntaxTree, setPageNum, syncHook } from '@/lib/subscribe';
 
 export enum SORT_DIRECTION {
   UP = 'UP',
@@ -20,12 +20,12 @@ const toPage = (e: Event) => {
   if (page !== undefined) {
     // Fallback for browsers that don't support View Transitions API
     if (!document.startViewTransition) {
-      syncHook.call(EVENT_NAME.SET_CURRENT_BOOK_PAGE, page);
+      setPageNum(page);
       return;
     }
     // With View Transition
     document.startViewTransition(() => {
-      syncHook.call(EVENT_NAME.SET_CURRENT_BOOK_PAGE, page);
+      setPageNum(page);
     });
   }
   syncHook.call(EVENT_NAME.CLOSE_POPOVER);
