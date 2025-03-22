@@ -69,7 +69,7 @@ export const BookDetailMenu = (): React.JSX.Element => {
 
   const onSearchResult = (e: Event) => {
     const title = (e.target as HTMLElement)?.getAttribute('item-index');
-    if (title === '') return
+    if (title === '') return;
     setPageNum(Number(title));
   };
 
@@ -101,33 +101,37 @@ export const BookDetailMenu = (): React.JSX.Element => {
         <Catalogue />
       ) : (
         <div ref={searchResultRef} className="pb-7 overflow-y-auto flex-auto">
-          {searchResult.length > 0 ? searchResult?.map((item) => {
-            const { text = [], index, title } = item;
-            return (
-              <div key={index} item-index={`${index}`}>
-                <div className="text-text-color-1 font-normal text-base px-6 py-2">{title}</div>
-                {text.map((str, i) => {
-                  const { pre, value, next } = str;
-                  return (
-                    <div
-                      item-index={`${str.index}`}
-                      className="text-text-color-2 font-normal text-base py-4 px-6 cursor-pointer hover:bg-blue-50"
-                      key={pre + value + next + i}
-                    >
-                      {pre}
-                      <span className="text-brand-blue-color-1">{value}</span>
-                      {next}
-                    </div>
-                  );
-                })}
+          {searchResult.length > 0 ? (
+            searchResult?.map((item) => {
+              const { text = [], index, title } = item;
+              return (
+                <div key={index} item-index={`${index}`}>
+                  <div className="text-text-color-1 font-normal text-base px-6 py-2">{title}</div>
+                  {text.map((str, i) => {
+                    const { pre, value, next } = str;
+                    return (
+                      <div
+                        item-index={`${str.index}`}
+                        className="text-text-color-2 font-normal text-base py-4 px-6 cursor-pointer hover:bg-blue-50"
+                        key={pre + value + next + i}
+                      >
+                        {pre}
+                        <span className="text-brand-blue-color-1">{value}</span>
+                        {next}
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })
+          ) : (
+            <div className="h-full">
+              <div className="flex flex-col items-center justify-center h-full">
+                <r-icon name="without-content" style={ICON_STYLE}></r-icon>
+                <div className="text-text-color-2 font-normal text-base">无结果</div>
               </div>
-            );
-          }) : <div className='h-full'>
-            <div className="flex flex-col items-center justify-center h-full">
-              <r-icon name="without-content" style={ICON_STYLE}></r-icon>
-              <div className="text-text-color-2 font-normal text-base">无结果</div>
             </div>
-          </div>}
+          )}
         </div>
       )}
     </div>
