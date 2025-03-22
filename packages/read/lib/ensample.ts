@@ -2,11 +2,11 @@
 import princekin from '@/assets/books/princekin/princekin.txt?url';
 import princekinIcon from '@/assets/books/princekin/image.png?url';
 // 骆驼祥子
-import camelXiangzi from '@/assets/books/camelXiangzi/骆驼祥子.txt?url';
+import camelXiangzi from '@/assets/books/camelXiangzi/camelXiangzi.txt?url';
 // 三国演义
-import threeKingdoms from '@/assets/books/romance-of-the-Three-Kingdoms/三国演义.txt?url';
+import threeKingdoms from '@/assets/books/theThreeKingdoms/theThreeKingdoms.txt?url';
 // 国富论
-import theWealthOfNations from '@/assets/books/theWealthOfNations/国富论.txt?url';
+import theWealthOfNations from '@/assets/books/theWealthOfNations/theWealthOfNations.txt?url';
 
 export interface EnBook {
   url: string;
