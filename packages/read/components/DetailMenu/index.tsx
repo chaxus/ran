@@ -60,15 +60,12 @@ export const BookDetailMenu = (): React.JSX.Element => {
         }
       }
     });
-    // 没有搜索结果
-    if (pageSearchResult.length <= 0) {
-      return;
-    }
     setSearchResult(pageSearchResult);
   }, 500);
 
   const onSearchResult = (e: Event) => {
     const title = (e.target as HTMLDivElement).title;
+    if (title === '') return
     setPageNum(Number(title));
   };
 
@@ -100,11 +97,11 @@ export const BookDetailMenu = (): React.JSX.Element => {
         <Catalogue />
       ) : (
         <div ref={searchResultRef} className="pb-7 overflow-y-auto flex-auto">
-          {searchResult.map((item) => {
+          {searchResult.length > 0 ? searchResult?.map((item) => {
             const { text = [], index, title } = item;
             return (
               <div key={index} title={`${index}`}>
-                <div className="text-text-color-1 font-normal text-base px-6 py-2 cursor-pointer">{title}</div>
+                <div className="text-text-color-1 font-normal text-base px-6 py-2">{title}</div>
                 {text.map((str, i) => {
                   const { pre, value, next } = str;
                   return (
@@ -121,7 +118,12 @@ export const BookDetailMenu = (): React.JSX.Element => {
                 })}
               </div>
             );
-          })}
+          }) : <div className='h-full'>
+            <div className="flex flex-col items-center justify-center h-full">
+              <r-icon name="without-content"></r-icon>
+              <div className="text-text-color-2 font-normal text-base">无结果</div>
+            </div>
+          </div>}
         </div>
       )}
     </div>

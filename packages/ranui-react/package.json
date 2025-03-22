@@ -18,7 +18,7 @@
   "author": "chaxus",
   "license": "MIT",
   "engines": {
-    "node": "^16.20.2 || >=18.0.0"
+    "node": ">=23.10.0"
   },
   "scripts": {
     "dev": "vite",

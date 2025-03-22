@@ -8,7 +8,7 @@
     "dev": "vite --host --force"
   },
   "engines": {
-    "node": "^22.9.0"
+     "node": ">=23.10.0"
   },
   "keywords": [],
   "author": "",

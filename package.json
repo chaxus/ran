@@ -4,7 +4,7 @@
   "description": "Monorepo",
   "type": "module",
   "engines": {
-    "node": "^22.9.0"
+      "node": ">=23.10.0"
   },
   "scripts": {
     "pre": "sh ./bin/preinstall.sh",
