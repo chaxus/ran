@@ -25,6 +25,10 @@ interface SearchResult {
   title: string;
 }
 
+const ICON_STYLE = {
+  '--ran-icon-font-size': '60px',
+};
+
 export const BookDetailMenu = (): React.JSX.Element => {
   const searchRef = useRef<HTMLInputElement>(null);
   const [showSearchResult, setShowSearchResult] = useState(false);
@@ -64,7 +68,7 @@ export const BookDetailMenu = (): React.JSX.Element => {
   }, 500);
 
   const onSearchResult = (e: Event) => {
-    const title = (e.target as HTMLDivElement).title;
+    const title = (e.target as HTMLElement)?.getAttribute('item-index');
     if (title === '') return
     setPageNum(Number(title));
   };
@@ -100,13 +104,13 @@ export const BookDetailMenu = (): React.JSX.Element => {
           {searchResult.length > 0 ? searchResult?.map((item) => {
             const { text = [], index, title } = item;
             return (
-              <div key={index} title={`${index}`}>
+              <div key={index} item-index={`${index}`}>
                 <div className="text-text-color-1 font-normal text-base px-6 py-2">{title}</div>
                 {text.map((str, i) => {
                   const { pre, value, next } = str;
                   return (
                     <div
-                      title={`${str.index}`}
+                      item-index={`${str.index}`}
                       className="text-text-color-2 font-normal text-base py-4 px-6 cursor-pointer hover:bg-blue-50"
                       key={pre + value + next + i}
                     >
@@ -120,7 +124,7 @@ export const BookDetailMenu = (): React.JSX.Element => {
             );
           }) : <div className='h-full'>
             <div className="flex flex-col items-center justify-center h-full">
-              <r-icon name="without-content"></r-icon>
+              <r-icon name="without-content" style={ICON_STYLE}></r-icon>
               <div className="text-text-color-2 font-normal text-base">无结果</div>
             </div>
           </div>}
