@@ -26,5 +26,10 @@
     "ethers": "^6.13.4",
     "hardhat": "^2.22.3",
     "viem": "^2.10.2"
+  },
+  "dependencies": {
+    "@nomicfoundation/hardhat-toolbox-viem": "^3.0.0",
+    "@types/chai": "^4.2.0",
+    "chai": "^4.2.0"
   }
 }
