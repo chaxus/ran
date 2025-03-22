@@ -78,7 +78,7 @@ export const BookDetail = (): React.JSX.Element => {
 
   const toHome = () => {
     if (document.startViewTransition) {
-      ref.current?.style.setProperty('view-transition-name', 'book-info');
+      ref.current?.style.setProperty('view-transition-name', `book-info-${id}`);
       document.startViewTransition(() => {
         ref.current?.style.setProperty('view-transition-name', '');
         navigate(ROUTE_PATH.HOME);
@@ -97,7 +97,7 @@ export const BookDetail = (): React.JSX.Element => {
         const { content } = res.data;
         const textSyntaxTree: TextSyntaxTree = transformTextToExpectedFormat(content, showContainerRef.current!);
         setTextSyntaxTree(textSyntaxTree);
-        ref.current?.style.setProperty('view-transition-name', 'book-info');
+        ref.current?.style.setProperty('view-transition-name', `book-info-${id}`);
       })
       .catch(() => {
         navigate(ROUTE_PATH.HOME);
@@ -132,7 +132,7 @@ export const BookDetail = (): React.JSX.Element => {
         <div
           ref={ref}
           style={{
-            viewTransitionName: 'book-info',
+            viewTransitionName: `book-info-${id}`,
           }}
           className="bg-front-bg-color-3 rounded-2xl flex-grow pt-7 px-16 flex flex-col text-base book-info-container"
         >

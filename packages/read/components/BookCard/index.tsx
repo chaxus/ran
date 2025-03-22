@@ -12,7 +12,7 @@ export const BookCard = ({ book }: BookCardProps): React.JSX.Element => {
   const ref = useRef<HTMLAnchorElement>(null);
   const toDetail = () => {
     if (document.startViewTransition) {
-      ref.current?.style.setProperty('view-transition-name', 'book-info');
+      ref.current?.style.setProperty('view-transition-name', `book-info-${id}`);
       document.startViewTransition(() => {
         ref.current?.style.setProperty('view-transition-name', '');
         navigate(`/book-detail/${id}`);
@@ -23,7 +23,7 @@ export const BookCard = ({ book }: BookCardProps): React.JSX.Element => {
   };
 
   useEffect(() => {
-    ref.current?.style.setProperty('view-transition-name', 'book-info');
+    ref.current?.style.setProperty('view-transition-name', `book-info-${id}`);
   }, []);
 
   return (
@@ -31,7 +31,7 @@ export const BookCard = ({ book }: BookCardProps): React.JSX.Element => {
       ref={ref}
       onClick={toDetail}
       style={{
-        viewTransitionName: 'book-info',
+        viewTransitionName: `book-info-${id}`,
       }}
       className="w-2xs h-40 bg-front-bg-color-3 p-5 cursor-pointer rounded-xl mr-6 items-center flex hover:scale-110 transition-all mt-5"
     >

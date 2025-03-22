@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { debounce } from 'ranuts/utils';
 import { BookCard } from '@/components/BookCard';
 import { addBook, getAllBooks } from '@/store/books';
 import { checkEncoding, createReader } from '@/lib/transformText';
@@ -32,6 +33,7 @@ const plusIconStyle = {
 
 export const Home = (): React.JSX.Element => {
   const [bookList, setBookList] = useState<BookInfo[]>([]);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const add = () => {
     const uploadFile = document.createElement('input');
@@ -88,6 +90,12 @@ export const Home = (): React.JSX.Element => {
         });
       });
   };
+
+  const onChange = debounce((e: Event) => {
+    const value = (e.target as HTMLInputElement).value;
+    console.log(value);
+  });
+
   useEffect(() => {
     // 默认添加的书籍，只添加一次
     if (!localStorage.getItem(BOOKS_ADD_BY_DEFAULT)) {
@@ -98,13 +106,18 @@ export const Home = (): React.JSX.Element => {
     }
     // 查询所有书籍，进行展示
     getBooks();
+    // 监听搜索框的 change 事件
+    inputRef.current?.addEventListener('change', onChange);
+    return () => {
+      inputRef.current?.removeEventListener('change', onChange);
+    };
   }, []);
 
   return (
     <div>
       <div className="w-full h-72 bg-front-bg-color-2 justify-center items-center flex flex-col">
         {/* <div className='text-5xl mb-7'>Read Book</div> */}
-        <r-input className="w-1/2 min-w-2xs h-14 block" icon="search" style={inputStyle} placeholder="搜索"></r-input>
+        <r-input className="w-1/2 min-w-2xs h-14 block" icon="search" style={inputStyle} placeholder="搜索" ref={inputRef}></r-input>
       </div>
       <div className="w-full bg-front-bg-color-1 min-h-svh">
         <div className="max-w-7xl mx-auto pt-12 flex flex-row justify-between items-center">
