@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { debounce } from 'ranuts/utils';
 import { BookCard } from '@/components/BookCard';
 import { addBook, getAllBooks } from '@/store/books';
-import { checkEncoding, createReader } from '@/lib/transformText';
+import { checkEncoding, createReader, trim } from '@/lib/transformText';
 import { resumeDB } from '@/store';
 import { BOOKS_ADD_BY_DEFAULT, ensampleConfigs } from '@/lib/ensample';
 import type { EnBook } from '@/lib/ensample';
@@ -34,6 +34,7 @@ const plusIconStyle = {
 export const Home = (): React.JSX.Element => {
   const [bookList, setBookList] = useState<BookInfo[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [searchValue, setSearchValue] = useState<string>('');
 
   const add = () => {
     const uploadFile = document.createElement('input');
@@ -92,7 +93,9 @@ export const Home = (): React.JSX.Element => {
   };
 
   const onChange = debounce((e: Event) => {
-    const value = (e.target as HTMLInputElement).value;
+    const value = trim((e.target as HTMLInputElement)?.value || '');
+    setSearchValue(value);
+    if (!value) return
     console.log(value);
   });
 
@@ -115,17 +118,28 @@ export const Home = (): React.JSX.Element => {
 
   return (
     <div>
-      <div className="w-full h-72 bg-front-bg-color-2 justify-center items-center flex flex-col">
+      <div className="w-full bg-front-bg-color-2">
         {/* <div className='text-5xl mb-7'>Read Book</div> */}
-        <r-input
-          className="w-1/2 min-w-2xs h-14 block"
-          icon="search"
-          style={inputStyle}
-          placeholder="搜索"
-          ref={inputRef}
-        ></r-input>
+        <div className='w-full min-h-72 pt-28'>
+          <r-input
+            className="w-1/2 min-w-2xs h-14 block mx-auto"
+            icon="search"
+            style={inputStyle}
+            placeholder="搜索"
+            ref={inputRef}
+          ></r-input>
+          <div className='w-full transition-all overflow-hidden mt-6' style={{ height: searchValue ? '100vh' : '0px' }}>
+            {/* <r-loading name="circle-fold"></r-loading> */}
+            <div className='w-1/2 min-w-2xs block mx-auto bg-front-bg-color-3 rounded-xl px-3.5 py-5'>
+              <div>
+                <div className='text-text-color-2 text-sm font-medium'>电子书</div>
+                <div></div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div className="w-full bg-front-bg-color-1 min-h-svh">
+      {!searchValue && <div className="w-full bg-front-bg-color-1 min-h-svh">
         <div className="max-w-7xl mx-auto pt-12 flex flex-row justify-between items-center">
           <div className="flex justify-start items-center">
             <div className="cursor-pointer text-text-color-1 text-2xl font-medium">我的书架</div>
@@ -140,7 +154,7 @@ export const Home = (): React.JSX.Element => {
             <r-icon name="plus" style={plusIconStyle} onClick={add}></r-icon>
           </div>
         </div>
-      </div>
+      </div>}
     </div>
   );
 };
