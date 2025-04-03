@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 declare module '*.less';
 declare module '*.less?inline';
 declare module '*.ts';
