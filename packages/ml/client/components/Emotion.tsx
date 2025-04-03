@@ -264,7 +264,8 @@ class EmotionModel {
   };
 }
 const { loadData, train, test, save, loadModel, predict } = new EmotionModel();
-export const Emotion = (): JSX.Element => {
+
+export const Emotion = (): React.JSX.Element => {
   const [state, setState] = useState('');
   const memory = tfMemory();
   const input = (e: { target: { value: React.SetStateAction<string> } }) => {

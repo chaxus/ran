@@ -18,18 +18,18 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@nomicfoundation/hardhat-ignition": "^0.15.6",
-    "@nomicfoundation/hardhat-ignition-ethers": "^0.15.6",
+    "@nomicfoundation/hardhat-ignition": "^0.15.10",
+    "@nomicfoundation/hardhat-ignition-ethers": "^0.15.10",
     "@nomicfoundation/hardhat-toolbox-viem": "^3.0.0",
-    "@remix-project/remixd": "^0.6.40",
-    "@types/chai-as-promised": "^7.1.8",
-    "ethers": "^6.13.4",
-    "hardhat": "^2.22.3",
-    "viem": "^2.10.2"
+    "@remix-project/remixd": "^0.6.45",
+    "@types/chai-as-promised": "^8.0.2",
+    "ethers": "^6.13.5",
+    "hardhat": "^2.22.19",
+    "viem": "^2.24.3"
   },
   "dependencies": {
     "@nomicfoundation/hardhat-toolbox-viem": "^3.0.0",
-    "@types/chai": "^4.2.0",
-    "chai": "^4.2.0"
+    "@types/chai": "^5.2.1",
+    "chai": "^5.2.0"
   }
 }

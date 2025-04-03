@@ -175,7 +175,7 @@ class LineModel {
 
 const { loadData, train, test, save, loadModel, predict, openTfvis } = new LineModel();
 
-export const LineModelComponent = (): JSX.Element => {
+export const LineModelComponent = (): React.JSX.Element => {
   const [state, setState] = useState('');
   const memory = tfMemory();
   const input = (e: { target: { value: React.SetStateAction<string> } }) => {
