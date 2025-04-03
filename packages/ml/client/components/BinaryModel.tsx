@@ -302,7 +302,7 @@ class BinaryModel {
 
 const { loadData, train, test, save, loadModel, predict, openTfvis } = new BinaryModel();
 
-export const Binary = (): JSX.Element => {
+export const Binary = (): React.JSX.Element => {
   const [square, setSquare] = useState(`2000`);
   const [price, setPrice] = useState(`1000000`);
 

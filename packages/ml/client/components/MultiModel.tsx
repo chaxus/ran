@@ -328,7 +328,7 @@ class MultiModel {
 
 const { loadData, train, test, save, loadModel, predict, openTfvis } = new MultiModel();
 
-export const Multi = (): JSX.Element => {
+export const Multi = (): React.JSX.Element => {
   const [square, setSquare] = useState('');
   const [price, setPrice] = useState('');
 

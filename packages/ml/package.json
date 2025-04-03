@@ -12,18 +12,18 @@
   "author": "chaxus",
   "dependencies": {
     "@ranui/react": "workspace:^",
-    "ranuts": "workspace:^",
-    "@tensorflow/tfjs": "^4.19.0",
+    "@tensorflow/tfjs": "^4.22.0",
     "@tensorflow/tfjs-vis": "^1.5.1",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-router-dom": "^6.23.0"
+    "ranuts": "workspace:^",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^7.4.1"
   },
   "devDependencies": {
-    "@types/react": "^18.3.1",
-    "@types/react-dom": "^18.3.0",
-    "@vitejs/plugin-react": "^4.2.1",
-    "vite": "^5.2.11",
-    "vite-plugin-dts": "^3.9.1"
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^6.2.4",
+    "vite-plugin-dts": "^4.5.3"
   }
 }
