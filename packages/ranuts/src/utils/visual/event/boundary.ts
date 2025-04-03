@@ -13,7 +13,6 @@ export class EventBoundary {
   public overTargets: Container[] = [];
   constructor(stage: Container) {
     this.rootContainer = stage;
-
     this.eventHandlerMap.mousemove = this.fireMouseMove;
     this.eventHandlerMap.mousedown = this.fireMouseDown;
     this.eventHandlerMap.mouseup = this.fireMouseUp;
