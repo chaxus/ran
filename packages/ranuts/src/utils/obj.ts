@@ -34,8 +34,7 @@ const transitionJsonToString = (jsonObj: string | JSON, callback: (error: Error)
     }
   } else {
     try {
-      // eslint-disable-next-line regexp/no-unused-capturing-group
-      jsonObj = typeof jsonObj === 'string' ? jsonObj.replace(/(')/g, '"') : JSON.stringify(jsonObj);
+      jsonObj = typeof jsonObj === 'string' ? jsonObj.replace(/'/g, '"') : JSON.stringify(jsonObj);
       _jsonObj = JSON.stringify(JSON.parse(jsonObj));
     } catch (error) {
       // 转换失败错误信息
@@ -72,10 +71,9 @@ export const formatJson = (jsonObj: string, callback = () => {}): string => {
   // 正则匹配到 [,] 符号则在两边添加回车换行
   jsonString = jsonString.replace(/([[\]])/g, '\r\n$1\r\n');
   // 正则匹配到，符号则在两边添加回车换行
-  jsonString = jsonString.replace(/(,)/g, '$1\r\n');
+  jsonString = jsonString.replace(/,/g, ',\r\n');
   // 正则匹配到要超过一行的换行需要改为一行
-  // eslint-disable-next-line regexp/no-unused-capturing-group
-  jsonString = jsonString.replace(/(\r\n\r\n)/g, '\r\n');
+  jsonString = jsonString.replace(/\r\n\r\n/g, '\r\n');
   // 正则匹配到单独处于一行的，符号时需要去掉换行，将，置于同行
   jsonString = jsonString.replace(/\r\n,/g, ',');
   // 特殊处理双引号中的内容
