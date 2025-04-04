@@ -3,13 +3,24 @@
   "version": "1.0.0",
   "description": "",
   "type": "module",
-  "main": "index.js",
+  "main": "dist/umd/index.js",
+  "module": "dist/es/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/umd/index.js",
+      "import": "./dist/es/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "vite --host --force",
-    "build": "vite build"
+    "build": "sh ./bin/build.sh"
   },
   "keywords": [],
-  "author": "",
+  "author": "chaxus",
   "license": "ISC",
   "devDependencies": {
     "typescript": "^5.8.2",
