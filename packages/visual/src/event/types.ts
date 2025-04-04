@@ -1,3 +1,6 @@
+import { Point } from "../vertex/point";
+import { Container } from "../vertex/container";
+import { EventPhase } from "./enums";
 export class FederatedMouseEvent {
     public isTrusted = true;
     public timeStamp = 0;
