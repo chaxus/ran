@@ -1,6 +1,6 @@
 import type { Container } from '../vertex/container';
 import { Rectangle } from '../shape/rectangle';
-import type { IApplicationOptions } from '@/src/types';
+import type { IApplicationOptions } from '../types';
 
 export abstract class Renderer {
   public canvasEle: HTMLCanvasElement;

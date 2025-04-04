@@ -1,6 +1,6 @@
 import type { Container } from '../vertex/container';
-import type { IApplicationOptions } from '@/src/types';
-import { Renderer } from '@/src/render/render';
+import type { IApplicationOptions } from '../types';
+import { Renderer } from './render';
 // 2D 渲染器
 export class CanvasRenderer extends Renderer {
   public ctx: CanvasRenderingContext2D;
