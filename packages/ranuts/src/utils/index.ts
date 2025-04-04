@@ -1,3 +1,4 @@
+import { SyncHook } from './subscribe';
 import { AudioRecorder } from '@/utils/audioRecorder';
 import { createSignal, subscribers } from '@/utils/signal';
 import { audioVendor, canvasVendor, webglVendor } from '@/utils/behavior';
@@ -90,7 +91,6 @@ import {
   str2Xml,
   strParse,
 } from '@/utils/str';
-import { SyncHook } from '@/utils/subscribe';
 import { generateThrottle, throttle } from '@/utils/throttle';
 import { performanceTime, timeFormat, timestampToTime } from '@/utils/time';
 export {
