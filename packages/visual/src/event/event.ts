@@ -1,3 +1,8 @@
+import type { Container } from "../vertex/container";
+import { EventBoundary } from "./boundry";
+import { FederatedMouseEvent } from "./types";
+import type { FederatedEventMap } from "./types";
+
 
 export class EventSystem {
     private canvasEle: HTMLCanvasElement; // canvas 元素

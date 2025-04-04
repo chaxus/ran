@@ -1,3 +1,4 @@
+import type { Container } from '../vertex/container';
 import type { IApplicationOptions } from '@/src/types'
 import { Renderer } from '@/src/render/render';
 

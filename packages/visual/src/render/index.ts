@@ -1,3 +1,5 @@
+import { WebGLRenderer } from './webGLRender';
+import { WebGPURenderer } from './webGPURender';
 import type { IApplicationOptions } from '@/src/types'
 import type { Renderer } from '@/src/render/render';
 import { CanvasRenderer } from '@/src/render/canvasRender';

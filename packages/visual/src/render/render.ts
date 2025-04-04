@@ -1,3 +1,5 @@
+import type { Container } from '../vertex/container';
+import { Rectangle } from '../shape/rectangle';
 import type { IApplicationOptions } from '@/src/types'
 
 export abstract class Renderer {

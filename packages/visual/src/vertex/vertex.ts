@@ -1,4 +1,11 @@
 import { SyncHook } from 'ranuts/utils'
+import type { Cursor, FederatedEventMap } from '../event/types';
+import type { Shape } from '../shape/shape';
+import { Transform } from '../transform/transform';
+import type { Matrix } from '../transform/matrix';
+import { DEG_TO_RAD, RAD_TO_DEG } from '../transform/enums';
+import type { Container } from './container';
+import type { ObservablePoint } from './point';
 // 这个类代表了最原始的‘节点’的概念，所有可以被展示到 canvas 画布上的、各种类型的节点都会继承于这个类，这是一个抽象类，我们并不会直接实例化这个类。
 // 这个类上面挂载了‘节点’的各种属性，比如：父元素、透明度、旋转角度、缩放、平移、节点是否可见等。
 // 这个类还继承了 SyncHook 类，这个类是一个自定义的事件订阅/发布类，用于实现事件的订阅和发布。

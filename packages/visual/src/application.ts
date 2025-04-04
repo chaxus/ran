@@ -1,4 +1,6 @@
 
+import { Container } from './vertex/container';
+import { EventSystem } from './event/event';
 import type { IApplicationOptions } from '@/src/types';
 import type { Renderer } from '@/src/render/render';
 import { getRenderer } from '@/src/render';
