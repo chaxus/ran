@@ -40,7 +40,6 @@ export class EventBoundary {
   };
   // 碰撞检测
   private hitTest = (globalPos: Point): Container | null => {
-    
     this.hasFoundTarget = false;
     this.hitTarget = null;
 

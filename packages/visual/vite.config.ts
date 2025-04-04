@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default defineConfig({
-  build:{
+  build: {
     lib: {
       entry: resolve(__dirname, './index.ts'),
       name: 'visual',
