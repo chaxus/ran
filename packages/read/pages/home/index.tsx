@@ -95,7 +95,7 @@ export const Home = (): React.JSX.Element => {
   const onChange = debounce((e: Event) => {
     const value = trim((e.target as HTMLInputElement)?.value || '');
     setSearchValue(value);
-    if (!value) return
+    if (!value) return;
     console.log(value);
   });
 
@@ -120,7 +120,7 @@ export const Home = (): React.JSX.Element => {
     <div>
       <div className="w-full bg-front-bg-color-2">
         {/* <div className='text-5xl mb-7'>Read Book</div> */}
-        <div className='w-full min-h-72 pt-28'>
+        <div className="w-full min-h-72 pt-28">
           <r-input
             className="w-1/2 min-w-2xs h-14 block mx-auto"
             icon="search"
@@ -128,33 +128,35 @@ export const Home = (): React.JSX.Element => {
             placeholder="搜索"
             ref={inputRef}
           ></r-input>
-          <div className='w-full transition-all overflow-hidden mt-6' style={{ height: searchValue ? '100vh' : '0px' }}>
+          <div className="w-full transition-all overflow-hidden mt-6" style={{ height: searchValue ? '100vh' : '0px' }}>
             {/* <r-loading name="circle-fold"></r-loading> */}
-            <div className='w-1/2 min-w-2xs block mx-auto bg-front-bg-color-3 rounded-xl px-3.5 py-5'>
+            <div className="w-1/2 min-w-2xs block mx-auto bg-front-bg-color-3 rounded-xl px-3.5 py-5">
               <div>
-                <div className='text-text-color-2 text-sm font-medium'>电子书</div>
+                <div className="text-text-color-2 text-sm font-medium">电子书</div>
                 <div></div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      {!searchValue && <div className="w-full bg-front-bg-color-1 min-h-svh">
-        <div className="max-w-7xl mx-auto pt-12 flex flex-row justify-between items-center">
-          <div className="flex justify-start items-center">
-            <div className="cursor-pointer text-text-color-1 text-2xl font-medium">我的书架</div>
-            <r-icon className="-rotate-90 cursor-pointer" name="more" style={moreIconStyle}></r-icon>
+      {!searchValue && (
+        <div className="w-full bg-front-bg-color-1 min-h-svh">
+          <div className="max-w-7xl mx-auto pt-12 flex flex-row justify-between items-center">
+            <div className="flex justify-start items-center">
+              <div className="cursor-pointer text-text-color-1 text-2xl font-medium">我的书架</div>
+              <r-icon className="-rotate-90 cursor-pointer" name="more" style={moreIconStyle}></r-icon>
+            </div>
+          </div>
+          <div className="max-w-7xl mx-auto flex flex-row flex-wrap justify-start items-center">
+            {bookList.map((book) => (
+              <BookCard book={book} key={book.id} />
+            ))}
+            <div className="w-2xs h-40 bg-front-bg-color-3 p-5 cursor-pointer justify-center rounded-xl mr-6 items-center flex hover:scale-110 transition-all mt-5">
+              <r-icon name="plus" style={plusIconStyle} onClick={add}></r-icon>
+            </div>
           </div>
         </div>
-        <div className="max-w-7xl mx-auto flex flex-row flex-wrap justify-start items-center">
-          {bookList.map((book) => (
-            <BookCard book={book} key={book.id} />
-          ))}
-          <div className="w-2xs h-40 bg-front-bg-color-3 p-5 cursor-pointer justify-center rounded-xl mr-6 items-center flex hover:scale-110 transition-all mt-5">
-            <r-icon name="plus" style={plusIconStyle} onClick={add}></r-icon>
-          </div>
-        </div>
-      </div>}
+      )}
     </div>
   );
 };
