@@ -20,7 +20,6 @@
     "experimentalDecorators": true,
     "paths": {
       "@/*": ["./*"],
-      "@/types/*": ["./types/*"],
       "@/src/*": ["./src/*"]
     }
   }
