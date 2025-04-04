@@ -102,7 +102,7 @@ import {
   timeFormat,
   timestampToTime,
   webglVendor,
-} from '@/utils';
+} from './src/utils';
 import type { CurrentDevice } from '@/utils';
 import { reactify } from '@/react';
 import {
