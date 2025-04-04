@@ -15,6 +15,7 @@ const build: BuildEnvironmentOptions = {
     fileName: 'index',
     formats: ['umd'],
   },
+  outDir: resolve(__dirname, '../dist/umd'),
   chunkSizeWarningLimit: 500,
   assetsInlineLimit: 1024,
   reportCompressedSize: false,
