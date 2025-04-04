@@ -14,6 +14,7 @@ const build: BuildEnvironmentOptions = {
     fileName: 'index',
     formats: ['es'],
   },
+  outDir: resolve(__dirname, '../dist/es'),
   chunkSizeWarningLimit: 500,
   assetsInlineLimit: 1024,
   reportCompressedSize: false,
