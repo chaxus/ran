@@ -6,3 +6,15 @@ export enum SHAPE_TYPE {
   ELLIPSE = 'ellipse', // 椭圆
   ROUNDED_RECTANGLE = 'rounded rectangle', // 圆角矩形
 }
+
+export enum LINE_CAP {
+  BUTT = 'butt',
+  ROUND = 'round',
+  SQUARE = 'square',
+}
+
+export enum LINE_JOIN {
+  MITER = 'miter',
+  BEVEL = 'bevel',
+  ROUND = 'round',
+}
