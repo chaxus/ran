@@ -12,8 +12,8 @@ export class Application {
   private animationFrameId: number | undefined;
   public eventSystem: EventSystem;
 
-  constructor(options: IApplicationOptions) {
-    const { view = document.createElement('canvas') } = options;
+  constructor(options?: IApplicationOptions) {
+    const { view = document.createElement('canvas') } = options || {};
     // 创建 canvas 元素
     this.view = view;
     // 根据参数，判断是用什么渲染模式
