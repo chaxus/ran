@@ -8,5 +8,13 @@
   <body>
     <div id="app"></div>
     <script type="module" src="./index.ts"></script>
+
+    <script type="module">
+      import { Sankey } from './components/sankey';
+      const sankey = new Sankey({
+        data: numchildrenData,
+      });
+      document.body.appendChild(sankey.vessel.view);
+    </script>
   </body>
 </html>

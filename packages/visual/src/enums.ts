@@ -4,3 +4,7 @@ export enum RENDERER_TYPE {
   CANVAS = 'canvas',
   WEB_GPU = 'webgpu',
 }
+
+export const CONTAINER = 'container';
+
+export const GRAPHICS = 'graphics';
