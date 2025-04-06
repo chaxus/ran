@@ -16,7 +16,7 @@
       <r-button class="ml-1 h-8" @click="clickButton">{{ t('components_totp_1') }}</r-button>
     </div>
 
-    <div class="text-[#3451b2] text-base">
+    <div class="text-[#3451b2] text-base mt-6">
       <div>code: {{ outputValue.code }}</div>
       <div>{{ t('components_totp_4') }}: {{ outputValue.expires }}</div>
     </div>
