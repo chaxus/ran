@@ -21,7 +21,7 @@ export default tseslint.config(
       '**/assets/**',
       '**/temp/**',
       '**/public/**',
-      '**/.vitepress/cache/**',
+      '**/cache/**',
       '**/*.snap',
     ],
   },

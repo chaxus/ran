@@ -8,7 +8,7 @@ import i18n, { loadLanguageAsync } from '../lang';
 import { LANGS_DICT, MANIFEST_PATH_ROOT, PWA_ELEMENT_NAME, PWA_INSTALL_ID, RAN_CHAXUS_LANG } from '../lib/constant';
 import './styles/index.less';
 import './styles/vars.less';
-import './tailwind.less';
+import './tailwind.min.css';
 import 'ranui/style';
 
 declare global {

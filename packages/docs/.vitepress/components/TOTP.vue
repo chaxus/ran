@@ -28,6 +28,7 @@ import { ref } from 'vue';
 import useBasic from '../composition/useBasic';
 import { TOTP, timestampToTime } from 'ranuts/utils';
 
+
 const { t, $env, locale } = useBasic();
 
 // 输入框的值
@@ -71,3 +72,10 @@ const clickButton = () => {
   }
 };
 </script>
+<style scoped lang="less">
+@tailwind base;
+
+@tailwind components;
+
+@tailwind utilities;
+</style>
