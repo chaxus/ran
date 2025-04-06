@@ -296,7 +296,6 @@ export class Graphics extends Container {
     }
     return this;
   };
-
   public arcTo = (x1: number, y1: number, x2: number, y2: number, radius: number): Graphics => {
     if (!this.currentPath) return this;
     const len = this.currentPath.points.length;

@@ -55,7 +55,7 @@ export interface Level {
 }
 
 export interface Context {
-  action: SHook;
+  action: SyncHook;
   currentState: string;
   duration: number;
   currentTime: number;
