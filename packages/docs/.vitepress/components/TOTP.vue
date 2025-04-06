@@ -28,7 +28,6 @@ import { ref } from 'vue';
 import useBasic from '../composition/useBasic';
 import { TOTP, timestampToTime } from 'ranuts/utils';
 
-
 const { t, $env, locale } = useBasic();
 
 // 输入框的值
@@ -46,7 +45,7 @@ const outputValue = ref({
  * @description: 监听输入框的变化
  * @param {*} e
  */
-const onChange = (e) => {
+const onChange = (e: { detail: { value: string } }) => {
   inputValue.value = e.detail.value;
   inputStatus.value = INPUT_STATUS.NORMAL;
 };
@@ -72,10 +71,3 @@ const clickButton = () => {
   }
 };
 </script>
-<style scoped lang="less">
-@tailwind base;
-
-@tailwind components;
-
-@tailwind utilities;
-</style>
