@@ -1,57 +1,48 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import postcss from 'postcss';
+// function isInsideRoot(rule) {
+//   return rule.selectors.length !== 1 || rule.selectors[0] !== ':root' || rule.parent.type !== 'root';
+// }
 
-const __filename = fileURLToPath(import.meta.url);
+// function isVariableDeclaration(decl) {
+//   return Boolean(decl.value) && decl.prop.startsWith('--');
+// }
 
-const __dirname = path.dirname(__filename);
+// function parse(css, options) {
+//   const root = postcss.parse(css, {
+//     from: options.from,
+//     // parser: options.parser,
+//   });
 
-function isInsideRoot(rule) {
-  return rule.selectors.length !== 1 || rule.selectors[0] !== ':root' || rule.parent.type !== 'root';
-}
+//   const variables = {};
+//   root.walkRules((rule) => {
+//     if (isInsideRoot(rule)) {
+//       return;
+//     }
 
-function isVariableDeclaration(decl) {
-  return Boolean(decl.value) && decl.prop.startsWith('--');
-}
+//     rule.each((decl) => {
+//       if (decl.type === 'decl' && isVariableDeclaration(decl)) {
+//         const name = decl.prop.slice(2);
+//         variables[name] = decl.value;
+//       }
+//     });
+//   });
+//   return variables;
+// }
 
-function parse(css, options) {
-  const root = postcss.parse(css, {
-    from: options.from,
-    // parser: options.parser,
-  });
+// function parseFileSync(fileName, options) {
+//   const css = fs.readFileSync(fileName, 'utf-8');
+//   return parse(css, { ...options, from: fileName });
+// }
 
-  const variables = {};
-  root.walkRules((rule) => {
-    if (isInsideRoot(rule)) {
-      return;
-    }
-
-    rule.each((decl) => {
-      if (decl.type === 'decl' && isVariableDeclaration(decl)) {
-        const name = decl.prop.slice(2);
-        variables[name] = decl.value;
-      }
-    });
-  });
-  return variables;
-}
-
-function parseFileSync(fileName, options) {
-  const css = fs.readFileSync(fileName, 'utf-8');
-  return parse(css, { ...options, from: fileName });
-}
-
-function themeReplacements(): Record<string, string> {
-  const fileName = path.resolve(__dirname, '../theme/theme.less');
-  const variables = parseFileSync(fileName, {
-    parser: 'postcss-scss',
-  });
-  return Object.entries(variables).reduce((memo, e) => {
-    memo[`var(--${e[0]})`] = e[1];
-    return memo;
-  }, {});
-}
+// function themeReplacements(): Record<string, string> {
+//   const fileName = path.resolve(__dirname, '../theme/theme.less');
+//   const variables = parseFileSync(fileName, {
+//     parser: 'postcss-scss',
+//   });
+//   return Object.entries(variables).reduce((memo, e) => {
+//     memo[`var(--${e[0]})`] = e[1];
+//     return memo;
+//   }, {});
+// }
 
 function normalize(config: Record<string, string>): Record<string, string> {
   const r = {};
@@ -69,4 +60,4 @@ function normalize(config: Record<string, string>): Record<string, string> {
   return r;
 }
 
-export { themeReplacements, normalize };
+export { normalize };
