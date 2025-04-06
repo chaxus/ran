@@ -1,3 +1,4 @@
+declare module '*.vue';
 interface Window {
   ran_docs: boolean | undefined;
   uploadFile: Function;
