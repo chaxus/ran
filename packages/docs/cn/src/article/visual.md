@@ -683,6 +683,20 @@ class Container extends Vertex {
     app.stage.addChild(blueGraphic);
     app.stage.addChild(grayGraphic);
 
+    const path = new Graphics()
+      .lineStyle(3, 'purple')
+      .beginFill('pink', 0.6)
+      .moveTo(100, 100)
+      .lineTo(300, 100)
+      .arc(300, 300, 200, Math.PI * 1.5, Math.PI * 2)
+      .bezierCurveTo(500, 400, 600, 500, 700, 500)
+      .lineTo(600, 300)
+      .arcTo(700, 100, 800, 300, 150)
+      .quadraticCurveTo(900, 100, 1100, 200)
+      .closePath();
+
+    app.stage.addChild(path);
+
     app.render();
   </script>
 </body>

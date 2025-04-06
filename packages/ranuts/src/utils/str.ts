@@ -53,7 +53,7 @@ export const str2Xml = (xmlStr: string, format: DOMParserSupportedType = 'text/x
 };
 
 export const isString = (obj: unknown): boolean => {
-  return toString.call(obj) === '[object String]';
+  return window.toString.call(obj) === '[object String]';
 };
 
 export function randomString(len: number = 8): string {
@@ -174,3 +174,7 @@ export function getMatchingSentences(text: string, searchValue: string): string[
   // 去除完全重复的句子
   return [...new Set(filteredSentences)];
 }
+
+export const toString = (value: string | number): string => {
+  return String(value);
+};

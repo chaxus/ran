@@ -1,3 +1,4 @@
+import { toString } from './str';
 interface ComputeNumberResult {
   result: number;
   next: (a: string, b: number) => ComputeNumberResult;
@@ -80,7 +81,7 @@ export class Mathjs {
     return this.handleMethod(a, b)('-');
   };
 }
-
+// 数字运算
 export function mathjs(a: number, type: string, b: number): ComputeNumberResult {
   /**
    * 获取数字小数点的长度
@@ -132,3 +133,35 @@ export function mathjs(a: number, type: string, b: number): ComputeNumberResult 
     },
   };
 }
+
+export const transformNumber = (value: string, locale = 'zh-CN', precision = 2, fixed = 2): string => {
+  let units = ['', 'K', 'M', 'B', 'T'];
+  let setpSize = 3;
+  if (locale === 'zh-CN') {
+    units = ['', ' 万', ' 亿', ' 万亿'];
+    setpSize = 4;
+  }
+  if (locale === 'zh-HK') {
+    units = ['', ' 萬', ' 億', ' 萬億'];
+    setpSize = 4;
+  }
+
+  if (!/^[+-]?\d+(?:\.\d+)?$/.test(value)) {
+    return '--';
+  }
+  const length = parseInt(value).toString().length;
+  const unitIndex = Math.min(Math.floor((length - 1) / setpSize), units.length - 1);
+  const formattedValue = Mathjs.divide(Number(value), 10 ** (unitIndex * setpSize))?.toFixed(precision);
+  return Number(formattedValue).toFixed(fixed) + units[unitIndex];
+};
+
+// 给数字添加符号
+export const addNumSym = (value: string | number, flag?: string | number): string => {
+  if (toString(value).startsWith('+') || toString(value).startsWith('-')) {
+    return toString(value);
+  }
+  if (flag) {
+    return Number(flag || 0) > 0 ? `+${toString(value)}` : toString(value);
+  }
+  return Number(value || 0) > 0 ? `+${toString(value)}` : toString(value);
+};

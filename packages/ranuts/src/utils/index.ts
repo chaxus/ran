@@ -1,4 +1,16 @@
 import { SyncHook } from './subscribe';
+import { Mathjs, addNumSym, mathjs, perToNum, range, transformNumber } from './number';
+import {
+  changeHumpToLowerCase,
+  clearBr,
+  clearStr,
+  getMatchingSentences,
+  isString,
+  randomString,
+  str2Xml,
+  strParse,
+  toString,
+} from './str';
 import { AudioRecorder } from '@/utils/audioRecorder';
 import { createSignal, subscribers } from '@/utils/signal';
 import { audioVendor, canvasVendor, webglVendor } from '@/utils/behavior';
@@ -64,7 +76,6 @@ import { MimeType, getMime, setMime } from '@/utils/mimeType';
 import { Monitor } from '@/utils/monitor';
 import { getStatus, status } from '@/utils/network';
 import { noop } from '@/utils/noop';
-import { Mathjs, mathjs, perToNum, range } from '@/utils/number';
 import {
   cloneDeep,
   filterObj,
@@ -81,16 +92,6 @@ import { QuestQueue } from '@/utils/queue';
 import { createData, report } from '@/utils/report';
 import { handleFetchHook } from '@/utils/request';
 import { scriptOnLoad } from '@/utils/script';
-import {
-  changeHumpToLowerCase,
-  clearBr,
-  clearStr,
-  getMatchingSentences,
-  isString,
-  randomString,
-  str2Xml,
-  strParse,
-} from '@/utils/str';
 import { generateThrottle, throttle } from '@/utils/throttle';
 import { performanceTime, timeFormat, timestampToTime } from '@/utils/time';
 export {
@@ -197,6 +198,9 @@ export {
   createSignal,
   subscribers,
   getMatchingSentences,
+  transformNumber,
+  toString,
+  addNumSym,
 };
 
 export type { CurrentDevice };

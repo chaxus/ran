@@ -6,6 +6,7 @@ export class CanvasRenderer extends Renderer {
   public ctx: CanvasRenderingContext2D;
   private backgroundColor: string | undefined;
   private backgroundAlpha: number | undefined;
+  private dpr: number;
   constructor(options: IApplicationOptions) {
     super(options);
     console.log('正在使用 %c canvas2D ', 'color: #05aa6d; background-color: #ffffff;font-size: 20px;', '渲染');
@@ -13,6 +14,9 @@ export class CanvasRenderer extends Renderer {
     this.backgroundColor = backgroundColor;
     this.backgroundAlpha = backgroundAlpha;
     this.ctx = this.canvasEle.getContext('2d')!;
+    // 清晰度
+    this.dpr = window.devicePixelRatio || 1;
+    this.ctx.scale(this.dpr, this.dpr);
   }
   public render(container: Container): void {
     container.updateTransform();

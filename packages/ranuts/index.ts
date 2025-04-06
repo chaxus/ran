@@ -15,6 +15,7 @@ import {
   SyncHook,
   TOTP,
   addClassToElement,
+  addNumSym,
   appendUrl,
   audioVendor,
   canvasVendor,
@@ -101,6 +102,8 @@ import {
   throttle,
   timeFormat,
   timestampToTime,
+  toString,
+  transformNumber,
   webglVendor,
 } from './src/utils';
 import type { CurrentDevice } from '@/utils';
@@ -263,6 +266,9 @@ export {
   createSignal,
   subscribers,
   getMatchingSentences,
+  transformNumber,
+  toString,
+  addNumSym,
 };
 
 export type { CurrentDevice };
