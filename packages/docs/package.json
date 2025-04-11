@@ -29,7 +29,7 @@
     "autoprefixer": "^10.4.21",
     "less": "^4.2.2",
     "typescript": "^5.8.2",
-    "vite": "^6.2.5",
+    "vite": "^6.2.6",
     "vitepress": "^1.0.0-rc.44"
   },
   "dependencies": {
