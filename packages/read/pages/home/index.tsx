@@ -1,14 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 import { debounce } from 'ranuts/utils';
+import { useNavigate } from 'react-router-dom';
 import { BookCard } from '@/components/BookCard';
 import { addBook, getAllBooks, searchBooksByAuthor, searchBooksByContent, searchBooksByTitle } from '@/store/books';
 import { checkEncoding, createReader, trim } from '@/lib/transformText';
 import { resumeDB } from '@/store';
 import { BOOKS_ADD_BY_DEFAULT, ensampleConfigs } from '@/lib/ensample';
 import type { EnBook } from '@/lib/ensample';
-import type { BookInfo } from '@/store/books';
+import type { BookInfo, SearchResult } from '@/store/books';
 import 'ranui/input';
 import 'ranui/icon';
+import { ROUTE_PATH } from '@/router';
 
 const inputStyle = {
   '--ran-input-border-radius': '2rem',
@@ -31,10 +33,20 @@ const plusIconStyle = {
   '--ran-icon-margin': '0px',
 };
 
+const ICON_STYLE = {
+  '--ran-icon-font-size': '120px',
+};
+
 export const Home = (): React.JSX.Element => {
   const [bookList, setBookList] = useState<BookInfo[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const [searchValue, setSearchValue] = useState<string>('');
+  const searchResultRef = useRef<HTMLDivElement>(null);
+  const [searchTitleResult, setSearchTitleResult] = useState<BookInfo[]>([]);
+  const [searchLoading, setSearchLoading] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const [searchAuthorResult, setSearchAuthorResult] = useState<BookInfo[]>([]);
+  const [searchContentResult, setSearchContentResult] = useState<SearchResult[]>([]);
 
 
   const add = () => {
@@ -84,7 +96,6 @@ export const Home = (): React.JSX.Element => {
   const getBooks = () => {
     getAllBooks<BookInfo>()
       .then((res) => {
-        console.log('getBooks---->', res);
         if (!res.error) {
           setBookList(res.data);
         } else {
@@ -100,31 +111,59 @@ export const Home = (): React.JSX.Element => {
       });
   };
 
+  const clearSearchResult = () => {
+    setSearchTitleResult([]);
+    setSearchAuthorResult([]);
+    setSearchContentResult([]);
+  };
+
   const onChange = debounce((e: Event) => {
     const value = trim((e.target as HTMLInputElement)?.value || '');
     setSearchValue(value);
-    if (!value) return;
+    setSearchLoading(true);
+    if (!value) {
+      setSearchLoading(false);
+      return;
+    };
+    clearSearchResult();
     // 搜索功能
     // 1. 搜索书的标题（分页 3 条）
     // 2. 搜索书的作者（分页 3 条）
     // 3. 搜索书内容（分页 3 条）
-    console.log(value);
     searchBooksByTitle<BookInfo>(value).then((res) => {
       if (!res.error) {
-        console.log('res title---->', res);
+        setSearchTitleResult(res.data);
       }
+      setTimeout(() => {
+        setSearchLoading(false);
+      }, 500);
     });
     searchBooksByAuthor<BookInfo>(value).then((res) => {
       if (!res.error) {
+        setSearchAuthorResult(res.data);
         console.log('res author---->', res);
       }
+      setTimeout(() => {
+        setSearchLoading(false);
+      }, 500);
     });
-    searchBooksByContent<BookInfo>(value).then((res) => {
+    searchBooksByContent<SearchResult>(value).then((res) => {
       if (!res.error) {
-        console.log('res content---->', res);
+        setSearchContentResult(res.data);
       }
+      setTimeout(() => {
+        setSearchLoading(false);
+      }, 500);
     });
-  });
+  }, 500);
+
+  const onClickSearchResult = (e: Event) => {
+    const target = e.target as HTMLDivElement;
+    const id = target.getAttribute('item-id');
+    if (id) {
+      navigate(ROUTE_PATH.BOOK_DETAIL + `/${id}`);
+    }
+  };
 
   useEffect(() => {
     // 默认添加的书籍，只添加一次
@@ -138,8 +177,10 @@ export const Home = (): React.JSX.Element => {
     getBooks();
     // 监听搜索框的 change 事件
     inputRef.current?.addEventListener('change', onChange);
+    searchResultRef.current?.addEventListener('click', onClickSearchResult);
     return () => {
       inputRef.current?.removeEventListener('change', onChange);
+      searchResultRef.current?.removeEventListener('click', onClickSearchResult);
     };
   }, []);
 
@@ -155,21 +196,81 @@ export const Home = (): React.JSX.Element => {
             placeholder="搜索"
             ref={inputRef}
           ></r-input>
-          <div className="w-full transition-all overflow-hidden mt-6" style={{ height: searchValue ? '100vh' : '0px' }}>
-            {/* <r-loading name="circle-fold"></r-loading> */}
-            <div className="w-1/2 min-w-2xs block mx-auto bg-front-bg-color-3 rounded-xl px-3.5 py-5">
-              <div>
-                <div className="text-text-color-2 text-sm font-medium">电子书</div>
-                <div>
-                  {/* <div className="px-7 py-2 flex flex-row flex-nowrap items-center shrink-0">
-                    {bookDetail.image && <img className="w-14 mr-5" src={bookDetail.image} />}
+          <div className="w-full transition-all duration-500 overflow-hidden mt-6 pb-6" style={{ height: searchValue ? 'calc(100vh - var(--spacing) * 48)' : '0px' }} ref={searchResultRef}>
+            <div className="overflow-y-auto h-full">
+              {(searchTitleResult.length > 0 && !searchLoading) && (
+                <div className="w-1/2 min-w-2xs block mx-auto bg-front-bg-color-3 rounded-xl py-5 mb-6">
+                  <div>
+                    <div className="text-text-color-2 text-base font-medium px-5 pb-1.5">电子书</div>
                     <div>
-                      <div className="text-lg text-text-color-1 font-medium break-all">{bookDetail.title}</div>
-                      <div className="text-sm text-text-color-2 font-medium mt-1 break-all">{bookDetail.author}</div>
+                      {searchTitleResult.map((book) => {
+                        const { title, author, image } = book;
+                        const strList = title.split(searchValue) || [];
+                        return (
+                          <div className="py-3.5 px-5 flex flex-row flex-nowrap items-center shrink-0 cursor-pointer hover:bg-blue-50 min-h-32" key={book.id + 'title'} item-id={book.id}>
+                            {image && <img className="w-16 mr-5" src={image} item-id={book.id} />}
+                            <div>
+                              <div className="text-lg text-text-color-1 font-medium break-all" item-id={book.id}>{strList.map((item, index) => (
+                                <span key={item} item-id={book.id}>{item}{index === strList.length - 1 ? '' : <span item-id={book.id} className="text-blue-500">{searchValue}</span>}</span>
+                              ))}</div>
+                              <div className="text-base text-text-color-2 font-medium mt-1 break-all" item-id={book.id}>{author}</div>
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
-                  </div> */}
+                  </div>
                 </div>
-              </div>
+              )}
+              {(searchContentResult.length > 0 && !searchLoading) && (
+                <div className="w-1/2 min-w-2xs block mx-auto bg-front-bg-color-3 rounded-xl py-5">
+                  <div>
+                    <div className="text-text-color-2 text-base font-medium px-5 pb-1.5">全文中提到 <span className="text-blue-500">{searchValue}</span> 的书 · {searchContentResult.length}</div>
+                    <div>
+                      {searchContentResult.map((book) => {
+                        const { title, author, image, matchedText = [] } = book;
+                        const [str] = matchedText || [];
+                        const strList = str.split(searchValue) || [];
+                        return (
+                          <div className="py-3.5 px-5 flex flex-row flex-nowrap items-center shrink-0 cursor-pointer hover:bg-blue-50 min-h-32" key={book.id + 'content'} item-id={book.id}>
+                            {image && <img className="w-16 mr-5" src={image} item-id={book.id} />}
+                            <div>
+                              <div className="text-lg text-text-color-1 font-medium break-all" item-id={book.id}>{title}</div>
+                              <div className="text-base text-text-color-2 font-medium mt-1 break-all" item-id={book.id}>{author}</div>
+                              <div className="text-base text-text-color-2 font-medium mt-1 break-all" item-id={book.id}>{strList.map((item, index) => (
+                                <span key={item} item-id={book.id}>{item}{index === strList.length - 1 ? '' : <span item-id={book.id} className="text-blue-500">{searchValue}</span>}</span>
+                              ))}</div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>)}
+              {
+                (searchTitleResult.length === 0 && searchAuthorResult.length === 0 && searchContentResult.length === 0 && !searchLoading) && (
+                  <div className="h-full">
+                    <div className="flex flex-col items-center justify-center h-full">
+                      <r-icon name="without-content" className="text-text-color-2" style={ICON_STYLE}></r-icon>
+                      <div className="text-text-color-2 font-normal text-xl">无结果</div>
+                    </div>
+                  </div>
+                )
+              }
+              {
+                searchLoading && (
+                  <div className="h-full">
+                    <div className="flex flex-col items-center justify-center h-full">
+                      <r-loading name="circle-fold" className="text-2xl" style={
+                        {
+                          '--loading-circle-fold-item-before-background': 'var(--brand-blue-color-1)',
+                          '--loading-circle-fold-item-after-background': 'var(--brand-blue-color-1)',
+                        }
+                      }></r-loading>
+                    </div>
+                  </div>
+                )
+              }
             </div>
           </div>
         </div>
