@@ -1,6 +1,8 @@
+import { getMatchingSentences } from 'ranuts/utils';
 import CryptoJS from 'crypto-js';
 import { db } from '@/store/index';
 import type { IDBResult } from '@/lib/indexedDB';
+import { arrayBufferToString } from '@/lib/transformText';
 
 export interface BookInfo {
   id: string;
@@ -11,6 +13,10 @@ export interface BookInfo {
   encoding: string;
   createTime: number;
   modifyTime: number;
+}
+
+export interface SearchResult extends BookInfo {
+  matchedText: string;
 }
 
 const STORE_NAME_BOOKS_INFO_KEY = 'books_info';
@@ -154,6 +160,69 @@ export const searchBooksByAuthor = <T = unknown>(keyword: string): Promise<IDBRe
         data: [] as T[],
         error: true,
         message: 'Search failed',
+      });
+    };
+  });
+};
+// 搜索书籍内容
+export const searchBooksByContent = <T = unknown>(keyword: string): Promise<IDBResult<T[]>> => {
+  return new Promise((resolve) => {
+    if (!db.database) {
+      resolve({
+        status: 'error',
+        code: 1,
+        data: [] as T[],
+        error: true,
+        message: 'Database not initialized'
+      });
+      return;
+    }
+
+    const request = db.database.transaction(STORE_NAME_BOOKS_INFO_KEY, 'readonly')
+      .objectStore(STORE_NAME_BOOKS_INFO_KEY)
+      .openCursor();
+    
+    const results: T[] = [];
+    const searchText = keyword.toLowerCase();
+    
+    request.onsuccess = (event) => {
+      const cursor = (event.target as IDBRequest).result;
+      if (cursor) {
+        const book = cursor.value as BookInfo;
+        try {
+          // 将内容转换为文本并搜索
+          const contentText = arrayBufferToString(book.content).toLowerCase();
+          if (contentText.includes(searchText)) {
+            // 使用 getMatchingSentences 获取匹配的句子
+            const matchedSentences = getMatchingSentences(contentText, searchText);
+            // 创建包含匹配文本的结果对象
+            const result = {
+              ...book,
+              matchedText: matchedSentences
+            };
+            results.push(result as T);
+          }
+        } catch (error) {
+          console.error('Error converting content to text:', error);
+        }
+        cursor.continue();
+      } else {
+        resolve({
+          status: 'success',
+          code: 0,
+          data: results,
+          error: false
+        });
+      }
+    };
+    
+    request.onerror = () => {
+      resolve({
+        status: 'error',
+        code: 1,
+        data: [] as T[],
+        error: true,
+        message: 'Search failed'
       });
     };
   });
