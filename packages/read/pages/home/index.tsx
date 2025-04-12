@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { debounce } from 'ranuts/utils';
 import { BookCard } from '@/components/BookCard';
-import { addBook, getAllBooks, searchBooksByAuthor, searchBooksByTitle  } from '@/store/books';
+import { addBook, getAllBooks, searchBooksByAuthor, searchBooksByContent, searchBooksByTitle } from '@/store/books';
 import { checkEncoding, createReader, trim } from '@/lib/transformText';
 import { resumeDB } from '@/store';
 import { BOOKS_ADD_BY_DEFAULT, ensampleConfigs } from '@/lib/ensample';
@@ -110,6 +110,11 @@ export const Home = (): React.JSX.Element => {
     searchBooksByAuthor<BookInfo>(value).then((res) => {
       if (!res.error) {
         console.log('res author---->', res);
+      }
+    });
+    searchBooksByContent<BookInfo>(value).then((res) => {
+      if (!res.error) {
+        console.log('res content---->', res);
       }
     });
   });
