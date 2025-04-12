@@ -59,7 +59,7 @@ export const Catalogue = (): React.JSX.Element => {
   return (
     <>
       <div className="px-7 py-2 flex flex-row flex-nowrap items-center shrink-0">
-        <img className="w-14 mr-5" src={bookDetail.image} />
+        {bookDetail.image && <img className="w-14 mr-5" src={bookDetail.image} />}
         <div>
           <div className="text-lg text-text-color-1 font-medium break-all">{bookDetail.title}</div>
           <div className="text-sm text-text-color-2 font-medium mt-1 break-all">{bookDetail.author}</div>

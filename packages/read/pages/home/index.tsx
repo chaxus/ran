@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { debounce } from 'ranuts/utils';
 import { BookCard } from '@/components/BookCard';
-import { addBook, getAllBooks } from '@/store/books';
+import { addBook, getAllBooks, searchBooksByAuthor, searchBooksByTitle  } from '@/store/books';
 import { checkEncoding, createReader, trim } from '@/lib/transformText';
 import { resumeDB } from '@/store';
 import { BOOKS_ADD_BY_DEFAULT, ensampleConfigs } from '@/lib/ensample';
@@ -35,6 +35,7 @@ export const Home = (): React.JSX.Element => {
   const [bookList, setBookList] = useState<BookInfo[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const [searchValue, setSearchValue] = useState<string>('');
+
 
   const add = () => {
     const uploadFile = document.createElement('input');
@@ -96,7 +97,21 @@ export const Home = (): React.JSX.Element => {
     const value = trim((e.target as HTMLInputElement)?.value || '');
     setSearchValue(value);
     if (!value) return;
+    // 搜索功能
+    // 1. 搜索书的标题（分页 3 条）
+    // 2. 搜索书的作者（分页 3 条）
+    // 3. 搜索书内容（分页 3 条）
     console.log(value);
+    searchBooksByTitle<BookInfo>(value).then((res) => {
+      if (!res.error) {
+        console.log('res title---->', res);
+      }
+    });
+    searchBooksByAuthor<BookInfo>(value).then((res) => {
+      if (!res.error) {
+        console.log('res author---->', res);
+      }
+    });
   });
 
   useEffect(() => {
@@ -133,7 +148,15 @@ export const Home = (): React.JSX.Element => {
             <div className="w-1/2 min-w-2xs block mx-auto bg-front-bg-color-3 rounded-xl px-3.5 py-5">
               <div>
                 <div className="text-text-color-2 text-sm font-medium">电子书</div>
-                <div></div>
+                <div>
+                  {/* <div className="px-7 py-2 flex flex-row flex-nowrap items-center shrink-0">
+                    {bookDetail.image && <img className="w-14 mr-5" src={bookDetail.image} />}
+                    <div>
+                      <div className="text-lg text-text-color-1 font-medium break-all">{bookDetail.title}</div>
+                      <div className="text-sm text-text-color-2 font-medium mt-1 break-all">{bookDetail.author}</div>
+                    </div>
+                  </div> */}
+                </div>
               </div>
             </div>
           </div>
