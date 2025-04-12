@@ -211,7 +211,7 @@ export const Home = (): React.JSX.Element => {
                             {image && <img className="w-16 mr-5" src={image} item-id={book.id} />}
                             <div>
                               <div className="text-lg text-text-color-1 font-medium break-all" item-id={book.id}>{strList.map((item, index) => (
-                                <span key={item} item-id={book.id}>{item}{index === strList.length - 1 ? '' : <span item-id={book.id} className="text-blue-500">{searchValue}</span>}</span>
+                                <span key={item + index} item-id={book.id}>{item}{index === strList.length - 1 ? '' : <span item-id={book.id} className="text-blue-500">{searchValue}</span>}</span>
                               ))}</div>
                               <div className="text-base text-text-color-2 font-medium mt-1 break-all" item-id={book.id}>{author}</div>
                             </div>
@@ -238,7 +238,7 @@ export const Home = (): React.JSX.Element => {
                               <div className="text-lg text-text-color-1 font-medium break-all" item-id={book.id}>{title}</div>
                               <div className="text-base text-text-color-2 font-medium mt-1 break-all" item-id={book.id}>{author}</div>
                               <div className="text-base text-text-color-2 font-medium mt-1 break-all" item-id={book.id}>{strList.map((item, index) => (
-                                <span key={item} item-id={book.id}>{item}{index === strList.length - 1 ? '' : <span item-id={book.id} className="text-blue-500">{searchValue}</span>}</span>
+                                <span key={item + index} item-id={book.id}>{item}{index === strList.length - 1 ? '' : <span item-id={book.id} className="text-blue-500">{searchValue}</span>}</span>
                               ))}</div>
                             </div>
                           </div>
