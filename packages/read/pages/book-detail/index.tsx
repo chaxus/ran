@@ -17,6 +17,7 @@ import {
   setTextSyntaxTree,
   syncHook,
 } from '@/lib/subscribe';
+import { resumeDB } from '@/store';
 import 'ranui/icon';
 import 'ranui/input';
 import './index.scss';
@@ -88,20 +89,29 @@ export const BookDetail = (): React.JSX.Element => {
     }
   };
 
-  useEffect(() => {
+  const getBookDetailById = (id?: string) => {
     if (!id) return;
     getBookById<BookInfo>(id)
       .then((res) => {
-        if (res.error) return;
-        setCurrentBookDetail(res.data);
-        const { content } = res.data;
-        const textSyntaxTree: TextSyntaxTree = transformTextToExpectedFormat(content, showContainerRef.current!);
-        setTextSyntaxTree(textSyntaxTree);
-        ref.current?.style.setProperty('view-transition-name', `book-info-${id}`);
+        if (res.error) {
+          resumeDB().then(() => {
+            getBookDetailById(id);
+          });
+        } else {
+          setCurrentBookDetail(res.data);
+          const { content } = res.data;
+          const textSyntaxTree: TextSyntaxTree = transformTextToExpectedFormat(content, showContainerRef.current!);
+          setTextSyntaxTree(textSyntaxTree);
+          ref.current?.style.setProperty('view-transition-name', `book-info-${id}`);
+        }
       })
       .catch(() => {
         navigate(ROUTE_PATH.HOME);
       });
+  };
+
+  useEffect(() => {
+    getBookDetailById(id);
   }, []);
 
   useEffect(() => {

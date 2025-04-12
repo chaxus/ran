@@ -1,8 +1,6 @@
-import { getMatchingSentences } from 'ranuts/utils';
 import CryptoJS from 'crypto-js';
 import { db } from '@/store/index';
 import type { IDBResult } from '@/lib/indexedDB';
-import { arrayBufferToString } from '@/lib/transformText';
 
 export interface BookInfo {
   id: string;
@@ -33,7 +31,7 @@ export const addBook = (data: {
   image?: string;
   content: ArrayBuffer | Uint8Array<ArrayBuffer>;
   encoding: string;
-}): Promise<IDBResult> => {
+}): Promise<IDBResult<BookInfo>> => {
   const { title = '', author = '', image = '', content, encoding = '' } = data;
   const hash = CryptoJS.MD5(typeof content === 'string' ? content : CryptoJS.lib.WordArray.create(content)).toString();
   const createTime = Date.now();
@@ -47,183 +45,80 @@ export const addBook = (data: {
     createTime,
     modifyTime: Date.now(),
   };
-  return db.add<BookInfo>({ storeName: STORE_NAME_BOOKS_INFO_KEY, data: bookInfo });
+
+  return performWorkerOperation<BookInfo>('add', { bookInfo });
 };
 
-export const getAllBooks = <T = unknown>(): Promise<IDBResult<T[]>> => {
-  // 创建一个读写事务
-  return db.readByCursor<T>({ storeName: STORE_NAME_BOOKS_INFO_KEY });
-};
-
-export const getBookById = <T = unknown>(id: string): Promise<IDBResult<T>> => {
-  return db.readByKey<T>({ storeName: STORE_NAME_BOOKS_INFO_KEY, key: id });
-};
-// 搜索书籍标题
-export const searchBooksByTitle = <T = unknown>(keyword: string): Promise<IDBResult<T[]>> => {
-  return new Promise((resolve) => {
-    if (!db.database) {
-      resolve({
-        status: 'error',
-        code: 1,
-        data: [] as T[],
-        error: true,
-        message: 'Database not initialized',
-      });
-      return;
-    }
-
-    const request = db.database
-      .transaction(STORE_NAME_BOOKS_INFO_KEY, 'readonly')
-      .objectStore(STORE_NAME_BOOKS_INFO_KEY)
-      .openCursor();
-
-    const results: T[] = [];
-
-    request.onsuccess = (event) => {
-      const cursor = (event.target as IDBRequest).result;
-      if (cursor) {
-        const book = cursor.value as BookInfo;
-        const searchText = keyword.toLowerCase();
-
-        // 检查标题或作者是否包含搜索关键词
-        if (book.title.toLowerCase().includes(searchText)) {
-          results.push(book as T);
-        }
-        cursor.continue();
-      } else {
-        resolve({
-          status: 'success',
-          code: 0,
-          data: results,
-          error: false,
-        });
-      }
-    };
-
-    request.onerror = () => {
-      resolve({
-        status: 'error',
-        code: 1,
-        data: [] as T[],
-        error: true,
-        message: 'Search failed',
-      });
-    };
+// 创建 worker
+const createDBWorker = () => {
+  const worker = new Worker(new URL('../workers/dbWorker.ts', import.meta.url), {
+    type: 'module'
   });
+  return worker;
 };
-// 搜索书籍作者
-export const searchBooksByAuthor = <T = unknown>(keyword: string): Promise<IDBResult<T[]>> => {
+
+// 通用的 worker 操作函数
+const performWorkerOperation = <T = unknown>(
+  type: string,
+  data: any = {}
+): Promise<IDBResult<T>> => {
   return new Promise((resolve) => {
     if (!db.database) {
       resolve({
         status: 'error',
         code: 1,
-        data: [] as T[],
-        error: true,
-        message: 'Database not initialized',
-      });
-      return;
-    }
-
-    const request = db.database
-      .transaction(STORE_NAME_BOOKS_INFO_KEY, 'readonly')
-      .objectStore(STORE_NAME_BOOKS_INFO_KEY)
-      .openCursor();
-
-    const results: T[] = [];
-
-    request.onsuccess = (event) => {
-      const cursor = (event.target as IDBRequest).result;
-      if (cursor) {
-        const book = cursor.value as BookInfo;
-        const searchText = keyword.toLowerCase();
-
-        // 检查标题或作者是否包含搜索关键词
-        if (book.author.toLowerCase().includes(searchText)) {
-          results.push(book as T);
-        }
-        cursor.continue();
-      } else {
-        resolve({
-          status: 'success',
-          code: 0,
-          data: results,
-          error: false,
-        });
-      }
-    };
-
-    request.onerror = () => {
-      resolve({
-        status: 'error',
-        code: 1,
-        data: [] as T[],
-        error: true,
-        message: 'Search failed',
-      });
-    };
-  });
-};
-// 搜索书籍内容
-export const searchBooksByContent = <T = unknown>(keyword: string): Promise<IDBResult<T[]>> => {
-  return new Promise((resolve) => {
-    if (!db.database) {
-      resolve({
-        status: 'error',
-        code: 1,
-        data: [] as T[],
+        data: undefined as T,
         error: true,
         message: 'Database not initialized'
       });
       return;
     }
 
-    const request = db.database.transaction(STORE_NAME_BOOKS_INFO_KEY, 'readonly')
-      .objectStore(STORE_NAME_BOOKS_INFO_KEY)
-      .openCursor();
-    
-    const results: T[] = [];
-    const searchText = keyword.toLowerCase();
-    
-    request.onsuccess = (event) => {
-      const cursor = (event.target as IDBRequest).result;
-      if (cursor) {
-        const book = cursor.value as BookInfo;
-        try {
-          // 将内容转换为文本并搜索
-          const contentText = arrayBufferToString(book.content).toLowerCase();
-          if (contentText.includes(searchText)) {
-            // 使用 getMatchingSentences 获取匹配的句子
-            const matchedSentences = getMatchingSentences(contentText, searchText);
-            // 创建包含匹配文本的结果对象
-            const result = {
-              ...book,
-              matchedText: matchedSentences
-            };
-            results.push(result as T);
-          }
-        } catch (error) {
-          console.error('Error converting content to text:', error);
-        }
-        cursor.continue();
-      } else {
-        resolve({
-          status: 'success',
-          code: 0,
-          data: results,
-          error: false
-        });
-      }
+    const worker = createDBWorker();
+    worker.onmessage = (e) => {
+      resolve(e.data);
+      worker.terminate();
     };
-    
-    request.onerror = () => {
+
+    worker.onerror = (error) => {
       resolve({
         status: 'error',
         code: 1,
-        data: [] as T[],
+        data: undefined as T,
         error: true,
-        message: 'Search failed'
+        message: error.message
       });
+      worker.terminate();
     };
+
+    worker.postMessage({
+      type,
+      data,
+      dbName: db.database.name,
+      storeName: STORE_NAME_BOOKS_INFO_KEY
+    });
   });
+};
+
+// 搜索函数
+export const searchBooksByTitle = <T = unknown>(keyword: string): Promise<IDBResult<T[]>> => {
+  return performWorkerOperation<T[]>('search', { keyword, searchType: 'title' });
+};
+
+export const searchBooksByAuthor = <T = unknown>(keyword: string): Promise<IDBResult<T[]>> => {
+  return performWorkerOperation<T[]>('search', { keyword, searchType: 'author' });
+};
+
+export const searchBooksByContent = <T = unknown>(keyword: string): Promise<IDBResult<T[]>> => {
+  return performWorkerOperation<T[]>('search', { keyword, searchType: 'content' });
+};
+
+// 获取所有书籍
+export const getAllBooks = <T = unknown>(): Promise<IDBResult<T[]>> => {
+  return performWorkerOperation<T[]>('getAll');
+};
+
+// 获取单个书籍
+export const getBookById = <T = unknown>(id: string): Promise<IDBResult<T>> => {
+  return performWorkerOperation<T>('get', { key: id });
 };

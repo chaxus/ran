@@ -84,7 +84,14 @@ export const Home = (): React.JSX.Element => {
   const getBooks = () => {
     getAllBooks<BookInfo>()
       .then((res) => {
-        if (!res.error) setBookList(res.data);
+        console.log('getBooks---->', res);
+        if (!res.error) {
+          setBookList(res.data);
+        } else {
+          resumeDB().then(() => {
+            getBooks();
+          });
+        }
       })
       .catch(() => {
         resumeDB().then(() => {

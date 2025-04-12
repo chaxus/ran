@@ -7,11 +7,12 @@
 // 主键集合：IDBKeyRange 对象，主键是默认建立索引的属性，可以取当前层级的某个属性，也可以指定下一层对象的属性，还可以是一个递增的整数
 
 export interface IDBResult<T = unknown> {
-  status: 'success' | 'error';
-  data: T;
+  status: 'success' | 'error' | 'pending';
   code: number;
+  data: T;
   error: boolean;
   message?: string;
+  progress?: number;
 }
 
 export class WebDB {
