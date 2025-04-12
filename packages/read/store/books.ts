@@ -52,3 +52,109 @@ export const getAllBooks = <T = unknown>(): Promise<IDBResult<T[]>> => {
 export const getBookById = <T = unknown>(id: string): Promise<IDBResult<T>> => {
   return db.readByKey<T>({ storeName: STORE_NAME_BOOKS_INFO_KEY, key: id });
 };
+// 搜索书籍标题
+export const searchBooksByTitle = <T = unknown>(keyword: string): Promise<IDBResult<T[]>> => {
+  return new Promise((resolve) => {
+    if (!db.database) {
+      resolve({
+        status: 'error',
+        code: 1,
+        data: [] as T[],
+        error: true,
+        message: 'Database not initialized',
+      });
+      return;
+    }
+
+    const request = db.database
+      .transaction(STORE_NAME_BOOKS_INFO_KEY, 'readonly')
+      .objectStore(STORE_NAME_BOOKS_INFO_KEY)
+      .openCursor();
+
+    const results: T[] = [];
+
+    request.onsuccess = (event) => {
+      const cursor = (event.target as IDBRequest).result;
+      if (cursor) {
+        const book = cursor.value as BookInfo;
+        const searchText = keyword.toLowerCase();
+
+        // 检查标题或作者是否包含搜索关键词
+        if (book.title.toLowerCase().includes(searchText)) {
+          results.push(book as T);
+        }
+        cursor.continue();
+      } else {
+        resolve({
+          status: 'success',
+          code: 0,
+          data: results,
+          error: false,
+        });
+      }
+    };
+
+    request.onerror = () => {
+      resolve({
+        status: 'error',
+        code: 1,
+        data: [] as T[],
+        error: true,
+        message: 'Search failed',
+      });
+    };
+  });
+};
+// 搜索书籍作者
+export const searchBooksByAuthor = <T = unknown>(keyword: string): Promise<IDBResult<T[]>> => {
+  return new Promise((resolve) => {
+    if (!db.database) {
+      resolve({
+        status: 'error',
+        code: 1,
+        data: [] as T[],
+        error: true,
+        message: 'Database not initialized',
+      });
+      return;
+    }
+
+    const request = db.database
+      .transaction(STORE_NAME_BOOKS_INFO_KEY, 'readonly')
+      .objectStore(STORE_NAME_BOOKS_INFO_KEY)
+      .openCursor();
+
+    const results: T[] = [];
+
+    request.onsuccess = (event) => {
+      const cursor = (event.target as IDBRequest).result;
+      if (cursor) {
+        const book = cursor.value as BookInfo;
+        const searchText = keyword.toLowerCase();
+
+        // 检查标题或作者是否包含搜索关键词
+        if (book.author.toLowerCase().includes(searchText)) {
+          results.push(book as T);
+        }
+        cursor.continue();
+      } else {
+        resolve({
+          status: 'success',
+          code: 0,
+          data: results,
+          error: false,
+        });
+      }
+    };
+
+    request.onerror = () => {
+      resolve({
+        status: 'error',
+        code: 1,
+        data: [] as T[],
+        error: true,
+        message: 'Search failed',
+      });
+    };
+  });
+};

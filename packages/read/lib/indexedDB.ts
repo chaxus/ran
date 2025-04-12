@@ -15,7 +15,7 @@ export interface IDBResult<T = unknown> {
 }
 
 export class WebDB {
-  db?: IDBDatabase;
+  database?: IDBDatabase;
   version: number;
   dbName: string;
   constructor({ dbName, version }: { dbName: string; version?: number }) {
@@ -26,12 +26,12 @@ export class WebDB {
     return new Promise<IDBResult<{ db: IDBDatabase }>>((resolve, reject) => {
       const request = indexedDB.open(this.dbName, this.version);
       request.onsuccess = () => {
-        this.db = request.result;
-        this.version = this.db.version;
+        this.database = request.result;
+        this.version = this.database.version;
         resolve({
           status: 'success',
           data: {
-            db: this.db,
+            db: this.database,
           },
           code: 0,
           error: false,
@@ -65,12 +65,12 @@ export class WebDB {
         }
       };
       request.onupgradeneeded = () => {
-        this.db = request.result;
-        this.version = this.db.version;
+        this.database = request.result;
+        this.version = this.database.version;
         resolve({
           status: 'success',
           data: {
-            db: this.db,
+            db: this.database,
           },
           code: 0,
           error: false,
@@ -79,7 +79,7 @@ export class WebDB {
     });
   };
   closeDataBase = (): void => {
-    this.db?.close();
+    this.database?.close();
   };
   deleteDatabase = ({ dbName }: { dbName: string }): Promise<IDBResult> => {
     return new Promise<IDBResult>((resolve, reject) => {
@@ -104,16 +104,16 @@ export class WebDB {
     });
   };
   getObjectStore(storeName: string, mode: IDBTransactionMode = 'readonly'): IDBObjectStore | undefined {
-    if (!this.db) {
+    if (!this.database) {
       console.error('Database is not open');
       return undefined;
     }
-    const transaction = this.db.transaction([storeName], mode);
+    const transaction = this.database.transaction([storeName], mode);
     return transaction.objectStore(storeName);
   }
   createObjectStore = ({ storeName, options }: { storeName: string; options: IDBObjectStoreParameters }): void => {
-    if (this.db?.objectStoreNames.contains(storeName)) return;
-    this.db?.createObjectStore(storeName, options);
+    if (this.database?.objectStoreNames.contains(storeName)) return;
+    this.database?.createObjectStore(storeName, options);
   };
   refreshDatabase = (): Promise<IDBResult<{ db: IDBDatabase }>> => {
     this.closeDataBase();
@@ -137,7 +137,7 @@ export class WebDB {
   };
   add = <T = unknown>({ storeName, data }: { storeName: string; data: T }): Promise<IDBResult<T>> => {
     return new Promise<IDBResult<T>>((resolve, reject) => {
-      const transaction = this.db?.transaction(storeName, 'readwrite');
+      const transaction = this.database?.transaction(storeName, 'readwrite');
       const store = transaction?.objectStore(storeName);
       const request = store?.add(data);
       if (request) {
@@ -171,7 +171,7 @@ export class WebDB {
   };
   update = <T = unknown>({ storeName, data }: { storeName: string; data: T }): Promise<IDBResult> => {
     return new Promise<IDBResult>((resolve, reject) => {
-      const transaction = this.db?.transaction(storeName, 'readwrite');
+      const transaction = this.database?.transaction(storeName, 'readwrite');
       const store = transaction?.objectStore(storeName);
       const request = store?.put(data);
       if (request) {
@@ -205,7 +205,7 @@ export class WebDB {
   };
   readByKey = <T = unknown>({ storeName, key }: { storeName: string; key: IDBValidKey }): Promise<IDBResult<T>> => {
     return new Promise<IDBResult<T>>((resolve, reject) => {
-      const transaction = this.db?.transaction(storeName, 'readonly');
+      const transaction = this.database?.transaction(storeName, 'readonly');
       const store = transaction?.objectStore(storeName);
       const request = store?.get(key);
       if (request) {
@@ -247,7 +247,7 @@ export class WebDB {
     direction?: IDBCursorDirection;
   }): Promise<IDBResult<T[]>> => {
     return new Promise<IDBResult<T[]>>((resolve, reject) => {
-      const transaction = this.db?.transaction(storeName, 'readonly');
+      const transaction = this.database?.transaction(storeName, 'readonly');
       const store = transaction?.objectStore(storeName);
       const request = store?.openCursor(keyRange, direction);
       const result: T[] = [];
@@ -288,7 +288,7 @@ export class WebDB {
   };
   delete = ({ storeName, key }: { storeName: string; key: IDBValidKey }): Promise<IDBResult> => {
     return new Promise<IDBResult>((resolve, reject) => {
-      const transaction = this.db?.transaction(storeName, 'readwrite');
+      const transaction = this.database?.transaction(storeName, 'readwrite');
       const store = transaction?.objectStore(storeName);
       const request = store?.delete(key);
       if (request) {
