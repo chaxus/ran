@@ -52,16 +52,13 @@ export const addBook = (data: {
 // 创建 worker
 const createDBWorker = () => {
   const worker = new Worker(new URL('../workers/dbWorker.ts', import.meta.url), {
-    type: 'module'
+    type: 'module',
   });
   return worker;
 };
 
 // 通用的 worker 操作函数
-const performWorkerOperation = <T = unknown>(
-  type: string,
-  data: any = {}
-): Promise<IDBResult<T>> => {
+const performWorkerOperation = <T = unknown>(type: string, data: any = {}): Promise<IDBResult<T>> => {
   return new Promise((resolve) => {
     if (!db.database) {
       resolve({
@@ -69,7 +66,7 @@ const performWorkerOperation = <T = unknown>(
         code: 1,
         data: undefined as T,
         error: true,
-        message: 'Database not initialized'
+        message: 'Database not initialized',
       });
       return;
     }
@@ -86,7 +83,7 @@ const performWorkerOperation = <T = unknown>(
         code: 1,
         data: undefined as T,
         error: true,
-        message: error.message
+        message: error.message,
       });
       worker.terminate();
     };
@@ -95,7 +92,7 @@ const performWorkerOperation = <T = unknown>(
       type,
       data,
       dbName: db.database.name,
-      storeName: STORE_NAME_BOOKS_INFO_KEY
+      storeName: STORE_NAME_BOOKS_INFO_KEY,
     });
   });
 };
