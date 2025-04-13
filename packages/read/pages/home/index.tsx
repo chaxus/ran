@@ -284,12 +284,12 @@ export const Home = (): React.JSX.Element => {
             </div>
           </div>
           <div className="max-w-7xl mx-auto flex flex-row flex-wrap justify-start items-center">
-            {bookList.map((book) => (
-              <BookCard book={book} key={book.id} />
-            ))}
             <div className="w-2xs h-40 bg-front-bg-color-3 p-5 cursor-pointer justify-center rounded-xl mr-6 items-center flex hover:scale-110 transition-all mt-5">
               <r-icon name="plus" style={plusIconStyle} onClick={add}></r-icon>
             </div>
+            {bookList.map((book) => (
+              <BookCard book={book} key={book.id} />
+            ))}
           </div>
         </div>
       )}
