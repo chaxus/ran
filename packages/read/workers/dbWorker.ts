@@ -28,7 +28,7 @@ class SearchStrategy implements DBStrategy {
                     } else if (searchType === 'author' && book.author.toLowerCase().includes(searchText)) {
                         results.push(book);
                     } else if (searchType === 'content') {
-                        const contentText = arrayBufferToString(book.content).toLowerCase();
+                        const contentText = arrayBufferToString(book.content).replace(/<caption-title>/g,'').replace(/<\/caption-title>/g,'').toLowerCase();
                         if (contentText.includes(searchText)) {
                             const matchedSentences = getMatchingSentences(contentText, searchText);
                             results.push({
