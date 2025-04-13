@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { debounce } from 'ranuts/utils';
 import { getBookById } from '@/store/books';
@@ -55,7 +55,8 @@ const next = () => {
 };
 
 export const BookDetail = (): React.JSX.Element => {
-  const { id } = useParams();
+  const [searchParams] = useSearchParams();
+  const id = searchParams.get('id');
   const showContainerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const ref = useRef<HTMLDivElement>(null);
@@ -111,8 +112,10 @@ export const BookDetail = (): React.JSX.Element => {
   };
 
   useEffect(() => {
-    getBookDetailById(id);
-  }, []);
+    if (id) {
+      getBookDetailById(id);
+    }
+  }, [id]);
 
   useEffect(() => {
     // 书籍详情变更，更新 UI

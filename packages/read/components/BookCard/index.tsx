@@ -31,10 +31,10 @@ export const BookCard = ({ book }: BookCardProps): React.JSX.Element => {
       ref.current?.style.setProperty('view-transition-name', `book-info-${id}`);
       document.startViewTransition(() => {
         ref.current?.style.setProperty('view-transition-name', '');
-        navigate(`/book-detail/${id}`);
+        navigate(`/book-detail?id=${id}`);
       });
     } else {
-      navigate(`/book-detail/${id}`);
+      navigate(`/book-detail?id=${id}`);
     }
   };
 

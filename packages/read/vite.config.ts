@@ -9,6 +9,10 @@ const __dirname = path.dirname(__filename);
 
 export default defineConfig({
   plugins: [react()],
+  build: {
+    target: 'esnext',
+    manifest: true,
+  },
   resolve: {
     alias: {
       '@/components': resolve(__dirname, '/components'),

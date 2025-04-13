@@ -1,25 +1,26 @@
-import { appendFile } from '@/node/appendFile';
-import colors from '@/node/color';
-import body from '@/node/body';
-import { prompt, runCommand } from '@/node/command';
-import connect from '@/node/ctx2req';
-import queryFileInfo from '@/node/fileInfo';
-import get from '@/node/get';
-import { getIPAdress } from '@/node/getIPAdress';
-import isColorSupported from '@/node/isColorSupported';
-import paresUrl from '@/node/paresUrl';
-import readDir from '@/node/readDir';
-import readFile from '@/node/readFile';
-import Router from '@/node/router';
-import staticMiddleware from '@/node/send';
-import Server from '@/node/server';
-import startTask from '@/node/startTask';
-import { readStream, writeStream } from '@/node/stream';
-import taskEnd from '@/node/taskEnd';
-import { traverse, traverseSync } from '@/node/traverse';
-import watchFile from '@/node/watchFile';
-import WSS from '@/node/ws';
-import writeFile from '@/node/writeFile';
+import Server from './server';
+import { appendFile } from './appendFile';
+import colors from './color';
+import body from './body';
+import { prompt, runCommand } from './command';
+import connect from './ctx2req';
+import queryFileInfo from './fileInfo';
+import get from './get';
+import { getIPAdress } from './getIPAdress';
+import isColorSupported from './isColorSupported';
+import paresUrl from './paresUrl';
+import readDir from './readDir';
+import readFile from './readFile';
+import Router from './router';
+import staticMiddleware from './send';
+import startTask from './startTask';
+import { readStream, writeStream } from './stream';
+import taskEnd from './taskEnd';
+import { traverse, traverseSync } from './traverse';
+import watchFile from './watchFile';
+import WSS from './ws';
+import writeFile from './writeFile';
+import type { Context } from './server';
 export {
   appendFile,
   colors,
@@ -47,3 +48,4 @@ export {
   WSS,
   writeFile,
 };
+export type { Context };

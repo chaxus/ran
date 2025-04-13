@@ -106,8 +106,6 @@ import {
   transformNumber,
   webglVendor,
 } from './src/utils';
-import type { CurrentDevice } from '@/utils';
-import { reactify } from '@/react';
 import {
   Router,
   Server,
@@ -133,7 +131,10 @@ import {
   traverseSync,
   watchFile,
   writeStream,
-} from '@/node';
+} from './src/node';
+import type { Context } from './src/node';
+import type { CurrentDevice } from '@/utils';
+import { reactify } from '@/react';
 import { ocr } from '@/ml';
 
 export {
@@ -271,4 +272,4 @@ export {
   addNumSym,
 };
 
-export type { CurrentDevice };
+export type { CurrentDevice, Context };
