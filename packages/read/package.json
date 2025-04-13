@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "vite --host --force"
+    "dev": "vite --host --force",
+    "build": "vite build"
   },
   "engines": {
     "node": ">=23.10.0"
