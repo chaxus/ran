@@ -11,5 +11,6 @@ pnpm -F ranui tsc
 pnpm -F ranui-react tsc
 pnpm -F ranuts tsc
 pnpm -F solidity tsc
+pnpm -F read tsc
 # $bin/tsc --noEmit
 # npm run lint:es && npm run lint:prettier

@@ -8,7 +8,8 @@
     "dev": "vite --host --force --mode dev",
     "build:client": "vite build --outDir dist/client --ssrManifest",
     "build:server": "vite build --outDir dist/server --ssr server.tsx",
-    "build": "sh ./bin/build.sh"
+    "build": "sh ./bin/build.sh",
+    "tsc": "tsc --noEmit"
   },
   "engines": {
     "node": ">=23.10.0"

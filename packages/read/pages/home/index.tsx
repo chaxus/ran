@@ -48,7 +48,6 @@ export const Home = (): React.JSX.Element => {
   const [searchAuthorResult, setSearchAuthorResult] = useState<BookInfo[]>([]);
   const [searchContentResult, setSearchContentResult] = useState<SearchResult[]>([]);
 
-
   const add = () => {
     const uploadFile = document.createElement('input');
     uploadFile.setAttribute('type', 'file');
@@ -124,7 +123,7 @@ export const Home = (): React.JSX.Element => {
     if (!value) {
       setSearchLoading(false);
       return;
-    };
+    }
     clearSearchResult();
     // 搜索功能
     // 1. 搜索书的标题（分页 3 条）
@@ -196,9 +195,13 @@ export const Home = (): React.JSX.Element => {
             placeholder="搜索"
             ref={inputRef}
           ></r-input>
-          <div className="w-full transition-all duration-500 overflow-hidden mt-6 pb-6" style={{ height: searchValue ? 'calc(100vh - var(--spacing) * 48)' : '0px' }} ref={searchResultRef}>
+          <div
+            className="w-full transition-all duration-500 overflow-hidden mt-6 pb-6"
+            style={{ height: searchValue ? 'calc(100vh - var(--spacing) * 48)' : '0px' }}
+            ref={searchResultRef}
+          >
             <div className="overflow-y-auto h-full">
-              {(searchTitleResult.length > 0 && !searchLoading) && (
+              {searchTitleResult.length > 0 && !searchLoading && (
                 <div className="w-1/2 min-w-2xs block mx-auto bg-front-bg-color-3 rounded-xl py-5 mb-6">
                   <div>
                     <div className="text-text-color-2 text-base font-medium px-5 pb-1.5">电子书</div>
@@ -207,13 +210,30 @@ export const Home = (): React.JSX.Element => {
                         const { title, author, image } = book;
                         const strList = title.split(searchValue) || [];
                         return (
-                          <div className="py-3.5 px-5 flex flex-row flex-nowrap items-center shrink-0 cursor-pointer hover:bg-blue-50 min-h-32" key={book.id + 'title'} item-id={book.id}>
+                          <div
+                            className="py-3.5 px-5 flex flex-row flex-nowrap items-center shrink-0 cursor-pointer hover:bg-blue-50 min-h-32"
+                            key={book.id + 'title'}
+                            item-id={book.id}
+                          >
                             {image && <img className="w-16 mr-5" src={image} item-id={book.id} />}
                             <div>
-                              <div className="text-lg text-text-color-1 font-medium break-all" item-id={book.id}>{strList.map((item, index) => (
-                                <span key={item + index} item-id={book.id}>{item}{index === strList.length - 1 ? '' : <span item-id={book.id} className="text-blue-500">{searchValue}</span>}</span>
-                              ))}</div>
-                              <div className="text-base text-text-color-2 font-medium mt-1 break-all" item-id={book.id}>{author}</div>
+                              <div className="text-lg text-text-color-1 font-medium break-all" item-id={book.id}>
+                                {strList.map((item, index) => (
+                                  <span key={item + index} item-id={book.id}>
+                                    {item}
+                                    {index === strList.length - 1 ? (
+                                      ''
+                                    ) : (
+                                      <span item-id={book.id} className="text-blue-500">
+                                        {searchValue}
+                                      </span>
+                                    )}
+                                  </span>
+                                ))}
+                              </div>
+                              <div className="text-base text-text-color-2 font-medium mt-1 break-all" item-id={book.id}>
+                                {author}
+                              </div>
                             </div>
                           </div>
                         );
@@ -222,55 +242,79 @@ export const Home = (): React.JSX.Element => {
                   </div>
                 </div>
               )}
-              {(searchContentResult.length > 0 && !searchLoading) && (
+              {searchContentResult.length > 0 && !searchLoading && (
                 <div className="w-1/2 min-w-2xs block mx-auto bg-front-bg-color-3 rounded-xl py-5">
                   <div>
-                    <div className="text-text-color-2 text-base font-medium px-5 pb-1.5">全文中提到 <span className="text-blue-500">{searchValue}</span> 的书 · {searchContentResult.length}</div>
+                    <div className="text-text-color-2 text-base font-medium px-5 pb-1.5">
+                      全文中提到 <span className="text-blue-500">{searchValue}</span> 的书 ·{' '}
+                      {searchContentResult.length}
+                    </div>
                     <div>
                       {searchContentResult.map((book) => {
                         const { title, author, image, matchedText = [] } = book;
                         const [str] = matchedText || [];
                         const strList = str.split(searchValue) || [];
                         return (
-                          <div className="py-3.5 px-5 flex flex-row flex-nowrap items-center shrink-0 cursor-pointer hover:bg-blue-50 min-h-32" key={book.id + 'content'} item-id={book.id}>
+                          <div
+                            className="py-3.5 px-5 flex flex-row flex-nowrap items-center shrink-0 cursor-pointer hover:bg-blue-50 min-h-32"
+                            key={book.id + 'content'}
+                            item-id={book.id}
+                          >
                             {image && <img className="w-16 mr-5" src={image} item-id={book.id} />}
                             <div>
-                              <div className="text-lg text-text-color-1 font-medium break-all" item-id={book.id}>{title}</div>
-                              <div className="text-base text-text-color-2 font-medium mt-1 break-all" item-id={book.id}>{author}</div>
-                              <div className="text-base text-text-color-2 font-medium mt-1 break-all" item-id={book.id}>{strList.map((item, index) => (
-                                <span key={item + index} item-id={book.id}>{item}{index === strList.length - 1 ? '' : <span item-id={book.id} className="text-blue-500">{searchValue}</span>}</span>
-                              ))}</div>
+                              <div className="text-lg text-text-color-1 font-medium break-all" item-id={book.id}>
+                                {title}
+                              </div>
+                              <div className="text-base text-text-color-2 font-medium mt-1 break-all" item-id={book.id}>
+                                {author}
+                              </div>
+                              <div className="text-base text-text-color-2 font-medium mt-1 break-all" item-id={book.id}>
+                                {strList.map((item, index) => (
+                                  <span key={item + index} item-id={book.id}>
+                                    {item}
+                                    {index === strList.length - 1 ? (
+                                      ''
+                                    ) : (
+                                      <span item-id={book.id} className="text-blue-500">
+                                        {searchValue}
+                                      </span>
+                                    )}
+                                  </span>
+                                ))}
+                              </div>
                             </div>
                           </div>
                         );
                       })}
                     </div>
                   </div>
-                </div>)}
-              {
-                (searchTitleResult.length === 0 && searchAuthorResult.length === 0 && searchContentResult.length === 0 && !searchLoading) && (
+                </div>
+              )}
+              {searchTitleResult.length === 0 &&
+                searchAuthorResult.length === 0 &&
+                searchContentResult.length === 0 &&
+                !searchLoading && (
                   <div className="h-full">
                     <div className="flex flex-col items-center justify-center h-full">
                       <r-icon name="without-content" className="text-text-color-2" style={ICON_STYLE}></r-icon>
                       <div className="text-text-color-2 font-normal text-xl">无结果</div>
                     </div>
                   </div>
-                )
-              }
-              {
-                searchLoading && (
-                  <div className="h-full">
-                    <div className="flex flex-col items-center justify-center h-full">
-                      <r-loading name="circle-fold" className="text-2xl" style={
-                        {
-                          '--loading-circle-fold-item-before-background': 'var(--brand-blue-color-1)',
-                          '--loading-circle-fold-item-after-background': 'var(--brand-blue-color-1)',
-                        }
-                      }></r-loading>
-                    </div>
+                )}
+              {searchLoading && (
+                <div className="h-full">
+                  <div className="flex flex-col items-center justify-center h-full">
+                    <r-loading
+                      name="circle-fold"
+                      className="text-2xl"
+                      style={{
+                        '--loading-circle-fold-item-before-background': 'var(--brand-blue-color-1)',
+                        '--loading-circle-fold-item-after-background': 'var(--brand-blue-color-1)',
+                      }}
+                    ></r-loading>
                   </div>
-                )
-              }
+                </div>
+              )}
             </div>
           </div>
         </div>
