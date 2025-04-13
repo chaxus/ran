@@ -471,6 +471,9 @@ importers:
       tailwindcss:
         specifier: ^4.1.1
         version: 4.1.1
+      tsx:
+        specifier: ^4.19.3
+        version: 4.19.3
       typescript:
         specifier: ^5.8.2
         version: 5.8.2
@@ -2270,6 +2273,7 @@ packages:
   '@tailwindcss/oxide-darwin-arm64@4.1.1':
     resolution: {integrity: sha512-dI0QbdMWBvLB3MtaTKetzUKG9CUUQow8JSP4Nm+OxVokeZ+N+f1OmZW/hW1LzMxpx9RQCBgSRL+IIvKRat5Wdg==}
     engines: {node: '>= 10'}
+    cpu: [arm64]
     os: [darwin]
 
   '@tailwindcss/oxide-darwin-x64@4.1.1':

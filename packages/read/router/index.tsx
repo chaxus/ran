@@ -5,11 +5,13 @@ import { Loading } from '@/components/Loading/index';
 import { Home } from '@/pages/home/index';
 import { BookDetail } from '@/pages/book-detail/index';
 
+export const base = ''
+// export const base = '/packages/read/dist/client'
+
 export enum ROUTE_PATH {
-  HOME = '/home',
-  BOOK_DETAIL = '/book-detail',
-  BOOK_DETAIL_ID = '/book-detail/:id',
-  LOADING = '/loading',
+  HOME = `${base}/index`,
+  BOOK_DETAIL = `${base}/book-detail`,
+  LOADING = `${base}/loading`,
 }
 
 export interface Redirect {
@@ -36,18 +38,18 @@ const Redirect: Redirect = ({ to, replace, state }) => {
 
 export const Routes = (): ReactElement | null => {
   const defaultRoute = [
-    {
-      path: '/',
-      exact: true,
-      element: <Redirect to={ROUTE_PATH.HOME} />,
-    },
+    // {
+    //   path: '/',
+    //   exact: true,
+    //   element: <Redirect to={ROUTE_PATH.HOME} />,
+    // },
     {
       path: ROUTE_PATH.HOME,
       exact: true,
       element: <Home />,
     },
     {
-      path: ROUTE_PATH.BOOK_DETAIL_ID,
+      path: ROUTE_PATH.BOOK_DETAIL,
       exact: true,
       element: <BookDetail />,
     },
