@@ -9,7 +9,7 @@ export const base = '';
 // export const base = '/packages/read/dist/client'
 
 export enum ROUTE_PATH {
-  HOME = `${base}/index`,
+  HOME = `${base}/`,
   BOOK_DETAIL = `${base}/book-detail`,
   LOADING = `${base}/loading`,
 }
