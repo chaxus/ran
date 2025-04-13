@@ -14,7 +14,7 @@ const { render } = await import('../dist/server/server.js');
 // determine routes to pre-render from src/pages
 const routesToPrerender = fs.readdirSync(toAbsolute('../pages')).map((file) => {
   const name = file.replace(/\.tsx$/, '').toLowerCase();
-  return name === 'home' ? `/index` : `/${name}`;
+  return name === 'home' ? `/` : `/${name}`;
 });
 
 (async () => {
