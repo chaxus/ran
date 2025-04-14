@@ -27,8 +27,10 @@ export default defineConfig({
     extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json'],
   },
   css: {
-    modules: {
-      generateScopedName: '[name--[local]--[hash:base64:5]]',
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@import "@/styles/base.css";`,
+      },
     },
   },
 });

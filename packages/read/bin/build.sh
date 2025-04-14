@@ -5,6 +5,6 @@ npm run build:server
 
 node ./bin/build-ssg.js
 
-rm -rf dist/server
-rm -rf dist/assets
-rm -rf dist/.vite
+# rm -rf dist/server
+# rm -rf dist/assets
+# rm -rf dist/.vite
