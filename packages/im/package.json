@@ -8,7 +8,8 @@
     "node": ">=23.10.0"
   },
   "scripts": {
-    "dev": "sh ./bin/dev.sh"
+    "dev": "sh ./bin/dev.sh",
+    "build": "vite build"
   },
   "keywords": [],
   "author": "",
