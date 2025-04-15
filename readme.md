@@ -27,7 +27,7 @@ English · [中文](./readme-zh_CN.md)
 
 This is a technology exploration learning program. Frankly speaking, it has not yet been tested in the production environment, and there are not enough maintenance contributors, **so it is not recommended to use the production environment**, you can play with it yourself
 
-But pr and issues are always welcome . At the same time, based on the MIT protocol, the source code is completely open source, available for use and modification.
+But pr and issues are always welcome . At the same time, based on the `MIT` protocol, the source code is completely open source, available for use and modification.
 
 I aspire to extend the benefits of open-sourcing my code, as I myself have been greatly influenced and aided by numerous open-source projects throughout my development and learning journey. By doing so, I hope to contribute to a wider community where everyone can learn, grow, and benefit.
 
