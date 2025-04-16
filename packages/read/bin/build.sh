@@ -1,6 +1,5 @@
 bin=./node_modules/.bin
 
-npm run build:client
 npm run build:server
 
 node ./bin/build-ssg.js
