@@ -1,13 +1,12 @@
 import { StaticRouter } from 'react-router-dom';
-// import { BrowserRouter } from 'react-router-dom';
 import { hydrateRoot } from 'react-dom/client';
-import { App } from './app';
+import { App } from '../app';
 
 const container = document.getElementById('app')!;
 
 hydrateRoot(
   container,
-  <StaticRouter location={`/`}>
+  <StaticRouter location="/">
     <App />
   </StaticRouter>,
 );

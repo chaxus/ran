@@ -12,6 +12,10 @@ export default defineConfig({
   build: {
     target: 'esnext',
     manifest: true,
+    ssrManifest: true,
+    rollupOptions: {
+      input: 'views/index.html',
+    },
   },
   resolve: {
     alias: {
