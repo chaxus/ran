@@ -24,7 +24,7 @@
   "license": "ISC",
   "devDependencies": {
     "typescript": "^5.8.2",
-    "vite": "^6.2.6"
+    "vite": "^6.3.0"
   },
   "dependencies": {
     "ranuts": "workspace:^"
