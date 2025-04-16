@@ -102,7 +102,7 @@ void mainImage(out vec4 fragColor,in vec2 fragCoord){
 
 再外面整体除以 50，相当于减小了 sin 函数的振幅（amplitude）。
 
-![](../assets/image/texture-sin10x:50.jpg)
+![](../assets/image/texture-sin10x50.jpg)
 
 把这些操作转换成 Shader 代码吧。
 
