@@ -40,23 +40,23 @@ hydrateRoot(
     fs.writeFileSync(toAbsolute(`../views/client.tsx`), clientEntry);
     // run vite build
     childProcess.execSync(`npm run build:client`);
-    // 创建一个目录
+    // create a directory
     fs.mkdirSync(toAbsolute(`../dist/${name}`), { recursive: true });
-    // 将 dist 中的 client 目录下的 views 目录复制到 dist/${name}
+    // copy the dist/client/views directory to dist/${name}
     fs.cpSync(toAbsolute('../dist/client/views'), toAbsolute(`../dist/${name}`), { recursive: true });
-    // // 将 dist 中的 client 目录下的 assets 目录复制到 dist/${name}/assets
+    // copy the dist/client/assets directory to dist/${name}/assets
     fs.cpSync(toAbsolute('../dist/client/assets'), toAbsolute(`../dist/${name}/assets`), { recursive: true });
-    // // // render the app
+    // render the app
     const appHtml = await render(url);
-    // // // read the template
+    // read the template
     const template = fs.readFileSync(toAbsolute(`../dist/${name}/index.html`), 'utf-8');
-    // // // replace the ssr-outlet with the app html
+    // replace the ssr-outlet with the app html
     const html = template.replace(`<!--ssr-outlet-->`, appHtml);
-    // // // write to dist/${name}/index.html
+    // write to dist/${name}/index.html
     const filePath = `../dist/${name}/index.html`;
-    // // // create the dist/${name} directory if it doesn't exist
+    // create the dist/${name} directory if it doesn't exist
     fs.mkdirSync(toAbsolute(path.dirname(filePath)), { recursive: true });
-    // // // write the file
+    // write the file
     fs.writeFileSync(toAbsolute(filePath), html);
   }
 })();
