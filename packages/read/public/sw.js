@@ -1,4 +1,4 @@
-const CACHE_NAME = 'chaxus_ran_' + VERSION
+const CACHE_NAME = 'chaxus_weread';
 
 const IGNORE_REQUEST_LIST = [
   // google 上报不需要缓存

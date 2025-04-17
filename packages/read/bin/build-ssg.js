@@ -46,6 +46,16 @@ hydrateRoot(
     fs.cpSync(toAbsolute('../dist/client/views'), toAbsolute(`../dist/${name}`), { recursive: true });
     // copy the dist/client/assets directory to dist/${name}/assets
     fs.cpSync(toAbsolute('../dist/client/assets'), toAbsolute(`../dist/${name}/assets`), { recursive: true });
+    // copy the dist/client/public directory to dist/${name}/public
+    fs.cpSync(toAbsolute('../dist/client/sw.js'), toAbsolute(`../dist/${name}/sw.js`), { recursive: true });
+    // 读取 dist/${name}/assets 目录下的所有文件的名称
+    const assets = fs.readdirSync(toAbsolute(`../dist/${name}/assets`));
+    // 将所有名称拼接成一个数组字符串，输出
+    const assetsString = assets.map((asset) => `"/${asset}"`).join(',');
+    // 写入到 sw.js 文件开头
+    const swContent = fs.readFileSync(toAbsolute(`../dist/${name}/sw.js`), 'utf-8');
+    const newSwContent = 'const SERVICE_WORK_CACHE_FILE_PATHS = [' + assetsString + '];' + swContent;
+    fs.writeFileSync(toAbsolute(`../dist/${name}/sw.js`), newSwContent);
     // render the app
     const appHtml = await render(url);
     // read the template
