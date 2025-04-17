@@ -1,0 +1,1 @@
+export const SERVICE_WORK_VERSION = "1744898986"

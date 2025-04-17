@@ -17,6 +17,7 @@ export default defineConfig({
       input: 'views/index.html',
     },
   },
+  publicDir: 'public',
   resolve: {
     alias: {
       '@/components': resolve(__dirname, '/components'),
