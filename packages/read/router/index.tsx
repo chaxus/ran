@@ -15,7 +15,7 @@ export enum ROUTE_PATH {
 }
 
 export interface Redirect {
-  (param: { to: string; replace?: boolean; state?: object }): null;
+  (param: { to: string; replace?: boolean; state?: object }): ReactElement;
 }
 
 export const Page = ({ component }: { component: string }): ReactElement => {
@@ -33,30 +33,26 @@ const Redirect: Redirect = ({ to, replace, state }) => {
     navigate(to, { replace, state });
   });
 
-  return null;
+  return <Loading />;
 };
 
 export const Routes = (): ReactElement | null => {
   const defaultRoute = [
-    // {
-    //   path: '/',
-    //   exact: true,
-    //   element: <Redirect to={ROUTE_PATH.HOME} />,
-    // },
     {
       path: ROUTE_PATH.HOME,
-      exact: true,
       element: <Home />,
     },
     {
       path: ROUTE_PATH.BOOK_DETAIL,
-      exact: true,
       element: <BookDetail />,
     },
     {
       path: ROUTE_PATH.LOADING,
-      exact: true,
       element: <Loading />,
+    },
+    {
+      path: '*',
+      element: <Redirect to={ROUTE_PATH.HOME} />,
     },
   ];
   const routes = [...defaultRoute];

@@ -49,6 +49,7 @@ import {
   getMime,
   getPerformance,
   getPixelRatio,
+  getQuery,
   getStatus,
   getWindow,
   handleConsole,
@@ -270,6 +271,7 @@ export {
   transformNumber,
   toString,
   addNumSym,
+  getQuery,
 };
 
 export type { CurrentDevice, Context };

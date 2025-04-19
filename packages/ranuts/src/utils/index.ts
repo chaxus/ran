@@ -11,11 +11,6 @@ import {
   strParse,
   toString,
 } from './str';
-import { AudioRecorder } from '@/utils/audioRecorder';
-import { createSignal, subscribers } from '@/utils/signal';
-import { audioVendor, canvasVendor, webglVendor } from '@/utils/behavior';
-import { TOTP } from '@/utils/totp/totp';
-import { localStorageGetItem, localStorageSetItem } from '@/utils/storage';
 import {
   appendUrl,
   connection,
@@ -28,13 +23,19 @@ import {
   getFrame,
   getHost,
   getPixelRatio,
+  getQuery,
   getWindow,
   imageRequest,
   networkSpeed,
   removeGhosting,
   requestUrlToBuffer,
   retain,
-} from '@/utils/bom';
+} from './bom';
+import { AudioRecorder } from '@/utils/audioRecorder';
+import { createSignal, subscribers } from '@/utils/signal';
+import { audioVendor, canvasVendor, webglVendor } from '@/utils/behavior';
+import { TOTP } from '@/utils/totp/totp';
+import { localStorageGetItem, localStorageSetItem } from '@/utils/storage';
 import {
   Color,
   ColorScheme,
@@ -201,6 +202,7 @@ export {
   transformNumber,
   toString,
   addNumSym,
+  getQuery,
 };
 
 export type { CurrentDevice };

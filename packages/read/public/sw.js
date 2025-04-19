@@ -123,7 +123,7 @@ this.addEventListener(SERVICE_WORK.INSTALL, function (event) {
         fetch(url).then(response => {
           // 检查响应是否成功
           if (!response.ok) {
-            console.log('service worker fetch response error:', url)
+            return console.log('service worker fetch response error:', url)
           }
           // 将响应添加到缓存
           return cache.put(url, response);

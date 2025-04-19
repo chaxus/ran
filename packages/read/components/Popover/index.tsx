@@ -1,8 +1,8 @@
 import 'ranui/popover';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { EVENT_NAME, syncHook } from '@/lib/subscribe';
 
-interface PopoverProps {
+export interface PopoverProps {
   children: React.ReactNode;
   overlay: React.ReactNode;
   placement: 'top' | 'left' | 'right' | 'bottom';
@@ -11,6 +11,7 @@ interface PopoverProps {
 }
 
 export const Popover = ({ children, overlay, placement, trigger }: PopoverProps): React.JSX.Element => {
+  const [isClient, setIsClient] = useState(false);
   const ref = useRef<BaseIntrinsicElements['r-popover']>(null);
 
   const closePopover = useCallback(() => {
@@ -19,10 +20,15 @@ export const Popover = ({ children, overlay, placement, trigger }: PopoverProps)
 
   useEffect(() => {
     syncHook.tap(EVENT_NAME.CLOSE_POPOVER, closePopover);
+    setIsClient(true);
     return () => {
       syncHook.off(EVENT_NAME.CLOSE_POPOVER, closePopover);
     };
   }, []);
+
+  if (!isClient) {
+    return <div></div>;
+  }
 
   return (
     <div>

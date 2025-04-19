@@ -1,15 +1,17 @@
 import { useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import type { BookInfo } from '@/store/books';
 import './index.scss';
 import { setCurrentBookDetail, setPageNum, setTextSyntaxTree } from '@/lib/subscribe';
+// import { ROUTE_PATH } from '@/router';
+
 interface BookCardProps {
   book: BookInfo;
 }
 
 export const BookCard = ({ book }: BookCardProps): React.JSX.Element => {
   const { id, image, title = '', author = '' } = book || {};
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const ref = useRef<HTMLAnchorElement>(null);
 
   const clear = () => {
@@ -27,15 +29,15 @@ export const BookCard = ({ book }: BookCardProps): React.JSX.Element => {
 
   const toDetail = () => {
     clear();
-    if (document.startViewTransition) {
-      ref.current?.style.setProperty('view-transition-name', `book-info-${id}`);
-      document.startViewTransition(() => {
-        ref.current?.style.setProperty('view-transition-name', '');
-        navigate(`/book-detail?id=${id}`);
-      });
-    } else {
-      navigate(`/book-detail?id=${id}`);
-    }
+    // if (document.startViewTransition) {
+    //   ref.current?.style.setProperty('view-transition-name', `book-info-${id}`);
+    //   document.startViewTransition(() => {
+    //     ref.current?.style.setProperty('view-transition-name', '');
+    //     navigate(ROUTE_PATH.BOOK_DETAIL + `?id=${id}`);
+    //   });
+    // } else {
+    //   navigate(ROUTE_PATH.BOOK_DETAIL + `?id=${id}`);
+    // }
   };
 
   useEffect(() => {
@@ -46,6 +48,7 @@ export const BookCard = ({ book }: BookCardProps): React.JSX.Element => {
     <a
       ref={ref}
       onClick={toDetail}
+      href={`/book-detail?id=${id}`}
       style={{
         viewTransitionName: `book-info-${id}`,
       }}

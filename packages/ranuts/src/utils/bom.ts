@@ -201,7 +201,32 @@ export const getHost = (env?: string): string | undefined => {
  * @param {*} string
  * @return {*}
  */
-export const getAllQueryString = (url: string): Record<string, string> => {
+export const getAllQueryString = (url?: string): Record<string, string> => {
+  if (typeof window !== 'undefined') {
+    const r: Record<string, string> = {};
+    const href = url || window.location.href;
+    if (href.split('?')[1]) {
+      const str = href.split('?')[1];
+      const strList = str.split('&');
+      strList.forEach((item) => {
+        const [key, val] = item.split('=');
+        if (key && val) {
+          r[key] = decodeURIComponent(val);
+        }
+      });
+    }
+    return r;
+  }
+  return {};
+};
+
+/**
+ * @description: 将 url 上的字符串转换成对象
+ * @param {string} url
+ * @param {*} string
+ * @return {*}
+ */
+export const getQuery = (url?: string): Record<string, string> => {
   if (typeof window !== 'undefined') {
     const r: Record<string, string> = {};
     const href = url || window.location.href;

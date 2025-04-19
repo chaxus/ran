@@ -5,8 +5,9 @@ import { App } from '../app';
 import { base } from '../router';
 
 export function render(path: string = '/', options: RenderToPipeableStreamOptions = {}): string {
+  const location = path.startsWith('/') ? path : `/${path}`;
   return renderToString(
-    <StaticRouter location={`${base}${path}`}>
+    <StaticRouter location={`${base}${location}`}>
       <App />
     </StaticRouter>,
     options,

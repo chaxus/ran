@@ -1,6 +1,6 @@
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
-import { debounce } from 'ranuts/utils';
+import { debounce, getQuery } from 'ranuts/utils';
 import { getBookById } from '@/store/books';
 import { transformTextToExpectedFormat } from '@/lib/transformText';
 import type { BookInfo } from '@/store/books';
@@ -55,10 +55,9 @@ const next = () => {
 };
 
 export const BookDetail = (): React.JSX.Element => {
-  const [searchParams] = useSearchParams();
-  const id = searchParams.get('id');
   const showContainerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const { id } = getQuery();
   const ref = useRef<HTMLDivElement>(null);
   const [_, update] = useState(0);
   const bookDetail: BookInfo = getCurrentBookDetail();
@@ -79,6 +78,7 @@ export const BookDetail = (): React.JSX.Element => {
   };
 
   const toHome = () => {
+    if (!id) return;
     if (document.startViewTransition) {
       ref.current?.style.setProperty('view-transition-name', `book-info-${id}`);
       document.startViewTransition(() => {
@@ -112,10 +112,11 @@ export const BookDetail = (): React.JSX.Element => {
   };
 
   useEffect(() => {
+    const { id } = getQuery();
     if (id) {
       getBookDetailById(id);
     }
-  }, [id]);
+  }, []);
 
   useEffect(() => {
     // 书籍详情变更，更新 UI
