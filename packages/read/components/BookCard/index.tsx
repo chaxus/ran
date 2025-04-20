@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 import type { BookInfo } from '@/store/books';
 import './index.scss';
 import { setCurrentBookDetail, setPageNum, setTextSyntaxTree } from '@/lib/subscribe';
-// import { ROUTE_PATH } from '@/router';
+import { ROUTE_PATH } from '@/router';
 
 interface BookCardProps {
   book: BookInfo;
@@ -29,15 +29,15 @@ export const BookCard = ({ book }: BookCardProps): React.JSX.Element => {
 
   const toDetail = () => {
     clear();
-    // if (document.startViewTransition) {
-    //   ref.current?.style.setProperty('view-transition-name', `book-info-${id}`);
-    //   document.startViewTransition(() => {
-    //     ref.current?.style.setProperty('view-transition-name', '');
-    //     navigate(ROUTE_PATH.BOOK_DETAIL + `?id=${id}`);
-    //   });
-    // } else {
-    //   navigate(ROUTE_PATH.BOOK_DETAIL + `?id=${id}`);
-    // }
+    if (document.startViewTransition) {
+      ref.current?.style.setProperty('view-transition-name', `book-info-${id}`);
+      document.startViewTransition(() => {
+        ref.current?.style.setProperty('view-transition-name', '');
+        window.location.href = ROUTE_PATH.BOOK_DETAIL + `?id=${id}`;
+      });
+    } else {
+      window.location.href = ROUTE_PATH.BOOK_DETAIL + `?id=${id}`;
+    }
   };
 
   useEffect(() => {

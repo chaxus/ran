@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { debounce, getQuery } from 'ranuts/utils';
 import { getBookById } from '@/store/books';
@@ -56,7 +56,7 @@ const next = () => {
 
 export const BookDetail = (): React.JSX.Element => {
   const showContainerRef = useRef<HTMLDivElement>(null);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { id } = getQuery();
   const ref = useRef<HTMLDivElement>(null);
   const [_, update] = useState(0);
@@ -83,10 +83,10 @@ export const BookDetail = (): React.JSX.Element => {
       ref.current?.style.setProperty('view-transition-name', `book-info-${id}`);
       document.startViewTransition(() => {
         ref.current?.style.setProperty('view-transition-name', '');
-        navigate(ROUTE_PATH.HOME);
+        window.location.href = ROUTE_PATH.HOME;
       });
     } else {
-      navigate(ROUTE_PATH.HOME);
+      window.location.href = ROUTE_PATH.HOME;
     }
   };
 
@@ -107,7 +107,7 @@ export const BookDetail = (): React.JSX.Element => {
         }
       })
       .catch(() => {
-        navigate(ROUTE_PATH.HOME);
+        window.location.href = ROUTE_PATH.HOME;
       });
   };
 

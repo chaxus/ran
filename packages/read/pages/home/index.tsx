@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { debounce } from 'ranuts/utils';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import { BookCard } from '@/components/BookCard';
 import { addBook, getAllBooks, searchBooksByAuthor, searchBooksByContent, searchBooksByTitle } from '@/store/books';
 import { checkEncoding, createReader, trim } from '@/lib/transformText';
@@ -44,7 +44,7 @@ export const Home = (): React.JSX.Element => {
   const searchResultRef = useRef<HTMLDivElement>(null);
   const [searchTitleResult, setSearchTitleResult] = useState<BookInfo[]>([]);
   const [searchLoading, setSearchLoading] = useState<boolean>(false);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [searchAuthorResult, setSearchAuthorResult] = useState<BookInfo[]>([]);
   const [searchContentResult, setSearchContentResult] = useState<SearchResult[]>([]);
 
@@ -160,7 +160,7 @@ export const Home = (): React.JSX.Element => {
     const target = e.target as HTMLDivElement;
     const id = target.getAttribute('item-id');
     if (id) {
-      navigate(ROUTE_PATH.BOOK_DETAIL + `/${id}`);
+      window.location.href = ROUTE_PATH.BOOK_DETAIL + `?id=${id}`;
     }
   };
 
