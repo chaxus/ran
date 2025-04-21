@@ -85,7 +85,12 @@ hydrateRoot(
       });
     }
     // copy the dist/client/public directory to dist/${name}/public
-    fs.cpSync(toAbsolute('../dist/client/sw.js'), toAbsolute(`../dist/sw.js`), { recursive: true });
+    // 读取 client 下的所有文件，非目录
+    const clientFiles = fs.readdirSync(toAbsolute('../dist/client'));
+    // 将所有文件复制到 dist/${name}/public
+    clientFiles.forEach((file) => {
+      fs.cpSync(toAbsolute(`../dist/client/${file}`), toAbsolute(`../dist/${file}`), { recursive: true });
+    });
     // 读取 dist/${name}/assets 目录下的所有文件的名称
     const assets = fs.readdirSync(toAbsolute(`../dist/assets`));
     // 将所有名称拼接成一个数组字符串，输出
