@@ -34,7 +34,7 @@ export const addBook = (data: {
 }): Promise<IDBResult<BookInfo>> => {
   const { title = '', author = '', image = '', content, encoding = '' } = data;
   const hash = CryptoJS.MD5(typeof content === 'string' ? content : CryptoJS.lib.WordArray.create(content)).toString();
-  // const createTime = Date.now();
+  const createTime = Date.now();
   const bookInfo: BookInfo = {
     id: `${hash}`,
     title,
@@ -42,8 +42,8 @@ export const addBook = (data: {
     image,
     content,
     encoding,
-    // createTime,
-    // modifyTime: Date.now(),
+    createTime,
+    modifyTime: Date.now(),
   };
 
   return performWorkerOperation<BookInfo>('add', { bookInfo });

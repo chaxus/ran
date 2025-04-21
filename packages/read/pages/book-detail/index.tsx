@@ -56,7 +56,6 @@ const next = () => {
 
 export const BookDetail = (): React.JSX.Element => {
   const showContainerRef = useRef<HTMLDivElement>(null);
-  // const navigate = useNavigate();
   const { id } = getQuery();
   const ref = useRef<HTMLDivElement>(null);
   const [_, update] = useState(0);

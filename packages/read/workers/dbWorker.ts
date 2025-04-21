@@ -16,7 +16,6 @@ class SearchStrategy implements DBStrategy {
     const request = store.openCursor();
     const results: any[] = [];
     const searchText = keyword.toLowerCase();
-    // let totalProcessed = 0;
 
     request.onsuccess = (event) => {
       const cursor = (event.target as IDBRequest).result;
