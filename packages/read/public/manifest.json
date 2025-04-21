@@ -45,13 +45,6 @@
         "type": "image/jpg",
         "form_factor": "wide",
         "label": "Home screen of Awesome App"
-      },
-      {
-        "src": "/weread/screenshots_748x1340.jpg",
-        "sizes": "748x1340",
-        "type": "image/jpg",
-        "form_factor": "narrow",
-        "label": "List of Awesome Resources available in Awesome App"
       }
     ]
   }

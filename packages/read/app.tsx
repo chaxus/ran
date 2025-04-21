@@ -25,10 +25,10 @@ export const App = (): React.JSX.Element => {
   return (
     <div className="w-full h-full">
       <pwa-install
-        manifest-url="manifest.json"
+        manifest-url="/weread/manifest.json"
         name="weread"
         description="Progressive web application"
-        icon="read.svg"
+        icon="/weread/read.svg"
       ></pwa-install>
       <Routes />
     </div>
