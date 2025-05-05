@@ -17201,14 +17201,12 @@
               (r = n), (n = o);
             }
             t.Push(
-              t.itemFactory
-                .create('position')
-                .setProperties({
-                  name: t.currentCS,
-                  move: 'horizontal',
-                  left: t.create('node', 'mspace', [], { width: r }),
-                  right: t.create('node', 'mspace', [], { width: n }),
-                }),
+              t.itemFactory.create('position').setProperties({
+                name: t.currentCS,
+                move: 'horizontal',
+                left: t.create('node', 'mspace', [], { width: r }),
+                right: t.create('node', 'mspace', [], { width: n }),
+              }),
             );
           }),
           (_.Hskip = function (t, e) {
