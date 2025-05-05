@@ -11,11 +11,13 @@
   "license": "ISC",
   "dependencies": {
     "koa": "^2.16.1",
+    "koa-mount": "^4.2.0",
     "koa-send": "^5.0.1",
     "koa-static": "^5.0.0"
   },
   "devDependencies": {
     "@types/koa": "^2.15.0",
+    "@types/koa-mount": "^4.0.5",
     "@types/koa-send": "^4.1.6",
     "@types/koa-static": "^4.0.4"
   }
