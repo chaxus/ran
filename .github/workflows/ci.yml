@@ -1,13 +1,18 @@
 name: CI
 on:
   pull_request:
-    branches: main
+    branches: [main]
     paths:
       - "packages/**"
   push:
-    branches: main
+    branches: [main]
     paths:
       - "packages/**"
+
+permissions:
+  contents: read
+  pull-requests: read
+
 jobs:
   lint:
     if: github.repository == 'chaxus/ran'

@@ -5,9 +5,7 @@ import { cssPrefix } from '../config';
 export default class Datepicker {
   constructor() {
     this.calendar = new Calendar(new Date());
-    this.el = h('div', `${cssPrefix}-datepicker`).child(
-      this.calendar.el,
-    ).hide();
+    this.el = h('div', `${cssPrefix}-datepicker`).child(this.calendar.el).hide();
   }
 
   setValue(date) {

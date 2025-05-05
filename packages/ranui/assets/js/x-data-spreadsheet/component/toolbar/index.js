@@ -50,9 +50,7 @@ function initBtns2() {
 }
 
 function moreResize() {
-  const {
-    el, btns, moreEl, btns2,
-  } = this;
+  const { el, btns, moreEl, btns2 } = this;
   const { moreBtns, contentEl } = moreEl.dd;
   el.css('width', `${this.widthFn() - 60}px`);
   const elBox = el.box();
@@ -89,47 +87,38 @@ export default class Toolbar {
     const style = data.defaultStyle();
     this.items = [
       [
-        this.undoEl = new Undo(),
-        this.redoEl = new Redo(),
+        (this.undoEl = new Undo()),
+        (this.redoEl = new Redo()),
         new Print(),
-        this.paintformatEl = new Paintformat(),
-        this.clearformatEl = new Clearformat(),
+        (this.paintformatEl = new Paintformat()),
+        (this.clearformatEl = new Clearformat()),
+      ],
+      buildDivider(),
+      [(this.formatEl = new Format())],
+      buildDivider(),
+      [(this.fontEl = new Font()), (this.fontSizeEl = new FontSize())],
+      buildDivider(),
+      [
+        (this.boldEl = new Bold()),
+        (this.italicEl = new Italic()),
+        (this.underlineEl = new Underline()),
+        (this.strikeEl = new Strike()),
+        (this.textColorEl = new TextColor(style.color)),
+      ],
+      buildDivider(),
+      [(this.fillColorEl = new FillColor(style.bgcolor)), (this.borderEl = new Border()), (this.mergeEl = new Merge())],
+      buildDivider(),
+      [
+        (this.alignEl = new Align(style.align)),
+        (this.valignEl = new Valign(style.valign)),
+        (this.textwrapEl = new Textwrap()),
       ],
       buildDivider(),
       [
-        this.formatEl = new Format(),
-      ],
-      buildDivider(),
-      [
-        this.fontEl = new Font(),
-        this.fontSizeEl = new FontSize(),
-      ],
-      buildDivider(),
-      [
-        this.boldEl = new Bold(),
-        this.italicEl = new Italic(),
-        this.underlineEl = new Underline(),
-        this.strikeEl = new Strike(),
-        this.textColorEl = new TextColor(style.color),
-      ],
-      buildDivider(),
-      [
-        this.fillColorEl = new FillColor(style.bgcolor),
-        this.borderEl = new Border(),
-        this.mergeEl = new Merge(),
-      ],
-      buildDivider(),
-      [
-        this.alignEl = new Align(style.align),
-        this.valignEl = new Valign(style.valign),
-        this.textwrapEl = new Textwrap(),
-      ],
-      buildDivider(),
-      [
-        this.freezeEl = new Freeze(),
-        this.autofilterEl = new Autofilter(),
-        this.formulaEl = new Formula(),
-        this.moreEl = new More(),
+        (this.freezeEl = new Freeze()),
+        (this.autofilterEl = new Autofilter()),
+        (this.formulaEl = new Formula()),
+        (this.moreEl = new More()),
       ],
     ];
 

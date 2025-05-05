@@ -7,6 +7,10 @@ on:
       - edited
       - synchronize
 
+permissions:
+  pull-requests: write
+  contents: read
+
 jobs:
   main:
     if: github.repository == 'chaxus/ran'

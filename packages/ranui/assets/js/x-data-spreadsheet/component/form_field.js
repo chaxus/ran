@@ -18,8 +18,7 @@ export default class FormField {
     this.tip = h('div', 'tip').child('tip').hide();
     this.input = input;
     this.input.vchange = () => this.validate();
-    this.el = h('div', `${cssPrefix}-form-field`)
-      .children(this.label, input.el, this.tip);
+    this.el = h('div', `${cssPrefix}-form-field`).children(this.label, input.el, this.tip);
   }
 
   isShow() {
@@ -44,9 +43,7 @@ export default class FormField {
   }
 
   validate() {
-    const {
-      input, rule, tip, el,
-    } = this;
+    const { input, rule, tip, el } = this;
     const v = input.val();
     if (rule.required) {
       if (/^\s*$/.test(v)) {

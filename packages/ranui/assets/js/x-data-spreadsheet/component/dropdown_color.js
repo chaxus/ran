@@ -4,9 +4,7 @@ import ColorPalette from './color_palette';
 
 export default class DropdownColor extends Dropdown {
   constructor(iconName, color) {
-    const icon = new Icon(iconName)
-      .css('height', '16px')
-      .css('border-bottom', `3px solid ${color}`);
+    const icon = new Icon(iconName).css('height', '16px').css('border-bottom', `3px solid ${color}`);
     const colorPalette = new ColorPalette();
     colorPalette.change = (v) => {
       this.setTitle(v);

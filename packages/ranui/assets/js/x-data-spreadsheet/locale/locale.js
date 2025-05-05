@@ -73,8 +73,4 @@ export default {
   t,
 };
 
-export {
-  locale,
-  t,
-  tf,
-};
+export { locale, t, tf };

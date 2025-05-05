@@ -5,20 +5,18 @@ import DropdownLineType from './dropdown_linetype';
 import { cssPrefix } from '../config';
 
 function buildTable(...trs) {
-  return h('table', '').child(
-    h('tbody', '').children(...trs),
-  );
+  return h('table', '').child(h('tbody', '').children(...trs));
 }
 
 function buildTd(iconName) {
   return h('td', '').child(
-    h('div', `${cssPrefix}-border-palette-cell`).child(
-      new Icon(`border-${iconName}`),
-    ).on('click', () => {
-      this.mode = iconName;
-      const { mode, style, color } = this;
-      this.change({ mode, style, color });
-    }),
+    h('div', `${cssPrefix}-border-palette-cell`)
+      .child(new Icon(`border-${iconName}`))
+      .on('click', () => {
+        this.mode = iconName;
+        const { mode, style, color } = this;
+        this.change({ mode, style, color });
+      }),
   );
 }
 
@@ -42,11 +40,9 @@ export default class BorderPalette {
         h('td', `${cssPrefix}-border-palette-left`).child(
           buildTable(
             h('tr', '').children(
-              ...['all', 'inside', 'horizontal', 'vertical', 'outside'].map(it => buildTd.call(this, it)),
+              ...['all', 'inside', 'horizontal', 'vertical', 'outside'].map((it) => buildTd.call(this, it)),
             ),
-            h('tr', '').children(
-              ...['left', 'top', 'right', 'bottom', 'none'].map(it => buildTd.call(this, it)),
-            ),
+            h('tr', '').children(...['left', 'top', 'right', 'bottom', 'none'].map((it) => buildTd.call(this, it))),
           ),
         ),
         h('td', `${cssPrefix}-border-palette-right`).children(

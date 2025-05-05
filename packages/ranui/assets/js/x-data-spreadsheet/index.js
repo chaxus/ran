@@ -10,7 +10,6 @@ import { cssPrefix } from './config';
 import { locale } from './locale/locale';
 import './index.less';
 
-
 class Spreadsheet {
   constructor(selectors, options = {}) {
     let targetEl = selectors;
@@ -20,20 +19,26 @@ class Spreadsheet {
     if (typeof selectors === 'string') {
       targetEl = document.querySelector(selectors);
     }
-    this.bottombar = this.options.showBottomBar ? new Bottombar(() => {
-      const d = this.addSheet();
-      this.sheet.resetData(d);
-    }, (index) => {
-      const d = this.datas[index];
-      this.sheet.resetData(d);
-    }, () => {
-      this.deleteSheet();
-    }, (index, value) => {
-      this.datas[index].name = value;
-    }) : null;
+    this.bottombar = this.options.showBottomBar
+      ? new Bottombar(
+          () => {
+            const d = this.addSheet();
+            this.sheet.resetData(d);
+          },
+          (index) => {
+            const d = this.datas[index];
+            this.sheet.resetData(d);
+          },
+          () => {
+            this.deleteSheet();
+          },
+          (index, value) => {
+            this.datas[index].name = value;
+          },
+        )
+      : null;
     this.data = this.addSheet();
-    const rootEl = h('div', `${cssPrefix}`)
-      .on('contextmenu', evt => evt.preventDefault());
+    const rootEl = h('div', `${cssPrefix}`).on('contextmenu', (evt) => evt.preventDefault());
     // create canvas element
     targetEl.appendChild(rootEl.el);
     this.sheet = new Sheet(rootEl, this.data);
@@ -87,7 +92,7 @@ class Spreadsheet {
   }
 
   getData() {
-    return this.datas.map(it => it.getData());
+    return this.datas.map((it) => it.getData());
   }
 
   cellText(ri, ci, text, sheetIndex = 0) {
@@ -136,6 +141,4 @@ if (typeof window !== 'undefined') {
 }
 
 export default Spreadsheet;
-export {
-  spreadsheet,
-};
+export { spreadsheet };

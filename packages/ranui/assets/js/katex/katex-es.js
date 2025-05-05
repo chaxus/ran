@@ -13,11 +13,11 @@ var findEndOfMath = function findEndOfMath(delimiter, text, startIndex) {
 
     if (braceLevel <= 0 && text.slice(index, index + delimLength) === delimiter) {
       return index;
-    } else if (character === "\\") {
+    } else if (character === '\\') {
       index++;
-    } else if (character === "{") {
+    } else if (character === '{') {
       braceLevel++;
-    } else if (character === "}") {
+    } else if (character === '}') {
       braceLevel--;
     }
 
@@ -28,7 +28,7 @@ var findEndOfMath = function findEndOfMath(delimiter, text, startIndex) {
 };
 
 var escapeRegex = function escapeRegex(string) {
-  return string.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
+  return string.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
 };
 
 var amsRegex = /^\\begin{/;
@@ -36,7 +36,7 @@ var amsRegex = /^\\begin{/;
 var splitAtDelimiters = function splitAtDelimiters(text, delimiters) {
   var index;
   var data = [];
-  var regexLeft = new RegExp("(" + delimiters.map(x => escapeRegex(x.left)).join("|") + ")");
+  var regexLeft = new RegExp('(' + delimiters.map((x) => escapeRegex(x.left)).join('|') + ')');
 
   while (true) {
     index = text.search(regexLeft);
@@ -47,14 +47,13 @@ var splitAtDelimiters = function splitAtDelimiters(text, delimiters) {
 
     if (index > 0) {
       data.push({
-        type: "text",
-        data: text.slice(0, index)
+        type: 'text',
+        data: text.slice(0, index),
       });
       text = text.slice(index); // now text starts with delimiter
     } // ... so this always succeeds:
 
-
-    var i = delimiters.findIndex(delim => text.startsWith(delim.left));
+    var i = delimiters.findIndex((delim) => text.startsWith(delim.left));
     index = findEndOfMath(delimiters[i].right, text, delimiters[i].left.length);
 
     if (index === -1) {
@@ -64,18 +63,18 @@ var splitAtDelimiters = function splitAtDelimiters(text, delimiters) {
     var rawData = text.slice(0, index + delimiters[i].right.length);
     var math = amsRegex.test(rawData) ? rawData : text.slice(delimiters[i].left.length, index);
     data.push({
-      type: "math",
+      type: 'math',
       data: math,
       rawData,
-      display: delimiters[i].display
+      display: delimiters[i].display,
     });
     text = text.slice(index + delimiters[i].right.length);
   }
 
-  if (text !== "") {
+  if (text !== '') {
     data.push({
-      type: "text",
-      data: text
+      type: 'text',
+      data: text,
     });
   }
 
@@ -100,10 +99,10 @@ var renderMathInText = function renderMathInText(text, optionsCopy) {
   var fragment = document.createDocumentFragment();
 
   for (var i = 0; i < data.length; i++) {
-    if (data[i].type === "text") {
+    if (data[i].type === 'text') {
       fragment.appendChild(document.createTextNode(data[i].data));
     } else {
-      var span = document.createElement("span");
+      var span = document.createElement('span');
       var math = data[i].data; // Override any display mode defined in the settings with that
       // defined by the text itself
 
@@ -120,7 +119,7 @@ var renderMathInText = function renderMathInText(text, optionsCopy) {
           throw e;
         }
 
-        optionsCopy.errorCallback("KaTeX auto-render: Failed to parse `" + data[i].data + "` with ", e);
+        optionsCopy.errorCallback('KaTeX auto-render: Failed to parse `' + data[i].data + '` with ', e);
         fragment.appendChild(document.createTextNode(data[i].rawData));
         continue;
       }
@@ -170,20 +169,21 @@ var renderElem = function renderElem(elem, optionsCopy) {
       (function () {
         // Element node
         var className = ' ' + childNode.className + ' ';
-        var shouldRender = optionsCopy.ignoredTags.indexOf(childNode.nodeName.toLowerCase()) === -1 && optionsCopy.ignoredClasses.every(x => className.indexOf(' ' + x + ' ') === -1);
+        var shouldRender =
+          optionsCopy.ignoredTags.indexOf(childNode.nodeName.toLowerCase()) === -1 &&
+          optionsCopy.ignoredClasses.every((x) => className.indexOf(' ' + x + ' ') === -1);
 
         if (shouldRender) {
           renderElem(childNode, optionsCopy);
         }
       })();
     } // Otherwise, it's something else, and ignore it.
-
   }
 };
 
 var renderMathInElement = function renderMathInElement(elem, options) {
   if (!elem) {
-    throw new Error("No element provided to render");
+    throw new Error('No element provided to render');
   }
 
   var optionsCopy = {}; // Object.assign(optionsCopy, option)
@@ -194,45 +194,60 @@ var renderMathInElement = function renderMathInElement(elem, options) {
     }
   } // default options
 
-
-  optionsCopy.delimiters = optionsCopy.delimiters || [{
-    left: "$$",
-    right: "$$",
-    display: true
-  }, {
-    left: "\\(",
-    right: "\\)",
-    display: false
-  }, // LaTeX uses $…$, but it ruins the display of normal `$` in text:
-  // {left: "$", right: "$", display: false},
-  // $ must come after $$
-  // Render AMS environments even if outside $$…$$ delimiters.
-  {
-    left: "\\begin{equation}",
-    right: "\\end{equation}",
-    display: true
-  }, {
-    left: "\\begin{align}",
-    right: "\\end{align}",
-    display: true
-  }, {
-    left: "\\begin{alignat}",
-    right: "\\end{alignat}",
-    display: true
-  }, {
-    left: "\\begin{gather}",
-    right: "\\end{gather}",
-    display: true
-  }, {
-    left: "\\begin{CD}",
-    right: "\\end{CD}",
-    display: true
-  }, {
-    left: "\\[",
-    right: "\\]",
-    display: true
-  }];
-  optionsCopy.ignoredTags = optionsCopy.ignoredTags || ["script", "noscript", "style", "textarea", "pre", "code", "option"];
+  optionsCopy.delimiters = optionsCopy.delimiters || [
+    {
+      left: '$$',
+      right: '$$',
+      display: true,
+    },
+    {
+      left: '\\(',
+      right: '\\)',
+      display: false,
+    }, // LaTeX uses $…$, but it ruins the display of normal `$` in text:
+    // {left: "$", right: "$", display: false},
+    // $ must come after $$
+    // Render AMS environments even if outside $$…$$ delimiters.
+    {
+      left: '\\begin{equation}',
+      right: '\\end{equation}',
+      display: true,
+    },
+    {
+      left: '\\begin{align}',
+      right: '\\end{align}',
+      display: true,
+    },
+    {
+      left: '\\begin{alignat}',
+      right: '\\end{alignat}',
+      display: true,
+    },
+    {
+      left: '\\begin{gather}',
+      right: '\\end{gather}',
+      display: true,
+    },
+    {
+      left: '\\begin{CD}',
+      right: '\\end{CD}',
+      display: true,
+    },
+    {
+      left: '\\[',
+      right: '\\]',
+      display: true,
+    },
+  ];
+  optionsCopy.ignoredTags = optionsCopy.ignoredTags || [
+    'script',
+    'noscript',
+    'style',
+    'textarea',
+    'pre',
+    'code',
+    'option',
+  ];
   optionsCopy.ignoredClasses = optionsCopy.ignoredClasses || [];
   optionsCopy.errorCallback = optionsCopy.errorCallback || console.error; // Enable sharing of global macros defined via `\gdef` between different
   // math elements within a single call to `renderMathInElement`.
@@ -243,4 +258,4 @@ var renderMathInElement = function renderMathInElement(elem, options) {
 
 export { renderMathInElement as default };
 
-export { renderMathInElement }
+export { renderMathInElement };

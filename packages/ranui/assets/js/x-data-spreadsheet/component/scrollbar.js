@@ -6,7 +6,7 @@ export default class Scrollbar {
     this.vertical = vertical;
     this.moveFn = null;
     this.el = h('div', `${cssPrefix}-scrollbar ${vertical ? 'vertical' : 'horizontal'}`)
-      .child(this.contentEl = h('div', ''))
+      .child((this.contentEl = h('div', '')))
       .on('mousemove.stop', () => {})
       .on('scroll.stop', (evt) => {
         const { scrollTop, scrollLeft } = evt.target;
@@ -34,9 +34,7 @@ export default class Scrollbar {
       const cssKey = this.vertical ? 'height' : 'width';
       // console.log('d:', d);
       this.el.css(cssKey, `${d - 15}px`).show();
-      this.contentEl
-        .css(this.vertical ? 'width' : 'height', '1px')
-        .css(cssKey, `${contentDistance}px`);
+      this.contentEl.css(this.vertical ? 'width' : 'height', '1px').css(cssKey, `${contentDistance}px`);
     } else {
       this.el.hide();
     }

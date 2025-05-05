@@ -31,7 +31,7 @@ export const clearBr = (str = ''): string => {
   if (str.length === 0) return '';
   return str
     .replace(/\s+/g, '')
-    .replace(/<\/?.+?>/g, '')
+    .replace(/<[^>]*>/g, '')
     .replace(/[\r\n]/g, '');
 };
 

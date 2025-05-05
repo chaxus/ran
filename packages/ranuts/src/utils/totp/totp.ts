@@ -37,7 +37,7 @@ export class TOTP {
     shaObj.update(time);
     const hmac = shaObj.getHMAC('HEX');
     const offset = this.hex2dec(hmac.substring(hmac.length - 1));
-    let otp = (this.hex2dec(hmac.substr(offset * 2, 8)) & this.hex2dec('7fffffff')) + '';
+    let otp = (this.hex2dec(hmac.slice(offset * 2, offset * 2 + 8)) & this.hex2dec('7fffffff')) + '';
     const start = Math.max(otp.length - _options.digits, 0);
     otp = otp.substring(start, start + _options.digits);
     const expires = Math.ceil((_options.timestamp + 1) / (_options.period * 1000)) * _options.period * 1000;
@@ -57,7 +57,8 @@ export class TOTP {
     let bits = '';
     let hex = '';
 
-    const _base32 = base32.replace(/=+$/, '');
+    // Remove base32 padding characters more efficiently
+    const _base32 = base32.endsWith('=') ? base32.slice(0, base32.lastIndexOf('=')) : base32;
     for (let i = 0; i < _base32.length; i++) {
       const val = base32chars.indexOf(base32.charAt(i).toUpperCase());
       if (val === -1) throw new Error('Invalid base32 character in key');
@@ -65,7 +66,7 @@ export class TOTP {
     }
 
     for (let i = 0; i + 8 <= bits.length; i += 8) {
-      const chunk = bits.substr(i, 8);
+      const chunk = bits.slice(i, i + 8);
       hex = hex + this.leftpad(parseInt(chunk, 2).toString(16), 2, '0');
     }
     return hex;

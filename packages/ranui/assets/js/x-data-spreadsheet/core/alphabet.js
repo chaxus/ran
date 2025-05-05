@@ -1,6 +1,33 @@
 import './_.prototypes';
 
-const alphabets = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+const alphabets = [
+  'A',
+  'B',
+  'C',
+  'D',
+  'E',
+  'F',
+  'G',
+  'H',
+  'I',
+  'J',
+  'K',
+  'L',
+  'M',
+  'N',
+  'O',
+  'P',
+  'Q',
+  'R',
+  'S',
+  'T',
+  'U',
+  'V',
+  'W',
+  'X',
+  'Y',
+  'Z',
+];
 
 /** index number 2 letters
  * @example stringAt(26) ==> 'AA'
@@ -33,7 +60,7 @@ export function indexAt(str) {
   for (let i = 0; i < str.length - 1; i += 1) {
     const cindex = str.charCodeAt(i) - 65;
     const exponet = str.length - 1 - i;
-    ret += (alphabets.length ** exponet) + (alphabets.length * cindex);
+    ret += alphabets.length ** exponet + alphabets.length * cindex;
   }
   ret += str.charCodeAt(str.length - 1) - 65;
   return ret;

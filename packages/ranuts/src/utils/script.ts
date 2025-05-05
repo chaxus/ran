@@ -1,15 +1,16 @@
 /**
- * 动态插入script/link标签
+ * 动态插入 script/link 标签
  * @param {Array | String} url script/link的url队列
- * @param {Element} append 插入的父元素 默认body
- * @param {Function} callback 所有script onload回调 也可通过返回的promise执行回调
+ * @param {Element} append 插入的父元素 默认 body
+ * @param {Function} callback 所有 script onload 回调 也可通过返回的 promise 执行回调
  */
 export const scriptOnLoad = (urls: string[], append?: HTMLElement, callback?: Function): Promise<void> => {
   urls = Array.isArray(urls) ? urls : [urls];
   const array = urls.map((src) => {
-    const cssReg = /\w*.css$/;
+    // Check if the URL ends with .css using string operations instead of regex
+    const isCss = src.toLowerCase().endsWith('.css');
     let script: HTMLLinkElement | HTMLScriptElement;
-    if (cssReg.test(src)) {
+    if (isCss) {
       const link = document.createElement('link');
       link.type = 'text/css';
       link.rel = 'stylesheet';

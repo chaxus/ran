@@ -36,14 +36,11 @@ function buildMenuItem(item) {
       this.itemClick(item.key);
       this.hide();
     })
-    .children(
-      item.title(),
-      h('div', 'label').child(item.label || ''),
-    );
+    .children(item.title(), h('div', 'label').child(item.label || ''));
 }
 
 function buildMenu() {
-  return menuItems.map(it => buildMenuItem.call(this, it));
+  return menuItems.map((it) => buildMenuItem.call(this, it));
 }
 
 export default class ContextMenu {

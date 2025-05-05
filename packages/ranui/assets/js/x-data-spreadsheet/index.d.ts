@@ -42,21 +42,12 @@ export type CELL_EDITED = 'cell-edited';
 export type CellMerge = [number, number];
 
 export interface SpreadsheetEventHandler {
-  (
-    envt: CELL_SELECTED,
-    callback: (cell: Cell, rowIndex: number, colIndex: number) => void
-  ): void;
+  (envt: CELL_SELECTED, callback: (cell: Cell, rowIndex: number, colIndex: number) => void): void;
   (
     envt: CELLS_SELECTED,
-    callback: (
-      cell: Cell,
-      parameters: { sri: number; sci: number; eri: number; eci: number }
-    ) => void
+    callback: (cell: Cell, parameters: { sri: number; sci: number; eri: number; eci: number }) => void,
   ): void;
-  (
-    evnt: CELL_EDITED,
-    callback: (text: string, rowIndex: number, colIndex: number) => void
-  ): void;
+  (evnt: CELL_EDITED, callback: (text: string, rowIndex: number, colIndex: number) => void): void;
 }
 
 export interface ColProperties {
@@ -77,7 +68,7 @@ export interface CellData {
 export interface RowData {
   cells: {
     [key: number]: CellData;
-  }
+  };
 }
 
 /**
@@ -93,7 +84,7 @@ export interface SheetData {
     [key: number]: ColProperties;
   };
   rows?: {
-    [key: number]: RowData
+    [key: number]: RowData;
   };
 }
 
@@ -109,7 +100,7 @@ export interface CellStyle {
   valign?: 'top' | 'middle' | 'bottom';
   font?: {
     bold?: boolean;
-  }
+  };
   bgcolor?: string;
   textwrap?: boolean;
   color?: string;
@@ -120,13 +111,13 @@ export interface CellStyle {
     left?: string[];
   };
 }
-export interface Editor { }
-export interface Element { }
+export interface Editor {}
+export interface Element {}
 
-export interface Row { }
-export interface Table { }
-export interface Cell { }
-export interface Sheet { }
+export interface Row {}
+export interface Table {}
+export interface Cell {}
+export interface Sheet {}
 
 export default class Spreadsheet {
   constructor(container: string | HTMLElement, opts?: Options);
@@ -144,11 +135,7 @@ export default class Spreadsheet {
    * @param colIndex
    * @param sheetIndex
    */
-  cellStyle(
-    rowIndex: number,
-    colIndex: number,
-    sheetIndex: number
-  ): CellStyle;
+  cellStyle(rowIndex: number, colIndex: number, sheetIndex: number): CellStyle;
   /**
    * get/set cell text
    * @param rowIndex
@@ -156,12 +143,7 @@ export default class Spreadsheet {
    * @param text
    * @param sheetIndex
    */
-  cellText(
-    rowIndex: number,
-    colIndex: number,
-    text: string,
-    sheetIndex?: number
-  ): this;
+  cellText(rowIndex: number, colIndex: number, text: string, sheetIndex?: number): this;
   /**
    * remove current sheet
    */
@@ -191,5 +173,3 @@ export default class Spreadsheet {
 interface Window {
   x_spreadsheet(container: string | HTMLElement, opts?: Options): Spreadsheet;
 }
-
-
