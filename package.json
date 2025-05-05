@@ -22,7 +22,7 @@
   "homepage": "https://chaxus.github.io/ran/",
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@eslint/js": "^9.26.0",
     "@types/node": "^22.15.3",
