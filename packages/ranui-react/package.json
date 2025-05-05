@@ -69,18 +69,18 @@
     }
   },
   "devDependencies": {
-    "@babel/core": "^7.26.10",
-    "@babel/preset-env": "^7.26.9",
-    "@babel/preset-typescript": "^7.27.0",
-    "@originjs/vite-plugin-federation": "^1.4.0",
-    "@playwright/test": "^1.51.1",
-    "@types/react": "^19.1.0",
-    "@vitejs/plugin-react": "^4.3.4",
+    "@babel/core": "^7.27.1",
+    "@babel/preset-env": "^7.27.1",
+    "@babel/preset-typescript": "^7.27.1",
+    "@originjs/vite-plugin-federation": "^1.4.1",
+    "@playwright/test": "^1.52.0",
+    "@types/react": "^19.1.2",
+    "@vitejs/plugin-react": "^4.4.1",
     "prettier": "^3.5.3",
     "react-dom": "^19.1.0",
-    "tsx": "^4.19.3",
-    "typescript": "^5.8.2",
-    "vite": "^6.3.4"
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5"
   },
   "dependencies": {
     "ranui": "workspace:^",

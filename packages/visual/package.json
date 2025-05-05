@@ -23,8 +23,8 @@
   "author": "chaxus",
   "license": "ISC",
   "devDependencies": {
-    "typescript": "^5.8.2",
-    "vite": "^6.3.4"
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5"
   },
   "dependencies": {
     "ranuts": "workspace:^"
