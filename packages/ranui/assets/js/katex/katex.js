@@ -6925,7 +6925,7 @@
             Bmatrix: ['\\{', '\\}'],
             vmatrix: ['|', '|'],
             Vmatrix: ['\\Vert', '\\Vert'],
-          }[e.envName.replace('*', '')];
+          }[e.envName.replace(/\*/g, '')];
           let r = 'c';
           const o = { hskipBeforeAndAfter: !1, cols: [{ type: 'align', align: r }] };
           if ('*' === e.envName.charAt(e.envName.length - 1)) {
@@ -7354,11 +7354,11 @@
         if (null != e.leftDelim || null != e.rightDelim) {
           const t = [];
           if (null != e.leftDelim) {
-            const r = new gt.MathNode('mo', [new gt.TextNode(e.leftDelim.replace('\\', ''))]);
+            const r = new gt.MathNode('mo', [new gt.TextNode(e.leftDelim.replace(/\\/g, ''))]);
             r.setAttribute('fence', 'true'), t.push(r);
           }
           if ((t.push(r), null != e.rightDelim)) {
-            const r = new gt.MathNode('mo', [new gt.TextNode(e.rightDelim.replace('\\', ''))]);
+            const r = new gt.MathNode('mo', [new gt.TextNode(e.rightDelim.replace(/\\/g, ''))]);
             r.setAttribute('fence', 'true'), t.push(r);
           }
           return bt(t);

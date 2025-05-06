@@ -168,7 +168,21 @@
             preview.setAttribute('src', '');
             const file = files[0];
             const url = URL.createObjectURL(file);
-            preview.setAttribute('src', url);
+            // 验证和过滤 URL
+            const sanitizedUrl = (() => {
+              try {
+                const urlObj = new URL(url);
+                // 只允许 http 和 https 协议
+                if (!['http:', 'https:'].includes(urlObj.protocol)) {
+                  throw new Error('Invalid protocol');
+                }
+                return urlObj.href;
+              } catch (e) {
+                console.error('Invalid URL:', e);
+                return ''; // 返回空字符串或默认 URL
+              }
+            })();
+            preview.setAttribute('src', sanitizedUrl);
           }
         };
       };
