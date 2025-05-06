@@ -232,7 +232,7 @@ export default function processPptx(
         }
       }
     } else {
-      layoutFilename = RelationshipArray['attrs']['Target'].replace('../', 'ppt/');
+      layoutFilename = RelationshipArray['attrs']['Target'].replace(/\.\.\//g, 'ppt/');
     }
     // console.log(slideResObj);
     // Open slideLayoutXX.xml
@@ -266,7 +266,7 @@ export default function processPptx(
         }
       }
     } else {
-      masterFilename = RelationshipArray['attrs']['Target'].replace('../', 'ppt/');
+      masterFilename = RelationshipArray['attrs']['Target'].replace(/\.\.\//g, 'ppt/');
     }
     const slideMasterContent = await readXmlFile(zip, masterFilename);
     const slideMasterTextStyles = getTextByPathList(slideMasterContent, ['p:sldMaster', 'p:txStyles']);
@@ -282,7 +282,7 @@ export default function processPptx(
       for (let i = 0; i < RelationshipArray.length; i++) {
         switch (RelationshipArray[i]['attrs']['Type']) {
           case 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme':
-            themeFilename = RelationshipArray[i]['attrs']['Target'].replace('../', 'ppt/');
+            themeFilename = RelationshipArray[i]['attrs']['Target'].replace(/\.\.\//g, 'ppt/');
             break;
           default:
             masterResObj[RelationshipArray[i]['attrs']['Id']] = {
@@ -295,7 +295,7 @@ export default function processPptx(
         }
       }
     } else {
-      themeFilename = RelationshipArray['attrs']['Target'].replace('../', 'ppt/');
+      themeFilename = RelationshipArray['attrs']['Target'].replace(/\.\.\//g, 'ppt/');
     }
 
     if (themeFilename !== undefined) {

@@ -121,7 +121,7 @@
                       n = t
                         .toMML(this.root)
                         .replace(/\n */g, '')
-                        .replace(/<!--.*?-->/g, ''),
+                        .replace(/<!--[\s\S]*?-->/g, ''),
                       o = r.firstChild(r.body(r.parse(n, 'text/html'))),
                       i = r.node(
                         'mjx-assistive-mml',
@@ -17307,7 +17307,7 @@
                   s = -1,
                   a = t.i,
                   l = o.length,
-                  c = n ? new RegExp('^\\\\end\\s*\\{'.concat(n.replace(/\*/, '\\*'), '\\}')) : null;
+                  c = n ? new RegExp('^\\\\end\\s*\\{'.concat(n.replace(/\*/g, '\\*'), '\\}')) : null;
                 a < l;
 
               ) {

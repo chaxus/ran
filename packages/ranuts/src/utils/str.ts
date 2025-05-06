@@ -23,7 +23,7 @@ export const strParse = (
   return result;
 };
 /**
- * @description: 清除空格和换行
+ * @description: 清除空格和换行，并安全地移除 HTML 标签
  * @param {*} str
  * @return {*}
  */
@@ -31,7 +31,10 @@ export const clearBr = (str = ''): string => {
   if (str.length === 0) return '';
   return str
     .replace(/\s+/g, '')
-    .replace(/<[^>]*>/g, '')
+    .replace(/<!--[\s\S]*?-->/g, '') // 移除 HTML 注释
+    .replace(/&lt;/g, '<') // 处理 HTML 实体
+    .replace(/&gt;/g, '>')
+    .replace(/<[^>]+>/g, '') // 移除 HTML 标签
     .replace(/[\r\n]/g, '');
 };
 
