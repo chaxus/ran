@@ -13,6 +13,7 @@ export interface ChapterInfo {
   title: string;
   startIndex: number;
   endIndex: number;
+  children?: ChapterInfo[];
 }
 
 export interface TrainingData {
@@ -43,26 +44,6 @@ export class ChapterDetector {
     ['S-TITLE', 4], // 单个词的章节标题
   ]);
 
-  private readonly dbName = 'ChapterDetectorDB';
-  private readonly storeName = 'models';
-  private readonly modelKey = 'latest';
-
-  private async initDB(): Promise<IDBDatabase> {
-    return new Promise((resolve, reject) => {
-      const request = indexedDB.open(this.dbName, 1);
-
-      request.onerror = () => reject(request.error);
-      request.onsuccess = () => resolve(request.result);
-
-      request.onupgradeneeded = (event) => {
-        const db = (event.target as IDBOpenDBRequest).result;
-        if (!db.objectStoreNames.contains(this.storeName)) {
-          db.createObjectStore(this.storeName);
-        }
-      };
-    });
-  }
-
   private buildVocabulary(content: string) {
     // 从文本中构建词汇表
     const words = content.toLowerCase().split(/\s+/);
@@ -91,7 +72,7 @@ export class ChapterDetector {
     const words = text.toLowerCase().split(/\s+/);
     const labels: string[] = new Array(words.length).fill('O');
 
-    chapters.forEach((chapter) => {
+    const processChapter = (chapter: ChapterInfo) => {
       const chapterWords = chapter.title.toLowerCase().split(/\s+/);
       const startIndex = chapter.startIndex;
 
@@ -110,7 +91,14 @@ export class ChapterDetector {
           }
         });
       }
-    });
+
+      // 处理子章节
+      if (chapter.children?.length) {
+        chapter.children.forEach(processChapter);
+      }
+    };
+
+    chapters.forEach(processChapter);
 
     return labels;
   }
@@ -336,6 +324,7 @@ Epoch ${epoch + 1}/${epochs} completed:
       const chapters: ChapterInfo[] = [];
       let currentChapter: ChapterInfo | null = null;
       let currentTitleWords: string[] = [];
+      const chapterStack: ChapterInfo[] = [];
 
       for (let i = 0; i < lines.length; i++) {
         const line = lines[i].trim();
@@ -361,14 +350,24 @@ Epoch ${epoch + 1}/${epochs} completed:
             // 开始新的章节标题
             if (currentChapter) {
               currentChapter.endIndex = i - 1;
-              chapters.push(currentChapter);
+              if (chapterStack.length > 0) {
+                const parent = chapterStack[chapterStack.length - 1];
+                if (!parent.children) {
+                  parent.children = [];
+                }
+                parent.children.push(currentChapter);
+              } else {
+                chapters.push(currentChapter);
+              }
             }
             currentTitleWords = [word];
             currentChapter = {
               title: word,
               startIndex: i,
               endIndex: -1,
+              children: [],
             };
+            chapterStack.push(currentChapter);
           } else if (predictedLabel === 'I-TITLE' && currentChapter) {
             // 继续当前章节标题
             currentTitleWords.push(word);
@@ -377,18 +376,36 @@ Epoch ${epoch + 1}/${epochs} completed:
             // 结束当前章节标题
             currentTitleWords.push(word);
             currentChapter.title = currentTitleWords.join(' ');
+            chapterStack.pop();
           } else if (predictedLabel === 'S-TITLE') {
             // 单个词的章节标题
             if (currentChapter) {
               currentChapter.endIndex = i - 1;
-              chapters.push(currentChapter);
+              if (chapterStack.length > 0) {
+                const parent = chapterStack[chapterStack.length - 1];
+                if (!parent.children) {
+                  parent.children = [];
+                }
+                parent.children.push(currentChapter);
+              } else {
+                chapters.push(currentChapter);
+              }
             }
             currentChapter = {
               title: word,
               startIndex: i,
               endIndex: i,
+              children: [],
             };
-            chapters.push(currentChapter);
+            if (chapterStack.length > 0) {
+              const parent = chapterStack[chapterStack.length - 1];
+              if (!parent.children) {
+                parent.children = [];
+              }
+              parent.children.push(currentChapter);
+            } else {
+              chapters.push(currentChapter);
+            }
             currentChapter = null;
           }
 
@@ -401,7 +418,15 @@ Epoch ${epoch + 1}/${epochs} completed:
       // 处理最后一章
       if (currentChapter) {
         currentChapter.endIndex = lines.length - 1;
-        chapters.push(currentChapter);
+        if (chapterStack.length > 0) {
+          const parent = chapterStack[chapterStack.length - 1];
+          if (!parent.children) {
+            parent.children = [];
+          }
+          parent.children.push(currentChapter);
+        } else {
+          chapters.push(currentChapter);
+        }
       }
 
       results.push(chapters);
