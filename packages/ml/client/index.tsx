@@ -1,6 +1,5 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
 import * as tf from '@tensorflow/tfjs';
 import { Emotion } from './components/Emotion';
 
@@ -28,8 +27,6 @@ const root = createRoot(container);
 
 root.render(
   <>
-    <BrowserRouter>
       <App />
-    </BrowserRouter>
   </>,
 );
