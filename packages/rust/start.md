@@ -26,7 +26,7 @@ Rust 中的变量可以分为可变变量和不可变变量，通俗来说，就
 fn main() {
     // x 为可变变量，mut 即 mutable 的意思，该修饰符修饰的变量允许改变
     let mut x = 1;
-    println!("x = {}", x); 
+    println!("x = {}", x);
     x = 2;
     println!("x = {}", x);
 
@@ -34,8 +34,7 @@ fn main() {
     let y = 3;
     println!("y = {}", y);
     // 对不可变变量 y 重新赋值，Rust 编译器会给出 cannot assign twice to immutable variable y 的错误提示
-    y = 4; 
+    y = 4;
     println!("y = {}", y);
 }
 ```
-
