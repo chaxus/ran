@@ -1,6 +1,6 @@
-import 'ranui/popover';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { EVENT_NAME, syncHook } from '@/lib/subscribe';
+import 'ranui/popover';
 
 export interface PopoverProps {
   children: React.ReactNode;

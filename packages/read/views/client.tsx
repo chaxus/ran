@@ -6,7 +6,7 @@ const container = document.getElementById('app')!;
 
 hydrateRoot(
   container,
-  <StaticRouter location="/">
+  <StaticRouter location="/weread/">
     <App />
   </StaticRouter>,
 );

@@ -2,45 +2,45 @@
     "name": "weread", 
     "short_name": "weread",
     "id":"weread",
-    "start_url": "/",
+    "start_url": "/weread/",
     "display": "standalone", 
     "background_color": "#fff",
     "description": "A Troupe of little vagrants of the world, leave your footprints in my words .",
     "icons": [
       {
-        "src": "/icon_48.svg",
+        "src": "/weread/icon_48.svg",
         "sizes": "48x48",
         "type": "image/svg+xml"
       },
       {
-        "src": "/icon_72.svg",
+        "src": "/weread/icon_72.svg",
         "sizes": "72x72",
         "type": "image/svg+xml"
       },
       {
-        "src": "/icon_96.svg",
+        "src": "/weread/icon_96.svg",
         "sizes": "96x96",
         "type": "image/svg+xml"
       },
       {
-        "src": "/icon_144.svg",
+        "src": "/weread/icon_144.svg",
         "sizes": "144x144",
         "type": "image/svg+xml"
       },
       {
-        "src": "/icon_168.svg",
+        "src": "/weread/icon_168.svg",
         "sizes": "168x168",
         "type": "image/svg+xml"
       },
       {
-        "src": "/icon_192.svg",
+        "src": "/weread/icon_192.svg",
         "sizes": "192x192",
         "type": "image/svg+xml"
       }
     ],
     "screenshots" : [
       {
-        "src": "/screenshots_2560x1440.jpg",
+        "src": "/weread/screenshots_2560x1440.jpg",
         "sizes": "2560x1440",
         "type": "image/jpg",
         "form_factor": "wide",

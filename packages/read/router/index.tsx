@@ -5,7 +5,7 @@ import { Loading } from '@/components/Loading/index';
 import { Home } from '@/pages/home/index';
 import { BookDetail } from '@/pages/book-detail/index';
 
-export const base = '';
+export const base = '/weread';
 // export const base = '/packages/read/dist/client'
 
 export enum ROUTE_PATH {

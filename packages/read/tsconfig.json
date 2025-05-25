@@ -29,7 +29,8 @@
       "@/lib/*": ["./lib/*"],
       "@/store/*": ["./store/*"],
       "@/assets/*": ["./assets/*"],
-      "@/pages/*": ["./pages/*"]
+      "@/pages/*": ["./pages/*"],
+      "@/locales/*": ["./locales/*"]
     }
   }
 }

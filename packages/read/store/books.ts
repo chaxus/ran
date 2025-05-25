@@ -34,27 +34,45 @@ export const addBook = (data: {
 }): Promise<IDBResult<BookInfo>> => {
   const { title = '', author = '', image = '', content, encoding = '' } = data;
   const hash = CryptoJS.MD5(typeof content === 'string' ? content : CryptoJS.lib.WordArray.create(content)).toString();
-  const createTime = Date.now();
-  const bookInfo: BookInfo = {
-    id: `${hash}`,
-    title,
-    author,
-    image,
-    content,
-    encoding,
-    createTime,
-    modifyTime: Date.now(),
-  };
 
-  return performWorkerOperation<BookInfo>('add', { bookInfo });
+  // 先检查是否已存在相同 hash 的书籍
+  return getBookById<BookInfo>(hash).then((res) => {
+    if (!res.error && res.data) {
+      // 如果书籍已存在，直接返回已存在的书籍信息
+      return {
+        status: 'success',
+        code: 0,
+        data: res.data,
+        error: false,
+        message: 'Book already exists',
+      };
+    }
+
+    // 如果书籍不存在，则添加新书
+    const createTime = Date.now();
+    const bookInfo: BookInfo = {
+      id: `${hash}`,
+      title,
+      author,
+      image,
+      content,
+      encoding,
+      createTime,
+      modifyTime: Date.now(),
+    };
+    return performWorkerOperation<BookInfo>('add', { bookInfo });
+  });
 };
 
 // 创建 worker
+let dbWorker: Worker | null = null;
 const createDBWorker = () => {
-  const worker = new Worker(new URL('../workers/dbWorker.ts', import.meta.url), {
-    type: 'module',
-  });
-  return worker;
+  if (!dbWorker) {
+    dbWorker = new Worker(new URL('../workers/dbWorker.ts', import.meta.url), {
+      type: 'module',
+    });
+  }
+  return dbWorker;
 };
 
 // 通用的 worker 操作函数
@@ -72,12 +90,17 @@ const performWorkerOperation = <T = unknown>(type: string, data: any = {}): Prom
     }
 
     const worker = createDBWorker();
-    worker.onmessage = (e) => {
-      resolve(e.data);
-      worker.terminate();
+    const operationId = `${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
+
+    const messageHandler = (e: MessageEvent) => {
+      if (e.data.operationId === operationId) {
+        worker.removeEventListener('message', messageHandler);
+        resolve(e.data);
+      }
     };
 
-    worker.onerror = (error) => {
+    const errorHandler = (error: ErrorEvent) => {
+      worker.removeEventListener('error', errorHandler);
       resolve({
         status: 'error',
         code: 1,
@@ -85,14 +108,17 @@ const performWorkerOperation = <T = unknown>(type: string, data: any = {}): Prom
         error: true,
         message: error.message,
       });
-      worker.terminate();
     };
+
+    worker.addEventListener('message', messageHandler);
+    worker.addEventListener('error', errorHandler);
 
     worker.postMessage({
       type,
       data,
       dbName: db.database.name,
       storeName: STORE_NAME_BOOKS_INFO_KEY,
+      operationId,
     });
   });
 };

@@ -7,7 +7,15 @@ import camelXiangzi from '@/assets/books/camelXiangzi/camelXiangzi.txt?url';
 import threeKingdoms from '@/assets/books/theThreeKingdoms/theThreeKingdoms.txt?url';
 // 国富论
 import theWealthOfNations from '@/assets/books/theWealthOfNations/theWealthOfNations.txt?url';
-
+// 巴黎圣母院
+import theHunchbackOfNotreDame from '@/assets/books/TheHunchbackofNotre-Dame/TheHunchbackofNotre-Dame.txt?url';
+// 简爱
+import janeEyre from '@/assets/books/JaneEyre/JaneEyre.txt?url';
+// 瓦尔登湖
+import walden from '@/assets/books/walden/walden.txt?url';
+// 白雪公主
+import snowWhite from '@/assets/books/snowWhite/snowWhite.txt?url';
+import { t } from '@/locales';
 export interface EnBook {
   url: string;
   image?: string;
@@ -20,31 +28,59 @@ export const BOOKS_ADD_BY_DEFAULT = 'BOOKS_ADD_BY_DEFAULT';
 
 export const ensampleConfigs: EnBook[] = [
   {
-    title: '小王子',
+    title: t('books-princekin'),
     url: princekin,
     image: princekinIcon,
-    author: '[法] 安托万·德·圣埃克苏佩里',
+    author: t('books-princekin-author'),
     authorDate: '1900-1944',
   },
   {
-    title: '骆驼祥子',
+    title: t('books-camelXiangzi'),
     url: camelXiangzi,
     image: '',
-    author: '老舍（舒庆春）',
+    author: t('books-camelXiangzi-author'),
     authorDate: '1899-1966',
   },
   {
-    title: '三国演义',
+    title: t('books-theThreeKingdoms'),
     url: threeKingdoms,
     image: '',
-    author: '罗贯中',
+    author: t('books-theThreeKingdoms-author'),
     authorDate: '1330-1400',
   },
   {
-    title: '国富论',
+    title: t('books-theWealthOfNations'),
     url: theWealthOfNations,
     image: '',
-    author: '亚当·斯密',
+    author: t('books-theWealthOfNations-author'),
     authorDate: '1723-1790',
+  },
+  {
+    title: t('books-theHunchbackOfNotreDame'),
+    url: theHunchbackOfNotreDame,
+    image: '',
+    author: t('books-theHunchbackOfNotreDame-author'),
+    authorDate: '1802-1885',
+  },
+  {
+    title: t('books-janeEyre'),
+    url: janeEyre,
+    image: '',
+    author: t('books-janeEyre-author'),
+    authorDate: '1816-1855',
+  },
+  {
+    title: t('books-walden'),
+    url: walden,
+    image: '',
+    author: t('books-walden-author'),
+    authorDate: '1817-1862',
+  },
+  {
+    title: t('books-snowWhite'),
+    url: snowWhite,
+    image: '',
+    author: t('books-snowWhite-author'),
+    authorDate: '1789-1863',
   },
 ];

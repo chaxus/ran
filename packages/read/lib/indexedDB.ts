@@ -65,9 +65,13 @@ export class WebDB {
           });
         }
       };
-      request.onupgradeneeded = () => {
+      request.onupgradeneeded = (_event) => {
         this.database = request.result;
         this.version = this.database.version;
+        // 在这里创建 ObjectStore
+        if (this.database && !this.database.objectStoreNames.contains('books_info')) {
+          this.database.createObjectStore('books_info', { keyPath: 'id' });
+        }
         resolve({
           status: 'success',
           data: {

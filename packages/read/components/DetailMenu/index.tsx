@@ -4,7 +4,7 @@ import { trim } from '@/lib/transformText';
 import type { TextSyntaxTree } from '@/lib/transformText';
 import { Catalogue } from '@/components/Catalogue';
 import { getTextSyntaxTree, setPageNum } from '@/lib/subscribe';
-
+import { t } from '@/locales';
 const inputStyle = {
   '--ran-input-border-radius': '2rem',
   '--ran-input-content-border-radius': '2rem',
@@ -95,7 +95,7 @@ export const BookDetailMenu = (): React.JSX.Element => {
       }}
     >
       <div className="px-6 py-7">
-        <r-input className="h-10" icon="search" style={inputStyle} placeholder="搜索" ref={searchRef}></r-input>
+        <r-input className="h-10" icon="search" style={inputStyle} placeholder={t('search')} ref={searchRef}></r-input>
       </div>
       {!showSearchResult ? (
         <Catalogue />
@@ -128,7 +128,7 @@ export const BookDetailMenu = (): React.JSX.Element => {
             <div className="h-full">
               <div className="flex flex-col items-center justify-center h-full">
                 <r-icon name="without-content" style={ICON_STYLE}></r-icon>
-                <div className="text-text-color-2 font-normal text-base">无结果</div>
+                <div className="text-text-color-2 font-normal text-base">{t('no_result')}</div>
               </div>
             </div>
           )}

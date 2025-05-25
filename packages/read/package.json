@@ -1,32 +1,44 @@
 {
-  "name": "read",
+  "name": "weread",
   "version": "1.0.0",
-  "description": "",
+  "description": "weread web",
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "pre": "sh ./bin/preinstall.sh",
     "dev": "vite --host --force --mode dev",
     "build:client": "vite build --outDir dist/client",
     "build:server": "vite build --outDir dist/server --ssr ./views/server.tsx",
     "build": "sh ./bin/build.sh",
-    "tsc": "tsc --noEmit"
+    "tsc": "tsc --noEmit",
+    "format": "prettier --write .",
+    "lint": "eslint --cache ."
   },
   "engines": {
     "node": ">=23.10.0"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
+    "@eslint/js": "^9.26.0",
     "@tailwindcss/oxide-darwin-arm64": "^4.1.5",
     "@tailwindcss/postcss": "^4.1.5",
     "@tailwindcss/vite": "^4.1.5",
     "@types/crypto-js": "^4.2.2",
+    "@types/node": "^22.15.3",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.3",
+    "@typescript-eslint/parser": "^8.31.1",
     "@vitejs/plugin-react": "^4.4.1",
     "autoprefixer": "^10.4.21",
+    "eslint": "^9.26.0",
+    "eslint-plugin-import-x": "^4.11.0",
+    "eslint-plugin-n": "^17.17.0",
+    "eslint-plugin-regexp": "^2.7.0",
+    "globals": "^16.0.0",
     "postcss": "^8.5.3",
+    "prettier": "^3.5.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.5.3",
@@ -34,13 +46,15 @@
     "tailwindcss": "^4.1.5",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3",
+    "typescript-eslint": "^8.31.1",
     "vite": "^6.3.5"
   },
   "dependencies": {
     "@khmyznikov/pwa-install": "^0.5.5",
     "crypto-js": "^4.2.0",
     "jschardet": "^3.1.4",
-    "ranui": "workspace:^",
-    "ranuts": "workspace:^"
+    "lit": "^3.3.0",
+    "ranui": "0.1.10-alpha.23",
+    "ranuts": "0.1.0-alpha.18"
   }
 }

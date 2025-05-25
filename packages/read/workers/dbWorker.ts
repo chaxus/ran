@@ -1,9 +1,14 @@
 import { getMatchingSentences } from 'ranuts/utils';
 import { arrayBufferToString } from '@/lib/transformText';
 
+interface ExecuteOptions<T = unknown> {
+  store: IDBObjectStore;
+  data: T;
+  operationId: string;
+}
 // 定义操作策略接口
 interface DBStrategy {
-  execute(store: IDBObjectStore, data: any): void;
+  execute(options: ExecuteOptions): void;
 }
 
 // 定义操作类型
@@ -11,7 +16,11 @@ type OperationType = 'search' | 'add' | 'getAll' | 'get';
 
 // 搜索策略
 class SearchStrategy implements DBStrategy {
-  execute(store: IDBObjectStore, data: { keyword: string; searchType: 'title' | 'author' | 'content' }): void {
+  execute({
+    store,
+    data,
+    operationId,
+  }: ExecuteOptions<{ keyword: string; searchType: 'title' | 'author' | 'content' }>): void {
     const { keyword, searchType } = data;
     const request = store.openCursor();
     const results: any[] = [];
@@ -62,6 +71,7 @@ class SearchStrategy implements DBStrategy {
           code: 0,
           data: results,
           error: false,
+          operationId,
         });
       }
     };
@@ -73,6 +83,7 @@ class SearchStrategy implements DBStrategy {
         data: [],
         error: true,
         message: 'Search failed',
+        operationId,
       });
     };
   }
@@ -80,24 +91,35 @@ class SearchStrategy implements DBStrategy {
 
 // 添加策略
 class AddStrategy implements DBStrategy {
-  execute(store: IDBObjectStore, data: { bookInfo: any }): void {
+  execute({ store, data, operationId }: ExecuteOptions<{ bookInfo: any }>): void {
     const { bookInfo } = data;
     const request = store.add(bookInfo);
-
-    request.onsuccess = () => {
+    const onsuccess = () => {
       self.postMessage({
         status: 'success',
         code: 0,
         data: bookInfo,
         error: false,
+        operationId,
       });
     };
+    const onerror = () => {
+      self.postMessage({
+        status: 'error',
+        code: 1,
+        data: null,
+        error: true,
+        operationId,
+      });
+    };
+    request.addEventListener('success', onsuccess);
+    request.addEventListener('error', onerror);
   }
 }
 
 // 获取所有策略
 class GetAllStrategy implements DBStrategy {
-  execute(store: IDBObjectStore): void {
+  execute({ store, operationId }: ExecuteOptions): void {
     const request = store.getAll();
     request.onsuccess = () => {
       self.postMessage({
@@ -105,6 +127,7 @@ class GetAllStrategy implements DBStrategy {
         code: 0,
         data: request.result,
         error: false,
+        operationId,
       });
     };
   }
@@ -112,7 +135,7 @@ class GetAllStrategy implements DBStrategy {
 
 // 获取单个策略
 class GetStrategy implements DBStrategy {
-  execute(store: IDBObjectStore, data: { key: string }): void {
+  execute({ store, data, operationId }: ExecuteOptions<{ key: string }>): void {
     const { key } = data;
     const request = store.get(key);
     request.onsuccess = () => {
@@ -121,6 +144,16 @@ class GetStrategy implements DBStrategy {
         code: 0,
         data: request.result,
         error: false,
+        operationId,
+      });
+    };
+    request.onerror = () => {
+      self.postMessage({
+        status: 'error',
+        code: 1,
+        data: null,
+        error: true,
+        operationId,
       });
     };
   }
@@ -134,66 +167,78 @@ const strategyFactory: Record<OperationType, DBStrategy> = {
   get: new GetStrategy(),
 };
 
+// 数据库连接管理
+let db: IDBDatabase | null = null;
+let dbPromise: Promise<IDBDatabase> | null = null;
+
+const getDatabase = (dbName: string): Promise<IDBDatabase> => {
+  if (db) {
+    return Promise.resolve(db);
+  }
+
+  if (dbPromise) {
+    return dbPromise;
+  }
+
+  dbPromise = new Promise((resolve, reject) => {
+    const request = indexedDB.open(dbName);
+
+    request.onerror = () => {
+      dbPromise = null;
+      reject(request.error);
+    };
+
+    request.onsuccess = () => {
+      db = request.result;
+      dbPromise = null;
+      resolve(db);
+    };
+
+    request.onupgradeneeded = (event) => {
+      const db = (event.target as IDBOpenDBRequest).result;
+      const transaction = (event.target as IDBOpenDBRequest).transaction;
+      if (transaction) {
+        transaction.oncomplete = () => {
+          resolve(db);
+        };
+      } else {
+        resolve(db);
+      }
+    };
+  });
+
+  return dbPromise;
+};
+
 // 监听主线程的消息
 self.onmessage = async (e) => {
-  const { type, data, dbName, storeName } = e.data as {
+  const { type, data, dbName, storeName, operationId } = e.data as {
     type: OperationType;
     data: any;
     dbName: string;
     storeName: string;
+    operationId: string;
   };
 
   try {
-    // 打开数据库
-    const request = indexedDB.open(dbName);
+    const database = await getDatabase(dbName);
+    const transaction = database.transaction(storeName, type === 'add' ? 'readwrite' : 'readonly');
+    const store = transaction.objectStore(storeName);
 
-    request.onerror = () => {
+    // 获取对应的策略并执行
+    const strategy = strategyFactory[type];
+    if (strategy) {
+      strategy.execute({ store, data, operationId });
+    } else {
       self.postMessage({
         status: 'error',
         code: 1,
         data: null,
         error: true,
-        message: 'Database not initialized',
+        message: 'Unknown operation type',
+        operationId,
       });
-    };
-
-    request.onsuccess = (event) => {
-      const db = (event.target as IDBOpenDBRequest).result;
-      const transaction = db.transaction(storeName, type === 'add' ? 'readwrite' : 'readonly');
-      const store = transaction.objectStore(storeName);
-
-      // 发送进行中状态
-      // self.postMessage({
-      //     status: 'pending',
-      //     code: 0,
-      //     data: null,
-      //     error: false,
-      //     progress: 0
-      // });
-      // 获取对应的策略并执行
-      const strategy = strategyFactory[type];
-      if (strategy) {
-        strategy.execute(store, data);
-      } else {
-        self.postMessage({
-          status: 'error',
-          code: 1,
-          data: null,
-          error: true,
-          message: 'Unknown operation type',
-        });
-      }
-
-      request.onerror = () => {
-        self.postMessage({
-          status: 'error',
-          code: 1,
-          data: null,
-          error: true,
-          message: 'Operation failed',
-        });
-      };
-    };
+    }
   } catch (error) {
     self.postMessage({
       status: 'error',
@@ -201,6 +246,7 @@ self.onmessage = async (e) => {
       data: null,
       error: true,
       message: error.message,
+      operationId,
     });
   }
 };

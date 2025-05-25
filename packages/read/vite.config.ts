@@ -8,21 +8,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default defineConfig({
-  base: '/',
-  plugins: [
-    react(),
-    {
-      name: 'manifest-json-middleware',
-      configureServer(server) {
-        server.middlewares.use((req, res, next) => {
-          if (req.url?.endsWith('manifest.json')) {
-            res.setHeader('Content-Type', 'application/manifest+json');
-          }
-          next();
-        });
-      },
-    },
-  ],
+  base: '/weread',
+  plugins: [react()],
   build: {
     target: 'esnext',
     manifest: true,
@@ -42,6 +29,7 @@ export default defineConfig({
       '@/types': resolve(__dirname, '/types'),
       '@/styles': resolve(__dirname, '/styles'),
       '@/pages': resolve(__dirname, '/pages'),
+      '@/locales': resolve(__dirname, '/locales'),
     },
     extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json'],
   },
