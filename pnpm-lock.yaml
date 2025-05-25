@@ -119,10 +119,10 @@ importers:
         version: link:../ranuts
       react:
         specifier: '>=16.8.0 <19.0.0'
-        version: 19.1.0
+        version: 18.3.1
       vitepress:
         specifier: ^1.6.3
-        version: 1.6.3(@algolia/client-search@5.24.0)(@types/node@22.15.21)(@types/react@19.1.5)(axios@1.9.0)(idb-keyval@6.2.1)(less@4.3.0)(lightningcss@1.30.1)(postcss@8.5.3)(react-dom@18.3.1(react@19.1.0))(react@19.1.0)(sass-embedded@1.89.0)(search-insights@2.17.3)(terser@5.39.2)(typescript@5.8.3)
+        version: 1.6.3(@algolia/client-search@5.24.0)(@types/node@22.15.21)(@types/react@19.1.5)(axios@1.9.0)(idb-keyval@6.2.1)(less@4.3.0)(lightningcss@1.30.1)(postcss@8.5.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass-embedded@1.89.0)(search-insights@2.17.3)(terser@5.39.2)(typescript@5.8.3)
       vue:
         specifier: ^3.5.13
         version: 3.5.14(typescript@5.8.3)
@@ -330,7 +330,7 @@ importers:
         version: 3.5.3
       rollup-plugin-visualizer:
         specifier: ^5.14.0
-        version: 6.0.0(rollup@4.41.1)
+        version: 5.14.0(rollup@4.41.1)
       svgo:
         specifier: ^3.3.2
         version: 3.3.2
@@ -398,6 +398,9 @@ importers:
       earcut:
         specifier: ^3.0.1
         version: 3.0.1
+      jschardet:
+        specifier: ^3.1.4
+        version: 3.1.4
       magic-string:
         specifier: ^0.30.17
         version: 0.30.17
@@ -448,11 +451,11 @@ importers:
         specifier: ^3.3.0
         version: 3.3.0
       ranui:
-        specifier: 0.1.10-alpha.23
-        version: 0.1.10-alpha.23
+        specifier: workspace:*
+        version: link:../ranui
       ranuts:
-        specifier: 0.1.0-alpha.18
-        version: 0.1.0-alpha.18
+        specifier: workspace:*
+        version: link:../ranuts
     devDependencies:
       '@eslint/js':
         specifier: ^9.26.0
@@ -2608,7 +2611,6 @@ packages:
   '@tailwindcss/oxide-darwin-arm64@4.1.7':
     resolution: {integrity: sha512-81jUw9To7fimGGkuJ2W5h3/oGonTOZKZ8C2ghm/TTxbwvfSiFSDPd6/A/KE2N7Jp4mv3Ps9OFqg2fEKgZFfsvg==}
     engines: {node: '>= 10'}
-    cpu: [arm64]
     os: [darwin]
 
   '@tailwindcss/oxide-darwin-x64@4.1.7':
@@ -3750,10 +3752,6 @@ packages:
     resolution: {integrity: sha512-9q/rDEGSb/Qsvv2qvzIzdluL5k7AaJOTrw23z9reQthrbF7is4CtlT0DXyO1oei2DCp4uojjzQ7igaSHp1kAEQ==}
     engines: {node: '>=0.2.0'}
 
-  bundle-name@4.1.0:
-    resolution: {integrity: sha512-tjwM5exMg6BGRI+kNmTntNsvdZS1X8BFYS6tnJ2hdH0kVxM6/eVZ2xy+FqStSWvYmtfFMDLIxurorHwDKfDz5Q==}
-    engines: {node: '>=18'}
-
   bundle-require@5.1.0:
     resolution: {integrity: sha512-3WrrOuZiyaaZPWiEt4G3+IffISVC9HYlWueJEBWED4ZH4aIAC2PnkdnuRrR94M+w6yGWn4AglWtJtBI8YqvgoA==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
@@ -4300,14 +4298,6 @@ packages:
   deep-is@0.1.4:
     resolution: {integrity: sha512-oIPzksmTg4/MriiaYGO+okXDT7ztn/w3Eptv/+gSIdMdKsJo0u4CfYNFJPy+4SKMuCqGw2wxnA+URMg3t8a/bQ==}
 
-  default-browser-id@5.0.0:
-    resolution: {integrity: sha512-A6p/pu/6fyBcA1TRz/GqWYPViplrftcW2gZC9q79ngNCKAeR/X3gcEdXQHl4KNXV+3wgIJ1CPkJQ3IHM6lcsyA==}
-    engines: {node: '>=18'}
-
-  default-browser@5.2.1:
-    resolution: {integrity: sha512-WY/3TUME0x3KPYdRRxEJJvXRHV4PyPoUsxtZa78lwItwRQRHhd2U9xOscaT/YTf8uCXIAjeJOFBVEh/7FtD8Xg==}
-    engines: {node: '>=18'}
-
   defer-to-connect@1.1.3:
     resolution: {integrity: sha512-0ISdNousHvZT2EiFlZeZAHBUvSxmKswVCEf8hW7KWgG4a8MVEu/3Vb6uWYozkjylyCxe0JBIiRB1jV45S70WVQ==}
 
@@ -4315,9 +4305,9 @@ packages:
     resolution: {integrity: sha512-rBMvIzlpA8v6E+SJZoo++HAYqsLrkg7MSfIinMPFhmkorw7X+dOXVJQs+QT69zGkzMyfDnIMN2Wid1+NbL3T+A==}
     engines: {node: '>= 0.4'}
 
-  define-lazy-prop@3.0.0:
-    resolution: {integrity: sha512-N+MeXYoqr3pOgn8xfyRPREN7gHakLYjhsHhWGT3fWAiL4IkAt0iDw14QiiEm2bE30c5XX5q0FtAA3CK5f9/BUg==}
-    engines: {node: '>=12'}
+  define-lazy-prop@2.0.0:
+    resolution: {integrity: sha512-Ds09qNh8yw3khSjiJjiUInaGX9xlqZDY7JVryGxdxV7NPeuqQfplOpQ66yJFZut3jLa5zOwkXw1g9EI2uKh4Og==}
+    engines: {node: '>=8'}
 
   define-property@0.2.5:
     resolution: {integrity: sha512-Rr7ADjQZenceVOAKop6ALkkRAmH1A4Gx9hV/7ZujPUN2rkATqFO0JZLZInbAjpZYoJ1gUx8MRMQVkYemcbMSTA==}
@@ -5268,9 +5258,9 @@ packages:
     resolution: {integrity: sha512-JCNNGbwWZEVaSPtS45mdtrneRWJFp07LLmykxeFV5F6oBvNF8vHSfJuJgoT472pSfk+Mf8VnlrspaFBHWM8JAw==}
     engines: {node: '>= 0.4'}
 
-  is-docker@3.0.0:
-    resolution: {integrity: sha512-eljcgEDlEns/7AXFosB5K/2nCM4P7FQPkGc/DWLy5rmFEWvZayGrik1d9/QIY5nJ4f9YsVvBkA6kJpHn9rISdQ==}
-    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+  is-docker@2.2.1:
+    resolution: {integrity: sha512-F+i2BKsFrH66iaUFc0woD8sLy8getkwTwtOBjvs56Cx4CgJDeKQeqfz8wAYiSb8JOprWhHH5p77PbmYCvvUuXQ==}
+    engines: {node: '>=8'}
     hasBin: true
 
   is-electron@2.2.2:
@@ -5314,11 +5304,6 @@ packages:
   is-hex-prefixed@1.0.0:
     resolution: {integrity: sha512-WvtOiug1VFrE9v1Cydwm+FnXd3+w9GaeVUss5W4v/SLy3UW00vP+6iNF2SdnfiBoLy4bTqVdkftNGTUeOFVsbA==}
     engines: {node: '>=6.5.0', npm: '>=3'}
-
-  is-inside-container@1.0.0:
-    resolution: {integrity: sha512-KIYLCCJghfHZxqjYBE7rEy0OBuTd5xCHS7tHVgvCLkx7StIoaxwNW3hCALgEUjFfeRk+MG/Qxmp/vtETEF3tRA==}
-    engines: {node: '>=14.16'}
-    hasBin: true
 
   is-number@3.0.0:
     resolution: {integrity: sha512-4cboCqIpliH+mAvFNegjZQ4kgKc3ZUhQVr3HvWbSh5q3WH2v82ct+T2Y1hdU5Gdtorx/cLifQjqCbL7bpznLTg==}
@@ -5377,9 +5362,9 @@ packages:
     resolution: {integrity: sha512-eXK1UInq2bPmjyX6e3VHIzMLobc4J94i4AWn+Hpq3OU5KkrRC96OAcR3PRJ/pGu6m8TRnBHP9dkXQVsT/COVIA==}
     engines: {node: '>=0.10.0'}
 
-  is-wsl@3.1.0:
-    resolution: {integrity: sha512-UcVfVfaK4Sc4m7X3dUSoHoozQGBEFeDC+zVo06t98xe8CzHSZZBekNXH+tu0NalHolcJ/QAGqS46Hef7QXBIMw==}
-    engines: {node: '>=16'}
+  is-wsl@2.2.0:
+    resolution: {integrity: sha512-fKzAra0rGJUUBwGBgNkHZuToZcn+TtXHpeCgmkMJMMYx1sQDYaCSyjJBSCa2nH1DGm7s3n1oBnohoVTBaN7Lww==}
+    engines: {node: '>=8'}
 
   isarray@1.0.0:
     resolution: {integrity: sha512-VLghIWNM6ELQzo7zwmcg0NmTVyWKYjvIeM83yjp0wRDTmUnrM678fQbcKBo6n2CJEF0szoG//ytg+TKla89ALQ==}
@@ -6170,9 +6155,9 @@ packages:
   oniguruma-to-es@3.1.1:
     resolution: {integrity: sha512-bUH8SDvPkH3ho3dvwJwfonjlQ4R80vjyvrU8YpxuROddv55vAEJrTuCuCVUhhsHbtlD9tGGbaNApGQckXhS8iQ==}
 
-  open@10.1.2:
-    resolution: {integrity: sha512-cxN6aIDPz6rm8hbebcP7vrQNhvRcveZoJU72Y7vskh4oIm+BZwBECnx5nTmrlres1Qapvx27Qo1Auukpf8PKXw==}
-    engines: {node: '>=18'}
+  open@8.4.2:
+    resolution: {integrity: sha512-7x81NCL719oNbsq/3mh+hVrAWmFuEYUqrq/Iw3kUzH8ReypT9QQ0BLoJS7/G9k6N81XjW4qHWtjWwe/9eLy1EQ==}
+    engines: {node: '>=12'}
 
   opencollective-postinstall@2.0.3:
     resolution: {integrity: sha512-8AV/sCtuzUeTo8gQK5qDZzARrulB3egtLzFgteqB2tcT4Mw7B8Kt7JcDHmltjz6FOAHsvTevk70gZEbhM4ZS9Q==}
@@ -6488,17 +6473,9 @@ packages:
     resolution: {integrity: sha512-Egr3pqgzIB/UXvHFClUoY7GR0El4ExiGzNZHKmzLsH1ouR5/8PPWz1QjHJTVcTUToxOGY1kChPFjtSwRf0AlCQ==}
     engines: {node: ^16.20.2 || >=18.0.0}
 
-  ranui@0.1.10-alpha.23:
-    resolution: {integrity: sha512-yHcbcJLoCbbYP6BiLDvVfPDMMbv5ulME+bJzjyKwjtgWt1Ds1cXQe9uKG368KCykLnT+KS87SAO6/Ursf3Y7+g==}
-    engines: {node: '>=23.10.0'}
-
   ranuts@0.1.0-alpha.17:
     resolution: {integrity: sha512-RZmcc5APFXhc7ISvigPLsbAyBTGL+raAQhCYuc7kXyHR1z/as88RxD10GxDJI6T7IJGOEfe/LsftpYWonPqU6A==}
     engines: {node: ^16.20.2 || >=18.0.0}
-
-  ranuts@0.1.0-alpha.18:
-    resolution: {integrity: sha512-wJo1vyx25DiLsvNlrf5a0PPQBvUfgo0VGBxwbsTeUjpv4Dq3Uqv7eempq+IauJzinZyFirN+e0mQzWQm8z2L7w==}
-    engines: {node: '>=23.10.0'}
 
   raw-body@2.5.2:
     resolution: {integrity: sha512-8zGqypfENjCIqGhgXToC8aB2r7YrBX+AQAfIPs/Mlk+BtPTztOvTS01NRW/3Eh60J+a48lt8qsCzirQ6loCVfA==}
@@ -6541,6 +6518,10 @@ packages:
     peerDependenciesMeta:
       react-dom:
         optional: true
+
+  react@18.3.1:
+    resolution: {integrity: sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==}
+    engines: {node: '>=0.10.0'}
 
   react@19.1.0:
     resolution: {integrity: sha512-FS+XFBNvn3GTAWq26joslQgWNoFu08F4kl0J4CgdNKADkdSGXQyTCnKteIAJy96Br6YbpEU1LSzV5dYtjMkMDg==}
@@ -6723,8 +6704,8 @@ packages:
     resolution: {integrity: sha512-PD6U2PGk6Vq2spfgiWZdomLvRGDreBLxi5jv5M8EpRo3pU6VEm31KO+HFxE18Q3vgqfDrQ9pZA3FP95rkijNKw==}
     hasBin: true
 
-  rollup-plugin-visualizer@6.0.0:
-    resolution: {integrity: sha512-9aXBJh1uzI6XNmAeATox2z5MWrEPzL6hQgEMOYxTltWOy5x2ycQCec0Y9fC19sBgf3FvIF36aG9DrvUcdnXPew==}
+  rollup-plugin-visualizer@5.14.0:
+    resolution: {integrity: sha512-VlDXneTDaKsHIw8yzJAFWtrzguoJ/LnQ+lMpoVfYJ3jJF4Ihe5oYLAqLklIK/35lgUY+1yEzCkHyZ1j4A5w5fA==}
     engines: {node: '>=18'}
     hasBin: true
     peerDependencies:
@@ -6745,10 +6726,6 @@ packages:
     resolution: {integrity: sha512-cPmwD3FnFv8rKMBc1MxWCwVQFxwf1JEmSX3iQXrRVVG15zerAIXRjMFVWnd5Q5QvgKF7Aj+5ykXFhUl+QGnyOw==}
     engines: {node: '>=18.0.0', npm: '>=8.0.0'}
     hasBin: true
-
-  run-applescript@7.0.0:
-    resolution: {integrity: sha512-9by4Ij99JUr/MCFBUkDKLWK3G9HVXmabKz9U5MlIAIuvuzkiOicRYs8XJLxX+xahD+mLiiCYDqF9dKAgtzKP1A==}
-    engines: {node: '>=18'}
 
   run-parallel@1.2.0:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}
@@ -9066,9 +9043,9 @@ snapshots:
 
   '@docsearch/css@3.8.2': {}
 
-  '@docsearch/js@3.8.2(@algolia/client-search@5.24.0)(@types/react@19.1.5)(react-dom@18.3.1(react@19.1.0))(react@19.1.0)(search-insights@2.17.3)':
+  '@docsearch/js@3.8.2(@algolia/client-search@5.24.0)(@types/react@19.1.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.3)':
     dependencies:
-      '@docsearch/react': 3.8.2(@algolia/client-search@5.24.0)(@types/react@19.1.5)(react-dom@18.3.1(react@19.1.0))(react@19.1.0)(search-insights@2.17.3)
+      '@docsearch/react': 3.8.2(@algolia/client-search@5.24.0)(@types/react@19.1.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.3)
       preact: 10.26.5
     transitivePeerDependencies:
       - '@algolia/client-search'
@@ -9077,7 +9054,7 @@ snapshots:
       - react-dom
       - search-insights
 
-  '@docsearch/react@3.8.2(@algolia/client-search@5.24.0)(@types/react@19.1.5)(react-dom@18.3.1(react@19.1.0))(react@19.1.0)(search-insights@2.17.3)':
+  '@docsearch/react@3.8.2(@algolia/client-search@5.24.0)(@types/react@19.1.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.3)':
     dependencies:
       '@algolia/autocomplete-core': 1.17.7(@algolia/client-search@5.24.0)(algoliasearch@5.24.0)(search-insights@2.17.3)
       '@algolia/autocomplete-preset-algolia': 1.17.7(@algolia/client-search@5.24.0)(algoliasearch@5.24.0)
@@ -9085,8 +9062,8 @@ snapshots:
       algoliasearch: 5.24.0
     optionalDependencies:
       '@types/react': 19.1.5
-      react: 19.1.0
-      react-dom: 18.3.1(react@19.1.0)
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
       search-insights: 2.17.3
     transitivePeerDependencies:
       - '@algolia/client-search'
@@ -11826,10 +11803,6 @@ snapshots:
 
   buffers@0.1.1: {}
 
-  bundle-name@4.1.0:
-    dependencies:
-      run-applescript: 7.0.0
-
   bundle-require@5.1.0(esbuild@0.25.4):
     dependencies:
       esbuild: 0.25.4
@@ -12393,13 +12366,6 @@ snapshots:
 
   deep-is@0.1.4: {}
 
-  default-browser-id@5.0.0: {}
-
-  default-browser@5.2.1:
-    dependencies:
-      bundle-name: 4.1.0
-      default-browser-id: 5.0.0
-
   defer-to-connect@1.1.3: {}
 
   define-data-property@1.1.4:
@@ -12408,7 +12374,7 @@ snapshots:
       es-errors: 1.3.0
       gopd: 1.2.0
 
-  define-lazy-prop@3.0.0: {}
+  define-lazy-prop@2.0.0: {}
 
   define-property@0.2.5:
     dependencies:
@@ -13677,7 +13643,7 @@ snapshots:
       is-accessor-descriptor: 1.0.1
       is-data-descriptor: 1.0.1
 
-  is-docker@3.0.0: {}
+  is-docker@2.2.1: {}
 
   is-electron@2.2.2: {}
 
@@ -13714,10 +13680,6 @@ snapshots:
       is-extglob: 2.1.1
 
   is-hex-prefixed@1.0.0: {}
-
-  is-inside-container@1.0.0:
-    dependencies:
-      is-docker: 3.0.0
 
   is-number@3.0.0:
     dependencies:
@@ -13762,9 +13724,9 @@ snapshots:
 
   is-windows@1.0.2: {}
 
-  is-wsl@3.1.0:
+  is-wsl@2.2.0:
     dependencies:
-      is-inside-container: 1.0.0
+      is-docker: 2.2.1
 
   isarray@1.0.0: {}
 
@@ -14550,12 +14512,11 @@ snapshots:
       regex: 6.0.1
       regex-recursion: 6.0.2
 
-  open@10.1.2:
+  open@8.4.2:
     dependencies:
-      default-browser: 5.2.1
-      define-lazy-prop: 3.0.0
-      is-inside-container: 1.0.0
-      is-wsl: 3.1.0
+      define-lazy-prop: 2.0.0
+      is-docker: 2.2.1
+      is-wsl: 2.2.0
 
   opencollective-postinstall@2.0.3: {}
 
@@ -14881,30 +14842,10 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  ranui@0.1.10-alpha.23:
-    dependencies:
-      dayjs: 1.11.13
-      exceljs: 4.4.0
-      jszip: 3.10.1
-      lodash: 4.17.21
-      lodash-es: 4.17.21
-      ranuts: 0.1.0-alpha.18
-      tinycolor2: 1.6.0
-    transitivePeerDependencies:
-      - encoding
-
   ranuts@0.1.0-alpha.17(encoding@0.1.13):
     dependencies:
       magic-string: 0.27.0
       tesseract.js: 5.1.1(encoding@0.1.13)
-    transitivePeerDependencies:
-      - encoding
-
-  ranuts@0.1.0-alpha.18:
-    dependencies:
-      earcut: 3.0.1
-      magic-string: 0.30.17
-      tesseract.js: 6.0.1(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
 
@@ -14922,10 +14863,10 @@ snapshots:
       minimist: 1.2.8
       strip-json-comments: 2.0.1
 
-  react-dom@18.3.1(react@19.1.0):
+  react-dom@18.3.1(react@18.3.1):
     dependencies:
       loose-envify: 1.4.0
-      react: 19.1.0
+      react: 18.3.1
       scheduler: 0.23.2
     optional: true
 
@@ -14951,6 +14892,10 @@ snapshots:
       set-cookie-parser: 2.7.1
     optionalDependencies:
       react-dom: 19.1.0(react@19.1.0)
+
+  react@18.3.1:
+    dependencies:
+      loose-envify: 1.4.0
 
   react@19.1.0: {}
 
@@ -15125,9 +15070,9 @@ snapshots:
 
   rlp@3.0.0: {}
 
-  rollup-plugin-visualizer@6.0.0(rollup@4.41.1):
+  rollup-plugin-visualizer@5.14.0(rollup@4.41.1):
     dependencies:
-      open: 10.1.2
+      open: 8.4.2
       picomatch: 4.0.2
       source-map: 0.7.4
       yargs: 17.7.2
@@ -15185,8 +15130,6 @@ snapshots:
       '@rollup/rollup-win32-ia32-msvc': 4.41.1
       '@rollup/rollup-win32-x64-msvc': 4.41.1
       fsevents: 2.3.3
-
-  run-applescript@7.0.0: {}
 
   run-parallel@1.2.0:
     dependencies:
@@ -16620,10 +16563,10 @@ snapshots:
       tsx: 4.19.4
       yaml: 2.7.0
 
-  vitepress@1.6.3(@algolia/client-search@5.24.0)(@types/node@22.15.21)(@types/react@19.1.5)(axios@1.9.0)(idb-keyval@6.2.1)(less@4.3.0)(lightningcss@1.30.1)(postcss@8.5.3)(react-dom@18.3.1(react@19.1.0))(react@19.1.0)(sass-embedded@1.89.0)(search-insights@2.17.3)(terser@5.39.2)(typescript@5.8.3):
+  vitepress@1.6.3(@algolia/client-search@5.24.0)(@types/node@22.15.21)(@types/react@19.1.5)(axios@1.9.0)(idb-keyval@6.2.1)(less@4.3.0)(lightningcss@1.30.1)(postcss@8.5.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass-embedded@1.89.0)(search-insights@2.17.3)(terser@5.39.2)(typescript@5.8.3):
     dependencies:
       '@docsearch/css': 3.8.2
-      '@docsearch/js': 3.8.2(@algolia/client-search@5.24.0)(@types/react@19.1.5)(react-dom@18.3.1(react@19.1.0))(react@19.1.0)(search-insights@2.17.3)
+      '@docsearch/js': 3.8.2(@algolia/client-search@5.24.0)(@types/react@19.1.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.3)
       '@iconify-json/simple-icons': 1.2.33
       '@shikijs/core': 2.5.0
       '@shikijs/transformers': 2.5.0

@@ -54,7 +54,7 @@
     "crypto-js": "^4.2.0",
     "jschardet": "^3.1.4",
     "lit": "^3.3.0",
-    "ranui": "0.1.10-alpha.23",
-    "ranuts": "0.1.0-alpha.18"
+    "ranui": "workspace:*",
+    "ranuts": "workspace:*"
   }
 }

@@ -1,4 +1,5 @@
 import * as tf from '@tensorflow/tfjs';
+import { transformText } from 'ranuts/utils';
 
 declare global {
   interface Window {
@@ -45,9 +46,13 @@ export class ChapterDetector {
   ]);
 
   private buildVocabulary(content: string) {
+    // 确保内容是正确编码的字符串
+    const transformed = transformText(content);
+    const decodedContent = transformed?.content || content;
+
     // 从文本中构建词汇表
-    const words = content.toLowerCase().split(/\s+/);
-    words.forEach((word) => {
+    const words = decodedContent.toLowerCase().split(/\s+/);
+    words.forEach((word: string) => {
       if (!this.vocabulary.has(word)) {
         this.vocabulary.add(word);
         this.wordToIndex.set(word, this.vocabulary.size);
@@ -57,7 +62,11 @@ export class ChapterDetector {
   }
 
   private preprocessText(text: string): number[] {
-    const words = text.toLowerCase().split(/\s+/);
+    // 确保内容是正确编码的字符串
+    const transformed = transformText(text);
+    const decodedText = transformed?.content || text;
+
+    const words = decodedText.toLowerCase().split(/\s+/);
     const sequence = new Array(this.maxSequenceLength).fill(0);
 
     for (let i = 0; i < Math.min(words.length, this.maxSequenceLength); i++) {
@@ -69,7 +78,11 @@ export class ChapterDetector {
   }
 
   private generateLabels(text: string, chapters: ChapterInfo[]): string[] {
-    const words = text.toLowerCase().split(/\s+/);
+    // 确保内容是正确编码的字符串
+    const transformed = transformText(text);
+    const decodedText = transformed?.content || text;
+
+    const words = decodedText.toLowerCase().split(/\s+/);
     const labels: string[] = new Array(words.length).fill('O');
 
     const processChapter = (chapter: ChapterInfo) => {
@@ -232,7 +245,10 @@ export class ChapterDetector {
       // 新训练：构建词汇表和模型
       console.log('Building new model...');
       trainingData.forEach((data) => {
-        this.buildVocabulary(data.text);
+        // 确保文本内容正确编码
+        const transformed = transformText(data.text);
+        const decodedText = transformed?.content || data.text;
+        this.buildVocabulary(decodedText);
       });
       await this.buildModel();
     }
@@ -242,8 +258,12 @@ export class ChapterDetector {
     const labels: number[][] = [];
 
     trainingData.forEach((data) => {
-      const sequence = this.preprocessText(data.text);
-      const wordLabels = this.generateLabels(data.text, data.labels);
+      // 确保文本内容正确编码
+      const transformed = transformText(data.text);
+      const decodedText = transformed?.content || data.text;
+
+      const sequence = this.preprocessText(decodedText);
+      const wordLabels = this.generateLabels(decodedText, data.labels);
 
       // 将标签转换为数字
       const numericLabels = wordLabels.map((label) => this.labelToIndex.get(label) || 0);

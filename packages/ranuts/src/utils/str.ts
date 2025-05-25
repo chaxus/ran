@@ -1,3 +1,5 @@
+import { detect } from 'jschardet';
+
 /**
  * @description: 将字符串转对象，比如
  * @param {string} url 'a=1&b=2&c=3'
@@ -177,4 +179,36 @@ export function getMatchingSentences(text: string, searchValue: string): string[
 
 export const toString = (value: string | number): string => {
   return String(value);
+};
+
+export const checkEncoding = (uint8Array: Uint8Array): string => {
+  // 将 Uint8Array 转换为字符串
+  const asciiString = Array.from(uint8Array)
+    .map((byte) => String.fromCharCode(byte))
+    .join('');
+  const detected = detect(asciiString);
+  return detected.encoding || 'utf-8';
+};
+
+export interface TransformText {
+  encoding: string;
+  content: string;
+}
+
+export const transformText = (content: string | ArrayBuffer): TransformText | undefined => {
+  if (content instanceof ArrayBuffer) {
+    const uint8Array = new Uint8Array(content);
+    const asciiString = String.fromCharCode.apply(null, uint8Array as unknown as number[]);
+    const detected = detect(asciiString);
+    const encoding = detected.encoding || 'utf-8';
+    const text = new TextDecoder(encoding).decode(content);
+    if (detected.encoding && text) {
+      return {
+        encoding: detected.encoding,
+        content: text,
+      };
+    }
+  } else {
+    console.error('Unexpected result type:', typeof content);
+  }
 };

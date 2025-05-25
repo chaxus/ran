@@ -2,6 +2,7 @@ import { SyncHook } from './subscribe';
 import { Mathjs, addNumSym, mathjs, perToNum, range, transformNumber } from './number';
 import {
   changeHumpToLowerCase,
+  checkEncoding,
   clearBr,
   clearStr,
   getMatchingSentences,
@@ -10,7 +11,9 @@ import {
   str2Xml,
   strParse,
   toString,
+  transformText,
 } from './str';
+import type { TransformText } from './str';
 import {
   appendUrl,
   connection,
@@ -203,6 +206,8 @@ export {
   toString,
   addNumSym,
   getQuery,
+  checkEncoding,
+  transformText,
 };
 
-export type { CurrentDevice };
+export type { CurrentDevice, TransformText };

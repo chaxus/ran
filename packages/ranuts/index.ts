@@ -20,6 +20,7 @@ import {
   audioVendor,
   canvasVendor,
   changeHumpToLowerCase,
+  checkEncoding,
   clearBr,
   clearStr,
   cloneDeep,
@@ -105,6 +106,7 @@ import {
   timestampToTime,
   toString,
   transformNumber,
+  transformText,
   webglVendor,
 } from './src/utils';
 import {
@@ -134,7 +136,7 @@ import {
   writeStream,
 } from './src/node';
 import type { Context } from './src/node';
-import type { CurrentDevice } from '@/utils';
+import type { CurrentDevice, TransformText } from '@/utils';
 import { reactify } from '@/react';
 import { ocr } from '@/ml';
 
@@ -272,6 +274,8 @@ export {
   toString,
   addNumSym,
   getQuery,
+  checkEncoding,
+  transformText,
 };
 
-export type { CurrentDevice, Context };
+export type { CurrentDevice, Context, TransformText };

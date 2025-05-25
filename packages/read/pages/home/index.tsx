@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import { debounce } from 'ranuts/utils';
+import { checkEncoding, debounce } from 'ranuts/utils';
 import { BookCard } from '@/components/BookCard';
 import { addBook, getAllBooks, searchBooksByAuthor, searchBooksByContent, searchBooksByTitle } from '@/store/books';
-import { checkEncoding, createReader, trim } from '@/lib/transformText';
+import { createReader, trim } from '@/lib/transformText';
 import { resumeDB } from '@/store';
 import { BOOKS_ADD_BY_DEFAULT, ensampleConfigs } from '@/lib/ensample';
 import type { EnBook } from '@/lib/ensample';
