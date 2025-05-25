@@ -1,13 +1,13 @@
 import * as tf from '@tensorflow/tfjs';
 
 declare global {
-    interface Window {
-      URL: {
-        createObjectURL(blob: Blob): string;
-        revokeObjectURL(url: string): void;
-      };
-    }
-  } 
+  interface Window {
+    URL: {
+      createObjectURL(blob: Blob): string;
+      revokeObjectURL(url: string): void;
+    };
+  }
+}
 
 export interface ChapterInfo {
   title: string;
@@ -36,11 +36,11 @@ export class ChapterDetector {
   private wordToIndex: Map<string, number> = new Map<string, number>();
   private indexToWord: Map<number, string> = new Map<number, string>();
   private readonly labelToIndex: Map<string, number> = new Map<string, number>([
-    ['O', 0],      // 非章节标题
+    ['O', 0], // 非章节标题
     ['B-TITLE', 1], // 章节标题开始
     ['I-TITLE', 2], // 章节标题中间
     ['E-TITLE', 3], // 章节标题结束
-    ['S-TITLE', 4]  // 单个词的章节标题
+    ['S-TITLE', 4], // 单个词的章节标题
   ]);
 
   private readonly dbName = 'ChapterDetectorDB';
@@ -66,7 +66,7 @@ export class ChapterDetector {
   private buildVocabulary(content: string) {
     // 从文本中构建词汇表
     const words = content.toLowerCase().split(/\s+/);
-    words.forEach(word => {
+    words.forEach((word) => {
       if (!this.vocabulary.has(word)) {
         this.vocabulary.add(word);
         this.wordToIndex.set(word, this.vocabulary.size);
@@ -78,23 +78,23 @@ export class ChapterDetector {
   private preprocessText(text: string): number[] {
     const words = text.toLowerCase().split(/\s+/);
     const sequence = new Array(this.maxSequenceLength).fill(0);
-    
+
     for (let i = 0; i < Math.min(words.length, this.maxSequenceLength); i++) {
       const word = words[i];
       sequence[i] = this.wordToIndex.get(word) || 0;
     }
-    
+
     return sequence;
   }
 
   private generateLabels(text: string, chapters: ChapterInfo[]): string[] {
     const words = text.toLowerCase().split(/\s+/);
     const labels: string[] = new Array(words.length).fill('O');
-    
-    chapters.forEach(chapter => {
+
+    chapters.forEach((chapter) => {
       const chapterWords = chapter.title.toLowerCase().split(/\s+/);
       const startIndex = chapter.startIndex;
-      
+
       if (chapterWords.length === 1) {
         // 单个词的章节标题
         labels[startIndex] = 'S-TITLE';
@@ -111,55 +111,63 @@ export class ChapterDetector {
         });
       }
     });
-    
+
     return labels;
   }
 
   private async buildModel() {
     if (!this.model) {
       this.model = tf.sequential();
-      
+
       // 词嵌入层
-      this.model.add(tf.layers.embedding({
-        inputDim: this.vocabulary.size + 1,
-        outputDim: this.embeddingDim,
-        inputLength: this.maxSequenceLength,
-        maskZero: true,
-        trainable: true
-      }));
+      this.model.add(
+        tf.layers.embedding({
+          inputDim: this.vocabulary.size + 1,
+          outputDim: this.embeddingDim,
+          inputLength: this.maxSequenceLength,
+          maskZero: true,
+          trainable: true,
+        }),
+      );
 
       // 第一个双向 LSTM 层
-      this.model.add(tf.layers.bidirectional({
-        layer: tf.layers.lstm({
-          units: this.lstmUnits,
-          returnSequences: true,
-          dropout: 0.2,
-          recurrentDropout: 0.2
-        })
-      }));
+      this.model.add(
+        tf.layers.bidirectional({
+          layer: tf.layers.lstm({
+            units: this.lstmUnits,
+            returnSequences: true,
+            dropout: 0.2,
+            recurrentDropout: 0.2,
+          }),
+        }),
+      );
 
       // 第二个双向 LSTM 层
-      this.model.add(tf.layers.bidirectional({
-        layer: tf.layers.lstm({
-          units: this.lstmUnits,
-          returnSequences: true,
-          dropout: 0.2,
-          recurrentDropout: 0.2
-        })
-      }));
+      this.model.add(
+        tf.layers.bidirectional({
+          layer: tf.layers.lstm({
+            units: this.lstmUnits,
+            returnSequences: true,
+            dropout: 0.2,
+            recurrentDropout: 0.2,
+          }),
+        }),
+      );
 
       // 时间分布全连接层
-      this.model.add(tf.layers.timeDistributed({
-        layer: tf.layers.dense({
-          units: 5,
-          activation: 'softmax'
-        })
-      }));
+      this.model.add(
+        tf.layers.timeDistributed({
+          layer: tf.layers.dense({
+            units: 5,
+            activation: 'softmax',
+          }),
+        }),
+      );
 
       this.model.compile({
         optimizer: tf.train.adam(0.001),
         loss: 'categoricalCrossentropy',
-        metrics: ['accuracy']
+        metrics: ['accuracy'],
       });
     }
   }
@@ -173,14 +181,14 @@ export class ChapterDetector {
       model: this.model,
       vocabulary: Array.from(this.vocabulary),
       wordToIndex: Object.fromEntries(this.wordToIndex),
-      indexToWord: Object.fromEntries(this.indexToWord)
+      indexToWord: Object.fromEntries(this.indexToWord),
     };
 
     // 序列化模型
     const modelJSON = await this.model.toJSON();
     const serializedModelData = {
       ...modelData,
-      model: modelJSON
+      model: modelJSON,
     };
 
     // 创建下载链接
@@ -205,11 +213,11 @@ export class ChapterDetector {
       const serializedModelData = JSON.parse(text);
 
       // 从 JSON 加载模型
-      this.model = await tf.models.modelFromJSON(serializedModelData.model) as tf.Sequential;
+      this.model = (await tf.models.modelFromJSON(serializedModelData.model)) as tf.Sequential;
       this.vocabulary = new Set(serializedModelData.vocabulary);
       this.wordToIndex = new Map(Object.entries(serializedModelData.wordToIndex));
       this.indexToWord = new Map(
-        Object.entries(serializedModelData.indexToWord).map(([key, value]) => [Number(key), value as string])
+        Object.entries(serializedModelData.indexToWord).map(([key, value]) => [Number(key), value as string]),
       );
     } catch (error) {
       console.error('Error loading model:', error);
@@ -218,8 +226,8 @@ export class ChapterDetector {
   }
 
   public async train(
-    trainingData: TrainingData[], 
-    epochs: number = 20, 
+    trainingData: TrainingData[],
+    epochs: number = 20,
     incremental: boolean = false,
     onProgress?: (progress: {
       epoch: number;
@@ -227,7 +235,7 @@ export class ChapterDetector {
       accuracy: number;
       validationLoss?: number;
       validationAccuracy?: number;
-    }) => void
+    }) => void,
   ): Promise<void> {
     if (incremental && this.model) {
       // 增量训练：使用现有模型
@@ -235,23 +243,23 @@ export class ChapterDetector {
     } else {
       // 新训练：构建词汇表和模型
       console.log('Building new model...');
-      trainingData.forEach(data => {
+      trainingData.forEach((data) => {
         this.buildVocabulary(data.text);
       });
       await this.buildModel();
     }
-    
+
     // 准备训练数据
     const sequences: number[][] = [];
     const labels: number[][] = [];
-    
-    trainingData.forEach(data => {
+
+    trainingData.forEach((data) => {
       const sequence = this.preprocessText(data.text);
       const wordLabels = this.generateLabels(data.text, data.labels);
-      
+
       // 将标签转换为数字
-      const numericLabels = wordLabels.map(label => this.labelToIndex.get(label) || 0);
-      
+      const numericLabels = wordLabels.map((label) => this.labelToIndex.get(label) || 0);
+
       sequences.push(sequence);
       labels.push(numericLabels);
     });
@@ -276,9 +284,9 @@ export class ChapterDetector {
               loss: logs.loss,
               accuracy: logs.acc,
               validationLoss: logs.val_loss,
-              validationAccuracy: logs.val_acc
+              validationAccuracy: logs.val_acc,
             };
-            
+
             // 输出详细的训练信息
             console.log(`
 Epoch ${epoch + 1}/${epochs} completed:
@@ -300,8 +308,8 @@ Epoch ${epoch + 1}/${epochs} completed:
         },
         onTrainEnd: () => {
           console.log('\nTraining completed!');
-        }
-      }
+        },
+      },
     });
 
     // 清理张量
@@ -319,11 +327,11 @@ Epoch ${epoch + 1}/${epochs} completed:
 
     // 处理所有内容
     const results: ChapterInfo[][] = [];
-    
+
     for (const content of contents) {
       // 构建词汇表
       this.buildVocabulary(content);
-      
+
       const lines = content.split('\n');
       const chapters: ChapterInfo[] = [];
       let currentChapter: ChapterInfo | null = null;
@@ -338,15 +346,16 @@ Epoch ${epoch + 1}/${epochs} completed:
           // 预处理文本
           const sequence = this.preprocessText(word);
           const input = tf.tensor2d([sequence]);
-          
+
           // 预测
           const prediction = this.model.predict(input) as tf.Tensor;
-          const scores = await prediction.array() as number[][];
-          
+          const scores = (await prediction.array()) as number[][];
+
           // 获取最可能的标签
           const maxScore = Math.max(...scores[0]);
-          const predictedLabel = Array.from(this.labelToIndex.entries())
-            .find(([_, index]) => scores[0][index] === maxScore)?.[0];
+          const predictedLabel = Array.from(this.labelToIndex.entries()).find(
+            ([_, index]) => scores[0][index] === maxScore,
+          )?.[0];
 
           if (predictedLabel === 'B-TITLE') {
             // 开始新的章节标题
@@ -358,7 +367,7 @@ Epoch ${epoch + 1}/${epochs} completed:
             currentChapter = {
               title: word,
               startIndex: i,
-              endIndex: -1
+              endIndex: -1,
             };
           } else if (predictedLabel === 'I-TITLE' && currentChapter) {
             // 继续当前章节标题
@@ -377,7 +386,7 @@ Epoch ${epoch + 1}/${epochs} completed:
             currentChapter = {
               title: word,
               startIndex: i,
-              endIndex: i
+              endIndex: i,
             };
             chapters.push(currentChapter);
             currentChapter = null;
@@ -405,7 +414,7 @@ Epoch ${epoch + 1}/${epochs} completed:
 // 使用示例
 export async function processEbook(contents: string[], modelFile?: File): Promise<ChapterInfo[][]> {
   const detector = new ChapterDetector();
-  
+
   if (modelFile) {
     // 加载已有模型
     await detector.loadModel(modelFile);
@@ -413,6 +422,6 @@ export async function processEbook(contents: string[], modelFile?: File): Promis
   } else {
     throw new Error('No model file provided. Please provide a model file or train a new model.');
   }
-  
+
   return await detector.detectChapters(contents);
 }
