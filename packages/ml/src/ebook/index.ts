@@ -1,6 +1,13 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import * as path from 'node:path';
 import * as tf from '@tensorflow/tfjs';
+
+declare global {
+    interface Window {
+      URL: {
+        createObjectURL(blob: Blob): string;
+        revokeObjectURL(url: string): void;
+      };
+    }
+  } 
 
 export interface ChapterInfo {
   title: string;
@@ -11,6 +18,13 @@ export interface ChapterInfo {
 export interface TrainingData {
   text: string;
   labels: ChapterInfo[];
+}
+
+export interface ModelData {
+  model: tf.Sequential;
+  vocabulary: string[];
+  wordToIndex: Record<string, number>;
+  indexToWord: Record<number, string>;
 }
 
 export class ChapterDetector {
@@ -28,14 +42,25 @@ export class ChapterDetector {
     ['E-TITLE', 3], // 章节标题结束
     ['S-TITLE', 4]  // 单个词的章节标题
   ]);
-  private readonly modelDir: string;
 
-  constructor(modelDir: string = 'models') {
-    this.modelDir = modelDir;
-    // 确保模型目录存在
-    if (!existsSync(modelDir)) {
-      mkdirSync(modelDir, { recursive: true });
-    }
+  private readonly dbName = 'ChapterDetectorDB';
+  private readonly storeName = 'models';
+  private readonly modelKey = 'latest';
+
+  private async initDB(): Promise<IDBDatabase> {
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open(this.dbName, 1);
+
+      request.onerror = () => reject(request.error);
+      request.onsuccess = () => resolve(request.result);
+
+      request.onupgradeneeded = (event) => {
+        const db = (event.target as IDBOpenDBRequest).result;
+        if (!db.objectStoreNames.contains(this.storeName)) {
+          db.createObjectStore(this.storeName);
+        }
+      };
+    });
   }
 
   private buildVocabulary(content: string) {
@@ -139,47 +164,71 @@ export class ChapterDetector {
     }
   }
 
-  public async saveModel(): Promise<void> {
+  public async saveModel(): Promise<ModelData> {
     if (!this.model) {
       throw new Error('No model to save');
     }
 
-    // 保存模型
-    await this.model.save(`file://${path.join(this.modelDir, 'model')}`);
-
-    // 保存词汇表
-    const vocabularyData = {
+    const modelData: ModelData = {
+      model: this.model,
       vocabulary: Array.from(this.vocabulary),
       wordToIndex: Object.fromEntries(this.wordToIndex),
       indexToWord: Object.fromEntries(this.indexToWord)
     };
-    writeFileSync(
-      path.join(this.modelDir, 'vocabulary.json'),
-      JSON.stringify(vocabularyData, null, 2)
-    );
+
+    // 序列化模型
+    const modelJSON = await this.model.toJSON();
+    const serializedModelData = {
+      ...modelData,
+      model: modelJSON
+    };
+
+    // 创建下载链接
+    const blob = new Blob([JSON.stringify(serializedModelData, null, 2)], { type: 'application/json' });
+    // eslint-disable-next-line n/no-unsupported-features/node-builtins
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `chapter_detector_model_${Date.now()}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    // eslint-disable-next-line n/no-unsupported-features/node-builtins
+    URL.revokeObjectURL(url);
+
+    return modelData;
   }
 
-  public async loadModel(): Promise<void> {
-    const modelPath = path.join(this.modelDir, 'model');
-    const vocabPath = path.join(this.modelDir, 'vocabulary.json');
+  public async loadModel(file: File): Promise<void> {
+    try {
+      const text = await file.text();
+      const serializedModelData = JSON.parse(text);
 
-    if (!existsSync(modelPath) || !existsSync(vocabPath)) {
-      throw new Error('Model or vocabulary file not found');
+      // 从 JSON 加载模型
+      this.model = await tf.models.modelFromJSON(serializedModelData.model) as tf.Sequential;
+      this.vocabulary = new Set(serializedModelData.vocabulary);
+      this.wordToIndex = new Map(Object.entries(serializedModelData.wordToIndex));
+      this.indexToWord = new Map(
+        Object.entries(serializedModelData.indexToWord).map(([key, value]) => [Number(key), value as string])
+      );
+    } catch (error) {
+      console.error('Error loading model:', error);
+      throw error;
     }
-
-    // 加载模型
-    this.model = await tf.loadLayersModel(`file://${modelPath}`) as tf.Sequential;
-
-    // 加载词汇表
-    const vocabularyData = JSON.parse(readFileSync(vocabPath, 'utf-8'));
-    this.vocabulary = new Set(vocabularyData.vocabulary);
-    this.wordToIndex = new Map(Object.entries(vocabularyData.wordToIndex));
-    this.indexToWord = new Map(
-      Object.entries(vocabularyData.indexToWord).map(([key, value]) => [Number(key), value as string])
-    );
   }
 
-  public async train(trainingData: TrainingData[], epochs: number = 20, incremental: boolean = false): Promise<void> {
+  public async train(
+    trainingData: TrainingData[], 
+    epochs: number = 20, 
+    incremental: boolean = false,
+    onProgress?: (progress: {
+      epoch: number;
+      loss: number;
+      accuracy: number;
+      validationLoss?: number;
+      validationAccuracy?: number;
+    }) => void
+  ): Promise<void> {
     if (incremental && this.model) {
       // 增量训练：使用现有模型
       console.log('Performing incremental training...');
@@ -217,8 +266,40 @@ export class ChapterDetector {
       batchSize: 32,
       validationSplit: 0.2,
       callbacks: {
+        onEpochBegin: (epoch) => {
+          console.log(`\nEpoch ${epoch + 1}/${epochs} starting...`);
+        },
         onEpochEnd: (epoch, logs) => {
-          console.log(`Epoch ${epoch + 1}: loss = ${logs?.loss.toFixed(4)}, accuracy = ${logs?.acc.toFixed(4)}`);
+          if (logs) {
+            const progress = {
+              epoch: epoch + 1,
+              loss: logs.loss,
+              accuracy: logs.acc,
+              validationLoss: logs.val_loss,
+              validationAccuracy: logs.val_acc
+            };
+            
+            // 输出详细的训练信息
+            console.log(`
+Epoch ${epoch + 1}/${epochs} completed:
+- Training Loss: ${logs.loss.toFixed(4)}
+- Training Accuracy: ${(logs.acc * 100).toFixed(2)}%
+- Validation Loss: ${logs.val_loss?.toFixed(4) || 'N/A'}
+- Validation Accuracy: ${logs.val_acc ? (logs.val_acc * 100).toFixed(2) + '%' : 'N/A'}
+            `);
+
+            // 调用进度回调
+            onProgress?.(progress);
+          }
+        },
+        onTrainBegin: () => {
+          console.log('\nTraining started...');
+          console.log(`Total epochs: ${epochs}`);
+          console.log(`Batch size: 32`);
+          console.log(`Validation split: 20%`);
+        },
+        onTrainEnd: () => {
+          console.log('\nTraining completed!');
         }
       }
     });
@@ -227,7 +308,7 @@ export class ChapterDetector {
     xs.dispose();
     ys.dispose();
 
-    // 保存模型
+    // 训练完成后保存模型
     await this.saveModel();
   }
 
@@ -322,21 +403,15 @@ export class ChapterDetector {
 }
 
 // 使用示例
-export async function processEbook(contents: string[], trainingData?: TrainingData[]): Promise<ChapterInfo[][]> {
+export async function processEbook(contents: string[], modelFile?: File): Promise<ChapterInfo[][]> {
   const detector = new ChapterDetector();
   
-  try {
-    // 尝试加载已有模型
-    await detector.loadModel();
+  if (modelFile) {
+    // 加载已有模型
+    await detector.loadModel(modelFile);
     console.log('Loaded existing model');
-  } catch (_error) {
-    // 如果没有已有模型，且提供了训练数据，则训练新模型
-    if (trainingData) {
-      console.log('Training new model...');
-      await detector.train(trainingData);
-    } else {
-      throw new Error('No model found and no training data provided');
-    }
+  } else {
+    throw new Error('No model file provided. Please provide a model file or train a new model.');
   }
   
   return await detector.detectChapters(contents);
