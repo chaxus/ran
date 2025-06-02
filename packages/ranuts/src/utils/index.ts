@@ -29,6 +29,7 @@ import {
   getQuery,
   getWindow,
   imageRequest,
+  isSafari,
   networkSpeed,
   removeGhosting,
   requestUrlToBuffer,
@@ -208,6 +209,7 @@ export {
   getQuery,
   checkEncoding,
   transformText,
+  isSafari,
 };
 
 export type { CurrentDevice, TransformText };

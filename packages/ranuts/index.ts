@@ -68,6 +68,7 @@ import {
   isEqual,
   isImageSize,
   isMobile,
+  isSafari,
   isString,
   isWeiXin,
   localStorageGetItem,
@@ -107,7 +108,7 @@ import {
   toString,
   transformNumber,
   transformText,
-  webglVendor,
+  webglVendor
 } from './src/utils';
 import {
   Router,
@@ -276,6 +277,7 @@ export {
   getQuery,
   checkEncoding,
   transformText,
+  isSafari
 };
 
 export type { CurrentDevice, Context, TransformText };
