@@ -24,10 +24,7 @@ async function Custom() {
   if (typeof document !== 'undefined' && !customElements.get('r-preview')) {
     const { warning = noop } = message!;
 
-    const { renderPptx } = await import('@/components/preview/pptx');
-    const { renderDocx } = await import('@/components/preview/docx');
     const { renderPdf } = await import('@/components/preview/pdf');
-    const { renderExcel } = await import('@/components/preview/excel');
 
     const requestUrlToBuffer = (
       src: string,
@@ -72,51 +69,17 @@ async function Custom() {
       });
     };
 
-    const renderPpt = (file: File, options: RenderOptions) => {
-      const { dom, onError, onLoad } = options;
-      return new Promise<void>((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsArrayBuffer(file);
-        reader.onload = () => {
-          if (reader.result && dom) {
-            const param = {
-              pptx: reader.result,
-              resultElement: dom,
-              onError,
-              onLoad,
-            };
-            renderPptx(param)?.then(() => {
-              resolve();
-            });
-          }
-        };
-        reader.onerror = (error) => {
-          reject(error);
-        };
-        reader.onabort = (abort) => {
-          reject(abort);
-        };
-      });
-    };
-
-    const renderWord = (file: File, options: RenderOptions) => {
-      const { dom, onError, onLoad } = options;
-      return Promise.resolve()
-        .then(() => renderDocx({ buffer: file, bodyContainer: dom }))
-        .then(() => {
-          onLoad && onLoad({ success: true, message: '' });
-        })
-        .catch((error) => {
-          onError && onError({ success: true, data: error, message: '' });
-        });
-    };
+    const renderOffice = (file: File, options: RenderOptions) => {
+      console.log('renderOffice', file, options);
+      return Promise.resolve();
+    }
 
     const renderFileMap = new Map<string, (file: File, options: RenderOptions) => Promise<void>>([
       [PDF, renderPdf],
-      [PPTX, renderPpt],
-      [DOCX, renderWord],
-      [XLSX, renderExcel],
-      [XLS, renderExcel],
+      [PPTX, renderOffice],
+      [DOCX, renderOffice],
+      [XLSX, renderOffice],
+      [XLS, renderOffice],
     ]);
 
     class CustomElement extends HTMLElement {
@@ -208,7 +171,6 @@ async function Custom() {
                 } else {
                   this.previewContext.style.setProperty('width', '100%');
                 }
-                // document.body.style.overflow = 'hidden'
                 const options = {
                   dom: this.previewContext,
                   onError: this.onError,
@@ -226,8 +188,6 @@ async function Custom() {
       };
       closePreview = () => {
         if (this.preview) {
-          // document.body.style.overflow = 'auto'
-          // this.preview.style.display = 'none'
           document.body.removeChild(this.preview);
           this.preview = undefined;
         }

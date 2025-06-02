@@ -143,6 +143,7 @@ const createReader = (file: File): Promise<string | ArrayBuffer | null> => {
 
 export const renderPdf = async (file: File, options: RenderOptions): Promise<void> => {
   try {
+    debugger;
     if (typeof window !== 'undefined') {
       const pdf = await createReader(file);
       if (pdf) {
