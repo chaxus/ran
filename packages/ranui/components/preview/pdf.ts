@@ -1,7 +1,7 @@
 import { isSafari } from 'ranuts/utils';
 import { loadScript } from '@/utils/index';
-import * as PDF_JS from '@/assets/js/pdf.min.js?inline';
-import * as PDF_WORKER_JS from '@/assets/js/pdf.worker.min.js?inline';
+import PDF_JS from '@/assets/js/pdf.min.js?raw';
+import PDF_WORKER_JS from '@/assets/js/pdf.worker.min.js?raw';
 import type { BaseReturn, RenderOptions } from '@/components/preview/types';
 
 interface Viewport {
@@ -67,7 +67,7 @@ export class PdfPreview {
           const viewport = page.getViewport({ scale });
           const canvas = document.createElement('canvas');
           canvas.style.setProperty('margin', '0 auto');
-          this.dom.innerHTML = ''
+          // this.dom.innerHTML = ''
           this.dom.appendChild(canvas);
           const context = canvas.getContext('2d');
           const clientWidth = document.body.clientWidth - 20;
@@ -93,7 +93,10 @@ export class PdfPreview {
   };
   pdfPreview = (): Promise<BaseReturn> => {
     return new Promise((resolve) => {
-      window.pdfjsLib.GlobalWorkerOptions.workerSrc = PDF_WORKER_JS;
+      const workerBlob = new Blob([PDF_WORKER_JS], { type: 'application/javascript' });
+      // eslint-disable-next-line n/no-unsupported-features/node-builtins
+      const workerUrl = URL.createObjectURL(workerBlob);
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
       window.pdfjsLib.getDocument(this.pdf).promise.then(async (doc: PDFDocumentProxy) => {
         this.pdfDoc = doc;
         this.total = doc.numPages;
@@ -102,6 +105,11 @@ export class PdfPreview {
         resolve({ success: true, data: this.pdfDoc });
       });
     })
+  };
+  showTotalPage = async (): Promise<void> => {
+    for (let i = 1; i <= this.total; i++) {
+      await this.getPdfPage(i);
+    }
   };
   changePage = (num: number): number => {
     if (num > 0 && num <= this.total) {
@@ -148,13 +156,13 @@ const createReader = (file: File): Promise<string | ArrayBuffer | null> => {
 
 export const renderPdf = async (file: File, options: RenderOptions): Promise<void> => {
   try {
-    debugger;
     if (typeof window !== 'undefined') {
       loadScript({ type: 'content', content: PDF_JS });
       const pdf = await createReader(file);
       if (pdf) {
         const PDF = new PdfPreview(pdf, options);
-        PDF.pdfPreview();
+        await PDF.pdfPreview()
+        await PDF.showTotalPage()
       }
     }
   } catch (error) {

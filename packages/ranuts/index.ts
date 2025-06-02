@@ -74,6 +74,7 @@ import {
   localStorageGetItem,
   localStorageSetItem,
   mathjs,
+  md5,
   memoize,
   merge,
   mergeExports,
@@ -277,7 +278,8 @@ export {
   getQuery,
   checkEncoding,
   transformText,
-  isSafari
+  isSafari,
+  md5
 };
 
 export type { CurrentDevice, Context, TransformText };

@@ -7,6 +7,7 @@ import {
   clearStr,
   getMatchingSentences,
   isString,
+  md5,
   randomString,
   str2Xml,
   strParse,
@@ -210,6 +211,7 @@ export {
   checkEncoding,
   transformText,
   isSafari,
+  md5
 };
 
 export type { CurrentDevice, TransformText };
