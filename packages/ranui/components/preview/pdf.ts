@@ -1,28 +1,30 @@
 import { isSafari } from 'ranuts/utils';
 import { loadScript } from '@/utils/index';
+// copy from: https://github.com/mozilla/pdfjs-dist/blob/master/build/pdf.min.js 
 import PDF_JS from '@/assets/js/pdf.min.js?raw';
+// copy from：https://github.com/mozilla/pdfjs-dist/blob/master/build/pdf.worker.min.js
 import PDF_WORKER_JS from '@/assets/js/pdf.worker.min.js?raw';
 import type { BaseReturn, RenderOptions } from '@/components/preview/types';
 
-interface Viewport {
+export interface Viewport {
   width: number;
   height: number;
   viewBox: Array<number>;
 }
 
-interface RenderContext {
+export interface RenderContext {
   canvasContext: CanvasRenderingContext2D | null;
   transform: Array<number>;
   viewport: Viewport;
 }
 
-interface PDFPageProxy {
+export interface PDFPageProxy {
   pageNumber: number;
   getViewport: ({ scale }: { scale: number }) => Viewport;
   render: (options: RenderContext) => void;
 }
 
-interface PDFDocumentProxy {
+export interface PDFDocumentProxy {
   numPages: number;
   getPage: (x: number) => Promise<PDFPageProxy>;
 }
