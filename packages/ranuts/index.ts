@@ -68,11 +68,13 @@ import {
   isEqual,
   isImageSize,
   isMobile,
+  isSafari,
   isString,
   isWeiXin,
   localStorageGetItem,
   localStorageSetItem,
   mathjs,
+  md5,
   memoize,
   merge,
   mergeExports,
@@ -107,7 +109,7 @@ import {
   toString,
   transformNumber,
   transformText,
-  webglVendor,
+  webglVendor
 } from './src/utils';
 import {
   Router,
@@ -276,6 +278,8 @@ export {
   getQuery,
   checkEncoding,
   transformText,
+  isSafari,
+  md5
 };
 
 export type { CurrentDevice, Context, TransformText };

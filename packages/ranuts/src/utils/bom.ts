@@ -442,3 +442,23 @@ export const networkSpeed = async (options: Options): Promise<ReturnType> => {
   ping = pingList.reduce((a, b) => a + b) / pingList.length;
   return { ping, jitter };
 };
+
+export const isSafari = (): boolean | undefined |string => {
+  // eslint-disable-next-line n/no-unsupported-features/node-builtins
+  if (typeof navigator === 'undefined') {
+    return undefined;
+  }
+  // 不是标准，但 ios safari 上有 vendor 属性
+  return (
+    // eslint-disable-next-line n/no-unsupported-features/node-builtins
+    navigator.vendor &&
+    // eslint-disable-next-line n/no-unsupported-features/node-builtins
+    navigator.vendor.indexOf('Apple') > -1 &&
+    // eslint-disable-next-line n/no-unsupported-features/node-builtins
+    navigator.userAgent &&
+    // eslint-disable-next-line n/no-unsupported-features/node-builtins
+    !navigator.userAgent.includes('CriOS') &&
+    // eslint-disable-next-line n/no-unsupported-features/node-builtins
+    !navigator.userAgent.includes('FxiOS')
+  );
+};

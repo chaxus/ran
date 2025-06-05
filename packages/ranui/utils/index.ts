@@ -1,3 +1,5 @@
+import { md5 } from 'ranuts/utils';
+
 export const falseList = [false, 'false', null, undefined];
 /**
  * @description: 判断这个元素上是否有 disabled 属性
@@ -66,11 +68,29 @@ export const createIconList = (): void => {
   }, 0);
 };
 
-export const loadScript = (src: string): Promise<{ success: boolean }> => {
+// Cache for loaded scripts
+const loadedScripts = new Set<string>();
+
+export const loadScript = ({ type, content }: { type: string, content: string }): Promise<{ success: boolean }> => {
   return new Promise((resolve, reject) => {
+    // Generate a unique key for the script using MD5
+    const scriptKey = md5(content)
+    
+    // Check if script is already loaded
+    if (loadedScripts.has(scriptKey)) {
+      resolve({ success: true });
+      return;
+    }
+
     const script = document.createElement('script');
-    script.src = src;
+    if(type === 'url'){
+      script.src = content;
+    }
+    if(type === 'content'){
+      script.textContent = content
+    }
     script.onload = function () {
+      loadedScripts.add(scriptKey);
       resolve({ success: true });
     };
     script.onerror = function (error) {
@@ -81,7 +101,7 @@ export const loadScript = (src: string): Promise<{ success: boolean }> => {
 };
 
 export interface CustomErrorType {
-  new (m: string): void;
+  new(m: string): void;
 }
 
 export function createCustomError(msg: string = ''): CustomErrorType {
@@ -134,7 +154,7 @@ export const vod = {
   },
 };
 
-export const HTMLElementSSR = (): { new (): HTMLElement; prototype: HTMLElement } | null => {
+export const HTMLElementSSR = (): { new(): HTMLElement; prototype: HTMLElement } | null => {
   if (typeof document !== 'undefined') {
     return HTMLElement;
   }

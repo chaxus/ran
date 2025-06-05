@@ -2,11 +2,10 @@
  * @Author: chaxus nouo18@163.com
  * @Date: 2024-12-08 17:58:20
  * @LastEditors: chaxus nouo18@163.com
- * @LastEditTime: 2025-03-16 12:55:22
+ * @LastEditTime: 2025-06-02 12:06:11
  * @FilePath: /ran/packages/ranui/components/popover/index.ts
  */
-import { create, isMobile } from 'ranuts/utils';
-import { debounce } from 'lodash-es';
+import { create, debounce, isMobile } from 'ranuts/utils';
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
 import '@/components/popover/content';
 import '@/components/dropdown';

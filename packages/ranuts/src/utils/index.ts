@@ -7,6 +7,7 @@ import {
   clearStr,
   getMatchingSentences,
   isString,
+  md5,
   randomString,
   str2Xml,
   strParse,
@@ -29,6 +30,7 @@ import {
   getQuery,
   getWindow,
   imageRequest,
+  isSafari,
   networkSpeed,
   removeGhosting,
   requestUrlToBuffer,
@@ -208,6 +210,8 @@ export {
   getQuery,
   checkEncoding,
   transformText,
+  isSafari,
+  md5
 };
 
 export type { CurrentDevice, TransformText };
