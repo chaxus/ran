@@ -419,3 +419,42 @@ export const md5 = (str: string): string => {
 
   return (wordToHex(a) + wordToHex(b) + wordToHex(c) + wordToHex(d)).toLowerCase();
 };
+// 生成随机数
+export const getRandomString = (len: number = 8): string => {
+  return Math.random().toString(36).substring(2, len + 2);
+};
+
+/**
+ * 消息编解码工具
+ */
+export const MessageCodec = {
+  /**
+   * 编码消息
+   * @param data 要编码的数据
+   * @returns 编码后的字符串
+   */
+  encode(data: any): string {
+    try {
+      const jsonStr = JSON.stringify(data)
+      return btoa(encodeURIComponent(jsonStr))
+    } catch (error) {
+      console.error('Message encode error:', error)
+      return ''
+    }
+  },
+
+  /**
+   * 解码消息
+   * @param encodedStr 编码后的字符串
+   * @returns 解码后的数据
+   */
+  decode<T = any>(encodedStr: string): T | null {
+    try {
+      const jsonStr = decodeURIComponent(atob(encodedStr))
+      return JSON.parse(jsonStr)
+    } catch (error) {
+      console.error('Message decode error:', error)
+      return null
+    }
+  },
+}

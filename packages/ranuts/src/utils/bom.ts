@@ -1,6 +1,6 @@
+import { MessageCodec, isString } from './str';
 import { noop } from '@/utils/noop';
 import { performanceTime } from '@/utils/time';
-import { isString } from '@/utils/str';
 import { isClient } from '@/utils/device';
 
 /**
@@ -407,17 +407,17 @@ export const imageRequest = (url?: string): Promise<number> => {
  */
 export const durationHandler =
   <T, U>(handler: (...args: T[]) => U, ...params: T[]): ((a: number) => Promise<U>) =>
-  (duration: number): Promise<U> =>
-    new Promise((resolve, reject) => {
-      setTimeout(async () => {
-        try {
-          const result = await handler(...params);
-          resolve(result);
-        } catch (error) {
-          reject(error);
-        }
-      }, duration);
-    });
+    (duration: number): Promise<U> =>
+      new Promise((resolve, reject) => {
+        setTimeout(async () => {
+          try {
+            const result = await handler(...params);
+            resolve(result);
+          } catch (error) {
+            reject(error);
+          }
+        }, duration);
+      });
 
 /**
  * @description: 通过请求来测试当前网络的 ping 值
@@ -443,7 +443,7 @@ export const networkSpeed = async (options: Options): Promise<ReturnType> => {
   return { ping, jitter };
 };
 
-export const isSafari = (): boolean | undefined |string => {
+export const isSafari = (): boolean | undefined | string => {
   // eslint-disable-next-line n/no-unsupported-features/node-builtins
   if (typeof navigator === 'undefined') {
     return undefined;
@@ -462,3 +462,270 @@ export const isSafari = (): boolean | undefined |string => {
     !navigator.userAgent.includes('FxiOS')
   );
 };
+
+// #region Bridge start
+
+export interface MessageHandler<T = unknown, R = unknown> {
+  (payload: T): Promise<R> | R
+}
+
+export interface MessageData<T = unknown> {
+  type: string
+  payload: T
+  id?: string
+  isResponse?: boolean
+  isError?: boolean
+}
+
+export interface PendingRequest<R = unknown> {
+  resolve: (value: R) => void
+  reject: (error: unknown) => void
+}
+
+const DEFAULT_TIMEOUT = 3000
+// 白名单
+// const whiteList = ['localhost', '127.0.0.1', 'chaxus.github.io']
+
+/**
+ * Bridge 注册事件，供 client 消费
+ */
+
+export class PostMessageBridge {
+  private targetWindow: Window
+  private targetOrigin: string
+  private messageHandlers: Map<string, MessageHandler<any, any>>
+  private pendingRequests: Map<string, PendingRequest<any>>
+
+  constructor(targetWindow: Window, targetOrigin = '*') {
+    this.targetWindow = targetWindow
+    this.targetOrigin = targetOrigin
+    this.messageHandlers = new Map()
+    this.pendingRequests = new Map()
+    // 监听消息
+    window.addEventListener('message', this.handleMessage)
+  }
+
+  private handleMessage = <T = unknown>(event: MessageEvent) => {
+    // const hostname = new URL(event.origin).hostname
+    // 验证消息来源
+    // if (this.targetOrigin !== '*' && event.origin !== this.targetOrigin && !whiteList.includes(hostname)) return
+    if (this.targetOrigin !== '*' && event.origin !== this.targetOrigin) return
+
+    const decodedData = MessageCodec.decode<MessageData<T>>(event.data)
+    if (!decodedData) return
+
+    const { type, payload, id, isResponse } = decodedData
+
+    // 处理响应消息
+    if (isResponse && id) {
+      const pendingRequest = this.pendingRequests.get(id)
+      if (pendingRequest) {
+        pendingRequest.resolve(payload)
+        this.pendingRequests.delete(id)
+      }
+      return
+    }
+
+    // 处理普通消息
+    const handler = this.messageHandlers.get(type)
+    if (handler) {
+      Promise.resolve(handler(payload))
+        .then(response => {
+          if (id) {
+            this.targetWindow.postMessage(
+              MessageCodec.encode({
+                type,
+                payload: response,
+                id,
+                isResponse: true,
+              }),
+              this.targetOrigin
+            )
+          }
+        })
+        .catch(error => {
+          if (id) {
+            this.targetWindow.postMessage(
+              MessageCodec.encode({
+                type,
+                payload: error.message,
+                id,
+                isResponse: true,
+                isError: true,
+              }),
+              this.targetOrigin
+            )
+          }
+        })
+    }
+  }
+
+  // 注册消息处理器
+  on = <T = unknown, R = unknown>(type: string, handler: MessageHandler<T, R>): void => {
+    this.messageHandlers.set(type, handler as MessageHandler<any, any>)
+  }
+
+  // 移除消息处理器
+  off = (type: string): void => {
+    this.messageHandlers.delete(type)
+  }
+
+  // 发送消息并等待响应
+  send = async <T = unknown, R = unknown>(type: string, payload: T): Promise<R> => {
+    const id = Math.random().toString(36).slice(2, 11)
+
+    return new Promise<R>((resolve, reject) => {
+      this.pendingRequests.set(id, { resolve, reject })
+
+      this.targetWindow.postMessage(
+        MessageCodec.encode({
+          type,
+          payload,
+          id,
+        }),
+        this.targetOrigin
+      )
+      // 兜底方案，如果一段时间没有收到响应，则请求结束
+      setTimeout(() => {
+        if (this.pendingRequests.has(id)) {
+          this.pendingRequests.delete(id)
+          reject(new Error('Request timeout'))
+        }
+      }, DEFAULT_TIMEOUT)
+    })
+  }
+
+  // 广播消息
+  broadcast = <T = unknown>(data: { type: string; payload: T }): void  => {
+    const { type, payload } = data
+    this.targetWindow.postMessage(
+      MessageCodec.encode({
+        type,
+        payload,
+      }),
+      this.targetOrigin
+    )
+  }
+
+  // 清理
+  destroy = (): void => {
+    window.removeEventListener('message', this.handleMessage)
+    this.messageHandlers.clear()
+    this.pendingRequests.clear()
+  }
+}
+// #endregion Bridge end
+
+// #region BridgeManager start
+export interface BridgeManagerOptions {
+  id?: string
+  targetOrigin: string
+  targetWindow: Window
+}
+
+export class BridgeManager {
+  private static instance: BridgeManager
+
+  private bridges = new Map<string, PostMessageBridge>()
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  private constructor() {}
+
+  static getInstance(): BridgeManager {
+    if (!BridgeManager.instance) {
+      BridgeManager.instance = new BridgeManager()
+    }
+    return BridgeManager.instance
+  }
+
+  // 创建新的 bridge
+  connectClient = ({
+    id,
+    targetOrigin,
+    targetWindow,
+  }: BridgeManagerOptions): { bridge: PostMessageBridge; id: string } => {
+    const bridge = new PostMessageBridge(targetWindow, targetOrigin)
+    if (!id) {
+      id = Math.random().toString(36).slice(2, 11)
+    }
+    if (this.bridges.has(id)) {
+      throw new Error(`Bridge ${id} already exists`)
+    }
+    this.bridges.set(id, bridge)
+    return { bridge, id }
+  }
+
+  // 获取指定 bridge
+  getClient = (id: string): PostMessageBridge | undefined => {
+    return this.bridges.get(id)
+  }
+
+  // 移除 bridge
+  removeClient = (id: string): void => {
+    const bridge = this.bridges.get(id)
+    if (bridge) {
+      bridge.destroy()
+      this.bridges.delete(id)
+    }
+  }
+
+  // 广播消息到所有 bridge
+  broadcast = <T = unknown>(payload: { type: string; payload: T }): void => {
+    this.bridges.forEach(bridge => {
+      bridge.broadcast(payload)
+    })
+  }
+
+  // 发送消息到指定 bridge
+  sendTo = <T = unknown, R = unknown>(id: string, type: string, payload: T): Promise<R> => {
+    const bridge = this.getClient(id)
+    if (!bridge) {
+      return Promise.reject(new Error(`Bridge ${id} not found`))
+    }
+    return bridge.send<T, R>(type, payload)
+  }
+}
+
+// 导出单例实例
+export const bridgeManager = BridgeManager.getInstance()
+
+// #endregion BridgeManager end
+
+
+// #region Client start
+
+export interface BroadcastPayload {
+  type: string
+  payload: unknown
+}
+
+export interface CallToPayload<T = unknown> {
+  id: string
+  type: string
+  payload: T
+}
+
+export const Client = {
+  // 连接 Client
+  connect: ({ id, targetWindow, targetOrigin }: BridgeManagerOptions): { bridge: PostMessageBridge; id: string } => {
+    return bridgeManager.connectClient({ id, targetWindow, targetOrigin })
+  },
+  // 移除 Client 连接
+  remove: (id: string): void => {
+    if (!id) return
+    bridgeManager.removeClient(id)
+  },
+  /** 广播消息到所有 Platform */
+  broadcast: (payload: BroadcastPayload): void => {
+    return bridgeManager.broadcast(payload)
+  },
+  /** 发送消息到指定 Platform */
+  call: <T = unknown, R = unknown>({ id, type, payload }: CallToPayload<T>): Promise<R> => {
+    return bridgeManager.sendTo<T, R>(id, type, payload)
+  },
+  /** 广播消息到所有所有可以接收消息的窗口 (为了安全考虑，不建议使用) */
+  broadcastToAll: (payload: BroadcastPayload): void => {
+    return window.postMessage(MessageCodec.encode(payload), '*')
+  },
+}
+// #endregion Client end

@@ -1,14 +1,18 @@
 import {
   AudioRecorder,
+  BridgeManager,
   Chain,
+  Client,
   Color,
   ColorScheme,
   FMT,
   Hsl,
   Hsla,
   Mathjs,
+  MessageCodec,
   MimeType,
   Monitor,
+  PostMessageBridge,
   QuestQueue,
   Rgb,
   Rgba,
@@ -18,6 +22,7 @@ import {
   addNumSym,
   appendUrl,
   audioVendor,
+  bridgeManager,
   canvasVendor,
   changeHumpToLowerCase,
   checkEncoding,
@@ -51,6 +56,7 @@ import {
   getPerformance,
   getPixelRatio,
   getQuery,
+  getRandomString,
   getStatus,
   getWindow,
   handleConsole,
@@ -111,6 +117,7 @@ import {
   transformText,
   webglVendor
 } from './src/utils';
+import type { BridgeManagerOptions, BroadcastPayload, CallToPayload, MessageData, MessageHandler, PendingRequest } from './src/utils';
 import {
   Router,
   Server,
@@ -279,7 +286,13 @@ export {
   checkEncoding,
   transformText,
   isSafari,
-  md5
+  md5,
+  getRandomString,
+  bridgeManager,
+  Client,
+  BridgeManager,
+  PostMessageBridge,
+  MessageCodec
 };
 
-export type { CurrentDevice, Context, TransformText };
+export type { CurrentDevice, Context, TransformText, MessageHandler, MessageData, PendingRequest, BridgeManagerOptions, BroadcastPayload, CallToPayload };
