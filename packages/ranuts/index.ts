@@ -115,9 +115,16 @@ import {
   toString,
   transformNumber,
   transformText,
-  webglVendor
+  webglVendor,
 } from './src/utils';
-import type { BridgeManagerOptions, BroadcastPayload, CallToPayload, MessageData, MessageHandler, PendingRequest } from './src/utils';
+import type {
+  BridgeManagerOptions,
+  BroadcastPayload,
+  CallToPayload,
+  MessageData,
+  MessageHandler,
+  PendingRequest,
+} from './src/utils';
 import {
   Router,
   Server,
@@ -292,7 +299,17 @@ export {
   Client,
   BridgeManager,
   PostMessageBridge,
-  MessageCodec
+  MessageCodec,
 };
 
-export type { CurrentDevice, Context, TransformText, MessageHandler, MessageData, PendingRequest, BridgeManagerOptions, BroadcastPayload, CallToPayload };
+export type {
+  CurrentDevice,
+  Context,
+  TransformText,
+  MessageHandler,
+  MessageData,
+  PendingRequest,
+  BridgeManagerOptions,
+  BroadcastPayload,
+  CallToPayload,
+};

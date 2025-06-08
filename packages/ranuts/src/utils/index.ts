@@ -14,7 +14,7 @@ import {
   str2Xml,
   strParse,
   toString,
-  transformText
+  transformText,
 } from './str';
 import type { TransformText } from './str';
 import {
@@ -40,9 +40,16 @@ import {
   networkSpeed,
   removeGhosting,
   requestUrlToBuffer,
-  retain
+  retain,
 } from './bom';
-import type { BridgeManagerOptions, BroadcastPayload, CallToPayload, MessageData, MessageHandler, PendingRequest } from './bom';
+import type {
+  BridgeManagerOptions,
+  BroadcastPayload,
+  CallToPayload,
+  MessageData,
+  MessageHandler,
+  PendingRequest,
+} from './bom';
 import {
   cloneDeep,
   filterObj,
@@ -224,7 +231,16 @@ export {
   Client,
   BridgeManager,
   PostMessageBridge,
-  MessageCodec
+  MessageCodec,
 };
 
-export type { CurrentDevice, TransformText, MessageHandler, MessageData, PendingRequest, BridgeManagerOptions, BroadcastPayload, CallToPayload };
+export type {
+  CurrentDevice,
+  TransformText,
+  MessageHandler,
+  MessageData,
+  PendingRequest,
+  BridgeManagerOptions,
+  BroadcastPayload,
+  CallToPayload,
+};

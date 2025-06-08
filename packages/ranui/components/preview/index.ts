@@ -5,12 +5,12 @@ import { loadResources } from './resource-loader';
 import templatedoc from '@/assets/apps/documenteditor/main/index.html?raw';
 import templateppt from '@/assets/apps/presentationeditor/main/index.html?raw';
 import templatetab from '@/assets/apps/spreadsheeteditor/main/index.html?raw';
-import { 
+import {
   convertDocument,
   createEditorInstance,
-  initX2T, 
-  initX2TScript, 
-  loadEditorApi
+  initX2T,
+  initX2TScript,
+  loadEditorApi,
 } from '@/components/preview/onlyoffice';
 import message from '@/components/message';
 import { DOCX, PDF, PPTX, XLS, XLSX } from '@/components/preview/constant';
@@ -34,47 +34,40 @@ interface requestUrlToArraybufferReturn extends BaseReturn {
 // 处理模板中的资源路径
 function processTemplatePaths(template: string, type: 'doc' | 'ppt' | 'xls'): string {
   // 替换资源路径
-  return template
-    // 替换 CSS 路径
-    .replace(
-      /href="\.\.\/\.\.\/\.\.\/apps\/([^"]+)"/g,
-      'href="/assets/apps/$1"'
-    )
-    // 替换 SDK 路径
-    .replace(
-      /src="\.\.\/\.\.\/\.\.\/\.\.\/sdkjs\/([^"]+)"/g,
-      'src="/assets/sdkjs/$1"'
-    )
-    // 替换其他资源路径
-    .replace(
-      /src="\.\.\/\.\.\/common\/([^"]+)"/g,
-      'src="/assets/apps/common/$1"'
-    );
+  return (
+    template
+      // 替换 CSS 路径
+      .replace(/href="\.\.\/\.\.\/\.\.\/apps\/([^"]+)"/g, 'href="/assets/apps/$1"')
+      // 替换 SDK 路径
+      .replace(/src="\.\.\/\.\.\/\.\.\/\.\.\/sdkjs\/([^"]+)"/g, 'src="/assets/sdkjs/$1"')
+      // 替换其他资源路径
+      .replace(/src="\.\.\/\.\.\/common\/([^"]+)"/g, 'src="/assets/apps/common/$1"')
+  );
 }
 
 const renderOffice = async (file: File, options: RenderOptions) => {
   try {
     // 初始化 x2t-wasm
-    await initX2TScript()
+    await initX2TScript();
     // 加载编辑器 API
-    await loadEditorApi()
-    await initX2T()
+    await loadEditorApi();
+    await initX2T();
 
     // 转换文档
-    const result = await convertDocument(file)
-    
+    const result = await convertDocument(file);
+
     // 创建编辑器实例
     createEditorInstance({
       fileName: file.name,
       fileType: file.type,
       binData: new Uint8Array(result.bin).buffer,
-      media: result.media
-    })
+      media: result.media,
+    });
   } catch (error) {
-    console.error('renderOffice error:', error)
-    options.onError?.(error)
+    console.error('renderOffice error:', error);
+    options.onError?.(error);
   }
-}
+};
 
 async function Custom() {
   if (typeof document !== 'undefined' && !customElements.get('r-preview')) {
@@ -255,12 +248,12 @@ async function Custom() {
         this._iframe.style.width = '100%';
         this._iframe.style.height = '100%';
         this._iframe.style.border = 'none';
-        
+
         // 根据文件类型选择模板
         const fileType = this.src?.split('.').pop()?.toLowerCase() || '';
         let template = templatedoc; // 默认使用文档编辑器模板
         let editorType: 'doc' | 'ppt' | 'xls' = 'doc';
-        
+
         if (fileType === 'xlsx' || fileType === 'xls') {
           template = templatetab;
           editorType = 'xls';
@@ -268,13 +261,13 @@ async function Custom() {
           template = templateppt;
           editorType = 'ppt';
         }
-        
+
         // 处理模板中的资源路径
         template = processTemplatePaths(template, editorType);
-        
+
         // 写入模板内容
         this._iframe.srcdoc = template;
-        
+
         // 等待 iframe 加载完成
         this._iframe.onload = () => {
           const contentWindow = this._iframe?.contentWindow;
@@ -289,12 +282,12 @@ async function Custom() {
         if (this.previewContext) {
           this.previewContext.appendChild(this._iframe);
         }
-      }
+      };
       initEditor = async () => {
         try {
           // 加载资源
           await loadResources();
-          
+
           // 初始化 x2t-wasm
           await initX2TScript();
           // 加载编辑器 API
@@ -308,14 +301,14 @@ async function Custom() {
 
             // 转换文档
             const result = await convertDocument(file);
-            
+
             // 创建编辑器实例
             if (this._editorWindow) {
               createEditorInstance({
                 fileName: file.name,
                 fileType: file.type,
                 binData: new Uint8Array(result.bin).buffer,
-                media: result.media
+                media: result.media,
               });
             }
           }
@@ -325,7 +318,7 @@ async function Custom() {
             this.preview?.removeChild(this._loadingElement);
           }
         }
-      }
+      };
       showPreview = () => {
         if (this.src) {
           if (this.preview) {
@@ -355,7 +348,7 @@ async function Custom() {
             this.preview.appendChild(this._loadingElement);
             document.body.appendChild(this.preview);
           }
-          
+
           // 创建编辑器 iframe
           this.createEditorIframe();
         }

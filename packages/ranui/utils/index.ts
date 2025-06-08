@@ -71,11 +71,11 @@ export const createIconList = (): void => {
 // Cache for loaded scripts
 const loadedScripts = new Set<string>();
 
-export const loadScript = ({ type, content }: { type: string, content: string }): Promise<{ success: boolean }> => {
+export const loadScript = ({ type, content }: { type: string; content: string }): Promise<{ success: boolean }> => {
   return new Promise((resolve, reject) => {
     // Generate a unique key for the script using MD5
-    const scriptKey = md5(content)
-    
+    const scriptKey = md5(content);
+
     // Check if script is already loaded
     if (loadedScripts.has(scriptKey)) {
       resolve({ success: true });
@@ -83,11 +83,11 @@ export const loadScript = ({ type, content }: { type: string, content: string })
     }
 
     const script = document.createElement('script');
-    if(type === 'url'){
+    if (type === 'url') {
       script.src = content;
     }
-    if(type === 'content'){
-      script.textContent = content
+    if (type === 'content') {
+      script.textContent = content;
     }
     script.onload = function () {
       loadedScripts.add(scriptKey);
@@ -101,7 +101,7 @@ export const loadScript = ({ type, content }: { type: string, content: string })
 };
 
 export interface CustomErrorType {
-  new(m: string): void;
+  new (m: string): void;
 }
 
 export function createCustomError(msg: string = ''): CustomErrorType {
@@ -154,7 +154,7 @@ export const vod = {
   },
 };
 
-export const HTMLElementSSR = (): { new(): HTMLElement; prototype: HTMLElement } | null => {
+export const HTMLElementSSR = (): { new (): HTMLElement; prototype: HTMLElement } | null => {
   if (typeof document !== 'undefined') {
     return HTMLElement;
   }
@@ -212,19 +212,19 @@ export const createSignal = <T = unknown>(
 export function getMimeTypeFromExtension(fileName: string): string {
   const ext = fileName.split('.').pop()?.toLowerCase() || '';
   const mimeTypes: Record<string, string> = {
-    'doc': 'application/msword',
-    'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    'xls': 'application/vnd.ms-excel',
-    'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    'ppt': 'application/vnd.ms-powerpoint',
-    'pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-    'pdf': 'application/pdf',
-    'txt': 'text/plain',
-    'png': 'image/png',
-    'jpg': 'image/jpeg',
-    'jpeg': 'image/jpeg',
-    'gif': 'image/gif',
-    'svg': 'image/svg+xml',
+    doc: 'application/msword',
+    docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    xls: 'application/vnd.ms-excel',
+    xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    ppt: 'application/vnd.ms-powerpoint',
+    pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    pdf: 'application/pdf',
+    txt: 'text/plain',
+    png: 'image/png',
+    jpg: 'image/jpeg',
+    jpeg: 'image/jpeg',
+    gif: 'image/gif',
+    svg: 'image/svg+xml',
   };
   return mimeTypes[ext] || 'application/octet-stream';
 }

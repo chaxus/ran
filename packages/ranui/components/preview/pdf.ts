@@ -1,6 +1,6 @@
 import { isSafari } from 'ranuts/utils';
 import { loadScript } from '@/utils/index';
-// copy from: https://github.com/mozilla/pdfjs-dist/blob/master/build/pdf.min.js 
+// copy from: https://github.com/mozilla/pdfjs-dist/blob/master/build/pdf.min.js
 import PDF_JS from '@/assets/js/pdf.min.js?raw';
 // copy from：https://github.com/mozilla/pdfjs-dist/blob/master/build/pdf.worker.min.js
 import PDF_WORKER_JS from '@/assets/js/pdf.worker.min.js?raw';
@@ -65,7 +65,7 @@ export class PdfPreview {
       if (this.pdfDoc) {
         this.pdfDoc.getPage(number).then((page: PDFPageProxy) => {
           // safari 上有兼容性问题
-          const scale = isSafari() ? Math.min(window.devicePixelRatio, 2) : (window.devicePixelRatio || 1);
+          const scale = isSafari() ? Math.min(window.devicePixelRatio, 2) : window.devicePixelRatio || 1;
           const viewport = page.getViewport({ scale });
           const canvas = document.createElement('canvas');
           canvas.style.setProperty('margin', '0 auto');
@@ -75,8 +75,8 @@ export class PdfPreview {
           const clientWidth = document.body.clientWidth - 20;
           const { width } = viewport;
           const baseRadio = width > clientWidth ? clientWidth / width : 1;
-          canvas.width = viewport.width * scale
-          canvas.height = viewport.height * scale
+          canvas.width = viewport.width * scale;
+          canvas.height = viewport.height * scale;
           canvas.style.width = Math.floor(viewport.width) * baseRadio + 'px';
           canvas.style.height = Math.floor(viewport.height) * baseRadio + 'px';
           const renderContext = {
@@ -106,7 +106,7 @@ export class PdfPreview {
         await this.getPdfPage(this.pageNumber);
         resolve({ success: true, data: this.pdfDoc });
       });
-    })
+    });
   };
   showTotalPage = async (): Promise<void> => {
     for (let i = 1; i <= this.total; i++) {
@@ -163,8 +163,8 @@ export const renderPdf = async (file: File, options: RenderOptions): Promise<voi
       const pdf = await createReader(file);
       if (pdf) {
         const PDF = new PdfPreview(pdf, options);
-        await PDF.pdfPreview()
-        await PDF.showTotalPage()
+        await PDF.pdfPreview();
+        await PDF.showTotalPage();
       }
     }
   } catch (error) {
