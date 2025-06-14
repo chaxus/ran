@@ -429,6 +429,11 @@ export const getRandomString = (len: number = 8): string => {
 
 /**
  * 消息编解码工具
+ * 可以正确处理所有 Unicode 字符，包括中文、emoji 等
+ * 编码后的字符串只包含 A-Z, a-z, 0-9, +, /, = 这些安全字符
+ * 适合在 URL、Cookie 等场景使用
+ * 编码解码过程是双向的，不会丢失数据
+ * 不会出现编码解码不一致的问题
  */
 export const MessageCodec = {
   /**
@@ -439,7 +444,9 @@ export const MessageCodec = {
   encode(data: any): string {
     try {
       const jsonStr = JSON.stringify(data);
-      return btoa(encodeURIComponent(jsonStr));
+      const encoder = new TextEncoder();
+      const bytes = encoder.encode(jsonStr);
+      return btoa(String.fromCharCode.apply(null, Array.from(bytes)));
     } catch (error) {
       console.error('Message encode error:', error);
       return '';
@@ -453,11 +460,81 @@ export const MessageCodec = {
    */
   decode<T = any>(encodedStr: string): T | null {
     try {
-      const jsonStr = decodeURIComponent(atob(encodedStr));
+      const binaryStr = atob(encodedStr);
+      const bytes = new Uint8Array(binaryStr.length);
+      for (let i = 0; i < binaryStr.length; i++) {
+        bytes[i] = binaryStr.charCodeAt(i);
+      }
+      const decoder = new TextDecoder();
+      const jsonStr = decoder.decode(bytes);
       return JSON.parse(jsonStr);
     } catch (error) {
       console.error('Message decode error:', error);
       return null;
+    }
+  },
+
+  /**
+   * 编码文件对象
+   * @param file File对象
+   * @returns 包含文件信息的可传输对象
+   */
+  async encodeFile(file: File): Promise<{
+    name: string;
+    type: string;
+    size: number;
+    lastModified: number;
+    data: string;
+  }> {
+    try {
+      // 读取文件内容为 ArrayBuffer
+      const arrayBuffer = await file.arrayBuffer();
+      // 将 ArrayBuffer 转换为 base64 字符串
+      const base64 = btoa(
+        String.fromCharCode.apply(null, Array.from(new Uint8Array(arrayBuffer)))
+      );
+
+      return {
+        name: file.name,
+        type: file.type,
+        size: file.size,
+        lastModified: file.lastModified,
+        data: base64,
+      };
+    } catch (error) {
+      console.error('File encode error:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * 解码文件对象
+   * @param encodedFile 编码后的文件对象
+   * @returns 重建的 File 对象
+   */
+  decodeFile(encodedFile: {
+    name: string;
+    type: string;
+    size: number;
+    lastModified: number;
+    data: string;
+  }): File {
+    try {
+      // 将 base64 字符串转换回 ArrayBuffer
+      const binaryStr = atob(encodedFile.data);
+      const bytes = new Uint8Array(binaryStr.length);
+      for (let i = 0; i < binaryStr.length; i++) {
+        bytes[i] = binaryStr.charCodeAt(i);
+      }
+
+      // 创建新的 File 对象
+      return new File([bytes], encodedFile.name, {
+        type: encodedFile.type,
+        lastModified: encodedFile.lastModified,
+      });
+    } catch (error) {
+      console.error('File decode error:', error);
+      throw error;
     }
   },
 };
