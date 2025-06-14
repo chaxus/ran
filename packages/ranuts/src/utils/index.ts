@@ -1,12 +1,15 @@
 import { SyncHook } from './subscribe';
 import { Mathjs, addNumSym, mathjs, perToNum, range, transformNumber } from './number';
 import {
+  MessageCodec,
   changeHumpToLowerCase,
   checkEncoding,
   clearBr,
   clearStr,
   getMatchingSentences,
+  getRandomString,
   isString,
+  md5,
   randomString,
   str2Xml,
   strParse,
@@ -15,7 +18,11 @@ import {
 } from './str';
 import type { TransformText } from './str';
 import {
+  BridgeManager,
+  Client,
+  PostMessageBridge,
   appendUrl,
+  bridgeManager,
   connection,
   createObjectURL,
   durationHandler,
@@ -29,11 +36,31 @@ import {
   getQuery,
   getWindow,
   imageRequest,
+  isSafari,
   networkSpeed,
   removeGhosting,
   requestUrlToBuffer,
   retain,
 } from './bom';
+import type {
+  BridgeManagerOptions,
+  BroadcastPayload,
+  CallToPayload,
+  MessageData,
+  MessageHandler,
+  PendingRequest,
+} from './bom';
+import {
+  cloneDeep,
+  filterObj,
+  formatJson,
+  isEqual,
+  merge,
+  mergeExports,
+  querystring,
+  replaceOld,
+  setAttributeByGlobal,
+} from './obj';
 import { AudioRecorder } from '@/utils/audioRecorder';
 import { createSignal, subscribers } from '@/utils/signal';
 import { audioVendor, canvasVendor, webglVendor } from '@/utils/behavior';
@@ -80,17 +107,6 @@ import { MimeType, getMime, setMime } from '@/utils/mimeType';
 import { Monitor } from '@/utils/monitor';
 import { getStatus, status } from '@/utils/network';
 import { noop } from '@/utils/noop';
-import {
-  cloneDeep,
-  filterObj,
-  formatJson,
-  isEqual,
-  merge,
-  mergeExports,
-  querystring,
-  replaceOld,
-  setAttributeByGlobal,
-} from '@/utils/obj';
 import { getPerformance } from '@/utils/performance';
 import { QuestQueue } from '@/utils/queue';
 import { createData, report } from '@/utils/report';
@@ -208,6 +224,23 @@ export {
   getQuery,
   checkEncoding,
   transformText,
+  isSafari,
+  md5,
+  getRandomString,
+  bridgeManager,
+  Client,
+  BridgeManager,
+  PostMessageBridge,
+  MessageCodec,
 };
 
-export type { CurrentDevice, TransformText };
+export type {
+  CurrentDevice,
+  TransformText,
+  MessageHandler,
+  MessageData,
+  PendingRequest,
+  BridgeManagerOptions,
+  BroadcastPayload,
+  CallToPayload,
+};
