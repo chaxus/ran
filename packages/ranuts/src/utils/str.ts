@@ -427,13 +427,47 @@ export const getRandomString = (len: number = 8): string => {
     .substring(2, len + 2);
 };
 
+// 添加类型定义
+type FileMetadata = {
+  type: 'File';
+  name: string;
+  mimeType: string;
+  size: number;
+  lastModified: number;
+  content: Uint8Array;
+};
+
+type BlobMetadata = {
+  type: 'Blob';
+  mimeType: string;
+  size: number;
+  content: Uint8Array;
+};
+
+type FileChunk = {
+  name: string;
+  type: string;
+  size: number;
+  lastModified: number;
+  totalChunks: number;
+  chunkIndex: number;
+  data: string;
+};
+
+// 添加错误类型
+class MessageCodecError extends Error {
+  constructor(message: string, public readonly code: string) {
+    super(message);
+    this.name = 'MessageCodecError';
+  }
+}
+
 /**
  * 消息编解码工具
- * 可以正确处理所有 Unicode 字符，包括中文、emoji 等
+ * 正确处理所有 Unicode 字符，包括中文、emoji 等
  * 编码后的字符串只包含 A-Z, a-z, 0-9, +, /, = 这些安全字符
  * 适合在 URL、Cookie 等场景使用
- * 编码解码过程是双向的，不会丢失数据
- * 不会出现编码解码不一致的问题
+ * 编码解码过程是双向的，不会丢失数据，不会出现编码解码不一致的问题
  */
 export const MessageCodec = {
   /**
@@ -478,12 +512,11 @@ export const MessageCodec = {
    * 编码文件对象
    * @param file File对象
    * @returns 编码后的字符串
+   * @throws {MessageCodecError} 当文件编码失败时抛出
    */
   async encodeFile(file: File): Promise<string> {
     try {
       const arrayBuffer = await file.arrayBuffer();
-      // 将 ArrayBuffer 转换为 Uint8Array 后直接使用 this.encode
-      // 同时保留文件的元数据信息
       return this.encode({
         type: 'File',
         name: file.name,
@@ -493,43 +526,54 @@ export const MessageCodec = {
         content: new Uint8Array(arrayBuffer)
       });
     } catch (error) {
-      console.error('File encode error:', error);
-      throw error;
+      throw new MessageCodecError(
+        `Failed to encode file: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        'FILE_ENCODE_ERROR'
+      );
     }
   },
 
   /**
-   * 解码 File 对象
-   * @param encodedStr 编码后的字符串
+   * 解码文件对象
+   * @param encoded 编码后的字符串
    * @returns 解码后的 File 对象
+   * @throws {MessageCodecError} 当解码失败或类型不匹配时抛出
    */
-  decodeFile(encodedStr: string): File {
+  decodeFile(encoded: string): File {
     try {
-      const decoded = this.decode(encodedStr);
+      const decoded = this.decode(encoded);
       if (decoded.type !== 'File') {
-        throw new Error('Invalid encoded File data');
+        throw new MessageCodecError(
+          `Expected File type but got ${decoded.type}`,
+          'INVALID_FILE_TYPE'
+        );
       }
-
-      const fileContent = atob(decoded.content);
-      const fileBytes = new Uint8Array(fileContent.length);
-      for (let i = 0; i < fileContent.length; i++) {
-        fileBytes[i] = fileContent.charCodeAt(i);
-      }
-
-      return new File([fileBytes], decoded.name, {
-        type: decoded.mimeType,
-        lastModified: decoded.lastModified
-      });
+      const metadata = decoded as FileMetadata;
+      // 确保 content 是 ArrayBuffer 类型
+      const content = metadata.content instanceof Uint8Array 
+        ? metadata.content.buffer.slice(0) // 创建一个新的 ArrayBuffer
+        : metadata.content;
+      return new File(
+        [content as ArrayBuffer],
+        metadata.name,
+        { type: metadata.mimeType, lastModified: metadata.lastModified }
+      );
     } catch (error) {
-      console.error('File decode error:', error);
-      throw error;
+      if (error instanceof MessageCodecError) {
+        throw error;
+      }
+      throw new MessageCodecError(
+        `Failed to decode file: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        'FILE_DECODE_ERROR'
+      );
     }
   },
 
   /**
    * 编码 Blob 对象
-   * @param blob Blob对象
+   * @param blob Blob 对象
    * @returns 编码后的字符串
+   * @throws {MessageCodecError} 当编码失败时抛出
    */
   async encodeBlob(blob: Blob): Promise<string> {
     try {
@@ -538,42 +582,54 @@ export const MessageCodec = {
         type: 'Blob',
         mimeType: blob.type,
         size: blob.size,
-        content: btoa(String.fromCharCode.apply(null, Array.from(new Uint8Array(arrayBuffer))))
+        content: new Uint8Array(arrayBuffer)
       });
     } catch (error) {
-      console.error('Blob encode error:', error);
-      throw error;
+      throw new MessageCodecError(
+        `Failed to encode blob: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        'BLOB_ENCODE_ERROR'
+      );
     }
   },
 
   /**
    * 解码 Blob 对象
-   * @param encodedStr 编码后的字符串
+   * @param encoded 编码后的字符串
    * @returns 解码后的 Blob 对象
+   * @throws {MessageCodecError} 当解码失败或类型不匹配时抛出
    */
-  decodeBlob(encodedStr: string): Blob {
+  decodeBlob(encoded: string): Blob {
     try {
-      const decoded = this.decode(encodedStr);
+      const decoded = this.decode(encoded);
       if (decoded.type !== 'Blob') {
-        throw new Error('Invalid encoded Blob data');
+        throw new MessageCodecError(
+          `Expected Blob type but got ${decoded.type}`,
+          'INVALID_BLOB_TYPE'
+        );
       }
-
-      const blobContent = atob(decoded.content);
-      const blobBytes = new Uint8Array(blobContent.length);
-      for (let i = 0; i < blobContent.length; i++) {
-        blobBytes[i] = blobContent.charCodeAt(i);
-      }
-
-      return new Blob([blobBytes], { type: decoded.mimeType });
+      const metadata = decoded as BlobMetadata;
+      // 确保 content 是 ArrayBuffer 类型
+      const content = metadata.content instanceof Uint8Array 
+        ? metadata.content.buffer.slice(0) // 创建一个新的 ArrayBuffer
+        : metadata.content;
+      return new Blob(
+        [content as ArrayBuffer],
+        { type: metadata.mimeType }
+      );
     } catch (error) {
-      console.error('Blob decode error:', error);
-      throw error;
+      if (error instanceof MessageCodecError) {
+        throw error;
+      }
+      throw new MessageCodecError(
+        `Failed to decode blob: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        'BLOB_DECODE_ERROR'
+      );
     }
   },
 
   /**
    * 编码 Date 对象
-   * @param date Date对象
+   * @param date Date 对象
    * @returns 编码后的字符串
    */
   encodeDate(date: Date): string {
@@ -591,7 +647,7 @@ export const MessageCodec = {
   /**
    * 解码 Date 对象
    * @param encodedStr 编码后的字符串
-   * @returns 解码后的Date对象
+   * @returns 解码后的 Date 对象
    */
   decodeDate(encodedStr: string): Date {
     try {
@@ -608,7 +664,7 @@ export const MessageCodec = {
 
   /**
    * 编码 RegExp 对象
-   * @param regexp RegExp对象
+   * @param regexp RegExp 对象
    * @returns 编码后的字符串
    */
   encodeRegExp(regexp: RegExp): string {
@@ -627,7 +683,7 @@ export const MessageCodec = {
   /**
    * 解码 RegExp 对象
    * @param encodedStr 编码后的字符串
-   * @returns 解码后的RegExp对象
+   * @returns 解码后的 RegExp 对象
    */
   decodeRegExp(encodedStr: string): RegExp {
     try {
@@ -644,7 +700,7 @@ export const MessageCodec = {
 
   /**
    * 编码 Map 对象
-   * @param map Map对象
+   * @param map Map 对象
    * @returns 编码后的字符串
    */
   encodeMap<K, V>(map: Map<K, V>): string {
@@ -829,39 +885,29 @@ export const MessageCodec = {
    * @param file File 对象
    * @param chunkSize 分片大小，默认 1MB
    * @returns 包含文件信息和分片数据的可传输对象数组
+   * @throws {MessageCodecError} 当分片编码失败时抛出
    */
   async encodeFileChunked(
     file: File,
     chunkSize: number = 1024 * 1024 // 默认 1MB
-  ): Promise<Array<{
-    name: string;
-    type: string;
-    size: number;
-    lastModified: number;
-    totalChunks: number;
-    chunkIndex: number;
-    data: string;
-  }>> {
+  ): Promise<FileChunk[]> {
     try {
+      if (chunkSize <= 0) {
+        throw new MessageCodecError(
+          'Chunk size must be greater than 0',
+          'INVALID_CHUNK_SIZE'
+        );
+      }
+
       const totalChunks = Math.ceil(file.size / chunkSize);
-      const chunks: Array<{
-        name: string;
-        type: string;
-        size: number;
-        lastModified: number;
-        totalChunks: number;
-        chunkIndex: number;
-        data: string;
-      }> = [];
+      const chunks: FileChunk[] = [];
 
       for (let i = 0; i < totalChunks; i++) {
         const start = i * chunkSize;
         const end = Math.min(start + chunkSize, file.size);
         const chunk = file.slice(start, end);
         
-        // 读取分片内容为 ArrayBuffer
         const arrayBuffer = await chunk.arrayBuffer();
-        // 将 ArrayBuffer 转换为 base64 字符串
         const base64 = btoa(
           String.fromCharCode.apply(null, Array.from(new Uint8Array(arrayBuffer)))
         );
@@ -879,8 +925,13 @@ export const MessageCodec = {
 
       return chunks;
     } catch (error) {
-      console.error('File chunked encode error:', error);
-      throw error;
+      if (error instanceof MessageCodecError) {
+        throw error;
+      }
+      throw new MessageCodecError(
+        `Failed to encode file chunks: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        'FILE_CHUNK_ENCODE_ERROR'
+      );
     }
   },
 
@@ -888,25 +939,36 @@ export const MessageCodec = {
    * 解码分片文件对象
    * @param chunks 编码后的文件分片数组
    * @returns 重建的File对象
+   * @throws {MessageCodecError} 当分片解码失败或分片不完整时抛出
    */
-  async decodeFileChunked(chunks: Array<{
-    name: string;
-    type: string;
-    size: number;
-    lastModified: number;
-    totalChunks: number;
-    chunkIndex: number;
-    data: string;
-  }>): Promise<File> {
+  async decodeFileChunked(chunks: FileChunk[]): Promise<File> {
     try {
+      if (!chunks.length) {
+        throw new MessageCodecError('No chunks provided', 'NO_CHUNKS');
+      }
+
       const { type, lastModified, totalChunks } = chunks[0];
+      
       // 验证分片完整性
       if (chunks.length !== totalChunks) {
-        throw new Error(`Missing chunks. Expected ${totalChunks}, got ${chunks.length}`);
+        throw new MessageCodecError(
+          `Missing chunks. Expected ${totalChunks}, got ${chunks.length}`,
+          'INCOMPLETE_CHUNKS'
+        );
       }
 
       // 按分片索引排序
       chunks.sort((a, b) => a.chunkIndex - b.chunkIndex);
+
+      // 验证分片索引的连续性
+      for (let i = 0; i < chunks.length; i++) {
+        if (chunks[i].chunkIndex !== i) {
+          throw new MessageCodecError(
+            `Invalid chunk index at position ${i}`,
+            'INVALID_CHUNK_ORDER'
+          );
+        }
+      }
 
       // 合并所有分片
       const chunksData = await Promise.all(
@@ -929,14 +991,18 @@ export const MessageCodec = {
         offset += chunkData.length;
       }
 
-      // 创建新的 File 对象
-      return new File([result], chunks[0].name, {
+      return new File([result.buffer.slice(0)], chunks[0].name, {
         type,
         lastModified,
       });
     } catch (error) {
-      console.error('File chunked decode error:', error);
-      throw error;
+      if (error instanceof MessageCodecError) {
+        throw error;
+      }
+      throw new MessageCodecError(
+        `Failed to decode file chunks: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        'FILE_CHUNK_DECODE_ERROR'
+      );
     }
   },
 };
