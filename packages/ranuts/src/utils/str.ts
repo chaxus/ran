@@ -537,4 +537,120 @@ export const MessageCodec = {
       throw error;
     }
   },
+
+  /**
+   * 分片编码文件对象
+   * @param file File对象
+   * @param chunkSize 分片大小，默认 1MB
+   * @returns 包含文件信息和分片数据的可传输对象数组
+   */
+  async encodeFileChunked(
+    file: File,
+    chunkSize: number = 1024 * 1024 // 默认1MB
+  ): Promise<Array<{
+    name: string;
+    type: string;
+    size: number;
+    lastModified: number;
+    totalChunks: number;
+    chunkIndex: number;
+    data: string;
+  }>> {
+    try {
+      const totalChunks = Math.ceil(file.size / chunkSize);
+      const chunks: Array<{
+        name: string;
+        type: string;
+        size: number;
+        lastModified: number;
+        totalChunks: number;
+        chunkIndex: number;
+        data: string;
+      }> = [];
+
+      for (let i = 0; i < totalChunks; i++) {
+        const start = i * chunkSize;
+        const end = Math.min(start + chunkSize, file.size);
+        const chunk = file.slice(start, end);
+        
+        // 读取分片内容为 ArrayBuffer
+        const arrayBuffer = await chunk.arrayBuffer();
+        // 将 ArrayBuffer 转换为 base64 字符串
+        const base64 = btoa(
+          String.fromCharCode.apply(null, Array.from(new Uint8Array(arrayBuffer)))
+        );
+
+        chunks.push({
+          name: file.name,
+          type: file.type,
+          size: file.size,
+          lastModified: file.lastModified,
+          totalChunks,
+          chunkIndex: i,
+          data: base64,
+        });
+      }
+
+      return chunks;
+    } catch (error) {
+      console.error('File chunked encode error:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * 解码分片文件对象
+   * @param chunks 编码后的文件分片数组
+   * @returns 重建的File对象
+   */
+  async decodeFileChunked(chunks: Array<{
+    name: string;
+    type: string;
+    size: number;
+    lastModified: number;
+    totalChunks: number;
+    chunkIndex: number;
+    data: string;
+  }>): Promise<File> {
+    try {
+      const { type, lastModified, totalChunks } = chunks[0];
+      // 验证分片完整性
+      if (chunks.length !== totalChunks) {
+        throw new Error(`Missing chunks. Expected ${totalChunks}, got ${chunks.length}`);
+      }
+
+      // 按分片索引排序
+      chunks.sort((a, b) => a.chunkIndex - b.chunkIndex);
+
+      // 合并所有分片
+      const chunksData = await Promise.all(
+        chunks.map(async (chunk) => {
+          const binaryStr = atob(chunk.data);
+          const bytes = new Uint8Array(binaryStr.length);
+          for (let i = 0; i < binaryStr.length; i++) {
+            bytes[i] = binaryStr.charCodeAt(i);
+          }
+          return bytes;
+        })
+      );
+
+      // 创建完整的 ArrayBuffer
+      const totalSize = chunks.reduce((sum, chunk) => sum + chunk.data.length, 0);
+      const result = new Uint8Array(totalSize);
+      let offset = 0;
+      for (const chunkData of chunksData) {
+        result.set(chunkData, offset);
+        offset += chunkData.length;
+      }
+
+      // 创建新的 File 对象
+      return new File([result], chunks[0].name, {
+        type,
+        lastModified,
+      });
+    } catch (error) {
+      console.error('File chunked decode error:', error);
+      throw error;
+    }
+  },
 };
