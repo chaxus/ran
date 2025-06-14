@@ -477,30 +477,21 @@ export const MessageCodec = {
   /**
    * 编码文件对象
    * @param file File对象
-   * @returns 包含文件信息的可传输对象
+   * @returns 编码后的字符串
    */
-  async encodeFile(file: File): Promise<{
-    name: string;
-    type: string;
-    size: number;
-    lastModified: number;
-    data: string;
-  }> {
+  async encodeFile(file: File): Promise<string> {
     try {
-      // 读取文件内容为 ArrayBuffer
       const arrayBuffer = await file.arrayBuffer();
-      // 将 ArrayBuffer 转换为 base64 字符串
-      const base64 = btoa(
-        String.fromCharCode.apply(null, Array.from(new Uint8Array(arrayBuffer)))
-      );
-
-      return {
+      // 将 ArrayBuffer 转换为 Uint8Array 后直接使用 this.encode
+      // 同时保留文件的元数据信息
+      return this.encode({
+        type: 'File',
         name: file.name,
-        type: file.type,
+        mimeType: file.type,
         size: file.size,
         lastModified: file.lastModified,
-        data: base64,
-      };
+        content: new Uint8Array(arrayBuffer)
+      });
     } catch (error) {
       console.error('File encode error:', error);
       throw error;
@@ -508,29 +499,26 @@ export const MessageCodec = {
   },
 
   /**
-   * 解码文件对象
-   * @param encodedFile 编码后的文件对象
-   * @returns 重建的 File 对象
+   * 解码 File 对象
+   * @param encodedStr 编码后的字符串
+   * @returns 解码后的 File 对象
    */
-  decodeFile(encodedFile: {
-    name: string;
-    type: string;
-    size: number;
-    lastModified: number;
-    data: string;
-  }): File {
+  decodeFile(encodedStr: string): File {
     try {
-      // 将 base64 字符串转换回 ArrayBuffer
-      const binaryStr = atob(encodedFile.data);
-      const bytes = new Uint8Array(binaryStr.length);
-      for (let i = 0; i < binaryStr.length; i++) {
-        bytes[i] = binaryStr.charCodeAt(i);
+      const decoded = this.decode(encodedStr);
+      if (decoded.type !== 'File') {
+        throw new Error('Invalid encoded File data');
       }
 
-      // 创建新的 File 对象
-      return new File([bytes], encodedFile.name, {
-        type: encodedFile.type,
-        lastModified: encodedFile.lastModified,
+      const fileContent = atob(decoded.content);
+      const fileBytes = new Uint8Array(fileContent.length);
+      for (let i = 0; i < fileContent.length; i++) {
+        fileBytes[i] = fileContent.charCodeAt(i);
+      }
+
+      return new File([fileBytes], decoded.name, {
+        type: decoded.mimeType,
+        lastModified: decoded.lastModified
       });
     } catch (error) {
       console.error('File decode error:', error);
@@ -539,14 +527,312 @@ export const MessageCodec = {
   },
 
   /**
+   * 编码 Blob 对象
+   * @param blob Blob对象
+   * @returns 编码后的字符串
+   */
+  async encodeBlob(blob: Blob): Promise<string> {
+    try {
+      const arrayBuffer = await blob.arrayBuffer();
+      return this.encode({
+        type: 'Blob',
+        mimeType: blob.type,
+        size: blob.size,
+        content: btoa(String.fromCharCode.apply(null, Array.from(new Uint8Array(arrayBuffer))))
+      });
+    } catch (error) {
+      console.error('Blob encode error:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * 解码 Blob 对象
+   * @param encodedStr 编码后的字符串
+   * @returns 解码后的 Blob 对象
+   */
+  decodeBlob(encodedStr: string): Blob {
+    try {
+      const decoded = this.decode(encodedStr);
+      if (decoded.type !== 'Blob') {
+        throw new Error('Invalid encoded Blob data');
+      }
+
+      const blobContent = atob(decoded.content);
+      const blobBytes = new Uint8Array(blobContent.length);
+      for (let i = 0; i < blobContent.length; i++) {
+        blobBytes[i] = blobContent.charCodeAt(i);
+      }
+
+      return new Blob([blobBytes], { type: decoded.mimeType });
+    } catch (error) {
+      console.error('Blob decode error:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * 编码 Date 对象
+   * @param date Date对象
+   * @returns 编码后的字符串
+   */
+  encodeDate(date: Date): string {
+    try {
+      return this.encode({
+        type: 'Date',
+        value: date.toISOString()
+      });
+    } catch (error) {
+      console.error('Date encode error:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * 解码 Date 对象
+   * @param encodedStr 编码后的字符串
+   * @returns 解码后的Date对象
+   */
+  decodeDate(encodedStr: string): Date {
+    try {
+      const decoded = this.decode(encodedStr);
+      if (decoded.type !== 'Date') {
+        throw new Error('Invalid encoded Date data');
+      }
+      return new Date(decoded.value);
+    } catch (error) {
+      console.error('Date decode error:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * 编码 RegExp 对象
+   * @param regexp RegExp对象
+   * @returns 编码后的字符串
+   */
+  encodeRegExp(regexp: RegExp): string {
+    try {
+      return this.encode({
+        type: 'RegExp',
+        source: regexp.source,
+        flags: regexp.flags
+      });
+    } catch (error) {
+      console.error('RegExp encode error:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * 解码 RegExp 对象
+   * @param encodedStr 编码后的字符串
+   * @returns 解码后的RegExp对象
+   */
+  decodeRegExp(encodedStr: string): RegExp {
+    try {
+      const decoded = this.decode(encodedStr);
+      if (decoded.type !== 'RegExp') {
+        throw new Error('Invalid encoded RegExp data');
+      }
+      return new RegExp(decoded.source, decoded.flags);
+    } catch (error) {
+      console.error('RegExp decode error:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * 编码 Map 对象
+   * @param map Map对象
+   * @returns 编码后的字符串
+   */
+  encodeMap<K, V>(map: Map<K, V>): string {
+    try {
+      return this.encode({
+        type: 'Map',
+        value: Array.from(map.entries())
+      });
+    } catch (error) {
+      console.error('Map encode error:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * 解码 Map 对象
+   * @param encodedStr 编码后的字符串
+   * @returns 解码后的 Map 对象
+   */
+  decodeMap<K, V>(encodedStr: string): Map<K, V> {
+    try {
+      const decoded = this.decode(encodedStr);
+      if (decoded.type !== 'Map') {
+        throw new Error('Invalid encoded Map data');
+      }
+      return new Map(decoded.value);
+    } catch (error) {
+      console.error('Map decode error:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * 编码 Set 对象
+   * @param set Set 对象
+   * @returns 编码后的字符串
+   */
+  encodeSet<T>(set: Set<T>): string {
+    try {
+      return this.encode({
+        type: 'Set',
+        value: Array.from(set)
+      });
+    } catch (error) {
+      console.error('Set encode error:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * 解码 Set 对象
+   * @param encodedStr 编码后的字符串
+   * @returns 解码后的 Set 对象
+   */
+  decodeSet<T>(encodedStr: string): Set<T> {
+    try {
+      const decoded = this.decode(encodedStr);
+      if (decoded.type !== 'Set') {
+        throw new Error('Invalid encoded Set data');
+      }
+      return new Set(decoded.value);
+    } catch (error) {
+      console.error('Set decode error:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * 编码 Error 对象
+   * @param error Error 对象
+   * @returns 编码后的字符串
+   */
+  encodeError(error: Error): string {
+    try {
+      return this.encode({
+        type: 'Error',
+        name: error.name,
+        message: error.message,
+        stack: error.stack
+      });
+    } catch (error) {
+      console.error('Error encode error:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * 解码 Error 对象
+   * @param encodedStr 编码后的字符串
+   * @returns 解码后的 Error 对象
+   */
+  decodeError(encodedStr: string): Error {
+    try {
+      const decoded = this.decode(encodedStr);
+      if (decoded.type !== 'Error') {
+        throw new Error('Invalid encoded Error data');
+      }
+      const error = new Error(decoded.message);
+      error.name = decoded.name;
+      error.stack = decoded.stack;
+      return error;
+    } catch (error) {
+      console.error('Error decode error:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * 编码 ArrayBuffer 对象
+   * @param buffer ArrayBuffer 对象
+   * @returns 编码后的字符串
+   */
+  encodeArrayBuffer(buffer: ArrayBuffer): string {
+    try {
+      return this.encode({
+        type: 'ArrayBuffer',
+        value: Array.from(new Uint8Array(buffer))
+      });
+    } catch (error) {
+      console.error('ArrayBuffer encode error:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * 解码 ArrayBuffer 对象
+   * @param encodedStr 编码后的字符串
+   * @returns 解码后的 ArrayBuffer 对象
+   */
+  decodeArrayBuffer(encodedStr: string): ArrayBuffer {
+    try {
+      const decoded = this.decode(encodedStr);
+      if (decoded.type !== 'ArrayBuffer') {
+        throw new Error('Invalid encoded ArrayBuffer data');
+      }
+      return new Uint8Array(decoded.value).buffer;
+    } catch (error) {
+      console.error('ArrayBuffer decode error:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * 编码 TypedArray 对象
+   * @param typedArray TypedArray 对象
+   * @returns 编码后的字符串
+   */
+  encodeTypedArray(typedArray: ArrayBufferView): string {
+    try {
+      return this.encode({
+        type: 'TypedArray',
+        constructor: typedArray.constructor.name,
+        value: Array.from(new Uint8Array(typedArray.buffer, typedArray.byteOffset, typedArray.byteLength))
+      });
+    } catch (error) {
+      console.error('TypedArray encode error:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * 解码 TypedArray 对象
+   * @param encodedStr 编码后的字符串
+   * @returns 解码后的 TypedArray 对象
+   */
+  decodeTypedArray(encodedStr: string): ArrayBufferView {
+    try {
+      const decoded = this.decode(encodedStr);
+      if (decoded.type !== 'TypedArray') {
+        throw new Error('Invalid encoded TypedArray data');
+      }
+      const TypedArrayConstructor = (window as any)[decoded.constructor];
+      return new TypedArrayConstructor(decoded.value);
+    } catch (error) {
+      console.error('TypedArray decode error:', error);
+      throw error;
+    }
+  },
+
+  /**
    * 分片编码文件对象
-   * @param file File对象
+   * @param file File 对象
    * @param chunkSize 分片大小，默认 1MB
    * @returns 包含文件信息和分片数据的可传输对象数组
    */
   async encodeFileChunked(
     file: File,
-    chunkSize: number = 1024 * 1024 // 默认1MB
+    chunkSize: number = 1024 * 1024 // 默认 1MB
   ): Promise<Array<{
     name: string;
     type: string;
