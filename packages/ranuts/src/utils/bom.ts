@@ -1,4 +1,5 @@
-import { MessageCodec, isString } from './str';
+import { MessageCodec, getRandomString, isString } from './str';
+import { isFunction } from './func';
 import { noop } from '@/utils/noop';
 import { performanceTime } from '@/utils/time';
 import { isClient } from '@/utils/device';
@@ -407,17 +408,17 @@ export const imageRequest = (url?: string): Promise<number> => {
  */
 export const durationHandler =
   <T, U>(handler: (...args: T[]) => U, ...params: T[]): ((a: number) => Promise<U>) =>
-  (duration: number): Promise<U> =>
-    new Promise((resolve, reject) => {
-      setTimeout(async () => {
-        try {
-          const result = await handler(...params);
-          resolve(result);
-        } catch (error) {
-          reject(error);
-        }
-      }, duration);
-    });
+    (duration: number): Promise<U> =>
+      new Promise((resolve, reject) => {
+        setTimeout(async () => {
+          try {
+            const result = await handler(...params);
+            resolve(result);
+          } catch (error) {
+            reject(error);
+          }
+        }, duration);
+      });
 
 /**
  * @description: 通过请求来测试当前网络的 ping 值
@@ -629,7 +630,7 @@ export class BridgeManager {
   private bridges = new Map<string, PostMessageBridge>();
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() {}
+  private constructor() { }
 
   static getInstance(): BridgeManager {
     if (!BridgeManager.instance) {
@@ -646,7 +647,7 @@ export class BridgeManager {
   }: BridgeManagerOptions): { bridge: PostMessageBridge; id: string } => {
     const bridge = new PostMessageBridge(targetWindow, targetOrigin);
     if (!id) {
-      id = Math.random().toString(36).slice(2, 11);
+      id = getRandomString(10);
     }
     if (this.bridges.has(id)) {
       throw new Error(`Bridge ${id} already exists`);
@@ -728,3 +729,41 @@ export const Client = {
   },
 };
 // #endregion Client end
+
+// #region Platform start
+export const initPlatform = (events: Record<string, MessageHandler>): { destroy: () => void } => {
+  // 找到指定的元素，建立连接，通信
+  const initBridge = async (event: MessageEvent) => {
+    // const hostname = new URL(event.origin).hostname
+    // 验证消息来源
+    // if (!whiteList.includes(hostname)) return
+    // 解码
+    const decodedData = MessageCodec.decode<MessageData>(event.data)
+    if (!decodedData) return
+    const { type, payload, id } = decodedData
+    const handler = events[type]
+    if (!isFunction(handler)) return
+    const result = await handler(payload)
+    if (!result) return
+    // 编码
+    const encodedData = MessageCodec.encode({ type, payload: result, id, isResponse: true })
+    // 发送
+    event.source?.postMessage(encodedData, { targetOrigin: event.origin })
+  }
+  window.removeEventListener('message', initBridge)
+  // iframe 中建立连接
+  window.addEventListener('message', initBridge)
+
+  const destroy = () => {
+    window.removeEventListener('message', initBridge)
+  }
+
+  return {
+    destroy,
+  }
+}
+
+export const Platform = {
+  init: initPlatform,
+}
+// #endregion Platform end
