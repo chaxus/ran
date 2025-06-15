@@ -44,8 +44,14 @@
 
 ### 是否可关闭`closeable`
 
-`closeable` 默认为 `true` ，可以关闭，设置成 `false` 时， 表示不可关闭，将不会展示右上角的关闭按钮
+`closeable` 默认为 `true` ，可以关闭，设置成 `false` 时，表示不可关闭，将不会展示右上角的关闭按钮
 
 ```html
 <r-preview closeable="false"></r-preview>
 ```
+
+## 版本历史
+
+- ranui 0.1.10-alpha-24 之前：使用 docx-preview 和 pdfjs 进行文档预览
+- ranui 0.1.10-alpha-24 之后：改用 OnlyOffice WebAssembly 版本进行文档预览
+  - 部署详情请参考：[OnlyOffice Web Local](https://github.com/ranuts/document)

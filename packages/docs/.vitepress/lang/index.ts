@@ -12,11 +12,11 @@ const i18n = createI18n({
   devtools: false,
 });
 
-export const setI18nLanguage = (lang: 'zh-CN' | 'en'): string => {
+export const setI18nLanguage = (lang: string): string => {
   if (i18n.mode === I18N_MODE.LEGACY) {
-    i18n.global.locale.value = lang;
+    i18n.global.locale.value = lang as 'zh-CN' | 'en';
   } else {
-    i18n.global.locale.value = lang;
+    i18n.global.locale.value = lang as 'zh-CN' | 'en';
   }
   return lang;
 };
@@ -27,7 +27,7 @@ export const mergeCommonMessage = (message: string, lang = locale): void => {
 };
 
 // 异步加载语言词条
-export const loadLanguageAsync = (lang: 'zh-CN' | 'en'): Promise<string> => {
+export const loadLanguageAsync = (lang: string): Promise<string> => {
   if (!lang) return Promise.reject('lang is undefined');
   // 如果语言相同
   if (i18n.global.locale.value === lang) {

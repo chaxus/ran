@@ -1,5 +1,4 @@
 import { addClassToElement, create, removeClassToElement } from 'ranuts/utils';
-import type { Chain } from 'ranuts/utils';
 import { HTMLElementSSR, createCustomError, falseList } from '@/utils/index';
 
 export interface Context {
@@ -10,7 +9,7 @@ export class Checkbox extends (HTMLElementSSR()!) {
   checkInput: HTMLInputElement;
   checkInner: HTMLSpanElement;
   context: Context;
-  container: Chain;
+  container: HTMLElement;
   _shadowDom: ShadowRoot;
   static get observedAttributes(): string[] {
     return ['disabled', 'checked', 'value'];

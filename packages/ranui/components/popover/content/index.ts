@@ -5,7 +5,7 @@ import { HTMLElementSSR, createCustomError } from '@/utils/index';
 export class Content extends (HTMLElementSSR()!) {
   observer: MutationObserver;
   _shadowDom: ShadowRoot;
-  _slot: HTMLSlotElement;
+  _slot: HTMLElement;
   constructor() {
     super();
     this._slot = create('slot').setAttribute('class', 'slot').element;

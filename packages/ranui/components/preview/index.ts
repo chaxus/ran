@@ -1,9 +1,11 @@
-import { create, noop } from 'ranuts/utils';
-import '@/components/icon';
+import { Client, MessageCodec, create, noop } from 'ranuts/utils';
 import less from './index.less?inline';
 import message from '@/components/message';
 import { DOCX, PDF, PPTX, XLS, XLSX } from '@/components/preview/constant';
 import type { BaseReturn, RenderOptions } from '@/components/preview/types';
+import '@/components/icon';
+
+const TARGET_ORIGIN = 'https://ranuts.github.io/document';
 
 interface RequestUrlToArraybufferOption {
   responseType: XMLHttpRequestResponseType;
@@ -20,14 +22,42 @@ interface requestUrlToArraybufferReturn extends BaseReturn {
   data: Blob & { name: string };
 }
 
+const renderOffice = async (file: File, options: RenderOptions) => {
+  try {
+    const { iframe, onLoad } = options;
+    if (!iframe) return;
+    Client.removeAll();
+    const { id } = Client.connect({
+      targetOrigin: new URL(TARGET_ORIGIN).origin,
+      targetWindow: iframe.contentWindow!,
+    });
+    const chunks = await MessageCodec.encodeFileChunked(file);
+    // 使用 Promise.all 并发发送所有 chunks
+    await Promise.all(
+      chunks.map((item) =>
+        Client.call({
+          id,
+          type: 'RENDER_OFFICE',
+          payload: item,
+        }),
+      ),
+    );
+    iframe.style.setProperty('width', '100%');
+    iframe.style.setProperty('height', '100%');
+    iframe.style.setProperty('border', 'none');
+    iframe.style.setProperty('display', 'block');
+    onLoad?.();
+  } catch (error) {
+    console.error('renderOffice error:', error);
+    options.onError?.(error);
+  }
+};
+
 async function Custom() {
   if (typeof document !== 'undefined' && !customElements.get('r-preview')) {
     const { warning = noop } = message!;
 
-    const { renderPptx } = await import('@/components/preview/pptx');
-    const { renderDocx } = await import('@/components/preview/docx');
     const { renderPdf } = await import('@/components/preview/pdf');
-    const { renderExcel } = await import('@/components/preview/excel');
 
     const requestUrlToBuffer = (
       src: string,
@@ -72,63 +102,28 @@ async function Custom() {
       });
     };
 
-    const renderPpt = (file: File, options: RenderOptions) => {
-      const { dom, onError, onLoad } = options;
-      return new Promise<void>((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsArrayBuffer(file);
-        reader.onload = () => {
-          if (reader.result && dom) {
-            const param = {
-              pptx: reader.result,
-              resultElement: dom,
-              onError,
-              onLoad,
-            };
-            renderPptx(param)?.then(() => {
-              resolve();
-            });
-          }
-        };
-        reader.onerror = (error) => {
-          reject(error);
-        };
-        reader.onabort = (abort) => {
-          reject(abort);
-        };
-      });
-    };
-
-    const renderWord = (file: File, options: RenderOptions) => {
-      const { dom, onError, onLoad } = options;
-      return Promise.resolve()
-        .then(() => renderDocx({ buffer: file, bodyContainer: dom }))
-        .then(() => {
-          onLoad && onLoad({ success: true, message: '' });
-        })
-        .catch((error) => {
-          onError && onError({ success: true, data: error, message: '' });
-        });
-    };
-
     const renderFileMap = new Map<string, (file: File, options: RenderOptions) => Promise<void>>([
       [PDF, renderPdf],
-      [PPTX, renderPpt],
-      [DOCX, renderWord],
-      [XLSX, renderExcel],
-      [XLS, renderExcel],
+      [PPTX, renderOffice],
+      [DOCX, renderOffice],
+      [XLSX, renderOffice],
+      [XLS, renderOffice],
     ]);
 
     class CustomElement extends HTMLElement {
-      _loadingText: any;
       static get observedAttributes() {
         return ['src', 'closeable'];
       }
+      previewContextPdf?: HTMLDivElement;
+      _loadingText?: HTMLDivElement;
+      previewIframe?: HTMLIFrameElement;
       preview?: HTMLElement | null;
       previewContext?: HTMLDivElement;
       _slot: HTMLSlotElement;
       _div: HTMLElement;
       _loadingElement?: HTMLDivElement;
+      _iframe?: HTMLIFrameElement;
+      _editorWindow?: Window;
       constructor() {
         super();
         this._div = document.createElement('div');
@@ -179,7 +174,9 @@ async function Custom() {
           this._loadingText.innerText = `Loading ${progress}`;
           if (num >= 100) {
             setTimeout(() => {
-              this._loadingText.innerText = `Loading...`;
+              if (this._loadingText) {
+                this._loadingText.innerText = `Loading...`;
+              }
             }, 300);
           }
         }
@@ -200,24 +197,29 @@ async function Custom() {
             });
             if (success && data) {
               file = new File([data], data.name, { type: data.type });
-              const { type } = file;
-              const handler = renderFileMap.get(type);
-              if (handler && this.previewContext) {
-                if (type === XLSX || type === XLS) {
-                  this.previewContext.style.setProperty('width', '100%');
-                } else {
-                  this.previewContext.style.setProperty('width', '100%');
-                }
-                // document.body.style.overflow = 'hidden'
-                const options = {
-                  dom: this.previewContext,
-                  onError: this.onError,
-                  onLoad: this.onLoad,
-                };
-                handler(file, options);
-              }
             } else {
               warning(message);
+            }
+          }
+          if (file instanceof File) {
+            const { type } = file;
+            const handler = renderFileMap.get(type);
+            if (handler && this.previewContext) {
+              this.previewContext.style.setProperty('width', '100%');
+              if (this.previewContextPdf) {
+                this.previewContextPdf.style.setProperty('width', '100%');
+              } else {
+                this.previewContextPdf = document.createElement('div');
+                this.previewContextPdf.setAttribute('class', 'r-preview-context-pdf');
+                this.previewContext.appendChild(this.previewContextPdf);
+              }
+              const options = {
+                dom: this.previewContextPdf,
+                onError: this.onError,
+                onLoad: this.onLoad,
+                iframe: this.previewIframe,
+              };
+              handler(file, options);
             }
           }
         } catch (error) {
@@ -226,50 +228,71 @@ async function Custom() {
       };
       closePreview = () => {
         if (this.preview) {
-          // document.body.style.overflow = 'auto'
-          // this.preview.style.display = 'none'
-          document.body.removeChild(this.preview);
-          this.preview = undefined;
+          Client.broadcast({
+            type: 'CLOSE_PREVIEW',
+            payload: '',
+          });
+          Client.removeAll();
+          this.previewIframe?.style.setProperty('display', 'none');
+          this.preview.style.setProperty('display', 'none');
+          if (this.previewContextPdf && this.previewContext) {
+            this.previewContext.removeChild(this.previewContextPdf);
+          }
         }
       };
       showPreview = () => {
         if (this.src) {
           if (this.preview) {
             this.preview.style.display = 'block';
+            this.preview.appendChild(this._loadingElement!);
+            this._loadingElement?.style.setProperty('display', 'block');
           } else {
-            this.preview = document.createElement('div');
-            this.preview.setAttribute('class', 'r-preview-mask');
-            this.preview.setAttribute('id', 'r-preview-mask');
-            const previewOption = document.createElement('div');
-            previewOption.setAttribute('class', 'r-preview-options');
-            if (this.closeable !== 'false') {
-              const previewCloseButton = document.createElement('r-icon');
-              previewCloseButton.setAttribute('class', 'r-preview-options-close');
-              previewCloseButton.setAttribute('name', 'close-circle-fill');
-              previewCloseButton.setAttribute('size', '40');
-              previewCloseButton.addEventListener('click', this.closePreview);
-              previewOption.appendChild(previewCloseButton);
-            }
-            const previewContain = document.createElement('div');
-            previewContain.setAttribute('class', 'r-preview-contain');
-            this.previewContext = document.createElement('div');
-            this.previewContext.setAttribute('class', 'r-preview-context');
-            previewContain.appendChild(this.previewContext);
-            this.preview.appendChild(previewOption);
-            this.preview?.appendChild(previewContain);
-            this._loadingElement = this.createLoading();
-            this.preview.appendChild(this._loadingElement);
-            document.body.appendChild(this.preview);
+            this.preliminary();
           }
           this.handleFile(this.src);
         }
       };
+      preliminary = () => {
+        this.preview = document.createElement('div');
+        this.preview.setAttribute('class', 'r-preview-mask');
+        this.preview.setAttribute('id', 'r-preview-mask');
+        const previewOption = document.createElement('div');
+        previewOption.setAttribute('class', 'r-preview-options');
+        if (this.closeable !== 'false') {
+          const previewCloseButton = document.createElement('r-icon');
+          previewCloseButton.setAttribute('class', 'r-preview-options-close');
+          previewCloseButton.setAttribute('name', 'close-circle-fill');
+          previewCloseButton.setAttribute('size', '40');
+          previewCloseButton.addEventListener('click', this.closePreview);
+          previewOption.appendChild(previewCloseButton);
+        }
+        const previewContain = document.createElement('div');
+        previewContain.setAttribute('class', 'r-preview-contain');
+        this.previewContext = document.createElement('div');
+        this.previewContext.setAttribute('class', 'r-preview-context');
+        this.previewContextPdf = document.createElement('div');
+        this.previewContextPdf.setAttribute('class', 'r-preview-context-pdf');
+        this.previewContext.appendChild(this.previewContextPdf);
+        this.previewIframe = document.createElement('iframe');
+        this.previewIframe.setAttribute('src', TARGET_ORIGIN);
+        this.previewIframe.setAttribute('style', 'display: none;');
+        this.previewIframe.style.setProperty('margin-bottom', '30px');
+        this.previewContext.appendChild(this.previewIframe);
+        previewContain.appendChild(this.previewContext);
+        this.preview.appendChild(previewOption);
+        this._loadingElement = this.createLoading();
+        this.preview.appendChild(this._loadingElement);
+        this.preview?.appendChild(previewContain);
+        this.preview.style.setProperty('display', 'none');
+        document.body.appendChild(this.preview);
+      };
       connectedCallback() {
-        this.preview = document.getElementById('r-preview-mask');
+        this.preliminary();
         this.addEventListener('click', this.showPreview);
       }
       disconnectedCallback() {
         this.removeEventListener('click', this.showPreview);
+        this.preview && document.body.removeChild(this.preview);
       }
       attributeChangedCallback(name: string, oldValue: string, newValue: string) {
         if (newValue !== oldValue) {
