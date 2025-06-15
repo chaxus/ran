@@ -160,7 +160,7 @@ export class WebGPURenderer extends BatchRenderer {
 
       this.curVertBufferLength = this.vertexCount;
     }
-    device.queue.writeBuffer(this.gpuVertexBuffer, 0, this.vertFloatView);
+    device.queue.writeBuffer(this.gpuVertexBuffer, 0, this.vertFloatView.buffer);
 
     if (this.indexCount > this.curIndexBufferLength) {
       this.gpuIndexBuffer.destroy();
@@ -173,7 +173,7 @@ export class WebGPURenderer extends BatchRenderer {
 
       this.curIndexBufferLength = this.indexCount;
     }
-    device.queue.writeBuffer(this.gpuIndexBuffer, 0, this.indexBuffer);
+    device.queue.writeBuffer(this.gpuIndexBuffer, 0, this.indexBuffer.buffer);
   }
 
   protected setRootTransform(a: number, b: number, c: number, d: number, tx: number, ty: number): void {

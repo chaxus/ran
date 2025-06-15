@@ -831,3 +831,19 @@ export function getMime(ext: string): string | undefined {
   const suffix = !~idx ? tmp : tmp.substring(++idx);
   return MimeType.get(`.${suffix}`) || MimeType.get(suffix);
 }
+
+/**
+ * Get file extensions from MIME type
+ * @param mimeType The MIME type to get extensions for
+ * @returns Array of file extensions (without dot)
+ */
+export const getExtensions = (mimeType: string): string[] => {
+  const extensions: string[] = [];
+  MimeType.forEach((value, key) => {
+    if (value === mimeType) {
+      // Remove the leading dot from the extension
+      extensions.push(key.startsWith('.') ? key.slice(1) : key);
+    }
+  });
+  return extensions;
+};

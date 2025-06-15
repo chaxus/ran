@@ -1,7 +1,7 @@
 import { create } from 'ranuts/utils';
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
 export class Math extends (HTMLElementSSR()!) {
-  contain: HTMLDivElement;
+  contain: HTMLElement;
   static get observedAttributes(): string[] {
     return ['latex'];
   }

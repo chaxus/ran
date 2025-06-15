@@ -3,7 +3,7 @@ export * as icon from '@/components/icon';
 export * as image from '@/components/image';
 export * as input from '@/components/input';
 export * as message from '@/components/message';
-// export * as preview from '@/components/preview';
+export * as preview from '@/components/preview';
 export * as skeleton from '@/components/skeleton';
 export * as tabpane from '@/components/tabpane';
 export * as tab from '@/components/tab';

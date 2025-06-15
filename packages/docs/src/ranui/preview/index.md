@@ -49,3 +49,9 @@ If there is a 'src' address, the popup window will be opened, and if there is no
 ```html
 <r-preview closeable="false"></r-preview>
 ```
+
+## Version History
+
+- Before ranui 0.1.10-alpha-24: Used docx-preview and pdfjs for document preview
+- After ranui 0.1.10-alpha-24: Switched to OnlyOffice WebAssembly version for better document preview support
+  - Deployment details can be found at: [OnlyOffice Web Local](https://github.com/ranuts/document)

@@ -286,7 +286,7 @@ export class Chain {
    * @description: 给当前元素添加子元素
    * @return {Chain}
    */
-  public addChild = (child: Chain | Chain[]): Chain => {
+  public addChild = (child: Chain | Chain[] | HTMLElement | HTMLElement[]): Chain => {
     if (Array.isArray(child)) {
       const Fragment = document.createDocumentFragment();
       child.forEach((item) => {

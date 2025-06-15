@@ -1,6 +1,6 @@
 {
   "name": "ranui",
-  "version": "0.1.10-alpha.23",
+  "version": "0.1.10-alpha-24",
   "description": "UI Component library based on `Web Component`",
   "main": "dist/umd/index.umd.cjs",
   "module": "dist/index.js",
@@ -203,12 +203,6 @@
     "vite": "^6.3.5"
   },
   "dependencies": {
-    "dayjs": "^1.11.13",
-    "exceljs": "^4.4.0",
-    "jszip": "^3.10.1",
-    "lodash": "^4.17.21",
-    "lodash-es": "^4.17.21",
-    "ranuts": "workspace:^",
-    "tinycolor2": "^1.6.0"
+    "ranuts": "workspace:^"
   }
 }

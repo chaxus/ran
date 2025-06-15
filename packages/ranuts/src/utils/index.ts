@@ -1,12 +1,15 @@
 import { SyncHook } from './subscribe';
 import { Mathjs, addNumSym, mathjs, perToNum, range, transformNumber } from './number';
 import {
+  MessageCodec,
   changeHumpToLowerCase,
   checkEncoding,
   clearBr,
   clearStr,
   getMatchingSentences,
+  getRandomString,
   isString,
+  md5,
   randomString,
   str2Xml,
   strParse,
@@ -15,7 +18,12 @@ import {
 } from './str';
 import type { TransformText } from './str';
 import {
+  BridgeManager,
+  Client,
+  Platform,
+  PostMessageBridge,
   appendUrl,
+  bridgeManager,
   connection,
   createObjectURL,
   durationHandler,
@@ -29,16 +37,64 @@ import {
   getQuery,
   getWindow,
   imageRequest,
+  isSafari,
   networkSpeed,
   removeGhosting,
   requestUrlToBuffer,
   retain,
 } from './bom';
-import { AudioRecorder } from '@/utils/audioRecorder';
-import { createSignal, subscribers } from '@/utils/signal';
-import { audioVendor, canvasVendor, webglVendor } from '@/utils/behavior';
-import { TOTP } from '@/utils/totp/totp';
-import { localStorageGetItem, localStorageSetItem } from '@/utils/storage';
+import type {
+  BridgeManagerOptions,
+  BroadcastPayload,
+  CallToPayload,
+  MessageData,
+  MessageHandler,
+  PendingRequest,
+} from './bom';
+import {
+  cloneDeep,
+  filterObj,
+  formatJson,
+  isEqual,
+  merge,
+  mergeExports,
+  querystring,
+  replaceOld,
+  setAttributeByGlobal,
+} from './obj';
+import { MimeType, getExtensions, getMime, setMime } from './mimeType';
+import { AudioRecorder } from './audioRecorder';
+import { createSignal, subscribers } from './signal';
+import { audioVendor, canvasVendor, webglVendor } from './behavior';
+import { TOTP } from './totp/totp';
+import { localStorageGetItem, localStorageSetItem } from './storage';
+import { compose } from './compose';
+import { handleConsole } from './console';
+import { debounce } from './debounce';
+import {
+  Chain,
+  addClassToElement,
+  create,
+  createDocumentFragment,
+  escapeHtml,
+  removeClassToElement,
+  setFontSize2html,
+} from './dom';
+import { handleError } from './error';
+import { convertImageToBase64, isImageSize } from './img';
+import { memoize } from './memoize';
+import { Monitor } from './monitor';
+import { getStatus, status } from './network';
+import { noop } from './noop';
+import { getPerformance } from './performance';
+import { QuestQueue } from './queue';
+import { createData, report } from './report';
+import { handleFetchHook } from './request';
+import { scriptOnLoad } from './script';
+import { generateThrottle, throttle } from './throttle';
+import { performanceTime, timeFormat, timestampToTime } from './time';
+import type { CurrentDevice } from './device';
+import { currentDevice, isBangDevice, isClient, isMobile, isWeiXin } from './device';
 import {
   Color,
   ColorScheme,
@@ -59,45 +115,6 @@ import {
   rgbToHsb,
   rgbToHsl,
 } from '@/utils/color';
-import { compose } from '@/utils/compose';
-import { handleConsole } from '@/utils/console';
-import { debounce } from '@/utils/debounce';
-import { currentDevice, isBangDevice, isClient, isMobile, isWeiXin } from '@/utils/device';
-import type { CurrentDevice } from '@/utils/device';
-import {
-  Chain,
-  addClassToElement,
-  create,
-  createDocumentFragment,
-  escapeHtml,
-  removeClassToElement,
-  setFontSize2html,
-} from '@/utils/dom';
-import { handleError } from '@/utils/error';
-import { convertImageToBase64, isImageSize } from '@/utils/img';
-import { memoize } from '@/utils/memoize';
-import { MimeType, getMime, setMime } from '@/utils/mimeType';
-import { Monitor } from '@/utils/monitor';
-import { getStatus, status } from '@/utils/network';
-import { noop } from '@/utils/noop';
-import {
-  cloneDeep,
-  filterObj,
-  formatJson,
-  isEqual,
-  merge,
-  mergeExports,
-  querystring,
-  replaceOld,
-  setAttributeByGlobal,
-} from '@/utils/obj';
-import { getPerformance } from '@/utils/performance';
-import { QuestQueue } from '@/utils/queue';
-import { createData, report } from '@/utils/report';
-import { handleFetchHook } from '@/utils/request';
-import { scriptOnLoad } from '@/utils/script';
-import { generateThrottle, throttle } from '@/utils/throttle';
-import { performanceTime, timeFormat, timestampToTime } from '@/utils/time';
 export {
   performanceTime,
   timeFormat,
@@ -133,6 +150,7 @@ export {
   status,
   Monitor,
   MimeType,
+  getExtensions,
   setMime,
   getMime,
   memoize,
@@ -208,6 +226,24 @@ export {
   getQuery,
   checkEncoding,
   transformText,
+  isSafari,
+  md5,
+  getRandomString,
+  bridgeManager,
+  Client,
+  BridgeManager,
+  PostMessageBridge,
+  MessageCodec,
+  Platform,
 };
 
-export type { CurrentDevice, TransformText };
+export type {
+  CurrentDevice,
+  TransformText,
+  MessageHandler,
+  MessageData,
+  PendingRequest,
+  BridgeManagerOptions,
+  BroadcastPayload,
+  CallToPayload,
+};
