@@ -162,6 +162,8 @@ export const renderPdf = async (file: File, options: RenderOptions): Promise<voi
       loadScript({ type: 'content', content: PDF_JS });
       const pdf = await createReader(file);
       if (pdf) {
+        const { dom } = options;
+        dom?.style.setProperty('display', 'flex');
         const PDF = new PdfPreview(pdf, options);
         await PDF.pdfPreview();
         await PDF.showTotalPage();

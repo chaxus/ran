@@ -24,7 +24,8 @@ interface requestUrlToArraybufferReturn extends BaseReturn {
 
 const renderOffice = async (file: File, options: RenderOptions) => {
   try {
-    const { iframe, onLoad } = options;
+    const { iframe, onLoad, dom } = options;
+    dom?.style.setProperty('display', 'none');
     if (!iframe) return;
     Client.removeAll();
     const { id } = Client.connect({
@@ -206,13 +207,6 @@ async function Custom() {
             const handler = renderFileMap.get(type);
             if (handler && this.previewContext) {
               this.previewContext.style.setProperty('width', '100%');
-              if (this.previewContextPdf) {
-                this.previewContextPdf.style.setProperty('width', '100%');
-              } else {
-                this.previewContextPdf = document.createElement('div');
-                this.previewContextPdf.setAttribute('class', 'r-preview-context-pdf');
-                this.previewContext.appendChild(this.previewContextPdf);
-              }
               const options = {
                 dom: this.previewContextPdf,
                 onError: this.onError,
@@ -245,7 +239,14 @@ async function Custom() {
           if (this.preview) {
             this.preview.style.display = 'block';
             this.preview.appendChild(this._loadingElement!);
+            if (this.previewContextPdf && this.previewContext?.contains(this.previewContextPdf)) {
+              this.previewContext.removeChild(this.previewContextPdf);
+            }
+            this.previewContextPdf = document.createElement('div');
+            this.previewContextPdf.setAttribute('class', 'r-preview-context-pdf');
+            this.previewContext?.appendChild(this.previewContextPdf);
             this._loadingElement?.style.setProperty('display', 'block');
+
           } else {
             this.preliminary();
           }
