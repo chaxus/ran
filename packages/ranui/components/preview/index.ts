@@ -246,7 +246,6 @@ async function Custom() {
             this.previewContextPdf.setAttribute('class', 'r-preview-context-pdf');
             this.previewContext?.appendChild(this.previewContextPdf);
             this._loadingElement?.style.setProperty('display', 'block');
-
           } else {
             this.preliminary();
           }
