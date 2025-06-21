@@ -512,7 +512,9 @@ export class PostMessageBridge {
     // if (this.targetOrigin !== '*' && event.origin !== this.targetOrigin && !whiteList.includes(hostname)) return
     if (this.targetOrigin !== '*' && event.origin !== this.targetOrigin) return;
 
-    const decodedData = MessageCodec.decode<MessageData<T>>(event.data);
+    // 创建 event.data 的副本，避免对其他监听器造成干扰
+    const dataCopy = typeof event.data === 'string' ? String(event.data) : event.data;
+    const decodedData = MessageCodec.decode<MessageData<T>>(dataCopy);
     if (!decodedData) return;
 
     const { type, payload, id, isResponse } = decodedData;
@@ -755,7 +757,10 @@ export const initPlatform = <T = unknown, R = unknown>(
     // 验证消息来源
     // if (!whiteList.includes(hostname)) return
     // 解码
-    const decodedData = MessageCodec.decode<MessageData<T>>(event.data);
+    if (typeof event.data !== 'string') return;
+    // 创建 event.data 的副本，避免对其他监听器造成干扰
+    const str = String(event.data);
+    const decodedData = MessageCodec.decode<MessageData<T>>(str);
     if (!decodedData) return;
     const { type, payload, id } = decodedData;
     const handler = events[type];
