@@ -59,8 +59,8 @@ This monorepo contains various experimental packages:
 
 | Package | Version | Downloads | Description |
 |---------|---------|-----------|-------------|
-| [ranui](packages/ranui) | [![ranui version](https://img.shields.io/npm/v/ranui.svg?label=%20)](packages/ranui/readme.md) | [![npm-d](https://img.shields.io/npm/dt/ranui.svg)](https://www.npmjs.com/package/ranui) | Experimental web component library |
-| [ranuts](packages/ranuts) | [![ranuts version](https://img.shields.io/npm/v/ranuts.svg?label=%20)](packages/ranuts/readme.md) | [![npm-d](https://img.shields.io/npm/dt/ranuts.svg)](https://www.npmjs.com/package/ranuts) | Utility library (in development) |
+| [ranui](packages/ranui) | [![ranui version](https://img.shields.io/npm/v/ranui.svg?label=%20)](packages/ranui/readme.md) | [![npm-d](https://img.shields.io/npm/dt/ranui.svg)](https://www.npmjs.com/package/ranui) | web component library |
+| [ranuts](packages/ranuts) | [![ranuts version](https://img.shields.io/npm/v/ranuts.svg?label=%20)](packages/ranuts/readme.md) | [![npm-d](https://img.shields.io/npm/dt/ranuts.svg)](https://www.npmjs.com/package/ranuts) | Utility library |
 
 ### Experimental Projects
 
@@ -129,7 +129,6 @@ This is a **technology exploration and learning project** in early development. 
 - 🚧 **Early Development**: Most features are still being developed
 - 🧪 **Experimental**: APIs may change frequently
 - 📚 **Learning Focus**: Primarily for learning and experimentation
-- ⚠️ **Not Production Ready**: Not recommended for production use
 
 ## 🤝 Contributing
 

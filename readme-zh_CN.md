@@ -59,8 +59,8 @@
 
 | 包名 | 版本 | 下载量 | 描述 |
 |------|------|--------|------|
-| [ranui](packages/ranui) | [![ranui version](https://img.shields.io/npm/v/ranui.svg?label=%20)](packages/ranui/readme.md) | [![npm-d](https://img.shields.io/npm/dt/ranui.svg)](https://www.npmjs.com/package/ranui) | 实验性 Web 组件库 |
-| [ranuts](packages/ranuts) | [![ranuts version](https://img.shields.io/npm/v/ranuts.svg?label=%20)](packages/ranuts/readme.md) | [![npm-d](https://img.shields.io/npm/dt/ranuts.svg)](https://www.npmjs.com/package/ranuts) | 工具函数库（开发中） |
+| [ranui](packages/ranui) | [![ranui version](https://img.shields.io/npm/v/ranui.svg?label=%20)](packages/ranui/readme.md) | [![npm-d](https://img.shields.io/npm/dt/ranui.svg)](https://www.npmjs.com/package/ranui) | Web 组件库 |
+| [ranuts](packages/ranuts) | [![ranuts version](https://img.shields.io/npm/v/ranuts.svg?label=%20)](packages/ranuts/readme.md) | [![npm-d](https://img.shields.io/npm/dt/ranuts.svg)](https://www.npmjs.com/package/ranuts) | 工具函数库 |
 
 ### 实验性项目
 
