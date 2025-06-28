@@ -1,6 +1,6 @@
 # ranuts
 
-Experimental utility library with commonly used functions and tools
+实验性工具函数库，包含常用的函数和工具
 
 ---
 
@@ -10,32 +10,34 @@ Experimental utility library with commonly used functions and tools
 <a href="https://github.com/chaxus/ran"><img src="https://img.badgesize.io/https:/unpkg.com/ranuts/dist/index.js?label=brotli&compression=brotli" alt="brotli"></a>
 <a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/badge/module%20formats-umd%2C%20esm-green.svg" alt="module formats: umd, esm"></a>
 
+**中文** | [English](./readme.md)
+
 ---
 
-## ⚠️ Important Notice
+## ⚠️ 重要说明
 
-This is an **experimental utility library** in early development. While functional, it's primarily designed for learning and experimentation.
+这是一个**实验性工具函数库**，处于早期开发阶段。虽然功能可用，但主要用于学习和实验。
 
-**Key points:**
-- 🚧 **Early Development**: Features are still being developed and refined
-- 🧪 **Experimental**: APIs may change frequently
-- 📚 **Learning Focus**: Primarily for learning JavaScript/TypeScript utilities
+**关键要点：**
+- 🚧 **早期开发**: 功能仍在开发和完善中
+- 🧪 **实验性**: API 可能会频繁变化
+- 📚 **学习导向**: 主要用于学习 JavaScript/TypeScript 工具函数
 
-## Install
+## 安装
 
-Using npm:
+使用 npm:
 
 ```console
 npm install ranuts@latest --save
 ```
 
-## Document
+## 文档
 
-[Some commonly used functions and tools](https://chaxus.github.io/ran/src/ranuts/)
+[一些常用的函数和工具](https://chaxus.github.io/ran/cn/src/ranuts/)
 
-## Usage
+## 使用方式
 
-Import as required. You can select:
+按需导入。您可以选择：
 
 - ranuts/utils
 - ranuts/wasm
@@ -51,7 +53,7 @@ import { reactify } from 'ranuts/react';
 import { ocr } from 'ranuts/ml';
 ```
 
-Full import,(Full import will introduce many unnecessary modules. You are advised to import them on demand)
+全量导入（全量导入会引入许多不必要的模块，建议按需导入）
 
 - ESM
 
@@ -85,20 +87,20 @@ document.body.appendChild(html);
 <script>
 ```
 
-## Contributing
+## 贡献
 
-We welcome contributions from learners and developers! This is an experimental project, so please be patient with the development process.
+我们欢迎学习者和开发者的贡献！这是一个实验性项目，请对开发过程保持耐心。
 
-## Contributors
+## 贡献者
 
 <a href="https://github.com/chaxus/ran/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=chaxus/ran" />
 </a>
 
-## Visitors
+## 访问统计
 
 ![](http://profile-counter.glitch.me/chaxus-ranuts/count.svg)
 
 ## Meta
 
-[LICENSE (MIT)](/LICENSE)
+[LICENSE (MIT)](/LICENSE) 

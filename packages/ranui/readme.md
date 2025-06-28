@@ -1,6 +1,6 @@
 # ranui
 
-UI Component library based on `Web Component`
+Experimental UI Component library based on `Web Component`
 
 ---
 
@@ -12,15 +12,24 @@ UI Component library based on `Web Component`
 
 **English** | [中文](./README.zh-CN.md)
 
-## Feature
+## ⚠️ Important Notice
 
-1. **Cross-Framework Compatibility**: Works seamlessly with React, Vue, Preact, SolidJS, Svelte, and more. Integrates with any JavaScript project following W3C standards.
+This is an **experimental UI library** in early development. While functional, it's primarily designed for learning and experimentation.
+
+**Key points:**
+- 🚧 **Early Development**: Features are still being developed and refined
+- 🧪 **Experimental**: APIs may change frequently
+- 📚 **Learning Focus**: Primarily for learning Web Components and UI development
+
+## Features
+
+1. **Cross-Framework Compatibility**: Works with React, Vue, Preact, SolidJS, Svelte, and more. Integrates with any JavaScript project following W3C standards.
 2. **Pure Native Experience**: No need for npm, React/Vue, or build tools. Easy to start, like using native div tags, simplifying structure and reducing learning costs.
 3. **Modular Design**: Breaks systems into small, reusable components for enhanced maintainability and scalability.
 4. **Open-Source**: Licensed under MIT, providing free access to all source code for personal or commercial use.
 5. **Interactive Documentation**: Offers detailed, interactive documentation with live examples for efficient learning.
 6. **Type-Checking**: Built on TypeScript with full type support, ensuring robust and maintainable code.
-7. **Stability and Durability**: Framework independent (React/vue), avoid disruptive updates, and ensure continuous project operation.
+7. **Framework Independent**: Works independently of React/Vue, avoiding disruptive updates, and ensuring continuous project operation.
 
 ## Install
 
@@ -148,7 +157,6 @@ import 'ranui';
 ### tsx
 
 ```tsx
-// react 18
 import type { SyntheticEvent } from 'react';
 import React, { useRef } from 'react';
 import 'ranui';
@@ -181,6 +189,10 @@ const FilePreview = () => {
   );
 };
 ```
+
+## Contributing
+
+We welcome contributions from learners and developers! This is an experimental project, so please be patient with the development process.
 
 ## Contributors
 

@@ -82,7 +82,7 @@ import 'ranui';
 ### 5.`tsx`
 
 ```tsx
-// react 18
+// react
 import type { SyntheticEvent } from 'react';
 import React, { useRef } from 'react';
 import 'ranui';
@@ -253,10 +253,6 @@ import 'ranui';
 <r-math latex="x = {-b \pm \sqrt{b^2-4ac} \over 2a}"></r-math>
 
 ## Event
-
-- `react`
-
-[@ranui/react](https://www.npmjs.com/package/@ranui/react) By `react` higher-order functions encapsulated [ranui](https://www.npmjs.com/package/ranui) and become, `Event` events follow `react` Event specification. It is slightly different from the W3C standard.
 
 - Modern 'web' standards
 

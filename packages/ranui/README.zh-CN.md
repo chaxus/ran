@@ -1,6 +1,6 @@
 # ranui
 
-基于 `Web Components` 组件方案
+基于 `Web Components` 的实验性组件库
 
 ---
 
@@ -12,6 +12,15 @@
 
 **中文** | [English](./readme.md)
 
+## ⚠️ 重要说明
+
+这是一个**实验性 UI 库**，处于早期开发阶段。虽然功能可用，但主要用于学习和实验。
+
+**关键要点：**
+- 🚧 **早期开发**: 功能仍在开发和完善中
+- 🧪 **实验性**: API 可能会频繁变化
+- 📚 **学习导向**: 主要用于学习 Web Components 和 UI 开发
+
 ## 特点
 
 1. **跨框架兼容：** 与 React, Vue, Preact, SolidJS, Svelte 等兼容。可以和遵循 W3C 标准的任何 JavaScript 项目集成。
@@ -19,7 +28,7 @@
 3. **模块化设计：** 可选导入和全量导入，以增强可维护性和可伸缩性。
 4. **交互式丰富文档：** 提供详细的交互式文档，并附有有效的示例子。
 5. **支持类型校验：** 基于 TypeScript 构建，具有类型支持，确保代码的健壮性和可维护性。
-6. **持久和稳定：** 与框架 (React/vue) 无关，避免破坏性的更新，并确保持续的项目运行。
+6. **框架无关：** 与框架 (React/vue) 无关，避免破坏性的更新，并确保持续的项目运行。
 
 ## 安装
 
@@ -147,7 +156,7 @@ import 'ranui';
 ### tsx
 
 ```tsx
-// react 18
+// react
 import type { SyntheticEvent } from 'react';
 import React, { useRef } from 'react';
 import 'ranui';
@@ -180,6 +189,10 @@ const FilePreview = () => {
   );
 };
 ```
+
+## 贡献
+
+我们欢迎学习者和开发者的贡献！这是一个实验性项目，请对开发过程保持耐心。
 
 ## 贡献者
 

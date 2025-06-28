@@ -131,7 +131,7 @@ import 'ranui';
 ### tsx
 
 ```tsx
-// react 18
+// react
 import type { SyntheticEvent } from 'react';
 import React, { useRef } from 'react';
 import 'ranui';
@@ -262,10 +262,6 @@ const FilePreview = () => {
 <r-math latex="x = {-b \pm \sqrt{b^2-4ac} \over 2a}"></r-math>
 
 ## Event 事件
-
-- `react`
-
-[@ranui/react](https://www.npmjs.com/package/@ranui/react) 是由`react`高阶函数封装[ranui](https://www.npmjs.com/package/ranui)而成，`Event` 事件遵循`react`事件规范。跟`W3C`标准略有不同。
 
 - 现代`web`标准
 
