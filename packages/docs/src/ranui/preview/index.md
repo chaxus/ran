@@ -2,14 +2,6 @@
 
 Support `docx`, `pptx`, `pdf`, `xlsx` file preview
 
-## Version History
-
-- **Before ranui 0.1.10-alpha-24**: 
-  - Used [jszip](https://github.com/Stuk/jszip), [docx-preview](https://github.com/VolodymyrBaydalka/docxjs), [exceljs](https://github.com/exceljs/exceljs), [pdfjs](https://github.com/mozilla/pdfjs-dist), [pptx2html](https://github.com/g21589/PPTX2HTML) for document preview
-- **After ranui 0.1.10-alpha-26**: Switched to `OnlyOffice` WebAssembly version for better document preview support
-  - Deployment details can be found at: [OnlyOffice Web Local](https://github.com/ranuts/document)
-
-
 ## Code demo
 
 <div style="width: 100px; margin-top:10px">
@@ -69,3 +61,10 @@ This parameter can also be used for debugging
 ```html
 <r-preview baseUrl="http://localhost:5174/document"></r-preview>
 ```
+
+## Version History
+
+- **Before ranui 0.1.10-alpha-24**:
+  - Used [jszip](https://github.com/Stuk/jszip), [docx-preview](https://github.com/VolodymyrBaydalka/docxjs), [exceljs](https://github.com/exceljs/exceljs), [pdfjs](https://github.com/mozilla/pdfjs-dist), [pptx2html](https://github.com/g21589/PPTX2HTML) for document preview
+- **After ranui 0.1.10-alpha-26**: Switched to `OnlyOffice` WebAssembly version for better document preview support
+  - Deployment details can be found at: [OnlyOffice Web Local](https://github.com/ranuts/document)
