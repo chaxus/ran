@@ -4,7 +4,7 @@
 
 - **ranui 0.1.10-alpha-24 版本之前**: 
   - 使用 [jszip](https://github.com/Stuk/jszip), [docx-preview](https://github.com/VolodymyrBaydalka/docxjs), [exceljs](https://github.com/exceljs/exceljs), [pdfjs](https://github.com/mozilla/pdfjs-dist), [pptx2html](https://github.com/g21589/PPTX2HTML) 进行文档的预览。
-- **ranui 0.1.10-alpha-24 版本之后**: 改用 OnlyOffice WebAssembly 版本进行文档预览
+- **ranui 0.1.10-alpha-26 版本之后**: 改用 OnlyOffice WebAssembly 版本进行文档预览
   - 部署详情请参考： [OnlyOffice Web Local](https://github.com/ranuts/document)
 
 
