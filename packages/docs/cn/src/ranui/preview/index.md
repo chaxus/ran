@@ -1,6 +1,6 @@
 # preview 文件预览
 
-支持`docx`，`pptx`，`pdf`,`xlsx`文件的预览
+支持`docx`，`pptx`，`pdf`，`xlsx`文件的预览
 
 ## 代码演示
 
