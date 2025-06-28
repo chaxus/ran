@@ -1,1 +1,1 @@
-npx pnpm -F ranuts build && pnpm -F ranui build && pnpm -F ranui-react build && pnpm -F docs build
+npx pnpm -F ranuts build && pnpm -F ranui build && pnpm -F docs build

@@ -46,7 +46,7 @@
 - 🎨 **UI 库**: WebComponent 组件
 - 🛠️ **工具库**: TypeScript 工具函数
 - 🤖 **机器学习**: 基础的 ML 工具和实验
-- 📱 **Web 应用**: IM 聊天和阅读应用（原型）
+- 📱 **Web 应用**: IM 聊天应用（原型）
 - 🔧 **开发工具**: 构建工具和调试工具
 - 🌐 **Web3**: 智能合约实验
 - 🎯 **可视化工具**: 数据可视化实验
@@ -57,23 +57,22 @@
 
 ### 核心库（Alpha 阶段）
 
-| 包名 | 版本 | 下载量 | 描述 |
-|------|------|--------|------|
-| [ranui](packages/ranui) | [![ranui version](https://img.shields.io/npm/v/ranui.svg?label=%20)](packages/ranui/readme.md) | [![npm-d](https://img.shields.io/npm/dt/ranui.svg)](https://www.npmjs.com/package/ranui) | Web 组件库 |
+| 包名                      | 版本                                                                                              | 下载量                                                                                     | 描述       |
+| ------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ---------- |
+| [ranui](packages/ranui)   | [![ranui version](https://img.shields.io/npm/v/ranui.svg?label=%20)](packages/ranui/readme.md)    | [![npm-d](https://img.shields.io/npm/dt/ranui.svg)](https://www.npmjs.com/package/ranui)   | Web 组件库 |
 | [ranuts](packages/ranuts) | [![ranuts version](https://img.shields.io/npm/v/ranuts.svg?label=%20)](packages/ranuts/readme.md) | [![npm-d](https://img.shields.io/npm/dt/ranuts.svg)](https://www.npmjs.com/package/ranuts) | 工具函数库 |
 
 ### 实验性项目
 
-| 包名 | 描述 |
-|------|------|
-| [im](packages/im) | 聊天应用原型 |
-| [read](packages/read) | 阅读应用原型 |
-| [ml](packages/ml) | 机器学习实验 |
-| [visual](packages/visual) | 数据可视化实验 |
-| [solidity](packages/solidity) | Web3 智能合约实验 |
-| [ranite](packages/ranite) | 开发工具实验 |
-| [debug](packages/debug) | 调试工具 |
-| [image-process](packages/image-process) | 图像处理实验 |
+| 包名                                    | 描述              |
+| --------------------------------------- | ----------------- |
+| [im](packages/im)                       | 聊天应用原型      |
+| [ml](packages/ml)                       | 机器学习实验      |
+| [visual](packages/visual)               | 数据可视化实验    |
+| [solidity](packages/solidity)           | Web3 智能合约实验 |
+| [ranite](packages/ranite)               | 开发工具实验      |
+| [debug](packages/debug)                 | 调试工具          |
+| [image-process](packages/image-process) | 图像处理实验      |
 
 ## 🚀 快速开始
 
@@ -94,10 +93,10 @@ pnpm build
 ### 使用核心包
 
 ```bash
-# 安装 ranui (实验性 Web 组件)
+# 安装 ranui (Web 组件)
 npm install ranui
 
-# 安装工具函数 (开发中)
+# 安装工具函数
 npm install ranuts
 ```
 
@@ -126,10 +125,10 @@ pnpm --filter ranui build
 这是一个**技术探索和学习项目**，处于早期开发阶段。大多数包都处于 alpha 阶段或实验阶段。
 
 **关键要点：**
+
 - 🚧 **早期开发**: 大多数功能仍在开发中
 - 🧪 **实验性**: API 可能会频繁变化
 - 📚 **学习导向**: 主要用于学习和实验
-- ⚠️ **非生产就绪**: 不建议用于生产环境
 
 ## 🤝 贡献指南
 

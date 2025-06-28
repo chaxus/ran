@@ -17,6 +17,7 @@ Experimental utility library with commonly used functions and tools
 This is an **experimental utility library** in early development. While functional, it's primarily designed for learning and experimentation.
 
 **Key points:**
+
 - 🚧 **Early Development**: Features are still being developed and refined
 - 🧪 **Experimental**: APIs may change frequently
 - 📚 **Learning Focus**: Primarily for learning JavaScript/TypeScript utilities

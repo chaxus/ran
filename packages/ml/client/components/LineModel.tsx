@@ -1,11 +1,20 @@
 import React, { useState } from 'react';
-import { Input, message } from '@ranui/react';
 import type { TensorContainerObject, TypedArray } from '@tensorflow/tfjs';
 import type { Point2D } from '@tensorflow/tfjs-vis';
 import * as tfvis from '@tensorflow/tfjs-vis';
 import * as tf from '@tensorflow/tfjs';
 import { createModel, denormalise, normalise, plot, tfMemory, trainModel } from '../lib';
 import type { Normalise } from '../lib';
+import 'ranui/input';
+import 'ranui/message';
+import 'ranui/typings';
+
+declare global {
+  interface Window {
+    message: Partial<Ran.Message>;
+  }
+}
+const message = window.message;
 
 const path = '../../assets/dataset/kc_house_data.csv';
 
@@ -40,7 +49,7 @@ class LineModel {
   loadData = async (path: string): Promise<void> => {
     // 导入数据
     const houseSaleDateSet = tf.data.csv(path);
-    // 从数据中提取x,y值并绘制图形
+    // 从数据中提取 x,y 值并绘制图形
     const pointsDataSet = houseSaleDateSet.map((record: HouseSaleDataSet) => {
       return {
         x: record.sqft_living,
@@ -203,9 +212,9 @@ export const LineModelComponent = (): React.JSX.Element => {
       <h2>加载模型</h2>
       <button onClick={() => loadModel()}>loadModel</button>
       <h2>预测</h2>
-      <Input onChange={input} />
+      <r-input onChange={input} />
       <button onClick={predictOut}>input number to predict result</button>
-      <h2>打开tfvis视图</h2>
+      <h2>打开 tfvis 视图</h2>
       <button onClick={openTfvis}>openTfvis</button>
     </div>
   );

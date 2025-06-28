@@ -15,9 +15,9 @@
   "keywords": [],
   "author": "chaxus",
   "dependencies": {
-    "@ranui/react": "workspace:^",
     "@tensorflow/tfjs": "^4.22.0",
     "@tensorflow/tfjs-vis": "^1.5.1",
+    "ranui": "0.1.10-alpha-26",
     "ranuts": "workspace:^",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

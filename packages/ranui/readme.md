@@ -17,6 +17,7 @@ Experimental UI Component library based on `Web Component`
 This is an **experimental UI library** in early development. While functional, it's primarily designed for learning and experimentation.
 
 **Key points:**
+
 - 🚧 **Early Development**: Features are still being developed and refined
 - 🧪 **Experimental**: APIs may change frequently
 - 📚 **Learning Focus**: Primarily for learning Web Components and UI development

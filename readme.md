@@ -46,7 +46,7 @@ English · [中文](./readme-zh_CN.md)
 - 🎨 **UI Libraries**: web components
 - 🛠️ **Utility Libraries**: TypeScript utilities
 - 🤖 **Machine Learning**: Basic ML tools and experiments
-- 📱 **Web Applications**: IM chat and reading apps (prototypes)
+- 📱 **Web Applications**: IM chat app (prototype)
 - 🔧 **Development Tools**: Build tools and debug utilities
 - 🌐 **Web3**: Smart contract experiments
 - 🎯 **Visual Tools**: Data visualization experiments
@@ -57,23 +57,22 @@ This monorepo contains various experimental packages:
 
 ### Core Libraries (Alpha Stage)
 
-| Package | Version | Downloads | Description |
-|---------|---------|-----------|-------------|
-| [ranui](packages/ranui) | [![ranui version](https://img.shields.io/npm/v/ranui.svg?label=%20)](packages/ranui/readme.md) | [![npm-d](https://img.shields.io/npm/dt/ranui.svg)](https://www.npmjs.com/package/ranui) | web component library |
-| [ranuts](packages/ranuts) | [![ranuts version](https://img.shields.io/npm/v/ranuts.svg?label=%20)](packages/ranuts/readme.md) | [![npm-d](https://img.shields.io/npm/dt/ranuts.svg)](https://www.npmjs.com/package/ranuts) | Utility library |
+| Package                   | Version                                                                                           | Downloads                                                                                  | Description           |
+| ------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | --------------------- |
+| [ranui](packages/ranui)   | [![ranui version](https://img.shields.io/npm/v/ranui.svg?label=%20)](packages/ranui/readme.md)    | [![npm-d](https://img.shields.io/npm/dt/ranui.svg)](https://www.npmjs.com/package/ranui)   | web component library |
+| [ranuts](packages/ranuts) | [![ranuts version](https://img.shields.io/npm/v/ranuts.svg?label=%20)](packages/ranuts/readme.md) | [![npm-d](https://img.shields.io/npm/dt/ranuts.svg)](https://www.npmjs.com/package/ranuts) | Utility library       |
 
 ### Experimental Projects
 
-| Package | Description |
-|---------|-------------|
-| [im](packages/im) | Chat application prototype |
-| [read](packages/read) | Reading application prototype |
-| [ml](packages/ml) | Machine learning experiments |
-| [visual](packages/visual) | Data visualization experiments |
-| [solidity](packages/solidity) | Web3 smart contract experiments |
-| [ranite](packages/ranite) | Development tooling experiments |
-| [debug](packages/debug) | Debug utilities |
-| [image-process](packages/image-process) | Image processing experiments |
+| Package                                 | Description                     |
+| --------------------------------------- | ------------------------------- |
+| [im](packages/im)                       | Chat application prototype      |
+| [ml](packages/ml)                       | Machine learning experiments    |
+| [visual](packages/visual)               | Data visualization experiments  |
+| [solidity](packages/solidity)           | Web3 smart contract experiments |
+| [ranite](packages/ranite)               | Development tooling experiments |
+| [debug](packages/debug)                 | Debug utilities                 |
+| [image-process](packages/image-process) | Image processing experiments    |
 
 ## 🚀 Quick Start
 
@@ -91,13 +90,13 @@ pnpm install
 pnpm build
 ```
 
-### Using Core Packages (Experimental)
+### Using Core Packages
 
 ```bash
-# Install ranui (experimental web components)
+# Install ranui (web components)
 npm install ranui
 
-# Install utilities (work in progress)
+# Install utilities
 npm install ranuts
 ```
 
@@ -126,6 +125,7 @@ pnpm --filter ranui build
 This is a **technology exploration and learning project** in early development. Most packages are in alpha stage or experimental phase.
 
 **Key points:**
+
 - 🚧 **Early Development**: Most features are still being developed
 - 🧪 **Experimental**: APIs may change frequently
 - 📚 **Learning Focus**: Primarily for learning and experimentation

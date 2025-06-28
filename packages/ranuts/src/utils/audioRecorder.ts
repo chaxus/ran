@@ -401,7 +401,7 @@ class WebmContainer extends WebmBase<ContainerData[]> {
     let bytes = 1,
       flag = 0x80;
     while (x >= flag && bytes < 8) {
-      bytes++, (flag *= 0x80);
+      (bytes++, (flag *= 0x80));
     }
     if (!draft) {
       let value = flag + x;

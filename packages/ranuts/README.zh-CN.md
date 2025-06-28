@@ -19,6 +19,7 @@
 这是一个**实验性工具函数库**，处于早期开发阶段。虽然功能可用，但主要用于学习和实验。
 
 **关键要点：**
+
 - 🚧 **早期开发**: 功能仍在开发和完善中
 - 🧪 **实验性**: API 可能会频繁变化
 - 📚 **学习导向**: 主要用于学习 JavaScript/TypeScript 工具函数
@@ -103,4 +104,4 @@ document.body.appendChild(html);
 
 ## Meta
 
-[LICENSE (MIT)](/LICENSE) 
+[LICENSE (MIT)](/LICENSE)

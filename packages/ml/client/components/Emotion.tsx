@@ -1,12 +1,20 @@
 import React, { useState } from 'react';
-import { Input, message } from '@ranui/react';
-import '@ranui/react/style';
 import type { TensorContainerObject } from '@tensorflow/tfjs';
 import * as tfvis from '@tensorflow/tfjs-vis';
 import * as tf from '@tensorflow/tfjs';
 import { word } from 'ranuts/wasm';
 import { denormalise, normalise, tfMemory, trainModel } from '../lib';
 import type { Normalise } from '../lib';
+import 'ranui/input';
+import 'ranui/message';
+import 'ranui/typings';
+
+declare global {
+  interface Window {
+    message: Partial<Ran.Message>;
+  }
+}
+const message = window.message;
 
 const path = '../../assets/dataset/min_label_review.csv';
 
@@ -292,7 +300,7 @@ export const Emotion = (): React.JSX.Element => {
       <h2>加载模型</h2>
       <button onClick={() => loadModel()}>加载模型</button>
       <h2>预测</h2>
-      <Input onChange={input} />
+      <r-input onChange={input} />
       <button onClick={predictOut}>输入文本去预测结果</button>
       <h2>打开 tfvis 视图</h2>
       {/* <button onClick={openTfvis}>打开 tfvis 视图</button> */}
