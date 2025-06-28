@@ -24,12 +24,12 @@ interface requestUrlToArraybufferReturn extends BaseReturn {
 
 const renderOffice = async (file: File, options: RenderOptions) => {
   try {
-    const { iframe, onLoad, dom } = options;
+    const { iframe, onLoad, dom, baseUrl } = options;
     dom?.style.setProperty('display', 'none');
     if (!iframe) return;
     Client.removeAll();
     const { id } = Client.connect({
-      targetOrigin: new URL(TARGET_ORIGIN).origin,
+      targetOrigin: new URL(baseUrl || TARGET_ORIGIN).origin,
       targetWindow: iframe.contentWindow!,
     });
     const chunks = await MessageCodec.encodeFileChunked(file);
@@ -154,6 +154,12 @@ async function Custom() {
       set closeable(value) {
         if (value) this.setAttribute('closeable', value);
       }
+      get baseUrl() {
+        return this.getAttribute('baseUrl') || TARGET_ORIGIN;
+      }
+      set baseUrl(value) {
+        if (value) this.setAttribute('baseUrl', value);
+      }
       createLoading = () => {
         this._loadingElement = document.createElement('div');
         this._loadingElement.setAttribute('class', 'r-preview-loading');
@@ -212,6 +218,7 @@ async function Custom() {
                 onError: this.onError,
                 onLoad: this.onLoad,
                 iframe: this.previewIframe,
+                baseUrl: this.baseUrl,
               };
               handler(file, options);
             }
@@ -274,7 +281,7 @@ async function Custom() {
         this.previewContextPdf.setAttribute('class', 'r-preview-context-pdf');
         this.previewContext.appendChild(this.previewContextPdf);
         this.previewIframe = document.createElement('iframe');
-        this.previewIframe.setAttribute('src', TARGET_ORIGIN);
+        this.previewIframe.setAttribute('src', this.baseUrl);
         this.previewIframe.setAttribute('style', 'display: none;');
         this.previewIframe.style.setProperty('margin-bottom', '30px');
         this.previewContext.appendChild(this.previewIframe);

@@ -2,6 +2,12 @@
 
 支持`docx`，`pptx`，`pdf`,`xlsx`文件的预览
 
+- **ranui 0.1.10-alpha-24 版本之前**: 
+  - 使用 [jszip](https://github.com/Stuk/jszip), [docx-preview](https://github.com/VolodymyrBaydalka/docxjs), [exceljs](https://github.com/exceljs/exceljs), [pdfjs](https://github.com/mozilla/pdfjs-dist), [pptx2html](https://github.com/g21589/PPTX2HTML) 进行文档的预览。
+- **ranui 0.1.10-alpha-24 版本之后**: 改用 OnlyOffice WebAssembly 版本进行文档预览
+  - 部署详情请参考： [OnlyOffice Web Local](https://github.com/ranuts/document)
+
+
 ## 代码演示
 
 <div style="width: 100px; margin-top:10px">
@@ -50,8 +56,14 @@
 <r-preview closeable="false"></r-preview>
 ```
 
-## 版本历史
+### `baseUrl`
 
-- ranui 0.1.10-alpha-24 之前：使用 docx-preview 和 pdfjs 进行文档预览
-- ranui 0.1.10-alpha-24 之后：改用 OnlyOffice WebAssembly 版本进行文档预览
-  - 部署详情请参考：[OnlyOffice Web Local](https://github.com/ranuts/document)
+当您需要自定义文档预览服务时，可以通过 `baseUrl` 属性指定服务地址。默认情况下，组件会使用内置的预览服务。
+
+内置的部署参考：https://github.com/ranuts/document
+
+也可以通过这个参数来调试
+
+```html
+<r-preview baseUrl="http://localhost:5174/document"></r-preview>
+```
