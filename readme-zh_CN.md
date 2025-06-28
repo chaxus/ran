@@ -43,8 +43,8 @@
 
 ## ✨ 功能特性
 
-- 🎨 **UI 库**: 实验性的 Web 组件和 React 组件（开发中）
-- 🛠️ **工具库**: JavaScript/TypeScript 工具函数（开发中）
+- 🎨 **UI 库**: WebComponent 组件
+- 🛠️ **工具库**: TypeScript 工具函数
 - 🤖 **机器学习**: 基础的 ML 工具和实验
 - 📱 **Web 应用**: IM 聊天和阅读应用（原型）
 - 🔧 **开发工具**: 构建工具和调试工具
@@ -60,7 +60,6 @@
 | 包名 | 版本 | 下载量 | 描述 |
 |------|------|--------|------|
 | [ranui](packages/ranui) | [![ranui version](https://img.shields.io/npm/v/ranui.svg?label=%20)](packages/ranui/readme.md) | [![npm-d](https://img.shields.io/npm/dt/ranui.svg)](https://www.npmjs.com/package/ranui) | 实验性 Web 组件库 |
-| [@ranui/react](packages/ranui-react) | [![@ranui/react version](https://img.shields.io/npm/v/@ranui/react.svg?label=%20)](packages/ranui-react/readme.md) | [![npm-d](https://img.shields.io/npm/dt/@ranui/react.svg)](https://www.npmjs.com/package/@ranui/react) | 实验性 React 组件库 |
 | [ranuts](packages/ranuts) | [![ranuts version](https://img.shields.io/npm/v/ranuts.svg?label=%20)](packages/ranuts/readme.md) | [![npm-d](https://img.shields.io/npm/dt/ranuts.svg)](https://www.npmjs.com/package/ranuts) | 工具函数库（开发中） |
 
 ### 实验性项目
@@ -92,13 +91,13 @@ pnpm install
 pnpm build
 ```
 
-### 使用核心包（实验性）
+### 使用核心包
 
 ```bash
-# 安装 ranui (Web 组件)
+# 安装 ranui (实验性 Web 组件)
 npm install ranui
 
-# 安装工具函数 
+# 安装工具函数 (开发中)
 npm install ranuts
 ```
 

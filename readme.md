@@ -43,8 +43,8 @@ English · [中文](./readme-zh_CN.md)
 
 ## ✨ Features
 
-- 🎨 **UI Libraries**: Experimental web components and React components (in development)
-- 🛠️ **Utility Libraries**: JavaScript/TypeScript utilities (work in progress)
+- 🎨 **UI Libraries**: web components
+- 🛠️ **Utility Libraries**: TypeScript utilities
 - 🤖 **Machine Learning**: Basic ML tools and experiments
 - 📱 **Web Applications**: IM chat and reading apps (prototypes)
 - 🔧 **Development Tools**: Build tools and debug utilities
@@ -60,7 +60,6 @@ This monorepo contains various experimental packages:
 | Package | Version | Downloads | Description |
 |---------|---------|-----------|-------------|
 | [ranui](packages/ranui) | [![ranui version](https://img.shields.io/npm/v/ranui.svg?label=%20)](packages/ranui/readme.md) | [![npm-d](https://img.shields.io/npm/dt/ranui.svg)](https://www.npmjs.com/package/ranui) | Experimental web component library |
-| [@ranui/react](packages/ranui-react) | [![@ranui/react version](https://img.shields.io/npm/v/@ranui/react.svg?label=%20)](packages/ranui-react/readme.md) | [![npm-d](https://img.shields.io/npm/dt/@ranui/react.svg)](https://www.npmjs.com/package/@ranui/react) | Experimental React component library |
 | [ranuts](packages/ranuts) | [![ranuts version](https://img.shields.io/npm/v/ranuts.svg?label=%20)](packages/ranuts/readme.md) | [![npm-d](https://img.shields.io/npm/dt/ranuts.svg)](https://www.npmjs.com/package/ranuts) | Utility library (in development) |
 
 ### Experimental Projects
@@ -97,9 +96,6 @@ pnpm build
 ```bash
 # Install ranui (experimental web components)
 npm install ranui
-
-# Install React components (experimental)
-npm install @ranui/react
 
 # Install utilities (work in progress)
 npm install ranuts
