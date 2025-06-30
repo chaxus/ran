@@ -1,72 +1,74 @@
 # Input
 
-Entering content via mouse or keyboard is the most basic form field packaging.
+Input component for entering content via mouse or keyboard, the most basic form control.
 
-## Code demo
+## Quick Start
+
+### Basic Usage
 
 <div style="width:300px;">
-    Input field:<r-input></r-input>
+    Input field: <r-input></r-input>
 </div>
 
-```xml
+```html
 <r-input></r-input>
 ```
 
-## Attribute
+## API Reference
 
-### `label`
+### Properties
 
-Provide an input experience similar to Metiral Design.
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `label` | `string` | `''` | Input label for Material Design style experience |
+| `placeholder` | `string` | `''` | Placeholder text |
+| `value` | `string` | `''` | Input value |
+| `disabled` | `boolean` | `false` | Whether the input is disabled |
+| `type` | `string` | `'text'` | Input type: `text`, `password`, `number` |
+| `icon` | `string` | `''` | Input icon |
+| `name` | `string` | `''` | Form field name for form submission |
+| `status` | `string` | `''` | Input status: `error`, `warning` |
+| `min` | `number` | `-` | Minimum value for number input |
+| `max` | `number` | `-` | Maximum value for number input |
+| `step` | `number` | `1` | Step value for number input |
 
-<r-input label="user"></r-input>
+### Label Input `label`
 
-```html
-<r-input label="user"></r-input>
-```
+Provides Material Design style input experience
 
-### `placeholder`
-
-Consistent with native 'placeholder'.
-
-<r-input placeholder="user"></r-input>
-
-```html
-<r-input placeholder="user"></r-input>
-```
-
-### `disabled`
-
-The input box can be disabled by disabled. After disabled, the events on the button become invalid.
-
-<r-input label="user" disabled></r-input>
+<r-input label="Username"></r-input>
 
 ```html
-<r-input label="user" disabled></r-input>
+<r-input label="Username"></r-input>
 ```
 
-### `value`
+### Placeholder `placeholder`
 
-Sets or returns the value of the 'value' property of the input box.
+Consistent with native `placeholder` attribute
+
+<r-input placeholder="Enter username"></r-input>
+
+```html
+<r-input placeholder="Enter username"></r-input>
+```
+
+### Disabled State `disabled`
+
+<r-input label="Username" disabled></r-input>
+
+```html
+<r-input label="Username" disabled></r-input>
+```
+
+### Input Value `value`
 
 <r-input value="1234"></r-input>
 
-### `type`
-
-Currently support 'password', 'number' these types, set will appear additional 'ui' controls.
-
-#### Password entry field
-
-The password can be switched between plain text and ciphertext.
-
-<r-input icon="lock" type="password"></r-input>
-
 ```html
-<r-input icon="lock" type="password"></r-input>
+<r-input value="1234"></r-input>
 ```
 
-### `icon`
-
-You can set an 'icon' to represent the tag identifier.
+### Icon `icon`
 
 <r-input icon="user"></r-input>
 
@@ -74,84 +76,84 @@ You can set an 'icon' to represent the tag identifier.
 <r-input icon="user"></r-input>
 ```
 
-#### Digital input box
+### Input Types `type`
 
-Numeric input box, similar to the native 'input[type=number]', support 'min', 'max', 'step' attributes, support keyboard up and down keys to switch numbers.
+#### Password Input
 
-<r-input type="number" min="-10" max="10" step="0.5" ></r-input>
+<r-input icon="lock" type="password"></r-input>
+
+```html
+<r-input icon="lock" type="password"></r-input>
+```
+
+#### Number Input
+
+<r-input type="number" min="-10" max="10" step="0.5"></r-input>
 
 ```html
 <r-input type="number" min="-10" max="10" step="0.5"></r-input>
 ```
 
-### name
-
-Valid when associated with the form component, the field name collected when the form is submitted
-
-### status
-
-- error
-
-Default color value: `#ff4d4f`
-
-<div>
- <r-input status="error"></r-input>
-</div>
-
-```xml
-<r-input status="error"></r-input>
-```
-
-- warning
-
-Default color value:`#ff7875`
-
-<div>
-  <r-input status="warning"></r-input>
-</div>
-
-```xml
-<r-input  status="warning"></r-input>
-```
-
-## `event`
-
-Common callback events.
-
-### onchange
-
-Triggered when text changes.
-
-<r-input onchange="console.log(this.value)"></r-input>
+### Form Field Name `name`
 
 ```html
-<r-input onchange="func(this.value)"></r-input>
+<r-input name="username" label="Username"></r-input>
 ```
 
-```js
+### Status `status`
+
+#### Error State
+
+<r-input status="error" label="Username"></r-input>
+
+```html
+<r-input status="error" label="Username"></r-input>
+```
+
+#### Warning State
+
+<r-input status="warning" label="Username"></r-input>
+
+```html
+<r-input status="warning" label="Username"></r-input>
+```
+
+## Events
+
+### Change Event `onchange`
+
+<r-input onchange="console.log(this.value)" label="Username"></r-input>
+
+```html
+<r-input onchange="handleChange(this.value)" label="Username"></r-input>
+```
+
+```javascript
 const input = document.createElement('r-input');
-input.setAttribute('label', 'home');
-const func = (e) => {
-  console.log(e);
+input.setAttribute('label', 'Username');
+const handleChange = (value) => {
+  console.log('Value changed:', value);
 };
-input.addEventListener('change', func);
+input.addEventListener('change', handleChange);
 ```
 
-### oninput
+### Input Event `oninput`
 
-Triggered when text changes.
+<r-input oninput="console.log(this.value)" label="Username"></r-input>
 
-<r-input oninput="console.log(this.value)"></r-input>
-
-```js
+```javascript
 const input = document.createElement('r-input');
-input.setAttribute('label', 'home');
-const func = (e) => {
-  console.log(e);
+input.setAttribute('label', 'Username');
+const handleInput = (value) => {
+  console.log('Typing:', value);
 };
-input.addEventListener('input', func);
+input.addEventListener('input', handleInput);
 ```
 
-The e parameter structure of the event
+## Best Practices
 
-![input method](../../../assets/ranui/input-input.jpg)
+- **Labels**: Add meaningful labels to inputs
+- **Placeholders**: Use placeholders for input hints
+- **Icons**: Add relevant icons to enhance UX
+- **Validation**: Use `status` property to show input state
+- **Types**: Choose appropriate input types for content

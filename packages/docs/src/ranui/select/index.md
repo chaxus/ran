@@ -1,28 +1,10 @@
 # Select
 
-A regular pull-down selector.
+Dropdown selector component with support for single selection, search, and custom styling.
 
-## Code demo
+## Quick Start
 
-<r-select style="width: 120px; height: 40px" defaultValue="185">
-      <r-option value="185">Mike</r-option>
-      <r-option value="186">Tom</r-option>
-      <r-option value="187">Lucy</r-option>
-</r-select>
-
-```xml
-<r-select style="width: 120px; height: 40px" defaultValue="185">
-      <r-option value="185">Mike</r-option>
-      <r-option value="186">Tom</r-option>
-      <r-option value="187">Lucy</r-option>
-    </r-select>
-```
-
-## Attribute
-
-### `defaultValue`
-
-Sets the currently selected value
+### Basic Usage
 
 <r-select style="width: 120px; height: 40px" defaultValue="185">
       <r-option value="185">Mike</r-option>
@@ -30,17 +12,53 @@ Sets the currently selected value
       <r-option value="187">Lucy</r-option>
 </r-select>
 
-```xml
-    <r-select style="width: 120px; height: 40px" defaultValue="185">
+```html
+<r-select style="width: 120px; height: 40px" defaultValue="185">
       <r-option value="185">Mike</r-option>
       <r-option value="186">Tom</r-option>
       <r-option value="187">Lucy</r-option>
-    </r-select>
+</r-select>
 ```
 
-### `disabled`
+## API Reference
 
-Adding the disabled attribute makes the selection box unavailable and changes the style.
+### Select Properties
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `defaultValue` | `string` | `''` | Default selected value |
+| `disabled` | `boolean` | `false` | Whether the select is disabled |
+| `type` | `string` | `'default'` | Select type: `default`, `text` |
+| `placement` | `string` | `'bottom'` | Dropdown direction: `top`, `bottom` |
+| `showSearch` | `boolean` | `false` | Whether to show search box |
+| `getPopupContainerId` | `string` | `''` | Container element id for dropdown |
+| `dropdownclass` | `string` | `''` | Custom class name for dropdown |
+| `trigger` | `string` | `'click'` | Trigger method: `click`, `hover`, `click,hover`, `none` |
+
+### Option Properties
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `value` | `string` | `''` | Option value |
+| `disabled` | `boolean` | `false` | Whether the option is disabled |
+
+### Default Value `defaultValue`
+
+<r-select style="width: 120px; height: 40px" defaultValue="185">
+      <r-option value="185">Mike</r-option>
+      <r-option value="186">Tom</r-option>
+      <r-option value="187">Lucy</r-option>
+</r-select>
+
+```html
+<r-select style="width: 120px; height: 40px" defaultValue="185">
+      <r-option value="185">Mike</r-option>
+      <r-option value="186">Tom</r-option>
+      <r-option value="187">Lucy</r-option>
+</r-select>
+```
+
+### Disabled State `disabled`
 
 <r-select style="width: 120px; height: 40px" disabled defaultValue="185">
       <r-option value="185">Mike</r-option>
@@ -48,17 +66,15 @@ Adding the disabled attribute makes the selection box unavailable and changes th
     <r-option value="187">Lucy</r-option>
 </r-select>
 
-```xml
-    <r-select style="width: 120px; height: 40px" disabled defaultValue="185">
+```html
+<r-select style="width: 120px; height: 40px" disabled defaultValue="185">
       <r-option value="185">Mike</r-option>
       <r-option value="186">Tom</r-option>
       <r-option value="187">Lucy</r-option>
-    </r-select>
+</r-select>
 ```
 
-### `type`
-
-You can set the text type without borders and drop-down ICONS
+### Text Type `type`
 
 <r-select
       style="width: 120px; height: 40px"
@@ -70,7 +86,7 @@ You can set the text type without borders and drop-down ICONS
 <r-option value="187">Lucy</r-option>
 </r-select>
 
-```xml
+```html
 <r-select
       style="width: 120px; height: 40px"
       type="text"
@@ -79,12 +95,10 @@ You can set the text type without borders and drop-down ICONS
       <r-option value="185">Mike</r-option>
       <r-option value="186">Tom</r-option>
       <r-option value="187">Lucy</r-option>
-    </r-select>
+</r-select>
 ```
 
-### `placement`
-
-Drop-down box display direction default down, set to 'top' can go up
+### Dropdown Direction `placement`
 
 <r-select
       style="width: 120px; height: 40px"
@@ -97,7 +111,7 @@ Drop-down box display direction default down, set to 'top' can go up
 <r-option value="187">Lucy</r-option>
 </r-select>
 
-```xml
+```html
 <r-select
       style="width: 120px; height: 40px"
       type="text"
@@ -107,12 +121,10 @@ Drop-down box display direction default down, set to 'top' can go up
       <r-option value="185">Mike</r-option>
       <r-option value="186">Tom</r-option>
       <r-option value="187">Lucy</r-option>
-    </r-select>
+</r-select>
 ```
 
-### `showSearch`
-
-Expand to search for options
+### Search Function `showSearch`
 
 <r-select style="width: 120px; height: 40px" showSearch>
 <r-option value="185">Mike</r-option>
@@ -120,7 +132,7 @@ Expand to search for options
 <r-option value="187">Lucy</r-option>
 </r-select>
 
-```xml
+```html
 <r-select style="width: 120px; height: 40px" showSearch>
 <r-option value="185">Mike</r-option>
 <r-option value="186">Tom</r-option>
@@ -128,33 +140,27 @@ Expand to search for options
 </r-select>
 ```
 
-### `getPopupContainerId`
+### Container Mount `getPopupContainerId`
 
-The drop-down box is mounted to document.body by default, and can be mounted to the specified element by passing in the element's id
-`
-<r-select style="width: 120px; height: 40px">
-<r-option value="185">Mike</r-option>
-<r-option value="186">Tom</r-option>
-<r-option value="187">Lucy</r-option>
-</r-select>
-
-```xml
+```html
 <r-select getPopupContainerId="elementid">
       <r-option value="185">Mike</r-option>
       <r-option value="186">Tom</r-option>
       <r-option value="187">Lucy</r-option>
-    </r-select>
+</r-select>
 ```
 
-### `dropdownclass`
+### Custom Styling `dropdownclass`
 
-If you need to customize the style of the drop-down box, you can pass in a 'class' name to customize
+```html
+<r-select dropdownclass="custom-dropdown">
+      <r-option value="185">Mike</r-option>
+      <r-option value="186">Tom</r-option>
+      <r-option value="187">Lucy</r-option>
+</r-select>
+```
 
-### trigger
-
-'select' The method that the component triggers. Default 'click', click trigger. You can set 'hover', or 'click,hover', which means that both click and mouse move trigger.
-
-If it is set to none, it will not trigger.
+### Trigger Method `trigger`
 
 <r-select style="width: 120px; height: 40px" trigger="click,hover">
 <r-option value="185">Mike</r-option>
@@ -162,10 +168,58 @@ If it is set to none, it will not trigger.
 <r-option value="187">Lucy</r-option>
 </r-select>
 
-```xml
-<r-select getPopupContainerId="elementid" action="click,hover">
+```html
+<!-- Click trigger (default) -->
+<r-select trigger="click">
       <r-option value="185">Mike</r-option>
       <r-option value="186">Tom</r-option>
       <r-option value="187">Lucy</r-option>
-    </r-select>
+</r-select>
+
+<!-- Hover trigger -->
+<r-select trigger="hover">
+      <r-option value="185">Mike</r-option>
+      <r-option value="186">Tom</r-option>
+      <r-option value="187">Lucy</r-option>
+</r-select>
+
+<!-- Both click and hover -->
+<r-select trigger="click,hover">
+      <r-option value="185">Mike</r-option>
+      <r-option value="186">Tom</r-option>
+      <r-option value="187">Lucy</r-option>
+</r-select>
+
+<!-- No trigger -->
+<r-select trigger="none">
+      <r-option value="185">Mike</r-option>
+      <r-option value="186">Tom</r-option>
+      <r-option value="187">Lucy</r-option>
+</r-select>
 ```
+
+## Events
+
+### Change Event
+
+```html
+<r-select onchange="handleChange">
+      <r-option value="185">Mike</r-option>
+      <r-option value="186">Tom</r-option>
+      <r-option value="187">Lucy</r-option>
+</r-select>
+
+<script>
+function handleChange(value) {
+  console.log('Selected value:', value);
+}
+</script>
+```
+
+## Best Practices
+
+- **Option Count**: Enable search when there are many options
+- **Trigger Method**: Choose appropriate trigger based on user habits
+- **Mount Position**: Pay attention to dropdown mount position in complex layouts
+- **Custom Styling**: Use `dropdownclass` for style customization
+- **Disabled Options**: Use `disabled` attribute for unavailable options

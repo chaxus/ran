@@ -1,155 +1,239 @@
-# Input 输入框
+# Select 下拉选择框
 
-通过鼠标或键盘输入内容，是最基础的表单域的包装。
+下拉选择器组件，支持单选、搜索、自定义样式等功能。
 
-## 代码演示
+## 快速开始
 
-<div style="width:300px;">
-    输入框：<r-input></r-input>
-</div>
+### 基础用法
 
-```xml
-<r-input></r-input>
-```
-
-## 属性
-
-### 标签`label`
-
-提供类似于 `Metiral Design` 的输入体验。
-
-<r-input label="user"></r-input>
+<r-select style="width: 120px; height: 40px" defaultValue="185">
+      <r-option value="185">Mike</r-option>
+      <r-option value="186">Tom</r-option>
+      <r-option value="187">Lucy</r-option>
+</r-select>
 
 ```html
-<r-input label="user"></r-input>
+<r-select style="width: 120px; height: 40px" defaultValue="185">
+      <r-option value="185">Mike</r-option>
+      <r-option value="186">Tom</r-option>
+      <r-option value="187">Lucy</r-option>
+</r-select>
 ```
 
-### 占位`placeholder`
+## API 参考
 
-与原生`placeholder`一致。
+### Select 属性
 
-<r-input placeholder="user"></r-input>
+| 属性 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `defaultValue` | `string` | `''` | 默认选中的值 |
+| `disabled` | `boolean` | `false` | 是否禁用选择器 |
+| `type` | `string` | `'default'` | 选择器类型：`default`、`text` |
+| `placement` | `string` | `'bottom'` | 下拉框展示方向：`top`、`bottom` |
+| `showSearch` | `boolean` | `false` | 是否显示搜索框 |
+| `getPopupContainerId` | `string` | `''` | 下拉框挂载元素的 id |
+| `dropdownclass` | `string` | `''` | 下拉框的自定义 class 名 |
+| `trigger` | `string` | `'click'` | 触发方式：`click`、`hover`、`click,hover`、`none` |
+
+### Option 属性
+
+| 属性 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `value` | `string` | `''` | 选项的值 |
+| `disabled` | `boolean` | `false` | 是否禁用该选项 |
+
+### 默认值 `defaultValue`
+
+设置当前选中的值
+
+<r-select style="width: 120px; height: 40px" defaultValue="185">
+      <r-option value="185">Mike</r-option>
+      <r-option value="186">Tom</r-option>
+      <r-option value="187">Lucy</r-option>
+</r-select>
 
 ```html
-<r-input placeholder="user"></r-input>
+<r-select style="width: 120px; height: 40px" defaultValue="185">
+      <r-option value="185">Mike</r-option>
+      <r-option value="186">Tom</r-option>
+      <r-option value="187">Lucy</r-option>
+</r-select>
 ```
 
-### 禁用`disabled`
+### 禁用状态 `disabled`
 
-通过`disabled`可以禁用输入框，禁用后该按钮上的事件失效。
-
-<r-input label="user" disabled></r-input>
+<r-select style="width: 120px; height: 40px" disabled defaultValue="185">
+      <r-option value="185">Mike</r-option>
+      <r-option value="186">Tom</r-option>
+    <r-option value="187">Lucy</r-option>
+</r-select>
 
 ```html
-<r-input label="user" disabled></r-input>
+<r-select style="width: 120px; height: 40px" disabled defaultValue="185">
+      <r-option value="185">Mike</r-option>
+      <r-option value="186">Tom</r-option>
+      <r-option value="187">Lucy</r-option>
+</r-select>
 ```
 
-### 值`value`
+### 文本类型 `type`
 
-设置或返回输入框的`value`属性值。
+可以设置文本类型，不显示边框和下拉图标
 
-<r-input value="1234"></r-input>
-
-### 类型`type`
-
-目前支持`password`、`number`这几种类型，设置后会出现额外的`ui`控件。
-
-#### 密码输入框
-
-支持密码明文和密文切换。
-
-<r-input icon="lock" type="password"></r-input>
+<r-select
+      style="width: 120px; height: 40px"
+      type="text"
+      defaultValue="185"
+    >
+<r-option value="185">Mike</r-option>
+<r-option value="186">Tom</r-option>
+<r-option value="187">Lucy</r-option>
+</r-select>
 
 ```html
-<r-input icon="lock" type="password"></r-input>
+<r-select
+      style="width: 120px; height: 40px"
+      type="text"
+      defaultValue="185"
+    >
+      <r-option value="185">Mike</r-option>
+      <r-option value="186">Tom</r-option>
+      <r-option value="187">Lucy</r-option>
+</r-select>
 ```
 
-### 图标`icon`
+### 下拉方向 `placement`
 
-可以设置一个`icon`来表示标签标识。
+下拉框展示方向默认向下，设置成 `top` 可以向上展示
 
-<r-input icon="user"></r-input>
+<r-select
+      style="width: 120px; height: 40px"
+      type="text"
+      defaultValue="185"
+      placement="top"
+    >
+<r-option value="185">Mike</r-option>
+<r-option value="186">Tom</r-option>
+<r-option value="187">Lucy</r-option>
+</r-select>
 
 ```html
-<r-input icon="user"></r-input>
+<r-select
+      style="width: 120px; height: 40px"
+      type="text"
+      defaultValue="185"
+      placement="top"
+    >
+      <r-option value="185">Mike</r-option>
+      <r-option value="186">Tom</r-option>
+      <r-option value="187">Lucy</r-option>
+</r-select>
 ```
 
-#### 数字输入框
+### 搜索功能 `showSearch`
 
-数字输入框，类似于原生`input[type=number]`，支持`min`、`max`、`step`属性，支持键盘上下键切换数字。
+展开后可对选项进行搜索
 
-<r-input type="number" min="-10" max="10" step="0.5" ></r-input>
+<r-select style="width: 120px; height: 40px" showSearch>
+<r-option value="185">Mike</r-option>
+<r-option value="186">Tom</r-option>
+<r-option value="187">Lucy</r-option>
+</r-select>
 
 ```html
-<r-input type="number" min="-10" max="10" step="0.5"></r-input>
+<r-select style="width: 120px; height: 40px" showSearch>
+<r-option value="185">Mike</r-option>
+<r-option value="186">Tom</r-option>
+<r-option value="187">Lucy</r-option>
+</r-select>
 ```
 
-### name 属性名
+### 挂载容器 `getPopupContainerId`
 
-跟 form 组件联动的时候有效，form 提交时收集的字段名字
-
-### status 状态
-
-- error
-
-默认色值: `#ff4d4f`
-
-<div>
- <r-input status="error"></r-input>
-</div>
-
-```xml
-<r-input status="error"></r-input>
-```
-
-- warning
-
-默认色值: `#ff7875`
-
-<div>
-  <r-input status="warning"></r-input>
-</div>
-
-```xml
-<r-input  status="warning"></r-input>
-```
-
-## 事件`event`
-
-常见的回调事件。
-
-### onchange
-
-文本改变的时候触发。
-
-<r-input onchange="console.log(this.value)"></r-input>
+下拉框默认挂载到 `document.body` 上，可以传入元素的 `id` 挂载到指定元素内
 
 ```html
-<r-input onchange="func(this.value)"></r-input>
+<r-select getPopupContainerId="elementid">
+      <r-option value="185">Mike</r-option>
+      <r-option value="186">Tom</r-option>
+      <r-option value="187">Lucy</r-option>
+</r-select>
 ```
 
-```js
-const input = document.createElement('r-input');
-input.setAttribute('label', 'home');
-const func = (e) => {
-  console.log(e);
-};
-input.addEventListener('change', func);
+### 自定义样式 `dropdownclass`
+
+如果需要自定义下拉框的样式，可以传入一个 `class` 名
+
+```html
+<r-select dropdownclass="custom-dropdown">
+      <r-option value="185">Mike</r-option>
+      <r-option value="186">Tom</r-option>
+      <r-option value="187">Lucy</r-option>
+</r-select>
 ```
 
-### oninput
+### 触发方式 `trigger`
 
-输入时触发。
-<r-input oninput="console.log(this.value)"></r-input>
+控制下拉框的触发方式
 
-```js
-const input = document.createElement('r-input');
-input.setAttribute('label', 'home');
-const func = (e) => {
-  console.log(e);
-};
-input.addEventListener('input', func);
+<r-select style="width: 120px; height: 40px" trigger="click,hover">
+<r-option value="185">Mike</r-option>
+<r-option value="186">Tom</r-option>
+<r-option value="187">Lucy</r-option>
+</r-select>
+
+```html
+<!-- 点击触发（默认） -->
+<r-select trigger="click">
+      <r-option value="185">Mike</r-option>
+      <r-option value="186">Tom</r-option>
+      <r-option value="187">Lucy</r-option>
+</r-select>
+
+<!-- 悬停触发 -->
+<r-select trigger="hover">
+      <r-option value="185">Mike</r-option>
+      <r-option value="186">Tom</r-option>
+      <r-option value="187">Lucy</r-option>
+</r-select>
+
+<!-- 点击和悬停都触发 -->
+<r-select trigger="click,hover">
+      <r-option value="185">Mike</r-option>
+      <r-option value="186">Tom</r-option>
+      <r-option value="187">Lucy</r-option>
+</r-select>
+
+<!-- 不触发 -->
+<r-select trigger="none">
+      <r-option value="185">Mike</r-option>
+      <r-option value="186">Tom</r-option>
+      <r-option value="187">Lucy</r-option>
+</r-select>
 ```
 
-事件的`e`参数结构
-![input方法](../../../../assets/ranui/input-input.jpg)
+## 事件
+
+### 选择变化事件
+
+```html
+<r-select onchange="handleChange">
+      <r-option value="185">Mike</r-option>
+      <r-option value="186">Tom</r-option>
+      <r-option value="187">Lucy</r-option>
+</r-select>
+
+<script>
+function handleChange(value) {
+  console.log('选中的值：', value);
+}
+</script>
+```
+
+## 最佳实践
+
+- **选项数量**: 当选项较多时，建议启用搜索功能
+- **触发方式**: 根据用户习惯选择合适的触发方式
+- **挂载位置**: 在复杂布局中注意下拉框的挂载位置
+- **样式定制**: 使用 `dropdownclass` 进行样式定制
+- **禁用选项**: 使用 `disabled` 属性禁用不需要的选项
