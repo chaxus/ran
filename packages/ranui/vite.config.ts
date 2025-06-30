@@ -71,7 +71,6 @@ export const es: BuildOptions = {
       image: resolve(__dirname, 'components/image/index.ts'),
       input: resolve(__dirname, 'components/input/index.ts'),
       message: resolve(__dirname, 'components/message/index.ts'),
-      preview: resolve(__dirname, 'components/preview/index.ts'),
       skeleton: resolve(__dirname, 'components/skeleton/index.ts'),
       tabpane: resolve(__dirname, 'components/tabpane/index.ts'),
       tab: resolve(__dirname, 'components/tab/index.ts'),

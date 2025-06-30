@@ -157,33 +157,14 @@ import 'ranui';
 ### tsx
 
 ```tsx
-import type { SyntheticEvent } from 'react';
-import React, { useRef } from 'react';
-import 'ranui';
+import 'ranui/button';
 
-const FilePreview = () => {
-  const ref = useRef<HTMLDivElement | null>(null);
-  const uploadFile = (e: SyntheticEvent<HTMLDivElement>) => {
-    if (ref.current) {
-      const uploadFile = document.createElement('input');
-      uploadFile.setAttribute('type', 'file');
-      uploadFile.click();
-      uploadFile.onchange = (e) => {
-        const { files = [] } = uploadFile;
-        if (files && files?.length > 0 && ref.current) {
-          ref.current.setAttribute('src', '');
-          const file = files[0];
-          const url = URL.createObjectURL(file);
-          ref.current.setAttribute('src', url);
-        }
-      };
-    }
-  };
+const Button = () => {
+
   return (
     <div>
-      <r-preview ref={ref}></r-preview>
-      <r-button type="primary" onClick={uploadFile}>
-        choose file to preview
+      <r-button type="primary">
+        button
       </r-button>
     </div>
   );

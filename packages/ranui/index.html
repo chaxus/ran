@@ -152,27 +152,6 @@
       <r-input label="user" placeholder="name"></r-input>
       <r-input icon="home" status="warning"></r-input>
     </div>
-    <h2>Preview</h2>
-    <r-button type="primary" onclick="uploadFile()">choose file to preview</r-button>
-    <r-preview id="preview" baseUrl="http://localhost:5174/document"></r-preview>
-    <script>
-      const inputDom = document.getElementById('input2');
-      const uploadFile = () => {
-        const preview = document.getElementById('preview');
-        const uploadFile = document.createElement('input');
-        uploadFile.setAttribute('type', 'file');
-        uploadFile.click();
-        uploadFile.onchange = (e) => {
-          const { files = [] } = uploadFile;
-          if (files.length > 0) {
-            preview.setAttribute('src', '');
-            const file = files[0];
-            const url = URL.createObjectURL(file);
-            preview.setAttribute('src', url);
-          }
-        };
-      };
-    </script>
     <h2>message</h2>
     <r-button onclick="message.info('这是一条提示 info')">信息提示</r-button>
     <r-button onclick="message.warning('这是一条提示 warning')">警告提示</r-button>

@@ -2,8 +2,6 @@ declare module '*.less';
 declare module '*.less?inline';
 declare module '*.ts';
 declare module '*.svg';
-declare module 'docx-preview';
-declare module 'exceljs/*';
 declare module '@/assets/*';
 declare module '@/public/*';
 declare module '@/components/*';
