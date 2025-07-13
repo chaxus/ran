@@ -14,9 +14,9 @@
 
 ```html
 <r-select style="width: 120px; height: 40px" defaultValue="185">
-      <r-option value="185">Mike</r-option>
-      <r-option value="186">Tom</r-option>
-      <r-option value="187">Lucy</r-option>
+  <r-option value="185">Mike</r-option>
+  <r-option value="186">Tom</r-option>
+  <r-option value="187">Lucy</r-option>
 </r-select>
 ```
 
@@ -24,22 +24,22 @@
 
 ### Select 属性
 
-| 属性 | 类型 | 默认值 | 说明 |
-|------|------|--------|------|
-| `defaultValue` | `string` | `''` | 默认选中的值 |
-| `disabled` | `boolean` | `false` | 是否禁用选择器 |
-| `type` | `string` | `'default'` | 选择器类型：`default`、`text` |
-| `placement` | `string` | `'bottom'` | 下拉框展示方向：`top`、`bottom` |
-| `showSearch` | `boolean` | `false` | 是否显示搜索框 |
-| `getPopupContainerId` | `string` | `''` | 下拉框挂载元素的 id |
-| `dropdownclass` | `string` | `''` | 下拉框的自定义 class 名 |
-| `trigger` | `string` | `'click'` | 触发方式：`click`、`hover`、`click,hover`、`none` |
+| 属性                  | 类型      | 默认值      | 说明                                              |
+| --------------------- | --------- | ----------- | ------------------------------------------------- |
+| `defaultValue`        | `string`  | `''`        | 默认选中的值                                      |
+| `disabled`            | `boolean` | `false`     | 是否禁用选择器                                    |
+| `type`                | `string`  | `'default'` | 选择器类型：`default`、`text`                     |
+| `placement`           | `string`  | `'bottom'`  | 下拉框展示方向：`top`、`bottom`                   |
+| `showSearch`          | `boolean` | `false`     | 是否显示搜索框                                    |
+| `getPopupContainerId` | `string`  | `''`        | 下拉框挂载元素的 id                               |
+| `dropdownclass`       | `string`  | `''`        | 下拉框的自定义 class 名                           |
+| `trigger`             | `string`  | `'click'`   | 触发方式：`click`、`hover`、`click,hover`、`none` |
 
 ### Option 属性
 
-| 属性 | 类型 | 默认值 | 说明 |
-|------|------|--------|------|
-| `value` | `string` | `''` | 选项的值 |
+| 属性       | 类型      | 默认值  | 说明           |
+| ---------- | --------- | ------- | -------------- |
+| `value`    | `string`  | `''`    | 选项的值       |
 | `disabled` | `boolean` | `false` | 是否禁用该选项 |
 
 ### 默认值 `defaultValue`
@@ -54,9 +54,9 @@
 
 ```html
 <r-select style="width: 120px; height: 40px" defaultValue="185">
-      <r-option value="185">Mike</r-option>
-      <r-option value="186">Tom</r-option>
-      <r-option value="187">Lucy</r-option>
+  <r-option value="185">Mike</r-option>
+  <r-option value="186">Tom</r-option>
+  <r-option value="187">Lucy</r-option>
 </r-select>
 ```
 
@@ -70,9 +70,9 @@
 
 ```html
 <r-select style="width: 120px; height: 40px" disabled defaultValue="185">
-      <r-option value="185">Mike</r-option>
-      <r-option value="186">Tom</r-option>
-      <r-option value="187">Lucy</r-option>
+  <r-option value="185">Mike</r-option>
+  <r-option value="186">Tom</r-option>
+  <r-option value="187">Lucy</r-option>
 </r-select>
 ```
 
@@ -91,14 +91,10 @@
 </r-select>
 
 ```html
-<r-select
-      style="width: 120px; height: 40px"
-      type="text"
-      defaultValue="185"
-    >
-      <r-option value="185">Mike</r-option>
-      <r-option value="186">Tom</r-option>
-      <r-option value="187">Lucy</r-option>
+<r-select style="width: 120px; height: 40px" type="text" defaultValue="185">
+  <r-option value="185">Mike</r-option>
+  <r-option value="186">Tom</r-option>
+  <r-option value="187">Lucy</r-option>
 </r-select>
 ```
 
@@ -118,15 +114,10 @@
 </r-select>
 
 ```html
-<r-select
-      style="width: 120px; height: 40px"
-      type="text"
-      defaultValue="185"
-      placement="top"
-    >
-      <r-option value="185">Mike</r-option>
-      <r-option value="186">Tom</r-option>
-      <r-option value="187">Lucy</r-option>
+<r-select style="width: 120px; height: 40px" type="text" defaultValue="185" placement="top">
+  <r-option value="185">Mike</r-option>
+  <r-option value="186">Tom</r-option>
+  <r-option value="187">Lucy</r-option>
 </r-select>
 ```
 
@@ -142,9 +133,9 @@
 
 ```html
 <r-select style="width: 120px; height: 40px" showSearch>
-<r-option value="185">Mike</r-option>
-<r-option value="186">Tom</r-option>
-<r-option value="187">Lucy</r-option>
+  <r-option value="185">Mike</r-option>
+  <r-option value="186">Tom</r-option>
+  <r-option value="187">Lucy</r-option>
 </r-select>
 ```
 
@@ -154,9 +145,9 @@
 
 ```html
 <r-select getPopupContainerId="elementid">
-      <r-option value="185">Mike</r-option>
-      <r-option value="186">Tom</r-option>
-      <r-option value="187">Lucy</r-option>
+  <r-option value="185">Mike</r-option>
+  <r-option value="186">Tom</r-option>
+  <r-option value="187">Lucy</r-option>
 </r-select>
 ```
 
@@ -166,9 +157,9 @@
 
 ```html
 <r-select dropdownclass="custom-dropdown">
-      <r-option value="185">Mike</r-option>
-      <r-option value="186">Tom</r-option>
-      <r-option value="187">Lucy</r-option>
+  <r-option value="185">Mike</r-option>
+  <r-option value="186">Tom</r-option>
+  <r-option value="187">Lucy</r-option>
 </r-select>
 ```
 
@@ -185,30 +176,30 @@
 ```html
 <!-- 点击触发（默认） -->
 <r-select trigger="click">
-      <r-option value="185">Mike</r-option>
-      <r-option value="186">Tom</r-option>
-      <r-option value="187">Lucy</r-option>
+  <r-option value="185">Mike</r-option>
+  <r-option value="186">Tom</r-option>
+  <r-option value="187">Lucy</r-option>
 </r-select>
 
 <!-- 悬停触发 -->
 <r-select trigger="hover">
-      <r-option value="185">Mike</r-option>
-      <r-option value="186">Tom</r-option>
-      <r-option value="187">Lucy</r-option>
+  <r-option value="185">Mike</r-option>
+  <r-option value="186">Tom</r-option>
+  <r-option value="187">Lucy</r-option>
 </r-select>
 
 <!-- 点击和悬停都触发 -->
 <r-select trigger="click,hover">
-      <r-option value="185">Mike</r-option>
-      <r-option value="186">Tom</r-option>
-      <r-option value="187">Lucy</r-option>
+  <r-option value="185">Mike</r-option>
+  <r-option value="186">Tom</r-option>
+  <r-option value="187">Lucy</r-option>
 </r-select>
 
 <!-- 不触发 -->
 <r-select trigger="none">
-      <r-option value="185">Mike</r-option>
-      <r-option value="186">Tom</r-option>
-      <r-option value="187">Lucy</r-option>
+  <r-option value="185">Mike</r-option>
+  <r-option value="186">Tom</r-option>
+  <r-option value="187">Lucy</r-option>
 </r-select>
 ```
 
@@ -218,15 +209,15 @@
 
 ```html
 <r-select onchange="handleChange">
-      <r-option value="185">Mike</r-option>
-      <r-option value="186">Tom</r-option>
-      <r-option value="187">Lucy</r-option>
+  <r-option value="185">Mike</r-option>
+  <r-option value="186">Tom</r-option>
+  <r-option value="187">Lucy</r-option>
 </r-select>
 
 <script>
-function handleChange(value) {
-  console.log('选中的值：', value);
-}
+  function handleChange(value) {
+    console.log('选中的值：', value);
+  }
 </script>
 ```
 

@@ -34,7 +34,7 @@ npm install ranui
     input.setAttribute('type', 'file');
     input.setAttribute('accept', '.docx,.pptx,.pdf,.xlsx');
     input.click();
-    
+
     input.onchange = (e) => {
       const { files = [] } = input;
       if (files.length > 0) {
@@ -51,11 +51,11 @@ npm install ranui
 
 ### Properties
 
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `src` | `string` | `''` | File preview URL, automatically opens preview modal when set |
-| `closeable` | `boolean` | `true` | Whether to show the close button |
-| `baseUrl` | `string` | `''` | Custom document preview service URL |
+| Property    | Type      | Default | Description                                                  |
+| ----------- | --------- | ------- | ------------------------------------------------------------ |
+| `src`       | `string`  | `''`    | File preview URL, automatically opens preview modal when set |
+| `closeable` | `boolean` | `true`  | Whether to show the close button                             |
+| `baseUrl`   | `string`  | `''`    | Custom document preview service URL                          |
 
 ### File Source `src`
 
@@ -92,11 +92,11 @@ When you need to customize the document preview service, you can specify the ser
 - **Before ranui 0.1.10-alpha-24**:
   - Used multiple third-party libraries (jszip, docx-preview, exceljs, pdfjs, pptx2html) for document preview
 
-- **After ranui 0.1.10-alpha-26**: 
+- **After ranui 0.1.10-alpha-26**:
   - Switched to OnlyOffice WebAssembly version for better preview experience
   - Deployment details can be found at: [OnlyOffice Web Local](https://github.com/ranuts/document)
 
-- **After ranui 0.1.10-alpha-27**: 
+- **After ranui 0.1.10-alpha-27**:
   - 🎉 Added standalone [@ranui/preview](https://www.npmjs.com/package/@ranui/preview) package
   - Provides lighter installation option, specifically for file preview functionality
   - The ranui package will no longer include the `r-preview` component
@@ -106,15 +106,17 @@ When you need to customize the document preview service, you can specify the ser
 If you're currently using the `r-preview` component from the ranui package, we recommend following these steps to migrate:
 
 1. **Install the new package**:
+
    ```bash
    npm install @ranui/preview
    ```
 
 2. **Update imports**:
+
    ```javascript
    // Before
    import 'ranui';
-   
+
    // Now
    import '@ranui/preview';
    ```

@@ -20,8 +20,8 @@ import Loading from '../../../../vue/loading.vue'
 
 ### 属性
 
-| 属性 | 类型 | 默认值 | 说明 |
-|------|------|--------|------|
+| 属性   | 类型     | 默认值     | 说明         |
+| ------ | -------- | ---------- | ------------ |
 | `name` | `string` | `'circle'` | 加载动画类型 |
 
 ### 加载动画类型 `name`
@@ -122,18 +122,27 @@ r-loading {
 </div>
 
 ```html
-<r-loading name="circle" style="--loading-circle-width: 2em; --loading-circle-height: 2em; --loading-circle-container-div-background: #1890ff;"></r-loading>
-<r-loading name="double-bounce" style="--loading-double-bounce-width: 3em; --loading-double-bounce-height: 3em; --loading-double-bounce1-background: #52c41a; --loading-double-bounce2-background: #52c41a;"></r-loading>
-<r-loading name="rotate" style="--loading-rotate-width: 4em; --loading-rotate-height: 4em; --loading-rotate-background: #faad14;"></r-loading>
+<r-loading
+  name="circle"
+  style="--loading-circle-width: 2em; --loading-circle-height: 2em; --loading-circle-container-div-background: #1890ff;"
+></r-loading>
+<r-loading
+  name="double-bounce"
+  style="--loading-double-bounce-width: 3em; --loading-double-bounce-height: 3em; --loading-double-bounce1-background: #52c41a; --loading-double-bounce2-background: #52c41a;"
+></r-loading>
+<r-loading
+  name="rotate"
+  style="--loading-rotate-width: 4em; --loading-rotate-height: 4em; --loading-rotate-background: #faad14;"
+></r-loading>
 ```
 
 #### 常用 CSS 变量
 
-| 变量名 | 默认值 | 说明 |
-|--------|--------|------|
-| `--loading-{type}-width` | `4em` | 加载动画宽度 |
-| `--loading-{type}-height` | `4em` | 加载动画高度 |
-| `--loading-{type}-background` | `#4096ff` | 主要背景色 |
+| 变量名                                  | 默认值    | 说明         |
+| --------------------------------------- | --------- | ------------ |
+| `--loading-{type}-width`                | `4em`     | 加载动画宽度 |
+| `--loading-{type}-height`               | `4em`     | 加载动画高度 |
+| `--loading-{type}-background`           | `#4096ff` | 主要背景色   |
 | `--loading-{type}-div-background-color` | `#4096ff` | 子元素背景色 |
 
 > 注意：`{type}` 需要替换为具体的加载类型名称，如 `circle`、`double-bounce`、`rotate` 等。

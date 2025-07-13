@@ -34,7 +34,7 @@ npm install ranui
     input.setAttribute('type', 'file');
     input.setAttribute('accept', '.docx,.pptx,.pdf,.xlsx');
     input.click();
-    
+
     input.onchange = (e) => {
       const { files = [] } = input;
       if (files.length > 0) {
@@ -51,11 +51,11 @@ npm install ranui
 
 ### 属性
 
-| 属性 | 类型 | 默认值 | 说明 |
-|------|------|--------|------|
-| `src` | `string` | `''` | 文件预览地址，有值时会自动打开预览弹窗 |
-| `closeable` | `boolean` | `true` | 是否显示关闭按钮 |
-| `baseUrl` | `string` | `''` | 自定义文档预览服务地址 |
+| 属性        | 类型      | 默认值 | 说明                                   |
+| ----------- | --------- | ------ | -------------------------------------- |
+| `src`       | `string`  | `''`   | 文件预览地址，有值时会自动打开预览弹窗 |
+| `closeable` | `boolean` | `true` | 是否显示关闭按钮                       |
+| `baseUrl`   | `string`  | `''`   | 自定义文档预览服务地址                 |
 
 ### 资源地址 `src`
 
@@ -92,11 +92,11 @@ npm install ranui
 - **ranui 0.1.10-alpha-24 版本之前**:
   - 使用多个第三方库（jszip、docx-preview、exceljs、pdfjs、pptx2html）进行文档预览
 
-- **ranui 0.1.10-alpha-26 版本之后**: 
+- **ranui 0.1.10-alpha-26 版本之后**:
   - 改用 OnlyOffice WebAssembly 版本，提供更好的预览体验
   - 部署详情请参考：[OnlyOffice Web Local](https://github.com/ranuts/document)
 
-- **ranui 0.1.10-alpha-27 版本之后**: 
+- **ranui 0.1.10-alpha-27 版本之后**:
   - 🎉 新增独立的 [@ranui/preview](https://www.npmjs.com/package/@ranui/preview) 包
   - 提供更轻量级的安装选项，专门用于文件预览功能
   - ranui 包将不再包含 `r-preview` 组件
@@ -106,15 +106,17 @@ npm install ranui
 如果您正在使用 ranui 包中的 `r-preview` 组件，建议按以下步骤迁移：
 
 1. **安装新包**：
+
    ```bash
    npm install @ranui/preview
    ```
 
 2. **更新导入**：
+
    ```javascript
    // 之前
    import 'ranui';
-   
+
    // 现在
    import '@ranui/preview';
    ```

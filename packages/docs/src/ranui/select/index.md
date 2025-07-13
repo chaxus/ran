@@ -14,9 +14,9 @@ Dropdown selector component with support for single selection, search, and custo
 
 ```html
 <r-select style="width: 120px; height: 40px" defaultValue="185">
-      <r-option value="185">Mike</r-option>
-      <r-option value="186">Tom</r-option>
-      <r-option value="187">Lucy</r-option>
+  <r-option value="185">Mike</r-option>
+  <r-option value="186">Tom</r-option>
+  <r-option value="187">Lucy</r-option>
 </r-select>
 ```
 
@@ -24,22 +24,22 @@ Dropdown selector component with support for single selection, search, and custo
 
 ### Select Properties
 
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `defaultValue` | `string` | `''` | Default selected value |
-| `disabled` | `boolean` | `false` | Whether the select is disabled |
-| `type` | `string` | `'default'` | Select type: `default`, `text` |
-| `placement` | `string` | `'bottom'` | Dropdown direction: `top`, `bottom` |
-| `showSearch` | `boolean` | `false` | Whether to show search box |
-| `getPopupContainerId` | `string` | `''` | Container element id for dropdown |
-| `dropdownclass` | `string` | `''` | Custom class name for dropdown |
-| `trigger` | `string` | `'click'` | Trigger method: `click`, `hover`, `click,hover`, `none` |
+| Property              | Type      | Default     | Description                                             |
+| --------------------- | --------- | ----------- | ------------------------------------------------------- |
+| `defaultValue`        | `string`  | `''`        | Default selected value                                  |
+| `disabled`            | `boolean` | `false`     | Whether the select is disabled                          |
+| `type`                | `string`  | `'default'` | Select type: `default`, `text`                          |
+| `placement`           | `string`  | `'bottom'`  | Dropdown direction: `top`, `bottom`                     |
+| `showSearch`          | `boolean` | `false`     | Whether to show search box                              |
+| `getPopupContainerId` | `string`  | `''`        | Container element id for dropdown                       |
+| `dropdownclass`       | `string`  | `''`        | Custom class name for dropdown                          |
+| `trigger`             | `string`  | `'click'`   | Trigger method: `click`, `hover`, `click,hover`, `none` |
 
 ### Option Properties
 
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `value` | `string` | `''` | Option value |
+| Property   | Type      | Default | Description                    |
+| ---------- | --------- | ------- | ------------------------------ |
+| `value`    | `string`  | `''`    | Option value                   |
 | `disabled` | `boolean` | `false` | Whether the option is disabled |
 
 ### Default Value `defaultValue`
@@ -52,9 +52,9 @@ Dropdown selector component with support for single selection, search, and custo
 
 ```html
 <r-select style="width: 120px; height: 40px" defaultValue="185">
-      <r-option value="185">Mike</r-option>
-      <r-option value="186">Tom</r-option>
-      <r-option value="187">Lucy</r-option>
+  <r-option value="185">Mike</r-option>
+  <r-option value="186">Tom</r-option>
+  <r-option value="187">Lucy</r-option>
 </r-select>
 ```
 
@@ -68,9 +68,9 @@ Dropdown selector component with support for single selection, search, and custo
 
 ```html
 <r-select style="width: 120px; height: 40px" disabled defaultValue="185">
-      <r-option value="185">Mike</r-option>
-      <r-option value="186">Tom</r-option>
-      <r-option value="187">Lucy</r-option>
+  <r-option value="185">Mike</r-option>
+  <r-option value="186">Tom</r-option>
+  <r-option value="187">Lucy</r-option>
 </r-select>
 ```
 
@@ -87,14 +87,10 @@ Dropdown selector component with support for single selection, search, and custo
 </r-select>
 
 ```html
-<r-select
-      style="width: 120px; height: 40px"
-      type="text"
-      defaultValue="185"
-    >
-      <r-option value="185">Mike</r-option>
-      <r-option value="186">Tom</r-option>
-      <r-option value="187">Lucy</r-option>
+<r-select style="width: 120px; height: 40px" type="text" defaultValue="185">
+  <r-option value="185">Mike</r-option>
+  <r-option value="186">Tom</r-option>
+  <r-option value="187">Lucy</r-option>
 </r-select>
 ```
 
@@ -112,15 +108,10 @@ Dropdown selector component with support for single selection, search, and custo
 </r-select>
 
 ```html
-<r-select
-      style="width: 120px; height: 40px"
-      type="text"
-      defaultValue="185"
-      placement="top"
-    >
-      <r-option value="185">Mike</r-option>
-      <r-option value="186">Tom</r-option>
-      <r-option value="187">Lucy</r-option>
+<r-select style="width: 120px; height: 40px" type="text" defaultValue="185" placement="top">
+  <r-option value="185">Mike</r-option>
+  <r-option value="186">Tom</r-option>
+  <r-option value="187">Lucy</r-option>
 </r-select>
 ```
 
@@ -134,9 +125,9 @@ Dropdown selector component with support for single selection, search, and custo
 
 ```html
 <r-select style="width: 120px; height: 40px" showSearch>
-<r-option value="185">Mike</r-option>
-<r-option value="186">Tom</r-option>
-<r-option value="187">Lucy</r-option>
+  <r-option value="185">Mike</r-option>
+  <r-option value="186">Tom</r-option>
+  <r-option value="187">Lucy</r-option>
 </r-select>
 ```
 
@@ -144,9 +135,9 @@ Dropdown selector component with support for single selection, search, and custo
 
 ```html
 <r-select getPopupContainerId="elementid">
-      <r-option value="185">Mike</r-option>
-      <r-option value="186">Tom</r-option>
-      <r-option value="187">Lucy</r-option>
+  <r-option value="185">Mike</r-option>
+  <r-option value="186">Tom</r-option>
+  <r-option value="187">Lucy</r-option>
 </r-select>
 ```
 
@@ -154,9 +145,9 @@ Dropdown selector component with support for single selection, search, and custo
 
 ```html
 <r-select dropdownclass="custom-dropdown">
-      <r-option value="185">Mike</r-option>
-      <r-option value="186">Tom</r-option>
-      <r-option value="187">Lucy</r-option>
+  <r-option value="185">Mike</r-option>
+  <r-option value="186">Tom</r-option>
+  <r-option value="187">Lucy</r-option>
 </r-select>
 ```
 
@@ -171,30 +162,30 @@ Dropdown selector component with support for single selection, search, and custo
 ```html
 <!-- Click trigger (default) -->
 <r-select trigger="click">
-      <r-option value="185">Mike</r-option>
-      <r-option value="186">Tom</r-option>
-      <r-option value="187">Lucy</r-option>
+  <r-option value="185">Mike</r-option>
+  <r-option value="186">Tom</r-option>
+  <r-option value="187">Lucy</r-option>
 </r-select>
 
 <!-- Hover trigger -->
 <r-select trigger="hover">
-      <r-option value="185">Mike</r-option>
-      <r-option value="186">Tom</r-option>
-      <r-option value="187">Lucy</r-option>
+  <r-option value="185">Mike</r-option>
+  <r-option value="186">Tom</r-option>
+  <r-option value="187">Lucy</r-option>
 </r-select>
 
 <!-- Both click and hover -->
 <r-select trigger="click,hover">
-      <r-option value="185">Mike</r-option>
-      <r-option value="186">Tom</r-option>
-      <r-option value="187">Lucy</r-option>
+  <r-option value="185">Mike</r-option>
+  <r-option value="186">Tom</r-option>
+  <r-option value="187">Lucy</r-option>
 </r-select>
 
 <!-- No trigger -->
 <r-select trigger="none">
-      <r-option value="185">Mike</r-option>
-      <r-option value="186">Tom</r-option>
-      <r-option value="187">Lucy</r-option>
+  <r-option value="185">Mike</r-option>
+  <r-option value="186">Tom</r-option>
+  <r-option value="187">Lucy</r-option>
 </r-select>
 ```
 
@@ -204,15 +195,15 @@ Dropdown selector component with support for single selection, search, and custo
 
 ```html
 <r-select onchange="handleChange">
-      <r-option value="185">Mike</r-option>
-      <r-option value="186">Tom</r-option>
-      <r-option value="187">Lucy</r-option>
+  <r-option value="185">Mike</r-option>
+  <r-option value="186">Tom</r-option>
+  <r-option value="187">Lucy</r-option>
 </r-select>
 
 <script>
-function handleChange(value) {
-  console.log('Selected value:', value);
-}
+  function handleChange(value) {
+    console.log('Selected value:', value);
+  }
 </script>
 ```
 

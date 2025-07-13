@@ -16,12 +16,12 @@
 
 ### 属性
 
-| 属性 | 类型 | 默认值 | 说明 |
-|------|------|--------|------|
-| `type` | `string` | `'default'` | 按钮类型：`default`、`primary`、`warning`、`text` |
-| `disabled` | `boolean` | `false` | 是否禁用按钮 |
-| `icon` | `string` | `''` | 按钮图标名称 |
-| `effect` | `boolean` | `true` | 是否显示点击水波纹特效 |
+| 属性       | 类型      | 默认值      | 说明                                              |
+| ---------- | --------- | ----------- | ------------------------------------------------- |
+| `type`     | `string`  | `'default'` | 按钮类型：`default`、`primary`、`warning`、`text` |
+| `disabled` | `boolean` | `false`     | 是否禁用按钮                                      |
+| `icon`     | `string`  | `''`        | 按钮图标名称                                      |
+| `effect`   | `boolean` | `true`      | 是否显示点击水波纹特效                            |
 
 ### 按钮类型 `type`
 
@@ -85,8 +85,7 @@
 </div>
 
 ```html
-<r-button type="default" icon="user">默认按钮</r-button>
-<r-button type="primary" icon="home">主要按钮</r-button>
+<r-button type="default" icon="user">默认按钮</r-button> <r-button type="primary" icon="home">主要按钮</r-button>
 ```
 
 ### 特效控制 `effect`
@@ -111,16 +110,16 @@
 <r-button onclick="handleClick()">点击我</r-button>
 
 <script>
-function handleClick() {
-  console.log('按钮被点击了');
-}
+  function handleClick() {
+    console.log('按钮被点击了');
+  }
 </script>
 ```
 
 ## 最佳实践
 
 - **主要操作**: 使用 `type="primary"` 的按钮
-- **危险操作**: 使用 `type="warning"` 的按钮  
+- **危险操作**: 使用 `type="warning"` 的按钮
 - **次要操作**: 使用 `type="text"` 的按钮
 - **禁用状态**: 在操作不可用时使用 `disabled` 属性
 - **图标使用**: 为按钮添加相关图标可以提升用户体验

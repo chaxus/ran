@@ -160,12 +160,9 @@ import 'ranui';
 import 'ranui/button';
 
 const Button = () => {
-
   return (
     <div>
-      <r-button type="primary">
-        button
-      </r-button>
+      <r-button type="primary">button</r-button>
     </div>
   );
 };

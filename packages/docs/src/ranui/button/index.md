@@ -16,12 +16,12 @@ Button component for triggering instant actions with multiple styles and states.
 
 ### Properties
 
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `type` | `string` | `'default'` | Button type: `default`, `primary`, `warning`, `text` |
-| `disabled` | `boolean` | `false` | Whether the button is disabled |
-| `icon` | `string` | `''` | Button icon name |
-| `effect` | `boolean` | `true` | Whether to show click ripple effect |
+| Property   | Type      | Default     | Description                                          |
+| ---------- | --------- | ----------- | ---------------------------------------------------- |
+| `type`     | `string`  | `'default'` | Button type: `default`, `primary`, `warning`, `text` |
+| `disabled` | `boolean` | `false`     | Whether the button is disabled                       |
+| `icon`     | `string`  | `''`        | Button icon name                                     |
+| `effect`   | `boolean` | `true`      | Whether to show click ripple effect                  |
 
 ### Button Types `type`
 
@@ -99,16 +99,16 @@ Button component for triggering instant actions with multiple styles and states.
 <r-button onclick="handleClick()">Click Me</r-button>
 
 <script>
-function handleClick() {
-  console.log('Button clicked');
-}
+  function handleClick() {
+    console.log('Button clicked');
+  }
 </script>
 ```
 
 ## Best Practices
 
 - **Primary Actions**: Use `type="primary"`
-- **Dangerous Actions**: Use `type="warning"`  
+- **Dangerous Actions**: Use `type="warning"`
 - **Secondary Actions**: Use `type="text"`
 - **Disabled State**: Use `disabled` when actions unavailable
 - **Icons**: Add relevant icons to enhance UX

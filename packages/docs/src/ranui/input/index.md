@@ -18,19 +18,19 @@ Input component for entering content via mouse or keyboard, the most basic form 
 
 ### Properties
 
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `label` | `string` | `''` | Input label for Material Design style experience |
-| `placeholder` | `string` | `''` | Placeholder text |
-| `value` | `string` | `''` | Input value |
-| `disabled` | `boolean` | `false` | Whether the input is disabled |
-| `type` | `string` | `'text'` | Input type: `text`, `password`, `number` |
-| `icon` | `string` | `''` | Input icon |
-| `name` | `string` | `''` | Form field name for form submission |
-| `status` | `string` | `''` | Input status: `error`, `warning` |
-| `min` | `number` | `-` | Minimum value for number input |
-| `max` | `number` | `-` | Maximum value for number input |
-| `step` | `number` | `1` | Step value for number input |
+| Property      | Type      | Default  | Description                                      |
+| ------------- | --------- | -------- | ------------------------------------------------ |
+| `label`       | `string`  | `''`     | Input label for Material Design style experience |
+| `placeholder` | `string`  | `''`     | Placeholder text                                 |
+| `value`       | `string`  | `''`     | Input value                                      |
+| `disabled`    | `boolean` | `false`  | Whether the input is disabled                    |
+| `type`        | `string`  | `'text'` | Input type: `text`, `password`, `number`         |
+| `icon`        | `string`  | `''`     | Input icon                                       |
+| `name`        | `string`  | `''`     | Form field name for form submission              |
+| `status`      | `string`  | `''`     | Input status: `error`, `warning`                 |
+| `min`         | `number`  | `-`      | Minimum value for number input                   |
+| `max`         | `number`  | `-`      | Maximum value for number input                   |
+| `step`        | `number`  | `1`      | Step value for number input                      |
 
 ### Label Input `label`
 
