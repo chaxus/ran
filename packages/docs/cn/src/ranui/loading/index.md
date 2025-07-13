@@ -54,31 +54,31 @@ Loading 组件使用 CSS 变量进行样式控制，您可以通过设置 CSS �
 
 #### 尺寸自定义
 
-每种加载类型都有对应的尺寸 CSS 变量：
+每种加载类型都有对应的尺寸 CSS 变量。推荐使用 px 单位以获得更精确的控制：
 
 ```css
 /* Circle 类型 */
 r-loading {
-  --loading-circle-width: 2em;
-  --loading-circle-height: 2em;
+  --loading-circle-width: 32px;
+  --loading-circle-height: 32px;
 }
 
 /* Double-bounce 类型 */
 r-loading {
-  --loading-double-bounce-width: 3em;
-  --loading-double-bounce-height: 3em;
+  --loading-double-bounce-width: 40px;
+  --loading-double-bounce-height: 40px;
 }
 
 /* Rotate 类型 */
 r-loading {
-  --loading-rotate-width: 4em;
-  --loading-rotate-height: 4em;
+  --loading-rotate-width: 48px;
+  --loading-rotate-height: 48px;
 }
 
 /* Stretch 类型 */
 r-loading {
-  --loading-stretch-width: 5em;
-  --loading-stretch-height: 6em;
+  --loading-stretch-width: 60px;
+  --loading-stretch-height: 72px;
 }
 ```
 
@@ -112,38 +112,31 @@ r-loading {
 #### 实际示例
 
 <div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;width:80px;height:80px">
-    <r-loading name="circle" style="--loading-circle-width: 2em; --loading-circle-height: 2em; --loading-circle-container-div-background: #1890ff;"></r-loading>
+    <r-loading name="circle" style="--loading-circle-width: 64px; --loading-circle-height: 64px; --loading-circle-container-div-background: #1890ff;"></r-loading>
 </div>
 <div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;width:80px;height:80px">
-    <r-loading name="double-bounce" style="--loading-double-bounce-width: 3em; --loading-double-bounce-height: 3em; --loading-double-bounce1-background: #52c41a; --loading-double-bounce2-background: #52c41a;"></r-loading>
-</div>
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;width:80px;height:80px">
-    <r-loading name="rotate" style="--loading-rotate-width: 4em; --loading-rotate-height: 4em; --loading-rotate-background: #faad14;"></r-loading>
+    <r-loading name="rotate" style="--loading-rotate-width: 48px; --loading-rotate-height: 48px; --loading-rotate-background: #faad14;"></r-loading>
 </div>
 
 ```html
 <r-loading
   name="circle"
-  style="--loading-circle-width: 2em; --loading-circle-height: 2em; --loading-circle-container-div-background: #1890ff;"
-></r-loading>
-<r-loading
-  name="double-bounce"
-  style="--loading-double-bounce-width: 3em; --loading-double-bounce-height: 3em; --loading-double-bounce1-background: #52c41a; --loading-double-bounce2-background: #52c41a;"
+  style="--loading-circle-width: 64px; --loading-circle-height: 64px; --loading-circle-container-div-background: #1890ff;"
 ></r-loading>
 <r-loading
   name="rotate"
-  style="--loading-rotate-width: 4em; --loading-rotate-height: 4em; --loading-rotate-background: #faad14;"
+  style="--loading-rotate-width: 48px; --loading-rotate-height: 48px; --loading-rotate-background: #faad14;"
 ></r-loading>
 ```
 
 #### 常用 CSS 变量
 
-| 变量名                                  | 默认值    | 说明         |
-| --------------------------------------- | --------- | ------------ |
-| `--loading-{type}-width`                | `4em`     | 加载动画宽度 |
-| `--loading-{type}-height`               | `4em`     | 加载动画高度 |
-| `--loading-{type}-background`           | `#4096ff` | 主要背景色   |
-| `--loading-{type}-div-background-color` | `#4096ff` | 子元素背景色 |
+| 变量名                                  | 默认值    | 说明                             |
+| --------------------------------------- | --------- | -------------------------------- |
+| `--loading-{type}-width`                | `4em`     | 加载动画宽度（推荐使用 px 单位） |
+| `--loading-{type}-height`               | `4em`     | 加载动画高度（推荐使用 px 单位） |
+| `--loading-{type}-background`           | `#4096ff` | 主要背景色                       |
+| `--loading-{type}-div-background-color` | `#4096ff` | 子元素背景色                     |
 
 > 注意：`{type}` 需要替换为具体的加载类型名称，如 `circle`、`double-bounce`、`rotate` 等。
 

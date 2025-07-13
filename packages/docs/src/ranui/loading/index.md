@@ -54,31 +54,31 @@ The Loading component uses CSS variables for styling control. You can customize 
 
 #### Size Customization
 
-Each loading type has corresponding size CSS variables:
+Each loading type has corresponding size CSS variables. It's recommended to use px units for more precise control:
 
 ```css
 /* Circle type */
 r-loading {
-  --loading-circle-width: 2em;
-  --loading-circle-height: 2em;
+  --loading-circle-width: 32px;
+  --loading-circle-height: 32px;
 }
 
 /* Double-bounce type */
 r-loading {
-  --loading-double-bounce-width: 3em;
-  --loading-double-bounce-height: 3em;
+  --loading-double-bounce-width: 40px;
+  --loading-double-bounce-height: 40px;
 }
 
 /* Rotate type */
 r-loading {
-  --loading-rotate-width: 4em;
-  --loading-rotate-height: 4em;
+  --loading-rotate-width: 48px;
+  --loading-rotate-height: 48px;
 }
 
 /* Stretch type */
 r-loading {
-  --loading-stretch-width: 5em;
-  --loading-stretch-height: 6em;
+  --loading-stretch-width: 60px;
+  --loading-stretch-height: 72px;
 }
 ```
 
@@ -112,38 +112,31 @@ r-loading {
 #### Live Examples
 
 <div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;width:80px;height:80px">
-    <r-loading name="circle" style="--loading-circle-width: 2em; --loading-circle-height: 2em; --loading-circle-container-div-background: #1890ff;"></r-loading>
+    <r-loading name="circle" style="--loading-circle-width: 64px; --loading-circle-height: 64px; --loading-circle-container-div-background: #1890ff;"></r-loading>
 </div>
 <div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;width:80px;height:80px">
-    <r-loading name="double-bounce" style="--loading-double-bounce-width: 3em; --loading-double-bounce-height: 3em; --loading-double-bounce1-background: #52c41a; --loading-double-bounce2-background: #52c41a;"></r-loading>
-</div>
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;width:80px;height:80px">
-    <r-loading name="rotate" style="--loading-rotate-width: 4em; --loading-rotate-height: 4em; --loading-rotate-background: #faad14;"></r-loading>
+    <r-loading name="rotate" style="--loading-rotate-width: 48px; --loading-rotate-height: 48px; --loading-rotate-background: #faad14;"></r-loading>
 </div>
 
 ```html
 <r-loading
   name="circle"
-  style="--loading-circle-width: 2em; --loading-circle-height: 2em; --loading-circle-container-div-background: #1890ff;"
-></r-loading>
-<r-loading
-  name="double-bounce"
-  style="--loading-double-bounce-width: 3em; --loading-double-bounce-height: 3em; --loading-double-bounce1-background: #52c41a; --loading-double-bounce2-background: #52c41a;"
+  style="--loading-circle-width: 64px; --loading-circle-height: 64px; --loading-circle-container-div-background: #1890ff;"
 ></r-loading>
 <r-loading
   name="rotate"
-  style="--loading-rotate-width: 4em; --loading-rotate-height: 4em; --loading-rotate-background: #faad14;"
+  style="--loading-rotate-width: 48px; --loading-rotate-height: 48px; --loading-rotate-background: #faad14;"
 ></r-loading>
 ```
 
 #### Common CSS Variables
 
-| Variable                                | Default   | Description                  |
-| --------------------------------------- | --------- | ---------------------------- |
-| `--loading-{type}-width`                | `4em`     | Loading animation width      |
-| `--loading-{type}-height`               | `4em`     | Loading animation height     |
-| `--loading-{type}-background`           | `#4096ff` | Main background color        |
-| `--loading-{type}-div-background-color` | `#4096ff` | Sub-element background color |
+| Variable                                | Default   | Description                                            |
+| --------------------------------------- | --------- | ------------------------------------------------------ |
+| `--loading-{type}-width`                | `4em`     | Loading animation width (recommended to use px units)  |
+| `--loading-{type}-height`               | `4em`     | Loading animation height (recommended to use px units) |
+| `--loading-{type}-background`           | `#4096ff` | Main background color                                  |
+| `--loading-{type}-div-background-color` | `#4096ff` | Sub-element background color                           |
 
 > Note: Replace `{type}` with the specific loading type name, such as `circle`, `double-bounce`, `rotate`, etc.
 
