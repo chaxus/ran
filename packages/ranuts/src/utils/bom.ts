@@ -483,7 +483,7 @@ export interface PendingRequest<R = unknown> {
   reject: (error: unknown) => void;
 }
 
-const DEFAULT_TIMEOUT = 20000;
+const DEFAULT_TIMEOUT = 120000;
 // 白名单
 // const whiteList = ['localhost', '127.0.0.1', 'chaxus.github.io']
 
