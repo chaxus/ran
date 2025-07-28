@@ -25,21 +25,21 @@
   "author": "chaxus",
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^22.15.3",
-    "less": "^4.3.0",
+    "@types/node": "^24.1.0",
+    "less": "^4.4.0",
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "@khmyznikov/pwa-install": "^0.5.5",
-    "@lit/react": "^1.0.7",
-    "@ranui/preview": "0.0.1-alpha-1",
-    "@types/react": "^19.1.2",
-    "lit": "^3.3.0",
+    "@khmyznikov/pwa-install": "^0.5.7",
+    "@lit/react": "^1.0.8",
+    "@ranui/preview": "0.0.1-alpha-3",
+    "@types/react": "^19.1.8",
+    "lit": "^3.3.1",
     "ranui": "workspace:*",
     "ranuts": "workspace:*",
     "vitepress": "^1.6.3",
-    "vue": "^3.5.13",
-    "vue-i18n": "^11.1.10"
+    "vue": "^3.5.18",
+    "vue-i18n": "^11.1.11"
   },
   "peerDependencies": {
     "@types/react": ">=16.8.0 <19.0.0",
