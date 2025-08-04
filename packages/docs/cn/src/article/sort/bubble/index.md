@@ -16,14 +16,14 @@
 ## 代码演示
 
 ```ts
-const bubble = (list: number[]) => {
+const bubble = (list: number[]): number[] => {
   const size = list.length;
-  for (let i = 0; i < size; i++) {
-    for (let j = 0; j < size; j++) {
-      if (list[i] < list[j]) {
-        list[i] = list[i] ^ list[j];
-        list[j] = list[i] ^ list[j];
-        list[i] = list[i] ^ list[j];
+  for (let i = 0; i < size - 1; i++) {
+    for (let j = 0; j < size - i - 1; j++) {
+      if (list[j] > list[j + 1]) {
+        list[j] = list[j] ^ list[j + 1];
+        list[j + 1] = list[j] ^ list[j + 1];
+        list[j] = list[j] ^ list[j + 1];
       }
     }
   }
