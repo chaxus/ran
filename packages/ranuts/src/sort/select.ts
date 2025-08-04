@@ -1,5 +1,5 @@
 /**
- * @description: 选择排序，遍历一遍，找到最小值，放到最前面，重复n次上述操作。
+ * @description: 选择排序，遍历一遍，找到最小值，放到最前面，重复 n 次上述操作。
  * @param {Array} list
  * @return {Array}
  */

@@ -1,5 +1,5 @@
 /**
- * @description: 冒泡排序，两两比较，交换位置，遍历n^2
+ * @description: 冒泡排序，两两比较，交换位置，遍历 n^2
  * @param {Array} list
  * @return {Array}
  */

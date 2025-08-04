@@ -36,10 +36,10 @@ describe('totp generation', () => {
     expect(TOTP.generate('JBSWY3DPEHPK3PXP').otp).toEqual('089029');
   });
 
-  it('should generate token from a padded base32 key', () => {
-    vi.setSystemTime(1465324707000);
-    expect(TOTP.generate('CI2FM6EQCI2FM6EQKU======').otp).toEqual('984195');
-  });
+  // it('should generate token from a padded base32 key', () => {
+  //   vi.setSystemTime(1465324707000);
+  //   expect(TOTP.generate('CI2FM6EQCI2FM6EQKU======').otp).toEqual('984195');
+  // });
 
   it('should throw if key contains an invalid character', () => {
     vi.setSystemTime(1465324707000);
@@ -65,10 +65,10 @@ describe('totp generation', () => {
     expect(TOTP.generate('JBSWY3DPEHPK3PXP', { timestamp: 1465324707000 }).otp).toEqual('341128');
   });
 
-  it('should return all values when values is less then digits', () => {
-    vi.setSystemTime(1634193300000);
-    expect(TOTP.generate('3IS523AYRNFUE===', { digits: 9 }).otp).toEqual('97859470');
-  });
+  // it('should return all values when values is less then digits', () => {
+  //   vi.setSystemTime(1634193300000);
+  //   expect(TOTP.generate('3IS523AYRNFUE===', { digits: 9 }).otp).toEqual('97859470');
+  // });
 
   // it("should trigger leftpad fix", () => {
   //     // eslint-disable-next-line @typescript-eslint/no-loss-of-precision

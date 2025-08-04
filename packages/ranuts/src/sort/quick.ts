@@ -13,7 +13,7 @@ const swap = (list: number[], left: number, right: number) => {
   }
 };
 /**
- * @description: 设置基准值pivot
+ * @description: 设置基准值 pivot
  * @param {Array} list
  * @param {number} left
  * @param {number} right
