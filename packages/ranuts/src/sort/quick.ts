@@ -1,44 +1,17 @@
-/**
- * @description: 交换元素
- * @param {number} list
- * @param {number} left
- * @param {number} right
- * @return {*}
- */
-const swap = (list: number[], left: number, right: number) => {
-  if (list[left] !== list[right]) {
-    list[left] = list[left] ^ list[right];
-    list[right] = list[left] ^ list[right];
-    list[left] = list[left] ^ list[right];
-  }
-};
-/**
- * @description: 设置基准值 pivot
- * @param {Array} list
- * @param {number} left
- * @param {number} right
- * @return {number} index
- */
-const partition = (list: number[], left: number, right: number) => {
+const partition = (list: number[], left: number, right: number): number => {
   const pivot = left;
   let index = pivot + 1;
   for (let i = index; i <= right; i++) {
-    if (list[i] < list[pivot]) {
-      swap(list, i, index);
+    if (list[i] > list[pivot]) {
+      [list[i], list[index]] = [list[index], list[i]];
       index++;
     }
   }
-  swap(list, index - 1, pivot);
+  [list[index - 1], list[pivot]] = [list[pivot], list[index - 1]];
   return index - 1;
 };
-/**
- * @description: 不断分区，设置基准值
- * @param {Array} list
- * @param {number} left
- * @param {number} right
- * @return {Array}
- */
-const combine = (list: number[], left: number, right: number) => {
+
+const combine = (list: number[], left: number, right: number): number[] => {
   if (left < right) {
     const partitionIndex = partition(list, left, right);
     combine(list, left, partitionIndex - 1);
@@ -53,7 +26,7 @@ const combine = (list: number[], left: number, right: number) => {
  */
 const quick = (list: number[] = []): number[] => {
   const size = list.length;
-  return combine(list, 0, size - 1);
+  return combine(list, 0, size);
 };
 
 export default quick;
