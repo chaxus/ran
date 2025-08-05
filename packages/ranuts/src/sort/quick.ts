@@ -22,7 +22,7 @@ const swap = (list: number[], left: number, right: number) => {
 const partition = (list: number[], left: number, right: number) => {
   const pivot = left;
   let index = pivot + 1;
-  for (let i = index; i <= right; i++) {
+  for (let i = index + 1; i <= right; i++) {
     if (list[i] < list[pivot]) {
       swap(list, i, index);
       index++;

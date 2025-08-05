@@ -1,19 +1,19 @@
-const combine = (left: number[], right: number[]) => {
-  const list: number[] = [];
-  while (left.length > 0 && right.length > 0) {
-    if (left[0] <= right[0]) {
-      list.push(left.shift()!);
+const combile = (left: number[], right: number[]): number[] => {
+  const result: number[] = [];
+  while (left.length && right.length) {
+    if (left[0] < right[0]) {
+      result.push(left.unshift());
     } else {
-      list.push(right.shift()!);
+      result.push(right.unshift());
     }
   }
   while (left.length) {
-    list.push(left.shift()!);
+    result.push(left.unshift());
   }
   while (right.length) {
-    list.push(right.shift()!);
+    result.push(right.unshift());
   }
-  return list;
+  return result;
 };
 /**
  * @description: 归并排序
@@ -21,14 +21,12 @@ const combine = (left: number[], right: number[]) => {
  * @return {Array}
  */
 const merge = (list: Array<number>): Array<number> => {
-  const { length } = list;
-  if (length < 1) {
-    return list;
-  }
-  const middle = length >> 1;
+  const size = list.length;
+  if (size <= 1) return list;
+  const middle = size >> 1;
   const left = list.slice(0, middle);
   const right = list.slice(middle);
-  return combine(merge(left), merge(right));
+  return combile(merge(left), merge(right));
 };
 
 export default merge;

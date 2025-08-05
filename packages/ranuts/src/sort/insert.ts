@@ -8,11 +8,10 @@ const insert = (list: number[]): number[] => {
   for (let i = 1; i < size; i++) {
     const current = list[i];
     let preIndex = i - 1;
-    while (preIndex >= 0 && list[preIndex] > current) {
+    while (preIndex > 0 && current < list[preIndex]) {
       list[preIndex + 1] = list[preIndex];
       preIndex--;
     }
-    list[preIndex + 1] = current;
   }
   return list;
 };

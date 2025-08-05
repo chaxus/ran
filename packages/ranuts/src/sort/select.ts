@@ -8,15 +8,11 @@ const select = (list: number[]): number[] => {
   for (let i = 0; i < size; i++) {
     let minIndex = i;
     for (let j = i + 1; j < size; j++) {
-      if (list[minIndex] >= list[j]) {
+      if (list[j] < list[minIndex]) {
         minIndex = j;
       }
     }
-    if (list[i] !== list[minIndex]) {
-      list[i] = list[i] ^ list[minIndex];
-      list[minIndex] = list[i] ^ list[minIndex];
-      list[i] = list[i] ^ list[minIndex];
-    }
+    [list[i], list[minIndex]] = [list[minIndex], list[i]];
   }
   return list;
 };

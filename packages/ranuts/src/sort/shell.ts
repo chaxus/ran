@@ -5,11 +5,11 @@
  */
 const shell = (list: number[]): number[] => {
   const size = list.length;
-  for (let gap = size >> 1; gap > 0; gap >>= 1) {
+  for (let gap = size >> 1; gap >= 1; gap >>= 1) {
     for (let i = gap; i < size; i += gap) {
       const current = list[i];
       let preIndex = i - gap;
-      while (preIndex >= 0 && list[preIndex] > current) {
+      while (preIndex >= 0 && current < list[preIndex]) {
         list[preIndex + gap] = list[preIndex];
         preIndex -= gap;
       }
