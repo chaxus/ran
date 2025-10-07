@@ -155,12 +155,10 @@ import {
 } from './src/node';
 import type { Context } from './src/node';
 import type { CurrentDevice, TransformText } from '@/utils';
-import { reactify } from '@/react';
 import { ocr } from '@/ml';
 
 export {
   ocr,
-  reactify,
   AudioRecorder,
   Color,
   ColorScheme,
