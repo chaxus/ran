@@ -1,4 +1,4 @@
-# 🚀 Ran - Technology Exploration & Learning Platform
+# 🚀 Ran - Exploration & Learning
 
 <p align="center">
   <a href="https://chaxus.github.io/ran/" target="_blank" rel="noopener noreferrer">
