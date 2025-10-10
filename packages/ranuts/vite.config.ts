@@ -108,16 +108,7 @@ export const umdWasm: BuildOptions = {
     formats: ['umd'],
   },
 };
-export const umdReact: BuildOptions = {
-  ...chunkOptimization,
-  outDir: resolve(__dirname, 'dist/umd/react'),
-  lib: {
-    entry: resolve(__dirname, 'src/react/index.ts'),
-    name: 'ranuts_react',
-    fileName: 'react',
-    formats: ['umd'],
-  },
-};
+
 export const umdNode: BuildOptions = {
   ...chunkOptimization,
   outDir: resolve(__dirname, 'dist/umd/node'),
@@ -143,7 +134,6 @@ export const es: BuildOptions = {
   ...chunkOptimization,
   lib: {
     entry: {
-      react: resolve(__dirname, 'src/react/index.ts'),
       utils: resolve(__dirname, 'src/utils/index.ts'),
       wasm: resolve(__dirname, 'src/wasm/index.ts'),
       node: resolve(__dirname, 'src/node/index.ts'),
