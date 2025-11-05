@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "koa": "^3.0.1",
+    "koa": "^3.0.3",
     "koa-mount": "^4.2.0",
     "koa-send": "^5.0.1",
     "koa-static": "^5.0.0"
