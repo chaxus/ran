@@ -6,9 +6,9 @@ Pass in a string and convert it to 'xml'
 
 ### Return
 
-| argument      | Instructions          | type          |
-| ------------- | --------------------- | ------------- |
-| `HTMLElement` | 返回一个`HTMLElement` | `HTMLElement` |
+| argument      | Description              | type          |
+| ------------- | ------------------------ | ------------- |
+| `HTMLElement` | Returns an `HTMLElement` | `HTMLElement` |
 
 ### Options
 

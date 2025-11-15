@@ -1,17 +1,17 @@
 # EventEmitter
 
-发布订阅的类
+Publish-subscribe class.
 
 ## Class
 
 ### Methods
 
-| 方法 | 参数                                   | 说明                               | 默认值 |
-| ---- | -------------------------------------- | ---------------------------------- | ------ |
-| on   | 订阅事件                               | 订阅事件，传入参数事件名，回调函数 | 无     |
-| once | 订阅一次事件，传入参数事件名，回调函数 | 订阅一次事件，触发一次后不再会触发 | 无     |
-| off  | 取消订阅事件，传入参数事件名，回调函数 | 取消订阅事件                       | 无     |
-| emit | 触发事件，需要事件名                   | 触发事件                           | 无     |
+| Method | Parameters              | Description                                                 | Default |
+| ------ | ----------------------- | ----------------------------------------------------------- | ------- |
+| on     | Subscribe to event      | Subscribe to event, pass event name and callback            | None    |
+| once   | Subscribe to event once | Subscribe to event once, trigger once then auto unsubscribe | None    |
+| off    | Unsubscribe from event  | Unsubscribe from event, pass event name and callback        | None    |
+| emit   | Trigger event           | Trigger event, requires event name                          | None    |
 
 ## Example
 
@@ -20,31 +20,31 @@ import { Subscribe } from 'ranuts';
 
 const subscribe = new Subscribe();
 
-// 订阅事件1
+// Subscribe to event 1
 subscribe.on('event', () => {
   console.log(1);
 });
-// 订阅事件2
+// Subscribe to event 2
 subscribe.on('event', () => {
   console.log(2);
 });
-// 订阅事件3
+// Subscribe to event 3
 const eventThree = () => {
   console.log(3);
 };
 subscribe.on('event', eventThree);
-// 订阅事件4，需要传递参数
+// Subscribe to event 4, need to pass parameters
 subscribe.on('event', (num) => {
   console.log(num);
 });
-// 触发事件，同时传参数
+// Trigger event, pass parameters
 subscribe.emit('event', 4);
 // console.log(1) console.log(2) console.log(3) console.log(4)
 
-// 取消事件三
+// Unsubscribe event three
 subscribe.off('event', eventThree);
 
-// 订阅一次，触发一次自动取消
+// Subscribe once, auto unsubscribe after trigger
 subscribe.once('other', () => {
   console.log(5);
 });

@@ -1,6 +1,6 @@
 # ReadDir
 
-读一个目录下的所有文件
+Read all files in a directory.
 
 ## API
 
@@ -8,15 +8,15 @@
 
 - Promise
 
-| 参数   | 说明                 | 类型    | 描述           |
-| ------ | -------------------- | ------- | -------------- |
-| result | 目录下所有文件的数组 | `array` | 传入函数的参数 |
+| Parameter | Description                     | Type    | Description         |
+| --------- | ------------------------------- | ------- | ------------------- |
+| result    | Array of all files in directory | `array` | Array of file paths |
 
 ### Options
 
-| 参数    | 说明        | 类型     | 默认值         |
-| ------- | ----------- | -------- | -------------- |
-| options | { dirPath } | `object` | 传入函数的参数 |
-| dirPath | 文件的路径  | `Stats`  |                |
+| Parameter | Description    | Type     | Default  |
+| --------- | -------------- | -------- | -------- |
+| options   | { dirPath }    | `object` | Required |
+| dirPath   | Directory path | `string` | Required |
 
 ## Example

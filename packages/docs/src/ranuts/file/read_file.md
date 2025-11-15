@@ -1,6 +1,6 @@
 # ReadFile
 
-观察一个文件是否改变
+Read file content.
 
 ## API
 
@@ -8,15 +8,14 @@
 
 - Promise
 
-| 参数 | 说明           | 类型      | 描述                         |
-| ---- | -------------- | --------- | ---------------------------- |
-| data | 文件是否被改变 | `boolean` | true 文件改变 false 文件没变 |
+| Parameter | Description  | Type     | Description            |
+| --------- | ------------ | -------- | ---------------------- |
+| data      | File content | `string` | File content as string |
 
 ### Options
 
-| 参数     | 说明                           | 类型     | 默认值    |
-| -------- | ------------------------------ | -------- | --------- |
-| path     | 文件路径，需要监听的文件       | `string` | undefined |
-| interval | 监听文件改变的时间，单位毫秒。 | `number` | `20`      |
+| Parameter | Description       | Type     | Default   |
+| --------- | ----------------- | -------- | --------- |
+| path      | File path to read | `string` | undefined |
 
 ## Example

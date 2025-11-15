@@ -12,10 +12,10 @@ Filter the properties of the object, remove the properties of the object in the 
 
 ### Options
 
-| argument | Instructions             | type     | Default value |
-| -------- | ------------------------ | -------- | ------------- |
-| obj      | Objects to be filtered   | `object` | 无            |
-| list     | Familiar array to filter | `array`  | 无            |
+| argument | Instructions           | type     | Default value |
+| -------- | ---------------------- | -------- | ------------- |
+| obj      | Objects to be filtered | `object` | Required      |
+| list     | Filter array           | `array`  | Required      |
 
 ## Example
 

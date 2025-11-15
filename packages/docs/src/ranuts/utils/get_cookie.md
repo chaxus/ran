@@ -14,7 +14,7 @@ Pass in a string to get the value of the cookie with the specified name
 
 | argument | Instructions                                         | type     | Default value |
 | -------- | ---------------------------------------------------- | -------- | ------------- |
-| name     | Specifies the value of the name that gets the cookie | `object` | 无            |
+| name     | Specifies the value of the name that gets the cookie | `string` | Required      |
 
 ## Example
 

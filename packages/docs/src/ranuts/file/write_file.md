@@ -1,6 +1,6 @@
 # WriteFile
 
-将内容写入文件
+Write content to file.
 
 ## API
 
@@ -8,14 +8,14 @@
 
 - Promise
 
-| 参数    | 说明                                           | 类型      | 描述                 |
-| ------- | ---------------------------------------------- | --------- | -------------------- |
-| success | 是否写入成功                                   | `boolean` | true 成功 false 失败 |
-| data    | 写入失败的原因，添加成功后的文件内容和文件路径 | `any`     |                      |
+| Parameter | Description                                                   | Type      | Description                         |
+| --------- | ------------------------------------------------------------- | --------- | ----------------------------------- |
+| success   | Whether write was successful                                  | `boolean` | true for success, false for failure |
+| data      | Reason for write failure, or file content and path on success | `any`     |                                     |
 
 ### Options
 
-| 参数    | 说明                     | 类型     | 默认值    |
-| ------- | ------------------------ | -------- | --------- |
-| path    | 文件路径，需要追加的文件 | `string` | undefined |
-| content | 需要追加的内容           | `string` | 无        |
+| Parameter | Description           | Type     | Default   |
+| --------- | --------------------- | -------- | --------- |
+| path      | File path to write to | `string` | undefined |
+| content   | Content to write      | `string` | Required  |

@@ -1,6 +1,6 @@
 # AppendFile
 
-追加一些数据到文件内
+Append data to file.
 
 ## API
 
@@ -8,16 +8,16 @@
 
 - Promise
 
-| 参数    | 说明                                 | 类型      | 描述                         |
-| ------- | ------------------------------------ | --------- | ---------------------------- |
-| success | 是否追加成功                         | `boolean` | true 追加成功 false 追加失败 |
-| data    | 追加失败的原因，添加成功后的文件内容 | `any`     |                              |
+| Parameter | Description                                           | Type      | Description                         |
+| --------- | ----------------------------------------------------- | --------- | ----------------------------------- |
+| success   | Whether append was successful                         | `boolean` | true for success, false for failure |
+| data      | Reason for append failure, or file content on success | `any`     |                                     |
 
 ### Options
 
-| 参数    | 说明                     | 类型     | 默认值    |
-| ------- | ------------------------ | -------- | --------- |
-| path    | 文件路径，需要追加的文件 | `string` | undefined |
-| content | 需要追加的内容           | `string` | 无        |
+| Parameter | Description            | Type     | Default   |
+| --------- | ---------------------- | -------- | --------- |
+| path      | File path to append to | `string` | undefined |
+| content   | Content to append      | `string` | Required  |
 
 ## Example

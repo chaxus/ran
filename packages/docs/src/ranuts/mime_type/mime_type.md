@@ -1,20 +1,20 @@
 # getMime
 
-传入文件格式后缀，返回`mime type`
+Pass in file format extension, returns `mime type`.
 
 ## API
 
 ### Return
 
-| 参数     | 说明            | 类型     |
-| -------- | --------------- | -------- |
-| `string` | 返回`mime type` | `string` |
+| Argument | Description         | Type     |
+| -------- | ------------------- | -------- |
+| `string` | Returns `mime type` | `string` |
 
 ### Options
 
-| 参数 | 说明         | 类型     | 默认值 |
-| ---- | ------------ | -------- | ------ |
-| ext  | 文件后缀格式 | `string` | 无     |
+| Parameter | Description           | Type     | Default  |
+| --------- | --------------------- | -------- | -------- |
+| ext       | File extension format | `string` | Required |
 
 ## Example
 
@@ -23,8 +23,9 @@ import { getMime } from 'ranuts';
 
 const result = getMime('.pptx');
 console.log(result);
-// 'application/vnd.openxmlformats-officedocument.presentationml.presentation
+// 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+
 const res = getMime('.txt');
-console.log(result);
-// text/plain
+console.log(res);
+// 'text/plain'
 ```
