@@ -1,0 +1,167 @@
+/**
+ * Skeleton Component Styles
+ */
+
+/* ========== CSS Custom Properties ========== */
+
+:host {
+  --skeleton-bg: rgba(0, 0, 0, 0.06);
+  --skeleton-shimmer: rgba(0, 0, 0, 0.15);
+  --skeleton-radius: 4px;
+  --skeleton-height: auto;
+  --skeleton-width: 100%;
+  --skeleton-animation-duration: 1.4s;
+}
+
+/* ========== Base Container ========== */
+
+.skeleton-container {
+  display: block;
+  position: relative;
+  width: 100%;
+}
+
+/* ========== Skeleton Element ========== */
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+  width: var(--skeleton-width);
+  height: var(--skeleton-height);
+}
+
+/* Hide slot content when loading */
+.skeleton-loading slot {
+  display: none;
+}
+
+/* Show slot content when not loading */
+.skeleton-container:not(.skeleton-loading) .skeleton {
+  display: none;
+}
+
+/* ========== Skeleton Items ========== */
+
+.skeleton-item {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  background: var(--skeleton-bg);
+  border-radius: var(--skeleton-radius);
+  width: 100%;
+  height: 16px;
+  margin-bottom: 8px;
+}
+
+.skeleton-item:last-child {
+  margin-bottom: 0;
+}
+
+/* ========== Variant Styles ========== */
+
+/* Text variant */
+.skeleton-text .skeleton-item {
+  height: 16px;
+  border-radius: var(--skeleton-radius);
+}
+
+/* Circular variant */
+.skeleton-circular .skeleton-item {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-bottom: 0;
+}
+
+/* Rectangular variant */
+.skeleton-rectangular .skeleton-item {
+  height: 100px;
+  border-radius: 0;
+}
+
+/* Rounded variant */
+.skeleton-rounded .skeleton-item {
+  height: 100px;
+  border-radius: 8px;
+}
+
+/* ========== Animation Styles ========== */
+
+/* Pulse animation */
+@keyframes skeleton-pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.skeleton-animation-pulse .skeleton-item {
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+/* Wave animation */
+@keyframes skeleton-wave {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.skeleton-animation-wave .skeleton-item::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--skeleton-shimmer),
+    transparent
+  );
+  animation: skeleton-wave var(--skeleton-animation-duration) ease-in-out infinite;
+  content: '';
+  transform: translateX(-100%);
+}
+
+/* No animation */
+.skeleton-animation-none .skeleton-item {
+  animation: none;
+}
+
+.skeleton-animation-none .skeleton-item::after {
+  display: none;
+}
+
+/* ========== Responsive Design ========== */
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-item,
+  .skeleton-item::after {
+    animation: none;
+  }
+}
+
+/* ========== Dark Mode Support ========== */
+
+@media (prefers-color-scheme: dark) {
+  :host {
+    --skeleton-bg: rgba(255, 255, 255, 0.1);
+    --skeleton-shimmer: rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* ========== Accessibility ========== */
+
+.skeleton-container[aria-busy='true'] {
+  pointer-events: none;
+  user-select: none;
+}

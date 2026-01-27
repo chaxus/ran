@@ -1,0 +1,141 @@
+/**
+ * Image Component Styles
+ */
+
+/* ========== CSS Custom Properties ========== */
+
+:host {
+  --image-width: auto;
+  --image-height: auto;
+  --image-radius: 0;
+  --image-object-fit: fill;
+  --image-bg: #f5f5f5;
+  --image-placeholder-bg: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  --image-error-color: #999;
+}
+
+/* ========== Base Container ========== */
+
+.image-container {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  width: var(--image-width);
+  height: var(--image-height);
+  background: var(--image-bg);
+  border-radius: var(--image-radius);
+}
+
+/* ========== Image Element ========== */
+
+.image-element {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: var(--image-object-fit);
+  border-radius: var(--image-radius);
+}
+
+/* ========== Placeholder ========== */
+
+.image-placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--image-placeholder-bg);
+  background-size: 200% 100%;
+  animation: image-loading 1.5s ease-in-out infinite;
+  display: none;
+}
+
+@keyframes image-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* ========== Error State ========== */
+
+.image-error {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--image-error-color);
+  font-size: 14px;
+  text-align: center;
+  padding: 16px;
+  box-sizing: border-box;
+  background: var(--image-bg);
+  display: none;
+}
+
+.image-error::before {
+  content: '📷';
+  font-size: 48px;
+  display: block;
+  margin-bottom: 8px;
+  opacity: 0.5;
+}
+
+/* ========== Object Fit Variants ========== */
+
+.image-element[style*='object-fit: fill'] {
+  object-fit: fill;
+}
+
+.image-element[style*='object-fit: contain'] {
+  object-fit: contain;
+}
+
+.image-element[style*='object-fit: cover'] {
+  object-fit: cover;
+}
+
+.image-element[style*='object-fit: none'] {
+  object-fit: none;
+}
+
+.image-element[style*='object-fit: scale-down'] {
+  object-fit: scale-down;
+}
+
+/* ========== Responsive Design ========== */
+
+@media (prefers-reduced-motion: reduce) {
+  .image-placeholder {
+    animation: none;
+    background: var(--image-bg);
+  }
+}
+
+/* ========== Dark Mode Support ========== */
+
+@media (prefers-color-scheme: dark) {
+  :host {
+    --image-bg: #2a2a2a;
+    --image-placeholder-bg: linear-gradient(90deg, #2a2a2a 25%, #3a3a3a 50%, #2a2a2a 75%);
+    --image-error-color: #ccc;
+  }
+}
+
+/* ========== Loading State ========== */
+
+.image-container[data-loading='true'] .image-placeholder {
+  display: block;
+}
+
+/* ========== Error State Display ========== */
+
+.image-container[data-error='true'] .image-error {
+  display: flex;
+}
