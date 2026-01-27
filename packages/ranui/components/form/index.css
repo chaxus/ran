@@ -2,16 +2,96 @@
  * Form Component Styles
  */
 
+/* ========== CSS Custom Properties ========== */
+
 :host {
+  --form-label-color: rgba(0, 0, 0, 0.88);
+  --form-error-color: #ff4d4f;
+  --form-item-margin-bottom: 24px;
+  --form-label-font-size: 14px;
+  --form-error-font-size: 14px;
+
   display: block;
   box-sizing: border-box;
 }
 
+/* ========== Form Container ========== */
+
 .r-form {
   width: 100%;
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
+
+/* ========== Layout: Vertical (Default) ========== */
+
+:host([layout='vertical']) .r-form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ========== Layout: Horizontal ========== */
+
+:host([layout='horizontal']) .r-form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ========== Layout: Inline ========== */
+
+:host([layout='inline']) .r-form {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+/* ========== Slotted Content ========== */
 
 ::slotted(*) {
   box-sizing: border-box;
+}
+
+/* ========== Form Item Styling (via CSS parts) ========== */
+
+::slotted([slot]) {
+  margin-bottom: var(--form-item-margin-bottom);
+}
+
+:host([layout='inline']) ::slotted([slot]) {
+  margin-bottom: 0;
+}
+
+/* ========== Disabled State ========== */
+
+:host([disabled]) {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* ========== Loading State ========== */
+
+:host([loading]) {
+  opacity: 0.6;
+  pointer-events: none;
+  position: relative;
+}
+
+/* ========== Accessibility ========== */
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ========== Dark Mode ========== */
+
+@media (prefers-color-scheme: dark) {
+  :host {
+    --form-label-color: rgba(255, 255, 255, 0.85);
+  }
 }

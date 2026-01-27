@@ -1,0 +1,50 @@
+/**
+ * Math Component Styles
+ */
+
+/* ========== CSS Custom Properties ========== */
+
+:host {
+  --math-display: flex;
+  --math-justify-content: space-around;
+  --math-align-items: center;
+  --math-katex-display: none;
+
+  position: relative;
+  display: block;
+}
+
+/* ========== Container ========== */
+
+.ran-math {
+  display: var(--math-display);
+  justify-content: var(--math-justify-content);
+  align-items: var(--math-align-items);
+  box-sizing: border-box;
+}
+
+/* ========== KaTeX Styles ========== */
+
+.katex-html {
+  display: var(--math-katex-display);
+}
+
+/* ========== Loading State ========== */
+
+:host([loading]) {
+  opacity: 0.6;
+}
+
+/* ========== Error State ========== */
+
+:host([error]) .ran-math {
+  color: #ff4d4f;
+}
+
+/* ========== Dark Mode ========== */
+
+@media (prefers-color-scheme: dark) {
+  .ran-math {
+    color: rgba(255, 255, 255, 0.85);
+  }
+}
