@@ -1,0 +1,11 @@
+/**
+ * Popover Content Component Styles
+ */
+
+:host {
+  display: contents;
+}
+
+.slot {
+  display: contents;
+}

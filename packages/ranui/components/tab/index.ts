@@ -1,331 +1,569 @@
-import { addClassToElement, createDocumentFragment } from 'ranuts/utils';
-import { isDisabled, removeClassToElementChild } from '../../utils/index';
+import type { TabType, TabAlign, TabChangeEventDetail } from './types';
+import { HTMLElementSSR, createCustomError } from '@/utils/index';
 
-function CustomElement() {
-  if (typeof window !== 'undefined' && !customElements.get('r-tabs')) {
-    class Tabs extends HTMLElement {
-      static get observedAttributes() {
-        return ['active', 'forceRender', 'type', 'align', 'effect'];
-      }
-      _container: HTMLDivElement;
-      _header: HTMLDivElement;
-      _nav: HTMLDivElement;
-      _line: HTMLDivElement;
-      _content: HTMLDivElement;
-      _wrap: HTMLDivElement;
-      _slot: HTMLSlotElement;
-      tabHeaderKeyMapIndex: Record<string, number>;
-      constructor() {
-        super();
-        /**
-         * <div class="tab">
-         *   <div class="tab-header">
-         *      <div class="tab-header_nav">...</div>
-         *      <div class="tab-header_line"></div>
-         *   </div>
-         *   <div class="tab-content">
-         *      <div class="tab-content_wrap">
-         *         <slot></slot>
-         *      </div>
-         *   </div>
-         * </div>
-         */
-        this._container = document.createElement('div');
-        this._container.setAttribute('class', 'ran-tab');
-        this._header = document.createElement('div');
-        this._header.setAttribute('class', 'ran-tab-header');
-        this._nav = document.createElement('div');
-        this._nav.setAttribute('class', 'ran-tab-header-nav');
-        this._line = document.createElement('div');
-        this._line.setAttribute('class', 'ran-tab-header-line');
-        this._content = document.createElement('div');
-        this._content.setAttribute('class', 'ran-tab-content');
-        this._wrap = document.createElement('div');
-        this._wrap.setAttribute('class', 'ran-tab-content-wrap');
-        this._slot = document.createElement('slot');
-        this._wrap.appendChild(this._slot);
-        this._content.appendChild(this._wrap);
-        this._header.appendChild(createDocumentFragment([this._nav, this._line])!);
-        this._container.appendChild(createDocumentFragment([this._header, this._content])!);
-        this.tabHeaderKeyMapIndex = {};
+/**
+ * Modern Tab Component
+ *
+ * @element r-tabs
+ *
+ * @fires change - Fired when the active tab changes
+ *
+ * @slot - Tab panels (r-tab elements)
+ *
+ * @csspart header - The tab header container
+ * @csspart nav - The navigation container
+ * @csspart line - The active indicator line
+ * @csspart content - The content container
+ *
+ * @cssprop --tab-active-color - Active tab color
+ * @cssprop --tab-line-color - Indicator line color
+ * @cssprop --tab-border-color - Border color for line type
+ * @cssprop --tab-border-radius - Border radius
+ * @cssprop --tab-transition-duration - Transition duration
+ * @cssprop --tab-header-padding - Header padding
+ * @cssprop --tab-content-padding - Content padding
+ */
+export class Tabs extends (HTMLElementSSR()!) {
+  private _container!: HTMLDivElement;
+  private _header!: HTMLDivElement;
+  private _nav!: HTMLDivElement;
+  private _line!: HTMLDivElement;
+  private _content!: HTMLDivElement;
+  private _wrap!: HTMLDivElement;
+  private _slot!: HTMLSlotElement;
+  private _shadowRoot!: ShadowRoot;
+  private _tabHeaderKeyMapIndex: Record<string, number> = {};
+  private _previousActive?: string;
 
-        const shadowRoot = this.attachShadow({ mode: 'closed' });
-        shadowRoot.appendChild(this._container);
-      }
+  static get observedAttributes(): string[] {
+    return ['active', 'type', 'align', 'effect'];
+  }
 
-      get align() {
-        return this.getAttribute('align') || 'start';
-      }
+  constructor() {
+    super();
 
-      set align(value) {
-        this.setAttribute('align', value);
-      }
+    this._shadowRoot = this.attachShadow({ mode: 'open' });
+    this.render();
+  }
 
-      set type(value) {
-        this.setAttribute('type', value);
-      }
+  // ========== Properties ==========
 
-      get type() {
-        return this.getAttribute('type') || 'flat';
-      }
+  get align(): TabAlign {
+    return (this.getAttribute('align') as TabAlign) || 'start';
+  }
+  set align(value: TabAlign) {
+    this.setAttribute('align', value);
+  }
 
-      get active() {
-        return this.getAttribute('active');
-      }
+  get type(): TabType {
+    return (this.getAttribute('type') as TabType) || 'flat';
+  }
+  set type(value: TabType) {
+    this.setAttribute('type', value);
+  }
 
-      set active(value) {
-        if (value) {
-          this.setAttribute('active', value);
-          this.setTabLine(value);
-          this.setTabContent(value);
-        } else {
-          this.removeAttribute('active');
-        }
-      }
+  get active(): string | null {
+    return this.getAttribute('active');
+  }
+  set active(value: string | null) {
+    if (value) {
+      this.setAttribute('active', value);
+    } else {
+      this.removeAttribute('active');
+    }
+  }
 
-      get effect() {
-        return this.getAttribute('effect');
-      }
+  get effect(): string | null {
+    return this.getAttribute('effect');
+  }
+  set effect(value: string | null) {
+    if (value && value !== 'false') {
+      this.setAttribute('effect', value);
+    } else {
+      this.removeAttribute('effect');
+    }
+  }
 
-      set effect(value) {
-        if (!value || value === 'false') {
-          this.removeAttribute('effect');
-        } else {
-          this.setAttribute('effect', value);
-        }
-      }
-      /**
-       * @description: 构建 tabPane 组件 key 值和 index 的映射，同时判断一个 tabs 下的 tabPane key 值不能重复
-       * @param {string} key
-       * @param {number} index
-       */
-      initTabHeaderKeyMapIndex = (key: string, index: number) => {
-        const value = this.tabHeaderKeyMapIndex[key];
-        if (value) {
-          throw new Error('tab 组件的 key 值存在重复，或者某个 tab 组件缺少 key 属性');
-        } else {
-          this.tabHeaderKeyMapIndex[key] = index;
-        }
-      };
-      /**
-       * @description: 根据传入的 tabPane 生成 tabs 的头部
-       * @param {Element} tabPane
-       * @param {number} index
-       * @return {Element}
-       */
-      createTabHeader(tabPane: Element, index: number) {
-        const label = tabPane.getAttribute('label') || '';
-        const icon = tabPane.getAttribute('icon') || '';
-        const iconSize = tabPane.getAttribute('iconSize') || '';
-        const key = tabPane.getAttribute('r-key') || `${index}`;
-        const type = tabPane.getAttribute('type') || 'text';
-        this.initTabHeaderKeyMapIndex(key, index);
-        const tabHeader = document.createElement('r-button');
-        tabHeader.setAttribute('class', 'tab-header-nav-item');
-        tabHeader.setAttribute('type', type);
-        icon && tabHeader.setAttribute('icon', icon);
-        iconSize && tabHeader.setAttribute('iconSize', iconSize);
-        isDisabled(tabPane) && tabHeader.setAttribute('disabled', '');
-        tabHeader.setAttribute('r-key', key);
-        if (this.effect) {
-          tabPane.setAttribute('effect', this.effect);
-          this._line.style.setProperty('display', 'none');
-        }
-        tabPane.setAttribute('r-key', key);
-        tabHeader.innerHTML = label;
-        return tabHeader;
-      }
-      /**
-       * @description: 初始化 tabLine 的位置，主要是当 tabs 的 align 属性为 center 时需要处理
-       */
-      initTabLineAlignCenter = () => {
-        const { length } = this._nav.children;
-        let left = 0;
-        for (let i = 0; i < length; i++) {
-          const { width = 0 } = this._nav.children[i].getBoundingClientRect();
-          left += width;
-        }
-        this._line.style.setProperty('left', `calc(50% - ${left / 2}px)`);
-      };
-      /**
-       * @description: 初始化tabLine的位置，主要是当tabs的align属性为end时需要处理
-       */
-      initTabLineAlignEnd = () => {
-        const { length } = this._nav.children;
-        let left = 0;
-        for (let i = 0; i < length; i++) {
-          const { width = 0 } = this._nav.children[i].getBoundingClientRect();
-          left += width;
-        }
-        this._line.style.setProperty('left', `calc(100% - ${left}px)`);
-      };
-      /**
-       * @description: 通过key值设置tabLine的位置
-       * @param {string} key
-       */
-      setTabLine = (key: string) => {
-        if (key) {
-          const index = this.tabHeaderKeyMapIndex[key];
-          // 计算 tabHeader 的宽度，给 tabLine 赋值
-          const TabHeader = this._nav.children[index];
-          const { width = 0 } = TabHeader.getBoundingClientRect();
-          this._line.style.setProperty('width', `${width}px`);
-          // 计算 tabLine 的移动距离
-          let distance = 0;
-          for (let i = 0; i < index; i++) {
-            const item = this._nav.children[i];
-            const { width = 0 } = item.getBoundingClientRect();
-            distance += width;
-          }
-          // 设置移动的距离
-          this._line.style.setProperty('transform', `translateX(${distance}px)`);
-        }
-      };
-      /**
-       * @description: 通过传入的key值设置tabContent
-       */
-      setTabContent = (key: string) => {
-        if (key) {
-          const index = this.tabHeaderKeyMapIndex[key];
-          this._wrap.style.setProperty('transform', `translateX(${index * -100}%)`);
-        }
-      };
-      /**
-       * @description: 根据点击设置 tabLine 的位置
-       * @param {Event} e
-       * @param {number} index
-       * @param {number} width
-       */
-      clickTabHead = (e: Event) => {
-        const tabHeader = e.target as Element;
-        // 移动元素到可视区域内
-        // tabHeader.scrollIntoView({ block: "center", inline: "center" });
-        // TODO: tab 超出屏幕滚动问题
-        const key = tabHeader.getAttribute('r-key');
-        const disabled = isDisabled(tabHeader);
-        if (!disabled && key) {
-          this.setAttribute('active', key);
-          this.setTabLine(key);
-          this.setTabContent(key);
-          removeClassToElementChild(this._nav, 'active');
-          addClassToElement(tabHeader, 'active');
-        }
-      };
-      /**
-       * @description: tabPane 设置属性，需要在 tabs 上展示时触发
-       * @param {string} key
-       * @param {string} value
-       */
-      updateAttribute = (key: string, attribute: string, value: string | null = '') => {
-        const index = this.tabHeaderKeyMapIndex[key];
-        if (key && value && this._nav.children[index]) {
-          this._nav.children[index]?.setAttribute(attribute, value);
-        } else {
-          this._nav.children[index]?.removeAttribute(attribute);
-        }
-      };
-      /**
-       * @description: 初始化 tabs 的 active 属性和 tabLine,tabContent
-       */
-      initActive = () => {
-        const tabHeaderList = [...this._nav.children];
-        const initTabList = tabHeaderList.filter((item) => !isDisabled(item));
-        let initTabHeader: Element | undefined;
-        // 如果有 active，找到 active 对应的标签，设置活跃标签
-        if (this.active != null) {
-          initTabHeader = initTabList.find((item) => item.getAttribute('r-key') === this.active);
-          initTabHeader?.setAttribute('r-key', this.active);
-        }
-        // 如果没有 active，则默认第一个标签为活跃标签
-        if (!initTabHeader) {
-          initTabHeader = initTabList.shift();
-        }
-        // 如果都没有，则返回
-        if (!initTabHeader) return;
-        const index = tabHeaderList.findIndex((item) => item === initTabHeader);
-        const key = initTabHeader?.getAttribute('r-key') || `${index}`;
-        if (key != null) {
-          this.setAttribute('active', `${key}`);
-          addClassToElement(initTabHeader, 'active');
-          this.setTabContent(key);
-          setTimeout(() => {
-            // icon 渲染过慢的问题
-            this.setTabLine(key);
-          }, 200);
-        }
-      };
-      /**
-       * @description: 监听 slot 组件的添加/删除/替换操作，进行 tabs 初始化
-       * @return {*}
-       */
-      listenSlotChange = () => {
-        const slots = this._slot.assignedElements();
-        slots.forEach((item, index) => {
-          const tabPane = this.createTabHeader(item, index);
-          this._nav.appendChild(tabPane);
-          tabPane.addEventListener('click', this.clickTabHead);
-        });
-        this.initActive();
-        // 如果存在 align 属性，进行设置 tabLine 的初始位置
-        if (this.align) {
-          if (this.align === 'center') this.initTabLineAlignCenter();
-          if (this.align === 'end') this.initTabLineAlignEnd();
-        }
-      };
-      /**
-       * @description: 初始化 tab
-       */
-      initTab = () => {
-        this._slot.addEventListener('slotchange', this.listenSlotChange);
-      };
-      /**
-       * @description: 卸载 tab
-       */
-      unloadTab = () => {
-        this._slot.removeEventListener('slotchange', this.listenSlotChange);
-      };
+  // ========== Render ==========
 
-      connectedCallback() {
-        this.initTab();
+  private render(): void {
+    const style = document.createElement('style');
+    style.textContent = `@import url("${new URL('./index.css', import.meta.url).href}");`;
+
+    // Create container structure
+    this._container = document.createElement('div');
+    this._container.className = 'ran-tab';
+
+    // Header with nav and line
+    this._header = document.createElement('div');
+    this._header.className = 'ran-tab-header';
+    this._header.setAttribute('part', 'header');
+    this._header.setAttribute('role', 'tablist');
+
+    this._nav = document.createElement('div');
+    this._nav.className = 'ran-tab-header-nav';
+    this._nav.setAttribute('part', 'nav');
+
+    this._line = document.createElement('div');
+    this._line.className = 'ran-tab-header-line';
+    this._line.setAttribute('part', 'line');
+    this._line.setAttribute('aria-hidden', 'true');
+
+    this._header.appendChild(this._nav);
+    this._header.appendChild(this._line);
+
+    // Content area
+    this._content = document.createElement('div');
+    this._content.className = 'ran-tab-content';
+    this._content.setAttribute('part', 'content');
+
+    this._wrap = document.createElement('div');
+    this._wrap.className = 'ran-tab-content-wrap';
+
+    this._slot = document.createElement('slot');
+
+    this._wrap.appendChild(this._slot);
+    this._content.appendChild(this._wrap);
+
+    this._container.appendChild(this._header);
+    this._container.appendChild(this._content);
+
+    this._shadowRoot.appendChild(style);
+    this._shadowRoot.appendChild(this._container);
+  }
+
+  // ========== Lifecycle ==========
+
+  connectedCallback(): void {
+    this.setupEventListeners();
+  }
+
+  disconnectedCallback(): void {
+    this.removeEventListeners();
+  }
+
+  attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
+    if (oldValue === newValue) return;
+
+    switch (name) {
+      case 'align':
+        this.updateLineAlignment();
+        break;
+
+      case 'effect':
+        this.updateEffectOnTabs(newValue);
+        break;
+
+      case 'active':
+        if (newValue) {
+          this.activateTab(newValue);
+        }
+        break;
+
+      case 'type':
+        // Type change handled by CSS
+        break;
+    }
+  }
+
+  // ========== Event Listeners ==========
+
+  private setupEventListeners(): void {
+    this._slot.addEventListener('slotchange', this.handleSlotChange);
+  }
+
+  private removeEventListeners(): void {
+    this._slot.removeEventListener('slotchange', this.handleSlotChange);
+
+    // Remove all tab header click listeners
+    const headers = Array.from(this._nav.children);
+    headers.forEach((header) => {
+      header.removeEventListener('click', this.handleTabClick);
+      header.removeEventListener('keydown', this.handleTabKeyDown);
+    });
+  }
+
+  private handleSlotChange = (): void => {
+    this.initializeTabs();
+  };
+
+  private handleTabClick = (event: Event): void => {
+    const tabHeader = event.currentTarget as HTMLElement;
+    const key = tabHeader.getAttribute('r-key');
+    const disabled = tabHeader.hasAttribute('disabled');
+
+    if (!disabled && key) {
+      this.selectTab(key);
+    }
+  };
+
+  private handleTabKeyDown = (event: Event): void => {
+    const keyboardEvent = event as KeyboardEvent;
+    const key = keyboardEvent.key;
+
+    switch (key) {
+      case 'ArrowLeft':
+        keyboardEvent.preventDefault();
+        this.focusPreviousTab();
+        break;
+
+      case 'ArrowRight':
+        keyboardEvent.preventDefault();
+        this.focusNextTab();
+        break;
+
+      case 'Home':
+        keyboardEvent.preventDefault();
+        this.focusFirstTab();
+        break;
+
+      case 'End':
+        keyboardEvent.preventDefault();
+        this.focusLastTab();
+        break;
+
+      case 'Enter':
+      case ' ':
+        keyboardEvent.preventDefault();
+        const tabHeader = event.currentTarget as HTMLElement;
+        const tabKey = tabHeader.getAttribute('r-key');
+        if (tabKey) {
+          this.selectTab(tabKey);
+        }
+        break;
+    }
+  };
+
+  // ========== Tab Management ==========
+
+  private initializeTabs(): void {
+    // Clear existing tabs
+    this._nav.innerHTML = '';
+    this._tabHeaderKeyMapIndex = {};
+
+    // Get all tab panes
+    const tabPanes = this._slot.assignedElements();
+
+    tabPanes.forEach((tabPane, index) => {
+      const key = tabPane.getAttribute('r-key') || `${index}`;
+
+      // Check for duplicate keys
+      if (this._tabHeaderKeyMapIndex[key] !== undefined) {
+        throw new Error(`Duplicate tab key: ${key}. Each tab must have a unique r-key attribute.`);
       }
 
-      disconnectCallback() {
-        this.unloadTab();
+      this._tabHeaderKeyMapIndex[key] = index;
+
+      // Create tab header
+      const tabHeader = this.createTabHeader(tabPane, key);
+      this._nav.appendChild(tabHeader);
+
+      // Set effect if present
+      if (this.effect) {
+        tabPane.setAttribute('effect', this.effect);
+        this._line.style.display = 'none';
       }
 
-      attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-        if (oldValue !== newValue) {
-          this.dispatchEvent(
-            new CustomEvent('change', {
-              detail: {
-                active: this.active,
-              },
-            }),
-          );
-          // 改变 align 属性，进行设置 tabLine 的初始位置
-          if (name === 'align') {
-            if (newValue === 'center') this.initTabLineAlignCenter();
-            if (newValue === 'end') this.initTabLineAlignEnd();
-          }
-          if (name === 'effect') {
-            const tabHeaderList = [...this._nav.children];
-            tabHeaderList.forEach((item) => {
-              if (!this.effect || this.effect === 'false') {
-                item.removeAttribute('effect');
-              } else {
-                item.setAttribute('effect', newValue);
-              }
-            });
-          }
-          if (name === 'active') {
-            this.setAttribute(name, newValue);
-          }
-        }
+      // Ensure tab pane has the key
+      tabPane.setAttribute('r-key', key);
+    });
+
+    // Initialize active tab
+    this.initializeActiveTab();
+
+    // Update line alignment
+    this.updateLineAlignment();
+  }
+
+  private createTabHeader(tabPane: Element, key: string): HTMLElement {
+    const label = tabPane.getAttribute('label') || '';
+    const icon = tabPane.getAttribute('icon');
+    const iconSize = tabPane.getAttribute('iconSize');
+    const disabled = tabPane.hasAttribute('disabled');
+    const type = tabPane.getAttribute('type') || 'text';
+
+    const tabHeader = document.createElement('r-button');
+    tabHeader.className = 'tab-header-nav-item';
+    tabHeader.setAttribute('type', type);
+    tabHeader.setAttribute('role', 'tab');
+    tabHeader.setAttribute('r-key', key);
+    tabHeader.setAttribute('tabindex', '-1');
+    tabHeader.setAttribute('aria-selected', 'false');
+
+    if (icon) tabHeader.setAttribute('icon', icon);
+    if (iconSize) tabHeader.setAttribute('iconSize', iconSize);
+    if (disabled) {
+      tabHeader.setAttribute('disabled', '');
+      tabHeader.setAttribute('aria-disabled', 'true');
+    }
+
+    tabHeader.innerHTML = label;
+
+    // Add event listeners
+    tabHeader.addEventListener('click', this.handleTabClick);
+    tabHeader.addEventListener('keydown', this.handleTabKeyDown);
+
+    return tabHeader;
+  }
+
+  private initializeActiveTab(): void {
+    const headers = Array.from(this._nav.children) as HTMLElement[];
+    const enabledHeaders = headers.filter((h) => !h.hasAttribute('disabled'));
+
+    let activeHeader: HTMLElement | undefined;
+
+    // If active attribute is set, find that tab
+    if (this.active) {
+      activeHeader = enabledHeaders.find((h) => h.getAttribute('r-key') === this.active);
+    }
+
+    // Otherwise use first enabled tab
+    if (!activeHeader) {
+      activeHeader = enabledHeaders[0];
+    }
+
+    if (activeHeader) {
+      const key = activeHeader.getAttribute('r-key');
+      if (key) {
+        this.selectTab(key, false);
       }
     }
-    customElements.define('r-tabs', Tabs);
-    return Tabs;
+  }
+
+  private selectTab(key: string, dispatchEvent = true): void {
+    const index = this._tabHeaderKeyMapIndex[key];
+    if (index === undefined) return;
+
+    // Update active attribute
+    this._previousActive = this.active || undefined;
+    this.active = key;
+
+    // Update tab headers
+    const headers = Array.from(this._nav.children) as HTMLElement[];
+    headers.forEach((header) => {
+      const headerKey = header.getAttribute('r-key');
+      const isActive = headerKey === key;
+
+      if (isActive) {
+        header.classList.add('active');
+        header.setAttribute('aria-selected', 'true');
+        header.setAttribute('tabindex', '0');
+      } else {
+        header.classList.remove('active');
+        header.setAttribute('aria-selected', 'false');
+        header.setAttribute('tabindex', '-1');
+      }
+    });
+
+    // Update line position
+    this.updateLinePosition(key);
+
+    // Update content position
+    this.updateContentPosition(key);
+
+    // Dispatch change event
+    if (dispatchEvent) {
+      this.dispatchEvent(
+        new CustomEvent<TabChangeEventDetail>('change', {
+          detail: {
+            active: key,
+            previousActive: this._previousActive,
+          },
+          bubbles: true,
+          composed: true,
+        })
+      );
+    }
+  }
+
+  private activateTab(key: string): void {
+    this.selectTab(key, false);
+  }
+
+  private updateLinePosition(key: string): void {
+    const index = this._tabHeaderKeyMapIndex[key];
+    if (index === undefined) return;
+
+    const headers = Array.from(this._nav.children) as HTMLElement[];
+    const activeHeader = headers[index];
+
+    if (!activeHeader) return;
+
+    // Calculate width
+    const { width } = activeHeader.getBoundingClientRect();
+    this._line.style.width = `${width}px`;
+
+    // Calculate distance
+    let distance = 0;
+    for (let i = 0; i < index; i++) {
+      const header = headers[i];
+      const { width: headerWidth } = header.getBoundingClientRect();
+      distance += headerWidth;
+    }
+
+    this._line.style.transform = `translateX(${distance}px)`;
+  }
+
+  private updateContentPosition(key: string): void {
+    const index = this._tabHeaderKeyMapIndex[key];
+    if (index === undefined) return;
+
+    this._wrap.style.transform = `translateX(${index * -100}%)`;
+
+    // Update ARIA for tab panels
+    const panels = this._slot.assignedElements();
+    panels.forEach((panel, i) => {
+      if (i === index) {
+        panel.setAttribute('aria-hidden', 'false');
+      } else {
+        panel.setAttribute('aria-hidden', 'true');
+      }
+    });
+  }
+
+  private updateLineAlignment(): void {
+    if (this.align === 'center') {
+      this.initTabLineAlignCenter();
+    } else if (this.align === 'end') {
+      this.initTabLineAlignEnd();
+    } else {
+      this._line.style.left = '';
+    }
+  }
+
+  private initTabLineAlignCenter(): void {
+    const headers = Array.from(this._nav.children) as HTMLElement[];
+    let totalWidth = 0;
+
+    headers.forEach((header) => {
+      const { width } = header.getBoundingClientRect();
+      totalWidth += width;
+    });
+
+    this._line.style.left = `calc(50% - ${totalWidth / 2}px)`;
+  }
+
+  private initTabLineAlignEnd(): void {
+    const headers = Array.from(this._nav.children) as HTMLElement[];
+    let totalWidth = 0;
+
+    headers.forEach((header) => {
+      const { width } = header.getBoundingClientRect();
+      totalWidth += width;
+    });
+
+    this._line.style.left = `calc(100% - ${totalWidth}px)`;
+  }
+
+  private updateEffectOnTabs(effect: string): void {
+    const headers = Array.from(this._nav.children) as HTMLElement[];
+    const panels = this._slot.assignedElements();
+
+    headers.forEach((header) => {
+      if (!effect || effect === 'false') {
+        header.removeAttribute('effect');
+      } else {
+        header.setAttribute('effect', effect);
+      }
+    });
+
+    panels.forEach((panel) => {
+      if (!effect || effect === 'false') {
+        panel.removeAttribute('effect');
+      } else {
+        panel.setAttribute('effect', effect);
+      }
+    });
+
+    // Hide line if effect is set
+    if (effect && effect !== 'false') {
+      this._line.style.display = 'none';
+    } else {
+      this._line.style.display = '';
+    }
+  }
+
+  // ========== Keyboard Navigation ==========
+
+  private focusPreviousTab(): void {
+    const headers = Array.from(this._nav.children) as HTMLElement[];
+    const currentIndex = headers.findIndex((h) => h.getAttribute('tabindex') === '0');
+
+    if (currentIndex <= 0) return;
+
+    let newIndex = currentIndex - 1;
+    while (newIndex >= 0 && headers[newIndex].hasAttribute('disabled')) {
+      newIndex--;
+    }
+
+    if (newIndex >= 0) {
+      headers[newIndex].focus();
+    }
+  }
+
+  private focusNextTab(): void {
+    const headers = Array.from(this._nav.children) as HTMLElement[];
+    const currentIndex = headers.findIndex((h) => h.getAttribute('tabindex') === '0');
+
+    if (currentIndex >= headers.length - 1) return;
+
+    let newIndex = currentIndex + 1;
+    while (newIndex < headers.length && headers[newIndex].hasAttribute('disabled')) {
+      newIndex++;
+    }
+
+    if (newIndex < headers.length) {
+      headers[newIndex].focus();
+    }
+  }
+
+  private focusFirstTab(): void {
+    const headers = Array.from(this._nav.children) as HTMLElement[];
+    const firstEnabled = headers.find((h) => !h.hasAttribute('disabled'));
+
+    if (firstEnabled) {
+      firstEnabled.focus();
+    }
+  }
+
+  private focusLastTab(): void {
+    const headers = Array.from(this._nav.children) as HTMLElement[];
+    const lastEnabled = headers.reverse().find((h) => !h.hasAttribute('disabled'));
+
+    if (lastEnabled) {
+      lastEnabled.focus();
+    }
+  }
+
+  // ========== Public Methods ==========
+
+  /**
+   * Updates an attribute on a specific tab header
+   */
+  public updateAttribute(key: string, attribute: string, value: string | null = ''): void {
+    const index = this._tabHeaderKeyMapIndex[key];
+    if (index === undefined) return;
+
+    const headers = Array.from(this._nav.children) as HTMLElement[];
+    const header = headers[index];
+
+    if (!header) return;
+
+    if (value) {
+      header.setAttribute(attribute, value);
+    } else {
+      header.removeAttribute(attribute);
+    }
   }
 }
 
-export default CustomElement();
+function Custom() {
+  if (typeof document !== 'undefined' && !customElements.get('r-tabs')) {
+    customElements.define('r-tabs', Tabs);
+    return Tabs;
+  } else {
+    return createCustomError('document is undefined or r-tabs already exists');
+  }
+}
+
+export default Custom();

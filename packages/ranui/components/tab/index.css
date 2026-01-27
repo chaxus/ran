@@ -1,0 +1,174 @@
+/**
+ * Tab Component Styles
+ */
+
+/* ========== CSS Custom Properties ========== */
+
+:host {
+  --tab-active-color: #1890ff;
+  --tab-line-color: #1890ff;
+  --tab-border-color: rgba(0, 0, 0, 0.2);
+  --tab-border-radius: 0.25em;
+  --tab-transition-duration: 0.2s;
+  --tab-header-padding: 0;
+  --tab-content-padding: 10px;
+
+  display: block;
+  box-sizing: border-box;
+}
+
+/* ========== Container ========== */
+
+.ran-tab {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+/* ========== Header ========== */
+
+.ran-tab-header {
+  position: relative;
+  overflow: hidden;
+  scroll-behavior: smooth;
+  padding: var(--tab-header-padding);
+}
+
+.ran-tab-header-nav {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.ran-tab-header-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.ran-tab-header-nav-item {
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: color var(--tab-transition-duration);
+}
+
+.ran-tab-header-nav-item.active {
+  color: var(--tab-active-color);
+}
+
+.ran-tab-header-nav-item:focus-visible {
+  outline: 2px solid var(--tab-active-color);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Active indicator line */
+.ran-tab-header-line {
+  position: absolute;
+  width: 0;
+  margin-top: -2px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--tab-line-color);
+  transition: all var(--tab-transition-duration);
+}
+
+/* ========== Content ========== */
+
+.ran-tab-content {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.ran-tab-content-wrap {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform var(--tab-transition-duration);
+}
+
+::slotted(r-tab) {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding: var(--tab-content-padding);
+  flex-shrink: 0;
+  overflow: auto;
+  text-align: start;
+}
+
+/* ========== Type: Line ========== */
+
+:host([type='line']) .ran-tab-header-nav-item {
+  border: solid 1px transparent;
+}
+
+:host([type='line']) .ran-tab-header-nav-item.active {
+  color: var(--tab-line-color);
+  border: solid 1px transparent;
+  border-color: var(--tab-border-color) var(--tab-border-color) transparent;
+  border-radius: var(--tab-border-radius) var(--tab-border-radius) 0 0;
+}
+
+:host([type='line']) .ran-tab-header-line {
+  transition: none;
+  visibility: hidden;
+}
+
+:host([type='line']) .ran-tab-header-line::after,
+:host([type='line']) .ran-tab-header-line::before {
+  content: '';
+  position: absolute;
+  visibility: visible;
+  width: 9999px;
+  height: 1px;
+  bottom: 0;
+  background: var(--tab-border-color);
+}
+
+:host([type='line']) .ran-tab-header-line::after {
+  left: 100%;
+}
+
+:host([type='line']) .ran-tab-header-line::before {
+  right: 100%;
+}
+
+/* ========== Alignment ========== */
+
+:host([align='center']) .ran-tab-header-nav {
+  justify-content: center;
+}
+
+:host([align='center']) .ran-tab-header-line {
+  left: 50%;
+}
+
+:host([align='end']) .ran-tab-header-nav {
+  justify-content: flex-end;
+}
+
+/* ========== Accessibility ========== */
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .ran-tab-header-nav-item:focus-visible {
+    outline-width: 3px;
+  }
+}
+
+/* ========== Dark Mode ========== */
+
+@media (prefers-color-scheme: dark) {
+  :host {
+    --tab-border-color: rgba(255, 255, 255, 0.2);
+  }
+}

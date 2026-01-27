@@ -1,0 +1,45 @@
+/**
+ * Popover Component Styles
+ */
+
+/* ========== CSS Custom Properties ========== */
+
+:host {
+  --popover-trigger-display: inline-block;
+  display: var(--popover-trigger-display);
+}
+
+/* ========== Trigger Element ========== */
+
+.popover-trigger {
+  box-sizing: border-box;
+  position: relative;
+  display: block;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+}
+
+.popover-trigger:focus-visible {
+  outline: 2px solid #4096ff;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ========== Accessibility ========== */
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .popover-trigger:focus-visible {
+    outline-width: 3px;
+  }
+}

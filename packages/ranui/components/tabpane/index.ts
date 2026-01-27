@@ -1,108 +1,184 @@
-interface ExtendParentNode {
+import { HTMLElementSSR, createCustomError } from '@/utils/index';
+
+/**
+ * Parent interface for Tabs component
+ */
+interface TabsParent extends ParentNode {
   updateAttribute: (key: string, attribute: string, value?: string | null) => void;
 }
 
-function CustomElement() {
-  if (typeof window !== 'undefined' && !customElements.get('r-tab')) {
-    class TabPane extends HTMLElement {
-      static get observedAttributes() {
-        return ['label', 'key', 'disabled', 'icon', 'effect', 'iconSize'];
-      }
-      _div: HTMLElement;
-      parent: (ParentNode & ExtendParentNode) | undefined | null;
-      constructor() {
-        super();
-        this._div = document.createElement('slot');
-        const shadowRoot = this.attachShadow({ mode: 'closed' });
-        shadowRoot.appendChild(this._div);
-      }
-      get label() {
-        return this.getAttribute('label') || '';
-      }
-      set label(value) {
-        this.setAttribute('label', value);
-      }
-      get icon() {
-        return this.getAttribute('icon');
-      }
-      set icon(value) {
-        if (!value || value === 'false') {
-          this.removeAttribute('icon');
-        } else {
-          this.setAttribute('icon', value);
-        }
-      }
-      get iconSize() {
-        return this.getAttribute('iconSize');
-      }
-      set iconSize(value) {
-        if (!value || value === 'false') {
-          this.removeAttribute('iconSize');
-        } else {
-          this.setAttribute('iconSize', value);
-        }
-      }
-      get key() {
-        return this.getAttribute('r-key');
-      }
-      set key(value) {
-        if (value) {
-          this.setAttribute('r-key', value);
-        } else {
-          this.removeAttribute('r-key');
-        }
-      }
-      get disabled() {
-        return this.getAttribute('disabled');
-      }
-      set disabled(value) {
-        if (!value || value === 'false') {
-          this.removeAttribute('disabled');
-        } else {
-          this.setAttribute('disabled', value);
-        }
-      }
-      get effect() {
-        return this.getAttribute('effect');
-      }
-      set effect(value) {
-        if (!value || value === 'false') {
-          this.removeAttribute('effect');
-        } else {
-          this.setAttribute('effect', value);
-        }
-      }
-      onClick(e: Event) {
-        console.log('e', e);
-      }
-      /**
-       * @description: 在页面元素都加载完毕后，设置 tab 上的图标
-       */
-      initAttribute = () => {
-        this.parent = this.parentNode as ParentNode & ExtendParentNode;
-        this.key && this.parent?.updateAttribute(this.key, 'icon', this.icon);
-        this.key && this.parent?.updateAttribute(this.key, 'iconSize', this.iconSize);
-        this.key && this.parent?.updateAttribute(this.key, 'effect', this.effect);
-      };
-      connectedCallback() {
-        this._div.addEventListener('click', this.onClick);
-        document.addEventListener('DOMContentLoaded', this.initAttribute);
-      }
-      disconnectCallback() {
-        document.removeEventListener('DOMContentLoaded', this.initAttribute);
-      }
-      attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-        if (oldValue !== newValue && this.key && this.parent?.updateAttribute) {
-          if (name === 'icon') this.parent?.updateAttribute(this.key, 'icon', newValue);
-          if (name === 'iconSize') this.parent?.updateAttribute(this.key, 'iconSize', newValue);
-          if (name === 'effect') this.parent?.updateAttribute(this.key, 'effect', newValue);
-          if (name === 'disabled') this.parent?.updateAttribute(this.key, 'disabled', newValue);
-        }
+/**
+ * Modern Tab Panel Component
+ *
+ * @element r-tab
+ *
+ * @slot - Panel content
+ *
+ * @cssprop --tab-content-padding - Content padding (inherited from r-tabs)
+ */
+export class TabPane extends (HTMLElementSSR()!) {
+  private _slot!: HTMLSlotElement;
+  private _shadowRoot!: ShadowRoot;
+  private _parent?: TabsParent | null;
+
+  static get observedAttributes(): string[] {
+    return ['label', 'r-key', 'disabled', 'icon', 'iconSize', 'effect'];
+  }
+
+  constructor() {
+    super();
+
+    this._shadowRoot = this.attachShadow({ mode: 'open' });
+    this.render();
+  }
+
+  // ========== Properties ==========
+
+  get label(): string {
+    return this.getAttribute('label') || '';
+  }
+  set label(value: string) {
+    this.setAttribute('label', value);
+  }
+
+  get icon(): string | null {
+    return this.getAttribute('icon');
+  }
+  set icon(value: string | null) {
+    if (value && value !== 'false') {
+      this.setAttribute('icon', value);
+    } else {
+      this.removeAttribute('icon');
+    }
+  }
+
+  get iconSize(): string | null {
+    return this.getAttribute('iconSize');
+  }
+  set iconSize(value: string | null) {
+    if (value && value !== 'false') {
+      this.setAttribute('iconSize', value);
+    } else {
+      this.removeAttribute('iconSize');
+    }
+  }
+
+  get key(): string | null {
+    return this.getAttribute('r-key');
+  }
+  set key(value: string | null) {
+    if (value) {
+      this.setAttribute('r-key', value);
+    } else {
+      this.removeAttribute('r-key');
+    }
+  }
+
+  get disabled(): boolean {
+    return this.hasAttribute('disabled');
+  }
+  set disabled(value: boolean) {
+    if (value) {
+      this.setAttribute('disabled', '');
+    } else {
+      this.removeAttribute('disabled');
+    }
+  }
+
+  get effect(): string | null {
+    return this.getAttribute('effect');
+  }
+  set effect(value: string | null) {
+    if (value && value !== 'false') {
+      this.setAttribute('effect', value);
+    } else {
+      this.removeAttribute('effect');
+    }
+  }
+
+  // ========== Render ==========
+
+  private render(): void {
+    this._slot = document.createElement('slot');
+    this._shadowRoot.appendChild(this._slot);
+  }
+
+  // ========== Lifecycle ==========
+
+  connectedCallback(): void {
+    this._parent = this.parentNode as TabsParent;
+
+    // Initialize attributes on parent after DOM is loaded
+    if (typeof document !== 'undefined') {
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', this.initializeAttributes);
+      } else {
+        this.initializeAttributes();
       }
     }
+
+    // Set ARIA role
+    this.setAttribute('role', 'tabpanel');
+  }
+
+  disconnectedCallback(): void {
+    if (typeof document !== 'undefined') {
+      document.removeEventListener('DOMContentLoaded', this.initializeAttributes);
+    }
+  }
+
+  attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
+    if (oldValue === newValue) return;
+
+    // Update parent tab header when attributes change
+    if (this.key && this._parent?.updateAttribute) {
+      switch (name) {
+        case 'icon':
+          this._parent.updateAttribute(this.key, 'icon', newValue);
+          break;
+
+        case 'iconSize':
+          this._parent.updateAttribute(this.key, 'iconSize', newValue);
+          break;
+
+        case 'effect':
+          this._parent.updateAttribute(this.key, 'effect', newValue);
+          break;
+
+        case 'disabled':
+          this._parent.updateAttribute(this.key, 'disabled', newValue);
+          break;
+      }
+    }
+  }
+
+  // ========== Methods ==========
+
+  private initializeAttributes = (): void => {
+    if (!this.key || !this._parent?.updateAttribute) return;
+
+    // Sync attributes with parent tab header
+    if (this.icon) {
+      this._parent.updateAttribute(this.key, 'icon', this.icon);
+    }
+
+    if (this.iconSize) {
+      this._parent.updateAttribute(this.key, 'iconSize', this.iconSize);
+    }
+
+    if (this.effect) {
+      this._parent.updateAttribute(this.key, 'effect', this.effect);
+    }
+  };
+}
+
+function Custom() {
+  if (typeof document !== 'undefined' && !customElements.get('r-tab')) {
     customElements.define('r-tab', TabPane);
     return TabPane;
+  } else {
+    return createCustomError('document is undefined or r-tab already exists');
   }
 }
 
-export default CustomElement();
+export default Custom();
