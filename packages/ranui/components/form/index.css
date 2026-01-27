@@ -1,0 +1,17 @@
+/**
+ * Form Component Styles
+ */
+
+:host {
+  display: block;
+  box-sizing: border-box;
+}
+
+.r-form {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+::slotted(*) {
+  box-sizing: border-box;
+}

@@ -1,0 +1,101 @@
+/**
+ * Dropdown Item Component Styles
+ */
+
+/* ========== CSS Custom Properties ========== */
+
+:host {
+  --dropdown-item-padding: 5px 12px;
+  --dropdown-item-font-size: 14px;
+  --dropdown-item-color: rgba(0, 0, 0, 0.88);
+  --dropdown-item-hover-bg: rgba(0, 0, 0, 0.04);
+  --dropdown-item-active-bg: #e6f7ff;
+  --dropdown-item-active-color: #1890ff;
+  --dropdown-item-border-radius: 4px;
+  --dropdown-item-transition: background 0.3s ease;
+
+  display: block;
+}
+
+/* ========== Container ========== */
+
+.ranui-dropdown-option-item {
+  position: relative;
+  display: block;
+  padding: var(--dropdown-item-padding);
+  color: var(--dropdown-item-color);
+  font-weight: normal;
+  font-size: var(--dropdown-item-font-size);
+  line-height: 1.5714285714285714;
+  border-radius: var(--dropdown-item-border-radius);
+  cursor: pointer;
+  transition: var(--dropdown-item-transition);
+  user-select: none;
+}
+
+.ranui-dropdown-option-item:hover {
+  background-color: var(--dropdown-item-hover-bg);
+}
+
+.ranui-dropdown-option-item:focus-visible {
+  outline: 2px solid #1890ff;
+  outline-offset: -2px;
+}
+
+/* ========== Content ========== */
+
+.ranui-dropdown-option-item-content {
+  text-align: left;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+  list-style: none;
+}
+
+/* ========== Active State ========== */
+
+.ranui-dropdown-option-active {
+  background-color: var(--dropdown-item-active-bg);
+  font-weight: 600;
+  color: var(--dropdown-item-active-color);
+}
+
+.ranui-dropdown-option-active:hover {
+  background-color: var(--dropdown-item-active-bg);
+}
+
+/* ========== Disabled State ========== */
+
+:host([disabled]) .ranui-dropdown-option-item {
+  cursor: not-allowed;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* ========== Accessibility ========== */
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .ranui-dropdown-option-item:focus-visible {
+    outline-width: 3px;
+  }
+}
+
+/* ========== Dark Mode ========== */
+
+@media (prefers-color-scheme: dark) {
+  :host {
+    --dropdown-item-color: rgba(255, 255, 255, 0.85);
+    --dropdown-item-hover-bg: rgba(255, 255, 255, 0.08);
+    --dropdown-item-active-bg: #111b26;
+    --dropdown-item-active-color: #177ddc;
+  }
+}

@@ -1,74 +1,156 @@
-import type { Chain } from 'ranuts/utils';
-import { addClassToElement, create, removeClassToElement } from 'ranuts/utils';
-import less from './index.less?inline';
-import { HTMLElementSSR, createCustomError, isDisabled } from '@/utils/index';
+import { HTMLElementSSR, createCustomError } from '@/utils/index';
 
+/**
+ * Modern Dropdown Item Component
+ *
+ * @element r-dropdown-item
+ *
+ * @slot - Item content
+ *
+ * @csspart item - The item container
+ * @csspart content - The item content
+ *
+ * @cssprop --dropdown-item-padding - Item padding
+ * @cssprop --dropdown-item-font-size - Item font size
+ * @cssprop --dropdown-item-color - Item text color
+ * @cssprop --dropdown-item-hover-bg - Hover background color
+ * @cssprop --dropdown-item-active-bg - Active background color
+ * @cssprop --dropdown-item-active-color - Active text color
+ */
 export class DropdownItem extends (HTMLElementSSR()!) {
-  ionDropdownItem: Chain;
-  _slot: Chain;
-  _shadowDom: ShadowRoot;
-  ionDropdownItemContent: Chain;
+  private _container!: HTMLDivElement;
+  private _content!: HTMLDivElement;
+  private _slot!: HTMLSlotElement;
+  private _shadowRoot!: ShadowRoot;
+
   static get observedAttributes(): string[] {
-    return ['active', 'value', 'title'];
+    return ['active', 'value', 'title', 'disabled'];
   }
+
   constructor() {
     super();
-    this._slot = create('slot').setAttribute('class', 'slot');
-    this.ionDropdownItemContent = create('div')
-      .setAttribute('class', 'ranui-dropdown-option-item-content')
-      .setAttribute('part', 'ranui-dropdown-option-item-content')
-      .addChild(this._slot);
-    this.ionDropdownItem = create('div')
-      .setAttribute('class', 'ranui-dropdown-option-item')
-      .setAttribute('part', 'ranui-dropdown-option-item')
-      .addChild([this.ionDropdownItemContent]);
-    const shadowRoot = this.attachShadow({ mode: 'closed' });
-    this._shadowDom = shadowRoot;
-    const style = create('style').setTextContent(less);
-    shadowRoot.appendChild(style.element);
-    shadowRoot.appendChild(this.ionDropdownItem.element);
+
+    this._shadowRoot = this.attachShadow({ mode: 'open' });
+    this.render();
   }
+
+  // ========== Properties ==========
+
   get value(): string {
     return this.getAttribute('value') || '';
   }
   set value(value: string) {
-    if (!isDisabled(this) && value) {
+    if (value) {
       this.setAttribute('value', value);
     } else {
       this.removeAttribute('value');
     }
   }
-  get active(): string {
-    return this.getAttribute('active') || '';
+
+  get active(): boolean {
+    return this.hasAttribute('active');
   }
-  set active(value: string) {
+  set active(value: boolean) {
     if (value) {
-      this.setAttribute('active', value);
+      this.setAttribute('active', '');
     } else {
       this.removeAttribute('active');
     }
   }
-  get title(): string {
-    return this.getAttribute('title') || '';
+
+  get disabled(): boolean {
+    return this.hasAttribute('disabled');
   }
-  set title(value: string) {
+  set disabled(value: boolean) {
     if (value) {
-      this.setAttribute('title', value);
+      this.setAttribute('disabled', '');
     } else {
-      this.removeAttribute('title');
+      this.removeAttribute('disabled');
     }
   }
+
+  // ========== Render ==========
+
+  private render(): void {
+    const style = document.createElement('style');
+    style.textContent = `@import url("${new URL('./index.css', import.meta.url).href}");`;
+
+    this._slot = document.createElement('slot');
+
+    this._content = document.createElement('div');
+    this._content.className = 'ranui-dropdown-option-item-content';
+    this._content.setAttribute('part', 'content');
+    this._content.appendChild(this._slot);
+
+    this._container = document.createElement('div');
+    this._container.className = 'ranui-dropdown-option-item';
+    this._container.setAttribute('part', 'item');
+    this._container.setAttribute('role', 'option');
+    this._container.setAttribute('tabindex', '-1');
+    this._container.appendChild(this._content);
+
+    this._shadowRoot.appendChild(style);
+    this._shadowRoot.appendChild(this._container);
+  }
+
+  // ========== Lifecycle ==========
+
   connectedCallback(): void {
-    if (this.active) {
-      addClassToElement(this.ionDropdownItem.element, 'ranui-dropdown-option-active');
+    this.updateActiveState();
+    this.updateDisabledState();
+  }
+
+  attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
+    if (oldValue === newValue) return;
+
+    switch (name) {
+      case 'active':
+        this.updateActiveState();
+        break;
+
+      case 'disabled':
+        this.updateDisabledState();
+        break;
+
+      case 'title':
+        if (newValue) {
+          this._container.setAttribute('title', newValue);
+        } else {
+          this._container.removeAttribute('title');
+        }
+        break;
     }
   }
-  attributeChangedCallback(name: string, _: string, newValue: string): void {
-    if (name === 'active' && newValue) {
-      addClassToElement(this.ionDropdownItem.element, 'ranui-dropdown-option-active');
+
+  // ========== Methods ==========
+
+  private updateActiveState(): void {
+    if (this.active) {
+      this._container.classList.add('ranui-dropdown-option-active');
+      this._container.setAttribute('aria-selected', 'true');
     } else {
-      removeClassToElement(this.ionDropdownItem.element, 'ranui-dropdown-option-active');
+      this._container.classList.remove('ranui-dropdown-option-active');
+      this._container.setAttribute('aria-selected', 'false');
     }
+  }
+
+  private updateDisabledState(): void {
+    if (this.disabled) {
+      this._container.setAttribute('aria-disabled', 'true');
+      this._container.setAttribute('tabindex', '-1');
+    } else {
+      this._container.removeAttribute('aria-disabled');
+      this._container.setAttribute('tabindex', '0');
+    }
+  }
+
+  // ========== Public Methods ==========
+
+  /**
+   * Focus this item
+   */
+  public focus(): void {
+    this._container.focus();
   }
 }
 
@@ -77,7 +159,7 @@ function Custom() {
     customElements.define('r-dropdown-item', DropdownItem);
     return DropdownItem;
   } else {
-    return createCustomError('document is undefined or r-dropdown-item  is exist');
+    return createCustomError('document is undefined or r-dropdown-item already exists');
   }
 }
 

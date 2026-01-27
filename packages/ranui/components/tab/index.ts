@@ -1,4 +1,4 @@
-import type { TabType, TabAlign, TabChangeEventDetail } from './types';
+import type { TabAlign, TabChangeEventDetail, TabType } from './types';
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
 
 /**
@@ -224,13 +224,13 @@ export class Tabs extends (HTMLElementSSR()!) {
 
       case 'Enter':
       case ' ':
-        keyboardEvent.preventDefault();
+        { keyboardEvent.preventDefault();
         const tabHeader = event.currentTarget as HTMLElement;
         const tabKey = tabHeader.getAttribute('r-key');
         if (tabKey) {
           this.selectTab(tabKey);
         }
-        break;
+        break; }
     }
   };
 

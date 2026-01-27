@@ -1,0 +1,235 @@
+/**
+ * Select Component Styles
+ */
+
+/* ========== CSS Custom Properties ========== */
+
+:host {
+  --select-width: 120px;
+  --select-height: 32px;
+  --select-font-size: 14px;
+  --select-border-color: #d9d9d9;
+  --select-border-radius: 6px;
+  --select-focus-color: #1890ff;
+  --select-hover-border-color: #1890ff;
+  --select-disabled-opacity: 0.6;
+  --select-transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+
+  position: relative;
+  display: inline-block;
+  width: var(--select-width);
+  height: var(--select-height);
+  cursor: pointer;
+  outline: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:host(:focus),
+:host(:active) {
+  outline: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ========== Disabled State ========== */
+
+:host([disabled]) {
+  cursor: not-allowed;
+  pointer-events: all;
+  opacity: var(--select-disabled-opacity);
+}
+
+:host([disabled]) .selection {
+  cursor: not-allowed;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+/* ========== Hidden Options ========== */
+
+::slotted(r-option) {
+  display: none;
+}
+
+/* ========== Select Container ========== */
+
+.ran-select {
+  width: 100%;
+  height: 100%;
+  font-size: var(--select-font-size);
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  color: rgba(0, 0, 0, 0.88);
+  line-height: 1.5714285714285714;
+  list-style: none;
+  position: relative;
+  display: inline-block;
+}
+
+/* ========== Selection Box ========== */
+
+.selection {
+  position: relative;
+  background-color: #ffffff;
+  border: 1px solid var(--select-border-color);
+  border-radius: var(--select-border-radius);
+  transition: var(--select-transition);
+  width: 100%;
+  height: 100%;
+  padding: 0 11px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+}
+
+:host(:not([disabled]):hover) .selection {
+  border-color: var(--select-hover-border-color);
+}
+
+:host(:not([disabled]):focus) .selection {
+  border-color: var(--select-focus-color);
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+/* ========== Selection Text ========== */
+
+.selection-item {
+  position: absolute;
+  top: 0;
+  left: 12px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  user-select: none;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  max-width: calc(100% - 40px);
+}
+
+/* ========== Search Input ========== */
+
+.selection-search {
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: calc(100% - 40px);
+  margin: 0;
+  padding: 0 11px;
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+:host([showSearch]:not([disabled])) .selection-search {
+  display: block;
+  cursor: text;
+  pointer-events: auto;
+}
+
+:host([showSearch]:not([disabled]):focus) .selection-search {
+  opacity: 1;
+}
+
+:host([showSearch]:not([disabled]):focus) .selection-item {
+  opacity: 0;
+}
+
+.selection-search::-webkit-search-cancel-button {
+  display: none;
+  -webkit-appearance: none;
+}
+
+.selection-search::part(ran-input) {
+  border: none;
+  padding: 0;
+  height: 100%;
+  outline: none;
+}
+
+.selection-search::part(ran-input):active,
+.selection-search::part(ran-input):focus {
+  border: none;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+/* ========== Icon ========== */
+
+.icon {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  height: 12px;
+  margin-top: -6px;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+  transition: transform 0.2s;
+}
+
+:host([open]) .icon {
+  transform: rotate(180deg);
+}
+
+/* ========== Text Type (No Border) ========== */
+
+:host([type='text']) .selection {
+  border: none;
+  padding-left: 0;
+}
+
+:host([type='text']) .icon {
+  display: none;
+}
+
+/* ========== Focus Visible ========== */
+
+:host(:focus-visible) .selection {
+  outline: 2px solid var(--select-focus-color);
+  outline-offset: 2px;
+}
+
+/* ========== Accessibility ========== */
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (prefers-contrast: high) {
+  :host(:focus-visible) .selection {
+    outline-width: 3px;
+  }
+}
+
+/* ========== Dark Mode ========== */
+
+@media (prefers-color-scheme: dark) {
+  :host {
+    --select-border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .selection {
+    background-color: #141414;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  :host([disabled]) .selection {
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+}
