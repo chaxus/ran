@@ -363,7 +363,7 @@ export class Modal extends (HTMLElementSSR()!) {
       const slot = this._body.querySelector('slot');
       if (slot) {
         const nodes = slot.assignedNodes();
-        nodes.forEach((node) => node.remove());
+        nodes.forEach((node) => node.parentNode?.removeChild(node));
       }
     }
   }

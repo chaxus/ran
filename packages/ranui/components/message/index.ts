@@ -261,7 +261,7 @@ class MessageElement extends (HTMLElementSSR()!) {
  */
 class MessageManager {
   private container!: HTMLDivElement;
-  private config: Required<MessageGlobalConfig> = {
+  private _config: Required<MessageGlobalConfig> = {
     duration: DEFAULT_DURATION,
     position: 'top',
     maxCount: 0,
@@ -278,7 +278,7 @@ class MessageManager {
       this.container.className = 'ranui-message-container';
       this.container.style.cssText = `
         position: fixed;
-        top: ${this.config.offset}px;
+        top: ${this._config.offset}px;
         left: 0;
         width: 100%;
         pointer-events: none;
@@ -309,9 +309,9 @@ class MessageManager {
     }
 
     // Check max count
-    if (this.config.maxCount > 0) {
+    if (this._config.maxCount > 0) {
       const messages = this.container.querySelectorAll('.message');
-      if (messages.length >= this.config.maxCount) {
+      if (messages.length >= this._config.maxCount) {
         (messages[0] as MessageElement).close();
       }
     }
@@ -325,7 +325,7 @@ class MessageManager {
     });
 
     // Start auto-close timer
-    const duration = options.duration ?? this.config.duration;
+    const duration = options.duration ?? this._config.duration;
     message.startTimer(duration);
 
     // Handle close event
@@ -388,7 +388,7 @@ class MessageManager {
   }
 
   public config(options: MessageGlobalConfig): void {
-    this.config = { ...this.config, ...options };
+    this._config = { ...this._config, ...options };
 
     if (options.offset !== undefined) {
       this.container.style.top = `${options.offset}px`;

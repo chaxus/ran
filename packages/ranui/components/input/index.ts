@@ -622,8 +622,9 @@ export class Input extends (HTMLElementSSR()!) {
     );
   };
 
-  private handleKeyDown = (event: KeyboardEvent): void => {
-    if (event.key === 'Enter' && this.type !== 'textarea') {
+  private handleKeyDown = (event: Event): void => {
+    const keyboardEvent = event as KeyboardEvent;
+    if (keyboardEvent.key === 'Enter' && this.type !== 'textarea') {
       this.dispatchEvent(
         new CustomEvent<InputInputEventDetail>('input-enter', {
           detail: { value: this.value },
