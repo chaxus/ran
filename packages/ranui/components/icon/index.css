@@ -1,0 +1,118 @@
+/**
+ * Icon Component Styles
+ * Modern, clean styling with CSS variables for maximum flexibility
+ */
+
+/* ========== CSS Custom Properties ========== */
+:host {
+  /* Layout */
+  --icon-display: inline-flex;
+  --icon-align: center;
+  --icon-justify: center;
+
+  /* Size & Spacing */
+  --icon-size: 1em;
+  --icon-margin: 0;
+
+  /* Colors */
+  --icon-color: currentColor;
+
+  /* Animation */
+  --icon-spin-duration: 1.4s;
+  --icon-spin-timing: linear;
+}
+
+/* ========== Host Styles ========== */
+:host {
+  display: var(--icon-display);
+  align-items: var(--icon-align);
+  justify-content: var(--icon-justify);
+  box-sizing: border-box;
+  margin: var(--icon-margin);
+  vertical-align: middle;
+}
+
+/* Spin Animation */
+:host([spin]) {
+  animation: icon-spin var(--icon-spin-duration) var(--icon-spin-timing) infinite;
+}
+
+/* ========== Container Styles ========== */
+.icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1em;
+  height: 1em;
+  color: var(--icon-color);
+  font-size: var(--icon-size);
+  line-height: 1;
+}
+
+/* ========== SVG Styles ========== */
+.icon-container svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+  stroke: currentColor;
+  stroke-width: 0;
+}
+
+/* Prevent SVG from shrinking */
+.icon-container svg {
+  flex-shrink: 0;
+}
+
+/* ========== Animations ========== */
+@keyframes icon-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ========== Accessibility ========== */
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  :host([spin]) {
+    animation: none;
+  }
+
+  /* Provide alternative indication for spinning state */
+  :host([spin])::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.5;
+  }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .icon-container svg {
+    stroke-width: 1;
+  }
+}
+
+/* ========== Print Styles ========== */
+@media print {
+  :host([spin]) {
+    animation: none;
+  }
+
+  /* Ensure icons are visible in print */
+  .icon-container {
+    color: black;
+  }
+}
+
+/* ========== Utility Classes (via CSS Parts) ========== */
+/* Users can target ::part(base) for custom styling */

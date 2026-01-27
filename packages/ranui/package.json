@@ -54,11 +54,6 @@
       "import": "./dist/index.js",
       "require": "./dist/umd/index.umd.cjs"
     },
-    "./shadowless": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/shadowless.js",
-      "require": "./dist/umd/shadowless/shadowless.umd.cjs"
-    },
     "./button": {
       "types": "./dist/index.d.ts",
       "import": "./dist/button.js",

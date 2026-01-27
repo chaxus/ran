@@ -1,5 +1,5 @@
 {
-  "include": ["components", "plugins", "utils", "test", "shadowless", "**/*.ts", "typing.d.ts"],
+  "include": ["components", "plugins", "utils", "test", "theme", "**/*.ts", "typing.d.ts"],
   "exclude": ["node_modules/**", "dist/**", "assets", "public"],
   "compilerOptions": {
     "module": "ESNext",
@@ -17,15 +17,14 @@
     "noImplicitAny": true,
     "useUnknownInCatchVariables": false,
     "inlineSourceMap": true,
-    "baseUrl": ".",
     "experimentalDecorators": true,
     "paths": {
-      "@/assets/*": ["assets/*"],
-      "@/public/*": ["public/*"],
-      "@/components/*": ["components/*"],
-      "@/shadowless/*": ["shadowless/*"],
-      "@/plugins/*": ["plugins/*"],
-      "@/utils/*": ["utils/*"]
+      "@/assets/*": ["./assets/*"],
+      "@/public/*": ["./public/*"],
+      "@/components/*": ["./components/*"],
+      "@/theme/*": ["./theme/*"],
+      "@/plugins/*": ["./plugins/*"],
+      "@/utils/*": ["./utils/*"]
     }
   }
 }

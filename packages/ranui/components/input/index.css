@@ -1,0 +1,473 @@
+/**
+ * Input Component Styles
+ * Modern, accessible input with floating labels and variants
+ */
+
+/* ========== CSS Custom Properties ========== */
+:host {
+  /* Layout */
+  --input-display: inline-block;
+  --input-width: 280px;
+
+  /* Size - Small */
+  --input-sm-height: 32px;
+  --input-sm-padding: 0 12px;
+  --input-sm-font-size: 13px;
+  --input-sm-icon-size: 14px;
+
+  /* Size - Medium */
+  --input-md-height: 40px;
+  --input-md-padding: 0 16px;
+  --input-md-font-size: 14px;
+  --input-md-icon-size: 16px;
+
+  /* Size - Large */
+  --input-lg-height: 48px;
+  --input-lg-padding: 0 20px;
+  --input-lg-font-size: 16px;
+  --input-lg-icon-size: 18px;
+
+  /* Colors */
+  --input-color-text: #1f2937;
+  --input-color-placeholder: #9ca3af;
+  --input-color-border: #d1d5db;
+  --input-color-border-hover: #9ca3af;
+  --input-color-border-focus: #3b82f6;
+  --input-color-background: #ffffff;
+  --input-color-background-filled: #f9fafb;
+  --input-color-background-disabled: #f3f4f6;
+
+  /* Status Colors */
+  --input-color-error: #ef4444;
+  --input-color-warning: #f59e0b;
+  --input-color-success: #10b981;
+
+  /* Border */
+  --input-border-width: 1px;
+  --input-border-radius: 6px;
+
+  /* Shadow */
+  --input-shadow-focus: 0 0 0 3px rgba(59, 130, 246, 0.1);
+
+  /* Transition */
+  --input-transition-duration: 150ms;
+  --input-transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Label */
+  --input-label-font-size: 14px;
+  --input-label-font-size-floating: 12px;
+  --input-label-top-floating: -8px;
+  --input-label-padding: 0 4px;
+
+  /* Icon */
+  --input-icon-margin: 8px;
+
+  /* Clear Button */
+  --input-clear-size: 20px;
+  --input-clear-color: #6b7280;
+  --input-clear-hover-color: #374151;
+
+  /* Count */
+  --input-count-font-size: 12px;
+  --input-count-color: #9ca3af;
+  --input-count-margin-top: 4px;
+
+  /* Error */
+  --input-error-font-size: 12px;
+  --input-error-margin-top: 4px;
+
+  /* Textarea */
+  --input-textarea-min-height: 80px;
+  --input-textarea-padding: 12px 16px;
+}
+
+/* ========== Host Styles ========== */
+:host {
+  display: var(--input-display);
+  box-sizing: border-box;
+}
+
+:host([full-width]) {
+  display: block;
+  width: 100%;
+}
+
+/* ========== Container ========== */
+.input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: var(--input-width);
+  background: var(--input-color-background);
+  border: var(--input-border-width) solid var(--input-color-border);
+  border-radius: var(--input-border-radius);
+  transition: all var(--input-transition-duration) var(--input-transition-timing);
+  box-sizing: border-box;
+}
+
+.input-container:hover {
+  border-color: var(--input-color-border-hover);
+}
+
+.input-container:focus-within {
+  border-color: var(--input-color-border-focus);
+  box-shadow: var(--input-shadow-focus);
+  outline: none;
+}
+
+/* Full Width */
+.input-full-width {
+  width: 100%;
+}
+
+/* ========== Size Variants ========== */
+.input-sm {
+  height: var(--input-sm-height);
+}
+
+.input-sm .input-control {
+  padding: var(--input-sm-padding);
+  font-size: var(--input-sm-font-size);
+}
+
+.input-sm r-icon {
+  font-size: var(--input-sm-icon-size);
+}
+
+.input-md {
+  height: var(--input-md-height);
+}
+
+.input-md .input-control {
+  padding: var(--input-md-padding);
+  font-size: var(--input-md-font-size);
+}
+
+.input-md r-icon {
+  font-size: var(--input-md-icon-size);
+}
+
+.input-lg {
+  height: var(--input-lg-height);
+}
+
+.input-lg .input-control {
+  padding: var(--input-lg-padding);
+  font-size: var(--input-lg-font-size);
+}
+
+.input-lg r-icon {
+  font-size: var(--input-lg-icon-size);
+}
+
+/* ========== Style Variants ========== */
+/* Outlined (default) - already defined above */
+
+.input-filled {
+  background: var(--input-color-background-filled);
+  border-color: transparent;
+}
+
+.input-filled:hover {
+  background: #f3f4f6;
+}
+
+.input-filled:focus-within {
+  background: var(--input-color-background);
+  border-color: var(--input-color-border-focus);
+}
+
+.input-borderless {
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.input-borderless:hover {
+  border-color: transparent;
+  background: var(--input-color-background-filled);
+}
+
+.input-borderless:focus-within {
+  border-color: transparent;
+  background: var(--input-color-background-filled);
+  box-shadow: none;
+}
+
+/* ========== Status Variants ========== */
+.input-error {
+  border-color: var(--input-color-error);
+}
+
+.input-error:hover {
+  border-color: var(--input-color-error);
+}
+
+.input-error:focus-within {
+  border-color: var(--input-color-error);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.input-warning {
+  border-color: var(--input-color-warning);
+}
+
+.input-warning:hover {
+  border-color: var(--input-color-warning);
+}
+
+.input-warning:focus-within {
+  border-color: var(--input-color-warning);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+}
+
+.input-success {
+  border-color: var(--input-color-success);
+}
+
+.input-success:hover {
+  border-color: var(--input-color-success);
+}
+
+.input-success:focus-within {
+  border-color: var(--input-color-success);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+/* ========== States ========== */
+.input-disabled {
+  background: var(--input-color-background-disabled);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.input-disabled:hover {
+  border-color: var(--input-color-border);
+}
+
+.input-disabled .input-control {
+  cursor: not-allowed;
+}
+
+.input-readonly {
+  background: var(--input-color-background-filled);
+}
+
+/* ========== Input Control ========== */
+.input-control {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: var(--input-md-padding);
+  margin: 0;
+  font-family: inherit;
+  font-size: var(--input-md-font-size);
+  color: var(--input-color-text);
+  background: transparent;
+  border: none;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.input-control::placeholder {
+  color: var(--input-color-placeholder);
+}
+
+/* Textarea specific */
+.input-control[part="input"]:is(textarea) {
+  min-height: var(--input-textarea-min-height);
+  padding: var(--input-textarea-padding);
+  resize: vertical;
+  line-height: 1.5;
+}
+
+/* Remove number spinners */
+.input-control[type="number"]::-webkit-inner-spin-button,
+.input-control[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.input-control[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* ========== Prefix & Suffix ========== */
+.input-prefix,
+.input-suffix {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: #6b7280;
+}
+
+.input-prefix:not(:empty) {
+  margin-left: var(--input-icon-margin);
+  margin-right: calc(var(--input-icon-margin) / 2);
+}
+
+.input-suffix:not(:empty) {
+  margin-left: calc(var(--input-icon-margin) / 2);
+  margin-right: var(--input-icon-margin);
+}
+
+.input-prefix:empty,
+.input-suffix:empty {
+  display: none;
+}
+
+/* ========== Floating Label ========== */
+.input-label {
+  position: absolute;
+  left: calc(var(--input-md-padding) / 2 + var(--input-border-width));
+  top: 50%;
+  transform: translateY(-50%);
+  padding: var(--input-label-padding);
+  font-size: var(--input-label-font-size);
+  color: var(--input-color-placeholder);
+  background: var(--input-color-background);
+  pointer-events: none;
+  transition: all var(--input-transition-duration) var(--input-transition-timing);
+  white-space: nowrap;
+  z-index: 1;
+}
+
+.input-container:focus-within .input-label,
+.input-has-value .input-label {
+  top: var(--input-label-top-floating);
+  font-size: var(--input-label-font-size-floating);
+  color: var(--input-color-border-focus);
+}
+
+.input-error .input-label {
+  color: var(--input-color-error);
+}
+
+.input-warning .input-label {
+  color: var(--input-color-warning);
+}
+
+.input-success .input-label {
+  color: var(--input-color-success);
+}
+
+/* Adjust label for filled variant */
+.input-filled .input-label {
+  background: transparent;
+}
+
+/* ========== Clear Button ========== */
+.input-clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--input-clear-size);
+  height: var(--input-clear-size);
+  margin: 0;
+  padding: 0;
+  color: var(--input-clear-color);
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all var(--input-transition-duration) var(--input-transition-timing);
+  flex-shrink: 0;
+}
+
+.input-clear:hover {
+  color: var(--input-clear-hover-color);
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.input-clear:active {
+  transform: scale(0.95);
+}
+
+.input-clear:focus {
+  outline: 2px solid var(--input-color-border-focus);
+  outline-offset: 2px;
+}
+
+/* ========== Character Count ========== */
+.input-count {
+  position: absolute;
+  right: calc(var(--input-md-padding) / 2);
+  bottom: calc(-1 * var(--input-count-margin-top) - var(--input-count-font-size) - 4px);
+  font-size: var(--input-count-font-size);
+  color: var(--input-count-color);
+}
+
+/* ========== Error Message ========== */
+.input-error-message {
+  position: absolute;
+  left: 0;
+  bottom: calc(-1 * var(--input-error-margin-top) - var(--input-error-font-size) - 4px);
+  font-size: var(--input-error-font-size);
+  color: var(--input-color-error);
+  line-height: 1.4;
+}
+
+/* ========== Accessibility ========== */
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .input-container,
+  .input-label,
+  .input-clear {
+    transition: none;
+  }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .input-container {
+    border-width: 2px;
+  }
+
+  .input-container:focus-within {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+}
+
+/* Focus Visible */
+.input-clear:focus-visible {
+  outline: 2px solid var(--input-color-border-focus);
+  outline-offset: 2px;
+}
+
+/* ========== Dark Mode Support ========== */
+@media (prefers-color-scheme: dark) {
+  :host {
+    --input-color-text: #f9fafb;
+    --input-color-placeholder: #6b7280;
+    --input-color-border: #4b5563;
+    --input-color-border-hover: #6b7280;
+    --input-color-background: #1f2937;
+    --input-color-background-filled: #374151;
+    --input-color-background-disabled: #374151;
+  }
+
+  .input-filled:hover {
+    background: #4b5563;
+  }
+
+  .input-borderless:hover,
+  .input-borderless:focus-within {
+    background: #374151;
+  }
+
+  .input-clear:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* ========== Print Styles ========== */
+@media print {
+  .input-clear {
+    display: none;
+  }
+
+  .input-container {
+    border-color: #000;
+    box-shadow: none;
+  }
+}

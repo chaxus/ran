@@ -39,17 +39,24 @@ export const clearBr = (str = ''): string => {
 
 /**
  * @description: 传入字符串和指定的格式，将字符串转成 xml
- * @param {string} xmlStr
- * @param {DOMParserSupportedType} format
- * @return {Document}
+ * @param {string} xmlStr - XML string to parse
+ * @param {DOMParserSupportedType} format - MIME type for parsing
+ * @return {Element | undefined} Returns Element (base type for SVGElement and HTMLElement)
+ * @template T - Element type to return (SVGElement, HTMLElement, etc.)
  */
-export const str2Xml = (xmlStr: string, format: DOMParserSupportedType = 'text/xml'): HTMLElement | undefined => {
-  if (window.DOMParser) return new window.DOMParser().parseFromString(xmlStr, format).documentElement;
+export const str2Xml = <T extends Element = Element>(
+  xmlStr: string,
+  format: DOMParserSupportedType = 'text/xml',
+): T | undefined => {
+  if (window.DOMParser) {
+    const element = new window.DOMParser().parseFromString(xmlStr, format).documentElement;
+    return element as unknown as T | undefined;
+  }
   if (typeof window.ActiveXObject !== 'undefined') {
     const xmlDoc = new window.ActiveXObject('Microsoft.XMLDOM');
     xmlDoc.async = 'false';
     xmlDoc.loadXML(xmlStr);
-    return xmlDoc;
+    return xmlDoc as unknown as T | undefined;
   }
   return undefined;
 };

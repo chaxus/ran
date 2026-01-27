@@ -1,0 +1,469 @@
+/**
+ * Button Component Styles with Variants System
+ * Based on design tokens and CSS Parts for maximum flexibility
+ */
+
+/* ========== Host Styles ========== */
+:host {
+  /* Design tokens */
+  --color-primary: #1890ff;
+  --color-primary-hover: #40a9ff;
+  --color-success: #52c41a;
+  --color-success-hover: #73d13d;
+  --color-warning: #faad14;
+  --color-warning-hover: #ffc53d;
+  --color-danger: #ff4d4f;
+  --color-danger-hover: #ff7875;
+  --color-neutral: #d9d9d9;
+  --color-neutral-hover: #bfbfbf;
+
+  /* Base variables */
+  --btn-transition: background-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1),
+                    border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1),
+                    color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1),
+                    opacity 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+
+  display: inline-flex;
+  position: relative;
+  box-sizing: border-box;
+}
+
+:host([full-width]) {
+  display: flex;
+  width: 100%;
+}
+
+/* ========== Button Base Styles ========== */
+.btn {
+  all: unset;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-weight: 500;
+  line-height: 1.5;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
+  transition: var(--btn-transition);
+  position: relative;
+  overflow: hidden;
+
+  /* Default appearance */
+  border: 1px solid transparent;
+  background: var(--btn-bg, transparent);
+  color: var(--btn-color, rgba(0, 0, 0, 0.88));
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+:host([full-width]) .btn {
+  width: 100%;
+}
+
+/* ========== Size Variants ========== */
+.btn-sm {
+  height: 24px;
+  padding: 0 8px;
+  font-size: 12px;
+  border-radius: 2px;
+}
+
+.btn-md {
+  height: 32px;
+  padding: 4px 15px;
+  font-size: 14px;
+  border-radius: 4px;
+}
+
+.btn-lg {
+  height: 40px;
+  padding: 6px 20px;
+  font-size: 16px;
+  border-radius: 6px;
+}
+
+/* ========== Radius Variants ========== */
+.btn-radius-none { border-radius: 0; }
+.btn-radius-sm { border-radius: 2px; }
+.btn-radius-base { border-radius: 4px; }
+.btn-radius-md { border-radius: 6px; }
+.btn-radius-lg { border-radius: 8px; }
+.btn-radius-xl { border-radius: 12px; }
+.btn-radius-full { border-radius: 9999px; }
+
+/* ========== Solid Variant ========== */
+.btn-solid.btn-primary {
+  --btn-bg: var(--color-primary);
+  --btn-color: #fff;
+  border-color: var(--color-primary);
+}
+.btn-solid.btn-primary:hover {
+  --btn-bg: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+}
+
+.btn-solid.btn-success {
+  --btn-bg: var(--color-success);
+  --btn-color: #fff;
+  border-color: var(--color-success);
+}
+.btn-solid.btn-success:hover {
+  --btn-bg: var(--color-success-hover);
+  border-color: var(--color-success-hover);
+}
+
+.btn-solid.btn-warning {
+  --btn-bg: var(--color-warning);
+  --btn-color: #fff;
+  border-color: var(--color-warning);
+}
+.btn-solid.btn-warning:hover {
+  --btn-bg: var(--color-warning-hover);
+  border-color: var(--color-warning-hover);
+}
+
+.btn-solid.btn-danger {
+  --btn-bg: var(--color-danger);
+  --btn-color: #fff;
+  border-color: var(--color-danger);
+}
+.btn-solid.btn-danger:hover {
+  --btn-bg: var(--color-danger-hover);
+  border-color: var(--color-danger-hover);
+}
+
+.btn-solid.btn-neutral {
+  --btn-bg: #fff;
+  --btn-color: rgba(0, 0, 0, 0.88);
+  border-color: var(--color-neutral);
+}
+.btn-solid.btn-neutral:hover {
+  --btn-color: var(--color-primary);
+  border-color: var(--color-primary-hover);
+}
+
+/* ========== Outline Variant ========== */
+.btn-outline.btn-primary {
+  --btn-bg: transparent;
+  --btn-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+.btn-outline.btn-primary:hover {
+  --btn-bg: rgba(24, 144, 255, 0.1);
+  --btn-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+}
+
+.btn-outline.btn-success {
+  --btn-bg: transparent;
+  --btn-color: var(--color-success);
+  border-color: var(--color-success);
+}
+.btn-outline.btn-success:hover {
+  --btn-bg: rgba(82, 196, 26, 0.1);
+  --btn-color: var(--color-success-hover);
+  border-color: var(--color-success-hover);
+}
+
+.btn-outline.btn-warning {
+  --btn-bg: transparent;
+  --btn-color: var(--color-warning);
+  border-color: var(--color-warning);
+}
+.btn-outline.btn-warning:hover {
+  --btn-bg: rgba(250, 173, 20, 0.1);
+  --btn-color: var(--color-warning-hover);
+  border-color: var(--color-warning-hover);
+}
+
+.btn-outline.btn-danger {
+  --btn-bg: transparent;
+  --btn-color: var(--color-danger);
+  border-color: var(--color-danger);
+}
+.btn-outline.btn-danger:hover {
+  --btn-bg: rgba(245, 34, 45, 0.1);
+  --btn-color: var(--color-danger-hover);
+  border-color: var(--color-danger-hover);
+}
+
+.btn-outline.btn-neutral {
+  --btn-bg: transparent;
+  --btn-color: rgba(0, 0, 0, 0.88);
+  border-color: var(--color-neutral);
+}
+.btn-outline.btn-neutral:hover {
+  --btn-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+/* ========== Ghost Variant ========== */
+.btn-ghost {
+  border-color: transparent;
+}
+
+.btn-ghost.btn-primary {
+  --btn-bg: transparent;
+  --btn-color: var(--color-primary);
+}
+.btn-ghost.btn-primary:hover {
+  --btn-bg: rgba(24, 144, 255, 0.1);
+}
+
+.btn-ghost.btn-success {
+  --btn-bg: transparent;
+  --btn-color: var(--color-success);
+}
+.btn-ghost.btn-success:hover {
+  --btn-bg: rgba(82, 196, 26, 0.1);
+}
+
+.btn-ghost.btn-warning {
+  --btn-bg: transparent;
+  --btn-color: var(--color-warning);
+}
+.btn-ghost.btn-warning:hover {
+  --btn-bg: rgba(250, 173, 20, 0.1);
+}
+
+.btn-ghost.btn-danger {
+  --btn-bg: transparent;
+  --btn-color: var(--color-danger);
+}
+.btn-ghost.btn-danger:hover {
+  --btn-bg: rgba(245, 34, 45, 0.1);
+}
+
+.btn-ghost.btn-neutral {
+  --btn-bg: transparent;
+  --btn-color: rgba(0, 0, 0, 0.65);
+}
+.btn-ghost.btn-neutral:hover {
+  --btn-bg: rgba(0, 0, 0, 0.06);
+}
+
+/* ========== Link Variant ========== */
+.btn-link {
+  border-color: transparent;
+  padding: 0;
+  height: auto;
+}
+
+.btn-link.btn-primary {
+  --btn-bg: transparent;
+  --btn-color: var(--color-primary);
+}
+.btn-link.btn-primary:hover {
+  --btn-color: var(--color-primary-hover);
+}
+
+.btn-link.btn-success {
+  --btn-bg: transparent;
+  --btn-color: var(--color-success);
+}
+.btn-link.btn-success:hover {
+  --btn-color: var(--color-success-hover);
+}
+
+.btn-link.btn-warning {
+  --btn-bg: transparent;
+  --btn-color: var(--color-warning);
+}
+.btn-link.btn-warning:hover {
+  --btn-color: var(--color-warning-hover);
+}
+
+.btn-link.btn-danger {
+  --btn-bg: transparent;
+  --btn-color: var(--color-danger);
+}
+.btn-link.btn-danger:hover {
+  --btn-color: var(--color-danger-hover);
+}
+
+/* ========== Text Variant (alias for ghost) ========== */
+.btn-text {
+  border-color: transparent;
+}
+
+.btn-text.btn-primary {
+  --btn-bg: transparent;
+  --btn-color: var(--color-primary);
+}
+.btn-text.btn-primary:hover {
+  --btn-bg: rgba(24, 144, 255, 0.1);
+}
+
+/* ========== States ========== */
+.btn-disabled,
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.btn-loading {
+  cursor: default;
+  pointer-events: none;
+}
+
+.btn:active:not(.btn-disabled):not(.btn-loading) {
+  transform: scale(0.98);
+}
+
+/* ========== Loading Indicator ========== */
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.spinner {
+  animation: rotate 2s linear infinite;
+  width: 1em;
+  height: 1em;
+}
+
+.spinner .path {
+  stroke: currentColor;
+  stroke-linecap: round;
+  animation: dash 1.5s ease-in-out infinite;
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dasharray: 1, 150;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -35;
+  }
+  100% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -124;
+  }
+}
+
+/* ========== Icon Containers ========== */
+.icon-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-container:empty {
+  display: none;
+}
+
+/* ========== Content ========== */
+.content {
+  display: inline-flex;
+  align-items: center;
+  gap: inherit;
+}
+
+/* ========== Ripple Effect ========== */
+@media (min-width: 1024px) {
+  .btn::before {
+    content: '';
+    position: absolute;
+    top: var(--ripple-y, 50%);
+    left: var(--ripple-x, 50%);
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .btn:active::before {
+    width: 300px;
+    height: 300px;
+    opacity: 0;
+    transition: width 0.6s, height 0.6s, opacity 0.6s;
+  }
+}
+
+/* ========== Dark Theme Support ========== */
+@media (prefers-color-scheme: dark) {
+  :host {
+    --color-primary: #40a9ff;
+    --color-primary-hover: #69b1ff;
+    --color-success: #73d13d;
+    --color-success-hover: #95de64;
+    --color-warning: #ffc53d;
+    --color-warning-hover: #ffd666;
+    --color-danger: #ff7875;
+    --color-danger-hover: #ffa39e;
+    --color-neutral: #434343;
+    --color-neutral-hover: #595959;
+  }
+
+  .btn {
+    --btn-color: rgba(255, 255, 255, 0.88);
+  }
+
+  .btn-solid.btn-neutral {
+    --btn-bg: #141414;
+    --btn-color: rgba(255, 255, 255, 0.88);
+  }
+
+  .btn-outline.btn-neutral {
+    --btn-color: rgba(255, 255, 255, 0.88);
+  }
+
+  .btn-ghost.btn-neutral {
+    --btn-color: rgba(255, 255, 255, 0.65);
+  }
+  .btn-ghost.btn-neutral:hover {
+    --btn-bg: rgba(255, 255, 255, 0.08);
+  }
+}
+
+/* ========== Reduced Motion ========== */
+@media (prefers-reduced-motion: reduce) {
+  .btn {
+    transition: none;
+  }
+
+  .btn::before {
+    display: none;
+  }
+
+  .spinner {
+    animation: none;
+  }
+
+  .spinner .path {
+    animation: none;
+    stroke-dasharray: none;
+  }
+}
+
+/* ========== Print Styles ========== */
+@media print {
+  .btn {
+    border: 1px solid #000;
+    background: #fff;
+    color: #000;
+  }
+}
