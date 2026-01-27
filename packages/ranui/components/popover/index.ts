@@ -1,4 +1,4 @@
-import type { PopoverPlacement, PopoverTrigger, PopoverVisibilityEventDetail, PopoverContentChangeEventDetail } from './types';
+import type { PopoverContentChangeEventDetail, PopoverPlacement, PopoverTrigger, PopoverVisibilityEventDetail } from './types';
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
 import '@/components/popover/content';
 import '@/components/dropdown';
@@ -135,9 +135,9 @@ export class Popover extends (HTMLElementSSR()!) {
 
       case 'visible':
         if (this.visible) {
-          this.showPopover();
+          this._showPopover();
         } else {
-          this.hidePopover();
+          this._hidePopover();
         }
         break;
     }
@@ -388,7 +388,7 @@ export class Popover extends (HTMLElementSSR()!) {
     this.clearHideTimer();
   }
 
-  private showPopover(): void {
+  private _showPopover(): void {
     if (!this._popoverContent) return;
 
     const transitionClass = `ran-dropdown-${this.placement}-in`;
@@ -405,7 +405,7 @@ export class Popover extends (HTMLElementSSR()!) {
     );
   }
 
-  private hidePopover(): void {
+  private _hidePopover(): void {
     if (!this._popoverContent) return;
 
     const transitionClass = `ran-dropdown-${this.placement}-out`;
