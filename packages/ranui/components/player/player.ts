@@ -1,4 +1,3 @@
-// import styles from './index.css?inline';
 import type { Level, PlayerConfig, PlayerEventDetail, PlayerState } from './types';
 import { VideoManager } from './video-manager';
 import { ProgressManager } from './progress-manager';
@@ -46,7 +45,7 @@ export class Player extends (HTMLElementSSR()!) {
 
     // 创建样式
     const style = document.createElement('style');
-    style.textContent = this.getStyles();
+    style.textContent = `@import url("${new URL('./index.css', import.meta.url).href}");`;
     this._shadowRoot.appendChild(style);
 
     // 创建容器
@@ -65,128 +64,6 @@ export class Player extends (HTMLElementSSR()!) {
     this._container.appendChild(this._videoContainer);
     this._container.appendChild(this._controlsContainer);
     this._shadowRoot.appendChild(this._container);
-  }
-
-  private getStyles(): string {
-    return `
-      :host {
-        display: block;
-        width: var(--width, 100%);
-        height: var(--height, 100%);
-        position: relative;
-        background: var(--background, #000);
-        overflow: hidden;
-      }
-
-      .container {
-        width: 100%;
-        height: 100%;
-        position: relative;
-      }
-
-      .video-container {
-        width: 100%;
-        height: 100%;
-      }
-
-      .player-video {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-      }
-
-      .controls-container {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        padding: 16px;
-      }
-
-      .controls {
-        background: var(--controls-bg, linear-gradient(180deg, transparent, rgba(0,0,0,0.7)));
-        opacity: 0;
-        transition: opacity 0.3s;
-      }
-
-      .controls-bottom {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 8px;
-      }
-
-      .controls-left,
-      .controls-right {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-      }
-
-      .play-button {
-        width: 20px;
-        height: 20px;
-        cursor: pointer;
-        background-size: contain;
-      }
-
-      .play-button.paused {
-        background: url(./img/smallplay.png) no-repeat;
-      }
-
-      .play-button.playing {
-        background: url(./img/smallpause.png) no-repeat;
-      }
-
-      .time-display {
-        display: flex;
-        gap: 4px;
-        color: #fff;
-        font-size: 12px;
-      }
-
-      .progress {
-        width: 100%;
-        height: 4px;
-        position: relative;
-        cursor: pointer;
-      }
-
-      .progress-wrap {
-        width: 100%;
-        height: 100%;
-        background: var(--progress-bg, rgba(255,255,255,0.3));
-        border-radius: 2px;
-        overflow: hidden;
-      }
-
-      .progress-value {
-        height: 100%;
-        background: var(--progress-color, #fff);
-        transform: scaleX(0);
-        transform-origin: left;
-        will-change: transform;
-      }
-
-      .progress-dot {
-        position: absolute;
-        top: -2px;
-        left: -4px;
-        width: 8px;
-        height: 8px;
-        background: #fff;
-        border-radius: 50%;
-        transform: translateX(0);
-      }
-
-      .fullscreen-button {
-        width: 16px;
-        height: 16px;
-        cursor: pointer;
-        background: url(./img/fullscreenfig.png) no-repeat;
-        background-size: contain;
-      }
-    `;
   }
 
   // ========== 生命周期 ==========

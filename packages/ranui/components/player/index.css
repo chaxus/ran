@@ -1,16 +1,54 @@
+/**
+ * Player Component Styles
+ */
+
+/* ========== CSS Custom Properties ========== */
+
 :host {
+  /* Size */
+  --player-width: 100%;
+  --player-height: 100%;
+  --player-background: #000;
+
+  /* Controls */
+  --player-controls-bg: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.7));
+  --player-controls-padding: 16px;
+  --player-controls-gap: 12px;
+  --player-controls-transition: opacity 0.3s;
+
+  /* Progress bar */
+  --player-progress-height: 4px;
+  --player-progress-bg: rgba(255, 255, 255, 0.3);
+  --player-progress-color: #fff;
+  --player-progress-dot-size: 8px;
+
+  /* Text */
+  --player-time-color: #fff;
+  --player-time-font-size: 12px;
+  --player-select-color: #fff;
+  --player-select-font-size: 12px;
+
+  /* Buttons */
+  --player-button-size: 20px;
+  --player-fullscreen-button-size: 16px;
+  --player-volume-icon-size: 16px;
+
+  /* Volume */
+  --player-volume-width: 60px;
+
   display: block;
-  width: var(--width, 100%);
-  height: var(--height, 100%);
   position: relative;
-  background: var(--background, #000);
-  overflow: hidden;
+  box-sizing: border-box;
 }
 
+/* ========== Container ========== */
+
 .container {
-  width: 100%;
-  height: 100%;
+  width: var(--player-width);
+  height: var(--player-height);
   position: relative;
+  background: var(--player-background);
+  overflow: hidden;
 }
 
 .video-container {
@@ -24,18 +62,22 @@
   object-fit: contain;
 }
 
+/* ========== Controls Container ========== */
+
 .controls-container {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 16px;
+  padding: var(--player-controls-padding);
 }
 
+/* ========== Controls ========== */
+
 .controls {
-  background: var(--controls-bg, linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.7)));
+  background: var(--player-controls-bg);
   opacity: 0;
-  transition: opacity 0.3s;
+  transition: var(--player-controls-transition);
 }
 
 .controls-bottom {
@@ -49,14 +91,17 @@
 .controls-right {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--player-controls-gap);
 }
 
+/* ========== Play Button ========== */
+
 .play-button {
-  width: 20px;
-  height: 20px;
+  width: var(--player-button-size);
+  height: var(--player-button-size);
   cursor: pointer;
   background-size: contain;
+  flex-shrink: 0;
 }
 
 .play-button.paused {
@@ -67,16 +112,21 @@
   background: url(./img/smallpause.png) no-repeat;
 }
 
+/* ========== Time Display ========== */
+
 .time-display {
   display: flex;
   gap: 4px;
-  color: #fff;
-  font-size: 12px;
+  color: var(--player-time-color);
+  font-size: var(--player-time-font-size);
+  white-space: nowrap;
 }
+
+/* ========== Progress Bar ========== */
 
 .progress {
   width: 100%;
-  height: 4px;
+  height: var(--player-progress-height);
   position: relative;
   cursor: pointer;
 }
@@ -84,37 +134,33 @@
 .progress-wrap {
   width: 100%;
   height: 100%;
-  background: var(--progress-bg, rgba(255, 255, 255, 0.3));
+  background: var(--player-progress-bg);
   border-radius: 2px;
   overflow: hidden;
 }
 
 .progress-value {
   height: 100%;
-  background: var(--progress-color, #fff);
+  background: var(--player-progress-color);
   transform: scaleX(0);
   transform-origin: left;
   will-change: transform;
+  transition: transform 0.1s ease-out;
 }
 
 .progress-dot {
   position: absolute;
-  top: -2px;
-  left: -4px;
-  width: 8px;
-  height: 8px;
-  background: #fff;
+  top: calc((var(--player-progress-height) - var(--player-progress-dot-size)) / 2);
+  left: calc(var(--player-progress-dot-size) / -2);
+  width: var(--player-progress-dot-size);
+  height: var(--player-progress-dot-size);
+  background: var(--player-progress-color);
   border-radius: 50%;
   transform: translateX(0);
+  will-change: transform;
 }
 
-.fullscreen-button {
-  width: 16px;
-  height: 16px;
-  cursor: pointer;
-  background: url(./img/fullscreenfig.png) no-repeat;
-  background-size: contain;
-}
+/* ========== Volume Control ========== */
 
 .volume-control {
   display: flex;
@@ -123,11 +169,12 @@
 }
 
 .volume-icon {
-  width: 16px;
-  height: 16px;
+  width: var(--player-volume-icon-size);
+  height: var(--player-volume-icon-size);
   cursor: pointer;
   background: url(./img/volume.png) no-repeat;
   background-size: contain;
+  flex-shrink: 0;
 }
 
 .volume-icon.muted {
@@ -136,19 +183,117 @@
 }
 
 .volume-progress {
-  width: 60px;
+  width: var(--player-volume-width);
 }
+
+/* ========== Select Controls ========== */
 
 .speed-select,
 .clarity-select {
   min-width: 60px;
-  color: var(--select-color, #fff);
-  font-size: 12px;
+  color: var(--player-select-color);
+  font-size: var(--player-select-font-size);
 }
 
-/* 响应式设计 */
+/* ========== Fullscreen Button ========== */
+
+.fullscreen-button {
+  width: var(--player-fullscreen-button-size);
+  height: var(--player-fullscreen-button-size);
+  cursor: pointer;
+  background: url(./img/fullscreenfig.png) no-repeat;
+  background-size: contain;
+  flex-shrink: 0;
+}
+
+/* ========== State: Loading ========== */
+
+:host([loading]) {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* ========== State: Error ========== */
+
+:host([error]) .controls {
+  background: linear-gradient(180deg, transparent, rgba(255, 0, 0, 0.3));
+}
+
+/* ========== Responsive Design ========== */
+
 @media (max-width: 500px) {
+  :host {
+    --player-controls-padding: 12px;
+    --player-controls-gap: 8px;
+  }
+
   .volume-control {
     display: none;
   }
+
+  .speed-select,
+  .clarity-select {
+    min-width: 50px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 320px) {
+  :host {
+    --player-controls-padding: 8px;
+    --player-controls-gap: 6px;
+    --player-time-font-size: 11px;
+  }
+}
+
+/* ========== Accessibility ========== */
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus styles for keyboard navigation */
+.play-button:focus,
+.fullscreen-button:focus,
+.volume-icon:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.8);
+  outline-offset: 2px;
+}
+
+/* ========== Dark Mode ========== */
+
+@media (prefers-color-scheme: dark) {
+  :host {
+    --player-background: #1a1a1a;
+    --player-controls-bg: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.9));
+  }
+}
+
+/* ========== Theme Support ========== */
+
+/* Light theme override */
+:host([theme='light']) {
+  --player-background: #f5f5f5;
+  --player-controls-bg: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.9));
+  --player-time-color: #333;
+  --player-select-color: #333;
+  --player-progress-color: #1890ff;
+}
+
+/* Dark theme override */
+:host([theme='dark']) {
+  --player-background: #000;
+  --player-controls-bg: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.9));
+  --player-time-color: #fff;
+  --player-select-color: #fff;
+  --player-progress-color: #fff;
+}
+
+/* Custom theme support */
+:host([theme='custom']) {
+  /* Users can override all CSS variables */
 }

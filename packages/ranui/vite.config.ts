@@ -6,7 +6,7 @@ import { visualizer } from 'rollup-plugin-visualizer';
 // import viteImagemin from '@vheemstra/vite-plugin-imagemin';
 // import imageminSvgo from 'imagemin-svgo';
 import { babel } from '@rollup/plugin-babel';
-import loadStyle from './plugins/load-style';
+// import loadStyle from './plugins/load-style';
 import loadSvg from './plugins/load-svg';
 import { PORT } from './build/config';
 
@@ -78,9 +78,9 @@ export const viteConfig: UserConfig = {
     exclude: ['public'],
   },
   plugins: [
-    loadStyle({
-      ignore: ['ranui/components/modal/index.ts'],
-    }),
+    // loadStyle({
+    //   ignore: ['ranui/components/modal/index.ts'],
+    // }),
     loadSvg({ svgo: false, defaultImport: 'raw' }),
     visualizer({
       emitFile: false,
