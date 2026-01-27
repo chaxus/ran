@@ -1,5 +1,5 @@
 {
-  "include": ["src", "test", "plugins", "**/*.ts"],
+  "include": ["src", "test", "plugins", "**/*.ts", "**/*.d.ts"],
   "exclude": ["dist"],
   "compilerOptions": {
     "module": "ESNext",
@@ -16,7 +16,7 @@
     "useUnknownInCatchVariables": false,
     "inlineSourceMap": true,
     "experimentalDecorators": true,
-    "types": ["@webgpu/types"],
+    "types": ["@webgpu/types", "./rollup.d.ts"],
     "paths": {
       "@/*": ["./src/*"]
     }

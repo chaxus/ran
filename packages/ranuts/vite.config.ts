@@ -1,8 +1,8 @@
 import path, { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
-import type { RollupOptions } from 'rollup';
 import type { BuildOptions, UserConfig } from 'vite';
+import type { RollupOptions } from './rollup';
 
 const __filename = fileURLToPath(import.meta.url);
 
