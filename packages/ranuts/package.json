@@ -65,18 +65,19 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@babel/parser": "^7.28.4",
+    "@babel/parser": "^7.28.6",
     "@types/earcut": "^3.0.0",
-    "@types/node": "^24.7.0",
-    "@webgpu/types": "^0.1.65",
+    "@types/node": "^25.0.10",
+    "@webgpu/types": "^0.1.69",
+    "rollup": "^4.57.0",
     "typescript": "^5.9.3",
-    "vite": "^6.4.1",
-    "vitest": "^3.2.4"
+    "vite": "^7.3.1",
+    "vitest": "^4.0.18"
   },
   "dependencies": {
     "earcut": "^3.0.2",
     "jschardet": "^3.1.4",
-    "magic-string": "^0.30.19",
-    "tesseract.js": "^6.0.1"
+    "magic-string": "^0.30.21",
+    "tesseract.js": "^7.0.0"
   }
 }

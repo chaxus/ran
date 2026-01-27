@@ -1,457 +1,154 @@
-/**
- * Player Component Styles
- */
-
-/* ========== CSS Custom Properties ========== */
-
 :host {
-  --player-display: block;
-  --player-width: 100%;
-  --player-height: 100%;
-  --player-background: #000;
-
-  /* Play button */
-  --player-play-btn-size: 64px;
-  --player-play-btn-background: url(./img/bigplay.png) no-repeat;
-
-  /* Controller */
-  --player-controller-background: linear-gradient(180deg, rgba(217, 217, 217, 0.5) 0%, rgba(91, 91, 91, 0.5) 100%);
-  --player-controller-padding: 16px;
-  --player-controller-height: 34px;
-  --player-controller-transition: opacity 0.3s ease;
-
-  /* Progress */
-  --player-progress-height: 4px;
-  --player-progress-background: rgba(255, 255, 255, 0.3);
-  --player-progress-value-background: rgba(255, 255, 255, 0.8);
-  --player-progress-dot-size: 8px;
-  --player-progress-dot-background: rgba(255, 255, 255, 1);
-
-  /* Time display */
-  --player-time-color: #fff;
-  --player-time-font-size: 12px;
-
-  /* Volume */
-  --player-volume-width: 50px;
-
-  /* Tooltip */
-  --player-tooltip-background: rgba(0, 0, 0, 0.75);
-  --player-tooltip-color: #fff;
-  --player-tooltip-font-size: 10px;
-  --player-tooltip-padding: 4px 6px;
-  --player-tooltip-border-radius: 4px;
-
   display: block;
-  box-sizing: border-box;
-}
-
-/* ========== Container ========== */
-
-.ran-player {
-  display: var(--player-display);
-  width: var(--player-width);
-  height: var(--player-height);
+  width: var(--width, 100%);
+  height: var(--height, 100%);
   position: relative;
+  background: var(--background, #000);
   overflow: hidden;
-  background: var(--player-background);
-  box-sizing: border-box;
 }
 
-.ran-player-contain {
+.container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.video-container {
   width: 100%;
   height: 100%;
 }
 
-.ran-player-video {
+.player-video {
   width: 100%;
   height: 100%;
-  outline: none;
+  object-fit: contain;
 }
 
-/* ========== Hide Native Controls ========== */
-
-.ran-player-video::-webkit-media-controls-fullscreen-button,
-.ran-player-video::-webkit-media-controls-play-button,
-.ran-player-video::-webkit-media-controls-timeline,
-.ran-player-video::-webkit-media-controls-current-time-display,
-.ran-player-video::-webkit-media-controls-time-remaining-display,
-.ran-player-video::-webkit-media-controls-mute-button,
-.ran-player-video::-webkit-media-controls-toggle-closed-captions-button,
-.ran-player-video::-webkit-media-controls-volume-slider,
-.ran-player-video::-webkit-media-controls-enclosure {
-  display: none;
-}
-
-/* ========== Play Button (Center) ========== */
-
-.ran-player-play-btn {
-  background: var(--player-play-btn-background);
-  background-size: contain;
-  width: var(--player-play-btn-size);
-  height: var(--player-play-btn-size);
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  cursor: pointer;
-  z-index: 10;
-  transition: opacity 0.2s ease;
-}
-
-.ran-player-play-btn:hover {
-  opacity: 0.8;
-}
-
-/* ========== Controller ========== */
-
-.ran-player-controller {
+.controls-container {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  background: var(--player-controller-background);
-  padding: var(--player-controller-padding);
+  padding: 16px;
+}
+
+.controls {
+  background: var(--controls-bg, linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.7)));
   opacity: 0;
-  transition: var(--player-controller-transition);
-  z-index: 20;
-  box-sizing: border-box;
+  transition: opacity 0.3s;
 }
 
-.ran-player:hover .ran-player-controller,
-.ran-player-controller:focus-within {
-  opacity: 1;
-}
-
-/* ========== Tooltip ========== */
-
-.ran-player-controller-tip {
-  position: absolute;
-  top: -12px;
-  max-width: 80px;
-  padding: var(--player-tooltip-padding);
-  background: var(--player-tooltip-background);
-  color: var(--player-tooltip-color);
-  font-size: var(--player-tooltip-font-size);
-  border-radius: var(--player-tooltip-border-radius);
-  opacity: 0;
-  pointer-events: none;
-  white-space: nowrap;
-  z-index: 100;
-  text-align: center;
-  transition: opacity 0.2s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-
-.ran-player-controller-tip-time {
-  margin-top: 2px;
-}
-
-.ran-player-controller-tip-text {
-  margin-top: 2px;
-  font-size: 9px;
-  opacity: 0.8;
-}
-
-/* ========== Progress Bar ========== */
-
-.ran-player-controller-progress {
-  position: relative;
-  width: 100%;
-  height: var(--player-progress-height);
-  cursor: pointer;
-  margin-bottom: 8px;
-}
-
-.ran-player-controller-progress:focus {
-  outline: 2px solid rgba(255, 255, 255, 0.5);
-  outline-offset: 2px;
-}
-
-.ran-player-controller-progress-wrap {
-  width: 100%;
-  height: 100%;
-  background: var(--player-progress-background);
-  border-radius: 20px;
-  position: relative;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.ran-player-controller-progress-wrap-value {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  background: var(--player-progress-value-background);
-  transform: scaleX(0);
-  transform-origin: 0 0;
-  will-change: transform;
-  border-radius: 20px;
-}
-
-.ran-player-controller-progress-dot {
-  position: absolute;
-  top: -2px;
-  left: -4px;
-  width: var(--player-progress-dot-size);
-  height: var(--player-progress-dot-size);
-  background: var(--player-progress-dot-background);
-  border-radius: 50%;
-  cursor: grab;
-  z-index: 9;
-  transition: transform 0.1s ease;
-}
-
-.ran-player-controller-progress-dot:active {
-  cursor: grabbing;
-  transform: scale(1.3);
-}
-
-/* ========== Controller Bottom ========== */
-
-.ran-player-controller-bottom {
+.controls-bottom {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
+  margin-top: 8px;
 }
 
-.ran-player-controller-bottom-left,
-.ran-player-controller-bottom-right {
+.controls-left,
+.controls-right {
   display: flex;
   align-items: center;
-  user-select: none;
+  gap: 12px;
 }
 
-/* ========== Play/Pause Button ========== */
-
-.ran-player-controller-bottom-left-btn {
+.play-button {
   width: 20px;
   height: 20px;
   cursor: pointer;
-  outline: none;
-  -webkit-tap-highlight-color: transparent;
-  transition: opacity 0.2s ease;
+  background-size: contain;
 }
 
-.ran-player-controller-bottom-left-btn:hover {
-  opacity: 0.8;
-}
-
-.ran-player-controller-bottom-left-btn:focus-visible {
-  outline: 2px solid rgba(255, 255, 255, 0.5);
-  outline-offset: 2px;
-  border-radius: 2px;
-}
-
-.ran-player-controller-bottom-left-btn-play {
+.play-button.paused {
   background: url(./img/smallplay.png) no-repeat;
-  background-size: contain;
 }
 
-.ran-player-controller-bottom-left-btn-pause {
+.play-button.playing {
   background: url(./img/smallpause.png) no-repeat;
-  background-size: contain;
 }
 
-/* ========== Time Display ========== */
-
-.ran-player-controller-bottom-left-time-current,
-.ran-player-controller-bottom-left-time-divide,
-.ran-player-controller-bottom-left-time-duration {
-  color: var(--player-time-color);
-  font-size: var(--player-time-font-size);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  line-height: 1;
-  margin-left: 8px;
-}
-
-.ran-player-controller-bottom-left-time-current {
-  min-width: 40px;
-  text-align: right;
-}
-
-.ran-player-controller-bottom-left-time-divide {
-  margin: 0 4px;
-}
-
-.ran-player-controller-bottom-left-time-duration {
-  min-width: 40px;
-  text-align: left;
-}
-
-/* ========== Volume Control ========== */
-
-.ran-player-controller-bottom-right-volume {
+.time-display {
   display: flex;
-  align-items: center;
-  margin-right: 12px;
-  gap: 6px;
+  gap: 4px;
+  color: #fff;
+  font-size: 12px;
 }
 
-.ran-player-controller-bottom-right-volume-icon {
-  width: 18px;
-  height: 18px;
+.progress {
+  width: 100%;
+  height: 4px;
+  position: relative;
   cursor: pointer;
-  transition: opacity 0.2s ease;
 }
 
-.ran-player-controller-bottom-right-volume-icon:hover {
-  opacity: 0.8;
-}
-
-.ran-player-controller-bottom-right-volume-icon:focus-visible {
-  outline: 2px solid rgba(255, 255, 255, 0.5);
-  outline-offset: 2px;
+.progress-wrap {
+  width: 100%;
+  height: 100%;
+  background: var(--progress-bg, rgba(255, 255, 255, 0.3));
   border-radius: 2px;
+  overflow: hidden;
 }
 
-.ran-player-controller-bottom-right-volume-icon-volume {
-  background: url(./img/volumenotmute.svg) no-repeat;
-  background-size: contain;
+.progress-value {
+  height: 100%;
+  background: var(--progress-color, #fff);
+  transform: scaleX(0);
+  transform-origin: left;
+  will-change: transform;
 }
 
-.ran-player-controller-bottom-right-volume-icon-mute {
-  background: url(./img/volumemute.svg) no-repeat;
-  background-size: contain;
+.progress-dot {
+  position: absolute;
+  top: -2px;
+  left: -4px;
+  width: 8px;
+  height: 8px;
+  background: #fff;
+  border-radius: 50%;
+  transform: translateX(0);
 }
 
-.ran-player-controller-bottom-right-volume-progress {
-  width: var(--player-volume-width);
-}
-
-/* ========== Speed & Clarity Select ========== */
-
-.ran-player-controller-bottom-right-speed,
-.ran-player-controller-bottom-right-clarity {
-  color: #fff;
-  font-size: 12px;
-  margin-right: 12px;
-  cursor: pointer;
-}
-
-.ran-player-controller-bottom-right-speed r-select,
-.ran-player-controller-bottom-right-clarity r-select {
-  width: 46px;
-  height: 20px;
-}
-
-.ran-player-controller-bottom-right-speed r-select::part(selection),
-.ran-player-controller-bottom-right-clarity r-select::part(selection) {
-  background-color: transparent;
-}
-
-.ran-player-controller-bottom-right-speed r-select::part(icon),
-.ran-player-controller-bottom-right-clarity r-select::part(icon) {
-  display: none;
-}
-
-.ran-player-controller-bottom-right-speed r-select::part(selection-item),
-.ran-player-controller-bottom-right-clarity r-select::part(selection-item) {
-  color: #fff;
-  font-size: 12px;
-}
-
-/* ========== Fullscreen Button ========== */
-
-.ran-player-controller-bottom-right-full {
-  background: url('./img/fullscreenfig.png') no-repeat;
-  background-size: contain;
+.fullscreen-button {
   width: 16px;
   height: 16px;
   cursor: pointer;
-  transition: opacity 0.2s ease;
+  background: url(./img/fullscreenfig.png) no-repeat;
+  background-size: contain;
 }
 
-.ran-player-controller-bottom-right-full:hover {
-  opacity: 0.8;
+.volume-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.ran-player-controller-bottom-right-full:focus-visible {
-  outline: 2px solid rgba(255, 255, 255, 0.5);
-  outline-offset: 2px;
-  border-radius: 2px;
+.volume-icon {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  background: url(./img/volume.png) no-repeat;
+  background-size: contain;
 }
 
-/* ========== Dropdown Customization ========== */
-
-.video-speed-dropdown,
-.video-clarity-dropdown {
-  z-index: 101;
-  --ran-dropdown-padding: 0px;
-  --ran-dropdown-background: rgba(91, 91, 91, 0.9);
-  --ran-dropdown-option-item-hover-background-color: #595959;
-  --ran-dropdown-option-active-hover-background-color: #595959;
-  --ran-dropdown-option-item-padding: 6px 12px;
-  --ran-dropdown-content-color: #fff;
-  --ran-dropdown-content-font-size: 12px;
-  --ran-dropdown-option-active-background-color: rgba(255, 255, 255, 0.1);
-  --ran-dropdown-content-text-align: center;
-  --ran-dropdown-border-radius: 4px;
+.volume-icon.muted {
+  background: url(./img/muted.png) no-repeat;
+  background-size: contain;
 }
 
-/* ========== Responsive Design ========== */
+.volume-progress {
+  width: 60px;
+}
 
+.speed-select,
+.clarity-select {
+  min-width: 60px;
+  color: var(--select-color, #fff);
+  font-size: 12px;
+}
+
+/* 响应式设计 */
 @media (max-width: 500px) {
-  .ran-player-controller-bottom-right-volume {
+  .volume-control {
     display: none;
   }
-
-  .ran-player-controller-padding {
-    --player-controller-padding: 12px;
-  }
-
-  .ran-player-play-btn {
-    --player-play-btn-size: 48px;
-  }
-}
-
-/* ========== Accessibility ========== */
-
-@media (prefers-reduced-motion: reduce) {
-  .ran-player-play-btn,
-  .ran-player-controller,
-  .ran-player-controller-tip,
-  .ran-player-controller-progress-dot,
-  .ran-player-controller-bottom-left-btn,
-  .ran-player-controller-bottom-right-volume-icon,
-  .ran-player-controller-bottom-right-full {
-    transition: none;
-  }
-}
-
-@media (prefers-contrast: more) {
-  .ran-player-controller {
-    --player-controller-background: linear-gradient(180deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.95) 100%);
-  }
-
-  .ran-player-controller-progress-wrap {
-    --player-progress-background: rgba(255, 255, 255, 0.5);
-  }
-
-  .ran-player-controller-progress-wrap-value {
-    --player-progress-value-background: rgba(255, 255, 255, 1);
-  }
-
-  .ran-player-controller-tip {
-    --player-tooltip-background: rgba(0, 0, 0, 0.95);
-  }
-}
-
-/* ========== Focus Management ========== */
-
-.ran-player:focus {
-  outline: 2px solid rgba(255, 255, 255, 0.5);
-  outline-offset: 2px;
-}
-
-.ran-player:focus:not(:focus-visible) {
-  outline: none;
-}
-
-/* ========== Dark Mode (Default for Video Player) ========== */
-
-:host {
-  color-scheme: dark;
 }

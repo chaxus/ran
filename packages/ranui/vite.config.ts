@@ -5,7 +5,6 @@ import type { BuildOptions, PluginOption, UserConfig } from 'vite';
 import { visualizer } from 'rollup-plugin-visualizer';
 // import viteImagemin from '@vheemstra/vite-plugin-imagemin';
 // import imageminSvgo from 'imagemin-svgo';
-import type { RollupOptions } from 'rollup';
 import { babel } from '@rollup/plugin-babel';
 import loadStyle from './plugins/load-style';
 import loadSvg from './plugins/load-svg';
@@ -15,15 +14,7 @@ const __filename = fileURLToPath(import.meta.url);
 
 const __dirname = path.dirname(__filename);
 
-interface chunkOptimization {
-  assetsInlineLimit: number;
-  chunkSizeWarningLimit: number;
-  reportCompressedSize: boolean;
-  rollupOptions: RollupOptions;
-  minify: boolean | 'terser' | 'esbuild' | undefined;
-}
-
-const chunkOptimization: Partial<chunkOptimization> = {
+const chunkOptimization: Partial<BuildOptions> = {
   chunkSizeWarningLimit: 500,
   assetsInlineLimit: 1024,
   reportCompressedSize: false,
@@ -36,7 +27,7 @@ const chunkOptimization: Partial<chunkOptimization> = {
       preset: 'recommended',
       manualPureFunctions: ['console.log'],
     },
-  },
+  } as any,
   minify: 'terser',
 };
 

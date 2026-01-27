@@ -16,7 +16,7 @@
     "useUnknownInCatchVariables": false,
     "inlineSourceMap": true,
     "experimentalDecorators": true,
-    "types": ["@webgpu/types", "./rollup.d.ts"],
+    "types": ["@webgpu/types"],
     "paths": {
       "@/*": ["./src/*"]
     }

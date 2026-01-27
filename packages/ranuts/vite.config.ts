@@ -2,7 +2,6 @@ import path, { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import type { BuildOptions, UserConfig } from 'vite';
-import type { RollupOptions } from './rollup';
 
 const __filename = fileURLToPath(import.meta.url);
 
@@ -49,15 +48,7 @@ const list2map = (list: string[]): Record<string, string> => {
   }, {});
 };
 
-interface chunkOptimization {
-  assetsInlineLimit: number;
-  chunkSizeWarningLimit: number;
-  reportCompressedSize: boolean;
-  rollupOptions: RollupOptions;
-  minify: boolean | 'terser' | 'esbuild' | undefined;
-}
-
-const chunkOptimization: Partial<chunkOptimization> = {
+const chunkOptimization: Partial<BuildOptions> = {
   chunkSizeWarningLimit: 500,
   assetsInlineLimit: 1024,
   reportCompressedSize: false,
@@ -73,7 +64,7 @@ const chunkOptimization: Partial<chunkOptimization> = {
       preset: 'recommended',
       manualPureFunctions: ['console.log'],
     },
-  },
+  } as any,
   minify: 'terser',
 };
 
