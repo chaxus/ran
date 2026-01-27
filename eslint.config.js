@@ -15,6 +15,7 @@ const shouldTypeCheck = typeof process.env.VSCODE_PID === 'string';
 export default tseslint.config(
   {
     ignores: [
+      '.agents/**',
       'packages/solidity/**',
       '**/dist/**',
       '**/report/**',
