@@ -1,6 +1,6 @@
+import failImage from '../../assets/image/failImage';
 import type { ImageErrorEventDetail, ImageFit, ImageLoadEventDetail, ImageLoadingStrategy } from './types';
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
-import failImage from '../../assets/image/failImage';
 
 /**
  * Modern Image Component

@@ -1,0 +1,15 @@
+/**
+ * Option Component Styles
+ */
+
+:host {
+  display: none;
+}
+
+.ran-option {
+  display: block;
+}
+
+.ran-option-content {
+  display: block;
+}
