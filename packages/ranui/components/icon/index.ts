@@ -1,20 +1,81 @@
-import { html, RanElement } from '@/utils/index';
-import { adoptStyles } from '@/utils/style';
 import iconCss from './index.less?inline';
+import { RanElement, html } from '@/utils/index';
+import { adoptStyles } from '@/utils/style';
 
-const iconLoaders = import.meta.glob('../../assets/icons/*.svg', {
-  query: '?raw',
-  import: 'default',
-}) as Record<string, () => Promise<string>>;
+type ImportMetaWithEnv = ImportMeta & { env?: { DEV?: boolean } };
+
+const isDev = typeof import.meta !== 'undefined' && Boolean((import.meta as ImportMetaWithEnv).env?.DEV);
 const iconSvgCache = new Map<string, string>();
+let hasStartedRegistration = false;
+
+const isSvgText = (value: string): boolean => /<svg[\s>]/i.test(value);
+
+const pickSvgText = (value: unknown): string | undefined => {
+  if (typeof value === 'string') {
+    return isSvgText(value) ? value : undefined;
+  }
+  if (!value || typeof value !== 'object') return undefined;
+
+  const record = value as Record<string, unknown>;
+  const data = record.data;
+  if (typeof data === 'string' && isSvgText(data)) {
+    return data;
+  }
+
+  const nestedDefault = record.default;
+  if (typeof nestedDefault === 'string' && isSvgText(nestedDefault)) {
+    return nestedDefault;
+  }
+  if (nestedDefault && typeof nestedDefault === 'object') {
+    const nested = nestedDefault as Record<string, unknown>;
+    if (typeof nested.data === 'string' && isSvgText(nested.data)) {
+      return nested.data;
+    }
+  }
+  return undefined;
+};
+
+/** Register one icon. Consumer controls what gets bundled by what it imports. */
+export const registerIcon = (name: string, source: unknown): void => {
+  hasStartedRegistration = true;
+  const svg = pickSvgText(source);
+  if (!svg) {
+    if (isDev) {
+      console.warn(`[ranui-icon] register icon failed: ${name}`);
+    }
+    return;
+  }
+  iconSvgCache.set(`inline:${name}`, svg);
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('ranui-icon-registered', { detail: { name } }));
+  }
+};
+
+/** Batch register icons. */
+export const registerIcons = (icons: Record<string, unknown>): void => {
+  hasStartedRegistration = true;
+  Object.entries(icons).forEach(([name, source]) => {
+    registerIcon(name, source);
+  });
+};
 
 export class Icon extends RanElement {
-  static get observedAttributes() {
+  private readonly isDev = isDev;
+
+  static get observedAttributes(): string[] {
     return ['name', 'size', 'color', 'spin', 'decorative', 'aria-label'];
   }
   _icon?: SVGElement;
   _div!: HTMLElement;
   _shadowDom!: ShadowRoot;
+  _onIconRegistered = (event: Event): void => {
+    const customEvent = event as CustomEvent<{ name?: string }>;
+    const registeredName = customEvent.detail?.name;
+    if (!registeredName) return;
+    if (registeredName === this.name && !this._icon) {
+      this.setIcon();
+    }
+  };
 
   constructor() {
     super();
@@ -31,28 +92,28 @@ export class Icon extends RanElement {
     this._div = div;
   }
 
-  get name() {
-    return this.getAttribute('name');
+  get name(): string {
+    return this.getAttribute('name') || '';
   }
-  set name(value) {
+  set name(value: string) {
     if (value) this.setAttribute('name', value);
   }
-  get size() {
-    return this.getAttribute('size');
+  get size(): string {
+    return this.getAttribute('size') || '';
   }
-  set size(value) {
+  set size(value: string) {
     if (value) this.setAttribute('size', value);
   }
-  get color() {
-    return this.getAttribute('color');
+  get color(): string {
+    return this.getAttribute('color') || '';
   }
-  set color(value) {
+  set color(value: string) {
     if (value) this.setAttribute('color', value);
   }
-  get spin() {
+  get spin(): boolean {
     return this.hasAttribute('spin');
   }
-  set spin(value) {
+  set spin(value: boolean) {
     if (value) this.setAttribute('spin', '');
     else this.removeAttribute('spin');
   }
@@ -97,7 +158,7 @@ export class Icon extends RanElement {
    * @description: 设置 icon 的 svg
    * @return {*}
    */
-  setIcon = async () => {
+  setIcon = (): void => {
     if (typeof document === 'undefined') return;
     if (this._icon) {
       this._icon.remove();
@@ -110,28 +171,29 @@ export class Icon extends RanElement {
       } else {
         try {
           const cacheKey = `inline:${iconName}`;
-          let svg = iconSvgCache.get(cacheKey);
+          const svg = iconSvgCache.get(cacheKey);
           if (!svg) {
-            const loader = iconLoaders[`../../assets/icons/${iconName}.svg`];
-            if (!loader) {
-              if (typeof process !== 'undefined' && process.env.NODE_ENV !== 'production') {
-                console.warn(`[ranui-icon] icon not found: ${iconName}`);
-              }
-              return;
+            if (this.isDev && hasStartedRegistration) {
+              console.warn(`[ranui-icon] icon not registered: ${iconName}`);
             }
-            svg = await loader();
-            iconSvgCache.set(cacheKey, svg);
+            return;
           }
-          if (typeof svg === 'string' && svg.trim().startsWith('<svg')) {
+          if (svg && this.isSvgText(svg)) {
             this.renderSvg(svg, iconName);
+          } else if (this.isDev) {
+            console.warn(`[ranui-icon] invalid svg text: ${iconName}`);
           }
         } catch (error) {
-          if (typeof process !== 'undefined' && process.env.NODE_ENV !== 'production') {
+          if (this.isDev) {
             console.warn(`[ranui-icon] render icon failed: ${iconName}`, error);
           }
         }
       }
     }
+  };
+
+  isSvgText = (value: string): boolean => {
+    return isSvgText(value);
   };
 
   parseSvg = (svgContent: string): SVGElement | undefined => {
@@ -141,15 +203,18 @@ export class Icon extends RanElement {
     if (!root || root.tagName.toLowerCase() === 'parsererror') return undefined;
     if (root.tagName.toLowerCase() !== 'svg') return undefined;
 
+    // Use XMLSerializer for XML nodes (outerHTML is not stable across browsers here).
+    const serialized = new XMLSerializer().serializeToString(root);
+
     // Recreate in current document to avoid cross-document node quirks.
     const template = document.createElement('template');
-    template.innerHTML = root.outerHTML;
+    template.innerHTML = serialized.trim();
     const svg = template.content.firstElementChild;
     if (!svg || svg.tagName.toLowerCase() !== 'svg') return undefined;
     return svg as SVGElement;
   };
 
-  renderSvg = (svgContent: string, iconName: string) => {
+  renderSvg = (svgContent: string, iconName: string): void => {
     const svgElement = this.parseSvg(svgContent);
     if (svgElement) {
       this._icon = svgElement;
@@ -160,6 +225,8 @@ export class Icon extends RanElement {
       this.setColor();
       this.setSpin();
       this.syncA11y();
+    } else if (this.isDev) {
+      console.warn(`[ranui-icon] parse svg failed: ${iconName}`);
     }
   };
 
@@ -167,7 +234,7 @@ export class Icon extends RanElement {
    * @description: 设置 icon 的大小
    * @return {*}
    */
-  setSize = () => {
+  setSize = (): void => {
     if (this._icon) {
       const size = this.size || '1em';
       this._icon.setAttribute('width', size);
@@ -179,7 +246,7 @@ export class Icon extends RanElement {
    * @description: 设置 icon 的颜色
    * @return {*}
    */
-  setColor = () => {
+  setColor = (): void => {
     if (this._icon) {
       const color = this.color || 'currentColor';
       this._icon.style.setProperty('color', color);
@@ -192,7 +259,7 @@ export class Icon extends RanElement {
    * @description: 设置 icon 是否旋转
    * @return {*}
    */
-  setSpin = () => {
+  setSpin = (): void => {
     if (this.spin) {
       this._div.classList.add('ran-icon-spin');
     } else {
@@ -200,11 +267,16 @@ export class Icon extends RanElement {
     }
   };
 
-  connectedCallback() {
+  connectedCallback(): void {
+    window.addEventListener('ranui-icon-registered', this._onIconRegistered as EventListener);
     this.setIcon();
   }
 
-  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+  disconnectedCallback(): void {
+    window.removeEventListener('ranui-icon-registered', this._onIconRegistered as EventListener);
+  }
+
+  attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
     if (newValue !== oldValue) {
       if (name === 'name') this.setIcon();
       if (name === 'size') this.setSize();
