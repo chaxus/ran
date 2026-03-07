@@ -1,6 +1,7 @@
 import { create } from 'ranuts/utils';
-import less from './index.less?inline';
+import contentCss from './index.less?inline';
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
+import { adoptStyles } from '@/utils/style';
 
 export class Content extends (HTMLElementSSR()!) {
   observer: MutationObserver;
@@ -11,8 +12,7 @@ export class Content extends (HTMLElementSSR()!) {
     this._slot = create('slot').setAttribute('class', 'slot').element;
     const shadowRoot = this.attachShadow({ mode: 'closed' });
     this._shadowDom = shadowRoot;
-    const style = create('style').setTextContent(less);
-    shadowRoot.appendChild(style.element);
+    adoptStyles(this._shadowDom, contentCss);
     shadowRoot.appendChild(this._slot);
     this.observer = new MutationObserver(this.callback);
   }
@@ -40,7 +40,7 @@ export class Content extends (HTMLElementSSR()!) {
   connectedCallback(): void {
     this.observer.observe(this, { attributes: true, childList: true, subtree: true });
   }
-  disconnectCallback(): void {
+  disconnectedCallback(): void {
     this.observer.disconnect();
   }
 }

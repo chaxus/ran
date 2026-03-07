@@ -1,6 +1,7 @@
 import { create } from 'ranuts/utils';
 import '@/components/icon';
-import less from './index.less?inline';
+import { adoptStyles } from '@/utils/style';
+import messageCss from './index.less?inline';
 
 const AnimationTime = 300; // message 退出动画执行的时间
 const defaultDuration = 3000; // 默认 message 存在的时间
@@ -51,6 +52,7 @@ function Custom() {
         this._content.appendChild(this._info);
         this._notice.appendChild(this._content);
         const shadowRoot = this.attachShadow({ mode: 'closed' });
+        adoptStyles(shadowRoot, messageCss);
         shadowRoot.appendChild(this._notice);
       }
       get type() {
@@ -91,11 +93,9 @@ function Custom() {
     customElements.define('r-message', CustomMessage);
 
     const container = document.createElement('div');
-    const style = create('style').setTextContent(less);
     const div = document.createElement('div');
     div.setAttribute('class', 'ranui-message');
     document.body.appendChild(container);
-    container.appendChild(style.element);
     container.appendChild(div);
 
     const commonPrompt = (type: string) => {

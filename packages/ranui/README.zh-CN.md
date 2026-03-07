@@ -168,6 +168,26 @@ const Button = () => {
 };
 ```
 
+### SSR & Builder (推荐)
+
+对于需要服务端渲染 (SSR) 或更声明式构建 UI 的场景，推荐使用 `builder` 工具：
+
+```ts
+import { Div, ButtonBuilder } from 'ranui/utils';
+import { renderToString } from 'ranui/utils/ssr';
+
+// 声明式构建
+const btn = ButtonBuilder()
+  .class('my-btn')
+  .label('Submit')
+  .build();
+
+// SSR 渲染 (支持 Declarative Shadow DOM)
+const html = renderToString(new Button()); 
+```
+
+更多细节请查看 [Utility Documentation](./utils/README.md)。
+
 ## 贡献
 
 我们欢迎学习者和开发者的贡献！这是一个实验性项目，请对开发过程保持耐心。

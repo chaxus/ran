@@ -1,5 +1,7 @@
 import { create } from 'ranuts/utils';
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
+import { adoptStyles } from '@/utils/style';
+import loadingCss from './index.less?inline';
 
 export enum ICON_NAME_AMP {
   DOUBLE_BOUNCE = 'double-bounce',
@@ -43,6 +45,7 @@ export class Loading extends (HTMLElementSSR()!) {
     this.contain = document.createElement('div');
     this.contain.setAttribute('class', 'ran-loading');
     const shadowRoot = this.attachShadow({ mode: 'open' });
+    adoptStyles(shadowRoot, loadingCss);
     shadowRoot.appendChild(this.contain);
   }
   get name(): ICON_NAME_AMP {

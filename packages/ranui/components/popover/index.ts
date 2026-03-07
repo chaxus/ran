@@ -9,6 +9,8 @@ import { create, debounce, isMobile } from 'ranuts/utils';
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
 import '@/components/popover/content';
 import '@/components/dropdown';
+import { adoptStyles } from '@/utils/style';
+import popoverCss from './index.less?inline';
 
 // index.ts:29 Uncaught DOMException: Failed to construct 'CustomElement': The result must not have children
 // index.ts:31 Uncaught DOMException: Failed to construct 'CustomElement': The result must not have attributes
@@ -72,6 +74,7 @@ export class Popover extends (HTMLElementSSR()!) {
     this.popoverBlock.appendChild(this._slot);
     const shadowRoot = this.attachShadow({ mode: 'closed' });
     this._shadowDom = shadowRoot;
+    adoptStyles(this._shadowDom, popoverCss);
     shadowRoot.appendChild(this.popoverBlock);
   }
   get placement(): string {
@@ -301,7 +304,7 @@ export class Popover extends (HTMLElementSSR()!) {
     this.changePlacement();
     document.addEventListener('click', this.clickRemovePopover);
   }
-  disconnectCallback(): void {
+  disconnectedCallback(): void {
     this.removeEventListener('mouseenter', this.hoverPopover);
     this.removeEventListener('mouseleave', this.hoverRemovePopover);
     this.removeEventListener('click', this.hoverPopover);

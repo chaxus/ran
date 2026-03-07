@@ -1,4 +1,6 @@
 import failImage from '../../assets/image/failImage';
+import { adoptStyles } from '@/utils/style';
+import imageCss from './index.less?inline';
 
 function Custom() {
   if (typeof window !== 'undefined' && !customElements.get('r-img')) {
@@ -13,6 +15,7 @@ function Custom() {
         this._container = document.createElement('div');
         this._container.setAttribute('class', 'ran-image');
         const shadowRoot = this.attachShadow({ mode: 'closed' });
+        adoptStyles(shadowRoot, imageCss);
         shadowRoot.appendChild(this._container);
       }
       get fallback() {

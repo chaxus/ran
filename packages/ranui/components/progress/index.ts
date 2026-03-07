@@ -1,122 +1,124 @@
 import { perToNum } from 'ranuts/utils';
-import { HTMLElementSSR, createCustomError } from '@/utils/index';
+import { Div, RanElement } from '@/utils/index';
+import { adoptStyles } from '@/utils/style';
+import progressCss from './index.less?inline';
 
 const attributes: string[] = ['percent', 'type', 'total', 'dot'];
 
-class Progress extends (HTMLElementSSR()!) {
-  _progress: HTMLDivElement;
-  _progressWrap: HTMLDivElement;
-  _progressWrapValue: HTMLDivElement;
-  _progressDot: HTMLDivElement;
-  moveProgress: { mouseDown: boolean };
-  _shadowDom: ShadowRoot;
-  constructor() {
-    super();
-    this._progress = document.createElement('div');
-    this._progress.setAttribute('class', 'ran-progress');
-    this._progress.setAttribute('role', 'progressbar');
-    this._progressWrap = document.createElement('div');
-    this._progressWrap.setAttribute('class', 'ran-progress-wrap');
-    this._progress.appendChild(this._progressWrap);
-    this._progressWrapValue = document.createElement('div');
-    this._progressWrapValue.setAttribute('class', 'ran-progress-wrap-value');
-    this._progressWrap.appendChild(this._progressWrapValue);
-    this._progressDot = document.createElement('div');
-    this._progressDot.setAttribute('class', 'ran-progress-dot');
-    this.moveProgress = {
-      mouseDown: false,
-    };
-    this._progress.appendChild(this._progressDot);
-    const shadowRoot = this.attachShadow({ mode: 'closed' });
-    this._shadowDom = shadowRoot;
-    shadowRoot.appendChild(this._progress);
-  }
+export class Progress extends RanElement {
+  _progress!: HTMLDivElement;
+  _progressWrap!: HTMLDivElement;
+  _progressWrapValue!: HTMLDivElement;
+  _progressDot!: HTMLDivElement;
+  _shadowDom!: ShadowRoot;
+  moveProgress: { mouseDown: boolean } = { mouseDown: false };
+
   static get observedAttributes(): string[] {
     return attributes;
   }
-  get percent(): string {
-    const percent = this.getAttribute('percent') || '';
-    const num = perToNum(percent);
-    if (Number(num) > Number(this.total)) {
-      console.error('percent must be < total');
-      return this.total;
+
+  constructor() {
+    super();
+    this._shadowDom = this.shadowRoot || this.attachShadow({ mode: 'closed' });
+    adoptStyles(this._shadowDom, progressCss);
+
+    // 🏗️ Surgical rehydration: check if content already exists to avoid nuking styles
+    let container = this._shadowDom.querySelector('.ran-progress') as HTMLDivElement;
+    if (!container) {
+      const progressBuilder = Div()
+        .class('ran-progress')
+        .role('progressbar')
+        .children(
+          Div().class('ran-progress-wrap').children(Div().class('ran-progress-wrap-value')),
+          Div().class('ran-progress-dot'),
+        );
+      container = progressBuilder.build();
+      this._shadowDom.appendChild(container);
     }
-    return `${perToNum(percent)}`;
+
+    this._progress = container;
+    this._progressWrap = container.querySelector('.ran-progress-wrap')!;
+    this._progressWrapValue = container.querySelector('.ran-progress-wrap-value')!;
+    this._progressDot = container.querySelector('.ran-progress-dot')!;
+  }
+
+  get percent(): string {
+    const percentAttr = this.getAttribute('percent') || '0';
+    const num = perToNum(percentAttr);
+    const totalNum = Number(this.total);
+    if (num > totalNum) {
+      // ⚠️ Keep it silent or cap it, console.error is too loud for dev
+      return String(totalNum);
+    }
+    return String(num);
   }
   set percent(value: string) {
-    this.setAttribute('percent', `${value || 0}`);
-    this.setAttribute('aria-valuenow', `${value || 0}`);
+    this.setAttribute('percent', value || '0');
+    this.setAttribute('aria-valuenow', value || '0');
   }
+
   get total(): string {
     const total = this.getAttribute('total');
-    if (!total) return '1';
+    if (!total) return '100'; // 💡 Better default for "percent" context
     return `${perToNum(total)}`;
   }
   set total(value: string) {
-    this.setAttribute('total', value || '');
+    this.setAttribute('total', value || '100');
   }
+
   get type(): string {
-    const result = ['primary', 'drag'];
-    const type = this.getAttribute('type') || '';
-    if (result.includes(type)) {
-      return type;
-    } else {
-      return 'primary';
-    }
+    const type = this.getAttribute('type') || 'primary';
+    return ['primary', 'drag'].includes(type) ? type : 'primary';
   }
   set type(value: string) {
     this.setAttribute('type', value || 'primary');
   }
-  get animation(): string {
-    const result = ['play', 'pause'];
-    const animation = this.getAttribute('animation') || '';
-    if (result.includes(animation)) {
-      return animation;
-    } else {
-      return 'pause';
-    }
-  }
-  set animation(value: string) {
-    this.setAttribute('animation', value || 'pause');
-  }
+
   get dot(): string {
-    const result = ['true', 'false'];
-    const dot = this.getAttribute('dot') || '';
-    if (result.includes(dot)) {
-      return dot;
-    } else {
-      return 'true';
-    }
+    const dot = this.getAttribute('dot') || 'true';
+    return ['true', 'false'].includes(dot) ? dot : 'true';
   }
   set dot(value: string) {
     this.setAttribute('dot', value || 'true');
   }
+
   progressClick = (e: MouseEvent): void => {
+    if (this.type !== 'drag') return;
     const rect = this._progress.getBoundingClientRect();
     const offsetX = e.clientX - rect.left;
     const percentage = Math.min(1, Math.max(0, offsetX / this._progress.offsetWidth));
-    this.percent = `${percentage * Number(this.total)}`;
-    this._progressWrapValue.style.setProperty('transform', `scaleX(${percentage})`);
-    this._progressDot.style.setProperty('transform', `translateX(${percentage * this._progress.offsetWidth}px)`);
+    const newVal = percentage * Number(this.total);
+    this.percent = String(newVal);
+    this.updateUI(percentage);
     this.change();
   };
-  progressDotMouseDown = (): void => {
+
+  progressDotMouseDown = (e: MouseEvent): void => {
     this.moveProgress.mouseDown = true;
+    e.stopPropagation();
   };
+
   progressDotMouseMove = (e: MouseEvent): void => {
     if (!this.moveProgress.mouseDown) return;
     const rect = this._progress.getBoundingClientRect();
     const offsetX = e.clientX - rect.left;
     const percentage = Math.min(1, Math.max(0, offsetX / this._progress.offsetWidth));
-    this.percent = `${percentage * Number(this.total)}`;
-    this._progressWrapValue.style.setProperty('transform', `scaleX(${percentage})`);
-    this._progressDot.style.setProperty('transform', `translateX(${percentage * this._progress.offsetWidth}px)`);
+    const newVal = percentage * Number(this.total);
+    this.percent = String(newVal);
+    this.updateUI(percentage);
     this.change();
   };
+
   progressDotMouseUp = (): void => {
-    if (!this.moveProgress.mouseDown) return;
     this.moveProgress.mouseDown = false;
   };
+
+  updateUI = (percentage: number): void => {
+    if (!this._progressWrapValue || !this._progressDot) return;
+    this._progressWrapValue.style.setProperty('transform', `scaleX(${percentage})`);
+    this._progressDot.style.setProperty('transform', `translateX(${percentage * this._progress.offsetWidth}px)`);
+  };
+
   change = (): void => {
     this.dispatchEvent(
       new CustomEvent('change', {
@@ -128,7 +130,9 @@ class Progress extends (HTMLElementSSR()!) {
       }),
     );
   };
+
   appendProgressDot = (): void => {
+    if (!this._progress || !this._progressDot) return;
     if (this.dot === 'true' && !this._progress.contains(this._progressDot)) {
       this._progress.appendChild(this._progressDot);
     }
@@ -136,11 +140,14 @@ class Progress extends (HTMLElementSSR()!) {
       this._progress.removeChild(this._progressDot);
     }
   };
+
   updateCurrentProgress = (): void => {
-    const percent = Number(this.percent) / Number(this.total);
-    this._progressWrapValue.style.setProperty('transform', `scaleX(${percent})`);
-    this._progressDot.style.setProperty('transform', `translateX(${percent * this._progress.offsetWidth}px)`);
+    if (!this._progress) return;
+    const total = Number(this.total) || 100;
+    const percent = Number(this.percent) / total;
+    this.updateUI(percent);
   };
+
   dragEvent = (): void => {
     if (this.type !== 'drag') return;
     this._progress.addEventListener('click', this.progressClick);
@@ -148,45 +155,42 @@ class Progress extends (HTMLElementSSR()!) {
     document.addEventListener('mousemove', this.progressDotMouseMove);
     document.addEventListener('mouseup', this.progressDotMouseUp);
   };
+
   private resize = (): void => {
     this.updateCurrentProgress();
   };
+
   connectedCallback(): void {
-    const type = this.getAttribute('type');
-    if (!type) {
+    if (!this.hasAttribute('type')) {
       this.setAttribute('type', 'primary');
     }
     this.dragEvent();
     this.updateCurrentProgress();
+    this.appendProgressDot();
     window.addEventListener('resize', this.resize);
   }
-  disconnectCallback(): void {
+
+  disconnectedCallback(): void {
     this._progress.removeEventListener('click', this.progressClick);
     this._progressDot.removeEventListener('mousedown', this.progressDotMouseDown);
     document.removeEventListener('mousemove', this.progressDotMouseMove);
     document.removeEventListener('mouseup', this.progressDotMouseUp);
     window.removeEventListener('resize', this.resize);
   }
-  attributeChangedCallback(k: string, o: string, n: string): void {
-    if (o !== n) {
-      if (k === 'dot') {
-        this.appendProgressDot();
-      }
-      if (k === 'percent') {
-        this.updateCurrentProgress();
-      }
-    }
+
+  attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
+    if (oldValue === newValue) return;
+    if (name === 'dot') this.appendProgressDot();
+    if (name === 'percent' || name === 'total') this.updateCurrentProgress();
   }
 }
 
 function Custom() {
   if (typeof document !== 'undefined' && !customElements.get('r-progress')) {
-    Progress && customElements.define('r-progress', Progress);
+    customElements.define('r-progress', Progress);
     return Progress;
-  } else {
-    return createCustomError('document is undefined or r-progress is exist');
   }
+  return Progress;
 }
 
 export default Custom();
-export { Progress };

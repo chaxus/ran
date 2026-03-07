@@ -1,5 +1,7 @@
 import { getPixelRatio } from 'ranuts/utils';
 import { createCustomError } from '@/utils/index';
+import { adoptStyles } from '@/utils/style';
+import radarCss from './index.less?inline';
 
 interface AbilityTags {
   abilityName: string;
@@ -44,6 +46,7 @@ function Custom() {
         this.abilityRadarChartContainer.appendChild(this.abilityRadarChart);
         const shadowRoot = this.attachShadow({ mode: 'closed' });
         this._shadowDom = shadowRoot;
+        adoptStyles(this._shadowDom, radarCss);
         shadowRoot.appendChild(this.abilityRadarChartContainer);
       }
       get abilitys() {
