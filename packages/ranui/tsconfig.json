@@ -17,15 +17,14 @@
     "noImplicitAny": true,
     "useUnknownInCatchVariables": false,
     "inlineSourceMap": true,
-    "baseUrl": ".",
     "experimentalDecorators": true,
     "paths": {
-      "@/assets/*": ["assets/*"],
-      "@/public/*": ["public/*"],
-      "@/components/*": ["components/*"],
-      "@/shadowless/*": ["shadowless/*"],
-      "@/plugins/*": ["plugins/*"],
-      "@/utils/*": ["utils/*"]
+      "@/assets/*": ["./assets/*"],
+      "@/public/*": ["./public/*"],
+      "@/components/*": ["./components/*"],
+      "@/shadowless/*": ["./shadowless/*"],
+      "@/plugins/*": ["./plugins/*"],
+      "@/utils/*": ["./utils/*"]
     }
   }
 }

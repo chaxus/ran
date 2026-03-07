@@ -1,3 +1,6 @@
+import { adoptStyles } from '@/utils/style';
+import tabPaneCss from './index.less?inline';
+
 interface ExtendParentNode {
   updateAttribute: (key: string, attribute: string, value?: string | null) => void;
 }
@@ -14,6 +17,7 @@ function CustomElement() {
         super();
         this._div = document.createElement('slot');
         const shadowRoot = this.attachShadow({ mode: 'closed' });
+        adoptStyles(shadowRoot, tabPaneCss);
         shadowRoot.appendChild(this._div);
       }
       get label() {
@@ -88,7 +92,7 @@ function CustomElement() {
         this._div.addEventListener('click', this.onClick);
         document.addEventListener('DOMContentLoaded', this.initAttribute);
       }
-      disconnectCallback() {
+      disconnectedCallback() {
         document.removeEventListener('DOMContentLoaded', this.initAttribute);
       }
       attributeChangedCallback(name: string, oldValue: string, newValue: string) {

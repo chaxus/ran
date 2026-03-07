@@ -2,10 +2,11 @@ import { range } from 'ranuts/utils';
 import { HTMLElementSSR, createCustomError, createSignal } from '@/utils/index';
 import { HEX_COLOR_REGEX, RGBA_REGEX, RGB_REGEX, hex2hsv, hsv2rgb, rgb2hsv } from '@/utils/color';
 import '@/components/popover';
-import '@/shadowless/input';
-import '@/shadowless/select';
+import '@/components/input';
+import '@/components/select';
 import '@/components/progress';
-import './index.less';
+import { adoptStyles } from '@/utils/style';
+import colorPickerCss from './index.less?inline';
 
 // RGBA：red、green、blue, 透明度
 // HSL：色相、饱和度、亮度，透明度
@@ -44,6 +45,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
   colorpicker: HTMLDivElement;
   colorpickerInner: HTMLDivElement;
   context!: Context;
+  _shadowDom: ShadowRoot;
   popoverBlock: HTMLElement;
   popoverContent: HTMLElement;
   colorPickerInner?: HTMLDivElement;
@@ -71,6 +73,8 @@ export class ColorPicker extends (HTMLElementSSR()!) {
   }
   constructor() {
     super();
+    this._shadowDom = this.attachShadow({ mode: 'closed' });
+    adoptStyles(this._shadowDom, colorPickerCss);
     this.setAttribute('class', 'ran-colorpicker');
     this.popoverBlock = document.createElement('r-popover');
     this.popoverBlock.setAttribute('class', 'ran-popover');
@@ -83,7 +87,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     this.popoverBlock.appendChild(this.colorpicker);
     this.popoverBlock.appendChild(this.popoverContent);
     this.colorpicker.appendChild(this.colorpickerInner);
-    this.appendChild(this.popoverBlock);
+    this._shadowDom.appendChild(this.popoverBlock);
     this.colorPickerPaletteSelect = false;
     this.createContext();
   }
@@ -359,7 +363,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     this.colorPickerInputContainerSelect = document.createElement('div');
     this.colorPickerInputContainerSelect.setAttribute('class', 'ran-color-picker-input-container-select');
     this.colorPickerInputContainerSelect.setAttribute('id', colorPickerInputContainerId);
-    this.colorPickerInputContainerSelectItem = document.createElement('ra-select');
+    this.colorPickerInputContainerSelectItem = document.createElement('r-select');
     this.colorPickerInputContainerSelectItem.setAttribute('value', 'HEX');
     this.colorPickerInputContainerSelectItem.setAttribute('class', 'ran-color-picker-input-container-select-item');
     this.colorPickerInputContainerSelectItem.setAttribute('type', 'text');
@@ -375,9 +379,9 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     this.colorPickerInputContainerSelectItem.appendChild(Fragment);
     this.colorPickerInputContainerSelect.appendChild(this.colorPickerInputContainerSelectItem);
     this.colorPickerInputContainer.appendChild(this.colorPickerInputContainerSelect);
-    this.colorPickerInputContainerInputColor = document.createElement('ra-input');
+    this.colorPickerInputContainerInputColor = document.createElement('r-input');
     this.colorPickerInputContainerInputColor.setAttribute('class', 'ran-color-picker-input-container-input-color');
-    this.colorPickerInputContainerInputNumber = document.createElement('ra-input');
+    this.colorPickerInputContainerInputNumber = document.createElement('r-input');
     this.colorPickerInputContainerInputNumber.setAttribute('class', 'ran-color-picker-input-container-input-number');
     this.colorPickerInputContainer.appendChild(this.colorPickerInputContainerInputColor);
     this.colorPickerInputContainer.appendChild(this.colorPickerInputContainerInputNumber);
@@ -423,7 +427,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
   connectedCallback(): void {
     this.popoverBlock.addEventListener('click', this.openColorPicker);
   }
-  disconnectCallback(): void {
+  disconnectedCallback(): void {
     this.popoverBlock.removeEventListener('click', this.openColorPicker);
     this.colorPickerPanelDot?.removeEventListener('mousedown', this.mouseDownColorPickerPalette);
     document.body.removeEventListener('mousemove', this.mouseMoveColorPickerPalette);

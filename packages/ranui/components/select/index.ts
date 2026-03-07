@@ -1,4 +1,5 @@
 import { generateThrottle, isMobile } from 'ranuts/utils';
+import selectCss from './index.less?inline';
 import { HTMLElementSSR, createCustomError, isDisabled } from '@/utils/index';
 import '@/components/select/option';
 import '@/components/dropdown';
@@ -6,6 +7,7 @@ import '@/components/select/dropdown-item';
 import '@/components/icon';
 import '@/components/input';
 import type { Input } from '@/components/input';
+import { adoptStyles } from '@/utils/style';
 
 interface Option {
   label: string | number;
@@ -31,6 +33,8 @@ const animationTime = 300;
 
 export class Select extends (HTMLElementSSR()!) {
   removeTimeId?: NodeJS.Timeout;
+  _listboxId: string;
+  _activeIndex: number;
   _slot: HTMLSlotElement;
   _shadowDom: ShadowRoot;
   _select: HTMLDivElement;
@@ -64,6 +68,8 @@ export class Select extends (HTMLElementSSR()!) {
   }
   constructor() {
     super();
+    this._listboxId = `ran-select-listbox-${Math.random().toString(36).slice(2, 9)}`;
+    this._activeIndex = -1;
     this._slot = document.createElement('slot');
     this._select = document.createElement('div');
     this._select.setAttribute('class', 'ran-select');
@@ -98,6 +104,7 @@ export class Select extends (HTMLElementSSR()!) {
     this._optionValueMapLabel = new Map();
     const shadowRoot = this.attachShadow({ mode: 'closed' });
     this._shadowDom = shadowRoot;
+    adoptStyles(this._shadowDom, selectCss);
     this._shadowDom.appendChild(this._select);
   }
   get value(): string {
@@ -165,17 +172,138 @@ export class Select extends (HTMLElementSSR()!) {
     if (!value || value === 'false') {
       this.removeAttribute('disabled');
       this._selection.removeAttribute('disabled');
+      this.removeAttribute('aria-disabled');
+      if (!this.hasAttribute('tabindex')) this.tabIndex = 0;
     } else {
       this.setAttribute('disabled', '');
       this._selection.setAttribute('disabled', '');
+      this.setAttribute('aria-disabled', 'true');
+      this.tabIndex = -1;
     }
   }
+
+  initAria = (): void => {
+    if (!this.hasAttribute('tabindex')) {
+      this.tabIndex = 0;
+    }
+    this.setAttribute('role', 'combobox');
+    this.setAttribute('aria-haspopup', 'listbox');
+    this.setAttribute('aria-controls', this._listboxId);
+    this.setAttribute('aria-expanded', 'false');
+    this.setAttribute('aria-disabled', this.disabled ? 'true' : 'false');
+  };
+
+  updateAriaExpanded = (isExpanded: boolean): void => {
+    this.setAttribute('aria-expanded', isExpanded ? 'true' : 'false');
+  };
+
+  getDropdownOptions = (): HTMLElement[] => {
+    if (!this._selectionDropdown) return [];
+    return Array.from(this._selectionDropdown.querySelectorAll('r-dropdown-item')) as HTMLElement[];
+  };
+
+  syncActiveState = (): void => {
+    const options = this.getDropdownOptions();
+    options.forEach((item, index) => {
+      item.setAttribute('aria-selected', item === this._activeOption ? 'true' : 'false');
+      if (!item.id) {
+        item.id = `${this._listboxId}-option-${index}`;
+      }
+    });
+    if (this._activeOption?.id) {
+      this.setAttribute('aria-activedescendant', this._activeOption.id);
+    } else {
+      this.removeAttribute('aria-activedescendant');
+    }
+  };
+
+  setActiveOptionByIndex = (targetIndex: number): void => {
+    const options = this.getDropdownOptions();
+    if (options.length === 0) return;
+    const normalizedIndex = Math.max(0, Math.min(targetIndex, options.length - 1));
+    const next = options[normalizedIndex];
+    if (!next) return;
+    if (this._activeOption && this._activeOption !== next) {
+      this._activeOption.removeAttribute('active');
+      this._activeOption.setAttribute('aria-selected', 'false');
+    }
+    this._activeIndex = normalizedIndex;
+    this._activeOption = next;
+    const activeValue = next.getAttribute('value') || '';
+    next.setAttribute('active', activeValue);
+    next.setAttribute('aria-selected', 'true');
+    next.scrollIntoView({ block: 'nearest' });
+    this.syncActiveState();
+  };
+
+  selectOptionElement = (optionElement: HTMLElement | null, shouldDispatch = true): void => {
+    if (!optionElement) return;
+    const label = optionElement.getAttribute('title') || optionElement.textContent?.trim() || '';
+    const value = optionElement.getAttribute('value') || this._optionLabelMapValue.get(label) || '';
+    if (!value) return;
+    this.setAttribute('value', value);
+    this._text.innerHTML = label;
+    this._text.setAttribute('title', label);
+    this._search.setAttribute('placeholder', label);
+    const rect = this.getBoundingClientRect();
+    const { height } = rect;
+    this._text.style.setProperty('line-height', `${height}px`);
+    if (this._activeOption && this._activeOption !== optionElement) {
+      this._activeOption.removeAttribute('active');
+      this._activeOption.setAttribute('aria-selected', 'false');
+    }
+    this._activeOption = optionElement;
+    this._activeIndex = this.getDropdownOptions().findIndex((item) => item === optionElement);
+    optionElement.setAttribute('active', value);
+    optionElement.setAttribute('aria-selected', 'true');
+    this.syncActiveState();
+    this.setSelectDropdownDisplayNone();
+    if (shouldDispatch) {
+      this.dispatchEvent(new CustomEvent('change', { detail: { value, label } }));
+    }
+  };
+
+  isDropdownOpen = (): boolean => {
+    if (!this._selectionDropdown) return false;
+    return this._selectionDropdown.style.display === 'block';
+  };
+
+  keydownSelect = (e: KeyboardEvent): void => {
+    if (this.disabled) return;
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (!this.isDropdownOpen()) {
+        this.selectMouseDown(e);
+      }
+      const options = this.getDropdownOptions();
+      if (options.length === 0) return;
+      const step = e.key === 'ArrowDown' ? 1 : -1;
+      const current = this._activeIndex >= 0 ? this._activeIndex : 0;
+      this.setActiveOptionByIndex(current + step);
+      return;
+    }
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      if (!this.isDropdownOpen()) {
+        this.selectMouseDown(e);
+        return;
+      }
+      if (this._activeOption) {
+        this.selectOptionElement(this._activeOption);
+      }
+      return;
+    }
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      this.setSelectDropdownDisplayNone();
+    }
+  };
   handlerExternalCss(): void {
     if (this.sheet) {
       try {
         const sheet = new CSSStyleSheet();
         sheet.insertRule(this.sheet);
-        this._shadowDom.adoptedStyleSheets = [sheet];
+        this._shadowDom.adoptedStyleSheets = [...this._shadowDom.adoptedStyleSheets, sheet];
       } catch (error) {
         console.error(`Failed to parse the rule in CSSStyleSheet: ${this.sheet}, error: ${error}`);
       }
@@ -187,6 +315,7 @@ export class Select extends (HTMLElementSSR()!) {
    */
   setSelectDropdownDisplayNone = (): void => {
     if (this._selectDropDownOutTimeId) return;
+    this.updateAriaExpanded(false);
     if (this._selectionDropdown && this._selectionDropdown.style.display !== 'none') {
       this._selectionDropdown.setAttribute('transit', placementDirection[this.placement].remove);
       this._selectDropDownOutTimeId = setTimeout(() => {
@@ -203,6 +332,7 @@ export class Select extends (HTMLElementSSR()!) {
    */
   setSelectDropdownDisplayBlock = (): void => {
     if (this._selectDropDownInTimeId) return;
+    this.updateAriaExpanded(true);
     if (this._selectionDropdown && this._selectionDropdown.style.display !== 'block') {
       this._selectionDropdown.setAttribute('transit', placementDirection[this.placement].add);
       this._selectionDropdown?.style.setProperty('display', 'block');
@@ -279,28 +409,8 @@ export class Select extends (HTMLElementSSR()!) {
    */
   clickOption = (e: MouseEvent): void => {
     e.stopPropagation();
-    const element = e.target as Element;
-    const label = element.innerHTML;
-    const value = this._optionLabelMapValue.get(label);
-    if (value) {
-      this.setAttribute('value', value);
-      this._text.innerHTML = label;
-      this._text.setAttribute('title', label);
-      this._search.setAttribute('placeholder', label);
-    }
-    const rect = this.getBoundingClientRect();
-    const { height } = rect;
-    this._text.style.setProperty('line-height', `${height}px`);
-    if (this._activeOption) {
-      this._activeOption.removeAttribute('active');
-    }
-    this._activeOption = element as HTMLElement;
-    if (this._activeOption) {
-      this._activeOption.setAttribute('active', value || '');
-    }
-    this.setSelectDropdownDisplayNone();
-    // 点击后触发 onchange 事件
-    this.dispatchEvent(new CustomEvent('change', { detail: { value, label } }));
+    const element = (e.target as Element).closest('r-dropdown-item') as HTMLElement | null;
+    this.selectOptionElement(element);
     this.removeDropDownTimeId(e);
   };
   /**
@@ -315,6 +425,8 @@ export class Select extends (HTMLElementSSR()!) {
       this._selectDropdown.style.setProperty('outline', '0');
       this._selectDropdown.addEventListener('click', this.clickOption);
       this._selectionDropdown = document.createElement('r-dropdown');
+      this._selectionDropdown.setAttribute('id', this._listboxId);
+      this._selectionDropdown.setAttribute('role', 'listbox');
       if (this.dropdownclass) {
         this._selectionDropdown.setAttribute('class', this.dropdownclass);
       }
@@ -346,6 +458,9 @@ export class Select extends (HTMLElementSSR()!) {
    * @return {*}
    */
   addOptionToSlot = (): void => {
+    this._optionList = [];
+    this._optionLabelMapValue.clear();
+    this._optionValueMapLabel.clear();
     const slots = this._slot.assignedElements();
     slots.forEach((item) => {
       if (item.tagName !== 'R-OPTION') return;
@@ -369,10 +484,16 @@ export class Select extends (HTMLElementSSR()!) {
     } else {
       this._selectDropdown?.style.setProperty('display', 'block');
     }
+    if (this._selectionDropdown) {
+      this._selectionDropdown.innerHTML = '';
+      this._activeOption = undefined;
+      this._activeIndex = -1;
+    }
     options.forEach((item) => {
       if (this._selectionDropdown) {
         const { label, value } = item;
         const selectOptionItem = document.createElement('r-dropdown-item');
+        selectOptionItem.setAttribute('role', 'option');
         const defaultValue = this.getAttribute('defaultValue') || this.getAttribute('value');
         if (defaultValue === value) {
           selectOptionItem.setAttribute('active', value);
@@ -386,6 +507,8 @@ export class Select extends (HTMLElementSSR()!) {
         this._selectionDropdown.appendChild(selectOptionItem);
       }
     });
+    this._activeIndex = this.getDropdownOptions().findIndex((item) => item === this._activeOption);
+    this.syncActiveState();
     this.setDefaultValue();
   };
   setDefaultValue = (): void => {
@@ -399,6 +522,11 @@ export class Select extends (HTMLElementSSR()!) {
     this._text.style.setProperty('line-height', `${height}px`);
     this._text.innerHTML = label;
     this._text.setAttribute('title', label);
+    const options = this.getDropdownOptions();
+    const target = options.find((item) => item.getAttribute('value') === defaultValue) || null;
+    if (target) {
+      this.selectOptionElement(target, false);
+    }
   };
   changeSearch = (e: Event): void => {
     const value = (e as CustomEvent).detail.value || '';
@@ -461,12 +589,14 @@ export class Select extends (HTMLElementSSR()!) {
   connectedCallback(): void {
     this.handlerExternalCss();
     this.createOption();
+    this.initAria();
     this.listenActionEvent();
     this.listenSlotChange();
     this.setShowSearch();
+    this.addEventListener('keydown', this.keydownSelect);
     document.addEventListener('click', this.clickRemoveSelect);
   }
-  disconnectCallback(): void {
+  disconnectedCallback(): void {
     this.removeEventListener('mouseenter', this.selectMouseDown);
     this.removeEventListener('mouseleave', this.selectBlur);
     this.removeEventListener('click', this.selectMouseDown);
@@ -474,16 +604,22 @@ export class Select extends (HTMLElementSSR()!) {
     this.removeSelectDropdown();
     this._selectDropdown?.removeEventListener('click', this.clickOption);
     this.removeListenSlotChange();
+    this.removeShowSearch();
+    this.removeEventListener('keydown', this.keydownSelect);
     document.removeEventListener('click', this.clickRemoveSelect);
   }
   attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     if (name === 'disabled' && this._select) {
       if (!newValue || newValue === 'false') {
-        this._select.setAttribute('disabled', '');
-        this._selection.setAttribute('disabled', '');
-      } else {
         this._select.removeAttribute('disabled');
         this._selection.removeAttribute('disabled');
+        this.removeAttribute('aria-disabled');
+        if (!this.hasAttribute('tabindex')) this.tabIndex = 0;
+      } else {
+        this._select.setAttribute('disabled', '');
+        this._selection.setAttribute('disabled', '');
+        this.setAttribute('aria-disabled', 'true');
+        this.tabIndex = -1;
       }
     }
     if (name === 'sheet' && this._shadowDom && oldValue !== newValue) {

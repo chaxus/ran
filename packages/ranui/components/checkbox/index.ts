@@ -1,5 +1,7 @@
 import { addClassToElement, create, removeClassToElement } from 'ranuts/utils';
 import { HTMLElementSSR, createCustomError, falseList } from '@/utils/index';
+import { adoptStyles } from '@/utils/style';
+import checkboxCss from './index.less?inline';
 
 export interface Context {
   checked: boolean;
@@ -26,6 +28,7 @@ export class Checkbox extends (HTMLElementSSR()!) {
       .addChild([this.checkInput, this.checkInner]).element;
     const shadowRoot = this.attachShadow({ mode: 'closed' });
     this._shadowDom = shadowRoot;
+    adoptStyles(shadowRoot, checkboxCss);
     shadowRoot.appendChild(this.container);
     this.context = {
       checked: false,
@@ -103,7 +106,7 @@ export class Checkbox extends (HTMLElementSSR()!) {
   connectedCallback(): void {
     this.addEventListener('click', this.onChange);
   }
-  disconnectCallback(): void {
+  disconnectedCallback(): void {
     this.removeEventListener('click', this.onChange);
   }
   attributeChangedCallback(name: string, oldValue: string, newValue: string): void {

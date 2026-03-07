@@ -1,5 +1,7 @@
 import { create } from 'ranuts/utils';
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
+import { adoptStyles } from '@/utils/style';
+import mathCss from './index.less?inline';
 export class Math extends (HTMLElementSSR()!) {
   contain: HTMLElement;
   static get observedAttributes(): string[] {
@@ -9,6 +11,7 @@ export class Math extends (HTMLElementSSR()!) {
     super();
     this.contain = create('div').setAttribute('class', 'ran-math').element;
     const shadowRoot = this.attachShadow({ mode: 'closed' });
+    adoptStyles(shadowRoot, mathCss);
     shadowRoot.appendChild(this.contain);
   }
   get latex(): string {

@@ -169,6 +169,26 @@ const Button = () => {
 };
 ```
 
+### SSR & Builder (Recommended)
+
+For scenarios requiring Server-Side Rendering (SSR) or a more declarative UI construction, we recommend using the `builder` utility:
+
+```ts
+import { Div, ButtonBuilder } from 'ranui/utils';
+import { renderToString } from 'ranui/utils/ssr';
+
+// Declarative Building
+const btn = ButtonBuilder()
+  .class('my-btn')
+  .label('Submit')
+  .build();
+
+// SSR Rendering (with Declarative Shadow DOM support)
+const html = renderToString(new Button()); 
+```
+
+For more details, see the [Utility Documentation](./utils/README.md).
+
 ## Contributing
 
 We welcome contributions from learners and developers! This is an experimental project, so please be patient with the development process.

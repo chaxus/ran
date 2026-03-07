@@ -1,4 +1,5 @@
 import { md5 } from 'ranuts/utils';
+export * from './builder';
 
 export const falseList = [false, 'false', null, undefined];
 /**
@@ -154,12 +155,18 @@ export const vod = {
   },
 };
 
-export const HTMLElementSSR = (): { new (): HTMLElement; prototype: HTMLElement } | null => {
+import { HTMLElementMock } from './builder';
+
+// ─── SSR/Node Compatibility ───────────────────────────────────────────────────
+
+export const HTMLElementSSR = (): { new (): HTMLElement; prototype: HTMLElement } => {
   if (typeof document !== 'undefined') {
     return HTMLElement;
   }
-  return null;
+  return HTMLElementMock as unknown as { new (): HTMLElement; prototype: HTMLElement };
 };
+
+export const RanElement = HTMLElementSSR()!;
 
 export const createSignal = <T = unknown>(
   value: T,
@@ -228,3 +235,30 @@ export function getMimeTypeFromExtension(fileName: string): string {
   };
   return mimeTypes[ext] || 'application/octet-stream';
 }
+
+/**
+ * 转义 HTML 特殊字符，防止 XSS
+ */
+const escapeHtml = (unsafe: any): string => {
+  if (typeof unsafe !== 'string') return String(unsafe);
+  return unsafe
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+};
+
+/**
+ * 极简的声明式模板实现
+ * 将模板字符串解析为 DocumentFragment，并对动态部分进行转义防止 XSS
+ */
+export const html = (strings: TemplateStringsArray, ...values: any[]): DocumentFragment => {
+  const template = document.createElement('template');
+  template.innerHTML = strings.reduce((acc, str, i) => {
+    const value = values[i - 1];
+    const safeValue = Array.isArray(value) ? value.map(escapeHtml).join('') : escapeHtml(value);
+    return acc + safeValue + str;
+  });
+  return template.content;
+};

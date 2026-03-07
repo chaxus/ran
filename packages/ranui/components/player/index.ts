@@ -11,7 +11,8 @@ import '@/assets/js/hls.js';
 import type { Progress } from '@/components/progress';
 import '@/components/select';
 import { HTMLElementSSR } from '@/utils/index';
-import './index.less';
+import { adoptStyles } from '@/utils/style';
+import playerCss from './index.less?inline';
 
 const PLAY_STATE_LIST = ['play', 'playing', 'timeupdate'];
 
@@ -123,6 +124,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   _playerTip: HTMLDivElement;
   _playerTipTime: HTMLDivElement;
   _playerTipText: HTMLDivElement;
+  _shadowDom: ShadowRoot;
   _volume?: number;
   _video?: HTMLVideoElement;
   _hls?: HlsPlayer;
@@ -135,6 +137,8 @@ export class RanPlayer extends (HTMLElementSSR()!) {
    */
   constructor() {
     super();
+    this._shadowDom = this.attachShadow({ mode: 'closed' });
+    adoptStyles(this._shadowDom, playerCss);
     // 如果有子元素，进行置空
     this.innerHTML = '';
     this._player = document.createElement('div');
@@ -373,7 +377,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     const Hls = window.Hls;
     // 如果有子元素，进行置空
     this.innerHTML = '';
-    if (!this.contains(this._player)) this.appendChild(this._player);
+    if (!this._shadowDom.contains(this._player)) this._shadowDom.appendChild(this._player);
     if (this._hls) {
       this._hls.destroy();
       this._hls = undefined;
@@ -989,7 +993,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     window.addEventListener('resize', this.resize);
     this.updatePlayer();
   }
-  disconnectCallback(): void {
+  disconnectedCallback(): void {
     this._container.removeEventListener('click', this.dispatchClickPlayerContainerAction);
     this._playerBtn.removeEventListener('click', this.dispatchClickPlayerBtnAction);
     this._playerControllerBottomPlayBtn.removeEventListener('click', this.dispatchClickPlayerBtnAction);

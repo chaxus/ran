@@ -12,8 +12,15 @@
   align-items: var(--ran-icon-align-items, center);
   justify-content: var(--ran-icon-justify-content, center);
   color: var(--ran-icon-color, inherit);
-  font-size: var(--ran-icon-font-size, 24px);
+  font-size: var(--ran-icon-font-size, 1em);
   margin: var(--ran-icon-margin, 0);
+}
+
+.ran-icon svg {
+  width: var(--ran-icon-svg-width, 1em);
+  height: var(--ran-icon-svg-height, 1em);
+  fill: var(--ran-icon-svg-fill, currentColor);
+  stroke: var(--ran-icon-svg-stroke, currentColor);
 }
 @keyframes rotate {
   to {

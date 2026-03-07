@@ -1,5 +1,7 @@
 import { addClassToElement, createDocumentFragment } from 'ranuts/utils';
 import { isDisabled, removeClassToElementChild } from '../../utils/index';
+import { adoptStyles } from '@/utils/style';
+import tabCss from './index.less?inline';
 
 function CustomElement() {
   if (typeof window !== 'undefined' && !customElements.get('r-tabs')) {
@@ -50,6 +52,7 @@ function CustomElement() {
         this.tabHeaderKeyMapIndex = {};
 
         const shadowRoot = this.attachShadow({ mode: 'closed' });
+        adoptStyles(shadowRoot, tabCss);
         shadowRoot.appendChild(this._container);
       }
 
@@ -289,7 +292,7 @@ function CustomElement() {
         this.initTab();
       }
 
-      disconnectCallback() {
+      disconnectedCallback() {
         this.unloadTab();
       }
 

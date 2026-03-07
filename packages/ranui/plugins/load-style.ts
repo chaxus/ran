@@ -8,6 +8,9 @@ export default function loadStylePlugin(options?: Options): Plugin {
     name: 'vite-plugin-load-style',
     transform(code, id) {
       const path = /ranui\/components\/[a-z|A-Z\d]+\/index.ts/;
+      // Skip files that have already been migrated to the new adoptStyles pattern
+      if (code.includes('adoptStyles') || code.includes('?inline')) return { code, map: null };
+
       const stylePath = new RegExp(/((this\.)?[a-zA-Z\d]+)\s*=\s*this\.attachShadow\(\{.*\}\)/);
       const { ignore = [] } = options ?? {};
       const match = stylePath.exec(code) ?? [];

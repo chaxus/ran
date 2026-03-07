@@ -7,7 +7,6 @@ import { visualizer } from 'rollup-plugin-visualizer';
 // import imageminSvgo from 'imagemin-svgo';
 import type { RollupOptions } from 'rollup';
 import { babel } from '@rollup/plugin-babel';
-import loadStyle from './plugins/load-style';
 import loadSvg from './plugins/load-svg';
 import { PORT } from './build/config';
 
@@ -51,17 +50,6 @@ export const umd: BuildOptions = {
   },
 };
 
-export const umdShadowless: BuildOptions = {
-  ...chunkOptimization,
-  outDir: resolve(__dirname, 'dist/umd/shadowless'),
-  lib: {
-    entry: resolve(__dirname, 'shadowless.ts'),
-    name: 'ranui',
-    fileName: 'shadowless',
-    formats: ['umd'],
-  },
-};
-
 export const es: BuildOptions = {
   ...chunkOptimization,
   lib: {
@@ -84,11 +72,9 @@ export const es: BuildOptions = {
       colorpicker: resolve(__dirname, 'components/colorpicker/index.ts'),
       popover: resolve(__dirname, 'components/popover/index.ts'),
       loading: resolve(__dirname, 'components/loading/index.ts'),
+      form: resolve(__dirname, 'components/form/index.ts'),
+      scratch: resolve(__dirname, 'components/scratch/index.ts'),
       index: resolve(__dirname, 'index.ts'),
-      inputShadowless: resolve(__dirname, 'shadowless/input/index.ts'),
-      iconShadowless: resolve(__dirname, 'shadowless/icon/index.ts'),
-      selectShadowless: resolve(__dirname, 'shadowless/select/index.ts'),
-      shadowless: resolve(__dirname, 'shadowless.ts'),
     },
     fileName: (_: string, name: string): string => {
       return `${name}.js`;
@@ -102,9 +88,6 @@ export const viteConfig: UserConfig = {
     exclude: ['public'],
   },
   plugins: [
-    loadStyle({
-      ignore: ['ranui/components/modal/index.ts'],
-    }),
     loadSvg({ svgo: false, defaultImport: 'raw' }),
     visualizer({
       emitFile: false,
@@ -122,7 +105,7 @@ export const viteConfig: UserConfig = {
   resolve: {
     alias: {
       '@/components': resolve(__dirname, 'components/'),
-      '@/shadowless': resolve(__dirname, 'shadowless/'),
+
       '@/assets': resolve(__dirname, 'assets/'),
       '@/public': resolve(__dirname, 'public/'),
       '@/utils': resolve(__dirname, 'utils/'),

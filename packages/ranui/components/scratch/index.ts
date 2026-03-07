@@ -1,10 +1,13 @@
 import { HTMLElementSSR } from '@/utils/index';
+import { adoptStyles } from '@/utils/style';
+import scratchCss from './index.less?inline';
 
 class ScratchTicket extends (HTMLElementSSR()!) {
   scratchTicketContainer: HTMLDivElement;
   scratchTicket: HTMLCanvasElement;
   state: { touchStart: boolean; scratchArea: number };
   scratchAward: HTMLDivElement;
+  _shadowDom: ShadowRoot;
   static get observedAttributes(): string[] {
     return ['disabled', 'icon', 'effect', 'iconSize', 'sheet'];
   }
@@ -21,41 +24,8 @@ class ScratchTicket extends (HTMLElementSSR()!) {
     // this.scratchAward.appendChild(this.scratchTicket);
     this.scratchTicketContainer.appendChild(this.scratchTicket);
     this.scratchTicketContainer.appendChild(this.scratchAward);
-    // const shadowRoot = this.attachShadow({ mode: 'closed' });
-    const style = document.createElement('style');
-    style.textContent = `
-    :host{
-        position: relative;
-        display: block;
-    }
-    .ran-scratch-ticket{
-        position: relative;
-        display: block;
-        width:100%;
-        height:100%;
-    }
-    .ran-scratch-ticket-award{
-        position: absolute;
-        top:0px;
-        left:0px;
-        display: block;
-        width:100%;
-        height:100%;
-        background:#000;
-        z-index:1;
-    }
-    .ran-scratch-ticket-canvas{
-        position: absolute;
-        top:0px;
-        left:0px;
-        display: block;
-        width:100%;
-        height:100%;
-        z-index:2;
-    }
-    `;
-    document.body.appendChild(style);
-    // shadowRoot.appendChild(this.scratchTicketContainer);
+    this._shadowDom = this.attachShadow({ mode: 'closed' });
+    adoptStyles(this._shadowDom, scratchCss);
     this.state = {
       touchStart: false,
       scratchArea: 0,
@@ -104,7 +74,9 @@ class ScratchTicket extends (HTMLElementSSR()!) {
     this.scratchTicket.addEventListener('touchend', this.touchEndScratch);
   };
   attributeChangedCallback(): void {
-    this.appendChild(this.scratchTicketContainer);
+    if (!this._shadowDom.contains(this.scratchTicketContainer)) {
+      this._shadowDom.appendChild(this.scratchTicketContainer);
+    }
     this.drawScratchTicket();
   }
 }

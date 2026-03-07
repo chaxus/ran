@@ -1,6 +1,8 @@
 import type { Chain } from 'ranuts/utils';
 import { addClassToElement, create, removeClassToElement } from 'ranuts/utils';
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
+import { adoptStyles } from '@/utils/style';
+import dropdownCss from './index.less?inline';
 
 const animationTime = 300;
 
@@ -32,6 +34,7 @@ export class Dropdown extends (HTMLElementSSR()!) {
     this.container = create('div').setAttribute('class', 'ranui-dropdown-container').addChild([this.dropdown]);
     const shadowRoot = this.attachShadow({ mode: 'closed' });
     this._shadowDom = shadowRoot;
+    adoptStyles(shadowRoot, dropdownCss);
     shadowRoot.appendChild(this.container.element);
   }
   get transit(): string {

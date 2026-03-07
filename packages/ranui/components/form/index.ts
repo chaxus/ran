@@ -1,3 +1,6 @@
+import { adoptStyles } from '@/utils/style';
+import formCss from './index.less?inline';
+
 function Component() {
   const template = document.createElement('template');
   const slot = document.createElement('slot');
@@ -12,6 +15,7 @@ function Component() {
       super();
       this._form = form.cloneNode(true) as HTMLFormElement;
       const shadowRoot = this.attachShadow({ mode: 'closed' });
+      adoptStyles(shadowRoot, formCss);
       const jsonData: Record<string, any> = {};
       const formData = new FormData(this._form);
       formData.forEach((_, key) => {

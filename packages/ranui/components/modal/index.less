@@ -1,0 +1,63 @@
+:host {
+	position: var(--ran-modal-host-position, static);
+}
+
+.ran-modal-root {
+	position: var(--ran-modal-root-position, fixed);
+	inset: var(--ran-modal-root-inset, 0);
+	z-index: var(--ran-modal-root-z-index, 1000);
+	display: var(--ran-modal-root-display, none);
+}
+
+.ran-modal-root[open] {
+	display: var(--ran-modal-root-open-display, block);
+}
+
+.ran-modal-mask {
+	position: var(--ran-modal-mask-position, absolute);
+	inset: var(--ran-modal-mask-inset, 0);
+	background: var(--ran-modal-mask-background, rgba(0, 0, 0, 0.45));
+}
+
+.ran-modal-dialog {
+	position: var(--ran-modal-dialog-position, relative);
+	width: var(--ran-modal-dialog-width, min(560px, calc(100vw - 32px)));
+	margin: var(--ran-modal-dialog-margin, 10vh auto 0);
+	background: var(--ran-modal-dialog-background, #fff);
+	border-radius: var(--ran-modal-dialog-border-radius, 10px);
+	box-shadow: var(--ran-modal-dialog-box-shadow, 0 10px 32px rgba(0, 0, 0, 0.2));
+	outline: var(--ran-modal-dialog-outline, none);
+	max-height: var(--ran-modal-dialog-max-height, calc(100vh - 20vh));
+	overflow: var(--ran-modal-dialog-overflow, hidden);
+}
+
+.ran-modal-header {
+	display: var(--ran-modal-header-display, flex);
+	align-items: var(--ran-modal-header-align-items, center);
+	justify-content: var(--ran-modal-header-justify-content, space-between);
+	padding: var(--ran-modal-header-padding, 16px 18px);
+	border-bottom: var(--ran-modal-header-border-bottom, 1px solid #f0f0f0);
+}
+
+.ran-modal-title {
+	margin: var(--ran-modal-title-margin, 0);
+	font-size: var(--ran-modal-title-font-size, 16px);
+	line-height: var(--ran-modal-title-line-height, 1.5);
+	color: var(--ran-modal-title-color, #111827);
+}
+
+.ran-modal-close {
+	border: var(--ran-modal-close-border, none);
+	background: var(--ran-modal-close-background, transparent);
+	color: var(--ran-modal-close-color, #667085);
+	font-size: var(--ran-modal-close-font-size, 18px);
+	cursor: var(--ran-modal-close-cursor, pointer);
+	padding: var(--ran-modal-close-padding, 0 4px);
+}
+
+.ran-modal-body {
+	padding: var(--ran-modal-body-padding, 18px);
+	max-height: var(--ran-modal-body-max-height, calc(100vh - 32vh));
+	overflow: var(--ran-modal-body-overflow, auto);
+	color: var(--ran-modal-body-color, #344054);
+}

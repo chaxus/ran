@@ -1,5 +1,7 @@
 import { HTMLElementSSR, createCustomError, falseList, isDisabled } from '@/utils/index';
 import '@/components/icon/index';
+import { adoptStyles } from '@/utils/style';
+import inputCss from './index.less?inline';
 
 export class Input extends (HTMLElementSSR()!) {
   static get observedAttributes(): string[] {
@@ -31,6 +33,7 @@ export class Input extends (HTMLElementSSR()!) {
   constructor() {
     super();
     const shadowRoot = this.attachShadow({ mode: 'closed' });
+    adoptStyles(shadowRoot, inputCss);
     this._input = document.createElement('div');
     this._input.setAttribute('class', 'ran-input');
     this._input.setAttribute('part', 'ran-input');
@@ -455,7 +458,7 @@ export class Input extends (HTMLElementSSR()!) {
       this.dealIcon();
     }
   }
-  disconnectCallback(): void {
+  disconnectedCallback(): void {
     this._inputContent.removeEventListener('input', this.customInput);
   }
   attributeChangedCallback(name: string, oldValue: string, newValue: string): void {

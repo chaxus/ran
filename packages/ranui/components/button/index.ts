@@ -1,32 +1,49 @@
 import { currentDevice } from 'ranuts/utils';
-import { HTMLElementSSR, createCustomError, falseList, isDisabled } from '@/utils/index';
+import { Div, RanElement, Slot, falseList, isDisabled } from '@/utils/index';
+import { adoptStyles } from '@/utils/style';
+import buttonCss from './index.less?inline';
 
-export class Button extends (HTMLElementSSR()!) {
-  _btn: HTMLDivElement;
-  _btnContent: HTMLDivElement;
+export class Button extends RanElement {
+  _btn!: HTMLDivElement;
+  _btnContent!: HTMLDivElement;
   _iconElement?: HTMLElement;
-  _slot: HTMLSlotElement;
-  _shadowDom: ShadowRoot;
+  _slot!: HTMLSlotElement;
+  _shadowDom!: ShadowRoot;
   debounceTimeId?: NodeJS.Timeout;
+
   static get observedAttributes(): string[] {
     return ['disabled', 'icon', 'effect', 'iconSize', 'sheet'];
   }
+
   constructor() {
     super();
-    this._slot = document.createElement('slot');
-    this._btnContent = document.createElement('div');
-    this._btn = document.createElement('div');
-    this._btn.setAttribute('class', 'ran-btn');
-    this._btn.setAttribute('part', 'ran-btn');
-    this._btnContent.setAttribute('class', 'ran-btn-content');
-    this._btnContent.setAttribute('part', 'ran-btn-content');
-    this._btnContent.appendChild(this._slot);
-    this._slot.setAttribute('class', 'slot');
-    const shadowRoot = this.attachShadow({ mode: 'closed' });
-    this._shadowDom = shadowRoot;
-    this._btn.appendChild(this._btnContent);
-    shadowRoot.appendChild(this._btn);
+    // 🛡️ Rehydration safe: check if shadowRoot already exists (e.g. from DSD)
+    this._shadowDom = this.shadowRoot || this.attachShadow({ mode: 'closed' });
+    adoptStyles(this._shadowDom, buttonCss);
+
+    // 🏗️ Surgical rehydration: check if content already exists to avoid nuking styles
+    let btn = this._shadowDom.querySelector<HTMLDivElement>('.ran-btn');
+    if (!btn) {
+      btn = Div()
+        .class('ran-btn')
+        .attr('part', 'ran-btn')
+        .role('button')
+        .tabIndex(0)
+        .children(Div().class('ran-btn-content').attr('part', 'ran-btn-content').children(Slot().class('slot')))
+        .build();
+      this._shadowDom.appendChild(btn);
+    }
+    this._btn = btn;
+    this._btnContent = btn.querySelector<HTMLDivElement>('.ran-btn-content')!;
+    this._slot = btn.querySelector<HTMLSlotElement>('slot')!;
+
+    // 🖱️ Bind events manually to support Rehydration (SSR/DSD)
+    this._btn.addEventListener('mousedown', this.mousedown);
+    this._btn.addEventListener('mouseup', this.mouseup);
+    this._btn.addEventListener('keydown', this.keydown);
   }
+
+  // ── Properties ─────────────────────────────────────────────────────────────
 
   get sheet(): string {
     return this.getAttribute('sheet') || '';
@@ -34,6 +51,7 @@ export class Button extends (HTMLElementSSR()!) {
   set sheet(value: string) {
     this.setAttribute('sheet', value || '');
   }
+
   get disabled(): boolean | string {
     return isDisabled(this);
   }
@@ -46,6 +64,7 @@ export class Button extends (HTMLElementSSR()!) {
       this.setAttribute('aria-disabled', 'true');
     }
   }
+
   get iconSize(): string {
     return this.getAttribute('iconSize') || '';
   }
@@ -57,6 +76,7 @@ export class Button extends (HTMLElementSSR()!) {
       this.setIcon();
     }
   }
+
   get icon(): string {
     return this.getAttribute('icon') || '';
   }
@@ -68,6 +88,7 @@ export class Button extends (HTMLElementSSR()!) {
       this.setIcon();
     }
   }
+
   get effect(): string {
     return this.getAttribute('effect') || '';
   }
@@ -78,43 +99,55 @@ export class Button extends (HTMLElementSSR()!) {
       this.setAttribute('effect', value);
     }
   }
+
+  // ── Methods ────────────────────────────────────────────────────────────────
+
   /**
    * @description: 设置 button 的 icon
-   * @return {*}
    */
   setIcon = (): void => {
-    if (this.icon) {
-      // 获取 button 的尺寸
-      const { width, height } = this._slot.getBoundingClientRect();
-      const size = Math.min(width, height);
+    // Only proceed in browser and if icon exists
+    if (typeof document === 'undefined' || !this._slot) return;
+    const iconName = this.icon;
+    if (!iconName) {
       if (this._iconElement) {
-        // 如果有_iconElement，只用设置 name 和 size
-        this._iconElement.setAttribute('name', this.icon);
-      } else {
-        // 创建 icon，设置 name,size,color
-        this._iconElement = document.createElement('r-icon');
-        this._iconElement.setAttribute('name', this.icon);
-        this._iconElement.setAttribute('color', 'currentColor');
-        this._iconElement.setAttribute('class', 'icon');
-        // 添加到 btn 元素的首位
-        this._slot.insertAdjacentElement('beforebegin', this._iconElement);
+        this._iconElement.remove();
+        this._iconElement = undefined;
       }
-      if (this.iconSize) {
-        this._iconElement.setAttribute('size', this.iconSize);
-      } else {
-        this._iconElement.setAttribute('size', `${size - 5}`);
-      }
+      return;
     }
+
+    if (this._iconElement) {
+      this._iconElement.setAttribute('name', iconName);
+    } else {
+      // 🏗️ Check if icon already exists (Hydration)
+      let icon = this._shadowDom.querySelector('r-icon');
+      if (!icon) {
+        icon = document.createElement('r-icon');
+        icon.setAttribute('color', 'currentColor');
+        icon.setAttribute('class', 'icon');
+        this._slot.insertAdjacentElement('beforebegin', icon);
+      }
+      this._iconElement = icon as HTMLElement;
+      this._iconElement.setAttribute('name', iconName);
+    }
+
+    const { width, height } = this._slot.getBoundingClientRect();
+    const size = Math.min(width, height) || 16;
+    const finalSize = this.iconSize || `${size > 5 ? size - 5 : size}`;
+    this._iconElement.setAttribute('size', String(finalSize));
   };
+
   mousedown = (event: MouseEvent): void => {
     if (currentDevice() !== 'pc') return;
-    if (!this.disabled || this.disabled === 'false') {
+    if (!this.disabled) {
       this.debounceMouseEvent();
       const { left, top } = this.getBoundingClientRect();
-      this._btn.style.setProperty('--ran-x', event.clientX - left + 'px');
-      this._btn.style.setProperty('--ran-y', event.clientY - top + 'px');
+      this._btn.style.setProperty('--ran-x', `${event.clientX - left}px`);
+      this._btn.style.setProperty('--ran-y', `${event.clientY - top}px`);
     }
   };
+
   mouseup = (): void => {
     if (currentDevice() !== 'pc') return;
     if (this.debounceTimeId) return;
@@ -124,45 +157,75 @@ export class Button extends (HTMLElementSSR()!) {
       this.debounceMouseEvent();
     }, 600);
   };
-  debounceMouseEvent = (): void => {
-    clearTimeout(this.debounceTimeId);
-    this.debounceTimeId = undefined;
+
+  keydown = (event: KeyboardEvent): void => {
+    if (isDisabled(this)) return;
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      this.click();
+    }
   };
+
+  debounceMouseEvent = (): void => {
+    if (this.debounceTimeId) {
+      clearTimeout(this.debounceTimeId);
+      this.debounceTimeId = undefined;
+    }
+  };
+
   handlerExternalCss = (): void => {
-    if (this.sheet) {
+    if (this.sheet && this._shadowDom) {
       try {
         const sheet = new CSSStyleSheet();
-        sheet.insertRule(this.sheet);
-        this._shadowDom.adoptedStyleSheets = [sheet];
+        sheet.replaceSync(this.sheet);
+        // 🛡️ Fix: DON'T overwrite, append to existing sheets to keep base styles
+        this._shadowDom.adoptedStyleSheets = [...this._shadowDom.adoptedStyleSheets, sheet];
       } catch (error) {
-        console.error(`Failed to parse the rule in CSSStyleSheet: ${this.sheet}, error: ${error}`);
+        console.error(`Failed to apply CSSStyleSheet in Button: ${error}`);
       }
     }
   };
+
+  syncA11yState = (): void => {
+    const disabled = isDisabled(this);
+    this._btn.setAttribute('aria-disabled', disabled ? 'true' : 'false');
+    this._btn.tabIndex = disabled ? -1 : 0;
+    if (disabled) {
+      this.setAttribute('aria-disabled', 'true');
+      this._btnContent.setAttribute('disabled', 'true');
+    } else {
+      this.removeAttribute('aria-disabled');
+      this._btnContent.removeAttribute('disabled');
+    }
+  };
+
+  // ── Lifecycle ──────────────────────────────────────────────────────────────
+
   connectedCallback(): void {
-    this._btn.addEventListener('mousedown', this.mousedown);
-    this._btn.addEventListener('mouseup', this.mouseup);
     this.handlerExternalCss();
     this.setIcon();
-    this.setAttribute('role', 'button');
-    this.setAttribute('tabindex', '0');
+    this.syncA11yState();
   }
-  disconnectCallback(): void {
-    this._btn.removeEventListener('mousedown', this.mousedown);
-    this._btn.removeEventListener('mouseup', this.mouseup);
-  }
-  attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
-    if (name === 'disabled' && this._btnContent) {
-      if (!newValue || newValue === 'false') {
-        this._btnContent.setAttribute('disabled', '');
-      } else {
-        this._btnContent.removeAttribute('disabled');
-      }
+
+  /**
+   * @description: FIX: 修正拼写错误 disconnectCallback -> disconnectedCallback
+   * 确保组件销毁时正确移除事件监听，彻底杜绝内存泄漏。
+   */
+  disconnectedCallback(): void {
+    this.debounceMouseEvent();
+    if (this._btn) {
+      this._btn.removeEventListener('mousedown', this.mousedown);
+      this._btn.removeEventListener('mouseup', this.mouseup);
+      this._btn.removeEventListener('keydown', this.keydown);
     }
-    if (name === 'icon' && this._btnContent && oldValue !== newValue) this.setIcon();
-    if (name === 'iconSize' && this._btnContent && oldValue !== newValue)
-      this._btnContent.setAttribute('iconSize', newValue);
-    if (name === 'sheet' && this._shadowDom && oldValue !== newValue) this.handlerExternalCss();
+  }
+
+  attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
+    if (oldValue === newValue) return;
+
+    if (name === 'disabled' && this._btnContent) this.syncA11yState();
+    if (name === 'icon' || name === 'iconSize') this.setIcon();
+    if (name === 'sheet') this.handlerExternalCss();
   }
 }
 
@@ -170,9 +233,8 @@ function Custom() {
   if (typeof document !== 'undefined' && !customElements.get('r-button')) {
     customElements.define('r-button', Button);
     return Button;
-  } else {
-    return createCustomError('document is undefined or r-button is exist');
   }
+  return Button;
 }
 
 export default Custom();
