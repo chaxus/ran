@@ -5,7 +5,25 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ranui - full examples</title>
-  <script src="./index.ts" type="module"></script>
+  <script type="module">
+    import arrowDown from './assets/icons/arrow-down.svg?raw';
+    import home from './assets/icons/home.svg?raw';
+    import loading from './assets/icons/loading.svg?raw';
+    import lock from './assets/icons/lock.svg?raw';
+    import setting from './assets/icons/setting.svg?raw';
+    import { registerIcons } from './components/icon/index.ts';
+
+    registerIcons({
+      'arrow-down': arrowDown,
+      home,
+      loading,
+      lock,
+      setting,
+    });
+
+    // Register icons first, then bootstrap all components/examples.
+    await import('./index.ts');
+  </script>
   <style>
     :root {
       --bg: #f5f7fb;
