@@ -49,10 +49,11 @@ r-select {
     }
   }
   &([type="text"]) {
-    &::part(selection) {
+    .selection {
       border: var(--ran-select-host-type-text-selection-border, none);
+      background: var(--ran-select-host-type-text-selection-background, transparent);
     }
-    &::part(icon) {
+    .icon {
       display: var(--ran-select-host-type-text-icon-display, none);
     }
   }
