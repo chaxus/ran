@@ -87,8 +87,19 @@ export class Progress extends RanElement {
     const rect = this._progress.getBoundingClientRect();
     const offsetX = e.clientX - rect.left;
     const percentage = Math.min(1, Math.max(0, offsetX / this._progress.offsetWidth));
+    console.log(
+      '[progressClick] e.clientX:',
+      e.clientX,
+      'rect.left:',
+      rect.left,
+      'offsetWidth:',
+      this._progress.offsetWidth,
+      'percentage:',
+      percentage,
+    );
     const newVal = percentage * Number(this.total);
     this.percent = String(newVal);
+    console.log('[progressClick] newVal:', newVal, 'total:', this.total, 'this.percent:', this.percent);
     this.updateUI(percentage);
     this.change();
   };
