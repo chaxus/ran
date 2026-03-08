@@ -93,11 +93,6 @@ export const viteConfig: UserConfig = {
       emitFile: false,
       filename: 'report/build-stats.html',
     }) as PluginOption,
-    // viteImagemin({
-    //   plugins: {
-    //     svg: imageminSvgo(),
-    //   },
-    // }),
     babel({
       babelHelpers: 'bundled',
     }),

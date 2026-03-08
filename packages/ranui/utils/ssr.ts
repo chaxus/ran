@@ -1,5 +1,16 @@
 import { HTMLElementMock } from './builder';
 
+// ─── SSR/Node Compatibility ───────────────────────────────────────────────────
+
+export const HTMLElementSSR = (): { new (): HTMLElement; prototype: HTMLElement } => {
+  if (typeof document !== 'undefined') {
+    return HTMLElement;
+  }
+  return HTMLElementMock as unknown as { new (): HTMLElement; prototype: HTMLElement };
+};
+
+export const RanElement = HTMLElementSSR()!;
+
 /**
  * Rendering utility for RanUI components in SSR environments.
  * It takes a component instance and returns its HTML string representation,
