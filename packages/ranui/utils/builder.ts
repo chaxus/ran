@@ -135,7 +135,8 @@ export class HTMLElementMock {
     return;
   }
 
-  serialize(): string {
+  serialize(tagNameOverride?: string): string {
+    const tagName = tagNameOverride || this.tagName;
     const attrs = Array.from(this.attributes.entries())
       .map(([k, v]) => ` ${k}="${escapeHtmlAttribute(v)}"`)
       .join('');
@@ -152,7 +153,7 @@ export class HTMLElementMock {
     if (this.textContent !== null) {
       innerHTML += escapeHtml(this.textContent);
     } else if (this._innerHTML) {
-      innerHTML += this._innerHTML; // Warning: this assumes raw HTML is safe if manually set
+      innerHTML += this._innerHTML;
     } else {
       innerHTML += this.childrenList
         .map((child) => {
@@ -179,11 +180,11 @@ export class HTMLElementMock {
       'track',
       'wbr',
     ];
-    if (selfClosing.includes(this.tagName) && !innerHTML) {
-      return `<${this.tagName}${attrs}${styleAttr} />`;
+    if (selfClosing.includes(tagName) && !innerHTML) {
+      return `<${tagName}${attrs}${styleAttr} />`;
     }
 
-    return `<${this.tagName}${attrs}${styleAttr}>${innerHTML}</${this.tagName}>`;
+    return `<${tagName}${attrs}${styleAttr}>${innerHTML}</${tagName}>`;
   }
 }
 
