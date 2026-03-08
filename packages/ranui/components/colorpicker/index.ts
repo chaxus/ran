@@ -422,10 +422,8 @@ export class ColorPicker extends (HTMLElementSSR()!) {
   };
   openColorPicker = (): void => {
     if (this.colorPickerInner) return;
-    this.colorPickerInner = document.createElement('div');
-    this.colorPickerInner.setAttribute('class', 'ran-color-picker-inner');
-    this.colorPickerInnerContent = document.createElement('div');
-    this.colorPickerInnerContent.setAttribute('class', 'ran-color-picker-inner-content');
+    this.colorPickerInner = Div().class('ran-color-picker-inner').build() as HTMLDivElement;
+    this.colorPickerInnerContent = Div().class('ran-color-picker-inner-content').build() as HTMLDivElement;
     this.createColorPickerProgress();
     this.createColorPickerSelect();
     this.createColorPickerInput();

@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <link rel="icon" href="data:;" />
   <meta charset="UTF-8" />
@@ -136,6 +137,7 @@
     }
   </style>
 </head>
+
 <body>
   <main class="page">
     <header class="hero">
@@ -311,10 +313,8 @@
     <section id="radar" class="section">
       <h2>Radar - r-radar</h2>
       <div class="box" style="max-width: 340px;">
-        <r-radar
-          style="width: 300px; height: 300px; display: block;"
-          abilitys='[{"abilityName":"Performance","scoreRate":"92"},{"abilityName":"Accessibility","scoreRate":"83"},{"abilityName":"DX","scoreRate":"75"},{"abilityName":"Stability","scoreRate":"86"},{"abilityName":"Features","scoreRate":"80"}]'
-        ></r-radar>
+        <r-radar style="width: 300px; height: 300px; display: block;"
+          abilitys='[{"abilityName":"Performance","scoreRate":"92"},{"abilityName":"Accessibility","scoreRate":"83"},{"abilityName":"DX","scoreRate":"75"},{"abilityName":"Stability","scoreRate":"86"},{"abilityName":"Features","scoreRate":"80"}]'></r-radar>
       </div>
     </section>
 
@@ -325,7 +325,8 @@
           <div slot="r-form_content" class="demo-row">
             <r-input name="name" label="Name" placeholder="Your name"></r-input>
             <r-input name="email" label="Email" placeholder="Your email"></r-input>
-            <r-button type="primary" onclick="document.getElementById('demo-form')?.shadowRoot?.querySelector('form')?.requestSubmit?.()">Submit</r-button>
+            <r-button type="primary"
+              onclick="document.getElementById('demo-form')?.shadowRoot?.querySelector('form')?.requestSubmit?.()">Submit</r-button>
           </div>
         </r-form>
       </div>
@@ -333,8 +334,13 @@
 
     <section id="scratch" class="section">
       <h2>Scratch - r-scratch</h2>
-      <p class="small">当前代码中 `scratch` 已导出但尚未 `customElements.define`，此处先标注为待接入示例。</p>
-      <div class="box">待接入：`r-scratch` 注册后可在此处直接展示。</div>
+      <div class="box" style="width: 300px; height: 150px; position: relative; overflow: hidden; border-radius: 8px;">
+        <r-scratch style="width: 100%; height: 100%;"></r-scratch>
+        <div
+          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; z-index: -1; background: #f0f0f0; color: #999;">
+          WINNER!
+        </div>
+      </div>
     </section>
 
     <section id="player" class="section">
@@ -371,4 +377,5 @@
     </section>
   </main>
 </body>
+
 </html>
