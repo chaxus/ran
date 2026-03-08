@@ -1,4 +1,5 @@
 import { adoptStyles } from '@/utils/style';
+import { Slot } from '@/utils/builder';
 import tabPaneCss from './index.less?inline';
 
 interface ExtendParentNode {
@@ -13,12 +14,18 @@ function CustomElement() {
       }
       _div: HTMLElement;
       parent: (ParentNode & ExtendParentNode) | undefined | null;
+      _shadowDom: ShadowRoot;
       constructor() {
         super();
-        this._div = document.createElement('slot');
-        const shadowRoot = this.attachShadow({ mode: 'closed' });
-        adoptStyles(shadowRoot, tabPaneCss);
-        shadowRoot.appendChild(this._div);
+        this._shadowDom = this.shadowRoot || this.attachShadow({ mode: 'closed' });
+        adoptStyles(this._shadowDom, tabPaneCss);
+
+        let slot = this._shadowDom.querySelector('slot') as HTMLSlotElement;
+        if (!slot) {
+          slot = Slot().build() as HTMLSlotElement;
+          this._shadowDom.appendChild(slot);
+        }
+        this._div = slot;
       }
       get label() {
         return this.getAttribute('label') || '';
