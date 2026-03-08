@@ -29,6 +29,7 @@
     "test": "sh ./bin/test.sh",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
+    "test:unit:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
     "test:report": "playwright show-report",
     "test:ui": "playwright test --ui",
@@ -57,7 +58,6 @@
       "import": "./dist/index.js",
       "require": "./dist/umd/index.umd.cjs"
     },
-
     "./button": {
       "types": "./dist/index.d.ts",
       "import": "./dist/button.js",
@@ -185,8 +185,9 @@
     "@types/lodash": "^4.17.20",
     "@types/lodash-es": "^4.17.12",
     "@types/tinycolor2": "^1.4.6",
-    "jsdom": "^26.1.0",
+    "@vitest/coverage-v8": "^3.2.4",
     "imagemin-svgo": "^11.0.1",
+    "jsdom": "^26.1.0",
     "less": "^4.4.2",
     "prettier": "^3.6.2",
     "rollup-plugin-visualizer": "^6.0.4",

@@ -11,6 +11,12 @@ export default defineConfig({
     include: ['test/**/*.test.ts'],
     globals: true,
     clearMocks: true,
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html'],
+      include: ['components/**/*.ts'],
+      exclude: ['components/**/*.test.ts'],
+    },
   },
   resolve: {
     alias: {

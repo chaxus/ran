@@ -88,7 +88,9 @@ constructor() {
 | **`sheet` 属性** | 程序化/动态注入 | `<r-button sheet=".ran-btn-content { ... }">` |
 | **Slot 内容** | 自定义插槽内容样式 | `<r-button><strong style="color:red">文字</strong></r-button>` |
 
-> **原则**：组件内部所有 CSS 值均使用 `var(--token, 默认值)` 写法，使用方只需覆盖变量即可定制任意样式，无需了解 Shadow DOM 内部结构。
+> **原则**：组件内部所有 CSS 值均使用 `var(--token, 默认值)` 写法，使用方只需覆盖变量即可定制任意样式。
+> 
+> **权重建议**：组件内部默认样式优先使用 `:host` 或 `:host(selector)` 声明。这样外部通过标签名设置的样式具有更高权重，方便用户覆盖，避免强制使用 `!important`。
 
 ---
 
@@ -159,7 +161,8 @@ this._progressWrap = container.querySelector('.ran-progress-wrap')!;
 建议执行方式：
 1. 先迁移静态结构组件（Button/Input/Select/Modal/Tab）。
 2. 再迁移复杂组件的“外层结构”，保留核心绘制逻辑原生实现。
-3. 每次迁移后补最小回归用例（属性、事件、键盘行为、SSR 复用）。
+3. **性能建议**：对于高性能列表（如 `Select` 选项、`Tab` 头部），优先在父级容器上使用**事件代理 (Event Delegation)**，避免在 Builder 链式调用中为每个子节点绑定 `on('click')`。
+4. 每次迁移后补最小回归用例（属性、事件、键盘行为、SSR 复用）。
 
 ### 现有 Builder API 速查
 
@@ -240,6 +243,14 @@ constructor() {
 }
 ```
 这种混合模式保证了组件在纯客户端（例如 SPA 管理后台）和同构应用（例如 Next.js 博客官网）中都能有最佳的性能表现。
+
+### 浏览器兼容性基准
+
+| 特性 | 最低版本支持 | Polyfill / 降级策略 |
+|------|------------|-------------------|
+| Constructable Stylesheets | Chrome 73, Safari 14.1, Firefox 101 | 降级为 `<style>` 标签注入 |
+| Declarative Shadow DOM | Chrome 90, Safari 16.4, Firefox 123 | 手动执行 `hydrateShadowRoots` 脚本 |
+| `::part()` / `::slotted()` | Chrome 73, Safari 13.1, Firefox 72 | 无（核心 Web 标准） |
 
 
 ---
@@ -392,7 +403,7 @@ export interface ButtonProps {
 components/button/
 ├── index.ts        ← 组件逻辑（Builder + adoptStyles）
 ├── index.less      ← 组件样式（全部用 CSS 变量）
-└── index.test.ts   ← 单元测试（待补充）
+└── ../test/button.contract.test.ts   ← 单元测试（已接入）
 ```
 
 ### 6.2 测试基础设施
@@ -402,21 +413,19 @@ components/button/
 | 层次 | 工具 | 内容 |
 |------|------|------|
 | 单元测试 | Vitest | 组件属性读写、方法调用、事件触发 |
-| 组件测试 | `@web/test-runner` | 在真实浏览器中测试 Shadow DOM 行为 |
-| 视觉回归 | Playwright + Percy | 捕捉样式改动导致的视觉变化 |
+| 组件/集成测试 | Playwright | 在真实浏览器中测试交互链路与布局行为 |
+| 视觉回归 | Playwright screenshot / Percy (可选) | 捕捉样式改动导致的视觉变化 |
 
 ### 6.3 `disconnectedCallback` 内存泄漏规范
 
 **已发现的问题**：多个组件将 `disconnectedCallback` 误写为 `disconnectCallback`，导致组件销毁时事件监听器没有被清理，造成内存泄漏。
 
-**规范**：每个注册了事件监听器的组件，**必须**在 `disconnectedCallback` 中移除：
-```ts
-disconnectedCallback(): void {
-  this._btn.removeEventListener('click', this.handleClick);
-  document.removeEventListener('click', this.handleOutsideClick);
-  window.removeEventListener('resize', this.resize);
-}
-```
+**规范**：每个注册了事件监听器的组件，**必须**在 `disconnectedCallback` 中移除。
+
+**质量工具计划**：
+- 引入自定义 ESLint 插件，强制检查继承自 `RanElement` 的类名：
+  - 是否包含 `disconnectedCallback` 且未拼写错误。
+  - 是否正确调用了 `super.disconnectedCallback()`（如果基类有逻辑）。
 
 ---
 
