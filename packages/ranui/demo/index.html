@@ -346,8 +346,9 @@
     <section id="player" class="section">
       <h2>Player - r-player</h2>
       <p class="small">播放器体积较大，这里提供一个基础地址用于回归检查。</p>
-      <div class="box" style="max-width: 700px;">
-        <r-player src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"></r-player>
+      <div class="box" style="max-width: 700px; height: 400px;">
+        <r-player debug="true"
+          src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"></r-player>
       </div>
     </section>
 
@@ -355,7 +356,12 @@
       <h2>Modal - r-modal</h2>
       <p class="small">当前 modal 组件是占位实现，先展示标签实例，方便后续迭代时观察行为变化。</p>
       <div class="demo-row">
-        <r-modal id="demo-modal">Modal placeholder</r-modal>
+        <r-button type="primary" onclick="document.getElementById('demo-modal').setAttribute('open', 'true')">Open
+          Modal</r-button>
+        <r-modal id="demo-modal" title="Demo Modal">
+          <p>This is a modal content example.</p>
+          <r-button onclick="document.getElementById('demo-modal').removeAttribute('open')">Close</r-button>
+        </r-modal>
       </div>
     </section>
 

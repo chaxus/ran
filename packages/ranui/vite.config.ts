@@ -108,7 +108,7 @@ export const viteConfig: UserConfig = {
     preprocessorOptions: {
       less: {
         javascriptEnabled: true,
-        additionalData: `@import "./base.less";`,
+        additionalData: `@import "${resolve(__dirname, 'base.less')}";`,
       },
     },
     modules: {
