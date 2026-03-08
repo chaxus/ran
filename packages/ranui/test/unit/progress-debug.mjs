@@ -15,16 +15,16 @@ import('./components/progress/index.ts').then((mod) => {
   el.setAttribute('percent', '30');
   el.setAttribute('total', '100');
   document.body.appendChild(el);
-  
+
   const innerProgress = el._shadowDom.querySelector('.ran-progress');
-  
+
   // mock offsetWidth
   Object.defineProperty(innerProgress, 'offsetWidth', { value: 100 });
   innerProgress.getBoundingClientRect = () => ({ left: 0, top: 0, width: 100, height: 10 });
-  
+
   const clickEvent = new MouseEvent('click', { clientX: 50 });
   innerProgress.dispatchEvent(clickEvent);
-  
+
   console.log('Percent after click:', el.percent);
   console.log('Dot transform after click:', el._shadowDom.querySelector('.ran-progress-dot').style.transform);
 });

@@ -7,7 +7,7 @@ import '@/components/select/dropdown-item';
 import '@/components/icon';
 import '@/components/input';
 import type { Input } from '@/components/input';
-import { Div, Span, InputBuilder, Slot, View } from '@/utils/builder';
+import { Div, InputBuilder, Slot, Span, View } from '@/utils/builder';
 import { adoptStyles } from '@/utils/style';
 
 interface Option {

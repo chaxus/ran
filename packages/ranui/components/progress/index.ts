@@ -1,9 +1,9 @@
 import { perToNum } from 'ranuts/utils';
-import { Div, RanElement } from '@/utils/index';
-import { adoptStyles } from '@/utils/style';
 import progressCss from './index.less?inline';
+import { Div, RanElement } from '@/utils/index';
+import { adoptSheetText, adoptStyles } from '@/utils/style';
 
-const attributes: string[] = ['percent', 'type', 'total', 'dot'];
+const attributes: string[] = ['percent', 'type', 'total', 'dot', 'sheet'];
 
 export class Progress extends RanElement {
   _progress!: HTMLDivElement;
@@ -29,8 +29,8 @@ export class Progress extends RanElement {
         .class('ran-progress')
         .role('progressbar')
         .children(
-          Div().class('ran-progress-wrap').children(Div().class('ran-progress-wrap-value')),
-          Div().class('ran-progress-dot'),
+          Div().class('ran-progress-wrap').part('track').children(Div().class('ran-progress-wrap-value').part('fill')),
+          Div().class('ran-progress-dot').part('dot'),
         );
       container = progressBuilder.build();
       this._shadowDom.appendChild(container);
@@ -81,6 +81,19 @@ export class Progress extends RanElement {
   set dot(value: string) {
     this.setAttribute('dot', value || 'true');
   }
+
+  get sheet(): string {
+    return this.getAttribute('sheet') || '';
+  }
+
+  set sheet(value: string) {
+    this.setAttribute('sheet', value || '');
+  }
+
+  handlerExternalCss = (): void => {
+    if (!this.sheet) return;
+    adoptSheetText(this._shadowDom, this.sheet);
+  };
 
   progressClick = (e: MouseEvent): void => {
     if (this.type !== 'drag') return;
@@ -172,6 +185,7 @@ export class Progress extends RanElement {
   };
 
   connectedCallback(): void {
+    this.handlerExternalCss();
     if (!this.hasAttribute('type')) {
       this.setAttribute('type', 'primary');
     }
@@ -193,6 +207,7 @@ export class Progress extends RanElement {
     if (oldValue === newValue) return;
     if (name === 'dot') this.appendProgressDot();
     if (name === 'percent' || name === 'total') this.updateCurrentProgress();
+    if (name === 'sheet') this.handlerExternalCss();
   }
 }
 

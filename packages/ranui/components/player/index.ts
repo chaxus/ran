@@ -4,7 +4,7 @@ import type { Progress } from '@/components/progress';
 import '@/components/select';
 import { Div, Slot, View } from '@/utils/builder';
 import { HTMLElementSSR } from '@/utils/index';
-import { adoptStyles } from '@/utils/style';
+import { adoptSheetText, adoptStyles } from '@/utils/style';
 import playerCss from './index.less?inline';
 
 const PLAY_STATE_LIST = ['play', 'playing', 'timeupdate'];
@@ -122,7 +122,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   _video?: HTMLVideoElement;
   _hls?: HlsPlayer;
   static get observedAttributes(): string[] {
-    return ['src', 'volume', 'currentTime', 'playbackRate', 'debug'];
+    return ['src', 'volume', 'currentTime', 'playbackRate', 'debug', 'sheet'];
   }
   /**
    * @description: 初始化 view 和 video 的全局上下文
@@ -403,6 +403,16 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   set playbackRate(value: string) {
     this.setAttribute('playbackRate', value || '');
   }
+  get sheet(): string {
+    return this.getAttribute('sheet') || '';
+  }
+  set sheet(value: string) {
+    this.setAttribute('sheet', value || '');
+  }
+  handlerExternalCss = (): void => {
+    if (!this.sheet) return;
+    adoptSheetText(this._shadowDom, this.sheet);
+  };
   changeClarityToSetVideo = (): void => {
     const { currentTime, playbackRate, volume, currentState } = this.ctx;
     this.setCurrentTime(currentTime);
@@ -1105,6 +1115,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     }
   };
   connectedCallback(): void {
+    this.handlerExternalCss();
     this._container.addEventListener('click', this.dispatchClickPlayerContainerAction);
     this._playerBtn.addEventListener('click', this.dispatchClickPlayerBtnAction);
     this.addEventListener('keydown', this.SpaceKeyDown);
@@ -1147,6 +1158,9 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     }
     if (k === 'volume' && o !== n) {
       this.setVolume(Number(n) / 100);
+    }
+    if (k === 'sheet' && o !== n) {
+      this.handlerExternalCss();
     }
   }
 }

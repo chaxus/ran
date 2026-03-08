@@ -1,7 +1,7 @@
 import { getPixelRatio } from 'ranuts/utils';
-import { Div, RanElement, View, createCustomError } from '@/utils/index';
-import { adoptStyles } from '@/utils/style';
 import radarCss from './index.less?inline';
+import { Div, RanElement, View, createCustomError } from '@/utils/index';
+import { adoptSheetText, adoptStyles } from '@/utils/style';
 
 interface AbilityTags {
   abilityName: string;
@@ -30,7 +30,7 @@ function Custom() {
       mRadius?: number;
       mAngle?: number;
       static get observedAttributes() {
-        return ['abilitys', 'colorPolygon', 'colorLine', 'fillColor', 'strokeColor'];
+        return ['abilitys', 'colorPolygon', 'colorLine', 'fillColor', 'strokeColor', 'sheet'];
       }
       abilityRadarChartContainer: HTMLDivElement;
       abilityRadarChart: HTMLCanvasElement;
@@ -107,6 +107,16 @@ function Custom() {
       set strokeColor(value) {
         this.setAttribute('strokeColor', value || STROKE_COLOR);
       }
+      get sheet() {
+        return this.getAttribute('sheet') || '';
+      }
+      set sheet(value) {
+        this.setAttribute('sheet', value || '');
+      }
+      handlerExternalCss = (): void => {
+        if (!this.sheet) return;
+        adoptSheetText(this._shadowDom, this.sheet);
+      };
       refreshData() {
         const ctx = this.abilityRadarChart.getContext('2d');
         if (!this.abilityRadarChartContainer || !ctx) return;
@@ -327,6 +337,7 @@ function Custom() {
       }
 
       connectedCallback() {
+        this.handlerExternalCss();
         this.refreshData();
       }
       disconnectedCallback() {
@@ -336,6 +347,9 @@ function Custom() {
         const attribute = ['abilitys', 'colorPolygon', 'colorLine', 'fillColor', 'strokeColor'];
         if (attribute.includes(name) && this.abilityRadarChartContainer && oldValue !== newValue) {
           this.refreshData();
+        }
+        if (name === 'sheet' && oldValue !== newValue) {
+          this.handlerExternalCss();
         }
       }
     }

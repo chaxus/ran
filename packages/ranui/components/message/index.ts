@@ -5,7 +5,7 @@ import infoCircleFill from '@/assets/icons/info-circle-fill.svg?raw';
 import warningCircleFill from '@/assets/icons/warning-circle-fill.svg?raw';
 import { registerIcons } from '@/components/icon';
 import { Div, Span, View } from '@/utils/builder';
-import { adoptStyles } from '@/utils/style';
+import { adoptSheetText, adoptStyles } from '@/utils/style';
 import { getMessageContainer, type MessageRenderOptions } from './container';
 
 const AnimationTime = 300; // message 退出动画执行的时间
@@ -46,17 +46,18 @@ function Custom() {
       _content: HTMLDivElement;
       _icon?: HTMLElement;
       _span: HTMLSpanElement;
+      _shadowDom: ShadowRoot;
       timeId?: NodeJS.Timeout;
       close?: () => void;
       static get observedAttributes() {
-        return ['type', 'content'];
+        return ['type', 'content', 'sheet'];
       }
       constructor() {
         super();
-        const shadowRoot = this.shadowRoot || this.attachShadow({ mode: 'closed' });
-        adoptStyles(shadowRoot, messageCss);
+        this._shadowDom = this.shadowRoot || this.attachShadow({ mode: 'closed' });
+        adoptStyles(this._shadowDom, messageCss);
 
-        let notice = shadowRoot.querySelector('.ran-message-notice') as HTMLDivElement;
+        let notice = this._shadowDom.querySelector('.ran-message-notice') as HTMLDivElement;
         if (!notice) {
           notice = Div()
             .class('ran-message-notice')
@@ -66,7 +67,7 @@ function Custom() {
                 .children(Div().class('ran-message-notice-content-info').children(View('r-icon'), Span())),
             )
             .build() as HTMLDivElement;
-          shadowRoot.appendChild(notice);
+          this._shadowDom.appendChild(notice);
         }
 
         this._notice = notice;
@@ -74,6 +75,8 @@ function Custom() {
         this._info = notice.querySelector('.ran-message-notice-content-info') as HTMLDivElement;
         this._icon = notice.querySelector('r-icon') as HTMLElement;
         this._span = notice.querySelector('span') as HTMLSpanElement;
+
+        this.handlerExternalCss();
       }
       get type() {
         return this.getAttribute('type');
@@ -87,6 +90,16 @@ function Custom() {
       set content(value) {
         if (value) this.setAttribute('content', value);
       }
+      get sheet() {
+        return this.getAttribute('sheet') || '';
+      }
+      set sheet(value) {
+        this.setAttribute('sheet', value || '');
+      }
+      handlerExternalCss = (): void => {
+        if (!this.sheet) return;
+        adoptSheetText(this._shadowDom, this.sheet);
+      };
       setIcon = (value: string) => {
         const icon = typeMapIcon.get(value);
         const color = typeMapColor.get(value);
@@ -103,6 +116,9 @@ function Custom() {
         }
         if (name === 'type' && oldValue !== newValue) {
           this.setIcon(newValue);
+        }
+        if (name === 'sheet' && oldValue !== newValue) {
+          this.handlerExternalCss();
         }
       }
     }

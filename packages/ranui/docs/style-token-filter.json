@@ -1,0 +1,39 @@
+{
+  "global": {
+    "includeContains": [],
+    "excludeContains": [
+      "-host-",
+      "-root-",
+      "-container-",
+      "-wrap-",
+      "-slot-",
+      "-position",
+      "-display",
+      "-box-sizing",
+      "-margin",
+      "-padding",
+      "-width",
+      "-height",
+      "-top",
+      "-left",
+      "-right",
+      "-bottom",
+      "-inset",
+      "-z-index",
+      "-overflow",
+      "-outline",
+      "-cursor",
+      "-pointer-events",
+      "-touch-action",
+      "-list-style",
+      "-x",
+      "-y"
+    ]
+  },
+  "componentOverrides": {
+    "button": {
+      "includeContains": ["-padding"],
+      "excludeContains": []
+    }
+  }
+}

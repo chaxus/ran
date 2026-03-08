@@ -1,7 +1,7 @@
 import { HTMLElementSSR, createCustomError, falseList, isDisabled } from '@/utils/index';
 import { Div, InputBuilder, Label, View } from '@/utils/builder';
 import '@/components/icon/index';
-import { adoptStyles } from '@/utils/style';
+import { adoptSheetText, adoptStyles } from '@/utils/style';
 import inputCss from './index.less?inline';
 
 export class Input extends (HTMLElementSSR()!) {
@@ -25,6 +25,7 @@ export class Input extends (HTMLElementSSR()!) {
       'variant', // filled borderless
       'minrows', // 当 type 等于 TextArea 时
       'maxrows',
+      'sheet',
     ];
   }
   _shadowDom: ShadowRoot;
@@ -41,8 +42,8 @@ export class Input extends (HTMLElementSSR()!) {
     if (!wrap) {
       wrap = Div()
         .class('ran-input')
-        .part('ran-input')
-        .children(InputBuilder().class('ran-input-content').part('ran-input-content'))
+        .part('input')
+        .children(InputBuilder().class('ran-input-content').part('content'))
         .build();
       this._shadowDom.appendChild(wrap);
     }
@@ -285,6 +286,19 @@ export class Input extends (HTMLElementSSR()!) {
       this.removeAttribute('type');
     }
   }
+
+  get sheet(): string {
+    return this.getAttribute('sheet') || '';
+  }
+
+  set sheet(value: string) {
+    this.setAttribute('sheet', value || '');
+  }
+
+  handlerExternalCss = (): void => {
+    if (!this.sheet) return;
+    adoptSheetText(this._shadowDom, this.sheet);
+  };
   /**
    * @description: 原生的 input 方法
    * @param {Event} event
@@ -342,7 +356,7 @@ export class Input extends (HTMLElementSSR()!) {
         if (this._label) {
           this._label.innerHTML = value;
         } else {
-          this._label = Label().class('ran-input-label').part('ran-input-label').text(value).build();
+          this._label = Label().class('ran-input-label').part('label').text(value).build();
           this._input.appendChild(this._label as HTMLLabelElement);
         }
       } else {
@@ -440,6 +454,7 @@ export class Input extends (HTMLElementSSR()!) {
     }
   };
   connectedCallback(): void {
+    this.handlerExternalCss();
     // 如果一开始就设置了 input 的值，则初始化 input 的值
     if (this.value) {
       this._inputContent.value = this.value;
@@ -465,6 +480,9 @@ export class Input extends (HTMLElementSSR()!) {
   }
   attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     this.listenEvent(name, oldValue, newValue);
+    if (name === 'sheet' && oldValue !== newValue) {
+      this.handlerExternalCss();
+    }
   }
 }
 

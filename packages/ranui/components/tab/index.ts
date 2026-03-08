@@ -1,13 +1,13 @@
 import { isDisabled } from '../../utils/index';
-import { Div, Slot, View } from '@/utils/builder';
-import { adoptStyles } from '@/utils/style';
 import tabCss from './index.less?inline';
+import { Div, Slot, View } from '@/utils/builder';
+import { adoptSheetText, adoptStyles } from '@/utils/style';
 
 function CustomElement() {
   if (typeof window !== 'undefined' && !customElements.get('r-tabs')) {
     class Tabs extends HTMLElement {
       static get observedAttributes() {
-        return ['active', 'forceRender', 'type', 'align', 'effect'];
+        return ['active', 'forceRender', 'type', 'align', 'effect', 'sheet'];
       }
       _container: HTMLDivElement;
       _header: HTMLDivElement;
@@ -29,11 +29,19 @@ function CustomElement() {
         if (!wrap) {
           wrap = Div()
             .class('ran-tab')
+            .part('tabs')
             .children(
               Div()
                 .class('ran-tab-header')
-                .children(Div().class('ran-tab-header-nav'), Div().class('ran-tab-header-line')),
-              Div().class('ran-tab-content').children(Div().class('ran-tab-content-wrap').children(Slot())),
+                .part('header')
+                .children(
+                  Div().class('ran-tab-header-nav').part('nav'),
+                  Div().class('ran-tab-header-line').part('indicator'),
+                ),
+              Div()
+                .class('ran-tab-content')
+                .part('content')
+                .children(Div().class('ran-tab-content-wrap').part('content-wrap').children(Slot())),
             )
             .build() as HTMLDivElement;
           shadowRoot.appendChild(wrap);
@@ -89,6 +97,19 @@ function CustomElement() {
           this.setAttribute('effect', value);
         }
       }
+
+      get sheet() {
+        return this.getAttribute('sheet') || '';
+      }
+
+      set sheet(value) {
+        this.setAttribute('sheet', value || '');
+      }
+
+      handlerExternalCss = () => {
+        if (!this.sheet) return;
+        adoptSheetText(this._shadowDom, this.sheet);
+      };
       /**
        * @description: 构建 tabPane 组件 key 值和 index 的映射，同时判断一个 tabs 下的 tabPane key 值不能重复
        * @param {string} key
@@ -266,6 +287,7 @@ function CustomElement() {
       };
 
       connectedCallback() {
+        this.handlerExternalCss();
         this.initTab();
       }
 
@@ -299,6 +321,9 @@ function CustomElement() {
           }
           if (name === 'active') {
             this.setAttribute(name, newValue);
+          }
+          if (name === 'sheet') {
+            this.handlerExternalCss();
           }
         }
       }

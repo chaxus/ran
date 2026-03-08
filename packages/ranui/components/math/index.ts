@@ -1,12 +1,12 @@
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
 import { Div, Span } from '@/utils/builder';
-import { adoptStyles } from '@/utils/style';
+import { adoptSheetText, adoptStyles } from '@/utils/style';
 import mathCss from './index.less?inline';
 export class Math extends (HTMLElementSSR()!) {
   contain: HTMLElement;
   _shadowDom: ShadowRoot;
   static get observedAttributes(): string[] {
-    return ['latex'];
+    return ['latex', 'sheet'];
   }
   constructor() {
     super();
@@ -28,6 +28,16 @@ export class Math extends (HTMLElementSSR()!) {
   set latex(value: string) {
     this.setAttribute('latex', value || '');
   }
+  get sheet(): string {
+    return this.getAttribute('sheet') || '';
+  }
+  set sheet(value: string) {
+    this.setAttribute('sheet', value || '');
+  }
+  handlerExternalCss = (): void => {
+    if (!this.sheet) return;
+    adoptSheetText(this._shadowDom, this.sheet);
+  };
   render(): void {
     if (!this.latex) return;
     import('@/assets/js/katex/katex-es.js')
@@ -45,12 +55,16 @@ export class Math extends (HTMLElementSSR()!) {
       });
   }
   connectedCallback(): void {
+    this.handlerExternalCss();
     this.render();
   }
   attributeChangedCallback(k: string, o: string, n: string): void {
     if (o !== n) {
       if (k === 'latex') {
         this.render();
+      }
+      if (k === 'sheet') {
+        this.handlerExternalCss();
       }
     }
   }

@@ -34,7 +34,8 @@
     "test:report": "playwright show-report",
     "test:ui": "playwright test --ui",
     "test:update": "playwright test --update-snapshots",
-    "tsc": "tsc --noEmit"
+    "tsc": "tsc --noEmit",
+    "doc:style": "tsx ./bin/generate-style-docs.ts"
   },
   "files": [
     "dist",

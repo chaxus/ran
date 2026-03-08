@@ -1,6 +1,6 @@
-import { adoptStyles } from '@/utils/style';
-import { Slot } from '@/utils/builder';
 import tabPaneCss from './index.less?inline';
+import { adoptSheetText, adoptStyles } from '@/utils/style';
+import { Slot } from '@/utils/builder';
 
 interface ExtendParentNode {
   updateAttribute: (key: string, attribute: string, value?: string | null) => void;
@@ -10,7 +10,7 @@ function CustomElement() {
   if (typeof window !== 'undefined' && !customElements.get('r-tab')) {
     class TabPane extends HTMLElement {
       static get observedAttributes() {
-        return ['label', 'key', 'disabled', 'icon', 'effect', 'iconSize'];
+        return ['label', 'key', 'disabled', 'icon', 'effect', 'iconSize', 'sheet'];
       }
       _div: HTMLElement;
       parent: (ParentNode & ExtendParentNode) | undefined | null;
@@ -22,7 +22,7 @@ function CustomElement() {
 
         let slot = this._shadowDom.querySelector('slot') as HTMLSlotElement;
         if (!slot) {
-          slot = Slot().build() as HTMLSlotElement;
+          slot = Slot().part('content').build() as HTMLSlotElement;
           this._shadowDom.appendChild(slot);
         }
         this._div = slot;
@@ -83,6 +83,16 @@ function CustomElement() {
           this.setAttribute('effect', value);
         }
       }
+      get sheet() {
+        return this.getAttribute('sheet');
+      }
+      set sheet(value) {
+        this.setAttribute('sheet', value || '');
+      }
+      handlerExternalCss = () => {
+        if (!this.sheet) return;
+        adoptSheetText(this._shadowDom, this.sheet);
+      };
       onClick(e: Event) {
         console.log('e', e);
       }
@@ -96,6 +106,7 @@ function CustomElement() {
         this.key && this.parent?.updateAttribute(this.key, 'effect', this.effect);
       };
       connectedCallback() {
+        this.handlerExternalCss();
         this._div.addEventListener('click', this.onClick);
         document.addEventListener('DOMContentLoaded', this.initAttribute);
       }
@@ -108,6 +119,9 @@ function CustomElement() {
           if (name === 'iconSize') this.parent?.updateAttribute(this.key, 'iconSize', newValue);
           if (name === 'effect') this.parent?.updateAttribute(this.key, 'effect', newValue);
           if (name === 'disabled') this.parent?.updateAttribute(this.key, 'disabled', newValue);
+        }
+        if (name === 'sheet' && oldValue !== newValue) {
+          this.handlerExternalCss();
         }
       }
     }

@@ -43,6 +43,21 @@ npm install ranui --save
 
 [See components and use examples](https://chaxus.github.io/ran/cn/src/ranui/)
 
+### 样式定制文档
+
+当前样式系统已统一为 CSS Token 与 `::part()` 规范。
+
+- 样式覆盖规范: [docs/style-override.md](./docs/style-override.md)
+- 完整 Token/Part 清单（自动生成）: [docs/style-tokens-parts.md](./docs/style-tokens-parts.md)
+- 面向使用方的公开样式 API（自动生成）: [docs/style-tokens-public.md](./docs/style-tokens-public.md)
+- 公开 Token 过滤配置: [docs/style-token-filter.json](./docs/style-token-filter.json)
+
+可通过以下命令刷新样式文档：
+
+```bash
+pnpm doc:style
+```
+
 ## 引入方式
 
 支持按需导入，以显著减少包体积大小
@@ -201,13 +216,10 @@ import { Div, ButtonBuilder } from 'ranui/utils';
 import { renderToString } from 'ranui/utils/ssr';
 
 // 声明式构建
-const btn = ButtonBuilder()
-  .class('my-btn')
-  .label('Submit')
-  .build();
+const btn = ButtonBuilder().class('my-btn').label('Submit').build();
 
 // SSR 渲染 (支持 Declarative Shadow DOM)
-const html = renderToString(new Button()); 
+const html = renderToString(new Button());
 ```
 
 更多细节请查看 [Utility Documentation](./utils/README.md)。
