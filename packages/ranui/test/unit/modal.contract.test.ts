@@ -184,4 +184,102 @@ describe('r-modal contract', () => {
 
     expect(closeCalled).toBe(false);
   });
+
+  it('locks and restores body scroll with stacked modals', async () => {
+    const modalA = await createModal();
+    const modalB = await createModal();
+
+    modalA.open = true;
+    await sleep();
+    expect(document.body.style.overflow).toBe('hidden');
+
+    modalB.open = true;
+    await sleep();
+    expect(document.body.style.overflow).toBe('hidden');
+
+    modalB.open = false;
+    await sleep();
+    expect(document.body.style.overflow).toBe('hidden');
+
+    modalA.open = false;
+    await sleep();
+    expect(document.body.style.overflow).toBe('');
+  });
+
+  it('only closes topmost modal on Escape when stacked', async () => {
+    const modalA = await createModal();
+    const modalB = await createModal();
+
+    modalA.open = true;
+    modalB.open = true;
+    await sleep();
+
+    const escapeEvent = new KeyboardEvent('keydown', { key: 'Escape', bubbles: true });
+    document.dispatchEvent(escapeEvent);
+    await sleep();
+
+    expect(modalB.open).toBe(false);
+    expect(modalA.open).toBe(true);
+  });
+
+  it('supports cancelling open via beforeopen event', async () => {
+    const modal = await createModal();
+    modal.addEventListener('beforeopen', (event) => {
+      event.preventDefault();
+    });
+
+    modal.open = true;
+    await sleep();
+
+    expect(modal.open).toBe(false);
+    expect(document.body.style.overflow).toBe('');
+  });
+
+  it('supports cancelling close via beforeclose event', async () => {
+    const modal = await createModal();
+    modal.open = true;
+    await sleep();
+
+    modal.addEventListener('beforeclose', (event) => {
+      event.preventDefault();
+    });
+
+    modal.close('program');
+    await sleep();
+
+    expect(modal.open).toBe(true);
+  });
+
+  it('respects closeOnEsc false', async () => {
+    const modal = await createModal();
+    modal.closeOnEsc = false;
+    modal.open = true;
+    await sleep();
+
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    await sleep();
+
+    expect(modal.open).toBe(true);
+  });
+
+  it('emits afteropen and afterclose events', async () => {
+    const modal = await createModal();
+    let afterOpen = false;
+    let afterClose = false;
+
+    modal.addEventListener('afteropen', () => {
+      afterOpen = true;
+    });
+    modal.addEventListener('afterclose', () => {
+      afterClose = true;
+    });
+
+    modal.open = true;
+    await sleep(360);
+    expect(afterOpen).toBe(true);
+
+    modal.close('program');
+    await sleep(360);
+    expect(afterClose).toBe(true);
+  });
 });

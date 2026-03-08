@@ -37,12 +37,12 @@
   outline: var(--ran-modal-dialog-outline, none);
   max-height: var(--ran-modal-dialog-max-height, calc(100vh - 20vh));
   overflow: var(--ran-modal-dialog-overflow, hidden);
-  transform: scale(0.9);
+  transform: translateY(var(--ran-modal-dialog-offset-y, clamp(-56px, -6vh, -24px))) scale(0.9);
   transition: transform 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
 .ran-modal-root[open] .ran-modal-dialog {
-  transform: scale(1);
+  transform: translateY(var(--ran-modal-dialog-offset-y, clamp(-56px, -6vh, -24px))) scale(1);
 }
 
 .ran-modal-header {
