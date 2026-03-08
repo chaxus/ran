@@ -263,6 +263,11 @@ export class ElementBuilder<T extends HTMLElement = HTMLElement> {
     return this;
   }
 
+  part(value: string): this {
+    this.el.setAttribute('part', value);
+    return this;
+  }
+
   data(key: string, value: string): this {
     return this.attr(`data-${key}`, value);
   }
