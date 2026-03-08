@@ -147,6 +147,7 @@ r-select {
         border: var(--ran-select-host-selection-search-ran-input-border, none);
         padding: var(--ran-select-host-selection-search-ran-input-padding, 0);
         height: var(--ran-select-host-selection-search-ran-input-height, 100%);
+        min-height: var(--ran-select-host-selection-search-ran-input-min-height, 0);
         outline: var(--ran-select-host-selection-search-ran-input-outline, none);
         &:active {
           border: var(--ran-select-host-selection-search-ran-input-active-border, none);
@@ -157,6 +158,9 @@ r-select {
           box-shadow: var(--ran-select-host-selection-search-ran-input-active-box-shadow, none);
           border-right-width: var(--ran-select-host-selection-search-ran-input-active-border-right-width, 0px);
         }
+      }
+      &::part(ran-input-content) {
+        min-height: var(--ran-select-host-selection-search-ran-input-content-min-height, 0);
       }
     }
     &-item {
