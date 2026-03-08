@@ -91,16 +91,21 @@ export function loadVideoSource<TPlayer extends HlsPlayerLike>(input: {
     existingHls.destroy();
   }
   if (Hls?.isSupported() && src) {
-    const hls = new Hls();
-    hls.off(Hls.Events.MANIFEST_LOADED, onManifestLoaded);
-    hls.on(Hls.Events.MANIFEST_LOADED, onManifestLoaded);
-    hls.off(Hls.Events.ERROR, onHlsError);
-    hls.on(Hls.Events.ERROR, onHlsError);
-    hls.loadSource(src);
-    hls.attachMedia(video);
-    return hls;
+    try {
+      const hls = new Hls();
+      hls.off(Hls.Events.MANIFEST_LOADED, onManifestLoaded);
+      hls.on(Hls.Events.MANIFEST_LOADED, onManifestLoaded);
+      hls.off(Hls.Events.ERROR, onHlsError);
+      hls.on(Hls.Events.ERROR, onHlsError);
+      hls.loadSource(src);
+      hls.attachMedia(video);
+      return hls;
+    } catch {
+      // Fall through to native src binding when HLS initialization fails.
+    }
   }
-  if (video.canPlayType('application/vnd.apple.mpegurl') && src) {
+  if (src) {
+    // Native binding is the universal fallback for mp4 and browser-supported HLS.
     video.src = src;
   }
   return undefined;

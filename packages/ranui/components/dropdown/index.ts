@@ -96,10 +96,20 @@ export class Dropdown extends (HTMLElementSSR()!) {
     }
   };
   handlerArrow = (): void => {
-    if (!this.arrow) return;
+    const arrow = (this.arrow || '').trim();
+    if (!arrow) {
+      if (this.arrowIcon && this.container.contains(this.arrowIcon)) {
+        this.container.removeChild(this.arrowIcon);
+      }
+      this.arrowIcon = undefined;
+      return;
+    }
     if (!this.arrowIcon && this.container) {
-      this.arrowIcon = Div().class(`ranui-dropdown-arrow ${this.arrow}`).build() as HTMLElement;
+      this.arrowIcon = Div().class('ranui-dropdown-arrow').build() as HTMLElement;
       this.container.appendChild(this.arrowIcon);
+    }
+    if (this.arrowIcon) {
+      this.arrowIcon.className = `ranui-dropdown-arrow ${arrow}`;
     }
   };
   stopPropagation = (e: Event): void => {

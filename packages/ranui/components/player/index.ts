@@ -117,6 +117,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   _isSeeking!: boolean;
   _wasPlayingBeforeSeek!: boolean;
   _isBuffering!: boolean;
+  _isSwitchingSource!: boolean;
   _playerControllerBottom: HTMLDivElement;
   _playerControllerBottomRight: HTMLDivElement;
   _playerControllerBottomLeft: HTMLDivElement;
@@ -188,6 +189,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     this._playerTipText = viewRefs.playerTipText;
     this.ctx = createDefaultPlayerContext<SyncHook, Partial<Level>>(new SyncHook());
     this.applyRuntimeState(createDefaultRuntimeState<PlaybackSnapshot>());
+    this._isSwitchingSource = false;
   }
   get src(): string {
     return this.getAttribute('src') || '';
@@ -267,7 +269,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     this.setPlaybackRate(snapshot.playbackRate);
     this.setVolume(snapshot.volume);
     if (snapshot.shouldResume) {
-      this.play();
+      this.safePlay(true);
       return;
     }
     this.pause();
@@ -277,7 +279,8 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     const url = this.ctx.levelMap.get((e as CustomEvent).detail.value);
     if (url && this._hls) {
       this._pendingPlaybackRestore = this.capturePlaybackSnapshot();
-      this.setLoadingState(this._pendingPlaybackRestore.shouldResume);
+      this._isSwitchingSource = true;
+      this.setLoadingState(true);
       this._hls.loadSource(url);
       this._hls.startLoad();
     }
@@ -360,10 +363,6 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     if (!this._shadowDom.contains(this._player)) this._shadowDom.appendChild(this._player);
     this.setLoadingState(false);
     this.resetTransientState();
-    if (this._hls) {
-      this._hls.destroy();
-      this._hls = undefined;
-    }
     this._container.innerHTML = '';
     this._video = View('video')
       .class('ran-player-video')
@@ -381,6 +380,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
         video: this._video,
         src: this.src,
         Hls,
+        existingHls: this._hls,
         onManifestLoaded: this.manifestLoaded,
         onHlsError: this.hlsError,
       });
@@ -394,6 +394,8 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     }
   };
   hlsError = (event: unknown, data: unknown): void => {
+    this._isSwitchingSource = false;
+    this.setLoadingState(false);
     this.change('hlsError', { event, data });
     if (this._video) {
       this._video.src = this.src;
@@ -419,6 +421,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   };
   onCanplay = (e: Event): void => {
     this.ctx.currentState = e.type;
+    this._isSwitchingSource = false;
     this.setLoadingState(false);
     syncPlayButtonState(this._playerControllerBottomPlayBtn, false);
     this.change('canplay', e);
@@ -426,6 +429,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   };
   onCanplaythrough = (e: Event): void => {
     this.ctx.currentState = e.type;
+    this._isSwitchingSource = false;
     this.setLoadingState(false);
     this.change('canplaythrough', e);
   };
@@ -444,11 +448,13 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   };
   onEnded = (e: Event): void => {
     this.ctx.currentState = e.type;
+    this._isSwitchingSource = false;
     this.setLoadingState(false);
     this.change('ended', e);
   };
   onError = (e: Event): void => {
     this.ctx.currentState = e.type;
+    this._isSwitchingSource = false;
     this.setLoadingState(false);
     this.change('error', e);
   };
@@ -458,6 +464,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
       this.restorePlaybackSnapshot(this._pendingPlaybackRestore);
       this._pendingPlaybackRestore = undefined;
     }
+    this._isSwitchingSource = false;
     this.updateBufferedProgress();
     this.change('loadedmetadata', e);
   };
@@ -476,6 +483,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   };
   onSeeked = (e: Event): void => {
     this.ctx.currentState = e.type;
+    this._isSwitchingSource = false;
     this.setLoadingState(false);
     this.change('seeked', e);
   };
@@ -518,10 +526,11 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   onWaiting = (e: Event): void => {
     this.ctx.currentState = e.type;
     this.setLoadingState(
-      shouldSetLoadingOnWaiting({
+      this._isSwitchingSource ||
+        shouldSetLoadingOnWaiting({
         isSeeking: this._isSeeking,
         video: this._video,
-      }),
+        }),
     );
     this.change('waiting', e);
   };
@@ -535,6 +544,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   };
   onPlaying = (e: Event): void => {
     this.ctx.currentState = e.type;
+    this._isSwitchingSource = false;
     this.setLoadingState(false);
     syncCenterPlayVisibility(this._playerBtn, false);
     syncPlayButtonState(this._playerControllerBottomPlayBtn, true);
@@ -675,6 +685,9 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   progressDotMouseDown = (): void => {
     this._playerBtn.style.setProperty('display', 'none');
     this.moveProgress.mouseDown = true;
+    const duration = this.getTotalTime() || this.ctx.duration;
+    const currentTime = this.getCurrentTime();
+    this.moveProgress.percentage = duration > 0 ? Math.floor(normalizeProgress(currentTime / duration) * 100) / 100 : 0;
     this._isSeeking = true;
     this._wasPlayingBeforeSeek = !!this._video && !this._video.paused && !this._video.ended;
     this.cancelAnimationFrame();
@@ -714,7 +727,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     this._isSeeking = false;
     this._wasPlayingBeforeSeek = false;
     if (shouldResume) {
-      this.play();
+      this.safePlay(true);
       this.requestAnimationFrame(this.updateCurrentProgress);
       return;
     }
@@ -883,9 +896,13 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   };
   changeSpeed = (e: Event): void => {
     const speed = Number((e as CustomEvent).detail.value) || 1;
+    const shouldResume = shouldResumePlayback(this._video);
     this.ctx.playbackRate = speed;
     this.change('speed', speed);
     this.setPlaybackRate(speed);
+    if (shouldResume) {
+      this.safePlay(false);
+    }
   };
   progressMouseEnter = (e: MouseEvent): void => {
     this._playerTip.style.setProperty('opacity', '1');
@@ -1002,13 +1019,23 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     }
     return this.ctx.duration;
   };
+  safePlay = (showLoading: boolean): void => {
+    if (!this._video) return;
+    if (showLoading) this.setLoadingState(true);
+    const result = this._video.play();
+    if (result && typeof result.catch === 'function') {
+      result.catch(() => {
+        this.setLoadingState(false);
+      });
+    }
+  };
   public play = (n?: number): void => {
     if (this._video) {
       if (n !== undefined && n >= 0) {
         this.ctx.currentTime = n;
         this._video.currentTime = n;
       }
-      this._video.play();
+      this.safePlay(false);
     }
   };
   public pause = (): void => {
