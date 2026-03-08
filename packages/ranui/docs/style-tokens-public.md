@@ -309,7 +309,7 @@ Generated at: 2026-03-08T10:53:36.771Z
 
 ### `modal`
 
-- Tokens: 13
+- Tokens: 14
 - Parts: 7
 
 #### Tokens
@@ -322,6 +322,7 @@ Generated at: 2026-03-08T10:53:36.771Z
 - `--ran-modal-dialog-background`
 - `--ran-modal-dialog-border-radius`
 - `--ran-modal-dialog-box-shadow`
+- `--ran-modal-dialog-offset-y`
 - `--ran-modal-header-align-items`
 - `--ran-modal-header-justify-content`
 - `--ran-modal-mask-background`
