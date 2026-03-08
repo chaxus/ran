@@ -112,10 +112,9 @@ function Custom() {
   const commonPrompt = (type: string) => {
     return (options: Ran.Prompt | string | undefined | null) => {
       const renderOptions: MessageRenderOptions = {};
-      const message = document.createElement('r-message') as HTMLElement & {
+      const message = View('r-message').class('message').build() as HTMLElement & {
         timeId?: NodeJS.Timeout;
       };
-      message.setAttribute('class', 'message');
       message.timeId && clearTimeout(message.timeId);
       message.setAttribute('type', type);
       let duration = defaultDuration;

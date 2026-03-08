@@ -1,5 +1,5 @@
 import { HTMLElementSSR, createCustomError, falseList, isDisabled } from '@/utils/index';
-import { Div, InputBuilder, Label } from '@/utils/builder';
+import { Div, InputBuilder, Label, View } from '@/utils/builder';
 import '@/components/icon/index';
 import { adoptStyles } from '@/utils/style';
 import inputCss from './index.less?inline';
@@ -417,8 +417,7 @@ export class Input extends (HTMLElementSSR()!) {
    */
   dealIcon = (): void => {
     if (!this._icon) {
-      this._icon = document.createElement('r-icon');
-      this._icon.setAttribute('class', 'ran-icon');
+      this._icon = View('r-icon').class('ran-icon').build() as HTMLElement;
       this._inputContent.insertAdjacentElement('beforebegin', this._icon);
     }
     this.icon && this._icon.setAttribute('name', this.icon);

@@ -95,3 +95,7 @@ class ScratchTicket extends (HTMLElementSSR()!) {
 }
 
 export default ScratchTicket;
+
+if (typeof document !== 'undefined' && !customElements.get('r-scratch')) {
+  customElements.define('r-scratch', ScratchTicket);
+}

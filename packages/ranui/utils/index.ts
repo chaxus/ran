@@ -1,5 +1,6 @@
 import { md5 } from 'ranuts/utils';
 export * from './builder';
+import { Div, Span, View } from './builder';
 
 export const falseList = [false, 'false', null, undefined];
 /**
@@ -50,20 +51,16 @@ export const createIconList = (): void => {
     ];
     const dom = document.getElementById('icon-list');
     list.forEach((item) => {
-      const container = document.createElement('div');
-      container.style.setProperty('display', 'flex');
-      container.style.setProperty('align-items', 'center');
-      container.style.setProperty('margin', '15px');
-      container.style.setProperty('justify-content', 'center');
-      container.style.setProperty('flex-flow', 'column nowrap');
-      const icon = document.createElement('r-icon');
-      icon.setAttribute('name', item);
-      icon.setAttribute('size', '50');
-      container.appendChild(icon);
-      const span = document.createElement('span');
-      span.innerHTML = item;
-      container.appendChild(span);
-      console.log(container, dom);
+      const container = Div()
+        .style({
+          display: 'flex',
+          'align-items': 'center',
+          margin: '15px',
+          'justify-content': 'center',
+          'flex-flow': 'column nowrap',
+        })
+        .children(View('r-icon').attr('name', item).attr('size', '50'), Span().text(item))
+        .build();
       dom?.appendChild(container);
     });
   }, 0);
