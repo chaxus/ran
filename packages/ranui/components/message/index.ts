@@ -155,32 +155,23 @@ function Custom() {
     };
   };
 
-  return {
+  const api = {
     info: commonPrompt('info'),
     success: commonPrompt('success'),
     error: commonPrompt('error'),
     warning: commonPrompt('warning'),
     toast: commonPrompt('toast'),
   };
+
+  if (typeof window !== 'undefined') {
+    (window as any).message = api;
+    if (!(window as any).ranui) (window as any).ranui = {};
+    (window as any).ranui.message = api;
+  }
+
+  return api;
 }
 
 const message = Custom();
-
-declare global {
-  interface Window {
-    message: Ran.Message;
-    ranui: {
-      message?: Ran.Message;
-    };
-  }
-}
-
-if (typeof window !== 'undefined' && message) {
-  window.message = message;
-  if (!window.ranui) {
-    window.ranui = {};
-  }
-  window.ranui.message = message;
-}
 
 export default message;

@@ -437,14 +437,19 @@ export class Select extends (HTMLElementSSR()!) {
   createOption = (): void => {
     if (!this._selectDropdown) {
       const container = document.getElementById(this.getPopupContainerId) || document.body;
-      this._selectDropdown = document.createElement('div');
-      this._selectDropdown.style.setProperty('-webkit-tap-highlight-color', 'transparent');
-      this._selectDropdown.style.setProperty('outline', '0');
-      this._selectDropdown.addEventListener('click', this.clickOption);
-      this._selectionDropdown = document.createElement('r-dropdown');
-      this._selectionDropdown.setAttribute('id', this._listboxId);
-      this._selectionDropdown.setAttribute('role', 'listbox');
-      this._selectionDropdown.style.setProperty('position', 'absolute');
+      this._selectDropdown = Div()
+        .style('-webkit-tap-highlight-color', 'transparent')
+        .style('outline', '0')
+        .on('click', this.clickOption)
+        .build() as HTMLDivElement;
+
+      this._selectionDropdown = View('r-dropdown')
+        .id(this._listboxId)
+        .attr('role', 'listbox')
+        .style('position', 'absolute')
+        .style('display', 'none')
+        .build() as HTMLElement;
+
       if (this.dropdownclass) {
         this._selectionDropdown.setAttribute('class', this.dropdownclass);
       }
@@ -453,7 +458,6 @@ export class Select extends (HTMLElementSSR()!) {
         this._selectDropdown.addEventListener('mouseenter', this.removeDropDownTimeId);
       }
       this._selectDropdown.appendChild(this._selectionDropdown);
-      this._selectionDropdown.style.setProperty('display', 'none');
       container.appendChild(this._selectDropdown);
     }
   };
@@ -512,8 +516,12 @@ export class Select extends (HTMLElementSSR()!) {
     options.forEach((item) => {
       if (this._selectionDropdown) {
         const { label, value } = item;
-        const selectOptionItem = document.createElement('r-dropdown-item');
-        selectOptionItem.setAttribute('role', 'option');
+        const selectOptionItem = View('r-dropdown-item')
+          .attr('role', 'option')
+          .attr('value', `${value}`)
+          .attr('title', `${label}`)
+          .text(`${label}`)
+          .build() as HTMLElement;
         const defaultValue = this.getAttribute('defaultValue') || this.getAttribute('value');
         if (defaultValue === value) {
           selectOptionItem.setAttribute('active', value);
@@ -521,9 +529,6 @@ export class Select extends (HTMLElementSSR()!) {
         } else {
           selectOptionItem.removeAttribute('active');
         }
-        selectOptionItem.innerHTML = `${label}`;
-        selectOptionItem.setAttribute('value', `${value}`);
-        selectOptionItem.setAttribute('title', `${label}`);
         this._selectionDropdown.appendChild(selectOptionItem);
       }
     });

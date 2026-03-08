@@ -1,3 +1,5 @@
+import { Div } from '@/utils/builder';
+
 export interface MessageRenderOptions {
   top?: number | string;
   zIndex?: number | string;
@@ -30,11 +32,7 @@ export const getMessageContainer = (options?: MessageRenderOptions): HTMLDivElem
 
   let host = mountEl.querySelector<HTMLElement>(getMessageHostSelector());
   if (!host) {
-    host = document.createElement('div');
-    host.setAttribute(MESSAGE_HOST_ATTR, 'true');
-    const container = document.createElement('div');
-    container.setAttribute('class', 'ranui-message');
-    host.appendChild(container);
+    host = Div().attr(MESSAGE_HOST_ATTR, 'true').children(Div().class('ranui-message')).build() as HTMLDivElement;
     mountEl.appendChild(host);
   }
 

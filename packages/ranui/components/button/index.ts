@@ -1,5 +1,6 @@
 import { currentDevice } from 'ranuts/utils';
 import { Div, RanElement, Slot, falseList, isDisabled } from '@/utils/index';
+import { Style, View } from '@/utils/builder';
 import { adoptStyles } from '@/utils/style';
 import buttonCss from './index.less?inline';
 
@@ -124,9 +125,7 @@ export class Button extends RanElement {
       // 🏗️ Check if icon already exists (Hydration)
       let icon = this._shadowDom.querySelector('r-icon');
       if (!icon) {
-        icon = document.createElement('r-icon');
-        icon.setAttribute('color', 'currentColor');
-        icon.setAttribute('class', 'icon');
+        icon = View('r-icon').attr('color', 'currentColor').class('icon').build() as HTMLElement;
         this._slot.insertAdjacentElement('beforebegin', icon);
       }
       this._iconElement = icon as HTMLElement;
@@ -188,14 +187,12 @@ export class Button extends RanElement {
           this._shadowDom.adoptedStyleSheets = [...currentSheets, sheet];
         } catch (error: any) {
           // Fallback if replaceSync is unsupported
-          const style = document.createElement('style');
-          style.textContent = this.sheet;
+          const style = Style().text(this.sheet).build();
           this._shadowDom.appendChild(style);
         }
       } else {
         // Fallback for jsdom and browsers that don't support adoptedStyleSheets properly
-        const style = document.createElement('style');
-        style.textContent = this.sheet;
+        const style = Style().text(this.sheet).build();
         this._shadowDom.appendChild(style);
       }
     }

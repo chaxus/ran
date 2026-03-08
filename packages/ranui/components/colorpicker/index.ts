@@ -1,6 +1,7 @@
 import { range } from 'ranuts/utils';
 import { HTMLElementSSR, createCustomError, createSignal } from '@/utils/index';
 import { HEX_COLOR_REGEX, RGBA_REGEX, RGB_REGEX, hex2hsv, hsv2rgb, rgb2hsv } from '@/utils/color';
+import { Div, View } from '@/utils/builder';
 import '@/components/popover';
 import '@/components/input';
 import '@/components/select';
@@ -49,45 +50,55 @@ export class ColorPicker extends (HTMLElementSSR()!) {
   popoverBlock: HTMLElement;
   popoverContent: HTMLElement;
   colorPickerInner?: HTMLDivElement;
-  colorPickerInnerContent?: HTMLDivElement;
-  colorPickerPanel?: HTMLDivElement;
-  colorPickerInputContainer?: HTMLDivElement;
+  colorPickerInnerContent?: HTMLElement;
+  colorPickerPanel?: HTMLElement;
+  colorPickerInputContainer?: HTMLElement;
   colorPickerPanelDot?: HTMLDivElement;
   colorPickerPanelSliderContainer?: HTMLDivElement;
   colorPickerPanelSliderGroup?: HTMLDivElement;
   colorPickerPanelSliderHue?: HTMLElement;
   colorPickerPanelSliderAlpha?: HTMLElement;
-  colorPickerColorBlockInner?: HTMLDivElement;
-  colorPickerColorBlock?: HTMLDivElement;
-  colorPickerInnerContentSelect?: HTMLDivElement;
-  colorPickerPanelPalette?: HTMLDivElement;
-  colorPickerPanelSaturation?: HTMLDivElement;
+  colorPickerColorBlockInner?: HTMLElement;
+  colorPickerColorBlock?: HTMLElement;
+  colorPickerInnerContentSelect?: HTMLElement;
+  colorPickerPanelPalette?: HTMLElement;
+  colorPickerPanelSaturation?: HTMLElement;
   colorPickerInputContainerSelect?: HTMLElement;
   colorPickerInputContainerInputColor?: HTMLElement;
   colorPickerInputContainerInputNumber?: HTMLElement;
   colorPickerInputContainerSelectItem?: HTMLElement;
   colorPickerPaletteSelect: boolean;
-  colorPickerPanelDotInner?: HTMLDivElement;
+  colorPickerPanelDotInner?: HTMLElement;
   static get observedAttributes(): string[] {
     return ['disabled', 'value'];
   }
   constructor() {
     super();
-    this._shadowDom = this.attachShadow({ mode: 'closed' });
+    this._shadowDom = this.shadowRoot || this.attachShadow({ mode: 'closed' });
     adoptStyles(this._shadowDom, colorPickerCss);
     this.setAttribute('class', 'ran-colorpicker');
-    this.popoverBlock = document.createElement('r-popover');
-    this.popoverBlock.setAttribute('class', 'ran-popover');
-    this.popoverContent = document.createElement('r-content');
-    this.popoverContent.setAttribute('class', 'ran-content');
-    this.colorpicker = document.createElement('div');
-    this.colorpicker.setAttribute('class', 'ran-colorpicker-block');
-    this.colorpickerInner = document.createElement('div');
-    this.colorpickerInner.setAttribute('class', 'ran-colorpicker-inner');
-    this.popoverBlock.appendChild(this.colorpicker);
-    this.popoverBlock.appendChild(this.popoverContent);
-    this.colorpicker.appendChild(this.colorpickerInner);
-    this._shadowDom.appendChild(this.popoverBlock);
+
+    let popoverBlock = this._shadowDom.querySelector('r-popover') as HTMLElement | null;
+    let popoverContent = this._shadowDom.querySelector('r-content') as HTMLElement | null;
+    let colorpicker = this._shadowDom.querySelector('.ran-colorpicker-block') as HTMLDivElement | null;
+    let colorpickerInner = this._shadowDom.querySelector('.ran-colorpicker-inner') as HTMLDivElement | null;
+
+    if (!popoverBlock || !popoverContent || !colorpicker || !colorpickerInner) {
+      colorpickerInner = Div().class('ran-colorpicker-inner').build() as HTMLDivElement;
+      colorpicker = Div().class('ran-colorpicker-block').children(colorpickerInner).build() as HTMLDivElement;
+      popoverContent = View('r-content').class('ran-content').build() as HTMLElement;
+      popoverBlock = View('r-popover')
+        .class('ran-popover')
+        .children(colorpicker, popoverContent)
+        .build() as HTMLElement;
+      this._shadowDom.appendChild(popoverBlock);
+    }
+
+    this.popoverBlock = popoverBlock;
+    this.popoverContent = popoverContent;
+    this.colorpicker = colorpicker;
+    this.colorpickerInner = colorpickerInner;
+
     this.colorPickerPaletteSelect = false;
     this.createContext();
   }
@@ -293,37 +304,49 @@ export class ColorPicker extends (HTMLElementSSR()!) {
   };
   createColorPickerProgress = (): void => {
     // progress
-    this.colorPickerPanelSliderContainer = document.createElement('div');
-    this.colorPickerPanelSliderContainer.setAttribute('class', 'ran-color-picker-slider-container');
-    this.colorPickerPanelSliderGroup = document.createElement('div');
-    this.colorPickerPanelSliderGroup.setAttribute('class', 'ran-color-picker-slider-container-group');
-    this.colorPickerPanelSliderHue = document.createElement('r-progress');
-    this.updateColorPickerPanelSliderHueProgressDot();
-    this.colorPickerPanelSliderHue.style.setProperty(
-      '--ran-progress-wrap-background',
-      'linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000)',
-    );
-    this.colorPickerPanelSliderHue.setAttribute('percent', `${this.context.hue.getter() / 360}`);
+    this.colorPickerPanelSliderHue = View('r-progress')
+      .class('ran-color-picker-slider-container-group-hue')
+      .attr('type', 'drag')
+      .style(
+        '--ran-progress-wrap-background',
+        'linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000)',
+      )
+      .attr('percent', `${this.context.hue.getter() / 360}`)
+      .build() as HTMLElement;
+
     this.colorPickerPanelSliderHue.addEventListener('change', this.changeColorPickerHue);
-    this.colorPickerPanelSliderHue.setAttribute('type', 'drag');
-    this.colorPickerPanelSliderHue.setAttribute('class', 'ran-color-picker-slider-container-group-hue');
-    this.colorPickerPanelSliderAlpha = document.createElement('r-progress');
-    this.updateColorPickerPanelSliderAlphaProgressDot();
-    this.colorPickerPanelSliderAlpha.setAttribute('percent', `${this.context.transparency.getter() / 100}`);
-    this.updateColorPickerPanelSliderAlphaProgressWrap();
+    this.updateColorPickerPanelSliderHueProgressDot();
+
+    this.colorPickerPanelSliderAlpha = View('r-progress')
+      .class('ran-color-picker-slider-container-group-alpha')
+      .attr('type', 'drag')
+      .attr('percent', `${this.context.transparency.getter() / 100}`)
+      .build() as HTMLElement;
+
     this.colorPickerPanelSliderAlpha.addEventListener('change', this.changeColorPickerAlpha);
-    this.colorPickerPanelSliderAlpha.setAttribute('type', 'drag');
-    this.colorPickerPanelSliderAlpha.setAttribute('class', 'ran-color-picker-slider-container-group-alpha');
-    this.colorPickerPanelSliderGroup.appendChild(this.colorPickerPanelSliderHue);
-    this.colorPickerPanelSliderGroup.appendChild(this.colorPickerPanelSliderAlpha);
-    this.colorPickerPanelSliderContainer.appendChild(this.colorPickerPanelSliderGroup);
-    this.colorPickerColorBlock = document.createElement('div');
-    this.colorPickerColorBlock.setAttribute('class', 'ran-color-picker-slider-container-color-block');
-    this.colorPickerColorBlockInner = document.createElement('div');
-    this.colorPickerColorBlockInner.setAttribute('class', 'ran-color-picker-slider-container-color-block-inner');
+    this.updateColorPickerPanelSliderAlphaProgressWrap();
+    this.updateColorPickerPanelSliderAlphaProgressDot();
+
+    this.colorPickerPanelSliderGroup = Div()
+      .class('ran-color-picker-slider-container-group')
+      .children(this.colorPickerPanelSliderHue, this.colorPickerPanelSliderAlpha)
+      .build() as HTMLDivElement;
+
+    this.colorPickerColorBlockInner = Div()
+      .class('ran-color-picker-slider-container-color-block-inner')
+      .build() as HTMLElement;
+
     this.updateColorPickerColorBlockInnerBackground();
-    this.colorPickerColorBlock.appendChild(this.colorPickerColorBlockInner);
-    this.colorPickerPanelSliderContainer.appendChild(this.colorPickerColorBlock);
+
+    this.colorPickerColorBlock = Div()
+      .class('ran-color-picker-slider-container-color-block')
+      .children(this.colorPickerColorBlockInner)
+      .build() as HTMLElement;
+
+    this.colorPickerPanelSliderContainer = Div()
+      .class('ran-color-picker-slider-container')
+      .children(this.colorPickerPanelSliderGroup, this.colorPickerColorBlock)
+      .build() as HTMLDivElement;
   };
   changeColorPickerHue = (e: Event): void => {
     this.context.hue.setter((e as CustomEvent).detail.value * HUE);
@@ -332,59 +355,70 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     this.context.transparency.setter((e as CustomEvent).detail.value * 100);
   };
   createColorPickerSelect = (): void => {
-    this.colorPickerPanel = document.createElement('div');
-    this.colorPickerPanel.setAttribute('class', 'ran-color-picker-panel');
-    this.colorPickerInnerContentSelect = document.createElement('div');
-    this.colorPickerInnerContentSelect.setAttribute('class', 'ran-color-picker-select');
-    this.colorPickerPanel.appendChild(this.colorPickerInnerContentSelect);
-    this.colorPickerPanelPalette = document.createElement('div');
-    this.colorPickerPanelPalette.setAttribute('class', 'ran-color-picker-palette');
-    this.colorPickerInnerContentSelect.appendChild(this.colorPickerPanelPalette);
-    this.colorPickerPanelSaturation = document.createElement('div');
-    this.colorPickerPanelSaturation.setAttribute('class', 'ran-color-picker-saturation');
+    this.colorPickerPanelSaturation = Div().class('ran-color-picker-saturation').build() as HTMLElement;
     this.updateColorPickerPanelSaturationBackground();
-    this.colorPickerPanelDot = document.createElement('div');
-    this.colorPickerPanelDotInner = document.createElement('div');
-    this.colorPickerPanelDotInner.setAttribute('class', 'ran-color-picker-palette-dot-inner');
-    this.colorPickerPanelDot.setAttribute('class', 'ran-color-picker-palette-dot');
+
+    this.colorPickerPanelDotInner = Div().class('ran-color-picker-palette-dot-inner').build() as HTMLElement;
+
+    this.colorPickerPanelDot = Div()
+      .class('ran-color-picker-palette-dot')
+      .children(this.colorPickerPanelDotInner)
+      .build() as HTMLDivElement;
+
     this.colorPickerPanelDot.addEventListener('mousedown', this.mouseDownColorPickerPalette);
     document.body.addEventListener('mousemove', this.mouseMoveColorPickerPalette);
     this.colorPickerPanelDot.addEventListener('mouseup', this.mouseUpColorPickerPalette);
-    this.colorPickerPanelDot.appendChild(this.colorPickerPanelDotInner);
-    this.colorPickerPanelPalette.appendChild(this.colorPickerPanelDot);
-    this.colorPickerPanelPalette.appendChild(this.colorPickerPanelSaturation);
+
+    this.colorPickerPanelPalette = Div()
+      .class('ran-color-picker-palette')
+      .children(this.colorPickerPanelDot, this.colorPickerPanelSaturation)
+      .build() as HTMLElement;
+
     this.colorPickerPanelPalette.addEventListener('mousedown', this.clickColorPalette);
+
+    this.colorPickerInnerContentSelect = Div()
+      .class('ran-color-picker-select')
+      .children(this.colorPickerPanelPalette)
+      .build() as HTMLElement;
+
+    this.colorPickerPanel = Div()
+      .class('ran-color-picker-panel')
+      .children(this.colorPickerInnerContentSelect)
+      .build() as HTMLElement;
   };
   createColorPickerInput = (): void => {
-    this.colorPickerInputContainer = document.createElement('div');
-    this.colorPickerInputContainer.setAttribute('class', 'ran-color-picker-input-container');
     const colorPickerInputContainerId = `${performance.now()}`.replace('.', '');
-    // select
-    this.colorPickerInputContainerSelect = document.createElement('div');
-    this.colorPickerInputContainerSelect.setAttribute('class', 'ran-color-picker-input-container-select');
-    this.colorPickerInputContainerSelect.setAttribute('id', colorPickerInputContainerId);
-    this.colorPickerInputContainerSelectItem = document.createElement('r-select');
-    this.colorPickerInputContainerSelectItem.setAttribute('value', 'HEX');
-    this.colorPickerInputContainerSelectItem.setAttribute('class', 'ran-color-picker-input-container-select-item');
-    this.colorPickerInputContainerSelectItem.setAttribute('type', 'text');
-    this.colorPickerInputContainerSelectItem.setAttribute('getPopupContainerId', colorPickerInputContainerId);
-    const colorSelectOption = ['HEX', 'HSB', 'RGB'];
-    const Fragment = document.createDocumentFragment();
-    colorSelectOption.forEach((item) => {
-      const Option = document.createElement('r-option');
-      Option.setAttribute('value', item);
-      Option.innerText = item;
-      Fragment.appendChild(Option);
-    });
-    this.colorPickerInputContainerSelectItem.appendChild(Fragment);
-    this.colorPickerInputContainerSelect.appendChild(this.colorPickerInputContainerSelectItem);
-    this.colorPickerInputContainer.appendChild(this.colorPickerInputContainerSelect);
-    this.colorPickerInputContainerInputColor = document.createElement('r-input');
-    this.colorPickerInputContainerInputColor.setAttribute('class', 'ran-color-picker-input-container-input-color');
-    this.colorPickerInputContainerInputNumber = document.createElement('r-input');
-    this.colorPickerInputContainerInputNumber.setAttribute('class', 'ran-color-picker-input-container-input-number');
-    this.colorPickerInputContainer.appendChild(this.colorPickerInputContainerInputColor);
-    this.colorPickerInputContainer.appendChild(this.colorPickerInputContainerInputNumber);
+
+    this.colorPickerInputContainerSelectItem = View('r-select')
+      .attr('value', 'HEX')
+      .class('ran-color-picker-input-container-select-item')
+      .attr('type', 'text')
+      .attr('getPopupContainerId', colorPickerInputContainerId)
+      .children(...['HEX', 'HSB', 'RGB'].map((item) => View('r-option').attr('value', item).text(item).build()))
+      .build() as HTMLElement;
+
+    this.colorPickerInputContainerSelect = Div()
+      .class('ran-color-picker-input-container-select')
+      .id(colorPickerInputContainerId)
+      .children(this.colorPickerInputContainerSelectItem)
+      .build() as HTMLElement;
+
+    this.colorPickerInputContainerInputColor = View('r-input')
+      .class('ran-color-picker-input-container-input-color')
+      .build() as HTMLElement;
+
+    this.colorPickerInputContainerInputNumber = View('r-input')
+      .class('ran-color-picker-input-container-input-number')
+      .build() as HTMLElement;
+
+    this.colorPickerInputContainer = Div()
+      .class('ran-color-picker-input-container')
+      .children(
+        this.colorPickerInputContainerSelect,
+        this.colorPickerInputContainerInputColor,
+        this.colorPickerInputContainerInputNumber,
+      )
+      .build() as HTMLElement;
   };
   openColorPicker = (): void => {
     if (this.colorPickerInner) return;
