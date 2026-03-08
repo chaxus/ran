@@ -362,7 +362,10 @@ export class Select extends (HTMLElementSSR()!) {
       if (!this._selectionDropdown || !this._selectDropdown) return;
       const rect = this.getBoundingClientRect();
       const { top, left, bottom, width } = rect;
-      const root = document.getElementById(this.getPopupContainerId);
+      const rootNode = this.getRootNode() as ShadowRoot | Document;
+      const root =
+        (rootNode.getElementById ? rootNode.getElementById(this.getPopupContainerId) : null) ||
+        document.getElementById(this.getPopupContainerId);
       this._selectionDropdown.style.setProperty('position', `absolute`);
       this._selectionDropdown.style.setProperty('--ran-x', `${top + window.scrollX}`);
       this._selectionDropdown.style.setProperty('--ran-y', `${left + window.scrollY}`);
@@ -436,7 +439,11 @@ export class Select extends (HTMLElementSSR()!) {
    */
   createOption = (): void => {
     if (!this._selectDropdown) {
-      const container = document.getElementById(this.getPopupContainerId) || document.body;
+      const root = this.getRootNode() as ShadowRoot | Document;
+      const container =
+        (root.getElementById ? root.getElementById(this.getPopupContainerId) : null) ||
+        document.getElementById(this.getPopupContainerId) ||
+        document.body;
       this._selectDropdown = Div()
         .style('-webkit-tap-highlight-color', 'transparent')
         .style('outline', '0')
@@ -468,7 +475,11 @@ export class Select extends (HTMLElementSSR()!) {
   removeSelectDropdown = (): void => {
     try {
       if (this._selectDropdown) {
-        const container = document.getElementById(this.getPopupContainerId) || document.body;
+        const root = this.getRootNode() as ShadowRoot | Document;
+        const container =
+          (root.getElementById ? root.getElementById(this.getPopupContainerId) : null) ||
+          document.getElementById(this.getPopupContainerId) ||
+          document.body;
         if (container && this._selectDropdown.parentNode === container) {
           container.removeChild(this._selectDropdown);
         }

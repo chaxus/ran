@@ -19,29 +19,33 @@
 }
 
 .video-speed-dropdown {
-  z-index: 101;
-  --ran-dropdown-padding: 0px;
-  --ran-dropdown-background: rgba(91, 91, 91, 0.6);
-  --ran-dropdown-option-item-hover-background-color: #595959;
-  --ran-dropdown-option-active-hover-background-color: #595959;
-  --ran-dropdown-option-item-padding: 2px 4px;
+  z-index: 1011;
+  --ran-dropdown-padding: 4px 0;
+  --ran-dropdown-background: rgba(43, 43, 43, 0.9);
+  --ran-dropdown-option-item-hover-background-color: rgba(255, 255, 255, 0.15);
+  --ran-dropdown-option-active-hover-background-color: rgba(255, 255, 255, 0.25);
+  --ran-dropdown-option-item-padding: 4px 2px;
+  --ran-dropdown-option-item-color: #fff;
   --ran-dropdown-content-color: #fff;
-  --ran-dropdown-content-font-size: 12px;
-  --ran-dropdown-option-active-background-color: transparent;
+  --ran-dropdown-content-font-size: 11px;
+  --ran-dropdown-option-active-background-color: rgba(255, 255, 255, 0.2);
   --ran-dropdown-content-text-align: center;
+  --ran-dropdown-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
 }
 
 .video-clarity-dropdown {
-  z-index: 101;
-  --ran-dropdown-padding: 0px;
-  --ran-dropdown-background: rgba(91, 91, 91, 0.6);
-  --ran-dropdown-option-item-hover-background-color: #595959;
-  --ran-dropdown-option-active-hover-background-color: #595959;
-  --ran-dropdown-option-item-padding: 2px 4px;
+  z-index: 1011;
+  --ran-dropdown-padding: 4px 0;
+  --ran-dropdown-background: rgba(43, 43, 43, 0.9);
+  --ran-dropdown-option-item-hover-background-color: rgba(255, 255, 255, 0.15);
+  --ran-dropdown-option-active-hover-background-color: rgba(255, 255, 255, 0.25);
+  --ran-dropdown-option-item-padding: 4px 2px;
+  --ran-dropdown-option-item-color: #fff;
   --ran-dropdown-content-color: #fff;
-  --ran-dropdown-content-font-size: 12px;
-  --ran-dropdown-option-active-background-color: transparent;
+  --ran-dropdown-content-font-size: 11px;
+  --ran-dropdown-option-active-background-color: rgba(255, 255, 255, 0.2);
   --ran-dropdown-content-text-align: center;
+  --ran-dropdown-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
 }
 
 .video-control_loading {
@@ -453,6 +457,8 @@
 
             &::part(selection) {
               background-color: transparent;
+              padding: 0;
+              border: none;
             }
 
             &::part(icon) {
@@ -460,7 +466,9 @@
             }
 
             &::part(selection-item) {
-              top: 1px;
+              width: 100%;
+              text-align: center;
+              left: 0;
               color: #fff;
               font-size: 12px;
             }
@@ -501,6 +509,8 @@
 
             &::part(selection) {
               background-color: transparent;
+              padding: 0;
+              border: none;
             }
 
             &::part(icon) {
@@ -508,7 +518,9 @@
             }
 
             &::part(selection-item) {
-              top: 1px;
+              width: 100%;
+              text-align: center;
+              left: 0;
               color: #fff;
               font-size: 12px;
             }

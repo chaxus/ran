@@ -1,5 +1,5 @@
 import { SyncHook, addClassToElement, generateThrottle, range, removeClassToElement, timeFormat } from 'ranuts/utils';
-import '@/assets/js/hls.js';
+import '../../assets/js/hls.js';
 import type { Progress } from '@/components/progress';
 import '@/components/select';
 import { Div, Slot, View } from '@/utils/builder';
@@ -224,7 +224,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
         .build() as HTMLDivElement;
       playControllerBottomVolumeProgress = View('r-progress')
         .class('ran-player-controller-bottom-right-volume-progress')
-        .attr('percent', '0.5')
+        .attr('percent', '50')
         .attr('type', 'drag')
         .build() as Progress;
       playControllerBottomVolume = Div()
@@ -472,6 +472,9 @@ export class RanPlayer extends (HTMLElementSSR()!) {
    */
   updatePlayer = (): void => {
     const Hls = window.Hls;
+    if (!Hls) {
+      console.warn('r-player: Hls.js is not loaded from window.Hls');
+    }
     // 如果有子元素，进行置空
     this.innerHTML = '';
     if (!this._shadowDom.contains(this._player)) this._shadowDom.appendChild(this._player);
@@ -479,6 +482,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
       this._hls.destroy();
       this._hls = undefined;
     }
+    this._container.innerHTML = '';
     this._video = View('video')
       .class('ran-player-video')
       .attr('preload', 'auto')
@@ -503,9 +507,11 @@ export class RanPlayer extends (HTMLElementSSR()!) {
           this._hls.loadSource(this.src);
           this._hls.attachMedia(this._video);
         }
-        this._container.appendChild(this._video);
-        this._video.parentElement?.setAttribute('class', 'ran-player-contain');
       }
+      if (!this._container.contains(this._video)) {
+        this._container.appendChild(this._video);
+      }
+      this._video.parentElement?.setAttribute('class', 'ran-player-contain');
       this.listenEvent();
     } catch (error) {
       console.log('r-player update player error:', error);
@@ -892,10 +898,11 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   };
   changeVolumeProgress = (e: Event): void => {
     if (this._video) {
-      this.setVolume((e as CustomEvent).detail.value);
-      this.change('volume', (e as CustomEvent).detail.value);
-      if ((e as CustomEvent).detail.value > 0) {
-        this._volume = (e as CustomEvent).detail.value;
+      const volume = (e as CustomEvent).detail.value / 100;
+      this.setVolume(volume);
+      this.change('volume', volume);
+      if (volume > 0) {
+        this._volume = volume;
       }
     }
   };
@@ -1108,6 +1115,14 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     this._playControllerBottomRightFullScreen.removeEventListener('click', this.openFullScreen);
     window.removeEventListener('resize', this.resize);
     document.removeEventListener('fullscreenchange', this.fullScreenChange);
+  }
+  attributeChangedCallback(k: string, o: string, n: string): void {
+    if (k === 'src' && o !== n) {
+      this.updatePlayer();
+    }
+    if (k === 'volume' && o !== n) {
+      this.setVolume(Number(n) / 100);
+    }
   }
 }
 

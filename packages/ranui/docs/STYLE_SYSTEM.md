@@ -88,6 +88,8 @@ constructor() {
 | **`sheet` 属性** | 程序化/动态注入 | `<r-button sheet=".ran-btn-content { ... }">` |
 | **Slot 内容** | 自定义插槽内容样式 | `<r-button><strong style="color:red">文字</strong></r-button>` |
 
+> 📄 详细规范见 [style-override.md](./style-override.md)，包含嵌套组件作用域、CSS Token 命名约定、Part 暴露规范及实施路线图。
+
 > **原则**：组件内部所有 CSS 值均使用 `var(--token, 默认值)` 写法，使用方只需覆盖变量即可定制任意样式。
 > 
 > **权重建议**：组件内部默认样式优先使用 `:host` 或 `:host(selector)` 声明。这样外部通过标签名设置的样式具有更高权重，方便用户覆盖，避免强制使用 `!important`。
