@@ -83,4 +83,18 @@ describe('r-player contract', () => {
     expect(restoreSpy).toHaveBeenCalledWith(snapshot);
     expect(player._pendingPlaybackRestore).toBeUndefined();
   });
+
+  it('falls back to native src when Hls is unavailable', () => {
+    const originalHls = (window as any).Hls;
+    (window as any).Hls = undefined;
+
+    const player = document.createElement('r-player') as any;
+    player.setAttribute('src', 'https://example.com/video.mp4');
+    document.body.appendChild(player);
+    player.updatePlayer();
+
+    expect(player._video.src).toContain('https://example.com/video.mp4');
+
+    (window as any).Hls = originalHls;
+  });
 });

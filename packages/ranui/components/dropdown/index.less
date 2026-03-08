@@ -178,22 +178,23 @@
       transform: translateX(
           calc(var(--ran-dropdown-arrow-anchor-width, var(--ran-dropdown-min-width, 100%)) / 2 - calc(@arrow-size / 2))
         )
-        translateY(-16px) rotate(0deg);
+        translateY(calc(-1 * var(--ran-dropdown-arrow-height, @arrow-size) + var(--ran-dropdown-arrow-overlap, 2px)))
+        rotate(0deg);
       top: 0px;
     }
     .bottom {
       transform: translateX(
           calc(var(--ran-dropdown-arrow-anchor-width, var(--ran-dropdown-min-width, 100%)) / 2 - calc(@arrow-size / 2))
         )
-        translateY(0px) rotate(180deg);
+        translateY(var(--ran-dropdown-arrow-overlap, 2px)) rotate(180deg);
       top: max(
         0px,
-        calc(var(--ran-dropdown-arrow-anchor-height, var(--ran-dropdown-min-height, 100%)) - calc(@arrow-size / 4))
+        calc(var(--ran-dropdown-min-height, 100%) - calc(@arrow-size / 4))
       );
     }
     .left {
       transform: translateX(calc(0px - var(--ran-dropdown-arrow-width, 16px)))
-        translateY(calc(var(--ran-dropdown-arrow-width, 16px) / 2)) rotate(270deg);
+        translateY(calc(var(--ran-dropdown-arrow-width, 16px) / 2 + var(--ran-dropdown-arrow-overlap, 2px))) rotate(270deg);
       top: max(
         0px,
         calc(var(--ran-dropdown-arrow-anchor-height, var(--ran-dropdown-min-height, 100%)) / 2 - @arrow-size)
@@ -204,7 +205,8 @@
       transform: translateX(0)
         translateY(
           calc(
-            var(--ran-dropdown-arrow-anchor-height, var(--ran-dropdown-min-height, 100%)) / 2 - calc(@arrow-size / 2)
+            var(--ran-dropdown-arrow-anchor-height, var(--ran-dropdown-min-height, 100%)) / 2 - calc(@arrow-size / 2) +
+              var(--ran-dropdown-arrow-overlap, 2px)
           )
         )
         rotate(90deg);
@@ -244,7 +246,7 @@
       transform: var(--ran-dropdown-arrow-after-transform, translateY(50%) rotate(-135deg));
       box-shadow: var(--ran-dropdown-arrow-after-box-shadow, 2px 2px 5px rgba(0, 0, 0, 0.05));
       z-index: var(--ran-dropdown-arrow-after-z-index, 0);
-      background: var(--ran-dropdown-arrow-after-background, transparent);
+      background: var(--ran-dropdown-arrow-after-background, #fff);
     }
   }
 }

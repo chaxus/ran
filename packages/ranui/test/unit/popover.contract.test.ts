@@ -51,4 +51,27 @@ describe('r-popover contract', () => {
     await sleep(800); // 16 + 300 + 16 + 300 = 632ms
     expect(popoverContent.style.display).toBe('none');
   });
+
+  it('applies arrow direction and anchor sizing variables when shown', async () => {
+    const sleep = (ms = 50) => new Promise((r) => setTimeout(r, ms));
+    const popover = document.createElement('r-popover') as any;
+    popover.trigger = 'hover';
+    popover.placement = 'top';
+    popover.arrow = 'true';
+    popover.innerHTML = `
+      <div id="trigger">Hover me</div>
+      <r-content>Popover content</r-content>
+    `;
+    document.body.appendChild(popover);
+    await sleep(100);
+
+    const popoverContent = popover.popoverContent as HTMLElement;
+    popover.dispatchEvent(new MouseEvent('mouseenter'));
+    await sleep(120);
+
+    expect(popoverContent.style.display).toBe('block');
+    expect(popoverContent.getAttribute('arrow')).toBe('bottom');
+    expect(popoverContent.style.getPropertyValue('--ran-dropdown-arrow-anchor-width')).not.toBe('');
+    expect(popoverContent.style.getPropertyValue('--ran-dropdown-arrow-anchor-height')).not.toBe('');
+  });
 });
