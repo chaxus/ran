@@ -173,7 +173,7 @@ export class Select extends (HTMLElementSSR()!) {
       this.removeAttribute('disabled');
       this._selection.removeAttribute('disabled');
       this.removeAttribute('aria-disabled');
-      if (!this.hasAttribute('tabindex')) this.tabIndex = 0;
+      this.tabIndex = 0;
     } else {
       this.setAttribute('disabled', '');
       this._selection.setAttribute('disabled', '');
@@ -447,7 +447,9 @@ export class Select extends (HTMLElementSSR()!) {
     try {
       if (this._selectDropdown) {
         const container = document.getElementById(this.getPopupContainerId) || document.body;
-        container.removeChild(this._selectDropdown);
+        if (container && this._selectDropdown.parentNode === container) {
+          container.removeChild(this._selectDropdown);
+        }
       }
     } catch (error) {
       console.error('removeSelectDropdown error', error);

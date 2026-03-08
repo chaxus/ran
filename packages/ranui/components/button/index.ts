@@ -50,6 +50,7 @@ export class Button extends RanElement {
   }
   set sheet(value: string) {
     this.setAttribute('sheet', value || '');
+    this.handlerExternalCss();
   }
 
   get disabled(): boolean | string {
@@ -175,13 +176,27 @@ export class Button extends RanElement {
 
   handlerExternalCss = (): void => {
     if (this.sheet && this._shadowDom) {
-      try {
-        const sheet = new CSSStyleSheet();
-        sheet.replaceSync(this.sheet);
-        // 🛡️ Fix: DON'T overwrite, append to existing sheets to keep base styles
-        this._shadowDom.adoptedStyleSheets = [...this._shadowDom.adoptedStyleSheets, sheet];
-      } catch (error) {
-        console.error(`Failed to apply CSSStyleSheet in Button: ${error}`);
+      // 🛡️ Fix: DON'T overwrite, append to existing sheets to keep base styles
+      // In JS DOM environments, adoptedStyleSheets is frozen readonly array
+      const canAdopt = this._shadowDom.adoptedStyleSheets && !Object.isFrozen(this._shadowDom.adoptedStyleSheets);
+
+      if (canAdopt) {
+        try {
+          const sheet = new CSSStyleSheet();
+          sheet.replaceSync(this.sheet);
+          const currentSheets = this._shadowDom.adoptedStyleSheets || [];
+          this._shadowDom.adoptedStyleSheets = [...currentSheets, sheet];
+        } catch (error: any) {
+          // Fallback if replaceSync is unsupported
+          const style = document.createElement('style');
+          style.textContent = this.sheet;
+          this._shadowDom.appendChild(style);
+        }
+      } else {
+        // Fallback for jsdom and browsers that don't support adoptedStyleSheets properly
+        const style = document.createElement('style');
+        style.textContent = this.sheet;
+        this._shadowDom.appendChild(style);
       }
     }
   };
