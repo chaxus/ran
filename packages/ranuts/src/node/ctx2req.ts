@@ -15,7 +15,11 @@ function noCallbackHandler(ctx: Context, connectMiddleware: ConnectMiddleware, n
 function withCallbackHandler(ctx: Context, connectMiddleware: ConnectMiddleware, next: Next): Promise<void> {
   return new Promise((resolve, reject) => {
     connectMiddleware(ctx.req, ctx.res, (err: Error) => {
-      err ? reject(err) : resolve(next());
+      if (err) {
+        reject(err);
+      } else {
+        resolve(next());
+      }
     });
   });
 }

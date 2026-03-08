@@ -436,10 +436,15 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     this.createColorPickerProgress();
     this.createColorPickerSelect();
     this.createColorPickerInput();
-    this.colorPickerPanel && this.colorPickerInnerContent.appendChild(this.colorPickerPanel);
-    this.colorPickerPanelSliderContainer &&
+    if (this.colorPickerPanel) {
+      this.colorPickerInnerContent.appendChild(this.colorPickerPanel);
+    }
+    if (this.colorPickerPanelSliderContainer) {
       this.colorPickerInnerContent.appendChild(this.colorPickerPanelSliderContainer);
-    this.colorPickerInputContainer && this.colorPickerInnerContent.appendChild(this.colorPickerInputContainer);
+    }
+    if (this.colorPickerInputContainer) {
+      this.colorPickerInnerContent.appendChild(this.colorPickerInputContainer);
+    }
     this.colorPickerInner.appendChild(this.colorPickerInnerContent);
     this.popoverContent.appendChild(this.colorPickerInner);
     this.changeColorPalettePositionByContext();

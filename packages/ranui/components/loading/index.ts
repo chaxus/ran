@@ -143,7 +143,7 @@ export class Loading extends (HTMLElementSSR()!) {
     const loading = Div().class(ICON_NAME_AMP.CIRCLE).part(ICON_NAME_AMP.CIRCLE).build();
     Array(3)
       .fill(1)
-      .map(() => new Array(4).fill(1))
+      .map(() => Array(4).fill(1))
       .forEach((i, index) => {
         const container = Div()
           .class(`circle-container container${index + 1}`)
@@ -431,7 +431,9 @@ export class Loading extends (HTMLElementSSR()!) {
       [ICON_NAME_AMP.PACMAN]: this.pacmanLoading,
     };
     const handler = NAME_MAP[this.name];
-    handler && handler();
+    if (handler) {
+      handler();
+    }
   };
   connectedCallback(): void {
     this.handlerExternalCss();

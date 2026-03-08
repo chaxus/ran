@@ -434,7 +434,9 @@ export class Input extends (HTMLElementSSR()!) {
       this._icon = View('r-icon').class('ran-icon').build() as HTMLElement;
       this._inputContent.insertAdjacentElement('beforebegin', this._icon);
     }
-    this.icon && this._icon.setAttribute('name', this.icon);
+    if (this.icon) {
+      this._icon.setAttribute('name', this.icon);
+    }
   };
   /**
    * @description: 聚合监听事件

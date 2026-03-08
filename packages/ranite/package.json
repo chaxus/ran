@@ -14,21 +14,21 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@babel/core": "^7.27.1",
-    "chokidar": "^4.0.3",
+    "@babel/core": "^7.29.0",
+    "chokidar": "^5.0.0",
     "connect": "^3.7.0",
     "picocolors": "^1.1.1",
-    "sirv": "^3.0.1",
-    "tsup": "^8.4.0"
+    "sirv": "^3.0.2",
+    "tsup": "^8.5.1"
   },
   "dependencies": {
     "@types/ws": "^8.18.1",
-    "debug": "^4.4.0",
-    "es-module-lexer": "^1.7.0",
-    "esbuild": "^0.25.3",
-    "fs-extra": "^11.3.0",
-    "magic-string": "^0.30.17",
-    "resolve": "^1.22.10",
-    "ws": "^8.18.2"
+    "debug": "^4.4.3",
+    "es-module-lexer": "^2.0.0",
+    "esbuild": "^0.27.3",
+    "fs-extra": "^11.3.4",
+    "magic-string": "^0.30.21",
+    "resolve": "^1.22.11",
+    "ws": "^8.19.0"
   }
 }

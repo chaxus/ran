@@ -1,7 +1,7 @@
-import { Div, Slot, View } from '@/utils/builder';
+import { Slot, View } from '@/utils/builder';
 import { adoptStyles } from '@/utils/style';
 import formCss from './index.less?inline';
-import { RanElement, html } from '@/utils/index'; // Added RanElement and html
+import { RanElement } from '@/utils/index';
 
 class CustomElement extends RanElement {
   // Changed to extend RanElement

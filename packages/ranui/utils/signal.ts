@@ -37,7 +37,9 @@ export const createSignal = <T = unknown>(
         updateSignal(newValue);
       }
     } else {
-      !comparator && updateSignal(newValue);
+      if (!comparator) {
+        updateSignal(newValue);
+      }
     }
   };
   return [getter, setter];

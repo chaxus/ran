@@ -101,9 +101,11 @@ function CustomElement() {
        */
       initAttribute = () => {
         this.parent = this.parentNode as ParentNode & ExtendParentNode;
-        this.key && this.parent?.updateAttribute(this.key, 'icon', this.icon);
-        this.key && this.parent?.updateAttribute(this.key, 'iconSize', this.iconSize);
-        this.key && this.parent?.updateAttribute(this.key, 'effect', this.effect);
+        if (this.key) {
+          this.parent?.updateAttribute(this.key, 'icon', this.icon);
+          this.parent?.updateAttribute(this.key, 'iconSize', this.iconSize);
+          this.parent?.updateAttribute(this.key, 'effect', this.effect);
+        }
       };
       connectedCallback() {
         this.handlerExternalCss();

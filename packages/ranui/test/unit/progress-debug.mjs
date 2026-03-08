@@ -9,7 +9,7 @@ global.ShadowRoot = dom.window.ShadowRoot;
 
 // Simulate ShadowRoot.prototype.attachShadow mock if needed, but jsdom supports it.
 
-import('./components/progress/index.ts').then((mod) => {
+import('./components/progress/index.ts').then(() => {
   const el = document.createElement('r-progress');
   el.setAttribute('type', 'drag');
   el.setAttribute('percent', '30');

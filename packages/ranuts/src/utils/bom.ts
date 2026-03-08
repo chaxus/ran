@@ -12,13 +12,19 @@ import { isClient } from '@/utils/device';
 export const retain = (callback = noop): void => {
   const historyReturnCb = () => {
     callback();
-    isClient && window.removeEventListener('popstate', historyReturnCb);
+    if (isClient) {
+      window.removeEventListener('popstate', historyReturnCb);
+    }
   };
 
   // 向 history 栈中推入两个和当前页面一样的历史记录，用来在页面发生跳转的时候区分返回和前进动作
-  isClient && window.history.pushState(null, '', window.location.href);
+  if (isClient) {
+    window.history.pushState(null, '', window.location.href);
+  }
   setTimeout(() => {
-    isClient && window.addEventListener('popstate', historyReturnCb);
+    if (isClient) {
+      window.addEventListener('popstate', historyReturnCb);
+    }
   }, 500);
 };
 
@@ -85,12 +91,16 @@ export const requestUrlToBuffer = (
       reject({ success: false, data: e, message: `` });
     };
     xhr.onprogress = (event) => {
-      options.onProgress && options.onProgress(event);
+      if (options.onProgress) {
+        options.onProgress(event);
+      }
     };
     xhr.withCredentials = options.withCredentials || false;
     if (options.headers) {
       Object.keys(options.headers).forEach(function (key) {
-        options.headers?.[key] && xhr.setRequestHeader(key, options.headers[key]);
+        if (options.headers?.[key]) {
+          xhr.setRequestHeader(key, options.headers[key]);
+        }
       });
     }
     xhr.send(options.body);

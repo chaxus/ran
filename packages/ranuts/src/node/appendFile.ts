@@ -12,10 +12,12 @@ import type { Error } from '@/node/fs';
 export const appendFile = (path: string, content: string): Promise<Ranuts.Identification> =>
   new Promise((resolve, reject) => {
     fs.appendFile(path, content, (err: Error) => {
-      err
-        ? reject({ success: false, _identification: false, data: err })
-        : readFile(path).then((result: Ranuts.Identification | PromiseLike<Ranuts.Identification>) => {
-            resolve(result);
-          });
+      if (err) {
+        reject({ success: false, _identification: false, data: err });
+      } else {
+        readFile(path).then((result: Ranuts.Identification | PromiseLike<Ranuts.Identification>) => {
+          resolve(result);
+        });
+      }
     });
   });

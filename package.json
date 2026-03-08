@@ -13,8 +13,8 @@
     "build": "sh ./bin/build.sh",
     "test": "sh ./bin/test.sh",
     "lint": "sh ./bin/lint.sh",
-    "lint:es": "eslint --cache .",
-    "lint:fix": "eslint --cache --fix",
+    "lint:es": "oxlint --config .oxlintrc.json .",
+    "lint:fix": "oxlint --config .oxlintrc.json --fix .",
     "lint:prettier": "prettier --check --cache .",
     "format": "prettier --write --cache .",
     "cpd": "jscpd ./packages"
@@ -24,26 +24,20 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@eslint/js": "^9.39.1",
-    "@types/node": "^24.10.1",
-    "@typescript-eslint/parser": "^8.46.4",
-    "eslint": "^9.39.1",
-    "eslint-plugin-import-x": "^4.16.1",
-    "eslint-plugin-n": "^17.23.1",
-    "eslint-plugin-regexp": "^2.10.0",
-    "jscpd": "^4.0.5",
-    "prettier": "^3.6.2",
-    "terser": "^5.44.1",
+    "@types/node": "^25.3.5",
+    "jscpd": "^4.0.8",
+    "oxlint": "^1.51.0",
+    "prettier": "^3.8.1",
+    "terser": "^5.46.0",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.46.4",
-    "vite": "^6.4.1",
+    "vite": "^7.3.1",
     "vite-plugin-dts": "^4.5.4",
-    "vitest": "^4.0.9",
-    "vue": "^3.5.24",
-    "vue-tsc": "^3.1.3"
+    "vitest": "^4.0.18",
+    "vue": "^3.5.29",
+    "vue-tsc": "^3.2.5"
   },
   "dependencies": {
-    "globals": "^16.5.0",
+    "globals": "^17.4.0",
     "ranui": "0.1.10-alpha-27"
   },
   "pnpm": {

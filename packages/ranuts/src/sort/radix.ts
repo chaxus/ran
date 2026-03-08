@@ -25,7 +25,9 @@ const getDigit = (num: number) => {
 const radix = (list: Array<number>, maxDigit?: number): Array<number> => {
   if (list.length === 0) return list;
   if (!maxDigit) maxDigit = getDigit(getMax(list));
-  const buckets = new Array(maxDigit).fill(0).map(() => new Array(0));
+  const buckets = Array(maxDigit)
+    .fill(0)
+    .map(() => [] as number[]);
   for (let j = 0; j < list.length; j++) {
     const digit = getDigit(list[j]);
     buckets[digit - 1].push(list[j]);

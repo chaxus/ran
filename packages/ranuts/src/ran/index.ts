@@ -1,13 +1,13 @@
-// 当浏览器有空闲或者超时了就会调用performWork来执行任务：
-// workLoop 的工作大概猜到了，它会从更新队列(updateQueue)中弹出更新任务来执行
-// 每执行完一个‘执行单元‘，就检查一下剩余时间是否充足，如果充足就进行执行下一个执行单元，反之则停止执行，保存现场，等下一次有执行权时恢复:
+// 当浏览器有空闲或者超时了就会调用 performWork 来执行任务：
+// workLoop 的工作大概猜到了，它会从更新队列 (updateQueue) 中弹出更新任务来执行
+// 每执行完一个‘执行单元‘，就检查一下剩余时间是否充足，如果充足就进行执行下一个执行单元，反之则停止执行，保存现场，等下一次有执行权时恢复：
 // performUnitOfWork 负责对 Fiber 进行操作，并按照深度遍历的顺序返回下一个 Fiber。
 // Reconciliation：
-// 可以认为是 Diff 阶段, 这个阶段可以被中断, 这个阶段会找出所有节点变更，例如节点新增、删除、属性变更等等,
-// 这些变更React 称之为'副作用(Effect)' . 以下生命周期钩子会在协调阶段被调用：
+// 可以认为是 Diff 阶段，这个阶段可以被中断，这个阶段会找出所有节点变更，例如节点新增、删除、属性变更等等，
+// 这些变更 React 称之为'副作用 (Effect)' . 以下生命周期钩子会在协调阶段被调用：
 // Commit
-// 将上一个阶段计算出来的需要处理的**副作用(Effects)**一次性执行了。
-// 这个阶段必须同步执行，不能被打断. 这些生命周期钩子在提交阶段被执行:
+// 将上一个阶段计算出来的需要处理的**副作用 (Effects)**一次性执行了。
+// 这个阶段必须同步执行，不能被打断。这些生命周期钩子在提交阶段被执行：
 
 type InventedElementProps = any;
 
@@ -24,16 +24,16 @@ interface Fiber {
   /**
    * @description: 节点的类型信息
    */
-  // 标记 Fiber 类型, 例如函数组件、类组件、宿主组件
+  // 标记 Fiber 类型，例如函数组件、类组件、宿主组件
   tag?: string;
-  // 节点元素类型, 是具体的类组件、函数组件、宿主组件(字符串)
+  // 节点元素类型，是具体的类组件、函数组件、宿主组件 (字符串)
   type: string;
   /**
    * @description: 节点的状态
    */
   props?: FiberProps;
   pendingProps?: any;
-  // 上一次渲染的props
+  // 上一次渲染的 props
   memoizedProps?: any; // The props used to create the output.
   // 上一次渲染的组件状态
   memoizedState?: any;
@@ -41,7 +41,7 @@ interface Fiber {
    * @description: 副作用
    */
   effectTag?: string; // 操作的标记
-  // 和节点关系一样，React 同样使用链表来将所有有副作用的Fiber连接起来
+  // 和节点关系一样，React 同样使用链表来将所有有副作用的 Fiber 连接起来
   nextEffect?: Fiber | null;
   /**
    * @description: 节点的结构信息
@@ -49,21 +49,21 @@ interface Fiber {
   child?: Fiber; // 子节点
   sibling?: Fiber; // 兄弟节点
   return?: Fiber; // 指向父节点
-  key?: string; // 子节点的唯一键, 即我们渲染列表传入的key属性
+  key?: string; // 子节点的唯一键，即我们渲染列表传入的 key 属性
   /**
    * @description: 指向的旧节点
    */
-  alternate?: Fiber; // 记录上次的状态，进行diff对比
+  alternate?: Fiber; // 记录上次的状态，进行 diff 对比
 
   dom?: AuthenticElement; // 判断是不是根节点
 }
 
 let deletions: Array<Fiber> = []; // 需要删除的节点
-let currentFiberNode: Fiber | undefined; // 用于记录当前处理到的fiber节点
-let fiberRoot: Fiber | undefined; // 记录fiber的根节点
+let currentFiberNode: Fiber | undefined; // 用于记录当前处理到的 fiber 节点
+let fiberRoot: Fiber | undefined; // 记录 fiber 的根节点
 
 /**
- * @description: 创建文本虚拟DOM
+ * @description: 创建文本虚拟 DOM
  * @param {string} text
  * @return {VirtualDom}
  */
@@ -77,7 +77,7 @@ function createTextInventedElement(text: string): InventedElement {
   };
 }
 /**
- * @description: 创建虚拟DOM，参考React源码：https://github.com/facebook/react/blob/main/packages/react/src/ReactElement.js
+ * @description: 创建虚拟 DOM，参考 React 源码：https://github.com/facebook/react/blob/main/packages/react/src/ReactElement.js
  * @param {string} type
  * @param {VirtualDomProps} props
  * @param {array} children
@@ -86,7 +86,7 @@ function createTextInventedElement(text: string): InventedElement {
 function createElement(type: string, config: InventedElementProps, children: Array<InventedElement>): InventedElement {
   const props = {
     ...config,
-    // children也要放到props里面去，这样我们在组件里面就能通过this.props.children拿到子元素
+    // children 也要放到 props 里面去，这样我们在组件里面就能通过 this.props.children 拿到子元素
     children: children.map((child) => {
       return typeof child === 'object' ? child : createTextInventedElement(child);
     }),
@@ -96,7 +96,7 @@ function createElement(type: string, config: InventedElementProps, children: Arr
 }
 
 /**
- * @description: 将fiber渲染成真实DOM, 参考react源码：https://github.com/facebook/react/blob/main/packages/react-dom/src/client/ReactDOMLegacy.js
+ * @description: 将 fiber 渲染成真实 DOM, 参考 react 源码：https://github.com/facebook/react/blob/main/packages/react-dom/src/client/ReactDOMLegacy.js
  * @param {VirtualDom} element
  * @return {RealDom}
  */
@@ -107,7 +107,7 @@ function fiberToAuthenticElement(fiber: Fiber): AuthenticElement {
   }
   const dom = document.createElement(fiber.type);
   for (const prop in fiber.props) {
-    // 将fiber上除了props属性都挂载到真正的DOM上去
+    // 将 fiber 上除了 props 属性都挂载到真正的 DOM 上去
     if (prop.startsWith('on')) {
       // 处理监听事件
       dom.addEventListener(prop.toLowerCase(), fiber.props[prop], false);
@@ -118,12 +118,12 @@ function fiberToAuthenticElement(fiber: Fiber): AuthenticElement {
   return dom;
 }
 /**
- * @description: 深度遍历，虚拟DOM转Fiber，用于替代虚拟DOM直接diff和转真实DOM。转成fiber后再一次性render，也叫commit。
+ * @description: 深度遍历，虚拟 DOM 转 Fiber，用于替代虚拟 DOM 直接 diff 和转真实 DOM。转成 fiber 后再一次性 render，也叫 commit。
  * @return {*}
  */
 function reconcile(fiber: Fiber) {
-  // 把虚拟DOM 的 render 和 patch阶段，变成了虚拟DOM转fiber的reconcile，同时空闲时才转schedule，转完后一次性commitFiber
-  // 用于解决虚拟DOM转真实DOM时，render和patch时间过长的问题。只解决了patch时候问题。
+  // 把虚拟 DOM 的 render 和 patch 阶段，变成了虚拟 DOM 转 fiber 的 reconcile，同时空闲时才转 schedule，转完后一次性 commitFiber
+  // 用于解决虚拟 DOM 转真实 DOM 时，render 和 patch 时间过长的问题。只解决了 patch 时候问题。
   reconcileFiberNode(fiber);
   // 这个函数的返回值是下一个任务，这其实是一个深度优先遍历
   // 先找子元素，没有子元素了就找兄弟元素
@@ -146,15 +146,15 @@ function reconcile(fiber: Fiber) {
   }
 }
 /**
- * @description: 处理当前fiber节点，diff当前的节点
+ * @description: 处理当前 fiber 节点，diff 当前的节点
  * @return {*}
  */
 function reconcileFiberNode(fiber: Fiber) {
   if (!fiber.dom) {
-    // 如果 fiber 上没有真实的 dom ，则生成一个真实的 dom
+    // 如果 fiber 上没有真实的 dom，则生成一个真实的 dom
     fiber.dom = fiberToAuthenticElement(fiber);
   }
-  // reconcileChildren是把之前的 vdom 转成 child、sibling、return 这样串联起来的 fiber 链表：
+  // reconcileChildren 是把之前的 vdom 转成 child、sibling、return 这样串联起来的 fiber 链表：
   reconcileChildren(fiber);
 }
 /**
@@ -162,10 +162,10 @@ function reconcileFiberNode(fiber: Fiber) {
  * @param {Fiber} fiber
  */
 function reconcileChildren(fiber: Fiber) {
-  // 只有虚拟DOM才有fiber.props.children， fiber是通过child指向子节点
+  // 只有虚拟 DOM 才有 fiber.props.children，fiber 是通过 child 指向子节点
   const children: Array<Fiber> = fiber.props.children; // 获取现在的 fiber 树
-  // 构建fiber结构
-  // const alternateFiber = fiber.alternate // 获取上次的fiber树
+  // 构建 fiber 结构
+  // const alternateFiber = fiber.alternate // 获取上次的 fiber 树
   let alternateChildFiber = fiber.alternate && fiber.alternate.child; // 获取上次的 fiber 树
   let updateFiber: Fiber | undefined;
   let prevSibling: Fiber | undefined;
@@ -257,7 +257,7 @@ function reconcileChildren(fiber: Fiber) {
  */
 function schedule(deadline: IdleDeadline) {
   while (currentFiberNode && deadline.timeRemaining() > 1) {
-    // 这个while循环会在任务执行完或者时间到了的时候结束
+    // 这个 while 循环会在任务执行完或者时间到了的时候结束
     currentFiberNode = reconcile(currentFiberNode);
   }
 
@@ -266,18 +266,20 @@ function schedule(deadline: IdleDeadline) {
     commitFiber();
   }
 
-  // 如果任务还没完，但是时间到了，我们需要继续注册requestIdleCallback
+  // 如果任务还没完，但是时间到了，我们需要继续注册 requestIdleCallback
   requestIdleCallback(schedule);
 }
 /**
- * @description: fiber构建完成，同时区别也构建完成，进行统一的commit渲染
+ * @description: fiber 构建完成，同时区别也构建完成，进行统一的 commit 渲染
  * @return {*}
  */
 function commitFiber() {
   deletions.forEach(fiberHandler); // 执行真正的节点删除
-  fiberRoot && fiberHandler(fiberRoot); // 开启递归
-  currentFiberNode = fiberRoot; // 记录一下currentRoot
-  fiberRoot = undefined; // 操作完后将workInProgressRoot重置
+  if (fiberRoot) {
+    fiberHandler(fiberRoot); // 开启递归
+  }
+  currentFiberNode = fiberRoot; // 记录一下 currentRoot
+  fiberRoot = undefined; // 操作完后将 workInProgressRoot 重置
 }
 function replacementHandler(fiber: Fiber) {
   if (fiber.return) {
@@ -321,34 +323,40 @@ const fiberHandlerMapEffectTag = new Map([
   ['UPDATE', updateHandler],
 ]);
 /**
- * @description: 不同类型的fiber对应不同的处理方式
+ * @description: 不同类型的 fiber 对应不同的处理方式
  * @param {Fiber} fiber
  */
 function fiberHandler(fiber: Fiber) {
   if (!fiber) {
     return;
   }
-  // 向上查找真正的DOM
+  // 向上查找真正的 DOM
   let parentFiber = fiber.return;
   while (parentFiber && !parentFiber.dom) {
     parentFiber = parentFiber.return;
   }
   const handler = fiberHandlerMapEffectTag.get(fiber.effectTag || '');
-  handler && handler(fiber);
+  if (handler) {
+    handler(fiber);
+  }
 
   // 递归操作子元素和兄弟元素
-  fiber.child && fiberHandler(fiber.child);
-  fiber.sibling && fiberHandler(fiber.sibling);
+  if (fiber.child) {
+    fiberHandler(fiber.child);
+  }
+  if (fiber.sibling) {
+    fiberHandler(fiber.sibling);
+  }
 }
 /**
- * @description: 传入虚拟DOM和需要挂载的根节点，将虚拟DOM转化为Fiber，将fiber转化为真实DOM进行挂载
+ * @description: 传入虚拟 DOM 和需要挂载的根节点，将虚拟 DOM 转化为 Fiber，将 fiber 转化为真实 DOM 进行挂载
  * @param {InventedElement} inventedElement
  * @param {Element} root
  */
 function render(inventedElement: InventedElement, root: Element): void {
-  // 保存上一次的fiber根节点，进行对比更新
+  // 保存上一次的 fiber 根节点，进行对比更新
   const alternate = fiberRoot;
-  // fiber和虚拟DOM结构上差不多，将虚拟DOM构建称fiber
+  // fiber 和虚拟 DOM 结构上差不多，将虚拟 DOM 构建称 fiber
   fiberRoot = {
     type: 'ROOT',
     dom: root,

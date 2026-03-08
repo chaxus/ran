@@ -1,0 +1,20 @@
+{
+  "$schema": "https://raw.githubusercontent.com/oxc-project/oxc/main/npm/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "unicorn", "node", "import", "promise"],
+  "ignorePatterns": [
+    "packages/solidity/**",
+    "**/dist/**",
+    "**/report/**",
+    "**/assets/**",
+    "**/temp/**",
+    "**/public/**",
+    "**/cache/**",
+    "**/*.snap"
+  ],
+  "rules": {
+    "eqeqeq": "off",
+    "no-debugger": "error",
+    "no-empty": "warn",
+    "prefer-const": "warn"
+  }
+}

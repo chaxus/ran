@@ -5,7 +5,7 @@
     "module": "ESNext",
     "esModuleInterop": true,
     "target": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "outDir": "dist",
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
@@ -13,7 +13,6 @@
     "noImplicitAny": true,
     "useUnknownInCatchVariables": false,
     "inlineSourceMap": true,
-    "baseUrl": ".",
     "jsx": "react-jsx",
     "alwaysStrict": true,
     "removeComments": false,
@@ -24,10 +23,10 @@
     "experimentalDecorators": true,
     "skipLibCheck": true,
     "paths": {
-      "@/assets/*": ["assets/*"],
-      "@/components/*": ["components/*"],
-      "@/plugins/*": ["plugins/*"],
-      "@/utils/*": ["utils/*"]
+      "@/assets/*": ["./assets/*"],
+      "@/components/*": ["./components/*"],
+      "@/plugins/*": ["./plugins/*"],
+      "@/utils/*": ["./utils/*"]
     }
   }
 }

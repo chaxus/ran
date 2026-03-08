@@ -31,7 +31,6 @@ describe('r-select contract', () => {
   it('reflects disabled property to attributes and selection', async () => {
     const select = await createSelectWithOptions();
     // @ts-ignore - access private _shadowDom because mode is closed
-    const selection = select._shadowDom?.querySelector('.selection') as HTMLElement;
 
     // Initial state
     expect(select.hasAttribute('disabled')).toBe(false);

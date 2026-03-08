@@ -4,7 +4,7 @@
  * @param {Element} append 插入的父元素 默认 body
  * @param {Function} callback 所有 script onload 回调 也可通过返回的 promise 执行回调
  */
-export const scriptOnLoad = (urls: string[], append?: HTMLElement, callback?: Function): Promise<void> => {
+export const scriptOnLoad = (urls: string[], append?: HTMLElement, callback?: () => void): Promise<void> => {
   urls = Array.isArray(urls) ? urls : [urls];
   const array = urls.map((src) => {
     // Check if the URL ends with .css using string operations instead of regex
@@ -33,7 +33,8 @@ export const scriptOnLoad = (urls: string[], append?: HTMLElement, callback?: Fu
 
   return new Promise((resolve) => {
     Promise.all(array).then(() => {
-      if (typeof callback === 'function') {
+      if (callback) {
+        // oxlint-disable-next-line promise/no-callback-in-promise
         callback();
       }
       resolve();

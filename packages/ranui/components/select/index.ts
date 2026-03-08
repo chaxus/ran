@@ -330,7 +330,9 @@ export class Select extends (HTMLElementSSR()!) {
       this._selectionDropdown.setAttribute('transit', placementDirection[this.placement].remove);
       this._selectDropDownOutTimeId = setTimeout(() => {
         this._selectionDropdown?.style.setProperty('display', 'none');
-        this._selectionDropdown && this._selectionDropdown.removeAttribute('transit');
+        if (this._selectionDropdown) {
+          this._selectionDropdown.removeAttribute('transit');
+        }
         clearTimeout(this._selectDropDownOutTimeId);
         this._selectDropDownOutTimeId = undefined;
       }, animationTime);
@@ -347,7 +349,9 @@ export class Select extends (HTMLElementSSR()!) {
       this._selectionDropdown.setAttribute('transit', placementDirection[this.placement].add);
       this._selectionDropdown?.style.setProperty('display', 'block');
       this._selectDropDownInTimeId = setTimeout(() => {
-        this._selectionDropdown && this._selectionDropdown.removeAttribute('transit');
+        if (this._selectionDropdown) {
+          this._selectionDropdown.removeAttribute('transit');
+        }
         clearTimeout(this._selectDropDownInTimeId);
         this._selectDropDownInTimeId = undefined;
       }, animationTime);
@@ -591,12 +595,16 @@ export class Select extends (HTMLElementSSR()!) {
   };
   setShowSearch = (): void => {
     this.onSearch = searchThrottle(this.changeSearch);
-    this.onSearch && this._search.addEventListener('change', this.onSearch);
-    this.onSearch && this._search.addEventListener('click', this.onSearch);
+    if (this.onSearch) {
+      this._search.addEventListener('change', this.onSearch);
+      this._search.addEventListener('click', this.onSearch);
+    }
   };
   removeShowSearch = (): void => {
-    this.onSearch && this._search.removeEventListener('change', this.onSearch);
-    this.onSearch && this._search.removeEventListener('click', this.onSearch);
+    if (this.onSearch) {
+      this._search.removeEventListener('change', this.onSearch);
+      this._search.removeEventListener('click', this.onSearch);
+    }
   };
   listenSlotChange = (): void => {
     this._slot.addEventListener('slotchange', this.addOptionToSlot);

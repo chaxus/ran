@@ -45,7 +45,7 @@ const bodyMiddleware = (options: Partial<ServerBody> = {}): MiddlewareFunction =
         res.setHeader('content-type', 'application/json;charset=UTF-8');
         try {
           ctx.request.body = json ? JSON.parse(body) : body;
-        } catch (_error) {
+        } catch {
           ctx.request.body = body;
         }
         next();

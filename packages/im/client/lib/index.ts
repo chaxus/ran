@@ -37,13 +37,13 @@ export const getRandomNumberForRange = (minimum: number, maximum: number): numbe
  */
 export const randomGeneratePolygon = (number: number = 3, maxSides: number = 10): Array<Polygon> => {
   // 渲染几个多边形（这里只有 3 个）
-  const polygonList = new Array(number).fill([]);
+  const polygonList = Array(number).fill([]);
   // 随机这几个多边形的颜色数组
   const polygonColorArray = getRandomNumberForRange(0, themes.length - 1);
   // 遍历每个多边形
   return polygonList.map((_, index) => {
     // 1.首先获取每个多边形随机的边数
-    const num = new Array(getRandomNumberForRange(3, maxSides)).fill([]);
+    const num = Array(getRandomNumberForRange(3, maxSides)).fill([]);
     // 2.然后计算每个角的坐标
     const coordinates = num.map(() => {
       // 获取 x 坐标（这里三个图形各三分之一，所以使用三等分）

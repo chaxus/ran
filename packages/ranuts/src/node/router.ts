@@ -73,7 +73,9 @@ class Router {
       const { path, method } = ctx.request;
       const pathMap = this.map.get(method);
       const handler = pathMap ? pathMap.get(path) : next;
-      handler && handler(ctx, next);
+      if (handler) {
+        handler(ctx, next);
+      }
     };
   }
   allowedMethods(): MiddlewareFunction {

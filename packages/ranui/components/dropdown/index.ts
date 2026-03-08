@@ -1,6 +1,6 @@
 import { addClassToElement, removeClassToElement } from 'ranuts/utils';
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
-import { Div, Slot, View } from '@/utils/builder';
+import { Div, Slot } from '@/utils/builder';
 import { adoptSheetText, adoptStyles } from '@/utils/style';
 import dropdownCss from './index.less?inline';
 

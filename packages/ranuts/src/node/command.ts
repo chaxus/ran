@@ -29,7 +29,11 @@ export const prompt = ({ message, stream = process.stderr, defaultResponse = 'Y'
       rl.close();
       const response = (answer || defaultResponse).toLowerCase();
       // Resolve with the input response
-      response === 'y' || response === 'yes' ? resolve(true) : resolve(false);
+      if (response === 'y' || response === 'yes') {
+        resolve(true);
+      } else {
+        resolve(false);
+      }
     });
   });
 };

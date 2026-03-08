@@ -46,7 +46,6 @@ export class Math extends (HTMLElementSSR()!) {
         if (this.latex) {
           const span = Span().text(`$$${this.latex}$$`).build() as HTMLSpanElement;
           this.contain.appendChild(span);
-          const win = window as MathJaxWindow;
           katex.renderMathInElement(this.contain);
         }
       })

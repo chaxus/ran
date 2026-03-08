@@ -168,7 +168,9 @@ export class Concurrent {
       return;
     }
     const domParent = fiber?.parent?.dom;
-    fiber?.dom && domParent?.appendChild(fiber.dom);
+    if (fiber?.dom && domParent) {
+      domParent.appendChild(fiber.dom);
+    }
     this.commitWork(fiber.child);
     this.commitWork(fiber.sibling);
   }
