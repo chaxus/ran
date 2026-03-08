@@ -1,4 +1,5 @@
 import { adoptStyles } from '@/utils/style';
+import { Div } from '@/utils/builder';
 import skeletonCss from './index.less?inline';
 
 function Skeleton() {
@@ -10,11 +11,15 @@ function Skeleton() {
       _div: HTMLElement;
       constructor() {
         super();
-        this._div = document.createElement('div');
-        this._div.setAttribute('class', 'ran-skeleton');
         const shadowRoot = this.attachShadow({ mode: 'closed' });
         adoptStyles(shadowRoot, skeletonCss);
-        shadowRoot.appendChild(this._div);
+
+        let div = shadowRoot.querySelector('.ran-skeleton') as HTMLElement | null;
+        if (!div) {
+          div = Div().class('ran-skeleton').build() as HTMLElement;
+          shadowRoot.appendChild(div);
+        }
+        this._div = div;
       }
     }
 

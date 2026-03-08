@@ -1,5 +1,6 @@
 import modalCss from './index.less?inline';
-import { RanElement, createCustomError, falseList  } from '@/utils/index';
+import { RanElement, createCustomError, falseList } from '@/utils/index';
+import { Div, Slot, View } from '@/utils/builder';
 import { adoptStyles } from '@/utils/style';
 
 const FOCUSABLE_SELECTOR =
@@ -29,50 +30,36 @@ export class Modal extends RanElement {
 
     let root = this._shadowDom.querySelector('.ran-modal-root') as HTMLDivElement | null;
     if (!root) {
-      root = document.createElement('div');
-      root.className = 'ran-modal-root';
-      root.setAttribute('part', 'root');
+      root = Div()
+        .class('ran-modal-root')
+        .part('root')
+        .children(
+          Div().class('ran-modal-mask').part('mask'),
+          Div()
+            .class('ran-modal-dialog')
+            .part('dialog')
+            .role('dialog')
+            .attr('aria-modal', 'true')
+            .tabIndex(-1)
+            .labelledBy(this._labelId)
+            .children(
+              View('header')
+                .class('ran-modal-header')
+                .part('header')
+                .children(
+                  View('h3').class('ran-modal-title').part('title').id(this._labelId),
+                  View('button')
+                    .class('ran-modal-close')
+                    .part('close')
+                    .attr('type', 'button')
+                    .label('Close dialog')
+                    .text('x'),
+                ),
+              Div().class('ran-modal-body').part('body').children(Slot()),
+            ),
+        )
+        .build() as HTMLDivElement;
 
-      const mask = document.createElement('div');
-      mask.className = 'ran-modal-mask';
-      mask.setAttribute('part', 'mask');
-
-      const dialog = document.createElement('div');
-      dialog.className = 'ran-modal-dialog';
-      dialog.setAttribute('part', 'dialog');
-      dialog.setAttribute('role', 'dialog');
-      dialog.setAttribute('aria-modal', 'true');
-      dialog.setAttribute('tabindex', '-1');
-      dialog.setAttribute('aria-labelledby', this._labelId);
-
-      const header = document.createElement('header');
-      header.className = 'ran-modal-header';
-      header.setAttribute('part', 'header');
-
-      const title = document.createElement('h3');
-      title.className = 'ran-modal-title';
-      title.setAttribute('part', 'title');
-      title.id = this._labelId;
-
-      const closeBtn = document.createElement('button');
-      closeBtn.className = 'ran-modal-close';
-      closeBtn.setAttribute('part', 'close');
-      closeBtn.setAttribute('type', 'button');
-      closeBtn.setAttribute('aria-label', 'Close dialog');
-      closeBtn.textContent = 'x';
-
-      const body = document.createElement('div');
-      body.className = 'ran-modal-body';
-      body.setAttribute('part', 'body');
-      const slot = document.createElement('slot');
-      body.appendChild(slot);
-
-      header.appendChild(title);
-      header.appendChild(closeBtn);
-      dialog.appendChild(header);
-      dialog.appendChild(body);
-      root.appendChild(mask);
-      root.appendChild(dialog);
       this._shadowDom.appendChild(root);
     }
 

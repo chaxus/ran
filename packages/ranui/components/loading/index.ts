@@ -1,5 +1,5 @@
-import { create } from 'ranuts/utils';
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
+import { Div, Span, View } from '@/utils/builder';
 import { adoptStyles } from '@/utils/style';
 import loadingCss from './index.less?inline';
 
@@ -42,11 +42,15 @@ export class Loading extends (HTMLElementSSR()!) {
   }
   constructor() {
     super();
-    this.contain = document.createElement('div');
-    this.contain.setAttribute('class', 'ran-loading');
     const shadowRoot = this.attachShadow({ mode: 'open' });
     adoptStyles(shadowRoot, loadingCss);
-    shadowRoot.appendChild(this.contain);
+
+    let contain = shadowRoot.querySelector('.ran-loading') as HTMLDivElement | null;
+    if (!contain) {
+      contain = Div().class('ran-loading').build() as HTMLDivElement;
+      shadowRoot.appendChild(contain);
+    }
+    this.contain = contain;
   }
   get name(): ICON_NAME_AMP {
     const name = this.getAttribute('name') || '';
@@ -57,359 +61,330 @@ export class Loading extends (HTMLElementSSR()!) {
     this.setAttribute('name', value || '');
   }
   rotateLoading = (): void => {
-    const loading = document.createElement('div');
-    loading.setAttribute('class', ICON_NAME_AMP.ROTATE);
-    loading.setAttribute('part', ICON_NAME_AMP.ROTATE);
+    const loading = Div().class(ICON_NAME_AMP.ROTATE).part(ICON_NAME_AMP.ROTATE).build();
     this.contain.appendChild(loading);
   };
   stretchLoading = (): void => {
-    const loading = document.createElement('div');
-    loading.setAttribute('class', ICON_NAME_AMP.STRETCH);
-    loading.setAttribute('part', ICON_NAME_AMP.STRETCH);
-    Array(5)
-      .fill(1)
-      .forEach((_, i) => {
-        const rect = document.createElement('div');
-        rect.setAttribute('class', `rect${i + 1}`);
-        loading.appendChild(rect);
-      });
+    const loading = Div()
+      .class(ICON_NAME_AMP.STRETCH)
+      .part(ICON_NAME_AMP.STRETCH)
+      .children(
+        ...Array(5)
+          .fill(1)
+          .map((_, i) => Div().class(`rect${i + 1}`)),
+      )
+      .build();
     this.contain.appendChild(loading);
   };
   doubleBounceLoading = (): void => {
-    const loading = document.createElement('div');
-    loading.setAttribute('class', ICON_NAME_AMP.DOUBLE_BOUNCE);
-    loading.setAttribute('part', ICON_NAME_AMP.DOUBLE_BOUNCE);
-    Array(2)
-      .fill(1)
-      .forEach((_, i) => {
-        const rect = document.createElement('div');
-        rect.setAttribute('class', `double-bounce${i + 1}`);
-        loading.appendChild(rect);
-      });
+    const loading = Div()
+      .class(ICON_NAME_AMP.DOUBLE_BOUNCE)
+      .part(ICON_NAME_AMP.DOUBLE_BOUNCE)
+      .children(
+        ...Array(2)
+          .fill(1)
+          .map((_, i) => Div().class(`double-bounce${i + 1}`)),
+      )
+      .build();
     this.contain.appendChild(loading);
   };
   cubeLoading = (): void => {
-    const loading = document.createElement('div');
-    loading.setAttribute('class', ICON_NAME_AMP.CUBE);
-    loading.setAttribute('part', ICON_NAME_AMP.CUBE);
-    Array(2)
-      .fill(1)
-      .forEach((_, i) => {
-        const rect = document.createElement('div');
-        rect.setAttribute('class', `cube${i + 1}`);
-        loading.appendChild(rect);
-      });
+    const loading = Div()
+      .class(ICON_NAME_AMP.CUBE)
+      .part(ICON_NAME_AMP.CUBE)
+      .children(
+        ...Array(2)
+          .fill(1)
+          .map((_, i) => Div().class(`cube${i + 1}`)),
+      )
+      .build();
     this.contain.appendChild(loading);
   };
   dotLoading = (): void => {
-    const loading = document.createElement('div');
-    loading.setAttribute('class', ICON_NAME_AMP.DOT);
-    loading.setAttribute('part', ICON_NAME_AMP.DOT);
-    Array(2)
-      .fill(1)
-      .forEach((_, i) => {
-        const rect = document.createElement('div');
-        rect.setAttribute('class', `dot${i + 1}`);
-        loading.appendChild(rect);
-      });
+    const loading = Div()
+      .class(ICON_NAME_AMP.DOT)
+      .part(ICON_NAME_AMP.DOT)
+      .children(
+        ...Array(2)
+          .fill(1)
+          .map((_, i) => Div().class(`dot${i + 1}`)),
+      )
+      .build();
     this.contain.appendChild(loading);
   };
   tripleBounceLoading = (): void => {
-    const loading = document.createElement('div');
-    loading.setAttribute('class', ICON_NAME_AMP.TRIPLE_BOUNCE);
-    loading.setAttribute('part', ICON_NAME_AMP.TRIPLE_BOUNCE);
-    Array(3)
-      .fill(1)
-      .forEach((_, i) => {
-        const rect = document.createElement('div');
-        rect.setAttribute('class', `triple-bounce${i + 1}`);
-        loading.appendChild(rect);
-      });
+    const loading = Div()
+      .class(ICON_NAME_AMP.TRIPLE_BOUNCE)
+      .part(ICON_NAME_AMP.TRIPLE_BOUNCE)
+      .children(
+        ...Array(3)
+          .fill(1)
+          .map((_, i) => Div().class(`triple-bounce${i + 1}`)),
+      )
+      .build();
     this.contain.appendChild(loading);
   };
   scaleOutLoading = (): void => {
-    const loading = document.createElement('div');
-    loading.setAttribute('class', ICON_NAME_AMP.SCALE_OUT);
-    loading.setAttribute('part', ICON_NAME_AMP.SCALE_OUT);
+    const loading = Div().class(ICON_NAME_AMP.SCALE_OUT).part(ICON_NAME_AMP.SCALE_OUT).build();
     this.contain.appendChild(loading);
   };
   circleLoading = (): void => {
-    const loading = document.createElement('div');
-    loading.setAttribute('class', ICON_NAME_AMP.CIRCLE);
-    loading.setAttribute('part', ICON_NAME_AMP.CIRCLE);
+    const loading = Div().class(ICON_NAME_AMP.CIRCLE).part(ICON_NAME_AMP.CIRCLE).build();
     Array(3)
       .fill(1)
       .map(() => new Array(4).fill(1))
       .forEach((i, index) => {
-        const container = document.createElement('div');
-        container.setAttribute('class', `circle-container container${index + 1}`);
-        i.forEach((_, j) => {
-          const rect = document.createElement('div');
-          rect.setAttribute('class', `circle${j + 1}`);
-          container.appendChild(rect);
-        });
+        const container = Div()
+          .class(`circle-container container${index + 1}`)
+          .children(...i.map((_, j) => Div().class(`circle${j + 1}`)))
+          .build();
         loading.appendChild(container);
       });
     this.contain.appendChild(loading);
   };
   circleLineLoading = (): void => {
-    const { element: core } = create('div').setAttribute('class', 'circle-line-core');
-    const { element: border } = create('div').setAttribute('class', 'circle-line-border').append(core);
-    const { element: loading } = create('div')
-      .setAttribute('class', ICON_NAME_AMP.CIRCLE_LINE)
-      .setAttribute('part', ICON_NAME_AMP.CIRCLE_LINE)
-      .append(border);
+    const loading = Div()
+      .class(ICON_NAME_AMP.CIRCLE_LINE)
+      .part(ICON_NAME_AMP.CIRCLE_LINE)
+      .children(Div().class('circle-line-border').children(Div().class('circle-line-core')))
+      .build();
     this.contain.appendChild(loading);
   };
   squareLoading = (): void => {
-    const { element: core } = create('div').setAttribute('class', 'square-core');
-    const { element: box1 } = create('div').setAttribute('class', 'square-box1').append(core);
-    const { element: box2 } = create('div').setAttribute('class', 'square-box2').append(core);
-    const { element: square } = create('div')
-      .setAttribute('class', ICON_NAME_AMP.SQUARE)
-      .setAttribute('part', ICON_NAME_AMP.SQUARE)
-      .append(box1)
-      .append(box2);
-    this.contain.appendChild(square);
+    const loading = Div()
+      .class(ICON_NAME_AMP.SQUARE)
+      .part(ICON_NAME_AMP.SQUARE)
+      .children(
+        Div().class('square-box1').children(Div().class('square-core')),
+        Div().class('square-box2').children(Div().class('square-core')),
+      )
+      .build();
+    this.contain.appendChild(loading);
   };
   pulseLoading = (): void => {
-    const pulse = create('div').setAttribute('class', ICON_NAME_AMP.PULSE).setAttribute('part', ICON_NAME_AMP.PULSE);
-    Array(3)
-      .fill(1)
-      .forEach((_, index) => {
-        const { element: bubble } = create('div').setAttribute('class', `pulse-bubble pulse-bubble-${index + 1}`);
-        pulse.append(bubble);
-      });
-    this.contain.appendChild(pulse.element);
+    const pulse = Div()
+      .class(ICON_NAME_AMP.PULSE)
+      .part(ICON_NAME_AMP.PULSE)
+      .children(
+        ...Array(3)
+          .fill(1)
+          .map((_, index) => Div().class(`pulse-bubble pulse-bubble-${index + 1}`)),
+      )
+      .build();
+    this.contain.appendChild(pulse);
   };
   solarLoading = (): void => {
-    const { element: sun } = create('div').setAttribute('class', 'sun').setAttribute('part', 'sun');
-    const { element: mercury } = create('div').setAttribute('class', 'planet mercury');
-    const { element: mercuryOrbit } = create('div')
-      .setAttribute('class', 'mercury-orbit orbit')
-      .append(mercury)
-      .append(sun);
-    const { element: venus } = create('div').setAttribute('class', 'planet venus');
-    const { element: venusOrbit } = create('div')
-      .setAttribute('class', 'venus-orbit orbit')
-      .append(venus)
-      .append(mercuryOrbit);
-    const { element: earth } = create('div').setAttribute('class', 'planet earth');
-    const { element: earthOrbit } = create('div')
-      .setAttribute('class', 'earth-orbit orbit')
-      .append(earth)
-      .append(venusOrbit);
-    const { element: solar } = create('div')
-      .setAttribute('class', ICON_NAME_AMP.SOLAR)
-      .setAttribute('part', ICON_NAME_AMP.SOLAR)
-      .append(earthOrbit);
+    const solar = Div()
+      .class(ICON_NAME_AMP.SOLAR)
+      .part(ICON_NAME_AMP.SOLAR)
+      .children(
+        Div()
+          .class('earth-orbit orbit')
+          .children(
+            Div().class('planet earth'),
+            Div()
+              .class('venus-orbit orbit')
+              .children(
+                Div().class('planet venus'),
+                Div()
+                  .class('mercury-orbit orbit')
+                  .children(Div().class('planet mercury'), Div().class('sun').part('sun')),
+              ),
+          ),
+      )
+      .build();
     this.contain.appendChild(solar);
   };
   cubeFoldLoading = (): void => {
-    const { element: cubeFold } = create('div')
-      .setAttribute('class', ICON_NAME_AMP.CUBE_FOLD)
-      .setAttribute('part', ICON_NAME_AMP.CUBE_FOLD);
-    Array(4)
-      .fill(1)
-      .forEach((_, index) => {
-        const { element: cube } = create('div').setAttribute('class', `cube-fold-item cube-fold-item-${index + 1}`);
-        cubeFold.appendChild(cube);
-      });
-    this.contain.appendChild(cubeFold);
+    const loading = Div()
+      .class(ICON_NAME_AMP.CUBE_FOLD)
+      .part(ICON_NAME_AMP.CUBE_FOLD)
+      .children(
+        ...Array(4)
+          .fill(1)
+          .map((_, index) => Div().class(`cube-fold-item cube-fold-item-${index + 1}`)),
+      )
+      .build();
+    this.contain.appendChild(loading);
   };
   circleFoldLoading = (): void => {
-    const circleFold = create('div')
-      .setAttribute('class', ICON_NAME_AMP.CIRCLE_FOLD)
-      .setAttribute('part', ICON_NAME_AMP.CIRCLE_FOLD);
-    Array(12)
-      .fill(1)
-      .forEach((_, index) => {
-        const { element } = create('div').setAttribute('class', `circle-fold-item circle-fold-item-${index + 1}`);
-        circleFold.append(element);
-      });
-    this.contain.appendChild(circleFold.element);
+    const loading = Div()
+      .class(ICON_NAME_AMP.CIRCLE_FOLD)
+      .part(ICON_NAME_AMP.CIRCLE_FOLD)
+      .children(
+        ...Array(12)
+          .fill(1)
+          .map((_, index) => Div().class(`circle-fold-item circle-fold-item-${index + 1}`)),
+      )
+      .build();
+    this.contain.appendChild(loading);
   };
   cubeGridLoading = (): void => {
-    const cubeGrid = create('div')
-      .setAttribute('class', ICON_NAME_AMP.CUBE_GRID)
-      .setAttribute('part', ICON_NAME_AMP.CUBE_GRID);
-    Array(9)
-      .fill(1)
-      .forEach((_, index) => {
-        const { element } = create('div').setAttribute('class', `cube-grid-item cube-grid-item-${index + 1}`);
-        cubeGrid.append(element);
-      });
-    this.contain.appendChild(cubeGrid.element);
+    const loading = Div()
+      .class(ICON_NAME_AMP.CUBE_GRID)
+      .part(ICON_NAME_AMP.CUBE_GRID)
+      .children(
+        ...Array(9)
+          .fill(1)
+          .map((_, index) => Div().class(`cube-grid-item cube-grid-item-${index + 1}`)),
+      )
+      .build();
+    this.contain.appendChild(loading);
   };
   circleTurnLoading = (): void => {
-    const { element: circleTurn } = create('div')
-      .setAttribute('class', ICON_NAME_AMP.CIRCLE_TURN)
-      .setAttribute('part', ICON_NAME_AMP.CIRCLE_TURN);
-    this.contain.appendChild(circleTurn);
+    const loading = Div().class(ICON_NAME_AMP.CIRCLE_TURN).part(ICON_NAME_AMP.CIRCLE_TURN).build();
+    this.contain.appendChild(loading);
   };
   circleRotateLoading = (): void => {
-    const { element: circleRotate } = create('div')
-      .setAttribute('class', ICON_NAME_AMP.CIRCLE_ROTATE)
-      .setAttribute('part', ICON_NAME_AMP.CIRCLE_ROTATE);
-    const { element: circleInner } = create('div').setAttribute('class', 'circle-rotate-inner');
-    const { element: circleOuter } = create('div').setAttribute('class', 'circle-rotate-outer');
-    circleRotate.appendChild(circleOuter);
-    circleRotate.appendChild(circleInner);
-    this.contain.appendChild(circleRotate);
+    const loading = Div()
+      .class(ICON_NAME_AMP.CIRCLE_ROTATE)
+      .part(ICON_NAME_AMP.CIRCLE_ROTATE)
+      .children(Div().class('circle-rotate-outer'), Div().class('circle-rotate-inner'))
+      .build();
+    this.contain.appendChild(loading);
   };
   circleSpinLoading = (): void => {
-    const { element: circleSpin } = create('div')
-      .setAttribute('class', ICON_NAME_AMP.CIRCLE_SPIN)
-      .setAttribute('part', ICON_NAME_AMP.CIRCLE_SPIN);
-    const { element: circleInner } = create('div').setAttribute('class', 'circle-spin-inner');
-    const { element: circleOuter } = create('div').setAttribute('class', 'circle-spin-outer');
-    circleSpin.appendChild(circleOuter);
-    circleSpin.appendChild(circleInner);
-    this.contain.appendChild(circleSpin);
+    const loading = Div()
+      .class(ICON_NAME_AMP.CIRCLE_SPIN)
+      .part(ICON_NAME_AMP.CIRCLE_SPIN)
+      .children(Div().class('circle-spin-outer'), Div().class('circle-spin-inner'))
+      .build();
+    this.contain.appendChild(loading);
   };
   dotBarLoading = (): void => {
-    const { element: dotBar } = create('div')
-      .setAttribute('class', ICON_NAME_AMP.DOT_BAR)
-      .setAttribute('part', ICON_NAME_AMP.DOT_BAR);
-    Array(5)
-      .fill(1)
-      .forEach((_, index) => {
-        const { element } = create('div').setAttribute('class', `dot-bar-item dot-bar-item-${index + 1}`);
-        dotBar.appendChild(element);
-      });
-    this.contain.appendChild(dotBar);
+    const loading = Div()
+      .class(ICON_NAME_AMP.DOT_BAR)
+      .part(ICON_NAME_AMP.DOT_BAR)
+      .children(
+        ...Array(5)
+          .fill(1)
+          .map((_, index) => Div().class(`dot-bar-item dot-bar-item-${index + 1}`)),
+      )
+      .build();
+    this.contain.appendChild(loading);
   };
   dotCircleLoading = (): void => {
-    const { element: dotCircle } = create('div')
-      .setAttribute('class', ICON_NAME_AMP.DOT_CIRCLE)
-      .setAttribute('part', ICON_NAME_AMP.DOT_CIRCLE);
-    Array(5)
-      .fill(1)
-      .forEach((_, index) => {
-        const { element } = create('div').setAttribute('class', `dot-circle-item dot-circle-item-${index + 1}`);
-        dotCircle.appendChild(element);
-      });
-    this.contain.appendChild(dotCircle);
+    const loading = Div()
+      .class(ICON_NAME_AMP.DOT_CIRCLE)
+      .part(ICON_NAME_AMP.DOT_CIRCLE)
+      .children(
+        ...Array(5)
+          .fill(1)
+          .map((_, index) => Div().class(`dot-circle-item dot-circle-item-${index + 1}`)),
+      )
+      .build();
+    this.contain.appendChild(loading);
   };
   lineLoading = (): void => {
-    const { element: line } = create('div')
-      .setAttribute('class', ICON_NAME_AMP.LINE)
-      .setAttribute('part', ICON_NAME_AMP.LINE);
-    Array(3)
-      .fill(1)
-      .forEach(() => {
-        const { element } = create('div').setAttribute('class', `line-item`);
-        line.appendChild(element);
-      });
-    this.contain.appendChild(line);
+    const loading = Div()
+      .class(ICON_NAME_AMP.LINE)
+      .part(ICON_NAME_AMP.LINE)
+      .children(
+        ...Array(3)
+          .fill(1)
+          .map(() => Div().class('line-item')),
+      )
+      .build();
+    this.contain.appendChild(loading);
   };
   dotPulseLoading = (): void => {
-    const { element: dotPulse } = create('div')
-      .setAttribute('class', ICON_NAME_AMP.DOT_PULSE)
-      .setAttribute('class', ICON_NAME_AMP.DOT_PULSE);
-    Array(5)
-      .fill(1)
-      .forEach((_, index) => {
-        const { element: pulse } = create('div').setAttribute('class', `dot-pulse-item`);
-        const { element: dot } = create('div').setAttribute(
-          'class',
-          `dot-pulse-item-dot dot-pulse-item-dot-${index + 1}`,
-        );
-        const { element: ball } = create('div').setAttribute(
-          'class',
-          `dot-pulse-item-ball dot-pulse-item-ball-${index + 1}`,
-        );
-        pulse.appendChild(dot);
-        pulse.appendChild(ball);
-        dotPulse.appendChild(pulse);
-      });
-    this.contain.appendChild(dotPulse);
+    const loading = Div()
+      .class(ICON_NAME_AMP.DOT_PULSE)
+      .class(ICON_NAME_AMP.DOT_PULSE)
+      .children(
+        ...Array(5)
+          .fill(1)
+          .map((_, index) =>
+            Div()
+              .class('dot-pulse-item')
+              .children(
+                Div().class(`dot-pulse-item-dot dot-pulse-item-dot-${index + 1}`),
+                Div().class(`dot-pulse-item-ball dot-pulse-item-ball-${index + 1}`),
+              ),
+          ),
+      )
+      .build();
+    this.contain.appendChild(loading);
   };
   lineScaleLoading = (): void => {
-    const { element: lineScale } = create('div')
-      .setAttribute('class', ICON_NAME_AMP.LINE_SCALE)
-      .setAttribute('part', ICON_NAME_AMP.LINE_SCALE);
-    Array(5)
-      .fill(1)
-      .forEach(() => {
-        const { element } = create('div').setAttribute('class', `line-scale-item`);
-        lineScale.appendChild(element);
-      });
-    this.contain.appendChild(lineScale);
+    const loading = Div()
+      .class(ICON_NAME_AMP.LINE_SCALE)
+      .part(ICON_NAME_AMP.LINE_SCALE)
+      .children(
+        ...Array(5)
+          .fill(1)
+          .map(() => Div().class('line-scale-item')),
+      )
+      .build();
+    this.contain.appendChild(loading);
   };
   textLoading = (): void => {
-    const { element: text } = create('div')
-      .setAttribute('class', ICON_NAME_AMP.TEXT)
-      .setAttribute('part', ICON_NAME_AMP.TEXT);
-    const arr = ['L', 'o', 'a', 'd', 'i', 'n', 'g'];
-    arr.forEach((i) => {
-      const { element } = create('span').setAttribute('class', `text-item`).setTextContent(i);
-      text.appendChild(element);
-    });
-    this.contain.appendChild(text);
+    const loading = Div()
+      .class(ICON_NAME_AMP.TEXT)
+      .part(ICON_NAME_AMP.TEXT)
+      .children(...['L', 'o', 'a', 'd', 'i', 'n', 'g'].map((i) => Span().class('text-item').text(i)))
+      .build();
+    this.contain.appendChild(loading);
   };
   cubeDimLoading = (): void => {
-    const { element: cubeDim } = create('div')
-      .setAttribute('class', ICON_NAME_AMP.CUBE_DIM)
-      .setAttribute('part', ICON_NAME_AMP.CUBE_DIM);
-    Array(9)
-      .fill(1)
-      .forEach(() => {
-        const { element } = create('div').setAttribute('class', `cube-dim-item`);
-        cubeDim.appendChild(element);
-      });
-    this.contain.appendChild(cubeDim);
+    const loading = Div()
+      .class(ICON_NAME_AMP.CUBE_DIM)
+      .part(ICON_NAME_AMP.CUBE_DIM)
+      .children(
+        ...Array(9)
+          .fill(1)
+          .map(() => Div().class('cube-dim-item')),
+      )
+      .build();
+    this.contain.appendChild(loading);
   };
   dotLineLoading = (): void => {
-    const { element: dotLine } = create('div')
-      .setAttribute('class', ICON_NAME_AMP.DOT_LINE)
-      .setAttribute('part', ICON_NAME_AMP.DOT_LINE);
-    Array(2)
-      .fill(1)
-      .forEach(() => {
-        const { element: line } = create('div').setAttribute('class', `dot-line-item`);
-        const { element } = create('div').setAttribute('class', `dot-line-item-circle`);
-        line.appendChild(element);
-        dotLine.appendChild(line);
-      });
-    this.contain.appendChild(dotLine);
+    const loading = Div()
+      .class(ICON_NAME_AMP.DOT_LINE)
+      .part(ICON_NAME_AMP.DOT_LINE)
+      .children(
+        ...Array(2)
+          .fill(1)
+          .map(() => Div().class('dot-line-item').children(Div().class('dot-line-item-circle'))),
+      )
+      .build();
+    this.contain.appendChild(loading);
   };
   arcLoading = (): void => {
-    const { element: arcItem } = create('div').setAttribute('class', 'arc-item');
-    const { element: arc } = create('div')
-      .setAttribute('class', ICON_NAME_AMP.ARC)
-      .setAttribute('part', ICON_NAME_AMP.ARC)
-      .append(arcItem);
-    const { element: span } = create('span').setTextContent('LOADING');
-    const { element: h1 } = create('h1').append(span);
-    arc.appendChild(h1);
-    this.contain.appendChild(arc);
+    const loading = Div()
+      .class(ICON_NAME_AMP.ARC)
+      .part(ICON_NAME_AMP.ARC)
+      .children(Div().class('arc-item'), View('h1').children(Span().text('LOADING')))
+      .build();
+    this.contain.appendChild(loading);
   };
   dropLoading = (): void => {
-    const { element: span } = create('span').setTextContent('LOADING');
-    const { element: dropItemBg } = create('div').setAttribute('class', 'drop-item-bg').append(span);
-    const { element: dropDot1 } = create('div').setAttribute('class', 'drop-dot-1');
-    const { element: dropDot2 } = create('div').setAttribute('class', 'drop-dot-2');
-    const { element: dropDot } = create('div').setAttribute('class', 'drop-dot').append(dropDot1).append(dropDot2);
-    const { element: dropItem } = create('div').setAttribute('class', 'drop-item').append(dropItemBg).append(dropDot);
-    const { element: drop } = create('div')
-      .setAttribute('class', ICON_NAME_AMP.DROP)
-      .setAttribute('part', ICON_NAME_AMP.DROP)
-      .append(dropItem)
-      .append(dropDot);
-    this.contain.appendChild(drop);
+    const loading = Div()
+      .class(ICON_NAME_AMP.DROP)
+      .part(ICON_NAME_AMP.DROP)
+      .children(
+        Div()
+          .class('drop-item')
+          .children(
+            Div().class('drop-item-bg').children(Span().text('LOADING')),
+            Div().class('drop-dot').children(Div().class('drop-dot-1'), Div().class('drop-dot-2')),
+          ),
+        Div().class('drop-dot').children(Div().class('drop-dot-1'), Div().class('drop-dot-2')),
+      )
+      .build();
+    this.contain.appendChild(loading);
   };
   pacmanLoading = (): void => {
-    const { element: pacman } = create('div')
-      .setAttribute('class', ICON_NAME_AMP.PACMAN)
-      .setAttribute('part', ICON_NAME_AMP.PACMAN);
-    Array(5)
-      .fill(1)
-      .forEach(() => {
-        const { element: dot } = create('div');
-        pacman.append(dot);
-      });
-    this.contain.appendChild(pacman);
+    const loading = Div()
+      .class(ICON_NAME_AMP.PACMAN)
+      .part(ICON_NAME_AMP.PACMAN)
+      .children(
+        ...Array(5)
+          .fill(1)
+          .map(() => Div()),
+      )
+      .build();
+    this.contain.appendChild(loading);
   };
   createLoading = (): void => {
     this.contain.innerHTML = '';

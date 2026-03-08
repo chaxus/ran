@@ -1,6 +1,6 @@
-import type { Chain } from 'ranuts/utils';
-import { addClassToElement, create, removeClassToElement } from 'ranuts/utils';
+import { addClassToElement, removeClassToElement } from 'ranuts/utils';
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
+import { Div, Slot, View } from '@/utils/builder';
 import { adoptStyles } from '@/utils/style';
 import dropdownCss from './index.less?inline';
 
@@ -14,28 +14,38 @@ export enum ARROW_TYPE {
 }
 
 export class Dropdown extends (HTMLElementSSR()!) {
-  dropdown: Chain;
-  _slot: Chain;
+  dropdown: HTMLElement;
+  _slot: HTMLSlotElement;
   _shadowDom: ShadowRoot;
-  arrowIcon?: Chain;
-  container: Chain;
+  arrowIcon?: HTMLElement;
+  container: HTMLElement;
   static get observedAttributes(): string[] {
     return ['transit', 'arrow'];
   }
   constructor() {
     super();
-    this._slot = create('slot').setAttribute('class', 'slot');
-    this.dropdown = create('div')
-      .setStyle('-webkit-tap-highlight-color', 'transparent')
-      .setStyle('outline', '0')
-      .setAttribute('class', 'ranui-dropdown')
-      .setAttribute('part', 'ranui-dropdown')
-      .addChild([this._slot]);
-    this.container = create('div').setAttribute('class', 'ranui-dropdown-container').addChild([this.dropdown]);
-    const shadowRoot = this.attachShadow({ mode: 'closed' });
-    this._shadowDom = shadowRoot;
-    adoptStyles(shadowRoot, dropdownCss);
-    shadowRoot.appendChild(this.container.element);
+    this._shadowDom = this.shadowRoot || this.attachShadow({ mode: 'closed' });
+    adoptStyles(this._shadowDom, dropdownCss);
+
+    let container = this._shadowDom.querySelector('.ranui-dropdown-container') as HTMLElement | null;
+    if (!container) {
+      container = Div()
+        .class('ranui-dropdown-container')
+        .children(
+          Div()
+            .style('-webkit-tap-highlight-color', 'transparent')
+            .style('outline', '0')
+            .class('ranui-dropdown')
+            .part('ranui-dropdown')
+            .children(Slot().class('slot')),
+        )
+        .build() as HTMLElement;
+      this._shadowDom.appendChild(container);
+    }
+
+    this.container = container;
+    this.dropdown = container.querySelector('.ranui-dropdown') as HTMLElement;
+    this._slot = container.querySelector('.slot') as HTMLSlotElement;
   }
   get transit(): string {
     return this.getAttribute('transit') || '';
@@ -68,18 +78,18 @@ export class Dropdown extends (HTMLElementSSR()!) {
     }
   }
   handlerTransit = (): void => {
-    if (this.transit) {
-      addClassToElement(this.dropdown.element, this.transit);
+    if (this.transit && this.dropdown) {
+      addClassToElement(this.dropdown, this.transit);
       setTimeout(() => {
-        removeClassToElement(this.dropdown.element, this.transit);
+        removeClassToElement(this.dropdown, this.transit);
       }, animationTime);
     }
   };
   handlerArrow = (): void => {
     if (!this.arrow) return;
-    if (!this.arrowIcon) {
-      this.arrowIcon = create('div').setAttribute('class', `ranui-dropdown-arrow ${this.arrow}`);
-      this.container.addChild([this.arrowIcon]);
+    if (!this.arrowIcon && this.container) {
+      this.arrowIcon = Div().class(`ranui-dropdown-arrow ${this.arrow}`).build() as HTMLElement;
+      this.container.appendChild(this.arrowIcon);
     }
   };
   stopPropagation = (e: Event): void => {
@@ -94,9 +104,9 @@ export class Dropdown extends (HTMLElementSSR()!) {
   }
   attributeChangedCallback(name: string, _: string, newValue: string): void {
     if (name === 'transit' && newValue) {
-      addClassToElement(this.dropdown.element, this.transit);
+      addClassToElement(this.dropdown, this.transit);
       setTimeout(() => {
-        removeClassToElement(this.dropdown.element, this.transit);
+        removeClassToElement(this.dropdown, this.transit);
       }, animationTime);
     }
     if (name === 'arrow') {
