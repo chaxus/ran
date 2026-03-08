@@ -8,13 +8,50 @@ import { HTMLElementMock } from './builder';
  * @param component The RanUI component instance (e.g. new Button())
  * @returns HTML string with DSD
  */
+/**
+ * Rendering utility for RanUI components in SSR environments.
+ */
 export const renderToString = (component: any): string => {
-  if (component && typeof component.serialize === 'function') {
-    return component.serialize();
+  if (!component) return '';
+
+  // Heuristic to find the tag name if it's a RanUI component
+  // In our project, classes are often named after the component (e.g., Button -> r-button)
+  // or we can check the tagName property of the Mock
+  let tagName = '';
+  if (component.tagName && component.tagName !== 'div') {
+    tagName = component.tagName;
+  } else {
+    const className = component.constructor.name.toLowerCase();
+    const tagMap: Record<string, string> = {
+      button: 'r-button',
+      icon: 'r-icon',
+      input: 'r-input',
+      select: 'r-select',
+      checkbox: 'r-checkbox',
+      progress: 'r-progress',
+      loading: 'r-loading',
+      skeleton: 'r-skeleton',
+      modal: 'r-modal',
+      tabs: 'r-tabs',
+      tabpane: 'r-tab',
+      radar: 'r-radar',
+      player: 'r-player',
+      popover: 'r-popover',
+      content: 'r-content',
+      form: 'r-form',
+      scratchticket: 'r-scratch',
+      colorpicker: 'r-colorpicker',
+      math: 'r-math',
+    };
+    tagName = tagMap[className] || 'div';
   }
-  // Fallback for HTMLElementMock instances
+
+  if (typeof component.serialize === 'function') {
+    return component.serialize(tagName);
+  }
+
   if (component instanceof HTMLElementMock) {
-    return component.serialize();
+    return component.serialize(tagName);
   }
   return '';
 };
