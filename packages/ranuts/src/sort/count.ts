@@ -16,7 +16,7 @@ const getMax = (list: number[]) => {
 const count = (list: number[]): number[] => {
   if (list.length <= 1) return list;
   const max = getMax(list);
-  const countList = new Array(max + 1).fill(0);
+  const countList = Array(max + 1).fill(0);
   list.forEach((item) => {
     if (!countList[item]) {
       countList[item] = 1;

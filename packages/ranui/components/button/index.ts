@@ -123,12 +123,12 @@ export class Button extends RanElement {
       this._iconElement.setAttribute('name', iconName);
     } else {
       // 🏗️ Check if icon already exists (Hydration)
-      let icon = this._shadowDom.querySelector('r-icon');
+      let icon = this._shadowDom.querySelector<HTMLElement>('r-icon');
       if (!icon) {
         icon = View('r-icon').attr('color', 'currentColor').class('icon').build() as HTMLElement;
         this._slot.insertAdjacentElement('beforebegin', icon);
       }
-      this._iconElement = icon as HTMLElement;
+      this._iconElement = icon;
       this._iconElement.setAttribute('name', iconName);
     }
 
@@ -185,7 +185,7 @@ export class Button extends RanElement {
           sheet.replaceSync(this.sheet);
           const currentSheets = this._shadowDom.adoptedStyleSheets || [];
           this._shadowDom.adoptedStyleSheets = [...currentSheets, sheet];
-        } catch (error: any) {
+        } catch {
           // Fallback if replaceSync is unsupported
           const style = Style().text(this.sheet).build();
           this._shadowDom.appendChild(style);

@@ -46,7 +46,7 @@ const staticMiddleware = (option: Partial<Option> = {}): MiddlewareFunction => {
             fs.accessSync(path.join(root, req.url + '.html'), fs.constants.F_OK);
             // 当允许访问时，则返回对应的页面
             fileName = req.url + '.html';
-          } catch (_e) {
+          } catch {
             // 否则直接返回 index.html
             fileName = path.join(req.url, 'index.html');
           }
@@ -74,7 +74,9 @@ const staticMiddleware = (option: Partial<Option> = {}): MiddlewareFunction => {
         console.log('request has not url');
       }
       await next();
-    } catch (_error) {}
+    } catch {
+      // Ignore middleware-chain errors to preserve current static-serving behavior.
+    }
   };
 };
 

@@ -169,7 +169,7 @@ async function loadFilterConfig(): Promise<ResolvedTokenFilterConfig> {
       global,
       componentOverrides,
     };
-  } catch (error) {
+  } catch {
     console.warn(`[style-docs] invalid filter config at ${path.relative(ROOT, FILTER_CONFIG_FILE)}; using defaults`);
     return fallback;
   }

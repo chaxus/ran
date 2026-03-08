@@ -561,7 +561,9 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   change = (name: string, value: unknown): void => {
     const currentTime = this.getCurrentTime();
     const duration = this.getTotalTime();
-    this.debug && console.log(name, value);
+    if (this.debug) {
+      console.log(name, value);
+    }
     this.dispatchEvent(
       new CustomEvent('change', {
         detail: {
@@ -833,7 +835,9 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     if (this.requestAnimationFrameId) return;
     this.requestAnimationFrameId = window.requestAnimationFrame(() => {
       fn();
-      this.requestAnimationFrameId && cancelAnimationFrame(this.requestAnimationFrameId);
+      if (this.requestAnimationFrameId) {
+        cancelAnimationFrame(this.requestAnimationFrameId);
+      }
       this.requestAnimationFrameId = undefined;
       this.requestAnimationFrame(fn);
     });

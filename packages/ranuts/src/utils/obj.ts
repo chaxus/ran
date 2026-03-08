@@ -30,7 +30,7 @@ const transitionJsonToString = (jsonObj: string | JSON, callback: (error: Error)
       // 转换失败错误信息
       // console.error('您传递的 json 数据格式有误，请核对...');
       // console.error(error);
-      callback(error);
+      callback(error as Error);
     }
   } else {
     try {
@@ -40,7 +40,7 @@ const transitionJsonToString = (jsonObj: string | JSON, callback: (error: Error)
       // 转换失败错误信息
       // console.error('您传递的 json 数据格式有误，请核对...');
       // console.error(error);
-      callback(error);
+      callback(error as Error);
     }
   }
   return _jsonObj;
@@ -119,10 +119,10 @@ export const formatJson = (jsonObj: string, callback = () => {}): string => {
     let indent = 0;
     // 表示缩进的位数，以空格作为计数单位
     let padding = '';
-    if (/\{$/.test(item) || /\[$/.test(item)) {
+    if (item.endsWith('{') || item.endsWith('[')) {
       // 匹配到以{和 [结尾的时候 indent 加 1
       indent += 1;
-    } else if (/\}$/.test(item) || /\]$/.test(item) || /\},$/.test(item) || /\],$/.test(item)) {
+    } else if (item.endsWith('}') || item.endsWith(']') || item.endsWith('},') || item.endsWith('],')) {
       // 匹配到以}和] 结尾的时候 indent 减 1
       if (pad !== 0) {
         pad -= 1;
@@ -529,7 +529,7 @@ export const cloneDeep = <T>(value: T, cloneMap = new WeakMap<object, any>()): T
     }
 
     return result;
-  } catch (_error) {
+  } catch {
     // 无法通过构造函数创建的对象，返回原对象的浅拷贝
     console.warn(
       `Unable to deeply clone object of type ${Object.prototype.toString.call(value)}. Fallback to shallow copy.`,

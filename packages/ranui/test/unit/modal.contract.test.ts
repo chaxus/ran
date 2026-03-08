@@ -1,4 +1,4 @@
-import { describe, expect, it, beforeEach, vi } from 'vitest';
+import { describe, expect, it, beforeEach } from 'vitest';
 import { Modal } from '@/components/modal/index';
 // Ensure custom elements are defined
 import '@/components/modal/index';

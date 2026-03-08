@@ -1,7 +1,6 @@
 import path, { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
-import type { RollupOptions } from 'rollup';
 import type { BuildOptions, UserConfig } from 'vite';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -53,7 +52,7 @@ interface chunkOptimization {
   assetsInlineLimit: number;
   chunkSizeWarningLimit: number;
   reportCompressedSize: boolean;
-  rollupOptions: RollupOptions;
+  rollupOptions: NonNullable<BuildOptions['rollupOptions']>;
   minify: boolean | 'terser' | 'esbuild' | undefined;
 }
 

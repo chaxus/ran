@@ -107,7 +107,9 @@ function Custom() {
           this._icon?.setAttribute('name', icon);
           this._icon?.style.setProperty('margin-right', '8px');
           this._icon?.setAttribute('size', '18');
-          color && this._icon?.setAttribute('color', color);
+          if (color) {
+            this._icon?.setAttribute('color', color);
+          }
         }
       };
       attributeChangedCallback(name: string, oldValue: string, newValue: string) {
@@ -131,7 +133,9 @@ function Custom() {
       const message = View('r-message').class('message').build() as HTMLElement & {
         timeId?: NodeJS.Timeout;
       };
-      message.timeId && clearTimeout(message.timeId);
+      if (message.timeId) {
+        clearTimeout(message.timeId);
+      }
       message.setAttribute('type', type);
       let duration = defaultDuration;
       let close: Ran.Prompt['close'];

@@ -64,7 +64,9 @@ export class EventStreamFetch {
     return fetch(url, options)
       .then((response) => {
         if (response.status === 200) {
-          options.onopen && options.onopen();
+          if (options.onopen) {
+            options.onopen();
+          }
           return response.body;
         }
       })
@@ -76,10 +78,14 @@ export class EventStreamFetch {
           // value 为返回数据，Uint8Array
           return reader?.read().then(({ done, value }) => {
             if (done) {
-              options.onclose && options.onclose();
+              if (options.onclose) {
+                options.onclose();
+              }
               return;
             }
-            options.onmessage && options.onmessage(value);
+            if (options.onmessage) {
+              options.onmessage(value);
+            }
             // 持续读取流信息
             return push();
           });
@@ -88,7 +94,9 @@ export class EventStreamFetch {
         return push();
       })
       .catch((e) => {
-        options.onerror && options.onerror(e);
+        if (options.onerror) {
+          options.onerror(e);
+        }
       });
   };
 }

@@ -15,16 +15,17 @@ type Caller = (relPath: string, absPath: string, stats: Stats) => any;
  */
 export async function traverse(dir: string, callback: Caller, pre = ''): Promise<any> {
   dir = resolve('.', dir);
-  await toRead(dir).then((arr) => {
-    return Promise.all(
-      arr.map((str) => {
-        const abs = join(dir, str);
-        return toStats(abs).then((stats) => {
-          return stats.isDirectory() ? traverse(abs, callback, join(pre, str)) : callback(join(pre, str), abs, stats);
-        });
-      }),
-    );
-  });
+  const arr = await toRead(dir);
+  await Promise.all(
+    arr.map(async (str) => {
+      const abs = join(dir, str);
+      const stats = await toStats(abs);
+      if (stats.isDirectory()) {
+        return traverse(abs, callback, join(pre, str));
+      }
+      return callback(join(pre, str), abs, stats);
+    }),
+  );
 }
 /**
  * @description: 同步方法，递归遍历每一个目录，为找到的文件都执行一个函数
@@ -41,6 +42,10 @@ export function traverseSync(dir: string, callback: Caller, pre = ''): void {
   for (; i < arr.length; i++) {
     abs = join(dir, arr[i]);
     stats = statSync(abs);
-    stats.isDirectory() ? traverseSync(abs, callback, join(pre, arr[i])) : callback(join(pre, arr[i]), abs, stats);
+    if (stats.isDirectory()) {
+      traverseSync(abs, callback, join(pre, arr[i]));
+    } else {
+      callback(join(pre, arr[i]), abs, stats);
+    }
   }
 }

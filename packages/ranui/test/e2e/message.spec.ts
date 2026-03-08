@@ -4,7 +4,7 @@ import { DEV_SERVER } from '../../build/config';
 test.describe('message', () => {
   test('supports top, zIndex and getContainer', async ({ page }) => {
     await page.goto(DEV_SERVER, { waitUntil: 'load' });
-    await page.waitForFunction(() => typeof window.message?.info === 'function');
+    await page.waitForFunction(() => typeof (window as any).message?.info === 'function');
 
     await page.evaluate(() => {
       const existed = document.getElementById('custom-message-root');
@@ -15,7 +15,7 @@ test.describe('message', () => {
       root.id = 'custom-message-root';
       document.body.appendChild(root);
 
-      window.message?.info({
+      (window as any).message?.info({
         content: 'custom container message',
         duration: 5000,
         top: 40,
@@ -33,7 +33,7 @@ test.describe('message', () => {
 
   test('reuses one host in same container and updates host style per call', async ({ page }) => {
     await page.goto(DEV_SERVER, { waitUntil: 'load' });
-    await page.waitForFunction(() => typeof window.message?.success === 'function');
+    await page.waitForFunction(() => typeof (window as any).message?.success === 'function');
 
     await page.evaluate(() => {
       const messageApi = (window as any).message;

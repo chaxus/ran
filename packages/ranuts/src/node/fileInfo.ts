@@ -10,9 +10,11 @@ import fs from '@/node/fs';
 const queryFileInfo = (path: string): Promise<Ranuts.Identification> =>
   new Promise((resolve, reject) => {
     fs.stat(path, (err, data: Stats) => {
-      err
-        ? reject({ success: false, _identification: false, data: err })
-        : resolve({ success: true, _identification: true, data });
+      if (err) {
+        reject({ success: false, _identification: false, data: err });
+      } else {
+        resolve({ success: true, _identification: true, data });
+      }
     });
   });
 

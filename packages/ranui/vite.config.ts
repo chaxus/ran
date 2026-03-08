@@ -5,7 +5,6 @@ import type { BuildOptions, PluginOption, UserConfig } from 'vite';
 import { visualizer } from 'rollup-plugin-visualizer';
 // import viteImagemin from '@vheemstra/vite-plugin-imagemin';
 // import imageminSvgo from 'imagemin-svgo';
-import type { RollupOptions } from 'rollup';
 import loadSvg from './plugins/load-svg';
 import { PORT } from './build/config';
 
@@ -17,7 +16,7 @@ interface chunkOptimization {
   assetsInlineLimit: number;
   chunkSizeWarningLimit: number;
   reportCompressedSize: boolean;
-  rollupOptions: RollupOptions;
+  rollupOptions: NonNullable<BuildOptions['rollupOptions']>;
   minify: boolean | 'terser' | 'esbuild' | undefined;
 }
 

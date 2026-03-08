@@ -195,7 +195,9 @@ export class Popover extends (HTMLElementSSR()!) {
       this.popoverContent?.style.setProperty('display', 'block');
       this.placementPosition();
       this.dropDownInTimeId = setTimeout(() => {
-        this.popoverContent && this.popoverContent.removeAttribute('transit');
+        if (this.popoverContent) {
+          this.popoverContent.removeAttribute('transit');
+        }
         clearTimeout(this.dropDownInTimeId);
         this.dropDownInTimeId = undefined;
       }, animationTime);
@@ -215,7 +217,9 @@ export class Popover extends (HTMLElementSSR()!) {
       this.popoverContent.setAttribute('transit', placementDirection[this.placement].remove);
       this.dropDownOutTimeId = setTimeout(() => {
         this.popoverContent?.style.setProperty('display', 'none');
-        this.popoverContent && this.popoverContent.removeAttribute('transit');
+        if (this.popoverContent) {
+          this.popoverContent.removeAttribute('transit');
+        }
         clearTimeout(this.dropDownOutTimeId);
         this.dropDownOutTimeId = undefined;
       }, animationTime);

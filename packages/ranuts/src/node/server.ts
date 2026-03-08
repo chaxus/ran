@@ -56,7 +56,7 @@ class Server {
     const server = http.createServer((req, res) => {
       this.ctx.req = req;
       this.ctx.res = res;
-      fn(this.ctx).then().catch(onerror);
+      fn(this.ctx).catch(onerror);
     });
     return server.listen(...args);
   }

@@ -29,7 +29,9 @@ const bucket = (list: Array<number>, bucketSize: number = 5, max?: number, min?:
   if (!max) max = getMax(list);
   if (!min) min = getMin(list);
   const bucketCount = Math.floor((max - min) / bucketSize) + 1;
-  const buckets = new Array(bucketCount + 1).fill(0).map(() => new Array(0));
+  const buckets = Array(bucketCount + 1)
+    .fill(0)
+    .map(() => [] as number[]);
 
   for (let i = 0; i < list.length; i++) {
     buckets[Math.floor((list[i] - min) / bucketSize)].push(list[i]);

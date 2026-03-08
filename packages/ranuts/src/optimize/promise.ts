@@ -33,8 +33,8 @@ Promise.resolve();
 
 // 原型链上的方法
 
-Promise.prototype.catch;
+void Promise.prototype.catch;
 
-Promise.prototype.finally;
+void Promise.prototype.finally;
 
-Promise.prototype.then;
+void Promise.prototype.then;

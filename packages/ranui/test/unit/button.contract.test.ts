@@ -68,8 +68,6 @@ describe('r-button contract', () => {
       // @ts-ignore - access private _shadowDom because mode is closed
       const shadow = btn._shadowDom as ShadowRoot;
 
-      const initialShadowHtml = shadow?.innerHTML || '';
-
       // Assigning the sheet property should trigger the fallback
       btn.setAttribute('sheet', '.ran-btn { background: red; }');
       await new Promise((r) => setTimeout(r, 20));

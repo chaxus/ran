@@ -464,6 +464,7 @@ export class CustomPromise {
       cb(resolve, reject);
     }
   }
+  // oxlint-disable-next-line unicorn/no-thenable
   then = (r: unknown, j: unknown): CustomPromise => {
     return new CustomPromise((resolve: Function, reject: Function) => {
       if (this.status === RESOLVED) {

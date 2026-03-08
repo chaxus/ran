@@ -1,7 +1,7 @@
 
 bin=./node_modules/.bin
 $bin/prettier --check --cache .
-$bin/eslint --cache . && $bin/prettier --check --cache .
+$bin/oxlint --config .oxlintrc.json . && $bin/prettier --check --cache .
 # before lint, make sure all packages are built
 # pnpm build
 pnpm -F docs tsc

@@ -67,7 +67,7 @@ export class ChapterDetector {
     const decodedText = transformed?.content || text;
 
     const words = decodedText.toLowerCase().split(/\s+/);
-    const sequence = new Array(this.maxSequenceLength).fill(0);
+    const sequence = Array(this.maxSequenceLength).fill(0);
 
     for (let i = 0; i < Math.min(words.length, this.maxSequenceLength); i++) {
       const word = words[i];
@@ -83,7 +83,7 @@ export class ChapterDetector {
     const decodedText = transformed?.content || text;
 
     const words = decodedText.toLowerCase().split(/\s+/);
-    const labels: string[] = new Array(words.length).fill('O');
+    const labels: string[] = Array(words.length).fill('O');
 
     const processChapter = (chapter: ChapterInfo) => {
       const chapterWords = chapter.title.toLowerCase().split(/\s+/);

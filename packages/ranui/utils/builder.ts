@@ -422,7 +422,9 @@ export class ShadowBuilder<T extends HTMLElement = HTMLElement> {
         sheet.replaceSync(cssText);
         this.root.adoptedStyleSheets = [...this.root.adoptedStyleSheets, sheet];
         return this;
-      } catch {}
+      } catch {
+        // Fallback to <style> injection below when adoptedStyleSheets is unavailable.
+      }
     }
     const style = document.createElement('style');
     style.textContent = cssText;
