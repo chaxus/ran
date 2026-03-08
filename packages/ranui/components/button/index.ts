@@ -1,8 +1,8 @@
 import { currentDevice } from 'ranuts/utils';
+import buttonCss from './index.less?inline';
 import { Div, RanElement, Slot, falseList, isDisabled } from '@/utils/index';
 import { Style, View } from '@/utils/builder';
 import { adoptStyles } from '@/utils/style';
-import buttonCss from './index.less?inline';
 
 export class Button extends RanElement {
   _btn!: HTMLDivElement;
@@ -27,10 +27,10 @@ export class Button extends RanElement {
     if (!btn) {
       btn = Div()
         .class('ran-btn')
-        .attr('part', 'ran-btn')
+        .attr('part', 'button')
         .role('button')
         .tabIndex(0)
-        .children(Div().class('ran-btn-content').attr('part', 'ran-btn-content').children(Slot().class('slot')))
+        .children(Div().class('ran-btn-content').attr('part', 'content').children(Slot().class('slot')))
         .build();
       this._shadowDom.appendChild(btn);
     }

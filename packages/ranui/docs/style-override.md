@@ -10,11 +10,13 @@
 Web Components 的 Shadow DOM 提供了天然的样式隔离，但这也带来了外部样式定制的挑战。
 
 **当前已实现的基础**：
+
 - 所有组件通过 `adoptStyles(shadowRoot, css)` 显式注入样式
 - 所有 CSS 值已用 `var(--ran-*, 默认值)` 形式声明
 - 部分组件已通过 `part` 属性暴露内部元素
 
 **当前存在的问题**：
+
 1. `--ran-*` 变量命名不系统，缺乏分层约定
 2. `::part()` 暴露不完整，无法精细定制
 3. 嵌套组件（如 `r-player` 内的 `r-select` 内的 `r-dropdown`）的样式作用域问题未解决
@@ -37,13 +39,14 @@ r-button {
 
 /* 配合 class 实现按语境覆盖 */
 .dark-theme r-select {
-  --ran-select-background: #1a1a1a;
-  --ran-select-color: #fff;
+  --ran-select-selection-background-color: #1a1a1a;
+  --ran-select-selection-color: #fff;
 }
 ```
 
 **原则**：
-- 每个 CSS 属性必须由 `var(--ran-[组件]-[状态]-[属性], 默认值)` 控制
+
+- 每个 CSS 属性必须由 `var(--ran-[组件]-[元素]-[状态]-[属性], 默认值)` 控制
 - 变量命名规则见第三节
 
 ---
@@ -70,6 +73,7 @@ r-button::part(content) {
 ```
 
 **规范**：
+
 - 所有对外部定制有价值的内部节点都应标注 `part` 属性
 - part 名称采用 kebab-case，不带 `ran-` 前缀
 - 每个组件的 parts 必须在文档中列出
@@ -92,16 +96,14 @@ btn.setAttribute('sheet', `.ran-btn-content { background: ${themeColor}; }`);
 ```
 
 **组件实现要求**：
+
 ```ts
 // 在 attributeChangedCallback 里响应 sheet 变化
 if (name === 'sheet' && newValue) {
   try {
     const sheet = new CSSStyleSheet();
     sheet.insertRule(newValue);
-    this._shadowDom.adoptedStyleSheets = [
-      ...this._shadowDom.adoptedStyleSheets,
-      sheet,
-    ];
+    this._shadowDom.adoptedStyleSheets = [...this._shadowDom.adoptedStyleSheets, sheet];
   } catch (e) {
     console.error(`[ranui] Failed to apply sheet: ${e}`);
   }
@@ -131,13 +133,13 @@ if (name === 'sheet' && newValue) {
 --ran-[组件]-[元素]-[状态]-[属性]
 ```
 
-| 片段 | 说明 | 示例 |
-|------|------|------|
-| `ran` | 统一前缀 | |
-| `[组件]` | 组件名（与标签名去掉 `r-` 后一致） | `btn`, `select`, `dropdown`, `player` |
-| `[元素]` | 内部元素名（可选） | `selection`, `icon`, `content` |
-| `[状态]` | 交互状态（可选） | `hover`, `focus`, `active`, `disabled` |
-| `[属性]` | CSS 属性名（kebab-case） | `background-color`, `color`, `border-radius` |
+| 片段     | 说明                               | 示例                                         |
+| -------- | ---------------------------------- | -------------------------------------------- |
+| `ran`    | 统一前缀                           |                                              |
+| `[组件]` | 组件名（与标签名去掉 `r-` 后一致） | `btn`, `select`, `dropdown`, `player`        |
+| `[元素]` | 内部元素名（可选）                 | `selection`, `icon`, `content`               |
+| `[状态]` | 交互状态（可选）                   | `hover`, `focus`, `active`, `disabled`       |
+| `[属性]` | CSS 属性名（kebab-case）           | `background-color`, `color`, `border-radius` |
 
 ### 示例
 
@@ -167,6 +169,7 @@ if (name === 'sheet' && newValue) {
 ### 问题描述
 
 当组件 A 内部使用了组件 B（B 又内部使用了 C），例如：
+
 ```
 r-player (Shadow DOM A)
   └─ r-select (Shadow DOM B)
@@ -178,6 +181,7 @@ r-player (Shadow DOM A)
 ### 解决方案：`dropdownclass` + Shadow Root 容器
 
 **核心机制**：
+
 1. `r-select` 提供 `getPopupContainerId` 属性，指定弹层挂载的容器 ID
 2. `r-select` 的 `createOption()` 用 `getRootNode().getElementById()` 在自己的宿主 Shadow Root 内查找容器
 3. `r-dropdown` 被挂载进 **A 的 Shadow DOM** 内部
@@ -188,8 +192,8 @@ r-player (Shadow DOM A)
 // r-player 内正确的写法
 const playerIdentifier = 'ran-player' + uniqueId;
 const speedSelect = View('r-select')
-  .attr('getPopupContainerId', playerIdentifier)  // ← 指向 r-player shadow 内的容器
-  .attr('dropdownclass', 'video-speed-dropdown')  // ← 在 player shadow 样式里有定义
+  .attr('getPopupContainerId', playerIdentifier) // ← 指向 r-player shadow 内的容器
+  .attr('dropdownclass', 'video-speed-dropdown') // ← 在 player shadow 样式里有定义
   .build();
 
 // .ran-player div 也需要 id= playerIdentifier
@@ -206,6 +210,7 @@ const player = Div().id(playerIdentifier).build();
 ```
 
 **关键修复**（`r-select/index.ts`中必须正确实现）：
+
 ```ts
 // createOption() 中
 const root = this.getRootNode() as ShadowRoot | Document;
@@ -220,6 +225,49 @@ const root =
   (rootNode.getElementById ? rootNode.getElementById(this.getPopupContainerId) : null) ||
   document.getElementById(this.getPopupContainerId);
 ```
+
+### `r-player + r-popover` 实战约定（已落地）
+
+`r-player` 与 `r-popover` 场景下，建议统一使用以下约定，确保弹层定位与样式覆盖稳定：
+
+1. 在父组件 Shadow DOM 内创建唯一容器 id（如 `ran-player${uid}`）。
+2. 子级 `r-select` 必须设置 `getPopupContainerId` 指向该 id。
+3. 子级 `r-select` 必须设置 `dropdownclass`（如 `video-speed-dropdown`）。
+4. 主题 token 写在父组件 Shadow 样式里的 `.video-speed-dropdown` 选择器上。
+5. 弹层定位变量由 `r-popover` 注入 `--ran-dropdown-arrow-anchor-*` 与 `--ran-dropdown-min-*`。
+
+```ts
+// player/index.ts（示意）
+const playerIdentifier = `ran-player${uid}`;
+
+const speedSelect = View('r-select')
+  .attr('getPopupContainerId', playerIdentifier)
+  .attr('dropdownclass', 'video-speed-dropdown')
+  .build();
+
+const claritySelect = View('r-select')
+  .attr('getPopupContainerId', playerIdentifier)
+  .attr('dropdownclass', 'video-clarity-dropdown')
+  .build();
+```
+
+```less
+// player/index.less（示意）
+.video-speed-dropdown,
+.video-clarity-dropdown {
+  --ran-dropdown-background: rgba(43, 43, 43, 0.9);
+  --ran-dropdown-option-item-color: #fff;
+  --ran-dropdown-option-item-hover-background-color: rgba(255, 255, 255, 0.15);
+  --ran-dropdown-option-item-content-color: #fff;
+}
+```
+
+**排查清单**：
+
+1. 下拉样式不生效：优先检查 `dropdownclass` 是否与父级样式类名一致。
+2. 下拉挂载到 `body`：检查 `getPopupContainerId` 对应容器是否存在于当前 Shadow Root。
+3. 箭头位置错乱：确认 `r-popover` 已注入 `--ran-dropdown-arrow-anchor-width/height`。
+4. 宽高计算异常：确认 `r-popover` 已注入 `--ran-dropdown-min-width/height`。
 
 ### 不应该做的
 
@@ -237,15 +285,15 @@ const root =
 
 每个组件应该暴露如下 part：
 
-| 组件 | 应暴露的 part |
-|------|--------------|
-| `r-button` | `content`（内容区） |
-| `r-input` | `input`（原生 input）, `content`（外层容器） |
-| `r-select` | `selection`（触发区）, `icon`（箭头图标）, `selection-item`（选中文本） |
-| `r-dropdown` | `dropdown`（弹层根元素） |
-| `r-dropdown-item` | `item`（每个选项） |
-| `r-modal` | `dialog`（弹窗容器）, `header`, `body`, `footer` |
-| `r-progress` | `track`（轨道）, `fill`（填充条）, `dot`（拖拽点） |
+| 组件              | 应暴露的 part                                                                                 |
+| ----------------- | --------------------------------------------------------------------------------------------- |
+| `r-button`        | `content`（内容区）                                                                           |
+| `r-input`         | `input`（原生 input）, `content`（外层容器）                                                  |
+| `r-select`        | `selection`（触发区）, `icon`（箭头图标）, `selection-item`（选中文本）, `search`（搜索输入） |
+| `r-dropdown`      | `dropdown`（弹层根元素）                                                                      |
+| `r-dropdown-item` | `item`（每个选项）, `content`（选项内容）                                                     |
+| `r-modal`         | `dialog`（弹窗容器）, `header`, `body`, `footer`                                              |
+| `r-progress`      | `track`（轨道）, `fill`（填充条）, `dot`（拖拽点）                                            |
 
 ---
 
@@ -254,14 +302,15 @@ const root =
 ### 🔴 P0：基础修复（当前阶段）
 
 - [x] `r-select` createOption/removeSelectDropdown/placementPosition 支持 Shadow Root 查找
-- [ ] 统一所有 CSS 变量命名为规范格式（增量，不破坏现有 API）
-- [ ] 补全 `r-select` 和 `r-dropdown` 的 part 暴露
+- [x] `r-select`、`r-dropdown`、`r-dropdown-item` 的 CSS Token 命名统一为规范格式（本次为大版本升级，按最佳实践直接切换）
+- [x] 补全 `r-select` 和 `r-dropdown` 的 part 暴露（并补充 `r-dropdown-item`）
 
 ### 🟡 P1：系统化完善（下阶段）
 
-- [ ] 为每个组件生成完整的 CSS Token 文档（可自动从 `.less` 文件提取）
-- [ ] 为复杂嵌套组件（`r-player`, `r-popover`）补全 `getPopupContainerId` + `dropdownclass` 机制文档
-- [ ] `sheet` 属性在所有组件中实现完整的 `attributeChangedCallback` 响应
+- [x] 为每个组件生成完整的 CSS Token 文档（自动从 `.less` 与 `index.ts` 提取）
+- [x] 第二批核心组件完成 `sheet` 动态样式响应接入：`r-tabs`、`r-tab`、`r-modal`、`r-input`、`r-progress`
+- [x] 为复杂嵌套组件（`r-player`, `r-popover`）补全 `getPopupContainerId` + `dropdownclass` 机制文档
+- [x] `sheet` 属性在所有含 `observedAttributes` 的组件中实现完整的 `attributeChangedCallback` 响应
 
 ### 🟢 P2：开发者体验（长期）
 
@@ -291,3 +340,17 @@ const root =
   --ran-dropdown-option-item-color: #fff;
 }
 ```
+
+### 本次已实施（2026-03-08）
+
+- `r-select`：重构为规范 token 命名，去除历史混杂命名；保留 `selection/icon/selection-item/search` 的 `part` 暴露
+- `r-dropdown`：`part` 统一为 `dropdown`；`popover` 语义 token 统一替换为 `dropdown` 语义
+- `r-dropdown-item`：`part` 统一为 `item/content`；内容区 token 统一为 `--ran-dropdown-option-item-content-*`
+- 新增自动化文档脚本：`pnpm doc:style`，生成 `docs/style-tokens-parts.md`
+- 新增公开 API 文档：`docs/style-tokens-public.md`（过滤内部结构型 token）
+- 公开 API 过滤规则配置：`docs/style-token-filter.json`（支持全局与组件级 include/exclude）
+- `r-tabs`：补齐 `part` 暴露（`tabs/header/nav/indicator/content/content-wrap`）并支持 `sheet`
+- `r-tab`：补齐 `part=content` 并支持 `sheet`
+- `r-modal`、`r-input`、`r-progress`：支持 `sheet` 动态样式响应
+- 第三批组件 `sheet` 响应补齐：`r-checkbox`、`r-colorpicker`、`r-dropdown`、`r-icon`、`r-img`、`r-loading`、`r-math`、`r-message`、`r-player`、`r-popover`、`r-radar`、`r-dropdown-item`、`r-skeleton`
+- `r-player + r-popover`：补充嵌套挂载与样式作用域文档（`getPopupContainerId + dropdownclass`）

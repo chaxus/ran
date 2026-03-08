@@ -1,386 +1,402 @@
 <!doctype html>
 <html lang="en">
+  <head>
+    <link rel="icon" href="data:;" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ranui - full examples</title>
+    <script type="module" src="./index.ts"></script>
+    <style>
+      :root {
+        --bg: #f5f7fb;
+        --card: #ffffff;
+        --line: #e8edf5;
+        --text: #1f2430;
+        --sub: #667085;
+        --brand: #1677ff;
+        --brand-2: #13c2c2;
+      }
 
-<head>
-  <link rel="icon" href="data:;" />
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ranui - full examples</title>
-  <script type="module" src="./index.ts"></script>
-  <style>
-    :root {
-      --bg: #f5f7fb;
-      --card: #ffffff;
-      --line: #e8edf5;
-      --text: #1f2430;
-      --sub: #667085;
-      --brand: #1677ff;
-      --brand-2: #13c2c2;
-    }
+      * {
+        box-sizing: border-box;
+      }
 
-    * {
-      box-sizing: border-box;
-    }
+      body {
+        margin: 0;
+        color: var(--text);
+        background:
+          radial-gradient(circle at 0% 0%, rgba(22, 119, 255, 0.14), transparent 30%),
+          radial-gradient(circle at 100% 0%, rgba(19, 194, 194, 0.14), transparent 30%), var(--bg);
+        font-family: 'Avenir Next', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      }
 
-    body {
-      margin: 0;
-      color: var(--text);
-      background:
-        radial-gradient(circle at 0% 0%, rgba(22, 119, 255, 0.14), transparent 30%),
-        radial-gradient(circle at 100% 0%, rgba(19, 194, 194, 0.14), transparent 30%),
-        var(--bg);
-      font-family: 'Avenir Next', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-    }
-
-    .page {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 24px;
-    }
-
-    .hero {
-      border: 1px solid var(--line);
-      background: linear-gradient(135deg, #ffffff 0%, #f7fbff 100%);
-      border-radius: 16px;
-      padding: 20px 24px;
-      margin-bottom: 18px;
-    }
-
-    .hero h1 {
-      margin: 0 0 8px;
-      font-size: 28px;
-      letter-spacing: 0.2px;
-    }
-
-    .hero p {
-      margin: 0;
-      color: var(--sub);
-      line-height: 1.6;
-    }
-
-    .toc {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin: 14px 0 0;
-    }
-
-    .toc a {
-      text-decoration: none;
-      color: #174ea6;
-      background: #eef5ff;
-      border: 1px solid #d7e6ff;
-      border-radius: 999px;
-      padding: 4px 10px;
-      font-size: 13px;
-    }
-
-    .section {
-      margin-bottom: 16px;
-      padding: 16px;
-      border-radius: 16px;
-      border: 1px solid var(--line);
-      background: var(--card);
-    }
-
-    .section h2 {
-      margin: 0 0 12px;
-      font-size: 18px;
-      border-left: 4px solid var(--brand);
-      padding-left: 8px;
-    }
-
-    .demo-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      align-items: center;
-      margin-bottom: 12px;
-    }
-
-    .demo-grid {
-      display: grid;
-      gap: 12px;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    }
-
-    .box {
-      border: 1px dashed #d8e2f2;
-      border-radius: 12px;
-      padding: 12px;
-      min-height: 60px;
-    }
-
-    .small {
-      color: var(--sub);
-      font-size: 13px;
-      margin: 0 0 8px;
-    }
-
-    #popup-root {
-      position: relative;
-      min-height: 20px;
-    }
-
-    @media (max-width: 768px) {
       .page {
-        padding: 14px;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 24px;
+      }
+
+      .hero {
+        border: 1px solid var(--line);
+        background: linear-gradient(135deg, #ffffff 0%, #f7fbff 100%);
+        border-radius: 16px;
+        padding: 20px 24px;
+        margin-bottom: 18px;
       }
 
       .hero h1 {
-        font-size: 22px;
+        margin: 0 0 8px;
+        font-size: 28px;
+        letter-spacing: 0.2px;
+      }
+
+      .hero p {
+        margin: 0;
+        color: var(--sub);
+        line-height: 1.6;
+      }
+
+      .toc {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 14px 0 0;
+      }
+
+      .toc a {
+        text-decoration: none;
+        color: #174ea6;
+        background: #eef5ff;
+        border: 1px solid #d7e6ff;
+        border-radius: 999px;
+        padding: 4px 10px;
+        font-size: 13px;
       }
 
       .section {
-        padding: 12px;
+        margin-bottom: 16px;
+        padding: 16px;
+        border-radius: 16px;
+        border: 1px solid var(--line);
+        background: var(--card);
       }
-    }
-  </style>
-</head>
 
-<body>
-  <main class="page">
-    <header class="hero">
-      <h1>RanUI Full Example Board</h1>
-      <p>已补齐当前可注册组件的示例，方便 dev 启动后逐个检查。每个 section 至少包含一个最小可运行 demo。</p>
-      <nav class="toc">
-        <a href="#button">button</a>
-        <a href="#icon">icon</a>
-        <a href="#image">image</a>
-        <a href="#input">input</a>
-        <a href="#select">select</a>
-        <a href="#checkbox">checkbox</a>
-        <a href="#progress">progress</a>
-        <a href="#loading">loading</a>
-        <a href="#skeleton">skeleton</a>
-        <a href="#message">message</a>
-        <a href="#tabs">tabs</a>
-        <a href="#popover">popover</a>
-        <a href="#colorpicker">colorpicker</a>
-        <a href="#math">math</a>
-        <a href="#radar">radar</a>
-        <a href="#form">form</a>
-        <a href="#scratch">scratch</a>
-        <a href="#player">player</a>
-        <a href="#modal">modal</a>
-        <a href="#dsd">dsd</a>
-      </nav>
-    </header>
+      .section h2 {
+        margin: 0 0 12px;
+        font-size: 18px;
+        border-left: 4px solid var(--brand);
+        padding-left: 8px;
+      }
 
-    <section id="button" class="section">
-      <h2>Button - r-button</h2>
-      <div class="demo-row">
-        <r-button type="primary">Primary</r-button>
-        <r-button type="warning">Warning</r-button>
-        <r-button type="text">Text</r-button>
-        <r-button disabled>Disabled</r-button>
-        <r-button icon="home">Icon</r-button>
-      </div>
-    </section>
+      .demo-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+        margin-bottom: 12px;
+      }
 
-    <section id="icon" class="section">
-      <h2>Icon - r-icon</h2>
-      <div class="demo-row">
-        <r-icon name="home" size="32" color="#1677ff"></r-icon>
-        <r-icon name="setting" size="32"></r-icon>
-        <r-icon name="loading" size="32" spin color="#13c2c2"></r-icon>
-      </div>
-    </section>
+      .demo-grid {
+        display: grid;
+        gap: 12px;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      }
 
-    <section id="image" class="section">
-      <h2>Image - r-img</h2>
-      <p class="small">一个正常图片，一个故意失效链接用于检查 fallback。</p>
-      <div class="demo-row">
-        <r-img src="https://picsum.photos/220/120" style="width: 220px; height: 120px; display: block;"></r-img>
-        <r-img src="https://picsum.photos/220/121" style="width: 220px; height: 120px; display: block;"></r-img>
-      </div>
-    </section>
+      .box {
+        border: 1px dashed #d8e2f2;
+        border-radius: 12px;
+        padding: 12px;
+        min-height: 60px;
+      }
 
-    <section id="input" class="section">
-      <h2>Input - r-input</h2>
-      <div class="demo-grid">
-        <div class="box">
-          <r-input label="Username" placeholder="请输入用户名"></r-input>
+      .small {
+        color: var(--sub);
+        font-size: 13px;
+        margin: 0 0 8px;
+      }
+
+      #popup-root {
+        position: relative;
+        min-height: 20px;
+      }
+
+      @media (max-width: 768px) {
+        .page {
+          padding: 14px;
+        }
+
+        .hero h1 {
+          font-size: 22px;
+        }
+
+        .section {
+          padding: 12px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <main class="page">
+      <header class="hero">
+        <h1>RanUI Full Example Board</h1>
+        <p>已补齐当前可注册组件的示例，方便 dev 启动后逐个检查。每个 section 至少包含一个最小可运行 demo。</p>
+        <nav class="toc">
+          <a href="#button">button</a>
+          <a href="#icon">icon</a>
+          <a href="#image">image</a>
+          <a href="#input">input</a>
+          <a href="#select">select</a>
+          <a href="#checkbox">checkbox</a>
+          <a href="#progress">progress</a>
+          <a href="#loading">loading</a>
+          <a href="#skeleton">skeleton</a>
+          <a href="#message">message</a>
+          <a href="#tabs">tabs</a>
+          <a href="#popover">popover</a>
+          <a href="#colorpicker">colorpicker</a>
+          <a href="#math">math</a>
+          <a href="#radar">radar</a>
+          <a href="#form">form</a>
+          <a href="#scratch">scratch</a>
+          <a href="#player">player</a>
+          <a href="#modal">modal</a>
+          <a href="#dsd">dsd</a>
+        </nav>
+      </header>
+
+      <section id="button" class="section">
+        <h2>Button - r-button</h2>
+        <div class="demo-row">
+          <r-button type="primary">Primary</r-button>
+          <r-button type="warning">Warning</r-button>
+          <r-button type="text">Text</r-button>
+          <r-button disabled>Disabled</r-button>
+          <r-button icon="home">Icon</r-button>
         </div>
-        <div class="box">
-          <r-input label="Password" type="password" icon="lock"></r-input>
+      </section>
+
+      <section id="icon" class="section">
+        <h2>Icon - r-icon</h2>
+        <div class="demo-row">
+          <r-icon name="home" size="32" color="#1677ff"></r-icon>
+          <r-icon name="setting" size="32"></r-icon>
+          <r-icon name="loading" size="32" spin color="#13c2c2"></r-icon>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section id="select" class="section">
-      <h2>Select - r-select + r-option</h2>
-      <div id="popup-root"></div>
-      <div class="demo-row">
-        <r-select style="width: 180px" defaultValue="lucy" getPopupContainerId="popup-root" trigger="click">
-          <r-option value="jack">Jack</r-option>
-          <r-option value="lucy">Lucy</r-option>
-          <r-option value="tom">Tom</r-option>
-        </r-select>
-        <r-select style="width: 220px" showSearch getPopupContainerId="popup-root" trigger="click">
-          <r-option value="apple">Apple</r-option>
-          <r-option value="banana">Banana</r-option>
-          <r-option value="grape">Grape</r-option>
-          <r-option value="orange">Orange</r-option>
-        </r-select>
-      </div>
-    </section>
+      <section id="image" class="section">
+        <h2>Image - r-img</h2>
+        <p class="small">一个正常图片，一个故意失效链接用于检查 fallback。</p>
+        <div class="demo-row">
+          <r-img src="https://picsum.photos/220/120" style="width: 220px; height: 120px; display: block"></r-img>
+          <r-img src="https://picsum.photos/220/121" style="width: 220px; height: 120px; display: block"></r-img>
+        </div>
+      </section>
 
-    <section id="checkbox" class="section">
-      <h2>Checkbox - r-checkbox</h2>
-      <div class="demo-row">
-        <r-checkbox checked="true">Checked</r-checkbox>
-        <r-checkbox>Unchecked</r-checkbox>
-        <r-checkbox disabled checked="true">Disabled</r-checkbox>
-      </div>
-    </section>
-
-    <section id="progress" class="section">
-      <h2>Progress - r-progress</h2>
-      <div class="demo-grid">
-        <div class="box"><r-progress percent="65"></r-progress></div>
-        <div class="box"><r-progress type="drag" percent="30"></r-progress></div>
-      </div>
-    </section>
-
-    <section id="loading" class="section">
-      <h2>Loading - r-loading</h2>
-      <div class="demo-row">
-        <r-loading name="rotate"></r-loading>
-        <r-loading name="stretch"></r-loading>
-        <r-loading name="dot"></r-loading>
-        <r-loading name="circle-line"></r-loading>
-      </div>
-    </section>
-
-    <section id="skeleton" class="section">
-      <h2>Skeleton - r-skeleton</h2>
-      <div class="demo-grid">
-        <div class="box"><r-skeleton></r-skeleton></div>
-        <div class="box"><r-skeleton style="height: 24px;"></r-skeleton></div>
-      </div>
-    </section>
-
-    <section id="message" class="section">
-      <h2>Message - r-message / window.message</h2>
-      <div class="demo-row">
-        <r-button onclick="window.message?.info('Info message from demo')">Info</r-button>
-        <r-button onclick="window.message?.success('Success message from demo')">Success</r-button>
-        <r-button onclick="window.message?.warning('Warning message from demo')">Warning</r-button>
-        <r-button onclick="window.message?.error('Error message from demo')">Error</r-button>
-      </div>
-    </section>
-
-    <section id="tabs" class="section">
-      <h2>Tabs - r-tabs + r-tab</h2>
-      <div class="box">
-        <r-tabs active="overview" align="start" style="width: 100%;">
-          <r-tab label="Overview" r-key="overview">Overview content</r-tab>
-          <r-tab label="API" r-key="api">API content</r-tab>
-          <r-tab label="Disabled" r-key="disabled" disabled>Disabled content</r-tab>
-        </r-tabs>
-      </div>
-    </section>
-
-    <section id="popover" class="section">
-      <h2>Popover - r-popover + r-content</h2>
-      <div class="demo-row">
-        <r-popover placement="top" trigger="hover,click">
-          <r-button>Hover / Click Me</r-button>
-          <r-content>
-            <div style="padding: 8px 10px;">Popover content demo</div>
-          </r-content>
-        </r-popover>
-      </div>
-    </section>
-
-    <section id="colorpicker" class="section">
-      <h2>ColorPicker - r-colorpicker</h2>
-      <div class="demo-row">
-        <r-colorpicker value="#1677ff"></r-colorpicker>
-        <r-colorpicker value="rgba(255, 0, 0, 0.5)"></r-colorpicker>
-      </div>
-    </section>
-
-    <section id="math" class="section">
-      <h2>Math - r-math</h2>
-      <div class="demo-grid">
-        <div class="box"><r-math latex="E = mc^2"></r-math></div>
-        <div class="box"><r-math latex="x = {-b \pm \sqrt{b^2-4ac} \over 2a}"></r-math></div>
-      </div>
-    </section>
-
-    <section id="radar" class="section">
-      <h2>Radar - r-radar</h2>
-      <div class="box" style="max-width: 400px; aspect-ratio: 1/1;">
-        <r-radar style="width: 100%; height: 100%; display: block;"
-          abilitys='[{"abilityName":"Performance","scoreRate":"92"},{"abilityName":"Accessibility","scoreRate":"83"},{"abilityName":"DX","scoreRate":"75"},{"abilityName":"Stability","scoreRate":"86"},{"abilityName":"Features","scoreRate":"80"}]'></r-radar>
-      </div>
-    </section>
-
-    <section id="form" class="section">
-      <h2>Form - r-form</h2>
-      <div class="box">
-        <r-form id="demo-form">
-          <div slot="r-form_content" class="demo-row">
-            <r-input name="name" label="Name" placeholder="Your name"></r-input>
-            <r-input name="email" label="Email" placeholder="Your email"></r-input>
-            <r-button type="primary"
-              onclick="document.getElementById('demo-form')?.shadowRoot?.querySelector('form')?.requestSubmit?.()">Submit</r-button>
+      <section id="input" class="section">
+        <h2>Input - r-input</h2>
+        <div class="demo-grid">
+          <div class="box">
+            <r-input label="Username" placeholder="请输入用户名"></r-input>
           </div>
-        </r-form>
-      </div>
-    </section>
-
-    <section id="scratch" class="section">
-      <h2>Scratch - r-scratch</h2>
-      <div class="box" style="width: 300px; height: 150px; position: relative; overflow: hidden; border-radius: 8px;">
-        <r-scratch style="width: 100%; height: 100%;"></r-scratch>
-        <div
-          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; z-index: -1; background: #f0f0f0; color: #999;">
-          WINNER!
+          <div class="box">
+            <r-input label="Password" type="password" icon="lock"></r-input>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section id="player" class="section">
-      <h2>Player - r-player</h2>
-      <p class="small">播放器体积较大，这里提供一个基础地址用于回归检查。</p>
-      <div class="box" style="max-width: 700px; height: 400px;">
-        <r-player debug="true" src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"></r-player>
-      </div>
-    </section>
+      <section id="select" class="section">
+        <h2>Select - r-select + r-option</h2>
+        <div id="popup-root"></div>
+        <div class="demo-row">
+          <r-select style="width: 180px" defaultValue="lucy" getPopupContainerId="popup-root" trigger="click">
+            <r-option value="jack">Jack</r-option>
+            <r-option value="lucy">Lucy</r-option>
+            <r-option value="tom">Tom</r-option>
+          </r-select>
+          <r-select style="width: 220px" showSearch getPopupContainerId="popup-root" trigger="click">
+            <r-option value="apple">Apple</r-option>
+            <r-option value="banana">Banana</r-option>
+            <r-option value="grape">Grape</r-option>
+            <r-option value="orange">Orange</r-option>
+          </r-select>
+        </div>
+      </section>
 
-    <section id="modal" class="section">
-      <h2>Modal - r-modal</h2>
-      <p class="small">当前 modal 组件是占位实现，先展示标签实例，方便后续迭代时观察行为变化。</p>
-      <div class="demo-row">
-        <r-button type="primary" onclick="document.getElementById('demo-modal').setAttribute('open', 'true')">Open
-          Modal</r-button>
-        <r-modal id="demo-modal" title="Demo Modal">
-          <p>This is a modal content example.</p>
-          <r-button onclick="document.getElementById('demo-modal').removeAttribute('open')">Close</r-button>
-        </r-modal>
-      </div>
-    </section>
+      <section id="checkbox" class="section">
+        <h2>Checkbox - r-checkbox</h2>
+        <div class="demo-row">
+          <r-checkbox checked="true">Checked</r-checkbox>
+          <r-checkbox>Unchecked</r-checkbox>
+          <r-checkbox disabled checked="true">Disabled</r-checkbox>
+        </div>
+      </section>
 
-    <section id="dsd" class="section">
-      <h2>DSD Rehydration - r-button</h2>
-      <p class="small">用于检查文档中提到的 DSD 注水场景。</p>
-      <div class="demo-row">
-        <r-button type="primary">
-          DSD Button
-          <template shadowrootmode="closed">
-            <div class="ran-btn" role="button" tabindex="0">
-              <div class="ran-btn-content">
-                <slot></slot>
-              </div>
+      <section id="progress" class="section">
+        <h2>Progress - r-progress</h2>
+        <div class="demo-grid">
+          <div class="box"><r-progress percent="65"></r-progress></div>
+          <div class="box"><r-progress type="drag" percent="30"></r-progress></div>
+        </div>
+      </section>
+
+      <section id="loading" class="section">
+        <h2>Loading - r-loading</h2>
+        <div class="demo-row">
+          <r-loading name="rotate"></r-loading>
+          <r-loading name="stretch"></r-loading>
+          <r-loading name="dot"></r-loading>
+          <r-loading name="circle-line"></r-loading>
+        </div>
+      </section>
+
+      <section id="skeleton" class="section">
+        <h2>Skeleton - r-skeleton</h2>
+        <div class="demo-grid">
+          <div class="box"><r-skeleton></r-skeleton></div>
+          <div class="box"><r-skeleton style="height: 24px"></r-skeleton></div>
+        </div>
+      </section>
+
+      <section id="message" class="section">
+        <h2>Message - r-message / window.message</h2>
+        <div class="demo-row">
+          <r-button onclick="window.message?.info('Info message from demo')">Info</r-button>
+          <r-button onclick="window.message?.success('Success message from demo')">Success</r-button>
+          <r-button onclick="window.message?.warning('Warning message from demo')">Warning</r-button>
+          <r-button onclick="window.message?.error('Error message from demo')">Error</r-button>
+        </div>
+      </section>
+
+      <section id="tabs" class="section">
+        <h2>Tabs - r-tabs + r-tab</h2>
+        <div class="box">
+          <r-tabs active="overview" align="start" style="width: 100%">
+            <r-tab label="Overview" r-key="overview">Overview content</r-tab>
+            <r-tab label="API" r-key="api">API content</r-tab>
+            <r-tab label="Disabled" r-key="disabled" disabled>Disabled content</r-tab>
+          </r-tabs>
+        </div>
+      </section>
+
+      <section id="popover" class="section">
+        <h2>Popover - r-popover + r-content</h2>
+        <div class="demo-row">
+          <r-popover placement="top" trigger="hover,click">
+            <r-button>Hover / Click Me</r-button>
+            <r-content>
+              <div style="padding: 8px 10px">Popover content demo</div>
+            </r-content>
+          </r-popover>
+        </div>
+      </section>
+
+      <section id="colorpicker" class="section">
+        <h2>ColorPicker - r-colorpicker</h2>
+        <div class="demo-row">
+          <r-colorpicker value="#1677ff"></r-colorpicker>
+          <r-colorpicker value="rgba(255, 0, 0, 0.5)"></r-colorpicker>
+        </div>
+      </section>
+
+      <section id="math" class="section">
+        <h2>Math - r-math</h2>
+        <div class="demo-grid">
+          <div class="box"><r-math latex="E = mc^2"></r-math></div>
+          <div class="box"><r-math latex="x = {-b \pm \sqrt{b^2-4ac} \over 2a}"></r-math></div>
+        </div>
+      </section>
+
+      <section id="radar" class="section">
+        <h2>Radar - r-radar</h2>
+        <div class="box" style="max-width: 400px; aspect-ratio: 1/1">
+          <r-radar
+            style="width: 100%; height: 100%; display: block"
+            abilitys='[{"abilityName":"Performance","scoreRate":"92"},{"abilityName":"Accessibility","scoreRate":"83"},{"abilityName":"DX","scoreRate":"75"},{"abilityName":"Stability","scoreRate":"86"},{"abilityName":"Features","scoreRate":"80"}]'
+          ></r-radar>
+        </div>
+      </section>
+
+      <section id="form" class="section">
+        <h2>Form - r-form</h2>
+        <div class="box">
+          <r-form id="demo-form">
+            <div slot="r-form_content" class="demo-row">
+              <r-input name="name" label="Name" placeholder="Your name"></r-input>
+              <r-input name="email" label="Email" placeholder="Your email"></r-input>
+              <r-button
+                type="primary"
+                onclick="document.getElementById('demo-form')?.shadowRoot?.querySelector('form')?.requestSubmit?.()"
+                >Submit</r-button
+              >
             </div>
-          </template>
-        </r-button>
-      </div>
-    </section>
-  </main>
-</body>
+          </r-form>
+        </div>
+      </section>
 
+      <section id="scratch" class="section">
+        <h2>Scratch - r-scratch</h2>
+        <div class="box" style="width: 300px; height: 150px; position: relative; overflow: hidden; border-radius: 8px">
+          <r-scratch style="width: 100%; height: 100%"></r-scratch>
+          <div
+            style="
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              z-index: -1;
+              background: #f0f0f0;
+              color: #999;
+            "
+          >
+            WINNER!
+          </div>
+        </div>
+      </section>
+
+      <section id="player" class="section">
+        <h2>Player - r-player</h2>
+        <p class="small">播放器体积较大，这里提供一个基础地址用于回归检查。</p>
+        <div class="box" style="max-width: 700px; height: 400px">
+          <r-player debug="true" src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"></r-player>
+        </div>
+      </section>
+
+      <section id="modal" class="section">
+        <h2>Modal - r-modal</h2>
+        <p class="small">当前 modal 组件是占位实现，先展示标签实例，方便后续迭代时观察行为变化。</p>
+        <div class="demo-row">
+          <r-button type="primary" onclick="document.getElementById('demo-modal').setAttribute('open', 'true')"
+            >Open Modal</r-button
+          >
+          <r-modal id="demo-modal" title="Demo Modal">
+            <p>This is a modal content example.</p>
+            <r-button onclick="document.getElementById('demo-modal').removeAttribute('open')">Close</r-button>
+          </r-modal>
+        </div>
+      </section>
+
+      <section id="dsd" class="section">
+        <h2>DSD Rehydration - r-button</h2>
+        <p class="small">用于检查文档中提到的 DSD 注水场景。</p>
+        <div class="demo-row">
+          <r-button type="primary">
+            DSD Button
+            <template shadowrootmode="closed">
+              <div class="ran-btn" role="button" tabindex="0">
+                <div class="ran-btn-content">
+                  <slot></slot>
+                </div>
+              </div>
+            </template>
+          </r-button>
+        </div>
+      </section>
+    </main>
+  </body>
 </html>

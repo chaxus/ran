@@ -1,7 +1,7 @@
 import modalCss from './index.less?inline';
 import { RanElement, createCustomError, falseList } from '@/utils/index';
 import { Div, Slot, View } from '@/utils/builder';
-import { adoptStyles } from '@/utils/style';
+import { adoptSheetText, adoptStyles } from '@/utils/style';
 
 const FOCUSABLE_SELECTOR =
   'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -18,7 +18,7 @@ export class Modal extends RanElement {
   _previousActiveElement: Element | null;
 
   static get observedAttributes(): string[] {
-    return ['open', 'title', 'maskClosable'];
+    return ['open', 'title', 'maskClosable', 'sheet'];
   }
 
   constructor() {
@@ -102,6 +102,19 @@ export class Modal extends RanElement {
     }
   }
 
+  get sheet(): string {
+    return this.getAttribute('sheet') || '';
+  }
+
+  set sheet(value: string) {
+    this.setAttribute('sheet', value || '');
+  }
+
+  handlerExternalCss = (): void => {
+    if (!this.sheet) return;
+    adoptSheetText(this._shadowDom, this.sheet);
+  };
+
   syncTitle = (): void => {
     this._title.textContent = this.title || 'Modal';
   };
@@ -182,6 +195,7 @@ export class Modal extends RanElement {
   };
 
   connectedCallback(): void {
+    this.handlerExternalCss();
     this._mask.addEventListener('click', this.onMaskClick);
     this._closeBtn.addEventListener('click', this.onCloseButtonClick);
     document.addEventListener('keydown', this.onKeydown);
@@ -211,6 +225,10 @@ export class Modal extends RanElement {
       } else {
         this.closeDialog();
       }
+      return;
+    }
+    if (name === 'sheet') {
+      this.handlerExternalCss();
     }
   }
 }

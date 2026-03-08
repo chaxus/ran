@@ -1,7 +1,7 @@
 import { addClassToElement, removeClassToElement } from 'ranuts/utils';
 import { HTMLElementSSR, createCustomError, falseList } from '@/utils/index';
 import { Div, InputBuilder, Span } from '@/utils/builder';
-import { adoptStyles } from '@/utils/style';
+import { adoptSheetText, adoptStyles } from '@/utils/style';
 import checkboxCss from './index.less?inline';
 
 export interface Context {
@@ -15,7 +15,7 @@ export class Checkbox extends (HTMLElementSSR()!) {
   container: HTMLElement;
   _shadowDom: ShadowRoot;
   static get observedAttributes(): string[] {
-    return ['disabled', 'checked', 'value'];
+    return ['disabled', 'checked', 'value', 'sheet'];
   }
   constructor() {
     super();
@@ -26,10 +26,10 @@ export class Checkbox extends (HTMLElementSSR()!) {
     if (!wrap) {
       wrap = Div()
         .class('ran-checkbox')
-        .part('ran-checkbox')
+        .part('checkbox')
         .children(
-          InputBuilder().class('ran-checkbox-input').part('ran-checkbox-input').attr('type', 'checkbox'),
-          Span().class('ran-checkbox-inner').part('ran-checkbox-inner'),
+          InputBuilder().class('ran-checkbox-input').part('input').attr('type', 'checkbox'),
+          Span().class('ran-checkbox-inner').part('inner'),
         )
         .build();
       this._shadowDom.appendChild(wrap);
@@ -83,6 +83,16 @@ export class Checkbox extends (HTMLElementSSR()!) {
     }
     this.updateChecked();
   }
+  get sheet(): string {
+    return this.getAttribute('sheet') || '';
+  }
+  set sheet(value: string) {
+    this.setAttribute('sheet', value || '');
+  }
+  handlerExternalCss = (): void => {
+    if (!this.sheet) return;
+    adoptSheetText(this._shadowDom, this.sheet);
+  };
   updateChecked = (): void => {
     const { checked } = this.context;
     if (checked) {
@@ -113,6 +123,7 @@ export class Checkbox extends (HTMLElementSSR()!) {
     this.update();
   };
   connectedCallback(): void {
+    this.handlerExternalCss();
     this.addEventListener('click', this.onChange);
   }
   disconnectedCallback(): void {
@@ -127,6 +138,9 @@ export class Checkbox extends (HTMLElementSSR()!) {
       if (name === 'value') {
         this.checked = newValue;
         this.value = newValue;
+      }
+      if (name === 'sheet') {
+        this.handlerExternalCss();
       }
     }
   }

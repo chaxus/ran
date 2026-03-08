@@ -15,19 +15,21 @@ const card = Div()
   .class('card')
   .children(
     Span().text('Hello World'),
-    ButtonBuilder().label('Click Me').on('click', () => console.log('Clicked'))
+    ButtonBuilder()
+      .label('Click Me')
+      .on('click', () => console.log('Clicked')),
   )
   .build();
 ```
 
 ### Key Features
 
-*   **⚡ Fluent API**: Chain methods like `.class()`, `.attr()`, `.style()`, and `.children()`.
-*   **♿ Accessibility**: First-class support for ARIA via `.role()`, `.label()`, `.tabIndex()`, etc.
-*   **🎨 Dynamic Styles**: `.style()` supports both object maps and single properties (including CSS variables).
-*   **📌 Refs**: Capture element references using `createRef()`.
-*   **🪄 Shadow DOM**: Use `.shadow()` to attach and build shadow trees fluently.
-*   **🔒 SSR Safety**: Automatically uses `HTMLElementMock` in Node.js, allowing components to be instantiated and serialized without a browser.
+- **⚡ Fluent API**: Chain methods like `.class()`, `.attr()`, `.style()`, and `.children()`.
+- **♿ Accessibility**: First-class support for ARIA via `.role()`, `.label()`, `.tabIndex()`, etc.
+- **🎨 Dynamic Styles**: `.style()` supports both object maps and single properties (including CSS variables).
+- **📌 Refs**: Capture element references using `createRef()`.
+- **🪄 Shadow DOM**: Use `.shadow()` to attach and build shadow trees fluently.
+- **🔒 SSR Safety**: Automatically uses `HTMLElementMock` in Node.js, allowing components to be instantiated and serialized without a browser.
 
 ---
 
@@ -45,7 +47,7 @@ import { renderToString } from '@/utils/ssr';
 
 const btn = new Button();
 btn.setAttribute('effect', 'true');
-const html = renderToString(btn); 
+const html = renderToString(btn);
 // Output: <r-button effect="true"><template shadowrootmode="closed">...</template></r-button>
 ```
 
@@ -64,19 +66,19 @@ this._shadowDom = this.shadowRoot || this.attachShadow({ mode: 'closed' });
 
 ### `ElementBuilder<T>`
 
-| Method | Description |
-| :--- | :--- |
-| `id(value: string)` | Set the element ID. |
-| `class(value: string)` | Set the full class string. |
-| `addClass(...names: string[])` | Add classes incrementally. |
-| `attr(name: string, value: string)` | Set a generic HTML attribute. |
-| `style(map: object \| key, value)` | Set inline styles or CSS variables. |
-| `role(value: string)` | Set the WAI-ARIA role. |
-| `label(value: string)` | Set `aria-label`. |
-| `children(...items)` | Append builders, elements, or strings. |
-| `shadow(options)` | Attach a shadow root and return a `ShadowBuilder`. |
-| `serialize()` | Generate HTML string (used for SSR). |
-| `build()` | Returns the `HTMLElement` (or mock in SSR). |
+| Method                              | Description                                        |
+| :---------------------------------- | :------------------------------------------------- |
+| `id(value: string)`                 | Set the element ID.                                |
+| `class(value: string)`              | Set the full class string.                         |
+| `addClass(...names: string[])`      | Add classes incrementally.                         |
+| `attr(name: string, value: string)` | Set a generic HTML attribute.                      |
+| `style(map: object \| key, value)`  | Set inline styles or CSS variables.                |
+| `role(value: string)`               | Set the WAI-ARIA role.                             |
+| `label(value: string)`              | Set `aria-label`.                                  |
+| `children(...items)`                | Append builders, elements, or strings.             |
+| `shadow(options)`                   | Attach a shadow root and return a `ShadowBuilder`. |
+| `serialize()`                       | Generate HTML string (used for SSR).               |
+| `build()`                           | Returns the `HTMLElement` (or mock in SSR).        |
 
 ### `h(tag, props, ...children)`
 

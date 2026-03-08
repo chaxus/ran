@@ -1,6 +1,5 @@
 import { Div, Slot } from '@/utils/builder';
-import { HTMLElementSSR, createCustomError, isDisabled } from '@/utils/index';
-import { adoptStyles } from '@/utils/style';
+import { createCustomError, isDisabled } from '@/utils/index';
 
 function Custom() {
   if (typeof document !== 'undefined' && !customElements.get('r-option')) {

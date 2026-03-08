@@ -1,7 +1,7 @@
 import iconCss from './index.less?inline';
 import { RanElement, html } from '@/utils/index';
 import { View } from '@/utils/builder';
-import { adoptStyles } from '@/utils/style';
+import { adoptSheetText, adoptStyles } from '@/utils/style';
 
 type ImportMetaWithEnv = ImportMeta & { env?: { DEV?: boolean } };
 
@@ -64,7 +64,7 @@ export class Icon extends RanElement {
   private readonly isDev = isDev;
 
   static get observedAttributes(): string[] {
-    return ['name', 'size', 'color', 'spin', 'decorative', 'aria-label'];
+    return ['name', 'size', 'color', 'spin', 'decorative', 'aria-label', 'sheet'];
   }
   _icon?: SVGElement;
   _div!: HTMLElement;
@@ -138,6 +138,19 @@ export class Icon extends RanElement {
     }
     this.setAttribute('aria-label', value);
   }
+
+  get sheet(): string {
+    return this.getAttribute('sheet') || '';
+  }
+
+  set sheet(value: string) {
+    this.setAttribute('sheet', value || '');
+  }
+
+  handlerExternalCss = (): void => {
+    if (!this.sheet) return;
+    adoptSheetText(this._shadowDom, this.sheet);
+  };
 
   syncA11y = (): void => {
     if (!this._icon) return;
@@ -270,6 +283,7 @@ export class Icon extends RanElement {
 
   connectedCallback(): void {
     window.addEventListener('ranui-icon-registered', this._onIconRegistered as EventListener);
+    this.handlerExternalCss();
     this.setIcon();
   }
 
@@ -284,6 +298,7 @@ export class Icon extends RanElement {
       if (name === 'color') this.setColor();
       if (name === 'spin') this.setSpin();
       if (name === 'decorative' || name === 'aria-label') this.syncA11y();
+      if (name === 'sheet') this.handlerExternalCss();
     }
   }
 }

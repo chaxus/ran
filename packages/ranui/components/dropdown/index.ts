@@ -1,7 +1,7 @@
 import { addClassToElement, removeClassToElement } from 'ranuts/utils';
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
 import { Div, Slot, View } from '@/utils/builder';
-import { adoptStyles } from '@/utils/style';
+import { adoptSheetText, adoptStyles } from '@/utils/style';
 import dropdownCss from './index.less?inline';
 
 const animationTime = 300;
@@ -20,7 +20,7 @@ export class Dropdown extends (HTMLElementSSR()!) {
   arrowIcon?: HTMLElement;
   container: HTMLElement;
   static get observedAttributes(): string[] {
-    return ['transit', 'arrow'];
+    return ['transit', 'arrow', 'sheet'];
   }
   constructor() {
     super();
@@ -36,7 +36,7 @@ export class Dropdown extends (HTMLElementSSR()!) {
             .style('-webkit-tap-highlight-color', 'transparent')
             .style('outline', '0')
             .class('ranui-dropdown')
-            .part('ranui-dropdown')
+            .part('dropdown')
             .children(Slot().class('slot')),
         )
         .build() as HTMLElement;
@@ -77,6 +77,16 @@ export class Dropdown extends (HTMLElementSSR()!) {
       this.removeAttribute('show');
     }
   }
+  get sheet(): string {
+    return this.getAttribute('sheet') || '';
+  }
+  set sheet(value: string) {
+    this.setAttribute('sheet', value || '');
+  }
+  handlerExternalCss = (): void => {
+    if (!this.sheet) return;
+    adoptSheetText(this._shadowDom, this.sheet);
+  };
   handlerTransit = (): void => {
     if (this.transit && this.dropdown) {
       addClassToElement(this.dropdown, this.transit);
@@ -96,6 +106,7 @@ export class Dropdown extends (HTMLElementSSR()!) {
     e.stopPropagation();
   };
   connectedCallback(): void {
+    this.handlerExternalCss();
     this.handlerTransit();
     this.handlerArrow();
   }
@@ -111,6 +122,9 @@ export class Dropdown extends (HTMLElementSSR()!) {
     }
     if (name === 'arrow') {
       this.handlerArrow();
+    }
+    if (name === 'sheet') {
+      this.handlerExternalCss();
     }
   }
 }

@@ -166,8 +166,8 @@
   cursor: var(--ran-dropdown-cursor, auto);
   width: var(--ran-dropdown-width, 100%);
   height: var(--ran-dropdown-height, 100%);
-  min-height: var(--ran-popover-height, 100%);
-  min-width: var(--ran-popover-width, 100%);
+  min-height: var(--ran-dropdown-min-height, 100%);
+  min-width: var(--ran-dropdown-min-width, 100%);
   &-container {
     position: var(--ran-dropdown-container-position, relative);
     display: var(--ran-dropdown-container-display, block);
@@ -175,21 +175,39 @@
     height: var(--ran-dropdown-container-height, 100%);
     box-sizing: var(--ran-dropdown-container-box-sizing, border-box);
     .top {
-      transform: translateX(calc(var(--ran-popover-width) / 2 - calc(@arrow-size / 2))) translateY(-16px) rotate(0deg);
+      transform: translateX(
+          calc(var(--ran-dropdown-arrow-anchor-width, var(--ran-dropdown-min-width, 100%)) / 2 - calc(@arrow-size / 2))
+        )
+        translateY(-16px) rotate(0deg);
       top: 0px;
     }
     .bottom {
-      transform: translateX(calc(var(--ran-popover-width) / 2 - calc(@arrow-size / 2))) translateY(0px) rotate(180deg);
-      top: calc(var(--ran-popover-height) - calc(@arrow-size / 4), 0px);
+      transform: translateX(
+          calc(var(--ran-dropdown-arrow-anchor-width, var(--ran-dropdown-min-width, 100%)) / 2 - calc(@arrow-size / 2))
+        )
+        translateY(0px) rotate(180deg);
+      top: max(
+        0px,
+        calc(var(--ran-dropdown-arrow-anchor-height, var(--ran-dropdown-min-height, 100%)) - calc(@arrow-size / 4))
+      );
     }
     .left {
       transform: translateX(calc(0px - var(--ran-dropdown-arrow-width, 16px)))
         translateY(calc(var(--ran-dropdown-arrow-width, 16px) / 2)) rotate(270deg);
-      top: calc(max(0px, calc(var(--ran-popover-height) / 2 - calc(@arrow-size))));
+      top: max(
+        0px,
+        calc(var(--ran-dropdown-arrow-anchor-height, var(--ran-dropdown-min-height, 100%)) / 2 - @arrow-size)
+      );
     }
     .right {
       left: 100%;
-      transform: translateX(0) translateY(calc(var(--ran-popover-height) / 2 - calc(@arrow-size / 2))) rotate(90deg);
+      transform: translateX(0)
+        translateY(
+          calc(
+            var(--ran-dropdown-arrow-anchor-height, var(--ran-dropdown-min-height, 100%)) / 2 - calc(@arrow-size / 2)
+          )
+        )
+        rotate(90deg);
       top: 0px;
     }
   }

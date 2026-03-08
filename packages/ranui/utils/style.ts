@@ -15,6 +15,7 @@
 
 /** CSS 字符串 → CSSStyleSheet 对象缓存，同组件多实例只解析一次 */
 const sheetCache = new Map<string, CSSStyleSheet>();
+const dynamicSheetCache = new Map<string, CSSStyleSheet>();
 
 /**
  * 将 CSS 字符串注入到指定的 Shadow DOM。
@@ -49,6 +50,42 @@ export const adoptStyles = (shadowRoot: ShadowRoot, cssText: string): void => {
   if (!shadowRoot.querySelector('style[data-ranui]')) {
     const style = document.createElement('style');
     style.setAttribute('data-ranui', '');
+    style.textContent = cssText;
+    shadowRoot.appendChild(style);
+  }
+};
+
+/**
+ * 注入通过组件 `sheet` 属性传入的动态样式。
+ * 幂等策略：同一 shadowRoot 内相同 cssText 只注入一次。
+ */
+export const adoptSheetText = (shadowRoot: ShadowRoot, cssText: string): void => {
+  if (typeof document === 'undefined') return;
+  if (!cssText) return;
+
+  if (typeof CSSStyleSheet !== 'undefined') {
+    try {
+      if (!dynamicSheetCache.has(cssText)) {
+        const sheet = new CSSStyleSheet();
+        sheet.replaceSync(cssText);
+        dynamicSheetCache.set(cssText, sheet);
+      }
+      const sheet = dynamicSheetCache.get(cssText)!;
+      if (!shadowRoot.adoptedStyleSheets.includes(sheet)) {
+        shadowRoot.adoptedStyleSheets = [...shadowRoot.adoptedStyleSheets, sheet];
+      }
+      return;
+    } catch {
+      // ignore and fallback to style tag
+    }
+  }
+
+  const existed = Array.from(shadowRoot.querySelectorAll('style[data-ranui-sheet]')).some(
+    (item) => item.textContent === cssText,
+  );
+  if (!existed) {
+    const style = document.createElement('style');
+    style.setAttribute('data-ranui-sheet', '');
     style.textContent = cssText;
     shadowRoot.appendChild(style);
   }

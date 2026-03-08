@@ -1,25 +1,26 @@
 import failImage from '../../assets/image/failImage';
 import { Div } from '@/utils/builder';
-import { adoptStyles } from '@/utils/style';
+import { adoptSheetText, adoptStyles } from '@/utils/style';
 import imageCss from './index.less?inline';
 
 function Custom() {
   if (typeof window !== 'undefined' && !customElements.get('r-img')) {
     class CustomElement extends HTMLElement {
       static get observedAttributes() {
-        return ['fallback'];
+        return ['fallback', 'sheet'];
       }
       _image: HTMLImageElement | undefined;
       _container: Element;
+      _shadowDom: ShadowRoot;
       constructor() {
         super();
-        const shadowRoot = this.attachShadow({ mode: 'closed' });
-        adoptStyles(shadowRoot, imageCss);
+        this._shadowDom = this.shadowRoot || this.attachShadow({ mode: 'closed' });
+        adoptStyles(this._shadowDom, imageCss);
 
-        let container = shadowRoot.querySelector('.ran-image') as Element | null;
+        let container = this._shadowDom.querySelector('.ran-image') as Element | null;
         if (!container) {
           container = Div().class('ran-image').build() as Element;
-          shadowRoot.appendChild(container);
+          this._shadowDom.appendChild(container);
         }
         this._container = container;
       }
@@ -34,6 +35,19 @@ function Custom() {
         }
       }
 
+      get sheet() {
+        return this.getAttribute('sheet') || '';
+      }
+
+      set sheet(value) {
+        this.setAttribute('sheet', value || '');
+      }
+
+      handlerExternalCss = (): void => {
+        if (!this.sheet) return;
+        adoptSheetText(this._shadowDom, this.sheet);
+      };
+
       listenFallback(name: string, value: string) {
         if (name === 'fallback' && this._image) {
           if (value) {
@@ -45,6 +59,7 @@ function Custom() {
       }
 
       connectedCallback() {
+        this.handlerExternalCss();
         const src = this.getAttribute('src') || '';
         this._image = new Image();
         this._image.src = src;
@@ -61,6 +76,9 @@ function Custom() {
       }
       attributeChangedCallback(name: string, _: string, newValue: string) {
         this.listenFallback(name, newValue);
+        if (name === 'sheet') {
+          this.handlerExternalCss();
+        }
       }
     }
     customElements.define('r-img', CustomElement);

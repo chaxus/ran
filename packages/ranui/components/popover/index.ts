@@ -10,7 +10,7 @@ import { HTMLElementSSR, createCustomError } from '@/utils/index';
 import '@/components/popover/content';
 import '@/components/dropdown';
 import { Div, Slot, View } from '@/utils/builder';
-import { adoptStyles } from '@/utils/style';
+import { adoptSheetText, adoptStyles } from '@/utils/style';
 import popoverCss from './index.less?inline';
 
 // index.ts:29 Uncaught DOMException: Failed to construct 'CustomElement': The result must not have children
@@ -60,7 +60,7 @@ export class Popover extends (HTMLElementSSR()!) {
   dropDownOutTimeId?: NodeJS.Timeout;
   removeTimeId?: NodeJS.Timeout;
   static get observedAttributes(): string[] {
-    return ['placement', 'arrow', 'trigger'];
+    return ['placement', 'arrow', 'trigger', 'sheet'];
   }
   public readonly closePopover = (): void => {
     this.setDropdownDisplayNone();
@@ -103,6 +103,16 @@ export class Popover extends (HTMLElementSSR()!) {
   set getPopupContainerId(value: string) {
     this.setAttribute('getPopupContainerId', value);
   }
+  get sheet(): string {
+    return this.getAttribute('sheet') || '';
+  }
+  set sheet(value: string) {
+    this.setAttribute('sheet', value || '');
+  }
+  handlerExternalCss = (): void => {
+    if (!this.sheet) return;
+    adoptSheetText(this._shadowDom, this.sheet);
+  };
   stopPropagation = (e: Event): void => {
     e.stopPropagation();
   };
@@ -244,10 +254,10 @@ export class Popover extends (HTMLElementSSR()!) {
     this.popoverContent.style.setProperty('inset', `${popoverTop}px auto auto ${popoverLeft}px`);
     this.popoverContent.style.setProperty('--ran-x', `${popoverLeft}px`);
     this.popoverContent.style.setProperty('--ran-y', `${popoverTop}px`);
-    this.popoverContent.style.setProperty('--ran-popover-width', `${width}px`);
-    this.popoverContent.style.setProperty('--ran-popover-height', `${height}px`);
-    this.popoverContent.style.setProperty('--ran-popover-content-width', `${popoverContentRect.width}px`);
-    this.popoverContent.style.setProperty('--ran-popover-content-height', `${popoverContentRect.height}px`);
+    this.popoverContent.style.setProperty('--ran-dropdown-arrow-anchor-width', `${width}px`);
+    this.popoverContent.style.setProperty('--ran-dropdown-arrow-anchor-height', `${height}px`);
+    this.popoverContent.style.setProperty('--ran-dropdown-min-width', `${popoverContentRect.width}px`);
+    this.popoverContent.style.setProperty('--ran-dropdown-min-height', `${popoverContentRect.height}px`);
   };
   /**
    * @description: 鼠标移入
@@ -298,6 +308,7 @@ export class Popover extends (HTMLElementSSR()!) {
     }
   }, HOVER_TIME);
   connectedCallback(): void {
+    this.handlerExternalCss();
     for (const element of this.children) {
       if (element.tagName === 'R-CONTENT') {
         element.addEventListener('change', this.watchContent);
@@ -321,6 +332,9 @@ export class Popover extends (HTMLElementSSR()!) {
       }
       if (n === 'placement') {
         this.changePlacement();
+      }
+      if (n === 'sheet') {
+        this.handlerExternalCss();
       }
     }
   }

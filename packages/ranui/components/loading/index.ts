@@ -1,7 +1,7 @@
+import loadingCss from './index.less?inline';
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
 import { Div, Span, View } from '@/utils/builder';
-import { adoptStyles } from '@/utils/style';
-import loadingCss from './index.less?inline';
+import { adoptSheetText, adoptStyles } from '@/utils/style';
 
 export enum ICON_NAME_AMP {
   DOUBLE_BOUNCE = 'double-bounce',
@@ -37,18 +37,19 @@ export enum ICON_NAME_AMP {
 
 export class Loading extends (HTMLElementSSR()!) {
   contain: HTMLDivElement;
+  _shadowDom: ShadowRoot;
   static get observedAttributes(): string[] {
-    return ['name'];
+    return ['name', 'sheet'];
   }
   constructor() {
     super();
-    const shadowRoot = this.attachShadow({ mode: 'open' });
-    adoptStyles(shadowRoot, loadingCss);
+    this._shadowDom = this.shadowRoot || this.attachShadow({ mode: 'open' });
+    adoptStyles(this._shadowDom, loadingCss);
 
-    let contain = shadowRoot.querySelector('.ran-loading') as HTMLDivElement | null;
+    let contain = this._shadowDom.querySelector('.ran-loading') as HTMLDivElement | null;
     if (!contain) {
       contain = Div().class('ran-loading').build() as HTMLDivElement;
-      shadowRoot.appendChild(contain);
+      this._shadowDom.appendChild(contain);
     }
     this.contain = contain;
   }
@@ -60,6 +61,16 @@ export class Loading extends (HTMLElementSSR()!) {
   set name(value: string) {
     this.setAttribute('name', value || '');
   }
+  get sheet(): string {
+    return this.getAttribute('sheet') || '';
+  }
+  set sheet(value: string) {
+    this.setAttribute('sheet', value || '');
+  }
+  handlerExternalCss = (): void => {
+    if (!this.sheet) return;
+    adoptSheetText(this._shadowDom, this.sheet);
+  };
   rotateLoading = (): void => {
     const loading = Div().class(ICON_NAME_AMP.ROTATE).part(ICON_NAME_AMP.ROTATE).build();
     this.contain.appendChild(loading);
@@ -423,12 +434,16 @@ export class Loading extends (HTMLElementSSR()!) {
     handler && handler();
   };
   connectedCallback(): void {
+    this.handlerExternalCss();
     this.createLoading();
   }
   attributeChangedCallback(k: string, o: string, n: string): void {
     if (o !== n) {
       if (k === 'name') {
         this.createLoading();
+      }
+      if (k === 'sheet') {
+        this.handlerExternalCss();
       }
     }
   }

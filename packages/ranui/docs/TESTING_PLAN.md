@@ -19,17 +19,20 @@ Build a modern, fast, and reliable testing system for `ranui` with layered cover
 ## Test Layers and Scope
 
 1. Unit (`test/**/*.test.ts`)
+
 - Attribute/property reflection
 - Event payload and dispatch timing
 - Utility helpers and state transitions
 - Edge cases and guard clauses
 
 2. Integration (`tests/**/*.spec.ts`)
+
 - Real browser interaction chains
 - Shadow DOM visual behavior
 - Overlay stacking and positioning
 
 3. Optional non-blocking extensions
+
 - a11y checks for core components
 - visual snapshots for high-risk UI changes
 
@@ -133,10 +136,13 @@ Acceptance:
 ## Risk and Mitigation
 
 1. Risk: duplicate coverage between unit and browser tests.
+
 - Mitigation: mark each test file with layer intent and keep integration tests concise.
 
 2. Risk: helper extraction changes runtime behavior.
+
 - Mitigation: preserve existing public API and validate with both unit and browser tests.
 
 3. Risk: flaky async tests for message lifecycle.
+
 - Mitigation: unit test stable helper contracts first; keep timing-sensitive checks in Playwright only.

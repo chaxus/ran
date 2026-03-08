@@ -1,7 +1,7 @@
+import scratchCss from './index.less?inline';
 import { Div, View } from '@/utils/builder';
 import { HTMLElementSSR } from '@/utils/index';
 import { adoptStyles } from '@/utils/style';
-import scratchCss from './index.less?inline';
 
 class ScratchTicket extends (HTMLElementSSR()!) {
   scratchTicketContainer: HTMLDivElement;

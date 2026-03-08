@@ -1,6 +1,6 @@
 # ranui
 
-Experimental UI Component library based on `Web Component`
+基于 `Web Components` 的实验性组件库
 
 ---
 
@@ -10,69 +10,83 @@ Experimental UI Component library based on `Web Component`
 <a href="https://github.com/chaxus/ran"><img src="https://img.badgesize.io/https:/unpkg.com/ranui/dist/umd/shadowless/shadowless.umd.cjs?label=brotli&compression=brotli" alt="brotli"></a>
 <a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/badge/module%20formats-umd%2C%20esm-green.svg" alt="module formats: umd, esm"></a>
 
-**English** | [中文](./README.zh-CN.md)
+**中文** | [English](./readme.md)
 
-## ⚠️ Important Notice
+## ⚠️ 重要说明
 
-This is an **experimental UI library** in early development. While functional, it's primarily designed for learning and experimentation.
+这是一个**实验性 UI 库**，处于早期开发阶段。虽然功能可用，但主要用于学习和实验。
 
-**Key points:**
+**关键要点：**
 
-- 🚧 **Early Development**: Features are still being developed and refined
-- 🧪 **Experimental**: APIs may change frequently
-- 📚 **Learning Focus**: Primarily for learning Web Components and UI development
+- 🚧 **早期开发**: 功能仍在开发和完善中
+- 🧪 **实验性**: API 可能会频繁变化
+- 📚 **学习导向**: 主要用于学习 Web Components 和 UI 开发
 
-## Features
+## 特点
 
-1. **Cross-Framework Compatibility**: Works with React, Vue, Preact, SolidJS, Svelte, and more. Integrates with any JavaScript project following W3C standards.
-2. **Pure Native Experience**: No need for npm, React/Vue, or build tools. Easy to start, like using native div tags, simplifying structure and reducing learning costs.
-3. **Modular Design**: Breaks systems into small, reusable components for enhanced maintainability and scalability.
-4. **Open-Source**: Licensed under MIT, providing free access to all source code for personal or commercial use.
-5. **Interactive Documentation**: Offers detailed, interactive documentation with live examples for efficient learning.
-6. **Type-Checking**: Built on TypeScript with full type support, ensuring robust and maintainable code.
-7. **Framework Independent**: Works independently of React/Vue, avoiding disruptive updates, and ensuring continuous project operation.
+1. **跨框架兼容：** 与 React, Vue, Preact, SolidJS, Svelte 等兼容。可以和遵循 W3C 标准的任何 JavaScript 项目集成。
+2. **原生体验：** 易于入门，像使用本地 div 标签，简化项目大小和减少学习成本。
+3. **模块化设计：** 可选导入和全量导入，以增强可维护性和可伸缩性。
+4. **交互式丰富文档：** 提供详细的交互式文档，并附有有效的示例子。
+5. **支持类型校验：** 基于 TypeScript 构建，具有类型支持，确保代码的健壮性和可维护性。
+6. **框架无关：** 与框架 (React/vue) 无关，避免破坏性的更新，并确保持续的项目运行。
 
-## Install
+## 安装
 
-Using npm:
+使用 npm:
 
 ```console
-npm install ranui@latest --save
+npm install ranui --save
 ```
 
-## Document and Example
+## 文档和示例
 
-[See components and use examples](https://chaxus.github.io/ran/src/ranui/)
+[See components and use examples](https://chaxus.github.io/ran/cn/src/ranui/)
 
-## Import
+### 样式定制文档
 
-Support for on-demand import, which can reduce the size of loaded js
+当前样式系统已统一为 CSS Token 与 `::part()` 规范。
+
+- 样式覆盖规范：[docs/style-override.md](./docs/style-override.md)
+- 完整 Token/Part 清单（自动生成）: [docs/style-tokens-parts.md](./docs/style-tokens-parts.md)
+- 面向使用方的公开样式 API（自动生成）: [docs/style-tokens-public.md](./docs/style-tokens-public.md)
+- 公开 Token 过滤配置：[docs/style-token-filter.json](./docs/style-token-filter.json)
+
+可通过以下命令刷新样式文档：
+
+```bash
+pnpm doc:style
+```
+
+## 引入方式
+
+支持按需导入，以显著减少包体积大小
 
 ```js
 import 'ranui/button';
 ```
 
-If there is a `style` problem, you can import the style manually
+如果遇到样式问题，可以选择手动导入样式文件
 
 ```js
 import 'ranui/style';
 ```
 
-If there is a `type` problem, you can manually import the type
+如果遇到类型问题，可以选择手动导入类型文件
 
 ```ts
 import 'ranui/typings';
-// or
+// 或者
 import 'ranui/dist/index.d.ts';
-// or
+// 或者
 import 'ranui/type';
-// or
+// 或者
 import 'ranui/dist/typings';
 ```
 
-Not all of them. Just pick one that works
+并不是都要，选一个能生效的就行
 
-Support global import
+也支持全量导入
 
 ```ts
 import 'ranui';
@@ -84,7 +98,7 @@ import 'ranui';
 import 'ranui';
 ```
 
-Or
+或者
 
 ```js
 import 'ranui/button';
@@ -96,13 +110,13 @@ import 'ranui/button';
 <script src="./ranui/dist/umd/index.umd.cjs"></script>
 ```
 
-## Usage
+## 使用方式
 
-It is based on the `Web Component`, you can use it without focusing on the framework.
+它是基于`Web Components`的组件，你可以不用关注框架就可以使用它。
 
-In most cases, you can use it just like a native `div` tag
+在大多数情况下，您可以像使用本地 `div` 标签一样使用它
 
-Here are some examples:
+下面是一些例子：
 
 - html
 - js
@@ -169,9 +183,9 @@ const Button = () => {
 };
 ```
 
-### Message Position and Container
+### Message 位置与容器配置
 
-`window.message` now supports custom top offset, z-index, and mount container:
+`window.message` 现已支持自定义顶部偏移、层级和挂载容器：
 
 ```ts
 import 'ranui/message';
@@ -179,7 +193,7 @@ import 'ranui/message';
 const customRoot = document.getElementById('custom-message-root');
 
 window.message?.success({
-  content: 'Saved successfully',
+  content: '保存成功',
   duration: 2000,
   top: 24,
   zIndex: 3000,
@@ -187,44 +201,42 @@ window.message?.success({
 });
 ```
 
-`top` accepts `number | string` (`24` -> `24px`, `'2rem'` keeps original unit).
+`top` 支持 `number | string`（`24` 会转成 `24px`，`'2rem'` 会保留原单位）。
 
-`zIndex` accepts `number | string`.
+`zIndex` 支持 `number | string`。
 
-`getContainer` should return an `HTMLElement`; defaults to `document.body` when not provided.
+`getContainer` 需要返回 `HTMLElement`；未传时默认挂载到 `document.body`。
 
-### SSR & Builder (Recommended)
+### SSR & Builder (推荐)
 
-For scenarios requiring Server-Side Rendering (SSR) or a more declarative UI construction, we recommend using the `builder` utility:
+对于需要服务端渲染 (SSR) 或更声明式构建 UI 的场景，推荐使用 `builder` 工具：
 
 ```ts
 import { Div, ButtonBuilder } from 'ranui/utils';
 import { renderToString } from 'ranui/utils/ssr';
 
-// Declarative Building
-const btn = ButtonBuilder()
-  .class('my-btn')
-  .label('Submit')
-  .build();
+// 声明式构建
+const btn = ButtonBuilder().class('my-btn').label('Submit').build();
 
-// SSR Rendering (with Declarative Shadow DOM support)
-const html = renderToString(new Button()); 
+// SSR 渲染 (支持 Declarative Shadow DOM)
+const html = renderToString(new Button());
 ```
 
-For more details, see the [Utility Documentation](./utils/README.md).
+更多细节请查看 [Utility Documentation](./utils/README.md)。
 
-## Contributing
+## 贡献
 
-We welcome contributions from learners and developers! This is an experimental project, so please be patient with the development process.
+我们欢迎学习者和开发者的贡献！这是一个实验性项目，请对开发过程保持耐心。
 
-## Contributors
+## 贡献者
 
 <a href="https://github.com/chaxus/ran/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=chaxus/ran" />
 </a>
 
-## Visitors
+## Meta
 
+[LICENSE (MIT)](/LICENSE)
 ![](http://profile-counter.glitch.me/chaxus-ranui/count.svg)
 
 ## Meta

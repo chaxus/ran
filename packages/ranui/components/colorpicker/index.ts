@@ -6,7 +6,7 @@ import '@/components/popover';
 import '@/components/input';
 import '@/components/select';
 import '@/components/progress';
-import { adoptStyles } from '@/utils/style';
+import { adoptSheetText, adoptStyles } from '@/utils/style';
 import colorPickerCss from './index.less?inline';
 
 // RGBA：red、green、blue, 透明度
@@ -70,7 +70,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
   colorPickerPaletteSelect: boolean;
   colorPickerPanelDotInner?: HTMLElement;
   static get observedAttributes(): string[] {
-    return ['disabled', 'value'];
+    return ['disabled', 'value', 'sheet'];
   }
   constructor() {
     super();
@@ -108,6 +108,16 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     this.setAttribute('value', value);
     this.updateColorValue(value);
   }
+  get sheet(): string {
+    return this.getAttribute('sheet') || '';
+  }
+  set sheet(value: string) {
+    this.setAttribute('sheet', value || '');
+  }
+  handlerExternalCss = (): void => {
+    if (!this.sheet) return;
+    adoptSheetText(this._shadowDom, this.sheet);
+  };
   createContext = (): void => {
     this.context = {
       value: this.createColorValueSignal(),
@@ -456,6 +466,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     this.colorPickerPaletteSelect = false;
   };
   connectedCallback(): void {
+    this.handlerExternalCss();
     this.setAttribute('class', 'ran-colorpicker');
     this.popoverBlock.addEventListener('click', this.openColorPicker);
   }
@@ -470,6 +481,9 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     if (o !== v) {
       if (n === 'value') {
         this.updateColorValue(v);
+      }
+      if (n === 'sheet') {
+        this.handlerExternalCss();
       }
     }
   }

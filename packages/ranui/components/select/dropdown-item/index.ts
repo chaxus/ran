@@ -1,8 +1,8 @@
-import { Div, Slot } from '@/utils/builder';
-import { adoptStyles } from '@/utils/style';
-import { HTMLElementSSR, createCustomError, isDisabled } from '@/utils/index';
 import { addClassToElement, removeClassToElement } from 'ranuts/utils';
 import less from './index.less?inline';
+import { Div, Slot } from '@/utils/builder';
+import { adoptSheetText, adoptStyles } from '@/utils/style';
+import { HTMLElementSSR, createCustomError, isDisabled } from '@/utils/index';
 
 export class DropdownItem extends (HTMLElementSSR()!) {
   ionDropdownItem: HTMLElement;
@@ -10,7 +10,7 @@ export class DropdownItem extends (HTMLElementSSR()!) {
   _shadowDom: ShadowRoot;
   ionDropdownItemContent: HTMLElement;
   static get observedAttributes(): string[] {
-    return ['active', 'value', 'title'];
+    return ['active', 'value', 'title', 'sheet'];
   }
   constructor() {
     super();
@@ -27,12 +27,12 @@ export class DropdownItem extends (HTMLElementSSR()!) {
       slot = Slot().class('slot').build() as HTMLSlotElement;
       ionDropdownItemContent = Div()
         .class('ranui-dropdown-option-item-content')
-        .part('ranui-dropdown-option-item-content')
+        .part('content')
         .children(slot)
         .build() as HTMLDivElement;
       ionDropdownItem = Div()
         .class('ranui-dropdown-option-item')
-        .part('ranui-dropdown-option-item')
+        .part('item')
         .children(ionDropdownItemContent)
         .build() as HTMLDivElement;
       this._shadowDom.appendChild(ionDropdownItem);
@@ -72,12 +72,27 @@ export class DropdownItem extends (HTMLElementSSR()!) {
       this.removeAttribute('title');
     }
   }
+  get sheet(): string {
+    return this.getAttribute('sheet') || '';
+  }
+  set sheet(value: string) {
+    this.setAttribute('sheet', value || '');
+  }
+  handlerExternalCss = (): void => {
+    if (!this.sheet) return;
+    adoptSheetText(this._shadowDom, this.sheet);
+  };
   connectedCallback(): void {
+    this.handlerExternalCss();
     if (this.active) {
       addClassToElement(this.ionDropdownItem, 'ranui-dropdown-option-active');
     }
   }
   attributeChangedCallback(name: string, _: string, newValue: string): void {
+    if (name === 'sheet') {
+      this.handlerExternalCss();
+      return;
+    }
     if (name === 'active' && newValue) {
       addClassToElement(this.ionDropdownItem, 'ranui-dropdown-option-active');
     } else {
