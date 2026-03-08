@@ -76,7 +76,6 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     super();
     this._shadowDom = this.shadowRoot || this.attachShadow({ mode: 'closed' });
     adoptStyles(this._shadowDom, colorPickerCss);
-    this.setAttribute('class', 'ran-colorpicker');
 
     let popoverBlock = this._shadowDom.querySelector('r-popover') as HTMLElement | null;
     let popoverContent = this._shadowDom.querySelector('r-content') as HTMLElement | null;
@@ -457,6 +456,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     this.colorPickerPaletteSelect = false;
   };
   connectedCallback(): void {
+    this.setAttribute('class', 'ran-colorpicker');
     this.popoverBlock.addEventListener('click', this.openColorPicker);
   }
   disconnectedCallback(): void {

@@ -25,7 +25,8 @@ describe('r-popover contract', () => {
 
   it('toggles visibility on hover trigger', async () => {
     const sleep = (ms = 50) => new Promise((r) => setTimeout(r, ms));
-    const popover = document.createElement('r-popover') as unknown as Popover;
+    const popover = document.createElement('r-popover') as any;
+    popover.trigger = 'hover';
     popover.innerHTML = `
       <div id="trigger">Hover me</div>
       <r-content>Popover content</r-content>
@@ -33,22 +34,21 @@ describe('r-popover contract', () => {
     document.body.appendChild(popover);
     await sleep(100);
 
-    // @ts-ignore - access private field for testing
-    const popoverBlock = popover.popoverBlock as HTMLElement;
-    // The classes used are from placementDirection map in index.ts
-    // For default placement 'bottom', it uses 'ran-dropdown-down-in'
+    const popoverContent = popover.popoverContent as HTMLElement;
+    expect(popoverContent).not.toBeUndefined();
 
-    // Initial state: not visible
-    expect(popoverBlock.classList.contains('ran-dropdown-down-in')).toBe(false);
+    // Initial state: hidden
+    expect(popoverContent.style.display).toBe('none');
 
     // Simulate mouseenter
     popover.dispatchEvent(new MouseEvent('mouseenter'));
     await sleep(100);
-    expect(popoverBlock.classList.contains('ran-dropdown-down-in')).toBe(true);
+    expect(popoverContent.style.display).toBe('block');
+    expect(popoverContent.getAttribute('transit')).toBe('ran-dropdown-up-in');
 
     // Simulate mouseleave
     popover.dispatchEvent(new MouseEvent('mouseleave'));
-    await sleep(500); // Wait for animation (300ms)
-    expect(popoverBlock.classList.contains('ran-dropdown-down-in')).toBe(false);
+    await sleep(800); // 16 + 300 + 16 + 300 = 632ms
+    expect(popoverContent.style.display).toBe('none');
   });
 });
