@@ -1,5 +1,5 @@
-import { addClassToElement, createDocumentFragment } from 'ranuts/utils';
-import { isDisabled, removeClassToElementChild } from '../../utils/index';
+import { isDisabled } from '../../utils/index';
+import { Div, Slot, View } from '@/utils/builder';
 import { adoptStyles } from '@/utils/style';
 import tabCss from './index.less?inline';
 
@@ -16,44 +16,36 @@ function CustomElement() {
       _content: HTMLDivElement;
       _wrap: HTMLDivElement;
       _slot: HTMLSlotElement;
+      _shadowDom: ShadowRoot;
       tabHeaderKeyMapIndex: Record<string, number>;
       constructor() {
         super();
-        /**
-         * <div class="tab">
-         *   <div class="tab-header">
-         *      <div class="tab-header_nav">...</div>
-         *      <div class="tab-header_line"></div>
-         *   </div>
-         *   <div class="tab-content">
-         *      <div class="tab-content_wrap">
-         *         <slot></slot>
-         *      </div>
-         *   </div>
-         * </div>
-         */
-        this._container = document.createElement('div');
-        this._container.setAttribute('class', 'ran-tab');
-        this._header = document.createElement('div');
-        this._header.setAttribute('class', 'ran-tab-header');
-        this._nav = document.createElement('div');
-        this._nav.setAttribute('class', 'ran-tab-header-nav');
-        this._line = document.createElement('div');
-        this._line.setAttribute('class', 'ran-tab-header-line');
-        this._content = document.createElement('div');
-        this._content.setAttribute('class', 'ran-tab-content');
-        this._wrap = document.createElement('div');
-        this._wrap.setAttribute('class', 'ran-tab-content-wrap');
-        this._slot = document.createElement('slot');
-        this._wrap.appendChild(this._slot);
-        this._content.appendChild(this._wrap);
-        this._header.appendChild(createDocumentFragment([this._nav, this._line])!);
-        this._container.appendChild(createDocumentFragment([this._header, this._content])!);
+        const shadowRoot = this.attachShadow({ mode: 'closed' });
+        this._shadowDom = shadowRoot;
+        adoptStyles(shadowRoot, tabCss);
         this.tabHeaderKeyMapIndex = {};
 
-        const shadowRoot = this.attachShadow({ mode: 'closed' });
-        adoptStyles(shadowRoot, tabCss);
-        shadowRoot.appendChild(this._container);
+        let wrap = shadowRoot.querySelector('.ran-tab') as HTMLDivElement;
+        if (!wrap) {
+          wrap = Div()
+            .class('ran-tab')
+            .children(
+              Div()
+                .class('ran-tab-header')
+                .children(Div().class('ran-tab-header-nav'), Div().class('ran-tab-header-line')),
+              Div().class('ran-tab-content').children(Div().class('ran-tab-content-wrap').children(Slot())),
+            )
+            .build() as HTMLDivElement;
+          shadowRoot.appendChild(wrap);
+        }
+
+        this._container = wrap;
+        this._header = wrap.querySelector('.ran-tab-header') as HTMLDivElement;
+        this._nav = wrap.querySelector('.ran-tab-header-nav') as HTMLDivElement;
+        this._line = wrap.querySelector('.ran-tab-header-line') as HTMLDivElement;
+        this._content = wrap.querySelector('.ran-tab-content') as HTMLDivElement;
+        this._wrap = wrap.querySelector('.ran-tab-content-wrap') as HTMLDivElement;
+        this._slot = wrap.querySelector('slot') as HTMLSlotElement;
       }
 
       get align() {
@@ -110,12 +102,6 @@ function CustomElement() {
           this.tabHeaderKeyMapIndex[key] = index;
         }
       };
-      /**
-       * @description: 根据传入的 tabPane 生成 tabs 的头部
-       * @param {Element} tabPane
-       * @param {number} index
-       * @return {Element}
-       */
       createTabHeader(tabPane: Element, index: number) {
         const label = tabPane.getAttribute('label') || '';
         const icon = tabPane.getAttribute('icon') || '';
@@ -123,20 +109,19 @@ function CustomElement() {
         const key = tabPane.getAttribute('r-key') || `${index}`;
         const type = tabPane.getAttribute('type') || 'text';
         this.initTabHeaderKeyMapIndex(key, index);
-        const tabHeader = document.createElement('r-button');
-        tabHeader.setAttribute('class', 'tab-header-nav-item');
-        tabHeader.setAttribute('type', type);
-        icon && tabHeader.setAttribute('icon', icon);
-        iconSize && tabHeader.setAttribute('iconSize', iconSize);
-        isDisabled(tabPane) && tabHeader.setAttribute('disabled', '');
-        tabHeader.setAttribute('r-key', key);
+
+        const builder = View('r-button').class('tab-header-nav-item').attr('type', type).attr('r-key', key).text(label);
+
+        if (icon) builder.attr('icon', icon);
+        if (iconSize) builder.attr('iconSize', iconSize);
+        if (isDisabled(tabPane)) builder.attr('disabled', '');
+
         if (this.effect) {
           tabPane.setAttribute('effect', this.effect);
           this._line.style.setProperty('display', 'none');
         }
         tabPane.setAttribute('r-key', key);
-        tabHeader.innerHTML = label;
-        return tabHeader;
+        return builder.build();
       }
       /**
        * @description: 初始化 tabLine 的位置，主要是当 tabs 的 align 属性为 center 时需要处理
@@ -193,12 +178,6 @@ function CustomElement() {
           this._wrap.style.setProperty('transform', `translateX(${index * -100}%)`);
         }
       };
-      /**
-       * @description: 根据点击设置 tabLine 的位置
-       * @param {Event} e
-       * @param {number} index
-       * @param {number} width
-       */
       clickTabHead = (e: Event) => {
         const tabHeader = e.target as Element;
         // 移动元素到可视区域内
@@ -210,8 +189,9 @@ function CustomElement() {
           this.setAttribute('active', key);
           this.setTabLine(key);
           this.setTabContent(key);
-          removeClassToElementChild(this._nav, 'active');
-          addClassToElement(tabHeader, 'active');
+          const navItems = this._nav.querySelectorAll('.active');
+          navItems.forEach((item) => item.classList.remove('active'));
+          tabHeader.classList.add('active');
         }
       };
       /**
@@ -227,9 +207,6 @@ function CustomElement() {
           this._nav.children[index]?.removeAttribute(attribute);
         }
       };
-      /**
-       * @description: 初始化 tabs 的 active 属性和 tabLine,tabContent
-       */
       initActive = () => {
         const tabHeaderList = [...this._nav.children];
         const initTabList = tabHeaderList.filter((item) => !isDisabled(item));
@@ -249,7 +226,7 @@ function CustomElement() {
         const key = initTabHeader?.getAttribute('r-key') || `${index}`;
         if (key != null) {
           this.setAttribute('active', `${key}`);
-          addClassToElement(initTabHeader, 'active');
+          initTabHeader.classList.add('active');
           this.setTabContent(key);
           setTimeout(() => {
             // icon 渲染过慢的问题
