@@ -3,7 +3,14 @@ import '../../assets/js/hls.js';
 import type { Progress } from '@/components/progress';
 import '@/components/select';
 import { PLAY_STATE_LIST, SPEED } from './core/constants';
+import {
+  bindControllerEvents,
+  type PlayerControllerElements,
+  type PlayerControllerHandlers,
+  unbindControllerEvents,
+} from './core/controller';
 import { createPlaybackSnapshot, resolveSeekDuration, shouldResumePlayback, type PlaybackSnapshot } from './core/playback';
+import { bindMediaEvents, loadVideoSource, unbindMediaEvents, type PlayerMediaHandlers } from './core/media';
 import { getBufferedPercentage, normalizeProgress } from './core/progress';
 import { Div, Slot, View } from '@/utils/builder';
 import { HTMLElementSSR } from '@/utils/index';
@@ -550,21 +557,13 @@ export class RanPlayer extends (HTMLElementSSR()!) {
       .build() as HTMLVideoElement;
     this._video.controls = false;
     try {
-      if (Hls?.isSupported() && this.src) {
-        // 优先使用 HLS.js —— 支持清晰度切换、事件回调
-        this._hls = new Hls();
-        if (this._hls) {
-          this._hls.off(Hls.Events.MANIFEST_LOADED, this.manifestLoaded);
-          this._hls.on(Hls.Events.MANIFEST_LOADED, this.manifestLoaded);
-          this._hls.off(Hls.Events.ERROR, this.hlsError);
-          this._hls.on(Hls.Events.ERROR, this.hlsError);
-          this._hls.loadSource(this.src);
-          this._hls.attachMedia(this._video);
-        }
-      } else if (this._video.canPlayType('application/vnd.apple.mpegurl') && this.src) {
-        // 降级：原生 HLS（Safari / 不支持 HLS.js 的环境），无清晰度切换
-        this._video.src = this.src;
-      }
+      this._hls = loadVideoSource<HlsPlayer>({
+        video: this._video,
+        src: this.src,
+        Hls,
+        onManifestLoaded: this.manifestLoaded,
+        onHlsError: this.hlsError,
+      });
       if (!this._container.contains(this._video)) {
         this._container.appendChild(this._video);
       }
@@ -730,30 +729,35 @@ export class RanPlayer extends (HTMLElementSSR()!) {
       this.controllerBarTimeId = undefined;
     }
   };
+  getMediaHandlers = (): PlayerMediaHandlers => {
+    return {
+      onCanplay: this.onCanplay,
+      onCanplaythrough: this.onCanplaythrough,
+      onComplete: this.onComplete,
+      onDurationchange: this.onDurationchange,
+      onEmptied: this.onEmptied,
+      onEnded: this.onEnded,
+      onError: this.onError,
+      onLoadeddata: this.onLoadeddata,
+      onLoadedmetadata: this.onLoadedmetadata,
+      onLoadstart: this.onLoadstart,
+      onPause: this.onPause,
+      onPlay: this.onPlay,
+      onPlaying: this.onPlaying,
+      onProgress: this.onProgress,
+      onRatechange: this.onRatechange,
+      onSeeked: this.onSeeked,
+      onSeeking: this.onSeeking,
+      onStalled: this.onStalled,
+      onSuspend: this.onSuspend,
+      onTimeupdate: this.onTimeupdate,
+      onVolumechange: this.onVolumechange,
+      onWaiting: this.onWaiting,
+    };
+  };
   clearListenerEvent = (): void => {
     if (!this._video) return;
-    this._video.removeEventListener('canplay', this.onCanplay);
-    this._video.removeEventListener('canplaythrough', this.onCanplaythrough);
-    this._video.removeEventListener('complete', this.onComplete);
-    this._video.removeEventListener('durationchange', this.onDurationchange);
-    this._video.removeEventListener('emptied', this.onEmptied);
-    this._video.removeEventListener('ended', this.onEnded);
-    this._video.removeEventListener('error', this.onError);
-    this._video.removeEventListener('loadeddata', this.onLoadeddata);
-    this._video.removeEventListener('loadedmetadata', this.onLoadedmetadata);
-    this._video.removeEventListener('loadstart', this.onLoadstart);
-    this._video.removeEventListener('pause', this.onPause);
-    this._video.removeEventListener('play', this.onPlay);
-    this._video.removeEventListener('playing', this.onPlaying);
-    this._video.removeEventListener('progress', this.onProgress);
-    this._video.removeEventListener('ratechange', this.onRatechange);
-    this._video.removeEventListener('seeked', this.onSeeked);
-    this._video.removeEventListener('seeking', this.onSeeking);
-    this._video.removeEventListener('stalled', this.onStalled);
-    this._video.removeEventListener('suspend', this.onSuspend);
-    this._video.removeEventListener('timeupdate', this.onTimeupdate);
-    this._video.removeEventListener('volumechange', this.onVolumechange);
-    this._video.removeEventListener('waiting', this.onWaiting);
+    unbindMediaEvents(this._video, this.getMediaHandlers());
   };
   /**
    * @description: 用户行为和 video 之间的交互
@@ -762,28 +766,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   listenEvent = (): void => {
     if (!this._video) return;
     this.clearListenerEvent();
-    this._video.addEventListener('canplay', this.onCanplay);
-    this._video.addEventListener('canplaythrough', this.onCanplaythrough);
-    this._video.addEventListener('complete', this.onComplete);
-    this._video.addEventListener('durationchange', this.onDurationchange);
-    this._video.addEventListener('emptied', this.onEmptied);
-    this._video.addEventListener('ended', this.onEnded);
-    this._video.addEventListener('error', this.onError);
-    this._video.addEventListener('loadeddata', this.onLoadeddata);
-    this._video.addEventListener('loadedmetadata', this.onLoadedmetadata);
-    this._video.addEventListener('loadstart', this.onLoadstart);
-    this._video.addEventListener('pause', this.onPause);
-    this._video.addEventListener('play', this.onPlay);
-    this._video.addEventListener('playing', this.onPlaying);
-    this._video.addEventListener('progress', this.onProgress);
-    this._video.addEventListener('ratechange', this.onRatechange);
-    this._video.addEventListener('seeked', this.onSeeked);
-    this._video.addEventListener('seeking', this.onSeeking);
-    this._video.addEventListener('stalled', this.onStalled);
-    this._video.addEventListener('suspend', this.onSuspend);
-    this._video.addEventListener('timeupdate', this.onTimeupdate);
-    this._video.addEventListener('volumechange', this.onVolumechange);
-    this._video.addEventListener('waiting', this.onWaiting);
+    bindMediaEvents(this._video, this.getMediaHandlers());
   };
   showControllerBar = (e?: MouseEvent): void => {
     if (e) {
@@ -1207,50 +1190,54 @@ export class RanPlayer extends (HTMLElementSSR()!) {
       this._video.pause();
     }
   };
+  getControllerElements = (): PlayerControllerElements => {
+    return {
+      host: this,
+      container: this._container,
+      player: this._player,
+      playerBtn: this._playerBtn,
+      progress: this._progress,
+      progressDot: this._progressDot,
+      playBtn: this._playerControllerBottomPlayBtn,
+      volumeProgress: this._playControllerBottomVolumeProgress,
+      fullScreenBtn: this._playControllerBottomRightFullScreen,
+      volumeIcon: this._playControllerBottomSpeedIcon,
+    };
+  };
+  getControllerHandlers = (): PlayerControllerHandlers => {
+    return {
+      onContainerClick: this.dispatchClickPlayerContainerAction,
+      onPlayerBtnClick: this.dispatchClickPlayerBtnAction,
+      onKeydown: this.SpaceKeyDown,
+      onProgressDotMouseDown: this.progressDotMouseDown,
+      onPlayBtnClick: this.dispatchClickPlayerBtnAction,
+      onProgressClick: this.progressClick,
+      onProgressMouseEnter: this.progressMouseEnter,
+      onProgressMouseMove: this.progressMouseMove,
+      onProgressMouseLeave: this.progressMouseLeave,
+      onPlayerMouseMove: this.progressDotMouseMove,
+      onDocumentMouseMove: this.progressDotMouseMoveDocument,
+      onDocumentMouseUp: this.progressDotMouseUp,
+      onVolumeChange: this.changeVolumeProgress,
+      onFullScreenClick: this.openFullScreen,
+      onVolumeIconClick: this.changePlayerVolume,
+      onFullscreenChange: this.fullScreenChange,
+      onResize: this.resize,
+    };
+  };
   connectedCallback(): void {
     this.handlerExternalCss();
-    this._container.addEventListener('click', this.dispatchClickPlayerContainerAction);
-    this._playerBtn.addEventListener('click', this.dispatchClickPlayerBtnAction);
-    this.addEventListener('keydown', this.SpaceKeyDown);
-    this._progressDot.addEventListener('mousedown', this.progressDotMouseDown);
-    this._playerControllerBottomPlayBtn.addEventListener('click', this.dispatchClickPlayerBtnAction);
-    this._progress.addEventListener('click', this.progressClick);
-    this._progress.addEventListener('mouseenter', this.progressMouseEnter);
-    this._progress.addEventListener('mousemove', this.progressMouseMove);
-    this._progress.addEventListener('mouseleave', this.progressMouseLeave);
-    this._player.addEventListener('mousemove', this.progressDotMouseMove);
-    document.addEventListener('mousemove', this.progressDotMouseMoveDocument);
-    document.addEventListener('mouseup', this.progressDotMouseUp);
-    this._playControllerBottomVolumeProgress.addEventListener('change', this.changeVolumeProgress);
-    this._playControllerBottomRightFullScreen.addEventListener('click', this.openFullScreen);
-    this._playControllerBottomSpeedIcon.addEventListener('click', this.changePlayerVolume);
-    document.addEventListener('fullscreenchange', this.fullScreenChange);
-    window.addEventListener('resize', this.resize);
+    bindControllerEvents(this.getControllerElements(), this.getControllerHandlers());
     this.updatePlayer();
   }
   disconnectedCallback(): void {
-    this._container.removeEventListener('click', this.dispatchClickPlayerContainerAction);
-    this._playerBtn.removeEventListener('click', this.dispatchClickPlayerBtnAction);
-    this._playerControllerBottomPlayBtn.removeEventListener('click', this.dispatchClickPlayerBtnAction);
+    unbindControllerEvents(this.getControllerElements(), this.getControllerHandlers());
     this.cancelAnimationFrame();
-    this.removeEventListener('keydown', this.SpaceKeyDown);
-    this._progress.removeEventListener('click', this.progressClick);
-    this._progress.removeEventListener('mouseenter', this.progressMouseEnter);
-    this._progress.removeEventListener('mousemove', this.progressMouseMove);
-    this._progress.removeEventListener('mouseleave', this.progressMouseLeave);
-    this._progressDot.removeEventListener('mousedown', this.progressDotMouseDown);
-    this._player.removeEventListener('mousemove', this.progressDotMouseMove);
-    document.removeEventListener('mousemove', this.progressDotMouseMoveDocument);
-    document.removeEventListener('mouseup', this.progressDotMouseUp);
     this.moveProgress.mouseDown = false;
     this._isSeeking = false;
     this._wasPlayingBeforeSeek = false;
     this._pendingPlaybackRestore = undefined;
     this.setLoadingState(false);
-    this._playControllerBottomVolumeProgress.removeEventListener('change', this.changeVolumeProgress);
-    this._playControllerBottomRightFullScreen.removeEventListener('click', this.openFullScreen);
-    window.removeEventListener('resize', this.resize);
-    document.removeEventListener('fullscreenchange', this.fullScreenChange);
   }
   attributeChangedCallback(k: string, o: string, n: string): void {
     if (k === 'src' && o !== n) {
