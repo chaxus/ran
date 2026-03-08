@@ -1,6 +1,40 @@
 // ─── SSR Guard & Mocks ────────────────────────────────────────────────────────
 const isSSR = typeof document === 'undefined';
 
+type MockNode = HTMLElementMock | DocumentFragmentMock | string;
+
+const matchSelector = (node: HTMLElementMock, selector: string): boolean => {
+  const trimmed = selector.trim();
+  if (!trimmed) return false;
+
+  if (trimmed.startsWith('.')) {
+    return node.classList.contains(trimmed.slice(1));
+  }
+  if (trimmed.startsWith('#')) {
+    return node.getAttribute('id') === trimmed.slice(1);
+  }
+  if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+    const content = trimmed.slice(1, -1).trim();
+    const [rawKey, rawValue] = content.split('=');
+    const key = (rawKey || '').trim();
+    if (!key) return false;
+    if (rawValue == null) return node.hasAttribute(key);
+    const value = rawValue.trim().replace(/^['\"]|['\"]$/g, '');
+    return node.getAttribute(key) === value;
+  }
+  return node.tagName === trimmed.toLowerCase();
+};
+
+const collectMatches = (nodes: MockNode[], selector: string, result: HTMLElementMock[]): void => {
+  for (const child of nodes) {
+    if (!(child instanceof HTMLElementMock)) continue;
+    if (matchSelector(child, selector)) {
+      result.push(child);
+    }
+    collectMatches(child.childrenList as MockNode[], selector, result);
+  }
+};
+
 /**
  * A minimal mock of DocumentFragment for SSR environments.
  */
@@ -16,11 +50,14 @@ export class DocumentFragmentMock {
       .join('');
   }
   // For compatibility with polyfills or manual queries
-  querySelector(): null {
-    return null;
+  querySelector(selector: string): HTMLElementMock | null {
+    const list = this.querySelectorAll(selector);
+    return list.length > 0 ? list[0] : null;
   }
-  querySelectorAll(): any[] {
-    return [] as any;
+  querySelectorAll(selector: string): HTMLElementMock[] {
+    const result: HTMLElementMock[] = [];
+    collectMatches(this.childrenList as MockNode[], selector, result);
+    return result;
   }
 }
 
@@ -35,6 +72,7 @@ export class HTMLElementMock {
   public shadowRoot: ShadowRootMock | null = null;
   public textContent: string | null = null;
   public content?: DocumentFragmentMock; // For <template>
+  private eventListeners: Map<string, Set<EventListenerOrEventListenerObject>> = new Map();
 
   public style = {
     setProperty: (k: string, v: string): void => {
@@ -106,33 +144,39 @@ export class HTMLElementMock {
   }
 
   querySelector(selector: string): HTMLElementMock | null {
-    // Basic support for querySelector in constructor for rehydration properties
-    if (selector.startsWith('.') || selector.startsWith('#')) {
-      // Deep search (simplified)
-      const find = (nodes: any[]): any => {
-        for (const node of nodes) {
-          if (node instanceof HTMLElementMock) {
-            if (selector.startsWith('.') && node.classList.contains(selector.slice(1))) return node;
-            if (selector.startsWith('#') && node.getAttribute('id') === selector.slice(1)) return node;
-            const found = find(node.childrenList);
-            if (found) return found;
-          }
-        }
-        return null;
-      };
-      return find(this.childrenList);
-    }
-    return null;
+    const result = this.querySelectorAll(selector);
+    return result.length > 0 ? result[0] : null;
   }
 
-  querySelectorAll(): any[] {
-    return [] as any;
+  querySelectorAll(selector: string): HTMLElementMock[] {
+    const result: HTMLElementMock[] = [];
+    collectMatches(this.childrenList as MockNode[], selector, result);
+    return result;
   }
-  addEventListener(): void {
-    return;
+  addEventListener(type: string, listener: EventListenerOrEventListenerObject): void {
+    const bucket = this.eventListeners.get(type) || new Set<EventListenerOrEventListenerObject>();
+    bucket.add(listener);
+    this.eventListeners.set(type, bucket);
   }
-  removeEventListener(): void {
-    return;
+  removeEventListener(type: string, listener: EventListenerOrEventListenerObject): void {
+    const bucket = this.eventListeners.get(type);
+    if (!bucket) return;
+    bucket.delete(listener);
+    if (bucket.size === 0) {
+      this.eventListeners.delete(type);
+    }
+  }
+  dispatchEvent(event: Event): boolean {
+    const listeners = this.eventListeners.get(event.type);
+    if (!listeners || listeners.size === 0) return true;
+    for (const listener of listeners) {
+      if (typeof listener === 'function') {
+        listener.call(this, event);
+      } else {
+        listener.handleEvent(event);
+      }
+    }
+    return !event.defaultPrevented;
   }
 
   serialize(tagNameOverride?: string): string {
@@ -206,6 +250,10 @@ class ShadowRootMock {
 
   querySelector(selector: string): HTMLElementMock | null {
     return this.host.querySelector(selector);
+  }
+
+  querySelectorAll(selector: string): HTMLElementMock[] {
+    return this.host.querySelectorAll(selector);
   }
 
   serialize(): string {
@@ -438,7 +486,7 @@ export class ShadowBuilder<T extends HTMLElement = HTMLElement> {
 
   serialize(): string {
     if (isSSR) return (this.root as unknown as ShadowRootMock).serialize();
-    return '';
+    return (this.root as ShadowRoot).innerHTML;
   }
 }
 
