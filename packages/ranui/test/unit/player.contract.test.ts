@@ -97,4 +97,58 @@ describe('r-player contract', () => {
 
     (window as any).Hls = originalHls;
   });
+
+  it('forces loading state while source is switching', () => {
+    const player = document.createElement('r-player') as any;
+    document.body.appendChild(player);
+
+    player._isSwitchingSource = true;
+    const setLoadingStateSpy = vi.spyOn(player, 'setLoadingState');
+
+    player.onWaiting(new Event('waiting'));
+
+    expect(setLoadingStateSpy).toHaveBeenCalledWith(true);
+  });
+
+  it('keeps snapshot progress/time on loadeddata during source switch', () => {
+    const player = document.createElement('r-player') as any;
+    document.body.appendChild(player);
+
+    player._isSwitchingSource = true;
+    player._pendingPlaybackRestore = {
+      currentTime: 42,
+      playbackRate: 1,
+      volume: 0.5,
+      shouldResume: true,
+    };
+    vi.spyOn(player, 'getTotalTime').mockReturnValue(100);
+    const syncProgressSpy = vi.spyOn(player, 'syncProgressByPercentage');
+
+    player.onLoadeddata(new Event('loadeddata'));
+
+    expect(syncProgressSpy).toHaveBeenCalledWith(0.42);
+    expect(player._playerControllerBottomTimeCurrent.innerText).toBe('00:42');
+  });
+
+  it('freezes progress rendering while source is switching', () => {
+    const player = document.createElement('r-player') as any;
+    document.body.appendChild(player);
+
+    player.ctx.duration = 100;
+    player._isSwitchingSource = true;
+    player._pendingPlaybackRestore = {
+      currentTime: 50,
+      playbackRate: 1,
+      volume: 0.5,
+      shouldResume: true,
+    };
+
+    const syncProgressSpy = vi.spyOn(player, 'syncProgressByPercentage');
+    const getCurrentTimeSpy = vi.spyOn(player, 'getCurrentTime');
+
+    player.updateCurrentProgress();
+
+    expect(syncProgressSpy).toHaveBeenCalledWith(0.5);
+    expect(getCurrentTimeSpy).not.toHaveBeenCalled();
+  });
 });
