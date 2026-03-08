@@ -6,7 +6,6 @@ import { visualizer } from 'rollup-plugin-visualizer';
 // import viteImagemin from '@vheemstra/vite-plugin-imagemin';
 // import imageminSvgo from 'imagemin-svgo';
 import type { RollupOptions } from 'rollup';
-import { babel } from '@rollup/plugin-babel';
 import loadSvg from './plugins/load-svg';
 import { PORT } from './build/config';
 
@@ -93,9 +92,6 @@ export const viteConfig: UserConfig = {
       emitFile: false,
       filename: 'report/build-stats.html',
     }) as PluginOption,
-    babel({
-      babelHelpers: 'bundled',
-    }),
   ],
   resolve: {
     alias: {
