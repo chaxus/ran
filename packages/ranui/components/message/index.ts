@@ -4,6 +4,7 @@ import closeCircleFill from '@/assets/icons/close-circle-fill.svg?raw';
 import infoCircleFill from '@/assets/icons/info-circle-fill.svg?raw';
 import warningCircleFill from '@/assets/icons/warning-circle-fill.svg?raw';
 import { registerIcons } from '@/components/icon';
+import { Div, Span, View } from '@/utils/builder';
 import { adoptStyles } from '@/utils/style';
 import { getMessageContainer, type MessageRenderOptions } from './container';
 
@@ -52,21 +53,27 @@ function Custom() {
       }
       constructor() {
         super();
-        this._notice = document.createElement('div');
-        this._notice.setAttribute('class', 'ran-message-notice');
-        this._content = document.createElement('div');
-        this._content.setAttribute('class', 'ran-message-notice-content');
-        this._info = document.createElement('div');
-        this._info.setAttribute('class', 'ran-message-notice-content-info');
-        this._icon = document.createElement('r-icon');
-        this._span = document.createElement('span');
-        this._info.appendChild(this._icon);
-        this._info.appendChild(this._span);
-        this._content.appendChild(this._info);
-        this._notice.appendChild(this._content);
-        const shadowRoot = this.attachShadow({ mode: 'closed' });
+        const shadowRoot = this.shadowRoot || this.attachShadow({ mode: 'closed' });
         adoptStyles(shadowRoot, messageCss);
-        shadowRoot.appendChild(this._notice);
+
+        let notice = shadowRoot.querySelector('.ran-message-notice') as HTMLDivElement;
+        if (!notice) {
+          notice = Div()
+            .class('ran-message-notice')
+            .children(
+              Div()
+                .class('ran-message-notice-content')
+                .children(Div().class('ran-message-notice-content-info').children(View('r-icon'), Span())),
+            )
+            .build() as HTMLDivElement;
+          shadowRoot.appendChild(notice);
+        }
+
+        this._notice = notice;
+        this._content = notice.querySelector('.ran-message-notice-content') as HTMLDivElement;
+        this._info = notice.querySelector('.ran-message-notice-content-info') as HTMLDivElement;
+        this._icon = notice.querySelector('r-icon') as HTMLElement;
+        this._span = notice.querySelector('span') as HTMLSpanElement;
       }
       get type() {
         return this.getAttribute('type');

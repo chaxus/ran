@@ -7,6 +7,7 @@ import '@/components/select/dropdown-item';
 import '@/components/icon';
 import '@/components/input';
 import type { Input } from '@/components/input';
+import { Div, Span, InputBuilder, Slot, View } from '@/utils/builder';
 import { adoptStyles } from '@/utils/style';
 
 interface Option {
@@ -70,42 +71,51 @@ export class Select extends (HTMLElementSSR()!) {
     super();
     this._listboxId = `ran-select-listbox-${Math.random().toString(36).slice(2, 9)}`;
     this._activeIndex = -1;
-    this._slot = document.createElement('slot');
-    this._select = document.createElement('div');
-    this._select.setAttribute('class', 'ran-select');
-    this._select.setAttribute('part', 'select');
-    this._selection = document.createElement('div');
-    this._selection.setAttribute('class', 'selection');
-    this._selection.setAttribute('part', 'selection');
-    this._selector = document.createElement('div');
-    this._search = document.createElement('r-input') as Input;
-    this._search.setAttribute('class', 'selection-search');
-    this._search.setAttribute('part', 'search');
-    this._search.setAttribute('type', 'search');
-    this._search.setAttribute('autocomplete', 'off');
-    this._text = document.createElement('span');
-    this._text.setAttribute('class', 'selection-item');
-    this._text.setAttribute('part', 'selection-item');
-    this._icon = document.createElement('r-icon');
-    this._icon.setAttribute('class', 'icon');
-    this._icon.setAttribute('part', 'icon');
-    this._icon.setAttribute('name', 'arrow-down');
-    this._icon.setAttribute('color', '#d9d9d9');
-    this._icon.setAttribute('size', '16');
-    this._selector.appendChild(this._text);
-    this._selector.appendChild(this._search);
-    this._selection.appendChild(this._icon);
-    this._selection.appendChild(this._selector);
-    this._slot.setAttribute('class', 'slot');
-    this._select.appendChild(this._selection);
-    this._select.appendChild(this._slot);
     this._optionList = [];
     this._optionLabelMapValue = new Map();
     this._optionValueMapLabel = new Map();
-    const shadowRoot = this.attachShadow({ mode: 'closed' });
-    this._shadowDom = shadowRoot;
+
+    this._shadowDom = this.shadowRoot || this.attachShadow({ mode: 'closed' });
     adoptStyles(this._shadowDom, selectCss);
-    this._shadowDom.appendChild(this._select);
+
+    let wrap = this._shadowDom.querySelector('.ran-select') as HTMLDivElement;
+    if (!wrap) {
+      wrap = Div()
+        .class('ran-select')
+        .part('select')
+        .children(
+          Div()
+            .class('selection')
+            .part('selection')
+            .children(
+              View('r-icon')
+                .class('icon')
+                .part('icon')
+                .attr('name', 'arrow-down')
+                .attr('color', '#d9d9d9')
+                .attr('size', '16'),
+              Div().children(
+                Span().class('selection-item').part('selection-item'),
+                InputBuilder()
+                  .class('selection-search')
+                  .part('search')
+                  .attr('type', 'search')
+                  .attr('autocomplete', 'off'),
+              ),
+            ),
+          Slot().class('slot'),
+        )
+        .build() as HTMLDivElement;
+      this._shadowDom.appendChild(wrap);
+    }
+
+    this._select = wrap;
+    this._selection = wrap.querySelector('.selection') as HTMLDivElement;
+    this._selector = this._selection.querySelector('div') as HTMLDivElement;
+    this._icon = wrap.querySelector('.icon') as HTMLElement;
+    this._text = wrap.querySelector('.selection-item') as HTMLSpanElement;
+    this._search = wrap.querySelector('.selection-search') as Input;
+    this._slot = wrap.querySelector('slot') as HTMLSlotElement;
   }
   get value(): string {
     return this.getAttribute('value') || '';
@@ -345,29 +355,35 @@ export class Select extends (HTMLElementSSR()!) {
   };
   placementPosition = (): void => {
     if (!this._selectionDropdown || !this._selectDropdown) return;
-    const rect = this.getBoundingClientRect();
-    const { top, left, bottom, width } = rect;
-    const root = document.getElementById(this.getPopupContainerId);
-    this._selectionDropdown.style.setProperty('position', `absolute`);
-    this._selectionDropdown.style.setProperty('--ran-x', `${top + window.scrollX}`);
-    this._selectionDropdown.style.setProperty('--ran-y', `${left + window.scrollY}`);
-    const OFFSET = 4;
-    let selectTop = bottom + window.scrollY + OFFSET;
-    let selectLeft = left + window.scrollX;
-    this._selectionDropdown.style.setProperty('width', `${width}px`);
-    if (this.placement === 'top') {
-      selectTop = top + window.scrollY - this._selectionDropdown.clientHeight - OFFSET;
-    }
-    if (this.getPopupContainerId && root) {
-      const rootRect = root.getBoundingClientRect();
-      selectLeft = left - rootRect.left;
+
+    // Defer coordinate mapping to next animation frame so that display: block
+    // changes and newly-populated drop-down items are factored into measurements.
+    requestAnimationFrame(() => {
+      if (!this._selectionDropdown || !this._selectDropdown) return;
+      const rect = this.getBoundingClientRect();
+      const { top, left, bottom, width } = rect;
+      const root = document.getElementById(this.getPopupContainerId);
+      this._selectionDropdown.style.setProperty('position', `absolute`);
+      this._selectionDropdown.style.setProperty('--ran-x', `${top + window.scrollX}`);
+      this._selectionDropdown.style.setProperty('--ran-y', `${left + window.scrollY}`);
+      const OFFSET = 4;
+      let selectTop = bottom + window.scrollY + OFFSET;
+      let selectLeft = left + window.scrollX;
+      this._selectionDropdown.style.setProperty('width', `${width}px`);
       if (this.placement === 'top') {
-        selectTop = top - rootRect.top - this._selectionDropdown.clientHeight - OFFSET;
-      } else {
-        selectTop = bottom - rootRect.top + OFFSET;
+        selectTop = top + window.scrollY - this._selectionDropdown.clientHeight - OFFSET;
       }
-    }
-    this._selectionDropdown.style.setProperty('inset', `${selectTop}px auto auto ${selectLeft}px`);
+      if (this.getPopupContainerId && root) {
+        const rootRect = root.getBoundingClientRect();
+        selectLeft = left - rootRect.left;
+        if (this.placement === 'top') {
+          selectTop = top - rootRect.top - this._selectionDropdown.clientHeight - OFFSET;
+        } else {
+          selectTop = bottom - rootRect.top + OFFSET;
+        }
+      }
+      this._selectionDropdown.style.setProperty('inset', `${selectTop}px auto auto ${selectLeft}px`);
+    });
   };
   /**
    * @description: 设置下拉框

@@ -146,8 +146,9 @@ r-select {
       &::part(ran-input) {
         border: var(--ran-select-host-selection-search-ran-input-border, none);
         padding: var(--ran-select-host-selection-search-ran-input-padding, 0);
-        height: var(--ran-select-host-selection-search-ran-input-height, 100%);
-        min-height: var(--ran-select-host-selection-search-ran-input-min-height, 0);
+        height: 100%;
+        min-height: 100%;
+        box-sizing: border-box;
         outline: var(--ran-select-host-selection-search-ran-input-outline, none);
         &:active {
           border: var(--ran-select-host-selection-search-ran-input-active-border, none);
