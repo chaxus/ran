@@ -6,6 +6,29 @@ import { adoptSheetText, adoptStyles } from '@/utils/style';
 const FOCUSABLE_SELECTOR =
   'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
+export type ModalCloseTrigger = 'mask' | 'button' | 'escape' | 'program';
+export type ModalProgrammaticAction = 'confirm' | 'cancel' | 'dismiss';
+
+export interface ModalProgrammaticOptions {
+  title?: string;
+  content?: string | Node;
+  okText?: string;
+  cancelText?: string;
+  showCancel?: boolean;
+  maskClosable?: boolean;
+  closeOnEsc?: boolean;
+  lockScroll?: boolean;
+  autoFocus?: boolean;
+  closable?: boolean;
+  onConfirm?: () => boolean | void | Promise<boolean | void>;
+  onCancel?: () => boolean | void | Promise<boolean | void>;
+}
+
+export interface ModalProgrammaticResult {
+  action: ModalProgrammaticAction;
+  trigger: ModalCloseTrigger;
+}
+
 export class Modal extends RanElement {
   static _openStack: Modal[] = [];
   static _bodyScrollLockCount = 0;
@@ -20,6 +43,8 @@ export class Modal extends RanElement {
   _title: HTMLHeadingElement;
   _closeBtn: HTMLButtonElement;
   _slot: HTMLSlotElement;
+  _footer: HTMLElement;
+  _footerSlot: HTMLSlotElement;
   _labelId: string;
   _previousActiveElement: Element | null;
   _isDialogOpen: boolean;
@@ -28,7 +53,7 @@ export class Modal extends RanElement {
   _afterCloseTimer: number | null;
 
   static get observedAttributes(): string[] {
-    return ['open', 'title', 'maskClosable', 'closeOnEsc', 'lockScroll', 'autoFocus', 'sheet'];
+    return ['open', 'title', 'maskClosable', 'closeOnEsc', 'lockScroll', 'autoFocus', 'closable', 'sheet'];
   }
 
   constructor() {
@@ -70,6 +95,7 @@ export class Modal extends RanElement {
                     .text('x'),
                 ),
               Div().class('ran-modal-body').part('body').children(Slot()),
+              View('footer').class('ran-modal-footer').part('footer').children(Slot().attr('name', 'footer')),
             ),
         )
         .build() as HTMLDivElement;
@@ -83,7 +109,11 @@ export class Modal extends RanElement {
     this._title = this._root.querySelector('.ran-modal-title') as HTMLHeadingElement;
     this._closeBtn = this._root.querySelector('.ran-modal-close') as HTMLButtonElement;
     this._slot = this._root.querySelector('slot') as HTMLSlotElement;
+    this._footer = this._root.querySelector('.ran-modal-footer') as HTMLElement;
+    this._footerSlot = this._root.querySelector('slot[name="footer"]') as HTMLSlotElement;
     this.syncTitle();
+    this.syncClosable();
+    this.syncFooter();
   }
 
   get open(): boolean {
@@ -160,6 +190,18 @@ export class Modal extends RanElement {
     }
   }
 
+  get closable(): boolean {
+    const value = this.getAttribute('closable');
+    return !(value === 'false' || value === '0');
+  }
+  set closable(value: boolean | string | null | undefined) {
+    if (!value || value === 'false' || value === '0') {
+      this.setAttribute('closable', 'false');
+    } else {
+      this.setAttribute('closable', 'true');
+    }
+  }
+
   handlerExternalCss = (): void => {
     if (!this.sheet) return;
     adoptSheetText(this._shadowDom, this.sheet);
@@ -167,6 +209,23 @@ export class Modal extends RanElement {
 
   syncTitle = (): void => {
     this._title.textContent = this.title || 'Modal';
+  };
+
+  syncClosable = (): void => {
+    const isClosable = this.closable;
+    this._closeBtn.hidden = !isClosable;
+    this._closeBtn.setAttribute('aria-hidden', isClosable ? 'false' : 'true');
+    this._closeBtn.tabIndex = isClosable ? 0 : -1;
+  };
+
+  syncFooter = (): void => {
+    const assignedNodes = this._footerSlot?.assignedNodes({ flatten: true }) || [];
+    const hasFooter = assignedNodes.some((node) => {
+      if (node.nodeType === Node.ELEMENT_NODE) return true;
+      if (node.nodeType === Node.TEXT_NODE) return (node.textContent || '').trim().length > 0;
+      return false;
+    });
+    this._root.classList.toggle('has-footer', hasFooter);
   };
 
   getFocusableElements = (): HTMLElement[] => {
@@ -211,7 +270,7 @@ export class Modal extends RanElement {
     Modal._inertSnapshot.clear();
 
     if (Modal._openStack.length === 0) return;
-    const openModalHosts = new Set(Modal._openStack);
+    const openModalHosts = new Set<HTMLElement>(Modal._openStack.map((item) => item as HTMLElement));
     const bodyChildren = Array.from(body.children) as HTMLElement[];
 
     bodyChildren.forEach((child) => {
@@ -285,7 +344,7 @@ export class Modal extends RanElement {
     }, timeout);
   };
 
-  emitAfterClose = (trigger: 'mask' | 'button' | 'escape' | 'program'): void => {
+  emitAfterClose = (trigger: ModalCloseTrigger): void => {
     const timeout = this.getTransitionTimeout();
     this._afterCloseTimer = window.setTimeout(() => {
       this._afterCloseTimer = null;
@@ -315,7 +374,7 @@ export class Modal extends RanElement {
     }
   };
 
-  close = (trigger: 'mask' | 'button' | 'escape' | 'program' = 'program'): void => {
+  close = (trigger: ModalCloseTrigger = 'program'): void => {
     if (!this.open) return;
     const beforeClose = new CustomEvent('beforeclose', {
       cancelable: true,
@@ -411,7 +470,10 @@ export class Modal extends RanElement {
     this._closeBtn.addEventListener('click', this.onCloseButtonClick);
     document.addEventListener('keydown', this.onKeydown);
     document.addEventListener('focusin', this.onDocumentFocusIn);
+    this._footerSlot.addEventListener('slotchange', this.syncFooter);
     this.syncTitle();
+    this.syncClosable();
+    this.syncFooter();
     if (this.open) {
       this.openDialog();
     } else {
@@ -427,6 +489,7 @@ export class Modal extends RanElement {
     this._closeBtn.removeEventListener('click', this.onCloseButtonClick);
     document.removeEventListener('keydown', this.onKeydown);
     document.removeEventListener('focusin', this.onDocumentFocusIn);
+    this._footerSlot.removeEventListener('slotchange', this.syncFooter);
     this.clearAfterTimers();
   }
 
@@ -434,6 +497,10 @@ export class Modal extends RanElement {
     if (oldValue === newValue) return;
     if (name === 'title') {
       this.syncTitle();
+      return;
+    }
+    if (name === 'closable') {
+      this.syncClosable();
       return;
     }
     if (name === 'open') {
@@ -448,6 +515,130 @@ export class Modal extends RanElement {
       this.handlerExternalCss();
     }
   }
+
+  static normalizeProgrammaticOptions = (options?: ModalProgrammaticOptions | string): ModalProgrammaticOptions => {
+    if (typeof options === 'string') {
+      return { content: options };
+    }
+    return options || {};
+  };
+
+  static open = (options?: ModalProgrammaticOptions | string): Promise<ModalProgrammaticResult> => {
+    if (typeof document === 'undefined') {
+      return Promise.resolve({ action: 'dismiss', trigger: 'program' });
+    }
+
+    const resolved = Modal.normalizeProgrammaticOptions(options);
+    const {
+      title = 'Confirm',
+      content = '',
+      okText = 'OK',
+      cancelText = 'Cancel',
+      showCancel = false,
+      maskClosable = false,
+      closeOnEsc = true,
+      lockScroll = true,
+      autoFocus = true,
+      closable = true,
+      onConfirm,
+      onCancel,
+    } = resolved;
+
+    return new Promise((resolve) => {
+      const modal = document.createElement('r-modal') as Modal;
+      modal.title = title;
+      modal.maskClosable = maskClosable;
+      modal.closeOnEsc = closeOnEsc;
+      modal.lockScroll = lockScroll;
+      modal.autoFocus = autoFocus;
+      modal.closable = closable;
+
+      const body = document.createElement('div');
+      if (typeof content === 'string') {
+        body.textContent = content;
+      } else if (content instanceof Node) {
+        body.appendChild(content);
+      }
+      modal.appendChild(body);
+
+      const footer = document.createElement('div');
+      footer.setAttribute('slot', 'footer');
+      footer.className = 'ran-modal-actions';
+
+      let action: ModalProgrammaticAction = 'dismiss';
+
+      if (showCancel) {
+        const cancelButton = document.createElement('button');
+        cancelButton.type = 'button';
+        cancelButton.className = 'ran-modal-action ran-modal-action-cancel';
+        cancelButton.textContent = cancelText;
+        cancelButton.addEventListener('click', async () => {
+          const shouldContinue = (await onCancel?.()) !== false;
+          if (!shouldContinue) return;
+          action = 'cancel';
+          modal.close('program');
+        });
+        footer.appendChild(cancelButton);
+      }
+
+      const okButton = document.createElement('button');
+      okButton.type = 'button';
+      okButton.className = 'ran-modal-action ran-modal-action-confirm';
+      okButton.textContent = okText;
+      okButton.addEventListener('click', async () => {
+        okButton.disabled = true;
+        try {
+          const shouldContinue = (await onConfirm?.()) !== false;
+          if (!shouldContinue) return;
+          action = 'confirm';
+          modal.close('program');
+        } finally {
+          okButton.disabled = false;
+        }
+      });
+      footer.appendChild(okButton);
+
+      modal.appendChild(footer);
+
+      const onAfterClose = (event: Event) => {
+        const trigger = ((event as CustomEvent).detail?.trigger || 'program') as ModalCloseTrigger;
+        modal.removeEventListener('afterclose', onAfterClose);
+        if (modal.parentElement) {
+          modal.parentElement.removeChild(modal);
+        }
+        resolve({ action, trigger });
+      };
+
+      modal.addEventListener('afterclose', onAfterClose);
+      document.body.appendChild(modal);
+      modal.open = true;
+    });
+  };
+
+  static confirm = (options?: ModalProgrammaticOptions | string): Promise<ModalProgrammaticResult> => {
+    const resolved = Modal.normalizeProgrammaticOptions(options);
+    return Modal.open({ ...resolved, showCancel: true });
+  };
+
+  static info = (options?: ModalProgrammaticOptions | string): Promise<ModalProgrammaticResult> => {
+    const resolved = Modal.normalizeProgrammaticOptions(options);
+    return Modal.open({ ...resolved, showCancel: false, title: resolved.title || 'Info' });
+  };
+
+  static success = (options?: ModalProgrammaticOptions | string): Promise<ModalProgrammaticResult> => {
+    const resolved = Modal.normalizeProgrammaticOptions(options);
+    return Modal.open({ ...resolved, showCancel: false, title: resolved.title || 'Success' });
+  };
+
+  static warning = (options?: ModalProgrammaticOptions | string): Promise<ModalProgrammaticResult> => {
+    const resolved = Modal.normalizeProgrammaticOptions(options);
+    return Modal.open({ ...resolved, showCancel: false, title: resolved.title || 'Warning' });
+  };
+
+  static error = (options?: ModalProgrammaticOptions | string): Promise<ModalProgrammaticResult> => {
+    const resolved = Modal.normalizeProgrammaticOptions(options);
+    return Modal.open({ ...resolved, showCancel: false, title: resolved.title || 'Error' });
+  };
 }
 
 function Custom() {

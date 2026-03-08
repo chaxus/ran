@@ -96,9 +96,13 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   _progress: HTMLDivElement;
   _progressDot: HTMLDivElement;
   _progressWrap: HTMLDivElement;
+  _progressWrapBuffer: HTMLDivElement;
   _progressWrapValue: HTMLDivElement;
   requestAnimationFrameId?: number;
   moveProgress: { percentage: number; mouseDown: boolean };
+  _isSeeking: boolean;
+  _wasPlayingBeforeSeek: boolean;
+  _isBuffering: boolean;
   _playerControllerBottom: HTMLDivElement;
   _playerControllerBottomRight: HTMLDivElement;
   _playerControllerBottomLeft: HTMLDivElement;
@@ -143,6 +147,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     // Internal node references
     let progress: HTMLDivElement | null = null;
     let progressWrap: HTMLDivElement | null = null;
+    let progressWrapBuffer: HTMLDivElement | null = null;
     let progressWrapValue: HTMLDivElement | null = null;
     let progressDot: HTMLDivElement | null = null;
     let playerControllerBottom: HTMLDivElement | null = null;
@@ -169,10 +174,11 @@ export class RanPlayer extends (HTMLElementSSR()!) {
       playerBtn = Div().class('ran-player-play-btn').build() as HTMLDivElement;
 
       // Progress tree
+      progressWrapBuffer = Div().class('ran-player-controller-progress-wrap-buffer').build() as HTMLDivElement;
       progressWrapValue = Div().class('ran-player-controller-progress-wrap-value').build() as HTMLDivElement;
       progressWrap = Div()
         .class('ran-player-controller-progress-wrap')
-        .children(progressWrapValue)
+        .children(progressWrapBuffer, progressWrapValue)
         .build() as HTMLDivElement;
       progressDot = Div().class('ran-player-controller-progress-dot').build() as HTMLDivElement;
       progress = Div()
@@ -279,6 +285,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
       // Re-hydrate variables from existing DSD tree
       progress = playerController.querySelector('.ran-player-controller-progress') as HTMLDivElement;
       progressWrap = progress.querySelector('.ran-player-controller-progress-wrap') as HTMLDivElement;
+      progressWrapBuffer = progressWrap.querySelector('.ran-player-controller-progress-wrap-buffer') as HTMLDivElement;
       progressWrapValue = progressWrap.querySelector('.ran-player-controller-progress-wrap-value') as HTMLDivElement;
       progressDot = progress.querySelector('.ran-player-controller-progress-dot') as HTMLDivElement;
 
@@ -334,6 +341,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     this._playerBtn = playerBtn;
     this._progress = progress;
     this._progressWrap = progressWrap;
+    this._progressWrapBuffer = progressWrapBuffer;
     this._progressWrapValue = progressWrapValue;
     this._progressDot = progressDot;
     this._playerControllerBottom = playerControllerBottom;
@@ -372,6 +380,9 @@ export class RanPlayer extends (HTMLElementSSR()!) {
       percentage: 0,
       mouseDown: false,
     };
+    this._isSeeking = false;
+    this._wasPlayingBeforeSeek = false;
+    this._isBuffering = false;
   }
   get src(): string {
     return this.getAttribute('src') || '';
@@ -813,6 +824,15 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     this._progressDot.style.setProperty('transform', `translateX(${percentage * this._progress.offsetWidth}px)`);
     this.moveProgress.percentage = Math.floor(percentage * 100) / 100;
   };
+  progressDotMouseMoveDocument = (e: MouseEvent): void => {
+    if (!this.moveProgress.mouseDown) return;
+    const rect = this._progress.getBoundingClientRect();
+    const offsetX = e.clientX - rect.left - 9;
+    const percentage = range(offsetX / this._progress.offsetWidth);
+    this._progressWrapValue.style.setProperty('transform', `scaleX(${percentage})`);
+    this._progressDot.style.setProperty('transform', `translateX(${percentage * this._progress.offsetWidth}px)`);
+    this.moveProgress.percentage = Math.floor(percentage * 100) / 100;
+  };
   /**
    * @description: 进度条鼠标松开事件
    * @param {MouseEvent} e
@@ -1130,7 +1150,8 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     this._progress.addEventListener('mousemove', this.progressMouseMove);
     this._progress.addEventListener('mouseleave', this.progressMouseLeave);
     this._player.addEventListener('mousemove', this.progressDotMouseMove);
-    this._player.addEventListener('mouseup', this.progressDotMouseUp);
+    document.addEventListener('mousemove', this.progressDotMouseMoveDocument);
+    document.addEventListener('mouseup', this.progressDotMouseUp);
     this._playControllerBottomVolumeProgress.addEventListener('change', this.changeVolumeProgress);
     this._playControllerBottomRightFullScreen.addEventListener('click', this.openFullScreen);
     this._playControllerBottomSpeedIcon.addEventListener('click', this.changePlayerVolume);
@@ -1150,7 +1171,9 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     this._progress.removeEventListener('mouseleave', this.progressMouseLeave);
     this._progressDot.removeEventListener('mousedown', this.progressDotMouseDown);
     this._player.removeEventListener('mousemove', this.progressDotMouseMove);
-    this._player.removeEventListener('mouseup', this.progressDotMouseUp);
+    document.removeEventListener('mousemove', this.progressDotMouseMoveDocument);
+    document.removeEventListener('mouseup', this.progressDotMouseUp);
+    this.moveProgress.mouseDown = false;
     this._playControllerBottomVolumeProgress.removeEventListener('change', this.changeVolumeProgress);
     this._playControllerBottomRightFullScreen.removeEventListener('click', this.openFullScreen);
     window.removeEventListener('resize', this.resize);

@@ -282,4 +282,36 @@ describe('r-modal contract', () => {
     await sleep(360);
     expect(afterClose).toBe(true);
   });
+
+  it('shows footer area when footer slot has content', async () => {
+    const modal = await createModal();
+    // @ts-ignore
+    const shadow = modal._shadowDom as ShadowRoot;
+    const root = shadow?.querySelector('.ran-modal-root') as HTMLElement;
+
+    expect(root.classList.contains('has-footer')).toBe(false);
+
+    const footerNode = document.createElement('button');
+    footerNode.setAttribute('slot', 'footer');
+    footerNode.textContent = 'Action';
+    modal.appendChild(footerNode);
+    await sleep();
+
+    expect(root.classList.contains('has-footer')).toBe(true);
+  });
+
+  it('supports programmatic confirm API', async () => {
+    const task = Modal.confirm({ title: 'Delete', content: 'Sure?' });
+    await sleep(40);
+    const modal = document.querySelector('r-modal') as Modal;
+    expect(modal).toBeTruthy();
+
+    const confirmButton = modal.querySelector('.ran-modal-action-confirm') as HTMLButtonElement;
+    confirmButton.click();
+
+    const result = await task;
+    expect(result.action).toBe('confirm');
+    expect(result.trigger).toBe('program');
+    expect(document.querySelector('r-modal')).toBeNull();
+  });
 });
