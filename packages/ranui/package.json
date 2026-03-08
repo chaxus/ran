@@ -175,18 +175,12 @@
     }
   },
   "devDependencies": {
-    "@babel/core": "^7.29.0",
-    "@babel/plugin-transform-nullish-coalescing-operator": "^7.28.6",
-    "@babel/preset-env": "^7.29.0",
-    "@babel/preset-typescript": "^7.28.5",
     "@playwright/test": "^1.58.2",
-    "@rollup/plugin-babel": "^7.0.0",
     "@types/node": "^25.3.5",
     "@vitest/coverage-v8": "^4.0.18",
     "jsdom": "^28.1.0",
     "less": "^4.5.1",
     "prettier": "^3.8.1",
-    "rollup": "^4.59.0",
     "rollup-plugin-visualizer": "^7.0.1",
     "svgo": "^4.0.1",
     "tsx": "^4.21.0",
