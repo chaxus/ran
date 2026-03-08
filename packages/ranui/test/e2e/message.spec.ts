@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { DEV_SERVER } from '../build/config';
+import { DEV_SERVER } from '../../build/config';
 
 test.describe('message', () => {
   test('supports top, zIndex and getContainer', async ({ page }) => {

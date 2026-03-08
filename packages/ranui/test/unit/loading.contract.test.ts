@@ -1,7 +1,7 @@
 import { describe, expect, it, beforeEach } from 'vitest';
-import type { Loading } from '../components/loading/index';
+import type { Loading } from '@/components/loading/index';
 // Ensure custom elements are defined
-import '../components/loading/index';
+import '@/components/loading/index';
 
 describe('r-loading contract', () => {
   beforeEach(() => {
