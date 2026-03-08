@@ -73,7 +73,9 @@ export function ensurePlayerView(input: {
       .children(progressWrap, progressDot)
       .build() as HTMLDivElement;
 
-    const playerControllerBottomPlayBtn = Div().class('ran-player-controller-bottom-left-btn').build() as HTMLDivElement;
+    const playerControllerBottomPlayBtn = Div()
+      .class('ran-player-controller-bottom-left-btn')
+      .build() as HTMLDivElement;
     const playerControllerBottomTimeCurrent = Div()
       .class('ran-player-controller-bottom-left-time-current')
       .build() as HTMLDivElement;
@@ -122,8 +124,12 @@ export function ensurePlayerView(input: {
       .children(playControllerBottomSpeedIcon, playControllerBottomVolumeProgress)
       .build() as HTMLDivElement;
 
-    const playControllerBottomClarity = Div().class('ran-player-controller-bottom-right-clarity').build() as HTMLDivElement;
-    const playControllerBottomRightFullScreen = Div().class('ran-player-controller-bottom-right-full').build() as HTMLDivElement;
+    const playControllerBottomClarity = Div()
+      .class('ran-player-controller-bottom-right-clarity')
+      .build() as HTMLDivElement;
+    const playControllerBottomRightFullScreen = Div()
+      .class('ran-player-controller-bottom-right-full')
+      .build() as HTMLDivElement;
 
     const playerControllerBottomRight = Div()
       .class('ran-player-controller-bottom-right')
@@ -142,7 +148,10 @@ export function ensurePlayerView(input: {
 
     const playerTipTime = Div().class('ran-player-controller-tip-time').build() as HTMLDivElement;
     const playerTipText = Div().class('ran-player-controller-tip-text').build() as HTMLDivElement;
-    const playerTip = Div().class('ran-player-controller-tip').children(playerTipTime, playerTipText).build() as HTMLDivElement;
+    const playerTip = Div()
+      .class('ran-player-controller-tip')
+      .children(playerTipTime, playerTipText)
+      .build() as HTMLDivElement;
 
     playerController = Div()
       .class('ran-player-controller')
@@ -192,7 +201,9 @@ export function ensurePlayerView(input: {
     '.ran-player-controller-bottom-left-btn',
   );
   const playerControllerBottomTimeCurrent = assertExists(
-    playerControllerBottomLeft.querySelector('.ran-player-controller-bottom-left-time-current') as HTMLDivElement | null,
+    playerControllerBottomLeft.querySelector(
+      '.ran-player-controller-bottom-left-time-current',
+    ) as HTMLDivElement | null,
     '.ran-player-controller-bottom-left-time-current',
   );
   const playerControllerBottomTimeDivide = assertExists(
@@ -200,7 +211,9 @@ export function ensurePlayerView(input: {
     '.ran-player-controller-bottom-left-time-divide',
   );
   const playerControllerBottomTimeDuration = assertExists(
-    playerControllerBottomLeft.querySelector('.ran-player-controller-bottom-left-time-duration') as HTMLDivElement | null,
+    playerControllerBottomLeft.querySelector(
+      '.ran-player-controller-bottom-left-time-duration',
+    ) as HTMLDivElement | null,
     '.ran-player-controller-bottom-left-time-duration',
   );
 
@@ -227,7 +240,9 @@ export function ensurePlayerView(input: {
     'r-progress',
   );
   const playControllerBottomSpeedIcon = assertExists(
-    playControllerBottomVolume.querySelector('.ran-player-controller-bottom-right-volume-icon') as HTMLDivElement | null,
+    playControllerBottomVolume.querySelector(
+      '.ran-player-controller-bottom-right-volume-icon',
+    ) as HTMLDivElement | null,
     '.ran-player-controller-bottom-right-volume-icon',
   );
   const playControllerBottomClarity = assertExists(

@@ -1,17 +1,11 @@
 import { addClassToElement, removeClassToElement } from 'ranuts/utils';
 
-export function shouldSetLoadingOnSeeking(input: {
-  isDraggingProgress: boolean;
-  video?: HTMLVideoElement;
-}): boolean {
+export function shouldSetLoadingOnSeeking(input: { isDraggingProgress: boolean; video?: HTMLVideoElement }): boolean {
   const { isDraggingProgress, video } = input;
   return !isDraggingProgress && !!video && !video.paused;
 }
 
-export function shouldSetLoadingOnWaiting(input: {
-  isSeeking: boolean;
-  video?: HTMLVideoElement;
-}): boolean {
+export function shouldSetLoadingOnWaiting(input: { isSeeking: boolean; video?: HTMLVideoElement }): boolean {
   const { isSeeking, video } = input;
   return !!video && !video.paused && !video.ended && !isSeeking;
 }

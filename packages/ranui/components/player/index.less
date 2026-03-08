@@ -68,18 +68,29 @@
   position: var(--ran-player-position, relative);
   overflow: var(--ran-player-overflow, hidden);
 
+  &.ran-player-buffering::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: var(--ran-player-loading-mask-z-index, 10);
+    background: var(--ran-player-loading-mask-background, rgba(0, 0, 0, 0.35));
+    backdrop-filter: var(--ran-player-loading-mask-backdrop-filter, blur(1px));
+    pointer-events: none;
+  }
+
   &.ran-player-buffering::after {
     content: '';
     position: var(--ran-player-loading-position, absolute);
     z-index: var(--ran-player-loading-z-index, 11);
-    top: var(--ran-player-loading-top, calc(50% - 30px));
-    left: var(--ran-player-loading-left, calc(50% - 30px));
-    width: var(--ran-player-loading-width, 60px);
-    height: var(--ran-player-loading-height, 60px);
+    top: var(--ran-player-loading-top, calc(50% - 36px));
+    left: var(--ran-player-loading-left, calc(50% - 36px));
+    width: var(--ran-player-loading-width, 72px);
+    height: var(--ran-player-loading-height, 72px);
     background-position: var(--ran-player-loading-background-position, center);
     background-repeat: var(--ran-player-loading-background-repeat, no-repeat);
     background-size: var(--ran-player-loading-background-size, contain);
     animation: var(--ran-player-loading-animation, loading 1s steps(1) infinite);
+    filter: var(--ran-player-loading-filter, drop-shadow(0 2px 8px rgba(0, 0, 0, 0.6)));
     pointer-events: none;
   }
 

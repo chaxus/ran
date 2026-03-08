@@ -187,14 +187,12 @@
           calc(var(--ran-dropdown-arrow-anchor-width, var(--ran-dropdown-min-width, 100%)) / 2 - calc(@arrow-size / 2))
         )
         translateY(var(--ran-dropdown-arrow-overlap, 2px)) rotate(180deg);
-      top: max(
-        0px,
-        calc(var(--ran-dropdown-min-height, 100%) - calc(@arrow-size / 4))
-      );
+      top: max(0px, calc(var(--ran-dropdown-min-height, 100%) - calc(@arrow-size / 4)));
     }
     .left {
       transform: translateX(calc(0px - var(--ran-dropdown-arrow-width, 16px)))
-        translateY(calc(var(--ran-dropdown-arrow-width, 16px) / 2 + var(--ran-dropdown-arrow-overlap, 2px))) rotate(270deg);
+        translateY(calc(var(--ran-dropdown-arrow-width, 16px) / 2 + var(--ran-dropdown-arrow-overlap, 2px)))
+        rotate(270deg);
       top: max(
         0px,
         calc(var(--ran-dropdown-arrow-anchor-height, var(--ran-dropdown-min-height, 100%)) / 2 - @arrow-size)

@@ -9,7 +9,12 @@ import {
   type PlayerControllerHandlers,
   unbindControllerEvents,
 } from './core/controller';
-import { createPlaybackSnapshot, resolveSeekDuration, shouldResumePlayback, type PlaybackSnapshot } from './core/playback';
+import {
+  createPlaybackSnapshot,
+  resolveSeekDuration,
+  shouldResumePlayback,
+  type PlaybackSnapshot,
+} from './core/playback';
 import { bindMediaEvents, loadVideoSource, unbindMediaEvents, type PlayerMediaHandlers } from './core/media';
 import {
   shouldSetLoadingOnSeeking,
@@ -511,7 +516,10 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     const duration = this.getTotalTime();
     this.ctx.duration = duration;
     this.updateBufferedProgress();
-    this._playerControllerBottomTimeCurrent.innerText = '00:00';
+    const currentTimeWhenSwitching =
+      this._isSwitchingSource && this._pendingPlaybackRestore ? this._pendingPlaybackRestore.currentTime : 0;
+    this.syncProgressByPercentage(duration > 0 ? currentTimeWhenSwitching / duration : 0);
+    this._playerControllerBottomTimeCurrent.innerText = timeFormat(currentTimeWhenSwitching);
     this._playerControllerBottomTimeDivide.innerText = '/';
     this._playerControllerBottomTimeDuration.innerText = timeFormat(this.ctx.duration);
     this.change('loadeddata', e);
@@ -529,8 +537,8 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     this.setLoadingState(
       this._isSwitchingSource ||
         shouldSetLoadingOnWaiting({
-        isSeeking: this._isSeeking,
-        video: this._video,
+          isSeeking: this._isSeeking,
+          video: this._video,
         }),
     );
     this.change('waiting', e);
@@ -767,6 +775,15 @@ export class RanPlayer extends (HTMLElementSSR()!) {
    * @return {*}
    */
   updateCurrentProgress = (): void => {
+    if (this._isSwitchingSource && this._pendingPlaybackRestore) {
+      const duration = this.ctx.duration;
+      const currentTime = this._pendingPlaybackRestore.currentTime;
+      if (Number.isFinite(duration) && duration > 0) {
+        this.syncProgressByPercentage(currentTime / duration);
+      }
+      this._playerControllerBottomTimeCurrent.innerText = timeFormat(currentTime);
+      return;
+    }
     const currentTime = this.getCurrentTime();
     this.ctx.currentTime = currentTime;
     const { duration } = this.ctx;

@@ -31,10 +31,7 @@ export interface PlayerControllerHandlers {
   onResize: () => void;
 }
 
-type EventTargetScope =
-  | keyof PlayerControllerElements
-  | 'document'
-  | 'window';
+type EventTargetScope = keyof PlayerControllerElements | 'document' | 'window';
 
 type ControllerEventBinding = {
   target: EventTargetScope;
@@ -62,10 +59,7 @@ const CONTROLLER_EVENT_BINDINGS: ControllerEventBinding[] = [
   { target: 'window', eventName: 'resize', handler: 'onResize' },
 ];
 
-function resolveEventTarget(
-  elements: PlayerControllerElements,
-  target: EventTargetScope,
-): EventTarget {
+function resolveEventTarget(elements: PlayerControllerElements, target: EventTargetScope): EventTarget {
   if (target === 'document') return document;
   if (target === 'window') return window;
   return elements[target];
