@@ -428,6 +428,7 @@ export class Select extends (HTMLElementSSR()!) {
       this._selectionDropdown = document.createElement('r-dropdown');
       this._selectionDropdown.setAttribute('id', this._listboxId);
       this._selectionDropdown.setAttribute('role', 'listbox');
+      this._selectionDropdown.style.setProperty('position', 'absolute');
       if (this.dropdownclass) {
         this._selectionDropdown.setAttribute('class', this.dropdownclass);
       }
