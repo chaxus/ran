@@ -1,10 +1,21 @@
 import { create } from 'ranuts/utils';
-import '@/components/icon';
+import checkCircleFill from '@/assets/icons/check-circle-fill.svg?raw';
+import closeCircleFill from '@/assets/icons/close-circle-fill.svg?raw';
+import infoCircleFill from '@/assets/icons/info-circle-fill.svg?raw';
+import warningCircleFill from '@/assets/icons/warning-circle-fill.svg?raw';
+import { registerIcons } from '@/components/icon';
 import { adoptStyles } from '@/utils/style';
 import messageCss from './index.less?inline';
 
 const AnimationTime = 300; // message 退出动画执行的时间
 const defaultDuration = 3000; // 默认 message 存在的时间
+
+registerIcons({
+  'check-circle-fill': checkCircleFill,
+  'close-circle-fill': closeCircleFill,
+  'info-circle-fill': infoCircleFill,
+  'warning-circle-fill': warningCircleFill,
+});
 
 // message 类型映射 icon 的类型
 const typeMapIcon = new Map([
