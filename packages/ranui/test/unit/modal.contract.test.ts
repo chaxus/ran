@@ -250,6 +250,28 @@ describe('r-modal contract', () => {
     expect(modal.open).toBe(true);
   });
 
+  it('blocks ui interactions when beforeclose is prevented', async () => {
+    const modal = await createModal();
+    modal.open = true;
+    await sleep();
+
+    modal.addEventListener('beforeclose', (event) => {
+      event.preventDefault();
+    });
+
+    // @ts-ignore
+    const shadow = modal._shadowDom as ShadowRoot;
+    const closeBtn = shadow?.querySelector('.ran-modal-close') as HTMLElement;
+    closeBtn?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    await sleep();
+    expect(modal.open).toBe(true);
+
+    const mask = shadow?.querySelector('.ran-modal-mask') as HTMLElement;
+    mask?.dispatchEvent(new MouseEvent('click', { bubbles: true, composed: true }));
+    await sleep();
+    expect(modal.open).toBe(true);
+  });
+
   it('respects closeOnEsc false', async () => {
     const modal = await createModal();
     modal.closeOnEsc = false;
@@ -313,5 +335,31 @@ describe('r-modal contract', () => {
     expect(result.action).toBe('confirm');
     expect(result.trigger).toBe('program');
     expect(document.querySelector('r-modal')).toBeNull();
+  });
+
+  it('closes normally when mounted inside nested body subtree', async () => {
+    const container = document.createElement('main');
+    document.body.appendChild(container);
+
+    const modal = document.createElement('r-modal') as Modal;
+    container.appendChild(modal);
+    await sleep(20);
+
+    modal.open = true;
+    await sleep();
+
+    // @ts-ignore
+    const shadow = modal._shadowDom as ShadowRoot;
+    const closeBtn = shadow?.querySelector('.ran-modal-close') as HTMLElement;
+    closeBtn?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    await sleep();
+    expect(modal.open).toBe(false);
+
+    modal.open = true;
+    await sleep();
+    const mask = shadow?.querySelector('.ran-modal-mask') as HTMLElement;
+    mask?.dispatchEvent(new MouseEvent('click', { bubbles: true, composed: true }));
+    await sleep();
+    expect(modal.open).toBe(false);
   });
 });

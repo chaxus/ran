@@ -12,7 +12,16 @@ import {
 import { createPlaybackSnapshot, resolveSeekDuration, shouldResumePlayback, type PlaybackSnapshot } from './core/playback';
 import { bindMediaEvents, loadVideoSource, unbindMediaEvents, type PlayerMediaHandlers } from './core/media';
 import { getBufferedPercentage, normalizeProgress } from './core/progress';
-import { Div, Slot, View } from '@/utils/builder';
+import {
+  createDefaultPlayerContext,
+  createDefaultRuntimeState,
+  resetSourceContextState,
+  resetTransientRuntimeState,
+  type PlayerContextState,
+  type PlayerRuntimeState,
+} from './core/state';
+import { ensurePlayerView } from './core/view';
+import { View } from '@/utils/builder';
 import { HTMLElementSSR } from '@/utils/index';
 import { adoptSheetText, adoptStyles } from '@/utils/style';
 import playerCss from './index.less?inline';
@@ -99,10 +108,10 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   _progressWrapBuffer: HTMLDivElement;
   _progressWrapValue: HTMLDivElement;
   requestAnimationFrameId?: number;
-  moveProgress: { percentage: number; mouseDown: boolean };
-  _isSeeking: boolean;
-  _wasPlayingBeforeSeek: boolean;
-  _isBuffering: boolean;
+  moveProgress!: { percentage: number; mouseDown: boolean };
+  _isSeeking!: boolean;
+  _wasPlayingBeforeSeek!: boolean;
+  _isBuffering!: boolean;
   _playerControllerBottom: HTMLDivElement;
   _playerControllerBottomRight: HTMLDivElement;
   _playerControllerBottomLeft: HTMLDivElement;
@@ -139,252 +148,41 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     adoptStyles(this._shadowDom, playerCss);
     // 如果有子元素，进行置空
     this.innerHTML = '';
-    let player = this._shadowDom.querySelector('.ran-player') as HTMLDivElement | null;
-    let container = this._shadowDom.querySelector('.ran-player-contain') as HTMLDivElement | null;
-    let slot = this._shadowDom.querySelector('slot') as HTMLSlotElement | null;
-    let playerBtn = this._shadowDom.querySelector('.ran-player-play-btn') as HTMLDivElement | null;
-    let playerController = this._shadowDom.querySelector('.ran-player-controller') as HTMLDivElement | null;
+    const viewRefs = ensurePlayerView({
+      shadowDom: this._shadowDom,
+      speedOptions: SPEED,
+      onSpeedChange: this.changeSpeed,
+    });
 
-    // Internal node references
-    let progress: HTMLDivElement | null = null;
-    let progressWrap: HTMLDivElement | null = null;
-    let progressWrapBuffer: HTMLDivElement | null = null;
-    let progressWrapValue: HTMLDivElement | null = null;
-    let progressDot: HTMLDivElement | null = null;
-    let playerControllerBottom: HTMLDivElement | null = null;
-    let playerControllerBottomRight: HTMLDivElement | null = null;
-    let playerControllerBottomLeft: HTMLDivElement | null = null;
-    let playerControllerBottomPlayBtn: HTMLDivElement | null = null;
-    let playerControllerBottomTimeCurrent: HTMLDivElement | null = null;
-    let playerControllerBottomTimeDivide: HTMLDivElement | null = null;
-    let playerControllerBottomTimeDuration: HTMLDivElement | null = null;
-    let playControllerBottomSpeed: HTMLDivElement | null = null;
-    let playControllerBottomSpeedPopover: HTMLElement | null = null;
-    let playControllerBottomVolume: HTMLDivElement | null = null;
-    let playControllerBottomVolumeProgress: Progress | null = null;
-    let playControllerBottomSpeedIcon: HTMLDivElement | null = null;
-    let playControllerBottomClarity: HTMLElement | null = null;
-    let playControllerBottomRightFullScreen: HTMLDivElement | null = null;
-    let playerTip: HTMLDivElement | null = null;
-    let playerTipTime: HTMLDivElement | null = null;
-    let playerTipText: HTMLDivElement | null = null;
-
-    if (!player || !container || !slot || !playerBtn || !playerController) {
-      container = Div().build() as HTMLDivElement;
-      slot = Slot().build() as HTMLSlotElement;
-      playerBtn = Div().class('ran-player-play-btn').build() as HTMLDivElement;
-
-      // Progress tree
-      progressWrapBuffer = Div().class('ran-player-controller-progress-wrap-buffer').build() as HTMLDivElement;
-      progressWrapValue = Div().class('ran-player-controller-progress-wrap-value').build() as HTMLDivElement;
-      progressWrap = Div()
-        .class('ran-player-controller-progress-wrap')
-        .children(progressWrapBuffer, progressWrapValue)
-        .build() as HTMLDivElement;
-      progressDot = Div().class('ran-player-controller-progress-dot').build() as HTMLDivElement;
-      progress = Div()
-        .class('ran-player-controller-progress')
-        .children(progressWrap, progressDot)
-        .build() as HTMLDivElement;
-
-      // Left controls
-      playerControllerBottomPlayBtn = Div().class('ran-player-controller-bottom-left-btn').build() as HTMLDivElement;
-      playerControllerBottomTimeCurrent = Div()
-        .class('ran-player-controller-bottom-left-time-current')
-        .build() as HTMLDivElement;
-      playerControllerBottomTimeDivide = Div()
-        .class('ran-player-controller-bottom-left-time-divide')
-        .build() as HTMLDivElement;
-      playerControllerBottomTimeDuration = Div()
-        .class('ran-player-controller-bottom-left-time-duration')
-        .build() as HTMLDivElement;
-      playerControllerBottomLeft = Div()
-        .class('ran-player-controller-bottom-left')
-        .children(
-          playerControllerBottomPlayBtn,
-          playerControllerBottomTimeCurrent,
-          playerControllerBottomTimeDivide,
-          playerControllerBottomTimeDuration,
-        )
-        .build() as HTMLDivElement;
-
-      // Right controls: speed
-      const playerIdentifier = 'ran-player' + `${performance.now()}`.replace('.', '');
-      playControllerBottomSpeedPopover = View('r-select')
-        .attr('value', '1')
-        .attr('trigger', 'hover,click')
-        .attr('type', 'text')
-        .attr('placement', 'top')
-        .attr('getPopupContainerId', playerIdentifier)
-        .attr('dropdownclass', 'video-speed-dropdown')
-        .children(...SPEED.map((item) => View('r-option').attr('value', `${item.value}`).text(item.label).build()))
-        .build() as HTMLElement;
-      playControllerBottomSpeedPopover.addEventListener('change', this.changeSpeed);
-      playControllerBottomSpeed = Div()
-        .class('ran-player-controller-bottom-right-speed')
-        .children(playControllerBottomSpeedPopover)
-        .build() as HTMLDivElement;
-
-      // Right controls: volume
-      playControllerBottomSpeedIcon = Div()
-        .class('ran-player-controller-bottom-right-volume-icon ran-player-controller-bottom-right-volume-icon-volume')
-        .build() as HTMLDivElement;
-      playControllerBottomVolumeProgress = View('r-progress')
-        .class('ran-player-controller-bottom-right-volume-progress')
-        .attr('percent', '50')
-        .attr('type', 'drag')
-        .build() as Progress;
-      playControllerBottomVolume = Div()
-        .class('ran-player-controller-bottom-right-volume')
-        .children(playControllerBottomSpeedIcon, playControllerBottomVolumeProgress)
-        .build() as HTMLDivElement;
-
-      // Right controls: rest
-      playControllerBottomClarity = Div().class('ran-player-controller-bottom-right-clarity').build() as HTMLDivElement;
-      playControllerBottomRightFullScreen = Div()
-        .class('ran-player-controller-bottom-right-full')
-        .build() as HTMLDivElement;
-
-      playerControllerBottomRight = Div()
-        .class('ran-player-controller-bottom-right')
-        .children(
-          playControllerBottomClarity,
-          playControllerBottomSpeed,
-          playControllerBottomVolume,
-          playControllerBottomRightFullScreen,
-        )
-        .build() as HTMLDivElement;
-
-      // Controller bottom
-      playerControllerBottom = Div()
-        .class('ran-player-controller-bottom')
-        .children(playerControllerBottomLeft, playerControllerBottomRight)
-        .build() as HTMLDivElement;
-
-      // Tip
-      playerTipTime = Div().class('ran-player-controller-tip-time').build() as HTMLDivElement;
-      playerTipText = Div().class('ran-player-controller-tip-text').build() as HTMLDivElement;
-      playerTip = Div()
-        .class('ran-player-controller-tip')
-        .children(playerTipTime, playerTipText)
-        .build() as HTMLDivElement;
-
-      // Main controller container
-      playerController = Div()
-        .class('ran-player-controller')
-        .children(playerTip, progress, playerControllerBottom)
-        .build() as HTMLDivElement;
-
-      player = Div()
-        .class('ran-player')
-        .id(playerIdentifier)
-        .children(container, slot, playerBtn, playerController)
-        .build() as HTMLDivElement;
-
-      this._shadowDom.appendChild(player);
-    } else {
-      // Re-hydrate variables from existing DSD tree
-      progress = playerController.querySelector('.ran-player-controller-progress') as HTMLDivElement;
-      progressWrap = progress.querySelector('.ran-player-controller-progress-wrap') as HTMLDivElement;
-      progressWrapBuffer = progressWrap.querySelector('.ran-player-controller-progress-wrap-buffer') as HTMLDivElement;
-      progressWrapValue = progressWrap.querySelector('.ran-player-controller-progress-wrap-value') as HTMLDivElement;
-      progressDot = progress.querySelector('.ran-player-controller-progress-dot') as HTMLDivElement;
-
-      playerControllerBottom = playerController.querySelector('.ran-player-controller-bottom') as HTMLDivElement;
-      playerControllerBottomLeft = playerControllerBottom.querySelector(
-        '.ran-player-controller-bottom-left',
-      ) as HTMLDivElement;
-      playerControllerBottomPlayBtn = playerControllerBottomLeft.querySelector(
-        '.ran-player-controller-bottom-left-btn',
-      ) as HTMLDivElement;
-      playerControllerBottomTimeCurrent = playerControllerBottomLeft.querySelector(
-        '.ran-player-controller-bottom-left-time-current',
-      ) as HTMLDivElement;
-      playerControllerBottomTimeDivide = playerControllerBottomLeft.querySelector(
-        '.ran-player-controller-bottom-left-time-divide',
-      ) as HTMLDivElement;
-      playerControllerBottomTimeDuration = playerControllerBottomLeft.querySelector(
-        '.ran-player-controller-bottom-left-time-duration',
-      ) as HTMLDivElement;
-
-      playerControllerBottomRight = playerControllerBottom.querySelector(
-        '.ran-player-controller-bottom-right',
-      ) as HTMLDivElement;
-      playControllerBottomSpeed = playerControllerBottomRight.querySelector(
-        '.ran-player-controller-bottom-right-speed',
-      ) as HTMLDivElement;
-      playControllerBottomSpeedPopover = playControllerBottomSpeed.querySelector('r-select') as HTMLElement;
-      playControllerBottomSpeedPopover.addEventListener('change', this.changeSpeed);
-
-      playControllerBottomVolume = playerControllerBottomRight.querySelector(
-        '.ran-player-controller-bottom-right-volume',
-      ) as HTMLDivElement;
-      playControllerBottomVolumeProgress = playControllerBottomVolume.querySelector('r-progress') as Progress;
-      playControllerBottomSpeedIcon = playControllerBottomVolume.querySelector(
-        '.ran-player-controller-bottom-right-volume-icon',
-      ) as HTMLDivElement;
-
-      playControllerBottomClarity = playerControllerBottomRight.querySelector(
-        '.ran-player-controller-bottom-right-clarity',
-      ) as HTMLElement;
-      playControllerBottomRightFullScreen = playerControllerBottomRight.querySelector(
-        '.ran-player-controller-bottom-right-full',
-      ) as HTMLDivElement;
-
-      playerTip = playerController.querySelector('.ran-player-controller-tip') as HTMLDivElement;
-      playerTipTime = playerTip.querySelector('.ran-player-controller-tip-time') as HTMLDivElement;
-      playerTipText = playerTip.querySelector('.ran-player-controller-tip-text') as HTMLDivElement;
-    }
-
-    this._player = player;
-    this._container = container;
-    this._slot = slot;
-    this._playerBtn = playerBtn;
-    this._progress = progress;
-    this._progressWrap = progressWrap;
-    this._progressWrapBuffer = progressWrapBuffer;
-    this._progressWrapValue = progressWrapValue;
-    this._progressDot = progressDot;
-    this._playerControllerBottom = playerControllerBottom;
-    this._playerControllerBottomRight = playerControllerBottomRight;
-    this._playerControllerBottomLeft = playerControllerBottomLeft;
-    this._playerControllerBottomPlayBtn = playerControllerBottomPlayBtn;
-    this._playerControllerBottomTimeCurrent = playerControllerBottomTimeCurrent;
-    this._playerControllerBottomTimeDivide = playerControllerBottomTimeDivide;
-    this._playerControllerBottomTimeDuration = playerControllerBottomTimeDuration;
-    this._playControllerBottomSpeed = playControllerBottomSpeed;
-    this._playControllerBottomSpeedPopover = playControllerBottomSpeedPopover;
-    this._playControllerBottomVolume = playControllerBottomVolume;
-    this._playControllerBottomVolumeProgress = playControllerBottomVolumeProgress;
-    this._playControllerBottomSpeedIcon = playControllerBottomSpeedIcon;
-    this._playControllerBottomClarity = playControllerBottomClarity;
-    this._playControllerBottomRightFullScreen = playControllerBottomRightFullScreen;
-    this._playerController = playerController;
-    this._playerTip = playerTip;
-    this._playerTipTime = playerTipTime;
-    this._playerTipText = playerTipText;
-    // ctx
-    this.ctx = {
-      currentTime: 0, // 当前时间
-      duration: 0, // 总时长
-      currentState: '', // 当前视频状态
-      action: new SyncHook(), // 不同时期触发的状态
-      volume: 0.5, // 当前音量
-      playbackRate: 1, // 当前倍速
-      clarity: '', // 当前清晰度
-      fullScreen: false, // 是否全屏
-      levels: [], // 清晰度列表
-      url: '', // 当前播放的地址
-      levelMap: new Map(), // 清晰度和名字的映射关系
-    };
-    this.moveProgress = {
-      percentage: 0,
-      mouseDown: false,
-    };
-    this._isSeeking = false;
-    this._wasPlayingBeforeSeek = false;
-    this._isBuffering = false;
-    this._pendingPlaybackRestore = undefined;
+    this._player = viewRefs.player;
+    this._container = viewRefs.container;
+    this._slot = viewRefs.slot;
+    this._playerBtn = viewRefs.playerBtn;
+    this._progress = viewRefs.progress;
+    this._progressWrap = viewRefs.progressWrap;
+    this._progressWrapBuffer = viewRefs.progressWrapBuffer;
+    this._progressWrapValue = viewRefs.progressWrapValue;
+    this._progressDot = viewRefs.progressDot;
+    this._playerControllerBottom = viewRefs.playerControllerBottom;
+    this._playerControllerBottomRight = viewRefs.playerControllerBottomRight;
+    this._playerControllerBottomLeft = viewRefs.playerControllerBottomLeft;
+    this._playerControllerBottomPlayBtn = viewRefs.playerControllerBottomPlayBtn;
+    this._playerControllerBottomTimeCurrent = viewRefs.playerControllerBottomTimeCurrent;
+    this._playerControllerBottomTimeDivide = viewRefs.playerControllerBottomTimeDivide;
+    this._playerControllerBottomTimeDuration = viewRefs.playerControllerBottomTimeDuration;
+    this._playControllerBottomSpeed = viewRefs.playControllerBottomSpeed;
+    this._playControllerBottomSpeedPopover = viewRefs.playControllerBottomSpeedPopover;
+    this._playControllerBottomVolume = viewRefs.playControllerBottomVolume;
+    this._playControllerBottomVolumeProgress = viewRefs.playControllerBottomVolumeProgress;
+    this._playControllerBottomSpeedIcon = viewRefs.playControllerBottomSpeedIcon;
+    this._playControllerBottomClarity = viewRefs.playControllerBottomClarity;
+    this._playControllerBottomRightFullScreen = viewRefs.playControllerBottomRightFullScreen;
+    this._playerController = viewRefs.playerController;
+    this._playerTip = viewRefs.playerTip;
+    this._playerTipTime = viewRefs.playerTipTime;
+    this._playerTipText = viewRefs.playerTipText;
+    this.ctx = createDefaultPlayerContext(new SyncHook()) as unknown as Context;
+    this.applyRuntimeState(createDefaultRuntimeState());
   }
   get src(): string {
     return this.getAttribute('src') || '';
@@ -425,6 +223,27 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   handlerExternalCss = (): void => {
     if (!this.sheet) return;
     adoptSheetText(this._shadowDom, this.sheet);
+  };
+  getRuntimeState = (): PlayerRuntimeState => {
+    return {
+      moveProgress: this.moveProgress,
+      isSeeking: this._isSeeking,
+      wasPlayingBeforeSeek: this._wasPlayingBeforeSeek,
+      isBuffering: this._isBuffering,
+      pendingPlaybackRestore: this._pendingPlaybackRestore,
+    };
+  };
+  applyRuntimeState = (state: PlayerRuntimeState): void => {
+    this.moveProgress = state.moveProgress;
+    this._isSeeking = state.isSeeking;
+    this._wasPlayingBeforeSeek = state.wasPlayingBeforeSeek;
+    this._isBuffering = state.isBuffering;
+    this._pendingPlaybackRestore = state.pendingPlaybackRestore as PlaybackSnapshot | undefined;
+  };
+  resetTransientState = (): void => {
+    const runtimeState = this.getRuntimeState();
+    resetTransientRuntimeState(runtimeState);
+    this.applyRuntimeState(runtimeState);
   };
   capturePlaybackSnapshot = (): PlaybackSnapshot => {
     const currentTime = this.getCurrentTime();
@@ -529,17 +348,13 @@ export class RanPlayer extends (HTMLElementSSR()!) {
       console.warn('r-player: Hls.js is not loaded from window.Hls');
     }
     // 重置清晰度状态，避免旧数据干扰新视频的 manifest 加载
-    this.ctx.levels = [];
-    this.ctx.levelMap = new Map();
-    this.ctx.clarity = '';
+    resetSourceContextState(this.ctx as unknown as PlayerContextState);
     this._playControllerBottomClarity.innerHTML = '';
     // 如果有子元素，进行置空
     this.innerHTML = '';
     if (!this._shadowDom.contains(this._player)) this._shadowDom.appendChild(this._player);
     this.setLoadingState(false);
-    this._isSeeking = false;
-    this._wasPlayingBeforeSeek = false;
-    this._pendingPlaybackRestore = undefined;
+    this.resetTransientState();
     if (this._hls) {
       this._hls.destroy();
       this._hls = undefined;
@@ -1233,10 +1048,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   disconnectedCallback(): void {
     unbindControllerEvents(this.getControllerElements(), this.getControllerHandlers());
     this.cancelAnimationFrame();
-    this.moveProgress.mouseDown = false;
-    this._isSeeking = false;
-    this._wasPlayingBeforeSeek = false;
-    this._pendingPlaybackRestore = undefined;
+    this.resetTransientState();
     this.setLoadingState(false);
   }
   attributeChangedCallback(k: string, o: string, n: string): void {
