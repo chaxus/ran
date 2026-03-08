@@ -309,8 +309,8 @@ Generated at: 2026-03-08T10:53:36.771Z
 
 ### `modal`
 
-- Tokens: 14
-- Parts: 7
+- Tokens: 19
+- Parts: 8
 
 #### Tokens
 
@@ -323,6 +323,11 @@ Generated at: 2026-03-08T10:53:36.771Z
 - `--ran-modal-dialog-border-radius`
 - `--ran-modal-dialog-box-shadow`
 - `--ran-modal-dialog-offset-y`
+- `--ran-modal-footer-align-items`
+- `--ran-modal-footer-border-top`
+- `--ran-modal-footer-gap`
+- `--ran-modal-footer-justify-content`
+- `--ran-modal-footer-padding`
 - `--ran-modal-header-align-items`
 - `--ran-modal-header-justify-content`
 - `--ran-modal-mask-background`
@@ -334,6 +339,7 @@ Generated at: 2026-03-08T10:53:36.771Z
 - `body`
 - `close`
 - `dialog`
+- `footer`
 - `header`
 - `mask`
 - `root`
