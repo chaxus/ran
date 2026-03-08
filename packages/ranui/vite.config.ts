@@ -83,6 +83,7 @@ export const es: BuildOptions = {
 };
 
 export const viteConfig: UserConfig = {
+  root: 'demo',
   optimizeDeps: {
     exclude: ['public'],
   },
