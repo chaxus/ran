@@ -30,7 +30,7 @@ describe('r-icon contract', () => {
     // Default is decorative true (no aria-label)
     expect(icon.decorative).toBe(true);
 
-    const svgEl = icon.shadowRoot?.querySelector('svg');
+    const svgEl = (icon as any)._shadowDom?.querySelector('svg');
     expect(svgEl).not.toBeNull();
 
     expect(icon.getAttribute('aria-hidden')).toBe('true');
@@ -45,7 +45,7 @@ describe('r-icon contract', () => {
 
     // Wait for the sync properties
     await sleep();
-    const newSvgEl = icon.shadowRoot?.querySelector('svg');
+    const newSvgEl = (icon as any)._shadowDom?.querySelector('svg');
     expect(newSvgEl?.hasAttribute('aria-hidden')).toBe(false);
   });
 
@@ -58,7 +58,7 @@ describe('r-icon contract', () => {
     await sleep();
     expect(icon.getAttribute('size')).toBe('2rem');
 
-    const svgEl = icon.shadowRoot?.querySelector('svg');
+    const svgEl = (icon as any)._shadowDom?.querySelector('svg');
     expect(svgEl?.getAttribute('width')).toBe('2rem');
     expect(svgEl?.getAttribute('height')).toBe('2rem');
 
@@ -69,7 +69,7 @@ describe('r-icon contract', () => {
     expect(svgEl?.style.getPropertyValue('color')).toBe('blue');
 
     // Update spin class
-    const inner = icon.shadowRoot?.querySelector('.ran-icon');
+    const inner = (icon as any)._shadowDom?.querySelector('.ran-icon');
     expect(inner?.classList.contains('ran-icon-spin')).toBe(false);
     icon.spin = true;
     await sleep();
@@ -81,13 +81,13 @@ describe('r-icon contract', () => {
 
     icon.name = 'async-icon';
     await sleep();
-    expect(icon.shadowRoot?.querySelector('svg')).toBeNull();
+    expect((icon as any)._shadowDom?.querySelector('svg')).toBeNull();
 
     // Register after component is connected
     registerIcon('async-icon', sampleSvg);
 
     await sleep(20);
-    const svgEl = icon.shadowRoot?.querySelector('svg');
+    const svgEl = (icon as any)._shadowDom?.querySelector('svg');
     expect(svgEl).not.toBeNull();
   });
 });

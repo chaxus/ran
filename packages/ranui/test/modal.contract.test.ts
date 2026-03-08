@@ -20,42 +20,51 @@ describe('r-modal contract', () => {
   it('reflects open property and updates dialog visibility', async () => {
     const modal = await createModal();
     // Modal root is created synchronously in constructor
-    const root = modal.shadowRoot?.querySelector('.ran-modal-root') as HTMLElement;
-    const dialog = modal.shadowRoot?.querySelector('.ran-modal-dialog') as HTMLElement;
+    // @ts-ignore
+    const shadow = modal._shadowDom as ShadowRoot;
+    const root = shadow?.querySelector('.ran-modal-root') as HTMLElement;
+    const dialog = shadow?.querySelector('.ran-modal-dialog') as HTMLElement;
 
     // Initial state (closed)
     expect(modal.open).toBe(false);
-    expect(root.hasAttribute('open')).toBe(false);
-    expect(dialog.getAttribute('aria-hidden')).toBe('true');
+    expect(root?.hasAttribute('open')).toBe(false);
+    expect(dialog?.getAttribute('aria-hidden')).toBe('true');
 
     // Open modal
     modal.open = true;
     // JSDOM hasAttribute handles things differently sometimes, need to await render
     await sleep();
     expect(modal.hasAttribute('open')).toBe(true);
-    expect(root.hasAttribute('open')).toBe(true);
-    expect(dialog.getAttribute('aria-hidden')).toBe('false');
+    expect(root?.hasAttribute('open')).toBe(true);
+    expect(dialog?.getAttribute('aria-hidden')).toBe('false');
 
     // Close modal
     modal.open = false;
-    await sleep(20);
+    await sleep();
     expect(modal.hasAttribute('open')).toBe(false);
-    expect(root.hasAttribute('open')).toBe(false);
-    expect(dialog.getAttribute('aria-hidden')).toBe('true');
+    expect(root?.hasAttribute('open')).toBe(false);
+    expect(dialog?.getAttribute('aria-hidden')).toBe('true');
   });
 
   it('reflects title property', async () => {
     const modal = await createModal();
-    const titleEl = modal.shadowRoot?.querySelector('.ran-modal-title') as HTMLElement;
+    // @ts-ignore
+    const shadow = modal._shadowDom as ShadowRoot;
+    const titleEl = shadow?.querySelector('.ran-modal-title') as HTMLElement;
 
     // Default title
-    expect(titleEl.textContent).toBe('Modal');
+    expect(titleEl?.textContent).toBe('Modal');
 
     // Set title
-    modal.title = 'Custom Title';
+    modal.title = 'New Title';
     await sleep();
-    expect(modal.getAttribute('title')).toBe('Custom Title');
-    expect(titleEl.textContent).toBe('Custom Title');
+    expect(modal.getAttribute('title')).toBe('New Title');
+    expect(titleEl?.textContent).toBe('New Title');
+
+    // Remove title
+    modal.removeAttribute('title');
+    await sleep();
+    expect(titleEl?.textContent).toBe('Modal'); // Fallback to default
   });
 
   it('dispatches close event on mask click when maskClosable is true', async () => {
@@ -74,9 +83,12 @@ describe('r-modal contract', () => {
     await sleep();
 
     // Re-query mask after potential re-render
-    const maskContent = modal.shadowRoot?.querySelector('.ran-modal-mask') as HTMLElement;
+    // @ts-ignore
+    const shadow = modal._shadowDom as ShadowRoot;
+    const mask = shadow?.querySelector('.ran-modal-mask') as HTMLElement;
 
-    // Click mask
+    // We need to click the internal element inside the mask because event composition
+    const maskContent = mask?.querySelector('.ran-modal-mask') || mask;
     maskContent?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
 
     expect(closeTrigger).toBe('mask');
@@ -95,7 +107,10 @@ describe('r-modal contract', () => {
     modal.maskClosable = false;
     await sleep();
 
-    const maskContent = modal.shadowRoot?.querySelector('.ran-modal-mask') as HTMLElement;
+    // @ts-ignore
+    const shadow = modal._shadowDom as ShadowRoot;
+    const mask = shadow?.querySelector('.ran-modal-mask') as HTMLElement;
+    const maskContent = mask?.querySelector('.ran-modal-mask') || mask;
     maskContent?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
 
     expect(closeCalled).toBe(false);
@@ -114,7 +129,12 @@ describe('r-modal contract', () => {
     await sleep();
 
     // Click close button
-    const closeBtnContent = modal.shadowRoot?.querySelector('.ran-modal-close') as HTMLElement;
+    // @ts-ignore
+    const shadow = modal._shadowDom as ShadowRoot;
+    const closeBtn = shadow?.querySelector('.ran-modal-close') as HTMLElement;
+
+    // Click inner icon or the button
+    const closeBtnContent = closeBtn?.querySelector('r-icon') || closeBtn;
     closeBtnContent?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
 
     expect(closeTrigger).toBe('button');
