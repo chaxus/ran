@@ -270,11 +270,13 @@ export class Modal extends RanElement {
     Modal._inertSnapshot.clear();
 
     if (Modal._openStack.length === 0) return;
-    const openModalHosts = new Set<HTMLElement>(Modal._openStack.map((item) => item as HTMLElement));
+    const openModalHosts = Modal._openStack.map((item) => item as HTMLElement);
     const bodyChildren = Array.from(body.children) as HTMLElement[];
 
     bodyChildren.forEach((child) => {
-      if (openModalHosts.has(child)) return;
+      // Keep the full ancestor branch interactive for every open modal host.
+      const containsOpenModal = openModalHosts.some((host) => child === host || child.contains(host));
+      if (containsOpenModal) return;
       Modal._inertSnapshot.set(child, {
         inert: child.inert,
         ariaHidden: child.getAttribute('aria-hidden'),
@@ -435,7 +437,8 @@ export class Modal extends RanElement {
 
   onMaskClick = (event: MouseEvent): void => {
     if (!this.maskClosable) return;
-    if (event.target === this._mask) {
+    const inDialog = (event.composedPath() as EventTarget[]).includes(this._dialog);
+    if (!inDialog) {
       this.close('mask');
     }
   };
