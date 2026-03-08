@@ -1,7 +1,5 @@
 import { getPixelRatio } from 'ranuts/utils';
-import type { BaseRadarOptions, DataParameters, RadarContext } from './types';
-import { Div, View } from '@/utils/builder';
-import { createCustomError } from '@/utils/index';
+import { Div, RanElement, View, createCustomError } from '@/utils/index';
 import { adoptStyles } from '@/utils/style';
 import radarCss from './index.less?inline';
 
@@ -24,7 +22,7 @@ const STROKE_COLOR = 'rgba(255,121,35,0.60)';
 
 function Custom() {
   if (typeof document !== 'undefined' && !customElements.get('r-radar')) {
-    class RadarChart extends HTMLElement {
+    class RadarChart extends RanElement {
       mData?: Array<AbilityTags>;
       mCount?: number;
       mW?: number;
@@ -38,11 +36,10 @@ function Custom() {
       abilityRadarChart: HTMLCanvasElement;
       _iconElement?: HTMLElement;
       _shadowDom: ShadowRoot;
-      resizeObserver: ResizeObserver; // Added based on the new constructor
+      resizeObserver: ResizeObserver;
       constructor() {
         super();
-        const shadowRoot = this.attachShadow({ mode: 'closed' });
-        this._shadowDom = shadowRoot;
+        this._shadowDom = this.shadowRoot || this.attachShadow({ mode: 'closed' });
         adoptStyles(this._shadowDom, radarCss);
 
         let container = this._shadowDom.querySelector('.ran-radar') as HTMLDivElement | null;
@@ -57,7 +54,11 @@ function Custom() {
         this.abilityRadarChartContainer = container;
         this.abilityRadarChart = radarChart;
         this.resizeObserver = new ResizeObserver(this.resize);
+        this.resizeObserver.observe(this.abilityRadarChartContainer);
       }
+      resize = (): void => {
+        this.refreshData();
+      };
       get abilitys() {
         const item = this.getAttribute('abilitys');
         if (typeof item === 'string') {
@@ -327,6 +328,9 @@ function Custom() {
 
       connectedCallback() {
         this.refreshData();
+      }
+      disconnectedCallback() {
+        this.resizeObserver.disconnect();
       }
       attributeChangedCallback(name: string, oldValue: string, newValue: string) {
         const attribute = ['abilitys', 'colorPolygon', 'colorLine', 'fillColor', 'strokeColor'];

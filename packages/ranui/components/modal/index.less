@@ -6,11 +6,17 @@
 	position: var(--ran-modal-root-position, fixed);
 	inset: var(--ran-modal-root-inset, 0);
 	z-index: var(--ran-modal-root-z-index, 1000);
-	display: var(--ran-modal-root-display, none);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.3s, visibility 0.3s;
 }
 
 .ran-modal-root[open] {
-	display: var(--ran-modal-root-open-display, block);
+	opacity: 1;
+	visibility: visible;
 }
 
 .ran-modal-mask {
@@ -22,13 +28,19 @@
 .ran-modal-dialog {
 	position: var(--ran-modal-dialog-position, relative);
 	width: var(--ran-modal-dialog-width, min(560px, calc(100vw - 32px)));
-	margin: var(--ran-modal-dialog-margin, 10vh auto 0);
+	margin: var(--ran-modal-dialog-margin, 0 auto);
 	background: var(--ran-modal-dialog-background, #fff);
 	border-radius: var(--ran-modal-dialog-border-radius, 10px);
 	box-shadow: var(--ran-modal-dialog-box-shadow, 0 10px 32px rgba(0, 0, 0, 0.2));
 	outline: var(--ran-modal-dialog-outline, none);
 	max-height: var(--ran-modal-dialog-max-height, calc(100vh - 20vh));
 	overflow: var(--ran-modal-dialog-overflow, hidden);
+	transform: scale(0.9);
+	transition: transform 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.ran-modal-root[open] .ran-modal-dialog {
+	transform: scale(1);
 }
 
 .ran-modal-header {
