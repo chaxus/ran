@@ -1,5 +1,5 @@
-import { create } from 'ranuts/utils';
 import contentCss from './index.less?inline';
+import { Slot } from '@/utils/builder';
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
 import { adoptStyles } from '@/utils/style';
 
@@ -9,11 +9,16 @@ export class Content extends (HTMLElementSSR()!) {
   _slot: HTMLElement;
   constructor() {
     super();
-    this._slot = create('slot').setAttribute('class', 'slot').element;
     const shadowRoot = this.attachShadow({ mode: 'closed' });
     this._shadowDom = shadowRoot;
     adoptStyles(this._shadowDom, contentCss);
-    shadowRoot.appendChild(this._slot);
+
+    let slot = this._shadowDom.querySelector('.slot') as HTMLElement | null;
+    if (!slot) {
+      slot = Slot().class('slot').build() as HTMLElement;
+      this._shadowDom.appendChild(slot);
+    }
+    this._slot = slot;
     this.observer = new MutationObserver(this.callback);
   }
   callback = (mutations: MutationRecord[]): void => {

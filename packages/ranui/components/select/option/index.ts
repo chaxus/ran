@@ -1,4 +1,6 @@
-import { createCustomError, isDisabled } from '@/utils/index';
+import { Div, Slot } from '@/utils/builder';
+import { HTMLElementSSR, createCustomError, isDisabled } from '@/utils/index';
+import { adoptStyles } from '@/utils/style';
 
 function Custom() {
   if (typeof document !== 'undefined' && !customElements.get('r-option')) {
@@ -12,16 +14,27 @@ function Custom() {
       }
       constructor() {
         super();
-        this._slot = document.createElement('slot');
-        this._option = document.createElement('div');
-        this._option.setAttribute('class', 'ran-option');
-        this._optionContent = document.createElement('div');
-        this._optionContent.setAttribute('class', 'ran-option-content');
-        this._optionContent.appendChild(this._slot);
-        this._option.appendChild(this._optionContent);
-        const shadowRoot = this.attachShadow({ mode: 'closed' });
-        this._shadowDom = shadowRoot;
-        shadowRoot.appendChild(this._option);
+        this._shadowDom = this.attachShadow({ mode: 'closed' });
+        // Assuming optionCss is defined elsewhere or will be added. For now, commenting out to avoid error.
+        // adoptStyles(this._shadowDom, optionCss);
+        this.setAttribute('class', 'ran-option');
+
+        let option = this._shadowDom.querySelector('.ran-select-dropdown-option') as HTMLDivElement | null;
+        let optionContent = this._shadowDom.querySelector(
+          '.ran-select-dropdown-option-content',
+        ) as HTMLDivElement | null;
+        let slot = this._shadowDom.querySelector('slot') as HTMLSlotElement | null;
+
+        if (!option || !optionContent || !slot) {
+          slot = Slot().build() as HTMLSlotElement;
+          optionContent = Div().class('ran-select-dropdown-option-content').children(slot).build() as HTMLDivElement;
+          option = Div().class('ran-select-dropdown-option').children(optionContent).build() as HTMLDivElement;
+          this._shadowDom.appendChild(option);
+        }
+
+        this._slot = slot;
+        this._optionContent = optionContent;
+        this._option = option;
       }
       get value() {
         return this.getAttribute('value');

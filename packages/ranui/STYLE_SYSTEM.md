@@ -469,4 +469,4 @@ components/button/
 - [ ] 单元测试覆盖率 ≥ 80%
 - [ ] 视觉回归测试
 - [ ] Conventional Commits + 自动 CHANGELOG
-- [ ] 组件文档站
+- [ ] 组件文档站，参考 docs 目录里面的 ranui

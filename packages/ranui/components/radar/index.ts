@@ -1,4 +1,6 @@
 import { getPixelRatio } from 'ranuts/utils';
+import type { BaseRadarOptions, DataParameters, RadarContext } from './types';
+import { Div, View } from '@/utils/builder';
 import { createCustomError } from '@/utils/index';
 import { adoptStyles } from '@/utils/style';
 import radarCss from './index.less?inline';
@@ -36,18 +38,25 @@ function Custom() {
       abilityRadarChart: HTMLCanvasElement;
       _iconElement?: HTMLElement;
       _shadowDom: ShadowRoot;
+      resizeObserver: ResizeObserver; // Added based on the new constructor
       constructor() {
         super();
-        this.abilityRadarChartContainer = document.createElement('div');
-        this.abilityRadarChartContainer.setAttribute('class', 'ran-radar');
-        this.abilityRadarChart = document.createElement('canvas');
-        this.abilityRadarChart.style.setProperty('width', '100%');
-        this.abilityRadarChart.style.setProperty('height', '100%');
-        this.abilityRadarChartContainer.appendChild(this.abilityRadarChart);
         const shadowRoot = this.attachShadow({ mode: 'closed' });
         this._shadowDom = shadowRoot;
         adoptStyles(this._shadowDom, radarCss);
-        shadowRoot.appendChild(this.abilityRadarChartContainer);
+
+        let container = this._shadowDom.querySelector('.ran-radar') as HTMLDivElement | null;
+        let radarChart = this._shadowDom.querySelector('canvas') as HTMLCanvasElement | null;
+
+        if (!container || !radarChart) {
+          radarChart = View('canvas').build() as HTMLCanvasElement;
+          container = Div().class('ran-radar').children(radarChart).build() as HTMLDivElement;
+          this._shadowDom.appendChild(container);
+        }
+
+        this.abilityRadarChartContainer = container;
+        this.abilityRadarChart = radarChart;
+        this.resizeObserver = new ResizeObserver(this.resize);
       }
       get abilitys() {
         const item = this.getAttribute('abilitys');

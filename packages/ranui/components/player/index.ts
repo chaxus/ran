@@ -1,15 +1,8 @@
-import {
-  SyncHook,
-  addClassToElement,
-  createDocumentFragment,
-  generateThrottle,
-  range,
-  removeClassToElement,
-  timeFormat,
-} from 'ranuts/utils';
+import { SyncHook, addClassToElement, generateThrottle, range, removeClassToElement, timeFormat } from 'ranuts/utils';
 import '@/assets/js/hls.js';
 import type { Progress } from '@/components/progress';
 import '@/components/select';
+import { Div, Slot, View } from '@/utils/builder';
 import { HTMLElementSSR } from '@/utils/index';
 import { adoptStyles } from '@/utils/style';
 import playerCss from './index.less?inline';
@@ -141,122 +134,226 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     adoptStyles(this._shadowDom, playerCss);
     // 如果有子元素，进行置空
     this.innerHTML = '';
-    this._player = document.createElement('div');
-    this._container = document.createElement('div');
-    this._slot = document.createElement('slot');
-    this._playerBtn = document.createElement('div');
-    this._progress = document.createElement('div');
-    this._progressWrap = document.createElement('div');
-    this._progressWrapValue = document.createElement('div');
-    this._progressDot = document.createElement('div');
-    this._playerControllerBottom = document.createElement('div');
-    this._playerControllerBottomRight = document.createElement('div');
-    this._playerControllerBottomLeft = document.createElement('div');
-    this._player.setAttribute('class', 'ran-player');
-    this._player.setAttribute('id', 'ran-player' + `${performance.now()}`.replace('.', ''));
-    // play and pause
-    this._playerBtn.setAttribute('class', 'ran-player-play-btn');
-    // progress
-    this._progress.setAttribute('class', 'ran-player-controller-progress');
-    this._progressWrap.setAttribute('class', 'ran-player-controller-progress-wrap');
-    this._progressWrapValue.setAttribute('class', 'ran-player-controller-progress-wrap-value');
-    this._progressDot.setAttribute('class', 'ran-player-controller-progress-dot');
-    // play and pause btn, current / total time
-    this._playerControllerBottom.setAttribute('class', 'ran-player-controller-bottom');
-    this._playerControllerBottomRight.setAttribute('class', 'ran-player-controller-bottom-right');
-    this._playerControllerBottomLeft.setAttribute('class', 'ran-player-controller-bottom-left');
-    this._playerControllerBottomPlayBtn = document.createElement('div');
-    this._playerControllerBottomPlayBtn.setAttribute('class', 'ran-player-controller-bottom-left-btn');
-    this._playerControllerBottomTimeCurrent = document.createElement('div');
-    this._playerControllerBottomTimeCurrent.setAttribute('class', 'ran-player-controller-bottom-left-time-current');
-    this._playerControllerBottomTimeDivide = document.createElement('div');
-    this._playerControllerBottomTimeDivide.setAttribute('class', 'ran-player-controller-bottom-left-time-divide');
-    this._playerControllerBottomTimeDuration = document.createElement('div');
-    this._playerControllerBottomTimeDuration.setAttribute('class', 'ran-player-controller-bottom-left-time-duration');
-    // speed
-    this._playControllerBottomSpeed = document.createElement('div');
-    this._playControllerBottomSpeed.setAttribute('class', 'ran-player-controller-bottom-right-speed');
-    this._playControllerBottomSpeedPopover = document.createElement('r-select');
-    this._playControllerBottomSpeedPopover.setAttribute('value', '1');
-    this._playControllerBottomSpeedPopover.setAttribute('trigger', 'hover,click');
-    this._playControllerBottomSpeedPopover.setAttribute('type', 'text');
-    this._playControllerBottomSpeedPopover.setAttribute('placement', 'top');
-    const id = this._player.getAttribute('id');
-    id && this._playControllerBottomSpeedPopover.setAttribute('getPopupContainerId', id);
-    this._playControllerBottomSpeedPopover.setAttribute('dropdownclass', 'video-speed-dropdown');
-    this._playControllerBottomSpeedPopover.addEventListener('change', this.changeSpeed);
-    const Fragment = document.createDocumentFragment();
-    SPEED.forEach((item) => {
-      const { label, value } = item;
-      const option = document.createElement('r-option');
-      option.innerHTML = label;
-      option.setAttribute('value', `${value}`);
-      Fragment.appendChild(option);
-    });
-    this._playControllerBottomSpeedPopover.appendChild(Fragment);
-    this._playControllerBottomSpeed.appendChild(this._playControllerBottomSpeedPopover);
-    // volume
-    this._playControllerBottomVolume = document.createElement('div');
-    this._playControllerBottomVolume.setAttribute('class', 'ran-player-controller-bottom-right-volume');
-    this._playControllerBottomVolumeProgress = document.createElement('r-progress') as Progress;
-    this._playControllerBottomVolumeProgress.setAttribute(
-      'class',
-      'ran-player-controller-bottom-right-volume-progress',
-    );
-    this._playControllerBottomVolumeProgress.setAttribute('percent', '0.5');
-    this._playControllerBottomVolumeProgress.setAttribute('type', 'drag');
-    this._playControllerBottomSpeedIcon = document.createElement('div');
-    this._playControllerBottomSpeedIcon.setAttribute(
-      'class',
-      'ran-player-controller-bottom-right-volume-icon ran-player-controller-bottom-right-volume-icon-volume',
-    );
-    // clarity
-    this._playControllerBottomClarity = document.createElement('div');
-    this._playControllerBottomClarity.setAttribute('class', 'ran-player-controller-bottom-right-clarity');
-    // fullscreen
-    this._playControllerBottomRightFullScreen = document.createElement('div');
-    this._playControllerBottomRightFullScreen.setAttribute('class', 'ran-player-controller-bottom-right-full');
-    // controller
-    this._playerController = document.createElement('div');
-    this._playerController.setAttribute('class', 'ran-player-controller');
-    this._playerTip = document.createElement('div');
-    this._playerTip.setAttribute('class', 'ran-player-controller-tip');
-    this._playerTipTime = document.createElement('div');
-    this._playerTipTime.setAttribute('class', 'ran-player-controller-tip-time');
-    this._playerTipText = document.createElement('div');
-    this._playerTipText.setAttribute('class', 'ran-player-controller-tip-text');
-    this._playerTip.appendChild(createDocumentFragment([this._playerTipTime, this._playerTipText])!);
-    this._playerController.appendChild(
-      createDocumentFragment([this._playerTip, this._progress, this._playerControllerBottom])!,
-    );
-    // container
-    this._player.appendChild(
-      createDocumentFragment([this._container, this._slot, this._playerBtn, this._playerController])!,
-    );
-    this._progressWrap.appendChild(this._progressWrapValue);
-    this._progress.appendChild(createDocumentFragment([this._progressWrap, this._progressDot])!);
-    this._playerControllerBottom.appendChild(
-      createDocumentFragment([this._playerControllerBottomLeft, this._playerControllerBottomRight])!,
-    );
-    this._playerControllerBottomLeft.appendChild(
-      createDocumentFragment([
-        this._playerControllerBottomPlayBtn,
-        this._playerControllerBottomTimeCurrent,
-        this._playerControllerBottomTimeDivide,
-        this._playerControllerBottomTimeDuration,
-      ])!,
-    );
-    this._playControllerBottomVolume.appendChild(
-      createDocumentFragment([this._playControllerBottomSpeedIcon, this._playControllerBottomVolumeProgress])!,
-    );
-    this._playerControllerBottomRight.appendChild(
-      createDocumentFragment([
-        this._playControllerBottomClarity,
-        this._playControllerBottomSpeed,
-        this._playControllerBottomVolume,
-        this._playControllerBottomRightFullScreen,
-      ])!,
-    );
+    let player = this._shadowDom.querySelector('.ran-player') as HTMLDivElement | null;
+    let container = this._shadowDom.querySelector('.ran-player-contain') as HTMLDivElement | null;
+    let slot = this._shadowDom.querySelector('slot') as HTMLSlotElement | null;
+    let playerBtn = this._shadowDom.querySelector('.ran-player-play-btn') as HTMLDivElement | null;
+    let playerController = this._shadowDom.querySelector('.ran-player-controller') as HTMLDivElement | null;
+
+    // Internal node references
+    let progress: HTMLDivElement | null = null;
+    let progressWrap: HTMLDivElement | null = null;
+    let progressWrapValue: HTMLDivElement | null = null;
+    let progressDot: HTMLDivElement | null = null;
+    let playerControllerBottom: HTMLDivElement | null = null;
+    let playerControllerBottomRight: HTMLDivElement | null = null;
+    let playerControllerBottomLeft: HTMLDivElement | null = null;
+    let playerControllerBottomPlayBtn: HTMLDivElement | null = null;
+    let playerControllerBottomTimeCurrent: HTMLDivElement | null = null;
+    let playerControllerBottomTimeDivide: HTMLDivElement | null = null;
+    let playerControllerBottomTimeDuration: HTMLDivElement | null = null;
+    let playControllerBottomSpeed: HTMLDivElement | null = null;
+    let playControllerBottomSpeedPopover: HTMLElement | null = null;
+    let playControllerBottomVolume: HTMLDivElement | null = null;
+    let playControllerBottomVolumeProgress: Progress | null = null;
+    let playControllerBottomSpeedIcon: HTMLDivElement | null = null;
+    let playControllerBottomClarity: HTMLElement | null = null;
+    let playControllerBottomRightFullScreen: HTMLDivElement | null = null;
+    let playerTip: HTMLDivElement | null = null;
+    let playerTipTime: HTMLDivElement | null = null;
+    let playerTipText: HTMLDivElement | null = null;
+
+    if (!player || !container || !slot || !playerBtn || !playerController) {
+      container = Div().build() as HTMLDivElement;
+      slot = Slot().build() as HTMLSlotElement;
+      playerBtn = Div().class('ran-player-play-btn').build() as HTMLDivElement;
+
+      // Progress tree
+      progressWrapValue = Div().class('ran-player-controller-progress-wrap-value').build() as HTMLDivElement;
+      progressWrap = Div()
+        .class('ran-player-controller-progress-wrap')
+        .children(progressWrapValue)
+        .build() as HTMLDivElement;
+      progressDot = Div().class('ran-player-controller-progress-dot').build() as HTMLDivElement;
+      progress = Div()
+        .class('ran-player-controller-progress')
+        .children(progressWrap, progressDot)
+        .build() as HTMLDivElement;
+
+      // Left controls
+      playerControllerBottomPlayBtn = Div().class('ran-player-controller-bottom-left-btn').build() as HTMLDivElement;
+      playerControllerBottomTimeCurrent = Div()
+        .class('ran-player-controller-bottom-left-time-current')
+        .build() as HTMLDivElement;
+      playerControllerBottomTimeDivide = Div()
+        .class('ran-player-controller-bottom-left-time-divide')
+        .build() as HTMLDivElement;
+      playerControllerBottomTimeDuration = Div()
+        .class('ran-player-controller-bottom-left-time-duration')
+        .build() as HTMLDivElement;
+      playerControllerBottomLeft = Div()
+        .class('ran-player-controller-bottom-left')
+        .children(
+          playerControllerBottomPlayBtn,
+          playerControllerBottomTimeCurrent,
+          playerControllerBottomTimeDivide,
+          playerControllerBottomTimeDuration,
+        )
+        .build() as HTMLDivElement;
+
+      // Right controls: speed
+      const playerIdentifier = 'ran-player' + `${performance.now()}`.replace('.', '');
+      playControllerBottomSpeedPopover = View('r-select')
+        .attr('value', '1')
+        .attr('trigger', 'hover,click')
+        .attr('type', 'text')
+        .attr('placement', 'top')
+        .attr('getPopupContainerId', playerIdentifier)
+        .attr('dropdownclass', 'video-speed-dropdown')
+        .children(...SPEED.map((item) => View('r-option').attr('value', `${item.value}`).text(item.label).build()))
+        .build() as HTMLElement;
+      playControllerBottomSpeedPopover.addEventListener('change', this.changeSpeed);
+      playControllerBottomSpeed = Div()
+        .class('ran-player-controller-bottom-right-speed')
+        .children(playControllerBottomSpeedPopover)
+        .build() as HTMLDivElement;
+
+      // Right controls: volume
+      playControllerBottomSpeedIcon = Div()
+        .class('ran-player-controller-bottom-right-volume-icon ran-player-controller-bottom-right-volume-icon-volume')
+        .build() as HTMLDivElement;
+      playControllerBottomVolumeProgress = View('r-progress')
+        .class('ran-player-controller-bottom-right-volume-progress')
+        .attr('percent', '0.5')
+        .attr('type', 'drag')
+        .build() as Progress;
+      playControllerBottomVolume = Div()
+        .class('ran-player-controller-bottom-right-volume')
+        .children(playControllerBottomSpeedIcon, playControllerBottomVolumeProgress)
+        .build() as HTMLDivElement;
+
+      // Right controls: rest
+      playControllerBottomClarity = Div().class('ran-player-controller-bottom-right-clarity').build() as HTMLDivElement;
+      playControllerBottomRightFullScreen = Div()
+        .class('ran-player-controller-bottom-right-full')
+        .build() as HTMLDivElement;
+
+      playerControllerBottomRight = Div()
+        .class('ran-player-controller-bottom-right')
+        .children(
+          playControllerBottomClarity,
+          playControllerBottomSpeed,
+          playControllerBottomVolume,
+          playControllerBottomRightFullScreen,
+        )
+        .build() as HTMLDivElement;
+
+      // Controller bottom
+      playerControllerBottom = Div()
+        .class('ran-player-controller-bottom')
+        .children(playerControllerBottomLeft, playerControllerBottomRight)
+        .build() as HTMLDivElement;
+
+      // Tip
+      playerTipTime = Div().class('ran-player-controller-tip-time').build() as HTMLDivElement;
+      playerTipText = Div().class('ran-player-controller-tip-text').build() as HTMLDivElement;
+      playerTip = Div()
+        .class('ran-player-controller-tip')
+        .children(playerTipTime, playerTipText)
+        .build() as HTMLDivElement;
+
+      // Main controller container
+      playerController = Div()
+        .class('ran-player-controller')
+        .children(playerTip, progress, playerControllerBottom)
+        .build() as HTMLDivElement;
+
+      player = Div()
+        .class('ran-player')
+        .id(playerIdentifier)
+        .children(container, slot, playerBtn, playerController)
+        .build() as HTMLDivElement;
+
+      this._shadowDom.appendChild(player);
+    } else {
+      // Re-hydrate variables from existing DSD tree
+      progress = playerController.querySelector('.ran-player-controller-progress') as HTMLDivElement;
+      progressWrap = progress.querySelector('.ran-player-controller-progress-wrap') as HTMLDivElement;
+      progressWrapValue = progressWrap.querySelector('.ran-player-controller-progress-wrap-value') as HTMLDivElement;
+      progressDot = progress.querySelector('.ran-player-controller-progress-dot') as HTMLDivElement;
+
+      playerControllerBottom = playerController.querySelector('.ran-player-controller-bottom') as HTMLDivElement;
+      playerControllerBottomLeft = playerControllerBottom.querySelector(
+        '.ran-player-controller-bottom-left',
+      ) as HTMLDivElement;
+      playerControllerBottomPlayBtn = playerControllerBottomLeft.querySelector(
+        '.ran-player-controller-bottom-left-btn',
+      ) as HTMLDivElement;
+      playerControllerBottomTimeCurrent = playerControllerBottomLeft.querySelector(
+        '.ran-player-controller-bottom-left-time-current',
+      ) as HTMLDivElement;
+      playerControllerBottomTimeDivide = playerControllerBottomLeft.querySelector(
+        '.ran-player-controller-bottom-left-time-divide',
+      ) as HTMLDivElement;
+      playerControllerBottomTimeDuration = playerControllerBottomLeft.querySelector(
+        '.ran-player-controller-bottom-left-time-duration',
+      ) as HTMLDivElement;
+
+      playerControllerBottomRight = playerControllerBottom.querySelector(
+        '.ran-player-controller-bottom-right',
+      ) as HTMLDivElement;
+      playControllerBottomSpeed = playerControllerBottomRight.querySelector(
+        '.ran-player-controller-bottom-right-speed',
+      ) as HTMLDivElement;
+      playControllerBottomSpeedPopover = playControllerBottomSpeed.querySelector('r-select') as HTMLElement;
+      playControllerBottomSpeedPopover.addEventListener('change', this.changeSpeed);
+
+      playControllerBottomVolume = playerControllerBottomRight.querySelector(
+        '.ran-player-controller-bottom-right-volume',
+      ) as HTMLDivElement;
+      playControllerBottomVolumeProgress = playControllerBottomVolume.querySelector('r-progress') as Progress;
+      playControllerBottomSpeedIcon = playControllerBottomVolume.querySelector(
+        '.ran-player-controller-bottom-right-volume-icon',
+      ) as HTMLDivElement;
+
+      playControllerBottomClarity = playerControllerBottomRight.querySelector(
+        '.ran-player-controller-bottom-right-clarity',
+      ) as HTMLElement;
+      playControllerBottomRightFullScreen = playerControllerBottomRight.querySelector(
+        '.ran-player-controller-bottom-right-full',
+      ) as HTMLDivElement;
+
+      playerTip = playerController.querySelector('.ran-player-controller-tip') as HTMLDivElement;
+      playerTipTime = playerTip.querySelector('.ran-player-controller-tip-time') as HTMLDivElement;
+      playerTipText = playerTip.querySelector('.ran-player-controller-tip-text') as HTMLDivElement;
+    }
+
+    this._player = player;
+    this._container = container;
+    this._slot = slot;
+    this._playerBtn = playerBtn;
+    this._progress = progress;
+    this._progressWrap = progressWrap;
+    this._progressWrapValue = progressWrapValue;
+    this._progressDot = progressDot;
+    this._playerControllerBottom = playerControllerBottom;
+    this._playerControllerBottomRight = playerControllerBottomRight;
+    this._playerControllerBottomLeft = playerControllerBottomLeft;
+    this._playerControllerBottomPlayBtn = playerControllerBottomPlayBtn;
+    this._playerControllerBottomTimeCurrent = playerControllerBottomTimeCurrent;
+    this._playerControllerBottomTimeDivide = playerControllerBottomTimeDivide;
+    this._playerControllerBottomTimeDuration = playerControllerBottomTimeDuration;
+    this._playControllerBottomSpeed = playControllerBottomSpeed;
+    this._playControllerBottomSpeedPopover = playControllerBottomSpeedPopover;
+    this._playControllerBottomVolume = playControllerBottomVolume;
+    this._playControllerBottomVolumeProgress = playControllerBottomVolumeProgress;
+    this._playControllerBottomSpeedIcon = playControllerBottomSpeedIcon;
+    this._playControllerBottomClarity = playControllerBottomClarity;
+    this._playControllerBottomRightFullScreen = playControllerBottomRightFullScreen;
+    this._playerController = playerController;
+    this._playerTip = playerTip;
+    this._playerTipTime = playerTipTime;
+    this._playerTipText = playerTipText;
     // ctx
     this.ctx = {
       currentTime: 0, // 当前时间
@@ -335,20 +432,20 @@ export class RanPlayer extends (HTMLElementSSR()!) {
       const { name, url } = item;
       if (!name || !url) return;
       this.ctx.levelMap.set(name, url);
-      const option = document.createElement('r-option');
-      option.setAttribute('value', name);
-      option.innerHTML = name;
+      const option = View('r-option').attr('value', name).text(name).build() as HTMLElement;
       Fragment.appendChild(option);
     });
-    const select = document.createElement('r-select');
-    select.setAttribute('value', this.ctx.clarity || 'Auto');
-    select.appendChild(Fragment);
-    select.setAttribute('type', 'text');
-    select.setAttribute('trigger', 'hover,click');
-    select.setAttribute('placement', 'top');
     const id = this._player.getAttribute('id');
-    id && select.setAttribute('getPopupContainerId', id);
-    select.setAttribute('dropdownclass', 'video-clarity-dropdown');
+    const select = View('r-select')
+      .attr('value', this.ctx.clarity || 'Auto')
+      .attr('type', 'text')
+      .attr('trigger', 'hover,click')
+      .attr('placement', 'top')
+      .attr('dropdownclass', 'video-clarity-dropdown')
+      .children(Fragment as unknown as HTMLElement)
+      .build() as HTMLElement;
+
+    if (id) select.setAttribute('getPopupContainerId', id);
     select.addEventListener('change', this.changeClarity);
     this._playControllerBottomClarity.appendChild(select);
   };
@@ -382,16 +479,17 @@ export class RanPlayer extends (HTMLElementSSR()!) {
       this._hls.destroy();
       this._hls = undefined;
     }
-    this._video = document.createElement('video');
-    this._video.setAttribute('class', 'ran-player-video');
-    this._video.setAttribute('preload', 'auto');
-    this._video.setAttribute('x5-video-player-type', 'h5');
-    this._video.setAttribute('x5-video-orientation', 'portrait');
-    this._video.setAttribute('webkit-playsinline', 'true');
-    this._video.setAttribute('playsinline', 'true');
-    this._video.setAttribute('controls', 'false');
+    this._video = View('video')
+      .class('ran-player-video')
+      .attr('preload', 'auto')
+      .attr('x5-video-player-type', 'h5')
+      .attr('x5-video-orientation', 'portrait')
+      .attr('webkit-playsinline', 'true')
+      .attr('playsinline', 'true')
+      .attr('controls', 'false')
+      .attr('initial-time', '0.01')
+      .build() as HTMLVideoElement;
     this._video.controls = false;
-    this._video.setAttribute('initial-time', '0.01');
     try {
       if (this._video.canPlayType('application/vnd.apple.mpegurl') && this.src) {
         this._video.src = this.src;

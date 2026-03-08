@@ -1,3 +1,4 @@
+import { Div, View } from '@/utils/builder';
 import { HTMLElementSSR } from '@/utils/index';
 import { adoptStyles } from '@/utils/style';
 import scratchCss from './index.less?inline';
@@ -13,19 +14,31 @@ class ScratchTicket extends (HTMLElementSSR()!) {
   }
   constructor() {
     super();
-    this.scratchTicketContainer = document.createElement('div');
-    this.scratchTicketContainer.setAttribute('class', 'ran-scratch-ticket');
-    this.scratchAward = document.createElement('div');
-    this.scratchAward.setAttribute('class', 'ran-scratch-ticket-award');
-    this.scratchTicket = document.createElement('canvas');
-    this.scratchTicket.setAttribute('class', 'ran-scratch-ticket-canvas');
-    this.scratchTicket.style.setProperty('width', '100%');
-    this.scratchTicket.style.setProperty('height', '100%');
-    // this.scratchAward.appendChild(this.scratchTicket);
-    this.scratchTicketContainer.appendChild(this.scratchTicket);
-    this.scratchTicketContainer.appendChild(this.scratchAward);
-    this._shadowDom = this.attachShadow({ mode: 'closed' });
+    this._shadowDom = this.shadowRoot || this.attachShadow({ mode: 'closed' });
     adoptStyles(this._shadowDom, scratchCss);
+
+    let scratchTicketContainer = this._shadowDom.querySelector('.ran-scratch-ticket') as HTMLDivElement | null;
+    let scratchAward = this._shadowDom.querySelector('.ran-scratch-ticket-award') as HTMLDivElement | null;
+    let scratchTicket = this._shadowDom.querySelector('.ran-scratch-ticket-canvas') as HTMLCanvasElement | null;
+
+    if (!scratchTicketContainer || !scratchAward || !scratchTicket) {
+      scratchTicket = View('canvas')
+        .class('ran-scratch-ticket-canvas')
+        .style('width', '100%')
+        .style('height', '100%')
+        .build() as HTMLCanvasElement;
+      scratchAward = Div().class('ran-scratch-ticket-award').build() as HTMLDivElement;
+      scratchTicketContainer = Div()
+        .class('ran-scratch-ticket')
+        .children(scratchTicket, scratchAward)
+        .build() as HTMLDivElement;
+      this._shadowDom.appendChild(scratchTicketContainer);
+    }
+
+    this.scratchTicketContainer = scratchTicketContainer;
+    this.scratchAward = scratchAward;
+    this.scratchTicket = scratchTicket;
+
     this.state = {
       touchStart: false,
       scratchArea: 0,

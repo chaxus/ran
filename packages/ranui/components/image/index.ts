@@ -1,4 +1,5 @@
 import failImage from '../../assets/image/failImage';
+import { Div } from '@/utils/builder';
 import { adoptStyles } from '@/utils/style';
 import imageCss from './index.less?inline';
 
@@ -12,11 +13,15 @@ function Custom() {
       _container: Element;
       constructor() {
         super();
-        this._container = document.createElement('div');
-        this._container.setAttribute('class', 'ran-image');
         const shadowRoot = this.attachShadow({ mode: 'closed' });
         adoptStyles(shadowRoot, imageCss);
-        shadowRoot.appendChild(this._container);
+
+        let container = shadowRoot.querySelector('.ran-image') as Element | null;
+        if (!container) {
+          container = Div().class('ran-image').build() as Element;
+          shadowRoot.appendChild(container);
+        }
+        this._container = container;
       }
       get fallback() {
         return this.getAttribute('fallback') || failImage;

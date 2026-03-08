@@ -5,10 +5,11 @@
  * @LastEditTime: 2025-06-02 12:06:11
  * @FilePath: /ran/packages/ranui/components/popover/index.ts
  */
-import { create, debounce, isMobile } from 'ranuts/utils';
+import { debounce, isMobile } from 'ranuts/utils';
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
 import '@/components/popover/content';
 import '@/components/dropdown';
+import { Div, Slot, View } from '@/utils/builder';
 import { adoptStyles } from '@/utils/style';
 import popoverCss from './index.less?inline';
 
@@ -66,16 +67,17 @@ export class Popover extends (HTMLElementSSR()!) {
   };
   constructor() {
     super();
-    this._slot = document.createElement('slot');
-    this._slot.setAttribute('class', 'slot');
-    this.popoverBlock = document.createElement('div');
-    this.popoverBlock.setAttribute('class', 'ran-popover-block');
-    this.popoverBlock.setAttribute('role', 'tooltip');
-    this.popoverBlock.appendChild(this._slot);
-    const shadowRoot = this.attachShadow({ mode: 'closed' });
-    this._shadowDom = shadowRoot;
+    this._shadowDom = this.shadowRoot || this.attachShadow({ mode: 'closed' });
     adoptStyles(this._shadowDom, popoverCss);
-    shadowRoot.appendChild(this.popoverBlock);
+
+    let block = this._shadowDom.querySelector('.ran-popover-block') as HTMLDivElement | null;
+    if (!block) {
+      block = Div().class('ran-popover-block').role('tooltip').children(Slot().class('slot')).build() as HTMLDivElement;
+      this._shadowDom.appendChild(block);
+    }
+
+    this.popoverBlock = block;
+    this._slot = block.querySelector('.slot') as HTMLSlotElement;
   }
   get placement(): string {
     return this.getAttribute('placement') || 'top';
@@ -112,13 +114,15 @@ export class Popover extends (HTMLElementSSR()!) {
   createContent = (content: HTMLCollection): void => {
     if (!content) return;
     if (!this.popoverContent) {
-      const div = document.createElement('div');
-      this.popoverContent = create('r-dropdown')
-        .setAttribute('class', 'ran-popover-dropdown')
-        .setStyle('display', 'none')
-        .setStyle('position', 'absolute').element;
+      this.popoverContent = View('r-dropdown')
+        .class('ran-popover-dropdown')
+        .style('display', 'none')
+        .style('position', 'absolute')
+        .build() as HTMLElement;
       this.popoverContent?.addEventListener('click', this.stopPropagation);
-      this.popoverContent && div.appendChild(this.popoverContent);
+
+      const div = Div().children(this.popoverContent).build() as HTMLDivElement;
+
       if (this.trigger.includes('hover') && !isMobile()) {
         this.popoverContent?.addEventListener('mouseleave', this.blur);
         this.popoverContent?.addEventListener('mouseenter', this.removeDropDownTimeId);

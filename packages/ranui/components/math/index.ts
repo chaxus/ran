@@ -1,18 +1,25 @@
-import { create } from 'ranuts/utils';
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
+import { Div, Span } from '@/utils/builder';
 import { adoptStyles } from '@/utils/style';
 import mathCss from './index.less?inline';
 export class Math extends (HTMLElementSSR()!) {
   contain: HTMLElement;
+  _shadowDom: ShadowRoot;
   static get observedAttributes(): string[] {
     return ['latex'];
   }
   constructor() {
     super();
-    this.contain = create('div').setAttribute('class', 'ran-math').element;
     const shadowRoot = this.attachShadow({ mode: 'closed' });
-    adoptStyles(shadowRoot, mathCss);
-    shadowRoot.appendChild(this.contain);
+    this._shadowDom = shadowRoot;
+    adoptStyles(this._shadowDom, mathCss);
+
+    let contain = this._shadowDom.querySelector('.ran-math') as HTMLDivElement | null;
+    if (!contain) {
+      contain = Div().class('ran-math').build() as HTMLDivElement;
+      this._shadowDom.appendChild(contain);
+    }
+    this.contain = contain;
   }
   get latex(): string {
     const latex = this.getAttribute('latex') || '';
@@ -26,10 +33,12 @@ export class Math extends (HTMLElementSSR()!) {
     import('@/assets/js/katex/katex-es.js')
       .then((katex) => {
         this.contain.innerHTML = '';
-        const span = create('span').setTextContent(`$$${this.latex}$$`).element;
-        this.contain.appendChild(span);
-        if (!katex) return;
-        katex.renderMathInElement(this.contain);
+        if (this.latex) {
+          const span = Span().text(`$$${this.latex}$$`).build() as HTMLSpanElement;
+          this.contain.appendChild(span);
+          const win = window as MathJaxWindow;
+          katex.renderMathInElement(this.contain);
+        }
       })
       .catch(function (err: Error) {
         console.warn(`ranui math component warning: ${err.message}\n${err}`);

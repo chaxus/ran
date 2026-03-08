@@ -1,5 +1,6 @@
 import iconCss from './index.less?inline';
 import { RanElement, html } from '@/utils/index';
+import { View } from '@/utils/builder';
 import { adoptStyles } from '@/utils/style';
 
 type ImportMetaWithEnv = ImportMeta & { env?: { DEV?: boolean } };
@@ -207,7 +208,7 @@ export class Icon extends RanElement {
     const serialized = new XMLSerializer().serializeToString(root);
 
     // Recreate in current document to avoid cross-document node quirks.
-    const template = document.createElement('template');
+    const template = View('template').build() as HTMLTemplateElement;
     template.innerHTML = serialized.trim();
     const svg = template.content.firstElementChild;
     if (!svg || svg.tagName.toLowerCase() !== 'svg') return undefined;
