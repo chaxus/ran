@@ -450,18 +450,36 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     this._playControllerBottomClarity.appendChild(select);
   };
   manifestLoaded = (type: string, data: { levels: Level[]; url: string }): void => {
+    console.log(
+      '[r-player] manifestLoaded called, type:',
+      type,
+      'levels:',
+      data?.levels?.length,
+      'first level:',
+      data?.levels?.[0],
+    );
     if (type === 'hlsManifestLoaded') {
       const { url, levels = [] } = data;
       if (levels.length <= 0) return;
       levels.forEach((item) => {
-        if (this.ctx.levelMap.get(item.name) === item.url) return;
-        this.ctx.levels.push(item);
+        // HLS.js Level 的 name 字段可能为空，用 height 或 bitrate 作为 fallback
+        const name =
+          item.name ||
+          (item.height ? `${item.height}p` : '') ||
+          (item.bitrate ? `${Math.round(item.bitrate / 1000)}k` : '');
+        console.log('[r-player] level item:', item, '→ derived name:', name);
+        if (!name) return;
+        const levelWithName = { ...item, name };
+        if (this.ctx.levelMap.get(name) === item.url) return;
+        this.ctx.levels.push(levelWithName);
+        this.ctx.levelMap.set(name, item.url || url);
       });
       if (!this.ctx.levelMap.get('Auto')) {
         this.ctx.levels.push({ name: 'Auto', url });
         this.ctx.levelMap.set('Auto', url);
       }
       this.ctx.url = url;
+      console.log('[r-player] ctx.levels after manifest:', this.ctx.levels);
       this.createClaritySelect();
       this.change('hlsManifestLoaded', { data });
     }
@@ -475,6 +493,11 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     if (!Hls) {
       console.warn('r-player: Hls.js is not loaded from window.Hls');
     }
+    // 重置清晰度状态，避免旧数据干扰新视频的 manifest 加载
+    this.ctx.levels = [];
+    this.ctx.levelMap = new Map();
+    this.ctx.clarity = '';
+    this._playControllerBottomClarity.innerHTML = '';
     // 如果有子元素，进行置空
     this.innerHTML = '';
     if (!this._shadowDom.contains(this._player)) this._shadowDom.appendChild(this._player);
@@ -495,9 +518,8 @@ export class RanPlayer extends (HTMLElementSSR()!) {
       .build() as HTMLVideoElement;
     this._video.controls = false;
     try {
-      if (this._video.canPlayType('application/vnd.apple.mpegurl') && this.src) {
-        this._video.src = this.src;
-      } else if (Hls?.isSupported() && this.src) {
+      if (Hls?.isSupported() && this.src) {
+        // 优先使用 HLS.js —— 支持清晰度切换、事件回调
         this._hls = new Hls();
         if (this._hls) {
           this._hls.off(Hls.Events.MANIFEST_LOADED, this.manifestLoaded);
@@ -507,6 +529,9 @@ export class RanPlayer extends (HTMLElementSSR()!) {
           this._hls.loadSource(this.src);
           this._hls.attachMedia(this._video);
         }
+      } else if (this._video.canPlayType('application/vnd.apple.mpegurl') && this.src) {
+        // 降级：原生 HLS（Safari / 不支持 HLS.js 的环境），无清晰度切换
+        this._video.src = this.src;
       }
       if (!this._container.contains(this._video)) {
         this._container.appendChild(this._video);
