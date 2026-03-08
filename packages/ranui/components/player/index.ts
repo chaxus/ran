@@ -62,6 +62,13 @@ export interface Context {
   clarity: string;
 }
 
+interface PlaybackSnapshot {
+  currentTime: number;
+  playbackRate: number;
+  volume: number;
+  shouldResume: boolean;
+}
+
 interface Hls {
   Events: {
     MANIFEST_LOADED: 'hlsManifestLoaded';
@@ -125,6 +132,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   _volume?: number;
   _video?: HTMLVideoElement;
   _hls?: HlsPlayer;
+  _pendingPlaybackRestore?: PlaybackSnapshot;
   static get observedAttributes(): string[] {
     return ['src', 'volume', 'currentTime', 'playbackRate', 'debug', 'sheet'];
   }
@@ -383,6 +391,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     this._isSeeking = false;
     this._wasPlayingBeforeSeek = false;
     this._isBuffering = false;
+    this._pendingPlaybackRestore = undefined;
   }
   get src(): string {
     return this.getAttribute('src') || '';
@@ -424,24 +433,36 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     if (!this.sheet) return;
     adoptSheetText(this._shadowDom, this.sheet);
   };
-  changeClarityToSetVideo = (): void => {
-    const { currentTime, playbackRate, volume, currentState } = this.ctx;
-    this.setCurrentTime(currentTime);
-    this.setPlaybackRate(playbackRate);
-    this.setVolume(volume);
-    if (PLAY_STATE_LIST.includes(currentState)) {
+  capturePlaybackSnapshot = (): PlaybackSnapshot => {
+    const currentTime = this.getCurrentTime();
+    const playbackRate = this.getPlaybackRate() || this.ctx.playbackRate || 1;
+    const volume = this.getVolume() || this.ctx.volume;
+    const shouldResume = !!this._video && !this._video.paused && !this._video.ended;
+    return {
+      currentTime,
+      playbackRate,
+      volume,
+      shouldResume,
+    };
+  };
+  restorePlaybackSnapshot = (snapshot: PlaybackSnapshot): void => {
+    this.setCurrentTime(snapshot.currentTime);
+    this.setPlaybackRate(snapshot.playbackRate);
+    this.setVolume(snapshot.volume);
+    if (snapshot.shouldResume) {
       this.play();
-    } else {
-      this.pause();
+      return;
     }
+    this.pause();
   };
   changeClarity = (e: Event): void => {
     this.ctx.clarity = (e as CustomEvent).detail.value;
     const url = this.ctx.levelMap.get((e as CustomEvent).detail.value);
     if (url && this._hls) {
+      this._pendingPlaybackRestore = this.capturePlaybackSnapshot();
+      this.setLoadingState(this._pendingPlaybackRestore.shouldResume);
       this._hls.loadSource(url);
       this._hls.startLoad();
-      this.changeClarityToSetVideo();
     }
   };
   createClaritySelect = (): void => {
@@ -522,6 +543,10 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     // 如果有子元素，进行置空
     this.innerHTML = '';
     if (!this._shadowDom.contains(this._player)) this._shadowDom.appendChild(this._player);
+    this.setLoadingState(false);
+    this._isSeeking = false;
+    this._wasPlayingBeforeSeek = false;
+    this._pendingPlaybackRestore = undefined;
     if (this._hls) {
       this._hls.destroy();
       this._hls = undefined;
@@ -589,6 +614,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   };
   onCanplay = (e: Event): void => {
     this.ctx.currentState = e.type;
+    this.setLoadingState(false);
     removeClassToElement(this._playerControllerBottomPlayBtn, 'ran-player-controller-bottom-left-btn-pause');
     addClassToElement(this._playerControllerBottomPlayBtn, 'ran-player-controller-bottom-left-btn-play');
     this.change('canplay', e);
@@ -596,6 +622,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   };
   onCanplaythrough = (e: Event): void => {
     this.ctx.currentState = e.type;
+    this.setLoadingState(false);
     this.change('canplaythrough', e);
   };
   onComplete = (e: Event): void => {
@@ -604,6 +631,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   };
   onDurationchange = (e: Event): void => {
     this.ctx.currentState = e.type;
+    this.updateBufferedProgress();
     this.change('durationchange', e);
   };
   onEmptied = (e: Event): void => {
@@ -612,14 +640,21 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   };
   onEnded = (e: Event): void => {
     this.ctx.currentState = e.type;
+    this.setLoadingState(false);
     this.change('ended', e);
   };
   onError = (e: Event): void => {
     this.ctx.currentState = e.type;
+    this.setLoadingState(false);
     this.change('error', e);
   };
   onLoadedmetadata = (e: Event): void => {
     this.ctx.currentState = e.type;
+    if (this._pendingPlaybackRestore) {
+      this.restorePlaybackSnapshot(this._pendingPlaybackRestore);
+      this._pendingPlaybackRestore = undefined;
+    }
+    this.updateBufferedProgress();
     this.change('loadedmetadata', e);
   };
   onLoadstart = (e: Event): void => {
@@ -628,6 +663,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   };
   onProgress = (e: Event): void => {
     this.ctx.currentState = e.type;
+    this.updateBufferedProgress();
     this.change('progress', e);
   };
   onRatechange = (e: Event): void => {
@@ -636,10 +672,12 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   };
   onSeeked = (e: Event): void => {
     this.ctx.currentState = e.type;
+    this.setLoadingState(false);
     this.change('seeked', e);
   };
   onSeeking = (e: Event): void => {
     this.ctx.currentState = e.type;
+    this.setLoadingState(!this.moveProgress.mouseDown && !!this._video && !this._video.paused);
     this.change('seeking', e);
   };
   onStalled = (e: Event): void => {
@@ -654,6 +692,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     this.ctx.currentState = e.type;
     const duration = this.getTotalTime();
     this.ctx.duration = duration;
+    this.updateBufferedProgress();
     this._playerControllerBottomTimeCurrent.innerText = '00:00';
     this._playerControllerBottomTimeDivide.innerText = '/';
     this._playerControllerBottomTimeDuration.innerText = timeFormat(this.ctx.duration);
@@ -669,10 +708,12 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   };
   onWaiting = (e: Event): void => {
     this.ctx.currentState = e.type;
+    this.setLoadingState(!!this._video && !this._video.paused && !this._video.ended && !this._isSeeking);
     this.change('waiting', e);
   };
   onPlay = (e: Event): void => {
     this.ctx.currentState = e.type;
+    this.setLoadingState(false);
     this.requestAnimationFrame(this.updateCurrentProgress);
     removeClassToElement(this._playerControllerBottomPlayBtn, 'ran-player-controller-bottom-left-btn-play');
     addClassToElement(this._playerControllerBottomPlayBtn, 'ran-player-controller-bottom-left-btn-pause');
@@ -681,6 +722,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   };
   onPlaying = (e: Event): void => {
     this.ctx.currentState = e.type;
+    this.setLoadingState(false);
     this._playerBtn.style.setProperty('display', 'none');
     removeClassToElement(this._playerControllerBottomPlayBtn, 'ran-player-controller-bottom-left-btn-play');
     addClassToElement(this._playerControllerBottomPlayBtn, 'ran-player-controller-bottom-left-btn-pause');
@@ -690,7 +732,8 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   };
   onPause = (e: Event): void => {
     this.ctx.currentState = e.type;
-    this._playerBtn.style.setProperty('display', 'block');
+    this.setLoadingState(false);
+    this._playerBtn.style.setProperty('display', this._isSeeking ? 'none' : 'block');
     this.change('pause', e);
     removeClassToElement(this._playerControllerBottomPlayBtn, 'ran-player-controller-bottom-left-btn-pause');
     addClassToElement(this._playerControllerBottomPlayBtn, 'ran-player-controller-bottom-left-btn-play');
@@ -787,6 +830,54 @@ export class RanPlayer extends (HTMLElementSSR()!) {
       }
     }
   };
+  setLoadingState = (loading: boolean): void => {
+    if (this._isBuffering === loading) return;
+    this._isBuffering = loading;
+    if (loading) {
+      addClassToElement(this._player, 'ran-player-buffering');
+      return;
+    }
+    removeClassToElement(this._player, 'ran-player-buffering');
+  };
+  updateBufferedProgress = (): void => {
+    if (!this._video) return;
+    const duration = this.getTotalTime();
+    if (!Number.isFinite(duration) || duration <= 0) {
+      this._progressWrapBuffer.style.setProperty('transform', 'scaleX(0)');
+      return;
+    }
+    const { buffered, currentTime } = this._video;
+    let bufferedEnd = 0;
+    for (let i = 0; i < buffered.length; i++) {
+      const start = buffered.start(i);
+      const end = buffered.end(i);
+      if (start <= currentTime && currentTime <= end) {
+        bufferedEnd = end;
+        break;
+      }
+      if (end > bufferedEnd) {
+        bufferedEnd = end;
+      }
+    }
+    const percentage = range(bufferedEnd / duration);
+    this._progressWrapBuffer.style.setProperty('transform', `scaleX(${percentage})`);
+  };
+  syncProgressByPercentage = (percentage: number): void => {
+    const normalizedPercentage = range(percentage);
+    this._progressWrapValue.style.setProperty('transform', `scaleX(${normalizedPercentage})`);
+    this._progressDot.style.setProperty(
+      'transform',
+      `translateX(${normalizedPercentage * this._progress.offsetWidth}px)`,
+    );
+  };
+  seekToPercentage = (percentage: number): void => {
+    const durationFromContext = this.ctx.duration;
+    const durationFromVideo = this.getTotalTime();
+    const duration = durationFromVideo > 0 ? durationFromVideo : durationFromContext;
+    if (!Number.isFinite(duration) || duration <= 0) return;
+    this.setCurrentTime(duration * range(percentage));
+    this.updateCurrentProgress();
+  };
   /**
    * @description: 进度条点击事件
    * @param {MouseEvent} e
@@ -796,8 +887,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     const rect = this._progressWrap.getBoundingClientRect();
     const offsetX = e.clientX - rect.left;
     const percentage = range(offsetX / this._progress.offsetWidth);
-    this.setCurrentTime(this.ctx.duration * percentage);
-    this.updateCurrentProgress();
+    this.seekToPercentage(percentage);
   };
   /**
    * @description: 进度条鼠标按下事件
@@ -807,6 +897,8 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   progressDotMouseDown = (): void => {
     this._playerBtn.style.setProperty('display', 'none');
     this.moveProgress.mouseDown = true;
+    this._isSeeking = true;
+    this._wasPlayingBeforeSeek = !!this._video && !this._video.paused && !this._video.ended;
     this.cancelAnimationFrame();
   };
   /**
@@ -820,8 +912,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     const rect = this._progress.getBoundingClientRect();
     const offsetX = e.clientX - rect.left - 9;
     const percentage = range(offsetX / this._progress.offsetWidth);
-    this._progressWrapValue.style.setProperty('transform', `scaleX(${percentage})`);
-    this._progressDot.style.setProperty('transform', `translateX(${percentage * this._progress.offsetWidth}px)`);
+    this.syncProgressByPercentage(percentage);
     this.moveProgress.percentage = Math.floor(percentage * 100) / 100;
   };
   progressDotMouseMoveDocument = (e: MouseEvent): void => {
@@ -829,8 +920,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     const rect = this._progress.getBoundingClientRect();
     const offsetX = e.clientX - rect.left - 9;
     const percentage = range(offsetX / this._progress.offsetWidth);
-    this._progressWrapValue.style.setProperty('transform', `scaleX(${percentage})`);
-    this._progressDot.style.setProperty('transform', `translateX(${percentage * this._progress.offsetWidth}px)`);
+    this.syncProgressByPercentage(percentage);
     this.moveProgress.percentage = Math.floor(percentage * 100) / 100;
   };
   /**
@@ -840,11 +930,18 @@ export class RanPlayer extends (HTMLElementSSR()!) {
    */
   progressDotMouseUp = (): void => {
     if (!this.moveProgress.mouseDown) return;
-    const percentage = this.moveProgress.percentage;
-    this.setCurrentTime(this.ctx.duration * percentage);
-    this.play();
+    const shouldResume = this._wasPlayingBeforeSeek;
+    this.seekToPercentage(this.moveProgress.percentage);
     this.moveProgress.mouseDown = false;
-    this.requestAnimationFrame(this.updateCurrentProgress);
+    this._isSeeking = false;
+    this._wasPlayingBeforeSeek = false;
+    if (shouldResume) {
+      this.play();
+      this.requestAnimationFrame(this.updateCurrentProgress);
+      return;
+    }
+    this.pause();
+    this.cancelAnimationFrame();
   };
   /**
    * @description: 更新页面样式
@@ -881,11 +978,12 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     const currentTime = this.getCurrentTime();
     this.ctx.currentTime = currentTime;
     const { duration } = this.ctx;
-    this._progressWrapValue.style.setProperty('transform', `scaleX(${currentTime / duration})`);
-    this._progressDot.style.setProperty(
-      'transform',
-      `translateX(${(currentTime / duration) * this._progress.offsetWidth}px)`,
-    );
+    if (!Number.isFinite(duration) || duration <= 0) {
+      this.syncProgressByPercentage(0);
+      return;
+    }
+    this.syncProgressByPercentage(currentTime / duration);
+    this.updateBufferedProgress();
     if (currentTime >= 0) {
       this._playerControllerBottomTimeCurrent.innerText = timeFormat(currentTime);
     }
@@ -1006,8 +1104,10 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     }
   };
   changeSpeed = (e: Event): void => {
-    this.change('speed', (e as CustomEvent).detail.value);
-    this.setPlaybackRate((e as CustomEvent).detail.value);
+    const speed = Number((e as CustomEvent).detail.value) || 1;
+    this.ctx.playbackRate = speed;
+    this.change('speed', speed);
+    this.setPlaybackRate(speed);
   };
   progressMouseEnter = (e: MouseEvent): void => {
     this._playerTip.style.setProperty('opacity', '1');
@@ -1174,6 +1274,10 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     document.removeEventListener('mousemove', this.progressDotMouseMoveDocument);
     document.removeEventListener('mouseup', this.progressDotMouseUp);
     this.moveProgress.mouseDown = false;
+    this._isSeeking = false;
+    this._wasPlayingBeforeSeek = false;
+    this._pendingPlaybackRestore = undefined;
+    this.setLoadingState(false);
     this._playControllerBottomVolumeProgress.removeEventListener('change', this.changeVolumeProgress);
     this._playControllerBottomRightFullScreen.removeEventListener('click', this.openFullScreen);
     window.removeEventListener('resize', this.resize);
