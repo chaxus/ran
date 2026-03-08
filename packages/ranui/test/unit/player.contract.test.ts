@@ -16,13 +16,13 @@ describe('r-player contract', () => {
     player._wasPlayingBeforeSeek = true;
 
     const setCurrentTimeSpy = vi.spyOn(player, 'setCurrentTime');
-    const playSpy = vi.spyOn(player, 'play').mockImplementation(() => undefined);
+    const safePlaySpy = vi.spyOn(player, 'safePlay').mockImplementation(() => undefined);
     const rafSpy = vi.spyOn(player, 'requestAnimationFrame').mockImplementation(() => undefined);
 
     document.dispatchEvent(new MouseEvent('mouseup'));
 
     expect(setCurrentTimeSpy).toHaveBeenCalledWith(30);
-    expect(playSpy).toHaveBeenCalled();
+    expect(safePlaySpy).toHaveBeenCalled();
     expect(rafSpy).toHaveBeenCalled();
     expect(player.moveProgress.mouseDown).toBe(false);
   });
