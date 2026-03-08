@@ -68,6 +68,21 @@
   position: var(--ran-player-position, relative);
   overflow: var(--ran-player-overflow, hidden);
 
+  &.ran-player-buffering::after {
+    content: '';
+    position: var(--ran-player-loading-position, absolute);
+    z-index: var(--ran-player-loading-z-index, 11);
+    top: var(--ran-player-loading-top, calc(50% - 30px));
+    left: var(--ran-player-loading-left, calc(50% - 30px));
+    width: var(--ran-player-loading-width, 60px);
+    height: var(--ran-player-loading-height, 60px);
+    background-position: var(--ran-player-loading-background-position, center);
+    background-repeat: var(--ran-player-loading-background-repeat, no-repeat);
+    background-size: var(--ran-player-loading-background-size, contain);
+    animation: var(--ran-player-loading-animation, loading 1s steps(1) infinite);
+    pointer-events: none;
+  }
+
   &-contain {
     width: var(--ran-player-contain-width, 100%);
     height: var(--ran-player-contain-height, 100%);
@@ -233,6 +248,21 @@
         pointer-events: var(--ran-player-controller-progress-wrap-pointer-events, none);
         box-sizing: var(--ran-player-controller-progress-wrap-box-sizing, content-box);
 
+        &-buffer {
+          position: var(--ran-player-controller-progress-wrap-buffer-position, absolute);
+          top: var(--ran-player-controller-progress-wrap-buffer-top, 0px);
+          left: var(--ran-player-controller-progress-wrap-buffer-left, 0);
+          height: var(--ran-player-controller-progress-wrap-buffer-height, 100%);
+          width: var(--ran-player-controller-progress-wrap-buffer-width, 100%);
+          transform: var(--ran-player-controller-progress-wrap-buffer-transform, scaleX(0));
+          transform-origin: var(--ran-player-controller-progress-wrap-buffer-transform-origin, 0 0);
+          will-change: var(--ran-player-controller-progress-wrap-buffer-will-change, transform);
+          background: var(--ran-player-controller-progress-wrap-buffer-background, rgba(255, 255, 255, 0.45));
+          border-radius: var(--ran-player-controller-progress-wrap-buffer-border-radius, 20px);
+          box-sizing: var(--ran-player-controller-progress-wrap-buffer-box-sizing, content-box);
+          z-index: var(--ran-player-controller-progress-wrap-buffer-z-index, 1);
+        }
+
         &-value {
           position: var(--ran-player-controller-progress-wrap-value-position, absolute);
           top: var(--ran-player-controller-progress-wrap-value-top, 0px);
@@ -246,6 +276,7 @@
           border-radius: var(--ran-player-controller-progress-wrap-value-border-radius, 20px);
           box-sizing: var(--ran-player-controller-progress-wrap-value-box-sizing, content-box);
           cursor: var(--ran-player-controller-progress-wrap-value-cursor, pointer);
+          z-index: var(--ran-player-controller-progress-wrap-value-z-index, 2);
         }
       }
 
