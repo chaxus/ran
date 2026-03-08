@@ -8,7 +8,7 @@ const __dirname = path.dirname(__filename);
 export default defineConfig({
   test: {
     environment: 'jsdom',
-    include: ['test/**/*.test.ts'],
+    include: ['test/unit/**/*.test.ts'],
     globals: true,
     clearMocks: true,
     coverage: {

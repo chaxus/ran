@@ -1,7 +1,7 @@
 import { describe, expect, it, beforeEach } from 'vitest';
-import type { ColorPicker } from '../components/colorpicker/index';
+import type { ColorPicker } from '@/components/colorpicker/index';
 // Ensure custom elements are defined
-import '../components/colorpicker/index';
+import '@/components/colorpicker/index';
 
 describe('r-colorpicker contract', () => {
   beforeEach(() => {

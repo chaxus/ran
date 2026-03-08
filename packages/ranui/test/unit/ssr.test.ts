@@ -2,8 +2,8 @@
  * @vitest-environment node
  */
 import { describe, it, expect } from 'vitest';
-import { Button } from '../components/button/index';
-import { renderToString } from '../utils/ssr';
+import { Button } from '@/components/button/index';
+import { renderToString } from '@/utils/ssr';
 
 describe('SSR Rendering', () => {
   it('should render r-button with DSD template', () => {

@@ -1,8 +1,8 @@
 import { describe, expect, it, beforeEach } from 'vitest';
-import type { Popover } from '../components/popover/index';
+import type { Popover } from '@/components/popover/index';
 // Ensure custom elements are defined
-import '../components/popover/index';
-import '../components/popover/content/index';
+import '@/components/popover/index';
+import '@/components/popover/content/index';
 
 describe('r-popover contract', () => {
   beforeEach(() => {
