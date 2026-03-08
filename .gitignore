@@ -21,3 +21,6 @@ dist
 report
 # tesseract
 *.traineddata
+
+# test coverage
+coverage
