@@ -11,13 +11,18 @@ import {
 } from './core/controller';
 import { createPlaybackSnapshot, resolveSeekDuration, shouldResumePlayback, type PlaybackSnapshot } from './core/playback';
 import { bindMediaEvents, loadVideoSource, unbindMediaEvents, type PlayerMediaHandlers } from './core/media';
+import {
+  shouldSetLoadingOnSeeking,
+  shouldSetLoadingOnWaiting,
+  syncCenterPlayVisibility,
+  syncPlayButtonState,
+} from './core/events';
 import { getBufferedPercentage, normalizeProgress } from './core/progress';
 import {
   createDefaultPlayerContext,
   createDefaultRuntimeState,
   resetSourceContextState,
   resetTransientRuntimeState,
-  type PlayerContextState,
   type PlayerRuntimeState,
 } from './core/state';
 import { ensurePlayerView } from './core/view';
@@ -181,8 +186,8 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     this._playerTip = viewRefs.playerTip;
     this._playerTipTime = viewRefs.playerTipTime;
     this._playerTipText = viewRefs.playerTipText;
-    this.ctx = createDefaultPlayerContext(new SyncHook()) as unknown as Context;
-    this.applyRuntimeState(createDefaultRuntimeState());
+    this.ctx = createDefaultPlayerContext<SyncHook, Partial<Level>>(new SyncHook());
+    this.applyRuntimeState(createDefaultRuntimeState<PlaybackSnapshot>());
   }
   get src(): string {
     return this.getAttribute('src') || '';
@@ -224,7 +229,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     if (!this.sheet) return;
     adoptSheetText(this._shadowDom, this.sheet);
   };
-  getRuntimeState = (): PlayerRuntimeState => {
+  getRuntimeState = (): PlayerRuntimeState<PlaybackSnapshot> => {
     return {
       moveProgress: this.moveProgress,
       isSeeking: this._isSeeking,
@@ -233,12 +238,12 @@ export class RanPlayer extends (HTMLElementSSR()!) {
       pendingPlaybackRestore: this._pendingPlaybackRestore,
     };
   };
-  applyRuntimeState = (state: PlayerRuntimeState): void => {
+  applyRuntimeState = (state: PlayerRuntimeState<PlaybackSnapshot>): void => {
     this.moveProgress = state.moveProgress;
     this._isSeeking = state.isSeeking;
     this._wasPlayingBeforeSeek = state.wasPlayingBeforeSeek;
     this._isBuffering = state.isBuffering;
-    this._pendingPlaybackRestore = state.pendingPlaybackRestore as PlaybackSnapshot | undefined;
+    this._pendingPlaybackRestore = state.pendingPlaybackRestore;
   };
   resetTransientState = (): void => {
     const runtimeState = this.getRuntimeState();
@@ -348,7 +353,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
       console.warn('r-player: Hls.js is not loaded from window.Hls');
     }
     // 重置清晰度状态，避免旧数据干扰新视频的 manifest 加载
-    resetSourceContextState(this.ctx as unknown as PlayerContextState);
+    resetSourceContextState(this.ctx);
     this._playControllerBottomClarity.innerHTML = '';
     // 如果有子元素，进行置空
     this.innerHTML = '';
@@ -415,8 +420,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   onCanplay = (e: Event): void => {
     this.ctx.currentState = e.type;
     this.setLoadingState(false);
-    removeClassToElement(this._playerControllerBottomPlayBtn, 'ran-player-controller-bottom-left-btn-pause');
-    addClassToElement(this._playerControllerBottomPlayBtn, 'ran-player-controller-bottom-left-btn-play');
+    syncPlayButtonState(this._playerControllerBottomPlayBtn, false);
     this.change('canplay', e);
     this.resize();
   };
@@ -477,7 +481,12 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   };
   onSeeking = (e: Event): void => {
     this.ctx.currentState = e.type;
-    this.setLoadingState(!this.moveProgress.mouseDown && !!this._video && !this._video.paused);
+    this.setLoadingState(
+      shouldSetLoadingOnSeeking({
+        isDraggingProgress: this.moveProgress.mouseDown,
+        video: this._video,
+      }),
+    );
     this.change('seeking', e);
   };
   onStalled = (e: Event): void => {
@@ -508,24 +517,27 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   };
   onWaiting = (e: Event): void => {
     this.ctx.currentState = e.type;
-    this.setLoadingState(!!this._video && !this._video.paused && !this._video.ended && !this._isSeeking);
+    this.setLoadingState(
+      shouldSetLoadingOnWaiting({
+        isSeeking: this._isSeeking,
+        video: this._video,
+      }),
+    );
     this.change('waiting', e);
   };
   onPlay = (e: Event): void => {
     this.ctx.currentState = e.type;
     this.setLoadingState(false);
     this.requestAnimationFrame(this.updateCurrentProgress);
-    removeClassToElement(this._playerControllerBottomPlayBtn, 'ran-player-controller-bottom-left-btn-play');
-    addClassToElement(this._playerControllerBottomPlayBtn, 'ran-player-controller-bottom-left-btn-pause');
+    syncPlayButtonState(this._playerControllerBottomPlayBtn, true);
     this.showControllerBar();
     this.change('play', e);
   };
   onPlaying = (e: Event): void => {
     this.ctx.currentState = e.type;
     this.setLoadingState(false);
-    this._playerBtn.style.setProperty('display', 'none');
-    removeClassToElement(this._playerControllerBottomPlayBtn, 'ran-player-controller-bottom-left-btn-play');
-    addClassToElement(this._playerControllerBottomPlayBtn, 'ran-player-controller-bottom-left-btn-pause');
+    syncCenterPlayVisibility(this._playerBtn, false);
+    syncPlayButtonState(this._playerControllerBottomPlayBtn, true);
     this.requestAnimationFrame(this.updateCurrentProgress);
     this.showControllerBar();
     this.change('playing', e);
@@ -533,10 +545,9 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   onPause = (e: Event): void => {
     this.ctx.currentState = e.type;
     this.setLoadingState(false);
-    this._playerBtn.style.setProperty('display', this._isSeeking ? 'none' : 'block');
+    syncCenterPlayVisibility(this._playerBtn, !this._isSeeking);
     this.change('pause', e);
-    removeClassToElement(this._playerControllerBottomPlayBtn, 'ran-player-controller-bottom-left-btn-pause');
-    addClassToElement(this._playerControllerBottomPlayBtn, 'ran-player-controller-bottom-left-btn-play');
+    syncPlayButtonState(this._playerControllerBottomPlayBtn, false);
     this.cancelAnimationFrame();
     this._playerController.style.setProperty('opacity', '1');
     if (this.controllerBarTimeId) {
