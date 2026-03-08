@@ -169,6 +169,30 @@ const Button = () => {
 };
 ```
 
+### Message Position and Container
+
+`window.message` now supports custom top offset, z-index, and mount container:
+
+```ts
+import 'ranui/message';
+
+const customRoot = document.getElementById('custom-message-root');
+
+window.message?.success({
+  content: 'Saved successfully',
+  duration: 2000,
+  top: 24,
+  zIndex: 3000,
+  getContainer: () => customRoot,
+});
+```
+
+`top` accepts `number | string` (`24` -> `24px`, `'2rem'` keeps original unit).
+
+`zIndex` accepts `number | string`.
+
+`getContainer` should return an `HTMLElement`; defaults to `document.body` when not provided.
+
 ### SSR & Builder (Recommended)
 
 For scenarios requiring Server-Side Rendering (SSR) or a more declarative UI construction, we recommend using the `builder` utility:

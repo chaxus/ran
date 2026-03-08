@@ -168,6 +168,30 @@ const Button = () => {
 };
 ```
 
+### Message 位置与容器配置
+
+`window.message` 现已支持自定义顶部偏移、层级和挂载容器：
+
+```ts
+import 'ranui/message';
+
+const customRoot = document.getElementById('custom-message-root');
+
+window.message?.success({
+  content: '保存成功',
+  duration: 2000,
+  top: 24,
+  zIndex: 3000,
+  getContainer: () => customRoot,
+});
+```
+
+`top` 支持 `number | string`（`24` 会转成 `24px`，`'2rem'` 会保留原单位）。
+
+`zIndex` 支持 `number | string`。
+
+`getContainer` 需要返回 `HTMLElement`；未传时默认挂载到 `document.body`。
+
 ### SSR & Builder (推荐)
 
 对于需要服务端渲染 (SSR) 或更声明式构建 UI 的场景，推荐使用 `builder` 工具：

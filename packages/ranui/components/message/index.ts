@@ -1,11 +1,11 @@
-import { create } from 'ranuts/utils';
+import messageCss from './index.less?inline';
 import checkCircleFill from '@/assets/icons/check-circle-fill.svg?raw';
 import closeCircleFill from '@/assets/icons/close-circle-fill.svg?raw';
 import infoCircleFill from '@/assets/icons/info-circle-fill.svg?raw';
 import warningCircleFill from '@/assets/icons/warning-circle-fill.svg?raw';
 import { registerIcons } from '@/components/icon';
 import { adoptStyles } from '@/utils/style';
-import messageCss from './index.less?inline';
+import { getMessageContainer, type MessageRenderOptions } from './container';
 
 const AnimationTime = 300; // message 退出动画执行的时间
 const defaultDuration = 3000; // 默认 message 存在的时间
@@ -36,7 +36,9 @@ const typeMapColor = new Map([
 ]);
 
 function Custom() {
-  if (typeof window !== 'undefined' && !customElements.get('r-message')) {
+  if (typeof window === 'undefined') return null;
+
+  if (!customElements.get('r-message')) {
     class CustomMessage extends HTMLElement {
       _info: HTMLDivElement;
       _notice: HTMLDivElement;
@@ -78,10 +80,6 @@ function Custom() {
       set content(value) {
         if (value) this.setAttribute('content', value);
       }
-      /**
-       * @description: 设置图标
-       * @param {string} value
-       */
       setIcon = (value: string) => {
         const icon = typeMapIcon.get(value);
         const color = typeMapColor.get(value);
@@ -102,59 +100,61 @@ function Custom() {
       }
     }
     customElements.define('r-message', CustomMessage);
-
-    const container = document.createElement('div');
-    const div = document.createElement('div');
-    div.setAttribute('class', 'ranui-message');
-    document.body.appendChild(container);
-    container.appendChild(div);
-
-    const commonPrompt = (type: string) => {
-      return (options: Ran.Prompt | string | undefined | null) => {
-        const message = new CustomMessage();
-        message.setAttribute('class', 'message');
-        message.timeId && clearTimeout(message.timeId);
-        message.setAttribute('type', type);
-        let duration = defaultDuration;
-        let close: Ran.Prompt['close'];
-        if (!options) return;
-        if (typeof options === 'string') {
-          message.setAttribute('content', options);
-        } else {
-          message.setAttribute('content', options.content);
-          close = options.close;
-          duration = options.duration || defaultDuration;
-        }
-
-        const time = setTimeout(() => {
-          message.classList.remove('message-in');
-          message.classList.add('message-leave');
-          clearTimeout(time);
-        }, duration - AnimationTime);
-
-        message.timeId = setTimeout(() => {
-          message.classList.remove('message-leave');
-          div.removeChild(message);
-          if (close) close();
-        }, duration);
-
-        div.appendChild(message);
-        message.classList.add('message-in');
-        setTimeout(() => {
-          message.classList.remove('message-in');
-        }, AnimationTime);
-      };
-    };
-
-    return {
-      info: commonPrompt('info'),
-      success: commonPrompt('success'),
-      error: commonPrompt('error'),
-      warning: commonPrompt('warning'),
-      toast: commonPrompt('toast'),
-    };
   }
-  return null;
+
+  const commonPrompt = (type: string) => {
+    return (options: Ran.Prompt | string | undefined | null) => {
+      const renderOptions: MessageRenderOptions = {};
+      const message = document.createElement('r-message') as HTMLElement & {
+        timeId?: NodeJS.Timeout;
+      };
+      message.setAttribute('class', 'message');
+      message.timeId && clearTimeout(message.timeId);
+      message.setAttribute('type', type);
+      let duration = defaultDuration;
+      let close: Ran.Prompt['close'];
+      if (!options) return;
+      if (typeof options === 'string') {
+        message.setAttribute('content', options);
+      } else {
+        message.setAttribute('content', options.content);
+        close = options.close;
+        duration = options.duration || defaultDuration;
+        renderOptions.top = options.top;
+        renderOptions.zIndex = options.zIndex;
+        renderOptions.getContainer = options.getContainer;
+      }
+
+      const div = getMessageContainer(renderOptions);
+      if (!div) return;
+
+      const time = setTimeout(() => {
+        message.classList.remove('message-in');
+        message.classList.add('message-leave');
+        clearTimeout(time);
+      }, duration - AnimationTime);
+
+      message.timeId = setTimeout(() => {
+        message.classList.remove('message-leave');
+        div.removeChild(message);
+        if (close) close();
+      }, duration);
+
+      div.appendChild(message);
+      message.classList.add('message-in');
+      setTimeout(() => {
+        message.classList.remove('message-in');
+      }, AnimationTime);
+    };
+  };
+
+  return {
+    info: commonPrompt('info'),
+    success: commonPrompt('success'),
+    error: commonPrompt('error'),
+    warning: commonPrompt('warning'),
+    toast: commonPrompt('toast'),
+  };
 }
 
 const message = Custom();

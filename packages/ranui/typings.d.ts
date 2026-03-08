@@ -12,6 +12,9 @@ declare namespace Ran {
     content: string;
     duration?: number;
     close?: () => void;
+    top?: number | string;
+    zIndex?: number | string;
+    getContainer?: () => HTMLElement | null;
   }
 
   type Hint = (options: Prompt | string | undefined | null) => void;
