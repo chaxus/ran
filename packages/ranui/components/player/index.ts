@@ -2,12 +2,13 @@ import { SyncHook, addClassToElement, generateThrottle, range, removeClassToElem
 import '../../assets/js/hls.js';
 import type { Progress } from '@/components/progress';
 import '@/components/select';
+import { PLAY_STATE_LIST, SPEED } from './core/constants';
+import { createPlaybackSnapshot, resolveSeekDuration, shouldResumePlayback, type PlaybackSnapshot } from './core/playback';
+import { getBufferedPercentage, normalizeProgress } from './core/progress';
 import { Div, Slot, View } from '@/utils/builder';
 import { HTMLElementSSR } from '@/utils/index';
 import { adoptSheetText, adoptStyles } from '@/utils/style';
 import playerCss from './index.less?inline';
-
-const PLAY_STATE_LIST = ['play', 'playing', 'timeupdate'];
 
 const throttle = generateThrottle();
 
@@ -62,13 +63,6 @@ export interface Context {
   clarity: string;
 }
 
-interface PlaybackSnapshot {
-  currentTime: number;
-  playbackRate: number;
-  volume: number;
-  shouldResume: boolean;
-}
-
 interface Hls {
   Events: {
     MANIFEST_LOADED: 'hlsManifestLoaded';
@@ -84,14 +78,6 @@ declare global {
     Hls: HLS;
   }
 }
-
-const SPEED = [
-  { label: '2.0X', value: 2.0 },
-  { label: '1.5X', value: 1.5 },
-  { label: '1.0X', value: 1 },
-  { label: '0.8X', value: 0.8 },
-  { label: '0.5X', value: 0.5 },
-];
 
 export class RanPlayer extends (HTMLElementSSR()!) {
   public ctx: Context;
@@ -437,13 +423,13 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     const currentTime = this.getCurrentTime();
     const playbackRate = this.getPlaybackRate() || this.ctx.playbackRate || 1;
     const volume = this.getVolume() || this.ctx.volume;
-    const shouldResume = !!this._video && !this._video.paused && !this._video.ended;
-    return {
+    const shouldResume = shouldResumePlayback(this._video);
+    return createPlaybackSnapshot({
       currentTime,
       playbackRate,
       volume,
       shouldResume,
-    };
+    });
   };
   restorePlaybackSnapshot = (snapshot: PlaybackSnapshot): void => {
     this.setCurrentTime(snapshot.currentTime);
@@ -842,28 +828,11 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   updateBufferedProgress = (): void => {
     if (!this._video) return;
     const duration = this.getTotalTime();
-    if (!Number.isFinite(duration) || duration <= 0) {
-      this._progressWrapBuffer.style.setProperty('transform', 'scaleX(0)');
-      return;
-    }
-    const { buffered, currentTime } = this._video;
-    let bufferedEnd = 0;
-    for (let i = 0; i < buffered.length; i++) {
-      const start = buffered.start(i);
-      const end = buffered.end(i);
-      if (start <= currentTime && currentTime <= end) {
-        bufferedEnd = end;
-        break;
-      }
-      if (end > bufferedEnd) {
-        bufferedEnd = end;
-      }
-    }
-    const percentage = range(bufferedEnd / duration);
+    const percentage = getBufferedPercentage(this._video, duration);
     this._progressWrapBuffer.style.setProperty('transform', `scaleX(${percentage})`);
   };
   syncProgressByPercentage = (percentage: number): void => {
-    const normalizedPercentage = range(percentage);
+    const normalizedPercentage = normalizeProgress(percentage);
     this._progressWrapValue.style.setProperty('transform', `scaleX(${normalizedPercentage})`);
     this._progressDot.style.setProperty(
       'transform',
@@ -873,9 +842,9 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   seekToPercentage = (percentage: number): void => {
     const durationFromContext = this.ctx.duration;
     const durationFromVideo = this.getTotalTime();
-    const duration = durationFromVideo > 0 ? durationFromVideo : durationFromContext;
+    const duration = resolveSeekDuration(durationFromVideo, durationFromContext);
     if (!Number.isFinite(duration) || duration <= 0) return;
-    this.setCurrentTime(duration * range(percentage));
+    this.setCurrentTime(duration * normalizeProgress(percentage));
     this.updateCurrentProgress();
   };
   /**
