@@ -2,6 +2,7 @@ declare module '*.less';
 declare module '*.less?inline';
 declare module '*.ts';
 declare module '*.svg';
+declare module '*.svg?raw';
 declare module '@/assets/*';
 declare module '@/public/*';
 declare module '@/components/*';

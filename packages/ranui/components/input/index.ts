@@ -1,4 +1,5 @@
 import { HTMLElementSSR, createCustomError, falseList, isDisabled } from '@/utils/index';
+import { Div, InputBuilder, Label } from '@/utils/builder';
 import '@/components/icon/index';
 import { adoptStyles } from '@/utils/style';
 import inputCss from './index.less?inline';
@@ -26,22 +27,27 @@ export class Input extends (HTMLElementSSR()!) {
       'maxrows',
     ];
   }
+  _shadowDom: ShadowRoot;
   _input: HTMLDivElement;
   _label: HTMLLabelElement | undefined;
   _inputContent: HTMLInputElement;
   _icon: HTMLElement | undefined;
   constructor() {
     super();
-    const shadowRoot = this.attachShadow({ mode: 'closed' });
-    adoptStyles(shadowRoot, inputCss);
-    this._input = document.createElement('div');
-    this._input.setAttribute('class', 'ran-input');
-    this._input.setAttribute('part', 'ran-input');
-    this._inputContent = document.createElement('input');
-    this._inputContent.setAttribute('class', 'ran-input-content');
-    this._inputContent.setAttribute('part', 'ran-input-content');
-    this._input.appendChild(this._inputContent);
-    shadowRoot.appendChild(this._input);
+    this._shadowDom = this.shadowRoot || this.attachShadow({ mode: 'closed' });
+    adoptStyles(this._shadowDom, inputCss);
+
+    let wrap = this._shadowDom.querySelector('.ran-input') as HTMLDivElement;
+    if (!wrap) {
+      wrap = Div()
+        .class('ran-input')
+        .part('ran-input')
+        .children(InputBuilder().class('ran-input-content').part('ran-input-content'))
+        .build();
+      this._shadowDom.appendChild(wrap);
+    }
+    this._input = wrap;
+    this._inputContent = wrap.querySelector('.ran-input-content') as HTMLInputElement;
   }
   /**
    * @description: 获取 input 的值
@@ -336,11 +342,8 @@ export class Input extends (HTMLElementSSR()!) {
         if (this._label) {
           this._label.innerHTML = value;
         } else {
-          this._label = document.createElement('label');
-          this._label.innerHTML = value;
-          this._label.setAttribute('class', 'ran-input-label');
-          this._label.setAttribute('part', 'ran-input-label');
-          this._input.appendChild(this._label);
+          this._label = Label().class('ran-input-label').part('ran-input-label').text(value).build();
+          this._input.appendChild(this._label as HTMLLabelElement);
         }
       } else {
         this._input.removeAttribute('label');
