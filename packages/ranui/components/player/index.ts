@@ -361,6 +361,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     // 如果有子元素，进行置空
     this.innerHTML = '';
     if (!this._shadowDom.contains(this._player)) this._shadowDom.appendChild(this._player);
+    this._isSwitchingSource = false;
     this.setLoadingState(false);
     this.resetTransientState();
     this._container.innerHTML = '';
@@ -1087,6 +1088,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     unbindControllerEvents(this.getControllerElements(), this.getControllerHandlers());
     this.cancelAnimationFrame();
     this.resetTransientState();
+    this._isSwitchingSource = false;
     this.setLoadingState(false);
   }
   attributeChangedCallback(k: string, o: string, n: string): void {
