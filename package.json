@@ -36,10 +36,6 @@
     "vue": "^3.5.29",
     "vue-tsc": "^3.2.5"
   },
-  "dependencies": {
-    "globals": "^17.4.0",
-    "ranui": "0.1.10-alpha-27"
-  },
   "pnpm": {
     "ignoredBuiltDependencies": [
       "fsevents",
