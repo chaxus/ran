@@ -16,6 +16,8 @@ import {
   type PlaybackSnapshot,
 } from './core/playback';
 import { bindMediaEvents, loadVideoSource, unbindMediaEvents, type PlayerMediaHandlers } from './core/media';
+import { buildManifestLevels } from './core/levels';
+import { exitDocumentFullscreen, requestElementFullscreen } from './core/fullscreen';
 import {
   shouldSetLoadingOnSeeking,
   shouldSetLoadingOnWaiting,
@@ -147,7 +149,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   _hls?: HlsPlayer;
   _pendingPlaybackRestore?: PlaybackSnapshot;
   static get observedAttributes(): string[] {
-    return ['src', 'volume', 'currentTime', 'playbackRate', 'debug', 'sheet'];
+    return ['src', 'volume', 'currentTime', 'currenttime', 'playbackRate', 'playbackrate', 'debug', 'sheet'];
   }
   /**
    * @description: 初始化 view 和 video 的全局上下文
@@ -317,36 +319,13 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     this._playControllerBottomClarity.appendChild(select);
   };
   manifestLoaded = (type: string, data: { levels: Level[]; url: string }): void => {
-    console.log(
-      '[r-player] manifestLoaded called, type:',
-      type,
-      'levels:',
-      data?.levels?.length,
-      'first level:',
-      data?.levels?.[0],
-    );
     if (type === 'hlsManifestLoaded') {
       const { url, levels = [] } = data;
       if (levels.length <= 0) return;
-      levels.forEach((item) => {
-        // HLS.js Level 的 name 字段可能为空，用 height 或 bitrate 作为 fallback
-        const name =
-          item.name ||
-          (item.height ? `${item.height}p` : '') ||
-          (item.bitrate ? `${Math.round(item.bitrate / 1000)}k` : '');
-        console.log('[r-player] level item:', item, '→ derived name:', name);
-        if (!name) return;
-        const levelWithName = { ...item, name };
-        if (this.ctx.levelMap.get(name) === item.url) return;
-        this.ctx.levels.push(levelWithName);
-        this.ctx.levelMap.set(name, item.url || url);
-      });
-      if (!this.ctx.levelMap.get('Auto')) {
-        this.ctx.levels.push({ name: 'Auto', url });
-        this.ctx.levelMap.set('Auto', url);
-      }
+      const normalized = buildManifestLevels({ levels, manifestUrl: url, existingLevelMap: this.ctx.levelMap });
+      this.ctx.levels.push(...normalized.levels);
+      normalized.levelMapEntries.forEach(([name, levelUrl]) => this.ctx.levelMap.set(name, levelUrl));
       this.ctx.url = url;
-      console.log('[r-player] ctx.levels after manifest:', this.ctx.levels);
       this.createClaritySelect();
       this.change('hlsManifestLoaded', { data });
     }
@@ -357,7 +336,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
    */
   updatePlayer = (): void => {
     const Hls = window.Hls;
-    if (!Hls) {
+    if (!Hls && this.debug) {
       console.warn('r-player: Hls.js is not loaded from window.Hls');
     }
     // 重置清晰度状态，避免旧数据干扰新视频的 manifest 加载
@@ -396,7 +375,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
       this._video.parentElement?.setAttribute('class', 'ran-player-contain');
       this.listenEvent();
     } catch (error) {
-      console.log('r-player update player error:', error);
+      if (this.debug) console.warn('r-player update player error:', error);
     }
   };
   hlsError = (event: unknown, data: unknown): void => {
@@ -602,6 +581,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   };
   clearListenerEvent = (): void => {
     if (!this._video) return;
+    if (typeof this._video.removeEventListener !== 'function') return;
     unbindMediaEvents(this._video, this.getMediaHandlers());
   };
   /**
@@ -616,7 +596,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   showControllerBar = (e?: MouseEvent): void => {
     if (e) {
       const dom = e.target as HTMLElement;
-      if (dom.classList.value.includes('ran-player-controller')) {
+      if (dom?.classList.value.includes('ran-player-controller')) {
         this._playerController.style.setProperty('opacity', '1');
         if (this.controllerBarTimeId) {
           clearTimeout(this.controllerBarTimeId);
@@ -832,7 +812,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
           this.ctx.fullScreen = false;
         })
         .catch((error) => {
-          console.log(`exit full screen error:${error}`);
+          if (this.debug) console.warn(`exit full screen error:${error}`);
         });
     }
     if (e.code === 'ArrowLeft') {
@@ -873,23 +853,10 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     }
   };
   customRequestFullscreen = (): Promise<void> => {
-    return (
-      this._player.requestFullscreen() ||
-      this._player.mozRequestFullScreen() ||
-      this._player.msRequestFullscreen() ||
-      this._player.oRequestFullscreen() ||
-      this._player.webkitRequestFullscreen() ||
-      this._player.webkitEnterFullscreen()
-    );
+    return requestElementFullscreen(this._player);
   };
   customExitFullscreen = (): Promise<void> => {
-    return (
-      document.exitFullscreen() ||
-      document.msExitFullscreen() ||
-      document.mozCancelFullScreen() ||
-      document.oCancelFullScreen() ||
-      document.webkitExitFullscreen()
-    );
+    return exitDocumentFullscreen(document);
   };
   openFullScreen = (): void => {
     if (!this.ctx.fullScreen) {
@@ -899,7 +866,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
           this.ctx.fullScreen = true;
         })
         .catch((error) => {
-          console.log(`full screen error:${error}`);
+          if (this.debug) console.warn(`full screen error:${error}`);
         });
     } else {
       this.customExitFullscreen()
@@ -908,7 +875,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
           this.ctx.fullScreen = false;
         })
         .catch((error) => {
-          console.log(`exit full screen error:${error}`);
+          if (this.debug) console.warn(`exit full screen error:${error}`);
         });
     }
   };
@@ -934,7 +901,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     this._playerTipTime.innerText = timeFormat((offsetX / this._progress.clientWidth) * this.ctx.duration);
   };
   progressMouseLeave = (e: MouseEvent): void => {
-    if ((e.target as HTMLElement).classList.contains('ran-player-controller-progress-wrap-dot')) {
+    if ((e.target as HTMLElement | null)?.classList.contains('ran-player-controller-progress-wrap-dot')) {
       return;
     }
     this._playerTip.style.setProperty('opacity', '0');
@@ -963,11 +930,12 @@ export class RanPlayer extends (HTMLElementSSR()!) {
       this.setVolume(0);
       this.change('volume', 0);
     } else {
+      const restoredVolume = this._volume || 0.5;
       addClassToElement(this._playControllerBottomSpeedIcon, 'ran-player-controller-bottom-right-volume-icon-volume');
       removeClassToElement(this._playControllerBottomSpeedIcon, 'ran-player-controller-bottom-right-volume-icon-mute');
-      this._playControllerBottomVolumeProgress.setAttribute('percent', `${this._volume || 0.5}`);
-      this.setVolume(0.5);
-      this.change('volume', this._volume || 0.5);
+      this._playControllerBottomVolumeProgress.setAttribute('percent', `${restoredVolume}`);
+      this.setVolume(restoredVolume);
+      this.change('volume', restoredVolume);
     }
   };
   resize = (): void => {
@@ -1103,6 +1071,9 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   }
   disconnectedCallback(): void {
     unbindControllerEvents(this.getControllerElements(), this.getControllerHandlers());
+    this.clearListenerEvent();
+    this._hls?.destroy?.();
+    this._hls = undefined;
     this.cancelAnimationFrame();
     this.resetTransientState();
     this._isSwitchingSource = false;
@@ -1114,6 +1085,12 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     }
     if (k === 'volume' && o !== n) {
       this.setVolume(Number(n) / 100);
+    }
+    if ((k === 'currentTime' || k === 'currenttime') && o !== n) {
+      this.setCurrentTime(Number(n));
+    }
+    if ((k === 'playbackRate' || k === 'playbackrate') && o !== n) {
+      this.setPlaybackRate(Number(n));
     }
     if (k === 'sheet' && o !== n) {
       this.handlerExternalCss();
