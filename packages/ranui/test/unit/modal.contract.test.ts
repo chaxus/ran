@@ -1,4 +1,4 @@
-import { describe, expect, it, beforeEach } from 'vitest';
+import { describe, expect, it, beforeEach, vi } from 'vitest';
 import { Modal } from '@/components/modal/index';
 // Ensure custom elements are defined
 import '@/components/modal/index';
@@ -361,5 +361,197 @@ describe('r-modal contract', () => {
     mask?.dispatchEvent(new MouseEvent('click', { bubbles: true, composed: true }));
     await sleep();
     expect(modal.open).toBe(false);
+  });
+
+  it('Modal.info creates a modal with Info title and resolves on confirm', async () => {
+    const task = Modal.info({ content: 'Info message' });
+    await sleep(40);
+    const modal = document.querySelector('r-modal') as Modal;
+    expect(modal).toBeTruthy();
+    expect(modal.title).toBe('Info');
+
+    const confirmButton = modal.querySelector('.ran-modal-action-confirm') as HTMLButtonElement;
+    confirmButton.click();
+    const result = await task;
+    expect(result.action).toBe('confirm');
+  });
+
+  it('Modal.success creates a modal with Success title', async () => {
+    const task = Modal.success('Success!');
+    await sleep(40);
+    const modal = document.querySelector('r-modal') as Modal;
+    expect(modal.title).toBe('Success');
+    const confirmButton = modal.querySelector('.ran-modal-action-confirm') as HTMLButtonElement;
+    confirmButton.click();
+    await task;
+  });
+
+  it('Modal.warning creates a modal with Warning title', async () => {
+    const task = Modal.warning({ content: 'Warn' });
+    await sleep(40);
+    const modal = document.querySelector('r-modal') as Modal;
+    expect(modal.title).toBe('Warning');
+    const confirmButton = modal.querySelector('.ran-modal-action-confirm') as HTMLButtonElement;
+    confirmButton.click();
+    await task;
+  });
+
+  it('Modal.error creates a modal with Error title', async () => {
+    const task = Modal.error({ title: 'Custom Error', content: 'Err' });
+    await sleep(40);
+    const modal = document.querySelector('r-modal') as Modal;
+    expect(modal.title).toBe('Custom Error');
+    const confirmButton = modal.querySelector('.ran-modal-action-confirm') as HTMLButtonElement;
+    confirmButton.click();
+    await task;
+  });
+
+  it('Modal.confirm with cancel button click resolves with cancel action', async () => {
+    const task = Modal.confirm({ title: 'Confirm?', content: 'Are you sure?' });
+    await sleep(40);
+    const modal = document.querySelector('r-modal') as Modal;
+    expect(modal).toBeTruthy();
+
+    const cancelButton = modal.querySelector('.ran-modal-action-cancel') as HTMLButtonElement;
+    expect(cancelButton).not.toBeNull();
+    cancelButton.click();
+
+    const result = await task;
+    expect(result.action).toBe('cancel');
+  });
+
+  it('Modal.open with content as Node appends it to body', async () => {
+    const contentNode = document.createElement('p');
+    contentNode.textContent = 'Node content';
+    const task = Modal.open({ title: 'Node Test', content: contentNode });
+    await sleep(40);
+    const modal = document.querySelector('r-modal') as Modal;
+    expect(modal).toBeTruthy();
+    const confirmButton = modal.querySelector('.ran-modal-action-confirm') as HTMLButtonElement;
+    confirmButton.click();
+    await task;
+  });
+
+  it('normalizeProgrammaticOptions with string returns content object', () => {
+    const result = Modal.normalizeProgrammaticOptions('Hello');
+    expect(result).toEqual({ content: 'Hello' });
+  });
+
+  it('normalizeProgrammaticOptions with undefined returns empty object', () => {
+    const result = Modal.normalizeProgrammaticOptions(undefined);
+    expect(result).toEqual({});
+  });
+
+  it('attributeChangedCallback skips when old === new', async () => {
+    const modal = await createModal();
+    // @ts-ignore
+    const shadow = modal._shadowDom as ShadowRoot;
+    const titleEl = shadow?.querySelector('.ran-modal-title') as HTMLElement;
+    titleEl.textContent = 'Before';
+    (modal as any).attributeChangedCallback('title', 'same', 'same');
+    expect(titleEl.textContent).toBe('Before');
+  });
+
+  it('attributeChangedCallback handles closable change', async () => {
+    const modal = await createModal();
+    // @ts-ignore
+    const shadow = modal._shadowDom as ShadowRoot;
+    const closeBtn = shadow?.querySelector('.ran-modal-close') as HTMLButtonElement;
+    modal.setAttribute('closable', 'false');
+    await sleep();
+    expect(closeBtn.hidden).toBe(true);
+    modal.setAttribute('closable', 'true');
+    await sleep();
+    expect(closeBtn.hidden).toBe(false);
+  });
+
+  it('attributeChangedCallback handles sheet change', async () => {
+    const modal = await createModal();
+    const spy = vi.spyOn(modal as any, 'handlerExternalCss');
+    (modal as any).attributeChangedCallback('sheet', '', '.ran-modal { color: red; }');
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('trapFocus with no focusable elements focuses dialog', async () => {
+    const modal = await createModal();
+    modal.open = true;
+    await sleep();
+    // @ts-ignore
+    const dialog = (modal as any)._dialog as HTMLElement;
+    const focusSpy = vi.spyOn(dialog, 'focus');
+    const tabEvent = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true });
+    Object.defineProperty(tabEvent, 'preventDefault', { value: vi.fn() });
+    (modal as any).trapFocus(tabEvent);
+    expect(focusSpy).toHaveBeenCalled();
+  });
+
+  it('clearAfterTimers clears pending timers', async () => {
+    const modal = await createModal();
+    (modal as any)._afterOpenTimer = window.setTimeout(() => {}, 10000);
+    (modal as any)._afterCloseTimer = window.setTimeout(() => {}, 10000);
+    (modal as any).clearAfterTimers();
+    expect((modal as any)._afterOpenTimer).toBeNull();
+    expect((modal as any)._afterCloseTimer).toBeNull();
+  });
+
+  it('closeDialog when not open removes root open attribute', async () => {
+    const modal = await createModal();
+    expect((modal as any)._isDialogOpen).toBe(false);
+    (modal as any)._root.setAttribute('open', '');
+    (modal as any).closeDialog();
+    expect((modal as any)._root.hasAttribute('open')).toBe(false);
+  });
+
+  it('connectedCallback with open attribute already set calls openDialog', async () => {
+    const modal = document.createElement('r-modal') as Modal;
+    modal.setAttribute('open', '');
+    document.body.appendChild(modal);
+    await sleep(20);
+    expect(modal.open).toBe(true);
+    expect((modal as any)._isDialogOpen).toBe(true);
+  });
+
+  it('trapFocus cycles backward with shift+tab from first element', async () => {
+    const modal = await createModal();
+    modal.open = true;
+    await sleep();
+
+    // @ts-ignore
+    const shadow = modal._shadowDom as ShadowRoot;
+    const closeBtn = shadow.querySelector('.ran-modal-close') as HTMLButtonElement;
+
+    // Make the close button the first focusable and focus it
+    closeBtn.focus();
+
+    const focusSpy = vi.spyOn(closeBtn, 'focus');
+    const tabEvent = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true });
+    const preventDefaultSpy = vi.fn();
+    Object.defineProperty(tabEvent, 'preventDefault', { value: preventDefaultSpy });
+
+    // Manually simulate the trapFocus call
+    (modal as any).trapFocus(tabEvent);
+    // focus should cycle to last element (or dialog if no focusables)
+    expect(preventDefaultSpy).toHaveBeenCalled();
+  });
+
+  it('trapFocus cycles forward with tab from last element', async () => {
+    const modal = await createModal();
+    modal.open = true;
+    await sleep();
+
+    // @ts-ignore
+    const shadow = modal._shadowDom as ShadowRoot;
+    const closeBtn = shadow.querySelector('.ran-modal-close') as HTMLButtonElement;
+
+    const tabEvent = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: false, bubbles: true });
+    const preventDefaultSpy = vi.fn();
+    Object.defineProperty(tabEvent, 'preventDefault', { value: preventDefaultSpy });
+
+    // Override getFocusableElements to return one element set as "last"
+    vi.spyOn(modal as any, 'getFocusableElements').mockReturnValue([closeBtn]);
+    Object.defineProperty(shadow, 'activeElement', { get: () => closeBtn, configurable: true });
+
+    (modal as any).trapFocus(tabEvent);
+    expect(preventDefaultSpy).toHaveBeenCalled();
   });
 });

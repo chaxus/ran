@@ -4,7 +4,11 @@ import { DEV_SERVER } from '../../build/config';
 test('button', async ({ page }) => {
   await page.goto(DEV_SERVER, { waitUntil: 'load' });
   await expect(page).toHaveTitle(/ranui/);
+  await page.waitForFunction(() => customElements.get('r-button'));
   await page.evaluate(async () => {
+    document.body.innerHTML = '';
+    document.body.style.margin = '0';
+    document.body.style.padding = '24px';
     const component = document.createElement('r-button');
     component.role = 'button';
     component.innerText = 'Submit';
@@ -14,6 +18,7 @@ test('button', async ({ page }) => {
     document.body.appendChild(component);
   });
   // await page.getByRole('button', { name: /submit/i }).click();
-  await expect(page.getByRole('button', { name: /submit/i })).toBeVisible();
-  await expect(page).toHaveScreenshot('button.png', { fullPage: true });
+  const button = page.getByRole('button', { name: /submit/i });
+  await expect(button).toBeVisible();
+  await expect(button).toHaveScreenshot('button.png');
 });

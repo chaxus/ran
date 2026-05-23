@@ -11,11 +11,18 @@ export default defineConfig({
     include: ['test/unit/**/*.test.ts'],
     globals: true,
     clearMocks: true,
+    setupFiles: ['test/setup.ts'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
       include: ['components/**/*.ts'],
       exclude: ['components/**/*.test.ts'],
+      thresholds: {
+        statements: 80,
+        branches: 70,
+        functions: 85,
+        lines: 80,
+      },
     },
   },
   resolve: {

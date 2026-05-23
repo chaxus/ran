@@ -26,11 +26,7 @@ const chunkOptimization: Partial<chunkOptimization> = {
   reportCompressedSize: false,
   rollupOptions: {
     external: ['react', 'react-dom', 'vue'],
-    output: {
-      experimentalMinChunkSize: 500,
-    },
     treeshake: {
-      preset: 'recommended',
       manualPureFunctions: ['console.log'],
     },
   },

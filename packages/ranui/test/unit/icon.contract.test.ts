@@ -1,5 +1,5 @@
-import { describe, expect, it, beforeEach } from 'vitest';
-import { Icon, registerIcon } from '@/components/icon/index';
+import { describe, expect, it, beforeEach, vi } from 'vitest';
+import { Icon, registerIcon, registerIcons } from '@/components/icon/index';
 // Ensure custom elements are defined
 import '@/components/icon/index';
 
@@ -76,6 +76,22 @@ describe('r-icon contract', () => {
     expect(inner?.classList.contains('ran-icon-spin')).toBe(true);
   });
 
+  it('ariaLabel getter and setter', async () => {
+    const icon = await createIcon('test-aria', sampleSvg);
+    icon.ariaLabel = 'Home icon';
+    expect(icon.getAttribute('aria-label')).toBe('Home icon');
+    expect(icon.ariaLabel).toBe('Home icon');
+
+    icon.ariaLabel = '';
+    expect(icon.hasAttribute('aria-label')).toBe(false);
+  });
+
+  it('sheet getter and setter', async () => {
+    const icon = await createIcon('test-sheet', sampleSvg);
+    icon.sheet = '.ran-icon { color: red; }';
+    expect(icon.sheet).toBe('.ran-icon { color: red; }');
+  });
+
   it('reacts to new registered icons via events', async () => {
     const icon = await createIcon();
 
@@ -89,5 +105,117 @@ describe('r-icon contract', () => {
     await sleep(20);
     const svgEl = (icon as any)._shadowDom?.querySelector('svg');
     expect(svgEl).not.toBeNull();
+  });
+
+  it('registerIcon with non-SVG source does not add to cache', () => {
+    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    registerIcon('invalid-icon', 'not-an-svg');
+    const icon = document.createElement('r-icon') as Icon;
+    icon.name = 'invalid-icon';
+    document.body.appendChild(icon);
+    const svgEl = (icon as any)._shadowDom?.querySelector('svg');
+    expect(svgEl).toBeNull();
+    consoleWarnSpy.mockRestore();
+  });
+
+  it('registerIcons registers multiple icons at once', async () => {
+    registerIcons({ 'batch-icon-1': sampleSvg, 'batch-icon-2': sampleSvg });
+    const icon = document.createElement('r-icon') as Icon;
+    icon.name = 'batch-icon-1';
+    document.body.appendChild(icon);
+    await sleep(20);
+    const svgEl = (icon as any)._shadowDom?.querySelector('svg');
+    expect(svgEl).not.toBeNull();
+  });
+
+  it('registerIcon with object having data property', async () => {
+    const source = { data: sampleSvg };
+    registerIcon('data-icon', source);
+    const icon = document.createElement('r-icon') as Icon;
+    icon.name = 'data-icon';
+    document.body.appendChild(icon);
+    await sleep(20);
+    expect((icon as any)._shadowDom?.querySelector('svg')).not.toBeNull();
+  });
+
+  it('registerIcon with object having default property', async () => {
+    const source = { default: sampleSvg };
+    registerIcon('default-icon', source);
+    const icon = document.createElement('r-icon') as Icon;
+    icon.name = 'default-icon';
+    document.body.appendChild(icon);
+    await sleep(20);
+    expect((icon as any)._shadowDom?.querySelector('svg')).not.toBeNull();
+  });
+
+  it('registerIcon with nested default.data property', async () => {
+    const source = { default: { data: sampleSvg } };
+    registerIcon('nested-icon', source);
+    const icon = document.createElement('r-icon') as Icon;
+    icon.name = 'nested-icon';
+    document.body.appendChild(icon);
+    await sleep(20);
+    expect((icon as any)._shadowDom?.querySelector('svg')).not.toBeNull();
+  });
+
+  it('spin setter with false removes spin attribute', async () => {
+    const icon = await createIcon('spin-test', sampleSvg);
+    icon.spin = true;
+    expect(icon.hasAttribute('spin')).toBe(true);
+    icon.spin = false;
+    expect(icon.hasAttribute('spin')).toBe(false);
+  });
+
+  it('syncA11y returns early when no _icon', async () => {
+    const icon = await createIcon();
+    (icon as any)._icon = undefined;
+    expect(() => (icon as any).syncA11y()).not.toThrow();
+  });
+
+  it('setIcon renders SVG when name starts with <svg', async () => {
+    const icon = document.createElement('r-icon') as Icon;
+    document.body.appendChild(icon);
+    await sleep(20);
+    icon.name = sampleSvg;
+    await sleep(20);
+    const svgEl = (icon as any)._shadowDom?.querySelector('svg');
+    expect(svgEl).not.toBeNull();
+  });
+
+  it('_onIconRegistered does nothing when registeredName does not match', async () => {
+    const icon = await createIcon('some-icon', sampleSvg);
+    const spy = vi.spyOn(icon as any, 'setIcon');
+    const event = new CustomEvent('ranui-icon-registered', { detail: { name: 'other-icon' } });
+    (icon as any)._onIconRegistered(event);
+    expect(spy).not.toHaveBeenCalled();
+  });
+
+  it('_onIconRegistered does nothing when detail name is undefined', async () => {
+    const icon = await createIcon();
+    const spy = vi.spyOn(icon as any, 'setIcon');
+    const event = new CustomEvent('ranui-icon-registered', { detail: {} });
+    (icon as any)._onIconRegistered(event);
+    expect(spy).not.toHaveBeenCalled();
+  });
+
+  it('renderSvg with invalid svg content warns in dev mode', async () => {
+    const icon = await createIcon();
+    (icon as any).isDev = true;
+    const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    (icon as any).renderSvg('not-valid-svg', 'test-icon');
+    expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('parse svg failed: test-icon'));
+    consoleSpy.mockRestore();
+  });
+
+  it('parseSvg returns undefined for non-svg root element', async () => {
+    const icon = await createIcon();
+    const result = (icon as any).parseSvg('<div>not svg</div>');
+    expect(result).toBeUndefined();
+  });
+
+  it('parseSvg returns undefined for malformed content', async () => {
+    const icon = await createIcon();
+    const result = (icon as any).parseSvg('<malformed!!!>');
+    expect(result).toBeUndefined();
   });
 });

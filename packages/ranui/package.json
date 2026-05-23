@@ -176,18 +176,18 @@
     }
   },
   "devDependencies": {
-    "@playwright/test": "^1.58.2",
-    "@types/node": "^25.3.5",
-    "@vitest/coverage-v8": "^4.0.18",
-    "jsdom": "^28.1.0",
-    "less": "^4.5.1",
-    "prettier": "^3.8.1",
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^25.9.1",
+    "@vitest/coverage-v8": "^4.1.7",
+    "jsdom": "^29.1.1",
+    "less": "^4.6.4",
+    "prettier": "^3.8.3",
     "rollup-plugin-visualizer": "^7.0.1",
     "svgo": "^4.0.1",
-    "tsx": "^4.21.0",
-    "typescript": "^5.9.3",
-    "vite": "^7.3.1",
-    "vitest": "^4.0.18"
+    "tsx": "^4.22.3",
+    "typescript": "^6.0.3",
+    "vite": "^8.0.14",
+    "vitest": "^4.1.7"
   },
   "dependencies": {
     "ranuts": "workspace:^"

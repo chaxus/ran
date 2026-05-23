@@ -196,8 +196,8 @@ export class Progress extends RanElement {
   }
 
   disconnectedCallback(): void {
-    this._progress.removeEventListener('click', this.progressClick);
-    this._progressDot.removeEventListener('mousedown', this.progressDotMouseDown);
+    this._progress?.removeEventListener('click', this.progressClick);
+    this._progressDot?.removeEventListener('mousedown', this.progressDotMouseDown);
     document.removeEventListener('mousemove', this.progressDotMouseMove);
     document.removeEventListener('mouseup', this.progressDotMouseUp);
     window.removeEventListener('resize', this.resize);

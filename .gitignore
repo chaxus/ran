@@ -5,6 +5,7 @@ npminstall-debug.log
 # common
 .temp
 cache
+.claude
 # mac
 .DS_Store
 # eslint
