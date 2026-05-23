@@ -16,6 +16,31 @@ permissions:
 jobs:
   lint:
     if: github.repository == 'chaxus/ran'
+    runs-on: ubuntu-latest
+    name: "Lint & Type-check"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Format check
+        run: pnpm run format
+
+      - name: Lint
+        run: pnpm run lint
+
+  build-test:
+    if: github.repository == 'chaxus/ran'
     timeout-minutes: 30
     runs-on: ${{ matrix.os }}
     strategy:
@@ -23,7 +48,6 @@ jobs:
         os: [ubuntu-latest]
         node_version: [20, 22]
         include:
-          # Active LTS + other OS
           - os: macos-latest
             node_version: 22
           - os: windows-latest
@@ -31,40 +55,24 @@ jobs:
       fail-fast: false
     name: "Build&Test: node-${{ matrix.node_version }}, ${{ matrix.os }}"
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-python@v6
+
+      - uses: pnpm/action-setup@v4
         with:
-          python-version: "3.10"
+          version: 9
 
-      - uses: pnpm/action-setup@v6
-        name: Install pnpm
-        id: pnpm-install
+      - uses: actions/setup-node@v4
         with:
-          version: 7
-          run_install: false
+          node-version: ${{ matrix.node_version }}
+          cache: pnpm
 
-      - name: Get pnpm store directory
-        id: pnpm-cache
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-      - name: prepare
-        run: pnpm pre
-
-      - name: Install deps
-        run: pnpm install
-
-      - name: build
+      - name: Build
         run: pnpm run build
-
-      - name: format
-        run: pnpm run format
-
-      - name: Lint
-        run: pnpm run lint
 
       - name: Test
         run: pnpm run test
