@@ -113,6 +113,16 @@ export class Popover extends (HTMLElementSSR()!) {
     if (!this.sheet) return;
     adoptSheetText(this._shadowDom, this.sheet);
   };
+  initAria = (): void => {
+    if (!this.hasAttribute('tabindex')) {
+      this.tabIndex = 0;
+    }
+    this.setAttribute('aria-haspopup', 'dialog');
+    this.setAttribute('aria-expanded', 'false');
+  };
+  updateAriaExpanded = (isExpanded: boolean): void => {
+    this.setAttribute('aria-expanded', isExpanded ? 'true' : 'false');
+  };
   stopPropagation = (e: Event): void => {
     e.stopPropagation();
   };
@@ -191,6 +201,7 @@ export class Popover extends (HTMLElementSSR()!) {
     clearTimeout(this.dropDownOutTimeId);
     this.dropDownOutTimeId = undefined;
     if (this.popoverContent && this.popoverContent.style.display !== 'block') {
+      this.updateAriaExpanded(true);
       this.popoverContent.setAttribute('transit', placementDirection[this.placement].add);
       this.popoverContent?.style.setProperty('display', 'block');
       this.placementPosition();
@@ -214,6 +225,7 @@ export class Popover extends (HTMLElementSSR()!) {
     clearTimeout(this.dropDownOutTimeId);
     this.dropDownOutTimeId = undefined;
     if (this.popoverContent && this.popoverContent.style.display !== 'none') {
+      this.updateAriaExpanded(false);
       this.popoverContent.setAttribute('transit', placementDirection[this.placement].remove);
       this.dropDownOutTimeId = setTimeout(() => {
         this.popoverContent?.style.setProperty('display', 'none');
@@ -280,6 +292,16 @@ export class Popover extends (HTMLElementSSR()!) {
     e.preventDefault();
     this.setDropdownDisplayBlock();
   };
+  keydownPopover = (e: KeyboardEvent): void => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      this.setDropdownDisplayBlock();
+    }
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      this.setDropdownDisplayNone();
+    }
+  };
   clickRemovePopover = (e: Event): void => {
     this.hoverRemovePopover(e);
   };
@@ -312,6 +334,7 @@ export class Popover extends (HTMLElementSSR()!) {
     }
   }, HOVER_TIME);
   connectedCallback(): void {
+    this.initAria();
     this.handlerExternalCss();
     for (const element of this.children) {
       if (element.tagName === 'R-CONTENT') {
@@ -321,12 +344,14 @@ export class Popover extends (HTMLElementSSR()!) {
     }
     this.popoverTrigger();
     this.changePlacement();
+    this.addEventListener('keydown', this.keydownPopover);
     document.addEventListener('click', this.clickRemovePopover);
   }
   disconnectedCallback(): void {
     this.removeEventListener('mouseenter', this.hoverPopover);
-    this.removeEventListener('mouseleave', this.hoverRemovePopover);
-    this.removeEventListener('click', this.hoverPopover);
+    this.removeEventListener('mouseleave', this.blur);
+    this.removeEventListener('click', this.clickPopover);
+    this.removeEventListener('keydown', this.keydownPopover);
     document.removeEventListener('click', this.clickRemovePopover);
   }
   attributeChangedCallback(n: string, o: string, v: string): void {

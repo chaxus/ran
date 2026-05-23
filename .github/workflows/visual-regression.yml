@@ -1,0 +1,60 @@
+name: Visual Regression
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "packages/ranui/**"
+  pull_request:
+    branches: [main]
+    paths:
+      - "packages/ranui/**"
+
+permissions:
+  contents: read
+  pull-requests: write  # required for Argos to post PR comments
+
+jobs:
+  visual:
+    if: github.repository == 'chaxus/ran'
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    name: "Visual Regression (Chromium)"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: 9
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Install Playwright browsers
+        run: pnpm --filter ranui exec playwright install chromium --with-deps
+
+      - name: Build ranui
+        run: pnpm --filter ranui run build
+
+      - name: Run visual regression tests
+        env:
+          ARGOS_TOKEN: ${{ secrets.ARGOS_TOKEN }}
+        run: pnpm --filter ranui exec playwright test --project=chromium test/e2e/visual/
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-visual-report
+          path: packages/ranui/playwright-report/
+          retention-days: 7
