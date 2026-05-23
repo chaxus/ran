@@ -1,1 +1,1 @@
-npx pnpm@9 -F ranuts build && pnpm -F ranui build && pnpm -F docs build
+npx pnpm -F ranuts build && pnpm -F ranui build && pnpm -F docs build
