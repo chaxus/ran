@@ -5,6 +5,7 @@ import '@/components/select/option';
 import '@/components/dropdown';
 import '@/components/select/dropdown-item';
 import '@/components/icon';
+import { defineSSR } from '@/utils/ssr-registry';
 import '@/components/input';
 import type { Input } from '@/components/input';
 import { Div, InputBuilder, Slot, Span, View } from '@/utils/builder';
@@ -673,12 +674,8 @@ export class Select extends (HTMLElementSSR()!) {
 }
 
 function Custom() {
-  if (typeof document !== 'undefined' && !customElements.get('r-select')) {
-    customElements.define('r-select', Select);
-    return Select;
-  } else {
-    return createCustomError('document is undefined or r-select is exist');
-  }
+  defineSSR('r-select', Select as unknown as new () => HTMLElement);
+  return Select;
 }
 
 export default Custom();

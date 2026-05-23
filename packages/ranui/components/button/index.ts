@@ -3,6 +3,7 @@ import buttonCss from './index.less?inline';
 import { Div, RanElement, Slot, falseList, isDisabled } from '@/utils/index';
 import { Style, View } from '@/utils/builder';
 import { adoptStyles } from '@/utils/style';
+import { defineSSR } from '@/utils/ssr-registry';
 
 export class Button extends RanElement {
   _btn!: HTMLDivElement;
@@ -242,10 +243,7 @@ export class Button extends RanElement {
 }
 
 function Custom() {
-  if (typeof document !== 'undefined' && !customElements.get('r-button')) {
-    customElements.define('r-button', Button);
-    return Button;
-  }
+  defineSSR('r-button', Button as unknown as new () => HTMLElement);
   return Button;
 }
 

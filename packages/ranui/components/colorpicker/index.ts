@@ -5,6 +5,7 @@ import { Div, View } from '@/utils/builder';
 import '@/components/popover';
 import '@/components/input';
 import '@/components/select';
+import { defineSSR } from '@/utils/ssr-registry';
 import '@/components/progress';
 import { adoptSheetText, adoptStyles } from '@/utils/style';
 import colorPickerCss from './index.less?inline';
@@ -495,12 +496,8 @@ export class ColorPicker extends (HTMLElementSSR()!) {
 }
 
 function Custom() {
-  if (typeof document !== 'undefined' && !customElements.get('r-colorpicker')) {
-    customElements.define('r-colorpicker', ColorPicker);
-    return ColorPicker;
-  } else {
-    return createCustomError('document is undefined or r-colorpicker is exist');
-  }
+  defineSSR('r-colorpicker', ColorPicker as unknown as new () => HTMLElement);
+  return ColorPicker;
 }
 
 export default Custom();

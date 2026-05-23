@@ -1,0 +1,3 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`r-button DSD snapshot > matches snapshot 1`] = `"<r-button><template shadowrootmode="closed"><div class="ran-btn" part="button" role="button" tabindex="0"><div class="ran-btn-content" part="content"><slot class="slot"></slot></div></div></template></r-button>"`;

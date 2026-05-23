@@ -3,6 +3,7 @@ import less from './index.less?inline';
 import { Div, Slot } from '@/utils/builder';
 import { adoptSheetText, adoptStyles } from '@/utils/style';
 import { HTMLElementSSR, createCustomError, isDisabled } from '@/utils/index';
+import { defineSSR } from '@/utils/ssr-registry';
 
 export class DropdownItem extends (HTMLElementSSR()!) {
   ionDropdownItem: HTMLElement;
@@ -102,12 +103,8 @@ export class DropdownItem extends (HTMLElementSSR()!) {
 }
 
 function Custom() {
-  if (typeof document !== 'undefined' && !customElements.get('r-dropdown-item')) {
-    customElements.define('r-dropdown-item', DropdownItem);
-    return DropdownItem;
-  } else {
-    return createCustomError('document is undefined or r-dropdown-item  is exist');
-  }
+  defineSSR('r-dropdown-item', DropdownItem as unknown as new () => HTMLElement);
+  return DropdownItem;
 }
 
 export default Custom();

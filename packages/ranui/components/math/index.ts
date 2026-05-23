@@ -2,6 +2,7 @@ import { HTMLElementSSR, createCustomError } from '@/utils/index';
 import { Div, Span } from '@/utils/builder';
 import { adoptSheetText, adoptStyles } from '@/utils/style';
 import mathCss from './index.less?inline';
+import { defineSSR } from '@/utils/ssr-registry';
 export class Math extends (HTMLElementSSR()!) {
   contain: HTMLElement;
   _shadowDom: ShadowRoot;
@@ -70,12 +71,8 @@ export class Math extends (HTMLElementSSR()!) {
 }
 
 async function Custom() {
-  if (typeof document !== 'undefined' && !customElements.get('r-math')) {
-    customElements.define('r-math', Math);
-    return Math;
-  } else {
-    return createCustomError('document is undefined or r-math is exist');
-  }
+  defineSSR('r-math', Math as unknown as new () => HTMLElement);
+  return Math;
 }
 
 export default Custom();

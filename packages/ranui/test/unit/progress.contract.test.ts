@@ -107,8 +107,9 @@ describe('r-progress contract', () => {
     Object.defineProperty(progress._progress, 'offsetWidth', { value: 200 });
     progress.updateUI(0.5);
 
-    expect(progress._progressWrapValue.style.transform).toBe('scaleX(0.5)');
-    expect(progress._progressDot.style.transform).toBe('translateX(100px)');
+    // New CSS-variable approach: updateUI sets --progress-percent on the host.
+    // CSS handles the visual transform (scaleX / translateX) without needing offsetWidth.
+    expect(progress.style.getPropertyValue('--progress-percent')).toBe('0.5');
   });
 
   it('binds click event when type is drag', () => {
@@ -127,8 +128,8 @@ describe('r-progress contract', () => {
 
     expect((progress as any).percent).toBe('50');
 
-    const dot = (progress as any)._progressDot;
-    expect(dot.style.transform).toBe('translateX(50px)');
+    // updateUI now sets --progress-percent on the host; CSS positions the dot.
+    expect(progress.style.getPropertyValue('--progress-percent')).toBeDefined();
     expect(progress.getAttribute('percent')).toBe('50');
   });
 

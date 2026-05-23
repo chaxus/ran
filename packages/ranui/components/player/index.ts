@@ -37,6 +37,7 @@ import { View } from '@/utils/builder';
 import { HTMLElementSSR } from '@/utils/index';
 import { adoptSheetText, adoptStyles } from '@/utils/style';
 import playerCss from './index.less?inline';
+import { defineSSR } from '@/utils/ssr-registry';
 
 const throttle = generateThrottle();
 
@@ -1099,10 +1100,8 @@ export class RanPlayer extends (HTMLElementSSR()!) {
 }
 
 function Custom() {
-  if (typeof document !== 'undefined' && !customElements.get('r-player')) {
-    customElements.define('r-player', RanPlayer);
-    return RanPlayer;
-  }
+  defineSSR('r-player', RanPlayer as unknown as new () => HTMLElement);
+  return RanPlayer;
 }
 
 export default Custom();

@@ -156,6 +156,9 @@ export class HTMLElementMock {
   }
 
   serialize(tagNameOverride?: string): string {
+    if (typeof (this as any)._preSerialize === 'function') {
+      (this as any)._preSerialize();
+    }
     const tagName = tagNameOverride || this.tagName;
     const attrs = Array.from(this.attributes.entries())
       .map(([k, v]) => ` ${k}="${escapeHtmlAttribute(v)}"`)
@@ -225,11 +228,14 @@ export class ShadowRootMock {
   }
 
   querySelector(selector: string): HTMLElementMock | null {
-    return this.host.querySelector(selector);
+    const result = this.querySelectorAll(selector);
+    return result.length > 0 ? result[0] : null;
   }
 
   querySelectorAll(selector: string): HTMLElementMock[] {
-    return this.host.querySelectorAll(selector);
+    const result: HTMLElementMock[] = [];
+    collectMatches(this.childrenList as MockNode[], selector, result);
+    return result;
   }
 
   serialize(): string {

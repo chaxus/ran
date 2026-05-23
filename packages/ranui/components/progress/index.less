@@ -28,7 +28,7 @@
       left: var(--ran-progress-wrap-value-left, 0);
       height: var(--ran-progress-wrap-value-height, 100%);
       width: var(--ran-progress-wrap-value-width, 100%);
-      transform: var(--ran-progress-wrap-value-transform, scaleX(0));
+      transform: scaleX(var(--progress-percent, 0));
       transform-origin: var(--ran-progress-wrap-value-transform-origin, 0 0);
       will-change: var(--ran-progress-wrap-value-will-change, transform);
       background: var(--ran-progress-wrap-value-background, linear-gradient(90deg, #0bc8bb 2.42%, #00d297 98.79%));
@@ -38,7 +38,8 @@
   &-dot {
     position: var(--ran-progress-dot-position, absolute);
     top: var(--ran-progress-dot-top, -5px);
-    left: var(--ran-progress-dot-left, -9px);
+    left: calc(var(--progress-percent, 0) * 100%);
+    transform: translateX(-50%);
     border-radius: var(--ran-progress-dot-border-radius, 50%);
     width: var(--ran-progress-dot-width, 18px);
     height: var(--ran-progress-dot-height, 18px);

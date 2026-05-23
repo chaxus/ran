@@ -3,6 +3,7 @@ import { Div, InputBuilder, Label, View } from '@/utils/builder';
 import '@/components/icon/index';
 import { adoptSheetText, adoptStyles } from '@/utils/style';
 import inputCss from './index.less?inline';
+import { defineSSR } from '@/utils/ssr-registry';
 
 export class Input extends (HTMLElementSSR()!) {
   static get observedAttributes(): string[] {
@@ -489,12 +490,8 @@ export class Input extends (HTMLElementSSR()!) {
 }
 
 function Custom() {
-  if (typeof window !== 'undefined' && !customElements.get('r-input')) {
-    customElements.define('r-input', Input);
-    return Input;
-  } else {
-    return createCustomError('document is undefined or r-input is exist');
-  }
+  defineSSR('r-input', Input as unknown as new () => HTMLElement);
+  return Input;
 }
 
 export default Custom();

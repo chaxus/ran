@@ -2,6 +2,7 @@ import { Slot, View } from '@/utils/builder';
 import { adoptStyles } from '@/utils/style';
 import formCss from './index.less?inline';
 import { RanElement } from '@/utils/index';
+import { defineSSR } from '@/utils/ssr-registry';
 
 class CustomElement extends RanElement {
   // Changed to extend RanElement
@@ -43,9 +44,7 @@ class CustomElement extends RanElement {
 }
 
 function Component() {
-  if (typeof window !== 'undefined' && !customElements.get('r-form')) {
-    window.customElements.define('r-form', CustomElement);
-    return CustomElement;
-  }
+  defineSSR('r-form', CustomElement as unknown as new () => HTMLElement);
+  return CustomElement;
 }
 export default Component();

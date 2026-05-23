@@ -12,6 +12,7 @@ import '@/components/dropdown';
 import { Div, Slot, View } from '@/utils/builder';
 import { adoptSheetText, adoptStyles } from '@/utils/style';
 import popoverCss from './index.less?inline';
+import { defineSSR } from '@/utils/ssr-registry';
 
 // index.ts:29 Uncaught DOMException: Failed to construct 'CustomElement': The result must not have children
 // index.ts:31 Uncaught DOMException: Failed to construct 'CustomElement': The result must not have attributes
@@ -370,12 +371,8 @@ export class Popover extends (HTMLElementSSR()!) {
 }
 
 function Custom() {
-  if (typeof document !== 'undefined' && !customElements.get('r-popover')) {
-    customElements.define('r-popover', Popover);
-    return Popover;
-  } else {
-    return createCustomError('document is undefined or r-popover is exist');
-  }
+  defineSSR('r-popover', Popover as unknown as new () => HTMLElement);
+  return Popover;
 }
 
 export default Custom();

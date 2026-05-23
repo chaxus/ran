@@ -3,6 +3,7 @@ import { HTMLElementSSR, createCustomError } from '@/utils/index';
 import { Div, Slot } from '@/utils/builder';
 import { adoptSheetText, adoptStyles } from '@/utils/style';
 import dropdownCss from './index.less?inline';
+import { defineSSR } from '@/utils/ssr-registry';
 
 const animationTime = 300;
 
@@ -140,12 +141,8 @@ export class Dropdown extends (HTMLElementSSR()!) {
 }
 
 function Custom() {
-  if (typeof document !== 'undefined' && !customElements.get('r-dropdown')) {
-    customElements.define('r-dropdown', Dropdown);
-    return Dropdown;
-  } else {
-    return createCustomError('document is undefined or r-dropdown is exist');
-  }
+  defineSSR('r-dropdown', Dropdown as unknown as new () => HTMLElement);
+  return Dropdown;
 }
 
 export default Custom();

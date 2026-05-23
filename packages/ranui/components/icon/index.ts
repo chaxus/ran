@@ -2,6 +2,7 @@ import iconCss from './index.less?inline';
 import { RanElement, html } from '@/utils/index';
 import { View } from '@/utils/builder';
 import { adoptSheetText, adoptStyles } from '@/utils/style';
+import { defineSSR } from '@/utils/ssr-registry';
 
 type ImportMetaWithEnv = ImportMeta & { env?: { DEV?: boolean } };
 
@@ -303,6 +304,4 @@ export class Icon extends RanElement {
   }
 }
 
-if (typeof document !== 'undefined' && !customElements.get('r-icon')) {
-  customElements.define('r-icon', Icon);
-}
+defineSSR('r-icon', Icon as unknown as new () => HTMLElement);

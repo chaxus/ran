@@ -3,6 +3,7 @@ import { HTMLElementSSR, createCustomError, falseList } from '@/utils/index';
 import { Div, InputBuilder, Span } from '@/utils/builder';
 import { adoptSheetText, adoptStyles } from '@/utils/style';
 import checkboxCss from './index.less?inline';
+import { defineSSR } from '@/utils/ssr-registry';
 
 export interface Context {
   checked: boolean;
@@ -147,12 +148,8 @@ export class Checkbox extends (HTMLElementSSR()!) {
 }
 
 function Custom() {
-  if (typeof document !== 'undefined' && !customElements.get('r-checkbox')) {
-    customElements.define('r-checkbox', Checkbox);
-    return Checkbox;
-  } else {
-    return createCustomError('document is undefined or r-checkbox is exist');
-  }
+  defineSSR('r-checkbox', Checkbox as unknown as new () => HTMLElement);
+  return Checkbox;
 }
 
 export default Custom();

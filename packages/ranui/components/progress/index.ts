@@ -2,6 +2,7 @@ import { perToNum } from 'ranuts/utils';
 import progressCss from './index.less?inline';
 import { Div, RanElement } from '@/utils/index';
 import { adoptSheetText, adoptStyles } from '@/utils/style';
+import { defineSSR } from '@/utils/ssr-registry';
 
 const attributes: string[] = ['percent', 'type', 'total', 'dot', 'sheet'];
 
@@ -138,10 +139,15 @@ export class Progress extends RanElement {
   };
 
   updateUI = (percentage: number): void => {
-    if (!this._progressWrapValue || !this._progressDot) return;
-    this._progressWrapValue.style.setProperty('transform', `scaleX(${percentage})`);
-    this._progressDot.style.setProperty('transform', `translateX(${percentage * this._progress.offsetWidth}px)`);
+    this.style.setProperty('--progress-percent', String(percentage));
   };
+
+  _preSerialize(): void {
+    const percent = Number(this.getAttribute('percent') || '0');
+    const total = Number(this.getAttribute('total') || '100');
+    const fraction = Math.min(1, Math.max(0, percent / total));
+    this.style.setProperty('--progress-percent', String(fraction));
+  }
 
   change = (): void => {
     this.dispatchEvent(
@@ -212,10 +218,7 @@ export class Progress extends RanElement {
 }
 
 function Custom() {
-  if (typeof document !== 'undefined' && !customElements.get('r-progress')) {
-    customElements.define('r-progress', Progress);
-    return Progress;
-  }
+  defineSSR('r-progress', Progress as unknown as new () => HTMLElement);
   return Progress;
 }
 

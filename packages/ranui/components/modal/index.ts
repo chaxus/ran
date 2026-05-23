@@ -2,6 +2,7 @@ import modalCss from './index.less?inline';
 import { RanElement, createCustomError, falseList } from '@/utils/index';
 import { Div, Slot, View } from '@/utils/builder';
 import { adoptSheetText, adoptStyles } from '@/utils/style';
+import { defineSSR } from '@/utils/ssr-registry';
 
 const FOCUSABLE_SELECTOR =
   'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -645,11 +646,8 @@ export class Modal extends RanElement {
 }
 
 function Custom() {
-  if (typeof window !== 'undefined' && !customElements.get('r-modal')) {
-    customElements.define('r-modal', Modal);
-    return Modal;
-  }
-  return createCustomError('document is undefined or r-modal is exist');
+  defineSSR('r-modal', Modal as unknown as new () => HTMLElement);
+  return Modal;
 }
 
 export default Custom();

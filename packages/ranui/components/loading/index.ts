@@ -2,6 +2,7 @@ import loadingCss from './index.less?inline';
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
 import { Div, Span, View } from '@/utils/builder';
 import { adoptSheetText, adoptStyles } from '@/utils/style';
+import { defineSSR } from '@/utils/ssr-registry';
 
 export enum ICON_NAME_AMP {
   DOUBLE_BOUNCE = 'double-bounce',
@@ -452,12 +453,8 @@ export class Loading extends (HTMLElementSSR()!) {
 }
 
 function Custom() {
-  if (typeof document !== 'undefined' && !customElements.get('r-loading')) {
-    customElements.define('r-loading', Loading);
-    return Loading;
-  } else {
-    return createCustomError('document is undefined or r-loading is exist');
-  }
+  defineSSR('r-loading', Loading as unknown as new () => HTMLElement);
+  return Loading;
 }
 
 export default Custom();

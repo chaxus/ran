@@ -2,6 +2,7 @@ import contentCss from './index.less?inline';
 import { Slot } from '@/utils/builder';
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
 import { adoptStyles } from '@/utils/style';
+import { defineSSR } from '@/utils/ssr-registry';
 
 export class Content extends (HTMLElementSSR()!) {
   observer: MutationObserver;
@@ -51,12 +52,8 @@ export class Content extends (HTMLElementSSR()!) {
 }
 
 function Custom() {
-  if (typeof document !== 'undefined' && !customElements.get('r-content')) {
-    customElements.define('r-content', Content);
-    return Content;
-  } else {
-    return createCustomError('document is undefined or r-content is exist');
-  }
+  defineSSR('r-content', Content as unknown as new () => HTMLElement);
+  return Content;
 }
 
 export default Custom();

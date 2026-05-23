@@ -2,6 +2,7 @@ import scratchCss from './index.less?inline';
 import { Div, View } from '@/utils/builder';
 import { HTMLElementSSR } from '@/utils/index';
 import { adoptStyles } from '@/utils/style';
+import { defineSSR } from '@/utils/ssr-registry';
 
 class ScratchTicket extends (HTMLElementSSR()!) {
   scratchTicketContainer: HTMLDivElement;
@@ -96,6 +97,4 @@ class ScratchTicket extends (HTMLElementSSR()!) {
 
 export default ScratchTicket;
 
-if (typeof document !== 'undefined' && !customElements.get('r-scratch')) {
-  customElements.define('r-scratch', ScratchTicket);
-}
+defineSSR('r-scratch', ScratchTicket as unknown as new () => HTMLElement);

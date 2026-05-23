@@ -1,4 +1,5 @@
 import { HTMLElementMock } from './builder';
+import { getSSRRegistry } from './ssr-registry';
 
 // ─── SSR/Node Compatibility ───────────────────────────────────────────────────
 
@@ -12,55 +13,30 @@ export const HTMLElementSSR = (): { new (): HTMLElement; prototype: HTMLElement 
 export const RanElement = HTMLElementSSR()!;
 
 /**
- * Rendering utility for RanUI components in SSR environments.
- * It takes a component instance and returns its HTML string representation,
- * including Declarative Shadow DOM (DSD) templates.
- *
- * @param component The RanUI component instance (e.g. new Button())
- * @returns HTML string with DSD
+ * Resolve the custom element tag name for a component instance.
+ * Checks the SSR registry first, then falls back to the component's own tagName.
  */
+const resolveTagName = (component: any): string => {
+  if (component.tagName && component.tagName !== 'div') {
+    return component.tagName;
+  }
+  const registry = getSSRRegistry();
+  for (const [tag, Ctor] of registry) {
+    if (component instanceof Ctor) return tag;
+  }
+  return component.constructor.name.toLowerCase();
+};
+
 /**
  * Rendering utility for RanUI components in SSR environments.
+ * Accepts a component instance and returns its HTML string with Declarative Shadow DOM.
  */
 export const renderToString = (component: any): string => {
   if (!component) return '';
-
-  // Heuristic to find the tag name if it's a RanUI component
-  // In our project, classes are often named after the component (e.g., Button -> r-button)
-  // or we can check the tagName property of the Mock
-  let tagName = '';
-  if (component.tagName && component.tagName !== 'div') {
-    tagName = component.tagName;
-  } else {
-    const className = component.constructor.name.toLowerCase();
-    const tagMap: Record<string, string> = {
-      button: 'r-button',
-      icon: 'r-icon',
-      input: 'r-input',
-      select: 'r-select',
-      checkbox: 'r-checkbox',
-      progress: 'r-progress',
-      loading: 'r-loading',
-      skeleton: 'r-skeleton',
-      modal: 'r-modal',
-      tabs: 'r-tabs',
-      tabpane: 'r-tab',
-      radar: 'r-radar',
-      player: 'r-player',
-      popover: 'r-popover',
-      content: 'r-content',
-      form: 'r-form',
-      scratchticket: 'r-scratch',
-      colorpicker: 'r-colorpicker',
-      math: 'r-math',
-    };
-    tagName = tagMap[className] || 'div';
-  }
-
+  const tagName = resolveTagName(component);
   if (typeof component.serialize === 'function') {
     return component.serialize(tagName);
   }
-
   if (component instanceof HTMLElementMock) {
     return component.serialize(tagName);
   }
