@@ -1,6 +1,6 @@
 import modalCss from './index.less?inline';
 import { RanElement, createCustomError, falseList } from '@/utils/index';
-import { Div, Slot, View } from '@/utils/builder';
+import { ButtonBuilder, Div, Slot, View } from '@/utils/builder';
 import { adoptSheetText, adoptStyles } from '@/utils/style';
 import { defineSSR } from '@/utils/ssr-registry';
 
@@ -549,7 +549,7 @@ export class Modal extends RanElement {
     } = resolved;
 
     return new Promise((resolve) => {
-      const modal = document.createElement('r-modal') as Modal;
+      const modal = View<Modal>('r-modal').build();
       modal.title = title;
       modal.maskClosable = maskClosable;
       modal.closeOnEsc = closeOnEsc;
@@ -557,7 +557,7 @@ export class Modal extends RanElement {
       modal.autoFocus = autoFocus;
       modal.closable = closable;
 
-      const body = document.createElement('div');
+      const body = Div().build();
       if (typeof content === 'string') {
         body.textContent = content;
       } else if (content instanceof Node) {
@@ -565,30 +565,22 @@ export class Modal extends RanElement {
       }
       modal.appendChild(body);
 
-      const footer = document.createElement('div');
-      footer.setAttribute('slot', 'footer');
-      footer.className = 'ran-modal-actions';
-
       let action: ModalProgrammaticAction = 'dismiss';
 
+      const footerBuilder = Div().attr('slot', 'footer').class('ran-modal-actions');
+
       if (showCancel) {
-        const cancelButton = document.createElement('button');
-        cancelButton.type = 'button';
-        cancelButton.className = 'ran-modal-action ran-modal-action-cancel';
-        cancelButton.textContent = cancelText;
+        const cancelButton = ButtonBuilder().attr('type', 'button').class('ran-modal-action ran-modal-action-cancel').text(cancelText).build();
         cancelButton.addEventListener('click', async () => {
           const shouldContinue = (await onCancel?.()) !== false;
           if (!shouldContinue) return;
           action = 'cancel';
           modal.close('program');
         });
-        footer.appendChild(cancelButton);
+        footerBuilder.children(cancelButton);
       }
 
-      const okButton = document.createElement('button');
-      okButton.type = 'button';
-      okButton.className = 'ran-modal-action ran-modal-action-confirm';
-      okButton.textContent = okText;
+      const okButton = ButtonBuilder().attr('type', 'button').class('ran-modal-action ran-modal-action-confirm').text(okText).build();
       okButton.addEventListener('click', async () => {
         okButton.disabled = true;
         try {
@@ -600,9 +592,9 @@ export class Modal extends RanElement {
           okButton.disabled = false;
         }
       });
-      footer.appendChild(okButton);
+      footerBuilder.children(okButton);
 
-      modal.appendChild(footer);
+      modal.appendChild(footerBuilder.build());
 
       const onAfterClose = (event: Event) => {
         const trigger = ((event as CustomEvent).detail?.trigger || 'program') as ModalCloseTrigger;

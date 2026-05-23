@@ -253,7 +253,7 @@ export class Select extends (HTMLElementSSR()!) {
     const value = optionElement.getAttribute('value') || this._optionLabelMapValue.get(label) || '';
     if (!value) return;
     this.setAttribute('value', value);
-    this._text.innerHTML = label;
+    this._text.textContent = label;
     this._text.setAttribute('title', label);
     this._search.setAttribute('placeholder', label);
     const rect = this.getBoundingClientRect();
@@ -561,7 +561,7 @@ export class Select extends (HTMLElementSSR()!) {
     const rect = this.getBoundingClientRect();
     const { height } = rect;
     this._text.style.setProperty('line-height', `${height}px`);
-    this._text.innerHTML = label;
+    this._text.textContent = label;
     this._text.setAttribute('title', label);
     const options = this.getDropdownOptions();
     const target = options.find((item) => item.getAttribute('value') === defaultValue) || null;
