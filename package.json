@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Monorepo",
   "type": "module",
-  "packageManager": "pnpm@11.2.2",
   "engines": {
     "node": ">=20.0.0"
   },
