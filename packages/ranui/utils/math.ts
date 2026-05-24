@@ -115,7 +115,7 @@ export const getLinearGradient = (
   return context.reduce((gradient: any, item: any, index: any) => {
     const info = item.split(' ');
     if (info.length === 1) gradient.addColorStop(index, info[0]);
-    else if (info.length === 2) gradient.addColorStop(...info);
+    else if (info.length === 2) gradient.addColorStop(info[1], info[0]);
     return gradient;
   }, gradient);
 };

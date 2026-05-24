@@ -1,5 +1,7 @@
-bin=./node_modules/.bin
-npm run test:tsc
-$bin/playwright install
-$bin/playwright install-deps
-$bin/playwright test
+#!/bin/bash
+set -e
+
+pnpm -F ranuts build
+npm run tsc
+npm run test:unit
+npm run test:ssr

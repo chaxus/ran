@@ -51,7 +51,6 @@ export class ColorPicker extends (HTMLElementSSR()!) {
   popoverBlock: HTMLElement;
   popoverContent: HTMLElement;
   colorPickerInner?: HTMLDivElement;
-  colorPickerInnerContent?: HTMLElement;
   colorPickerPanel?: HTMLElement;
   colorPickerInputContainer?: HTMLElement;
   colorPickerPanelDot?: HTMLDivElement;
@@ -61,7 +60,6 @@ export class ColorPicker extends (HTMLElementSSR()!) {
   colorPickerPanelSliderAlpha?: HTMLElement;
   colorPickerColorBlockInner?: HTMLElement;
   colorPickerColorBlock?: HTMLElement;
-  colorPickerInnerContentSelect?: HTMLElement;
   colorPickerPanelPalette?: HTMLElement;
   colorPickerPanelSaturation?: HTMLElement;
   colorPickerInputContainerSelect?: HTMLElement;
@@ -313,7 +311,6 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     this.changeColorPalettePosition(offsetX, offsetY);
   };
   createColorPickerProgress = (): void => {
-    // progress
     this.colorPickerPanelSliderHue = View('r-progress')
       .class('ran-color-picker-slider-container-group-hue')
       .attr('type', 'drag')
@@ -322,36 +319,33 @@ export class ColorPicker extends (HTMLElementSSR()!) {
         'linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000)',
       )
       .attr('percent', `${this.context.hue.getter() / 360}`)
+      .on('change', this.changeColorPickerHue)
       .build() as HTMLElement;
-
-    this.colorPickerPanelSliderHue.addEventListener('change', this.changeColorPickerHue);
     this.updateColorPickerPanelSliderHueProgressDot();
 
     this.colorPickerPanelSliderAlpha = View('r-progress')
       .class('ran-color-picker-slider-container-group-alpha')
       .attr('type', 'drag')
       .attr('percent', `${this.context.transparency.getter() / 100}`)
+      .on('change', this.changeColorPickerAlpha)
       .build() as HTMLElement;
-
-    this.colorPickerPanelSliderAlpha.addEventListener('change', this.changeColorPickerAlpha);
     this.updateColorPickerPanelSliderAlphaProgressWrap();
     this.updateColorPickerPanelSliderAlphaProgressDot();
-
-    this.colorPickerPanelSliderGroup = Div()
-      .class('ran-color-picker-slider-container-group')
-      .children(this.colorPickerPanelSliderHue, this.colorPickerPanelSliderAlpha)
-      .build() as HTMLDivElement;
 
     this.colorPickerColorBlockInner = Div()
       .class('ran-color-picker-slider-container-color-block-inner')
       .build() as HTMLElement;
-
     this.updateColorPickerColorBlockInnerBackground();
 
     this.colorPickerColorBlock = Div()
       .class('ran-color-picker-slider-container-color-block')
       .children(this.colorPickerColorBlockInner)
       .build() as HTMLElement;
+
+    this.colorPickerPanelSliderGroup = Div()
+      .class('ran-color-picker-slider-container-group')
+      .children(this.colorPickerPanelSliderHue, this.colorPickerPanelSliderAlpha)
+      .build() as HTMLDivElement;
 
     this.colorPickerPanelSliderContainer = Div()
       .class('ran-color-picker-slider-container')
@@ -372,28 +366,24 @@ export class ColorPicker extends (HTMLElementSSR()!) {
 
     this.colorPickerPanelDot = Div()
       .class('ran-color-picker-palette-dot')
+      .on('mousedown', this.mouseDownColorPickerPalette)
+      .on('mouseup', this.mouseUpColorPickerPalette)
       .children(this.colorPickerPanelDotInner)
       .build() as HTMLDivElement;
 
-    this.colorPickerPanelDot.addEventListener('mousedown', this.mouseDownColorPickerPalette);
     document.body.addEventListener('mousemove', this.mouseMoveColorPickerPalette);
-    this.colorPickerPanelDot.addEventListener('mouseup', this.mouseUpColorPickerPalette);
 
     this.colorPickerPanelPalette = Div()
       .class('ran-color-picker-palette')
+      .on('mousedown', this.clickColorPalette)
       .children(this.colorPickerPanelDot, this.colorPickerPanelSaturation)
-      .build() as HTMLElement;
-
-    this.colorPickerPanelPalette.addEventListener('mousedown', this.clickColorPalette);
-
-    this.colorPickerInnerContentSelect = Div()
-      .class('ran-color-picker-select')
-      .children(this.colorPickerPanelPalette)
       .build() as HTMLElement;
 
     this.colorPickerPanel = Div()
       .class('ran-color-picker-panel')
-      .children(this.colorPickerInnerContentSelect)
+      .children(
+        Div().class('ran-color-picker-select').children(this.colorPickerPanelPalette),
+      )
       .build() as HTMLElement;
   };
   createColorPickerInput = (): void => {
@@ -432,35 +422,35 @@ export class ColorPicker extends (HTMLElementSSR()!) {
   };
   openColorPicker = (): void => {
     if (this.colorPickerInner) return;
-    this.colorPickerInner = Div().class('ran-color-picker-inner').build() as HTMLDivElement;
-    this.colorPickerInnerContent = Div().class('ran-color-picker-inner-content').build() as HTMLDivElement;
     this.createColorPickerProgress();
     this.createColorPickerSelect();
     this.createColorPickerInput();
-    if (this.colorPickerPanel) {
-      this.colorPickerInnerContent.appendChild(this.colorPickerPanel);
-    }
-    if (this.colorPickerPanelSliderContainer) {
-      this.colorPickerInnerContent.appendChild(this.colorPickerPanelSliderContainer);
-    }
-    if (this.colorPickerInputContainer) {
-      this.colorPickerInnerContent.appendChild(this.colorPickerInputContainer);
-    }
-    this.colorPickerInner.appendChild(this.colorPickerInnerContent);
+    this.colorPickerInner = Div()
+      .class('ran-color-picker-inner')
+      .children(
+        Div()
+          .class('ran-color-picker-inner-content')
+          .children(this.colorPickerPanel, this.colorPickerPanelSliderContainer, this.colorPickerInputContainer),
+      )
+      .build() as HTMLDivElement;
     this.popoverContent.appendChild(this.colorPickerInner);
     this.changeColorPalettePositionByContext();
   };
   mouseMoveColorPickerPalette = (e: MouseEvent): void => {
     if (!this.colorPickerPanelPalette || !this.colorPickerPaletteSelect) return;
     const { pageX, pageY } = e;
-    const { top = 0, left = 0, width, height } = this.colorPickerPanelPalette?.getBoundingClientRect() || {};
-    const limitY = range(pageY - top - BOT_WIDTH, -BOT_WIDTH, height - BOT_WIDTH);
-    const limitX = range(pageX - left - BOT_WIDTH, -BOT_WIDTH, width - BOT_WIDTH);
-    this.context.saturation.setter((limitX / width) * 100); // 饱和度
-    this.context.lightness.setter((limitY / height) * 100);
+    const { top = 0, left = 0, width, height } = this.colorPickerPanelPalette.getBoundingClientRect();
+    // Dot visual position: centered on cursor, clamped to palette bounds
+    const dotX = range(pageX - left - BOT_WIDTH, -BOT_WIDTH, width - BOT_WIDTH);
+    const dotY = range(pageY - top - BOT_WIDTH, -BOT_WIDTH, height - BOT_WIDTH);
+    // Color value: actual cursor in [0, w/h], Y inverted so top = bright (consistent with click)
+    const colorX = range(pageX - left, 0, width);
+    const colorY = range(pageY - top, 0, height);
+    this.context.saturation.setter((colorX / width) * 100);
+    this.context.lightness.setter(((height - colorY) / height) * 100);
     window.requestAnimationFrame(() => {
-      this.colorPickerPanelDot?.style.setProperty('top', `${limitY}px`);
-      this.colorPickerPanelDot?.style.setProperty('left', `${limitX}px`);
+      this.colorPickerPanelDot?.style.setProperty('top', `${dotY}px`);
+      this.colorPickerPanelDot?.style.setProperty('left', `${dotX}px`);
     });
   };
   mouseDownColorPickerPalette = (e: MouseEvent): void => {

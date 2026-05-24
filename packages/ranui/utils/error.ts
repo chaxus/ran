@@ -1,5 +1,5 @@
 export interface CustomErrorType {
-  new (m: string): void;
+  new (m?: string): { message: string };
 }
 
 export function createCustomError(msg: string = ''): CustomErrorType {

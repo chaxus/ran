@@ -32,7 +32,7 @@
     "test:unit:coverage": "vitest run --coverage",
     "test:ssr": "vitest run --config vitest.config.ssr.ts",
     "test:ssr:watch": "vitest --config vitest.config.ssr.ts",
-    "test:all": "npm run test:unit && npm run test:ssr",
+    "test:all": "pnpm -F ranuts build && npm run tsc && npm run test:unit && npm run test:ssr",
     "test:e2e": "playwright test",
     "test:report": "playwright show-report",
     "test:ui": "playwright test --ui",
