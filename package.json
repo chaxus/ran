@@ -41,11 +41,6 @@
       "fsevents",
       "keccak",
       "secp256k1"
-    ],
-    "overrides": {
-      "tinyexec": "1.1.2",
-      "tldts": "7.0.30",
-      "tldts-core": "7.0.30"
-    }
+    ]
   }
 }
