@@ -26,12 +26,18 @@
   height: var(--ran-input-height, 100%);
   min-width: var(--ran-input-min-width, 0);
   padding: var(--ran-input-padding, 0px 0px 0px 4px);
-  color: var(--ran-input-color, #000000d9);
+  color: var(--ran-input-color, var(--ran-color-text, #000000d9));
   font-size: var(--ran-input-font-size, 12px);
+  font-family: var(--ran-input-font-family, var(--ran-skin-font-family, inherit));
   line-height: var(--ran-input-line-height, 1.5715);
-  background-color: var(--ran-input-background-color, #fff);
+  background-color: var(--ran-input-background-color, var(--ran-color-bg-elevated, #fff));
   background-image: var(--ran-input-background-image, none);
-  border: var(--ran-input-border, 1px solid #d9d9d9);
+  border: var(--ran-input-border, 1px solid var(--ran-color-border, #d9d9d9));
+  border-image-source: var(--ran-input-border-image-source, none);
+  border-image-slice: var(--ran-input-border-image-slice, 8);
+  border-image-width: var(--ran-input-border-image-width, 4px);
+  border-image-outset: 0;
+  border-image-repeat: stretch;
   border-radius: var(--ran-input-border-radius, 2px);
   transition: var(--ran-input-transition, all 0.3s);
   // overflow: var(--ran-input-overflow, hidden);
@@ -42,56 +48,56 @@
     justify-content: var(--ran-input-icon-justify-content, center);
   }
   &:active {
-    border-color: var(--ran-input-active-border-color, #40a9ff);
+    border-color: var(--ran-input-active-border-color, var(--ran-color-primary, #40a9ff));
     box-shadow: var(--ran-input-active-box-shadow, 0 0 0 2px rgba(24, 144, 255, 0.2));
     border-right-width: var(--ran-input-active-border-right-width, 1px);
     outline: var(--ran-input-active-outline, 0);
   }
   &:hover {
-    border-color: var(--ran-input-hover-border-color, #40a9ff);
+    border-color: var(--ran-input-hover-border-color, var(--ran-color-primary, #40a9ff));
     border-right-width: var(--ran-input-hover-border-right-width, 1px);
   }
   & > .ran-input-content:hover ~ .ran-input-label {
-    color: var(--ran-input-label-hover-color, #40a9ff);
+    color: var(--ran-input-label-hover-color, var(--ran-color-primary, #40a9ff));
   }
   &[value] > .ran-input-label {
     transform: var(--ran-input-label-value-transform, translateY(calc(-50% - 0.43em)) scale(0.8));
-    color: var(--ran-input-label-value-color, #00000040);
+    color: var(--ran-input-label-value-color, var(--ran-color-text-disabled, #00000040));
   }
   &[status='error'] {
-    border-color: var(--ran-input-status-error-border-color, #ff4d4f);
+    border-color: var(--ran-input-status-error-border-color, var(--ran-color-danger, #ff4d4f));
     & > .ran-input-content ~ .ran-input-label {
-      color: var(--ran-input-label-status-error-color, #ff4d4f);
+      color: var(--ran-input-label-status-error-color, var(--ran-color-danger, #ff4d4f));
     }
   }
   &[status='warning'] {
-    border-color: var(--ran-input-status-warning-border-color, #ff7875);
+    border-color: var(--ran-input-status-warning-border-color, var(--ran-color-warning, #ff7875));
     & > .ran-input-content ~ .ran-input-label {
-      color: var(--ran-input-label-status-warning-color, #ff7875);
+      color: var(--ran-input-label-status-warning-color, var(--ran-color-warning, #ff7875));
     }
   }
   &[disabled] {
-    color: var(--ran-input-disabled-color, #00000040);
-    background-color: var(--ran-input-disabled-background-color, #f5f5f5);
-    border-color: var(--ran-input-disabled-border-color, #d9d9d9);
+    color: var(--ran-input-disabled-color, var(--ran-color-text-disabled, #00000040));
+    background-color: var(--ran-input-disabled-background-color, var(--ran-color-bg-muted, #f5f5f5));
+    border-color: var(--ran-input-disabled-border-color, var(--ran-color-border, #d9d9d9));
     box-shadow: var(--ran-input-disabled-box-shadow, none);
     cursor: var(--ran-input-disabled-cursor, not-allowed);
     opacity: var(--ran-input-disabled-opacity, 1);
     & > .ran-input-content {
-      color: var(--ran-input-content-disabled-color, #00000040);
-      background-color: var(--ran-input-content-disabled-background-color, #f5f5f5);
-      border-color: var(--ran-input-content-disabled-border-color, #d9d9d9);
+      color: var(--ran-input-content-disabled-color, var(--ran-color-text-disabled, #00000040));
+      background-color: var(--ran-input-content-disabled-background-color, var(--ran-color-bg-muted, #f5f5f5));
+      border-color: var(--ran-input-content-disabled-border-color, var(--ran-color-border, #d9d9d9));
       box-shadow: var(--ran-input-content-disabled-box-shadow, none);
       cursor: var(--ran-input-content-disabled-cursor, not-allowed);
       opacity: var(--ran-input-content-disabled-opacity, 1);
     }
     & > .ran-input-content ~ .ran-input-label {
-      color: var(--ran-input-label-disabled-color, #00000040);
-      background-color: var(--ran-input-label-disabled-background-color, #f5f5f5);
+      color: var(--ran-input-label-disabled-color, var(--ran-color-text-disabled, #00000040));
+      background-color: var(--ran-input-label-disabled-background-color, var(--ran-color-bg-muted, #f5f5f5));
     }
     & > .ran-input-label {
-      color: #999;
-      border-color: var(--ran-input-label-disabled-border-color, #d9d9d9);
+      color: var(--ran-input-label-disabled-color, var(--ran-color-text-disabled, #999));
+      border-color: var(--ran-input-label-disabled-border-color, var(--ran-color-border, #d9d9d9));
       box-shadow: var(--ran-input-label-disabled-box-shadow, none);
       cursor: var(--ran-input-label-disabled-cursor, not-allowed);
     }
@@ -121,10 +127,10 @@
     height: var(--ran-input-content-height, 100%);
     min-height: var(--ran-input-content-min-height, 30px);
     min-width: var(--ran-input-content-min-width, 0);
-    color: var(--ran-input-content-color, #000000d9);
+    color: var(--ran-input-content-color, var(--ran-color-text, #000000d9));
     font-size: var(--ran-input-content-font-size, 14px);
     line-height: var(--ran-input-content-line-height, 1.48);
-    background-color: var(--ran-input-content-background-color, #fff);
+    background-color: var(--ran-input-content-background-color, var(--ran-color-bg-elevated, #fff));
     background-image: var(--ran-input-content-background-image, none);
     transition: var(--ran-input-content-transition, all 0.3s);
     outline: var(--ran-input-content-outline, none);
@@ -137,7 +143,7 @@
       outline: var(--ran-input-content-hover-outline, 0);
     }
     &::placeholder {
-      color: var(--ran-input-content-placeholder-color, #999);
+      color: var(--ran-input-content-placeholder-color, var(--ran-color-text-disabled, #999));
     }
     &:placeholder-shown ~ .ran-input-label {
       transform: var(--ran-input-content-placeholder-label-transform, translateY(calc(-50% - 0.43em)) scale(0.8));
@@ -167,8 +173,8 @@
     );
     transform-origin: var(--ran-input-label-transform-origin, left);
     padding: var(--ran-input-label-padding, 0 0);
-    color: var(--ran-input-label-color, #999);
-    background: var(--ran-input-label-background, #fff);
+    color: var(--ran-input-label-color, var(--ran-color-text-disabled, #999));
+    background: var(--ran-input-label-background, var(--ran-color-bg-elevated, #fff));
     opacity: var(--ran-input-label-opacity, 0.9);
     transition: var(--ran-input-label-transition, all 0.3s);
   }

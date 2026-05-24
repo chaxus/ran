@@ -236,6 +236,70 @@ setThemeTokens({
 });
 ```
 
+### What Happens When The Theme Switches
+
+Understanding the switching mechanism helps implementors avoid common mistakes.
+
+**Step 1 — one attribute write, no component JS involved**
+
+```ts
+setTheme('dark')
+// only does:
+document.documentElement.setAttribute('data-ran-theme', 'dark')
+document.documentElement.setAttribute('theme', 'dark')
+```
+
+No component lifecycle methods run. No Shadow DOM is touched by JS.
+
+**Step 2 — browser CSS engine re-evaluates the cascade**
+
+The browser detects the attribute change on `:root` and immediately re-matches
+all CSS selectors. The dark override block becomes active:
+
+```css
+:root[data-ran-theme='dark'] {
+  --ran-color-bg: #141414;
+  --ran-color-text: rgba(255, 255, 255, 0.88);
+  /* ... */
+}
+```
+
+**Step 3 — CSS custom properties cross Shadow DOM**
+
+CSS custom properties are inherited properties. Shadow DOM does not block
+inheritance. Every component's internal styles that reference `var(--ran-color-*)` 
+see the new values without any JS being triggered inside the component.
+
+```
+:root  →  --ran-color-bg: #141414
+  └── <r-button>  (Light DOM)
+        └── #shadow-root (closed)
+              └── .ran-btn-content
+                    background: var(--ran-btn-bg, var(--ran-color-bg))
+                    ↑ reads #141414 automatically
+```
+
+**Step 4 — browser render pipeline**
+
+What the browser does next depends on which properties changed:
+
+| Changed property type | Pipeline stage | Cost |
+|-----------------------|---------------|------|
+| `color`, `background-color`, `box-shadow` | Paint only | Low |
+| `border-radius`, `opacity` | Paint only | Low |
+| `border-width`, `padding`, `font-size` | Layout + Paint | Medium, causes reflow |
+| `font-family` | Layout + Paint + font fetch | Medium–high, risk of FOUT |
+
+For light/dark switching, only color-family properties change. This means:
+
+- no layout reflow
+- no font loading
+- one paint pass across all affected elements
+- the entire visual update completes within a single frame
+
+This is why light/dark switching feels instant. Any theme system change that
+triggers layout reflow or font loading will feel noticeably slower.
+
 ### Component Local Overrides
 
 All existing customization paths remain valid:

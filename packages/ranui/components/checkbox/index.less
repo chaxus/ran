@@ -14,8 +14,8 @@
     }
     opacity: var(--ran-checkbox-disabled-opacity, 0.6);
     .ran-checkbox-inner {
-      background-color: var(--ran-checkbox-checked-background-color, #d9d9d9);
-      border: 1px solid #d9d9d9;
+      background-color: var(--ran-checkbox-checked-background-color, var(--ran-color-bg-muted, #d9d9d9));
+      border: 1px solid var(--ran-color-border, #d9d9d9);
       &::after {
         cursor: not-allowed;
         pointer-events: none;
@@ -24,7 +24,7 @@
     }
     .ran-checkbox-checked {
       .ran-checkbox-inner {
-        background-color: var(--ran-checkbox-checked-background-color, #d9d9d9);
+        background-color: var(--ran-checkbox-checked-background-color, var(--ran-color-bg-muted, #d9d9d9));
         &::after {
           opacity: var(--ran-checkbox-checked-after-opacity, 0);
         }
@@ -40,11 +40,11 @@
   width: var(--ran-checkbox-width, 16px);
   height: var(--ran-checkbox-height, 16px);
   padding: var(--ran-checkbox-padding, 0);
-  color: var(--ran-checkbox-color, rgba(0, 0, 0, 0.88));
+  color: var(--ran-checkbox-color, var(--ran-color-text, rgba(0, 0, 0, 0.88)));
   font-size: var(--ran-checkbox-font-size, 14px);
   line-height: var(--ran-checkbox-line-height, 1);
   list-style: var(--ran-checkbox-list-style, none);
-  font-family: var(--ran-checkbox-font-family, @fontFamily);
+  font-family: var(--ran-checkbox-font-family, var(--ran-skin-font-family, @fontFamily));
   white-space: var(--ran-checkbox-white-space, nowrap);
   cursor: var(--ran-checkbox-cursor, pointer);
   border-radius: var(--ran-checkbox-border-radius, 4px);
@@ -62,8 +62,13 @@
     width: var(--ran-checkbox-inner-width, 16px);
     height: var(--ran-checkbox-inner-height, 16px);
     direction: var(--ran-checkbox-inner-direction, ltr);
-    background-color: var(--ran-checkbox-inner-background-color, #fff);
-    border: var(--ran-checkbox-inner-border, 1px solid #d9d9d9);
+    background-color: var(--ran-checkbox-inner-background-color, var(--ran-color-bg-elevated, #fff));
+    border: var(--ran-checkbox-inner-border, 1px solid var(--ran-color-border, #d9d9d9));
+    border-image-source: var(--ran-checkbox-inner-border-image-source, none);
+    border-image-slice: var(--ran-checkbox-inner-border-image-slice, 8);
+    border-image-width: var(--ran-checkbox-inner-border-image-width, 4px);
+    border-image-outset: 0;
+    border-image-repeat: stretch;
     border-radius: var(--ran-checkbox-inner-border-radius, 4px);
     border-collapse: var(--ran-checkbox-inner-border-collapse, separate);
     &::after {
@@ -89,8 +94,8 @@
   }
   &-checked {
     .ran-checkbox-inner {
-      background-color: var(--ran-checkbox-checked-background-color, #1677ff);
-      border: var(--ran-checkbox-checked-border, 1px solid #1677ff);
+      background-color: var(--ran-checkbox-checked-background-color, var(--ran-color-primary, #1677ff));
+      border: var(--ran-checkbox-checked-border, 1px solid var(--ran-color-primary, #1677ff));
       &::after {
         opacity: var(--ran-checkbox-checked-after-opacity, 1);
       }

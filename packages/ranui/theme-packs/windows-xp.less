@@ -1,0 +1,121 @@
+/* Windows XP — standalone Tahoma/gradient palette, independent of win98 pack */
+
+:root[data-ran-theme-pack='windows-xp'],
+[data-ran-theme-pack='windows-xp'] {
+  --ran-color-primary: #003c7a;
+  --ran-color-success: #228b22;
+  --ran-color-warning: #cc7a00;
+  --ran-color-danger: #a00000;
+  --ran-color-bg: #ece9d8;
+  --ran-color-bg-elevated: #ffffff;
+  --ran-color-bg-muted: #d4d0c8;
+  --ran-color-text: #000000;
+  --ran-color-text-secondary: #444444;
+  --ran-color-text-disabled: #888888;
+  --ran-color-border: #7a96df;
+  --ran-color-border-secondary: #c7d5f4;
+  --ran-color-link: #003c7a;
+
+  --ran-font-family: 'Tahoma', 'Segoe UI', Geneva, sans-serif;
+  --ran-font-size: 11px;
+
+  --ran-radius-sm: 3px;
+  --ran-radius-md: 3px;
+  --ran-radius-lg: 4px;
+
+  --ran-shadow-elevated: 2px 2px 4px rgba(0, 0, 0, 0.3);
+
+  --ran-skin-font-family: 'Tahoma', 'Segoe UI', Geneva, sans-serif;
+  --ran-skin-border-width: 1px;
+  --ran-skin-border-style: solid;
+  --ran-skin-outline-color: #7a96df;
+  --ran-skin-raised-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  --ran-skin-inset-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
+  --ran-skin-hard-shadow: none;
+  --ran-skin-control-height-sm: 22px;
+  --ran-skin-control-height-md: 24px;
+
+  --ran-motion-duration-fast: 0ms;
+  --ran-motion-duration-base: 0ms;
+}
+
+[data-ran-theme-pack='windows-xp'] r-button,
+[data-ran-theme-pack='windows-xp'] r-input,
+[data-ran-theme-pack='windows-xp'] r-checkbox,
+[data-ran-theme-pack='windows-xp'] r-select,
+[data-ran-theme-pack='windows-xp'] r-dropdown,
+[data-ran-theme-pack='windows-xp'] r-modal {
+  font-family: var(--ran-skin-font-family);
+}
+
+[data-ran-theme-pack='windows-xp'] r-button {
+  --ran-btn-box-shadow: var(--ran-skin-raised-shadow);
+  --ran-btn-content-border-radius: 3px;
+  --ran-btn-content-border: 1px solid #7a96df;
+  --ran-btn-contain-background: var(--ran-color-bg);
+  --ran-btn-contain-transition: none;
+  --ran-btn-content-font-family: var(--ran-skin-font-family);
+  --ran-btn-content-font-size: 11px;
+  --ran-btn-content-padding: 3px 12px;
+  --ran-btn-content-line-height: 18px;
+  --ran-btn-content-color: var(--ran-color-text);
+  --ran-btn-content-background-color: linear-gradient(to bottom, #ece9d8 0%, #d4d0c8 100%);
+  --ran-btn-content-border-color: #7a96df;
+}
+
+[data-ran-theme-pack='windows-xp'] r-button[type='primary'] {
+  --ran-btn-content-background-color: linear-gradient(to bottom, #3e88e0 0%, #1e5fa8 100%);
+  --ran-btn-content-border-color: #1b56a0;
+  --ran-btn-content-color: #ffffff;
+}
+
+[data-ran-theme-pack='windows-xp'] r-input {
+  --ran-input-border-radius: 3px;
+  --ran-input-border: 1px solid #7a96df;
+  --ran-input-background-color: #ffffff;
+  --ran-input-font-family: var(--ran-skin-font-family);
+  --ran-input-content-font-family: var(--ran-skin-font-family);
+  --ran-input-content-font-size: 11px;
+  --ran-input-transition: none;
+  --ran-input-content-transition: none;
+  --ran-input-content-background-color: #ffffff;
+}
+
+[data-ran-theme-pack='windows-xp'] r-checkbox {
+  --ran-checkbox-font-family: var(--ran-skin-font-family);
+  --ran-checkbox-border-radius: 3px;
+  --ran-checkbox-inner-border-radius: 2px;
+  --ran-checkbox-inner-border: 1px solid #7a96df;
+  --ran-checkbox-inner-background-color: #ffffff;
+  --ran-checkbox-checked-border: 1px solid #1e5fa8;
+  --ran-checkbox-checked-background-color: var(--ran-color-primary);
+}
+
+[data-ran-theme-pack='windows-xp'] r-select {
+  --ran-select-root-font-family: var(--ran-skin-font-family);
+  --ran-select-selection-border-radius: 3px;
+  --ran-select-selection-border: 1px solid #7a96df;
+  --ran-select-selection-background-color: #ffffff;
+  --ran-select-selection-transition: none;
+  --ran-select-selection-font-size: 11px;
+}
+
+[data-ran-theme-pack='windows-xp'] r-dropdown {
+  --ran-dropdown-font-family: var(--ran-skin-font-family);
+  --ran-dropdown-border-radius: 3px;
+  --ran-dropdown-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+  --ran-dropdown-background: var(--ran-color-bg-elevated);
+}
+
+[data-ran-theme-pack='windows-xp'] r-modal {
+  --ran-modal-dialog-border-radius: 4px;
+  --ran-modal-dialog-background: var(--ran-color-bg-elevated);
+  --ran-modal-dialog-box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.4);
+  --ran-modal-header-background: linear-gradient(to right, #0a246a 0%, #a6caf0 100%);
+  --ran-modal-header-padding: 4px 8px;
+  --ran-modal-header-border-bottom: none;
+  --ran-modal-title-color: #ffffff;
+  --ran-modal-title-font-size: 11px;
+  --ran-modal-close-color: #ffffff;
+  --ran-modal-body-color: var(--ran-color-text);
+}

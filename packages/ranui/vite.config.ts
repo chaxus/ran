@@ -15,10 +15,17 @@ const __dirname = path.dirname(__filename);
 const chunkOptimization: Partial<BuildOptions> = {
   chunkSizeWarningLimit: 500,
   assetsInlineLimit: 1024,
+  cssCodeSplit: true,
   reportCompressedSize: false,
   emptyOutDir: true,
   rollupOptions: {
     external: ['react', 'react-dom', 'vue'],
+    output: {
+      assetFileNames: (assetInfo): string => {
+        if (assetInfo.names?.includes('style.css')) return 'ranui.css';
+        return '[name][extname]';
+      },
+    },
     treeshake: {
       manualPureFunctions: ['console.log'],
     },
@@ -65,6 +72,14 @@ export const es: BuildOptions = {
       scratch: resolve(__dirname, 'components/scratch/index.ts'),
       index: resolve(__dirname, 'index.ts'),
       style: resolve(__dirname, 'style.ts'),
+      'theme-packs/pixel-retro': resolve(__dirname, 'theme-packs/pixel-retro.ts'),
+      'theme-packs/windows-98': resolve(__dirname, 'theme-packs/windows-98.ts'),
+      'theme-packs/windows-xp': resolve(__dirname, 'theme-packs/windows-xp.ts'),
+      'theme-packs/system-6': resolve(__dirname, 'theme-packs/system-6.ts'),
+      'theme-packs/wired': resolve(__dirname, 'theme-packs/wired.ts'),
+      'theme-packs/paper': resolve(__dirname, 'theme-packs/paper.ts'),
+      'theme-packs/neo-brutalism': resolve(__dirname, 'theme-packs/neo-brutalism.ts'),
+      'theme-packs/transitions': resolve(__dirname, 'theme-packs/transitions.ts'),
     },
     fileName: (_: string, name: string): string => {
       return `${name}.js`;

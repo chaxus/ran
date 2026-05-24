@@ -63,6 +63,14 @@
       "require": "./dist/index.cjs"
     },
     "./style": "./dist/ranui.css",
+    "./theme-packs/pixel-retro": "./dist/pixel-retro.css",
+    "./theme-packs/windows-98": "./dist/windows-98.css",
+    "./theme-packs/windows-xp": "./dist/windows-xp.css",
+    "./theme-packs/system-6": "./dist/system-6.css",
+    "./theme-packs/wired": "./dist/wired.css",
+    "./theme-packs/paper": "./dist/paper.css",
+    "./theme-packs/neo-brutalism": "./dist/neo-brutalism.css",
+    "./theme-packs/transitions": "./dist/transitions.css",
     "./button": {
       "types": "./dist/index.d.ts",
       "import": "./dist/button.js",

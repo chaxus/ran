@@ -119,9 +119,35 @@ function toRelativeComponentName(dirPath: string): string {
   return path.relative(COMPONENTS_DIR, dirPath).split(path.sep).join('/');
 }
 
+type TokenLayer = 'semantic' | 'skin' | 'component' | 'internal';
+
+const SEMANTIC_PREFIXES = ['--ran-color-', '--ran-font-', '--ran-radius-', '--ran-shadow-', '--ran-motion-', '--ran-spacing-'];
+
+const COMPONENT_PREFIXES = [
+  '--ran-btn-', '--ran-input-', '--ran-checkbox-', '--ran-select-', '--ran-dropdown-',
+  '--ran-modal-', '--ran-message-', '--ran-tab-', '--ran-tabpane-', '--ran-skeleton-',
+  '--ran-icon-', '--ran-image-', '--ran-player-', '--ran-progress-', '--ran-colorpicker-',
+  '--ran-popover-', '--ran-loading-', '--ran-math-', '--ran-form-', '--ran-scratch-',
+  '--ran-radar-',
+];
+
+function classifyToken(token: string): TokenLayer {
+  if (token.startsWith('--ran-skin-')) return 'skin';
+  if (SEMANTIC_PREFIXES.some((p) => token.startsWith(p))) return 'semantic';
+  if (COMPONENT_PREFIXES.some((p) => token.startsWith(p))) return 'component';
+  return 'internal';
+}
+
 function renderList(values: string[]): string {
   if (values.length === 0) return '- (none)';
   return values.map((value) => `- \`${value}\``).join('\n');
+}
+
+function renderClassifiedList(values: string[]): string {
+  if (values.length === 0) return '- (none)';
+  return values
+    .map((token) => `- \`${token}\` *(${classifyToken(token)})*`)
+    .join('\n');
 }
 
 function normalizeRule(rule?: TokenFilterRule): Required<TokenFilterRule> {
@@ -231,7 +257,14 @@ function buildDoc(entries: ComponentEntry[], mode: 'full' | 'public', filterConf
     lines.push(`- Parts: ${partList.length}`);
     lines.push('');
     lines.push('#### Tokens');
-    lines.push(renderList(tokenList));
+    const layerGroups: Record<TokenLayer, string[]> = { semantic: [], skin: [], component: [], internal: [] };
+    for (const token of tokenList) layerGroups[classifyToken(token)].push(token);
+    const nonEmpty = (Object.entries(layerGroups) as [TokenLayer, string[]][]).filter(([, v]) => v.length > 0);
+    if (nonEmpty.length > 0) {
+      const summary = nonEmpty.map(([layer, v]) => `${layer}: ${v.length}`).join(' · ');
+      lines.push(`<!-- layers: ${summary} -->`);
+    }
+    lines.push(mode === 'full' ? renderClassifiedList(tokenList) : renderList(tokenList));
     lines.push('');
     lines.push('#### Parts');
     lines.push(renderList(partList));

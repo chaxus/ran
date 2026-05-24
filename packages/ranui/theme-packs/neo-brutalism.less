@@ -1,0 +1,121 @@
+:root[data-ran-theme-pack='neo-brutalism'],
+[data-ran-theme-pack='neo-brutalism'] {
+  --ran-color-primary: #ff5722;
+  --ran-color-success: #00c853;
+  --ran-color-warning: #ffd600;
+  --ran-color-danger: #f50057;
+  --ran-color-bg: #ffffff;
+  --ran-color-bg-elevated: #ffffff;
+  --ran-color-bg-muted: #f5f5f5;
+  --ran-color-text: #000000;
+  --ran-color-text-secondary: #111111;
+  --ran-color-text-disabled: #777777;
+  --ran-color-border: #000000;
+  --ran-color-border-secondary: #222222;
+  --ran-color-link: #ff5722;
+
+  --ran-font-family:
+    'Space Grotesk', 'Inter', 'Arial Black', 'Arial', sans-serif;
+  --ran-font-size: 14px;
+
+  --ran-radius-sm: 4px;
+  --ran-radius-md: 4px;
+  --ran-radius-lg: 6px;
+
+  --ran-shadow-elevated: 4px 4px 0 #000000;
+
+  --ran-skin-font-family:
+    'Space Grotesk', 'Inter', 'Arial Black', 'Arial', sans-serif;
+  --ran-skin-border-width: 3px;
+  --ran-skin-border-style: solid;
+  --ran-skin-outline-color: #000000;
+  --ran-skin-raised-shadow: none;
+  --ran-skin-inset-shadow: none;
+  --ran-skin-hard-shadow: 4px 4px 0 #000000;
+  --ran-skin-rough-shadow: none;
+
+  --ran-motion-duration-fast: 0.1s;
+  --ran-motion-duration-base: 0.15s;
+}
+
+[data-ran-theme-pack='neo-brutalism'] r-button,
+[data-ran-theme-pack='neo-brutalism'] r-input,
+[data-ran-theme-pack='neo-brutalism'] r-checkbox,
+[data-ran-theme-pack='neo-brutalism'] r-select,
+[data-ran-theme-pack='neo-brutalism'] r-dropdown,
+[data-ran-theme-pack='neo-brutalism'] r-modal,
+[data-ran-theme-pack='neo-brutalism'] r-message {
+  font-family: var(--ran-skin-font-family);
+}
+
+[data-ran-theme-pack='neo-brutalism'] r-button {
+  --ran-btn-box-shadow: var(--ran-skin-hard-shadow);
+  --ran-btn-content-border-radius: var(--ran-radius-md);
+  --ran-btn-content-border: var(--ran-skin-border-width) var(--ran-skin-border-style) #000000;
+  --ran-btn-contain-background: var(--ran-color-bg);
+  --ran-btn-content-font-family: var(--ran-skin-font-family);
+  --ran-btn-content-font-size: 14px;
+  --ran-btn-content-font-weight: 700;
+  --ran-btn-content-padding: 6px 16px;
+  --ran-btn-content-color: #000000;
+  --ran-btn-content-background-color: var(--ran-color-bg);
+  --ran-btn-content-border-color: #000000;
+}
+
+[data-ran-theme-pack='neo-brutalism'] r-button[type='primary'] {
+  --ran-btn-content-background-color: var(--ran-color-primary);
+  --ran-btn-content-border-color: #000000;
+  --ran-btn-content-color: #ffffff;
+}
+
+[data-ran-theme-pack='neo-brutalism'] r-button[type='warning'] {
+  --ran-btn-content-background-color: var(--ran-color-warning);
+  --ran-btn-content-border-color: #000000;
+  --ran-btn-content-color: #000000;
+  --ran-btn-content-warning-background-color: var(--ran-color-warning);
+  --ran-btn-content-warning-border-color: #000000;
+  --ran-btn-content-warning-color: #000000;
+}
+
+[data-ran-theme-pack='neo-brutalism'] r-input {
+  --ran-input-border-radius: var(--ran-radius-md);
+  --ran-input-border: var(--ran-skin-border-width) var(--ran-skin-border-style) #000000;
+  --ran-input-font-family: var(--ran-skin-font-family);
+  --ran-input-content-font-family: var(--ran-skin-font-family);
+  --ran-input-box-shadow: var(--ran-skin-hard-shadow);
+}
+
+[data-ran-theme-pack='neo-brutalism'] r-checkbox {
+  --ran-checkbox-font-family: var(--ran-skin-font-family);
+  --ran-checkbox-border-radius: var(--ran-radius-sm);
+  --ran-checkbox-inner-border-radius: var(--ran-radius-sm);
+  --ran-checkbox-inner-border: var(--ran-skin-border-width) var(--ran-skin-border-style) #000000;
+  --ran-checkbox-checked-border: var(--ran-skin-border-width) var(--ran-skin-border-style) #000000;
+  --ran-checkbox-checked-background-color: var(--ran-color-primary);
+}
+
+[data-ran-theme-pack='neo-brutalism'] r-select {
+  --ran-select-root-font-family: var(--ran-skin-font-family);
+  --ran-select-selection-border-radius: var(--ran-radius-md);
+  --ran-select-selection-border: var(--ran-skin-border-width) var(--ran-skin-border-style) #000000;
+  --ran-select-selection-transition: none;
+}
+
+[data-ran-theme-pack='neo-brutalism'] r-dropdown {
+  --ran-dropdown-font-family: var(--ran-skin-font-family);
+  --ran-dropdown-border-radius: var(--ran-radius-md);
+  --ran-dropdown-box-shadow: var(--ran-skin-hard-shadow);
+  --ran-dropdown-arrow-after-box-shadow: none;
+}
+
+[data-ran-theme-pack='neo-brutalism'] r-modal {
+  --ran-modal-dialog-border-radius: var(--ran-radius-lg);
+  --ran-modal-dialog-box-shadow: var(--ran-skin-hard-shadow);
+  --ran-modal-header-border-bottom: var(--ran-skin-border-width) solid #000000;
+  --ran-modal-footer-border-top: var(--ran-skin-border-width) solid #000000;
+}
+
+[data-ran-theme-pack='neo-brutalism'] r-message {
+  --ran-message-notice-content-border-radius: var(--ran-radius-md);
+  --ran-message-notice-content-box-shadow: var(--ran-skin-hard-shadow);
+}

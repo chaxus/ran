@@ -1,3 +1,4 @@
+export * from '@/utils/theme';
 export * from '@/components/button';
 export * from '@/components/icon';
 export * from '@/components/image';

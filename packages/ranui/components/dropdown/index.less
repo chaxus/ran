@@ -152,17 +152,17 @@
   box-sizing: var(--ran-dropdown-box-sizing, border-box);
   margin: var(--ran-dropdown-margin, 0);
   padding: var(--ran-dropdown-padding, 0);
-  color: var(--ran-dropdown-color, rgba(0, 0, 0, 0.88));
+  color: var(--ran-dropdown-color, var(--ran-color-text, rgba(0, 0, 0, 0.88)));
   font-size: var(--ran-dropdown-font-size, 14px);
   list-style: var(--ran-dropdown-list-style, none);
-  font-family: var(--ran-dropdown-font-family, @font-family);
+  font-family: var(--ran-dropdown-font-family, var(--ran-skin-font-family, @font-family));
   z-index: var(--ran-dropdown-z-index, 1050);
   overflow: var(--ran-dropdown-overflow, hidden);
   font-variant: var(--ran-dropdown-font-variant, initial);
-  background: var(--ran-dropdown-background, #ffffff);
+  background: var(--ran-dropdown-background, var(--ran-color-bg-elevated, #ffffff));
   border-radius: var(--ran-dropdown-border-radius, 8px);
   outline: var(--ran-dropdown-outline, none);
-  box-shadow: var(--ran-dropdown-box-shadow, @box-shadow);
+  box-shadow: var(--ran-dropdown-box-shadow, var(--ran-skin-raised-shadow, var(--ran-shadow-elevated, @box-shadow)));
   cursor: var(--ran-dropdown-cursor, auto);
   width: var(--ran-dropdown-width, 100%);
   height: var(--ran-dropdown-height, 100%);
@@ -221,7 +221,7 @@
     height: var(--ran-dropdown-arrow-height, @arrow-size);
     overflow: var(--ran-dropdown-arrow-overflow, hidden);
     &::before {
-      background: var(--ran-dropdown-arrow-before-background, #fff);
+      background: var(--ran-dropdown-arrow-before-background, var(--ran-color-bg-elevated, #fff));
       position: var(--ran-dropdown-arrow-before-position, absolute);
       bottom: var(--ran-dropdown-arrow-before-bottom, 0);
       inset-inline-start: 0;
@@ -244,7 +244,7 @@
       transform: var(--ran-dropdown-arrow-after-transform, translateY(50%) rotate(-135deg));
       box-shadow: var(--ran-dropdown-arrow-after-box-shadow, 2px 2px 5px rgba(0, 0, 0, 0.05));
       z-index: var(--ran-dropdown-arrow-after-z-index, 0);
-      background: var(--ran-dropdown-arrow-after-background, #fff);
+      background: var(--ran-dropdown-arrow-after-background, var(--ran-color-bg-elevated, #fff));
     }
   }
 }

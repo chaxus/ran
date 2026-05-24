@@ -1,0 +1,123 @@
+:root[data-ran-theme-pack='system-6'],
+[data-ran-theme-pack='system-6'] {
+  --ran-color-primary: #000000;
+  --ran-color-success: #000000;
+  --ran-color-warning: #000000;
+  --ran-color-danger: #000000;
+  --ran-color-bg: #ffffff;
+  --ran-color-bg-elevated: #ffffff;
+  --ran-color-bg-muted: #dddddd;
+  --ran-color-text: #000000;
+  --ran-color-text-secondary: #000000;
+  --ran-color-text-disabled: #888888;
+  --ran-color-border: #000000;
+  --ran-color-border-secondary: #888888;
+  --ran-color-link: #000000;
+
+  --ran-font-family: 'Chicago', 'Charcoal', 'Geneva', 'Helvetica Neue', sans-serif;
+  --ran-font-size: 12px;
+
+  --ran-radius-sm: 0;
+  --ran-radius-md: 0;
+  --ran-radius-lg: 0;
+
+  --ran-shadow-elevated: none;
+
+  --ran-skin-font-family: 'Chicago', 'Charcoal', 'Geneva', 'Helvetica Neue', sans-serif;
+  --ran-skin-border-width: 1px;
+  --ran-skin-border-style: solid;
+  --ran-skin-outline-color: #000000;
+  --ran-skin-raised-shadow: none;
+  --ran-skin-inset-shadow: none;
+  --ran-skin-hard-shadow: none;
+  --ran-skin-control-height-sm: 20px;
+  --ran-skin-control-height-md: 20px;
+
+  --ran-motion-duration-fast: 0ms;
+  --ran-motion-duration-base: 0ms;
+}
+
+[data-ran-theme-pack='system-6'] r-button,
+[data-ran-theme-pack='system-6'] r-input,
+[data-ran-theme-pack='system-6'] r-checkbox,
+[data-ran-theme-pack='system-6'] r-select,
+[data-ran-theme-pack='system-6'] r-dropdown,
+[data-ran-theme-pack='system-6'] r-modal,
+[data-ran-theme-pack='system-6'] r-message {
+  font-family: var(--ran-skin-font-family);
+}
+
+[data-ran-theme-pack='system-6'] r-button {
+  --ran-btn-box-shadow: none;
+  --ran-btn-content-border-radius: 0;
+  --ran-btn-content-border: 1px solid #000000;
+  --ran-btn-contain-background: var(--ran-color-bg);
+  --ran-btn-contain-transition: none;
+  --ran-btn-content-font-family: var(--ran-skin-font-family);
+  --ran-btn-content-font-size: 12px;
+  --ran-btn-content-padding: 1px 10px;
+  --ran-btn-content-line-height: 18px;
+  --ran-btn-content-color: var(--ran-color-text);
+  --ran-btn-content-background-color: var(--ran-color-bg);
+  --ran-btn-content-border-color: #000000;
+}
+
+/* Default action button (Mac System 6 style): black border, bold outline */
+[data-ran-theme-pack='system-6'] r-button[type='primary'] {
+  --ran-btn-box-shadow: 0 0 0 3px #000000;
+  --ran-btn-content-background-color: var(--ran-color-bg);
+  --ran-btn-content-color: var(--ran-color-text);
+}
+
+[data-ran-theme-pack='system-6'] r-input {
+  --ran-input-border-radius: 0;
+  --ran-input-border: 1px solid #000000;
+  --ran-input-background-color: #ffffff;
+  --ran-input-font-family: var(--ran-skin-font-family);
+  --ran-input-content-font-family: var(--ran-skin-font-family);
+  --ran-input-content-font-size: 12px;
+  --ran-input-transition: none;
+  --ran-input-content-transition: none;
+  --ran-input-content-background-color: #ffffff;
+}
+
+[data-ran-theme-pack='system-6'] r-checkbox {
+  --ran-checkbox-font-family: var(--ran-skin-font-family);
+  --ran-checkbox-border-radius: 0;
+  --ran-checkbox-inner-border-radius: 0;
+  --ran-checkbox-inner-border: 1px solid #000000;
+  --ran-checkbox-inner-background-color: #ffffff;
+  --ran-checkbox-checked-border: 1px solid #000000;
+  --ran-checkbox-checked-background-color: #000000;
+}
+
+[data-ran-theme-pack='system-6'] r-select {
+  --ran-select-root-font-family: var(--ran-skin-font-family);
+  --ran-select-selection-border-radius: 0;
+  --ran-select-selection-border: 1px solid #000000;
+  --ran-select-selection-background-color: #ffffff;
+  --ran-select-selection-transition: none;
+  --ran-select-selection-font-size: 12px;
+}
+
+[data-ran-theme-pack='system-6'] r-dropdown {
+  --ran-dropdown-font-family: var(--ran-skin-font-family);
+  --ran-dropdown-border-radius: 0;
+  --ran-dropdown-box-shadow: 2px 2px 0 #000000;
+  --ran-dropdown-arrow-after-box-shadow: none;
+  --ran-dropdown-background: var(--ran-color-bg-elevated);
+}
+
+[data-ran-theme-pack='system-6'] r-modal {
+  --ran-modal-dialog-border-radius: 0;
+  --ran-modal-dialog-background: var(--ran-color-bg-elevated);
+  --ran-modal-dialog-box-shadow: 3px 3px 0 #000000;
+  --ran-modal-header-border-bottom: 1px solid #000000;
+  --ran-modal-title-font-size: 12px;
+  --ran-modal-body-color: var(--ran-color-text);
+}
+
+[data-ran-theme-pack='system-6'] r-message {
+  --ran-message-notice-content-border-radius: 0;
+  --ran-message-notice-content-box-shadow: 2px 2px 0 #000000;
+}
