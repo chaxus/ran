@@ -435,6 +435,10 @@
         gap: 14px;
       }
 
+      .code-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
       .feature-card,
       .theme-card,
       .code-example,
@@ -1057,10 +1061,11 @@ export function App() {
         }
 
         function applyPack(pack) {
-          root.setAttribute('data-ran-theme-pack', pack);
           if (pack) {
+            root.setAttribute('data-ran-theme-pack', pack);
             writeStorage('ran-theme-pack', pack);
           } else {
+            root.removeAttribute('data-ran-theme-pack');
             removeStorage('ran-theme-pack');
           }
           syncPressed('.pack-chip[data-pack]', 'data-pack', pack || '');
