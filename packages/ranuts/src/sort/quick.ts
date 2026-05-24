@@ -2,7 +2,7 @@ const partition = (list: number[], left: number, right: number): number => {
   const pivot = left;
   let index = pivot + 1;
   for (let i = index; i <= right; i++) {
-    if (list[i] > list[pivot]) {
+    if (list[i] < list[pivot]) {
       [list[i], list[index]] = [list[index], list[i]];
       index++;
     }
@@ -26,7 +26,7 @@ const combine = (list: number[], left: number, right: number): number[] => {
  */
 const quick = (list: number[] = []): number[] => {
   const size = list.length;
-  return combine(list, 0, size);
+  return combine(list, 0, size - 1);
 };
 
 export default quick;

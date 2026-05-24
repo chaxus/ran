@@ -17,13 +17,9 @@ const handing = (name: string, sort: Function, limit: number = 10) => {
     const taskId = startTask();
     for (let i = 0; i < limit; i++) {
       const exampleArray = randomArray();
-      try {
-        const result = sort(exampleArray);
-        const rightResult = [...exampleArray].sort((a: number, b: number) => a - b);
-        expect(result).toEqual(rightResult);
-      } catch (error) {
-        console.log(error, sort, exampleArray);
-      }
+      const result = sort(exampleArray);
+      const rightResult = [...exampleArray].sort((a: number, b: number) => a - b);
+      expect(result).toEqual(rightResult);
     }
     const time = taskEnd(taskId);
     console.log(name, time);
