@@ -38,9 +38,14 @@
   },
   "pnpm": {
     "ignoredBuiltDependencies": [
+      "core-js",
+      "esbuild",
       "fsevents",
       "keccak",
-      "secp256k1"
+      "preact",
+      "secp256k1",
+      "sharp",
+      "tesseract.js"
     ]
   }
 }
