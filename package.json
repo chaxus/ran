@@ -41,13 +41,6 @@
       "fsevents",
       "keccak",
       "secp256k1"
-    ],
-    "minimumReleaseAgeExclude": [
-      "@argos-ci/browser",
-      "@argos-ci/playwright",
-      "tinyexec",
-      "tldts-core",
-      "tldts"
     ]
   }
 }
