@@ -1,5 +1,6 @@
 import { Div, Slot } from '@/utils/builder';
 import { createCustomError, isDisabled } from '@/utils/index';
+import { ensureShadowElement, ensureShadowRoot, setStringAttribute, syncSheetAttribute } from '@/utils/component';
 
 function Custom() {
   if (typeof document !== 'undefined' && !customElements.get('r-option')) {
@@ -13,23 +14,19 @@ function Custom() {
       }
       constructor() {
         super();
-        this._shadowDom = this.attachShadow({ mode: 'closed' });
-        // Assuming optionCss is defined elsewhere or will be added. For now, commenting out to avoid error.
-        // adoptStyles(this._shadowDom, optionCss);
+        this._shadowDom = ensureShadowRoot(this);
         this.setAttribute('class', 'ran-option');
 
-        let option = this._shadowDom.querySelector('.ran-select-dropdown-option') as HTMLDivElement | null;
-        let optionContent = this._shadowDom.querySelector(
-          '.ran-select-dropdown-option-content',
-        ) as HTMLDivElement | null;
-        let slot = this._shadowDom.querySelector('slot') as HTMLSlotElement | null;
-
-        if (!option || !optionContent || !slot) {
-          slot = Slot().build() as HTMLSlotElement;
-          optionContent = Div().class('ran-select-dropdown-option-content').children(slot).build() as HTMLDivElement;
-          option = Div().class('ran-select-dropdown-option').children(optionContent).build() as HTMLDivElement;
-          this._shadowDom.appendChild(option);
-        }
+        const option = ensureShadowElement(this._shadowDom, '.ran-select-dropdown-option', () => {
+          const slot = Slot().build() as HTMLSlotElement;
+          const optionContent = Div()
+            .class('ran-select-dropdown-option-content')
+            .children(slot)
+            .build() as HTMLDivElement;
+          return Div().class('ran-select-dropdown-option').children(optionContent).build() as HTMLDivElement;
+        });
+        const optionContent = option.querySelector('.ran-select-dropdown-option-content') as HTMLDivElement;
+        const slot = option.querySelector('slot') as HTMLSlotElement;
 
         this._slot = slot;
         this._optionContent = optionContent;
@@ -39,13 +36,13 @@ function Custom() {
         return this.getAttribute('value');
       }
       set value(value) {
-        this.setAttribute('value', value || '');
+        setStringAttribute(this, 'value', value);
       }
       get sheet() {
         return this.getAttribute('sheet');
       }
       set sheet(value) {
-        this.setAttribute('sheet', value || '');
+        setStringAttribute(this, 'sheet', value);
       }
       get disabled() {
         return isDisabled(this);
@@ -58,15 +55,7 @@ function Custom() {
         }
       }
       handlerExternalCss() {
-        if (this.sheet) {
-          try {
-            const sheet = new CSSStyleSheet();
-            sheet.insertRule(this.sheet);
-            this._shadowDom.adoptedStyleSheets = [sheet];
-          } catch (error) {
-            console.error(`Failed to parse the rule in CSSStyleSheet: ${this.sheet}, error: ${error}`);
-          }
-        }
+        syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
       }
       attributeChangedCallback(name: string, oldValue: string, newValue: string) {
         if (name === 'disabled' && this._option) {

@@ -9,7 +9,13 @@ import { defineSSR } from '@/utils/ssr-registry';
 import '@/components/input';
 import type { Input } from '@/components/input';
 import { Div, InputBuilder, Slot, Span, View } from '@/utils/builder';
-import { adoptStyles } from '@/utils/style';
+import {
+  ensureShadowElement,
+  ensureShadowRoot,
+  getStringAttribute,
+  setStringAttribute,
+  syncSheetAttribute,
+} from '@/utils/component';
 
 interface Option {
   label: string | number;
@@ -76,39 +82,38 @@ export class Select extends (HTMLElementSSR()!) {
     this._optionLabelMapValue = new Map();
     this._optionValueMapLabel = new Map();
 
-    this._shadowDom = this.shadowRoot || this.attachShadow({ mode: 'closed' });
-    adoptStyles(this._shadowDom, selectCss);
-
-    let wrap = this._shadowDom.querySelector('.ran-select') as HTMLDivElement;
-    if (!wrap) {
-      wrap = Div()
-        .class('ran-select')
-        .part('select')
-        .children(
-          Div()
-            .class('selection')
-            .part('selection')
-            .children(
-              View('r-icon')
-                .class('icon')
-                .part('icon')
-                .attr('name', 'arrow-down')
-                .attr('color', '#d9d9d9')
-                .attr('size', '16'),
-              Div().children(
-                Span().class('selection-item').part('selection-item'),
-                InputBuilder()
-                  .class('selection-search')
-                  .part('search')
-                  .attr('type', 'search')
-                  .attr('autocomplete', 'off'),
+    this._shadowDom = ensureShadowRoot(this, selectCss);
+    const wrap = ensureShadowElement(
+      this._shadowDom,
+      '.ran-select',
+      () =>
+        Div()
+          .class('ran-select')
+          .part('select')
+          .children(
+            Div()
+              .class('selection')
+              .part('selection')
+              .children(
+                View('r-icon')
+                  .class('icon')
+                  .part('icon')
+                  .attr('name', 'arrow-down')
+                  .attr('color', '#d9d9d9')
+                  .attr('size', '16'),
+                Div().children(
+                  Span().class('selection-item').part('selection-item'),
+                  InputBuilder()
+                    .class('selection-search')
+                    .part('search')
+                    .attr('type', 'search')
+                    .attr('autocomplete', 'off'),
+                ),
               ),
-            ),
-          Slot().class('slot'),
-        )
-        .build() as HTMLDivElement;
-      this._shadowDom.appendChild(wrap);
-    }
+            Slot().class('slot'),
+          )
+          .build() as HTMLDivElement,
+    );
 
     this._select = wrap;
     this._selection = wrap.querySelector('.selection') as HTMLDivElement;
@@ -153,10 +158,10 @@ export class Select extends (HTMLElementSSR()!) {
     this.setAttribute('placement', value || '');
   }
   get sheet(): string {
-    return this.getAttribute('sheet') || '';
+    return getStringAttribute(this, 'sheet');
   }
   set sheet(value: string) {
-    this.setAttribute('sheet', value || '');
+    setStringAttribute(this, 'sheet', value);
   }
   get getPopupContainerId(): string {
     return this.getAttribute('getPopupContainerId') || '';
@@ -310,15 +315,7 @@ export class Select extends (HTMLElementSSR()!) {
     }
   };
   handlerExternalCss(): void {
-    if (this.sheet) {
-      try {
-        const sheet = new CSSStyleSheet();
-        sheet.insertRule(this.sheet);
-        this._shadowDom.adoptedStyleSheets = [...this._shadowDom.adoptedStyleSheets, sheet];
-      } catch (error) {
-        console.error(`Failed to parse the rule in CSSStyleSheet: ${this.sheet}, error: ${error}`);
-      }
-    }
+    syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
   }
   /**
    * @description: 移除 select dropdown
