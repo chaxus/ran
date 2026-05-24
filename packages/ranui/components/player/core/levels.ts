@@ -17,7 +17,11 @@ export interface BuildManifestLevelsResult<TLevel extends ManifestLevelLike> {
 }
 
 export function deriveLevelName(level: ManifestLevelLike): string {
-  return level.name || (level.height ? `${level.height}p` : '') || (level.bitrate ? `${Math.round(level.bitrate / 1000)}k` : '');
+  return (
+    level.name ||
+    (level.height ? `${level.height}p` : '') ||
+    (level.bitrate ? `${Math.round(level.bitrate / 1000)}k` : '')
+  );
 }
 
 export function buildManifestLevels<TLevel extends ManifestLevelLike>(

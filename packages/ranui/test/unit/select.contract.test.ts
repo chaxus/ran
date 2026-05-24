@@ -232,7 +232,9 @@ describe('r-select contract', () => {
     const select = await createSelectWithOptions();
     const opts = select.getDropdownOptions();
     if (opts.length > 0) {
-      opts.forEach(o => { (o as any).scrollIntoView = vi.fn(); });
+      opts.forEach((o) => {
+        (o as any).scrollIntoView = vi.fn();
+      });
       expect(() => select.setActiveOptionByIndex(0)).not.toThrow();
     } else {
       expect(true).toBe(true);
@@ -303,7 +305,9 @@ describe('r-select contract', () => {
     await sleep(20);
 
     const opts = select.getDropdownOptions();
-    opts.forEach(o => { (o as any).scrollIntoView = vi.fn(); });
+    opts.forEach((o) => {
+      (o as any).scrollIntoView = vi.fn();
+    });
 
     const event = new KeyboardEvent('keydown', { key: 'ArrowDown', cancelable: true });
     expect(() => select.keydownSelect(event)).not.toThrow();
@@ -316,7 +320,9 @@ describe('r-select contract', () => {
     await sleep(20);
 
     const opts = select.getDropdownOptions();
-    opts.forEach(o => { (o as any).scrollIntoView = vi.fn(); });
+    opts.forEach((o) => {
+      (o as any).scrollIntoView = vi.fn();
+    });
 
     select.setActiveOptionByIndex(1);
     const event = new KeyboardEvent('keydown', { key: 'ArrowUp', cancelable: true });
@@ -330,7 +336,9 @@ describe('r-select contract', () => {
     await sleep(20);
 
     const opts = select.getDropdownOptions();
-    opts.forEach(o => { (o as any).scrollIntoView = vi.fn(); });
+    opts.forEach((o) => {
+      (o as any).scrollIntoView = vi.fn();
+    });
     if (opts.length > 0) {
       select.setActiveOptionByIndex(0);
       select.setSelectDropdownDisplayBlock();
@@ -423,9 +431,7 @@ describe('r-select contract', () => {
     const select = await createSelectWithOptions();
     select.createOption();
     select.setAttribute('defaultValue', 'a');
-    (select as any).createSelectDropdownContent([
-      { label: 'Option A', value: 'a' },
-    ]);
+    (select as any).createSelectDropdownContent([{ label: 'Option A', value: 'a' }]);
     const opts = select.getDropdownOptions();
     if (opts.length > 0) {
       expect(opts[0].getAttribute('active')).toBe('a');
@@ -468,7 +474,9 @@ describe('r-select contract', () => {
 
     const opts = select.getDropdownOptions();
     if (opts.length >= 2) {
-      opts.forEach(o => { (o as any).scrollIntoView = vi.fn(); });
+      opts.forEach((o) => {
+        (o as any).scrollIntoView = vi.fn();
+      });
       select.setActiveOptionByIndex(0);
       const prev = select._activeOption;
       select.setActiveOptionByIndex(1);

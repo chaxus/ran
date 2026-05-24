@@ -49,15 +49,28 @@ describe('player/core/progress', () => {
 
   it('getBufferedPercentage skips range whose end is not greater than current max', () => {
     // Two ranges: [0, 20] then [25, 15] — second end (15) < bufferedEnd (20)
-    const video = makeVideo(30, makeBuffered([[0, 20], [25, 15]]), 100);
+    const video = makeVideo(
+      30,
+      makeBuffered([
+        [0, 20],
+        [25, 15],
+      ]),
+      100,
+    );
     // After first range: bufferedEnd=20. Second range: 15 < 20, no update.
     expect(getBufferedPercentage(video, 100)).toBe(0.2);
   });
 
   it('getBufferedPercentage uses the largest end across non-matching ranges', () => {
     // currentTime=50 not in any range; first range ends at 10, second at 30
-    const video = makeVideo(50, makeBuffered([[0, 10], [15, 30]]), 100);
+    const video = makeVideo(
+      50,
+      makeBuffered([
+        [0, 10],
+        [15, 30],
+      ]),
+      100,
+    );
     expect(getBufferedPercentage(video, 100)).toBe(0.3);
   });
 });
-

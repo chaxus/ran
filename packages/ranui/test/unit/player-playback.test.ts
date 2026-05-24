@@ -1,12 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import {
-  shouldResumePlayback,
-  resolveSeekDuration,
-  createPlaybackSnapshot,
-} from '@/components/player/core/playback';
+import { shouldResumePlayback, resolveSeekDuration, createPlaybackSnapshot } from '@/components/player/core/playback';
 
 const makeVideo = (overrides: Partial<HTMLVideoElement> = {}): HTMLVideoElement =>
-  ({ paused: false, ended: false, ...overrides } as any);
+  ({ paused: false, ended: false, ...overrides }) as any;
 
 describe('player/core/playback', () => {
   describe('shouldResumePlayback', () => {

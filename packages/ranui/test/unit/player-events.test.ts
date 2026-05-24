@@ -7,7 +7,7 @@ import {
 } from '@/components/player/core/events';
 
 const makeVideo = (overrides: Partial<HTMLVideoElement> = {}): HTMLVideoElement =>
-  ({ paused: false, ended: false, ...overrides } as any);
+  ({ paused: false, ended: false, ...overrides }) as any;
 
 describe('player/core/events', () => {
   describe('shouldSetLoadingOnSeeking', () => {

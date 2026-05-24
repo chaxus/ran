@@ -4,12 +4,12 @@
 
 `utils/builder/` 已提供完整的 SSR 基础设施：
 
-| 模块 | 作用 |
-|---|---|
-| `env.ts` — `isSSR` | `typeof document === 'undefined'` 环境检测 |
-| `mocks.ts` — `HTMLElementMock` / `ShadowRootMock` | 完整 mock DOM，含 `serialize()` 输出 DSD HTML |
-| `core.ts` — `ElementBuilder` | fluent builder，构造时按 `isSSR` 分支，SSR 下用 mock |
-| `factory.ts` — `DeclarativeShadow` | 直接生成 DSD template 元素 |
+| 模块                                              | 作用                                                 |
+| ------------------------------------------------- | ---------------------------------------------------- |
+| `env.ts` — `isSSR`                                | `typeof document === 'undefined'` 环境检测           |
+| `mocks.ts` — `HTMLElementMock` / `ShadowRootMock` | 完整 mock DOM，含 `serialize()` 输出 DSD HTML        |
+| `core.ts` — `ElementBuilder`                      | fluent builder，构造时按 `isSSR` 分支，SSR 下用 mock |
+| `factory.ts` — `DeclarativeShadow`                | 直接生成 DSD template 元素                           |
 
 现有组件（`r-button`、`r-progress` 等）已通过 `Div()`、`View()` 等 factory 在 constructor 里建立 shadow DOM，**结构层面的 SSR 能力已就绪**。
 
@@ -99,13 +99,13 @@ export function applySSRAttributes(el: HTMLElement): void {
 
 ### 阶段三：按组件类型分层 SSR 策略
 
-| 组件 | 策略 | 备注 |
-|---|---|---|
-| `r-button` / `r-input` / `r-checkbox` | 完全 SSR | 纯结构，CSS 驱动 |
-| `r-progress` / `r-tabs` | 完全 SSR | 阶段一重构后支持 |
-| `r-select` / `r-modal` / `r-popover` | SSR shell | 输出关闭状态结构 |
+| 组件                                      | 策略            | 备注                            |
+| ----------------------------------------- | --------------- | ------------------------------- |
+| `r-button` / `r-input` / `r-checkbox`     | 完全 SSR        | 纯结构，CSS 驱动                |
+| `r-progress` / `r-tabs`                   | 完全 SSR        | 阶段一重构后支持                |
+| `r-select` / `r-modal` / `r-popover`      | SSR shell       | 输出关闭状态结构                |
 | `r-colorpicker` / `r-radar` / `r-scratch` | Placeholder SSR | 输出占位元素，canvas 客户端渲染 |
-| `r-player` | Poster SSR | 输出 poster + 静态控制栏 HTML |
+| `r-player`                                | Poster SSR      | 输出 poster + 静态控制栏 HTML   |
 
 **注意**：`r-button` 表中标注"完全 SSR"，但其 ripple 效果使用了 `getBoundingClientRect`（[components/button/index.ts:135](../components/button/index.ts#L135)）。这段代码在事件处理器里，不影响 SSR 序列化输出，但需要在组件注释里说明，避免后续贡献者误判。
 
@@ -144,11 +144,11 @@ export function getSSRConstructor(tagName: string): (new () => HTMLElement) | un
 
 `renderToStream` 接收原始 HTML 字符串，需要在 Node.js 里解析出标签、属性、嵌套结构。这是阶段四工程量最大的部分。
 
-| 方案 | 优点 | 缺点 |
-|---|---|---|
+| 方案               | 优点                         | 缺点                      |
+| ------------------ | ---------------------------- | ------------------------- |
 | `node-html-parser` | 轻量（无依赖），API 接近 DOM | 不完全符合 HTML5 解析规范 |
-| `htmlparser2` | 成熟，流式解析 | SAX 风格，需自行建树 |
-| `parse5` | 完全符合 HTML5 规范 | 较重 |
+| `htmlparser2`      | 成熟，流式解析               | SAX 风格，需自行建树      |
+| `parse5`           | 完全符合 HTML5 规范          | 较重                      |
 
 推荐 `node-html-parser`：ranui 组件不会生成异常 HTML，规范合规性要求不高，轻量优先。
 
@@ -178,8 +178,8 @@ app.get('/', (req, res) => {
 解决方案：`renderToStream` 内部先建完整组件树，再自顶向下序列化：
 
 ```typescript
-const tree = parseToComponentTree(html);  // 建立父子关系
-const output = serializeTree(tree);       // 父组件序列化时可读取 children
+const tree = parseToComponentTree(html); // 建立父子关系
+const output = serializeTree(tree); // 父组件序列化时可读取 children
 ```
 
 涉及组件：`r-select`（读取 `r-option` 的 value/label）、`r-tabs`（读取 `r-tab` 的 label/key）、`r-form`（读取表单字段）。
@@ -233,6 +233,7 @@ export default defineConfig({
 ### 各阶段对应测试
 
 **阶段一** — `test/ssr/css-vars.test.ts`
+
 ```typescript
 it('r-progress SSR output uses CSS variable', () => {
   const el = new Progress();
@@ -244,6 +245,7 @@ it('r-progress SSR output uses CSS variable', () => {
 ```
 
 **阶段三** — `test/ssr/components/`
+
 ```typescript
 it('r-button serializes to valid DSD', () => {
   const el = new Button();
@@ -254,6 +256,7 @@ it('r-button serializes to valid DSD', () => {
 ```
 
 **阶段四** — `test/ssr/stream.test.ts`
+
 ```typescript
 it('renderToStream yields complete DSD HTML', async () => {
   const chunks: string[] = [];
@@ -266,6 +269,7 @@ it('renderToStream yields complete DSD HTML', async () => {
 ```
 
 **阶段五** — `test/ssr/registry.test.ts`
+
 ```typescript
 it('defineSSR registers and retrieves constructor', () => {
   defineSSR('r-test', TestComponent);
@@ -274,13 +278,16 @@ it('defineSSR registers and retrieves constructor', () => {
 ```
 
 **阶段六** — `test/ssr/parent-child.test.ts`
+
 ```typescript
 it('r-select SSR includes option labels from children', async () => {
-  const html = await collect(renderToStream(`
+  const html = await collect(
+    renderToStream(`
     <r-select>
       <r-option value="a">Apple</r-option>
     </r-select>
-  `));
+  `),
+  );
   expect(html).toContain('Apple');
 });
 ```
@@ -308,12 +315,12 @@ it('r-button DSD snapshot', () => {
 
 ### 覆盖率目标
 
-| 套件 | 环境 | 目标 |
-|---|---|---|
-| `test:unit` | jsdom | 现有阈值（80/70/85/80） |
-| `test:ssr` | node | `utils/builder/`、`utils/ssr.ts` 行覆盖 ≥ 90% |
-| `test:e2e` | Chromium | 视觉回归，Argos CI 对比 |
-| Next.js E2E | Chromium | FOUC 验证，hydration 正确性 |
+| 套件        | 环境     | 目标                                          |
+| ----------- | -------- | --------------------------------------------- |
+| `test:unit` | jsdom    | 现有阈值（80/70/85/80）                       |
+| `test:ssr`  | node     | `utils/builder/`、`utils/ssr.ts` 行覆盖 ≥ 90% |
+| `test:e2e`  | Chromium | 视觉回归，Argos CI 对比                       |
+| Next.js E2E | Chromium | FOUC 验证，hydration 正确性                   |
 
 ---
 

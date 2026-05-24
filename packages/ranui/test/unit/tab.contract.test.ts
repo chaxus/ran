@@ -732,9 +732,11 @@ describe('r-tabs and r-tab contract', () => {
 
     // Mock getBoundingClientRect for nav children
     for (const child of Array.from(tabs._nav.children)) {
-      (child as HTMLElement).getBoundingClientRect = () => ({ width: 80, height: 30, left: 0, top: 0, right: 80, bottom: 30, toJSON: () => ({}) } as DOMRect);
+      (child as HTMLElement).getBoundingClientRect = () =>
+        ({ width: 80, height: 30, left: 0, top: 0, right: 80, bottom: 30, toJSON: () => ({}) }) as DOMRect;
     }
-    header2.getBoundingClientRect = () => ({ width: 80, height: 30, left: 0, top: 0, right: 80, bottom: 30, toJSON: () => ({}) } as DOMRect);
+    header2.getBoundingClientRect = () =>
+      ({ width: 80, height: 30, left: 0, top: 0, right: 80, bottom: 30, toJSON: () => ({}) }) as DOMRect;
 
     tabs.tabHeaderKeyMapIndex = { k1: 0, k2: 1 };
     tabs.setTabLine('k2');

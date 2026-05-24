@@ -160,9 +160,14 @@ describe('r-scratch contract', () => {
     const revealImg = { src: '', onload: null as any };
     let capturedOnload: Function | null = null;
     const origImage = global.Image;
-    (global as any).Image = function() {
+    (global as any).Image = function () {
       capturedOnload = null;
-      const mockImg = { src: '', set onload(fn: any) { capturedOnload = fn; } };
+      const mockImg = {
+        src: '',
+        set onload(fn: any) {
+          capturedOnload = fn;
+        },
+      };
       return mockImg;
     };
 

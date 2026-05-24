@@ -57,6 +57,5 @@ describe('r-popover accessibility contract', () => {
     expect(addSpy).toHaveBeenCalledWith('keydown', popover.keydownPopover);
     expect(removeSpy).toHaveBeenCalledWith('click', popover.clickPopover);
     expect(removeSpy).toHaveBeenCalledWith('keydown', popover.keydownPopover);
-
   });
 });

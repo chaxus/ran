@@ -570,7 +570,11 @@ export class Modal extends RanElement {
       const footerBuilder = Div().attr('slot', 'footer').class('ran-modal-actions');
 
       if (showCancel) {
-        const cancelButton = ButtonBuilder().attr('type', 'button').class('ran-modal-action ran-modal-action-cancel').text(cancelText).build();
+        const cancelButton = ButtonBuilder()
+          .attr('type', 'button')
+          .class('ran-modal-action ran-modal-action-cancel')
+          .text(cancelText)
+          .build();
         cancelButton.addEventListener('click', async () => {
           const shouldContinue = (await onCancel?.()) !== false;
           if (!shouldContinue) return;
@@ -580,7 +584,11 @@ export class Modal extends RanElement {
         footerBuilder.children(cancelButton);
       }
 
-      const okButton = ButtonBuilder().attr('type', 'button').class('ran-modal-action ran-modal-action-confirm').text(okText).build();
+      const okButton = ButtonBuilder()
+        .attr('type', 'button')
+        .class('ran-modal-action ran-modal-action-confirm')
+        .text(okText)
+        .build();
       okButton.addEventListener('click', async () => {
         okButton.disabled = true;
         try {

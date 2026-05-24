@@ -94,7 +94,9 @@ describe('r-player media event handlers', () => {
 
     player.onPlay(new Event('play'));
     expect(player.ctx.currentState).toBe('play');
-    expect(player._playerControllerBottomPlayBtn.classList.contains('ran-player-controller-bottom-left-btn-pause')).toBe(true);
+    expect(
+      player._playerControllerBottomPlayBtn.classList.contains('ran-player-controller-bottom-left-btn-pause'),
+    ).toBe(true);
 
     player.onPlaying(new Event('playing'));
     expect(player._playerBtn.style.display).toBe('none');

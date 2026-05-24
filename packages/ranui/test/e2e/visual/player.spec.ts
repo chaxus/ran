@@ -31,7 +31,8 @@ test('player control bar layout', async ({ page }) => {
   // Inject player and let it partially initialize, then screenshot just the controls
   await page.evaluate(() => {
     const container = document.createElement('div');
-    container.style.cssText = 'width:700px;height:400px;background:#000;border-radius:8px;overflow:hidden;position:relative;';
+    container.style.cssText =
+      'width:700px;height:400px;background:#000;border-radius:8px;overflow:hidden;position:relative;';
     const player = document.createElement('r-player');
     player.setAttribute('debug', 'true');
     container.appendChild(player);

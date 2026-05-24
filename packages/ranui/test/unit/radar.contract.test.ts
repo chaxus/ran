@@ -2,9 +2,30 @@ import { describe, expect, it, beforeEach, vi } from 'vitest';
 import '@/components/radar';
 
 const sampleAbilitys = JSON.stringify([
-  { abilityName: 'Speed', scoreRate: 80, backgroundColor: '#fff', fontSize: '12px', fontFamily: 'Arial', fontColor: '#000' },
-  { abilityName: 'Power', scoreRate: 60, backgroundColor: '#fff', fontSize: '12px', fontFamily: 'Arial', fontColor: '#000' },
-  { abilityName: 'Defense', scoreRate: 90, backgroundColor: '#fff', fontSize: '12px', fontFamily: 'Arial', fontColor: '#000' },
+  {
+    abilityName: 'Speed',
+    scoreRate: 80,
+    backgroundColor: '#fff',
+    fontSize: '12px',
+    fontFamily: 'Arial',
+    fontColor: '#000',
+  },
+  {
+    abilityName: 'Power',
+    scoreRate: 60,
+    backgroundColor: '#fff',
+    fontSize: '12px',
+    fontFamily: 'Arial',
+    fontColor: '#000',
+  },
+  {
+    abilityName: 'Defense',
+    scoreRate: 90,
+    backgroundColor: '#fff',
+    fontSize: '12px',
+    fontFamily: 'Arial',
+    fontColor: '#000',
+  },
 ]);
 
 describe('r-radar contract', () => {
@@ -41,7 +62,16 @@ describe('r-radar contract', () => {
 
   it('abilitys setter serializes object array to JSON', () => {
     const radar = mount();
-    const data = [{ abilityName: 'Agility', scoreRate: 50, backgroundColor: '#fff', fontSize: '14px', fontFamily: 'Helvetica', fontColor: '#333' }];
+    const data = [
+      {
+        abilityName: 'Agility',
+        scoreRate: 50,
+        backgroundColor: '#fff',
+        fontSize: '14px',
+        fontFamily: 'Helvetica',
+        fontColor: '#333',
+      },
+    ];
     radar.abilitys = data;
     expect(radar.getAttribute('abilitys')).toBe(JSON.stringify(data));
   });
@@ -90,11 +120,24 @@ describe('r-radar contract', () => {
   });
 
   const makeCtx = () => ({
-    save: vi.fn(), restore: vi.fn(), beginPath: vi.fn(), closePath: vi.fn(),
-    stroke: vi.fn(), fill: vi.fn(), lineTo: vi.fn(), moveTo: vi.fn(),
-    fillText: vi.fn(), arc: vi.fn(), fillRect: vi.fn(), roundRect: vi.fn(),
-    strokeStyle: '', fillStyle: '', lineWidth: 1, font: '',
-    textAlign: '', textBaseline: '',
+    save: vi.fn(),
+    restore: vi.fn(),
+    beginPath: vi.fn(),
+    closePath: vi.fn(),
+    stroke: vi.fn(),
+    fill: vi.fn(),
+    lineTo: vi.fn(),
+    moveTo: vi.fn(),
+    fillText: vi.fn(),
+    arc: vi.fn(),
+    fillRect: vi.fn(),
+    roundRect: vi.fn(),
+    strokeStyle: '',
+    fillStyle: '',
+    lineWidth: 1,
+    font: '',
+    textAlign: '',
+    textBaseline: '',
     setLineDash: vi.fn(),
     measureText: vi.fn().mockReturnValue({ width: 40 }),
     getBoundingClientRect: vi.fn().mockReturnValue({ width: 40, height: 20 }),

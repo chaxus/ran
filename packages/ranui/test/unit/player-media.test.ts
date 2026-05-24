@@ -129,7 +129,9 @@ describe('loadVideoSource', () => {
     };
     const onManifestLoaded = vi.fn();
     const onHlsError = vi.fn();
-    function MockHls() { return hlsInstance; }
+    function MockHls() {
+      return hlsInstance;
+    }
     (MockHls as any).isSupported = () => true;
     (MockHls as any).Events = { MANIFEST_LOADED: 'manifestLoaded', ERROR: 'hlsError' };
     const Hls = MockHls as unknown as HlsLikeStatic<HlsPlayerLike>;
@@ -172,7 +174,9 @@ describe('loadVideoSource', () => {
 
   it('falls back to native src when HLS constructor throws', () => {
     const video = document.createElement('video');
-    function ThrowingHls() { throw new Error('HLS init failed'); }
+    function ThrowingHls() {
+      throw new Error('HLS init failed');
+    }
     (ThrowingHls as any).isSupported = () => true;
     (ThrowingHls as any).Events = { MANIFEST_LOADED: 'manifestLoaded', ERROR: 'hlsError' };
     const Hls = ThrowingHls as unknown as HlsLikeStatic<HlsPlayerLike>;
@@ -200,12 +204,21 @@ describe('loadVideoSource', () => {
       loadSource: vi.fn(),
       attachMedia: vi.fn(),
     };
-    function NewMockHls() { return newHlsInstance; }
+    function NewMockHls() {
+      return newHlsInstance;
+    }
     (NewMockHls as any).isSupported = () => true;
     (NewMockHls as any).Events = { MANIFEST_LOADED: 'manifestLoaded', ERROR: 'hlsError' };
     const Hls = NewMockHls as unknown as HlsLikeStatic<HlsPlayerLike>;
 
-    const result = loadVideoSource({ video, src: 'new.m3u8', Hls, existingHls, onManifestLoaded: vi.fn(), onHlsError: vi.fn() });
+    const result = loadVideoSource({
+      video,
+      src: 'new.m3u8',
+      Hls,
+      existingHls,
+      onManifestLoaded: vi.fn(),
+      onHlsError: vi.fn(),
+    });
     expect(existingHls.destroy).toHaveBeenCalledTimes(1);
     expect(result).toBe(newHlsInstance);
   });

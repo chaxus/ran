@@ -69,7 +69,9 @@ describe('r-checkbox contract', () => {
     document.body.appendChild(checkbox);
 
     let fired = false;
-    checkbox.addEventListener('change', () => { fired = true; });
+    checkbox.addEventListener('change', () => {
+      fired = true;
+    });
 
     checkbox.click();
     expect(fired).toBe(false);
