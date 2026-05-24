@@ -35,7 +35,7 @@ import {
 import { ensurePlayerView } from './core/view';
 import { View } from '@/utils/builder';
 import { HTMLElementSSR } from '@/utils/index';
-import { adoptSheetText, adoptStyles } from '@/utils/style';
+import { ensureShadowRoot, getStringAttribute, setStringAttribute, syncSheetAttribute } from '@/utils/component';
 import playerCss from './index.less?inline';
 import { defineSSR } from '@/utils/ssr-registry';
 
@@ -158,8 +158,7 @@ export class RanPlayer extends (HTMLElementSSR()!) {
    */
   constructor() {
     super();
-    this._shadowDom = this.attachShadow({ mode: 'closed' });
-    adoptStyles(this._shadowDom, playerCss);
+    this._shadowDom = ensureShadowRoot(this, playerCss);
     // 如果有子元素，进行置空
     this.innerHTML = '';
     const viewRefs = ensurePlayerView({
@@ -230,14 +229,13 @@ export class RanPlayer extends (HTMLElementSSR()!) {
     this.setAttribute('playbackRate', value || '');
   }
   get sheet(): string {
-    return this.getAttribute('sheet') || '';
+    return getStringAttribute(this, 'sheet');
   }
   set sheet(value: string) {
-    this.setAttribute('sheet', value || '');
+    setStringAttribute(this, 'sheet', value);
   }
   handlerExternalCss = (): void => {
-    if (!this.sheet) return;
-    adoptSheetText(this._shadowDom, this.sheet);
+    syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
   };
   getRuntimeState = (): PlayerRuntimeState<PlaybackSnapshot> => {
     return {
