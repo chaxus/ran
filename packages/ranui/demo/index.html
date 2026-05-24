@@ -443,18 +443,18 @@
 
           <div class="nav-controls" aria-label="Visual settings">
             <div class="segmented" aria-label="Theme">
-              <button class="seg-btn active" data-theme="">Light</button>
-              <button class="seg-btn" data-theme="dark">Dark</button>
+              <button class="seg-btn active" data-theme="" aria-pressed="true">Light</button>
+              <button class="seg-btn" data-theme="dark" aria-pressed="false">Dark</button>
             </div>
             <div class="pack-list" aria-label="Theme pack">
-              <button class="pack-chip active" data-pack="">Default</button>
-              <button class="pack-chip" data-pack="pixel-retro">Pixel</button>
-              <button class="pack-chip" data-pack="windows-98">Win 98</button>
-              <button class="pack-chip" data-pack="windows-xp">Win XP</button>
-              <button class="pack-chip" data-pack="system-6">System 6</button>
-              <button class="pack-chip" data-pack="wired">Wired</button>
-              <button class="pack-chip" data-pack="paper">Paper</button>
-              <button class="pack-chip" data-pack="neo-brutalism">Neo</button>
+              <button class="pack-chip active" data-pack="" aria-pressed="true">Default</button>
+              <button class="pack-chip" data-pack="pixel-retro" aria-pressed="false">Pixel</button>
+              <button class="pack-chip" data-pack="windows-98" aria-pressed="false">Win 98</button>
+              <button class="pack-chip" data-pack="windows-xp" aria-pressed="false">Win XP</button>
+              <button class="pack-chip" data-pack="system-6" aria-pressed="false">System 6</button>
+              <button class="pack-chip" data-pack="wired" aria-pressed="false">Wired</button>
+              <button class="pack-chip" data-pack="paper" aria-pressed="false">Paper</button>
+              <button class="pack-chip" data-pack="neo-brutalism" aria-pressed="false">Neo</button>
             </div>
           </div>
         </div>
@@ -498,41 +498,78 @@
       (function () {
         var root = document.documentElement;
 
-        document.querySelectorAll('.seg-btn').forEach(function (btn) {
-          btn.addEventListener('click', function () {
-            document.querySelectorAll('.seg-btn').forEach(function (button) {
-              button.classList.remove('active');
-            });
-            btn.classList.add('active');
+        function readStorage(key) {
+          try {
+            return window.localStorage.getItem(key);
+          } catch (error) {
+            return null;
+          }
+        }
 
-            var theme = btn.getAttribute('data-theme') || '';
-            if (theme) {
-              root.setAttribute('data-ran-theme', theme);
-              localStorage.setItem('ran-theme', theme);
-            } else {
-              root.removeAttribute('data-ran-theme');
-              localStorage.setItem('ran-theme', 'light');
-            }
+        function writeStorage(key, value) {
+          try {
+            window.localStorage.setItem(key, value);
+          } catch (error) {
+            // Ignore storage errors in private browsing and restricted embeds.
+          }
+        }
+
+        function removeStorage(key) {
+          try {
+            window.localStorage.removeItem(key);
+          } catch (error) {
+            // Ignore storage errors in private browsing and restricted embeds.
+          }
+        }
+
+        function syncPressed(selector, attribute, activeValue) {
+          document.querySelectorAll(selector).forEach(function (button) {
+            var isActive = (button.getAttribute(attribute) || '') === activeValue;
+            button.classList.toggle('active', isActive);
+            button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+          });
+        }
+
+        function applyTheme(theme) {
+          if (theme) {
+            root.setAttribute('data-ran-theme', theme);
+            root.setAttribute('theme', theme);
+            writeStorage('ran-theme', theme);
+          } else {
+            root.setAttribute('data-ran-theme', 'light');
+            root.setAttribute('theme', 'light');
+            writeStorage('ran-theme', 'light');
+          }
+          syncPressed('.seg-btn[data-theme]', 'data-theme', theme || '');
+        }
+
+        function applyPack(pack) {
+          if (pack) {
+            root.setAttribute('data-ran-theme-pack', pack);
+            writeStorage('ran-theme-pack', pack);
+          } else {
+            root.removeAttribute('data-ran-theme-pack');
+            removeStorage('ran-theme-pack');
+          }
+          syncPressed('.pack-chip[data-pack]', 'data-pack', pack || '');
+        }
+
+        document.querySelectorAll('.seg-btn[data-theme]').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            applyTheme(btn.getAttribute('data-theme') || '');
           });
         });
 
-        document.querySelectorAll('.pack-chip').forEach(function (btn) {
+        document.querySelectorAll('.pack-chip[data-pack]').forEach(function (btn) {
           btn.addEventListener('click', function () {
-            document.querySelectorAll('.pack-chip').forEach(function (button) {
-              button.classList.remove('active');
-            });
-            btn.classList.add('active');
-
-            var pack = btn.getAttribute('data-pack') || '';
-            if (pack) {
-              root.setAttribute('data-ran-theme-pack', pack);
-              localStorage.setItem('ran-theme-pack', pack);
-            } else {
-              root.removeAttribute('data-ran-theme-pack');
-              localStorage.removeItem('ran-theme-pack');
-            }
+            applyPack(btn.getAttribute('data-pack') || '');
           });
         });
+
+        var initialTheme = root.getAttribute('data-ran-theme') || root.getAttribute('theme') || readStorage('ran-theme') || '';
+        var initialPack = root.getAttribute('data-ran-theme-pack') || readStorage('ran-theme-pack') || '';
+        applyTheme(initialTheme === 'dark' ? 'dark' : '');
+        applyPack(initialPack);
       })();
     </script>
   </body>
