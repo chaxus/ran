@@ -22,7 +22,9 @@
   },
   "scripts": {
     "dev": "vite --host",
-    "build": "sh ./bin/build.sh",
+    "build": "RANUI_MINIFY=esbuild RANUI_CSS_MINIFY=esbuild sh ./bin/build.sh",
+    "build:release": "RANUI_MINIFY=terser RANUI_CSS_MINIFY=esbuild sh ./bin/build.sh",
+    "build:analyze": "RANUI_ANALYZE=true RANUI_MINIFY=esbuild RANUI_CSS_MINIFY=esbuild sh ./bin/build.sh",
     "build:es": "vite build -c ./build/config.es.ts",
     "build:bundle": "vite build -c ./build/config.bundle.ts",
     "prepublish": "npm run build",

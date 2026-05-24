@@ -4,399 +4,993 @@
     <link rel="icon" href="data:;" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ranui - full examples</title>
+    <title>ranui — Component Examples</title>
     <script type="module" src="./index.ts"></script>
     <style>
+      /* ================================================================
+         Design tokens — warm neutral palette
+      ================================================================ */
       :root {
-        --bg: #f5f7fb;
-        --card: #ffffff;
-        --line: #e8edf5;
-        --text: #1f2430;
-        --sub: #667085;
-        --brand: #1677ff;
-        --brand-2: #13c2c2;
+        --c-bg:           #f9f8f6;
+        --c-surface:      #ffffff;
+        --c-surface-2:    #f4f1ed;
+        --c-border:       #e8e3db;
+        --c-border-2:     #d4cec6;
+        --c-text:         #1c1b18;
+        --c-text-2:       #706d66;
+        --c-text-3:       #a09c95;
+        --c-brand:        #cf7555;
+        --c-brand-bg:     #fdf1ec;
+        --c-brand-border: #f0c5b0;
+        --c-blue:         #1677ff;
+        --c-shadow-sm:    0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.04);
+        --c-shadow-md:    0 4px 16px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.04);
+        --c-r:            12px;
       }
 
-      * {
-        box-sizing: border-box;
+      /* ── Dark ─────────────────────────────────────────────────── */
+      :root[data-ran-theme='dark'] {
+        --c-bg:           #1a1916;
+        --c-surface:      #242220;
+        --c-surface-2:    #2e2b28;
+        --c-border:       #3a3733;
+        --c-border-2:     #4a4743;
+        --c-text:         #ede9e3;
+        --c-text-2:       #9e9a93;
+        --c-text-3:       #6b6762;
+        --c-brand:        #e8956d;
+        --c-brand-bg:     #2e221b;
+        --c-brand-border: #5a3525;
+        --c-blue:         #4096ff;
+        --c-shadow-sm:    0 1px 3px rgba(0,0,0,.3), 0 1px 2px rgba(0,0,0,.2);
+        --c-shadow-md:    0 4px 16px rgba(0,0,0,.4), 0 2px 4px rgba(0,0,0,.2);
       }
+      :root[data-ran-theme='dark'] body { background: var(--c-bg); }
+
+      /* ── Pixel Retro ──────────────────────────────────────────── */
+      :root[data-ran-theme-pack='pixel-retro'] {
+        --c-bg: #1a1a2e; --c-surface: #16213e; --c-surface-2: #0f3460;
+        --c-border: #1e3a6e; --c-text: #e0e0e0; --c-text-2: #a0a0a0; --c-text-3: #666;
+        --c-brand: #e94560; --c-brand-bg: #2a1520; --c-brand-border: #5a1830;
+        --c-shadow-sm: 0 1px 3px rgba(0,0,0,.4); --c-shadow-md: 0 4px 16px rgba(0,0,0,.5);
+      }
+      :root[data-ran-theme-pack='pixel-retro'] body { background: var(--c-bg); }
+
+      /* ── Windows 98 ───────────────────────────────────────────── */
+      :root[data-ran-theme-pack='windows-98'] {
+        --c-bg: #c0c0c0; --c-surface: #c0c0c0; --c-surface-2: #d4d0c8;
+        --c-border: #808080; --c-text: #000; --c-text-2: #444; --c-text-3: #888;
+        --c-brand: #000080; --c-brand-bg: #e0e0f0; --c-brand-border: #0000a0;
+        --c-shadow-sm: none; --c-shadow-md: none;
+      }
+      :root[data-ran-theme-pack='windows-98'] body { background: var(--c-bg); }
+
+      /* ── Windows XP ───────────────────────────────────────────── */
+      :root[data-ran-theme-pack='windows-xp'] {
+        --c-bg: #ece9d8; --c-surface: #fff; --c-surface-2: #d4d0c8;
+        --c-border: #c7d5f4; --c-text: #000; --c-text-2: #444; --c-text-3: #888;
+        --c-brand: #003c7a; --c-brand-bg: #e8f0fc; --c-brand-border: #7a96df;
+      }
+      :root[data-ran-theme-pack='windows-xp'] body { background: var(--c-bg); }
+
+      /* ── System 6 ─────────────────────────────────────────────── */
+      :root[data-ran-theme-pack='system-6'] {
+        --c-bg: #fff; --c-surface: #fff; --c-surface-2: #f0f0f0;
+        --c-border: #000; --c-text: #000; --c-text-2: #444; --c-text-3: #888;
+        --c-brand: #000; --c-brand-bg: #e0e0e0; --c-brand-border: #000;
+        --c-shadow-sm: none; --c-shadow-md: none;
+      }
+      :root[data-ran-theme-pack='system-6'] body { background: var(--c-bg); }
+
+      /* ── Wired ────────────────────────────────────────────────── */
+      :root[data-ran-theme-pack='wired'] {
+        --c-bg: #fafaf8; --c-surface: #fafaf8; --c-surface-2: #f0f0ec;
+        --c-border: #c8c4b4; --c-text: #1a1a1a; --c-text-2: #666; --c-text-3: #999;
+        --c-brand: #2d6a4f; --c-brand-bg: #e8f5f0; --c-brand-border: #95d5b2;
+      }
+      :root[data-ran-theme-pack='wired'] body { background: var(--c-bg); }
+
+      /* ── Paper ────────────────────────────────────────────────── */
+      :root[data-ran-theme-pack='paper'] {
+        --c-bg: #fffef5; --c-surface: #fffef5; --c-surface-2: #f5f3e6;
+        --c-border: #d4c9a8; --c-text: #2d2d2d; --c-text-2: #7a7055; --c-text-3: #a09070;
+        --c-brand: #5c4a2a; --c-brand-bg: #f5ece0; --c-brand-border: #c8a96e;
+        --c-shadow-sm: 1px 2px 0 rgba(0,0,0,.1); --c-shadow-md: 3px 4px 0 rgba(0,0,0,.1);
+      }
+      :root[data-ran-theme-pack='paper'] body { background: var(--c-bg); }
+
+      /* ── Neo Brutalism ────────────────────────────────────────── */
+      :root[data-ran-theme-pack='neo-brutalism'] {
+        --c-bg: #f5f5f5; --c-surface: #fff; --c-surface-2: #ececec;
+        --c-border: #000; --c-text: #000; --c-text-2: #555; --c-text-3: #888;
+        --c-brand: #ff5722; --c-brand-bg: #fff0ec; --c-brand-border: #ff5722;
+        --c-shadow-sm: 2px 2px 0 #000; --c-shadow-md: 4px 4px 0 #000;
+      }
+      :root[data-ran-theme-pack='neo-brutalism'] body { background: var(--c-bg); }
+
+      /* ================================================================
+         Base
+      ================================================================ */
+      *, *::before, *::after { box-sizing: border-box; }
 
       body {
         margin: 0;
-        color: var(--text);
-        background:
-          radial-gradient(circle at 0% 0%, rgba(22, 119, 255, 0.14), transparent 30%),
-          radial-gradient(circle at 100% 0%, rgba(19, 194, 194, 0.14), transparent 30%), var(--bg);
-        font-family: 'Avenir Next', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        font-family: 'Inter', 'SF Pro Text', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+        font-size: 14px;
+        line-height: 1.6;
+        color: var(--c-text);
+        background: var(--c-bg);
+        transition: background 200ms ease, color 200ms ease;
+        -webkit-font-smoothing: antialiased;
       }
 
-      .page {
+      /* ================================================================
+         Topbar
+      ================================================================ */
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        height: 52px;
+        padding: 0 24px;
+        background: color-mix(in srgb, var(--c-surface) 88%, transparent);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-bottom: 1px solid var(--c-border);
+        transition: background 200ms, border-color 200ms;
+      }
+
+      .topbar-brand {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 700;
+        font-size: 15px;
+        letter-spacing: -0.3px;
+        color: var(--c-text);
+        text-decoration: none;
+        flex-shrink: 0;
+      }
+
+      .topbar-logo {
+        width: 28px;
+        height: 28px;
+        border-radius: 7px;
+        background: linear-gradient(135deg, var(--c-brand) 0%, color-mix(in srgb, var(--c-brand) 65%, #ff9966) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: -1px;
+        flex-shrink: 0;
+      }
+
+      .topbar-version {
+        font-size: 11px;
+        color: var(--c-text-3);
+        font-weight: 400;
+        background: var(--c-surface-2);
+        border: 1px solid var(--c-border);
+        border-radius: 4px;
+        padding: 1px 6px;
+      }
+
+      .topbar-spacer { flex: 1; }
+
+      .theme-toggle {
+        display: flex;
+        align-items: center;
+        border: 1px solid var(--c-border);
+        border-radius: 8px;
+        overflow: hidden;
+        background: var(--c-surface-2);
+      }
+
+      .sw-btn {
+        border: none;
+        background: none;
+        cursor: pointer;
+        padding: 5px 12px;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--c-text-2);
+        font-family: inherit;
+        transition: background 120ms, color 120ms, box-shadow 120ms;
+        line-height: 1.4;
+        white-space: nowrap;
+      }
+
+      .sw-btn.active {
+        background: var(--c-surface);
+        color: var(--c-text);
+        box-shadow: var(--c-shadow-sm);
+      }
+
+      /* ================================================================
+         Hero
+      ================================================================ */
+      .hero {
+        padding: 20px 24px 0;
         max-width: 1280px;
         margin: 0 auto;
-        padding: 24px;
       }
 
-      .hero {
-        border: 1px solid var(--line);
-        background: linear-gradient(135deg, #ffffff 0%, #f7fbff 100%);
-        border-radius: 16px;
-        padding: 20px 24px;
-        margin-bottom: 18px;
+      .hero-inner {
+        border: 1px solid var(--c-border);
+        border-radius: 20px;
+        background: var(--c-surface);
+        box-shadow: var(--c-shadow-md);
+        overflow: hidden;
+        transition: background 200ms, border-color 200ms, box-shadow 200ms;
       }
 
-      .hero h1 {
+      .hero-top {
+        padding: 28px 32px 24px;
+        background: linear-gradient(
+          140deg,
+          var(--c-surface) 0%,
+          color-mix(in srgb, var(--c-brand-bg) 50%, var(--c-surface)) 100%
+        );
+        border-bottom: 1px solid var(--c-border);
+        transition: background 200ms, border-color 200ms;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 3px 8px;
+        border-radius: 999px;
+        border: 1px solid var(--c-brand-border);
+        color: var(--c-brand);
+        background: var(--c-brand-bg);
+        margin-bottom: 14px;
+      }
+
+      .badge-dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--c-brand);
+        flex-shrink: 0;
+      }
+
+      .hero-title {
         margin: 0 0 8px;
-        font-size: 28px;
-        letter-spacing: 0.2px;
+        font-size: 34px;
+        font-weight: 700;
+        letter-spacing: -1px;
+        line-height: 1.15;
+        color: var(--c-text);
       }
 
-      .hero p {
+      .hero-title .grad {
+        background: linear-gradient(
+          135deg,
+          var(--c-brand) 0%,
+          color-mix(in srgb, var(--c-brand) 55%, #ff9966) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .hero-desc {
         margin: 0;
-        color: var(--sub);
-        line-height: 1.6;
+        color: var(--c-text-2);
+        font-size: 14px;
+        max-width: 500px;
+        line-height: 1.65;
       }
 
-      .toc {
+      .hero-stats {
+        display: flex;
+        gap: 28px;
+        margin-top: 22px;
+        padding-top: 20px;
+        border-top: 1px solid var(--c-border);
+        transition: border-color 200ms;
+      }
+
+      .stat { display: flex; flex-direction: column; gap: 3px; }
+
+      .stat-value {
+        font-size: 24px;
+        font-weight: 700;
+        letter-spacing: -0.8px;
+        color: var(--c-text);
+        line-height: 1;
+      }
+
+      .stat-label {
+        font-size: 11px;
+        color: var(--c-text-3);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      /* ── Pack selector ─────────────────────────────────────────── */
+      .hero-packs {
+        padding: 16px 32px;
+        transition: background 200ms;
+      }
+
+      .pack-row-label {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--c-text-3);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 10px;
+      }
+
+      .pack-row {
         display: flex;
         flex-wrap: wrap;
-        gap: 8px;
-        margin: 14px 0 0;
+        gap: 6px;
       }
 
-      .toc a {
+      .sw-pack {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid var(--c-border);
+        border-radius: 8px;
+        background: var(--c-surface-2);
+        color: var(--c-text-2);
+        font-size: 12px;
+        font-weight: 500;
+        padding: 5px 12px;
+        cursor: pointer;
+        font-family: inherit;
+        transition: all 150ms ease;
+        white-space: nowrap;
+      }
+
+      .sw-pack:hover {
+        border-color: var(--c-brand-border);
+        background: var(--c-brand-bg);
+        color: var(--c-brand);
+      }
+
+      .sw-pack.active {
+        border-color: var(--c-brand);
+        background: var(--c-brand);
+        color: #fff;
+        box-shadow: 0 2px 8px color-mix(in srgb, var(--c-brand) 35%, transparent);
+      }
+
+      .swatch {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        border: 1px solid rgba(0,0,0,.12);
+      }
+
+      /* ================================================================
+         Jump nav
+      ================================================================ */
+      .jump-nav {
+        position: sticky;
+        top: 52px;
+        z-index: 90;
+        background: color-mix(in srgb, var(--c-bg) 90%, transparent);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border-bottom: 1px solid var(--c-border);
+        padding: 0 24px;
+        overflow-x: auto;
+        scrollbar-width: none;
+        transition: background 200ms, border-color 200ms;
+      }
+      .jump-nav::-webkit-scrollbar { display: none; }
+
+      .jump-nav-inner {
+        max-width: 1280px;
+        margin: 0 auto;
+        display: flex;
+      }
+
+      .jump-nav a {
+        display: block;
+        padding: 9px 11px;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--c-text-3);
         text-decoration: none;
-        color: #174ea6;
-        background: #eef5ff;
-        border: 1px solid #d7e6ff;
-        border-radius: 999px;
-        padding: 4px 10px;
-        font-size: 13px;
+        white-space: nowrap;
+        border-bottom: 2px solid transparent;
+        transition: color 120ms, border-color 120ms;
+        font-family: 'SF Mono', 'Fira Code', ui-monospace, monospace;
       }
 
+      .jump-nav a:hover {
+        color: var(--c-text);
+        border-bottom-color: var(--c-border-2);
+      }
+
+      /* ================================================================
+         Content grid
+      ================================================================ */
+      .content {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 18px 24px 64px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+      }
+
+      @media (max-width: 860px) {
+        .content { grid-template-columns: 1fr; }
+        .section.span-2 { grid-column: span 1 !important; }
+      }
+
+      /* ================================================================
+         Section cards
+      ================================================================ */
       .section {
-        margin-bottom: 16px;
-        padding: 16px;
-        border-radius: 16px;
-        border: 1px solid var(--line);
-        background: var(--card);
+        border: 1px solid var(--c-border);
+        border-radius: var(--c-r);
+        background: var(--c-surface);
+        box-shadow: var(--c-shadow-sm);
+        overflow: hidden;
+        transition: background 200ms, border-color 200ms, box-shadow 200ms;
       }
 
-      .section h2 {
-        margin: 0 0 12px;
-        font-size: 18px;
-        border-left: 4px solid var(--brand);
-        padding-left: 8px;
+      .section.span-2 { grid-column: span 2; }
+
+      .section-head {
+        display: flex;
+        align-items: baseline;
+        flex-wrap: wrap;
+        gap: 6px;
+        padding: 13px 18px 11px;
+        border-bottom: 1px solid var(--c-border);
+        background: var(--c-surface-2);
+        transition: background 200ms, border-color 200ms;
       }
 
+      .section-head h2 {
+        margin: 0;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--c-text);
+        letter-spacing: -0.1px;
+      }
+
+      .section-tag {
+        font-size: 11px;
+        font-family: 'SF Mono', 'Fira Code', ui-monospace, monospace;
+        color: var(--c-brand);
+        background: var(--c-brand-bg);
+        border: 1px solid var(--c-brand-border);
+        border-radius: 4px;
+        padding: 1px 6px;
+        transition: color 200ms, background 200ms, border-color 200ms;
+      }
+
+      .section-note {
+        font-size: 11px;
+        color: var(--c-text-3);
+        margin: 0;
+        flex-basis: 100%;
+      }
+
+      .section-body {
+        padding: 16px 18px;
+      }
+
+      /* ================================================================
+         Demo helpers
+      ================================================================ */
       .demo-row {
         display: flex;
         flex-wrap: wrap;
-        gap: 12px;
+        gap: 10px;
         align-items: center;
-        margin-bottom: 12px;
       }
+
+      .demo-row + .demo-row { margin-top: 10px; }
 
       .demo-grid {
         display: grid;
-        gap: 12px;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 10px;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
       }
 
       .box {
-        border: 1px dashed #d8e2f2;
-        border-radius: 12px;
+        border: 1px dashed var(--c-border-2);
+        border-radius: 8px;
         padding: 12px;
-        min-height: 60px;
+        min-height: 52px;
+        display: flex;
+        align-items: center;
+        transition: border-color 200ms;
       }
 
-      .small {
-        color: var(--sub);
-        font-size: 13px;
-        margin: 0 0 8px;
+      .section-note-inline {
+        font-size: 12px;
+        color: var(--c-text-3);
+        margin: 0 0 10px;
       }
 
-      #popup-root {
-        position: relative;
-        min-height: 20px;
-      }
+      #popup-root { position: relative; min-height: 0; }
 
+      /* ================================================================
+         Responsive
+      ================================================================ */
       @media (max-width: 768px) {
-        .page {
-          padding: 14px;
-        }
-
-        .hero h1 {
-          font-size: 22px;
-        }
-
-        .section {
-          padding: 12px;
-        }
+        .topbar { padding: 0 16px; }
+        .topbar-version { display: none; }
+        .hero { padding: 14px 16px 0; }
+        .hero-top { padding: 20px 20px 18px; }
+        .hero-title { font-size: 26px; }
+        .hero-stats { gap: 16px; }
+        .hero-packs { padding: 14px 20px; }
+        .jump-nav { padding: 0 16px; }
+        .content { padding: 14px 16px 48px; gap: 10px; }
       }
     </style>
   </head>
 
   <body>
-    <main class="page">
-      <header class="hero">
-        <h1>RanUI Full Example Board</h1>
-        <p>已补齐当前可注册组件的示例，方便 dev 启动后逐个检查。每个 section 至少包含一个最小可运行 demo。</p>
-        <nav class="toc">
-          <a href="#button">button</a>
-          <a href="#icon">icon</a>
-          <a href="#image">image</a>
-          <a href="#input">input</a>
-          <a href="#select">select</a>
-          <a href="#checkbox">checkbox</a>
-          <a href="#progress">progress</a>
-          <a href="#loading">loading</a>
-          <a href="#skeleton">skeleton</a>
-          <a href="#message">message</a>
-          <a href="#tabs">tabs</a>
-          <a href="#popover">popover</a>
-          <a href="#colorpicker">colorpicker</a>
-          <a href="#math">math</a>
-          <a href="#radar">radar</a>
-          <a href="#form">form</a>
-          <a href="#scratch">scratch</a>
-          <a href="#player">player</a>
-          <a href="#modal">modal</a>
-          <a href="#dsd">dsd</a>
-        </nav>
-      </header>
+
+    <!-- Topbar ─────────────────────────────────────────────────── -->
+    <header class="topbar">
+      <a class="topbar-brand" href="#">
+        <div class="topbar-logo">r</div>
+        ranui
+      </a>
+      <span class="topbar-version">v0.1.10-alpha</span>
+      <div class="topbar-spacer"></div>
+      <div class="theme-toggle">
+        <button class="sw-btn active" data-theme="">Light</button>
+        <button class="sw-btn" data-theme="dark">Dark</button>
+      </div>
+    </header>
+
+    <!-- Hero ────────────────────────────────────────────────────── -->
+    <div class="hero">
+      <div class="hero-inner">
+
+        <div class="hero-top">
+          <div class="badge"><span class="badge-dot"></span>Web Components</div>
+          <h1 class="hero-title"><span class="grad">ranui</span> Component Examples</h1>
+          <p class="hero-desc">All registered components in one place. Switch themes and packs live — every component responds instantly.</p>
+          <div class="hero-stats">
+            <div class="stat">
+              <div class="stat-value">20</div>
+              <div class="stat-label">Components</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value">7</div>
+              <div class="stat-label">Theme Packs</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value">2</div>
+              <div class="stat-label">Color Modes</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-packs">
+          <div class="pack-row-label">Theme Pack</div>
+          <div class="pack-row">
+            <button class="sw-pack active" data-pack="">
+              <span class="swatch" style="background:#1677ff"></span>Default
+            </button>
+            <button class="sw-pack" data-pack="pixel-retro">
+              <span class="swatch" style="background:#e94560"></span>Pixel Retro
+            </button>
+            <button class="sw-pack" data-pack="windows-98">
+              <span class="swatch" style="background:#000080"></span>Win 98
+            </button>
+            <button class="sw-pack" data-pack="windows-xp">
+              <span class="swatch" style="background:#3e88e0"></span>Win XP
+            </button>
+            <button class="sw-pack" data-pack="system-6">
+              <span class="swatch" style="background:#000000"></span>System 6
+            </button>
+            <button class="sw-pack" data-pack="wired">
+              <span class="swatch" style="background:#2d6a4f"></span>Wired
+            </button>
+            <button class="sw-pack" data-pack="paper">
+              <span class="swatch" style="background:#c8a96e"></span>Paper
+            </button>
+            <button class="sw-pack" data-pack="neo-brutalism">
+              <span class="swatch" style="background:#ff5722"></span>Neo Brutalism
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Jump nav ────────────────────────────────────────────────── -->
+    <nav class="jump-nav">
+      <div class="jump-nav-inner">
+        <a href="#button">button</a>
+        <a href="#icon">icon</a>
+        <a href="#image">image</a>
+        <a href="#input">input</a>
+        <a href="#select">select</a>
+        <a href="#checkbox">checkbox</a>
+        <a href="#progress">progress</a>
+        <a href="#loading">loading</a>
+        <a href="#skeleton">skeleton</a>
+        <a href="#message">message</a>
+        <a href="#tabs">tabs</a>
+        <a href="#popover">popover</a>
+        <a href="#colorpicker">colorpicker</a>
+        <a href="#math">math</a>
+        <a href="#radar">radar</a>
+        <a href="#form">form</a>
+        <a href="#scratch">scratch</a>
+        <a href="#player">player</a>
+        <a href="#modal">modal</a>
+        <a href="#dsd">dsd</a>
+      </div>
+    </nav>
+
+    <!-- Component grid ──────────────────────────────────────────── -->
+    <main class="content">
 
       <section id="button" class="section">
-        <h2>Button - r-button</h2>
-        <div class="demo-row">
-          <r-button type="primary">Primary</r-button>
-          <r-button type="warning">Warning</r-button>
-          <r-button type="text">Text</r-button>
-          <r-button disabled>Disabled</r-button>
-          <r-button icon="home">Icon</r-button>
+        <div class="section-head">
+          <h2>Button</h2>
+          <span class="section-tag">r-button</span>
+        </div>
+        <div class="section-body">
+          <div class="demo-row">
+            <r-button type="primary">Primary</r-button>
+            <r-button type="warning">Warning</r-button>
+            <r-button type="text">Text</r-button>
+            <r-button disabled>Disabled</r-button>
+            <r-button icon="home">Icon</r-button>
+          </div>
         </div>
       </section>
 
       <section id="icon" class="section">
-        <h2>Icon - r-icon</h2>
-        <div class="demo-row">
-          <r-icon name="home" size="32" color="#1677ff"></r-icon>
-          <r-icon name="setting" size="32"></r-icon>
-          <r-icon name="loading" size="32" spin color="#13c2c2"></r-icon>
+        <div class="section-head">
+          <h2>Icon</h2>
+          <span class="section-tag">r-icon</span>
+        </div>
+        <div class="section-body">
+          <div class="demo-row">
+            <r-icon name="home" size="32" color="#1677ff"></r-icon>
+            <r-icon name="setting" size="32"></r-icon>
+            <r-icon name="loading" size="32" spin color="#13c2c2"></r-icon>
+          </div>
         </div>
       </section>
 
-      <section id="image" class="section">
-        <h2>Image - r-img</h2>
-        <p class="small">一个正常图片，一个故意失效链接用于检查 fallback。</p>
-        <div class="demo-row">
-          <r-img src="https://picsum.photos/220/120" style="width: 220px; height: 120px; display: block"></r-img>
-          <r-img src="https://picsum.photos/220/121" style="width: 220px; height: 120px; display: block"></r-img>
+      <section id="image" class="section span-2">
+        <div class="section-head">
+          <h2>Image</h2>
+          <span class="section-tag">r-img</span>
+          <p class="section-note">Second image uses an invalid URL to verify fallback rendering</p>
+        </div>
+        <div class="section-body">
+          <div class="demo-row">
+            <r-img src="https://picsum.photos/220/120" style="width:220px;height:120px;display:block;border-radius:6px"></r-img>
+            <r-img src="https://picsum.photos/220/9999" style="width:220px;height:120px;display:block;border-radius:6px"></r-img>
+          </div>
         </div>
       </section>
 
       <section id="input" class="section">
-        <h2>Input - r-input</h2>
-        <div class="demo-grid">
-          <div class="box">
-            <r-input label="Username" placeholder="请输入用户名"></r-input>
-          </div>
-          <div class="box">
-            <r-input label="Password" type="password" icon="lock"></r-input>
+        <div class="section-head">
+          <h2>Input</h2>
+          <span class="section-tag">r-input</span>
+        </div>
+        <div class="section-body">
+          <div class="demo-grid">
+            <div class="box" style="display:block">
+              <r-input label="Username" placeholder="Enter username"></r-input>
+            </div>
+            <div class="box" style="display:block">
+              <r-input label="Password" type="password" icon="lock"></r-input>
+            </div>
           </div>
         </div>
       </section>
 
       <section id="select" class="section">
-        <h2>Select - r-select + r-option</h2>
-        <div id="popup-root"></div>
-        <div class="demo-row">
-          <r-select style="width: 180px" defaultValue="lucy" getPopupContainerId="popup-root" trigger="click">
-            <r-option value="jack">Jack</r-option>
-            <r-option value="lucy">Lucy</r-option>
-            <r-option value="tom">Tom</r-option>
-          </r-select>
-          <r-select style="width: 220px" showSearch getPopupContainerId="popup-root" trigger="click">
-            <r-option value="apple">Apple</r-option>
-            <r-option value="banana">Banana</r-option>
-            <r-option value="grape">Grape</r-option>
-            <r-option value="orange">Orange</r-option>
-          </r-select>
+        <div class="section-head">
+          <h2>Select</h2>
+          <span class="section-tag">r-select · r-option</span>
+        </div>
+        <div class="section-body">
+          <div id="popup-root"></div>
+          <div class="demo-row">
+            <r-select style="width:170px" defaultValue="lucy" getPopupContainerId="popup-root" trigger="click">
+              <r-option value="jack">Jack</r-option>
+              <r-option value="lucy">Lucy</r-option>
+              <r-option value="tom">Tom</r-option>
+            </r-select>
+            <r-select style="width:190px" showSearch getPopupContainerId="popup-root" trigger="click">
+              <r-option value="apple">Apple</r-option>
+              <r-option value="banana">Banana</r-option>
+              <r-option value="grape">Grape</r-option>
+              <r-option value="orange">Orange</r-option>
+            </r-select>
+          </div>
         </div>
       </section>
 
       <section id="checkbox" class="section">
-        <h2>Checkbox - r-checkbox</h2>
-        <div class="demo-row">
-          <r-checkbox checked="true">Checked</r-checkbox>
-          <r-checkbox>Unchecked</r-checkbox>
-          <r-checkbox disabled checked="true">Disabled</r-checkbox>
+        <div class="section-head">
+          <h2>Checkbox</h2>
+          <span class="section-tag">r-checkbox</span>
+        </div>
+        <div class="section-body">
+          <div class="demo-row">
+            <r-checkbox checked="true">Checked</r-checkbox>
+            <r-checkbox>Unchecked</r-checkbox>
+            <r-checkbox disabled checked="true">Disabled</r-checkbox>
+          </div>
         </div>
       </section>
 
       <section id="progress" class="section">
-        <h2>Progress - r-progress</h2>
-        <div class="demo-grid">
-          <div class="box"><r-progress percent="65"></r-progress></div>
-          <div class="box"><r-progress type="drag" percent="30"></r-progress></div>
+        <div class="section-head">
+          <h2>Progress</h2>
+          <span class="section-tag">r-progress</span>
+        </div>
+        <div class="section-body">
+          <div class="demo-grid">
+            <div class="box" style="display:block"><r-progress percent="65"></r-progress></div>
+            <div class="box" style="display:block"><r-progress type="drag" percent="30"></r-progress></div>
+          </div>
         </div>
       </section>
 
       <section id="loading" class="section">
-        <h2>Loading - r-loading</h2>
-        <div class="demo-row">
-          <r-loading name="rotate"></r-loading>
-          <r-loading name="stretch"></r-loading>
-          <r-loading name="dot"></r-loading>
-          <r-loading name="circle-line"></r-loading>
+        <div class="section-head">
+          <h2>Loading</h2>
+          <span class="section-tag">r-loading</span>
+        </div>
+        <div class="section-body">
+          <div class="demo-row">
+            <r-loading name="rotate"></r-loading>
+            <r-loading name="stretch"></r-loading>
+            <r-loading name="dot"></r-loading>
+            <r-loading name="circle-line"></r-loading>
+          </div>
         </div>
       </section>
 
       <section id="skeleton" class="section">
-        <h2>Skeleton - r-skeleton</h2>
-        <div class="demo-grid">
-          <div class="box"><r-skeleton></r-skeleton></div>
-          <div class="box"><r-skeleton style="height: 24px"></r-skeleton></div>
+        <div class="section-head">
+          <h2>Skeleton</h2>
+          <span class="section-tag">r-skeleton</span>
+        </div>
+        <div class="section-body">
+          <div class="demo-grid">
+            <div class="box" style="display:block"><r-skeleton></r-skeleton></div>
+            <div class="box" style="display:block"><r-skeleton style="height:24px"></r-skeleton></div>
+          </div>
         </div>
       </section>
 
       <section id="message" class="section">
-        <h2>Message - r-message / window.message</h2>
-        <div class="demo-row">
-          <r-button onclick="window.message?.info('Info message from demo')">Info</r-button>
-          <r-button onclick="window.message?.success('Success message from demo')">Success</r-button>
-          <r-button onclick="window.message?.warning('Warning message from demo')">Warning</r-button>
-          <r-button onclick="window.message?.error('Error message from demo')">Error</r-button>
+        <div class="section-head">
+          <h2>Message</h2>
+          <span class="section-tag">r-message · window.message</span>
+        </div>
+        <div class="section-body">
+          <div class="demo-row">
+            <r-button onclick="window.message?.info('Info message')">Info</r-button>
+            <r-button onclick="window.message?.success('Success!')">Success</r-button>
+            <r-button onclick="window.message?.warning('Warning!')">Warning</r-button>
+            <r-button onclick="window.message?.error('Error!')">Error</r-button>
+          </div>
         </div>
       </section>
 
-      <section id="tabs" class="section">
-        <h2>Tabs - r-tabs + r-tab</h2>
-        <div class="box">
-          <r-tabs active="overview" align="start" style="width: 100%">
+      <section id="tabs" class="section span-2">
+        <div class="section-head">
+          <h2>Tabs</h2>
+          <span class="section-tag">r-tabs · r-tab</span>
+        </div>
+        <div class="section-body">
+          <r-tabs active="overview" align="start" style="width:100%">
             <r-tab label="Overview" r-key="overview">Overview content</r-tab>
-            <r-tab label="API" r-key="api">API content</r-tab>
-            <r-tab label="Disabled" r-key="disabled" disabled>Disabled content</r-tab>
+            <r-tab label="API" r-key="api">API reference content</r-tab>
+            <r-tab label="Disabled" r-key="disabled" disabled>Disabled</r-tab>
           </r-tabs>
         </div>
       </section>
 
       <section id="popover" class="section">
-        <h2>Popover - r-popover + r-content</h2>
-        <div class="demo-row">
-          <r-popover placement="top" trigger="hover,click" arrow="true">
-            <r-button>Hover / Click Me</r-button>
-            <r-content>
-              <div style="padding: 8px 10px">Popover content demo</div>
-            </r-content>
-          </r-popover>
+        <div class="section-head">
+          <h2>Popover</h2>
+          <span class="section-tag">r-popover · r-content</span>
+        </div>
+        <div class="section-body">
+          <div class="demo-row">
+            <r-popover placement="top" trigger="hover,click" arrow="true">
+              <r-button>Hover / Click</r-button>
+              <r-content>
+                <div style="padding:8px 12px">Popover content here</div>
+              </r-content>
+            </r-popover>
+          </div>
         </div>
       </section>
 
       <section id="colorpicker" class="section">
-        <h2>ColorPicker - r-colorpicker</h2>
-        <div class="demo-row">
-          <r-colorpicker value="#1677ff"></r-colorpicker>
-          <r-colorpicker value="rgba(255, 0, 0, 0.5)"></r-colorpicker>
+        <div class="section-head">
+          <h2>Color Picker</h2>
+          <span class="section-tag">r-colorpicker</span>
+        </div>
+        <div class="section-body">
+          <div class="demo-row">
+            <r-colorpicker value="#1677ff"></r-colorpicker>
+            <r-colorpicker value="rgba(255,0,0,0.5)"></r-colorpicker>
+          </div>
         </div>
       </section>
 
       <section id="math" class="section">
-        <h2>Math - r-math</h2>
-        <div class="demo-grid">
-          <div class="box"><r-math latex="E = mc^2"></r-math></div>
-          <div class="box"><r-math latex="x = {-b \pm \sqrt{b^2-4ac} \over 2a}"></r-math></div>
+        <div class="section-head">
+          <h2>Math</h2>
+          <span class="section-tag">r-math</span>
+        </div>
+        <div class="section-body">
+          <div class="demo-grid">
+            <div class="box"><r-math latex="E = mc^2"></r-math></div>
+            <div class="box"><r-math latex="x = {-b \pm \sqrt{b^2-4ac} \over 2a}"></r-math></div>
+          </div>
         </div>
       </section>
 
       <section id="radar" class="section">
-        <h2>Radar - r-radar</h2>
-        <div class="box" style="max-width: 400px; aspect-ratio: 1/1">
-          <r-radar
-            style="width: 100%; height: 100%; display: block"
-            abilitys='[{"abilityName":"Performance","scoreRate":"92"},{"abilityName":"Accessibility","scoreRate":"83"},{"abilityName":"DX","scoreRate":"75"},{"abilityName":"Stability","scoreRate":"86"},{"abilityName":"Features","scoreRate":"80"}]'
-          ></r-radar>
+        <div class="section-head">
+          <h2>Radar</h2>
+          <span class="section-tag">r-radar</span>
+        </div>
+        <div class="section-body">
+          <div style="max-width:300px;aspect-ratio:1/1">
+            <r-radar style="width:100%;height:100%;display:block"
+              abilitys='[{"abilityName":"Performance","scoreRate":"92"},{"abilityName":"A11y","scoreRate":"83"},{"abilityName":"DX","scoreRate":"75"},{"abilityName":"Stability","scoreRate":"86"},{"abilityName":"Features","scoreRate":"80"}]'>
+            </r-radar>
+          </div>
         </div>
       </section>
 
-      <section id="form" class="section">
-        <h2>Form - r-form</h2>
-        <div class="box">
+      <section id="form" class="section span-2">
+        <div class="section-head">
+          <h2>Form</h2>
+          <span class="section-tag">r-form</span>
+        </div>
+        <div class="section-body">
           <r-form id="demo-form">
             <div slot="r-form_content" class="demo-row">
               <r-input name="name" label="Name" placeholder="Your name"></r-input>
               <r-input name="email" label="Email" placeholder="Your email"></r-input>
-              <r-button
-                type="primary"
-                onclick="document.getElementById('demo-form')?.shadowRoot?.querySelector('form')?.requestSubmit?.()"
-                >Submit</r-button
-              >
+              <r-button type="primary"
+                onclick="document.getElementById('demo-form')?.shadowRoot?.querySelector('form')?.requestSubmit?.()">
+                Submit
+              </r-button>
             </div>
           </r-form>
         </div>
       </section>
 
       <section id="scratch" class="section">
-        <h2>Scratch - r-scratch</h2>
-        <div class="box" style="width: 300px; height: 150px; position: relative; overflow: hidden; border-radius: 8px">
-          <r-scratch style="width: 100%; height: 100%"></r-scratch>
-          <div
-            style="
-              position: absolute;
-              top: 0;
-              left: 0;
-              width: 100%;
-              height: 100%;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              z-index: -1;
-              background: #f0f0f0;
-              color: #999;
-            "
-          >
-            WINNER!
+        <div class="section-head">
+          <h2>Scratch</h2>
+          <span class="section-tag">r-scratch</span>
+        </div>
+        <div class="section-body">
+          <div style="width:280px;height:140px;position:relative;overflow:hidden;border-radius:8px;border:1px solid var(--c-border)">
+            <r-scratch style="width:100%;height:100%"></r-scratch>
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:-1;background:var(--c-surface-2);color:var(--c-text-2);font-size:18px;font-weight:700;letter-spacing:2px">
+              WINNER!
+            </div>
           </div>
         </div>
       </section>
 
-      <section id="player" class="section">
-        <h2>Player - r-player</h2>
-        <p class="small">播放器体积较大，这里提供一个基础地址用于回归检查。</p>
-        <div class="box" style="max-width: 700px; height: 400px">
-          <r-player debug="true" src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"></r-player>
+      <section id="modal" class="section">
+        <div class="section-head">
+          <h2>Modal</h2>
+          <span class="section-tag">r-modal</span>
+        </div>
+        <div class="section-body">
+          <div class="demo-row">
+            <r-button type="primary"
+              onclick="document.getElementById('demo-modal').setAttribute('open','true')">
+              Open Modal
+            </r-button>
+            <r-modal id="demo-modal" title="Demo Modal">
+              <p>This is a modal content example.</p>
+              <r-button onclick="document.getElementById('demo-modal').removeAttribute('open')">Close</r-button>
+            </r-modal>
+          </div>
         </div>
       </section>
 
-      <section id="modal" class="section">
-        <h2>Modal - r-modal</h2>
-        <p class="small">当前 modal 组件是占位实现，先展示标签实例，方便后续迭代时观察行为变化。</p>
-        <div class="demo-row">
-          <r-button type="primary" onclick="document.getElementById('demo-modal').setAttribute('open', 'true')"
-            >Open Modal</r-button
-          >
-          <r-modal id="demo-modal" title="Demo Modal">
-            <p>This is a modal content example.</p>
-            <r-button onclick="document.getElementById('demo-modal').removeAttribute('open')">Close</r-button>
-          </r-modal>
+      <section id="player" class="section span-2">
+        <div class="section-head">
+          <h2>Player</h2>
+          <span class="section-tag">r-player</span>
+          <p class="section-note">HLS live stream — checks media pipeline and playback controls</p>
+        </div>
+        <div class="section-body">
+          <div style="max-width:700px;height:380px">
+            <r-player debug="true" src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"></r-player>
+          </div>
         </div>
       </section>
 
       <section id="dsd" class="section">
-        <h2>DSD Rehydration - r-button</h2>
-        <p class="small">用于检查文档中提到的 DSD 注水场景。</p>
-        <div class="demo-row">
-          <r-button type="primary">
-            DSD Button
-            <template shadowrootmode="closed">
-              <div class="ran-btn" role="button" tabindex="0">
-                <div class="ran-btn-content">
-                  <slot></slot>
+        <div class="section-head">
+          <h2>DSD Rehydration</h2>
+          <span class="section-tag">r-button</span>
+          <p class="section-note">Declarative Shadow DOM — checks rehydration path</p>
+        </div>
+        <div class="section-body">
+          <div class="demo-row">
+            <r-button type="primary">
+              DSD Button
+              <template shadowrootmode="closed">
+                <div class="ran-btn" role="button" tabindex="0">
+                  <div class="ran-btn-content"><slot></slot></div>
                 </div>
-              </div>
-            </template>
-          </r-button>
+              </template>
+            </r-button>
+          </div>
         </div>
       </section>
+
     </main>
+
+    <script>
+      (function () {
+        var root = document.documentElement;
+
+        document.querySelectorAll('.sw-btn').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            document.querySelectorAll('.sw-btn').forEach(function (b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            var theme = btn.dataset.theme;
+            if (theme) {
+              root.setAttribute('data-ran-theme', theme);
+              root.setAttribute('theme', theme);
+            } else {
+              root.removeAttribute('data-ran-theme');
+              root.removeAttribute('theme');
+            }
+          });
+        });
+
+        document.querySelectorAll('.sw-pack').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            document.querySelectorAll('.sw-pack').forEach(function (b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            var pack = btn.dataset.pack;
+            if (pack) {
+              root.setAttribute('data-ran-theme-pack', pack);
+            } else {
+              root.removeAttribute('data-ran-theme-pack');
+            }
+          });
+        });
+      })();
+    </script>
   </body>
 </html>

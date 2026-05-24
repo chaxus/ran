@@ -12,10 +12,29 @@ const __filename = fileURLToPath(import.meta.url);
 
 const __dirname = path.dirname(__filename);
 
+const parseMinifyMode = (value: string | undefined): BuildOptions['minify'] => {
+  if (!value) return 'esbuild';
+  if (value === 'false') return false;
+  if (value === 'terser' || value === 'esbuild' || value === 'oxc') return value;
+  return 'esbuild';
+};
+
+const parseCssMinifyMode = (value: string | undefined): BuildOptions['cssMinify'] => {
+  if (!value) return 'esbuild';
+  if (value === 'false') return false;
+  if (value === 'esbuild' || value === 'lightningcss') return value;
+  return 'esbuild';
+};
+
+const minifyMode = parseMinifyMode(process.env.RANUI_MINIFY);
+const cssMinifyMode = parseCssMinifyMode(process.env.RANUI_CSS_MINIFY);
+const enableAnalyze = process.env.RANUI_ANALYZE === 'true';
+
 const chunkOptimization: Partial<BuildOptions> = {
   chunkSizeWarningLimit: 500,
   assetsInlineLimit: 1024,
   cssCodeSplit: true,
+  cssMinify: cssMinifyMode,
   reportCompressedSize: false,
   emptyOutDir: true,
   rollupOptions: {
@@ -30,7 +49,7 @@ const chunkOptimization: Partial<BuildOptions> = {
       manualPureFunctions: ['console.log'],
     },
   },
-  minify: 'terser',
+  minify: minifyMode,
 };
 
 export const bundle: BuildOptions = {
@@ -95,10 +114,12 @@ export const viteConfig: UserConfig = {
   },
   plugins: [
     loadSvg({ svgo: false, defaultImport: 'raw' }),
-    visualizer({
-      emitFile: false,
-      filename: 'report/build-stats.html',
-    }) as PluginOption,
+    enableAnalyze
+      ? (visualizer({
+          emitFile: false,
+          filename: 'report/build-stats.html',
+        }) as PluginOption)
+      : null,
   ],
   resolve: {
     alias: {
