@@ -37,6 +37,19 @@ describe('theme pack source contracts', () => {
     expect(viteConfig).toContain('cssCodeSplit: true');
   });
 
+  it('ships an all-in-one theme-packs bundle for zero-config usage', () => {
+    expect(existsSync(resolve(root, 'theme-packs/all.ts'))).toBe(true);
+    const source = read('theme-packs/all.ts');
+    for (const pack of ALL_PACKS) {
+      expect(source, `all.ts missing ${pack}`).toContain(`./${pack}`);
+    }
+  });
+
+  it('exports the all bundle as ranui/theme-packs in package.json', () => {
+    const packageJson = read('package.json');
+    expect(packageJson).toContain('"./theme-packs": "./dist/all.css"');
+  });
+
   it('scopes every pack css under data-ran-theme-pack', () => {
     for (const pack of ALL_PACKS) {
       const source = read(`theme-packs/${pack}.less`);

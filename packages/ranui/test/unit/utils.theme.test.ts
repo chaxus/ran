@@ -3,6 +3,7 @@ import {
   clearThemeToken,
   getTheme,
   getThemePack,
+  initTheme,
   setTheme,
   setThemePack,
   setThemeToken,
@@ -15,6 +16,7 @@ describe('utils/theme', () => {
     document.documentElement.removeAttribute('data-ran-theme');
     document.documentElement.removeAttribute('data-ran-theme-pack');
     document.documentElement.removeAttribute('style');
+    localStorage.clear();
   });
 
   it('setTheme writes both the namespaced and legacy theme attributes', () => {
@@ -122,5 +124,56 @@ describe('utils/theme', () => {
     clearThemeToken('--ran-color-primary');
 
     expect(document.documentElement.style.getPropertyValue('--ran-color-primary')).toBe('');
+  });
+
+  it('setTheme persists the choice to localStorage', () => {
+    setTheme('dark');
+
+    expect(localStorage.getItem('ran-theme')).toBe('dark');
+  });
+
+  it('setTheme light persists to localStorage', () => {
+    setTheme('light');
+
+    expect(localStorage.getItem('ran-theme')).toBe('light');
+  });
+
+  it('setThemePack persists the choice to localStorage', () => {
+    setThemePack('pixel-retro');
+
+    expect(localStorage.getItem('ran-theme-pack')).toBe('pixel-retro');
+  });
+
+  it('setThemePack default removes the key from localStorage', () => {
+    localStorage.setItem('ran-theme-pack', 'paper');
+
+    setThemePack('default');
+
+    expect(localStorage.getItem('ran-theme-pack')).toBeNull();
+  });
+
+  it('setTheme system writes a concrete dark or light attribute', () => {
+    setTheme('system');
+
+    const attr = document.documentElement.getAttribute('data-ran-theme');
+    expect(['light', 'dark']).toContain(attr);
+    expect(localStorage.getItem('ran-theme')).toBe('system');
+  });
+
+  it('initTheme restores theme and pack from localStorage', () => {
+    localStorage.setItem('ran-theme', 'dark');
+    localStorage.setItem('ran-theme-pack', 'wired');
+
+    initTheme();
+
+    expect(document.documentElement.getAttribute('data-ran-theme')).toBe('dark');
+    expect(document.documentElement.getAttribute('data-ran-theme-pack')).toBe('wired');
+  });
+
+  it('initTheme is a no-op when localStorage is empty', () => {
+    initTheme();
+
+    expect(document.documentElement.hasAttribute('data-ran-theme')).toBe(false);
+    expect(document.documentElement.hasAttribute('data-ran-theme-pack')).toBe(false);
   });
 });

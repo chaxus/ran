@@ -62,3 +62,49 @@
   --ran-skin-control-height-md: 32px;
   --ran-skin-font-family: var(--ran-font-family);
 }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-ran-theme='light']) {
+    --ran-gray-1: #141414;
+    --ran-gray-2: #1d1d1d;
+    --ran-gray-3: #262626;
+    --ran-gray-4: #303030;
+    --ran-gray-5: #434343;
+    --ran-gray-6: #8c8c8c;
+    --ran-gray-13: #ffffff;
+
+    --ran-color-bg: #141414;
+    --ran-color-bg-elevated: #1d1d1d;
+    --ran-color-bg-muted: #262626;
+    --ran-color-text: rgba(255, 255, 255, 0.85);
+    --ran-color-text-secondary: rgba(255, 255, 255, 0.65);
+    --ran-color-text-disabled: rgba(255, 255, 255, 0.25);
+    --ran-color-border: #434343;
+    --ran-color-border-secondary: #303030;
+
+    --ran-shadow-elevated:
+      0 6px 16px rgba(0, 0, 0, 0.48), 0 3px 6px -4px rgba(0, 0, 0, 0.64), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+  }
+}
+
+[data-ran-theme='dark'] {
+  --ran-gray-1: #141414;
+  --ran-gray-2: #1d1d1d;
+  --ran-gray-3: #262626;
+  --ran-gray-4: #303030;
+  --ran-gray-5: #434343;
+  --ran-gray-6: #8c8c8c;
+  --ran-gray-13: #ffffff;
+
+  --ran-color-bg: #141414;
+  --ran-color-bg-elevated: #1d1d1d;
+  --ran-color-bg-muted: #262626;
+  --ran-color-text: rgba(255, 255, 255, 0.85);
+  --ran-color-text-secondary: rgba(255, 255, 255, 0.65);
+  --ran-color-text-disabled: rgba(255, 255, 255, 0.25);
+  --ran-color-border: #434343;
+  --ran-color-border-secondary: #303030;
+
+  --ran-shadow-elevated:
+    0 6px 16px rgba(0, 0, 0, 0.48), 0 3px 6px -4px rgba(0, 0, 0, 0.64), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+}

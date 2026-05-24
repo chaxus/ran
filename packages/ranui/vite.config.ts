@@ -99,6 +99,7 @@ export const es: BuildOptions = {
       'theme-packs/paper': resolve(__dirname, 'theme-packs/paper.ts'),
       'theme-packs/neo-brutalism': resolve(__dirname, 'theme-packs/neo-brutalism.ts'),
       'theme-packs/transitions': resolve(__dirname, 'theme-packs/transitions.ts'),
+      'theme-packs/all': resolve(__dirname, 'theme-packs/all.ts'),
     },
     fileName: (_: string, name: string): string => {
       return `${name}.js`;
