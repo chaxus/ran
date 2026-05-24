@@ -442,11 +442,11 @@
           </nav>
 
           <div class="nav-controls" aria-label="Visual settings">
-            <div class="segmented" aria-label="Theme">
+            <div class="segmented" role="group" aria-label="Theme">
               <button class="seg-btn active" data-theme="" aria-pressed="true">Light</button>
               <button class="seg-btn" data-theme="dark" aria-pressed="false">Dark</button>
             </div>
-            <div class="pack-list" aria-label="Theme pack">
+            <div class="pack-list" role="group" aria-label="Theme pack">
               <button class="pack-chip active" data-pack="" aria-pressed="true">Default</button>
               <button class="pack-chip" data-pack="pixel-retro" aria-pressed="false">Pixel</button>
               <button class="pack-chip" data-pack="windows-98" aria-pressed="false">Win 98</button>
@@ -543,6 +543,17 @@
           syncPressed('.seg-btn[data-theme]', 'data-theme', theme || '');
         }
 
+        function syncInitialTheme(theme) {
+          if (theme === 'dark') {
+            root.setAttribute('data-ran-theme', 'dark');
+            root.setAttribute('theme', 'dark');
+            syncPressed('.seg-btn[data-theme]', 'data-theme', 'dark');
+            return;
+          }
+
+          syncPressed('.seg-btn[data-theme]', 'data-theme', '');
+        }
+
         function applyPack(pack) {
           if (pack) {
             root.setAttribute('data-ran-theme-pack', pack);
@@ -568,7 +579,7 @@
 
         var initialTheme = root.getAttribute('data-ran-theme') || root.getAttribute('theme') || readStorage('ran-theme') || '';
         var initialPack = root.getAttribute('data-ran-theme-pack') || readStorage('ran-theme-pack') || '';
-        applyTheme(initialTheme === 'dark' ? 'dark' : '');
+        syncInitialTheme(initialTheme);
         applyPack(initialPack);
       })();
     </script>
