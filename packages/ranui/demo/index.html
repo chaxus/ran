@@ -269,10 +269,19 @@
       .intro {
         width: min(1180px, calc(100% - 40px));
         margin: 0 auto;
-        padding: 68px 0 40px;
+        min-height: calc(100vh - 72px);
+        padding: 64px 0 56px;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(340px, 440px);
+        align-items: center;
+        gap: 48px;
       }
 
-      .intro-kicker {
+      .hero-content {
+        min-width: 0;
+      }
+
+      .eyebrow {
         margin: 0 0 14px;
         color: var(--accent-2);
         font-size: 13px;
@@ -285,16 +294,97 @@
         max-width: 820px;
         margin: 0;
         color: var(--ink);
-        font-size: clamp(38px, 6vw, 72px);
+        font-size: clamp(42px, 6vw, 72px);
         line-height: 1;
         letter-spacing: 0;
       }
 
-      .intro-copy {
+      .hero-copy {
         max-width: 660px;
         margin: 22px 0 0;
         color: var(--muted);
         font-size: 18px;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 30px;
+      }
+
+      .primary-action,
+      .secondary-action {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        border-radius: 8px;
+        padding: 0 18px;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 800;
+        white-space: nowrap;
+      }
+
+      .primary-action {
+        color: #ffffff;
+        background: var(--accent);
+        box-shadow: 0 12px 28px color-mix(in srgb, var(--accent) 24%, transparent);
+      }
+
+      .secondary-action {
+        border: 1px solid var(--line);
+        color: var(--ink);
+        background: var(--surface);
+      }
+
+      .hero-preview {
+        display: grid;
+        gap: 14px;
+        min-width: 0;
+      }
+
+      .preview-surface,
+      .code-panel {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+
+      .preview-surface {
+        display: grid;
+        gap: 14px;
+        padding: 20px;
+      }
+
+      .preview-surface r-button,
+      .preview-surface r-input,
+      .preview-surface r-select,
+      .preview-surface r-progress,
+      .preview-surface r-checkbox {
+        max-width: 100%;
+      }
+
+      .code-panel {
+        display: grid;
+        gap: 1px;
+        overflow: hidden;
+        padding: 0;
+        background: var(--line);
+      }
+
+      .code-panel code {
+        display: block;
+        overflow-x: auto;
+        padding: 12px 14px;
+        color: var(--ink);
+        background: var(--surface-2);
+        font-family: "SF Mono", "Cascadia Code", ui-monospace, monospace;
+        font-size: 13px;
+        line-height: 1.45;
+        white-space: nowrap;
       }
 
       .placeholder-grid {
@@ -342,6 +432,18 @@
       :root[data-ran-theme-pack='system-6'] .pack-chip,
       :root[data-ran-theme-pack='neo-brutalism'] .seg-btn,
       :root[data-ran-theme-pack='neo-brutalism'] .pack-chip,
+      :root[data-ran-theme-pack='windows-98'] .primary-action,
+      :root[data-ran-theme-pack='windows-98'] .secondary-action,
+      :root[data-ran-theme-pack='windows-98'] .preview-surface,
+      :root[data-ran-theme-pack='windows-98'] .code-panel,
+      :root[data-ran-theme-pack='system-6'] .primary-action,
+      :root[data-ran-theme-pack='system-6'] .secondary-action,
+      :root[data-ran-theme-pack='system-6'] .preview-surface,
+      :root[data-ran-theme-pack='system-6'] .code-panel,
+      :root[data-ran-theme-pack='neo-brutalism'] .primary-action,
+      :root[data-ran-theme-pack='neo-brutalism'] .secondary-action,
+      :root[data-ran-theme-pack='neo-brutalism'] .preview-surface,
+      :root[data-ran-theme-pack='neo-brutalism'] .code-panel,
       :root[data-ran-theme-pack='windows-98'] .placeholder-section,
       :root[data-ran-theme-pack='system-6'] .placeholder-section,
       :root[data-ran-theme-pack='neo-brutalism'] .placeholder-section {
@@ -366,6 +468,9 @@
       }
 
       :root[data-ran-theme-pack='neo-brutalism'] .site-nav,
+      :root[data-ran-theme-pack='neo-brutalism'] .secondary-action,
+      :root[data-ran-theme-pack='neo-brutalism'] .preview-surface,
+      :root[data-ran-theme-pack='neo-brutalism'] .code-panel,
       :root[data-ran-theme-pack='neo-brutalism'] .placeholder-section {
         border-width: 2px;
       }
@@ -392,6 +497,12 @@
           overflow: hidden;
         }
 
+        .intro {
+          grid-template-columns: 1fr;
+          align-items: start;
+          min-height: 0;
+        }
+
         .placeholder-grid {
           grid-template-columns: 1fr;
         }
@@ -415,11 +526,32 @@
         }
 
         .intro {
-          padding-top: 44px;
+          padding: 44px 0 36px;
+          gap: 30px;
         }
 
         .intro h1 {
           font-size: 38px;
+        }
+
+        .hero-copy {
+          font-size: 16px;
+        }
+
+        .hero-actions {
+          display: grid;
+          grid-template-columns: 1fr;
+        }
+
+        .primary-action,
+        .secondary-action {
+          width: 100%;
+          white-space: normal;
+          text-align: center;
+        }
+
+        .preview-surface {
+          padding: 16px;
         }
       }
     </style>
@@ -462,11 +594,34 @@
 
       <main id="top">
         <section class="intro" aria-labelledby="intro-title">
-          <p class="intro-kicker">Framework-neutral Web Components</p>
-          <h1 id="intro-title">ranui is a UI library for product interfaces that need to travel.</h1>
-          <p class="intro-copy">
-            This shell establishes the product-grade visual system for the redesigned demo site. Detailed content sections will be added in follow-up tasks.
-          </p>
+          <div class="hero-content">
+            <p class="eyebrow">Framework-neutral Web Components</p>
+            <h1 id="intro-title">ranui builds native-feeling interfaces that travel across frameworks.</h1>
+            <p class="hero-copy">A TypeScript UI library built on custom elements, theme tokens, modular imports, and real browser standards.</p>
+            <div class="hero-actions" aria-label="Hero actions">
+              <a class="primary-action" href="#components">Explore components</a>
+              <a class="secondary-action" href="#code">Copy install path</a>
+            </div>
+          </div>
+
+          <div class="hero-preview" aria-label="Live component preview">
+            <div class="preview-surface">
+              <r-button type="primary">Deploy interface</r-button>
+              <r-input placeholder="Search components"></r-input>
+              <r-select placeholder="Theme pack">
+                <r-option value="default">Default</r-option>
+                <r-option value="paper">Paper</r-option>
+                <r-option value="neo">Neo Brutalism</r-option>
+              </r-select>
+              <r-progress percent="72"></r-progress>
+              <r-checkbox checked>Typed custom elements</r-checkbox>
+            </div>
+            <div class="code-panel" aria-label="Install and import examples">
+              <code>pnpm add ranui</code>
+              <code>import 'ranui';</code>
+              <code>import 'ranui/button';</code>
+            </div>
+          </div>
         </section>
 
         <div class="placeholder-grid" aria-label="Planned sections">
