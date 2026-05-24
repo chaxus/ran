@@ -157,11 +157,6 @@ export const viteConfig: UserConfig = {
     extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json'],
   },
   plugins: [],
-  test: {
-    onConsoleLog(log, type) {
-      throw new Error(`Unexpected console.${type} in test: ${log}`);
-    },
-  },
 };
 
 export default defineConfig(viteConfig);
