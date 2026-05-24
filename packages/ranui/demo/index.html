@@ -387,40 +387,224 @@
         white-space: nowrap;
       }
 
-      .placeholder-grid {
+      .content-stack {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 18px;
+        gap: 24px;
         width: min(1180px, calc(100% - 40px));
         margin: 0 auto;
         padding: 0 0 80px;
       }
 
-      .placeholder-section {
-        min-height: 190px;
+      .content-section {
         scroll-margin-top: 96px;
         border: 1px solid var(--line);
         border-radius: 8px;
         background: var(--surface);
         box-shadow: var(--shadow);
-        padding: 24px;
+        padding: 28px;
       }
 
-      .placeholder-section:first-child {
-        grid-column: 1 / -1;
+      .section-header {
+        display: grid;
+        gap: 8px;
+        max-width: 760px;
+        margin-bottom: 22px;
       }
 
+      .section-header h2,
       .placeholder-section h2 {
-        margin: 0 0 10px;
-        font-size: 18px;
+        margin: 0;
+        font-size: 24px;
         line-height: 1.25;
         letter-spacing: 0;
       }
 
+      .section-header p,
       .placeholder-section p {
         max-width: 620px;
         margin: 0;
         color: var(--muted);
+      }
+
+      .feature-grid,
+      .theme-preview-grid,
+      .code-grid,
+      .style-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .feature-card,
+      .theme-card,
+      .code-example,
+      .style-example,
+      .placeholder-section {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface-2);
+      }
+
+      .placeholder-section {
+        display: grid;
+        align-content: start;
+        gap: 10px;
+        min-height: 190px;
+        scroll-margin-top: 96px;
+        padding: 24px;
+      }
+
+      .feature-card {
+        min-height: 118px;
+        padding: 18px;
+      }
+
+      .feature-card h3,
+      .theme-card h3,
+      .code-example h3,
+      .style-example h3 {
+        margin: 0;
+        color: var(--ink);
+        font-size: 16px;
+        line-height: 1.3;
+        letter-spacing: 0;
+      }
+
+      .feature-card p,
+      .theme-card p {
+        margin: 8px 0 0;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .theme-lab-controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 18px;
+      }
+
+      .theme-card {
+        display: grid;
+        gap: 14px;
+        min-height: 128px;
+        padding: 16px;
+      }
+
+      .theme-swatch {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        min-height: 48px;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: var(--surface);
+      }
+
+      .theme-swatch span:first-child {
+        background: var(--accent);
+      }
+
+      .theme-swatch span:last-child {
+        background: var(--accent-2);
+      }
+
+      .theme-card[data-pack-preview='default'] .theme-swatch span:first-child {
+        background: #2563eb;
+      }
+
+      .theme-card[data-pack-preview='default'] .theme-swatch span:last-child {
+        background: #0f766e;
+      }
+
+      .theme-card[data-pack-preview='dark'] .theme-swatch span:first-child {
+        background: #0b1120;
+      }
+
+      .theme-card[data-pack-preview='dark'] .theme-swatch span:last-child {
+        background: #60a5fa;
+      }
+
+      .theme-card[data-pack-preview='pixel-retro'] .theme-swatch span:first-child {
+        background: #f43f5e;
+      }
+
+      .theme-card[data-pack-preview='pixel-retro'] .theme-swatch span:last-child {
+        background: #22d3ee;
+      }
+
+      .theme-card[data-pack-preview='windows-98'] .theme-swatch span:first-child {
+        background: #c0c0c0;
+      }
+
+      .theme-card[data-pack-preview='windows-98'] .theme-swatch span:last-child {
+        background: #000080;
+      }
+
+      .theme-card[data-pack-preview='windows-xp'] .theme-swatch span:first-child {
+        background: #1e5fa8;
+      }
+
+      .theme-card[data-pack-preview='windows-xp'] .theme-swatch span:last-child {
+        background: #3b8f2f;
+      }
+
+      .theme-card[data-pack-preview='system-6'] .theme-swatch span:first-child {
+        background: #000000;
+      }
+
+      .theme-card[data-pack-preview='system-6'] .theme-swatch span:last-child {
+        background: #eeeeee;
+      }
+
+      .theme-card[data-pack-preview='wired'] .theme-swatch span:first-child {
+        background: #166534;
+      }
+
+      .theme-card[data-pack-preview='wired'] .theme-swatch span:last-child {
+        background: #0f766e;
+      }
+
+      .theme-card[data-pack-preview='paper'] .theme-swatch span:first-child {
+        background: #fffdf5;
+      }
+
+      .theme-card[data-pack-preview='paper'] .theme-swatch span:last-child {
+        background: #7c5c21;
+      }
+
+      .theme-card[data-pack-preview='neo-brutalism'] .theme-swatch span:first-child {
+        background: #ff4d00;
+      }
+
+      .theme-card[data-pack-preview='neo-brutalism'] .theme-swatch span:last-child {
+        background: #000000;
+      }
+
+      .code-example,
+      .style-example {
+        overflow: hidden;
+      }
+
+      .code-example h3,
+      .style-example h3 {
+        padding: 14px 16px 0;
+      }
+
+      .code-example pre,
+      .style-example pre {
+        margin: 0;
+        overflow-x: auto;
+        padding: 14px 16px 16px;
+      }
+
+      .code-example code,
+      .style-example code {
+        color: var(--ink);
+        font-family: "SF Mono", "Cascadia Code", ui-monospace, monospace;
+        font-size: 13px;
+        line-height: 1.55;
+        white-space: pre;
       }
 
       :root[data-ran-theme-pack='windows-98'] .brand-mark,
@@ -444,6 +628,21 @@
       :root[data-ran-theme-pack='neo-brutalism'] .secondary-action,
       :root[data-ran-theme-pack='neo-brutalism'] .preview-surface,
       :root[data-ran-theme-pack='neo-brutalism'] .code-panel,
+      :root[data-ran-theme-pack='windows-98'] .content-section,
+      :root[data-ran-theme-pack='system-6'] .content-section,
+      :root[data-ran-theme-pack='neo-brutalism'] .content-section,
+      :root[data-ran-theme-pack='windows-98'] .feature-card,
+      :root[data-ran-theme-pack='system-6'] .feature-card,
+      :root[data-ran-theme-pack='neo-brutalism'] .feature-card,
+      :root[data-ran-theme-pack='windows-98'] .theme-card,
+      :root[data-ran-theme-pack='system-6'] .theme-card,
+      :root[data-ran-theme-pack='neo-brutalism'] .theme-card,
+      :root[data-ran-theme-pack='windows-98'] .code-example,
+      :root[data-ran-theme-pack='system-6'] .code-example,
+      :root[data-ran-theme-pack='neo-brutalism'] .code-example,
+      :root[data-ran-theme-pack='windows-98'] .style-example,
+      :root[data-ran-theme-pack='system-6'] .style-example,
+      :root[data-ran-theme-pack='neo-brutalism'] .style-example,
       :root[data-ran-theme-pack='windows-98'] .placeholder-section,
       :root[data-ran-theme-pack='system-6'] .placeholder-section,
       :root[data-ran-theme-pack='neo-brutalism'] .placeholder-section {
@@ -471,6 +670,11 @@
       :root[data-ran-theme-pack='neo-brutalism'] .secondary-action,
       :root[data-ran-theme-pack='neo-brutalism'] .preview-surface,
       :root[data-ran-theme-pack='neo-brutalism'] .code-panel,
+      :root[data-ran-theme-pack='neo-brutalism'] .content-section,
+      :root[data-ran-theme-pack='neo-brutalism'] .feature-card,
+      :root[data-ran-theme-pack='neo-brutalism'] .theme-card,
+      :root[data-ran-theme-pack='neo-brutalism'] .code-example,
+      :root[data-ran-theme-pack='neo-brutalism'] .style-example,
       :root[data-ran-theme-pack='neo-brutalism'] .placeholder-section {
         border-width: 2px;
       }
@@ -503,15 +707,18 @@
           min-height: 0;
         }
 
-        .placeholder-grid {
-          grid-template-columns: 1fr;
+        .feature-grid,
+        .theme-preview-grid,
+        .code-grid,
+        .style-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
         }
       }
 
       @media (max-width: 620px) {
         .nav-inner,
         .intro,
-        .placeholder-grid {
+        .content-stack {
           width: min(100% - 28px, 1180px);
         }
 
@@ -552,6 +759,17 @@
 
         .preview-surface {
           padding: 16px;
+        }
+
+        .content-section {
+          padding: 20px;
+        }
+
+        .feature-grid,
+        .theme-preview-grid,
+        .code-grid,
+        .style-grid {
+          grid-template-columns: 1fr;
         }
       }
     </style>
@@ -624,26 +842,155 @@
           </div>
         </section>
 
-        <div class="placeholder-grid" aria-label="Planned sections">
-          <section class="placeholder-section" id="why">
-            <h2>Why ranui</h2>
-            <p>Placeholder for the product rationale section.</p>
+        <div class="content-stack" aria-label="Demo sections">
+          <section class="content-section" id="why">
+            <div class="section-header">
+              <h2>Why ranui</h2>
+              <p>Small primitives for teams that want browser-native UI without giving up framework ergonomics.</p>
+            </div>
+            <div class="feature-grid">
+              <article class="feature-card">
+                <h3>Cross-framework</h3>
+                <p>Use the same components from plain HTML, React, Vue, Svelte, or any runtime that renders DOM.</p>
+              </article>
+              <article class="feature-card">
+                <h3>Native custom elements</h3>
+                <p>Components ship as standards-based elements with encapsulated behavior and predictable markup.</p>
+              </article>
+              <article class="feature-card">
+                <h3>Modular imports</h3>
+                <p>Import the whole library for prototypes or load individual controls for tighter bundles.</p>
+              </article>
+              <article class="feature-card">
+                <h3>Typed with TypeScript</h3>
+                <p>Authoring and public paths are typed so component APIs stay clear in larger codebases.</p>
+              </article>
+              <article class="feature-card">
+                <h3>Token-based styling</h3>
+                <p>Theme values flow through CSS variables, making brand colors and density easy to tune.</p>
+              </article>
+              <article class="feature-card">
+                <h3>SSR builder path</h3>
+                <p>Server rendering helpers keep markup generation available when hydration is not the first step.</p>
+              </article>
+            </div>
           </section>
-          <section class="placeholder-section" id="themes">
-            <h2>Theme Lab</h2>
-            <p>Placeholder for theme controls and theme-pack previews.</p>
+
+          <section class="content-section" id="themes">
+            <div class="section-header">
+              <h2>Theme Lab</h2>
+              <p>Switch the active theme and scan the theme-pack palette before applying it to the live preview.</p>
+            </div>
+            <div class="theme-lab-controls" aria-label="Theme Lab controls">
+              <div class="segmented" role="group" aria-label="Theme Lab theme">
+                <button class="seg-btn active" data-theme="" aria-pressed="true">Light</button>
+                <button class="seg-btn" data-theme="dark" aria-pressed="false">Dark</button>
+              </div>
+              <div class="pack-list" role="group" aria-label="Theme Lab theme pack">
+                <button class="pack-chip active" data-pack="" aria-pressed="true">Default</button>
+                <button class="pack-chip" data-pack="pixel-retro" aria-pressed="false">Pixel</button>
+                <button class="pack-chip" data-pack="windows-98" aria-pressed="false">Win 98</button>
+                <button class="pack-chip" data-pack="windows-xp" aria-pressed="false">Win XP</button>
+                <button class="pack-chip" data-pack="system-6" aria-pressed="false">System 6</button>
+                <button class="pack-chip" data-pack="wired" aria-pressed="false">Wired</button>
+                <button class="pack-chip" data-pack="paper" aria-pressed="false">Paper</button>
+                <button class="pack-chip" data-pack="neo-brutalism" aria-pressed="false">Neo</button>
+              </div>
+            </div>
+            <div class="theme-preview-grid">
+              <article class="theme-card" data-pack-preview="default">
+                <div class="theme-swatch" aria-hidden="true"><span></span><span></span></div>
+                <h3>Default</h3>
+              </article>
+              <article class="theme-card" data-pack-preview="dark">
+                <div class="theme-swatch" aria-hidden="true"><span></span><span></span></div>
+                <h3>Dark</h3>
+              </article>
+              <article class="theme-card" data-pack-preview="pixel-retro">
+                <div class="theme-swatch" aria-hidden="true"><span></span><span></span></div>
+                <h3>Pixel Retro</h3>
+              </article>
+              <article class="theme-card" data-pack-preview="windows-98">
+                <div class="theme-swatch" aria-hidden="true"><span></span><span></span></div>
+                <h3>Windows 98</h3>
+              </article>
+              <article class="theme-card" data-pack-preview="windows-xp">
+                <div class="theme-swatch" aria-hidden="true"><span></span><span></span></div>
+                <h3>Windows XP</h3>
+              </article>
+              <article class="theme-card" data-pack-preview="system-6">
+                <div class="theme-swatch" aria-hidden="true"><span></span><span></span></div>
+                <h3>System 6</h3>
+              </article>
+              <article class="theme-card" data-pack-preview="wired">
+                <div class="theme-swatch" aria-hidden="true"><span></span><span></span></div>
+                <h3>Wired</h3>
+              </article>
+              <article class="theme-card" data-pack-preview="paper">
+                <div class="theme-swatch" aria-hidden="true"><span></span><span></span></div>
+                <h3>Paper</h3>
+              </article>
+              <article class="theme-card" data-pack-preview="neo-brutalism">
+                <div class="theme-swatch" aria-hidden="true"><span></span><span></span></div>
+                <h3>Neo Brutalism</h3>
+              </article>
+            </div>
           </section>
+
           <section class="placeholder-section" id="components">
             <h2>Components</h2>
             <p>Placeholder for the component gallery.</p>
           </section>
-          <section class="placeholder-section" id="code">
-            <h2>Code</h2>
-            <p>Placeholder for usage paths and import examples.</p>
+
+          <section class="content-section" id="code">
+            <div class="section-header">
+              <h2>Code</h2>
+              <p>Choose the path that matches the app boundary: direct browser script, package side effect, single component, or JSX.</p>
+            </div>
+            <div class="code-grid">
+              <article class="code-example">
+                <h3>UMD</h3>
+                <pre><code>&lt;script src="./ranui/dist/umd/index.umd.cjs"&gt;&lt;/script&gt;
+&lt;r-button type="primary"&gt;Button&lt;/r-button&gt;</code></pre>
+              </article>
+              <article class="code-example">
+                <h3>Package</h3>
+                <pre><code>import 'ranui';</code></pre>
+              </article>
+              <article class="code-example">
+                <h3>Modular</h3>
+                <pre><code>import 'ranui/button';</code></pre>
+              </article>
+              <article class="code-example">
+                <h3>JSX</h3>
+                <pre><code>import 'ranui';
+
+export function App() {
+  return &lt;r-button type="primary"&gt;Save&lt;/r-button&gt;;
+}</code></pre>
+              </article>
+            </div>
           </section>
-          <section class="placeholder-section" id="style-api">
-            <h2>Style API</h2>
-            <p>Placeholder for token and styling documentation.</p>
+
+          <section class="content-section" id="style-api">
+            <div class="section-header">
+              <h2>Style API</h2>
+              <p>Theme with documented tokens first, then target exposed parts when a component needs local shape changes.</p>
+            </div>
+            <div class="style-grid">
+              <article class="style-example">
+                <h3>Tokens</h3>
+                <pre><code>:root {
+  --ran-color-primary: #2563eb;
+}</code></pre>
+              </article>
+              <article class="style-example">
+                <h3>Parts</h3>
+                <pre><code>r-button::part(button) {
+  border-radius: 6px;
+}</code></pre>
+              </article>
+            </div>
           </section>
         </div>
       </main>
@@ -710,11 +1057,10 @@
         }
 
         function applyPack(pack) {
+          root.setAttribute('data-ran-theme-pack', pack);
           if (pack) {
-            root.setAttribute('data-ran-theme-pack', pack);
             writeStorage('ran-theme-pack', pack);
           } else {
-            root.removeAttribute('data-ran-theme-pack');
             removeStorage('ran-theme-pack');
           }
           syncPressed('.pack-chip[data-pack]', 'data-pack', pack || '');
