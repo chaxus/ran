@@ -35,9 +35,7 @@ app.use(body());
 app.use(router.routes());
 // app.use(requestMiddleWare)
 
-app.listen(PORT, () => {
-  console.info(colors.green(`===========================> Server Start at ${PORT} <===============================`));
-});
+app.listen(PORT);
 //     })
 // })
 describe('encodeUrl(url)', function () {
