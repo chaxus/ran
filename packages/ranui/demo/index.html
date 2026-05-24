@@ -412,6 +412,7 @@
       }
 
       .section-header h2,
+      .site-section > h2,
       .placeholder-section h2 {
         margin: 0;
         font-size: 24px;
@@ -443,10 +444,133 @@
       .theme-card,
       .code-example,
       .style-example,
+      .component-card,
       .placeholder-section {
         border: 1px solid var(--line);
         border-radius: 8px;
         background: var(--surface-2);
+      }
+
+      .site-section {
+        display: grid;
+        gap: 18px;
+        scroll-margin-top: 96px;
+      }
+
+      .gallery-group {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .gallery-group::before {
+        content: attr(data-group);
+        grid-column: 1 / -1;
+        color: var(--accent-2);
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .component-card {
+        display: grid;
+        align-content: start;
+        gap: 14px;
+        min-width: 0;
+        min-height: 148px;
+        padding: 16px;
+      }
+
+      .component-card h3 {
+        margin: 0;
+        color: var(--ink);
+        font-size: 16px;
+        line-height: 1.3;
+        letter-spacing: 0;
+      }
+
+      .component-card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .demo-row,
+      .demo-stack,
+      .demo-grid {
+        min-width: 0;
+      }
+
+      .demo-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .demo-stack {
+        display: grid;
+        gap: 12px;
+      }
+
+      .demo-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .demo-box {
+        min-width: 0;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface);
+        padding: 12px;
+      }
+
+      .demo-media {
+        width: 100%;
+        max-width: 320px;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface);
+      }
+
+      .demo-scratch {
+        position: relative;
+        width: min(100%, 300px);
+        height: 140px;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface);
+      }
+
+      .demo-scratch-prize {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        display: grid;
+        place-items: center;
+        color: var(--accent);
+        background: var(--surface-2);
+        font-size: 18px;
+        font-weight: 800;
+        letter-spacing: 0;
+      }
+
+      .demo-scratch r-scratch {
+        position: relative;
+        z-index: 1;
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      .demo-player {
+        width: min(100%, 620px);
+        height: 340px;
       }
 
       .placeholder-section {
@@ -638,6 +762,18 @@
       :root[data-ran-theme-pack='windows-98'] .feature-card,
       :root[data-ran-theme-pack='system-6'] .feature-card,
       :root[data-ran-theme-pack='neo-brutalism'] .feature-card,
+      :root[data-ran-theme-pack='windows-98'] .component-card,
+      :root[data-ran-theme-pack='system-6'] .component-card,
+      :root[data-ran-theme-pack='neo-brutalism'] .component-card,
+      :root[data-ran-theme-pack='windows-98'] .demo-box,
+      :root[data-ran-theme-pack='system-6'] .demo-box,
+      :root[data-ran-theme-pack='neo-brutalism'] .demo-box,
+      :root[data-ran-theme-pack='windows-98'] .demo-media,
+      :root[data-ran-theme-pack='system-6'] .demo-media,
+      :root[data-ran-theme-pack='neo-brutalism'] .demo-media,
+      :root[data-ran-theme-pack='windows-98'] .demo-scratch,
+      :root[data-ran-theme-pack='system-6'] .demo-scratch,
+      :root[data-ran-theme-pack='neo-brutalism'] .demo-scratch,
       :root[data-ran-theme-pack='windows-98'] .theme-card,
       :root[data-ran-theme-pack='system-6'] .theme-card,
       :root[data-ran-theme-pack='neo-brutalism'] .theme-card,
@@ -676,6 +812,10 @@
       :root[data-ran-theme-pack='neo-brutalism'] .code-panel,
       :root[data-ran-theme-pack='neo-brutalism'] .content-section,
       :root[data-ran-theme-pack='neo-brutalism'] .feature-card,
+      :root[data-ran-theme-pack='neo-brutalism'] .component-card,
+      :root[data-ran-theme-pack='neo-brutalism'] .demo-box,
+      :root[data-ran-theme-pack='neo-brutalism'] .demo-media,
+      :root[data-ran-theme-pack='neo-brutalism'] .demo-scratch,
       :root[data-ran-theme-pack='neo-brutalism'] .theme-card,
       :root[data-ran-theme-pack='neo-brutalism'] .code-example,
       :root[data-ran-theme-pack='neo-brutalism'] .style-example,
@@ -713,6 +853,7 @@
 
         .feature-grid,
         .theme-preview-grid,
+        .gallery-group,
         .code-grid,
         .style-grid {
           grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -771,9 +912,15 @@
 
         .feature-grid,
         .theme-preview-grid,
+        .gallery-group,
+        .demo-grid,
         .code-grid,
         .style-grid {
           grid-template-columns: 1fr;
+        }
+
+        .demo-player {
+          height: 220px;
         }
       }
     </style>
@@ -941,9 +1088,201 @@
             </div>
           </section>
 
-          <section class="placeholder-section" id="components">
-            <h2>Components</h2>
-            <p>Placeholder for the component gallery.</p>
+          <section id="components" class="site-section">
+            <h2>Component Gallery</h2>
+            <div class="gallery-group" data-group="Actions and inputs">
+              <article class="component-card">
+                <h3>Button</h3>
+                <div class="demo-row">
+                  <r-button type="primary">Primary</r-button>
+                  <r-button type="warning">Warning</r-button>
+                  <r-button type="text">Text</r-button>
+                  <r-button disabled>Disabled</r-button>
+                  <r-button icon="home">Icon</r-button>
+                </div>
+              </article>
+              <article class="component-card">
+                <h3>Icon</h3>
+                <div class="demo-row">
+                  <r-icon name="home" size="28" color="#2563eb"></r-icon>
+                  <r-icon name="setting" size="28"></r-icon>
+                  <r-icon name="loading" size="28" spin color="#0f766e"></r-icon>
+                </div>
+              </article>
+              <article class="component-card">
+                <h3>Input</h3>
+                <div class="demo-grid">
+                  <r-input label="Username" placeholder="Enter username"></r-input>
+                  <r-input label="Password" type="password" icon="lock"></r-input>
+                </div>
+              </article>
+              <article class="component-card">
+                <h3>Select</h3>
+                <div id="popup-root"></div>
+                <div class="demo-row">
+                  <r-select style="width: 170px" defaultValue="lucy" getPopupContainerId="popup-root" trigger="click">
+                    <r-option value="jack">Jack</r-option>
+                    <r-option value="lucy">Lucy</r-option>
+                    <r-option value="tom">Tom</r-option>
+                  </r-select>
+                  <r-select style="width: 190px" showSearch getPopupContainerId="popup-root" trigger="click">
+                    <r-option value="apple">Apple</r-option>
+                    <r-option value="banana">Banana</r-option>
+                    <r-option value="grape">Grape</r-option>
+                    <r-option value="orange">Orange</r-option>
+                  </r-select>
+                </div>
+              </article>
+              <article class="component-card">
+                <h3>Checkbox</h3>
+                <div class="demo-row">
+                  <r-checkbox checked="true">Checked</r-checkbox>
+                  <r-checkbox>Unchecked</r-checkbox>
+                  <r-checkbox disabled checked="true">Disabled</r-checkbox>
+                </div>
+              </article>
+              <article class="component-card">
+                <h3>Form</h3>
+                <r-form id="demo-form">
+                  <div slot="r-form_content" class="demo-row">
+                    <r-input name="name" label="Name" placeholder="Your name"></r-input>
+                    <r-input name="email" label="Email" placeholder="Your email"></r-input>
+                    <r-button type="primary" onclick="document.getElementById('demo-form')?.shadowRoot?.querySelector('form')?.requestSubmit?.()">
+                      Submit
+                    </r-button>
+                  </div>
+                </r-form>
+              </article>
+            </div>
+            <div class="gallery-group" data-group="Feedback">
+              <article class="component-card">
+                <h3>Progress</h3>
+                <div class="demo-stack">
+                  <r-progress percent="65"></r-progress>
+                  <r-progress type="drag" percent="30"></r-progress>
+                </div>
+              </article>
+              <article class="component-card">
+                <h3>Loading</h3>
+                <div class="demo-row">
+                  <r-loading name="rotate"></r-loading>
+                  <r-loading name="stretch"></r-loading>
+                  <r-loading name="dot"></r-loading>
+                  <r-loading name="circle-line"></r-loading>
+                </div>
+              </article>
+              <article class="component-card">
+                <h3>Skeleton</h3>
+                <div class="demo-stack">
+                  <r-skeleton></r-skeleton>
+                  <r-skeleton style="height: 24px"></r-skeleton>
+                </div>
+              </article>
+              <article class="component-card">
+                <h3>Message</h3>
+                <div class="demo-row">
+                  <r-button onclick="window.message?.success('Saved with ranui')">Save</r-button>
+                  <r-message type="success" content="Saved with ranui"></r-message>
+                </div>
+              </article>
+            </div>
+            <div class="gallery-group" data-group="Navigation and overlays">
+              <article class="component-card">
+                <h3>Tabs</h3>
+                <r-tabs active="overview" align="start" style="width: 100%">
+                  <r-tab label="Overview" r-key="overview">Overview content</r-tab>
+                  <r-tab label="API" r-key="api">API reference content</r-tab>
+                  <r-tab label="Disabled" r-key="disabled" disabled>Disabled content</r-tab>
+                </r-tabs>
+              </article>
+              <article class="component-card">
+                <h3>Popover</h3>
+                <div class="demo-row">
+                  <r-popover placement="top" trigger="hover,click" arrow="true">
+                    <r-button>Hover or click</r-button>
+                    <r-content>
+                      <div style="padding: 8px 12px">Popover content here</div>
+                    </r-content>
+                  </r-popover>
+                </div>
+              </article>
+              <article class="component-card">
+                <h3>Modal</h3>
+                <div class="demo-row">
+                  <r-button
+                    type="primary"
+                    onclick="typeof document.querySelector('#demo-modal')?.open === 'function' ? document.querySelector('#demo-modal')?.open?.() : (document.querySelector('#demo-modal').open = true)"
+                  >
+                    Open Modal
+                  </r-button>
+                  <r-modal id="demo-modal" title="Demo Modal">
+                    <p>This is a modal content example.</p>
+                    <r-button onclick="document.querySelector('#demo-modal')?.removeAttribute('open')">Close</r-button>
+                  </r-modal>
+                </div>
+              </article>
+            </div>
+            <div class="gallery-group" data-group="Media and advanced">
+              <article class="component-card">
+                <h3>Image</h3>
+                <div class="demo-row">
+                  <r-img class="demo-media" src="https://picsum.photos/220/120"></r-img>
+                  <r-img class="demo-media" src="https://picsum.photos/220/9999"></r-img>
+                </div>
+              </article>
+              <article class="component-card">
+                <h3>Color Picker</h3>
+                <div class="demo-row">
+                  <r-colorpicker value="#2563eb"></r-colorpicker>
+                  <r-colorpicker value="rgba(255,0,0,0.5)"></r-colorpicker>
+                </div>
+              </article>
+              <article class="component-card">
+                <h3>Math</h3>
+                <div class="demo-grid">
+                  <div class="demo-box"><r-math latex="E = mc^2"></r-math></div>
+                  <div class="demo-box"><r-math latex="x = {-b \pm \sqrt{b^2-4ac} \over 2a}"></r-math></div>
+                </div>
+              </article>
+              <article class="component-card">
+                <h3>Radar</h3>
+                <div class="demo-box" style="max-width: 300px; aspect-ratio: 1 / 1">
+                  <r-radar
+                    style="display: block; width: 100%; height: 100%"
+                    abilitys='[{"abilityName":"Performance","scoreRate":"92"},{"abilityName":"A11y","scoreRate":"83"},{"abilityName":"DX","scoreRate":"75"},{"abilityName":"Stability","scoreRate":"86"},{"abilityName":"Features","scoreRate":"80"}]'
+                  ></r-radar>
+                </div>
+              </article>
+              <article class="component-card">
+                <h3>Scratch</h3>
+                <div class="demo-stack">
+                  <r-button onclick="typeof document.querySelector('#demo-scratch')?.open === 'function' ? document.querySelector('#demo-scratch')?.open?.() : undefined">Open Scratch</r-button>
+                  <div class="demo-scratch">
+                    <div class="demo-scratch-prize">WINNER</div>
+                    <r-scratch id="demo-scratch"></r-scratch>
+                  </div>
+                </div>
+              </article>
+              <article class="component-card">
+                <h3>Player</h3>
+                <div class="demo-player">
+                  <r-player debug="true" src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"></r-player>
+                </div>
+              </article>
+              <article class="component-card">
+                <h3>Declarative Shadow DOM Button</h3>
+                <div class="demo-row">
+                  <r-button type="primary">
+                    DSD Button
+                    <template shadowrootmode="closed">
+                      <div class="ran-btn" role="button" tabindex="0">
+                        <div class="ran-btn-content"><slot></slot></div>
+                      </div>
+                    </template>
+                  </r-button>
+                </div>
+              </article>
+            </div>
           </section>
 
           <section class="content-section" id="code">
