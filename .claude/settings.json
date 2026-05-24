@@ -1,0 +1,53 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -E \"package\\\\.json$\")",
+      "Bash(rtk vitest *)",
+      "Bash(node -e ' *)",
+      "Bash(python3 -c ' *)",
+      "Bash(rtk find *)",
+      "Bash(tee /tmp/cov_raw.txt)",
+      "Bash(echo \"DONE: $?\")",
+      "Bash(python3 -c \"import sys,re; m=re.search\\('\\\\\"numTotalTests\\\\\":\\(\\\\d+\\)', sys.stdin.read\\(\\)\\); print\\('Total tests:', m.group\\(1\\) if m else 'unknown'\\)\")",
+      "Bash(node -e \"const { isMobile } = require\\('./node_modules/ranuts/dist/index.cjs'\\); console.log\\(isMobile\\(\\)\\)\")",
+      "Bash(node -e \"const p = require\\('/Users/ranzhouhang/Documents/code/ran/node_modules/@argos-ci/playwright/package.json'\\); console.log\\(p.version, Object.keys\\(p.exports || {}\\).slice\\(0, 10\\)\\)\")",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(d.get\\('version'\\)\\); print\\(list\\(d.get\\('exports', {}\\).keys\\(\\)\\)[:15]\\)\")",
+      "Bash(rtk tsc *)",
+      "Bash(brew list *)",
+      "Bash(/opt/homebrew/bin/gh auth *)",
+      "Bash(/opt/homebrew/bin/gh pr create --base main --head test/ranui --title 'feat\\(ranui\\): builder pattern, player refactor, modal enhancement, SSR infrastructure & test coverage' --body ' *)",
+      "Bash(git rebase *)",
+      "Bash(mkdir -p .claude/commands)",
+      "Bash(git config *)",
+      "Bash(echo 'pnpm-lock.yaml merge=lockfile')",
+      "Bash(grep -v 'pnpm-lock.yaml merge=lockfile' .git/info/attributes)",
+      "Bash(mv /tmp/attrs_tmp .git/info/attributes)",
+      "Bash(rtk pnpm *)",
+      "Bash(/opt/homebrew/bin/gh pr edit 340 --body ' *)",
+      "Bash(/opt/homebrew/bin/gh run *)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\('packageManager',''\\), indent=2\\)\\); print\\(json.dumps\\(d.get\\('engines',''\\), indent=2\\)\\)\")",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\('engines:', d.get\\('engines',{}\\)\\)\")",
+      "Bash(pnpm --version)",
+      "Bash(npm view *)",
+      "Bash(python3 -c \"import sys,json; vs=json.load\\(sys.stdin\\); print\\('\\\\n'.join\\(vs[-5:]\\)\\)\")",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\('6.6.4:', d.get\\('6.6.4',''\\)\\)\")",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\('1.2.2:', d.get\\('1.2.2',''\\)\\)\")",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\('7.0.32:', d.get\\('7.0.32',''\\)\\)\")",
+      "Bash(pnpm why *)",
+      "Bash(python3 -c \"import sys,json; vs=json.load\\(sys.stdin\\); print\\('\\\\n'.join\\([v for v in vs if v.startswith\\('4.'\\)]\\)[-10:]\\)\")",
+      "Bash(python3 -c \"import sys,json; vs=json.load\\(sys.stdin\\); print\\('\\\\n'.join\\([v for v in vs if v.startswith\\('29.'\\)]\\)\\)\")",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(d if isinstance\\(d,str\\) else d[-1]\\)\")",
+      "Bash(python3 -c \"import sys,json; vs=json.load\\(sys.stdin\\); print\\('\\\\n'.join\\(vs[-8:]\\)\\)\")",
+      "Bash(nvm list *)",
+      "Bash(pnpm build:es)",
+      "Bash(pnpm --filter docs build)",
+      "Bash(pnpm build *)",
+      "Bash(gh pr *)",
+      "Bash(rtk curl *)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\('scripts',{}\\), indent=2\\)\\)\")"
+    ],
+    "additionalDirectories": [
+      "/Users/ranzhouhang/Documents/code/ran/.claude"
+    ]
+  }
+}
