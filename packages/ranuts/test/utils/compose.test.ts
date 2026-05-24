@@ -53,8 +53,7 @@ describe('utils', () => {
         arr.push(6);
         await next();
         arr.push(7);
-      } catch (err) {
-        console.log('err', err);
+      } catch (_err) {
         arr.push(2);
       }
       arr.push(3);
