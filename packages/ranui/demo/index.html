@@ -5,6 +5,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ranui — Component Examples</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Caveat:wght@400;600;700&family=Patrick+Hand&display=swap" rel="stylesheet" />
     <script type="module" src="./index.ts"></script>
     <style>
       /* ================================================================
@@ -540,6 +543,824 @@
         .hero-packs { padding: 14px 20px; }
         .jump-nav { padding: 0 16px; }
         .content { padding: 14px 16px 48px; gap: 10px; }
+      }
+
+      /* ================================================================
+         PER-PACK SHELL OVERRIDES
+         Each pack overrides the shell's visual language, not just colors.
+      ================================================================ */
+
+      /* ── PIXEL RETRO — NES / Game Cartridge ──────────────────── */
+      :root[data-ran-theme-pack='pixel-retro'] body {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 8px;
+        background: #0f0f23;
+        background-image: repeating-linear-gradient(
+          0deg, rgba(0,0,0,0.15) 0px, transparent 1px, transparent 4px
+        );
+        image-rendering: pixelated;
+      }
+      :root[data-ran-theme-pack='pixel-retro'] .topbar {
+        background: #0f0f23;
+        border-bottom: 3px solid #e94560;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+      }
+      :root[data-ran-theme-pack='pixel-retro'] .topbar-logo {
+        background: #e94560;
+        border-radius: 0;
+      }
+      :root[data-ran-theme-pack='pixel-retro'] .topbar-brand,
+      :root[data-ran-theme-pack='pixel-retro'] .topbar-version {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 8px;
+        letter-spacing: 0;
+      }
+      :root[data-ran-theme-pack='pixel-retro'] .hero-inner {
+        border-radius: 0;
+        box-shadow: 6px 6px 0 #e94560;
+        border: 3px solid #e94560;
+      }
+      :root[data-ran-theme-pack='pixel-retro'] .hero-top {
+        background: #16213e;
+        border-radius: 0;
+        border-bottom: 3px solid #e94560;
+      }
+      :root[data-ran-theme-pack='pixel-retro'] .hero-packs {
+        background: #16213e;
+        border-radius: 0;
+      }
+      :root[data-ran-theme-pack='pixel-retro'] .hero-title {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 14px;
+        line-height: 2;
+        letter-spacing: 0;
+      }
+      :root[data-ran-theme-pack='pixel-retro'] .hero-desc,
+      :root[data-ran-theme-pack='pixel-retro'] .stat-label,
+      :root[data-ran-theme-pack='pixel-retro'] .pack-row-label {
+        font-size: 7px;
+        line-height: 2;
+        letter-spacing: 0;
+      }
+      :root[data-ran-theme-pack='pixel-retro'] .stat-value {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 18px;
+      }
+      :root[data-ran-theme-pack='pixel-retro'] .jump-nav {
+        background: #0f0f23;
+        border-bottom: 2px solid #e94560;
+        backdrop-filter: none;
+      }
+      :root[data-ran-theme-pack='pixel-retro'] .jump-nav a {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 7px;
+        color: #4cc9f0;
+        letter-spacing: 0;
+      }
+      :root[data-ran-theme-pack='pixel-retro'] .jump-nav a:hover { color: #e94560; }
+      :root[data-ran-theme-pack='pixel-retro'] .section {
+        border: 3px solid #e94560;
+        border-radius: 0;
+        box-shadow: 5px 5px 0 #e94560;
+      }
+      :root[data-ran-theme-pack='pixel-retro'] .section-head {
+        background: #e94560;
+        border-bottom: 3px solid #b8183a;
+        border-radius: 0;
+      }
+      :root[data-ran-theme-pack='pixel-retro'] .section-head h2 {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 8px;
+        color: #fff;
+        letter-spacing: 0;
+      }
+      :root[data-ran-theme-pack='pixel-retro'] .section-tag {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 6px;
+        background: #0f0f23;
+        color: #4cc9f0;
+        border-color: #4cc9f0;
+        border-radius: 0;
+        letter-spacing: 0;
+      }
+      :root[data-ran-theme-pack='pixel-retro'] .badge {
+        background: transparent;
+        border-color: #e94560;
+        color: #e94560;
+        border-radius: 0;
+        font-family: 'Press Start 2P', monospace;
+        font-size: 6px;
+      }
+
+      /* ── WINDOWS 98 — Classic Win32 UI ───────────────────────── */
+      :root[data-ran-theme-pack='windows-98'] body {
+        background: #008080;
+        font-family: 'MS Sans Serif', 'Arial', sans-serif;
+        font-size: 11px;
+      }
+      :root[data-ran-theme-pack='windows-98'] .topbar {
+        background: #c0c0c0;
+        border-bottom: none;
+        box-shadow: inset 0 -2px 0 #808080, inset 0 -3px 0 #000;
+        backdrop-filter: none;
+        height: 44px;
+      }
+      :root[data-ran-theme-pack='windows-98'] .topbar-logo {
+        background: #000080;
+        border-radius: 0;
+        box-shadow: inset -1px -1px 0 #000080, inset 1px 1px 0 #6060c0;
+      }
+      :root[data-ran-theme-pack='windows-98'] .topbar-brand {
+        font-family: 'MS Sans Serif', Arial, sans-serif;
+        font-size: 11px;
+        font-weight: bold;
+      }
+      :root[data-ran-theme-pack='windows-98'] .topbar-version {
+        font-family: 'MS Sans Serif', Arial, sans-serif;
+        font-size: 10px;
+        background: #c0c0c0;
+        border: 1px solid;
+        border-color: #808080 #fff #fff #808080;
+        border-radius: 0;
+      }
+      :root[data-ran-theme-pack='windows-98'] .hero-inner {
+        border-radius: 2px;
+        box-shadow: inset -1px -1px 0 #808080, inset 1px 1px 0 #fff, 2px 2px 0 #000;
+        border: none;
+      }
+      :root[data-ran-theme-pack='windows-98'] .hero-top {
+        background: #c0c0c0;
+        border-bottom: 1px solid #808080;
+        border-radius: 0;
+        padding-top: 0;
+      }
+      :root[data-ran-theme-pack='windows-98'] .hero-top::before {
+        content: 'ranui — Component Examples';
+        display: flex;
+        align-items: center;
+        height: 22px;
+        padding: 0 6px;
+        background: linear-gradient(to right, #000080, #1084d0);
+        color: #fff;
+        font-family: 'MS Sans Serif', Arial, sans-serif;
+        font-size: 11px;
+        font-weight: bold;
+        margin-bottom: 12px;
+      }
+      :root[data-ran-theme-pack='windows-98'] .badge { display: none; }
+      :root[data-ran-theme-pack='windows-98'] .hero-title {
+        font-family: 'MS Sans Serif', Arial, sans-serif;
+        font-size: 16px;
+        letter-spacing: 0;
+      }
+      :root[data-ran-theme-pack='windows-98'] .hero-desc {
+        font-family: 'MS Sans Serif', Arial, sans-serif;
+        font-size: 11px;
+      }
+      :root[data-ran-theme-pack='windows-98'] .hero-packs {
+        background: #c0c0c0;
+      }
+      :root[data-ran-theme-pack='windows-98'] .jump-nav {
+        background: #c0c0c0;
+        border-bottom: 1px solid #808080;
+        backdrop-filter: none;
+      }
+      :root[data-ran-theme-pack='windows-98'] .jump-nav a {
+        font-family: 'MS Sans Serif', Arial, sans-serif;
+        font-size: 11px;
+        color: #000;
+        padding: 6px 8px;
+      }
+      :root[data-ran-theme-pack='windows-98'] .jump-nav a:hover {
+        background: #000080;
+        color: #fff;
+        border-bottom-color: transparent;
+      }
+      :root[data-ran-theme-pack='windows-98'] .section {
+        border: none;
+        border-radius: 2px;
+        box-shadow: inset -1px -1px 0 #808080, inset 1px 1px 0 #fff, 2px 2px 0 #000;
+      }
+      :root[data-ran-theme-pack='windows-98'] .section-head {
+        background: linear-gradient(to right, #000080, #1084d0);
+        border-bottom: none;
+        border-radius: 0;
+        padding: 3px 6px;
+        gap: 4px;
+      }
+      :root[data-ran-theme-pack='windows-98'] .section-head::after {
+        content: '✕';
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        width: 16px;
+        height: 14px;
+        background: #c0c0c0;
+        box-shadow: inset -1px -1px 0 #808080, inset 1px 1px 0 #fff;
+        color: #000;
+        font-family: Arial, sans-serif;
+        font-size: 11px;
+        font-weight: bold;
+        margin-left: auto;
+        line-height: 1;
+      }
+      :root[data-ran-theme-pack='windows-98'] .section-head h2 {
+        font-family: 'MS Sans Serif', Arial, sans-serif;
+        font-size: 11px;
+        font-weight: bold;
+        color: #fff;
+      }
+      :root[data-ran-theme-pack='windows-98'] .section-tag {
+        font-family: 'MS Sans Serif', Arial, sans-serif;
+        font-size: 10px;
+        background: transparent;
+        color: rgba(255,255,255,.75);
+        border-color: rgba(255,255,255,.4);
+        border-radius: 0;
+      }
+      :root[data-ran-theme-pack='windows-98'] .section-body {
+        background: #c0c0c0;
+      }
+      :root[data-ran-theme-pack='windows-98'] .box {
+        border: 1px solid;
+        border-color: #808080 #fff #fff #808080;
+        background: #fff;
+        border-radius: 0;
+      }
+
+      /* ── WINDOWS XP — Luna theme ─────────────────────────────── */
+      :root[data-ran-theme-pack='windows-xp'] body {
+        background: #3a6ea5;
+        font-family: 'Tahoma', sans-serif;
+        font-size: 11px;
+      }
+      :root[data-ran-theme-pack='windows-xp'] .topbar {
+        background: linear-gradient(to bottom, #2f71cd 0%, #1e5fa8 100%);
+        border-bottom: 2px solid #1045a6;
+        backdrop-filter: none;
+      }
+      :root[data-ran-theme-pack='windows-xp'] .topbar-logo {
+        background: linear-gradient(135deg, #4caf50, #2e7d32);
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0,0,0,.4);
+      }
+      :root[data-ran-theme-pack='windows-xp'] .topbar-brand,
+      :root[data-ran-theme-pack='windows-xp'] .topbar-version {
+        color: #fff;
+        font-family: Tahoma, sans-serif;
+        font-size: 11px;
+        text-shadow: 1px 1px 2px rgba(0,0,0,.5);
+      }
+      :root[data-ran-theme-pack='windows-xp'] .topbar-version {
+        background: rgba(0,0,0,.2);
+        border-color: rgba(255,255,255,.3);
+      }
+      :root[data-ran-theme-pack='windows-xp'] .hero-inner {
+        border-radius: 6px 6px 4px 4px;
+        box-shadow: 0 4px 16px rgba(0,0,0,.4);
+        border: none;
+      }
+      :root[data-ran-theme-pack='windows-xp'] .hero-top {
+        background: #ece9d8;
+        border-bottom: 1px solid #c7d5f4;
+        border-radius: 0;
+        padding-top: 0;
+      }
+      :root[data-ran-theme-pack='windows-xp'] .hero-top::before {
+        content: '🪟  ranui — Component Examples';
+        display: flex;
+        align-items: center;
+        height: 28px;
+        padding: 0 8px;
+        background: linear-gradient(to bottom, #0a246a 0%, #3e88e0 50%, #1e5fa8 100%);
+        color: #fff;
+        font-family: Tahoma, sans-serif;
+        font-size: 11px;
+        font-weight: bold;
+        text-shadow: 1px 1px 2px rgba(0,0,0,.5);
+        border-radius: 4px 4px 0 0;
+        margin-bottom: 14px;
+      }
+      :root[data-ran-theme-pack='windows-xp'] .hero-title {
+        font-family: Tahoma, sans-serif;
+        font-size: 18px;
+        letter-spacing: 0;
+      }
+      :root[data-ran-theme-pack='windows-xp'] .hero-packs {
+        background: #ece9d8;
+      }
+      :root[data-ran-theme-pack='windows-xp'] .jump-nav {
+        background: #ece9d8;
+        border-bottom: 1px solid #c7d5f4;
+        backdrop-filter: none;
+      }
+      :root[data-ran-theme-pack='windows-xp'] .jump-nav a {
+        font-family: Tahoma, sans-serif;
+        font-size: 11px;
+        color: #003c7a;
+      }
+      :root[data-ran-theme-pack='windows-xp'] .section {
+        border-radius: 4px 4px 3px 3px;
+        box-shadow: 0 2px 8px rgba(0,0,0,.25);
+        border: none;
+      }
+      :root[data-ran-theme-pack='windows-xp'] .section-head {
+        background: linear-gradient(to bottom, #0a246a 0%, #3e88e0 50%, #1e5fa8 100%);
+        border-bottom: none;
+        border-radius: 3px 3px 0 0;
+        padding: 4px 8px;
+      }
+      :root[data-ran-theme-pack='windows-xp'] .section-head h2 {
+        font-family: Tahoma, sans-serif;
+        font-size: 11px;
+        font-weight: bold;
+        color: #fff;
+        text-shadow: 1px 1px 2px rgba(0,0,0,.5);
+      }
+      :root[data-ran-theme-pack='windows-xp'] .section-tag {
+        font-family: Tahoma, sans-serif;
+        font-size: 10px;
+        background: transparent;
+        color: rgba(255,255,255,.8);
+        border-color: rgba(255,255,255,.4);
+        border-radius: 3px;
+      }
+      :root[data-ran-theme-pack='windows-xp'] .section-body {
+        background: #fff;
+      }
+
+      /* ── SYSTEM 6 — Classic Mac ──────────────────────────────── */
+      :root[data-ran-theme-pack='system-6'] body {
+        font-family: 'Chicago', 'Monaco', monospace;
+        font-size: 12px;
+        background: #fff;
+      }
+      :root[data-ran-theme-pack='system-6'] .topbar {
+        background: #fff;
+        border-bottom: 1px solid #000;
+        backdrop-filter: none;
+        height: 20px;
+        padding: 0 8px;
+      }
+      :root[data-ran-theme-pack='system-6'] .topbar-logo {
+        width: 16px;
+        height: 16px;
+        border-radius: 0;
+        background: #000;
+        font-size: 10px;
+        font-family: monospace;
+        font-weight: bold;
+      }
+      :root[data-ran-theme-pack='system-6'] .topbar-brand {
+        font-family: 'Chicago', monospace;
+        font-size: 12px;
+        font-weight: bold;
+        letter-spacing: 0;
+      }
+      :root[data-ran-theme-pack='system-6'] .topbar-version {
+        font-family: monospace;
+        font-size: 10px;
+        background: #fff;
+        border-color: #000;
+        border-radius: 0;
+      }
+      :root[data-ran-theme-pack='system-6'] .sw-btn {
+        font-family: 'Chicago', monospace;
+        font-size: 11px;
+        border-radius: 0;
+      }
+      :root[data-ran-theme-pack='system-6'] .theme-toggle {
+        border-color: #000;
+        border-radius: 0;
+        background: #fff;
+      }
+      :root[data-ran-theme-pack='system-6'] .sw-btn.active {
+        background: #000;
+        color: #fff;
+        box-shadow: none;
+      }
+      :root[data-ran-theme-pack='system-6'] .hero-inner {
+        border: 1px solid #000;
+        border-radius: 0;
+        box-shadow: 1px 1px 0 #000;
+      }
+      :root[data-ran-theme-pack='system-6'] .hero-top {
+        background: #fff;
+        border-bottom: 1px solid #000;
+        border-radius: 0;
+        padding-top: 0;
+      }
+      :root[data-ran-theme-pack='system-6'] .hero-top::before {
+        content: '';
+        display: block;
+        height: 16px;
+        background: repeating-linear-gradient(
+          to right,
+          #000 0px, #000 1px, #fff 1px, #fff 2px
+        );
+        margin-bottom: 12px;
+      }
+      :root[data-ran-theme-pack='system-6'] .badge { display: none; }
+      :root[data-ran-theme-pack='system-6'] .hero-title {
+        font-family: 'Chicago', monospace;
+        font-size: 20px;
+        letter-spacing: 0;
+        font-weight: bold;
+      }
+      :root[data-ran-theme-pack='system-6'] .hero-title .grad {
+        background: none;
+        -webkit-text-fill-color: #000;
+        color: #000;
+      }
+      :root[data-ran-theme-pack='system-6'] .hero-packs { background: #fff; }
+      :root[data-ran-theme-pack='system-6'] .jump-nav {
+        background: #fff;
+        border-bottom: 1px solid #000;
+        backdrop-filter: none;
+      }
+      :root[data-ran-theme-pack='system-6'] .jump-nav a {
+        font-family: 'Chicago', monospace;
+        font-size: 11px;
+        color: #000;
+      }
+      :root[data-ran-theme-pack='system-6'] .jump-nav a:hover {
+        background: #000;
+        color: #fff;
+        border-bottom-color: transparent;
+      }
+      :root[data-ran-theme-pack='system-6'] .section {
+        border: 1px solid #000;
+        border-radius: 0;
+        box-shadow: 1px 1px 0 #000;
+      }
+      :root[data-ran-theme-pack='system-6'] .section-head {
+        background: repeating-linear-gradient(
+          to right,
+          #000 0px, #000 1px, #fff 1px, #fff 2px
+        );
+        border-bottom: 1px solid #000;
+        border-radius: 0;
+        padding: 2px 8px;
+        gap: 6px;
+      }
+      :root[data-ran-theme-pack='system-6'] .section-head h2 {
+        background: #fff;
+        color: #000;
+        font-family: 'Chicago', monospace;
+        font-size: 12px;
+        font-weight: bold;
+        padding: 0 4px;
+      }
+      :root[data-ran-theme-pack='system-6'] .section-tag {
+        font-family: monospace;
+        font-size: 10px;
+        background: #fff;
+        color: #000;
+        border-color: #000;
+        border-radius: 0;
+      }
+      :root[data-ran-theme-pack='system-6'] .box {
+        border: 1px solid #000;
+        border-radius: 0;
+      }
+
+      /* ── WIRED — Hand-drawn / Sketchy ────────────────────────── */
+      :root[data-ran-theme-pack='wired'] body {
+        font-family: 'Caveat', cursive;
+        font-size: 16px;
+        background: #fafaf8;
+      }
+      :root[data-ran-theme-pack='wired'] .topbar {
+        background: #fafaf8;
+        border-bottom: 2px solid #1a1a1a;
+        backdrop-filter: none;
+        font-family: 'Caveat', cursive;
+      }
+      :root[data-ran-theme-pack='wired'] .topbar-logo {
+        background: #2d6a4f;
+        border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+      }
+      :root[data-ran-theme-pack='wired'] .topbar-brand {
+        font-family: 'Caveat', cursive;
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: 0;
+      }
+      :root[data-ran-theme-pack='wired'] .hero-inner {
+        border: 2px solid #1a1a1a;
+        border-radius: 3px 8px 5px 6px;
+        box-shadow: 4px 5px 0 rgba(0,0,0,.18);
+      }
+      :root[data-ran-theme-pack='wired'] .hero-inner::before {
+        content: '';
+        position: absolute;
+        inset: -5px;
+        border: 1.5px solid #1a1a1a;
+        border-radius: 5px 10px 7px 8px;
+        opacity: 0.3;
+        pointer-events: none;
+      }
+      :root[data-ran-theme-pack='wired'] .hero-top {
+        background: #fafaf8;
+        border-bottom: 2px solid #c8c4b4;
+        border-radius: 0;
+      }
+      :root[data-ran-theme-pack='wired'] .hero-title {
+        font-family: 'Caveat', cursive;
+        font-size: 40px;
+        font-weight: 700;
+        letter-spacing: 0;
+        line-height: 1.2;
+      }
+      :root[data-ran-theme-pack='wired'] .hero-desc {
+        font-family: 'Caveat', cursive;
+        font-size: 16px;
+      }
+      :root[data-ran-theme-pack='wired'] .stat-value {
+        font-family: 'Caveat', cursive;
+        font-size: 32px;
+        font-weight: 700;
+      }
+      :root[data-ran-theme-pack='wired'] .hero-packs {
+        background: #fafaf8;
+      }
+      :root[data-ran-theme-pack='wired'] .jump-nav {
+        background: #fafaf8;
+        border-bottom: 2px solid #1a1a1a;
+        backdrop-filter: none;
+      }
+      :root[data-ran-theme-pack='wired'] .jump-nav a {
+        font-family: 'Caveat', cursive;
+        font-size: 15px;
+        color: #1a1a1a;
+      }
+      :root[data-ran-theme-pack='wired'] .section {
+        position: relative;
+        border: 2px solid #1a1a1a;
+        border-radius: 3px 9px 5px 7px;
+        box-shadow: 3px 4px 0 rgba(0,0,0,.15);
+      }
+      :root[data-ran-theme-pack='wired'] .section::before {
+        content: '';
+        position: absolute;
+        inset: -4px;
+        border: 1.5px solid #1a1a1a;
+        border-radius: 5px 11px 7px 9px;
+        opacity: 0.25;
+        pointer-events: none;
+        z-index: 1;
+      }
+      :root[data-ran-theme-pack='wired'] .section-head {
+        background: #f0f0ec;
+        border-bottom: 2px solid #c8c4b4;
+        border-radius: 0;
+      }
+      :root[data-ran-theme-pack='wired'] .section-head h2 {
+        font-family: 'Caveat', cursive;
+        font-size: 20px;
+        font-weight: 700;
+        color: #1a1a1a;
+      }
+      :root[data-ran-theme-pack='wired'] .section-tag {
+        font-family: 'Caveat', cursive;
+        font-size: 13px;
+        border-radius: 3px 8px 4px 6px;
+      }
+      :root[data-ran-theme-pack='wired'] .box {
+        border: 2px solid #c8c4b4;
+        border-radius: 2px 7px 4px 5px;
+      }
+
+      /* ── PAPER — Notebook / Handwritten ─────────────────────── */
+      :root[data-ran-theme-pack='paper'] body {
+        font-family: 'Patrick Hand', cursive;
+        font-size: 15px;
+        background: #fffef5;
+        background-image:
+          repeating-linear-gradient(
+            transparent, transparent 27px, #e8e0c8 27px, #e8e0c8 28px
+          );
+        background-attachment: local;
+      }
+      :root[data-ran-theme-pack='paper'] .topbar {
+        background: rgba(255,254,245,.95);
+        border-bottom: 2px solid #c8a96e;
+        backdrop-filter: none;
+        font-family: 'Patrick Hand', cursive;
+      }
+      :root[data-ran-theme-pack='paper'] .topbar-logo {
+        background: #5c4a2a;
+        border-radius: 3px 6px 4px 5px;
+        font-family: 'Patrick Hand', cursive;
+        font-size: 16px;
+        font-weight: bold;
+      }
+      :root[data-ran-theme-pack='paper'] .topbar-brand {
+        font-family: 'Patrick Hand', cursive;
+        font-size: 18px;
+        font-weight: bold;
+        letter-spacing: 0;
+      }
+      :root[data-ran-theme-pack='paper'] .hero-inner {
+        border: 2px solid #c8a96e;
+        border-radius: 4px 8px 5px 6px;
+        box-shadow: 3px 4px 0 rgba(0,0,0,.15);
+        transform: rotate(-0.3deg);
+      }
+      :root[data-ran-theme-pack='paper'] .hero-top {
+        background: #fffef5;
+        border-bottom: 2px dashed #c8a96e;
+        border-radius: 0;
+      }
+      :root[data-ran-theme-pack='paper'] .hero-title {
+        font-family: 'Patrick Hand', cursive;
+        font-size: 36px;
+        letter-spacing: 0;
+        font-weight: bold;
+      }
+      :root[data-ran-theme-pack='paper'] .hero-desc {
+        font-family: 'Patrick Hand', cursive;
+        font-size: 15px;
+      }
+      :root[data-ran-theme-pack='paper'] .stat-value {
+        font-family: 'Patrick Hand', cursive;
+        font-size: 32px;
+        font-weight: bold;
+      }
+      :root[data-ran-theme-pack='paper'] .hero-packs {
+        background: #fffef5;
+      }
+      :root[data-ran-theme-pack='paper'] .jump-nav {
+        background: rgba(255,254,245,.95);
+        border-bottom: 2px solid #c8a96e;
+        backdrop-filter: none;
+      }
+      :root[data-ran-theme-pack='paper'] .jump-nav a {
+        font-family: 'Patrick Hand', cursive;
+        font-size: 14px;
+        color: #5c4a2a;
+      }
+      :root[data-ran-theme-pack='paper'] .section {
+        border: 2px solid #5c4a2a;
+        box-shadow: 3px 4px 0 rgba(0,0,0,.15);
+      }
+      :root[data-ran-theme-pack='paper'] .section:nth-child(odd) {
+        transform: rotate(-0.4deg);
+        border-radius: 4px 8px 5px 6px;
+      }
+      :root[data-ran-theme-pack='paper'] .section:nth-child(even) {
+        transform: rotate(0.3deg);
+        border-radius: 6px 4px 7px 3px;
+      }
+      :root[data-ran-theme-pack='paper'] .section:hover { transform: none; }
+      :root[data-ran-theme-pack='paper'] .section-head {
+        background: #f5ece0;
+        border-bottom: 2px dashed #c8a96e;
+        border-radius: 0;
+      }
+      :root[data-ran-theme-pack='paper'] .section-head h2 {
+        font-family: 'Patrick Hand', cursive;
+        font-size: 18px;
+        font-weight: bold;
+        color: #2d2d2d;
+      }
+      :root[data-ran-theme-pack='paper'] .section-tag {
+        font-family: 'Patrick Hand', cursive;
+        font-size: 13px;
+        border-radius: 3px 7px 4px 5px;
+      }
+      :root[data-ran-theme-pack='paper'] .box {
+        border: 2px dashed #c8a96e;
+        border-radius: 3px 7px 4px 5px;
+        background: #fffef5;
+      }
+
+      /* ── NEO BRUTALISM ───────────────────────────────────────── */
+      :root[data-ran-theme-pack='neo-brutalism'] body {
+        font-family: system-ui, sans-serif;
+        background: #f5f5f5;
+      }
+      :root[data-ran-theme-pack='neo-brutalism'] .topbar {
+        background: #ff5722;
+        border-bottom: 3px solid #000;
+        backdrop-filter: none;
+      }
+      :root[data-ran-theme-pack='neo-brutalism'] .topbar-logo {
+        background: #000;
+        border-radius: 0;
+        border: 2px solid #fff;
+      }
+      :root[data-ran-theme-pack='neo-brutalism'] .topbar-brand {
+        color: #fff;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      :root[data-ran-theme-pack='neo-brutalism'] .topbar-version {
+        background: #000;
+        color: #ff5722;
+        border-color: #000;
+        border-radius: 0;
+        font-weight: 700;
+      }
+      :root[data-ran-theme-pack='neo-brutalism'] .sw-btn {
+        border-radius: 0;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 11px;
+        color: #fff;
+      }
+      :root[data-ran-theme-pack='neo-brutalism'] .sw-btn.active {
+        background: #fff;
+        color: #000;
+        box-shadow: none;
+      }
+      :root[data-ran-theme-pack='neo-brutalism'] .theme-toggle {
+        border: 2px solid #fff;
+        border-radius: 0;
+        background: rgba(0,0,0,.2);
+      }
+      :root[data-ran-theme-pack='neo-brutalism'] .hero-inner {
+        border: 3px solid #000;
+        border-radius: 0;
+        box-shadow: 6px 6px 0 #000;
+      }
+      :root[data-ran-theme-pack='neo-brutalism'] .hero-top {
+        background: #fff;
+        border-bottom: 3px solid #000;
+        border-radius: 0;
+      }
+      :root[data-ran-theme-pack='neo-brutalism'] .hero-title {
+        font-size: 36px;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: -1px;
+      }
+      :root[data-ran-theme-pack='neo-brutalism'] .badge {
+        background: #ff5722;
+        border-color: #000;
+        color: #fff;
+        border-radius: 0;
+        border-width: 2px;
+        font-weight: 900;
+      }
+      :root[data-ran-theme-pack='neo-brutalism'] .stat-value {
+        font-weight: 900;
+        font-size: 28px;
+      }
+      :root[data-ran-theme-pack='neo-brutalism'] .hero-packs {
+        background: #f5f5f5;
+        border-top: 3px solid #000;
+      }
+      :root[data-ran-theme-pack='neo-brutalism'] .jump-nav {
+        background: #f5f5f5;
+        border-bottom: 3px solid #000;
+        backdrop-filter: none;
+      }
+      :root[data-ran-theme-pack='neo-brutalism'] .jump-nav a {
+        font-weight: 700;
+        color: #000;
+        text-transform: uppercase;
+        font-size: 11px;
+        font-family: monospace;
+      }
+      :root[data-ran-theme-pack='neo-brutalism'] .jump-nav a:hover {
+        color: #ff5722;
+        border-bottom-color: #ff5722;
+      }
+      :root[data-ran-theme-pack='neo-brutalism'] .section {
+        border: 3px solid #000;
+        border-radius: 0;
+        box-shadow: 5px 5px 0 #000;
+      }
+      :root[data-ran-theme-pack='neo-brutalism'] .section-head {
+        background: #ff5722;
+        border-bottom: 3px solid #000;
+        border-radius: 0;
+      }
+      :root[data-ran-theme-pack='neo-brutalism'] .section-head h2 {
+        color: #fff;
+        font-weight: 900;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      :root[data-ran-theme-pack='neo-brutalism'] .section-tag {
+        background: #000;
+        color: #ff5722;
+        border-color: #000;
+        border-radius: 0;
+        font-weight: 700;
+      }
+      :root[data-ran-theme-pack='neo-brutalism'] .section-body {
+        background: #fff;
+      }
+      :root[data-ran-theme-pack='neo-brutalism'] .box {
+        border: 2px solid #000;
+        border-radius: 0;
+        background: #f5f5f5;
       }
     </style>
   </head>
