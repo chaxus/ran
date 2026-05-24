@@ -2,8 +2,8 @@
 set -e
 
 bin=./node_modules/.bin
+$bin/oxlint --config .oxlintrc.json .
 $bin/prettier --check --cache .
-$bin/oxlint --config .oxlintrc.json . && $bin/prettier --check --cache .
 # build ranuts and ranui first so their type declarations are available for dependent packages
 pnpm -F ranuts build
 pnpm -F ranui build
