@@ -12,18 +12,11 @@ const __filename = fileURLToPath(import.meta.url);
 
 const __dirname = path.dirname(__filename);
 
-interface chunkOptimization {
-  assetsInlineLimit: number;
-  chunkSizeWarningLimit: number;
-  reportCompressedSize: boolean;
-  rollupOptions: NonNullable<BuildOptions['rollupOptions']>;
-  minify: boolean | 'terser' | 'esbuild' | undefined;
-}
-
-const chunkOptimization: Partial<chunkOptimization> = {
+const chunkOptimization: Partial<BuildOptions> = {
   chunkSizeWarningLimit: 500,
   assetsInlineLimit: 1024,
   reportCompressedSize: false,
+  emptyOutDir: true,
   rollupOptions: {
     external: ['react', 'react-dom', 'vue'],
     treeshake: {
@@ -46,6 +39,7 @@ export const umd: BuildOptions = {
 
 export const es: BuildOptions = {
   ...chunkOptimization,
+  outDir: resolve(__dirname, 'dist'),
   lib: {
     entry: {
       button: resolve(__dirname, 'components/button/index.ts'),
@@ -69,6 +63,7 @@ export const es: BuildOptions = {
       form: resolve(__dirname, 'components/form/index.ts'),
       scratch: resolve(__dirname, 'components/scratch/index.ts'),
       index: resolve(__dirname, 'index.ts'),
+      style: resolve(__dirname, 'style.ts'),
     },
     fileName: (_: string, name: string): string => {
       return `${name}.js`;

@@ -23,6 +23,16 @@ export default defineConfig({
   title: 'ran',
   description: DESCRIPTION,
   base: BASE_PATH,
+  vite: {
+    build: {
+      rollupOptions: {
+        onwarn(warning, warn) {
+          if (warning.code === 'INVALID_ANNOTATION') return;
+          warn(warning);
+        },
+      },
+    },
+  },
   lastUpdated: true,
   locales: {
     // root: { label: '简体中文', lang: 'zh-CN' },

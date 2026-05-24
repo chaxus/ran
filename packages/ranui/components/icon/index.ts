@@ -4,9 +4,7 @@ import { View } from '@/utils/builder';
 import { adoptSheetText, adoptStyles } from '@/utils/style';
 import { defineSSR } from '@/utils/ssr-registry';
 
-type ImportMetaWithEnv = ImportMeta & { env?: { DEV?: boolean } };
-
-const isDev = typeof import.meta !== 'undefined' && Boolean((import.meta as ImportMetaWithEnv).env?.DEV);
+const isDev = import.meta.env.DEV;
 const iconSvgCache = new Map<string, string>();
 let hasStartedRegistration = false;
 

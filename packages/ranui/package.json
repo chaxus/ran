@@ -62,6 +62,7 @@
       "import": "./dist/index.js",
       "require": "./dist/umd/index.umd.cjs"
     },
+    "./style": "./dist/ranui.css",
     "./button": {
       "types": "./dist/index.d.ts",
       "import": "./dist/button.js",

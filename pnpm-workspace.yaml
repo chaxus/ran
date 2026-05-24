@@ -1,3 +1,10 @@
 packages:
   # all packages in subdirs of packages/ and components/
   - 'packages/**'
+allowBuilds:
+  core-js: true
+  esbuild: true
+  fsevents: true
+  preact: true
+  sharp: true
+  tesseract.js: true

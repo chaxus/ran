@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 declare module '*.less';
 declare module '*.less?inline';
 declare module '*.ts';
