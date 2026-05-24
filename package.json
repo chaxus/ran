@@ -4,7 +4,7 @@
   "description": "Monorepo",
   "type": "module",
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=24.0.0"
   },
   "scripts": {
     "pre": "sh ./bin/preinstall.sh",
@@ -41,6 +41,13 @@
       "fsevents",
       "keccak",
       "secp256k1"
+    ],
+    "minimumReleaseAgeExclude": [
+      "@argos-ci/browser",
+      "@argos-ci/playwright",
+      "tinyexec",
+      "tldts-core",
+      "tldts"
     ]
   }
 }
