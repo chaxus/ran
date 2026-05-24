@@ -8,7 +8,6 @@ $bin/oxlint --config .oxlintrc.json . && $bin/prettier --check --cache .
 pnpm -F ranuts build
 pnpm -F ranui build
 pnpm -F docs tsc
-pnpm -F image-process tsc
 pnpm -F ranui tsc
 pnpm -F ranuts tsc
 pnpm -F solidity tsc
