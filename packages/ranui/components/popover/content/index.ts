@@ -1,8 +1,8 @@
 import contentCss from './index.less?inline';
 import { Slot } from '@/utils/builder';
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
-import { adoptStyles } from '@/utils/style';
 import { defineSSR } from '@/utils/ssr-registry';
+import { ensureShadowElement, ensureShadowRoot } from '@/utils/component';
 
 export class Content extends (HTMLElementSSR()!) {
   observer: MutationObserver;
@@ -10,15 +10,8 @@ export class Content extends (HTMLElementSSR()!) {
   _slot: HTMLElement;
   constructor() {
     super();
-    const shadowRoot = this.attachShadow({ mode: 'closed' });
-    this._shadowDom = shadowRoot;
-    adoptStyles(this._shadowDom, contentCss);
-
-    let slot = this._shadowDom.querySelector('.slot') as HTMLElement | null;
-    if (!slot) {
-      slot = Slot().class('slot').build() as HTMLElement;
-      this._shadowDom.appendChild(slot);
-    }
+    this._shadowDom = ensureShadowRoot(this, contentCss);
+    const slot = ensureShadowElement(this._shadowDom, '.slot', () => Slot().class('slot').build() as HTMLElement);
     this._slot = slot;
     this.observer = new MutationObserver(this.callback);
   }

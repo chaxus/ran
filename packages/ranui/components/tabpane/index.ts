@@ -1,6 +1,6 @@
 import tabPaneCss from './index.less?inline';
-import { adoptSheetText, adoptStyles } from '@/utils/style';
 import { Slot } from '@/utils/builder';
+import { ensureShadowElement, ensureShadowRoot, setStringAttribute, syncSheetAttribute } from '@/utils/component';
 
 interface ExtendParentNode {
   updateAttribute: (key: string, attribute: string, value?: string | null) => void;
@@ -17,14 +17,12 @@ function CustomElement() {
       _shadowDom: ShadowRoot;
       constructor() {
         super();
-        this._shadowDom = this.shadowRoot || this.attachShadow({ mode: 'closed' });
-        adoptStyles(this._shadowDom, tabPaneCss);
-
-        let slot = this._shadowDom.querySelector('slot') as HTMLSlotElement;
-        if (!slot) {
-          slot = Slot().part('content').build() as HTMLSlotElement;
-          this._shadowDom.appendChild(slot);
-        }
+        this._shadowDom = ensureShadowRoot(this, tabPaneCss);
+        const slot = ensureShadowElement(
+          this._shadowDom,
+          'slot',
+          () => Slot().part('content').build() as HTMLSlotElement,
+        );
         this._div = slot;
       }
       get label() {
@@ -87,11 +85,10 @@ function CustomElement() {
         return this.getAttribute('sheet');
       }
       set sheet(value) {
-        this.setAttribute('sheet', value || '');
+        setStringAttribute(this, 'sheet', value);
       }
       handlerExternalCss = () => {
-        if (!this.sheet) return;
-        adoptSheetText(this._shadowDom, this.sheet);
+        syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
       };
       onClick(e: Event) {
         console.log('e', e);

@@ -1,7 +1,13 @@
 import { addClassToElement, removeClassToElement } from 'ranuts/utils';
 import { HTMLElementSSR, createCustomError, falseList } from '@/utils/index';
 import { Div, InputBuilder, Span } from '@/utils/builder';
-import { adoptSheetText, adoptStyles } from '@/utils/style';
+import {
+  ensureShadowElement,
+  ensureShadowRoot,
+  getStringAttribute,
+  setStringAttribute,
+  syncSheetAttribute,
+} from '@/utils/component';
 import checkboxCss from './index.less?inline';
 import { defineSSR } from '@/utils/ssr-registry';
 
@@ -20,21 +26,17 @@ export class Checkbox extends (HTMLElementSSR()!) {
   }
   constructor() {
     super();
-    this._shadowDom = this.shadowRoot || this.attachShadow({ mode: 'closed' });
-    adoptStyles(this._shadowDom, checkboxCss);
-
-    let wrap = this._shadowDom.querySelector('.ran-checkbox') as HTMLElement;
-    if (!wrap) {
-      wrap = Div()
+    this._shadowDom = ensureShadowRoot(this, checkboxCss);
+    const wrap = ensureShadowElement(this._shadowDom, '.ran-checkbox', () =>
+      Div()
         .class('ran-checkbox')
         .part('checkbox')
         .children(
           InputBuilder().class('ran-checkbox-input').part('input').attr('type', 'checkbox'),
           Span().class('ran-checkbox-inner').part('inner'),
         )
-        .build();
-      this._shadowDom.appendChild(wrap);
-    }
+        .build(),
+    );
 
     this.container = wrap;
     this.checkInput = wrap.querySelector('.ran-checkbox-input') as HTMLInputElement;
@@ -45,10 +47,10 @@ export class Checkbox extends (HTMLElementSSR()!) {
     };
   }
   get disabled(): string {
-    return this.getAttribute('disabled') || '';
+    return getStringAttribute(this, 'disabled');
   }
   set disabled(value: string) {
-    this.setAttribute('disabled', value);
+    setStringAttribute(this, 'disabled', value);
   }
   get value(): string {
     const checked = this.getAttribute('value');
@@ -85,14 +87,13 @@ export class Checkbox extends (HTMLElementSSR()!) {
     this.updateChecked();
   }
   get sheet(): string {
-    return this.getAttribute('sheet') || '';
+    return getStringAttribute(this, 'sheet');
   }
   set sheet(value: string) {
-    this.setAttribute('sheet', value || '');
+    setStringAttribute(this, 'sheet', value);
   }
   handlerExternalCss = (): void => {
-    if (!this.sheet) return;
-    adoptSheetText(this._shadowDom, this.sheet);
+    syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
   };
   updateChecked = (): void => {
     const { checked } = this.context;

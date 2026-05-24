@@ -1,8 +1,8 @@
 import scratchCss from './index.less?inline';
 import { Div, View } from '@/utils/builder';
 import { HTMLElementSSR } from '@/utils/index';
-import { adoptStyles } from '@/utils/style';
 import { defineSSR } from '@/utils/ssr-registry';
+import { ensureShadowElement, ensureShadowRoot } from '@/utils/component';
 
 class ScratchTicket extends (HTMLElementSSR()!) {
   scratchTicketContainer: HTMLDivElement;
@@ -15,26 +15,18 @@ class ScratchTicket extends (HTMLElementSSR()!) {
   }
   constructor() {
     super();
-    this._shadowDom = this.shadowRoot || this.attachShadow({ mode: 'closed' });
-    adoptStyles(this._shadowDom, scratchCss);
-
-    let scratchTicketContainer = this._shadowDom.querySelector('.ran-scratch-ticket') as HTMLDivElement | null;
-    let scratchAward = this._shadowDom.querySelector('.ran-scratch-ticket-award') as HTMLDivElement | null;
-    let scratchTicket = this._shadowDom.querySelector('.ran-scratch-ticket-canvas') as HTMLCanvasElement | null;
-
-    if (!scratchTicketContainer || !scratchAward || !scratchTicket) {
-      scratchTicket = View('canvas')
+    this._shadowDom = ensureShadowRoot(this, scratchCss);
+    const scratchTicketContainer = ensureShadowElement(this._shadowDom, '.ran-scratch-ticket', () => {
+      const scratchTicket = View('canvas')
         .class('ran-scratch-ticket-canvas')
         .style('width', '100%')
         .style('height', '100%')
         .build() as HTMLCanvasElement;
-      scratchAward = Div().class('ran-scratch-ticket-award').build() as HTMLDivElement;
-      scratchTicketContainer = Div()
-        .class('ran-scratch-ticket')
-        .children(scratchTicket, scratchAward)
-        .build() as HTMLDivElement;
-      this._shadowDom.appendChild(scratchTicketContainer);
-    }
+      const scratchAward = Div().class('ran-scratch-ticket-award').build() as HTMLDivElement;
+      return Div().class('ran-scratch-ticket').children(scratchTicket, scratchAward).build() as HTMLDivElement;
+    });
+    const scratchAward = scratchTicketContainer.querySelector('.ran-scratch-ticket-award') as HTMLDivElement;
+    const scratchTicket = scratchTicketContainer.querySelector('.ran-scratch-ticket-canvas') as HTMLCanvasElement;
 
     this.scratchTicketContainer = scratchTicketContainer;
     this.scratchAward = scratchAward;

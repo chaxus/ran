@@ -1,8 +1,14 @@
 import iconCss from './index.less?inline';
-import { RanElement, html } from '@/utils/index';
-import { View } from '@/utils/builder';
-import { adoptSheetText, adoptStyles } from '@/utils/style';
+import { RanElement } from '@/utils/index';
+import { Div, View } from '@/utils/builder';
 import { defineSSR } from '@/utils/ssr-registry';
+import {
+  ensureShadowElement,
+  ensureShadowRoot,
+  getStringAttribute,
+  setStringAttribute,
+  syncSheetAttribute,
+} from '@/utils/component';
 
 const isDev = import.meta.env.DEV;
 const iconSvgCache = new Map<string, string>();
@@ -79,33 +85,27 @@ export class Icon extends RanElement {
 
   constructor() {
     super();
-    this._shadowDom = this.shadowRoot || this.attachShadow({ mode: 'closed' });
-    adoptStyles(this._shadowDom, iconCss);
-
-    // Rehydration safe: check if content already exists
-    let div = this._shadowDom.querySelector('.ran-icon') as HTMLElement;
-    if (!div) {
-      const fragment = html` <div class="ran-icon" part="ran-icon"></div> `;
-      this._shadowDom.appendChild(fragment);
-      div = this._shadowDom.querySelector('.ran-icon')!;
-    }
+    this._shadowDom = ensureShadowRoot(this, iconCss);
+    const div = ensureShadowElement(this._shadowDom, '.ran-icon', () =>
+      Div().class('ran-icon').part('ran-icon').build(),
+    );
     this._div = div;
   }
 
   get name(): string {
-    return this.getAttribute('name') || '';
+    return getStringAttribute(this, 'name');
   }
   set name(value: string) {
     if (value) this.setAttribute('name', value);
   }
   get size(): string {
-    return this.getAttribute('size') || '';
+    return getStringAttribute(this, 'size');
   }
   set size(value: string) {
     if (value) this.setAttribute('size', value);
   }
   get color(): string {
-    return this.getAttribute('color') || '';
+    return getStringAttribute(this, 'color');
   }
   set color(value: string) {
     if (value) this.setAttribute('color', value);
@@ -128,27 +128,22 @@ export class Icon extends RanElement {
   }
 
   get ariaLabel(): string {
-    return this.getAttribute('aria-label') || '';
+    return getStringAttribute(this, 'aria-label');
   }
   set ariaLabel(value: string) {
-    if (!value) {
-      this.removeAttribute('aria-label');
-      return;
-    }
-    this.setAttribute('aria-label', value);
+    setStringAttribute(this, 'aria-label', value, { removeEmpty: true });
   }
 
   get sheet(): string {
-    return this.getAttribute('sheet') || '';
+    return getStringAttribute(this, 'sheet');
   }
 
   set sheet(value: string) {
-    this.setAttribute('sheet', value || '');
+    setStringAttribute(this, 'sheet', value);
   }
 
   handlerExternalCss = (): void => {
-    if (!this.sheet) return;
-    adoptSheetText(this._shadowDom, this.sheet);
+    syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
   };
 
   syncA11y = (): void => {

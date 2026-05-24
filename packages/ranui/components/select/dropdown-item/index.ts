@@ -1,9 +1,15 @@
 import { addClassToElement, removeClassToElement } from 'ranuts/utils';
 import less from './index.less?inline';
 import { Div, Slot } from '@/utils/builder';
-import { adoptSheetText, adoptStyles } from '@/utils/style';
 import { HTMLElementSSR, createCustomError, isDisabled } from '@/utils/index';
 import { defineSSR } from '@/utils/ssr-registry';
+import {
+  ensureShadowElement,
+  ensureShadowRoot,
+  getStringAttribute,
+  setStringAttribute,
+  syncSheetAttribute,
+} from '@/utils/component';
 
 export class DropdownItem extends (HTMLElementSSR()!) {
   ionDropdownItem: HTMLElement;
@@ -15,36 +21,31 @@ export class DropdownItem extends (HTMLElementSSR()!) {
   }
   constructor() {
     super();
-    this._shadowDom = this.shadowRoot || this.attachShadow({ mode: 'closed' });
-    adoptStyles(this._shadowDom, less);
-
-    let ionDropdownItem = this._shadowDom.querySelector('.ranui-dropdown-option-item') as HTMLDivElement | null;
-    let ionDropdownItemContent = this._shadowDom.querySelector(
-      '.ranui-dropdown-option-item-content',
-    ) as HTMLDivElement | null;
-    let slot = this._shadowDom.querySelector('slot') as HTMLSlotElement | null;
-
-    if (!ionDropdownItem || !ionDropdownItemContent || !slot) {
-      slot = Slot().class('slot').build() as HTMLSlotElement;
-      ionDropdownItemContent = Div()
+    this._shadowDom = ensureShadowRoot(this, less);
+    const ionDropdownItem = ensureShadowElement(this._shadowDom, '.ranui-dropdown-option-item', () => {
+      const slot = Slot().class('slot').build() as HTMLSlotElement;
+      const ionDropdownItemContent = Div()
         .class('ranui-dropdown-option-item-content')
         .part('content')
         .children(slot)
         .build() as HTMLDivElement;
-      ionDropdownItem = Div()
+      return Div()
         .class('ranui-dropdown-option-item')
         .part('item')
         .children(ionDropdownItemContent)
         .build() as HTMLDivElement;
-      this._shadowDom.appendChild(ionDropdownItem);
-    }
+    });
+    const ionDropdownItemContent = ionDropdownItem.querySelector(
+      '.ranui-dropdown-option-item-content',
+    ) as HTMLDivElement;
+    const slot = ionDropdownItem.querySelector('slot') as HTMLSlotElement;
 
     this._slot = slot as any;
     this.ionDropdownItemContent = ionDropdownItemContent as any;
     this.ionDropdownItem = ionDropdownItem as any;
   }
   get value(): string {
-    return this.getAttribute('value') || '';
+    return getStringAttribute(this, 'value');
   }
   set value(value: string) {
     if (!isDisabled(this) && value) {
@@ -54,7 +55,7 @@ export class DropdownItem extends (HTMLElementSSR()!) {
     }
   }
   get active(): string {
-    return this.getAttribute('active') || '';
+    return getStringAttribute(this, 'active');
   }
   set active(value: string) {
     if (value) {
@@ -64,7 +65,7 @@ export class DropdownItem extends (HTMLElementSSR()!) {
     }
   }
   get title(): string {
-    return this.getAttribute('title') || '';
+    return getStringAttribute(this, 'title');
   }
   set title(value: string) {
     if (value) {
@@ -74,14 +75,13 @@ export class DropdownItem extends (HTMLElementSSR()!) {
     }
   }
   get sheet(): string {
-    return this.getAttribute('sheet') || '';
+    return getStringAttribute(this, 'sheet');
   }
   set sheet(value: string) {
-    this.setAttribute('sheet', value || '');
+    setStringAttribute(this, 'sheet', value);
   }
   handlerExternalCss = (): void => {
-    if (!this.sheet) return;
-    adoptSheetText(this._shadowDom, this.sheet);
+    syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
   };
   connectedCallback(): void {
     this.handlerExternalCss();

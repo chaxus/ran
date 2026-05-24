@@ -1,7 +1,13 @@
 import { getPixelRatio } from 'ranuts/utils';
 import radarCss from './index.less?inline';
 import { Div, RanElement, View, createCustomError } from '@/utils/index';
-import { adoptSheetText, adoptStyles } from '@/utils/style';
+import {
+  ensureShadowElement,
+  ensureShadowRoot,
+  getStringAttribute,
+  setStringAttribute,
+  syncSheetAttribute,
+} from '@/utils/component';
 
 interface AbilityTags {
   abilityName: string;
@@ -39,17 +45,17 @@ function Custom() {
       resizeObserver: ResizeObserver;
       constructor() {
         super();
-        this._shadowDom = this.shadowRoot || this.attachShadow({ mode: 'closed' });
-        adoptStyles(this._shadowDom, radarCss);
-
-        let container = this._shadowDom.querySelector('.ran-radar') as HTMLDivElement | null;
-        let radarChart = this._shadowDom.querySelector('canvas') as HTMLCanvasElement | null;
-
-        if (!container || !radarChart) {
-          radarChart = View('canvas').build() as HTMLCanvasElement;
-          container = Div().class('ran-radar').children(radarChart).build() as HTMLDivElement;
-          this._shadowDom.appendChild(container);
-        }
+        this._shadowDom = ensureShadowRoot(this, radarCss);
+        const container = ensureShadowElement(
+          this._shadowDom,
+          '.ran-radar',
+          () =>
+            Div()
+              .class('ran-radar')
+              .children(View('canvas').build() as HTMLCanvasElement)
+              .build() as HTMLDivElement,
+        );
+        const radarChart = container.querySelector('canvas') as HTMLCanvasElement;
 
         this.abilityRadarChartContainer = container;
         this.abilityRadarChart = radarChart;
@@ -108,14 +114,13 @@ function Custom() {
         this.setAttribute('strokeColor', value || STROKE_COLOR);
       }
       get sheet() {
-        return this.getAttribute('sheet') || '';
+        return getStringAttribute(this, 'sheet');
       }
       set sheet(value) {
-        this.setAttribute('sheet', value || '');
+        setStringAttribute(this, 'sheet', value);
       }
       handlerExternalCss = (): void => {
-        if (!this.sheet) return;
-        adoptSheetText(this._shadowDom, this.sheet);
+        syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
       };
       refreshData() {
         const ctx = this.abilityRadarChart.getContext('2d');
