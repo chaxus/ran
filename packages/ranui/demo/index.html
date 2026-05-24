@@ -4,1931 +4,532 @@
     <link rel="icon" href="data:;" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ranui — Component Examples</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Caveat:wght@400;600;700&family=Patrick+Hand&display=swap" rel="stylesheet" />
+    <title>ranui — Web Components UI Library</title>
     <script type="module" src="./index.ts"></script>
     <style>
-      /* ================================================================
-         Design tokens — warm neutral palette
-      ================================================================ */
       :root {
-        --c-bg:           #f7f6f3;
-        --c-surface:      #ffffff;
-        --c-surface-2:    #f2ede8;
-        --c-border:       #e5dfd7;
-        --c-border-2:     #cfc9c0;
-        --c-text:         #181714;
-        --c-text-2:       #6b6860;
-        --c-text-3:       #9e9a92;
-        --c-brand:        #d06040;
-        --c-brand-bg:     #fdf0ea;
-        --c-brand-border: #f2bda5;
-        --c-blue:         #1677ff;
-        --c-shadow-sm:    0 1px 2px rgba(0,0,0,.06), 0 1px 3px rgba(0,0,0,.04);
-        --c-shadow-md:    0 4px 20px rgba(0,0,0,.09), 0 2px 6px rgba(0,0,0,.05);
-        --c-shadow-lg:    0 12px 40px rgba(0,0,0,.12), 0 4px 12px rgba(0,0,0,.06);
-        --c-r:            14px;
+        --page: #f6f8fb;
+        --surface: #ffffff;
+        --surface-2: #eef3f8;
+        --ink: #0f172a;
+        --muted: #607086;
+        --line: #d8e1ec;
+        --accent: #2563eb;
+        --accent-2: #0f766e;
+        --warn: #f59e0b;
+        --shadow: 0 18px 50px rgba(15, 23, 42, 0.12);
       }
 
-      /* ── Dark ─────────────────────────────────────────────────── */
       :root[data-ran-theme='dark'] {
-        --c-bg:           #141311;
-        --c-surface:      #1e1c1a;
-        --c-surface-2:    #272421;
-        --c-border:       #333028;
-        --c-border-2:     #423f38;
-        --c-text:         #ede9e2;
-        --c-text-2:       #9a9690;
-        --c-text-3:       #66635d;
-        --c-brand:        #e8956d;
-        --c-brand-bg:     #2a1e16;
-        --c-brand-border: #532d1d;
-        --c-blue:         #4096ff;
-        --c-shadow-sm:    0 1px 3px rgba(0,0,0,.35), 0 1px 2px rgba(0,0,0,.25);
-        --c-shadow-md:    0 4px 20px rgba(0,0,0,.45), 0 2px 6px rgba(0,0,0,.25);
-        --c-shadow-lg:    0 12px 40px rgba(0,0,0,.55), 0 4px 12px rgba(0,0,0,.3);
+        --page: #0b1120;
+        --surface: #111827;
+        --surface-2: #1f2937;
+        --ink: #e5edf8;
+        --muted: #9aa8bc;
+        --line: #2f3b4f;
+        --accent: #60a5fa;
+        --accent-2: #2dd4bf;
+        --warn: #fbbf24;
+        --shadow: 0 18px 50px rgba(0, 0, 0, 0.36);
       }
-      :root[data-ran-theme='dark'] body { background: var(--c-bg); }
 
-      /* ── Pixel Retro ──────────────────────────────────────────── */
       :root[data-ran-theme-pack='pixel-retro'] {
-        --c-bg: #1a1a2e; --c-surface: #16213e; --c-surface-2: #0f3460;
-        --c-border: #1e3a6e; --c-text: #e0e0e0; --c-text-2: #a0a0a0; --c-text-3: #666;
-        --c-brand: #e94560; --c-brand-bg: #2a1520; --c-brand-border: #5a1830;
-        --c-shadow-sm: 0 1px 3px rgba(0,0,0,.4); --c-shadow-md: 0 4px 16px rgba(0,0,0,.5);
+        --page: #10172a;
+        --surface: #17213b;
+        --surface-2: #22335d;
+        --ink: #f8fbff;
+        --muted: #a7b4d2;
+        --line: #355088;
+        --accent: #f43f5e;
+        --accent-2: #22d3ee;
       }
-      :root[data-ran-theme-pack='pixel-retro'] body { background: var(--c-bg); }
 
-      /* ── Windows 98 ───────────────────────────────────────────── */
       :root[data-ran-theme-pack='windows-98'] {
-        --c-bg: #c0c0c0; --c-surface: #c0c0c0; --c-surface-2: #d4d0c8;
-        --c-border: #808080; --c-text: #000; --c-text-2: #444; --c-text-3: #888;
-        --c-brand: #000080; --c-brand-bg: #e0e0f0; --c-brand-border: #0000a0;
-        --c-shadow-sm: none; --c-shadow-md: none;
+        --page: #c0c0c0;
+        --surface: #d4d0c8;
+        --surface-2: #ece9d8;
+        --ink: #000000;
+        --muted: #303030;
+        --line: #808080;
+        --accent: #000080;
+        --accent-2: #008080;
+        --shadow: 2px 2px 0 #808080;
       }
-      :root[data-ran-theme-pack='windows-98'] body { background: var(--c-bg); }
 
-      /* ── Windows XP ───────────────────────────────────────────── */
       :root[data-ran-theme-pack='windows-xp'] {
-        --c-bg: #ece9d8; --c-surface: #fff; --c-surface-2: #d4d0c8;
-        --c-border: #c7d5f4; --c-text: #000; --c-text-2: #444; --c-text-3: #888;
-        --c-brand: #003c7a; --c-brand-bg: #e8f0fc; --c-brand-border: #7a96df;
+        --page: #e8eefb;
+        --surface: #ffffff;
+        --surface-2: #eef5ff;
+        --line: #a9c5ee;
+        --accent: #1e5fa8;
+        --accent-2: #3b8f2f;
       }
-      :root[data-ran-theme-pack='windows-xp'] body { background: var(--c-bg); }
 
-      /* ── System 6 ─────────────────────────────────────────────── */
       :root[data-ran-theme-pack='system-6'] {
-        --c-bg: #fff; --c-surface: #fff; --c-surface-2: #f0f0f0;
-        --c-border: #000; --c-text: #000; --c-text-2: #444; --c-text-3: #888;
-        --c-brand: #000; --c-brand-bg: #e0e0e0; --c-brand-border: #000;
-        --c-shadow-sm: none; --c-shadow-md: none;
+        --page: #ffffff;
+        --surface: #ffffff;
+        --surface-2: #eeeeee;
+        --ink: #000000;
+        --muted: #333333;
+        --line: #000000;
+        --accent: #000000;
+        --accent-2: #555555;
+        --shadow: 2px 2px 0 #000000;
       }
-      :root[data-ran-theme-pack='system-6'] body { background: var(--c-bg); }
 
-      /* ── Wired ────────────────────────────────────────────────── */
       :root[data-ran-theme-pack='wired'] {
-        --c-bg: #fafaf8; --c-surface: #fafaf8; --c-surface-2: #f0f0ec;
-        --c-border: #c8c4b4; --c-text: #1a1a1a; --c-text-2: #666; --c-text-3: #999;
-        --c-brand: #2d6a4f; --c-brand-bg: #e8f5f0; --c-brand-border: #95d5b2;
+        --page: #f8faf7;
+        --surface: #ffffff;
+        --surface-2: #eff5ef;
+        --line: #c8d8ca;
+        --accent: #166534;
+        --accent-2: #0f766e;
       }
-      :root[data-ran-theme-pack='wired'] body { background: var(--c-bg); }
 
-      /* ── Paper ────────────────────────────────────────────────── */
       :root[data-ran-theme-pack='paper'] {
-        --c-bg: #fffef5; --c-surface: #fffef5; --c-surface-2: #f5f3e6;
-        --c-border: #d4c9a8; --c-text: #2d2d2d; --c-text-2: #7a7055; --c-text-3: #a09070;
-        --c-brand: #5c4a2a; --c-brand-bg: #f5ece0; --c-brand-border: #c8a96e;
-        --c-shadow-sm: 1px 2px 0 rgba(0,0,0,.1); --c-shadow-md: 3px 4px 0 rgba(0,0,0,.1);
+        --page: #fbfaf3;
+        --surface: #fffdf5;
+        --surface-2: #f2efe1;
+        --ink: #202124;
+        --muted: #6f6756;
+        --line: #d8cfb7;
+        --accent: #7c5c21;
+        --accent-2: #0f766e;
       }
-      :root[data-ran-theme-pack='paper'] body { background: var(--c-bg); }
 
-      /* ── Neo Brutalism ────────────────────────────────────────── */
       :root[data-ran-theme-pack='neo-brutalism'] {
-        --c-bg: #f5f5f5; --c-surface: #fff; --c-surface-2: #ececec;
-        --c-border: #000; --c-text: #000; --c-text-2: #555; --c-text-3: #888;
-        --c-brand: #ff5722; --c-brand-bg: #fff0ec; --c-brand-border: #ff5722;
-        --c-shadow-sm: 2px 2px 0 #000; --c-shadow-md: 4px 4px 0 #000;
+        --page: #f5f5f5;
+        --surface: #ffffff;
+        --surface-2: #eeeeee;
+        --ink: #000000;
+        --muted: #3f3f46;
+        --line: #000000;
+        --accent: #ff4d00;
+        --accent-2: #2563eb;
+        --shadow: 6px 6px 0 #000000;
       }
-      :root[data-ran-theme-pack='neo-brutalism'] body { background: var(--c-bg); }
 
-      /* ================================================================
-         Base
-      ================================================================ */
-      *, *::before, *::after { box-sizing: border-box; }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
 
       body {
         margin: 0;
-        font-family: 'Inter', 'SF Pro Text', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
-        font-size: 14px;
+        min-width: 320px;
+        color: var(--ink);
+        background: var(--page);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-size: 15px;
         line-height: 1.6;
-        color: var(--c-text);
-        background: var(--c-bg);
-        transition: background 200ms ease, color 200ms ease;
         -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
       }
 
-      /* ================================================================
-         Topbar
-      ================================================================ */
-      .topbar {
+      button,
+      a {
+        font: inherit;
+      }
+
+      .site-shell {
+        min-height: 100vh;
+      }
+
+      .site-nav {
         position: sticky;
         top: 0;
-        z-index: 100;
-        display: flex;
+        z-index: 20;
+        border-bottom: 1px solid var(--line);
+        background: color-mix(in srgb, var(--surface) 88%, transparent);
+        backdrop-filter: blur(16px);
+      }
+
+      .nav-inner {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
         align-items: center;
-        gap: 12px;
-        height: 54px;
-        padding: 0 28px;
-        background: color-mix(in srgb, var(--c-surface) 85%, transparent);
-        backdrop-filter: blur(20px) saturate(180%);
-        -webkit-backdrop-filter: blur(20px) saturate(180%);
-        border-bottom: 1px solid var(--c-border);
-        transition: background 200ms, border-color 200ms;
-      }
-      .topbar::after {
-        content: '';
-        position: absolute;
-        bottom: -1px;
-        left: 0;
-        right: 0;
-        height: 1px;
-        background: linear-gradient(
-          90deg,
-          transparent 0%,
-          color-mix(in srgb, var(--c-brand) 40%, transparent) 30%,
-          color-mix(in srgb, var(--c-brand) 40%, transparent) 70%,
-          transparent 100%
-        );
-        pointer-events: none;
-      }
-
-      .topbar-brand {
-        display: flex;
-        align-items: center;
-        gap: 9px;
-        font-weight: 700;
-        font-size: 15px;
-        letter-spacing: -0.4px;
-        color: var(--c-text);
-        text-decoration: none;
-        flex-shrink: 0;
-      }
-
-      .topbar-logo {
-        width: 30px;
-        height: 30px;
-        border-radius: 8px;
-        background: linear-gradient(140deg, var(--c-brand) 0%, color-mix(in srgb, var(--c-brand) 55%, #ff8c44) 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #fff;
-        font-size: 13px;
-        font-weight: 800;
-        letter-spacing: -1px;
-        flex-shrink: 0;
-        box-shadow: 0 2px 8px color-mix(in srgb, var(--c-brand) 40%, transparent);
-      }
-
-      .topbar-version {
-        font-size: 11px;
-        color: var(--c-text-3);
-        font-weight: 500;
-        background: var(--c-surface-2);
-        border: 1px solid var(--c-border);
-        border-radius: 5px;
-        padding: 2px 7px;
-        font-family: 'SF Mono', 'Fira Code', ui-monospace, monospace;
-      }
-
-      .topbar-spacer { flex: 1; }
-
-      .theme-toggle {
-        display: flex;
-        align-items: center;
-        border: 1px solid var(--c-border);
-        border-radius: 9px;
-        overflow: hidden;
-        background: var(--c-surface-2);
-        padding: 2px;
-        gap: 2px;
-      }
-
-      .sw-btn {
-        border: none;
-        background: none;
-        cursor: pointer;
-        padding: 4px 12px;
-        font-size: 12px;
-        font-weight: 500;
-        color: var(--c-text-2);
-        font-family: inherit;
-        transition: background 150ms, color 150ms, box-shadow 150ms;
-        line-height: 1.4;
-        white-space: nowrap;
-        border-radius: 6px;
-      }
-
-      .sw-btn.active {
-        background: var(--c-surface);
-        color: var(--c-text);
-        box-shadow: var(--c-shadow-sm);
-      }
-
-      /* ================================================================
-         Hero
-      ================================================================ */
-      .hero {
-        padding: 24px 28px 0;
-        max-width: 1320px;
+        gap: 20px;
+        width: min(1180px, calc(100% - 40px));
         margin: 0 auto;
+        min-height: 72px;
       }
 
-      .hero-inner {
-        border: 1px solid var(--c-border);
-        border-radius: 22px;
-        background: var(--c-surface);
-        box-shadow: var(--c-shadow-lg);
-        overflow: hidden;
-        position: relative;
-        transition: background 200ms, border-color 200ms, box-shadow 200ms;
-      }
-
-      /* decorative mesh blobs */
-      .hero-inner::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background:
-          radial-gradient(ellipse 55% 60% at 90% -10%, color-mix(in srgb, var(--c-brand) 12%, transparent) 0%, transparent 70%),
-          radial-gradient(ellipse 40% 50% at -5% 110%, color-mix(in srgb, #8b5cf6 8%, transparent) 0%, transparent 65%);
-        pointer-events: none;
-        z-index: 0;
-      }
-
-      .hero-top {
-        position: relative;
-        z-index: 1;
-        padding: 36px 40px 28px;
-        background: linear-gradient(
-          155deg,
-          var(--c-surface) 0%,
-          color-mix(in srgb, var(--c-brand-bg) 30%, var(--c-surface)) 100%
-        );
-        border-bottom: 1px solid var(--c-border);
-        transition: background 200ms, border-color 200ms;
-      }
-
-      .badge {
+      .brand {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
-        font-size: 10.5px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.7px;
-        padding: 4px 10px;
-        border-radius: 999px;
-        border: 1px solid var(--c-brand-border);
-        color: var(--c-brand);
-        background: var(--c-brand-bg);
-        margin-bottom: 18px;
-        font-family: 'SF Mono', 'Fira Code', ui-monospace, monospace;
-      }
-
-      .badge-dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: var(--c-brand);
-        flex-shrink: 0;
-        box-shadow: 0 0 0 2px color-mix(in srgb, var(--c-brand) 25%, transparent);
-        animation: pulse-dot 2.4s ease infinite;
-      }
-      @keyframes pulse-dot {
-        0%, 100% { box-shadow: 0 0 0 2px color-mix(in srgb, var(--c-brand) 25%, transparent); }
-        50%       { box-shadow: 0 0 0 5px color-mix(in srgb, var(--c-brand) 10%, transparent); }
-      }
-
-      .hero-title {
-        margin: 0 0 10px;
-        font-size: 50px;
+        gap: 10px;
+        color: var(--ink);
+        text-decoration: none;
         font-weight: 800;
-        letter-spacing: -2px;
-        line-height: 1.1;
-        color: var(--c-text);
+        letter-spacing: 0;
       }
 
-      .hero-title .grad {
-        background: linear-gradient(
-          135deg,
-          var(--c-brand) 0%,
-          color-mix(in srgb, var(--c-brand) 50%, #f97316) 100%
-        );
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+      .brand-mark {
+        display: grid;
+        place-items: center;
+        width: 34px;
+        height: 34px;
+        border: 1px solid color-mix(in srgb, var(--accent) 36%, var(--line));
+        border-radius: 8px;
+        color: #ffffff;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        box-shadow: 0 8px 24px color-mix(in srgb, var(--accent) 20%, transparent);
+        font-size: 14px;
       }
 
-      .hero-desc {
-        margin: 0;
-        color: var(--c-text-2);
-        font-size: 14.5px;
-        max-width: 480px;
-        line-height: 1.7;
-      }
-
-      .hero-stats {
+      .nav-links {
         display: flex;
-        gap: 12px;
-        margin-top: 28px;
-        padding-top: 0;
-      }
-
-      .stat {
-        display: flex;
-        flex-direction: column;
+        justify-content: center;
         gap: 4px;
-        padding: 14px 20px;
-        background: color-mix(in srgb, var(--c-surface-2) 70%, transparent);
-        border: 1px solid var(--c-border);
-        border-radius: 12px;
-        min-width: 90px;
-        backdrop-filter: blur(8px);
-        transition: border-color 200ms, background 200ms;
+        min-width: 0;
       }
 
-      .stat:hover {
-        border-color: var(--c-brand-border);
-        background: var(--c-brand-bg);
-      }
-
-      .stat-value {
-        font-size: 28px;
-        font-weight: 800;
-        letter-spacing: -1px;
-        color: var(--c-text);
-        line-height: 1;
-      }
-
-      .stat-label {
-        font-size: 10.5px;
-        color: var(--c-text-3);
-        text-transform: uppercase;
-        letter-spacing: 0.6px;
-        font-weight: 600;
-      }
-
-      /* ── Pack selector ─────────────────────────────────────────── */
-      .hero-packs {
-        position: relative;
-        z-index: 1;
-        padding: 18px 40px 20px;
-        transition: background 200ms;
-        border-top: 0;
-      }
-
-      .pack-row-label {
-        font-size: 10.5px;
-        font-weight: 700;
-        color: var(--c-text-3);
-        text-transform: uppercase;
-        letter-spacing: 0.7px;
-        margin-bottom: 12px;
-        font-family: 'SF Mono', 'Fira Code', ui-monospace, monospace;
-      }
-
-      .pack-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 7px;
-      }
-
-      .sw-pack {
+      .nav-links a {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
-        border: 1px solid var(--c-border);
-        border-radius: 10px;
-        background: var(--c-surface);
-        color: var(--c-text-2);
-        font-size: 12px;
-        font-weight: 500;
-        padding: 6px 14px;
-        cursor: pointer;
-        font-family: inherit;
-        transition: all 160ms ease;
+        min-height: 38px;
+        padding: 0 12px;
+        border-radius: 8px;
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 650;
         white-space: nowrap;
-        box-shadow: var(--c-shadow-sm);
       }
 
-      .sw-pack:hover {
-        border-color: var(--c-brand-border);
-        background: var(--c-brand-bg);
-        color: var(--c-brand);
-        transform: translateY(-1px);
-        box-shadow: var(--c-shadow-md);
+      .nav-links a:hover {
+        color: var(--ink);
+        background: var(--surface-2);
       }
 
-      .sw-pack.active {
-        border-color: var(--c-brand);
-        background: var(--c-brand);
-        color: #fff;
-        box-shadow: 0 3px 12px color-mix(in srgb, var(--c-brand) 40%, transparent);
-        transform: translateY(-1px);
+      .nav-controls {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 10px;
+        min-width: 0;
       }
 
-      .swatch {
-        width: 14px;
-        height: 14px;
-        border-radius: 50%;
-        flex-shrink: 0;
-        border: 1.5px solid rgba(255,255,255,.4);
-        box-shadow: 0 1px 3px rgba(0,0,0,.2);
-      }
-      .sw-pack.active .swatch {
-        border-color: rgba(255,255,255,.6);
+      .segmented,
+      .pack-list {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: var(--surface-2);
       }
 
-      /* ================================================================
-         Jump nav
-      ================================================================ */
-      .jump-nav {
-        position: sticky;
-        top: 54px;
-        z-index: 90;
-        background: color-mix(in srgb, var(--c-bg) 92%, transparent);
-        backdrop-filter: blur(12px) saturate(150%);
-        -webkit-backdrop-filter: blur(12px) saturate(150%);
-        border-bottom: 1px solid var(--c-border);
-        padding: 0 28px;
+      .pack-list {
+        max-width: 430px;
         overflow-x: auto;
         scrollbar-width: none;
-        transition: background 200ms, border-color 200ms;
-      }
-      .jump-nav::-webkit-scrollbar { display: none; }
-
-      .jump-nav-inner {
-        max-width: 1320px;
-        margin: 0 auto;
-        display: flex;
-        gap: 2px;
-        padding: 6px 0;
       }
 
-      .jump-nav a {
-        display: block;
-        padding: 5px 10px;
-        font-size: 11.5px;
-        font-weight: 500;
-        color: var(--c-text-3);
-        text-decoration: none;
-        white-space: nowrap;
-        border-radius: 6px;
-        transition: color 140ms, background 140ms;
-        font-family: 'SF Mono', 'Fira Code', ui-monospace, monospace;
+      .pack-list::-webkit-scrollbar {
+        display: none;
       }
 
-      .jump-nav a:hover {
-        color: var(--c-text);
-        background: var(--c-surface-2);
-      }
-
-      /* ================================================================
-         Content grid
-      ================================================================ */
-      .content {
-        max-width: 1320px;
-        margin: 0 auto;
-        padding: 22px 28px 80px;
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 16px;
-      }
-
-      @media (max-width: 860px) {
-        .content { grid-template-columns: 1fr; }
-        .section.span-2 { grid-column: span 1 !important; }
-      }
-
-      /* ================================================================
-         Section cards
-      ================================================================ */
-      .section {
-        --accent: var(--c-brand);
-        border: 1px solid var(--c-border);
-        border-radius: var(--c-r);
-        background: var(--c-surface);
-        box-shadow: var(--c-shadow-sm);
-        overflow: hidden;
-        transition: background 200ms, border-color 200ms, box-shadow 200ms, transform 200ms;
-        position: relative;
-      }
-
-      .section::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 3px;
-        background: var(--accent);
-        opacity: 0.7;
-        z-index: 1;
-        transition: opacity 200ms, height 200ms;
-      }
-
-      .section:hover {
-        box-shadow: var(--c-shadow-md);
-        transform: translateY(-2px);
-        border-color: var(--c-border-2);
-      }
-
-      .section:hover::before {
-        opacity: 1;
-        height: 3px;
-      }
-
-      .section.span-2 { grid-column: span 2; }
-
-      .section-head {
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 8px;
-        padding: 14px 20px 12px;
-        border-bottom: 1px solid var(--c-border);
-        background: linear-gradient(
-          135deg,
-          var(--c-surface-2) 0%,
-          color-mix(in srgb, var(--c-surface-2) 60%, var(--c-surface)) 100%
-        );
-        transition: background 200ms, border-color 200ms;
-      }
-
-      .section-head h2 {
-        margin: 0;
-        font-size: 13px;
-        font-weight: 700;
-        color: var(--c-text);
-        letter-spacing: -0.2px;
-        line-height: 1.3;
-      }
-
-      .section-tag {
-        font-size: 10.5px;
-        font-family: 'SF Mono', 'Fira Code', ui-monospace, monospace;
-        color: var(--accent);
-        background: color-mix(in srgb, var(--accent) 8%, transparent);
-        border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
-        border-radius: 5px;
-        padding: 2px 7px;
-        font-weight: 500;
-        transition: color 200ms, background 200ms, border-color 200ms;
-      }
-
-      .section-note {
-        font-size: 11px;
-        color: var(--c-text-3);
-        margin: 0;
-        flex-basis: 100%;
-        line-height: 1.5;
-      }
-
-      .section-body {
-        padding: 18px 20px;
-      }
-
-      /* ================================================================
-         Demo helpers
-      ================================================================ */
-      .demo-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        align-items: center;
-      }
-
-      .demo-row + .demo-row { margin-top: 12px; }
-
-      .demo-grid {
-        display: grid;
-        gap: 12px;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      }
-
-      .box {
-        border: 1px dashed var(--c-border-2);
-        border-radius: 10px;
-        padding: 14px;
-        min-height: 54px;
-        display: flex;
-        align-items: center;
-        background: color-mix(in srgb, var(--c-surface-2) 40%, transparent);
-        transition: border-color 200ms, background 200ms;
-      }
-
-      .box:hover {
-        border-color: var(--c-border-2);
-        background: var(--c-surface-2);
-      }
-
-      .section-note-inline {
-        font-size: 12px;
-        color: var(--c-text-3);
-        margin: 0 0 10px;
-      }
-
-      #popup-root { position: relative; min-height: 0; }
-
-      /* ================================================================
-         Responsive
-      ================================================================ */
-      @media (max-width: 768px) {
-        .topbar { padding: 0 18px; height: 50px; }
-        .topbar-version { display: none; }
-        .hero { padding: 14px 16px 0; }
-        .hero-top { padding: 24px 22px 20px; }
-        .hero-title { font-size: 32px; letter-spacing: -1.5px; }
-        .hero-stats { gap: 10px; flex-wrap: wrap; }
-        .stat { padding: 12px 16px; }
-        .hero-packs { padding: 14px 22px 18px; }
-        .jump-nav { padding: 0 18px; }
-        .jump-nav-inner { padding: 4px 0; }
-        .content { padding: 16px 16px 56px; gap: 12px; }
-      }
-
-      /* suppress default accent bar + hover lift for all themed packs */
-      :root[data-ran-theme-pack] .section::before { display: none; }
-      :root[data-ran-theme-pack] .section:hover { transform: none; }
-      :root[data-ran-theme-pack] .topbar::after { display: none; }
-      :root[data-ran-theme-pack] .badge-dot { animation: none; }
-
-      /* ================================================================
-         PER-PACK SHELL OVERRIDES
-         Each pack overrides the shell's visual language, not just colors.
-      ================================================================ */
-
-      /* ── PIXEL RETRO — NES / Game Cartridge ──────────────────── */
-      :root[data-ran-theme-pack='pixel-retro'] body {
-        font-family: 'Press Start 2P', monospace;
-        font-size: 8px;
-        background: #0f0f23;
-        background-image: repeating-linear-gradient(
-          0deg, rgba(0,0,0,0.15) 0px, transparent 1px, transparent 4px
-        );
-        image-rendering: pixelated;
-      }
-      :root[data-ran-theme-pack='pixel-retro'] .topbar {
-        background: #0f0f23;
-        border-bottom: 3px solid #e94560;
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
-      }
-      :root[data-ran-theme-pack='pixel-retro'] .topbar-logo {
-        background: #e94560;
-        border-radius: 0;
-      }
-      :root[data-ran-theme-pack='pixel-retro'] .topbar-brand,
-      :root[data-ran-theme-pack='pixel-retro'] .topbar-version {
-        font-family: 'Press Start 2P', monospace;
-        font-size: 8px;
-        letter-spacing: 0;
-      }
-      :root[data-ran-theme-pack='pixel-retro'] .hero-inner {
-        border-radius: 0;
-        box-shadow: 6px 6px 0 #e94560;
-        border: 3px solid #e94560;
-      }
-      :root[data-ran-theme-pack='pixel-retro'] .hero-top {
-        background: #16213e;
-        border-radius: 0;
-        border-bottom: 3px solid #e94560;
-      }
-      :root[data-ran-theme-pack='pixel-retro'] .hero-packs {
-        background: #16213e;
-        border-radius: 0;
-      }
-      :root[data-ran-theme-pack='pixel-retro'] .hero-title {
-        font-family: 'Press Start 2P', monospace;
-        font-size: 14px;
-        line-height: 2;
-        letter-spacing: 0;
-      }
-      :root[data-ran-theme-pack='pixel-retro'] .hero-desc,
-      :root[data-ran-theme-pack='pixel-retro'] .stat-label,
-      :root[data-ran-theme-pack='pixel-retro'] .pack-row-label {
-        font-size: 7px;
-        line-height: 2;
-        letter-spacing: 0;
-      }
-      :root[data-ran-theme-pack='pixel-retro'] .stat-value {
-        font-family: 'Press Start 2P', monospace;
-        font-size: 18px;
-      }
-      :root[data-ran-theme-pack='pixel-retro'] .jump-nav {
-        background: #0f0f23;
-        border-bottom: 2px solid #e94560;
-        backdrop-filter: none;
-      }
-      :root[data-ran-theme-pack='pixel-retro'] .jump-nav a {
-        font-family: 'Press Start 2P', monospace;
-        font-size: 7px;
-        color: #4cc9f0;
-        letter-spacing: 0;
-      }
-      :root[data-ran-theme-pack='pixel-retro'] .jump-nav a:hover { color: #e94560; }
-      :root[data-ran-theme-pack='pixel-retro'] .section {
-        border: 3px solid #e94560;
-        border-radius: 0;
-        box-shadow: 5px 5px 0 #e94560;
-      }
-      :root[data-ran-theme-pack='pixel-retro'] .section-head {
-        background: #e94560;
-        border-bottom: 3px solid #b8183a;
-        border-radius: 0;
-      }
-      :root[data-ran-theme-pack='pixel-retro'] .section-head h2 {
-        font-family: 'Press Start 2P', monospace;
-        font-size: 8px;
-        color: #fff;
-        letter-spacing: 0;
-      }
-      :root[data-ran-theme-pack='pixel-retro'] .section-tag {
-        font-family: 'Press Start 2P', monospace;
-        font-size: 6px;
-        background: #0f0f23;
-        color: #4cc9f0;
-        border-color: #4cc9f0;
-        border-radius: 0;
-        letter-spacing: 0;
-      }
-      :root[data-ran-theme-pack='pixel-retro'] .badge {
-        background: transparent;
-        border-color: #e94560;
-        color: #e94560;
-        border-radius: 0;
-        font-family: 'Press Start 2P', monospace;
-        font-size: 6px;
-      }
-
-      /* ── WINDOWS 98 — Classic Win32 UI ───────────────────────── */
-      :root[data-ran-theme-pack='windows-98'] body {
-        background: #008080;
-        font-family: 'MS Sans Serif', 'Arial', sans-serif;
-        font-size: 11px;
-      }
-      :root[data-ran-theme-pack='windows-98'] .topbar {
-        background: #c0c0c0;
-        border-bottom: none;
-        box-shadow: inset 0 -2px 0 #808080, inset 0 -3px 0 #000;
-        backdrop-filter: none;
-        height: 44px;
-      }
-      :root[data-ran-theme-pack='windows-98'] .topbar-logo {
-        background: #000080;
-        border-radius: 0;
-        box-shadow: inset -1px -1px 0 #000080, inset 1px 1px 0 #6060c0;
-      }
-      :root[data-ran-theme-pack='windows-98'] .topbar-brand {
-        font-family: 'MS Sans Serif', Arial, sans-serif;
-        font-size: 11px;
-        font-weight: bold;
-      }
-      :root[data-ran-theme-pack='windows-98'] .topbar-version {
-        font-family: 'MS Sans Serif', Arial, sans-serif;
-        font-size: 10px;
-        background: #c0c0c0;
-        border: 1px solid;
-        border-color: #808080 #fff #fff #808080;
-        border-radius: 0;
-      }
-      :root[data-ran-theme-pack='windows-98'] .hero-inner {
-        border-radius: 2px;
-        box-shadow: inset -1px -1px 0 #808080, inset 1px 1px 0 #fff, 2px 2px 0 #000;
-        border: none;
-      }
-      :root[data-ran-theme-pack='windows-98'] .hero-top {
-        background: #c0c0c0;
-        border-bottom: 1px solid #808080;
-        border-radius: 0;
-        padding-top: 0;
-      }
-      :root[data-ran-theme-pack='windows-98'] .hero-top::before {
-        content: 'ranui — Component Examples';
-        display: flex;
-        align-items: center;
-        height: 22px;
-        padding: 0 6px;
-        background: linear-gradient(to right, #000080, #1084d0);
-        color: #fff;
-        font-family: 'MS Sans Serif', Arial, sans-serif;
-        font-size: 11px;
-        font-weight: bold;
-        margin-bottom: 12px;
-      }
-      :root[data-ran-theme-pack='windows-98'] .badge { display: none; }
-      :root[data-ran-theme-pack='windows-98'] .hero-title {
-        font-family: 'MS Sans Serif', Arial, sans-serif;
-        font-size: 16px;
-        letter-spacing: 0;
-      }
-      :root[data-ran-theme-pack='windows-98'] .hero-desc {
-        font-family: 'MS Sans Serif', Arial, sans-serif;
-        font-size: 11px;
-      }
-      :root[data-ran-theme-pack='windows-98'] .hero-packs {
-        background: #c0c0c0;
-      }
-      :root[data-ran-theme-pack='windows-98'] .jump-nav {
-        background: #c0c0c0;
-        border-bottom: 1px solid #808080;
-        backdrop-filter: none;
-      }
-      :root[data-ran-theme-pack='windows-98'] .jump-nav a {
-        font-family: 'MS Sans Serif', Arial, sans-serif;
-        font-size: 11px;
-        color: #000;
-        padding: 6px 8px;
-      }
-      :root[data-ran-theme-pack='windows-98'] .jump-nav a:hover {
-        background: #000080;
-        color: #fff;
-        border-bottom-color: transparent;
-      }
-      :root[data-ran-theme-pack='windows-98'] .section {
-        border: none;
-        border-radius: 2px;
-        box-shadow: inset -1px -1px 0 #808080, inset 1px 1px 0 #fff, 2px 2px 0 #000;
-      }
-      :root[data-ran-theme-pack='windows-98'] .section-head {
-        background: linear-gradient(to right, #000080, #1084d0);
-        border-bottom: none;
-        border-radius: 0;
-        padding: 3px 6px;
-        gap: 4px;
-      }
-      :root[data-ran-theme-pack='windows-98'] .section-head::after {
-        content: '✕';
-        display: flex;
+      .seg-btn,
+      .pack-chip {
+        display: inline-flex;
         align-items: center;
         justify-content: center;
-        flex-shrink: 0;
-        width: 16px;
-        height: 14px;
-        background: #c0c0c0;
-        box-shadow: inset -1px -1px 0 #808080, inset 1px 1px 0 #fff;
-        color: #000;
-        font-family: Arial, sans-serif;
-        font-size: 11px;
-        font-weight: bold;
-        margin-left: auto;
+        min-height: 30px;
+        border: 0;
+        border-radius: 7px;
+        padding: 0 10px;
+        color: var(--muted);
+        background: transparent;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .seg-btn:hover,
+      .pack-chip:hover {
+        color: var(--ink);
+      }
+
+      .seg-btn.active,
+      .pack-chip.active {
+        color: var(--ink);
+        background: var(--surface);
+        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
+      }
+
+      .intro {
+        width: min(1180px, calc(100% - 40px));
+        margin: 0 auto;
+        padding: 68px 0 40px;
+      }
+
+      .intro-kicker {
+        margin: 0 0 14px;
+        color: var(--accent-2);
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .intro h1 {
+        max-width: 820px;
+        margin: 0;
+        color: var(--ink);
+        font-size: clamp(38px, 6vw, 72px);
         line-height: 1;
-      }
-      :root[data-ran-theme-pack='windows-98'] .section-head h2 {
-        font-family: 'MS Sans Serif', Arial, sans-serif;
-        font-size: 11px;
-        font-weight: bold;
-        color: #fff;
-      }
-      :root[data-ran-theme-pack='windows-98'] .section-tag {
-        font-family: 'MS Sans Serif', Arial, sans-serif;
-        font-size: 10px;
-        background: transparent;
-        color: rgba(255,255,255,.75);
-        border-color: rgba(255,255,255,.4);
-        border-radius: 0;
-      }
-      :root[data-ran-theme-pack='windows-98'] .section-body {
-        background: #c0c0c0;
-      }
-      :root[data-ran-theme-pack='windows-98'] .box {
-        border: 1px solid;
-        border-color: #808080 #fff #fff #808080;
-        background: #fff;
-        border-radius: 0;
-      }
-
-      /* ── WINDOWS XP — Luna theme ─────────────────────────────── */
-      :root[data-ran-theme-pack='windows-xp'] body {
-        background: #3a6ea5;
-        font-family: 'Tahoma', sans-serif;
-        font-size: 11px;
-      }
-      :root[data-ran-theme-pack='windows-xp'] .topbar {
-        background: linear-gradient(to bottom, #2f71cd 0%, #1e5fa8 100%);
-        border-bottom: 2px solid #1045a6;
-        backdrop-filter: none;
-      }
-      :root[data-ran-theme-pack='windows-xp'] .topbar-logo {
-        background: linear-gradient(135deg, #4caf50, #2e7d32);
-        border-radius: 4px;
-        box-shadow: 0 1px 3px rgba(0,0,0,.4);
-      }
-      :root[data-ran-theme-pack='windows-xp'] .topbar-brand,
-      :root[data-ran-theme-pack='windows-xp'] .topbar-version {
-        color: #fff;
-        font-family: Tahoma, sans-serif;
-        font-size: 11px;
-        text-shadow: 1px 1px 2px rgba(0,0,0,.5);
-      }
-      :root[data-ran-theme-pack='windows-xp'] .topbar-version {
-        background: rgba(0,0,0,.2);
-        border-color: rgba(255,255,255,.3);
-      }
-      :root[data-ran-theme-pack='windows-xp'] .hero-inner {
-        border-radius: 6px 6px 4px 4px;
-        box-shadow: 0 4px 16px rgba(0,0,0,.4);
-        border: none;
-      }
-      :root[data-ran-theme-pack='windows-xp'] .hero-top {
-        background: #ece9d8;
-        border-bottom: 1px solid #c7d5f4;
-        border-radius: 0;
-        padding-top: 0;
-      }
-      :root[data-ran-theme-pack='windows-xp'] .hero-top::before {
-        content: '🪟  ranui — Component Examples';
-        display: flex;
-        align-items: center;
-        height: 28px;
-        padding: 0 8px;
-        background: linear-gradient(to bottom, #0a246a 0%, #3e88e0 50%, #1e5fa8 100%);
-        color: #fff;
-        font-family: Tahoma, sans-serif;
-        font-size: 11px;
-        font-weight: bold;
-        text-shadow: 1px 1px 2px rgba(0,0,0,.5);
-        border-radius: 4px 4px 0 0;
-        margin-bottom: 14px;
-      }
-      :root[data-ran-theme-pack='windows-xp'] .hero-title {
-        font-family: Tahoma, sans-serif;
-        font-size: 18px;
         letter-spacing: 0;
       }
-      :root[data-ran-theme-pack='windows-xp'] .hero-packs {
-        background: #ece9d8;
-      }
-      :root[data-ran-theme-pack='windows-xp'] .jump-nav {
-        background: #ece9d8;
-        border-bottom: 1px solid #c7d5f4;
-        backdrop-filter: none;
-      }
-      :root[data-ran-theme-pack='windows-xp'] .jump-nav a {
-        font-family: Tahoma, sans-serif;
-        font-size: 11px;
-        color: #003c7a;
-      }
-      :root[data-ran-theme-pack='windows-xp'] .section {
-        border-radius: 4px 4px 3px 3px;
-        box-shadow: 0 2px 8px rgba(0,0,0,.25);
-        border: none;
-      }
-      :root[data-ran-theme-pack='windows-xp'] .section-head {
-        background: linear-gradient(to bottom, #0a246a 0%, #3e88e0 50%, #1e5fa8 100%);
-        border-bottom: none;
-        border-radius: 3px 3px 0 0;
-        padding: 4px 8px;
-      }
-      :root[data-ran-theme-pack='windows-xp'] .section-head h2 {
-        font-family: Tahoma, sans-serif;
-        font-size: 11px;
-        font-weight: bold;
-        color: #fff;
-        text-shadow: 1px 1px 2px rgba(0,0,0,.5);
-      }
-      :root[data-ran-theme-pack='windows-xp'] .section-tag {
-        font-family: Tahoma, sans-serif;
-        font-size: 10px;
-        background: transparent;
-        color: rgba(255,255,255,.8);
-        border-color: rgba(255,255,255,.4);
-        border-radius: 3px;
-      }
-      :root[data-ran-theme-pack='windows-xp'] .section-body {
-        background: #fff;
+
+      .intro-copy {
+        max-width: 660px;
+        margin: 22px 0 0;
+        color: var(--muted);
+        font-size: 18px;
       }
 
-      /* ── SYSTEM 6 — Classic Mac ──────────────────────────────── */
+      .placeholder-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+        width: min(1180px, calc(100% - 40px));
+        margin: 0 auto;
+        padding: 0 0 80px;
+      }
+
+      .placeholder-section {
+        min-height: 190px;
+        scroll-margin-top: 96px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface);
+        box-shadow: var(--shadow);
+        padding: 24px;
+      }
+
+      .placeholder-section:first-child {
+        grid-column: 1 / -1;
+      }
+
+      .placeholder-section h2 {
+        margin: 0 0 10px;
+        font-size: 18px;
+        line-height: 1.25;
+        letter-spacing: 0;
+      }
+
+      .placeholder-section p {
+        max-width: 620px;
+        margin: 0;
+        color: var(--muted);
+      }
+
+      :root[data-ran-theme-pack='windows-98'] .brand-mark,
+      :root[data-ran-theme-pack='system-6'] .brand-mark,
+      :root[data-ran-theme-pack='neo-brutalism'] .brand-mark,
+      :root[data-ran-theme-pack='windows-98'] .seg-btn,
+      :root[data-ran-theme-pack='windows-98'] .pack-chip,
+      :root[data-ran-theme-pack='system-6'] .seg-btn,
+      :root[data-ran-theme-pack='system-6'] .pack-chip,
+      :root[data-ran-theme-pack='neo-brutalism'] .seg-btn,
+      :root[data-ran-theme-pack='neo-brutalism'] .pack-chip,
+      :root[data-ran-theme-pack='windows-98'] .placeholder-section,
+      :root[data-ran-theme-pack='system-6'] .placeholder-section,
+      :root[data-ran-theme-pack='neo-brutalism'] .placeholder-section {
+        border-radius: 0;
+      }
+
+      :root[data-ran-theme-pack='pixel-retro'] body {
+        font-family: "SF Mono", "Cascadia Code", ui-monospace, monospace;
+      }
+
       :root[data-ran-theme-pack='system-6'] body {
-        font-family: 'Chicago', 'Monaco', monospace;
-        font-size: 12px;
-        background: #fff;
-      }
-      :root[data-ran-theme-pack='system-6'] .topbar {
-        background: #fff;
-        border-bottom: 1px solid #000;
-        backdrop-filter: none;
-        height: 20px;
-        padding: 0 8px;
-      }
-      :root[data-ran-theme-pack='system-6'] .topbar-logo {
-        width: 16px;
-        height: 16px;
-        border-radius: 0;
-        background: #000;
-        font-size: 10px;
-        font-family: monospace;
-        font-weight: bold;
-      }
-      :root[data-ran-theme-pack='system-6'] .topbar-brand {
-        font-family: 'Chicago', monospace;
-        font-size: 12px;
-        font-weight: bold;
-        letter-spacing: 0;
-      }
-      :root[data-ran-theme-pack='system-6'] .topbar-version {
-        font-family: monospace;
-        font-size: 10px;
-        background: #fff;
-        border-color: #000;
-        border-radius: 0;
-      }
-      :root[data-ran-theme-pack='system-6'] .sw-btn {
-        font-family: 'Chicago', monospace;
-        font-size: 11px;
-        border-radius: 0;
-      }
-      :root[data-ran-theme-pack='system-6'] .theme-toggle {
-        border-color: #000;
-        border-radius: 0;
-        background: #fff;
-      }
-      :root[data-ran-theme-pack='system-6'] .sw-btn.active {
-        background: #000;
-        color: #fff;
-        box-shadow: none;
-      }
-      :root[data-ran-theme-pack='system-6'] .hero-inner {
-        border: 1px solid #000;
-        border-radius: 0;
-        box-shadow: 1px 1px 0 #000;
-      }
-      :root[data-ran-theme-pack='system-6'] .hero-top {
-        background: #fff;
-        border-bottom: 1px solid #000;
-        border-radius: 0;
-        padding-top: 0;
-      }
-      :root[data-ran-theme-pack='system-6'] .hero-top::before {
-        content: '';
-        display: block;
-        height: 16px;
-        background: repeating-linear-gradient(
-          to right,
-          #000 0px, #000 1px, #fff 1px, #fff 2px
-        );
-        margin-bottom: 12px;
-      }
-      :root[data-ran-theme-pack='system-6'] .badge { display: none; }
-      :root[data-ran-theme-pack='system-6'] .hero-title {
-        font-family: 'Chicago', monospace;
-        font-size: 20px;
-        letter-spacing: 0;
-        font-weight: bold;
-      }
-      :root[data-ran-theme-pack='system-6'] .hero-title .grad {
-        background: none;
-        -webkit-text-fill-color: #000;
-        color: #000;
-      }
-      :root[data-ran-theme-pack='system-6'] .hero-packs { background: #fff; }
-      :root[data-ran-theme-pack='system-6'] .jump-nav {
-        background: #fff;
-        border-bottom: 1px solid #000;
-        backdrop-filter: none;
-      }
-      :root[data-ran-theme-pack='system-6'] .jump-nav a {
-        font-family: 'Chicago', monospace;
-        font-size: 11px;
-        color: #000;
-      }
-      :root[data-ran-theme-pack='system-6'] .jump-nav a:hover {
-        background: #000;
-        color: #fff;
-        border-bottom-color: transparent;
-      }
-      :root[data-ran-theme-pack='system-6'] .section {
-        border: 1px solid #000;
-        border-radius: 0;
-        box-shadow: 1px 1px 0 #000;
-      }
-      :root[data-ran-theme-pack='system-6'] .section-head {
-        background: repeating-linear-gradient(
-          to right,
-          #000 0px, #000 1px, #fff 1px, #fff 2px
-        );
-        border-bottom: 1px solid #000;
-        border-radius: 0;
-        padding: 2px 8px;
-        gap: 6px;
-      }
-      :root[data-ran-theme-pack='system-6'] .section-head h2 {
-        background: #fff;
-        color: #000;
-        font-family: 'Chicago', monospace;
-        font-size: 12px;
-        font-weight: bold;
-        padding: 0 4px;
-      }
-      :root[data-ran-theme-pack='system-6'] .section-tag {
-        font-family: monospace;
-        font-size: 10px;
-        background: #fff;
-        color: #000;
-        border-color: #000;
-        border-radius: 0;
-      }
-      :root[data-ran-theme-pack='system-6'] .box {
-        border: 1px solid #000;
-        border-radius: 0;
+        font-family: Chicago, Monaco, ui-monospace, monospace;
       }
 
-      /* ── WIRED — Hand-drawn / Sketchy ────────────────────────── */
-      :root[data-ran-theme-pack='wired'] body {
-        font-family: 'Caveat', cursive;
-        font-size: 16px;
-        background: #fafaf8;
-      }
-      :root[data-ran-theme-pack='wired'] .topbar {
-        background: #fafaf8;
-        border-bottom: 2px solid #1a1a1a;
-        backdrop-filter: none;
-        font-family: 'Caveat', cursive;
-      }
-      :root[data-ran-theme-pack='wired'] .topbar-logo {
-        background: #2d6a4f;
-        border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-      }
-      :root[data-ran-theme-pack='wired'] .topbar-brand {
-        font-family: 'Caveat', cursive;
-        font-size: 20px;
-        font-weight: 700;
-        letter-spacing: 0;
-      }
-      :root[data-ran-theme-pack='wired'] .hero-inner {
-        border: 2px solid #1a1a1a;
-        border-radius: 3px 8px 5px 6px;
-        box-shadow: 4px 5px 0 rgba(0,0,0,.18);
-      }
-      :root[data-ran-theme-pack='wired'] .hero-inner::before {
-        content: '';
-        position: absolute;
-        inset: -5px;
-        border: 1.5px solid #1a1a1a;
-        border-radius: 5px 10px 7px 8px;
-        opacity: 0.3;
-        pointer-events: none;
-      }
-      :root[data-ran-theme-pack='wired'] .hero-top {
-        background: #fafaf8;
-        border-bottom: 2px solid #c8c4b4;
-        border-radius: 0;
-      }
-      :root[data-ran-theme-pack='wired'] .hero-title {
-        font-family: 'Caveat', cursive;
-        font-size: 40px;
-        font-weight: 700;
-        letter-spacing: 0;
-        line-height: 1.2;
-      }
-      :root[data-ran-theme-pack='wired'] .hero-desc {
-        font-family: 'Caveat', cursive;
-        font-size: 16px;
-      }
-      :root[data-ran-theme-pack='wired'] .stat-value {
-        font-family: 'Caveat', cursive;
-        font-size: 32px;
-        font-weight: 700;
-      }
-      :root[data-ran-theme-pack='wired'] .hero-packs {
-        background: #fafaf8;
-      }
-      :root[data-ran-theme-pack='wired'] .jump-nav {
-        background: #fafaf8;
-        border-bottom: 2px solid #1a1a1a;
-        backdrop-filter: none;
-      }
-      :root[data-ran-theme-pack='wired'] .jump-nav a {
-        font-family: 'Caveat', cursive;
-        font-size: 15px;
-        color: #1a1a1a;
-      }
-      :root[data-ran-theme-pack='wired'] .section {
-        position: relative;
-        border: 2px solid #1a1a1a;
-        border-radius: 3px 9px 5px 7px;
-        box-shadow: 3px 4px 0 rgba(0,0,0,.15);
-      }
-      :root[data-ran-theme-pack='wired'] .section::before {
-        content: '';
-        position: absolute;
-        inset: -4px;
-        border: 1.5px solid #1a1a1a;
-        border-radius: 5px 11px 7px 9px;
-        opacity: 0.25;
-        pointer-events: none;
-        z-index: 1;
-      }
-      :root[data-ran-theme-pack='wired'] .section-head {
-        background: #f0f0ec;
-        border-bottom: 2px solid #c8c4b4;
-        border-radius: 0;
-      }
-      :root[data-ran-theme-pack='wired'] .section-head h2 {
-        font-family: 'Caveat', cursive;
-        font-size: 20px;
-        font-weight: 700;
-        color: #1a1a1a;
-      }
-      :root[data-ran-theme-pack='wired'] .section-tag {
-        font-family: 'Caveat', cursive;
-        font-size: 13px;
-        border-radius: 3px 8px 4px 6px;
-      }
-      :root[data-ran-theme-pack='wired'] .box {
-        border: 2px solid #c8c4b4;
-        border-radius: 2px 7px 4px 5px;
+      :root[data-ran-theme-pack='windows-98'] body,
+      :root[data-ran-theme-pack='windows-xp'] body {
+        font-family: Tahoma, Verdana, sans-serif;
       }
 
-      /* ── PAPER — Notebook / Handwritten ─────────────────────── */
       :root[data-ran-theme-pack='paper'] body {
-        font-family: 'Patrick Hand', cursive;
-        font-size: 15px;
-        background: #fffef5;
-        background-image:
-          repeating-linear-gradient(
-            transparent, transparent 27px, #e8e0c8 27px, #e8e0c8 28px
-          );
-        background-attachment: local;
-      }
-      :root[data-ran-theme-pack='paper'] .topbar {
-        background: rgba(255,254,245,.95);
-        border-bottom: 2px solid #c8a96e;
-        backdrop-filter: none;
-        font-family: 'Patrick Hand', cursive;
-      }
-      :root[data-ran-theme-pack='paper'] .topbar-logo {
-        background: #5c4a2a;
-        border-radius: 3px 6px 4px 5px;
-        font-family: 'Patrick Hand', cursive;
-        font-size: 16px;
-        font-weight: bold;
-      }
-      :root[data-ran-theme-pack='paper'] .topbar-brand {
-        font-family: 'Patrick Hand', cursive;
-        font-size: 18px;
-        font-weight: bold;
-        letter-spacing: 0;
-      }
-      :root[data-ran-theme-pack='paper'] .hero-inner {
-        border: 2px solid #c8a96e;
-        border-radius: 4px 8px 5px 6px;
-        box-shadow: 3px 4px 0 rgba(0,0,0,.15);
-        transform: rotate(-0.3deg);
-      }
-      :root[data-ran-theme-pack='paper'] .hero-top {
-        background: #fffef5;
-        border-bottom: 2px dashed #c8a96e;
-        border-radius: 0;
-      }
-      :root[data-ran-theme-pack='paper'] .hero-title {
-        font-family: 'Patrick Hand', cursive;
-        font-size: 36px;
-        letter-spacing: 0;
-        font-weight: bold;
-      }
-      :root[data-ran-theme-pack='paper'] .hero-desc {
-        font-family: 'Patrick Hand', cursive;
-        font-size: 15px;
-      }
-      :root[data-ran-theme-pack='paper'] .stat-value {
-        font-family: 'Patrick Hand', cursive;
-        font-size: 32px;
-        font-weight: bold;
-      }
-      :root[data-ran-theme-pack='paper'] .hero-packs {
-        background: #fffef5;
-      }
-      :root[data-ran-theme-pack='paper'] .jump-nav {
-        background: rgba(255,254,245,.95);
-        border-bottom: 2px solid #c8a96e;
-        backdrop-filter: none;
-      }
-      :root[data-ran-theme-pack='paper'] .jump-nav a {
-        font-family: 'Patrick Hand', cursive;
-        font-size: 14px;
-        color: #5c4a2a;
-      }
-      :root[data-ran-theme-pack='paper'] .section {
-        border: 2px solid #5c4a2a;
-        box-shadow: 3px 4px 0 rgba(0,0,0,.15);
-      }
-      :root[data-ran-theme-pack='paper'] .section:nth-child(odd) {
-        transform: rotate(-0.4deg);
-        border-radius: 4px 8px 5px 6px;
-      }
-      :root[data-ran-theme-pack='paper'] .section:nth-child(even) {
-        transform: rotate(0.3deg);
-        border-radius: 6px 4px 7px 3px;
-      }
-      :root[data-ran-theme-pack='paper'] .section:hover { transform: none; }
-      :root[data-ran-theme-pack='paper'] .section-head {
-        background: #f5ece0;
-        border-bottom: 2px dashed #c8a96e;
-        border-radius: 0;
-      }
-      :root[data-ran-theme-pack='paper'] .section-head h2 {
-        font-family: 'Patrick Hand', cursive;
-        font-size: 18px;
-        font-weight: bold;
-        color: #2d2d2d;
-      }
-      :root[data-ran-theme-pack='paper'] .section-tag {
-        font-family: 'Patrick Hand', cursive;
-        font-size: 13px;
-        border-radius: 3px 7px 4px 5px;
-      }
-      :root[data-ran-theme-pack='paper'] .box {
-        border: 2px dashed #c8a96e;
-        border-radius: 3px 7px 4px 5px;
-        background: #fffef5;
+        font-family: Georgia, "Times New Roman", serif;
       }
 
-      /* ── NEO BRUTALISM ───────────────────────────────────────── */
-      :root[data-ran-theme-pack='neo-brutalism'] body {
-        font-family: system-ui, sans-serif;
-        background: #f5f5f5;
-      }
-      :root[data-ran-theme-pack='neo-brutalism'] .topbar {
-        background: #ff5722;
-        border-bottom: 3px solid #000;
-        backdrop-filter: none;
-      }
-      :root[data-ran-theme-pack='neo-brutalism'] .topbar-logo {
-        background: #000;
-        border-radius: 0;
-        border: 2px solid #fff;
-      }
-      :root[data-ran-theme-pack='neo-brutalism'] .topbar-brand {
-        color: #fff;
-        font-weight: 900;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-      }
-      :root[data-ran-theme-pack='neo-brutalism'] .topbar-version {
-        background: #000;
-        color: #ff5722;
-        border-color: #000;
-        border-radius: 0;
-        font-weight: 700;
-      }
-      :root[data-ran-theme-pack='neo-brutalism'] .sw-btn {
-        border-radius: 0;
-        font-weight: 700;
-        text-transform: uppercase;
-        font-size: 11px;
-        color: #fff;
-      }
-      :root[data-ran-theme-pack='neo-brutalism'] .sw-btn.active {
-        background: #fff;
-        color: #000;
-        box-shadow: none;
-      }
-      :root[data-ran-theme-pack='neo-brutalism'] .theme-toggle {
-        border: 2px solid #fff;
-        border-radius: 0;
-        background: rgba(0,0,0,.2);
-      }
-      :root[data-ran-theme-pack='neo-brutalism'] .hero-inner {
-        border: 3px solid #000;
-        border-radius: 0;
-        box-shadow: 6px 6px 0 #000;
-      }
-      :root[data-ran-theme-pack='neo-brutalism'] .hero-top {
-        background: #fff;
-        border-bottom: 3px solid #000;
-        border-radius: 0;
-      }
-      :root[data-ran-theme-pack='neo-brutalism'] .hero-title {
-        font-size: 36px;
-        font-weight: 900;
-        text-transform: uppercase;
-        letter-spacing: -1px;
-      }
-      :root[data-ran-theme-pack='neo-brutalism'] .badge {
-        background: #ff5722;
-        border-color: #000;
-        color: #fff;
-        border-radius: 0;
+      :root[data-ran-theme-pack='neo-brutalism'] .site-nav,
+      :root[data-ran-theme-pack='neo-brutalism'] .placeholder-section {
         border-width: 2px;
-        font-weight: 900;
       }
-      :root[data-ran-theme-pack='neo-brutalism'] .stat-value {
-        font-weight: 900;
-        font-size: 28px;
+
+      @media (max-width: 980px) {
+        .nav-inner {
+          grid-template-columns: 1fr;
+          align-items: stretch;
+          padding: 14px 0;
+        }
+
+        .nav-links {
+          justify-content: flex-start;
+          overflow-x: auto;
+          scrollbar-width: none;
+        }
+
+        .nav-links::-webkit-scrollbar {
+          display: none;
+        }
+
+        .nav-controls {
+          justify-content: flex-start;
+          overflow: hidden;
+        }
+
+        .placeholder-grid {
+          grid-template-columns: 1fr;
+        }
       }
-      :root[data-ran-theme-pack='neo-brutalism'] .hero-packs {
-        background: #f5f5f5;
-        border-top: 3px solid #000;
-      }
-      :root[data-ran-theme-pack='neo-brutalism'] .jump-nav {
-        background: #f5f5f5;
-        border-bottom: 3px solid #000;
-        backdrop-filter: none;
-      }
-      :root[data-ran-theme-pack='neo-brutalism'] .jump-nav a {
-        font-weight: 700;
-        color: #000;
-        text-transform: uppercase;
-        font-size: 11px;
-        font-family: monospace;
-      }
-      :root[data-ran-theme-pack='neo-brutalism'] .jump-nav a:hover {
-        color: #ff5722;
-        border-bottom-color: #ff5722;
-      }
-      :root[data-ran-theme-pack='neo-brutalism'] .section {
-        border: 3px solid #000;
-        border-radius: 0;
-        box-shadow: 5px 5px 0 #000;
-      }
-      :root[data-ran-theme-pack='neo-brutalism'] .section-head {
-        background: #ff5722;
-        border-bottom: 3px solid #000;
-        border-radius: 0;
-      }
-      :root[data-ran-theme-pack='neo-brutalism'] .section-head h2 {
-        color: #fff;
-        font-weight: 900;
-        font-size: 13px;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-      }
-      :root[data-ran-theme-pack='neo-brutalism'] .section-tag {
-        background: #000;
-        color: #ff5722;
-        border-color: #000;
-        border-radius: 0;
-        font-weight: 700;
-      }
-      :root[data-ran-theme-pack='neo-brutalism'] .section-body {
-        background: #fff;
-      }
-      :root[data-ran-theme-pack='neo-brutalism'] .box {
-        border: 2px solid #000;
-        border-radius: 0;
-        background: #f5f5f5;
+
+      @media (max-width: 620px) {
+        .nav-inner,
+        .intro,
+        .placeholder-grid {
+          width: min(100% - 28px, 1180px);
+        }
+
+        .nav-controls {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .segmented,
+        .pack-list {
+          width: 100%;
+        }
+
+        .intro {
+          padding-top: 44px;
+        }
+
+        .intro h1 {
+          font-size: 38px;
+        }
       }
     </style>
   </head>
-
   <body>
+    <div class="site-shell">
+      <header class="site-nav">
+        <div class="nav-inner">
+          <a class="brand" href="#top" aria-label="ranui home">
+            <span class="brand-mark">r</span>
+            <span>ranui</span>
+          </a>
 
-    <!-- Topbar ─────────────────────────────────────────────────── -->
-    <header class="topbar">
-      <a class="topbar-brand" href="#">
-        <div class="topbar-logo">r</div>
-        ranui
-      </a>
-      <span class="topbar-version">v0.1.10-alpha</span>
-      <div class="topbar-spacer"></div>
-      <div class="theme-toggle">
-        <button class="sw-btn active" data-theme="">Light</button>
-        <button class="sw-btn" data-theme="dark">Dark</button>
-      </div>
-    </header>
+          <nav class="nav-links" aria-label="Demo sections">
+            <a href="#why">Why ranui</a>
+            <a href="#themes">Theme Lab</a>
+            <a href="#components">Components</a>
+            <a href="#code">Code</a>
+            <a href="#style-api">Style API</a>
+          </nav>
 
-    <!-- Hero ────────────────────────────────────────────────────── -->
-    <div class="hero">
-      <div class="hero-inner">
-
-        <div class="hero-top">
-          <div class="badge"><span class="badge-dot"></span>Web Components</div>
-          <h1 class="hero-title"><span class="grad">ranui</span> Component Examples</h1>
-          <p class="hero-desc">All registered components in one place. Switch themes and packs live — every component responds instantly.</p>
-          <div class="hero-stats">
-            <div class="stat">
-              <div class="stat-value">20</div>
-              <div class="stat-label">Components</div>
+          <div class="nav-controls" aria-label="Visual settings">
+            <div class="segmented" aria-label="Theme">
+              <button class="seg-btn active" data-theme="">Light</button>
+              <button class="seg-btn" data-theme="dark">Dark</button>
             </div>
-            <div class="stat">
-              <div class="stat-value">7</div>
-              <div class="stat-label">Theme Packs</div>
-            </div>
-            <div class="stat">
-              <div class="stat-value">2</div>
-              <div class="stat-label">Color Modes</div>
+            <div class="pack-list" aria-label="Theme pack">
+              <button class="pack-chip active" data-pack="">Default</button>
+              <button class="pack-chip" data-pack="pixel-retro">Pixel</button>
+              <button class="pack-chip" data-pack="windows-98">Win 98</button>
+              <button class="pack-chip" data-pack="windows-xp">Win XP</button>
+              <button class="pack-chip" data-pack="system-6">System 6</button>
+              <button class="pack-chip" data-pack="wired">Wired</button>
+              <button class="pack-chip" data-pack="paper">Paper</button>
+              <button class="pack-chip" data-pack="neo-brutalism">Neo</button>
             </div>
           </div>
         </div>
+      </header>
 
-        <div class="hero-packs">
-          <div class="pack-row-label">Theme Pack</div>
-          <div class="pack-row">
-            <button class="sw-pack active" data-pack="">
-              <span class="swatch" style="background:#1677ff"></span>Default
-            </button>
-            <button class="sw-pack" data-pack="pixel-retro">
-              <span class="swatch" style="background:#e94560"></span>Pixel Retro
-            </button>
-            <button class="sw-pack" data-pack="windows-98">
-              <span class="swatch" style="background:#000080"></span>Win 98
-            </button>
-            <button class="sw-pack" data-pack="windows-xp">
-              <span class="swatch" style="background:#3e88e0"></span>Win XP
-            </button>
-            <button class="sw-pack" data-pack="system-6">
-              <span class="swatch" style="background:#000000"></span>System 6
-            </button>
-            <button class="sw-pack" data-pack="wired">
-              <span class="swatch" style="background:#2d6a4f"></span>Wired
-            </button>
-            <button class="sw-pack" data-pack="paper">
-              <span class="swatch" style="background:#c8a96e"></span>Paper
-            </button>
-            <button class="sw-pack" data-pack="neo-brutalism">
-              <span class="swatch" style="background:#ff5722"></span>Neo Brutalism
-            </button>
-          </div>
+      <main id="top">
+        <section class="intro" aria-labelledby="intro-title">
+          <p class="intro-kicker">Framework-neutral Web Components</p>
+          <h1 id="intro-title">ranui is a UI library for product interfaces that need to travel.</h1>
+          <p class="intro-copy">
+            This shell establishes the product-grade visual system for the redesigned demo site. Detailed content sections will be added in follow-up tasks.
+          </p>
+        </section>
+
+        <div class="placeholder-grid" aria-label="Planned sections">
+          <section class="placeholder-section" id="why">
+            <h2>Why ranui</h2>
+            <p>Placeholder for the product rationale section.</p>
+          </section>
+          <section class="placeholder-section" id="themes">
+            <h2>Theme Lab</h2>
+            <p>Placeholder for theme controls and theme-pack previews.</p>
+          </section>
+          <section class="placeholder-section" id="components">
+            <h2>Components</h2>
+            <p>Placeholder for the component gallery.</p>
+          </section>
+          <section class="placeholder-section" id="code">
+            <h2>Code</h2>
+            <p>Placeholder for usage paths and import examples.</p>
+          </section>
+          <section class="placeholder-section" id="style-api">
+            <h2>Style API</h2>
+            <p>Placeholder for token and styling documentation.</p>
+          </section>
         </div>
-
-      </div>
+      </main>
     </div>
-
-    <!-- Jump nav ────────────────────────────────────────────────── -->
-    <nav class="jump-nav">
-      <div class="jump-nav-inner">
-        <a href="#button">button</a>
-        <a href="#icon">icon</a>
-        <a href="#image">image</a>
-        <a href="#input">input</a>
-        <a href="#select">select</a>
-        <a href="#checkbox">checkbox</a>
-        <a href="#progress">progress</a>
-        <a href="#loading">loading</a>
-        <a href="#skeleton">skeleton</a>
-        <a href="#message">message</a>
-        <a href="#tabs">tabs</a>
-        <a href="#popover">popover</a>
-        <a href="#colorpicker">colorpicker</a>
-        <a href="#math">math</a>
-        <a href="#radar">radar</a>
-        <a href="#form">form</a>
-        <a href="#scratch">scratch</a>
-        <a href="#player">player</a>
-        <a href="#modal">modal</a>
-        <a href="#dsd">dsd</a>
-      </div>
-    </nav>
-
-    <!-- Component grid ──────────────────────────────────────────── -->
-    <main class="content">
-
-      <section id="button" class="section" style="--accent:#3b82f6">
-        <div class="section-head">
-          <h2>Button</h2>
-          <span class="section-tag">r-button</span>
-        </div>
-        <div class="section-body">
-          <div class="demo-row">
-            <r-button type="primary">Primary</r-button>
-            <r-button type="warning">Warning</r-button>
-            <r-button type="text">Text</r-button>
-            <r-button disabled>Disabled</r-button>
-            <r-button icon="home">Icon</r-button>
-          </div>
-        </div>
-      </section>
-
-      <section id="icon" class="section" style="--accent:#8b5cf6">
-        <div class="section-head">
-          <h2>Icon</h2>
-          <span class="section-tag">r-icon</span>
-        </div>
-        <div class="section-body">
-          <div class="demo-row">
-            <r-icon name="home" size="32" color="#1677ff"></r-icon>
-            <r-icon name="setting" size="32"></r-icon>
-            <r-icon name="loading" size="32" spin color="#13c2c2"></r-icon>
-          </div>
-        </div>
-      </section>
-
-      <section id="image" class="section span-2" style="--accent:#10b981">
-        <div class="section-head">
-          <h2>Image</h2>
-          <span class="section-tag">r-img</span>
-          <p class="section-note">Second image uses an invalid URL to verify fallback rendering</p>
-        </div>
-        <div class="section-body">
-          <div class="demo-row">
-            <r-img src="https://picsum.photos/220/120" style="width:220px;height:120px;display:block;border-radius:6px"></r-img>
-            <r-img src="https://picsum.photos/220/9999" style="width:220px;height:120px;display:block;border-radius:6px"></r-img>
-          </div>
-        </div>
-      </section>
-
-      <section id="input" class="section" style="--accent:#f59e0b">
-        <div class="section-head">
-          <h2>Input</h2>
-          <span class="section-tag">r-input</span>
-        </div>
-        <div class="section-body">
-          <div class="demo-grid">
-            <div class="box" style="display:block">
-              <r-input label="Username" placeholder="Enter username"></r-input>
-            </div>
-            <div class="box" style="display:block">
-              <r-input label="Password" type="password" icon="lock"></r-input>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="select" class="section" style="--accent:#f59e0b">
-        <div class="section-head">
-          <h2>Select</h2>
-          <span class="section-tag">r-select · r-option</span>
-        </div>
-        <div class="section-body">
-          <div id="popup-root"></div>
-          <div class="demo-row">
-            <r-select style="width:170px" defaultValue="lucy" getPopupContainerId="popup-root" trigger="click">
-              <r-option value="jack">Jack</r-option>
-              <r-option value="lucy">Lucy</r-option>
-              <r-option value="tom">Tom</r-option>
-            </r-select>
-            <r-select style="width:190px" showSearch getPopupContainerId="popup-root" trigger="click">
-              <r-option value="apple">Apple</r-option>
-              <r-option value="banana">Banana</r-option>
-              <r-option value="grape">Grape</r-option>
-              <r-option value="orange">Orange</r-option>
-            </r-select>
-          </div>
-        </div>
-      </section>
-
-      <section id="checkbox" class="section" style="--accent:#f59e0b">
-        <div class="section-head">
-          <h2>Checkbox</h2>
-          <span class="section-tag">r-checkbox</span>
-        </div>
-        <div class="section-body">
-          <div class="demo-row">
-            <r-checkbox checked="true">Checked</r-checkbox>
-            <r-checkbox>Unchecked</r-checkbox>
-            <r-checkbox disabled checked="true">Disabled</r-checkbox>
-          </div>
-        </div>
-      </section>
-
-      <section id="progress" class="section" style="--accent:#3b82f6">
-        <div class="section-head">
-          <h2>Progress</h2>
-          <span class="section-tag">r-progress</span>
-        </div>
-        <div class="section-body">
-          <div class="demo-grid">
-            <div class="box" style="display:block"><r-progress percent="65"></r-progress></div>
-            <div class="box" style="display:block"><r-progress type="drag" percent="30"></r-progress></div>
-          </div>
-        </div>
-      </section>
-
-      <section id="loading" class="section" style="--accent:#ec4899">
-        <div class="section-head">
-          <h2>Loading</h2>
-          <span class="section-tag">r-loading</span>
-        </div>
-        <div class="section-body">
-          <div class="demo-row">
-            <r-loading name="rotate"></r-loading>
-            <r-loading name="stretch"></r-loading>
-            <r-loading name="dot"></r-loading>
-            <r-loading name="circle-line"></r-loading>
-          </div>
-        </div>
-      </section>
-
-      <section id="skeleton" class="section" style="--accent:#ec4899">
-        <div class="section-head">
-          <h2>Skeleton</h2>
-          <span class="section-tag">r-skeleton</span>
-        </div>
-        <div class="section-body">
-          <div class="demo-grid">
-            <div class="box" style="display:block"><r-skeleton></r-skeleton></div>
-            <div class="box" style="display:block"><r-skeleton style="height:24px"></r-skeleton></div>
-          </div>
-        </div>
-      </section>
-
-      <section id="message" class="section" style="--accent:#f97316">
-        <div class="section-head">
-          <h2>Message</h2>
-          <span class="section-tag">r-message · window.message</span>
-        </div>
-        <div class="section-body">
-          <div class="demo-row">
-            <r-button onclick="window.message?.info('Info message')">Info</r-button>
-            <r-button onclick="window.message?.success('Success!')">Success</r-button>
-            <r-button onclick="window.message?.warning('Warning!')">Warning</r-button>
-            <r-button onclick="window.message?.error('Error!')">Error</r-button>
-          </div>
-        </div>
-      </section>
-
-      <section id="tabs" class="section span-2" style="--accent:#6366f1">
-        <div class="section-head">
-          <h2>Tabs</h2>
-          <span class="section-tag">r-tabs · r-tab</span>
-        </div>
-        <div class="section-body">
-          <r-tabs active="overview" align="start" style="width:100%">
-            <r-tab label="Overview" r-key="overview">Overview content</r-tab>
-            <r-tab label="API" r-key="api">API reference content</r-tab>
-            <r-tab label="Disabled" r-key="disabled" disabled>Disabled</r-tab>
-          </r-tabs>
-        </div>
-      </section>
-
-      <section id="popover" class="section" style="--accent:#14b8a6">
-        <div class="section-head">
-          <h2>Popover</h2>
-          <span class="section-tag">r-popover · r-content</span>
-        </div>
-        <div class="section-body">
-          <div class="demo-row">
-            <r-popover placement="top" trigger="hover,click" arrow="true">
-              <r-button>Hover / Click</r-button>
-              <r-content>
-                <div style="padding:8px 12px">Popover content here</div>
-              </r-content>
-            </r-popover>
-          </div>
-        </div>
-      </section>
-
-      <section id="colorpicker" class="section" style="--accent:#14b8a6">
-        <div class="section-head">
-          <h2>Color Picker</h2>
-          <span class="section-tag">r-colorpicker</span>
-        </div>
-        <div class="section-body">
-          <div class="demo-row">
-            <r-colorpicker value="#1677ff"></r-colorpicker>
-            <r-colorpicker value="rgba(255,0,0,0.5)"></r-colorpicker>
-          </div>
-        </div>
-      </section>
-
-      <section id="math" class="section" style="--accent:#a855f7">
-        <div class="section-head">
-          <h2>Math</h2>
-          <span class="section-tag">r-math</span>
-        </div>
-        <div class="section-body">
-          <div class="demo-grid">
-            <div class="box"><r-math latex="E = mc^2"></r-math></div>
-            <div class="box"><r-math latex="x = {-b \pm \sqrt{b^2-4ac} \over 2a}"></r-math></div>
-          </div>
-        </div>
-      </section>
-
-      <section id="radar" class="section" style="--accent:#a855f7">
-        <div class="section-head">
-          <h2>Radar</h2>
-          <span class="section-tag">r-radar</span>
-        </div>
-        <div class="section-body">
-          <div style="max-width:300px;aspect-ratio:1/1">
-            <r-radar style="width:100%;height:100%;display:block"
-              abilitys='[{"abilityName":"Performance","scoreRate":"92"},{"abilityName":"A11y","scoreRate":"83"},{"abilityName":"DX","scoreRate":"75"},{"abilityName":"Stability","scoreRate":"86"},{"abilityName":"Features","scoreRate":"80"}]'>
-            </r-radar>
-          </div>
-        </div>
-      </section>
-
-      <section id="form" class="section span-2" style="--accent:#f59e0b">
-        <div class="section-head">
-          <h2>Form</h2>
-          <span class="section-tag">r-form</span>
-        </div>
-        <div class="section-body">
-          <r-form id="demo-form">
-            <div slot="r-form_content" class="demo-row">
-              <r-input name="name" label="Name" placeholder="Your name"></r-input>
-              <r-input name="email" label="Email" placeholder="Your email"></r-input>
-              <r-button type="primary"
-                onclick="document.getElementById('demo-form')?.shadowRoot?.querySelector('form')?.requestSubmit?.()">
-                Submit
-              </r-button>
-            </div>
-          </r-form>
-        </div>
-      </section>
-
-      <section id="scratch" class="section" style="--accent:#ef4444">
-        <div class="section-head">
-          <h2>Scratch</h2>
-          <span class="section-tag">r-scratch</span>
-        </div>
-        <div class="section-body">
-          <div style="width:280px;height:140px;position:relative;overflow:hidden;border-radius:8px;border:1px solid var(--c-border)">
-            <r-scratch style="width:100%;height:100%"></r-scratch>
-            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:-1;background:var(--c-surface-2);color:var(--c-text-2);font-size:18px;font-weight:700;letter-spacing:2px">
-              WINNER!
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="modal" class="section" style="--accent:#ef4444">
-        <div class="section-head">
-          <h2>Modal</h2>
-          <span class="section-tag">r-modal</span>
-        </div>
-        <div class="section-body">
-          <div class="demo-row">
-            <r-button type="primary"
-              onclick="document.getElementById('demo-modal').setAttribute('open','true')">
-              Open Modal
-            </r-button>
-            <r-modal id="demo-modal" title="Demo Modal">
-              <p>This is a modal content example.</p>
-              <r-button onclick="document.getElementById('demo-modal').removeAttribute('open')">Close</r-button>
-            </r-modal>
-          </div>
-        </div>
-      </section>
-
-      <section id="player" class="section span-2" style="--accent:#0ea5e9">
-        <div class="section-head">
-          <h2>Player</h2>
-          <span class="section-tag">r-player</span>
-          <p class="section-note">HLS live stream — checks media pipeline and playback controls</p>
-        </div>
-        <div class="section-body">
-          <div style="max-width:700px;height:380px">
-            <r-player debug="true" src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"></r-player>
-          </div>
-        </div>
-      </section>
-
-      <section id="dsd" class="section" style="--accent:#6b7280">
-        <div class="section-head">
-          <h2>DSD Rehydration</h2>
-          <span class="section-tag">r-button</span>
-          <p class="section-note">Declarative Shadow DOM — checks rehydration path</p>
-        </div>
-        <div class="section-body">
-          <div class="demo-row">
-            <r-button type="primary">
-              DSD Button
-              <template shadowrootmode="closed">
-                <div class="ran-btn" role="button" tabindex="0">
-                  <div class="ran-btn-content"><slot></slot></div>
-                </div>
-              </template>
-            </r-button>
-          </div>
-        </div>
-      </section>
-
-    </main>
 
     <script>
       (function () {
         var root = document.documentElement;
 
-        document.querySelectorAll('.sw-btn').forEach(function (btn) {
+        document.querySelectorAll('.seg-btn').forEach(function (btn) {
           btn.addEventListener('click', function () {
-            document.querySelectorAll('.sw-btn').forEach(function (b) { b.classList.remove('active'); });
+            document.querySelectorAll('.seg-btn').forEach(function (button) {
+              button.classList.remove('active');
+            });
             btn.classList.add('active');
-            var theme = btn.dataset.theme;
+
+            var theme = btn.getAttribute('data-theme') || '';
             if (theme) {
               root.setAttribute('data-ran-theme', theme);
-              root.setAttribute('theme', theme);
+              localStorage.setItem('ran-theme', theme);
             } else {
               root.removeAttribute('data-ran-theme');
-              root.removeAttribute('theme');
+              localStorage.setItem('ran-theme', 'light');
             }
           });
         });
 
-        document.querySelectorAll('.sw-pack').forEach(function (btn) {
+        document.querySelectorAll('.pack-chip').forEach(function (btn) {
           btn.addEventListener('click', function () {
-            document.querySelectorAll('.sw-pack').forEach(function (b) { b.classList.remove('active'); });
+            document.querySelectorAll('.pack-chip').forEach(function (button) {
+              button.classList.remove('active');
+            });
             btn.classList.add('active');
-            var pack = btn.dataset.pack;
+
+            var pack = btn.getAttribute('data-pack') || '';
             if (pack) {
               root.setAttribute('data-ran-theme-pack', pack);
+              localStorage.setItem('ran-theme-pack', pack);
             } else {
               root.removeAttribute('data-ran-theme-pack');
+              localStorage.removeItem('ran-theme-pack');
             }
           });
         });
