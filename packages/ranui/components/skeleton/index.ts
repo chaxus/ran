@@ -1,6 +1,12 @@
 import skeletonCss from './index.less?inline';
-import { adoptSheetText, adoptStyles } from '@/utils/style';
 import { Div } from '@/utils/builder';
+import {
+  ensureShadowElement,
+  ensureShadowRoot,
+  getStringAttribute,
+  setStringAttribute,
+  syncSheetAttribute,
+} from '@/utils/component';
 
 function Skeleton() {
   if (typeof window !== 'undefined' && !customElements.get('r-skeleton')) {
@@ -12,30 +18,22 @@ function Skeleton() {
       _shadowDom: ShadowRoot;
       constructor() {
         super();
-        this._shadowDom = this.shadowRoot || this.attachShadow({ mode: 'closed' });
-        adoptStyles(this._shadowDom, skeletonCss);
-
-        let div = this._shadowDom.querySelector('.ran-skeleton') as HTMLElement | null;
-        if (!div) {
-          div = Div().class('ran-skeleton').build() as HTMLElement;
-          this._shadowDom.appendChild(div);
-        }
-        this._div = div;
+        this._shadowDom = ensureShadowRoot(this, skeletonCss);
+        this._div = ensureShadowElement(this._shadowDom, '.ran-skeleton', () => Div().class('ran-skeleton').build());
       }
       get sheet() {
-        return this.getAttribute('sheet') || '';
+        return getStringAttribute(this, 'sheet');
       }
       set sheet(value) {
-        this.setAttribute('sheet', value || '');
+        setStringAttribute(this, 'sheet', value);
       }
       handlerExternalCss = (): void => {
-        if (!this.sheet) return;
-        adoptSheetText(this._shadowDom, this.sheet);
+        syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
       };
       connectedCallback(): void {
         this.handlerExternalCss();
       }
-      attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
+      attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
         if (name === 'sheet' && oldValue !== newValue) {
           this.handlerExternalCss();
         }

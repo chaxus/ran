@@ -1,5 +1,5 @@
 import { isSSR } from './env';
-import { HTMLElementMock, ShadowRootMock } from './mocks';
+import { DocumentFragmentMock, HTMLElementMock, ShadowRootMock } from './mocks';
 
 export interface Ref<T extends HTMLElement = HTMLElement> {
   current: T | null;
@@ -40,6 +40,20 @@ export class ElementBuilder<T extends HTMLElement = HTMLElement> {
     return this;
   }
 
+  attrs(values: Record<string, string | number | boolean | null | undefined>): this {
+    Object.entries(values).forEach(([name, value]) => {
+      if (value == null) return;
+      this.el.setAttribute(name, String(value));
+    });
+    return this;
+  }
+
+  boolAttr(name: string, value: boolean, enabledValue = ''): this {
+    if (value) this.el.setAttribute(name, enabledValue);
+    else this.el.removeAttribute(name);
+    return this;
+  }
+
   part(value: string): this {
     this.el.setAttribute('part', value);
     return this;
@@ -56,6 +70,11 @@ export class ElementBuilder<T extends HTMLElement = HTMLElement> {
       Object.entries(keyOrMap).forEach(([k, v]) => this.el.style.setProperty(k, v));
     }
     return this;
+  }
+
+  cssVar(name: string, value: string): this {
+    const property = name.startsWith('--') ? name : `--${name}`;
+    return this.style(property, value);
   }
 
   aria(key: string, value: string): this {
@@ -120,6 +139,25 @@ export class ElementBuilder<T extends HTMLElement = HTMLElement> {
       }
     });
     return this;
+  }
+
+  replaceChildren(
+    ...items: (
+      | HTMLElement
+      | string
+      | ElementBuilder<any>
+      | undefined
+      | null
+      | (HTMLElement | string | ElementBuilder<any> | undefined | null)[]
+    )[]
+  ): this {
+    if (isSSR) {
+      const mock = this.el as unknown as HTMLElementMock | DocumentFragmentMock;
+      mock.childrenList = [];
+    } else {
+      this.el.replaceChildren();
+    }
+    return this.children(...items);
   }
 
   text(value: string): this {

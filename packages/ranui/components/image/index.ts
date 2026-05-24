@@ -1,6 +1,12 @@
 import failImage from '../../assets/image/failImage';
 import { Div } from '@/utils/builder';
-import { adoptSheetText, adoptStyles } from '@/utils/style';
+import {
+  ensureShadowElement,
+  ensureShadowRoot,
+  getStringAttribute,
+  setStringAttribute,
+  syncSheetAttribute,
+} from '@/utils/component';
 import imageCss from './index.less?inline';
 
 function Custom() {
@@ -14,41 +20,30 @@ function Custom() {
       _shadowDom: ShadowRoot;
       constructor() {
         super();
-        this._shadowDom = this.shadowRoot || this.attachShadow({ mode: 'closed' });
-        adoptStyles(this._shadowDom, imageCss);
-
-        let container = this._shadowDom.querySelector('.ran-image') as Element | null;
-        if (!container) {
-          container = Div().class('ran-image').build() as Element;
-          this._shadowDom.appendChild(container);
-        }
+        this._shadowDom = ensureShadowRoot(this, imageCss);
+        const container = ensureShadowElement(this._shadowDom, '.ran-image', () => Div().class('ran-image').build());
         this._container = container;
       }
       get fallback() {
-        return this.getAttribute('fallback') || failImage;
+        return getStringAttribute(this, 'fallback', failImage);
       }
       set fallback(value) {
-        if (value) {
-          this.setAttribute('fallback', value);
-        } else {
-          this.removeAttribute('fallback');
-        }
+        setStringAttribute(this, 'fallback', value, { removeEmpty: true });
       }
 
       get sheet() {
-        return this.getAttribute('sheet') || '';
+        return getStringAttribute(this, 'sheet');
       }
 
       set sheet(value) {
-        this.setAttribute('sheet', value || '');
+        setStringAttribute(this, 'sheet', value);
       }
 
       handlerExternalCss = (): void => {
-        if (!this.sheet) return;
-        adoptSheetText(this._shadowDom, this.sheet);
+        syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
       };
 
-      listenFallback(name: string, value: string) {
+      listenFallback(name: string, value: string | null) {
         if (name === 'fallback' && this._image) {
           if (value) {
             this._image.setAttribute('fallback', value);
@@ -74,9 +69,9 @@ function Custom() {
           }
         });
       }
-      attributeChangedCallback(name: string, _: string, newValue: string) {
+      attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
         this.listenFallback(name, newValue);
-        if (name === 'sheet') {
+        if (name === 'sheet' && oldValue !== newValue) {
           this.handlerExternalCss();
         }
       }

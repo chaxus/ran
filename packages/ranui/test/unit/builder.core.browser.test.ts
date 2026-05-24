@@ -65,6 +65,22 @@ describe('ElementBuilder — attr() / part() / data()', () => {
     expect(el.getAttribute('type')).toBe('email');
   });
 
+  it('attrs() sets multiple attributes and skips nullish values', () => {
+    const el = new ElementBuilder('input')
+      .attrs({ type: 'email', disabled: '', placeholder: undefined, name: null })
+      .build();
+    expect(el.getAttribute('type')).toBe('email');
+    expect(el.getAttribute('disabled')).toBe('');
+    expect(el.hasAttribute('placeholder')).toBe(false);
+    expect(el.hasAttribute('name')).toBe(false);
+  });
+
+  it('boolAttr() toggles an attribute', () => {
+    const el = new ElementBuilder('button').boolAttr('disabled', true).boolAttr('hidden', false).build();
+    expect(el.getAttribute('disabled')).toBe('');
+    expect(el.hasAttribute('hidden')).toBe(false);
+  });
+
   it('part() sets the part attribute', () => {
     const el = new ElementBuilder('div').part('base').build();
     expect(el.getAttribute('part')).toBe('base');
@@ -83,11 +99,14 @@ describe('ElementBuilder — style()', () => {
   });
 
   it('style(map) sets multiple CSS properties', () => {
-    const el = new ElementBuilder('div')
-      .style({ color: 'blue', 'font-size': '16px' })
-      .build();
+    const el = new ElementBuilder('div').style({ color: 'blue', 'font-size': '16px' }).build();
     expect(el.style.getPropertyValue('color')).toBe('blue');
     expect(el.style.getPropertyValue('font-size')).toBe('16px');
+  });
+
+  it('cssVar() sets a CSS custom property', () => {
+    const el = new ElementBuilder('div').cssVar('ran-x', '12px').build();
+    expect(el.style.getPropertyValue('--ran-x')).toBe('12px');
   });
 });
 
@@ -176,12 +195,19 @@ describe('ElementBuilder — children()', () => {
 
   it('accepts mixed types in one call', () => {
     const span = document.createElement('em');
-    const el = new ElementBuilder('div')
-      .children('text', span, new ElementBuilder('b').text('bold'), null)
-      .build();
+    const el = new ElementBuilder('div').children('text', span, new ElementBuilder('b').text('bold'), null).build();
     expect(el.textContent).toContain('text');
     expect(el.textContent).toContain('bold');
     expect(el.querySelector('em')).toBeTruthy();
+  });
+
+  it('replaceChildren() clears previous children and appends new children', () => {
+    const el = new ElementBuilder('div')
+      .children(new ElementBuilder('span').text('old'))
+      .replaceChildren(new ElementBuilder('strong').text('new'))
+      .build();
+    expect(el.querySelector('span')).toBeNull();
+    expect(el.querySelector('strong')?.textContent).toBe('new');
   });
 });
 
@@ -281,18 +307,12 @@ describe('ShadowBuilder — children()', () => {
 
   it('appends an HTMLElement into shadow root', () => {
     const span = document.createElement('span');
-    const { shadow } = new ElementBuilder('div')
-      .shadow({ mode: 'open' })
-      .children(span)
-      .done();
+    const { shadow } = new ElementBuilder('div').shadow({ mode: 'open' }).children(span).done();
     expect(shadow.querySelector('span')).toBe(span);
   });
 
   it('ignores null and undefined', () => {
-    const { shadow } = new ElementBuilder('div')
-      .shadow({ mode: 'open' })
-      .children(null, undefined)
-      .done();
+    const { shadow } = new ElementBuilder('div').shadow({ mode: 'open' }).children(null, undefined).done();
     expect(shadow.childNodes.length).toBe(0);
   });
 
@@ -307,10 +327,7 @@ describe('ShadowBuilder — children()', () => {
 
 describe('ShadowBuilder — css()', () => {
   it('injects CSS (via adoptedStyleSheets or style tag fallback)', () => {
-    const { shadow } = new ElementBuilder('div')
-      .shadow({ mode: 'open' })
-      .css(':host { display: block; }')
-      .done();
+    const { shadow } = new ElementBuilder('div').shadow({ mode: 'open' }).css(':host { display: block; }').done();
     // jsdom may not expose adoptedStyleSheets on ShadowRoot — use optional chaining
     const hasAdopted = (shadow.adoptedStyleSheets?.length ?? 0) > 0;
     const hasStyleTag = !!shadow.querySelector('style');
@@ -321,10 +338,7 @@ describe('ShadowBuilder — css()', () => {
     const orig = (globalThis as any).CSSStyleSheet;
     (globalThis as any).CSSStyleSheet = undefined;
     try {
-      const { shadow } = new ElementBuilder('div')
-        .shadow({ mode: 'open' })
-        .css(':host { color: red; }')
-        .done();
+      const { shadow } = new ElementBuilder('div').shadow({ mode: 'open' }).css(':host { color: red; }').done();
       const styleEl = shadow.querySelector('style');
       expect(styleEl).not.toBeNull();
       expect(styleEl?.textContent).toContain(':host { color: red; }');
@@ -342,10 +356,7 @@ describe('ShadowBuilder — css()', () => {
     }
     (globalThis as any).CSSStyleSheet = BrokenSheet;
     try {
-      const { shadow } = new ElementBuilder('div')
-        .shadow({ mode: 'open' })
-        .css(':host { color: blue; }')
-        .done();
+      const { shadow } = new ElementBuilder('div').shadow({ mode: 'open' }).css(':host { color: blue; }').done();
       const styleEl = shadow.querySelector('style');
       expect(styleEl).not.toBeNull();
       expect(styleEl?.textContent).toContain(':host { color: blue; }');
@@ -369,10 +380,7 @@ describe('ShadowBuilder — adoptSheet()', () => {
   it.skipIf(!supportsAdoptedSheets)('adds a CSSStyleSheet to adoptedStyleSheets', () => {
     const sheet = new CSSStyleSheet();
     sheet.replaceSync('span { color: red; }');
-    const { shadow } = new ElementBuilder('div')
-      .shadow({ mode: 'open' })
-      .adoptSheet(sheet)
-      .done();
+    const { shadow } = new ElementBuilder('div').shadow({ mode: 'open' }).adoptSheet(sheet).done();
     expect(shadow.adoptedStyleSheets).toContain(sheet);
   });
 });

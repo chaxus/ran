@@ -2,8 +2,8 @@ import { currentDevice } from 'ranuts/utils';
 import buttonCss from './index.less?inline';
 import { Div, RanElement, Slot, falseList, isDisabled } from '@/utils/index';
 import { Style, View } from '@/utils/builder';
-import { adoptStyles } from '@/utils/style';
 import { defineSSR } from '@/utils/ssr-registry';
+import { ensureShadowElement, ensureShadowRoot } from '@/utils/component';
 
 export class Button extends RanElement {
   _btn!: HTMLDivElement;
@@ -19,22 +19,17 @@ export class Button extends RanElement {
 
   constructor() {
     super();
-    // 🛡️ Rehydration safe: check if shadowRoot already exists (e.g. from DSD)
-    this._shadowDom = this.shadowRoot || this.attachShadow({ mode: 'closed' });
-    adoptStyles(this._shadowDom, buttonCss);
+    this._shadowDom = ensureShadowRoot(this, buttonCss);
 
-    // 🏗️ Surgical rehydration: check if content already exists to avoid nuking styles
-    let btn = this._shadowDom.querySelector<HTMLDivElement>('.ran-btn');
-    if (!btn) {
-      btn = Div()
+    const btn = ensureShadowElement(this._shadowDom, '.ran-btn', () =>
+      Div()
         .class('ran-btn')
         .attr('part', 'button')
         .role('button')
         .tabIndex(0)
         .children(Div().class('ran-btn-content').attr('part', 'content').children(Slot().class('slot')))
-        .build();
-      this._shadowDom.appendChild(btn);
-    }
+        .build(),
+    );
     this._btn = btn;
     this._btnContent = btn.querySelector<HTMLDivElement>('.ran-btn-content')!;
     this._slot = btn.querySelector<HTMLSlotElement>('slot')!;

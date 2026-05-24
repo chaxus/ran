@@ -1,8 +1,8 @@
 import { Slot, View } from '@/utils/builder';
-import { adoptStyles } from '@/utils/style';
 import formCss from './index.less?inline';
 import { RanElement } from '@/utils/index';
 import { defineSSR } from '@/utils/ssr-registry';
+import { ensureShadowElement, ensureShadowRoot } from '@/utils/component';
 
 class CustomElement extends RanElement {
   // Changed to extend RanElement
@@ -11,14 +11,13 @@ class CustomElement extends RanElement {
 
   constructor() {
     super();
-    this._shadowDom = this.shadowRoot || this.attachShadow({ mode: 'closed' }); // Initialized _shadowDom
-    adoptStyles(this._shadowDom, formCss); // Used _shadowDom
+    this._shadowDom = ensureShadowRoot(this, formCss);
 
-    let form = this._shadowDom.querySelector('.r-form') as HTMLFormElement | null; // Used _shadowDom
-    if (!form) {
-      form = View('form').class('r-form').children(Slot().attr('name', 'r-form_content')).build() as HTMLFormElement;
-      this._shadowDom.appendChild(form); // Used _shadowDom
-    }
+    const form = ensureShadowElement(
+      this._shadowDom,
+      '.r-form',
+      () => View('form').class('r-form').children(Slot().attr('name', 'r-form_content')).build() as HTMLFormElement,
+    );
     this._form = form;
 
     // The following logic for jsonData and event listener should be moved to connectedCallback or a method

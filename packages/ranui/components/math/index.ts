@@ -1,6 +1,12 @@
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
 import { Div, Span } from '@/utils/builder';
-import { adoptSheetText, adoptStyles } from '@/utils/style';
+import {
+  ensureShadowElement,
+  ensureShadowRoot,
+  getStringAttribute,
+  setStringAttribute,
+  syncSheetAttribute,
+} from '@/utils/component';
 import mathCss from './index.less?inline';
 import { defineSSR } from '@/utils/ssr-registry';
 export class Math extends (HTMLElementSSR()!) {
@@ -11,33 +17,29 @@ export class Math extends (HTMLElementSSR()!) {
   }
   constructor() {
     super();
-    const shadowRoot = this.attachShadow({ mode: 'closed' });
-    this._shadowDom = shadowRoot;
-    adoptStyles(this._shadowDom, mathCss);
-
-    let contain = this._shadowDom.querySelector('.ran-math') as HTMLDivElement | null;
-    if (!contain) {
-      contain = Div().class('ran-math').build() as HTMLDivElement;
-      this._shadowDom.appendChild(contain);
-    }
+    this._shadowDom = ensureShadowRoot(this, mathCss);
+    const contain = ensureShadowElement(
+      this._shadowDom,
+      '.ran-math',
+      () => Div().class('ran-math').build() as HTMLDivElement,
+    );
     this.contain = contain;
   }
   get latex(): string {
-    const latex = this.getAttribute('latex') || '';
+    const latex = getStringAttribute(this, 'latex');
     return decodeURIComponent(latex);
   }
   set latex(value: string) {
-    this.setAttribute('latex', value || '');
+    setStringAttribute(this, 'latex', value);
   }
   get sheet(): string {
-    return this.getAttribute('sheet') || '';
+    return getStringAttribute(this, 'sheet');
   }
   set sheet(value: string) {
-    this.setAttribute('sheet', value || '');
+    setStringAttribute(this, 'sheet', value);
   }
   handlerExternalCss = (): void => {
-    if (!this.sheet) return;
-    adoptSheetText(this._shadowDom, this.sheet);
+    syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
   };
   render(): void {
     if (!this.latex) return;
@@ -58,7 +60,7 @@ export class Math extends (HTMLElementSSR()!) {
     this.handlerExternalCss();
     this.render();
   }
-  attributeChangedCallback(k: string, o: string, n: string): void {
+  attributeChangedCallback(k: string, o: string | null, n: string | null): void {
     if (o !== n) {
       if (k === 'latex') {
         this.render();

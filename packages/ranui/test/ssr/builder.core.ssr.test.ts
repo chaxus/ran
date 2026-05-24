@@ -54,10 +54,7 @@ describe('ElementBuilder (SSR) — addClass() / removeClass()', () => {
   });
 
   it('removes a class', () => {
-    const el = new ElementBuilder('div')
-      .addClass('a', 'b')
-      .removeClass('a')
-      .build() as unknown as HTMLElementMock;
+    const el = new ElementBuilder('div').addClass('a', 'b').removeClass('a').build() as unknown as HTMLElementMock;
     expect(el.classList.contains('a')).toBe(false);
     expect(el.classList.contains('b')).toBe(true);
   });
@@ -67,6 +64,25 @@ describe('ElementBuilder (SSR) — attr() / part() / data()', () => {
   it('attr() sets arbitrary attribute', () => {
     const el = new ElementBuilder('input').attr('type', 'checkbox').build() as unknown as HTMLElementMock;
     expect(el.getAttribute('type')).toBe('checkbox');
+  });
+
+  it('attrs() sets multiple attributes and skips nullish values', () => {
+    const el = new ElementBuilder('input')
+      .attrs({ type: 'email', disabled: '', placeholder: undefined, name: null })
+      .build() as unknown as HTMLElementMock;
+    expect(el.getAttribute('type')).toBe('email');
+    expect(el.hasAttribute('disabled')).toBe(true);
+    expect(el.hasAttribute('placeholder')).toBe(false);
+    expect(el.hasAttribute('name')).toBe(false);
+  });
+
+  it('boolAttr() toggles an attribute', () => {
+    const el = new ElementBuilder('button')
+      .boolAttr('disabled', true)
+      .boolAttr('hidden', false)
+      .build() as unknown as HTMLElementMock;
+    expect(el.hasAttribute('disabled')).toBe(true);
+    expect(el.hasAttribute('hidden')).toBe(false);
   });
 
   it('part() sets part attribute', () => {
@@ -92,6 +108,11 @@ describe('ElementBuilder (SSR) — style()', () => {
       .build() as unknown as HTMLElementMock;
     expect(el.inlineStyles.get('background-color')).toBe('blue');
     expect(el.inlineStyles.get('color')).toBe('white');
+  });
+
+  it('cssVar() stores a CSS custom property', () => {
+    const el = new ElementBuilder('div').cssVar('ran-x', '12px').build() as unknown as HTMLElementMock;
+    expect(el.inlineStyles.get('--ran-x')).toBe('12px');
   });
 });
 
@@ -158,6 +179,15 @@ describe('ElementBuilder (SSR) — children()', () => {
       .build() as unknown as HTMLElementMock;
     expect(el.childrenList).toHaveLength(2);
   });
+
+  it('replaceChildren() clears previous children and appends new children', () => {
+    const el = new ElementBuilder('div')
+      .children(new ElementBuilder('span').text('old'))
+      .replaceChildren(new ElementBuilder('strong').text('new'))
+      .build() as unknown as HTMLElementMock;
+    expect(el.childrenList).toHaveLength(1);
+    expect((el.childrenList[0] as HTMLElementMock).tagName).toBe('strong');
+  });
 });
 
 describe('ElementBuilder (SSR) — ref()', () => {
@@ -191,9 +221,7 @@ describe('ElementBuilder (SSR) — serialize()', () => {
   });
 
   it('serializes nested children', () => {
-    const html = new ElementBuilder('ul')
-      .children(new ElementBuilder('li').text('item'))
-      .serialize();
+    const html = new ElementBuilder('ul').children(new ElementBuilder('li').text('item')).serialize();
     expect(html).toBe('<ul><li>item</li></ul>');
   });
 
@@ -228,10 +256,7 @@ describe('ShadowBuilder (SSR) — css()', () => {
   });
 
   it('chains multiple css() calls', () => {
-    const sb = new ElementBuilder('div')
-      .shadow({ mode: 'open' })
-      .css('a { color: red; }')
-      .css('b { color: blue; }');
+    const sb = new ElementBuilder('div').shadow({ mode: 'open' }).css('a { color: red; }').css('b { color: blue; }');
     const { shadow } = sb.done();
     const mock = shadow as unknown as ShadowRootMock;
     expect(mock.adoptedStyleSheets).toHaveLength(2);
@@ -249,10 +274,7 @@ describe('ShadowBuilder (SSR) — children()', () => {
   });
 
   it('appends string child', () => {
-    const { shadow } = new ElementBuilder('div')
-      .shadow({ mode: 'open' })
-      .children('raw')
-      .done();
+    const { shadow } = new ElementBuilder('div').shadow({ mode: 'open' }).children('raw').done();
     const mock = shadow as unknown as ShadowRootMock;
     expect(mock.childrenList[0]).toBe('raw');
   });

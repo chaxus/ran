@@ -1,7 +1,13 @@
 import { addClassToElement, removeClassToElement } from 'ranuts/utils';
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
 import { Div, Slot } from '@/utils/builder';
-import { adoptSheetText, adoptStyles } from '@/utils/style';
+import {
+  ensureShadowElement,
+  ensureShadowRoot,
+  getStringAttribute,
+  setStringAttribute,
+  syncSheetAttribute,
+} from '@/utils/component';
 import dropdownCss from './index.less?inline';
 import { defineSSR } from '@/utils/ssr-registry';
 
@@ -25,68 +31,54 @@ export class Dropdown extends (HTMLElementSSR()!) {
   }
   constructor() {
     super();
-    this._shadowDom = this.shadowRoot || this.attachShadow({ mode: 'closed' });
-    adoptStyles(this._shadowDom, dropdownCss);
-
-    let container = this._shadowDom.querySelector('.ranui-dropdown-container') as HTMLElement | null;
-    if (!container) {
-      container = Div()
-        .class('ranui-dropdown-container')
-        .children(
-          Div()
-            .style('-webkit-tap-highlight-color', 'transparent')
-            .style('outline', '0')
-            .class('ranui-dropdown')
-            .part('dropdown')
-            .children(Slot().class('slot')),
-        )
-        .build() as HTMLElement;
-      this._shadowDom.appendChild(container);
-    }
+    this._shadowDom = ensureShadowRoot(this, dropdownCss);
+    const container = ensureShadowElement(
+      this._shadowDom,
+      '.ranui-dropdown-container',
+      () =>
+        Div()
+          .class('ranui-dropdown-container')
+          .children(
+            Div()
+              .style('-webkit-tap-highlight-color', 'transparent')
+              .style('outline', '0')
+              .class('ranui-dropdown')
+              .part('dropdown')
+              .children(Slot().class('slot')),
+          )
+          .build() as HTMLElement,
+    );
 
     this.container = container;
     this.dropdown = container.querySelector('.ranui-dropdown') as HTMLElement;
     this._slot = container.querySelector('.slot') as HTMLSlotElement;
   }
   get transit(): string {
-    return this.getAttribute('transit') || '';
+    return getStringAttribute(this, 'transit');
   }
   set transit(value: string) {
-    if (value) {
-      this.setAttribute('transit', value);
-    } else {
-      this.removeAttribute('transit');
-    }
+    setStringAttribute(this, 'transit', value, { removeEmpty: true });
   }
   get arrow(): string {
-    return this.getAttribute('arrow') || '';
+    return getStringAttribute(this, 'arrow');
   }
   set arrow(value: string) {
-    if (value) {
-      this.setAttribute('arrow', value);
-    } else {
-      this.removeAttribute('arrow');
-    }
+    setStringAttribute(this, 'arrow', value, { removeEmpty: true });
   }
   get show(): string {
-    return this.getAttribute('show') || '';
+    return getStringAttribute(this, 'show');
   }
   set show(value: string) {
-    if (value) {
-      this.setAttribute('show', value);
-    } else {
-      this.removeAttribute('show');
-    }
+    setStringAttribute(this, 'show', value, { removeEmpty: true });
   }
   get sheet(): string {
-    return this.getAttribute('sheet') || '';
+    return getStringAttribute(this, 'sheet');
   }
   set sheet(value: string) {
-    this.setAttribute('sheet', value || '');
+    setStringAttribute(this, 'sheet', value);
   }
   handlerExternalCss = (): void => {
-    if (!this.sheet) return;
-    adoptSheetText(this._shadowDom, this.sheet);
+    syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
   };
   handlerTransit = (): void => {
     if (this.transit && this.dropdown) {
@@ -124,7 +116,7 @@ export class Dropdown extends (HTMLElementSSR()!) {
   disconnectedCallback(): void {
     // this.removeEventListener('click', this.stopPropagation);
   }
-  attributeChangedCallback(name: string, _: string, newValue: string): void {
+  attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
     if (name === 'transit' && newValue) {
       addClassToElement(this.dropdown, this.transit);
       setTimeout(() => {
@@ -134,7 +126,7 @@ export class Dropdown extends (HTMLElementSSR()!) {
     if (name === 'arrow') {
       this.handlerArrow();
     }
-    if (name === 'sheet') {
+    if (name === 'sheet' && oldValue !== newValue) {
       this.handlerExternalCss();
     }
   }

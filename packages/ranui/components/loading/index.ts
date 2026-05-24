@@ -1,7 +1,13 @@
 import loadingCss from './index.less?inline';
 import { HTMLElementSSR, createCustomError } from '@/utils/index';
 import { Div, Span, View } from '@/utils/builder';
-import { adoptSheetText, adoptStyles } from '@/utils/style';
+import {
+  ensureShadowElement,
+  ensureShadowRoot,
+  getStringAttribute,
+  setStringAttribute,
+  syncSheetAttribute,
+} from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
 
 export enum ICON_NAME_AMP {
@@ -44,33 +50,30 @@ export class Loading extends (HTMLElementSSR()!) {
   }
   constructor() {
     super();
-    this._shadowDom = this.shadowRoot || this.attachShadow({ mode: 'open' });
-    adoptStyles(this._shadowDom, loadingCss);
-
-    let contain = this._shadowDom.querySelector('.ran-loading') as HTMLDivElement | null;
-    if (!contain) {
-      contain = Div().class('ran-loading').build() as HTMLDivElement;
-      this._shadowDom.appendChild(contain);
-    }
+    this._shadowDom = ensureShadowRoot(this, loadingCss, { mode: 'open' });
+    const contain = ensureShadowElement(
+      this._shadowDom,
+      '.ran-loading',
+      () => Div().class('ran-loading').build() as HTMLDivElement,
+    );
     this.contain = contain;
   }
   get name(): ICON_NAME_AMP {
-    const name = this.getAttribute('name') || '';
+    const name = getStringAttribute(this, 'name');
     if (!name) return ICON_NAME_AMP.CIRCLE;
     return name as ICON_NAME_AMP;
   }
   set name(value: string) {
-    this.setAttribute('name', value || '');
+    setStringAttribute(this, 'name', value);
   }
   get sheet(): string {
-    return this.getAttribute('sheet') || '';
+    return getStringAttribute(this, 'sheet');
   }
   set sheet(value: string) {
-    this.setAttribute('sheet', value || '');
+    setStringAttribute(this, 'sheet', value);
   }
   handlerExternalCss = (): void => {
-    if (!this.sheet) return;
-    adoptSheetText(this._shadowDom, this.sheet);
+    syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
   };
   rotateLoading = (): void => {
     const loading = Div().class(ICON_NAME_AMP.ROTATE).part(ICON_NAME_AMP.ROTATE).build();

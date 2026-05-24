@@ -1,7 +1,13 @@
 import { perToNum } from 'ranuts/utils';
 import progressCss from './index.less?inline';
 import { Div, RanElement } from '@/utils/index';
-import { adoptSheetText, adoptStyles } from '@/utils/style';
+import {
+  ensureShadowElement,
+  ensureShadowRoot,
+  getStringAttribute,
+  setStringAttribute,
+  syncSheetAttribute,
+} from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
 
 const attributes: string[] = ['percent', 'type', 'total', 'dot', 'sheet'];
@@ -20,22 +26,18 @@ export class Progress extends RanElement {
 
   constructor() {
     super();
-    this._shadowDom = this.shadowRoot || this.attachShadow({ mode: 'closed' });
-    adoptStyles(this._shadowDom, progressCss);
+    this._shadowDom = ensureShadowRoot(this, progressCss);
 
-    // 🏗️ Surgical rehydration: check if content already exists to avoid nuking styles
-    let container = this._shadowDom.querySelector('.ran-progress') as HTMLDivElement;
-    if (!container) {
-      const progressBuilder = Div()
+    const container = ensureShadowElement(this._shadowDom, '.ran-progress', () =>
+      Div()
         .class('ran-progress')
         .role('progressbar')
         .children(
           Div().class('ran-progress-wrap').part('track').children(Div().class('ran-progress-wrap-value').part('fill')),
           Div().class('ran-progress-dot').part('dot'),
-        );
-      container = progressBuilder.build();
-      this._shadowDom.appendChild(container);
-    }
+        )
+        .build(),
+    );
 
     this._progress = container;
     this._progressWrap = container.querySelector('.ran-progress-wrap')!;
@@ -84,16 +86,15 @@ export class Progress extends RanElement {
   }
 
   get sheet(): string {
-    return this.getAttribute('sheet') || '';
+    return getStringAttribute(this, 'sheet');
   }
 
   set sheet(value: string) {
-    this.setAttribute('sheet', value || '');
+    setStringAttribute(this, 'sheet', value);
   }
 
   handlerExternalCss = (): void => {
-    if (!this.sheet) return;
-    adoptSheetText(this._shadowDom, this.sheet);
+    syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
   };
 
   progressClick = (e: MouseEvent): void => {
