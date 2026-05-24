@@ -5,7 +5,13 @@ import infoCircleFill from '@/assets/icons/info-circle-fill.svg?raw';
 import warningCircleFill from '@/assets/icons/warning-circle-fill.svg?raw';
 import { registerIcons } from '@/components/icon';
 import { Div, Span, View } from '@/utils/builder';
-import { adoptSheetText, adoptStyles } from '@/utils/style';
+import {
+  ensureShadowElement,
+  ensureShadowRoot,
+  getStringAttribute,
+  setStringAttribute,
+  syncSheetAttribute,
+} from '@/utils/component';
 import { getMessageContainer, type MessageRenderOptions } from './container';
 
 const AnimationTime = 300; // message 退出动画执行的时间
@@ -54,21 +60,20 @@ function Custom() {
       }
       constructor() {
         super();
-        this._shadowDom = this.shadowRoot || this.attachShadow({ mode: 'closed' });
-        adoptStyles(this._shadowDom, messageCss);
-
-        let notice = this._shadowDom.querySelector('.ran-message-notice') as HTMLDivElement;
-        if (!notice) {
-          notice = Div()
-            .class('ran-message-notice')
-            .children(
-              Div()
-                .class('ran-message-notice-content')
-                .children(Div().class('ran-message-notice-content-info').children(View('r-icon'), Span())),
-            )
-            .build() as HTMLDivElement;
-          this._shadowDom.appendChild(notice);
-        }
+        this._shadowDom = ensureShadowRoot(this, messageCss);
+        const notice = ensureShadowElement(
+          this._shadowDom,
+          '.ran-message-notice',
+          () =>
+            Div()
+              .class('ran-message-notice')
+              .children(
+                Div()
+                  .class('ran-message-notice-content')
+                  .children(Div().class('ran-message-notice-content-info').children(View('r-icon'), Span())),
+              )
+              .build() as HTMLDivElement,
+        );
 
         this._notice = notice;
         this._content = notice.querySelector('.ran-message-notice-content') as HTMLDivElement;
@@ -91,14 +96,13 @@ function Custom() {
         if (value) this.setAttribute('content', value);
       }
       get sheet() {
-        return this.getAttribute('sheet') || '';
+        return getStringAttribute(this, 'sheet');
       }
       set sheet(value) {
-        this.setAttribute('sheet', value || '');
+        setStringAttribute(this, 'sheet', value);
       }
       handlerExternalCss = (): void => {
-        if (!this.sheet) return;
-        adoptSheetText(this._shadowDom, this.sheet);
+        syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
       };
       setIcon = (value: string) => {
         const icon = typeMapIcon.get(value);

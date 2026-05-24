@@ -7,7 +7,13 @@ import '@/components/input';
 import '@/components/select';
 import { defineSSR } from '@/utils/ssr-registry';
 import '@/components/progress';
-import { adoptSheetText, adoptStyles } from '@/utils/style';
+import {
+  ensureShadowElement,
+  ensureShadowRoot,
+  getStringAttribute,
+  setStringAttribute,
+  syncSheetAttribute,
+} from '@/utils/component';
 import colorPickerCss from './index.less?inline';
 
 // RGBA：red、green、blue, 透明度
@@ -73,24 +79,16 @@ export class ColorPicker extends (HTMLElementSSR()!) {
   }
   constructor() {
     super();
-    this._shadowDom = this.shadowRoot || this.attachShadow({ mode: 'closed' });
-    adoptStyles(this._shadowDom, colorPickerCss);
-
-    let popoverBlock = this._shadowDom.querySelector('r-popover') as HTMLElement | null;
-    let popoverContent = this._shadowDom.querySelector('r-content') as HTMLElement | null;
-    let colorpicker = this._shadowDom.querySelector('.ran-colorpicker-block') as HTMLDivElement | null;
-    let colorpickerInner = this._shadowDom.querySelector('.ran-colorpicker-inner') as HTMLDivElement | null;
-
-    if (!popoverBlock || !popoverContent || !colorpicker || !colorpickerInner) {
-      colorpickerInner = Div().class('ran-colorpicker-inner').build() as HTMLDivElement;
-      colorpicker = Div().class('ran-colorpicker-block').children(colorpickerInner).build() as HTMLDivElement;
-      popoverContent = View('r-content').class('ran-content').build() as HTMLElement;
-      popoverBlock = View('r-popover')
-        .class('ran-popover')
-        .children(colorpicker, popoverContent)
-        .build() as HTMLElement;
-      this._shadowDom.appendChild(popoverBlock);
-    }
+    this._shadowDom = ensureShadowRoot(this, colorPickerCss);
+    const popoverBlock = ensureShadowElement(this._shadowDom, 'r-popover', () => {
+      const colorpickerInner = Div().class('ran-colorpicker-inner').build() as HTMLDivElement;
+      const colorpicker = Div().class('ran-colorpicker-block').children(colorpickerInner).build() as HTMLDivElement;
+      const popoverContent = View('r-content').class('ran-content').build() as HTMLElement;
+      return View('r-popover').class('ran-popover').children(colorpicker, popoverContent).build() as HTMLElement;
+    });
+    const popoverContent = popoverBlock.querySelector('r-content') as HTMLElement;
+    const colorpicker = popoverBlock.querySelector('.ran-colorpicker-block') as HTMLDivElement;
+    const colorpickerInner = popoverBlock.querySelector('.ran-colorpicker-inner') as HTMLDivElement;
 
     this.popoverBlock = popoverBlock;
     this.popoverContent = popoverContent;
@@ -108,14 +106,13 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     this.updateColorValue(value);
   }
   get sheet(): string {
-    return this.getAttribute('sheet') || '';
+    return getStringAttribute(this, 'sheet');
   }
   set sheet(value: string) {
-    this.setAttribute('sheet', value || '');
+    setStringAttribute(this, 'sheet', value);
   }
   handlerExternalCss = (): void => {
-    if (!this.sheet) return;
-    adoptSheetText(this._shadowDom, this.sheet);
+    syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
   };
   createContext = (): void => {
     this.context = {
@@ -381,9 +378,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
 
     this.colorPickerPanel = Div()
       .class('ran-color-picker-panel')
-      .children(
-        Div().class('ran-color-picker-select').children(this.colorPickerPanelPalette),
-      )
+      .children(Div().class('ran-color-picker-select').children(this.colorPickerPanelPalette))
       .build() as HTMLElement;
   };
   createColorPickerInput = (): void => {

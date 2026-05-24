@@ -10,7 +10,13 @@ import { HTMLElementSSR, createCustomError } from '@/utils/index';
 import '@/components/popover/content';
 import '@/components/dropdown';
 import { Div, Slot, View } from '@/utils/builder';
-import { adoptSheetText, adoptStyles } from '@/utils/style';
+import {
+  ensureShadowElement,
+  ensureShadowRoot,
+  getStringAttribute,
+  setStringAttribute,
+  syncSheetAttribute,
+} from '@/utils/component';
 import popoverCss from './index.less?inline';
 import { defineSSR } from '@/utils/ssr-registry';
 
@@ -68,51 +74,48 @@ export class Popover extends (HTMLElementSSR()!) {
   };
   constructor() {
     super();
-    this._shadowDom = this.shadowRoot || this.attachShadow({ mode: 'closed' });
-    adoptStyles(this._shadowDom, popoverCss);
-
-    let block = this._shadowDom.querySelector('.ran-popover-block') as HTMLDivElement | null;
-    if (!block) {
-      block = Div().class('ran-popover-block').role('tooltip').children(Slot().class('slot')).build() as HTMLDivElement;
-      this._shadowDom.appendChild(block);
-    }
+    this._shadowDom = ensureShadowRoot(this, popoverCss);
+    const block = ensureShadowElement(
+      this._shadowDom,
+      '.ran-popover-block',
+      () => Div().class('ran-popover-block').role('tooltip').children(Slot().class('slot')).build() as HTMLDivElement,
+    );
 
     this.popoverBlock = block;
     this._slot = block.querySelector('.slot') as HTMLSlotElement;
   }
   get placement(): string {
-    return this.getAttribute('placement') || 'top';
+    return getStringAttribute(this, 'placement', 'top');
   }
   set placement(value: string) {
-    this.setAttribute('placement', value);
+    setStringAttribute(this, 'placement', value);
   }
   get arrow(): string {
-    return this.getAttribute('arrow') || '';
+    return getStringAttribute(this, 'arrow');
   }
   set arrow(value: string) {
-    this.setAttribute('arrow', value);
+    setStringAttribute(this, 'arrow', value);
   }
   get trigger(): string {
-    return this.getAttribute('trigger') || 'hover';
+    return getStringAttribute(this, 'trigger', 'hover');
   }
   set trigger(value: string) {
-    this.setAttribute('trigger', value);
+    setStringAttribute(this, 'trigger', value);
   }
   get getPopupContainerId(): string {
-    return this.getAttribute('getPopupContainerId') || '';
+    return getStringAttribute(this, 'getPopupContainerId');
   }
   set getPopupContainerId(value: string) {
-    this.setAttribute('getPopupContainerId', value);
+    setStringAttribute(this, 'getPopupContainerId', value);
   }
   get sheet(): string {
-    return this.getAttribute('sheet') || '';
+    return getStringAttribute(this, 'sheet');
   }
   set sheet(value: string) {
-    this.setAttribute('sheet', value || '');
+    setStringAttribute(this, 'sheet', value);
   }
   handlerExternalCss = (): void => {
-    if (!this.sheet) return;
-    adoptSheetText(this._shadowDom, this.sheet);
+    syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
   };
   initAria = (): void => {
     if (!this.hasAttribute('tabindex')) {

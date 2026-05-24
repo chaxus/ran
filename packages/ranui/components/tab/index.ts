@@ -1,7 +1,13 @@
 import { isDisabled } from '../../utils/index';
 import tabCss from './index.less?inline';
 import { Div, Slot, View } from '@/utils/builder';
-import { adoptSheetText, adoptStyles } from '@/utils/style';
+import {
+  ensureShadowElement,
+  ensureShadowRoot,
+  getStringAttribute,
+  setStringAttribute,
+  syncSheetAttribute,
+} from '@/utils/component';
 
 function CustomElement() {
   if (typeof window !== 'undefined' && !customElements.get('r-tabs')) {
@@ -20,32 +26,31 @@ function CustomElement() {
       tabHeaderKeyMapIndex: Record<string, number>;
       constructor() {
         super();
-        const shadowRoot = this.attachShadow({ mode: 'closed' });
-        this._shadowDom = shadowRoot;
-        adoptStyles(shadowRoot, tabCss);
+        this._shadowDom = ensureShadowRoot(this, tabCss);
         this.tabHeaderKeyMapIndex = {};
 
-        let wrap = shadowRoot.querySelector('.ran-tab') as HTMLDivElement;
-        if (!wrap) {
-          wrap = Div()
-            .class('ran-tab')
-            .part('tabs')
-            .children(
-              Div()
-                .class('ran-tab-header')
-                .part('header')
-                .children(
-                  Div().class('ran-tab-header-nav').part('nav'),
-                  Div().class('ran-tab-header-line').part('indicator'),
-                ),
-              Div()
-                .class('ran-tab-content')
-                .part('content')
-                .children(Div().class('ran-tab-content-wrap').part('content-wrap').children(Slot())),
-            )
-            .build() as HTMLDivElement;
-          shadowRoot.appendChild(wrap);
-        }
+        const wrap = ensureShadowElement(
+          this._shadowDom,
+          '.ran-tab',
+          () =>
+            Div()
+              .class('ran-tab')
+              .part('tabs')
+              .children(
+                Div()
+                  .class('ran-tab-header')
+                  .part('header')
+                  .children(
+                    Div().class('ran-tab-header-nav').part('nav'),
+                    Div().class('ran-tab-header-line').part('indicator'),
+                  ),
+                Div()
+                  .class('ran-tab-content')
+                  .part('content')
+                  .children(Div().class('ran-tab-content-wrap').part('content-wrap').children(Slot())),
+              )
+              .build() as HTMLDivElement,
+        );
 
         this._container = wrap;
         this._header = wrap.querySelector('.ran-tab-header') as HTMLDivElement;
@@ -57,7 +62,7 @@ function CustomElement() {
       }
 
       get align() {
-        return this.getAttribute('align') || 'start';
+        return getStringAttribute(this, 'align', 'start');
       }
 
       set align(value) {
@@ -69,7 +74,7 @@ function CustomElement() {
       }
 
       get type() {
-        return this.getAttribute('type') || 'flat';
+        return getStringAttribute(this, 'type', 'flat');
       }
 
       get active() {
@@ -99,16 +104,15 @@ function CustomElement() {
       }
 
       get sheet() {
-        return this.getAttribute('sheet') || '';
+        return getStringAttribute(this, 'sheet');
       }
 
       set sheet(value) {
-        this.setAttribute('sheet', value || '');
+        setStringAttribute(this, 'sheet', value);
       }
 
       handlerExternalCss = () => {
-        if (!this.sheet) return;
-        adoptSheetText(this._shadowDom, this.sheet);
+        syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
       };
       /**
        * @description: 构建 tabPane 组件 key 值和 index 的映射，同时判断一个 tabs 下的 tabPane key 值不能重复
