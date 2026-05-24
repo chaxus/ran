@@ -2,7 +2,7 @@
   "name": "ranui",
   "version": "0.1.10-alpha-27",
   "description": "UI Component library based on `Web Component`",
-  "main": "dist/umd/index.umd.cjs",
+  "main": "dist/index.cjs",
   "module": "dist/index.js",
   "type": "module",
   "types": "./dist/index.d.ts",
@@ -24,7 +24,7 @@
     "dev": "vite --host",
     "build": "sh ./bin/build.sh",
     "build:es": "vite build -c ./build/config.es.ts",
-    "build:umd": "vite build -c ./build/config.umd.ts",
+    "build:bundle": "vite build -c ./build/config.bundle.ts",
     "prepublish": "npm run build",
     "test": "sh ./bin/test.sh",
     "test:unit": "vitest run",
@@ -60,108 +60,103 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "require": "./dist/umd/index.umd.cjs"
+      "require": "./dist/index.cjs"
     },
     "./style": "./dist/ranui.css",
     "./button": {
       "types": "./dist/index.d.ts",
       "import": "./dist/button.js",
-      "require": "./dist/umd/index.umd.cjs"
+      "require": "./dist/index.cjs"
     },
     "./icon": {
       "types": "./dist/index.d.ts",
       "import": "./dist/icon.js",
-      "require": "./dist/umd/index.umd.cjs"
+      "require": "./dist/index.cjs"
     },
     "./image": {
       "types": "./dist/index.d.ts",
       "import": "./dist/image.js",
-      "require": "./dist/umd/index.umd.cjs"
+      "require": "./dist/index.cjs"
     },
     "./input": {
       "types": "./dist/index.d.ts",
       "import": "./dist/input.js",
-      "require": "./dist/umd/index.umd.cjs"
+      "require": "./dist/index.cjs"
     },
     "./message": {
       "types": "./dist/index.d.ts",
       "import": "./dist/message.js",
-      "require": "./dist/umd/index.umd.cjs"
+      "require": "./dist/index.cjs"
     },
     "./skeleton": {
       "types": "./dist/index.d.ts",
       "import": "./dist/skeleton.js",
-      "require": "./dist/umd/index.umd.cjs"
+      "require": "./dist/index.cjs"
     },
     "./tab": {
       "types": "./dist/index.d.ts",
       "import": "./dist/tab.js",
-      "require": "./dist/umd/index.umd.cjs"
+      "require": "./dist/index.cjs"
     },
     "./tabpane": {
       "types": "./dist/index.d.ts",
       "import": "./dist/tabpane.js",
-      "require": "./dist/umd/index.umd.cjs"
+      "require": "./dist/index.cjs"
     },
     "./radar": {
       "types": "./dist/index.d.ts",
       "import": "./dist/radar.js",
-      "require": "./dist/umd/index.umd.cjs"
+      "require": "./dist/index.cjs"
     },
     "./modal": {
       "types": "./dist/index.d.ts",
       "import": "./dist/modal.js",
-      "require": "./dist/umd/index.umd.cjs"
+      "require": "./dist/index.cjs"
     },
     "./select": {
       "types": "./dist/index.d.ts",
       "import": "./dist/select.js",
-      "require": "./dist/umd/index.umd.cjs"
+      "require": "./dist/index.cjs"
     },
     "./progress": {
       "types": "./dist/index.d.ts",
       "import": "./dist/progress.js",
-      "require": "./dist/umd/index.umd.cjs"
+      "require": "./dist/index.cjs"
     },
     "./player": {
       "types": "./dist/index.d.ts",
       "import": "./dist/player.js",
-      "require": "./dist/umd/index.umd.cjs"
+      "require": "./dist/index.cjs"
     },
     "./popover": {
       "types": "./dist/index.d.ts",
       "import": "./dist/popover.js",
-      "require": "./dist/umd/index.umd.cjs"
+      "require": "./dist/index.cjs"
     },
     "./content": {
       "types": "./dist/index.d.ts",
       "import": "./dist/content.js",
-      "require": "./dist/umd/index.umd.cjs"
+      "require": "./dist/index.cjs"
     },
     "./loading": {
       "types": "./dist/index.d.ts",
       "import": "./dist/loading.js",
-      "require": "./dist/umd/index.umd.cjs"
+      "require": "./dist/index.cjs"
     },
     "./colorpicker": {
       "types": "./dist/index.d.ts",
       "import": "./dist/colorpicker.js",
-      "require": "./dist/umd/index.umd.cjs"
+      "require": "./dist/index.cjs"
     },
     "./math": {
       "types": "./dist/index.d.ts",
       "import": "./dist/math.js",
-      "require": "./dist/umd/index.umd.cjs"
+      "require": "./dist/index.cjs"
     },
     "./checkbox": {
       "types": "./dist/index.d.ts",
       "import": "./dist/checkbox.js",
-      "require": "./dist/umd/index.umd.cjs"
-    },
-    "./style": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/ranui.css",
-      "require": "./dist/umd/index.umd.cjs"
+      "require": "./dist/index.cjs"
     },
     "./type": {
       "types": "./dist/index.d.ts",

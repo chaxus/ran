@@ -18,11 +18,10 @@ do
     esac
 done
 
-# build es and splite bundle
+# build es (split per component, cleans dist/)
 $bin/vite build -c ./build/config.es.ts
-# build umd
-# TODO: splite bundle
-$bin/vite build -c ./build/config.umd.ts
+# build cjs + iife (single bundle, appends to dist/)
+$bin/vite build -c ./build/config.bundle.ts
 
 $bin/tsc --declaration --emitDeclarationOnly --outDir ./dist --project tsconfig.json
 

@@ -26,14 +26,15 @@ const chunkOptimization: Partial<BuildOptions> = {
   minify: 'terser',
 };
 
-export const umd: BuildOptions = {
+export const bundle: BuildOptions = {
   ...chunkOptimization,
-  outDir: resolve(__dirname, 'dist/umd'),
+  outDir: resolve(__dirname, 'dist'),
+  emptyOutDir: false,
   lib: {
     entry: resolve(__dirname, 'index.ts'),
     name: 'ranui',
     fileName: 'index',
-    formats: ['umd'],
+    formats: ['cjs', 'iife'],
   },
 };
 
