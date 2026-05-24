@@ -6,6 +6,7 @@ npminstall-debug.log
 .temp
 cache
 .claude/**
+.superpowers/**
 # mac
 .DS_Store
 # eslint
