@@ -1,7 +1,13 @@
 import { HTMLElementSSR, createCustomError, falseList, isDisabled } from '@/utils/index';
 import { Div, InputBuilder, Label, View } from '@/utils/builder';
 import '@/components/icon/index';
-import { adoptSheetText, adoptStyles } from '@/utils/style';
+import {
+  ensureShadowElement,
+  ensureShadowRoot,
+  getStringAttribute,
+  setStringAttribute,
+  syncSheetAttribute,
+} from '@/utils/component';
 import inputCss from './index.less?inline';
 import { defineSSR } from '@/utils/ssr-registry';
 
@@ -36,18 +42,14 @@ export class Input extends (HTMLElementSSR()!) {
   _icon: HTMLElement | undefined;
   constructor() {
     super();
-    this._shadowDom = this.shadowRoot || this.attachShadow({ mode: 'closed' });
-    adoptStyles(this._shadowDom, inputCss);
-
-    let wrap = this._shadowDom.querySelector('.ran-input') as HTMLDivElement;
-    if (!wrap) {
-      wrap = Div()
+    this._shadowDom = ensureShadowRoot(this, inputCss);
+    const wrap = ensureShadowElement(this._shadowDom, '.ran-input', () =>
+      Div()
         .class('ran-input')
         .part('input')
         .children(InputBuilder().class('ran-input-content').part('content'))
-        .build();
-      this._shadowDom.appendChild(wrap);
-    }
+        .build(),
+    );
     this._input = wrap;
     this._inputContent = wrap.querySelector('.ran-input-content') as HTMLInputElement;
   }
@@ -289,16 +291,15 @@ export class Input extends (HTMLElementSSR()!) {
   }
 
   get sheet(): string {
-    return this.getAttribute('sheet') || '';
+    return getStringAttribute(this, 'sheet');
   }
 
   set sheet(value: string) {
-    this.setAttribute('sheet', value || '');
+    setStringAttribute(this, 'sheet', value);
   }
 
   handlerExternalCss = (): void => {
-    if (!this.sheet) return;
-    adoptSheetText(this._shadowDom, this.sheet);
+    syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
   };
   /**
    * @description: 原生的 input 方法

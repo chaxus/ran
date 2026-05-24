@@ -1,7 +1,13 @@
 import modalCss from './index.less?inline';
 import { RanElement, createCustomError, falseList } from '@/utils/index';
 import { ButtonBuilder, Div, Slot, View } from '@/utils/builder';
-import { adoptSheetText, adoptStyles } from '@/utils/style';
+import {
+  ensureShadowElement,
+  ensureShadowRoot,
+  getStringAttribute,
+  setStringAttribute,
+  syncSheetAttribute,
+} from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
 
 const FOCUSABLE_SELECTOR =
@@ -65,44 +71,42 @@ export class Modal extends RanElement {
     this._scrollLocked = false;
     this._afterOpenTimer = null;
     this._afterCloseTimer = null;
-    this._shadowDom = this.shadowRoot || this.attachShadow({ mode: 'closed' });
-    adoptStyles(this._shadowDom, modalCss);
-
-    let root = this._shadowDom.querySelector('.ran-modal-root') as HTMLDivElement | null;
-    if (!root) {
-      root = Div()
-        .class('ran-modal-root')
-        .part('root')
-        .children(
-          Div().class('ran-modal-mask').part('mask'),
-          Div()
-            .class('ran-modal-dialog')
-            .part('dialog')
-            .role('dialog')
-            .attr('aria-modal', 'true')
-            .tabIndex(-1)
-            .labelledBy(this._labelId)
-            .children(
-              View('header')
-                .class('ran-modal-header')
-                .part('header')
-                .children(
-                  View('h3').class('ran-modal-title').part('title').id(this._labelId),
-                  View('button')
-                    .class('ran-modal-close')
-                    .part('close')
-                    .attr('type', 'button')
-                    .label('Close dialog')
-                    .text('x'),
-                ),
-              Div().class('ran-modal-body').part('body').children(Slot()),
-              View('footer').class('ran-modal-footer').part('footer').children(Slot().attr('name', 'footer')),
-            ),
-        )
-        .build() as HTMLDivElement;
-
-      this._shadowDom.appendChild(root);
-    }
+    this._shadowDom = ensureShadowRoot(this, modalCss);
+    const root = ensureShadowElement(
+      this._shadowDom,
+      '.ran-modal-root',
+      () =>
+        Div()
+          .class('ran-modal-root')
+          .part('root')
+          .children(
+            Div().class('ran-modal-mask').part('mask'),
+            Div()
+              .class('ran-modal-dialog')
+              .part('dialog')
+              .role('dialog')
+              .attr('aria-modal', 'true')
+              .tabIndex(-1)
+              .labelledBy(this._labelId)
+              .children(
+                View('header')
+                  .class('ran-modal-header')
+                  .part('header')
+                  .children(
+                    View('h3').class('ran-modal-title').part('title').id(this._labelId),
+                    View('button')
+                      .class('ran-modal-close')
+                      .part('close')
+                      .attr('type', 'button')
+                      .label('Close dialog')
+                      .text('x'),
+                  ),
+                Div().class('ran-modal-body').part('body').children(Slot()),
+                View('footer').class('ran-modal-footer').part('footer').children(Slot().attr('name', 'footer')),
+              ),
+          )
+          .build() as HTMLDivElement,
+    );
 
     this._root = root;
     this._mask = this._root.querySelector('.ran-modal-mask') as HTMLDivElement;
@@ -148,11 +152,11 @@ export class Modal extends RanElement {
   }
 
   get sheet(): string {
-    return this.getAttribute('sheet') || '';
+    return getStringAttribute(this, 'sheet');
   }
 
   set sheet(value: string) {
-    this.setAttribute('sheet', value || '');
+    setStringAttribute(this, 'sheet', value);
   }
 
   get closeOnEsc(): boolean {
@@ -204,8 +208,7 @@ export class Modal extends RanElement {
   }
 
   handlerExternalCss = (): void => {
-    if (!this.sheet) return;
-    adoptSheetText(this._shadowDom, this.sheet);
+    syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
   };
 
   syncTitle = (): void => {
