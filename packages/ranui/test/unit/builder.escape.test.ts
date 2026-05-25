@@ -18,14 +18,12 @@ describe('escapeHtml', () => {
     expect(escapeHtml('"hello"')).toBe('&quot;hello&quot;');
   });
 
-  it("escapes single quote", () => {
+  it('escapes single quote', () => {
     expect(escapeHtml("it's")).toBe('it&#039;s');
   });
 
   it('escapes all special characters together', () => {
-    expect(escapeHtml('<a href="test\'s & others">')).toBe(
-      '&lt;a href=&quot;test&#039;s &amp; others&quot;&gt;',
-    );
+    expect(escapeHtml('<a href="test\'s & others">')).toBe('&lt;a href=&quot;test&#039;s &amp; others&quot;&gt;');
   });
 
   it('escapes XSS-style payload', () => {

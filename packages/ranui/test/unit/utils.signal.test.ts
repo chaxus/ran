@@ -23,7 +23,10 @@ describe('signal', () => {
   it('does not notify when value is unchanged (Object.is)', () => {
     const fn = vi.fn();
     const [, setCount] = signal(1);
-    createEffect(() => { setCount(1); fn(); });
+    createEffect(() => {
+      setCount(1);
+      fn();
+    });
     const calls = fn.mock.calls.length;
     setCount(1);
     expect(fn.mock.calls.length).toBe(calls); // no extra call
@@ -31,12 +34,12 @@ describe('signal', () => {
 
   it('uses custom equals to skip equivalent values', () => {
     const fn = vi.fn();
-    const [get, set] = signal(
-      { id: 1, name: 'old' },
-      { equals: (a, b) => a.id === b.id },
-    );
+    const [get, set] = signal({ id: 1, name: 'old' }, { equals: (a, b) => a.id === b.id });
 
-    createEffect(() => { get(); fn(); });
+    createEffect(() => {
+      get();
+      fn();
+    });
     const calls = fn.mock.calls.length;
 
     set({ id: 1, name: 'new' }); // same id → skip
@@ -60,7 +63,10 @@ describe('createEffect', () => {
     const [count, setCount] = signal(0);
     const fn = vi.fn();
 
-    createEffect(() => { count(); fn(); });
+    createEffect(() => {
+      count();
+      fn();
+    });
     expect(fn).toHaveBeenCalledTimes(1);
 
     setCount(1);
@@ -74,7 +80,10 @@ describe('createEffect', () => {
     const [count, setCount] = signal(0);
     const fn = vi.fn();
 
-    const dispose = createEffect(() => { count(); fn(); });
+    const dispose = createEffect(() => {
+      count();
+      fn();
+    });
     dispose();
 
     setCount(1);
@@ -130,7 +139,10 @@ describe('createEffect — stale subscription cleanup', () => {
     const [count, setCount] = signal(0);
     const fn = vi.fn();
 
-    const dispose = createEffect(() => { count(); fn(); });
+    const dispose = createEffect(() => {
+      count();
+      fn();
+    });
     dispose();
 
     setCount(1);
@@ -144,7 +156,11 @@ describe('batch', () => {
     const [b, setB] = signal(0);
     const fn = vi.fn();
 
-    createEffect(() => { a(); b(); fn(); });
+    createEffect(() => {
+      a();
+      b();
+      fn();
+    });
     expect(fn).toHaveBeenCalledTimes(1);
 
     batch(() => {
@@ -161,9 +177,16 @@ describe('batch', () => {
     const [y, setY] = signal(0);
     const fn = vi.fn();
 
-    createEffect(() => { x(); y(); fn(); });
+    createEffect(() => {
+      x();
+      y();
+      fn();
+    });
 
-    batch(() => { setX(1); setY(1); });
+    batch(() => {
+      setX(1);
+      setY(1);
+    });
     expect(fn).toHaveBeenCalledTimes(2); // 1 initial + 1 batched
   });
 
@@ -171,10 +194,15 @@ describe('batch', () => {
     const [a, setA] = signal(0);
     const fn = vi.fn();
 
-    createEffect(() => { a(); fn(); });
+    createEffect(() => {
+      a();
+      fn();
+    });
 
     batch(() => {
-      batch(() => { setA(1); }); // inner batch — absorbed
+      batch(() => {
+        setA(1);
+      }); // inner batch — absorbed
       setA(2);
     }); // outer flush
 
@@ -198,12 +226,15 @@ describe('computed', () => {
   it('only recomputes when dependencies change', () => {
     const fn = vi.fn(() => 42);
     const [x, setX] = signal(0);
-    const c = computed(() => { x(); return fn(); });
+    const c = computed(() => {
+      x();
+      return fn();
+    });
 
     c(); // first read — triggers initial compute
     const calls = fn.mock.calls.length;
 
-    setX(1);  // dependency changed → recompute
+    setX(1); // dependency changed → recompute
     c();
     expect(fn.mock.calls.length).toBeGreaterThan(calls);
   });

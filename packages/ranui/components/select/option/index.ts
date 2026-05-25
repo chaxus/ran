@@ -17,10 +17,7 @@ export class Option extends RanElement {
 
     const option = ensureShadowElement(this._shadowDom, '.ran-select-dropdown-option', () => {
       const slot = Slot().build() as HTMLSlotElement;
-      const optionContent = Div()
-        .class('ran-select-dropdown-option-content')
-        .children(slot)
-        .build() as HTMLDivElement;
+      const optionContent = Div().class('ran-select-dropdown-option-content').children(slot).build() as HTMLDivElement;
       return Div().class('ran-select-dropdown-option').children(optionContent).build() as HTMLDivElement;
     });
     const optionContent = option.querySelector('.ran-select-dropdown-option-content') as HTMLDivElement;

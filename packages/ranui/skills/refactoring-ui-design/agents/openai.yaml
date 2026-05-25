@@ -1,7 +1,7 @@
 interface:
-  display_name: "Refactoring UI Design"
-  short_description: "Developer-focused UI polish tactics"
-  default_prompt: "Use $refactoring-ui-design to review this interface and suggest concrete visual refactors."
+  display_name: 'Refactoring UI Design'
+  short_description: 'Developer-focused UI polish tactics'
+  default_prompt: 'Use $refactoring-ui-design to review this interface and suggest concrete visual refactors.'
 
 policy:
   allow_implicit_invocation: true

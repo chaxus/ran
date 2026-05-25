@@ -78,29 +78,29 @@ Main();
 
 ### API Reference
 
-| Method                                                | Description                                                                   |
-| :---------------------------------------------------- | :---------------------------------------------------------------------------- |
-| `id(value)`                                           | Set the element ID.                                                           |
-| `class(value)`                                        | Set the full class string.                                                    |
-| `addClass(...names)` / `removeClass(...names)`        | Add or remove classes incrementally.                                          |
-| `attr(name, value)` / `attrs(record)`                 | Set attributes. `attrs` skips `null` and `undefined` values.                  |
-| `boolAttr(name, value, enabledValue?)`                | Toggle a boolean attribute.                                                   |
-| `part(value)`                                         | Set the `part` attribute for `::part()` styling.                              |
-| `data(key, value)`                                    | Set a `data-*` attribute.                                                     |
-| `style(key, value)` / `style(map)`                    | Set inline styles.                                                            |
-| `cssVar(name, value)`                                 | Set a CSS custom property; `--` is added when omitted.                        |
-| `aria(key, value)` / `role(value)`                    | Set accessibility attributes.                                                 |
-| `tabIndex(value)`                                     | Set `tabindex`.                                                               |
-| `label(value)` / `labelledBy(id)` / `describedBy(id)` | Set common ARIA naming attributes.                                            |
-| `ariaHidden(hidden?)`                                 | Set `aria-hidden`.                                                            |
-| `on(type, listener, options?)`                        | Attach a permanent build-time listener — tied to the element's lifetime. Use in the constructor for internal shadow DOM elements. |
+| Method                                                | Description                                                                                                                               |
+| :---------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------- |
+| `id(value)`                                           | Set the element ID.                                                                                                                       |
+| `class(value)`                                        | Set the full class string.                                                                                                                |
+| `addClass(...names)` / `removeClass(...names)`        | Add or remove classes incrementally.                                                                                                      |
+| `attr(name, value)` / `attrs(record)`                 | Set attributes. `attrs` skips `null` and `undefined` values.                                                                              |
+| `boolAttr(name, value, enabledValue?)`                | Toggle a boolean attribute.                                                                                                               |
+| `part(value)`                                         | Set the `part` attribute for `::part()` styling.                                                                                          |
+| `data(key, value)`                                    | Set a `data-*` attribute.                                                                                                                 |
+| `style(key, value)` / `style(map)`                    | Set inline styles.                                                                                                                        |
+| `cssVar(name, value)`                                 | Set a CSS custom property; `--` is added when omitted.                                                                                    |
+| `aria(key, value)` / `role(value)`                    | Set accessibility attributes.                                                                                                             |
+| `tabIndex(value)`                                     | Set `tabindex`.                                                                                                                           |
+| `label(value)` / `labelledBy(id)` / `describedBy(id)` | Set common ARIA naming attributes.                                                                                                        |
+| `ariaHidden(hidden?)`                                 | Set `aria-hidden`.                                                                                                                        |
+| `on(type, listener, options?)`                        | Attach a permanent build-time listener — tied to the element's lifetime. Use in the constructor for internal shadow DOM elements.         |
 | `listen(manager, type, handler, options?)`            | Register a lifecycle-managed listener into an `EventManager`. Use in `connectedCallback` when the listener must be removed on disconnect. |
-| `children(...items)` / `replaceChildren(...items)`    | Append or replace child builders, elements, strings, arrays, or empty values. |
-| `text(value)`                                         | Set text content.                                                             |
-| `ref(holder)`                                         | Capture the built element in a `createRef()` holder.                          |
-| `shadow(options?)`                                    | Attach a Shadow Root and return a `ShadowBuilder`.                            |
-| `build()`                                             | Return the `HTMLElement` or SSR mock.                                         |
-| `serialize()`                                         | Serialize the element for SSR or browser diagnostics.                         |
+| `children(...items)` / `replaceChildren(...items)`    | Append or replace child builders, elements, strings, arrays, or empty values.                                                             |
+| `text(value)`                                         | Set text content.                                                                                                                         |
+| `ref(holder)`                                         | Capture the built element in a `createRef()` holder.                                                                                      |
+| `shadow(options?)`                                    | Attach a Shadow Root and return a `ShadowBuilder`.                                                                                        |
+| `build()`                                             | Return the `HTMLElement` or SSR mock.                                                                                                     |
+| `serialize()`                                         | Serialize the element for SSR or browser diagnostics.                                                                                     |
 
 ## Event Management (`builder/events.ts`)
 
@@ -143,20 +143,20 @@ connectedCallback(): void {
 
 ### API Reference
 
-| API | Description |
-| :-- | :---------- |
-| `new EventManager()` | Create a fresh manager backed by an internal `AbortController`. |
-| `manager.on(target, type, handler, options?)` | Register a listener on `target`; automatically scoped to the manager's signal. Fluent — returns `this`. |
-| `manager.abort()` | Remove all registered listeners and reset the internal `AbortController` so the manager can be reused on the next `connectedCallback`. |
-| `manager.signal` | The underlying `AbortSignal` — pass directly to `addEventListener` when bypassing the fluent API. |
+| API                                           | Description                                                                                                                            |
+| :-------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------- |
+| `new EventManager()`                          | Create a fresh manager backed by an internal `AbortController`.                                                                        |
+| `manager.on(target, type, handler, options?)` | Register a listener on `target`; automatically scoped to the manager's signal. Fluent — returns `this`.                                |
+| `manager.abort()`                             | Remove all registered listeners and reset the internal `AbortController` so the manager can be reused on the next `connectedCallback`. |
+| `manager.signal`                              | The underlying `AbortSignal` — pass directly to `addEventListener` when bypassing the fluent API.                                      |
 
 ### When to use `.on()` vs `.listen()`
 
-| | `ElementBuilder.on()` | `EventManager.on()` / `.listen()` |
-|---|---|---|
-| **Registered at** | Build time (constructor) | Connect time (`connectedCallback`) |
-| **Removed when** | Element is garbage-collected | `manager.abort()` is called |
-| **Use for** | Permanent internal shadow DOM listeners | Any listener that must be cleaned up on disconnect |
+|                   | `ElementBuilder.on()`                   | `EventManager.on()` / `.listen()`                  |
+| ----------------- | --------------------------------------- | -------------------------------------------------- |
+| **Registered at** | Build time (constructor)                | Connect time (`connectedCallback`)                 |
+| **Removed when**  | Element is garbage-collected            | `manager.abort()` is called                        |
+| **Use for**       | Permanent internal shadow DOM listeners | Any listener that must be cleaned up on disconnect |
 
 ## Reactive Primitives (`builder/signal.ts`)
 
@@ -186,29 +186,36 @@ const countEl = Span().build();
 const doubleEl = Span().build();
 
 // Effects drive updates — re-run automatically when signals change
-const disposeA = createEffect(() => { countEl.textContent = `${count()}`; });
-const disposeB = createEffect(() => { doubleEl.textContent = `${doubled()}`; });
+const disposeA = createEffect(() => {
+  countEl.textContent = `${count()}`;
+});
+const disposeB = createEffect(() => {
+  doubleEl.textContent = `${doubled()}`;
+});
 
 // Tear down when section is removed
-return () => { disposeA(); disposeB(); };
+return () => {
+  disposeA();
+  disposeB();
+};
 ```
 
 ### API Reference
 
-| API | Description |
-| :-- | :---------- |
-| `signal(initial, options?)` | Create a reactive value. Returns `[getter, setter]`. Reading the getter inside an effect auto-tracks the dependency. |
-| `getter()` | Read the current value. Auto-subscribes the running effect. |
-| `setter(value)` | Write a new value; notifies all dependent effects. Skips update when value is unchanged (`Object.is`). |
-| `setter(fn)` | Updater form: receives previous value, returns next. |
-| `createEffect(fn)` | Run `fn` immediately; re-run whenever any signal read inside it changes. Before each re-run, removes itself from signals it no longer reads (stale-subscription cleanup). Returns a `dispose` function that stops tracking and removes all subscriptions for GC. `fn` may return a cleanup called before each re-run and on dispose. |
-| `computed(fn)` | Derived read-only signal. Recomputes when its dependencies change. Returns a getter. |
-| `batch(fn)` | Run multiple signal writes as one atomic update. All dependent effects are deferred and flushed once (deduplicated) after `fn` returns. Nested `batch()` calls are absorbed by the outermost one. |
+| API                         | Description                                                                                                                                                                                                                                                                                                                          |
+| :-------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `signal(initial, options?)` | Create a reactive value. Returns `[getter, setter]`. Reading the getter inside an effect auto-tracks the dependency.                                                                                                                                                                                                                 |
+| `getter()`                  | Read the current value. Auto-subscribes the running effect.                                                                                                                                                                                                                                                                          |
+| `setter(value)`             | Write a new value; notifies all dependent effects. Skips update when value is unchanged (`Object.is`).                                                                                                                                                                                                                               |
+| `setter(fn)`                | Updater form: receives previous value, returns next.                                                                                                                                                                                                                                                                                 |
+| `createEffect(fn)`          | Run `fn` immediately; re-run whenever any signal read inside it changes. Before each re-run, removes itself from signals it no longer reads (stale-subscription cleanup). Returns a `dispose` function that stops tracking and removes all subscriptions for GC. `fn` may return a cleanup called before each re-run and on dispose. |
+| `computed(fn)`              | Derived read-only signal. Recomputes when its dependencies change. Returns a getter.                                                                                                                                                                                                                                                 |
+| `batch(fn)`                 | Run multiple signal writes as one atomic update. All dependent effects are deferred and flushed once (deduplicated) after `fn` returns. Nested `batch()` calls are absorbed by the outermost one.                                                                                                                                    |
 
 ### `signal` options
 
-| Option | Type | Description |
-| :----- | :--- | :---------- |
+| Option   | Type                            | Description                                                                   |
+| :------- | :------------------------------ | :---------------------------------------------------------------------------- |
 | `equals` | `(prev: T, next: T) => boolean` | Custom equality check. Return `true` to skip update. Defaults to `Object.is`. |
 
 ### Page development pattern
@@ -218,7 +225,7 @@ import { signal, createEffect, computed, batch, EventManager, Div, ButtonBuilder
 
 function initCounter(container: HTMLElement) {
   const [count, setCount] = signal(0);
-  const [step,  setStep]  = signal(1);
+  const [step, setStep] = signal(1);
   const doubled = computed(() => count() * 2);
   const scope = new EventManager();
 
@@ -227,11 +234,18 @@ function initCounter(container: HTMLElement) {
     .class('counter')
     .children(
       label,
-      ButtonBuilder().text('+').listen(scope, 'click', () => setCount(n => n + step())),
-      ButtonBuilder().text('reset').listen(scope, 'click', () =>
-        // Two writes → one effect flush
-        batch(() => { setCount(0); setStep(1); }),
-      ),
+      ButtonBuilder()
+        .text('+')
+        .listen(scope, 'click', () => setCount((n) => n + step())),
+      ButtonBuilder()
+        .text('reset')
+        .listen(scope, 'click', () =>
+          // Two writes → one effect flush
+          batch(() => {
+            setCount(0);
+            setStep(1);
+          }),
+        ),
     )
     .build();
 
@@ -240,7 +254,10 @@ function initCounter(container: HTMLElement) {
   });
 
   container.appendChild(view);
-  return () => { dispose(); scope.abort(); };
+  return () => {
+    dispose();
+    scope.abort();
+  };
 }
 ```
 

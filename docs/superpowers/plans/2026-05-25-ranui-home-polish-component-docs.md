@@ -22,6 +22,7 @@
 ## Task 1: Add Homepage Docs-Entry Contract Test
 
 **Files:**
+
 - Create: `packages/ranui/test/unit/demo-home.source.test.ts`
 
 - [ ] **Step 1: Write the failing source contract test**
@@ -100,6 +101,7 @@ Expected: FAIL because `demo-home.source.test.ts` exists but `demo/index.html` d
 ## Task 2: Polish Homepage Shell and Component Directory
 
 **Files:**
+
 - Modify: `packages/ranui/demo/index.html`
 - Test: `packages/ranui/test/unit/demo-home.source.test.ts`
 
@@ -208,6 +210,7 @@ Expected: still FAIL because detail blocks have not been added yet.
 ## Task 3: Add Same-Page Component Notes
 
 **Files:**
+
 - Modify: `packages/ranui/demo/index.html`
 - Test: `packages/ranui/test/unit/demo-home.source.test.ts`
 
@@ -324,7 +327,7 @@ Add these rules near the code/style section styles:
   background: var(--surface);
   padding: 8px 10px;
   color: var(--ink);
-  font-family: "SF Mono", "Cascadia Code", ui-monospace, monospace;
+  font-family: 'SF Mono', 'Cascadia Code', ui-monospace, monospace;
   font-size: 12px;
 }
 
@@ -361,6 +364,7 @@ Expected: PASS.
 ## Task 4: Verify Type Safety, Build, and Visual Behavior
 
 **Files:**
+
 - Verify: `packages/ranui/demo/index.html`
 - Verify: `packages/ranui/test/unit/demo-home.source.test.ts`
 

@@ -146,9 +146,7 @@ describe('factory builder chaining', () => {
   });
 
   it('Ul() with Li() children serializes correctly', () => {
-    const html = Ul()
-      .children(Li().text('item 1'), Li().text('item 2'))
-      .serialize();
+    const html = Ul().children(Li().text('item 1'), Li().text('item 2')).serialize();
     expect(html).toBe('<ul><li>item 1</li><li>item 2</li></ul>');
   });
 

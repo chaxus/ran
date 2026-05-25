@@ -30,11 +30,7 @@ export class Section extends RanElement {
         .class('ran-section-header')
         .attr('part', 'header')
         .children(
-          Div()
-            .class('ran-section-heading')
-            .attr('part', 'heading')
-            .attr('role', 'heading')
-            .attr('aria-level', '2'),
+          Div().class('ran-section-heading').attr('part', 'heading').attr('role', 'heading').attr('aria-level', '2'),
           Div().class('ran-section-subtitle').attr('part', 'subtitle'),
         )
         .build();
@@ -74,14 +70,12 @@ export class Section extends RanElement {
 
   private _syncHeading(): void {
     this._headingEl.textContent = this.getAttribute('heading') ?? '';
-    this._headerEl.style.display =
-      this._headingEl.textContent || this._subtitleEl.textContent ? '' : 'none';
+    this._headerEl.style.display = this._headingEl.textContent || this._subtitleEl.textContent ? '' : 'none';
   }
 
   private _syncSubtitle(): void {
     this._subtitleEl.textContent = this.getAttribute('subtitle') ?? '';
-    this._headerEl.style.display =
-      this._headingEl.textContent || this._subtitleEl.textContent ? '' : 'none';
+    this._headerEl.style.display = this._headingEl.textContent || this._subtitleEl.textContent ? '' : 'none';
   }
 
   connectedCallback(): void {

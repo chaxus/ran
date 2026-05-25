@@ -78,29 +78,29 @@ Main();
 
 ### API 参考
 
-| 方法                                                  | 说明                                                       |
-| :---------------------------------------------------- | :--------------------------------------------------------- |
-| `id(value)`                                           | 设置元素 ID。                                              |
-| `class(value)`                                        | 设置完整 class 字符串。                                    |
-| `addClass(...names)` / `removeClass(...names)`        | 增量添加或移除 class。                                     |
-| `attr(name, value)` / `attrs(record)`                 | 设置属性。`attrs` 会跳过 `null` 和 `undefined` 值。        |
-| `boolAttr(name, value, enabledValue?)`                | 切换布尔属性。                                             |
-| `part(value)`                                         | 设置 `part` 属性，用于 `::part()` 样式覆盖。               |
-| `data(key, value)`                                    | 设置 `data-*` 属性。                                       |
-| `style(key, value)` / `style(map)`                    | 设置内联样式。                                             |
-| `cssVar(name, value)`                                 | 设置 CSS 自定义属性；省略 `--` 时会自动补齐。              |
-| `aria(key, value)` / `role(value)`                    | 设置可访问性属性。                                         |
-| `tabIndex(value)`                                     | 设置 `tabindex`。                                          |
-| `label(value)` / `labelledBy(id)` / `describedBy(id)` | 设置常用 ARIA 命名属性。                                   |
-| `ariaHidden(hidden?)`                                 | 设置 `aria-hidden`。                                       |
-| `on(type, listener, options?)`                        | 绑定永久构建时监听器 — 生命周期等同于元素本身。适用于构造函数中的 shadow DOM 内部元素。 |
+| 方法                                                  | 说明                                                                                                                      |
+| :---------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------ |
+| `id(value)`                                           | 设置元素 ID。                                                                                                             |
+| `class(value)`                                        | 设置完整 class 字符串。                                                                                                   |
+| `addClass(...names)` / `removeClass(...names)`        | 增量添加或移除 class。                                                                                                    |
+| `attr(name, value)` / `attrs(record)`                 | 设置属性。`attrs` 会跳过 `null` 和 `undefined` 值。                                                                       |
+| `boolAttr(name, value, enabledValue?)`                | 切换布尔属性。                                                                                                            |
+| `part(value)`                                         | 设置 `part` 属性，用于 `::part()` 样式覆盖。                                                                              |
+| `data(key, value)`                                    | 设置 `data-*` 属性。                                                                                                      |
+| `style(key, value)` / `style(map)`                    | 设置内联样式。                                                                                                            |
+| `cssVar(name, value)`                                 | 设置 CSS 自定义属性；省略 `--` 时会自动补齐。                                                                             |
+| `aria(key, value)` / `role(value)`                    | 设置可访问性属性。                                                                                                        |
+| `tabIndex(value)`                                     | 设置 `tabindex`。                                                                                                         |
+| `label(value)` / `labelledBy(id)` / `describedBy(id)` | 设置常用 ARIA 命名属性。                                                                                                  |
+| `ariaHidden(hidden?)`                                 | 设置 `aria-hidden`。                                                                                                      |
+| `on(type, listener, options?)`                        | 绑定永久构建时监听器 — 生命周期等同于元素本身。适用于构造函数中的 shadow DOM 内部元素。                                   |
 | `listen(manager, type, handler, options?)`            | 将监听器注册到 `EventManager`，由 manager 统一管理生命周期。适用于 `connectedCallback` 中需要随 disconnect 清理的监听器。 |
-| `children(...items)` / `replaceChildren(...items)`    | 追加或替换子节点，支持 builder、元素、字符串、数组和空值。 |
-| `text(value)`                                         | 设置文本内容。                                             |
-| `ref(holder)`                                         | 将构建出的元素保存到 `createRef()` 的 holder 中。          |
-| `shadow(options?)`                                    | 挂载 Shadow Root，并返回 `ShadowBuilder`。                 |
-| `build()`                                             | 返回 `HTMLElement` 或 SSR mock。                           |
-| `serialize()`                                         | 为 SSR 或浏览器诊断序列化元素。                            |
+| `children(...items)` / `replaceChildren(...items)`    | 追加或替换子节点，支持 builder、元素、字符串、数组和空值。                                                                |
+| `text(value)`                                         | 设置文本内容。                                                                                                            |
+| `ref(holder)`                                         | 将构建出的元素保存到 `createRef()` 的 holder 中。                                                                         |
+| `shadow(options?)`                                    | 挂载 Shadow Root，并返回 `ShadowBuilder`。                                                                                |
+| `build()`                                             | 返回 `HTMLElement` 或 SSR mock。                                                                                          |
+| `serialize()`                                         | 为 SSR 或浏览器诊断序列化元素。                                                                                           |
 
 ## 事件管理 (`builder/events.ts`)
 
@@ -143,19 +143,19 @@ connectedCallback(): void {
 
 ### API 参考
 
-| API | 说明 |
-| :-- | :--- |
-| `new EventManager()` | 创建一个由内部 `AbortController` 驱动的事件管理器。 |
-| `manager.on(target, type, handler, options?)` | 将监听器注册到 `target`，自动绑定到 manager 的 signal。链式调用，返回 `this`。 |
-| `manager.abort()` | 移除所有已注册的监听器，并重置内部 `AbortController`，支持在下次 `connectedCallback` 中复用。 |
-| `manager.signal` | 底层 `AbortSignal` — 需要绕过链式 API 时，可直接传给 `addEventListener` 的 options。 |
+| API                                           | 说明                                                                                          |
+| :-------------------------------------------- | :-------------------------------------------------------------------------------------------- |
+| `new EventManager()`                          | 创建一个由内部 `AbortController` 驱动的事件管理器。                                           |
+| `manager.on(target, type, handler, options?)` | 将监听器注册到 `target`，自动绑定到 manager 的 signal。链式调用，返回 `this`。                |
+| `manager.abort()`                             | 移除所有已注册的监听器，并重置内部 `AbortController`，支持在下次 `connectedCallback` 中复用。 |
+| `manager.signal`                              | 底层 `AbortSignal` — 需要绕过链式 API 时，可直接传给 `addEventListener` 的 options。          |
 
 ### `.on()` 与 `.listen()` 的选择
 
-| | `ElementBuilder.on()` | `EventManager.on()` / `.listen()` |
-|---|---|---|
-| **注册时机** | 构建时（constructor） | 连接时（connectedCallback） |
-| **移除时机** | 元素被 GC 时自动释放 | 调用 `manager.abort()` 时 |
+|              | `ElementBuilder.on()`     | `EventManager.on()` / `.listen()`  |
+| ------------ | ------------------------- | ---------------------------------- |
+| **注册时机** | 构建时（constructor）     | 连接时（connectedCallback）        |
+| **移除时机** | 元素被 GC 时自动释放      | 调用 `manager.abort()` 时          |
 | **适用场景** | shadow DOM 内部静态监听器 | 需要随 disconnect 清理的任何监听器 |
 
 ## 响应式原语 (`builder/signal.ts`)
@@ -186,29 +186,36 @@ const countEl = Span().build();
 const doubleEl = Span().build();
 
 // Effect 驱动 DOM 更新 — signal 变化时自动重新执行
-const disposeA = createEffect(() => { countEl.textContent = `${count()}`; });
-const disposeB = createEffect(() => { doubleEl.textContent = `${doubled()}`; });
+const disposeA = createEffect(() => {
+  countEl.textContent = `${count()}`;
+});
+const disposeB = createEffect(() => {
+  doubleEl.textContent = `${doubled()}`;
+});
 
 // 区块销毁时清理
-return () => { disposeA(); disposeB(); };
+return () => {
+  disposeA();
+  disposeB();
+};
 ```
 
 ### API 参考
 
-| API | 说明 |
-| :-- | :--- |
-| `signal(initial, options?)` | 创建响应式值，返回 `[getter, setter]`。在 effect 内读取 getter 会自动追踪依赖。 |
-| `getter()` | 读取当前值，自动订阅当前 effect。 |
-| `setter(value)` | 写入新值，通知所有依赖 effect。值未变时跳过（`Object.is`）。 |
-| `setter(fn)` | 更新函数形式：接收上一个值，返回新值。 |
-| `createEffect(fn)` | 立即执行 `fn`，其依赖的 signal 变化时自动重新执行。每次重新执行前会将自身从不再读取的 signal 中移除（过期订阅清理）。返回 `dispose` 函数，调用后停止追踪并从所有 signal 移除引用（GC 友好）。`fn` 可返回 cleanup 函数，在每次重新执行前和 dispose 时调用。 |
-| `computed(fn)` | 派生只读 signal，依赖变化时惰性重新计算。返回 getter。 |
-| `batch(fn)` | 将多次 signal 写入合并为一次原子更新。所有依赖 effect 在 `fn` 返回后统一 flush（去重）。嵌套 `batch()` 调用会被最外层吸收。 |
+| API                         | 说明                                                                                                                                                                                                                                                       |
+| :-------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `signal(initial, options?)` | 创建响应式值，返回 `[getter, setter]`。在 effect 内读取 getter 会自动追踪依赖。                                                                                                                                                                            |
+| `getter()`                  | 读取当前值，自动订阅当前 effect。                                                                                                                                                                                                                          |
+| `setter(value)`             | 写入新值，通知所有依赖 effect。值未变时跳过（`Object.is`）。                                                                                                                                                                                               |
+| `setter(fn)`                | 更新函数形式：接收上一个值，返回新值。                                                                                                                                                                                                                     |
+| `createEffect(fn)`          | 立即执行 `fn`，其依赖的 signal 变化时自动重新执行。每次重新执行前会将自身从不再读取的 signal 中移除（过期订阅清理）。返回 `dispose` 函数，调用后停止追踪并从所有 signal 移除引用（GC 友好）。`fn` 可返回 cleanup 函数，在每次重新执行前和 dispose 时调用。 |
+| `computed(fn)`              | 派生只读 signal，依赖变化时惰性重新计算。返回 getter。                                                                                                                                                                                                     |
+| `batch(fn)`                 | 将多次 signal 写入合并为一次原子更新。所有依赖 effect 在 `fn` 返回后统一 flush（去重）。嵌套 `batch()` 调用会被最外层吸收。                                                                                                                                |
 
 ### `signal` 选项
 
-| 选项 | 类型 | 说明 |
-| :--- | :--- | :--- |
+| 选项     | 类型                            | 说明                                                           |
+| :------- | :------------------------------ | :------------------------------------------------------------- |
 | `equals` | `(prev: T, next: T) => boolean` | 自定义相等判断，返回 `true` 时跳过更新。默认使用 `Object.is`。 |
 
 ### 页面开发模式
@@ -218,7 +225,7 @@ import { signal, createEffect, computed, batch, EventManager, Div, ButtonBuilder
 
 function initCounter(container: HTMLElement) {
   const [count, setCount] = signal(0);
-  const [step,  setStep]  = signal(1);
+  const [step, setStep] = signal(1);
   const doubled = computed(() => count() * 2);
   const scope = new EventManager();
 
@@ -227,11 +234,18 @@ function initCounter(container: HTMLElement) {
     .class('counter')
     .children(
       label,
-      ButtonBuilder().text('+').listen(scope, 'click', () => setCount(n => n + step())),
-      ButtonBuilder().text('重置').listen(scope, 'click', () =>
-        // 两次写入 → 一次 effect flush
-        batch(() => { setCount(0); setStep(1); }),
-      ),
+      ButtonBuilder()
+        .text('+')
+        .listen(scope, 'click', () => setCount((n) => n + step())),
+      ButtonBuilder()
+        .text('重置')
+        .listen(scope, 'click', () =>
+          // 两次写入 → 一次 effect flush
+          batch(() => {
+            setCount(0);
+            setStep(1);
+          }),
+        ),
     )
     .build();
 
@@ -240,7 +254,10 @@ function initCounter(container: HTMLElement) {
   });
 
   container.appendChild(view);
-  return () => { dispose(); scope.abort(); };
+  return () => {
+    dispose();
+    scope.abort();
+  };
 }
 ```
 

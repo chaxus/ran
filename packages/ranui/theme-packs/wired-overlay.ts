@@ -14,7 +14,9 @@ const SELECTORS = [
   'r-skeleton',
   'r-card',
   'r-section',
-].map((tag) => `[data-ran-theme-pack="wired"] ${tag}:not([data-wired-skip])`).join(',');
+]
+  .map((tag) => `[data-ran-theme-pack="wired"] ${tag}:not([data-wired-skip])`)
+  .join(',');
 
 const ROUGHNESS = 2;
 const STROKE_WIDTH = 1.5;

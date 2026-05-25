@@ -232,25 +232,40 @@ import { signal, createEffect, computed, batch, EventManager, Div, ButtonBuilder
 
 function initCounter(container: HTMLElement) {
   const [count, setCount] = signal(0);
-  const [step,  setStep]  = signal(1);
+  const [step, setStep] = signal(1);
   const doubled = computed(() => count() * 2);
   const scope = new EventManager();
 
   const label = Div().build();
-  const view = Div().children(
-    label,
-    ButtonBuilder().text('+').listen(scope, 'click', () => setCount(n => n + step())),
-    ButtonBuilder().text('重置').listen(scope, 'click', () =>
-      batch(() => { setCount(0); setStep(1); }), // 两次写入 → 一次 flush
-    ),
-  ).build();
+  const view = Div()
+    .children(
+      label,
+      ButtonBuilder()
+        .text('+')
+        .listen(scope, 'click', () => setCount((n) => n + step())),
+      ButtonBuilder()
+        .text('重置')
+        .listen(
+          scope,
+          'click',
+          () =>
+            batch(() => {
+              setCount(0);
+              setStep(1);
+            }), // 两次写入 → 一次 flush
+        ),
+    )
+    .build();
 
   const dispose = createEffect(() => {
     label.textContent = `${count()} (×2 = ${doubled()})`;
   });
 
   container.appendChild(view);
-  return () => { dispose(); scope.abort(); }; // 区块销毁时清理
+  return () => {
+    dispose();
+    scope.abort();
+  }; // 区块销毁时清理
 }
 ```
 

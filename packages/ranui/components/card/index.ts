@@ -42,14 +42,8 @@ export class Card extends RanElement {
                 ),
               Slot().attr('name', 'extra').attr('part', 'extra'),
             ),
-          Div()
-            .class('ran-card-body')
-            .attr('part', 'body')
-            .children(Slot()),
-          Div()
-            .class('ran-card-footer')
-            .attr('part', 'footer')
-            .children(Slot().attr('name', 'footer')),
+          Div().class('ran-card-body').attr('part', 'body').children(Slot()),
+          Div().class('ran-card-footer').attr('part', 'footer').children(Slot().attr('name', 'footer')),
         )
         .build(),
     );
@@ -108,7 +102,7 @@ export class Card extends RanElement {
     syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
   }
 
-  attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
+  attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
     if (oldValue === newValue) return;
     if (name === 'title') this._syncTitle();
     if (name === 'description') this._syncDescription();

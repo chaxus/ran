@@ -202,13 +202,61 @@ export class RadarChart extends RanElement {
       const fontSize = this.mData[i]?.fontSize || defaultFontSize;
       ctx.font = `${fontSize}px ${fontFamily}`;
       if (this.mAngle * i >= 0 && this.mAngle * i < Math.PI / 2) {
-        this.drawButton(ctx, backgroundColor, x, y, 44 * radio, 24 * radio, 12 * radio, this.mData[i].abilityName, fontColor, fontFamily, fontSize);
+        this.drawButton(
+          ctx,
+          backgroundColor,
+          x,
+          y,
+          44 * radio,
+          24 * radio,
+          12 * radio,
+          this.mData[i].abilityName,
+          fontColor,
+          fontFamily,
+          fontSize,
+        );
       } else if (this.mAngle * i >= Math.PI / 2 && this.mAngle * i < Math.PI) {
-        this.drawButton(ctx, backgroundColor, x, y - 24 * radio, 44 * radio, 24 * radio, 12 * radio, this.mData[i].abilityName, fontColor, fontFamily, fontSize);
+        this.drawButton(
+          ctx,
+          backgroundColor,
+          x,
+          y - 24 * radio,
+          44 * radio,
+          24 * radio,
+          12 * radio,
+          this.mData[i].abilityName,
+          fontColor,
+          fontFamily,
+          fontSize,
+        );
       } else if (this.mAngle * i >= Math.PI && this.mAngle * i < (Math.PI * 3) / 2) {
-        this.drawButton(ctx, backgroundColor, x - 44 * radio, y - 24 * radio, 44 * radio, 24 * radio, 12 * radio, this.mData[i].abilityName, fontColor, fontFamily, fontSize);
+        this.drawButton(
+          ctx,
+          backgroundColor,
+          x - 44 * radio,
+          y - 24 * radio,
+          44 * radio,
+          24 * radio,
+          12 * radio,
+          this.mData[i].abilityName,
+          fontColor,
+          fontFamily,
+          fontSize,
+        );
       } else {
-        this.drawButton(ctx, backgroundColor, x - 44 * radio, y, 44 * radio, 24 * radio, 12 * radio, this.mData[i].abilityName, fontColor, fontFamily, fontSize);
+        this.drawButton(
+          ctx,
+          backgroundColor,
+          x - 44 * radio,
+          y,
+          44 * radio,
+          24 * radio,
+          12 * radio,
+          this.mData[i].abilityName,
+          fontColor,
+          fontFamily,
+          fontSize,
+        );
       }
     }
     ctx.restore();

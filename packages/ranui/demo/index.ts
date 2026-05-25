@@ -33,8 +33,12 @@ registerIcons({
 
 // Register icons first, then bootstrap all components/examples.
 import('../index').then(() => {
-  const themeSelect = document.getElementById('theme-select') as HTMLElement & { selectOptionElement?: (el: Element | null, dispatch?: boolean) => void };
-  const packSelect = document.getElementById('pack-select') as HTMLElement & { selectOptionElement?: (el: Element | null, dispatch?: boolean) => void };
+  const themeSelect = document.getElementById('theme-select') as HTMLElement & {
+    selectOptionElement?: (el: Element | null, dispatch?: boolean) => void;
+  };
+  const packSelect = document.getElementById('pack-select') as HTMLElement & {
+    selectOptionElement?: (el: Element | null, dispatch?: boolean) => void;
+  };
 
   themeSelect?.addEventListener('change', (e: Event) => {
     const value = (e as CustomEvent<{ value: string }>).detail.value as RanThemeName;

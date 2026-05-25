@@ -26,10 +26,25 @@ function openPicker(): ColorPicker & Record<string, any> {
 /** Mock getBoundingClientRect on the palette element via direct assignment (works in jsdom). */
 function mockPaletteBCR(
   cp: any,
-  { top = 100, left = 50, width = 200, height = 160 }: { top?: number; left?: number; width?: number; height?: number } = {},
+  {
+    top = 100,
+    left = 50,
+    width = 200,
+    height = 160,
+  }: { top?: number; left?: number; width?: number; height?: number } = {},
 ): void {
   (cp.colorPickerPanelPalette as any).getBoundingClientRect = (): DOMRect =>
-    ({ top, left, width, height, right: left + width, bottom: top + height, x: left, y: top, toJSON: () => ({}) }) as DOMRect;
+    ({
+      top,
+      left,
+      width,
+      height,
+      right: left + width,
+      bottom: top + height,
+      x: left,
+      y: top,
+      toJSON: () => ({}),
+    }) as DOMRect;
 }
 
 function createMouseMoveWithPage(pageX: number, pageY: number): MouseEvent {
@@ -177,8 +192,9 @@ describe('updateColorValue', () => {
   it('updates colorpickerInner background style', () => {
     const cp = createCp();
     cp.updateColorValue('#ff0000');
-    expect(cp.colorpickerInner.style.getPropertyValue('background') ||
-           cp.colorpickerInner.getAttribute('style')).toBeTruthy();
+    expect(
+      cp.colorpickerInner.style.getPropertyValue('background') || cp.colorpickerInner.getAttribute('style'),
+    ).toBeTruthy();
   });
 });
 
@@ -253,17 +269,13 @@ describe('openColorPicker', () => {
 describe('createColorPickerProgress — event wiring', () => {
   it('slider-hue dispatching change updates hue context', () => {
     const cp = openPicker();
-    cp.colorPickerPanelSliderHue!.dispatchEvent(
-      new CustomEvent('change', { detail: { value: 0.5 } }),
-    );
+    cp.colorPickerPanelSliderHue!.dispatchEvent(new CustomEvent('change', { detail: { value: 0.5 } }));
     expect(cp.context.hue.getter()).toBeCloseTo(180, 0);
   });
 
   it('slider-alpha dispatching change updates transparency context', () => {
     const cp = openPicker();
-    cp.colorPickerPanelSliderAlpha!.dispatchEvent(
-      new CustomEvent('change', { detail: { value: 0.3 } }),
-    );
+    cp.colorPickerPanelSliderAlpha!.dispatchEvent(new CustomEvent('change', { detail: { value: 0.3 } }));
     expect(cp.context.transparency.getter()).toBeCloseTo(30, 0);
   });
 });
@@ -377,7 +389,10 @@ describe('changeColorPalettePosition', () => {
 
   it('top-left click → saturation=0, lightness=100', () => {
     const cp = openPicker();
-    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => { cb(0); return 0; });
+    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => {
+      cb(0);
+      return 0;
+    });
     mockPaletteBCR(cp, { top: 0, left: 0, width: 200, height: 160 });
     cp.changeColorPalettePosition(0, 0);
     expect(cp.context.saturation.getter()).toBeCloseTo(0, 0);
@@ -386,7 +401,10 @@ describe('changeColorPalettePosition', () => {
 
   it('bottom-right click → saturation=100, lightness=0', () => {
     const cp = openPicker();
-    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => { cb(0); return 0; });
+    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => {
+      cb(0);
+      return 0;
+    });
     mockPaletteBCR(cp, { top: 0, left: 0, width: 200, height: 160 });
     cp.changeColorPalettePosition(200, 160);
     expect(cp.context.saturation.getter()).toBeCloseTo(100, 0);
@@ -395,7 +413,10 @@ describe('changeColorPalettePosition', () => {
 
   it('center click → saturation≈50, lightness≈50', () => {
     const cp = openPicker();
-    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => { cb(0); return 0; });
+    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => {
+      cb(0);
+      return 0;
+    });
     mockPaletteBCR(cp, { top: 0, left: 0, width: 200, height: 160 });
     cp.changeColorPalettePosition(100, 80);
     expect(cp.context.saturation.getter()).toBeCloseTo(50, 0);
@@ -405,18 +426,24 @@ describe('changeColorPalettePosition', () => {
   it('sets dot position via requestAnimationFrame', () => {
     const cp = openPicker();
     const frames: FrameRequestCallback[] = [];
-    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => { frames.push(cb); return frames.length; });
+    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => {
+      frames.push(cb);
+      return frames.length;
+    });
     mockPaletteBCR(cp, { top: 0, left: 0, width: 200, height: 160 });
     cp.changeColorPalettePosition(50, 40);
     expect(frames.length).toBe(1);
     frames[0](0);
     expect(cp.colorPickerPanelDot?.style.getPropertyValue('left')).toBe('42px'); // 50 - BOT_WIDTH(8)
-    expect(cp.colorPickerPanelDot?.style.getPropertyValue('top')).toBe('32px');  // 40 - BOT_WIDTH(8)
+    expect(cp.colorPickerPanelDot?.style.getPropertyValue('top')).toBe('32px'); // 40 - BOT_WIDTH(8)
   });
 
   it('clamps values outside palette bounds', () => {
     const cp = openPicker();
-    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => { cb(0); return 0; });
+    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => {
+      cb(0);
+      return 0;
+    });
     mockPaletteBCR(cp, { top: 0, left: 0, width: 200, height: 160 });
     cp.changeColorPalettePosition(-100, -100); // below 0
     expect(cp.context.saturation.getter()).toBeCloseTo(0, 0);
@@ -430,7 +457,10 @@ describe('changeColorPalettePosition', () => {
 describe('clickColorPalette', () => {
   it('calls changeColorPalettePosition with offsetX/offsetY', () => {
     const cp = openPicker();
-    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => { cb(0); return 0; });
+    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => {
+      cb(0);
+      return 0;
+    });
     mockPaletteBCR(cp, { top: 0, left: 0, width: 200, height: 160 });
     const spy = vi.spyOn(cp, 'changeColorPalettePosition');
     const event = new MouseEvent('mousedown', { bubbles: false });
@@ -463,9 +493,17 @@ describe('mouseMoveColorPickerPalette', () => {
   // For these tests we mock at Element.prototype level so jsdom reliably
   // returns non-zero dimensions during the method call.
   it('moving to top of palette → lightness ≈ 100 (Y-axis inverted)', () => {
-    vi.spyOn(Element.prototype, 'getBoundingClientRect').mockReturnValue(
-      { top: 100, left: 50, width: 200, height: 160, right: 250, bottom: 260, x: 50, y: 100, toJSON: () => ({}) } as DOMRect,
-    );
+    vi.spyOn(Element.prototype, 'getBoundingClientRect').mockReturnValue({
+      top: 100,
+      left: 50,
+      width: 200,
+      height: 160,
+      right: 250,
+      bottom: 260,
+      x: 50,
+      y: 100,
+      toJSON: () => ({}),
+    } as DOMRect);
     const cp = openPicker();
     cp.colorPickerPaletteSelect = true;
     cp.mouseMoveColorPickerPalette(createMouseMoveWithPage(150, 100));
@@ -473,9 +511,17 @@ describe('mouseMoveColorPickerPalette', () => {
   });
 
   it('moving to bottom of palette → lightness ≈ 0', () => {
-    vi.spyOn(Element.prototype, 'getBoundingClientRect').mockReturnValue(
-      { top: 100, left: 50, width: 200, height: 160, right: 250, bottom: 260, x: 50, y: 100, toJSON: () => ({}) } as DOMRect,
-    );
+    vi.spyOn(Element.prototype, 'getBoundingClientRect').mockReturnValue({
+      top: 100,
+      left: 50,
+      width: 200,
+      height: 160,
+      right: 250,
+      bottom: 260,
+      x: 50,
+      y: 100,
+      toJSON: () => ({}),
+    } as DOMRect);
     const cp = openPicker();
     cp.colorPickerPaletteSelect = true;
     cp.mouseMoveColorPickerPalette(createMouseMoveWithPage(150, 260));
@@ -483,9 +529,17 @@ describe('mouseMoveColorPickerPalette', () => {
   });
 
   it('moving to left edge → saturation ≈ 0', () => {
-    vi.spyOn(Element.prototype, 'getBoundingClientRect').mockReturnValue(
-      { top: 100, left: 50, width: 200, height: 160, right: 250, bottom: 260, x: 50, y: 100, toJSON: () => ({}) } as DOMRect,
-    );
+    vi.spyOn(Element.prototype, 'getBoundingClientRect').mockReturnValue({
+      top: 100,
+      left: 50,
+      width: 200,
+      height: 160,
+      right: 250,
+      bottom: 260,
+      x: 50,
+      y: 100,
+      toJSON: () => ({}),
+    } as DOMRect);
     const cp = openPicker();
     cp.colorPickerPaletteSelect = true;
     cp.mouseMoveColorPickerPalette(createMouseMoveWithPage(50, 180));
@@ -493,9 +547,17 @@ describe('mouseMoveColorPickerPalette', () => {
   });
 
   it('moving to right edge → saturation ≈ 100', () => {
-    vi.spyOn(Element.prototype, 'getBoundingClientRect').mockReturnValue(
-      { top: 100, left: 50, width: 200, height: 160, right: 250, bottom: 260, x: 50, y: 100, toJSON: () => ({}) } as DOMRect,
-    );
+    vi.spyOn(Element.prototype, 'getBoundingClientRect').mockReturnValue({
+      top: 100,
+      left: 50,
+      width: 200,
+      height: 160,
+      right: 250,
+      bottom: 260,
+      x: 50,
+      y: 100,
+      toJSON: () => ({}),
+    } as DOMRect);
     const cp = openPicker();
     cp.colorPickerPaletteSelect = true;
     cp.mouseMoveColorPickerPalette(createMouseMoveWithPage(250, 180));
@@ -504,9 +566,17 @@ describe('mouseMoveColorPickerPalette', () => {
 
   it('drag and click produce consistent lightness for the same position', () => {
     // palette at origin so pageX/pageY equal offsetX/offsetY directly
-    vi.spyOn(Element.prototype, 'getBoundingClientRect').mockReturnValue(
-      { top: 0, left: 0, width: 200, height: 160, right: 200, bottom: 160, x: 0, y: 0, toJSON: () => ({}) } as DOMRect,
-    );
+    vi.spyOn(Element.prototype, 'getBoundingClientRect').mockReturnValue({
+      top: 0,
+      left: 0,
+      width: 200,
+      height: 160,
+      right: 200,
+      bottom: 160,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    } as DOMRect);
     const cp = openPicker();
 
     cp.changeColorPalettePosition(100, 80);
@@ -607,7 +677,10 @@ describe('connectedCallback', () => {
 
   it('registers click listener that calls openColorPicker', () => {
     const cp = createCp();
-    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => { cb(0); return 0; });
+    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => {
+      cb(0);
+      return 0;
+    });
     cp.popoverBlock.click();
     expect(cp.colorPickerInner).toBeTruthy();
   });

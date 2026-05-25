@@ -26,7 +26,16 @@ describe('theme pack source contracts', () => {
     const packageJson = read('package.json');
     const viteConfig = read('vite.config.ts');
 
-    const exportPacks = ['pixel-retro', 'windows-98', 'windows-xp', 'system-6', 'wired', 'paper', 'neo-brutalism', 'transitions'];
+    const exportPacks = [
+      'pixel-retro',
+      'windows-98',
+      'windows-xp',
+      'system-6',
+      'wired',
+      'paper',
+      'neo-brutalism',
+      'transitions',
+    ];
     for (const pack of exportPacks) {
       expect(packageJson, `package.json missing ${pack} export`).toContain(
         `"./theme-packs/${pack}": "./dist/${pack}.css"`,
@@ -53,9 +62,7 @@ describe('theme pack source contracts', () => {
   it('scopes every pack css under data-ran-theme-pack', () => {
     for (const pack of ALL_PACKS) {
       const source = read(`theme-packs/${pack}.less`);
-      expect(source, `${pack} should scope under data-ran-theme-pack`).toContain(
-        `[data-ran-theme-pack='${pack}']`,
-      );
+      expect(source, `${pack} should scope under data-ran-theme-pack`).toContain(`[data-ran-theme-pack='${pack}']`);
     }
   });
 

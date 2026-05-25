@@ -19,11 +19,7 @@ export class TabPane extends RanElement {
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, tabPaneCss);
-    const slot = ensureShadowElement(
-      this._shadowDom,
-      'slot',
-      () => Slot().part('content').build() as HTMLSlotElement,
-    );
+    const slot = ensureShadowElement(this._shadowDom, 'slot', () => Slot().part('content').build() as HTMLSlotElement);
     this._div = slot;
   }
   get label() {

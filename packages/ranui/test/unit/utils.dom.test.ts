@@ -49,7 +49,8 @@ describe('utils/dom', () => {
   });
 
   it('builds template fragments with escaped dynamic values', () => {
-    const fragment = html`<p>${'<script>alert(1)</script>'}</p><span>${['A&B', '"C"']}</span>`;
+    const fragment = html`<p>${'<script>alert(1)</script>'}</p>
+      <span>${['A&B', '"C"']}</span>`;
     const container = document.createElement('div');
     container.appendChild(fragment);
 

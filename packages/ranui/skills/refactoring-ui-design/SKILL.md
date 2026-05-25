@@ -78,18 +78,18 @@ Do not use this to override explicit product requirements, an existing design sy
 
 ## UI Smell Fixes
 
-| Smell | Refactor |
-| --- | --- |
-| Everything competes equally | Increase hierarchy with weight, contrast, spacing, and position. |
-| Too many boxes and lines | Remove borders; use spacing, background contrast, or subtle shadow. |
-| Page feels cramped | Increase outer padding and group spacing before changing colors. |
-| Page feels sparse | Constrain width, tighten related groups, and add content hierarchy. |
-| Content is hard to scan | Add section structure, consistent alignment, and stronger labels or metadata treatment. |
-| Colors feel random | Reduce to defined roles and shade scales. |
-| UI feels flat | Add elevation, overlap, or background layering only where structure needs it. |
-| Typography feels amateur | Reduce font sizes, use fewer weights, improve line-height, and enforce readable line length. |
-| Forms feel heavy | Group fields, reduce label emphasis, clarify primary action, and remove unnecessary dividers. |
-| Dashboard feels noisy | De-emphasize chrome, emphasize current data, and use tables/cards only where comparison needs them. |
+| Smell                       | Refactor                                                                                            |
+| --------------------------- | --------------------------------------------------------------------------------------------------- |
+| Everything competes equally | Increase hierarchy with weight, contrast, spacing, and position.                                    |
+| Too many boxes and lines    | Remove borders; use spacing, background contrast, or subtle shadow.                                 |
+| Page feels cramped          | Increase outer padding and group spacing before changing colors.                                    |
+| Page feels sparse           | Constrain width, tighten related groups, and add content hierarchy.                                 |
+| Content is hard to scan     | Add section structure, consistent alignment, and stronger labels or metadata treatment.             |
+| Colors feel random          | Reduce to defined roles and shade scales.                                                           |
+| UI feels flat               | Add elevation, overlap, or background layering only where structure needs it.                       |
+| Typography feels amateur    | Reduce font sizes, use fewer weights, improve line-height, and enforce readable line length.        |
+| Forms feel heavy            | Group fields, reduce label emphasis, clarify primary action, and remove unnecessary dividers.       |
+| Dashboard feels noisy       | De-emphasize chrome, emphasize current data, and use tables/cards only where comparison needs them. |
 
 ## Implementation Rules
 

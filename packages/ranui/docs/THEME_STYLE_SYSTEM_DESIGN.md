@@ -243,10 +243,10 @@ Understanding the switching mechanism helps implementors avoid common mistakes.
 **Step 1 — one attribute write, no component JS involved**
 
 ```ts
-setTheme('dark')
+setTheme('dark');
 // only does:
-document.documentElement.setAttribute('data-ran-theme', 'dark')
-document.documentElement.setAttribute('theme', 'dark')
+document.documentElement.setAttribute('data-ran-theme', 'dark');
+document.documentElement.setAttribute('theme', 'dark');
 ```
 
 No component lifecycle methods run. No Shadow DOM is touched by JS.
@@ -267,7 +267,7 @@ all CSS selectors. The dark override block becomes active:
 **Step 3 — CSS custom properties cross Shadow DOM**
 
 CSS custom properties are inherited properties. Shadow DOM does not block
-inheritance. Every component's internal styles that reference `var(--ran-color-*)` 
+inheritance. Every component's internal styles that reference `var(--ran-color-*)`
 see the new values without any JS being triggered inside the component.
 
 ```
@@ -283,12 +283,12 @@ see the new values without any JS being triggered inside the component.
 
 What the browser does next depends on which properties changed:
 
-| Changed property type | Pipeline stage | Cost |
-|-----------------------|---------------|------|
-| `color`, `background-color`, `box-shadow` | Paint only | Low |
-| `border-radius`, `opacity` | Paint only | Low |
-| `border-width`, `padding`, `font-size` | Layout + Paint | Medium, causes reflow |
-| `font-family` | Layout + Paint + font fetch | Medium–high, risk of FOUT |
+| Changed property type                     | Pipeline stage              | Cost                      |
+| ----------------------------------------- | --------------------------- | ------------------------- |
+| `color`, `background-color`, `box-shadow` | Paint only                  | Low                       |
+| `border-radius`, `opacity`                | Paint only                  | Low                       |
+| `border-width`, `padding`, `font-size`    | Layout + Paint              | Medium, causes reflow     |
+| `font-family`                             | Layout + Paint + font fetch | Medium–high, risk of FOUT |
 
 For light/dark switching, only color-family properties change. This means:
 

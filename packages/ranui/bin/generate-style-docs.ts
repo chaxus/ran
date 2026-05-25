@@ -121,13 +121,36 @@ function toRelativeComponentName(dirPath: string): string {
 
 type TokenLayer = 'semantic' | 'skin' | 'component' | 'internal';
 
-const SEMANTIC_PREFIXES = ['--ran-color-', '--ran-font-', '--ran-radius-', '--ran-shadow-', '--ran-motion-', '--ran-spacing-'];
+const SEMANTIC_PREFIXES = [
+  '--ran-color-',
+  '--ran-font-',
+  '--ran-radius-',
+  '--ran-shadow-',
+  '--ran-motion-',
+  '--ran-spacing-',
+];
 
 const COMPONENT_PREFIXES = [
-  '--ran-btn-', '--ran-input-', '--ran-checkbox-', '--ran-select-', '--ran-dropdown-',
-  '--ran-modal-', '--ran-message-', '--ran-tab-', '--ran-tabpane-', '--ran-skeleton-',
-  '--ran-icon-', '--ran-image-', '--ran-player-', '--ran-progress-', '--ran-colorpicker-',
-  '--ran-popover-', '--ran-loading-', '--ran-math-', '--ran-form-', '--ran-scratch-',
+  '--ran-btn-',
+  '--ran-input-',
+  '--ran-checkbox-',
+  '--ran-select-',
+  '--ran-dropdown-',
+  '--ran-modal-',
+  '--ran-message-',
+  '--ran-tab-',
+  '--ran-tabpane-',
+  '--ran-skeleton-',
+  '--ran-icon-',
+  '--ran-image-',
+  '--ran-player-',
+  '--ran-progress-',
+  '--ran-colorpicker-',
+  '--ran-popover-',
+  '--ran-loading-',
+  '--ran-math-',
+  '--ran-form-',
+  '--ran-scratch-',
   '--ran-radar-',
 ];
 
@@ -145,9 +168,7 @@ function renderList(values: string[]): string {
 
 function renderClassifiedList(values: string[]): string {
   if (values.length === 0) return '- (none)';
-  return values
-    .map((token) => `- \`${token}\` *(${classifyToken(token)})*`)
-    .join('\n');
+  return values.map((token) => `- \`${token}\` *(${classifyToken(token)})*`).join('\n');
 }
 
 function normalizeRule(rule?: TokenFilterRule): Required<TokenFilterRule> {

@@ -61,9 +61,7 @@ describe('utils/style', () => {
     adoptSheetText(shadowRoot, '.x { display: block; }');
 
     expect(shadowRoot.adoptedStyleSheets).toHaveLength(1);
-    expect((shadowRoot.adoptedStyleSheets[0] as unknown as CSSStyleSheetMock).cssText).toBe(
-      '.x { display: block; }',
-    );
+    expect((shadowRoot.adoptedStyleSheets[0] as unknown as CSSStyleSheetMock).cssText).toBe('.x { display: block; }');
   });
 
   it('falls back to dynamic style tags and deduplicates by css text', () => {

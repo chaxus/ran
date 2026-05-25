@@ -23,6 +23,7 @@
 ## Task 1: Replace Page Shell and Visual System
 
 **Files:**
+
 - Modify: `packages/ranui/demo/index.html`
 
 - [ ] **Step 1: Snapshot current demo shell**
@@ -108,6 +109,7 @@ Expected: Vite prints a localhost URL and the page loads without syntax errors.
 ## Task 2: Build Hero, Live Preview, and Product Messaging
 
 **Files:**
+
 - Modify: `packages/ranui/demo/index.html`
 
 - [ ] **Step 1: Add the hero content**
@@ -117,7 +119,9 @@ Add a first-viewport hero with:
 ```html
 <p class="eyebrow">Framework-neutral Web Components</p>
 <h1>ranui builds native-feeling interfaces that travel across frameworks.</h1>
-<p class="hero-copy">A TypeScript UI library built on custom elements, theme tokens, modular imports, and real browser standards.</p>
+<p class="hero-copy">
+  A TypeScript UI library built on custom elements, theme tokens, modular imports, and real browser standards.
+</p>
 ```
 
 Include two primary actions:
@@ -160,6 +164,7 @@ Open the page at desktop width and mobile width. Expected: hero text, action but
 ## Task 3: Add Why, Theme Lab, Code Paths, and Style API Sections
 
 **Files:**
+
 - Modify: `packages/ranui/demo/index.html`
 
 - [ ] **Step 1: Add `#why` feature section**
@@ -229,6 +234,7 @@ Click each nav anchor and each theme or pack control. Expected: anchors scroll t
 ## Task 4: Rebuild the Component Gallery Without Losing Demos
 
 **Files:**
+
 - Modify: `packages/ranui/demo/index.html`
 
 - [ ] **Step 1: Create grouped gallery containers**
@@ -261,8 +267,7 @@ r-scratch, r-modal, r-player, Declarative Shadow DOM r-button
 Keep buttons that call:
 
 ```html
-onclick="window.message?.success('Saved with ranui')"
-onclick="document.querySelector('#demo-modal')?.open?.()"
+onclick="window.message?.success('Saved with ranui')" onclick="document.querySelector('#demo-modal')?.open?.()"
 onclick="document.querySelector('#demo-scratch')?.open?.()"
 ```
 
@@ -281,6 +286,7 @@ Expected: output includes every component listed in Step 2.
 ## Task 5: Final Browser Verification and Cleanup
 
 **Files:**
+
 - Modify: `packages/ranui/demo/index.html`
 
 - [ ] **Step 1: Run formatter or existing quality command if available**

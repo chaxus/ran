@@ -91,7 +91,7 @@ describe('matchSelector — attribute selector', () => {
     expect(matchSelector(node, '[type="text"]')).toBe(true);
   });
 
-  it("matches attribute with single-quoted value", () => {
+  it('matches attribute with single-quoted value', () => {
     const node = el('input');
     node.setAttribute('type', 'text');
     expect(matchSelector(node, "[type='text']")).toBe(true);

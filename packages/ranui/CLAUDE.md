@@ -41,18 +41,21 @@ import componentCss from './index.less?inline';
 import { Div, EventManager, Slot } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
-  ensureShadowRoot, ensureShadowElement,
-  getStringAttribute, setStringAttribute, syncSheetAttribute,
+  ensureShadowRoot,
+  ensureShadowElement,
+  getStringAttribute,
+  setStringAttribute,
+  syncSheetAttribute,
 } from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
 
 export class MyComponent extends RanElement {
   _events = new EventManager();
   _shadowDom!: ShadowRoot;
-  _myEl!: HTMLElement;          // store refs to queried elements
+  _myEl!: HTMLElement; // store refs to queried elements
 
   static get observedAttributes(): string[] {
-    return ['my-attr', 'sheet'];  // always include 'sheet'
+    return ['my-attr', 'sheet']; // always include 'sheet'
   }
 
   constructor() {
@@ -60,21 +63,25 @@ export class MyComponent extends RanElement {
     this._shadowDom = ensureShadowRoot(this, componentCss);
 
     const root = ensureShadowElement(this._shadowDom, '.ran-mycomp', () =>
-      Div()
-        .class('ran-mycomp')
-        .attr('part', 'mycomp')
-        .children(Slot())
-        .build()
+      Div().class('ran-mycomp').attr('part', 'mycomp').children(Slot()).build(),
     );
     this._myEl = root.querySelector<HTMLElement>('.ran-mycomp-inner')!;
   }
 
   // ── Accessors ──────────────────────────────────────────────────────────
-  get myAttr(): string { return getStringAttribute(this, 'my-attr'); }
-  set myAttr(v: string) { setStringAttribute(this, 'my-attr', v); }
+  get myAttr(): string {
+    return getStringAttribute(this, 'my-attr');
+  }
+  set myAttr(v: string) {
+    setStringAttribute(this, 'my-attr', v);
+  }
 
-  get sheet(): string { return getStringAttribute(this, 'sheet'); }
-  set sheet(v: string) { setStringAttribute(this, 'sheet', v); }
+  get sheet(): string {
+    return getStringAttribute(this, 'sheet');
+  }
+  set sheet(v: string) {
+    setStringAttribute(this, 'sheet', v);
+  }
 
   handlerExternalCss = (): void => {
     syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
@@ -88,11 +95,11 @@ export class MyComponent extends RanElement {
   }
 
   disconnectedCallback(): void {
-    this._events.abort();  // removes ALL listeners registered via _events
+    this._events.abort(); // removes ALL listeners registered via _events
   }
 
   attributeChangedCallback(name: string, old: string, next: string): void {
-    if (old === next) return;                     // ALWAYS guard here
+    if (old === next) return; // ALWAYS guard here
     if (name === 'my-attr') this._syncMyAttr();
     if (name === 'sheet') this.handlerExternalCss();
   }
@@ -111,6 +118,7 @@ export default MyComponent;
 ```
 
 **Rules:**
+
 - Extend `RanElement` (= `HTMLElement` in browser, `HTMLElementMock` in SSR)
 - Always use `ensureShadowRoot` — never call `attachShadow` directly
 - Always use `ensureShadowElement` to build the Shadow DOM subtree (idempotent)
@@ -125,12 +133,14 @@ export default MyComponent;
 After creating `components/mycomp/index.ts`:
 
 1. **`index.ts`** — add both lines:
+
    ```ts
-   export * from '@/components/mycomp';   // types
-   import '@/components/mycomp';          // side-effect registration
+   export * from '@/components/mycomp'; // types
+   import '@/components/mycomp'; // side-effect registration
    ```
 
 2. **`vite.config.ts`** — add entry to `es.lib.entry`:
+
    ```ts
    mycomp: resolve(__dirname, 'components/mycomp/index.ts'),
    ```
@@ -197,15 +207,13 @@ Section(), Article(), Nav(), Header(), Footer(), Main()
 ```
 
 **Example:**
+
 ```typescript
 const header = Div()
   .class('ran-mycomp-header')
   .attr('part', 'header')
   .role('heading')
-  .children(
-    Div().class('ran-mycomp-title').attr('part', 'title'),
-    Slot().attr('name', 'extra').attr('part', 'extra'),
-  )
+  .children(Div().class('ran-mycomp-title').attr('part', 'title'), Slot().attr('name', 'extra').attr('part', 'extra'))
   .build();
 ```
 
@@ -231,19 +239,19 @@ disconnectedCallback(): void {
 }
 ```
 
-| API | Description |
-|-----|-------------|
-| `manager.on(target, type, handler, options?)` | Register listener scoped to manager's signal. Fluent — returns `this`. |
-| `manager.abort()` | Remove all listeners, reset `AbortController`. Safe to call multiple times. |
-| `manager.signal` | The raw `AbortSignal` — pass to `addEventListener` directly when needed. |
+| API                                           | Description                                                                 |
+| --------------------------------------------- | --------------------------------------------------------------------------- |
+| `manager.on(target, type, handler, options?)` | Register listener scoped to manager's signal. Fluent — returns `this`.      |
+| `manager.abort()`                             | Remove all listeners, reset `AbortController`. Safe to call multiple times. |
+| `manager.signal`                              | The raw `AbortSignal` — pass to `addEventListener` directly when needed.    |
 
 **When to use `.on()` vs `.listen()` vs `EventManager.on()`:**
 
-| | `ElementBuilder.on()` | `EventManager.on()` / `.listen()` |
-|---|---|---|
-| Registered at | Build time (constructor) | Connect time (`connectedCallback`) |
-| Removed when | Element GC'd | `manager.abort()` |
-| Use for | Permanent internal shadow DOM listeners | Any listener needing cleanup on disconnect |
+|               | `ElementBuilder.on()`                   | `EventManager.on()` / `.listen()`          |
+| ------------- | --------------------------------------- | ------------------------------------------ |
+| Registered at | Build time (constructor)                | Connect time (`connectedCallback`)         |
+| Removed when  | Element GC'd                            | `manager.abort()`                          |
+| Use for       | Permanent internal shadow DOM listeners | Any listener needing cleanup on disconnect |
 
 ### `utils/builder/signal.ts` — Reactive primitives
 
@@ -254,18 +262,20 @@ import { signal, createEffect, computed, batch } from '@/utils/builder';
 
 // signal — reactive value, [getter, setter] tuple
 const [count, setCount] = signal(0);
-const [name, setName]   = signal('Jane', { equals: (a, b) => a === b });
+const [name, setName] = signal('Jane', { equals: (a, b) => a === b });
 
-count()              // read — auto-subscribes inside createEffect / computed
-setCount(1)          // write — notifies dependents; skips if unchanged
-setCount(n => n + 1) // updater form
+count(); // read — auto-subscribes inside createEffect / computed
+setCount(1); // write — notifies dependents; skips if unchanged
+setCount((n) => n + 1); // updater form
 
 // createEffect — runs immediately, re-runs when read signals change
 // Before each re-run: removes itself from signals it no longer reads (stale-subscription cleanup)
 // On dispose: removes from all signals (GC-safe)
 const dispose = createEffect(() => {
   el.textContent = `${count()}`;
-  return () => { /* optional cleanup before re-run */ };
+  return () => {
+    /* optional cleanup before re-run */
+  };
 });
 dispose(); // stop tracking, remove all subscriptions
 
@@ -273,7 +283,10 @@ dispose(); // stop tracking, remove all subscriptions
 const doubled = computed(() => count() * 2);
 
 // batch — coalesce multiple writes into one effect flush
-batch(() => { setCount(0); setName('reset'); }); // effects run once, not twice
+batch(() => {
+  setCount(0);
+  setName('reset');
+}); // effects run once, not twice
 ```
 
 **SwiftUI parallel:**
@@ -285,6 +298,7 @@ batch(() => { setCount(0); setName('reset'); }); // effects run once, not twice
 | `batch()` | Automatic mutation coalescing in same event handler |
 
 **Page section pattern** (signal + EventManager together):
+
 ```typescript
 function initSection(container: HTMLElement) {
   const [value, setValue] = signal('');
@@ -295,9 +309,14 @@ function initSection(container: HTMLElement) {
     .listen(scope, 'input', (e) => setValue((e.target as HTMLInputElement).value))
     .build();
 
-  const dispose = createEffect(() => { output.textContent = value(); });
+  const dispose = createEffect(() => {
+    output.textContent = value();
+  });
   container.append(input, output);
-  return () => { dispose(); scope.abort(); };
+  return () => {
+    dispose();
+    scope.abort();
+  };
 }
 ```
 
@@ -313,8 +332,9 @@ getSSRRegistry(): ReadonlyMap<string, new () => HTMLElement>
 ```
 
 `RanElement` is exported from `utils/index.ts`:
+
 ```typescript
-export const RanElement = HTMLElementSSR()!
+export const RanElement = HTMLElementSSR()!;
 // Returns HTMLElement in browser, HTMLElementMock in SSR
 ```
 
@@ -420,7 +440,9 @@ Every component's `index.less` automatically receives `@import "base.less"` via 
     color: var(--ran-mycomp-title-color, var(--ran-color-text));
     font-size: var(--ran-mycomp-title-font-size, 16px);
 
-    &:empty { display: none; }   /* hide empty text nodes */
+    &:empty {
+      display: none;
+    } /* hide empty text nodes */
   }
 }
 ```
@@ -434,11 +456,7 @@ Every component's `index.less` automatically receives `@import "base.less"` via 
 A structured content container with header, body, and footer zones.
 
 ```html
-<r-card
-  title="Card Title"
-  description="Optional subtitle"
-  sheet=".ran-card { background: red; }">
-
+<r-card title="Card Title" description="Optional subtitle" sheet=".ran-card { background: red; }">
   <!-- Default slot: body content -->
   <p>Body content goes here</p>
 
@@ -452,11 +470,11 @@ A structured content container with header, body, and footer zones.
 
 **Attributes / Properties:**
 
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| `title` | `string` | `''` | Card heading (hidden when empty via `:empty`) |
-| `description` | `string` | `''` | Subtitle below title (hidden when empty) |
-| `sheet` | `string` | `''` | CSS injected into shadow DOM |
+| Name          | Type     | Default | Description                                   |
+| ------------- | -------- | ------- | --------------------------------------------- |
+| `title`       | `string` | `''`    | Card heading (hidden when empty via `:empty`) |
+| `description` | `string` | `''`    | Subtitle below title (hidden when empty)      |
+| `sheet`       | `string` | `''`    | CSS injected into shadow DOM                  |
 
 **Header visibility:** Controlled by `:host(:not([title]):not([description])) .ran-card-header { display: none }` — header is invisible when neither attribute is set.
 
@@ -467,6 +485,7 @@ A structured content container with header, body, and footer zones.
 **CSS variables exposed:** `--ran-card-display`, `--ran-card-min-height`, `--ran-card-gap`, `--ran-card-padding`, `--ran-card-radius`, `--ran-card-background`, `--ran-card-shadow`, `--ran-card-title-color`, `--ran-card-title-font-size`, `--ran-card-title-font-weight`, `--ran-card-description-color`, `--ran-card-description-font-size`
 
 **Styling override example:**
+
 ```css
 /* Via CSS variables */
 .my-section r-card {
@@ -508,11 +527,11 @@ npm run test:unit:coverage # with coverage report
 ```typescript
 import { describe, expect, it, beforeEach, vi } from 'vitest';
 import { Card } from '@/components/card';
-import '@/components/card';    // ensure customElements.define runs
+import '@/components/card'; // ensure customElements.define runs
 
 describe('r-card contract', () => {
   beforeEach(() => {
-    document.body.innerHTML = '';   // clean DOM between tests
+    document.body.innerHTML = ''; // clean DOM between tests
   });
 
   it('renders shadow DOM structure', () => {
@@ -543,7 +562,11 @@ describe('r-card contract', () => {
   it('injects external CSS via sheet attribute (fallback path)', () => {
     const origCSS = window.CSSStyleSheet;
     try {
-      class MockSheet { replaceSync() { throw new Error('force fallback'); } }
+      class MockSheet {
+        replaceSync() {
+          throw new Error('force fallback');
+        }
+      }
       (window as any).CSSStyleSheet = MockSheet;
 
       const card = document.createElement('r-card') as Card;
@@ -561,14 +584,14 @@ describe('r-card contract', () => {
 
 ### Key patterns
 
-| Task | How |
-|------|-----|
-| Access shadow DOM | `(el as any)._shadowDom as ShadowRoot` |
-| Access private field | `(el as any)._fieldName` |
-| Spy on private method | `vi.spyOn(el as any, '_methodName')` |
-| Simulate async slot update | `await new Promise(r => setTimeout(r, 50))` |
-| Test sheet CSS injection | Mock `CSSStyleSheet.replaceSync` to throw, then check `shadow.innerHTML` |
-| Clean DOM between tests | `document.body.innerHTML = ''` in `beforeEach` |
+| Task                       | How                                                                      |
+| -------------------------- | ------------------------------------------------------------------------ |
+| Access shadow DOM          | `(el as any)._shadowDom as ShadowRoot`                                   |
+| Access private field       | `(el as any)._fieldName`                                                 |
+| Spy on private method      | `vi.spyOn(el as any, '_methodName')`                                     |
+| Simulate async slot update | `await new Promise(r => setTimeout(r, 50))`                              |
+| Test sheet CSS injection   | Mock `CSSStyleSheet.replaceSync` to throw, then check `shadow.innerHTML` |
+| Clean DOM between tests    | `document.body.innerHTML = ''` in `beforeEach`                           |
 
 ### jsdom limitations
 
@@ -580,11 +603,11 @@ describe('r-card contract', () => {
 
 High unit-test coverage guarantees each component's **own API** is correct, but it does not guarantee the **assembled page** is correct. The gap lives at the integration layer.
 
-| Layer | What it catches | What it misses |
-|-------|-----------------|----------------|
-| Unit (`test/unit/`) | Attribute reflection, event dispatch, shadow DOM structure, CSS injection | Layout interactions between components, slot projection into host, height/width in real parent context |
-| Integration (`test/integration/`) | Component-in-component layout, slot content rendering, CSS variable inheritance across component boundaries | Full user flows |
-| Visual regression (screenshot diff) | Any unintended pixel change after a refactor | — |
+| Layer                               | What it catches                                                                                             | What it misses                                                                                         |
+| ----------------------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Unit (`test/unit/`)                 | Attribute reflection, event dispatch, shadow DOM structure, CSS injection                                   | Layout interactions between components, slot projection into host, height/width in real parent context |
+| Integration (`test/integration/`)   | Component-in-component layout, slot content rendering, CSS variable inheritance across component boundaries | Full user flows                                                                                        |
+| Visual regression (screenshot diff) | Any unintended pixel change after a refactor                                                                | —                                                                                                      |
 
 **Rule:** every time a bug is found on the demo page or in a composition scenario, the fix must be accompanied by an integration test that would have caught it. Do not rely on raising the unit coverage number to prevent that class of bug.
 
@@ -600,7 +623,9 @@ import '@/components/checkbox';
 import '@/components/select/option';
 
 describe('component composition', () => {
-  beforeEach(() => { document.body.innerHTML = ''; });
+  beforeEach(() => {
+    document.body.innerHTML = '';
+  });
 
   // ── Layout: percentage-height component inside a card ────────────────
   it('r-progress inside r-card has bounded height', () => {
@@ -630,8 +655,17 @@ describe('component composition', () => {
   // ── Custom element constructor rule ──────────────────────────────────
   it('document.createElement does not throw for any registered element', () => {
     // If a constructor calls this.setAttribute(), Chrome throws NotSupportedError.
-    const tags = ['r-button', 'r-input', 'r-select', 'r-option', 'r-checkbox',
-                  'r-progress', 'r-card', 'r-tabs', 'r-tab'];
+    const tags = [
+      'r-button',
+      'r-input',
+      'r-select',
+      'r-option',
+      'r-checkbox',
+      'r-progress',
+      'r-card',
+      'r-tabs',
+      'r-tab',
+    ];
     for (const tag of tags) {
       expect(() => document.createElement(tag)).not.toThrow();
     }
@@ -643,11 +677,11 @@ describe('component composition', () => {
 
 These bugs slipped through unit tests. Each has a regression test pattern to prevent recurrence.
 
-| Bug | Root cause | Regression test signal |
-|-----|-----------|----------------------|
-| `r-progress` height 126px inside card | `:host` had no height; `.ran-progress { height: 100% }` resolved to container height | `progress.clientHeight < 50` when placed inside `r-card` |
-| `r-checkbox` label invisible | Shadow DOM had no `<slot>`, so light DOM children were not projected | `shadow.querySelector('slot') !== null` |
-| `r-option` `NotSupportedError` (×11) | Constructor called `this.setAttribute('class', …)` — forbidden by Custom Elements spec during `createElement` | `expect(() => document.createElement('r-option')).not.toThrow()` |
+| Bug                                   | Root cause                                                                                                    | Regression test signal                                           |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| `r-progress` height 126px inside card | `:host` had no height; `.ran-progress { height: 100% }` resolved to container height                          | `progress.clientHeight < 50` when placed inside `r-card`         |
+| `r-checkbox` label invisible          | Shadow DOM had no `<slot>`, so light DOM children were not projected                                          | `shadow.querySelector('slot') !== null`                          |
+| `r-option` `NotSupportedError` (×11)  | Constructor called `this.setAttribute('class', …)` — forbidden by Custom Elements spec during `createElement` | `expect(() => document.createElement('r-option')).not.toThrow()` |
 
 ---
 
@@ -665,10 +699,11 @@ These bugs slipped through unit tests. Each has a regression test pattern to pre
 ### LESS auto-import
 
 `base.less` is injected by Vite into every LESS file:
+
 ```typescript
 // vite.config.ts
 less: {
-  additionalData: `@import "${resolve(__dirname, 'base.less')}";`
+  additionalData: `@import "${resolve(__dirname, 'base.less')}";`;
 }
 ```
 
@@ -680,18 +715,18 @@ Each component gets its own `dist/{name}.js` ES module. The barrel `dist/index.j
 
 ## Common Pitfalls
 
-| Pitfall | Fix |
-|---------|-----|
-| `attributeChangedCallback` fires when attribute set to same value | Add `if (old === next) return;` as first line |
-| Shadow DOM re-attached on reconnect | Use `ensureShadowRoot` (WeakMap cache), never bare `attachShadow` |
-| Styles not applied in SSR | Use `RanElement` base class and `defineSSR` |
-| `adoptedStyleSheets` frozen in jsdom | `syncSheetAttribute` / `adoptSheetText` already handles `<style>` fallback |
-| Event listeners leak on disconnect | Use `EventManager` — call `manager.abort()` in `disconnectedCallback`; never track individual `removeEventListener` calls |
-| `import '@/components/mycomp'` not in index.ts | Components won't register for users who `import 'ranui'` |
-| Missing `card` entry in vite.config.ts | `dist/card.js` won't be built; per-component imports break |
-| Factory function wrapper pattern (`function Custom() { defineSSR(...); return Class; } export default Custom()`) | Anti-pattern — `defineSSR` handles registration; use `defineSSR(...); export default ClassName;` directly |
-| `border-color: var(--token)` without hex fallback | Add hex fallback: `var(--ran-color-border, #d9d9d9)` so borders show without theme tokens |
-| Shadow root `mode: 'open'` | Always use default closed mode via `ensureShadowRoot(this, css)` — never pass `{ mode: 'open' }` |
-| `this.setAttribute(…)` called in constructor | Forbidden by Custom Elements spec — Chrome throws `NotSupportedError: The result must not have attributes` on `document.createElement`. Move all `this.setAttribute` / `this.classList` calls to `connectedCallback` |
-| Component `:host` has no height + inner div uses `height: 100%` | `100%` resolves to the parent container height when `:host` has no explicit size, expanding the component unexpectedly. Always set `display: block; height: var(--token, <default>)` on `:host` for height-aware components (e.g. `r-progress`) |
-| Shadow DOM has no `<slot>` for label/child content | Light DOM children are silently not rendered; the component appears broken when used with text content. Always add a `Slot()` to the shadow DOM when the component is designed to accept slotted content |
+| Pitfall                                                                                                          | Fix                                                                                                                                                                                                                                             |
+| ---------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `attributeChangedCallback` fires when attribute set to same value                                                | Add `if (old === next) return;` as first line                                                                                                                                                                                                   |
+| Shadow DOM re-attached on reconnect                                                                              | Use `ensureShadowRoot` (WeakMap cache), never bare `attachShadow`                                                                                                                                                                               |
+| Styles not applied in SSR                                                                                        | Use `RanElement` base class and `defineSSR`                                                                                                                                                                                                     |
+| `adoptedStyleSheets` frozen in jsdom                                                                             | `syncSheetAttribute` / `adoptSheetText` already handles `<style>` fallback                                                                                                                                                                      |
+| Event listeners leak on disconnect                                                                               | Use `EventManager` — call `manager.abort()` in `disconnectedCallback`; never track individual `removeEventListener` calls                                                                                                                       |
+| `import '@/components/mycomp'` not in index.ts                                                                   | Components won't register for users who `import 'ranui'`                                                                                                                                                                                        |
+| Missing `card` entry in vite.config.ts                                                                           | `dist/card.js` won't be built; per-component imports break                                                                                                                                                                                      |
+| Factory function wrapper pattern (`function Custom() { defineSSR(...); return Class; } export default Custom()`) | Anti-pattern — `defineSSR` handles registration; use `defineSSR(...); export default ClassName;` directly                                                                                                                                       |
+| `border-color: var(--token)` without hex fallback                                                                | Add hex fallback: `var(--ran-color-border, #d9d9d9)` so borders show without theme tokens                                                                                                                                                       |
+| Shadow root `mode: 'open'`                                                                                       | Always use default closed mode via `ensureShadowRoot(this, css)` — never pass `{ mode: 'open' }`                                                                                                                                                |
+| `this.setAttribute(…)` called in constructor                                                                     | Forbidden by Custom Elements spec — Chrome throws `NotSupportedError: The result must not have attributes` on `document.createElement`. Move all `this.setAttribute` / `this.classList` calls to `connectedCallback`                            |
+| Component `:host` has no height + inner div uses `height: 100%`                                                  | `100%` resolves to the parent container height when `:host` has no explicit size, expanding the component unexpectedly. Always set `display: block; height: var(--token, <default>)` on `:host` for height-aware components (e.g. `r-progress`) |
+| Shadow DOM has no `<slot>` for label/child content                                                               | Light DOM children are silently not rendered; the component appears broken when used with text content. Always add a `Slot()` to the shadow DOM when the component is designed to accept slotted content                                        |

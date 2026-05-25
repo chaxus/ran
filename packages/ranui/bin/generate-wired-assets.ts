@@ -128,9 +128,7 @@ function generate(): void {
 
   writeFileSync(OUTPUT, lines.join('\n') + '\n', 'utf8');
   console.log(`Wrote ${OUTPUT}`);
-  console.log(
-    `Total size: ${(Buffer.byteLength(lines.join('\n'), 'utf8') / 1024).toFixed(1)} KB`,
-  );
+  console.log(`Total size: ${(Buffer.byteLength(lines.join('\n'), 'utf8') / 1024).toFixed(1)} KB`);
 }
 
 generate();

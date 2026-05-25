@@ -53,7 +53,9 @@ describe('utils/ssr-stream', () => {
   });
 
   it('passes unknown custom elements through with boolean and quoted attributes', async () => {
-    const html = await renderHTMLToString(`<unknown-element enabled foo="bar" single='quote'>content</unknown-element>`);
+    const html = await renderHTMLToString(
+      `<unknown-element enabled foo="bar" single='quote'>content</unknown-element>`,
+    );
 
     expect(html).toBe('<unknown-element enabled foo="bar" single="quote">content</unknown-element>');
   });

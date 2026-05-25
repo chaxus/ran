@@ -34,7 +34,6 @@ export class Button extends RanElement {
     this._btn = btn;
     this._btnContent = btn.querySelector<HTMLDivElement>('.ran-btn-content')!;
     this._slot = btn.querySelector<HTMLSlotElement>('slot')!;
-
   }
 
   // ── Properties ─────────────────────────────────────────────────────────────

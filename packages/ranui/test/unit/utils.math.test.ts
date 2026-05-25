@@ -61,14 +61,9 @@ describe('utils/math', () => {
 
   it('creates linear gradients for keyword directions', () => {
     const ctx = createContextMock();
-    const gradient = getLinearGradient(
-      ctx,
-      10,
-      20,
-      100,
-      50,
-      'linear-gradient(to right, red 0, blue 1)',
-    ) as unknown as { addColorStop: ReturnType<typeof vi.fn> };
+    const gradient = getLinearGradient(ctx, 10, 20, 100, 50, 'linear-gradient(to right, red 0, blue 1)') as unknown as {
+      addColorStop: ReturnType<typeof vi.fn>;
+    };
 
     expect(ctx.createLinearGradient).toHaveBeenCalledWith(10, 20, 110, 20);
     expect(gradient.addColorStop).toHaveBeenCalledWith('0', 'red');
@@ -96,15 +91,12 @@ describe('utils/math', () => {
     expect(ctx.createLinearGradient).toHaveBeenCalledWith(...expected);
   });
 
-  it.each([0, 30, 60, 120, 160, 200, 240, 300, 330])(
-    'creates linear gradients for %sdeg',
-    (degree) => {
-      const ctx = createContextMock();
-      getLinearGradient(ctx, 0, 0, 100, 50, `linear-gradient(${degree}deg, red, blue)`);
+  it.each([0, 30, 60, 120, 160, 200, 240, 300, 330])('creates linear gradients for %sdeg', (degree) => {
+    const ctx = createContextMock();
+    getLinearGradient(ctx, 0, 0, 100, 50, `linear-gradient(${degree}deg, red, blue)`);
 
-      expect(ctx.createLinearGradient).toHaveBeenCalledTimes(1);
-      expect(ctx.gradient.addColorStop).toHaveBeenCalledWith(0, 'red');
-      expect(ctx.gradient.addColorStop).toHaveBeenCalledWith(1, 'blue');
-    },
-  );
+    expect(ctx.createLinearGradient).toHaveBeenCalledTimes(1);
+    expect(ctx.gradient.addColorStop).toHaveBeenCalledWith(0, 'red');
+    expect(ctx.gradient.addColorStop).toHaveBeenCalledWith(1, 'blue');
+  });
 });

@@ -16,10 +16,7 @@ import { describe, expect, it, beforeEach } from 'vitest';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = resolve(__filename, '..');
 
-const PROGRESS_LESS = readFileSync(
-  resolve(__dirname, '../../components/progress/index.less'),
-  'utf-8',
-);
+const PROGRESS_LESS = readFileSync(resolve(__dirname, '../../components/progress/index.less'), 'utf-8');
 
 // Register all components under test
 import '@/components/button';
@@ -34,8 +31,8 @@ import '@/components/popover';
 import '@/components/progress';
 import '@/components/select';
 import '@/components/select/option';
-import '@/components/tab';      // registers r-tabs
-import '@/components/tabpane';  // registers r-tab
+import '@/components/tab'; // registers r-tabs
+import '@/components/tabpane'; // registers r-tab
 
 // ─────────────────────────────────────────────────────────────────────────────
 // 1. Custom Elements constructor spec compliance
@@ -63,12 +60,9 @@ describe('Custom Elements constructor spec compliance', () => {
     'r-tab',
   ] as const;
 
-  it.each(TAGS)(
-    'document.createElement("%s") does not throw',
-    (tag) => {
-      expect(() => document.createElement(tag)).not.toThrow();
-    },
-  );
+  it.each(TAGS)('document.createElement("%s") does not throw', (tag) => {
+    expect(() => document.createElement(tag)).not.toThrow();
+  });
 
   it('r-option gains ran-option class only after being connected', () => {
     const option = document.createElement('r-option');
@@ -92,7 +86,9 @@ describe('Custom Elements constructor spec compliance', () => {
 // ─────────────────────────────────────────────────────────────────────────────
 
 describe('r-checkbox slot projection', () => {
-  beforeEach(() => { document.body.innerHTML = ''; });
+  beforeEach(() => {
+    document.body.innerHTML = '';
+  });
 
   it('shadow DOM contains a default slot for label text', () => {
     const cb = document.createElement('r-checkbox');
@@ -140,7 +136,9 @@ describe('r-checkbox slot projection', () => {
 // ─────────────────────────────────────────────────────────────────────────────
 
 describe('r-progress CSS height contract', () => {
-  beforeEach(() => { document.body.innerHTML = ''; });
+  beforeEach(() => {
+    document.body.innerHTML = '';
+  });
 
   it(':host declares display:block in LESS source', () => {
     expect(PROGRESS_LESS).toContain('display: block');

@@ -227,11 +227,11 @@ Suggested wired skin tokens:
   --ran-skin-rough-stroke-width: 1.5;
   --ran-skin-rough-fill: none;
   --ran-skin-rough-seed: 42;
-  --ran-skin-rough-border-image-normal: url("data:image/svg+xml,...");
-  --ran-skin-rough-border-image-hover: url("data:image/svg+xml,...");
-  --ran-skin-rough-border-image-focus: url("data:image/svg+xml,...");
-  --ran-skin-rough-border-image-active: url("data:image/svg+xml,...");
-  --ran-skin-rough-border-image-disabled: url("data:image/svg+xml,...");
+  --ran-skin-rough-border-image-normal: url('data:image/svg+xml,...');
+  --ran-skin-rough-border-image-hover: url('data:image/svg+xml,...');
+  --ran-skin-rough-border-image-focus: url('data:image/svg+xml,...');
+  --ran-skin-rough-border-image-active: url('data:image/svg+xml,...');
+  --ran-skin-rough-border-image-disabled: url('data:image/svg+xml,...');
   --ran-skin-hard-shadow: none;
   --ran-skin-rough-shadow: 2px 3px 0 rgba(0, 0, 0, 0.15);
   --ran-radius-sm: 0px;
@@ -246,7 +246,10 @@ Asset generation script outline (`bin/generate-wired-assets.ts`):
 import { RoughSVG } from 'roughjs/bundled/rough.svg';
 
 const seed = 42;
-const sizes = [{ w: 80, h: 32 }, { w: 120, h: 40 }];
+const sizes = [
+  { w: 80, h: 32 },
+  { w: 120, h: 40 },
+];
 const states = ['normal', 'hover', 'focus', 'active', 'disabled'];
 
 // For each size × state combination, generate an SVG rectangle with RoughJS,
@@ -787,7 +790,7 @@ irregular borders through paper, and finally the remaining packs.
 Calling `setThemePack('pixel-retro')` does exactly one thing in JS:
 
 ```ts
-document.documentElement.setAttribute('data-ran-theme-pack', 'pixel-retro')
+document.documentElement.setAttribute('data-ran-theme-pack', 'pixel-retro');
 ```
 
 After that, the browser CSS engine takes over. Pack CSS scoped under
@@ -796,7 +799,7 @@ cascade down the document tree, cross Shadow DOM boundaries through inheritance,
 and the browser repaints affected elements. No component JS is triggered.
 
 This mechanism is identical to light/dark switching. The difference in perceived
-smoothness comes from *what properties change*, not from the switching API.
+smoothness comes from _what properties change_, not from the switching API.
 
 ### Smoothness By Pack Type
 
@@ -855,15 +858,15 @@ Expected experience: instant shape and shadow change, possible text FOUT.
 
 ### Smoothness Summary
 
-| Pack | Layout reflow | Font FOUT risk | Border transition | Overall |
-|------|--------------|----------------|-------------------|---------|
-| pixel-retro | No | Yes (external font) | Smooth | Near-instant |
-| neo-brutalism | Minor (border-width) | No | Smooth | Near-instant |
-| windows-98 | Minor (dimensions) | No | Smooth | Near-instant |
-| windows-xp | Minor (dimensions) | No | Smooth | Near-instant |
-| system-6 | Minor | No | Smooth | Near-instant |
-| wired | Minor | Yes (external font) | Hard snap (not transitionable) | Jarring |
-| paper | No | Yes (external font) | Smooth | Near-instant |
+| Pack          | Layout reflow        | Font FOUT risk      | Border transition              | Overall      |
+| ------------- | -------------------- | ------------------- | ------------------------------ | ------------ |
+| pixel-retro   | No                   | Yes (external font) | Smooth                         | Near-instant |
+| neo-brutalism | Minor (border-width) | No                  | Smooth                         | Near-instant |
+| windows-98    | Minor (dimensions)   | No                  | Smooth                         | Near-instant |
+| windows-xp    | Minor (dimensions)   | No                  | Smooth                         | Near-instant |
+| system-6      | Minor                | No                  | Smooth                         | Near-instant |
+| wired         | Minor                | Yes (external font) | Hard snap (not transitionable) | Jarring      |
+| paper         | No                   | Yes (external font) | Smooth                         | Near-instant |
 
 ### Three Design Gaps Not Addressed In This Document
 
@@ -904,8 +907,8 @@ runtime pack switching:
 
 ```html
 <!-- Preload in <head> before any pack is activated -->
-<link rel="preload" href="/fonts/PressStart2P.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/fonts/Caveat.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/PressStart2P.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/fonts/Caveat.woff2" as="font" type="font/woff2" crossorigin />
 ```
 
 Alternatively, pack CSS should declare the relevant `@font-face` with
