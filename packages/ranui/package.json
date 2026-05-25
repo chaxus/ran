@@ -169,6 +169,11 @@
       "import": "./dist/checkbox.js",
       "require": "./dist/index.cjs"
     },
+    "./card": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/card.js",
+      "require": "./dist/index.cjs"
+    },
     "./type": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
