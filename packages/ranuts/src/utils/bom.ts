@@ -540,8 +540,9 @@ export class PostMessageBridge {
     }
 
     // 处理普通消息
+    if (typeof type !== 'string' || !this.messageHandlers.has(type)) return;
     const handler = this.messageHandlers.get(type);
-    if (handler) {
+    if (isFunction(handler)) {
       Promise.resolve(handler(payload))
         .then((response) => {
           if (id) {
@@ -761,6 +762,10 @@ export const Client = {
 export const initPlatform = <T = unknown, R = unknown>(
   events: Record<string, MessageHandler<T, R>>,
 ): { destroy: () => void } => {
+  const handlers = new Map<string, MessageHandler<T, R>>(
+    Object.entries(events).filter((entry): entry is [string, MessageHandler<T, R>] => isFunction(entry[1])),
+  );
+
   // 找到指定的元素，建立连接，通信
   const initBridge = async (event: MessageEvent) => {
     // const hostname = new URL(event.origin).hostname
@@ -773,8 +778,9 @@ export const initPlatform = <T = unknown, R = unknown>(
     const decodedData = MessageCodec.decode<MessageData<T>>(str);
     if (!decodedData) return;
     const { type, payload, id } = decodedData;
-    const handler = events[type];
-    if (!isFunction(handler)) return;
+    if (typeof type !== 'string' || !handlers.has(type)) return;
+    const handler = handlers.get(type);
+    if (!handler) return;
     const result = await handler(payload);
     // 编码
     const encodedData = MessageCodec.encode({ type, payload: result, id, isResponse: true });
