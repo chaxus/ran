@@ -576,6 +576,79 @@ describe('r-card contract', () => {
 - `window.getComputedStyle` returns empty for shadow DOM CSS rules — test attribute and style values directly, not computed CSS
 - `adoptedStyleSheets` is frozen — sheet injection tests require the mock pattern above
 
+### Testing philosophy — why unit coverage alone is not enough
+
+High unit-test coverage guarantees each component's **own API** is correct, but it does not guarantee the **assembled page** is correct. The gap lives at the integration layer.
+
+| Layer | What it catches | What it misses |
+|-------|-----------------|----------------|
+| Unit (`test/unit/`) | Attribute reflection, event dispatch, shadow DOM structure, CSS injection | Layout interactions between components, slot projection into host, height/width in real parent context |
+| Integration (`test/integration/`) | Component-in-component layout, slot content rendering, CSS variable inheritance across component boundaries | Full user flows |
+| Visual regression (screenshot diff) | Any unintended pixel change after a refactor | — |
+
+**Rule:** every time a bug is found on the demo page or in a composition scenario, the fix must be accompanied by an integration test that would have caught it. Do not rely on raising the unit coverage number to prevent that class of bug.
+
+### Integration test patterns
+
+File naming: `test/integration/{scenario}.test.ts`
+
+```typescript
+import { describe, expect, it, beforeEach } from 'vitest';
+import '@/components/card';
+import '@/components/progress';
+import '@/components/checkbox';
+import '@/components/select/option';
+
+describe('component composition', () => {
+  beforeEach(() => { document.body.innerHTML = ''; });
+
+  // ── Layout: percentage-height component inside a card ────────────────
+  it('r-progress inside r-card has bounded height', () => {
+    const card = document.createElement('r-card');
+    const progress = document.createElement('r-progress');
+    progress.setAttribute('percent', '72');
+    card.appendChild(progress);
+    document.body.appendChild(card);
+
+    // host height must be a fixed token value, not unbounded
+    const hostHeight = (progress as HTMLElement).style.getPropertyValue('--ran-progress-height');
+    // or verify offsetHeight is not larger than a sane threshold
+    expect(progress.clientHeight).toBeLessThan(50);
+  });
+
+  // ── Slot projection: label text inside r-checkbox ────────────────────
+  it('r-checkbox projects label text via slot', () => {
+    const cb = document.createElement('r-checkbox') as HTMLElement;
+    cb.textContent = 'Accept terms';
+    document.body.appendChild(cb);
+
+    // shadow DOM must contain a slot element so light DOM is projected
+    const shadow = (cb as any)._shadowDom as ShadowRoot;
+    expect(shadow.querySelector('slot')).not.toBeNull();
+  });
+
+  // ── Custom element constructor rule ──────────────────────────────────
+  it('document.createElement does not throw for any registered element', () => {
+    // If a constructor calls this.setAttribute(), Chrome throws NotSupportedError.
+    const tags = ['r-button', 'r-input', 'r-select', 'r-option', 'r-checkbox',
+                  'r-progress', 'r-card', 'r-tabs', 'r-tab'];
+    for (const tag of tags) {
+      expect(() => document.createElement(tag)).not.toThrow();
+    }
+  });
+});
+```
+
+### Three integration bugs and their test signatures
+
+These bugs slipped through unit tests. Each has a regression test pattern to prevent recurrence.
+
+| Bug | Root cause | Regression test signal |
+|-----|-----------|----------------------|
+| `r-progress` height 126px inside card | `:host` had no height; `.ran-progress { height: 100% }` resolved to container height | `progress.clientHeight < 50` when placed inside `r-card` |
+| `r-checkbox` label invisible | Shadow DOM had no `<slot>`, so light DOM children were not projected | `shadow.querySelector('slot') !== null` |
+| `r-option` `NotSupportedError` (×11) | Constructor called `this.setAttribute('class', …)` — forbidden by Custom Elements spec during `createElement` | `expect(() => document.createElement('r-option')).not.toThrow()` |
+
 ---
 
 ## Build & Config
@@ -619,3 +692,6 @@ Each component gets its own `dist/{name}.js` ES module. The barrel `dist/index.j
 | Factory function wrapper pattern (`function Custom() { defineSSR(...); return Class; } export default Custom()`) | Anti-pattern — `defineSSR` handles registration; use `defineSSR(...); export default ClassName;` directly |
 | `border-color: var(--token)` without hex fallback | Add hex fallback: `var(--ran-color-border, #d9d9d9)` so borders show without theme tokens |
 | Shadow root `mode: 'open'` | Always use default closed mode via `ensureShadowRoot(this, css)` — never pass `{ mode: 'open' }` |
+| `this.setAttribute(…)` called in constructor | Forbidden by Custom Elements spec — Chrome throws `NotSupportedError: The result must not have attributes` on `document.createElement`. Move all `this.setAttribute` / `this.classList` calls to `connectedCallback` |
+| Component `:host` has no height + inner div uses `height: 100%` | `100%` resolves to the parent container height when `:host` has no explicit size, expanding the component unexpectedly. Always set `display: block; height: var(--token, <default>)` on `:host` for height-aware components (e.g. `r-progress`) |
+| Shadow DOM has no `<slot>` for label/child content | Light DOM children are silently not rendered; the component appears broken when used with text content. Always add a `Slot()` to the shadow DOM when the component is designed to accept slotted content |
