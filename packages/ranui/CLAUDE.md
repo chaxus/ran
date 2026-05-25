@@ -508,3 +508,6 @@ Each component gets its own `dist/{name}.js` ES module. The barrel `dist/index.j
 | Event listeners leak on disconnect | Remove in `disconnectedCallback`; listener reference must be same function instance |
 | `import '@/components/mycomp'` not in index.ts | Components won't register for users who `import 'ranui'` |
 | Missing `card` entry in vite.config.ts | `dist/card.js` won't be built; per-component imports break |
+| Factory function wrapper pattern (`function Custom() { defineSSR(...); return Class; } export default Custom()`) | Anti-pattern — `defineSSR` handles registration; use `defineSSR(...); export default ClassName;` directly |
+| `border-color: var(--token)` without hex fallback | Add hex fallback: `var(--ran-color-border, #d9d9d9)` so borders show without theme tokens |
+| Shadow root `mode: 'open'` | Always use default closed mode via `ensureShadowRoot(this, css)` — never pass `{ mode: 'open' }` |

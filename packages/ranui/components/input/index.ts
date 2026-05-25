@@ -489,9 +489,5 @@ export class Input extends (HTMLElementSSR()!) {
   }
 }
 
-function Custom() {
-  defineSSR('r-input', Input as unknown as new () => HTMLElement);
-  return Input;
-}
-
-export default Custom();
+defineSSR('r-input', Input as unknown as new () => HTMLElement);
+export default Input;

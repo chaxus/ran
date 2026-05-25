@@ -1,6 +1,6 @@
 # ranui
 
-基于 `Web Components` 的实验性组件库
+An experimental UI component library based on Web Components. Components use Shadow DOM encapsulation, CSS Token theming, and SSR / Declarative Shadow DOM support.
 
 ---
 
@@ -10,113 +10,129 @@
 <a href="https://github.com/chaxus/ran"><img src="https://img.badgesize.io/https:/unpkg.com/ranui/dist/umd/shadowless/shadowless.umd.cjs?label=brotli&compression=brotli" alt="brotli"></a>
 <a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/badge/module%20formats-umd%2C%20esm-green.svg" alt="module formats: umd, esm"></a>
 
-**中文** | [English](./readme.md)
+[中文](./README.zh-CN.md) | **English**
 
-## ⚠️ 重要说明
+## Important Notice
 
-这是一个**实验性 UI 库**，处于早期开发阶段。虽然功能可用，但主要用于学习和实验。
+This is an **experimental UI library** in early development. It is usable, but primarily intended for learning and experimentation.
 
-**关键要点：**
+Key points:
 
-- 🚧 **早期开发**: 功能仍在开发和完善中
-- 🧪 **实验性**: API 可能会频繁变化
-- 📚 **学习导向**: 主要用于学习 Web Components 和 UI 开发
+- **Early development**: features are still being developed and refined.
+- **Experimental**: APIs may change frequently.
+- **Learning-oriented**: mainly intended for learning Web Components and UI development.
 
-## 特点
+## Features
 
-1. **跨框架兼容：** 与 React, Vue, Preact, SolidJS, Svelte 等兼容。可以和遵循 W3C 标准的任何 JavaScript 项目集成。
-2. **原生体验：** 易于入门，像使用本地 div 标签，简化项目大小和减少学习成本。
-3. **模块化设计：** 可选导入和全量导入，以增强可维护性和可伸缩性。
-4. **交互式丰富文档：** 提供详细的交互式文档，并附有有效的示例子。
-5. **支持类型校验：** 基于 TypeScript 构建，具有类型支持，确保代码的健壮性和可维护性。
-6. **框架无关：** 与框架 (React/vue) 无关，避免破坏性的更新，并确保持续的项目运行。
+1. **Cross-framework compatibility:** works with React, Vue, Preact, SolidJS, Svelte, and any JavaScript project that follows W3C standards.
+2. **Native experience:** use custom elements such as `<r-button>` and `<r-modal>` like native HTML elements.
+3. **Modular design:** supports both full imports and per-component imports for better maintainability and bundle control.
+4. **Shadow DOM encapsulation:** component internals are isolated by default, while CSS Tokens, `::part()`, and the `sheet` attribute provide controlled styling hooks.
+5. **TypeScript support:** built with TypeScript and type definitions.
+6. **SSR friendly:** supports server rendering through `defineSSR`, `renderToString`, and Declarative Shadow DOM.
 
-## 安装
+## Installation
 
-使用 npm:
+Using npm:
 
 ```console
 npm install ranui --save
 ```
 
-## 文档和示例
+## Documentation and Examples
 
 [See components and use examples](https://chaxus.github.io/ran/cn/src/ranui/)
 
-### 样式定制文档
+### Styling Documentation
 
-当前样式系统已统一为 CSS Token 与 `::part()` 规范。
+The styling system is unified around CSS Tokens and `::part()`.
 
-- 样式覆盖规范：[docs/style-override.md](./docs/style-override.md)
-- 完整 Token/Part 清单（自动生成）: [docs/style-tokens-parts.md](./docs/style-tokens-parts.md)
-- 面向使用方的公开样式 API（自动生成）: [docs/style-tokens-public.md](./docs/style-tokens-public.md)
-- 公开 Token 过滤配置：[docs/style-token-filter.json](./docs/style-token-filter.json)
+- Style override guide: [docs/style-override.md](./docs/style-override.md)
+- Complete Token/Part list, generated automatically: [docs/style-tokens-parts.md](./docs/style-tokens-parts.md)
+- Public styling API for consumers, generated automatically: [docs/style-tokens-public.md](./docs/style-tokens-public.md)
+- Public token filter config: [docs/style-token-filter.json](./docs/style-token-filter.json)
 
-可通过以下命令刷新样式文档：
+Refresh the styling docs with:
 
 ```bash
 pnpm doc:style
 ```
 
-## 引入方式
+### Themes and Theme Packs
 
-支持按需导入，以显著减少包体积大小
+RanUI supports light, dark, and system themes, plus multiple CSS-only theme packs.
+
+```ts
+import { initTheme, setTheme, setThemePack, setThemeToken } from 'ranui';
+import 'ranui/theme-packs/pixel-retro';
+
+initTheme();
+setTheme('system');
+setThemePack('pixel-retro');
+setThemeToken('--ran-color-primary', '#2563eb');
+```
+
+Available theme packs include `windows-98`, `windows-xp`, `system-6`, `wired`, `paper`, `pixel-retro`, and `neo-brutalism`. Use `setThemePack('default')` to restore the default theme pack.
+
+## Imports
+
+Use per-component imports to reduce bundle size:
 
 ```js
 import 'ranui/button';
 ```
 
-如果遇到样式问题，可以选择手动导入样式文件
+If styles are missing, import the stylesheet manually:
 
 ```js
 import 'ranui/style';
 ```
 
-如果遇到类型问题，可以选择手动导入类型文件
+If type resolution fails, import one of the type entry points manually:
 
 ```ts
 import 'ranui/typings';
-// 或者
+// or
 import 'ranui/dist/index.d.ts';
-// 或者
+// or
 import 'ranui/type';
-// 或者
+// or
 import 'ranui/dist/typings';
 ```
 
-并不是都要，选一个能生效的就行
+Only one working type entry is needed.
 
-也支持全量导入
+Full import is also supported:
 
 ```ts
 import 'ranui';
 ```
 
-- ES module
+ES module:
 
 ```js
 import 'ranui';
 ```
 
-或者
+or:
 
 ```js
 import 'ranui/button';
 ```
 
-- UMD, IIFE, CJS
+UMD, IIFE, CJS:
 
 ```html
 <script src="./ranui/dist/umd/index.umd.cjs"></script>
 ```
 
-## 使用方式
+## Usage
 
-它是基于`Web Components`的组件，你可以不用关注框架就可以使用它。
+RanUI components are Web Components, so they can be used without framework-specific wrappers.
 
-在大多数情况下，您可以像使用本地 `div` 标签一样使用它
+In most cases, use them like native HTML elements.
 
-下面是一些例子：
+Examples:
 
 - html
 - js
@@ -140,7 +156,7 @@ import 'ranui/button';
 import 'ranui';
 
 const Button = document.createElement('r-button');
-Button.appendChild('this is button text');
+Button.textContent = 'this is button text';
 document.body.appendChild(Button);
 ```
 
@@ -183,9 +199,9 @@ const Button = () => {
 };
 ```
 
-### Message 位置与容器配置
+### Message Position and Container
 
-`window.message` 现已支持自定义顶部偏移、层级和挂载容器：
+`window.message` supports custom top offset, z-index, and mount container:
 
 ```ts
 import 'ranui/message';
@@ -193,7 +209,7 @@ import 'ranui/message';
 const customRoot = document.getElementById('custom-message-root');
 
 window.message?.success({
-  content: '保存成功',
+  content: 'Saved',
   duration: 2000,
   top: 24,
   zIndex: 3000,
@@ -201,43 +217,52 @@ window.message?.success({
 });
 ```
 
-`top` 支持 `number | string`（`24` 会转成 `24px`，`'2rem'` 会保留原单位）。
+`top` supports `number | string`; `24` becomes `24px`, while `'2rem'` keeps its unit.
 
-`zIndex` 支持 `number | string`。
+`zIndex` supports `number | string`.
 
-`getContainer` 需要返回 `HTMLElement`；未传时默认挂载到 `document.body`。
+`getContainer` must return an `HTMLElement`; when omitted, messages mount to `document.body`.
 
-### SSR & Builder (推荐)
+### SSR & Builder
 
-对于需要服务端渲染 (SSR) 或更声明式构建 UI 的场景，推荐使用 `builder` 工具：
+For SSR or declarative UI construction, RanUI internally uses `builder`, the SSR registry, and Declarative Shadow DOM. Components reuse existing Shadow Roots through `ensureShadowRoot` and keep initialization idempotent through `ensureShadowElement`.
+
+Source-level SSR rendering example:
 
 ```ts
-import { Div, ButtonBuilder } from 'ranui/utils';
-import { renderToString } from 'ranui/utils/ssr';
+import { Button } from '@/components/button';
+import { renderToString } from '@/utils/ssr';
 
-// 声明式构建
-const btn = ButtonBuilder().class('my-btn').label('Submit').build();
+const button = new Button();
+button.setAttribute('effect', 'true');
 
-// SSR 渲染 (支持 Declarative Shadow DOM)
-const html = renderToString(new Button());
+// Outputs an HTML string containing Declarative Shadow DOM.
+const html = renderToString(button);
 ```
 
-更多细节请查看 [Utility Documentation](./utils/README.md)。
+See [Utility Documentation](./utils/README.md) for details.
 
-## 贡献
+## Component Development Conventions
 
-我们欢迎学习者和开发者的贡献！这是一个实验性项目，请对开发过程保持耐心。
+When adding or maintaining components, follow the package conventions:
 
-## 贡献者
+- Extend `RanElement`; do not directly extend the browser `HTMLElement`.
+- Use `ensureShadowRoot` to create or reuse Shadow Roots; do not call `attachShadow` directly.
+- Use `ensureShadowElement` to build Shadow DOM subtrees idempotently.
+- Include `sheet` in `observedAttributes` and sync component-level style overrides through `syncSheetAttribute`.
+- Guard `attributeChangedCallback` with `if (old === next) return;`.
+- Register components with `defineSSR('r-name', Component)`, not direct `customElements.define`.
+- Add both type exports and side-effect imports in `index.ts`; also add standalone entries in `vite.config.ts` and `package.json`.
+
+## Contributing
+
+Contributions from learners and developers are welcome. This is an experimental project, so please expect active iteration.
+
+## Contributors
 
 <a href="https://github.com/chaxus/ran/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=chaxus/ran" />
 </a>
-
-## Meta
-
-[LICENSE (MIT)](/LICENSE)
-![](http://profile-counter.glitch.me/chaxus-ranui/count.svg)
 
 ## Meta
 

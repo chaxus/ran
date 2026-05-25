@@ -648,9 +648,5 @@ export class Modal extends RanElement {
   };
 }
 
-function Custom() {
-  defineSSR('r-modal', Modal as unknown as new () => HTMLElement);
-  return Modal;
-}
-
-export default Custom();
+defineSSR('r-modal', Modal as unknown as new () => HTMLElement);
+export default Modal;

@@ -237,9 +237,5 @@ export class Button extends RanElement {
   }
 }
 
-function Custom() {
-  defineSSR('r-button', Button as unknown as new () => HTMLElement);
-  return Button;
-}
-
-export default Custom();
+defineSSR('r-button', Button as unknown as new () => HTMLElement);
+export default Button;

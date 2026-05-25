@@ -145,9 +145,5 @@ export class Checkbox extends (HTMLElementSSR()!) {
   }
 }
 
-function Custom() {
-  defineSSR('r-checkbox', Checkbox as unknown as new () => HTMLElement);
-  return Checkbox;
-}
-
-export default Custom();
+defineSSR('r-checkbox', Checkbox as unknown as new () => HTMLElement);
+export default Checkbox;

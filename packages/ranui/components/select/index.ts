@@ -669,9 +669,5 @@ export class Select extends (HTMLElementSSR()!) {
   }
 }
 
-function Custom() {
-  defineSSR('r-select', Select as unknown as new () => HTMLElement);
-  return Select;
-}
-
-export default Custom();
+defineSSR('r-select', Select as unknown as new () => HTMLElement);
+export default Select;

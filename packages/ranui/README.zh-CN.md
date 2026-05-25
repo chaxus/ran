@@ -10,7 +10,7 @@
 <a href="https://github.com/chaxus/ran"><img src="https://img.badgesize.io/https:/unpkg.com/ranui/dist/umd/shadowless/shadowless.umd.cjs?label=brotli&compression=brotli" alt="brotli"></a>
 <a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/badge/module%20formats-umd%2C%20esm-green.svg" alt="module formats: umd, esm"></a>
 
-**中文** | [English](./readme.md)
+**中文** | [English](./README.md)
 
 ## ⚠️ 重要说明
 
@@ -47,10 +47,10 @@ npm install ranui --save
 
 当前样式系统已统一为 CSS Token 与 `::part()` 规范。
 
-- 样式覆盖规范: [docs/style-override.md](./docs/style-override.md)
+- 样式覆盖规范：[docs/style-override.md](./docs/style-override.md)
 - 完整 Token/Part 清单（自动生成）: [docs/style-tokens-parts.md](./docs/style-tokens-parts.md)
 - 面向使用方的公开样式 API（自动生成）: [docs/style-tokens-public.md](./docs/style-tokens-public.md)
-- 公开 Token 过滤配置: [docs/style-token-filter.json](./docs/style-token-filter.json)
+- 公开 Token 过滤配置：[docs/style-token-filter.json](./docs/style-token-filter.json)
 
 可通过以下命令刷新样式文档：
 

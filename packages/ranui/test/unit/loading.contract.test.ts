@@ -67,27 +67,29 @@ describe('r-loading contract', () => {
   it('renders shadow DOM with .ran-loading container', () => {
     const loading = document.createElement('r-loading') as unknown as Loading;
     document.body.appendChild(loading);
-    expect(loading.shadowRoot?.querySelector('.ran-loading')).not.toBeNull();
+    const shadow = (loading as any)._shadowDom as ShadowRoot;
+    expect(shadow.querySelector('.ran-loading')).not.toBeNull();
   });
 
   it('createLoading clears previous animation before rendering new one', () => {
     const loading = document.createElement('r-loading') as any;
     document.body.appendChild(loading);
+    const shadow = loading._shadowDom as ShadowRoot;
 
     loading.name = ICON_NAME_AMP.ROTATE;
-    const firstChild = loading.shadowRoot?.querySelector('.rotate');
-    expect(firstChild).not.toBeNull();
+    expect(shadow.querySelector('.rotate')).not.toBeNull();
 
     loading.name = ICON_NAME_AMP.STRETCH;
-    expect(loading.shadowRoot?.querySelector('.rotate')).toBeNull();
-    expect(loading.shadowRoot?.querySelector('.stretch')).not.toBeNull();
+    expect(shadow.querySelector('.rotate')).toBeNull();
+    expect(shadow.querySelector('.stretch')).not.toBeNull();
   });
 
   it.each(ALL_ANIMATIONS)('renders %s animation with selector %s', (name, selector) => {
     const loading = document.createElement('r-loading') as any;
     document.body.appendChild(loading);
+    const shadow = loading._shadowDom as ShadowRoot;
     loading.name = name;
-    expect(loading.shadowRoot?.querySelector(selector)).not.toBeNull();
+    expect(shadow.querySelector(selector)).not.toBeNull();
   });
 
   it('attributeChangedCallback re-renders on name change', () => {

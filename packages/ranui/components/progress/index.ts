@@ -218,9 +218,5 @@ export class Progress extends RanElement {
   }
 }
 
-function Custom() {
-  defineSSR('r-progress', Progress as unknown as new () => HTMLElement);
-  return Progress;
-}
-
-export default Custom();
+defineSSR('r-progress', Progress as unknown as new () => HTMLElement);
+export default Progress;

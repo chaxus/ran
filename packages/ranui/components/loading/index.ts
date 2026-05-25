@@ -455,9 +455,5 @@ export class Loading extends (HTMLElementSSR()!) {
   }
 }
 
-function Custom() {
-  defineSSR('r-loading', Loading as unknown as new () => HTMLElement);
-  return Loading;
-}
-
-export default Custom();
+defineSSR('r-loading', Loading as unknown as new () => HTMLElement);
+export default Loading;
