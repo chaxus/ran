@@ -2,18 +2,18 @@
   box-sizing: border-box;
   min-width: 32px;
   height: 32px;
-  border-radius: 6px;
-  border: 1px solid #d9d9d9;
+  border-radius: var(--ran-colorpicker-border-radius, var(--ran-radius-md, 6px));
+  border: var(--ran-colorpicker-border, 1px solid var(--ran-color-border, #d9d9d9));
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s;
-  background: #ffffff;
+  transition: var(--ran-colorpicker-transition, all 0.2s);
+  background: var(--ran-colorpicker-background, var(--ran-color-bg-elevated, #ffffff));
   padding: 3px;
   &-block {
     position: relative;
-    border-radius: 4px;
+    border-radius: var(--ran-colorpicker-block-border-radius, var(--ran-radius-sm, 4px));
     width: 24px;
     height: 24px;
     box-shadow: inset 0 0 1px 0 rgba(0, 0, 0, 0.25);
@@ -94,14 +94,14 @@
               width: 138px;
               height: 24px;
               &::part(input) {
-                border-radius: 6px;
+                border-radius: var(--ran-colorpicker-input-border-radius, var(--ran-radius-md, 6px));
               }
             }
             &-number {
               width: 42px;
               height: 24px;
               &::part(input) {
-                border-radius: 6px;
+                border-radius: var(--ran-colorpicker-input-border-radius, var(--ran-radius-md, 6px));
               }
             }
           }
@@ -111,11 +111,9 @@
         position: relative;
         min-height: 160px;
         overflow: hidden;
-        border-radius: 4px;
+        border-radius: var(--ran-colorpicker-palette-border-radius, var(--ran-radius-sm, 4px));
         &-dot {
           position: absolute;
-          // left: 205.812px;
-          // top: -8px;
           z-index: 1;
           will-change: top, left;
           &-inner {
@@ -127,7 +125,6 @@
             box-shadow:
               inset 0 0 1px 0 rgba(0, 0, 0, 0.25),
               0 0 0 1px rgba(0, 0, 0, 0.06);
-            // background-color: rgb(22, 119, 255);
             background-color: transparent;
           }
         }
@@ -158,7 +155,6 @@
               height: 8px;
               &-dot {
                 z-index: 1;
-                // background: rgb(0, 106, 255);
                 width: 8px;
                 height: 8px;
                 top: -2px;
@@ -198,7 +194,6 @@
                 top: -2px;
                 left: -4px;
                 z-index: 1;
-                // background: rgb(22, 119, 255);
                 width: 8px;
                 height: 8px;
                 border: 2px solid #fff;
@@ -212,11 +207,6 @@
               &-wrap {
                 position: absolute;
                 inset: 0px;
-                // background: linear-gradient(
-                //   to right,
-                //   rgba(255, 0, 4, 0),
-                //   rgb(22, 119, 255)
-                // );
                 border-radius: calc(8px / 2);
                 box-shadow: inset 0 0 1px 0 rgba(0, 0, 0, 0.25);
                 &-value {
@@ -228,7 +218,7 @@
         }
         &-color-block {
           position: relative;
-          border-radius: 4px;
+          border-radius: var(--ran-colorpicker-swatch-border-radius, var(--ran-radius-sm, 4px));
           width: calc(8px * 2 + 12px);
           height: calc(8px * 2 + 12px);
           box-shadow: inset 0 0 1px 0 rgba(0, 0, 0, 0.25);
@@ -240,7 +230,6 @@
           );
           background-size: 50% 50%;
           &-inner {
-            // background: rgb(22, 119, 255);
             width: 100%;
             height: 100%;
             border: 1px solid rgba(0, 0, 0, 0.06);

@@ -69,3 +69,76 @@
   --ran-message-notice-content-border-radius: var(--ran-radius-md);
   --ran-message-notice-content-box-shadow: var(--ran-skin-rough-shadow);
 }
+
+[data-ran-theme-pack='paper'] r-tab,
+[data-ran-theme-pack='paper'] r-tabpane {
+  font-family: var(--ran-skin-font-family);
+}
+
+[data-ran-theme-pack='paper'] r-tab {
+  --ran-tab-active-color: var(--ran-color-primary);
+  --ran-tab-line-color: var(--ran-color-primary);
+  --ran-tab-border-color: var(--ran-color-border);
+  --ran-tab-border-radius: var(--ran-radius-sm);
+  --ran-tab-line-transition: none;
+  --ran-tab-content-transition: none;
+}
+
+[data-ran-theme-pack='paper'] r-progress {
+  --ran-progress-wrap-background: #e8e4d4;
+  --ran-progress-wrap-border-radius: var(--ran-radius-sm);
+  --ran-progress-wrap-value-background: var(--ran-color-primary);
+  --ran-progress-wrap-value-border-radius: var(--ran-radius-sm);
+  --ran-progress-dot-background: var(--ran-color-primary);
+  --ran-progress-dot-border-radius: var(--ran-radius-sm);
+}
+
+[data-ran-theme-pack='paper'] r-skeleton {
+  --ran-skeleton-border-radius: var(--ran-radius-sm);
+  --ran-skeleton-background: #e8e4d4;
+  --ran-skeleton-shimmer: linear-gradient(90deg, #e8e4d4 25%, #f5f1e4 37%, #e8e4d4 63%);
+}
+
+[data-ran-theme-pack='paper'] r-colorpicker {
+  --ran-colorpicker-border-radius: var(--ran-radius-md);
+  --ran-colorpicker-block-border-radius: var(--ran-radius-sm);
+  --ran-colorpicker-palette-border-radius: var(--ran-radius-sm);
+  --ran-colorpicker-swatch-border-radius: var(--ran-radius-sm);
+  --ran-colorpicker-border: var(--ran-skin-border-width) var(--ran-skin-border-style) var(--ran-color-border);
+  --ran-colorpicker-background: var(--ran-color-bg-elevated);
+  --ran-colorpicker-transition: none;
+  --ran-colorpicker-input-border-radius: var(--ran-radius-sm);
+}
+
+[data-ran-theme-pack='paper'] r-player {
+  --ran-player-controller-tip-font-family: var(--ran-skin-font-family);
+  --ran-player-controller-tip-border-radius: var(--ran-radius-sm);
+  --ran-player-controller-progress-wrap-border-radius: var(--ran-radius-sm);
+  --ran-player-controller-progress-wrap-buffer-border-radius: var(--ran-radius-sm);
+  --ran-player-controller-progress-wrap-value-border-radius: var(--ran-radius-sm);
+  --ran-player-controller-bottom-left-time-current-font-family: var(--ran-skin-font-family);
+  --ran-player-controller-bottom-left-time-divide-font-family: var(--ran-skin-font-family);
+  --ran-player-controller-bottom-left-time-duration-font-family: var(--ran-skin-font-family);
+  --ran-player-controller-transition: none;
+}
+
+[data-ran-theme-pack='paper'] r-radar {
+  --ran-radar-polygon-color: #c4b880;
+  --ran-radar-line-color: #c4b880;
+  --ran-radar-fill-color: rgba(80, 100, 60, 0.3);
+  --ran-radar-stroke-color: rgba(80, 100, 60, 0.7);
+}
+
+[data-ran-theme-pack='paper'] r-select {
+  --ran-select-root-font-family: var(--ran-skin-font-family);
+  --ran-select-selection-border-radius: var(--ran-radius-md);
+  --ran-select-selection-border: var(--ran-skin-border-width) var(--ran-skin-border-style) var(--ran-color-border);
+  --ran-select-selection-transition: none;
+}
+
+[data-ran-theme-pack='paper'] r-dropdown {
+  --ran-dropdown-font-family: var(--ran-skin-font-family);
+  --ran-dropdown-border-radius: var(--ran-radius-md);
+  --ran-dropdown-box-shadow: var(--ran-skin-rough-shadow);
+  --ran-dropdown-arrow-after-box-shadow: none;
+}

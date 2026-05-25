@@ -1,7 +1,7 @@
-@activeColor: var(--active-color, #1890ff);
-@lineColor: var(--line-color, #1890ff);
-@borderColor: var(--border-color, rgba(0, 0, 0, 0.2));
-@borderRadius: var(--border-radius, 0.25em);
+@activeColor: var(--ran-tab-active-color, var(--ran-color-primary, #1890ff));
+@lineColor: var(--ran-tab-line-color, var(--ran-color-primary, #1890ff));
+@borderColor: var(--ran-tab-border-color, var(--ran-color-border, rgba(0, 0, 0, 0.2)));
+@borderRadius: var(--ran-tab-border-radius, var(--ran-radius-sm, 0.25em));
 
 .ran-tab {
   // 这个伪类选择器仅仅适用于 影子节点树 (Shadow Dom)。并且只会选择实际的元素节点，而不包括文本节点。
@@ -40,7 +40,7 @@
       height: 2px;
       border-radius: 2px;
       background: @lineColor;
-      transition: 0.2s;
+      transition: var(--ran-tab-line-transition, 0.2s);
     }
   }
 
@@ -50,7 +50,7 @@
       display: flex;
       width: 100%;
       height: 100%;
-      transition: 0.2s;
+      transition: var(--ran-tab-content-transition, 0.2s);
     }
   }
 }

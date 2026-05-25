@@ -14,18 +14,21 @@
   overflow: hidden;
   background: 0 0;
   width: 100%;
-  height: 16px;
-  background: rgba(0, 0, 0, 0.06);
-  border-radius: 4px;
+  height: var(--ran-skeleton-height, 16px);
+  background: var(--ran-skeleton-background, rgba(0, 0, 0, 0.06));
+  border-radius: var(--ran-skeleton-border-radius, var(--ran-radius-sm, 4px));
   &::after {
     position: absolute;
     top: 0;
     inset-inline-end: -150%;
     bottom: 0;
     inset-inline-start: -150%;
-    background: linear-gradient(90deg, rgba(0, 0, 0, 0.06) 25%, rgba(0, 0, 0, 0.15) 37%, rgba(0, 0, 0, 0.06) 63%);
+    background: var(
+      --ran-skeleton-shimmer,
+      linear-gradient(90deg, rgba(0, 0, 0, 0.06) 25%, rgba(0, 0, 0, 0.15) 37%, rgba(0, 0, 0, 0.06) 63%)
+    );
     animation-name: skeleton;
-    animation-duration: 1.4s;
+    animation-duration: var(--ran-skeleton-animation-duration, 1.4s);
     animation-timing-function: ease;
     animation-iteration-count: infinite;
     content: '';

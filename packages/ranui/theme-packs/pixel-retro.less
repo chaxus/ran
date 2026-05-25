@@ -96,3 +96,63 @@
   --ran-message-notice-content-border-radius: 0;
   --ran-message-notice-content-box-shadow: var(--ran-skin-hard-shadow);
 }
+
+[data-ran-theme-pack='pixel-retro'] r-tab,
+[data-ran-theme-pack='pixel-retro'] r-tabpane {
+  image-rendering: pixelated;
+  font-family: var(--ran-skin-font-family);
+}
+
+[data-ran-theme-pack='pixel-retro'] r-tab {
+  --ran-tab-active-color: var(--ran-color-primary);
+  --ran-tab-line-color: var(--ran-color-primary);
+  --ran-tab-border-color: var(--ran-color-border);
+  --ran-tab-border-radius: 0;
+  --ran-tab-line-transition: none;
+  --ran-tab-content-transition: none;
+}
+
+[data-ran-theme-pack='pixel-retro'] r-progress {
+  --ran-progress-wrap-background: #111827;
+  --ran-progress-wrap-border-radius: 0;
+  --ran-progress-wrap-value-background: var(--ran-color-primary);
+  --ran-progress-wrap-value-border-radius: 0;
+  --ran-progress-dot-background: var(--ran-color-primary);
+  --ran-progress-dot-border-radius: 0;
+}
+
+[data-ran-theme-pack='pixel-retro'] r-skeleton {
+  --ran-skeleton-border-radius: 0;
+  --ran-skeleton-background: rgba(0, 0, 0, 0.12);
+  --ran-skeleton-shimmer: linear-gradient(90deg, rgba(0, 0, 0, 0.08) 25%, rgba(0, 0, 0, 0.2) 37%, rgba(0, 0, 0, 0.08) 63%);
+  --ran-skeleton-animation-duration: 0s;
+}
+
+[data-ran-theme-pack='pixel-retro'] r-colorpicker {
+  --ran-colorpicker-border-radius: 0;
+  --ran-colorpicker-block-border-radius: 0;
+  --ran-colorpicker-palette-border-radius: 0;
+  --ran-colorpicker-swatch-border-radius: 0;
+  --ran-colorpicker-border: var(--ran-skin-border-width) var(--ran-skin-border-style) var(--ran-color-border);
+  --ran-colorpicker-transition: none;
+}
+
+[data-ran-theme-pack='pixel-retro'] r-player {
+  --ran-player-controller-tip-font-family: var(--ran-skin-font-family);
+  --ran-player-controller-tip-border-radius: 0;
+  --ran-player-controller-progress-wrap-border-radius: 0;
+  --ran-player-controller-progress-wrap-buffer-border-radius: 0;
+  --ran-player-controller-progress-wrap-value-border-radius: 0;
+  --ran-player-controller-progress-dot-border-radius: 0;
+  --ran-player-controller-bottom-left-time-current-font-family: var(--ran-skin-font-family);
+  --ran-player-controller-bottom-left-time-divide-font-family: var(--ran-skin-font-family);
+  --ran-player-controller-bottom-left-time-duration-font-family: var(--ran-skin-font-family);
+  --ran-player-controller-transition: none;
+}
+
+[data-ran-theme-pack='pixel-retro'] r-radar {
+  --ran-radar-polygon-color: #333333;
+  --ran-radar-line-color: #333333;
+  --ran-radar-fill-color: rgba(59, 130, 246, 0.45);
+  --ran-radar-stroke-color: rgba(59, 130, 246, 0.85);
+}

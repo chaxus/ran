@@ -163,6 +163,7 @@
       .brand {
         display: inline-flex;
         align-items: center;
+        flex: 0 0 auto;
         gap: 10px;
         color: var(--ink);
         text-decoration: none;
@@ -185,16 +186,22 @@
 
       .nav-links {
         display: flex;
-        justify-content: center;
+        justify-content: flex-start;
         gap: 4px;
         min-width: 0;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+
+      .nav-links::-webkit-scrollbar {
+        display: none;
       }
 
       .nav-links a {
         display: inline-flex;
         align-items: center;
         min-height: 38px;
-        padding: 0 12px;
+        padding: 0 10px;
         border-radius: 8px;
         color: var(--muted);
         text-decoration: none;
@@ -228,7 +235,7 @@
       }
 
       .pack-list {
-        max-width: 430px;
+        max-width: 520px;
         overflow-x: auto;
         scrollbar-width: none;
       }
@@ -269,7 +276,7 @@
       .intro {
         width: min(1180px, calc(100% - 40px));
         margin: 0 auto;
-        min-height: calc(100vh - 72px);
+        min-height: clamp(620px, 72vh, 760px);
         padding: 64px 0 56px;
         display: grid;
         grid-template-columns: minmax(0, 1fr) minmax(340px, 440px);
@@ -427,6 +434,11 @@
         color: var(--muted);
       }
 
+      .section-kicker {
+        margin: -8px 0 0;
+        color: var(--muted);
+      }
+
       .feature-grid,
       .theme-preview-grid,
       .code-grid,
@@ -482,6 +494,13 @@
         padding: 16px;
       }
 
+      .component-card-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 14px;
+      }
+
       .component-card h3 {
         margin: 0;
         color: var(--ink);
@@ -494,6 +513,31 @@
         margin: 0;
         color: var(--muted);
         font-size: 14px;
+      }
+
+      .component-meta {
+        flex: 0 0 auto;
+        border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--line));
+        border-radius: 999px;
+        padding: 3px 8px;
+        color: var(--accent);
+        background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+        font-size: 11px;
+        font-weight: 800;
+        line-height: 1.2;
+        text-transform: uppercase;
+      }
+
+      .component-link {
+        align-self: start;
+        color: var(--accent);
+        font-size: 13px;
+        font-weight: 800;
+        text-decoration: none;
+      }
+
+      .component-link:hover {
+        text-decoration: underline;
       }
 
       .demo-row,
@@ -714,6 +758,74 @@
         overflow: hidden;
       }
 
+      .component-docs {
+        scroll-margin-top: 96px;
+      }
+
+      .docs-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .docs-card {
+        display: grid;
+        align-content: start;
+        gap: 12px;
+        min-width: 0;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface-2);
+        padding: 16px;
+        scroll-margin-top: 112px;
+      }
+
+      .docs-card-head {
+        display: flex;
+        align-items: start;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .docs-card h3,
+      .docs-card p,
+      .docs-card ul {
+        margin: 0;
+      }
+
+      .docs-card a {
+        color: var(--accent);
+        font-size: 13px;
+        font-weight: 800;
+        text-decoration: none;
+      }
+
+      .docs-card a:hover {
+        text-decoration: underline;
+      }
+
+      .docs-card code {
+        overflow-x: auto;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: var(--surface);
+        padding: 8px 10px;
+        color: var(--ink);
+        font-family: "SF Mono", "Cascadia Code", ui-monospace, monospace;
+        font-size: 12px;
+      }
+
+      .docs-card pre {
+        margin: 0;
+        overflow-x: auto;
+      }
+
+      .docs-card ul {
+        padding-left: 18px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
       .code-example h3,
       .style-example h3 {
         padding: 14px 16px 0;
@@ -855,7 +967,8 @@
         .theme-preview-grid,
         .gallery-group,
         .code-grid,
-        .style-grid {
+        .style-grid,
+        .docs-grid {
           grid-template-columns: repeat(2, minmax(0, 1fr));
         }
       }
@@ -915,7 +1028,8 @@
         .gallery-group,
         .demo-grid,
         .code-grid,
-        .style-grid {
+        .style-grid,
+        .docs-grid {
           grid-template-columns: 1fr;
         }
 
@@ -968,8 +1082,8 @@
             <h1 id="intro-title">ranui builds native-feeling interfaces that travel across frameworks.</h1>
             <p class="hero-copy">A TypeScript UI library built on custom elements, theme tokens, modular imports, and real browser standards.</p>
             <div class="hero-actions" aria-label="Hero actions">
-              <a class="primary-action" href="#components">Explore components</a>
-              <a class="secondary-action" href="#code">Copy install path</a>
+              <a class="primary-action" href="#components">Browse components</a>
+              <a class="secondary-action" href="#themes">Open theme lab</a>
             </div>
           </div>
 
@@ -1089,10 +1203,17 @@
           </section>
 
           <section id="components" class="site-section">
-            <h2>Component Gallery</h2>
+            <h2>Component Directory</h2>
+            <p class="section-kicker">Live examples with same-page notes for imports, usage, and styling hooks.</p>
             <div class="gallery-group" data-group="Actions and inputs">
-              <article class="component-card">
-                <h3>Button</h3>
+              <article class="component-card" id="component-button">
+                <div class="component-card-head">
+                  <div>
+                    <h3>Button</h3>
+                    <p>Trigger actions with primary, warning, text, icon, and disabled states.</p>
+                  </div>
+                  <span class="component-meta">action</span>
+                </div>
                 <div class="demo-row">
                   <r-button type="primary">Primary</r-button>
                   <r-button type="warning">Warning</r-button>
@@ -1100,24 +1221,45 @@
                   <r-button disabled>Disabled</r-button>
                   <r-button icon="home">Icon</r-button>
                 </div>
+                <a class="component-link" href="#docs-button">View notes</a>
               </article>
-              <article class="component-card">
-                <h3>Icon</h3>
+              <article class="component-card" id="component-icon">
+                <div class="component-card-head">
+                  <div>
+                    <h3>Icon</h3>
+                    <p>Register SVG assets once and render consistent symbols anywhere.</p>
+                  </div>
+                  <span class="component-meta">visual</span>
+                </div>
                 <div class="demo-row">
                   <r-icon name="home" size="28" color="#2563eb"></r-icon>
                   <r-icon name="setting" size="28"></r-icon>
                   <r-icon name="loading" size="28" spin color="#0f766e"></r-icon>
                 </div>
+                <a class="component-link" href="#docs-icon">View notes</a>
               </article>
-              <article class="component-card">
-                <h3>Input</h3>
+              <article class="component-card" id="component-input">
+                <div class="component-card-head">
+                  <div>
+                    <h3>Input</h3>
+                    <p>Collect text, passwords, labels, and icon-assisted values.</p>
+                  </div>
+                  <span class="component-meta">form</span>
+                </div>
                 <div class="demo-grid">
                   <r-input label="Username" placeholder="Enter username"></r-input>
                   <r-input label="Password" type="password" icon="lock"></r-input>
                 </div>
+                <a class="component-link" href="#docs-input">View notes</a>
               </article>
-              <article class="component-card">
-                <h3>Select</h3>
+              <article class="component-card" id="component-select">
+                <div class="component-card-head">
+                  <div>
+                    <h3>Select</h3>
+                    <p>Choose from option lists with popup placement and search support.</p>
+                  </div>
+                  <span class="component-meta">form</span>
+                </div>
                 <div id="popup-root"></div>
                 <div class="demo-row">
                   <r-select style="width: 170px" defaultValue="lucy" getPopupContainerId="popup-root" trigger="click">
@@ -1132,17 +1274,31 @@
                     <r-option value="orange">Orange</r-option>
                   </r-select>
                 </div>
+                <a class="component-link" href="#docs-select">View notes</a>
               </article>
-              <article class="component-card">
-                <h3>Checkbox</h3>
+              <article class="component-card" id="component-checkbox">
+                <div class="component-card-head">
+                  <div>
+                    <h3>Checkbox</h3>
+                    <p>Represent binary choices with checked, unchecked, and disabled states.</p>
+                  </div>
+                  <span class="component-meta">form</span>
+                </div>
                 <div class="demo-row">
                   <r-checkbox checked="true">Checked</r-checkbox>
                   <r-checkbox>Unchecked</r-checkbox>
                   <r-checkbox disabled checked="true">Disabled</r-checkbox>
                 </div>
+                <a class="component-link" href="#docs-checkbox">View notes</a>
               </article>
-              <article class="component-card">
-                <h3>Form</h3>
+              <article class="component-card" id="component-form">
+                <div class="component-card-head">
+                  <div>
+                    <h3>Form</h3>
+                    <p>Coordinate named controls and submit handling through slots.</p>
+                  </div>
+                  <span class="component-meta">form</span>
+                </div>
                 <r-form id="demo-form">
                   <div slot="r-form_content" class="demo-row">
                     <r-input name="name" label="Name" placeholder="Your name"></r-input>
@@ -1152,51 +1308,93 @@
                     </r-button>
                   </div>
                 </r-form>
+                <a class="component-link" href="#docs-form">View notes</a>
               </article>
             </div>
             <div class="gallery-group" data-group="Feedback">
-              <article class="component-card">
-                <h3>Progress</h3>
+              <article class="component-card" id="component-progress">
+                <div class="component-card-head">
+                  <div>
+                    <h3>Progress</h3>
+                    <p>Show completion as a fixed value or draggable progress control.</p>
+                  </div>
+                  <span class="component-meta">feedback</span>
+                </div>
                 <div class="demo-stack">
                   <r-progress percent="65"></r-progress>
                   <r-progress type="drag" percent="30"></r-progress>
                 </div>
+                <a class="component-link" href="#docs-progress">View notes</a>
               </article>
-              <article class="component-card">
-                <h3>Loading</h3>
+              <article class="component-card" id="component-loading">
+                <div class="component-card-head">
+                  <div>
+                    <h3>Loading</h3>
+                    <p>Use compact loaders for pending network, media, or state transitions.</p>
+                  </div>
+                  <span class="component-meta">feedback</span>
+                </div>
                 <div class="demo-row">
                   <r-loading name="rotate"></r-loading>
                   <r-loading name="stretch"></r-loading>
                   <r-loading name="dot"></r-loading>
                   <r-loading name="circle-line"></r-loading>
                 </div>
+                <a class="component-link" href="#docs-loading">View notes</a>
               </article>
-              <article class="component-card">
-                <h3>Skeleton</h3>
+              <article class="component-card" id="component-skeleton">
+                <div class="component-card-head">
+                  <div>
+                    <h3>Skeleton</h3>
+                    <p>Reserve content shape while async data or media loads.</p>
+                  </div>
+                  <span class="component-meta">feedback</span>
+                </div>
                 <div class="demo-stack">
                   <r-skeleton></r-skeleton>
                   <r-skeleton style="height: 24px"></r-skeleton>
                 </div>
+                <a class="component-link" href="#docs-skeleton">View notes</a>
               </article>
-              <article class="component-card">
-                <h3>Message</h3>
+              <article class="component-card" id="component-message">
+                <div class="component-card-head">
+                  <div>
+                    <h3>Message</h3>
+                    <p>Surface transient feedback inline or through the global message API.</p>
+                  </div>
+                  <span class="component-meta">feedback</span>
+                </div>
                 <div class="demo-row">
                   <r-button onclick="window.message?.success('Saved with ranui')">Save</r-button>
                   <r-message type="success" content="Saved with ranui"></r-message>
                 </div>
+                <a class="component-link" href="#docs-message">View notes</a>
               </article>
             </div>
             <div class="gallery-group" data-group="Navigation and overlays">
-              <article class="component-card">
-                <h3>Tabs</h3>
+              <article class="component-card" id="component-tabs">
+                <div class="component-card-head">
+                  <div>
+                    <h3>Tabs</h3>
+                    <p>Switch between related panels without leaving the current page context.</p>
+                  </div>
+                  <span class="component-meta">navigation</span>
+                </div>
                 <r-tabs active="overview" align="start" style="width: 100%">
                   <r-tab label="Overview" r-key="overview">Overview content</r-tab>
                   <r-tab label="API" r-key="api">API reference content</r-tab>
                   <r-tab label="Disabled" r-key="disabled" disabled>Disabled content</r-tab>
                 </r-tabs>
+                <a class="component-link" href="#docs-tabs">View notes</a>
               </article>
-              <article class="component-card">
-                <h3>Popover</h3>
+              <article class="component-card" id="component-popover">
+                <div class="component-card-head">
+                  <div>
+                    <h3>Popover</h3>
+                    <p>Attach contextual floating content to a trigger element.</p>
+                  </div>
+                  <span class="component-meta">overlay</span>
+                </div>
                 <div class="demo-row">
                   <r-popover placement="top" trigger="hover,click" arrow="true">
                     <r-button>Hover or click</r-button>
@@ -1205,9 +1403,16 @@
                     </r-content>
                   </r-popover>
                 </div>
+                <a class="component-link" href="#docs-popover">View notes</a>
               </article>
-              <article class="component-card">
-                <h3>Modal</h3>
+              <article class="component-card" id="component-modal">
+                <div class="component-card-head">
+                  <div>
+                    <h3>Modal</h3>
+                    <p>Focus attention on blocking decisions or richer temporary flows.</p>
+                  </div>
+                  <span class="component-meta">overlay</span>
+                </div>
                 <div class="demo-row">
                   <r-button
                     type="primary"
@@ -1220,41 +1425,76 @@
                     <r-button onclick="document.querySelector('#demo-modal')?.removeAttribute('open')">Close</r-button>
                   </r-modal>
                 </div>
+                <a class="component-link" href="#docs-modal">View notes</a>
               </article>
             </div>
             <div class="gallery-group" data-group="Media and advanced">
-              <article class="component-card">
-                <h3>Image</h3>
+              <article class="component-card" id="component-image">
+                <div class="component-card-head">
+                  <div>
+                    <h3>Image</h3>
+                    <p>Render image content with a consistent component wrapper.</p>
+                  </div>
+                  <span class="component-meta">media</span>
+                </div>
                 <div class="demo-row">
                   <r-img class="demo-media" src="https://picsum.photos/220/120"></r-img>
                   <r-img class="demo-media" src="https://picsum.photos/220/9999"></r-img>
                 </div>
+                <a class="component-link" href="#docs-image">View notes</a>
               </article>
-              <article class="component-card">
-                <h3>Color Picker</h3>
+              <article class="component-card" id="component-colorpicker">
+                <div class="component-card-head">
+                  <div>
+                    <h3>Color Picker</h3>
+                    <p>Let users select solid or alpha-aware colors in themed surfaces.</p>
+                  </div>
+                  <span class="component-meta">input</span>
+                </div>
                 <div class="demo-row">
                   <r-colorpicker value="#2563eb"></r-colorpicker>
                   <r-colorpicker value="rgba(255,0,0,0.5)"></r-colorpicker>
                 </div>
+                <a class="component-link" href="#docs-colorpicker">View notes</a>
               </article>
-              <article class="component-card">
-                <h3>Math</h3>
+              <article class="component-card" id="component-math">
+                <div class="component-card-head">
+                  <div>
+                    <h3>Math</h3>
+                    <p>Display LaTeX expressions inside normal interface content.</p>
+                  </div>
+                  <span class="component-meta">content</span>
+                </div>
                 <div class="demo-grid">
                   <div class="demo-box"><r-math latex="E = mc^2"></r-math></div>
                   <div class="demo-box"><r-math latex="x = {-b \pm \sqrt{b^2-4ac} \over 2a}"></r-math></div>
                 </div>
+                <a class="component-link" href="#docs-math">View notes</a>
               </article>
-              <article class="component-card">
-                <h3>Radar</h3>
+              <article class="component-card" id="component-radar">
+                <div class="component-card-head">
+                  <div>
+                    <h3>Radar</h3>
+                    <p>Compare weighted scores in a compact polygon chart.</p>
+                  </div>
+                  <span class="component-meta">chart</span>
+                </div>
                 <div class="demo-box" style="max-width: 300px; aspect-ratio: 1 / 1">
                   <r-radar
                     style="display: block; width: 100%; height: 100%"
                     abilitys='[{"abilityName":"Performance","scoreRate":"92"},{"abilityName":"A11y","scoreRate":"83"},{"abilityName":"DX","scoreRate":"75"},{"abilityName":"Stability","scoreRate":"86"},{"abilityName":"Features","scoreRate":"80"}]'
                   ></r-radar>
                 </div>
+                <a class="component-link" href="#docs-radar">View notes</a>
               </article>
-              <article class="component-card">
-                <h3>Scratch</h3>
+              <article class="component-card" id="component-scratch">
+                <div class="component-card-head">
+                  <div>
+                    <h3>Scratch</h3>
+                    <p>Create an interactive reveal surface for promotional or game-like moments.</p>
+                  </div>
+                  <span class="component-meta">advanced</span>
+                </div>
                 <div class="demo-stack">
                   <r-button onclick="typeof document.querySelector('#demo-scratch')?.open === 'function' ? document.querySelector('#demo-scratch')?.open?.() : undefined">Open Scratch</r-button>
                   <div class="demo-scratch">
@@ -1262,6 +1502,7 @@
                     <r-scratch id="demo-scratch"></r-scratch>
                   </div>
                 </div>
+                <a class="component-link" href="#docs-scratch">View notes</a>
               </article>
               <article class="component-card">
                 <h3>Player</h3>
@@ -1281,6 +1522,257 @@
                     </template>
                   </r-button>
                 </div>
+              </article>
+            </div>
+          </section>
+
+          <section class="component-docs content-section" aria-labelledby="component-notes-title">
+            <div class="section-header">
+              <h2 id="component-notes-title">Component notes</h2>
+              <p>Quick import paths and usage reminders for the controls shown above.</p>
+            </div>
+            <div class="docs-grid">
+              <article class="docs-card" id="docs-button">
+                <div class="docs-card-head">
+                  <h3>Button</h3>
+                  <a href="#component-button">Back to demo</a>
+                </div>
+                <p>Use buttons for direct commands and compact tool actions.</p>
+                <code>import 'ranui/button';</code>
+                <pre><code>&lt;r-button type="primary"&gt;Save&lt;/r-button&gt;</code></pre>
+                <ul>
+                  <li>Supports primary, warning, text, disabled, and icon states.</li>
+                  <li>Theme packs style the same element through CSS variables.</li>
+                </ul>
+              </article>
+              <article class="docs-card" id="docs-icon">
+                <div class="docs-card-head">
+                  <h3>Icon</h3>
+                  <a href="#component-icon">Back to demo</a>
+                </div>
+                <p>Render registered SVG icons with size, color, and spin controls.</p>
+                <code>import 'ranui/icon';</code>
+                <pre><code>&lt;r-icon name="home" size="24"&gt;&lt;/r-icon&gt;</code></pre>
+                <ul>
+                  <li>Register icon names before rendering them in the page.</li>
+                  <li>Use `spin` for loading or progress affordances.</li>
+                </ul>
+              </article>
+              <article class="docs-card" id="docs-input">
+                <div class="docs-card-head">
+                  <h3>Input</h3>
+                  <a href="#component-input">Back to demo</a>
+                </div>
+                <p>Collect typed values with labels, placeholders, types, and optional icons.</p>
+                <code>import 'ranui/input';</code>
+                <pre><code>&lt;r-input label="Email" placeholder="name@example.com"&gt;&lt;/r-input&gt;</code></pre>
+                <ul>
+                  <li>Use `type="password"` for secret values.</li>
+                  <li>Theme packs can tune border radius, font, and transitions.</li>
+                </ul>
+              </article>
+              <article class="docs-card" id="docs-select">
+                <div class="docs-card-head">
+                  <h3>Select</h3>
+                  <a href="#component-select">Back to demo</a>
+                </div>
+                <p>Choose a value from projected `r-option` children.</p>
+                <code>import 'ranui/select';</code>
+                <pre><code>&lt;r-select placeholder="Theme"&gt;
+  &lt;r-option value="paper"&gt;Paper&lt;/r-option&gt;
+&lt;/r-select&gt;</code></pre>
+                <ul>
+                  <li>Use `showSearch` for larger option sets.</li>
+                  <li>`getPopupContainerId` keeps overlays inside a known container.</li>
+                </ul>
+              </article>
+              <article class="docs-card" id="docs-checkbox">
+                <div class="docs-card-head">
+                  <h3>Checkbox</h3>
+                  <a href="#component-checkbox">Back to demo</a>
+                </div>
+                <p>Represent a binary user preference or agreement state.</p>
+                <code>import 'ranui/checkbox';</code>
+                <pre><code>&lt;r-checkbox checked&gt;Remember choice&lt;/r-checkbox&gt;</code></pre>
+                <ul>
+                  <li>Supports checked, unchecked, and disabled states.</li>
+                  <li>Use label text as the projected child content.</li>
+                </ul>
+              </article>
+              <article class="docs-card" id="docs-form">
+                <div class="docs-card-head">
+                  <h3>Form</h3>
+                  <a href="#component-form">Back to demo</a>
+                </div>
+                <p>Group named controls into a submit-ready form surface.</p>
+                <code>import 'ranui/form';</code>
+                <pre><code>&lt;r-form&gt;
+  &lt;div slot="r-form_content"&gt;...&lt;/div&gt;
+&lt;/r-form&gt;</code></pre>
+                <ul>
+                  <li>Place field markup in the `r-form_content` slot.</li>
+                  <li>Pair with `r-input`, `r-select`, and `r-button` for compact flows.</li>
+                </ul>
+              </article>
+              <article class="docs-card" id="docs-progress">
+                <div class="docs-card-head">
+                  <h3>Progress</h3>
+                  <a href="#component-progress">Back to demo</a>
+                </div>
+                <p>Show determinate progress or expose a draggable progress value.</p>
+                <code>import 'ranui/progress';</code>
+                <pre><code>&lt;r-progress percent="72"&gt;&lt;/r-progress&gt;</code></pre>
+                <ul>
+                  <li>Use `percent` for the current value.</li>
+                  <li>Use `type="drag"` when the user should adjust the value.</li>
+                </ul>
+              </article>
+              <article class="docs-card" id="docs-loading">
+                <div class="docs-card-head">
+                  <h3>Loading</h3>
+                  <a href="#component-loading">Back to demo</a>
+                </div>
+                <p>Show pending states with compact animated indicators.</p>
+                <code>import 'ranui/loading';</code>
+                <pre><code>&lt;r-loading name="rotate"&gt;&lt;/r-loading&gt;</code></pre>
+                <ul>
+                  <li>Switch the `name` attribute to select a loader style.</li>
+                  <li>Loader colors follow semantic theme tokens.</li>
+                </ul>
+              </article>
+              <article class="docs-card" id="docs-skeleton">
+                <div class="docs-card-head">
+                  <h3>Skeleton</h3>
+                  <a href="#component-skeleton">Back to demo</a>
+                </div>
+                <p>Reserve layout while data, media, or expensive content is loading.</p>
+                <code>import 'ranui/skeleton';</code>
+                <pre><code>&lt;r-skeleton style="height: 24px"&gt;&lt;/r-skeleton&gt;</code></pre>
+                <ul>
+                  <li>Use stable dimensions to prevent layout shift.</li>
+                  <li>Theme packs can adjust shimmer, radius, and background.</li>
+                </ul>
+              </article>
+              <article class="docs-card" id="docs-message">
+                <div class="docs-card-head">
+                  <h3>Message</h3>
+                  <a href="#component-message">Back to demo</a>
+                </div>
+                <p>Display inline or global feedback for completed user actions.</p>
+                <code>import 'ranui/message';</code>
+                <pre><code>&lt;r-message type="success" content="Saved"&gt;&lt;/r-message&gt;</code></pre>
+                <ul>
+                  <li>Use `window.message?.success()` for toast-like feedback.</li>
+                  <li>Inline messages are useful in demos and static examples.</li>
+                </ul>
+              </article>
+              <article class="docs-card" id="docs-tabs">
+                <div class="docs-card-head">
+                  <h3>Tabs</h3>
+                  <a href="#component-tabs">Back to demo</a>
+                </div>
+                <p>Switch between small groups of related content.</p>
+                <code>import 'ranui/tab';</code>
+                <pre><code>&lt;r-tabs active="overview"&gt;
+  &lt;r-tab label="Overview" r-key="overview"&gt;...&lt;/r-tab&gt;
+&lt;/r-tabs&gt;</code></pre>
+                <ul>
+                  <li>Set `active` to the matching `r-key` value.</li>
+                  <li>Use disabled tabs for unavailable panels.</li>
+                </ul>
+              </article>
+              <article class="docs-card" id="docs-popover">
+                <div class="docs-card-head">
+                  <h3>Popover</h3>
+                  <a href="#component-popover">Back to demo</a>
+                </div>
+                <p>Attach short contextual content to a trigger.</p>
+                <code>import 'ranui/popover';</code>
+                <pre><code>&lt;r-popover placement="top" trigger="hover,click"&gt;
+  &lt;r-button&gt;Inspect&lt;/r-button&gt;
+&lt;/r-popover&gt;</code></pre>
+                <ul>
+                  <li>Use placement values to keep overlays near the trigger.</li>
+                  <li>Project popover content through `r-content`.</li>
+                </ul>
+              </article>
+              <article class="docs-card" id="docs-modal">
+                <div class="docs-card-head">
+                  <h3>Modal</h3>
+                  <a href="#component-modal">Back to demo</a>
+                </div>
+                <p>Open focused temporary surfaces for decisions and short flows.</p>
+                <code>import 'ranui/modal';</code>
+                <pre><code>&lt;r-modal id="settings-modal" title="Settings"&gt;...&lt;/r-modal&gt;</code></pre>
+                <ul>
+                  <li>Use `title` for the dialog heading.</li>
+                  <li>Theme packs can adjust dialog shadow, borders, and header treatment.</li>
+                </ul>
+              </article>
+              <article class="docs-card" id="docs-image">
+                <div class="docs-card-head">
+                  <h3>Image</h3>
+                  <a href="#component-image">Back to demo</a>
+                </div>
+                <p>Render image assets inside a consistent media component.</p>
+                <code>import 'ranui/image';</code>
+                <pre><code>&lt;r-img src="/preview.png"&gt;&lt;/r-img&gt;</code></pre>
+                <ul>
+                  <li>Keep container dimensions stable for predictable layout.</li>
+                  <li>Use normal CSS sizing on the custom element.</li>
+                </ul>
+              </article>
+              <article class="docs-card" id="docs-colorpicker">
+                <div class="docs-card-head">
+                  <h3>Color Picker</h3>
+                  <a href="#component-colorpicker">Back to demo</a>
+                </div>
+                <p>Let users pick colors for design tools, settings, and theme surfaces.</p>
+                <code>import 'ranui/colorpicker';</code>
+                <pre><code>&lt;r-colorpicker value="#2563eb"&gt;&lt;/r-colorpicker&gt;</code></pre>
+                <ul>
+                  <li>Accepts hex and rgba-style values.</li>
+                  <li>Theme packs can tune swatch, panel, and input radii.</li>
+                </ul>
+              </article>
+              <article class="docs-card" id="docs-math">
+                <div class="docs-card-head">
+                  <h3>Math</h3>
+                  <a href="#component-math">Back to demo</a>
+                </div>
+                <p>Typeset LaTeX expressions in docs, learning tools, and analysis panels.</p>
+                <code>import 'ranui/math';</code>
+                <pre><code>&lt;r-math latex="E = mc^2"&gt;&lt;/r-math&gt;</code></pre>
+                <ul>
+                  <li>Use the `latex` attribute for the expression source.</li>
+                  <li>Wrap in stable containers for long formulas.</li>
+                </ul>
+              </article>
+              <article class="docs-card" id="docs-radar">
+                <div class="docs-card-head">
+                  <h3>Radar</h3>
+                  <a href="#component-radar">Back to demo</a>
+                </div>
+                <p>Visualize multi-axis scores in a compact comparison chart.</p>
+                <code>import 'ranui/radar';</code>
+                <pre><code>&lt;r-radar abilitys='[{"abilityName":"DX","scoreRate":"86"}]'&gt;&lt;/r-radar&gt;</code></pre>
+                <ul>
+                  <li>`abilitys` accepts JSON data for labels and score rates.</li>
+                  <li>Theme packs can set polygon, line, fill, and stroke colors.</li>
+                </ul>
+              </article>
+              <article class="docs-card" id="docs-scratch">
+                <div class="docs-card-head">
+                  <h3>Scratch</h3>
+                  <a href="#component-scratch">Back to demo</a>
+                </div>
+                <p>Reveal hidden content through an interactive scratch surface.</p>
+                <code>import 'ranui/scratch';</code>
+                <pre><code>&lt;r-scratch id="prize-scratch"&gt;&lt;/r-scratch&gt;</code></pre>
+                <ul>
+                  <li>Place the prize layer behind the scratch component.</li>
+                  <li>Use an explicit height so the canvas has a stable drawing area.</li>
+                </ul>
               </article>
             </div>
           </section>

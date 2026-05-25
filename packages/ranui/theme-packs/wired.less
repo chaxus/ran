@@ -1,18 +1,9 @@
-@import url('./wired-assets.less');
-
 :root[data-ran-theme-pack='wired'],
 [data-ran-theme-pack='wired'] {
   --ran-skin-font-family: 'Caveat', 'Patrick Hand', 'Comic Sans MS', cursive;
   --ran-skin-border-style: solid;
   --ran-skin-border-width: 2px;
   --ran-skin-outline-color: #111827;
-  --ran-skin-rough-stroke-width: 1.5;
-  --ran-skin-rough-seed: 42;
-  --ran-skin-rough-border-image-normal: @wired-svg-normal;
-  --ran-skin-rough-border-image-hover: @wired-svg-hover;
-  --ran-skin-rough-border-image-focus: @wired-svg-focus;
-  --ran-skin-rough-border-image-active: @wired-svg-active;
-  --ran-skin-rough-border-image-disabled: @wired-svg-disabled;
   --ran-skin-hard-shadow: none;
   --ran-skin-rough-shadow: 2px 3px 0 rgba(0, 0, 0, 0.15);
   --ran-skin-raised-shadow: var(--ran-skin-rough-shadow);
@@ -28,32 +19,29 @@
   --ran-color-bg-muted: #f0ede8;
 }
 
+/* JS overlay handles all borders; strip CSS borders to avoid doubling */
 [data-ran-theme-pack='wired'] r-button,
 [data-ran-theme-pack='wired'] r-input,
 [data-ran-theme-pack='wired'] r-checkbox,
+[data-ran-theme-pack='wired'] r-select,
 [data-ran-theme-pack='wired'] r-modal,
 [data-ran-theme-pack='wired'] r-message {
   font-family: var(--ran-skin-font-family);
 }
 
 [data-ran-theme-pack='wired'] r-button {
-  --ran-btn-box-shadow: var(--ran-skin-rough-shadow);
+  --ran-btn-box-shadow: none;
   --ran-btn-content-border-radius: 0;
-  --ran-btn-content-border: 4px solid transparent;
-  --ran-btn-content-border-image-source: var(--ran-skin-rough-border-image-normal);
-  --ran-btn-content-border-image-slice: 8;
-  --ran-btn-content-border-image-width: 4px;
-  --ran-btn-contain-transition: none;
+  --ran-btn-content-border: none;
+  --ran-btn-content-border-image-source: none;
   --ran-btn-contain-transition: none;
   --ran-btn-content-font-family: var(--ran-skin-font-family);
 }
 
 [data-ran-theme-pack='wired'] r-input {
   --ran-input-border-radius: 0;
-  --ran-input-border: 4px solid transparent;
-  --ran-input-border-image-source: var(--ran-skin-rough-border-image-normal);
-  --ran-input-border-image-slice: 8;
-  --ran-input-border-image-width: 4px;
+  --ran-input-border: none;
+  --ran-input-border-image-source: none;
   --ran-input-font-family: var(--ran-skin-font-family);
   --ran-input-content-font-family: var(--ran-skin-font-family);
   --ran-input-transition: none;
@@ -64,26 +52,92 @@
   --ran-checkbox-font-family: var(--ran-skin-font-family);
   --ran-checkbox-border-radius: 0;
   --ran-checkbox-inner-border-radius: 0;
-  --ran-checkbox-inner-border: 4px solid transparent;
-  --ran-checkbox-inner-border-image-source: var(--ran-skin-rough-border-image-normal);
-  --ran-checkbox-inner-border-image-slice: 8;
-  --ran-checkbox-inner-border-image-width: 4px;
+  --ran-checkbox-inner-border: none;
+  --ran-checkbox-inner-border-image-source: none;
 }
 
 [data-ran-theme-pack='wired'] r-modal {
   --ran-modal-dialog-border-radius: 0;
-  --ran-modal-dialog-box-shadow: var(--ran-skin-rough-shadow);
-  --ran-modal-dialog-border-image-source: var(--ran-skin-rough-border-image-normal);
-  --ran-modal-dialog-border-image-slice: 8;
-  --ran-modal-dialog-border-image-width: 4px;
+  --ran-modal-dialog-box-shadow: none;
+  --ran-modal-dialog-border-image-source: none;
   --ran-modal-header-border-bottom: 1px solid var(--ran-color-border);
   --ran-modal-footer-border-top: 1px solid var(--ran-color-border);
 }
 
 [data-ran-theme-pack='wired'] r-message {
   --ran-message-notice-content-border-radius: 0;
-  --ran-message-notice-content-box-shadow: var(--ran-skin-rough-shadow);
-  --ran-message-notice-content-border-image-source: var(--ran-skin-rough-border-image-normal);
-  --ran-message-notice-content-border-image-slice: 8;
-  --ran-message-notice-content-border-image-width: 4px;
+  --ran-message-notice-content-box-shadow: none;
+  --ran-message-notice-content-border-image-source: none;
+}
+
+[data-ran-theme-pack='wired'] r-tab,
+[data-ran-theme-pack='wired'] r-tabpane {
+  font-family: var(--ran-skin-font-family);
+}
+
+[data-ran-theme-pack='wired'] r-tab {
+  --ran-tab-active-color: var(--ran-color-primary);
+  --ran-tab-line-color: var(--ran-color-primary);
+  --ran-tab-border-color: var(--ran-skin-outline-color);
+  --ran-tab-border-radius: 0;
+}
+
+[data-ran-theme-pack='wired'] r-progress {
+  --ran-progress-wrap-background: #e0dbd4;
+  --ran-progress-wrap-border-radius: 0;
+  --ran-progress-wrap-value-background: var(--ran-color-primary);
+  --ran-progress-wrap-value-border-radius: 0;
+  --ran-progress-dot-background: var(--ran-color-primary);
+  --ran-progress-dot-border-radius: 0;
+}
+
+[data-ran-theme-pack='wired'] r-skeleton {
+  --ran-skeleton-border-radius: 0;
+  --ran-skeleton-background: #e0dbd4;
+  --ran-skeleton-shimmer: linear-gradient(90deg, #e0dbd4 25%, #f0ebe4 37%, #e0dbd4 63%);
+}
+
+[data-ran-theme-pack='wired'] r-colorpicker {
+  --ran-colorpicker-border-radius: 0;
+  --ran-colorpicker-block-border-radius: 0;
+  --ran-colorpicker-palette-border-radius: 0;
+  --ran-colorpicker-swatch-border-radius: 0;
+  --ran-colorpicker-border: none;
+  --ran-colorpicker-background: var(--ran-color-bg-elevated);
+  --ran-colorpicker-transition: none;
+  --ran-colorpicker-input-border-radius: 0;
+}
+
+[data-ran-theme-pack='wired'] r-select {
+  --ran-select-root-font-family: var(--ran-skin-font-family);
+  --ran-select-selection-border-radius: 0;
+  --ran-select-selection-border: none;
+  --ran-select-selection-border-image-source: none;
+  --ran-select-selection-transition: none;
+}
+
+[data-ran-theme-pack='wired'] r-dropdown {
+  --ran-dropdown-font-family: var(--ran-skin-font-family);
+  --ran-dropdown-border-radius: 0;
+  --ran-dropdown-box-shadow: var(--ran-skin-rough-shadow);
+  --ran-dropdown-arrow-after-box-shadow: none;
+}
+
+[data-ran-theme-pack='wired'] r-player {
+  --ran-player-controller-tip-font-family: var(--ran-skin-font-family);
+  --ran-player-controller-tip-border-radius: 0;
+  --ran-player-controller-progress-wrap-border-radius: 0;
+  --ran-player-controller-progress-wrap-buffer-border-radius: 0;
+  --ran-player-controller-progress-wrap-value-border-radius: 0;
+  --ran-player-controller-progress-dot-border-radius: 0;
+  --ran-player-controller-bottom-left-time-current-font-family: var(--ran-skin-font-family);
+  --ran-player-controller-bottom-left-time-divide-font-family: var(--ran-skin-font-family);
+  --ran-player-controller-bottom-left-time-duration-font-family: var(--ran-skin-font-family);
+}
+
+[data-ran-theme-pack='wired'] r-radar {
+  --ran-radar-polygon-color: #c8c2b8;
+  --ran-radar-line-color: #c8c2b8;
+  --ran-radar-fill-color: rgba(100, 149, 80, 0.35);
+  --ran-radar-stroke-color: rgba(100, 149, 80, 0.8);
 }

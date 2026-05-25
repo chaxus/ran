@@ -85,30 +85,34 @@ function Custom() {
           this.setAttribute('abilitys', JSON.stringify(value) || '');
         }
       }
+      _cssVar(name: string): string {
+        if (typeof getComputedStyle === 'undefined') return '';
+        return getComputedStyle(this).getPropertyValue(name).trim();
+      }
       // 多边形颜色
       get colorPolygon() {
-        return this.getAttribute('colorPolygon') || POLYGON_COLOR;
+        return this.getAttribute('colorPolygon') || this._cssVar('--ran-radar-polygon-color') || POLYGON_COLOR;
       }
       set colorPolygon(value) {
         this.setAttribute('colorPolygon', value || POLYGON_COLOR);
       }
       // 顶点连线颜色
       get colorLine() {
-        return this.getAttribute('colorLine') || LINE_COLOR;
+        return this.getAttribute('colorLine') || this._cssVar('--ran-radar-line-color') || LINE_COLOR;
       }
       set colorLine(value) {
         this.setAttribute('colorLine', value || LINE_COLOR);
       }
       // 数据渲染处的颜色
       get fillColor() {
-        return this.getAttribute('fillColor') || FILL_COLOR;
+        return this.getAttribute('fillColor') || this._cssVar('--ran-radar-fill-color') || FILL_COLOR;
       }
       set fillColor(value) {
         this.setAttribute('fillColor', value || FILL_COLOR);
       }
       // 数据渲染处线和点的颜色
       get strokeColor() {
-        return this.getAttribute('strokeColor') || STROKE_COLOR;
+        return this.getAttribute('strokeColor') || this._cssVar('--ran-radar-stroke-color') || STROKE_COLOR;
       }
       set strokeColor(value) {
         this.setAttribute('strokeColor', value || STROKE_COLOR);

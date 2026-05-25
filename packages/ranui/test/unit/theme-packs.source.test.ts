@@ -83,11 +83,12 @@ describe('theme pack source contracts', () => {
     expect(source).toContain('#ffffff');
   });
 
-  it('scopes wired css with rough border-image pipeline', () => {
+  it('scopes wired css with runtime rough overlay support', () => {
     const source = read('theme-packs/wired.less');
-    expect(source).toContain('--ran-skin-rough-border-image-normal');
     expect(source).toContain('--ran-skin-rough-shadow');
-    expect(source).toContain('wired-assets.less');
+    expect(source).toContain('--ran-btn-content-border: none');
+    expect(source).toContain('--ran-input-border: none');
+    expect(source).toContain('--ran-select-selection-border: none');
   });
 
   it('scopes paper css with informal radius and shadow', () => {
@@ -120,12 +121,13 @@ describe('theme pack source contracts', () => {
     }
   });
 
-  it('wired pack TS entry does not import roughjs or any runtime drawing dependency', () => {
+  it('wired pack TS entry activates the runtime drawing overlay', () => {
     const wiredTs = read('theme-packs/wired.ts');
-    const wiredLess = read('theme-packs/wired.less');
-    expect(wiredTs).not.toContain('roughjs');
-    expect(wiredTs).not.toContain('rough.js');
-    expect(wiredLess).not.toContain('roughjs');
+    const overlayTs = read('theme-packs/wired-overlay.ts');
+    const packageJson = read('package.json');
+    expect(wiredTs).toContain('./wired-overlay');
+    expect(overlayTs).toContain("from 'roughjs'");
+    expect(packageJson).toContain('"roughjs"');
   });
 
   it('ships a transitions pack for smooth pack switching', () => {

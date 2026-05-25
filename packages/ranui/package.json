@@ -201,6 +201,7 @@
     "vitest": "^4.1.7"
   },
   "dependencies": {
-    "ranuts": "workspace:^"
+    "ranuts": "workspace:^",
+    "roughjs": "^4.6.6"
   }
 }

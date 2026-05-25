@@ -119,3 +119,68 @@
   --ran-modal-close-color: #ffffff;
   --ran-modal-body-color: var(--ran-color-text);
 }
+
+[data-ran-theme-pack='windows-xp'] r-tab,
+[data-ran-theme-pack='windows-xp'] r-tabpane {
+  font-family: var(--ran-skin-font-family);
+}
+
+[data-ran-theme-pack='windows-xp'] r-tab {
+  --ran-tab-active-color: var(--ran-color-primary);
+  --ran-tab-line-color: var(--ran-color-primary);
+  --ran-tab-border-color: #7a96df;
+  --ran-tab-border-radius: var(--ran-radius-sm);
+  --ran-tab-line-transition: none;
+  --ran-tab-content-transition: none;
+}
+
+[data-ran-theme-pack='windows-xp'] r-progress {
+  --ran-progress-wrap-background: #d4d0c8;
+  --ran-progress-wrap-border-radius: var(--ran-radius-sm);
+  --ran-progress-wrap-value-background: linear-gradient(to right, #3e88e0 0%, #1e5fa8 100%);
+  --ran-progress-wrap-value-border-radius: var(--ran-radius-sm);
+  --ran-progress-dot-background: #1e5fa8;
+  --ran-progress-dot-border-radius: 50%;
+}
+
+[data-ran-theme-pack='windows-xp'] r-skeleton {
+  --ran-skeleton-border-radius: var(--ran-radius-sm);
+  --ran-skeleton-background: #d4d0c8;
+  --ran-skeleton-shimmer: linear-gradient(90deg, #d4d0c8 25%, #e8e4dc 37%, #d4d0c8 63%);
+  --ran-skeleton-animation-duration: 0s;
+}
+
+[data-ran-theme-pack='windows-xp'] r-colorpicker {
+  --ran-colorpicker-border-radius: var(--ran-radius-sm);
+  --ran-colorpicker-block-border-radius: var(--ran-radius-sm);
+  --ran-colorpicker-palette-border-radius: var(--ran-radius-sm);
+  --ran-colorpicker-swatch-border-radius: var(--ran-radius-sm);
+  --ran-colorpicker-border: 1px solid #7a96df;
+  --ran-colorpicker-background: var(--ran-color-bg-elevated);
+  --ran-colorpicker-transition: none;
+  --ran-colorpicker-input-border-radius: var(--ran-radius-sm);
+}
+
+[data-ran-theme-pack='windows-xp'] r-player {
+  --ran-player-controller-tip-font-family: var(--ran-skin-font-family);
+  --ran-player-controller-tip-border-radius: var(--ran-radius-sm);
+  --ran-player-controller-progress-wrap-border-radius: var(--ran-radius-sm);
+  --ran-player-controller-progress-wrap-buffer-border-radius: var(--ran-radius-sm);
+  --ran-player-controller-progress-wrap-value-border-radius: var(--ran-radius-sm);
+  --ran-player-controller-bottom-left-time-current-font-family: var(--ran-skin-font-family);
+  --ran-player-controller-bottom-left-time-divide-font-family: var(--ran-skin-font-family);
+  --ran-player-controller-bottom-left-time-duration-font-family: var(--ran-skin-font-family);
+  --ran-player-controller-transition: none;
+}
+
+[data-ran-theme-pack='windows-xp'] r-radar {
+  --ran-radar-polygon-color: #7a96df;
+  --ran-radar-line-color: #7a96df;
+  --ran-radar-fill-color: rgba(0, 60, 122, 0.35);
+  --ran-radar-stroke-color: rgba(0, 60, 122, 0.75);
+}
+
+[data-ran-theme-pack='windows-xp'] r-message {
+  --ran-message-notice-content-border-radius: var(--ran-radius-sm);
+  --ran-message-notice-content-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+}
