@@ -483,10 +483,9 @@ export class Input extends (HTMLElementSSR()!) {
     this._inputContent.removeEventListener('input', this.customInput);
   }
   attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
+    if (oldValue === newValue) return;
     this.listenEvent(name, oldValue, newValue);
-    if (name === 'sheet' && oldValue !== newValue) {
-      this.handlerExternalCss();
-    }
+    if (name === 'sheet') this.handlerExternalCss();
   }
 }
 

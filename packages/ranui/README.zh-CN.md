@@ -1,6 +1,6 @@
 # ranui
 
-基于 `Web Components` 的实验性组件库
+基于 `Web Components` 的实验性组件库。组件使用 Shadow DOM 封装、CSS Token 主题体系，并提供 SSR / Declarative Shadow DOM 支持。
 
 ---
 
@@ -25,11 +25,11 @@
 ## 特点
 
 1. **跨框架兼容：** 与 React, Vue, Preact, SolidJS, Svelte 等兼容。可以和遵循 W3C 标准的任何 JavaScript 项目集成。
-2. **原生体验：** 易于入门，像使用本地 div 标签，简化项目大小和减少学习成本。
+2. **原生体验：** 易于入门，像使用原生 HTML 标签一样使用 `<r-button>`、`<r-modal>` 等自定义元素。
 3. **模块化设计：** 可选导入和全量导入，以增强可维护性和可伸缩性。
-4. **交互式丰富文档：** 提供详细的交互式文档，并附有有效的示例子。
+4. **Shadow DOM 封装：** 组件内部样式默认隔离，并通过 CSS Token、`::part()` 和 `sheet` 属性开放可控的样式覆盖能力。
 5. **支持类型校验：** 基于 TypeScript 构建，具有类型支持，确保代码的健壮性和可维护性。
-6. **框架无关：** 与框架 (React/vue) 无关，避免破坏性的更新，并确保持续的项目运行。
+6. **SSR 友好：** 通过 `defineSSR`、`renderToString` 和 Declarative Shadow DOM 支持服务端渲染场景。
 
 ## 安装
 
@@ -57,6 +57,22 @@ npm install ranui --save
 ```bash
 pnpm doc:style
 ```
+
+### 主题与主题包
+
+RanUI 支持亮色、暗色与系统主题，并提供多个 CSS-only 主题包。
+
+```ts
+import { initTheme, setTheme, setThemePack, setThemeToken } from 'ranui';
+import 'ranui/theme-packs/pixel-retro';
+
+initTheme();
+setTheme('system');
+setThemePack('pixel-retro');
+setThemeToken('--ran-color-primary', '#2563eb');
+```
+
+可用主题包包括 `windows-98`、`windows-xp`、`system-6`、`wired`、`paper`、`pixel-retro`、`neo-brutalism`。使用 `setThemePack('default')` 可恢复默认主题包。
 
 ## 引入方式
 
@@ -140,7 +156,7 @@ import 'ranui/button';
 import 'ranui';
 
 const Button = document.createElement('r-button');
-Button.appendChild('this is button text');
+Button.textContent = 'this is button text';
 document.body.appendChild(Button);
 ```
 
@@ -209,20 +225,34 @@ window.message?.success({
 
 ### SSR & Builder (推荐)
 
-对于需要服务端渲染 (SSR) 或更声明式构建 UI 的场景，推荐使用 `builder` 工具：
+对于需要服务端渲染 (SSR) 或更声明式构建 UI 的场景，RanUI 内部使用 `builder`、SSR registry 与 Declarative Shadow DOM。组件会通过 `ensureShadowRoot` 复用已有 Shadow Root，并通过 `ensureShadowElement` 保持初始化幂等。
+
+源码内的 SSR 渲染示例：
 
 ```ts
-import { Div, ButtonBuilder } from 'ranui/utils';
-import { renderToString } from 'ranui/utils/ssr';
+import { Button } from '@/components/button';
+import { renderToString } from '@/utils/ssr';
 
-// 声明式构建
-const btn = ButtonBuilder().class('my-btn').label('Submit').build();
+const button = new Button();
+button.setAttribute('effect', 'true');
 
-// SSR 渲染 (支持 Declarative Shadow DOM)
-const html = renderToString(new Button());
+// 输出包含 Declarative Shadow DOM 的 HTML 字符串
+const html = renderToString(button);
 ```
 
 更多细节请查看 [Utility Documentation](./utils/README.md)。
+
+## 组件开发约定
+
+新增或维护组件时请遵循当前包内约定：
+
+- 组件继承 `RanElement`，不要直接继承浏览器环境下的 `HTMLElement`。
+- 使用 `ensureShadowRoot` 创建或复用 Shadow Root，不要直接调用 `attachShadow`。
+- 使用 `ensureShadowElement` 构建 Shadow DOM 子树，保证重复构造时幂等。
+- `observedAttributes` 包含 `sheet`，并通过 `syncSheetAttribute` 同步组件级样式覆盖。
+- `attributeChangedCallback` 首行使用 `if (old === next) return;` 避免重复同步。
+- 使用 `defineSSR('r-name', Component)` 注册组件，而不是直接调用 `customElements.define`。
+- 在 `index.ts` 中同时添加类型导出和副作用导入；在 `vite.config.ts`、`package.json` 中补齐独立入口与导出。
 
 ## 贡献
 

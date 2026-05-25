@@ -132,19 +132,16 @@ export class Checkbox extends (HTMLElementSSR()!) {
     this.removeEventListener('click', this.onChange);
   }
   attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
-    if (oldValue !== newValue) {
-      if (name === 'checked') {
-        this.checked = newValue;
-        this.value = newValue;
-      }
-      if (name === 'value') {
-        this.checked = newValue;
-        this.value = newValue;
-      }
-      if (name === 'sheet') {
-        this.handlerExternalCss();
-      }
+    if (oldValue === newValue) return;
+    if (name === 'checked') {
+      this.checked = newValue;
+      this.value = newValue;
     }
+    if (name === 'value') {
+      this.checked = newValue;
+      this.value = newValue;
+    }
+    if (name === 'sheet') this.handlerExternalCss();
   }
 }
 

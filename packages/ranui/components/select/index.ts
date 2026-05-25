@@ -651,6 +651,7 @@ export class Select extends (HTMLElementSSR()!) {
     document.removeEventListener('click', this.clickRemoveSelect);
   }
   attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
+    if (oldValue === newValue) return;
     if (name === 'disabled' && this._select) {
       if (!newValue || newValue === 'false') {
         this._select.removeAttribute('disabled');
@@ -664,9 +665,7 @@ export class Select extends (HTMLElementSSR()!) {
         this.tabIndex = -1;
       }
     }
-    if (name === 'sheet' && this._shadowDom && oldValue !== newValue) {
-      this.handlerExternalCss();
-    }
+    if (name === 'sheet' && this._shadowDom) this.handlerExternalCss();
   }
 }
 

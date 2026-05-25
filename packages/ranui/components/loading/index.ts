@@ -50,7 +50,7 @@ export class Loading extends (HTMLElementSSR()!) {
   }
   constructor() {
     super();
-    this._shadowDom = ensureShadowRoot(this, loadingCss, { mode: 'open' });
+    this._shadowDom = ensureShadowRoot(this, loadingCss);
     const contain = ensureShadowElement(
       this._shadowDom,
       '.ran-loading',
