@@ -52,7 +52,7 @@ test('player control bar layout', async ({ page }) => {
 
 test('player with live stream src (UI ready state)', async ({ page }) => {
   // Use the existing demo section with the HLS stream; only screenshot the container before playback
-  const section = page.locator('#player');
+  const section = page.locator('#component-player');
   await expect(section).toBeVisible();
   // Don't wait for stream to load — just verify the initial UI chrome renders
   await page.waitForTimeout(1000);

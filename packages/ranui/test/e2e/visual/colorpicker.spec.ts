@@ -8,7 +8,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('colorpicker default appearance', async ({ page }) => {
-  const section = page.locator('#colorpicker');
+  const section = page.locator('#component-colorpicker');
   await expect(section).toBeVisible();
   // Give the canvas time to fully render
   await page.waitForTimeout(200);
@@ -17,14 +17,14 @@ test('colorpicker default appearance', async ({ page }) => {
 
 test('colorpicker panel open', async ({ page }) => {
   // Click the first colorpicker swatch to open the panel
-  await page.locator('r-colorpicker').first().click();
+  await page.locator('#component-colorpicker r-colorpicker').first().click();
   await page.waitForTimeout(300);
   // Canvas panel should now be visible; screenshot the whole page to capture the overlay
   await argosScreenshot(page, 'colorpicker-panel-open');
 });
 
 test('colorpicker rgba value', async ({ page }) => {
-  const pickers = page.locator('r-colorpicker');
+  const pickers = page.locator('#component-colorpicker r-colorpicker');
   // Second colorpicker has value="rgba(255,0,0,0.5)"
   const second = pickers.nth(1);
   await expect(second).toBeVisible();
