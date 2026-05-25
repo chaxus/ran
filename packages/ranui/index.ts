@@ -20,6 +20,7 @@ export * from '@/components/popover';
 export * from '@/components/form';
 export * from '@/components/scratch';
 export * from '@/components/card';
+export * from '@/components/section';
 
 // Side effects for registration
 import '@/components/button';
@@ -43,3 +44,4 @@ import '@/components/popover';
 import '@/components/form';
 import '@/components/scratch';
 import '@/components/card';
+import '@/components/section';

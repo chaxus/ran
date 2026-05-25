@@ -29,11 +29,11 @@
           </nav>
 
           <div class="nav-controls" aria-label="Visual settings">
-            <r-select id="theme-select" style="width: 88px" trigger="click" getPopupContainerId="nav-portal">
+            <r-select id="theme-select" style="width: 88px" trigger="click" getPopupContainerId="nav-portal" data-wired-skip>
               <r-option value="light">Light</r-option>
               <r-option value="dark">Dark</r-option>
             </r-select>
-            <r-select id="pack-select" style="width: 152px" trigger="click" getPopupContainerId="nav-portal">
+            <r-select id="pack-select" style="width: 152px" trigger="click" getPopupContainerId="nav-portal" data-wired-skip>
               <r-option value="default">Default</r-option>
               <r-option value="pixel-retro">Pixel Retro</r-option>
               <r-option value="windows-98">Windows 98</r-option>
@@ -63,17 +63,17 @@
           </div>
 
           <div class="hero-preview" aria-label="Live component preview">
-            <div class="preview-surface">
-              <r-button type="primary">Deploy interface</r-button>
-              <r-input placeholder="Search components"></r-input>
+            <r-card class="preview-surface">
+              <r-button type="primary" data-wired-skip>Deploy interface</r-button>
+              <r-input placeholder="Search components" data-wired-skip></r-input>
               <r-select placeholder="Theme pack" data-wired-skip>
                 <r-option value="default">Default</r-option>
                 <r-option value="paper">Paper</r-option>
                 <r-option value="neo">Neo Brutalism</r-option>
               </r-select>
-              <r-progress percent="72"></r-progress>
-              <r-checkbox checked>Typed custom elements</r-checkbox>
-            </div>
+              <r-progress percent="72" data-wired-skip></r-progress>
+              <r-checkbox checked data-wired-skip>Typed custom elements</r-checkbox>
+            </r-card>
             <div class="code-panel" aria-label="Install and import examples">
               <code>pnpm add ranui</code>
               <code>import 'ranui';</code>
@@ -85,89 +85,73 @@
         <div class="content-stack" aria-label="Demo sections">
 
           <!-- ── Why ranui ──────────────────────────────────── -->
-          <section class="content-section" id="why">
-            <div class="section-header">
-              <h2>Why ranui</h2>
-              <p>Small primitives for teams that want browser-native UI without giving up framework ergonomics.</p>
-            </div>
+          <r-section id="why" heading="Why ranui" subtitle="Small primitives for teams that want browser-native UI without giving up framework ergonomics.">
             <div class="feature-grid">
-              <article class="feature-card">
-                <h3>Cross-framework</h3>
+              <r-card title="Cross-framework">
                 <p>Use the same components from plain HTML, React, Vue, Svelte, or any runtime that renders DOM.</p>
-              </article>
-              <article class="feature-card">
-                <h3>Native custom elements</h3>
+              </r-card>
+              <r-card title="Native custom elements">
                 <p>Components ship as standards-based elements with encapsulated behavior and predictable markup.</p>
-              </article>
-              <article class="feature-card">
-                <h3>Modular imports</h3>
+              </r-card>
+              <r-card title="Modular imports">
                 <p>Import the whole library for prototypes or load individual controls for tighter bundles.</p>
-              </article>
-              <article class="feature-card">
-                <h3>Typed with TypeScript</h3>
+              </r-card>
+              <r-card title="Typed with TypeScript">
                 <p>Authoring and public paths are typed so component APIs stay clear in larger codebases.</p>
-              </article>
-              <article class="feature-card">
-                <h3>Token-based styling</h3>
+              </r-card>
+              <r-card title="Token-based styling">
                 <p>Theme values flow through CSS variables, making brand colors and density easy to tune.</p>
-              </article>
-              <article class="feature-card">
-                <h3>SSR builder path</h3>
+              </r-card>
+              <r-card title="SSR builder path">
                 <p>Server rendering helpers keep markup generation available when hydration is not the first step.</p>
-              </article>
+              </r-card>
             </div>
-          </section>
+          </r-section>
 
           <!-- ── Theme Lab ──────────────────────────────────── -->
-          <section class="content-section" id="themes">
-            <div class="section-header">
-              <h2>Theme Lab</h2>
-              <p>Use the Theme and Pack selects in the nav to switch styles. Scan the palette below before choosing.</p>
-            </div>
+          <r-section id="themes" heading="Theme Lab" subtitle="Use the Theme and Pack selects in the nav to switch styles. Scan the palette below before choosing.">
             <div class="theme-preview-grid">
-              <article class="theme-card" data-pack-preview="default">
+              <r-card data-pack-preview="default">
                 <div class="theme-swatch" aria-hidden="true"><span></span><span></span></div>
                 <h3>Default</h3>
-              </article>
-              <article class="theme-card" data-pack-preview="dark">
+              </r-card>
+              <r-card data-pack-preview="dark">
                 <div class="theme-swatch" aria-hidden="true"><span></span><span></span></div>
                 <h3>Dark</h3>
-              </article>
-              <article class="theme-card" data-pack-preview="pixel-retro">
+              </r-card>
+              <r-card data-pack-preview="pixel-retro">
                 <div class="theme-swatch" aria-hidden="true"><span></span><span></span></div>
                 <h3>Pixel Retro</h3>
-              </article>
-              <article class="theme-card" data-pack-preview="windows-98">
+              </r-card>
+              <r-card data-pack-preview="windows-98">
                 <div class="theme-swatch" aria-hidden="true"><span></span><span></span></div>
                 <h3>Windows 98</h3>
-              </article>
-              <article class="theme-card" data-pack-preview="windows-xp">
+              </r-card>
+              <r-card data-pack-preview="windows-xp">
                 <div class="theme-swatch" aria-hidden="true"><span></span><span></span></div>
                 <h3>Windows XP</h3>
-              </article>
-              <article class="theme-card" data-pack-preview="system-6">
+              </r-card>
+              <r-card data-pack-preview="system-6">
                 <div class="theme-swatch" aria-hidden="true"><span></span><span></span></div>
                 <h3>System 6</h3>
-              </article>
-              <article class="theme-card" data-pack-preview="wired">
+              </r-card>
+              <r-card data-pack-preview="wired">
                 <div class="theme-swatch" aria-hidden="true"><span></span><span></span></div>
                 <h3>Wired</h3>
-              </article>
-              <article class="theme-card" data-pack-preview="paper">
+              </r-card>
+              <r-card data-pack-preview="paper">
                 <div class="theme-swatch" aria-hidden="true"><span></span><span></span></div>
                 <h3>Paper</h3>
-              </article>
-              <article class="theme-card" data-pack-preview="neo-brutalism">
+              </r-card>
+              <r-card data-pack-preview="neo-brutalism">
                 <div class="theme-swatch" aria-hidden="true"><span></span><span></span></div>
                 <h3>Neo Brutalism</h3>
-              </article>
+              </r-card>
             </div>
-          </section>
+          </r-section>
 
           <!-- ── Component Gallery ──────────────────────────── -->
-          <section id="components" class="site-section">
-            <h2>Component Directory</h2>
-            <p class="section-kicker">Live examples with same-page notes for imports, usage, and styling hooks.</p>
+          <r-section id="components" heading="Component Directory" subtitle="Live examples with same-page notes for imports, usage, and styling hooks.">
 
             <div class="gallery-group" data-group="Actions and inputs">
               <r-card id="component-button" title="Button"
@@ -413,14 +397,10 @@
                 </div>
               </r-card>
             </div>
-          </section>
+          </r-section>
 
           <!-- ── Component Notes ────────────────────────────── -->
-          <section class="component-docs content-section" aria-labelledby="component-notes-title">
-            <div class="section-header">
-              <h2 id="component-notes-title">Component notes</h2>
-              <p>Quick import paths and usage reminders for the controls shown above.</p>
-            </div>
+          <r-section id="component-notes" heading="Component notes" subtitle="Quick import paths and usage reminders for the controls shown above.">
             <div class="docs-grid">
               <r-card id="docs-button" title="Button">
                 <a slot="extra" href="#component-button">Back to demo</a>
@@ -628,60 +608,46 @@
                 </ul>
               </r-card>
             </div>
-          </section>
+          </r-section>
 
           <!-- ── Code ──────────────────────────────────────── -->
-          <section class="content-section" id="code">
-            <div class="section-header">
-              <h2>Code</h2>
-              <p>Choose the path that matches the app boundary: direct browser script, package side effect, single component, or JSX.</p>
-            </div>
+          <r-section id="code" heading="Code" subtitle="Choose the path that matches the app boundary: direct browser script, package side effect, single component, or JSX.">
             <div class="code-grid">
-              <article class="code-example">
-                <h3>UMD</h3>
+              <r-card title="UMD">
                 <pre><code>&lt;script src="./ranui/dist/umd/index.umd.cjs"&gt;&lt;/script&gt;
 &lt;r-button type="primary"&gt;Button&lt;/r-button&gt;</code></pre>
-              </article>
-              <article class="code-example">
-                <h3>Package</h3>
+              </r-card>
+              <r-card title="Package">
                 <pre><code>import 'ranui';</code></pre>
-              </article>
-              <article class="code-example">
-                <h3>Modular</h3>
+              </r-card>
+              <r-card title="Modular">
                 <pre><code>import 'ranui/button';</code></pre>
-              </article>
-              <article class="code-example">
-                <h3>JSX</h3>
+              </r-card>
+              <r-card title="JSX">
                 <pre><code>import 'ranui';
 
 export function App() {
   return &lt;r-button type="primary"&gt;Save&lt;/r-button&gt;;
 }</code></pre>
-              </article>
+              </r-card>
             </div>
-          </section>
+          </r-section>
 
           <!-- ── Style API ──────────────────────────────────── -->
-          <section class="content-section" id="style-api">
-            <div class="section-header">
-              <h2>Style API</h2>
-              <p>Theme with documented tokens first, then target exposed parts when a component needs local shape changes.</p>
-            </div>
+          <r-section id="style-api" heading="Style API" subtitle="Theme with documented tokens first, then target exposed parts when a component needs local shape changes.">
             <div class="style-grid">
-              <article class="style-example">
-                <h3>Tokens</h3>
+              <r-card title="Tokens">
                 <pre><code>:root {
   --ran-color-primary: #2563eb;
 }</code></pre>
-              </article>
-              <article class="style-example">
-                <h3>Parts</h3>
+              </r-card>
+              <r-card title="Parts">
                 <pre><code>r-button::part(button) {
   border-radius: 6px;
 }</code></pre>
-              </article>
+              </r-card>
             </div>
-          </section>
+          </r-section>
 
         </div>
       </main>

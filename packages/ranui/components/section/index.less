@@ -1,0 +1,46 @@
+:host {
+  display: block;
+  scroll-margin-top: 96px;
+  border-width: var(--ran-skin-border-width, 1px);
+  border-style: var(--ran-skin-border-style, solid);
+  border-color: var(--ran-section-border-color, var(--ran-color-border, #d9d9d9));
+  border-radius: var(--ran-section-radius, var(--ran-radius-md, 8px));
+  background: var(--ran-section-background, var(--ran-color-bg-elevated, #ffffff));
+  box-shadow: var(--ran-section-shadow, var(--ran-shadow-elevated, none));
+  padding: var(--ran-section-padding, 28px);
+  box-sizing: border-box;
+}
+
+.ran-section-header {
+  display: grid;
+  gap: 8px;
+  max-width: 760px;
+  margin-bottom: 22px;
+}
+
+.ran-section-heading {
+  margin: 0;
+  color: var(--ran-section-heading-color, var(--ran-color-text, #0f172a));
+  font-size: var(--ran-section-heading-font-size, 24px);
+  font-weight: var(--ran-section-heading-font-weight, 700);
+  line-height: 1.25;
+  letter-spacing: 0;
+
+  &:empty {
+    display: none;
+  }
+}
+
+.ran-section-subtitle {
+  max-width: 620px;
+  margin: 0;
+  color: var(--ran-section-subtitle-color, var(--ran-color-text-secondary, #607086));
+
+  &:empty {
+    display: none;
+  }
+}
+
+.ran-section-body {
+  min-width: 0;
+}

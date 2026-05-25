@@ -12,6 +12,8 @@ const SELECTORS = [
   'r-progress',
   'r-colorpicker',
   'r-skeleton',
+  'r-card',
+  'r-section',
 ].map((tag) => `[data-ran-theme-pack="wired"] ${tag}:not([data-wired-skip])`).join(',');
 
 const ROUGHNESS = 2;

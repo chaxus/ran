@@ -299,7 +299,15 @@ a {
   min-width: 0;
 }
 
-.preview-surface,
+/* preview-surface is now r-card; code-panel stays plain */
+r-card.preview-surface {
+  --ran-card-background: var(--surface);
+  --ran-color-border: var(--line);
+  --ran-card-shadow: var(--shadow);
+  --ran-card-padding: 20px;
+  --ran-card-gap: 14px;
+}
+
 .code-panel {
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -307,17 +315,11 @@ a {
   box-shadow: var(--shadow);
 }
 
-.preview-surface {
-  display: grid;
-  gap: 14px;
-  padding: 20px;
-}
-
-.preview-surface r-button,
-.preview-surface r-input,
-.preview-surface r-select,
-.preview-surface r-progress,
-.preview-surface r-checkbox {
+r-card.preview-surface r-button,
+r-card.preview-surface r-input,
+r-card.preview-surface r-select,
+r-card.preview-surface r-progress,
+r-card.preview-surface r-checkbox {
   max-width: 100%;
 }
 
@@ -349,41 +351,11 @@ a {
   padding: 0 0 80px;
 }
 
-.content-section {
-  scroll-margin-top: 96px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--surface);
-  box-shadow: var(--shadow);
-  padding: 28px;
-}
-
-.section-header {
-  display: grid;
-  gap: 8px;
-  max-width: 760px;
-  margin-bottom: 22px;
-}
-
-.section-header h2,
-.site-section > h2,
-.placeholder-section h2 {
-  margin: 0;
-  font-size: 24px;
-  line-height: 1.25;
-  letter-spacing: 0;
-}
-
-.section-header p,
-.placeholder-section p {
-  max-width: 620px;
-  margin: 0;
-  color: var(--muted);
-}
-
-.section-kicker {
-  margin: -8px 0 0;
-  color: var(--muted);
+/* r-section — replaces .content-section + .section-header pattern */
+r-section {
+  --ran-section-background: var(--surface);
+  --ran-section-border-color: var(--line);
+  --ran-section-shadow: var(--shadow);
 }
 
 .feature-grid,
@@ -399,20 +371,24 @@ a {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.feature-card,
-.theme-card,
-.code-example,
-.style-example,
+/* r-card used as feature / theme / code / style cards */
+.feature-grid r-card,
+.theme-preview-grid r-card,
+.code-grid r-card,
+.style-grid r-card {
+  --ran-card-background: var(--surface-2);
+  --ran-color-border: var(--line);
+}
+
+.code-grid r-card,
+.style-grid r-card {
+  overflow: hidden;
+}
+
 .placeholder-section {
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--surface-2);
-}
-
-.site-section {
-  display: grid;
-  gap: 18px;
-  scroll-margin-top: 96px;
 }
 
 .gallery-group {
@@ -550,34 +526,28 @@ a {
   padding: 24px;
 }
 
-.feature-card {
-  min-height: 118px;
-  padding: 18px;
+.feature-grid r-card {
+  --ran-card-min-height: 118px;
 }
 
-.feature-card h3,
-.theme-card h3,
-.code-example h3,
-.style-example h3 {
-  margin: 0;
-  color: var(--ink);
-  font-size: 16px;
-  line-height: 1.3;
-  letter-spacing: 0;
+.theme-preview-grid r-card {
+  --ran-card-min-height: 128px;
 }
 
-.feature-card p,
-.theme-card p {
+/* Slotted heading inside feature / theme cards */
+.feature-grid r-card h3,
+.theme-preview-grid r-card h3 {
   margin: 8px 0 0;
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.3;
+}
+
+.feature-grid r-card p,
+.theme-preview-grid r-card p {
+  margin: 6px 0 0;
   color: var(--muted);
   font-size: 14px;
-}
-
-.theme-card {
-  display: grid;
-  gap: 14px;
-  min-height: 128px;
-  padding: 16px;
 }
 
 .theme-swatch {
@@ -598,33 +568,25 @@ a {
   background: var(--accent-2);
 }
 
-.theme-card[data-pack-preview='default'] .theme-swatch span:first-child { background: #2563eb; }
-.theme-card[data-pack-preview='default'] .theme-swatch span:last-child  { background: #0f766e; }
-.theme-card[data-pack-preview='dark'] .theme-swatch span:first-child     { background: #0b1120; }
-.theme-card[data-pack-preview='dark'] .theme-swatch span:last-child      { background: #60a5fa; }
-.theme-card[data-pack-preview='pixel-retro'] .theme-swatch span:first-child { background: #f43f5e; }
-.theme-card[data-pack-preview='pixel-retro'] .theme-swatch span:last-child  { background: #22d3ee; }
-.theme-card[data-pack-preview='windows-98'] .theme-swatch span:first-child  { background: #c0c0c0; }
-.theme-card[data-pack-preview='windows-98'] .theme-swatch span:last-child   { background: #000080; }
-.theme-card[data-pack-preview='windows-xp'] .theme-swatch span:first-child  { background: #1e5fa8; }
-.theme-card[data-pack-preview='windows-xp'] .theme-swatch span:last-child   { background: #3b8f2f; }
-.theme-card[data-pack-preview='system-6'] .theme-swatch span:first-child    { background: #000000; }
-.theme-card[data-pack-preview='system-6'] .theme-swatch span:last-child     { background: #eeeeee; }
-.theme-card[data-pack-preview='wired'] .theme-swatch span:first-child       { background: #166534; }
-.theme-card[data-pack-preview='wired'] .theme-swatch span:last-child        { background: #0f766e; }
-.theme-card[data-pack-preview='paper'] .theme-swatch span:first-child       { background: #fffdf5; }
-.theme-card[data-pack-preview='paper'] .theme-swatch span:last-child        { background: #7c5c21; }
-.theme-card[data-pack-preview='neo-brutalism'] .theme-swatch span:first-child { background: #ff4d00; }
-.theme-card[data-pack-preview='neo-brutalism'] .theme-swatch span:last-child  { background: #000000; }
+r-card[data-pack-preview='default'] .theme-swatch span:first-child { background: #2563eb; }
+r-card[data-pack-preview='default'] .theme-swatch span:last-child  { background: #0f766e; }
+r-card[data-pack-preview='dark'] .theme-swatch span:first-child     { background: #0b1120; }
+r-card[data-pack-preview='dark'] .theme-swatch span:last-child      { background: #60a5fa; }
+r-card[data-pack-preview='pixel-retro'] .theme-swatch span:first-child { background: #f43f5e; }
+r-card[data-pack-preview='pixel-retro'] .theme-swatch span:last-child  { background: #22d3ee; }
+r-card[data-pack-preview='windows-98'] .theme-swatch span:first-child  { background: #c0c0c0; }
+r-card[data-pack-preview='windows-98'] .theme-swatch span:last-child   { background: #000080; }
+r-card[data-pack-preview='windows-xp'] .theme-swatch span:first-child  { background: #1e5fa8; }
+r-card[data-pack-preview='windows-xp'] .theme-swatch span:last-child   { background: #3b8f2f; }
+r-card[data-pack-preview='system-6'] .theme-swatch span:first-child    { background: #000000; }
+r-card[data-pack-preview='system-6'] .theme-swatch span:last-child     { background: #eeeeee; }
+r-card[data-pack-preview='wired'] .theme-swatch span:first-child       { background: #166534; }
+r-card[data-pack-preview='wired'] .theme-swatch span:last-child        { background: #0f766e; }
+r-card[data-pack-preview='paper'] .theme-swatch span:first-child       { background: #fffdf5; }
+r-card[data-pack-preview='paper'] .theme-swatch span:last-child        { background: #7c5c21; }
+r-card[data-pack-preview='neo-brutalism'] .theme-swatch span:first-child { background: #ff4d00; }
+r-card[data-pack-preview='neo-brutalism'] .theme-swatch span:last-child  { background: #000000; }
 
-.code-example,
-.style-example {
-  overflow: hidden;
-}
-
-.component-docs {
-  scroll-margin-top: 96px;
-}
 
 .docs-grid {
   display: grid;
@@ -700,28 +662,19 @@ a {
   white-space: pre;
 }
 
-/* Theme-pack shape overrides */
+/* Theme-pack shape overrides — flat packs use 0 radius */
 :root[data-ran-theme-pack='windows-98'] .brand-mark,
 :root[data-ran-theme-pack='system-6'] .brand-mark,
 :root[data-ran-theme-pack='neo-brutalism'] .brand-mark,
 :root[data-ran-theme-pack='windows-98'] .primary-action,
 :root[data-ran-theme-pack='windows-98'] .secondary-action,
-:root[data-ran-theme-pack='windows-98'] .preview-surface,
 :root[data-ran-theme-pack='windows-98'] .code-panel,
 :root[data-ran-theme-pack='system-6'] .primary-action,
 :root[data-ran-theme-pack='system-6'] .secondary-action,
-:root[data-ran-theme-pack='system-6'] .preview-surface,
 :root[data-ran-theme-pack='system-6'] .code-panel,
 :root[data-ran-theme-pack='neo-brutalism'] .primary-action,
 :root[data-ran-theme-pack='neo-brutalism'] .secondary-action,
-:root[data-ran-theme-pack='neo-brutalism'] .preview-surface,
 :root[data-ran-theme-pack='neo-brutalism'] .code-panel,
-:root[data-ran-theme-pack='windows-98'] .content-section,
-:root[data-ran-theme-pack='system-6'] .content-section,
-:root[data-ran-theme-pack='neo-brutalism'] .content-section,
-:root[data-ran-theme-pack='windows-98'] .feature-card,
-:root[data-ran-theme-pack='system-6'] .feature-card,
-:root[data-ran-theme-pack='neo-brutalism'] .feature-card,
 :root[data-ran-theme-pack='windows-98'] .demo-box,
 :root[data-ran-theme-pack='system-6'] .demo-box,
 :root[data-ran-theme-pack='neo-brutalism'] .demo-box,
@@ -731,29 +684,23 @@ a {
 :root[data-ran-theme-pack='windows-98'] .demo-scratch,
 :root[data-ran-theme-pack='system-6'] .demo-scratch,
 :root[data-ran-theme-pack='neo-brutalism'] .demo-scratch,
-:root[data-ran-theme-pack='windows-98'] .theme-card,
-:root[data-ran-theme-pack='system-6'] .theme-card,
-:root[data-ran-theme-pack='neo-brutalism'] .theme-card,
-:root[data-ran-theme-pack='windows-98'] .code-example,
-:root[data-ran-theme-pack='system-6'] .code-example,
-:root[data-ran-theme-pack='neo-brutalism'] .code-example,
-:root[data-ran-theme-pack='windows-98'] .style-example,
-:root[data-ran-theme-pack='system-6'] .style-example,
-:root[data-ran-theme-pack='neo-brutalism'] .style-example,
 :root[data-ran-theme-pack='windows-98'] .placeholder-section,
 :root[data-ran-theme-pack='system-6'] .placeholder-section,
 :root[data-ran-theme-pack='neo-brutalism'] .placeholder-section {
   border-radius: 0;
 }
 
-/* r-card radius override for flat theme packs */
-:root[data-ran-theme-pack='windows-98'] .gallery-group r-card,
-:root[data-ran-theme-pack='system-6'] .gallery-group r-card,
-:root[data-ran-theme-pack='neo-brutalism'] .gallery-group r-card,
-:root[data-ran-theme-pack='windows-98'] .docs-grid r-card,
-:root[data-ran-theme-pack='system-6'] .docs-grid r-card,
-:root[data-ran-theme-pack='neo-brutalism'] .docs-grid r-card {
+/* r-card and r-section radius override for flat theme packs */
+:root[data-ran-theme-pack='windows-98'] r-card,
+:root[data-ran-theme-pack='system-6'] r-card,
+:root[data-ran-theme-pack='neo-brutalism'] r-card {
   --ran-card-radius: 0;
+}
+
+:root[data-ran-theme-pack='windows-98'] r-section,
+:root[data-ran-theme-pack='system-6'] r-section,
+:root[data-ran-theme-pack='neo-brutalism'] r-section {
+  --ran-section-radius: 0;
 }
 
 :root[data-ran-theme-pack='pixel-retro'] body {
@@ -827,21 +774,12 @@ a {
   letter-spacing: -0.01em;
 }
 
-:root[data-ran-theme-pack='wired'] .content-section,
-:root[data-ran-theme-pack='wired'] .preview-surface,
-:root[data-ran-theme-pack='wired'] .feature-card,
-:root[data-ran-theme-pack='wired'] .theme-card,
-:root[data-ran-theme-pack='wired'] .code-example,
-:root[data-ran-theme-pack='wired'] .style-example,
+/* wired.less already sets --ran-card-radius:0 and --ran-section-radius:0 via CSS vars;
+   plain-HTML surfaces that still exist get zero-radius + shadow here */
 :root[data-ran-theme-pack='wired'] .demo-box,
 :root[data-ran-theme-pack='wired'] .demo-scratch {
   border-radius: 0;
   box-shadow: var(--shadow);
-}
-
-:root[data-ran-theme-pack='wired'] .gallery-group r-card,
-:root[data-ran-theme-pack='wired'] .docs-grid r-card {
-  --ran-card-radius: 0;
 }
 
 @media (max-width: 980px) {
@@ -923,12 +861,12 @@ a {
     text-align: center;
   }
 
-  .preview-surface {
-    padding: 16px;
+  r-card.preview-surface {
+    --ran-card-padding: 16px;
   }
 
-  .content-section {
-    padding: 20px;
+  r-section {
+    --ran-section-padding: 20px;
   }
 
   .feature-grid,

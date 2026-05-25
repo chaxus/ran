@@ -90,6 +90,7 @@ export const es: BuildOptions = {
       form: resolve(__dirname, 'components/form/index.ts'),
       scratch: resolve(__dirname, 'components/scratch/index.ts'),
       card: resolve(__dirname, 'components/card/index.ts'),
+      section: resolve(__dirname, 'components/section/index.ts'),
       index: resolve(__dirname, 'index.ts'),
       style: resolve(__dirname, 'style.ts'),
       'theme-packs/pixel-retro': resolve(__dirname, 'theme-packs/pixel-retro.ts'),
