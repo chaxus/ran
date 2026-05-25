@@ -1,6 +1,6 @@
 import { addClassToElement, removeClassToElement } from 'ranuts/utils';
 import { RanElement, falseList } from '@/utils/index';
-import { Div, EventManager, InputBuilder, Span } from '@/utils/builder';
+import { Div, EventManager, InputBuilder, Slot, Span } from '@/utils/builder';
 import {
   ensureShadowElement,
   ensureShadowRoot,
@@ -28,20 +28,26 @@ export class Checkbox extends RanElement {
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, checkboxCss);
-    const wrap = ensureShadowElement(this._shadowDom, '.ran-checkbox', () =>
+    const wrapper = ensureShadowElement(this._shadowDom, '.ran-checkbox-wrapper', () =>
       Div()
-        .class('ran-checkbox')
-        .part('checkbox')
+        .class('ran-checkbox-wrapper')
+        .part('wrapper')
         .children(
-          InputBuilder().class('ran-checkbox-input').part('input').attr('type', 'checkbox'),
-          Span().class('ran-checkbox-inner').part('inner'),
+          Div()
+            .class('ran-checkbox')
+            .part('checkbox')
+            .children(
+              InputBuilder().class('ran-checkbox-input').part('input').attr('type', 'checkbox'),
+              Span().class('ran-checkbox-inner').part('inner'),
+            ),
+          Span().class('ran-checkbox-label').part('label').children(Slot()),
         )
         .build(),
     );
 
-    this.container = wrap;
-    this.checkInput = wrap.querySelector('.ran-checkbox-input') as HTMLInputElement;
-    this.checkInner = wrap.querySelector('.ran-checkbox-inner') as HTMLSpanElement;
+    this.container = wrapper.querySelector('.ran-checkbox') as HTMLElement;
+    this.checkInput = wrapper.querySelector('.ran-checkbox-input') as HTMLInputElement;
+    this.checkInner = wrapper.querySelector('.ran-checkbox-inner') as HTMLSpanElement;
 
     this.context = {
       checked: false,

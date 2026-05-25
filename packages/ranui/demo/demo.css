@@ -323,6 +323,11 @@ r-card.preview-surface r-checkbox {
   max-width: 100%;
 }
 
+r-card.preview-surface r-select {
+  display: block;
+  width: 100%;
+}
+
 .code-panel {
   display: grid;
   gap: 1px;

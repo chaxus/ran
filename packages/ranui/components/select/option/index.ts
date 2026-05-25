@@ -14,7 +14,6 @@ export class Option extends RanElement {
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this);
-    this.setAttribute('class', 'ran-option');
 
     const option = ensureShadowElement(this._shadowDom, '.ran-select-dropdown-option', () => {
       const slot = Slot().build() as HTMLSlotElement;
@@ -55,6 +54,11 @@ export class Option extends RanElement {
   }
   handlerExternalCss() {
     syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
+  }
+  connectedCallback(): void {
+    if (!this.classList.contains('ran-option')) {
+      this.classList.add('ran-option');
+    }
   }
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     if (oldValue === newValue) return;

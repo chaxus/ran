@@ -2,7 +2,7 @@
 
 :host {
   position: var(--ran-checkbox-host-position, relative);
-  display: var(--ran-checkbox-host-display, block);
+  display: var(--ran-checkbox-host-display, inline-flex);
   margin: var(--ran-checkbox-host-margin, 0);
   padding: var(--ran-checkbox-host-padding, 0);
   box-sizing: var(--ran-checkbox-host-box-sizing, border-box);
@@ -32,6 +32,22 @@
     }
   }
 }
+.ran-checkbox-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ran-checkbox-label-gap, 8px);
+  cursor: pointer;
+  line-height: 1;
+}
+
+.ran-checkbox-label {
+  color: var(--ran-checkbox-label-color, var(--ran-color-text, rgba(0, 0, 0, 0.88)));
+  font-size: var(--ran-checkbox-label-font-size, 14px);
+  font-family: var(--ran-checkbox-label-font-family, var(--ran-skin-font-family, inherit));
+  line-height: var(--ran-checkbox-label-line-height, 1.5);
+  user-select: none;
+}
+
 .ran-checkbox {
   position: var(--ran-checkbox-position, relative);
   display: var(--ran-checkbox-display, block);
