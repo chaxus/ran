@@ -51,9 +51,12 @@
   --page: #e8eefb;
   --surface: #ffffff;
   --surface-2: #eef5ff;
+  --ink: #0a1929;
+  --muted: #2d4a6e;
   --line: #a9c5ee;
   --accent: #1e5fa8;
   --accent-2: #3b8f2f;
+  --shadow: 2px 2px 4px rgba(0, 0, 100, 0.15);
 }
 
 :root[data-ran-theme-pack='system-6'] {
@@ -72,9 +75,12 @@
   --page: #f8faf7;
   --surface: #ffffff;
   --surface-2: #eff5ef;
+  --ink: #111827;
+  --muted: #4b5563;
   --line: #c8d8ca;
   --accent: #166534;
   --accent-2: #0f766e;
+  --shadow: 2px 3px 0 rgba(0, 0, 0, 0.12);
 }
 
 :root[data-ran-theme-pack='paper'] {
@@ -787,6 +793,55 @@ a {
 :root[data-ran-theme-pack='neo-brutalism'] .gallery-group r-card,
 :root[data-ran-theme-pack='neo-brutalism'] .docs-grid r-card {
   --ran-skin-border-width: 2px;
+}
+
+/* ── Nav portal — above sticky nav (z-index 20), below nothing ─────────── */
+#nav-portal {
+  position: fixed;
+  inset: 0;
+  z-index: 1050;
+  pointer-events: none;
+}
+
+/* Dropdown content inside the portal must receive pointer events */
+#nav-portal > * {
+  pointer-events: auto;
+}
+
+/* ── Wired pack — apply Caveat font to page chrome when active ─────────── */
+:root[data-ran-theme-pack='wired'] body {
+  font-family: 'Caveat', 'Patrick Hand', cursive;
+  font-size: 17px;
+  letter-spacing: 0.01em;
+}
+
+:root[data-ran-theme-pack='wired'] .nav-links a {
+  font-weight: 700;
+}
+
+:root[data-ran-theme-pack='wired'] h1,
+:root[data-ran-theme-pack='wired'] h2,
+:root[data-ran-theme-pack='wired'] h3 {
+  font-family: 'Caveat', 'Patrick Hand', cursive;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+:root[data-ran-theme-pack='wired'] .content-section,
+:root[data-ran-theme-pack='wired'] .preview-surface,
+:root[data-ran-theme-pack='wired'] .feature-card,
+:root[data-ran-theme-pack='wired'] .theme-card,
+:root[data-ran-theme-pack='wired'] .code-example,
+:root[data-ran-theme-pack='wired'] .style-example,
+:root[data-ran-theme-pack='wired'] .demo-box,
+:root[data-ran-theme-pack='wired'] .demo-scratch {
+  border-radius: 0;
+  box-shadow: var(--shadow);
+}
+
+:root[data-ran-theme-pack='wired'] .gallery-group r-card,
+:root[data-ran-theme-pack='wired'] .docs-grid r-card {
+  --ran-card-radius: 0;
 }
 
 @media (max-width: 980px) {

@@ -12,7 +12,7 @@ const SELECTORS = [
   'r-progress',
   'r-colorpicker',
   'r-skeleton',
-].map((tag) => `[data-ran-theme-pack="wired"] ${tag}`).join(',');
+].map((tag) => `[data-ran-theme-pack="wired"] ${tag}:not([data-wired-skip])`).join(',');
 
 const ROUGHNESS = 2;
 const STROKE_WIDTH = 1.5;
@@ -48,12 +48,15 @@ function ensureLayer(): SVGSVGElement {
   svg.setAttribute('aria-hidden', 'true');
   svg.setAttribute('data-ran-wired-overlay', '');
   Object.assign(svg.style, {
-    position: 'fixed',
-    inset: '0',
+    // position: absolute so the SVG scrolls with the page; paths use document
+    // coordinates (getBoundingClientRect + scrollX/Y) and never need redrawn
+    // on scroll — eliminates the one-frame lag that caused jitter.
+    position: 'absolute',
+    top: '0',
+    left: '0',
     width: '100%',
     height: '100%',
     pointerEvents: 'none',
-    // High enough to overlay components; modal scrim is typically 1000+
     zIndex: '999',
     overflow: 'visible',
   });
@@ -68,8 +71,8 @@ function drawElement(el: Element): void {
   const rect = el.getBoundingClientRect();
   if (rect.width < 2 || rect.height < 2) return;
 
-  const x = rect.left - PAD;
-  const y = rect.top - PAD;
+  const x = rect.left + window.scrollX - PAD;
+  const y = rect.top + window.scrollY - PAD;
   const w = rect.width + PAD * 2;
   const h = rect.height + PAD * 2;
 
@@ -164,7 +167,6 @@ export function activateWiredBorders(): void {
     attributeFilter: ['data-ran-theme-pack'],
   });
 
-  window.addEventListener('scroll', schedule, { passive: true, capture: true });
   window.addEventListener('resize', schedule, { passive: true });
 
   trackNew();
@@ -176,7 +178,6 @@ export function deactivateWiredBorders(): void {
   mo?.disconnect();
   ro = null;
   mo = null;
-  window.removeEventListener('scroll', schedule, true);
   window.removeEventListener('resize', schedule);
   layer?.remove();
   layer = null;

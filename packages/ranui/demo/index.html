@@ -5,6 +5,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ranui — Web Components UI Library</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&display=swap" rel="stylesheet" />
     <script type="module" src="./index.ts"></script>
     <link rel="stylesheet" href="./demo.css" />
   </head>
@@ -26,11 +29,11 @@
           </nav>
 
           <div class="nav-controls" aria-label="Visual settings">
-            <r-select id="theme-select" style="width: 88px" trigger="click">
+            <r-select id="theme-select" style="width: 88px" trigger="click" getPopupContainerId="nav-portal">
               <r-option value="light">Light</r-option>
               <r-option value="dark">Dark</r-option>
             </r-select>
-            <r-select id="pack-select" style="width: 152px" trigger="click">
+            <r-select id="pack-select" style="width: 152px" trigger="click" getPopupContainerId="nav-portal">
               <r-option value="default">Default</r-option>
               <r-option value="pixel-retro">Pixel Retro</r-option>
               <r-option value="windows-98">Windows 98</r-option>
@@ -41,6 +44,8 @@
               <r-option value="neo-brutalism">Neo Brutalism</r-option>
             </r-select>
           </div>
+          <!-- Portal for nav select dropdowns — lives above sticky nav (z-index 1050 > nav z-index 20) -->
+          <div id="nav-portal"></div>
         </div>
       </header>
 
@@ -61,7 +66,7 @@
             <div class="preview-surface">
               <r-button type="primary">Deploy interface</r-button>
               <r-input placeholder="Search components"></r-input>
-              <r-select placeholder="Theme pack">
+              <r-select placeholder="Theme pack" data-wired-skip>
                 <r-option value="default">Default</r-option>
                 <r-option value="paper">Paper</r-option>
                 <r-option value="neo">Neo Brutalism</r-option>
