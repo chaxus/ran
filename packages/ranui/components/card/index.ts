@@ -109,6 +109,7 @@ export class Card extends RanElement {
   }
 
   attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
+    if (oldValue === newValue) return;
     if (name === 'title') this._syncTitle();
     if (name === 'description') this._syncDescription();
     if (name === 'sheet') syncSheetAttribute(this, this._shadowDom, name, oldValue, newValue);
