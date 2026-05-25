@@ -1,7 +1,7 @@
 import { currentDevice } from 'ranuts/utils';
 import buttonCss from './index.less?inline';
 import { Div, RanElement, Slot, falseList, isDisabled } from '@/utils/index';
-import { Style, View } from '@/utils/builder';
+import { EventManager, Style, View } from '@/utils/builder';
 import { defineSSR } from '@/utils/ssr-registry';
 import { ensureShadowElement, ensureShadowRoot } from '@/utils/component';
 
@@ -11,6 +11,7 @@ export class Button extends RanElement {
   _iconElement?: HTMLElement;
   _slot!: HTMLSlotElement;
   _shadowDom!: ShadowRoot;
+  _events = new EventManager();
   debounceTimeId?: NodeJS.Timeout;
 
   static get observedAttributes(): string[] {
@@ -34,10 +35,6 @@ export class Button extends RanElement {
     this._btnContent = btn.querySelector<HTMLDivElement>('.ran-btn-content')!;
     this._slot = btn.querySelector<HTMLSlotElement>('slot')!;
 
-    // 🖱️ Bind events manually to support Rehydration (SSR/DSD)
-    this._btn.addEventListener('mousedown', this.mousedown);
-    this._btn.addEventListener('mouseup', this.mouseup);
-    this._btn.addEventListener('keydown', this.keydown);
   }
 
   // ── Properties ─────────────────────────────────────────────────────────────
@@ -213,6 +210,10 @@ export class Button extends RanElement {
     this.handlerExternalCss();
     this.setIcon();
     this.syncA11yState();
+    this._events
+      .on(this._btn, 'mousedown', this.mousedown)
+      .on(this._btn, 'mouseup', this.mouseup)
+      .on(this._btn, 'keydown', this.keydown);
   }
 
   /**
@@ -221,11 +222,7 @@ export class Button extends RanElement {
    */
   disconnectedCallback(): void {
     this.debounceMouseEvent();
-    if (this._btn) {
-      this._btn.removeEventListener('mousedown', this.mousedown);
-      this._btn.removeEventListener('mouseup', this.mouseup);
-      this._btn.removeEventListener('keydown', this.keydown);
-    }
+    this._events.abort();
   }
 
   attributeChangedCallback(name: string, oldValue: string, newValue: string): void {

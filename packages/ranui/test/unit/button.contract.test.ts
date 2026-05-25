@@ -202,12 +202,12 @@ describe('r-button contract', () => {
     (btn as any).debounceTimeId = undefined;
   });
 
-  it('disconnectedCallback removes event listeners', () => {
+  it('disconnectedCallback aborts EventManager to remove all listeners', () => {
     const btn = document.createElement('r-button') as Button;
     document.body.appendChild(btn);
-    const spy = vi.spyOn((btn as any)._btn, 'removeEventListener');
+    const spy = vi.spyOn((btn as any)._events, 'abort');
     document.body.removeChild(btn);
-    expect(spy).toHaveBeenCalledWith('mousedown', (btn as any).mousedown);
+    expect(spy).toHaveBeenCalledOnce();
   });
 
   it('setIcon creates icon element when icon is set', () => {

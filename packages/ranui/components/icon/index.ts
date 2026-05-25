@@ -1,6 +1,6 @@
 import iconCss from './index.less?inline';
 import { RanElement } from '@/utils/index';
-import { Div, View } from '@/utils/builder';
+import { Div, EventManager, View } from '@/utils/builder';
 import { defineSSR } from '@/utils/ssr-registry';
 import {
   ensureShadowElement,
@@ -67,6 +67,7 @@ export const registerIcons = (icons: Record<string, unknown>): void => {
 
 export class Icon extends RanElement {
   private readonly isDev = isDev;
+  _events = new EventManager();
 
   static get observedAttributes(): string[] {
     return ['name', 'size', 'color', 'spin', 'decorative', 'aria-label', 'sheet'];
@@ -276,24 +277,23 @@ export class Icon extends RanElement {
   };
 
   connectedCallback(): void {
-    window.addEventListener('ranui-icon-registered', this._onIconRegistered as EventListener);
+    this._events.on(window, 'ranui-icon-registered', this._onIconRegistered as EventListener);
     this.handlerExternalCss();
     this.setIcon();
   }
 
   disconnectedCallback(): void {
-    window.removeEventListener('ranui-icon-registered', this._onIconRegistered as EventListener);
+    this._events.abort();
   }
 
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
-    if (newValue !== oldValue) {
-      if (name === 'name') this.setIcon();
-      if (name === 'size') this.setSize();
-      if (name === 'color') this.setColor();
-      if (name === 'spin') this.setSpin();
-      if (name === 'decorative' || name === 'aria-label') this.syncA11y();
-      if (name === 'sheet') this.handlerExternalCss();
-    }
+    if (oldValue === newValue) return;
+    if (name === 'name') this.setIcon();
+    if (name === 'size') this.setSize();
+    if (name === 'color') this.setColor();
+    if (name === 'spin') this.setSpin();
+    if (name === 'decorative' || name === 'aria-label') this.syncA11y();
+    if (name === 'sheet') this.handlerExternalCss();
   }
 }
 

@@ -1,5 +1,5 @@
-import { HTMLElementSSR, createCustomError, falseList, isDisabled } from '@/utils/index';
-import { Div, InputBuilder, Label, View } from '@/utils/builder';
+import { RanElement, falseList, isDisabled } from '@/utils/index';
+import { Div, EventManager, InputBuilder, Label, View } from '@/utils/builder';
 import '@/components/icon/index';
 import {
   ensureShadowElement,
@@ -11,7 +11,7 @@ import {
 import inputCss from './index.less?inline';
 import { defineSSR } from '@/utils/ssr-registry';
 
-export class Input extends (HTMLElementSSR()!) {
+export class Input extends RanElement {
   static get observedAttributes(): string[] {
     return [
       'label',
@@ -35,6 +35,7 @@ export class Input extends (HTMLElementSSR()!) {
       'sheet',
     ];
   }
+  _events = new EventManager();
   _shadowDom: ShadowRoot;
   _input: HTMLDivElement;
   _label: HTMLLabelElement | undefined;
@@ -474,13 +475,13 @@ export class Input extends (HTMLElementSSR()!) {
     if (this.type) {
       this._inputContent.setAttribute('type', this.type);
     }
-    this._inputContent.addEventListener('input', this.customInput);
+    this._events.on(this._inputContent, 'input', this.customInput);
     if (document.readyState === 'complete') {
       this.dealIcon();
     }
   }
   disconnectedCallback(): void {
-    this._inputContent.removeEventListener('input', this.customInput);
+    this._events.abort();
   }
   attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     if (oldValue === newValue) return;

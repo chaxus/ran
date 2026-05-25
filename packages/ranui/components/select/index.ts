@@ -1,6 +1,6 @@
 import { generateThrottle, isMobile } from 'ranuts/utils';
 import selectCss from './index.less?inline';
-import { HTMLElementSSR, createCustomError, isDisabled } from '@/utils/index';
+import { RanElement, isDisabled } from '@/utils/index';
 import '@/components/select/option';
 import '@/components/dropdown';
 import '@/components/select/dropdown-item';
@@ -8,7 +8,7 @@ import '@/components/icon';
 import { defineSSR } from '@/utils/ssr-registry';
 import '@/components/input';
 import type { Input } from '@/components/input';
-import { Div, InputBuilder, Slot, Span, View } from '@/utils/builder';
+import { Div, EventManager, InputBuilder, Slot, Span, View } from '@/utils/builder';
 import {
   ensureShadowElement,
   ensureShadowRoot,
@@ -39,7 +39,8 @@ const searchThrottle = generateThrottle();
 
 const animationTime = 300;
 
-export class Select extends (HTMLElementSSR()!) {
+export class Select extends RanElement {
+  _events = new EventManager();
   removeTimeId?: NodeJS.Timeout;
   _listboxId: string;
   _activeIndex: number;
@@ -591,39 +592,6 @@ export class Select extends (HTMLElementSSR()!) {
       this.createSelectDropdownContent(this._optionList);
     }
   };
-  setShowSearch = (): void => {
-    this.onSearch = searchThrottle(this.changeSearch);
-    if (this.onSearch) {
-      this._search.addEventListener('change', this.onSearch);
-      this._search.addEventListener('click', this.onSearch);
-    }
-  };
-  removeShowSearch = (): void => {
-    if (this.onSearch) {
-      this._search.removeEventListener('change', this.onSearch);
-      this._search.removeEventListener('click', this.onSearch);
-    }
-  };
-  listenSlotChange = (): void => {
-    this._slot.addEventListener('slotchange', this.addOptionToSlot);
-  };
-  removeListenSlotChange = (): void => {
-    this._slot.removeEventListener('slotchange', this.addOptionToSlot);
-  };
-  listenActionEvent = (): void => {
-    this.removeEventListener('mouseenter', this.selectMouseDown);
-    this.removeEventListener('mouseleave', this.selectBlur);
-    this.removeEventListener('click', this.selectMouseDown);
-    this.removeEventListener('blur', this.selectBlur);
-    if (this.trigger.includes('hover') && !isMobile()) {
-      this.addEventListener('mouseenter', this.selectMouseDown);
-      this.addEventListener('mouseleave', this.selectBlur);
-    }
-    if (this.trigger.includes('click')) {
-      this.addEventListener('click', this.selectMouseDown);
-      this.addEventListener('blur', this.selectBlur);
-    }
-  };
   clickRemoveSelect = (e: Event): void => {
     e.stopPropagation();
     this.setSelectDropdownDisplayNone();
@@ -632,23 +600,26 @@ export class Select extends (HTMLElementSSR()!) {
     this.handlerExternalCss();
     this.createOption();
     this.initAria();
-    this.listenActionEvent();
-    this.listenSlotChange();
-    this.setShowSearch();
-    this.addEventListener('keydown', this.keydownSelect);
-    document.addEventListener('click', this.clickRemoveSelect);
+    this._events
+      .on(this._slot, 'slotchange', this.addOptionToSlot)
+      .on(this, 'keydown', this.keydownSelect)
+      .on(document, 'click', this.clickRemoveSelect);
+    if (this.trigger.includes('hover') && !isMobile()) {
+      this._events.on(this, 'mouseenter', this.selectMouseDown).on(this, 'mouseleave', this.selectBlur);
+    }
+    if (this.trigger.includes('click')) {
+      this._events.on(this, 'click', this.selectMouseDown).on(this, 'blur', this.selectBlur);
+    }
+    if (this.showSearch) {
+      this.onSearch = searchThrottle(this.changeSearch);
+      if (this.onSearch) {
+        this._events.on(this._search, 'change', this.onSearch).on(this._search, 'click', this.onSearch);
+      }
+    }
   }
   disconnectedCallback(): void {
-    this.removeEventListener('mouseenter', this.selectMouseDown);
-    this.removeEventListener('mouseleave', this.selectBlur);
-    this.removeEventListener('click', this.selectMouseDown);
-    this.removeEventListener('blur', this.selectBlur);
+    this._events.abort();
     this.removeSelectDropdown();
-    this._selectDropdown?.removeEventListener('click', this.clickOption);
-    this.removeListenSlotChange();
-    this.removeShowSearch();
-    this.removeEventListener('keydown', this.keydownSelect);
-    document.removeEventListener('click', this.clickRemoveSelect);
   }
   attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     if (oldValue === newValue) return;

@@ -1,6 +1,6 @@
 import { perToNum } from 'ranuts/utils';
 import progressCss from './index.less?inline';
-import { Div, RanElement } from '@/utils/index';
+import { Div, EventManager, RanElement } from '@/utils/index';
 import {
   ensureShadowElement,
   ensureShadowRoot,
@@ -18,6 +18,7 @@ export class Progress extends RanElement {
   _progressWrapValue!: HTMLDivElement;
   _progressDot!: HTMLDivElement;
   _shadowDom!: ShadowRoot;
+  _events = new EventManager();
   moveProgress: { mouseDown: boolean } = { mouseDown: false };
 
   static get observedAttributes(): string[] {
@@ -181,10 +182,11 @@ export class Progress extends RanElement {
 
   dragEvent = (): void => {
     if (this.type !== 'drag') return;
-    this._progress.addEventListener('click', this.progressClick);
-    this._progressDot.addEventListener('mousedown', this.progressDotMouseDown);
-    document.addEventListener('mousemove', this.progressDotMouseMove);
-    document.addEventListener('mouseup', this.progressDotMouseUp);
+    this._events
+      .on(this._progress, 'click', this.progressClick)
+      .on(this._progressDot, 'mousedown', this.progressDotMouseDown)
+      .on(document, 'mousemove', this.progressDotMouseMove as EventListener)
+      .on(document, 'mouseup', this.progressDotMouseUp as EventListener);
   };
 
   private resize = (): void => {
@@ -199,15 +201,11 @@ export class Progress extends RanElement {
     this.dragEvent();
     this.updateCurrentProgress();
     this.appendProgressDot();
-    window.addEventListener('resize', this.resize);
+    this._events.on(window, 'resize', this.resize);
   }
 
   disconnectedCallback(): void {
-    this._progress?.removeEventListener('click', this.progressClick);
-    this._progressDot?.removeEventListener('mousedown', this.progressDotMouseDown);
-    document.removeEventListener('mousemove', this.progressDotMouseMove);
-    document.removeEventListener('mouseup', this.progressDotMouseUp);
-    window.removeEventListener('resize', this.resize);
+    this._events.abort();
   }
 
   attributeChangedCallback(name: string, oldValue: string, newValue: string): void {

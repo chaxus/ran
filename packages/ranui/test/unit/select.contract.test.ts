@@ -1,5 +1,6 @@
 import { describe, expect, it, beforeEach, vi } from 'vitest';
 import { Select } from '@/components/select/index';
+import { EventManager } from '@/utils/builder';
 // Ensure custom elements are defined
 import '@/components/select/index';
 
@@ -505,16 +506,15 @@ describe('r-select contract', () => {
     expect((select as any)._select.hasAttribute('disabled')).toBe(true);
   });
 
-  it('listenActionEvent adds hover listeners when trigger is hover', async () => {
+  it('connectedCallback registers hover listeners via EventManager when trigger is hover', async () => {
     const select = document.createElement('r-select') as Select;
     select.setAttribute('trigger', 'hover');
+    const abortSpy = vi.spyOn(EventManager.prototype, 'on');
     document.body.appendChild(select);
     await sleep(20);
 
-    const addSpy = vi.spyOn(select as any, 'addEventListener');
-    (select as any).listenActionEvent();
-    const calls = addSpy.mock.calls.map((c) => c[0]);
-    expect(calls).toContain('mouseenter');
-    expect(calls).toContain('mouseleave');
+    const registeredTypes = abortSpy.mock.calls.map((c) => c[1]);
+    expect(registeredTypes).toContain('mouseenter');
+    expect(registeredTypes).toContain('mouseleave');
   });
 });

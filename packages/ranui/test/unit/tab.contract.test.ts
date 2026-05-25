@@ -239,12 +239,12 @@ describe('r-tabs and r-tab contract', () => {
     expect(tabs.getAttribute('active')).toBe(prevActive);
   });
 
-  it('disconnectedCallback removes slot listener', () => {
+  it('disconnectedCallback aborts EventManager to remove slot listener', () => {
     const tabs = document.createElement('r-tabs') as any;
     document.body.appendChild(tabs);
-    const removeSpy = vi.spyOn(tabs._slot, 'removeEventListener');
+    const abortSpy = vi.spyOn(tabs._events, 'abort');
     document.body.removeChild(tabs);
-    expect(removeSpy).toHaveBeenCalledWith('slotchange', tabs.listenSlotChange);
+    expect(abortSpy).toHaveBeenCalledOnce();
   });
 
   it('setTabContent does nothing when key is empty', () => {
@@ -371,12 +371,12 @@ describe('r-tabs and r-tab contract', () => {
     expect(tabPane.getAttribute('label')).toBe('Tab Label');
   });
 
-  it('r-tab disconnectedCallback removes DOMContentLoaded listener', () => {
+  it('r-tab disconnectedCallback aborts EventManager to remove DOMContentLoaded listener', () => {
     const tabPane = document.createElement('r-tab') as any;
     document.body.appendChild(tabPane);
-    const removeSpy = vi.spyOn(document, 'removeEventListener');
+    const abortSpy = vi.spyOn(tabPane._events, 'abort');
     document.body.removeChild(tabPane);
-    expect(removeSpy).toHaveBeenCalledWith('DOMContentLoaded', tabPane.initAttribute);
+    expect(abortSpy).toHaveBeenCalledOnce();
   });
 
   it('r-tab attributeChangedCallback forwards icon change to parent', () => {
@@ -440,10 +440,10 @@ describe('r-tabs and r-tab contract', () => {
     expect(spy).toHaveBeenCalled();
   });
 
-  it('r-tab onClick does not throw', () => {
+  it('r-tab initAttribute does not throw when called directly', () => {
     const tabPane = document.createElement('r-tab') as any;
     document.body.appendChild(tabPane);
-    expect(() => tabPane.onClick(new Event('click'))).not.toThrow();
+    expect(() => tabPane.initAttribute()).not.toThrow();
   });
 
   it('r-tab effect getter returns null when not set', () => {

@@ -1,5 +1,5 @@
 import { addClassToElement, removeClassToElement } from 'ranuts/utils';
-import { HTMLElementSSR, createCustomError } from '@/utils/index';
+import { RanElement } from '@/utils/index';
 import { Div, Slot } from '@/utils/builder';
 import {
   ensureShadowElement,
@@ -20,7 +20,7 @@ export enum ARROW_TYPE {
   RIGHT = 'right',
 }
 
-export class Dropdown extends (HTMLElementSSR()!) {
+export class Dropdown extends RanElement {
   dropdown: HTMLElement;
   _slot: HTMLSlotElement;
   _shadowDom: ShadowRoot;
@@ -132,9 +132,5 @@ export class Dropdown extends (HTMLElementSSR()!) {
   }
 }
 
-function Custom() {
-  defineSSR('r-dropdown', Dropdown as unknown as new () => HTMLElement);
-  return Dropdown;
-}
-
-export default Custom();
+defineSSR('r-dropdown', Dropdown as unknown as new () => HTMLElement);
+export default Dropdown;

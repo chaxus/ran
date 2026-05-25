@@ -1,7 +1,7 @@
 import { addClassToElement, removeClassToElement } from 'ranuts/utils';
 import less from './index.less?inline';
 import { Div, Slot } from '@/utils/builder';
-import { HTMLElementSSR, createCustomError, isDisabled } from '@/utils/index';
+import { RanElement, isDisabled } from '@/utils/index';
 import { defineSSR } from '@/utils/ssr-registry';
 import {
   ensureShadowElement,
@@ -11,7 +11,7 @@ import {
   syncSheetAttribute,
 } from '@/utils/component';
 
-export class DropdownItem extends (HTMLElementSSR()!) {
+export class DropdownItem extends RanElement {
   ionDropdownItem: HTMLElement;
   _slot: HTMLSlotElement;
   _shadowDom: ShadowRoot;
@@ -102,9 +102,5 @@ export class DropdownItem extends (HTMLElementSSR()!) {
   }
 }
 
-function Custom() {
-  defineSSR('r-dropdown-item', DropdownItem as unknown as new () => HTMLElement);
-  return DropdownItem;
-}
-
-export default Custom();
+defineSSR('r-dropdown-item', DropdownItem as unknown as new () => HTMLElement);
+export default DropdownItem;

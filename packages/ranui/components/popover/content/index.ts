@@ -1,10 +1,10 @@
 import contentCss from './index.less?inline';
 import { Slot } from '@/utils/builder';
-import { HTMLElementSSR, createCustomError } from '@/utils/index';
+import { RanElement } from '@/utils/index';
 import { defineSSR } from '@/utils/ssr-registry';
 import { ensureShadowElement, ensureShadowRoot } from '@/utils/component';
 
-export class Content extends (HTMLElementSSR()!) {
+export class Content extends RanElement {
   observer: MutationObserver;
   _shadowDom: ShadowRoot;
   _slot: HTMLElement;
@@ -44,9 +44,5 @@ export class Content extends (HTMLElementSSR()!) {
   }
 }
 
-function Custom() {
-  defineSSR('r-content', Content as unknown as new () => HTMLElement);
-  return Content;
-}
-
-export default Custom();
+defineSSR('r-content', Content as unknown as new () => HTMLElement);
+export default Content;

@@ -1,6 +1,6 @@
 import { addClassToElement, removeClassToElement } from 'ranuts/utils';
-import { HTMLElementSSR, createCustomError, falseList } from '@/utils/index';
-import { Div, InputBuilder, Span } from '@/utils/builder';
+import { RanElement, falseList } from '@/utils/index';
+import { Div, EventManager, InputBuilder, Span } from '@/utils/builder';
 import {
   ensureShadowElement,
   ensureShadowRoot,
@@ -15,7 +15,8 @@ export interface Context {
   checked: boolean;
 }
 
-export class Checkbox extends (HTMLElementSSR()!) {
+export class Checkbox extends RanElement {
+  _events = new EventManager();
   checkInput: HTMLInputElement;
   checkInner: HTMLSpanElement;
   context: Context;
@@ -126,10 +127,10 @@ export class Checkbox extends (HTMLElementSSR()!) {
   };
   connectedCallback(): void {
     this.handlerExternalCss();
-    this.addEventListener('click', this.onChange);
+    this._events.on(this, 'click', this.onChange);
   }
   disconnectedCallback(): void {
-    this.removeEventListener('click', this.onChange);
+    this._events.abort();
   }
   attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     if (oldValue === newValue) return;

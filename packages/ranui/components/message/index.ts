@@ -12,10 +12,12 @@ import {
   setStringAttribute,
   syncSheetAttribute,
 } from '@/utils/component';
+import { RanElement } from '@/utils/index';
+import { defineSSR } from '@/utils/ssr-registry';
 import { getMessageContainer, type MessageRenderOptions } from './container';
 
-const AnimationTime = 300; // message 退出动画执行的时间
-const defaultDuration = 3000; // 默认 message 存在的时间
+const AnimationTime = 300;
+const defaultDuration = 3000;
 
 registerIcons({
   'check-circle-fill': checkCircleFill,
@@ -24,7 +26,6 @@ registerIcons({
   'warning-circle-fill': warningCircleFill,
 });
 
-// message 类型映射 icon 的类型
 const typeMapIcon = new Map([
   ['success', 'check-circle-fill'],
   ['warning', 'warning-circle-fill'],
@@ -33,7 +34,6 @@ const typeMapIcon = new Map([
   ['toast', null],
 ]);
 
-// message 类型映射 icon 的颜色
 const typeMapColor = new Map([
   ['success', '#52c41a'],
   ['warning', '#faad14'],
@@ -42,94 +42,88 @@ const typeMapColor = new Map([
   ['toast', 'rgba(0, 0, 0, 0.7)'],
 ]);
 
-function Custom() {
-  if (typeof window === 'undefined') return null;
-
-  if (!customElements.get('r-message')) {
-    class CustomMessage extends HTMLElement {
-      _info: HTMLDivElement;
-      _notice: HTMLDivElement;
-      _content: HTMLDivElement;
-      _icon?: HTMLElement;
-      _span: HTMLSpanElement;
-      _shadowDom: ShadowRoot;
-      timeId?: NodeJS.Timeout;
-      close?: () => void;
-      static get observedAttributes() {
-        return ['type', 'content', 'sheet'];
-      }
-      constructor() {
-        super();
-        this._shadowDom = ensureShadowRoot(this, messageCss);
-        const notice = ensureShadowElement(
-          this._shadowDom,
-          '.ran-message-notice',
-          () =>
+export class CustomMessage extends RanElement {
+  _info: HTMLDivElement;
+  _notice: HTMLDivElement;
+  _content: HTMLDivElement;
+  _icon?: HTMLElement;
+  _span: HTMLSpanElement;
+  _shadowDom: ShadowRoot;
+  timeId?: NodeJS.Timeout;
+  close?: () => void;
+  static get observedAttributes() {
+    return ['type', 'content', 'sheet'];
+  }
+  constructor() {
+    super();
+    this._shadowDom = ensureShadowRoot(this, messageCss);
+    const notice = ensureShadowElement(
+      this._shadowDom,
+      '.ran-message-notice',
+      () =>
+        Div()
+          .class('ran-message-notice')
+          .children(
             Div()
-              .class('ran-message-notice')
-              .children(
-                Div()
-                  .class('ran-message-notice-content')
-                  .children(Div().class('ran-message-notice-content-info').children(View('r-icon'), Span())),
-              )
-              .build() as HTMLDivElement,
-        );
+              .class('ran-message-notice-content')
+              .children(Div().class('ran-message-notice-content-info').children(View('r-icon'), Span())),
+          )
+          .build() as HTMLDivElement,
+    );
 
-        this._notice = notice;
-        this._content = notice.querySelector('.ran-message-notice-content') as HTMLDivElement;
-        this._info = notice.querySelector('.ran-message-notice-content-info') as HTMLDivElement;
-        this._icon = notice.querySelector('r-icon') as HTMLElement;
-        this._span = notice.querySelector('span') as HTMLSpanElement;
+    this._notice = notice;
+    this._content = notice.querySelector('.ran-message-notice-content') as HTMLDivElement;
+    this._info = notice.querySelector('.ran-message-notice-content-info') as HTMLDivElement;
+    this._icon = notice.querySelector('r-icon') as HTMLElement;
+    this._span = notice.querySelector('span') as HTMLSpanElement;
 
-        this.handlerExternalCss();
-      }
-      get type() {
-        return this.getAttribute('type');
-      }
-      set type(value) {
-        if (value) this.setAttribute('type', value);
-      }
-      get content() {
-        return this.getAttribute('content');
-      }
-      set content(value) {
-        if (value) this.setAttribute('content', value);
-      }
-      get sheet() {
-        return getStringAttribute(this, 'sheet');
-      }
-      set sheet(value) {
-        setStringAttribute(this, 'sheet', value);
-      }
-      handlerExternalCss = (): void => {
-        syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
-      };
-      setIcon = (value: string) => {
-        const icon = typeMapIcon.get(value);
-        const color = typeMapColor.get(value);
-        if (icon) {
-          this._icon?.setAttribute('name', icon);
-          this._icon?.style.setProperty('margin-right', '8px');
-          this._icon?.setAttribute('size', '18');
-          if (color) {
-            this._icon?.setAttribute('color', color);
-          }
-        }
-      };
-      attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-        if (name === 'content' && oldValue !== newValue) {
-          this._span.textContent = newValue;
-        }
-        if (name === 'type' && oldValue !== newValue) {
-          this.setIcon(newValue);
-        }
-        if (name === 'sheet' && oldValue !== newValue) {
-          this.handlerExternalCss();
-        }
+    this.handlerExternalCss();
+  }
+  get type() {
+    return this.getAttribute('type');
+  }
+  set type(value) {
+    if (value) this.setAttribute('type', value);
+  }
+  get content() {
+    return this.getAttribute('content');
+  }
+  set content(value) {
+    if (value) this.setAttribute('content', value);
+  }
+  get sheet() {
+    return getStringAttribute(this, 'sheet');
+  }
+  set sheet(value) {
+    setStringAttribute(this, 'sheet', value);
+  }
+  handlerExternalCss = (): void => {
+    syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
+  };
+  setIcon = (value: string) => {
+    const icon = typeMapIcon.get(value);
+    const color = typeMapColor.get(value);
+    if (icon) {
+      this._icon?.setAttribute('name', icon);
+      this._icon?.style.setProperty('margin-right', '8px');
+      this._icon?.setAttribute('size', '18');
+      if (color) {
+        this._icon?.setAttribute('color', color);
       }
     }
-    customElements.define('r-message', CustomMessage);
+  };
+  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+    if (oldValue === newValue) return;
+    if (name === 'content') this._span.textContent = newValue;
+    if (name === 'type') this.setIcon(newValue);
+    if (name === 'sheet') this.handlerExternalCss();
   }
+}
+
+defineSSR('r-message', CustomMessage as unknown as new () => HTMLElement);
+
+function initMessageApi() {
+  if (typeof window === 'undefined') return null;
 
   const commonPrompt = (type: string) => {
     return (options: Ran.Prompt | string | undefined | null) => {
@@ -186,15 +180,13 @@ function Custom() {
     toast: commonPrompt('toast'),
   };
 
-  if (typeof window !== 'undefined') {
-    (window as any).message = api;
-    if (!(window as any).ranui) (window as any).ranui = {};
-    (window as any).ranui.message = api;
-  }
+  (window as any).message = api;
+  if (!(window as any).ranui) (window as any).ranui = {};
+  (window as any).ranui.message = api;
 
   return api;
 }
 
-const message = Custom();
+const message = initMessageApi();
 
 export default message;

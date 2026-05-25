@@ -1,6 +1,6 @@
 import modalCss from './index.less?inline';
 import { RanElement, createCustomError, falseList } from '@/utils/index';
-import { ButtonBuilder, Div, Slot, View } from '@/utils/builder';
+import { ButtonBuilder, Div, EventManager, Slot, View } from '@/utils/builder';
 import {
   ensureShadowElement,
   ensureShadowRoot,
@@ -43,6 +43,7 @@ export class Modal extends RanElement {
   static _bodyPaddingRight = '';
   static _inertSnapshot = new Map<HTMLElement, { inert: boolean; ariaHidden: string | null }>();
 
+  _events = new EventManager();
   _shadowDom: ShadowRoot;
   _root: HTMLDivElement;
   _mask: HTMLDivElement;
@@ -473,11 +474,12 @@ export class Modal extends RanElement {
 
   connectedCallback(): void {
     this.handlerExternalCss();
-    this._mask.addEventListener('click', this.onMaskClick);
-    this._closeBtn.addEventListener('click', this.onCloseButtonClick);
-    document.addEventListener('keydown', this.onKeydown);
-    document.addEventListener('focusin', this.onDocumentFocusIn);
-    this._footerSlot.addEventListener('slotchange', this.syncFooter);
+    this._events
+      .on(this._mask, 'click', this.onMaskClick)
+      .on(this._closeBtn, 'click', this.onCloseButtonClick)
+      .on(document, 'keydown', this.onKeydown as EventListener)
+      .on(document, 'focusin', this.onDocumentFocusIn as EventListener)
+      .on(this._footerSlot, 'slotchange', this.syncFooter);
     this.syncTitle();
     this.syncClosable();
     this.syncFooter();
@@ -492,11 +494,7 @@ export class Modal extends RanElement {
     if (this._root.hasAttribute('open')) {
       this.closeDialog();
     }
-    this._mask.removeEventListener('click', this.onMaskClick);
-    this._closeBtn.removeEventListener('click', this.onCloseButtonClick);
-    document.removeEventListener('keydown', this.onKeydown);
-    document.removeEventListener('focusin', this.onDocumentFocusIn);
-    this._footerSlot.removeEventListener('slotchange', this.syncFooter);
+    this._events.abort();
     this.clearAfterTimers();
   }
 

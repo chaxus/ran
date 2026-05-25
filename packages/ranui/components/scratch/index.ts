@@ -1,10 +1,10 @@
 import scratchCss from './index.less?inline';
 import { Div, View } from '@/utils/builder';
-import { HTMLElementSSR } from '@/utils/index';
+import { RanElement } from '@/utils/index';
 import { defineSSR } from '@/utils/ssr-registry';
 import { ensureShadowElement, ensureShadowRoot } from '@/utils/component';
 
-class ScratchTicket extends (HTMLElementSSR()!) {
+class ScratchTicket extends RanElement {
   scratchTicketContainer: HTMLDivElement;
   scratchTicket: HTMLCanvasElement;
   state: { touchStart: boolean; scratchArea: number };

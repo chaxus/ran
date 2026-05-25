@@ -1,4 +1,4 @@
-import { HTMLElementSSR, createCustomError } from '@/utils/index';
+import { RanElement } from '@/utils/index';
 import { Div, Span } from '@/utils/builder';
 import {
   ensureShadowElement,
@@ -9,7 +9,7 @@ import {
 } from '@/utils/component';
 import mathCss from './index.less?inline';
 import { defineSSR } from '@/utils/ssr-registry';
-export class Math extends (HTMLElementSSR()!) {
+export class Math extends RanElement {
   contain: HTMLElement;
   _shadowDom: ShadowRoot;
   static get observedAttributes(): string[] {
@@ -61,20 +61,11 @@ export class Math extends (HTMLElementSSR()!) {
     this.render();
   }
   attributeChangedCallback(k: string, o: string | null, n: string | null): void {
-    if (o !== n) {
-      if (k === 'latex') {
-        this.render();
-      }
-      if (k === 'sheet') {
-        this.handlerExternalCss();
-      }
-    }
+    if (o === n) return;
+    if (k === 'latex') this.render();
+    if (k === 'sheet') this.handlerExternalCss();
   }
 }
 
-async function Custom() {
-  defineSSR('r-math', Math as unknown as new () => HTMLElement);
-  return Math;
-}
-
-export default Custom();
+defineSSR('r-math', Math as unknown as new () => HTMLElement);
+export default Math;

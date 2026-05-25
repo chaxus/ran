@@ -46,16 +46,12 @@ describe('r-popover accessibility contract', () => {
   });
 
   it('removes the same listeners that connectedCallback registered', async () => {
-    const addSpy = vi.spyOn(HTMLElement.prototype, 'addEventListener');
-    const removeSpy = vi.spyOn(HTMLElement.prototype, 'removeEventListener');
     const popover = await createPopover();
     await sleep();
 
+    const abortSpy = vi.spyOn((popover as any)._events, 'abort');
     document.body.removeChild(popover);
 
-    expect(addSpy).toHaveBeenCalledWith('click', popover.clickPopover);
-    expect(addSpy).toHaveBeenCalledWith('keydown', popover.keydownPopover);
-    expect(removeSpy).toHaveBeenCalledWith('click', popover.clickPopover);
-    expect(removeSpy).toHaveBeenCalledWith('keydown', popover.keydownPopover);
+    expect(abortSpy).toHaveBeenCalledOnce();
   });
 });

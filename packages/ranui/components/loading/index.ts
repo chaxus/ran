@@ -1,5 +1,5 @@
 import loadingCss from './index.less?inline';
-import { HTMLElementSSR, createCustomError } from '@/utils/index';
+import { RanElement } from '@/utils/index';
 import { Div, Span, View } from '@/utils/builder';
 import {
   ensureShadowElement,
@@ -42,7 +42,7 @@ export enum ICON_NAME_AMP {
   PACMAN = 'pacman',
 }
 
-export class Loading extends (HTMLElementSSR()!) {
+export class Loading extends RanElement {
   contain: HTMLDivElement;
   _shadowDom: ShadowRoot;
   static get observedAttributes(): string[] {
@@ -444,14 +444,9 @@ export class Loading extends (HTMLElementSSR()!) {
     this.createLoading();
   }
   attributeChangedCallback(k: string, o: string, n: string): void {
-    if (o !== n) {
-      if (k === 'name') {
-        this.createLoading();
-      }
-      if (k === 'sheet') {
-        this.handlerExternalCss();
-      }
-    }
+    if (o === n) return;
+    if (k === 'name') this.createLoading();
+    if (k === 'sheet') this.handlerExternalCss();
   }
 }
 

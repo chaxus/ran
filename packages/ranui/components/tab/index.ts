@@ -1,6 +1,6 @@
 import { isDisabled, RanElement } from '@/utils/index';
 import tabCss from './index.less?inline';
-import { Div, Slot, View } from '@/utils/builder';
+import { Div, EventManager, Slot, View } from '@/utils/builder';
 import {
   ensureShadowElement,
   ensureShadowRoot,
@@ -15,6 +15,7 @@ export class Tabs extends RanElement {
     return ['active', 'forceRender', 'type', 'align', 'effect', 'sheet'];
   }
 
+  _events = new EventManager();
   _container: HTMLDivElement;
   _header: HTMLDivElement;
   _nav: HTMLDivElement;
@@ -246,21 +247,13 @@ export class Tabs extends RanElement {
     }
   };
 
-  initTab = (): void => {
-    this._slot.addEventListener('slotchange', this.listenSlotChange);
-  };
-
-  unloadTab = (): void => {
-    this._slot.removeEventListener('slotchange', this.listenSlotChange);
-  };
-
   connectedCallback(): void {
     this.handlerExternalCss();
-    this.initTab();
+    this._events.on(this._slot, 'slotchange', this.listenSlotChange);
   }
 
   disconnectedCallback(): void {
-    this.unloadTab();
+    this._events.abort();
   }
 
   attributeChangedCallback(name: string, oldValue: string, newValue: string): void {

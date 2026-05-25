@@ -6,10 +6,10 @@
  * @FilePath: /ran/packages/ranui/components/popover/index.ts
  */
 import { debounce, isMobile } from 'ranuts/utils';
-import { HTMLElementSSR, createCustomError } from '@/utils/index';
+import { RanElement } from '@/utils/index';
 import '@/components/popover/content';
 import '@/components/dropdown';
-import { Div, Slot, View } from '@/utils/builder';
+import { Div, EventManager, Slot, View } from '@/utils/builder';
 import {
   ensureShadowElement,
   ensureShadowRoot,
@@ -56,7 +56,8 @@ export enum PLACEMENT_TYPE {
   RIGHT = 'right',
 }
 
-export class Popover extends (HTMLElementSSR()!) {
+export class Popover extends RanElement {
+  _events = new EventManager();
   _slot: HTMLSlotElement;
   popoverBlock: HTMLDivElement;
   popoverContent?: HTMLElement;
@@ -310,14 +311,20 @@ export class Popover extends (HTMLElementSSR()!) {
     this.hoverRemovePopover(e);
   };
   popoverTrigger = (): void => {
-    this.removeEventListener('mouseenter', this.hoverPopover);
-    this.removeEventListener('mouseleave', this.blur);
-    this.removeEventListener('click', this.clickPopover);
-    if (this.trigger.includes('hover')) {
-      this.addEventListener('mouseenter', this.hoverPopover);
-      this.addEventListener('mouseleave', this.blur);
+    this._events.abort();
+    for (const element of this.children) {
+      if (element.tagName === 'R-CONTENT') {
+        this._events.on(element, 'change', this.watchContent);
+      }
     }
-    this.addEventListener('click', this.clickPopover);
+    if (this.trigger.includes('hover')) {
+      this._events.on(this, 'mouseenter', this.hoverPopover);
+      this._events.on(this, 'mouseleave', this.blur);
+    }
+    this._events
+      .on(this, 'click', this.clickPopover)
+      .on(this, 'keydown', this.keydownPopover)
+      .on(document, 'click', this.clickRemovePopover);
   };
   hoverRemovePopover = (e: Event): void => {
     e.stopPropagation();
@@ -342,40 +349,22 @@ export class Popover extends (HTMLElementSSR()!) {
     this.handlerExternalCss();
     for (const element of this.children) {
       if (element.tagName === 'R-CONTENT') {
-        element.addEventListener('change', this.watchContent);
         this.createContent(element.children);
       }
     }
     this.popoverTrigger();
     this.changePlacement();
-    this.addEventListener('keydown', this.keydownPopover);
-    document.addEventListener('click', this.clickRemovePopover);
   }
   disconnectedCallback(): void {
-    this.removeEventListener('mouseenter', this.hoverPopover);
-    this.removeEventListener('mouseleave', this.blur);
-    this.removeEventListener('click', this.clickPopover);
-    this.removeEventListener('keydown', this.keydownPopover);
-    document.removeEventListener('click', this.clickRemovePopover);
+    this._events.abort();
   }
   attributeChangedCallback(n: string, o: string, v: string): void {
-    if (o !== v) {
-      if (n === 'trigger') {
-        this.popoverTrigger();
-      }
-      if (n === 'placement') {
-        this.changePlacement();
-      }
-      if (n === 'sheet') {
-        this.handlerExternalCss();
-      }
-    }
+    if (o === v) return;
+    if (n === 'trigger') this.popoverTrigger();
+    if (n === 'placement') this.changePlacement();
+    if (n === 'sheet') this.handlerExternalCss();
   }
 }
 
-function Custom() {
-  defineSSR('r-popover', Popover as unknown as new () => HTMLElement);
-  return Popover;
-}
-
-export default Custom();
+defineSSR('r-popover', Popover as unknown as new () => HTMLElement);
+export default Popover;
