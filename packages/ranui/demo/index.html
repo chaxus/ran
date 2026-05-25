@@ -26,11 +26,23 @@
           </nav>
 
           <div class="nav-controls" aria-label="Visual settings">
-            <r-select id="theme-select" style="width: 88px" trigger="click" getPopupContainerId="nav-portal" data-wired-skip>
+            <r-select
+              id="theme-select"
+              style="width: 88px"
+              trigger="click"
+              getPopupContainerId="nav-portal"
+              data-wired-skip
+            >
               <r-option value="light">Light</r-option>
               <r-option value="dark">Dark</r-option>
             </r-select>
-            <r-select id="pack-select" style="width: 152px" trigger="click" getPopupContainerId="nav-portal" data-wired-skip>
+            <r-select
+              id="pack-select"
+              style="width: 152px"
+              trigger="click"
+              getPopupContainerId="nav-portal"
+              data-wired-skip
+            >
               <r-option value="default">Default</r-option>
               <r-option value="pixel-retro">Pixel Retro</r-option>
               <r-option value="windows-98">Windows 98</r-option>
@@ -52,7 +64,10 @@
           <div class="hero-content">
             <p class="eyebrow">Framework-neutral Web Components</p>
             <h1 id="intro-title">ranui builds native-feeling interfaces that travel across frameworks.</h1>
-            <p class="hero-copy">A TypeScript UI library built on custom elements, theme tokens, modular imports, and real browser standards.</p>
+            <p class="hero-copy">
+              A TypeScript UI library built on custom elements, theme tokens, modular imports, and real browser
+              standards.
+            </p>
             <div class="hero-actions" aria-label="Hero actions">
               <a class="primary-action" href="#components">Explore components</a>
               <a class="secondary-action" href="#code">Copy install path</a>
@@ -80,9 +95,12 @@
         </section>
 
         <div class="content-stack" aria-label="Demo sections">
-
           <!-- ── Why ranui ──────────────────────────────────── -->
-          <r-section id="why" heading="Why ranui" subtitle="Small primitives for teams that want browser-native UI without giving up framework ergonomics.">
+          <r-section
+            id="why"
+            heading="Why ranui"
+            subtitle="Small primitives for teams that want browser-native UI without giving up framework ergonomics."
+          >
             <div class="feature-grid">
               <r-card title="Cross-framework">
                 <p>Use the same components from plain HTML, React, Vue, Svelte, or any runtime that renders DOM.</p>
@@ -106,7 +124,11 @@
           </r-section>
 
           <!-- ── Theme Lab ──────────────────────────────────── -->
-          <r-section id="themes" heading="Theme Lab" subtitle="Use the Theme and Pack selects in the nav to switch styles. Scan the palette below before choosing.">
+          <r-section
+            id="themes"
+            heading="Theme Lab"
+            subtitle="Use the Theme and Pack selects in the nav to switch styles. Scan the palette below before choosing."
+          >
             <div class="theme-preview-grid">
               <r-card data-pack-preview="default">
                 <div class="theme-swatch" aria-hidden="true"><span></span><span></span></div>
@@ -148,11 +170,17 @@
           </r-section>
 
           <!-- ── Component Gallery ──────────────────────────── -->
-          <r-section id="components" heading="Component Directory" subtitle="Live examples with same-page notes for imports, usage, and styling hooks.">
-
+          <r-section
+            id="components"
+            heading="Component Directory"
+            subtitle="Live examples with same-page notes for imports, usage, and styling hooks."
+          >
             <div class="gallery-group" data-group="Actions and inputs">
-              <r-card id="component-button" title="Button"
-                description="Trigger actions with primary, warning, text, icon, and disabled states.">
+              <r-card
+                id="component-button"
+                title="Button"
+                description="Trigger actions with primary, warning, text, icon, and disabled states."
+              >
                 <span slot="extra" class="component-meta">action</span>
                 <div class="demo-row">
                   <r-button type="primary">Primary</r-button>
@@ -164,8 +192,11 @@
                 <a slot="footer" class="component-link" href="#docs-button">View notes</a>
               </r-card>
 
-              <r-card id="component-icon" title="Icon"
-                description="Register SVG assets once and render consistent symbols anywhere.">
+              <r-card
+                id="component-icon"
+                title="Icon"
+                description="Register SVG assets once and render consistent symbols anywhere."
+              >
                 <span slot="extra" class="component-meta">visual</span>
                 <div class="demo-row">
                   <r-icon name="home" size="28" color="#2563eb"></r-icon>
@@ -175,8 +206,11 @@
                 <a slot="footer" class="component-link" href="#docs-icon">View notes</a>
               </r-card>
 
-              <r-card id="component-input" title="Input"
-                description="Collect text, passwords, labels, and icon-assisted values.">
+              <r-card
+                id="component-input"
+                title="Input"
+                description="Collect text, passwords, labels, and icon-assisted values."
+              >
                 <span slot="extra" class="component-meta">form</span>
                 <div class="demo-grid">
                   <r-input label="Username" placeholder="Enter username"></r-input>
@@ -185,8 +219,11 @@
                 <a slot="footer" class="component-link" href="#docs-input">View notes</a>
               </r-card>
 
-              <r-card id="component-select" title="Select"
-                description="Choose from option lists with popup placement and search support.">
+              <r-card
+                id="component-select"
+                title="Select"
+                description="Choose from option lists with popup placement and search support."
+              >
                 <span slot="extra" class="component-meta">form</span>
                 <div id="popup-root"></div>
                 <div class="demo-row">
@@ -205,8 +242,11 @@
                 <a slot="footer" class="component-link" href="#docs-select">View notes</a>
               </r-card>
 
-              <r-card id="component-checkbox" title="Checkbox"
-                description="Represent binary choices with checked, unchecked, and disabled states.">
+              <r-card
+                id="component-checkbox"
+                title="Checkbox"
+                description="Represent binary choices with checked, unchecked, and disabled states."
+              >
                 <span slot="extra" class="component-meta">form</span>
                 <div class="demo-row">
                   <r-checkbox checked="true">Checked</r-checkbox>
@@ -216,14 +256,22 @@
                 <a slot="footer" class="component-link" href="#docs-checkbox">View notes</a>
               </r-card>
 
-              <r-card id="component-form" title="Form"
-                description="Coordinate named controls and submit handling through slots.">
+              <r-card
+                id="component-form"
+                title="Form"
+                description="Coordinate named controls and submit handling through slots."
+              >
                 <span slot="extra" class="component-meta">form</span>
                 <r-form id="demo-form">
                   <div slot="r-form_content" class="demo-row">
                     <r-input name="name" label="Name" placeholder="Your name"></r-input>
                     <r-input name="email" label="Email" placeholder="Your email"></r-input>
-                    <r-button type="primary" onclick="document.getElementById('demo-form')?.shadowRoot?.querySelector('form')?.requestSubmit?.()">
+                    <r-button
+                      type="primary"
+                      onclick="
+                        document.getElementById('demo-form')?.shadowRoot?.querySelector('form')?.requestSubmit?.()
+                      "
+                    >
                       Submit
                     </r-button>
                   </div>
@@ -233,8 +281,11 @@
             </div>
 
             <div class="gallery-group" data-group="Feedback">
-              <r-card id="component-progress" title="Progress"
-                description="Show completion as a fixed value or draggable progress control.">
+              <r-card
+                id="component-progress"
+                title="Progress"
+                description="Show completion as a fixed value or draggable progress control."
+              >
                 <span slot="extra" class="component-meta">feedback</span>
                 <div class="demo-stack">
                   <r-progress percent="65"></r-progress>
@@ -243,8 +294,11 @@
                 <a slot="footer" class="component-link" href="#docs-progress">View notes</a>
               </r-card>
 
-              <r-card id="component-loading" title="Loading"
-                description="Use compact loaders for pending network, media, or state transitions.">
+              <r-card
+                id="component-loading"
+                title="Loading"
+                description="Use compact loaders for pending network, media, or state transitions."
+              >
                 <span slot="extra" class="component-meta">feedback</span>
                 <div class="demo-row">
                   <r-loading name="rotate"></r-loading>
@@ -255,8 +309,11 @@
                 <a slot="footer" class="component-link" href="#docs-loading">View notes</a>
               </r-card>
 
-              <r-card id="component-skeleton" title="Skeleton"
-                description="Reserve content shape while async data or media loads.">
+              <r-card
+                id="component-skeleton"
+                title="Skeleton"
+                description="Reserve content shape while async data or media loads."
+              >
                 <span slot="extra" class="component-meta">feedback</span>
                 <div class="demo-stack">
                   <r-skeleton></r-skeleton>
@@ -265,8 +322,11 @@
                 <a slot="footer" class="component-link" href="#docs-skeleton">View notes</a>
               </r-card>
 
-              <r-card id="component-message" title="Message"
-                description="Surface transient feedback inline or through the global message API.">
+              <r-card
+                id="component-message"
+                title="Message"
+                description="Surface transient feedback inline or through the global message API."
+              >
                 <span slot="extra" class="component-meta">feedback</span>
                 <div class="demo-row">
                   <r-button onclick="window.message?.success('Saved with ranui')">Save</r-button>
@@ -277,8 +337,11 @@
             </div>
 
             <div class="gallery-group" data-group="Navigation and overlays">
-              <r-card id="component-tabs" title="Tabs"
-                description="Switch between related panels without leaving the current page context.">
+              <r-card
+                id="component-tabs"
+                title="Tabs"
+                description="Switch between related panels without leaving the current page context."
+              >
                 <span slot="extra" class="component-meta">navigation</span>
                 <r-tabs active="overview" align="start" style="width: 100%">
                   <r-tab label="Overview" r-key="overview">Overview content</r-tab>
@@ -288,8 +351,11 @@
                 <a slot="footer" class="component-link" href="#docs-tabs">View notes</a>
               </r-card>
 
-              <r-card id="component-popover" title="Popover"
-                description="Attach contextual floating content to a trigger element.">
+              <r-card
+                id="component-popover"
+                title="Popover"
+                description="Attach contextual floating content to a trigger element."
+              >
                 <span slot="extra" class="component-meta">overlay</span>
                 <div class="demo-row">
                   <r-popover placement="top" trigger="hover,click" arrow="true">
@@ -302,12 +368,21 @@
                 <a slot="footer" class="component-link" href="#docs-popover">View notes</a>
               </r-card>
 
-              <r-card id="component-modal" title="Modal"
-                description="Focus attention on blocking decisions or richer temporary flows.">
+              <r-card
+                id="component-modal"
+                title="Modal"
+                description="Focus attention on blocking decisions or richer temporary flows."
+              >
                 <span slot="extra" class="component-meta">overlay</span>
                 <div class="demo-row">
-                  <r-button type="primary"
-                    onclick="typeof document.querySelector('#demo-modal')?.open === 'function' ? document.querySelector('#demo-modal')?.open?.() : (document.querySelector('#demo-modal').open = true)">
+                  <r-button
+                    type="primary"
+                    onclick="
+                      typeof document.querySelector('#demo-modal')?.open === 'function'
+                        ? document.querySelector('#demo-modal')?.open?.()
+                        : (document.querySelector('#demo-modal').open = true)
+                    "
+                  >
                     Open Modal
                   </r-button>
                   <r-modal id="demo-modal" title="Demo Modal">
@@ -320,8 +395,11 @@
             </div>
 
             <div class="gallery-group" data-group="Media and advanced">
-              <r-card id="component-image" title="Image"
-                description="Render image content with a consistent component wrapper.">
+              <r-card
+                id="component-image"
+                title="Image"
+                description="Render image content with a consistent component wrapper."
+              >
                 <span slot="extra" class="component-meta">media</span>
                 <div class="demo-row">
                   <r-img class="demo-media" src="https://picsum.photos/220/120"></r-img>
@@ -330,8 +408,11 @@
                 <a slot="footer" class="component-link" href="#docs-image">View notes</a>
               </r-card>
 
-              <r-card id="component-colorpicker" title="Color Picker"
-                description="Let users select solid or alpha-aware colors in themed surfaces.">
+              <r-card
+                id="component-colorpicker"
+                title="Color Picker"
+                description="Let users select solid or alpha-aware colors in themed surfaces."
+              >
                 <span slot="extra" class="component-meta">input</span>
                 <div class="demo-row">
                   <r-colorpicker value="#2563eb"></r-colorpicker>
@@ -340,8 +421,11 @@
                 <a slot="footer" class="component-link" href="#docs-colorpicker">View notes</a>
               </r-card>
 
-              <r-card id="component-math" title="Math"
-                description="Display LaTeX expressions inside normal interface content.">
+              <r-card
+                id="component-math"
+                title="Math"
+                description="Display LaTeX expressions inside normal interface content."
+              >
                 <span slot="extra" class="component-meta">content</span>
                 <div class="demo-grid">
                   <div class="demo-box"><r-math latex="E = mc^2"></r-math></div>
@@ -350,8 +434,11 @@
                 <a slot="footer" class="component-link" href="#docs-math">View notes</a>
               </r-card>
 
-              <r-card id="component-radar" title="Radar"
-                description="Compare weighted scores in a compact polygon chart.">
+              <r-card
+                id="component-radar"
+                title="Radar"
+                description="Compare weighted scores in a compact polygon chart."
+              >
                 <span slot="extra" class="component-meta">chart</span>
                 <div class="demo-box" style="max-width: 300px; aspect-ratio: 1 / 1">
                   <r-radar
@@ -362,11 +449,21 @@
                 <a slot="footer" class="component-link" href="#docs-radar">View notes</a>
               </r-card>
 
-              <r-card id="component-scratch" title="Scratch"
-                description="Create an interactive reveal surface for promotional or game-like moments.">
+              <r-card
+                id="component-scratch"
+                title="Scratch"
+                description="Create an interactive reveal surface for promotional or game-like moments."
+              >
                 <span slot="extra" class="component-meta">advanced</span>
                 <div class="demo-stack">
-                  <r-button onclick="typeof document.querySelector('#demo-scratch')?.open === 'function' ? document.querySelector('#demo-scratch')?.open?.() : undefined">Open Scratch</r-button>
+                  <r-button
+                    onclick="
+                      typeof document.querySelector('#demo-scratch')?.open === 'function'
+                        ? document.querySelector('#demo-scratch')?.open?.()
+                        : undefined
+                    "
+                    >Open Scratch</r-button
+                  >
                   <div class="demo-scratch">
                     <div class="demo-scratch-prize">WINNER</div>
                     <r-scratch id="demo-scratch"></r-scratch>
@@ -397,7 +494,11 @@
           </r-section>
 
           <!-- ── Component Notes ────────────────────────────── -->
-          <r-section id="component-notes" heading="Component notes" subtitle="Quick import paths and usage reminders for the controls shown above.">
+          <r-section
+            id="component-notes"
+            heading="Component notes"
+            subtitle="Quick import paths and usage reminders for the controls shown above."
+          >
             <div class="docs-grid">
               <r-card id="docs-button" title="Button">
                 <a slot="extra" href="#component-button">Back to demo</a>
@@ -608,7 +709,11 @@
           </r-section>
 
           <!-- ── Code ──────────────────────────────────────── -->
-          <r-section id="code" heading="Code" subtitle="Choose the path that matches the app boundary: direct browser script, package side effect, single component, or JSX.">
+          <r-section
+            id="code"
+            heading="Code"
+            subtitle="Choose the path that matches the app boundary: direct browser script, package side effect, single component, or JSX."
+          >
             <div class="code-grid">
               <r-card title="UMD">
                 <pre><code>&lt;script src="./ranui/dist/umd/index.umd.cjs"&gt;&lt;/script&gt;
@@ -631,7 +736,11 @@ export function App() {
           </r-section>
 
           <!-- ── Style API ──────────────────────────────────── -->
-          <r-section id="style-api" heading="Style API" subtitle="Theme with documented tokens first, then target exposed parts when a component needs local shape changes.">
+          <r-section
+            id="style-api"
+            heading="Style API"
+            subtitle="Theme with documented tokens first, then target exposed parts when a component needs local shape changes."
+          >
             <div class="style-grid">
               <r-card title="Tokens">
                 <pre><code>:root {
@@ -645,7 +754,6 @@ export function App() {
               </r-card>
             </div>
           </r-section>
-
         </div>
       </main>
     </div>
@@ -659,7 +767,10 @@ export function App() {
           var t = localStorage.getItem('ran-theme') || '';
           var p = localStorage.getItem('ran-theme-pack') || '';
           var r = document.documentElement;
-          if (t === 'dark') { r.setAttribute('data-ran-theme', 'dark'); r.setAttribute('theme', 'dark'); }
+          if (t === 'dark') {
+            r.setAttribute('data-ran-theme', 'dark');
+            r.setAttribute('theme', 'dark');
+          }
           if (p) r.setAttribute('data-ran-theme-pack', p);
           var ts = document.getElementById('theme-select');
           var ps = document.getElementById('pack-select');
