@@ -614,18 +614,18 @@ describe('connectedCallback', () => {
 });
 
 describe('disconnectedCallback', () => {
-  it('removes click listener from popoverBlock', () => {
+  it('aborts EventManager to remove all lifecycle listeners', () => {
     const cp = openPicker();
-    const removeSpy = vi.spyOn(cp.popoverBlock, 'removeEventListener');
+    const abortSpy = vi.spyOn((cp as any)._events, 'abort');
     document.body.removeChild(cp);
-    expect(removeSpy).toHaveBeenCalledWith('click', cp.openColorPicker);
+    expect(abortSpy).toHaveBeenCalledOnce();
   });
 
-  it('removes mousemove listener from document.body', () => {
+  it('disposes reactive effects on disconnect', () => {
     const cp = openPicker();
-    const removeSpy = vi.spyOn(document.body, 'removeEventListener');
+    const disposeSpy = vi.spyOn(cp as any, 'disposeEffects');
     document.body.removeChild(cp);
-    expect(removeSpy).toHaveBeenCalledWith('mousemove', cp.mouseMoveColorPickerPalette);
+    expect(disposeSpy).toHaveBeenCalledOnce();
   });
 });
 

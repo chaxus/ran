@@ -9,7 +9,7 @@ export {
   getMimeTypeFromExtension,
 } from './dom';
 export * from './error';
-export { signal, createEffect, computed, batch, createSignal } from './builder/signal';
+export { signal, createEffect, computed, batch } from './builder/signal';
 export * from './ssr';
 export * from './video';
 export * from './component';

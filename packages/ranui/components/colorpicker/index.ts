@@ -1,7 +1,7 @@
 import { range } from 'ranuts/utils';
-import { HTMLElementSSR, createCustomError, createSignal } from '@/utils/index';
+import { signal, createEffect, RanElement } from '@/utils/index';
 import { HEX_COLOR_REGEX, RGBA_REGEX, RGB_REGEX, hex2hsv, hsv2rgb, rgb2hsv } from '@/utils/color';
-import { Div, View } from '@/utils/builder';
+import { Div, View, EventManager } from '@/utils/builder';
 import '@/components/popover';
 import '@/components/input';
 import '@/components/select';
@@ -43,17 +43,16 @@ export interface RGBA {
 
 export interface Signal<T> {
   getter: () => T;
-  setter: (newValue: T) => void;
+  setter: (newValue: T | ((prev: T) => T)) => void;
 }
-/**
- * @description: 数据驱动视图，改变数据，即改变视图
- * @return {*}
- */
-export class ColorPicker extends (HTMLElementSSR()!) {
+
+export class ColorPicker extends RanElement {
   colorpicker: HTMLDivElement;
   colorpickerInner: HTMLDivElement;
   context!: Context;
   _shadowDom: ShadowRoot;
+  _events = new EventManager();
+  _effectDisposers: Array<() => void> = [];
   popoverBlock: HTMLElement;
   popoverContent: HTMLElement;
   colorPickerInner?: HTMLDivElement;
@@ -74,9 +73,11 @@ export class ColorPicker extends (HTMLElementSSR()!) {
   colorPickerInputContainerSelectItem?: HTMLElement;
   colorPickerPaletteSelect: boolean;
   colorPickerPanelDotInner?: HTMLElement;
+
   static get observedAttributes(): string[] {
     return ['disabled', 'value', 'sheet'];
   }
+
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, colorPickerCss);
@@ -98,127 +99,70 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     this.colorPickerPaletteSelect = false;
     this.createContext();
   }
+
   get value(): string {
     return this.context?.value.getter() || '';
   }
+
   set value(value: string) {
     this.setAttribute('value', value);
     this.updateColorValue(value);
   }
+
   get sheet(): string {
     return getStringAttribute(this, 'sheet');
   }
+
   set sheet(value: string) {
     setStringAttribute(this, 'sheet', value);
   }
+
   handlerExternalCss = (): void => {
     syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
   };
+
   createContext = (): void => {
+    const mk = <T>(initial: T): Signal<T> => {
+      const [getter, setter] = signal<T>(initial);
+      return { getter, setter };
+    };
     this.context = {
-      value: this.createColorValueSignal(),
-      disabled: this.createColorDisabled(),
-      hue: this.createColorHue(),
-      saturation: this.createColorSaturation(),
-      lightness: this.createColorLightness(),
-      transparency: this.createColorTransparency(),
+      value: mk(''),
+      disabled: mk(true),
+      hue: mk(0),
+      saturation: mk(100),
+      lightness: mk(100),
+      transparency: mk(80),
     };
   };
-  /**
-   * @description:  0 - 360 色相 hue
-   * @param {*} Signal
-   * @return {*}
-   */
-  createColorHue = (): Signal<number> => {
-    const [getter, setter] = createSignal<number>(0, {
-      subscriber: [
-        this.updateColorPickerPanelSaturationBackground,
-        this.updateColorPickerPanelSliderHueProgressPercent,
-        this.updateColorPickerPanelSliderAlphaProgressWrap,
-        this.updateColorPickerPanelSliderAlphaProgressDot,
-        this.updateColorPickerColorBlockInnerBackground,
-        this.updateColorPickerPanelSliderHueProgressDot,
-      ],
-    });
-    return { getter, setter };
-  };
-  /**
-   * @description: 0 - 100 饱和度 x
-   * @param {*} Signal
-   * @return {*}
-   */
-  createColorSaturation = (): Signal<number> => {
-    const [getter, setter] = createSignal(100, {
-      subscriber: [
-        this.updateColorPickerPanelSliderAlphaProgressWrap,
-        this.updateColorPickerPanelSliderAlphaProgressDot,
-        this.updateColorPickerColorBlockInnerBackground,
-      ],
-    });
-    return { getter, setter };
-  };
-  /**
-   * @description: 0 - 100 亮度 y
-   * @param {*} Signal
-   * @return {*}
-   */
-  createColorLightness = (): Signal<number> => {
-    const [getter, setter] = createSignal(100, {
-      subscriber: [
-        this.updateColorPickerPanelSliderAlphaProgressWrap,
-        this.updateColorPickerPanelSliderAlphaProgressDot,
-        this.updateColorPickerColorBlockInnerBackground,
-      ],
-    });
-    return { getter, setter };
-  };
-  /**
-   * @description:  0 - 100 透明度
-   * @param {*} Signal
-   * @return {*}
-   */
-  createColorTransparency = (): Signal<number> => {
-    const [getter, setter] = createSignal(80, {
-      subscriber: [
-        this.updateColorPickerPanelSliderAlphaProgressPercent,
-        this.updateColorPickerColorBlockInnerBackground,
-        this.updateColorPickerPanelSliderAlphaProgressDot,
-      ],
-    });
-    return { getter, setter };
-  };
-  createColorDisabled = (): Signal<boolean> => {
-    const [getter, setter] = createSignal(true, { subscriber: [] });
-    return { getter, setter };
-  };
-  createColorValueSignal = (): Signal<string> => {
-    const [getter, setter] = createSignal('', {
-      subscriber: [this.updateColorValue],
-    });
-    return { getter, setter };
-  };
+
   generateHue2rgb = (): string => {
     const { hue } = this.context;
     const { r, g, b } = hsv2rgb(hue.getter(), 100, 100);
     return `rgb(${r}, ${g}, ${b})`;
   };
+
   generateHsv2Rgb = (): string => {
     const { r, g, b } = this.generateHsv2Rgba();
     return `rgb(${r}, ${g}, ${b})`;
   };
+
   generateHsv2Rgba = (): RGBA => {
     const { hue, saturation, lightness, transparency } = this.context;
     const { r, g, b } = hsv2rgb(hue.getter(), saturation.getter(), lightness.getter());
     return { r, g, b, a: transparency.getter() / 100 };
   };
+
   generateHsv2RgbaValue = (): string => {
     const { r, g, b, a } = this.generateHsv2Rgba();
     return `rgb(${r}, ${g}, ${b}, ${a})`;
   };
+
   generateColorPickerProgress = (): string => {
     const { r, g, b } = this.generateHsv2Rgba();
     return `linear-gradient(to right, rgba(255, 0, 4, 0), rgba(${r}, ${g}, ${b}, 1))`;
   };
+
   updateColorValue = (value: string): void => {
     if (value !== this.context?.value.getter()) {
       const hex = HEX_COLOR_REGEX.exec(value); // #1677FF #fff #FFF
@@ -250,34 +194,77 @@ export class ColorPicker extends (HTMLElementSSR()!) {
       this.context?.value.setter(value);
     }
   };
+
   updateColorPickerPanelSliderHueProgressPercent = (hue: number): void => {
     this.colorPickerPanelSliderHue?.setAttribute('percent', `${hue / 360}`);
   };
+
   updateColorPickerPanelSliderAlphaProgressPercent = (alpha: number): void => {
     this.colorPickerPanelSliderAlpha?.setAttribute('percent', `${alpha / 100}`);
   };
+
   updateColorPickerPanelSliderAlphaProgressWrap = (): void => {
     this.colorPickerPanelSliderAlpha?.style.setProperty(
       '--ran-progress-wrap-background',
       this.generateColorPickerProgress(),
     );
   };
+
   updateColorPickerPanelSliderAlphaProgressDot = (): void => {
     this.colorPickerPanelSliderAlpha?.style.setProperty('--ran-progress-dot-background', this.generateHsv2RgbaValue());
   };
+
   updateColorPickerPanelSliderHueProgressDot = (): void => {
     this.colorPickerPanelSliderHue?.style.setProperty('--ran-progress-dot-background', this.generateHue2rgb());
   };
+
   updateColorPickerColorBlockInnerBackground = (): void => {
     this.colorPickerColorBlockInner?.style.setProperty('background', this.generateHsv2RgbaValue());
   };
+
   updateColorPickerPanelSaturationBackground = (): void => {
     this.colorPickerPanelSaturation?.style.setProperty('background-color', this.generateHue2rgb());
   };
+
+  setupEffects = (): void => {
+    this._effectDisposers.push(
+      // Hue-dependent colors: saturation panel bg and hue slider dot
+      createEffect(() => {
+        const hueRgb = this.generateHue2rgb();
+        this.colorPickerPanelSaturation?.style.setProperty('background-color', hueRgb);
+        this.colorPickerPanelSliderHue?.style.setProperty('--ran-progress-dot-background', hueRgb);
+      }),
+      // Hue slider percent position
+      createEffect(() => {
+        const pct = `${this.context.hue.getter() / 360}`;
+        this.colorPickerPanelSliderHue?.setAttribute('percent', pct);
+      }),
+      // Alpha track gradient (hue + saturation + lightness)
+      createEffect(() => {
+        const gradient = this.generateColorPickerProgress();
+        this.colorPickerPanelSliderAlpha?.style.setProperty('--ran-progress-wrap-background', gradient);
+      }),
+      // Alpha dot color, alpha percent, color block bg (all four signals)
+      createEffect(() => {
+        const rgba = this.generateHsv2RgbaValue();
+        const pct = `${this.context.transparency.getter() / 100}`;
+        this.colorPickerPanelSliderAlpha?.style.setProperty('--ran-progress-dot-background', rgba);
+        this.colorPickerPanelSliderAlpha?.setAttribute('percent', pct);
+        this.colorPickerColorBlockInner?.style.setProperty('background', rgba);
+      }),
+    );
+  };
+
+  disposeEffects = (): void => {
+    for (const dispose of this._effectDisposers) dispose();
+    this._effectDisposers = [];
+  };
+
   clickStop = (e: MouseEvent): void => {
     e.stopPropagation();
     e.preventDefault();
   };
+
   changeColorPalettePositionByContext = (): void => {
     window.requestAnimationFrame(() => {
       this.updateColorValue(this.value);
@@ -290,6 +277,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
       this.colorPickerPanelDot?.style.setProperty('left', `${limitX - BOT_WIDTH}px`);
     });
   };
+
   changeColorPalettePosition = (offsetX: number, offsetY: number): void => {
     if (!this.colorPickerPanelPalette) return;
     if (!this.context?.lightness.getter || !this.context?.saturation.getter) return;
@@ -303,10 +291,12 @@ export class ColorPicker extends (HTMLElementSSR()!) {
       this.colorPickerPanelDot?.style.setProperty('left', `${offsetX - BOT_WIDTH}px`);
     });
   };
+
   clickColorPalette = (e: MouseEvent): void => {
     const { offsetX, offsetY } = e;
     this.changeColorPalettePosition(offsetX, offsetY);
   };
+
   createColorPickerProgress = (): void => {
     this.colorPickerPanelSliderHue = View('r-progress')
       .class('ran-color-picker-slider-container-group-hue')
@@ -349,12 +339,15 @@ export class ColorPicker extends (HTMLElementSSR()!) {
       .children(this.colorPickerPanelSliderGroup, this.colorPickerColorBlock)
       .build() as HTMLDivElement;
   };
+
   changeColorPickerHue = (e: Event): void => {
     this.context.hue.setter((e as CustomEvent).detail.value * HUE);
   };
+
   changeColorPickerAlpha = (e: Event): void => {
     this.context.transparency.setter((e as CustomEvent).detail.value * 100);
   };
+
   createColorPickerSelect = (): void => {
     this.colorPickerPanelSaturation = Div().class('ran-color-picker-saturation').build() as HTMLElement;
     this.updateColorPickerPanelSaturationBackground();
@@ -368,7 +361,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
       .children(this.colorPickerPanelDotInner)
       .build() as HTMLDivElement;
 
-    document.body.addEventListener('mousemove', this.mouseMoveColorPickerPalette);
+    this._events.on(document.body, 'mousemove', this.mouseMoveColorPickerPalette);
 
     this.colorPickerPanelPalette = Div()
       .class('ran-color-picker-palette')
@@ -381,6 +374,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
       .children(Div().class('ran-color-picker-select').children(this.colorPickerPanelPalette))
       .build() as HTMLElement;
   };
+
   createColorPickerInput = (): void => {
     const colorPickerInputContainerId = `${performance.now()}`.replace('.', '');
 
@@ -415,6 +409,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
       )
       .build() as HTMLElement;
   };
+
   openColorPicker = (): void => {
     if (this.colorPickerInner) return;
     this.createColorPickerProgress();
@@ -431,6 +426,7 @@ export class ColorPicker extends (HTMLElementSSR()!) {
     this.popoverContent.appendChild(this.colorPickerInner);
     this.changeColorPalettePositionByContext();
   };
+
   mouseMoveColorPickerPalette = (e: MouseEvent): void => {
     if (!this.colorPickerPanelPalette || !this.colorPickerPaletteSelect) return;
     const { pageX, pageY } = e;
@@ -448,41 +444,35 @@ export class ColorPicker extends (HTMLElementSSR()!) {
       this.colorPickerPanelDot?.style.setProperty('left', `${dotX}px`);
     });
   };
+
   mouseDownColorPickerPalette = (e: MouseEvent): void => {
     e.stopPropagation();
     e.preventDefault();
     this.colorPickerPaletteSelect = true;
   };
+
   mouseUpColorPickerPalette = (): void => {
     this.colorPickerPaletteSelect = false;
   };
+
   connectedCallback(): void {
     this.handlerExternalCss();
     this.setAttribute('class', 'ran-colorpicker');
-    this.popoverBlock.addEventListener('click', this.openColorPicker);
+    this._events.on(this.popoverBlock, 'click', this.openColorPicker);
+    this.setupEffects();
   }
+
   disconnectedCallback(): void {
-    this.popoverBlock.removeEventListener('click', this.openColorPicker);
-    this.colorPickerPanelDot?.removeEventListener('mousedown', this.mouseDownColorPickerPalette);
-    document.body.removeEventListener('mousemove', this.mouseMoveColorPickerPalette);
-    this.colorPickerPanelDot?.removeEventListener('mouseup', this.mouseUpColorPickerPalette);
-    this.colorPickerPanelPalette?.removeEventListener('mousedown', this.clickColorPalette);
+    this._events.abort();
+    this.disposeEffects();
   }
-  attributeChangedCallback(n: string, o: string, v: string): void {
-    if (o !== v) {
-      if (n === 'value') {
-        this.updateColorValue(v);
-      }
-      if (n === 'sheet') {
-        this.handlerExternalCss();
-      }
-    }
+
+  attributeChangedCallback(name: string, old: string, next: string): void {
+    if (old === next) return;
+    if (name === 'value') this.updateColorValue(next);
+    if (name === 'sheet') this.handlerExternalCss();
   }
 }
 
-function Custom() {
-  defineSSR('r-colorpicker', ColorPicker as unknown as new () => HTMLElement);
-  return ColorPicker;
-}
-
-export default Custom();
+defineSSR('r-colorpicker', ColorPicker as unknown as new () => HTMLElement);
+export default ColorPicker;

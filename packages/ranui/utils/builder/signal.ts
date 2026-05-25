@@ -39,54 +39,6 @@ let currentSources: Set<Set<() => void>> | null = null;
  */
 let pendingBatch: Set<() => void> | null = null;
 
-// ── createSignal (legacy API) ─────────────────────────────────────────────────
-
-/**
- * @deprecated Use `signal()` + `createEffect()` instead.
- * Kept for backward compatibility with components that register manual subscribers.
- */
-export const createSignal = <T = unknown>(
-  value: T,
-  options?: {
-    subscriber?: Function[];
-    equals?: boolean | ((prev: T | undefined, next: T) => boolean);
-  },
-): [() => T, (newValue: T) => void] => {
-  const state = {
-    value,
-    subscribers: new Set<Function>(),
-    comparator: options?.equals,
-  };
-
-  if (Array.isArray(options?.subscriber)) {
-    options!.subscriber!.forEach((fn) => {
-      if (typeof fn === 'function') state.subscribers.add(fn);
-    });
-  }
-
-  const getter = (): T => state.value;
-
-  const notify = (next: T) => {
-    state.value = next;
-    state.subscribers.forEach((sub) => sub(next));
-  };
-
-  const setter = (newValue: T): void => {
-    const { comparator } = state;
-    if (comparator instanceof Function) {
-      if (!comparator(state.value, newValue)) notify(newValue);
-    } else if (comparator === true) {
-      // always skip
-    } else if (comparator === false) {
-      if (state.value !== newValue) notify(newValue);
-    } else {
-      if (state.value !== newValue) notify(newValue);
-    }
-  };
-
-  return [getter, setter];
-};
-
 // ── signal ────────────────────────────────────────────────────────────────────
 
 export type Getter<T> = () => T;
