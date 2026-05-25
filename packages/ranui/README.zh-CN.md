@@ -253,6 +253,7 @@ const html = renderToString(button);
 - `attributeChangedCallback` 首行使用 `if (old === next) return;` 避免重复同步。
 - 使用 `defineSSR('r-name', Component)` 注册组件，而不是直接调用 `customElements.define`。
 - 在 `index.ts` 中同时添加类型导出和副作用导入；在 `vite.config.ts`、`package.json` 中补齐独立入口与导出。
+- 在 `connectedCallback` 中使用 `@/utils/builder` 导出的 `EventManager` 管理生命周期事件；在 `disconnectedCallback` 中调用 `manager.abort()` 一次清理所有监听器，不要逐个调用 `removeEventListener`。
 
 ## 贡献
 

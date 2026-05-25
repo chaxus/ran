@@ -1,4 +1,5 @@
 export { isSSR } from './env';
+export { EventManager } from './events';
 export { escapeHtml, escapeHtmlAttribute } from './escape';
 export { type MockNode, matchSelector, collectMatches } from './selectors';
 export { DocumentFragmentMock, HTMLElementMock, ShadowRootMock } from './mocks';

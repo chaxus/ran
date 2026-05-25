@@ -93,13 +93,70 @@ Main();
 | `tabIndex(value)`                                     | Set `tabindex`.                                                               |
 | `label(value)` / `labelledBy(id)` / `describedBy(id)` | Set common ARIA naming attributes.                                            |
 | `ariaHidden(hidden?)`                                 | Set `aria-hidden`.                                                            |
-| `on(type, listener, options?)`                        | Attach an event listener.                                                     |
+| `on(type, listener, options?)`                        | Attach a permanent build-time listener — tied to the element's lifetime. Use in the constructor for internal shadow DOM elements. |
+| `listen(manager, type, handler, options?)`            | Register a lifecycle-managed listener into an `EventManager`. Use in `connectedCallback` when the listener must be removed on disconnect. |
 | `children(...items)` / `replaceChildren(...items)`    | Append or replace child builders, elements, strings, arrays, or empty values. |
 | `text(value)`                                         | Set text content.                                                             |
 | `ref(holder)`                                         | Capture the built element in a `createRef()` holder.                          |
 | `shadow(options?)`                                    | Attach a Shadow Root and return a `ShadowBuilder`.                            |
 | `build()`                                             | Return the `HTMLElement` or SSR mock.                                         |
 | `serialize()`                                         | Serialize the element for SSR or browser diagnostics.                         |
+
+## Event Management (`builder/events.ts`)
+
+`EventManager` centralises lifecycle-bound event listeners using `AbortController`. Call `abort()` once in `disconnectedCallback` instead of tracking every `removeEventListener` call individually.
+
+```ts
+import { EventManager } from '@/utils/builder';
+```
+
+### Usage in a Web Component
+
+```ts
+class MyComponent extends RanElement {
+  private _events = new EventManager();
+
+  connectedCallback(): void {
+    this._events
+      .on(this._input, 'input', this.handleInput)
+      .on(this._slot, 'slotchange', this.handleSlotChange)
+      .on(this, 'click', this.handleClick, { capture: true });
+  }
+
+  disconnectedCallback(): void {
+    this._events.abort(); // removes every listener registered above
+  }
+}
+```
+
+You can also wire into an `EventManager` directly from a builder chain (useful when building elements inside `connectedCallback`):
+
+```ts
+connectedCallback(): void {
+  this._events = new EventManager();
+  this._icon = View('r-icon')
+    .class('ran-icon')
+    .listen(this._events, 'click', this.handleIconClick)
+    .build();
+}
+```
+
+### API Reference
+
+| API | Description |
+| :-- | :---------- |
+| `new EventManager()` | Create a fresh manager backed by an internal `AbortController`. |
+| `manager.on(target, type, handler, options?)` | Register a listener on `target`; automatically scoped to the manager's signal. Fluent — returns `this`. |
+| `manager.abort()` | Remove all registered listeners and reset the internal `AbortController` so the manager can be reused on the next `connectedCallback`. |
+| `manager.signal` | The underlying `AbortSignal` — pass directly to `addEventListener` when bypassing the fluent API. |
+
+### When to use `.on()` vs `.listen()`
+
+| | `ElementBuilder.on()` | `EventManager.on()` / `.listen()` |
+|---|---|---|
+| **Registered at** | Build time (constructor) | Connect time (`connectedCallback`) |
+| **Removed when** | Element is garbage-collected | `manager.abort()` is called |
+| **Use for** | Permanent internal shadow DOM listeners | Any listener that must be cleaned up on disconnect |
 
 ## SSR & Declarative Shadow DOM
 

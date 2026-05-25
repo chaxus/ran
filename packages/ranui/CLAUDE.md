@@ -104,6 +104,7 @@ export default MyComponent;
 - Always include `sheet` in `observedAttributes` and wire `syncSheetAttribute`
 - Always call `defineSSR` (not bare `customElements.define`)
 - Export both named (`export class`) and default (`export default`)
+- Use `EventManager` from `@/utils/builder` for lifecycle-bound listeners in `connectedCallback`; call `manager.abort()` in `disconnectedCallback` — never manually call `removeEventListener` per listener
 
 ### Registering in the package
 
@@ -175,7 +176,8 @@ Section(), Article(), Nav(), Header(), Footer(), Main()
 .cssVar(name, value)                      // sets --name
 .aria(key, value)    .role(value)         .tabIndex(n)
 .label(v)            .ariaHidden(bool)
-.on(type, listener, options)
+.on(type, listener, options)              // permanent, build-time
+.listen(manager, type, handler, options)  // lifecycle-managed via EventManager
 .children(...items)  .text(value)         .ref(holder)
 .build(): T          // returns the DOM element
 ```
@@ -192,6 +194,42 @@ const header = Div()
   )
   .build();
 ```
+
+### `utils/builder/events.ts` — EventManager
+
+Centralises lifecycle-bound listeners with `AbortController`. Import from `@/utils/builder`.
+
+```typescript
+import { EventManager } from '@/utils/builder';
+
+// In component class:
+private _events = new EventManager();
+
+connectedCallback(): void {
+  this._events
+    .on(this._input, 'input', this.handleInput)
+    .on(this._slot, 'slotchange', this.handleSlotChange)
+    .on(this, 'click', this.handleClick, { capture: true });
+}
+
+disconnectedCallback(): void {
+  this._events.abort(); // removes every listener, resets for next connect
+}
+```
+
+| API | Description |
+|-----|-------------|
+| `manager.on(target, type, handler, options?)` | Register listener scoped to manager's signal. Fluent — returns `this`. |
+| `manager.abort()` | Remove all listeners, reset `AbortController`. Safe to call multiple times. |
+| `manager.signal` | The raw `AbortSignal` — pass to `addEventListener` directly when needed. |
+
+**When to use `.on()` vs `.listen()` vs `EventManager.on()`:**
+
+| | `ElementBuilder.on()` | `EventManager.on()` / `.listen()` |
+|---|---|---|
+| Registered at | Build time (constructor) | Connect time (`connectedCallback`) |
+| Removed when | Element GC'd | `manager.abort()` |
+| Use for | Permanent internal shadow DOM listeners | Any listener needing cleanup on disconnect |
 
 ### `utils/ssr-registry.ts`
 
@@ -505,7 +543,7 @@ Each component gets its own `dist/{name}.js` ES module. The barrel `dist/index.j
 | Shadow DOM re-attached on reconnect | Use `ensureShadowRoot` (WeakMap cache), never bare `attachShadow` |
 | Styles not applied in SSR | Use `RanElement` base class and `defineSSR` |
 | `adoptedStyleSheets` frozen in jsdom | `syncSheetAttribute` / `adoptSheetText` already handles `<style>` fallback |
-| Event listeners leak on disconnect | Remove in `disconnectedCallback`; listener reference must be same function instance |
+| Event listeners leak on disconnect | Use `EventManager` — call `manager.abort()` in `disconnectedCallback`; never track individual `removeEventListener` calls |
 | `import '@/components/mycomp'` not in index.ts | Components won't register for users who `import 'ranui'` |
 | Missing `card` entry in vite.config.ts | `dist/card.js` won't be built; per-component imports break |
 | Factory function wrapper pattern (`function Custom() { defineSSR(...); return Class; } export default Custom()`) | Anti-pattern — `defineSSR` handles registration; use `defineSSR(...); export default ClassName;` directly |

@@ -253,6 +253,7 @@ When adding or maintaining components, follow the package conventions:
 - Guard `attributeChangedCallback` with `if (old === next) return;`.
 - Register components with `defineSSR('r-name', Component)`, not direct `customElements.define`.
 - Add both type exports and side-effect imports in `index.ts`; also add standalone entries in `vite.config.ts` and `package.json`.
+- Use `EventManager` from `@/utils/builder` for lifecycle-bound listeners in `connectedCallback`; call `manager.abort()` in `disconnectedCallback` instead of tracking individual `removeEventListener` calls.
 
 ## Contributing
 

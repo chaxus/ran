@@ -1,5 +1,6 @@
 import { isSSR } from './env';
 import { DocumentFragmentMock, HTMLElementMock, ShadowRootMock } from './mocks';
+import type { EventManager } from './events';
 
 export interface Ref<T extends HTMLElement = HTMLElement> {
   current: T | null;
@@ -105,12 +106,31 @@ export class ElementBuilder<T extends HTMLElement = HTMLElement> {
     return this.aria('hidden', String(hidden));
   }
 
+  /**
+   * Permanent build-time listener — tied to the element's lifetime.
+   * Use for internal shadow DOM elements created in the constructor.
+   */
   on<K extends keyof HTMLElementEventMap>(
     type: K,
     listener: (this: T, ev: HTMLElementEventMap[K]) => any,
     options?: boolean | AddEventListenerOptions,
   ): this {
     this.el.addEventListener(type, listener as EventListener, options);
+    return this;
+  }
+
+  /**
+   * Lifecycle-managed listener — registered into an EventManager.
+   * Use in connectedCallback when building elements that need cleanup on disconnect.
+   * Call manager.abort() in disconnectedCallback to remove all listeners at once.
+   */
+  listen<K extends keyof HTMLElementEventMap>(
+    manager: EventManager,
+    type: K,
+    handler: (this: T, ev: HTMLElementEventMap[K]) => any,
+    options?: Omit<AddEventListenerOptions, 'signal'>,
+  ): this {
+    manager.on(this.el, type, handler as EventListener, options);
     return this;
   }
 
