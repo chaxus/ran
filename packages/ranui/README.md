@@ -225,20 +225,24 @@ window.message?.success({
 
 ### Reactive Primitives
 
-`signal`, `createEffect`, and `computed` ship alongside the DOM builder for building reactive page sections without a framework. The design mirrors SwiftUI's `@Observable`: reading a signal inside an effect automatically tracks the dependency; writing it notifies only the affected effects.
+`signal`, `createEffect`, `computed`, and `batch` ship alongside the DOM builder for building reactive page sections without a framework. The design mirrors SwiftUI's `@Observable` with two correctness improvements from Solid.js: effects automatically clean up stale subscriptions before each re-run, and `batch()` coalesces multiple signal writes into a single effect flush — the same guarantee SwiftUI gives for free.
 
 ```ts
-import { signal, createEffect, computed, EventManager, Div, ButtonBuilder } from 'ranui/builder';
+import { signal, createEffect, computed, batch, EventManager, Div, ButtonBuilder } from 'ranui/builder';
 
 function initCounter(container: HTMLElement) {
   const [count, setCount] = signal(0);
+  const [step,  setStep]  = signal(1);
   const doubled = computed(() => count() * 2);
   const scope = new EventManager();
 
   const label = Div().build();
   const view = Div().children(
     label,
-    ButtonBuilder().text('+').listen(scope, 'click', () => setCount(n => n + 1)),
+    ButtonBuilder().text('+').listen(scope, 'click', () => setCount(n => n + step())),
+    ButtonBuilder().text('reset').listen(scope, 'click', () =>
+      batch(() => { setCount(0); setStep(1); }), // two writes → one effect flush
+    ),
   ).build();
 
   const dispose = createEffect(() => {

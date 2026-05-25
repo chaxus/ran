@@ -225,20 +225,24 @@ window.message?.success({
 
 ### 响应式原语
 
-`signal`、`createEffect`、`computed` 与 DOM builder 一起提供，用于在无框架依赖的情况下构建响应式页面区块。设计思路与 SwiftUI 的 `@Observable` 一致：在 effect 内读取 signal 会自动追踪依赖，写入时只通知受影响的 effect。
+`signal`、`createEffect`、`computed`、`batch` 与 DOM builder 一起提供，用于在无框架依赖的情况下构建响应式页面区块。设计参考 SwiftUI 的 `@Observable`，并借鉴 Solid.js 补充了两个正确性改进：effect 重新执行前自动清理过期订阅；`batch()` 将多次 signal 写入合并为一次 effect flush，与 SwiftUI 自动合并变更的行为对齐。
 
 ```ts
-import { signal, createEffect, computed, EventManager, Div, ButtonBuilder } from 'ranui/builder';
+import { signal, createEffect, computed, batch, EventManager, Div, ButtonBuilder } from 'ranui/builder';
 
 function initCounter(container: HTMLElement) {
   const [count, setCount] = signal(0);
+  const [step,  setStep]  = signal(1);
   const doubled = computed(() => count() * 2);
   const scope = new EventManager();
 
   const label = Div().build();
   const view = Div().children(
     label,
-    ButtonBuilder().text('+').listen(scope, 'click', () => setCount(n => n + 1)),
+    ButtonBuilder().text('+').listen(scope, 'click', () => setCount(n => n + step())),
+    ButtonBuilder().text('重置').listen(scope, 'click', () =>
+      batch(() => { setCount(0); setStep(1); }), // 两次写入 → 一次 flush
+    ),
   ).build();
 
   const dispose = createEffect(() => {

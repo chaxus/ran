@@ -236,34 +236,39 @@ disconnectedCallback(): void {
 Fine-grained reactivity (SwiftUI `@Observable` / Solid.js signals). Auto-tracks dependencies — no manual subscription.
 
 ```typescript
-import { signal, createEffect, computed } from '@/utils/builder';
+import { signal, createEffect, computed, batch } from '@/utils/builder';
 
 // signal — reactive value, [getter, setter] tuple
 const [count, setCount] = signal(0);
 const [name, setName]   = signal('Jane', { equals: (a, b) => a === b });
 
-count()           // read — auto-subscribes inside createEffect / computed
-setCount(1)       // write — notifies dependents
-setCount(n => n + 1)  // updater form
+count()              // read — auto-subscribes inside createEffect / computed
+setCount(1)          // write — notifies dependents; skips if unchanged
+setCount(n => n + 1) // updater form
 
 // createEffect — runs immediately, re-runs when read signals change
+// Before each re-run: removes itself from signals it no longer reads (stale-subscription cleanup)
+// On dispose: removes from all signals (GC-safe)
 const dispose = createEffect(() => {
   el.textContent = `${count()}`;
   return () => { /* optional cleanup before re-run */ };
 });
-dispose(); // stop tracking
+dispose(); // stop tracking, remove all subscriptions
 
 // computed — derived read-only signal
 const doubled = computed(() => count() * 2);
-doubled() // always up-to-date, recalculates lazily
+
+// batch — coalesce multiple writes into one effect flush
+batch(() => { setCount(0); setName('reset'); }); // effects run once, not twice
 ```
 
 **SwiftUI parallel:**
 | JS | SwiftUI |
 |----|---------|
 | `signal()` | `@State` / `@Observable` property |
-| `createEffect()` | `body` (auto-tracks reads, re-computes on writes) |
+| `createEffect()` | `body` (auto-tracks; cleans stale deps before re-run) |
 | `computed()` | Swift computed property |
+| `batch()` | Automatic mutation coalescing in same event handler |
 
 **Page section pattern** (signal + EventManager together):
 ```typescript

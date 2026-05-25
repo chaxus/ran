@@ -163,15 +163,16 @@ connectedCallback(): void {
 细粒度响应式，设计参考 SwiftUI `@Observable` 和 Solid.js signals。在 `createEffect` 或 `computed` 中读取 signal 会自动建立依赖关系，无需手动订阅。
 
 ```ts
-import { signal, createEffect, computed } from '@/utils/builder';
+import { signal, createEffect, computed, batch } from '@/utils/builder';
 ```
 
-**核心模型 — 与 SwiftUI 的 `View = f(State)` 同一思路：**
+**核心模型 — 与 SwiftUI 的 `View = f(State)` 同一思路，并借鉴 Solid.js 补充两个正确性改进：**
 
 ```
 signal()       ≈  @State / @Observable 属性
-createEffect() ≈  SwiftUI body（自动追踪读取，写入时重新执行）
+createEffect() ≈  SwiftUI body（自动追踪；重新执行前清理过期订阅）
 computed()     ≈  Swift computed property（派生值，自动缓存）
+batch()        ≈  SwiftUI 的自动合并变更（同一事件处理器内只 flush 一次）
 ```
 
 ### 用法
@@ -200,8 +201,9 @@ return () => { disposeA(); disposeB(); };
 | `getter()` | 读取当前值，自动订阅当前 effect。 |
 | `setter(value)` | 写入新值，通知所有依赖 effect。值未变时跳过（`Object.is`）。 |
 | `setter(fn)` | 更新函数形式：接收上一个值，返回新值。 |
-| `createEffect(fn)` | 立即执行 `fn`，其依赖的 signal 变化时自动重新执行。返回 `dispose` 函数。`fn` 可返回 cleanup 函数，在每次重新执行前和 dispose 时调用。 |
+| `createEffect(fn)` | 立即执行 `fn`，其依赖的 signal 变化时自动重新执行。每次重新执行前会将自身从不再读取的 signal 中移除（过期订阅清理）。返回 `dispose` 函数，调用后停止追踪并从所有 signal 移除引用（GC 友好）。`fn` 可返回 cleanup 函数，在每次重新执行前和 dispose 时调用。 |
 | `computed(fn)` | 派生只读 signal，依赖变化时惰性重新计算。返回 getter。 |
+| `batch(fn)` | 将多次 signal 写入合并为一次原子更新。所有依赖 effect 在 `fn` 返回后统一 flush（去重）。嵌套 `batch()` 调用会被最外层吸收。 |
 
 ### `signal` 选项
 
@@ -212,10 +214,11 @@ return () => { disposeA(); disposeB(); };
 ### 页面开发模式
 
 ```ts
-import { signal, createEffect, computed, EventManager, Div, ButtonBuilder } from '@/utils/builder';
+import { signal, createEffect, computed, batch, EventManager, Div, ButtonBuilder } from '@/utils/builder';
 
 function initCounter(container: HTMLElement) {
   const [count, setCount] = signal(0);
+  const [step,  setStep]  = signal(1);
   const doubled = computed(() => count() * 2);
   const scope = new EventManager();
 
@@ -224,8 +227,11 @@ function initCounter(container: HTMLElement) {
     .class('counter')
     .children(
       label,
-      ButtonBuilder().text('+').listen(scope, 'click', () => setCount(n => n + 1)),
-      ButtonBuilder().text('-').listen(scope, 'click', () => setCount(n => n - 1)),
+      ButtonBuilder().text('+').listen(scope, 'click', () => setCount(n => n + step())),
+      ButtonBuilder().text('重置').listen(scope, 'click', () =>
+        // 两次写入 → 一次 effect flush
+        batch(() => { setCount(0); setStep(1); }),
+      ),
     )
     .build();
 

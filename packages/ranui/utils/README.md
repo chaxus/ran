@@ -163,15 +163,16 @@ connectedCallback(): void {
 Fine-grained reactivity inspired by SwiftUI's `@Observable` and Solid.js signals. Reading a signal inside `createEffect` or `computed` automatically establishes a dependency — no manual subscription needed.
 
 ```ts
-import { signal, createEffect, computed } from '@/utils/builder';
+import { signal, createEffect, computed, batch } from '@/utils/builder';
 ```
 
-**Core model — the same idea as SwiftUI's `View = f(State)`:**
+**Core model — same idea as SwiftUI's `View = f(State)`, with two correctness improvements borrowed from Solid.js:**
 
 ```
 signal()       ≈  @State / @Observable property
-createEffect() ≈  SwiftUI body  (auto-tracks reads, re-runs on writes)
+createEffect() ≈  SwiftUI body  (auto-tracks reads; cleans stale deps before each re-run)
 computed()     ≈  Swift computed property  (derived, cached)
+batch()        ≈  SwiftUI's automatic mutation coalescing  (one flush per event handler)
 ```
 
 ### Usage
@@ -200,8 +201,9 @@ return () => { disposeA(); disposeB(); };
 | `getter()` | Read the current value. Auto-subscribes the running effect. |
 | `setter(value)` | Write a new value; notifies all dependent effects. Skips update when value is unchanged (`Object.is`). |
 | `setter(fn)` | Updater form: receives previous value, returns next. |
-| `createEffect(fn)` | Run `fn` immediately; re-run whenever any signal read inside it changes. Returns a `dispose` function. `fn` may return a cleanup function called before each re-run and on dispose. |
+| `createEffect(fn)` | Run `fn` immediately; re-run whenever any signal read inside it changes. Before each re-run, removes itself from signals it no longer reads (stale-subscription cleanup). Returns a `dispose` function that stops tracking and removes all subscriptions for GC. `fn` may return a cleanup called before each re-run and on dispose. |
 | `computed(fn)` | Derived read-only signal. Recomputes when its dependencies change. Returns a getter. |
+| `batch(fn)` | Run multiple signal writes as one atomic update. All dependent effects are deferred and flushed once (deduplicated) after `fn` returns. Nested `batch()` calls are absorbed by the outermost one. |
 
 ### `signal` options
 
@@ -212,10 +214,11 @@ return () => { disposeA(); disposeB(); };
 ### Page development pattern
 
 ```ts
-import { signal, createEffect, computed, EventManager, Div, ButtonBuilder } from '@/utils/builder';
+import { signal, createEffect, computed, batch, EventManager, Div, ButtonBuilder } from '@/utils/builder';
 
 function initCounter(container: HTMLElement) {
   const [count, setCount] = signal(0);
+  const [step,  setStep]  = signal(1);
   const doubled = computed(() => count() * 2);
   const scope = new EventManager();
 
@@ -224,8 +227,11 @@ function initCounter(container: HTMLElement) {
     .class('counter')
     .children(
       label,
-      ButtonBuilder().text('+').listen(scope, 'click', () => setCount(n => n + 1)),
-      ButtonBuilder().text('-').listen(scope, 'click', () => setCount(n => n - 1)),
+      ButtonBuilder().text('+').listen(scope, 'click', () => setCount(n => n + step())),
+      ButtonBuilder().text('reset').listen(scope, 'click', () =>
+        // Two writes → one effect flush
+        batch(() => { setCount(0); setStep(1); }),
+      ),
     )
     .build();
 

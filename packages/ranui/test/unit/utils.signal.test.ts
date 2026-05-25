@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { signal, createEffect, computed } from '@/utils/builder';
+import { signal, createEffect, computed, batch } from '@/utils/builder';
 
 describe('signal', () => {
   it('returns the initial value', () => {
@@ -100,6 +100,85 @@ describe('createEffect', () => {
     const dispose = createEffect(() => cleanup);
     dispose();
     expect(cleanup).toHaveBeenCalledOnce();
+  });
+});
+
+describe('createEffect — stale subscription cleanup', () => {
+  it('stops receiving updates from signals no longer read (conditional dependency)', () => {
+    const [show, setShow] = signal(true);
+    const [count, setCount] = signal(0);
+    const fn = vi.fn();
+
+    createEffect(() => {
+      if (show()) count(); // count is only read when show is true
+      fn();
+    });
+
+    expect(fn).toHaveBeenCalledTimes(1);
+
+    setCount(1); // show=true, count read → effect runs
+    expect(fn).toHaveBeenCalledTimes(2);
+
+    setShow(false); // effect re-runs, no longer reads count
+    expect(fn).toHaveBeenCalledTimes(3);
+
+    setCount(2); // count changed but effect no longer subscribes → must NOT run
+    expect(fn).toHaveBeenCalledTimes(3);
+  });
+
+  it('removes subscriptions on dispose so signals do not hold a reference', () => {
+    const [count, setCount] = signal(0);
+    const fn = vi.fn();
+
+    const dispose = createEffect(() => { count(); fn(); });
+    dispose();
+
+    setCount(1);
+    expect(fn).toHaveBeenCalledTimes(1); // only the initial run, nothing after dispose
+  });
+});
+
+describe('batch', () => {
+  it('flushes effects once after all writes', () => {
+    const [a, setA] = signal(0);
+    const [b, setB] = signal(0);
+    const fn = vi.fn();
+
+    createEffect(() => { a(); b(); fn(); });
+    expect(fn).toHaveBeenCalledTimes(1);
+
+    batch(() => {
+      setA(1); // normally triggers effect
+      setB(1); // normally triggers effect again
+    });
+
+    // Only one flush after both writes, not two
+    expect(fn).toHaveBeenCalledTimes(2);
+  });
+
+  it('deduplicates — same effect triggered by two signals runs only once', () => {
+    const [x, setX] = signal(0);
+    const [y, setY] = signal(0);
+    const fn = vi.fn();
+
+    createEffect(() => { x(); y(); fn(); });
+
+    batch(() => { setX(1); setY(1); });
+    expect(fn).toHaveBeenCalledTimes(2); // 1 initial + 1 batched
+  });
+
+  it('nested batch calls are absorbed by the outer batch', () => {
+    const [a, setA] = signal(0);
+    const fn = vi.fn();
+
+    createEffect(() => { a(); fn(); });
+
+    batch(() => {
+      batch(() => { setA(1); }); // inner batch — absorbed
+      setA(2);
+    }); // outer flush
+
+    expect(fn).toHaveBeenCalledTimes(2); // 1 initial + 1 flush
   });
 });
 
