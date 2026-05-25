@@ -38,7 +38,7 @@ Every component follows this exact structure:
 
 ```typescript
 import componentCss from './index.less?inline';
-import { Div, Slot } from '@/utils/builder';
+import { Div, EventManager, Slot } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
   ensureShadowRoot, ensureShadowElement,
@@ -47,6 +47,7 @@ import {
 import { defineSSR } from '@/utils/ssr-registry';
 
 export class MyComponent extends RanElement {
+  _events = new EventManager();
   _shadowDom!: ShadowRoot;
   _myEl!: HTMLElement;          // store refs to queried elements
 
@@ -75,21 +76,34 @@ export class MyComponent extends RanElement {
   get sheet(): string { return getStringAttribute(this, 'sheet'); }
   set sheet(v: string) { setStringAttribute(this, 'sheet', v); }
 
+  handlerExternalCss = (): void => {
+    syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
+  };
+
   // ── Lifecycle ──────────────────────────────────────────────────────────
   connectedCallback(): void {
-    this._syncMyAttr();
-    syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
+    this.handlerExternalCss();
+    this._events.on(this._myEl, 'click', this._handleClick);
+    // add other lifecycle-bound listeners here via _events.on(...)
+  }
+
+  disconnectedCallback(): void {
+    this._events.abort();  // removes ALL listeners registered via _events
   }
 
   attributeChangedCallback(name: string, old: string, next: string): void {
     if (old === next) return;                     // ALWAYS guard here
     if (name === 'my-attr') this._syncMyAttr();
-    if (name === 'sheet') syncSheetAttribute(this, this._shadowDom, name, old, next);
+    if (name === 'sheet') this.handlerExternalCss();
   }
 
   private _syncMyAttr(): void {
     this._myEl.textContent = this.getAttribute('my-attr') ?? '';
   }
+
+  private _handleClick = (): void => {
+    // handle click
+  };
 }
 
 defineSSR('r-mycomp', MyComponent as unknown as new () => HTMLElement);
