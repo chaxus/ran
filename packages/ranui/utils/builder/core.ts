@@ -134,6 +134,27 @@ export class ElementBuilder<T extends HTMLElement = HTMLElement> {
     return this;
   }
 
+  /**
+   * Delegated listener — the built element acts as the parent container.
+   * Fires handler only when the event originates from a descendant matching selector.
+   * Registered into an EventManager so it is cleaned up with manager.abort().
+   *
+   *   Div().class('list')
+   *     .children(...)
+   *     .delegate(scope, '.item', 'click', (ev, item) => handleItem(item))
+   *     .build();
+   */
+  delegate<K extends keyof HTMLElementEventMap>(
+    manager: EventManager,
+    selector: string,
+    type: K,
+    handler: (ev: HTMLElementEventMap[K], target: Element) => void,
+    options?: Omit<AddEventListenerOptions, 'signal'>,
+  ): this {
+    manager.delegate(this.el, selector, type, handler, options);
+    return this;
+  }
+
   children(
     ...items: (
       | HTMLElement

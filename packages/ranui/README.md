@@ -223,6 +223,35 @@ window.message?.success({
 
 `getContainer` must return an `HTMLElement`; when omitted, messages mount to `document.body`.
 
+### Reactive Primitives
+
+`signal`, `createEffect`, and `computed` ship alongside the DOM builder for building reactive page sections without a framework. The design mirrors SwiftUI's `@Observable`: reading a signal inside an effect automatically tracks the dependency; writing it notifies only the affected effects.
+
+```ts
+import { signal, createEffect, computed, EventManager, Div, ButtonBuilder } from 'ranui/builder';
+
+function initCounter(container: HTMLElement) {
+  const [count, setCount] = signal(0);
+  const doubled = computed(() => count() * 2);
+  const scope = new EventManager();
+
+  const label = Div().build();
+  const view = Div().children(
+    label,
+    ButtonBuilder().text('+').listen(scope, 'click', () => setCount(n => n + 1)),
+  ).build();
+
+  const dispose = createEffect(() => {
+    label.textContent = `${count()} (×2 = ${doubled()})`;
+  });
+
+  container.appendChild(view);
+  return () => { dispose(); scope.abort(); }; // teardown
+}
+```
+
+See [Utility Documentation](./utils/README.md) for the full API.
+
 ### SSR & Builder
 
 For SSR or declarative UI construction, RanUI internally uses `builder`, the SSR registry, and Declarative Shadow DOM. Components reuse existing Shadow Roots through `ensureShadowRoot` and keep initialization idempotent through `ensureShadowElement`.

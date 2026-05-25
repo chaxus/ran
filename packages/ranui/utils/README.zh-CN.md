@@ -158,6 +158,86 @@ connectedCallback(): void {
 | **移除时机** | 元素被 GC 时自动释放 | 调用 `manager.abort()` 时 |
 | **适用场景** | shadow DOM 内部静态监听器 | 需要随 disconnect 清理的任何监听器 |
 
+## 响应式原语 (`builder/signal.ts`)
+
+细粒度响应式，设计参考 SwiftUI `@Observable` 和 Solid.js signals。在 `createEffect` 或 `computed` 中读取 signal 会自动建立依赖关系，无需手动订阅。
+
+```ts
+import { signal, createEffect, computed } from '@/utils/builder';
+```
+
+**核心模型 — 与 SwiftUI 的 `View = f(State)` 同一思路：**
+
+```
+signal()       ≈  @State / @Observable 属性
+createEffect() ≈  SwiftUI body（自动追踪读取，写入时重新执行）
+computed()     ≈  Swift computed property（派生值，自动缓存）
+```
+
+### 用法
+
+```ts
+const [count, setCount] = signal(0);
+const doubled = computed(() => count() * 2);
+
+// DOM 结构只构建一次
+const countEl = Span().build();
+const doubleEl = Span().build();
+
+// Effect 驱动 DOM 更新 — signal 变化时自动重新执行
+const disposeA = createEffect(() => { countEl.textContent = `${count()}`; });
+const disposeB = createEffect(() => { doubleEl.textContent = `${doubled()}`; });
+
+// 区块销毁时清理
+return () => { disposeA(); disposeB(); };
+```
+
+### API 参考
+
+| API | 说明 |
+| :-- | :--- |
+| `signal(initial, options?)` | 创建响应式值，返回 `[getter, setter]`。在 effect 内读取 getter 会自动追踪依赖。 |
+| `getter()` | 读取当前值，自动订阅当前 effect。 |
+| `setter(value)` | 写入新值，通知所有依赖 effect。值未变时跳过（`Object.is`）。 |
+| `setter(fn)` | 更新函数形式：接收上一个值，返回新值。 |
+| `createEffect(fn)` | 立即执行 `fn`，其依赖的 signal 变化时自动重新执行。返回 `dispose` 函数。`fn` 可返回 cleanup 函数，在每次重新执行前和 dispose 时调用。 |
+| `computed(fn)` | 派生只读 signal，依赖变化时惰性重新计算。返回 getter。 |
+
+### `signal` 选项
+
+| 选项 | 类型 | 说明 |
+| :--- | :--- | :--- |
+| `equals` | `(prev: T, next: T) => boolean` | 自定义相等判断，返回 `true` 时跳过更新。默认使用 `Object.is`。 |
+
+### 页面开发模式
+
+```ts
+import { signal, createEffect, computed, EventManager, Div, ButtonBuilder } from '@/utils/builder';
+
+function initCounter(container: HTMLElement) {
+  const [count, setCount] = signal(0);
+  const doubled = computed(() => count() * 2);
+  const scope = new EventManager();
+
+  const label = Div().class('label').build();
+  const view = Div()
+    .class('counter')
+    .children(
+      label,
+      ButtonBuilder().text('+').listen(scope, 'click', () => setCount(n => n + 1)),
+      ButtonBuilder().text('-').listen(scope, 'click', () => setCount(n => n - 1)),
+    )
+    .build();
+
+  const dispose = createEffect(() => {
+    label.textContent = `${count()} (×2 = ${doubled()})`;
+  });
+
+  container.appendChild(view);
+  return () => { dispose(); scope.abort(); };
+}
+```
+
 ## SSR 与 Declarative Shadow DOM
 
 RanUI 通过 `HTMLElementMock`、`defineSSR` 和 Declarative Shadow DOM 序列化支持 SSR。

@@ -223,6 +223,35 @@ window.message?.success({
 
 `getContainer` 需要返回 `HTMLElement`；未传时默认挂载到 `document.body`。
 
+### 响应式原语
+
+`signal`、`createEffect`、`computed` 与 DOM builder 一起提供，用于在无框架依赖的情况下构建响应式页面区块。设计思路与 SwiftUI 的 `@Observable` 一致：在 effect 内读取 signal 会自动追踪依赖，写入时只通知受影响的 effect。
+
+```ts
+import { signal, createEffect, computed, EventManager, Div, ButtonBuilder } from 'ranui/builder';
+
+function initCounter(container: HTMLElement) {
+  const [count, setCount] = signal(0);
+  const doubled = computed(() => count() * 2);
+  const scope = new EventManager();
+
+  const label = Div().build();
+  const view = Div().children(
+    label,
+    ButtonBuilder().text('+').listen(scope, 'click', () => setCount(n => n + 1)),
+  ).build();
+
+  const dispose = createEffect(() => {
+    label.textContent = `${count()} (×2 = ${doubled()})`;
+  });
+
+  container.appendChild(view);
+  return () => { dispose(); scope.abort(); }; // 区块销毁时清理
+}
+```
+
+详细 API 请参考 [工具文档](./utils/README.zh-CN.md)。
+
 ### SSR & Builder (推荐)
 
 对于需要服务端渲染 (SSR) 或更声明式构建 UI 的场景，RanUI 内部使用 `builder`、SSR registry 与 Declarative Shadow DOM。组件会通过 `ensureShadowRoot` 复用已有 Shadow Root，并通过 `ensureShadowElement` 保持初始化幂等。

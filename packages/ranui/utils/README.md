@@ -158,6 +158,86 @@ connectedCallback(): void {
 | **Removed when** | Element is garbage-collected | `manager.abort()` is called |
 | **Use for** | Permanent internal shadow DOM listeners | Any listener that must be cleaned up on disconnect |
 
+## Reactive Primitives (`builder/signal.ts`)
+
+Fine-grained reactivity inspired by SwiftUI's `@Observable` and Solid.js signals. Reading a signal inside `createEffect` or `computed` automatically establishes a dependency — no manual subscription needed.
+
+```ts
+import { signal, createEffect, computed } from '@/utils/builder';
+```
+
+**Core model — the same idea as SwiftUI's `View = f(State)`:**
+
+```
+signal()       ≈  @State / @Observable property
+createEffect() ≈  SwiftUI body  (auto-tracks reads, re-runs on writes)
+computed()     ≈  Swift computed property  (derived, cached)
+```
+
+### Usage
+
+```ts
+const [count, setCount] = signal(0);
+const doubled = computed(() => count() * 2);
+
+// Build DOM once
+const countEl = Span().build();
+const doubleEl = Span().build();
+
+// Effects drive updates — re-run automatically when signals change
+const disposeA = createEffect(() => { countEl.textContent = `${count()}`; });
+const disposeB = createEffect(() => { doubleEl.textContent = `${doubled()}`; });
+
+// Tear down when section is removed
+return () => { disposeA(); disposeB(); };
+```
+
+### API Reference
+
+| API | Description |
+| :-- | :---------- |
+| `signal(initial, options?)` | Create a reactive value. Returns `[getter, setter]`. Reading the getter inside an effect auto-tracks the dependency. |
+| `getter()` | Read the current value. Auto-subscribes the running effect. |
+| `setter(value)` | Write a new value; notifies all dependent effects. Skips update when value is unchanged (`Object.is`). |
+| `setter(fn)` | Updater form: receives previous value, returns next. |
+| `createEffect(fn)` | Run `fn` immediately; re-run whenever any signal read inside it changes. Returns a `dispose` function. `fn` may return a cleanup function called before each re-run and on dispose. |
+| `computed(fn)` | Derived read-only signal. Recomputes when its dependencies change. Returns a getter. |
+
+### `signal` options
+
+| Option | Type | Description |
+| :----- | :--- | :---------- |
+| `equals` | `(prev: T, next: T) => boolean` | Custom equality check. Return `true` to skip update. Defaults to `Object.is`. |
+
+### Page development pattern
+
+```ts
+import { signal, createEffect, computed, EventManager, Div, ButtonBuilder } from '@/utils/builder';
+
+function initCounter(container: HTMLElement) {
+  const [count, setCount] = signal(0);
+  const doubled = computed(() => count() * 2);
+  const scope = new EventManager();
+
+  const label = Div().class('label').build();
+  const view = Div()
+    .class('counter')
+    .children(
+      label,
+      ButtonBuilder().text('+').listen(scope, 'click', () => setCount(n => n + 1)),
+      ButtonBuilder().text('-').listen(scope, 'click', () => setCount(n => n - 1)),
+    )
+    .build();
+
+  const dispose = createEffect(() => {
+    label.textContent = `${count()} (×2 = ${doubled()})`;
+  });
+
+  container.appendChild(view);
+  return () => { dispose(); scope.abort(); };
+}
+```
+
 ## SSR & Declarative Shadow DOM
 
 RanUI supports SSR through `HTMLElementMock`, `defineSSR`, and Declarative Shadow DOM serialization.

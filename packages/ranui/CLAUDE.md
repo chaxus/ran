@@ -231,6 +231,57 @@ disconnectedCallback(): void {
 | Removed when | Element GC'd | `manager.abort()` |
 | Use for | Permanent internal shadow DOM listeners | Any listener needing cleanup on disconnect |
 
+### `utils/builder/signal.ts` — Reactive primitives
+
+Fine-grained reactivity (SwiftUI `@Observable` / Solid.js signals). Auto-tracks dependencies — no manual subscription.
+
+```typescript
+import { signal, createEffect, computed } from '@/utils/builder';
+
+// signal — reactive value, [getter, setter] tuple
+const [count, setCount] = signal(0);
+const [name, setName]   = signal('Jane', { equals: (a, b) => a === b });
+
+count()           // read — auto-subscribes inside createEffect / computed
+setCount(1)       // write — notifies dependents
+setCount(n => n + 1)  // updater form
+
+// createEffect — runs immediately, re-runs when read signals change
+const dispose = createEffect(() => {
+  el.textContent = `${count()}`;
+  return () => { /* optional cleanup before re-run */ };
+});
+dispose(); // stop tracking
+
+// computed — derived read-only signal
+const doubled = computed(() => count() * 2);
+doubled() // always up-to-date, recalculates lazily
+```
+
+**SwiftUI parallel:**
+| JS | SwiftUI |
+|----|---------|
+| `signal()` | `@State` / `@Observable` property |
+| `createEffect()` | `body` (auto-tracks reads, re-computes on writes) |
+| `computed()` | Swift computed property |
+
+**Page section pattern** (signal + EventManager together):
+```typescript
+function initSection(container: HTMLElement) {
+  const [value, setValue] = signal('');
+  const scope = new EventManager();
+
+  const output = Span().build();
+  const input = InputBuilder()
+    .listen(scope, 'input', (e) => setValue((e.target as HTMLInputElement).value))
+    .build();
+
+  const dispose = createEffect(() => { output.textContent = value(); });
+  container.append(input, output);
+  return () => { dispose(); scope.abort(); };
+}
+```
+
 ### `utils/ssr-registry.ts`
 
 ```typescript
