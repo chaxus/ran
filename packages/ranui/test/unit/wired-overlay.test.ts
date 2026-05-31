@@ -1,5 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { activateWiredBorders, deactivateWiredBorders } from '../../theme-packs/wired-overlay';
+import {
+  activateWiredBorders,
+  deactivateWiredBorders,
+  syncWiredBordersForThemePack,
+} from '../../theme-packs/wired-overlay';
 
 describe('wired overlay', () => {
   beforeEach(() => {
@@ -38,6 +42,60 @@ describe('wired overlay', () => {
     expect(document.querySelectorAll('[data-ran-wired-overlay] path').length).toBeGreaterThan(0);
 
     document.documentElement.removeAttribute('data-ran-theme-pack');
+    await Promise.resolve();
+
+    expect(document.querySelectorAll('[data-ran-wired-overlay] path')).toHaveLength(0);
+  });
+
+  it('syncs activation from the root theme pack attribute', () => {
+    document.documentElement.setAttribute('data-ran-theme-pack', 'wired');
+
+    const card = document.createElement('r-card');
+    vi.spyOn(card, 'getBoundingClientRect').mockReturnValue({
+      x: 10,
+      y: 10,
+      top: 10,
+      right: 150,
+      bottom: 90,
+      left: 10,
+      width: 140,
+      height: 80,
+      toJSON: () => ({}),
+    });
+    document.body.appendChild(card);
+
+    syncWiredBordersForThemePack();
+
+    expect(document.querySelectorAll('[data-ran-wired-overlay] path').length).toBeGreaterThan(0);
+
+    document.documentElement.setAttribute('data-ran-theme-pack', 'paper');
+    syncWiredBordersForThemePack();
+
+    expect(document.querySelectorAll('[data-ran-wired-overlay] path')).toHaveLength(0);
+  });
+
+  it('removes drawn borders when a tracked element becomes wired-skip', async () => {
+    document.documentElement.setAttribute('data-ran-theme-pack', 'wired');
+
+    const input = document.createElement('r-input');
+    vi.spyOn(input, 'getBoundingClientRect').mockReturnValue({
+      x: 20,
+      y: 20,
+      top: 20,
+      right: 220,
+      bottom: 56,
+      left: 20,
+      width: 200,
+      height: 36,
+      toJSON: () => ({}),
+    });
+    document.body.appendChild(input);
+
+    activateWiredBorders();
+
+    expect(document.querySelectorAll('[data-ran-wired-overlay] path').length).toBeGreaterThan(0);
+
+    input.setAttribute('data-wired-skip', '');
     await Promise.resolve();
 
     expect(document.querySelectorAll('[data-ran-wired-overlay] path')).toHaveLength(0);

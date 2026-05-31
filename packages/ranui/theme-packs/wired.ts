@@ -1,10 +1,10 @@
 import './wired.less';
-import { activateWiredBorders } from './wired-overlay';
+import { syncWiredBordersForThemePack } from './wired-overlay';
 
 if (typeof document !== 'undefined') {
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', activateWiredBorders, { once: true });
+    document.addEventListener('DOMContentLoaded', () => syncWiredBordersForThemePack(), { once: true });
   } else {
-    activateWiredBorders();
+    syncWiredBordersForThemePack();
   }
 }

@@ -151,6 +151,10 @@ describe('theme pack source contracts', () => {
     const overlayTs = read('theme-packs/wired-overlay.ts');
     const packageJson = read('package.json');
     expect(wiredTs).toContain('./wired-overlay');
+    expect(wiredTs).toContain('syncWiredBordersForThemePack');
+    expect(overlayTs).toContain('syncWiredBordersForThemePack');
+    expect(overlayTs).toContain("getPropertyValue('--ran-skin-outline-color')");
+    expect(overlayTs).toContain("'data-wired-skip'");
     expect(overlayTs).toContain("from 'roughjs'");
     expect(packageJson).toContain('"roughjs"');
   });

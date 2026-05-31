@@ -44,6 +44,12 @@ let mo: MutationObserver | null = null;
 
 const generator = rough.generator();
 
+function getStrokeColor(el: Element): string {
+  if (typeof window === 'undefined') return STROKE_COLOR;
+  const value = window.getComputedStyle(el).getPropertyValue('--ran-skin-outline-color').trim();
+  return value || STROKE_COLOR;
+}
+
 // ── Layer ──────────────────────────────────────────────────────────────────
 
 function ensureLayer(): SVGSVGElement {
@@ -83,7 +89,7 @@ function drawElement(el: Element): void {
   const drawable = generator.rectangle(x, y, w, h, {
     roughness: ROUGHNESS,
     strokeWidth: STROKE_WIDTH,
-    stroke: STROKE_COLOR,
+    stroke: getStrokeColor(el),
     fill: 'none',
     seed: getSeed(el),
     bowing: BOWING,
@@ -168,7 +174,7 @@ export function activateWiredBorders(): void {
     childList: true,
     subtree: true,
     attributes: true,
-    attributeFilter: ['data-ran-theme-pack'],
+    attributeFilter: ['data-ran-theme-pack', 'data-wired-skip'],
   });
 
   window.addEventListener('resize', schedule, { passive: true });
@@ -188,4 +194,13 @@ export function deactivateWiredBorders(): void {
   tracked.clear();
   groups.clear();
   active = false;
+}
+
+export function syncWiredBordersForThemePack(target: Element = document.documentElement): void {
+  if (typeof window === 'undefined') return;
+  if (target.getAttribute('data-ran-theme-pack') === 'wired') {
+    activateWiredBorders();
+  } else {
+    deactivateWiredBorders();
+  }
 }

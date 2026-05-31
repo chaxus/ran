@@ -15,7 +15,7 @@ import '../theme-packs/wired';
 import '../theme-packs/paper';
 import '../theme-packs/neo-brutalism';
 import '../theme-packs/transitions';
-import { activateWiredBorders, deactivateWiredBorders } from '../theme-packs/wired-overlay';
+import { syncWiredBordersForThemePack } from '../theme-packs/wired-overlay';
 
 const PACK_NAMES: RanThemePackName[] = [
   'default',
@@ -59,7 +59,7 @@ initTheme();
 
 // Activate wired borders if wired pack is already stored from a previous visit
 if (typeof localStorage !== 'undefined' && localStorage.getItem('ran-theme-pack') === 'wired') {
-  activateWiredBorders();
+  syncWiredBordersForThemePack();
 }
 
 registerIcons({
@@ -85,10 +85,6 @@ import('../index').then(() => {
   packSelect?.addEventListener('change', (e: Event) => {
     const value = (e as CustomEvent<{ value: string }>).detail.value;
     setThemePack((value === 'default' ? 'default' : value) as RanThemePackName);
-    if (value === 'wired') {
-      activateWiredBorders();
-    } else {
-      deactivateWiredBorders();
-    }
+    syncWiredBordersForThemePack();
   });
 });
