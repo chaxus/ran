@@ -33,6 +33,7 @@
               getPopupContainerId="nav-portal"
               data-wired-skip
             >
+              <r-option value="system">System</r-option>
               <r-option value="light">Light</r-option>
               <r-option value="dark">Dark</r-option>
             </r-select>
@@ -76,15 +77,15 @@
 
           <div class="hero-preview" aria-label="Live component preview">
             <r-card class="preview-surface">
-              <r-button type="primary" data-wired-skip>Deploy interface</r-button>
-              <r-input placeholder="Search components" data-wired-skip></r-input>
-              <r-select placeholder="Theme pack" data-wired-skip>
+              <r-button type="primary">Deploy interface</r-button>
+              <r-input placeholder="Search components"></r-input>
+              <r-select placeholder="Theme pack">
                 <r-option value="default">Default</r-option>
                 <r-option value="paper">Paper</r-option>
                 <r-option value="neo">Neo Brutalism</r-option>
               </r-select>
-              <r-progress percent="72" data-wired-skip></r-progress>
-              <r-checkbox checked data-wired-skip>Typed custom elements</r-checkbox>
+              <r-progress percent="72"></r-progress>
+              <r-checkbox checked>Typed custom elements</r-checkbox>
             </r-card>
             <div class="code-panel" aria-label="Install and import examples">
               <code>pnpm add ranui</code>
@@ -199,9 +200,9 @@
               >
                 <span slot="extra" class="component-meta">visual</span>
                 <div class="demo-row">
-                  <r-icon name="home" size="28" color="#2563eb"></r-icon>
+                  <r-icon name="home" size="28" color="var(--accent)"></r-icon>
                   <r-icon name="setting" size="28"></r-icon>
-                  <r-icon name="loading" size="28" spin color="#0f766e"></r-icon>
+                  <r-icon name="loading" size="28" spin color="var(--accent-2)"></r-icon>
                 </div>
                 <a slot="footer" class="component-link" href="#docs-icon">View notes</a>
               </r-card>

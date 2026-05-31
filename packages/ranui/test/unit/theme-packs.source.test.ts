@@ -66,6 +66,24 @@ describe('theme pack source contracts', () => {
     }
   });
 
+  it('defines page-level semantic tokens for every theme pack', () => {
+    for (const pack of ALL_PACKS) {
+      const source = read(`theme-packs/${pack}.less`);
+      for (const token of [
+        '--ran-page-background',
+        '--ran-page-text',
+        '--ran-page-text-muted',
+        '--ran-surface-background',
+        '--ran-surface-background-muted',
+        '--ran-surface-border',
+        '--ran-accent-color',
+        '--ran-accent-color-secondary',
+      ]) {
+        expect(source, `${pack} missing ${token}`).toContain(token);
+      }
+    }
+  });
+
   it('scopes pixel-retro css with skin pixel tokens', () => {
     const source = read('theme-packs/pixel-retro.less');
     expect(source).toContain('--ran-skin-hard-shadow');

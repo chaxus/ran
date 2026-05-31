@@ -1,109 +1,14 @@
 :root {
-  --page: #f6f8fb;
-  --surface: #ffffff;
-  --surface-2: #eef3f8;
-  --ink: #0f172a;
-  --muted: #607086;
-  --line: #d8e1ec;
-  --accent: #2563eb;
-  --accent-2: #0f766e;
-  --warn: #f59e0b;
-  --shadow: 0 18px 50px rgba(15, 23, 42, 0.12);
-}
-
-:root[data-ran-theme='dark'] {
-  --page: #0b1120;
-  --surface: #111827;
-  --surface-2: #1f2937;
-  --ink: #e5edf8;
-  --muted: #9aa8bc;
-  --line: #2f3b4f;
-  --accent: #60a5fa;
-  --accent-2: #2dd4bf;
-  --warn: #fbbf24;
-  --shadow: 0 18px 50px rgba(0, 0, 0, 0.36);
-}
-
-:root[data-ran-theme-pack='pixel-retro'] {
-  --page: #10172a;
-  --surface: #17213b;
-  --surface-2: #22335d;
-  --ink: #f8fbff;
-  --muted: #a7b4d2;
-  --line: #355088;
-  --accent: #f43f5e;
-  --accent-2: #22d3ee;
-}
-
-:root[data-ran-theme-pack='windows-98'] {
-  --page: #c0c0c0;
-  --surface: #d4d0c8;
-  --surface-2: #ece9d8;
-  --ink: #000000;
-  --muted: #303030;
-  --line: #808080;
-  --accent: #000080;
-  --accent-2: #008080;
-  --shadow: 2px 2px 0 #808080;
-}
-
-:root[data-ran-theme-pack='windows-xp'] {
-  --page: #e8eefb;
-  --surface: #ffffff;
-  --surface-2: #eef5ff;
-  --ink: #0a1929;
-  --muted: #2d4a6e;
-  --line: #a9c5ee;
-  --accent: #1e5fa8;
-  --accent-2: #3b8f2f;
-  --shadow: 2px 2px 4px rgba(0, 0, 100, 0.15);
-}
-
-:root[data-ran-theme-pack='system-6'] {
-  --page: #ffffff;
-  --surface: #ffffff;
-  --surface-2: #eeeeee;
-  --ink: #000000;
-  --muted: #333333;
-  --line: #000000;
-  --accent: #000000;
-  --accent-2: #555555;
-  --shadow: 2px 2px 0 #000000;
-}
-
-:root[data-ran-theme-pack='wired'] {
-  --page: #f8faf7;
-  --surface: #ffffff;
-  --surface-2: #eff5ef;
-  --ink: #111827;
-  --muted: #4b5563;
-  --line: #c8d8ca;
-  --accent: #166534;
-  --accent-2: #0f766e;
-  --shadow: 2px 3px 0 rgba(0, 0, 0, 0.12);
-}
-
-:root[data-ran-theme-pack='paper'] {
-  --page: #fbfaf3;
-  --surface: #fffdf5;
-  --surface-2: #f2efe1;
-  --ink: #202124;
-  --muted: #6f6756;
-  --line: #d8cfb7;
-  --accent: #7c5c21;
-  --accent-2: #0f766e;
-}
-
-:root[data-ran-theme-pack='neo-brutalism'] {
-  --page: #f5f5f5;
-  --surface: #ffffff;
-  --surface-2: #eeeeee;
-  --ink: #000000;
-  --muted: #3f3f46;
-  --line: #000000;
-  --accent: #ff4d00;
-  --accent-2: #2563eb;
-  --shadow: 6px 6px 0 #000000;
+  --page: var(--ran-page-background);
+  --surface: var(--ran-surface-background);
+  --surface-2: var(--ran-surface-background-muted);
+  --ink: var(--ran-page-text);
+  --muted: var(--ran-page-text-muted);
+  --line: var(--ran-surface-border);
+  --accent: var(--ran-accent-color);
+  --accent-2: var(--ran-accent-color-secondary);
+  --warn: var(--ran-warning-color);
+  --shadow: var(--ran-surface-shadow);
 }
 
 *,
@@ -121,14 +26,7 @@ body {
   min-width: 320px;
   color: var(--ink);
   background: var(--page);
-  font-family:
-    Inter,
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    sans-serif;
+  font-family: var(--ran-font-family);
   font-size: 15px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -142,6 +40,16 @@ a {
 
 .site-shell {
   min-height: 100vh;
+}
+
+r-card,
+r-section {
+  --ran-color-primary: var(--accent);
+  --ran-color-text: var(--ink);
+  --ran-color-text-secondary: var(--muted);
+  --ran-color-border: var(--line);
+  --ran-color-bg-elevated: var(--surface);
+  --ran-color-bg-muted: var(--surface-2);
 }
 
 .site-nav {
@@ -366,6 +274,8 @@ r-card.preview-surface r-select {
 r-section {
   --ran-section-background: var(--surface);
   --ran-section-border-color: var(--line);
+  --ran-section-heading-color: var(--ink);
+  --ran-section-subtitle-color: var(--muted);
   --ran-section-shadow: var(--shadow);
 }
 
@@ -389,6 +299,8 @@ r-section {
 .style-grid r-card {
   --ran-card-background: var(--surface-2);
   --ran-color-border: var(--line);
+  --ran-card-title-color: var(--ink);
+  --ran-card-description-color: var(--muted);
 }
 
 .code-grid r-card,
@@ -422,6 +334,8 @@ r-section {
 .gallery-group r-card {
   --ran-card-background: var(--surface-2);
   --ran-color-border: var(--line);
+  --ran-card-title-color: var(--ink);
+  --ran-card-description-color: var(--muted);
   --ran-card-min-height: 148px;
   scroll-margin-top: 96px;
 }
@@ -644,6 +558,8 @@ r-card[data-pack-preview='neo-brutalism'] .theme-swatch span:last-child {
 .docs-grid r-card {
   --ran-card-background: var(--surface-2);
   --ran-color-border: var(--line);
+  --ran-card-title-color: var(--ink);
+  --ran-card-description-color: var(--muted);
   scroll-margin-top: 112px;
 }
 

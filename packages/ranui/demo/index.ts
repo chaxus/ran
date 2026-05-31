@@ -6,6 +6,7 @@ import setting from '@/assets/icons/setting.svg?raw';
 import { registerIcons } from '@/components/icon/index';
 import { initTheme, setTheme, setThemePack } from '@/utils/theme';
 import type { RanThemeName, RanThemePackName } from '@/utils/theme';
+import '../style';
 import '../theme-packs/pixel-retro';
 import '../theme-packs/windows-98';
 import '../theme-packs/windows-xp';
@@ -15,6 +16,44 @@ import '../theme-packs/paper';
 import '../theme-packs/neo-brutalism';
 import '../theme-packs/transitions';
 import { activateWiredBorders, deactivateWiredBorders } from '../theme-packs/wired-overlay';
+
+const PACK_NAMES: RanThemePackName[] = [
+  'default',
+  'pixel-retro',
+  'windows-98',
+  'windows-xp',
+  'system-6',
+  'wired',
+  'paper',
+  'neo-brutalism',
+];
+
+type DemoSelectElement = HTMLElement & {
+  selectOptionElement?: (el: Element | null, dispatch?: boolean) => void;
+};
+
+const getStoredTheme = (): RanThemeName => {
+  const value = typeof localStorage === 'undefined' ? '' : localStorage.getItem('ran-theme');
+  return value === 'dark' || value === 'system' ? value : 'light';
+};
+
+const getStoredPack = (): RanThemePackName => {
+  const value = typeof localStorage === 'undefined' ? '' : localStorage.getItem('ran-theme-pack');
+  return PACK_NAMES.includes(value as RanThemePackName) ? (value as RanThemePackName) : 'default';
+};
+
+const selectStoredOption = (select: DemoSelectElement | null, value: string): void => {
+  if (!select) return;
+  const option = Array.from(select.querySelectorAll('r-option')).find((item) => item.getAttribute('value') === value);
+  select.setAttribute('defaultValue', value);
+  select.setAttribute('value', value);
+  select.selectOptionElement?.(option || null, false);
+};
+
+const syncThemeControls = (themeSelect: DemoSelectElement | null, packSelect: DemoSelectElement | null): void => {
+  selectStoredOption(themeSelect, getStoredTheme());
+  selectStoredOption(packSelect, getStoredPack());
+};
 
 initTheme();
 
@@ -33,16 +72,14 @@ registerIcons({
 
 // Register icons first, then bootstrap all components/examples.
 import('../index').then(() => {
-  const themeSelect = document.getElementById('theme-select') as HTMLElement & {
-    selectOptionElement?: (el: Element | null, dispatch?: boolean) => void;
-  };
-  const packSelect = document.getElementById('pack-select') as HTMLElement & {
-    selectOptionElement?: (el: Element | null, dispatch?: boolean) => void;
-  };
+  const themeSelect = document.getElementById('theme-select') as DemoSelectElement | null;
+  const packSelect = document.getElementById('pack-select') as DemoSelectElement | null;
+
+  syncThemeControls(themeSelect, packSelect);
 
   themeSelect?.addEventListener('change', (e: Event) => {
     const value = (e as CustomEvent<{ value: string }>).detail.value as RanThemeName;
-    setTheme(value === 'dark' ? 'dark' : 'light');
+    setTheme(value);
   });
 
   packSelect?.addEventListener('change', (e: Event) => {
