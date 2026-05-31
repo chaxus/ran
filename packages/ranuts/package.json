@@ -29,16 +29,6 @@
       "types": "./dist/src/utils/index.d.ts",
       "import": "./dist/src/utils/index.js",
       "require": "./dist/umd/utils/utils.umd.cjs"
-    },
-    "./wasm": {
-      "types": "./dist/src/wasm/index.d.ts",
-      "import": "./dist/src/wasm/index.js",
-      "require": "./dist/umd/wasm/wasm.umd.cjs"
-    },
-    "./ml": {
-      "types": "./dist/src/ml/index.d.ts",
-      "import": "./dist/src/ml/index.js",
-      "require": "./dist/umd/ml/ml.umd.cjs"
     }
   },
   "repository": {
@@ -76,7 +66,6 @@
   "dependencies": {
     "earcut": "^3.0.2",
     "jschardet": "^3.1.4",
-    "magic-string": "^0.30.21",
-    "tesseract.js": "^7.0.0"
+    "magic-string": "^0.30.21"
   }
 }

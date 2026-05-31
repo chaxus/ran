@@ -39,17 +39,13 @@ npm install ranuts@latest --save
 Import as required. You can select:
 
 - ranuts/utils
-- ranuts/wasm
 - ranuts/node
 - ranuts/react
-- ranuts/ml
 
 ```js
 import { str2Xml } from 'ranuts/utils';
 import { readFile } from 'ranuts/node';
-import { word } from 'ranuts/wasm';
 import { reactify } from 'ranuts/react';
-import { ocr } from 'ranuts/ml';
 ```
 
 Full import,(Full import will introduce many unnecessary modules. You are advised to import them on demand)

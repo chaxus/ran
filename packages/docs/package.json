@@ -32,7 +32,6 @@
   "dependencies": {
     "@khmyznikov/pwa-install": "^0.6.3",
     "@lit/react": "^1.0.8",
-    "@ranui/preview": "0.0.1-alpha-3",
     "lit": "^3.3.2",
     "ranui": "workspace:*",
     "ranuts": "workspace:*",

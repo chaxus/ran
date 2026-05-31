@@ -216,7 +216,6 @@ const themeCnConfig: DefaultTheme.Config = {
             collapsed: true,
             items: [
               { text: 'TOTP - 一次性密码生成器', link: '/cn/src/ranuts/utils/totp.md' },
-              { text: 'OCR - 文字识别', link: '/cn/src/ranuts/utils/ocr.md' },
               { text: 'createSignal - 创建响应式信号', link: '/cn/src/ranuts/utils/create_signal.md' },
               { text: 'setMime - 设置 MIME 类型', link: '/cn/src/ranuts/utils/set_mime.md' },
               { text: 'getExtensions - 获取扩展名', link: '/cn/src/ranuts/utils/get_extensions.md' },

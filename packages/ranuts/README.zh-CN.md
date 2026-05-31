@@ -41,17 +41,13 @@ npm install ranuts@latest --save
 按需导入。您可以选择：
 
 - ranuts/utils
-- ranuts/wasm
 - ranuts/node
 - ranuts/react
-- ranuts/ml
 
 ```js
 import { str2Xml } from 'ranuts/utils';
 import { readFile } from 'ranuts/node';
-import { word } from 'ranuts/wasm';
 import { reactify } from 'ranuts/react';
-import { ocr } from 'ranuts/ml';
 ```
 
 全量导入（全量导入会引入许多不必要的模块，建议按需导入）

@@ -97,16 +97,6 @@ export const umdUtil: BuildOptions = {
     formats: ['umd'],
   },
 };
-export const umdWasm: BuildOptions = {
-  ...chunkOptimization,
-  outDir: resolve(__dirname, 'dist/umd/wasm'),
-  lib: {
-    entry: resolve(__dirname, 'src/wasm/index.ts'),
-    name: 'ranuts_wasm',
-    fileName: 'wasm',
-    formats: ['umd'],
-  },
-};
 
 export const umdNode: BuildOptions = {
   ...chunkOptimization,
@@ -118,25 +108,13 @@ export const umdNode: BuildOptions = {
     formats: ['umd'],
   },
 };
-export const umdMl: BuildOptions = {
-  ...chunkOptimization,
-  outDir: resolve(__dirname, 'dist/umd/ml'),
-  lib: {
-    entry: resolve(__dirname, 'src/ml/index.ts'),
-    name: 'ranuts_ml',
-    fileName: 'ml',
-    formats: ['umd'],
-  },
-};
 
 export const es: BuildOptions = {
   ...chunkOptimization,
   lib: {
     entry: {
       utils: resolve(__dirname, 'src/utils/index.ts'),
-      wasm: resolve(__dirname, 'src/wasm/index.ts'),
       node: resolve(__dirname, 'src/node/index.ts'),
-      ml: resolve(__dirname, 'src/ml/index.ts'),
       index: resolve(__dirname, 'index.ts'),
     },
     fileName: (_: string, name: string): string => {

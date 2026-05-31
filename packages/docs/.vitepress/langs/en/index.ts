@@ -216,7 +216,6 @@ const themeEnConfig: DefaultTheme.Config = {
             collapsed: true,
             items: [
               { text: 'TOTP - One-time password generator', link: '/src/ranuts/utils/totp.md' },
-              { text: 'OCR - Text recognition', link: '/src/ranuts/utils/ocr.md' },
               { text: 'createSignal - Create reactive signal', link: '/src/ranuts/utils/create_signal.md' },
               { text: 'setMime - Set MIME type', link: '/src/ranuts/utils/set_mime.md' },
               { text: 'getExtensions - Get extensions', link: '/src/ranuts/utils/get_extensions.md' },
