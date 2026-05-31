@@ -36,6 +36,8 @@ import {
 
 `ElementBuilder` 提供链式 API 用于构建 DOM 元素。它支持 SSR，并能让组件构造函数保持简洁。
 
+这种写法接近 SwiftUI “根据状态描述视图”的模型，但底层仍然是平台原生 DOM API。`Div()`、`ButtonBuilder()` 等工厂函数描述元素树，类似 modifier 的链式方法负责挂载属性、样式、文本、子节点、ref 和事件，最后由 `build()` 返回真实 `HTMLElement` 或 SSR mock。
+
 ### 基础用法
 
 ```ts
@@ -50,6 +52,48 @@ const card = Div()
       .label('Click Me')
       .on('click', () => console.log('Clicked')),
     Slot().attr('name', 'extra'),
+  )
+  .build();
+```
+
+### 声明式 UI 结构
+
+静态 DOM 结构优先用 builder 链式调用描述：
+
+```ts
+const toolbar = Div()
+  .class('toolbar')
+  .children(
+    ButtonBuilder()
+      .part('button')
+      .text('保存')
+      .on('click', handleSave),
+    ButtonBuilder()
+      .part('button')
+      .text('取消')
+      .on('click', handleCancel),
+  )
+  .build();
+```
+
+如果状态变化需要更新已构建的节点，用 `createEffect` 做局部 DOM 更新：
+
+```ts
+import { ButtonBuilder, createEffect, Div, signal, Span } from '@/utils/builder';
+
+const [count, setCount] = signal(0);
+const label = Span().build();
+
+createEffect(() => {
+  label.textContent = `Count: ${count()}`;
+});
+
+const view = Div()
+  .children(
+    label,
+    ButtonBuilder()
+      .text('+')
+      .on('click', () => setCount((n) => n + 1)),
   )
   .build();
 ```
@@ -95,6 +139,7 @@ Main();
 | `ariaHidden(hidden?)`                                 | 设置 `aria-hidden`。                                                                                                      |
 | `on(type, listener, options?)`                        | 绑定永久构建时监听器 — 生命周期等同于元素本身。适用于构造函数中的 shadow DOM 内部元素。                                   |
 | `listen(manager, type, handler, options?)`            | 将监听器注册到 `EventManager`，由 manager 统一管理生命周期。适用于 `connectedCallback` 中需要随 disconnect 清理的监听器。 |
+| `delegate(manager, selector, type, handler, options?)` | 在当前元素上注册生命周期受控的事件委托监听器；handler 会收到原事件和匹配到的后代元素。                                    |
 | `children(...items)` / `replaceChildren(...items)`    | 追加或替换子节点，支持 builder、元素、字符串、数组和空值。                                                                |
 | `text(value)`                                         | 设置文本内容。                                                                                                            |
 | `ref(holder)`                                         | 将构建出的元素保存到 `createRef()` 的 holder 中。                                                                         |
@@ -141,12 +186,29 @@ connectedCallback(): void {
 }
 ```
 
+对于动态列表或操作菜单，用 `delegate()` 让一个监听器处理匹配的后代元素：
+
+```ts
+const actions = Div()
+  .class('actions')
+  .children(
+    ButtonBuilder().attr('data-action', 'edit').text('编辑'),
+    ButtonBuilder().attr('data-action', 'delete').text('删除'),
+  )
+  .delegate(this._events, '[data-action]', 'click', (_event, target) => {
+    const action = target.getAttribute('data-action');
+    this.handleAction(action);
+  })
+  .build();
+```
+
 ### API 参考
 
 | API                                           | 说明                                                                                          |
 | :-------------------------------------------- | :-------------------------------------------------------------------------------------------- |
 | `new EventManager()`                          | 创建一个由内部 `AbortController` 驱动的事件管理器。                                           |
 | `manager.on(target, type, handler, options?)` | 将监听器注册到 `target`，自动绑定到 manager 的 signal。链式调用，返回 `this`。                |
+| `manager.delegate(parent, selector, type, handler, options?)` | 在 `parent` 上注册一个监听器，当事件目标或其祖先匹配 `selector` 时调用 `handler`。 |
 | `manager.abort()`                             | 移除所有已注册的监听器，并重置内部 `AbortController`，支持在下次 `connectedCallback` 中复用。 |
 | `manager.signal`                              | 底层 `AbortSignal` — 需要绕过链式 API 时，可直接传给 `addEventListener` 的 options。          |
 

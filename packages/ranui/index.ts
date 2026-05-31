@@ -1,26 +1,36 @@
-export * from '@/utils/theme';
-export * from '@/components/button';
-export * from '@/components/icon';
-export * from '@/components/image';
-export * from '@/components/input';
-export * from '@/components/message';
-export * from '@/components/skeleton';
-export * from '@/components/tabpane';
-export * from '@/components/tab';
-export * from '@/components/radar';
+export {
+  setTheme,
+  getTheme,
+  setThemePack,
+  getThemePack,
+  setThemeToken,
+  clearThemeToken,
+  setThemeTokens,
+  initTheme,
+} from '@/utils/theme';
+export type { RanThemeName, RanThemePackName, ThemeTarget, ThemeTokenMap } from '@/utils/theme';
+export { Button } from '@/components/button';
+export { Icon, registerIcon, registerIcons } from '@/components/icon';
+export { ImageElement } from '@/components/image';
+export { Input } from '@/components/input';
+export { CustomMessage } from '@/components/message';
+export { Skeleton } from '@/components/skeleton';
+export { TabPane } from '@/components/tabpane';
+export { Tabs } from '@/components/tab';
+export { RadarChart } from '@/components/radar';
 export { default as RanPlayer } from '@/components/player';
 export { default as RanModal } from '@/components/modal';
-export * from '@/components/select';
-export * from '@/components/progress';
+export { Select } from '@/components/select';
+export { Progress } from '@/components/progress';
 export { default as RanCheckbox } from '@/components/checkbox';
 export { default as RanColorPicker } from '@/components/colorpicker';
-export * from '@/components/loading';
-export * from '@/components/math';
-export * from '@/components/popover';
-export * from '@/components/form';
-export * from '@/components/scratch';
-export * from '@/components/card';
-export * from '@/components/section';
+export { ICON_NAME_AMP, Loading } from '@/components/loading';
+export { Math } from '@/components/math';
+export { PLACEMENT_TYPE, Popover } from '@/components/popover';
+export type { PlacementDirection } from '@/components/popover';
+export { Form } from '@/components/form';
+export { Card } from '@/components/card';
+export { Section } from '@/components/section';
 
 // Side effects for registration
 import '@/components/button';

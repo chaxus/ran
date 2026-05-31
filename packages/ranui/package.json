@@ -65,6 +65,11 @@
       "require": "./dist/index.cjs"
     },
     "./style": "./dist/ranui.css",
+    "./builder": {
+      "types": "./dist/builder.d.ts",
+      "import": "./dist/builder.js",
+      "require": "./dist/index.cjs"
+    },
     "./theme-packs/pixel-retro": "./dist/pixel-retro.css",
     "./theme-packs/windows-98": "./dist/windows-98.css",
     "./theme-packs/windows-xp": "./dist/windows-xp.css",

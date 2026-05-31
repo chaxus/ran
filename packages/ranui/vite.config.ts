@@ -92,6 +92,7 @@ export const es: BuildOptions = {
       card: resolve(__dirname, 'components/card/index.ts'),
       section: resolve(__dirname, 'components/section/index.ts'),
       index: resolve(__dirname, 'index.ts'),
+      builder: resolve(__dirname, 'builder.ts'),
       style: resolve(__dirname, 'style.ts'),
       'theme-packs/pixel-retro': resolve(__dirname, 'theme-packs/pixel-retro.ts'),
       'theme-packs/windows-98': resolve(__dirname, 'theme-packs/windows-98.ts'),

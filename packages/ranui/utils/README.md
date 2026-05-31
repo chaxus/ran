@@ -36,6 +36,8 @@ Component conventions:
 
 `ElementBuilder` provides a fluent API for constructing DOM elements. It is SSR-safe and keeps component constructors concise.
 
+The style is intentionally close to SwiftUI's "describe the view from state" model, but it stays on top of platform DOM APIs. Factory helpers such as `Div()` and `ButtonBuilder()` describe the element tree, modifier-like methods attach attributes, styles, text, children, refs, and events, and `build()` returns the real `HTMLElement` or an SSR mock.
+
 ### Basic Usage
 
 ```ts
@@ -50,6 +52,48 @@ const card = Div()
       .label('Click Me')
       .on('click', () => console.log('Clicked')),
     Slot().attr('name', 'extra'),
+  )
+  .build();
+```
+
+### Declarative UI Shape
+
+Builder chains are the preferred way to describe static DOM structure:
+
+```ts
+const toolbar = Div()
+  .class('toolbar')
+  .children(
+    ButtonBuilder()
+      .part('button')
+      .text('Save')
+      .on('click', handleSave),
+    ButtonBuilder()
+      .part('button')
+      .text('Cancel')
+      .on('click', handleCancel),
+  )
+  .build();
+```
+
+Use `createEffect` when state needs to update an existing node after construction:
+
+```ts
+import { ButtonBuilder, createEffect, Div, signal, Span } from '@/utils/builder';
+
+const [count, setCount] = signal(0);
+const label = Span().build();
+
+createEffect(() => {
+  label.textContent = `Count: ${count()}`;
+});
+
+const view = Div()
+  .children(
+    label,
+    ButtonBuilder()
+      .text('+')
+      .on('click', () => setCount((n) => n + 1)),
   )
   .build();
 ```
@@ -95,6 +139,7 @@ Main();
 | `ariaHidden(hidden?)`                                 | Set `aria-hidden`.                                                                                                                        |
 | `on(type, listener, options?)`                        | Attach a permanent build-time listener — tied to the element's lifetime. Use in the constructor for internal shadow DOM elements.         |
 | `listen(manager, type, handler, options?)`            | Register a lifecycle-managed listener into an `EventManager`. Use in `connectedCallback` when the listener must be removed on disconnect. |
+| `delegate(manager, selector, type, handler, options?)` | Register a lifecycle-managed delegated listener on this element. The handler receives the event and the matched descendant.                |
 | `children(...items)` / `replaceChildren(...items)`    | Append or replace child builders, elements, strings, arrays, or empty values.                                                             |
 | `text(value)`                                         | Set text content.                                                                                                                         |
 | `ref(holder)`                                         | Capture the built element in a `createRef()` holder.                                                                                      |
@@ -141,12 +186,29 @@ connectedCallback(): void {
 }
 ```
 
+For dynamic lists or action menus, use `delegate()` so one listener handles matching descendants:
+
+```ts
+const actions = Div()
+  .class('actions')
+  .children(
+    ButtonBuilder().attr('data-action', 'edit').text('Edit'),
+    ButtonBuilder().attr('data-action', 'delete').text('Delete'),
+  )
+  .delegate(this._events, '[data-action]', 'click', (_event, target) => {
+    const action = target.getAttribute('data-action');
+    this.handleAction(action);
+  })
+  .build();
+```
+
 ### API Reference
 
 | API                                           | Description                                                                                                                            |
 | :-------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------- |
 | `new EventManager()`                          | Create a fresh manager backed by an internal `AbortController`.                                                                        |
 | `manager.on(target, type, handler, options?)` | Register a listener on `target`; automatically scoped to the manager's signal. Fluent — returns `this`.                                |
+| `manager.delegate(parent, selector, type, handler, options?)` | Register one listener on `parent` and invoke `handler` when the event target or one of its ancestors matches `selector`. |
 | `manager.abort()`                             | Remove all registered listeners and reset the internal `AbortController` so the manager can be reused on the next `connectedCallback`. |
 | `manager.signal`                              | The underlying `AbortSignal` — pass directly to `addEventListener` when bypassing the fluent API.                                      |
 
