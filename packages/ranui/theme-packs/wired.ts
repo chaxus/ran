@@ -1,10 +1,10 @@
 import './wired.less';
-import { syncWiredBordersForThemePack } from './wired-overlay';
+import { installWiredThemePackSync } from './wired-overlay';
 
 if (typeof document !== 'undefined') {
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => syncWiredBordersForThemePack(), { once: true });
+    document.addEventListener('DOMContentLoaded', () => installWiredThemePackSync(), { once: true });
   } else {
-    syncWiredBordersForThemePack();
+    installWiredThemePackSync();
   }
 }

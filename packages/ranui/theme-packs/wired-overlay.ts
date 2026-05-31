@@ -41,6 +41,8 @@ let active = false;
 
 let ro: ResizeObserver | null = null;
 let mo: MutationObserver | null = null;
+let rootMo: MutationObserver | null = null;
+let rootTarget: Element | null = null;
 
 const generator = rough.generator();
 
@@ -156,6 +158,7 @@ function trackNew(): void {
 
 export function activateWiredBorders(): void {
   if (typeof window === 'undefined') return;
+  installWiredThemePackSync();
   if (active) {
     trackNew();
     schedule();
@@ -196,11 +199,34 @@ export function deactivateWiredBorders(): void {
   active = false;
 }
 
-export function syncWiredBordersForThemePack(target: Element = document.documentElement): void {
+export function syncWiredBordersForThemePack(target?: Element): void {
   if (typeof window === 'undefined') return;
-  if (target.getAttribute('data-ran-theme-pack') === 'wired') {
+  const element = target || document.documentElement;
+  if (element.getAttribute('data-ran-theme-pack') === 'wired') {
     activateWiredBorders();
   } else {
     deactivateWiredBorders();
   }
+}
+
+export function installWiredThemePackSync(target?: Element): void {
+  if (typeof window === 'undefined') return;
+  const element = target || document.documentElement;
+  if (rootMo && rootTarget === element) return;
+
+  uninstallWiredThemePackSync();
+
+  rootTarget = element;
+  rootMo = new MutationObserver(() => syncWiredBordersForThemePack(element));
+  rootMo.observe(element, {
+    attributes: true,
+    attributeFilter: ['data-ran-theme-pack'],
+  });
+  syncWiredBordersForThemePack(element);
+}
+
+export function uninstallWiredThemePackSync(): void {
+  rootMo?.disconnect();
+  rootMo = null;
+  rootTarget = null;
 }

@@ -2,7 +2,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   activateWiredBorders,
   deactivateWiredBorders,
+  installWiredThemePackSync,
   syncWiredBordersForThemePack,
+  uninstallWiredThemePackSync,
 } from '../../theme-packs/wired-overlay';
 
 describe('wired overlay', () => {
@@ -15,6 +17,7 @@ describe('wired overlay', () => {
 
   afterEach(() => {
     deactivateWiredBorders();
+    uninstallWiredThemePackSync();
     document.body.innerHTML = '';
     document.documentElement.removeAttribute('data-ran-theme-pack');
     vi.restoreAllMocks();
@@ -96,6 +99,36 @@ describe('wired overlay', () => {
     expect(document.querySelectorAll('[data-ran-wired-overlay] path').length).toBeGreaterThan(0);
 
     input.setAttribute('data-wired-skip', '');
+    await Promise.resolve();
+
+    expect(document.querySelectorAll('[data-ran-wired-overlay] path')).toHaveLength(0);
+  });
+
+  it('installs a root observer so later wired pack changes activate the runtime overlay', async () => {
+    const section = document.createElement('r-section');
+    vi.spyOn(section, 'getBoundingClientRect').mockReturnValue({
+      x: 12,
+      y: 14,
+      top: 14,
+      right: 252,
+      bottom: 134,
+      left: 12,
+      width: 240,
+      height: 120,
+      toJSON: () => ({}),
+    });
+    document.body.appendChild(section);
+
+    installWiredThemePackSync();
+
+    expect(document.querySelectorAll('[data-ran-wired-overlay] path')).toHaveLength(0);
+
+    document.documentElement.setAttribute('data-ran-theme-pack', 'wired');
+    await Promise.resolve();
+
+    expect(document.querySelectorAll('[data-ran-wired-overlay] path').length).toBeGreaterThan(0);
+
+    document.documentElement.setAttribute('data-ran-theme-pack', 'paper');
     await Promise.resolve();
 
     expect(document.querySelectorAll('[data-ran-wired-overlay] path')).toHaveLength(0);
