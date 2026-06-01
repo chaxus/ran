@@ -64,30 +64,37 @@
         <section class="intro" aria-labelledby="intro-title">
           <div class="intro-grid">
             <div class="hero-content">
-              <p class="eyebrow">Theme Workbench</p>
-              <h1 id="intro-title">ranui keeps component systems native, themed, and inspectable.</h1>
+              <p class="eyebrow">Component Workbench</p>
+              <h1 id="intro-title">Build native UI, then bend its skin.</h1>
               <p class="hero-copy">
-                Switch theme packs, inspect real Web Components, and scan the same controls under every visual skin.
+                ranui ships Web Components that stay inspectable in plain HTML, typed app code, and CSS-token-driven
+                theme packs.
               </p>
               <div class="hero-actions" aria-label="Hero actions">
                 <a class="primary-action" href="#themes">Open theme lab</a>
                 <a class="secondary-action" href="#components">Explore components</a>
               </div>
               <div class="hero-stats" aria-label="Library capabilities">
-                <span><strong>20+</strong> components</span>
-                <span><strong>8</strong> theme modes</span>
-                <span><strong>0</strong> framework lock-in</span>
+                <span><strong>20+</strong> custom elements</span>
+                <span><strong>8</strong> theme packs</span>
+                <span><strong>0</strong> wrappers required</span>
+              </div>
+              <div class="hero-spec-list" aria-label="Developer promises">
+                <span>Shadow DOM</span>
+                <span>CSS tokens</span>
+                <span>SSR helpers</span>
+                <span>Per-component imports</span>
               </div>
             </div>
 
             <div class="hero-preview workbench-panel" aria-label="Live component preview">
               <div class="workbench-toolbar">
-                <span>Preview</span>
+                <span>Live DOM Preview</span>
                 <span class="workbench-led"></span>
               </div>
               <r-card class="preview-surface">
                 <div class="preview-header">
-                  <span>Release panel</span>
+                  <span>Ship controls</span>
                   <r-message type="success" content="Stable"></r-message>
                 </div>
                 <r-input label="Component" placeholder="Search components"></r-input>
@@ -105,6 +112,11 @@
                   <r-loading name="dot"></r-loading>
                 </div>
               </r-card>
+              <div class="workbench-trace" aria-label="Component contract">
+                <span><b>Element</b><code>&lt;r-button&gt;</code></span>
+                <span><b>Style hook</b><code>--ran-color-primary</code></span>
+                <span><b>Import</b><code>ranui/button</code></span>
+              </div>
               <div class="code-panel" aria-label="Install and import examples">
                 <code>pnpm add ranui</code>
                 <code>import 'ranui';</code>
@@ -157,21 +169,36 @@
                 </span>
                 <span>Default</span>
               </button>
-              <button class="theme-pack-button" type="button" data-pack-choice="pixel-retro" data-pack-preview="pixel-retro">
+              <button
+                class="theme-pack-button"
+                type="button"
+                data-pack-choice="pixel-retro"
+                data-pack-preview="pixel-retro"
+              >
                 <span class="theme-window" aria-hidden="true">
                   <span class="theme-window-bar"></span>
                   <span class="theme-window-body"><span></span><span></span><span></span></span>
                 </span>
                 <span>Pixel Retro</span>
               </button>
-              <button class="theme-pack-button" type="button" data-pack-choice="windows-98" data-pack-preview="windows-98">
+              <button
+                class="theme-pack-button"
+                type="button"
+                data-pack-choice="windows-98"
+                data-pack-preview="windows-98"
+              >
                 <span class="theme-window" aria-hidden="true">
                   <span class="theme-window-bar"></span>
                   <span class="theme-window-body"><span></span><span></span><span></span></span>
                 </span>
                 <span>Windows 98</span>
               </button>
-              <button class="theme-pack-button" type="button" data-pack-choice="windows-xp" data-pack-preview="windows-xp">
+              <button
+                class="theme-pack-button"
+                type="button"
+                data-pack-choice="windows-xp"
+                data-pack-preview="windows-xp"
+              >
                 <span class="theme-window" aria-hidden="true">
                   <span class="theme-window-bar"></span>
                   <span class="theme-window-body"><span></span><span></span><span></span></span>
@@ -220,6 +247,15 @@
             heading="Component Directory"
             subtitle="Live examples with same-page notes for imports, usage, and styling hooks."
           >
+            <div class="component-jump" aria-label="Component quick links">
+              <a href="#component-button">Button</a>
+              <a href="#component-input">Input</a>
+              <a href="#component-select">Select</a>
+              <a href="#component-message">Message</a>
+              <a href="#component-modal">Modal</a>
+              <a href="#component-radar">Radar</a>
+            </div>
+
             <div class="gallery-group" data-group="Actions and inputs">
               <r-card
                 id="component-button"
@@ -447,8 +483,14 @@
               >
                 <span slot="extra" class="component-meta">media</span>
                 <div class="demo-row">
-                  <r-img class="demo-media" src="https://picsum.photos/220/120"></r-img>
-                  <r-img class="demo-media" src="https://picsum.photos/220/9999"></r-img>
+                  <r-img
+                    class="demo-media"
+                    src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='440' height='240' viewBox='0 0 440 240'%3E%3Crect width='440' height='240' fill='%230f172a'/%3E%3Ccircle cx='120' cy='92' r='48' fill='%232563eb'/%3E%3Cpath d='M0 210 L92 132 L158 176 L236 98 L440 230 Z' fill='%2314b8a6'/%3E%3Ctext x='28' y='42' fill='white' font-family='monospace' font-size='20'%3Eranui media%3C/text%3E%3C/svg%3E"
+                  ></r-img>
+                  <r-img
+                    class="demo-media"
+                    src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='440' height='240' viewBox='0 0 440 240'%3E%3Crect width='440' height='240' fill='%23f8fafc'/%3E%3Crect x='28' y='28' width='384' height='184' rx='10' fill='%23e2e8f0'/%3E%3Cpath d='M56 178 L142 108 L204 148 L286 76 L384 178 Z' fill='%23475569'/%3E%3Ccircle cx='326' cy='78' r='28' fill='%23f97316'/%3E%3C/svg%3E"
+                  ></r-img>
                 </div>
                 <a slot="footer" class="component-link" href="#docs-image">View notes</a>
               </r-card>
