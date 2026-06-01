@@ -55,6 +55,28 @@ const syncThemeControls = (themeSelect: DemoSelectElement | null, packSelect: De
   selectStoredOption(packSelect, getStoredPack());
 };
 
+const setActivePackButton = (value: RanThemePackName): void => {
+  document.querySelectorAll<HTMLElement>('.theme-pack-button').forEach((button) => {
+    const isActive = button.dataset.packChoice === value;
+    button.classList.toggle('active', isActive);
+    button.setAttribute('aria-pressed', String(isActive));
+  });
+};
+
+const bindThemePackButtons = (packSelect: DemoSelectElement | null): void => {
+  setActivePackButton(getStoredPack());
+  document.querySelectorAll<HTMLElement>('.theme-pack-button').forEach((button) => {
+    button.addEventListener('click', () => {
+      const value = button.dataset.packChoice as RanThemePackName | undefined;
+      if (!value || !PACK_NAMES.includes(value)) return;
+      setThemePack(value);
+      selectStoredOption(packSelect, value);
+      setActivePackButton(value);
+      syncWiredBordersForThemePack();
+    });
+  });
+};
+
 initTheme();
 
 // Activate wired borders if wired pack is already stored from a previous visit
@@ -76,6 +98,7 @@ import('../index').then(() => {
   const packSelect = document.getElementById('pack-select') as DemoSelectElement | null;
 
   syncThemeControls(themeSelect, packSelect);
+  bindThemePackButtons(packSelect);
 
   themeSelect?.addEventListener('change', (e: Event) => {
     const value = (e as CustomEvent<{ value: string }>).detail.value as RanThemeName;
@@ -84,7 +107,9 @@ import('../index').then(() => {
 
   packSelect?.addEventListener('change', (e: Event) => {
     const value = (e as CustomEvent<{ value: string }>).detail.value;
-    setThemePack((value === 'default' ? 'default' : value) as RanThemePackName);
+    const pack = (value === 'default' ? 'default' : value) as RanThemePackName;
+    setThemePack(pack);
+    setActivePackButton(pack);
     syncWiredBordersForThemePack();
   });
 });

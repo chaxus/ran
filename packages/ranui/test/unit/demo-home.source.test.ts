@@ -57,6 +57,21 @@ describe('ranui demo homepage source', () => {
     expect(source).toContain('href="#style-api"');
   });
 
+  it('presents the homepage as an interactive theme workbench', () => {
+    const source = readDemo();
+    const css = readDemoCss();
+    const ts = readDemoTs();
+
+    expect(source).toContain('class="intro-grid"');
+    expect(source).toContain('workbench-panel');
+    expect(source).toContain('class="theme-pack-button"');
+    expect(source).toContain('data-pack-choice="wired"');
+    expect(source).toContain('class="theme-window"');
+    expect(css).toContain('.theme-pack-button');
+    expect(css).toContain('.theme-window');
+    expect(ts).toContain('bindThemePackButtons');
+  });
+
   it('derives demo page chrome from the ran theme token contract', () => {
     const source = readDemoCss();
     const tokens = readThemeTokens();

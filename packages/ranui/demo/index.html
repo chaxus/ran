@@ -62,35 +62,54 @@
       <main id="top">
         <!-- ── Hero ──────────────────────────────────────────── -->
         <section class="intro" aria-labelledby="intro-title">
-          <div class="hero-content">
-            <p class="eyebrow">Framework-neutral Web Components</p>
-            <h1 id="intro-title">ranui builds native-feeling interfaces that travel across frameworks.</h1>
-            <p class="hero-copy">
-              A TypeScript UI library built on custom elements, theme tokens, modular imports, and real browser
-              standards.
-            </p>
-            <div class="hero-actions" aria-label="Hero actions">
-              <a class="primary-action" href="#components">Explore components</a>
-              <a class="secondary-action" href="#code">Copy install path</a>
+          <div class="intro-grid">
+            <div class="hero-content">
+              <p class="eyebrow">Theme Workbench</p>
+              <h1 id="intro-title">ranui keeps component systems native, themed, and inspectable.</h1>
+              <p class="hero-copy">
+                Switch theme packs, inspect real Web Components, and scan the same controls under every visual skin.
+              </p>
+              <div class="hero-actions" aria-label="Hero actions">
+                <a class="primary-action" href="#themes">Open theme lab</a>
+                <a class="secondary-action" href="#components">Explore components</a>
+              </div>
+              <div class="hero-stats" aria-label="Library capabilities">
+                <span><strong>20+</strong> components</span>
+                <span><strong>8</strong> theme modes</span>
+                <span><strong>0</strong> framework lock-in</span>
+              </div>
             </div>
-          </div>
 
-          <div class="hero-preview" aria-label="Live component preview">
-            <r-card class="preview-surface">
-              <r-button type="primary">Deploy interface</r-button>
-              <r-input placeholder="Search components"></r-input>
-              <r-select placeholder="Theme pack">
-                <r-option value="default">Default</r-option>
-                <r-option value="paper">Paper</r-option>
-                <r-option value="neo">Neo Brutalism</r-option>
-              </r-select>
-              <r-progress percent="72"></r-progress>
-              <r-checkbox checked>Typed custom elements</r-checkbox>
-            </r-card>
-            <div class="code-panel" aria-label="Install and import examples">
-              <code>pnpm add ranui</code>
-              <code>import 'ranui';</code>
-              <code>import 'ranui/button';</code>
+            <div class="hero-preview workbench-panel" aria-label="Live component preview">
+              <div class="workbench-toolbar">
+                <span>Preview</span>
+                <span class="workbench-led"></span>
+              </div>
+              <r-card class="preview-surface">
+                <div class="preview-header">
+                  <span>Release panel</span>
+                  <r-message type="success" content="Stable"></r-message>
+                </div>
+                <r-input label="Component" placeholder="Search components"></r-input>
+                <div class="preview-row">
+                  <r-select placeholder="Theme pack" style="width: 180px">
+                    <r-option value="default">Default</r-option>
+                    <r-option value="paper">Paper</r-option>
+                    <r-option value="neo">Neo Brutalism</r-option>
+                  </r-select>
+                  <r-button type="primary">Deploy</r-button>
+                </div>
+                <r-progress percent="72"></r-progress>
+                <div class="preview-row">
+                  <r-checkbox checked>Typed custom elements</r-checkbox>
+                  <r-loading name="dot"></r-loading>
+                </div>
+              </r-card>
+              <div class="code-panel" aria-label="Install and import examples">
+                <code>pnpm add ranui</code>
+                <code>import 'ranui';</code>
+                <code>import 'ranui/theme-packs';</code>
+              </div>
             </div>
           </div>
         </section>
@@ -131,42 +150,67 @@
             subtitle="Use the Theme and Pack selects in the nav to switch styles. Scan the palette below before choosing."
           >
             <div class="theme-preview-grid">
-              <r-card data-pack-preview="default">
-                <div class="theme-swatch" aria-hidden="true"><span></span><span></span></div>
-                <h3>Default</h3>
-              </r-card>
-              <r-card data-pack-preview="dark">
-                <div class="theme-swatch" aria-hidden="true"><span></span><span></span></div>
-                <h3>Dark</h3>
-              </r-card>
-              <r-card data-pack-preview="pixel-retro">
-                <div class="theme-swatch" aria-hidden="true"><span></span><span></span></div>
-                <h3>Pixel Retro</h3>
-              </r-card>
-              <r-card data-pack-preview="windows-98">
-                <div class="theme-swatch" aria-hidden="true"><span></span><span></span></div>
-                <h3>Windows 98</h3>
-              </r-card>
-              <r-card data-pack-preview="windows-xp">
-                <div class="theme-swatch" aria-hidden="true"><span></span><span></span></div>
-                <h3>Windows XP</h3>
-              </r-card>
-              <r-card data-pack-preview="system-6">
-                <div class="theme-swatch" aria-hidden="true"><span></span><span></span></div>
-                <h3>System 6</h3>
-              </r-card>
-              <r-card data-pack-preview="wired">
-                <div class="theme-swatch" aria-hidden="true"><span></span><span></span></div>
-                <h3>Wired</h3>
-              </r-card>
-              <r-card data-pack-preview="paper">
-                <div class="theme-swatch" aria-hidden="true"><span></span><span></span></div>
-                <h3>Paper</h3>
-              </r-card>
-              <r-card data-pack-preview="neo-brutalism">
-                <div class="theme-swatch" aria-hidden="true"><span></span><span></span></div>
-                <h3>Neo Brutalism</h3>
-              </r-card>
+              <button class="theme-pack-button" type="button" data-pack-choice="default" data-pack-preview="default">
+                <span class="theme-window" aria-hidden="true">
+                  <span class="theme-window-bar"></span>
+                  <span class="theme-window-body"><span></span><span></span><span></span></span>
+                </span>
+                <span>Default</span>
+              </button>
+              <button class="theme-pack-button" type="button" data-pack-choice="pixel-retro" data-pack-preview="pixel-retro">
+                <span class="theme-window" aria-hidden="true">
+                  <span class="theme-window-bar"></span>
+                  <span class="theme-window-body"><span></span><span></span><span></span></span>
+                </span>
+                <span>Pixel Retro</span>
+              </button>
+              <button class="theme-pack-button" type="button" data-pack-choice="windows-98" data-pack-preview="windows-98">
+                <span class="theme-window" aria-hidden="true">
+                  <span class="theme-window-bar"></span>
+                  <span class="theme-window-body"><span></span><span></span><span></span></span>
+                </span>
+                <span>Windows 98</span>
+              </button>
+              <button class="theme-pack-button" type="button" data-pack-choice="windows-xp" data-pack-preview="windows-xp">
+                <span class="theme-window" aria-hidden="true">
+                  <span class="theme-window-bar"></span>
+                  <span class="theme-window-body"><span></span><span></span><span></span></span>
+                </span>
+                <span>Windows XP</span>
+              </button>
+              <button class="theme-pack-button" type="button" data-pack-choice="system-6" data-pack-preview="system-6">
+                <span class="theme-window" aria-hidden="true">
+                  <span class="theme-window-bar"></span>
+                  <span class="theme-window-body"><span></span><span></span><span></span></span>
+                </span>
+                <span>System 6</span>
+              </button>
+              <button class="theme-pack-button" type="button" data-pack-choice="wired" data-pack-preview="wired">
+                <span class="theme-window" aria-hidden="true">
+                  <span class="theme-window-bar"></span>
+                  <span class="theme-window-body"><span></span><span></span><span></span></span>
+                </span>
+                <span>Wired</span>
+              </button>
+              <button class="theme-pack-button" type="button" data-pack-choice="paper" data-pack-preview="paper">
+                <span class="theme-window" aria-hidden="true">
+                  <span class="theme-window-bar"></span>
+                  <span class="theme-window-body"><span></span><span></span><span></span></span>
+                </span>
+                <span>Paper</span>
+              </button>
+              <button
+                class="theme-pack-button"
+                type="button"
+                data-pack-choice="neo-brutalism"
+                data-pack-preview="neo-brutalism"
+              >
+                <span class="theme-window" aria-hidden="true">
+                  <span class="theme-window-bar"></span>
+                  <span class="theme-window-body"><span></span><span></span><span></span></span>
+                </span>
+                <span>Neo Brutalism</span>
+              </button>
             </div>
           </r-section>
 
