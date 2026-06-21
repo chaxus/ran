@@ -18,11 +18,11 @@
           </a>
 
           <nav class="nav-links" aria-label="Demo sections">
-            <a href="#why">Why ranui</a>
-            <a href="#themes">Theme Lab</a>
-            <a href="#components">Components</a>
-            <a href="#code">Code</a>
-            <a href="#style-api">Style API</a>
+            <a href="#why" data-i18n="nav.why">Why ranui</a>
+            <a href="#themes" data-i18n="nav.themes">Theme Lab</a>
+            <a href="#components" data-i18n="nav.components">Components</a>
+            <a href="#code" data-i18n="nav.code">Code</a>
+            <a href="#style-api" data-i18n="nav.style">Style API</a>
           </nav>
 
           <div class="nav-controls" aria-label="Visual settings">
@@ -53,6 +53,16 @@
               <r-option value="paper">Paper</r-option>
               <r-option value="neo-brutalism">Neo Brutalism</r-option>
             </r-select>
+            <r-select
+              id="lang-select"
+              style="width: 92px"
+              trigger="click"
+              getPopupContainerId="nav-portal"
+              data-wired-skip
+            >
+              <r-option value="en">English</r-option>
+              <r-option value="zh">中文</r-option>
+            </r-select>
           </div>
           <!-- Portal for nav select dropdowns — lives above sticky nav (z-index 1050 > nav z-index 20) -->
           <div id="nav-portal"></div>
@@ -64,37 +74,37 @@
         <section class="intro" aria-labelledby="intro-title">
           <div class="intro-grid">
             <div class="hero-content">
-              <p class="eyebrow">Component Workbench</p>
-              <h1 id="intro-title">Build native UI, then bend its skin.</h1>
-              <p class="hero-copy">
+              <p class="eyebrow" data-i18n="hero.eyebrow">Component Workbench</p>
+              <h1 id="intro-title" data-i18n-html="hero.h1">Build native UI,<br>then <em>bend its skin.</em></h1>
+              <p class="hero-copy" data-i18n="hero.copy">
                 ranui ships Web Components that stay inspectable in plain HTML, typed app code, and CSS-token-driven
                 theme packs.
               </p>
               <div class="hero-actions" aria-label="Hero actions">
-                <a class="primary-action" href="#themes">Open theme lab</a>
-                <a class="secondary-action" href="#components">Explore components</a>
+                <a class="primary-action" href="#themes" data-i18n="hero.cta.primary">Open theme lab</a>
+                <a class="secondary-action" href="#components" data-i18n="hero.cta.secondary">Explore components</a>
               </div>
               <div class="hero-stats" aria-label="Library capabilities">
-                <span><strong>20+</strong> custom elements</span>
-                <span><strong>8</strong> theme packs</span>
-                <span><strong>0</strong> wrappers required</span>
+                <span><strong>20+</strong><span data-i18n="hero.stat.elements"> custom elements</span></span>
+                <span><strong>8</strong><span data-i18n="hero.stat.packs"> theme packs</span></span>
+                <span><strong>0</strong><span data-i18n="hero.stat.wrappers"> wrappers required</span></span>
               </div>
               <div class="hero-spec-list" aria-label="Developer promises">
-                <span>Shadow DOM</span>
-                <span>CSS tokens</span>
-                <span>SSR helpers</span>
-                <span>Per-component imports</span>
+                <span data-i18n="hero.spec.shadow">Shadow DOM</span>
+                <span data-i18n="hero.spec.tokens">CSS tokens</span>
+                <span data-i18n="hero.spec.ssr">SSR helpers</span>
+                <span data-i18n="hero.spec.imports">Per-component imports</span>
               </div>
             </div>
 
             <div class="hero-preview workbench-panel" aria-label="Live component preview">
               <div class="workbench-toolbar">
-                <span>Live DOM Preview</span>
+                <span data-i18n="workbench.title">Live DOM Preview</span>
                 <span class="workbench-led"></span>
               </div>
               <r-card class="preview-surface">
                 <div class="preview-header">
-                  <span>Ship controls</span>
+                  <span data-i18n="workbench.panel">Ship controls</span>
                   <r-message type="success" content="Stable"></r-message>
                 </div>
                 <r-input label="Component" placeholder="Search components"></r-input>
@@ -108,14 +118,14 @@
                 </div>
                 <r-progress percent="72"></r-progress>
                 <div class="preview-row">
-                  <r-checkbox checked>Typed custom elements</r-checkbox>
+                  <r-checkbox checked data-i18n="workbench.typed">Typed custom elements</r-checkbox>
                   <r-loading name="dot"></r-loading>
                 </div>
               </r-card>
               <div class="workbench-trace" aria-label="Component contract">
-                <span><b>Element</b><code>&lt;r-button&gt;</code></span>
-                <span><b>Style hook</b><code>--ran-color-primary</code></span>
-                <span><b>Import</b><code>ranui/button</code></span>
+                <span><b data-i18n="workbench.trace.element">Element</b><code>&lt;r-button&gt;</code></span>
+                <span><b data-i18n="workbench.trace.style">Style hook</b><code>--ran-color-primary</code></span>
+                <span><b data-i18n="workbench.trace.import">Import</b><code>ranui/button</code></span>
               </div>
               <div class="code-panel" aria-label="Install and import examples">
                 <code>pnpm add ranui</code>
@@ -130,26 +140,27 @@
           <!-- ── Why ranui ──────────────────────────────────── -->
           <r-section
             id="why"
+            data-i18n-section="why"
             heading="Why ranui"
             subtitle="Small primitives for teams that want browser-native UI without giving up framework ergonomics."
           >
             <div class="feature-grid">
-              <r-card title="Cross-framework">
+              <r-card data-i18n-card="feature.cross" title="Cross-framework">
                 <p>Use the same components from plain HTML, React, Vue, Svelte, or any runtime that renders DOM.</p>
               </r-card>
-              <r-card title="Native custom elements">
+              <r-card data-i18n-card="feature.native" title="Native custom elements">
                 <p>Components ship as standards-based elements with encapsulated behavior and predictable markup.</p>
               </r-card>
-              <r-card title="Modular imports">
+              <r-card data-i18n-card="feature.modular" title="Modular imports">
                 <p>Import the whole library for prototypes or load individual controls for tighter bundles.</p>
               </r-card>
-              <r-card title="Typed with TypeScript">
+              <r-card data-i18n-card="feature.typed" title="Typed with TypeScript">
                 <p>Authoring and public paths are typed so component APIs stay clear in larger codebases.</p>
               </r-card>
-              <r-card title="Token-based styling">
+              <r-card data-i18n-card="feature.tokens" title="Token-based styling">
                 <p>Theme values flow through CSS variables, making brand colors and density easy to tune.</p>
               </r-card>
-              <r-card title="SSR builder path">
+              <r-card data-i18n-card="feature.ssr" title="SSR builder path">
                 <p>Server rendering helpers keep markup generation available when hydration is not the first step.</p>
               </r-card>
             </div>
@@ -158,111 +169,235 @@
           <!-- ── Theme Lab ──────────────────────────────────── -->
           <r-section
             id="themes"
+            data-i18n-section="themes"
             heading="Theme Lab"
             subtitle="Use the Theme and Pack selects in the nav to switch styles. Scan the palette below before choosing."
           >
-            <div class="theme-preview-grid">
-              <button class="theme-pack-button" type="button" data-pack-choice="default" data-pack-preview="default">
-                <span class="theme-window" aria-hidden="true">
-                  <span class="theme-window-bar"></span>
-                  <span class="theme-window-body"><span></span><span></span><span></span></span>
-                </span>
-                <span>Default</span>
+            <div class="pack-runway">
+
+              <button class="pack-card theme-pack-button" type="button" data-pack-choice="default" data-pack-preview="default">
+                <div class="pack-stage">
+                  <div class="pack-titlebar"><span class="pack-tl r"></span><span class="pack-tl y"></span><span class="pack-tl g"></span><span class="pack-title-text">workspace.app</span></div>
+                  <div class="pack-canvas">
+                    <div class="pack-btns"><div class="pack-btn">Primary</div><div class="pack-btn-sec">Ghost</div></div>
+                    <div class="pack-input-el">Search components…</div>
+                    <div class="pack-checks"><div class="pack-check on"><span></span><em>Enabled</em></div><div class="pack-check"><span></span><em>Option</em></div></div>
+                    <div class="pack-bar"><div style="width:65%"></div></div>
+                  </div>
+                </div>
+                <footer class="pack-ft"><span data-i18n="pack.default">Default</span><span class="pack-pip"></span></footer>
               </button>
-              <button
-                class="theme-pack-button"
-                type="button"
-                data-pack-choice="pixel-retro"
-                data-pack-preview="pixel-retro"
-              >
-                <span class="theme-window" aria-hidden="true">
-                  <span class="theme-window-bar"></span>
-                  <span class="theme-window-body"><span></span><span></span><span></span></span>
-                </span>
-                <span>Pixel Retro</span>
+
+              <button class="pack-card theme-pack-button" type="button" data-pack-choice="pixel-retro" data-pack-preview="pixel-retro">
+                <div class="pack-stage">
+                  <div class="pack-titlebar"><span class="pack-tl r"></span><span class="pack-tl y"></span><span class="pack-tl g"></span><span class="pack-title-text">TERMINAL.EXE</span></div>
+                  <div class="pack-canvas">
+                    <div class="pack-btns"><div class="pack-btn">[ RUN ]</div><div class="pack-btn-sec">[ ESC ]</div></div>
+                    <div class="pack-input-el">&gt; query_</div>
+                    <div class="pack-checks"><div class="pack-check on"><span></span><em>[x] Active</em></div><div class="pack-check"><span></span><em>[ ] Option</em></div></div>
+                    <div class="pack-bar"><div style="width:72%"></div></div>
+                  </div>
+                </div>
+                <footer class="pack-ft"><span data-i18n="pack.pixel-retro">Pixel Retro</span><span class="pack-pip"></span></footer>
               </button>
-              <button
-                class="theme-pack-button"
-                type="button"
-                data-pack-choice="windows-98"
-                data-pack-preview="windows-98"
-              >
-                <span class="theme-window" aria-hidden="true">
-                  <span class="theme-window-bar"></span>
-                  <span class="theme-window-body"><span></span><span></span><span></span></span>
-                </span>
-                <span>Windows 98</span>
+
+              <button class="pack-card theme-pack-button" type="button" data-pack-choice="windows-98" data-pack-preview="windows-98">
+                <div class="pack-stage">
+                  <div class="pack-titlebar"><span class="pack-tl r"></span><span class="pack-tl y"></span><span class="pack-tl g"></span><span class="pack-title-text">Notepad</span></div>
+                  <div class="pack-canvas">
+                    <div class="pack-btns"><div class="pack-btn">OK</div><div class="pack-btn-sec">Cancel</div></div>
+                    <div class="pack-input-el">C:\Windows\_</div>
+                    <div class="pack-checks"><div class="pack-check on"><span></span><em>✓ Details</em></div><div class="pack-check"><span></span><em>Updates</em></div></div>
+                    <div class="pack-bar"><div style="width:40%"></div></div>
+                  </div>
+                </div>
+                <footer class="pack-ft"><span data-i18n="pack.windows-98">Windows 98</span><span class="pack-pip"></span></footer>
               </button>
-              <button
-                class="theme-pack-button"
-                type="button"
-                data-pack-choice="windows-xp"
-                data-pack-preview="windows-xp"
-              >
-                <span class="theme-window" aria-hidden="true">
-                  <span class="theme-window-bar"></span>
-                  <span class="theme-window-body"><span></span><span></span><span></span></span>
-                </span>
-                <span>Windows XP</span>
+
+              <button class="pack-card theme-pack-button" type="button" data-pack-choice="windows-xp" data-pack-preview="windows-xp">
+                <div class="pack-stage">
+                  <div class="pack-titlebar"><span class="pack-tl r"></span><span class="pack-tl y"></span><span class="pack-tl g"></span><span class="pack-title-text">My Documents</span></div>
+                  <div class="pack-canvas">
+                    <div class="pack-btns"><div class="pack-btn">Start</div><div class="pack-btn-sec">Cancel</div></div>
+                    <div class="pack-input-el">Search the web…</div>
+                    <div class="pack-checks"><div class="pack-check on"><span></span><em>Enable</em></div><div class="pack-check"><span></span><em>Update</em></div></div>
+                    <div class="pack-bar"><div style="width:55%"></div></div>
+                  </div>
+                </div>
+                <footer class="pack-ft"><span data-i18n="pack.windows-xp">Windows XP</span><span class="pack-pip"></span></footer>
               </button>
-              <button class="theme-pack-button" type="button" data-pack-choice="system-6" data-pack-preview="system-6">
-                <span class="theme-window" aria-hidden="true">
-                  <span class="theme-window-bar"></span>
-                  <span class="theme-window-body"><span></span><span></span><span></span></span>
-                </span>
-                <span>System 6</span>
+
+              <button class="pack-card theme-pack-button" type="button" data-pack-choice="system-6" data-pack-preview="system-6">
+                <div class="pack-stage">
+                  <div class="pack-titlebar"><span class="pack-tl r"></span><span class="pack-tl y"></span><span class="pack-tl g"></span><span class="pack-title-text">Finder</span></div>
+                  <div class="pack-canvas">
+                    <div class="pack-btns"><div class="pack-btn">Open</div><div class="pack-btn-sec">Close</div></div>
+                    <div class="pack-input-el">Macintosh HD:</div>
+                    <div class="pack-checks"><div class="pack-check on"><span></span><em>☑ Locked</em></div><div class="pack-check"><span></span><em>☐ Shared</em></div></div>
+                    <div class="pack-bar"><div style="width:80%"></div></div>
+                  </div>
+                </div>
+                <footer class="pack-ft"><span data-i18n="pack.system-6">System 6</span><span class="pack-pip"></span></footer>
               </button>
-              <button class="theme-pack-button" type="button" data-pack-choice="wired" data-pack-preview="wired">
-                <span class="theme-window" aria-hidden="true">
-                  <span class="theme-window-bar"></span>
-                  <span class="theme-window-body"><span></span><span></span><span></span></span>
-                </span>
-                <span>Wired</span>
+
+              <button class="pack-card theme-pack-button" type="button" data-pack-choice="wired" data-pack-preview="wired">
+                <div class="pack-stage">
+                  <div class="pack-titlebar"><span class="pack-tl r"></span><span class="pack-tl y"></span><span class="pack-tl g"></span><span class="pack-title-text">sketch.pad</span></div>
+                  <div class="pack-canvas">
+                    <div class="pack-btns"><div class="pack-btn">Submit</div><div class="pack-btn-sec">Reset</div></div>
+                    <div class="pack-input-el">Type here…</div>
+                    <div class="pack-checks"><div class="pack-check on"><span></span><em>Done</em></div><div class="pack-check"><span></span><em>Pending</em></div></div>
+                    <div class="pack-bar"><div style="width:50%"></div></div>
+                  </div>
+                </div>
+                <footer class="pack-ft"><span data-i18n="pack.wired">Wired</span><span class="pack-pip"></span></footer>
               </button>
-              <button class="theme-pack-button" type="button" data-pack-choice="paper" data-pack-preview="paper">
-                <span class="theme-window" aria-hidden="true">
-                  <span class="theme-window-bar"></span>
-                  <span class="theme-window-body"><span></span><span></span><span></span></span>
-                </span>
-                <span>Paper</span>
+
+              <button class="pack-card theme-pack-button" type="button" data-pack-choice="paper" data-pack-preview="paper">
+                <div class="pack-stage">
+                  <div class="pack-titlebar"><span class="pack-tl r"></span><span class="pack-tl y"></span><span class="pack-tl g"></span><span class="pack-title-text">diary.txt</span></div>
+                  <div class="pack-canvas">
+                    <div class="pack-btns"><div class="pack-btn">Send</div><div class="pack-btn-sec">Discard</div></div>
+                    <div class="pack-input-el">Write something…</div>
+                    <div class="pack-checks"><div class="pack-check on"><span></span><em>Remember</em></div><div class="pack-check"><span></span><em>Subscribe</em></div></div>
+                    <div class="pack-bar"><div style="width:45%"></div></div>
+                  </div>
+                </div>
+                <footer class="pack-ft"><span data-i18n="pack.paper">Paper</span><span class="pack-pip"></span></footer>
               </button>
-              <button
-                class="theme-pack-button"
-                type="button"
-                data-pack-choice="neo-brutalism"
-                data-pack-preview="neo-brutalism"
-              >
-                <span class="theme-window" aria-hidden="true">
-                  <span class="theme-window-bar"></span>
-                  <span class="theme-window-body"><span></span><span></span><span></span></span>
-                </span>
-                <span>Neo Brutalism</span>
+
+              <button class="pack-card theme-pack-button" type="button" data-pack-choice="neo-brutalism" data-pack-preview="neo-brutalism">
+                <div class="pack-stage">
+                  <div class="pack-titlebar"><span class="pack-tl r"></span><span class="pack-tl y"></span><span class="pack-tl g"></span><span class="pack-title-text">BRUTAL.APP</span></div>
+                  <div class="pack-canvas">
+                    <div class="pack-btns"><div class="pack-btn">SUBMIT</div><div class="pack-btn-sec">CANCEL</div></div>
+                    <div class="pack-input-el">ENTER TEXT</div>
+                    <div class="pack-checks"><div class="pack-check on"><span></span><em>CHECKED</em></div><div class="pack-check"><span></span><em>OPTION B</em></div></div>
+                    <div class="pack-bar"><div style="width:88%"></div></div>
+                  </div>
+                </div>
+                <footer class="pack-ft"><span data-i18n="pack.neo-brutalism">Neo Brutalism</span><span class="pack-pip"></span></footer>
               </button>
+
             </div>
           </r-section>
 
           <!-- ── Component Gallery ──────────────────────────── -->
           <r-section
             id="components"
+            data-i18n-section="components"
             heading="Component Directory"
             subtitle="Live examples with same-page notes for imports, usage, and styling hooks."
           >
-            <div class="component-jump" aria-label="Component quick links">
-              <a href="#component-button">Button</a>
-              <a href="#component-input">Input</a>
-              <a href="#component-select">Select</a>
-              <a href="#component-message">Message</a>
-              <a href="#component-modal">Modal</a>
-              <a href="#component-radar">Radar</a>
+            <div class="component-spotlights">
+
+              <div class="cspot">
+                <div class="cspot-stage">
+                  <div class="cspot-demo-col">
+                    <span class="cspot-demo-label">Variants</span>
+                    <div class="cspot-row">
+                      <r-button type="primary">Primary</r-button>
+                      <r-button type="warning">Warning</r-button>
+                      <r-button type="text">Text</r-button>
+                    </div>
+                    <span class="cspot-demo-label">States</span>
+                    <div class="cspot-row">
+                      <r-button icon="home" type="primary">With icon</r-button>
+                      <r-button disabled>Disabled</r-button>
+                      <r-button icon="loading">Loading</r-button>
+                    </div>
+                  </div>
+                </div>
+                <div class="cspot-info">
+                  <span class="cspot-tag">action</span>
+                  <h3>&lt;r-button&gt;</h3>
+                  <p>Trigger actions with primary, warning, text, icon, and disabled variants. All states respond to theme packs and CSS token overrides.</p>
+                  <pre><code>import 'ranui/button';
+
+&lt;r-button type="primary"&gt;Save&lt;/r-button&gt;
+
+/* Token override */
+--ran-btn-content-background-color: #7c3aed;</code></pre>
+                </div>
+              </div>
+
+              <div class="cspot cspot-flip">
+                <div class="cspot-stage">
+                  <div id="cspot-portal" style="position:relative;z-index:10"></div>
+                  <div class="cspot-demo-col">
+                    <span class="cspot-demo-label">With search</span>
+                    <r-select style="width:220px" showSearch getPopupContainerId="cspot-portal" trigger="click" placeholder="Search themes…">
+                      <r-option value="default">Default</r-option>
+                      <r-option value="pixel">Pixel Retro</r-option>
+                      <r-option value="paper">Paper</r-option>
+                      <r-option value="neo">Neo Brutalism</r-option>
+                      <r-option value="wired">Wired</r-option>
+                    </r-select>
+                    <span class="cspot-demo-label">Default value</span>
+                    <r-select style="width:220px" trigger="click" getPopupContainerId="cspot-portal" defaultValue="lucy">
+                      <r-option value="jack">Jack</r-option>
+                      <r-option value="lucy">Lucy</r-option>
+                      <r-option value="tom">Tom</r-option>
+                    </r-select>
+                  </div>
+                </div>
+                <div class="cspot-info">
+                  <span class="cspot-tag">form</span>
+                  <h3>&lt;r-select&gt;</h3>
+                  <p>Choose from projected <code>r-option</code> children. Supports search, portal-based popup container, and keyboard navigation.</p>
+                  <pre><code>import 'ranui/select';
+
+&lt;r-select showSearch getPopupContainerId="root"&gt;
+  &lt;r-option value="a"&gt;Option A&lt;/r-option&gt;
+  &lt;r-option value="b"&gt;Option B&lt;/r-option&gt;
+&lt;/r-select&gt;</code></pre>
+                </div>
+              </div>
+
+              <div class="cspot">
+                <div class="cspot-stage">
+                  <r-tabs active="t1" style="width:100%">
+                    <r-tab label="Overview" r-key="t1"><div class="cspot-tab-body">Summarised content for the Overview panel.</div></r-tab>
+                    <r-tab label="API" r-key="t2"><div class="cspot-tab-body">API reference and attribute table.</div></r-tab>
+                    <r-tab label="Changelog" r-key="t3"><div class="cspot-tab-body">Version history and breaking changes.</div></r-tab>
+                    <r-tab label="Disabled" r-key="t4" disabled>Disabled.</r-tab>
+                  </r-tabs>
+                </div>
+                <div class="cspot-info">
+                  <span class="cspot-tag">navigation</span>
+                  <h3>&lt;r-tabs&gt;</h3>
+                  <p>Switch between related panels. Set <code>active</code> to the matching <code>r-key</code>. Tabs follow theme pack border and spacing tokens.</p>
+                  <pre><code>import 'ranui/tab';
+
+&lt;r-tabs active="overview"&gt;
+  &lt;r-tab label="Overview" r-key="overview"&gt;
+    Content here
+  &lt;/r-tab&gt;
+&lt;/r-tabs&gt;</code></pre>
+                </div>
+              </div>
+
             </div>
 
-            <div class="gallery-group" data-group="Actions and inputs">
+            <div class="gallery-divider"><span>Component catalog</span></div>
+
+            <div class="component-jump" aria-label="Component quick links">
+              <a href="#component-button" data-i18n="jump.button">Button</a>
+              <a href="#component-input" data-i18n="jump.input">Input</a>
+              <a href="#component-select" data-i18n="jump.select">Select</a>
+              <a href="#component-message" data-i18n="jump.message">Message</a>
+              <a href="#component-modal" data-i18n="jump.modal">Modal</a>
+              <a href="#component-radar" data-i18n="jump.radar">Radar</a>
+            </div>
+
+            <div class="gallery-group" data-group="Actions and inputs" data-i18n-group="group.actions">
               <r-card
                 id="component-button"
+                data-i18n-card="card.button"
                 title="Button"
                 description="Trigger actions with primary, warning, text, icon, and disabled states."
               >
-                <span slot="extra" class="component-meta">action</span>
+                <span slot="extra" class="component-meta" data-i18n="card.button.meta">action</span>
                 <div class="demo-row">
                   <r-button type="primary">Primary</r-button>
                   <r-button type="warning">Warning</r-button>
@@ -270,42 +405,45 @@
                   <r-button disabled>Disabled</r-button>
                   <r-button icon="home">Icon</r-button>
                 </div>
-                <a slot="footer" class="component-link" href="#docs-button">View notes</a>
+                <a slot="footer" class="component-link" href="#docs-button" data-i18n="link.viewnotes">View notes</a>
               </r-card>
 
               <r-card
                 id="component-icon"
+                data-i18n-card="card.icon"
                 title="Icon"
                 description="Register SVG assets once and render consistent symbols anywhere."
               >
-                <span slot="extra" class="component-meta">visual</span>
+                <span slot="extra" class="component-meta" data-i18n="card.icon.meta">visual</span>
                 <div class="demo-row">
                   <r-icon name="home" size="28" color="var(--accent)"></r-icon>
                   <r-icon name="setting" size="28"></r-icon>
                   <r-icon name="loading" size="28" spin color="var(--accent-2)"></r-icon>
                 </div>
-                <a slot="footer" class="component-link" href="#docs-icon">View notes</a>
+                <a slot="footer" class="component-link" href="#docs-icon" data-i18n="link.viewnotes">View notes</a>
               </r-card>
 
               <r-card
                 id="component-input"
+                data-i18n-card="card.input"
                 title="Input"
                 description="Collect text, passwords, labels, and icon-assisted values."
               >
-                <span slot="extra" class="component-meta">form</span>
+                <span slot="extra" class="component-meta" data-i18n="card.input.meta">form</span>
                 <div class="demo-grid">
                   <r-input label="Username" placeholder="Enter username"></r-input>
                   <r-input label="Password" type="password" icon="lock"></r-input>
                 </div>
-                <a slot="footer" class="component-link" href="#docs-input">View notes</a>
+                <a slot="footer" class="component-link" href="#docs-input" data-i18n="link.viewnotes">View notes</a>
               </r-card>
 
               <r-card
                 id="component-select"
+                data-i18n-card="card.select"
                 title="Select"
                 description="Choose from option lists with popup placement and search support."
               >
-                <span slot="extra" class="component-meta">form</span>
+                <span slot="extra" class="component-meta" data-i18n="card.select.meta">form</span>
                 <div id="popup-root"></div>
                 <div class="demo-row">
                   <r-select style="width: 170px" defaultValue="lucy" getPopupContainerId="popup-root" trigger="click">
@@ -320,29 +458,31 @@
                     <r-option value="orange">Orange</r-option>
                   </r-select>
                 </div>
-                <a slot="footer" class="component-link" href="#docs-select">View notes</a>
+                <a slot="footer" class="component-link" href="#docs-select" data-i18n="link.viewnotes">View notes</a>
               </r-card>
 
               <r-card
                 id="component-checkbox"
+                data-i18n-card="card.checkbox"
                 title="Checkbox"
                 description="Represent binary choices with checked, unchecked, and disabled states."
               >
-                <span slot="extra" class="component-meta">form</span>
+                <span slot="extra" class="component-meta" data-i18n="card.checkbox.meta">form</span>
                 <div class="demo-row">
                   <r-checkbox checked="true">Checked</r-checkbox>
                   <r-checkbox>Unchecked</r-checkbox>
                   <r-checkbox disabled checked="true">Disabled</r-checkbox>
                 </div>
-                <a slot="footer" class="component-link" href="#docs-checkbox">View notes</a>
+                <a slot="footer" class="component-link" href="#docs-checkbox" data-i18n="link.viewnotes">View notes</a>
               </r-card>
 
               <r-card
                 id="component-form"
+                data-i18n-card="card.form"
                 title="Form"
                 description="Coordinate named controls and submit handling through slots."
               >
-                <span slot="extra" class="component-meta">form</span>
+                <span slot="extra" class="component-meta" data-i18n="card.form.meta">form</span>
                 <r-form id="demo-form">
                   <div slot="r-form_content" class="demo-row">
                     <r-input name="name" label="Name" placeholder="Your name"></r-input>
@@ -357,87 +497,93 @@
                     </r-button>
                   </div>
                 </r-form>
-                <a slot="footer" class="component-link" href="#docs-form">View notes</a>
+                <a slot="footer" class="component-link" href="#docs-form" data-i18n="link.viewnotes">View notes</a>
               </r-card>
             </div>
 
-            <div class="gallery-group" data-group="Feedback">
+            <div class="gallery-group" data-group="Feedback" data-i18n-group="group.feedback">
               <r-card
                 id="component-progress"
+                data-i18n-card="card.progress"
                 title="Progress"
                 description="Show completion as a fixed value or draggable progress control."
               >
-                <span slot="extra" class="component-meta">feedback</span>
+                <span slot="extra" class="component-meta" data-i18n="card.progress.meta">feedback</span>
                 <div class="demo-stack">
                   <r-progress percent="65"></r-progress>
                   <r-progress type="drag" percent="30"></r-progress>
                 </div>
-                <a slot="footer" class="component-link" href="#docs-progress">View notes</a>
+                <a slot="footer" class="component-link" href="#docs-progress" data-i18n="link.viewnotes">View notes</a>
               </r-card>
 
               <r-card
                 id="component-loading"
+                data-i18n-card="card.loading"
                 title="Loading"
                 description="Use compact loaders for pending network, media, or state transitions."
               >
-                <span slot="extra" class="component-meta">feedback</span>
+                <span slot="extra" class="component-meta" data-i18n="card.loading.meta">feedback</span>
                 <div class="demo-row">
                   <r-loading name="rotate"></r-loading>
                   <r-loading name="stretch"></r-loading>
                   <r-loading name="dot"></r-loading>
                   <r-loading name="circle-line"></r-loading>
                 </div>
-                <a slot="footer" class="component-link" href="#docs-loading">View notes</a>
+                <a slot="footer" class="component-link" href="#docs-loading" data-i18n="link.viewnotes">View notes</a>
               </r-card>
 
               <r-card
                 id="component-skeleton"
+                data-i18n-card="card.skeleton"
                 title="Skeleton"
                 description="Reserve content shape while async data or media loads."
               >
-                <span slot="extra" class="component-meta">feedback</span>
+                <span slot="extra" class="component-meta" data-i18n="card.skeleton.meta">feedback</span>
                 <div class="demo-stack">
                   <r-skeleton></r-skeleton>
                   <r-skeleton style="height: 24px"></r-skeleton>
                 </div>
-                <a slot="footer" class="component-link" href="#docs-skeleton">View notes</a>
+                <a slot="footer" class="component-link" href="#docs-skeleton" data-i18n="link.viewnotes">View notes</a>
               </r-card>
 
               <r-card
                 id="component-message"
+                data-i18n-card="card.message"
                 title="Message"
                 description="Surface transient feedback inline or through the global message API."
               >
-                <span slot="extra" class="component-meta">feedback</span>
+                <span slot="extra" class="component-meta" data-i18n="card.message.meta">feedback</span>
                 <div class="demo-row">
                   <r-button onclick="window.message?.success('Saved with ranui')">Save</r-button>
                   <r-message type="success" content="Saved with ranui"></r-message>
                 </div>
-                <a slot="footer" class="component-link" href="#docs-message">View notes</a>
+                <a slot="footer" class="component-link" href="#docs-message" data-i18n="link.viewnotes">View notes</a>
               </r-card>
             </div>
 
-            <div class="gallery-group" data-group="Navigation and overlays">
+            <div class="gallery-group" data-group="Navigation and overlays" data-i18n-group="group.navigation">
               <r-card
                 id="component-tabs"
+                data-i18n-card="card.tabs"
                 title="Tabs"
                 description="Switch between related panels without leaving the current page context."
               >
-                <span slot="extra" class="component-meta">navigation</span>
+                <span slot="extra" class="component-meta" data-i18n="card.tabs.meta">navigation</span>
                 <r-tabs active="overview" align="start" style="width: 100%">
                   <r-tab label="Overview" r-key="overview">Overview content</r-tab>
                   <r-tab label="API" r-key="api">API reference content</r-tab>
                   <r-tab label="Disabled" r-key="disabled" disabled>Disabled content</r-tab>
                 </r-tabs>
-                <a slot="footer" class="component-link" href="#docs-tabs">View notes</a>
+                <a slot="footer" class="component-link" href="#docs-tabs" data-i18n="link.viewnotes">View notes</a>
               </r-card>
 
               <r-card
                 id="component-popover"
+                data-i18n-card="card.popover"
                 title="Popover"
                 description="Attach contextual floating content to a trigger element."
               >
-                <span slot="extra" class="component-meta">overlay</span>
+                <span slot="extra" class="component-meta" data-i18n="card.popover.meta">overlay</span>
                 <div class="demo-row">
                   <r-popover placement="top" trigger="hover,click" arrow="true">
                     <r-button>Hover or click</r-button>
@@ -446,15 +592,16 @@
                     </r-content>
                   </r-popover>
                 </div>
-                <a slot="footer" class="component-link" href="#docs-popover">View notes</a>
+                <a slot="footer" class="component-link" href="#docs-popover" data-i18n="link.viewnotes">View notes</a>
               </r-card>
 
               <r-card
                 id="component-modal"
+                data-i18n-card="card.modal"
                 title="Modal"
                 description="Focus attention on blocking decisions or richer temporary flows."
               >
-                <span slot="extra" class="component-meta">overlay</span>
+                <span slot="extra" class="component-meta" data-i18n="card.modal.meta">overlay</span>
                 <div class="demo-row">
                   <r-button
                     type="primary"
@@ -471,17 +618,18 @@
                     <r-button onclick="document.querySelector('#demo-modal')?.removeAttribute('open')">Close</r-button>
                   </r-modal>
                 </div>
-                <a slot="footer" class="component-link" href="#docs-modal">View notes</a>
+                <a slot="footer" class="component-link" href="#docs-modal" data-i18n="link.viewnotes">View notes</a>
               </r-card>
             </div>
 
-            <div class="gallery-group" data-group="Media and advanced">
+            <div class="gallery-group" data-group="Media and advanced" data-i18n-group="group.media">
               <r-card
                 id="component-image"
+                data-i18n-card="card.image"
                 title="Image"
                 description="Render image content with a consistent component wrapper."
               >
-                <span slot="extra" class="component-meta">media</span>
+                <span slot="extra" class="component-meta" data-i18n="card.image.meta">media</span>
                 <div class="demo-row">
                   <r-img
                     class="demo-media"
@@ -492,56 +640,60 @@
                     src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='440' height='240' viewBox='0 0 440 240'%3E%3Crect width='440' height='240' fill='%23f8fafc'/%3E%3Crect x='28' y='28' width='384' height='184' rx='10' fill='%23e2e8f0'/%3E%3Cpath d='M56 178 L142 108 L204 148 L286 76 L384 178 Z' fill='%23475569'/%3E%3Ccircle cx='326' cy='78' r='28' fill='%23f97316'/%3E%3C/svg%3E"
                   ></r-img>
                 </div>
-                <a slot="footer" class="component-link" href="#docs-image">View notes</a>
+                <a slot="footer" class="component-link" href="#docs-image" data-i18n="link.viewnotes">View notes</a>
               </r-card>
 
               <r-card
                 id="component-colorpicker"
+                data-i18n-card="card.colorpicker"
                 title="Color Picker"
                 description="Let users select solid or alpha-aware colors in themed surfaces."
               >
-                <span slot="extra" class="component-meta">input</span>
+                <span slot="extra" class="component-meta" data-i18n="card.colorpicker.meta">input</span>
                 <div class="demo-row">
                   <r-colorpicker value="#2563eb"></r-colorpicker>
                   <r-colorpicker value="rgba(255,0,0,0.5)"></r-colorpicker>
                 </div>
-                <a slot="footer" class="component-link" href="#docs-colorpicker">View notes</a>
+                <a slot="footer" class="component-link" href="#docs-colorpicker" data-i18n="link.viewnotes">View notes</a>
               </r-card>
 
               <r-card
                 id="component-math"
+                data-i18n-card="card.math"
                 title="Math"
                 description="Display LaTeX expressions inside normal interface content."
               >
-                <span slot="extra" class="component-meta">content</span>
+                <span slot="extra" class="component-meta" data-i18n="card.math.meta">content</span>
                 <div class="demo-grid">
                   <div class="demo-box"><r-math latex="E = mc^2"></r-math></div>
                   <div class="demo-box"><r-math latex="x = {-b \pm \sqrt{b^2-4ac} \over 2a}"></r-math></div>
                 </div>
-                <a slot="footer" class="component-link" href="#docs-math">View notes</a>
+                <a slot="footer" class="component-link" href="#docs-math" data-i18n="link.viewnotes">View notes</a>
               </r-card>
 
               <r-card
                 id="component-radar"
+                data-i18n-card="card.radar"
                 title="Radar"
                 description="Compare weighted scores in a compact polygon chart."
               >
-                <span slot="extra" class="component-meta">chart</span>
+                <span slot="extra" class="component-meta" data-i18n="card.radar.meta">chart</span>
                 <div class="demo-box" style="max-width: 300px; aspect-ratio: 1 / 1">
                   <r-radar
                     style="display: block; width: 100%; height: 100%"
                     abilitys='[{"abilityName":"Performance","scoreRate":"92"},{"abilityName":"A11y","scoreRate":"83"},{"abilityName":"DX","scoreRate":"75"},{"abilityName":"Stability","scoreRate":"86"},{"abilityName":"Features","scoreRate":"80"}]'
                   ></r-radar>
                 </div>
-                <a slot="footer" class="component-link" href="#docs-radar">View notes</a>
+                <a slot="footer" class="component-link" href="#docs-radar" data-i18n="link.viewnotes">View notes</a>
               </r-card>
 
               <r-card
                 id="component-scratch"
+                data-i18n-card="card.scratch"
                 title="Scratch"
                 description="Create an interactive reveal surface for promotional or game-like moments."
               >
-                <span slot="extra" class="component-meta">advanced</span>
+                <span slot="extra" class="component-meta" data-i18n="card.scratch.meta">advanced</span>
                 <div class="demo-stack">
                   <r-button
                     onclick="
@@ -556,7 +708,7 @@
                     <r-scratch id="demo-scratch"></r-scratch>
                   </div>
                 </div>
-                <a slot="footer" class="component-link" href="#docs-scratch">View notes</a>
+                <a slot="footer" class="component-link" href="#docs-scratch" data-i18n="link.viewnotes">View notes</a>
               </r-card>
 
               <r-card id="component-player" title="Player">
@@ -583,6 +735,7 @@
           <!-- ── Component Notes ────────────────────────────── -->
           <r-section
             id="component-notes"
+            data-i18n-section="notes"
             heading="Component notes"
             subtitle="Quick import paths and usage reminders for the controls shown above."
           >
@@ -798,6 +951,7 @@
           <!-- ── Code ──────────────────────────────────────── -->
           <r-section
             id="code"
+            data-i18n-section="code"
             heading="Code"
             subtitle="Choose the path that matches the app boundary: direct browser script, package side effect, single component, or JSX."
           >
@@ -825,6 +979,7 @@ export function App() {
           <!-- ── Style API ──────────────────────────────────── -->
           <r-section
             id="style-api"
+            data-i18n-section="style"
             heading="Style API"
             subtitle="Theme with documented tokens first, then target exposed parts when a component needs local shape changes."
           >
@@ -847,8 +1002,6 @@ export function App() {
 
     <script>
       // Prevent theme/pack flash and pre-set select defaults before ranui upgrades.
-      // Inline scripts run before deferred module scripts — setting defaultValue here
-      // ensures r-select picks it up during connectedCallback / slotchange.
       (function () {
         try {
           var t = localStorage.getItem('ran-theme') || '';

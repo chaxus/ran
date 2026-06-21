@@ -6,6 +6,8 @@ import setting from '@/assets/icons/setting.svg?raw';
 import { registerIcons } from '@/components/icon/index';
 import { initTheme, setTheme, setThemePack } from '@/utils/theme';
 import type { RanThemeName, RanThemePackName } from '@/utils/theme';
+import { getLang, applyLanguage } from './i18n';
+import type { Lang } from './i18n';
 import '../style';
 import '../theme-packs/pixel-retro';
 import '../theme-packs/windows-98';
@@ -111,5 +113,16 @@ import('../index').then(() => {
     setThemePack(pack);
     setActivePackButton(pack);
     syncWiredBordersForThemePack();
+  });
+
+  // ── i18n ──────────────────────────────────────────────────────────
+  const langSelect = document.getElementById('lang-select') as DemoSelectElement | null;
+  const initLang = getLang();
+  selectStoredOption(langSelect, initLang);
+  applyLanguage(initLang);
+
+  langSelect?.addEventListener('change', (e: Event) => {
+    const value = (e as CustomEvent<{ value: string }>).detail.value as Lang;
+    applyLanguage(value);
   });
 });
