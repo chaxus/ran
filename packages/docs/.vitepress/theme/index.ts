@@ -39,7 +39,6 @@ export default {
   enhanceApp({ app }: EnhanceAppContext): void {
     if (!import.meta.env.SSR) {
       import('ranui');
-      import('@ranui/preview');
       pwaInstall();
     }
     app.use(env);

@@ -157,7 +157,7 @@ describe('r-scratch contract', () => {
     scratch.scratchTicket.height = 100;
 
     // Call the onload function directly if we can
-    const revealImg = { src: '', onload: null as any };
+    const _revealImg = { src: '', onload: null as any };
     let capturedOnload: Function | null = null;
     const origImage = global.Image;
     (global as any).Image = function () {

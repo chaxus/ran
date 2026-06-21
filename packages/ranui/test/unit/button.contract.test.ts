@@ -144,7 +144,7 @@ describe('r-button contract', () => {
     (btn as any).mousedown(event);
     // --ran-x and --ran-y set (40px and 40px)
     const shadow = (btn as any)._shadowDom as ShadowRoot;
-    const inner = shadow.querySelector('.ran-btn') as HTMLElement;
+    shadow.querySelector('.ran-btn') as HTMLElement;
     // Even in jsdom, the CSS var may be set
     expect((btn as any).getBoundingClientRect).toHaveBeenCalled();
   });

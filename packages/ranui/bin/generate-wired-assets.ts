@@ -25,7 +25,6 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 const OUTPUT = resolve(ROOT, 'theme-packs/wired-assets.less');
 
-const SEED = 42;
 const SVG_SIZE = 32;
 const SLICE = 8;
 const BORDER_WIDTH = 4;

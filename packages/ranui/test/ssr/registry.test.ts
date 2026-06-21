@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { defineSSR, getSSRConstructor, getSSRRegistry } from '@/utils/ssr-registry';
 import { HTMLElementMock } from '@/utils/builder';
 

@@ -714,7 +714,6 @@ describe('r-tabs and r-tab contract', () => {
   });
 
   it('setTabLine calculates offset for non-first tab (index > 0)', () => {
-    const sleep = (ms = 10) => new Promise((r) => setTimeout(r, ms));
     const tabs = document.createElement('r-tabs') as any;
     document.body.appendChild(tabs);
 

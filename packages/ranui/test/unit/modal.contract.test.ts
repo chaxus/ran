@@ -523,7 +523,7 @@ describe('r-modal contract', () => {
     // Make the close button the first focusable and focus it
     closeBtn.focus();
 
-    const focusSpy = vi.spyOn(closeBtn, 'focus');
+    vi.spyOn(closeBtn, 'focus');
     const tabEvent = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true });
     const preventDefaultSpy = vi.fn();
     Object.defineProperty(tabEvent, 'preventDefault', { value: preventDefaultSpy });

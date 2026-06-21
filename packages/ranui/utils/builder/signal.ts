@@ -79,7 +79,7 @@ export function signal<T>(initial: T, options?: SignalOptions<T>): [Getter<T>, S
       // Inside batch() — collect effects, deduplicate, flush after batch exits.
       for (const sub of subscribers) pendingBatch.add(sub);
     } else {
-      for (const sub of [...subscribers]) sub();
+      for (const sub of subscribers) sub();
     }
   };
 

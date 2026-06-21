@@ -2,7 +2,7 @@
  * Tests for ElementBuilder and ShadowBuilder in browser (jsdom) environment.
  * isSSR === false here, so real DOM APIs are exercised.
  */
-import { describe, it, expect, vi, afterEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { createRef, ElementBuilder, ShadowBuilder } from '@/utils/builder/core';
 
 // ---------------------------------------------------------------------------
@@ -229,11 +229,7 @@ describe('ElementBuilder — ref()', () => {
 
 describe('ElementBuilder — on()', () => {
   it('attaches an event listener', () => {
-    const el = new ElementBuilder('button').build();
-    let clicked = false;
-    new ElementBuilder('button').on('click', () => {
-      clicked = true;
-    });
+    new ElementBuilder('button').on('click', () => {});
     // re-build to get element with listener
     let called = false;
     const btn = new ElementBuilder('button')

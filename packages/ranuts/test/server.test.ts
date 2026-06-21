@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { Router, Server, body, colors } from '@/node';
+import { Router, Server, body } from '@/node';
 
 const app = new Server();
 const PORT = 30103;

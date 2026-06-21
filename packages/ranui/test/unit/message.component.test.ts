@@ -2,8 +2,6 @@ import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest';
 import message from '@/components/message/index';
 
 describe('r-message component', () => {
-  const sleep = (ms = 10) => new Promise((r) => setTimeout(r, ms));
-
   beforeEach(() => {
     document.body.innerHTML = '';
     vi.useFakeTimers();

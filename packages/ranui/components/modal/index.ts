@@ -1,5 +1,5 @@
 import modalCss from './index.less?inline';
-import { RanElement, createCustomError, falseList } from '@/utils/index';
+import { RanElement, falseList } from '@/utils/index';
 import { ButtonBuilder, Div, EventManager, Slot, View } from '@/utils/builder';
 import {
   ensureShadowElement,

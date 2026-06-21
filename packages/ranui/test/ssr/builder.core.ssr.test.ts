@@ -3,7 +3,7 @@
  * isSSR === true here, so HTMLElementMock / ShadowRootMock code paths are exercised.
  */
 import { describe, it, expect } from 'vitest';
-import { createRef, ElementBuilder, ShadowBuilder } from '@/utils/builder/core';
+import { createRef, ElementBuilder } from '@/utils/builder/core';
 import { HTMLElementMock, ShadowRootMock } from '@/utils/builder/mocks';
 
 // ---------------------------------------------------------------------------

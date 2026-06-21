@@ -53,7 +53,7 @@ describe('utils', () => {
         arr.push(6);
         await next();
         arr.push(7);
-      } catch (_err) {
+      } catch {
         arr.push(2);
       }
       arr.push(3);
