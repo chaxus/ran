@@ -1,9 +1,9 @@
 import { currentDevice } from 'ranuts/utils';
 import buttonCss from './index.less?inline';
 import { Div, RanElement, Slot, falseList, isDisabled } from '@/utils/index';
-import { EventManager, Style, View } from '@/utils/builder';
+import { EventManager, View } from '@/utils/builder';
 import { defineSSR } from '@/utils/ssr-registry';
-import { ensureShadowElement, ensureShadowRoot } from '@/utils/component';
+import { ensureShadowElement, ensureShadowRoot, syncSheetAttribute } from '@/utils/component';
 
 export class Button extends RanElement {
   _btn!: HTMLDivElement;
@@ -166,28 +166,7 @@ export class Button extends RanElement {
   };
 
   handlerExternalCss = (): void => {
-    if (this.sheet && this._shadowDom) {
-      // 🛡️ Fix: DON'T overwrite, append to existing sheets to keep base styles
-      // In JS DOM environments, adoptedStyleSheets is frozen readonly array
-      const canAdopt = this._shadowDom.adoptedStyleSheets && !Object.isFrozen(this._shadowDom.adoptedStyleSheets);
-
-      if (canAdopt) {
-        try {
-          const sheet = new CSSStyleSheet();
-          sheet.replaceSync(this.sheet);
-          const currentSheets = this._shadowDom.adoptedStyleSheets || [];
-          this._shadowDom.adoptedStyleSheets = [...currentSheets, sheet];
-        } catch {
-          // Fallback if replaceSync is unsupported
-          const style = Style().text(this.sheet).build();
-          this._shadowDom.appendChild(style);
-        }
-      } else {
-        // Fallback for jsdom and browsers that don't support adoptedStyleSheets properly
-        const style = Style().text(this.sheet).build();
-        this._shadowDom.appendChild(style);
-      }
-    }
+    syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
   };
 
   syncA11yState = (): void => {

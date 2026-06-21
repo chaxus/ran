@@ -93,6 +93,8 @@ export const es: BuildOptions = {
       section: resolve(__dirname, 'components/section/index.ts'),
       index: resolve(__dirname, 'index.ts'),
       builder: resolve(__dirname, 'builder.ts'),
+      ssr: resolve(__dirname, 'ssr.ts'),
+      'ssr-stream': resolve(__dirname, 'ssr-stream.ts'),
       style: resolve(__dirname, 'style.ts'),
       'theme-packs/pixel-retro': resolve(__dirname, 'theme-packs/pixel-retro.ts'),
       'theme-packs/windows-98': resolve(__dirname, 'theme-packs/windows-98.ts'),

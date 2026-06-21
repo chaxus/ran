@@ -70,6 +70,16 @@
       "import": "./dist/builder.js",
       "require": "./dist/index.cjs"
     },
+    "./ssr": {
+      "types": "./dist/ssr.d.ts",
+      "import": "./dist/ssr.js",
+      "require": "./dist/index.cjs"
+    },
+    "./ssr-stream": {
+      "types": "./dist/ssr-stream.d.ts",
+      "import": "./dist/ssr-stream.js",
+      "require": "./dist/index.cjs"
+    },
     "./theme-packs/pixel-retro": "./dist/pixel-retro.css",
     "./theme-packs/windows-98": "./dist/windows-98.css",
     "./theme-packs/windows-xp": "./dist/windows-xp.css",

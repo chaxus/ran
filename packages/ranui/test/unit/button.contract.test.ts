@@ -228,6 +228,36 @@ describe('r-button contract', () => {
     expect((btn as any)._iconElement).toBeUndefined();
   });
 
+  it('handlerExternalCss applies the same fallback sheet only once', () => {
+    const originalCSSStyleSheet = window.CSSStyleSheet;
+    const cssText = '.ran-btn { color: rgb(0, 0, 255); }';
+
+    try {
+      class MockCSSStyleSheet {
+        replaceSync() {
+          throw new Error('Fallback trigger');
+        }
+      }
+      (window as any).CSSStyleSheet = MockCSSStyleSheet;
+
+      const btn = document.createElement('r-button') as Button;
+      document.body.appendChild(btn);
+      const shadow = (btn as any)._shadowDom as ShadowRoot;
+
+      btn.setAttribute('sheet', cssText);
+      (btn as any).handlerExternalCss();
+      (btn as any).handlerExternalCss();
+
+      const matchingStyles = Array.from(shadow.querySelectorAll('style')).filter(
+        (style) => style.textContent === cssText,
+      );
+      expect(matchingStyles).toHaveLength(1);
+      expect(matchingStyles[0]?.hasAttribute('data-ranui-sheet')).toBe(true);
+    } finally {
+      window.CSSStyleSheet = originalCSSStyleSheet;
+    }
+  });
+
   it('handlerExternalCss with adoptedStyleSheets support applies sheet', () => {
     const btn = document.createElement('r-button') as Button;
     document.body.appendChild(btn);

@@ -25,4 +25,29 @@ describe('package export source contracts', () => {
     expect(packageJson, 'package.json missing builder import path').toContain('"import": "./dist/builder.js"');
     expect(packageJson, 'package.json missing builder require fallback').toContain('"require": "./dist/index.cjs"');
   });
+
+  it('exposes SSR helpers as standalone public subpaths', () => {
+    const packageJson = read('package.json');
+    const viteConfig = read('vite.config.ts');
+
+    expect(existsSync(resolve(root, 'ssr.ts')), 'ssr.ts source entry missing').toBe(true);
+    expect(existsSync(resolve(root, 'ssr-stream.ts')), 'ssr-stream.ts source entry missing').toBe(true);
+
+    expect(viteConfig, 'vite.config.ts missing ssr entry').toContain("ssr: resolve(__dirname, 'ssr.ts')");
+    expect(viteConfig, 'vite.config.ts missing ssr-stream entry').toContain(
+      "'ssr-stream': resolve(__dirname, 'ssr-stream.ts')",
+    );
+
+    expect(packageJson, 'package.json missing ./ssr export').toContain('"./ssr"');
+    expect(packageJson, 'package.json missing ssr types path').toContain('"types": "./dist/ssr.d.ts"');
+    expect(packageJson, 'package.json missing ssr import path').toContain('"import": "./dist/ssr.js"');
+
+    expect(packageJson, 'package.json missing ./ssr-stream export').toContain('"./ssr-stream"');
+    expect(packageJson, 'package.json missing ssr-stream types path').toContain(
+      '"types": "./dist/ssr-stream.d.ts"',
+    );
+    expect(packageJson, 'package.json missing ssr-stream import path').toContain(
+      '"import": "./dist/ssr-stream.js"',
+    );
+  });
 });
