@@ -28,10 +28,7 @@ const MARKER_CLOSE_TEXT = 'impeccable-live-end';
  * matching them would silently inject tracking scripts into third-party
  * code. The user cannot turn these off via config — they are the floor.
  */
-const HARD_EXCLUDES = [
-  '**/node_modules/**',
-  '**/.git/**',
-];
+const HARD_EXCLUDES = ['**/node_modules/**', '**/.git/**'];
 
 export async function injectCli() {
   const args = process.argv.slice(2);
@@ -249,12 +246,16 @@ function validateConfig(cfg) {
     throw new Error("config.commentSyntax must be 'html' or 'jsx'");
   }
   if (cfg.cspChecked !== undefined && typeof cfg.cspChecked !== 'boolean') {
-    throw new Error("config.cspChecked, if present, must be a boolean");
+    throw new Error('config.cspChecked, if present, must be a boolean');
   }
 }
 
-function commentOpen(syntax) { return syntax === 'jsx' ? '{/*' : '<!--'; }
-function commentClose(syntax) { return syntax === 'jsx' ? '*/}' : '-->'; }
+function commentOpen(syntax) {
+  return syntax === 'jsx' ? '{/*' : '<!--';
+}
+function commentClose(syntax) {
+  return syntax === 'jsx' ? '*/}' : '-->';
+}
 
 function buildTagBlock(syntax, port, filePath) {
   const open = commentOpen(syntax);
@@ -264,9 +265,23 @@ function buildTagBlock(syntax, port, filePath) {
   const isAstro = typeof filePath === 'string' && filePath.endsWith('.astro');
   const scriptAttrs = isAstro ? 'is:inline ' : '';
   return (
-    open + ' ' + MARKER_OPEN_TEXT + ' ' + close + '\n' +
-    '<script ' + scriptAttrs + 'src="http://localhost:' + port + '/live.js"></script>\n' +
-    open + ' ' + MARKER_CLOSE_TEXT + ' ' + close + '\n'
+    open +
+    ' ' +
+    MARKER_OPEN_TEXT +
+    ' ' +
+    close +
+    '\n' +
+    '<script ' +
+    scriptAttrs +
+    'src="http://localhost:' +
+    port +
+    '/live.js"></script>\n' +
+    open +
+    ' ' +
+    MARKER_CLOSE_TEXT +
+    ' ' +
+    close +
+    '\n'
   );
 }
 
@@ -432,8 +447,11 @@ export function revertCspMeta(content) {
     if (!contentAttr) continue;
 
     let originalValue;
-    try { originalValue = Buffer.from(origAttr.value, 'base64').toString('utf-8'); }
-    catch { continue; }
+    try {
+      originalValue = Buffer.from(origAttr.value, 'base64').toString('utf-8');
+    } catch {
+      continue;
+    }
 
     const newContentAttr = `content=${contentAttr.quote}${originalValue}${contentAttr.quote}`;
     let newAttrs = tag.attrs.replace(contentAttr.full, newContentAttr);

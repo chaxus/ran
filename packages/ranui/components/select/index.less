@@ -51,7 +51,7 @@
       display: var(--ran-select-icon-text-display, none);
     }
   }
-  &(:not([disabled]):focus) {
+  &(:not([disabled],[type="text"]):focus) {
     .selection {
       border: var(--ran-select-selection-focus-border, 1px solid @theme-color);
       &-search {
@@ -104,6 +104,7 @@
   .selection {
     position: var(--ran-select-selection-position, relative);
     background-color: var(--ran-select-selection-background-color, var(--ran-color-bg-elevated, #ffffff));
+    background-image: var(--ran-select-selection-background-image, none);
     border: var(--ran-select-selection-border, 1px solid var(--ran-color-border, #d9d9d9));
     transition: var(--ran-select-selection-transition, @transition);
     width: var(--ran-select-selection-width, 100%);
@@ -171,6 +172,8 @@
       appearance: var(--ran-select-selection-item-appearance, none);
       font-family: var(--ran-select-selection-item-font-family, inherit);
       height: var(--ran-select-selection-item-height, 100%);
+      display: var(--ran-select-selection-item-display, flex);
+      align-items: var(--ran-select-selection-item-align-items, center);
       user-select: var(--ran-select-selection-item-user-select, none);
       overflow: var(--ran-select-selection-item-overflow, hidden);
       white-space: var(--ran-select-selection-item-white-space, nowrap);

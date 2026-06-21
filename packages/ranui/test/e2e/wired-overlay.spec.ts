@@ -61,9 +61,7 @@ test.beforeEach(async ({ page }) => {
 test('wired overlay — SVG is appended to body when wired pack is active', async ({ page }) => {
   await activateWired(page);
 
-  const hasOverlay = await page.evaluate(() =>
-    document.querySelector('[data-ran-wired-overlay]') !== null,
-  );
+  const hasOverlay = await page.evaluate(() => document.querySelector('[data-ran-wired-overlay]') !== null);
   expect(hasOverlay).toBe(true);
 });
 
@@ -86,9 +84,7 @@ test('wired overlay — overlay SVG has aria-hidden and is pointer-events:none',
 test('wired overlay — paths exist for each wired component', async ({ page }) => {
   await activateWired(page);
 
-  const pathCount = await page.evaluate(
-    () => document.querySelectorAll('[data-ran-wired-overlay] path').length,
-  );
+  const pathCount = await page.evaluate(() => document.querySelectorAll('[data-ran-wired-overlay] path').length);
   expect(pathCount).toBeGreaterThan(0);
 });
 
@@ -126,8 +122,10 @@ test('wired overlay — drawn paths are spatially aligned with their components'
     const covers = groups.some((g) => {
       const gBox = g.getBoundingClientRect();
       return (
-        gBox.left <= componentCenterX && componentCenterX <= gBox.right &&
-        gBox.top <= componentCenterY && componentCenterY <= gBox.bottom
+        gBox.left <= componentCenterX &&
+        componentCenterX <= gBox.right &&
+        gBox.top <= componentCenterY &&
+        componentCenterY <= gBox.bottom
       );
     });
 
@@ -150,9 +148,7 @@ test('wired overlay — reactivation after deactivation produces exactly one ove
   await deactivateWired(page);
   await activateWired(page);
 
-  const overlayCount = await page.evaluate(
-    () => document.querySelectorAll('[data-ran-wired-overlay]').length,
-  );
+  const overlayCount = await page.evaluate(() => document.querySelectorAll('[data-ran-wired-overlay]').length);
   expect(overlayCount).toBe(1);
 });
 

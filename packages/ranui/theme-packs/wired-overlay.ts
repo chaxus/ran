@@ -69,7 +69,7 @@ function ensureLayer(): SVGSVGElement {
     width: '100%',
     height: '100%',
     pointerEvents: 'none',
-    zIndex: '999',
+    zIndex: '15',
     overflow: 'visible',
   });
   document.body.appendChild(svg);
@@ -85,13 +85,18 @@ function drawElement(el: Element): void {
 
   const x = rect.left + window.scrollX - PAD;
   const y = rect.top + window.scrollY - PAD;
-  const w = rect.width + PAD * 2;
+  // For checkboxes draw only around the square box (height × height),
+  // not the full element width which includes the label text.
+  const boxSide = el.tagName.toLowerCase() === 'r-checkbox' ? rect.height : rect.width;
+  const w = boxSide + PAD * 2;
   const h = rect.height + PAD * 2;
+
+  const stroke = getStrokeColor(el);
 
   const drawable = generator.rectangle(x, y, w, h, {
     roughness: ROUGHNESS,
     strokeWidth: STROKE_WIDTH,
-    stroke: getStrokeColor(el),
+    stroke,
     fill: 'none',
     seed: getSeed(el),
     bowing: BOWING,

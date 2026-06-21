@@ -18,10 +18,7 @@
 import { buildManualEditEvidence } from './live-manual-edit-evidence.mjs';
 import { readBuffer, readBufferStrict, writeBuffer, countByPage } from './live-manual-edits-buffer.mjs';
 import { isGeneratedFile } from './is-generated.mjs';
-import {
-  runCopyEditBatchAgent,
-  runCopyEditPostApplyChecks,
-} from './live-copy-edit-agent.mjs';
+import { runCopyEditBatchAgent, runCopyEditPostApplyChecks } from './live-copy-edit-agent.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -109,9 +106,10 @@ function normalizeFailedEntries(batch, result, fallbackReason) {
     failed.push({
       id: entry.id,
       reason: item.reason || item.message || fallbackReason || 'failed',
-      candidates: Array.isArray(item.candidates) && item.candidates.length > 0
-        ? item.candidates
-        : candidatesForEntry(batch, entry.id),
+      candidates:
+        Array.isArray(item.candidates) && item.candidates.length > 0
+          ? item.candidates
+          : candidatesForEntry(batch, entry.id),
     });
   }
   return failed;
@@ -120,7 +118,7 @@ function normalizeFailedEntries(batch, result, fallbackReason) {
 function mergeFailedEntries(...groups) {
   const out = [];
   const indexById = new Map();
-  for (const item of groups.flatMap((group) => Array.isArray(group) ? group : [])) {
+  for (const item of groups.flatMap((group) => (Array.isArray(group) ? group : []))) {
     if (!item || typeof item !== 'object') continue;
     const id = typeof item.id === 'string' && item.id ? item.id : null;
     if (!id) {
@@ -165,7 +163,7 @@ function allEntryIds(batch) {
 }
 
 function mergeUniqueStrings(...groups) {
-  return uniqueStrings(groups.flatMap((group) => Array.isArray(group) ? group : []));
+  return uniqueStrings(groups.flatMap((group) => (Array.isArray(group) ? group : [])));
 }
 
 function repairAttemptLimit(env = process.env) {
@@ -175,43 +173,45 @@ function repairAttemptLimit(env = process.env) {
 }
 
 function summarizeRepairFailures(failures = []) {
-  return failures.map((failure) => {
-    const out = {
-      reason: failure.reason || failure.detail || 'validation_failed',
-    };
-    if (failure.id || failure.entryId) out.entryId = failure.id || failure.entryId;
-    if (failure.ref) out.ref = failure.ref;
-    if (failure.detail) out.detail = failure.detail;
-    if (failure.file) out.file = failure.file;
-    if (failure.message) out.message = failure.message;
-    if (failure.marker) out.marker = failure.marker;
-    if (Array.isArray(failure.files)) out.files = failure.files.slice(0, 8);
-    if (Array.isArray(failure.candidates)) {
-      out.candidates = failure.candidates.slice(0, 8).map((candidate) => ({
-        file: candidate.file,
-        line: candidate.line,
-        kind: candidate.kind,
-        reason: candidate.reason,
-      }));
-    }
-    if (Array.isArray(failure.failures)) {
-      out.failures = failure.failures.slice(0, 8).map((item) => ({
-        ref: item.ref,
-        reason: item.reason || item.detail,
-        detail: item.detail,
-        candidates: Array.isArray(item.candidates)
-          ? item.candidates.slice(0, 6).map((candidate) => ({
-              file: candidate.file,
-              line: candidate.line,
-              kind: candidate.kind,
-              reason: candidate.reason,
-            }))
-          : undefined,
-      }));
-    }
-    if (failure.checks) out.checks = failure.checks;
-    return out;
-  }).slice(0, 20);
+  return failures
+    .map((failure) => {
+      const out = {
+        reason: failure.reason || failure.detail || 'validation_failed',
+      };
+      if (failure.id || failure.entryId) out.entryId = failure.id || failure.entryId;
+      if (failure.ref) out.ref = failure.ref;
+      if (failure.detail) out.detail = failure.detail;
+      if (failure.file) out.file = failure.file;
+      if (failure.message) out.message = failure.message;
+      if (failure.marker) out.marker = failure.marker;
+      if (Array.isArray(failure.files)) out.files = failure.files.slice(0, 8);
+      if (Array.isArray(failure.candidates)) {
+        out.candidates = failure.candidates.slice(0, 8).map((candidate) => ({
+          file: candidate.file,
+          line: candidate.line,
+          kind: candidate.kind,
+          reason: candidate.reason,
+        }));
+      }
+      if (Array.isArray(failure.failures)) {
+        out.failures = failure.failures.slice(0, 8).map((item) => ({
+          ref: item.ref,
+          reason: item.reason || item.detail,
+          detail: item.detail,
+          candidates: Array.isArray(item.candidates)
+            ? item.candidates.slice(0, 6).map((candidate) => ({
+                file: candidate.file,
+                line: candidate.line,
+                kind: candidate.kind,
+                reason: candidate.reason,
+              }))
+            : undefined,
+        }));
+      }
+      if (failure.checks) out.checks = failure.checks;
+      return out;
+    })
+    .slice(0, 20);
 }
 
 function buildRepairBatch(batch, repair) {
@@ -242,17 +242,21 @@ function sourceHintWindowFailure(cwd, op) {
   if (!relative) return null;
   const absolute = path.resolve(cwd, relative);
   let content;
-  try { content = fs.readFileSync(absolute, 'utf-8'); } catch { return null; }
+  try {
+    content = fs.readFileSync(absolute, 'utf-8');
+  } catch {
+    return null;
+  }
   const lines = content.split('\n');
   const line = Math.max(1, Number(hint.line) || 1);
   const lineText = lines[line - 1] || '';
   const start = Math.max(0, line - 5);
   const end = Math.min(lines.length, line + 4);
   if (
-    typeof op.originalText === 'string'
-    && op.originalText
-    && lineText.includes(op.originalText)
-    && !lineShowsAppliedOp(lineText, op)
+    typeof op.originalText === 'string' &&
+    op.originalText &&
+    lineText.includes(op.originalText) &&
+    !lineShowsAppliedOp(lineText, op)
   ) {
     return {
       file: relative,
@@ -276,7 +280,11 @@ function verificationTargetsForOp(batch, op, reportedFiles, cwd) {
   };
 
   add(op.sourceHint?.file, op.sourceHint?.line, 'source_hint');
-  add(candidate?.sourceHint?.relativeFile || candidate?.sourceHint?.file, candidate?.sourceHint?.line, 'candidate_source_hint');
+  add(
+    candidate?.sourceHint?.relativeFile || candidate?.sourceHint?.file,
+    candidate?.sourceHint?.line,
+    'candidate_source_hint',
+  );
   for (const item of candidate?.textMatches || []) add(item.file, item.line, 'text_match');
   for (const item of candidate?.objectKeyMatches || []) add(item.file, item.line, 'object_key_match');
   for (const item of candidate?.locatorMatches || []) add(item.file, item.line, 'locator_match');
@@ -286,7 +294,11 @@ function verificationTargetsForOp(batch, op, reportedFiles, cwd) {
   // a card label plus its count. Dynamic source stores both on the label/key
   // line, so the count op may need the sibling label's data candidates.
   for (const siblingCandidate of siblingCandidatesForEntry(batch, op)) {
-    add(siblingCandidate.sourceHint?.relativeFile || siblingCandidate.sourceHint?.file, siblingCandidate.sourceHint?.line, 'entry_source_hint');
+    add(
+      siblingCandidate.sourceHint?.relativeFile || siblingCandidate.sourceHint?.file,
+      siblingCandidate.sourceHint?.line,
+      'entry_source_hint',
+    );
     for (const item of siblingCandidate.textMatches || []) add(item.file, item.line, 'entry_text_match');
     for (const item of siblingCandidate.objectKeyMatches || []) add(item.file, item.line, 'entry_object_key_match');
     for (const item of siblingCandidate.contextTextMatches || []) add(item.file, item.line, 'entry_context_text_match');
@@ -308,8 +320,7 @@ function verificationTargetsForOp(batch, op, reportedFiles, cwd) {
 }
 
 function objectKeyCandidatesForOp(batch, op) {
-  const candidates = (batch.candidates || [])
-    .filter((item) => item.entryId === op.entryId && item.ref === op.ref);
+  const candidates = (batch.candidates || []).filter((item) => item.entryId === op.entryId && item.ref === op.ref);
   return candidates.flatMap((candidate) => candidate.objectKeyMatches || []);
 }
 
@@ -328,7 +339,11 @@ function objectKeyMatchStillUsesOriginal(cwd, match, op) {
   const lineNumber = Number(match?.line);
   if (!relative || !Number.isFinite(lineNumber) || lineNumber < 1) return false;
   let lines;
-  try { lines = fs.readFileSync(path.resolve(cwd, relative), 'utf-8').split('\n'); } catch { return false; }
+  try {
+    lines = fs.readFileSync(path.resolve(cwd, relative), 'utf-8').split('\n');
+  } catch {
+    return false;
+  }
   const start = Math.max(0, lineNumber - 4);
   const end = Math.min(lines.length, lineNumber + 3);
   const windowLines = lines.slice(start, end);
@@ -337,23 +352,22 @@ function objectKeyMatchStillUsesOriginal(cwd, match, op) {
 }
 
 function coupledObjectKeyFailuresForOp(batch, op, cwd) {
-  if (
-    typeof op?.originalText !== 'string'
-    || typeof op?.newText !== 'string'
-    || op.originalText === op.newText
-  ) return [];
+  if (typeof op?.originalText !== 'string' || typeof op?.newText !== 'string' || op.originalText === op.newText)
+    return [];
   return objectKeyCandidatesForOp(batch, op)
     .filter((match) => objectKeyMatchStillUsesOriginal(cwd, match, op))
     .map((match) => ({
       ref: op.ref,
       reason: 'source_verification_failed',
       detail: 'edited_text_source_key_dependency_not_updated',
-      candidates: [{
-        file: normalizeRelativeFile(cwd, match.file) || match.file,
-        line: match.line,
-        kind: 'object_key_match',
-        reason: 'edited text is also a source key; update the coupled key to newText or fail the entry',
-      }],
+      candidates: [
+        {
+          file: normalizeRelativeFile(cwd, match.file) || match.file,
+          line: match.line,
+          kind: 'object_key_match',
+          reason: 'edited text is also a source key; update the coupled key to newText or fail the entry',
+        },
+      ],
     }));
 }
 
@@ -366,7 +380,11 @@ function locatorTargetsInFile(cwd, relativeFile, op) {
   if (!opHasLocator(op)) return [];
   const absolute = path.resolve(cwd, relativeFile);
   let lines;
-  try { lines = fs.readFileSync(absolute, 'utf-8').split('\n'); } catch { return []; }
+  try {
+    lines = fs.readFileSync(absolute, 'utf-8').split('\n');
+  } catch {
+    return [];
+  }
   const out = [];
   for (let index = 0; index < lines.length; index += 1) {
     if (!lineMatchesManualEditLocator(lines[index], op)) continue;
@@ -378,7 +396,11 @@ function locatorTargetsInFile(cwd, relativeFile, op) {
 
 function verificationTargetPasses(cwd, target, op) {
   let lines;
-  try { lines = fs.readFileSync(path.resolve(cwd, target.file), 'utf-8').split('\n'); } catch { return false; }
+  try {
+    lines = fs.readFileSync(path.resolve(cwd, target.file), 'utf-8').split('\n');
+  } catch {
+    return false;
+  }
   return verificationTargetPassesLines(lines, target, op);
 }
 
@@ -388,10 +410,11 @@ function verificationTargetPassesLines(lines, target, op) {
   const originalText = typeof op?.originalText === 'string' ? op.originalText : '';
   if (originalText && line.includes(originalText)) return false;
   const kind = String(target.kind || '');
-  const canSearchWindow = target.reported
-    || kind.includes('context_text_match')
-    || kind.includes('object_key_match')
-    || kind.includes('text_match');
+  const canSearchWindow =
+    target.reported ||
+    kind.includes('context_text_match') ||
+    kind.includes('object_key_match') ||
+    kind.includes('text_match');
   if (!canSearchWindow) return false;
   const radius = kind.includes('context_text_match') ? 20 : 4;
   const start = Math.max(0, target.line - radius - 1);
@@ -410,12 +433,19 @@ function windowShowsAppliedOp(lines, op) {
   const normalizedOriginal = normalizeVerificationText(originalText);
   const normalizedWindow = normalizeVerificationText(lines.join('\n'));
   if (!normalizedNew || !normalizedWindow.includes(normalizedNew)) return false;
-  if (normalizedOriginal && !normalizedNew.includes(normalizedOriginal) && normalizedWindow.includes(normalizedOriginal)) return false;
+  if (
+    normalizedOriginal &&
+    !normalizedNew.includes(normalizedOriginal) &&
+    normalizedWindow.includes(normalizedOriginal)
+  )
+    return false;
   return true;
 }
 
 function normalizeVerificationText(text) {
-  return String(text || '').replace(/\s+/g, ' ').trim();
+  return String(text || '')
+    .replace(/\s+/g, ' ')
+    .trim();
 }
 
 function lineShowsAppliedOp(line, op) {
@@ -429,11 +459,7 @@ function lineShowsAppliedOp(line, op) {
 }
 
 function opHasLocator(op) {
-  return !!(
-    op?.tag
-    || op?.elementId
-    || (Array.isArray(op?.classes) && op.classes.filter(Boolean).length > 0)
-  );
+  return !!(op?.tag || op?.elementId || (Array.isArray(op?.classes) && op.classes.filter(Boolean).length > 0));
 }
 
 function lineMatchesManualEditLocator(line, op) {
@@ -471,20 +497,20 @@ function verifyAppliedEntry({ batch, entry, reportedFiles, cwd }) {
     }
     const targets = verificationTargetsForOp(batch, op, reportedFiles, cwd);
     const coupledObjectKeyFailures = coupledObjectKeyFailuresForOp(batch, op, cwd);
-    if (
-      coupledObjectKeyFailures.length === 0
-      && targets.some((target) => verificationTargetPasses(cwd, target, op))
-    ) continue;
+    if (coupledObjectKeyFailures.length === 0 && targets.some((target) => verificationTargetPasses(cwd, target, op)))
+      continue;
 
     if (coupledObjectKeyFailures.length > 0) {
-      failures.push(...coupledObjectKeyFailures.map((failure) => ({
-        ...failure,
-        candidates: [
-          ...(failure.candidates || []),
-          ...targets.map((target) => ({ file: target.file, line: target.line, kind: target.kind })),
-          ...candidatesForEntry(batch, entry.id),
-        ].slice(0, 12),
-      })));
+      failures.push(
+        ...coupledObjectKeyFailures.map((failure) => ({
+          ...failure,
+          candidates: [
+            ...(failure.candidates || []),
+            ...targets.map((target) => ({ file: target.file, line: target.line, kind: target.kind })),
+            ...candidatesForEntry(batch, entry.id),
+          ].slice(0, 12),
+        })),
+      );
       continue;
     }
 
@@ -494,7 +520,11 @@ function verifyAppliedEntry({ batch, entry, reportedFiles, cwd }) {
         ref: op.ref,
         reason: 'source_verification_failed',
         detail: hintedOldText.reason,
-        candidates: [hintedOldText, ...targets.map((target) => ({ file: target.file, line: target.line, kind: target.kind })), ...candidatesForEntry(batch, entry.id)].slice(0, 12),
+        candidates: [
+          hintedOldText,
+          ...targets.map((target) => ({ file: target.file, line: target.line, kind: target.kind })),
+          ...candidatesForEntry(batch, entry.id),
+        ].slice(0, 12),
       });
       continue;
     }
@@ -502,8 +532,14 @@ function verifyAppliedEntry({ batch, entry, reportedFiles, cwd }) {
     failures.push({
       ref: op.ref,
       reason: 'source_verification_failed',
-      detail: op.newText.length === 0 ? 'originalText_still_present_in_plausible_source_location' : 'newText_not_found_in_plausible_source_location',
-      candidates: targets.map((target) => ({ file: target.file, line: target.line, kind: target.kind })).concat(candidatesForEntry(batch, entry.id)).slice(0, 12),
+      detail:
+        op.newText.length === 0
+          ? 'originalText_still_present_in_plausible_source_location'
+          : 'newText_not_found_in_plausible_source_location',
+      candidates: targets
+        .map((target) => ({ file: target.file, line: target.line, kind: target.kind }))
+        .concat(candidatesForEntry(batch, entry.id))
+        .slice(0, 12),
     });
   }
   return failures;
@@ -522,9 +558,8 @@ function findUnappliedEntrySourceChanges({ batch, entries, reportedFiles, cwd, r
       const op = { ...rawOp, entryId: entry.id };
       if (typeof op.newText !== 'string' || op.newText.length === 0) continue;
       const targets = verificationTargetsForOp(batch, op, reportedFiles, cwd);
-      const leakedTargets = targets.filter((target) =>
-        verificationTargetPasses(cwd, target, op)
-        && !snapshotTargetPasses(rollbackSnapshot, target, op)
+      const leakedTargets = targets.filter(
+        (target) => verificationTargetPasses(cwd, target, op) && !snapshotTargetPasses(rollbackSnapshot, target, op),
       );
       if (leakedTargets.length === 0) continue;
       failures.push({
@@ -571,9 +606,12 @@ function clearAppliedEntries(cwd, appliedEntryIds) {
 
 function snapshotRollbackFiles(cwd, files = null) {
   const snapshot = new Map();
-  const rollbackFiles = Array.isArray(files) && files.length > 0
-    ? uniqueStrings(files).map((file) => normalizeRollbackPath(cwd, file)).filter(Boolean)
-    : collectRollbackFiles(cwd);
+  const rollbackFiles =
+    Array.isArray(files) && files.length > 0
+      ? uniqueStrings(files)
+          .map((file) => normalizeRollbackPath(cwd, file))
+          .filter(Boolean)
+      : collectRollbackFiles(cwd);
   for (const relativeFile of rollbackFiles) {
     const absolute = path.resolve(cwd, relativeFile);
     try {
@@ -602,12 +640,20 @@ function collectRollbackFiles(cwd) {
 function scanRollbackDir(dir, cwd, out, seenDirs, seenFiles, depth) {
   if (depth > 10) return;
   let realDir;
-  try { realDir = fs.realpathSync(dir); } catch { return; }
+  try {
+    realDir = fs.realpathSync(dir);
+  } catch {
+    return;
+  }
   if (seenDirs.has(realDir)) return;
   seenDirs.add(realDir);
 
   let entries;
-  try { entries = fs.readdirSync(dir, { withFileTypes: true }); } catch { return; }
+  try {
+    entries = fs.readdirSync(dir, { withFileTypes: true });
+  } catch {
+    return;
+  }
   for (const entry of entries) {
     if (entry.isDirectory()) {
       if (ROLLBACK_SKIP_DIRS.has(entry.name)) continue;
@@ -619,7 +665,11 @@ function scanRollbackDir(dir, cwd, out, seenDirs, seenFiles, depth) {
     const absolute = path.join(dir, entry.name);
     if (isGeneratedFile(absolute, { cwd })) continue;
     let realFile;
-    try { realFile = fs.realpathSync(absolute); } catch { continue; }
+    try {
+      realFile = fs.realpathSync(absolute);
+    } catch {
+      continue;
+    }
     if (seenFiles.has(realFile)) continue;
     seenFiles.add(realFile);
     const relative = path.relative(cwd, absolute);
@@ -630,9 +680,10 @@ function scanRollbackDir(dir, cwd, out, seenDirs, seenFiles, depth) {
 
 function changedFilesSinceSnapshot(cwd, snapshot, scopeFiles = null) {
   const changed = new Map();
-  const scopedFiles = Array.isArray(scopeFiles) && scopeFiles.length > 0
-    ? scopeFiles.map((file) => normalizeRollbackPath(cwd, file)).filter(Boolean)
-    : null;
+  const scopedFiles =
+    Array.isArray(scopeFiles) && scopeFiles.length > 0
+      ? scopeFiles.map((file) => normalizeRollbackPath(cwd, file)).filter(Boolean)
+      : null;
   const currentFiles = new Set(scopedFiles || collectRollbackFiles(cwd));
   for (const [relativeFile, before] of snapshot.entries()) {
     if (scopedFiles && !currentFiles.has(relativeFile)) continue;
@@ -646,7 +697,11 @@ function changedFilesSinceSnapshot(cwd, snapshot, scopeFiles = null) {
       continue;
     }
     let content;
-    try { content = fs.readFileSync(absolute, 'utf-8'); } catch { continue; }
+    try {
+      content = fs.readFileSync(absolute, 'utf-8');
+    } catch {
+      continue;
+    }
     if (content !== before.content) {
       changed.set(relativeFile, { file: relativeFile, kind: 'modified' });
     }
@@ -661,9 +716,7 @@ function changedFilesSinceSnapshot(cwd, snapshot, scopeFiles = null) {
 
 function rollbackChangedFiles(cwd, snapshot, extraFiles = [], scopeFiles = []) {
   const scope = new Set(
-    [...(scopeFiles || []), ...(extraFiles || [])]
-      .map((file) => normalizeRollbackPath(cwd, file))
-      .filter(Boolean),
+    [...(scopeFiles || []), ...(extraFiles || [])].map((file) => normalizeRollbackPath(cwd, file)).filter(Boolean),
   );
   const changed = changedFilesSinceSnapshot(cwd, snapshot, [...scope]);
   const byFile = new Map(changed.map((item) => [item.file, item]));
@@ -717,16 +770,8 @@ function collectApplyOwnedFiles(batch, cwd, extraFiles = []) {
 }
 
 function unreportedChangedFiles(cwd, snapshot, reportedFiles, scopeFiles = []) {
-  const reported = new Set(
-    (reportedFiles || [])
-      .map((file) => normalizeRollbackPath(cwd, file))
-      .filter(Boolean),
-  );
-  const scope = new Set(
-    (scopeFiles || [])
-      .map((file) => normalizeRollbackPath(cwd, file))
-      .filter(Boolean),
-  );
+  const reported = new Set((reportedFiles || []).map((file) => normalizeRollbackPath(cwd, file)).filter(Boolean));
+  const scope = new Set((scopeFiles || []).map((file) => normalizeRollbackPath(cwd, file)).filter(Boolean));
   return changedFilesSinceSnapshot(cwd, snapshot, [...scope])
     .map((item) => item.file)
     .filter((file) => scope.has(file))
@@ -786,7 +831,7 @@ async function repairPostApplyValidation({
   let currentFailed = Array.isArray(failed) ? failed : [];
   let currentNotes = Array.isArray(notes) ? notes : [];
   let currentWarnings = Array.isArray(warnings) ? warnings : [];
-  let currentFailures = Array.isArray(repairFailures) ? repairFailures : (postChecks?.failures || []);
+  let currentFailures = Array.isArray(repairFailures) ? repairFailures : postChecks?.failures || [];
 
   for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
     const repair = {
@@ -809,10 +854,12 @@ async function repairPostApplyValidation({
         chatAvailable,
       });
     } catch (err) {
-      currentFailures = [{
-        reason: 'repair_agent_failed',
-        message: err.message || String(err),
-      }];
+      currentFailures = [
+        {
+          reason: 'repair_agent_failed',
+          message: err.message || String(err),
+        },
+      ];
       continue;
     }
 
@@ -820,10 +867,7 @@ async function repairPostApplyValidation({
     currentNotes = [...currentNotes, ...(repairResult.notes || [])];
     currentWarnings = [...currentWarnings, ...(repairResult.warnings || [])];
     currentAppliedIds = mergeUniqueStrings(currentAppliedIds, repairResult.appliedEntryIds || []);
-    currentFailed = mergeFailedEntries(
-      currentFailed,
-      normalizeFailedEntries(batch, repairResult, 'repair_failed'),
-    );
+    currentFailed = mergeFailedEntries(currentFailed, normalizeFailedEntries(batch, repairResult, 'repair_failed'));
 
     const verified = verifyEntriesAfterRepair({
       batch,
@@ -865,16 +909,17 @@ async function repairPostApplyValidation({
     };
   }
 
-  const decisionFailedEntries = currentAppliedIds.length > 0
-    ? (batch.entries || [])
-        .filter((entry) => currentAppliedIds.includes(entry.id))
-        .map((entry) => ({
-          id: entry.id,
-          reason: repairReason,
-          checks: currentFailures,
-          candidates: candidatesForEntry(batch, entry.id),
-        }))
-    : verificationFailuresForEntries(batch, batch.entries || [], repairReason, { checks: currentFailures });
+  const decisionFailedEntries =
+    currentAppliedIds.length > 0
+      ? (batch.entries || [])
+          .filter((entry) => currentAppliedIds.includes(entry.id))
+          .map((entry) => ({
+            id: entry.id,
+            reason: repairReason,
+            checks: currentFailures,
+            candidates: candidatesForEntry(batch, entry.id),
+          }))
+      : verificationFailuresForEntries(batch, batch.entries || [], repairReason, { checks: currentFailures });
   return {
     applied: [],
     failed: mergeFailedEntries(decisionFailedEntries, currentFailed),
@@ -986,9 +1031,10 @@ export async function commitManualEdits({
     const failed = normalizeFailedEntries(batch, result, result.message || 'AI copy edit failed');
     return {
       applied: [],
-      failed: failed.length > 0
-        ? failed
-        : verificationFailuresForEntries(batch, batch.entries, result.message || 'AI copy edit failed'),
+      failed:
+        failed.length > 0
+          ? failed
+          : verificationFailuresForEntries(batch, batch.entries, result.message || 'AI copy edit failed'),
       files: result.files || [],
       cleared: 0,
       count,
@@ -1031,10 +1077,15 @@ export async function commitManualEdits({
 
   const unreportedFiles = unreportedChangedFiles(cwd, rollbackSnapshot, result.files || [], rollbackScope);
   if (unreportedFiles.length > 0) {
-    const rollback = rollbackChangedFiles(cwd, rollbackSnapshot, result.files || [], [...rollbackScope, ...unreportedFiles]);
+    const rollback = rollbackChangedFiles(cwd, rollbackSnapshot, result.files || [], [
+      ...rollbackScope,
+      ...unreportedFiles,
+    ]);
     return {
       applied: [],
-      failed: verificationFailuresForEntries(batch, batch.entries, 'unreported_source_changes', { files: unreportedFiles }),
+      failed: verificationFailuresForEntries(batch, batch.entries, 'unreported_source_changes', {
+        files: unreportedFiles,
+      }),
       files: result.files || [],
       unreportedFiles,
       cleared: 0,
@@ -1101,17 +1152,17 @@ export async function commitManualEdits({
       });
     }
   }
-  const unreportedEntries = result.status === 'done' || result.status === 'partial'
-    ? batch.entries.filter((entry) => !reportedAppliedIds.includes(entry.id) && !aiFailed.some((item) => item.id === entry.id))
-    : [];
+  const unreportedEntries =
+    result.status === 'done' || result.status === 'partial'
+      ? batch.entries.filter(
+          (entry) => !reportedAppliedIds.includes(entry.id) && !aiFailed.some((item) => item.id === entry.id),
+        )
+      : [];
   const nonRepairFailed = [
     ...verificationFailuresForEntries(batch, unreportedEntries, 'not_reported_applied'),
     ...aiFailed,
   ];
-  const failed = [
-    ...verificationFailed,
-    ...nonRepairFailed,
-  ];
+  const failed = [...verificationFailed, ...nonRepairFailed];
 
   const unappliedEntries = batch.entries.filter((entry) => !reportedAppliedIds.includes(entry.id));
   const leakedUnapplied = findUnappliedEntrySourceChanges({
@@ -1133,11 +1184,7 @@ export async function commitManualEdits({
     const rollback = rollbackChangedFiles(cwd, rollbackSnapshot, result.files || [], rollbackScope);
     return {
       applied: [],
-      failed: [
-        ...leakedUnapplied,
-        ...failed.filter((item) => !leakedIds.has(item.id)),
-        ...rolledBackVerified,
-      ],
+      failed: [...leakedUnapplied, ...failed.filter((item) => !leakedIds.has(item.id)), ...rolledBackVerified],
       files: result.files || [],
       cleared: 0,
       count,
@@ -1173,9 +1220,10 @@ export async function commitManualEdits({
 
   const postChecks = runCopyEditPostApplyChecks({ cwd, files: result.files || [] });
   if (!postChecks.ok) {
-    const postCheckEntries = verifiedAppliedIds.length > 0
-      ? reportedAppliedEntries.filter((entry) => verifiedAppliedIds.includes(entry.id))
-      : batch.entries;
+    const postCheckEntries =
+      verifiedAppliedIds.length > 0
+        ? reportedAppliedEntries.filter((entry) => verifiedAppliedIds.includes(entry.id))
+        : batch.entries;
     return repairPostApplyValidation({
       batch,
       cwd,
@@ -1187,9 +1235,8 @@ export async function commitManualEdits({
       applyBatchToSource,
       chatAvailable,
       transactionId,
-      appliedEntryIds: verifiedAppliedIds.length > 0
-        ? verifiedAppliedIds
-        : postCheckEntries.map((entry) => entry.id).filter(Boolean),
+      appliedEntryIds:
+        verifiedAppliedIds.length > 0 ? verifiedAppliedIds : postCheckEntries.map((entry) => entry.id).filter(Boolean),
       files: result.files || [],
       failed,
       notes: result.notes || [],

@@ -189,6 +189,21 @@
       "import": "./dist/card.js",
       "require": "./dist/index.cjs"
     },
+    "./router": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/router.js",
+      "require": "./dist/index.cjs"
+    },
+    "./route": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/route.js",
+      "require": "./dist/index.cjs"
+    },
+    "./link": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/link.js",
+      "require": "./dist/index.cjs"
+    },
     "./type": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",

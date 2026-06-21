@@ -21,14 +21,17 @@ for (const name of ['rotate', 'stretch', 'dot', 'circle-line'] as const) {
 }
 
 test('loading — all types row', async ({ page }) => {
-  await mount(page, `
+  await mount(
+    page,
+    `
     <div style="display: flex; gap: 24px; align-items: center;">
       <r-loading name="rotate"></r-loading>
       <r-loading name="stretch"></r-loading>
       <r-loading name="dot"></r-loading>
       <r-loading name="circle-line"></r-loading>
     </div>
-  `);
+  `,
+  );
   const el = page.locator('div').first();
   await expect(el).toBeVisible();
   await page.waitForTimeout(50);

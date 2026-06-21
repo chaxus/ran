@@ -6,8 +6,18 @@
 import { canCreateInsert } from './live-insert-ui.mjs';
 
 export const VISUAL_ACTIONS = [
-  'impeccable', 'bolder', 'quieter', 'distill', 'polish', 'typeset',
-  'colorize', 'layout', 'adapt', 'animate', 'delight', 'overdrive',
+  'impeccable',
+  'bolder',
+  'quieter',
+  'distill',
+  'polish',
+  'typeset',
+  'colorize',
+  'layout',
+  'adapt',
+  'animate',
+  'delight',
+  'overdrive',
 ];
 
 const ID_PATTERN = /^[0-9a-f]{8}$/;
@@ -15,8 +25,12 @@ const VARIANT_ID_PATTERN = /^[0-9]{1,3}$/;
 const INSERT_POSITIONS = new Set(['before', 'after']);
 const FORBIDDEN_MANUAL_EDIT_TEXT_CHARS = ['<', '{', '}', '`'];
 
-function isValidId(v) { return typeof v === 'string' && ID_PATTERN.test(v); }
-function isValidVariantId(v) { return typeof v === 'string' && VARIANT_ID_PATTERN.test(v); }
+function isValidId(v) {
+  return typeof v === 'string' && ID_PATTERN.test(v);
+}
+function isValidVariantId(v) {
+  return typeof v === 'string' && VARIANT_ID_PATTERN.test(v);
+}
 
 function validateManualEditText(newText) {
   if (typeof newText !== 'string') return null;
@@ -45,15 +59,18 @@ function validateInsertGenerate(msg) {
   if (!anchor.tagName && !anchor.outerHTML && !(Array.isArray(anchor.classes) && anchor.classes.length)) {
     return 'generate: insert.anchor needs tagName, classes, or outerHTML';
   }
-  if (!msg.placeholder || typeof msg.placeholder !== 'object') return 'generate: insert mode requires placeholder dimensions';
+  if (!msg.placeholder || typeof msg.placeholder !== 'object')
+    return 'generate: insert mode requires placeholder dimensions';
   if (!Number.isFinite(msg.placeholder.width) || !Number.isFinite(msg.placeholder.height)) {
     return 'generate: placeholder width and height must be numbers';
   }
-  if (!canCreateInsert({
-    prompt: msg.freeformPrompt,
-    comments: msg.comments,
-    strokes: msg.strokes,
-  })) {
+  if (
+    !canCreateInsert({
+      prompt: msg.freeformPrompt,
+      comments: msg.comments,
+      strokes: msg.strokes,
+    })
+  ) {
     return 'generate: insert requires freeformPrompt or annotations';
   }
   return validateAnnotationFields(msg);
@@ -84,7 +101,9 @@ function validateManualEditEvent(msg, label) {
       }
       const forbidden = validateManualEditText(op.newText);
       if (forbidden) {
-        return label + ': newText cannot contain ' + forbidden.join(' ') + ' (plain text only; ask the AI to insert markup)';
+        return (
+          label + ': newText cannot contain ' + forbidden.join(' ') + ' (plain text only; ask the AI to insert markup)'
+        );
       }
     }
   }
@@ -112,8 +131,12 @@ export function validateEvent(msg) {
       return isValidId(msg.id) ? null : 'discard: missing or malformed id';
     case 'checkpoint':
       if (!isValidId(msg.id)) return 'checkpoint: missing or malformed id';
-      if (!Number.isInteger(msg.revision) || msg.revision < 0) return 'checkpoint: revision must be a non-negative integer';
-      if (msg.paramValues !== undefined && (typeof msg.paramValues !== 'object' || msg.paramValues === null || Array.isArray(msg.paramValues))) {
+      if (!Number.isInteger(msg.revision) || msg.revision < 0)
+        return 'checkpoint: revision must be a non-negative integer';
+      if (
+        msg.paramValues !== undefined &&
+        (typeof msg.paramValues !== 'object' || msg.paramValues === null || Array.isArray(msg.paramValues))
+      ) {
         return 'checkpoint: paramValues must be an object';
       }
       return null;

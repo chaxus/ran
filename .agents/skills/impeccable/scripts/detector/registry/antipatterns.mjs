@@ -379,11 +379,11 @@ const RULE_ENGINE_SUPPORT = {
 };
 
 function getAntipattern(id) {
-  return ANTIPATTERNS.find(rule => rule.id === id);
+  return ANTIPATTERNS.find((rule) => rule.id === id);
 }
 
 function getRulesForCategory(category) {
-  return ANTIPATTERNS.filter(rule => rule.category === category);
+  return ANTIPATTERNS.filter((rule) => rule.category === category);
 }
 
 function getRuleEngineSupport(engine) {
@@ -391,9 +391,7 @@ function getRuleEngineSupport(engine) {
 }
 
 // Set of provider tags that gate rules off by default (e.g. 'gpt', 'gemini').
-const GATED_PROVIDERS = new Set(
-  ANTIPATTERNS.map(rule => rule.gated).filter(Boolean),
-);
+const GATED_PROVIDERS = new Set(ANTIPATTERNS.map((rule) => rule.gated).filter(Boolean));
 
 // Drop findings for rules gated behind a provider tag unless that provider
 // was explicitly enabled (CLI --gpt / --gemini). Non-gated findings always
@@ -401,7 +399,7 @@ const GATED_PROVIDERS = new Set(
 function filterByProviders(findings, providers = []) {
   const enabled = new Set(providers || []);
   if (!GATED_PROVIDERS.size) return findings;
-  return findings.filter(f => {
+  return findings.filter((f) => {
     const rule = getAntipattern(f.antipattern);
     if (!rule || !rule.gated) return true;
     return enabled.has(rule.gated);

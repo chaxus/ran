@@ -5,3 +5,5 @@ pnpm-workspace.yaml
 report
 public
 assets
+.agents/
+skills/

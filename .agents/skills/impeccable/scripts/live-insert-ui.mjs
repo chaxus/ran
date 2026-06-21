@@ -61,9 +61,7 @@ export function computeInsertPosition(clientX, clientY, rect, axis = 'column') {
 export function canCreateInsert({ prompt, comments, strokes }) {
   const hasPrompt = typeof prompt === 'string' && prompt.trim().length > 0;
   const hasComments = Array.isArray(comments) && comments.length > 0;
-  const hasStrokes = Array.isArray(strokes) && strokes.some(
-    (s) => Array.isArray(s?.points) && s.points.length >= 2,
-  );
+  const hasStrokes = Array.isArray(strokes) && strokes.some((s) => Array.isArray(s?.points) && s.points.length >= 2);
   return hasPrompt || hasComments || hasStrokes;
 }
 
@@ -218,9 +216,7 @@ export function placeholderSizing({ axis, parentDisplay, parentWidth, anchorFlex
 
   if (axis === 'row') {
     if (display.includes('flex')) {
-      const flex = anchorFlex && anchorFlex !== 'none' && anchorFlex !== '0 1 auto'
-        ? anchorFlex
-        : '1 1 0';
+      const flex = anchorFlex && anchorFlex !== 'none' && anchorFlex !== '0 1 auto' ? anchorFlex : '1 1 0';
       return { kind: 'flex', flex, minWidth: 0 };
     }
     if (display === 'grid' || display === 'inline-grid') {
@@ -393,14 +389,7 @@ export function setVariantShown(el, shown) {
  * }} opts
  */
 export function resolveInsertSessionAnchor(opts) {
-  const {
-    wrapper,
-    variantCount = 0,
-    visibleVariant = 0,
-    placeholder,
-    insertAnchor,
-    pickVariantContent,
-  } = opts || {};
+  const { wrapper, variantCount = 0, visibleVariant = 0, placeholder, insertAnchor, pickVariantContent } = opts || {};
   if (wrapper && variantCount > 0 && visibleVariant > 0 && pickVariantContent) {
     const vis = pickVariantContent(wrapper, visibleVariant);
     if (vis) return vis;

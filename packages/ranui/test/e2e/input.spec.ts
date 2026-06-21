@@ -10,9 +10,12 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('input — default with label', async ({ page }) => {
-  await mount(page, `
+  await mount(
+    page,
+    `
     <r-input style="width: 240px" label="Username" placeholder="Enter username"></r-input>
-  `);
+  `,
+  );
   const el = page.locator('r-input');
   await expect(el).toBeVisible();
   await expect(el).toHaveScreenshot('input-default.png');
@@ -20,9 +23,12 @@ test('input — default with label', async ({ page }) => {
 });
 
 test('input — with icon', async ({ page }) => {
-  await mount(page, `
+  await mount(
+    page,
+    `
     <r-input style="width: 240px" label="Password" type="password" icon="lock"></r-input>
-  `);
+  `,
+  );
   const el = page.locator('r-input');
   await expect(el).toBeVisible();
   await expect(el).toHaveScreenshot('input-with-icon.png');
@@ -30,9 +36,12 @@ test('input — with icon', async ({ page }) => {
 });
 
 test('input — focused', async ({ page }) => {
-  await mount(page, `
+  await mount(
+    page,
+    `
     <r-input id="inp" style="width: 240px" label="Email" placeholder="you@example.com"></r-input>
-  `);
+  `,
+  );
   const el = page.locator('#inp');
   await expect(el).toBeVisible();
   // Click the native input inside shadow DOM to trigger focus styles
@@ -46,9 +55,12 @@ test('input — focused', async ({ page }) => {
 });
 
 test('input — disabled', async ({ page }) => {
-  await mount(page, `
+  await mount(
+    page,
+    `
     <r-input style="width: 240px" label="Read only" disabled value="Cannot edit"></r-input>
-  `);
+  `,
+  );
   const el = page.locator('r-input');
   await expect(el).toBeVisible();
   await expect(el).toHaveScreenshot('input-disabled.png');

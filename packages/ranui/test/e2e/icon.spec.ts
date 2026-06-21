@@ -12,14 +12,17 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('icon — size variants', async ({ page }) => {
-  await mount(page, `
+  await mount(
+    page,
+    `
     <div style="display: flex; gap: 16px; align-items: center;">
       <r-icon name="home" size="16"></r-icon>
       <r-icon name="home" size="24"></r-icon>
       <r-icon name="home" size="32"></r-icon>
       <r-icon name="home" size="48"></r-icon>
     </div>
-  `);
+  `,
+  );
   const el = page.locator('div').first();
   await expect(el).toBeVisible();
   await expect(el).toHaveScreenshot('icon-sizes.png');
@@ -27,13 +30,16 @@ test('icon — size variants', async ({ page }) => {
 });
 
 test('icon — custom color', async ({ page }) => {
-  await mount(page, `
+  await mount(
+    page,
+    `
     <div style="display: flex; gap: 16px; align-items: center;">
       <r-icon name="setting" size="28" color="#1890ff"></r-icon>
       <r-icon name="setting" size="28" color="#52c41a"></r-icon>
       <r-icon name="setting" size="28" color="#ff4d4f"></r-icon>
     </div>
-  `);
+  `,
+  );
   const el = page.locator('div').first();
   await expect(el).toBeVisible();
   await expect(el).toHaveScreenshot('icon-colors.png');

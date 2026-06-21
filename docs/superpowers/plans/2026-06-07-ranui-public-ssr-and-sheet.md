@@ -13,6 +13,7 @@
 ### Task 1: Public SSR Export Contracts
 
 **Files:**
+
 - Modify: `packages/ranui/test/unit/package-exports.source.test.ts`
 - Create: `packages/ranui/ssr.ts`
 - Create: `packages/ranui/ssr-stream.ts`
@@ -56,6 +57,7 @@ Expected: PASS.
 ### Task 2: Button Sheet Idempotency
 
 **Files:**
+
 - Modify: `packages/ranui/test/unit/button.contract.test.ts`
 - Modify: `packages/ranui/components/button/index.ts`
 
@@ -88,6 +90,7 @@ Expected: PASS.
 ### Task 3: Full Verification
 
 **Files:**
+
 - No new files.
 
 - [x] **Step 1: Run TypeScript**

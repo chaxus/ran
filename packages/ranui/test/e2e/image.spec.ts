@@ -17,10 +17,13 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('image — single', async ({ page }) => {
-  await mount(page, `
+  await mount(
+    page,
+    `
     <r-img style="width: 440px; height: 240px; display: block"
       src="${BLUE_SVG}"></r-img>
-  `);
+  `,
+  );
   const el = page.locator('r-img');
   await expect(el).toBeVisible();
   await expect(el).toHaveScreenshot('image-single.png');
@@ -28,12 +31,15 @@ test('image — single', async ({ page }) => {
 });
 
 test('image — multiple side by side', async ({ page }) => {
-  await mount(page, `
+  await mount(
+    page,
+    `
     <div style="display: flex; gap: 12px;">
       <r-img style="width: 200px; height: 120px; display: block" src="${BLUE_SVG}"></r-img>
       <r-img style="width: 200px; height: 120px; display: block" src="${LIGHT_SVG}"></r-img>
     </div>
-  `);
+  `,
+  );
   const el = page.locator('div').first();
   await expect(el).toBeVisible();
   await expect(el).toHaveScreenshot('image-multiple.png');

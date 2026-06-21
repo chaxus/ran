@@ -9,7 +9,7 @@ const candidates = [
   path.join(__dirname, 'detector', 'detect-antipatterns.mjs'),
   path.join(__dirname, '..', '..', 'cli', 'engine', 'detect-antipatterns.mjs'),
 ];
-const detectorPath = candidates.find(p => fs.existsSync(p));
+const detectorPath = candidates.find((p) => fs.existsSync(p));
 
 if (!detectorPath) {
   process.stderr.write('Error: bundled detector not found.\n');

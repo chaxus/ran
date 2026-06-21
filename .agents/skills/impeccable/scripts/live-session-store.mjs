@@ -172,13 +172,14 @@ function applyEvent(snapshot, entry, inheritedDiagnostics = []) {
       next.expectedVariants = event.count ?? next.expectedVariants;
       next.pendingEventSeq = entry.seq ?? next.pendingEventSeq;
       next.pendingEvent = toPendingEvent(event);
-      if (event.screenshotPath) upsertArtifact(next.annotationArtifacts, { type: 'screenshot', path: event.screenshotPath });
+      if (event.screenshotPath)
+        upsertArtifact(next.annotationArtifacts, { type: 'screenshot', path: event.screenshotPath });
       break;
     case 'variants_ready':
     case 'agent_done':
       next.phase = event.carbonize === true ? 'carbonize_required' : 'variants_ready';
       next.sourceFile = event.file ?? next.sourceFile;
-      next.arrivedVariants = event.arrivedVariants ?? (next.arrivedVariants ?? next.expectedVariants);
+      next.arrivedVariants = event.arrivedVariants ?? next.arrivedVariants ?? next.expectedVariants;
       next.pendingEventSeq = null;
       next.pendingEvent = null;
       if (event.carbonize === true) {

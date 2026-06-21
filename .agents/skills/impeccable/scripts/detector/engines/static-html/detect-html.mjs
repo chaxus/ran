@@ -27,23 +27,25 @@ import {
 } from '../../rules/checks.mjs';
 import { filterByProviders } from '../../registry/antipatterns.mjs';
 import { detectText, runTextContentAnalyzers } from '../regex/detect-text.mjs';
-import {
-  StaticDocument,
-  buildStaticStyleMap,
-  buildStaticWindow,
-  collectStaticCssText,
-} from './css-cascade.mjs';
+import { StaticDocument, buildStaticStyleMap, buildStaticWindow, collectStaticCssText } from './css-cascade.mjs';
 
 function checkStaticPageTypography(document, window) {
   const findings = [];
   const fonts = new Set();
   const overusedFound = new Set();
-  for (const el of document.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, td, th, dd, blockquote, figcaption, a, button, label, span, div')) {
-    const hasText = el.childNodes.some(n => n.nodeType === 3 && n.textContent.trim().length > 0);
+  for (const el of document.querySelectorAll(
+    'p, h1, h2, h3, h4, h5, h6, li, td, th, dd, blockquote, figcaption, a, button, label, span, div',
+  )) {
+    const hasText = el.childNodes.some((n) => n.nodeType === 3 && n.textContent.trim().length > 0);
     if (!hasText) continue;
     const ff = window.getComputedStyle(el).fontFamily || '';
-    const stack = ff.split(',').map(f => f.trim().replace(/^['"]|['"]$/g, '').toLowerCase());
-    const primary = stack.find(f => f && !GENERIC_FONTS.has(f));
+    const stack = ff.split(',').map((f) =>
+      f
+        .trim()
+        .replace(/^['"]|['"]$/g, '')
+        .toLowerCase(),
+    );
+    const primary = stack.find((f) => f && !GENERIC_FONTS.has(f));
     if (!primary) continue;
     fonts.add(primary);
     if (OVERUSED_FONTS.has(primary)) overusedFound.add(primary);
@@ -63,7 +65,10 @@ function checkStaticPageTypography(document, window) {
     const sorted = [...sizes].sort((a, b) => a - b);
     const ratio = sorted[sorted.length - 1] / sorted[0];
     if (ratio < 2.0) {
-      findings.push({ id: 'flat-type-hierarchy', snippet: `Sizes: ${sorted.map(s => s + 'px').join(', ')} (ratio ${ratio.toFixed(1)}:1)` });
+      findings.push({
+        id: 'flat-type-hierarchy',
+        snippet: `Sizes: ${sorted.map((s) => s + 'px').join(', ')} (ratio ${ratio.toFixed(1)}:1)`,
+      });
     }
   }
   return findings;
@@ -84,64 +89,106 @@ function checkElementBrokenImage(el) {
 }
 
 const STATIC_ELEMENT_RULES = [
-  { id: 'border-rules', selector: '*', run: (el, tag, style, window, customPropMap) => checkElementBorders(tag, style, null, resolveBorderRadiusPx(el, style, parseFloat(style.width) || 0, window)) },
-  { id: 'color-rules', selector: '*', run: (el, tag, style, window, customPropMap) => checkElementColors(el, style, tag, window, customPropMap, false) },
-  { id: 'dark-glow', selector: '*', run: (el, tag, style, window, customPropMap) => checkElementGlow(tag, style, resolveBackground(el.parentElement || el, window, customPropMap)) },
+  {
+    id: 'border-rules',
+    selector: '*',
+    run: (el, tag, style, window, customPropMap) =>
+      checkElementBorders(tag, style, null, resolveBorderRadiusPx(el, style, parseFloat(style.width) || 0, window)),
+  },
+  {
+    id: 'color-rules',
+    selector: '*',
+    run: (el, tag, style, window, customPropMap) => checkElementColors(el, style, tag, window, customPropMap, false),
+  },
+  {
+    id: 'dark-glow',
+    selector: '*',
+    run: (el, tag, style, window, customPropMap) =>
+      checkElementGlow(tag, style, resolveBackground(el.parentElement || el, window, customPropMap)),
+  },
   { id: 'motion-rules', selector: '*', run: (el, tag, style) => checkElementMotion(tag, style) },
-  { id: 'icon-tile-stack', selector: 'h1,h2,h3,h4,h5,h6', run: (el, tag, _style, window) => checkElementIconTile(el, tag, window) },
+  {
+    id: 'icon-tile-stack',
+    selector: 'h1,h2,h3,h4,h5,h6',
+    run: (el, tag, _style, window) => checkElementIconTile(el, tag, window),
+  },
   { id: 'italic-serif-display', selector: 'h1,h2', run: (el, tag, style) => checkElementItalicSerif(el, style, tag) },
-  { id: 'hero-eyebrow-chip', selector: 'h1', run: (el, tag, style, window, customPropMap) => checkElementHeroEyebrow(el, style, tag, window, customPropMap) },
+  {
+    id: 'hero-eyebrow-chip',
+    selector: 'h1',
+    run: (el, tag, style, window, customPropMap) => checkElementHeroEyebrow(el, style, tag, window, customPropMap),
+  },
   { id: 'broken-image', selector: 'img', run: (el) => checkElementBrokenImage(el) },
   { id: 'quality-rules', selector: '*', run: (el, tag, style, window) => checkElementQuality(el, style, tag, window) },
-  { id: 'oversized-h1', selector: 'h1', run: (el, tag, style, window) => checkElementOversizedH1(el, style, tag, window) },
-  { id: 'clipped-overflow-container', selector: '*', run: (el, tag, style, window) => checkElementClippedOverflow(el, style, tag, window) },
+  {
+    id: 'oversized-h1',
+    selector: 'h1',
+    run: (el, tag, style, window) => checkElementOversizedH1(el, style, tag, window),
+  },
+  {
+    id: 'clipped-overflow-container',
+    selector: '*',
+    run: (el, tag, style, window) => checkElementClippedOverflow(el, style, tag, window),
+  },
   { id: 'gpt-thin-border-wide-shadow', selector: '*', run: (el, tag, style) => checkElementGptBorderShadow(el, style) },
 ];
 
 async function detectHtml(filePath, options = {}) {
   const profile = options?.profile;
-  const html = profileStep(profile, {
-    engine: 'static-html',
-    phase: 'setup',
-    ruleId: 'read-html',
-    target: filePath,
-  }, () => fs.readFileSync(filePath, 'utf-8'));
+  const html = profileStep(
+    profile,
+    {
+      engine: 'static-html',
+      phase: 'setup',
+      ruleId: 'read-html',
+      target: filePath,
+    },
+    () => fs.readFileSync(filePath, 'utf-8'),
+  );
 
   let modules;
   try {
-    modules = await profileStepAsync(profile, {
-      engine: 'static-html',
-      phase: 'setup',
-      ruleId: 'import-static-parser',
-      target: filePath,
-    }, async () => {
-      const [htmlparser2, cssSelect, csstree, domutils] = await Promise.all([
-        import('htmlparser2'),
-        import('css-select'),
-        import('css-tree'),
-        import('domutils'),
-      ]);
-      return {
-        parseDocument: htmlparser2.parseDocument,
-        selectAll: cssSelect.selectAll,
-        selectOne: cssSelect.selectOne,
-        is: cssSelect.is,
-        csstree,
-        domutils,
-      };
-    });
+    modules = await profileStepAsync(
+      profile,
+      {
+        engine: 'static-html',
+        phase: 'setup',
+        ruleId: 'import-static-parser',
+        target: filePath,
+      },
+      async () => {
+        const [htmlparser2, cssSelect, csstree, domutils] = await Promise.all([
+          import('htmlparser2'),
+          import('css-select'),
+          import('css-tree'),
+          import('domutils'),
+        ]);
+        return {
+          parseDocument: htmlparser2.parseDocument,
+          selectAll: cssSelect.selectAll,
+          selectOne: cssSelect.selectOne,
+          is: cssSelect.is,
+          csstree,
+          domutils,
+        };
+      },
+    );
   } catch {
     return detectText(html, filePath, options);
   }
 
   const resolvedPath = path.resolve(filePath);
   const fileDir = path.dirname(resolvedPath);
-  const root = profileStep(profile, {
-    engine: 'static-html',
-    phase: 'parse-html',
-    ruleId: 'parse-document',
-    target: filePath,
-  }, () => modules.parseDocument(html, { lowerCaseAttributeNames: false, lowerCaseTags: true }));
+  const root = profileStep(
+    profile,
+    {
+      engine: 'static-html',
+      phase: 'parse-html',
+      ruleId: 'parse-document',
+      target: filePath,
+    },
+    () => modules.parseDocument(html, { lowerCaseAttributeNames: false, lowerCaseTags: true }),
+  );
 
   const cssText = collectStaticCssText(root, fileDir, profile, filePath, modules);
   const document = new StaticDocument(root, modules);
@@ -151,9 +198,10 @@ async function detectHtml(filePath, options = {}) {
   const customPropMap = null;
 
   const findings = [];
-  const runElementCheck = (ruleId, callback) => profile
-    ? profileFindings(profile, { engine: 'static-html', phase: 'element', ruleId, target: filePath }, callback)
-    : callback();
+  const runElementCheck = (ruleId, callback) =>
+    profile
+      ? profileFindings(profile, { engine: 'static-html', phase: 'element', ruleId, target: filePath }, callback)
+      : callback();
 
   const visitedByRule = new Map();
   for (const rule of STATIC_ELEMENT_RULES) {
@@ -169,13 +217,16 @@ async function detectHtml(filePath, options = {}) {
   }
 
   if (isFullPage(html)) {
-    const runPageCheck = (ruleId, callback) => profile
-      ? profileFindings(profile, { engine: 'static-html', phase: 'page', ruleId, target: filePath }, callback)
-      : callback();
+    const runPageCheck = (ruleId, callback) =>
+      profile
+        ? profileFindings(profile, { engine: 'static-html', phase: 'page', ruleId, target: filePath }, callback)
+        : callback();
     for (const f of runPageCheck('typography-rules', () => checkStaticPageTypography(document, window))) {
       findings.push(finding(f.id, filePath, f.snippet));
     }
-    for (const f of runPageCheck('repeated-section-kickers', () => checkRepeatedSectionKickersFromDoc(document, window))) {
+    for (const f of runPageCheck('repeated-section-kickers', () =>
+      checkRepeatedSectionKickersFromDoc(document, window),
+    )) {
       findings.push(finding(f.id, filePath, f.snippet));
     }
     for (const f of runPageCheck('layout-rules', () => checkPageLayout(document, window))) {
@@ -187,9 +238,9 @@ async function detectHtml(filePath, options = {}) {
     for (const f of runPageCheck('skipped-heading', () => checkPageQualityFromDoc(document))) {
       findings.push(finding(f.id, filePath, f.snippet));
     }
-    for (const f of runPageCheck('html-patterns', () => checkHtmlPatterns(html).filter(item =>
-      item.id !== 'bounce-easing' && item.id !== 'layout-transition'
-    ))) {
+    for (const f of runPageCheck('html-patterns', () =>
+      checkHtmlPatterns(html).filter((item) => item.id !== 'bounce-easing' && item.id !== 'layout-transition'),
+    )) {
       findings.push(finding(f.id, filePath, f.snippet));
     }
     // Text-content analyzers (em-dash overuse, marketing buzzwords,

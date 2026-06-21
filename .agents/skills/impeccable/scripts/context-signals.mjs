@@ -42,7 +42,10 @@ function latestCritique(cwd) {
   try {
     const dir = getCritiqueDir(cwd);
     if (!fs.existsSync(dir)) return null;
-    const files = fs.readdirSync(dir).filter((f) => f.endsWith('.md')).sort();
+    const files = fs
+      .readdirSync(dir)
+      .filter((f) => f.endsWith('.md'))
+      .sort();
     if (!files.length) return null;
     const newest = files[files.length - 1];
     const text = fs.readFileSync(path.join(dir, newest), 'utf-8');
@@ -104,11 +107,14 @@ function gitSignals(cwd) {
   if (fromDiff) {
     changed = fromDiff.split('\n').filter(Boolean);
   } else if (fromStatus) {
-    changed = fromStatus.split(/\r?\n/).filter(Boolean).map((l) => {
-      const p = l.slice(3);
-      const arrow = p.indexOf(' -> ');
-      return arrow === -1 ? p : p.slice(arrow + 4);
-    });
+    changed = fromStatus
+      .split(/\r?\n/)
+      .filter(Boolean)
+      .map((l) => {
+        const p = l.slice(3);
+        const arrow = p.indexOf(' -> ');
+        return arrow === -1 ? p : p.slice(arrow + 4);
+      });
   }
   return {
     isRepo: true,
@@ -128,7 +134,11 @@ function probePort(port, timeout = 250) {
     const finish = (ok) => {
       if (settled) return;
       settled = true;
-      try { sock.destroy(); } catch { /* ignore */ }
+      try {
+        sock.destroy();
+      } catch {
+        /* ignore */
+      }
       resolve(ok);
     };
     sock.setTimeout(timeout);
@@ -152,8 +162,17 @@ async function devServerSignals() {
 
 // Extensions the detector scans (mirrors the engine's walkDir set + HTML).
 const SCANNABLE_EXT = new Set([
-  '.html', '.htm', '.css', '.scss',
-  '.jsx', '.tsx', '.js', '.ts', '.vue', '.svelte', '.astro',
+  '.html',
+  '.htm',
+  '.css',
+  '.scss',
+  '.jsx',
+  '.tsx',
+  '.js',
+  '.ts',
+  '.vue',
+  '.svelte',
+  '.astro',
 ]);
 // Where UI source typically lives. The detector walks these and skips
 // node_modules / dist / build / .next / .nuxt automatically.

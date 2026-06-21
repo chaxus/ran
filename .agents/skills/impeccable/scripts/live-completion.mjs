@@ -12,7 +12,8 @@ export function completionAckForAcceptResult(eventId, completionType, acceptResu
     ack.final = false;
     ack.requiresComplete = true;
     ack.nextCommand = `live-complete.mjs --id ${eventId}`;
-    ack.message = 'Carbonize cleanup must be verified, then the session must be completed explicitly before polling again.';
+    ack.message =
+      'Carbonize cleanup must be verified, then the session must be completed explicitly before polling again.';
   }
   return ack;
 }

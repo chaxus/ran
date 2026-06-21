@@ -8,6 +8,9 @@ import { initTheme, setTheme, setThemePack } from '@/utils/theme';
 import type { RanThemeName, RanThemePackName } from '@/utils/theme';
 import { getLang, applyLanguage } from './i18n';
 import type { Lang } from './i18n';
+import '../components/router';
+import '../components/route';
+import '../components/link';
 import '../style';
 import '../theme-packs/pixel-retro';
 import '../theme-packs/windows-98';
@@ -17,6 +20,7 @@ import '../theme-packs/wired';
 import '../theme-packs/paper';
 import '../theme-packs/neo-brutalism';
 import '../theme-packs/transitions';
+import '../theme-packs/dark-overrides';
 import { syncWiredBordersForThemePack } from '../theme-packs/wired-overlay';
 
 const PACK_NAMES: RanThemePackName[] = [
@@ -81,6 +85,19 @@ const bindThemePackButtons = (packSelect: DemoSelectElement | null): void => {
 
 initTheme();
 
+// SPA navigation: intercept clicks on elements with data-spa-link attribute
+document.addEventListener('click', (e: Event) => {
+  const a = (e.target as HTMLElement).closest('[data-spa-link]');
+  if (!a) return;
+  const href = (a as HTMLElement).getAttribute('href');
+  if (!href) return;
+  const router = document.querySelector('r-router') as (HTMLElement & { navigate: (path: string) => void }) | null;
+  if (!router?.navigate) return;
+  e.preventDefault();
+  router.navigate(href);
+  window.scrollTo({ top: 0, behavior: 'instant' });
+});
+
 // Activate wired borders if wired pack is already stored from a previous visit
 if (typeof localStorage !== 'undefined' && localStorage.getItem('ran-theme-pack') === 'wired') {
   syncWiredBordersForThemePack();
@@ -94,26 +111,26 @@ registerIcons({
   setting,
 });
 
+const updateThemeToggleIcon = (theme: RanThemeName): void => {
+  const btn = document.getElementById('theme-toggle');
+  if (btn) btn.setAttribute('data-theme', theme === 'dark' ? 'dark' : 'light');
+};
+
+// Theme toggle button (moon/sun icon in nav)
+const themeToggle = document.getElementById('theme-toggle');
+themeToggle?.addEventListener('click', () => {
+  const next: RanThemeName = getStoredTheme() === 'dark' ? 'light' : 'dark';
+  setTheme(next);
+  updateThemeToggleIcon(next);
+});
+
 // Register icons first, then bootstrap all components/examples.
 import('../index').then(() => {
-  const themeSelect = document.getElementById('theme-select') as DemoSelectElement | null;
-  const packSelect = document.getElementById('pack-select') as DemoSelectElement | null;
+  // No nav selects for theme/pack — controls live in hero pack pills
+  syncThemeControls(null, null);
+  bindThemePackButtons(null);
 
-  syncThemeControls(themeSelect, packSelect);
-  bindThemePackButtons(packSelect);
-
-  themeSelect?.addEventListener('change', (e: Event) => {
-    const value = (e as CustomEvent<{ value: string }>).detail.value as RanThemeName;
-    setTheme(value);
-  });
-
-  packSelect?.addEventListener('change', (e: Event) => {
-    const value = (e as CustomEvent<{ value: string }>).detail.value;
-    const pack = (value === 'default' ? 'default' : value) as RanThemePackName;
-    setThemePack(pack);
-    setActivePackButton(pack);
-    syncWiredBordersForThemePack();
-  });
+  updateThemeToggleIcon(getStoredTheme());
 
   // ── i18n ──────────────────────────────────────────────────────────
   const langSelect = document.getElementById('lang-select') as DemoSelectElement | null;

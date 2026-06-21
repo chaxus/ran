@@ -45,6 +45,14 @@
   --ran-btn-content-border-image-source: none;
   --ran-btn-contain-transition: none;
   --ran-btn-content-font-family: var(--ran-skin-font-family);
+  /* Paper-white background — hand-drawn look comes from the rough SVG border overlay */
+  --ran-btn-content-background-color: #fefefe;
+  --ran-btn-content-color: #111827;
+  --ran-btn-content-hover-background-color: #f0ede8;
+  --ran-btn-content-hover-color: #111827;
+  --ran-btn-content-warning-background-color: #fefefe;
+  --ran-btn-content-warning-color: #111827;
+  --ran-btn-content-warning-border-color: none;
 }
 
 [data-ran-theme-pack='wired'] r-input {
@@ -63,6 +71,12 @@
   --ran-checkbox-inner-border-radius: 0;
   --ran-checkbox-inner-border: none;
   --ran-checkbox-inner-border-image-source: none;
+  /* Paper-white box; rough SVG border drawn only around the box by the overlay */
+  --ran-checkbox-checked-background-color: #fefefe;
+  --ran-checkbox-checked-background-image: none;
+  --ran-checkbox-checked-border: none;
+  /* Dark-ink checkmark so it reads clearly on white */
+  --ran-checkbox-inner-after-border: 2px solid #111827;
 }
 
 [data-ran-theme-pack='wired'] r-modal {
@@ -94,9 +108,16 @@
 [data-ran-theme-pack='wired'] r-progress {
   --ran-progress-wrap-background: #e0dbd4;
   --ran-progress-wrap-border-radius: 0;
-  --ran-progress-wrap-value-background: var(--ran-color-primary);
+  /* Pencil-hachure fill: diagonal stripes to match hand-drawn aesthetic */
+  --ran-progress-wrap-value-background: repeating-linear-gradient(
+    -45deg,
+    #111827 0px,
+    #111827 2px,
+    #d0cbc3 2px,
+    #d0cbc3 7px
+  );
   --ran-progress-wrap-value-border-radius: 0;
-  --ran-progress-dot-background: var(--ran-color-primary);
+  --ran-progress-dot-background: #111827;
   --ran-progress-dot-border-radius: 0;
 }
 

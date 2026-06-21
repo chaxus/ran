@@ -17,19 +17,21 @@ const DEFAULT_TIMEOUT_MS = 60_000;
 const require = createRequire(import.meta.url);
 
 export function buildCopyEditBatchPrompt(batch, { cwd = process.cwd() } = {}) {
-  const repairLines = batch?.repair ? [
-    '',
-    'Repair mode:',
-    '- The previous Apply attempt changed source, but validation failed.',
-    '- Do not restart from the old source. Inspect and repair the current source files.',
-    '- Fix the validation failures below while preserving all successfully applied visible copy edits.',
-    '- If a failure says source_verification_failed, make the current source prove each applied op: the newText must appear at a plausible hinted, candidate, or coupled source location.',
-    '- If the old visible text is still present only because newText contains it, keep the valid append/edit and repair only missing source evidence.',
-    '- If failures or candidates show edited text is also a lookup key, update coupled count, animation, icon, image, asset, style, or metadata keys in the current source, or fail that entry without partial edits.',
-    '- Keep failed and notes as arrays.',
-    '- Return the same canonical JSON shape after repair.',
-    JSON.stringify(batch.repair, null, 2),
-  ] : [];
+  const repairLines = batch?.repair
+    ? [
+        '',
+        'Repair mode:',
+        '- The previous Apply attempt changed source, but validation failed.',
+        '- Do not restart from the old source. Inspect and repair the current source files.',
+        '- Fix the validation failures below while preserving all successfully applied visible copy edits.',
+        '- If a failure says source_verification_failed, make the current source prove each applied op: the newText must appear at a plausible hinted, candidate, or coupled source location.',
+        '- If the old visible text is still present only because newText contains it, keep the valid append/edit and repair only missing source evidence.',
+        '- If failures or candidates show edited text is also a lookup key, update coupled count, animation, icon, image, asset, style, or metadata keys in the current source, or fail that entry without partial edits.',
+        '- Keep failed and notes as arrays.',
+        '- Return the same canonical JSON shape after repair.',
+        JSON.stringify(batch.repair, null, 2),
+      ]
+    : [];
   return [
     'You are the Impeccable staged copy-edit batch applier.',
     '',
@@ -145,7 +147,9 @@ export function runCopyEditPostApplyChecks({ cwd = process.cwd(), files = [] } =
       continue;
     }
     let content = '';
-    try { content = fs.readFileSync(file, 'utf-8'); } catch (err) {
+    try {
+      content = fs.readFileSync(file, 'utf-8');
+    } catch (err) {
       failures.push({ file: relativeFile, reason: 'read_failed', message: err.message });
       continue;
     }
@@ -211,7 +215,9 @@ function checkFrameworkSourceSyntax(relativeFile, content) {
 }
 
 function findLeftoverImpeccableMarker(content) {
-  const commentMarker = content.match(/^\s*(?:<!--|\{\/\*)\s*impeccable-carbonize-(?:start|end)\b|^\s*(?:<!--|\{\/\*)\s*impeccable-variants-(?:start|end)\b/m);
+  const commentMarker = content.match(
+    /^\s*(?:<!--|\{\/\*)\s*impeccable-carbonize-(?:start|end)\b|^\s*(?:<!--|\{\/\*)\s*impeccable-variants-(?:start|end)\b/m,
+  );
   if (commentMarker) return commentMarker[0];
 
   const attrPattern = /\bdata-impeccable-(?:variants?|original-text|editable|text-wrap)\s*=/g;
@@ -340,7 +346,10 @@ function stripLiveRuntimeHtml(html) {
   return html
     .replace(/\sdata-impeccable-(?:original-text|editable|text-wrap)(?:=(?:"[^"]*"|'[^']*'|[^\s>]+))?/g, '')
     .replace(/\scontenteditable(?:=(?:"[^"]*"|'[^']*'|[^\s>]+))?/g, '')
-    .replace(/\sstyle=(["'])(?:(?!\1)[\s\S])*(?:-webkit-user-modify|user-select:\s*text|cursor:\s*text)(?:(?!\1)[\s\S])*\1/g, '');
+    .replace(
+      /\sstyle=(["'])(?:(?!\1)[\s\S])*(?:-webkit-user-modify|user-select:\s*text|cursor:\s*text)(?:(?!\1)[\s\S])*\1/g,
+      '',
+    );
 }
 
 function normalizeBatchResult(result) {
@@ -360,7 +369,7 @@ function normalizeBatchResult(result) {
   const warnings = Array.isArray(result.warnings)
     ? result.warnings
         .filter(Boolean)
-        .map((warning) => typeof warning === 'string' ? { message: warning } : warning)
+        .map((warning) => (typeof warning === 'string' ? { message: warning } : warning))
         .filter((warning) => warning && typeof warning === 'object')
     : [];
   return {
@@ -417,7 +426,8 @@ export function parseCopyEditAgentResult(text) {
       const nested = parseCopyEditAgentResult(parsedOuter.result);
       if (nested) return nested;
     }
-    if (parsedOuter.status === 'done' || parsedOuter.status === 'partial' || parsedOuter.status === 'error') return parsedOuter;
+    if (parsedOuter.status === 'done' || parsedOuter.status === 'partial' || parsedOuter.status === 'error')
+      return parsedOuter;
   }
 
   const jsonMatch = trimmed.match(/\{[\s\S]*\}/);
@@ -448,11 +458,14 @@ export function chooseCopyEditAgent({
 function runCodex(prompt, { cwd, env, resultPath, logPath, timeoutMs = DEFAULT_TIMEOUT_MS }) {
   const args = [
     'exec',
-    '--cd', cwd,
+    '--cd',
+    cwd,
     '--dangerously-bypass-approvals-and-sandbox',
     '--ephemeral',
-    '--output-last-message', resultPath,
-    '-c', `model_reasoning_effort="${env.IMPECCABLE_LIVE_COPY_AGENT_EFFORT || 'low'}"`,
+    '--output-last-message',
+    resultPath,
+    '-c',
+    `model_reasoning_effort="${env.IMPECCABLE_LIVE_COPY_AGENT_EFFORT || 'low'}"`,
   ];
   if (env.IMPECCABLE_LIVE_COPY_AGENT_MODEL) {
     args.push('--model', env.IMPECCABLE_LIVE_COPY_AGENT_MODEL);
@@ -462,11 +475,7 @@ function runCodex(prompt, { cwd, env, resultPath, logPath, timeoutMs = DEFAULT_T
 }
 
 function runClaude(prompt, { cwd, env, resultPath, logPath, timeoutMs = DEFAULT_TIMEOUT_MS }) {
-  const args = [
-    '--print',
-    '--permission-mode', 'bypassPermissions',
-    '--output-format', 'json',
-  ];
+  const args = ['--print', '--permission-mode', 'bypassPermissions', '--output-format', 'json'];
   if (env.IMPECCABLE_LIVE_COPY_AGENT_MODEL) {
     args.push('--model', env.IMPECCABLE_LIVE_COPY_AGENT_MODEL);
   }
@@ -510,7 +519,9 @@ function runAgentProcess(command, args, stdin, { cwd, env, logPath, timeoutMs, m
     };
 
     process.once('SIGTERM', () => {
-      try { child.kill('SIGTERM'); } catch {}
+      try {
+        child.kill('SIGTERM');
+      } catch {}
     });
     child.stdout.on('data', (chunk) => {
       output += chunk.toString();
@@ -539,7 +550,11 @@ function isPathInsideOrEqual(cwd, file) {
 }
 
 function tryParseJson(text) {
-  try { return JSON.parse(text); } catch { return null; }
+  try {
+    return JSON.parse(text);
+  } catch {
+    return null;
+  }
 }
 
 function truncate(value, max) {
@@ -566,10 +581,16 @@ export function describeNoProviderError({
   const lines = ['No live copy-edit AI runner is available.'];
   if (exists('claude')) {
     if (env.CLAUDE_CODE_OAUTH_TOKEN) {
-      lines.push('  • Claude CLI: installed; CLAUDE_CODE_OAUTH_TOKEN is set but the CLI still rejected it. The token may be expired or invalid.');
+      lines.push(
+        '  • Claude CLI: installed; CLAUDE_CODE_OAUTH_TOKEN is set but the CLI still rejected it. The token may be expired or invalid.',
+      );
     } else {
-      lines.push('  • Claude CLI: installed but not selected. If Apply still fails, the subprocess may be unable to read your `claude /login` credentials (on macOS, the Keychain can be unreachable from a no-TTY child).');
-      lines.push('      Headless fix: run `claude setup-token` once, then `export CLAUDE_CODE_OAUTH_TOKEN=<the printed sk-ant-oat01-… token>` before starting `live-server.mjs`.');
+      lines.push(
+        '  • Claude CLI: installed but not selected. If Apply still fails, the subprocess may be unable to read your `claude /login` credentials (on macOS, the Keychain can be unreachable from a no-TTY child).',
+      );
+      lines.push(
+        '      Headless fix: run `claude setup-token` once, then `export CLAUDE_CODE_OAUTH_TOKEN=<the printed sk-ant-oat01-… token>` before starting `live-server.mjs`.',
+      );
       lines.push('      Alternative: `export ANTHROPIC_API_KEY=<key>` if you have console.anthropic.com credits.');
     }
   } else {
@@ -581,9 +602,13 @@ export function describeNoProviderError({
     lines.push('  • Codex CLI: not installed.');
   }
   if (chatAvailable()) {
-    lines.push('  • Chat: an Impeccable live session is polling but selection chose another provider — unexpected; please report.');
+    lines.push(
+      '  • Chat: an Impeccable live session is polling but selection chose another provider — unexpected; please report.',
+    );
   } else {
-    lines.push('  • Chat: no Impeccable live session is currently polling on this server. Start Impeccable live in your chat to route Apply through the chat agent.');
+    lines.push(
+      '  • Chat: no Impeccable live session is currently polling on this server. Start Impeccable live in your chat to route Apply through the chat agent.',
+    );
   }
   lines.push('Fix one of the above, or set IMPECCABLE_LIVE_COPY_AGENT=mock for tests.');
   return lines.join('\n');
@@ -622,7 +647,10 @@ export function extractRunnerErrorMessage(output, command) {
       return `${command} CLI: ${parsed.error.trim()}`;
     }
   }
-  const lines = text.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+  const lines = text
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
   if (lines.length > 0) {
     const last = lines[lines.length - 1];
     if (last.length > 0 && last.length < 400) return `${command}: ${last}`;
@@ -658,11 +686,7 @@ function computeCommandAuthed(command) {
   if (command !== 'claude') return false;
   let result;
   try {
-    result = spawnSync('claude', [
-      '--print',
-      '--output-format', 'json',
-      'ping',
-    ], {
+    result = spawnSync('claude', ['--print', '--output-format', 'json', 'ping'], {
       encoding: 'utf-8',
       timeout: 10000,
       env: process.env,

@@ -147,8 +147,12 @@ function writeUpdateCache(cache) {
 
 /** Compare dotted numeric versions. Returns >0 when a is newer than b. */
 function compareSemver(a, b) {
-  const pa = String(a).split('.').map(n => parseInt(n, 10) || 0);
-  const pb = String(b).split('.').map(n => parseInt(n, 10) || 0);
+  const pa = String(a)
+    .split('.')
+    .map((n) => parseInt(n, 10) || 0);
+  const pb = String(b)
+    .split('.')
+    .map((n) => parseInt(n, 10) || 0);
   for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
     const diff = (pa[i] || 0) - (pb[i] || 0);
     if (diff !== 0) return diff;
@@ -227,8 +231,8 @@ async function cli() {
     // — cheap models miss the empty case more often than the explicit one.
     const parts = [
       'NO_PRODUCT_MD: This project has no PRODUCT.md yet. ' +
-      'Stop the current task, load reference/init.md, and follow its ' +
-      'instructions to write PRODUCT.md before resuming.',
+        'Stop the current task, load reference/init.md, and follow its ' +
+        'instructions to write PRODUCT.md before resuming.',
     ];
     if (updateDirective) parts.push(updateDirective);
     process.stdout.write(parts.join('\n\n---\n\n') + '\n');

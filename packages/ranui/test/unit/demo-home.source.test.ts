@@ -37,14 +37,17 @@ describe('ranui demo homepage source', () => {
 
     expect(source).toContain('id="components"');
     expect(source).toContain('Component Directory');
-    expect(source).toContain('Component notes');
     expect(source).toContain('class="component-meta"');
-    expect(source).toContain('component-notes');
 
+    // Component gallery cards still present on landing page
     for (const component of COMPONENTS) {
       expect(source, `${component} card anchor missing`).toContain(`id="component-${component}"`);
-      expect(source, `${component} detail anchor missing`).toContain(`id="docs-${component}"`);
-      expect(source, `${component} detail link missing`).toContain(`href="#docs-${component}"`);
+    }
+
+    // Detail pages moved to routed views — each component has a route and SPA link
+    for (const component of COMPONENTS) {
+      expect(source, `${component} route missing`).toContain(`path="/components/${component}"`);
+      expect(source, `${component} view-notes link missing`).toContain(`href="/components/${component}"`);
     }
   });
 
@@ -52,7 +55,6 @@ describe('ranui demo homepage source', () => {
     const source = readDemo();
 
     expect(source).toContain('href="#components"');
-    expect(source).toContain('Explore components');
     expect(source).toContain('href="#themes"');
     expect(source).toContain('href="#style-api"');
   });
@@ -63,12 +65,11 @@ describe('ranui demo homepage source', () => {
     const ts = readDemoTs();
 
     expect(source).toContain('class="intro-grid"');
-    expect(source).toContain('workbench-panel');
-    expect(source).toContain('class="theme-pack-button"');
+    expect(source).toContain('class="hero-mockup"');
+    expect(source).toContain('class="pack-pill theme-pack-button"');
     expect(source).toContain('data-pack-choice="wired"');
-    expect(source).toContain('class="theme-window"');
     expect(css).toContain('.theme-pack-button');
-    expect(css).toContain('.theme-window');
+    expect(css).toContain('.pack-pill');
     expect(ts).toContain('bindThemePackButtons');
   });
 

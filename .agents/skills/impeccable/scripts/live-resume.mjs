@@ -16,7 +16,8 @@ export function manualApplyResumeHint(event = {}) {
   if (summary.pageUrl) parts.push(`page ${summary.pageUrl}`);
   if (summary.chunk) parts.push(`chunk ${summary.chunk.index}/${summary.chunk.total}`);
   if (Number.isFinite(summary.opCount)) parts.push(`${summary.opCount} op(s)`);
-  if (Number.isFinite(summary.entryCount)) parts.push(`${summary.entryCount} entr${summary.entryCount === 1 ? 'y' : 'ies'}`);
+  if (Number.isFinite(summary.entryCount))
+    parts.push(`${summary.entryCount} entr${summary.entryCount === 1 ? 'y' : 'ies'}`);
   if (summary.files?.length) parts.push(`likely files: ${summary.files.join(', ')}`);
   const scope = parts.length ? ` (${parts.join(', ')})` : '';
   return `Manual Apply pending${scope}. If you have not already leased it, run live-poll.mjs. Apply the source edits from the manual_edit_apply batch, then reply with ${manualApplyReplyCommand(event.id)}. Polling only leases this work item; it does not commit source edits. Do not run live-commit-manual-edits.mjs for this leased event. Do not poll again before replying.`;
@@ -63,7 +64,9 @@ function parseArgs(argv) {
 export async function resumeCli() {
   const args = parseArgs(process.argv.slice(2));
   if (args.help) {
-    console.log(`Usage: node live-resume.mjs [--id SESSION_ID]\n\nPrint the active durable session checkpoint and the next safe agent action.`);
+    console.log(
+      `Usage: node live-resume.mjs [--id SESSION_ID]\n\nPrint the active durable session checkpoint and the next safe agent action.`,
+    );
     return;
   }
 

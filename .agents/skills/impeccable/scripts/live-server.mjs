@@ -48,8 +48,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // DESIGN sidecar is project-local at .impeccable/design.json, with legacy
 // DESIGN.json fallback for existing projects.
 const CONTEXT_DIR = resolveContextDir(process.cwd());
-const DEFAULT_POLL_TIMEOUT = 600_000;   // 10 min — agent re-polls on timeout anyway
-const SSE_HEARTBEAT_INTERVAL = 30_000;  // keepalive ping every 30s
+const DEFAULT_POLL_TIMEOUT = 600_000; // 10 min — agent re-polls on timeout anyway
+const SSE_HEARTBEAT_INTERVAL = 30_000; // keepalive ping every 30s
 
 // ---------------------------------------------------------------------------
 // Port detection
@@ -73,13 +73,13 @@ async function findOpenPort(start = 8400) {
 const state = {
   token: null,
   port: null,
-  sseClients: new Set(),   // SSE response objects (server→browser push)
-  pendingEvents: [],        // browser events waiting for agent ack ({ event, leaseUntil })
-  pendingPolls: [],         // agent poll callbacks waiting for browser events
+  sseClients: new Set(), // SSE response objects (server→browser push)
+  pendingEvents: [], // browser events waiting for agent ack ({ event, leaseUntil })
+  pendingPolls: [], // agent poll callbacks waiting for browser events
   nextEventSeq: 1,
   lastAgentPollingBroadcast: null,
   exitTimer: null,
-  sessionDir: null,         // per-session tmp dir for annotation screenshots
+  sessionDir: null, // per-session tmp dir for annotation screenshots
   sessionStore: null,
   leaseTimer: null,
   manualEditActivity: null,
@@ -129,7 +129,9 @@ function manualEditApplyChunkSize(env = process.env) {
 function countManualApplyOps(entriesOrBatch) {
   const entries = Array.isArray(entriesOrBatch)
     ? entriesOrBatch
-    : Array.isArray(entriesOrBatch?.entries) ? entriesOrBatch.entries : [];
+    : Array.isArray(entriesOrBatch?.entries)
+      ? entriesOrBatch.entries
+      : [];
   let count = 0;
   for (const entry of entries) count += Array.isArray(entry.ops) ? entry.ops.length : 0;
   return count;
@@ -254,36 +256,33 @@ function compactManualApplyBatch(batch = {}) {
     entries,
     ops: entries.flatMap((entry) => entry.ops.map((op) => ({ ...op, entryId: entry.id }))),
     candidates: candidates.length > 0 ? candidates : undefined,
-    context: batch.context ? {
-      bufferPath: batch.context.bufferPath,
-      totalEntries: batch.context.totalEntries,
-      totalOps: batch.context.totalOps,
-      chunkIndex: batch.context.chunkIndex,
-      chunkTotal: batch.context.chunkTotal,
-      totalApplyOps: batch.context.totalApplyOps,
-    } : undefined,
+    context: batch.context
+      ? {
+          bufferPath: batch.context.bufferPath,
+          totalEntries: batch.context.totalEntries,
+          totalOps: batch.context.totalOps,
+          chunkIndex: batch.context.chunkIndex,
+          chunkTotal: batch.context.chunkTotal,
+          totalApplyOps: batch.context.totalApplyOps,
+        }
+      : undefined,
   };
 }
 
 function compactManualApplyCandidates(candidates) {
-  return (Array.isArray(candidates) ? candidates : [])
-    .slice(0, 24)
-    .map((candidate) => ({
-      entryId: candidate.entryId,
-      ref: candidate.ref,
-      sourceHint: compactManualApplySourceMatch(candidate.sourceHint),
-      textMatches: compactManualApplySourceMatches(candidate.textMatches, 8),
-      objectKeyMatches: compactManualApplySourceMatches(candidate.objectKeyMatches, 8),
-      contextTextMatches: compactManualApplySourceMatches(candidate.contextTextMatches, 8),
-      locatorMatches: compactManualApplySourceMatches(candidate.locatorMatches, 6),
-    }));
+  return (Array.isArray(candidates) ? candidates : []).slice(0, 24).map((candidate) => ({
+    entryId: candidate.entryId,
+    ref: candidate.ref,
+    sourceHint: compactManualApplySourceMatch(candidate.sourceHint),
+    textMatches: compactManualApplySourceMatches(candidate.textMatches, 8),
+    objectKeyMatches: compactManualApplySourceMatches(candidate.objectKeyMatches, 8),
+    contextTextMatches: compactManualApplySourceMatches(candidate.contextTextMatches, 8),
+    locatorMatches: compactManualApplySourceMatches(candidate.locatorMatches, 6),
+  }));
 }
 
 function compactManualApplySourceMatches(matches, limit) {
-  return (Array.isArray(matches) ? matches : [])
-    .slice(0, limit)
-    .map(compactManualApplySourceMatch)
-    .filter(Boolean);
+  return (Array.isArray(matches) ? matches : []).slice(0, limit).map(compactManualApplySourceMatch).filter(Boolean);
 }
 
 function compactManualApplySourceMatch(match) {
@@ -340,14 +339,16 @@ function compactManualApplyContext(value) {
 }
 
 function compactNearbyManualEditTexts(items) {
-  return (Array.isArray(items) ? items : [])
-    .slice(0, MANUAL_APPLY_COMPACT_NEARBY_LIMIT)
-    .map((item) => typeof item === 'string' ? { text: truncateManualApplyText(item, MANUAL_APPLY_COMPACT_TEXT_LIMIT) } : {
-      ref: item?.ref,
-      tag: item?.tag,
-      classes: Array.isArray(item?.classes) ? item.classes : [],
-      text: truncateManualApplyText(item?.text, MANUAL_APPLY_COMPACT_TEXT_LIMIT),
-    });
+  return (Array.isArray(items) ? items : []).slice(0, MANUAL_APPLY_COMPACT_NEARBY_LIMIT).map((item) =>
+    typeof item === 'string'
+      ? { text: truncateManualApplyText(item, MANUAL_APPLY_COMPACT_TEXT_LIMIT) }
+      : {
+          ref: item?.ref,
+          tag: item?.tag,
+          classes: Array.isArray(item?.classes) ? item.classes : [],
+          text: truncateManualApplyText(item?.text, MANUAL_APPLY_COMPACT_TEXT_LIMIT),
+        },
+  );
 }
 
 function truncateManualApplyText(value, max) {
@@ -449,7 +450,9 @@ function normalizeApplyChunkResult(result) {
   return {
     status,
     message: typeof result?.message === 'string' ? result.message : null,
-    appliedEntryIds: Array.isArray(result?.appliedEntryIds) ? result.appliedEntryIds.filter((id) => typeof id === 'string') : [],
+    appliedEntryIds: Array.isArray(result?.appliedEntryIds)
+      ? result.appliedEntryIds.filter((id) => typeof id === 'string')
+      : [],
     failed: Array.isArray(result?.failed) ? result.failed.filter(Boolean) : [],
     files: Array.isArray(result?.files) ? result.files.filter((file) => typeof file === 'string') : [],
     notes: Array.isArray(result?.notes) ? result.notes.filter((note) => typeof note === 'string') : [],
@@ -573,12 +576,16 @@ function markChunkEntriesFailed(failedByEntry, chunk, reason) {
 function splitManualApplyBatch(batch, maxOps) {
   const totalOpCount = countManualApplyOps(batch);
   if (totalOpCount <= maxOps) {
-    return [{
-      batch,
-      meta: null,
-      entryIds: new Set((batch?.entries || []).map((entry) => entry.id).filter(Boolean)),
-      opCountsByEntry: new Map((batch?.entries || []).map((entry) => [entry.id, Array.isArray(entry.ops) ? entry.ops.length : 0])),
-    }];
+    return [
+      {
+        batch,
+        meta: null,
+        entryIds: new Set((batch?.entries || []).map((entry) => entry.id).filter(Boolean)),
+        opCountsByEntry: new Map(
+          (batch?.entries || []).map((entry) => [entry.id, Array.isArray(entry.ops) ? entry.ops.length : 0]),
+        ),
+      },
+    ];
   }
 
   const rawChunks = [];
@@ -761,7 +768,11 @@ function clearManualApplyTransaction(cwd = process.cwd(), transactionId = null) 
   }
 }
 
-function rollbackManualApplyTransaction({ cwd = process.cwd(), pageUrl = null, reason = 'manual_edit_transaction_rollback' } = {}) {
+function rollbackManualApplyTransaction({
+  cwd = process.cwd(),
+  pageUrl = null,
+  reason = 'manual_edit_transaction_rollback',
+} = {}) {
   const transaction = readManualApplyTransaction(cwd);
   if (!transaction) return null;
   if (pageUrl && transaction.pageUrl && transaction.pageUrl !== pageUrl) return null;
@@ -822,9 +833,7 @@ function collectManualApplyFiles(batch, extraFiles = []) {
     for (const item of candidate.contextTextMatches || []) files.push(item.file);
   }
   files.push(...(extraFiles || []));
-  return [...new Set(files)]
-    .map((file) => normalizeProjectFile(file))
-    .filter(Boolean);
+  return [...new Set(files)].map((file) => normalizeProjectFile(file)).filter(Boolean);
 }
 
 function normalizeProjectFile(file) {
@@ -835,7 +844,12 @@ function normalizeProjectFile(file) {
   return relative;
 }
 
-function rollbackApplySnapshot(batch, rollbackSnapshot, extraFiles = [], reason = 'manual_edit_apply_snapshot_rollback') {
+function rollbackApplySnapshot(
+  batch,
+  rollbackSnapshot,
+  extraFiles = [],
+  reason = 'manual_edit_apply_snapshot_rollback',
+) {
   const scope = collectManualApplyFiles(batch, extraFiles);
   const rolledBackFiles = [];
   const rollbackFailures = [];
@@ -862,7 +876,12 @@ function rollbackTimedOutApplyReply(msg) {
   const details = state.timedOutApplyIds.get(msg.id);
   if (!details) return { rolledBackFiles: [], rollbackFailures: [] };
   state.timedOutApplyIds.delete(msg.id);
-  return rollbackApplySnapshot(details.batch, details.rollbackSnapshot, msg.data?.files || [], 'stale_manual_edit_apply_reply');
+  return rollbackApplySnapshot(
+    details.batch,
+    details.rollbackSnapshot,
+    msg.data?.files || [],
+    'stale_manual_edit_apply_reply',
+  );
 }
 
 // Cap per-annotation upload size. A full 1920×1080 PNG is typically <1 MB;
@@ -870,7 +889,11 @@ function rollbackTimedOutApplyReply(msg) {
 const MAX_ANNOTATION_BYTES = 10 * 1024 * 1024;
 
 function enqueueEvent(event) {
-  if (!event || (event.id && state.pendingEvents.some((entry) => entry.event?.id === event.id && entry.event?.type === event.type))) return;
+  if (
+    !event ||
+    (event.id && state.pendingEvents.some((entry) => entry.event?.id === event.id && entry.event?.type === event.type))
+  )
+    return;
   state.pendingEvents.push({ event, leaseUntil: 0, seq: state.nextEventSeq++ });
   flushPendingPolls();
 }
@@ -950,7 +973,10 @@ function summarizePendingEventForStatus(entry) {
     summary.repair = event.repair || null;
     summary.evidencePath = event.evidencePath || null;
     summary.agentAction = event.agentAction || buildManualApplyAgentAction(event);
-    summary.manualApplySummary = summarizeManualApplyEvent(event, state.pendingApplyDeferreds.get(event.id)?.batch || event.batch);
+    summary.manualApplySummary = summarizeManualApplyEvent(
+      event,
+      state.pendingApplyDeferreds.get(event.id)?.batch || event.batch,
+    );
   }
   return summary;
 }
@@ -1008,10 +1034,13 @@ function scheduleLeaseFlush() {
     .filter((leaseUntil) => leaseUntil > now)
     .sort((a, b) => a - b)[0];
   if (!nextLeaseUntil) return;
-  state.leaseTimer = setTimeout(() => {
-    state.leaseTimer = null;
-    flushPendingPolls();
-  }, Math.max(0, nextLeaseUntil - now));
+  state.leaseTimer = setTimeout(
+    () => {
+      state.leaseTimer = null;
+      flushPendingPolls();
+    },
+    Math.max(0, nextLeaseUntil - now),
+  );
 }
 
 function flushPendingPolls() {
@@ -1046,7 +1075,11 @@ function broadcastAgentPollingIfChanged() {
 function broadcast(msg) {
   const data = 'data: ' + JSON.stringify(msg) + '\n\n';
   for (const res of state.sseClients) {
-    try { res.write(data); } catch { /* client gone */ }
+    try {
+      res.write(data);
+    } catch {
+      /* client gone */
+    }
   }
 }
 
@@ -1088,8 +1121,7 @@ function getManualEditStatus() {
 function summarizePendingManualEditBatch(pageUrl = null) {
   try {
     const buffer = readManualEditsBuffer(process.cwd());
-    const entries = (buffer.entries || [])
-      .filter((entry) => !pageUrl || entry.pageUrl === pageUrl);
+    const entries = (buffer.entries || []).filter((entry) => !pageUrl || entry.pageUrl === pageUrl);
     return {
       pendingEntryCount: entries.length,
       pendingOpCount: entries.reduce((sum, entry) => sum + (entry.ops?.length || 0), 0),
@@ -1156,7 +1188,12 @@ function loadBrowserScripts() {
   ];
   let detectScript = '';
   for (const p of detectPaths) {
-    try { detectScript = fs.readFileSync(p, 'utf-8'); break; } catch { /* try next */ }
+    try {
+      detectScript = fs.readFileSync(p, 'utf-8');
+      break;
+    } catch {
+      /* try next */
+    }
   }
 
   // live-browser.js: DO NOT cache. Return the path so the /live.js handler
@@ -1181,11 +1218,17 @@ function hasProjectContext() {
   try {
     fs.accessSync(path.join(CONTEXT_DIR, 'PRODUCT.md'), fs.constants.R_OK);
     return true;
-  } catch { return false; }
+  } catch {
+    return false;
+  }
 }
 
 function statOrNull(filePath) {
-  try { return fs.statSync(filePath); } catch { return null; }
+  try {
+    return fs.statSync(filePath);
+  } catch {
+    return null;
+  }
 }
 
 // HTTP request handler
@@ -1197,7 +1240,11 @@ function createRequestHandler({ detectScript, sessionPath, livePath }) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    if (req.method === 'OPTIONS') { res.writeHead(204); res.end(); return; }
+    if (req.method === 'OPTIONS') {
+      res.writeHead(204);
+      res.end();
+      return;
+    }
 
     const p = url.pathname;
 
@@ -1220,18 +1267,23 @@ function createRequestHandler({ detectScript, sessionPath, livePath }) {
       const body =
         `window.__IMPECCABLE_TOKEN__ = '${state.token}';\n` +
         `window.__IMPECCABLE_PORT__ = ${state.port};\n` +
-        sessionScript + '\n' +
+        sessionScript +
+        '\n' +
         liveScript;
       res.writeHead(200, {
         'Content-Type': 'application/javascript',
         'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
-        'Pragma': 'no-cache',
+        Pragma: 'no-cache',
       });
       res.end(body);
       return;
     }
     if (p === '/detect.js' || p === '/') {
-      if (!detectScript) { res.writeHead(404); res.end('Not available'); return; }
+      if (!detectScript) {
+        res.writeHead(404);
+        res.end('Not available');
+        return;
+      }
       res.writeHead(200, { 'Content-Type': 'application/javascript' });
       res.end(detectScript);
       return;
@@ -1249,7 +1301,8 @@ function createRequestHandler({ detectScript, sessionPath, livePath }) {
         });
         res.end(fs.readFileSync(vendorPath));
       } catch {
-        res.writeHead(404); res.end('Vendor script not found');
+        res.writeHead(404);
+        res.end('Vendor script not found');
       }
       return;
     }
@@ -1260,7 +1313,11 @@ function createRequestHandler({ detectScript, sessionPath, livePath }) {
     // bridge and preserves the "one shot from the user's POV" UX.
     if (p === '/annotation' && req.method === 'POST') {
       const token = url.searchParams.get('token');
-      if (token !== state.token) { res.writeHead(401); res.end('Unauthorized'); return; }
+      if (token !== state.token) {
+        res.writeHead(401);
+        res.end('Unauthorized');
+        return;
+      }
       const eventId = url.searchParams.get('eventId');
       if (!eventId || !/^[A-Za-z0-9_-]{1,64}$/.test(eventId)) {
         res.writeHead(400, { 'Content-Type': 'application/json' });
@@ -1317,28 +1374,38 @@ function createRequestHandler({ detectScript, sessionPath, livePath }) {
     // --- Health ---
     if (p === '/status') {
       const token = url.searchParams.get('token');
-      if (token !== state.token) { res.writeHead(401, { 'Content-Type': 'application/json' }); res.end(JSON.stringify({ error: 'Unauthorized' })); return; }
+      if (token !== state.token) {
+        res.writeHead(401, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Unauthorized' }));
+        return;
+      }
       const sessions = state.sessionStore ? state.sessionStore.listActiveSessions() : [];
       res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({
-        status: 'ok',
-        port: state.port,
-        connectedClients: state.sseClients.size,
-        pendingEvents: state.pendingEvents.map((entry) => summarizePendingEventForStatus(entry)),
-        agentPolling: agentPollingConnected(),
-        activeSessions: sessions,
-        manualEdits: getManualEditStatus(),
-      }));
+      res.end(
+        JSON.stringify({
+          status: 'ok',
+          port: state.port,
+          connectedClients: state.sseClients.size,
+          pendingEvents: state.pendingEvents.map((entry) => summarizePendingEventForStatus(entry)),
+          agentPolling: agentPollingConnected(),
+          activeSessions: sessions,
+          manualEdits: getManualEditStatus(),
+        }),
+      );
       return;
     }
 
     if (p === '/health') {
       res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({
-        status: 'ok', port: state.port, mode: 'variant',
-        hasProjectContext: hasProjectContext(),
-        connectedClients: state.sseClients.size,
-      }));
+      res.end(
+        JSON.stringify({
+          status: 'ok',
+          port: state.port,
+          mode: 'variant',
+          hasProjectContext: hasProjectContext(),
+          connectedClients: state.sseClients.size,
+        }),
+      );
       return;
     }
 
@@ -1355,7 +1422,11 @@ function createRequestHandler({ detectScript, sessionPath, livePath }) {
     //   /design-system/raw     returns DESIGN.md markdown verbatim
     if (p === '/design-system.json' || p === '/design-system/raw') {
       const token = url.searchParams.get('token');
-      if (token !== state.token) { res.writeHead(401); res.end('Unauthorized'); return; }
+      if (token !== state.token) {
+        res.writeHead(401);
+        res.end('Unauthorized');
+        return;
+      }
 
       const mdPath = path.join(CONTEXT_DIR, 'DESIGN.md');
       const jsonPath = resolveDesignSidecarPath(process.cwd(), CONTEXT_DIR) || getDesignSidecarPath(process.cwd());
@@ -1363,7 +1434,11 @@ function createRequestHandler({ detectScript, sessionPath, livePath }) {
       const jsonStat = statOrNull(jsonPath);
 
       if (p === '/design-system/raw') {
-        if (!mdStat) { res.writeHead(404); res.end('Not found'); return; }
+        if (!mdStat) {
+          res.writeHead(404);
+          res.end('Not found');
+          return;
+        }
         res.writeHead(200, { 'Content-Type': 'text/markdown; charset=utf-8' });
         res.end(fs.readFileSync(mdPath, 'utf-8'));
         return;
@@ -1406,14 +1481,31 @@ function createRequestHandler({ detectScript, sessionPath, livePath }) {
     // --- Source file (no-HMR fallback) ---
     if (p === '/source') {
       const token = url.searchParams.get('token');
-      if (token !== state.token) { res.writeHead(401); res.end('Unauthorized'); return; }
+      if (token !== state.token) {
+        res.writeHead(401);
+        res.end('Unauthorized');
+        return;
+      }
       const filePath = url.searchParams.get('path');
-      if (!filePath || filePath.includes('..')) { res.writeHead(400); res.end('Bad path'); return; }
+      if (!filePath || filePath.includes('..')) {
+        res.writeHead(400);
+        res.end('Bad path');
+        return;
+      }
       const absPath = path.resolve(process.cwd(), filePath);
-      if (!absPath.startsWith(process.cwd())) { res.writeHead(403); res.end('Forbidden'); return; }
+      if (!absPath.startsWith(process.cwd())) {
+        res.writeHead(403);
+        res.end('Forbidden');
+        return;
+      }
       let content;
-      try { content = fs.readFileSync(absPath, 'utf-8'); }
-      catch { res.writeHead(404); res.end('File not found'); return; }
+      try {
+        content = fs.readFileSync(absPath, 'utf-8');
+      } catch {
+        res.writeHead(404);
+        res.end('File not found');
+        return;
+      }
       res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
       res.end(content);
       return;
@@ -1422,24 +1514,36 @@ function createRequestHandler({ detectScript, sessionPath, livePath }) {
     // --- SSE: server→browser push (replaces WebSocket) ---
     if (p === '/events' && req.method === 'GET') {
       const token = url.searchParams.get('token');
-      if (token !== state.token) { res.writeHead(401); res.end('Unauthorized'); return; }
+      if (token !== state.token) {
+        res.writeHead(401);
+        res.end('Unauthorized');
+        return;
+      }
       res.writeHead(200, {
         'Content-Type': 'text/event-stream',
         'Cache-Control': 'no-cache',
-        'Connection': 'keep-alive',
+        Connection: 'keep-alive',
       });
-      res.write('data: ' + JSON.stringify({
-        type: 'connected',
-        hasProjectContext: hasProjectContext(),
-        agentPolling: agentPollingConnected(),
-      }) + '\n\n');
+      res.write(
+        'data: ' +
+          JSON.stringify({
+            type: 'connected',
+            hasProjectContext: hasProjectContext(),
+            agentPolling: agentPollingConnected(),
+          }) +
+          '\n\n',
+      );
 
       state.sseClients.add(res);
       clearTimeout(state.exitTimer);
 
       // Keepalive: SSE comment every 30s prevents silent connection drops.
       const heartbeat = setInterval(() => {
-        try { res.write(': keepalive\n\n'); } catch { clearInterval(heartbeat); }
+        try {
+          res.write(': keepalive\n\n');
+        } catch {
+          clearInterval(heartbeat);
+        }
       }, SSE_HEARTBEAT_INTERVAL);
 
       req.on('close', () => {
@@ -1459,10 +1563,14 @@ function createRequestHandler({ detectScript, sessionPath, livePath }) {
     // page batch through the local AI copy-edit runner.
     if (p === '/manual-edit-stash' && req.method === 'POST') {
       let body = '';
-      req.on('data', (c) => { body += c; });
+      req.on('data', (c) => {
+        body += c;
+      });
       req.on('end', () => {
         let msg;
-        try { msg = JSON.parse(body); } catch {
+        try {
+          msg = JSON.parse(body);
+        } catch {
           res.writeHead(400, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ error: 'Invalid JSON' }));
           return;
@@ -1498,7 +1606,9 @@ function createRequestHandler({ detectScript, sessionPath, livePath }) {
           opCount: msg.ops.length,
           pendingCount,
           totalCount,
-          hintedFileCount: new Set((msg.ops || []).map((op) => summarizeManualLogFile(op.sourceHint?.file)).filter(Boolean)).size,
+          hintedFileCount: new Set(
+            (msg.ops || []).map((op) => summarizeManualLogFile(op.sourceHint?.file)).filter(Boolean),
+          ).size,
         });
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ ok: true, pendingCount, totalCount, perPage }));
@@ -1509,25 +1619,35 @@ function createRequestHandler({ detectScript, sessionPath, livePath }) {
     // GET /manual-edit-stash?pageUrl=<url>  →  { count, totalCount, perPage, entries }
     if (p === '/manual-edit-stash' && req.method === 'GET') {
       const token = url.searchParams.get('token');
-      if (token !== state.token) { res.writeHead(401); res.end('Unauthorized'); return; }
+      if (token !== state.token) {
+        res.writeHead(401);
+        res.end('Unauthorized');
+        return;
+      }
       const pageUrl = url.searchParams.get('pageUrl') || '';
       const { totalCount, perPage } = countPendingByPage(process.cwd());
       const buffer = readManualEditsBuffer(process.cwd());
       const entriesForPage = pageUrl ? buffer.entries.filter((e) => e.pageUrl === pageUrl) : buffer.entries;
       res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({
-        count: pageUrl ? (perPage[pageUrl] || 0) : totalCount,
-        totalCount,
-        perPage,
-        entries: entriesForPage,
-      }));
+      res.end(
+        JSON.stringify({
+          count: pageUrl ? perPage[pageUrl] || 0 : totalCount,
+          totalCount,
+          perPage,
+          entries: entriesForPage,
+        }),
+      );
       return;
     }
 
     // POST /manual-edit-commit?pageUrl=<url>  →  ask the AI to apply the staged page batch.
     if (p === '/manual-edit-commit' && req.method === 'POST') {
       const token = url.searchParams.get('token');
-      if (token !== state.token) { res.writeHead(401); res.end('Unauthorized'); return; }
+      if (token !== state.token) {
+        res.writeHead(401);
+        res.end('Unauthorized');
+        return;
+      }
       const pageUrl = url.searchParams.get('pageUrl');
       const asyncMode = /^(1|true|yes)$/i.test(url.searchParams.get('async') || '');
       const repairOnly = /^(1|true|yes)$/i.test(url.searchParams.get('repair') || '');
@@ -1537,35 +1657,41 @@ function createRequestHandler({ detectScript, sessionPath, livePath }) {
         res.end(JSON.stringify({ error: 'manual_edit_repair_transaction_missing' }));
         return;
       }
-      const recoveredTransaction = repairOnly ? null : rollbackManualApplyTransaction({
-        cwd: process.cwd(),
-        pageUrl,
-        reason: 'manual_edit_commit_recovered_abandoned_transaction',
-      });
+      const recoveredTransaction = repairOnly
+        ? null
+        : rollbackManualApplyTransaction({
+            cwd: process.cwd(),
+            pageUrl,
+            reason: 'manual_edit_commit_recovered_abandoned_transaction',
+          });
       const before = getManualEditStatus();
-      const pendingCount = pageUrl ? (before.perPage[pageUrl] || 0) : before.totalCount;
+      const pendingCount = pageUrl ? before.perPage[pageUrl] || 0 : before.totalCount;
       recordManualEditActivity('manual_edit_commit_started', {
         pageUrl,
         repairOnly,
         pendingCount,
         totalCount: before.totalCount,
-        recoveredTransaction: recoveredTransaction ? {
-          id: recoveredTransaction.id,
-          reason: recoveredTransaction.reason,
-          skipped: recoveredTransaction.skipped,
-          rolledBackFiles: recoveredTransaction.rolledBackFiles,
-          rollbackFailures: summarizeManualDiagnostics(recoveredTransaction.rollbackFailures),
-        } : null,
+        recoveredTransaction: recoveredTransaction
+          ? {
+              id: recoveredTransaction.id,
+              reason: recoveredTransaction.reason,
+              skipped: recoveredTransaction.skipped,
+              rolledBackFiles: recoveredTransaction.rolledBackFiles,
+              rollbackFailures: summarizeManualDiagnostics(recoveredTransaction.rollbackFailures),
+            }
+          : null,
         ...summarizePendingManualEditBatch(pageUrl),
       });
       if (asyncMode) {
         res.writeHead(202, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({
-          status: 'started',
-          pendingCount,
-          totalCount: before.totalCount,
-          perPage: before.perPage,
-        }));
+        res.end(
+          JSON.stringify({
+            status: 'started',
+            pendingCount,
+            totalCount: before.totalCount,
+            perPage: before.perPage,
+          }),
+        );
       }
       (async () => {
         let result;
@@ -1587,8 +1713,7 @@ function createRequestHandler({ detectScript, sessionPath, livePath }) {
             }
           }
           const requestedMode = (process.env.IMPECCABLE_LIVE_COPY_AGENT || 'auto').trim().toLowerCase();
-          const useChatRoute = requestedMode === 'chat'
-            || (requestedMode === 'auto' && chatAgentLikelyActive());
+          const useChatRoute = requestedMode === 'chat' || (requestedMode === 'auto' && chatAgentLikelyActive());
           if (useChatRoute) {
             routedProvider = 'chat';
             const timeoutMs = Number(process.env.IMPECCABLE_LIVE_COPY_AGENT_TIMEOUT_MS || 120000);
@@ -1637,10 +1762,12 @@ function createRequestHandler({ detectScript, sessionPath, livePath }) {
           });
           if (!asyncMode) {
             res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({
-              error: 'manual_edit_commit_failed',
-              message,
-            }));
+            res.end(
+              JSON.stringify({
+                error: 'manual_edit_commit_failed',
+                message,
+              }),
+            );
           }
           return;
         } finally {
@@ -1657,8 +1784,10 @@ function createRequestHandler({ detectScript, sessionPath, livePath }) {
             transactionId: transaction?.id || existingTransaction?.id || null,
             repair: result.repair || null,
             failed: summarizeManualApplyFailures(result.failed),
-            files: Array.isArray(result.files) ? result.files.slice(0, 20).map(summarizeManualLogFile).filter(Boolean) : [],
-            remainingCount: pageUrl ? (perPage[pageUrl] || 0) : totalCount,
+            files: Array.isArray(result.files)
+              ? result.files.slice(0, 20).map(summarizeManualLogFile).filter(Boolean)
+              : [],
+            remainingCount: pageUrl ? perPage[pageUrl] || 0 : totalCount,
             totalCount,
           });
         } else {
@@ -1670,14 +1799,20 @@ function createRequestHandler({ detectScript, sessionPath, livePath }) {
             appliedCount: Array.isArray(result.applied) ? result.applied.length : 0,
             failedCount: Array.isArray(result.failed) ? result.failed.length : 0,
             failed: summarizeManualApplyFailures(result.failed),
-            files: Array.isArray(result.files) ? result.files.slice(0, 20).map(summarizeManualLogFile).filter(Boolean) : [],
+            files: Array.isArray(result.files)
+              ? result.files.slice(0, 20).map(summarizeManualLogFile).filter(Boolean)
+              : [],
             warnings: summarizeManualDiagnostics(result.warnings),
-            rolledBackFiles: Array.isArray(result.rolledBackFiles) ? result.rolledBackFiles.slice(0, 20).map(summarizeManualLogFile).filter(Boolean) : [],
+            rolledBackFiles: Array.isArray(result.rolledBackFiles)
+              ? result.rolledBackFiles.slice(0, 20).map(summarizeManualLogFile).filter(Boolean)
+              : [],
             rollbackFailures: summarizeManualDiagnostics(result.rollbackFailures),
-            unreportedFiles: Array.isArray(result.unreportedFiles) ? result.unreportedFiles.slice(0, 20).map(summarizeManualLogFile).filter(Boolean) : undefined,
+            unreportedFiles: Array.isArray(result.unreportedFiles)
+              ? result.unreportedFiles.slice(0, 20).map(summarizeManualLogFile).filter(Boolean)
+              : undefined,
             noteCount: Array.isArray(result.notes) ? result.notes.length : 0,
             cleared: result.cleared || 0,
-            remainingCount: pageUrl ? (perPage[pageUrl] || 0) : totalCount,
+            remainingCount: pageUrl ? perPage[pageUrl] || 0 : totalCount,
             totalCount,
           });
         }
@@ -1692,18 +1827,28 @@ function createRequestHandler({ detectScript, sessionPath, livePath }) {
     // POST /manual-edit-repair-decision  →  user resolves an exhausted repair loop.
     if (p === '/manual-edit-repair-decision' && req.method === 'POST') {
       let body = '';
-      req.on('data', (chunk) => { body += chunk; });
+      req.on('data', (chunk) => {
+        body += chunk;
+      });
       req.on('end', () => {
         let payload = {};
-        try { payload = body ? JSON.parse(body) : {}; } catch {
+        try {
+          payload = body ? JSON.parse(body) : {};
+        } catch {
           res.writeHead(400, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ error: 'Invalid JSON' }));
           return;
         }
         const token = payload.token || url.searchParams.get('token');
-        if (token !== state.token) { res.writeHead(401); res.end('Unauthorized'); return; }
+        if (token !== state.token) {
+          res.writeHead(401);
+          res.end('Unauthorized');
+          return;
+        }
         const pageUrl = payload.pageUrl || url.searchParams.get('pageUrl') || null;
-        const action = String(payload.action || url.searchParams.get('action') || '').trim().toLowerCase();
+        const action = String(payload.action || url.searchParams.get('action') || '')
+          .trim()
+          .toLowerCase();
         if (action !== 'rollback') {
           res.writeHead(400, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ error: 'unsupported_manual_edit_repair_decision', action }));
@@ -1719,7 +1864,7 @@ function createRequestHandler({ detectScript, sessionPath, livePath }) {
           action,
           pageUrl,
           rollback,
-          remainingCount: pageUrl ? (perPage[pageUrl] || 0) : totalCount,
+          remainingCount: pageUrl ? perPage[pageUrl] || 0 : totalCount,
           totalCount,
           perPage,
         };
@@ -1733,7 +1878,11 @@ function createRequestHandler({ detectScript, sessionPath, livePath }) {
     // POST /manual-edit-discard?pageUrl=<url>  →  drops entries (all if no pageUrl)
     if (p === '/manual-edit-discard' && req.method === 'POST') {
       const token = url.searchParams.get('token');
-      if (token !== state.token) { res.writeHead(401); res.end('Unauthorized'); return; }
+      if (token !== state.token) {
+        res.writeHead(401);
+        res.end('Unauthorized');
+        return;
+      }
       const pageUrl = url.searchParams.get('pageUrl');
       let discarded;
       let discardedEntries = [];
@@ -1764,12 +1913,14 @@ function createRequestHandler({ detectScript, sessionPath, livePath }) {
         pageUrl,
         discarded,
         canceledApplyIds: canceledApplyEvents.map((event) => event.id),
-        transactionRollback: transactionRollback ? {
-          id: transactionRollback.id,
-          rolledBackFiles: transactionRollback.rolledBackFiles?.map(summarizeManualLogFile).filter(Boolean) || [],
-          rollbackFailures: summarizeManualDiagnostics(transactionRollback.rollbackFailures),
-          skipped: transactionRollback.skipped,
-        } : undefined,
+        transactionRollback: transactionRollback
+          ? {
+              id: transactionRollback.id,
+              rolledBackFiles: transactionRollback.rolledBackFiles?.map(summarizeManualLogFile).filter(Boolean) || [],
+              rollbackFailures: summarizeManualDiagnostics(transactionRollback.rollbackFailures),
+              skipped: transactionRollback.skipped,
+            }
+          : undefined,
         totalCount,
       });
       res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -1780,17 +1931,25 @@ function createRequestHandler({ detectScript, sessionPath, livePath }) {
     // Defense in depth: redirect any stragglers from the old /manual-edit endpoint.
     if (p === '/manual-edit' && req.method === 'POST') {
       res.writeHead(410, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ error: '/manual-edit is removed; use /manual-edit-stash and /manual-edit-commit for staged copy edits.' }));
+      res.end(
+        JSON.stringify({
+          error: '/manual-edit is removed; use /manual-edit-stash and /manual-edit-commit for staged copy edits.',
+        }),
+      );
       return;
     }
 
     // --- Browser→server events (replaces WebSocket messages) ---
     if (p === '/events' && req.method === 'POST') {
       let body = '';
-      req.on('data', (c) => { body += c; });
+      req.on('data', (c) => {
+        body += c;
+      });
       req.on('end', () => {
         let msg;
-        try { msg = JSON.parse(body); } catch {
+        try {
+          msg = JSON.parse(body);
+        } catch {
           res.writeHead(400, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ error: 'Invalid JSON' }));
           return;
@@ -1809,7 +1968,9 @@ function createRequestHandler({ detectScript, sessionPath, livePath }) {
         }
         if (msg.type === 'manual_edit_apply') {
           res.writeHead(400, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify({ error: 'manual_edit_apply is disabled; use /manual-edit-stash then /manual-edit-commit' }));
+          res.end(
+            JSON.stringify({ error: 'manual_edit_apply is disabled; use /manual-edit-stash then /manual-edit-commit' }),
+          );
           return;
         }
         const error = validateEvent(msg);
@@ -1839,7 +2000,11 @@ function createRequestHandler({ detectScript, sessionPath, livePath }) {
     // --- Stop ---
     if (p === '/stop') {
       const token = url.searchParams.get('token');
-      if (token !== state.token) { res.writeHead(401); res.end('Unauthorized'); return; }
+      if (token !== state.token) {
+        res.writeHead(401);
+        res.end('Unauthorized');
+        return;
+      }
       res.writeHead(200, { 'Content-Type': 'text/plain' });
       res.end('stopping');
       shutdown();
@@ -1856,7 +2021,8 @@ function createRequestHandler({ detectScript, sessionPath, livePath }) {
       return;
     }
 
-    res.writeHead(404); res.end('Not found');
+    res.writeHead(404);
+    res.end('Not found');
   };
 }
 
@@ -1907,10 +2073,14 @@ function handlePollGet(req, res, url) {
 
 function handlePollPost(req, res) {
   let body = '';
-  req.on('data', (c) => { body += c; });
+  req.on('data', (c) => {
+    body += c;
+  });
   req.on('end', () => {
     let msg;
-    try { msg = JSON.parse(body); } catch {
+    try {
+      msg = JSON.parse(body);
+    } catch {
       res.writeHead(400, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ error: 'Invalid JSON' }));
       return;
@@ -1973,7 +2143,9 @@ function handlePollPost(req, res) {
         existingSession = state.sessionStore.getSnapshot(msg.id, { includeCompleted: true });
         if (!existingSession?.updatedAt) existingSession = null;
         skipJournalReply = existingSession?.phase === 'completed' || existingSession?.phase === 'discarded';
-      } catch { /* fall through and record the reply normally */ }
+      } catch {
+        /* fall through and record the reply normally */
+      }
     }
     if (!acknowledgedEvent && !existingSession) {
       recordManualEditActivity('manual_edit_poll_reply_unknown', {
@@ -1981,23 +2153,26 @@ function handlePollPost(req, res) {
         type: msg.type || null,
       });
       res.writeHead(msg.id ? 404 : 400, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({
-        error: msg.id ? 'unknown_poll_reply_id' : 'missing_poll_reply_id',
-        id: msg.id,
-      }));
+      res.end(
+        JSON.stringify({
+          error: msg.id ? 'unknown_poll_reply_id' : 'missing_poll_reply_id',
+          id: msg.id,
+        }),
+      );
       return;
     }
     if (state.sessionStore && msg.id && !skipJournalReply) {
       try {
-        const eventType = msg.type === 'steer_done'
-          ? 'steer_done'
-          : msg.type === 'discard' || msg.type === 'discarded'
-            ? 'discarded'
-            : msg.type === 'complete'
-              ? 'complete'
-              : msg.type === 'error'
-                ? 'agent_error'
-                : 'agent_done';
+        const eventType =
+          msg.type === 'steer_done'
+            ? 'steer_done'
+            : msg.type === 'discard' || msg.type === 'discarded'
+              ? 'discarded'
+              : msg.type === 'complete'
+                ? 'complete'
+                : msg.type === 'error'
+                  ? 'agent_error'
+                  : 'agent_done';
         state.sessionStore.appendEvent({
           type: eventType,
           id: msg.id,
@@ -2006,7 +2181,9 @@ function handlePollPost(req, res) {
           sourceEventType: acknowledgedEvent?.type,
           carbonize: msg.data?.carbonize === true,
         });
-      } catch { /* keep reply path best-effort; browser still needs SSE */ }
+      } catch {
+        /* keep reply path best-effort; browser still needs SSE */
+      }
     }
     flushPendingPolls();
     // Forward the reply to the browser via SSE
@@ -2027,9 +2204,15 @@ function shutdown() {
   if (state.leaseTimer) clearTimeout(state.leaseTimer);
   state.leaseTimer = null;
   if (state.sessionDir) {
-    try { fs.rmSync(state.sessionDir, { recursive: true, force: true }); } catch {}
+    try {
+      fs.rmSync(state.sessionDir, { recursive: true, force: true });
+    } catch {}
   }
-  for (const res of state.sseClients) { try { res.end(); } catch {} }
+  for (const res of state.sseClients) {
+    try {
+      res.end();
+    } catch {}
+  }
   state.sseClients.clear();
   for (const poll of state.pendingPolls) poll.resolve({ type: 'exit' });
   state.pendingPolls.length = 0;
@@ -2103,10 +2286,8 @@ if (args.includes('stop')) {
         }
       }
     } catch (err) {
-      const detail = err.stderr?.toString?.().trim?.()
-        || err.stdout?.toString?.().trim?.()
-        || err.message
-        || String(err);
+      const detail =
+        err.stderr?.toString?.().trim?.() || err.stdout?.toString?.().trim?.() || err.message || String(err);
       console.warn(`Note: could not remove live script tag (${detail.split('\n')[0]})`);
     }
   }
@@ -2117,7 +2298,7 @@ if (args.includes('stop')) {
 // print the connection JSON, then exit.  This keeps the startup command
 // simple (no shell backgrounding or chained commands).
 if (args.includes('--background')) {
-  const childArgs = args.filter(a => a !== '--background');
+  const childArgs = args.filter((a) => a !== '--background');
   const child = spawn(process.execPath, [fileURLToPath(import.meta.url), ...childArgs], {
     detached: true,
     stdio: 'ignore',
@@ -2135,8 +2316,10 @@ if (args.includes('--background')) {
         console.log(JSON.stringify(info));
         process.exit(0);
       }
-    } catch { /* not ready yet */ }
-    await new Promise(r => setTimeout(r, 200));
+    } catch {
+      /* not ready yet */
+    }
+    await new Promise((r) => setTimeout(r, 200));
   }
   console.error('Timed out waiting for live server to start.');
   process.exit(1);
@@ -2152,7 +2335,9 @@ if (existingRecord?.info) {
     console.error('Stop it first with: node ' + path.basename(fileURLToPath(import.meta.url)) + ' stop');
     process.exit(1);
   } catch {
-    try { fs.unlinkSync(existingRecord.path); } catch {}
+    try {
+      fs.unlinkSync(existingRecord.path);
+    } catch {}
   }
 }
 
@@ -2164,7 +2349,7 @@ rollbackManualApplyTransaction({
 });
 restorePendingEventsFromStore();
 pruneStaleManualApplyEvidence(process.cwd());
-const portArg = args.find(a => a.startsWith('--port='));
+const portArg = args.find((a) => a.startsWith('--port='));
 state.port = portArg ? parseInt(portArg.split('=')[1], 10) : await findOpenPort();
 // Annotation screenshots live in the project root so the agent's Read tool
 // doesn't trip a per-file permission prompt. Sessioned by token so concurrent

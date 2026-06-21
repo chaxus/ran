@@ -43,11 +43,7 @@ describe('package export source contracts', () => {
     expect(packageJson, 'package.json missing ssr import path').toContain('"import": "./dist/ssr.js"');
 
     expect(packageJson, 'package.json missing ./ssr-stream export').toContain('"./ssr-stream"');
-    expect(packageJson, 'package.json missing ssr-stream types path').toContain(
-      '"types": "./dist/ssr-stream.d.ts"',
-    );
-    expect(packageJson, 'package.json missing ssr-stream import path').toContain(
-      '"import": "./dist/ssr-stream.js"',
-    );
+    expect(packageJson, 'package.json missing ssr-stream types path').toContain('"types": "./dist/ssr-stream.d.ts"');
+    expect(packageJson, 'package.json missing ssr-stream import path').toContain('"import": "./dist/ssr-stream.js"');
   });
 });

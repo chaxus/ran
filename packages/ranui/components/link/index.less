@@ -1,0 +1,21 @@
+:host {
+  display: inline;
+}
+
+a {
+  color: var(--ran-color-link, #2563eb);
+  text-decoration: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+
+  &:hover {
+    text-decoration: underline;
+    opacity: 0.85;
+  }
+}
+
+:host([active]) a {
+  font-weight: 600;
+  text-decoration: underline;
+}

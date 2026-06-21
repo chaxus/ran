@@ -12,7 +12,9 @@ test.beforeEach(async ({ page }) => {
 // ── with value ──────────────────────────────────────────────────────────────
 
 test('select — with value', async ({ page }) => {
-  await mount(page, `
+  await mount(
+    page,
+    `
     <div id="popup-root"></div>
     <r-select id="sel" style="width: 200px" defaultValue="lucy"
       getPopupContainerId="popup-root" trigger="click">
@@ -20,7 +22,8 @@ test('select — with value', async ({ page }) => {
       <r-option value="lucy">Lucy</r-option>
       <r-option value="tom">Tom</r-option>
     </r-select>
-  `);
+  `,
+  );
   const el = page.locator('#sel');
   await expect(el).toBeVisible();
   await page.waitForTimeout(50);
@@ -53,13 +56,16 @@ test('select — with value', async ({ page }) => {
 // ── placeholder (no value) ──────────────────────────────────────────────────
 
 test('select — placeholder', async ({ page }) => {
-  await mount(page, `
+  await mount(
+    page,
+    `
     <div id="popup-root"></div>
     <r-select style="width: 200px" getPopupContainerId="popup-root" trigger="click">
       <r-option value="apple">Apple</r-option>
       <r-option value="banana">Banana</r-option>
     </r-select>
-  `);
+  `,
+  );
   const el = page.locator('r-select');
   await expect(el).toBeVisible();
   await expect(el).toHaveScreenshot('select-placeholder.png');
@@ -69,14 +75,17 @@ test('select — placeholder', async ({ page }) => {
 // ── showSearch ───────────────────────────────────────────────────────────────
 
 test('select — showSearch', async ({ page }) => {
-  await mount(page, `
+  await mount(
+    page,
+    `
     <div id="popup-root"></div>
     <r-select style="width: 200px" showSearch getPopupContainerId="popup-root" trigger="click">
       <r-option value="apple">Apple</r-option>
       <r-option value="banana">Banana</r-option>
       <r-option value="grape">Grape</r-option>
     </r-select>
-  `);
+  `,
+  );
   const el = page.locator('r-select');
   await expect(el).toBeVisible();
   await expect(el).toHaveScreenshot('select-show-search.png');
@@ -86,12 +95,15 @@ test('select — showSearch', async ({ page }) => {
 // ── disabled ─────────────────────────────────────────────────────────────────
 
 test('select — disabled', async ({ page }) => {
-  await mount(page, `
+  await mount(
+    page,
+    `
     <r-select style="width: 200px" disabled defaultValue="lucy">
       <r-option value="jack">Jack</r-option>
       <r-option value="lucy">Lucy</r-option>
     </r-select>
-  `);
+  `,
+  );
   const el = page.locator('r-select');
   await expect(el).toBeVisible();
   await expect(el).toHaveScreenshot('select-disabled.png');
@@ -101,7 +113,9 @@ test('select — disabled', async ({ page }) => {
 // ── open dropdown ─────────────────────────────────────────────────────────────
 
 test('select — open dropdown', async ({ page }) => {
-  await mount(page, `
+  await mount(
+    page,
+    `
     <div id="popup-root" style="position: relative; min-height: 4px;"></div>
     <r-select style="width: 200px" defaultValue="lucy"
       getPopupContainerId="popup-root" trigger="click">
@@ -109,7 +123,8 @@ test('select — open dropdown', async ({ page }) => {
       <r-option value="lucy">Lucy</r-option>
       <r-option value="tom">Tom</r-option>
     </r-select>
-  `);
+  `,
+  );
   await page.locator('r-select').click();
   await page.waitForTimeout(350);
   await expect(page).toHaveScreenshot('select-open.png');

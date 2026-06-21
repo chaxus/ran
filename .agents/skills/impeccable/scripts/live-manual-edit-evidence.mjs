@@ -38,9 +38,7 @@ const SKIP_DIRS = new Set([
 
 export function buildManualEditEvidence({ cwd = process.cwd(), pageUrl = null } = {}) {
   const buffer = readBuffer(cwd);
-  const entries = pageUrl
-    ? buffer.entries.filter((entry) => entry.pageUrl === pageUrl)
-    : buffer.entries;
+  const entries = pageUrl ? buffer.entries.filter((entry) => entry.pageUrl === pageUrl) : buffer.entries;
   const opCount = countOps(entries);
 
   if (opCount === 0) {
@@ -137,10 +135,17 @@ function buildCandidatesForOp(op, cwd, searchFiles) {
     ref: op.ref,
     originalText,
     sourceHint: analyzeSourceHint(op, cwd),
-    textMatches: originalText ? findLiteralMatches(searchFiles, originalText, { max: literalMatchLimit(originalText) }) : [],
-    objectKeyMatches: originalText ? findObjectKeyMatches(searchFiles, originalText, { max: OBJECT_KEY_MATCH_LIMIT }) : [],
+    textMatches: originalText
+      ? findLiteralMatches(searchFiles, originalText, { max: literalMatchLimit(originalText) })
+      : [],
+    objectKeyMatches: originalText
+      ? findObjectKeyMatches(searchFiles, originalText, { max: OBJECT_KEY_MATCH_LIMIT })
+      : [],
     locatorMatches: findLocatorMatches(searchFiles, op, { max: LOCATOR_MATCH_LIMIT }),
-    contextTextMatches: findContextMatches(searchFiles, contextNeedles, { maxPerHint: CONTEXT_MATCH_PER_HINT, max: CONTEXT_MATCH_LIMIT }),
+    contextTextMatches: findContextMatches(searchFiles, contextNeedles, {
+      maxPerHint: CONTEXT_MATCH_PER_HINT,
+      max: CONTEXT_MATCH_LIMIT,
+    }),
   };
 }
 
@@ -219,12 +224,20 @@ function collectSearchFiles(cwd) {
 function scanDir(dir, cwd, seenDirs, seenFiles, out, depth) {
   if (depth > 7 || !fs.existsSync(dir)) return;
   let realDir;
-  try { realDir = fs.realpathSync(dir); } catch { return; }
+  try {
+    realDir = fs.realpathSync(dir);
+  } catch {
+    return;
+  }
   if (seenDirs.has(realDir)) return;
   seenDirs.add(realDir);
 
   let entries;
-  try { entries = fs.readdirSync(dir, { withFileTypes: true }); } catch { return; }
+  try {
+    entries = fs.readdirSync(dir, { withFileTypes: true });
+  } catch {
+    return;
+  }
   for (const entry of entries) {
     const fullPath = path.join(dir, entry.name);
     if (entry.isDirectory()) {
@@ -239,7 +252,11 @@ function scanDir(dir, cwd, seenDirs, seenFiles, out, depth) {
 
 function scanRootFiles(cwd, seenFiles, out) {
   let entries;
-  try { entries = fs.readdirSync(cwd, { withFileTypes: true }); } catch { return; }
+  try {
+    entries = fs.readdirSync(cwd, { withFileTypes: true });
+  } catch {
+    return;
+  }
   for (const entry of entries) {
     if (!entry.isFile() || !TEXT_EXTENSIONS.has(path.extname(entry.name).toLowerCase())) continue;
     maybeAddSearchFile(path.join(cwd, entry.name), cwd, seenFiles, out);
@@ -248,12 +265,20 @@ function scanRootFiles(cwd, seenFiles, out) {
 
 function maybeAddSearchFile(file, cwd, seenFiles, out) {
   let realFile;
-  try { realFile = fs.realpathSync(file); } catch { return; }
+  try {
+    realFile = fs.realpathSync(file);
+  } catch {
+    return;
+  }
   if (seenFiles.has(realFile)) return;
   seenFiles.add(realFile);
   if (isGeneratedFile(file, { cwd })) return;
   let content;
-  try { content = fs.readFileSync(file, 'utf-8'); } catch { return; }
+  try {
+    content = fs.readFileSync(file, 'utf-8');
+  } catch {
+    return;
+  }
   out.push({ file, relativeFile: path.relative(cwd, file), content, lines: content.split('\n') });
 }
 
@@ -345,7 +370,9 @@ function isPathInsideOrEqual(cwd, file) {
 }
 
 function normalizeText(value) {
-  return String(value || '').replace(/\s+/g, ' ').trim();
+  return String(value || '')
+    .replace(/\s+/g, ' ')
+    .trim();
 }
 
 function decodeBasicHtml(value) {

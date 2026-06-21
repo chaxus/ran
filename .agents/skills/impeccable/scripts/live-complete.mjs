@@ -13,9 +13,13 @@ function parseArgs(argv) {
     if (arg === '--id') out.id = argv[++i];
     else if (arg.startsWith('--id=')) out.id = arg.slice('--id='.length);
     else if (arg === '--discarded' || arg === '--discard') out.status = 'discarded';
-    else if (arg === '--error') { out.status = 'agent_error'; out.message = argv[++i] || 'unknown error'; }
-    else if (arg.startsWith('--error=')) { out.status = 'agent_error'; out.message = arg.slice('--error='.length); }
-    else if (arg === '--help' || arg === '-h') out.help = true;
+    else if (arg === '--error') {
+      out.status = 'agent_error';
+      out.message = argv[++i] || 'unknown error';
+    } else if (arg.startsWith('--error=')) {
+      out.status = 'agent_error';
+      out.message = arg.slice('--error='.length);
+    } else if (arg === '--help' || arg === '-h') out.help = true;
   }
   return out;
 }
@@ -23,7 +27,9 @@ function parseArgs(argv) {
 export async function completeCli() {
   const args = parseArgs(process.argv.slice(2));
   if (args.help || !args.id) {
-    console.log(`Usage: node live-complete.mjs --id SESSION_ID [--discarded|--error MESSAGE]\n\nAppend the final durable session acknowledgement. Use after accept/discard cleanup is verified.`);
+    console.log(
+      `Usage: node live-complete.mjs --id SESSION_ID [--discarded|--error MESSAGE]\n\nAppend the final durable session acknowledgement. Use after accept/discard cleanup is verified.`,
+    );
     process.exit(args.help ? 0 : 1);
   }
 
@@ -37,11 +43,12 @@ export async function completeCli() {
   }
 
   const store = createLiveSessionStore({ cwd: process.cwd(), sessionId: args.id });
-  const event = args.status === 'discarded'
-    ? { type: 'discarded', id: args.id }
-    : args.status === 'agent_error'
-      ? { type: 'agent_error', id: args.id, message: args.message || 'unknown error' }
-      : { type: 'complete', id: args.id };
+  const event =
+    args.status === 'discarded'
+      ? { type: 'discarded', id: args.id }
+      : args.status === 'agent_error'
+        ? { type: 'agent_error', id: args.id, message: args.message || 'unknown error' }
+        : { type: 'complete', id: args.id };
   const snapshot = store.appendEvent(event);
   console.log(JSON.stringify({ ok: true, id: args.id, phase: snapshot.phase, snapshot }, null, 2));
 }
@@ -51,11 +58,7 @@ function readServerInfo() {
 }
 
 async function completeThroughServer(info, args) {
-  const type = args.status === 'discarded'
-    ? 'discarded'
-    : args.status === 'agent_error'
-      ? 'error'
-      : 'complete';
+  const type = args.status === 'discarded' ? 'discarded' : args.status === 'agent_error' ? 'error' : 'complete';
   try {
     const res = await fetch(`http://localhost:${info.port}/poll`, {
       method: 'POST',

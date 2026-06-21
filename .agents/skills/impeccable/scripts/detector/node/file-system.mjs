@@ -6,14 +6,32 @@ import path from 'node:path';
 // ---------------------------------------------------------------------------
 
 const SKIP_DIRS = new Set([
-  'node_modules', '.git', 'dist', 'build', '.next', '.nuxt', '.output',
-  '.svelte-kit', '__pycache__', '.turbo', '.vercel',
+  'node_modules',
+  '.git',
+  'dist',
+  'build',
+  '.next',
+  '.nuxt',
+  '.output',
+  '.svelte-kit',
+  '__pycache__',
+  '.turbo',
+  '.vercel',
 ]);
 
 const SCANNABLE_EXTENSIONS = new Set([
-  '.html', '.htm', '.css', '.scss', '.less',
-  '.jsx', '.tsx', '.js', '.ts',
-  '.vue', '.svelte', '.astro',
+  '.html',
+  '.htm',
+  '.css',
+  '.scss',
+  '.less',
+  '.jsx',
+  '.tsx',
+  '.js',
+  '.ts',
+  '.vue',
+  '.svelte',
+  '.astro',
 ]);
 
 const HTML_EXTENSIONS = new Set(['.html', '.htm']);
@@ -21,7 +39,11 @@ const HTML_EXTENSIONS = new Set(['.html', '.htm']);
 function walkDir(dir) {
   const files = [];
   let entries;
-  try { entries = fs.readdirSync(dir, { withFileTypes: true }); } catch { return files; }
+  try {
+    entries = fs.readdirSync(dir, { withFileTypes: true });
+  } catch {
+    return files;
+  }
   for (const entry of entries) {
     if (SKIP_DIRS.has(entry.name)) continue;
     const full = path.join(dir, entry.name);
@@ -30,7 +52,6 @@ function walkDir(dir) {
   }
   return files;
 }
-
 
 // ---------------------------------------------------------------------------
 // Import graph (multi-file awareness)
@@ -93,36 +114,68 @@ function buildImportGraph(files) {
 // ---------------------------------------------------------------------------
 
 const FRAMEWORK_CONFIGS = [
-  { name: 'Next.js', files: ['next.config.js', 'next.config.mjs', 'next.config.ts'], defaultPort: 3000,
+  {
+    name: 'Next.js',
+    files: ['next.config.js', 'next.config.mjs', 'next.config.ts'],
+    defaultPort: 3000,
     portRe: /port\s*[:=]\s*(\d+)/,
-    fingerprint: { header: 'x-powered-by', value: /next/i } },
-  { name: 'SvelteKit', files: ['svelte.config.js', 'svelte.config.ts'], defaultPort: 5173,
+    fingerprint: { header: 'x-powered-by', value: /next/i },
+  },
+  {
+    name: 'SvelteKit',
+    files: ['svelte.config.js', 'svelte.config.ts'],
+    defaultPort: 5173,
     portRe: /port\s*[:=]\s*(\d+)/,
-    fingerprint: { header: 'x-sveltekit-page', value: null } },
-  { name: 'Nuxt', files: ['nuxt.config.js', 'nuxt.config.ts'], defaultPort: 3000,
+    fingerprint: { header: 'x-sveltekit-page', value: null },
+  },
+  {
+    name: 'Nuxt',
+    files: ['nuxt.config.js', 'nuxt.config.ts'],
+    defaultPort: 3000,
     portRe: /port\s*[:=]\s*(\d+)/,
-    fingerprint: { header: 'x-powered-by', value: /nuxt/i } },
-  { name: 'Vite', files: ['vite.config.js', 'vite.config.ts', 'vite.config.mjs'], defaultPort: 5173,
+    fingerprint: { header: 'x-powered-by', value: /nuxt/i },
+  },
+  {
+    name: 'Vite',
+    files: ['vite.config.js', 'vite.config.ts', 'vite.config.mjs'],
+    defaultPort: 5173,
     portRe: /port\s*[:=]\s*(\d+)/,
-    fingerprint: { body: /@vite\/client/ } },
-  { name: 'Astro', files: ['astro.config.js', 'astro.config.ts', 'astro.config.mjs'], defaultPort: 4321,
+    fingerprint: { body: /@vite\/client/ },
+  },
+  {
+    name: 'Astro',
+    files: ['astro.config.js', 'astro.config.ts', 'astro.config.mjs'],
+    defaultPort: 4321,
     portRe: /port\s*[:=]\s*(\d+)/,
-    fingerprint: { body: /astro/i } },
-  { name: 'Angular', files: ['angular.json'], defaultPort: 4200,
+    fingerprint: { body: /astro/i },
+  },
+  {
+    name: 'Angular',
+    files: ['angular.json'],
+    defaultPort: 4200,
     portRe: /"port"\s*:\s*(\d+)/,
-    fingerprint: { body: /ng-version/i } },
-  { name: 'Remix', files: ['remix.config.js', 'remix.config.ts'], defaultPort: 3000,
+    fingerprint: { body: /ng-version/i },
+  },
+  {
+    name: 'Remix',
+    files: ['remix.config.js', 'remix.config.ts'],
+    defaultPort: 3000,
     portRe: /port\s*[:=]\s*(\d+)/,
-    fingerprint: { header: 'x-powered-by', value: /remix/i } },
+    fingerprint: { header: 'x-powered-by', value: /remix/i },
+  },
 ];
 
 function detectFrameworkConfig(dir) {
   let entries;
-  try { entries = fs.readdirSync(dir); } catch { return null; }
+  try {
+    entries = fs.readdirSync(dir);
+  } catch {
+    return null;
+  }
   const entrySet = new Set(entries);
 
   for (const cfg of FRAMEWORK_CONFIGS) {
-    const match = cfg.files.find(f => entrySet.has(f));
+    const match = cfg.files.find((f) => entrySet.has(f));
     if (!match) continue;
 
     const configPath = path.join(dir, match);
@@ -131,7 +184,9 @@ function detectFrameworkConfig(dir) {
       const content = fs.readFileSync(configPath, 'utf-8');
       const portMatch = content.match(cfg.portRe);
       if (portMatch) port = parseInt(portMatch[1], 10);
-    } catch { /* use default */ }
+    } catch {
+      /* use default */
+    }
 
     return { name: cfg.name, port, configPath, fingerprint: cfg.fingerprint };
   }
@@ -149,9 +204,15 @@ async function isPortListening(port, fingerprint = null) {
     return new Promise((resolve) => {
       const sock = net.default.createConnection({ port, host: '127.0.0.1' });
       sock.setTimeout(500);
-      sock.on('connect', () => { sock.destroy(); resolve({ listening: true, matched: true }); });
+      sock.on('connect', () => {
+        sock.destroy();
+        resolve({ listening: true, matched: true });
+      });
       sock.on('error', () => resolve({ listening: false }));
-      sock.on('timeout', () => { sock.destroy(); resolve({ listening: false }); });
+      sock.on('timeout', () => {
+        sock.destroy();
+        resolve({ listening: false });
+      });
     });
   }
 

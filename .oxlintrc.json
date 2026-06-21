@@ -9,7 +9,9 @@
     "**/temp/**",
     "**/public/**",
     "**/cache/**",
-    "**/*.snap"
+    "**/*.snap",
+    ".agents/**",
+    "skills/**"
   ],
   "rules": {
     "eqeqeq": "off",

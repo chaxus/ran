@@ -10,8 +10,15 @@ import {
 // ── Helpers ────────────────────────────────────────────────────────────────
 
 const BASE_RECT: DOMRect = {
-  x: 10, y: 10, top: 10, right: 110, bottom: 60, left: 10,
-  width: 100, height: 50, toJSON: () => ({}),
+  x: 10,
+  y: 10,
+  top: 10,
+  right: 110,
+  bottom: 60,
+  left: 10,
+  width: 100,
+  height: 50,
+  toJSON: () => ({}),
 };
 
 function makeEl(tag: string, rect: Partial<DOMRect> = {}): HTMLElement {
@@ -39,7 +46,10 @@ function overlayEl(): Element | null {
 
 describe('wired overlay', () => {
   beforeEach(() => {
-    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => { cb(0); return 0; });
+    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => {
+      cb(0);
+      return 0;
+    });
   });
 
   afterEach(() => {
@@ -181,12 +191,15 @@ describe('wired overlay', () => {
 
     it('ResizeObserver.observe is called for each tracked element', () => {
       const observeSpy = vi.fn();
-      vi.stubGlobal('ResizeObserver', class {
-        observe = observeSpy;
-        unobserve = vi.fn();
-        disconnect = vi.fn();
-        constructor(_cb: ResizeObserverCallback) {}
-      });
+      vi.stubGlobal(
+        'ResizeObserver',
+        class {
+          observe = observeSpy;
+          unobserve = vi.fn();
+          disconnect = vi.fn();
+          constructor(_cb: ResizeObserverCallback) {}
+        },
+      );
 
       document.documentElement.setAttribute('data-ran-theme-pack', 'wired');
       const el = makeEl('r-button');
@@ -230,12 +243,15 @@ describe('wired overlay', () => {
 
     it('ResizeObserver is disconnected on deactivation', () => {
       const disconnectSpy = vi.fn();
-      vi.stubGlobal('ResizeObserver', class {
-        observe = vi.fn();
-        unobserve = vi.fn();
-        disconnect = disconnectSpy;
-        constructor(_cb: ResizeObserverCallback) {}
-      });
+      vi.stubGlobal(
+        'ResizeObserver',
+        class {
+          observe = vi.fn();
+          unobserve = vi.fn();
+          disconnect = disconnectSpy;
+          constructor(_cb: ResizeObserverCallback) {}
+        },
+      );
 
       appendWiredEl();
       activateWiredBorders();
@@ -307,9 +323,18 @@ describe('wired overlay', () => {
 
   describe('component selector coverage', () => {
     const WIRED_TAGS = [
-      'r-button', 'r-input', 'r-checkbox', 'r-select',
-      'r-modal', 'r-message', 'r-tab', 'r-progress',
-      'r-colorpicker', 'r-skeleton', 'r-card', 'r-section',
+      'r-button',
+      'r-input',
+      'r-checkbox',
+      'r-select',
+      'r-modal',
+      'r-message',
+      'r-tab',
+      'r-progress',
+      'r-colorpicker',
+      'r-skeleton',
+      'r-card',
+      'r-section',
     ] as const;
 
     it('all 12 targeted component tags are drawn when wired pack is active', () => {

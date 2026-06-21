@@ -38,12 +38,14 @@ export function buildPollReplyPayload(token, { id, type, message, file, data }) 
 
 export function manualApplyPollBanner(event = {}) {
   const id = event.id || 'EVENT_ID';
-  return [
-    `Manual Apply action required: edit source, then reply with \`live-poll.mjs --reply ${id} done --data '<json>'\`.`,
-    'The JSON data must include status, appliedEntryIds, failed, files, and notes; summary counters are only a recovery fallback.',
-    'Do not run live-commit-manual-edits.mjs for this leased event.',
-    'Do not poll again before replying.',
-  ].join('\n') + '\n';
+  return (
+    [
+      `Manual Apply action required: edit source, then reply with \`live-poll.mjs --reply ${id} done --data '<json>'\`.`,
+      'The JSON data must include status, appliedEntryIds, failed, files, and notes; summary counters are only a recovery fallback.',
+      'Do not run live-commit-manual-edits.mjs for this leased event.',
+      'Do not poll again before replying.',
+    ].join('\n') + '\n'
+  );
 }
 
 /**
@@ -71,12 +73,8 @@ export function parseReplyArgs(args) {
       throw wrapped;
     }
   }
-  const message = args.find((a, i) =>
-    i > replyIdx + 2
-    && !a.startsWith('--')
-    && i !== fileIdx + 1
-    && i !== dataIdx + 1
-  ) || undefined;
+  const message =
+    args.find((a, i) => i > replyIdx + 2 && !a.startsWith('--') && i !== fileIdx + 1 && i !== dataIdx + 1) || undefined;
   return { id, type: status, message, file, data };
 }
 
@@ -88,7 +86,9 @@ function validateReplyArgs({ id, status }) {
     throw err;
   }
   if (['done', 'error', 'complete', 'discard', 'discarded'].includes(id)) {
-    const err = new Error(`${usage}\nThe value after --reply must be the event id, not the status ${JSON.stringify(id)}. Use --reply EVENT_ID ${id}.`);
+    const err = new Error(
+      `${usage}\nThe value after --reply must be the event id, not the status ${JSON.stringify(id)}. Use --reply EVENT_ID ${id}.`,
+    );
     err.code = 'INVALID_REPLY_ARGS';
     throw err;
   }
@@ -133,10 +133,7 @@ export function isEventPending(status, eventId) {
   return (status.pendingEvents || []).some((entry) => entry.id === eventId);
 }
 
-export async function waitForEventAck(base, token, eventId, {
-  pollIntervalMs = 400,
-  maxWaitMs = 600_000,
-} = {}) {
+export async function waitForEventAck(base, token, eventId, { pollIntervalMs = 400, maxWaitMs = 600_000 } = {}) {
   const deadline = Date.now() + maxWaitMs;
   while (Date.now() < deadline) {
     const status = await fetchServerStatus(base, token);
@@ -152,9 +149,7 @@ export async function fetchNextEvent(base, token, { totalDeadline } = {}) {
       return { type: 'timeout' };
     }
 
-    const remaining = totalDeadline
-      ? totalDeadline - Date.now()
-      : PER_REQUEST_TIMEOUT_MS;
+    const remaining = totalDeadline ? totalDeadline - Date.now() : PER_REQUEST_TIMEOUT_MS;
     const slice = Math.min(Math.max(remaining, 1000), PER_REQUEST_TIMEOUT_MS);
     const res = await fetch(`${base}/poll?token=${token}&timeout=${slice}`);
 
@@ -186,11 +181,11 @@ export async function augmentEventWithAcceptHandling(event, base, token) {
   const scriptArgs = buildAcceptScriptArgs(event);
 
   try {
-    const out = execFileSync(
-      'node',
-      [acceptScript, ...scriptArgs],
-      { encoding: 'utf-8', cwd: process.cwd(), timeout: 30_000 },
-    );
+    const out = execFileSync('node', [acceptScript, ...scriptArgs], {
+      encoding: 'utf-8',
+      cwd: process.cwd(),
+      timeout: 30_000,
+    });
     event._acceptResult = JSON.parse(out.trim());
   } catch (err) {
     event._acceptResult = { handled: false, mode: 'error', error: err.message };
@@ -216,9 +211,10 @@ export async function augmentEventWithAcceptHandling(event, base, token) {
 }
 
 export function buildAcceptScriptArgs(event) {
-  const scriptArgs = event.type === 'discard'
-    ? ['--id', String(event.id), '--discard']
-    : ['--id', String(event.id), '--variant', String(event.variantId)];
+  const scriptArgs =
+    event.type === 'discard'
+      ? ['--id', String(event.id), '--discard']
+      : ['--id', String(event.id), '--variant', String(event.variantId)];
   if (event.pageUrl) scriptArgs.push('--page-url', String(event.pageUrl));
   if (event.type === 'accept' && event.paramValues && Object.keys(event.paramValues).length > 0) {
     scriptArgs.push('--param-values', JSON.stringify(event.paramValues));
@@ -231,7 +227,11 @@ export function writeCarbonizeBanner(event) {
     process.stderr.write('\n' + manualApplyPollBanner(event) + '\n');
   }
   if (event._acceptResult?.carbonize === true) {
-    process.stderr.write('\n⚠ Carbonize cleanup REQUIRED before next poll. After cleanup, run live-complete.mjs --id ' + event.id + '. See reference/live.md "Required after accept".\n\n');
+    process.stderr.write(
+      '\n⚠ Carbonize cleanup REQUIRED before next poll. After cleanup, run live-complete.mjs --id ' +
+        event.id +
+        '. See reference/live.md "Required after accept".\n\n',
+    );
   }
 }
 
@@ -248,12 +248,14 @@ export async function runPollOnce(base, token, { totalTimeout = 600_000 } = {}) 
   return event;
 }
 
-export async function runPollStream(base, token, {
-  ackTimeoutMs = 600_000,
-  ackPollIntervalMs = 400,
-  shouldContinue = () => true,
-} = {}) {
-  process.stderr.write('[impeccable-poll] stream mode: one JSON object per line on stdout; use --reply while this process stays running\n');
+export async function runPollStream(
+  base,
+  token,
+  { ackTimeoutMs = 600_000, ackPollIntervalMs = 400, shouldContinue = () => true } = {},
+) {
+  process.stderr.write(
+    '[impeccable-poll] stream mode: one JSON object per line on stdout; use --reply while this process stays running\n',
+  );
 
   while (shouldContinue()) {
     const event = await fetchNextEvent(base, token);

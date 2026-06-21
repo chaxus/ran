@@ -29,13 +29,15 @@ export async function statusCli() {
   const activeSessions = store.listActiveSessions();
   const manualApply = findPendingManualApply(server, activeSessions);
   const payload = {
-    liveServer: server ? {
-      status: server.status,
-      port: server.port,
-      connectedClients: server.connectedClients,
-      agentPolling: server.agentPolling,
-      pendingEvents: server.pendingEvents,
-    } : null,
+    liveServer: server
+      ? {
+          status: server.status,
+          port: server.port,
+          connectedClients: server.connectedClients,
+          agentPolling: server.agentPolling,
+          pendingEvents: server.pendingEvents,
+        }
+      : null,
     activeSessions: server?.activeSessions || activeSessions,
     recoveryHint: manualApply
       ? manualApplyResumeHint(manualApply)

@@ -1,7 +1,5 @@
 function profileNow() {
-  return typeof performance !== 'undefined' && performance.now
-    ? performance.now()
-    : Date.now();
+  return typeof performance !== 'undefined' && performance.now ? performance.now() : Date.now();
 }
 
 function createDetectorProfile() {
@@ -35,7 +33,7 @@ function recordProfileEvent(profile, event) {
 
 function extractFindingIds(findings) {
   if (!Array.isArray(findings) || findings.length === 0) return [];
-  return [...new Set(findings.map(f => f?.id || f?.type || f?.antipattern).filter(Boolean))];
+  return [...new Set(findings.map((f) => f?.id || f?.type || f?.antipattern).filter(Boolean))];
 }
 
 function profileFindings(profile, meta, callback) {
@@ -94,17 +92,12 @@ async function profileStepAsync(profile, meta, callback) {
 
 function percentile(sortedValues, pct) {
   if (!sortedValues.length) return 0;
-  const idx = Math.min(
-    sortedValues.length - 1,
-    Math.max(0, Math.ceil((pct / 100) * sortedValues.length) - 1),
-  );
+  const idx = Math.min(sortedValues.length - 1, Math.max(0, Math.ceil((pct / 100) * sortedValues.length) - 1));
   return sortedValues[idx];
 }
 
 function summarizeDetectorProfile(profile) {
-  const events = Array.isArray(profile)
-    ? profile
-    : (Array.isArray(profile?.events) ? profile.events : []);
+  const events = Array.isArray(profile) ? profile : Array.isArray(profile?.events) ? profile.events : [];
   const groups = new Map();
   for (const event of events) {
     const key = [
@@ -134,7 +127,7 @@ function summarizeDetectorProfile(profile) {
     group.samples.push(ms);
   }
   return [...groups.values()]
-    .map(group => {
+    .map((group) => {
       const samples = group.samples.sort((a, b) => a - b);
       return {
         engine: group.engine,

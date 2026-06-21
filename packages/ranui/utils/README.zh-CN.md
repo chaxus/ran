@@ -64,14 +64,8 @@ const card = Div()
 const toolbar = Div()
   .class('toolbar')
   .children(
-    ButtonBuilder()
-      .part('button')
-      .text('保存')
-      .on('click', handleSave),
-    ButtonBuilder()
-      .part('button')
-      .text('取消')
-      .on('click', handleCancel),
+    ButtonBuilder().part('button').text('保存').on('click', handleSave),
+    ButtonBuilder().part('button').text('取消').on('click', handleCancel),
   )
   .build();
 ```
@@ -122,30 +116,30 @@ Main();
 
 ### API 参考
 
-| 方法                                                  | 说明                                                                                                                      |
-| :---------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------ |
-| `id(value)`                                           | 设置元素 ID。                                                                                                             |
-| `class(value)`                                        | 设置完整 class 字符串。                                                                                                   |
-| `addClass(...names)` / `removeClass(...names)`        | 增量添加或移除 class。                                                                                                    |
-| `attr(name, value)` / `attrs(record)`                 | 设置属性。`attrs` 会跳过 `null` 和 `undefined` 值。                                                                       |
-| `boolAttr(name, value, enabledValue?)`                | 切换布尔属性。                                                                                                            |
-| `part(value)`                                         | 设置 `part` 属性，用于 `::part()` 样式覆盖。                                                                              |
-| `data(key, value)`                                    | 设置 `data-*` 属性。                                                                                                      |
-| `style(key, value)` / `style(map)`                    | 设置内联样式。                                                                                                            |
-| `cssVar(name, value)`                                 | 设置 CSS 自定义属性；省略 `--` 时会自动补齐。                                                                             |
-| `aria(key, value)` / `role(value)`                    | 设置可访问性属性。                                                                                                        |
-| `tabIndex(value)`                                     | 设置 `tabindex`。                                                                                                         |
-| `label(value)` / `labelledBy(id)` / `describedBy(id)` | 设置常用 ARIA 命名属性。                                                                                                  |
-| `ariaHidden(hidden?)`                                 | 设置 `aria-hidden`。                                                                                                      |
-| `on(type, listener, options?)`                        | 绑定永久构建时监听器 — 生命周期等同于元素本身。适用于构造函数中的 shadow DOM 内部元素。                                   |
-| `listen(manager, type, handler, options?)`            | 将监听器注册到 `EventManager`，由 manager 统一管理生命周期。适用于 `connectedCallback` 中需要随 disconnect 清理的监听器。 |
+| 方法                                                   | 说明                                                                                                                      |
+| :----------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------ |
+| `id(value)`                                            | 设置元素 ID。                                                                                                             |
+| `class(value)`                                         | 设置完整 class 字符串。                                                                                                   |
+| `addClass(...names)` / `removeClass(...names)`         | 增量添加或移除 class。                                                                                                    |
+| `attr(name, value)` / `attrs(record)`                  | 设置属性。`attrs` 会跳过 `null` 和 `undefined` 值。                                                                       |
+| `boolAttr(name, value, enabledValue?)`                 | 切换布尔属性。                                                                                                            |
+| `part(value)`                                          | 设置 `part` 属性，用于 `::part()` 样式覆盖。                                                                              |
+| `data(key, value)`                                     | 设置 `data-*` 属性。                                                                                                      |
+| `style(key, value)` / `style(map)`                     | 设置内联样式。                                                                                                            |
+| `cssVar(name, value)`                                  | 设置 CSS 自定义属性；省略 `--` 时会自动补齐。                                                                             |
+| `aria(key, value)` / `role(value)`                     | 设置可访问性属性。                                                                                                        |
+| `tabIndex(value)`                                      | 设置 `tabindex`。                                                                                                         |
+| `label(value)` / `labelledBy(id)` / `describedBy(id)`  | 设置常用 ARIA 命名属性。                                                                                                  |
+| `ariaHidden(hidden?)`                                  | 设置 `aria-hidden`。                                                                                                      |
+| `on(type, listener, options?)`                         | 绑定永久构建时监听器 — 生命周期等同于元素本身。适用于构造函数中的 shadow DOM 内部元素。                                   |
+| `listen(manager, type, handler, options?)`             | 将监听器注册到 `EventManager`，由 manager 统一管理生命周期。适用于 `connectedCallback` 中需要随 disconnect 清理的监听器。 |
 | `delegate(manager, selector, type, handler, options?)` | 在当前元素上注册生命周期受控的事件委托监听器；handler 会收到原事件和匹配到的后代元素。                                    |
-| `children(...items)` / `replaceChildren(...items)`    | 追加或替换子节点，支持 builder、元素、字符串、数组和空值。                                                                |
-| `text(value)`                                         | 设置文本内容。                                                                                                            |
-| `ref(holder)`                                         | 将构建出的元素保存到 `createRef()` 的 holder 中。                                                                         |
-| `shadow(options?)`                                    | 挂载 Shadow Root，并返回 `ShadowBuilder`。                                                                                |
-| `build()`                                             | 返回 `HTMLElement` 或 SSR mock。                                                                                          |
-| `serialize()`                                         | 为 SSR 或浏览器诊断序列化元素。                                                                                           |
+| `children(...items)` / `replaceChildren(...items)`     | 追加或替换子节点，支持 builder、元素、字符串、数组和空值。                                                                |
+| `text(value)`                                          | 设置文本内容。                                                                                                            |
+| `ref(holder)`                                          | 将构建出的元素保存到 `createRef()` 的 holder 中。                                                                         |
+| `shadow(options?)`                                     | 挂载 Shadow Root，并返回 `ShadowBuilder`。                                                                                |
+| `build()`                                              | 返回 `HTMLElement` 或 SSR mock。                                                                                          |
+| `serialize()`                                          | 为 SSR 或浏览器诊断序列化元素。                                                                                           |
 
 ## 事件管理 (`builder/events.ts`)
 
@@ -204,13 +198,13 @@ const actions = Div()
 
 ### API 参考
 
-| API                                           | 说明                                                                                          |
-| :-------------------------------------------- | :-------------------------------------------------------------------------------------------- |
-| `new EventManager()`                          | 创建一个由内部 `AbortController` 驱动的事件管理器。                                           |
-| `manager.on(target, type, handler, options?)` | 将监听器注册到 `target`，自动绑定到 manager 的 signal。链式调用，返回 `this`。                |
-| `manager.delegate(parent, selector, type, handler, options?)` | 在 `parent` 上注册一个监听器，当事件目标或其祖先匹配 `selector` 时调用 `handler`。 |
-| `manager.abort()`                             | 移除所有已注册的监听器，并重置内部 `AbortController`，支持在下次 `connectedCallback` 中复用。 |
-| `manager.signal`                              | 底层 `AbortSignal` — 需要绕过链式 API 时，可直接传给 `addEventListener` 的 options。          |
+| API                                                           | 说明                                                                                          |
+| :------------------------------------------------------------ | :-------------------------------------------------------------------------------------------- |
+| `new EventManager()`                                          | 创建一个由内部 `AbortController` 驱动的事件管理器。                                           |
+| `manager.on(target, type, handler, options?)`                 | 将监听器注册到 `target`，自动绑定到 manager 的 signal。链式调用，返回 `this`。                |
+| `manager.delegate(parent, selector, type, handler, options?)` | 在 `parent` 上注册一个监听器，当事件目标或其祖先匹配 `selector` 时调用 `handler`。            |
+| `manager.abort()`                                             | 移除所有已注册的监听器，并重置内部 `AbortController`，支持在下次 `connectedCallback` 中复用。 |
+| `manager.signal`                                              | 底层 `AbortSignal` — 需要绕过链式 API 时，可直接传给 `addEventListener` 的 options。          |
 
 ### `.on()` 与 `.listen()` 的选择
 

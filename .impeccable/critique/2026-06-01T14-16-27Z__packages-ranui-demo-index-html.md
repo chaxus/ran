@@ -6,21 +6,22 @@ p1_count: 0
 timestamp: 2026-06-01T14-16-27Z
 slug: packages-ranui-demo-index-html
 ---
+
 #### Design Health Score
 
-| # | Heuristic | Score | Key Issue |
-|---|---|---:|---|
-| 1 | Visibility of System Status | 4 | Theme and pack controls are visible in the sticky nav. |
-| 2 | Match System / Real World | 4 | The workbench metaphor matches developer evaluation. |
-| 3 | User Control and Freedom | 3 | Theme switching is clear; component details rely on same-page anchors. |
-| 4 | Consistency and Standards | 4 | Uses real ranui components, tokens, and existing demo conventions. |
-| 5 | Error Prevention | 3 | Offline media dependency was removed; code examples still need full API validation later. |
-| 6 | Recognition Rather Than Recall | 4 | Quick links, install/import snippets, and visible component demos reduce recall. |
-| 7 | Flexibility and Efficiency | 3 | Single-page docs entry is efficient; deeper search/filter remains future scope. |
-| 8 | Aesthetic and Minimalist Design | 4 | Stronger workbench direction without hiding real controls. |
-| 9 | Error Recovery | 3 | Demo interactions expose basic states, but not failure/retry patterns. |
-| 10 | Help and Documentation | 4 | Component notes provide import paths and usage reminders. |
-| **Total** | | **36/40** | **Strong** |
+| #         | Heuristic                       |     Score | Key Issue                                                                                 |
+| --------- | ------------------------------- | --------: | ----------------------------------------------------------------------------------------- |
+| 1         | Visibility of System Status     |         4 | Theme and pack controls are visible in the sticky nav.                                    |
+| 2         | Match System / Real World       |         4 | The workbench metaphor matches developer evaluation.                                      |
+| 3         | User Control and Freedom        |         3 | Theme switching is clear; component details rely on same-page anchors.                    |
+| 4         | Consistency and Standards       |         4 | Uses real ranui components, tokens, and existing demo conventions.                        |
+| 5         | Error Prevention                |         3 | Offline media dependency was removed; code examples still need full API validation later. |
+| 6         | Recognition Rather Than Recall  |         4 | Quick links, install/import snippets, and visible component demos reduce recall.          |
+| 7         | Flexibility and Efficiency      |         3 | Single-page docs entry is efficient; deeper search/filter remains future scope.           |
+| 8         | Aesthetic and Minimalist Design |         4 | Stronger workbench direction without hiding real controls.                                |
+| 9         | Error Recovery                  |         3 | Demo interactions expose basic states, but not failure/retry patterns.                    |
+| 10        | Help and Documentation          |         4 | Component notes provide import paths and usage reminders.                                 |
+| **Total** |                                 | **36/40** | **Strong**                                                                                |
 
 #### Anti-Patterns Verdict
 

@@ -24,13 +24,13 @@ import { join, resolve } from 'node:path';
 // Skills that were renamed, merged, or folded in v2.0, v2.1, and v3.0.
 const DEPRECATED_NAMES = [
   // v2.0 renames
-  'frontend-design',    // renamed to impeccable
-  'teach-impeccable',   // folded into /impeccable init
+  'frontend-design', // renamed to impeccable
+  'teach-impeccable', // folded into /impeccable init
   // v2.1 merges
-  'arrange',            // renamed to layout
-  'normalize',          // merged into polish
-  'onboard',            // merged into harden
-  'extract',            // merged into /impeccable extract
+  'arrange', // renamed to layout
+  'normalize', // merged into polish
+  'onboard', // merged into harden
+  'extract', // merged into /impeccable extract
   // v3.0 consolidation: all standalone skills -> /impeccable sub-commands
   'adapt',
   'animate',
@@ -53,8 +53,17 @@ const DEPRECATED_NAMES = [
 
 // All known harness directories that may contain a skills/ subfolder.
 const HARNESS_DIRS = [
-  '.claude', '.cursor', '.gemini', '.codex', '.agents',
-  '.trae', '.trae-cn', '.pi', '.opencode', '.kiro', '.rovodev',
+  '.claude',
+  '.cursor',
+  '.gemini',
+  '.codex',
+  '.agents',
+  '.trae',
+  '.trae-cn',
+  '.pi',
+  '.opencode',
+  '.kiro',
+  '.rovodev',
 ];
 
 // Per-skill fingerprints for SKILL.md bodies that never mentioned
@@ -192,9 +201,7 @@ export function removeDeprecatedSkills(projectRoot, lock) {
         // Symlink: check the target if it's alive, otherwise treat
         // dangling symlinks to deprecated names as safe to remove.
         const targetAlive = existsSync(skillPath);
-        const isMatch = targetAlive
-          ? isImpeccableSkill(skillPath, { skillName: name, lock })
-          : true;
+        const isMatch = targetAlive ? isImpeccableSkill(skillPath, { skillName: name, lock }) : true;
         if (isMatch) {
           unlinkSync(skillPath);
           deleted.push(skillPath);

@@ -31,6 +31,9 @@ export type { PlacementDirection } from '@/components/popover';
 export { Form } from '@/components/form';
 export { Card } from '@/components/card';
 export { Section } from '@/components/section';
+export { Router } from '@/components/router';
+export { Route } from '@/components/route';
+export { Link } from '@/components/link';
 
 // Side effects for registration
 import '@/components/button';
@@ -55,3 +58,6 @@ import '@/components/form';
 import '@/components/scratch';
 import '@/components/card';
 import '@/components/section';
+import '@/components/router';
+import '@/components/route';
+import '@/components/link';

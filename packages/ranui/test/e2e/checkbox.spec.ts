@@ -42,14 +42,17 @@ test('checkbox — disabled checked', async ({ page }) => {
 });
 
 test('checkbox — all variants row', async ({ page }) => {
-  await mount(page, `
+  await mount(
+    page,
+    `
     <div style="display: flex; gap: 16px; align-items: center;">
       <r-checkbox>Unchecked</r-checkbox>
       <r-checkbox checked="true">Checked</r-checkbox>
       <r-checkbox disabled>Disabled</r-checkbox>
       <r-checkbox disabled checked="true">Disabled checked</r-checkbox>
     </div>
-  `);
+  `,
+  );
   const el = page.locator('div').first();
   await expect(el).toBeVisible();
   await expect(el).toHaveScreenshot('checkbox-all-variants.png');

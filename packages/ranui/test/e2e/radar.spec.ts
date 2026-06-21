@@ -18,12 +18,15 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('radar — default dataset', async ({ page }) => {
-  await mount(page, `
+  await mount(
+    page,
+    `
     <div style="width: 300px; height: 300px;">
       <r-radar style="display: block; width: 100%; height: 100%"
         abilitys='${ABILITIES}'></r-radar>
     </div>
-  `);
+  `,
+  );
   const el = page.locator('div').first();
   await expect(el).toBeVisible();
   await page.waitForTimeout(200); // canvas paints asynchronously after connectedCallback
@@ -39,12 +42,15 @@ test('radar — uniform scores', async ({ page }) => {
     { abilityName: 'D', scoreRate: '50' },
     { abilityName: 'E', scoreRate: '50' },
   ]);
-  await mount(page, `
+  await mount(
+    page,
+    `
     <div style="width: 300px; height: 300px;">
       <r-radar style="display: block; width: 100%; height: 100%"
         abilitys='${uniform}'></r-radar>
     </div>
-  `);
+  `,
+  );
   const el = page.locator('div').first();
   await expect(el).toBeVisible();
   await page.waitForTimeout(200);
