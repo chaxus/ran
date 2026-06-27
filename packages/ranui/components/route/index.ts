@@ -9,6 +9,7 @@ import {
   syncSheetAttribute,
 } from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
+import { getSSGPath } from '@/utils/router';
 
 type RouterElement = HTMLElement & { _currentPath: string };
 
@@ -88,6 +89,13 @@ export class Route extends RanElement {
     if (matched) {
       this.dispatchEvent(new CustomEvent('routematch', { detail: { path: currentPath, params }, bubbles: true }));
     }
+  }
+
+  // Called by HTMLElementMock.serialize() before the element is serialized in SSR/SSG.
+  // At this point all attributes (path, exact) are already set, so _update() resolves correctly.
+  _preSerialize(): void {
+    const ssgPath = getSSGPath();
+    if (ssgPath !== null) this._update(ssgPath);
   }
 
   connectedCallback(): void {

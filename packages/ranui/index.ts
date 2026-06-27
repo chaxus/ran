@@ -34,7 +34,7 @@ export { Section } from '@/components/section';
 export { Router } from '@/components/router';
 export { Route } from '@/components/route';
 export { Link } from '@/components/link';
-export { RouterCore, createRouter, useRouter, enableMpaViewTransitions } from '@/utils/router';
+export { RouterCore, createRouter, useRouter, enableMpaViewTransitions, setSSGPath, clearSSGPath, getSSGPath } from '@/utils/router';
 export type {
   RouterConfig,
   RouteConfig,
@@ -45,6 +45,8 @@ export type {
   PageSwapEvent,
   PageRevealEvent,
 } from '@/utils/router';
+export { renderStaticPage, generateStaticPages } from '@/utils/ssg';
+export type { SSGPage } from '@/utils/ssg';
 
 // Side effects for registration
 import '@/components/button';

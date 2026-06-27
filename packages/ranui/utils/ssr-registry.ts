@@ -10,6 +10,9 @@ const registry = new Map<string, new () => HTMLElement>();
 export function defineSSR(tagName: string, constructor: new () => HTMLElement): void {
   if (isSSR) {
     registry.set(tagName, constructor);
+    // Mark the prototype so HTMLElementMock.serialize() uses the correct tag name
+    // when this component appears as a child in a larger element tree.
+    (constructor.prototype as Record<string, unknown>)._ssrTag = tagName;
   } else if (!customElements.get(tagName)) {
     customElements.define(tagName, constructor);
   }
