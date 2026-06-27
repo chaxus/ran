@@ -1,7 +1,10 @@
 {
   "brand.tagline": "Web Components · Geist design system",
+  "hero.badge": "✦ Built on the Geist design system",
   "hero.title": "A token-driven component library.",
   "hero.desc": "Built on Web Components and the Geist design system. Every surface below is themed by the same <code>--ran-*</code> tokens — flip dark mode to watch them all re-resolve at once.",
+  "hero.cta.primary": "Get started ↗",
+  "hero.cta.secondary": "Explore tokens ↓",
 
   "sec.colors": "Color scales",
   "sec.colors.lead": "Geist base palette. Each step is a CSS custom property that flips value in dark mode.",

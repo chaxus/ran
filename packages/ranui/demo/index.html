@@ -29,15 +29,20 @@
 
     <main>
       <div class="hero">
+        <span class="hero-badge" data-i18n="hero.badge">✦ Built on the Geist design system</span>
         <h1 data-i18n="hero.title">A token-driven component library.</h1>
         <p data-i18n="hero.desc">
           Built on Web Components and the Geist design system. Every surface below is themed by the same
           <code>--ran-*</code> tokens — flip dark mode to watch them all re-resolve at once.
         </p>
+        <div class="hero-cta">
+          <a class="btn-primary" href="https://github.com/chaxus/ran" target="_blank" rel="noopener" data-i18n="hero.cta.primary">Get started ↗</a>
+          <a class="btn-ghost" href="#tokens" data-i18n="hero.cta.secondary">Explore tokens ↓</a>
+        </div>
       </div>
 
       <!-- ── Color tokens ─────────────────────────────────────────────── -->
-      <section>
+      <section id="tokens">
         <h2 data-i18n="sec.colors">Color scales</h2>
         <p class="lead" data-i18n="sec.colors.lead">
           Geist base palette. Each step is a CSS custom property that flips value in dark mode.
