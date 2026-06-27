@@ -1,7 +1,10 @@
 {
   "brand.tagline": "Web Components · Geist 设计系统",
+  "hero.badge": "✦ 基于 Geist 设计系统",
   "hero.title": "一个 token 驱动的组件库。",
   "hero.desc": "基于 Web Components 与 Geist 设计系统构建。下方每个元素都由同一套 <code>--ran-*</code> token 着色 —— 切换暗色模式，它们会一起重新解析。",
+  "hero.cta.primary": "开始使用 ↗",
+  "hero.cta.secondary": "浏览 token ↓",
 
   "sec.colors": "色阶",
   "sec.colors.lead": "Geist 基础调色板。每一档都是一个 CSS 变量，在暗色模式下自动翻转取值。",
