@@ -17,6 +17,29 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Honor reduced-motion (see DESIGN.md §5): no smooth scroll, no transitions,
+   no hover transforms. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+  .home-card:hover,
+  .demo-card:hover,
+  r-card:hover,
+  .cta:hover,
+  .swatch:hover {
+    transform: none;
+  }
+}
+
 body {
   position: relative;
   font-family: var(--ran-font-family);
