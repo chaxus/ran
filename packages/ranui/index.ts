@@ -1,14 +1,5 @@
-export {
-  setTheme,
-  getTheme,
-  setThemePack,
-  getThemePack,
-  setThemeToken,
-  clearThemeToken,
-  setThemeTokens,
-  initTheme,
-} from '@/utils/theme';
-export type { RanThemeName, RanThemePackName, ThemeTarget, ThemeTokenMap } from '@/utils/theme';
+export { setTheme, getTheme, setThemeToken, clearThemeToken, setThemeTokens, initTheme } from '@/utils/theme';
+export type { RanThemeName, ThemeTarget, ThemeTokenMap } from '@/utils/theme';
 export { Button } from '@/components/button';
 export { Icon, registerIcon, registerIcons } from '@/components/icon';
 export { ImageElement } from '@/components/image';

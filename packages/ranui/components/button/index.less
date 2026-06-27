@@ -19,7 +19,7 @@
     display: var(--ran-btn-contain-display, block);
     background-image: var(--ran-btn-contain-background-image, none);
     cursor: var(--ran-btn-contain-cursor, pointer);
-    transition: var(--ran-btn-contain-transition, all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1));
+    transition: var(--ran-btn-contain-transition, all var(--ran-motion-duration-base, 0.2s) cubic-bezier(0.645, 0.045, 0.355, 1));
     user-select: var(--ran-btn-contain-user-select, none);
     touch-action: var(--ran-btn-contain-touch-action, manipulation);
     background: var(--ran-btn-contain-background, var(--ran-color-bg-elevated, #fff));
@@ -33,6 +33,11 @@
     .ran-btn {
       outline: var(--ran-btn-contain-outline, 0);
     }
+  }
+
+  &(:focus-visible) {
+    outline: var(--ran-btn-focus-outline, 2px solid var(--ran-color-primary));
+    outline-offset: var(--ran-btn-focus-outline-offset, 2px);
   }
 
   &([type="primary"]) {
@@ -50,6 +55,13 @@
     }
   }
 
+  &([type="primary"]:not([disabled]):active) {
+    .ran-btn-content {
+      background-color: var(--ran-btn-content-active-background-color, var(--ran-color-primary-active, #005ff2));
+      border-color: var(--ran-btn-content-active-border-color, var(--ran-color-primary-active, #005ff2));
+    }
+  }
+
   /* 媒体查询，针对屏幕宽度大于或等于 1024px 的设备（这里假设这是电脑屏幕的最小宽度） */
   @media (min-width: 1024px) {
     &(:not([disabled]):hover) {
@@ -61,7 +73,8 @@
 
     &([type="primary"]:not([disabled]):hover) {
       .ran-btn-content {
-        background-color: var(--ran-btn-content-hover-background-color, var(--ran-color-primary, #40a9ff));
+        background-color: var(--ran-btn-content-hover-background-color, var(--ran-color-primary-hover, #0059ec));
+        border-color: var(--ran-btn-content-hover-border-color, var(--ran-color-primary-hover, #0059ec));
         color: var(--ran-btn-content-hover-color, #fff);
       }
     }
@@ -155,7 +168,7 @@
   border-image-width: var(--ran-btn-content-border-image-width, 4px);
   border-image-outset: 0;
   border-image-repeat: stretch;
-  border-radius: var(--ran-btn-content-border-radius, 2px);
+  border-radius: var(--ran-btn-content-border-radius, var(--ran-radius-sm, 6px));
   border-color: var(--ran-btn-content-border-color, var(--ran-color-border, #d9d9d9));
   color: var(--ran-btn-content-color, var(--ran-color-text, #000000d9));
   line-height: var(--ran-btn-content-line-height, 22px);

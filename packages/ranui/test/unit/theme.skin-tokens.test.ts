@@ -8,28 +8,55 @@ const root = resolve(__dirname, '../..');
 
 const read = (path: string): string => readFileSync(resolve(root, path), 'utf8');
 
-describe('theme skin primitive tokens', () => {
-  it('defines the shared skin token layer used by special theme packs', () => {
+describe('theme tokens', () => {
+  it('defines the Geist base palette scales', () => {
+    const source = read('theme/tokens.less');
+
+    [
+      '--ran-gray-100',
+      '--ran-gray-1000',
+      '--ran-gray-alpha-100',
+      '--ran-blue-700',
+      '--ran-red-700',
+      '--ran-amber-700',
+      '--ran-green-700',
+      '--ran-background-100',
+    ].forEach((token) => {
+      expect(source).toContain(token);
+    });
+  });
+
+  it('maps semantic tokens onto the base scale', () => {
+    const source = read('theme/tokens.less');
+
+    [
+      '--ran-color-primary: var(--ran-blue-700)',
+      '--ran-color-text: var(--ran-gray-1000)',
+      '--ran-color-bg: var(--ran-background-100)',
+      '--ran-color-border: var(--ran-gray-400)',
+    ].forEach((decl) => {
+      expect(source).toContain(decl);
+    });
+  });
+
+  it('keeps the minimal skin primitive layer consumed by components', () => {
     const source = read('theme/tokens.less');
 
     [
       '--ran-skin-border-width',
       '--ran-skin-border-style',
-      '--ran-skin-outline-color',
-      '--ran-skin-inset-shadow',
       '--ran-skin-raised-shadow',
-      '--ran-skin-hard-shadow',
-      '--ran-skin-rough-shadow',
-      '--ran-skin-rough-border-image',
-      '--ran-skin-surface-texture',
-      '--ran-skin-pixel-size',
-      '--ran-skin-jitter-x',
-      '--ran-skin-jitter-y',
-      '--ran-skin-control-height-sm',
-      '--ran-skin-control-height-md',
       '--ran-skin-font-family',
     ].forEach((token) => {
       expect(source).toContain(token);
     });
+  });
+
+  it('redefines the base scale for dark mode', () => {
+    const source = read('theme/dark.less');
+
+    expect(source).toContain('.ran-theme-dark()');
+    expect(source).toContain('--ran-gray-1000: #ededed');
+    expect(source).toContain("[data-ran-theme='dark']");
   });
 });

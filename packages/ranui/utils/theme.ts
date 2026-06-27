@@ -1,18 +1,8 @@
 export type RanThemeName = 'light' | 'dark' | 'system';
-export type RanThemePackName =
-  | 'default'
-  | 'windows-98'
-  | 'windows-xp'
-  | 'system-6'
-  | 'wired'
-  | 'paper'
-  | 'pixel-retro'
-  | 'neo-brutalism';
 export type ThemeTarget = HTMLElement | Document;
 export type ThemeTokenMap = Record<string, string | number | null | undefined>;
 
 const STORAGE_KEY_THEME = 'ran-theme';
-const STORAGE_KEY_PACK = 'ran-theme-pack';
 
 let _systemMediaQuery: MediaQueryList | null = null;
 let _systemListener: (() => void) | null = null;
@@ -83,44 +73,6 @@ export const getTheme = (target?: ThemeTarget): RanThemeName | '' => {
   return '';
 };
 
-export const setThemePack = (name: RanThemePackName, target?: ThemeTarget): void => {
-  const element = resolveThemeElement(target);
-  if (!element) return;
-  if (name === 'default') {
-    element.removeAttribute('data-ran-theme-pack');
-    try {
-      localStorage.removeItem(STORAGE_KEY_PACK);
-    } catch {
-      // ignore
-    }
-    return;
-  }
-  element.setAttribute('data-ran-theme-pack', name);
-  try {
-    localStorage.setItem(STORAGE_KEY_PACK, name);
-  } catch {
-    // ignore
-  }
-};
-
-export const getThemePack = (target?: ThemeTarget): RanThemePackName | '' => {
-  const element = resolveThemeElement(target);
-  if (!element) return '';
-  const value = element.getAttribute('data-ran-theme-pack') || '';
-  if (
-    value === 'windows-98' ||
-    value === 'windows-xp' ||
-    value === 'system-6' ||
-    value === 'wired' ||
-    value === 'paper' ||
-    value === 'pixel-retro' ||
-    value === 'neo-brutalism'
-  ) {
-    return value;
-  }
-  return '';
-};
-
 export const setThemeToken = (name: string, value: string | number, target?: HTMLElement): void => {
   const element = resolveThemeElement(target);
   if (!element) return;
@@ -150,11 +102,6 @@ export const initTheme = (target?: ThemeTarget): void => {
     const storedTheme = localStorage.getItem(STORAGE_KEY_THEME) as RanThemeName | null;
     if (storedTheme === 'light' || storedTheme === 'dark' || storedTheme === 'system') {
       setTheme(storedTheme, target);
-    }
-
-    const storedPack = localStorage.getItem(STORAGE_KEY_PACK) as RanThemePackName | null;
-    if (storedPack) {
-      setThemePack(storedPack, target);
     }
   } catch {
     // ignore storage errors

@@ -6,6 +6,11 @@
     outline: 0;
     -webkit-tap-highlight-color: transparent;
   }
+  &(:focus-visible) {
+    outline: var(--ran-progress-focus-outline, 2px solid var(--ran-color-primary, #006bff));
+    outline-offset: var(--ran-progress-focus-outline-offset, 2px);
+    border-radius: var(--ran-radius-full, 9999px);
+  }
 }
 .ran-progress {
   position: var(--ran-progress-position, relative);
@@ -21,7 +26,7 @@
     width: var(--ran-progress-wrap-width, 100%);
     height: var(--ran-progress-wrap-height, 8px);
     border-radius: var(--ran-progress-wrap-border-radius, 20px);
-    background: var(--ran-progress-wrap-background, #5b5b5b);
+    background: var(--ran-progress-wrap-background, var(--ran-gray-200, #ebebeb));
     position: var(--ran-progress-wrap-position, relative);
     overflow: var(--ran-progress-wrap-overflow, hidden);
     &-value {

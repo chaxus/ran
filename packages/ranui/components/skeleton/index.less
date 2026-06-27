@@ -15,8 +15,8 @@
   background: 0 0;
   width: 100%;
   height: var(--ran-skeleton-height, 16px);
-  background: var(--ran-skeleton-background, rgba(0, 0, 0, 0.06));
-  border-radius: var(--ran-skeleton-border-radius, var(--ran-radius-sm, 4px));
+  background: var(--ran-skeleton-background, var(--ran-gray-alpha-200, rgba(0, 0, 0, 0.06)));
+  border-radius: var(--ran-skeleton-border-radius, var(--ran-radius-sm, 6px));
   &::after {
     position: absolute;
     top: 0;
@@ -25,7 +25,12 @@
     inset-inline-start: -150%;
     background: var(
       --ran-skeleton-shimmer,
-      linear-gradient(90deg, rgba(0, 0, 0, 0.06) 25%, rgba(0, 0, 0, 0.15) 37%, rgba(0, 0, 0, 0.06) 63%)
+      linear-gradient(
+        90deg,
+        var(--ran-gray-alpha-200, rgba(0, 0, 0, 0.06)) 25%,
+        var(--ran-gray-alpha-500, rgba(0, 0, 0, 0.15)) 37%,
+        var(--ran-gray-alpha-200, rgba(0, 0, 0, 0.06)) 63%
+      )
     );
     animation-name: skeleton;
     animation-duration: var(--ran-skeleton-animation-duration, 1.4s);

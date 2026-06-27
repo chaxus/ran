@@ -1,0 +1,272 @@
+/* ranui demo — Geist-based design system showcase.
+   The page chrome is driven entirely by the same --ran-* tokens the
+   components consume, so toggling dark mode re-themes everything at once. */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--ran-font-family);
+  font-size: var(--ran-font-size);
+  line-height: var(--ran-line-height);
+  color: var(--ran-color-text);
+  background: var(--ran-color-bg);
+  -webkit-font-smoothing: antialiased;
+  transition:
+    background var(--ran-motion-duration-base),
+    color var(--ran-motion-duration-base);
+}
+
+/* ── Top bar ─────────────────────────────────────────────────────────── */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ran-space-4);
+  padding: var(--ran-space-4) var(--ran-space-6);
+  background: color-mix(in srgb, var(--ran-color-bg) 80%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--ran-color-border);
+}
+
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: var(--ran-space-3);
+}
+
+.brand strong {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.brand span {
+  color: var(--ran-color-text-secondary);
+  font-size: 13px;
+}
+
+#theme-toggle {
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  color: var(--ran-color-text);
+  background: var(--ran-color-bg-elevated);
+  border: 1px solid var(--ran-color-border);
+  border-radius: var(--ran-radius-full);
+  padding: var(--ran-space-2) var(--ran-space-4);
+  transition: all var(--ran-motion-duration-base);
+}
+
+#theme-toggle:hover {
+  border-color: var(--ran-color-text-secondary);
+}
+
+#theme-toggle:focus-visible {
+  outline: 2px solid var(--ran-color-primary);
+  outline-offset: 2px;
+}
+
+/* ── Layout ──────────────────────────────────────────────────────────── */
+main {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: var(--ran-space-10) var(--ran-space-6) var(--ran-space-24);
+}
+
+.hero {
+  padding: var(--ran-space-16) 0 var(--ran-space-10);
+}
+
+.hero h1 {
+  margin: 0 0 var(--ran-space-4);
+  font-size: 44px;
+  line-height: 1.1;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.hero p {
+  margin: 0;
+  max-width: 560px;
+  font-size: 17px;
+  color: var(--ran-color-text-secondary);
+}
+
+section {
+  margin-top: var(--ran-space-16);
+}
+
+section > h2 {
+  margin: 0 0 var(--ran-space-2);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ran-color-text-secondary);
+}
+
+section > p.lead {
+  margin: 0 0 var(--ran-space-6);
+  color: var(--ran-color-text-secondary);
+}
+
+.panel {
+  padding: var(--ran-space-8);
+  border: 1px solid var(--ran-color-border);
+  border-radius: var(--ran-radius-lg);
+  background: var(--ran-color-bg-elevated);
+  box-shadow: var(--ran-shadow-elevated);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ran-space-4);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--ran-space-4);
+}
+
+.stack {
+  display: grid;
+  gap: var(--ran-space-4);
+}
+
+/* ── Color palette ───────────────────────────────────────────────────── */
+.swatch-row {
+  display: flex;
+  align-items: center;
+  gap: var(--ran-space-4);
+}
+
+.swatch-row + .swatch-row {
+  margin-top: var(--ran-space-3);
+}
+
+.swatch-label {
+  width: 56px;
+  flex-shrink: 0;
+  font-size: 12px;
+  color: var(--ran-color-text-secondary);
+  text-transform: capitalize;
+}
+
+.swatch-track {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+
+.swatch {
+  position: relative;
+  height: 44px;
+  border-radius: var(--ran-radius-sm);
+  border: 1px solid var(--ran-gray-alpha-200);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 3px;
+}
+
+.swatch span {
+  font-size: 9px;
+  color: var(--ran-gray-alpha-700);
+  mix-blend-mode: difference;
+  filter: invert(1) grayscale(1) contrast(9);
+}
+
+/* ── Scale showcases (radius / shadow) ──────────────────────────────── */
+.tile {
+  height: 88px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: var(--ran-color-text-secondary);
+  background: var(--ran-color-bg-muted);
+  border: 1px solid var(--ran-color-border);
+}
+
+.tile.r-sm {
+  border-radius: var(--ran-radius-sm);
+}
+.tile.r-md {
+  border-radius: var(--ran-radius-md);
+}
+.tile.r-lg {
+  border-radius: var(--ran-radius-lg);
+}
+
+.shadow-tile {
+  height: 88px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: var(--ran-color-text-secondary);
+  background: var(--ran-color-bg-elevated);
+  border-radius: var(--ran-radius-md);
+}
+.shadow-tile.s-1 {
+  box-shadow: var(--ran-shadow-elevated);
+}
+.shadow-tile.s-2 {
+  box-shadow: var(--ran-shadow-menu);
+}
+.shadow-tile.s-3 {
+  box-shadow: var(--ran-shadow-modal);
+}
+
+/* ── Component cards ────────────────────────────────────────────────── */
+.demo-card {
+  display: grid;
+  gap: var(--ran-space-4);
+  padding: var(--ran-space-6);
+  border: 1px solid var(--ran-color-border);
+  border-radius: var(--ran-radius-md);
+  background: var(--ran-color-bg-elevated);
+}
+
+.demo-card h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.task {
+  display: flex;
+  align-items: center;
+  gap: var(--ran-space-2);
+  color: var(--ran-color-text);
+}
+
+footer {
+  margin-top: var(--ran-space-24);
+  padding-top: var(--ran-space-8);
+  border-top: 1px solid var(--ran-color-border);
+  color: var(--ran-color-text-secondary);
+  font-size: 13px;
+  text-align: center;
+}
+
+footer a {
+  color: var(--ran-color-link);
+  text-decoration: none;
+}

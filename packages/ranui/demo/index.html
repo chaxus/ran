@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ranui — Geist-based Web Components</title>
+    <link rel="stylesheet" href="./demo.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <strong>ranui</strong>
+        <span>Web Components · Geist design system</span>
+      </div>
+      <button id="theme-toggle" type="button">☾ Dark</button>
+    </header>
+
+    <main>
+      <div class="hero">
+        <h1>A token-driven component library.</h1>
+        <p>
+          Built on Web Components and the Geist design system. Every surface below is themed by the same
+          <code>--ran-*</code> tokens — flip dark mode to watch them all re-resolve at once.
+        </p>
+      </div>
+
+      <!-- ── Color tokens ─────────────────────────────────────────────── -->
+      <section>
+        <h2>Color scales</h2>
+        <p class="lead">Geist base palette. Each step is a CSS custom property that flips value in dark mode.</p>
+        <div class="panel">
+          <div id="palette"></div>
+        </div>
+      </section>
+
+      <!-- ── Radius & elevation ───────────────────────────────────────── -->
+      <section>
+        <h2>Radius &amp; elevation</h2>
+        <div class="grid">
+          <div class="tile r-sm">radius-sm · 6px</div>
+          <div class="tile r-md">radius-md · 12px</div>
+          <div class="tile r-lg">radius-lg · 16px</div>
+          <div class="shadow-tile s-1">shadow-elevated</div>
+          <div class="shadow-tile s-2">shadow-menu</div>
+          <div class="shadow-tile s-3">shadow-modal</div>
+        </div>
+      </section>
+
+      <!-- ── Buttons ──────────────────────────────────────────────────── -->
+      <section>
+        <h2>Buttons</h2>
+        <div class="panel row">
+          <r-button type="primary">Primary</r-button>
+          <r-button>Default</r-button>
+          <r-button type="warning">Warning</r-button>
+          <r-button type="text">Text</r-button>
+          <r-button icon="home" type="primary">With icon</r-button>
+          <r-button icon="loading">Loading</r-button>
+          <r-button disabled>Disabled</r-button>
+        </div>
+      </section>
+
+      <!-- ── Forms ────────────────────────────────────────────────────── -->
+      <section>
+        <h2>Forms</h2>
+        <div class="grid">
+          <div class="demo-card">
+            <h3>Input</h3>
+            <r-input label="Username" placeholder="Enter username"></r-input>
+            <r-input label="Password" type="password" icon="lock"></r-input>
+            <r-input status="error" label="Email" placeholder="Invalid email"></r-input>
+          </div>
+          <div class="demo-card">
+            <h3>Select</h3>
+            <r-select style="width: 100%" trigger="click" defaultValue="medium">
+              <r-option value="high">🔴 High priority</r-option>
+              <r-option value="medium">🟡 Medium priority</r-option>
+              <r-option value="low">🟢 Low priority</r-option>
+            </r-select>
+            <r-select style="width: 100%" trigger="click" placeholder="Pick a teammate">
+              <r-option value="jack">Jack</r-option>
+              <r-option value="lucy">Lucy</r-option>
+              <r-option value="tom">Tom</r-option>
+            </r-select>
+          </div>
+          <div class="demo-card">
+            <h3>Checkbox</h3>
+            <label class="task"><r-checkbox checked></r-checkbox><span>Run unit tests</span></label>
+            <label class="task"><r-checkbox checked></r-checkbox><span>Review pull request</span></label>
+            <label class="task"><r-checkbox></r-checkbox><span>Deploy to staging</span></label>
+            <label class="task"><r-checkbox disabled></r-checkbox><span>Disabled option</span></label>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Feedback ─────────────────────────────────────────────────── -->
+      <section>
+        <h2>Feedback</h2>
+        <div class="grid">
+          <div class="demo-card">
+            <h3>Progress</h3>
+            <r-progress percent="35"></r-progress>
+            <r-progress percent="70"></r-progress>
+            <r-progress percent="100"></r-progress>
+          </div>
+          <div class="demo-card">
+            <h3>Skeleton</h3>
+            <r-skeleton></r-skeleton>
+            <r-skeleton style="height: 24px"></r-skeleton>
+            <r-skeleton style="height: 24px; width: 60%"></r-skeleton>
+          </div>
+          <div class="demo-card">
+            <h3>Loading</h3>
+            <div class="row">
+              <r-loading name="rotate"></r-loading>
+              <r-loading name="stretch"></r-loading>
+              <r-loading name="dot"></r-loading>
+              <r-loading name="circle-line"></r-loading>
+            </div>
+          </div>
+          <div class="demo-card">
+            <h3>Message</h3>
+            <div class="row">
+              <r-button type="primary" onclick="window.message?.success('Saved with ranui')">Success</r-button>
+              <r-button type="warning" onclick="window.message?.error('Something went wrong')">Error</r-button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Surfaces ─────────────────────────────────────────────────── -->
+      <section>
+        <h2>Surfaces</h2>
+        <div class="grid">
+          <r-card title="Cross-framework" description="Drop ranui into React, Vue, or vanilla — they are native custom elements.">
+            <span slot="extra">native</span>
+          </r-card>
+          <r-card title="Token-based styling" description="Theme with documented CSS variables, no build step required.">
+            <span slot="extra">theme</span>
+          </r-card>
+          <r-card title="SSR ready" description="Server-render to a string and hydrate on the client.">
+            <span slot="extra">ssr</span>
+          </r-card>
+        </div>
+
+        <div class="panel" style="margin-top: var(--ran-space-4)">
+          <r-tabs active="t1" style="width: 100%">
+            <r-tab label="Overview" r-key="t1">ranui ships ~24 components, all Shadow-DOM encapsulated.</r-tab>
+            <r-tab label="API" r-key="t2">Each component exposes attributes, <code>::part()</code>, and CSS variables.</r-tab>
+            <r-tab label="Theming" r-key="t3">Light/dark via a single attribute; tokens follow the Geist scale.</r-tab>
+            <r-tab label="Disabled" r-key="t4" disabled>Disabled tab.</r-tab>
+          </r-tabs>
+        </div>
+
+        <div class="panel row" style="margin-top: var(--ran-space-4)">
+          <r-button type="primary" id="open-modal">Open modal</r-button>
+          <r-link href="https://github.com/chaxus/ran" target="_blank">Documentation link →</r-link>
+        </div>
+      </section>
+
+      <!-- ── Data viz ─────────────────────────────────────────────────── -->
+      <section>
+        <h2>Data visualization</h2>
+        <div class="panel" style="display: flex; justify-content: center">
+          <r-radar style="width: 320px; height: 320px"></r-radar>
+        </div>
+      </section>
+
+      <footer>
+        ranui · MIT · <a href="https://github.com/chaxus/ran" target="_blank">github.com/chaxus/ran</a>
+      </footer>
+    </main>
+
+    <r-modal id="demo-modal" title="Deploy to production">
+      <p>This will push the current build to the production environment. Continue?</p>
+      <div slot="footer">
+        <r-button onclick="document.getElementById('demo-modal').open = false">Cancel</r-button>
+        <r-button type="primary" onclick="window.message?.success('Deployed'); document.getElementById('demo-modal').open = false">Deploy</r-button>
+      </div>
+    </r-modal>
+
+    <script type="module" src="./index.ts"></script>
+  </body>
+</html>
