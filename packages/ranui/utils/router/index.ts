@@ -74,6 +74,21 @@ let _globalRouter: RouterCore | null = null;
 // Injected <style> for MPA mode — kept as a module singleton so it's only injected once.
 let _mpaStyleEl: HTMLStyleElement | null = null;
 
+// SSG path context — set before renderToString so r-route._preSerialize() can resolve visibility.
+let _ssgPath: string | null = null;
+
+export function getSSGPath(): string | null {
+  return _ssgPath;
+}
+
+export function setSSGPath(path: string): void {
+  _ssgPath = path;
+}
+
+export function clearSSGPath(): void {
+  _ssgPath = null;
+}
+
 function parseQuery(search: string): Record<string, string> {
   const result: Record<string, string> = {};
   if (!search) return result;
@@ -158,6 +173,37 @@ export class RouterCore {
 
   get currentRoute(): RouteLocation | null {
     return this._current;
+  }
+
+  // ── Static path matching (used by matchRoute and SSG) ───────────────────
+
+  private _matchConfigPath(path: string, route: RouteConfig): boolean {
+    const paramNames: string[] = [];
+    const regexStr = route.path
+      .split('/')
+      .map((segment) => {
+        if (segment.startsWith(':')) {
+          paramNames.push(segment.slice(1));
+          return '([^/]+)';
+        }
+        if (segment === '*') return '(.*)';
+        return segment.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      })
+      .join('/');
+    const pattern = route.exact
+      ? new RegExp(`^${regexStr}$`)
+      : new RegExp(`^${regexStr}(?:/.*)?$`);
+    return pattern.test(path);
+  }
+
+  /** Return the first RouteConfig whose path matches the given URL path, or null. */
+  matchRoute(path: string): RouteConfig | null {
+    return this._routes.find((r) => this._matchConfigPath(path, r)) ?? null;
+  }
+
+  /** Return all route paths declared in the router config — used to enumerate SSG pages. */
+  getStaticPaths(): string[] {
+    return this._routes.map((r) => r.path);
   }
 
   // ── MPA setup ───────────────────────────────────────────────────────────

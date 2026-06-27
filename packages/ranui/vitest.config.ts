@@ -12,10 +12,6 @@ export default defineConfig({
     globals: true,
     clearMocks: true,
     setupFiles: ['test/setup.ts'],
-    // Limit parallel workers to avoid jsdom OOM when running 60+ test files concurrently.
-    poolOptions: {
-      forks: { maxForks: 4 },
-    },
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
