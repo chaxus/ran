@@ -164,25 +164,11 @@ main {
 }
 
 /* ── Hero (Overview) ─────────────────────────────────────────────────── */
+/* Left-aligned, high-contrast, restrained — the Geist way. No gradient text
+   (it lowers contrast) and no decorative glow. */
 .hero {
-  position: relative;
-  padding: var(--ran-space-24) 0 var(--ran-space-16);
-  text-align: center;
-}
-
-.hero::before {
-  content: '';
-  position: absolute;
-  top: -8%;
-  left: 50%;
-  width: min(760px, 90%);
-  height: 460px;
-  transform: translateX(-50%);
-  background: radial-gradient(circle, color-mix(in srgb, var(--ran-color-primary) 22%, transparent), transparent 68%);
-  filter: blur(48px);
-  opacity: 0.7;
-  z-index: -1;
-  pointer-events: none;
+  max-width: 760px;
+  padding: var(--ran-space-16) 0 var(--ran-space-10);
 }
 
 .hero-badge {
@@ -190,44 +176,34 @@ main {
   align-items: center;
   gap: 8px;
   margin-bottom: var(--ran-space-6);
-  padding: 6px 14px;
+  padding: 5px 12px;
   font-family: var(--ran-font-mono);
   font-size: 12px;
   color: var(--ran-color-text-secondary);
   background: var(--ran-color-bg-elevated);
   border: 1px solid var(--ran-color-border);
   border-radius: var(--ran-radius-full);
-  box-shadow: var(--ran-shadow-elevated);
 }
 
 .hero h1 {
-  margin: 0 auto var(--ran-space-5);
-  max-width: 16ch;
-  font-size: clamp(40px, 6vw, 64px);
-  line-height: 1.05;
+  margin: 0 0 var(--ran-space-5);
+  font-size: clamp(36px, 5vw, 56px);
+  line-height: 1.08;
   font-weight: 600;
   letter-spacing: -0.035em;
-  background: linear-gradient(
-    135deg,
-    var(--ran-color-text),
-    color-mix(in srgb, var(--ran-color-text) 50%, var(--ran-color-primary))
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
+  color: var(--ran-color-text);
 }
 
 .hero p {
-  margin: 0 auto;
-  max-width: 580px;
-  font-size: 17px;
+  margin: 0;
+  max-width: 600px;
+  font-size: 18px;
+  line-height: 1.55;
   color: var(--ran-color-text-secondary);
 }
 
 .hero-cta {
   display: flex;
-  justify-content: center;
   flex-wrap: wrap;
   gap: var(--ran-space-3);
   margin-top: var(--ran-space-8);
@@ -340,7 +316,7 @@ main {
 
 /* ── Sections ────────────────────────────────────────────────────────── */
 section {
-  margin-top: var(--ran-space-12);
+  margin-top: var(--ran-space-10);
   scroll-margin-top: var(--ran-space-16);
 }
 
@@ -606,6 +582,185 @@ footer {
 footer a {
   color: var(--ran-color-link);
   text-decoration: none;
+}
+
+/* ── Methodology: color state legend ─────────────────────────────────── */
+.state-legend {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--ran-space-2) var(--ran-space-4);
+  margin-top: var(--ran-space-4);
+}
+
+.state-item {
+  display: flex;
+  align-items: center;
+  gap: var(--ran-space-3);
+  font-size: 13px;
+}
+
+.state-chip {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: var(--ran-radius-sm);
+  border: 1px solid var(--ran-gray-alpha-200);
+}
+
+.state-step {
+  font-family: var(--ran-font-mono);
+  font-size: 12px;
+  color: var(--ran-color-text-secondary);
+  width: 34px;
+  flex-shrink: 0;
+}
+
+.state-role {
+  color: var(--ran-color-text);
+}
+
+/* ── Methodology: spacing scale ──────────────────────────────────────── */
+.space-scale {
+  display: grid;
+  gap: var(--ran-space-3);
+}
+
+.space-item {
+  display: flex;
+  align-items: center;
+  gap: var(--ran-space-4);
+}
+
+.space-item code {
+  font-family: var(--ran-font-mono);
+  font-size: 12px;
+  color: var(--ran-color-text-secondary);
+  width: 48px;
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.space-bar {
+  height: 16px;
+  border-radius: 3px;
+  background: var(--ran-color-primary);
+}
+
+/* ── Methodology: type roles ─────────────────────────────────────────── */
+.role-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--ran-space-5);
+  padding: var(--ran-space-4) 0;
+  border-top: 1px solid var(--ran-color-border-secondary);
+}
+
+.role-row:first-child {
+  border-top: 0;
+}
+
+.role-meta {
+  width: 120px;
+  flex-shrink: 0;
+  font-family: var(--ran-font-mono);
+  font-size: 12px;
+  color: var(--ran-color-text-secondary);
+}
+
+/* ── Methodology: motion ─────────────────────────────────────────────── */
+.motion-grid {
+  display: grid;
+  gap: 0;
+}
+
+.motion-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--ran-space-5);
+  padding: var(--ran-space-3) 0;
+  border-top: 1px solid var(--ran-color-border-secondary);
+}
+
+.motion-row:first-child {
+  border-top: 0;
+}
+
+.motion-dur {
+  width: 96px;
+  flex-shrink: 0;
+  font-family: var(--ran-font-mono);
+  font-size: 13px;
+  color: var(--ran-color-primary);
+}
+
+.motion-use {
+  color: var(--ran-color-text-secondary);
+}
+
+/* ── Methodology: do / don't ─────────────────────────────────────────── */
+.dodont {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--ran-space-4);
+}
+
+.guideline {
+  padding: var(--ran-space-5);
+  border: 1px solid var(--ran-color-border);
+  border-radius: var(--ran-radius-md);
+  background: var(--ran-color-bg-elevated);
+}
+
+.guideline-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: var(--ran-space-3);
+  font-family: var(--ran-font-mono);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.guideline.do .guideline-tag {
+  color: var(--ran-color-success);
+}
+
+.guideline.dont .guideline-tag {
+  color: var(--ran-color-danger);
+}
+
+.guideline p {
+  margin: 0 0 var(--ran-space-2);
+  color: var(--ran-color-text);
+}
+
+.guideline .sample {
+  font-family: var(--ran-font-mono);
+  font-size: 13px;
+  color: var(--ran-color-text-secondary);
+}
+
+/* ── Methodology: accessibility list ─────────────────────────────────── */
+.a11y-list {
+  display: grid;
+  gap: var(--ran-space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.a11y-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ran-space-3);
+  color: var(--ran-color-text);
+}
+
+.a11y-list li::before {
+  content: '✓';
+  flex-shrink: 0;
+  color: var(--ran-color-success);
+  font-weight: 600;
 }
 
 /* ── Responsive ──────────────────────────────────────────────────────── */
