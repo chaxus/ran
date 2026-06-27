@@ -3,6 +3,8 @@ import setting from '@/assets/icons/setting.svg?raw';
 import loading from '@/assets/icons/loading.svg?raw';
 import lock from '@/assets/icons/lock.svg?raw';
 import search from '@/assets/icons/search.svg?raw';
+import github from '@/assets/icons/github.svg?raw';
+import issue from '@/assets/icons/issue.svg?raw';
 import { registerIcons } from '@/components/icon/index';
 import message from '@/components/message';
 import { getTheme, initTheme, setTheme } from '@/utils/theme';
@@ -11,7 +13,7 @@ import type { Lang } from './i18n';
 import '../style';
 import '../index';
 
-registerIcons({ home, setting, loading, lock, search });
+registerIcons({ home, setting, loading, lock, search, github, issue });
 (window as unknown as { message: typeof message }).message = message;
 
 initTheme();
@@ -30,23 +32,28 @@ document.getElementById('theme-toggle')?.addEventListener('click', () => {
 });
 syncToggle();
 
-// ── Language switch (EN / 中文) ────────────────────────────────────────
-let lang: Lang = getLang();
-
-const syncLangToggle = (): void => {
-  const btn = document.getElementById('lang-toggle');
-  if (btn) btn.textContent = lang === 'zh' ? '中文' : 'EN';
+// ── Language switch via <r-select> ─────────────────────────────────────
+type DemoSelect = HTMLElement & {
+  selectOptionElement?: (el: Element | null, dispatch?: boolean) => void;
 };
 
+const lang: Lang = getLang();
 applyLanguage(lang);
-syncLangToggle();
 
-document.getElementById('lang-toggle')?.addEventListener('click', () => {
-  lang = lang === 'zh' ? 'en' : 'zh';
-  setLang(lang);
-  applyLanguage(lang);
-  syncLangToggle();
-});
+const langSelect = document.getElementById('lang-select') as DemoSelect | null;
+if (langSelect) {
+  // Reflect the active locale in the select without dispatching a change.
+  const active = Array.from(langSelect.querySelectorAll('r-option')).find((o) => o.getAttribute('value') === lang);
+  langSelect.setAttribute('defaultValue', lang);
+  langSelect.setAttribute('value', lang);
+  langSelect.selectOptionElement?.(active ?? null, false);
+
+  langSelect.addEventListener('change', (e: Event) => {
+    const value = (e as CustomEvent<{ value: string }>).detail.value as Lang;
+    setLang(value);
+    applyLanguage(value);
+  });
+}
 
 // ── Color palette swatches (read straight from the CSS custom properties) ──
 const SCALES: Record<string, number[]> = {

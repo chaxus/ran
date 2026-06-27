@@ -38,6 +38,14 @@ export type {
 } from '@/utils/router';
 export { renderStaticPage, generateStaticPages } from '@/utils/ssg';
 export type { SSGPage } from '@/utils/ssg';
+export { I18nCore, createI18n, useI18n } from '@/utils/i18n';
+export type {
+  I18nConfig,
+  MessageDict,
+  LocaleMessages,
+  TranslateParams,
+  LocaleChangeHandler,
+} from '@/utils/i18n';
 
 // Side effects for registration
 import '@/components/button';
