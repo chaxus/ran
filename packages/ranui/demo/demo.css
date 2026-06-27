@@ -212,9 +212,11 @@ main {
 /* CTA / route links render their box model via the `sheet` attr (see index.ts);
    demo.css owns the surface (color, background, border, hover). */
 .cta {
-  display: block;
+  display: inline-flex;
+  height: 42px;
   border-radius: var(--ran-radius-full);
   border: 1px solid transparent;
+  font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   transition: all var(--ran-motion-duration-base);
@@ -765,10 +767,20 @@ footer a {
 
 /* ── Responsive ──────────────────────────────────────────────────────── */
 @media (max-width: 820px) {
-  .route-nav {
+  /* Keep route navigation reachable — drop it to its own full-width row
+     rather than hiding it. */
+  .topbar {
+    flex-wrap: wrap;
+  }
+  .brand span {
     display: none;
   }
   .nav-link-text {
     display: none;
+  }
+  .route-nav {
+    order: 3;
+    width: 100%;
+    justify-content: center;
   }
 }

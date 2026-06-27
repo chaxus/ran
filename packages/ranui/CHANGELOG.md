@@ -11,6 +11,7 @@ All notable changes to `ranui` will be documented in this file.
 - New framework-agnostic i18n utility (`utils/i18n`, exported from `ranui` as `createI18n` / `useI18n` / `I18nCore`): `t(key, params)` with locale fallback + `{param}` interpolation, `setLocale`/`onChange` subscription, `addMessages`, localStorage persistence, and `navigator` locale detection. SSR-safe. Mirrors the router core/singleton design.
 - Interaction-state semantic tokens following Geist's 100–1000 state model: `--ran-color-bg-hover` / `-bg-active` / `-border-hover` / `-border-active`.
 - The demo's Design route is now a methodology page (color state ladder, spacing rhythm, typography roles, motion durations, copy do/don't, accessibility), modeled on the Vercel/Geist design spec.
+- `docs/DESIGN.md` — an AI-facing, executable design specification (color states, spacing, typography roles, radius/elevation, motion, copy, accessibility, component application, and a pre-ship checklist).
 
 ### Changed
 
@@ -26,6 +27,8 @@ All notable changes to `ranui` will be documented in this file.
 ### Fixed
 
 - Fixed dark-mode rendering bugs from hardcoded colors: `dropdown-item` text/hover/active, `skeleton` base + shimmer (previously invisible in dark), and `radar` canvas label color and grid lines now follow the theme tokens.
+- Demo hero CTA text is now vertically centered (the inner anchor's `height:100%` collapsed against an auto-height host; fixed with a fixed host height + `line-height:1`).
+- Demo route navigation is now reachable on mobile (it was hidden under 820px); it drops to its own full-width row instead.
 
 ### Tests
 
