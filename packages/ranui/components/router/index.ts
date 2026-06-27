@@ -9,6 +9,7 @@ import {
   syncSheetAttribute,
 } from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
+import { useRouter, type RouterComponentElement } from '@/utils/router';
 
 type RouteElement = HTMLElement & { _update: (path: string) => void };
 
@@ -94,6 +95,9 @@ export class Router extends RanElement {
     this._events.on(window, 'popstate', this._handlePopState);
     this._events.on(this, 'ran-navigate', this._handleNavigate as EventListener);
     this._events.on(this._slot, 'slotchange', () => this._syncRoutes());
+    // Register with RouterCore if a global instance exists
+    const core = useRouter();
+    if (core) core._bind(this as unknown as RouterComponentElement);
     this._syncRoutes();
     // Re-sync after r-route is guaranteed to be upgraded
     if (typeof customElements !== 'undefined') {
@@ -102,6 +106,8 @@ export class Router extends RanElement {
   }
 
   disconnectedCallback(): void {
+    const core = useRouter();
+    if (core) core._unbind(this as unknown as RouterComponentElement);
     this._events.abort();
   }
 

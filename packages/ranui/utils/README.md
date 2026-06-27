@@ -407,6 +407,91 @@ localStorage keys:
 'ran-theme-pack';
 ```
 
+## Router (`router/index.ts`)
+
+Client-side routing engine. Provides history management, navigation guards, route-change subscriptions, and View Transitions support for both SPA and MPA scenarios.
+
+```ts
+import { createRouter, useRouter, enableMpaViewTransitions } from 'ranui';
+import type { RouterConfig, RouteLocation, NavigationGuard } from 'ranui';
+```
+
+### `createRouter(config?)`
+
+Creates and registers a global `RouterCore` singleton. Call once at app startup.
+
+```ts
+const router = createRouter({
+  mode: 'history',       // 'history' (default) | 'hash'
+  base: '/app',          // strip prefix from all paths
+  routes: [
+    { path: '/', exact: true, meta: { title: 'Home' } },
+    { path: '/users/:id', meta: { requiresAuth: true } },
+  ],
+  viewTransition: 'spa', // 'spa' | 'mpa' | 'both' | false
+});
+```
+
+### `useRouter()`
+
+Returns the active `RouterCore`, or `null` if `createRouter` has not been called.
+
+```ts
+const router = useRouter();
+router?.push('/about');
+```
+
+### `RouterCore` API
+
+| API | Type / Returns | Description |
+| :--- | :--- | :--- |
+| `push(path)` | `Promise<void>` | Navigate and add a history entry |
+| `replace(path)` | `Promise<void>` | Navigate and replace the current entry |
+| `back()` | `void` | `history.back()` |
+| `forward()` | `void` | `history.forward()` |
+| `go(delta)` | `void` | `history.go(delta)` |
+| `beforeEach(guard)` | `() => void` | Register navigation guard; returns unsubscribe |
+| `afterEach(handler)` | `() => void` | Post-navigation hook; returns unsubscribe |
+| `onRouteChange(handler)` | `() => void` | Subscribe to route changes; returns unsubscribe |
+| `onPageSwap(handler)` | `() => void` | Cross-document `pageswap` event (MPA mode only) |
+| `onPageReveal(handler)` | `() => void` | Cross-document `pagereveal` event (MPA mode only) |
+| `currentRoute` | `RouteLocation \| null` | Current route — `{ path, params, query, fullPath }` |
+| `destroy()` | `void` | Remove all listeners and injected CSS |
+
+### Navigation guards
+
+Guards run in registration order before navigation commits. Call `next()` to allow, `next(false)` to cancel, or `next('/path')` to redirect.
+
+```ts
+const unsubscribe = router.beforeEach((to, from, next) => {
+  if (to.meta?.requiresAuth && !isLoggedIn()) next('/login');
+  else next();
+});
+unsubscribe(); // remove when no longer needed
+```
+
+### View Transitions
+
+| `viewTransition` value | Effect |
+| :--- | :--- |
+| `'spa'` / `true` | Wraps same-document DOM updates in `document.startViewTransition()` (Chrome 111+) |
+| `'mpa'` | Injects `@view-transition { navigation: auto }` for cross-document transitions (Chrome 126+); exposes `onPageSwap` / `onPageReveal` |
+| `'both'` | Both of the above |
+| `false` (default) | No transitions |
+
+Gracefully degrades when the API is not supported.
+
+### `enableMpaViewTransitions()`
+
+Standalone helper — injects `@view-transition { navigation: auto }` once without needing a router instance. Returns a cleanup function.
+
+```ts
+import { enableMpaViewTransitions } from 'ranui';
+
+const cleanup = enableMpaViewTransitions();
+// cleanup() removes the <style> element if needed
+```
+
 ## Style Utilities (`style.ts`)
 
 | API                             | Description                                                                    |

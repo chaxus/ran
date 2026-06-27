@@ -9,6 +9,7 @@ import {
   syncSheetAttribute,
 } from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
+import { useRouter } from '@/utils/router';
 
 export class Link extends RanElement {
   static get observedAttributes(): string[] {
@@ -57,6 +58,15 @@ export class Link extends RanElement {
     const href = this.href;
     if (!href || /^(https?:\/\/|\/\/|mailto:|tel:)/.test(href)) return;
     e.preventDefault();
+    const core = useRouter();
+    if (core) {
+      if (this.replace) {
+        core.replace(href);
+      } else {
+        core.push(href);
+      }
+      return;
+    }
     this.dispatchEvent(
       new CustomEvent('ran-navigate', {
         detail: { path: href, replace: this.replace },
