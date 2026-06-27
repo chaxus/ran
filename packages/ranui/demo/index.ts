@@ -92,6 +92,66 @@ if (palette) {
   }
 }
 
+// ── Color state legend (Geist: each step maps to a fixed interface state) ──
+const STATE_MAP: Array<[number, string]> = [
+  [100, 'state.bg'],
+  [200, 'state.bg-hover'],
+  [300, 'state.bg-active'],
+  [400, 'state.border'],
+  [500, 'state.border-hover'],
+  [600, 'state.border-active'],
+  [700, 'state.solid'],
+  [800, 'state.solid-hover'],
+  [900, 'state.text-secondary'],
+  [1000, 'state.text'],
+];
+
+const legend = document.getElementById('state-legend');
+if (legend) {
+  for (const [step, key] of STATE_MAP) {
+    const item = document.createElement('div');
+    item.className = 'state-item';
+
+    const chip = document.createElement('div');
+    chip.className = 'state-chip';
+    chip.style.background = `var(--ran-gray-${step})`;
+
+    const stepEl = document.createElement('span');
+    stepEl.className = 'state-step';
+    stepEl.textContent = String(step);
+
+    const role = document.createElement('span');
+    role.className = 'state-role';
+    role.setAttribute('data-i18n', key);
+
+    item.append(chip, stepEl, role);
+    legend.appendChild(item);
+  }
+}
+
+// ── Spacing scale (4px base; nine values) ─────────────────────────────
+const SPACE_VALUES = [4, 8, 12, 16, 24, 32, 40, 64, 96];
+const spaceScale = document.getElementById('space-scale');
+if (spaceScale) {
+  for (const v of SPACE_VALUES) {
+    const item = document.createElement('div');
+    item.className = 'space-item';
+
+    const code = document.createElement('code');
+    code.textContent = `${v}px`;
+
+    const bar = document.createElement('div');
+    bar.className = 'space-bar';
+    bar.style.width = `${v}px`;
+
+    item.append(code, bar);
+    spaceScale.appendChild(item);
+  }
+}
+
+// Re-translate any dynamically generated [data-i18n] nodes (state legend).
+applyLanguage(getLang());
+
 // ── Radar demo data ───────────────────────────────────────────────────
 // The radar is canvas-based, so it must (re)draw while visible. We render it
 // whenever the Components route becomes active (see routing wiring below).

@@ -85,9 +85,17 @@
           </div>
 
           <section id="tokens">
-            <h2 data-i18n="sec.colors">Color scales</h2>
-            <p class="lead" data-i18n="sec.colors.lead">Geist base palette. Each step is a CSS custom property that flips value in dark mode.</p>
+            <h2 data-i18n="sec.colors">Color</h2>
+            <p class="lead" data-i18n="sec.colors.lead">Ten-step scales where each step maps to a fixed interface state — color is just how a state looks.</p>
             <div class="panel"><div id="palette"></div></div>
+            <p class="lead" style="margin-top: var(--ran-space-6)" data-i18n="design.states.lead">Each step has one job, so hover / active / border / text states are decided up front — no guessing per component:</p>
+            <div class="panel"><div class="state-legend" id="state-legend"></div></div>
+          </section>
+
+          <section>
+            <h2 data-i18n="sec.spacing">Spacing</h2>
+            <p class="lead" data-i18n="sec.spacing.lead">A 4px base unit with just nine values. 8px within a group, 16px between groups, 32–40px between sections — a limited set keeps the rhythm.</p>
+            <div class="panel"><div class="space-scale" id="space-scale"></div></div>
           </section>
 
           <section>
@@ -104,17 +112,68 @@
 
           <section>
             <h2 data-i18n="sec.typo">Typography</h2>
-            <p class="lead" data-i18n="sec.typo.lead">Geist Sans for UI &amp; prose, Geist Mono for code &amp; data.</p>
-            <div class="panel type-samples">
-              <div class="type-row"><span class="type-meta">heading</span><span class="type-h">The quick brown fox</span></div>
-              <div class="type-row"><span class="type-meta">body</span><span class="type-b">The quick brown fox jumps over the lazy dog.</span></div>
-              <div class="type-row"><span class="type-meta">mono</span><span class="type-m">const theme = createTheme();</span></div>
+            <p class="lead" data-i18n="sec.typo.lead">Pick a role, not a size. Each role fixes the font, size, weight, and line-height up front.</p>
+            <div class="panel">
+              <div class="role-row"><span class="role-meta">heading-32</span><span class="type-h">Ship faster</span></div>
+              <div class="role-row"><span class="role-meta">copy-16</span><span class="type-b">Body copy for comfortable multi-line reading.</span></div>
+              <div class="role-row"><span class="role-meta">label-14</span><span style="font-size: 14px; font-weight: 500">Single-line scannable label</span></div>
+              <div class="role-row"><span class="role-meta">button-14</span><span style="font-size: 14px; font-weight: 500">Deploy project</span></div>
+              <div class="role-row"><span class="role-meta">mono-13</span><span class="type-m">const theme = createTheme();</span></div>
             </div>
           </section>
 
           <section>
+            <h2 data-i18n="sec.motion">Motion</h2>
+            <p class="lead" data-i18n="sec.motion.lead">Prefer none. When motion clarifies a change, keep it quick, light, and restrained.</p>
+            <div class="panel motion-grid">
+              <div class="motion-row"><span class="motion-dur">0ms</span><span class="motion-use" data-i18n="motion.instant">Changes that are already obvious — apply instantly.</span></div>
+              <div class="motion-row"><span class="motion-dur">150ms</span><span class="motion-use" data-i18n="motion.state">Hover and active state transitions.</span></div>
+              <div class="motion-row"><span class="motion-dur">200ms</span><span class="motion-use" data-i18n="motion.popover">Popovers and menus appearing.</span></div>
+              <div class="motion-row"><span class="motion-dur">300ms</span><span class="motion-use" data-i18n="motion.modal">Modals and dialogs.</span></div>
+            </div>
+          </section>
+
+          <section>
+            <h2 data-i18n="sec.content">Content</h2>
+            <p class="lead" data-i18n="sec.content.lead">Copy is part of the system. Be specific and remove guesswork.</p>
+            <div class="dodont">
+              <div class="guideline do">
+                <span class="guideline-tag" data-i18n="do.label">✓ Do</span>
+                <p data-i18n="content.btn.do">Buttons: an action plus an object.</p>
+                <span class="sample" data-i18n="content.btn.do.s">Deploy project · Delete member</span>
+              </div>
+              <div class="guideline dont">
+                <span class="guideline-tag" data-i18n="dont.label">✕ Don't</span>
+                <p data-i18n="content.btn.dont">Vague single verbs.</p>
+                <span class="sample" data-i18n="content.btn.dont.s">Deploy · OK · Delete</span>
+              </div>
+              <div class="guideline do">
+                <span class="guideline-tag" data-i18n="do.label">✓ Do</span>
+                <p data-i18n="content.err.do">Errors: what happened, then how to fix it.</p>
+                <span class="sample" data-i18n="content.err.do.s">Build failed: the bundle exceeds the size limit. Reduce it or raise the limit.</span>
+              </div>
+              <div class="guideline dont">
+                <span class="guideline-tag" data-i18n="dont.label">✕ Don't</span>
+                <p data-i18n="content.err.dont">Empty failures that say nothing.</p>
+                <span class="sample" data-i18n="content.err.dont.s">Operation failed, please try again.</span>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2 data-i18n="sec.a11y">Accessibility</h2>
+            <p class="lead" data-i18n="sec.a11y.lead">The system serves everyone — keyboard users, low vision, bright sunlight.</p>
+            <ul class="a11y-list">
+              <li data-i18n="a11y.contrast">Keep sufficient text-to-background contrast (WCAG AA).</li>
+              <li data-i18n="a11y.notcolor">Never signal state with color alone — pair it with an icon or text.</li>
+              <li data-i18n="a11y.focus">Every interactive element has a visible focus ring.</li>
+              <li data-i18n="a11y.keyboard">Full keyboard navigation; nothing is mouse-only.</li>
+            </ul>
+          </section>
+
+          <section>
             <h2 data-i18n="sec.dark">Light &amp; dark</h2>
-            <p class="lead" data-i18n="sec.dark.lead">Semantic tokens reference the base scale, so a single dark mixin redefines the scale and everything re-resolves. Toggle the theme in the top bar.</p>
+            <p class="lead" data-i18n="sec.dark.lead">Semantic tokens reference the base scale, so a single dark mixin redefines the scale and everything re-resolves. Same token name, different value — gray-1000 is #171717 in light, #ededed in dark.</p>
             <pre class="code"><code>:root[data-ran-theme="dark"] {
   .ran-theme-dark(); /* only the base scale flips */
 }
