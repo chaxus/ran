@@ -15,6 +15,7 @@ packages/ranui/
 ├── utils/
 │   ├── component.ts      # ensureShadowRoot, ensureShadowElement, attribute helpers
 │   ├── builder/          # ElementBuilder fluent DOM builder
+│   ├── router/           # RouterCore, createRouter, useRouter, enableMpaViewTransitions
 │   ├── ssr-registry.ts   # defineSSR, SSR support
 │   ├── theme.ts          # setTheme, setThemePack, initTheme
 │   ├── style.ts          # adoptStyles, adoptSheetText
@@ -365,6 +366,69 @@ localStorage keys: `'ran-theme'`, `'ran-theme-pack'`
 const falseList = [false, 'false', null, undefined]
 isDisabled(element: Element): boolean   // getAttribute('disabled') not in falseList
 ```
+
+### `utils/router/index.ts` — Client-side Router
+
+JS routing engine. Exported from the public `ranui` barrel as `createRouter`, `useRouter`, `RouterCore`, `enableMpaViewTransitions`.
+
+```typescript
+import { createRouter, useRouter, enableMpaViewTransitions } from 'ranui';
+import type { RouterConfig, RouteLocation, NavigationGuard, RouteChangeHandler, ViewTransitionMode } from 'ranui';
+```
+
+**`createRouter(config?)`** — creates and registers a global `RouterCore` singleton. Call once, before any `r-router` element connects.
+
+```typescript
+const router = createRouter({
+  mode: 'history',        // 'history' (default) | 'hash'
+  base: '/app',           // strip prefix from all paths
+  routes: [               // optional metadata; does not create DOM outlets
+    { path: '/', exact: true, meta: { title: 'Home' } },
+    { path: '/users/:id', meta: { requiresAuth: true } },
+  ],
+  viewTransition: 'both', // false (default) | true/'spa' | 'mpa' | 'both'
+});
+```
+
+**`useRouter()`** — returns the active `RouterCore` or `null`.
+
+**`RouterCore` public API:**
+
+| Method / Property | Description |
+| --- | --- |
+| `push(path)` → `Promise<void>` | Navigate, add history entry |
+| `replace(path)` → `Promise<void>` | Navigate, replace entry |
+| `back() / forward() / go(delta)` | Delegate to `window.history` |
+| `beforeEach(guard)` → `() => void` | Add navigation guard; returns unsubscribe |
+| `afterEach(handler)` → `() => void` | Post-nav hook; returns unsubscribe |
+| `onRouteChange(handler)` → `() => void` | Subscribe to every route change |
+| `onPageSwap(handler)` → `() => void` | MPA `pageswap` event (MPA/both mode only) |
+| `onPageReveal(handler)` → `() => void` | MPA `pagereveal` event (MPA/both mode only) |
+| `currentRoute` | `RouteLocation \| null` |
+| `destroy()` | Remove listeners and injected CSS |
+
+**`_bind(component)` / `_unbind(component)`** — called by `r-router` in `connectedCallback` / `disconnectedCallback`. Registers the DOM element so `RouterCore._notify()` can call `_syncRoutes()` on it directly without an event bus.
+
+**View Transitions:**
+
+| `viewTransition` | Behavior |
+| --- | --- |
+| `false` (default) | No transition |
+| `true` / `'spa'` | Wraps `syncDOM()` in `document.startViewTransition()` (Chrome 111+) |
+| `'mpa'` | Injects `@view-transition { navigation: auto }` into `<head>`; adds `pageswap`/`pagereveal` listeners |
+| `'both'` | Both spa + mpa |
+
+**SSR / SSG compatibility:**
+
+- `RouterCore` constructor: safe — no browser API access in constructor body.
+- `_getCurrentPath()`: returns `'/'` when `typeof window === 'undefined'`.
+- `push()` / `replace()`: skip `history.pushState` / `replaceState` in SSR but still run guards and `_notify()`.
+- `back()` / `forward()` / `go()`: no-op in SSR.
+- `injectMpaTransitionStyle()`: guarded with `typeof document === 'undefined'`.
+- `_enableMpa()`: `window.addEventListener` is guarded.
+- `r-router`, `r-route`, `r-link` components: SSR-safe via `RanElement` + `defineSSR` (same as all other components). `connectedCallback` is not called during SSR serialization, so `window` access inside it is not a concern.
+
+**`enableMpaViewTransitions()`** — standalone helper; injects the `@view-transition` style without a router. Returns a cleanup function that removes the style element.
 
 ---
 
@@ -730,3 +794,6 @@ Each component gets its own `dist/{name}.js` ES module. The barrel `dist/index.j
 | `this.setAttribute(…)` called in constructor                                                                     | Forbidden by Custom Elements spec — Chrome throws `NotSupportedError: The result must not have attributes` on `document.createElement`. Move all `this.setAttribute` / `this.classList` calls to `connectedCallback`                            |
 | Component `:host` has no height + inner div uses `height: 100%`                                                  | `100%` resolves to the parent container height when `:host` has no explicit size, expanding the component unexpectedly. Always set `display: block; height: var(--token, <default>)` on `:host` for height-aware components (e.g. `r-progress`) |
 | Shadow DOM has no `<slot>` for label/child content                                                               | Light DOM children are silently not rendered; the component appears broken when used with text content. Always add a `Slot()` to the shadow DOM when the component is designed to accept slotted content                                        |
+| Accessing `window` / `document` in `RouterCore` utility code                                                    | `RouterCore` is imported at the module level and can be instantiated in SSR. All `window.*` / `document.*` calls must be guarded with `typeof window !== 'undefined'` / `typeof document !== 'undefined'`. The existing utility guards are in `_getCurrentPath`, `_navigate`, `back/forward/go`, `injectMpaTransitionStyle`, and `_enableMpa/_disableMpa`. Add the same guard to any new code that touches browser globals. |
+| Calling `createRouter()` after `r-router` elements have already connected                                        | `r-router` calls `useRouter()?._bind(this)` in `connectedCallback`. If `createRouter` is called after the component is already in the DOM, the component will not be registered. Always call `createRouter()` before mounting `r-router`, or trigger reconnection manually. |
+| `viewTransition: 'mpa'` with SPA navigation                                                                     | MPA mode only injects `@view-transition { navigation: auto }` for full-page navigations. `push()` / `replace()` will NOT trigger this CSS-based transition — they bypass the browser's navigation pipeline. Use `'both'` when you need transitions for both SPA navigation and full-page links. |

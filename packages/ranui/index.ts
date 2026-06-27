@@ -34,6 +34,17 @@ export { Section } from '@/components/section';
 export { Router } from '@/components/router';
 export { Route } from '@/components/route';
 export { Link } from '@/components/link';
+export { RouterCore, createRouter, useRouter, enableMpaViewTransitions } from '@/utils/router';
+export type {
+  RouterConfig,
+  RouteConfig,
+  RouteLocation,
+  NavigationGuard,
+  RouteChangeHandler,
+  ViewTransitionMode,
+  PageSwapEvent,
+  PageRevealEvent,
+} from '@/utils/router';
 
 // Side effects for registration
 import '@/components/button';

@@ -298,6 +298,10 @@ const themeEnConfig: DefaultTheme.Config = {
           // { text: 'Modal 对话框', link: '/src/ranui/modal/' },
         ],
       },
+      {
+        text: 'Navigation',
+        items: [{ text: 'Router', link: '/src/ranui/router/' }],
+      },
     ],
     '/src/article/': [
       {

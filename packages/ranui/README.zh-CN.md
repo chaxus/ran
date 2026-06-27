@@ -271,6 +271,56 @@ function initCounter(container: HTMLElement) {
 
 详细 API 请参考 [工具文档](./utils/README.zh-CN.md)。
 
+### 路由
+
+RanUI 内置客户端路由，提供声明式组件和 JavaScript API 两种方式。
+
+**声明式组件：**
+
+```html
+<r-router>
+  <nav>
+    <r-link href="/">首页</r-link>
+    <r-link href="/about">关于</r-link>
+  </nav>
+
+  <r-route path="/" exact><h2>首页</h2></r-route>
+  <r-route path="/about"><h2>关于</h2></r-route>
+  <r-route path="/users/:id"><h2>用户详情</h2></r-route>
+</r-router>
+```
+
+**JavaScript API，含导航守卫：**
+
+```ts
+import { createRouter } from 'ranui';
+
+const router = createRouter({
+  mode: 'history',
+  routes: [
+    { path: '/', exact: true, meta: { title: '首页' } },
+    { path: '/users/:id', meta: { requiresAuth: true } },
+  ],
+  viewTransition: 'spa', // 'spa' | 'mpa' | 'both'
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.meta?.requiresAuth && !isLoggedIn()) next('/login');
+  else next();
+});
+
+router.push('/users/42');
+```
+
+纯 MPA 站点（无需 JS router）可使用 `enableMpaViewTransitions()` 注入 `@view-transition { navigation: auto }`。共享元素过渡动画通过标准 `view-transition-name` CSS 属性实现。
+
+```ts
+import { enableMpaViewTransitions } from 'ranui';
+enableMpaViewTransitions();
+```
+
+完整 API（守卫、`onPageSwap`/`onPageReveal`、元素级动画命名）请参考 [路由文档](https://chaxus.github.io/ran/cn/src/ranui/router/)。
+
 ### SSR & Builder (推荐)
 
 对于需要服务端渲染 (SSR) 或更声明式构建 UI 的场景，RanUI 内部使用 `builder`、SSR registry 与 Declarative Shadow DOM。组件会通过 `ensureShadowRoot` 复用已有 Shadow Root，并通过 `ensureShadowElement` 保持初始化幂等。

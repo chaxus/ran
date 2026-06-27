@@ -271,6 +271,56 @@ function initCounter(container: HTMLElement) {
 
 See [Utility Documentation](./utils/README.md) for the full API.
 
+### Routing
+
+RanUI includes client-side routing via declarative components and a JavaScript API.
+
+**Declarative components:**
+
+```html
+<r-router>
+  <nav>
+    <r-link href="/">Home</r-link>
+    <r-link href="/about">About</r-link>
+  </nav>
+
+  <r-route path="/" exact><h2>Home</h2></r-route>
+  <r-route path="/about"><h2>About</h2></r-route>
+  <r-route path="/users/:id"><h2>User detail</h2></r-route>
+</r-router>
+```
+
+**JavaScript API with navigation guard:**
+
+```ts
+import { createRouter } from 'ranui';
+
+const router = createRouter({
+  mode: 'history',
+  routes: [
+    { path: '/', exact: true, meta: { title: 'Home' } },
+    { path: '/users/:id', meta: { requiresAuth: true } },
+  ],
+  viewTransition: 'spa', // 'spa' | 'mpa' | 'both'
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.meta?.requiresAuth && !isLoggedIn()) next('/login');
+  else next();
+});
+
+router.push('/users/42');
+```
+
+For pure MPA sites (no JS router needed), use `enableMpaViewTransitions()` to inject `@view-transition { navigation: auto }`. Shared-element morph animations are supported via the standard `view-transition-name` CSS property.
+
+```ts
+import { enableMpaViewTransitions } from 'ranui';
+enableMpaViewTransitions();
+```
+
+See the [Router documentation](https://chaxus.github.io/ran/src/ranui/router/) for the full API including guards, `onPageSwap`/`onPageReveal`, and per-element transition names.
+
 ### SSR & Builder
 
 For SSR or declarative UI construction, RanUI internally uses `builder`, the SSR registry, and Declarative Shadow DOM. Components reuse existing Shadow Roots through `ensureShadowRoot` and keep initialization idempotent through `ensureShadowElement`.

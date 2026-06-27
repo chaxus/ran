@@ -36,7 +36,7 @@ import {
 
 `ElementBuilder` 提供链式 API 用于构建 DOM 元素。它支持 SSR，并能让组件构造函数保持简洁。
 
-这种写法接近 SwiftUI “根据状态描述视图”的模型，但底层仍然是平台原生 DOM API。`Div()`、`ButtonBuilder()` 等工厂函数描述元素树，类似 modifier 的链式方法负责挂载属性、样式、文本、子节点、ref 和事件，最后由 `build()` 返回真实 `HTMLElement` 或 SSR mock。
+这种写法接近 SwiftUI“根据状态描述视图”的模型，但底层仍然是平台原生 DOM API。`Div()`、`ButtonBuilder()` 等工厂函数描述元素树，类似 modifier 的链式方法负责挂载属性、样式、文本、子节点、ref 和事件，最后由 `build()` 返回真实 `HTMLElement` 或 SSR mock。
 
 ### 基础用法
 
@@ -400,11 +400,96 @@ type RanThemePackName =
   | 'neo-brutalism';
 ```
 
-localStorage key：
+localStorage key:
 
 ```ts
 'ran-theme';
 'ran-theme-pack';
+```
+
+## 路由 (`router/index.ts`)
+
+客户端路由引擎。提供 history 管理、导航守卫、路由变化订阅，以及针对 SPA 和 MPA 场景的 View Transitions 过渡动画支持。
+
+```ts
+import { createRouter, useRouter, enableMpaViewTransitions } from 'ranui';
+import type { RouterConfig, RouteLocation, NavigationGuard } from 'ranui';
+```
+
+### `createRouter(config?)`
+
+创建并注册全局 `RouterCore` 单例。应在应用启动时调用一次。
+
+```ts
+const router = createRouter({
+  mode: 'history',       // 'history'（默认）| 'hash'
+  base: '/app',          // 从所有路径中去除前缀
+  routes: [
+    { path: '/', exact: true, meta: { title: '首页' } },
+    { path: '/users/:id', meta: { requiresAuth: true } },
+  ],
+  viewTransition: 'spa', // 'spa' | 'mpa' | 'both' | false
+});
+```
+
+### `useRouter()`
+
+返回当前激活的 `RouterCore`，若未调用 `createRouter` 则返回 `null`。
+
+```ts
+const router = useRouter();
+router?.push('/about');
+```
+
+### `RouterCore` API
+
+| 方法 / 属性 | 类型 | 说明 |
+| :--- | :--- | :--- |
+| `push(path)` | `Promise<void>` | 导航并新增历史记录 |
+| `replace(path)` | `Promise<void>` | 导航并替换当前历史记录 |
+| `back()` | `void` | `history.back()` |
+| `forward()` | `void` | `history.forward()` |
+| `go(delta)` | `void` | `history.go(delta)` |
+| `beforeEach(guard)` | `() => void` | 注册导航守卫，返回取消订阅函数 |
+| `afterEach(handler)` | `() => void` | 导航后钩子，返回取消订阅函数 |
+| `onRouteChange(handler)` | `() => void` | 订阅路由变化，返回取消订阅函数 |
+| `onPageSwap(handler)` | `() => void` | 跨文档 `pageswap` 事件（仅 MPA 模式） |
+| `onPageReveal(handler)` | `() => void` | 跨文档 `pagereveal` 事件（仅 MPA 模式） |
+| `currentRoute` | `RouteLocation \| null` | 当前路由——`{ path, params, query, fullPath }` |
+| `destroy()` | `void` | 移除所有监听器和注入的 CSS |
+
+### 导航守卫
+
+守卫按注册顺序依次执行，在导航提交前运行。调用 `next()` 放行，`next(false)` 取消，`next('/path')` 重定向。
+
+```ts
+const unsubscribe = router.beforeEach((to, from, next) => {
+  if (to.meta?.requiresAuth && !isLoggedIn()) next('/login');
+  else next();
+});
+unsubscribe(); // 不再需要时移除守卫
+```
+
+### View Transitions
+
+| `viewTransition` 值 | 效果 |
+| :--- | :--- |
+| `'spa'` / `true` | 将同文档 DOM 更新包裹在 `document.startViewTransition()` 中（Chrome 111+） |
+| `'mpa'` | 注入 `@view-transition { navigation: auto }` 实现跨文档过渡（Chrome 126+），并开放 `onPageSwap` / `onPageReveal` 钩子 |
+| `'both'` | 同时启用以上两者 |
+| `false`（默认） | 不启用过渡动画 |
+
+不支持 View Transitions API 时自动降级为同步更新。
+
+### `enableMpaViewTransitions()`
+
+无需 router 实例的独立辅助函数——向 `<head>` 注入 `@view-transition { navigation: auto }`，返回清理函数。
+
+```ts
+import { enableMpaViewTransitions } from 'ranui';
+
+const cleanup = enableMpaViewTransitions();
+// cleanup() 可在需要时移除注入的 <style>
 ```
 
 ## 样式工具 (`style.ts`)
