@@ -3,21 +3,21 @@
     position: var(--ran-dropdown-option-item-position, relative);
     display: var(--ran-dropdown-option-item-display, block);
     padding: var(--ran-dropdown-option-item-padding, 5px 12px);
-    color: var(--ran-dropdown-option-item-color, rgba(0, 0, 0, 0.88));
+    color: var(--ran-dropdown-option-item-color, var(--ran-color-text, rgba(0, 0, 0, 0.88)));
     font-weight: var(--ran-dropdown-option-item-font-weight, normal);
     font-size: var(--ran-dropdown-option-item-font-size, 14px);
-    transition: var(--ran-dropdown-option-item-transition, background 0.3s ease);
-    border-radius: var(--ran-dropdown-option-item-border-radius, 4px);
+    transition: var(--ran-dropdown-option-item-transition, background var(--ran-motion-duration-base, 0.2s) ease);
+    border-radius: var(--ran-dropdown-option-item-border-radius, var(--ran-radius-sm, 6px));
     cursor: var(--ran-dropdown-option-item-cursor, pointer);
     &:hover {
-      background-color: var(--ran-dropdown-option-item-hover-background-color, rgba(0, 0, 0, 0.04));
+      background-color: var(--ran-dropdown-option-item-hover-background-color, var(--ran-gray-alpha-100, rgba(0, 0, 0, 0.04)));
     }
     &-content {
       text-align: var(--ran-dropdown-option-item-content-text-align, left);
       overflow: var(--ran-dropdown-option-item-content-overflow, hidden);
       white-space: var(--ran-dropdown-option-item-content-white-space, nowrap);
       text-overflow: var(--ran-dropdown-option-item-content-text-overflow, ellipsis);
-      color: var(--ran-dropdown-option-item-content-color, rgba(0, 0, 0, 0.88));
+      color: var(--ran-dropdown-option-item-content-color, var(--ran-color-text, rgba(0, 0, 0, 0.88)));
       font-size: var(--ran-dropdown-option-item-content-font-size, 14px);
       line-height: var(--ran-dropdown-option-item-content-line-height, 1.5714285714285714);
       box-sizing: var(--ran-dropdown-option-item-content-box-sizing, border-box);
@@ -27,10 +27,10 @@
     }
   }
   &-option-active {
-    background-color: var(--ran-dropdown-option-active-background-color, #e6f7ff);
+    background-color: var(--ran-dropdown-option-active-background-color, var(--ran-blue-100, #e6f7ff));
     font-weight: var(--ran-dropdown-option-active-font-weight, bold);
     &:hover {
-      background-color: var(--ran-dropdown-option-active-hover-background-color, #e6f7ff);
+      background-color: var(--ran-dropdown-option-active-hover-background-color, var(--ran-blue-100, #e6f7ff));
     }
   }
 }

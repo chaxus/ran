@@ -80,15 +80,6 @@
       "import": "./dist/ssr-stream.js",
       "require": "./dist/index.cjs"
     },
-    "./theme-packs/pixel-retro": "./dist/pixel-retro.css",
-    "./theme-packs/windows-98": "./dist/windows-98.css",
-    "./theme-packs/windows-xp": "./dist/windows-xp.css",
-    "./theme-packs/system-6": "./dist/system-6.css",
-    "./theme-packs/wired": "./dist/wired.css",
-    "./theme-packs/paper": "./dist/paper.css",
-    "./theme-packs/neo-brutalism": "./dist/neo-brutalism.css",
-    "./theme-packs": "./dist/all.css",
-    "./theme-packs/transitions": "./dist/transitions.css",
     "./button": {
       "types": "./dist/index.d.ts",
       "import": "./dist/button.js",
@@ -236,7 +227,6 @@
     "vitest": "^4.1.7"
   },
   "dependencies": {
-    "ranuts": "workspace:^",
-    "roughjs": "^4.6.6"
+    "ranuts": "workspace:^"
   }
 }

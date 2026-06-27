@@ -101,15 +101,6 @@ export const es: BuildOptions = {
       ssr: resolve(__dirname, 'ssr.ts'),
       'ssr-stream': resolve(__dirname, 'ssr-stream.ts'),
       style: resolve(__dirname, 'style.ts'),
-      'theme-packs/pixel-retro': resolve(__dirname, 'theme-packs/pixel-retro.ts'),
-      'theme-packs/windows-98': resolve(__dirname, 'theme-packs/windows-98.ts'),
-      'theme-packs/windows-xp': resolve(__dirname, 'theme-packs/windows-xp.ts'),
-      'theme-packs/system-6': resolve(__dirname, 'theme-packs/system-6.ts'),
-      'theme-packs/wired': resolve(__dirname, 'theme-packs/wired.ts'),
-      'theme-packs/paper': resolve(__dirname, 'theme-packs/paper.ts'),
-      'theme-packs/neo-brutalism': resolve(__dirname, 'theme-packs/neo-brutalism.ts'),
-      'theme-packs/transitions': resolve(__dirname, 'theme-packs/transitions.ts'),
-      'theme-packs/all': resolve(__dirname, 'theme-packs/all.ts'),
     },
     fileName: (_: string, name: string): string => {
       return `${name}.js`;

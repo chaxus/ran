@@ -100,6 +100,9 @@ export class RadarChart extends RanElement {
   set colorLine(value) {
     this.setAttribute('colorLine', value || LINE_COLOR);
   }
+  get fontColor() {
+    return this._cssVar('--ran-color-text') || FONT_COLOR;
+  }
   get fillColor() {
     return this.getAttribute('fillColor') || this._cssVar('--ran-radar-fill-color') || FILL_COLOR;
   }
@@ -197,7 +200,7 @@ export class RadarChart extends RanElement {
       const x = this.mCenter + this.mRadius * Math.sin(this.mAngle * i);
       const y = this.mCenter + this.mRadius * Math.cos(this.mAngle * i);
       const backgroundColor = this.mData[i]?.backgroundColor || BACKGROUND_COLOR;
-      const fontColor = this.mData[i]?.fontColor || FONT_COLOR;
+      const fontColor = this.mData[i]?.fontColor || this.fontColor;
       const fontFamily = this.mData[i]?.fontFamily || FONT_FAMILY;
       const fontSize = this.mData[i]?.fontSize || defaultFontSize;
       ctx.font = `${fontSize}px ${fontFamily}`;

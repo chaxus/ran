@@ -38,8 +38,8 @@
   border-image-width: var(--ran-input-border-image-width, 4px);
   border-image-outset: 0;
   border-image-repeat: stretch;
-  border-radius: var(--ran-input-border-radius, 2px);
-  transition: var(--ran-input-transition, all 0.3s);
+  border-radius: var(--ran-input-border-radius, var(--ran-radius-sm, 6px));
+  transition: var(--ran-input-transition, all var(--ran-motion-duration-base, 0.2s));
   // overflow: var(--ran-input-overflow, hidden);
   min-height: var(--ran-input-min-height, 32px);
   .ran-icon {
@@ -47,14 +47,14 @@
     align-items: var(--ran-input-icon-align-items, center);
     justify-content: var(--ran-input-icon-justify-content, center);
   }
-  &:active {
-    border-color: var(--ran-input-active-border-color, var(--ran-color-primary, #40a9ff));
-    box-shadow: var(--ran-input-active-box-shadow, 0 0 0 2px rgba(24, 144, 255, 0.2));
+  &:focus-within {
+    border-color: var(--ran-input-active-border-color, var(--ran-color-primary, #006bff));
+    box-shadow: var(--ran-input-active-box-shadow, 0 0 0 2px var(--ran-blue-400, #cae7ff));
     border-right-width: var(--ran-input-active-border-right-width, 1px);
     outline: var(--ran-input-active-outline, 0);
   }
   &:hover {
-    border-color: var(--ran-input-hover-border-color, var(--ran-color-primary, #40a9ff));
+    border-color: var(--ran-input-hover-border-color, var(--ran-color-primary, #006bff));
     border-right-width: var(--ran-input-hover-border-right-width, 1px);
   }
   & > .ran-input-content:hover ~ .ran-input-label {
@@ -132,9 +132,9 @@
     line-height: var(--ran-input-content-line-height, 1.48);
     background-color: var(--ran-input-content-background-color, var(--ran-color-bg-elevated, #fff));
     background-image: var(--ran-input-content-background-image, none);
-    transition: var(--ran-input-content-transition, all 0.3s);
+    transition: var(--ran-input-content-transition, all var(--ran-motion-duration-base, 0.2s));
     outline: var(--ran-input-content-outline, none);
-    border-radius: var(--ran-input-content-border-radius, 2px);
+    border-radius: var(--ran-input-content-border-radius, var(--ran-radius-sm, 6px));
     padding: var(--ran-input-content-padding, 0 0 0 2px);
     font-weight: var(--ran-input-content-font-weight, 400);
     &:focus,

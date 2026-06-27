@@ -3,15 +3,21 @@
 }
 
 a {
-  color: var(--ran-color-link, #2563eb);
+  color: var(--ran-color-link, #006bff);
   text-decoration: none;
   cursor: pointer;
   font-family: inherit;
   font-size: inherit;
+  border-radius: var(--ran-radius-sm, 6px);
 
   &:hover {
     text-decoration: underline;
     opacity: 0.85;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--ran-color-primary, #006bff);
+    outline-offset: 2px;
   }
 }
 

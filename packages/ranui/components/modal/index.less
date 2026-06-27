@@ -37,10 +37,10 @@
   border-image-width: var(--ran-modal-dialog-border-image-width, 4px);
   border-image-outset: 0;
   border-image-repeat: stretch;
-  border-radius: var(--ran-modal-dialog-border-radius, 10px);
+  border-radius: var(--ran-modal-dialog-border-radius, var(--ran-radius-md, 12px));
   box-shadow: var(
     --ran-modal-dialog-box-shadow,
-    var(--ran-skin-raised-shadow, var(--ran-shadow-elevated, 0 10px 32px rgba(0, 0, 0, 0.2)))
+    var(--ran-shadow-modal, var(--ran-shadow-elevated, 0 10px 32px rgba(0, 0, 0, 0.2)))
   );
   outline: var(--ran-modal-dialog-outline, none);
   max-height: var(--ran-modal-dialog-max-height, calc(100vh - 20vh));
@@ -107,7 +107,7 @@
 .ran-modal-footer::slotted(.ran-modal-action) {
   border: 1px solid var(--ran-color-border, #d0d5dd);
   background: var(--ran-color-bg-elevated, #fff);
-  border-radius: 8px;
+  border-radius: var(--ran-radius-sm, 6px);
   height: 34px;
   line-height: 32px;
   padding: 0 14px;
