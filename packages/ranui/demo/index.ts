@@ -93,20 +93,53 @@ if (palette) {
 }
 
 // ── Radar demo data ───────────────────────────────────────────────────
-const radar = document.querySelector('r-radar') as (HTMLElement & { abilitys: string }) | null;
-if (radar) {
-  radar.abilitys = JSON.stringify([
-    { abilityName: 'Speed', scoreRate: 0.9 },
-    { abilityName: 'Bundle', scoreRate: 0.75 },
-    { abilityName: 'SSR', scoreRate: 0.85 },
-    { abilityName: 'A11y', scoreRate: 0.7 },
-    { abilityName: 'Theming', scoreRate: 0.95 },
-    { abilityName: 'DX', scoreRate: 0.8 },
-  ]);
-}
+// The radar is canvas-based, so it must (re)draw while visible. We render it
+// whenever the Components route becomes active (see routing wiring below).
+const RADAR_DATA = JSON.stringify([
+  { abilityName: 'Speed', scoreRate: 90 },
+  { abilityName: 'Bundle', scoreRate: 75 },
+  { abilityName: 'SSR', scoreRate: 85 },
+  { abilityName: 'A11y', scoreRate: 70 },
+  { abilityName: 'Theming', scoreRate: 95 },
+  { abilityName: 'DX', scoreRate: 80 },
+]);
+
+const renderRadar = (): void => {
+  const radar = document.querySelector('r-radar') as (HTMLElement & { abilitys: string }) | null;
+  if (radar) radar.abilitys = RADAR_DATA;
+};
 
 // ── Modal open / close wiring ─────────────────────────────────────────
 const modal = document.getElementById('demo-modal') as (HTMLElement & { open: boolean }) | null;
 document.getElementById('open-modal')?.addEventListener('click', () => {
   if (modal) modal.open = true;
 });
+
+// ── Router chrome: link box model, active link, lazy radar render ───────
+const LINK_SHEETS: Record<string, string> = {
+  'route-link': 'a{display:flex;align-items:center;padding:6px 12px;color:inherit;text-decoration:none;border-radius:inherit}',
+  cta: 'a{display:flex;align-items:center;justify-content:center;gap:6px;height:100%;padding:11px 22px;color:inherit;text-decoration:none;border-radius:inherit}',
+  'home-card': 'a{display:flex;flex-direction:column;gap:8px;height:100%;padding:24px;color:inherit;text-decoration:none;border-radius:inherit}',
+};
+for (const [cls, sheet] of Object.entries(LINK_SHEETS)) {
+  document.querySelectorAll(`r-link.${cls}`).forEach((el) => el.setAttribute('sheet', sheet));
+}
+
+const setActiveLink = (path: string): void => {
+  document.querySelectorAll<HTMLElement>('r-link.route-link').forEach((link) => {
+    link.classList.toggle('active', link.getAttribute('href') === path);
+  });
+};
+
+const onRoute = (path: string): void => {
+  setActiveLink(path);
+  if (path === '/components') requestAnimationFrame(renderRadar);
+};
+
+const router = document.querySelector('r-router');
+router?.addEventListener('routechange', (e: Event) => {
+  onRoute((e as CustomEvent<{ path: string }>).detail.path);
+});
+
+// Initial state (the router's first routechange fires before this listener binds).
+onRoute(window.location.pathname || '/');

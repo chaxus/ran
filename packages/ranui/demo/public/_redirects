@@ -1,0 +1,3 @@
+# Cloudflare Pages SPA fallback: serve index.html (200) for client-side routes
+# so the ranui r-router (history mode) handles deep links and refreshes.
+/*    /index.html   200
