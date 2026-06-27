@@ -5,6 +5,7 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "esModuleInterop": true,
+    "resolveJsonModule": true,
     "target": "ESNext",
     "declaration": true,
     "outDir": "dist",

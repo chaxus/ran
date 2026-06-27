@@ -13,18 +13,16 @@
         <span data-i18n="brand.tagline">Web Components · Geist design system</span>
       </div>
       <nav class="topbar-actions">
-        <a class="nav-link" href="https://github.com/chaxus/ran" target="_blank" rel="noopener" data-i18n="nav.github"
-          >GitHub</a
-        >
-        <a
-          class="nav-link"
-          href="https://github.com/chaxus/ran/issues"
-          target="_blank"
-          rel="noopener"
-          data-i18n="nav.issues"
-          >Issues</a
-        >
-        <button id="lang-toggle" type="button">EN</button>
+        <a class="nav-link" href="https://github.com/chaxus/ran" target="_blank" rel="noopener">
+          <r-icon name="github" size="16"></r-icon><span data-i18n="nav.github">GitHub</span>
+        </a>
+        <a class="nav-link" href="https://github.com/chaxus/ran/issues" target="_blank" rel="noopener">
+          <r-icon name="issue" size="16"></r-icon><span data-i18n="nav.issues">Issues</span>
+        </a>
+        <r-select id="lang-select" class="lang-select" trigger="click">
+          <r-option value="en">English</r-option>
+          <r-option value="zh">中文</r-option>
+        </r-select>
         <button id="theme-toggle" type="button">☾ Dark</button>
       </nav>
     </header>

@@ -95,6 +95,7 @@ export const es: BuildOptions = {
       route: resolve(__dirname, 'components/route/index.ts'),
       link: resolve(__dirname, 'components/link/index.ts'),
       'utils/router': resolve(__dirname, 'utils/router/index.ts'),
+      'utils/i18n': resolve(__dirname, 'utils/i18n/index.ts'),
       ssg: resolve(__dirname, 'utils/ssg.ts'),
       index: resolve(__dirname, 'index.ts'),
       builder: resolve(__dirname, 'builder.ts'),
