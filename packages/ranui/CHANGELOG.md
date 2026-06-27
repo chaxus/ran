@@ -6,7 +6,7 @@ All notable changes to `ranui` will be documented in this file.
 
 ### Added
 
-- Rebuilt the demo page as a lightweight, token-driven Geist-style showcase (color scales, radius/elevation, buttons, forms, feedback, surfaces, radar) with a light/dark toggle. See `changelogs/2026-06-27.md`.
+- Rebuilt the demo page as a lightweight, token-driven Geist-style showcase (color scales, radius/elevation, buttons, forms, feedback, surfaces, radar) with a light/dark toggle. The top nav also includes GitHub/Issues links and an EN/中文 language switcher (persisted, auto-detected from `navigator.language`). See `changelogs/2026-06-27.md`.
 - New Geist-based design tokens: full `--ran-gray/gray-alpha/blue/red/amber/green-100..1000` scales, `--ran-background-100/200`, `--ran-space-*` spacing scale, `--ran-radius-full`, `--ran-shadow-menu/modal`, `--ran-focus-ring`, and `--ran-color-primary-hover/active`.
 
 ### Changed

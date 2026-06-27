@@ -6,6 +6,9 @@ import search from '@/assets/icons/search.svg?raw';
 import { registerIcons } from '@/components/icon/index';
 import message from '@/components/message';
 import { getTheme, initTheme, setTheme } from '@/utils/theme';
+import { applyLanguage, getLang, setLang } from './i18n';
+import type { Lang } from './i18n';
+import '../style';
 import '../index';
 
 registerIcons({ home, setting, loading, lock, search });
@@ -26,6 +29,24 @@ document.getElementById('theme-toggle')?.addEventListener('click', () => {
   syncToggle();
 });
 syncToggle();
+
+// ── Language switch (EN / 中文) ────────────────────────────────────────
+let lang: Lang = getLang();
+
+const syncLangToggle = (): void => {
+  const btn = document.getElementById('lang-toggle');
+  if (btn) btn.textContent = lang === 'zh' ? '中文' : 'EN';
+};
+
+applyLanguage(lang);
+syncLangToggle();
+
+document.getElementById('lang-toggle')?.addEventListener('click', () => {
+  lang = lang === 'zh' ? 'en' : 'zh';
+  setLang(lang);
+  applyLanguage(lang);
+  syncLangToggle();
+});
 
 // ── Color palette swatches (read straight from the CSS custom properties) ──
 const SCALES: Record<string, number[]> = {
