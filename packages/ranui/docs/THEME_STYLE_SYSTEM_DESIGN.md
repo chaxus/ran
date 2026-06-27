@@ -1,558 +1,230 @@
-# ranui Theme And Style System Redesign
+# ranui Theme & Style System
 
-> Last updated: 2026-05-24
+> Last updated: 2026-06-27
 
-## Goal
+## Overview
 
-Redesign ranui's style customization model from a collection of component-level CSS variables into a coherent theme system with semantic tokens, component tokens, runtime theme APIs, generated documentation, and regression tests.
+ranui's theming is a **token-driven system based on the [Geist design system](https://vercel.com/design)**. It ships a single light/dark theme — there are no theme packs. Styling is layered:
 
-The system must preserve current Web Components boundaries:
+```
+Base palette (Geist scales)   --ran-gray-700, --ran-blue-700 …
+        ↓ referenced by
+Semantic tokens               --ran-color-primary, --ran-color-text …
+        ↓ default values for
+Component tokens              --ran-btn-content-background-color …
+```
 
-- Component styles remain inside Shadow DOM.
-- Consumers can still customize through CSS custom properties, `::part()`, `sheet`, slots, and exported CSS.
-- Existing component tokens keep working during migration.
-- Server-side rendering and Declarative Shadow DOM stay compatible.
+The system preserves ranui's Web Components boundaries:
 
-## Current State
-
-The current style system has useful foundations:
-
-- `style.ts` imports `theme/index.less` as the public global style entry.
-- `theme/index.less` defines light and dark variables on `:root` and `:root[theme='dark']`.
-- Component Less files use many CSS custom properties.
-- Components inject Shadow DOM styles through `ensureShadowRoot()` and `adoptStyles()`.
-- Dynamic component-level CSS is supported with the `sheet` attribute through `syncSheetAttribute()`.
-- `bin/generate-style-docs.ts` extracts `--ran-*` tokens and `part` names into generated docs.
-
-The main gap is that global theme variables and component tokens are not connected. For example, `theme/color.less` defines `--bg-color`, `--text-color-*`, and `--brand-color-*`, but most component defaults still hard-code colors or use component-specific defaults directly.
+- Component styles stay inside Shadow DOM.
+- Consumers customize through CSS custom properties, `::part()`, the `sheet` attribute, slots, and exported CSS.
+- CSS custom properties cross Shadow DOM; selectors do not.
+- Server-side rendering and Declarative Shadow DOM stay compatible (the runtime API only touches attributes / CSS variables and is SSR-guarded).
 
 ## Design Principles
 
-1. **Theme tokens are semantic.**
-   They describe intent: primary color, text color, border color, surface color, radius, font, shadow, motion.
-
-2. **Component tokens are public override points.**
-   They describe component anatomy: button content background, select selection border, modal mask background.
-
-3. **Component tokens default to semantic tokens.**
-   A component-specific override should win, but if absent, the component should inherit from the active theme.
-
-4. **Shadow DOM remains isolated, CSS variables cross it.**
-   The theme system should rely on CSS custom property inheritance instead of piercing Shadow DOM.
-
-5. **`sheet` remains an escape hatch, not the primary theme API.**
-   It is useful for programmatic or deeply scoped overrides, but should not be required for ordinary theming.
-
-6. **Generated docs define the public surface.**
-   Token and part documentation must be generated from source, then filtered for public consumption.
-
-7. **Migration must be additive.**
-   Existing tokens should not be removed or renamed until aliases and migration notes exist.
+1. **Semantic tokens describe intent** — primary color, text, border, surface, radius, shadow, motion.
+2. **Component tokens are public override points** that default to semantic tokens.
+3. **Semantic tokens reference the base scale**, so dark mode only needs to redefine the scale (see below).
+4. **Shadow DOM stays isolated; CSS variables cross it** via inheritance — no piercing.
+5. **`sheet` is an escape hatch**, not the primary theming API.
+6. **Public token docs are generated from source** (`npm run doc:style`).
 
 ## Token Layers
 
-### Layer 1: Base Tokens
+### Layer 1 — Base palette (Geist scales)
 
-Base tokens represent raw scales. They are rarely used directly by component styles.
+Defined in [`theme/tokens.less`](../theme/tokens.less) on `:root`. Rarely used directly by component styles; they are the raw material semantic tokens point at.
 
 ```css
 :root {
-  --ran-blue-6: #1677ff;
-  --ran-red-6: #ff4d4f;
-  --ran-green-6: #52c41a;
-  --ran-gray-1: #ffffff;
-  --ran-gray-6: #8c8c8c;
-  --ran-gray-13: #000000;
+  /* 10-step scales: 100 (lightest) → 1000 (darkest), in light mode */
+  --ran-gray-100: #f2f2f2;   /* … */   --ran-gray-1000: #171717;
+  --ran-gray-alpha-100: #0000000d;     /* translucent, layer over any surface */
+  --ran-blue-700: #006bff;             /* + red / amber / green 100..1000 */
+  --ran-background-100: #ffffff;
+  --ran-background-200: #fafafa;
 }
 ```
 
-Base tokens may grow over time, but the first implementation should stay small and map only the values used by existing components.
+### Layer 2 — Semantic tokens
 
-### Layer 2: Semantic Theme Tokens
-
-Semantic tokens are the primary theme contract.
+The primary theme contract. Defined once on `:root`; each references a base-scale step so it flips automatically in dark mode.
 
 ```css
 :root {
-  --ran-color-primary: var(--ran-blue-6);
-  --ran-color-success: var(--ran-green-6);
-  --ran-color-warning: #faad14;
-  --ran-color-danger: var(--ran-red-6);
+  --ran-color-primary: var(--ran-blue-700);
+  --ran-color-primary-hover: var(--ran-blue-800);
+  --ran-color-primary-active: var(--ran-blue-900);
+  --ran-color-success: var(--ran-green-700);
+  --ran-color-warning: var(--ran-amber-700);
+  --ran-color-danger: var(--ran-red-700);
 
-  --ran-color-bg: #ffffff;
-  --ran-color-bg-elevated: #ffffff;
-  --ran-color-bg-muted: #f5f5f5;
-  --ran-color-text: rgba(0, 0, 0, 0.88);
-  --ran-color-text-secondary: rgba(0, 0, 0, 0.65);
-  --ran-color-text-disabled: rgba(0, 0, 0, 0.25);
-  --ran-color-border: #d9d9d9;
-  --ran-color-border-secondary: #f0f0f0;
+  --ran-color-bg: var(--ran-background-100);
+  --ran-color-bg-subtle: var(--ran-background-200);
+  --ran-color-bg-elevated: var(--ran-background-100); /* dark: → --ran-gray-100 */
+  --ran-color-bg-muted: var(--ran-gray-100);
+  --ran-color-text: var(--ran-gray-1000);
+  --ran-color-text-secondary: var(--ran-gray-900);
+  --ran-color-text-disabled: var(--ran-gray-700);
+  --ran-color-border: var(--ran-gray-400);
+  --ran-color-border-secondary: var(--ran-gray-300);
+  --ran-color-link: var(--ran-blue-700);
 
-  --ran-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --ran-font-family: 'Geist', 'Geist Sans', -apple-system, …;
+  --ran-font-mono: 'Geist Mono', ui-monospace, …;
   --ran-font-size: 14px;
   --ran-line-height: 1.5715;
 
-  --ran-radius-sm: 4px;
-  --ran-radius-md: 6px;
-  --ran-radius-lg: 8px;
+  --ran-radius-sm: 6px;
+  --ran-radius-md: 12px;
+  --ran-radius-lg: 16px;
+  --ran-radius-full: 9999px;
 
-  --ran-shadow-elevated: 0 6px 16px rgba(0, 0, 0, 0.08), 0 9px 28px rgba(0, 0, 0, 0.05);
-  --ran-motion-duration-fast: 0.2s;
-  --ran-motion-duration-base: 0.3s;
+  --ran-space-1: 4px; /* … 4px base unit … */ --ran-space-24: 96px;
+
+  --ran-shadow-elevated: 0 2px 2px rgba(0, 0, 0, 0.04);
+  --ran-shadow-menu: …;
+  --ran-shadow-modal: …;
+  --ran-focus-ring: 0 0 0 2px var(--ran-background-100), 0 0 0 4px var(--ran-color-primary);
+
+  --ran-motion-duration-fast: 0.15s;
+  --ran-motion-duration-base: 0.2s;
+
+  /* skin primitives — the minimal set components actually consume */
+  --ran-skin-border-width: 1px;
+  --ran-skin-border-style: solid;
+  --ran-skin-raised-shadow: var(--ran-shadow-elevated);
+  --ran-skin-font-family: var(--ran-font-family);
 }
 ```
 
-Dark theme overrides the semantic layer, not every component token:
+### Layer 3 — Component tokens
 
-```css
-:root[theme='dark'],
-:root[data-ran-theme='dark'] {
-  --ran-color-bg: #141414;
-  --ran-color-bg-elevated: #1f1f1f;
-  --ran-color-bg-muted: #262626;
-  --ran-color-text: rgba(255, 255, 255, 0.88);
-  --ran-color-text-secondary: rgba(255, 255, 255, 0.65);
-  --ran-color-text-disabled: rgba(255, 255, 255, 0.25);
-  --ran-color-border: #424242;
-  --ran-color-border-secondary: #303030;
-}
-```
-
-### Layer 3: Component Tokens
-
-Component tokens remain stable public override points. They should fallback to semantic tokens:
+Stable public override points that fall back to semantic tokens, which fall back to a literal:
 
 ```css
 .ran-btn-content {
-  background-color: var(--ran-btn-content-background-color, var(--ran-color-primary));
-  border-color: var(--ran-btn-content-border-color, var(--ran-color-primary));
+  background-color: var(--ran-btn-content-background-color, var(--ran-color-primary, #006bff));
   color: var(--ran-btn-content-color, #fff);
-}
-
-.selection {
-  background-color: var(--ran-select-selection-background-color, var(--ran-color-bg-elevated));
-  border: var(--ran-select-selection-border, 1px solid var(--ran-color-border));
-  color: var(--ran-select-selection-color, var(--ran-color-text));
+  border-radius: var(--ran-btn-content-border-radius, var(--ran-radius-sm, 6px));
 }
 ```
 
-This preserves existing component-level customization while enabling global theme switching.
+Component fallbacks should point at **tokens that flip with the theme** (e.g. `--ran-gray-alpha-100`, `--ran-blue-100`, `--ran-color-text`) rather than literal light-only colors, so dark mode is correct without per-component overrides.
 
-### Layer 4: Runtime State Tokens
+### Layer 4 — Runtime/internal tokens
 
-Runtime state tokens are internal or semi-public variables controlled by JS:
+JS-controlled, not part of the design API: `--ran-x`, `--ran-y`, `--progress-percent`, popover/dropdown positioning vars.
 
-- `--ran-x`
-- `--ran-y`
-- `--progress-percent`
-- popover/dropdown positioning variables
+## Dark Mode — a single source of truth
 
-These should be documented separately as internal/runtime tokens. They should not be promoted as design theme API.
+Dark mode lives in [`theme/dark.less`](../theme/dark.less) as one LESS mixin, `.ran-theme-dark()`, that **only redefines the base scale**. Because semantic tokens reference the scale, every semantic token flips automatically — only surfaces that don't track a single scale step (e.g. `--ran-color-bg-elevated`) and the literal shadows are overridden explicitly.
 
-## Naming Rules
+```less
+.ran-theme-dark() {
+  --ran-gray-1000: #ededed;
+  --ran-blue-700: #006efe;
+  /* … full scale … */
+  --ran-color-bg-elevated: var(--ran-gray-100);
+  --ran-shadow-elevated: 0 1px 2px rgba(0, 0, 0, 0.16);
+}
 
-All new public tokens must use `--ran-*`.
+@media (prefers-color-scheme: dark) {
+  :root:not([data-ran-theme='light']):not([theme='light']) { .ran-theme-dark(); }
+}
+:root[data-ran-theme='dark'],
+:root[theme='dark'] { .ran-theme-dark(); }
+```
 
-Allowed families:
-
-- `--ran-color-*`
-- `--ran-font-*`
-- `--ran-line-*`
-- `--ran-radius-*`
-- `--ran-shadow-*`
-- `--ran-motion-*`
-- `--ran-z-index-*`
-- `--ran-[component]-[element]-[state]-[property]`
-
-Deprecated but temporarily supported:
-
-- `--bg-color`
-- `--text-color-*`
-- `--line-color`
-- `--brand-color-*`
-- `--loading-*`
-- `--video-control-*`
-- `--active-color`
-- `--border-color`
-- `--progress-percent`
-
-The migration should first alias deprecated global variables to new semantic tokens, then update component defaults.
+This covers both system preference (unless explicitly set to light) and an explicit `data-ran-theme="dark"` (or legacy `theme="dark"`) attribute, without duplicating the dark values.
 
 ## Public API
 
-### CSS Entry
-
-Current usage remains supported:
+### CSS entry
 
 ```ts
 import 'ranui/style';
 ```
 
-This should load:
+Loads [`theme/index.less`](../theme/index.less) → `tokens.less` (base + light semantic) + `dark.less` (dark scale).
 
-1. base token definitions
-2. light semantic token defaults
-3. dark semantic token overrides
-4. compatibility aliases for old global variables
-
-### Attribute Theme Switching
-
-Both forms should be supported:
+### Attribute switching
 
 ```html
-<html theme="dark">
-  <html data-ran-theme="dark"></html>
-</html>
+<html data-ran-theme="dark">  <!-- recommended, namespaced -->
+<html theme="dark">           <!-- legacy, still supported -->
 ```
 
-`data-ran-theme` is recommended for new code because it is namespaced.
-
-### Runtime Theme API
-
-Add a small runtime utility:
+### Runtime API ([`utils/theme.ts`](../utils/theme.ts))
 
 ```ts
-type RanThemeName = 'light' | 'dark';
+type RanThemeName = 'light' | 'dark' | 'system';
 type ThemeTarget = HTMLElement | Document;
 
-setTheme(name: RanThemeName, target?: ThemeTarget): void;
-getTheme(target?: ThemeTarget): RanThemeName | '';
-setThemeToken(name: string, value: string, target?: HTMLElement): void;
-setThemeTokens(tokens: Record<string, string | number | null | undefined>, target?: HTMLElement): void;
-clearThemeToken(name: string, target?: HTMLElement): void;
+initTheme(target?): void;                 // restore persisted choice on load
+setTheme(name, target?): void;            // 'system' tracks prefers-color-scheme
+getTheme(target?): RanThemeName | '';
+setThemeToken(name, value, target?): void;
+setThemeTokens(tokens, target?): void;
+clearThemeToken(name, target?): void;
 ```
 
-Default target is `document.documentElement`.
-
-Example:
+`setTheme` writes `data-ran-theme` + `theme` and persists to `localStorage('ran-theme')`. Default target is `document.documentElement`. All functions are no-ops when `document` / `localStorage` are unavailable (SSR-safe).
 
 ```ts
 import { setTheme, setThemeTokens } from 'ranui';
-
 setTheme('dark');
-setThemeTokens({
-  '--ran-color-primary': '#6c47ff',
-  '--ran-radius-md': '10px',
-});
+setThemeTokens({ '--ran-color-primary': '#6c47ff', '--ran-radius-md': '10px' });
 ```
 
-### What Happens When The Theme Switches
+### What happens when the theme switches
 
-Understanding the switching mechanism helps implementors avoid common mistakes.
+1. **One attribute write, no component JS.** `setTheme('dark')` only sets `data-ran-theme` / `theme` on `:root`.
+2. **The CSS engine re-evaluates the cascade.** The `.ran-theme-dark()` block becomes active and the base scale takes dark values.
+3. **CSS custom properties cross Shadow DOM.** Custom properties are inherited, so every component reading `var(--ran-color-*)` sees the new value with no JS inside the component.
+4. **Render pipeline.** Light/dark only changes color-family properties → paint-only, no reflow, completes in one frame. (Avoid theme changes that alter `border-width` / `padding` / `font-family`, which force layout/reflow.)
 
-**Step 1 — one attribute write, no component JS involved**
-
-```ts
-setTheme('dark');
-// only does:
-document.documentElement.setAttribute('data-ran-theme', 'dark');
-document.documentElement.setAttribute('theme', 'dark');
-```
-
-No component lifecycle methods run. No Shadow DOM is touched by JS.
-
-**Step 2 — browser CSS engine re-evaluates the cascade**
-
-The browser detects the attribute change on `:root` and immediately re-matches
-all CSS selectors. The dark override block becomes active:
+### Component overrides
 
 ```css
-:root[data-ran-theme='dark'] {
-  --ran-color-bg: #141414;
-  --ran-color-text: rgba(255, 255, 255, 0.88);
-  /* ... */
-}
+r-button { --ran-btn-content-background-color: #6c47ff; }
+r-button::part(content) { border-radius: 999px; }
 ```
-
-**Step 3 — CSS custom properties cross Shadow DOM**
-
-CSS custom properties are inherited properties. Shadow DOM does not block
-inheritance. Every component's internal styles that reference `var(--ran-color-*)`
-see the new values without any JS being triggered inside the component.
-
-```
-:root  →  --ran-color-bg: #141414
-  └── <r-button>  (Light DOM)
-        └── #shadow-root (closed)
-              └── .ran-btn-content
-                    background: var(--ran-btn-bg, var(--ran-color-bg))
-                    ↑ reads #141414 automatically
-```
-
-**Step 4 — browser render pipeline**
-
-What the browser does next depends on which properties changed:
-
-| Changed property type                     | Pipeline stage              | Cost                      |
-| ----------------------------------------- | --------------------------- | ------------------------- |
-| `color`, `background-color`, `box-shadow` | Paint only                  | Low                       |
-| `border-radius`, `opacity`                | Paint only                  | Low                       |
-| `border-width`, `padding`, `font-size`    | Layout + Paint              | Medium, causes reflow     |
-| `font-family`                             | Layout + Paint + font fetch | Medium–high, risk of FOUT |
-
-For light/dark switching, only color-family properties change. This means:
-
-- no layout reflow
-- no font loading
-- one paint pass across all affected elements
-- the entire visual update completes within a single frame
-
-This is why light/dark switching feels instant. Any theme system change that
-triggers layout reflow or font loading will feel noticeably slower.
-
-### Component Local Overrides
-
-All existing customization paths remain valid:
-
-```css
-r-button {
-  --ran-btn-content-background-color: #6c47ff;
-}
-
-r-button::part(content) {
-  border-radius: 999px;
-}
-```
-
-`sheet` remains valid:
 
 ```html
 <r-button sheet=".ran-btn-content { background: rebeccapurple; }"></r-button>
 ```
 
-## File Design
+## Files
 
-### New Files
+- [`theme/tokens.less`](../theme/tokens.less) — base palette + light semantic + skin primitives.
+- [`theme/dark.less`](../theme/dark.less) — `.ran-theme-dark()` mixin + selectors.
+- [`theme/index.less`](../theme/index.less) — imports the two above; loaded by `style.ts`.
+- [`theme/font.less`](../theme/font.less) — shared `@fontFamily` LESS var (checkbox).
+- [`utils/theme.ts`](../utils/theme.ts) — runtime API, re-exported from `utils/index.ts` and the `ranui` barrel.
 
-- `theme/tokens.less`
-  Defines base tokens and semantic light defaults.
+## Generated token docs
 
-- `theme/dark.less`
-  Defines semantic dark overrides.
+Public token / part documentation is generated from source:
 
-- `theme/compat.less`
-  Maps old global variables to new semantic tokens where possible.
-
-- `utils/theme.ts`
-  Runtime theme API.
-
-- `test/unit/utils.theme.test.ts`
-  Unit tests for runtime API.
-
-- `test/ssr/theme.tokens.ssr.test.ts`
-  SSR-safe import and token serialization checks where applicable.
-
-### Modified Files
-
-- `theme/index.less`
-  Imports `tokens.less`, `dark.less`, and `compat.less`.
-
-- `utils/index.ts`
-  Re-exports `utils/theme.ts`.
-
-- Component Less files
-  Gradually replace hard-coded defaults with semantic token fallbacks.
-
-- `bin/generate-style-docs.ts`
-  Add token layer classification:
-  - semantic
-  - component
-  - runtime/internal
-  - deprecated alias
-
-- `docs/style-token-filter.json`
-  Update filtering rules to include semantic tokens and exclude runtime internals.
-
-## Migration Phases
-
-### Phase 1: Theme Foundation
-
-Add the new token files and runtime API without changing component visuals.
-
-Deliverables:
-
-- `theme/tokens.less`
-- `theme/dark.less`
-- `theme/compat.less`
-- `utils/theme.ts`
-- tests for theme API
-
-Expected behavior:
-
-- `import 'ranui/style'` still works.
-- `setTheme('dark')` sets both `data-ran-theme="dark"` and `theme="dark"` for compatibility.
-- Existing `:root[theme='dark']` behavior remains available.
-
-### Phase 2: High-Impact Component Token Mapping
-
-Update defaults for commonly used components first:
-
-- button
-- input
-- select
-- dropdown
-- modal
-- message
-- checkbox
-
-Example:
-
-```css
-border-color: var(--ran-input-border-color, var(--ran-color-border));
-color: var(--ran-input-color, var(--ran-color-text));
-background: var(--ran-input-background, var(--ran-color-bg-elevated));
+```bash
+npm run doc:style
 ```
 
-Expected behavior:
+- [`docs/style-tokens-public.md`](./style-tokens-public.md) — public component tokens.
+- [`docs/style-tokens-parts.md`](./style-tokens-parts.md) — full token + `::part()` inventory.
+- [`docs/style-token-filter.json`](./style-token-filter.json) — filtering rules.
 
-- Existing component token overrides still win.
-- Dark theme visibly affects these components.
+## Testing
 
-### Phase 3: Complex Component Token Mapping
+- [`test/unit/utils.theme.test.ts`](../test/unit/utils.theme.test.ts) — runtime API (set/get/initTheme, tokens, system mode).
+- [`test/unit/theme.skin-tokens.test.ts`](../test/unit/theme.skin-tokens.test.ts) — base scale presence, semantic mapping, skin layer, dark source.
+- [`test/ssr/theme.tokens.ssr.test.ts`](../test/ssr/theme.tokens.ssr.test.ts) — SSR-safe theme utilities.
 
-Update:
+## Compatibility rules
 
-- player
-- colorpicker
-- loading
-- progress
-- tab
-- popover
-- radar
-- skeleton
-- image
-- form
-
-Complex visual components may keep specialized tokens, but their neutral colors should fallback to semantic tokens.
-
-### Phase 4: Documentation And Enforcement
-
-Enhance generated docs and add checks.
-
-Deliverables:
-
-- Generated style docs include semantic tokens.
-- Public docs separate public component tokens from runtime internals.
-- Add a test or script check for non-`--ran-*` public token additions.
-
-### Phase 5: Deprecation
-
-After compatibility aliases ship, mark old token families as deprecated:
-
-- `--bg-color`
-- `--text-color-*`
-- `--brand-color-*`
-- `--line-color`
-- `--loading-*`
-- `--video-control-*`
-
-Do not remove deprecated tokens in this migration.
-
-## Testing Strategy
-
-### Unit Tests
-
-Add tests for `utils/theme.ts`:
-
-- `setTheme('dark')` sets `data-ran-theme` and `theme`.
-- `setTheme('light')` sets light attributes.
-- `getTheme()` reads `data-ran-theme` first, then `theme`.
-- `setThemeToken()` writes a CSS custom property.
-- `setThemeTokens()` writes multiple tokens and removes nullish values.
-- `clearThemeToken()` removes a token.
-- functions no-op safely when `document` is unavailable.
-
-### Component Contract Tests
-
-For each migrated component, add or update one focused test:
-
-- set semantic token on host
-- assert the component still renders
-- assert component token override still wins by checking attribute/style injection path when feasible
-
-### SSR Tests
-
-Add SSR checks for:
-
-- importing theme utilities does not require `document`
-- style entry remains importable in SSR test context if the test runner supports Less transform
-- components using semantic token fallbacks still serialize DSD markup
-
-### Visual Tests
-
-Add one light/dark visual fixture covering:
-
-- button
-- input
-- select
-- modal
-- message
-
-This catches accidental hard-coded color regressions.
-
-## Compatibility Rules
-
-1. Existing `sheet` attributes must keep working.
-2. Existing `--ran-[component]-*` tokens must keep working.
-3. Existing `theme="dark"` selector must keep working.
-4. New code should prefer `data-ran-theme`.
-5. No component should require JavaScript to receive a CSS-variable theme.
-6. Runtime API should only write attributes and CSS variables; it should not import component modules.
-
-## Risks
-
-### Risk: Token Explosion
-
-The codebase already has hundreds of component tokens. Adding semantic tokens can increase confusion.
-
-Mitigation:
-
-- Keep semantic tokens small.
-- Public docs should list semantic tokens first.
-- Component token docs should remain filterable.
-
-### Risk: Visual Regressions
-
-Replacing fallback colors can alter default appearance.
-
-Mitigation:
-
-- Migrate component groups in small commits.
-- Run contract tests and visual tests after each group.
-- Preserve original fallback as the final fallback:
-
-```css
-color: var(--ran-btn-content-color, var(--ran-color-primary, #1890ff));
-```
-
-### Risk: Shadow DOM Theme Misunderstanding
-
-Consumers may expect global class selectors to style internals.
-
-Mitigation:
-
-- Document that CSS variables cross Shadow DOM, selectors do not.
-- Keep `::part()` and `sheet` docs clear.
-
-## Implementation Order
-
-Recommended commit sequence:
-
-1. `feat(ranui): add theme tokens and runtime api`
-2. `refactor(ranui): map form controls to semantic tokens`
-3. `refactor(ranui): map overlay components to semantic tokens`
-4. `refactor(ranui): map media and feedback tokens`
-5. `docs(ranui): regenerate style token docs`
-6. `test(ranui): add theme visual coverage`
-
-## Success Criteria
-
-The redesign is complete when:
-
-- `import 'ranui/style'` exposes semantic light and dark tokens.
-- `setTheme('dark')` changes real component appearance without component-specific CSS.
-- Existing component-level `--ran-*` overrides still work.
-- Generated docs include semantic tokens and public component tokens.
-- `pnpm --filter ranui test:all` passes.
-- `pnpm --filter ranui test:unit:coverage` stays above current thresholds.
-- Visual tests cover at least one light/dark theme fixture.
+1. `--ran-[component]-*` overrides keep working.
+2. `theme="dark"` keeps working; prefer `data-ran-theme`.
+3. No component requires JavaScript to receive a CSS-variable theme.
+4. The runtime API only writes attributes and CSS variables — it never imports component modules.
