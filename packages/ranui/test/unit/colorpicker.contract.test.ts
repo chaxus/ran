@@ -78,4 +78,43 @@ describe('r-colorpicker contract', () => {
     document.body.appendChild(cp);
     expect(() => cp.updateColorValue('rgba(100, 200, 50, 0.5)')).not.toThrow();
   });
+
+  it('parses rgba alpha into the transparency signal (0-100)', () => {
+    const cp = document.createElement('r-colorpicker') as any;
+    document.body.appendChild(cp);
+
+    cp.updateColorValue('rgba(255, 0, 0, 0.5)');
+    expect(cp.context.transparency.getter()).toBe(50);
+
+    cp.updateColorValue('#00ff00');
+    expect(cp.context.transparency.getter()).toBe(100);
+  });
+
+  it('currentValue emits hex when opaque and rgba when translucent', () => {
+    const cp = document.createElement('r-colorpicker') as any;
+    document.body.appendChild(cp);
+
+    cp.updateColorValue('#ff0000');
+    expect(cp.currentValue()).toBe('#ff0000');
+
+    cp.updateColorValue('rgba(255, 0, 0, 0.5)');
+    expect(cp.currentValue()).toBe('rgba(255, 0, 0, 0.5)');
+  });
+
+  it('emitChange dispatches a change event with hex/rgb/rgba detail', () => {
+    const cp = document.createElement('r-colorpicker') as any;
+    document.body.appendChild(cp);
+
+    cp.updateColorValue('#ff0000');
+    let detail: any;
+    cp.addEventListener('change', (e: Event) => {
+      detail = (e as CustomEvent).detail;
+    });
+    cp.emitChange();
+
+    expect(detail).toBeDefined();
+    expect(detail.hex).toBe('#ff0000');
+    expect(detail.rgb).toBe('rgb(255, 0, 0)');
+    expect(detail.alpha).toBe(1);
+  });
 });
