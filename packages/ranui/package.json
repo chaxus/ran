@@ -235,19 +235,19 @@
     }
   },
   "devDependencies": {
-    "@argos-ci/playwright": "^6.6.4",
-    "@playwright/test": "^1.60.0",
-    "@types/node": "^25.9.1",
-    "@vitest/coverage-v8": "^4.1.7",
+    "@argos-ci/playwright": "^7.1.1",
+    "@playwright/test": "^1.61.1",
+    "@types/node": "^26.0.1",
+    "@vitest/coverage-v8": "^4.1.9",
     "jsdom": "^29.1.1",
-    "less": "^4.6.4",
-    "prettier": "^3.8.3",
+    "less": "^4.6.7",
+    "prettier": "^3.8.5",
     "rollup-plugin-visualizer": "^7.0.1",
     "svgo": "^4.0.1",
-    "tsx": "^4.22.3",
+    "tsx": "^4.22.4",
     "typescript": "^6.0.3",
-    "vite": "^8.0.14",
-    "vitest": "^4.1.7"
+    "vite": "^8.1.0",
+    "vitest": "^4.1.9"
   },
   "dependencies": {
     "ranuts": "workspace:^"
