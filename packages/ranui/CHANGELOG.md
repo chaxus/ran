@@ -30,6 +30,7 @@ All notable changes to `ranui` will be documented in this file.
 - Demo hero CTA text is now vertically centered (the inner anchor's `height:100%` collapsed against an auto-height host; fixed with a fixed host height + `line-height:1`).
 - Demo route navigation is now reachable on mobile (it was hidden under 820px); it drops to its own full-width row instead.
 - Demo accessibility: GitHub/Issues links now have `aria-label`s (they become icon-only on mobile), the primary `<nav>` is labelled, and the demo honors `prefers-reduced-motion`.
+- Elevation: recalibrated the overlay shadow tiers (`--ran-shadow-menu`, `--ran-shadow-modal`) so floating layers (dropdown, select, modal, message) actually read as elevated — the earlier Geist-literal values were imperceptible. `message` now uses the menu tier instead of the flat card tier. Documented "elevation = role" in DESIGN.md §4 / CLAUDE.md.
 
 ### Tests
 
