@@ -5,6 +5,7 @@ export interface IApplicationOptions {
   view?: HTMLCanvasElement;
   backgroundColor?: string;
   backgroundAlpha?: number;
+  debug?: boolean; // 开启后打印当前使用的渲染后端（默认关闭，避免污染控制台与测试）
 }
 
 export interface IFillStyleOptions {

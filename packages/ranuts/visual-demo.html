@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ranuts visual · 三后端验证 demo</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+        background: #0b0c10;
+        color: #e6e6e6;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        padding: 24px;
+      }
+      h1 { font-size: 16px; font-weight: 600; margin: 0; opacity: 0.9; }
+      .bar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+      button {
+        background: #1b1d24;
+        color: #e6e6e6;
+        border: 1px solid #2b2e38;
+        border-radius: 8px;
+        padding: 8px 14px;
+        font-size: 13px;
+        cursor: pointer;
+      }
+      button[aria-pressed='true'] { background: #0091ff; border-color: #0091ff; color: #fff; }
+      button:disabled { opacity: 0.4; cursor: not-allowed; }
+      #status { font-size: 12px; min-height: 16px; opacity: 0.8; font-variant-numeric: tabular-nums; }
+      #status.err { color: #ff6369; opacity: 1; }
+      #mount { width: 500px; height: 500px; border: 1px solid #2b2e38; border-radius: 12px; overflow: hidden; }
+      canvas { display: block; }
+      .hint { font-size: 11px; opacity: 0.5; max-width: 500px; text-align: center; line-height: 1.5; }
+    </style>
+  </head>
+  <body>
+    <h1>ranuts <code>visual</code> · 三后端验证</h1>
+    <div class="bar">
+      <button data-backend="canvas" aria-pressed="true">Canvas2D</button>
+      <button data-backend="webgl">WebGL</button>
+      <button data-backend="webgpu">WebGPU</button>
+    </div>
+    <div class="bar">
+      <button id="add">＋ 动态添加图形</button>
+      <button id="reset">重置场景</button>
+    </div>
+    <div id="status">初始化中…</div>
+    <div id="mount"></div>
+    <p class="hint">
+      场景：嵌套 Container + 多个 Graphics（矩形/圆/多边形填充、描边圆角矩形），整组持续旋转 + 缩放脉冲，
+      用于验证三角剖分 → 大数组打包 → 各后端绘制，以及逐帧 transform 更新（updateArray）路径。
+    </p>
+
+    <script type="module">
+      import { Application, Container, Graphics, RENDERER_TYPE } from './src/utils/visual/index.ts';
+
+      const mount = document.getElementById('mount');
+      const statusEl = document.getElementById('status');
+      const buttons = [...document.querySelectorAll('button[data-backend]')];
+
+      const PREFER = {
+        canvas: RENDERER_TYPE.CANVAS,
+        webgl: RENDERER_TYPE.WEB_GL,
+        webgpu: RENDERER_TYPE.WEB_GPU,
+      };
+
+      // WebGPU 不可用时禁用按钮
+      if (!('gpu' in navigator)) {
+        const b = buttons.find((x) => x.dataset.backend === 'webgpu');
+        b.disabled = true;
+        b.title = '当前浏览器不支持 WebGPU';
+      }
+
+      let app;
+      let rafId;
+      let group;
+
+      function setStatus(msg, isErr = false) {
+        statusEl.textContent = msg;
+        statusEl.classList.toggle('err', isErr);
+      }
+
+      function buildScene(stage) {
+        // 背景
+        const bg = new Graphics();
+        bg.beginFill('#11131a').drawRect(0, 0, 500, 500).endFill();
+        stage.addChild(bg);
+
+        // 可旋转分组，置于画布中心
+        const g = new Container();
+        g.position.set(250, 250);
+
+        const tri = new Graphics();
+        tri.beginFill('#0091ff').drawPolygon([0, -130, 120, 90, -120, 90]).endFill();
+
+        const rect = new Graphics();
+        rect.beginFill('#e5484d').drawRect(-70, -70, 140, 140).endFill();
+
+        const circle = new Graphics();
+        circle.beginFill('#30a46c').drawCircle(0, 0, 55).endFill();
+
+        const ring = new Graphics();
+        ring.lineStyle({ width: 10, color: '#f5d90a', cap: 'round', join: 'round' });
+        ring.drawRoundedRect(-115, -115, 230, 230, 28);
+
+        g.addChild(tri);
+        g.addChild(rect);
+        g.addChild(circle);
+        g.addChild(ring);
+        stage.addChild(g);
+        return g;
+      }
+
+      async function activate(backend) {
+        // 清理上一个实例与循环
+        if (rafId) cancelAnimationFrame(rafId);
+        // 每个后端用全新的 canvas（一个 canvas 拿过 2d/webgl 上下文后无法再换）
+        mount.innerHTML = '';
+        const view = document.createElement('canvas');
+        view.width = 500;
+        view.height = 500;
+        mount.appendChild(view);
+
+        buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.backend === backend)));
+
+        try {
+          setStatus(`正在初始化 ${backend} …`);
+          app = await Application.create({
+            view,
+            prefer: PREFER[backend],
+            backgroundColor: '#11131a',
+            backgroundAlpha: 1,
+            debug: true,
+          });
+          group = buildScene(app.stage);
+
+          let frames = 0;
+          let t0 = performance.now();
+          const loop = () => {
+            group.rotation += 0.012;
+            const s = 1 + Math.sin(performance.now() / 600) * 0.12;
+            group.scale.set(s, s);
+            app.render();
+
+            frames++;
+            const now = performance.now();
+            if (now - t0 >= 500) {
+              const fps = Math.round((frames * 1000) / (now - t0));
+              setStatus(`✅ ${backend} 渲染中 · ${fps} fps`);
+              frames = 0;
+              t0 = now;
+            }
+            rafId = requestAnimationFrame(loop);
+          };
+          loop();
+        } catch (e) {
+          console.error(e);
+          setStatus(`❌ ${backend} 失败：${e && e.message ? e.message : e}`, true);
+        }
+      }
+
+      buttons.forEach((b) => b.addEventListener('click', () => !b.disabled && activate(b.dataset.backend)));
+
+      // 动态增删节点：验证首帧之后的结构变更会触发 GPU 重建
+      const palette = ['#0091ff', '#e5484d', '#30a46c', '#f5d90a', '#bf7af0', '#ff8b3d'];
+      let dots = 0;
+      document.getElementById('add').addEventListener('click', () => {
+        if (!group) return;
+        const dot = new Graphics();
+        const color = palette[dots % palette.length];
+        const angle = (dots / 8) * Math.PI * 2;
+        dots++;
+        dot.beginFill(color).drawCircle(Math.cos(angle) * 160, Math.sin(angle) * 160, 18).endFill();
+        group.addChild(dot); // 首帧后新增 —— 必须出现
+      });
+      document.getElementById('reset').addEventListener('click', () => {
+        const active = buttons.find((b) => b.getAttribute('aria-pressed') === 'true');
+        dots = 0;
+        activate(active ? active.dataset.backend : 'canvas');
+      });
+
+      activate('canvas');
+    </script>
+  </body>
+</html>

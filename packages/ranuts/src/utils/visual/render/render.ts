@@ -3,10 +3,6 @@ import type { Container } from '@/utils/visual/vertex/container';
 import type { IApplicationOptions } from '@/utils/visual/types';
 
 export abstract class Renderer {
-  /**
-   * 是否需要重新构建大数组
-   */
-  static needBuildArr = true;
   public canvasEle: HTMLCanvasElement;
   public screen = new Rectangle();
   constructor(options: IApplicationOptions) {

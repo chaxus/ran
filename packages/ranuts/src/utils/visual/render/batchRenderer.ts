@@ -7,6 +7,13 @@ import type { IApplicationOptions } from '@/utils/visual/types';
 
 export abstract class BatchRenderer extends Renderer {
   /**
+   * 上次构建大数组时的场景结构版本号（每个渲染器实例独立）。与根节点的 structureVersion
+   * 不一致时说明场景结构变了（增删节点 / 重绘），需要重建；否则只做逐帧 transform 更新。
+   * 初值 -1 保证首帧一定构建。基于版本号对比，多个渲染器共享同一场景也不会互相“消费”脏标记。
+   */
+  protected builtVersion = -1;
+
+  /**
    * 顶点个数
    */
   protected vertexCount = 0;
@@ -156,16 +163,16 @@ export abstract class BatchRenderer extends Renderer {
     this.updateChildrenTransform(rootContainer);
 
     /**
-     * 判断是否需要重新构建大数组
+     * 场景结构变化时重建大数组，否则只更新顶点位置
      */
-    if (Renderer.needBuildArr) {
+    if (this.builtVersion !== rootContainer.structureVersion) {
       this.startBuild();
 
       buildArray(this, rootContainer);
 
       this.buildEnd();
 
-      Renderer.needBuildArr = false;
+      this.builtVersion = rootContainer.structureVersion;
     } else {
       updateArray(this.vertFloatView, rootContainer);
     }

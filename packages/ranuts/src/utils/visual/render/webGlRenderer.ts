@@ -1,111 +1,89 @@
-import { Renderer } from '@/utils/visual/render/render';
-import { BatchPool } from '@/utils/visual/render/utils/webgl/batchPool';
-import { initShader } from '@/utils/visual/render/utils/webgl/initShader';
+import { BatchRenderer } from '@/utils/visual/render/batchRenderer';
+import { initShader, setupVertexLayout } from '@/utils/visual/render/utils/webgl/initShader';
 import { toRgbArray } from '@/utils/visual/render/utils/index';
 import type { IApplicationOptions } from '@/utils/visual/types';
-import type { Container } from '@/utils/visual/vertex/container';
 
-export class WebGLRenderer extends Renderer {
+// WebGL 后端与 WebGPU 后端共用 BatchRenderer 的批处理管线（三角剖分 → 打包大数组），
+// 仅在 draw / updateBuffer / 矩阵 uniform 上使用各自的图形 API。
+export class WebGLRenderer extends BatchRenderer {
   public gl: WebGLRenderingContext;
-  public batchPool: BatchPool;
   private program: WebGLProgram;
+  private glVertexBuffer: WebGLBuffer;
+  private glIndexBuffer: WebGLBuffer;
   private unifLoc: {
     u_root_transform: WebGLUniformLocation;
     u_projection_matrix: WebGLUniformLocation;
   };
+
   constructor(options: IApplicationOptions) {
-    console.log('正在使用 %c webGL ', 'color: #881910; background-color: #ffffff;font-size: 20px;', '渲染');
     super(options);
-    const opts: WebGLContextAttributes = {
-      antialias: true,
-    };
-    this.gl = this.canvasEle.getContext('webgl', opts) as WebGLRenderingContext;
+
+    if (options.debug) {
+      console.log('正在使用 %c webGL ', 'color: #881910; background-color: #ffffff;font-size: 20px;', '渲染');
+    }
+
+    this.gl = this.canvasEle.getContext('webgl', { antialias: true }) as WebGLRenderingContext;
+
+    // 共享批处理管线使用 Uint32 顶点索引，WebGL1 需要开启该扩展
+    this.gl.getExtension('OES_element_index_uint');
 
     this.program = initShader(this);
 
-    const uRootTransformLoc = this.gl.getUniformLocation(this.program, 'u_root_transform') as WebGLUniformLocation;
-    const uProjectionMatrixLoc = this.gl.getUniformLocation(
-      this.program,
-      'u_projection_matrix',
-    ) as WebGLUniformLocation;
+    // 创建并绑定顶点 / 索引 buffer，设置顶点属性布局
+    this.glVertexBuffer = this.gl.createBuffer() as WebGLBuffer;
+    this.glIndexBuffer = this.gl.createBuffer() as WebGLBuffer;
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.glVertexBuffer);
+    this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this.glIndexBuffer);
+    setupVertexLayout(this.gl, this.program);
+
     this.unifLoc = {
-      u_root_transform: uRootTransformLoc,
-      u_projection_matrix: uProjectionMatrixLoc,
+      u_root_transform: this.gl.getUniformLocation(this.program, 'u_root_transform') as WebGLUniformLocation,
+      u_projection_matrix: this.gl.getUniformLocation(this.program, 'u_projection_matrix') as WebGLUniformLocation,
     };
 
-    this.setProjectionMatrix();
-
-    this.batchPool = new BatchPool(this);
-
-    const { backgroundColor, backgroundAlpha } = options;
-    const a = backgroundAlpha as number;
-    const [r, g, b] = toRgbArray(backgroundColor as string);
+    const a = (options.backgroundAlpha ?? 0) as number;
+    const [r, g, b] = toRgbArray((options.backgroundColor ?? '') as string);
     this.gl.clearColor(r * a, g * a, b * a, a);
 
     this.setRootTransform(1, 0, 0, 1, 0, 0);
+    this.setProjectionMatrix();
   }
 
-  /**
-   * 设置投影矩阵
-   */
-  private setProjectionMatrix() {
+  protected setProjectionMatrix(): void {
     const width = this.canvasEle.width;
     const height = this.canvasEle.height;
-
-    const gl = this.gl;
-
-    const loc = this.unifLoc.u_projection_matrix;
 
     const scaleX = (1 / width) * 2;
     const scaleY = (1 / height) * 2;
 
-    gl.uniformMatrix3fv(loc, false, new Float32Array([scaleX, 0, 0, 0, -scaleY, 0, -1, 1, 1]));
+    this.gl.uniformMatrix3fv(
+      this.unifLoc.u_projection_matrix,
+      false,
+      new Float32Array([scaleX, 0, 0, 0, -scaleY, 0, -1, 1, 1]),
+    );
   }
 
-  private setRootTransform(a: number, b: number, c: number, d: number, tx: number, ty: number) {
-    const gl = this.gl;
-
-    const loc = this.unifLoc.u_root_transform;
-
-    gl.uniformMatrix3fv(loc, false, new Float32Array([a, b, 0, c, d, 0, tx, ty, 1]));
+  protected setRootTransform(a: number, b: number, c: number, d: number, tx: number, ty: number): void {
+    this.gl.uniformMatrix3fv(
+      this.unifLoc.u_root_transform,
+      false,
+      new Float32Array([a, b, 0, c, d, 0, tx, ty, 1]),
+    );
   }
 
-  public render(rootContainer: Container): void {
-    /**
-     * update transform
-     */
-    rootContainer.sortChildren();
-
-    const dirty = rootContainer.transform.shouldUpdateLocalTransform;
-
-    rootContainer.transform.updateLocalTransform();
-
-    if (dirty) {
-      const { a, b, c, d, tx, ty } = rootContainer.transform.localTransform;
-      this.setRootTransform(a, b, c, d, tx, ty);
-    }
-
-    rootContainer.worldAlpha = rootContainer.alpha;
-
-    const children = rootContainer.children;
-    for (let i = 0; i < children.length; i++) {
-      children[i].updateTransform();
-    }
-
-    /**
-     * 清空画布并绘制
-     */
-
+  protected updateBuffer(): void {
     const gl = this.gl;
 
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.glVertexBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, this.vertFloatView, gl.DYNAMIC_DRAW);
+
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.glIndexBuffer);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer, gl.DYNAMIC_DRAW);
+  }
+
+  protected draw(): void {
+    const gl = this.gl;
     gl.clear(gl.COLOR_BUFFER_BIT);
-
-    BatchPool.testDrawCallCount = 0;
-
-    rootContainer.renderWebGLRecursive(this);
-
-    this.batchPool.flush();
-
-    // console.log('total draw call count：', BatchPool.testDrawCallCount)
+    gl.drawElements(gl.TRIANGLES, this.indexCount, gl.UNSIGNED_INT, 0);
   }
 }
