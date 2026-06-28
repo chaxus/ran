@@ -54,11 +54,23 @@ router.onRouteChange((to) => {
 
 ```css
 /* SPA 淡入淡出过渡 */
-@keyframes fade-in  { from { opacity: 0; } }
-@keyframes fade-out { to   { opacity: 0; } }
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
 
-::view-transition-old(root) { animation: 200ms ease-out fade-out; }
-::view-transition-new(root) { animation: 200ms ease-in  fade-in; }
+::view-transition-old(root) {
+  animation: 200ms ease-out fade-out;
+}
+::view-transition-new(root) {
+  animation: 200ms ease-in fade-in;
+}
 ```
 
 ## 组件
@@ -69,16 +81,16 @@ router.onRouteChange((to) => {
 
 #### 属性
 
-| 属性 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| `mode` | `'history' \| 'hash'` | `'history'` | History API 模式 |
-| `base` | `string` | `''` | 基础路径前缀，会从所有路径中去除 |
-| `sheet` | `string` | `''` | 注入到 Shadow DOM 的 CSS |
+| 属性    | 类型                  | 默认值      | 说明                             |
+| ------- | --------------------- | ----------- | -------------------------------- |
+| `mode`  | `'history' \| 'hash'` | `'history'` | History API 模式                 |
+| `base`  | `string`              | `''`        | 基础路径前缀，会从所有路径中去除 |
+| `sheet` | `string`              | `''`        | 注入到 Shadow DOM 的 CSS         |
 
 #### 事件
 
-| 事件 | Detail | 说明 |
-| --- | --- | --- |
+| 事件          | Detail             | 说明               |
+| ------------- | ------------------ | ------------------ |
 | `routechange` | `{ path: string }` | 每次路由更新后触发 |
 
 ### `r-route`
@@ -87,16 +99,16 @@ router.onRouteChange((to) => {
 
 #### 属性
 
-| 属性 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| `path` | `string` | `'/'` | 匹配模式，支持 `:param` 参数段和 `*` 通配符 |
-| `exact` | `boolean` | `false` | 是否要求精确匹配（不允许前缀匹配） |
-| `sheet` | `string` | `''` | 注入到 Shadow DOM 的 CSS |
+| 属性    | 类型      | 默认值  | 说明                                        |
+| ------- | --------- | ------- | ------------------------------------------- |
+| `path`  | `string`  | `'/'`   | 匹配模式，支持 `:param` 参数段和 `*` 通配符 |
+| `exact` | `boolean` | `false` | 是否要求精确匹配（不允许前缀匹配）          |
+| `sheet` | `string`  | `''`    | 注入到 Shadow DOM 的 CSS                    |
 
 #### 事件
 
-| 事件 | Detail | 说明 |
-| --- | --- | --- |
+| 事件         | Detail             | 说明                 |
+| ------------ | ------------------ | -------------------- |
 | `routematch` | `{ path, params }` | 当此路由被激活时触发 |
 
 #### 路径模式示例
@@ -116,11 +128,11 @@ router.onRouteChange((to) => {
 
 #### 属性
 
-| 属性 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| `href` | `string` | `''` | 目标路径 |
+| 属性      | 类型      | 默认值  | 说明                     |
+| --------- | --------- | ------- | ------------------------ |
+| `href`    | `string`  | `''`    | 目标路径                 |
 | `replace` | `boolean` | `false` | 替换当前历史记录而非新增 |
-| `sheet` | `string` | `''` | 注入到 Shadow DOM 的 CSS |
+| `sheet`   | `string`  | `''`    | 注入到 Shadow DOM 的 CSS |
 
 ```html
 <r-link href="/about">关于</r-link>
@@ -134,19 +146,19 @@ router.onRouteChange((to) => {
 
 创建并注册全局 `RouterCore` 实例。在应用启动时调用一次，应早于任何 `r-router` 元素挂载。
 
-| 选项 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| `mode` | `'history' \| 'hash'` | `'history'` | History API 模式 |
-| `base` | `string` | `''` | 基础路径前缀，会从所有内部路径中去除 |
-| `routes` | `RouteConfig[]` | `[]` | 路由配置列表 |
-| `viewTransition` | `boolean \| ViewTransitionMode` | `false` | 启用 View Transitions；`true` 等同于 `'spa'` |
+| 选项             | 类型                            | 默认值      | 说明                                         |
+| ---------------- | ------------------------------- | ----------- | -------------------------------------------- |
+| `mode`           | `'history' \| 'hash'`           | `'history'` | History API 模式                             |
+| `base`           | `string`                        | `''`        | 基础路径前缀，会从所有内部路径中去除         |
+| `routes`         | `RouteConfig[]`                 | `[]`        | 路由配置列表                                 |
+| `viewTransition` | `boolean \| ViewTransitionMode` | `false`     | 启用 View Transitions；`true` 等同于 `'spa'` |
 
 ```js
 import { createRouter } from 'ranui';
 
 const router = createRouter({
-  mode: 'history',       // 'history'（默认）| 'hash'
-  base: '/app',          // 从所有内部路径中去除 '/app' 前缀
+  mode: 'history', // 'history'（默认）| 'hash'
+  base: '/app', // 从所有内部路径中去除 '/app' 前缀
   routes: [
     { path: '/', exact: true, meta: { title: '首页' } },
     { path: '/users/:id', meta: { requiresAuth: true } },
@@ -159,23 +171,23 @@ const router = createRouter({
 
 `createRouter` 返回的实例，包含所有导航方法、钩子和属性。
 
-| 名称 | 签名 / 类型 | 说明 |
-| --- | --- | --- |
-| `push(path)` | `(path: string) => Promise<void>` | 导航并新增历史记录 |
-| `replace(path)` | `(path: string) => Promise<void>` | 导航并替换当前历史记录 |
-| `back()` | `() => void` | `history.back()` |
-| `forward()` | `() => void` | `history.forward()` |
-| `go(delta)` | `(delta: number) => void` | `history.go(delta)` |
-| `beforeEach(guard)` | `(guard: NavigationGuard) => () => void` | 注册导航守卫，返回取消订阅函数 |
-| `afterEach(handler)` | `(handler: RouteChangeHandler) => () => void` | 导航后钩子，DOM 更新后执行，返回取消订阅函数 |
-| `onRouteChange(handler)` | `(handler: RouteChangeHandler) => () => void` | 订阅每次路由变化，返回取消订阅函数 |
-| `onPageSwap(handler)` | `(handler: Function) => () => void` | 跨文档 `pageswap` 事件，仅 MPA 模式有效 |
-| `onPageReveal(handler)` | `(handler: Function) => () => void` | 跨文档 `pagereveal` 事件，仅 MPA 模式有效 |
-| `destroy()` | `() => void` | 移除所有监听器和注入的 CSS |
-| `currentRoute` | `RouteLocation \| null` | 当前路由位置对象 |
-| `mode` | `'history' \| 'hash'` | History 模式 |
-| `base` | `string` | 基础路径前缀 |
-| `routes` | `RouteConfig[]` | 已注册的路由配置 |
+| 名称                     | 签名 / 类型                                   | 说明                                         |
+| ------------------------ | --------------------------------------------- | -------------------------------------------- |
+| `push(path)`             | `(path: string) => Promise<void>`             | 导航并新增历史记录                           |
+| `replace(path)`          | `(path: string) => Promise<void>`             | 导航并替换当前历史记录                       |
+| `back()`                 | `() => void`                                  | `history.back()`                             |
+| `forward()`              | `() => void`                                  | `history.forward()`                          |
+| `go(delta)`              | `(delta: number) => void`                     | `history.go(delta)`                          |
+| `beforeEach(guard)`      | `(guard: NavigationGuard) => () => void`      | 注册导航守卫，返回取消订阅函数               |
+| `afterEach(handler)`     | `(handler: RouteChangeHandler) => () => void` | 导航后钩子，DOM 更新后执行，返回取消订阅函数 |
+| `onRouteChange(handler)` | `(handler: RouteChangeHandler) => () => void` | 订阅每次路由变化，返回取消订阅函数           |
+| `onPageSwap(handler)`    | `(handler: Function) => () => void`           | 跨文档 `pageswap` 事件，仅 MPA 模式有效      |
+| `onPageReveal(handler)`  | `(handler: Function) => () => void`           | 跨文档 `pagereveal` 事件，仅 MPA 模式有效    |
+| `destroy()`              | `() => void`                                  | 移除所有监听器和注入的 CSS                   |
+| `currentRoute`           | `RouteLocation \| null`                       | 当前路由位置对象                             |
+| `mode`                   | `'history' \| 'hash'`                         | History 模式                                 |
+| `base`                   | `string`                                      | 基础路径前缀                                 |
+| `routes`                 | `RouteConfig[]`                               | 已注册的路由配置                             |
 
 ```js
 router.push('/users/42');
@@ -230,11 +242,11 @@ router.onRouteChange((to, from) => {
 
 ### 三种模式对比
 
-| 模式 | Chrome | 触发时机 | 是否需要 JS |
-| --- | --- | --- | --- |
-| `'spa'` | 111+ | `router.push()` / `r-link` 点击 | 是 |
-| `'mpa'` | 126+ | 任意 `<a>` 跳转、表单提交、`location.href` | 否 |
-| `'both'` | 111+ / 126+ | 以上全部 | 可选 |
+| 模式     | Chrome      | 触发时机                                   | 是否需要 JS |
+| -------- | ----------- | ------------------------------------------ | ----------- |
+| `'spa'`  | 111+        | `router.push()` / `r-link` 点击            | 是          |
+| `'mpa'`  | 126+        | 任意 `<a>` 跳转、表单提交、`location.href` | 否          |
+| `'both'` | 111+ / 126+ | 以上全部                                   | 可选        |
 
 ### SPA 模式
 
@@ -247,12 +259,24 @@ const router = createRouter({ viewTransition: 'spa' }); // 或 true
 配合 CSS 定义动画效果：
 
 ```css
-@keyframes fade-in  { from { opacity: 0; } }
-@keyframes fade-out { to   { opacity: 0; } }
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
 
 /* 默认交叉淡入淡出 */
-::view-transition-old(root) { animation: 200ms ease-out fade-out; }
-::view-transition-new(root) { animation: 200ms ease-in  fade-in; }
+::view-transition-old(root) {
+  animation: 200ms ease-out fade-out;
+}
+::view-transition-new(root) {
+  animation: 200ms ease-in fade-in;
+}
 ```
 
 ### MPA 模式
@@ -327,8 +351,12 @@ SPA 导航使用 `startViewTransition()`，全页面跳转使用 `@view-transiti
 
 ```css
 /* CSS 方案 */
-.card[data-id="1"]  { view-transition-name: card-1; }
-.card[data-id="42"] { view-transition-name: card-42; }
+.card[data-id='1'] {
+  view-transition-name: card-1;
+}
+.card[data-id='42'] {
+  view-transition-name: card-42;
+}
 ```
 
 ```js
@@ -355,19 +383,34 @@ document.querySelector('.profile-header').style.viewTransitionName = `profile-${
 const pages = ['/', '/step-1', '/step-2', '/step-3'];
 
 router.beforeEach((to, from, next) => {
-  const toIdx   = pages.indexOf(to.path);
+  const toIdx = pages.indexOf(to.path);
   const fromIdx = pages.indexOf(from?.path ?? '');
-  document.documentElement.dataset.navDir =
-    toIdx >= fromIdx ? 'forward' : 'back';
+  document.documentElement.dataset.navDir = toIdx >= fromIdx ? 'forward' : 'back';
   next();
 });
 ```
 
 ```css
-@keyframes slide-from-right { from { translate: 100% 0; } }
-@keyframes slide-from-left  { from { translate: -100% 0; } }
-@keyframes slide-to-right   { to   { translate: 100% 0; } }
-@keyframes slide-to-left    { to   { translate: -100% 0; } }
+@keyframes slide-from-right {
+  from {
+    translate: 100% 0;
+  }
+}
+@keyframes slide-from-left {
+  from {
+    translate: -100% 0;
+  }
+}
+@keyframes slide-to-right {
+  to {
+    translate: 100% 0;
+  }
+}
+@keyframes slide-to-left {
+  to {
+    translate: -100% 0;
+  }
+}
 
 [data-nav-dir='forward']::view-transition-old(root) {
   animation: 300ms ease slide-to-left;
@@ -409,10 +452,10 @@ interface RouteConfig {
 }
 
 interface RouteLocation {
-  path: string;                    // 例如 '/users/42'
-  params: Record<string, string>;  // 例如 { id: '42' }
-  query: Record<string, string>;   // 例如 { tab: 'profile' }
-  fullPath: string;                // 例如 '/users/42?tab=profile'
+  path: string; // 例如 '/users/42'
+  params: Record<string, string>; // 例如 { id: '42' }
+  query: Record<string, string>; // 例如 { tab: 'profile' }
+  fullPath: string; // 例如 '/users/42?tab=profile'
 }
 
 type NavigationGuard = (

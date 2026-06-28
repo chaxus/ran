@@ -25,7 +25,13 @@
           <a class="nav-link" href="https://github.com/chaxus/ran" target="_blank" rel="noopener" aria-label="GitHub">
             <r-icon name="github" size="16"></r-icon><span class="nav-link-text" data-i18n="nav.github">GitHub</span>
           </a>
-          <a class="nav-link" href="https://github.com/chaxus/ran/issues" target="_blank" rel="noopener" aria-label="Issues">
+          <a
+            class="nav-link"
+            href="https://github.com/chaxus/ran/issues"
+            target="_blank"
+            rel="noopener"
+            aria-label="Issues"
+          >
             <r-icon name="issue" size="16"></r-icon><span class="nav-link-text" data-i18n="nav.issues">Issues</span>
           </a>
           <r-select id="lang-select" class="lang-select" trigger="click">
@@ -56,17 +62,23 @@
             <r-link href="/design" class="home-card">
               <span class="home-card-no">01</span>
               <span class="home-card-title" data-i18n="home.design.t">Design system</span>
-              <span class="home-card-desc" data-i18n="home.design.d">Geist color scales, radius, elevation, typography, and light/dark tokens.</span>
+              <span class="home-card-desc" data-i18n="home.design.d"
+                >Geist color scales, radius, elevation, typography, and light/dark tokens.</span
+              >
             </r-link>
             <r-link href="/components" class="home-card">
               <span class="home-card-no">02</span>
               <span class="home-card-title" data-i18n="home.components.t">Components</span>
-              <span class="home-card-desc" data-i18n="home.components.d">~24 Shadow-DOM components: buttons, forms, feedback, surfaces, charts.</span>
+              <span class="home-card-desc" data-i18n="home.components.d"
+                >~24 Shadow-DOM components: buttons, forms, feedback, surfaces, charts.</span
+              >
             </r-link>
             <r-link href="/guide" class="home-card">
               <span class="home-card-no">03</span>
               <span class="home-card-title" data-i18n="home.guide.t">Guide</span>
-              <span class="home-card-desc" data-i18n="home.guide.d">Install, theming API, i18n, and SSR — everything to ship.</span>
+              <span class="home-card-desc" data-i18n="home.guide.d"
+                >Install, theming API, i18n, and SSR — everything to ship.</span
+              >
             </r-link>
           </div>
         </r-route>
@@ -79,22 +91,30 @@
               ranui's tokens follow the
               <a href="https://vercel.com/design" target="_blank" rel="noopener">Geist design system</a>
               (<a href="https://vercel.com/design.md" target="_blank" rel="noopener">design.md</a> /
-              <a href="https://vercel.com/design.dark.md" target="_blank" rel="noopener">design.dark.md</a>). Base scales →
-              semantic tokens → component tokens; dark mode redefines only the base scale.
+              <a href="https://vercel.com/design.dark.md" target="_blank" rel="noopener">design.dark.md</a>). Base
+              scales → semantic tokens → component tokens; dark mode redefines only the base scale.
             </p>
           </div>
 
           <section id="tokens">
             <h2 data-i18n="sec.colors">Color</h2>
-            <p class="lead" data-i18n="sec.colors.lead">Ten-step scales where each step maps to a fixed interface state — color is just how a state looks.</p>
+            <p class="lead" data-i18n="sec.colors.lead">
+              Ten-step scales where each step maps to a fixed interface state — color is just how a state looks.
+            </p>
             <div class="panel"><div id="palette"></div></div>
-            <p class="lead" style="margin-top: var(--ran-space-6)" data-i18n="design.states.lead">Each step has one job, so hover / active / border / text states are decided up front — no guessing per component:</p>
+            <p class="lead" style="margin-top: var(--ran-space-6)" data-i18n="design.states.lead">
+              Each step has one job, so hover / active / border / text states are decided up front — no guessing per
+              component:
+            </p>
             <div class="panel"><div class="state-legend" id="state-legend"></div></div>
           </section>
 
           <section>
             <h2 data-i18n="sec.spacing">Spacing</h2>
-            <p class="lead" data-i18n="sec.spacing.lead">A 4px base unit with just nine values. 8px within a group, 16px between groups, 32–40px between sections — a limited set keeps the rhythm.</p>
+            <p class="lead" data-i18n="sec.spacing.lead">
+              A 4px base unit with just nine values. 8px within a group, 16px between groups, 32–40px between sections —
+              a limited set keeps the rhythm.
+            </p>
             <div class="panel"><div class="space-scale" id="space-scale"></div></div>
           </section>
 
@@ -112,30 +132,63 @@
 
           <section>
             <h2 data-i18n="sec.typo">Typography</h2>
-            <p class="lead" data-i18n="sec.typo.lead">Pick a role, not a size. Each role fixes the font, size, weight, and line-height up front.</p>
+            <p class="lead" data-i18n="sec.typo.lead">
+              Pick a role, not a size. Each role fixes the font, size, weight, and line-height up front.
+            </p>
             <div class="panel">
-              <div class="role-row"><span class="role-meta">heading-32</span><span class="type-h">Ship faster</span></div>
-              <div class="role-row"><span class="role-meta">copy-16</span><span class="type-b">Body copy for comfortable multi-line reading.</span></div>
-              <div class="role-row"><span class="role-meta">label-14</span><span style="font-size: 14px; font-weight: 500">Single-line scannable label</span></div>
-              <div class="role-row"><span class="role-meta">button-14</span><span style="font-size: 14px; font-weight: 500">Deploy project</span></div>
-              <div class="role-row"><span class="role-meta">mono-13</span><span class="type-m">const theme = createTheme();</span></div>
+              <div class="role-row">
+                <span class="role-meta">heading-32</span><span class="type-h">Ship faster</span>
+              </div>
+              <div class="role-row">
+                <span class="role-meta">copy-16</span
+                ><span class="type-b">Body copy for comfortable multi-line reading.</span>
+              </div>
+              <div class="role-row">
+                <span class="role-meta">label-14</span
+                ><span style="font-size: 14px; font-weight: 500">Single-line scannable label</span>
+              </div>
+              <div class="role-row">
+                <span class="role-meta">button-14</span
+                ><span style="font-size: 14px; font-weight: 500">Deploy project</span>
+              </div>
+              <div class="role-row">
+                <span class="role-meta">mono-13</span><span class="type-m">const theme = createTheme();</span>
+              </div>
             </div>
           </section>
 
           <section>
             <h2 data-i18n="sec.motion">Motion</h2>
-            <p class="lead" data-i18n="sec.motion.lead">Prefer none. When motion clarifies a change, keep it quick, light, and restrained.</p>
+            <p class="lead" data-i18n="sec.motion.lead">
+              Prefer none. When motion clarifies a change, keep it quick, light, and restrained.
+            </p>
             <div class="panel motion-grid">
-              <div class="motion-row"><span class="motion-dur">0ms</span><span class="motion-use" data-i18n="motion.instant">Changes that are already obvious — apply instantly.</span></div>
-              <div class="motion-row"><span class="motion-dur">150ms</span><span class="motion-use" data-i18n="motion.state">Hover and active state transitions.</span></div>
-              <div class="motion-row"><span class="motion-dur">200ms</span><span class="motion-use" data-i18n="motion.popover">Popovers and menus appearing.</span></div>
-              <div class="motion-row"><span class="motion-dur">300ms</span><span class="motion-use" data-i18n="motion.modal">Modals and dialogs.</span></div>
+              <div class="motion-row">
+                <span class="motion-dur">0ms</span
+                ><span class="motion-use" data-i18n="motion.instant"
+                  >Changes that are already obvious — apply instantly.</span
+                >
+              </div>
+              <div class="motion-row">
+                <span class="motion-dur">150ms</span
+                ><span class="motion-use" data-i18n="motion.state">Hover and active state transitions.</span>
+              </div>
+              <div class="motion-row">
+                <span class="motion-dur">200ms</span
+                ><span class="motion-use" data-i18n="motion.popover">Popovers and menus appearing.</span>
+              </div>
+              <div class="motion-row">
+                <span class="motion-dur">300ms</span
+                ><span class="motion-use" data-i18n="motion.modal">Modals and dialogs.</span>
+              </div>
             </div>
           </section>
 
           <section>
             <h2 data-i18n="sec.content">Content</h2>
-            <p class="lead" data-i18n="sec.content.lead">Copy is part of the system. Be specific and remove guesswork.</p>
+            <p class="lead" data-i18n="sec.content.lead">
+              Copy is part of the system. Be specific and remove guesswork.
+            </p>
             <div class="dodont">
               <div class="guideline do">
                 <span class="guideline-tag" data-i18n="do.label">✓ Do</span>
@@ -150,7 +203,9 @@
               <div class="guideline do">
                 <span class="guideline-tag" data-i18n="do.label">✓ Do</span>
                 <p data-i18n="content.err.do">Errors: what happened, then how to fix it.</p>
-                <span class="sample" data-i18n="content.err.do.s">Build failed: the bundle exceeds the size limit. Reduce it or raise the limit.</span>
+                <span class="sample" data-i18n="content.err.do.s"
+                  >Build failed: the bundle exceeds the size limit. Reduce it or raise the limit.</span
+                >
               </div>
               <div class="guideline dont">
                 <span class="guideline-tag" data-i18n="dont.label">✕ Don't</span>
@@ -162,7 +217,9 @@
 
           <section>
             <h2 data-i18n="sec.a11y">Accessibility</h2>
-            <p class="lead" data-i18n="sec.a11y.lead">The system serves everyone — keyboard users, low vision, bright sunlight.</p>
+            <p class="lead" data-i18n="sec.a11y.lead">
+              The system serves everyone — keyboard users, low vision, bright sunlight.
+            </p>
             <ul class="a11y-list">
               <li data-i18n="a11y.contrast">Keep sufficient text-to-background contrast (WCAG AA).</li>
               <li data-i18n="a11y.notcolor">Never signal state with color alone — pair it with an icon or text.</li>
@@ -173,7 +230,10 @@
 
           <section>
             <h2 data-i18n="sec.dark">Light &amp; dark</h2>
-            <p class="lead" data-i18n="sec.dark.lead">Semantic tokens reference the base scale, so a single dark mixin redefines the scale and everything re-resolves. Same token name, different value — gray-1000 is #171717 in light, #ededed in dark.</p>
+            <p class="lead" data-i18n="sec.dark.lead">
+              Semantic tokens reference the base scale, so a single dark mixin redefines the scale and everything
+              re-resolves. Same token name, different value — gray-1000 is #171717 in light, #ededed in dark.
+            </p>
             <pre class="code"><code>:root[data-ran-theme="dark"] {
   .ran-theme-dark(); /* only the base scale flips */
 }
@@ -185,7 +245,10 @@
         <r-route path="/components">
           <div class="page-head">
             <h1 data-i18n="components.title">Components</h1>
-            <p data-i18n="components.desc">Every component is Shadow-DOM encapsulated and themed through CSS variables, <code>::part()</code>, and the <code>sheet</code> attribute.</p>
+            <p data-i18n="components.desc">
+              Every component is Shadow-DOM encapsulated and themed through CSS variables, <code>::part()</code>, and
+              the <code>sheet</code> attribute.
+            </p>
           </div>
 
           <section>
@@ -206,9 +269,27 @@
             <div class="grid">
               <div class="demo-card">
                 <h3 data-i18n="card.input">Input</h3>
-                <r-input data-i18n-label="input.username.label" data-i18n-placeholder="input.username.ph" label="Username" placeholder="Enter username"></r-input>
-                <r-input type="password" icon="lock" data-i18n-placeholder="input.password.label" placeholder="Password"></r-input>
-                <r-input status="error" data-i18n-label="input.email.label" data-i18n-placeholder="input.email.ph" data-i18n-message="input.email.msg" label="Email" placeholder="Invalid email" message="Enter a valid email address"></r-input>
+                <r-input
+                  data-i18n-label="input.username.label"
+                  data-i18n-placeholder="input.username.ph"
+                  label="Username"
+                  placeholder="Enter username"
+                ></r-input>
+                <r-input
+                  type="password"
+                  icon="lock"
+                  data-i18n-placeholder="input.password.label"
+                  placeholder="Password"
+                ></r-input>
+                <r-input
+                  status="error"
+                  data-i18n-label="input.email.label"
+                  data-i18n-placeholder="input.email.ph"
+                  data-i18n-message="input.email.msg"
+                  label="Email"
+                  placeholder="Invalid email"
+                  message="Enter a valid email address"
+                ></r-input>
               </div>
               <div class="demo-card">
                 <h3 data-i18n="card.select">Select</h3>
@@ -217,7 +298,12 @@
                   <r-option value="medium" data-i18n="opt.medium">🟡 Medium priority</r-option>
                   <r-option value="low" data-i18n="opt.low">🟢 Low priority</r-option>
                 </r-select>
-                <r-select style="width: 100%" trigger="click" data-i18n-placeholder="select.ph" placeholder="Pick a teammate">
+                <r-select
+                  style="width: 100%"
+                  trigger="click"
+                  data-i18n-placeholder="select.ph"
+                  placeholder="Pick a teammate"
+                >
                   <r-option value="jack">Jack</r-option>
                   <r-option value="lucy">Lucy</r-option>
                   <r-option value="tom">Tom</r-option>
@@ -225,10 +311,18 @@
               </div>
               <div class="demo-card">
                 <h3 data-i18n="card.checkbox">Checkbox</h3>
-                <label class="task"><r-checkbox checked></r-checkbox><span data-i18n="cb.tests">Run unit tests</span></label>
-                <label class="task"><r-checkbox checked></r-checkbox><span data-i18n="cb.review">Review pull request</span></label>
-                <label class="task"><r-checkbox></r-checkbox><span data-i18n="cb.deploy">Deploy to staging</span></label>
-                <label class="task"><r-checkbox disabled></r-checkbox><span data-i18n="cb.disabled">Disabled option</span></label>
+                <label class="task"
+                  ><r-checkbox checked></r-checkbox><span data-i18n="cb.tests">Run unit tests</span></label
+                >
+                <label class="task"
+                  ><r-checkbox checked></r-checkbox><span data-i18n="cb.review">Review pull request</span></label
+                >
+                <label class="task"
+                  ><r-checkbox></r-checkbox><span data-i18n="cb.deploy">Deploy to staging</span></label
+                >
+                <label class="task"
+                  ><r-checkbox disabled></r-checkbox><span data-i18n="cb.disabled">Disabled option</span></label
+                >
               </div>
             </div>
           </section>
@@ -260,8 +354,12 @@
               <div class="demo-card">
                 <h3 data-i18n="card.message">Message</h3>
                 <div class="row">
-                  <r-button type="primary" data-i18n="msg.success" onclick="window.message?.success('ranui')">Success</r-button>
-                  <r-button type="warning" data-i18n="msg.error" onclick="window.message?.error('ranui')">Error</r-button>
+                  <r-button type="primary" data-i18n="msg.success" onclick="window.message?.success('ranui')"
+                    >Success</r-button
+                  >
+                  <r-button type="warning" data-i18n="msg.error" onclick="window.message?.error('ranui')"
+                    >Error</r-button
+                  >
                 </div>
               </div>
             </div>
@@ -270,23 +368,46 @@
           <section>
             <h2 data-i18n="sec.surfaces">Surfaces</h2>
             <div class="grid">
-              <r-card data-i18n-title="card.cross.title" data-i18n-desc="card.cross.desc" title="Cross-framework" description="Drop ranui into React, Vue, or vanilla — they are native custom elements.">
+              <r-card
+                data-i18n-title="card.cross.title"
+                data-i18n-desc="card.cross.desc"
+                title="Cross-framework"
+                description="Drop ranui into React, Vue, or vanilla — they are native custom elements."
+              >
                 <span slot="extra">native</span>
               </r-card>
-              <r-card data-i18n-title="card.token.title" data-i18n-desc="card.token.desc" title="Token-based styling" description="Theme with documented CSS variables, no build step required.">
+              <r-card
+                data-i18n-title="card.token.title"
+                data-i18n-desc="card.token.desc"
+                title="Token-based styling"
+                description="Theme with documented CSS variables, no build step required."
+              >
                 <span slot="extra">theme</span>
               </r-card>
-              <r-card data-i18n-title="card.ssr.title" data-i18n-desc="card.ssr.desc" title="SSR ready" description="Server-render to a string and hydrate on the client.">
+              <r-card
+                data-i18n-title="card.ssr.title"
+                data-i18n-desc="card.ssr.desc"
+                title="SSR ready"
+                description="Server-render to a string and hydrate on the client."
+              >
                 <span slot="extra">ssr</span>
               </r-card>
             </div>
 
             <div class="panel" style="margin-top: var(--ran-space-4)">
               <r-tabs active="t1" style="width: 100%">
-                <r-tab data-i18n-label="tab.overview" data-i18n="tab.overview.body" label="Overview" r-key="t1">ranui ships ~24 components, all Shadow-DOM encapsulated.</r-tab>
-                <r-tab data-i18n-label="tab.api" data-i18n="tab.api.body" label="API" r-key="t2">Each component exposes attributes, <code>::part()</code>, and CSS variables.</r-tab>
-                <r-tab data-i18n-label="tab.theming" data-i18n="tab.theming.body" label="Theming" r-key="t3">Light/dark via a single attribute; tokens follow the Geist scale.</r-tab>
-                <r-tab data-i18n-label="tab.disabled" data-i18n="tab.disabled.body" label="Disabled" r-key="t4" disabled>Disabled tab.</r-tab>
+                <r-tab data-i18n-label="tab.overview" data-i18n="tab.overview.body" label="Overview" r-key="t1"
+                  >ranui ships ~24 components, all Shadow-DOM encapsulated.</r-tab
+                >
+                <r-tab data-i18n-label="tab.api" data-i18n="tab.api.body" label="API" r-key="t2"
+                  >Each component exposes attributes, <code>::part()</code>, and CSS variables.</r-tab
+                >
+                <r-tab data-i18n-label="tab.theming" data-i18n="tab.theming.body" label="Theming" r-key="t3"
+                  >Light/dark via a single attribute; tokens follow the Geist scale.</r-tab
+                >
+                <r-tab data-i18n-label="tab.disabled" data-i18n="tab.disabled.body" label="Disabled" r-key="t4" disabled
+                  >Disabled tab.</r-tab
+                >
               </r-tabs>
             </div>
 
@@ -308,12 +429,16 @@
         <r-route path="/guide">
           <div class="page-head">
             <h1 data-i18n="guide.title">Guide</h1>
-            <p data-i18n="guide.desc">Everything you need to install ranui, theme it, localize it, and render it on the server.</p>
+            <p data-i18n="guide.desc">
+              Everything you need to install ranui, theme it, localize it, and render it on the server.
+            </p>
           </div>
 
           <section>
             <h2 data-i18n="guide.install">Installation</h2>
-            <p class="lead" data-i18n="guide.install.lead">Install the package, then import the global styles once and the components you need.</p>
+            <p class="lead" data-i18n="guide.install.lead">
+              Install the package, then import the global styles once and the components you need.
+            </p>
             <pre class="code"><code>npm i ranui
 
 import 'ranui/style';   // tokens + light/dark
@@ -334,7 +459,9 @@ setThemeTokens({
 
           <section>
             <h2 data-i18n="guide.i18n">Internationalization</h2>
-            <p class="lead" data-i18n="guide.i18n.lead">A framework-agnostic i18n core (the same one driving this page's language switch).</p>
+            <p class="lead" data-i18n="guide.i18n.lead">
+              A framework-agnostic i18n core (the same one driving this page's language switch).
+            </p>
             <pre class="code"><code>import { createI18n, useI18n } from 'ranui';
 
 const i18n = createI18n({
@@ -349,7 +476,9 @@ useI18n().setLocale('zh');</code></pre>
 
           <section>
             <h2 data-i18n="guide.ssr">Server-side rendering</h2>
-            <p class="lead" data-i18n="guide.ssr.lead">Render components to a Declarative Shadow DOM string and hydrate on the client.</p>
+            <p class="lead" data-i18n="guide.ssr.lead">
+              Render components to a Declarative Shadow DOM string and hydrate on the client.
+            </p>
             <pre class="code"><code>import { renderToString } from 'ranui/ssr';
 
 const html = renderToString(document.createElement('r-button'));
@@ -359,14 +488,25 @@ const html = renderToString(document.createElement('r-button'));
       </main>
 
       <footer>
-        <span data-i18n="footer">ranui · MIT · </span><a href="https://github.com/chaxus/ran" target="_blank">github.com/chaxus/ran</a>
+        <span data-i18n="footer">ranui · MIT · </span
+        ><a href="https://github.com/chaxus/ran" target="_blank">github.com/chaxus/ran</a>
       </footer>
 
       <r-modal id="demo-modal" data-i18n-title="modal.title" title="Deploy to production">
         <p data-i18n="modal.body">This will push the current build to the production environment. Continue?</p>
         <div slot="footer">
-          <r-button data-i18n="modal.cancel" onclick="document.getElementById('demo-modal').open = false">Cancel</r-button>
-          <r-button type="primary" data-i18n="modal.deploy" onclick="window.message?.success('Deployed'); document.getElementById('demo-modal').open = false">Deploy</r-button>
+          <r-button data-i18n="modal.cancel" onclick="document.getElementById('demo-modal').open = false"
+            >Cancel</r-button
+          >
+          <r-button
+            type="primary"
+            data-i18n="modal.deploy"
+            onclick="
+              window.message?.success('Deployed');
+              document.getElementById('demo-modal').open = false;
+            "
+            >Deploy</r-button
+          >
         </div>
       </r-modal>
     </r-router>

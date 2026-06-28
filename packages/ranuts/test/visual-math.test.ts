@@ -17,7 +17,10 @@ describe('visual/Matrix', () => {
   });
 
   it('round-trips a point through apply / applyInverse', () => {
-    const m = new Matrix().scale(2, 4).translate(10, -3).rotate(Math.PI / 5);
+    const m = new Matrix()
+      .scale(2, 4)
+      .translate(10, -3)
+      .rotate(Math.PI / 5);
     const original = new Point(3, 9);
     const back = m.applyInverse(m.apply(original));
     expect(back.x).toBeCloseTo(original.x, 6);

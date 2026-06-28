@@ -1,10 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import {
-  RouterCore,
-  createRouter,
-  enableMpaViewTransitions,
-  useRouter,
-} from '@/utils/router';
+import { RouterCore, createRouter, enableMpaViewTransitions, useRouter } from '@/utils/router';
 import type { RouterComponentElement } from '@/utils/router';
 
 // ── helpers ────────────────────────────────────────────────────────────────
@@ -253,8 +248,14 @@ describe('beforeEach', () => {
   it('multiple guards run in registration order', async () => {
     const router = createRouter();
     const order: string[] = [];
-    router.beforeEach((_to, _from, next) => { order.push('first'); next(); });
-    router.beforeEach((_to, _from, next) => { order.push('second'); next(); });
+    router.beforeEach((_to, _from, next) => {
+      order.push('first');
+      next();
+    });
+    router.beforeEach((_to, _from, next) => {
+      order.push('second');
+      next();
+    });
     await router.push('/multi');
     expect(order).toEqual(['first', 'second']);
   });

@@ -190,9 +190,7 @@ export class RouterCore {
         return segment.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       })
       .join('/');
-    const pattern = route.exact
-      ? new RegExp(`^${regexStr}$`)
-      : new RegExp(`^${regexStr}(?:/.*)?$`);
+    const pattern = route.exact ? new RegExp(`^${regexStr}$`) : new RegExp(`^${regexStr}(?:/.*)?$`);
     return pattern.test(path);
   }
 

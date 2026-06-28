@@ -177,9 +177,11 @@ document.getElementById('open-modal')?.addEventListener('click', () => {
 
 // ── Router chrome: link box model, active link, lazy radar render ───────
 const LINK_SHEETS: Record<string, string> = {
-  'route-link': 'a{display:flex;align-items:center;padding:6px 12px;color:inherit;text-decoration:none;border-radius:inherit}',
+  'route-link':
+    'a{display:flex;align-items:center;padding:6px 12px;color:inherit;text-decoration:none;border-radius:inherit}',
   cta: 'a{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;height:100%;padding:0 22px;line-height:1;box-sizing:border-box;color:inherit;text-decoration:none;border-radius:inherit}',
-  'home-card': 'a{display:flex;flex-direction:column;gap:8px;height:100%;padding:24px;color:inherit;text-decoration:none;border-radius:inherit}',
+  'home-card':
+    'a{display:flex;flex-direction:column;gap:8px;height:100%;padding:24px;color:inherit;text-decoration:none;border-radius:inherit}',
 };
 for (const [cls, sheet] of Object.entries(LINK_SHEETS)) {
   document.querySelectorAll(`r-link.${cls}`).forEach((el) => el.setAttribute('sheet', sheet));

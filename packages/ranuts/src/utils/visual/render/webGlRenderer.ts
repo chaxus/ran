@@ -64,11 +64,7 @@ export class WebGLRenderer extends BatchRenderer {
   }
 
   protected setRootTransform(a: number, b: number, c: number, d: number, tx: number, ty: number): void {
-    this.gl.uniformMatrix3fv(
-      this.unifLoc.u_root_transform,
-      false,
-      new Float32Array([a, b, 0, c, d, 0, tx, ty, 1]),
-    );
+    this.gl.uniformMatrix3fv(this.unifLoc.u_root_transform, false, new Float32Array([a, b, 0, c, d, 0, tx, ty, 1]));
   }
 
   protected updateBuffer(): void {

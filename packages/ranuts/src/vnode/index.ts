@@ -10,15 +10,7 @@ import { eventListenersModule } from './modules/listeners';
 import { propsModule } from './modules/props';
 import { styleModule } from './modules/style';
 import * as is from './is';
-import type {
-  ArrayOrElement,
-  Key,
-  VNode,
-  VNodeChildElement,
-  VNodeChildren,
-  VNodeData,
-  VNodes,
-} from './vnode';
+import type { ArrayOrElement, Key, VNode, VNodeChildElement, VNodeChildren, VNodeData, VNodes } from './vnode';
 import type { Hooks } from './hooks';
 import type { DOMAPI, Fragment } from './htmlDomApi';
 import type { ModuleHook, Modules } from './modules';

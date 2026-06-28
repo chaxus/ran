@@ -168,7 +168,8 @@ export class HTMLElementMock {
     if (typeof (this as any)._preSerialize === 'function') {
       (this as any)._preSerialize();
     }
-    const tagName = tagNameOverride || (this as Record<string, unknown>)._ssrTag as string | undefined || this.tagName;
+    const tagName =
+      tagNameOverride || ((this as Record<string, unknown>)._ssrTag as string | undefined) || this.tagName;
     const attrs = Array.from(this.attributes.entries())
       .map(([k, v]) => ` ${k}="${escapeHtmlAttribute(v)}"`)
       .join('');
