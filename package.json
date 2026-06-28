@@ -30,7 +30,7 @@
     "prettier": "^3.8.3",
     "terser": "^5.48.0",
     "typescript": "^6.0.3",
-    "vite": "^8.0.14",
+    "vite": "^6.4.3",
     "vite-plugin-dts": "^5.0.1",
     "vitest": "^4.1.7",
     "vue": "^3.5.34",

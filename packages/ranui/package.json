@@ -227,7 +227,7 @@
     "svgo": "^4.0.1",
     "tsx": "^4.22.3",
     "typescript": "^6.0.3",
-    "vite": "^8.0.14",
+    "vite": "^6.4.3",
     "vitest": "^4.1.7"
   },
   "dependencies": {
