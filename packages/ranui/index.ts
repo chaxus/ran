@@ -75,3 +75,61 @@ import '@/components/section';
 import '@/components/router';
 import '@/components/route';
 import '@/components/link';
+
+// ── Typed custom elements ───────────────────────────────────────────────────
+// Augment the DOM tag map so `document.querySelector('r-select')` and
+// `document.createElement('r-input')` are typed as the component class — no
+// `as` casts needed to read `.value` and other component properties.
+import type { Button as TButton } from '@/components/button';
+import type { Icon as TIcon } from '@/components/icon';
+import type { ImageElement as TImage } from '@/components/image';
+import type { Input as TInput } from '@/components/input';
+import type { CustomMessage as TMessage } from '@/components/message';
+import type { Skeleton as TSkeleton } from '@/components/skeleton';
+import type { TabPane as TTabPane } from '@/components/tabpane';
+import type { Tabs as TTabs } from '@/components/tab';
+import type { RadarChart as TRadar } from '@/components/radar';
+import type { RanPlayer as TPlayer } from '@/components/player';
+import type TModal from '@/components/modal';
+import type { Select as TSelect } from '@/components/select';
+import type { Progress as TProgress } from '@/components/progress';
+import type TCheckbox from '@/components/checkbox';
+import type TColorPicker from '@/components/colorpicker';
+import type { Loading as TLoading } from '@/components/loading';
+import type { Math as TMath } from '@/components/math';
+import type { Popover as TPopover } from '@/components/popover';
+import type { Form as TForm } from '@/components/form';
+import type { Card as TCard } from '@/components/card';
+import type { Section as TSection } from '@/components/section';
+import type { Router as TRouter } from '@/components/router';
+import type { Route as TRoute } from '@/components/route';
+import type { Link as TLink } from '@/components/link';
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'r-button': TButton;
+    'r-icon': TIcon;
+    'r-img': TImage;
+    'r-input': TInput;
+    'r-message': TMessage;
+    'r-skeleton': TSkeleton;
+    'r-tab': TTabPane;
+    'r-tabs': TTabs;
+    'r-radar': TRadar;
+    'r-player': TPlayer;
+    'r-modal': TModal;
+    'r-select': TSelect;
+    'r-progress': TProgress;
+    'r-checkbox': TCheckbox;
+    'r-colorpicker': TColorPicker;
+    'r-loading': TLoading;
+    'r-math': TMath;
+    'r-popover': TPopover;
+    'r-form': TForm;
+    'r-card': TCard;
+    'r-section': TSection;
+    'r-router': TRouter;
+    'r-route': TRoute;
+    'r-link': TLink;
+  }
+}

@@ -6,6 +6,25 @@
   "module": "dist/index.js",
   "type": "module",
   "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "builder": [
+        "./dist/builder.d.ts"
+      ],
+      "ssr": [
+        "./dist/ssr.d.ts"
+      ],
+      "ssr-stream": [
+        "./dist/ssr-stream.d.ts"
+      ],
+      "typings": [
+        "./dist/typings.d.ts"
+      ],
+      "*": [
+        "./dist/index.d.ts"
+      ]
+    }
+  },
   "homepage": "https://chaxus.github.io/ran/src/ranui/",
   "repository": {
     "type": "git",

@@ -41,7 +41,20 @@ npm install ranui --save
 
 ## Documentation and Examples
 
-[See components and use examples](https://chaxus.github.io/ran/cn/src/ranui/)
+[See components and use examples](https://chaxus.github.io/ran/src/ranui/)
+
+### Components & API reference
+
+Every element's attributes, properties, **events (with `detail` shapes)**, slots, and `::part()` names are generated from source — no need to grep the exports:
+
+- Per-element API: [docs/COMPONENTS.md](./docs/COMPONENTS.md)
+- Design standard (color/spacing/typography/motion/a11y): [docs/DESIGN.md](./docs/DESIGN.md)
+
+Regenerate after changing a component's API with:
+
+```bash
+pnpm doc:api
+```
 
 ### Styling Documentation
 
@@ -58,21 +71,21 @@ Refresh the styling docs with:
 pnpm doc:style
 ```
 
-### Themes and Theme Packs
+### Theming
 
-RanUI supports light, dark, and system themes, plus multiple CSS-only theme packs.
+ranui ships a single token system based on the [Geist design system](https://vercel.com/design), with `light`, `dark`, and `system` modes — there are no theme packs. Switch the mode or override any token at runtime (SSR-safe):
 
 ```ts
-import { initTheme, setTheme, setThemePack, setThemeToken } from 'ranui';
-import 'ranui/theme-packs/pixel-retro';
+import { initTheme, setTheme, setThemeToken, setThemeTokens } from 'ranui';
+import 'ranui/style';
 
-initTheme();
-setTheme('system');
-setThemePack('pixel-retro');
-setThemeToken('--ran-color-primary', '#2563eb');
+initTheme(); // restore the persisted choice on load
+setTheme('system'); // 'light' | 'dark' | 'system'
+setThemeToken('--ran-color-primary', '#6c47ff');
+setThemeTokens({ '--ran-radius-md': '10px' });
 ```
 
-Available theme packs include `windows-98`, `windows-xp`, `system-6`, `wired`, `paper`, `pixel-retro`, and `neo-brutalism`. Use `setThemePack('default')` to restore the default theme pack.
+Dark mode redefines only the base color scale; semantic tokens (`--ran-color-*`) reference it and flip automatically. See [docs/THEME_STYLE_SYSTEM_DESIGN.md](./docs/THEME_STYLE_SYSTEM_DESIGN.md) and [docs/DESIGN.md](./docs/DESIGN.md).
 
 ## Imports
 

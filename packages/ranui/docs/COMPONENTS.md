@@ -6,7 +6,7 @@ shape), slots, and `::part()` names — extracted from source. For CSS variables
 (theming tokens) see [style-tokens-public.md](./style-tokens-public.md); for
 design rules see [DESIGN.md](./DESIGN.md).
 
-Generated at: 2026-06-28T07:18:48.760Z
+Generated at: 2026-06-28T09:23:19.644Z
 
 29 custom elements.
 
@@ -54,7 +54,7 @@ Source: `components/colorpicker/index.ts`
 - **Properties**: `sheet: string`, `value: string`
 - **Events**: `change`
 - **Slots**: —
-- **Parts**: —
+- **Parts**: `block`, `swatch`
 
 ## `<r-content>`
 
@@ -286,7 +286,7 @@ Source: `components/section/index.ts`
 
 Source: `components/select/index.ts`
 
-- **Attributes**: `clear`, `defaultValue: string`, `disabled: boolean`, `dropdownclass: string`, `getPopupContainerId: string`, `placement: string`, `sheet: string`, `showSearch: string`, `trigger: string`, `type: string`
+- **Attributes**: `clear`, `defaultValue: string`, `disabled: boolean`, `dropdownclass: string`, `getPopupContainerId: string`, `placement: string`, `sheet: string`, `showSearch: string`, `trigger: string`, `type: string`, `value: string`
 - **Properties**: `defaultValue: string`, `disabled: boolean`, `dropdownclass: string`, `getPopupContainerId: string`, `placement: string`, `sheet: string`, `showSearch: string`, `trigger: string`, `type: string`, `value: string`
 - **Events**: `change` → detail `{ label, value }` · `search` → detail `{ value }`
 - **Slots**: `default`

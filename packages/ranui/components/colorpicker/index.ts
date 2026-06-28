@@ -78,8 +78,12 @@ export class ColorPicker extends RanElement {
     super();
     this._shadowDom = ensureShadowRoot(this, colorPickerCss);
     const popoverBlock = ensureShadowElement(this._shadowDom, 'r-popover', () => {
-      const colorpickerInner = Div().class('ran-colorpicker-inner').build() as HTMLDivElement;
-      const colorpicker = Div().class('ran-colorpicker-block').children(colorpickerInner).build() as HTMLDivElement;
+      const colorpickerInner = Div().class('ran-colorpicker-inner').part('swatch').build() as HTMLDivElement;
+      const colorpicker = Div()
+        .class('ran-colorpicker-block')
+        .part('block')
+        .children(colorpickerInner)
+        .build() as HTMLDivElement;
       const popoverContent = View('r-content').class('ran-content').build() as HTMLElement;
       return View('r-popover')
         .class('ran-popover')
