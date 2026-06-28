@@ -144,7 +144,10 @@
 
 :host {
   text-align: var(--ran-dropdown-host-text-align, left);
-  z-index: 10;
+  /* The host is positioned by the consumer (select/popover) and portaled to
+     <body>, so it must carry the overlay z-index itself — the inner element's
+     z-index is trapped in the host's stacking context. */
+  z-index: var(--ran-dropdown-host-z-index, var(--ran-z-dropdown, 1100));
 }
 
 .ranui-dropdown {

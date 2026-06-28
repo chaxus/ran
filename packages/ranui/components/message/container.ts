@@ -12,7 +12,8 @@ export const getMessageHostSelector = (): string => `[${MESSAGE_HOST_ATTR}="true
 
 export const applyHostStyle = (host: HTMLElement, options?: MessageRenderOptions): void => {
   const top = options?.top ?? 8;
-  const zIndex = options?.zIndex ?? 1010;
+  // Toasts sit at the top of the overlay ladder (see --ran-z-message).
+  const zIndex = options?.zIndex ?? 1200;
   host.style.setProperty('position', 'fixed');
   host.style.setProperty('top', typeof top === 'number' ? `${top}px` : String(top));
   host.style.setProperty('left', '0');

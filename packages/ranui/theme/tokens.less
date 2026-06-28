@@ -137,6 +137,15 @@
   --ran-shadow-menu: 0 2px 4px rgba(0, 0, 0, 0.05), 0 8px 24px -6px rgba(0, 0, 0, 0.14);
   --ran-shadow-modal: 0 4px 12px rgba(0, 0, 0, 0.08), 0 20px 48px -12px rgba(0, 0, 0, 0.22);
 
+  /* ── Z-index ladder (overlays) ──────────────────────────────────────
+     Floating overlays portal to <body>, so they need an explicit stacking
+     tier above page content. Dropdowns/popovers sit above modals so a select
+     opened inside a modal stays visible; toasts sit above everything. Override
+     a tier globally here, or per component via --ran-[component]-z-index. */
+  --ran-z-modal: 1000;
+  --ran-z-dropdown: 1100;
+  --ran-z-message: 1200;
+
   /* ── Focus ring (Geist) ─────────────────────────────────────────── */
   --ran-focus-ring: 0 0 0 2px var(--ran-background-100), 0 0 0 4px var(--ran-color-primary);
 
