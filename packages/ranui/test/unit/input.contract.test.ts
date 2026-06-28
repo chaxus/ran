@@ -226,17 +226,20 @@ describe('r-input contract', () => {
     expect(input.label).toBe('My Label');
   });
 
-  it('required getter returns attribute', () => {
+  it('required getter reflects the attribute as a boolean', () => {
     const input = document.createElement('r-input') as Input;
     document.body.appendChild(input);
+    expect(input.required).toBe(false);
     input.required = 'true';
-    expect(input.required).toBe('');
+    expect(input.required).toBe(true);
   });
 
-  it('disabled getter returns string of isDisabled result', () => {
+  it('disabled getter returns a boolean', () => {
     const input = document.createElement('r-input') as Input;
     document.body.appendChild(input);
-    expect(typeof input.disabled).toBe('string');
+    expect(input.disabled).toBe(false);
+    input.disabled = true;
+    expect(input.disabled).toBe(true);
   });
 
   it('min getter returns attribute', () => {
