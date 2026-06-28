@@ -14,7 +14,8 @@ const FREEZE_ANIMATIONS = `
 `;
 
 test.beforeEach(async ({ page }) => {
-  await page.goto(DEV_SERVER, { waitUntil: 'networkidle' });
+  // The demo is a routed app; component showcases live on the /components route.
+  await page.goto(`${DEV_SERVER}components`, { waitUntil: 'domcontentloaded' });
   // Wait until at least the core custom element is registered
   await page.waitForFunction(() => customElements.get('r-button'));
   await page.addStyleTag({ content: FREEZE_ANIMATIONS });
