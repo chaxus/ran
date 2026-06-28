@@ -517,4 +517,16 @@ describe('r-select contract', () => {
     expect(registeredTypes).toContain('mouseenter');
     expect(registeredTypes).toContain('mouseleave');
   });
+
+  it('setting the value attribute reflects to the closed-state label', () => {
+    const select = document.createElement('r-select') as Select;
+    select.innerHTML = '<r-option value="a">Apple</r-option><r-option value="b">Banana</r-option>';
+    document.body.appendChild(select);
+
+    select.setAttribute('value', 'b');
+    expect((select as unknown as { _text: HTMLElement })._text.textContent).toBe('Banana');
+
+    select.value = 'a';
+    expect((select as unknown as { _text: HTMLElement })._text.textContent).toBe('Apple');
+  });
 });

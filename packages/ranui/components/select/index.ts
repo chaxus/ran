@@ -72,6 +72,7 @@ export class Select extends RanElement {
       'sheet',
       'clear',
       'type',
+      'value',
       'defaultValue',
       'showSearch',
       'placement', // 弹窗的方向
@@ -642,8 +643,24 @@ export class Select extends RanElement {
         this.tabIndex = -1;
       }
     }
+    if (name === 'value') this.syncSelectedFromValue(newValue);
     if (name === 'sheet' && this._shadowDom) this.handlerExternalCss();
   }
+
+  /**
+   * Reflect a programmatic `value` change to the closed-state label. Lets
+   * `select.value = 'x'` (or setAttribute('value', 'x')) update the displayed
+   * selection without the consumer having to "nudge" the active option.
+   */
+  syncSelectedFromValue = (value: string): void => {
+    if (!value) return;
+    // Already reflected (e.g. the change came from selectOptionElement itself).
+    if (this._activeOption?.getAttribute('value') === value) return;
+    const option = Array.from(this.querySelectorAll('r-option')).find(
+      (item) => item.getAttribute('value') === value,
+    ) as HTMLElement | undefined;
+    if (option) this.selectOptionElement(option, false);
+  };
 }
 
 defineSSR('r-select', Select as unknown as new () => HTMLElement);
