@@ -423,6 +423,47 @@
               <r-radar style="width: 320px; height: 320px"></r-radar>
             </div>
           </section>
+
+          <section>
+            <h2 data-i18n="sec.more">Overlays, media &amp; utilities</h2>
+            <div class="grid">
+              <div class="demo-card">
+                <h3 data-i18n="card.icon">Icon</h3>
+                <div class="row">
+                  <r-icon name="home" size="22"></r-icon>
+                  <r-icon name="setting" size="22"></r-icon>
+                  <r-icon name="lock" size="22"></r-icon>
+                  <r-icon name="search" size="22"></r-icon>
+                  <r-icon name="loading" size="22" spin></r-icon>
+                </div>
+              </div>
+              <div class="demo-card">
+                <h3 data-i18n="card.colorpicker">Color picker</h3>
+                <div class="row">
+                  <r-colorpicker value="#006bff"></r-colorpicker>
+                  <r-colorpicker value="rgba(255,0,0,0.5)"></r-colorpicker>
+                </div>
+              </div>
+              <div class="demo-card">
+                <h3 data-i18n="card.popover">Popover</h3>
+                <r-popover placement="top" trigger="hover,click" arrow="true">
+                  <r-button data-i18n="popover.trigger">Hover or click</r-button>
+                  <r-content>
+                    <div style="padding: 8px 12px" data-i18n="popover.content">Popover content</div>
+                  </r-content>
+                </r-popover>
+              </div>
+              <div class="demo-card">
+                <h3 data-i18n="card.math">Math</h3>
+                <r-math latex="E = mc^2"></r-math>
+                <r-math latex="x = {-b \pm \sqrt{b^2-4ac} \over 2a}"></r-math>
+              </div>
+            </div>
+            <div class="panel" style="margin-top: var(--ran-space-4)">
+              <h3 data-i18n="card.player" style="margin: 0 0 var(--ran-space-3); font-size: 14px; font-weight: 600">Player</h3>
+              <r-player src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" style="width: 100%; max-width: 560px; display: block"></r-player>
+            </div>
+          </section>
         </r-route>
 
         <!-- ════════════ Guide ════════════ -->
