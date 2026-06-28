@@ -199,8 +199,10 @@
       top: var(--ran-select-selection-icon-top, 50%);
       inset-inline-start: var(--ran-select-selection-icon-inset-inline-start, auto);
       inset-inline-end: var(--ran-select-selection-icon-inset-inline-end, 8px);
-      height: var(--ran-select-selection-icon-height, 12px);
-      margin-top: var(--ran-select-selection-icon-margin-top, -3px);
+      height: var(--ran-select-selection-icon-height, 16px);
+      /* center on the vertical midline regardless of icon height (was a brittle -3px margin) */
+      transform: var(--ran-select-selection-icon-transform, translateY(-50%));
+      margin-top: var(--ran-select-selection-icon-margin-top, 0);
       font-size: var(--ran-select-selection-icon-font-size, 12px);
       pointer-events: var(--ran-select-selection-icon-pointer-events, none);
     }
