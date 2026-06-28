@@ -76,15 +76,15 @@ export class Checkbox extends RanElement {
     }
     this.updateChecked();
   }
-  get checked(): string {
+  get checked(): boolean {
     const checked = this.getAttribute('checked');
     if (falseList.includes(checked)) {
       this.context.checked = false;
     }
-    return `${this.context.checked}`;
+    return this.context.checked;
   }
-  set checked(value: string) {
-    if (falseList.includes(value)) {
+  set checked(value: boolean | string) {
+    if (falseList.includes(value as boolean | string | null | undefined)) {
       this.setAttribute('checked', 'false');
       this.context.checked = false;
     } else {

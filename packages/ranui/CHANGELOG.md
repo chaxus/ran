@@ -30,6 +30,7 @@ All notable changes to `ranui` will be documented in this file.
 ### Fixed
 
 - Fixed dark-mode rendering bugs from hardcoded colors: `dropdown-item` text/hover/active, `skeleton` base + shimmer (previously invisible in dark), and `radar` canvas label color and grid lines now follow the theme tokens.
+- **`r-checkbox.checked` now returns a `boolean`** instead of the string `"true"`/`"false"`. The string form made `if (el.checked)` always truthy (even when unchecked). The setter still accepts boolean or string. (Breaking — pre-1.0 beta.)
 - Demo hero CTA text is now vertically centered (the inner anchor's `height:100%` collapsed against an auto-height host; fixed with a fixed host height + `line-height:1`).
 - Demo route navigation is now reachable on mobile (it was hidden under 820px); it drops to its own full-width row instead.
 - Demo accessibility: GitHub/Issues links now have `aria-label`s (they become icon-only on mobile), the primary `<nav>` is labelled, and the demo honors `prefers-reduced-motion`.
