@@ -153,11 +153,9 @@ body::before {
 }
 
 .lang-switch {
+  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 2px;
-  padding: 0 var(--ran-space-2);
-  border-radius: var(--ran-radius-full);
   color: var(--ran-color-text-secondary);
   transition: color var(--ran-motion-duration-base);
 }
@@ -166,9 +164,22 @@ body::before {
   color: var(--ran-color-text);
 }
 
+/* Globe sits out of flow at the control's left edge, so the select's box (and
+   therefore its dropdown) starts at the same x — keeping trigger and dropdown
+   left-aligned. The select text is padded to clear the globe. */
+.lang-switch > r-icon {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
 .lang-select {
-  width: 84px;
-  --ran-select-selection-item-left: 4px;
+  width: 96px;
+  --ran-select-selection-item-left: 24px;
+  /* no arrow, so the item doesn't need to reserve room on the right */
+  --ran-select-selection-item-right: 8px;
   --ran-select-selection-color: currentColor;
   --ran-select-root-color: currentColor;
   /* drop the chevron — the globe leads instead */
