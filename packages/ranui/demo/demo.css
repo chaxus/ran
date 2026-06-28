@@ -152,8 +152,27 @@ body::before {
   outline-offset: 2px;
 }
 
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0 var(--ran-space-2);
+  border-radius: var(--ran-radius-full);
+  color: var(--ran-color-text-secondary);
+  transition: color var(--ran-motion-duration-base);
+}
+
+.lang-switch:hover {
+  color: var(--ran-color-text);
+}
+
 .lang-select {
-  width: 112px;
+  width: 84px;
+  --ran-select-selection-item-left: 4px;
+  --ran-select-selection-color: currentColor;
+  --ran-select-root-color: currentColor;
+  /* drop the chevron — the globe leads instead */
+  --ran-select-selection-icon-display: none;
 }
 
 #theme-toggle {

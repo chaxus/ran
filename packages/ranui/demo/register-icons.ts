@@ -10,6 +10,7 @@ import lock from '@/assets/icons/lock.svg?raw';
 import search from '@/assets/icons/search.svg?raw';
 import github from '@/assets/icons/github.svg?raw';
 import issue from '@/assets/icons/issue.svg?raw';
+import globe from '@/assets/icons/globe.svg?raw';
 import { registerIcons } from '@/components/icon';
 
-registerIcons({ home, setting, loading, lock, search, github, issue });
+registerIcons({ home, setting, loading, lock, search, github, issue, globe });
