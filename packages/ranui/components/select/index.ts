@@ -222,6 +222,7 @@ export class Select extends RanElement {
   syncActiveState = (): void => {
     const options = this.getDropdownOptions();
     options.forEach((item, index) => {
+      item.setAttribute('role', 'option');
       item.setAttribute('aria-selected', item === this._activeOption ? 'true' : 'false');
       if (!item.id) {
         item.id = `${this._listboxId}-option-${index}`;

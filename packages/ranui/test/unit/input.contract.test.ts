@@ -97,7 +97,7 @@ describe('r-input contract', () => {
     expect((input as any)._input.getAttribute('status')).toBe('error');
   });
 
-  it('fires input and change events on native input', () => {
+  it('fires input on each keystroke and change only on native change (blur)', () => {
     const input = document.createElement('r-input') as Input;
     document.body.appendChild(input);
 
@@ -113,8 +113,13 @@ describe('r-input contract', () => {
     Object.defineProperty(event, 'target', { value: innerInput });
     innerInput.dispatchEvent(event);
 
+    // input fires per keystroke; change must NOT (native semantics)
     expect(inputEvents.length).toBeGreaterThan(0);
-    expect(changeEvents.length).toBeGreaterThan(0);
+    expect(changeEvents.length).toBe(0);
+
+    // change forwards only when the native input fires its `change` (on blur/commit)
+    innerInput.dispatchEvent(new Event('change'));
+    expect(changeEvents.length).toBe(1);
   });
 
   it('min/max/step only apply when type is number', () => {
