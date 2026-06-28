@@ -68,13 +68,13 @@ describe('package export source contracts', () => {
     const packageJson = read('package.json');
     const viteConfig = read('vite.config.ts');
 
-    for (const subpath of ['./visual', './vnode', './wicket']) {
+    for (const subpath of ['./visual', './vnode']) {
       expect(packageJson).toContain(`"${subpath}"`);
     }
 
     // Each subpath needs a real ESM build entry and a populated barrel.
     expect(viteConfig).toContain("'utils/visual': resolve");
-    for (const barrel of ['src/vnode/index.ts', 'src/wicket/index.ts']) {
+    for (const barrel of ['src/vnode/index.ts', 'src/node/index.ts']) {
       expect(read(barrel).length).toBeGreaterThan(20);
     }
 
@@ -97,6 +97,18 @@ describe('package export source contracts', () => {
     for (const dir of ['src/arithmetic', 'src/sort', 'src/optimize']) {
       expect(existsSync(resolve(root, dir))).toBe(false);
     }
+  });
+
+  it('drops the niche, broken wicket subpath', () => {
+    const packageJson = read('package.json');
+    const viteConfig = read('vite.config.ts');
+
+    // Single-export WebView class with a recursive size getter/setter (stack
+    // overflow on construct) and an add() that never registers keys — removed
+    // rather than merged into utils.
+    expect(packageJson).not.toContain('"./wicket"');
+    expect(viteConfig).not.toContain('wicket:');
+    expect(existsSync(resolve(root, 'src/wicket'))).toBe(false);
   });
 
   it('drops dead/duplicate source (ran / cache / visual demo / websocket dup)', () => {

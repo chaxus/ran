@@ -27,7 +27,6 @@ const ENTRIES: Entry[] = [
   { subpath: 'ranuts/node', file: 'src/node/index.ts', blurb: 'Node 服务端工具（fs / http / ws / 中间件）', runtime: 'node only' },
   { subpath: 'ranuts/visual', file: 'src/utils/visual/index.ts', blurb: '2D 渲染引擎（Canvas / WebGL / WebGPU）', runtime: 'browser only' },
   { subpath: 'ranuts/vnode', file: 'src/vnode/index.ts', blurb: 'Snabbdom 风格虚拟 DOM', runtime: 'browser' },
-  { subpath: 'ranuts/wicket', file: 'src/wicket/index.ts', blurb: 'WebView 桥接通信', runtime: 'browser' },
 ];
 
 type Kind = 'function' | 'class' | 'interface' | 'type' | 'enum' | 'const' | 'other';

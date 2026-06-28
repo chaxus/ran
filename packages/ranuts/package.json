@@ -32,10 +32,6 @@
     "./vnode": {
       "types": "./dist/src/vnode/index.d.ts",
       "import": "./dist/src/vnode/index.js"
-    },
-    "./wicket": {
-      "types": "./dist/src/wicket/index.d.ts",
-      "import": "./dist/src/wicket/index.js"
     }
   },
   "repository": {
