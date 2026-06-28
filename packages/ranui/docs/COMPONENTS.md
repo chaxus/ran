@@ -6,7 +6,7 @@ shape), slots, and `::part()` names — extracted from source. For CSS variables
 (theming tokens) see [style-tokens-public.md](./style-tokens-public.md); for
 design rules see [DESIGN.md](./DESIGN.md).
 
-Generated at: 2026-06-28T04:23:57.194Z
+Generated at: 2026-06-28T04:27:49.124Z
 
 29 custom elements.
 
@@ -15,7 +15,13 @@ Generated at: 2026-06-28T04:23:57.194Z
 Source: `components/button/index.ts`
 
 - **Attributes**: `disabled: boolean | string`, `effect: string`, `icon: string`, `iconSize: string`, `sheet: string`, `type: string`
-- **Properties**: `disabled: boolean | string`, `effect: string`, `icon: string`, `iconSize: string`, `sheet: string`, `type: string`
+- **Properties**: 
+  - `disabled: boolean | string`
+  - `effect: string`
+  - `icon: string`
+  - `iconSize: string`
+  - `sheet: string`
+  - `type: string` — Visual variant: `''` (default) | `'primary'` | `'warning'` | `'text'`. Drives the `:host([type=...])` styles.
 - **Events**: —
 - **Slots**: `default`
 - **Parts**: `button`, `content`
@@ -115,7 +121,23 @@ Source: `components/image/index.ts`
 Source: `components/input/index.ts`
 
 - **Attributes**: `allowclear`, `count`, `disabled: boolean`, `icon: string`, `label: string`, `maxlength`, `maxrows`, `message: string`, `minrows`, `name: string`, `onPressEnter`, `placeholder: string`, `prefix: string`, `sheet: string`, `showcount`, `status: string`, `suffix: string`, `type: string`, `value: string`, `variant`
-- **Properties**: `disabled: boolean`, `icon: string`, `label: string`, `max: string`, `message: string`, `min: string`, `name: string`, `placeholder: string`, `prefix: string`, `required: boolean`, `sheet: string`, `status: string`, `step: string`, `suffix: string`, `type: string`, `value: string`
+- **Properties**: 
+  - `disabled: boolean` — input 上 disabled 属性
+  - `icon: string` — 一个 icon
+  - `label: string` — 类似于 Metiral Design 的输入体验。
+  - `max: string` — 当 input 类型为 number 类型时，可以获取 max 属性
+  - `message: string` — 下方的提示/校验文案
+  - `min: string` — 当 input 类型为 number 类型时，可以获取 min 属性
+  - `name: string` — 与 form 组件联动时，收集的属性名
+  - `placeholder: string` — input 的占位字符
+  - `prefix: string` — 前面的 icon
+  - `required: boolean` — input 是否为必选
+  - `sheet: string`
+  - `status: string` — input 框的状态
+  - `step: string` — 当 input 类型为 number 类型时，可以获取 step 属性
+  - `suffix: string` — 后面的 icon
+  - `type: string` — input 的类型
+  - `value: string` — input 的值
 - **Events**: `change` → detail `{ value }` · `input` → detail `{ value }`
 - **Slots**: —
 - **Parts**: `content`, `input`, `label`, `message`

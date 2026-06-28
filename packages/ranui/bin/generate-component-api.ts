@@ -12,6 +12,7 @@ const OUTPUT_FILE = path.join(ROOT, 'docs', 'COMPONENTS.md');
 interface Prop {
   name: string;
   type: string;
+  desc: string;
 }
 interface Evt {
   name: string;
@@ -73,9 +74,31 @@ function resolveType(type: string, aliases: Map<string, string>): string {
   return aliases.get(t) ?? t;
 }
 
+/** One-line description per accessor, from the preceding JSDoc (`@description`
+ * or first text line). Getter wins over setter. */
+function extractDescriptions(src: string): Map<string, string> {
+  const out = new Map<string, string>();
+  const re = /\/\*\*([\s\S]*?)\*\/\s*(?:get|set)\s+([A-Za-z$][\w$]*)\s*\(/g;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(src))) {
+    const name = m[2];
+    if (out.has(name)) continue;
+    const lines = m[1]
+      .split('\n')
+      .map((l) => l.replace(/^\s*\*\s?/, '').trim())
+      .filter(Boolean);
+    const descLine =
+      lines.find((l) => /@description/i.test(l))?.replace(/.*@description:?\s*/i, '') ??
+      lines.find((l) => !l.startsWith('@'));
+    if (descLine) out.set(name, descLine.replace(/^(获取|设置)\s*/, '').trim());
+  }
+  return out;
+}
+
 /** Public accessors with their type — getter return type wins, else setter param type. */
 function extractProperties(src: string): Prop[] {
   const aliases = buildTypeAliases(src);
+  const descs = extractDescriptions(src);
   const types = new Map<string, string>();
   const add = (name: string, type: string): void => {
     if (name === 'observedAttributes' || name.startsWith('_')) return;
@@ -93,7 +116,7 @@ function extractProperties(src: string): Prop[] {
   const getBare = /(?:^|\n)\s*get\s+([a-zA-Z$][\w$]*)\s*\(\)\s*\{/g;
   while ((m = getBare.exec(src))) add(m[1], '');
   return Array.from(types)
-    .map(([name, type]) => ({ name, type: resolveType(type, aliases) }))
+    .map(([name, type]) => ({ name, type: resolveType(type, aliases), desc: descs.get(name) ?? '' }))
     .sort((a, b) => a.name.localeCompare(b.name));
 }
 
@@ -157,7 +180,12 @@ function renderInline(values: string[]): string {
 
 function renderProps(props: Prop[]): string {
   if (!props.length) return '—';
-  return props.map((p) => `\`${p.type ? `${p.name}: ${p.type}` : p.name}\``).join(', ');
+  const sig = (p: Prop): string => `\`${p.type ? `${p.name}: ${p.type}` : p.name}\``;
+  // If any property has a description, use a one-per-line list; else keep it inline.
+  if (props.some((p) => p.desc)) {
+    return `\n${props.map((p) => `  - ${sig(p)}${p.desc ? ` — ${p.desc}` : ''}`).join('\n')}`;
+  }
+  return props.map(sig).join(', ');
 }
 
 /** Attributes annotated with the type of their matching property, when one exists. */
