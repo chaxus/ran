@@ -1,11 +1,4 @@
-import home from '@/assets/icons/home.svg?raw';
-import setting from '@/assets/icons/setting.svg?raw';
-import loading from '@/assets/icons/loading.svg?raw';
-import lock from '@/assets/icons/lock.svg?raw';
-import search from '@/assets/icons/search.svg?raw';
-import github from '@/assets/icons/github.svg?raw';
-import issue from '@/assets/icons/issue.svg?raw';
-import { registerIcons } from '@/components/icon/index';
+import './register-icons'; // must run before any component module (see file)
 import message from '@/components/message';
 import { getTheme, initTheme, setTheme } from '@/utils/theme';
 import { applyLanguage, getLang, setLang } from './i18n';
@@ -13,7 +6,6 @@ import type { Lang } from './i18n';
 import '../style';
 import '../index';
 
-registerIcons({ home, setting, loading, lock, search, github, issue });
 (window as unknown as { message: typeof message }).message = message;
 
 initTheme();
