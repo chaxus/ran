@@ -34,10 +34,13 @@
           >
             <r-icon name="issue" size="16"></r-icon><span class="nav-link-text" data-i18n="nav.issues">Issues</span>
           </a>
-          <r-select id="lang-select" class="lang-select" trigger="click">
-            <r-option value="en">English</r-option>
-            <r-option value="zh">中文</r-option>
-          </r-select>
+          <div class="lang-switch">
+            <r-icon name="globe" size="16" aria-hidden="true"></r-icon>
+            <r-select id="lang-select" class="lang-select" type="text" trigger="click">
+              <r-option value="en">English</r-option>
+              <r-option value="zh">中文</r-option>
+            </r-select>
+          </div>
           <button id="theme-toggle" type="button">☾ Dark</button>
         </div>
       </header>
