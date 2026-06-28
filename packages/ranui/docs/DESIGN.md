@@ -102,7 +102,15 @@ Decide by **role**; the role fixes font, size, weight, line-height:
 Radius: `--ran-radius-sm` 6 · `--ran-radius-md` 12 · `--ran-radius-lg` 16 · `--ran-radius-full` 9999.
 - Controls (button, input, select) → `sm`. Cards / dialogs → `md`. Large surfaces → `lg`. Pills / avatars → `full`.
 
-Elevation (subtle by design): `--ran-shadow-elevated` (raised cards), `--ran-shadow-menu` (popovers & menus), `--ran-shadow-modal` (dialogs).
+**Elevation is a role, not decoration.** Pick the shadow by *what the element is*, and make sure the tier is actually perceptible — a shadow you can't see fails its job.
+
+| Tier | Token | Use for |
+| --- | --- | --- |
+| Raised | `--ran-shadow-elevated` | In-flow surfaces that also have a border — `r-card`, `r-section`. Subtle on purpose. |
+| Overlay | `--ran-shadow-menu` | Transient layers floating **over** content — `r-dropdown`, `r-select` menu, `r-popover`, tooltips, `r-message`/toast. Must clearly lift off the page. |
+| Modal | `--ran-shadow-modal` | Blocking dialogs — `r-modal`. Strongest. |
+
+A floating overlay must **never** fall back to `--ran-shadow-elevated` (the card tier) — it will look flat. Borderless overlays (dropdown, toast) rely on the shadow alone for separation, so the overlay tiers carry real weight.
 
 ---
 

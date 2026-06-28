@@ -12,7 +12,8 @@ Web Components library built with TypeScript. All components use Shadow DOM enca
 - **Dark-safe fallbacks.** A component token's fallback must point at a token that *flips* (`var(--ran-color-text, …)`, `var(--ran-gray-alpha-100, …)`, `var(--ran-blue-100, …)`) — never a light-only literal like `rgba(0,0,0,.06)` or `#e6f7ff`, which breaks in dark mode.
 - **Spacing:** the `--ran-space-*` scale only (4px base, 9 values). 8 within a group, 16 between groups, 32–40 between sections.
 - **Typography:** choose a role (heading / label / copy / button / mono), not a raw px size.
-- **Radius/elevation/motion:** use the tokens; prefer no motion (0ms) and keep what remains quick (150/200/300ms); respect `prefers-reduced-motion`.
+- **Elevation = role.** Pick the shadow by what the element *is*: in-flow surface (card/section) → `--ran-shadow-elevated`; floating overlay (dropdown, select, popover, toast/message) → `--ran-shadow-menu`; blocking dialog → `--ran-shadow-modal`. A floating overlay must never fall back to the card tier (`elevated`) — it looks flat.
+- **Radius/motion:** use the tokens; prefer no motion (0ms) and keep what remains quick (150/200/300ms); respect `prefers-reduced-motion`.
 - **Copy:** buttons = action + object ("Deploy project"); errors = what + how; toasts state the change ("Project deleted").
 - **Accessibility:** WCAG AA contrast; never signal state by color alone (pair an icon/label); visible focus ring on every interactive element; icon-only controls need an `aria-label`; full keyboard nav.
 - **Verify rendered output** in light *and* dark, at narrow *and* wide widths, across the materially changed states — code review alone is not enough.
