@@ -6,6 +6,7 @@ All notable changes to `ranui` will be documented in this file.
 
 ### Added
 
+- `docs/COMPONENTS.md` — a generated per-element API reference (attributes, properties, events, slots, `::part()`) for all 29 custom elements, via `npm run doc:api` (`bin/generate-component-api.ts`). Published with the package and referenced from CLAUDE.md so agents can use components without reading source.
 - `r-input` now signals `status="error"`/`"warning"` with more than color (DESIGN.md §7): an automatic status icon, plus an optional `message` attribute that renders helper/validation text below the field.
 
 - Rebuilt the demo as a token-driven, Geist-style multi-page app routed with ranui's own `r-router`/`r-route`/`r-link` (Overview, Design, Components, Guide) in history mode, with a Cloudflare Pages `_redirects` SPA fallback. Top nav has route links, GitHub/Issues, an EN/中文 `r-select` language switcher (persisted, `navigator.language`-detected), and a light/dark toggle. See `changelogs/2026-06-27.md`.
