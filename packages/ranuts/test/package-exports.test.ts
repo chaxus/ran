@@ -64,21 +64,60 @@ describe('package export source contracts', () => {
     }
   });
 
-  it('exposes the previously-unreachable subsystems as subpaths', () => {
+  it('exposes the real subsystems as subpaths', () => {
     const packageJson = read('package.json');
     const viteConfig = read('vite.config.ts');
 
-    for (const subpath of ['./visual', './vnode', './wicket', './arithmetic', './sort', './optimize']) {
+    for (const subpath of ['./visual', './vnode']) {
       expect(packageJson).toContain(`"${subpath}"`);
     }
 
     // Each subpath needs a real ESM build entry and a populated barrel.
     expect(viteConfig).toContain("'utils/visual': resolve");
-    for (const barrel of ['src/vnode/index.ts', 'src/sort/index.ts']) {
+    for (const barrel of ['src/vnode/index.ts', 'src/node/index.ts']) {
       expect(read(barrel).length).toBeGreaterThan(20);
     }
 
     // The cache demo starts an HTTP server on import, so it must NOT be a subpath.
     expect(packageJson).not.toContain('"./cache"');
+  });
+
+  it('drops the learning-only subpaths (arithmetic / sort / optimize)', () => {
+    const packageJson = read('package.json');
+    const viteConfig = read('vite.config.ts');
+
+    // Removed as public subpaths — they were algorithm/JS-internals exercises with
+    // little library value and only inflated the generated API surface.
+    for (const subpath of ['./arithmetic', './sort', './optimize']) {
+      expect(packageJson).not.toContain(`"${subpath}"`);
+    }
+    for (const entry of ['arithmetic:', 'sort:', 'optimize:']) {
+      expect(viteConfig).not.toContain(entry);
+    }
+    for (const dir of ['src/arithmetic', 'src/sort', 'src/optimize']) {
+      expect(existsSync(resolve(root, dir))).toBe(false);
+    }
+  });
+
+  it('drops the niche, broken wicket subpath', () => {
+    const packageJson = read('package.json');
+    const viteConfig = read('vite.config.ts');
+
+    // Single-export WebView class with a recursive size getter/setter (stack
+    // overflow on construct) and an add() that never registers keys — removed
+    // rather than merged into utils.
+    expect(packageJson).not.toContain('"./wicket"');
+    expect(viteConfig).not.toContain('wicket:');
+    expect(existsSync(resolve(root, 'src/wicket'))).toBe(false);
+  });
+
+  it('drops dead/duplicate source (ran / cache / visual demo / websocket dup)', () => {
+    // Unreachable from any entry point — removed to slim the source tree.
+    for (const dir of ['src/ran', 'src/cache', 'src/utils/visual/demo']) {
+      expect(existsSync(resolve(root, dir))).toBe(false);
+    }
+    // node/websocket.ts was a stale duplicate of node/ws.ts (the one actually exported).
+    expect(existsSync(resolve(root, 'src/node/websocket.ts'))).toBe(false);
+    expect(existsSync(resolve(root, 'src/node/ws.ts'))).toBe(true);
   });
 });

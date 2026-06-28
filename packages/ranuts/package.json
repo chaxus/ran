@@ -32,22 +32,6 @@
     "./vnode": {
       "types": "./dist/src/vnode/index.d.ts",
       "import": "./dist/src/vnode/index.js"
-    },
-    "./wicket": {
-      "types": "./dist/src/wicket/index.d.ts",
-      "import": "./dist/src/wicket/index.js"
-    },
-    "./arithmetic": {
-      "types": "./dist/src/arithmetic/index.d.ts",
-      "import": "./dist/src/arithmetic/index.js"
-    },
-    "./sort": {
-      "types": "./dist/src/sort/index.d.ts",
-      "import": "./dist/src/sort/index.js"
-    },
-    "./optimize": {
-      "types": "./dist/src/optimize/index.d.ts",
-      "import": "./dist/src/optimize/index.js"
     }
   },
   "repository": {
@@ -61,7 +45,9 @@
   "homepage": "https://github.com/chaxus/ran/tree/main/packages/ranuts/docs",
   "files": [
     "dist",
-    "typings.d.ts"
+    "typings.d.ts",
+    "CLAUDE.md",
+    "docs/API.md"
   ],
   "scripts": {
     "build": "sh ./bin/build.sh",
@@ -69,6 +55,7 @@
     "test:coverage": "vitest run --coverage",
     "tsc": "tsc --noEmit",
     "dev": "vite --host",
+    "doc:api": "tsx ./bin/generate-api-docs.ts",
     "prepublish": "npm run build"
   },
   "keywords": [],
@@ -80,6 +67,7 @@
     "@types/node": "^25.3.5",
     "@vitest/coverage-v8": "^4.1.7",
     "@webgpu/types": "^0.1.69",
+    "tsx": "^4.22.3",
     "typescript": "^5.9.3",
     "vite": "^7.3.1",
     "vitest": "^4.0.18"

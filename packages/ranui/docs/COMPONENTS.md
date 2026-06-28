@@ -6,7 +6,7 @@ shape), slots, and `::part()` names — extracted from source. For CSS variables
 (theming tokens) see [style-tokens-public.md](./style-tokens-public.md); for
 design rules see [DESIGN.md](./DESIGN.md).
 
-Generated at: 2026-06-28T04:27:49.124Z
+Generated at: 2026-06-28T07:18:48.760Z
 
 29 custom elements.
 
@@ -52,7 +52,7 @@ Source: `components/colorpicker/index.ts`
 
 - **Attributes**: `disabled`, `sheet: string`, `value: string`
 - **Properties**: `sheet: string`, `value: string`
-- **Events**: —
+- **Events**: `change`
 - **Slots**: —
 - **Parts**: —
 
