@@ -1,242 +1,45 @@
+/**
+ * Trigger swatch styles (live in the shadow root).
+ *
+ * The popover panel is portaled into document.body by r-popover, so its styles
+ * cannot live here — see panel.less, which is injected with the panel content.
+ */
 .ran-colorpicker {
   box-sizing: border-box;
   min-width: 32px;
   height: 32px;
-  border-radius: var(--ran-colorpicker-border-radius, var(--ran-radius-md, 6px));
+  border-radius: var(--ran-colorpicker-border-radius, var(--ran-radius-md, 8px));
   border: var(--ran-colorpicker-border, 1px solid var(--ran-color-border, #d9d9d9));
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: var(--ran-colorpicker-transition, all 0.2s);
+  transition: var(--ran-colorpicker-transition, border-color 0.2s, box-shadow 0.2s);
   background: var(--ran-colorpicker-background, var(--ran-color-bg-elevated, #ffffff));
   padding: 3px;
+
+  &:hover {
+    border-color: var(--ran-colorpicker-border-hover, var(--ran-color-border-hover, var(--ran-gray-500)));
+  }
+
   &-block {
     position: relative;
     border-radius: var(--ran-colorpicker-block-border-radius, var(--ran-radius-sm, 4px));
     width: 24px;
     height: 24px;
-    box-shadow: inset 0 0 1px 0 rgba(0, 0, 0, 0.25);
+    box-shadow: inset 0 0 0 1px var(--ran-gray-alpha-200, rgba(0, 0, 0, 0.09));
     background-image: conic-gradient(
-      rgba(0, 0, 0, 0.06) 0 25%,
+      var(--ran-gray-alpha-100, rgba(0, 0, 0, 0.06)) 0 25%,
       transparent 0 50%,
-      rgba(0, 0, 0, 0.06) 0 75%,
+      var(--ran-gray-alpha-100, rgba(0, 0, 0, 0.06)) 0 75%,
       transparent 0
     );
     background-size: 50% 50%;
   }
+
   &-inner {
     width: 100%;
     height: 100%;
     border-radius: inherit;
-  }
-}
-.ran {
-  &-color {
-    &-picker {
-      box-sizing: border-box;
-      &-inner {
-        &-content {
-          box-sizing: border-box;
-          display: flex;
-          flex-direction: column;
-          width: 234px;
-        }
-      }
-      &-panel {
-        box-sizing: border-box;
-        margin-bottom: 12px;
-      }
-      &-input {
-        &-container {
-          display: flex;
-          width: 100%;
-          align-items: center;
-          justify-content: space-between;
-          &-select {
-            display: block;
-            width: 42px;
-            height: 24px;
-            position: relative;
-            &-item {
-              display: block;
-              width: 42px;
-              height: 24px;
-              .selection {
-                border: none;
-                padding: 0px;
-              }
-              .selection-item {
-                font-size: 12px;
-                left: 0px;
-              }
-              .icon {
-                .ran-icon {
-                  position: relative;
-                  left: 6px;
-                }
-              }
-            }
-            .ranui-select-dropdown {
-              &-option {
-                &-item {
-                  padding: 2px 2px;
-                  &-content {
-                    font-size: 12px;
-                    text-align: center;
-                  }
-                }
-              }
-            }
-          }
-          &-input {
-            &-color {
-              width: 138px;
-              height: 24px;
-              &::part(input) {
-                border-radius: var(--ran-colorpicker-input-border-radius, var(--ran-radius-md, 6px));
-              }
-            }
-            &-number {
-              width: 42px;
-              height: 24px;
-              &::part(input) {
-                border-radius: var(--ran-colorpicker-input-border-radius, var(--ran-radius-md, 6px));
-              }
-            }
-          }
-        }
-      }
-      &-palette {
-        position: relative;
-        min-height: 160px;
-        overflow: hidden;
-        border-radius: var(--ran-colorpicker-palette-border-radius, var(--ran-radius-sm, 4px));
-        &-dot {
-          position: absolute;
-          z-index: 1;
-          will-change: top, left;
-          &-inner {
-            width: 12px;
-            height: 12px;
-            border: 2px solid #fff;
-            border-radius: 50%;
-            cursor: pointer;
-            box-shadow:
-              inset 0 0 1px 0 rgba(0, 0, 0, 0.25),
-              0 0 0 1px rgba(0, 0, 0, 0.06);
-            background-color: transparent;
-          }
-        }
-      }
-      &-saturation {
-        background-color: rgb(0, 106, 255);
-        background-image:
-          linear-gradient(0deg, rgb(0, 0, 0), transparent),
-          linear-gradient(90deg, rgb(255, 255, 255), rgba(255, 255, 255, 0));
-        position: absolute;
-        border-radius: inherit;
-        box-shadow: inset 0 0 1px 0 rgba(0, 0, 0, 0.25);
-        inset: 0;
-      }
-      &-slider-container {
-        box-sizing: border-box;
-        display: flex;
-        gap: 12px;
-        margin-bottom: 12px;
-        &-group {
-          flex: 1;
-          box-sizing: border-box;
-          &-hue {
-            display: block;
-            margin-bottom: 12px;
-            .ran-progress {
-              position: relative;
-              height: 8px;
-              &-dot {
-                z-index: 1;
-                width: 8px;
-                height: 8px;
-                top: -2px;
-                left: -4px;
-                border: 2px solid #fff;
-                border-radius: 50%;
-                cursor: pointer;
-                box-shadow:
-                  inset 0 0 1px 0 rgba(0, 0, 0, 0.25),
-                  0 0 0 1px rgba(0, 0, 0, 0.06);
-              }
-              &-wrap {
-                position: absolute;
-                inset: 0px;
-                border-radius: calc(8px / 2);
-                box-shadow: inset 0 0 1px 0 rgba(0, 0, 0, 0.25);
-                &-value {
-                  background: transparent;
-                }
-              }
-            }
-          }
-          &-alpha {
-            background-image: conic-gradient(
-              rgba(0, 0, 0, 0.06) 0 25%,
-              transparent 0 50%,
-              rgba(0, 0, 0, 0.06) 0 75%,
-              transparent 0
-            );
-            background-size: 8px 8px;
-            border-radius: calc(8px / 2);
-            box-sizing: border-box;
-            .ran-progress {
-              position: relative;
-              height: 8px;
-              &-dot {
-                top: -2px;
-                left: -4px;
-                z-index: 1;
-                width: 8px;
-                height: 8px;
-                border: 2px solid #fff;
-                position: relative;
-                border-radius: 50%;
-                cursor: pointer;
-                box-shadow:
-                  inset 0 0 1px 0 rgba(0, 0, 0, 0.25),
-                  0 0 0 1px rgba(0, 0, 0, 0.06);
-              }
-              &-wrap {
-                position: absolute;
-                inset: 0px;
-                border-radius: calc(8px / 2);
-                box-shadow: inset 0 0 1px 0 rgba(0, 0, 0, 0.25);
-                &-value {
-                  background: transparent;
-                }
-              }
-            }
-          }
-        }
-        &-color-block {
-          position: relative;
-          border-radius: var(--ran-colorpicker-swatch-border-radius, var(--ran-radius-sm, 4px));
-          width: calc(8px * 2 + 12px);
-          height: calc(8px * 2 + 12px);
-          box-shadow: inset 0 0 1px 0 rgba(0, 0, 0, 0.25);
-          background-image: conic-gradient(
-            rgba(0, 0, 0, 0.06) 0 25%,
-            transparent 0 50%,
-            rgba(0, 0, 0, 0.06) 0 75%,
-            transparent 0
-          );
-          background-size: 50% 50%;
-          &-inner {
-            width: 100%;
-            height: 100%;
-            border: 1px solid rgba(0, 0, 0, 0.06);
-            border-radius: inherit;
-          }
-        }
-      }
-    }
   }
 }

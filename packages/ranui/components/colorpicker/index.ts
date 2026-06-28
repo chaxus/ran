@@ -1,12 +1,11 @@
 import { range } from 'ranuts/utils';
 import { signal, createEffect, RanElement } from '@/utils/index';
-import { HEX_COLOR_REGEX, RGBA_REGEX, RGB_REGEX, hex2hsv, hsv2rgb, rgb2hsv } from '@/utils/color';
-import { Div, View, EventManager } from '@/utils/builder';
+import { HEX_COLOR_REGEX, RGBA_REGEX, RGB_REGEX, hex2hsv, hsv2rgb, rgb2hex, rgb2hsv } from '@/utils/color';
+import { Div, View, EventManager, Style } from '@/utils/builder';
 import '@/components/popover';
 import '@/components/input';
 import '@/components/select';
 import { defineSSR } from '@/utils/ssr-registry';
-import '@/components/progress';
 import {
   ensureShadowElement,
   ensureShadowRoot,
@@ -15,13 +14,7 @@ import {
   syncSheetAttribute,
 } from '@/utils/component';
 import colorPickerCss from './index.less?inline';
-
-// RGBA：red、green、blue, 透明度
-// HSL：色相、饱和度、亮度，透明度
-// HSB：色相、饱和度、明度，透明度
-// HSV：色相、饱和度、明度，透明度
-
-const BOT_WIDTH = 8;
+import panelCss from './panel.less?inline';
 
 const HUE = 360;
 
@@ -30,7 +23,7 @@ export interface Context {
   value: Signal<string>;
   hue: Signal<number>; // 0 - 360 色相 hue
   saturation: Signal<number>; // 0 - 100 饱和度 x
-  lightness: Signal<number>; // 0 - 100 亮度 y
+  lightness: Signal<number>; // 0 - 100 明度 y
   transparency: Signal<number>; // 0 - 100 透明度
 }
 
@@ -38,13 +31,15 @@ export interface RGBA {
   r: number;
   g: number;
   b: number;
-  a: number;
+  a: number; // 0 - 1
 }
 
 export interface Signal<T> {
   getter: () => T;
   setter: (newValue: T | ((prev: T) => T)) => void;
 }
+
+type ColorFormat = 'HEX' | 'RGB';
 
 export class ColorPicker extends RanElement {
   colorpicker: HTMLDivElement;
@@ -55,24 +50,25 @@ export class ColorPicker extends RanElement {
   _effectDisposers: Array<() => void> = [];
   popoverBlock: HTMLElement;
   popoverContent: HTMLElement;
+
+  // Panel elements (built lazily on first open).
   colorPickerInner?: HTMLDivElement;
-  colorPickerPanel?: HTMLElement;
-  colorPickerInputContainer?: HTMLElement;
-  colorPickerPanelDot?: HTMLDivElement;
-  colorPickerPanelSliderContainer?: HTMLDivElement;
-  colorPickerPanelSliderGroup?: HTMLDivElement;
-  colorPickerPanelSliderHue?: HTMLElement;
-  colorPickerPanelSliderAlpha?: HTMLElement;
-  colorPickerColorBlockInner?: HTMLElement;
-  colorPickerColorBlock?: HTMLElement;
-  colorPickerPanelPalette?: HTMLElement;
-  colorPickerPanelSaturation?: HTMLElement;
-  colorPickerInputContainerSelect?: HTMLElement;
-  colorPickerInputContainerInputColor?: HTMLElement;
-  colorPickerInputContainerInputNumber?: HTMLElement;
-  colorPickerInputContainerSelectItem?: HTMLElement;
+  colorPickerPalette?: HTMLElement;
+  colorPickerSaturation?: HTMLElement;
+  colorPickerPaletteDot?: HTMLElement;
+  colorPickerHueSlider?: HTMLElement;
+  colorPickerHueThumb?: HTMLElement;
+  colorPickerAlphaSlider?: HTMLElement;
+  colorPickerAlphaTrack?: HTMLElement;
+  colorPickerAlphaThumb?: HTMLElement;
+  colorPickerPreviewInner?: HTMLElement;
+  colorPickerValueInput?: HTMLElement;
+  colorPickerFormatSelect?: HTMLElement;
+
   colorPickerPaletteSelect: boolean;
-  colorPickerPanelDotInner?: HTMLElement;
+  _activeSlider: 'hue' | 'alpha' | null = null;
+  _format: ColorFormat = 'HEX';
+  _editingInput = false;
 
   static get observedAttributes(): string[] {
     return ['disabled', 'value', 'sheet'];
@@ -85,28 +81,28 @@ export class ColorPicker extends RanElement {
       const colorpickerInner = Div().class('ran-colorpicker-inner').build() as HTMLDivElement;
       const colorpicker = Div().class('ran-colorpicker-block').children(colorpickerInner).build() as HTMLDivElement;
       const popoverContent = View('r-content').class('ran-content').build() as HTMLElement;
-      return View('r-popover').class('ran-popover').children(colorpicker, popoverContent).build() as HTMLElement;
+      return View('r-popover')
+        .class('ran-popover')
+        .attr('trigger', 'click')
+        .children(colorpicker, popoverContent)
+        .build() as HTMLElement;
     });
-    const popoverContent = popoverBlock.querySelector('r-content') as HTMLElement;
-    const colorpicker = popoverBlock.querySelector('.ran-colorpicker-block') as HTMLDivElement;
-    const colorpickerInner = popoverBlock.querySelector('.ran-colorpicker-inner') as HTMLDivElement;
-
     this.popoverBlock = popoverBlock;
-    this.popoverContent = popoverContent;
-    this.colorpicker = colorpicker;
-    this.colorpickerInner = colorpickerInner;
+    this.popoverContent = popoverBlock.querySelector('r-content') as HTMLElement;
+    this.colorpicker = popoverBlock.querySelector('.ran-colorpicker-block') as HTMLDivElement;
+    this.colorpickerInner = popoverBlock.querySelector('.ran-colorpicker-inner') as HTMLDivElement;
 
     this.colorPickerPaletteSelect = false;
     this.createContext();
   }
 
+  // ── Accessors ───────────────────────────────────────────────────────────
   get value(): string {
     return this.context?.value.getter() || '';
   }
 
   set value(value: string) {
     this.setAttribute('value', value);
-    this.updateColorValue(value);
   }
 
   get sheet(): string {
@@ -128,129 +124,195 @@ export class ColorPicker extends RanElement {
     };
     this.context = {
       value: mk(''),
-      disabled: mk(true),
+      disabled: mk(false),
       hue: mk(0),
-      saturation: mk(100),
+      saturation: mk(0),
       lightness: mk(100),
-      transparency: mk(80),
+      transparency: mk(100),
     };
   };
 
-  generateHue2rgb = (): string => {
-    const { hue } = this.context;
-    const { r, g, b } = hsv2rgb(hue.getter(), 100, 100);
-    return `rgb(${r}, ${g}, ${b})`;
-  };
-
-  generateHsv2Rgb = (): string => {
-    const { r, g, b } = this.generateHsv2Rgba();
-    return `rgb(${r}, ${g}, ${b})`;
-  };
-
-  generateHsv2Rgba = (): RGBA => {
+  // ── Color helpers ────────────────────────────────────────────────────────
+  currentRgba = (): RGBA => {
     const { hue, saturation, lightness, transparency } = this.context;
     const { r, g, b } = hsv2rgb(hue.getter(), saturation.getter(), lightness.getter());
     return { r, g, b, a: transparency.getter() / 100 };
   };
 
-  generateHsv2RgbaValue = (): string => {
-    const { r, g, b, a } = this.generateHsv2Rgba();
-    return `rgb(${r}, ${g}, ${b}, ${a})`;
+  /** Canonical string used for the `value` attribute and `change` events. */
+  currentValue = (): string => {
+    const { r, g, b, a } = this.currentRgba();
+    return a < 1 ? `rgba(${r}, ${g}, ${b}, ${Number(a.toFixed(2))})` : rgb2hex(r, g, b);
   };
 
-  generateColorPickerProgress = (): string => {
-    const { r, g, b } = this.generateHsv2Rgba();
-    return `linear-gradient(to right, rgba(255, 0, 4, 0), rgba(${r}, ${g}, ${b}, 1))`;
+  /** String shown in the value input, depending on the selected format. */
+  currentDisplay = (): string => {
+    const { r, g, b, a } = this.currentRgba();
+    if (this._format === 'RGB') {
+      return a < 1 ? `rgba(${r}, ${g}, ${b}, ${Number(a.toFixed(2))})` : `rgb(${r}, ${g}, ${b})`;
+    }
+    // HEX shows the 6-digit color; alpha is controlled by the alpha slider.
+    return rgb2hex(r, g, b);
   };
 
   updateColorValue = (value: string): void => {
-    if (value !== this.context?.value.getter()) {
-      const hex = HEX_COLOR_REGEX.exec(value); // #1677FF #fff #FFF
-      const rga = RGB_REGEX.exec(value.replace(/\s+/g, '')); // rgba(255, 255, 255, 0)
-      const rgba = RGBA_REGEX.exec(value.replace(/\s+/g, '')); // rgb(255, 255, 255, 0)
-      if (hex) {
-        const { h, s, v } = hex2hsv(hex[0]);
-        this.context.hue.setter(h);
-        this.context.saturation.setter(s);
-        this.context.lightness.setter(v);
-        this.context.transparency.setter(100);
-      } else if (rgba) {
-        const { h, s, v } = rgb2hsv(Number(rgba[1]), Number(rgba[2]), Number(rgba[3]));
-        this.context.hue.setter(h);
-        this.context.saturation.setter(s);
-        this.context.lightness.setter(v);
-        this.context.transparency.setter(Number(rgba[4]));
-      } else if (rga) {
-        const { h, s, v } = rgb2hsv(Number(rga[1]), Number(rga[2]), Number(rga[3]));
-        this.context.hue.setter(h);
-        this.context.saturation.setter(s);
-        this.context.lightness.setter(v);
-        this.context.transparency.setter(100);
-      } else {
-        return;
-      }
-      this.setAttribute('value', value);
-      this.colorpickerInner.style.setProperty('background', value);
-      this.context?.value.setter(value);
+    if (value === this.context?.value.getter()) return;
+    const compact = value.replace(/\s+/g, '');
+    const hex = HEX_COLOR_REGEX.exec(value); // #1677FF #fff #FFF
+    const rgba = RGBA_REGEX.exec(compact); // rgba(255, 255, 255, 0)
+    const rgb = RGB_REGEX.exec(compact); // rgb(255, 255, 255)
+    if (hex) {
+      const { h, s, v } = hex2hsv(hex[0]);
+      this.context.hue.setter(h);
+      this.context.saturation.setter(s);
+      this.context.lightness.setter(v);
+      this.context.transparency.setter(100);
+    } else if (rgba) {
+      const { h, s, v } = rgb2hsv(Number(rgba[1]), Number(rgba[2]), Number(rgba[3]));
+      this.context.hue.setter(h);
+      this.context.saturation.setter(s);
+      this.context.lightness.setter(v);
+      this.context.transparency.setter(Number(rgba[4]) * 100);
+    } else if (rgb) {
+      const { h, s, v } = rgb2hsv(Number(rgb[1]), Number(rgb[2]), Number(rgb[3]));
+      this.context.hue.setter(h);
+      this.context.saturation.setter(s);
+      this.context.lightness.setter(v);
+      this.context.transparency.setter(100);
+    } else {
+      return;
     }
+    this.setAttribute('value', value);
+    this.context?.value.setter(value);
   };
 
-  updateColorPickerPanelSliderHueProgressPercent = (hue: number): void => {
-    this.colorPickerPanelSliderHue?.setAttribute('percent', `${hue / 360}`);
-  };
-
-  updateColorPickerPanelSliderAlphaProgressPercent = (alpha: number): void => {
-    this.colorPickerPanelSliderAlpha?.setAttribute('percent', `${alpha / 100}`);
-  };
-
-  updateColorPickerPanelSliderAlphaProgressWrap = (): void => {
-    this.colorPickerPanelSliderAlpha?.style.setProperty(
-      '--ran-progress-wrap-background',
-      this.generateColorPickerProgress(),
+  /** Sync the `value` attribute to the live color and emit a `change` event. */
+  emitChange = (): void => {
+    const value = this.currentValue();
+    const { r, g, b, a } = this.currentRgba();
+    this.context?.value.setter(value);
+    this.setAttribute('value', value);
+    this.dispatchEvent(
+      new CustomEvent('change', {
+        detail: {
+          value,
+          hex: rgb2hex(r, g, b),
+          rgb: `rgb(${r}, ${g}, ${b})`,
+          rgba: `rgba(${r}, ${g}, ${b}, ${Number(a.toFixed(2))})`,
+          alpha: Number(a.toFixed(2)),
+        },
+        bubbles: true,
+        composed: true,
+      }),
     );
   };
 
-  updateColorPickerPanelSliderAlphaProgressDot = (): void => {
-    this.colorPickerPanelSliderAlpha?.style.setProperty('--ran-progress-dot-background', this.generateHsv2RgbaValue());
+  // ── Pointer interaction ───────────────────────────────────────────────────
+  palettePointerDown = (e: MouseEvent): void => {
+    e.preventDefault();
+    this.colorPickerPaletteSelect = true;
+    this.updatePaletteFromEvent(e);
   };
 
-  updateColorPickerPanelSliderHueProgressDot = (): void => {
-    this.colorPickerPanelSliderHue?.style.setProperty('--ran-progress-dot-background', this.generateHue2rgb());
+  updatePaletteFromEvent = (e: MouseEvent): void => {
+    if (!this.colorPickerPalette) return;
+    const { left, top, width, height } = this.colorPickerPalette.getBoundingClientRect();
+    if (!width || !height) return;
+    const x = range(e.clientX - left, 0, width);
+    const y = range(e.clientY - top, 0, height);
+    this.context.saturation.setter((x / width) * 100);
+    this.context.lightness.setter((1 - y / height) * 100);
+    this.emitChange();
   };
 
-  updateColorPickerColorBlockInnerBackground = (): void => {
-    this.colorPickerColorBlockInner?.style.setProperty('background', this.generateHsv2RgbaValue());
+  sliderPointerDown =
+    (kind: 'hue' | 'alpha') =>
+    (e: MouseEvent): void => {
+      e.preventDefault();
+      this._activeSlider = kind;
+      this.updateSliderFromEvent(kind, e);
+    };
+
+  updateSliderFromEvent = (kind: 'hue' | 'alpha', e: MouseEvent): void => {
+    const el = kind === 'hue' ? this.colorPickerHueSlider : this.colorPickerAlphaSlider;
+    if (!el) return;
+    const { left, width } = el.getBoundingClientRect();
+    if (!width) return;
+    const pct = range(e.clientX - left, 0, width) / width;
+    if (kind === 'hue') this.context.hue.setter(pct * HUE);
+    else this.context.transparency.setter(pct * 100);
+    this.emitChange();
   };
 
-  updateColorPickerPanelSaturationBackground = (): void => {
-    this.colorPickerPanelSaturation?.style.setProperty('background-color', this.generateHue2rgb());
+  onPointerMove = (e: Event): void => {
+    const me = e as MouseEvent;
+    if (this.colorPickerPaletteSelect) this.updatePaletteFromEvent(me);
+    else if (this._activeSlider) this.updateSliderFromEvent(this._activeSlider, me);
   };
 
+  onPointerUp = (): void => {
+    this.colorPickerPaletteSelect = false;
+    this._activeSlider = null;
+  };
+
+  // ── Input row ─────────────────────────────────────────────────────────────
+  onValueInput = (e: Event): void => {
+    const target = e.target as HTMLElement & { value?: string };
+    const next = (e as CustomEvent<{ value?: string }>).detail?.value ?? target?.value;
+    if (typeof next !== 'string') return;
+    this._editingInput = true;
+    this.updateColorValue(next.trim());
+    this._editingInput = false;
+    this.emitChange();
+  };
+
+  onFormatChange = (e: Event): void => {
+    const value = (e as CustomEvent<{ value?: string }>).detail?.value;
+    this._format = value === 'RGB' ? 'RGB' : 'HEX';
+    this.syncValueInput();
+  };
+
+  syncValueInput = (): void => {
+    if (this._editingInput || !this.colorPickerValueInput) return;
+    (this.colorPickerValueInput as HTMLElement & { value: string }).value = this.currentDisplay();
+  };
+
+  // ── Reactive panel updates ────────────────────────────────────────────────
   setupEffects = (): void => {
     this._effectDisposers.push(
-      // Hue-dependent colors: saturation panel bg and hue slider dot
+      // Saturation panel background = the pure hue.
       createEffect(() => {
-        const hueRgb = this.generateHue2rgb();
-        this.colorPickerPanelSaturation?.style.setProperty('background-color', hueRgb);
-        this.colorPickerPanelSliderHue?.style.setProperty('--ran-progress-dot-background', hueRgb);
+        const { r, g, b } = hsv2rgb(this.context.hue.getter(), 100, 100);
+        this.colorPickerSaturation?.style.setProperty('background-color', `rgb(${r}, ${g}, ${b})`);
       }),
-      // Hue slider percent position
+      // Palette dot position (percent-based, layout independent).
       createEffect(() => {
-        const pct = `${this.context.hue.getter() / 360}`;
-        this.colorPickerPanelSliderHue?.setAttribute('percent', pct);
+        const s = range(this.context.saturation.getter(), 0, 100);
+        const l = range(this.context.lightness.getter(), 0, 100);
+        this.colorPickerPaletteDot?.style.setProperty('left', `${s}%`);
+        this.colorPickerPaletteDot?.style.setProperty('top', `${100 - l}%`);
       }),
-      // Alpha track gradient (hue + saturation + lightness)
+      // Hue slider thumb position + color.
       createEffect(() => {
-        const gradient = this.generateColorPickerProgress();
-        this.colorPickerPanelSliderAlpha?.style.setProperty('--ran-progress-wrap-background', gradient);
+        const h = this.context.hue.getter();
+        const { r, g, b } = hsv2rgb(h, 100, 100);
+        this.colorPickerHueThumb?.style.setProperty('left', `${(h / HUE) * 100}%`);
+        this.colorPickerHueThumb?.style.setProperty('background', `rgb(${r}, ${g}, ${b})`);
       }),
-      // Alpha dot color, alpha percent, color block bg (all four signals)
+      // Alpha track gradient, alpha thumb, preview swatch, trigger swatch, input.
       createEffect(() => {
-        const rgba = this.generateHsv2RgbaValue();
-        const pct = `${this.context.transparency.getter() / 100}`;
-        this.colorPickerPanelSliderAlpha?.style.setProperty('--ran-progress-dot-background', rgba);
-        this.colorPickerPanelSliderAlpha?.setAttribute('percent', pct);
-        this.colorPickerColorBlockInner?.style.setProperty('background', rgba);
+        const { r, g, b, a } = this.currentRgba();
+        const solid = `rgb(${r}, ${g}, ${b})`;
+        const current = `rgba(${r}, ${g}, ${b}, ${Number(a.toFixed(3))})`;
+        this.colorPickerAlphaTrack?.style.setProperty(
+          'background',
+          `linear-gradient(to right, rgba(${r}, ${g}, ${b}, 0), ${solid})`,
+        );
+        this.colorPickerAlphaThumb?.style.setProperty('left', `${a * 100}%`);
+        this.colorPickerAlphaThumb?.style.setProperty('background', current);
+        this.colorPickerPreviewInner?.style.setProperty('background', current);
+        this.colorpickerInner?.style.setProperty('background', current);
+        this.syncValueInput();
       }),
     );
   };
@@ -260,206 +322,84 @@ export class ColorPicker extends RanElement {
     this._effectDisposers = [];
   };
 
-  clickStop = (e: MouseEvent): void => {
-    e.stopPropagation();
-    e.preventDefault();
-  };
-
-  changeColorPalettePositionByContext = (): void => {
-    window.requestAnimationFrame(() => {
-      this.updateColorValue(this.value);
-      if (!this.colorPickerPanelPalette) return;
-      if (!this.context?.lightness.getter || !this.context?.saturation.getter) return;
-      const { width, height } = this.colorPickerPanelPalette?.getBoundingClientRect() || {};
-      const limitY = height - (this.context.lightness.getter() / 100) * height;
-      const limitX = (this.context.saturation.getter() / 100) * width;
-      this.colorPickerPanelDot?.style.setProperty('top', `${limitY - BOT_WIDTH}px`);
-      this.colorPickerPanelDot?.style.setProperty('left', `${limitX - BOT_WIDTH}px`);
-    });
-  };
-
-  changeColorPalettePosition = (offsetX: number, offsetY: number): void => {
-    if (!this.colorPickerPanelPalette) return;
-    if (!this.context?.lightness.getter || !this.context?.saturation.getter) return;
-    const { width, height } = this.colorPickerPanelPalette?.getBoundingClientRect() || {};
-    const limitY = height - range(offsetY, 0, height);
-    const limitX = range(offsetX, 0, width);
-    this.context.saturation.setter((limitX / width) * 100); // 饱和度
-    this.context.lightness.setter((limitY / height) * 100);
-    window.requestAnimationFrame(() => {
-      this.colorPickerPanelDot?.style.setProperty('top', `${offsetY - BOT_WIDTH}px`);
-      this.colorPickerPanelDot?.style.setProperty('left', `${offsetX - BOT_WIDTH}px`);
-    });
-  };
-
-  clickColorPalette = (e: MouseEvent): void => {
-    const { offsetX, offsetY } = e;
-    this.changeColorPalettePosition(offsetX, offsetY);
-  };
-
-  createColorPickerProgress = (): void => {
-    this.colorPickerPanelSliderHue = View('r-progress')
-      .class('ran-color-picker-slider-container-group-hue')
-      .attr('type', 'drag')
-      .style(
-        '--ran-progress-wrap-background',
-        'linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000)',
-      )
-      .attr('percent', `${this.context.hue.getter() / 360}`)
-      .on('change', this.changeColorPickerHue)
-      .build() as HTMLElement;
-    this.updateColorPickerPanelSliderHueProgressDot();
-
-    this.colorPickerPanelSliderAlpha = View('r-progress')
-      .class('ran-color-picker-slider-container-group-alpha')
-      .attr('type', 'drag')
-      .attr('percent', `${this.context.transparency.getter() / 100}`)
-      .on('change', this.changeColorPickerAlpha)
-      .build() as HTMLElement;
-    this.updateColorPickerPanelSliderAlphaProgressWrap();
-    this.updateColorPickerPanelSliderAlphaProgressDot();
-
-    this.colorPickerColorBlockInner = Div()
-      .class('ran-color-picker-slider-container-color-block-inner')
-      .build() as HTMLElement;
-    this.updateColorPickerColorBlockInnerBackground();
-
-    this.colorPickerColorBlock = Div()
-      .class('ran-color-picker-slider-container-color-block')
-      .children(this.colorPickerColorBlockInner)
-      .build() as HTMLElement;
-
-    this.colorPickerPanelSliderGroup = Div()
-      .class('ran-color-picker-slider-container-group')
-      .children(this.colorPickerPanelSliderHue, this.colorPickerPanelSliderAlpha)
-      .build() as HTMLDivElement;
-
-    this.colorPickerPanelSliderContainer = Div()
-      .class('ran-color-picker-slider-container')
-      .children(this.colorPickerPanelSliderGroup, this.colorPickerColorBlock)
-      .build() as HTMLDivElement;
-  };
-
-  changeColorPickerHue = (e: Event): void => {
-    this.context.hue.setter((e as CustomEvent).detail.value * HUE);
-  };
-
-  changeColorPickerAlpha = (e: Event): void => {
-    this.context.transparency.setter((e as CustomEvent).detail.value * 100);
-  };
-
-  createColorPickerSelect = (): void => {
-    this.colorPickerPanelSaturation = Div().class('ran-color-picker-saturation').build() as HTMLElement;
-    this.updateColorPickerPanelSaturationBackground();
-
-    this.colorPickerPanelDotInner = Div().class('ran-color-picker-palette-dot-inner').build() as HTMLElement;
-
-    this.colorPickerPanelDot = Div()
-      .class('ran-color-picker-palette-dot')
-      .on('mousedown', this.mouseDownColorPickerPalette)
-      .on('mouseup', this.mouseUpColorPickerPalette)
-      .children(this.colorPickerPanelDotInner)
-      .build() as HTMLDivElement;
-
-    this._events.on(document.body, 'mousemove', this.mouseMoveColorPickerPalette);
-
-    this.colorPickerPanelPalette = Div()
-      .class('ran-color-picker-palette')
-      .on('mousedown', this.clickColorPalette)
-      .children(this.colorPickerPanelDot, this.colorPickerPanelSaturation)
-      .build() as HTMLElement;
-
-    this.colorPickerPanel = Div()
-      .class('ran-color-picker-panel')
-      .children(Div().class('ran-color-picker-select').children(this.colorPickerPanelPalette))
-      .build() as HTMLElement;
-  };
-
-  createColorPickerInput = (): void => {
-    const colorPickerInputContainerId = `${performance.now()}`.replace('.', '');
-
-    this.colorPickerInputContainerSelectItem = View('r-select')
-      .attr('value', 'HEX')
-      .class('ran-color-picker-input-container-select-item')
-      .attr('type', 'text')
-      .attr('getPopupContainerId', colorPickerInputContainerId)
-      .children(...['HEX', 'HSB', 'RGB'].map((item) => View('r-option').attr('value', item).text(item).build()))
-      .build() as HTMLElement;
-
-    this.colorPickerInputContainerSelect = Div()
-      .class('ran-color-picker-input-container-select')
-      .id(colorPickerInputContainerId)
-      .children(this.colorPickerInputContainerSelectItem)
-      .build() as HTMLElement;
-
-    this.colorPickerInputContainerInputColor = View('r-input')
-      .class('ran-color-picker-input-container-input-color')
-      .build() as HTMLElement;
-
-    this.colorPickerInputContainerInputNumber = View('r-input')
-      .class('ran-color-picker-input-container-input-number')
-      .build() as HTMLElement;
-
-    this.colorPickerInputContainer = Div()
-      .class('ran-color-picker-input-container')
-      .children(
-        this.colorPickerInputContainerSelect,
-        this.colorPickerInputContainerInputColor,
-        this.colorPickerInputContainerInputNumber,
-      )
-      .build() as HTMLElement;
-  };
-
+  // ── Panel construction (once, on first open) ──────────────────────────────
   openColorPicker = (): void => {
     if (this.colorPickerInner) return;
-    this.createColorPickerProgress();
-    this.createColorPickerSelect();
-    this.createColorPickerInput();
+
+    this.colorPickerSaturation = Div().class('ran-color-picker-saturation').build() as HTMLElement;
+    this.colorPickerPaletteDot = Div().class('ran-color-picker-palette-dot').build() as HTMLElement;
+    this.colorPickerPalette = Div()
+      .class('ran-color-picker-palette')
+      .on('mousedown', this.palettePointerDown)
+      .children(this.colorPickerSaturation, this.colorPickerPaletteDot)
+      .build() as HTMLElement;
+
+    this.colorPickerPreviewInner = Div().class('ran-color-picker-preview-inner').build() as HTMLElement;
+    const preview = Div().class('ran-color-picker-preview').children(this.colorPickerPreviewInner).build();
+
+    this.colorPickerHueThumb = Div().class('ran-color-picker-slider-thumb').build() as HTMLElement;
+    this.colorPickerHueSlider = Div()
+      .class('ran-color-picker-slider ran-color-picker-slider-hue')
+      .on('mousedown', this.sliderPointerDown('hue'))
+      .children(this.colorPickerHueThumb)
+      .build() as HTMLElement;
+
+    this.colorPickerAlphaTrack = Div().class('ran-color-picker-slider-alpha-track').build() as HTMLElement;
+    this.colorPickerAlphaThumb = Div().class('ran-color-picker-slider-thumb').build() as HTMLElement;
+    this.colorPickerAlphaSlider = Div()
+      .class('ran-color-picker-slider ran-color-picker-slider-alpha')
+      .on('mousedown', this.sliderPointerDown('alpha'))
+      .children(this.colorPickerAlphaTrack, this.colorPickerAlphaThumb)
+      .build() as HTMLElement;
+
+    const sliders = Div()
+      .class('ran-color-picker-sliders')
+      .children(this.colorPickerHueSlider, this.colorPickerAlphaSlider)
+      .build();
+    const controls = Div().class('ran-color-picker-controls').children(preview, sliders).build();
+
+    this.colorPickerFormatSelect = View('r-select')
+      .class('ran-color-picker-format')
+      .attr('value', this._format)
+      .attr('defaultValue', this._format)
+      .attr('trigger', 'click')
+      .children(...(['HEX', 'RGB'] as const).map((f) => View('r-option').attr('value', f).text(f).build()))
+      .on('change', this.onFormatChange)
+      .build() as HTMLElement;
+
+    this.colorPickerValueInput = View('r-input')
+      .class('ran-color-picker-value')
+      .on('change', this.onValueInput)
+      .build() as HTMLElement;
+
+    const inputRow = Div()
+      .class('ran-color-picker-input-container')
+      .children(this.colorPickerFormatSelect, this.colorPickerValueInput)
+      .build();
+
+    const content = Div()
+      .class('ran-color-picker-inner-content')
+      .children(this.colorPickerPalette, controls, inputRow)
+      .build();
+
     this.colorPickerInner = Div()
       .class('ran-color-picker-inner')
-      .children(
-        Div()
-          .class('ran-color-picker-inner-content')
-          .children(this.colorPickerPanel, this.colorPickerPanelSliderContainer, this.colorPickerInputContainer),
-      )
+      .children(Style().text(panelCss).build(), content)
       .build() as HTMLDivElement;
+
     this.popoverContent.appendChild(this.colorPickerInner);
-    this.changeColorPalettePositionByContext();
+    this.setupEffects();
+    this.syncValueInput();
   };
 
-  mouseMoveColorPickerPalette = (e: MouseEvent): void => {
-    if (!this.colorPickerPanelPalette || !this.colorPickerPaletteSelect) return;
-    const { pageX, pageY } = e;
-    const { top = 0, left = 0, width, height } = this.colorPickerPanelPalette.getBoundingClientRect();
-    // Dot visual position: centered on cursor, clamped to palette bounds
-    const dotX = range(pageX - left - BOT_WIDTH, -BOT_WIDTH, width - BOT_WIDTH);
-    const dotY = range(pageY - top - BOT_WIDTH, -BOT_WIDTH, height - BOT_WIDTH);
-    // Color value: actual cursor in [0, w/h], Y inverted so top = bright (consistent with click)
-    const colorX = range(pageX - left, 0, width);
-    const colorY = range(pageY - top, 0, height);
-    this.context.saturation.setter((colorX / width) * 100);
-    this.context.lightness.setter(((height - colorY) / height) * 100);
-    window.requestAnimationFrame(() => {
-      this.colorPickerPanelDot?.style.setProperty('top', `${dotY}px`);
-      this.colorPickerPanelDot?.style.setProperty('left', `${dotX}px`);
-    });
-  };
-
-  mouseDownColorPickerPalette = (e: MouseEvent): void => {
-    e.stopPropagation();
-    e.preventDefault();
-    this.colorPickerPaletteSelect = true;
-  };
-
-  mouseUpColorPickerPalette = (): void => {
-    this.colorPickerPaletteSelect = false;
-  };
-
+  // ── Lifecycle ──────────────────────────────────────────────────────────────
   connectedCallback(): void {
     this.handlerExternalCss();
     this.setAttribute('class', 'ran-colorpicker');
     this._events.on(this.popoverBlock, 'click', this.openColorPicker);
-    this.setupEffects();
+    this._events.on(document, 'mousemove', this.onPointerMove);
+    this._events.on(document, 'mouseup', this.onPointerUp);
+    if (this.value) this.updateColorValue(this.value);
   }
 
   disconnectedCallback(): void {
