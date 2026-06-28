@@ -79,22 +79,22 @@ export class CustomMessage extends RanElement {
 
     this.handlerExternalCss();
   }
-  get type() {
+  get type(): string | null {
     return this.getAttribute('type');
   }
-  set type(value) {
+  set type(value: string | null) {
     if (value) this.setAttribute('type', value);
   }
-  get content() {
+  get content(): string | null {
     return this.getAttribute('content');
   }
-  set content(value) {
+  set content(value: string | null) {
     if (value) this.setAttribute('content', value);
   }
-  get sheet() {
+  get sheet(): string {
     return getStringAttribute(this, 'sheet');
   }
-  set sheet(value) {
+  set sheet(value: string) {
     setStringAttribute(this, 'sheet', value);
   }
   handlerExternalCss = (): void => {

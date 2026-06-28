@@ -51,8 +51,31 @@ function extractAttributes(src: string): string[] {
   return uniqSorted(items.map((s) => s.slice(1, -1)));
 }
 
+/** Resolve same-file `enum X { K = 'v' }` and `type X = …` to readable types,
+ * so internal type names don't leak into the docs. */
+function buildTypeAliases(src: string): Map<string, string> {
+  const aliases = new Map<string, string>();
+  let m: RegExpExecArray | null;
+  const enumRe = /export\s+enum\s+([A-Za-z_$][\w$]*)\s*\{([\s\S]*?)\}/g;
+  while ((m = enumRe.exec(src))) {
+    const values = [...m[2].matchAll(/=\s*['"`]([^'"`]+)['"`]/g)].map((x) => `'${x[1]}'`);
+    if (values.length) aliases.set(m[1], values.join(' | '));
+  }
+  const typeRe = /export\s+type\s+([A-Za-z_$][\w$]*)\s*=\s*([^;]+);/g;
+  while ((m = typeRe.exec(src))) {
+    aliases.set(m[1], m[2].replace(/\s+/g, ' ').trim());
+  }
+  return aliases;
+}
+
+function resolveType(type: string, aliases: Map<string, string>): string {
+  const t = type.trim();
+  return aliases.get(t) ?? t;
+}
+
 /** Public accessors with their type — getter return type wins, else setter param type. */
 function extractProperties(src: string): Prop[] {
+  const aliases = buildTypeAliases(src);
   const types = new Map<string, string>();
   const add = (name: string, type: string): void => {
     if (name === 'observedAttributes' || name.startsWith('_')) return;
@@ -70,7 +93,7 @@ function extractProperties(src: string): Prop[] {
   const getBare = /(?:^|\n)\s*get\s+([a-zA-Z$][\w$]*)\s*\(\)\s*\{/g;
   while ((m = getBare.exec(src))) add(m[1], '');
   return Array.from(types)
-    .map(([name, type]) => ({ name, type }))
+    .map(([name, type]) => ({ name, type: resolveType(type, aliases) }))
     .sort((a, b) => a.name.localeCompare(b.name));
 }
 
