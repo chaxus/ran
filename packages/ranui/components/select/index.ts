@@ -1,10 +1,11 @@
 import { generateThrottle, isMobile } from 'ranuts/utils';
 import selectCss from './index.less?inline';
+import arrowDownIcon from '@/assets/icons/arrow-down.svg?raw';
 import { RanElement, isDisabled } from '@/utils/index';
 import '@/components/select/option';
 import '@/components/dropdown';
 import '@/components/select/dropdown-item';
-import '@/components/icon';
+import { registerIcon } from '@/components/icon';
 import { defineSSR } from '@/utils/ssr-registry';
 import '@/components/input';
 import type { Input } from '@/components/input';
@@ -34,6 +35,10 @@ const placementDirection: PlacementDirection = {
     remove: 'ran-dropdown-up-out',
   },
 };
+
+// The dropdown caret is part of the select's own chrome, so the component
+// registers its icon itself rather than relying on the consumer to do it.
+registerIcon('arrow-down', arrowDownIcon);
 
 const searchThrottle = generateThrottle();
 
@@ -100,7 +105,7 @@ export class Select extends RanElement {
                   .class('icon')
                   .part('icon')
                   .attr('name', 'arrow-down')
-                  .attr('color', '#d9d9d9')
+                  .attr('color', 'var(--ran-color-text-secondary)')
                   .attr('size', '16'),
                 Div().children(
                   Span().class('selection-item').part('selection-item'),
