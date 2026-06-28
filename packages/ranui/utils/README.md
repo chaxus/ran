@@ -422,8 +422,8 @@ Creates and registers a global `RouterCore` singleton. Call once at app startup.
 
 ```ts
 const router = createRouter({
-  mode: 'history',       // 'history' (default) | 'hash'
-  base: '/app',          // strip prefix from all paths
+  mode: 'history', // 'history' (default) | 'hash'
+  base: '/app', // strip prefix from all paths
   routes: [
     { path: '/', exact: true, meta: { title: 'Home' } },
     { path: '/users/:id', meta: { requiresAuth: true } },
@@ -443,20 +443,20 @@ router?.push('/about');
 
 ### `RouterCore` API
 
-| API | Type / Returns | Description |
-| :--- | :--- | :--- |
-| `push(path)` | `Promise<void>` | Navigate and add a history entry |
-| `replace(path)` | `Promise<void>` | Navigate and replace the current entry |
-| `back()` | `void` | `history.back()` |
-| `forward()` | `void` | `history.forward()` |
-| `go(delta)` | `void` | `history.go(delta)` |
-| `beforeEach(guard)` | `() => void` | Register navigation guard; returns unsubscribe |
-| `afterEach(handler)` | `() => void` | Post-navigation hook; returns unsubscribe |
-| `onRouteChange(handler)` | `() => void` | Subscribe to route changes; returns unsubscribe |
-| `onPageSwap(handler)` | `() => void` | Cross-document `pageswap` event (MPA mode only) |
-| `onPageReveal(handler)` | `() => void` | Cross-document `pagereveal` event (MPA mode only) |
-| `currentRoute` | `RouteLocation \| null` | Current route — `{ path, params, query, fullPath }` |
-| `destroy()` | `void` | Remove all listeners and injected CSS |
+| API                      | Type / Returns          | Description                                         |
+| :----------------------- | :---------------------- | :-------------------------------------------------- |
+| `push(path)`             | `Promise<void>`         | Navigate and add a history entry                    |
+| `replace(path)`          | `Promise<void>`         | Navigate and replace the current entry              |
+| `back()`                 | `void`                  | `history.back()`                                    |
+| `forward()`              | `void`                  | `history.forward()`                                 |
+| `go(delta)`              | `void`                  | `history.go(delta)`                                 |
+| `beforeEach(guard)`      | `() => void`            | Register navigation guard; returns unsubscribe      |
+| `afterEach(handler)`     | `() => void`            | Post-navigation hook; returns unsubscribe           |
+| `onRouteChange(handler)` | `() => void`            | Subscribe to route changes; returns unsubscribe     |
+| `onPageSwap(handler)`    | `() => void`            | Cross-document `pageswap` event (MPA mode only)     |
+| `onPageReveal(handler)`  | `() => void`            | Cross-document `pagereveal` event (MPA mode only)   |
+| `currentRoute`           | `RouteLocation \| null` | Current route — `{ path, params, query, fullPath }` |
+| `destroy()`              | `void`                  | Remove all listeners and injected CSS               |
 
 ### Navigation guards
 
@@ -472,12 +472,12 @@ unsubscribe(); // remove when no longer needed
 
 ### View Transitions
 
-| `viewTransition` value | Effect |
-| :--- | :--- |
-| `'spa'` / `true` | Wraps same-document DOM updates in `document.startViewTransition()` (Chrome 111+) |
-| `'mpa'` | Injects `@view-transition { navigation: auto }` for cross-document transitions (Chrome 126+); exposes `onPageSwap` / `onPageReveal` |
-| `'both'` | Both of the above |
-| `false` (default) | No transitions |
+| `viewTransition` value | Effect                                                                                                                              |
+| :--------------------- | :---------------------------------------------------------------------------------------------------------------------------------- |
+| `'spa'` / `true`       | Wraps same-document DOM updates in `document.startViewTransition()` (Chrome 111+)                                                   |
+| `'mpa'`                | Injects `@view-transition { navigation: auto }` for cross-document transitions (Chrome 126+); exposes `onPageSwap` / `onPageReveal` |
+| `'both'`               | Both of the above                                                                                                                   |
+| `false` (default)      | No transitions                                                                                                                      |
 
 Gracefully degrades when the API is not supported.
 

@@ -25,7 +25,15 @@ export { Section } from '@/components/section';
 export { Router } from '@/components/router';
 export { Route } from '@/components/route';
 export { Link } from '@/components/link';
-export { RouterCore, createRouter, useRouter, enableMpaViewTransitions, setSSGPath, clearSSGPath, getSSGPath } from '@/utils/router';
+export {
+  RouterCore,
+  createRouter,
+  useRouter,
+  enableMpaViewTransitions,
+  setSSGPath,
+  clearSSGPath,
+  getSSGPath,
+} from '@/utils/router';
 export type {
   RouterConfig,
   RouteConfig,
@@ -39,13 +47,7 @@ export type {
 export { renderStaticPage, generateStaticPages } from '@/utils/ssg';
 export type { SSGPage } from '@/utils/ssg';
 export { I18nCore, createI18n, useI18n } from '@/utils/i18n';
-export type {
-  I18nConfig,
-  MessageDict,
-  LocaleMessages,
-  TranslateParams,
-  LocaleChangeHandler,
-} from '@/utils/i18n';
+export type { I18nConfig, MessageDict, LocaleMessages, TranslateParams, LocaleChangeHandler } from '@/utils/i18n';
 
 // Side effects for registration
 import '@/components/button';

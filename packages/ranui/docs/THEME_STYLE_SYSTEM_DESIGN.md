@@ -39,9 +39,10 @@ Defined in [`theme/tokens.less`](../theme/tokens.less) on `:root`. Rarely used d
 ```css
 :root {
   /* 10-step scales: 100 (lightest) → 1000 (darkest), in light mode */
-  --ran-gray-100: #f2f2f2;   /* … */   --ran-gray-1000: #171717;
-  --ran-gray-alpha-100: #0000000d;     /* translucent, layer over any surface */
-  --ran-blue-700: #006bff;             /* + red / amber / green 100..1000 */
+  --ran-gray-100: #f2f2f2; /* … */
+  --ran-gray-1000: #171717;
+  --ran-gray-alpha-100: #0000000d; /* translucent, layer over any surface */
+  --ran-blue-700: #006bff; /* + red / amber / green 100..1000 */
   --ran-background-100: #ffffff;
   --ran-background-200: #fafafa;
 }
@@ -81,7 +82,8 @@ The primary theme contract. Defined once on `:root`; each references a base-scal
   --ran-radius-lg: 16px;
   --ran-radius-full: 9999px;
 
-  --ran-space-1: 4px; /* … 4px base unit … */ --ran-space-24: 96px;
+  --ran-space-1: 4px; /* … 4px base unit … */
+  --ran-space-24: 96px;
 
   --ran-shadow-elevated: 0 2px 2px rgba(0, 0, 0, 0.04);
   --ran-shadow-menu: …;
@@ -131,10 +133,14 @@ Dark mode lives in [`theme/dark.less`](../theme/dark.less) as one LESS mixin, `.
 }
 
 @media (prefers-color-scheme: dark) {
-  :root:not([data-ran-theme='light']):not([theme='light']) { .ran-theme-dark(); }
+  :root:not([data-ran-theme='light']):not([theme='light']) {
+    .ran-theme-dark();
+  }
 }
 :root[data-ran-theme='dark'],
-:root[theme='dark'] { .ran-theme-dark(); }
+:root[theme='dark'] {
+  .ran-theme-dark();
+}
 ```
 
 This covers both system preference (unless explicitly set to light) and an explicit `data-ran-theme="dark"` (or legacy `theme="dark"`) attribute, without duplicating the dark values.
@@ -152,8 +158,12 @@ Loads [`theme/index.less`](../theme/index.less) → `tokens.less` (base + light 
 ### Attribute switching
 
 ```html
-<html data-ran-theme="dark">  <!-- recommended, namespaced -->
-<html theme="dark">           <!-- legacy, still supported -->
+<html data-ran-theme="dark">
+  <!-- recommended, namespaced -->
+  <html theme="dark">
+    <!-- legacy, still supported -->
+  </html>
+</html>
 ```
 
 ### Runtime API ([`utils/theme.ts`](../utils/theme.ts))
@@ -188,8 +198,12 @@ setThemeTokens({ '--ran-color-primary': '#6c47ff', '--ran-radius-md': '10px' });
 ### Component overrides
 
 ```css
-r-button { --ran-btn-content-background-color: #6c47ff; }
-r-button::part(content) { border-radius: 999px; }
+r-button {
+  --ran-btn-content-background-color: #6c47ff;
+}
+r-button::part(content) {
+  border-radius: 999px;
+}
 ```
 
 ```html

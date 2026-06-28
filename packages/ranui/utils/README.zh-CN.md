@@ -422,8 +422,8 @@ import type { RouterConfig, RouteLocation, NavigationGuard } from 'ranui';
 
 ```ts
 const router = createRouter({
-  mode: 'history',       // 'history'（默认）| 'hash'
-  base: '/app',          // 从所有路径中去除前缀
+  mode: 'history', // 'history'（默认）| 'hash'
+  base: '/app', // 从所有路径中去除前缀
   routes: [
     { path: '/', exact: true, meta: { title: '首页' } },
     { path: '/users/:id', meta: { requiresAuth: true } },
@@ -443,20 +443,20 @@ router?.push('/about');
 
 ### `RouterCore` API
 
-| 方法 / 属性 | 类型 | 说明 |
-| :--- | :--- | :--- |
-| `push(path)` | `Promise<void>` | 导航并新增历史记录 |
-| `replace(path)` | `Promise<void>` | 导航并替换当前历史记录 |
-| `back()` | `void` | `history.back()` |
-| `forward()` | `void` | `history.forward()` |
-| `go(delta)` | `void` | `history.go(delta)` |
-| `beforeEach(guard)` | `() => void` | 注册导航守卫，返回取消订阅函数 |
-| `afterEach(handler)` | `() => void` | 导航后钩子，返回取消订阅函数 |
-| `onRouteChange(handler)` | `() => void` | 订阅路由变化，返回取消订阅函数 |
-| `onPageSwap(handler)` | `() => void` | 跨文档 `pageswap` 事件（仅 MPA 模式） |
-| `onPageReveal(handler)` | `() => void` | 跨文档 `pagereveal` 事件（仅 MPA 模式） |
-| `currentRoute` | `RouteLocation \| null` | 当前路由——`{ path, params, query, fullPath }` |
-| `destroy()` | `void` | 移除所有监听器和注入的 CSS |
+| 方法 / 属性              | 类型                    | 说明                                          |
+| :----------------------- | :---------------------- | :-------------------------------------------- |
+| `push(path)`             | `Promise<void>`         | 导航并新增历史记录                            |
+| `replace(path)`          | `Promise<void>`         | 导航并替换当前历史记录                        |
+| `back()`                 | `void`                  | `history.back()`                              |
+| `forward()`              | `void`                  | `history.forward()`                           |
+| `go(delta)`              | `void`                  | `history.go(delta)`                           |
+| `beforeEach(guard)`      | `() => void`            | 注册导航守卫，返回取消订阅函数                |
+| `afterEach(handler)`     | `() => void`            | 导航后钩子，返回取消订阅函数                  |
+| `onRouteChange(handler)` | `() => void`            | 订阅路由变化，返回取消订阅函数                |
+| `onPageSwap(handler)`    | `() => void`            | 跨文档 `pageswap` 事件（仅 MPA 模式）         |
+| `onPageReveal(handler)`  | `() => void`            | 跨文档 `pagereveal` 事件（仅 MPA 模式）       |
+| `currentRoute`           | `RouteLocation \| null` | 当前路由——`{ path, params, query, fullPath }` |
+| `destroy()`              | `void`                  | 移除所有监听器和注入的 CSS                    |
 
 ### 导航守卫
 
@@ -472,12 +472,12 @@ unsubscribe(); // 不再需要时移除守卫
 
 ### View Transitions
 
-| `viewTransition` 值 | 效果 |
-| :--- | :--- |
-| `'spa'` / `true` | 将同文档 DOM 更新包裹在 `document.startViewTransition()` 中（Chrome 111+） |
-| `'mpa'` | 注入 `@view-transition { navigation: auto }` 实现跨文档过渡（Chrome 126+），并开放 `onPageSwap` / `onPageReveal` 钩子 |
-| `'both'` | 同时启用以上两者 |
-| `false`（默认） | 不启用过渡动画 |
+| `viewTransition` 值 | 效果                                                                                                                  |
+| :------------------ | :-------------------------------------------------------------------------------------------------------------------- |
+| `'spa'` / `true`    | 将同文档 DOM 更新包裹在 `document.startViewTransition()` 中（Chrome 111+）                                            |
+| `'mpa'`             | 注入 `@view-transition { navigation: auto }` 实现跨文档过渡（Chrome 126+），并开放 `onPageSwap` / `onPageReveal` 钩子 |
+| `'both'`            | 同时启用以上两者                                                                                                      |
+| `false`（默认）     | 不启用过渡动画                                                                                                        |
 
 不支持 View Transitions API 时自动降级为同步更新。
 

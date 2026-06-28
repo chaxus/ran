@@ -21,46 +21,47 @@ Conflict resolution order: **user goals → verified evidence → this file → 
 
 Each hue is a **10-step scale** (`100`–`1000`). Every step has **one fixed job**, so interaction states are decided up front:
 
-| Step | Role |
-| --- | --- |
-| 100 | Default background |
-| 200 | Hover background |
-| 300 | Active (pressed) background |
-| 400 | Default border |
-| 500 | Hover border |
-| 600 | Active border |
-| 700 | Solid fill (button/badge) |
-| 800 | Solid fill — hover |
-| 900 | Secondary text & icons |
-| 1000 | Primary text & icons |
+| Step | Role                        |
+| ---- | --------------------------- |
+| 100  | Default background          |
+| 200  | Hover background            |
+| 300  | Active (pressed) background |
+| 400  | Default border              |
+| 500  | Hover border                |
+| 600  | Active border               |
+| 700  | Solid fill (button/badge)   |
+| 800  | Solid fill — hover          |
+| 900  | Secondary text & icons      |
+| 1000 | Primary text & icons        |
 
 Scales: `--ran-gray-100..1000`, `--ran-gray-alpha-100..1000` (translucent, layers over any surface), `--ran-blue-*`, `--ran-red-*`, `--ran-amber-*`, `--ran-green-*`, plus `--ran-background-100/200`.
 
 **Use the semantic layer, not the scale, in components:**
 
-| Token | Maps to | Use for |
-| --- | --- | --- |
-| `--ran-color-bg` | background-100 | Page background |
-| `--ran-color-bg-subtle` | background-200 | Subtle page zones |
-| `--ran-color-bg-elevated` | bg-100 / gray-100 (dark) | Cards, surfaces |
-| `--ran-color-bg-muted` | gray-100 | Inset / muted fills |
-| `--ran-color-bg-hover` | gray-200 | Hover background |
-| `--ran-color-bg-active` | gray-300 | Active background |
-| `--ran-color-text` | gray-1000 | Primary text |
-| `--ran-color-text-secondary` | gray-900 | Secondary text |
-| `--ran-color-text-disabled` | gray-700 | Disabled text |
-| `--ran-color-border` | gray-400 | Default border |
-| `--ran-color-border-hover` | gray-500 | Hover border |
-| `--ran-color-border-active` | gray-600 | Active border |
-| `--ran-color-primary` / `-hover` / `-active` | blue-700 / 800 / 900 | Primary action |
-| `--ran-color-success` / `warning` / `danger` | green-700 / amber-700 / red-700 | Status |
-| `--ran-color-link` | blue-700 | Links |
+| Token                                        | Maps to                         | Use for             |
+| -------------------------------------------- | ------------------------------- | ------------------- |
+| `--ran-color-bg`                             | background-100                  | Page background     |
+| `--ran-color-bg-subtle`                      | background-200                  | Subtle page zones   |
+| `--ran-color-bg-elevated`                    | bg-100 / gray-100 (dark)        | Cards, surfaces     |
+| `--ran-color-bg-muted`                       | gray-100                        | Inset / muted fills |
+| `--ran-color-bg-hover`                       | gray-200                        | Hover background    |
+| `--ran-color-bg-active`                      | gray-300                        | Active background   |
+| `--ran-color-text`                           | gray-1000                       | Primary text        |
+| `--ran-color-text-secondary`                 | gray-900                        | Secondary text      |
+| `--ran-color-text-disabled`                  | gray-700                        | Disabled text       |
+| `--ran-color-border`                         | gray-400                        | Default border      |
+| `--ran-color-border-hover`                   | gray-500                        | Hover border        |
+| `--ran-color-border-active`                  | gray-600                        | Active border       |
+| `--ran-color-primary` / `-hover` / `-active` | blue-700 / 800 / 900            | Primary action      |
+| `--ran-color-success` / `warning` / `danger` | green-700 / amber-700 / red-700 | Status              |
+| `--ran-color-link`                           | blue-700                        | Links               |
 
 **Accent meaning:** blue = primary & links · green = success · amber = warning · red = danger/error.
 
-**Light & dark:** same token name, different value. `gray-1000` is `#171717` in light and `#ededed` in dark. Components reference the *semantic name*; dark mode only redefines the base scale (one mixin), and everything re-resolves.
+**Light & dark:** same token name, different value. `gray-1000` is `#171717` in light and `#ededed` in dark. Components reference the _semantic name_; dark mode only redefines the base scale (one mixin), and everything re-resolves.
 
 **Rules**
+
 - Never hard-code a hex/rgb in a component for a value that should follow the theme.
 - A component token's fallback must point at a **token that flips** (`var(--ran-gray-alpha-100, …)`, `var(--ran-blue-100, …)`, `var(--ran-color-text, …)`), never a light-only literal — otherwise it breaks in dark mode.
 
@@ -71,6 +72,7 @@ Scales: `--ran-gray-100..1000`, `--ran-gray-alpha-100..1000` (translucent, layer
 A **4px base unit** with **nine values** only: `--ran-space-1..24` → `4, 8, 12, 16, 24, 32, 40, 64, 96`px.
 
 **Rhythm**
+
 - `8px` between elements inside a group.
 - `16px` between groups.
 - `32–40px` between sections.
@@ -85,13 +87,13 @@ Fonts: `--ran-font-family` (Geist Sans, UI & prose), `--ran-font-mono` (Geist Mo
 
 Decide by **role**; the role fixes font, size, weight, line-height:
 
-| Role | Use | Weight | Notes |
-| --- | --- | --- | --- |
-| heading | Titles | 600 | Tight letter-spacing (≈ -0.03em); 32 / 24 / 20 / 16px |
-| label | Single-line, scannable | 500 | 14 / 13 / 12px; no wrapping |
-| copy | Multi-line body | 400 | line-height ~1.55; 16 / 14px |
-| button | Button text | 500 | 14px; `line-height: 1` for crisp vertical centering |
-| mono | Code, data, eyebrows | 400/500 | `--ran-font-mono` |
+| Role    | Use                    | Weight  | Notes                                                 |
+| ------- | ---------------------- | ------- | ----------------------------------------------------- |
+| heading | Titles                 | 600     | Tight letter-spacing (≈ -0.03em); 32 / 24 / 20 / 16px |
+| label   | Single-line, scannable | 500     | 14 / 13 / 12px; no wrapping                           |
+| copy    | Multi-line body        | 400     | line-height ~1.55; 16 / 14px                          |
+| button  | Button text            | 500     | 14px; `line-height: 1` for crisp vertical centering   |
+| mono    | Code, data, eyebrows   | 400/500 | `--ran-font-mono`                                     |
 
 **Rule:** ask "what role is this text?" (heading / label / copy / button) — the style follows. Don't pick raw px per instance.
 
@@ -100,15 +102,16 @@ Decide by **role**; the role fixes font, size, weight, line-height:
 ## 4. Radius & elevation
 
 Radius: `--ran-radius-sm` 6 · `--ran-radius-md` 12 · `--ran-radius-lg` 16 · `--ran-radius-full` 9999.
+
 - Controls (button, input, select) → `sm`. Cards / dialogs → `md`. Large surfaces → `lg`. Pills / avatars → `full`.
 
-**Elevation is a role, not decoration.** Pick the shadow by *what the element is*, and make sure the tier is actually perceptible — a shadow you can't see fails its job.
+**Elevation is a role, not decoration.** Pick the shadow by _what the element is_, and make sure the tier is actually perceptible — a shadow you can't see fails its job.
 
-| Tier | Token | Use for |
-| --- | --- | --- |
-| Raised | `--ran-shadow-elevated` | In-flow surfaces that also have a border — `r-card`, `r-section`. Subtle on purpose. |
-| Overlay | `--ran-shadow-menu` | Transient layers floating **over** content — `r-dropdown`, `r-select` menu, `r-popover`, tooltips, `r-message`/toast. Must clearly lift off the page. |
-| Modal | `--ran-shadow-modal` | Blocking dialogs — `r-modal`. Strongest. |
+| Tier    | Token                   | Use for                                                                                                                                               |
+| ------- | ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Raised  | `--ran-shadow-elevated` | In-flow surfaces that also have a border — `r-card`, `r-section`. Subtle on purpose.                                                                  |
+| Overlay | `--ran-shadow-menu`     | Transient layers floating **over** content — `r-dropdown`, `r-select` menu, `r-popover`, tooltips, `r-message`/toast. Must clearly lift off the page. |
+| Modal   | `--ran-shadow-modal`    | Blocking dialogs — `r-modal`. Strongest.                                                                                                              |
 
 A floating overlay must **never** fall back to `--ran-shadow-elevated` (the card tier) — it will look flat. Borderless overlays (dropdown, toast) rely on the shadow alone for separation, so the overlay tiers carry real weight.
 
@@ -118,12 +121,12 @@ A floating overlay must **never** fall back to `--ran-shadow-elevated` (the card
 
 Durations: `--ran-motion-duration-fast` `0.15s`, `--ran-motion-duration-base` `0.2s`.
 
-| Duration | Use |
-| --- | --- |
-| 0ms | A change that is already obvious — apply instantly |
-| ~150ms | Hover / active state transitions |
-| ~200ms | Popovers & menus appearing |
-| ~300ms | Modals & dialogs |
+| Duration | Use                                                |
+| -------- | -------------------------------------------------- |
+| 0ms      | A change that is already obvious — apply instantly |
+| ~150ms   | Hover / active state transitions                   |
+| ~200ms   | Popovers & menus appearing                         |
+| ~300ms   | Modals & dialogs                                   |
 
 **Principle:** the bigger the change, the more time it earns. Otherwise: don't animate. Keep motion quick, light, and restrained. Respect `prefers-reduced-motion`.
 

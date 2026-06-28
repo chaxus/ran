@@ -56,10 +56,7 @@ export function renderStaticPage(element: HTMLElement, path: string): string {
  *   });
  *   // pages = [{ path: '/', html: '...' }, { path: '/about', html: '...' }, ...]
  */
-export function generateStaticPages(
-  factory: () => HTMLElement,
-  options?: { paths?: string[] },
-): SSGPage[] {
+export function generateStaticPages(factory: () => HTMLElement, options?: { paths?: string[] }): SSGPage[] {
   const router = useRouter();
   const paths = options?.paths ?? router?.getStaticPaths() ?? [];
 

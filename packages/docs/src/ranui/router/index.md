@@ -14,10 +14,10 @@ const router = createRouter({
   mode: 'history',
   viewTransition: 'spa',
   routes: [
-    { path: '/',        exact: true, meta: { title: 'Home' } },
-    { path: '/about',               meta: { title: 'About' } },
-    { path: '/dashboard',           meta: { title: 'Dashboard', requiresAuth: true } },
-    { path: '/login',               meta: { title: 'Login' } },
+    { path: '/', exact: true, meta: { title: 'Home' } },
+    { path: '/about', meta: { title: 'About' } },
+    { path: '/dashboard', meta: { title: 'Dashboard', requiresAuth: true } },
+    { path: '/login', meta: { title: 'Login' } },
   ],
 });
 
@@ -57,11 +57,23 @@ router.onRouteChange((to) => {
 
 ```css
 /* SPA transition — cross-fade between routes */
-@keyframes fade-in  { from { opacity: 0; } }
-@keyframes fade-out { to   { opacity: 0; } }
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
 
-::view-transition-old(root) { animation: 200ms ease-out fade-out; }
-::view-transition-new(root) { animation: 200ms ease-in  fade-in; }
+::view-transition-old(root) {
+  animation: 200ms ease-out fade-out;
+}
+::view-transition-new(root) {
+  animation: 200ms ease-in fade-in;
+}
 ```
 
 ## Components
@@ -72,16 +84,16 @@ Container component. Listens to `popstate` and syncs all child `r-route` element
 
 #### Attributes
 
-| Attribute | Type | Default | Description |
-| --- | --- | --- | --- |
-| `mode` | `'history' \| 'hash'` | `'history'` | History API mode |
-| `base` | `string` | `''` | Base URL prefix stripped from all paths |
-| `sheet` | `string` | `''` | CSS injected into the shadow DOM |
+| Attribute | Type                  | Default     | Description                             |
+| --------- | --------------------- | ----------- | --------------------------------------- |
+| `mode`    | `'history' \| 'hash'` | `'history'` | History API mode                        |
+| `base`    | `string`              | `''`        | Base URL prefix stripped from all paths |
+| `sheet`   | `string`              | `''`        | CSS injected into the shadow DOM        |
 
 #### Events
 
-| Event | Detail | Description |
-| --- | --- | --- |
+| Event         | Detail             | Description                    |
+| ------------- | ------------------ | ------------------------------ |
 | `routechange` | `{ path: string }` | Fires after every route update |
 
 ### `r-route`
@@ -90,16 +102,16 @@ Shows its slotted content when the current path matches `path`; hides it otherwi
 
 #### Attributes
 
-| Attribute | Type | Default | Description |
-| --- | --- | --- | --- |
-| `path` | `string` | `'/'` | Pattern to match. Supports `:param` segments and `*` wildcard |
-| `exact` | `boolean` | `false` | Require an exact match (no prefix matching) |
-| `sheet` | `string` | `''` | CSS injected into the shadow DOM |
+| Attribute | Type      | Default | Description                                                   |
+| --------- | --------- | ------- | ------------------------------------------------------------- |
+| `path`    | `string`  | `'/'`   | Pattern to match. Supports `:param` segments and `*` wildcard |
+| `exact`   | `boolean` | `false` | Require an exact match (no prefix matching)                   |
+| `sheet`   | `string`  | `''`    | CSS injected into the shadow DOM                              |
 
 #### Events
 
-| Event | Detail | Description |
-| --- | --- | --- |
+| Event        | Detail             | Description                          |
+| ------------ | ------------------ | ------------------------------------ |
 | `routematch` | `{ path, params }` | Fires when this route becomes active |
 
 #### Path pattern examples
@@ -119,11 +131,11 @@ External URLs (`http://`, `//`, `mailto:`, `tel:`) pass through as normal `<a>` 
 
 #### Attributes
 
-| Attribute | Type | Default | Description |
-| --- | --- | --- | --- |
-| `href` | `string` | `''` | Target path |
+| Attribute | Type      | Default | Description                                          |
+| --------- | --------- | ------- | ---------------------------------------------------- |
+| `href`    | `string`  | `''`    | Target path                                          |
 | `replace` | `boolean` | `false` | Replace the current history entry instead of pushing |
-| `sheet` | `string` | `''` | CSS injected into the shadow DOM |
+| `sheet`   | `string`  | `''`    | CSS injected into the shadow DOM                     |
 
 ```html
 <r-link href="/about">About</r-link>
@@ -141,8 +153,8 @@ Creates and registers a global `RouterCore` instance. Call once at app startup b
 import { createRouter } from 'ranui';
 
 const router = createRouter({
-  mode: 'history',       // 'history' (default) | 'hash'
-  base: '/app',          // strip '/app' prefix from all internal paths
+  mode: 'history', // 'history' (default) | 'hash'
+  base: '/app', // strip '/app' prefix from all internal paths
   routes: [
     { path: '/', exact: true, meta: { title: 'Home' } },
     { path: '/users/:id', meta: { requiresAuth: true } },
@@ -153,34 +165,34 @@ const router = createRouter({
 
 #### Options
 
-| Option | Type | Default | Description |
-| --- | --- | --- | --- |
-| `mode` | `'history' \| 'hash'` | `'history'` | URL strategy |
-| `base` | `string` | `''` | Base path prefix |
-| `routes` | `RouteConfig[]` | `[]` | Route definitions with path, exact, and meta |
-| `viewTransition` | `boolean \| ViewTransitionMode` | `false` | Enable View Transitions (`true` equals `'spa'`) |
+| Option           | Type                            | Default     | Description                                     |
+| ---------------- | ------------------------------- | ----------- | ----------------------------------------------- |
+| `mode`           | `'history' \| 'hash'`           | `'history'` | URL strategy                                    |
+| `base`           | `string`                        | `''`        | Base path prefix                                |
+| `routes`         | `RouteConfig[]`                 | `[]`        | Route definitions with path, exact, and meta    |
+| `viewTransition` | `boolean \| ViewTransitionMode` | `false`     | Enable View Transitions (`true` equals `'spa'`) |
 
 ### `RouterCore`
 
 All hook methods return an **unsubscribe function**.
 
-| Name | Signature / Type | Description |
-| --- | --- | --- |
-| `push(path)` | `(path: string) => Promise<void>` | Navigate and add a new history entry |
-| `replace(path)` | `(path: string) => Promise<void>` | Navigate and replace the current entry |
-| `back()` | `() => void` | `history.back()` |
-| `forward()` | `() => void` | `history.forward()` |
-| `go(delta)` | `(delta: number) => void` | `history.go(delta)` |
-| `beforeEach(guard)` | `(guard: NavigationGuard) => () => void` | Register a navigation guard; runs before navigation commits |
-| `afterEach(handler)` | `(handler: RouteChangeHandler) => () => void` | Post-navigation hook; runs after DOM is updated |
-| `onRouteChange(handler)` | `(handler: RouteChangeHandler) => () => void` | Subscribe to every route change |
-| `onPageSwap(handler)` | `(handler: (e: PageSwapEvent) => void) => () => void` | Cross-document `pageswap` event — MPA mode only |
-| `onPageReveal(handler)` | `(handler: (e: PageRevealEvent) => void) => () => void` | Cross-document `pagereveal` event — MPA mode only |
-| `destroy()` | `() => void` | Remove all listeners and injected CSS |
-| `currentRoute` | `RouteLocation \| null` | Current route location object |
-| `mode` | `'history' \| 'hash'` | History mode |
-| `base` | `string` | Base URL prefix |
-| `routes` | `RouteConfig[]` | Registered route configs |
+| Name                     | Signature / Type                                        | Description                                                 |
+| ------------------------ | ------------------------------------------------------- | ----------------------------------------------------------- |
+| `push(path)`             | `(path: string) => Promise<void>`                       | Navigate and add a new history entry                        |
+| `replace(path)`          | `(path: string) => Promise<void>`                       | Navigate and replace the current entry                      |
+| `back()`                 | `() => void`                                            | `history.back()`                                            |
+| `forward()`              | `() => void`                                            | `history.forward()`                                         |
+| `go(delta)`              | `(delta: number) => void`                               | `history.go(delta)`                                         |
+| `beforeEach(guard)`      | `(guard: NavigationGuard) => () => void`                | Register a navigation guard; runs before navigation commits |
+| `afterEach(handler)`     | `(handler: RouteChangeHandler) => () => void`           | Post-navigation hook; runs after DOM is updated             |
+| `onRouteChange(handler)` | `(handler: RouteChangeHandler) => () => void`           | Subscribe to every route change                             |
+| `onPageSwap(handler)`    | `(handler: (e: PageSwapEvent) => void) => () => void`   | Cross-document `pageswap` event — MPA mode only             |
+| `onPageReveal(handler)`  | `(handler: (e: PageRevealEvent) => void) => () => void` | Cross-document `pagereveal` event — MPA mode only           |
+| `destroy()`              | `() => void`                                            | Remove all listeners and injected CSS                       |
+| `currentRoute`           | `RouteLocation \| null`                                 | Current route location object                               |
+| `mode`                   | `'history' \| 'hash'`                                   | History mode                                                |
+| `base`                   | `string`                                                | Base URL prefix                                             |
+| `routes`                 | `RouteConfig[]`                                         | Registered route configs                                    |
 
 ```js
 router.push('/users/42');
@@ -239,11 +251,11 @@ Enable animated route transitions using the browser's [View Transitions API](htt
 
 Pick a mode before writing any CSS:
 
-| Mode | Chrome | Trigger | JS needed |
-| --- | --- | --- | --- |
-| `'spa'` | 111+ | `router.push()` / `r-link` click | Yes |
-| `'mpa'` | 126+ | Any `<a>` link, form submit, `location.href` | No |
-| `'both'` | 111+ / 126+ | All of the above | Optional |
+| Mode     | Chrome      | Trigger                                      | JS needed |
+| -------- | ----------- | -------------------------------------------- | --------- |
+| `'spa'`  | 111+        | `router.push()` / `r-link` click             | Yes       |
+| `'mpa'`  | 126+        | Any `<a>` link, form submit, `location.href` | No        |
+| `'both'` | 111+ / 126+ | All of the above                             | Optional  |
 
 ### SPA — same-document transitions
 
@@ -257,11 +269,23 @@ Add CSS to define the animation:
 
 ```css
 /* Default cross-fade */
-@keyframes fade-in  { from { opacity: 0; } }
-@keyframes fade-out { to   { opacity: 0; } }
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
 
-::view-transition-old(root) { animation: 200ms ease-out fade-out; }
-::view-transition-new(root) { animation: 200ms ease-in  fade-in; }
+::view-transition-old(root) {
+  animation: 200ms ease-out fade-out;
+}
+::view-transition-new(root) {
+  animation: 200ms ease-in fade-in;
+}
 ```
 
 ### MPA — cross-document transitions
@@ -336,8 +360,12 @@ The browser automatically animates the card from its list position to its detail
 
 ```css
 /* CSS approach — one rule per card */
-.card[data-id="1"]  { view-transition-name: card-1; }
-.card[data-id="42"] { view-transition-name: card-42; }
+.card[data-id='1'] {
+  view-transition-name: card-1;
+}
+.card[data-id='42'] {
+  view-transition-name: card-42;
+}
 ```
 
 ```js
@@ -365,19 +393,34 @@ Combine a `beforeEach` guard with a CSS custom property to produce different ani
 const pages = ['/', '/step-1', '/step-2', '/step-3'];
 
 router.beforeEach((to, from, next) => {
-  const toIdx   = pages.indexOf(to.path);
+  const toIdx = pages.indexOf(to.path);
   const fromIdx = pages.indexOf(from?.path ?? '');
-  document.documentElement.dataset.navDir =
-    toIdx >= fromIdx ? 'forward' : 'back';
+  document.documentElement.dataset.navDir = toIdx >= fromIdx ? 'forward' : 'back';
   next();
 });
 ```
 
 ```css
-@keyframes slide-from-right { from { translate: 100% 0; } }
-@keyframes slide-from-left  { from { translate: -100% 0; } }
-@keyframes slide-to-right   { to   { translate: 100% 0; } }
-@keyframes slide-to-left    { to   { translate: -100% 0; } }
+@keyframes slide-from-right {
+  from {
+    translate: 100% 0;
+  }
+}
+@keyframes slide-from-left {
+  from {
+    translate: -100% 0;
+  }
+}
+@keyframes slide-to-right {
+  to {
+    translate: 100% 0;
+  }
+}
+@keyframes slide-to-left {
+  to {
+    translate: -100% 0;
+  }
+}
 
 [data-nav-dir='forward']::view-transition-old(root) {
   animation: 300ms ease slide-to-left;
@@ -403,10 +446,10 @@ All browser APIs (`window`, `history`, `document`) are guarded with `typeof` che
 
 ```ts
 interface RouteLocation {
-  path: string;                    // e.g. '/users/42'
-  params: Record<string, string>;  // e.g. { id: '42' }
-  query: Record<string, string>;   // e.g. { tab: 'profile' }
-  fullPath: string;                // e.g. '/users/42?tab=profile'
+  path: string; // e.g. '/users/42'
+  params: Record<string, string>; // e.g. { id: '42' }
+  query: Record<string, string>; // e.g. { tab: 'profile' }
+  fullPath: string; // e.g. '/users/42?tab=profile'
 }
 
 type ViewTransitionMode = 'spa' | 'mpa' | 'both';

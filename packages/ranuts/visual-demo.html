@@ -7,7 +7,11 @@
     <style>
       body {
         margin: 0;
-        font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+        font-family:
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          sans-serif;
         background: #0b0c10;
         color: #e6e6e6;
         display: flex;
@@ -16,8 +20,18 @@
         gap: 16px;
         padding: 24px;
       }
-      h1 { font-size: 16px; font-weight: 600; margin: 0; opacity: 0.9; }
-      .bar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+      h1 {
+        font-size: 16px;
+        font-weight: 600;
+        margin: 0;
+        opacity: 0.9;
+      }
+      .bar {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
       button {
         background: #1b1d24;
         color: #e6e6e6;
@@ -27,13 +41,42 @@
         font-size: 13px;
         cursor: pointer;
       }
-      button[aria-pressed='true'] { background: #0091ff; border-color: #0091ff; color: #fff; }
-      button:disabled { opacity: 0.4; cursor: not-allowed; }
-      #status { font-size: 12px; min-height: 16px; opacity: 0.8; font-variant-numeric: tabular-nums; }
-      #status.err { color: #ff6369; opacity: 1; }
-      #mount { width: 500px; height: 500px; border: 1px solid #2b2e38; border-radius: 12px; overflow: hidden; }
-      canvas { display: block; }
-      .hint { font-size: 11px; opacity: 0.5; max-width: 500px; text-align: center; line-height: 1.5; }
+      button[aria-pressed='true'] {
+        background: #0091ff;
+        border-color: #0091ff;
+        color: #fff;
+      }
+      button:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+      #status {
+        font-size: 12px;
+        min-height: 16px;
+        opacity: 0.8;
+        font-variant-numeric: tabular-nums;
+      }
+      #status.err {
+        color: #ff6369;
+        opacity: 1;
+      }
+      #mount {
+        width: 500px;
+        height: 500px;
+        border: 1px solid #2b2e38;
+        border-radius: 12px;
+        overflow: hidden;
+      }
+      canvas {
+        display: block;
+      }
+      .hint {
+        font-size: 11px;
+        opacity: 0.5;
+        max-width: 500px;
+        text-align: center;
+        line-height: 1.5;
+      }
     </style>
   </head>
   <body>
@@ -173,7 +216,10 @@
         const color = palette[dots % palette.length];
         const angle = (dots / 8) * Math.PI * 2;
         dots++;
-        dot.beginFill(color).drawCircle(Math.cos(angle) * 160, Math.sin(angle) * 160, 18).endFill();
+        dot
+          .beginFill(color)
+          .drawCircle(Math.cos(angle) * 160, Math.sin(angle) * 160, 18)
+          .endFill();
         group.addChild(dot); // 首帧后新增 —— 必须出现
       });
       document.getElementById('reset').addEventListener('click', () => {

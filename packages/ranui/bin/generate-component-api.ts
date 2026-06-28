@@ -131,7 +131,11 @@ function detailKeys(body: string): string[] {
 
 /** Custom events the element dispatches, with their `detail` keys when present. */
 function extractEvents(src: string): Evt[] {
-  const names = uniqSorted((src.match(/new\s+CustomEvent\(\s*['"`]([^'"`]+)['"`]/g) || []).map((s) => s.replace(/.*['"`]([^'"`]+)['"`]$/, '$1')));
+  const names = uniqSorted(
+    (src.match(/new\s+CustomEvent\(\s*['"`]([^'"`]+)['"`]/g) || []).map((s) =>
+      s.replace(/.*['"`]([^'"`]+)['"`]$/, '$1'),
+    ),
+  );
   const details = new Map<string, string[]>();
   const re = /new\s+CustomEvent\(\s*['"`]([^'"`]+)['"`][\s\S]{0,220}?detail:\s*\{([^{}]*)\}/g;
   let m: RegExpExecArray | null;
@@ -202,7 +206,9 @@ function renderAttributes(attrs: string[], props: Prop[]): string {
 
 function renderEvents(events: Evt[]): string {
   if (!events.length) return '—';
-  return events.map((e) => (e.detail.length ? `\`${e.name}\` → detail \`{ ${e.detail.join(', ')} }\`` : `\`${e.name}\``)).join(' · ');
+  return events
+    .map((e) => (e.detail.length ? `\`${e.name}\` → detail \`{ ${e.detail.join(', ')} }\`` : `\`${e.name}\``))
+    .join(' · ');
 }
 
 async function main(): Promise<void> {

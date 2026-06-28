@@ -31,11 +31,7 @@ function buildApp(): HTMLElement {
 
 beforeEach(() => {
   createRouter({
-    routes: [
-      { path: '/', exact: true },
-      { path: '/about' },
-      { path: '/users/:id' },
-    ],
+    routes: [{ path: '/', exact: true }, { path: '/about' }, { path: '/users/:id' }],
   });
 });
 
