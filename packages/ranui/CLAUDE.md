@@ -4,6 +4,21 @@ Web Components library built with TypeScript. All components use Shadow DOM enca
 
 ---
 
+## Design Standards — read before building or changing any UI
+
+**[docs/DESIGN.md](docs/DESIGN.md) is the authoritative, executable design standard.** Follow it whenever your work changes what a user sees. It is based on the Geist design system (light/dark only). The non-negotiables:
+
+- **Color is a state ladder, not a palette.** Each scale step 100→1000 has one fixed job: 100 default bg · 200 hover bg · 300 active bg · 400 border · 500 hover border · 600 active border · 700 solid · 800 solid hover · 900 secondary text · 1000 primary text. Use the **semantic tokens** (`--ran-color-*`), never raw hex, in components.
+- **Dark-safe fallbacks.** A component token's fallback must point at a token that *flips* (`var(--ran-color-text, …)`, `var(--ran-gray-alpha-100, …)`, `var(--ran-blue-100, …)`) — never a light-only literal like `rgba(0,0,0,.06)` or `#e6f7ff`, which breaks in dark mode.
+- **Spacing:** the `--ran-space-*` scale only (4px base, 9 values). 8 within a group, 16 between groups, 32–40 between sections.
+- **Typography:** choose a role (heading / label / copy / button / mono), not a raw px size.
+- **Radius/elevation/motion:** use the tokens; prefer no motion (0ms) and keep what remains quick (150/200/300ms); respect `prefers-reduced-motion`.
+- **Copy:** buttons = action + object ("Deploy project"); errors = what + how; toasts state the change ("Project deleted").
+- **Accessibility:** WCAG AA contrast; never signal state by color alone (pair an icon/label); visible focus ring on every interactive element; icon-only controls need an `aria-label`; full keyboard nav.
+- **Verify rendered output** in light *and* dark, at narrow *and* wide widths, across the materially changed states — code review alone is not enough.
+
+---
+
 ## Project Layout
 
 ```
@@ -16,13 +31,15 @@ packages/ranui/
 │   ├── component.ts      # ensureShadowRoot, ensureShadowElement, attribute helpers
 │   ├── builder/          # ElementBuilder fluent DOM builder
 │   ├── router/           # RouterCore, createRouter, useRouter, enableMpaViewTransitions
+│   ├── i18n/             # I18nCore, createI18n, useI18n (framework-agnostic)
 │   ├── ssr-registry.ts   # defineSSR, SSR support
-│   ├── theme.ts          # setTheme, setThemePack, initTheme
+│   ├── theme.ts          # setTheme, setThemeToken(s), initTheme (light/dark/system)
 │   ├── style.ts          # adoptStyles, adoptSheetText
 │   └── dom.ts            # falseList, isDisabled
-├── theme-packs/          # Optional CSS-only theme packs
+├── theme/                # tokens.less (Geist base+semantic) + dark.less (dark mixin)
+├── docs/DESIGN.md        # ⭐ AI-facing design standard — follow it for ANY UI work
 ├── test/unit/            # *.contract.test.ts per component
-├── demo/                 # Dev server entry (Vite, port 5173)
+├── demo/                 # Dev server entry (Vite); routed showcase (r-router)
 ├── index.ts              # Barrel exports + side-effect imports
 ├── vite.config.ts        # Build + dev server config
 ├── vitest.config.ts      # Test config (jsdom, 80%+ coverage)
@@ -341,24 +358,35 @@ export const RanElement = HTMLElementSSR()!;
 
 ### `utils/theme.ts`
 
+Light/dark only — **there are no theme packs** (they were removed; `setThemePack`/`getThemePack`/`RanThemePackName` no longer exist). The token system is Geist-based; see [docs/DESIGN.md](docs/DESIGN.md) and [docs/THEME_STYLE_SYSTEM_DESIGN.md](docs/THEME_STYLE_SYSTEM_DESIGN.md).
+
 ```typescript
 type RanThemeName = 'light' | 'dark' | 'system'
-type RanThemePackName =
-  | 'default' | 'windows-98' | 'windows-xp' | 'system-6'
-  | 'wired' | 'paper' | 'pixel-retro' | 'neo-brutalism'
 type ThemeTarget = HTMLElement | Document
 
 initTheme(target?: ThemeTarget): void       // call once on page load; restores from localStorage
-setTheme(name: RanThemeName, target?: ThemeTarget): void
+setTheme(name: RanThemeName, target?: ThemeTarget): void   // 'system' tracks prefers-color-scheme
 getTheme(target?: ThemeTarget): RanThemeName | ''
-setThemePack(name: RanThemePackName, target?: ThemeTarget): void
-getThemePack(target?: ThemeTarget): RanThemePackName | ''
 setThemeToken(name: string, value: string | number, target?: HTMLElement): void
 clearThemeToken(name: string, target?: HTMLElement): void
 setThemeTokens(tokens: Record<string, string | number | null | undefined>, target?: HTMLElement): void
 ```
 
-localStorage keys: `'ran-theme'`, `'ran-theme-pack'`
+localStorage key: `'ran-theme'`. SSR-safe (all `document`/`localStorage` access guarded).
+
+Dark mode is a single source of truth: `theme/dark.less` redefines only the base scale via the `.ran-theme-dark()` mixin; semantic tokens reference the scale and flip automatically.
+
+### `utils/i18n/index.ts` — framework-agnostic i18n
+
+Same core/singleton shape as the router. Exported from the `ranui` barrel.
+
+```typescript
+const i18n = createI18n({ messages: { en, zh }, fallbackLocale: 'en', persist: true, detectNavigator: true })
+useI18n()!.t('hero.title', { name })   // fallback locale → key; {param} interpolation
+useI18n()!.setLocale('zh')             // persists; notifies onChange subscribers
+```
+
+`I18nCore`: `t` / `setLocale` / `getLocale` / `onChange(fn)→unsub` / `addMessages` / `getMessages` / `availableLocales` / `destroy`. SSR-safe.
 
 ### `utils/dom.ts`
 
@@ -454,14 +482,19 @@ Every component's `index.less` automatically receives `@import "base.less"` via 
 --ran-color-border-secondary
 --ran-color-link
 
---ran-radius-sm | --ran-radius-md | --ran-radius-lg
+--ran-radius-sm 6 | --ran-radius-md 12 | --ran-radius-lg 16 | --ran-radius-full
+--ran-space-1..24          /* 4 8 12 16 24 32 40 64 96 */
+--ran-shadow-elevated | --ran-shadow-menu | --ran-shadow-modal | --ran-focus-ring
 
+/* Geist base scales (rarely used directly; semantic tokens map onto them) */
+--ran-gray-100..1000 | --ran-gray-alpha-100..1000
+--ran-blue/red/amber/green-100..1000 | --ran-background-100/200
+
+/* Skin layer — only these four remain (pack-only ones were removed) */
 --ran-skin-font-family
---ran-skin-border-width    /* 1px default, 2px in neo-brutalism */
---ran-skin-border-style    /* solid | inset */
---ran-skin-raised-shadow   /* embossed effect */
---ran-skin-inset-shadow
---ran-skin-control-height-sm | -md
+--ran-skin-border-width
+--ran-skin-border-style
+--ran-skin-raised-shadow
 
 --ran-motion-duration-fast | --ran-motion-duration-base
 
@@ -797,3 +830,11 @@ Each component gets its own `dist/{name}.js` ES module. The barrel `dist/index.j
 | Accessing `window` / `document` in `RouterCore` utility code                                                    | `RouterCore` is imported at the module level and can be instantiated in SSR. All `window.*` / `document.*` calls must be guarded with `typeof window !== 'undefined'` / `typeof document !== 'undefined'`. The existing utility guards are in `_getCurrentPath`, `_navigate`, `back/forward/go`, `injectMpaTransitionStyle`, and `_enableMpa/_disableMpa`. Add the same guard to any new code that touches browser globals. |
 | Calling `createRouter()` after `r-router` elements have already connected                                        | `r-router` calls `useRouter()?._bind(this)` in `connectedCallback`. If `createRouter` is called after the component is already in the DOM, the component will not be registered. Always call `createRouter()` before mounting `r-router`, or trigger reconnection manually. |
 | `viewTransition: 'mpa'` with SPA navigation                                                                     | MPA mode only injects `@view-transition { navigation: auto }` for full-page navigations. `push()` / `replace()` will NOT trigger this CSS-based transition — they bypass the browser's navigation pipeline. Use `'both'` when you need transitions for both SPA navigation and full-page links. |
+| Hard-coded color that should follow the theme (e.g. `rgba(0,0,0,.06)`, `#e6f7ff`, black canvas text) | Breaks in dark mode. Point the fallback at a token that flips: `var(--ran-color-text, …)`, `var(--ran-gray-alpha-100, …)`, `var(--ran-blue-100, …)`. For canvas/JS-drawn colors, read the CSS var via `getComputedStyle(this).getPropertyValue('--ran-color-text')`. See DESIGN.md §1. |
+| Text not vertically centered in a pill/button | Don't rely on `height: 100%` against an auto-height host (it collapses to `auto`) plus an inherited `line-height`. Give the host a fixed height and the inner element `display:flex; align-items:center; line-height:1; box-sizing:border-box`. |
+| Icon-only control (icon link/button) with no text | Add an `aria-label` — an `aria-hidden` icon alone has no accessible name. Watch responsive rules that hide a text label on mobile (the control becomes icon-only). |
+| Animations/transitions without a reduced-motion escape | Add `@media (prefers-reduced-motion: reduce)` that zeroes transition/animation durations, disables smooth scroll, and removes hover transforms. DESIGN.md §5. |
+| Signalling state with color alone (red/green only) | Pair color with an icon or text (e.g. ✓/✕ labels, an error message + icon). DESIGN.md §7. |
+| Hiding navigation/affordances on mobile to save space | Don't remove the only way to do something. Reflow it (e.g. drop nav to its own row) instead of `display:none`. |
+| Styling an `r-link` host as a button/card | The clickable `<a>` lives in the link's (closed) shadow. Put the surface (bg/border/radius) on the host and inject the `<a>` box model (`display`, `padding`, `width/height`, `line-height`) via the `sheet` attribute so the whole area is clickable and centered. |
+| Demo deploy target | The demo routes with `r-router` in **history mode**; static hosts need an SPA fallback. Cloudflare Pages: `demo/public/_redirects` → `/* /index.html 200`. (GitHub Pages can't rewrite → would need hash mode.) |
