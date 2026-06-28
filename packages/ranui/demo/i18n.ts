@@ -37,6 +37,7 @@ export const applyLanguage = (lang: Lang): void => {
   });
   bind('data-i18n-placeholder', (el, v) => el.setAttribute('placeholder', v));
   bind('data-i18n-label', (el, v) => el.setAttribute('label', v));
+  bind('data-i18n-message', (el, v) => el.setAttribute('message', v));
   bind('data-i18n-title', (el, v) => el.setAttribute('title', v));
   bind('data-i18n-desc', (el, v) => el.setAttribute('description', v));
 };
