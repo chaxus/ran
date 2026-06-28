@@ -64,16 +64,50 @@
     transform: var(--ran-input-label-value-transform, translateY(calc(-50% - 0.43em)) scale(0.8));
     color: var(--ran-input-label-value-color, var(--ran-color-text-disabled, #00000040));
   }
+  /* Status icon — a non-color cue (shape) so error/warning is not signalled
+     by color alone (see DESIGN.md §7). CSS mask so it tints with the token. */
+  &[status='error'],
+  &[status='warning'] {
+    .ran-input-content {
+      padding-right: var(--ran-input-content-status-padding-right, 28px);
+    }
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      width: 16px;
+      height: 16px;
+      transform: translateY(-50%);
+      pointer-events: none;
+      mask-position: center;
+      mask-repeat: no-repeat;
+      mask-size: contain;
+      -webkit-mask-position: center;
+      -webkit-mask-repeat: no-repeat;
+      -webkit-mask-size: contain;
+    }
+  }
   &[status='error'] {
     border-color: var(--ran-input-status-error-border-color, var(--ran-color-danger, #ff4d4f));
     & > .ran-input-content ~ .ran-input-label {
       color: var(--ran-input-label-status-error-color, var(--ran-color-danger, #ff4d4f));
     }
+    &::after {
+      background-color: var(--ran-color-danger, #ff4d4f);
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 1a7 7 0 100 14A7 7 0 008 1zm-.75 3.5h1.5v5h-1.5v-5zM8 11a1 1 0 110 2 1 1 0 010-2z'/%3E%3C/svg%3E");
+      -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 1a7 7 0 100 14A7 7 0 008 1zm-.75 3.5h1.5v5h-1.5v-5zM8 11a1 1 0 110 2 1 1 0 010-2z'/%3E%3C/svg%3E");
+    }
   }
   &[status='warning'] {
-    border-color: var(--ran-input-status-warning-border-color, var(--ran-color-warning, #ff7875));
+    border-color: var(--ran-input-status-warning-border-color, var(--ran-color-warning, #faad14));
     & > .ran-input-content ~ .ran-input-label {
-      color: var(--ran-input-label-status-warning-color, var(--ran-color-warning, #ff7875));
+      color: var(--ran-input-label-status-warning-color, var(--ran-color-warning, #faad14));
+    }
+    &::after {
+      background-color: var(--ran-color-warning, #faad14);
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 1.5l6.85 11.86a.5.5 0 01-.43.75H1.58a.5.5 0 01-.43-.75L8 1.5zm-.75 4.25v3.5h1.5v-3.5h-1.5zM8 10.75a1 1 0 110 2 1 1 0 010-2z'/%3E%3C/svg%3E");
+      -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 1.5l6.85 11.86a.5.5 0 01-.43.75H1.58a.5.5 0 01-.43-.75L8 1.5zm-.75 4.25v3.5h1.5v-3.5h-1.5zM8 10.75a1 1 0 110 2 1 1 0 010-2z'/%3E%3C/svg%3E");
     }
   }
   &[disabled] {
@@ -178,4 +212,22 @@
     opacity: var(--ran-input-label-opacity, 0.9);
     transition: var(--ran-input-label-transition, all 0.3s);
   }
+}
+
+/* Helper / validation message below the field — a text cue for status
+   (DESIGN.md §7). Hidden when empty. */
+.ran-input-message {
+  margin-top: var(--ran-input-message-margin-top, 4px);
+  font-size: var(--ran-input-message-font-size, 12px);
+  line-height: var(--ran-input-message-line-height, 1.5);
+  color: var(--ran-input-message-color, var(--ran-color-text-secondary, #8c8c8c));
+  &:empty {
+    display: none;
+  }
+}
+:host([status='error']) .ran-input-message {
+  color: var(--ran-input-message-error-color, var(--ran-color-danger, #ff4d4f));
+}
+:host([status='warning']) .ran-input-message {
+  color: var(--ran-input-message-warning-color, var(--ran-color-warning, #faad14));
 }

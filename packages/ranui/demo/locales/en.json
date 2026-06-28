@@ -112,6 +112,7 @@
   "input.password.label": "Password",
   "input.email.label": "Email",
   "input.email.ph": "Invalid email",
+  "input.email.msg": "Enter a valid email address",
   "select.ph": "Pick a teammate",
   "opt.high": "🔴 High priority",
   "opt.medium": "🟡 Medium priority",

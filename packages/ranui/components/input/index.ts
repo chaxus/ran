@@ -22,6 +22,7 @@ export class Input extends RanElement {
       'icon',
       'value',
       'status', // error warning normal
+      'message', // helper / validation text shown below the field
       'prefix', // 前缀
       'suffix', // 后缀
       'allowclear', // 清除 icon
@@ -41,6 +42,7 @@ export class Input extends RanElement {
   _label: HTMLLabelElement | undefined;
   _inputContent: HTMLInputElement;
   _icon: HTMLElement | undefined;
+  _message: HTMLElement | undefined;
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, inputCss);
@@ -160,6 +162,22 @@ export class Input extends RanElement {
     } else {
       this.removeAttribute('status');
       this._input.removeAttribute('status');
+    }
+  }
+  /**
+   * @description: 获取下方的提示/校验文案
+   */
+  get message(): string {
+    return this.getAttribute('message') || '';
+  }
+  /**
+   * @description: 设置下方的提示/校验文案（配合 status 作为非颜色线索）
+   */
+  set message(value: string) {
+    if (value) {
+      this.setAttribute('message', value);
+    } else {
+      this.removeAttribute('message');
     }
   }
   /**
@@ -403,6 +421,24 @@ export class Input extends RanElement {
     }
   };
   /**
+   * @description: 监听 message 属性，渲染/更新字段下方的提示文案
+   * @param {string} name
+   * @param {string} value
+   */
+  listenMessage = (name: string, value: string): void => {
+    if (name !== 'message') return;
+    if (value) {
+      if (!this._message) {
+        this._message = Div().class('ran-input-message').part('message').build() as HTMLElement;
+        this._shadowDom.appendChild(this._message);
+      }
+      this._message.textContent = value;
+    } else if (this._message) {
+      this._message.remove();
+      this._message = undefined;
+    }
+  };
+  /**
    * @description: 监听 disabled 属性
    * @param {string} name
    * @param {string} value
@@ -451,6 +487,7 @@ export class Input extends RanElement {
     this.listenPlaceholder(name, newValue);
     this.listenLabel(name, newValue);
     this.listenStatus(name, newValue);
+    this.listenMessage(name, newValue);
     this.listenDisabled(name, newValue);
     this.listenIcon(name, newValue, oldValue);
     if (name === 'value' && oldValue !== newValue) {
@@ -467,6 +504,9 @@ export class Input extends RanElement {
     }
     if (this.status) {
       this._input.setAttribute('status', this.status);
+    }
+    if (this.message) {
+      this.listenMessage('message', this.message);
     }
     if (isDisabled(this)) {
       this._input.setAttribute('disabled', '');

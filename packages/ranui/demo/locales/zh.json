@@ -112,6 +112,7 @@
   "input.password.label": "密码",
   "input.email.label": "邮箱",
   "input.email.ph": "邮箱格式错误",
+  "input.email.msg": "请输入有效的邮箱地址",
   "select.ph": "选择成员",
   "opt.high": "🔴 高优先级",
   "opt.medium": "🟡 中优先级",

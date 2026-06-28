@@ -6,6 +6,8 @@ All notable changes to `ranui` will be documented in this file.
 
 ### Added
 
+- `r-input` now signals `status="error"`/`"warning"` with more than color (DESIGN.md §7): an automatic status icon, plus an optional `message` attribute that renders helper/validation text below the field.
+
 - Rebuilt the demo as a token-driven, Geist-style multi-page app routed with ranui's own `r-router`/`r-route`/`r-link` (Overview, Design, Components, Guide) in history mode, with a Cloudflare Pages `_redirects` SPA fallback. Top nav has route links, GitHub/Issues, an EN/中文 `r-select` language switcher (persisted, `navigator.language`-detected), and a light/dark toggle. See `changelogs/2026-06-27.md`.
 - New Geist-based design tokens: full `--ran-gray/gray-alpha/blue/red/amber/green-100..1000` scales, `--ran-background-100/200`, `--ran-space-*` spacing scale, `--ran-radius-full`, `--ran-shadow-menu/modal`, `--ran-focus-ring`, and `--ran-color-primary-hover/active`.
 - New framework-agnostic i18n utility (`utils/i18n`, exported from `ranui` as `createI18n` / `useI18n` / `I18nCore`): `t(key, params)` with locale fallback + `{param}` interpolation, `setLocale`/`onChange` subscription, `addMessages`, localStorage persistence, and `navigator` locale detection. SSR-safe. Mirrors the router core/singleton design.
