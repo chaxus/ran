@@ -164,6 +164,8 @@
       position: var(--ran-select-selection-item-position, absolute);
       top: var(--ran-select-selection-item-top, 0);
       left: var(--ran-select-selection-item-left, 12px);
+      /* bound the width so the ellipsis actually triggers (leaves room for the arrow) */
+      right: var(--ran-select-selection-item-right, 28px);
       margin: var(--ran-select-selection-item-margin, 0);
       padding: var(--ran-select-selection-item-padding, 0);
       background: var(--ran-select-selection-item-background, transparent);

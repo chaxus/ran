@@ -329,9 +329,7 @@ export class Input extends RanElement {
     event.preventDefault();
     const { target, data = '' } = event as InputEvent;
     this.value = (target as HTMLInputElement)?.value || data || '';
-    // 增加 onchange 事件
-    this.customChange();
-    // 默认 input 事件
+    // 默认 input 事件（每次输入都触发，与原生一致）
     this.dispatchEvent(
       new CustomEvent('input', {
         detail: {
@@ -341,9 +339,10 @@ export class Input extends RanElement {
     );
   };
   /**
-   * @description: 增加 change 方法，同时兼容大小写的情况
+   * @description: change 事件——与原生一致，在失焦（提交）时触发，而非每次输入
    */
   customChange = (): void => {
+    this.value = this._inputContent?.value ?? this.value;
     this.dispatchEvent(
       new CustomEvent('change', {
         detail: {
@@ -516,6 +515,8 @@ export class Input extends RanElement {
       this._inputContent.setAttribute('type', this.type);
     }
     this._events.on(this._inputContent, 'input', this.customInput);
+    // 原生 change 在失焦/提交时触发，这里转发为组件的 change 事件
+    this._events.on(this._inputContent, 'change', this.customChange);
     if (document.readyState === 'complete') {
       this.dealIcon();
     }

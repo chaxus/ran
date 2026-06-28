@@ -15,7 +15,7 @@ export class Button extends RanElement {
   debounceTimeId?: NodeJS.Timeout;
 
   static get observedAttributes(): string[] {
-    return ['disabled', 'icon', 'effect', 'iconSize', 'sheet'];
+    return ['disabled', 'icon', 'effect', 'iconSize', 'type', 'sheet'];
   }
 
   constructor() {
@@ -91,6 +91,18 @@ export class Button extends RanElement {
       this.removeAttribute('effect');
     } else {
       this.setAttribute('effect', value);
+    }
+  }
+
+  /** Visual variant: `''` (default) | `'primary'` | `'warning'` | `'text'`. Drives the `:host([type=...])` styles. */
+  get type(): string {
+    return this.getAttribute('type') || '';
+  }
+  set type(value: string | null) {
+    if (!value) {
+      this.removeAttribute('type');
+    } else {
+      this.setAttribute('type', value);
     }
   }
 

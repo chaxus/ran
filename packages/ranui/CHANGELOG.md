@@ -6,6 +6,7 @@ All notable changes to `ranui` will be documented in this file.
 
 ### Added
 
+- `r-button` `type` (`''` | `primary` | `warning` | `text`) is now a real observed attribute + property, so it appears in the generated API docs and works as `button.type = …`.
 - `docs/COMPONENTS.md` — a generated per-element API reference (attributes, properties, events, slots, `::part()`) for all 29 custom elements, via `npm run doc:api` (`bin/generate-component-api.ts`). Published with the package and referenced from CLAUDE.md so agents can use components without reading source.
 - `r-input` now signals `status="error"`/`"warning"` with more than color (DESIGN.md §7): an automatic status icon, plus an optional `message` attribute that renders helper/validation text below the field.
 
@@ -29,6 +30,10 @@ All notable changes to `ranui` will be documented in this file.
 
 ### Fixed
 
+- `r-input` `change` now fires on commit/blur (native semantics) instead of on every keystroke — `input` still fires per keystroke. Previously every keypress dispatched `change`.
+- `r-select` listbox items now expose `role="option"` (they already had `aria-selected`), so screen readers announce them.
+- `r-select` long selected text now ellipsizes (the selection item is width-bounded so `text-overflow: ellipsis` can trigger) instead of being hard-clipped.
+- Lowered `engines.node` from `>=24.0.0` to `>=20.19.0` so consumers on Node 20–23 don't get an engine warning.
 - Fixed dark-mode rendering bugs from hardcoded colors: `dropdown-item` text/hover/active, `skeleton` base + shimmer (previously invisible in dark), and `radar` canvas label color and grid lines now follow the theme tokens.
 - **Boolean-semantic properties now return real booleans** instead of strings (the string form made `if (el.prop)` always truthy): `r-checkbox.checked`, `r-checkbox.disabled`, `r-input.disabled`, `r-input.required`. Setters still accept boolean or string; boolean attributes now reflect as `disabled=""` (HTML convention). (Breaking — pre-1.0 beta.)
 - Demo hero CTA text is now vertically centered (the inner anchor's `height:100%` collapsed against an auto-height host; fixed with a fixed host height + `line-height:1`).

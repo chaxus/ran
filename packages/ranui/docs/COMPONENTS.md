@@ -6,7 +6,7 @@ A per-element quick reference of attributes, properties, events, slots, and
 see [style-tokens-public.md](./style-tokens-public.md); for design rules see
 [DESIGN.md](./DESIGN.md).
 
-Generated at: 2026-06-28T03:13:56.396Z
+Generated at: 2026-06-28T03:30:24.985Z
 
 29 custom elements.
 
@@ -14,8 +14,8 @@ Generated at: 2026-06-28T03:13:56.396Z
 
 Source: `components/button/index.ts`
 
-- **Attributes**: `disabled`, `effect`, `icon`, `iconSize`, `sheet`
-- **Properties**: `disabled`, `effect`, `icon`, `iconSize`, `sheet`
+- **Attributes**: `disabled`, `effect`, `icon`, `iconSize`, `sheet`, `type`
+- **Properties**: `disabled`, `effect`, `icon`, `iconSize`, `sheet`, `type`
 - **Events**: —
 - **Slots**: `default`
 - **Parts**: `button`, `content`
