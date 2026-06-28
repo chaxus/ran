@@ -490,6 +490,7 @@ Every component's `index.less` automatically receives `@import "base.less"` via 
 --ran-radius-sm 6 | --ran-radius-md 12 | --ran-radius-lg 16 | --ran-radius-full
 --ran-space-1..24          /* 4 8 12 16 24 32 40 64 96 */
 --ran-shadow-elevated | --ran-shadow-menu | --ran-shadow-modal | --ran-focus-ring
+--ran-z-modal 1000 | --ran-z-dropdown 1100 | --ran-z-message 1200   /* overlay stacking ladder; see DESIGN.md §4 */
 
 /* Geist base scales (rarely used directly; semantic tokens map onto them) */
 --ran-gray-100..1000 | --ran-gray-alpha-100..1000
