@@ -6,7 +6,7 @@ shape), slots, and `::part()` names — extracted from source. For CSS variables
 (theming tokens) see [style-tokens-public.md](./style-tokens-public.md); for
 design rules see [DESIGN.md](./DESIGN.md).
 
-Generated at: 2026-06-28T04:18:40.341Z
+Generated at: 2026-06-28T04:23:57.194Z
 
 29 custom elements.
 
@@ -134,8 +134,8 @@ Source: `components/link/index.ts`
 
 Source: `components/loading/index.ts`
 
-- **Attributes**: `name: ICON_NAME_AMP`, `sheet: string`
-- **Properties**: `name: ICON_NAME_AMP`, `sheet: string`
+- **Attributes**: `name: 'double-bounce' | 'rotate' | 'stretch' | 'cube' | 'dot' | 'triple-bounce' | 'scale-out' | 'circle' | 'circle-line' | 'square' | 'pulse' | 'solar' | 'cube-fold' | 'circle-fold' | 'cube-grid' | 'circle-turn' | 'circle-rotate' | 'circle-spin' | 'dot-bar' | 'dot-circle' | 'line' | 'dot-pulse' | 'line-scale' | 'text' | 'cube-dim' | 'dot-line' | 'arc' | 'drop' | 'pacman'`, `sheet: string`
+- **Properties**: `name: 'double-bounce' | 'rotate' | 'stretch' | 'cube' | 'dot' | 'triple-bounce' | 'scale-out' | 'circle' | 'circle-line' | 'square' | 'pulse' | 'solar' | 'cube-fold' | 'circle-fold' | 'cube-grid' | 'circle-turn' | 'circle-rotate' | 'circle-spin' | 'dot-bar' | 'dot-circle' | 'line' | 'dot-pulse' | 'line-scale' | 'text' | 'cube-dim' | 'dot-line' | 'arc' | 'drop' | 'pacman'`, `sheet: string`
 - **Events**: —
 - **Slots**: —
 - **Parts**: `sun`
@@ -155,7 +155,7 @@ Source: `components/math/index.ts`
 Source: `components/message/index.ts`
 
 - **Attributes**: —
-- **Properties**: `content`, `sheet`, `type`
+- **Properties**: `content: string | null`, `sheet: string`, `type: string | null`
 - **Events**: —
 - **Slots**: —
 - **Parts**: —
