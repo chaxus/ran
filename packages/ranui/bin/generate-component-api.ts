@@ -137,6 +137,18 @@ function renderProps(props: Prop[]): string {
   return props.map((p) => `\`${p.type ? `${p.name}: ${p.type}` : p.name}\``).join(', ');
 }
 
+/** Attributes annotated with the type of their matching property, when one exists. */
+function renderAttributes(attrs: string[], props: Prop[]): string {
+  if (!attrs.length) return '—';
+  const typeOf = new Map(props.map((p) => [p.name, p.type]));
+  return attrs
+    .map((a) => {
+      const t = typeOf.get(a);
+      return `\`${t ? `${a}: ${t}` : a}\``;
+    })
+    .join(', ');
+}
+
 function renderEvents(events: Evt[]): string {
   if (!events.length) return '—';
   return events.map((e) => (e.detail.length ? `\`${e.name}\` → detail \`{ ${e.detail.join(', ')} }\`` : `\`${e.name}\``)).join(' · ');
@@ -185,7 +197,7 @@ async function main(): Promise<void> {
     lines.push('');
     lines.push(`Source: \`${el.file}\``);
     lines.push('');
-    lines.push(`- **Attributes**: ${renderInline(el.attributes)}`);
+    lines.push(`- **Attributes**: ${renderAttributes(el.attributes, el.properties)}`);
     lines.push(`- **Properties**: ${renderProps(el.properties)}`);
     lines.push(`- **Events**: ${renderEvents(el.events)}`);
     const slots: string[] = [];

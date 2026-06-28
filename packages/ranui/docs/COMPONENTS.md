@@ -6,7 +6,7 @@ shape), slots, and `::part()` names — extracted from source. For CSS variables
 (theming tokens) see [style-tokens-public.md](./style-tokens-public.md); for
 design rules see [DESIGN.md](./DESIGN.md).
 
-Generated at: 2026-06-28T04:14:59.470Z
+Generated at: 2026-06-28T04:18:40.341Z
 
 29 custom elements.
 
@@ -14,7 +14,7 @@ Generated at: 2026-06-28T04:14:59.470Z
 
 Source: `components/button/index.ts`
 
-- **Attributes**: `disabled`, `effect`, `icon`, `iconSize`, `sheet`, `type`
+- **Attributes**: `disabled: boolean | string`, `effect: string`, `icon: string`, `iconSize: string`, `sheet: string`, `type: string`
 - **Properties**: `disabled: boolean | string`, `effect: string`, `icon: string`, `iconSize: string`, `sheet: string`, `type: string`
 - **Events**: —
 - **Slots**: `default`
@@ -24,7 +24,7 @@ Source: `components/button/index.ts`
 
 Source: `components/card/index.ts`
 
-- **Attributes**: `description`, `sheet`, `title`
+- **Attributes**: `description: string`, `sheet: string`, `title: string`
 - **Properties**: `description: string`, `sheet: string`, `title: string`
 - **Events**: —
 - **Slots**: `default`, `extra (named)`, `footer (named)`
@@ -34,7 +34,7 @@ Source: `components/card/index.ts`
 
 Source: `components/checkbox/index.ts`
 
-- **Attributes**: `checked`, `disabled`, `sheet`, `value`
+- **Attributes**: `checked: boolean`, `disabled: boolean`, `sheet: string`, `value: string`
 - **Properties**: `checked: boolean`, `disabled: boolean`, `sheet: string`, `value: string`
 - **Events**: `change` → detail `{ checked }`
 - **Slots**: `default`
@@ -44,7 +44,7 @@ Source: `components/checkbox/index.ts`
 
 Source: `components/colorpicker/index.ts`
 
-- **Attributes**: `disabled`, `sheet`, `value`
+- **Attributes**: `disabled`, `sheet: string`, `value: string`
 - **Properties**: `sheet: string`, `value: string`
 - **Events**: —
 - **Slots**: —
@@ -64,7 +64,7 @@ Source: `components/popover/content/index.ts`
 
 Source: `components/dropdown/index.ts`
 
-- **Attributes**: `arrow`, `sheet`, `transit`
+- **Attributes**: `arrow: string`, `sheet: string`, `transit: string`
 - **Properties**: `arrow: string`, `sheet: string`, `show: string`, `transit: string`
 - **Events**: —
 - **Slots**: `default`
@@ -74,7 +74,7 @@ Source: `components/dropdown/index.ts`
 
 Source: `components/select/dropdown-item/index.ts`
 
-- **Attributes**: `active`, `sheet`, `title`, `value`
+- **Attributes**: `active: string`, `sheet: string`, `title: string`, `value: string`
 - **Properties**: `active: string`, `sheet: string`, `title: string`, `value: string`
 - **Events**: —
 - **Slots**: `default`
@@ -84,7 +84,7 @@ Source: `components/select/dropdown-item/index.ts`
 
 Source: `components/form/index.ts`
 
-- **Attributes**: `sheet`
+- **Attributes**: `sheet: string`
 - **Properties**: `sheet: string`, `value: string | null`
 - **Events**: —
 - **Slots**: `default`, `r-form_content (named)`
@@ -94,7 +94,7 @@ Source: `components/form/index.ts`
 
 Source: `components/icon/index.ts`
 
-- **Attributes**: `aria-label`, `color`, `decorative`, `name`, `sheet`, `size`, `spin`
+- **Attributes**: `aria-label`, `color: string`, `decorative: boolean`, `name: string`, `sheet: string`, `size: string`, `spin: boolean`
 - **Properties**: `ariaLabel: string`, `color: string`, `decorative: boolean`, `name: string`, `sheet: string`, `size: string`, `spin: boolean`
 - **Events**: `ranui-icon-registered` → detail `{ name }`
 - **Slots**: —
@@ -114,7 +114,7 @@ Source: `components/image/index.ts`
 
 Source: `components/input/index.ts`
 
-- **Attributes**: `allowclear`, `count`, `disabled`, `icon`, `label`, `maxlength`, `maxrows`, `message`, `minrows`, `name`, `onPressEnter`, `placeholder`, `prefix`, `sheet`, `showcount`, `status`, `suffix`, `type`, `value`, `variant`
+- **Attributes**: `allowclear`, `count`, `disabled: boolean`, `icon: string`, `label: string`, `maxlength`, `maxrows`, `message: string`, `minrows`, `name: string`, `onPressEnter`, `placeholder: string`, `prefix: string`, `sheet: string`, `showcount`, `status: string`, `suffix: string`, `type: string`, `value: string`, `variant`
 - **Properties**: `disabled: boolean`, `icon: string`, `label: string`, `max: string`, `message: string`, `min: string`, `name: string`, `placeholder: string`, `prefix: string`, `required: boolean`, `sheet: string`, `status: string`, `step: string`, `suffix: string`, `type: string`, `value: string`
 - **Events**: `change` → detail `{ value }` · `input` → detail `{ value }`
 - **Slots**: —
@@ -124,7 +124,7 @@ Source: `components/input/index.ts`
 
 Source: `components/link/index.ts`
 
-- **Attributes**: `href`, `replace`, `sheet`
+- **Attributes**: `href: string`, `replace: boolean`, `sheet: string`
 - **Properties**: `href: string`, `replace: boolean`, `sheet: string`
 - **Events**: `ran-navigate` → detail `{ path, replace }`
 - **Slots**: —
@@ -134,7 +134,7 @@ Source: `components/link/index.ts`
 
 Source: `components/loading/index.ts`
 
-- **Attributes**: `name`, `sheet`
+- **Attributes**: `name: ICON_NAME_AMP`, `sheet: string`
 - **Properties**: `name: ICON_NAME_AMP`, `sheet: string`
 - **Events**: —
 - **Slots**: —
@@ -144,7 +144,7 @@ Source: `components/loading/index.ts`
 
 Source: `components/math/index.ts`
 
-- **Attributes**: `latex`, `sheet`
+- **Attributes**: `latex: string`, `sheet: string`
 - **Properties**: `latex: string`, `sheet: string`
 - **Events**: —
 - **Slots**: —
@@ -164,7 +164,7 @@ Source: `components/message/index.ts`
 
 Source: `components/modal/index.ts`
 
-- **Attributes**: `autoFocus`, `closable`, `closeOnEsc`, `lockScroll`, `maskClosable`, `open`, `sheet`, `title`
+- **Attributes**: `autoFocus: boolean`, `closable: boolean`, `closeOnEsc: boolean`, `lockScroll: boolean`, `maskClosable: boolean`, `open: boolean`, `sheet: string`, `title: string`
 - **Properties**: `autoFocus: boolean`, `closable: boolean`, `closeOnEsc: boolean`, `lockScroll: boolean`, `maskClosable: boolean`, `open: boolean`, `sheet: string`, `title: string`
 - **Events**: `afterclose` → detail `{ trigger }` · `afteropen` · `beforeclose` → detail `{ trigger }` · `beforeopen` · `close` → detail `{ trigger }` · `open`
 - **Slots**: `default`, `footer (named)`
@@ -184,7 +184,7 @@ Source: `components/select/option/index.ts`
 
 Source: `components/player/index.ts`
 
-- **Attributes**: `currenttime`, `currentTime`, `debug`, `playbackrate`, `playbackRate`, `sheet`, `src`, `volume`
+- **Attributes**: `currenttime`, `currentTime: string`, `debug: string`, `playbackrate`, `playbackRate: string`, `sheet: string`, `src: string`, `volume: string`
 - **Properties**: `currentTime: string`, `debug: string`, `playbackRate: string`, `sheet: string`, `src: string`, `volume: string`
 - **Events**: `change` → detail `{ currentTime, data, duration, tag, type }`
 - **Slots**: —
@@ -194,7 +194,7 @@ Source: `components/player/index.ts`
 
 Source: `components/popover/index.ts`
 
-- **Attributes**: `arrow`, `placement`, `sheet`, `trigger`
+- **Attributes**: `arrow: string`, `placement: string`, `sheet: string`, `trigger: string`
 - **Properties**: `arrow: string`, `getPopupContainerId: string`, `placement: string`, `sheet: string`, `trigger: string`
 - **Events**: —
 - **Slots**: `default`
@@ -224,7 +224,7 @@ Source: `components/radar/index.ts`
 
 Source: `components/route/index.ts`
 
-- **Attributes**: `exact`, `path`, `sheet`
+- **Attributes**: `exact: boolean`, `path: string`, `sheet: string`
 - **Properties**: `exact: boolean`, `params: Record<string, string>`, `path: string`, `sheet: string`
 - **Events**: `routematch` → detail `{ params, path }`
 - **Slots**: `default`
@@ -234,7 +234,7 @@ Source: `components/route/index.ts`
 
 Source: `components/router/index.ts`
 
-- **Attributes**: `base`, `mode`, `sheet`
+- **Attributes**: `base: string`, `mode: 'history' | 'hash'`, `sheet: string`
 - **Properties**: `base: string`, `mode: 'history' | 'hash'`, `sheet: string`
 - **Events**: `routechange` → detail `{ path }`
 - **Slots**: `default`
@@ -254,7 +254,7 @@ Source: `components/scratch/index.ts`
 
 Source: `components/section/index.ts`
 
-- **Attributes**: `heading`, `sheet`, `subtitle`
+- **Attributes**: `heading: string`, `sheet: string`, `subtitle: string`
 - **Properties**: `heading: string`, `sheet: string`, `subtitle: string`
 - **Events**: —
 - **Slots**: `default`
@@ -264,7 +264,7 @@ Source: `components/section/index.ts`
 
 Source: `components/select/index.ts`
 
-- **Attributes**: `clear`, `defaultValue`, `disabled`, `dropdownclass`, `getPopupContainerId`, `placement`, `sheet`, `showSearch`, `trigger`, `type`
+- **Attributes**: `clear`, `defaultValue: string`, `disabled: boolean`, `dropdownclass: string`, `getPopupContainerId: string`, `placement: string`, `sheet: string`, `showSearch: string`, `trigger: string`, `type: string`
 - **Properties**: `defaultValue: string`, `disabled: boolean`, `dropdownclass: string`, `getPopupContainerId: string`, `placement: string`, `sheet: string`, `showSearch: string`, `trigger: string`, `type: string`, `value: string`
 - **Events**: `change` → detail `{ label, value }` · `search` → detail `{ value }`
 - **Slots**: `default`
@@ -274,7 +274,7 @@ Source: `components/select/index.ts`
 
 Source: `components/skeleton/index.ts`
 
-- **Attributes**: `disabled`, `sheet`
+- **Attributes**: `disabled`, `sheet: string`
 - **Properties**: `sheet: string`
 - **Events**: —
 - **Slots**: —
@@ -294,7 +294,7 @@ Source: `components/tabpane/index.ts`
 
 Source: `components/tab/index.ts`
 
-- **Attributes**: `active`, `align`, `effect`, `forceRender`, `sheet`, `type`
+- **Attributes**: `active: string | null`, `align: string`, `effect: string | null`, `forceRender`, `sheet: string`, `type: string`
 - **Properties**: `active: string | null`, `align: string`, `effect: string | null`, `sheet: string`, `type: string`
 - **Events**: `change` → detail `{ active }`
 - **Slots**: `default`
