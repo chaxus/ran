@@ -43,4 +43,42 @@ describe('package export source contracts', () => {
     expect(existsSync(resolve(root, 'assets/ocr'))).toBe(false);
     expect(existsSync(resolve(root, 'assets/img/ocr'))).toBe(false);
   });
+
+  it('does not ship the broken ./react subpath', () => {
+    const packageJson = read('package.json');
+    const buildScript = read('bin/build.sh');
+
+    expect(packageJson).not.toContain('"./react"');
+    expect(packageJson).not.toContain('dist/src/react');
+    expect(buildScript).not.toContain('react');
+    expect(existsSync(resolve(root, 'src/react'))).toBe(false);
+  });
+
+  it('keeps Node-only code out of the default browser entry', () => {
+    const rootEntry = read('index.ts');
+
+    // The default entry must stay browser-safe: no Node server modules.
+    expect(rootEntry).not.toContain("from './src/node'");
+    for (const nodeOnly of ['Server', 'WSS', 'Router', 'runCommand', 'getIPAdress', 'staticMiddleware']) {
+      expect(rootEntry).not.toContain(nodeOnly);
+    }
+  });
+
+  it('exposes the previously-unreachable subsystems as subpaths', () => {
+    const packageJson = read('package.json');
+    const viteConfig = read('vite.config.ts');
+
+    for (const subpath of ['./visual', './vnode', './wicket', './arithmetic', './sort', './optimize']) {
+      expect(packageJson).toContain(`"${subpath}"`);
+    }
+
+    // Each subpath needs a real ESM build entry and a populated barrel.
+    expect(viteConfig).toContain("'utils/visual': resolve");
+    for (const barrel of ['src/vnode/index.ts', 'src/sort/index.ts']) {
+      expect(read(barrel).length).toBeGreaterThan(20);
+    }
+
+    // The cache demo starts an HTTP server on import, so it must NOT be a subpath.
+    expect(packageJson).not.toContain('"./cache"');
+  });
 });

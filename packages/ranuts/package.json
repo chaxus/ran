@@ -1,6 +1,6 @@
 {
   "name": "ranuts",
-  "version": "0.1.0-alpha-23",
+  "version": "1.0.0-beta-1",
   "description": "lib",
   "main": "dist/index.umd.cjs",
   "module": "dist/index.js",
@@ -15,11 +15,6 @@
       "import": "./dist/index.js",
       "require": "./dist/umd/index.umd.cjs"
     },
-    "./react": {
-      "types": "./dist/src/react/index.d.ts",
-      "import": "./dist/src/react/index.js",
-      "require": "./dist/umd/react/react.umd.cjs"
-    },
     "./node": {
       "types": "./dist/src/node/index.d.ts",
       "import": "./dist/src/node/index.js",
@@ -29,6 +24,30 @@
       "types": "./dist/src/utils/index.d.ts",
       "import": "./dist/src/utils/index.js",
       "require": "./dist/umd/utils/utils.umd.cjs"
+    },
+    "./visual": {
+      "types": "./dist/src/utils/visual/index.d.ts",
+      "import": "./dist/src/utils/visual/index.js"
+    },
+    "./vnode": {
+      "types": "./dist/src/vnode/index.d.ts",
+      "import": "./dist/src/vnode/index.js"
+    },
+    "./wicket": {
+      "types": "./dist/src/wicket/index.d.ts",
+      "import": "./dist/src/wicket/index.js"
+    },
+    "./arithmetic": {
+      "types": "./dist/src/arithmetic/index.d.ts",
+      "import": "./dist/src/arithmetic/index.js"
+    },
+    "./sort": {
+      "types": "./dist/src/sort/index.d.ts",
+      "import": "./dist/src/sort/index.js"
+    },
+    "./optimize": {
+      "types": "./dist/src/optimize/index.d.ts",
+      "import": "./dist/src/optimize/index.js"
     }
   },
   "repository": {
@@ -47,6 +66,7 @@
   "scripts": {
     "build": "sh ./bin/build.sh",
     "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "tsc": "tsc --noEmit",
     "dev": "vite --host",
     "prepublish": "npm run build"
@@ -58,6 +78,7 @@
     "@babel/parser": "^7.29.0",
     "@types/earcut": "^3.0.0",
     "@types/node": "^25.3.5",
+    "@vitest/coverage-v8": "^4.1.7",
     "@webgpu/types": "^0.1.69",
     "typescript": "^5.9.3",
     "vite": "^7.3.1",
