@@ -31,7 +31,7 @@ export class Graphics extends Container {
   }
   public lineStyle(width: number, color?: string, alpha?: number): Graphics;
   public lineStyle(options: ILineStyleOptions): Graphics;
-  public lineStyle(options: ILineStyleOptions | number, color: string = '0x000000', alpha: number = 1): Graphics {
+  public lineStyle(options: ILineStyleOptions | number, color: string = '#000000', alpha: number = 1): Graphics {
     this.startPoly();
     if (typeof options === 'object') {
       Object.assign(this._lineStyle, options);

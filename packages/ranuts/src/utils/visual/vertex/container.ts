@@ -92,7 +92,8 @@ export class Container extends Vertex {
    * 递归渲染以自身为根的整棵节点树
    */
   public renderCanvasRecursive = (render: CanvasRenderer): void => {
-    if (!this.visible) return;
+    // 与 WebGL / WebGPU 后端的 buildArray 保持一致：worldAlpha<=0 或不可见的子树直接跳过
+    if (this.worldAlpha <= 0 || !this.visible) return;
     // 先渲染自身
     this.renderCanvas(render);
     // 渲染子节点
