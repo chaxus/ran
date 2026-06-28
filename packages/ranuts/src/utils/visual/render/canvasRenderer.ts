@@ -8,7 +8,9 @@ export class CanvasRenderer extends Renderer {
   private backgroundAlpha: number | undefined;
   constructor(options: IApplicationOptions) {
     super(options);
-    console.log('正在使用 %c canvas2D ', 'color: #05aa6d; background-color: #ffffff;font-size: 20px;', '渲染');
+    if (options.debug) {
+      console.log('正在使用 %c canvas2D ', 'color: #05aa6d; background-color: #ffffff;font-size: 20px;', '渲染');
+    }
 
     const { backgroundColor, backgroundAlpha } = options;
     this.backgroundColor = backgroundColor;

@@ -45,10 +45,11 @@ const createProgram = (gl: WebGLRenderingContext, vertexShader: WebGLShader, fra
   return program;
 };
 
-const setVertexAttribPointer = (gl: WebGLRenderingContext, program: WebGLProgram) => {
-  gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
-  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, gl.createBuffer());
-
+/**
+ * 设置顶点属性布局。调用前需保证目标 ARRAY_BUFFER 已经绑定。
+ * 顶点格式与共享批处理管线（BatchRenderer）一致：position(2×Float32) + color(4×Uint8, 归一化)，stride = BYTES_PER_VERTEX。
+ */
+export const setupVertexLayout = (gl: WebGLRenderingContext, program: WebGLProgram): void => {
   const aPositionLoc = gl.getAttribLocation(program, `a_position`);
   gl.vertexAttribPointer(
     aPositionLoc, // attribute 变量的 location
@@ -80,9 +81,7 @@ export const initShader = (renderer: WebGLRenderer): WebGLProgram => {
 
   const program = createProgram(gl, vertexShader, fragmentShader);
 
-  setVertexAttribPointer(gl, program);
-
-  // 指定混合模式
+  // 指定混合模式（premultiplied alpha，与 WebGPU 后端一致）
   gl.enable(gl.BLEND);
   gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
 

@@ -26,6 +26,8 @@ export class GraphicsGeometry {
   public drawShape(shape: Shape, fillStyle: Fill, lineStyle: Line): void {
     const data = new GraphicsData(shape, fillStyle, lineStyle);
     this.graphicsData.push(data);
+    // 新增了图形，需要重新构建顶点 / 三角剖分，否则 GPU 后端拿不到任何几何数据
+    this.dirty = true;
   }
   /**
    * @param p 待检测点
@@ -63,5 +65,12 @@ export class GraphicsGeometry {
   }
   public clear(): void {
     this.graphicsData = [];
+    // 同时清空已构建的顶点 / 索引 / batchPart，并把构建游标归零，
+    // 否则 clear 后重绘会在旧数据基础上累加，导致大数组里残留已删除的图形
+    this.vertices.clear();
+    this.indices.clear();
+    this.batchParts = [];
+    this.shapeIndex = 0;
+    this.dirty = false;
   }
 }

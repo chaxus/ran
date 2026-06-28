@@ -3,7 +3,6 @@ import { Transform } from '@/utils/visual/math';
 import { CONTAINER } from '@/utils/visual/enums';
 import type { CanvasRenderer } from '@/utils/visual/render/canvasRenderer';
 import type { Point } from '@/utils/visual/vertex/point';
-import type { WebGLRenderer } from '@/utils/visual/render/webGlRenderer';
 import type { BatchRenderer } from '@/utils/visual/render/batchRenderer';
 import type { Batch } from '@/utils/visual/render/utils/batch/index';
 
@@ -29,9 +28,24 @@ export class Container extends Vertex {
    * batch 总数
    */
   protected batchCount = 0;
+  /**
+   * 场景结构版本号（仅根节点上的值有意义）。任何会改变“大数组该长什么样”的操作
+   * （增删子节点、Graphics 重绘）都会冒泡到根节点并使其 +1，渲染器据此决定是否重建大数组。
+   */
+  public structureVersion = 0;
   constructor() {
     super();
   }
+  /**
+   * 标记场景结构已变化：冒泡到根节点并递增其版本号，触发下一帧的大数组重建。
+   */
+  protected markStructureDirty = (): void => {
+    let node: Container = this;
+    while (node.parent) {
+      node = node.parent;
+    }
+    node.structureVersion++;
+  };
   /**
    * @description: 添加子元素
    * @param {Container} child
@@ -42,6 +56,7 @@ export class Container extends Vertex {
     this.children.push(child);
     child.parent = this; // 将要添加的 child 的 parent 指向 this
     this.isSort = true;
+    this.markStructureDirty();
   };
   /**
    * @description:删除子元素
@@ -53,6 +68,7 @@ export class Container extends Vertex {
       if (this.children[i] === child) {
         this.children.splice(i, 1);
         child.parent = undefined;
+        this.markStructureDirty();
         return;
       }
     }
@@ -69,9 +85,8 @@ export class Container extends Vertex {
   /**
    * 渲染自身，在 container 上面没有东西要渲染，所以这个函数的内容为空
    */
-  protected renderCanvas(render: CanvasRenderer): void {
-    // nothing
-    console.log('Container renderCanvas', render);
+  protected renderCanvas(_render: CanvasRenderer): void {
+    // 组容器自身没有可渲染内容，子类（如 Graphics）会重写此方法
   }
   /**
    * 递归渲染以自身为根的整棵节点树
@@ -109,40 +124,17 @@ export class Container extends Vertex {
   };
 
   /**
-   * 使用 webGL，渲染自身，在 container 上面没有东西要渲染，所以这个函数的内容为空
+   * 构建自身的 batch。组容器自身没有可渲染内容，子类（如 Graphics）会重写此方法。
+   * WebGL / WebGPU 后端统一通过 BatchRenderer 的 buildArray 递归调用本方法。
    */
-  protected renderWebGL(renderer: WebGLRenderer): void {
-    // nothing
-    console.log('Container renderWebGL', renderer);
-  }
-
-  /**
-   * 使用 webGL，递归渲染以自身为根的整棵节点树
-   */
-  public renderWebGLRecursive(renderer: WebGLRenderer): void {
-    if (!this.visible) {
-      return;
-    }
-
-    this.renderWebGL(renderer);
-
-    for (let i = 0; i < this.children.length; i++) {
-      this.children[i].renderWebGLRecursive(renderer);
-    }
-  }
-  /**
-   * 构建自身的 batch
-   */
-  public buildBatches(batchRenderer: BatchRenderer): void {
-    // nothing
-    console.log('Container buildBatches', batchRenderer);
+  public buildBatches(_batchRenderer: BatchRenderer): void {
+    // 组容器无内容
   }
 
   /**
    * 更新自身的所有 batch 对应的大数组中的顶点
    */
-  public updateBatches(floatView: Float32Array): void {
-    // nothing
-    console.log('Container updateBatches', floatView);
+  public updateBatches(_floatView: Float32Array): void {
+    // 组容器无内容
   }
 }

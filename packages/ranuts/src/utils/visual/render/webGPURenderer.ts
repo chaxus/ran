@@ -38,9 +38,11 @@ export class WebGPURenderer extends BatchRenderer {
   private uniformBindGroup!: GPUBindGroup;
 
   constructor(options: IApplicationOptions) {
-    console.log('正在使用 %c webGPU ', 'color: #0072c6; background-color: #ffffff;font-size: 20px;', '渲染');
-
     super(options);
+
+    if (options.debug) {
+      console.log('正在使用 %c webGPU ', 'color: #0072c6; background-color: #ffffff;font-size: 20px;', '渲染');
+    }
 
     this.options = options;
 

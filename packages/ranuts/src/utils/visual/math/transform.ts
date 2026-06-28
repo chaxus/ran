@@ -7,9 +7,9 @@ export class Transform {
   public localTransform = new Matrix();
   public worldTransform = new Matrix();
   public position: ObservablePoint;
-  public scale: ObservablePoint<number>;
+  public scale: ObservablePoint;
   public pivot: ObservablePoint;
-  public skew: ObservablePoint<number>;
+  public skew: ObservablePoint;
   public _rotation = 0;
   private rotateMatrix = new Matrix();
   private skewMatrix = new Matrix();

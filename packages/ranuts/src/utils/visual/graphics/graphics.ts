@@ -47,6 +47,8 @@ export class Graphics extends Container {
   };
   protected drawShape = (shape: Shape): Graphics => {
     this.geometry.drawShape(shape, this._fillStyle.clone(), this._lineStyle.clone());
+    // 几何内容变了，通知渲染器重建大数组
+    this.markStructureDirty();
     return this;
   };
   /**
@@ -349,6 +351,10 @@ export class Graphics extends Container {
     this._lineStyle.reset();
     this._fillStyle.reset();
     this.currentPath = new Polygon();
+    this.batches = [];
+    this.batchCount = 0;
+    // 几何被清空，通知渲染器重建大数组
+    this.markStructureDirty();
     return this;
   };
   /**
