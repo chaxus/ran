@@ -30,6 +30,7 @@ All notable changes to `ranui` will be documented in this file.
 
 ### Fixed
 
+- `r-input` no longer balloons in height when a `message` is set: the field box now defaults to content height (`--ran-input-height: auto`, min-height still 32px) instead of `100%`, which mis-resolved against the taller host once a message stacked below.
 - `r-input` `change` now fires on commit/blur (native semantics) instead of on every keystroke — `input` still fires per keystroke. Previously every keypress dispatched `change`.
 - `r-select` listbox items now expose `role="option"` (they already had `aria-selected`), so screen readers announce them.
 - `r-select` long selected text now ellipsizes (the selection item is width-bounded so `text-overflow: ellipsis` can trigger) instead of being hard-clipped.
