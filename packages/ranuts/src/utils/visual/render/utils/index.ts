@@ -30,11 +30,7 @@ export const getRgb = (color: string): [number, number, number] => {
   if (/^#?[0-9a-fA-F]{3}$/.test(color)) {
     // 快路径：#rgb 简写，扩展成 #rrggbb
     const hex = color.replace('#', '');
-    rgb = [
-      parseInt(hex[0] + hex[0], 16),
-      parseInt(hex[1] + hex[1], 16),
-      parseInt(hex[2] + hex[2], 16),
-    ];
+    rgb = [parseInt(hex[0] + hex[0], 16), parseInt(hex[1] + hex[1], 16), parseInt(hex[2] + hex[2], 16)];
   } else if (/^#?[0-9a-fA-F]{6}$/.test(color)) {
     // 快路径：#rrggbb，避免创建 canvas
     const colorHex = parseInt(color.replace('#', ''), 16);

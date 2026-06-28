@@ -24,8 +24,18 @@ interface Entry {
 // omitted: it re-exports the utils + visual surface and would only duplicate.
 const ENTRIES: Entry[] = [
   { subpath: 'ranuts/utils', file: 'src/utils/index.ts', blurb: '浏览器 / 通用工具函数', runtime: 'browser + node' },
-  { subpath: 'ranuts/node', file: 'src/node/index.ts', blurb: 'Node 服务端工具（fs / http / ws / 中间件）', runtime: 'node only' },
-  { subpath: 'ranuts/visual', file: 'src/utils/visual/index.ts', blurb: '2D 渲染引擎（Canvas / WebGL / WebGPU）', runtime: 'browser only' },
+  {
+    subpath: 'ranuts/node',
+    file: 'src/node/index.ts',
+    blurb: 'Node 服务端工具（fs / http / ws / 中间件）',
+    runtime: 'node only',
+  },
+  {
+    subpath: 'ranuts/visual',
+    file: 'src/utils/visual/index.ts',
+    blurb: '2D 渲染引擎（Canvas / WebGL / WebGPU）',
+    runtime: 'browser only',
+  },
   { subpath: 'ranuts/vnode', file: 'src/vnode/index.ts', blurb: 'Snabbdom 风格虚拟 DOM', runtime: 'browser' },
 ];
 
@@ -171,7 +181,9 @@ async function main(): Promise<void> {
     total += symbols.length;
 
     const anchor = entry.subpath.replace(/[^a-z]/g, '');
-    tocLines.push(`- [\`${entry.subpath}\`](#${anchor}) — ${entry.blurb} · _${entry.runtime}_ · ${symbols.length} exports`);
+    tocLines.push(
+      `- [\`${entry.subpath}\`](#${anchor}) — ${entry.blurb} · _${entry.runtime}_ · ${symbols.length} exports`,
+    );
 
     const sec: string[] = [];
     sec.push(`## \`${entry.subpath}\``);
@@ -202,7 +214,13 @@ async function main(): Promise<void> {
     sections.push(sec.join('\n'));
   }
 
-  const header = [...lines, `**${total} exports** across ${ENTRIES.length} entry points. Generated at ${new Date().toISOString()}.`, '', ...tocLines, ''];
+  const header = [
+    ...lines,
+    `**${total} exports** across ${ENTRIES.length} entry points. Generated at ${new Date().toISOString()}.`,
+    '',
+    ...tocLines,
+    '',
+  ];
 
   await fs.writeFile(OUTPUT_FILE, `${header.join('\n')}\n${sections.join('\n')}\n`, 'utf8');
   console.log(`Generated: ${path.relative(ROOT, OUTPUT_FILE)} (${total} exports, ${ENTRIES.length} entry points)`);
