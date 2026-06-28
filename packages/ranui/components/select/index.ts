@@ -333,6 +333,7 @@ export class Select extends RanElement {
     if (this._selectDropDownOutTimeId) return;
     this.updateAriaExpanded(false);
     if (this._selectionDropdown && this._selectionDropdown.style.display !== 'none') {
+      this._detachReposition();
       this._selectionDropdown.setAttribute('transit', placementDirection[this.placement].remove);
       this._selectDropDownOutTimeId = setTimeout(() => {
         this._selectionDropdown?.style.setProperty('display', 'none');
@@ -354,6 +355,7 @@ export class Select extends RanElement {
     if (this._selectionDropdown && this._selectionDropdown.style.display !== 'block') {
       this._selectionDropdown.setAttribute('transit', placementDirection[this.placement].add);
       this._selectionDropdown?.style.setProperty('display', 'block');
+      this._attachReposition();
       this._selectDropDownInTimeId = setTimeout(() => {
         if (this._selectionDropdown) {
           this._selectionDropdown.removeAttribute('transit');
@@ -397,6 +399,29 @@ export class Select extends RanElement {
       }
       this._selectionDropdown.style.setProperty('inset', `${selectTop}px auto auto ${selectLeft}px`);
     });
+  };
+
+  /**
+   * The dropdown is mounted on document.body and positioned once on open, so it
+   * detaches from the trigger when the page (or any scroll container) scrolls —
+   * e.g. a select inside a sticky header. Re-run placement on scroll/resize
+   * while it is open. Capture-phase scroll catches nested scroll containers too.
+   */
+  _repositionBound = false;
+  _repositionDropdown = (): void => {
+    if (this._selectionDropdown?.style.display === 'block') this.placementPosition();
+  };
+  _attachReposition = (): void => {
+    if (this._repositionBound || typeof window === 'undefined') return;
+    window.addEventListener('scroll', this._repositionDropdown, true);
+    window.addEventListener('resize', this._repositionDropdown);
+    this._repositionBound = true;
+  };
+  _detachReposition = (): void => {
+    if (!this._repositionBound || typeof window === 'undefined') return;
+    window.removeEventListener('scroll', this._repositionDropdown, true);
+    window.removeEventListener('resize', this._repositionDropdown);
+    this._repositionBound = false;
   };
   /**
    * @description: 设置下拉框
@@ -626,6 +651,7 @@ export class Select extends RanElement {
   }
   disconnectedCallback(): void {
     this._events.abort();
+    this._detachReposition();
     this.removeSelectDropdown();
   }
   attributeChangedCallback(name: string, oldValue: string, newValue: string): void {

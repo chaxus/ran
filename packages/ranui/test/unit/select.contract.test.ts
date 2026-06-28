@@ -529,4 +529,27 @@ describe('r-select contract', () => {
     select.value = 'a';
     expect((select as unknown as { _text: HTMLElement })._text.textContent).toBe('Apple');
   });
+
+  it('attaches scroll/resize listeners to reposition the dropdown and removes them on close', () => {
+    const select = document.createElement('r-select') as unknown as {
+      _attachReposition: () => void;
+      _detachReposition: () => void;
+      _repositionBound: boolean;
+    };
+    document.body.appendChild(select as unknown as Node);
+
+    const addSpy = vi.spyOn(window, 'addEventListener');
+    select._attachReposition();
+    expect(select._repositionBound).toBe(true);
+    expect(addSpy.mock.calls.some((c) => c[0] === 'scroll')).toBe(true);
+    expect(addSpy.mock.calls.some((c) => c[0] === 'resize')).toBe(true);
+
+    const removeSpy = vi.spyOn(window, 'removeEventListener');
+    select._detachReposition();
+    expect(select._repositionBound).toBe(false);
+    expect(removeSpy.mock.calls.some((c) => c[0] === 'scroll')).toBe(true);
+
+    addSpy.mockRestore();
+    removeSpy.mockRestore();
+  });
 });
