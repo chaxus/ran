@@ -6,7 +6,9 @@ Web Components library built with TypeScript. All components use Shadow DOM enca
 
 ## Design Standards — read before building or changing any UI
 
-**[docs/DESIGN.md](docs/DESIGN.md) is the authoritative, executable design standard.** Follow it whenever your work changes what a user sees. It is based on the Geist design system (light/dark only). The non-negotiables:
+**[docs/DESIGN.md](docs/DESIGN.md) is the authoritative, executable design standard.** Follow it whenever your work changes what a user sees. It is based on the Geist design system (light/dark only).
+
+For each element's **attributes / properties / events / slots / `::part()`**, consult **[docs/COMPONENTS.md](docs/COMPONENTS.md)** (generated — run `npm run doc:api` after changing any component's API) and **[docs/style-tokens-public.md](docs/style-tokens-public.md)** for its CSS variables. The non-negotiables:
 
 - **Color is a state ladder, not a palette.** Each scale step 100→1000 has one fixed job: 100 default bg · 200 hover bg · 300 active bg · 400 border · 500 hover border · 600 active border · 700 solid · 800 solid hover · 900 secondary text · 1000 primary text. Use the **semantic tokens** (`--ran-color-*`), never raw hex, in components.
 - **Dark-safe fallbacks.** A component token's fallback must point at a token that *flips* (`var(--ran-color-text, …)`, `var(--ran-gray-alpha-100, …)`, `var(--ran-blue-100, …)`) — never a light-only literal like `rgba(0,0,0,.06)` or `#e6f7ff`, which breaks in dark mode.
@@ -39,6 +41,7 @@ packages/ranui/
 │   └── dom.ts            # falseList, isDisabled
 ├── theme/                # tokens.less (Geist base+semantic) + dark.less (dark mixin)
 ├── docs/DESIGN.md        # ⭐ AI-facing design standard — follow it for ANY UI work
+├── docs/COMPONENTS.md    # ⭐ generated per-element API (attrs/props/events/slots/parts)
 ├── test/unit/            # *.contract.test.ts per component
 ├── demo/                 # Dev server entry (Vite); routed showcase (r-router)
 ├── index.ts              # Barrel exports + side-effect imports

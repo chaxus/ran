@@ -40,12 +40,15 @@
     "test:ui": "playwright test --ui",
     "test:update": "playwright test --update-snapshots",
     "tsc": "tsc --noEmit",
-    "doc:style": "tsx ./bin/generate-style-docs.ts"
+    "doc:style": "tsx ./bin/generate-style-docs.ts",
+    "doc:api": "tsx ./bin/generate-component-api.ts"
   },
   "files": [
     "dist",
     "typings.d.ts",
-    "docs/DESIGN.md"
+    "docs/DESIGN.md",
+    "docs/COMPONENTS.md",
+    "docs/style-tokens-public.md"
   ],
   "keywords": [
     "ran",
