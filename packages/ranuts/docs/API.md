@@ -8,7 +8,7 @@ constraints, conventions) read [../CLAUDE.md](../CLAUDE.md) first.
 Import from the **subpath** that owns the symbol, e.g. `import { debounce } from
 'ranuts/utils'`. The root `ranuts` barrel re-exports the utils + visual surface.
 
-**192 exports** across 5 entry points. Generated at 2026-06-28T09:09:39.515Z.
+**191 exports** across 4 entry points. Generated at 2026-06-28T09:16:39.044Z.
 
 ## Entry points
 
@@ -16,7 +16,6 @@ Import from the **subpath** that owns the symbol, e.g. `import { debounce } from
 - [`ranuts/node`](#ranutsnode) — Node 服务端工具（fs / http / ws / 中间件） · _node only_ · 26 exports
 - [`ranuts/visual`](#ranutsvisual) — 2D 渲染引擎（Canvas / WebGL / WebGPU） · _browser only_ · 12 exports
 - [`ranuts/vnode`](#ranutsvnode) — Snabbdom 风格虚拟 DOM · _browser_ · 26 exports
-- [`ranuts/wicket`](#ranutswicket) — WebView 桥接通信 · _browser_ · 1 exports
 
 ## `ranuts/utils`
 
@@ -300,16 +299,4 @@ import { /* … */ } from 'ranuts/vnode';
 ### Other
 
 - `"/Users/ranzhouhang/Documents/code/ran/packages/ranuts/src/vnode/is"`
-
-## `ranuts/wicket`
-
-WebView 桥接通信 · runtime: **browser** · source: `src/wicket/index.ts`
-
-```ts
-import { /* … */ } from 'ranuts/wicket';
-```
-
-### Classes
-
-- `class WebView`
 

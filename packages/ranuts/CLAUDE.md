@@ -34,7 +34,6 @@ Each subpath is an independent, tree-shakeable barrel. Import from the subpath, 
 | `ranuts/node`         | `src/node/index.ts`          | HTTP server, router, ws, fs, streams, middleware      | **node only**    |
 | `ranuts/visual`       | `src/utils/visual/index.ts`  | 2D rendering engine (Canvas / WebGL / WebGPU)         | **browser only** |
 | `ranuts/vnode`        | `src/vnode/index.ts`         | Snabbdom-style virtual DOM (`h`, `init`, modules)     | browser          |
-| `ranuts/wicket`       | `src/wicket/index.ts`        | WebView bridge communication                          | browser          |
 
 \* `ranuts/utils` is broad: most functions are browser-oriented (touch `window`/`document`),
 but pure helpers (`str`, `obj`, `number`, `compose`, `cloneDeep`, …) run anywhere. Functions
@@ -55,8 +54,7 @@ packages/ranuts/
 │   │   ├── visual/           # ranuts/visual — 2D rendering engine (see below)
 │   │   └── totp/             # TOTP + hand-rolled SHA
 │   ├── node/                 # ranuts/node — mini HTTP framework
-│   ├── vnode/                # ranuts/vnode — virtual DOM
-│   └── wicket/               # ranuts/wicket — webview bridge
+│   └── vnode/                # ranuts/vnode — virtual DOM
 ├── bin/
 │   ├── build.sh              # build (tsc types + vite es/umd)
 │   └── generate-api-docs.ts  # ⭐ doc:api — emits docs/API.md from source + JSDoc
