@@ -34,6 +34,10 @@ npm install ranuts@latest --save
 
 [Some commonly used functions and tools](https://chaxus.github.io/ran/src/ranuts/)
 
+**For AI agents / LLMs:** start from [CLAUDE.md](./CLAUDE.md) (orientation: entry points,
+runtime constraints, conventions) and [docs/API.md](./docs/API.md) (generated reference of
+every exported symbol with signatures + descriptions, run `npm run doc:api` to refresh).
+
 ## Usage
 
 Import as required. You can select:
