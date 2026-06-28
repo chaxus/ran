@@ -116,6 +116,12 @@ export const es: BuildOptions = {
       utils: resolve(__dirname, 'src/utils/index.ts'),
       node: resolve(__dirname, 'src/node/index.ts'),
       index: resolve(__dirname, 'index.ts'),
+      'utils/visual': resolve(__dirname, 'src/utils/visual/index.ts'),
+      vnode: resolve(__dirname, 'src/vnode/index.ts'),
+      wicket: resolve(__dirname, 'src/wicket/index.ts'),
+      arithmetic: resolve(__dirname, 'src/arithmetic/index.ts'),
+      sort: resolve(__dirname, 'src/sort/index.ts'),
+      optimize: resolve(__dirname, 'src/optimize/index.ts'),
     },
     fileName: (_: string, name: string): string => {
       if (name === 'index') {
