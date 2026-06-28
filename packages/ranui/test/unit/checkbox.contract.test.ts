@@ -33,14 +33,14 @@ describe('r-checkbox contract', () => {
     document.body.appendChild(checkbox);
 
     checkbox.setAttribute('checked', 'true');
-    expect((checkbox as any).checked).toBe('true');
+    expect((checkbox as any).checked).toBe(true);
     expect((checkbox as any).value).toBe('true');
 
     const wrapper = (checkbox as any)._shadowDom.querySelector('.ran-checkbox') as HTMLElement;
     expect(wrapper.classList.contains('ran-checkbox-checked')).toBe(true);
 
     checkbox.setAttribute('checked', 'false');
-    expect((checkbox as any).checked).toBe('false');
+    expect((checkbox as any).checked).toBe(false);
     expect((checkbox as any).value).toBe('false');
     expect(wrapper.classList.contains('ran-checkbox-checked')).toBe(false);
   });
