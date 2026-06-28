@@ -251,7 +251,7 @@
             </p>
           </div>
 
-          <section>
+          <section id="component-button">
             <h2 data-i18n="sec.buttons">Buttons</h2>
             <div class="panel row">
               <r-button type="primary" data-i18n="btn.primary">Primary</r-button>
@@ -264,10 +264,10 @@
             </div>
           </section>
 
-          <section>
+          <section id="component-form">
             <h2 data-i18n="sec.forms">Forms</h2>
             <div class="grid">
-              <div class="demo-card">
+              <div class="demo-card" id="component-input">
                 <h3 data-i18n="card.input">Input</h3>
                 <r-input
                   data-i18n-label="input.username.label"
@@ -291,7 +291,7 @@
                   message="Enter a valid email address"
                 ></r-input>
               </div>
-              <div class="demo-card">
+              <div class="demo-card" id="component-select">
                 <h3 data-i18n="card.select">Select</h3>
                 <r-select style="width: 100%" trigger="click" defaultValue="medium">
                   <r-option value="high" data-i18n="opt.high">🔴 High priority</r-option>
@@ -309,7 +309,7 @@
                   <r-option value="tom">Tom</r-option>
                 </r-select>
               </div>
-              <div class="demo-card">
+              <div class="demo-card" id="component-checkbox">
                 <h3 data-i18n="card.checkbox">Checkbox</h3>
                 <label class="task"
                   ><r-checkbox checked></r-checkbox><span data-i18n="cb.tests">Run unit tests</span></label
@@ -330,19 +330,19 @@
           <section>
             <h2 data-i18n="sec.feedback">Feedback</h2>
             <div class="grid">
-              <div class="demo-card">
+              <div class="demo-card" id="component-progress">
                 <h3 data-i18n="card.progress">Progress</h3>
                 <r-progress percent="35"></r-progress>
                 <r-progress percent="70"></r-progress>
                 <r-progress percent="100"></r-progress>
               </div>
-              <div class="demo-card">
+              <div class="demo-card" id="component-skeleton">
                 <h3 data-i18n="card.skeleton">Skeleton</h3>
                 <r-skeleton></r-skeleton>
                 <r-skeleton style="height: 24px"></r-skeleton>
                 <r-skeleton style="height: 24px; width: 60%"></r-skeleton>
               </div>
-              <div class="demo-card">
+              <div class="demo-card" id="component-loading">
                 <h3 data-i18n="card.loading">Loading</h3>
                 <div class="row">
                   <r-loading name="rotate"></r-loading>
@@ -394,30 +394,35 @@
               </r-card>
             </div>
 
-            <div class="panel" style="margin-top: var(--ran-space-4)">
-              <r-tabs active="t1" style="width: 100%">
-                <r-tab data-i18n-label="tab.overview" data-i18n="tab.overview.body" label="Overview" r-key="t1"
+            <div class="panel" id="component-tabs" style="margin-top: var(--ran-space-4)">
+              <r-tabs active="overview" style="width: 100%">
+                <r-tab data-i18n-label="tab.overview" data-i18n="tab.overview.body" label="Overview" r-key="overview"
                   >ranui ships ~24 components, all Shadow-DOM encapsulated.</r-tab
                 >
-                <r-tab data-i18n-label="tab.api" data-i18n="tab.api.body" label="API" r-key="t2"
+                <r-tab data-i18n-label="tab.api" data-i18n="tab.api.body" label="API" r-key="api"
                   >Each component exposes attributes, <code>::part()</code>, and CSS variables.</r-tab
                 >
-                <r-tab data-i18n-label="tab.theming" data-i18n="tab.theming.body" label="Theming" r-key="t3"
+                <r-tab data-i18n-label="tab.theming" data-i18n="tab.theming.body" label="Theming" r-key="theming"
                   >Light/dark via a single attribute; tokens follow the Geist scale.</r-tab
                 >
-                <r-tab data-i18n-label="tab.disabled" data-i18n="tab.disabled.body" label="Disabled" r-key="t4" disabled
+                <r-tab
+                  data-i18n-label="tab.disabled"
+                  data-i18n="tab.disabled.body"
+                  label="Disabled"
+                  r-key="disabled"
+                  disabled
                   >Disabled tab.</r-tab
                 >
               </r-tabs>
             </div>
 
-            <div class="panel row" style="margin-top: var(--ran-space-4)">
+            <div class="panel row" id="component-modal" style="margin-top: var(--ran-space-4)">
               <r-button type="primary" id="open-modal" data-i18n="surfaces.modal">Open modal</r-button>
               <r-link href="/guide" class="inline-link" data-i18n="surfaces.doc">Read the guide →</r-link>
             </div>
           </section>
 
-          <section>
+          <section id="component-radar">
             <h2 data-i18n="sec.dataviz">Data visualization</h2>
             <div class="panel" style="display: flex; justify-content: center">
               <r-radar style="width: 320px; height: 320px"></r-radar>
@@ -427,7 +432,7 @@
           <section>
             <h2 data-i18n="sec.more">Overlays, media &amp; utilities</h2>
             <div class="grid">
-              <div class="demo-card">
+              <div class="demo-card" id="component-icon">
                 <h3 data-i18n="card.icon">Icon</h3>
                 <div class="row">
                   <r-icon name="home" size="22"></r-icon>
@@ -437,14 +442,14 @@
                   <r-icon name="loading" size="22" spin></r-icon>
                 </div>
               </div>
-              <div class="demo-card">
+              <div class="demo-card" id="component-colorpicker">
                 <h3 data-i18n="card.colorpicker">Color picker</h3>
                 <div class="row">
                   <r-colorpicker value="#006bff"></r-colorpicker>
                   <r-colorpicker value="rgba(255,0,0,0.5)"></r-colorpicker>
                 </div>
               </div>
-              <div class="demo-card">
+              <div class="demo-card" id="component-popover">
                 <h3 data-i18n="card.popover">Popover</h3>
                 <r-popover placement="top" trigger="hover,click" arrow="true">
                   <r-button data-i18n="popover.trigger">Hover or click</r-button>
@@ -453,15 +458,20 @@
                   </r-content>
                 </r-popover>
               </div>
-              <div class="demo-card">
+              <div class="demo-card" id="component-math">
                 <h3 data-i18n="card.math">Math</h3>
                 <r-math latex="E = mc^2"></r-math>
                 <r-math latex="x = {-b \pm \sqrt{b^2-4ac} \over 2a}"></r-math>
               </div>
             </div>
-            <div class="panel" style="margin-top: var(--ran-space-4)">
-              <h3 data-i18n="card.player" style="margin: 0 0 var(--ran-space-3); font-size: 14px; font-weight: 600">Player</h3>
-              <r-player src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" style="width: 100%; max-width: 560px; display: block"></r-player>
+            <div class="panel" id="component-player" style="margin-top: var(--ran-space-4)">
+              <h3 data-i18n="card.player" style="margin: 0 0 var(--ran-space-3); font-size: 14px; font-weight: 600">
+                Player
+              </h3>
+              <r-player
+                src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+                style="width: 100%; max-width: 560px; display: block"
+              ></r-player>
             </div>
           </section>
         </r-route>

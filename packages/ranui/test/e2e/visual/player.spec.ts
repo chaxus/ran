@@ -3,7 +3,7 @@ import { argosScreenshot } from '@argos-ci/playwright';
 import { DEV_SERVER } from '../../../build/config';
 
 test.beforeEach(async ({ page }) => {
-  await page.goto(DEV_SERVER, { waitUntil: 'networkidle' });
+  await page.goto(`${DEV_SERVER}components`, { waitUntil: 'domcontentloaded' });
   await page.waitForFunction(() => customElements.get('r-player'));
 });
 
