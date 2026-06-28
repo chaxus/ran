@@ -1,5 +1,5 @@
 import { addClassToElement, removeClassToElement } from 'ranuts/utils';
-import { RanElement, falseList } from '@/utils/index';
+import { RanElement, falseList, isDisabled } from '@/utils/index';
 import { Div, EventManager, InputBuilder, Slot, Span } from '@/utils/builder';
 import {
   ensureShadowElement,
@@ -53,11 +53,15 @@ export class Checkbox extends RanElement {
       checked: false,
     };
   }
-  get disabled(): string {
-    return getStringAttribute(this, 'disabled');
+  get disabled(): boolean {
+    return isDisabled(this);
   }
-  set disabled(value: string) {
-    setStringAttribute(this, 'disabled', value);
+  set disabled(value: boolean | string) {
+    if (falseList.includes(value as boolean | string | null | undefined)) {
+      this.removeAttribute('disabled');
+    } else {
+      this.setAttribute('disabled', '');
+    }
   }
   get value(): string {
     const checked = this.getAttribute('value');
@@ -118,8 +122,7 @@ export class Checkbox extends RanElement {
     this.updateChecked();
   };
   onChange = (): void => {
-    if (falseList.includes(this.disabled)) return;
-    if (this.hasAttribute('disabled')) return;
+    if (this.disabled) return;
     const { checked } = this.context;
     this.context.checked = !checked;
     this.dispatchEvent(

@@ -98,14 +98,14 @@ export class Input extends RanElement {
    * @description: input 是否为必选
    * @return {String}
    */
-  get required(): string {
-    return this.getAttribute('required') || '';
+  get required(): boolean {
+    return this.hasAttribute('required');
   }
   /**
    * @description: 设置 input 是否为必选，除非设置成 false，否则都是必填
    * @param {*} value
    */
-  set required(value: string) {
+  set required(value: boolean | string) {
     if (!value || value === 'false') {
       this.removeAttribute('required');
     } else {
@@ -116,15 +116,15 @@ export class Input extends RanElement {
    * @description: 获取 input 上 disabled 属性
    * @return {String | null}
    */
-  get disabled(): string {
-    return `${isDisabled(this)}`;
+  get disabled(): boolean {
+    return isDisabled(this);
   }
   /**
    * @description: 设置 input 的 disabled 属性
    * @param {String} value
    */
-  set disabled(value: string) {
-    if (falseList.includes(value)) {
+  set disabled(value: boolean | string) {
+    if (falseList.includes(value as boolean | string | null | undefined)) {
       this.removeAttribute('disabled');
       this._input.removeAttribute('disabled');
       this._inputContent.removeAttribute('disabled');

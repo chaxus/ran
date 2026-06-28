@@ -97,12 +97,17 @@ describe('r-checkbox contract', () => {
     expect(checkbox.getAttribute('sheet')).toBe('.ran-checkbox { border: 1px solid red; }');
   });
 
-  it('disabled setter reflects to attribute', () => {
+  it('disabled reflects to/from the attribute as a boolean', () => {
     const checkbox = document.createElement('r-checkbox') as Checkbox;
     document.body.appendChild(checkbox);
 
-    checkbox.disabled = 'true';
-    expect(checkbox.getAttribute('disabled')).toBe('true');
+    checkbox.disabled = true;
+    expect(checkbox.hasAttribute('disabled')).toBe(true);
+    expect(checkbox.disabled).toBe(true);
+
+    checkbox.disabled = false;
+    expect(checkbox.hasAttribute('disabled')).toBe(false);
+    expect(checkbox.disabled).toBe(false);
   });
 
   it('attributeChangedCallback syncs value when checked attribute changes', () => {
