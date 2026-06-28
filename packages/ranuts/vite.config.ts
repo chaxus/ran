@@ -63,13 +63,11 @@ const chunkOptimization: Partial<chunkOptimization> = {
   rollupOptions: {
     external,
     output: {
-      experimentalMinChunkSize: 500,
       globals: {
         ...list2map(external),
       },
     },
     treeshake: {
-      preset: 'recommended',
       manualPureFunctions: ['console.log'],
     },
   },

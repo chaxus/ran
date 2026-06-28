@@ -27,13 +27,13 @@ from the **subpath that owns it** (below) — not from a deep source path.
 Each subpath is an independent, tree-shakeable barrel. Import from the subpath, never from
 `ranuts/dist/...` or `@/...` (that alias is internal to the source).
 
-| Import from           | Source                       | What                                                  | Runtime          |
-| --------------------- | ---------------------------- | ----------------------------------------------------- | ---------------- |
-| `ranuts`              | `index.ts`                   | Root barrel — re-exports the utils + visual surface   | browser + node   |
-| `ranuts/utils`        | `src/utils/index.ts`         | DOM/BOM, string, object, number, color, time, etc.    | browser + node\* |
-| `ranuts/node`         | `src/node/index.ts`          | HTTP server, router, ws, fs, streams, middleware      | **node only**    |
-| `ranuts/visual`       | `src/utils/visual/index.ts`  | 2D rendering engine (Canvas / WebGL / WebGPU)         | **browser only** |
-| `ranuts/vnode`        | `src/vnode/index.ts`         | Snabbdom-style virtual DOM (`h`, `init`, modules)     | browser          |
+| Import from     | Source                      | What                                                | Runtime          |
+| --------------- | --------------------------- | --------------------------------------------------- | ---------------- |
+| `ranuts`        | `index.ts`                  | Root barrel — re-exports the utils + visual surface | browser + node   |
+| `ranuts/utils`  | `src/utils/index.ts`        | DOM/BOM, string, object, number, color, time, etc.  | browser + node\* |
+| `ranuts/node`   | `src/node/index.ts`         | HTTP server, router, ws, fs, streams, middleware    | **node only**    |
+| `ranuts/visual` | `src/utils/visual/index.ts` | 2D rendering engine (Canvas / WebGL / WebGPU)       | **browser only** |
+| `ranuts/vnode`  | `src/vnode/index.ts`        | Snabbdom-style virtual DOM (`h`, `init`, modules)   | browser          |
 
 \* `ranuts/utils` is broad: most functions are browser-oriented (touch `window`/`document`),
 but pure helpers (`str`, `obj`, `number`, `compose`, `cloneDeep`, …) run anywhere. Functions
@@ -151,14 +151,14 @@ npm run doc:api      # regenerate docs/API.md from source + JSDoc
 
 ## Gotchas
 
-| Pitfall                                                                   | Fix                                                                                                  |
-| ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------- |
-| Importing from a deep source path or `@/…`                               | Import from the public subpath (`ranuts/utils`, `ranuts/visual`, …). `@/…` is build-internal only.  |
-| Importing `ranuts/node` in browser code                                  | It externalizes `fs`/`http`/`child_process` — server-only. Use `ranuts/utils` for browser helpers.  |
-| `new Application()` then `render()` with WebGPU                           | Device init is async — use `await Application.create(...)`, then `app.start()`.                      |
-| Hand-editing `docs/API.md`                                               | It's generated. Edit the source JSDoc and run `npm run doc:api`.                                     |
-| Adding an export but it's missing from `docs/API.md`                     | Re-export it from the module's `index.ts` barrel, then `npm run doc:api`.                            |
-| New entry point not importable as `ranuts/foo`                           | Wire all three: `package.json` exports + `vite.config.ts` es entry + generator `ENTRIES`.            |
-| `console.log` left in a function that a test calls                       | `vitest.config.ts` `onConsoleLog` throws — remove it or the test fails.                              |
-| Assuming a GPU/Canvas test can run in CI                                 | Test env is node (no DOM/GPU). Test pure logic; gate visual checks behind a browser demo.            |
-| Passing a non-`#rrggbb` color to the GPU backend and expecting it to fail | It won't — `getRgb` resolves any CSS color via the browser parser, matching the Canvas backend.      |
+| Pitfall                                                                   | Fix                                                                                                |
+| ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| Importing from a deep source path or `@/…`                                | Import from the public subpath (`ranuts/utils`, `ranuts/visual`, …). `@/…` is build-internal only. |
+| Importing `ranuts/node` in browser code                                   | It externalizes `fs`/`http`/`child_process` — server-only. Use `ranuts/utils` for browser helpers. |
+| `new Application()` then `render()` with WebGPU                           | Device init is async — use `await Application.create(...)`, then `app.start()`.                    |
+| Hand-editing `docs/API.md`                                                | It's generated. Edit the source JSDoc and run `npm run doc:api`.                                   |
+| Adding an export but it's missing from `docs/API.md`                      | Re-export it from the module's `index.ts` barrel, then `npm run doc:api`.                          |
+| New entry point not importable as `ranuts/foo`                            | Wire all three: `package.json` exports + `vite.config.ts` es entry + generator `ENTRIES`.          |
+| `console.log` left in a function that a test calls                        | `vitest.config.ts` `onConsoleLog` throws — remove it or the test fails.                            |
+| Assuming a GPU/Canvas test can run in CI                                  | Test env is node (no DOM/GPU). Test pure logic; gate visual checks behind a browser demo.          |
+| Passing a non-`#rrggbb` color to the GPU backend and expecting it to fail | It won't — `getRgb` resolves any CSS color via the browser parser, matching the Canvas backend.    |
