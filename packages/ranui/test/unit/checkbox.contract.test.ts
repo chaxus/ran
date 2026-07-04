@@ -1,4 +1,4 @@
-import { describe, expect, it, beforeEach } from 'vitest';
+import { describe, expect, it, beforeEach, vi } from 'vitest';
 import { Checkbox } from '@/components/checkbox';
 import '@/components/checkbox';
 
@@ -119,5 +119,71 @@ describe('r-checkbox contract', () => {
 
     checkbox.attributeChangedCallback('checked', 'true', 'false');
     expect(checkbox.context.checked).toBe(false);
+  });
+
+  it('exposes the host as the accessible checkbox and hides the inner input', () => {
+    const checkbox = document.createElement('r-checkbox') as any;
+    document.body.appendChild(checkbox);
+
+    expect(checkbox.getAttribute('role')).toBe('checkbox');
+    expect(checkbox.getAttribute('aria-checked')).toBe('false');
+    expect(checkbox.tabIndex).toBe(0);
+
+    // The decorative inner <input> is out of the a11y tree and tab order so there
+    // is only one checkbox node.
+    const innerInput = checkbox._shadowDom.querySelector('.ran-checkbox-input') as HTMLInputElement;
+    expect(innerInput.getAttribute('aria-hidden')).toBe('true');
+    expect(innerInput.tabIndex).toBe(-1);
+  });
+
+  it('reflects checked state to aria-checked on toggle', () => {
+    const checkbox = document.createElement('r-checkbox') as any;
+    document.body.appendChild(checkbox);
+
+    checkbox.click();
+    expect(checkbox.getAttribute('aria-checked')).toBe('true');
+    checkbox.click();
+    expect(checkbox.getAttribute('aria-checked')).toBe('false');
+  });
+
+  it('toggles on Space and Enter keydown', () => {
+    const checkbox = document.createElement('r-checkbox') as any;
+    document.body.appendChild(checkbox);
+
+    checkbox.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }));
+    expect(checkbox.context.checked).toBe(true);
+    checkbox.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    expect(checkbox.context.checked).toBe(false);
+  });
+
+  it('marks aria-disabled and drops out of the tab order when disabled', () => {
+    const checkbox = document.createElement('r-checkbox') as any;
+    checkbox.setAttribute('disabled', '');
+    document.body.appendChild(checkbox);
+
+    expect(checkbox.getAttribute('aria-disabled')).toBe('true');
+    expect(checkbox.tabIndex).toBe(-1);
+
+    // keyboard is a no-op when disabled
+    checkbox.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }));
+    expect(checkbox.context.checked).toBe(false);
+  });
+
+  it('is form-associated and relays its value through ElementInternals', () => {
+    expect((Checkbox as any).formAssociated).toBe(true);
+
+    const checkbox = document.createElement('r-checkbox') as any;
+    document.body.appendChild(checkbox);
+    expect(checkbox._internals).toBeTruthy();
+
+    // jsdom's ElementInternals omits setFormValue, so stub it to observe the calls
+    // our code makes (real browsers implement it — see the optional-chained call).
+    const setFormValue = vi.fn();
+    checkbox._internals.setFormValue = setFormValue;
+
+    checkbox.click(); // -> checked contributes its value
+    expect(setFormValue).toHaveBeenLastCalledWith('true');
+    checkbox.click(); // -> unchecked contributes nothing
+    expect(setFormValue).toHaveBeenLastCalledWith(null);
   });
 });

@@ -1,4 +1,4 @@
-import { describe, expect, it, beforeEach } from 'vitest';
+import { describe, expect, it, beforeEach, vi } from 'vitest';
 import { Input } from '@/components/input';
 import '@/components/input';
 
@@ -349,5 +349,33 @@ describe('r-input contract', () => {
 
     input.listenType('type', 'email');
     expect(input._inputContent.getAttribute('type')).toBe('email');
+  });
+
+  it('associates a rendered label with the control via for/id', () => {
+    const input = document.createElement('r-input') as any;
+    input.setAttribute('label', 'Email address');
+    document.body.appendChild(input);
+
+    const id = input._inputContent.id;
+    expect(id).toBeTruthy();
+    expect(input._label).toBeTruthy();
+    expect(input._label.htmlFor).toBe(id);
+  });
+
+  it('is form-associated and relays its value through ElementInternals', () => {
+    expect((Input as any).formAssociated).toBe(true);
+
+    const input = document.createElement('r-input') as any;
+    document.body.appendChild(input);
+    expect(input._internals).toBeTruthy();
+
+    // jsdom's ElementInternals omits setFormValue, so stub it to observe calls.
+    const setFormValue = vi.fn();
+    input._internals.setFormValue = setFormValue;
+
+    input.value = 'hello';
+    expect(setFormValue).toHaveBeenLastCalledWith('hello');
+    input.value = '';
+    expect(setFormValue).toHaveBeenLastCalledWith('');
   });
 });

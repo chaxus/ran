@@ -79,6 +79,14 @@ export class CustomMessage extends RanElement {
 
     this.handlerExternalCss();
   }
+  connectedCallback(): void {
+    // Read the whole toast as one unit rather than fragmenting it as text streams
+    // in; the type setter escalates error/warning to an assertive alert. Set here,
+    // not in the constructor — a custom element may not gain attributes while
+    // constructing (it throws and aborts the upgrade).
+    (RanElement.prototype as { connectedCallback?: () => void }).connectedCallback?.call(this);
+    if (!this.hasAttribute('aria-atomic')) this.setAttribute('aria-atomic', 'true');
+  }
   get type(): string | null {
     return this.getAttribute('type');
   }
@@ -100,6 +108,13 @@ export class CustomMessage extends RanElement {
   handlerExternalCss = (): void => {
     syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
   };
+  // Map the toast type to a live-region role: error/warning interrupt (assertive
+  // `alert`), success/info wait their turn (polite `status`). This escalates the
+  // urgent cases above the polite stack container (see container.ts).
+  setA11yRole = (value: string | null): void => {
+    const assertive = value === 'error' || value === 'warning';
+    this.setAttribute('role', assertive ? 'alert' : 'status');
+  };
   setIcon = (value: string) => {
     const icon = typeMapIcon.get(value);
     const color = typeMapColor.get(value);
@@ -115,7 +130,10 @@ export class CustomMessage extends RanElement {
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     if (oldValue === newValue) return;
     if (name === 'content') this._span.textContent = newValue;
-    if (name === 'type') this.setIcon(newValue);
+    if (name === 'type') {
+      this.setIcon(newValue);
+      this.setA11yRole(newValue);
+    }
     if (name === 'sheet') this.handlerExternalCss();
   }
 }

@@ -552,4 +552,19 @@ describe('r-select contract', () => {
     addSpy.mockRestore();
     removeSpy.mockRestore();
   });
+
+  it('is form-associated and relays its value through ElementInternals', () => {
+    expect((Select as any).formAssociated).toBe(true);
+
+    const select = document.createElement('r-select') as any;
+    document.body.appendChild(select);
+    expect(select._internals).toBeTruthy();
+
+    // jsdom's ElementInternals omits setFormValue, so stub it to observe calls.
+    const setFormValue = vi.fn();
+    select._internals.setFormValue = setFormValue;
+
+    select.value = 'apple';
+    expect(setFormValue).toHaveBeenLastCalledWith('apple');
+  });
 });
