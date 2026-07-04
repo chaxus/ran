@@ -303,7 +303,3 @@ import {} from /* … */ 'ranuts/vnode';
 - `const modules: Modules`
 - `const propsModule: { create: (oldVnode: VNode, vnode: VNode) => void; update: (oldVnode: VNode, vnode: VNode) => void; }`
 - `const styleModule: { pre: () => void; create: (oldVnode: VNode, vnode: VNode) => void; update: (oldVnode: VNode, vnode: VNode) => void; destroy: (vnode: VNode)…`
-
-### Other
-
-- `"/Users/ranzhouhang/Documents/code/ran/packages/ranuts/src/vnode/is"`
