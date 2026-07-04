@@ -1,0 +1,21 @@
+{
+  "name": "ran",
+  "owner": {
+    "name": "chaxus",
+    "url": "https://github.com/chaxus/ran"
+  },
+  "description": "Skills for the ran monorepo libraries — ranui (web components) and ranuts (utilities) — so AI can read and use them without spelunking the source.",
+  "metadata": {
+    "pluginRoot": "./plugins"
+  },
+  "plugins": [
+    {
+      "name": "ranui-ranuts",
+      "source": "./plugins/ranui-ranuts",
+      "description": "Reference skills for the ranui component library and the ranuts utility library (import maps, inventories, conventions, and pointers to the shipped API docs).",
+      "author": {
+        "name": "chaxus"
+      }
+    }
+  ]
+}
