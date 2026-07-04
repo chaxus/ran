@@ -31,10 +31,15 @@ export const strParse = (
  */
 export const clearBr = (str = ''): string => {
   if (str.length === 0) return '';
-  return str
-    .replace(/\s+/g, '')
-    .replace(/<[^>]*>/g, '')
-    .replace(/[\r\n]/g, '');
+  // Strip whitespace/newlines, then remove tags repeatedly until stable so that
+  // overlapping/nested angle brackets (e.g. `<<b>>`) can't leave a tag behind.
+  let out = str.replace(/\s+/g, '');
+  let prev = '';
+  while (out !== prev) {
+    prev = out;
+    out = out.replace(/<[^>]*>/g, '');
+  }
+  return out;
 };
 
 /**
