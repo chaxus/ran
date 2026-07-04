@@ -60,11 +60,11 @@ CSS injected into the card's shadow DOM — the same `sheet` convention used by 
 
 ## Slots
 
-| Slot          | Description                                                             |
-| ------------- | ----------------------------------------------------------------------- |
-| _(default)_   | Body content, rendered in the card body.                                |
-| `extra`       | Right side of the header — badges, links, or actions.                   |
-| `footer`      | Footer content. The footer is hidden until this slot has assigned nodes. |
+| Slot        | Description                                                              |
+| ----------- | ------------------------------------------------------------------------ |
+| _(default)_ | Body content, rendered in the card body.                                 |
+| `extra`     | Right side of the header — badges, links, or actions.                    |
+| `footer`    | Footer content. The footer is hidden until this slot has assigned nodes. |
 
 ## Styling
 

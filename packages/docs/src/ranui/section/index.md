@@ -56,9 +56,9 @@ CSS injected into the section's shadow DOM — the same `sheet` convention used 
 
 ## Slots
 
-| Slot        | Description                                     |
-| ----------- | ---------------------------------------------- |
-| _(default)_ | Body content, rendered below the header row.   |
+| Slot        | Description                                  |
+| ----------- | -------------------------------------------- |
+| _(default)_ | Body content, rendered below the header row. |
 
 ## Styling
 

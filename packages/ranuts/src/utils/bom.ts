@@ -522,18 +522,29 @@ export class PostMessageBridge {
     // if (this.targetOrigin !== '*' && event.origin !== this.targetOrigin && !whiteList.includes(hostname)) return
     if (this.targetOrigin !== '*' && event.origin !== this.targetOrigin) return;
 
+    // 每个 bridge 都在全局 window 上监听，这里校验来源窗口，
+    // 避免多个 bridge 互相处理对方（或自己）的消息。
+    // event.source 为 null 时（部分场景）不做过滤。
+    if (event.source && event.source !== this.targetWindow) return;
+
     // 创建 event.data 的副本，避免对其他监听器造成干扰
     const dataCopy = typeof event.data === 'string' ? String(event.data) : event.data;
     const decodedData = MessageCodec.decode<MessageData<T>>(dataCopy);
     if (!decodedData) return;
 
-    const { type, payload, id, isResponse } = decodedData;
+    const { type, payload, id, isResponse, isError } = decodedData;
 
     // 处理响应消息
     if (isResponse && id) {
       const pendingRequest = this.pendingRequests.get(id);
       if (pendingRequest) {
-        pendingRequest.resolve(payload);
+        // 远端 handler 抛错时回传 isError，需要 reject 而不是 resolve，
+        // 否则调用方会把错误信息当成正常结果。
+        if (isError) {
+          pendingRequest.reject(new Error(typeof payload === 'string' ? payload : 'Bridge request failed'));
+        } else {
+          pendingRequest.resolve(payload);
+        }
         this.pendingRequests.delete(id);
       }
       return;
@@ -543,10 +554,13 @@ export class PostMessageBridge {
     if (typeof type !== 'string' || !this.messageHandlers.has(type)) return;
     const handler = this.messageHandlers.get(type);
     if (isFunction(handler)) {
+      // 响应回发给消息真正的来源，而非固定的 targetWindow，
+      // 避免 targetWindow 与请求来源不一致时回错窗口。
+      const replyWindow = (event.source as Window | null) ?? this.targetWindow;
       Promise.resolve(handler(payload))
         .then((response) => {
           if (id) {
-            this.targetWindow.postMessage(
+            replyWindow.postMessage(
               MessageCodec.encode({
                 type,
                 payload: response,
@@ -559,10 +573,10 @@ export class PostMessageBridge {
         })
         .catch((error) => {
           if (id) {
-            this.targetWindow.postMessage(
+            replyWindow.postMessage(
               MessageCodec.encode({
                 type,
-                payload: error.message,
+                payload: error instanceof Error ? error.message : String(error),
                 id,
                 isResponse: true,
                 isError: true,
@@ -586,8 +600,25 @@ export class PostMessageBridge {
 
   // 发送消息并等待响应
   send = async <T = unknown, R = unknown>(type: string, payload: T): Promise<R> => {
-    const id = Math.random().toString(36).slice(2, 11);
+    const id = getRandomString(10);
     return new Promise<R>((rs, reject) => {
+      // 兜底方案，如果一段时间没有收到响应，则请求结束
+      const timeout = setTimeout(() => {
+        if (this.pendingRequests.has(id)) {
+          this.pendingRequests.delete(id);
+          reject(new Error('Request timeout'));
+        }
+      }, DEFAULT_TIMEOUT);
+      const resolve = (value: R) => {
+        clearTimeout(timeout);
+        rs(value);
+      };
+      const rejectWith = (error: unknown) => {
+        clearTimeout(timeout);
+        reject(error);
+      };
+      // 先注册 pending，再发送，避免响应先于注册到达。
+      this.pendingRequests.set(id, { resolve, reject: rejectWith });
       this.targetWindow.postMessage(
         MessageCodec.encode({
           type,
@@ -596,18 +627,6 @@ export class PostMessageBridge {
         }),
         this.targetOrigin,
       );
-      // 兜底方案，如果一段时间没有收到响应，则请求结束
-      const timeout = setTimeout(() => {
-        if (this.pendingRequests.has(id)) {
-          this.pendingRequests.delete(id);
-          reject(new Error('Request timeout'));
-        }
-      }, DEFAULT_TIMEOUT);
-      const resolve = (payload: R) => {
-        clearTimeout(timeout);
-        rs(payload);
-      };
-      this.pendingRequests.set(id, { resolve, reject });
     });
   };
 
@@ -627,6 +646,10 @@ export class PostMessageBridge {
   destroy = (): void => {
     window.removeEventListener('message', this.handleMessage);
     this.messageHandlers.clear();
+    // reject 未决请求，顺带清理各自的 timeout 定时器，避免悬挂。
+    this.pendingRequests.forEach((pending) => {
+      pending.reject(new Error('Bridge destroyed'));
+    });
     this.pendingRequests.clear();
   };
 }

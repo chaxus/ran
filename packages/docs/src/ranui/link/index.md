@@ -43,9 +43,9 @@ CSS injected into the link's shadow DOM — the same `sheet` convention used by 
 
 ## Events
 
-| Event          | Detail                       | When                                                        |
-| -------------- | ---------------------------- | ----------------------------------------------------------- |
-| `ran-navigate` | `{ path: string, replace }`  | An internal link is clicked and no ranui router is active. Bubbles and is composed. |
+| Event          | Detail                      | When                                                                                |
+| -------------- | --------------------------- | ----------------------------------------------------------------------------------- |
+| `ran-navigate` | `{ path: string, replace }` | An internal link is clicked and no ranui router is active. Bubbles and is composed. |
 
 ## Styling
 

@@ -45,13 +45,13 @@ Fires whenever the color changes — dragging the palette, moving a slider, edit
 input, or setting the `value` attribute. It **bubbles** and is **composed** (crosses shadow
 boundaries). `event.detail` carries the color in every format:
 
-| Field   | Type     | Example                  |
-| ------- | -------- | ------------------------ |
+| Field   | Type     | Example                                   |
+| ------- | -------- | ----------------------------------------- |
 | `value` | `string` | `"#1677ff"` / `"rgba(22, 119, 255, 0.5)"` |
-| `hex`   | `string` | `"#1677ff"`              |
-| `rgb`   | `string` | `"rgb(22, 119, 255)"`    |
-| `rgba`  | `string` | `"rgba(22, 119, 255, 0.5)"` |
-| `alpha` | `number` | `0.5`                    |
+| `hex`   | `string` | `"#1677ff"`                               |
+| `rgb`   | `string` | `"rgb(22, 119, 255)"`                     |
+| `rgba`  | `string` | `"rgba(22, 119, 255, 0.5)"`               |
+| `alpha` | `number` | `0.5`                                     |
 
 ```js
 picker.addEventListener('change', (e) => {
@@ -65,14 +65,14 @@ picker.addEventListener('change', (e) => {
 - **`::part(swatch)`** — the inner fill that shows the current color.
 - **CSS variables** — the trigger swatch reads these tokens:
 
-| Variable                              | Purpose                          |
-| ------------------------------------- | -------------------------------- |
-| `--ran-colorpicker-background`        | Swatch background                |
-| `--ran-colorpicker-border`            | Swatch border                    |
-| `--ran-colorpicker-border-hover`      | Border color on hover            |
-| `--ran-colorpicker-border-radius`     | Swatch corner radius             |
-| `--ran-colorpicker-block-border-radius` | Inner block corner radius      |
-| `--ran-colorpicker-transition`        | Hover transition                 |
+| Variable                                | Purpose                   |
+| --------------------------------------- | ------------------------- |
+| `--ran-colorpicker-background`          | Swatch background         |
+| `--ran-colorpicker-border`              | Swatch border             |
+| `--ran-colorpicker-border-hover`        | Border color on hover     |
+| `--ran-colorpicker-border-radius`       | Swatch corner radius      |
+| `--ran-colorpicker-block-border-radius` | Inner block corner radius |
+| `--ran-colorpicker-transition`          | Hover transition          |
 
 ```css
 r-colorpicker {

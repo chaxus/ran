@@ -21,34 +21,34 @@ new PostMessageBridge(targetWindow?: Window, targetOrigin?: string)
 
 #### Constructor parameters
 
-| Parameter      | Description                                                    | Type     | Default    |
-| -------------- | ------------------------------------------------------------- | -------- | ---------- |
-| `targetWindow` | The `Window` to post messages to (iframe, popup, `parent`, …) | `Window` | `window`   |
-| `targetOrigin` | Origin to post to / accept from. `'*'` disables the check     | `string` | `'*'`      |
+| Parameter      | Description                                                   | Type     | Default  |
+| -------------- | ------------------------------------------------------------- | -------- | -------- |
+| `targetWindow` | The `Window` to post messages to (iframe, popup, `parent`, …) | `Window` | `window` |
+| `targetOrigin` | Origin to post to / accept from. `'*'` disables the check     | `string` | `'*'`    |
 
 #### Methods
 
-| Method                          | Description                                                                                          | Signature                                                        |
-| ------------------------------- | --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
-| `on(type, handler)`             | Register a handler for a message `type`. Its return value (or resolved value) is sent back as reply. | `<T, R>(type: string, handler: MessageHandler<T, R>) => void`   |
-| `off(type)`                     | Remove the handler registered for `type`.                                                           | `(type: string) => void`                                        |
-| `send(type, payload)`           | Send a message and await the response. Rejects after a 120s timeout.                                | `<T, R>(type: string, payload: T) => Promise<R>`                |
-| `broadcast({ type, payload })`  | Fire-and-forget: post a message without expecting a response.                                       | `<T>(data: { type: string; payload: T }) => void`               |
-| `destroy()`                     | Remove the `message` listener and clear all handlers and pending requests.                          | `() => void`                                                     |
+| Method                         | Description                                                                                          | Signature                                                     |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| `on(type, handler)`            | Register a handler for a message `type`. Its return value (or resolved value) is sent back as reply. | `<T, R>(type: string, handler: MessageHandler<T, R>) => void` |
+| `off(type)`                    | Remove the handler registered for `type`.                                                            | `(type: string) => void`                                      |
+| `send(type, payload)`          | Send a message and await the response. Rejects after a 120s timeout.                                 | `<T, R>(type: string, payload: T) => Promise<R>`              |
+| `broadcast({ type, payload })` | Fire-and-forget: post a message without expecting a response.                                        | `<T>(data: { type: string; payload: T }) => void`             |
+| `destroy()`                    | Remove the `message` listener and clear all handlers and pending requests.                           | `() => void`                                                  |
 
 ### `BridgeManager`
 
 A singleton registry that owns multiple named `PostMessageBridge` instances. Get the shared instance with `BridgeManager.getInstance()` or use the ready-made [`bridgeManager`](#bridgemanager-singleton) export. The constructor is private.
 
-| Method                             | Description                                                                       | Signature                                                                                  |
-| ---------------------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| `BridgeManager.getInstance()`      | Return the shared singleton instance.                                             | `() => BridgeManager`                                                                       |
-| `connectClient(options)`           | Create and register a new bridge. Throws if `id` already exists.                  | `(options: BridgeManagerOptions) => { bridge: PostMessageBridge; id: string }`             |
-| `getClient(id)`                    | Look up a registered bridge by id.                                                | `(id: string) => PostMessageBridge \| undefined`                                           |
-| `removeClient(id)`                 | Destroy and unregister the bridge with this id.                                   | `(id: string) => void`                                                                      |
-| `removeAllClient()`                | Destroy and unregister every bridge.                                              | `() => void`                                                                                |
-| `broadcast({ type, payload })`     | Broadcast one message through every registered bridge.                            | `<T>(payload: { type: string; payload: T }) => void`                                       |
-| `sendTo(id, type, payload)`        | Send a request through the bridge with this id and await the response.            | `<T, R>(id: string, type: string, payload: T) => Promise<R>`                               |
+| Method                         | Description                                                            | Signature                                                                      |
+| ------------------------------ | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| `BridgeManager.getInstance()`  | Return the shared singleton instance.                                  | `() => BridgeManager`                                                          |
+| `connectClient(options)`       | Create and register a new bridge. Throws if `id` already exists.       | `(options: BridgeManagerOptions) => { bridge: PostMessageBridge; id: string }` |
+| `getClient(id)`                | Look up a registered bridge by id.                                     | `(id: string) => PostMessageBridge \| undefined`                               |
+| `removeClient(id)`             | Destroy and unregister the bridge with this id.                        | `(id: string) => void`                                                         |
+| `removeAllClient()`            | Destroy and unregister every bridge.                                   | `() => void`                                                                   |
+| `broadcast({ type, payload })` | Broadcast one message through every registered bridge.                 | `<T>(payload: { type: string; payload: T }) => void`                           |
+| `sendTo(id, type, payload)`    | Send a request through the bridge with this id and await the response. | `<T, R>(id: string, type: string, payload: T) => Promise<R>`                   |
 
 When `id` is omitted in `connectClient`, a random 10-character id is generated and returned.
 
@@ -64,33 +64,33 @@ import { bridgeManager } from 'ranuts/utils';
 
 A thin facade over `bridgeManager` for the **calling** side (the context that initiates requests). It is a plain object, not a class.
 
-| Method                     | Description                                          | Signature                                                                          |
-| -------------------------- | --------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| `connect(options)`         | Connect to a target window (delegates to `bridgeManager.connectClient`). | `(options: BridgeManagerOptions) => { bridge: PostMessageBridge; id: string }`     |
-| `remove(id)`               | Remove one connection by id.                        | `(id: string) => void`                                                             |
-| `removeAll()`              | Remove all connections.                             | `() => void`                                                                       |
-| `broadcast(payload)`       | Broadcast to all connected platforms.               | `(payload: BroadcastPayload) => void`                                             |
-| `call({ id, type, payload })` | Send a request to the platform behind `id` and await the reply.        | `<T, R>(payload: CallToPayload<T>) => Promise<R>`                                 |
-| `broadcastToAll(payload)`  | Post to the current window with origin `'*'`. Not recommended for security reasons. | `(payload: BroadcastPayload) => void`                             |
+| Method                        | Description                                                                         | Signature                                                                      |
+| ----------------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| `connect(options)`            | Connect to a target window (delegates to `bridgeManager.connectClient`).            | `(options: BridgeManagerOptions) => { bridge: PostMessageBridge; id: string }` |
+| `remove(id)`                  | Remove one connection by id.                                                        | `(id: string) => void`                                                         |
+| `removeAll()`                 | Remove all connections.                                                             | `() => void`                                                                   |
+| `broadcast(payload)`          | Broadcast to all connected platforms.                                               | `(payload: BroadcastPayload) => void`                                          |
+| `call({ id, type, payload })` | Send a request to the platform behind `id` and await the reply.                     | `<T, R>(payload: CallToPayload<T>) => Promise<R>`                              |
+| `broadcastToAll(payload)`     | Post to the current window with origin `'*'`. Not recommended for security reasons. | `(payload: BroadcastPayload) => void`                                          |
 
 ### `Platform`
 
 A facade for the **receiving** side (typically the code running inside an iframe). It is a plain object with a single method.
 
-| Method          | Description                                                                                                       | Signature                                                                       |
-| --------------- | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| Method                  | Description                                                                                                                                                                 | Signature                                                                         |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
 | `Platform.init(events)` | Register a map of `type -> handler`. On each incoming message it runs the matching handler and posts the result back to `event.source`. Returns a `destroy()` to tear down. | `<T, R>(events: Record<string, MessageHandler<T, R>>) => { destroy: () => void }` |
 
 ### `MessageCodec`
 
 The serializer used under the hood by every bridge. Encodes data to a Base64 string (safe for URLs, cookies, and `postMessage`) and decodes it back, preserving all Unicode characters.
 
-| Method                | Description                                                          | Signature                             |
-| --------------------- | ------------------------------------------------------------------- | ------------------------------------- |
-| `encode(data)`        | Serialize any JSON-serializable value to a Base64 string. Returns `''` on failure. | `(data: any) => string`  |
-| `decode(encodedStr)`  | Parse a Base64 string back to a value. Returns `null` on failure.   | `<T>(encodedStr: string) => T \| null`|
-| `encodeFile(file)`    | Encode a `File` (with metadata + bytes) to a Base64 string.         | `(file: File) => Promise<string>`     |
-| `decodeFile(encoded)` | Decode a string produced by `encodeFile` back into a `File`.        | `(encoded: string) => File`           |
+| Method                | Description                                                                        | Signature                              |
+| --------------------- | ---------------------------------------------------------------------------------- | -------------------------------------- |
+| `encode(data)`        | Serialize any JSON-serializable value to a Base64 string. Returns `''` on failure. | `(data: any) => string`                |
+| `decode(encodedStr)`  | Parse a Base64 string back to a value. Returns `null` on failure.                  | `<T>(encodedStr: string) => T \| null` |
+| `encodeFile(file)`    | Encode a `File` (with metadata + bytes) to a Base64 string.                        | `(file: File) => Promise<string>`      |
+| `decodeFile(encoded)` | Decode a string produced by `encodeFile` back into a `File`.                       | `(encoded: string) => File`            |
 
 ### Interfaces
 
@@ -108,48 +108,48 @@ interface MessageHandler<T = unknown, R = unknown> {
 
 The shape of a decoded message on the wire.
 
-| Field        | Description                                          | Type      |
-| ------------ | --------------------------------------------------- | --------- |
-| `type`       | Message type / channel name.                        | `string`  |
-| `payload`    | The message body.                                   | `T`       |
-| `id`         | Correlation id, present for request/response pairs. | `string?` |
-| `isResponse` | `true` when this message is a reply.                | `boolean?`|
-| `isError`    | `true` when the reply carries an error.             | `boolean?`|
+| Field        | Description                                         | Type       |
+| ------------ | --------------------------------------------------- | ---------- |
+| `type`       | Message type / channel name.                        | `string`   |
+| `payload`    | The message body.                                   | `T`        |
+| `id`         | Correlation id, present for request/response pairs. | `string?`  |
+| `isResponse` | `true` when this message is a reply.                | `boolean?` |
+| `isError`    | `true` when the reply carries an error.             | `boolean?` |
 
 #### `PendingRequest<R>`
 
 An in-flight `send()` awaiting its response (internal bookkeeping).
 
-| Field     | Description                        | Type                        |
-| --------- | ---------------------------------- | --------------------------- |
-| `resolve` | Resolve the pending promise.       | `(value: R) => void`        |
-| `reject`  | Reject the pending promise.        | `(error: unknown) => void`  |
+| Field     | Description                  | Type                       |
+| --------- | ---------------------------- | -------------------------- |
+| `resolve` | Resolve the pending promise. | `(value: R) => void`       |
+| `reject`  | Reject the pending promise.  | `(error: unknown) => void` |
 
 #### `BridgeManagerOptions`
 
 Options for `connectClient` / `Client.connect`.
 
-| Field          | Description                              | Type      | Default              |
-| -------------- | ---------------------------------------- | --------- | -------------------- |
+| Field          | Description                                    | Type      | Default               |
+| -------------- | ---------------------------------------------- | --------- | --------------------- |
 | `id`           | Explicit bridge id. Auto-generated if omitted. | `string?` | random 10-char string |
-| `targetOrigin` | Origin passed to `PostMessageBridge`.    | `string?` | `'*'`                |
-| `targetWindow` | Target `Window` passed to the bridge.    | `Window?` | `window`             |
+| `targetOrigin` | Origin passed to `PostMessageBridge`.          | `string?` | `'*'`                 |
+| `targetWindow` | Target `Window` passed to the bridge.          | `Window?` | `window`              |
 
 #### `BroadcastPayload`
 
 A one-way broadcast message.
 
-| Field     | Description        | Type      |
-| --------- | ------------------ | --------- |
-| `type`    | Message type.      | `string`  |
-| `payload` | The message body.  | `unknown` |
+| Field     | Description       | Type      |
+| --------- | ----------------- | --------- |
+| `type`    | Message type.     | `string`  |
+| `payload` | The message body. | `unknown` |
 
 #### `CallToPayload<T>`
 
 The argument to `Client.call`.
 
 | Field     | Description                       | Type     |
-| --------- | -------------------------------- | -------- |
+| --------- | --------------------------------- | -------- |
 | `id`      | Id of the target bridge/platform. | `string` |
 | `type`    | Message type.                     | `string` |
 | `payload` | The request body.                 | `T`      |
