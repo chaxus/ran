@@ -72,6 +72,45 @@ SSR helpers: `import { defineSSR } from 'ranui/ssr-registry'` (source) / `ranui/
 - `EventManager` — `.on(target, type, handler)` with `.abort()` to remove all
   listeners at once (use in `disconnectedCallback`).
 
+## Usage example
+
+Declarative — use elements like native HTML (after importing the subpath):
+
+```html
+<r-select value="a">
+  <r-option value="a">Apple</r-option>
+  <r-option value="b">Banana</r-option>
+</r-select>
+<r-input label="Email" name="email"></r-input>
+```
+
+Imperative — create, configure, and wire events (event `detail` shapes are in
+COMPONENTS.md, e.g. `r-select change → { value, label }`):
+
+```ts
+import 'ranui/select';
+import message from 'ranui/message';
+
+const sel = document.createElement('r-select');
+sel.setAttribute('value', 'a');
+sel.addEventListener('change', (e) => console.log((e as CustomEvent).detail.value));
+document.body.append(sel);
+
+message.success('Saved'); // imperative toast API: info | success | warning | error | toast
+```
+
+Builder + reactivity — compose DOM with signals (great for framework-free views):
+
+```ts
+import { Div, ButtonBuilder, signal, createEffect } from 'ranui/builder';
+
+const [count, setCount] = signal(0);
+const label = Div().build();
+createEffect(() => { label.textContent = `Count: ${count()}`; }); // re-runs on change
+const btn = ButtonBuilder().text('inc').on('click', () => setCount(count() + 1)).build();
+document.body.append(label, btn);
+```
+
 ## Accessibility (already built in — rely on it, don't re-implement)
 
 - `r-message` toasts announce via an `aria-live` region (errors = assertive `alert`).
