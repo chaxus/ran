@@ -1,12 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import {
-  BRIDGE_MARKER,
-  MessageCodec,
-  Platform,
-  PostMessageBridge,
-  acceptPortBridge,
-  createPortBridge,
-} from '@/utils';
+import { BRIDGE_MARKER, MessageCodec, Platform, PostMessageBridge, acceptPortBridge, createPortBridge } from '@/utils';
 
 describe('Platform bridge', () => {
   const originalWindow = globalThis.window;
@@ -211,7 +204,11 @@ describe('PostMessageBridge request/response', () => {
     const { bridge } = setupBridge(target);
     const promise = bridge.send('do', {});
     const env = lastEnvelope(target);
-    deliverTo(bridge, { ...env, payload: 'handler blew up', isResponse: true, isError: true, senderId: 'peer' }, target);
+    deliverTo(
+      bridge,
+      { ...env, payload: 'handler blew up', isResponse: true, isError: true, senderId: 'peer' },
+      target,
+    );
     await expect(promise).rejects.toThrow('handler blew up');
   });
 
@@ -249,11 +246,19 @@ describe('PostMessageBridge request/response', () => {
       return lastEnvelope(target).__bridge;
     })();
     // 另一通道的请求应被忽略
-    deliverTo(bridge, { __bridge: marker, channel: 'channel-B', type: 'greet', payload: {}, id: 'r1', senderId: 'peer' }, target);
+    deliverTo(
+      bridge,
+      { __bridge: marker, channel: 'channel-B', type: 'greet', payload: {}, id: 'r1', senderId: 'peer' },
+      target,
+    );
     await flush();
     expect(handler).not.toHaveBeenCalled();
     // 本通道的请求才处理
-    deliverTo(bridge, { __bridge: marker, channel: 'channel-A', type: 'greet', payload: {}, id: 'r2', senderId: 'peer' }, target);
+    deliverTo(
+      bridge,
+      { __bridge: marker, channel: 'channel-A', type: 'greet', payload: {}, id: 'r2', senderId: 'peer' },
+      target,
+    );
     await flush();
     expect(handler).toHaveBeenCalledTimes(1);
   });

@@ -1068,7 +1068,11 @@ export const createPortBridge = (port: MessagePort): PortBridge => {
 /**
  * 发起方：创建 MessageChannel，把一端交给目标窗口，自己持有另一端。
  */
-export const openPortBridge = ({ targetWindow, targetOrigin = '*', name = 'default' }: OpenPortBridgeOptions): PortBridge => {
+export const openPortBridge = ({
+  targetWindow,
+  targetOrigin = '*',
+  name = 'default',
+}: OpenPortBridgeOptions): PortBridge => {
   const channel = new MessageChannel();
   targetWindow.postMessage({ [PORT_INIT_MARKER]: true, name }, targetOrigin, [channel.port2]);
   return createPortBridge(channel.port1);
@@ -1078,7 +1082,10 @@ export const openPortBridge = ({ targetWindow, targetOrigin = '*', name = 'defau
  * 接收方：等待发起方递来的 port，握手完成后返回 bridge。
  * 返回的 Promise 在收到匹配 name 的握手消息后 resolve。
  */
-export const acceptPortBridge = ({ targetOrigin = '*', name = 'default' }: AcceptPortBridgeOptions = {}): Promise<PortBridge> => {
+export const acceptPortBridge = ({
+  targetOrigin = '*',
+  name = 'default',
+}: AcceptPortBridgeOptions = {}): Promise<PortBridge> => {
   if (typeof window === 'undefined') {
     return Promise.reject(new Error('acceptPortBridge is unavailable outside a browser environment'));
   }

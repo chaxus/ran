@@ -76,7 +76,14 @@ function tokenize(html: string): Token[] {
     // A valid open tag ends immediately (`>`) or continues with whitespace-led
     // attributes; anything else (e.g. `/`, a letter) means this wasn't a real tag.
     const nextChar = html[afterName];
-    if (nextChar !== '>' && nextChar !== ' ' && nextChar !== '\n' && nextChar !== '\t' && nextChar !== '\r' && nextChar !== '\f') {
+    if (
+      nextChar !== '>' &&
+      nextChar !== ' ' &&
+      nextChar !== '\n' &&
+      nextChar !== '\t' &&
+      nextChar !== '\r' &&
+      nextChar !== '\f'
+    ) {
       openTagRe.lastIndex = afterName;
       continue;
     }
