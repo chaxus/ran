@@ -40,13 +40,13 @@ console.log(picker.value); // 读回当前颜色
 颜色发生变化时触发 —— 拖动调色板、移动滑块、编辑数值输入框，或设置 `value` 特性时。
 该事件会**冒泡**且是 **composed**（可跨越 shadow 边界）。`event.detail` 携带各种格式的颜色：
 
-| 字段    | 类型     | 示例                     |
-| ------- | -------- | ------------------------ |
+| 字段    | 类型     | 示例                                      |
+| ------- | -------- | ----------------------------------------- |
 | `value` | `string` | `"#1677ff"` / `"rgba(22, 119, 255, 0.5)"` |
-| `hex`   | `string` | `"#1677ff"`              |
-| `rgb`   | `string` | `"rgb(22, 119, 255)"`    |
-| `rgba`  | `string` | `"rgba(22, 119, 255, 0.5)"` |
-| `alpha` | `number` | `0.5`                    |
+| `hex`   | `string` | `"#1677ff"`                               |
+| `rgb`   | `string` | `"rgb(22, 119, 255)"`                     |
+| `rgba`  | `string` | `"rgba(22, 119, 255, 0.5)"`               |
+| `alpha` | `number` | `0.5`                                     |
 
 ```js
 picker.addEventListener('change', (e) => {
@@ -60,14 +60,14 @@ picker.addEventListener('change', (e) => {
 - **`::part(swatch)`** — 显示当前颜色的内部填充块。
 - **CSS 变量** — 触发色块读取以下令牌：
 
-| 变量                                    | 用途                 |
-| --------------------------------------- | -------------------- |
-| `--ran-colorpicker-background`          | 色块背景             |
-| `--ran-colorpicker-border`              | 色块边框             |
-| `--ran-colorpicker-border-hover`        | 悬停时的边框颜色     |
-| `--ran-colorpicker-border-radius`       | 色块圆角             |
-| `--ran-colorpicker-block-border-radius` | 内部块圆角           |
-| `--ran-colorpicker-transition`          | 悬停过渡             |
+| 变量                                    | 用途             |
+| --------------------------------------- | ---------------- |
+| `--ran-colorpicker-background`          | 色块背景         |
+| `--ran-colorpicker-border`              | 色块边框         |
+| `--ran-colorpicker-border-hover`        | 悬停时的边框颜色 |
+| `--ran-colorpicker-border-radius`       | 色块圆角         |
+| `--ran-colorpicker-block-border-radius` | 内部块圆角       |
+| `--ran-colorpicker-transition`          | 悬停过渡         |
 
 ```css
 r-colorpicker {

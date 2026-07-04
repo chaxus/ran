@@ -59,13 +59,13 @@ const server = app.listen(3000, () => {
 
 默认导出。基于 `node:http` 的极简 Koa 风格服务器。
 
-| 成员                  | 说明                                                                   | 类型                                       |
-| --------------------- | ---------------------------------------------------------------------- | ------------------------------------------ |
-| `new Server()`        | 创建服务器，无参数。                                                    | `() => Server`                             |
-| `use(middleware)`     | 向中间件链追加一个中间件。返回 `void`（不可链式调用）。                 | `(fn: MiddlewareFunction) => void`         |
-| `listen(...args)`     | 开始监听。参数原样转发给 `http.Server.listen`，返回底层 `http.Server`。 | `(...args) => http.Server`                 |
-| `middleware`          | 已注册的中间件数组。                                                    | `MiddlewareFunction[]`                     |
-| `ctx`                 | 共享的请求 `Context`（其 `req`/`res` 每次请求都会被替换）。            | `Context`                                  |
+| 成员              | 说明                                                                    | 类型                               |
+| ----------------- | ----------------------------------------------------------------------- | ---------------------------------- |
+| `new Server()`    | 创建服务器，无参数。                                                    | `() => Server`                     |
+| `use(middleware)` | 向中间件链追加一个中间件。返回 `void`（不可链式调用）。                 | `(fn: MiddlewareFunction) => void` |
+| `listen(...args)` | 开始监听。参数原样转发给 `http.Server.listen`，返回底层 `http.Server`。 | `(...args) => http.Server`         |
+| `middleware`      | 已注册的中间件数组。                                                    | `MiddlewareFunction[]`             |
+| `ctx`             | 共享的请求 `Context`（其 `req`/`res` 每次请求都会被替换）。             | `Context`                          |
 
 **中间件签名**
 
@@ -79,30 +79,30 @@ type MiddlewareFunction = (ctx: Context, next: Next) => void | Promise<void>;
 
 **Context 结构**
 
-| 字段     | 说明                                                                     | 类型                        |
-| -------- | ------------------------------------------------------------------------ | --------------------------- |
-| `req`    | 传入的请求。                                                             | `http.IncomingMessage`      |
-| `res`    | 服务器响应。使用 `res.setHeader` / `res.writeHead` / `res.end` 写出。    | `http.ServerResponse`       |
-| `ipv4()` | 返回本机第一个非内网 IPv4 地址（否则 `undefined`）。                     | `() => string \| undefined` |
-| `request`| 由 `body()` 添加：`{ method, path, url, query, body }`，其中 `query` 为 `URLSearchParams`。 | `object`（动态） |
-| `[key]`  | `Context` 是开放对象，中间件可挂载任意字段。                             | `any`                       |
+| 字段      | 说明                                                                                        | 类型                        |
+| --------- | ------------------------------------------------------------------------------------------- | --------------------------- |
+| `req`     | 传入的请求。                                                                                | `http.IncomingMessage`      |
+| `res`     | 服务器响应。使用 `res.setHeader` / `res.writeHead` / `res.end` 写出。                       | `http.ServerResponse`       |
+| `ipv4()`  | 返回本机第一个非内网 IPv4 地址（否则 `undefined`）。                                        | `() => string \| undefined` |
+| `request` | 由 `body()` 添加：`{ method, path, url, query, body }`，其中 `query` 为 `URLSearchParams`。 | `object`（动态）            |
+| `[key]`   | `Context` 是开放对象，中间件可挂载任意字段。                                                | `any`                       |
 
 ### Router
 
 默认导出。按 HTTP 方法与精确路径注册处理函数，再通过 `routes()` 暴露为中间件。
 
-| 方法                         | 说明                                               | 类型                                   |
-| ---------------------------- | -------------------------------------------------- | -------------------------------------- |
-| `new Router()`               | 创建路由实例。                                     | `() => Router`                         |
-| `get(url, handler)`          | 注册一个 `GET` 路由。                              | `(url: string, h: Handler) => void`    |
-| `post(url, handler)`         | 注册一个 `POST` 路由。                             | `(url: string, h: Handler) => void`    |
-| `put(url, handler)`          | 注册一个 `PUT` 路由。                              | `(url: string, h: Handler) => void`    |
-| `patch(url, handler)`        | 注册一个 `PATCH` 路由。                            | `(url: string, h: Handler) => void`    |
-| `del(url, handler)`          | 注册一个 `DELETE` 路由。                           | `(url: string, h: Handler) => void`    |
-| `head(url, handler)`         | 注册一个 `HEAD` 路由。                             | `(url: string, h: Handler) => void`    |
-| `options(url, handler)`      | 注册一个 `OPTIONS` 路由。                          | `(url: string, h: Handler) => void`    |
-| `routes()`                   | 返回一个将请求派发到匹配处理函数的中间件。          | `() => MiddlewareFunction`             |
-| `allowedMethods()`           | 返回一个中间件，对未匹配的路径/方法回应 `404`/`405`/`501`。 | `() => MiddlewareFunction`     |
+| 方法                    | 说明                                                        | 类型                                |
+| ----------------------- | ----------------------------------------------------------- | ----------------------------------- |
+| `new Router()`          | 创建路由实例。                                              | `() => Router`                      |
+| `get(url, handler)`     | 注册一个 `GET` 路由。                                       | `(url: string, h: Handler) => void` |
+| `post(url, handler)`    | 注册一个 `POST` 路由。                                      | `(url: string, h: Handler) => void` |
+| `put(url, handler)`     | 注册一个 `PUT` 路由。                                       | `(url: string, h: Handler) => void` |
+| `patch(url, handler)`   | 注册一个 `PATCH` 路由。                                     | `(url: string, h: Handler) => void` |
+| `del(url, handler)`     | 注册一个 `DELETE` 路由。                                    | `(url: string, h: Handler) => void` |
+| `head(url, handler)`    | 注册一个 `HEAD` 路由。                                      | `(url: string, h: Handler) => void` |
+| `options(url, handler)` | 注册一个 `OPTIONS` 路由。                                   | `(url: string, h: Handler) => void` |
+| `routes()`              | 返回一个将请求派发到匹配处理函数的中间件。                  | `() => MiddlewareFunction`          |
+| `allowedMethods()`      | 返回一个中间件，对未匹配的路径/方法回应 `404`/`405`/`501`。 | `() => MiddlewareFunction`          |
 
 **处理函数签名**
 
@@ -116,33 +116,33 @@ type Handler = (ctx: Context, next: Next) => void;
 
 ### 中间件
 
-| 符号                     | 说明                                                                                                 | 类型                                        |
-| ------------------------ | ---------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| 符号                     | 说明                                                                                                     | 类型                                              |
+| ------------------------ | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
 | `body(options?)`         | body 解析中间件。填充 `ctx.request`，并解析 `application/json` / `multipart/form-data`。返回一个中间件。 | `(o?: Partial<ServerBody>) => MiddlewareFunction` |
-| `staticMiddleware(opt?)` | 从 `opt.pathname`（默认 `process.cwd()`）提供静态文件；访问 `/` 时返回 `index.html`。                 | `(o?: Partial<Option>) => MiddlewareFunction` |
-| `connect(fn)`            | 将 Connect/Express 风格的 `(req, res, next)` 中间件适配为本框架的中间件。                             | `(fn) => MiddlewareFunction`                |
+| `staticMiddleware(opt?)` | 从 `opt.pathname`（默认 `process.cwd()`）提供静态文件；访问 `/` 时返回 `index.html`。                    | `(o?: Partial<Option>) => MiddlewareFunction`     |
+| `connect(fn)`            | 将 Connect/Express 风格的 `(req, res, next)` 中间件适配为本框架的中间件。                                | `(fn) => MiddlewareFunction`                      |
 
 **`body(options)` 选项**
 
-| 选项         | 说明                                              | 类型             | 默认值               |
-| ------------ | ------------------------------------------------- | ---------------- | -------------------- |
-| `uploadDir`  | `multipart/form-data` 文件上传的存放目录。        | `string`         | `'.'`                |
-| `encoding`   | 传入请求流的编码。                                | `BufferEncoding` | `'utf-8'`/`'binary'` |
-| `json`       | 是否解析 JSON body（`false` 保留原始字符串）。    | `boolean`        | `true`               |
-| `urlencoded` | 预留：用于 urlencoded body。                       | `boolean`        | `true`               |
+| 选项         | 说明                                           | 类型             | 默认值               |
+| ------------ | ---------------------------------------------- | ---------------- | -------------------- |
+| `uploadDir`  | `multipart/form-data` 文件上传的存放目录。     | `string`         | `'.'`                |
+| `encoding`   | 传入请求流的编码。                             | `BufferEncoding` | `'utf-8'`/`'binary'` |
+| `json`       | 是否解析 JSON body（`false` 保留原始字符串）。 | `boolean`        | `true`               |
+| `urlencoded` | 预留：用于 urlencoded body。                   | `boolean`        | `true`               |
 
 **`staticMiddleware(option)` 选项**
 
-| 选项        | 说明                                              | 类型                       | 默认值             |
-| ----------- | ------------------------------------------------- | -------------------------- | ------------------ |
-| `pathname`  | 提供文件的根目录。                                | `string`                   | `process.cwd()`    |
-| `fileTypes` | 额外的 `扩展名 → MIME 类型` 映射。                | `Record<string, string>`   | `{}`               |
+| 选项        | 说明                               | 类型                     | 默认值          |
+| ----------- | ---------------------------------- | ------------------------ | --------------- |
+| `pathname`  | 提供文件的根目录。                 | `string`                 | `process.cwd()` |
+| `fileTypes` | 额外的 `扩展名 → MIME 类型` 映射。 | `Record<string, string>` | `{}`            |
 
 ### WebSocket
 
-| 符号                   | 说明                                                                                          | 类型                              |
-| ---------------------- | --------------------------------------------------------------------------------------------- | --------------------------------- |
-| `new WSS(httpServer)`  | 将 WebSocket 服务器附加到 `node:http` 服务器（处理 `upgrade` 握手与帧解析）。                  | `(server: http.Server) => WSS`    |
+| 符号                  | 说明                                                                          | 类型                           |
+| --------------------- | ----------------------------------------------------------------------------- | ------------------------------ |
+| `new WSS(httpServer)` | 将 WebSocket 服务器附加到 `node:http` 服务器（处理 `upgrade` 握手与帧解析）。 | `(server: http.Server) => WSS` |
 
 ```js
 import { Server, WSS } from 'ranuts/node';
@@ -162,22 +162,22 @@ wss.on('connect', (client) => {
 
 ### 工具函数
 
-| 符号                      | 说明                                                                                   | 签名                                                         |
-| ------------------------- | -------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
-| `connect(fn)`             | 将 Connect/Express 的 `(req, res, next)` 中间件适配为框架中间件。                       | `(fn) => MiddlewareFunction`                                 |
-| `get({ url })`            | HTTPS GET 一个 JSON 接口；resolve `{ success, data, message }`。                        | `({ url: string }) => Promise<Response>`                     |
-| `getIPAdress()`           | 本机第一个非内网 IPv4 地址，否则 `undefined`。                                          | `() => string \| undefined`                                  |
-| `paresUrl(req)`           | 将 `req.url` 解析为 `{ search, query, pathname, path, href }`（注意拼写）。            | `(req: IncomingMessage) => ParseUrl \| undefined`            |
-| `prompt({ message })`     | 在终端询问 yes/no 问题；输入 `y`/`yes` 时 resolve `true`。                             | `({ message, stream?, defaultResponse? }) => Promise<boolean>` |
-| `runCommand(cmd, args)`   | 派生子进程（继承 stdio）；退出码为 `0` 时 resolve。                                     | `(cmd: string, args: string[]) => Promise<void>`             |
-| `readStream({ path })`    | 为 `path` 创建 `fs.ReadStream`。                                                        | `(o: { path: string, ... }) => ReadStream`                   |
-| `writeStream({ path })`   | 为 `path` 创建 `fs.WriteStream`。                                                       | `(o: { path: string, ... }) => WriteStream`                  |
-| `startTask()`             | 启动高精度计时器；返回一个不透明的 `symbol`。                                          | `() => symbol`                                               |
-| `taskEnd(symbol)`         | 自对应 `startTask()` 起经过的时间（Node 中为纳秒 `bigint`）。                          | `(s: symbol) => number \| bigint`                            |
-| `traverse(dir, cb, pre?)` | 递归遍历 `dir`，对每个文件调用 `cb(relPath, absPath, stats)`（异步）。                  | `(dir, cb, pre?) => Promise<any>`                            |
-| `traverseSync(dir, cb, pre?)` | `traverse` 的同步版本。                                                             | `(dir, cb, pre?) => void`                                    |
-| `isColorSupported`        | 布尔值：当前终端是否支持 ANSI 颜色。                                                    | `boolean`                                                    |
-| `colors`                  | ANSI 颜色辅助函数，如 `colors.red('text')`，另有 `reset` / `bold` / `dim`。            | `Record<string, (s: string) => string>`                      |
+| 符号                          | 说明                                                                        | 签名                                                           |
+| ----------------------------- | --------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| `connect(fn)`                 | 将 Connect/Express 的 `(req, res, next)` 中间件适配为框架中间件。           | `(fn) => MiddlewareFunction`                                   |
+| `get({ url })`                | HTTPS GET 一个 JSON 接口；resolve `{ success, data, message }`。            | `({ url: string }) => Promise<Response>`                       |
+| `getIPAdress()`               | 本机第一个非内网 IPv4 地址，否则 `undefined`。                              | `() => string \| undefined`                                    |
+| `paresUrl(req)`               | 将 `req.url` 解析为 `{ search, query, pathname, path, href }`（注意拼写）。 | `(req: IncomingMessage) => ParseUrl \| undefined`              |
+| `prompt({ message })`         | 在终端询问 yes/no 问题；输入 `y`/`yes` 时 resolve `true`。                  | `({ message, stream?, defaultResponse? }) => Promise<boolean>` |
+| `runCommand(cmd, args)`       | 派生子进程（继承 stdio）；退出码为 `0` 时 resolve。                         | `(cmd: string, args: string[]) => Promise<void>`               |
+| `readStream({ path })`        | 为 `path` 创建 `fs.ReadStream`。                                            | `(o: { path: string, ... }) => ReadStream`                     |
+| `writeStream({ path })`       | 为 `path` 创建 `fs.WriteStream`。                                           | `(o: { path: string, ... }) => WriteStream`                    |
+| `startTask()`                 | 启动高精度计时器；返回一个不透明的 `symbol`。                               | `() => symbol`                                                 |
+| `taskEnd(symbol)`             | 自对应 `startTask()` 起经过的时间（Node 中为纳秒 `bigint`）。               | `(s: symbol) => number \| bigint`                              |
+| `traverse(dir, cb, pre?)`     | 递归遍历 `dir`，对每个文件调用 `cb(relPath, absPath, stats)`（异步）。      | `(dir, cb, pre?) => Promise<any>`                              |
+| `traverseSync(dir, cb, pre?)` | `traverse` 的同步版本。                                                     | `(dir, cb, pre?) => void`                                      |
+| `isColorSupported`            | 布尔值：当前终端是否支持 ANSI 颜色。                                        | `boolean`                                                      |
+| `colors`                      | ANSI 颜色辅助函数，如 `colors.red('text')`，另有 `reset` / `bold` / `dim`。 | `Record<string, (s: string) => string>`                        |
 
 ## 相关链接
 

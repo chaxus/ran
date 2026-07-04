@@ -64,15 +64,15 @@
 
 ### 实验性项目
 
-| 包名                                    | 描述              |
-| --------------------------------------- | ----------------- |
-| [im](packages/im)                       | 聊天应用原型      |
-| [visual](packages/visual)               | 数据可视化实验    |
-| [ranite](packages/ranite)               | 开发工具实验      |
-| [debug](packages/debug)                 | 调试工具          |
-| [image-process](packages/image-process) | 图像处理实验      |
-| [cpro](packages/cpro)                   | C/C++ 学习与实验  |
-| [rust](packages/rust)                   | Rust 学习与实验   |
+| 包名                                    | 描述             |
+| --------------------------------------- | ---------------- |
+| [im](packages/im)                       | 聊天应用原型     |
+| [visual](packages/visual)               | 数据可视化实验   |
+| [ranite](packages/ranite)               | 开发工具实验     |
+| [debug](packages/debug)                 | 调试工具         |
+| [image-process](packages/image-process) | 图像处理实验     |
+| [cpro](packages/cpro)                   | C/C++ 学习与实验 |
+| [rust](packages/rust)                   | Rust 学习与实验  |
 
 ## 🚀 快速开始
 

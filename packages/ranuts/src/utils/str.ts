@@ -498,7 +498,14 @@ export const MessageCodec = {
       const jsonStr = JSON.stringify(data);
       const encoder = new TextEncoder();
       const bytes = encoder.encode(jsonStr);
-      return btoa(String.fromCharCode.apply(null, Array.from(bytes)));
+      // 分块拼接，避免 String.fromCharCode.apply 对大 payload（如文件）
+      // 触发 "Maximum call stack size exceeded" 导致消息被静默丢弃。
+      let binaryStr = '';
+      const CHUNK_SIZE = 0x8000;
+      for (let i = 0; i < bytes.length; i += CHUNK_SIZE) {
+        binaryStr += String.fromCharCode.apply(null, Array.from(bytes.subarray(i, i + CHUNK_SIZE)));
+      }
+      return btoa(binaryStr);
     } catch (error) {
       console.log('Message encode error:', error);
       return '';

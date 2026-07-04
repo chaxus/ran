@@ -61,13 +61,13 @@ request bodies.
 
 Default export. A minimal Koa-style server built on `node:http`.
 
-| Member                | Description                                                             | Type                                       |
-| --------------------- | ---------------------------------------------------------------------- | ------------------------------------------ |
-| `new Server()`        | Create a server. Takes no arguments.                                   | `() => Server`                             |
-| `use(middleware)`     | Append a middleware to the chain. Returns `void` (not chainable).      | `(fn: MiddlewareFunction) => void`         |
-| `listen(...args)`     | Start listening. Args are forwarded to `http.Server.listen`. Returns the underlying `http.Server`. | `(...args) => http.Server` |
-| `middleware`          | The registered middleware array.                                       | `MiddlewareFunction[]`                     |
-| `ctx`                 | The shared request `Context` (its `req`/`res` are swapped per request). | `Context`                                 |
+| Member            | Description                                                                                        | Type                               |
+| ----------------- | -------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| `new Server()`    | Create a server. Takes no arguments.                                                               | `() => Server`                     |
+| `use(middleware)` | Append a middleware to the chain. Returns `void` (not chainable).                                  | `(fn: MiddlewareFunction) => void` |
+| `listen(...args)` | Start listening. Args are forwarded to `http.Server.listen`. Returns the underlying `http.Server`. | `(...args) => http.Server`         |
+| `middleware`      | The registered middleware array.                                                                   | `MiddlewareFunction[]`             |
+| `ctx`             | The shared request `Context` (its `req`/`res` are swapped per request).                            | `Context`                          |
 
 **Middleware signature**
 
@@ -81,31 +81,31 @@ registration order; calling `next()` twice throws.
 
 **Context shape**
 
-| Field    | Description                                                              | Type                        |
-| -------- | ----------------------------------------------------------------------- | --------------------------- |
-| `req`    | The incoming request.                                                    | `http.IncomingMessage`      |
-| `res`    | The server response. Write with `res.setHeader` / `res.writeHead` / `res.end`. | `http.ServerResponse` |
-| `ipv4()` | Returns the machine's first non-internal IPv4 address (or `undefined`). | `() => string \| undefined` |
-| `request`| Added by `body()`: `{ method, path, url, query, body }`. `query` is a `URLSearchParams`. | `object` (dynamic) |
-| `[key]`  | `Context` is an open bag — middleware may attach arbitrary fields.       | `any`                       |
+| Field     | Description                                                                              | Type                        |
+| --------- | ---------------------------------------------------------------------------------------- | --------------------------- |
+| `req`     | The incoming request.                                                                    | `http.IncomingMessage`      |
+| `res`     | The server response. Write with `res.setHeader` / `res.writeHead` / `res.end`.           | `http.ServerResponse`       |
+| `ipv4()`  | Returns the machine's first non-internal IPv4 address (or `undefined`).                  | `() => string \| undefined` |
+| `request` | Added by `body()`: `{ method, path, url, query, body }`. `query` is a `URLSearchParams`. | `object` (dynamic)          |
+| `[key]`   | `Context` is an open bag — middleware may attach arbitrary fields.                       | `any`                       |
 
 ### Router
 
 Default export. Registers handlers per HTTP method and exact path, then exposes them
 as middleware via `routes()`.
 
-| Method                       | Description                                        | Type                                   |
-| ---------------------------- | -------------------------------------------------- | -------------------------------------- |
-| `new Router()`               | Create a router.                                   | `() => Router`                         |
-| `get(url, handler)`          | Register a `GET` route.                            | `(url: string, h: Handler) => void`    |
-| `post(url, handler)`         | Register a `POST` route.                           | `(url: string, h: Handler) => void`    |
-| `put(url, handler)`          | Register a `PUT` route.                            | `(url: string, h: Handler) => void`    |
-| `patch(url, handler)`        | Register a `PATCH` route.                          | `(url: string, h: Handler) => void`    |
-| `del(url, handler)`          | Register a `DELETE` route.                         | `(url: string, h: Handler) => void`    |
-| `head(url, handler)`         | Register a `HEAD` route.                           | `(url: string, h: Handler) => void`    |
-| `options(url, handler)`      | Register an `OPTIONS` route.                        | `(url: string, h: Handler) => void`    |
-| `routes()`                   | Returns a middleware that dispatches to the matched handler. | `() => MiddlewareFunction`   |
-| `allowedMethods()`           | Returns a middleware that answers `404`/`405`/`501` for unmatched path/method. | `() => MiddlewareFunction` |
+| Method                  | Description                                                                    | Type                                |
+| ----------------------- | ------------------------------------------------------------------------------ | ----------------------------------- |
+| `new Router()`          | Create a router.                                                               | `() => Router`                      |
+| `get(url, handler)`     | Register a `GET` route.                                                        | `(url: string, h: Handler) => void` |
+| `post(url, handler)`    | Register a `POST` route.                                                       | `(url: string, h: Handler) => void` |
+| `put(url, handler)`     | Register a `PUT` route.                                                        | `(url: string, h: Handler) => void` |
+| `patch(url, handler)`   | Register a `PATCH` route.                                                      | `(url: string, h: Handler) => void` |
+| `del(url, handler)`     | Register a `DELETE` route.                                                     | `(url: string, h: Handler) => void` |
+| `head(url, handler)`    | Register a `HEAD` route.                                                       | `(url: string, h: Handler) => void` |
+| `options(url, handler)` | Register an `OPTIONS` route.                                                   | `(url: string, h: Handler) => void` |
+| `routes()`              | Returns a middleware that dispatches to the matched handler.                   | `() => MiddlewareFunction`          |
+| `allowedMethods()`      | Returns a middleware that answers `404`/`405`/`501` for unmatched path/method. | `() => MiddlewareFunction`          |
 
 **Handler signature**
 
@@ -119,33 +119,33 @@ segment support; use `ctx.request.query` for query parameters.
 
 ### Middleware
 
-| Symbol                   | Description                                                                                          | Type                                        |
-| ------------------------ | --------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| Symbol                   | Description                                                                                                               | Type                                              |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
 | `body(options?)`         | Body-parsing middleware. Fills `ctx.request` and parses `application/json` / `multipart/form-data`. Returns a middleware. | `(o?: Partial<ServerBody>) => MiddlewareFunction` |
-| `staticMiddleware(opt?)` | Serves static files from `opt.pathname` (default `process.cwd()`); serves `index.html` for `/`.     | `(o?: Partial<Option>) => MiddlewareFunction` |
-| `connect(fn)`            | Adapts a Connect/Express-style `(req, res, next)` middleware into this framework's middleware.       | `(fn) => MiddlewareFunction`                |
+| `staticMiddleware(opt?)` | Serves static files from `opt.pathname` (default `process.cwd()`); serves `index.html` for `/`.                           | `(o?: Partial<Option>) => MiddlewareFunction`     |
+| `connect(fn)`            | Adapts a Connect/Express-style `(req, res, next)` middleware into this framework's middleware.                            | `(fn) => MiddlewareFunction`                      |
 
 **`body(options)` options**
 
-| Option       | Description                                                | Type             | Default        |
-| ------------ | ---------------------------------------------------------- | ---------------- | -------------- |
-| `uploadDir`  | Directory for `multipart/form-data` file uploads.         | `string`         | `'.'`          |
-| `encoding`   | Encoding for the incoming request stream.                 | `BufferEncoding` | `'utf-8'`/`'binary'` |
-| `json`       | Parse JSON bodies (`false` keeps the raw string).         | `boolean`        | `true`         |
-| `urlencoded` | Reserved for urlencoded bodies.                           | `boolean`        | `true`         |
+| Option       | Description                                       | Type             | Default              |
+| ------------ | ------------------------------------------------- | ---------------- | -------------------- |
+| `uploadDir`  | Directory for `multipart/form-data` file uploads. | `string`         | `'.'`                |
+| `encoding`   | Encoding for the incoming request stream.         | `BufferEncoding` | `'utf-8'`/`'binary'` |
+| `json`       | Parse JSON bodies (`false` keeps the raw string). | `boolean`        | `true`               |
+| `urlencoded` | Reserved for urlencoded bodies.                   | `boolean`        | `true`               |
 
 **`staticMiddleware(option)` options**
 
-| Option      | Description                                              | Type                       | Default            |
-| ----------- | ------------------------------------------------------- | -------------------------- | ------------------ |
-| `pathname`  | Root directory to serve files from.                     | `string`                   | `process.cwd()`    |
-| `fileTypes` | Extra `extension → MIME type` mappings to register.     | `Record<string, string>`   | `{}`               |
+| Option      | Description                                         | Type                     | Default         |
+| ----------- | --------------------------------------------------- | ------------------------ | --------------- |
+| `pathname`  | Root directory to serve files from.                 | `string`                 | `process.cwd()` |
+| `fileTypes` | Extra `extension → MIME type` mappings to register. | `Record<string, string>` | `{}`            |
 
 ### WebSocket
 
-| Symbol                 | Description                                                                                     | Type                              |
-| ---------------------- | ---------------------------------------------------------------------------------------------- | --------------------------------- |
-| `new WSS(httpServer)`  | Attach a WebSocket server to a `node:http` server (handles the `upgrade` handshake and framing). | `(server: http.Server) => WSS` |
+| Symbol                | Description                                                                                      | Type                           |
+| --------------------- | ------------------------------------------------------------------------------------------------ | ------------------------------ |
+| `new WSS(httpServer)` | Attach a WebSocket server to a `node:http` server (handles the `upgrade` handshake and framing). | `(server: http.Server) => WSS` |
 
 ```js
 import { Server, WSS } from 'ranuts/node';
@@ -165,22 +165,22 @@ Each `client` exposes `send(data, options?)`, `ping()`, `pong()`, `close()`,
 
 ### Utilities
 
-| Symbol                    | Description                                                                             | Signature                                                     |
-| ------------------------- | -------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
-| `connect(fn)`             | Adapt a Connect/Express `(req, res, next)` middleware into a framework middleware.      | `(fn) => MiddlewareFunction`                                 |
-| `get({ url })`            | HTTPS GET a JSON endpoint; resolves `{ success, data, message }`.                       | `({ url: string }) => Promise<Response>`                     |
-| `getIPAdress()`           | The machine's first non-internal IPv4 address, or `undefined`.                         | `() => string \| undefined`                                  |
-| `paresUrl(req)`           | Parse `req.url` into `{ search, query, pathname, path, href }` (note the spelling).    | `(req: IncomingMessage) => ParseUrl \| undefined`            |
-| `prompt({ message })`     | Ask a yes/no question on the terminal; resolves `true` for `y`/`yes`.                  | `({ message, stream?, defaultResponse? }) => Promise<boolean>` |
-| `runCommand(cmd, args)`   | Spawn a child process (inherits stdio); resolves on exit code `0`.                     | `(cmd: string, args: string[]) => Promise<void>`             |
-| `readStream({ path })`    | Create a `fs.ReadStream` for `path`.                                                    | `(o: { path: string, ... }) => ReadStream`                   |
-| `writeStream({ path })`   | Create a `fs.WriteStream` for `path`.                                                   | `(o: { path: string, ... }) => WriteStream`                  |
-| `startTask()`             | Start a high-resolution timer; returns an opaque `symbol`.                             | `() => symbol`                                               |
-| `taskEnd(symbol)`         | Elapsed time since the matching `startTask()` (nanoseconds `bigint` in Node).          | `(s: symbol) => number \| bigint`                            |
-| `traverse(dir, cb, pre?)` | Recursively walk `dir`, calling `cb(relPath, absPath, stats)` for each file (async).    | `(dir, cb, pre?) => Promise<any>`                            |
-| `traverseSync(dir, cb, pre?)` | Synchronous version of `traverse`.                                                 | `(dir, cb, pre?) => void`                                    |
-| `isColorSupported`        | Boolean: whether the current terminal supports ANSI colors.                            | `boolean`                                                    |
-| `colors`                  | ANSI color helpers, e.g. `colors.red('text')`, plus `reset` / `bold` / `dim`.          | `Record<string, (s: string) => string>`                      |
+| Symbol                        | Description                                                                          | Signature                                                      |
+| ----------------------------- | ------------------------------------------------------------------------------------ | -------------------------------------------------------------- |
+| `connect(fn)`                 | Adapt a Connect/Express `(req, res, next)` middleware into a framework middleware.   | `(fn) => MiddlewareFunction`                                   |
+| `get({ url })`                | HTTPS GET a JSON endpoint; resolves `{ success, data, message }`.                    | `({ url: string }) => Promise<Response>`                       |
+| `getIPAdress()`               | The machine's first non-internal IPv4 address, or `undefined`.                       | `() => string \| undefined`                                    |
+| `paresUrl(req)`               | Parse `req.url` into `{ search, query, pathname, path, href }` (note the spelling).  | `(req: IncomingMessage) => ParseUrl \| undefined`              |
+| `prompt({ message })`         | Ask a yes/no question on the terminal; resolves `true` for `y`/`yes`.                | `({ message, stream?, defaultResponse? }) => Promise<boolean>` |
+| `runCommand(cmd, args)`       | Spawn a child process (inherits stdio); resolves on exit code `0`.                   | `(cmd: string, args: string[]) => Promise<void>`               |
+| `readStream({ path })`        | Create a `fs.ReadStream` for `path`.                                                 | `(o: { path: string, ... }) => ReadStream`                     |
+| `writeStream({ path })`       | Create a `fs.WriteStream` for `path`.                                                | `(o: { path: string, ... }) => WriteStream`                    |
+| `startTask()`                 | Start a high-resolution timer; returns an opaque `symbol`.                           | `() => symbol`                                                 |
+| `taskEnd(symbol)`             | Elapsed time since the matching `startTask()` (nanoseconds `bigint` in Node).        | `(s: symbol) => number \| bigint`                              |
+| `traverse(dir, cb, pre?)`     | Recursively walk `dir`, calling `cb(relPath, absPath, stats)` for each file (async). | `(dir, cb, pre?) => Promise<any>`                              |
+| `traverseSync(dir, cb, pre?)` | Synchronous version of `traverse`.                                                   | `(dir, cb, pre?) => void`                                      |
+| `isColorSupported`            | Boolean: whether the current terminal supports ANSI colors.                          | `boolean`                                                      |
+| `colors`                      | ANSI color helpers, e.g. `colors.red('text')`, plus `reset` / `bold` / `dim`.        | `Record<string, (s: string) => string>`                        |
 
 ## See also
 

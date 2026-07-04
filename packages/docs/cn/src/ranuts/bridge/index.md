@@ -21,34 +21,34 @@ new PostMessageBridge(targetWindow?: Window, targetOrigin?: string)
 
 #### 构造函数参数
 
-| 参数           | 说明                                                          | 类型     | 默认值     |
-| -------------- | ----------------------------------------------------------- | -------- | ---------- |
-| `targetWindow` | 要向其发送消息的 `Window`（iframe、弹窗、`parent` 等）        | `Window` | `window`   |
-| `targetOrigin` | 发送到 / 接受自的源。`'*'` 表示不做校验                       | `string` | `'*'`      |
+| 参数           | 说明                                                   | 类型     | 默认值   |
+| -------------- | ------------------------------------------------------ | -------- | -------- |
+| `targetWindow` | 要向其发送消息的 `Window`（iframe、弹窗、`parent` 等） | `Window` | `window` |
+| `targetOrigin` | 发送到 / 接受自的源。`'*'` 表示不做校验                | `string` | `'*'`    |
 
 #### 方法
 
-| 方法                           | 说明                                                                 | 签名                                                            |
-| ------------------------------ | -------------------------------------------------------------------- | --------------------------------------------------------------- |
-| `on(type, handler)`            | 为某个消息 `type` 注册处理器。其返回值（或 resolve 的值）会作为响应回传。 | `<T, R>(type: string, handler: MessageHandler<T, R>) => void`   |
-| `off(type)`                    | 移除为 `type` 注册的处理器。                                          | `(type: string) => void`                                        |
-| `send(type, payload)`          | 发送消息并等待响应。超过 120 秒未响应则 reject。                       | `<T, R>(type: string, payload: T) => Promise<R>`                |
-| `broadcast({ type, payload })` | 只发送不等待响应。                                                     | `<T>(data: { type: string; payload: T }) => void`               |
-| `destroy()`                    | 移除 `message` 监听器，并清空所有处理器与挂起的请求。                   | `() => void`                                                     |
+| 方法                           | 说明                                                                      | 签名                                                          |
+| ------------------------------ | ------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| `on(type, handler)`            | 为某个消息 `type` 注册处理器。其返回值（或 resolve 的值）会作为响应回传。 | `<T, R>(type: string, handler: MessageHandler<T, R>) => void` |
+| `off(type)`                    | 移除为 `type` 注册的处理器。                                              | `(type: string) => void`                                      |
+| `send(type, payload)`          | 发送消息并等待响应。超过 120 秒未响应则 reject。                          | `<T, R>(type: string, payload: T) => Promise<R>`              |
+| `broadcast({ type, payload })` | 只发送不等待响应。                                                        | `<T>(data: { type: string; payload: T }) => void`             |
+| `destroy()`                    | 移除 `message` 监听器，并清空所有处理器与挂起的请求。                     | `() => void`                                                  |
 
 ### `BridgeManager`
 
 一个单例注册表，管理多个具名的 `PostMessageBridge` 实例。通过 `BridgeManager.getInstance()` 获取共享实例，或直接使用现成的 [`bridgeManager`](#bridgemanager-单例) 导出。构造函数为私有。
 
-| 方法                             | 说明                                          | 签名                                                                                       |
-| -------------------------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| `BridgeManager.getInstance()`    | 返回共享的单例实例。                          | `() => BridgeManager`                                                                       |
-| `connectClient(options)`         | 创建并注册一个新的 bridge。若 `id` 已存在则抛错。 | `(options: BridgeManagerOptions) => { bridge: PostMessageBridge; id: string }`             |
-| `getClient(id)`                  | 按 id 查找已注册的 bridge。                    | `(id: string) => PostMessageBridge \| undefined`                                           |
-| `removeClient(id)`               | 销毁并注销指定 id 的 bridge。                  | `(id: string) => void`                                                                      |
-| `removeAllClient()`              | 销毁并注销所有 bridge。                        | `() => void`                                                                                |
-| `broadcast({ type, payload })`   | 通过所有已注册的 bridge 广播一条消息。         | `<T>(payload: { type: string; payload: T }) => void`                                       |
-| `sendTo(id, type, payload)`      | 通过指定 id 的 bridge 发送请求并等待响应。     | `<T, R>(id: string, type: string, payload: T) => Promise<R>`                               |
+| 方法                           | 说明                                              | 签名                                                                           |
+| ------------------------------ | ------------------------------------------------- | ------------------------------------------------------------------------------ |
+| `BridgeManager.getInstance()`  | 返回共享的单例实例。                              | `() => BridgeManager`                                                          |
+| `connectClient(options)`       | 创建并注册一个新的 bridge。若 `id` 已存在则抛错。 | `(options: BridgeManagerOptions) => { bridge: PostMessageBridge; id: string }` |
+| `getClient(id)`                | 按 id 查找已注册的 bridge。                       | `(id: string) => PostMessageBridge \| undefined`                               |
+| `removeClient(id)`             | 销毁并注销指定 id 的 bridge。                     | `(id: string) => void`                                                         |
+| `removeAllClient()`            | 销毁并注销所有 bridge。                           | `() => void`                                                                   |
+| `broadcast({ type, payload })` | 通过所有已注册的 bridge 广播一条消息。            | `<T>(payload: { type: string; payload: T }) => void`                           |
+| `sendTo(id, type, payload)`    | 通过指定 id 的 bridge 发送请求并等待响应。        | `<T, R>(id: string, type: string, payload: T) => Promise<R>`                   |
 
 在 `connectClient` 中省略 `id` 时，会生成并返回一个随机的 10 位字符 id。
 
@@ -64,33 +64,33 @@ import { bridgeManager } from 'ranuts/utils';
 
 针对**调用方**（发起请求的上下文）的 `bridgeManager` 门面。它是一个普通对象，而非类。
 
-| 方法                       | 说明                                        | 签名                                                                          |
-| -------------------------- | ------------------------------------------- | ----------------------------------------------------------------------------- |
-| `connect(options)`         | 连接到目标窗口（委托给 `bridgeManager.connectClient`）。 | `(options: BridgeManagerOptions) => { bridge: PostMessageBridge; id: string }` |
-| `remove(id)`               | 按 id 移除一个连接。                         | `(id: string) => void`                                                        |
-| `removeAll()`              | 移除所有连接。                              | `() => void`                                                                  |
-| `broadcast(payload)`       | 向所有已连接的 platform 广播。               | `(payload: BroadcastPayload) => void`                                        |
-| `call({ id, type, payload })` | 向 `id` 对应的 platform 发送请求并等待响应。 | `<T, R>(payload: CallToPayload<T>) => Promise<R>`                            |
-| `broadcastToAll(payload)`  | 以源 `'*'` 向当前窗口发送。出于安全考虑不推荐使用。 | `(payload: BroadcastPayload) => void`                                    |
+| 方法                          | 说明                                                     | 签名                                                                           |
+| ----------------------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| `connect(options)`            | 连接到目标窗口（委托给 `bridgeManager.connectClient`）。 | `(options: BridgeManagerOptions) => { bridge: PostMessageBridge; id: string }` |
+| `remove(id)`                  | 按 id 移除一个连接。                                     | `(id: string) => void`                                                         |
+| `removeAll()`                 | 移除所有连接。                                           | `() => void`                                                                   |
+| `broadcast(payload)`          | 向所有已连接的 platform 广播。                           | `(payload: BroadcastPayload) => void`                                          |
+| `call({ id, type, payload })` | 向 `id` 对应的 platform 发送请求并等待响应。             | `<T, R>(payload: CallToPayload<T>) => Promise<R>`                              |
+| `broadcastToAll(payload)`     | 以源 `'*'` 向当前窗口发送。出于安全考虑不推荐使用。      | `(payload: BroadcastPayload) => void`                                          |
 
 ### `Platform`
 
 针对**接收方**（通常是运行在 iframe 内的代码）的门面。它是一个只含单个方法的普通对象。
 
-| 方法            | 说明                                                                                                             | 签名                                                                            |
-| --------------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| 方法                    | 说明                                                                                                                              | 签名                                                                              |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
 | `Platform.init(events)` | 注册一个 `type -> handler` 的映射。每次收到消息时运行匹配的处理器，并将结果回传给 `event.source`。返回一个 `destroy()` 用于卸载。 | `<T, R>(events: Record<string, MessageHandler<T, R>>) => { destroy: () => void }` |
 
 ### `MessageCodec`
 
 每个 bridge 底层使用的序列化工具。将数据编码为 Base64 字符串（可安全用于 URL、Cookie 和 `postMessage`）并解码回来，且保留所有 Unicode 字符。
 
-| 方法                  | 说明                                                     | 签名                                  |
-| --------------------- | ------------------------------------------------------- | ------------------------------------- |
-| `encode(data)`        | 将任意可 JSON 序列化的值编码为 Base64 字符串。失败时返回 `''`。 | `(data: any) => string`          |
-| `decode(encodedStr)`  | 将 Base64 字符串解析回原始值。失败时返回 `null`。         | `<T>(encodedStr: string) => T \| null`|
-| `encodeFile(file)`    | 将 `File`（含元数据与字节）编码为 Base64 字符串。          | `(file: File) => Promise<string>`     |
-| `decodeFile(encoded)` | 将 `encodeFile` 生成的字符串解码回 `File`。               | `(encoded: string) => File`           |
+| 方法                  | 说明                                                            | 签名                                   |
+| --------------------- | --------------------------------------------------------------- | -------------------------------------- |
+| `encode(data)`        | 将任意可 JSON 序列化的值编码为 Base64 字符串。失败时返回 `''`。 | `(data: any) => string`                |
+| `decode(encodedStr)`  | 将 Base64 字符串解析回原始值。失败时返回 `null`。               | `<T>(encodedStr: string) => T \| null` |
+| `encodeFile(file)`    | 将 `File`（含元数据与字节）编码为 Base64 字符串。               | `(file: File) => Promise<string>`      |
+| `decodeFile(encoded)` | 将 `encodeFile` 生成的字符串解码回 `File`。                     | `(encoded: string) => File`            |
 
 ### 接口
 
@@ -108,51 +108,51 @@ interface MessageHandler<T = unknown, R = unknown> {
 
 线上传输时解码后的消息结构。
 
-| 字段         | 说明                              | 类型      |
-| ------------ | -------------------------------- | --------- |
-| `type`       | 消息类型 / 通道名。               | `string`  |
-| `payload`    | 消息体。                          | `T`       |
-| `id`         | 关联 id，请求/响应配对时存在。     | `string?` |
-| `isResponse` | 该消息为响应时为 `true`。          | `boolean?`|
-| `isError`    | 响应携带错误时为 `true`。          | `boolean?`|
+| 字段         | 说明                           | 类型       |
+| ------------ | ------------------------------ | ---------- |
+| `type`       | 消息类型 / 通道名。            | `string`   |
+| `payload`    | 消息体。                       | `T`        |
+| `id`         | 关联 id，请求/响应配对时存在。 | `string?`  |
+| `isResponse` | 该消息为响应时为 `true`。      | `boolean?` |
+| `isError`    | 响应携带错误时为 `true`。      | `boolean?` |
 
 #### `PendingRequest<R>`
 
 正在等待响应的 `send()` 请求（内部记账用）。
 
-| 字段      | 说明                | 类型                        |
-| --------- | ------------------- | --------------------------- |
-| `resolve` | resolve 挂起的 promise。 | `(value: R) => void`        |
-| `reject`  | reject 挂起的 promise。  | `(error: unknown) => void`  |
+| 字段      | 说明                     | 类型                       |
+| --------- | ------------------------ | -------------------------- |
+| `resolve` | resolve 挂起的 promise。 | `(value: R) => void`       |
+| `reject`  | reject 挂起的 promise。  | `(error: unknown) => void` |
 
 #### `BridgeManagerOptions`
 
 `connectClient` / `Client.connect` 的选项。
 
-| 字段           | 说明                                | 类型      | 默认值              |
-| -------------- | ---------------------------------- | --------- | ------------------- |
-| `id`           | 显式的 bridge id，省略时自动生成。   | `string?` | 随机 10 位字符串     |
-| `targetOrigin` | 传给 `PostMessageBridge` 的源。      | `string?` | `'*'`               |
-| `targetWindow` | 传给 bridge 的目标 `Window`。        | `Window?` | `window`            |
+| 字段           | 说明                               | 类型      | 默认值           |
+| -------------- | ---------------------------------- | --------- | ---------------- |
+| `id`           | 显式的 bridge id，省略时自动生成。 | `string?` | 随机 10 位字符串 |
+| `targetOrigin` | 传给 `PostMessageBridge` 的源。    | `string?` | `'*'`            |
+| `targetWindow` | 传给 bridge 的目标 `Window`。      | `Window?` | `window`         |
 
 #### `BroadcastPayload`
 
 单向广播消息。
 
-| 字段      | 说明        | 类型      |
-| --------- | ----------- | --------- |
-| `type`    | 消息类型。   | `string`  |
-| `payload` | 消息体。     | `unknown` |
+| 字段      | 说明       | 类型      |
+| --------- | ---------- | --------- |
+| `type`    | 消息类型。 | `string`  |
+| `payload` | 消息体。   | `unknown` |
 
 #### `CallToPayload<T>`
 
 `Client.call` 的参数。
 
-| 字段      | 说明                     | 类型     |
-| --------- | ----------------------- | -------- |
+| 字段      | 说明                         | 类型     |
+| --------- | ---------------------------- | -------- |
 | `id`      | 目标 bridge/platform 的 id。 | `string` |
-| `type`    | 消息类型。               | `string` |
-| `payload` | 请求体。                 | `T`      |
+| `type`    | 消息类型。                   | `string` |
+| `payload` | 请求体。                     | `T`      |
 
 ## Example
 

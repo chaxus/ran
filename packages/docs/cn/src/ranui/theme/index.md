@@ -29,14 +29,14 @@ getTheme(); // → 'light' | 'dark' | 'system' | ''
 
 ## API
 
-| 函数              | 签名                                                                     | 说明                                                                             |
-| ----------------- | ------------------------------------------------------------------------ | -------------------------------------------------------------------------------- |
-| `initTheme`       | `(target?: ThemeTarget) => void`                                        | 从 `localStorage` 恢复主题，加载时调用一次。SSR 下为空操作。                       |
-| `setTheme`        | `(name: RanThemeName, target?: ThemeTarget) => void`                    | 应用 `'light'` \| `'dark'` \| `'system'` 并持久化；`'system'` 会实时跟随系统。     |
-| `getTheme`        | `(target?: ThemeTarget) => RanThemeName \| ''`                          | 读取当前主题。system 模式下返回 `'system'`，未设置时返回 `''`。                    |
-| `setThemeToken`   | `(name: string, value: string \| number, target?: HTMLElement) => void` | 运行时覆盖单个令牌（作为目标元素的内联样式）。                                     |
-| `setThemeTokens`  | `(tokens: ThemeTokenMap, target?: HTMLElement) => void`                 | 批量覆盖令牌，值为 `null` / `undefined` 时清除对应令牌。                           |
-| `clearThemeToken` | `(name: string, target?: HTMLElement) => void`                          | 移除运行时的令牌覆盖。                                                             |
+| 函数              | 签名                                                                    | 说明                                                                           |
+| ----------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| `initTheme`       | `(target?: ThemeTarget) => void`                                        | 从 `localStorage` 恢复主题，加载时调用一次。SSR 下为空操作。                   |
+| `setTheme`        | `(name: RanThemeName, target?: ThemeTarget) => void`                    | 应用 `'light'` \| `'dark'` \| `'system'` 并持久化；`'system'` 会实时跟随系统。 |
+| `getTheme`        | `(target?: ThemeTarget) => RanThemeName \| ''`                          | 读取当前主题。system 模式下返回 `'system'`，未设置时返回 `''`。                |
+| `setThemeToken`   | `(name: string, value: string \| number, target?: HTMLElement) => void` | 运行时覆盖单个令牌（作为目标元素的内联样式）。                                 |
+| `setThemeTokens`  | `(tokens: ThemeTokenMap, target?: HTMLElement) => void`                 | 批量覆盖令牌，值为 `null` / `undefined` 时清除对应令牌。                       |
+| `clearThemeToken` | `(name: string, target?: HTMLElement) => void`                          | 移除运行时的令牌覆盖。                                                         |
 
 **类型**
 
@@ -65,28 +65,28 @@ type ThemeTokenMap = Record<string, string | number | null | undefined>;
 
 ### 语义颜色令牌
 
-| 令牌                           | 用途             |
-| ------------------------------ | ---------------- |
-| `--ran-color-primary`          | 主操作           |
-| `--ran-color-primary-hover`    | 主操作悬停       |
-| `--ran-color-primary-active`   | 主操作激活       |
-| `--ran-color-success`          | 成功             |
-| `--ran-color-warning`          | 警告             |
-| `--ran-color-danger`           | 危险 / 错误      |
-| `--ran-color-bg`               | 页面背景         |
-| `--ran-color-bg-subtle`        | 次级背景         |
-| `--ran-color-bg-elevated`      | 卡片 / 表面背景  |
-| `--ran-color-bg-muted`         | 弱化表面         |
-| `--ran-color-bg-hover`         | 悬停表面         |
-| `--ran-color-bg-active`        | 激活表面         |
-| `--ran-color-text`             | 主文本           |
-| `--ran-color-text-secondary`   | 次级文本         |
-| `--ran-color-text-disabled`    | 禁用文本         |
-| `--ran-color-border`           | 默认边框         |
-| `--ran-color-border-secondary` | 次级边框         |
-| `--ran-color-border-hover`     | 悬停边框         |
-| `--ran-color-border-active`    | 激活边框         |
-| `--ran-color-link`             | 链接色           |
+| 令牌                           | 用途            |
+| ------------------------------ | --------------- |
+| `--ran-color-primary`          | 主操作          |
+| `--ran-color-primary-hover`    | 主操作悬停      |
+| `--ran-color-primary-active`   | 主操作激活      |
+| `--ran-color-success`          | 成功            |
+| `--ran-color-warning`          | 警告            |
+| `--ran-color-danger`           | 危险 / 错误     |
+| `--ran-color-bg`               | 页面背景        |
+| `--ran-color-bg-subtle`        | 次级背景        |
+| `--ran-color-bg-elevated`      | 卡片 / 表面背景 |
+| `--ran-color-bg-muted`         | 弱化表面        |
+| `--ran-color-bg-hover`         | 悬停表面        |
+| `--ran-color-bg-active`        | 激活表面        |
+| `--ran-color-text`             | 主文本          |
+| `--ran-color-text-secondary`   | 次级文本        |
+| `--ran-color-text-disabled`    | 禁用文本        |
+| `--ran-color-border`           | 默认边框        |
+| `--ran-color-border-secondary` | 次级边框        |
+| `--ran-color-border-hover`     | 悬停边框        |
+| `--ran-color-border-active`    | 激活边框        |
+| `--ran-color-link`             | 链接色          |
 
 **颜色是状态阶梯，而非调色板。** 在一条色阶内每一档都有固定职责：`100` 默认背景 · `200` 悬停背景 ·
 `300` 激活背景 · `400` 边框 · `500` 悬停边框 · `600` 激活边框 · `700` 实色 · `800` 实色悬停 ·
@@ -94,15 +94,15 @@ type ThemeTokenMap = Record<string, string | number | null | undefined>;
 
 ### 非颜色令牌
 
-| 分组     | 令牌                                                                                                    |
-| -------- | ------------------------------------------------------------------------------------------------------- |
-| 圆角     | `--ran-radius-sm` 6px · `--ran-radius-md` 12px · `--ran-radius-lg` 16px · `--ran-radius-full`            |
-| 间距     | `--ran-space-1..24`（4px 基准：4 · 8 · 12 · 16 · 24 · 32 · 40 · 64 · 96）                                |
-| 阴影     | `--ran-shadow-elevated`（在流表面）· `--ran-shadow-menu`（浮层）· `--ran-shadow-modal`（对话框）         |
-| 层级     | `--ran-z-modal` 1000 · `--ran-z-dropdown` 1100 · `--ran-z-message` 1200                                  |
-| 动效     | `--ran-motion-duration-fast` 0.15s · `--ran-motion-duration-base` 0.2s                                   |
-| 焦点     | `--ran-focus-ring`                                                                                       |
-| 排版     | `--ran-font-family`（Geist Sans）· `--ran-font-mono`（Geist Mono）                                       |
+| 分组 | 令牌                                                                                             |
+| ---- | ------------------------------------------------------------------------------------------------ |
+| 圆角 | `--ran-radius-sm` 6px · `--ran-radius-md` 12px · `--ran-radius-lg` 16px · `--ran-radius-full`    |
+| 间距 | `--ran-space-1..24`（4px 基准：4 · 8 · 12 · 16 · 24 · 32 · 40 · 64 · 96）                        |
+| 阴影 | `--ran-shadow-elevated`（在流表面）· `--ran-shadow-menu`（浮层）· `--ran-shadow-modal`（对话框） |
+| 层级 | `--ran-z-modal` 1000 · `--ran-z-dropdown` 1100 · `--ran-z-message` 1200                          |
+| 动效 | `--ran-motion-duration-fast` 0.15s · `--ran-motion-duration-base` 0.2s                           |
+| 焦点 | `--ran-focus-ring`                                                                               |
+| 排版 | `--ran-font-family`（Geist Sans）· `--ran-font-mono`（Geist Mono）                               |
 
 ## 自定义令牌
 

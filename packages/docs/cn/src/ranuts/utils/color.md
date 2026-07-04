@@ -23,39 +23,39 @@ new Color(
 
 #### 参数
 
-| 参数  | 说明                                                                                    | 类型                                          | 默认值   |
-| ----- | --------------------------------------------------------------------------------------- | --------------------------------------------- | -------- |
-| `r`   | 红色通道。可为十六进制字符串（`#f00` / `#ff0000`，`#` 可选）、`[r, g, b, a?]` 数组，或数字 | `string \| number \| Array<string \| number>` | 无       |
-| `g`   | 绿色通道（当 `r` 为字符串或数组时忽略）                                                  | `string \| number`                            | `0`      |
-| `b`   | 蓝色通道（当 `r` 为字符串或数组时忽略）                                                  | `string \| number`                            | `0`      |
-| `a`   | 透明度通道（0–1）                                                                        | `string \| number`                            | `1.0`    |
+| 参数 | 说明                                                                                       | 类型                                          | 默认值 |
+| ---- | ------------------------------------------------------------------------------------------ | --------------------------------------------- | ------ |
+| `r`  | 红色通道。可为十六进制字符串（`#f00` / `#ff0000`，`#` 可选）、`[r, g, b, a?]` 数组，或数字 | `string \| number \| Array<string \| number>` | 无     |
+| `g`  | 绿色通道（当 `r` 为字符串或数组时忽略）                                                    | `string \| number`                            | `0`    |
+| `b`  | 蓝色通道（当 `r` 为字符串或数组时忽略）                                                    | `string \| number`                            | `0`    |
+| `a`  | 透明度通道（0–1）                                                                          | `string \| number`                            | `1.0`  |
 
 #### 属性
 
-| 属性     | 说明                              | 类型               |
-| -------- | --------------------------------- | ------------------ |
-| `r`      | 红色通道（0–255）                 | `string \| number` |
-| `g`      | 绿色通道（0–255）                 | `string \| number` |
-| `b`      | 蓝色通道（0–255）                 | `string \| number` |
-| `a`      | 透明度通道（0–1）                 | `string \| number` |
-| `h`      | 色相（0–360），与 `hsl.h` 同步    | `string \| number` |
-| `s`      | 饱和度（0–100），与 `hsl.s` 同步  | `string \| number` |
-| `l`      | 亮度（0–100），与 `hsl.l` 同步    | `string \| number` |
-| `rgb`    | RGB 值对象                        | `Rgb`              |
-| `rgba`   | RGBA 值对象                       | `Rgba`             |
-| `hex`    | 十六进制字符串（如 `#ff0000`）    | `string`           |
-| `hsl`    | HSL 值对象                        | `Hsl`              |
-| `hsla`   | HSLA 值对象                       | `Hsla`             |
+| 属性   | 说明                             | 类型               |
+| ------ | -------------------------------- | ------------------ |
+| `r`    | 红色通道（0–255）                | `string \| number` |
+| `g`    | 绿色通道（0–255）                | `string \| number` |
+| `b`    | 蓝色通道（0–255）                | `string \| number` |
+| `a`    | 透明度通道（0–1）                | `string \| number` |
+| `h`    | 色相（0–360），与 `hsl.h` 同步   | `string \| number` |
+| `s`    | 饱和度（0–100），与 `hsl.s` 同步 | `string \| number` |
+| `l`    | 亮度（0–100），与 `hsl.l` 同步   | `string \| number` |
+| `rgb`  | RGB 值对象                       | `Rgb`              |
+| `rgba` | RGBA 值对象                      | `Rgba`             |
+| `hex`  | 十六进制字符串（如 `#ff0000`）   | `string`           |
+| `hsl`  | HSL 值对象                       | `Hsl`              |
+| `hsla` | HSLA 值对象                      | `Hsla`             |
 
 #### 方法
 
-| 方法                        | 说明                                                              | 返回值 |
-| --------------------------- | ----------------------------------------------------------------- | ------ |
-| `setHue(newHue)`            | 设置色相并从 HSL 重新计算 RGB/hex                                 | `void` |
-| `setSat(newSat)`            | 设置饱和度并从 HSL 重新计算 RGB/hex                               | `void` |
-| `setLum(newLum)`            | 设置亮度并从 HSL 重新计算 RGB/hex                                 | `void` |
-| `setAlpha(newAlpha)`        | 同时设置 `rgba` 与 `hsla` 的透明度（不影响 RGB/hex）             | `void` |
-| `updateFromHsl()`           | 根据当前的 `h/s/l` 重新计算 `rgb`、各通道与 `hex`（由上述 setter 调用） | `void` |
+| 方法                 | 说明                                                                    | 返回值 |
+| -------------------- | ----------------------------------------------------------------------- | ------ |
+| `setHue(newHue)`     | 设置色相并从 HSL 重新计算 RGB/hex                                       | `void` |
+| `setSat(newSat)`     | 设置饱和度并从 HSL 重新计算 RGB/hex                                     | `void` |
+| `setLum(newLum)`     | 设置亮度并从 HSL 重新计算 RGB/hex                                       | `void` |
+| `setAlpha(newAlpha)` | 同时设置 `rgba` 与 `hsla` 的透明度（不影响 RGB/hex）                    | `void` |
+| `updateFromHsl()`    | 根据当前的 `h/s/l` 重新计算 `rgb`、各通道与 `hex`（由上述 setter 调用） | `void` |
 
 ### Rgb
 
@@ -69,12 +69,12 @@ new Rgb(col: Array<string | number>) // [r, g, b]
 
 #### 属性与方法
 
-| 成员         | 说明                    | 类型               |
-| ------------ | ----------------------- | ------------------ |
-| `r`          | 红色通道                | `string \| number` |
-| `g`          | 绿色通道                | `string \| number` |
-| `b`          | 蓝色通道                | `string \| number` |
-| `toString()` | 返回 `rgb(r,g,b)`       | `string`           |
+| 成员         | 说明              | 类型               |
+| ------------ | ----------------- | ------------------ |
+| `r`          | 红色通道          | `string \| number` |
+| `g`          | 绿色通道          | `string \| number` |
+| `b`          | 蓝色通道          | `string \| number` |
+| `toString()` | 返回 `rgb(r,g,b)` | `string`           |
 
 ### Rgba
 
@@ -88,11 +88,11 @@ new Rgba(col: Array<string | number>) // [r, g, b, a]
 
 #### 属性与方法
 
-| 成员         | 说明                    | 类型               |
-| ------------ | ----------------------- | ------------------ |
-| `r` `g` `b`  | 继承自 `Rgb`            | `string \| number` |
-| `a`          | 透明度通道              | `string \| number` |
-| `toString()` | 返回 `rgba(r,g,b,a)`    | `string`           |
+| 成员         | 说明                 | 类型               |
+| ------------ | -------------------- | ------------------ |
+| `r` `g` `b`  | 继承自 `Rgb`         | `string \| number` |
+| `a`          | 透明度通道           | `string \| number` |
+| `toString()` | 返回 `rgba(r,g,b,a)` | `string`           |
 
 ### Hsl
 
@@ -106,12 +106,12 @@ new Hsl(col: Array<string | number>) // [h, s, l]
 
 #### 属性与方法
 
-| 成员         | 说明                    | 类型               |
-| ------------ | ----------------------- | ------------------ |
-| `h`          | 色相（0–360）           | `string \| number` |
-| `s`          | 饱和度（0–100）         | `string \| number` |
-| `l`          | 亮度（0–100）           | `string \| number` |
-| `toString()` | 返回 `hsl(h,s%,l%)`     | `string`           |
+| 成员         | 说明                | 类型               |
+| ------------ | ------------------- | ------------------ |
+| `h`          | 色相（0–360）       | `string \| number` |
+| `s`          | 饱和度（0–100）     | `string \| number` |
+| `l`          | 亮度（0–100）       | `string \| number` |
+| `toString()` | 返回 `hsl(h,s%,l%)` | `string`           |
 
 ### Hsla
 
@@ -125,11 +125,11 @@ new Hsla(col: Array<string | number>) // [h, s, l, a]
 
 #### 属性与方法
 
-| 成员         | 说明                    | 类型               |
-| ------------ | ----------------------- | ------------------ |
+| 成员         | 说明                   | 类型               |
+| ------------ | ---------------------- | ------------------ |
 | `h` `s` `l`  | 继承自 `Hsl`           | `string \| number` |
-| `a`          | 透明度通道              | `string \| number` |
-| `toString()` | 返回 `hsla(h,s%,l%,a)`  | `string`           |
+| `a`          | 透明度通道             | `string \| number` |
+| `toString()` | 返回 `hsla(h,s%,l%,a)` | `string`           |
 
 ### ColorScheme
 
@@ -141,46 +141,46 @@ new Hsla(col: Array<string | number>) // [h, s, l, a]
 new ColorScheme(colorVal: (string | number)[], angleArray: number[])
 ```
 
-| 参数         | 说明                                                                        | 类型                   |
-| ------------ | --------------------------------------------------------------------------- | ---------------------- |
-| `colorVal`   | 基准色；或（当 `angleArray` 为 `undefined` 时）用于构建调色板的颜色数组      | `(string \| number)[]` |
-| `angleArray` | 应用到基准色上的色相偏移量（度），用于派生额外的调色板成员                    | `number[]`             |
+| 参数         | 说明                                                                    | 类型                   |
+| ------------ | ----------------------------------------------------------------------- | ---------------------- |
+| `colorVal`   | 基准色；或（当 `angleArray` 为 `undefined` 时）用于构建调色板的颜色数组 | `(string \| number)[]` |
+| `angleArray` | 应用到基准色上的色相偏移量（度），用于派生额外的调色板成员              | `number[]`             |
 
 #### 属性与方法
 
-| 成员                                     | 说明                                | 返回值    |
-| ---------------------------------------- | ----------------------------------- | --------- |
-| `palette`                                | 生成的颜色集合                      | `Color[]` |
-| `createFromColors(colorVal)`             | 由颜色数组构建调色板                | `Color[]` |
-| `createFromAngles(colorVal, angleArray)` | 由基准色加色相偏移量构建调色板      | `Color[]` |
+| 成员                                     | 说明                           | 返回值    |
+| ---------------------------------------- | ------------------------------ | --------- |
+| `palette`                                | 生成的颜色集合                 | `Color[]` |
+| `createFromColors(colorVal)`             | 由颜色数组构建调色板           | `Color[]` |
+| `createFromAngles(colorVal, angleArray)` | 由基准色加色相偏移量构建调色板 | `Color[]` |
 
 #### 静态工厂方法
 
 每个方法接受一个基准色值，返回带预设色相角度集的 `ColorScheme`。
 
-| 方法                            | 色相角度          | 配色方案         |
-| ------------------------------- | ----------------- | ---------------- |
-| `ColorScheme.Compl(colorVal)`   | `[180]`           | 互补色           |
-| `ColorScheme.Triad(colorVal)`   | `[120, 240]`      | 三角配色         |
-| `ColorScheme.Tetrad(colorVal)`  | `[60, 180, 240]`  | 四角配色         |
-| `ColorScheme.Analog(colorVal)`  | `[-45, 45]`       | 邻近色           |
-| `ColorScheme.Split(colorVal)`   | `[150, 210]`      | 分裂互补色       |
-| `ColorScheme.Accent(colorVal)`  | `[-45, 45, 180]`  | 强调邻近色       |
+| 方法                           | 色相角度         | 配色方案   |
+| ------------------------------ | ---------------- | ---------- |
+| `ColorScheme.Compl(colorVal)`  | `[180]`          | 互补色     |
+| `ColorScheme.Triad(colorVal)`  | `[120, 240]`     | 三角配色   |
+| `ColorScheme.Tetrad(colorVal)` | `[60, 180, 240]` | 四角配色   |
+| `ColorScheme.Analog(colorVal)` | `[-45, 45]`      | 邻近色     |
+| `ColorScheme.Split(colorVal)`  | `[150, 210]`     | 分裂互补色 |
+| `ColorScheme.Accent(colorVal)` | `[-45, 45, 180]` | 强调邻近色 |
 
 ### 转换函数
 
 `Color` 内部使用的独立函数，每个都单独导出以便直接使用。对于接受三个通道参数的函数，第一个参数也可以是单个数组（例如 `rgbToHsl([r, g, b])`）。
 
-| 函数                              | 说明                                                     | 签名                                                            |
-| --------------------------------- | -------------------------------------------------------- | -------------------------------------------------------------- |
-| `componentToHex(c)`               | 将一个 0–255 通道转换为两位十六进制字符串                | `(c: string \| number) => string`                              |
-| `hue2rgb(p, q, t)`                | HSL→RGB 的色相辅助函数（由 `hslToRgb` 使用）            | `(p: number, q: number, t: number) => number`                  |
-| `hslToRgb(h, s, l)`               | HSL → `[r, g, b]`（0–255）。首参可为 `[h, s, l]`         | `(h, s, l) => number[]`                                         |
-| `rgbToHsl(r, g, b)`               | RGB → `[h, s, l]`。首参可为 `[r, g, b]`                  | `(r, g, b) => number[]`                                         |
-| `rgbToHsb(r, g, b)`               | RGB → `[h, s, b]`（HSB/HSV）                             | `(r: number, g: number, b: number) => number[]`                |
-| `hsbToRgb(h, s, v)`               | HSB/HSV → `[r, g, b]`（0–255）                           | `(h: number, s: number, v: number) => number[]`                |
-| `hsvToRgb(h, s, v)`               | `hsbToRgb` 的别名                                        | `(h: number, s: number, v: number) => number[]`                |
-| `hsvToHsl(h, s, b)`               | HSB/HSV → `[h, s, l]`（经由 `rgbToHsl(hsbToRgb(...))`）  | `(h, s, b) => number[]`                                         |
+| 函数                | 说明                                                    | 签名                                            |
+| ------------------- | ------------------------------------------------------- | ----------------------------------------------- |
+| `componentToHex(c)` | 将一个 0–255 通道转换为两位十六进制字符串               | `(c: string \| number) => string`               |
+| `hue2rgb(p, q, t)`  | HSL→RGB 的色相辅助函数（由 `hslToRgb` 使用）            | `(p: number, q: number, t: number) => number`   |
+| `hslToRgb(h, s, l)` | HSL → `[r, g, b]`（0–255）。首参可为 `[h, s, l]`        | `(h, s, l) => number[]`                         |
+| `rgbToHsl(r, g, b)` | RGB → `[h, s, l]`。首参可为 `[r, g, b]`                 | `(r, g, b) => number[]`                         |
+| `rgbToHsb(r, g, b)` | RGB → `[h, s, b]`（HSB/HSV）                            | `(r: number, g: number, b: number) => number[]` |
+| `hsbToRgb(h, s, v)` | HSB/HSV → `[r, g, b]`（0–255）                          | `(h: number, s: number, v: number) => number[]` |
+| `hsvToRgb(h, s, v)` | `hsbToRgb` 的别名                                       | `(h: number, s: number, v: number) => number[]` |
+| `hsvToHsl(h, s, b)` | HSB/HSV → `[h, s, l]`（经由 `rgbToHsl(hsbToRgb(...))`） | `(h, s, b) => number[]`                         |
 
 > `componentToHex`、`rgbToHex` 和 `hexToRgb` 是底层构建块；参见 [rgbToHex](./rgb_to_hex.md) 与 [hexToRgb](./hex_to_rgb.md)。
 
@@ -189,7 +189,7 @@ new ColorScheme(colorVal: (string | number)[], angleArray: number[])
 一个记录终端 ANSI 转义码对的对象，用于文本样式和着色。每个条目都是 `[open, close]` 元组，用于包裹字符串以为终端输出添加样式。
 
 ```ts
-const FMT: Record<string, Array<string>>
+const FMT: Record<string, Array<string>>;
 ```
 
 可用的键：`bold`、`dim`、`reset`、`italic`、`underline`、`inverse`、`hidden`、`strikethrough`、`black`、`red`、`green`、`yellow`、`blue`、`magenta`、`cyan`、`white`、`gray`，以及背景变体 `bgBlack`、`bgRed`、`bgGreen`、`bgYellow`、`bgBlue`、`bgMagenta`、`bgCyan`、`bgWhite`。

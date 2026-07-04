@@ -32,14 +32,14 @@ component styles react to it. The choice is saved under the localStorage key `ra
 
 ## API
 
-| Function                              | Signature                                                            | Description                                                                                    |
-| ------------------------------------- | ------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| `initTheme`                           | `(target?: ThemeTarget) => void`                                    | Restore the saved theme from `localStorage`. Call once on load. No-op in SSR.                  |
-| `setTheme`                            | `(name: RanThemeName, target?: ThemeTarget) => void`                | Apply `'light'` \| `'dark'` \| `'system'` and persist it. `'system'` tracks the OS live.       |
-| `getTheme`                            | `(target?: ThemeTarget) => RanThemeName \| ''`                      | Read the active theme. Returns `'system'` when system mode is active, `''` if none is set.      |
-| `setThemeToken`                       | `(name: string, value: string \| number, target?: HTMLElement) => void` | Override a single token at runtime (inline style on the target).                          |
-| `setThemeTokens`                      | `(tokens: ThemeTokenMap, target?: HTMLElement) => void`             | Override many tokens at once. A `null` / `undefined` value clears that token.                   |
-| `clearThemeToken`                     | `(name: string, target?: HTMLElement) => void`                      | Remove a runtime token override.                                                               |
+| Function          | Signature                                                               | Description                                                                                |
+| ----------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `initTheme`       | `(target?: ThemeTarget) => void`                                        | Restore the saved theme from `localStorage`. Call once on load. No-op in SSR.              |
+| `setTheme`        | `(name: RanThemeName, target?: ThemeTarget) => void`                    | Apply `'light'` \| `'dark'` \| `'system'` and persist it. `'system'` tracks the OS live.   |
+| `getTheme`        | `(target?: ThemeTarget) => RanThemeName \| ''`                          | Read the active theme. Returns `'system'` when system mode is active, `''` if none is set. |
+| `setThemeToken`   | `(name: string, value: string \| number, target?: HTMLElement) => void` | Override a single token at runtime (inline style on the target).                           |
+| `setThemeTokens`  | `(tokens: ThemeTokenMap, target?: HTMLElement) => void`                 | Override many tokens at once. A `null` / `undefined` value clears that token.              |
+| `clearThemeToken` | `(name: string, target?: HTMLElement) => void`                          | Remove a runtime token override.                                                           |
 
 **Types**
 
@@ -70,28 +70,28 @@ per-component dark overrides.
 
 ### Semantic color tokens
 
-| Token                          | Role                          |
-| ------------------------------ | ----------------------------- |
-| `--ran-color-primary`          | Primary action                |
-| `--ran-color-primary-hover`    | Primary hover                 |
-| `--ran-color-primary-active`   | Primary active                |
-| `--ran-color-success`          | Success                       |
-| `--ran-color-warning`          | Warning                       |
-| `--ran-color-danger`           | Danger / error                |
-| `--ran-color-bg`               | Page background               |
-| `--ran-color-bg-subtle`        | Subtle background             |
-| `--ran-color-bg-elevated`      | Card / surface background     |
-| `--ran-color-bg-muted`         | Muted surface                 |
-| `--ran-color-bg-hover`         | Hover surface                 |
-| `--ran-color-bg-active`        | Active surface                |
-| `--ran-color-text`             | Primary text                  |
-| `--ran-color-text-secondary`   | Secondary text                |
-| `--ran-color-text-disabled`    | Disabled text                 |
-| `--ran-color-border`           | Default border                |
-| `--ran-color-border-secondary` | Subtle border                 |
-| `--ran-color-border-hover`     | Hover border                  |
-| `--ran-color-border-active`    | Active border                 |
-| `--ran-color-link`             | Link color                    |
+| Token                          | Role                      |
+| ------------------------------ | ------------------------- |
+| `--ran-color-primary`          | Primary action            |
+| `--ran-color-primary-hover`    | Primary hover             |
+| `--ran-color-primary-active`   | Primary active            |
+| `--ran-color-success`          | Success                   |
+| `--ran-color-warning`          | Warning                   |
+| `--ran-color-danger`           | Danger / error            |
+| `--ran-color-bg`               | Page background           |
+| `--ran-color-bg-subtle`        | Subtle background         |
+| `--ran-color-bg-elevated`      | Card / surface background |
+| `--ran-color-bg-muted`         | Muted surface             |
+| `--ran-color-bg-hover`         | Hover surface             |
+| `--ran-color-bg-active`        | Active surface            |
+| `--ran-color-text`             | Primary text              |
+| `--ran-color-text-secondary`   | Secondary text            |
+| `--ran-color-text-disabled`    | Disabled text             |
+| `--ran-color-border`           | Default border            |
+| `--ran-color-border-secondary` | Subtle border             |
+| `--ran-color-border-hover`     | Hover border              |
+| `--ran-color-border-active`    | Active border             |
+| `--ran-color-link`             | Link color                |
 
 **Color is a state ladder, not a palette.** Within a scale, each step has a fixed job:
 `100` default bg · `200` hover bg · `300` active bg · `400` border · `500` hover border ·
@@ -100,15 +100,15 @@ primary text.
 
 ### Non-color tokens
 
-| Group       | Tokens                                                                                             |
-| ----------- | ------------------------------------------------------------------------------------------------- |
-| Radius      | `--ran-radius-sm` 6px · `--ran-radius-md` 12px · `--ran-radius-lg` 16px · `--ran-radius-full`      |
-| Spacing     | `--ran-space-1..24` (4px base: 4 · 8 · 12 · 16 · 24 · 32 · 40 · 64 · 96)                           |
-| Elevation   | `--ran-shadow-elevated` (in-flow surface) · `--ran-shadow-menu` (overlay) · `--ran-shadow-modal` (dialog) |
-| Z-index     | `--ran-z-modal` 1000 · `--ran-z-dropdown` 1100 · `--ran-z-message` 1200                            |
-| Motion      | `--ran-motion-duration-fast` 0.15s · `--ran-motion-duration-base` 0.2s                             |
-| Focus       | `--ran-focus-ring`                                                                                 |
-| Typography  | `--ran-font-family` (Geist Sans) · `--ran-font-mono` (Geist Mono)                                  |
+| Group      | Tokens                                                                                                    |
+| ---------- | --------------------------------------------------------------------------------------------------------- |
+| Radius     | `--ran-radius-sm` 6px · `--ran-radius-md` 12px · `--ran-radius-lg` 16px · `--ran-radius-full`             |
+| Spacing    | `--ran-space-1..24` (4px base: 4 · 8 · 12 · 16 · 24 · 32 · 40 · 64 · 96)                                  |
+| Elevation  | `--ran-shadow-elevated` (in-flow surface) · `--ran-shadow-menu` (overlay) · `--ran-shadow-modal` (dialog) |
+| Z-index    | `--ran-z-modal` 1000 · `--ran-z-dropdown` 1100 · `--ran-z-message` 1200                                   |
+| Motion     | `--ran-motion-duration-fast` 0.15s · `--ran-motion-duration-base` 0.2s                                    |
+| Focus      | `--ran-focus-ring`                                                                                        |
+| Typography | `--ran-font-family` (Geist Sans) · `--ran-font-mono` (Geist Mono)                                         |
 
 ## Customizing tokens
 
