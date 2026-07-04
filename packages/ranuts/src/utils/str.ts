@@ -25,19 +25,29 @@ export const strParse = (
   return result;
 };
 /**
- * @description: 清除空格和换行
- * @param {*} str
- * @return {*}
+ * @description: 清除字符串中的空格、换行和 HTML 标签
+ * @param {string} str 要清理的字符串
+ * @return {string} 清理后的纯文本
  */
 export const clearBr = (str = ''): string => {
   if (str.length === 0) return '';
-  // Strip whitespace/newlines, then remove tags repeatedly until stable so that
-  // overlapping/nested angle brackets (e.g. `<<b>>`) can't leave a tag behind.
-  let out = str.replace(/\s+/g, '');
-  let prev = '';
-  while (out !== prev) {
-    prev = out;
-    out = out.replace(/<[^>]*>/g, '');
+  // Single linear pass (O(n)): strip whitespace and drop everything between angle
+  // brackets. Tracking `<` depth handles overlapping/nested brackets (e.g. `<<b>>`)
+  // without the quadratic regex-in-a-loop that CodeQL flags as ReDoS. An unmatched
+  // `>` at depth 0 is kept, matching the previous `/<[^>]*>/g` behaviour.
+  let out = '';
+  let depth = 0;
+  for (const ch of str) {
+    if (/\s/.test(ch)) continue;
+    if (ch === '<') {
+      depth++;
+      continue;
+    }
+    if (ch === '>' && depth > 0) {
+      depth--;
+      continue;
+    }
+    if (depth === 0) out += ch;
   }
   return out;
 };
