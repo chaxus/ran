@@ -22,6 +22,11 @@ import {
   Client,
   Platform,
   PostMessageBridge,
+  acceptPortBridge,
+  createPortBridge,
+  openPortBridge,
+  BRIDGE_MARKER,
+  DEFAULT_CHANNEL,
   appendUrl,
   bridgeManager,
   connection,
@@ -50,6 +55,9 @@ import type {
   MessageData,
   MessageHandler,
   PendingRequest,
+  PortBridge,
+  OpenPortBridgeOptions,
+  AcceptPortBridgeOptions,
 } from './bom';
 import {
   cloneDeep,
@@ -235,6 +243,11 @@ export {
   PostMessageBridge,
   MessageCodec,
   Platform,
+  openPortBridge,
+  acceptPortBridge,
+  createPortBridge,
+  BRIDGE_MARKER,
+  DEFAULT_CHANNEL,
 };
 
 export type {
@@ -246,4 +259,7 @@ export type {
   BridgeManagerOptions,
   BroadcastPayload,
   CallToPayload,
+  PortBridge,
+  OpenPortBridgeOptions,
+  AcceptPortBridgeOptions,
 };
