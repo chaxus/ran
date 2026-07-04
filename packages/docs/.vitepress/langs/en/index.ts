@@ -8,9 +8,9 @@ const themeEnConfig: DefaultTheme.Config = {
   },
   nav: [
     { text: 'Home', link: '/' },
-    { text: 'Function', link: '/src/ranuts/' },
-    { text: 'Component', link: '/src/ranui/' },
-    { text: 'Article', link: '/src/article/design_mode.md' },
+    { text: 'ranui', link: '/src/ranui/' },
+    { text: 'ranuts', link: '/src/ranuts/' },
+    { text: 'Articles', link: '/src/article/design_mode.md' },
   ],
   socialLinks: [{ icon: 'github', link: GITHUB }],
   footer: {

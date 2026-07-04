@@ -51,3 +51,32 @@ p img {
 
 @media (min-width: 960px) {
 }
+
+/* Smooth cross-page transitions (View Transitions API; wired in theme/index.ts) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.28s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/* Custom full-bleed home page (index.md / cn/index.md use layout: page + <Home />) */
+.ran-home-page {
+  .VPContent,
+  .VPPage {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: none !important;
+  }
+
+  .VPContent.is-home,
+  .VPPage {
+    width: 100%;
+  }
+}

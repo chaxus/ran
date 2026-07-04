@@ -8,9 +8,9 @@ const themeCnConfig: DefaultTheme.Config = {
   },
   nav: [
     { text: '首页', link: '/cn/' },
-    { text: '函数', link: '/cn/src/ranuts/' },
-    { text: '组件', link: '/cn/src/ranui/' },
-    { text: '璀璨', link: '/cn/src/article/design_mode.md' },
+    { text: 'ranui', link: '/cn/src/ranui/' },
+    { text: 'ranuts', link: '/cn/src/ranuts/' },
+    { text: '文章', link: '/cn/src/article/design_mode.md' },
   ],
   socialLinks: [{ icon: 'github', link: GITHUB }],
   footer: {
