@@ -1,6 +1,10 @@
 packages:
   # all packages in subdirs of packages/ and components/
   - 'packages/**'
+# Force patched versions of transitively-pulled build tools (Dependabot advisories).
+overrides:
+  esbuild: '>=0.28.1'
+  '@babel/core': '>=7.29.6'
 allowBuilds:
   core-js: true
   esbuild: true

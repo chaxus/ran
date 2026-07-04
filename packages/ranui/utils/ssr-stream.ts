@@ -59,8 +59,10 @@ function findClosingTag(html: string, tagName: string, searchFrom: number): numb
 
 function tokenize(html: string): Token[] {
   const tokens: Token[] = [];
-  // Custom element open tag: tag name must contain a hyphen
-  const openTagRe = /<([a-z][a-z0-9]*(?:-[a-z0-9]+)+)((?:\s[^>]*)?)\s*>/gi;
+  // Custom element open tag: tag name must contain a hyphen. The attribute group
+  // runs straight to `>` (no trailing `\s*`) so `[^>]*` and `\s*` can't overlap —
+  // that overlap was a polynomial-ReDoS on unterminated tags.
+  const openTagRe = /<([a-z][a-z0-9]*(?:-[a-z0-9]+)+)(\s[^>]*)?>/gi;
   let cursor = 0;
   let match: RegExpExecArray | null;
   openTagRe.lastIndex = 0;
