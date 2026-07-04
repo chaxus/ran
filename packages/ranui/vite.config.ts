@@ -86,6 +86,7 @@ export const es: BuildOptions = {
       checkbox: resolve(__dirname, 'components/checkbox/index.ts'),
       colorpicker: resolve(__dirname, 'components/colorpicker/index.ts'),
       popover: resolve(__dirname, 'components/popover/index.ts'),
+      dropdown: resolve(__dirname, 'components/dropdown/index.ts'),
       loading: resolve(__dirname, 'components/loading/index.ts'),
       form: resolve(__dirname, 'components/form/index.ts'),
       scratch: resolve(__dirname, 'components/scratch/index.ts'),

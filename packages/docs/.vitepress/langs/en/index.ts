@@ -96,6 +96,7 @@ const themeEnConfig: DefaultTheme.Config = {
               { text: 'hexToRgb - Hex to RGB', link: '/src/ranuts/utils/hex_to_rgb.md' },
               { text: 'rgbToHex - RGB to hex', link: '/src/ranuts/utils/rgb_to_hex.md' },
               { text: 'randomColor - Generate random color', link: '/src/ranuts/utils/random_color.md' },
+              { text: 'Color - Color classes & conversions', link: '/src/ranuts/utils/color.md' },
             ],
           },
           {
@@ -240,14 +241,29 @@ const themeEnConfig: DefaultTheme.Config = {
         ],
       },
       {
-        text: 'Event System',
-        collapsed: true,
-        items: [{ text: 'EventEmitter - Publish-subscribe', link: '/src/ranuts/mode/subscribe.md' }],
-      },
-      {
         text: 'MIME Type',
         collapsed: true,
         items: [{ text: 'getMime - Get MIME type', link: '/src/ranuts/mime_type/mime_type.md' }],
+      },
+      {
+        text: '2D Rendering (visual)',
+        collapsed: true,
+        items: [{ text: 'Rendering engine', link: '/src/ranuts/visual/index.md' }],
+      },
+      {
+        text: 'Virtual DOM (vnode)',
+        collapsed: true,
+        items: [{ text: 'Virtual DOM', link: '/src/ranuts/vnode/index.md' }],
+      },
+      {
+        text: 'Node Server',
+        collapsed: true,
+        items: [{ text: 'HTTP server & router', link: '/src/ranuts/node/index.md' }],
+      },
+      {
+        text: 'Bridge (postMessage)',
+        collapsed: true,
+        items: [{ text: 'Cross-context messaging', link: '/src/ranuts/bridge/index.md' }],
       },
       {
         text: 'Others',
@@ -264,6 +280,10 @@ const themeEnConfig: DefaultTheme.Config = {
         link: '/src/ranui/',
       },
       {
+        text: 'Theming',
+        items: [{ text: 'Theme & Tokens', link: '/src/ranui/theme/' }],
+      },
+      {
         text: 'Common',
         items: [
           { text: 'Button', link: '/src/ranui/button/' },
@@ -277,30 +297,42 @@ const themeEnConfig: DefaultTheme.Config = {
           { text: 'Image', link: '/src/ranui/image/' },
           { text: 'Math', link: '/src/ranui/math' },
           { text: 'CheckBox', link: '/src/ranui/checkbox/' },
-          { text: 'Tabs', link: '/src/ranui/tabs/' },
+          { text: 'Tabs', link: '/src/ranui/tab/' },
           { text: 'Preview', link: '/src/ranui/preview/' },
           { text: 'Radar', link: '/src/ranui/radar/' },
           { text: 'Select', link: '/src/ranui/select/' },
           { text: 'Player', link: '/src/ranui/player/' },
           { text: 'Progress', link: '/src/ranui/progress/' },
           { text: 'Popover', link: '/src/ranui/popover/' },
+          { text: 'Dropdown', link: '/src/ranui/dropdown/' },
+          { text: 'Card', link: '/src/ranui/card/' },
+          { text: 'Section', link: '/src/ranui/section/' },
+          { text: 'Scratch', link: '/src/ranui/scratch/' },
         ],
       },
       {
         text: 'Data Entry',
-        items: [{ text: 'Input', link: '/src/ranui/input/' }],
+        items: [
+          { text: 'Input', link: '/src/ranui/input/' },
+          { text: 'Form', link: '/src/ranui/form/' },
+          { text: 'ColorPicker', link: '/src/ranui/colorpicker/' },
+        ],
       },
       {
         text: 'Feedback',
         items: [
           { text: 'Message', link: '/src/ranui/message/' },
           { text: 'Skeleton', link: '/src/ranui/skeleton/' },
-          // { text: 'Modal 对话框', link: '/src/ranui/modal/' },
+          { text: 'Modal', link: '/src/ranui/modal/' },
         ],
       },
       {
         text: 'Navigation',
-        items: [{ text: 'Router', link: '/src/ranui/router/' }],
+        items: [
+          { text: 'Router', link: '/src/ranui/router/' },
+          { text: 'Route', link: '/src/ranui/route/' },
+          { text: 'Link', link: '/src/ranui/link/' },
+        ],
       },
     ],
     '/src/article/': [

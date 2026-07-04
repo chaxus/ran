@@ -8,7 +8,7 @@ constraints, conventions) read [../CLAUDE.md](../CLAUDE.md) first.
 Import from the **subpath** that owns the symbol, e.g. `import { debounce } from
 'ranuts/utils'`. The root `ranuts` barrel re-exports the utils + visual surface.
 
-**191 exports** across 4 entry points. Generated at 2026-06-28T09:16:39.044Z.
+**191 exports** across 4 entry points. Generated at 2026-07-04T08:30:32.420Z.
 
 ## Entry points
 
@@ -22,7 +22,7 @@ Import from the **subpath** that owns the symbol, e.g. `import { debounce } from
 浏览器 / 通用工具函数 · runtime: **browser + node** · source: `src/utils/index.ts`
 
 ```ts
-import {} from /* … */ 'ranuts/utils';
+import { /* … */ } from 'ranuts/utils';
 ```
 
 ### Functions
@@ -34,7 +34,7 @@ import {} from /* … */ 'ranuts/utils';
 - `canvasVendor(): string | null`
 - `changeHumpToLowerCase(str: string): string`
 - `checkEncoding(uint8Array: Uint8Array): string`
-- `clearBr(str?: string): string` — 清除空格和换行
+- `clearBr(str?: string): string` — 清除字符串中的空格、换行和 HTML 标签
 - `clearStr(str: string, options?: ClearStrOption): string` — 去除字符串首尾的空格，encode 编码，首尾的引号
 - `cloneDeep<T>(value: T, cloneMap?: WeakMap<object, any>): T` — 深克隆函数，支持各种复杂数据类型和循环引用
 - `componentToHex(c: string | number): string`
@@ -172,7 +172,7 @@ import {} from /* … */ 'ranuts/utils';
 Node 服务端工具（fs / http / ws / 中间件） · runtime: **node only** · source: `src/node/index.ts`
 
 ```ts
-import {} from /* … */ 'ranuts/node';
+import { /* … */ } from 'ranuts/node';
 ```
 
 ### Functions
@@ -221,7 +221,7 @@ import {} from /* … */ 'ranuts/node';
 2D 渲染引擎（Canvas / WebGL / WebGPU） · runtime: **browser only** · source: `src/utils/visual/index.ts`
 
 ```ts
-import {} from /* … */ 'ranuts/visual';
+import { /* … */ } from 'ranuts/visual';
 ```
 
 ### Classes
@@ -253,7 +253,7 @@ import {} from /* … */ 'ranuts/visual';
 Snabbdom 风格虚拟 DOM · runtime: **browser** · source: `src/vnode/index.ts`
 
 ```ts
-import {} from /* … */ 'ranuts/vnode';
+import { /* … */ } from 'ranuts/vnode';
 ```
 
 ### Functions
@@ -299,3 +299,4 @@ import {} from /* … */ 'ranuts/vnode';
 ### Other
 
 - `"/Users/ranzhouhang/Documents/code/ran/packages/ranuts/src/vnode/is"`
+

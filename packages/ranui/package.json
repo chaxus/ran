@@ -173,6 +173,11 @@
       "import": "./dist/popover.js",
       "require": "./dist/index.cjs"
     },
+    "./dropdown": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/dropdown.js",
+      "require": "./dist/index.cjs"
+    },
     "./content": {
       "types": "./dist/index.d.ts",
       "import": "./dist/content.js",

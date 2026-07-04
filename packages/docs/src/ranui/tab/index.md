@@ -42,9 +42,9 @@ TAB pages, where 'r-tab' needs to be used with 'r-tabs'
 </r-tabs>
 ```
 
-### active tag 'active', the tag's unique identifier 'ranKey'
+### active tag 'active', the tag's unique identifier 'r-key'
 
-- 'ranKey' is an attribute of 'r-tab' that determines the unique value of 'r-tab' under the same 'r-tabs'. If 'ranKey' is not set, it defaults to 'index'. (Not using the 'key' field is to prevent the 'key' is reserved field)
+- 'r-key' is an attribute of 'r-tab' that determines the unique value of 'r-tab' under the same 'r-tabs'. If 'r-key' is not set, it defaults to 'index'. (Not using the 'key' field is to prevent the 'key' is reserved field)
 - 'active' is an attribute of 'r-tabs', which is used to set active tabs. The label 'active' equals' key 'is an active label.
 
 1. 'key' is not set
@@ -69,20 +69,40 @@ TAB pages, where 'r-tab' needs to be used with 'r-tabs'
 
 <div style="width:100%;">
    <r-tabs active="c">
-      <r-tab label="tab1" ranKey="a">11111</r-tab>
-      <r-tab label="tab2" ranKey="b">22222</r-tab>
-      <r-tab label="tab3" ranKey="c">33333</r-tab>
+      <r-tab label="tab1" r-key="a">11111</r-tab>
+      <r-tab label="tab2" r-key="b">22222</r-tab>
+      <r-tab label="tab3" r-key="c">33333</r-tab>
       <r-tab label="tab4">4</r-tab>
     </r-tabs>
 </div>
 
 ```xml
     <r-tabs active="c">
-      <r-tab label="tab1" ranKey="a">11111</r-tab>
-      <r-tab label="tab2" ranKey="b">22222</r-tab>
-      <r-tab label="tab3" ranKey="c">33333</r-tab>
+      <r-tab label="tab1" r-key="a">11111</r-tab>
+      <r-tab label="tab2" r-key="b">22222</r-tab>
+      <r-tab label="tab3" r-key="c">33333</r-tab>
       <r-tab label="tab4">4</r-tab>
     </r-tabs>
+```
+
+### `icon`
+
+`r-tab` accepts an `icon` attribute (an `r-icon` name) shown before the tab label; `iconSize` sets its size.
+
+<div style="width:100%;">
+   <r-tabs>
+      <r-tab label="tab1" icon="edit">11111</r-tab>
+      <r-tab label="tab2" icon="delete">22222</r-tab>
+      <r-tab label="tab3">33333</r-tab>
+    </r-tabs>
+</div>
+
+```xml
+<r-tabs>
+      <r-tab label="tab1" icon="edit">11111</r-tab>
+      <r-tab label="tab2" icon="delete" iconSize="16">22222</r-tab>
+      <r-tab label="tab3">33333</r-tab>
+</r-tabs>
 ```
 
 ### `disabled`
@@ -91,18 +111,18 @@ Set unclickable labels
 
 <div style="width:100%;">
    <r-tabs active="c">
-      <r-tab label="tab1" ranKey="a" disabled>11111</r-tab>
-      <r-tab label="tab2" ranKey="b">22222</r-tab>
-      <r-tab label="tab3" ranKey="c">33333</r-tab>
+      <r-tab label="tab1" r-key="a" disabled>11111</r-tab>
+      <r-tab label="tab2" r-key="b">22222</r-tab>
+      <r-tab label="tab3" r-key="c">33333</r-tab>
       <r-tab label="tab4">4</r-tab>
     </r-tabs>
 </div>
 
 ```xml
     <r-tabs active="c">
-      <r-tab label="tab1" ranKey="a" disabled>11111</r-tab>
-      <r-tab label="tab2" ranKey="b">22222</r-tab>
-      <r-tab label="tab3" ranKey="c">33333</r-tab>
+      <r-tab label="tab1" r-key="a" disabled>11111</r-tab>
+      <r-tab label="tab2" r-key="b">22222</r-tab>
+      <r-tab label="tab3" r-key="c">33333</r-tab>
       <r-tab label="tab4">4</r-tab>
     </r-tabs>
 ```
@@ -203,4 +223,17 @@ Set the alignment of the label. The default is' align="start" '
         <r-tab label="tab2">22222</r-tab>
         <r-tab label="tab3">33333</r-tab>
     </r-tabs>
+```
+
+## Event
+
+### `change`
+
+`r-tabs` dispatches a `change` `CustomEvent` when the active tab switches. `event.detail.active` is the new active key (the `r-key` of the selected `r-tab`, or its index when no `r-key` is set).
+
+```js
+const tabs = document.querySelector('r-tabs');
+tabs.addEventListener('change', (e) => {
+  console.log('active tab:', e.detail.active);
+});
 ```

@@ -96,6 +96,7 @@ const themeCnConfig: DefaultTheme.Config = {
               { text: 'hexToRgb - 十六进制转 RGB', link: '/cn/src/ranuts/utils/hex_to_rgb.md' },
               { text: 'rgbToHex - RGB 转十六进制', link: '/cn/src/ranuts/utils/rgb_to_hex.md' },
               { text: 'randomColor - 生成随机颜色', link: '/cn/src/ranuts/utils/random_color.md' },
+              { text: 'Color - 颜色类与转换', link: '/cn/src/ranuts/utils/color.md' },
             ],
           },
           {
@@ -240,14 +241,29 @@ const themeCnConfig: DefaultTheme.Config = {
         ],
       },
       {
-        text: '事件系统',
-        collapsed: true,
-        items: [{ text: 'EventEmitter - 发布订阅模式', link: '/cn/src/ranuts/mode/subscribe.md' }],
-      },
-      {
         text: 'MIME 类型',
         collapsed: true,
         items: [{ text: 'getMime - 获取 MIME 类型', link: '/cn/src/ranuts/mime_type/mime_type.md' }],
+      },
+      {
+        text: '2D 渲染引擎 (visual)',
+        collapsed: true,
+        items: [{ text: '渲染引擎', link: '/cn/src/ranuts/visual/index.md' }],
+      },
+      {
+        text: '虚拟 DOM (vnode)',
+        collapsed: true,
+        items: [{ text: '虚拟 DOM', link: '/cn/src/ranuts/vnode/index.md' }],
+      },
+      {
+        text: 'Node 服务',
+        collapsed: true,
+        items: [{ text: 'HTTP 服务与路由', link: '/cn/src/ranuts/node/index.md' }],
+      },
+      {
+        text: 'Bridge 跨上下文通信',
+        collapsed: true,
+        items: [{ text: 'postMessage 桥接', link: '/cn/src/ranuts/bridge/index.md' }],
       },
       {
         text: '其他',
@@ -264,6 +280,10 @@ const themeCnConfig: DefaultTheme.Config = {
         link: '/cn/src/ranui/',
       },
       {
+        text: '主题',
+        items: [{ text: 'Theme 主题与令牌', link: '/cn/src/ranui/theme/' }],
+      },
+      {
         text: '通用',
         items: [
           { text: 'Button 按钮', link: '/cn/src/ranui/button/' },
@@ -277,30 +297,42 @@ const themeCnConfig: DefaultTheme.Config = {
           { text: 'Image 图片', link: '/cn/src/ranui/image/' },
           { text: 'Math 数学公式', link: '/cn/src/ranui/math/' },
           { text: 'CheckBox 多选框', link: '/cn/src/ranui/checkbox/' },
-          { text: 'Tabs 标签页', link: '/cn/src/ranui/tabs/' },
+          { text: 'Tabs 标签页', link: '/cn/src/ranui/tab/' },
           { text: 'Preview 预览', link: '/cn/src/ranui/preview/' },
           { text: 'Radar 雷达图', link: '/cn/src/ranui/radar/' },
           { text: 'Select 选择框', link: '/cn/src/ranui/select/' },
           { text: 'Player 视频播放器', link: '/cn/src/ranui/player/' },
           { text: 'Progress 进度条', link: '/cn/src/ranui/progress/' },
           { text: 'Popover 气泡卡片', link: '/cn/src/ranui/popover/' },
+          { text: 'Dropdown 下拉面板', link: '/cn/src/ranui/dropdown/' },
+          { text: 'Card 卡片', link: '/cn/src/ranui/card/' },
+          { text: 'Section 区块', link: '/cn/src/ranui/section/' },
+          { text: 'Scratch 刮刮卡', link: '/cn/src/ranui/scratch/' },
         ],
       },
       {
         text: '数据录入',
-        items: [{ text: 'Input 输入框', link: '/cn/src/ranui/input/' }],
+        items: [
+          { text: 'Input 输入框', link: '/cn/src/ranui/input/' },
+          { text: 'Form 表单', link: '/cn/src/ranui/form/' },
+          { text: 'ColorPicker 颜色选择器', link: '/cn/src/ranui/colorpicker/' },
+        ],
       },
       {
         text: '反馈',
         items: [
           { text: 'Message 全局提示', link: '/cn/src/ranui/message/' },
           { text: 'Skeleton 骨架屏', link: '/cn/src/ranui/skeleton/' },
-          // { text: 'Modal 对话框', link: '/src/ranui/modal/' },
+          { text: 'Modal 对话框', link: '/cn/src/ranui/modal/' },
         ],
       },
       {
         text: '导航',
-        items: [{ text: 'Router 路由', link: '/cn/src/ranui/router/' }],
+        items: [
+          { text: 'Router 路由', link: '/cn/src/ranui/router/' },
+          { text: 'Route 路由出口', link: '/cn/src/ranui/route/' },
+          { text: 'Link 链接', link: '/cn/src/ranui/link/' },
+        ],
       },
     ],
     '/cn/src/article/': [
