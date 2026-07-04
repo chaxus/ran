@@ -19,7 +19,16 @@ describe('utils/component helpers', () => {
     const root = ensureShadowRoot(host, '.root { color: red; }');
 
     expect(root).toBeInstanceOf(ShadowRoot);
-    expect(root.querySelector('style')?.textContent).toBe('.root { color: red; }');
+    expect(root.querySelector('style')?.textContent).toContain('.root { color: red; }');
+  });
+
+  it('ensureShadowRoot injects a prefers-reduced-motion override into every root', () => {
+    const withCss = ensureShadowRoot(document.createElement('div'), '.root { color: red; }');
+    expect(withCss.querySelector('style')?.textContent).toContain('prefers-reduced-motion');
+
+    // Applies even to components that pass no CSS of their own.
+    const noCss = ensureShadowRoot(document.createElement('div'));
+    expect(noCss.querySelector('style')?.textContent).toContain('prefers-reduced-motion');
   });
 
   it('ensureShadowRoot reuses an existing shadow root', () => {

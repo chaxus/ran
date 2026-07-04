@@ -335,6 +335,63 @@ describe('r-tabs and r-tab contract', () => {
     expect(tabs._nav.children[0].hasAttribute('icon')).toBe(false);
   });
 
+  it('wires WAI-ARIA tablist/tab/tabpanel roles and a roving tabindex', () => {
+    const tabs = document.createElement('r-tabs') as any;
+    document.body.appendChild(tabs);
+    expect(tabs._nav.getAttribute('role')).toBe('tablist');
+
+    const a = document.createElement('r-tab');
+    a.setAttribute('label', 'One');
+    a.setAttribute('r-key', 'a');
+    const b = document.createElement('r-tab');
+    b.setAttribute('label', 'Two');
+    b.setAttribute('r-key', 'b');
+    tabs._nav.appendChild(tabs.createTabHeader(a, 0));
+    tabs._nav.appendChild(tabs.createTabHeader(b, 1));
+    // jsdom can't slot, so feed the panes directly.
+    tabs._slot.assignedElements = () => [a, b];
+    tabs.setAttribute('active', 'a');
+    tabs.syncTabsAria();
+
+    const tab1 = tabs.tabFocusable(tabs._nav.children[0]);
+    const tab2 = tabs.tabFocusable(tabs._nav.children[1]);
+    expect(tab1.getAttribute('role')).toBe('tab');
+    expect(tab1.getAttribute('aria-selected')).toBe('true');
+    expect(tab2.getAttribute('aria-selected')).toBe('false');
+    // roving: only the active tab is tabbable
+    expect(tab1.tabIndex).toBe(0);
+    expect(tab2.tabIndex).toBe(-1);
+    // panel <-> tab linkage
+    expect(a.getAttribute('role')).toBe('tabpanel');
+    expect(a.getAttribute('aria-labelledby')).toBe(tab1.id);
+    expect(tab1.getAttribute('aria-controls')).toBe(a.id);
+    expect(b.getAttribute('aria-hidden')).toBe('true');
+  });
+
+  it('arrow keys move selection and roving focus across tabs', () => {
+    const tabs = document.createElement('r-tabs') as any;
+    document.body.appendChild(tabs);
+    const a = document.createElement('r-tab');
+    a.setAttribute('label', 'One');
+    a.setAttribute('r-key', 'a');
+    const b = document.createElement('r-tab');
+    b.setAttribute('label', 'Two');
+    b.setAttribute('r-key', 'b');
+    tabs._nav.appendChild(tabs.createTabHeader(a, 0));
+    tabs._nav.appendChild(tabs.createTabHeader(b, 1));
+    tabs._slot.assignedElements = () => [a, b];
+    tabs.setAttribute('active', 'a');
+    tabs.syncTabsAria();
+
+    tabs.onNavKeydown({ key: 'ArrowRight', target: tabs._nav.children[0], preventDefault() {} });
+    expect(tabs.getAttribute('active')).toBe('b');
+    expect(tabs.tabFocusable(tabs._nav.children[1]).getAttribute('aria-selected')).toBe('true');
+    expect(tabs.tabFocusable(tabs._nav.children[1]).tabIndex).toBe(0);
+
+    tabs.onNavKeydown({ key: 'Home', target: tabs._nav.children[1], preventDefault() {} });
+    expect(tabs.getAttribute('active')).toBe('a');
+  });
+
   // r-tab (TabPane) specific tests
   it('r-tab icon property reflects to attribute', () => {
     const tabPane = document.createElement('r-tab') as any;
