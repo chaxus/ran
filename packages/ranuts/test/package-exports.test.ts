@@ -14,7 +14,7 @@ describe('package export source contracts', () => {
     const viteConfig = read('vite.config.ts');
     const buildScript = read('bin/build.sh');
     const rootEntry = read('index.ts');
-    const englishReadme = read('readme.md');
+    const englishReadme = read('README.md');
     const chineseReadme = read('README.zh-CN.md');
     const lockfile = read('../../pnpm-lock.yaml');
 
