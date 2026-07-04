@@ -59,10 +59,11 @@ function findClosingTag(html: string, tagName: string, searchFrom: number): numb
 
 function tokenize(html: string): Token[] {
   const tokens: Token[] = [];
-  // Custom element open tag: tag name must contain a hyphen. The attribute group
-  // runs straight to `>` (no trailing `\s*`) so `[^>]*` and `\s*` can't overlap —
-  // that overlap was a polynomial-ReDoS on unterminated tags.
-  const openTagRe = /<([a-z][a-z0-9]*(?:-[a-z0-9]+)+)(\s[^>]*)?>/gi;
+  // Custom element open tag: tag name must contain a hyphen. The regex matches only
+  // the `<tag-name` prefix (no attribute quantifier), then we locate the closing `>`
+  // with a linear `indexOf`. This avoids the `[^>]*` backtracking that CodeQL flagged
+  // as a polynomial ReDoS on unterminated tags.
+  const openTagRe = /<([a-z][a-z0-9]*(?:-[a-z0-9]+)+)/gi;
   let cursor = 0;
   let match: RegExpExecArray | null;
   openTagRe.lastIndex = 0;
@@ -70,8 +71,20 @@ function tokenize(html: string): Token[] {
   while ((match = openTagRe.exec(html)) !== null) {
     const tagStart = match.index;
     const tagName = match[1].toLowerCase();
-    const attrsStr = match[2] || '';
-    const innerStart = tagStart + match[0].length;
+    const afterName = tagStart + match[0].length;
+
+    // A valid open tag ends immediately (`>`) or continues with whitespace-led
+    // attributes; anything else (e.g. `/`, a letter) means this wasn't a real tag.
+    const nextChar = html[afterName];
+    if (nextChar !== '>' && nextChar !== ' ' && nextChar !== '\n' && nextChar !== '\t' && nextChar !== '\r' && nextChar !== '\f') {
+      openTagRe.lastIndex = afterName;
+      continue;
+    }
+
+    const tagEnd = html.indexOf('>', afterName);
+    if (tagEnd === -1) break; // Unterminated open tag — nothing more to parse.
+    const attrsStr = html.slice(afterName, tagEnd);
+    const innerStart = tagEnd + 1;
 
     const closePos = findClosingTag(html, tagName, innerStart);
     if (closePos === -1) continue; // Malformed — skip

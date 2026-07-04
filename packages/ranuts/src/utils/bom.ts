@@ -1,4 +1,4 @@
-import { MessageCodec, getRandomString, isString } from './str';
+import { getRandomString, isString } from './str';
 import { isFunction } from './func';
 import { noop } from '@/utils/noop';
 import { performanceTime } from '@/utils/time';
@@ -486,6 +486,10 @@ export interface MessageData<T = unknown> {
   id?: string;
   isResponse?: boolean;
   isError?: boolean;
+  /** 通道标识：用于隔离同一窗口上的多个 bridge（默认 DEFAULT_CHANNEL） */
+  channel?: string;
+  /** 发送方实例 id：用于避免 bridge 处理自己发出的请求（自答自问） */
+  senderId?: string;
 }
 
 export interface PendingRequest<R = unknown> {
@@ -494,8 +498,55 @@ export interface PendingRequest<R = unknown> {
 }
 
 const DEFAULT_TIMEOUT = 120000;
+// 协议标记：只有带此标记的消息才被 bridge 处理，
+// 借此和页面上其它库（HMR、DevTools、第三方 SDK）的 postMessage 流量区分开。
+// 导出以便需要手动互操作/测试时对齐协议。
+export const BRIDGE_MARKER = '__ranuts_bridge__';
+// 默认通道：不显式指定 channel 时两端都落在这里，保持向后兼容。
+export const DEFAULT_CHANNEL = 'default';
 // 白名单
 // const whiteList = ['localhost', '127.0.0.1', 'chaxus.github.io']
+
+/** bridge 在线路上传输的信封：MessageData + 协议标记 */
+interface BridgeEnvelope<T = unknown> extends MessageData<T> {
+  __bridge: string;
+}
+
+/**
+ * 全局消息分发器：所有 PostMessageBridge 共享**同一个** window 'message' 监听器，
+ * 再由它把事件分发给各 bridge（方案 C）。避免 N 个 bridge = N 个监听器、
+ * 每条消息被处理 N 遍。第一个 bridge 注册时挂监听，最后一个注销时摘掉。
+ */
+class BridgeDispatcher {
+  private bridges = new Set<PostMessageBridge>();
+  // 记录当前挂载监听器的 window（而非布尔），以便在 window 变化时重新挂载。
+  private attachedWindow: Window | null = null;
+
+  private handleMessage = (event: MessageEvent): void => {
+    // 复制成数组，避免 bridge 在 receive 内销毁自身时修改遍历中的集合。
+    for (const bridge of Array.from(this.bridges)) {
+      bridge.receive(event);
+    }
+  };
+
+  add(bridge: PostMessageBridge): void {
+    this.bridges.add(bridge);
+    if (typeof window !== 'undefined' && this.attachedWindow !== window) {
+      window.addEventListener('message', this.handleMessage);
+      this.attachedWindow = window;
+    }
+  }
+
+  remove(bridge: PostMessageBridge): void {
+    this.bridges.delete(bridge);
+    if (this.bridges.size === 0 && this.attachedWindow) {
+      this.attachedWindow.removeEventListener('message', this.handleMessage);
+      this.attachedWindow = null;
+    }
+  }
+}
+
+const bridgeDispatcher = new BridgeDispatcher();
 
 /**
  * Bridge 注册事件，供 client 消费
@@ -506,12 +557,19 @@ export class PostMessageBridge {
   private targetOrigin: string;
   private messageHandlers: Map<string, MessageHandler<any, any>>;
   private pendingRequests: Map<string, PendingRequest<any>>;
+  // 通道标识：同一窗口上区分不同 bridge（方案 A）。默认落在 DEFAULT_CHANNEL，
+  // 两端不显式传 channel 时行为与旧版一致，向后兼容。
+  private channel: string;
+  // 本实例唯一 id：用于避免处理自己发出的请求（自答自问，方案 A）。
+  private senderId: string;
   // 是否运行在可用的浏览器环境（存在 window）。
   // 非浏览器环境（node/SSR）下降级为惰性 no-op，避免实例化即抛错。
   private available: boolean;
 
-  constructor(targetWindow?: Window, targetOrigin = '*') {
+  constructor(targetWindow?: Window, targetOrigin = '*', channel: string = DEFAULT_CHANNEL) {
     this.targetOrigin = targetOrigin;
+    this.channel = channel;
+    this.senderId = getRandomString(12);
     this.messageHandlers = new Map();
     this.pendingRequests = new Map();
     this.available = typeof window !== 'undefined';
@@ -521,27 +579,41 @@ export class PostMessageBridge {
       return;
     }
     this.targetWindow = targetWindow ?? window;
-    // 监听消息
-    window.addEventListener('message', this.handleMessage);
+    // 注册到共享分发器（方案 C），不再各自 addEventListener。
+    bridgeDispatcher.add(this);
   }
 
-  private handleMessage = <T = unknown>(event: MessageEvent) => {
+  // 用结构化克隆（postMessage 原生能力）直接发对象，盖上协议标记 + 通道 + 发送方 id。
+  // 不再走 base64/JSON，从而保留 Date/Map/Set/ArrayBuffer 等类型，也不再额外编解码。
+  private post(target: Window, data: MessageData): void {
+    const envelope: BridgeEnvelope = {
+      ...data,
+      __bridge: BRIDGE_MARKER,
+      channel: this.channel,
+      senderId: this.senderId,
+    };
+    target.postMessage(envelope, this.targetOrigin);
+  }
+
+  // 由共享分发器调用，处理单条 window message 事件。
+  // @internal 不建议外部直接调用。
+  receive = (event: MessageEvent): void => {
+    if (!this.available) return;
     // const hostname = new URL(event.origin).hostname
-    // 验证消息来源
     // if (this.targetOrigin !== '*' && event.origin !== this.targetOrigin && !whiteList.includes(hostname)) return
     if (this.targetOrigin !== '*' && event.origin !== this.targetOrigin) return;
 
-    // 每个 bridge 都在全局 window 上监听，这里校验来源窗口，
-    // 避免多个 bridge 互相处理对方（或自己）的消息。
-    // event.source 为 null 时（部分场景）不做过滤。
+    // 校验来源窗口，避免不同窗口互相串消息。event.source 为 null 时不过滤。
     if (event.source && event.source !== this.targetWindow) return;
 
-    // 创建 event.data 的副本，避免对其他监听器造成干扰
-    const dataCopy = typeof event.data === 'string' ? String(event.data) : event.data;
-    const decodedData = MessageCodec.decode<MessageData<T>>(dataCopy);
-    if (!decodedData) return;
+    const data = event.data as BridgeEnvelope | undefined;
+    // 协议标记过滤：非本协议流量（其它库的 postMessage）直接忽略，
+    // 无需解码、无控制台噪音。
+    if (!data || typeof data !== 'object' || data.__bridge !== BRIDGE_MARKER) return;
+    // 通道隔离：只处理本通道的消息（方案 A，解决同窗口多 bridge 串台）。
+    if ((data.channel ?? DEFAULT_CHANNEL) !== this.channel) return;
 
-    const { type, payload, id, isResponse, isError } = decodedData;
+    const { type, payload, id, isResponse, isError, senderId } = data;
 
     // 处理响应消息
     if (isResponse && id) {
@@ -559,6 +631,10 @@ export class PostMessageBridge {
       return;
     }
 
+    // 自答自问防护（方案 A）：不处理自己发出的请求。
+    // 同窗口做请求/响应时请用两个 bridge 实例（senderId 不同即可互通）。
+    if (senderId && senderId === this.senderId) return;
+
     // 处理普通消息
     if (typeof type !== 'string' || !this.messageHandlers.has(type)) return;
     const handler = this.messageHandlers.get(type);
@@ -568,30 +644,17 @@ export class PostMessageBridge {
       const replyWindow = (event.source as Window | null) ?? this.targetWindow;
       Promise.resolve(handler(payload))
         .then((response) => {
-          if (id) {
-            replyWindow.postMessage(
-              MessageCodec.encode({
-                type,
-                payload: response,
-                id,
-                isResponse: true,
-              }),
-              this.targetOrigin,
-            );
-          }
+          if (id) this.post(replyWindow, { type, payload: response, id, isResponse: true });
         })
         .catch((error) => {
           if (id) {
-            replyWindow.postMessage(
-              MessageCodec.encode({
-                type,
-                payload: error instanceof Error ? error.message : String(error),
-                id,
-                isResponse: true,
-                isError: true,
-              }),
-              this.targetOrigin,
-            );
+            this.post(replyWindow, {
+              type,
+              payload: error instanceof Error ? error.message : String(error),
+              id,
+              isResponse: true,
+              isError: true,
+            });
           }
         });
     }
@@ -613,12 +676,6 @@ export class PostMessageBridge {
       return Promise.reject(new Error('PostMessageBridge is unavailable outside a browser environment'));
     }
     const id = getRandomString(10);
-    // 先编码，编码失败（如 payload 存在循环引用）立即 reject，
-    // 否则会 post 空串、对端永不响应、白白等满超时。
-    const message = MessageCodec.encode({ type, payload, id });
-    if (!message) {
-      return Promise.reject(new Error('Failed to encode message payload'));
-    }
     return new Promise<R>((rs, reject) => {
       // 兜底方案，如果一段时间没有收到响应，则请求结束
       const timeout = setTimeout(() => {
@@ -637,28 +694,30 @@ export class PostMessageBridge {
       };
       // 先注册 pending，再发送，避免响应先于注册到达。
       this.pendingRequests.set(id, { resolve, reject: rejectWith });
-      this.targetWindow.postMessage(message, this.targetOrigin);
+      try {
+        this.post(this.targetWindow, { type, payload, id });
+      } catch (error) {
+        // 结构化克隆失败（如 payload 含函数 / DOM 节点）立即 reject，
+        // 不再让请求白白等满超时。（循环引用结构化克隆本身能处理）
+        this.pendingRequests.delete(id);
+        rejectWith(error instanceof Error ? error : new Error('Failed to post message'));
+      }
     });
   };
 
   // 广播消息
   broadcast = <T = unknown>(data: { type: string; payload: T }): void => {
     if (!this.available) return;
-    const { type, payload } = data;
-    this.targetWindow.postMessage(
-      MessageCodec.encode({
-        type,
-        payload,
-      }),
-      this.targetOrigin,
-    );
+    try {
+      this.post(this.targetWindow, { type: data.type, payload: data.payload });
+    } catch {
+      // 广播为尽力而为，克隆失败静默忽略。
+    }
   };
 
   // 清理
   destroy = (): void => {
-    if (this.available) {
-      window.removeEventListener('message', this.handleMessage);
-    }
+    bridgeDispatcher.remove(this);
     this.messageHandlers.clear();
     // reject 未决请求，顺带清理各自的 timeout 定时器，避免悬挂。
     this.pendingRequests.forEach((pending) => {
@@ -674,6 +733,8 @@ export interface BridgeManagerOptions {
   id?: string;
   targetOrigin?: string;
   targetWindow?: Window;
+  /** 通道标识：需要隔离同一窗口上的多个连接时显式指定，两端须一致 */
+  channel?: string;
 }
 
 export class BridgeManager {
@@ -696,8 +757,9 @@ export class BridgeManager {
     id,
     targetOrigin,
     targetWindow,
+    channel,
   }: BridgeManagerOptions): { bridge: PostMessageBridge; id: string } => {
-    const bridge = new PostMessageBridge(targetWindow, targetOrigin);
+    const bridge = new PostMessageBridge(targetWindow, targetOrigin, channel);
     if (!id) {
       id = getRandomString(10);
     }
@@ -767,8 +829,13 @@ export interface CallToPayload<T = unknown> {
 
 export const Client = {
   // 连接 Client
-  connect: ({ id, targetWindow, targetOrigin }: BridgeManagerOptions): { bridge: PostMessageBridge; id: string } => {
-    return bridgeManager.connectClient({ id, targetWindow, targetOrigin });
+  connect: ({
+    id,
+    targetWindow,
+    targetOrigin,
+    channel,
+  }: BridgeManagerOptions): { bridge: PostMessageBridge; id: string } => {
+    return bridgeManager.connectClient({ id, targetWindow, targetOrigin, channel });
   },
   // 移除 Client 连接
   remove: (id: string): void => {
@@ -785,12 +852,20 @@ export const Client = {
   },
   /** 发送消息到指定 Platform */
   call: <T = unknown, R = unknown>({ id, type, payload }: CallToPayload<T>): Promise<R> => {
-    console.log('call', id, type, payload);
     return bridgeManager.sendTo<T, R>(id, type, payload);
   },
   /** 广播消息到所有所有可以接收消息的窗口 (为了安全考虑，不建议使用) */
   broadcastToAll: (payload: BroadcastPayload): void => {
-    return window.postMessage(MessageCodec.encode(payload), '*');
+    if (typeof window === 'undefined') return;
+    // 与 bridge 协议一致：发结构化信封（带协议标记 + 默认通道），
+    // 这样接收端的 PostMessageBridge / Platform 才能识别。
+    const envelope: BridgeEnvelope = {
+      __bridge: BRIDGE_MARKER,
+      channel: DEFAULT_CHANNEL,
+      type: payload.type,
+      payload: payload.payload,
+    };
+    return window.postMessage(envelope, '*');
   },
 };
 // #endregion Client end
@@ -803,26 +878,34 @@ export const initPlatform = <T = unknown, R = unknown>(
     Object.entries(events).filter((entry): entry is [string, MessageHandler<T, R>] => isFunction(entry[1])),
   );
 
-  // 找到指定的元素，建立连接，通信
+  // 找到指定的元素，建立连接，通信。
+  // 与 PostMessageBridge 使用同一套信封协议（结构化对象 + 协议标记 + 通道），
+  // 因此 Client(PostMessageBridge) ↔ Platform 可以直接互通。
   const initBridge = async (event: MessageEvent) => {
     // const hostname = new URL(event.origin).hostname
-    // 验证消息来源
     // if (!whiteList.includes(hostname)) return
-    // 解码
-    if (typeof event.data !== 'string') return;
-    // 创建 event.data 的副本，避免对其他监听器造成干扰
-    const str = String(event.data);
-    const decodedData = MessageCodec.decode<MessageData<T>>(str);
-    if (!decodedData) return;
-    const { type, payload, id } = decodedData;
+    const data = event.data as BridgeEnvelope<T> | undefined;
+    // 协议标记过滤：忽略非本协议的 postMessage 流量。
+    if (!data || typeof data !== 'object' || data.__bridge !== BRIDGE_MARKER) return;
+    const { type, payload, id } = data;
+    const channel = data.channel ?? DEFAULT_CHANNEL;
     if (typeof type !== 'string' || !handlers.has(type)) return;
     const handler = handlers.get(type);
     if (!handler) return;
-    const result = await handler(payload);
-    // 编码
-    const encodedData = MessageCodec.encode({ type, payload: result, id, isResponse: true });
-    // 发送
-    event.source?.postMessage(encodedData, { targetOrigin: event.origin });
+    const reply = (body: Partial<BridgeEnvelope<unknown>>) => {
+      if (!id) return;
+      event.source?.postMessage(
+        { __bridge: BRIDGE_MARKER, channel, type, id, isResponse: true, ...body },
+        { targetOrigin: event.origin },
+      );
+    };
+    try {
+      const result = await handler(payload);
+      reply({ payload: result });
+    } catch (error) {
+      // 回传错误，让调用方 reject，而不是一直等到超时。
+      reply({ payload: error instanceof Error ? error.message : String(error), isError: true });
+    }
   };
   window.removeEventListener('message', initBridge);
   // iframe 中建立连接
@@ -841,3 +924,175 @@ export const Platform = {
   init: initPlatform,
 };
 // #endregion Platform end
+
+// #region PortBridge start
+/**
+ * 基于 MessagePort 的点对点桥接（方案 B，作为新 API 提供）。
+ *
+ * 与 PostMessageBridge 的「全局广播 + 过滤」不同，MessagePort 是浏览器提供的
+ * 私有点对点信道：只有握手时拿到 port 的双方能通信。因此天然规避了
+ * 跨窗口串消息、来源伪造、同窗口多桥串台、自答自问等问题，也无需 origin 过滤、
+ * 无需协议标记、无需 base64——payload 直接走结构化克隆。
+ *
+ * 典型用法：
+ *   // A 窗口（发起方）
+ *   const bridge = openPortBridge({ targetWindow: iframe.contentWindow, targetOrigin });
+ *   const res = await bridge.send('ping', { n: 1 });
+ *
+ *   // B 窗口（接收方）
+ *   const bridge = await acceptPortBridge({ targetOrigin });
+ *   bridge.on('ping', ({ n }) => n + 1);
+ *
+ * 也可用于已有 port 的场景（Web Worker / SharedWorker）：createPortBridge(port)。
+ */
+export interface PortBridge {
+  on: <T = unknown, R = unknown>(type: string, handler: MessageHandler<T, R>) => void;
+  off: (type: string) => void;
+  send: <T = unknown, R = unknown>(type: string, payload: T) => Promise<R>;
+  broadcast: <T = unknown>(data: { type: string; payload: T }) => void;
+  destroy: () => void;
+}
+
+// 握手消息标记：接收方据此识别「有人递来了 port」。
+const PORT_INIT_MARKER = '__ranuts_port_init__';
+
+export interface OpenPortBridgeOptions {
+  targetWindow: Window;
+  targetOrigin?: string;
+  /** 连接名：一个页面里区分多个独立 port 连接，两端须一致（默认 'default'） */
+  name?: string;
+}
+
+export interface AcceptPortBridgeOptions {
+  targetOrigin?: string;
+  name?: string;
+}
+
+/**
+ * 在任意 MessagePort 上构建 bridge（Web Worker / SharedWorker 或已握手的 port）。
+ */
+export const createPortBridge = (port: MessagePort): PortBridge => {
+  const messageHandlers = new Map<string, MessageHandler<any, any>>();
+  const pendingRequests = new Map<string, PendingRequest<any>>();
+
+  const onMessage = (event: MessageEvent): void => {
+    const data = event.data as MessageData | undefined;
+    if (!data || typeof data !== 'object' || typeof data.type !== 'string') return;
+    const { type, payload, id, isResponse, isError } = data;
+
+    if (isResponse && id) {
+      const pending = pendingRequests.get(id);
+      if (pending) {
+        if (isError) pending.reject(new Error(typeof payload === 'string' ? payload : 'Bridge request failed'));
+        else pending.resolve(payload);
+        pendingRequests.delete(id);
+      }
+      return;
+    }
+
+    if (!messageHandlers.has(type)) return;
+    const handler = messageHandlers.get(type);
+    if (isFunction(handler)) {
+      Promise.resolve(handler(payload))
+        .then((response) => {
+          if (id) port.postMessage({ type, payload: response, id, isResponse: true });
+        })
+        .catch((error) => {
+          if (id) {
+            port.postMessage({
+              type,
+              payload: error instanceof Error ? error.message : String(error),
+              id,
+              isResponse: true,
+              isError: true,
+            });
+          }
+        });
+    }
+  };
+
+  port.addEventListener('message', onMessage);
+  // 使用 addEventListener 时需显式 start() 才开始收消息。
+  port.start();
+
+  return {
+    on: (type, handler) => {
+      messageHandlers.set(type, handler as MessageHandler<any, any>);
+    },
+    off: (type) => {
+      messageHandlers.delete(type);
+    },
+    send: <T = unknown, R = unknown>(type: string, payload: T): Promise<R> => {
+      const id = getRandomString(10);
+      return new Promise<R>((rs, reject) => {
+        const timeout = setTimeout(() => {
+          if (pendingRequests.has(id)) {
+            pendingRequests.delete(id);
+            reject(new Error('Request timeout'));
+          }
+        }, DEFAULT_TIMEOUT);
+        const resolve = (value: R) => {
+          clearTimeout(timeout);
+          rs(value);
+        };
+        const rejectWith = (error: unknown) => {
+          clearTimeout(timeout);
+          reject(error);
+        };
+        pendingRequests.set(id, { resolve, reject: rejectWith });
+        try {
+          port.postMessage({ type, payload, id });
+        } catch (error) {
+          pendingRequests.delete(id);
+          rejectWith(error instanceof Error ? error : new Error('Failed to post message'));
+        }
+      });
+    },
+    broadcast: (data) => {
+      try {
+        port.postMessage({ type: data.type, payload: data.payload });
+      } catch {
+        // 尽力而为
+      }
+    },
+    destroy: () => {
+      port.removeEventListener('message', onMessage);
+      messageHandlers.clear();
+      pendingRequests.forEach((pending) => pending.reject(new Error('Bridge destroyed')));
+      pendingRequests.clear();
+      port.close();
+    },
+  };
+};
+
+/**
+ * 发起方：创建 MessageChannel，把一端交给目标窗口，自己持有另一端。
+ */
+export const openPortBridge = ({ targetWindow, targetOrigin = '*', name = 'default' }: OpenPortBridgeOptions): PortBridge => {
+  const channel = new MessageChannel();
+  targetWindow.postMessage({ [PORT_INIT_MARKER]: true, name }, targetOrigin, [channel.port2]);
+  return createPortBridge(channel.port1);
+};
+
+/**
+ * 接收方：等待发起方递来的 port，握手完成后返回 bridge。
+ * 返回的 Promise 在收到匹配 name 的握手消息后 resolve。
+ */
+export const acceptPortBridge = ({ targetOrigin = '*', name = 'default' }: AcceptPortBridgeOptions = {}): Promise<PortBridge> => {
+  if (typeof window === 'undefined') {
+    return Promise.reject(new Error('acceptPortBridge is unavailable outside a browser environment'));
+  }
+  return new Promise<PortBridge>((resolve) => {
+    const onInit = (event: MessageEvent): void => {
+      if (targetOrigin !== '*' && event.origin !== targetOrigin) return;
+      const data = event.data as { [PORT_INIT_MARKER]?: boolean; name?: string } | undefined;
+      if (!data || typeof data !== 'object' || data[PORT_INIT_MARKER] !== true || data.name !== name) return;
+      const port = event.ports?.[0];
+      if (!port) return;
+      window.removeEventListener('message', onInit);
+      resolve(createPortBridge(port));
+    };
+    window.addEventListener('message', onInit);
+  });
+};
+// #endregion PortBridge end

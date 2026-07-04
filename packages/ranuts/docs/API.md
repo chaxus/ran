@@ -8,11 +8,11 @@ constraints, conventions) read [../CLAUDE.md](../CLAUDE.md) first.
 Import from the **subpath** that owns the symbol, e.g. `import { debounce } from
 'ranuts/utils'`. The root `ranuts` barrel re-exports the utils + visual surface.
 
-**191 exports** across 4 entry points. Generated at 2026-07-04T08:30:32.420Z.
+**199 exports** across 4 entry points. Generated at 2026-07-04T09:39:55.881Z.
 
 ## Entry points
 
-- [`ranuts/utils`](#ranutsutils) — 浏览器 / 通用工具函数 · _browser + node_ · 127 exports
+- [`ranuts/utils`](#ranutsutils) — 浏览器 / 通用工具函数 · _browser + node_ · 135 exports
 - [`ranuts/node`](#ranutsnode) — Node 服务端工具（fs / http / ws / 中间件） · _node only_ · 26 exports
 - [`ranuts/visual`](#ranutsvisual) — 2D 渲染引擎（Canvas / WebGL / WebGPU） · _browser only_ · 12 exports
 - [`ranuts/vnode`](#ranutsvnode) — Snabbdom 风格虚拟 DOM · _browser_ · 26 exports
@@ -22,11 +22,12 @@ Import from the **subpath** that owns the symbol, e.g. `import { debounce } from
 浏览器 / 通用工具函数 · runtime: **browser + node** · source: `src/utils/index.ts`
 
 ```ts
-import {} from /* … */ 'ranuts/utils';
+import { /* … */ } from 'ranuts/utils';
 ```
 
 ### Functions
 
+- `acceptPortBridge({ targetOrigin, name }?: AcceptPortBridgeOptions): Promise<PortBridge>` — 接收方：等待发起方递来的 port，握手完成后返回 bridge。
 - `addClassToElement(element: Element, addClass: string): void` — 给指定的元素添加指定的 class
 - `addNumSym(value: string | number, flag?: string | number): string`
 - `appendUrl(url: string, params?: Record<string, string>): string` — 将一个对象转换成 querystring，拼接到 url 后面
@@ -45,6 +46,7 @@ import {} from /* … */ 'ranuts/utils';
 - `createData(params?: Record<string, unknown>): Record<string, unknown>`
 - `createDocumentFragment(list: Element[]): DocumentFragment | undefined` — 创建一个 Fragment
 - `createObjectURL(src: Blob | ArrayBuffer | Response): Promise<string>`
+- `createPortBridge(port: MessagePort): PortBridge` — 在任意 MessagePort 上构建 bridge（Web Worker / SharedWorker 或已握手的 port）。
 - `createSignal<T = unknown>(value: T, options?: { subscriber?: string; equals?: boolean | ((prev: T | undefined, next: T) => boolean); }): [() => T, (newValue: T…`
 - `currentDevice(): CurrentDevice`
 - `debounce(fn: any, ms?: number): any` — 防抖
@@ -94,6 +96,7 @@ import {} from /* … */ 'ranuts/utils';
 - `mergeExports(obj: Record<string, string>, exports: Record<string, string>): Record<string, string>` — 将 exports 对象拼接到 obj 上，并冻结 obj
 - `networkSpeed(options: Options): Promise<ReturnType>` — 通过请求来测试当前网络的 ping 值
 - `noop(): void`
+- `openPortBridge({ targetWindow, targetOrigin, name }: OpenPortBridgeOptions): PortBridge` — 发起方：创建 MessageChannel，把一端交给目标窗口，自己持有另一端。
 - `performanceTime(): number` — 获取当前时间戳
 - `perToNum(str?: string): number` — 百分比转换成数字
 - `querystring(data?: {}): string` — 对象转 url 字符串
@@ -143,12 +146,15 @@ import {} from /* … */ 'ranuts/utils';
 
 ### Interfaces
 
+- `interface AcceptPortBridgeOptions`
 - `interface BridgeManagerOptions`
 - `interface BroadcastPayload`
 - `interface CallToPayload`
 - `interface MessageData`
 - `interface MessageHandler`
+- `interface OpenPortBridgeOptions`
 - `interface PendingRequest`
+- `interface PortBridge` — 基于 MessagePort 的点对点桥接（方案 B，作为新 API 提供）。
 - `interface TransformText`
 
 ### Types
@@ -157,8 +163,10 @@ import {} from /* … */ 'ranuts/utils';
 
 ### Constants
 
+- `const BRIDGE_MARKER: "__ranuts_bridge__"`
 - `const bridgeManager: BridgeManager`
-- `const Client: { connect: ({ id, targetWindow, targetOrigin }: BridgeManagerOptions) => { bridge: PostMessageBridge; id: string; }; remove: (id: string) => void…`
+- `const Client: { connect: ({ id, targetWindow, targetOrigin, channel, }: BridgeManagerOptions) => { bridge: PostMessageBridge; id: string; }; remove: (id: strin…`
+- `const DEFAULT_CHANNEL: "default"`
 - `const FMT: Record<string, string[]>`
 - `const isClient: boolean`
 - `const MessageCodec: { encode(data: any): string; decode<T = any>(encodedStr: string): T | null; encodeFile(file: File): Promise<string>; decodeFile(encoded: st…` — 消息编解码工具
@@ -172,7 +180,7 @@ import {} from /* … */ 'ranuts/utils';
 Node 服务端工具（fs / http / ws / 中间件） · runtime: **node only** · source: `src/node/index.ts`
 
 ```ts
-import {} from /* … */ 'ranuts/node';
+import { /* … */ } from 'ranuts/node';
 ```
 
 ### Functions
@@ -221,7 +229,7 @@ import {} from /* … */ 'ranuts/node';
 2D 渲染引擎（Canvas / WebGL / WebGPU） · runtime: **browser only** · source: `src/utils/visual/index.ts`
 
 ```ts
-import {} from /* … */ 'ranuts/visual';
+import { /* … */ } from 'ranuts/visual';
 ```
 
 ### Classes
@@ -253,7 +261,7 @@ import {} from /* … */ 'ranuts/visual';
 Snabbdom 风格虚拟 DOM · runtime: **browser** · source: `src/vnode/index.ts`
 
 ```ts
-import {} from /* … */ 'ranuts/vnode';
+import { /* … */ } from 'ranuts/vnode';
 ```
 
 ### Functions
@@ -299,3 +307,4 @@ import {} from /* … */ 'ranuts/vnode';
 ### Other
 
 - `"/Users/ranzhouhang/Documents/code/ran/packages/ranuts/src/vnode/is"`
+
