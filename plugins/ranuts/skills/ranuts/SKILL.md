@@ -61,6 +61,25 @@ desktop integration).
 
 > This is a shortlist. See `node_modules/ranuts/docs/API.md` for the complete, exact list.
 
+## Usage example
+
+```ts
+import { createSignal, throttle, escapeHtml, getMime, cloneDeep } from 'ranuts/utils';
+
+// Reactive signal
+const [count, setCount] = createSignal(0);
+setCount(1);
+count(); // 1
+
+// Throttle a scroll handler
+const onScroll = throttle(() => console.log('scrolled'), 200);
+window.addEventListener('scroll', onScroll);
+
+escapeHtml('<b>hi</b>');   // "&lt;b&gt;hi&lt;/b&gt;"
+getMime('png');            // "image/png"
+cloneDeep({ a: { b: 1 } }); // deep copy, handles cycles
+```
+
 ## Conventions & gotchas
 
 - Import from the subpath (`ranuts/utils`), not `ranuts/dist/...` or `@/...`.

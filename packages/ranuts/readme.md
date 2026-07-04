@@ -38,6 +38,17 @@ npm install ranuts@latest --save
 runtime constraints, conventions) and [docs/API.md](./docs/API.md) (generated reference of
 every exported symbol with signatures + descriptions, run `npm run doc:api` to refresh).
 
+Or install the ready-made **Claude Code skill** from the `ran` plugin marketplace — it
+gives assistants the import map, `ranuts/utils` inventory, usage examples, and conventions,
+and points to the API reference shipped in the package:
+
+```bash
+/plugin marketplace add chaxus/ran
+/plugin install ranuts@ran
+```
+
+Claude then uses it automatically (or invoke it as `/ranuts:ranuts`).
+
 ## Usage
 
 Import as required. You can select:

@@ -57,6 +57,21 @@ Regenerate after changing a component's API with:
 pnpm doc:api
 ```
 
+### AI / Claude Code skill
+
+A ready-to-use skill lets AI assistants (Claude Code) read and use ranui without
+spelunking the source. It's published from the `ran` plugin marketplace:
+
+```bash
+/plugin marketplace add chaxus/ran
+/plugin install ranui@ran
+```
+
+Once installed, Claude uses it automatically when you work with ranui (or invoke it
+explicitly as `/ranui:ranui`). The skill covers the import map, element inventory, the
+builder/reactivity API, accessibility, and usage examples, and points to the API
+reference shipped in the package ([docs/COMPONENTS.md](./docs/COMPONENTS.md)).
+
 ### Styling Documentation
 
 The styling system is unified around CSS Tokens and `::part()`.
