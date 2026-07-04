@@ -60,7 +60,7 @@ This monorepo contains various experimental packages:
 | Package                   | Version                                                                                           | Downloads                                                                                  | Description           |
 | ------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | --------------------- |
 | [ranui](packages/ranui)   | [![ranui version](https://img.shields.io/npm/v/ranui.svg?label=%20)](packages/ranui/README.md)    | [![npm-d](https://img.shields.io/npm/dt/ranui.svg)](https://www.npmjs.com/package/ranui)   | web component library |
-| [ranuts](packages/ranuts) | [![ranuts version](https://img.shields.io/npm/v/ranuts.svg?label=%20)](packages/ranuts/readme.md) | [![npm-d](https://img.shields.io/npm/dt/ranuts.svg)](https://www.npmjs.com/package/ranuts) | Utility library       |
+| [ranuts](packages/ranuts) | [![ranuts version](https://img.shields.io/npm/v/ranuts.svg?label=%20)](packages/ranuts/README.md) | [![npm-d](https://img.shields.io/npm/dt/ranuts.svg)](https://www.npmjs.com/package/ranuts) | Utility library       |
 
 ### Experimental Projects
 
@@ -135,7 +135,7 @@ library you use:
 Each skill covers the import map, an inventory, usage examples, and conventions, and
 points to the API reference shipped in that package. See the per-library sections in
 [ranui](packages/ranui/README.md#ai--claude-code-skill) and
-[ranuts](packages/ranuts/readme.md).
+[ranuts](packages/ranuts/README.md).
 
 ## ⚠️ Important Notice
 
