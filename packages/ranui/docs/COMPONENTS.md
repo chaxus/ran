@@ -6,7 +6,7 @@ shape), slots, and `::part()` names — extracted from source. For CSS variables
 (theming tokens) see [style-tokens-public.md](./style-tokens-public.md); for
 design rules see [DESIGN.md](./DESIGN.md).
 
-Generated at: 2026-06-28T09:23:19.644Z
+Generated at: 2026-07-04T08:44:03.975Z
 
 29 custom elements.
 
@@ -15,7 +15,7 @@ Generated at: 2026-06-28T09:23:19.644Z
 Source: `components/button/index.ts`
 
 - **Attributes**: `disabled: boolean | string`, `effect: string`, `icon: string`, `iconSize: string`, `sheet: string`, `type: string`
-- **Properties**:
+- **Properties**: 
   - `disabled: boolean | string`
   - `effect: string`
   - `icon: string`
@@ -111,7 +111,10 @@ Source: `components/icon/index.ts`
 Source: `components/image/index.ts`
 
 - **Attributes**: —
-- **Properties**: `fallback`, `sheet`
+- **Properties**: 
+  - `alt` — Alternative text forwarded to the inner `<img>`. Defaults to `''` (empty),
+  - `fallback`
+  - `sheet`
 - **Events**: —
 - **Slots**: —
 - **Parts**: —
@@ -121,7 +124,7 @@ Source: `components/image/index.ts`
 Source: `components/input/index.ts`
 
 - **Attributes**: `allowclear`, `count`, `disabled: boolean`, `icon: string`, `label: string`, `maxlength`, `maxrows`, `message: string`, `minrows`, `name: string`, `onPressEnter`, `placeholder: string`, `prefix: string`, `sheet: string`, `showcount`, `status: string`, `suffix: string`, `type: string`, `value: string`, `variant`
-- **Properties**:
+- **Properties**: 
   - `disabled: boolean` — input 上 disabled 属性
   - `icon: string` — 一个 icon
   - `label: string` — 类似于 Metiral Design 的输入体验。
@@ -321,3 +324,4 @@ Source: `components/tab/index.ts`
 - **Events**: `change` → detail `{ active }`
 - **Slots**: `default`
 - **Parts**: `content`, `content-wrap`, `header`, `indicator`, `nav`, `tabs`
+

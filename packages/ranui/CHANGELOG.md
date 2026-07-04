@@ -6,6 +6,13 @@ All notable changes to `ranui` will be documented in this file.
 
 ### Added
 
+- **Accessibility pass across components (DESIGN.md §7):**
+  - `r-message` toasts are now announced by screen readers: the stack is a persistent `aria-live="polite"` region, each toast is `aria-atomic`, and `error`/`warning` escalate to an assertive `role="alert"` (others `role="status"`).
+  - `r-img` gains an `alt` attribute/property forwarded to the inner `<img>`; when unset it defaults to an empty `alt` (decorative) so screen readers skip it instead of announcing the URL.
+  - `r-checkbox`, `r-input`, and `r-select` are now **form-associated** (`ElementInternals` + `setFormValue`), so their values are collected by `<r-form>`'s native `FormData`. `r-checkbox` also exposes the host as the single `role="checkbox"` (with `aria-checked`, roving `tabindex`, Space/Enter toggle, `aria-disabled`) and hides the decorative inner input; `r-input` associates its rendered `<label>` with the control via `for`/`id`.
+  - `r-tabs` implements the WAI-ARIA tabs pattern: `role="tablist"`/`tab`/`tabpanel`, `aria-selected`, `aria-controls`/`aria-labelledby`, a roving `tabindex`, and Arrow/Home/End keyboard navigation.
+  - `r-colorpicker` is keyboard-operable: the hue/alpha sliders are `role="slider"` with `aria-valuemin/max/now` and Arrow/Home/End adjustment, and the swatch trigger (`role="button"`, `aria-haspopup="dialog"`) opens the panel via Enter/Space.
+  - Every component honours `prefers-reduced-motion: reduce` — a reduced-motion override is adopted into each shadow root via `ensureShadowRoot`.
 - `r-button` `type` (`''` | `primary` | `warning` | `text`) is now a real observed attribute + property, so it appears in the generated API docs and works as `button.type = …`.
 - `docs/COMPONENTS.md` now includes **typed properties** (e.g. `checked: boolean`, `value: string`) and **event `detail` shapes** (e.g. `r-select change → { value, label }`, `r-checkbox change → { checked }`, `r-input input/change → { value }`), extracted from source.
 - `docs/COMPONENTS.md` — a generated per-element API reference (attributes, properties, events, slots, `::part()`) for all 29 custom elements, via `npm run doc:api` (`bin/generate-component-api.ts`). Published with the package and referenced from CLAUDE.md so agents can use components without reading source.
