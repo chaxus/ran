@@ -1,0 +1,97 @@
+/* ------------------------------------------------------------------ *
+ * Component / utility documentation pages — global polish.
+ * Applies uniformly to every `.vp-doc` page (300+ md) via VitePress
+ * default-theme class hooks, so no per-page markdown edits are needed.
+ * ------------------------------------------------------------------ */
+
+/* ---------- section rhythm ---------- */
+.vp-doc h2 {
+  margin: 52px 0 20px;
+  padding-top: 26px;
+  border-top: 1px solid var(--vp-c-divider);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.vp-doc h2 + h3 {
+  margin-top: 12px;
+}
+.vp-doc h3 {
+  margin-top: 30px;
+  font-weight: 650;
+}
+
+/* ---------- API tables: one premium card, not zebra rows ---------- */
+.vp-doc table {
+  display: table;
+  width: 100%;
+  margin: 22px 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 12px;
+  overflow: hidden;
+  font-size: 14px;
+}
+.vp-doc tr {
+  background: transparent !important;
+  border: 0;
+  transition: background 0.15s ease;
+}
+.vp-doc th,
+.vp-doc td {
+  border: 0;
+  border-bottom: 1px solid var(--vp-c-divider);
+  padding: 11px 16px;
+}
+.vp-doc thead th {
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-2);
+  font-weight: 600;
+  font-size: 12.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-align: left;
+}
+.vp-doc tbody tr:last-child td {
+  border-bottom: 0;
+}
+.vp-doc tbody tr:hover td {
+  background: var(--vp-c-bg-soft);
+}
+/* first column (property / event / slot name) reads as an identifier */
+.vp-doc tbody td:first-child {
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+}
+/* inline code inside tables — quieter chip so tables don't get noisy */
+.vp-doc td code,
+.vp-doc th code {
+  background: var(--vp-c-bg-alt);
+  font-size: 12.5px;
+  padding: 2px 7px;
+}
+
+/* ---------- inline code & links ---------- */
+.vp-doc :not(pre) > code {
+  border-radius: 5px;
+}
+
+/* ---------- live demo breathing room ---------- *
+ * ranui docs drop bare <r-*> elements (sometimes in inline-styled wrappers)
+ * straight into the prose. Give them consistent vertical rhythm and keep a
+ * demo row from cramping against the code block that follows it. */
+.vp-doc :is(r-button, r-progress, r-input, r-checkbox, r-select, r-radar, r-colorpicker, r-loading, r-card, r-tab, r-math) {
+  vertical-align: middle;
+}
+.vp-doc p:has(> r-button, > r-progress, > r-input, > r-checkbox, > r-loading, > r-colorpicker) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+/* ---------- sidebar: clearer active item ---------- */
+.VPSidebarItem.is-active > .item .link .text,
+.VPSidebarItem.is-active > .item .text {
+  font-weight: 600;
+}

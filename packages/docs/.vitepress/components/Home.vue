@@ -615,11 +615,11 @@ const delay = (i: number) => ({ '--d': `${i * 65}ms` });
 }
 .wordmark {
   margin: 26px 0 0;
-  font-family: 'Bricolage Grotesque', var(--vp-font-family-base);
-  font-size: clamp(96px, 21vw, 228px);
+  font-family: 'Space Grotesk Display', sans-serif;
+  font-size: clamp(100px, 21vw, 236px);
   line-height: 0.86;
-  font-weight: 800;
-  letter-spacing: -0.03em;
+  font-weight: 600;
+  letter-spacing: -0.02em;
   background: linear-gradient(115deg, var(--ran-g1) 6%, var(--ran-g2) 50%, var(--ran-g3) 96%);
   -webkit-background-clip: text;
   background-clip: text;
@@ -730,7 +730,7 @@ const delay = (i: number) => ({ '--d': `${i * 65}ms` });
 }
 .stat-num {
   display: block;
-  font-family: 'Bricolage Grotesque', var(--vp-font-family-base);
+  font-family: var(--vp-font-family-base);
   font-size: clamp(30px, 5vw, 42px);
   font-weight: 800;
   letter-spacing: -0.02em;
@@ -867,7 +867,7 @@ const delay = (i: number) => ({ '--d': `${i * 65}ms` });
 }
 .caps-title {
   margin: 0;
-  font-family: 'Bricolage Grotesque', var(--vp-font-family-base);
+  font-family: var(--vp-font-family-base);
   font-size: clamp(26px, 3.8vw, 38px);
   font-weight: 800;
   letter-spacing: -0.02em;
@@ -901,7 +901,7 @@ const delay = (i: number) => ({ '--d': `${i * 65}ms` });
   border-bottom: 1px solid var(--vp-c-divider);
 }
 .caps-lib {
-  font-family: 'Bricolage Grotesque', var(--vp-font-family-base);
+  font-family: var(--vp-font-family-base);
   font-size: 20px;
   font-weight: 800;
   letter-spacing: -0.01em;
@@ -986,7 +986,7 @@ const delay = (i: number) => ({ '--d': `${i * 65}ms` });
 }
 .showcase-copy h2 {
   margin: 0;
-  font-family: 'Bricolage Grotesque', var(--vp-font-family-base);
+  font-family: var(--vp-font-family-base);
   font-size: clamp(26px, 3.6vw, 34px);
   font-weight: 800;
   letter-spacing: -0.02em;
