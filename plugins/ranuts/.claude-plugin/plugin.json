@@ -1,0 +1,10 @@
+{
+  "name": "ranuts",
+  "displayName": "ranuts",
+  "version": "1.0.0",
+  "description": "Reference skill for the ranuts utility library: 4-entry import map, ranuts/utils inventory, conventions, and pointers to the API docs shipped in the npm package.",
+  "author": {
+    "name": "chaxus",
+    "url": "https://github.com/chaxus/ran"
+  }
+}
