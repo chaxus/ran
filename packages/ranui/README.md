@@ -30,6 +30,7 @@ Key points:
 4. **Shadow DOM encapsulation:** component internals are isolated by default, while CSS Tokens, `::part()`, and the `sheet` attribute provide controlled styling hooks.
 5. **TypeScript support:** built with TypeScript and type definitions.
 6. **SSR friendly:** supports server rendering through `defineSSR`, `renderToString`, and Declarative Shadow DOM.
+7. **Accessible:** ARIA roles/states, full keyboard navigation, form-associated inputs (`<r-checkbox>`/`<r-input>`/`<r-select>` participate in native `FormData`), live-region toasts, and `prefers-reduced-motion` support.
 
 ## Installation
 

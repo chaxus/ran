@@ -30,6 +30,7 @@
 4. **Shadow DOM 封装：** 组件内部样式默认隔离，并通过 CSS Token、`::part()` 和 `sheet` 属性开放可控的样式覆盖能力。
 5. **支持类型校验：** 基于 TypeScript 构建，具有类型支持，确保代码的健壮性和可维护性。
 6. **SSR 友好：** 通过 `defineSSR`、`renderToString` 和 Declarative Shadow DOM 支持服务端渲染场景。
+7. **无障碍：** ARIA 角色/状态、完整键盘导航、表单参与控件（`<r-checkbox>`/`<r-input>`/`<r-select>` 可被原生 `FormData` 收集）、live-region 提示，并尊重 `prefers-reduced-motion`。
 
 ## 安装
 
