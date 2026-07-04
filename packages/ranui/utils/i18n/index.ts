@@ -63,7 +63,7 @@ export class I18nCore {
   private _handlers = new Set<LocaleChangeHandler>();
 
   constructor(config: I18nConfig = {}) {
-    this._messages = { ...(config.messages ?? {}) };
+    this._messages = { ...config.messages };
     this._fallback = config.fallbackLocale ?? 'en';
     this._persist = config.persist ?? false;
     this._storageKey = config.storageKey ?? DEFAULT_STORAGE_KEY;
@@ -102,7 +102,7 @@ export class I18nCore {
 
   /** Merge a dictionary into a locale (creating it if needed). */
   addMessages(locale: string, dict: MessageDict): void {
-    this._messages[locale] = { ...(this._messages[locale] ?? {}), ...dict };
+    this._messages[locale] = { ...this._messages[locale], ...dict };
   }
 
   getMessages(locale: string = this._locale): MessageDict {

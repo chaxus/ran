@@ -506,12 +506,21 @@ export class PostMessageBridge {
   private targetOrigin: string;
   private messageHandlers: Map<string, MessageHandler<any, any>>;
   private pendingRequests: Map<string, PendingRequest<any>>;
+  // 是否运行在可用的浏览器环境（存在 window）。
+  // 非浏览器环境（node/SSR）下降级为惰性 no-op，避免实例化即抛错。
+  private available: boolean;
 
-  constructor(targetWindow: Window = window, targetOrigin = '*') {
-    this.targetWindow = targetWindow;
+  constructor(targetWindow?: Window, targetOrigin = '*') {
     this.targetOrigin = targetOrigin;
     this.messageHandlers = new Map();
     this.pendingRequests = new Map();
+    this.available = typeof window !== 'undefined';
+    if (!this.available) {
+      // 无 window：桥接不可用，保留空实例，各操作降级处理。
+      this.targetWindow = undefined as unknown as Window;
+      return;
+    }
+    this.targetWindow = targetWindow ?? window;
     // 监听消息
     window.addEventListener('message', this.handleMessage);
   }
@@ -600,7 +609,16 @@ export class PostMessageBridge {
 
   // 发送消息并等待响应
   send = async <T = unknown, R = unknown>(type: string, payload: T): Promise<R> => {
+    if (!this.available) {
+      return Promise.reject(new Error('PostMessageBridge is unavailable outside a browser environment'));
+    }
     const id = getRandomString(10);
+    // 先编码，编码失败（如 payload 存在循环引用）立即 reject，
+    // 否则会 post 空串、对端永不响应、白白等满超时。
+    const message = MessageCodec.encode({ type, payload, id });
+    if (!message) {
+      return Promise.reject(new Error('Failed to encode message payload'));
+    }
     return new Promise<R>((rs, reject) => {
       // 兜底方案，如果一段时间没有收到响应，则请求结束
       const timeout = setTimeout(() => {
@@ -619,19 +637,13 @@ export class PostMessageBridge {
       };
       // 先注册 pending，再发送，避免响应先于注册到达。
       this.pendingRequests.set(id, { resolve, reject: rejectWith });
-      this.targetWindow.postMessage(
-        MessageCodec.encode({
-          type,
-          payload,
-          id,
-        }),
-        this.targetOrigin,
-      );
+      this.targetWindow.postMessage(message, this.targetOrigin);
     });
   };
 
   // 广播消息
   broadcast = <T = unknown>(data: { type: string; payload: T }): void => {
+    if (!this.available) return;
     const { type, payload } = data;
     this.targetWindow.postMessage(
       MessageCodec.encode({
@@ -644,7 +656,9 @@ export class PostMessageBridge {
 
   // 清理
   destroy = (): void => {
-    window.removeEventListener('message', this.handleMessage);
+    if (this.available) {
+      window.removeEventListener('message', this.handleMessage);
+    }
     this.messageHandlers.clear();
     // reject 未决请求，顺带清理各自的 timeout 定时器，避免悬挂。
     this.pendingRequests.forEach((pending) => {
