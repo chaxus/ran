@@ -95,6 +95,12 @@ export class ColorPicker extends RanElement {
     this.popoverContent = popoverBlock.querySelector('r-content') as HTMLElement;
     this.colorpicker = popoverBlock.querySelector('.ran-colorpicker-block') as HTMLDivElement;
     this.colorpickerInner = popoverBlock.querySelector('.ran-colorpicker-inner') as HTMLDivElement;
+    // The swatch is the trigger: make it a focusable button that opens the picker
+    // (keyboard support wired in connectedCallback) and announces its purpose.
+    this.colorpicker.setAttribute('role', 'button');
+    this.colorpicker.setAttribute('tabindex', '0');
+    this.colorpicker.setAttribute('aria-haspopup', 'dialog');
+    this.colorpicker.setAttribute('aria-label', 'Choose color');
 
     this.colorPickerPaletteSelect = false;
     this.createContext();
@@ -254,9 +260,59 @@ export class ColorPicker extends RanElement {
     else if (this._activeSlider) this.updateSliderFromEvent(this._activeSlider, me);
   };
 
+  /** Make a slider a focusable, described `role="slider"`; valuenow is kept live in setupEffects. */
+  initSliderA11y = (el: HTMLElement, label: string, max: number): void => {
+    el.setAttribute('role', 'slider');
+    el.setAttribute('tabindex', '0');
+    el.setAttribute('aria-label', label);
+    el.setAttribute('aria-orientation', 'horizontal');
+    el.setAttribute('aria-valuemin', '0');
+    el.setAttribute('aria-valuemax', String(max));
+  };
+
+  /** Arrow keys adjust the hue/alpha slider (Shift = coarse step, Home/End = ends). */
+  sliderKeydown =
+    (kind: 'hue' | 'alpha') =>
+    (e: KeyboardEvent): void => {
+      const max = kind === 'hue' ? HUE : 100;
+      const sig = kind === 'hue' ? this.context.hue : this.context.transparency;
+      const step = e.shiftKey ? 10 : 1;
+      const cur = sig.getter();
+      let next = cur;
+      switch (e.key) {
+        case 'ArrowRight':
+        case 'ArrowUp':
+          next = cur + step;
+          break;
+        case 'ArrowLeft':
+        case 'ArrowDown':
+          next = cur - step;
+          break;
+        case 'Home':
+          next = 0;
+          break;
+        case 'End':
+          next = max;
+          break;
+        default:
+          return;
+      }
+      e.preventDefault();
+      sig.setter(range(next, 0, max));
+      this.emitChange();
+    };
+
   onPointerUp = (): void => {
     this.colorPickerPaletteSelect = false;
     this._activeSlider = null;
+  };
+
+  /** Open the picker from the keyboard: Enter/Space act like a click on the swatch. */
+  onSwatchKeydown = (e: KeyboardEvent): void => {
+    if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+      e.preventDefault();
+      this.colorpicker?.click();
+    }
   };
 
   // ── Input row ─────────────────────────────────────────────────────────────
@@ -302,6 +358,7 @@ export class ColorPicker extends RanElement {
         const { r, g, b } = hsv2rgb(h, 100, 100);
         this.colorPickerHueThumb?.style.setProperty('left', `${(h / HUE) * 100}%`);
         this.colorPickerHueThumb?.style.setProperty('background', `rgb(${r}, ${g}, ${b})`);
+        this.colorPickerHueSlider?.setAttribute('aria-valuenow', String(Math.round(h)));
       }),
       // Alpha track gradient, alpha thumb, preview swatch, trigger swatch, input.
       createEffect(() => {
@@ -316,6 +373,8 @@ export class ColorPicker extends RanElement {
         this.colorPickerAlphaThumb?.style.setProperty('background', current);
         this.colorPickerPreviewInner?.style.setProperty('background', current);
         this.colorpickerInner?.style.setProperty('background', current);
+        this.colorPickerAlphaSlider?.setAttribute('aria-valuenow', String(Math.round(a * 100)));
+        this.colorPickerAlphaSlider?.setAttribute('aria-valuetext', `${Math.round(a * 100)}%`);
         this.syncValueInput();
       }),
     );
@@ -345,16 +404,20 @@ export class ColorPicker extends RanElement {
     this.colorPickerHueSlider = Div()
       .class('ran-color-picker-slider ran-color-picker-slider-hue')
       .on('mousedown', this.sliderPointerDown('hue'))
+      .on('keydown', this.sliderKeydown('hue'))
       .children(this.colorPickerHueThumb)
       .build() as HTMLElement;
+    this.initSliderA11y(this.colorPickerHueSlider, 'Hue', HUE);
 
     this.colorPickerAlphaTrack = Div().class('ran-color-picker-slider-alpha-track').build() as HTMLElement;
     this.colorPickerAlphaThumb = Div().class('ran-color-picker-slider-thumb').build() as HTMLElement;
     this.colorPickerAlphaSlider = Div()
       .class('ran-color-picker-slider ran-color-picker-slider-alpha')
       .on('mousedown', this.sliderPointerDown('alpha'))
+      .on('keydown', this.sliderKeydown('alpha'))
       .children(this.colorPickerAlphaTrack, this.colorPickerAlphaThumb)
       .build() as HTMLElement;
+    this.initSliderA11y(this.colorPickerAlphaSlider, 'Alpha opacity', 100);
 
     const sliders = Div()
       .class('ran-color-picker-sliders')
@@ -401,6 +464,7 @@ export class ColorPicker extends RanElement {
     this.handlerExternalCss();
     this.setAttribute('class', 'ran-colorpicker');
     this._events.on(this.popoverBlock, 'click', this.openColorPicker);
+    this._events.on(this.colorpicker, 'keydown', this.onSwatchKeydown as EventListener);
     this._events.on(document, 'mousemove', this.onPointerMove);
     this._events.on(document, 'mouseup', this.onPointerUp);
     if (this.value) this.updateColorValue(this.value);

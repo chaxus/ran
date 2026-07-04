@@ -117,4 +117,45 @@ describe('r-colorpicker contract', () => {
     expect(detail.rgb).toBe('rgb(255, 0, 0)');
     expect(detail.alpha).toBe(1);
   });
+
+  it('a11y: the swatch is a focusable button that opens the picker via keyboard', () => {
+    const cp = document.createElement('r-colorpicker') as any;
+    document.body.appendChild(cp);
+
+    expect(cp.colorpicker.getAttribute('role')).toBe('button');
+    expect(cp.colorpicker.getAttribute('tabindex')).toBe('0');
+    expect(cp.colorpicker.getAttribute('aria-haspopup')).toBe('dialog');
+    expect(cp.colorpicker.getAttribute('aria-label')).toBeTruthy();
+
+    // Enter opens the panel (builds it lazily).
+    cp.onSwatchKeydown({ key: 'Enter', preventDefault() {} });
+    expect(cp.colorPickerInner).toBeTruthy();
+  });
+
+  it('a11y: hue/alpha are role=slider with bounds and are keyboard-adjustable', () => {
+    const cp = document.createElement('r-colorpicker') as any;
+    document.body.appendChild(cp);
+    cp.openColorPicker();
+
+    const hue = cp.colorPickerHueSlider as HTMLElement;
+    const alpha = cp.colorPickerAlphaSlider as HTMLElement;
+    expect(hue.getAttribute('role')).toBe('slider');
+    expect(hue.getAttribute('tabindex')).toBe('0');
+    expect(hue.getAttribute('aria-valuemin')).toBe('0');
+    expect(hue.getAttribute('aria-valuemax')).toBe('360');
+    expect(alpha.getAttribute('aria-valuemax')).toBe('100');
+
+    // Arrow keys adjust the underlying value.
+    cp.context.hue.setter(10);
+    cp.sliderKeydown('hue')({ key: 'ArrowRight', shiftKey: false, preventDefault() {} });
+    expect(cp.context.hue.getter()).toBe(11);
+    cp.sliderKeydown('hue')({ key: 'Home', preventDefault() {} });
+    expect(cp.context.hue.getter()).toBe(0);
+    cp.sliderKeydown('hue')({ key: 'End', preventDefault() {} });
+    expect(cp.context.hue.getter()).toBe(360);
+
+    cp.context.transparency.setter(50);
+    cp.sliderKeydown('alpha')({ key: 'ArrowLeft', shiftKey: false, preventDefault() {} });
+    expect(cp.context.transparency.getter()).toBe(49);
+  });
 });
