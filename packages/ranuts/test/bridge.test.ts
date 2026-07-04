@@ -241,8 +241,9 @@ describe('PostMessageBridge request/response', () => {
     const handler = vi.fn(() => 'ok');
     bridge.on('greet', handler);
     const marker = (() => {
-      // 借一次 send 取出协议标记
-      bridge.send('warmup', {});
+      // 借一次 send 取出协议标记；该 send 不会有响应，destroy 时会被 reject，
+      // 挂 catch 吞掉，避免 unhandled rejection。
+      bridge.send('warmup', {}).catch(() => {});
       return lastEnvelope(target).__bridge;
     })();
     // 另一通道的请求应被忽略
@@ -267,7 +268,8 @@ describe('PostMessageBridge request/response', () => {
     const target = { postMessage: vi.fn() };
     const { bridge } = setupBridge(target);
     bridge.on('greet', () => 'hi');
-    bridge.send('warmup', {});
+    // warmup send 不会有响应，destroy 时会被 reject，挂 catch 避免 unhandled rejection。
+    bridge.send('warmup', {}).catch(() => {});
     const { __bridge: marker, channel, senderId } = lastEnvelope(target);
     target.postMessage.mockClear();
     // 用 bridge 自己的 senderId 发来的请求 → 跳过，不回复
