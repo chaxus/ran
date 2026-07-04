@@ -40,7 +40,7 @@ export class Container extends Vertex {
    * 标记场景结构已变化：冒泡到根节点并递增其版本号，触发下一帧的大数组重建。
    */
   protected markStructureDirty = (): void => {
-    let node: Container = this;
+    let node: Container = this.parent ?? this;
     while (node.parent) {
       node = node.parent;
     }

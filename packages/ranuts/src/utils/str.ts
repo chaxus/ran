@@ -506,8 +506,9 @@ export const MessageCodec = {
         binaryStr += String.fromCharCode.apply(null, Array.from(bytes.subarray(i, i + CHUNK_SIZE)));
       }
       return btoa(binaryStr);
-    } catch (error) {
-      console.log('Message encode error:', error);
+    } catch {
+      // 编码失败返回空串，由调用方（如 PostMessageBridge.send）感知并处理，
+      // 不在此打日志——避免污染控制台。
       return '';
     }
   },
@@ -527,8 +528,9 @@ export const MessageCodec = {
       const decoder = new TextDecoder();
       const jsonStr = decoder.decode(bytes);
       return JSON.parse(jsonStr);
-    } catch (error) {
-      console.log('Message decode error:', error);
+    } catch {
+      // 解码失败（页面上其它库的 postMessage 流量并非本协议）返回 null，
+      // 不打日志——否则外部消息会持续刷屏控制台。
       return null;
     }
   },
