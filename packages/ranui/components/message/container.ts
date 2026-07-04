@@ -33,7 +33,15 @@ export const getMessageContainer = (options?: MessageRenderOptions): HTMLDivElem
 
   let host = mountEl.querySelector<HTMLElement>(getMessageHostSelector());
   if (!host) {
-    host = Div().attr(MESSAGE_HOST_ATTR, 'true').children(Div().class('ranui-message')).build() as HTMLDivElement;
+    // The message stack is a persistent polite live region: it exists in the DOM
+    // before any toast is added, so screen readers announce each appended toast.
+    // `aria-atomic="false"` announces only the newly added toast (not the whole
+    // stack); error/warning toasts escalate to assertive via role="alert" on the
+    // individual `<r-message>` (see index.ts). Without this, toasts were silent.
+    host = Div()
+      .attr(MESSAGE_HOST_ATTR, 'true')
+      .children(Div().class('ranui-message').attr('aria-live', 'polite').attr('aria-atomic', 'false'))
+      .build() as HTMLDivElement;
     mountEl.appendChild(host);
   }
 

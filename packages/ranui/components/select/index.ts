@@ -45,6 +45,10 @@ const searchThrottle = generateThrottle();
 const animationTime = 300;
 
 export class Select extends RanElement {
+  // Participate in native forms: the selected value is host state, so relay it via
+  // ElementInternals so `new FormData(form)` (used by <r-form>) collects it.
+  static formAssociated = true;
+  _internals?: ElementInternals;
   _events = new EventManager();
   removeTimeId?: NodeJS.Timeout;
   _listboxId: string;
@@ -83,6 +87,12 @@ export class Select extends RanElement {
   }
   constructor() {
     super();
+    // attachInternals is allowed in the constructor; guard for SSR/old runtimes.
+    try {
+      this._internals = this.attachInternals();
+    } catch {
+      this._internals = undefined;
+    }
     this._listboxId = `ran-select-listbox-${Math.random().toString(36).slice(2, 9)}`;
     this._activeIndex = -1;
     this._optionList = [];
@@ -139,7 +149,12 @@ export class Select extends RanElement {
     } else {
       this.removeAttribute('value');
     }
+    this.syncFormValue();
   }
+  // Relay the selected value to the associated form (guarded — jsdom omits it).
+  syncFormValue = (): void => {
+    this._internals?.setFormValue?.(this.value);
+  };
   get defaultValue(): string {
     return this.getAttribute('defaultValue') || '';
   }
@@ -266,6 +281,7 @@ export class Select extends RanElement {
     const value = optionElement.getAttribute('value') || this._optionLabelMapValue.get(label) || '';
     if (!value) return;
     this.setAttribute('value', value);
+    this.syncFormValue();
     this._text.textContent = label;
     this._text.setAttribute('title', label);
     this._search.setAttribute('placeholder', label);
@@ -632,6 +648,7 @@ export class Select extends RanElement {
     this.handlerExternalCss();
     this.createOption();
     this.initAria();
+    this.syncFormValue(); // seed the form value from any initial selection
     this._events
       .on(this._slot, 'slotchange', this.addOptionToSlot)
       .on(this, 'keydown', this.keydownSelect)

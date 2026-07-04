@@ -34,6 +34,26 @@ describe('r-message component', () => {
     expect(shadow.querySelector('.ran-message-notice-content-info')).not.toBeNull();
   });
 
+  it('r-message is an atomic live region so the whole toast is announced', () => {
+    const el = document.createElement('r-message');
+    document.body.appendChild(el);
+    expect(el.getAttribute('aria-atomic')).toBe('true');
+  });
+
+  it('error/warning toasts are assertive alerts, success/info are polite status', () => {
+    const el = document.createElement('r-message') as any;
+    document.body.appendChild(el);
+
+    el.setAttribute('type', 'error');
+    expect(el.getAttribute('role')).toBe('alert');
+    el.setAttribute('type', 'warning');
+    expect(el.getAttribute('role')).toBe('alert');
+    el.setAttribute('type', 'success');
+    expect(el.getAttribute('role')).toBe('status');
+    el.setAttribute('type', 'info');
+    expect(el.getAttribute('role')).toBe('status');
+  });
+
   it('r-message type property reflects to attribute', () => {
     const el = document.createElement('r-message') as any;
     document.body.appendChild(el);

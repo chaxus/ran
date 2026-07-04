@@ -69,6 +69,36 @@ describe('r-img contract', () => {
     expect(innerImg.src).toContain('fallback.jpg');
   });
 
+  it('forwards alt to the inner img; defaults to empty (decorative)', () => {
+    const img = document.createElement('r-img') as any;
+    img.setAttribute('src', 'https://example.com/photo.jpg');
+    img.setAttribute('alt', 'A red bicycle');
+    document.body.appendChild(img);
+
+    expect(img._image.alt).toBe('A red bicycle');
+  });
+
+  it('gives the inner img an empty alt when none is set (skips the URL)', () => {
+    const img = document.createElement('r-img') as any;
+    img.setAttribute('src', 'https://example.com/photo.jpg');
+    document.body.appendChild(img);
+
+    expect(img._image.alt).toBe('');
+  });
+
+  it('updates inner img alt when the alt attribute changes', () => {
+    const img = document.createElement('r-img') as any;
+    img.setAttribute('src', 'https://example.com/photo.jpg');
+    document.body.appendChild(img);
+
+    img.setAttribute('alt', 'Updated description');
+    expect(img._image.alt).toBe('Updated description');
+
+    img.alt = 'Via property';
+    expect(img.getAttribute('alt')).toBe('Via property');
+    expect(img._image.alt).toBe('Via property');
+  });
+
   it('applies sheet via handlerExternalCss', () => {
     const img = document.createElement('r-img');
     document.body.appendChild(img);

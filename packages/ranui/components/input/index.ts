@@ -11,7 +11,15 @@ import {
 import inputCss from './index.less?inline';
 import { defineSSR } from '@/utils/ssr-registry';
 
+// Monotonic id source so each field's inner <input> can be referenced by its
+// <label for>. A counter (not Math.random) keeps ids stable and SSR-safe.
+let inputIdSeq = 0;
+
 export class Input extends RanElement {
+  // Participate in native forms: the value lives on a shadow-DOM <input> that
+  // `new FormData(form)` can't see, so the host relays it via ElementInternals.
+  static formAssociated = true;
+  _internals?: ElementInternals;
   static get observedAttributes(): string[] {
     return [
       'label',
@@ -45,6 +53,12 @@ export class Input extends RanElement {
   _message: HTMLElement | undefined;
   constructor() {
     super();
+    // attachInternals is allowed in the constructor; guard for SSR/old runtimes.
+    try {
+      this._internals = this.attachInternals();
+    } catch {
+      this._internals = undefined;
+    }
     this._shadowDom = ensureShadowRoot(this, inputCss);
     const wrap = ensureShadowElement(this._shadowDom, '.ran-input', () =>
       Div()
@@ -55,6 +69,9 @@ export class Input extends RanElement {
     );
     this._input = wrap;
     this._inputContent = wrap.querySelector('.ran-input-content') as HTMLInputElement;
+    // A stable id so a rendered <label> can point its `for` at this control,
+    // giving it an accessible name and click-to-focus (both in the same shadow root).
+    if (!this._inputContent.id) this._inputContent.id = `ran-input-${++inputIdSeq}`;
   }
   /**
    * @description: 获取 input 的值
@@ -75,6 +92,8 @@ export class Input extends RanElement {
       this.removeAttribute('value');
       this._input.removeAttribute('value');
     }
+    // Relay to the form on every value change (guarded — jsdom omits setFormValue).
+    this._internals?.setFormValue?.(this.getAttribute('value') ?? '');
   }
   /**
    * @description: 获取 input 的占位字符
@@ -377,6 +396,9 @@ export class Input extends RanElement {
           this._label.innerHTML = value;
         } else {
           this._label = Label().class('ran-input-label').part('label').text(value).build();
+          // Associate the label with the control so screen readers announce it and
+          // clicking the label focuses the field.
+          this._label.htmlFor = this._inputContent.id;
           this._input.appendChild(this._label as HTMLLabelElement);
         }
       } else {
@@ -501,6 +523,8 @@ export class Input extends RanElement {
       this._inputContent.value = this.value;
       this._input.setAttribute('value', this.value);
     }
+    // Seed the form value from the initial state.
+    this._internals?.setFormValue?.(this.value);
     if (this.status) {
       this._input.setAttribute('status', this.status);
     }

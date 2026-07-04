@@ -62,4 +62,15 @@ describe('message container', () => {
     expect(host.style.top).toBe('30px');
     expect(host.style.zIndex).toBe('2000');
   });
+
+  it('the stack is a polite live region so appended toasts are announced', () => {
+    const root = document.createElement('div');
+    document.body.appendChild(root);
+
+    const container = getMessageContainer({ getContainer: () => root });
+    // Persistent live region present before toasts are added; announces only the
+    // newly added toast, not the whole stack.
+    expect(container?.getAttribute('aria-live')).toBe('polite');
+    expect(container?.getAttribute('aria-atomic')).toBe('false');
+  });
 });
