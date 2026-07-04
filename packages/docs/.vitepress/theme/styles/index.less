@@ -52,6 +52,27 @@ p img {
 @media (min-width: 960px) {
 }
 
+/* Cross-page transition — scoped to the named content group only (never root,
+   which VitePress's theme toggle owns). Set dynamically in theme/index.ts. */
+::view-transition-old(ran-page) {
+  animation: ran-page-out 0.18s cubic-bezier(0.4, 0, 1, 1) both;
+}
+::view-transition-new(ran-page) {
+  animation: ran-page-in 0.26s cubic-bezier(0, 0, 0.2, 1) both;
+}
+@keyframes ran-page-out {
+  to {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+@keyframes ran-page-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
 /* Custom full-bleed home page (index.md / cn/index.md use layout: page + <Home />) */
 .ran-home-page {
   .VPContent,
