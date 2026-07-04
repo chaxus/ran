@@ -39,7 +39,7 @@
 
 ---
 
-English · [中文](./readme-zh_CN.md)
+English · [中文](./README.zh-CN.md)
 
 ## ✨ Features
 
@@ -59,7 +59,7 @@ This monorepo contains various experimental packages:
 
 | Package                   | Version                                                                                           | Downloads                                                                                  | Description           |
 | ------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | --------------------- |
-| [ranui](packages/ranui)   | [![ranui version](https://img.shields.io/npm/v/ranui.svg?label=%20)](packages/ranui/readme.md)    | [![npm-d](https://img.shields.io/npm/dt/ranui.svg)](https://www.npmjs.com/package/ranui)   | web component library |
+| [ranui](packages/ranui)   | [![ranui version](https://img.shields.io/npm/v/ranui.svg?label=%20)](packages/ranui/README.md)    | [![npm-d](https://img.shields.io/npm/dt/ranui.svg)](https://www.npmjs.com/package/ranui)   | web component library |
 | [ranuts](packages/ranuts) | [![ranuts version](https://img.shields.io/npm/v/ranuts.svg?label=%20)](packages/ranuts/readme.md) | [![npm-d](https://img.shields.io/npm/dt/ranuts.svg)](https://www.npmjs.com/package/ranuts) | Utility library       |
 
 ### Experimental Projects
@@ -67,12 +67,12 @@ This monorepo contains various experimental packages:
 | Package                                 | Description                     |
 | --------------------------------------- | ------------------------------- |
 | [im](packages/im)                       | Chat application prototype      |
-| [ml](packages/ml)                       | Machine learning experiments    |
 | [visual](packages/visual)               | Data visualization experiments  |
-| [solidity](packages/solidity)           | Web3 smart contract experiments |
 | [ranite](packages/ranite)               | Development tooling experiments |
 | [debug](packages/debug)                 | Debug utilities                 |
 | [image-process](packages/image-process) | Image processing experiments    |
+| [cpro](packages/cpro)                   | C/C++ learning & experiments    |
+| [rust](packages/rust)                   | Rust learning & experiments     |
 
 ## 🚀 Quick Start
 
@@ -119,6 +119,23 @@ pnpm --filter ranui build
 - **🎨 RanUI Documentation**: [UI Library Guide](https://chaxus.github.io/ran/src/ranui/)
 - **🛠️ RanUTS Documentation**: [Utility Library Guide](https://chaxus.github.io/ran/src/ranuts/)
 - **📝 Project Documentation**: [docs](packages/docs)
+
+## 🤖 AI / Claude Code
+
+This repo ships a Claude Code plugin marketplace so AI assistants can read and use the
+libraries without spelunking the source. Add the marketplace, then install whichever
+library you use:
+
+```bash
+/plugin marketplace add chaxus/ran
+/plugin install ranui@ran      # ranui — web components
+/plugin install ranuts@ran     # ranuts — utilities
+```
+
+Each skill covers the import map, an inventory, usage examples, and conventions, and
+points to the API reference shipped in that package. See the per-library sections in
+[ranui](packages/ranui/README.md#ai--claude-code-skill) and
+[ranuts](packages/ranuts/readme.md).
 
 ## ⚠️ Important Notice
 

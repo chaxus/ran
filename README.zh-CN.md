@@ -39,7 +39,7 @@
 
 ---
 
-[English](./readme.md) · 中文
+[English](./README.md) · 中文
 
 ## ✨ 功能特性
 
@@ -59,7 +59,7 @@
 
 | 包名                      | 版本                                                                                              | 下载量                                                                                     | 描述       |
 | ------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ---------- |
-| [ranui](packages/ranui)   | [![ranui version](https://img.shields.io/npm/v/ranui.svg?label=%20)](packages/ranui/readme.md)    | [![npm-d](https://img.shields.io/npm/dt/ranui.svg)](https://www.npmjs.com/package/ranui)   | Web 组件库 |
+| [ranui](packages/ranui)   | [![ranui version](https://img.shields.io/npm/v/ranui.svg?label=%20)](packages/ranui/README.md)    | [![npm-d](https://img.shields.io/npm/dt/ranui.svg)](https://www.npmjs.com/package/ranui)   | Web 组件库 |
 | [ranuts](packages/ranuts) | [![ranuts version](https://img.shields.io/npm/v/ranuts.svg?label=%20)](packages/ranuts/readme.md) | [![npm-d](https://img.shields.io/npm/dt/ranuts.svg)](https://www.npmjs.com/package/ranuts) | 工具函数库 |
 
 ### 实验性项目
@@ -67,12 +67,12 @@
 | 包名                                    | 描述              |
 | --------------------------------------- | ----------------- |
 | [im](packages/im)                       | 聊天应用原型      |
-| [ml](packages/ml)                       | 机器学习实验      |
 | [visual](packages/visual)               | 数据可视化实验    |
-| [solidity](packages/solidity)           | Web3 智能合约实验 |
 | [ranite](packages/ranite)               | 开发工具实验      |
 | [debug](packages/debug)                 | 调试工具          |
 | [image-process](packages/image-process) | 图像处理实验      |
+| [cpro](packages/cpro)                   | C/C++ 学习与实验  |
+| [rust](packages/rust)                   | Rust 学习与实验   |
 
 ## 🚀 快速开始
 
@@ -119,6 +119,21 @@ pnpm --filter ranui build
 - **🎨 RanUI 文档**: [UI 库指南](https://chaxus.github.io/ran/cn/src/ranui/)
 - **🛠️ RanUTS 文档**: [工具函数库指南](https://chaxus.github.io/ran/cn/src/ranuts/)
 - **📝 项目文档**: [docs](packages/docs)
+
+## 🤖 AI / Claude Code
+
+本仓库自带一个 Claude Code 插件 marketplace，让 AI 助手无需翻源码即可读懂并使用这些库。
+先添加 marketplace，再按需安装你用到的库：
+
+```bash
+/plugin marketplace add chaxus/ran
+/plugin install ranui@ran      # ranui —— Web 组件
+/plugin install ranuts@ran     # ranuts —— 工具函数
+```
+
+每个 skill 覆盖 import map、清单、用法示例与约定，并指向该包随 npm 发布的 API 文档。
+详见各库 README 里的 skill 小节：[ranui](packages/ranui/README.md#ai--claude-code-skill)、
+[ranuts](packages/ranuts/readme.md)。
 
 ## ⚠️ 重要说明
 
