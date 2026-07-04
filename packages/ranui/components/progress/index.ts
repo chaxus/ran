@@ -165,10 +165,14 @@ export class Progress extends RanElement {
 
   appendProgressDot = (): void => {
     if (!this._progress || !this._progressDot) return;
-    if (this.dot === 'true' && !this._progress.contains(this._progressDot)) {
+    // The dot is a drag handle — only meaningful for the interactive `drag`
+    // type. On a plain progress bar it renders as an orphaned, non-interactive
+    // marker, so keep it out unless the bar is actually draggable.
+    const shouldShow = this.dot === 'true' && this.type === 'drag';
+    if (shouldShow && !this._progress.contains(this._progressDot)) {
       this._progress.appendChild(this._progressDot);
     }
-    if (this.dot === 'false' && this._progress.contains(this._progressDot)) {
+    if (!shouldShow && this._progress.contains(this._progressDot)) {
       this._progress.removeChild(this._progressDot);
     }
   };
@@ -210,7 +214,7 @@ export class Progress extends RanElement {
 
   attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     if (oldValue === newValue) return;
-    if (name === 'dot') this.appendProgressDot();
+    if (name === 'dot' || name === 'type') this.appendProgressDot();
     if (name === 'percent' || name === 'total') this.updateCurrentProgress();
     if (name === 'sheet') this.handlerExternalCss();
   }

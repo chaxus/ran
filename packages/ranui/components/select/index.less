@@ -1,6 +1,12 @@
 @import url('../../base.less');
 
-@transition: all0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+// Interaction-driven props only. (Also fixes a `all0.2s` typo — a missing space
+// made this an invalid value, so the transition never applied at all.) Never
+// include `background`, or a light/dark theme switch fades the control.
+@transition:
+  border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1),
+  box-shadow 0.2s cubic-bezier(0.645, 0.045, 0.355, 1),
+  color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
 
 @theme-color: var(--ran-color-primary, #1890ff);
 
