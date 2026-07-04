@@ -10,6 +10,10 @@ import {
 } from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
 
+// Per-instance id source so tab/tabpanel id links are unique across multiple
+// <r-tabs> on a page (a counter keeps them stable and SSR-safe).
+let tabsSeq = 0;
+
 export class Tabs extends RanElement {
   static get observedAttributes(): string[] {
     return ['active', 'forceRender', 'type', 'align', 'effect', 'sheet'];
@@ -24,10 +28,12 @@ export class Tabs extends RanElement {
   _wrap: HTMLDivElement;
   _slot: HTMLSlotElement;
   _shadowDom: ShadowRoot;
+  _tabsId: number;
   tabHeaderKeyMapIndex: Record<string, number>;
 
   constructor() {
     super();
+    this._tabsId = ++tabsSeq;
     this._shadowDom = ensureShadowRoot(this, tabCss);
     this.tabHeaderKeyMapIndex = {};
 
@@ -61,6 +67,9 @@ export class Tabs extends RanElement {
     this._content = wrap.querySelector('.ran-tab-content') as HTMLDivElement;
     this._wrap = wrap.querySelector('.ran-tab-content-wrap') as HTMLDivElement;
     this._slot = wrap.querySelector('slot') as HTMLSlotElement;
+    // The header row is the WAI-ARIA tablist; each header's role/selection and the
+    // panels' roles are wired up in syncTabsAria once the panes are slotted in.
+    this._nav.setAttribute('role', 'tablist');
   }
 
   get align(): string {
@@ -85,6 +94,7 @@ export class Tabs extends RanElement {
       this.setAttribute('active', value);
       this.setTabLine(value);
       this.setTabContent(value);
+      this.syncTabsAria();
     } else {
       this.removeAttribute('active');
     }
@@ -187,16 +197,84 @@ export class Tabs extends RanElement {
   };
 
   clickTabHead = (e: Event): void => {
-    const tabHeader = e.target as Element;
+    // Events crossing the header r-button's shadow boundary retarget to the host.
+    const tabHeader = (e.currentTarget as Element) ?? (e.target as Element);
     const key = tabHeader.getAttribute('r-key');
     const disabled = isDisabled(tabHeader);
-    if (!disabled && key) {
-      this.setAttribute('active', key);
-      this.setTabLine(key);
-      this.setTabContent(key);
-      const navItems = this._nav.querySelectorAll('.active');
-      navItems.forEach((item) => item.classList.remove('active'));
-      tabHeader.classList.add('active');
+    if (!disabled && key) this.activateKey(key);
+  };
+
+  /** Select a tab by key: move the indicator, slide content, update classes + ARIA. */
+  activateKey = (key: string): void => {
+    this.setAttribute('active', key);
+    this.setTabLine(key);
+    this.setTabContent(key);
+    const navItems = this._nav.querySelectorAll('.active');
+    navItems.forEach((item) => item.classList.remove('active'));
+    const index = this.tabHeaderKeyMapIndex[key];
+    this._nav.children[index]?.classList.add('active');
+    this.syncTabsAria();
+  };
+
+  /** The header's focusable/semantic element — the r-button's inner `_btn`. */
+  tabFocusable = (header: Element): HTMLElement =>
+    (header as unknown as { _btn?: HTMLElement })._btn ?? (header as HTMLElement);
+  tabIdFor = (key: string): string => `ran-tab-${this._tabsId}-${key}`;
+  panelIdFor = (key: string): string => `ran-tabpanel-${this._tabsId}-${key}`;
+
+  /**
+   * Wire the WAI-ARIA tabs relationships: each header becomes role="tab" (on the
+   * button's inner focusable element, so it isn't a nested role="button"), with
+   * aria-selected + a roving tabindex (only the active tab is tabbable); each pane
+   * becomes role="tabpanel" labelled by its tab. Called on slot changes and every
+   * selection change.
+   */
+  syncTabsAria = (): void => {
+    const active = this.active;
+    const panes = this._slot?.assignedElements?.() ?? [];
+    [...this._nav.children].forEach((header, index) => {
+      const key = header.getAttribute('r-key') ?? `${index}`;
+      const selected = key === active;
+      const disabled = isDisabled(header);
+      const tab = this.tabFocusable(header);
+      tab.setAttribute('role', 'tab');
+      tab.id = this.tabIdFor(key);
+      tab.setAttribute('aria-controls', this.panelIdFor(key));
+      tab.setAttribute('aria-selected', selected ? 'true' : 'false');
+      // Roving tabindex: Tab reaches only the active tab; arrows move within.
+      tab.tabIndex = selected && !disabled ? 0 : -1;
+      const pane = panes[index];
+      if (pane) {
+        pane.setAttribute('role', 'tabpanel');
+        pane.id = this.panelIdFor(key);
+        pane.setAttribute('aria-labelledby', this.tabIdFor(key));
+        pane.setAttribute('tabindex', selected ? '0' : '-1');
+        if (selected) pane.removeAttribute('aria-hidden');
+        else pane.setAttribute('aria-hidden', 'true');
+      }
+    });
+  };
+
+  /** Roving arrow-key navigation over the tablist, with automatic activation. */
+  onNavKeydown = (e: KeyboardEvent): void => {
+    const navKeys = ['ArrowRight', 'ArrowLeft', 'ArrowDown', 'ArrowUp', 'Home', 'End'];
+    if (!navKeys.includes(e.key)) return;
+    const headers = [...this._nav.children].filter((item) => !isDisabled(item));
+    if (!headers.length) return;
+    const currentHost = (e.target as Element)?.closest?.('.tab-header-nav-item') ?? (e.target as Element);
+    let idx = headers.findIndex((item) => item === currentHost);
+    if (idx < 0) idx = headers.findIndex((item) => item.getAttribute('r-key') === this.active);
+    if (idx < 0) idx = 0;
+    let next = idx;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next = (idx + 1) % headers.length;
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') next = (idx - 1 + headers.length) % headers.length;
+    else if (e.key === 'Home') next = 0;
+    else if (e.key === 'End') next = headers.length - 1;
+    e.preventDefault();
+    const key = headers[next].getAttribute('r-key');
+    if (key) {
+      this.activateKey(key);
+      this.tabFocusable(headers[next]).focus();
     }
   };
 
@@ -241,6 +319,7 @@ export class Tabs extends RanElement {
       tabPane.addEventListener('click', this.clickTabHead);
     });
     this.initActive();
+    this.syncTabsAria();
     if (this.align) {
       if (this.align === 'center') this.initTabLineAlignCenter();
       if (this.align === 'end') this.initTabLineAlignEnd();
@@ -250,6 +329,7 @@ export class Tabs extends RanElement {
   connectedCallback(): void {
     this.handlerExternalCss();
     this._events.on(this._slot, 'slotchange', this.listenSlotChange);
+    this._events.on(this._nav, 'keydown', this.onNavKeydown as EventListener);
   }
 
   disconnectedCallback(): void {

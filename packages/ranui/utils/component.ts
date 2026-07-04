@@ -2,6 +2,17 @@ import { adoptSheetText, adoptStyles } from './style';
 
 const shadowRootCache = new WeakMap<HTMLElement, ShadowRoot>();
 
+/**
+ * Honour the user's "reduce motion" OS setting in every component. Adopted into
+ * each shadow root (last, so it overrides the component's own transitions), and
+ * scoped to the shadow tree by `*`. Only active when the user has the preference set.
+ */
+export const REDUCED_MOTION_CSS =
+  '@media (prefers-reduced-motion: reduce){' +
+  '*,*::before,*::after{' +
+  'animation-duration:.01ms !important;animation-iteration-count:1 !important;' +
+  'transition-duration:.01ms !important;scroll-behavior:auto !important}}';
+
 export const ensureShadowRoot = (
   host: HTMLElement,
   cssText = '',
@@ -9,7 +20,10 @@ export const ensureShadowRoot = (
 ): ShadowRoot => {
   const root = host.shadowRoot || shadowRootCache.get(host) || host.attachShadow(options);
   shadowRootCache.set(host, root);
-  if (cssText) adoptStyles(root, cssText);
+  // Append the reduced-motion overrides AFTER the component CSS (last wins) in the
+  // same adopted sheet, so they apply in both the constructable-stylesheet and the
+  // <style> fallback paths (the fallback only injects one marked style per root).
+  adoptStyles(root, cssText ? `${cssText}\n${REDUCED_MOTION_CSS}` : REDUCED_MOTION_CSS);
   return root;
 };
 
