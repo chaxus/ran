@@ -140,6 +140,22 @@ Durations: `--ran-motion-duration-fast` `0.15s`, `--ran-motion-duration-base` `0
 
 **Principle:** the bigger the change, the more time it earns. Otherwise: don't animate. Keep motion quick, light, and restrained. Respect `prefers-reduced-motion`.
 
+**Never animate a theme switch.** Transitions are for _interaction_ (hover / focus / press), not for flipping light↔dark. A structural surface that declares `transition: all` will, on a theme toggle, fade its `background-color` from the light value to the dark value over the transition duration — a visible white→dark flash while the rest of the page has already flipped. Rules:
+
+- Do **not** put `background` / `background-color` in a `transition` on any surface that carries a theme-driven color. List the interaction props explicitly (`border-color`, `box-shadow`, `color`, `opacity`, `transform`) — never `all`.
+- `transition: all` is banned in component styles for this reason; it also silently animates properties you never intended.
+
+```less
+/* ✗ flashes on theme switch */
+transition: all var(--ran-motion-duration-base, 0.2s);
+
+/* ✓ interaction only — theme flip is instant */
+transition:
+  border-color var(--ran-motion-duration-base, 0.2s),
+  box-shadow var(--ran-motion-duration-base, 0.2s),
+  color var(--ran-motion-duration-base, 0.2s);
+```
+
 ---
 
 ## 6. Content — copy is part of the system

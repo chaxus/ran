@@ -92,12 +92,15 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root:not([data-ran-theme='light']):not([theme='light']) {
+  :root:not([data-ran-theme='light']):not([theme='light']):not(.light) {
     .ran-theme-dark();
   }
 }
 
 :root[data-ran-theme='dark'],
-:root[theme='dark'] {
+:root[theme='dark'],
+/* Also honor the `.dark` class convention (Tailwind, VitePress, …) so consumers
+   that toggle a class instead of an attribute get dark tokens with zero glue. */
+:root.dark {
   .ran-theme-dark();
 }

@@ -15,7 +15,9 @@ describe('r-progress contract', () => {
     expect(shadow.querySelector('.ran-progress')).not.toBeNull();
     expect(shadow.querySelector('.ran-progress-wrap')).not.toBeNull();
     expect(shadow.querySelector('.ran-progress-wrap-value')).not.toBeNull();
-    expect(shadow.querySelector('.ran-progress-dot')).not.toBeNull();
+    // The drag handle element is built, but only mounted for type="drag"
+    // (a default bar detaches it), so assert the element exists, not that it's in the tree.
+    expect((progress as any)._progressDot).toBeTruthy();
   });
 
   it('percent defaults to 0 when not set', () => {
@@ -74,7 +76,7 @@ describe('r-progress contract', () => {
     expect(progress.dot).toBe('true');
   });
 
-  it('appendProgressDot appends dot when dot=true and dot is not in container', () => {
+  it('appendProgressDot appends dot when dot=true and type=drag', () => {
     const progress = document.createElement('r-progress') as any;
     document.body.appendChild(progress);
 
@@ -82,6 +84,7 @@ describe('r-progress contract', () => {
     if (progress._progress.contains(progress._progressDot)) {
       progress._progress.removeChild(progress._progressDot);
     }
+    progress.setAttribute('type', 'drag');
     progress.dot = 'true';
     progress.appendProgressDot();
     expect(progress._progress.contains(progress._progressDot)).toBe(true);
@@ -91,12 +94,42 @@ describe('r-progress contract', () => {
     const progress = document.createElement('r-progress') as any;
     document.body.appendChild(progress);
 
-    // First ensure dot is in DOM
+    // First ensure dot is in DOM (drag type shows the handle)
+    progress.setAttribute('type', 'drag');
     progress.dot = 'true';
     progress.appendProgressDot();
 
     progress.dot = 'false';
     progress.appendProgressDot();
+    expect(progress._progress.contains(progress._progressDot)).toBe(false);
+  });
+
+  // Regression: a plain (non-drag) progress bar must NOT render the drag handle,
+  // even with dot='true' — otherwise it shows as an orphaned green dot with no
+  // bar behind it (see docs homepage live demo).
+  it('does not append the drag dot for a non-drag progress even when dot=true', () => {
+    const progress = document.createElement('r-progress') as any;
+    document.body.appendChild(progress);
+
+    if (progress._progress.contains(progress._progressDot)) {
+      progress._progress.removeChild(progress._progressDot);
+    }
+    expect(progress.type).toBe('primary');
+    progress.dot = 'true';
+    progress.appendProgressDot();
+    expect(progress._progress.contains(progress._progressDot)).toBe(false);
+  });
+
+  it('removes the drag dot when switching from drag back to a plain bar', () => {
+    const progress = document.createElement('r-progress') as any;
+    document.body.appendChild(progress);
+
+    progress.setAttribute('type', 'drag');
+    progress.dot = 'true';
+    progress.appendProgressDot();
+    expect(progress._progress.contains(progress._progressDot)).toBe(true);
+
+    progress.setAttribute('type', 'primary');
     expect(progress._progress.contains(progress._progressDot)).toBe(false);
   });
 

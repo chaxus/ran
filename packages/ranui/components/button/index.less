@@ -19,12 +19,21 @@
     display: var(--ran-btn-contain-display, block);
     background-image: var(--ran-btn-contain-background-image, none);
     cursor: var(--ran-btn-contain-cursor, pointer);
+    // Transition only interaction-driven props — never `background`. Animating the
+    // surface color makes a light/dark theme switch visibly fade the button
+    // (white → dark) instead of flipping instantly with the rest of the page.
     transition: var(
       --ran-btn-contain-transition,
-      all var(--ran-motion-duration-base, 0.2s) cubic-bezier(0.645, 0.045, 0.355, 1)
+      color var(--ran-motion-duration-base, 0.2s) cubic-bezier(0.645, 0.045, 0.355, 1),
+      border-color var(--ran-motion-duration-base, 0.2s) cubic-bezier(0.645, 0.045, 0.355, 1),
+      box-shadow var(--ran-motion-duration-base, 0.2s) cubic-bezier(0.645, 0.045, 0.355, 1),
+      opacity var(--ran-motion-duration-base, 0.2s) cubic-bezier(0.645, 0.045, 0.355, 1)
     );
     user-select: var(--ran-btn-contain-user-select, none);
     touch-action: var(--ran-btn-contain-touch-action, manipulation);
+    // Round the elevated surface to match the content, so it can never poke out
+    // at the corners behind the rounded content (was showing white corners in dark).
+    border-radius: var(--ran-btn-content-border-radius, var(--ran-radius-sm, 6px));
     background: var(--ran-btn-contain-background, var(--ran-color-bg-elevated, #fff));
   }
 

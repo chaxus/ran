@@ -98,6 +98,8 @@ Do not use this to override explicit product requirements, an existing design sy
 - Use tokens or CSS variables when the project has them.
 - Keep changes consistent with the surrounding component library.
 - Verify responsive behavior. Spacing, line length, and hierarchy must work on mobile and desktop.
+- Motion is for interaction, not for theme changes. Never let a light↔dark switch animate — no `transition: all` and no `background`/`background-color` in a transition on themed surfaces, or the surface visibly fades (e.g. a white→dark flash) while the rest of the page has flipped instantly.
+- If a design system supports dark mode, verify the result in **both** light and dark, and while **toggling** between them (flashes only show mid-switch) — not just in a single static theme.
 - For significant frontend changes, inspect the result visually in a browser screenshot before claiming completion.
 
 ## Source Notes
