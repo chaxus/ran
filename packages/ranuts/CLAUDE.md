@@ -4,7 +4,7 @@ Experimental TypeScript utility library. A broad, learning-oriented collection: 
 helpers, string/object/number utilities, algorithms, a 2D rendering engine, a virtual DOM,
 and Node server tooling. Multi-entry, tree-shakeable, ships ESM + UMD.
 
-> ⚠️ **Experimental** (`1.0.0-beta-1`). APIs may change; primarily for learning. No
+> ⚠️ **Experimental** (`0.2.0-alpha.0`). APIs may change; primarily for learning. No
 > framework runtime — these are standalone functions and classes.
 
 ---

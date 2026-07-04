@@ -1,6 +1,6 @@
 {
   "name": "ranuts",
-  "version": "1.0.0-beta-1",
+  "version": "0.2.0-alpha.0",
   "description": "lib",
   "main": "dist/index.umd.cjs",
   "module": "dist/index.js",
