@@ -16,7 +16,7 @@ let tabsSeq = 0;
 
 export class Tabs extends RanElement {
   static get observedAttributes(): string[] {
-    return ['active', 'forceRender', 'type', 'align', 'effect', 'sheet'];
+    return ['active', 'type', 'align', 'effect', 'sheet'];
   }
 
   _events = new EventManager();

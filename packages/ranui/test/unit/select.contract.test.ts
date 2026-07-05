@@ -567,4 +567,95 @@ describe('r-select contract', () => {
     select.value = 'apple';
     expect(setFormValue).toHaveBeenLastCalledWith('apple');
   });
+
+  // ── FIX C: `clear` was in observedAttributes but never read; it is removed ──
+  it('does not observe the removed `clear` attribute', () => {
+    expect(Select.observedAttributes).not.toContain('clear');
+  });
+
+  // ── FIX B: disabled options are non-selectable ────────────────────────────
+  const createSelectWithDisabledMiddle = async () => {
+    const select = document.createElement('r-select') as Select;
+    [
+      ['1', 'One', false],
+      ['2', 'Two', true],
+      ['3', 'Three', false],
+    ].forEach(([value, label, disabled]) => {
+      const option = document.createElement('r-option');
+      option.setAttribute('value', value as string);
+      option.textContent = label as string;
+      if (disabled) option.setAttribute('disabled', '');
+      select.appendChild(option);
+    });
+    document.body.appendChild(select);
+    await sleep(20);
+    select.createOption();
+    select.addOptionToSlot();
+    await sleep(20);
+    return select;
+  };
+
+  it('reflects an option disabled state onto the rendered dropdown item', async () => {
+    const select = await createSelectWithDisabledMiddle();
+    const opts = select.getDropdownOptions();
+    const disabledItem = opts.find((o) => o.getAttribute('value') === '2')!;
+    expect(disabledItem.hasAttribute('disabled')).toBe(true);
+    expect(disabledItem.getAttribute('aria-disabled')).toBe('true');
+  });
+
+  it('does not select a disabled option on click (FIX B)', async () => {
+    const select = await createSelectWithDisabledMiddle();
+    const disabledItem = select.getDropdownOptions().find((o) => o.getAttribute('value') === '2')!;
+
+    const changes: Event[] = [];
+    select.addEventListener('change', (e: Event) => changes.push(e));
+    const fakeEvent = new MouseEvent('click', { bubbles: true });
+    Object.defineProperty(fakeEvent, 'target', { value: disabledItem, configurable: true });
+    select.clickOption(fakeEvent);
+
+    expect(select.value).toBe('');
+    expect(changes.length).toBe(0);
+  });
+
+  it('keyboard ArrowDown skips a disabled option (FIX B)', async () => {
+    const select = await createSelectWithDisabledMiddle();
+    const opts = select.getDropdownOptions();
+    opts.forEach((o) => {
+      (o as any).scrollIntoView = vi.fn();
+    });
+
+    // From nothing active, ArrowDown targets index 1 (disabled) → lands on index 2.
+    select.keydownSelect(new KeyboardEvent('keydown', { key: 'ArrowDown', cancelable: true }));
+
+    expect(opts[1].getAttribute('aria-selected')).toBe('false');
+    expect(opts[2].getAttribute('aria-selected')).toBe('true');
+    expect(select._activeOption).toBe(opts[2]);
+  });
+
+  // ── FIX A: defaultValue and showSearch are reactive after connect ─────────
+  it('re-applies the selection when defaultValue changes after connect (FIX A)', async () => {
+    const select = await createSelectWithOptions(); // options value '1' / '2'
+    select.createOption();
+    select.addOptionToSlot();
+    await sleep(20);
+
+    const spy = vi.spyOn(select, 'setDefaultValue');
+    select.setAttribute('defaultValue', '2');
+
+    expect(spy).toHaveBeenCalled();
+    expect(select.value).toBe('2');
+    expect((select as any)._text.textContent).toBe('Option 2');
+  });
+
+  it('wires and unwires the search box when showSearch toggles after connect (FIX A)', async () => {
+    const select = await createSelectWithOptions();
+    const spy = vi.spyOn(select as any, '_applyShowSearch');
+
+    select.setAttribute('showSearch', 'true');
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect((select as any).onSearch).toBeTruthy();
+
+    select.removeAttribute('showSearch');
+    expect(spy).toHaveBeenCalledTimes(2);
+  });
 });

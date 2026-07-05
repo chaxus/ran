@@ -25,13 +25,13 @@ message.success('Project deleted');
 
 Each method appends a toast and auto-dismisses it after `duration` milliseconds (default `3000`). All five share the same signature.
 
-| Method              | Description                                    |
-| ------------------- | --------------------------------------------- |
-| `message.info()`    | Neutral information toast (blue info icon)     |
-| `message.success()` | Success toast (green check icon)               |
+| Method              | Description                                       |
+| ------------------- | ------------------------------------------------- |
+| `message.info()`    | Neutral information toast (blue info icon)        |
+| `message.success()` | Success toast (green check icon)                  |
 | `message.warning()` | Warning toast (amber icon), announced assertively |
-| `message.error()`   | Error toast (red icon), announced assertively  |
-| `message.toast()`   | Plain dark toast with no icon                  |
+| `message.error()`   | Error toast (red icon), announced assertively     |
+| `message.toast()`   | Plain dark toast with no icon                     |
 
 ### Method Signature
 
@@ -51,14 +51,14 @@ message.info({
 
 ### Options
 
-| Option         | Type                          | Default | Description                                          |
-| -------------- | ----------------------------- | ------- | ---------------------------------------------------- |
-| `content`      | `string`                      | —       | Text to display (required when passing an object)    |
-| `duration`     | `number`                      | `3000`  | Auto-dismiss delay in milliseconds                   |
-| `close`        | `() => void`                  | —       | Callback fired after the toast is removed            |
-| `top`          | `number \| string`            | `8`     | Offset of the toast stack from the top of its container (number is treated as px) |
-| `zIndex`       | `number \| string`            | `1200`  | Stacking order of the toast container                |
-| `getContainer` | `() => HTMLElement \| null`   | `document.body` | Returns the element the toast stack mounts into |
+| Option         | Type                        | Default         | Description                                                                       |
+| -------------- | --------------------------- | --------------- | --------------------------------------------------------------------------------- |
+| `content`      | `string`                    | —               | Text to display (required when passing an object)                                 |
+| `duration`     | `number`                    | `3000`          | Auto-dismiss delay in milliseconds                                                |
+| `close`        | `() => void`                | —               | Callback fired after the toast is removed                                         |
+| `top`          | `number \| string`          | `8`             | Offset of the toast stack from the top of its container (number is treated as px) |
+| `zIndex`       | `number \| string`          | `1200`          | Stacking order of the toast container                                             |
+| `getContainer` | `() => HTMLElement \| null` | `document.body` | Returns the element the toast stack mounts into                                   |
 
 > Passing `null`, `undefined`, or an empty argument is a no-op — nothing is shown.
 
@@ -66,11 +66,11 @@ message.info({
 
 Each toast is a `<r-message>` custom element. The global API sets these attributes for you, but they can also be used directly.
 
-| Attribute | Type     | Default | Description                                                       |
-| --------- | -------- | ------- | ---------------------------------------------------------------- |
+| Attribute | Type     | Default | Description                                                                                                 |
+| --------- | -------- | ------- | ----------------------------------------------------------------------------------------------------------- |
 | `type`    | `string` | —       | One of `info`, `success`, `warning`, `error`, `toast`. Selects the icon/color and the ARIA live-region role |
-| `content` | `string` | —       | Text rendered inside the toast                                   |
-| `sheet`   | `string` | `''`    | CSS injected into the component's shadow DOM                      |
+| `content` | `string` | —       | Text rendered inside the toast                                                                              |
+| `sheet`   | `string` | `''`    | CSS injected into the component's shadow DOM                                                                |
 
 ## Message Types `type`
 
@@ -111,9 +111,9 @@ The `close` callback runs after the toast is removed from the DOM.
 </Demo>
 
 ```html
-<r-button
-  onclick="message.success({ content: 'Saved', close: () => message.info('Toast closed') })"
->Chained message</r-button>
+<r-button onclick="message.success({ content: 'Saved', close: () => message.info('Toast closed') })"
+  >Chained message</r-button
+>
 ```
 
 ```js
@@ -145,14 +145,14 @@ message.info({
 
 The toast stack lives in a body-portaled container; each `<r-message>` renders its content inside a shadow DOM whose surface is themeable via CSS variables (all with sensible fallbacks).
 
-| CSS Variable                                     | Default                          | Description                    |
-| ------------------------------------------------ | -------------------------------- | ------------------------------ |
-| `--ran-message-notice-content-background`        | `var(--ran-color-bg-elevated)`   | Toast surface background       |
-| `--ran-message-notice-content-border-radius`     | `var(--ran-radius-md)`           | Toast corner radius            |
-| `--ran-message-notice-content-box-shadow`        | `var(--ran-shadow-menu)`         | Toast elevation                |
-| `--ran-message-notice-content-info-span-color`   | `var(--ran-color-text)`          | Toast text color               |
-| `--ran-message-z-index`                          | `var(--ran-z-message, 1200)`     | Stack z-index                  |
-| `--ran-message-top`                              | `8px`                            | Stack offset from the top      |
+| CSS Variable                                   | Default                        | Description               |
+| ---------------------------------------------- | ------------------------------ | ------------------------- |
+| `--ran-message-notice-content-background`      | `var(--ran-color-bg-elevated)` | Toast surface background  |
+| `--ran-message-notice-content-border-radius`   | `var(--ran-radius-md)`         | Toast corner radius       |
+| `--ran-message-notice-content-box-shadow`      | `var(--ran-shadow-menu)`       | Toast elevation           |
+| `--ran-message-notice-content-info-span-color` | `var(--ran-color-text)`        | Toast text color          |
+| `--ran-message-z-index`                        | `var(--ran-z-message, 1200)`   | Stack z-index             |
+| `--ran-message-top`                            | `8px`                          | Stack offset from the top |
 
 ## Best Practices
 

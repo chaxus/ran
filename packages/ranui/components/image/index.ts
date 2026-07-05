@@ -13,7 +13,7 @@ import { defineSSR } from '@/utils/ssr-registry';
 
 export class ImageElement extends RanElement {
   static get observedAttributes() {
-    return ['fallback', 'sheet', 'alt'];
+    return ['src', 'fallback', 'sheet', 'alt'];
   }
   _image: HTMLImageElement | undefined;
   _container: Element;
@@ -60,11 +60,19 @@ export class ImageElement extends RanElement {
       }
     }
   }
+  /**
+   * Point the inner `<img>` at the current `src` attribute. The `error`/`load`
+   * listeners wired in `connectedCallback` stay attached, so this reuses the
+   * same fallback-on-error and append-on-load behavior for every src change.
+   */
+  updateSrc = (): void => {
+    if (this._image) {
+      this._image.src = this.getAttribute('src') || '';
+    }
+  };
   connectedCallback() {
     this.handlerExternalCss();
-    const src = this.getAttribute('src') || '';
     this._image = new Image();
-    this._image.src = src;
     // Always give the inner <img> an alt (empty = decorative) so it is never
     // announced by its URL.
     this._image.alt = this.alt;
@@ -78,10 +86,12 @@ export class ImageElement extends RanElement {
         this._container.appendChild(this._image);
       }
     });
+    this.updateSrc();
   }
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
     if (oldValue === newValue) return;
     this.listenFallback(name, newValue);
+    if (name === 'src') this.updateSrc();
     if (name === 'alt' && this._image) this._image.alt = newValue ?? '';
     if (name === 'sheet') this.handlerExternalCss();
   }

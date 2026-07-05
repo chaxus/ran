@@ -31,16 +31,10 @@ export class Input extends RanElement {
       'value',
       'status', // error warning normal
       'message', // helper / validation text shown below the field
-      'prefix', // 前缀
-      'suffix', // 后缀
-      'allowclear', // 清除 icon
-      'count', // 计算输入的数量
-      'maxlength',
-      'showcount',
-      'onPressEnter', // 按下回车的回调
-      'variant', // filled borderless
-      'minrows', // 当 type 等于 TextArea 时
-      'maxrows',
+      'min', // 当 type 等于 number 时约束下限
+      'max', // 当 type 等于 number 时约束上限
+      'step', // 当 type 等于 number 时的步长
+      'required', // 原生约束校验
       'sheet',
     ];
   }
@@ -274,42 +268,6 @@ export class Input extends RanElement {
     }
   }
   /**
-   * @description: 获取前面的 icon
-   * @return {String}
-   */
-  get prefix(): string {
-    return this.getAttribute('prefix') || '';
-  }
-  /**
-   * @description: 设置前面的 icon 来表示标识
-   * @param {string|null} value
-   */
-  set prefix(value: string) {
-    if (value) {
-      this.setAttribute('prefix', value);
-    } else {
-      this.removeAttribute('prefix');
-    }
-  }
-  /**
-   * @description: 获取后面的 icon
-   * @return {String}
-   */
-  get suffix(): string {
-    return this.getAttribute('suffix') || '';
-  }
-  /**
-   * @description: 设置后面的 icon 来表示标识
-   * @param {string|null} value
-   */
-  set suffix(value: string) {
-    if (value) {
-      this.setAttribute('suffix', value);
-    } else {
-      this.removeAttribute('suffix');
-    }
-  }
-  /**
    * @description: 获取 input 的类型
    * @return {string|null}
    */
@@ -460,6 +418,35 @@ export class Input extends RanElement {
     }
   };
   /**
+   * @description: 监听 min/max/step 属性，仅在 type="number" 时转发到内部 <input>
+   * 以启用原生数值约束；否则从内部 <input> 移除。
+   * @param {string} name
+   * @param {string} value
+   */
+  listenNumericConstraint = (name: string, value: string): void => {
+    if ((name === 'min' || name === 'max' || name === 'step') && this._inputContent) {
+      if (this.type === 'number' && value != null) {
+        this._inputContent.setAttribute(name, value);
+      } else {
+        this._inputContent.removeAttribute(name);
+      }
+    }
+  };
+  /**
+   * @description: 监听 required 属性，转发到内部 <input> 以启用原生约束校验
+   * @param {string} name
+   * @param {string} value
+   */
+  listenRequired = (name: string, value: string): void => {
+    if (name === 'required' && this._inputContent) {
+      if (value != null) {
+        this._inputContent.setAttribute('required', '');
+      } else {
+        this._inputContent.removeAttribute('required');
+      }
+    }
+  };
+  /**
    * @description: 监听 disabled 属性
    * @param {string} name
    * @param {string} value
@@ -509,6 +496,8 @@ export class Input extends RanElement {
     this.listenLabel(name, newValue);
     this.listenStatus(name, newValue);
     this.listenMessage(name, newValue);
+    this.listenNumericConstraint(name, newValue);
+    this.listenRequired(name, newValue);
     this.listenDisabled(name, newValue);
     this.listenIcon(name, newValue, oldValue);
     if (name === 'value' && oldValue !== newValue) {
@@ -537,6 +526,16 @@ export class Input extends RanElement {
     }
     if (this.type) {
       this._inputContent.setAttribute('type', this.type);
+    }
+    // Forward number constraints / required set before connect so native
+    // constraint validation applies from the first paint.
+    if (this.type === 'number') {
+      if (this.min) this._inputContent.setAttribute('min', this.min);
+      if (this.max) this._inputContent.setAttribute('max', this.max);
+      if (this.step) this._inputContent.setAttribute('step', this.step);
+    }
+    if (this.required) {
+      this._inputContent.setAttribute('required', '');
     }
     this._events.on(this._inputContent, 'input', this.customInput);
     // 原生 change 在失焦/提交时触发，这里转发为组件的 change 事件

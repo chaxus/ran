@@ -26,7 +26,6 @@ A low-level floating-panel primitive: a rounded, elevated surface with an option
 | --------- | -------- | ------- | ----------------------------------------------------------------------- |
 | `arrow`   | `string` | `''`    | Arrow side: `top`, `bottom`, `left`, `right`. Omit for no arrow.        |
 | `transit` | `string` | `''`    | CSS class applied to the panel for ~300ms to play an entrance animation |
-| `show`    | `string` | `''`    | Reflected attribute with no built-in behavior; a visibility hook        |
 | `sheet`   | `string` | `''`    | CSS injected into the component's shadow DOM                            |
 
 ### Arrow Direction `arrow`
@@ -95,15 +94,15 @@ CSS injected into the panel's shadow DOM — the same `sheet` convention used by
 
 ## Slots
 
-| Slot      | Description                             |
-| --------- | --------------------------------------- |
-| (default) | The panel's content, rendered as-is     |
+| Slot      | Description                         |
+| --------- | ----------------------------------- |
+| (default) | The panel's content, rendered as-is |
 
 ## CSS Parts
 
-| Part       | Description                                     |
-| ---------- | ----------------------------------------------- |
-| `dropdown` | The panel surface, for outside-shadow styling   |
+| Part       | Description                                   |
+| ---------- | --------------------------------------------- |
+| `dropdown` | The panel surface, for outside-shadow styling |
 
 ```css
 r-dropdown {

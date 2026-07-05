@@ -15,7 +15,7 @@ export class Skeleton extends RanElement {
   _shadowDom: ShadowRoot;
 
   static get observedAttributes(): string[] {
-    return ['disabled', 'sheet'];
+    return ['sheet'];
   }
 
   constructor() {

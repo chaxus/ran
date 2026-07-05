@@ -90,7 +90,7 @@ The component does **not** dispatch any custom events — there is nothing to bi
 
 This component exposes **no `::part()` hooks and no `--ran-scratch-*` CSS variables**. Its shadow DOM is three fixed layers:
 
-| Class                        | Role                                                          |
+| Class                        | Role                                                         |
 | ---------------------------- | ------------------------------------------------------------ |
 | `.ran-scratch-ticket`        | Full-size relative container (`width: 100%; height: 100%`)   |
 | `.ran-scratch-ticket-award`  | The reveal layer, `z-index: 1`, hardcoded `background: #000` |

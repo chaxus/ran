@@ -18,13 +18,13 @@ Progress bar for showing task completion, with an optional draggable handle.
 
 ### Properties
 
-| Property  | Type     | Default     | Description                                                         |
-| --------- | -------- | ----------- | ------------------------------------------------------------------ |
+| Property  | Type     | Default     | Description                                                            |
+| --------- | -------- | ----------- | ---------------------------------------------------------------------- |
 | `percent` | `string` | `'0'`       | Current progress; accepts a number or a percentage. Capped at `total`. |
-| `total`   | `string` | `'100'`     | Total progress; accepts a number or a percentage.                  |
-| `type`    | `string` | `'primary'` | Bar type: `primary` (static) or `drag` (clickable / draggable).    |
-| `dot`     | `string` | `'true'`    | Whether to show the drag handle: `true` or `false`.                |
-| `sheet`   | `string` | `''`        | CSS injected into the component's shadow DOM.                      |
+| `total`   | `string` | `'100'`     | Total progress; accepts a number or a percentage.                      |
+| `type`    | `string` | `'primary'` | Bar type: `primary` (static) or `drag` (clickable / draggable).        |
+| `dot`     | `string` | `'true'`    | Whether to show the drag handle: `true` or `false`.                    |
+| `sheet`   | `string` | `''`        | CSS injected into the component's shadow DOM.                          |
 
 ### Progress Value `percent`
 
@@ -69,8 +69,7 @@ Sets the denominator for `percent`. Both numbers and percentages are allowed, so
 </Demo>
 
 ```html
-<r-progress type="drag" percent="30%"></r-progress>
-<r-progress type="primary" percent="40%"></r-progress>
+<r-progress type="drag" percent="30%"></r-progress> <r-progress type="primary" percent="40%"></r-progress>
 ```
 
 ### Drag Handle `dot`
@@ -112,7 +111,7 @@ Dispatched on the `drag` type whenever the user clicks the track or drags the ha
 
 ## CSS Parts
 
-| Part    | Description                       |
+| Part    | Description                      |
 | ------- | -------------------------------- |
 | `track` | The progress track (background). |
 | `fill`  | The filled portion of the track. |

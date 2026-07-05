@@ -34,14 +34,14 @@ radar.abilitys = [
 
 ### Properties
 
-| Property       | Type                    | Default                                | Description                                                     |
-| -------------- | ----------------------- | -------------------------------------- | -------------------------------------------------------------- |
-| `abilitys`     | `string` / `Array`      | `''`                                   | Chart data as a JSON string (or an array via the JS property)  |
-| `colorPolygon` | `string`                | `var(--ran-radar-polygon-color)` / `#e6e6e6` | Color of the concentric grid polygons                    |
-| `colorLine`    | `string`                | `var(--ran-radar-line-color)` / `#e6e6e6`    | Color of the axis lines and outer edge                   |
-| `fillColor`    | `string`                | `rgba(255,121,35,0.60)`                | Fill color of the data region                                  |
-| `strokeColor`  | `string`                | `rgba(255,121,35,0.60)`                | Stroke color of the data region outline and vertex dots        |
-| `sheet`        | `string`                | `''`                                   | CSS injected into the component's shadow DOM                    |
+| Property       | Type               | Default                                      | Description                                                   |
+| -------------- | ------------------ | -------------------------------------------- | ------------------------------------------------------------- |
+| `abilitys`     | `string` / `Array` | `''`                                         | Chart data as a JSON string (or an array via the JS property) |
+| `colorPolygon` | `string`           | `var(--ran-radar-polygon-color)` / `#e6e6e6` | Color of the concentric grid polygons                         |
+| `colorLine`    | `string`           | `var(--ran-radar-line-color)` / `#e6e6e6`    | Color of the axis lines and outer edge                        |
+| `fillColor`    | `string`           | `rgba(255,121,35,0.60)`                      | Fill color of the data region                                 |
+| `strokeColor`  | `string`           | `rgba(255,121,35,0.60)`                      | Stroke color of the data region outline and vertex dots       |
+| `sheet`        | `string`           | `''`                                         | CSS injected into the component's shadow DOM                  |
 
 Each entry of the `abilitys` array accepts the following keys:
 
@@ -49,12 +49,12 @@ Each entry of the `abilitys` array accepts the following keys:
 | ----------------- | -------- | -------- | --------------------------------------------------------------- |
 | `abilityName`     | `string` | Yes      | Axis label text                                                 |
 | `scoreRate`       | `number` | Yes      | Value on that axis; the grid maxes out at `100`                 |
-| `backgroundColor` | `string` | No       | Background color of the label pill (default transparent)       |
-| `fontSize`        | `number` | No       | Font size of the label (defaults to a size scaled to the chart)|
-| `fontColor`       | `string` | No       | Label text color (defaults to `--ran-color-text`)              |
-| `fontFamily`      | `string` | No       | Label font family (default `黑体`)                             |
+| `backgroundColor` | `string` | No       | Background color of the label pill (default transparent)        |
+| `fontSize`        | `number` | No       | Font size of the label (defaults to a size scaled to the chart) |
+| `fontColor`       | `string` | No       | Label text color (defaults to `--ran-color-text`)               |
+| `fontFamily`      | `string` | No       | Label font family (default `黑体`)                              |
 
-> Note: `colorPolygon`, `colorLine`, `fillColor`, and `strokeColor` are read case-insensitively on the initial render, so the examples below render correctly when the attribute is present up front. Because these names are registered in `observedAttributes` in camelCase (which never matches the lowercased DOM attribute name), changing one of them after mount does not re-render the chart — set the data-driving `abilitys` attribute to force a refresh, or provide the colors via the CSS variables below. Prefer the CSS variables for theme-aware, reactive styling.
+> Note: `colorPolygon`, `colorLine`, `fillColor`, and `strokeColor` are read case-insensitively, so they render correctly whether the attribute is present up front or changed after mount — updating any of them re-renders the chart. For theme-aware styling, prefer the CSS variables below.
 
 ### Chart Data `abilitys`
 
@@ -131,16 +131,16 @@ Per-axis label styling (`backgroundColor`, `fontSize`, `fontColor`) can be set o
 
 The chart colors can also be set (theme-reactively) through CSS custom properties on the host:
 
-| Variable                     | Default                 | Description                          |
-| ---------------------------- | ----------------------- | ------------------------------------ |
-| `--ran-radar-polygon-color`  | `var(--ran-color-border)` / `#e6e6e6` | Grid polygon color     |
-| `--ran-radar-line-color`     | `var(--ran-color-border)` / `#e6e6e6` | Axis line color        |
-| `--ran-radar-fill-color`     | `rgba(255,121,35,0.60)` | Data region fill color               |
-| `--ran-radar-stroke-color`   | `rgba(255,121,35,0.60)` | Data region stroke color             |
-| `--ran-radar-width`          | `100%`                  | Canvas container width               |
-| `--ran-radar-height`         | `100%`                  | Canvas container height              |
-| `--ran-radar-display`        | `block`                 | `display` of the canvas container    |
-| `--ran-radar-position`       | `relative`              | `position` of the canvas container   |
+| Variable                    | Default                               | Description                        |
+| --------------------------- | ------------------------------------- | ---------------------------------- |
+| `--ran-radar-polygon-color` | `var(--ran-color-border)` / `#e6e6e6` | Grid polygon color                 |
+| `--ran-radar-line-color`    | `var(--ran-color-border)` / `#e6e6e6` | Axis line color                    |
+| `--ran-radar-fill-color`    | `rgba(255,121,35,0.60)`               | Data region fill color             |
+| `--ran-radar-stroke-color`  | `rgba(255,121,35,0.60)`               | Data region stroke color           |
+| `--ran-radar-width`         | `100%`                                | Canvas container width             |
+| `--ran-radar-height`        | `100%`                                | Canvas container height            |
+| `--ran-radar-display`       | `block`                               | `display` of the canvas container  |
+| `--ran-radar-position`      | `relative`                            | `position` of the canvas container |
 
 The label text color also falls back to the `--ran-color-text` theme token, so labels stay legible in light and dark mode.
 
@@ -153,4 +153,4 @@ None. `<r-radar>` does not dispatch any custom events.
 - **Sizing**: The host has no intrinsic size — always set an explicit `width`/`height` (via `style` or the `--ran-radar-width`/`--ran-radar-height` variables). The chart auto-redraws on container resize via a `ResizeObserver`.
 - **Data format**: Pass valid JSON in `abilitys`; malformed JSON is logged and cannot be parsed. Use the `abilitys` JS property when working with real arrays in script.
 - **Scale**: `scoreRate` is measured against a fixed maximum of `100`; normalize your values to that range.
-- **Theming**: Prefer the `--ran-radar-*` CSS variables over the color attributes — they are theme-reactive and update after mount, whereas the camelCase color attributes only apply on the initial render.
+- **Theming**: The color attributes (`colorPolygon`, `colorLine`, `fillColor`, `strokeColor`) are reactive and re-render the chart when changed after mount. Prefer the `--ran-radar-*` CSS variables when you want colors to follow the light/dark theme automatically.

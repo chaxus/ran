@@ -9,15 +9,12 @@ describe('r-popover contract', () => {
     document.body.innerHTML = '';
   });
 
-  it('reflects placement, arrow, and trigger properties to attributes', () => {
+  it('reflects placement and trigger properties to attributes', () => {
     const popover = document.createElement('r-popover') as unknown as Popover;
     document.body.appendChild(popover);
 
     popover.placement = 'top';
     expect(popover.getAttribute('placement')).toBe('top');
-
-    popover.arrow = 'false';
-    expect(popover.getAttribute('arrow')).toBe('false');
 
     popover.trigger = 'hover';
     expect(popover.getAttribute('trigger')).toBe('hover');
@@ -95,7 +92,6 @@ describe('r-popover contract', () => {
     const popover = document.createElement('r-popover') as any;
     popover.trigger = 'hover';
     popover.placement = 'top';
-    popover.arrow = 'true';
     popover.innerHTML = `
       <div id="trigger">Hover me</div>
       <r-content>Popover content</r-content>
@@ -111,13 +107,6 @@ describe('r-popover contract', () => {
     expect(popoverContent.getAttribute('arrow')).toBe('bottom');
     expect(popoverContent.style.getPropertyValue('--ran-dropdown-arrow-anchor-width')).not.toBe('');
     expect(popoverContent.style.getPropertyValue('--ran-dropdown-arrow-anchor-height')).not.toBe('');
-  });
-
-  it('arrow getter returns attribute value', () => {
-    const popover = document.createElement('r-popover') as any;
-    document.body.appendChild(popover);
-    popover.setAttribute('arrow', 'true');
-    expect(popover.arrow).toBe('true');
   });
 
   it('getPopupContainerId getter and setter', () => {

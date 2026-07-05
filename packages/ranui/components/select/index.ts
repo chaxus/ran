@@ -21,6 +21,7 @@ import {
 interface Option {
   label: string | number;
   value: string | number;
+  disabled?: boolean;
 }
 
 type PlacementDirection = Record<string, Record<string, string>>;
@@ -50,6 +51,9 @@ export class Select extends RanElement {
   static formAssociated = true;
   _internals?: ElementInternals;
   _events = new EventManager();
+  // Search listeners are (re)wired reactively as `showSearch` toggles, so they
+  // live in their own manager that can be aborted independently of _events.
+  _searchEvents = new EventManager();
   removeTimeId?: NodeJS.Timeout;
   _listboxId: string;
   _activeIndex: number;
@@ -74,11 +78,13 @@ export class Select extends RanElement {
     return [
       'disabled',
       'sheet',
-      'clear',
       'type',
       'value',
-      'defaultValue',
-      'showSearch',
+      // Attribute names are lowercased by the DOM, so these MUST be lowercase to
+      // be observed — the previous camelCase entries never fired (which is why
+      // defaultValue/showSearch used to apply only on first connect).
+      'defaultvalue',
+      'showsearch',
       'placement', // 弹窗的方向
       'getPopupContainerId', // 挂载的节点
       'dropdownclass', // 弹窗的类名
@@ -308,6 +314,25 @@ export class Select extends RanElement {
     return this._selectionDropdown.style.display === 'block';
   };
 
+  /**
+   * Walk from `from` in the direction of `step` (clamped to the list bounds)
+   * and return the first non-disabled option index, or -1 if none exists.
+   * Keeps keyboard navigation from ever landing on a disabled option.
+   */
+  _nextEnabledIndex = (from: number, step: number): number => {
+    const options = this.getDropdownOptions();
+    const count = options.length;
+    if (count === 0) return -1;
+    let index = Math.max(0, Math.min(from, count - 1));
+    for (let i = 0; i < count; i++) {
+      if (!isDisabled(options[index])) return index;
+      const next = index + step;
+      if (next < 0 || next > count - 1) return -1;
+      index = next;
+    }
+    return -1;
+  };
+
   keydownSelect = (e: KeyboardEvent): void => {
     if (this.disabled) return;
     if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
@@ -319,7 +344,8 @@ export class Select extends RanElement {
       if (options.length === 0) return;
       const step = e.key === 'ArrowDown' ? 1 : -1;
       const current = this._activeIndex >= 0 ? this._activeIndex : 0;
-      this.setActiveOptionByIndex(current + step);
+      const target = this._nextEnabledIndex(current + step, step);
+      if (target >= 0) this.setActiveOptionByIndex(target);
       return;
     }
     if (e.key === 'Enter' || e.key === ' ') {
@@ -481,6 +507,11 @@ export class Select extends RanElement {
   clickOption = (e: MouseEvent): void => {
     e.stopPropagation();
     const element = (e.target as Element).closest('r-dropdown-item') as HTMLElement | null;
+    // Disabled options are non-selectable, matching native <select> semantics.
+    if (element && isDisabled(element)) {
+      this.removeDropDownTimeId(e);
+      return;
+    }
     this.selectOptionElement(element);
     this.removeDropDownTimeId(e);
   };
@@ -552,7 +583,8 @@ export class Select extends RanElement {
       if (item.tagName !== 'R-OPTION') return;
       const label = item.innerHTML;
       const value = item.getAttribute('value') || '';
-      this._optionList?.push({ label, value });
+      const disabled = isDisabled(item);
+      this._optionList?.push({ label, value, disabled });
       if (this._optionLabelMapValue.get(label)) {
         console.warn(`${label} is repeat option`);
       }
@@ -577,13 +609,19 @@ export class Select extends RanElement {
     }
     options.forEach((item) => {
       if (this._selectionDropdown) {
-        const { label, value } = item;
+        const { label, value, disabled } = item;
         const selectOptionItem = View('r-dropdown-item')
           .attr('role', 'option')
           .attr('value', `${value}`)
           .attr('title', `${label}`)
           .text(`${label}`)
           .build() as HTMLElement;
+        // Carry the disabled state onto the rendered item so click/keyboard
+        // selection can skip it and assistive tech announces it.
+        if (disabled) {
+          selectOptionItem.setAttribute('disabled', '');
+          selectOptionItem.setAttribute('aria-disabled', 'true');
+        }
         const defaultValue = this.getAttribute('defaultValue') || this.getAttribute('value');
         if (defaultValue === value) {
           selectOptionItem.setAttribute('active', value);
@@ -630,7 +668,7 @@ export class Select extends RanElement {
         .map((item) => {
           const { label } = item;
           if (`${label}`.toLowerCase().includes(value)) {
-            return { label, value: item.value };
+            return { label, value: item.value, disabled: item.disabled };
           }
           return undefined;
         })
@@ -659,15 +697,26 @@ export class Select extends RanElement {
     if (this.trigger.includes('click')) {
       this._events.on(this, 'click', this.selectMouseDown).on(this, 'blur', this.selectBlur);
     }
+    this._applyShowSearch();
+  }
+  /**
+   * (Re)wire the search-box listeners to match the current `showSearch` value.
+   * Reactive: abort any previously-registered search listeners first, then
+   * re-register only while `showSearch` is truthy. Safe to call on connect and
+   * on every `showSearch` attribute change.
+   */
+  _applyShowSearch = (): void => {
+    this._searchEvents.abort();
     if (this.showSearch) {
       this.onSearch = searchThrottle(this.changeSearch);
       if (this.onSearch) {
-        this._events.on(this._search, 'change', this.onSearch).on(this._search, 'click', this.onSearch);
+        this._searchEvents.on(this._search, 'change', this.onSearch).on(this._search, 'click', this.onSearch);
       }
     }
-  }
+  };
   disconnectedCallback(): void {
     this._events.abort();
+    this._searchEvents.abort();
     this._detachReposition();
     this.removeSelectDropdown();
   }
@@ -688,6 +737,11 @@ export class Select extends RanElement {
     }
     if (name === 'value') this.syncSelectedFromValue(newValue);
     if (name === 'sheet' && this._shadowDom) this.handlerExternalCss();
+    // Reactive: `defaultValue` and `showSearch` used to apply only on first
+    // connect. Re-run the same effect their initial-connect code performs when
+    // they change afterwards.
+    if (name === 'defaultvalue') this.setDefaultValue();
+    if (name === 'showsearch' && this._search) this._applyShowSearch();
   }
 
   /**

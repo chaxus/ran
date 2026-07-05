@@ -122,9 +122,10 @@ describe('r-input contract', () => {
     expect(changeEvents.length).toBe(1);
   });
 
-  it('min/max/step only apply when type is number', () => {
+  it('min/max/step only apply when type is number and forward to the inner input', () => {
     const input = document.createElement('r-input') as Input;
     document.body.appendChild(input);
+    const innerInput = (input as any)._inputContent as HTMLInputElement;
 
     input.type = 'text';
     input.min = '0';
@@ -133,6 +134,9 @@ describe('r-input contract', () => {
     expect(input.getAttribute('min')).toBeNull();
     expect(input.getAttribute('max')).toBeNull();
     expect(input.getAttribute('step')).toBeNull();
+    expect(innerInput.hasAttribute('min')).toBe(false);
+    expect(innerInput.hasAttribute('max')).toBe(false);
+    expect(innerInput.hasAttribute('step')).toBe(false);
 
     input.type = 'number';
     input.min = '0';
@@ -141,17 +145,25 @@ describe('r-input contract', () => {
     expect(input.getAttribute('min')).toBe('0');
     expect(input.getAttribute('max')).toBe('100');
     expect(input.getAttribute('step')).toBe('1');
+    // FIX A: the constraints must reach the inner <input> so they actually constrain input
+    expect(innerInput.getAttribute('min')).toBe('0');
+    expect(innerInput.getAttribute('max')).toBe('100');
+    expect(innerInput.getAttribute('step')).toBe('1');
   });
 
-  it('required property getter and setter', () => {
+  it('required property getter and setter forwards to the inner input', () => {
     const input = document.createElement('r-input') as Input;
     document.body.appendChild(input);
+    const innerInput = (input as any)._inputContent as HTMLInputElement;
 
     input.required = 'true';
     expect(input.hasAttribute('required')).toBe(true);
+    // FIX A: forwarded so native constraint validation applies
+    expect(innerInput.hasAttribute('required')).toBe(true);
 
     input.required = 'false';
     expect(input.hasAttribute('required')).toBe(false);
+    expect(innerInput.hasAttribute('required')).toBe(false);
   });
 
   it('placeholder getter and setter use property accessor', () => {
@@ -179,24 +191,6 @@ describe('r-input contract', () => {
     expect(input.icon).toBe('search');
     input.icon = '';
     expect(input.hasAttribute('icon')).toBe(false);
-  });
-
-  it('prefix getter and setter', () => {
-    const input = document.createElement('r-input') as Input;
-    document.body.appendChild(input);
-    input.prefix = 'star';
-    expect(input.prefix).toBe('star');
-    input.prefix = '';
-    expect(input.hasAttribute('prefix')).toBe(false);
-  });
-
-  it('suffix getter and setter', () => {
-    const input = document.createElement('r-input') as Input;
-    document.body.appendChild(input);
-    input.suffix = 'eye';
-    expect(input.suffix).toBe('eye');
-    input.suffix = '';
-    expect(input.hasAttribute('suffix')).toBe(false);
   });
 
   it('type getter and setter', () => {

@@ -33,16 +33,16 @@ Modal visibility is controlled by the `open` attribute (or the `open` property).
 
 ### Properties
 
-| Property       | Type      | Default | Description                                                       |
-| -------------- | --------- | ------- | ----------------------------------------------------------------- |
-| `open`         | `boolean` | `false` | Whether the modal is visible                                      |
-| `title`        | `string`  | `''`    | Header title text (falls back to `Modal` when empty)             |
-| `closable`     | `boolean` | `true`  | Whether the close (`x`) button is shown                           |
-| `maskClosable` | `boolean` | `true`  | Whether clicking the backdrop mask closes the modal              |
-| `closeOnEsc`   | `boolean` | `true`  | Whether pressing `Escape` closes the modal                       |
-| `lockScroll`   | `boolean` | `true`  | Whether body scroll is locked while the modal is open            |
-| `autoFocus`    | `boolean` | `true`  | Whether the first focusable element is focused on open           |
-| `sheet`        | `string`  | `''`    | CSS injected into the shadow DOM                                  |
+| Property       | Type      | Default | Description                                            |
+| -------------- | --------- | ------- | ------------------------------------------------------ |
+| `open`         | `boolean` | `false` | Whether the modal is visible                           |
+| `title`        | `string`  | `''`    | Header title text (falls back to `Modal` when empty)   |
+| `closable`     | `boolean` | `true`  | Whether the close (`x`) button is shown                |
+| `maskClosable` | `boolean` | `true`  | Whether clicking the backdrop mask closes the modal    |
+| `closeOnEsc`   | `boolean` | `true`  | Whether pressing `Escape` closes the modal             |
+| `lockScroll`   | `boolean` | `true`  | Whether body scroll is locked while the modal is open  |
+| `autoFocus`    | `boolean` | `true`  | Whether the first focusable element is focused on open |
+| `sheet`        | `string`  | `''`    | CSS injected into the shadow DOM                       |
 
 ### Title `title`
 
@@ -101,7 +101,7 @@ By default clicking the backdrop closes the modal. Set to `false` to require an 
 
 ## Slots
 
-| Slot      | Description                                                    |
+| Slot      | Description                                                   |
 | --------- | ------------------------------------------------------------- |
 | (default) | Body content of the modal                                     |
 | `footer`  | Footer actions; the footer bar only shows when this is filled |
@@ -120,14 +120,14 @@ By default clicking the backdrop closes the modal. Set to `false` to require an 
 
 All close-related events carry a `trigger` in `event.detail` describing what caused the close: `'mask'`, `'button'`, `'escape'`, or `'program'`.
 
-| Event         | Cancelable | `detail`               | Description                                    |
-| ------------- | ---------- | ---------------------- | ---------------------------------------------- |
-| `beforeopen`  | Yes        | —                      | Before opening; call `preventDefault()` to cancel |
-| `open`        | No         | —                      | Fired when the modal opens                     |
-| `afteropen`   | No         | —                      | Fired after the open transition finishes       |
-| `beforeclose` | Yes        | `{ trigger }`          | Before closing; call `preventDefault()` to cancel |
-| `close`       | No         | `{ trigger }`          | Fired when the modal closes                    |
-| `afterclose`  | No         | `{ trigger }`          | Fired after the close transition finishes      |
+| Event         | Cancelable | `detail`      | Description                                       |
+| ------------- | ---------- | ------------- | ------------------------------------------------- |
+| `beforeopen`  | Yes        | —             | Before opening; call `preventDefault()` to cancel |
+| `open`        | No         | —             | Fired when the modal opens                        |
+| `afteropen`   | No         | —             | Fired after the open transition finishes          |
+| `beforeclose` | Yes        | `{ trigger }` | Before closing; call `preventDefault()` to cancel |
+| `close`       | No         | `{ trigger }` | Fired when the modal closes                       |
+| `afterclose`  | No         | `{ trigger }` | Fired after the close transition finishes         |
 
 ```html
 <r-modal id="modal" title="Example"></r-modal>
@@ -149,14 +149,14 @@ All close-related events carry a `trigger` in `event.detail` describing what cau
 
 The `Modal` class exposes static helpers that create, mount, and resolve a modal without markup. Each returns a `Promise<{ action, trigger }>` where `action` is `'confirm'`, `'cancel'`, or `'dismiss'`.
 
-| Method            | Description                                              |
-| ----------------- | ------------------------------------------------------- |
-| `Modal.open(opts)`    | Open a modal with a single OK button                |
-| `Modal.confirm(opts)` | Open a modal with OK and Cancel buttons             |
-| `Modal.info(opts)`    | Informational modal (title defaults to `Info`)      |
-| `Modal.success(opts)` | Success modal (title defaults to `Success`)         |
-| `Modal.warning(opts)` | Warning modal (title defaults to `Warning`)         |
-| `Modal.error(opts)`   | Error modal (title defaults to `Error`)             |
+| Method                | Description                                    |
+| --------------------- | ---------------------------------------------- |
+| `Modal.open(opts)`    | Open a modal with a single OK button           |
+| `Modal.confirm(opts)` | Open a modal with OK and Cancel buttons        |
+| `Modal.info(opts)`    | Informational modal (title defaults to `Info`) |
+| `Modal.success(opts)` | Success modal (title defaults to `Success`)    |
+| `Modal.warning(opts)` | Warning modal (title defaults to `Warning`)    |
+| `Modal.error(opts)`   | Error modal (title defaults to `Error`)        |
 
 Options (all optional): `title`, `content`, `okText`, `cancelText`, `showCancel`, `maskClosable`, `closeOnEsc`, `lockScroll`, `autoFocus`, `closable`, `onConfirm`, `onCancel`. `onConfirm` / `onCancel` may return `false` (or a promise resolving to `false`) to keep the modal open.
 
@@ -182,16 +182,16 @@ if (result.action === 'confirm') {
 
 Style internal pieces with `::part()`.
 
-| Part     | Description                    |
-| -------- | ------------------------------ |
-| `root`   | Outer overlay container        |
-| `mask`   | Backdrop behind the dialog     |
-| `dialog` | The dialog box                 |
-| `header` | Header bar                     |
-| `title`  | Title heading                  |
-| `close`  | Close (`x`) button             |
-| `body`   | Scrollable body region         |
-| `footer` | Footer action bar              |
+| Part     | Description                |
+| -------- | -------------------------- |
+| `root`   | Outer overlay container    |
+| `mask`   | Backdrop behind the dialog |
+| `dialog` | The dialog box             |
+| `header` | Header bar                 |
+| `title`  | Title heading              |
+| `close`  | Close (`x`) button         |
+| `body`   | Scrollable body region     |
+| `footer` | Footer action bar          |
 
 ```css
 r-modal::part(dialog) {

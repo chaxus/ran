@@ -1,5 +1,5 @@
 import type { Progress } from '@/components/progress';
-import { Div, Slot, View } from '@/utils/builder';
+import { Div, View } from '@/utils/builder';
 
 export interface SpeedOption {
   label: string;
@@ -9,7 +9,6 @@ export interface SpeedOption {
 export interface PlayerViewRefs {
   player: HTMLDivElement;
   container: HTMLDivElement;
-  slot: HTMLSlotElement;
   playerBtn: HTMLDivElement;
   playerController: HTMLDivElement;
   progress: HTMLDivElement;
@@ -52,13 +51,11 @@ export function ensurePlayerView(input: {
 
   let player = shadowDom.querySelector('.ran-player') as HTMLDivElement | null;
   let container = shadowDom.querySelector('.ran-player-contain') as HTMLDivElement | null;
-  let slot = shadowDom.querySelector('slot') as HTMLSlotElement | null;
   let playerBtn = shadowDom.querySelector('.ran-player-play-btn') as HTMLDivElement | null;
   let playerController = shadowDom.querySelector('.ran-player-controller') as HTMLDivElement | null;
 
-  if (!player || !container || !slot || !playerBtn || !playerController) {
+  if (!player || !container || !playerBtn || !playerController) {
     container = Div().build() as HTMLDivElement;
-    slot = Slot().build() as HTMLSlotElement;
     playerBtn = Div().class('ran-player-play-btn').build() as HTMLDivElement;
 
     const progressWrapBuffer = Div().class('ran-player-controller-progress-wrap-buffer').build() as HTMLDivElement;
@@ -161,7 +158,7 @@ export function ensurePlayerView(input: {
     player = Div()
       .class('ran-player')
       .id(playerIdentifier)
-      .children(container, slot, playerBtn, playerController)
+      .children(container, playerBtn, playerController)
       .build() as HTMLDivElement;
 
     shadowDom.appendChild(player);
@@ -270,7 +267,6 @@ export function ensurePlayerView(input: {
   return {
     player: assertExists(player, '.ran-player'),
     container: assertExists(container, '.ran-player-contain'),
-    slot: assertExists(slot, 'slot'),
     playerBtn: assertExists(playerBtn, '.ran-player-play-btn'),
     playerController: assertExists(playerController, '.ran-player-controller'),
     progress,

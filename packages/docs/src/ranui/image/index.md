@@ -20,12 +20,12 @@ Image component that renders an image with a built-in fallback shown when the so
 
 | Property   | Type     | Default                        | Description                                                                    |
 | ---------- | -------- | ------------------------------ | ------------------------------------------------------------------------------ |
-| `src`      | `string` | `''`                           | Image source URL. Read once when the element mounts (see note below).          |
+| `src`      | `string` | `''`                           | Image source URL. Reactive — changing it after mount reloads the image.        |
 | `alt`      | `string` | `''`                           | Alternative text forwarded to the inner `<img>`. Empty marks it as decorative. |
 | `fallback` | `string` | built-in broken-image data URI | Image shown when `src` fails to load.                                          |
 | `sheet`    | `string` | `''`                           | CSS injected into the component's shadow DOM.                                  |
 
-> ⚠️ **Note on `src`**: `src` is **not** in `observedAttributes`; it is read only once during `connectedCallback`. Changing `src` after the element is mounted does **not** reload the image. Set `src` before insertion, or re-create the element to change the source. `alt`, `fallback`, and `sheet` are observed and update reactively.
+`src`, `alt`, `fallback`, and `sheet` are all observed and update reactively — changing any of them on a mounted element takes effect immediately.
 
 ### Image Source `src`
 
@@ -88,7 +88,7 @@ None. `r-img` does not dispatch any custom events.
 
 ## Best Practices
 
-- **Set `src` before mounting**: Because `src` is read only once on connect, assign it before inserting the element; do not expect a later `src` change to reload the image.
+- **Change `src` anytime**: `src` is reactive, so updating it on a mounted element reloads the image; the fallback still kicks in if the new URL fails to load.
 - **Provide `alt` for meaningful images**: Describe the content for screen readers; leave `alt` empty only for purely decorative images.
 - **Rely on the built-in fallback**: A default broken-image placeholder is used automatically, but supply your own `fallback` when you want a branded or context-appropriate placeholder.
 - **Style with `sheet`**: Since the image lives in shadow DOM, use the `sheet` attribute (or component CSS variables) to apply borders, radius, or sizing.

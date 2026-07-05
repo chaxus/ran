@@ -28,30 +28,30 @@ Options are supplied as slotted `<r-option>` children. Each option's `value` att
 
 ### Properties
 
-| Property              | Type      | Default    | Description                                                                          |
-| --------------------- | --------- | ---------- | ----------------------------------------------------------------------------------- |
-| `value`               | `string`  | `''`       | Selected value. Setting it updates the closed-state label; ignored while `disabled` |
-| `defaultValue`        | `string`  | `''`       | Initial selected value, matched against option `value`                              |
-| `disabled`            | `boolean` | `false`    | Whether the select is disabled                                                      |
+| Property              | Type      | Default    | Description                                                                             |
+| --------------------- | --------- | ---------- | --------------------------------------------------------------------------------------- |
+| `value`               | `string`  | `''`       | Selected value. Setting it updates the closed-state label; ignored while `disabled`     |
+| `defaultValue`        | `string`  | `''`       | Initial selected value, matched against option `value`                                  |
+| `disabled`            | `boolean` | `false`    | Whether the select is disabled                                                          |
 | `type`                | `string`  | `''`       | `text` renders a borderless, transparent trigger with no arrow icon; otherwise bordered |
-| `placement`           | `string`  | `'bottom'` | Dropdown direction: `top`, `bottom`                                                 |
-| `showSearch`          | `boolean` | `false`    | Show an inline search box that filters options by label                             |
-| `getPopupContainerId` | `string`  | `''`       | Element `id` to mount the dropdown into (defaults to `document.body`)               |
-| `dropdownclass`       | `string`  | `''`       | Custom class applied to the dropdown panel                                          |
+| `placement`           | `string`  | `'bottom'` | Dropdown direction: `top`, `bottom`                                                     |
+| `showSearch`          | `boolean` | `false`    | Show an inline search box that filters options by label                                 |
+| `getPopupContainerId` | `string`  | `''`       | Element `id` to mount the dropdown into (defaults to `document.body`)                   |
+| `dropdownclass`       | `string`  | `''`       | Custom class applied to the dropdown panel                                              |
 | `trigger`             | `string`  | `'click'`  | How the dropdown opens: `click`, `hover`, or `click,hover` (hover is ignored on mobile) |
-| `sheet`               | `string`  | `''`       | CSS injected into the shadow DOM                                                     |
+| `sheet`               | `string`  | `''`       | CSS injected into the shadow DOM                                                        |
 
-> **Note:** `clear` is listed in `observedAttributes` but is not read anywhere in the component — it currently has no effect. `defaultValue` and `showSearch` are only applied when the element first connects; changing them after connection is not re-processed (only `value`, `disabled`, and `sheet` are handled in `attributeChangedCallback`).
+> **Note:** `defaultValue` and `showSearch` are reactive — changing them after the element has connected is re-processed (alongside `value`, `disabled`, and `sheet`) in `attributeChangedCallback`. Updating `defaultValue` re-applies the matching selection; toggling `showSearch` wires or unwires the inline search box.
 
 ### Option Properties
 
 Provide options via `<r-option>` child elements.
 
-| Property   | Type      | Default | Description                                                                                    |
-| ---------- | --------- | ------- | ---------------------------------------------------------------------------------------------- |
-| `value`    | `string`  | `''`    | Option value; emitted as the select's value when chosen                                        |
-| `disabled` | `boolean` | `false` | Present on `<r-option>`, but the select's selection logic does not skip disabled options       |
-| `sheet`    | `string`  | `''`    | CSS injected into the option's shadow DOM                                                       |
+| Property   | Type      | Default | Description                                                                                   |
+| ---------- | --------- | ------- | --------------------------------------------------------------------------------------------- |
+| `value`    | `string`  | `''`    | Option value; emitted as the select's value when chosen                                       |
+| `disabled` | `boolean` | `false` | Marks the option as non-selectable; the select skips it for both click and keyboard selection |
+| `sheet`    | `string`  | `''`    | CSS injected into the option's shadow DOM                                                     |
 
 Duplicate option labels or values log a `console.warn`.
 
@@ -130,7 +130,7 @@ Duplicate option labels or values log a `console.warn`.
 ### Search Function `showSearch`
 
 <Demo>
-  <r-select style="width: 120px; height: 40px" showSearch>
+  <r-select style="width: 120px; height: 40px" showSearch="true">
     <r-option value="185">Mike</r-option>
     <r-option value="186">Tom</r-option>
     <r-option value="187">Lucy</r-option>
@@ -138,7 +138,7 @@ Duplicate option labels or values log a `console.warn`.
 </Demo>
 
 ```html
-<r-select style="width: 120px; height: 40px" showSearch>
+<r-select style="width: 120px; height: 40px" showSearch="true">
   <r-option value="185">Mike</r-option>
   <r-option value="186">Tom</r-option>
   <r-option value="187">Lucy</r-option>
@@ -225,7 +225,7 @@ Fired when an option is selected. `event.detail` is `{ value, label }`, where `v
 Fired only when `showSearch` is enabled, as the user types in the search box (throttled). `event.detail` is `{ value }`, the current search text. The component also filters the visible options by label internally.
 
 ```html
-<r-select showSearch id="searchable">
+<r-select showSearch="true" id="searchable">
   <r-option value="185">Mike</r-option>
   <r-option value="186">Tom</r-option>
   <r-option value="187">Lucy</r-option>
@@ -244,18 +244,18 @@ Fired only when `showSearch` is enabled, as the user types in the search box (th
 
 ## Slots
 
-| Slot      | Description                                                          |
-| --------- | ------------------------------------------------------------------- |
-| (default) | Accepts `<r-option>` elements that define the selectable options    |
+| Slot      | Description                                                      |
+| --------- | ---------------------------------------------------------------- |
+| (default) | Accepts `<r-option>` elements that define the selectable options |
 
 ## CSS Parts
 
-| Part             | Description                                    |
-| ---------------- | ---------------------------------------------- |
-| `select`         | Root wrapper of the select                     |
-| `selection`      | The trigger box (border, background, layout)   |
-| `icon`           | Dropdown arrow icon                            |
-| `selection-item` | Element showing the selected option's label    |
+| Part             | Description                                         |
+| ---------------- | --------------------------------------------------- |
+| `select`         | Root wrapper of the select                          |
+| `selection`      | The trigger box (border, background, layout)        |
+| `icon`           | Dropdown arrow icon                                 |
+| `selection-item` | Element showing the selected option's label         |
 | `search`         | The inline search input (visible with `showSearch`) |
 
 ## Best Practices

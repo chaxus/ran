@@ -38,12 +38,12 @@ The `r-router` container and the `createRouter` / `RouterCore` JavaScript API (n
 
 ### Properties
 
-| Property | Type                     | Default | Description                                                                     |
-| -------- | ------------------------ | ------- | ------------------------------------------------------------------------------- |
-| `path`   | `string`                 | `'/'`   | Pattern matched against the current path. Supports `:param` segments and `*`    |
-| `exact`  | `boolean`                | `false` | Read-only. When the `exact` attribute is present, require an exact match        |
-| `params` | `Record<string, string>` | `{}`    | Read-only. The parameters captured from the current match                       |
-| `sheet`  | `string`                 | `''`    | CSS injected into the component's shadow DOM                                     |
+| Property | Type                     | Default | Description                                                                  |
+| -------- | ------------------------ | ------- | ---------------------------------------------------------------------------- |
+| `path`   | `string`                 | `'/'`   | Pattern matched against the current path. Supports `:param` segments and `*` |
+| `exact`  | `boolean`                | `false` | Read-only. When the `exact` attribute is present, require an exact match     |
+| `params` | `Record<string, string>` | `{}`    | Read-only. The parameters captured from the current match                    |
+| `sheet`  | `string`                 | `''`    | CSS injected into the component's shadow DOM                                 |
 
 ### Path Matching `path`
 

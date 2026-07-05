@@ -68,7 +68,7 @@ export class Popover extends RanElement {
   dropDownOutTimeId?: NodeJS.Timeout;
   removeTimeId?: NodeJS.Timeout;
   static get observedAttributes(): string[] {
-    return ['placement', 'arrow', 'trigger', 'sheet'];
+    return ['placement', 'trigger', 'sheet'];
   }
   public readonly closePopover = (): void => {
     this.setDropdownDisplayNone();
@@ -90,12 +90,6 @@ export class Popover extends RanElement {
   }
   set placement(value: string) {
     setStringAttribute(this, 'placement', value);
-  }
-  get arrow(): string {
-    return getStringAttribute(this, 'arrow');
-  }
-  set arrow(value: string) {
-    setStringAttribute(this, 'arrow', value);
   }
   get trigger(): string {
     return getStringAttribute(this, 'trigger', 'hover');

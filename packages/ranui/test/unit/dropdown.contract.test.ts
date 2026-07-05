@@ -68,19 +68,6 @@ describe('r-dropdown contract', () => {
     expect(dropdown.dropdown.classList.contains('ran-dropdown-down-in')).toBe(false);
   });
 
-  it('show property reflects to attributes and getter returns value', () => {
-    const dropdown = document.createElement('r-dropdown') as any;
-    document.body.appendChild(dropdown);
-
-    dropdown.show = 'true';
-    expect(dropdown.getAttribute('show')).toBe('true');
-    expect(dropdown.show).toBe('true');
-
-    dropdown.show = '';
-    expect(dropdown.hasAttribute('show')).toBe(false);
-    expect(dropdown.show).toBe('');
-  });
-
   it('stopPropagation calls event.stopPropagation', () => {
     const dropdown = document.createElement('r-dropdown') as any;
     document.body.appendChild(dropdown);

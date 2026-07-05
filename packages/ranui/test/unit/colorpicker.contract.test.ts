@@ -132,6 +132,34 @@ describe('r-colorpicker contract', () => {
     expect(cp.colorPickerInner).toBeTruthy();
   });
 
+  it('disabled: does not open on click and marks the host aria-disabled', () => {
+    const cp = document.createElement('r-colorpicker') as any;
+    cp.setAttribute('disabled', '');
+    document.body.appendChild(cp);
+
+    // Host + swatch reflect the disabled state.
+    expect(cp.disabled).toBe(true);
+    expect(cp.context.disabled.getter()).toBe(true);
+    expect(cp.getAttribute('aria-disabled')).toBe('true');
+    expect(cp.colorpicker.getAttribute('aria-disabled')).toBe('true');
+    expect(cp.colorpicker.getAttribute('tabindex')).toBe('-1');
+
+    // A click on the swatch must NOT build/open the panel.
+    cp.colorpicker.click();
+    expect(cp.colorPickerInner).toBeFalsy();
+
+    // Keyboard (Enter) must NOT open it either.
+    cp.onSwatchKeydown({ key: 'Enter', preventDefault() {} });
+    expect(cp.colorPickerInner).toBeFalsy();
+
+    // Re-enabling restores interaction: the panel opens on click.
+    cp.disabled = false;
+    expect(cp.getAttribute('aria-disabled')).toBeNull();
+    expect(cp.colorpicker.getAttribute('tabindex')).toBe('0');
+    cp.colorpicker.click();
+    expect(cp.colorPickerInner).toBeTruthy();
+  });
+
   it('a11y: hue/alpha are role=slider with bounds and are keyboard-adjustable', () => {
     const cp = document.createElement('r-colorpicker') as any;
     document.body.appendChild(cp);
