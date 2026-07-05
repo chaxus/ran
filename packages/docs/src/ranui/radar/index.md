@@ -1,128 +1,156 @@
 # Radar
 
-Comprehensive comparison of differences between multiple sets of data in two-dimensional form, often used to compare 2 or more sets of data
+Radar chart for comparing several metrics of one dataset on a two-dimensional canvas.
 
-## Code demo
+## Quick Start
 
-<r-radar style="width:300px;height:300px;display: block;" abilitys='[{"abilityName":"HP","scoreRate":"10"},{"abilityName":"Attack","scoreRate":"90"},{"abilityName":"DEF","scoreRate":"20"},{"abilityName":"Element mastery","scoreRate":"50"},{"abilityName":"Critical Hit Chance","scoreRate":"80"},{"abilityName":"Critical hit damage","scoreRate":"50"}]'></r-radar>
+### Basic Usage
 
-```xml
+Data is supplied through the `abilitys` attribute as a **JSON string** (an array of objects). Because HTML attributes can only hold strings, the value must be valid JSON; it is parsed internally with `JSON.parse`. The `<r-radar>` host has no intrinsic size, so give it an explicit width/height.
+
+<Demo>
+  <r-radar style="width:300px;height:300px;display:block;" abilitys='[{"abilityName":"HP","scoreRate":"10"},{"abilityName":"Attack","scoreRate":"90"},{"abilityName":"DEF","scoreRate":"20"},{"abilityName":"Element mastery","scoreRate":"50"},{"abilityName":"Critical Hit Chance","scoreRate":"80"},{"abilityName":"Critical hit damage","scoreRate":"50"}]'></r-radar>
+</Demo>
+
+```html
 <r-radar
-abilitys='[{"abilityName":"HP","scoreRate":"10"},{"abilityName":"Attack","scoreRate":"90"},{"abilityName":"DEF","scoreRate":"20"},{"abilityName":"Element mastery","scoreRate":"50"},{"abilityName":"Critical Hit Chance","scoreRate":"80"},{"abilityName":"Critical hit damage","scoreRate":"50"}]'
-    style="width:300px;height:300px;display: block;"
->
-</r-radar>
-```
-
-## Attribute
-
-### `abilitys`
-
-Data that needs to be presented
-
-An array object with the following properties
-
-| key             | Description                                            | type                                          |
-| --------------- | ------------------------------------------------------ | --------------------------------------------- |
-| abilityName     | Displays the attribute name                            | 'string'                                      |
-| scoreRate       | Displays the dimension value. The maximum value is 100 | 'number'                                      |
-| backgroundColor | The background color of the                            | property is an optional string                |
-| fontSize        | The font size for the attribute name                   | The optional parameter 'number'               |
-| fontFamily      | The font for the attribute name                        | is optional with 'string'                     |
-| fontColor       | The font color for the                                 | property is an optional parameter with string |
-
-<r-radar style="width:300px;height:300px;display: block;" abilitys='[{"abilityName":"HP","scoreRate":"10","backgroundColor":"red","fontSize":"30","fontColor":"blue"},{"abilityName":"Attack","scoreRate":"90"},{"abilityName":"DEF","scoreRate":"20"},{"abilityName":"Element mastery","scoreRate":"50"},{"abilityName":"Critical Hit Chance","scoreRate":"80"},{"abilityName":"Critical hit damage","scoreRate":"50"}]'></r-radar>
-
-```xml
-<r-radar
-    abilitys='[{"abilityName":"HP","scoreRate":"10","backgroundColor":"red","fontSize":"30","fontColor":"blue"},{"abilityName":"Attack","scoreRate":"90"},{"abilityName":"DEF","scoreRate":"20"},{"abilityName":"Element mastery","scoreRate":"50"},{"abilityName":"Critical Hit Chance","scoreRate":"80"},{"abilityName":"Critical hit damage","scoreRate":"50"}]'
-    style="width:300px;height:300px;display: block;"
->
-</r-radar>
-```
-
-### `colorPolygon`
-
-<r-radar style="width:300px;height:300px;display: block;" colorPolygon="green" abilitys='[{"abilityName":"HP","scoreRate":"10"},{"abilityName":"Attack","scoreRate":"90"},{"abilityName":"DEF","scoreRate":"20"},{"abilityName":"Element mastery","scoreRate":"50"},{"abilityName":"Critical Hit Chance","scoreRate":"80"},{"abilityName":"Critical hit damage","scoreRate":"50"}]'></r-radar>
-
-```xml
-<r-radar
-    colorPolygon="green"
-    abilitys='[{"abilityName":"HP","scoreRate":"10"},{"abilityName":"Attack","scoreRate":"90"},{"abilityName":"DEF","scoreRate":"20"},{"abilityName":"Element mastery","scoreRate":"50"},{"abilityName":"Critical Hit Chance","scoreRate":"80"},{"abilityName":"Critical hit damage","scoreRate":"50"}]'
-    style="width:300px;height:300px;display: block;"
->
-</r-radar>
-```
-
-### `colorLine`
-
-<r-radar style="width:300px;height:300px;display: block;" colorLine="blue" abilitys='[{"abilityName":"HP","scoreRate":"10"},{"abilityName":"Attack","scoreRate":"90"},{"abilityName":"DEF","scoreRate":"20"},{"abilityName":"Element mastery","scoreRate":"50"},{"abilityName":"Critical Hit Chance","scoreRate":"80"},{"abilityName":"Critical hit damage","scoreRate":"50"}]'></r-radar>
-
-```xml
-<r-radar
-    colorLine="blue"
-   abilitys='[{"abilityName":"HP","scoreRate":"10"},{"abilityName":"Attack","scoreRate":"90"},{"abilityName":"DEF","scoreRate":"20"},{"abilityName":"Element mastery","scoreRate":"50"},{"abilityName":"Critical Hit Chance","scoreRate":"80"},{"abilityName":"Critical hit damage","scoreRate":"50"}]'
+  style="width:300px;height:300px;display:block;"
+  abilitys='[{"abilityName":"HP","scoreRate":"10"},{"abilityName":"Attack","scoreRate":"90"},{"abilityName":"DEF","scoreRate":"20"},{"abilityName":"Element mastery","scoreRate":"50"},{"abilityName":"Critical Hit Chance","scoreRate":"80"},{"abilityName":"Critical hit damage","scoreRate":"50"}]'
 ></r-radar>
 ```
 
-### `fillColor`
+You can also set the data imperatively via the `abilitys` JS property, which accepts an array (it is stringified back onto the attribute) or a JSON string:
 
-<r-radar style="width:300px;height:300px;display: block;" fillColor="red" abilitys='[{"abilityName":"HP","scoreRate":"10"},{"abilityName":"Attack","scoreRate":"90"},{"abilityName":"DEF","scoreRate":"20"},{"abilityName":"Element mastery","scoreRate":"50"},{"abilityName":"Critical Hit Chance","scoreRate":"80"},{"abilityName":"Critical hit damage","scoreRate":"50"}]'></r-radar>
+```js
+const radar = document.querySelector('r-radar');
+radar.abilitys = [
+  { abilityName: 'HP', scoreRate: 10 },
+  { abilityName: 'Attack', scoreRate: 90 },
+  { abilityName: 'DEF', scoreRate: 20 },
+];
+```
 
-```xml
+## API Reference
+
+### Properties
+
+| Property       | Type                    | Default                                | Description                                                     |
+| -------------- | ----------------------- | -------------------------------------- | -------------------------------------------------------------- |
+| `abilitys`     | `string` / `Array`      | `''`                                   | Chart data as a JSON string (or an array via the JS property)  |
+| `colorPolygon` | `string`                | `var(--ran-radar-polygon-color)` / `#e6e6e6` | Color of the concentric grid polygons                    |
+| `colorLine`    | `string`                | `var(--ran-radar-line-color)` / `#e6e6e6`    | Color of the axis lines and outer edge                   |
+| `fillColor`    | `string`                | `rgba(255,121,35,0.60)`                | Fill color of the data region                                  |
+| `strokeColor`  | `string`                | `rgba(255,121,35,0.60)`                | Stroke color of the data region outline and vertex dots        |
+| `sheet`        | `string`                | `''`                                   | CSS injected into the component's shadow DOM                    |
+
+Each entry of the `abilitys` array accepts the following keys:
+
+| Key               | Type     | Required | Description                                                     |
+| ----------------- | -------- | -------- | --------------------------------------------------------------- |
+| `abilityName`     | `string` | Yes      | Axis label text                                                 |
+| `scoreRate`       | `number` | Yes      | Value on that axis; the grid maxes out at `100`                 |
+| `backgroundColor` | `string` | No       | Background color of the label pill (default transparent)       |
+| `fontSize`        | `number` | No       | Font size of the label (defaults to a size scaled to the chart)|
+| `fontColor`       | `string` | No       | Label text color (defaults to `--ran-color-text`)              |
+| `fontFamily`      | `string` | No       | Label font family (default `黑体`)                             |
+
+> Note: `colorPolygon`, `colorLine`, `fillColor`, and `strokeColor` are read case-insensitively on the initial render, so the examples below render correctly when the attribute is present up front. Because these names are registered in `observedAttributes` in camelCase (which never matches the lowercased DOM attribute name), changing one of them after mount does not re-render the chart — set the data-driving `abilitys` attribute to force a refresh, or provide the colors via the CSS variables below. Prefer the CSS variables for theme-aware, reactive styling.
+
+### Chart Data `abilitys`
+
+Per-axis label styling (`backgroundColor`, `fontSize`, `fontColor`) can be set on individual entries:
+
+<Demo>
+  <r-radar style="width:300px;height:300px;display:block;" abilitys='[{"abilityName":"HP","scoreRate":"10","backgroundColor":"red","fontSize":"30","fontColor":"blue"},{"abilityName":"Attack","scoreRate":"90"},{"abilityName":"DEF","scoreRate":"20"},{"abilityName":"Element mastery","scoreRate":"50"},{"abilityName":"Critical Hit Chance","scoreRate":"80"},{"abilityName":"Critical hit damage","scoreRate":"50"}]'></r-radar>
+</Demo>
+
+```html
 <r-radar
-    fillColor="red"
-   abilitys='[{"abilityName":"HP","scoreRate":"10"},{"abilityName":"Attack","scoreRate":"90"},{"abilityName":"DEF","scoreRate":"20"},{"abilityName":"Element mastery","scoreRate":"50"},{"abilityName":"Critical Hit Chance","scoreRate":"80"},{"abilityName":"Critical hit damage","scoreRate":"50"}]'
-    style="width:300px;height:300px;display: block;"
->
-</r-radar>
+  style="width:300px;height:300px;display:block;"
+  abilitys='[{"abilityName":"HP","scoreRate":"10","backgroundColor":"red","fontSize":"30","fontColor":"blue"},{"abilityName":"Attack","scoreRate":"90"},{"abilityName":"DEF","scoreRate":"20"},{"abilityName":"Element mastery","scoreRate":"50"},{"abilityName":"Critical Hit Chance","scoreRate":"80"},{"abilityName":"Critical hit damage","scoreRate":"50"}]'
+></r-radar>
 ```
 
-### `strokeColor`
+### Grid Polygon Color `colorPolygon`
 
-<r-radar style="width:300px;height:300px;display: block;" strokeColor="blue" abilitys='[{"abilityName":"HP","scoreRate":"10"},{"abilityName":"Attack","scoreRate":"90"},{"abilityName":"DEF","scoreRate":"20"},{"abilityName":"Element mastery","scoreRate":"50"},{"abilityName":"Critical Hit Chance","scoreRate":"80"},{"abilityName":"Critical hit damage","scoreRate":"50"}]'></r-radar>
+<Demo>
+  <r-radar style="width:300px;height:300px;display:block;" colorPolygon="green" abilitys='[{"abilityName":"HP","scoreRate":"10"},{"abilityName":"Attack","scoreRate":"90"},{"abilityName":"DEF","scoreRate":"20"},{"abilityName":"Element mastery","scoreRate":"50"},{"abilityName":"Critical Hit Chance","scoreRate":"80"},{"abilityName":"Critical hit damage","scoreRate":"50"}]'></r-radar>
+</Demo>
 
-```xml
+```html
 <r-radar
-    strokeColor="blue"
-   abilitys='[{"abilityName":"HP","scoreRate":"10"},{"abilityName":"Attack","scoreRate":"90"},{"abilityName":"DEF","scoreRate":"20"},{"abilityName":"Element mastery","scoreRate":"50"},{"abilityName":"Critical Hit Chance","scoreRate":"80"},{"abilityName":"Critical hit damage","scoreRate":"50"}]'
-    style="width:300px;height:300px;display: block;"
->
-</r-radar>
+  style="width:300px;height:300px;display:block;"
+  colorPolygon="green"
+  abilitys='[{"abilityName":"HP","scoreRate":"10"},{"abilityName":"Attack","scoreRate":"90"},{"abilityName":"DEF","scoreRate":"20"},{"abilityName":"Element mastery","scoreRate":"50"},{"abilityName":"Critical Hit Chance","scoreRate":"80"},{"abilityName":"Critical hit damage","scoreRate":"50"}]'
+></r-radar>
 ```
 
-### Example data used
+### Axis Line Color `colorLine`
 
-Because the 'attribute' of 'HTMl' can only get 'string'. Therefore, the data that needs to be passed in needs to be in the format of 'JSON' string, and then parsed by 'json.parse' array object, if the 'JSON' format is wrong, it cannot be parsed.
+<Demo>
+  <r-radar style="width:300px;height:300px;display:block;" colorLine="blue" abilitys='[{"abilityName":"HP","scoreRate":"10"},{"abilityName":"Attack","scoreRate":"90"},{"abilityName":"DEF","scoreRate":"20"},{"abilityName":"Element mastery","scoreRate":"50"},{"abilityName":"Critical Hit Chance","scoreRate":"80"},{"abilityName":"Critical hit damage","scoreRate":"50"}]'></r-radar>
+</Demo>
 
-```json
-[
-  {
-    "abilityName": "HP",
-    "scoreRate": "10",
-    "backgroundColor": "red",
-    "fontSize": "30",
-    "fontColor": "blue"
-  },
-  {
-    "abilityName": "Attack",
-    "scoreRate": "90"
-  },
-  {
-    "abilityName": "DEF",
-    "scoreRate": "20"
-  },
-  {
-    "abilityName": "Element mastery",
-    "scoreRate": "50"
-  },
-  {
-    "abilityName": "Critical Hit Chance",
-    "scoreRate": "80"
-  },
-  {
-    "abilityName": "Critical hit damage",
-    "scoreRate": "50"
-  }
-]
+```html
+<r-radar
+  style="width:300px;height:300px;display:block;"
+  colorLine="blue"
+  abilitys='[{"abilityName":"HP","scoreRate":"10"},{"abilityName":"Attack","scoreRate":"90"},{"abilityName":"DEF","scoreRate":"20"},{"abilityName":"Element mastery","scoreRate":"50"},{"abilityName":"Critical Hit Chance","scoreRate":"80"},{"abilityName":"Critical hit damage","scoreRate":"50"}]'
+></r-radar>
 ```
+
+### Region Fill Color `fillColor`
+
+<Demo>
+  <r-radar style="width:300px;height:300px;display:block;" fillColor="red" abilitys='[{"abilityName":"HP","scoreRate":"10"},{"abilityName":"Attack","scoreRate":"90"},{"abilityName":"DEF","scoreRate":"20"},{"abilityName":"Element mastery","scoreRate":"50"},{"abilityName":"Critical Hit Chance","scoreRate":"80"},{"abilityName":"Critical hit damage","scoreRate":"50"}]'></r-radar>
+</Demo>
+
+```html
+<r-radar
+  style="width:300px;height:300px;display:block;"
+  fillColor="red"
+  abilitys='[{"abilityName":"HP","scoreRate":"10"},{"abilityName":"Attack","scoreRate":"90"},{"abilityName":"DEF","scoreRate":"20"},{"abilityName":"Element mastery","scoreRate":"50"},{"abilityName":"Critical Hit Chance","scoreRate":"80"},{"abilityName":"Critical hit damage","scoreRate":"50"}]'
+></r-radar>
+```
+
+### Region Stroke Color `strokeColor`
+
+<Demo>
+  <r-radar style="width:300px;height:300px;display:block;" strokeColor="blue" abilitys='[{"abilityName":"HP","scoreRate":"10"},{"abilityName":"Attack","scoreRate":"90"},{"abilityName":"DEF","scoreRate":"20"},{"abilityName":"Element mastery","scoreRate":"50"},{"abilityName":"Critical Hit Chance","scoreRate":"80"},{"abilityName":"Critical hit damage","scoreRate":"50"}]'></r-radar>
+</Demo>
+
+```html
+<r-radar
+  style="width:300px;height:300px;display:block;"
+  strokeColor="blue"
+  abilitys='[{"abilityName":"HP","scoreRate":"10"},{"abilityName":"Attack","scoreRate":"90"},{"abilityName":"DEF","scoreRate":"20"},{"abilityName":"Element mastery","scoreRate":"50"},{"abilityName":"Critical Hit Chance","scoreRate":"80"},{"abilityName":"Critical hit damage","scoreRate":"50"}]'
+></r-radar>
+```
+
+### CSS Variables
+
+The chart colors can also be set (theme-reactively) through CSS custom properties on the host:
+
+| Variable                     | Default                 | Description                          |
+| ---------------------------- | ----------------------- | ------------------------------------ |
+| `--ran-radar-polygon-color`  | `var(--ran-color-border)` / `#e6e6e6` | Grid polygon color     |
+| `--ran-radar-line-color`     | `var(--ran-color-border)` / `#e6e6e6` | Axis line color        |
+| `--ran-radar-fill-color`     | `rgba(255,121,35,0.60)` | Data region fill color               |
+| `--ran-radar-stroke-color`   | `rgba(255,121,35,0.60)` | Data region stroke color             |
+| `--ran-radar-width`          | `100%`                  | Canvas container width               |
+| `--ran-radar-height`         | `100%`                  | Canvas container height              |
+| `--ran-radar-display`        | `block`                 | `display` of the canvas container    |
+| `--ran-radar-position`       | `relative`              | `position` of the canvas container   |
+
+The label text color also falls back to the `--ran-color-text` theme token, so labels stay legible in light and dark mode.
+
+## Events
+
+None. `<r-radar>` does not dispatch any custom events.
+
+## Best Practices
+
+- **Sizing**: The host has no intrinsic size — always set an explicit `width`/`height` (via `style` or the `--ran-radar-width`/`--ran-radar-height` variables). The chart auto-redraws on container resize via a `ResizeObserver`.
+- **Data format**: Pass valid JSON in `abilitys`; malformed JSON is logged and cannot be parsed. Use the `abilitys` JS property when working with real arrays in script.
+- **Scale**: `scoreRate` is measured against a fixed maximum of `100`; normalize your values to that range.
+- **Theming**: Prefer the `--ran-radar-*` CSS variables over the color attributes — they are theme-reactive and update after mount, whereas the camelCase color attributes only apply on the initial render.

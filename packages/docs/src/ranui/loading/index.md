@@ -4,13 +4,15 @@ import Loading from '../../../vue/loading.vue'
 
 # Loading
 
-Provides various beautiful loading animations to enhance user experience.
+Loading component providing a collection of animated indicators to signal in-progress work.
 
 ## Quick Start
 
 ### Basic Usage
 
-<r-loading name="circle"></r-loading>
+<Demo>
+  <r-loading name="circle"></r-loading>
+</Demo>
 
 ```html
 <r-loading name="circle"></r-loading>
@@ -20,26 +22,21 @@ Provides various beautiful loading animations to enhance user experience.
 
 ### Properties
 
-| Property | Type     | Default    | Description            |
-| -------- | -------- | ---------- | ---------------------- |
-| `name`   | `string` | `'circle'` | Loading animation type |
+| Property | Type     | Default    | Description                                                            |
+| -------- | -------- | ---------- | --------------------------------------------------------------------- |
+| `name`   | `string` | `'circle'` | Animation type. Falls back to `circle` when unset or unrecognized      |
+| `sheet`  | `string` | `''`       | CSS text injected into the component's shadow DOM for external styling |
 
 ### Loading Types `name`
 
-The component provides various beautiful loading animations
+Set `name` to one of the built-in animation types. Any unknown value renders nothing (only names in the list below are handled).
 
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;width:80px;height:80px">
-    <r-loading name="double-bounce"></r-loading>
-</div>
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;width:80px;height:80px">
-    <r-loading name="rotate"></r-loading>
-</div>
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;width:80px;height:80px">
-     <r-loading name="stretch"></r-loading>
-</div>
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;width:80px;height:80px">
-     <r-loading name="cube"></r-loading>
-</div>
+<Demo>
+  <r-loading name="double-bounce"></r-loading>
+  <r-loading name="rotate"></r-loading>
+  <r-loading name="stretch"></r-loading>
+  <r-loading name="cube"></r-loading>
+</Demo>
 
 ```html
 <r-loading name="double-bounce"></r-loading>
@@ -48,13 +45,23 @@ The component provides various beautiful loading animations
 <r-loading name="cube"></r-loading>
 ```
 
-### Custom Styling
+Available values:
 
-The Loading component uses CSS variables for styling control. You can customize the appearance by setting CSS variables.
+`double-bounce`, `rotate`, `stretch`, `cube`, `dot`, `triple-bounce`, `scale-out`, `circle`, `circle-line`, `square`, `pulse`, `solar`, `cube-fold`, `circle-fold`, `cube-grid`, `circle-turn`, `circle-rotate`, `circle-spin`, `dot-bar`, `dot-circle`, `line`, `dot-pulse`, `line-scale`, `text`, `cube-dim`, `dot-line`, `arc`, `drop`, `pacman`
 
-#### Size Customization
+### External Styles `sheet`
 
-Each loading type has corresponding size CSS variables. It's recommended to use px units for more precise control:
+The `sheet` attribute injects raw CSS into the component's shadow root, letting you override internal rules from outside without a build step.
+
+```html
+<r-loading name="circle" sheet=".circle { transform: scale(1.5); }"></r-loading>
+```
+
+## Custom Styling
+
+Each animation is themed entirely through CSS variables. Set them on the `r-loading` element (or an ancestor) to control size and color. Using `px` units gives more precise control than the default `em`-based sizing.
+
+### Size Customization
 
 ```css
 /* Circle type */
@@ -82,9 +89,7 @@ r-loading {
 }
 ```
 
-#### Color Customization
-
-Each loading type has corresponding color CSS variables:
+### Color Customization
 
 ```css
 /* Circle type */
@@ -109,14 +114,12 @@ r-loading {
 }
 ```
 
-#### Live Examples
+### Live Examples
 
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;width:80px;height:80px">
-    <r-loading name="circle" style="--loading-circle-width: 64px; --loading-circle-height: 64px; --loading-circle-container-div-background: #1890ff;"></r-loading>
-</div>
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;width:80px;height:80px">
-    <r-loading name="rotate" style="--loading-rotate-width: 48px; --loading-rotate-height: 48px; --loading-rotate-background: #faad14;"></r-loading>
-</div>
+<Demo>
+  <r-loading name="circle" style="--loading-circle-width: 64px; --loading-circle-height: 64px; --loading-circle-container-div-background: #1890ff;"></r-loading>
+  <r-loading name="rotate" style="--loading-rotate-width: 48px; --loading-rotate-height: 48px; --loading-rotate-background: #faad14;"></r-loading>
+</Demo>
 
 ```html
 <r-loading
@@ -129,16 +132,40 @@ r-loading {
 ></r-loading>
 ```
 
-#### Common CSS Variables
+### Common CSS Variables
+
+Each animation type has its own token namespace. The most common ones follow the pattern below:
 
 | Variable                                | Default   | Description                                            |
 | --------------------------------------- | --------- | ------------------------------------------------------ |
-| `--loading-{type}-width`                | `4em`     | Loading animation width (recommended to use px units)  |
-| `--loading-{type}-height`               | `4em`     | Loading animation height (recommended to use px units) |
+| `--loading-{type}-width`                | `4em`     | Animation width (recommended to use `px` units)        |
+| `--loading-{type}-height`               | `4em`     | Animation height (recommended to use `px` units)       |
 | `--loading-{type}-background`           | `#4096ff` | Main background color                                  |
 | `--loading-{type}-div-background-color` | `#4096ff` | Sub-element background color                           |
 
-> Note: Replace `{type}` with the specific loading type name, such as `circle`, `double-bounce`, `rotate`, etc.
+> Replace `{type}` with a specific animation name, e.g. `circle`, `double-bounce`, `rotate`. Base colors default through the theme tokens `--ran-color-primary`, `--ran-color-success`, and `--ran-color-text`.
+
+## CSS Parts
+
+Every animation exposes its root element as a `::part()` named after its `name` value, so you can target it from outside the shadow DOM:
+
+```css
+r-loading::part(rotate) {
+  filter: drop-shadow(0 0 4px currentColor);
+}
+```
+
+Part names: `double-bounce`, `rotate`, `stretch`, `cube`, `dot`, `triple-bounce`, `scale-out`, `circle`, `circle-line`, `square`, `pulse`, `solar`, `cube-fold`, `circle-fold`, `cube-grid`, `circle-turn`, `circle-rotate`, `circle-spin`, `dot-bar`, `dot-circle`, `line`, `line-scale`, `text`, `cube-dim`, `dot-line`, `arc`, `drop`, `pacman`. The `solar` animation additionally exposes a `sun` part.
+
+> Note: the `dot-pulse` animation does not currently export a `::part()` (its root is built without a `part` name), so it cannot be targeted this way.
+
+## Slots
+
+None. The component renders its animation entirely from the shadow DOM and does not project light-DOM children.
+
+## Events
+
+None. The component dispatches no custom events.
 
 ## All Loading Animations
 
@@ -146,8 +173,8 @@ r-loading {
 
 ## Best Practices
 
-- **Scene Selection**: Choose appropriate loading animations for different scenarios
-- **CSS Variables**: Use CSS variables to customize size and color instead of separate properties
-- **Performance**: Avoid using too many loading animations simultaneously
-- **Consistency**: Maintain consistent CSS variable naming patterns across your application
-- **Theme Adaptation**: Easily adapt to different theme colors through CSS variables
+- **Scene Selection**: Pick an animation that fits the context and pace of the task.
+- **CSS Variables**: Customize size and color via the `--loading-{type}-*` tokens rather than wrapping elements.
+- **Sizing**: Prefer `px` units over the default `em` sizing for predictable dimensions.
+- **Performance**: Avoid rendering many simultaneous animations on one screen.
+- **Theming**: The base colors follow `--ran-color-*` theme tokens, so animations adapt to light and dark modes automatically.

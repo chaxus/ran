@@ -1,235 +1,259 @@
 # Tab
 
-TAB pages, where 'r-tab' needs to be used with 'r-tabs'
+Tabbed container that switches between panes. Compose `<r-tabs>` as the container with one or more `<r-tab>` panes inside it.
 
-## Code demo
+## Quick Start
 
-<div style="width:100%;">
-    <r-tabs >
-        <r-tab label="tab1">11111</r-tab>
-        <r-tab label="tab2">22222</r-tab>
-        <r-tab label="tab3">33333</r-tab>
-    </r-tabs>
-</div>
+### Basic Usage
 
-```xml
-<r-tabs >
-      <r-tab label="tab1">11111</r-tab>
-      <r-tab label="tab2">22222</r-tab>
-      <r-tab label="tab3">33333</r-tab>
-</r-tabs>
-```
+<Demo column>
+  <r-tabs>
+    <r-tab label="tab1">11111</r-tab>
+    <r-tab label="tab2">22222</r-tab>
+    <r-tab label="tab3">33333</r-tab>
+  </r-tabs>
+</Demo>
 
-## Attribute
-
-### `label`
-
-'r-tab' property to set the name of the tag
-
-<div style="width:100%;">
-    <r-tabs >
-        <r-tab label="tab1">11111</r-tab>
-        <r-tab label="tab2">22222</r-tab>
-        <r-tab label="tab3">33333</r-tab>
-    </r-tabs>
-</div>
-
-```xml
-<r-tabs >
-      <r-tab label="tab1">11111</r-tab>
-      <r-tab label="tab2">22222</r-tab>
-      <r-tab label="tab3">33333</r-tab>
-</r-tabs>
-```
-
-### active tag 'active', the tag's unique identifier 'r-key'
-
-- 'r-key' is an attribute of 'r-tab' that determines the unique value of 'r-tab' under the same 'r-tabs'. If 'r-key' is not set, it defaults to 'index'. (Not using the 'key' field is to prevent the 'key' is reserved field)
-- 'active' is an attribute of 'r-tabs', which is used to set active tabs. The label 'active' equals' key 'is an active label.
-
-1. 'key' is not set
-
-<div style="width:100%;">
-    <r-tabs active="1">
-        <r-tab label="tab1">11111</r-tab>
-        <r-tab label="tab2">22222</r-tab>
-        <r-tab label="tab3">33333</r-tab>
-    </r-tabs>
-</div>
-
-```xml
- <r-tabs active="1">
-        <r-tab label="tab1">11111</r-tab>
-        <r-tab label="tab2">22222</r-tab>
-        <r-tab label="tab3">33333</r-tab>
- </r-tabs>
-```
-
-1. Set 'key'
-
-<div style="width:100%;">
-   <r-tabs active="c">
-      <r-tab label="tab1" r-key="a">11111</r-tab>
-      <r-tab label="tab2" r-key="b">22222</r-tab>
-      <r-tab label="tab3" r-key="c">33333</r-tab>
-      <r-tab label="tab4">4</r-tab>
-    </r-tabs>
-</div>
-
-```xml
-    <r-tabs active="c">
-      <r-tab label="tab1" r-key="a">11111</r-tab>
-      <r-tab label="tab2" r-key="b">22222</r-tab>
-      <r-tab label="tab3" r-key="c">33333</r-tab>
-      <r-tab label="tab4">4</r-tab>
-    </r-tabs>
-```
-
-### `icon`
-
-`r-tab` accepts an `icon` attribute (an `r-icon` name) shown before the tab label; `iconSize` sets its size.
-
-<div style="width:100%;">
-   <r-tabs>
-      <r-tab label="tab1" icon="edit">11111</r-tab>
-      <r-tab label="tab2" icon="delete">22222</r-tab>
-      <r-tab label="tab3">33333</r-tab>
-    </r-tabs>
-</div>
-
-```xml
+```html
 <r-tabs>
-      <r-tab label="tab1" icon="edit">11111</r-tab>
-      <r-tab label="tab2" icon="delete" iconSize="16">22222</r-tab>
-      <r-tab label="tab3">33333</r-tab>
+  <r-tab label="tab1">11111</r-tab>
+  <r-tab label="tab2">22222</r-tab>
+  <r-tab label="tab3">33333</r-tab>
 </r-tabs>
 ```
 
-### `disabled`
+Each `<r-tab>` becomes one pane; its `label` is rendered as the header button, and its slotted content is the pane body. Selecting a header slides the corresponding pane into view.
 
-Set unclickable labels
+## API Reference
 
-<div style="width:100%;">
-   <r-tabs active="c">
-      <r-tab label="tab1" r-key="a" disabled>11111</r-tab>
-      <r-tab label="tab2" r-key="b">22222</r-tab>
-      <r-tab label="tab3" r-key="c">33333</r-tab>
-      <r-tab label="tab4">4</r-tab>
-    </r-tabs>
-</div>
+### `r-tabs` Properties
 
-```xml
-    <r-tabs active="c">
-      <r-tab label="tab1" r-key="a" disabled>11111</r-tab>
-      <r-tab label="tab2" r-key="b">22222</r-tab>
-      <r-tab label="tab3" r-key="c">33333</r-tab>
-      <r-tab label="tab4">4</r-tab>
-    </r-tabs>
-```
+The container. Holds the header row, the active indicator, and the pane content area.
 
-### `type`
+| Property      | Type      | Default                | Description                                                            |
+| ------------- | --------- | ---------------------- | --------------------------------------------------------------------- |
+| `active`      | `string`  | first enabled tab      | The `r-key` of the currently active tab                               |
+| `type`        | `string`  | `'flat'`               | Header style: `flat`, `line`                                          |
+| `align`       | `string`  | `'start'`              | Header alignment: `start`, `center`, `end`                            |
+| `effect`      | `boolean` | `false`                | Enables ripple on the header buttons and hides the sliding indicator  |
+| `sheet`       | `string`  | `''`                   | CSS text injected into the shadow DOM                                 |
+| `forceRender` | —         | —                      | Observed but not implemented — currently inert                        |
 
-The 'r-tabs' property sets the types of tabs. If not set, the default is' flat '
+> The `active` property setter accepts a key string; assigning `null` removes the attribute. When no `active` is set, the first non-disabled tab is selected on mount.
 
-1. `flat`
+### `r-tab` Properties
 
-<div style="width:100%;">
-    <r-tabs type="flat">
-        <r-tab label="tab1">11111</r-tab>
-        <r-tab label="tab2">22222</r-tab>
-        <r-tab label="tab3">33333</r-tab>
-    </r-tabs>
-</div>
+A single pane. Its attributes are read by the parent `<r-tabs>` to build the matching header button.
 
-```xml
+| Property   | Type      | Default   | Description                                                             |
+| ---------- | --------- | --------- | --------------------------------------------------------------------- |
+| `label`    | `string`  | `''`      | Text shown in the tab header                                          |
+| `r-key`    | `string`  | index     | Unique identifier within an `<r-tabs>`; matched against `active`      |
+| `icon`     | `string`  | —         | `r-icon` name shown before the label                                  |
+| `iconSize` | `string`  | —         | Size of the header icon                                               |
+| `disabled` | `boolean` | `false`   | Makes the tab unselectable                                            |
+| `effect`   | `boolean` | —         | Ripple effect on the header (normally set by the parent's `effect`)   |
+| `sheet`    | `string`  | `''`      | CSS text injected into the shadow DOM                                 |
+
+> The `key` property getter/setter reads and writes the `r-key` attribute (the plain `key` name is avoided because it is a reserved field). Set `label` and `r-key` before the element is connected — changes to those two attributes are not re-processed after the headers are built.
+
+### Header Style `type`
+
+`flat` (default) shows a sliding underline indicator; `line` renders bordered tab headers.
+
+<Demo column>
+  <r-tabs type="flat">
+    <r-tab label="tab1">11111</r-tab>
+    <r-tab label="tab2">22222</r-tab>
+    <r-tab label="tab3">33333</r-tab>
+  </r-tabs>
+  <r-tabs type="line">
+    <r-tab label="tab1">11111</r-tab>
+    <r-tab label="tab2">22222</r-tab>
+    <r-tab label="tab3">33333</r-tab>
+  </r-tabs>
+</Demo>
+
+```html
 <r-tabs type="flat">
-      <r-tab label="tab1">11111</r-tab>
-      <r-tab label="tab2">22222</r-tab>
-      <r-tab label="tab3">33333</r-tab>
+  <r-tab label="tab1">11111</r-tab>
+  <r-tab label="tab2">22222</r-tab>
+  <r-tab label="tab3">33333</r-tab>
 </r-tabs>
-```
 
-2. `line`
-
-<div style="width:100%;">
-    <r-tabs type="line">
-        <r-tab label="tab1">11111</r-tab>
-        <r-tab label="tab2">22222</r-tab>
-        <r-tab label="tab3">33333</r-tab>
-    </r-tabs>
-</div>
-
-```xml
 <r-tabs type="line">
-      <r-tab label="tab1">11111</r-tab>
-      <r-tab label="tab2">22222</r-tab>
-      <r-tab label="tab3">33333</r-tab>
+  <r-tab label="tab1">11111</r-tab>
+  <r-tab label="tab2">22222</r-tab>
+  <r-tab label="tab3">33333</r-tab>
 </r-tabs>
 ```
 
-### `align`
+### Header Alignment `align`
 
-Set the alignment of the label. The default is' align="start" '
+Aligns the header row. Defaults to `start`.
 
-1. `start`
+<Demo column>
+  <r-tabs type="line" align="start">
+    <r-tab label="tab1">11111</r-tab>
+    <r-tab label="tab2">22222</r-tab>
+    <r-tab label="tab3">33333</r-tab>
+  </r-tabs>
+  <r-tabs type="line" align="center">
+    <r-tab label="tab1">11111</r-tab>
+    <r-tab label="tab2">22222</r-tab>
+    <r-tab label="tab3">33333</r-tab>
+  </r-tabs>
+  <r-tabs type="line" align="end">
+    <r-tab label="tab1">11111</r-tab>
+    <r-tab label="tab2">22222</r-tab>
+    <r-tab label="tab3">33333</r-tab>
+  </r-tabs>
+</Demo>
 
-<div style="width:100%;">
-    <r-tabs type="line" align="start">
-        <r-tab label="tab1">11111</r-tab>
-        <r-tab label="tab2">22222</r-tab>
-        <r-tab label="tab3">33333</r-tab>
-    </r-tabs>
-</div>
-
-```xml
- <r-tabs type="line" align="start">
-        <r-tab label="tab1">11111</r-tab>
-        <r-tab label="tab2">22222</r-tab>
-        <r-tab label="tab3">33333</r-tab>
-    </r-tabs>
+```html
+<r-tabs type="line" align="start"> ... </r-tabs>
+<r-tabs type="line" align="center"> ... </r-tabs>
+<r-tabs type="line" align="end"> ... </r-tabs>
 ```
 
-2. `center`
+### Active Tab `active` and `r-key`
 
-<div style="width:100%;">
-    <r-tabs type="line" align="center">
-        <r-tab label="tab1">11111</r-tab>
-        <r-tab label="tab2">22222</r-tab>
-        <r-tab label="tab3">33333</r-tab>
-    </r-tabs>
-</div>
+- `r-key` is an `<r-tab>` attribute that gives each pane a stable identity within the same `<r-tabs>`. When omitted it defaults to the pane's index.
+- `active` is an `<r-tabs>` attribute that selects the initially active tab: the pane whose `r-key` equals `active` is shown.
 
-```xml
- <r-tabs type="line" align="center">
-        <r-tab label="tab1">11111</r-tab>
-        <r-tab label="tab2">22222</r-tab>
-        <r-tab label="tab3">33333</r-tab>
-    </r-tabs>
+Without explicit keys, `active` matches the zero-based index:
+
+<Demo column>
+  <r-tabs active="1">
+    <r-tab label="tab1">11111</r-tab>
+    <r-tab label="tab2">22222</r-tab>
+    <r-tab label="tab3">33333</r-tab>
+  </r-tabs>
+</Demo>
+
+```html
+<r-tabs active="1">
+  <r-tab label="tab1">11111</r-tab>
+  <r-tab label="tab2">22222</r-tab>
+  <r-tab label="tab3">33333</r-tab>
+</r-tabs>
 ```
 
-3. `end`
+With explicit `r-key` values (panes without a key fall back to their index):
 
-<div style="width:100%;">
-    <r-tabs type="line" align="end">
-        <r-tab label="tab1">11111</r-tab>
-        <r-tab label="tab2">22222</r-tab>
-        <r-tab label="tab3">33333</r-tab>
-    </r-tabs>
-</div>
+<Demo column>
+  <r-tabs active="c">
+    <r-tab label="tab1" r-key="a">11111</r-tab>
+    <r-tab label="tab2" r-key="b">22222</r-tab>
+    <r-tab label="tab3" r-key="c">33333</r-tab>
+    <r-tab label="tab4">4</r-tab>
+  </r-tabs>
+</Demo>
 
-```xml
- <r-tabs type="line" align="end">
-        <r-tab label="tab1">11111</r-tab>
-        <r-tab label="tab2">22222</r-tab>
-        <r-tab label="tab3">33333</r-tab>
-    </r-tabs>
+```html
+<r-tabs active="c">
+  <r-tab label="tab1" r-key="a">11111</r-tab>
+  <r-tab label="tab2" r-key="b">22222</r-tab>
+  <r-tab label="tab3" r-key="c">33333</r-tab>
+  <r-tab label="tab4">4</r-tab>
+</r-tabs>
 ```
 
-## Event
+> Every `r-key` within one `<r-tabs>` must be unique — duplicate or missing keys on some panes throw an error while headers are being built.
+
+### Disabled Pane `disabled`
+
+A disabled `<r-tab>` cannot be selected, and it is skipped when picking the default active tab.
+
+<Demo column>
+  <r-tabs active="c">
+    <r-tab label="tab1" r-key="a" disabled>11111</r-tab>
+    <r-tab label="tab2" r-key="b">22222</r-tab>
+    <r-tab label="tab3" r-key="c">33333</r-tab>
+    <r-tab label="tab4">4</r-tab>
+  </r-tabs>
+</Demo>
+
+```html
+<r-tabs active="c">
+  <r-tab label="tab1" r-key="a" disabled>11111</r-tab>
+  <r-tab label="tab2" r-key="b">22222</r-tab>
+  <r-tab label="tab3" r-key="c">33333</r-tab>
+  <r-tab label="tab4">4</r-tab>
+</r-tabs>
+```
+
+### Header Icon `icon` and `iconSize`
+
+`<r-tab>` accepts an `icon` attribute (an `r-icon` name) rendered before the label; `iconSize` sets its size.
+
+<Demo column>
+  <r-tabs>
+    <r-tab label="tab1" icon="edit">11111</r-tab>
+    <r-tab label="tab2" icon="delete" iconSize="16">22222</r-tab>
+    <r-tab label="tab3">33333</r-tab>
+  </r-tabs>
+</Demo>
+
+```html
+<r-tabs>
+  <r-tab label="tab1" icon="edit">11111</r-tab>
+  <r-tab label="tab2" icon="delete" iconSize="16">22222</r-tab>
+  <r-tab label="tab3">33333</r-tab>
+</r-tabs>
+```
+
+### Ripple Effect `effect`
+
+Set `effect` on `<r-tabs>` to enable the click ripple on the header buttons. When `effect` is active the sliding underline indicator is hidden.
+
+<Demo column>
+  <r-tabs effect="true">
+    <r-tab label="tab1">11111</r-tab>
+    <r-tab label="tab2">22222</r-tab>
+    <r-tab label="tab3">33333</r-tab>
+  </r-tabs>
+</Demo>
+
+```html
+<r-tabs effect="true">
+  <r-tab label="tab1">11111</r-tab>
+  <r-tab label="tab2">22222</r-tab>
+  <r-tab label="tab3">33333</r-tab>
+</r-tabs>
+```
+
+## Slots
+
+| Element   | Slot      | Description                                              |
+| --------- | --------- | ------------------------------------------------------- |
+| `r-tabs`  | (default) | Accepts the `<r-tab>` panes                             |
+| `r-tab`   | (default) | The pane's body content, shown when the tab is active   |
+
+## CSS Parts
+
+`r-tabs` exposes:
+
+| Part           | Description                              |
+| -------------- | ---------------------------------------- |
+| `tabs`         | Root wrapper                             |
+| `header`       | Header row wrapper                       |
+| `nav`          | The tablist containing the header items  |
+| `indicator`    | The sliding underline line               |
+| `content`      | Pane content viewport                    |
+| `content-wrap` | The sliding track holding all panes      |
+
+`r-tab` exposes:
+
+| Part      | Description             |
+| --------- | ----------------------- |
+| `content` | The pane's content slot |
+
+## Events
 
 ### `change`
 
-`r-tabs` dispatches a `change` `CustomEvent` when the active tab switches. `event.detail.active` is the new active key (the `r-key` of the selected `r-tab`, or its index when no `r-key` is set).
+`<r-tabs>` dispatches a `change` `CustomEvent` when an observed attribute changes — most notably when the active tab switches. `event.detail.active` is the current active key (the `r-key` of the selected `<r-tab>`, or its index when no `r-key` is set).
 
 ```js
 const tabs = document.querySelector('r-tabs');
@@ -237,3 +261,13 @@ tabs.addEventListener('change', (e) => {
   console.log('active tab:', e.detail.active);
 });
 ```
+
+`<r-tab>` does not dispatch any custom events.
+
+## Best Practices
+
+- **Stable identity**: Give each `<r-tab>` a unique `r-key` and drive selection with `active` on `<r-tabs>` instead of relying on positional indexes.
+- **Style choice**: Use `type="line"` for a bordered, document-style tab strip; `type="flat"` (default) for the minimal sliding underline.
+- **Alignment**: Use `align="center"` or `align="end"` to reposition the header row within wide containers.
+- **Disabled panes**: Mark unavailable panes with `disabled`; they are skipped for both clicks and default selection.
+- **Keyboard navigation**: The header row is a WAI-ARIA tablist — arrow keys move between tabs (with `Home`/`End`), and only the active tab is in the tab order.
