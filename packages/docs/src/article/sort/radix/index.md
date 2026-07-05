@@ -10,7 +10,7 @@ Radix sort is sorted by the lowest order first, and then collected; Then sort by
 
 ## GIF presentation
 
-![Radix Sort](../../../../assets/ranuts/sort/radix.gif)
+<video src="../../../../assets/ranuts/sort/radix.mp4" autoplay loop muted playsinline style="max-width: 100%; border-radius: 8px;"></video>
 
 ## Code demo
 

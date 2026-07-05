@@ -11,7 +11,7 @@ Bubble sort is a simple sort algorithm. It repeatedly visits the sequence to be 
 
 ## GIF presentation
 
-![Bubble Sort](../../../../assets/ranuts/sort/bubble.gif)
+<video src="../../../../assets/ranuts/sort/bubble.mp4" autoplay loop muted playsinline style="max-width: 100%; border-radius: 8px;"></video>
 
 ## Code demo
 

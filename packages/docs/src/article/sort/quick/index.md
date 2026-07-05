@@ -12,7 +12,7 @@ Quicksort uses divide-and-conquer to divide a list into two sub-lists. The speci
 
 ## GIF presentation
 
-![Quick Sort](../../../../assets/ranuts/sort/quick.gif)
+<video src="../../../../assets/ranuts/sort/quick.mp4" autoplay loop muted playsinline style="max-width: 100%; border-radius: 8px;"></video>
 
 ## Code demo
 

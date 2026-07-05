@@ -10,7 +10,7 @@
 
 ## 动图演示
 
-![基数排序](../../../../../assets/ranuts/sort/radix.gif)
+<video src="../../../../../assets/ranuts/sort/radix.mp4" autoplay loop muted playsinline style="max-width: 100%; border-radius: 8px;"></video>
 
 ## 代码演示
 

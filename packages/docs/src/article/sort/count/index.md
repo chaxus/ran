@@ -11,7 +11,7 @@ counting sort is a kind of sorting algorithm that sacrifices memory space for lo
 
 ## GIF presentation
 
-![Count Sort](../../../../assets/ranuts/sort/count.gif)
+<video src="../../../../assets/ranuts/sort/count.mp4" autoplay loop muted playsinline style="max-width: 100%; border-radius: 8px;"></video>
 
 ## Code demo
 

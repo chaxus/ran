@@ -10,7 +10,7 @@ Merge sort is an effective sort algorithm based on merge operation. This algorit
 
 ## GIF presentation
 
-![Merge Sort](../../../../assets/ranuts/sort/merge.gif)
+<video src="../../../../assets/ranuts/sort/merge.mp4" autoplay loop muted playsinline style="max-width: 100%; border-radius: 8px;"></video>
 
 ## Code demo
 

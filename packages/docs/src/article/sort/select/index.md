@@ -12,7 +12,7 @@ Ordering results can be obtained by direct selection sorting of n records throug
 
 ## GIF presentation
 
-![Selection Sort](../../../../assets/ranuts/sort/select.gif)
+<video src="../../../../assets/ranuts/sort/select.mp4" autoplay loop muted playsinline style="max-width: 100%; border-radius: 8px;"></video>
 
 ## Code demo
 

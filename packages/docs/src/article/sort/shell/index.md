@@ -12,7 +12,7 @@ First, the whole record sequence to be sorted is divided into several sub-sequen
 
 ## GIF presentation
 
-![Shell Sort](../../../../assets/ranuts/sort/shell.gif)
+<video src="../../../../assets/ranuts/sort/shell.mp4" autoplay loop muted playsinline style="max-width: 100%; border-radius: 8px;"></video>
 
 ## Code implementation
 

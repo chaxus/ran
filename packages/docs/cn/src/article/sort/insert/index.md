@@ -13,7 +13,7 @@
 
 ## 动图演示
 
-![插入排序](../../../../../assets/ranuts/sort/insert.gif)
+<video src="../../../../../assets/ranuts/sort/insert.mp4" autoplay loop muted playsinline style="max-width: 100%; border-radius: 8px;"></video>
 
 ## 代码演示
 
