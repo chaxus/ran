@@ -1,0 +1,5 @@
+# ran.chaxus.com — allow all crawlers, point them at the sitemap
+User-agent: *
+Allow: /
+
+Sitemap: https://ran.chaxus.com/sitemap.xml
