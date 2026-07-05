@@ -246,7 +246,6 @@
     "@vitest/coverage-v8": "^4.1.9",
     "jsdom": "^29.1.1",
     "less": "^4.6.7",
-    "prettier": "^3.8.5",
     "rollup-plugin-visualizer": "^7.0.1",
     "svgo": "^4.0.1",
     "tsx": "^4.22.4",
