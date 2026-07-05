@@ -15,7 +15,7 @@ Generated at: 2026-07-05T13:14:26.449Z
 Source: `components/button/index.ts`
 
 - **Attributes**: `disabled: boolean | string`, `effect: string`, `icon: string`, `iconSize: string`, `sheet: string`, `type: string`
-- **Properties**: 
+- **Properties**:
   - `disabled: boolean | string`
   - `effect: string`
   - `icon: string`
@@ -111,7 +111,7 @@ Source: `components/icon/index.ts`
 Source: `components/image/index.ts`
 
 - **Attributes**: —
-- **Properties**: 
+- **Properties**:
   - `alt` — Alternative text forwarded to the inner `<img>`. Defaults to `''` (empty),
   - `fallback`
   - `sheet`
@@ -124,7 +124,7 @@ Source: `components/image/index.ts`
 Source: `components/input/index.ts`
 
 - **Attributes**: `disabled: boolean`, `icon: string`, `label: string`, `max: string`, `message: string`, `min: string`, `name: string`, `placeholder: string`, `required: boolean`, `sheet: string`, `status: string`, `step: string`, `type: string`, `value: string`
-- **Properties**: 
+- **Properties**:
   - `disabled: boolean` — input 上 disabled 属性
   - `icon: string` — 一个 icon
   - `label: string` — 类似于 Metiral Design 的输入体验。
@@ -322,4 +322,3 @@ Source: `components/tab/index.ts`
 - **Events**: `change` → detail `{ active }`
 - **Slots**: `default`
 - **Parts**: `content`, `content-wrap`, `header`, `indicator`, `nav`, `tabs`
-
