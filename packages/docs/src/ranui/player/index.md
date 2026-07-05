@@ -1,91 +1,171 @@
-# r-player
+# Player
 
-Video player
+A native `<r-player>` media element that wraps a `<video>` with a unified control bar, progress dragging, volume control, playback speed, fullscreen, and HLS streaming.
 
-Based on 'hlsjs' and' web components', let the native tag 'r-player' have a unified video control.
-Do not use the 'new Player(options)' way to mount to the specified 'dom', view return view, logic return logic, see and get, more intuitive.
+Built on `hls.js` and Web Components, so the same player runs unchanged across frameworks. Capabilities driven from source:
 
-1. Drag and drop the progress bar
-2. Volume control
-3. The bitrate is automatically switched based on the current bandwidth
-4. Manual definition switch
-5. Play at double speed
-6. Style custom overlay
-7. 'hls' protocol standard encryption video playback
-8. Based on native development, it can run in all frameworks and unify the cross-framework situation
-9. Unified browser controls
+- Draggable progress bar with buffered indicator and a time tooltip on hover
+- Volume control and mute toggle
+- Playback speed selection
+- Fullscreen toggle (and `Esc` to exit)
+- HLS (`.m3u8`) playback with automatic bitrate switching and a manual clarity selector, when `window.Hls` (hls.js) is available
+- Keyboard shortcuts: `Space` play/pause, `ArrowLeft` / `ArrowRight` seek 5s, `Escape` exit fullscreen
 
-## Code demo
+## Quick Start
 
-<r-player style="display: block;width:100%;max-width:600px;height:300px;" src="/ran/hls/example.m3u8"></r-player>
+<Demo>
+  <r-player style="display:block;width:100%;max-width:600px;height:300px;" src="/ran/hls/example.m3u8"></r-player>
+</Demo>
 
-```xml
-  <r-player src="/ran/hls/example.m3u8"></r-player>
+```html
+<r-player src="/ran/hls/example.m3u8"></r-player>
 ```
 
-## Attribute
+> The element renders as `display: block`. Give it an explicit width/height (inline style or CSS) so the video has a box to fill.
 
-### src
+## API Reference
 
-Resource address of the video
+### Properties
 
-### volume
+| Property       | Type     | Default | Description                                                                                          |
+| -------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------- |
+| `src`          | `string` | `''`    | Video resource URL. Changing it reloads the player. `.m3u8` sources use HLS when hls.js is present.  |
+| `volume`       | `string` | `''`    | Initial volume on a `0`–`100` scale (the attribute value is divided by 100 and applied to the video). |
+| `currentTime`  | `string` | `''`    | Initial playback position in seconds. Also accepted lowercase as `currenttime`.                      |
+| `playbackRate` | `string` | `''`    | Playback speed multiplier (e.g. `1`, `1.5`, `2`). Also accepted lowercase as `playbackrate`.         |
+| `debug`        | `string` | `''`    | When truthy, logs every internal `change` event and warnings to the console.                         |
+| `sheet`        | `string` | `''`    | CSS text injected into the component's shadow DOM for custom styling.                                 |
 
-Set the initial volume. The default is 0.5
+> Observed attributes (from `observedAttributes`): `src`, `volume`, `currentTime` / `currenttime`, `playbackRate` / `playbackrate`, `debug`, `sheet`.
 
-### currentTime
+### Video Source `src`
 
-Set the initial playback time. By default, the playback starts from the beginning
+<Demo>
+  <r-player style="display:block;width:100%;max-width:600px;height:300px;" src="/ran/hls/example.m3u8"></r-player>
+</Demo>
 
-### playbackRate
+```html
+<r-player src="/ran/hls/example.m3u8"></r-player>
+```
 
-Set the double speed. The default is 1.0
+### Initial Volume `volume`
 
-### debug
+Value is on a `0`–`100` scale.
 
-console.log some info
+```html
+<r-player src="/ran/hls/example.m3u8" volume="30"></r-player>
+```
 
-## `event`
+### Initial Playback Time `currentTime`
 
-### onchange
+Seconds from the start of the media.
 
-Listen for any player changes, and the value returned is as follows.
+```html
+<r-player src="/ran/hls/example.m3u8" currentTime="15"></r-player>
+```
 
-An 'instance of the player' can be obtained through this method.
+### Playback Speed `playbackRate`
 
-Live by 'type' to judge different event types, perform different operations
+```html
+<r-player src="/ran/hls/example.m3u8" playbackRate="1.5"></r-player>
+```
 
-| property    | explains that                           | is of type |
-| ----------- | --------------------------------------- | ---------- |
-| type        | Indicates the type of the changed event | 'string'   |
-| data        | The value of the                        | 'Object'   |
-| currentTime | The current playback time               | 'number'   |
-| duration    | Total duration of videos                | 'number'   |
-| tag         | An example of the player                | 'Element'  |
+### Debug Logging `debug`
 
-Where 'type' type has
+```html
+<r-player src="/ran/hls/example.m3u8" debug="true"></r-player>
+```
 
-| Name           | Description                                                                                                                                                  |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| canplay        | Your browser is ready to play the media file, but it probably doesn't have enough data to play it to the end without pausing to buffer the content further.  |
-| canplaythrough | The browser estimates that it canplay media until the end without stopping content buffering.                                                                |
-| complete       | OfflineAudioContext The rendering is complete.                                                                                                               |
-| durationchange | duration is triggered when the value of the duration property changes.                                                                                       |
-| emptied        | Media content emptied; For example, when the media is already loaded (or partially loaded), this event is sent and the load() method is called to reload it. |
-| ended          | The video stops playing because the media has reached the end point.                                                                                         |
-| loadedmetadata | The metadata is loaded.                                                                                                                                      |
-| progress       | is triggered periodically when the browser loads the resource.                                                                                               |
-| ratechange     | The play rate changes.                                                                                                                                       |
-| seeked         | The seek operation is complete.                                                                                                                              |
-| seeking        | seek begins.                                                                                                                                                 |
-| stalled        | The user agent is trying to obtain media data but it has not appeared unexpectedly.                                                                          |
-| suspend        | Media data loading has been suspended.                                                                                                                       |
-| loadeddata     | The first frame in media has been added. media has loaded.                                                                                                   |
-| timeupdate     | The time specified by the currentTime property changes. currentTime attribute has changed.                                                                   |
-| volumechange   | The volume changes.                                                                                                                                          |
-| waiting        | Playing has stopped due to lack of data.                                                                                                                     |
-| play           | Playback has started.                                                                                                                                        |
-| playing        | After a pause or delay due to lack of data, playback is ready to begin.                                                                                      |
-| pause          | Play is paused.                                                                                                                                              |
-| volume         | The volume changes.                                                                                                                                          |
-| fullscreen     | Triggers a full-screen event                                                                                                                                 |
+## Methods
+
+The player exposes imperative controls on the element instance:
+
+| Method                        | Description                                              |
+| ----------------------------- | ------------------------------------------------------- |
+| `play(time?)`                 | Start playback, optionally seeking to `time` (seconds). |
+| `pause()`                     | Pause playback.                                         |
+| `getCurrentTime()`            | Current playback position in seconds.                   |
+| `setCurrentTime(seconds)`     | Seek to a position.                                     |
+| `getTotalTime()`              | Total media duration in seconds.                        |
+| `getVolume()` / `setVolume(v)`| Read/set volume on a `0`–`1` scale.                     |
+| `getPlaybackRate()` / `setPlaybackRate(n)` | Read/set the speed multiplier.             |
+| `customRequestFullscreen()`   | Enter fullscreen. Returns a `Promise`.                  |
+| `customExitFullscreen()`      | Exit fullscreen. Returns a `Promise`.                   |
+
+## Events
+
+The player dispatches a single `change` CustomEvent. Every internal state transition — native media events and the player's own UI actions — funnels through it, so you subscribe once and switch on `detail.type`.
+
+```html
+<r-player id="player" src="/ran/hls/example.m3u8"></r-player>
+
+<script>
+  const player = document.getElementById('player');
+  player.addEventListener('change', (e) => {
+    const { type, data, currentTime, duration, tag } = e.detail;
+    console.log(type, currentTime, duration);
+    // `tag` is the <r-player> instance itself
+  });
+</script>
+```
+
+### `detail` payload
+
+| Property      | Type      | Description                              |
+| ------------- | --------- | ---------------------------------------- |
+| `type`        | `string`  | The name of the change that occurred.    |
+| `data`        | `unknown` | The value/event associated with the change. |
+| `currentTime` | `number`  | Current playback time (seconds).         |
+| `duration`    | `number`  | Total media duration (seconds).          |
+| `tag`         | `Element` | The `<r-player>` instance.               |
+
+### `detail.type` values
+
+Native media states forwarded from the underlying `<video>`:
+
+| Type             | Description                                                        |
+| ---------------- | ----------------------------------------------------------------- |
+| `canplay`        | Enough data to start playing.                                     |
+| `canplaythrough` | Can play to the end without buffering.                            |
+| `complete`       | Rendering complete.                                               |
+| `durationchange` | The `duration` value changed.                                     |
+| `emptied`        | Media emptied / reloaded.                                         |
+| `ended`          | Playback reached the end.                                         |
+| `error`          | A media error occurred.                                           |
+| `loadstart`      | The browser began loading the media.                              |
+| `loadedmetadata` | Metadata has loaded.                                              |
+| `loadeddata`     | The first frame has loaded.                                       |
+| `progress`       | Fired periodically while the resource loads.                      |
+| `ratechange`     | Playback rate changed.                                            |
+| `seeking`        | A seek started.                                                   |
+| `seeked`         | A seek completed.                                                 |
+| `stalled`        | The browser is trying to fetch data but none arrived.            |
+| `suspend`        | Media loading was suspended.                                      |
+| `timeupdate`     | `currentTime` changed.                                            |
+| `volumechange`   | The video element's volume changed.                              |
+| `waiting`        | Playback stalled waiting for data.                                |
+| `play`           | Playback started.                                                 |
+| `playing`        | Playback resumed after buffering/pause.                           |
+| `pause`          | Playback paused.                                                  |
+
+Player-specific actions:
+
+| Type                | `data`               | Description                                              |
+| ------------------- | -------------------- | ------------------------------------------------------- |
+| `volume`            | `number` (`0`–`1`)   | Volume changed via the control bar or mute toggle.      |
+| `speed`             | `number`             | Playback speed changed via the speed selector.          |
+| `fullscreen`        | `boolean`            | Fullscreen entered (`true`) or exited (`false`).        |
+| `hlsManifestLoaded` | `{ data }`           | HLS manifest parsed; clarity levels are now available.  |
+| `hlsError`          | `{ event, data }`    | An HLS error occurred (falls back to the raw `src`).    |
+
+## Slots
+
+The shadow DOM contains one unnamed default `<slot>`. In practice it is inert: the component clears its own light-DOM children (`this.innerHTML = ''`) in the constructor and again on every source load, so slotted content is removed. For custom overlays, style the player via the `sheet` attribute instead.
+
+## Best Practices
+
+- **Sizing**: The host is `display: block` with no intrinsic size — always give it an explicit width and height, otherwise the video collapses.
+- **HLS**: `.m3u8` playback needs hls.js loaded on `window.Hls`. Without it the player falls back to setting the raw `src` on the `<video>`, which only works where the browser plays HLS natively (e.g. Safari). Enable `debug` to see a warning when hls.js is missing.
+- **One listener**: Prefer a single `change` listener with a `switch (detail.type)` over trying to attach many event handlers — all state flows through `change`.
+- **Volume units**: The `volume` attribute is `0`–`100`, but `setVolume()` / `getVolume()` and the `volume` change payload use `0`–`1`.
+- **Custom styling**: Use the `sheet` attribute to inject shadow-DOM CSS; there are no exported `::part()` handles on the player itself.

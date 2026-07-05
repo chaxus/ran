@@ -1,30 +1,49 @@
 # Color Picker
 
-A compact color swatch that opens a popover panel with a saturation/lightness palette, a
-hue slider, an alpha slider, and a HEX/RGB value input. Its `value` accepts and emits
-standard CSS color strings.
+A compact color swatch that opens a popover panel with a saturation/lightness palette, a hue slider, an alpha slider, and a HEX/RGB value input. Its `value` accepts and emits standard CSS color strings.
 
-## Code demo
+## Quick Start
 
-<r-colorpicker value="#006bff"></r-colorpicker>
-<r-colorpicker value="rgba(255,0,0,0.5)"></r-colorpicker>
+### Basic Usage
 
-```xml
+<Demo align="start">
+  <r-colorpicker value="#006bff"></r-colorpicker>
+  <r-colorpicker value="rgba(255,0,0,0.5)"></r-colorpicker>
+</Demo>
+
+```html
 <r-colorpicker value="#006bff"></r-colorpicker>
 <r-colorpicker value="rgba(255,0,0,0.5)"></r-colorpicker>
 ```
 
-Click the swatch (or focus it and press Enter/Space) to open the panel. The hue and alpha
-sliders are keyboard-operable: arrow keys step by 1, Shift+arrow by 10, and Home/End jump
-to the ends.
+Click the swatch (or focus it and press Enter/Space) to open the panel. The hue and alpha sliders are keyboard-operable: arrow keys step by 1, Shift+arrow by 10, and Home/End jump to the ends.
 
-## Attributes
+## API Reference
 
-### `value`
+### Properties
 
-The current color, as a CSS color string. Accepts HEX (`#1677FF`, `#fff`), `rgb(...)`, and
-`rgba(...)` on the way in. On the way out, the canonical value is a 6-digit HEX string when
-the color is fully opaque, or an `rgba(...)` string when alpha is below 1.
+| Property | Type     | Default | Description                                                              |
+| -------- | -------- | ------- | ------------------------------------------------------------------------ |
+| `value`  | `string` | `''`    | The current color as a CSS color string (HEX, `rgb(...)`, `rgba(...)`)   |
+| `sheet`  | `string` | `''`    | CSS injected into the component's shadow DOM                             |
+
+> ⚠️ **Note**: `disabled` is listed in `observedAttributes` and a `disabled` signal is created internally, but nothing in the current source wires it to any behavior — `attributeChangedCallback` only handles `value` and `sheet`. Setting `disabled` has no effect today.
+
+### Value `value`
+
+The current color, as a CSS color string. Accepts HEX (`#1677FF`, `#fff`), `rgb(...)`, and `rgba(...)` on the way in. On the way out, the canonical value read back is a 6-digit HEX string when the color is fully opaque, or an `rgba(...)` string when alpha is below 1.
+
+<Demo align="start">
+  <r-colorpicker value="#00c853"></r-colorpicker>
+  <r-colorpicker value="rgb(22, 119, 255)"></r-colorpicker>
+  <r-colorpicker value="rgba(255, 0, 0, 0.5)"></r-colorpicker>
+</Demo>
+
+```html
+<r-colorpicker value="#00c853"></r-colorpicker>
+<r-colorpicker value="rgb(22, 119, 255)"></r-colorpicker>
+<r-colorpicker value="rgba(255, 0, 0, 0.5)"></r-colorpicker>
+```
 
 ```js
 const picker = document.querySelector('r-colorpicker');
@@ -32,18 +51,19 @@ picker.value = '#00c853';
 console.log(picker.value); // reads back the current color
 ```
 
-### `sheet`
+### External Styles `sheet`
 
-CSS injected into the component's shadow DOM — the same `sheet` convention used by every
-other ranui component.
+CSS injected into the component's shadow DOM — the same `sheet` convention used by every other ranui component.
+
+```html
+<r-colorpicker value="#006bff" sheet=".ran-colorpicker { border-radius: 6px; }"></r-colorpicker>
+```
 
 ## Events
 
 ### `change`
 
-Fires whenever the color changes — dragging the palette, moving a slider, editing the value
-input, or setting the `value` attribute. It **bubbles** and is **composed** (crosses shadow
-boundaries). `event.detail` carries the color in every format:
+Fires whenever the color changes — dragging the palette, moving a slider, editing the value input, or setting the `value` attribute. It **bubbles** and is **composed** (crosses shadow boundaries). `event.detail` carries the color in every format:
 
 | Field   | Type     | Example                                   |
 | ------- | -------- | ----------------------------------------- |
@@ -53,17 +73,37 @@ boundaries). `event.detail` carries the color in every format:
 | `rgba`  | `string` | `"rgba(22, 119, 255, 0.5)"`               |
 | `alpha` | `number` | `0.5`                                     |
 
-```js
-picker.addEventListener('change', (e) => {
-  console.log(e.detail.hex, e.detail.alpha);
-});
+```html
+<r-colorpicker value="#1677ff"></r-colorpicker>
+
+<script>
+  const picker = document.querySelector('r-colorpicker');
+  picker.addEventListener('change', (e) => {
+    console.log(e.detail.hex, e.detail.alpha);
+  });
+</script>
 ```
 
-## Styling
+## CSS Parts
 
-- **`::part(block)`** — the swatch container (the checkerboard-backed trigger box).
-- **`::part(swatch)`** — the inner fill that shows the current color.
-- **CSS variables** — the trigger swatch reads these tokens:
+The trigger swatch exposes two parts for styling from outside the shadow DOM:
+
+| Part     | Description                                       |
+| -------- | ------------------------------------------------- |
+| `block`  | The swatch container (checkerboard-backed trigger box) |
+| `swatch` | The inner fill that shows the current color       |
+
+```css
+r-colorpicker::part(block) {
+  box-shadow: 0 0 0 1px var(--line);
+}
+```
+
+The popover panel is portaled into `document.body`, so its styles are namespaced (`.ran-color-picker-*`) and travel with the panel rather than living on the host.
+
+### CSS Variables
+
+The trigger swatch reads these tokens:
 
 | Variable                                | Purpose                   |
 | --------------------------------------- | ------------------------- |
@@ -78,13 +118,12 @@ picker.addEventListener('change', (e) => {
 r-colorpicker {
   --ran-colorpicker-border-radius: 6px;
 }
-r-colorpicker::part(block) {
-  box-shadow: 0 0 0 1px var(--line);
-}
 ```
 
-The popover panel is portaled into `document.body`, so its styles are namespaced
-(`.ran-color-picker-*`) and travel with the panel rather than living on the host.
+## Best Practices
 
-Import it via `import 'ranui'` (registers every component) or the standalone
-`import 'ranui/colorpicker'`.
+- **Input formats**: Feed `value` any CSS color string — HEX, `rgb(...)`, or `rgba(...)`; the picker normalizes it internally.
+- **Reading the result**: Listen for `change` and read `event.detail` for the exact format you need (`hex`, `rgb`, `rgba`, `alpha`).
+- **Alpha**: Use `rgba(...)` input or the alpha slider when you need transparency; the read-back `value` becomes an `rgba(...)` string whenever alpha drops below 1.
+- **Keyboard**: The swatch and both sliders are focusable and keyboard-operable — no mouse required.
+- **Importing**: Load via `import 'ranui'` (registers every component) or the standalone `import 'ranui/colorpicker'`.

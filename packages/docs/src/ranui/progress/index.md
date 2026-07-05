@@ -1,27 +1,56 @@
-# progress
+# Progress
 
-Interactive progress bar
+Progress bar for showing task completion, with an optional draggable handle.
 
-## Code demo
+## Quick Start
 
-<r-progress type="drag" ></r-progress>
+<Demo>
+  <r-progress percent="40%"></r-progress>
+</Demo>
 
-```xml
-<r-progress type="drag" ></r-progress>
+```html
+<r-progress percent="40%"></r-progress>
 ```
 
-## Attribute
+> 💡 **Tip**: `r-progress` is a block-level element with no intrinsic width. Inside a flex row it can collapse to zero width — give it an explicit width (e.g. `style="width:100%"`) or place it in a block context.
 
-### `total`
+## API Reference
 
-Set progress bar Total progress, allowed percentages and numbers.
+### Properties
 
-<r-progress percent="30" total="1000"></r-progress>
+| Property  | Type     | Default     | Description                                                         |
+| --------- | -------- | ----------- | ------------------------------------------------------------------ |
+| `percent` | `string` | `'0'`       | Current progress; accepts a number or a percentage. Capped at `total`. |
+| `total`   | `string` | `'100'`     | Total progress; accepts a number or a percentage.                  |
+| `type`    | `string` | `'primary'` | Bar type: `primary` (static) or `drag` (clickable / draggable).    |
+| `dot`     | `string` | `'true'`    | Whether to show the drag handle: `true` or `false`.                |
+| `sheet`   | `string` | `''`        | CSS injected into the component's shadow DOM.                      |
 
-<div style="height:20px;width:10px"></div>
-<r-progress percent="70" total="100"></r-progress>
-<div style="height:20px;width:10px"></div>
-<r-progress percent="10%" total="100%"></r-progress>
+### Progress Value `percent`
+
+Sets the current progress. Accepts a number or a percentage string, and cannot exceed `total`. When `total` is not set it defaults to `100` (i.e. `percent` is read as a percentage of 100).
+
+<Demo column>
+  <r-progress percent="30%"></r-progress>
+  <r-progress percent="70%"></r-progress>
+  <r-progress percent="100%"></r-progress>
+</Demo>
+
+```html
+<r-progress percent="30%"></r-progress>
+<r-progress percent="70%"></r-progress>
+<r-progress percent="100%"></r-progress>
+```
+
+### Total Progress `total`
+
+Sets the denominator for `percent`. Both numbers and percentages are allowed, so `percent="30" total="1000"` fills the bar 3%.
+
+<Demo column>
+  <r-progress percent="30" total="1000"></r-progress>
+  <r-progress percent="70" total="100"></r-progress>
+  <r-progress percent="10%" total="100%"></r-progress>
+</Demo>
 
 ```html
 <r-progress percent="30" total="1000"></r-progress>
@@ -29,62 +58,75 @@ Set progress bar Total progress, allowed percentages and numbers.
 <r-progress percent="10%" total="100%"></r-progress>
 ```
 
-### `percent`
+### Bar Type `type`
 
-Set the current progress of the progress bar, you can set the percentage and number, 'percent' cannot exceed 'total'. If 'total' is not set, the default 'total' is' 100% ', that is, '1'.
+- `primary`: a static progress bar. This is the default when `type` is not set.
+- `drag`: a clickable and draggable progress bar. Clicking the track or dragging the handle updates `percent` and fires a `change` event. Dragging the handle requires `dot="true"`.
 
-<r-progress type="primary" percent="30%"></r-progress>
-
-<div style="height:20px;width:10px"></div>
-<r-progress type="primary" percent="70%"></r-progress>
-<div style="height:20px;width:10px"></div>
-<r-progress type="primary" percent="100%"></r-progress>
-
-```html
-<r-progress type="primary" percent="30%"></r-progress>
-<r-progress type="primary" percent="40%"></r-progress>
-<r-progress type="primary" percent="100%"></r-progress>
-```
-
-### `dot`
-
-Point of the progress bar, Default display, set to 'false' can be hidden
-
-<r-progress type="drag" percent="30%" dot="false"></r-progress>
-
-<div style="height:20px;width:10px"></div>
-<r-progress type="primary" percent="40%" dot="true"></r-progress>
-<div style="height:20px;width:10px"></div>
-<r-progress type="primary" percent="40%" ></r-progress>
+<Demo column>
+  <r-progress type="drag" percent="30%"></r-progress>
+  <r-progress type="primary" percent="40%"></r-progress>
+</Demo>
 
 ```html
-<r-progress type="drag" percent="30%" dot="false"></r-progress>
-<r-progress type="primary" percent="40%" dot="true"></r-progress>
-<r-progress type="primary" percent="40%"></r-progress>
-```
-
-### `type`
-
-- `primary`: Default progress bar, not setting the 'type' attribute is the default
-- `drag`: Draggable, clickable progress bar (dragging requires' dot 'to be' true ')
-
 <r-progress type="drag" percent="30%"></r-progress>
-
-<div style="height:20px;width:10px"></div>
 <r-progress type="primary" percent="40%"></r-progress>
-
-```html
-<r-progress type="drag" percent="30%"></r-progress> <r-progress type="primary" percent="40%"></r-progress>
 ```
 
-## Method
+### Drag Handle `dot`
+
+Toggles the drag handle. The handle is only rendered when `dot="true"` **and** `type="drag"` — on a static `primary` bar it is intentionally omitted, so `dot` has no visible effect there.
+
+<Demo column>
+  <r-progress type="drag" percent="30%" dot="true"></r-progress>
+  <r-progress type="drag" percent="30%" dot="false"></r-progress>
+</Demo>
+
+```html
+<r-progress type="drag" percent="30%" dot="true"></r-progress>
+<r-progress type="drag" percent="30%" dot="false"></r-progress>
+```
+
+## Events
 
 ### `change`
 
-The 'change' event is triggered when the 'percent' and 'total' properties change.
+Dispatched on the `drag` type whenever the user clicks the track or drags the handle, updating `percent`. The `detail` object carries:
 
-| property | explains that    | type               |
-| -------- | ---------------- | ------------------ |
-| value    | Current progress | 'string or number' |
-| percent  | Current progress | 'string or number' |
-| total    | Total progress   | 'string or number' |
+| Field     | Type     | Description      |
+| --------- | -------- | ---------------- |
+| `value`   | `string` | Current progress |
+| `percent` | `string` | Current progress |
+| `total`   | `string` | Total progress   |
+
+```html
+<r-progress type="drag" percent="30%"></r-progress>
+
+<script>
+  const progress = document.querySelector('r-progress');
+  progress.addEventListener('change', (e) => {
+    console.log(e.detail.value, e.detail.percent, e.detail.total);
+  });
+</script>
+```
+
+## CSS Parts
+
+| Part    | Description                       |
+| ------- | -------------------------------- |
+| `track` | The progress track (background). |
+| `fill`  | The filled portion of the track. |
+| `dot`   | The drag handle.                 |
+
+```css
+r-progress::part(fill) {
+  background: var(--ran-color-primary);
+}
+```
+
+## Best Practices
+
+- **Static bars**: use the default `type="primary"` to display read-only progress.
+- **Interactive bars**: use `type="drag"` when the user should be able to set the value, and listen for the `change` event.
+- **Percent vs. number**: mix `percent` and `total` freely — pass raw numbers when they map to a known total, or percentages for direct control.
+- **Layout width**: wrap the bar in a block container or set an explicit width so it does not collapse in flex layouts.

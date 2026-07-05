@@ -1,42 +1,50 @@
 # Input
 
-Input component for entering content via mouse or keyboard, the most basic form control.
+Input component for entering content via keyboard, the most basic form control.
 
 ## Quick Start
 
 ### Basic Usage
 
-<div style="width:300px;">
-    Input field: <r-input></r-input>
-</div>
+<Demo column>
+  <r-input placeholder="Enter text"></r-input>
+</Demo>
 
 ```html
-<r-input></r-input>
+<r-input placeholder="Enter text"></r-input>
 ```
 
 ## API Reference
 
 ### Properties
 
-| Property      | Type      | Default  | Description                                      |
-| ------------- | --------- | -------- | ------------------------------------------------ |
-| `label`       | `string`  | `''`     | Input label for Material Design style experience |
-| `placeholder` | `string`  | `''`     | Placeholder text                                 |
-| `value`       | `string`  | `''`     | Input value                                      |
-| `disabled`    | `boolean` | `false`  | Whether the input is disabled                    |
-| `type`        | `string`  | `'text'` | Input type: `text`, `password`, `number`         |
-| `icon`        | `string`  | `''`     | Input icon                                       |
-| `name`        | `string`  | `''`     | Form field name for form submission              |
-| `status`      | `string`  | `''`     | Input status: `error`, `warning`                 |
-| `min`         | `number`  | `-`      | Minimum value for number input                   |
-| `max`         | `number`  | `-`      | Maximum value for number input                   |
-| `step`        | `number`  | `1`      | Step value for number input                      |
+| Property      | Type      | Default | Description                                                       |
+| ------------- | --------- | ------- | ----------------------------------------------------------------- |
+| `label`       | `string`  | `''`    | Floating label for a Material Design style experience             |
+| `placeholder` | `string`  | `''`    | Placeholder text, forwarded to the native `<input>`               |
+| `value`       | `string`  | `''`    | Field value; reflected as an attribute and relayed to the form    |
+| `disabled`    | `boolean` | `false` | Whether the input is disabled                                     |
+| `type`        | `string`  | `''`    | Native input type forwarded to the inner control (`text`, `password`, `number`, …) |
+| `icon`        | `string`  | `''`    | Leading icon name (rendered as `r-icon`) inside the field         |
+| `name`        | `string`  | `''`    | Form field name used when the input participates in a form        |
+| `status`      | `string`  | `''`    | Validation status: `error`, `warning`                             |
+| `message`     | `string`  | `''`    | Helper / validation text rendered below the field                 |
+| `required`    | `boolean` | `false` | Reflects the `required` attribute (stored only — see note below)  |
+| `sheet`       | `string`  | `''`    | CSS injected into the shadow root                                 |
 
-### Label Input `label`
+> **Note on number inputs.** `min`, `max`, and `step` exist as JS property setters and only apply when `type="number"`, but they are set on the host and are **not forwarded to the inner `<input>`**, so they do not currently constrain typed values.
+>
+> **Note on `required`.** The property reflects the `required` attribute on the host but is not forwarded to the inner control, so it does not trigger native constraint validation.
+>
+> **Reserved / not implemented.** The attributes `prefix`, `suffix`, `allowclear`, `count`, `maxlength`, `showcount`, `onPressEnter`, `variant`, `minrows`, and `maxrows` appear in `observedAttributes` but have no rendering/behavior wired up yet. Do not rely on them.
 
-Provides Material Design style input experience
+### Label `label`
 
-<r-input label="Username"></r-input>
+Provides a Material Design style floating label.
+
+<Demo column>
+  <r-input label="Username"></r-input>
+</Demo>
 
 ```html
 <r-input label="Username"></r-input>
@@ -44,33 +52,41 @@ Provides Material Design style input experience
 
 ### Placeholder `placeholder`
 
-Consistent with native `placeholder` attribute
+Consistent with the native `placeholder` attribute.
 
-<r-input placeholder="Enter username"></r-input>
+<Demo column>
+  <r-input placeholder="Enter username"></r-input>
+</Demo>
 
 ```html
 <r-input placeholder="Enter username"></r-input>
+```
+
+### Value `value`
+
+<Demo column>
+  <r-input value="1234"></r-input>
+</Demo>
+
+```html
+<r-input value="1234"></r-input>
 ```
 
 ### Disabled State `disabled`
 
-<r-input label="Username" disabled></r-input>
+<Demo column>
+  <r-input label="Username" disabled></r-input>
+</Demo>
 
 ```html
 <r-input label="Username" disabled></r-input>
-```
-
-### Input Value `value`
-
-<r-input value="1234"></r-input>
-
-```html
-<r-input value="1234"></r-input>
 ```
 
 ### Icon `icon`
 
-<r-input icon="user"></r-input>
+<Demo column>
+  <r-input icon="user"></r-input>
+</Demo>
 
 ```html
 <r-input icon="user"></r-input>
@@ -78,20 +94,40 @@ Consistent with native `placeholder` attribute
 
 ### Input Types `type`
 
-#### Password Input
-
-<r-input icon="lock" type="password"></r-input>
+<Demo column>
+  <r-input icon="lock" type="password" placeholder="Password"></r-input>
+  <r-input type="number" placeholder="Number"></r-input>
+</Demo>
 
 ```html
-<r-input icon="lock" type="password"></r-input>
+<r-input icon="lock" type="password" placeholder="Password"></r-input>
+<r-input type="number" placeholder="Number"></r-input>
 ```
 
-#### Number Input
+### Status `status`
 
-<r-input type="number" min="-10" max="10" step="0.5"></r-input>
+Pair `status` with a `message` so the state is conveyed by text, not color alone.
+
+<Demo column>
+  <r-input status="error" label="Username" message="This field is required"></r-input>
+  <r-input status="warning" label="Username" message="Check this value"></r-input>
+</Demo>
 
 ```html
-<r-input type="number" min="-10" max="10" step="0.5"></r-input>
+<r-input status="error" label="Username" message="This field is required"></r-input>
+<r-input status="warning" label="Username" message="Check this value"></r-input>
+```
+
+### Helper Message `message`
+
+Renders helper / validation text below the field.
+
+<Demo column>
+  <r-input label="Email" message="We will never share your email"></r-input>
+</Demo>
+
+```html
+<r-input label="Email" message="We will never share your email"></r-input>
 ```
 
 ### Form Field Name `name`
@@ -100,60 +136,75 @@ Consistent with native `placeholder` attribute
 <r-input name="username" label="Username"></r-input>
 ```
 
-### Status `status`
-
-#### Error State
-
-<r-input status="error" label="Username"></r-input>
-
-```html
-<r-input status="error" label="Username"></r-input>
-```
-
-#### Warning State
-
-<r-input status="warning" label="Username"></r-input>
-
-```html
-<r-input status="warning" label="Username"></r-input>
-```
-
 ## Events
 
-### Change Event `onchange`
+Both events are dispatched as `CustomEvent`s carrying the current value in `detail`.
 
-<r-input onchange="console.log(this.value)" label="Username"></r-input>
+| Event    | When it fires                                        | `detail`             |
+| -------- | ---------------------------------------------------- | -------------------- |
+| `input`  | On every keystroke (mirrors the native `input`)      | `{ value: string }`  |
+| `change` | On commit / blur (mirrors the native `change`)       | `{ value: string }`  |
+
+### Input Event `input`
+
+<Demo column>
+  <r-input oninput="console.log(event.detail.value)" label="Username"></r-input>
+</Demo>
+
+```javascript
+const input = document.createElement('r-input');
+input.setAttribute('label', 'Username');
+input.addEventListener('input', (event) => {
+  console.log('Typing:', event.detail.value);
+});
+```
+
+### Change Event `change`
+
+<Demo column>
+  <r-input onchange="console.log(event.detail.value)" label="Username"></r-input>
+</Demo>
+
+```javascript
+const input = document.createElement('r-input');
+input.setAttribute('label', 'Username');
+input.addEventListener('change', (event) => {
+  console.log('Value changed:', event.detail.value);
+});
+```
+
+## Form Association
+
+`r-input` is a form-associated custom element (`static formAssociated = true`). It attaches `ElementInternals` and relays its value via `setFormValue`, so the field is collected by `new FormData(form)` and works inside `<r-form>` and native `<form>` elements — set `name` to give the value a key.
 
 ```html
-<r-input onchange="handleChange(this.value)" label="Username"></r-input>
+<form>
+  <r-input name="username" label="Username"></r-input>
+</form>
 ```
 
-```javascript
-const input = document.createElement('r-input');
-input.setAttribute('label', 'Username');
-const handleChange = (value) => {
-  console.log('Value changed:', value);
-};
-input.addEventListener('change', handleChange);
-```
+## CSS Parts
 
-### Input Event `oninput`
+Exposed via `::part()` for external styling.
 
-<r-input oninput="console.log(this.value)" label="Username"></r-input>
+| Part      | Element                                    |
+| --------- | ------------------------------------------ |
+| `input`   | The field wrapper                          |
+| `content` | The inner native `<input>` control         |
+| `label`   | The floating label (present when `label` set) |
+| `message` | The helper / validation text (present when `message` set) |
 
-```javascript
-const input = document.createElement('r-input');
-input.setAttribute('label', 'Username');
-const handleInput = (value) => {
-  console.log('Typing:', value);
-};
-input.addEventListener('input', handleInput);
+```css
+r-input::part(content) {
+  font-size: 16px;
+}
 ```
 
 ## Best Practices
 
-- **Labels**: Add meaningful labels to inputs
-- **Placeholders**: Use placeholders for input hints
-- **Icons**: Add relevant icons to enhance UX
-- **Validation**: Use `status` property to show input state
-- **Types**: Choose appropriate input types for content
+- **Labels**: Add a meaningful `label` so the field has an accessible name.
+- **Placeholders**: Use `placeholder` for input hints, not as a replacement for a label.
+- **Status + Message**: Pair `status` with `message` so state is not signalled by color alone.
+- **Icons**: Add a relevant `icon` to enhance recognition.
+- **Types**: Choose the appropriate `type` (`text`, `password`, `number`, …) for the content.
+- **Forms**: Set `name` when collecting the value inside a form.
