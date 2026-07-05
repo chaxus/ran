@@ -1,22 +1,17 @@
 <template>
   <div>
-    <div class="text-slate-600 text-base mt-2">{{ t('components_totp_6') }}</div>
-    <div class="flex flex-row justify-start items-start mt-4">
-      <div class="relative h-14">
-        <r-input
-          :label="t('components_totp_2')"
-          class="w-64 h-8 rounded-lg block text-lg"
-          :status="inputStatus"
-          @input="onChange"
-        ></r-input>
-        <div class="absolute bottom-0 left-0 text-sm text-[#ff4d4f]" v-if="inputStatus === INPUT_STATUS.ERROR">
+    <div class="totp-desc">{{ t('components_totp_6') }}</div>
+    <div class="totp-row">
+      <div class="totp-field">
+        <r-input :label="t('components_totp_2')" class="totp-input" :status="inputStatus" @input="onChange"></r-input>
+        <div class="totp-error" v-if="inputStatus === INPUT_STATUS.ERROR">
           {{ errorMessage }}
         </div>
       </div>
-      <r-button class="ml-1 h-8" @click="clickButton">{{ t('components_totp_1') }}</r-button>
+      <r-button class="totp-btn" @click="clickButton">{{ t('components_totp_1') }}</r-button>
     </div>
 
-    <div class="text-[#3451b2] text-base mt-6">
+    <div class="totp-output">
       <div>code: {{ outputValue.code }}</div>
       <div>{{ t('components_totp_4') }}: {{ outputValue.expires }}</div>
     </div>
@@ -71,3 +66,45 @@ const clickButton = () => {
   }
 };
 </script>
+
+<style scoped>
+.totp-desc {
+  margin-top: 8px;
+  font-size: 16px;
+  color: var(--vp-c-text-2);
+}
+.totp-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 4px;
+  margin-top: 16px;
+}
+.totp-field {
+  position: relative;
+  height: 56px;
+}
+.totp-input {
+  display: block;
+  width: 256px;
+  height: 32px;
+  font-size: 18px;
+  border-radius: 8px;
+}
+.totp-error {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  font-size: 14px;
+  color: var(--vp-c-danger-1, #ff4d4f);
+}
+.totp-btn {
+  height: 32px;
+}
+.totp-output {
+  margin-top: 24px;
+  font-size: 16px;
+  color: var(--vp-c-brand-1, #3451b2);
+}
+</style>

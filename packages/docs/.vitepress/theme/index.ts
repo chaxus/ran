@@ -12,7 +12,6 @@ import './styles/fonts.less';
 import './styles/index.less';
 import './styles/doc.less';
 import './styles/vars.less';
-import './tailwind.min.css';
 import 'ranui/style';
 
 declare global {
@@ -67,69 +66,6 @@ const enablePageTransitions = (router: Router): void => {
 };
 
 /**
- * @description: 把文档页里「实时组件演示 + 紧随其后的代码块」自动包成一张
- * playground 卡片(上方预览区、下方代码),无需改动 300+ 篇 markdown。
- * 只在代码块前面紧邻着含 <r-*> 的演示元素时才包,纯代码示例不受影响。
- * 每次换页后重跑(VitePress 会整体替换内容,旧包裹随之消失)。
- */
-const RAN_SELECTOR =
-  'r-button,r-progress,r-input,r-checkbox,r-select,r-radar,r-colorpicker,r-loading,r-card,r-tab,r-math,r-scratch,r-player,r-image,r-icon,r-modal,r-popover,r-dropdown,r-section,r-link,r-form,r-message,r-skeleton';
-const isDemoEl = (el: Element | null): boolean => {
-  if (!el || el.nodeType !== 1) return false;
-  if (/^R-/.test(el.tagName)) return true;
-  if (/^(H[1-6]|HR)$/.test(el.tagName)) return false;
-  return !!el.querySelector(RAN_SELECTOR);
-};
-const enhanceDemos = (): void => {
-  try {
-    document.querySelectorAll('.vp-doc div[class*="language-"]').forEach((code) => {
-      if (code.closest('.ran-demo')) return;
-      const demos: Element[] = [];
-      let prev = code.previousElementSibling;
-      while (isDemoEl(prev)) {
-        demos.unshift(prev as Element);
-        prev = (prev as Element).previousElementSibling;
-      }
-      if (!demos.length) return;
-      const card = document.createElement('div');
-      card.className = 'ran-demo';
-      const preview = document.createElement('div');
-      preview.className = 'ran-demo-preview';
-      demos[0].parentNode!.insertBefore(card, demos[0]);
-      demos.forEach((d) => preview.appendChild(d));
-      card.appendChild(preview);
-      card.appendChild(code);
-    });
-  } catch (error) {
-    console.warn('[ran] demo enhance skipped', error);
-  }
-};
-const scheduleEnhance = (): void => {
-  nextTick(() => requestAnimationFrame(enhanceDemos));
-};
-/**
- * @description: 换页前把演示卡片拆回原始 DOM 结构。我们移动了 Vue 渲染出来的
- * 节点(演示 + 代码块),若不还原,VitePress 卸载旧页时 Vue 会按自己的虚拟 DOM
- * 找不到被挪走的节点而报 "nodeType of null"。还原后 DOM 与 vdom 一致,卸载干净。
- */
-const unwrapDemos = (): void => {
-  try {
-    document.querySelectorAll('.vp-doc .ran-demo').forEach((card) => {
-      const parent = card.parentNode;
-      if (!parent) return;
-      const preview = card.querySelector('.ran-demo-preview');
-      const restored = [
-        ...(preview ? Array.from(preview.childNodes) : []),
-        ...Array.from(card.childNodes).filter((n) => n !== preview),
-      ];
-      restored.forEach((n) => parent.insertBefore(n, card));
-      card.remove();
-    });
-  } catch (error) {
-    console.warn('[ran] demo unwrap skipped', error);
-  }
-};
-/**
  * @description: pwa 引导安装
  */
 const pwaInstall = () => {
@@ -153,17 +89,6 @@ export default {
       syncRanuiTheme();
       enablePageTransitions(router);
       pwaInstall();
-      const prevBefore = router.onBeforeRouteChange;
-      router.onBeforeRouteChange = (to: string): void | boolean => {
-        unwrapDemos();
-        return prevBefore?.(to);
-      };
-      const prevAfter = router.onAfterRouteChanged;
-      router.onAfterRouteChanged = (to: string): void => {
-        prevAfter?.(to);
-        scheduleEnhance();
-      };
-      scheduleEnhance();
     }
     app.use(env);
     app.component('Home', Home);

@@ -80,7 +80,8 @@
  * ranui docs drop bare <r-*> elements (sometimes in inline-styled wrappers)
  * straight into the prose. Give them consistent vertical rhythm and keep a
  * demo row from cramping against the code block that follows it. */
-.vp-doc :is(r-button, r-progress, r-input, r-checkbox, r-select, r-radar, r-colorpicker, r-loading, r-card, r-tab, r-math) {
+.vp-doc
+  :is(r-button, r-progress, r-input, r-checkbox, r-select, r-radar, r-colorpicker, r-loading, r-card, r-tab, r-math) {
   vertical-align: middle;
 }
 .vp-doc p:has(> r-button, > r-progress, > r-input, > r-checkbox, > r-loading, > r-colorpicker) {
@@ -88,38 +89,6 @@
   flex-wrap: wrap;
   gap: 10px;
   align-items: center;
-}
-
-/* ---------- live demo → playground card ----------
- * Built at runtime by enhanceDemos() in theme/index.ts: a live-component demo
- * followed by its code block is wrapped into <div class="ran-demo"> with a
- * <div class="ran-demo-preview"> holding the demo and the code block below it. */
-.vp-doc .ran-demo {
-  margin: 22px 0;
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 14px;
-  overflow: hidden;
-  background: var(--vp-c-bg);
-}
-.vp-doc .ran-demo-preview {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px;
-  padding: 28px 24px;
-  background: var(--vp-c-bg-soft);
-  /* faint dotted field so the preview reads as a distinct surface */
-  background-image: radial-gradient(var(--vp-c-divider) 1px, transparent 1px);
-  background-size: 16px 16px;
-}
-/* demos often ship inline-block wrapper divs with their own margins — normalize */
-.vp-doc .ran-demo-preview > div {
-  margin: 0 !important;
-}
-.vp-doc .ran-demo [class*='language-'] {
-  margin: 0 !important;
-  border-radius: 0 !important;
-  border-top: 1px solid var(--vp-c-divider);
 }
 
 /* ---------- sidebar: clearer active item ---------- */
