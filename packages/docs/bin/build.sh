@@ -8,6 +8,25 @@ echo "export const SERVICE_WORK_VERSION = \"$version\"" > $SERVICE_WORK_VERSION
 # 执行 ssg 构建命令
 bin=./node_modules/.bin
 $bin/vitepress build
+# 生成 llms-full.txt:把所有文档 markdown 全文拼成一个纯文本,供 LLM 一次性摄取(GEO)。
+# 精编的入口地图见 public/llms.txt;这个是全文语料。
+llms_full="./.vitepress/dist/llms-full.txt"
+{
+  echo "# ran — full documentation corpus"
+  echo "# https://ran.chaxus.com  •  auto-generated at build time"
+  echo
+  find ./src -name "*.md" | sort | while read -r f; do
+    rel="${f#./src/}"
+    echo "================================================================"
+    echo "# https://ran.chaxus.com/src/${rel%.md}.html"
+    echo "================================================================"
+    echo
+    cat "$f"
+    echo
+    echo
+  done
+} > "$llms_full"
+echo "llms-full.txt generated: $llms_full"
 # 开启调试模式
 # set -x
 # 指定输出的目录
@@ -32,6 +51,7 @@ find "$dir" -type f \
   -not -name "*.m3u8" \
   -not -name "*.jpg" \
   -not -name "*.jpeg" \
+  -not -name "*.txt" \
   -not -name "*.DS_Store" \
   > "$tmpfile"
 # service worker中生成

@@ -1,0 +1,30 @@
+# ran
+
+> ran is an open-source front-end ecosystem by chaxus: **ranui**, a Web Components UI
+> library, and **ranuts**, a utility library — plus low-level web-infrastructure
+> experiments (a JS parser, a JSX compiler, a WASM/2D rendering engine). This site
+> documents ranui and ranuts.
+
+ranui is built on native Custom Elements (`<r-*>` tags), so it works in any framework
+or plain HTML. It ships first-class TypeScript types, light/dark theming via Geist-based
+CSS variables, Shadow DOM encapsulation, SSR/SSG support, and PWA. ranuts is a broad,
+tree-shakeable collection: DOM/BOM, string/object/number/color helpers, algorithms, a
+2D rendering engine (Canvas/WebGL/WebGPU), a virtual DOM, and Node server tooling.
+
+## Docs
+
+- [ranui — Web Components UI library](https://ran.chaxus.com/src/ranui/): button, input, select, checkbox, radio, card, tabs, modal, popover, dropdown, progress, message, icon, and more `<r-*>` elements, with theming and SSR
+- [ranuts — utility library](https://ran.chaxus.com/src/ranuts/): functional (debounce, throttle, memoize, compose), string/object/number/color utils, a 2D rendering engine, virtual DOM, TOTP
+- [Articles](https://ran.chaxus.com/src/article/design_mode.html): design-pattern and front-end engineering notes (parsers, compilers, bundlers, TypeScript, algorithms)
+
+## Reference
+
+- [Full documentation corpus for LLMs](https://ran.chaxus.com/llms-full.txt): every doc page concatenated as plain text
+- [Sitemap — all pages](https://ran.chaxus.com/sitemap.xml)
+- [GitHub repository](https://github.com/chaxus/ran)
+- [ranui on npm](https://www.npmjs.com/package/ranui)
+- [ranuts on npm](https://www.npmjs.com/package/ranuts)
+
+## Optional
+
+- [简体中文文档 (Simplified Chinese docs)](https://ran.chaxus.com/cn/)
