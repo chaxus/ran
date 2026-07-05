@@ -9,7 +9,7 @@ Bubble sort is a simple sort algorithm. It repeatedly visits the sequence to be 
 - Repeat the above steps for all elements except the last one;
 - Repeat steps 1 to 3 until the sorting is complete.
 
-## GIF presentation
+## Animation
 
 <video src="../../../../assets/ranuts/sort/bubble.mp4" autoplay loop muted playsinline style="max-width: 100%; border-radius: 8px;"></video>
 

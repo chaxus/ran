@@ -10,7 +10,7 @@ First, the whole record sequence to be sorted is divided into several sub-sequen
 - According to the number of incremental sequences k, the sequence is sorted by k passes.
 - For each sequence, according to the corresponding increment ti, the sequence to be sorted is divided into several sub-sequences with length m, and each sub-table is sorted by direct insertion. When the increment factor is only 1, the entire sequence is treated as a table, and the length of the table is the length of the entire sequence.
 
-## GIF presentation
+## Animation
 
 <video src="../../../../assets/ranuts/sort/shell.mp4" autoplay loop muted playsinline style="max-width: 100%; border-radius: 8px;"></video>
 

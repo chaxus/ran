@@ -9,7 +9,7 @@
 - 对所有的计数累加（从 C 中的第一个元素开始，每一项和前一项相加）；
 - 反向填充目标数组：将每个元素 i 放在新数组的第 C(i)项，每放一个元素就将 C(i)减去 1。
 
-## 动图演示
+## 动画演示
 
 <video src="../../../../../assets/ranuts/sort/count.mp4" autoplay loop muted playsinline style="max-width: 100%; border-radius: 8px;"></video>
 

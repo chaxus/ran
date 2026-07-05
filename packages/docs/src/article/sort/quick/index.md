@@ -10,7 +10,7 @@ Quicksort uses divide-and-conquer to divide a list into two sub-lists. The speci
 - Reorder the sequence so that all elements smaller than the base value are placed in front of the base value and all elements larger than the base value are placed behind the base value (the same number can go to either side). After the partition exits, the benchmark is in the middle of the sequence. This is called a partition operation;
 - Recursively sorts subsequences of elements less than the base value and subsequences of elements greater than the base value.
 
-## GIF presentation
+## Animation
 
 <video src="../../../../assets/ranuts/sort/quick.mp4" autoplay loop muted playsinline style="max-width: 100%; border-radius: 8px;"></video>
 

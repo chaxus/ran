@@ -8,7 +8,7 @@
 - arr 为原始数组，从最低位开始取每个位组成 radix 数组；
 - 对 radix 进行计数排序（利用计数排序适用于小范围数的特点）；
 
-## 动图演示
+## 动画演示
 
 <video src="../../../../../assets/ranuts/sort/radix.mp4" autoplay loop muted playsinline style="max-width: 100%; border-radius: 8px;"></video>
 

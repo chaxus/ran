@@ -9,7 +9,7 @@
 - 由于交换后新的堆顶 R[1]可能违反堆的性质，因此需要对当前无序区(R1,R2,……Rn-1)调整为新堆，然后再次将 R[1]与无序区最后一个元素交换，得到新的无序区(R1,R2….Rn-2)和新的有序区(Rn-1,Rn)。不断重复此过程直到有序区的元素个数为 n-1，则整个排序过程完成。
 - 升序用大根堆，降序用小根堆
 
-## 动图演示
+## 动画演示
 
 <video src="../../../../../assets/ranuts/sort/heap.mp4" autoplay loop muted playsinline style="max-width: 100%; border-radius: 8px;"></video>
 

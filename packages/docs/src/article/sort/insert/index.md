@@ -11,7 +11,7 @@ Stable sorting algorithm, because no matter what data is entered is O(n2) time c
 - After inserting a new element into this position;
 - Repeat Steps 2 to 5.
 
-## GIF presentation
+## Animation
 
 <video src="../../../../assets/ranuts/sort/insert.mp4" autoplay loop muted playsinline style="max-width: 100%; border-radius: 8px;"></video>
 

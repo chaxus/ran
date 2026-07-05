@@ -9,7 +9,7 @@ counting sort is a kind of sorting algorithm that sacrifices memory space for lo
 - Add up all counts (starting with the first element in C and adding each term to the previous one);
 - Backfill the target array: Place each element i in the C(i) item of the new array, and subtract 1 from C(i) for each element.
 
-## GIF presentation
+## Animation
 
 <video src="../../../../assets/ranuts/sort/count.mp4" autoplay loop muted playsinline style="max-width: 100%; border-radius: 8px;"></video>
 

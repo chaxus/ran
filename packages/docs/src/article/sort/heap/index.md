@@ -9,7 +9,7 @@ Heapsort (Heapsort) is a kind of sorting algorithm designed by using the heap da
 - Since the new top R[1] may violate the nature of the heap after exchange, it is necessary to adjust the current disorder region (R1,R2,... Rn-1) adjusts to the new heap, then swaps R[1] again with the last element of the unordered area, giving a new unordered area (R1,R2... .Rn-2) and the new ordered region (RN-1,Rn). Repeat this process until the number of elements in the ordered area is n-1, then the sorting process is complete.
 - Use large root piles in ascending order and small root piles in descending order
 
-## GIF presentation
+## Animation
 
 <video src="../../../../assets/ranuts/sort/heap.mp4" autoplay loop muted playsinline style="max-width: 100%; border-radius: 8px;"></video>
 
