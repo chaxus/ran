@@ -17,7 +17,7 @@
       <p class="subtitle reveal" :style="delay(3)">{{ t.subtitle }}</p>
 
       <div class="cta reveal" :style="delay(4)">
-        <a class="btn btn-primary" :href="withBase('/src/ranui/')">
+        <a class="btn btn-primary" :href="localeHref('/src/ranui/')">
           {{ t.ctaPrimary }}
           <svg viewBox="0 0 24 24" width="18" height="18">
             <path
@@ -61,7 +61,7 @@
         :key="p.title"
         class="pillar reveal"
         :style="delay(7 + i)"
-        :href="withBase(p.link)"
+        :href="localeHref(p.link)"
         @pointermove="spot"
       >
         <span class="spotlight" aria-hidden="true"></span>
@@ -186,6 +186,9 @@ const { lang } = useData();
 
 const isCN = computed(() => (lang.value || '').toLowerCase().startsWith('zh'));
 
+// Internal links point at the current locale's pages (the cn home lives under /cn/).
+const localeHref = (path: string): string => withBase(isCN.value ? `/cn${path}` : path);
+
 // ranui registers the custom elements only on the client — render the live
 // demo after mount, showing a skeleton during SSR / first paint.
 const mounted = ref(false);
@@ -281,7 +284,7 @@ const en = {
       title: 'Articles',
       desc: 'Field notes and deep dives — design patterns, functional programming, ASTs and the web platform, written along the way.',
       more: 'Start reading',
-      link: '/src/article/design_mode.md',
+      link: '/src/article/design_mode.html',
     },
   ],
   capsTitle: 'Not just another toolkit',
@@ -417,7 +420,7 @@ const cn = {
       title: '文章',
       desc: '一路记录的技术笔记与深度剖析 —— 设计模式、函数式编程、AST 与 Web 平台。',
       more: '开始阅读',
-      link: '/src/article/design_mode.md',
+      link: '/src/article/design_mode.html',
     },
   ],
   capsTitle: '不只是又一个工具库',
