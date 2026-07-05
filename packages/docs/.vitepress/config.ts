@@ -45,6 +45,9 @@ export default defineConfig({
     },
   },
   lastUpdated: true,
+  sitemap: {
+    hostname: HOME,
+  },
   locales: {
     // root: { label: '简体中文', lang: 'zh-CN' },
     // en: {
