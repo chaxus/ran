@@ -42,8 +42,8 @@ SERVICE_WORK_VARABLE="./.vitepress/dist/sw-file.js"
 
 # 拼接字符串
 echo "const SERVICE_WORK_CACHE_FILE_PATHS = [" > "$SERVICE_WORK_VARABLE"
-# 根路径
-ran="/ran"
+# 根路径(部署在 ran.chaxus.com 根域名,不再有 /ran 前缀)
+ran=""
 while read -r file; do
   # if [[ $file != *".DS_Store"* ]]; then
   str="${file##./.vitepress/dist}"

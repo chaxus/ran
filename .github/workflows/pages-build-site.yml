@@ -1,4 +1,9 @@
-name: pages-build-site
+name: pages-redirect
+# 站点已迁移到 Cloudflare Pages(ran.chaxus.com)。
+# 这个 workflow 不再构建完整文档站,而是往 gh-pages 发布一个「跳转器」:
+# 把旧的 chaxus.github.io/ran/* 客户端跳转到 ran.chaxus.com/*(保留子路径 + canonical),
+# 用于把搜索权重平滑迁到新域名。不能删除本 workflow,否则 gh-pages 会冻结在旧站,
+# 与新站形成重复内容。
 on:
   push:
     branches:
@@ -13,32 +18,39 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - name: Generate redirect stub
+        run: |
+          mkdir -p redirect
+          cat > redirect/index.html <<'HTML'
+          <!doctype html>
+          <html lang="en">
+          <head>
+          <meta charset="utf-8">
+          <meta name="robots" content="noindex, follow">
+          <title>Moved to ran.chaxus.com</title>
+          <script>
+            // 把 /ran/<path> 跳到 https://ran.chaxus.com/<path>,保留 query/hash
+            (function () {
+              var rest = location.pathname.replace(/^\/ran(?=\/|$)/, '');
+              var dest = 'https://ran.chaxus.com' + rest + location.search + location.hash;
+              var link = document.createElement('link');
+              link.rel = 'canonical';
+              link.href = dest;
+              document.head.appendChild(link);
+              location.replace(dest);
+            })();
+          </script>
+          <meta http-equiv="refresh" content="0; url=https://ran.chaxus.com/">
+          </head>
+          <body>
+          This site has moved to <a href="https://ran.chaxus.com/">ran.chaxus.com</a>.
+          </body>
+          </html>
+          HTML
+          cp redirect/index.html redirect/404.html
 
-      - uses: pnpm/action-setup@v6
-        with:
-          version: latest
-
-      - uses: actions/setup-node@v6
-        with:
-          node-version: 26
-          cache: pnpm
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build ranuts
-        run: pnpm -F ranuts build
-
-      - name: Build ranui
-        run: pnpm -F ranui build
-
-      - name: Build docs
-        run: pnpm -F docs build
-
-      - name: Deploy
+      - name: Deploy redirect to gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.RAN_ACTIONS_TOKEN }}
-          exclude_assets: ""
-          publish_dir: packages/docs/.vitepress/dist
+          publish_dir: redirect
