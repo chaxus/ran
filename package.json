@@ -19,7 +19,7 @@
     "format": "prettier --write --cache .",
     "cpd": "jscpd ./packages"
   },
-  "homepage": "https://chaxus.github.io/ran/",
+  "homepage": "https://ran.chaxus.com/",
   "keywords": [],
   "author": "",
   "license": "MIT",

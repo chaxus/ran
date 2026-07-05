@@ -37,9 +37,9 @@ export const PREVIEW_CODE = `
 export const DESCRIPTION =
   'Based on web component library, common function library utils, personal article record and so on';
 
-export const HOME = 'https://chaxus.github.io/ran/';
+export const HOME = 'https://ran.chaxus.com/';
 
-export const BASE_PATH = '/ran/';
+export const BASE_PATH = '/';
 
 export const HOME_ICON = `${HOME}home.svg`;
 
@@ -58,8 +58,8 @@ export const SERVICE_WORK = `
 const registerServiceWorker = async () => {
   if ('serviceWorker' in window.navigator) {
     try {
-      const registration = await navigator.serviceWorker.register('/ran/sw${SERVICE_WORK_VERSION}.js', {
-        scope: '/ran/',
+      const registration = await navigator.serviceWorker.register('/sw${SERVICE_WORK_VERSION}.js', {
+        scope: '/',
       });
       if (registration.installing) {
         console.log('installing Service worker');
