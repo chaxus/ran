@@ -6,7 +6,7 @@ shape), slots, and `::part()` names — extracted from source. For CSS variables
 (theming tokens) see [style-tokens-public.md](./style-tokens-public.md); for
 design rules see [DESIGN.md](./DESIGN.md).
 
-Generated at: 2026-07-04T08:44:03.975Z
+Generated at: 2026-07-05T13:14:26.449Z
 
 29 custom elements.
 
@@ -15,7 +15,7 @@ Generated at: 2026-07-04T08:44:03.975Z
 Source: `components/button/index.ts`
 
 - **Attributes**: `disabled: boolean | string`, `effect: string`, `icon: string`, `iconSize: string`, `sheet: string`, `type: string`
-- **Properties**:
+- **Properties**: 
   - `disabled: boolean | string`
   - `effect: string`
   - `icon: string`
@@ -50,8 +50,8 @@ Source: `components/checkbox/index.ts`
 
 Source: `components/colorpicker/index.ts`
 
-- **Attributes**: `disabled`, `sheet: string`, `value: string`
-- **Properties**: `sheet: string`, `value: string`
+- **Attributes**: `disabled: boolean`, `sheet: string`, `value: string`
+- **Properties**: `disabled: boolean`, `sheet: string`, `value: string`
 - **Events**: `change`
 - **Slots**: —
 - **Parts**: `block`, `swatch`
@@ -71,7 +71,7 @@ Source: `components/popover/content/index.ts`
 Source: `components/dropdown/index.ts`
 
 - **Attributes**: `arrow: string`, `sheet: string`, `transit: string`
-- **Properties**: `arrow: string`, `sheet: string`, `show: string`, `transit: string`
+- **Properties**: `arrow: string`, `sheet: string`, `transit: string`
 - **Events**: —
 - **Slots**: `default`
 - **Parts**: `dropdown`
@@ -111,7 +111,7 @@ Source: `components/icon/index.ts`
 Source: `components/image/index.ts`
 
 - **Attributes**: —
-- **Properties**:
+- **Properties**: 
   - `alt` — Alternative text forwarded to the inner `<img>`. Defaults to `''` (empty),
   - `fallback`
   - `sheet`
@@ -123,8 +123,8 @@ Source: `components/image/index.ts`
 
 Source: `components/input/index.ts`
 
-- **Attributes**: `allowclear`, `count`, `disabled: boolean`, `icon: string`, `label: string`, `maxlength`, `maxrows`, `message: string`, `minrows`, `name: string`, `onPressEnter`, `placeholder: string`, `prefix: string`, `sheet: string`, `showcount`, `status: string`, `suffix: string`, `type: string`, `value: string`, `variant`
-- **Properties**:
+- **Attributes**: `disabled: boolean`, `icon: string`, `label: string`, `max: string`, `message: string`, `min: string`, `name: string`, `placeholder: string`, `required: boolean`, `sheet: string`, `status: string`, `step: string`, `type: string`, `value: string`
+- **Properties**: 
   - `disabled: boolean` — input 上 disabled 属性
   - `icon: string` — 一个 icon
   - `label: string` — 类似于 Metiral Design 的输入体验。
@@ -133,12 +133,10 @@ Source: `components/input/index.ts`
   - `min: string` — 当 input 类型为 number 类型时，可以获取 min 属性
   - `name: string` — 与 form 组件联动时，收集的属性名
   - `placeholder: string` — input 的占位字符
-  - `prefix: string` — 前面的 icon
   - `required: boolean` — input 是否为必选
   - `sheet: string`
   - `status: string` — input 框的状态
   - `step: string` — 当 input 类型为 number 类型时，可以获取 step 属性
-  - `suffix: string` — 后面的 icon
   - `type: string` — input 的类型
   - `value: string` — input 的值
 - **Events**: `change` → detail `{ value }` · `input` → detail `{ value }`
@@ -219,8 +217,8 @@ Source: `components/player/index.ts`
 
 Source: `components/popover/index.ts`
 
-- **Attributes**: `arrow: string`, `placement: string`, `sheet: string`, `trigger: string`
-- **Properties**: `arrow: string`, `getPopupContainerId: string`, `placement: string`, `sheet: string`, `trigger: string`
+- **Attributes**: `placement: string`, `sheet: string`, `trigger: string`
+- **Properties**: `getPopupContainerId: string`, `placement: string`, `sheet: string`, `trigger: string`
 - **Events**: —
 - **Slots**: `default`
 - **Parts**: —
@@ -289,7 +287,7 @@ Source: `components/section/index.ts`
 
 Source: `components/select/index.ts`
 
-- **Attributes**: `clear`, `defaultValue: string`, `disabled: boolean`, `dropdownclass: string`, `getPopupContainerId: string`, `placement: string`, `sheet: string`, `showSearch: string`, `trigger: string`, `type: string`, `value: string`
+- **Attributes**: `defaultvalue`, `disabled: boolean`, `dropdownclass: string`, `getPopupContainerId: string`, `placement: string`, `sheet: string`, `showsearch`, `trigger: string`, `type: string`, `value: string`
 - **Properties**: `defaultValue: string`, `disabled: boolean`, `dropdownclass: string`, `getPopupContainerId: string`, `placement: string`, `sheet: string`, `showSearch: string`, `trigger: string`, `type: string`, `value: string`
 - **Events**: `change` → detail `{ label, value }` · `search` → detail `{ value }`
 - **Slots**: `default`
@@ -299,7 +297,7 @@ Source: `components/select/index.ts`
 
 Source: `components/skeleton/index.ts`
 
-- **Attributes**: `disabled`, `sheet: string`
+- **Attributes**: `sheet: string`
 - **Properties**: `sheet: string`
 - **Events**: —
 - **Slots**: —
@@ -319,8 +317,9 @@ Source: `components/tabpane/index.ts`
 
 Source: `components/tab/index.ts`
 
-- **Attributes**: `active: string | null`, `align: string`, `effect: string | null`, `forceRender`, `sheet: string`, `type: string`
+- **Attributes**: `active: string | null`, `align: string`, `effect: string | null`, `sheet: string`, `type: string`
 - **Properties**: `active: string | null`, `align: string`, `effect: string | null`, `sheet: string`, `type: string`
 - **Events**: `change` → detail `{ active }`
 - **Slots**: `default`
 - **Parts**: `content`, `content-wrap`, `header`, `indicator`, `nav`, `tabs`
+

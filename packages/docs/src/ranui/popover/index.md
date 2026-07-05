@@ -35,10 +35,7 @@ The trigger lives in the default slot; the floating content is wrapped in a nest
 | `placement`           | `string` | `'top'`   | Panel position relative to the trigger: `top`, `bottom`, `left`, `right`           |
 | `trigger`             | `string` | `'hover'` | How the panel opens: `hover` or `click` (a `click` handler is always bound)        |
 | `getPopupContainerId` | `string` | `''`      | `id` of an element to position the panel within (read at open time; not reflected) |
-| `arrow`               | `string` | `''`      | Observed but currently inert on the host — not applied to rendering (see note)     |
-| `sheet`               | `string` | `''`      | CSS injected into the component's shadow DOM                                        |
-
-> ⚠️ **Note**: `arrow` is listed in `observedAttributes` but is not handled in `attributeChangedCallback`, so setting it on `<r-popover>` has no visible effect. The internal dropdown's arrow direction is derived automatically from `placement`.
+| `sheet`               | `string` | `''`      | CSS injected into the component's shadow DOM                                       |
 
 ### Trigger Mode `trigger`
 
@@ -134,10 +131,10 @@ The trigger lives in the default slot; the floating content is wrapped in a nest
 
 ## Slots
 
-| Component     | Slot      | Description                                                                                          |
-| ------------- | --------- | --------------------------------------------------------------------------------------------------- |
-| `<r-popover>` | (default) | The trigger element plus the `<r-content>` wrapper                                                   |
-| `<r-content>` | (default) | The floating panel's content; these children are portaled to `document.body` and shown on open       |
+| Component     | Slot      | Description                                                                                    |
+| ------------- | --------- | ---------------------------------------------------------------------------------------------- |
+| `<r-popover>` | (default) | The trigger element plus the `<r-content>` wrapper                                             |
+| `<r-content>` | (default) | The floating panel's content; these children are portaled to `document.body` and shown on open |
 
 Both components expose a single unnamed default slot — there are no named slots.
 

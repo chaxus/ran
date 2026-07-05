@@ -68,12 +68,9 @@ Compose several skeletons to mimic a block of text or a paragraph.
 
 ### Properties
 
-| Property | Type     | Default | Description                                                                          |
-| -------- | -------- | ------- | ------------------------------------------------------------------------------------ |
-| `sheet`  | `string` | `''`    | CSS injected into the component's shadow DOM for scoped style overrides              |
-| `disabled` | `string` | `''`  | Observed attribute, but currently inert — it has no effect on rendering or animation |
-
-> ⚠️ **Note**: `disabled` appears in `observedAttributes` but is not handled in `attributeChangedCallback`, so setting it does nothing today. Only `sheet` is a functional property with a getter/setter.
+| Property | Type     | Default | Description                                                             |
+| -------- | -------- | ------- | ----------------------------------------------------------------------- |
+| `sheet`  | `string` | `''`    | CSS injected into the component's shadow DOM for scoped style overrides |
 
 ### Custom Styling `sheet`
 
@@ -91,13 +88,13 @@ Pass a CSS string through `sheet` to override the skeleton's look inside its sha
 
 The skeleton also exposes CSS custom properties for theming without `sheet`:
 
-| Variable                            | Default                                    | Description                       |
-| ----------------------------------- | ------------------------------------------ | --------------------------------- |
-| `--ran-skeleton-height`             | `16px`                                     | Height of the placeholder bar     |
-| `--ran-skeleton-background`         | `var(--ran-gray-alpha-200, …)`             | Base (non-shimmer) fill color     |
-| `--ran-skeleton-border-radius`      | `var(--ran-radius-sm, 6px)`                | Corner radius                     |
-| `--ran-skeleton-shimmer`            | `linear-gradient(90deg, …)`                | The moving highlight gradient     |
-| `--ran-skeleton-animation-duration` | `1.4s`                                     | Duration of one shimmer sweep     |
+| Variable                            | Default                        | Description                   |
+| ----------------------------------- | ------------------------------ | ----------------------------- |
+| `--ran-skeleton-height`             | `16px`                         | Height of the placeholder bar |
+| `--ran-skeleton-background`         | `var(--ran-gray-alpha-200, …)` | Base (non-shimmer) fill color |
+| `--ran-skeleton-border-radius`      | `var(--ran-radius-sm, 6px)`    | Corner radius                 |
+| `--ran-skeleton-shimmer`            | `linear-gradient(90deg, …)`    | The moving highlight gradient |
+| `--ran-skeleton-animation-duration` | `1.4s`                         | Duration of one shimmer sweep |
 
 <Demo>
   <r-skeleton style="--ran-skeleton-height: 32px; --ran-skeleton-border-radius: 16px"></r-skeleton>

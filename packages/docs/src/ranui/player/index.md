@@ -27,13 +27,13 @@ Built on `hls.js` and Web Components, so the same player runs unchanged across f
 
 ### Properties
 
-| Property       | Type     | Default | Description                                                                                          |
-| -------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------- |
-| `src`          | `string` | `''`    | Video resource URL. Changing it reloads the player. `.m3u8` sources use HLS when hls.js is present.  |
+| Property       | Type     | Default | Description                                                                                           |
+| -------------- | -------- | ------- | ----------------------------------------------------------------------------------------------------- |
+| `src`          | `string` | `''`    | Video resource URL. Changing it reloads the player. `.m3u8` sources use HLS when hls.js is present.   |
 | `volume`       | `string` | `''`    | Initial volume on a `0`–`100` scale (the attribute value is divided by 100 and applied to the video). |
-| `currentTime`  | `string` | `''`    | Initial playback position in seconds. Also accepted lowercase as `currenttime`.                      |
-| `playbackRate` | `string` | `''`    | Playback speed multiplier (e.g. `1`, `1.5`, `2`). Also accepted lowercase as `playbackrate`.         |
-| `debug`        | `string` | `''`    | When truthy, logs every internal `change` event and warnings to the console.                         |
+| `currentTime`  | `string` | `''`    | Initial playback position in seconds. Also accepted lowercase as `currenttime`.                       |
+| `playbackRate` | `string` | `''`    | Playback speed multiplier (e.g. `1`, `1.5`, `2`). Also accepted lowercase as `playbackrate`.          |
+| `debug`        | `string` | `''`    | When truthy, logs every internal `change` event and warnings to the console.                          |
 | `sheet`        | `string` | `''`    | CSS text injected into the component's shadow DOM for custom styling.                                 |
 
 > Observed attributes (from `observedAttributes`): `src`, `volume`, `currentTime` / `currenttime`, `playbackRate` / `playbackrate`, `debug`, `sheet`.
@@ -80,17 +80,17 @@ Seconds from the start of the media.
 
 The player exposes imperative controls on the element instance:
 
-| Method                        | Description                                              |
-| ----------------------------- | ------------------------------------------------------- |
-| `play(time?)`                 | Start playback, optionally seeking to `time` (seconds). |
-| `pause()`                     | Pause playback.                                         |
-| `getCurrentTime()`            | Current playback position in seconds.                   |
-| `setCurrentTime(seconds)`     | Seek to a position.                                     |
-| `getTotalTime()`              | Total media duration in seconds.                        |
-| `getVolume()` / `setVolume(v)`| Read/set volume on a `0`–`1` scale.                     |
-| `getPlaybackRate()` / `setPlaybackRate(n)` | Read/set the speed multiplier.             |
-| `customRequestFullscreen()`   | Enter fullscreen. Returns a `Promise`.                  |
-| `customExitFullscreen()`      | Exit fullscreen. Returns a `Promise`.                   |
+| Method                                     | Description                                             |
+| ------------------------------------------ | ------------------------------------------------------- |
+| `play(time?)`                              | Start playback, optionally seeking to `time` (seconds). |
+| `pause()`                                  | Pause playback.                                         |
+| `getCurrentTime()`                         | Current playback position in seconds.                   |
+| `setCurrentTime(seconds)`                  | Seek to a position.                                     |
+| `getTotalTime()`                           | Total media duration in seconds.                        |
+| `getVolume()` / `setVolume(v)`             | Read/set volume on a `0`–`1` scale.                     |
+| `getPlaybackRate()` / `setPlaybackRate(n)` | Read/set the speed multiplier.                          |
+| `customRequestFullscreen()`                | Enter fullscreen. Returns a `Promise`.                  |
+| `customExitFullscreen()`                   | Exit fullscreen. Returns a `Promise`.                   |
 
 ## Events
 
@@ -111,56 +111,56 @@ The player dispatches a single `change` CustomEvent. Every internal state transi
 
 ### `detail` payload
 
-| Property      | Type      | Description                              |
-| ------------- | --------- | ---------------------------------------- |
-| `type`        | `string`  | The name of the change that occurred.    |
+| Property      | Type      | Description                                 |
+| ------------- | --------- | ------------------------------------------- |
+| `type`        | `string`  | The name of the change that occurred.       |
 | `data`        | `unknown` | The value/event associated with the change. |
-| `currentTime` | `number`  | Current playback time (seconds).         |
-| `duration`    | `number`  | Total media duration (seconds).          |
-| `tag`         | `Element` | The `<r-player>` instance.               |
+| `currentTime` | `number`  | Current playback time (seconds).            |
+| `duration`    | `number`  | Total media duration (seconds).             |
+| `tag`         | `Element` | The `<r-player>` instance.                  |
 
 ### `detail.type` values
 
 Native media states forwarded from the underlying `<video>`:
 
-| Type             | Description                                                        |
-| ---------------- | ----------------------------------------------------------------- |
-| `canplay`        | Enough data to start playing.                                     |
-| `canplaythrough` | Can play to the end without buffering.                            |
-| `complete`       | Rendering complete.                                               |
-| `durationchange` | The `duration` value changed.                                     |
-| `emptied`        | Media emptied / reloaded.                                         |
-| `ended`          | Playback reached the end.                                         |
-| `error`          | A media error occurred.                                           |
-| `loadstart`      | The browser began loading the media.                              |
-| `loadedmetadata` | Metadata has loaded.                                              |
-| `loadeddata`     | The first frame has loaded.                                       |
-| `progress`       | Fired periodically while the resource loads.                      |
-| `ratechange`     | Playback rate changed.                                            |
-| `seeking`        | A seek started.                                                   |
-| `seeked`         | A seek completed.                                                 |
-| `stalled`        | The browser is trying to fetch data but none arrived.            |
-| `suspend`        | Media loading was suspended.                                      |
-| `timeupdate`     | `currentTime` changed.                                            |
-| `volumechange`   | The video element's volume changed.                              |
-| `waiting`        | Playback stalled waiting for data.                                |
-| `play`           | Playback started.                                                 |
-| `playing`        | Playback resumed after buffering/pause.                           |
-| `pause`          | Playback paused.                                                  |
+| Type             | Description                                           |
+| ---------------- | ----------------------------------------------------- |
+| `canplay`        | Enough data to start playing.                         |
+| `canplaythrough` | Can play to the end without buffering.                |
+| `complete`       | Rendering complete.                                   |
+| `durationchange` | The `duration` value changed.                         |
+| `emptied`        | Media emptied / reloaded.                             |
+| `ended`          | Playback reached the end.                             |
+| `error`          | A media error occurred.                               |
+| `loadstart`      | The browser began loading the media.                  |
+| `loadedmetadata` | Metadata has loaded.                                  |
+| `loadeddata`     | The first frame has loaded.                           |
+| `progress`       | Fired periodically while the resource loads.          |
+| `ratechange`     | Playback rate changed.                                |
+| `seeking`        | A seek started.                                       |
+| `seeked`         | A seek completed.                                     |
+| `stalled`        | The browser is trying to fetch data but none arrived. |
+| `suspend`        | Media loading was suspended.                          |
+| `timeupdate`     | `currentTime` changed.                                |
+| `volumechange`   | The video element's volume changed.                   |
+| `waiting`        | Playback stalled waiting for data.                    |
+| `play`           | Playback started.                                     |
+| `playing`        | Playback resumed after buffering/pause.               |
+| `pause`          | Playback paused.                                      |
 
 Player-specific actions:
 
-| Type                | `data`               | Description                                              |
-| ------------------- | -------------------- | ------------------------------------------------------- |
-| `volume`            | `number` (`0`–`1`)   | Volume changed via the control bar or mute toggle.      |
-| `speed`             | `number`             | Playback speed changed via the speed selector.          |
-| `fullscreen`        | `boolean`            | Fullscreen entered (`true`) or exited (`false`).        |
-| `hlsManifestLoaded` | `{ data }`           | HLS manifest parsed; clarity levels are now available.  |
-| `hlsError`          | `{ event, data }`    | An HLS error occurred (falls back to the raw `src`).    |
+| Type                | `data`             | Description                                            |
+| ------------------- | ------------------ | ------------------------------------------------------ |
+| `volume`            | `number` (`0`–`1`) | Volume changed via the control bar or mute toggle.     |
+| `speed`             | `number`           | Playback speed changed via the speed selector.         |
+| `fullscreen`        | `boolean`          | Fullscreen entered (`true`) or exited (`false`).       |
+| `hlsManifestLoaded` | `{ data }`         | HLS manifest parsed; clarity levels are now available. |
+| `hlsError`          | `{ event, data }`  | An HLS error occurred (falls back to the raw `src`).   |
 
 ## Slots
 
-The shadow DOM contains one unnamed default `<slot>`. In practice it is inert: the component clears its own light-DOM children (`this.innerHTML = ''`) in the constructor and again on every source load, so slotted content is removed. For custom overlays, style the player via the `sheet` attribute instead.
+The player does not accept slotted content: it clears its own light-DOM children (`this.innerHTML = ''`) in the constructor and again on every source load. For custom overlays, style the player via the `sheet` attribute instead.
 
 ## Best Practices
 

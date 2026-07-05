@@ -35,7 +35,7 @@ export class RadarChart extends RanElement {
   mRadius?: number;
   mAngle?: number;
   static get observedAttributes() {
-    return ['abilitys', 'colorPolygon', 'colorLine', 'fillColor', 'strokeColor', 'sheet'];
+    return ['abilitys', 'colorpolygon', 'colorline', 'fillcolor', 'strokecolor', 'sheet'];
   }
   abilityRadarChartContainer: HTMLDivElement;
   abilityRadarChart: HTMLCanvasElement;
@@ -340,7 +340,7 @@ export class RadarChart extends RanElement {
   }
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     if (oldValue === newValue) return;
-    const attribute = ['abilitys', 'colorPolygon', 'colorLine', 'fillColor', 'strokeColor'];
+    const attribute = ['abilitys', 'colorpolygon', 'colorline', 'fillcolor', 'strokecolor'];
     if (attribute.includes(name) && this.abilityRadarChartContainer) {
       this.refreshData();
     }

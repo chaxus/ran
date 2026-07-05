@@ -20,11 +20,11 @@ When an internal `href` is clicked, the link hands the path to the active ranui 
 
 ### Properties
 
-| Property  | Type      | Default | Description                                                                     |
-| --------- | --------- | ------- | ------------------------------------------------------------------------------- |
-| `href`    | `string`  | `''`    | Navigation target. Internal paths are routed in-app; external URLs navigate normally |
+| Property  | Type      | Default | Description                                                                                            |
+| --------- | --------- | ------- | ------------------------------------------------------------------------------------------------------ |
+| `href`    | `string`  | `''`    | Navigation target. Internal paths are routed in-app; external URLs navigate normally                   |
 | `replace` | `boolean` | `false` | When present, in-app navigation replaces the current history entry (read-only, reflects the attribute) |
-| `sheet`   | `string`  | `''`    | CSS injected into the link's shadow DOM                                          |
+| `sheet`   | `string`  | `''`    | CSS injected into the link's shadow DOM                                                                |
 
 ### Navigation Target `href`
 
@@ -36,8 +36,7 @@ Internal paths are routed in-app; absolute URLs and `mailto:` / `tel:` links nav
 </Demo>
 
 ```html
-<r-link href="/docs">Internal link</r-link>
-<r-link href="https://example.com">External link</r-link>
+<r-link href="/docs">Internal link</r-link> <r-link href="https://example.com">External link</r-link>
 ```
 
 ### Replace History `replace`
@@ -66,14 +65,14 @@ CSS injected into the link's shadow DOM — the same `sheet` convention used by 
 
 ## Slots
 
-| Slot      | Description                                                    |
+| Slot      | Description                                                   |
 | --------- | ------------------------------------------------------------- |
 | (default) | Link content, projected into the shadow `<a>` (text or nodes) |
 
 ## Events
 
-| Event          | Detail                                | When                                                                            |
-| -------------- | ------------------------------------- | ------------------------------------------------------------------------------- |
+| Event          | Detail                               | When                                                                             |
+| -------------- | ------------------------------------ | -------------------------------------------------------------------------------- |
 | `ran-navigate` | `{ path: string, replace: boolean }` | An internal link is clicked and no ranui router is active. Bubbles and composed. |
 
 ```html

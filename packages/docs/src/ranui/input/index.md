@@ -18,25 +18,22 @@ Input component for entering content via keyboard, the most basic form control.
 
 ### Properties
 
-| Property      | Type      | Default | Description                                                       |
-| ------------- | --------- | ------- | ----------------------------------------------------------------- |
-| `label`       | `string`  | `''`    | Floating label for a Material Design style experience             |
-| `placeholder` | `string`  | `''`    | Placeholder text, forwarded to the native `<input>`               |
-| `value`       | `string`  | `''`    | Field value; reflected as an attribute and relayed to the form    |
-| `disabled`    | `boolean` | `false` | Whether the input is disabled                                     |
+| Property      | Type      | Default | Description                                                                        |
+| ------------- | --------- | ------- | ---------------------------------------------------------------------------------- |
+| `label`       | `string`  | `''`    | Floating label for a Material Design style experience                              |
+| `placeholder` | `string`  | `''`    | Placeholder text, forwarded to the native `<input>`                                |
+| `value`       | `string`  | `''`    | Field value; reflected as an attribute and relayed to the form                     |
+| `disabled`    | `boolean` | `false` | Whether the input is disabled                                                      |
 | `type`        | `string`  | `''`    | Native input type forwarded to the inner control (`text`, `password`, `number`, …) |
-| `icon`        | `string`  | `''`    | Leading icon name (rendered as `r-icon`) inside the field         |
-| `name`        | `string`  | `''`    | Form field name used when the input participates in a form        |
-| `status`      | `string`  | `''`    | Validation status: `error`, `warning`                             |
-| `message`     | `string`  | `''`    | Helper / validation text rendered below the field                 |
-| `required`    | `boolean` | `false` | Reflects the `required` attribute (stored only — see note below)  |
-| `sheet`       | `string`  | `''`    | CSS injected into the shadow root                                 |
-
-> **Note on number inputs.** `min`, `max`, and `step` exist as JS property setters and only apply when `type="number"`, but they are set on the host and are **not forwarded to the inner `<input>`**, so they do not currently constrain typed values.
->
-> **Note on `required`.** The property reflects the `required` attribute on the host but is not forwarded to the inner control, so it does not trigger native constraint validation.
->
-> **Reserved / not implemented.** The attributes `prefix`, `suffix`, `allowclear`, `count`, `maxlength`, `showcount`, `onPressEnter`, `variant`, `minrows`, and `maxrows` appear in `observedAttributes` but have no rendering/behavior wired up yet. Do not rely on them.
+| `icon`        | `string`  | `''`    | Leading icon name (rendered as `r-icon`) inside the field                          |
+| `name`        | `string`  | `''`    | Form field name used when the input participates in a form                         |
+| `status`      | `string`  | `''`    | Validation status: `error`, `warning`                                              |
+| `message`     | `string`  | `''`    | Helper / validation text rendered below the field                                  |
+| `min`         | `string`  | `''`    | Minimum value; forwarded to the inner `<input>` when `type="number"`               |
+| `max`         | `string`  | `''`    | Maximum value; forwarded to the inner `<input>` when `type="number"`               |
+| `step`        | `string`  | `''`    | Value step; forwarded to the inner `<input>` when `type="number"`                  |
+| `required`    | `boolean` | `false` | Forwarded to the inner `<input>` so native constraint validation applies           |
+| `sheet`       | `string`  | `''`    | CSS injected into the shadow root                                                  |
 
 ### Label `label`
 
@@ -140,10 +137,10 @@ Renders helper / validation text below the field.
 
 Both events are dispatched as `CustomEvent`s carrying the current value in `detail`.
 
-| Event    | When it fires                                        | `detail`             |
-| -------- | ---------------------------------------------------- | -------------------- |
-| `input`  | On every keystroke (mirrors the native `input`)      | `{ value: string }`  |
-| `change` | On commit / blur (mirrors the native `change`)       | `{ value: string }`  |
+| Event    | When it fires                                   | `detail`            |
+| -------- | ----------------------------------------------- | ------------------- |
+| `input`  | On every keystroke (mirrors the native `input`) | `{ value: string }` |
+| `change` | On commit / blur (mirrors the native `change`)  | `{ value: string }` |
 
 ### Input Event `input`
 
@@ -187,11 +184,11 @@ input.addEventListener('change', (event) => {
 
 Exposed via `::part()` for external styling.
 
-| Part      | Element                                    |
-| --------- | ------------------------------------------ |
-| `input`   | The field wrapper                          |
-| `content` | The inner native `<input>` control         |
-| `label`   | The floating label (present when `label` set) |
+| Part      | Element                                                   |
+| --------- | --------------------------------------------------------- |
+| `input`   | The field wrapper                                         |
+| `content` | The inner native `<input>` control                        |
+| `label`   | The floating label (present when `label` set)             |
 | `message` | The helper / validation text (present when `message` set) |
 
 ```css

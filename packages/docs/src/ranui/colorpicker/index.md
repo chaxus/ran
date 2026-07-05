@@ -12,8 +12,7 @@ A compact color swatch that opens a popover panel with a saturation/lightness pa
 </Demo>
 
 ```html
-<r-colorpicker value="#006bff"></r-colorpicker>
-<r-colorpicker value="rgba(255,0,0,0.5)"></r-colorpicker>
+<r-colorpicker value="#006bff"></r-colorpicker> <r-colorpicker value="rgba(255,0,0,0.5)"></r-colorpicker>
 ```
 
 Click the swatch (or focus it and press Enter/Space) to open the panel. The hue and alpha sliders are keyboard-operable: arrow keys step by 1, Shift+arrow by 10, and Home/End jump to the ends.
@@ -22,12 +21,11 @@ Click the swatch (or focus it and press Enter/Space) to open the panel. The hue 
 
 ### Properties
 
-| Property | Type     | Default | Description                                                              |
-| -------- | -------- | ------- | ------------------------------------------------------------------------ |
-| `value`  | `string` | `''`    | The current color as a CSS color string (HEX, `rgb(...)`, `rgba(...)`)   |
-| `sheet`  | `string` | `''`    | CSS injected into the component's shadow DOM                             |
-
-> ⚠️ **Note**: `disabled` is listed in `observedAttributes` and a `disabled` signal is created internally, but nothing in the current source wires it to any behavior — `attributeChangedCallback` only handles `value` and `sheet`. Setting `disabled` has no effect today.
+| Property   | Type      | Default | Description                                                                                            |
+| ---------- | --------- | ------- | ------------------------------------------------------------------------------------------------------ |
+| `value`    | `string`  | `''`    | The current color as a CSS color string (HEX, `rgb(...)`, `rgba(...)`)                                 |
+| `disabled` | `boolean` | `false` | When present, the swatch can't be opened, is removed from the tab order, and is marked `aria-disabled` |
+| `sheet`    | `string`  | `''`    | CSS injected into the component's shadow DOM                                                           |
 
 ### Value `value`
 
@@ -49,6 +47,25 @@ The current color, as a CSS color string. Accepts HEX (`#1677FF`, `#fff`), `rgb(
 const picker = document.querySelector('r-colorpicker');
 picker.value = '#00c853';
 console.log(picker.value); // reads back the current color
+```
+
+### Disabled `disabled`
+
+Add the `disabled` attribute to make the picker inert: the swatch no longer opens the panel (via mouse or keyboard), it is taken out of the tab order, and the host is marked `aria-disabled="true"`. Removing the attribute restores normal interaction.
+
+<Demo align="start">
+  <r-colorpicker value="#006bff" disabled></r-colorpicker>
+  <r-colorpicker value="rgba(255, 0, 0, 0.5)" disabled></r-colorpicker>
+</Demo>
+
+```html
+<r-colorpicker value="#006bff" disabled></r-colorpicker>
+```
+
+```js
+const picker = document.querySelector('r-colorpicker');
+picker.disabled = true; // block interaction
+picker.disabled = false; // re-enable
 ```
 
 ### External Styles `sheet`
@@ -88,10 +105,10 @@ Fires whenever the color changes — dragging the palette, moving a slider, edit
 
 The trigger swatch exposes two parts for styling from outside the shadow DOM:
 
-| Part     | Description                                       |
-| -------- | ------------------------------------------------- |
+| Part     | Description                                            |
+| -------- | ------------------------------------------------------ |
 | `block`  | The swatch container (checkerboard-backed trigger box) |
-| `swatch` | The inner fill that shows the current color       |
+| `swatch` | The inner fill that shows the current color            |
 
 ```css
 r-colorpicker::part(block) {

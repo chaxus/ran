@@ -1,5 +1,5 @@
 import { range } from 'ranuts/utils';
-import { signal, createEffect, RanElement } from '@/utils/index';
+import { signal, createEffect, RanElement, isDisabled } from '@/utils/index';
 import { HEX_COLOR_REGEX, RGBA_REGEX, RGB_REGEX, hex2hsv, hsv2rgb, rgb2hex, rgb2hsv } from '@/utils/color';
 import { Div, View, EventManager, Style } from '@/utils/builder';
 import '@/components/popover';
@@ -123,8 +123,47 @@ export class ColorPicker extends RanElement {
     setStringAttribute(this, 'sheet', value);
   }
 
+  get disabled(): boolean {
+    return isDisabled(this);
+  }
+
+  set disabled(value: boolean | string | undefined | null) {
+    if (value === false || value === undefined || value === null) {
+      this.removeAttribute('disabled');
+    } else {
+      this.setAttribute('disabled', '');
+    }
+  }
+
   handlerExternalCss = (): void => {
     syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
+  };
+
+  /**
+   * Reflect the `disabled` attribute into the internal state, ARIA, and the
+   * swatch's visual/interaction state. When disabled the swatch is removed from
+   * the tab order and marked `aria-disabled`; opening is blocked by
+   * `blockWhenDisabled` (a capture-phase guard wired in connectedCallback).
+   */
+  syncDisabledState = (): void => {
+    const disabled = isDisabled(this);
+    this.context?.disabled.setter(disabled);
+    if (disabled) {
+      this.setAttribute('aria-disabled', 'true');
+      this.colorpicker?.setAttribute('disabled', '');
+    } else {
+      this.removeAttribute('aria-disabled');
+      this.colorpicker?.removeAttribute('disabled');
+    }
+    this.colorpicker?.setAttribute('aria-disabled', disabled ? 'true' : 'false');
+    this.colorpicker?.setAttribute('tabindex', disabled ? '-1' : '0');
+  };
+
+  /** Capture-phase guard: swallow clicks/keydowns on the swatch while disabled. */
+  blockWhenDisabled = (e: Event): void => {
+    if (!isDisabled(this)) return;
+    e.stopImmediatePropagation();
+    e.preventDefault();
   };
 
   createContext = (): void => {
@@ -309,6 +348,7 @@ export class ColorPicker extends RanElement {
 
   /** Open the picker from the keyboard: Enter/Space act like a click on the swatch. */
   onSwatchKeydown = (e: KeyboardEvent): void => {
+    if (isDisabled(this)) return;
     if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
       e.preventDefault();
       this.colorpicker?.click();
@@ -387,6 +427,7 @@ export class ColorPicker extends RanElement {
 
   // ── Panel construction (once, on first open) ──────────────────────────────
   openColorPicker = (): void => {
+    if (isDisabled(this)) return;
     if (this.colorPickerInner) return;
 
     this.colorPickerSaturation = Div().class('ran-color-picker-saturation').build() as HTMLElement;
@@ -463,10 +504,15 @@ export class ColorPicker extends RanElement {
   connectedCallback(): void {
     this.handlerExternalCss();
     this.setAttribute('class', 'ran-colorpicker');
+    // Capture-phase guards run before r-popover's own open handlers, so a
+    // disabled picker never opens (blocks both pointer and keyboard).
+    this._events.on(this, 'click', this.blockWhenDisabled, { capture: true });
+    this._events.on(this, 'keydown', this.blockWhenDisabled, { capture: true });
     this._events.on(this.popoverBlock, 'click', this.openColorPicker);
     this._events.on(this.colorpicker, 'keydown', this.onSwatchKeydown as EventListener);
     this._events.on(document, 'mousemove', this.onPointerMove);
     this._events.on(document, 'mouseup', this.onPointerUp);
+    this.syncDisabledState();
     if (this.value) this.updateColorValue(this.value);
   }
 
@@ -478,6 +524,7 @@ export class ColorPicker extends RanElement {
   attributeChangedCallback(name: string, old: string, next: string): void {
     if (old === next) return;
     if (name === 'value') this.updateColorValue(next);
+    if (name === 'disabled') this.syncDisabledState();
     if (name === 'sheet') this.handlerExternalCss();
   }
 }

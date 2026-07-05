@@ -305,7 +305,7 @@ export class Loading extends RanElement {
   dotPulseLoading = (): void => {
     const loading = Div()
       .class(ICON_NAME_AMP.DOT_PULSE)
-      .class(ICON_NAME_AMP.DOT_PULSE)
+      .part(ICON_NAME_AMP.DOT_PULSE)
       .children(
         ...Array(5)
           .fill(1)

@@ -42,4 +42,9 @@
     height: 100%;
     border-radius: inherit;
   }
+
+  &-block[disabled] {
+    cursor: var(--ran-colorpicker-disabled-cursor, not-allowed);
+    opacity: var(--ran-colorpicker-disabled-opacity, 0.5);
+  }
 }

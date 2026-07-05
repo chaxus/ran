@@ -26,11 +26,11 @@ A structured content container with header, body, and footer zones for grouping 
 
 ### Properties
 
-| Property      | Type     | Default | Description                                                             |
-| ------------- | -------- | ------- | ----------------------------------------------------------------------- |
-| `title`       | `string` | `''`    | Card heading, shown at the top of the header. Hidden when empty.        |
-| `description` | `string` | `''`    | Subtitle rendered below the title. Hidden when empty.                   |
-| `sheet`       | `string` | `''`    | CSS injected into the card's shadow DOM.                                |
+| Property      | Type     | Default | Description                                                      |
+| ------------- | -------- | ------- | ---------------------------------------------------------------- |
+| `title`       | `string` | `''`    | Card heading, shown at the top of the header. Hidden when empty. |
+| `description` | `string` | `''`    | Subtitle rendered below the title. Hidden when empty.            |
+| `sheet`       | `string` | `''`    | CSS injected into the card's shadow DOM.                         |
 
 ### Title `title`
 
@@ -86,15 +86,15 @@ CSS injected into the card's shadow DOM — the same `sheet` convention used by 
 
 The card exposes these `::part()` hooks for external styling:
 
-| Part          | Description                          |
-| ------------- | ------------------------------------ |
-| `card`        | The outer card container.            |
-| `header`      | The header row.                      |
-| `title`       | The title text.                      |
-| `description` | The subtitle text.                   |
-| `extra`       | The `extra` slot in the header.      |
-| `body`        | The body region (default slot).      |
-| `footer`      | The footer region (`footer` slot).   |
+| Part          | Description                        |
+| ------------- | ---------------------------------- |
+| `card`        | The outer card container.          |
+| `header`      | The header row.                    |
+| `title`       | The title text.                    |
+| `description` | The subtitle text.                 |
+| `extra`       | The `extra` slot in the header.    |
+| `body`        | The body region (default slot).    |
+| `footer`      | The footer region (`footer` slot). |
 
 The following CSS variables can be overridden: `--ran-card-display`, `--ran-card-min-height`, `--ran-card-gap`, `--ran-card-padding`, `--ran-card-radius`, `--ran-card-background`, `--ran-card-shadow`, `--ran-card-title-color`, `--ran-card-title-font-size`, `--ran-card-title-font-weight`, `--ran-card-description-color`, `--ran-card-description-font-size`.
 

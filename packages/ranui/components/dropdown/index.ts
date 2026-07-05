@@ -65,12 +65,6 @@ export class Dropdown extends RanElement {
   set arrow(value: string) {
     setStringAttribute(this, 'arrow', value, { removeEmpty: true });
   }
-  get show(): string {
-    return getStringAttribute(this, 'show');
-  }
-  set show(value: string) {
-    setStringAttribute(this, 'show', value, { removeEmpty: true });
-  }
   get sheet(): string {
     return getStringAttribute(this, 'sheet');
   }

@@ -21,7 +21,7 @@ Render high-quality LaTeX math formulas in HTML pages using KaTeX.
 | Property | Type     | Default | Description                                                                             |
 | -------- | -------- | ------- | --------------------------------------------------------------------------------------- |
 | `latex`  | `string` | `''`    | The LaTeX formula to render. The formula is provided via this attribute, not slot text. |
-| `sheet`  | `string` | `''`    | CSS injected into the component's shadow DOM.                                            |
+| `sheet`  | `string` | `''`    | CSS injected into the component's shadow DOM.                                           |
 
 > 💡 **Note**: The `latex` property getter decodes its value with `decodeURIComponent`, so URI-encoded formulas are decoded before rendering. The formula is wrapped in `$$…$$` and rendered with KaTeX. Providing the formula as slotted text content has no effect — only the `latex` attribute is rendered.
 

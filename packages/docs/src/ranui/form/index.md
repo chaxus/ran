@@ -32,9 +32,9 @@ Fields must be projected through the named slot `r-form_content` (directly or vi
 
 ### Properties
 
-| Property | Type             | Default | Description                                                                       |
-| -------- | ---------------- | ------- | --------------------------------------------------------------------------------- |
-| `value`  | `string \| null` | `null`  | Serialized form state as a JSON string, written when the internal form submits    |
+| Property | Type             | Default | Description                                                                          |
+| -------- | ---------------- | ------- | ------------------------------------------------------------------------------------ |
+| `value`  | `string \| null` | `null`  | Serialized form state as a JSON string, written when the internal form submits       |
 | `sheet`  | `string`         | `''`    | CSS injected into the component's shadow DOM (the internal form has class `.r-form`) |
 
 ### Serialized Value `value`

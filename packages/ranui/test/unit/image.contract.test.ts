@@ -69,6 +69,35 @@ describe('r-img contract', () => {
     expect(innerImg.src).toContain('fallback.jpg');
   });
 
+  it('src is observed and reloads the inner img when it changes after mount', async () => {
+    const img = document.createElement('r-img') as any;
+    img.setAttribute('src', 'https://example.com/first.jpg');
+    document.body.appendChild(img);
+
+    const innerImg = img._image as HTMLImageElement;
+    expect(innerImg.src).toContain('first.jpg');
+
+    img.setAttribute('src', 'https://example.com/second.jpg');
+    expect(innerImg.src).toContain('second.jpg');
+  });
+
+  it('falls back when src changes to a bad URL after mount', async () => {
+    const img = document.createElement('r-img') as any;
+    img.setAttribute('src', 'https://example.com/good.jpg');
+    img.setAttribute('fallback', 'https://example.com/fallback.jpg');
+    document.body.appendChild(img);
+
+    const innerImg = img._image as HTMLImageElement;
+
+    img.setAttribute('src', 'https://example.com/broken.jpg');
+    expect(innerImg.src).toContain('broken.jpg');
+
+    // the error listener wired on mount still fires for the new src
+    innerImg.dispatchEvent(new Event('error'));
+    await sleep(10);
+    expect(innerImg.src).toContain('fallback.jpg');
+  });
+
   it('forwards alt to the inner img; defaults to empty (decorative)', () => {
     const img = document.createElement('r-img') as any;
     img.setAttribute('src', 'https://example.com/photo.jpg');

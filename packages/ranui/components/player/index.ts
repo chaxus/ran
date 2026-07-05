@@ -112,7 +112,6 @@ export class RanPlayer extends (HTMLElementSSR()!) {
   public ctx: Context;
   _player: HTMLDivElement;
   _container: HTMLDivElement;
-  _slot: HTMLSlotElement;
   _playerController: HTMLDivElement;
   _playerBtn: HTMLDivElement;
   _progress: HTMLDivElement;
@@ -169,7 +168,6 @@ export class RanPlayer extends (HTMLElementSSR()!) {
 
     this._player = viewRefs.player;
     this._container = viewRefs.container;
-    this._slot = viewRefs.slot;
     this._playerBtn = viewRefs.playerBtn;
     this._progress = viewRefs.progress;
     this._progressWrap = viewRefs.progressWrap;

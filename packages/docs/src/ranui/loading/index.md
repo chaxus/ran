@@ -23,7 +23,7 @@ Loading component providing a collection of animated indicators to signal in-pro
 ### Properties
 
 | Property | Type     | Default    | Description                                                            |
-| -------- | -------- | ---------- | --------------------------------------------------------------------- |
+| -------- | -------- | ---------- | ---------------------------------------------------------------------- |
 | `name`   | `string` | `'circle'` | Animation type. Falls back to `circle` when unset or unrecognized      |
 | `sheet`  | `string` | `''`       | CSS text injected into the component's shadow DOM for external styling |
 
@@ -136,12 +136,12 @@ r-loading {
 
 Each animation type has its own token namespace. The most common ones follow the pattern below:
 
-| Variable                                | Default   | Description                                            |
-| --------------------------------------- | --------- | ------------------------------------------------------ |
-| `--loading-{type}-width`                | `4em`     | Animation width (recommended to use `px` units)        |
-| `--loading-{type}-height`               | `4em`     | Animation height (recommended to use `px` units)       |
-| `--loading-{type}-background`           | `#4096ff` | Main background color                                  |
-| `--loading-{type}-div-background-color` | `#4096ff` | Sub-element background color                           |
+| Variable                                | Default   | Description                                      |
+| --------------------------------------- | --------- | ------------------------------------------------ |
+| `--loading-{type}-width`                | `4em`     | Animation width (recommended to use `px` units)  |
+| `--loading-{type}-height`               | `4em`     | Animation height (recommended to use `px` units) |
+| `--loading-{type}-background`           | `#4096ff` | Main background color                            |
+| `--loading-{type}-div-background-color` | `#4096ff` | Sub-element background color                     |
 
 > Replace `{type}` with a specific animation name, e.g. `circle`, `double-bounce`, `rotate`. Base colors default through the theme tokens `--ran-color-primary`, `--ran-color-success`, and `--ran-color-text`.
 
@@ -155,9 +155,7 @@ r-loading::part(rotate) {
 }
 ```
 
-Part names: `double-bounce`, `rotate`, `stretch`, `cube`, `dot`, `triple-bounce`, `scale-out`, `circle`, `circle-line`, `square`, `pulse`, `solar`, `cube-fold`, `circle-fold`, `cube-grid`, `circle-turn`, `circle-rotate`, `circle-spin`, `dot-bar`, `dot-circle`, `line`, `line-scale`, `text`, `cube-dim`, `dot-line`, `arc`, `drop`, `pacman`. The `solar` animation additionally exposes a `sun` part.
-
-> Note: the `dot-pulse` animation does not currently export a `::part()` (its root is built without a `part` name), so it cannot be targeted this way.
+Part names: `double-bounce`, `rotate`, `stretch`, `cube`, `dot`, `triple-bounce`, `scale-out`, `circle`, `circle-line`, `square`, `pulse`, `solar`, `cube-fold`, `circle-fold`, `cube-grid`, `circle-turn`, `circle-rotate`, `circle-spin`, `dot-bar`, `dot-circle`, `line`, `dot-pulse`, `line-scale`, `text`, `cube-dim`, `dot-line`, `arc`, `drop`, `pacman`. The `solar` animation additionally exposes a `sun` part.
 
 ## Slots
 

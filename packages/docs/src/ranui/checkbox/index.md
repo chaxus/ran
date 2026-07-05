@@ -20,12 +20,12 @@ The default slot content becomes the checkbox label.
 
 ### Properties
 
-| Property   | Type      | Default  | Description                                                              |
-| ---------- | --------- | -------- | ------------------------------------------------------------------------ |
-| `checked`  | `boolean` | `false`  | Whether the checkbox is checked                                          |
-| `value`    | `string`  | `'false'`| Form value; mirrors the checked state as `'true'` / `'false'`            |
-| `disabled` | `boolean` | `false`  | Whether the checkbox is disabled                                         |
-| `sheet`    | `string`  | `''`     | CSS injected into the component's shadow DOM for custom styling          |
+| Property   | Type      | Default   | Description                                                     |
+| ---------- | --------- | --------- | --------------------------------------------------------------- |
+| `checked`  | `boolean` | `false`   | Whether the checkbox is checked                                 |
+| `value`    | `string`  | `'false'` | Form value; mirrors the checked state as `'true'` / `'false'`   |
+| `disabled` | `boolean` | `false`   | Whether the checkbox is disabled                                |
+| `sheet`    | `string`  | `''`      | CSS injected into the component's shadow DOM for custom styling |
 
 > The `checked` and `value` attributes are kept in sync: setting one updates the other. When checked, `value` is `'true'`; when unchecked, `value` is `'false'`.
 
@@ -37,8 +37,7 @@ The default slot content becomes the checkbox label.
 </Demo>
 
 ```html
-<r-checkbox checked="true">Checked</r-checkbox>
-<r-checkbox checked="false">Unchecked</r-checkbox>
+<r-checkbox checked="true">Checked</r-checkbox> <r-checkbox checked="false">Unchecked</r-checkbox>
 ```
 
 ### Value `value`
@@ -49,8 +48,7 @@ The default slot content becomes the checkbox label.
 </Demo>
 
 ```html
-<r-checkbox value="true">Value true</r-checkbox>
-<r-checkbox value="false">Value false</r-checkbox>
+<r-checkbox value="true">Value true</r-checkbox> <r-checkbox value="false">Value false</r-checkbox>
 ```
 
 ### Disabled State `disabled`
@@ -61,8 +59,7 @@ The default slot content becomes the checkbox label.
 </Demo>
 
 ```html
-<r-checkbox checked="true" disabled>Checked</r-checkbox>
-<r-checkbox checked="false" disabled>Unchecked</r-checkbox>
+<r-checkbox checked="true" disabled>Checked</r-checkbox> <r-checkbox checked="false" disabled>Unchecked</r-checkbox>
 ```
 
 ### Custom Styling `sheet`
@@ -107,9 +104,9 @@ A disabled checkbox does not fire `change`.
 
 ## Slots
 
-| Slot      | Description                                     |
-| --------- | ---------------------------------------------- |
-| (default) | The checkbox label, rendered next to the box   |
+| Slot      | Description                                  |
+| --------- | -------------------------------------------- |
+| (default) | The checkbox label, rendered next to the box |
 
 ## Form Association
 

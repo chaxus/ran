@@ -174,6 +174,28 @@ describe('r-radar contract', () => {
     expect(refreshSpy).toHaveBeenCalled();
   });
 
+  it('observes color attributes with the lowercased names the DOM stores', () => {
+    // The DOM lowercases attribute names, so observedAttributes must use
+    // lowercase to match what attributeChangedCallback actually receives.
+    const observed = (customElements.get('r-radar') as any).observedAttributes as string[];
+    expect(observed).toContain('colorpolygon');
+    expect(observed).toContain('colorline');
+    expect(observed).toContain('fillcolor');
+    expect(observed).toContain('strokecolor');
+  });
+
+  it('post-mount color attribute changes re-render the chart (reactive)', () => {
+    const radar = mount();
+    const refreshSpy = vi.spyOn(radar, 'refreshData').mockImplementation(() => undefined);
+    // setAttribute with camelCase name; the DOM stores it lowercased, which now
+    // matches observedAttributes, so attributeChangedCallback fires.
+    radar.setAttribute('colorPolygon', '#ff0000');
+    radar.setAttribute('colorLine', '#00ff00');
+    radar.setAttribute('fillColor', 'rgba(0,0,255,0.5)');
+    radar.setAttribute('strokeColor', '#123456');
+    expect(refreshSpy).toHaveBeenCalledTimes(4);
+  });
+
   it('disconnectedCallback disconnects resizeObserver', () => {
     const radar = mount();
     const disconnectSpy = vi.spyOn(radar.resizeObserver, 'disconnect');

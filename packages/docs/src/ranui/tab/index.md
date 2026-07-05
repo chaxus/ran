@@ -30,14 +30,13 @@ Each `<r-tab>` becomes one pane; its `label` is rendered as the header button, a
 
 The container. Holds the header row, the active indicator, and the pane content area.
 
-| Property      | Type      | Default                | Description                                                            |
-| ------------- | --------- | ---------------------- | --------------------------------------------------------------------- |
-| `active`      | `string`  | first enabled tab      | The `r-key` of the currently active tab                               |
-| `type`        | `string`  | `'flat'`               | Header style: `flat`, `line`                                          |
-| `align`       | `string`  | `'start'`              | Header alignment: `start`, `center`, `end`                            |
-| `effect`      | `boolean` | `false`                | Enables ripple on the header buttons and hides the sliding indicator  |
-| `sheet`       | `string`  | `''`                   | CSS text injected into the shadow DOM                                 |
-| `forceRender` | —         | —                      | Observed but not implemented — currently inert                        |
+| Property | Type      | Default           | Description                                                          |
+| -------- | --------- | ----------------- | -------------------------------------------------------------------- |
+| `active` | `string`  | first enabled tab | The `r-key` of the currently active tab                              |
+| `type`   | `string`  | `'flat'`          | Header style: `flat`, `line`                                         |
+| `align`  | `string`  | `'start'`         | Header alignment: `start`, `center`, `end`                           |
+| `effect` | `boolean` | `false`           | Enables ripple on the header buttons and hides the sliding indicator |
+| `sheet`  | `string`  | `''`              | CSS text injected into the shadow DOM                                |
 
 > The `active` property setter accepts a key string; assigning `null` removes the attribute. When no `active` is set, the first non-disabled tab is selected on mount.
 
@@ -45,15 +44,15 @@ The container. Holds the header row, the active indicator, and the pane content 
 
 A single pane. Its attributes are read by the parent `<r-tabs>` to build the matching header button.
 
-| Property   | Type      | Default   | Description                                                             |
-| ---------- | --------- | --------- | --------------------------------------------------------------------- |
-| `label`    | `string`  | `''`      | Text shown in the tab header                                          |
-| `r-key`    | `string`  | index     | Unique identifier within an `<r-tabs>`; matched against `active`      |
-| `icon`     | `string`  | —         | `r-icon` name shown before the label                                  |
-| `iconSize` | `string`  | —         | Size of the header icon                                               |
-| `disabled` | `boolean` | `false`   | Makes the tab unselectable                                            |
-| `effect`   | `boolean` | —         | Ripple effect on the header (normally set by the parent's `effect`)   |
-| `sheet`    | `string`  | `''`      | CSS text injected into the shadow DOM                                 |
+| Property   | Type      | Default | Description                                                         |
+| ---------- | --------- | ------- | ------------------------------------------------------------------- |
+| `label`    | `string`  | `''`    | Text shown in the tab header                                        |
+| `r-key`    | `string`  | index   | Unique identifier within an `<r-tabs>`; matched against `active`    |
+| `icon`     | `string`  | —       | `r-icon` name shown before the label                                |
+| `iconSize` | `string`  | —       | Size of the header icon                                             |
+| `disabled` | `boolean` | `false` | Makes the tab unselectable                                          |
+| `effect`   | `boolean` | —       | Ripple effect on the header (normally set by the parent's `effect`) |
+| `sheet`    | `string`  | `''`    | CSS text injected into the shadow DOM                               |
 
 > The `key` property getter/setter reads and writes the `r-key` attribute (the plain `key` name is avoided because it is a reserved field). Set `label` and `r-key` before the element is connected — changes to those two attributes are not re-processed after the headers are built.
 
@@ -225,23 +224,23 @@ Set `effect` on `<r-tabs>` to enable the click ripple on the header buttons. Whe
 
 ## Slots
 
-| Element   | Slot      | Description                                              |
-| --------- | --------- | ------------------------------------------------------- |
-| `r-tabs`  | (default) | Accepts the `<r-tab>` panes                             |
-| `r-tab`   | (default) | The pane's body content, shown when the tab is active   |
+| Element  | Slot      | Description                                           |
+| -------- | --------- | ----------------------------------------------------- |
+| `r-tabs` | (default) | Accepts the `<r-tab>` panes                           |
+| `r-tab`  | (default) | The pane's body content, shown when the tab is active |
 
 ## CSS Parts
 
 `r-tabs` exposes:
 
-| Part           | Description                              |
-| -------------- | ---------------------------------------- |
-| `tabs`         | Root wrapper                             |
-| `header`       | Header row wrapper                       |
-| `nav`          | The tablist containing the header items  |
-| `indicator`    | The sliding underline line               |
-| `content`      | Pane content viewport                    |
-| `content-wrap` | The sliding track holding all panes      |
+| Part           | Description                             |
+| -------------- | --------------------------------------- |
+| `tabs`         | Root wrapper                            |
+| `header`       | Header row wrapper                      |
+| `nav`          | The tablist containing the header items |
+| `indicator`    | The sliding underline line              |
+| `content`      | Pane content viewport                   |
+| `content-wrap` | The sliding track holding all panes     |
 
 `r-tab` exposes:
 

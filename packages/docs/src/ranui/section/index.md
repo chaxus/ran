@@ -22,11 +22,11 @@ Page section surface with an optional heading and subtitle above a slotted body.
 
 ### Properties
 
-| Property   | Type     | Default | Description                                                       |
-| ---------- | -------- | ------- | ---------------------------------------------------------------- |
-| `heading`  | `string` | `''`    | Section heading, rendered as an ARIA level-2 heading             |
-| `subtitle` | `string` | `''`    | Supporting line below the heading                                |
-| `sheet`    | `string` | `''`    | CSS injected into the section's shadow DOM                       |
+| Property   | Type     | Default | Description                                          |
+| ---------- | -------- | ------- | ---------------------------------------------------- |
+| `heading`  | `string` | `''`    | Section heading, rendered as an ARIA level-2 heading |
+| `subtitle` | `string` | `''`    | Supporting line below the heading                    |
+| `sheet`    | `string` | `''`    | CSS injected into the section's shadow DOM           |
 
 The header row (heading + subtitle) is hidden entirely when both `heading` and `subtitle` are empty.
 
@@ -87,11 +87,11 @@ CSS injected into the section's shadow DOM — the same `sheet` convention used 
 ## CSS Parts
 
 | Part       | Description                                |
-| ---------- | ----------------------------------------- |
+| ---------- | ------------------------------------------ |
 | `header`   | The header row wrapping heading + subtitle |
-| `heading`  | The ARIA level-2 heading element          |
-| `subtitle` | The supporting subtitle line              |
-| `body`     | The body wrapper around the default slot  |
+| `heading`  | The ARIA level-2 heading element           |
+| `subtitle` | The supporting subtitle line               |
+| `body`     | The body wrapper around the default slot   |
 
 CSS variables exposed: `--ran-section-border-color`, `--ran-section-radius`, `--ran-section-background`, `--ran-section-shadow`, `--ran-section-padding`, `--ran-section-heading-color`, `--ran-section-heading-font-size`, `--ran-section-heading-font-weight`, `--ran-section-subtitle-color`.
 
