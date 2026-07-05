@@ -12,7 +12,7 @@
 
 ## 动图演示
 
-![希尔排序](../../../../../assets/ranuts/sort/shell.gif)
+<video src="../../../../../assets/ranuts/sort/shell.mp4" autoplay loop muted playsinline style="max-width: 100%; border-radius: 8px;"></video>
 
 ## 代码实现
 

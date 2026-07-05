@@ -11,7 +11,7 @@ Heapsort (Heapsort) is a kind of sorting algorithm designed by using the heap da
 
 ## GIF presentation
 
-![Heap Sort](../../../../assets/ranuts/sort/heap.gif)
+<video src="../../../../assets/ranuts/sort/heap.mp4" autoplay loop muted playsinline style="max-width: 100%; border-radius: 8px;"></video>
 
 ## Code demo
 
