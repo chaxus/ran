@@ -6,7 +6,9 @@ Button component for triggering instant actions with multiple styles and states.
 
 ### Basic Usage
 
-<r-button>Button</r-button>
+<Demo>
+  <r-button>Button</r-button>
+</Demo>
 
 ```html
 <r-button>Button</r-button>
@@ -25,18 +27,12 @@ Button component for triggering instant actions with multiple styles and states.
 
 ### Button Types `type`
 
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-     <r-button type="primary">Primary Button</r-button>
-</div>
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-     <r-button type="warning">Warning Button</r-button>
-</div>
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-    <r-button type="text">Text Button</r-button>
-</div>
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-    <r-button>Default Button</r-button>
-</div>
+<Demo>
+  <r-button type="primary">Primary Button</r-button>
+  <r-button type="warning">Warning Button</r-button>
+  <r-button type="text">Text Button</r-button>
+  <r-button>Default Button</r-button>
+</Demo>
 
 ```html
 <r-button type="primary">Primary Button</r-button>
@@ -47,18 +43,12 @@ Button component for triggering instant actions with multiple styles and states.
 
 ### Disabled State `disabled`
 
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-     <r-button type="primary" disabled>Primary Button</r-button>
-</div>
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-     <r-button type="warning" disabled>Warning Button</r-button>
-</div>
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-    <r-button type="text" disabled>Text Button</r-button>
-</div>
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-    <r-button disabled>Default Button</r-button>
-</div>
+<Demo>
+  <r-button type="primary" disabled>Primary Button</r-button>
+  <r-button type="warning" disabled>Warning Button</r-button>
+  <r-button type="text" disabled>Text Button</r-button>
+  <r-button disabled>Default Button</r-button>
+</Demo>
 
 ```html
 <r-button type="primary" disabled>Primary Button</r-button>
@@ -71,12 +61,10 @@ Button component for triggering instant actions with multiple styles and states.
 
 > 💡 **Tip**: For precise icon positioning, use the Icon component directly
 
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-     <r-button type="default" icon="user">Default Button</r-button>
-</div>
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-     <r-button type="primary" icon="home">Primary Button</r-button>
-</div>
+<Demo>
+  <r-button type="default" icon="user">Default Button</r-button>
+  <r-button type="primary" icon="home">Primary Button</r-button>
+</Demo>
 
 ```html
 <r-button type="default" icon="user">Default Button</r-button>
@@ -85,8 +73,10 @@ Button component for triggering instant actions with multiple styles and states.
 
 ### Effect Control `effect`
 
-<r-button type="default" effect="false" icon="user">Default Button</r-button>
-<r-button type="primary" effect="false" icon="home">Primary Button</r-button>
+<Demo>
+  <r-button type="default" effect="false" icon="user">Default Button</r-button>
+  <r-button type="primary" effect="false" icon="home">Primary Button</r-button>
+</Demo>
 
 ```html
 <r-button type="default" effect="false" icon="user">Default Button</r-button>

@@ -82,47 +82,6 @@
 
 ## 图标列表
 
-<div style="display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    flex-flow: row wrap;" id="icon-list"></div>
+点击任意图标即可复制其用法。
 
-<script>
-const createIconList = () => {
-  setTimeout(() => {
-    const list = ['add-user', 'book',
-    'check-circle', 'close-circle',
-    'eye-close', 'eye',
-    'info-circle', 'loading',
-    'lock', 'message',
-    'power-off', 'setting',
-    'team', 'unlock',
-    'user','sort']
-   if (typeof document !== "undefined") {
-      const dom = document.getElementById('icon-list')
-      const com = document.createElement('div')
-      com.style.setProperty('display', 'grid')
-      com.style.setProperty('grid-template-columns', 'repeat(3, 200px)')
-      com.style.setProperty('grid-template-rows', 'repeat(3, 200px);')
-      list.forEach(item => {
-        const container = document.createElement('div')
-        container.style.setProperty('display', 'flex')
-        container.style.setProperty('align-items', 'center')
-        container.style.setProperty('margin', '15px')
-        container.style.setProperty('justify-content', 'center')
-        container.style.setProperty('flex-flow', 'column nowrap')
-        const icon = document.createElement('r-icon')
-        icon.setAttribute('name', item)
-        icon.setAttribute('size', "50")
-        container.appendChild(icon)
-        const span = document.createElement('span')
-        span.innerHTML = item
-        container.appendChild(span)
-        com?.appendChild(container)
-      })
-      dom?.appendChild(com)
-    }
-  }, 0)
-}
-createIconList()
-</script>
+<IconGallery />

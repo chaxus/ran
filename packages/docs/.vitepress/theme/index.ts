@@ -6,6 +6,8 @@ import env from '../plugins/env';
 import TOTP from '../components/TOTP.vue';
 import Layout from '../components/Layout.vue';
 import Home from '../components/Home.vue';
+import IconGallery from '../components/IconGallery.vue';
+import Demo from '../components/Demo.vue';
 import i18n, { loadLanguageAsync } from '../lang';
 import { LANGS_DICT, MANIFEST_PATH_ROOT, PWA_ELEMENT_NAME, PWA_INSTALL_ID, RAN_CHAXUS_LANG } from '../lib/constant';
 import './styles/fonts.less';
@@ -93,6 +95,8 @@ export default {
     }
     app.use(env);
     app.component('Home', Home);
+    app.component('IconGallery', IconGallery);
+    app.component('Demo', Demo);
     const locale = localStorageGetItem(RAN_CHAXUS_LANG) || LANGS_DICT.EN;
     loadLanguageAsync(locale)
       .then(() => {

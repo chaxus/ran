@@ -76,19 +76,47 @@
   border-radius: 5px;
 }
 
-/* ---------- live demo breathing room ---------- *
- * ranui docs drop bare <r-*> elements (sometimes in inline-styled wrappers)
- * straight into the prose. Give them consistent vertical rhythm and keep a
- * demo row from cramping against the code block that follows it. */
+/* ---------- live demos as soft preview cards ---------- *
+ * ranui docs drop bare <r-*> elements (often in an inline-styled flex wrapper)
+ * straight into the prose. Frame each demo row as a soft, theme-aware card so
+ * it reads as a playground instead of loose elements floating on the page.
+ * Global — no per-page markdown edits. (`align-items` isn't forced, so a demo
+ * with its own inline alignment — e.g. the icon `size` row — keeps it.) */
 .vp-doc
   :is(r-button, r-progress, r-input, r-checkbox, r-select, r-radar, r-colorpicker, r-loading, r-card, r-tab, r-math) {
   vertical-align: middle;
 }
+.vp-doc
+  div[style*='flex']:has(
+    > r-button,
+    > r-icon,
+    > r-progress,
+    > r-input,
+    > r-checkbox,
+    > r-select,
+    > r-radar,
+    > r-colorpicker,
+    > r-loading,
+    > r-card,
+    > r-tab,
+    > r-math,
+    > r-image,
+    > r-link,
+    > r-message,
+    > r-popover,
+    > r-dropdown,
+    > r-skeleton
+  ),
 .vp-doc p:has(> r-button, > r-progress, > r-input, > r-checkbox, > r-loading, > r-colorpicker) {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 18px;
   align-items: center;
+  margin: 22px 0;
+  padding: 26px 24px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 12px;
+  background: var(--vp-c-bg-soft);
 }
 
 /* ---------- sidebar: clearer active item ---------- */
