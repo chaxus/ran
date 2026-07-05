@@ -119,6 +119,37 @@
   background: var(--vp-c-bg-soft);
 }
 
+/* Transitional spacing fallback for pages not yet migrated to <Demo>. Some pages
+ * hand-roll demos as a *run of inline-block wrappers* (loading, message, link…) or
+ * put inline-block on the element itself (r-popover). CSS can't group a run of
+ * siblings into one card, but it can keep them off the heading above — applied to
+ * every item in the run so they stay aligned. Remove once every page uses <Demo>. */
+.vp-doc
+  div[style*='inline-block']:has(
+    > r-button,
+    > r-icon,
+    > r-loading,
+    > r-input,
+    > r-checkbox,
+    > r-select,
+    > r-colorpicker,
+    > r-image,
+    > r-link,
+    > r-progress,
+    > r-math,
+    > r-tab,
+    > r-card,
+    > r-message,
+    > r-popover,
+    > r-dropdown,
+    > r-radar
+  ),
+.vp-doc :is(r-popover, r-dropdown)[style*='inline-block'] {
+  margin-top: 18px;
+  margin-right: 12px;
+  vertical-align: top;
+}
+
 /* ---------- sidebar: clearer active item ---------- */
 .VPSidebarItem.is-active > .item .link .text,
 .VPSidebarItem.is-active > .item .text {
