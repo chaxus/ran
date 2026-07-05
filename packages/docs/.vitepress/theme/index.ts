@@ -86,6 +86,7 @@ export default {
   enhanceApp({ app, router }: EnhanceAppContext): void {
     if (!import.meta.env.SSR) {
       import('ranui');
+      import('./register-icons'); // register ranui's SVG icons so <r-icon> demos render
       syncRanuiTheme();
       enablePageTransitions(router);
       pwaInstall();
