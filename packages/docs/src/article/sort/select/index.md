@@ -10,7 +10,7 @@ Ordering results can be obtained by direct selection sorting of n records throug
 - i sort (i=1,2,3... n-1) At the beginning, the current ordered and disordered regions are R[1..i-1] and R(i.. n). The run sort selects the record R[k] with the smallest keyword from the current unordered area and swaps it with the first record R in the unordered area, so that R[1..i] and R[i+1..n) become a new ordered area with 1 more records and a new unordered area with 1 less records, respectively.
 - n-1 is done. The array is ordered.
 
-## GIF presentation
+## Animation
 
 <video src="../../../../assets/ranuts/sort/select.mp4" autoplay loop muted playsinline style="max-width: 100%; border-radius: 8px;"></video>
 

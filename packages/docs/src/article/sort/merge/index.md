@@ -8,7 +8,7 @@ Merge sort is an effective sort algorithm based on merge operation. This algorit
 - The two subsequences were merged and sorted respectively.
 - Merge two sorted subsequences into one final sorted sequence.
 
-## GIF presentation
+## Animation
 
 <video src="../../../../assets/ranuts/sort/merge.mp4" autoplay loop muted playsinline style="max-width: 100%; border-radius: 8px;"></video>
 

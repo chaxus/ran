@@ -8,7 +8,7 @@ Radix sort is sorted by the lowest order first, and then collected; Then sort by
 - arr is the original array, and each bit is taken from the lowest point to form radix array.
 - radix was sorted by counting (taking advantage of the feature that counting sort is suitable for a small range of numbers);
 
-## GIF presentation
+## Animation
 
 <video src="../../../../assets/ranuts/sort/radix.mp4" autoplay loop muted playsinline style="max-width: 100%; border-radius: 8px;"></video>
 

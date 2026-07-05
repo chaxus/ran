@@ -11,7 +11,7 @@
 - 将新元素插入到该位置后；
 - 重复步骤 2~5。
 
-## 动图演示
+## 动画演示
 
 <video src="../../../../../assets/ranuts/sort/insert.mp4" autoplay loop muted playsinline style="max-width: 100%; border-radius: 8px;"></video>
 

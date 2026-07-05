@@ -8,7 +8,7 @@
 - 对这两个子序列分别采用归并排序；
 - 将两个排序好的子序列合并成一个最终的排序序列。
 
-## 动图演示
+## 动画演示
 
 <video src="../../../../../assets/ranuts/sort/merge.mp4" autoplay loop muted playsinline style="max-width: 100%; border-radius: 8px;"></video>
 

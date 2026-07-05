@@ -9,7 +9,7 @@
 - 针对所有的元素重复以上的步骤，除了最后一个；
 - 重复步骤 1~3，直到排序完成。
 
-## 动图演示
+## 动画演示
 
 <video src="../../../../../assets/ranuts/sort/bubble.mp4" autoplay loop muted playsinline style="max-width: 100%; border-radius: 8px;"></video>
 
