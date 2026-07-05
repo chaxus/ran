@@ -196,21 +196,16 @@ onMounted(() => (mounted.value = true));
 
 const copied = ref(false);
 let copyTimer: ReturnType<typeof setTimeout> | undefined;
-const copyInstall = () => {
+const copyInstall = async () => {
   const text = 'npm i ranui ranuts';
-  const done = () => {
-    copied.value = true;
-    clearTimeout(copyTimer);
-    copyTimer = setTimeout(() => (copied.value = false), 1800);
-  };
-  if (navigator.clipboard?.writeText) {
-    navigator.clipboard
-      .writeText(text)
-      .then(done)
-      .catch(() => done());
-  } else {
-    done();
+  try {
+    await navigator.clipboard?.writeText?.(text);
+  } catch {
+    /* clipboard 不可用时静默降级,仍给出复制成功反馈 */
   }
+  copied.value = true;
+  clearTimeout(copyTimer);
+  copyTimer = setTimeout(() => (copied.value = false), 1800);
 };
 
 const spot = (e: PointerEvent) => {
