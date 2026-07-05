@@ -248,6 +248,13 @@ export class Icon extends RanElement {
       const size = this.size || '1em';
       this._icon.setAttribute('width', size);
       this._icon.setAttribute('height', size);
+      // The shadow stylesheet sets `.ran-icon svg { width: var(--ran-icon-svg-width, 1em) }`,
+      // and a CSS width beats the SVG width/height *attributes* — so `size` would never take
+      // effect. Set it as inline style too (inline style wins over the stylesheet rule).
+      // Unitless values (e.g. size="30") are px; keep units when given (2rem, 50%, 1em).
+      const cssSize = /^\d+(\.\d+)?$/.test(size) ? `${size}px` : size;
+      this._icon.style.setProperty('width', cssSize);
+      this._icon.style.setProperty('height', cssSize);
     }
   };
 
