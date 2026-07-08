@@ -1,11 +1,11 @@
 {
-    "name": "ran", 
+    "name": "ran — ranui Web Components & ranuts utilities",
     "short_name": "ran",
     "id":"/",
     "start_url": "/",
-    "display": "standalone", 
+    "display": "standalone",
     "background_color": "#fff",
-    "description": "A Troupe of little vagrants of the world, leave your footprints in my words .",
+    "description": "Documentation for ran: ranui, a native Web Components UI library, and ranuts, a tree-shakeable TypeScript utility library.",
     "icons": [
       {
         "src": "/icon_48.png",
@@ -44,14 +44,14 @@
         "sizes": "2560x1440",
         "type": "image/jpg",
         "form_factor": "wide",
-        "label": "Home screen of Awesome App"
+        "label": "ran documentation home"
       },
       {
         "src": "/screenshots_748x1340.jpg",
         "sizes": "748x1340",
         "type": "image/jpg",
         "form_factor": "narrow",
-        "label": "List of Awesome Resources available in Awesome App"
+        "label": "ran component and utility docs"
       }
     ]
   }
