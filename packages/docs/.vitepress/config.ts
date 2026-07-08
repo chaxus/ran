@@ -9,8 +9,11 @@ import {
   GOOGLE_ANALYSE,
   GTAG,
   HOME,
-  HOME_ICON,
   // KEY_WORDS,
+  OG_IMAGE,
+  OG_IMAGE_ALT,
+  OG_IMAGE_HEIGHT,
+  OG_IMAGE_WIDTH,
   PREVIEW_CODE,
   RANUI_PATH,
   SERVICE_WORK,
@@ -97,8 +100,17 @@ export default defineConfig({
     const enUrl = ORIGIN + relToUrl(enRel);
     const cnUrl = ORIGIN + relToUrl(cnRel);
 
+    // The home page's document <title> is otherwise just "ran" (title === site
+    // title, so no template is applied). Promote it to the full tagline so the
+    // most important on-page SEO signal carries the product keywords.
+    const isHome = enRel === 'index.md';
+    if (isHome) {
+      pageData.title = SITE_TAGLINE;
+      pageData.titleTemplate = false;
+    }
+
     const title = pageData.title || 'ran';
-    const ogTitle = title === 'ran' ? SITE_TAGLINE : `${title} | ran`;
+    const ogTitle = isHome ? SITE_TAGLINE : `${title} | ran`;
     const desc =
       pageData.frontmatter.description ||
       pageData.description ||
@@ -183,7 +195,7 @@ export default defineConfig({
     ['link', { rel: 'manifest', href: `${BASE_PATH}manifest.json` }],
     ['meta', { name: 'theme-color', content: '#646cff' }],
     // author
-    ['meta', { name: 'author', content: '81380@163.com' }],
+    ['meta', { name: 'author', content: 'chaxus' }],
     // 表示爬虫对此页面的处理行为 或 应当遵守的规则，是用来做搜索引擎抓取的
     // all：搜索引擎将索引此网页，并继续通过此 网页的链接索引文件 将被检索
     // none：搜索引擎将 忽略 此网页
@@ -195,9 +207,18 @@ export default defineConfig({
     // 已经有国际化，禁止谷歌自动翻译
     ['meta', { name: 'google', content: 'notranslate' }],
     // og — per-page og:title / og:description / og:url are injected in transformPageData.
-    // Only the shared image + type stay static here.
-    ['meta', { property: 'og:image', content: HOME_ICON }],
+    // Only the shared image + type + site identity stay static here.
+    ['meta', { property: 'og:image', content: OG_IMAGE }],
+    ['meta', { property: 'og:image:width', content: OG_IMAGE_WIDTH }],
+    ['meta', { property: 'og:image:height', content: OG_IMAGE_HEIGHT }],
+    ['meta', { property: 'og:image:alt', content: OG_IMAGE_ALT }],
     ['meta', { property: 'og:type', content: 'website' }],
+    ['meta', { property: 'og:site_name', content: 'ran' }],
+    ['meta', { property: 'og:locale', content: 'en_US' }],
+    ['meta', { property: 'og:locale:alternate', content: 'zh_CN' }],
+    // twitter:image is explicit so the large-summary card never falls back to the icon.
+    ['meta', { name: 'twitter:image', content: OG_IMAGE }],
+    ['meta', { name: 'twitter:image:alt', content: OG_IMAGE_ALT }],
     // site-wide structured data (JSON-LD): the site + its author (personal brand)
     ['script', { type: 'application/ld+json' }, JSON.stringify(SITE_JSONLD)],
     [

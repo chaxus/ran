@@ -35,13 +35,24 @@ export const PREVIEW_CODE = `
 `;
 
 export const DESCRIPTION =
-  'Based on web component library, common function library utils, personal article record and so on';
+  'ran is an open-source front-end ecosystem by chaxus: ranui, a native Web Components UI library, and ranuts, a tree-shakeable TypeScript utility library, plus low-level web-infrastructure experiments.';
 
 export const HOME = 'https://ran.chaxus.com/';
 
 export const BASE_PATH = '/';
 
 export const HOME_ICON = `${HOME}home.svg`;
+
+// og:image must be a raster image (PNG/JPG) — social crawlers (X/Twitter, Facebook,
+// LinkedIn, Slack, Discord) do not render SVG previews. This 2560×1440 screenshot
+// doubles as the summary_large_image card.
+export const OG_IMAGE = `${HOME}screenshots_2560x1440.jpg`;
+
+export const OG_IMAGE_WIDTH = '2560';
+
+export const OG_IMAGE_HEIGHT = '1440';
+
+export const OG_IMAGE_ALT = 'ran — Web Components UI library (ranui) and utility library (ranuts)';
 
 export const UTILS_PATH = `${HOME}src/ranuts/utils/`;
 
