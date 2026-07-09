@@ -1,5 +1,5 @@
 import type { DefaultTheme } from 'vitepress';
-import { GITHUB } from '../../common/index';
+import { GITHUB, EDITOR } from '../../common/index';
 
 const themeEnConfig: DefaultTheme.Config = {
   logo: '/home.svg',
@@ -11,6 +11,7 @@ const themeEnConfig: DefaultTheme.Config = {
     { text: 'ranui', link: '/src/ranui/' },
     { text: 'ranuts', link: '/src/ranuts/' },
     { text: 'Articles', link: '/src/article/design_mode.md' },
+    { text: 'Doc Editor', link: EDITOR },
   ],
   socialLinks: [{ icon: 'github', link: GITHUB }],
   footer: {

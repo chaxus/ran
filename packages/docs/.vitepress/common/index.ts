@@ -64,6 +64,9 @@ export const KEY_WORDS = 'ran,component,components,ui,design,ranui,web-component
 
 export const GITHUB = 'https://github.com/chaxus/ran';
 
+// Sibling open-source project: a privacy-first, in-browser document editor.
+export const EDITOR = 'https://edit.chaxus.com/';
+
 export const SERVICE_WORK = `
 // 注册 Service worker
 const registerServiceWorker = async () => {
