@@ -22,6 +22,8 @@ done
 $bin/vite build -c ./build/config.es.ts
 # build cjs + iife (single bundle, appends to dist/)
 $bin/vite build -c ./build/config.bundle.ts
+# build standalone per-component iife bundles (dist/iife/<name>.iife.js)
+$bin/tsx ./bin/build-iife.ts
 
 $bin/tsc --declaration --emitDeclarationOnly --outDir ./dist --project tsconfig.json
 

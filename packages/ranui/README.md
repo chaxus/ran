@@ -155,6 +155,32 @@ UMD, IIFE, CJS:
 <script src="./ranui/dist/umd/index.umd.cjs"></script>
 ```
 
+### Without a bundler (static pages / CDN)
+
+Pick the distribution that matches how many components the page uses:
+
+| Scenario                       | Best option                                    | Why                                                                  |
+| ------------------------------ | ---------------------------------------------- | -------------------------------------------------------------------- |
+| 1–2 components, one script tag | Per-component IIFE: `dist/iife/<name>.iife.js` | Self-contained, no module syntax needed                              |
+| Several components             | Per-component ES modules: `dist/<name>.js`     | Shared runtime chunks are deduplicated by the browser's module graph |
+| Everything                     | Full bundle: `dist/index.iife.js`              | One file, every component registered                                 |
+| Project with a bundler         | npm imports: `import 'ranui/<name>'`           | Tree-shaking and a single shared runtime                             |
+
+Per-component IIFE — one tag, no build step:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/ranui/dist/iife/select.iife.js" defer></script>
+```
+
+Each IIFE inlines its internal dependencies (e.g. `select` includes `icon`); element registration is guarded, so loading several files that share dependencies is safe — but each file carries its own copy of the shared runtime. When a page needs several components, prefer the ES modules instead, which deduplicate it:
+
+```html
+<script type="module">
+  import 'https://cdn.jsdelivr.net/npm/ranui/dist/button.js';
+  import 'https://cdn.jsdelivr.net/npm/ranui/dist/select.js';
+</script>
+```
+
 ## Usage
 
 RanUI components are Web Components, so they can be used without framework-specific wrappers.
