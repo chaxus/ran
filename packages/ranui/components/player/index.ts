@@ -108,7 +108,7 @@ declare global {
   }
 }
 
-export class RanPlayer extends (HTMLElementSSR()!) {
+export class RanPlayer extends HTMLElementSSR()! {
   public ctx: Context;
   _player: HTMLDivElement;
   _container: HTMLDivElement;

@@ -95,7 +95,7 @@ class C {}
 
 import d from 'e';
 
-export default e = 1;
+export default (e = 1);
 export { e };
 export * from 'e';
 ```

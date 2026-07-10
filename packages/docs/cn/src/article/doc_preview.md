@@ -255,21 +255,22 @@ async function loadTheme(zip: JSZip) {
 ```
 
 后续`ppt`里面的其他内容，都可以这么去解析。根据`officeopenxml`标准，可能包含：
-Part | Description |
+
+| Part                       | Description                                                                                                                                                                                |
 | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Comments Authors | Contains information about each author who has added a comment to the presentation. |
-| Comments | Contains comments for a single slide. |
-| Handout Master | Contains the look, position, and size of the slides, notes, header and footer text, date, or page number on the presentation's handout. There can be only one such part. |
-| Notes Master | Contains information about the content and formatting of all notes pages. There can be only one such part. |
-| Notes Slide | Contains the notes for a single slide. |
-| Presentation | Contains the definition of a slide presentation. There must be one and only one such part. See [Presentation](http://officeopenxml.com/PrPresentation.php). |
-| Presentation Properties | Contains all of the presentation's properties. There must be one and only one such part. |
-| Slide | Contains the content of a single slide. |
-| Slide Layout | Contains the definition for a slide template. It defines the default appearance and positioning of drawing objects on the slide. There must be one or more such parts. |
-| Slide Master | Contains the master definition of formatting, text, and objects that appear on each slide in the presentation that is derived from the slide master. There must be one or more such parts. |
-| Slide Synchronization Data | Contains properties specifying the current state of a slide that is being synchronized with a version of the slide stored on a central server. |
-| User-Defined Tags | Contains a set of user-defined properties for an object in a presentation. There can be zero or more such parts. |
-| View Properties | Contains display properties for the presentation.
+| Comments Authors           | Contains information about each author who has added a comment to the presentation.                                                                                                        |
+| Comments                   | Contains comments for a single slide.                                                                                                                                                      |
+| Handout Master             | Contains the look, position, and size of the slides, notes, header and footer text, date, or page number on the presentation's handout. There can be only one such part.                   |
+| Notes Master               | Contains information about the content and formatting of all notes pages. There can be only one such part.                                                                                 |
+| Notes Slide                | Contains the notes for a single slide.                                                                                                                                                     |
+| Presentation               | Contains the definition of a slide presentation. There must be one and only one such part. See [Presentation](http://officeopenxml.com/PrPresentation.php).                                |
+| Presentation Properties    | Contains all of the presentation's properties. There must be one and only one such part.                                                                                                   |
+| Slide                      | Contains the content of a single slide.                                                                                                                                                    |
+| Slide Layout               | Contains the definition for a slide template. It defines the default appearance and positioning of drawing objects on the slide. There must be one or more such parts.                     |
+| Slide Master               | Contains the master definition of formatting, text, and objects that appear on each slide in the presentation that is derived from the slide master. There must be one or more such parts. |
+| Slide Synchronization Data | Contains properties specifying the current state of a slide that is being synchronized with a version of the slide stored on a central server.                                             |
+| User-Defined Tags          | Contains a set of user-defined properties for an object in a presentation. There can be zero or more such parts.                                                                           |
+| View Properties            | Contains display properties for the presentation.                                                                                                                                          |
 
 等等内容，我们根据标准一点点解析并渲染就好了。
 

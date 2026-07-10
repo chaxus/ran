@@ -484,22 +484,7 @@ export type BinaryOperator =
 export type LogicalOperator = '||' | '&&' | '??';
 
 export type AssignmentOperator =
-  | '='
-  | '+='
-  | '-='
-  | '*='
-  | '/='
-  | '%='
-  | '**='
-  | '<<='
-  | '>>='
-  | '>>>='
-  | '|='
-  | '^='
-  | '&='
-  | '||='
-  | '&&='
-  | '??=';
+  '=' | '+=' | '-=' | '*=' | '/=' | '%=' | '**=' | '<<=' | '>>=' | '>>>=' | '|=' | '^=' | '&=' | '||=' | '&&=' | '??=';
 
 export type UpdateOperator = '++' | '--';
 
@@ -620,10 +605,7 @@ export interface MetaProperty extends BaseExpression {
 }
 
 export type ModuleDeclaration =
-  | ImportDeclaration
-  | ExportNamedDeclaration
-  | ExportDefaultDeclaration
-  | ExportAllDeclaration;
+  ImportDeclaration | ExportNamedDeclaration | ExportDefaultDeclaration | ExportAllDeclaration;
 export interface BaseModuleDeclaration extends BaseNode {}
 
 export type ModuleSpecifier = ImportSpecifier | ImportDefaultSpecifier | ImportNamespaceSpecifier | ExportSpecifier;
@@ -1105,12 +1087,7 @@ export type OutputPluginHooks =
 export type InputPluginHooks = Exclude<keyof FunctionPluginHooks, OutputPluginHooks>;
 
 export type SyncPluginHooks =
-  | 'augmentChunkHash'
-  | 'onLog'
-  | 'outputOptions'
-  | 'renderDynamicImport'
-  | 'resolveFileUrl'
-  | 'resolveImportMeta';
+  'augmentChunkHash' | 'onLog' | 'outputOptions' | 'renderDynamicImport' | 'resolveFileUrl' | 'resolveImportMeta';
 
 export type AsyncPluginHooks = Exclude<keyof FunctionPluginHooks, SyncPluginHooks>;
 
@@ -1124,13 +1101,7 @@ export type FirstPluginHooks =
   | 'shouldTransformCachedModule';
 
 export type SequentialPluginHooks =
-  | 'augmentChunkHash'
-  | 'generateBundle'
-  | 'onLog'
-  | 'options'
-  | 'outputOptions'
-  | 'renderChunk'
-  | 'transform';
+  'augmentChunkHash' | 'generateBundle' | 'onLog' | 'options' | 'outputOptions' | 'renderChunk' | 'transform';
 
 export type ParallelPluginHooks = Exclude<
   keyof FunctionPluginHooks | AddonHooks,

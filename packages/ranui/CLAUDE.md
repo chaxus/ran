@@ -312,12 +312,13 @@ batch(() => {
 ```
 
 **SwiftUI parallel:**
-| JS | SwiftUI |
-|----|---------|
-| `signal()` | `@State` / `@Observable` property |
+
+| JS               | SwiftUI                                               |
+| ---------------- | ----------------------------------------------------- |
+| `signal()`       | `@State` / `@Observable` property                     |
 | `createEffect()` | `body` (auto-tracks; cleans stale deps before re-run) |
-| `computed()` | Swift computed property |
-| `batch()` | Automatic mutation coalescing in same event handler |
+| `computed()`     | Swift computed property                               |
+| `batch()`        | Automatic mutation coalescing in same event handler   |
 
 **Page section pattern** (signal + EventManager together):
 
