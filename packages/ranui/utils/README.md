@@ -390,14 +390,7 @@ Theme names:
 ```ts
 type RanThemeName = 'light' | 'dark' | 'system';
 type RanThemePackName =
-  | 'default'
-  | 'windows-98'
-  | 'windows-xp'
-  | 'system-6'
-  | 'wired'
-  | 'paper'
-  | 'pixel-retro'
-  | 'neo-brutalism';
+  'default' | 'windows-98' | 'windows-xp' | 'system-6' | 'wired' | 'paper' | 'pixel-retro' | 'neo-brutalism';
 ```
 
 localStorage keys:
