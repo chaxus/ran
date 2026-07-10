@@ -19,17 +19,17 @@ npm install ranui
 ### 基础用法
 
 <div style="width: 100px; margin-top:10px">
-    <r-preview id="fhdjskafk"></r-preview>
-    <r-button type="primary" onclick="uploadFile('fhdjskafk')">选择文件预览</r-button>
+    <r-preview id="preview-demo"></r-preview>
+    <r-button type="primary" onclick="uploadFile('preview-demo')">选择文件预览</r-button>
 </div>
 
 ```html
-<r-preview id="preview"></r-preview>
+<r-preview id="preview-demo"></r-preview>
 <r-button type="primary" onclick="uploadFile()">选择文件预览</r-button>
 
 <script>
   const uploadFile = () => {
-    const preview = document.getElementById('preview');
+    const preview = document.getElementById('preview-demo');
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
     input.setAttribute('accept', '.docx,.pptx,.pdf,.xlsx');
