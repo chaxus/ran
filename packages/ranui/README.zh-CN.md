@@ -127,6 +127,32 @@ import 'ranui/button';
 <script src="./ranui/dist/umd/index.umd.cjs"></script>
 ```
 
+### 无构建工具场景（静态页 / CDN）
+
+按页面用到的组件数量选择分发方式：
+
+| 场景                         | 推荐方式                                | 原因                                      |
+| ---------------------------- | --------------------------------------- | ----------------------------------------- |
+| 只用 1–2 个组件，一行 script | 按组件 IIFE：`dist/iife/<name>.iife.js` | 自包含，无需模块语法                      |
+| 用多个组件                   | 按组件 ES 模块：`dist/<name>.js`        | 共享 runtime chunk 由浏览器模块图自动去重 |
+| 全都要                       | 全量包：`dist/index.iife.js`            | 一个文件注册所有组件                      |
+| 项目里有构建工具             | npm 引入：`import 'ranui/<name>'`       | 可摇树，共享一份 runtime                  |
+
+按组件 IIFE——一行引入、零构建：
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/ranui/dist/iife/select.iife.js" defer></script>
+```
+
+每个 IIFE 内联了自己的内部依赖（如 `select` 内含 `icon`）；元素注册有守卫，多个文件共享依赖时同时加载是安全的——但每个文件都带一份共享 runtime。页面需要多个组件时，建议改用 ES 模块，浏览器会自动去重：
+
+```html
+<script type="module">
+  import 'https://cdn.jsdelivr.net/npm/ranui/dist/button.js';
+  import 'https://cdn.jsdelivr.net/npm/ranui/dist/select.js';
+</script>
+```
+
 ## 使用方式
 
 它是基于`Web Components`的组件，你可以不用关注框架就可以使用它。
