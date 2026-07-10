@@ -8,8 +8,6 @@ const themeEnConfig: DefaultTheme.Config = {
   },
   nav: [
     { text: 'Home', link: '/' },
-    { text: 'ranui', link: '/src/ranui/' },
-    { text: 'ranuts', link: '/src/ranuts/' },
     { text: 'Articles', link: '/src/article/design_mode.md' },
     { text: 'Doc Editor', link: EDITOR },
   ],

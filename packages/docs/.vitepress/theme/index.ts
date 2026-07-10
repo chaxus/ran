@@ -5,6 +5,7 @@ import { localStorageGetItem, setAttributeByGlobal } from 'ranuts/utils';
 import env from '../plugins/env';
 import TOTP from '../components/TOTP.vue';
 import Layout from '../components/Layout.vue';
+import NavLayout from '../components/NavLayout.vue';
 import Home from '../components/Home.vue';
 import IconGallery from '../components/IconGallery.vue';
 import Demo from '../components/Demo.vue';
@@ -84,10 +85,12 @@ const pwaInstall = () => {
 
 export default {
   extends: DefaultTheme,
-  // Layout,
+  // Wrap the default layout to mount the product switcher (ranui/ranuts) next to the logo.
+  Layout: NavLayout,
   enhanceApp({ app, router }: EnhanceAppContext): void {
     if (!import.meta.env.SSR) {
       import('ranui');
+      import('@ranui/preview'); // r-preview was split out of the ranui main package; import it so the preview demo works
       import('./register-icons'); // register ranui's SVG icons so <r-icon> demos render
       syncRanuiTheme();
       enablePageTransitions(router);
