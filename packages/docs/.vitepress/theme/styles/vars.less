@@ -1,4 +1,16 @@
 /**
+ * Typography — Geist Sans/Mono, with system + CJK fallbacks (the site is
+ * bilingual and Geist has no CJK glyphs, so Chinese falls through cleanly).
+ * -------------------------------------------------------------------------- */
+
+:root {
+  --vp-font-family-base:
+    'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', 'PingFang SC', 'Hiragino Sans GB',
+    'Noto Sans SC', 'Microsoft YaHei', sans-serif;
+  --vp-font-family-mono: 'Geist Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+}
+
+/**
  * Colors
  * -------------------------------------------------------------------------- */
 

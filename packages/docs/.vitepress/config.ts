@@ -193,6 +193,12 @@ export default defineConfig({
     // base
     ['link', { rel: 'icon', href: `${BASE_PATH}favicon.ico` }],
     ['link', { rel: 'manifest', href: `${BASE_PATH}manifest.json` }],
+    // Geist Sans carries all body text — preload so the swap happens before first paint.
+    // Geist Mono is intentionally not preloaded: pages without code shouldn't pay for it.
+    [
+      'link',
+      { rel: 'preload', href: `${BASE_PATH}fonts/geist-variable.woff2`, as: 'font', type: 'font/woff2', crossorigin: '' },
+    ],
     ['meta', { name: 'theme-color', content: '#646cff' }],
     // author
     ['meta', { name: 'author', content: 'chaxus' }],

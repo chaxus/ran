@@ -1,3 +1,22 @@
+/* Geist Sans / Geist Mono (Vercel, SIL OFL 1.1) — the site's body and code faces.
+   Self-hosted variable fonts (one file covers all weights); the default theme's
+   bundled Inter is skipped via the `vitepress/theme-without-fonts` import.
+   `swap` is right here (unlike the wordmark faces below): body text should render
+   immediately with the fallback and re-paint when Geist arrives. */
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/geist-variable.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/geist-mono-variable.woff2') format('woff2');
+}
 /* Self-hosted display face (Fraunces, latin subset) for the homepage wordmark.
    Kept local so the docs stay a fully offline PWA with no external font requests.
 
