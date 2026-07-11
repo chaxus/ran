@@ -2,7 +2,7 @@
   <DefaultTheme.Layout />
 </template>
 <script setup lang="ts">
-import DefaultTheme from 'vitepress/theme';
+import DefaultTheme from 'vitepress/theme-without-fonts';
 import { useData } from 'vitepress';
 import useBasic from '../composition/useBasic';
 import { watchEffect, onMounted } from 'vue';

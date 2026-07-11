@@ -1,4 +1,5 @@
-import DefaultTheme from 'vitepress/theme';
+// theme-without-fonts: skip the default theme's bundled Inter — we ship Geist (see styles/fonts.less)
+import DefaultTheme from 'vitepress/theme-without-fonts';
 import type { EnhanceAppContext, Router } from 'vitepress';
 import { nextTick } from 'vue';
 import { localStorageGetItem, setAttributeByGlobal } from 'ranuts/utils';
