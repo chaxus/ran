@@ -104,6 +104,15 @@
   --ran-color-border-active: var(--ran-gray-600);
   --ran-color-link: var(--ran-blue-700);
 
+  /* Contrast surface (Geist "contrast" button): the highest-contrast
+     monochrome action. bg/text track gray-1000/background-100 so they invert
+     in dark mode; hover/active are literals stepped toward the page bg and
+     overridden in dark.less. */
+  --ran-color-contrast-bg: var(--ran-gray-1000);
+  --ran-color-contrast-bg-hover: #383838;
+  --ran-color-contrast-bg-active: #4d4d4d;
+  --ran-color-contrast-text: var(--ran-background-100);
+
   /* ── Typography ─────────────────────────────────────────────────── */
   --ran-font-family:
     'Geist', 'Geist Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',

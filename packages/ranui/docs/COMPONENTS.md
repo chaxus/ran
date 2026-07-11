@@ -6,7 +6,7 @@ shape), slots, and `::part()` names — extracted from source. For CSS variables
 (theming tokens) see [style-tokens-public.md](./style-tokens-public.md); for
 design rules see [DESIGN.md](./DESIGN.md).
 
-Generated at: 2026-07-05T13:14:26.449Z
+Generated at: 2026-07-11T04:29:31.985Z
 
 29 custom elements.
 
@@ -21,7 +21,7 @@ Source: `components/button/index.ts`
   - `icon: string`
   - `iconSize: string`
   - `sheet: string`
-  - `type: string` — Visual variant: `''` (default) | `'primary'` | `'warning'` | `'text'`. Drives the `:host([type=...])` styles.
+  - `type: string` — Visual variant: `''` (default) | `'primary'` | `'contrast'` | `'warning'` | `'text'`. Drives the `:host([type=...])` styles.
 - **Events**: —
 - **Slots**: `default`
 - **Parts**: `button`, `content`
