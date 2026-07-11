@@ -5,6 +5,10 @@ packages:
 overrides:
   esbuild: '>=0.28.1'
   '@babel/core': '>=7.29.6'
+  # @ranui/preview (split out of this repo) pins old published ranui/ranuts,
+  # which would drag tesseract.js back into the lockfile — use the workspace code.
+  '@ranui/preview>ranui': 'workspace:*'
+  '@ranui/preview>ranuts': 'workspace:*'
 allowBuilds:
   core-js: true
   esbuild: true
