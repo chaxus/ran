@@ -37,10 +37,10 @@ initTheme();
 
 ### Properties
 
-| Property | Type                              | Default    | Description                                                                                        |
-| -------- | --------------------------------- | ---------- | -------------------------------------------------------------------------------------------------- |
-| `value`  | `'system' \| 'light' \| 'dark'`   | `'system'` | Current selection, read from the theme API (`getTheme()`). Setting it applies and persists the theme. |
-| `sheet`  | `string`                          | `''`       | CSS injected into the component's shadow DOM.                                                       |
+| Property | Type                            | Default    | Description                                                                                           |
+| -------- | ------------------------------- | ---------- | ----------------------------------------------------------------------------------------------------- |
+| `value`  | `'system' \| 'light' \| 'dark'` | `'system'` | Current selection, read from the theme API (`getTheme()`). Setting it applies and persists the theme. |
+| `sheet`  | `string`                        | `''`       | CSS injected into the component's shadow DOM.                                                         |
 
 ### Localization Attributes
 
@@ -59,8 +59,8 @@ The three buttons are icon-only, so each carries an `aria-label`. Override them 
 
 ## Events
 
-| Event    | Detail                                     | Description                                                       |
-| -------- | ------------------------------------------ | ----------------------------------------------------------------- |
+| Event    | Detail                                     | Description                                                        |
+| -------- | ------------------------------------------ | ------------------------------------------------------------------ |
 | `change` | `{ theme: 'system' \| 'light' \| 'dark' }` | Fired when the user picks a theme. Bubbles and crosses shadow DOM. |
 
 ```js
@@ -82,11 +82,11 @@ document.querySelector('r-theme-switch').addEventListener('change', (e) => {
 
 ## CSS Parts
 
-| Part                          | Description                                                                    |
-| ----------------------------- | ------------------------------------------------------------------------------ |
-| `switch`                      | The outer segmented pill.                                                      |
-| `button`                      | Every choice button (each also exposes its choice name as an additional part). |
-| `system` / `light` / `dark`   | The individual choice buttons.                                                 |
+| Part                        | Description                                                                    |
+| --------------------------- | ------------------------------------------------------------------------------ |
+| `switch`                    | The outer segmented pill.                                                      |
+| `button`                    | Every choice button (each also exposes its choice name as an additional part). |
+| `system` / `light` / `dark` | The individual choice buttons.                                                 |
 
 ```css
 r-theme-switch::part(switch) {

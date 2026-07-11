@@ -73,32 +73,32 @@ per-component dark overrides.
 
 ### Semantic color tokens
 
-| Token                          | Role                      |
-| ------------------------------ | ------------------------- |
-| `--ran-color-primary`          | Primary action            |
-| `--ran-color-primary-hover`    | Primary hover             |
-| `--ran-color-primary-active`   | Primary active            |
-| `--ran-color-success`          | Success                   |
-| `--ran-color-warning`          | Warning                   |
-| `--ran-color-danger`           | Danger / error            |
-| `--ran-color-bg`               | Page background           |
-| `--ran-color-bg-subtle`        | Subtle background         |
-| `--ran-color-bg-elevated`      | Card / surface background |
-| `--ran-color-bg-muted`         | Muted surface             |
-| `--ran-color-bg-hover`         | Hover surface             |
-| `--ran-color-bg-active`        | Active surface            |
-| `--ran-color-text`             | Primary text              |
-| `--ran-color-text-secondary`   | Secondary text            |
-| `--ran-color-text-disabled`    | Disabled text             |
-| `--ran-color-border`           | Default border            |
-| `--ran-color-border-secondary` | Subtle border             |
-| `--ran-color-border-hover`     | Hover border              |
-| `--ran-color-border-active`    | Active border             |
-| `--ran-color-link`             | Link color                |
-| `--ran-color-contrast-bg`      | Contrast action surface   |
-| `--ran-color-contrast-bg-hover`  | Contrast hover           |
-| `--ran-color-contrast-bg-active` | Contrast active          |
-| `--ran-color-contrast-text`    | Text on contrast surface  |
+| Token                            | Role                      |
+| -------------------------------- | ------------------------- |
+| `--ran-color-primary`            | Primary action            |
+| `--ran-color-primary-hover`      | Primary hover             |
+| `--ran-color-primary-active`     | Primary active            |
+| `--ran-color-success`            | Success                   |
+| `--ran-color-warning`            | Warning                   |
+| `--ran-color-danger`             | Danger / error            |
+| `--ran-color-bg`                 | Page background           |
+| `--ran-color-bg-subtle`          | Subtle background         |
+| `--ran-color-bg-elevated`        | Card / surface background |
+| `--ran-color-bg-muted`           | Muted surface             |
+| `--ran-color-bg-hover`           | Hover surface             |
+| `--ran-color-bg-active`          | Active surface            |
+| `--ran-color-text`               | Primary text              |
+| `--ran-color-text-secondary`     | Secondary text            |
+| `--ran-color-text-disabled`      | Disabled text             |
+| `--ran-color-border`             | Default border            |
+| `--ran-color-border-secondary`   | Subtle border             |
+| `--ran-color-border-hover`       | Hover border              |
+| `--ran-color-border-active`      | Active border             |
+| `--ran-color-link`               | Link color                |
+| `--ran-color-contrast-bg`        | Contrast action surface   |
+| `--ran-color-contrast-bg-hover`  | Contrast hover            |
+| `--ran-color-contrast-bg-active` | Contrast active           |
+| `--ran-color-contrast-text`      | Text on contrast surface  |
 
 The **contrast** group backs the monochrome "highest-contrast" action (the Geist contrast
 button, `<r-button type="contrast">`): black-on-white in light mode, white-on-black in dark.
