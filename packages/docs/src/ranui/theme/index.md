@@ -30,6 +30,9 @@ getTheme(); // → 'light' | 'dark' | 'system' | ''
 `setTheme` writes `data-ran-theme` (and a legacy `theme`) attribute onto `<html>`; all
 component styles react to it. The choice is saved under the localStorage key `ran-theme`.
 
+For ready-made theme-switching UI, use the [`<r-theme-switch>`](/src/ranui/theme-switch/)
+component — a system / light / dark segmented control wired to this API.
+
 ## API
 
 | Function          | Signature                                                               | Description                                                                                |
@@ -92,6 +95,14 @@ per-component dark overrides.
 | `--ran-color-border-hover`     | Hover border              |
 | `--ran-color-border-active`    | Active border             |
 | `--ran-color-link`             | Link color                |
+| `--ran-color-contrast-bg`      | Contrast action surface   |
+| `--ran-color-contrast-bg-hover`  | Contrast hover           |
+| `--ran-color-contrast-bg-active` | Contrast active          |
+| `--ran-color-contrast-text`    | Text on contrast surface  |
+
+The **contrast** group backs the monochrome "highest-contrast" action (the Geist contrast
+button, `<r-button type="contrast">`): black-on-white in light mode, white-on-black in dark.
+Use it when the primary action should carry no hue.
 
 **Color is a state ladder, not a palette.** Within a scale, each step has a fixed job:
 `100` default bg · `200` hover bg · `300` active bg · `400` border · `500` hover border ·
@@ -109,6 +120,25 @@ primary text.
 | Motion     | `--ran-motion-duration-fast` 0.15s · `--ran-motion-duration-base` 0.2s                                    |
 | Focus      | `--ran-focus-ring`                                                                                        |
 | Typography | `--ran-font-family` (Geist Sans) · `--ran-font-mono` (Geist Mono)                                         |
+
+## Fonts
+
+ranui self-hosts the canonical faces behind `--ran-font-family` / `--ran-font-mono` — **Geist
+Sans** and **Geist Mono** (variable weight 100–900, SIL OFL 1.1 licensed). They are shipped
+with the package, so one import loads them with no CDN dependency:
+
+```js
+// bundlers
+import 'ranui/fonts';
+```
+
+```html
+<!-- static pages -->
+<link rel="stylesheet" href="…/ranui/dist/fonts/fonts.css" />
+```
+
+Without this import the typography tokens fall back to system fonts — everything still works,
+just without the Geist faces.
 
 ## Customizing tokens
 

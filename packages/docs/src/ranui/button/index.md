@@ -18,9 +18,9 @@ Button component for triggering instant actions with multiple styles and states.
 
 ### Properties
 
-| Property   | Type      | Default     | Description                                          |
-| ---------- | --------- | ----------- | ---------------------------------------------------- |
-| `type`     | `string`  | `'default'` | Button type: `default`, `primary`, `warning`, `text` |
+| Property   | Type      | Default     | Description                                                       |
+| ---------- | --------- | ----------- | ----------------------------------------------------------------- |
+| `type`     | `string`  | `'default'` | Button type: `default`, `primary`, `contrast`, `warning`, `text` |
 | `disabled` | `boolean` | `false`     | Whether the button is disabled                       |
 | `icon`     | `string`  | `''`        | Button icon name                                     |
 | `effect`   | `boolean` | `true`      | Whether to show click ripple effect                  |
@@ -29,6 +29,7 @@ Button component for triggering instant actions with multiple styles and states.
 
 <Demo>
   <r-button type="primary">Primary Button</r-button>
+  <r-button type="contrast">Contrast Button</r-button>
   <r-button type="warning">Warning Button</r-button>
   <r-button type="text">Text Button</r-button>
   <r-button>Default Button</r-button>
@@ -36,10 +37,13 @@ Button component for triggering instant actions with multiple styles and states.
 
 ```html
 <r-button type="primary">Primary Button</r-button>
+<r-button type="contrast">Contrast Button</r-button>
 <r-button type="warning">Warning Button</r-button>
 <r-button type="text">Text Button</r-button>
 <r-button>Default Button</r-button>
 ```
+
+`contrast` is the highest-contrast monochrome action (from the Geist design language): black-on-white in light mode, white-on-black in dark mode. Use it when the main action should carry no hue. It rides the `--ran-color-contrast-*` tokens — see [Theme & Tokens](/src/ranui/theme/).
 
 ### Disabled State `disabled`
 
@@ -97,7 +101,7 @@ Button component for triggering instant actions with multiple styles and states.
 
 ## Best Practices
 
-- **Primary Actions**: Use `type="primary"`
+- **Primary Actions**: Use `type="primary"`, or `type="contrast"` when the action should stay monochrome
 - **Dangerous Actions**: Use `type="warning"`
 - **Secondary Actions**: Use `type="text"`
 - **Disabled State**: Use `disabled` when actions unavailable

@@ -280,7 +280,10 @@ const themeEnConfig: DefaultTheme.Config = {
       },
       {
         text: 'Theming',
-        items: [{ text: 'Theme & Tokens', link: '/src/ranui/theme/' }],
+        items: [
+          { text: 'Theme & Tokens', link: '/src/ranui/theme/' },
+          { text: 'ThemeSwitch', link: '/src/ranui/theme-switch/' },
+        ],
       },
       {
         text: 'Common',

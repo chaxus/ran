@@ -280,7 +280,10 @@ const themeCnConfig: DefaultTheme.Config = {
       },
       {
         text: '主题',
-        items: [{ text: 'Theme 主题与令牌', link: '/cn/src/ranui/theme/' }],
+        items: [
+          { text: 'Theme 主题与令牌', link: '/cn/src/ranui/theme/' },
+          { text: 'ThemeSwitch 主题切换', link: '/cn/src/ranui/theme-switch/' },
+        ],
       },
       {
         text: '通用',
