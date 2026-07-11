@@ -11,45 +11,80 @@
 }
 
 /**
- * Colors
+ * Colors — mapped onto the ranui Geist token layer (ranui/style is loaded on
+ * every page, so the --ran-* custom properties resolve here and flip with the
+ * theme). One accent: Geist blue. Surfaces/dividers ride the gray ladder so
+ * VitePress chrome and live <r-*> demos share the exact same palette.
  * -------------------------------------------------------------------------- */
 
 :root {
-  --vp-c-brand: #646cff;
-  --vp-c-brand-light: #747bff;
-  --vp-c-brand-lighter: #9499ff;
-  --vp-c-brand-lightest: #bcc0ff;
-  --vp-c-brand-dark: #535bf2;
-  --vp-c-brand-darker: #454ce1;
-  --vp-c-brand-dimm: rgba(100, 108, 255, 0.08);
+  /* brand = the single blue accent (Geist blue ladder) */
+  --vp-c-brand: var(--ran-blue-700, #006bff);
+  --vp-c-brand-light: var(--ran-blue-800, #0059ec);
+  --vp-c-brand-lighter: var(--ran-blue-600, #48aeff);
+  --vp-c-brand-lightest: var(--ran-blue-500, #94ccff);
+  --vp-c-brand-dark: var(--ran-blue-800, #0059ec);
+  --vp-c-brand-darker: var(--ran-blue-900, #005ff2);
+  --vp-c-brand-dimm: var(--ran-blue-100, #f0f7ff);
+
+  /* Geist surfaces + hairlines (light: white page, near-white blocks) */
+  --vp-c-bg: var(--ran-background-100, #ffffff);
+  --vp-c-bg-alt: var(--ran-background-200, #fafafa);
+  --vp-c-bg-soft: var(--ran-background-200, #fafafa);
+  --vp-c-divider: var(--ran-gray-400, #eaeaea);
+  --vp-c-divider-light: var(--ran-gray-300, #e6e6e6);
+
+  /* text ladder */
+  --vp-c-text-1: var(--ran-gray-1000, #171717);
+  --vp-c-text-2: var(--ran-gray-900, #4d4d4d);
+  --vp-c-text-3: var(--ran-gray-700, #8f8f8f);
+}
+
+.dark {
+  /* the --ran-* scale flips via data-ran-theme (bridged in theme/index.ts),
+     so the same token references resolve to the dark values automatically —
+     only re-declared here for clarity where VitePress needs an explicit
+     .dark override to win over its own defaults */
+  --vp-c-brand-dimm: var(--ran-blue-100, #06193a);
+
+  --vp-c-bg: var(--ran-background-100, #000000);
+  --vp-c-bg-alt: var(--ran-gray-100, #1a1a1a);
+  --vp-c-bg-soft: var(--ran-gray-100, #1a1a1a);
+  --vp-c-divider: var(--ran-gray-400, #2e2e2e);
+  --vp-c-divider-light: var(--ran-gray-300, #292929);
+
+  --vp-c-text-1: var(--ran-gray-1000, #ededed);
+  --vp-c-text-2: var(--ran-gray-900, #a0a0a0);
+  --vp-c-text-3: var(--ran-gray-700, #8f8f8f);
 }
 
 /**
- * Component: Button
+ * Component: Button — Geist contrast (monochrome) primary: ink on page bg,
+ * inverting with the theme, exactly like the r-button contrast variant.
  * -------------------------------------------------------------------------- */
 
 :root {
-  --vp-button-brand-border: var(--vp-c-brand-light);
-  --vp-button-brand-bg: var(--vp-c-brand);
-  --vp-button-brand-text: #fff;
-  --vp-button-brand-hover-border: var(--vp-c-brand-light);
-  --vp-button-alt-hover-text: var(--vp-c-brand);
-  --vp-button-brand-hover-bg: var(--vp-c-brand-lighter);
-  --vp-button-brand-hover-border: var(--vp-c-brand-lighter);
-  --vp-button-brand-active-border: var(--vp-c-brand-light);
-  --vp-button-brand-active-text: var(--vp-c-text-dark-1);
-  --vp-button-brand-active-bg: var(--vp-button-brand-bg);
+  --vp-button-brand-border: var(--ran-color-contrast-bg, var(--ran-gray-1000, #171717));
+  --vp-button-brand-bg: var(--ran-color-contrast-bg, var(--ran-gray-1000, #171717));
+  --vp-button-brand-text: var(--ran-color-contrast-text, var(--ran-background-100, #ffffff));
+  --vp-button-brand-hover-border: var(--ran-color-contrast-bg-hover, #383838);
+  --vp-button-brand-hover-bg: var(--ran-color-contrast-bg-hover, #383838);
+  --vp-button-brand-hover-text: var(--ran-color-contrast-text, var(--ran-background-100, #ffffff));
+  --vp-button-brand-active-border: var(--ran-color-contrast-bg-active, #4d4d4d);
+  --vp-button-brand-active-bg: var(--ran-color-contrast-bg-active, #4d4d4d);
+  --vp-button-brand-active-text: var(--ran-color-contrast-text, var(--ran-background-100, #ffffff));
+  --vp-button-alt-hover-text: var(--vp-c-text-1);
 }
 
 /**
- * Component: Home
+ * Component: Home — monochrome wordmark (no gradient); ambient image glow
+ * quiet and blue-only.
  * -------------------------------------------------------------------------- */
 
 :root {
-  --vp-home-hero-name-color: transparent;
-  --vp-home-hero-name-background: -webkit-linear-gradient(120deg, #bd34fe 30%, #41d1ff);
+  --vp-home-hero-name-color: var(--vp-c-text-1);
 
-  --vp-home-hero-image-background-image: linear-gradient(-45deg, #bd34fe 50%, #47caff 50%);
+  --vp-home-hero-image-background-image: linear-gradient(-45deg, var(--ran-blue-300, #dfefff) 50%, transparent 50%);
   --vp-home-hero-image-filter: blur(40px);
 }
 
@@ -77,7 +112,7 @@
 
 .dark {
   --vp-custom-block-tip-border: var(--vp-c-brand);
-  --vp-custom-block-tip-text: var(--vp-c-brand-lightest);
+  --vp-custom-block-tip-text: var(--vp-c-brand-lighter);
   --vp-custom-block-tip-bg: var(--vp-c-brand-dimm);
 }
 
@@ -97,6 +132,8 @@
   Use lighter colors for links in dark mode for a11y.
   Also specify some classes twice to have higher specificity
   over scoped class data attribute.
+  (The dark --ran-blue scale already brightens the ladder — these keep the
+  extra lift for body links.)
 */
 .dark .vp-doc a,
 .dark .vp-doc a > code,

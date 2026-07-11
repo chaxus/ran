@@ -17,38 +17,6 @@
   font-display: swap;
   src: url('/fonts/geist-mono-variable.woff2') format('woff2');
 }
-/* Self-hosted display face (Fraunces, latin subset) for the homepage wordmark.
-   Kept local so the docs stay a fully offline PWA with no external font requests.
-
-   Two non-obvious requirements, both needed for the gradient wordmark to render:
-   - `font-weight: 100 900` (a RANGE, not a fixed value): the file is single-weight,
-     but a range makes the face match *any* requested weight. A fixed descriptor
-     (e.g. 600) makes the browser drop the face when the element's effective weight
-     differs and silently fall back to Inter.
-   - `font-display: block` (not `swap`): the wordmark uses `background-clip: text`,
-     which paints the text-as-mask once and does NOT repaint when a swap-font loads
-     late — so it would stay stuck on the fallback. `block` paints only once the
-     font is ready. */
-@font-face {
-  font-family: 'Fraunces Display';
-  font-style: normal;
-  font-weight: 100 900;
-  font-display: block;
-  src: url('/fonts/fraunces-600.woff2') format('woff2');
-}
-/* Syne — an arty, contemporary display grotesque (alternative wordmark face). */
-@font-face {
-  font-family: 'Syne Display';
-  font-style: normal;
-  font-weight: 100 900;
-  font-display: block;
-  src: url('/fonts/syne-800.woff2') format('woff2');
-}
-/* Space Grotesk — a techy, engineered grotesque (alternative wordmark face). */
-@font-face {
-  font-family: 'Space Grotesk Display';
-  font-style: normal;
-  font-weight: 100 900;
-  font-display: block;
-  src: url('/fonts/spacegrotesk-700.woff2') format('woff2');
-}
+/* The decorative wordmark faces (Fraunces / Syne / Space Grotesk) are gone —
+   the unified Geist design model sets the homepage wordmark in Geist itself
+   (solid ink, tight tracking), same as edit.chaxus.com. One family everywhere. */
