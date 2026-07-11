@@ -50,14 +50,14 @@ const PAGE_VT = 'ran-page';
 const enablePageTransitions = (router: Router): void => {
   if (typeof document === 'undefined' || !document.startViewTransition) return;
   const go = router.go.bind(router);
-  router.go = (href?: string): Promise<void> => {
+  router.go = (href: string, options?: Parameters<Router['go']>[1]): Promise<void> => {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const content = document.querySelector<HTMLElement>('.VPContent');
-    if (!document.startViewTransition || reduce || !content) return go(href);
+    if (!document.startViewTransition || reduce || options?.initialLoad || !content) return go(href, options);
     content.style.viewTransitionName = PAGE_VT;
     return new Promise<void>((resolve) => {
       const t = document.startViewTransition!(async () => {
-        await go(href);
+        await go(href, options);
         await nextTick();
       });
       t.finished.finally(() => {
