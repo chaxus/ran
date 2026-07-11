@@ -36,7 +36,7 @@
     "lit": "^3.3.3",
     "ranui": "workspace:*",
     "ranuts": "workspace:*",
-    "vitepress": "^1.6.4",
+    "vitepress": "2.0.0-alpha.18",
     "vue": "^3.5.39",
     "vue-i18n": "^11.4.6"
   }
