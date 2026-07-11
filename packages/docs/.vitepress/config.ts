@@ -197,7 +197,13 @@ export default defineConfig({
     // Geist Mono is intentionally not preloaded: pages without code shouldn't pay for it.
     [
       'link',
-      { rel: 'preload', href: `${BASE_PATH}fonts/geist-variable.woff2`, as: 'font', type: 'font/woff2', crossorigin: '' },
+      {
+        rel: 'preload',
+        href: `${BASE_PATH}fonts/geist-variable.woff2`,
+        as: 'font',
+        type: 'font/woff2',
+        crossorigin: '',
+      },
     ],
     ['meta', { name: 'theme-color', content: '#646cff' }],
     // author
