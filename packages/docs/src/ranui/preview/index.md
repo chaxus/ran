@@ -51,11 +51,11 @@ npm install ranui
 
 ### Properties
 
-| Property    | Type      | Default | Description                                                  |
-| ----------- | --------- | ------- | ------------------------------------------------------------ |
-| `src`       | `string`  | `''`    | File preview URL, automatically opens preview modal when set |
-| `closeable` | `boolean` | `true`  | Whether to show the close button                             |
-| `baseUrl`   | `string`  | `''`    | Custom document preview service URL                          |
+| Property    | Type      | Default                     | Description                                                  |
+| ----------- | --------- | --------------------------- | ------------------------------------------------------------ |
+| `src`       | `string`  | `''`                        | File preview URL, automatically opens preview modal when set |
+| `closeable` | `boolean` | `true`                      | Whether to show the close button                             |
+| `baseUrl`   | `string`  | `'https://edit.chaxus.com'` | Custom document preview service URL                          |
 
 ### File Source `src`
 
@@ -82,10 +82,10 @@ Control the close behavior of the preview modal
 When you need to customize the document preview service, you can specify the service address through the `baseUrl` property
 
 ```html
-<r-preview baseUrl="http://localhost:5174/document"></r-preview>
+<r-preview baseUrl="https://edit.chaxus.com"></r-preview>
 ```
 
-> 💡 **Tip**: Uses built-in preview service by default. Deployment details can be found at [OnlyOffice Web Local](https://github.com/ranuts/document)
+> 💡 **Tip**: Defaults to the hosted preview service at `https://edit.chaxus.com`. To self-host it, see [OnlyOffice Web Local](https://github.com/ranuts/document)
 
 ## Version History
 

@@ -51,11 +51,11 @@ npm install ranui
 
 ### 属性
 
-| 属性        | 类型      | 默认值 | 说明                                   |
-| ----------- | --------- | ------ | -------------------------------------- |
-| `src`       | `string`  | `''`   | 文件预览地址，有值时会自动打开预览弹窗 |
-| `closeable` | `boolean` | `true` | 是否显示关闭按钮                       |
-| `baseUrl`   | `string`  | `''`   | 自定义文档预览服务地址                 |
+| 属性        | 类型      | 默认值                      | 说明                                   |
+| ----------- | --------- | --------------------------- | -------------------------------------- |
+| `src`       | `string`  | `''`                        | 文件预览地址，有值时会自动打开预览弹窗 |
+| `closeable` | `boolean` | `true`                      | 是否显示关闭按钮                       |
+| `baseUrl`   | `string`  | `'https://edit.chaxus.com'` | 自定义文档预览服务地址                 |
 
 ### 资源地址 `src`
 
@@ -82,10 +82,10 @@ npm install ranui
 当您需要自定义文档预览服务时，可以通过 `baseUrl` 属性指定服务地址
 
 ```html
-<r-preview baseUrl="http://localhost:5174/document"></r-preview>
+<r-preview baseUrl="https://edit.chaxus.com"></r-preview>
 ```
 
-> 💡 **提示**: 默认使用内置的预览服务，部署详情请参考 [OnlyOffice Web Local](https://github.com/ranuts/document)
+> 💡 **提示**: 默认使用 `https://edit.chaxus.com` 提供的预览服务，如需自部署请参考 [OnlyOffice Web Local](https://github.com/ranuts/document)
 
 ## 版本历史
 
