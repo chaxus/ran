@@ -79,6 +79,8 @@ const pwaInstall = () => {
       pwaInstall = document.createElement(PWA_ELEMENT_NAME);
       pwaInstall.setAttribute('manifest-url', MANIFEST_PATH_ROOT);
       pwaInstall.setAttribute('id', PWA_INSTALL_ID);
+      // remember the visitor's dismissal — without this the prompt pops on every page load
+      pwaInstall.setAttribute('use-local-storage', 'true');
       document.body.appendChild(pwaInstall);
     }
   });

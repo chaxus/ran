@@ -74,6 +74,19 @@ p img {
   }
 }
 
+/* PWA install prompt (@khmyznikov/pwa-install) — re-tint its shadow-DOM vars
+   onto the site palette: Geist blue instead of the stock indigo, page-matching
+   surfaces in both themes. */
+#pwa-install {
+  --install-button-color: var(--ran-blue-700, #006bff);
+  --tint-color: var(--ran-blue-700, #006bff);
+  --background-color-button: var(--ran-blue-700, #006bff);
+  --background-color-button-active: var(--ran-blue-800, #0059ec);
+  --text-color-primary: var(--vp-c-text-1);
+  --text-color-secondary: var(--vp-c-text-2);
+  --text-color-description: var(--vp-c-text-2);
+}
+
 /* Custom full-bleed home page (index.md / cn/index.md use layout: page + <Home />) */
 .ran-home-page {
   .VPContent,
