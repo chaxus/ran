@@ -16,19 +16,22 @@
 
 ### 属性
 
-| 属性       | 类型      | 默认值      | 说明                                              |
-| ---------- | --------- | ----------- | ------------------------------------------------- |
-| `type`     | `string`  | `'default'` | 按钮类型：`default`、`primary`、`warning`、`text` |
+| 属性       | 类型      | 默认值      | 说明                                                          |
+| ---------- | --------- | ----------- | ------------------------------------------------------------- |
+| `type`     | `string`  | `'default'` | 按钮类型：`default`、`primary`、`contrast`、`warning`、`text` |
 | `disabled` | `boolean` | `false`     | 是否禁用按钮                                      |
 | `icon`     | `string`  | `''`        | 按钮图标名称                                      |
 | `effect`   | `boolean` | `true`      | 是否显示点击水波纹特效                            |
 
 ### 按钮类型 `type`
 
-按钮支持四种不同的类型，适用于不同的场景
+按钮支持五种不同的类型，适用于不同的场景
 
 <div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
      <r-button type="primary">主要按钮</r-button>
+</div>
+<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
+     <r-button type="contrast">对比按钮</r-button>
 </div>
 <div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
      <r-button type="warning">警告按钮</r-button>
@@ -42,10 +45,13 @@
 
 ```html
 <r-button type="primary">主要按钮</r-button>
+<r-button type="contrast">对比按钮</r-button>
 <r-button type="warning">警告按钮</r-button>
 <r-button type="text">文本按钮</r-button>
 <r-button>默认按钮</r-button>
 ```
+
+`contrast` 是对比度最高的单色（无彩色）操作按钮，来自 Geist 设计语言：浅色模式下黑底白字，深色模式下白底黑字。当主要操作不需要携带任何色相时使用。它消费 `--ran-color-contrast-*` 令牌——参见 [Theme 主题与令牌](/cn/src/ranui/theme/)。
 
 ### 禁用状态 `disabled`
 
@@ -118,7 +124,7 @@
 
 ## 最佳实践
 
-- **主要操作**: 使用 `type="primary"` 的按钮
+- **主要操作**: 使用 `type="primary"` 的按钮；若主要操作不应携带色相，使用 `type="contrast"`
 - **危险操作**: 使用 `type="warning"` 的按钮
 - **次要操作**: 使用 `type="text"` 的按钮
 - **禁用状态**: 在操作不可用时使用 `disabled` 属性

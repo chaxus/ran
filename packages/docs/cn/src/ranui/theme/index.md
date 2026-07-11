@@ -27,6 +27,9 @@ getTheme(); // → 'light' | 'dark' | 'system' | ''
 `setTheme` 会在 `<html>` 上写入 `data-ran-theme`（以及兼容用的 `theme`）属性，所有组件样式随之
 响应。选择会保存在 localStorage 键 `ran-theme` 下。
 
+如果需要现成的主题切换 UI，直接使用 [`<r-theme-switch>`](/cn/src/ranui/theme-switch/) 组件——
+一个接入该 API 的 system / light / dark 分段控件。
+
 ## API
 
 | 函数              | 签名                                                                    | 说明                                                                           |
@@ -87,6 +90,14 @@ type ThemeTokenMap = Record<string, string | number | null | undefined>;
 | `--ran-color-border-hover`     | 悬停边框        |
 | `--ran-color-border-active`    | 激活边框        |
 | `--ran-color-link`             | 链接色          |
+| `--ran-color-contrast-bg`        | 对比操作表面  |
+| `--ran-color-contrast-bg-hover`  | 对比悬停      |
+| `--ran-color-contrast-bg-active` | 对比激活      |
+| `--ran-color-contrast-text`      | 对比表面上的文本 |
+
+**contrast（对比）** 这组令牌支撑单色的「最高对比度」操作（即 Geist 对比按钮
+`<r-button type="contrast">`）：浅色模式黑底白字，深色模式白底黑字。当主要操作不应携带
+任何色相时使用。
 
 **颜色是状态阶梯，而非调色板。** 在一条色阶内每一档都有固定职责：`100` 默认背景 · `200` 悬停背景 ·
 `300` 激活背景 · `400` 边框 · `500` 悬停边框 · `600` 激活边框 · `700` 实色 · `800` 实色悬停 ·
@@ -103,6 +114,24 @@ type ThemeTokenMap = Record<string, string | number | null | undefined>;
 | 动效 | `--ran-motion-duration-fast` 0.15s · `--ran-motion-duration-base` 0.2s                           |
 | 焦点 | `--ran-focus-ring`                                                                               |
 | 排版 | `--ran-font-family`（Geist Sans）· `--ran-font-mono`（Geist Mono）                               |
+
+## 字体
+
+ranui 自托管了 `--ran-font-family` / `--ran-font-mono` 背后的标准字体——**Geist Sans** 与
+**Geist Mono**（可变字重 100–900，SIL OFL 1.1 许可）。字体文件随包分发，一行导入即可加载，
+不依赖任何 CDN：
+
+```js
+// 打包器
+import 'ranui/fonts';
+```
+
+```html
+<!-- 静态页面 -->
+<link rel="stylesheet" href="…/ranui/dist/fonts/fonts.css" />
+```
+
+不导入也一切正常——排版令牌会回退到系统字体，只是没有 Geist 字形。
 
 ## 自定义令牌
 
