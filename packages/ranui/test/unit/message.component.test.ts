@@ -111,7 +111,7 @@ describe('r-message component', () => {
 
     el.setIcon('info');
     expect(el._icon.getAttribute('name')).toBe('info-circle-fill');
-    expect(el._icon.getAttribute('color')).toBe('#1890ff');
+    expect(el._icon.getAttribute('color')).toBe('#006bff');
   });
 
   it('setIcon does not set icon for toast type', () => {
