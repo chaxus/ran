@@ -1,6 +1,6 @@
 {
   "name": "ranui",
-  "version": "0.2.0-alpha.3",
+  "version": "0.2.0-alpha.4",
   "description": "UI Component library based on `Web Component`",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
