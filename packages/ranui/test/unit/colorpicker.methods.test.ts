@@ -12,20 +12,16 @@ function createCp(): ColorPicker & Record<string, any> {
   return cp;
 }
 
-/** Open the picker panel and mock rAF to fire synchronously. */
+/** Create the picker and build its panel (panel elements exist only after open). */
 function openPicker(): ColorPicker & Record<string, any> {
   const cp = createCp();
-  vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => {
-    cb(0);
-    return 0;
-  });
   cp.openColorPicker();
   return cp;
 }
 
-/** Mock getBoundingClientRect on the palette element via direct assignment (works in jsdom). */
-function mockPaletteBCR(
-  cp: any,
+/** Mock getBoundingClientRect via direct assignment (works in jsdom). */
+function mockBCR(
+  el: HTMLElement,
   {
     top = 100,
     left = 50,
@@ -33,7 +29,7 @@ function mockPaletteBCR(
     height = 160,
   }: { top?: number; left?: number; width?: number; height?: number } = {},
 ): void {
-  (cp.colorPickerPanelPalette as any).getBoundingClientRect = (): DOMRect =>
+  (el as any).getBoundingClientRect = (): DOMRect =>
     ({
       top,
       left,
@@ -47,13 +43,8 @@ function mockPaletteBCR(
     }) as DOMRect;
 }
 
-function createMouseMoveWithPage(pageX: number, pageY: number): MouseEvent {
-  const event = new MouseEvent('mousemove');
-  Object.defineProperties(event, {
-    pageX: { value: pageX },
-    pageY: { value: pageY },
-  });
-  return event;
+function mouse(type: string, clientX: number, clientY = 0): MouseEvent {
+  return new MouseEvent(type, { clientX, clientY });
 }
 
 // ---------------------------------------------------------------------------
@@ -69,74 +60,59 @@ afterEach(() => {
 });
 
 // ---------------------------------------------------------------------------
-// Color generation methods
+// Color helpers — currentRgba / currentValue / currentDisplay
 // ---------------------------------------------------------------------------
 
-describe('generateHue2rgb', () => {
-  it('returns rgb string for current hue context', () => {
+describe('currentRgba', () => {
+  it('returns white and full alpha for the default context (h0 s0 v100 t100)', () => {
     const cp = createCp();
-    // Default hue = 0 → pure red
-    expect(cp.generateHue2rgb()).toBe('rgb(255, 0, 0)');
-  });
-
-  it('updates when hue context changes', () => {
-    const cp = createCp();
-    cp.context.hue.setter(120);
-    expect(cp.generateHue2rgb()).toBe('rgb(0, 255, 0)');
-  });
-
-  it('hue=240 → blue', () => {
-    const cp = createCp();
-    cp.context.hue.setter(240);
-    expect(cp.generateHue2rgb()).toBe('rgb(0, 0, 255)');
-  });
-});
-
-describe('generateHsv2Rgba', () => {
-  it('returns correct RGBA from default context', () => {
-    const cp = createCp();
-    // hue=0, sat=100, light=100, transparency=80
-    const { r, g, b, a } = cp.generateHsv2Rgba();
-    expect(r).toBe(255);
-    expect(g).toBe(0);
-    expect(b).toBe(0);
-    expect(a).toBeCloseTo(0.8);
+    expect(cp.currentRgba()).toEqual({ r: 255, g: 255, b: 255, a: 1 });
   });
 
   it('reflects context changes', () => {
     const cp = createCp();
-    cp.context.hue.setter(120); // green
+    cp.context.hue.setter(120);
+    cp.context.saturation.setter(100);
+    cp.context.lightness.setter(100);
     cp.context.transparency.setter(50);
-    const { r, g, b, a } = cp.generateHsv2Rgba();
-    expect(g).toBe(255);
-    expect(r).toBe(0);
-    expect(b).toBe(0);
+    const { r, g, b, a } = cp.currentRgba();
+    expect({ r, g, b }).toEqual({ r: 0, g: 255, b: 0 });
     expect(a).toBeCloseTo(0.5);
   });
 });
 
-describe('generateHsv2RgbaValue', () => {
-  it('returns rgba() string from context', () => {
+describe('currentValue', () => {
+  it('returns hex when fully opaque', () => {
     const cp = createCp();
-    expect(cp.generateHsv2RgbaValue()).toBe('rgb(255, 0, 0, 0.8)');
+    cp.context.hue.setter(0);
+    cp.context.saturation.setter(100);
+    cp.context.lightness.setter(100);
+    expect(cp.currentValue()).toBe('#ff0000');
+  });
+
+  it('returns rgba() when alpha < 1', () => {
+    const cp = createCp();
+    cp.context.hue.setter(0);
+    cp.context.saturation.setter(100);
+    cp.context.lightness.setter(100);
+    cp.context.transparency.setter(50);
+    expect(cp.currentValue()).toBe('rgba(255, 0, 0, 0.5)');
   });
 });
 
-describe('generateHsv2Rgb', () => {
-  it('returns rgb() string without alpha', () => {
+describe('currentDisplay', () => {
+  it('HEX format shows the 6-digit color regardless of alpha', () => {
     const cp = createCp();
-    expect(cp.generateHsv2Rgb()).toBe('rgb(255, 0, 0)');
+    cp.context.transparency.setter(40);
+    expect(cp.currentDisplay()).toBe('#ffffff');
   });
-});
 
-describe('generateColorPickerProgress', () => {
-  it('returns linear-gradient string', () => {
+  it('RGB format shows rgb() when opaque and rgba() when translucent', () => {
     const cp = createCp();
-    const result = cp.generateColorPickerProgress();
-    expect(result).toContain('linear-gradient(to right,');
-    expect(result).toContain('rgba(255, 0, 4, 0)');
-    // end color = current HSV → red at default
-    expect(result).toContain('rgba(255, 0, 0, 1)');
+    cp._format = 'RGB';
+    expect(cp.currentDisplay()).toBe('rgb(255, 255, 255)');
+    cp.context.transparency.setter(40);
+    expect(cp.currentDisplay()).toBe('rgba(255, 255, 255, 0.4)');
   });
 });
 
@@ -156,7 +132,6 @@ describe('updateColorValue', () => {
   it('ignores invalid / unrecognized color strings', () => {
     const cp = createCp();
     expect(() => cp.updateColorValue('not-a-color')).not.toThrow();
-    // value attribute stays unset
     expect(cp.getAttribute('value')).toBeNull();
   });
 
@@ -176,607 +151,459 @@ describe('updateColorValue', () => {
     expect(cp.context.transparency.getter()).toBe(100);
   });
 
-  it('rgba(r,g,b,a) sets transparency from alpha channel', () => {
+  it('rgba(r,g,b,a) sets transparency from the alpha channel (0–100 scale)', () => {
     const cp = createCp();
     cp.updateColorValue('rgba(0,0,255,0.5)');
     expect(cp.context.hue.getter()).toBe(240);
-    expect(cp.context.transparency.getter()).toBeCloseTo(0.5);
+    expect(cp.context.transparency.getter()).toBe(50);
   });
 
-  it('sets value attribute on the element', () => {
+  it('sets the value attribute on the element', () => {
     const cp = createCp();
     cp.updateColorValue('#aabbcc');
     expect(cp.getAttribute('value')).toBe('#aabbcc');
   });
+});
 
-  it('updates colorpickerInner background style', () => {
+// ---------------------------------------------------------------------------
+// emitChange
+// ---------------------------------------------------------------------------
+
+describe('emitChange', () => {
+  it('dispatches a composed, bubbling change event with the full detail shape', () => {
     const cp = createCp();
-    cp.updateColorValue('#ff0000');
-    expect(
-      cp.colorpickerInner.style.getPropertyValue('background') || cp.colorpickerInner.getAttribute('style'),
-    ).toBeTruthy();
+    cp.context.hue.setter(0);
+    cp.context.saturation.setter(100);
+    cp.context.lightness.setter(100);
+    const seen: CustomEvent[] = [];
+    cp.addEventListener('change', (e: Event) => seen.push(e as CustomEvent));
+    cp.emitChange();
+    expect(seen).toHaveLength(1);
+    expect(seen[0].detail).toEqual({
+      value: '#ff0000',
+      hex: '#ff0000',
+      rgb: 'rgb(255, 0, 0)',
+      rgba: 'rgba(255, 0, 0, 1)',
+      alpha: 1,
+    });
+    expect(seen[0].bubbles).toBe(true);
+    expect(seen[0].composed).toBe(true);
+  });
+
+  it('uses rgba() as the value when translucent and syncs the value attribute', () => {
+    const cp = createCp();
+    cp.context.hue.setter(0);
+    cp.context.saturation.setter(100);
+    cp.context.lightness.setter(100);
+    cp.context.transparency.setter(25);
+    cp.emitChange();
+    expect(cp.getAttribute('value')).toBe('rgba(255, 0, 0, 0.25)');
+    expect(cp.context.value.getter()).toBe('rgba(255, 0, 0, 0.25)');
   });
 });
 
 // ---------------------------------------------------------------------------
-// openColorPicker — lazy init & DOM structure
+// Palette pointer interaction
+// ---------------------------------------------------------------------------
+
+describe('palettePointerDown', () => {
+  it('starts palette selection and applies the event position', () => {
+    const cp = openPicker();
+    mockBCR(cp.colorPickerPalette!);
+    const e = mouse('mousedown', 150, 180); // center of 200×160 at (50,100)
+    vi.spyOn(e, 'preventDefault');
+    cp.palettePointerDown(e);
+    expect(e.preventDefault).toHaveBeenCalled();
+    expect(cp.colorPickerPaletteSelect).toBe(true);
+    expect(cp.context.saturation.getter()).toBe(50);
+    expect(cp.context.lightness.getter()).toBe(50);
+  });
+});
+
+describe('updatePaletteFromEvent', () => {
+  it('maps x → saturation and y → inverted lightness', () => {
+    const cp = openPicker();
+    mockBCR(cp.colorPickerPalette!);
+    cp.updatePaletteFromEvent(mouse('mousemove', 50 + 200, 100)); // right edge, top
+    expect(cp.context.saturation.getter()).toBe(100);
+    expect(cp.context.lightness.getter()).toBe(100);
+  });
+
+  it('clamps positions outside the palette box', () => {
+    const cp = openPicker();
+    mockBCR(cp.colorPickerPalette!);
+    cp.updatePaletteFromEvent(mouse('mousemove', 0, 10_000));
+    expect(cp.context.saturation.getter()).toBe(0);
+    expect(cp.context.lightness.getter()).toBe(0);
+  });
+
+  it('emits a change event for every update', () => {
+    const cp = openPicker();
+    mockBCR(cp.colorPickerPalette!);
+    const onChange = vi.fn();
+    cp.addEventListener('change', onChange);
+    cp.updatePaletteFromEvent(mouse('mousemove', 150, 180));
+    expect(onChange).toHaveBeenCalledTimes(1);
+  });
+
+  it('does nothing when the palette has zero size (jsdom default)', () => {
+    const cp = openPicker();
+    const before = cp.context.saturation.getter();
+    cp.updatePaletteFromEvent(mouse('mousemove', 150, 180));
+    expect(cp.context.saturation.getter()).toBe(before);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Slider pointer interaction
+// ---------------------------------------------------------------------------
+
+describe('sliderPointerDown / updateSliderFromEvent', () => {
+  it('hue: maps the x position to 0–360', () => {
+    const cp = openPicker();
+    mockBCR(cp.colorPickerHueSlider!, { left: 0, width: 200, top: 0, height: 12 });
+    cp.sliderPointerDown('hue')(mouse('mousedown', 100));
+    expect(cp._activeSlider).toBe('hue');
+    expect(cp.context.hue.getter()).toBe(180);
+  });
+
+  it('alpha: maps the x position to 0–100 transparency', () => {
+    const cp = openPicker();
+    mockBCR(cp.colorPickerAlphaSlider!, { left: 0, width: 200, top: 0, height: 12 });
+    cp.sliderPointerDown('alpha')(mouse('mousedown', 50));
+    expect(cp._activeSlider).toBe('alpha');
+    expect(cp.context.transparency.getter()).toBe(25);
+  });
+
+  it('clamps beyond both ends', () => {
+    const cp = openPicker();
+    mockBCR(cp.colorPickerHueSlider!, { left: 0, width: 200, top: 0, height: 12 });
+    cp.updateSliderFromEvent('hue', mouse('mousemove', -50));
+    expect(cp.context.hue.getter()).toBe(0);
+    cp.updateSliderFromEvent('hue', mouse('mousemove', 999));
+    expect(cp.context.hue.getter()).toBe(360);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Document-level pointer routing
+// ---------------------------------------------------------------------------
+
+describe('onPointerMove', () => {
+  it('routes to the palette while palette selection is active', () => {
+    const cp = openPicker();
+    cp.colorPickerPaletteSelect = true;
+    const spy = vi.spyOn(cp, 'updatePaletteFromEvent');
+    cp.onPointerMove(mouse('mousemove', 10, 10));
+    expect(spy).toHaveBeenCalledTimes(1);
+  });
+
+  it('routes to the active slider otherwise', () => {
+    const cp = openPicker();
+    cp._activeSlider = 'alpha';
+    const spy = vi.spyOn(cp, 'updateSliderFromEvent');
+    cp.onPointerMove(mouse('mousemove', 10, 10));
+    expect(spy).toHaveBeenCalledWith('alpha', expect.any(MouseEvent));
+  });
+
+  it('does nothing when no interaction is active', () => {
+    const cp = openPicker();
+    const palette = vi.spyOn(cp, 'updatePaletteFromEvent');
+    const slider = vi.spyOn(cp, 'updateSliderFromEvent');
+    cp.onPointerMove(mouse('mousemove', 10, 10));
+    expect(palette).not.toHaveBeenCalled();
+    expect(slider).not.toHaveBeenCalled();
+  });
+});
+
+describe('onPointerUp', () => {
+  it('ends palette selection and slider drag', () => {
+    const cp = openPicker();
+    cp.colorPickerPaletteSelect = true;
+    cp._activeSlider = 'hue';
+    cp.onPointerUp();
+    expect(cp.colorPickerPaletteSelect).toBe(false);
+    expect(cp._activeSlider).toBeNull();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Keyboard interaction
+// ---------------------------------------------------------------------------
+
+describe('sliderKeydown', () => {
+  const key = (k: string, shiftKey = false) => new KeyboardEvent('keydown', { key: k, shiftKey });
+
+  it('arrow keys step hue by 1 (10 with Shift)', () => {
+    const cp = createCp();
+    const kd = cp.sliderKeydown('hue');
+    kd(key('ArrowRight'));
+    expect(cp.context.hue.getter()).toBe(1);
+    kd(key('ArrowUp', true));
+    expect(cp.context.hue.getter()).toBe(11);
+    kd(key('ArrowLeft'));
+    expect(cp.context.hue.getter()).toBe(10);
+    kd(key('ArrowDown', true));
+    expect(cp.context.hue.getter()).toBe(0);
+  });
+
+  it('Home/End jump to the ends and steps are clamped', () => {
+    const cp = createCp();
+    const kd = cp.sliderKeydown('hue');
+    kd(key('End'));
+    expect(cp.context.hue.getter()).toBe(360);
+    kd(key('ArrowRight'));
+    expect(cp.context.hue.getter()).toBe(360); // clamped at max
+    kd(key('Home'));
+    expect(cp.context.hue.getter()).toBe(0);
+    kd(key('ArrowLeft'));
+    expect(cp.context.hue.getter()).toBe(0); // clamped at min
+  });
+
+  it('alpha slider uses a 0–100 range', () => {
+    const cp = createCp();
+    cp.context.transparency.setter(0);
+    const kd = cp.sliderKeydown('alpha');
+    kd(key('End'));
+    expect(cp.context.transparency.getter()).toBe(100);
+  });
+
+  it('prevents default on handled keys and ignores other keys', () => {
+    const cp = createCp();
+    const kd = cp.sliderKeydown('hue');
+    const handled = key('ArrowRight');
+    vi.spyOn(handled, 'preventDefault');
+    kd(handled);
+    expect(handled.preventDefault).toHaveBeenCalled();
+
+    const ignored = key('a');
+    vi.spyOn(ignored, 'preventDefault');
+    const before = cp.context.hue.getter();
+    kd(ignored);
+    expect(ignored.preventDefault).not.toHaveBeenCalled();
+    expect(cp.context.hue.getter()).toBe(before);
+  });
+
+  it('emits change for every keyboard adjustment', () => {
+    const cp = createCp();
+    const onChange = vi.fn();
+    cp.addEventListener('change', onChange);
+    cp.sliderKeydown('hue')(key('ArrowRight'));
+    expect(onChange).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('onSwatchKeydown', () => {
+  it('Enter and Space act like a click on the swatch', () => {
+    const cp = createCp();
+    const click = vi.spyOn(cp.colorpicker, 'click');
+    cp.onSwatchKeydown(new KeyboardEvent('keydown', { key: 'Enter' }));
+    cp.onSwatchKeydown(new KeyboardEvent('keydown', { key: ' ' }));
+    expect(click).toHaveBeenCalledTimes(2);
+  });
+
+  it('other keys do not open', () => {
+    const cp = createCp();
+    const click = vi.spyOn(cp.colorpicker, 'click');
+    cp.onSwatchKeydown(new KeyboardEvent('keydown', { key: 'Escape' }));
+    expect(click).not.toHaveBeenCalled();
+  });
+
+  it('does nothing while disabled', () => {
+    const cp = createCp();
+    cp.setAttribute('disabled', '');
+    const click = vi.spyOn(cp.colorpicker, 'click');
+    cp.onSwatchKeydown(new KeyboardEvent('keydown', { key: 'Enter' }));
+    expect(click).not.toHaveBeenCalled();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Input row — value input + format select
+// ---------------------------------------------------------------------------
+
+describe('onValueInput', () => {
+  it('applies a color from the event detail and emits change', () => {
+    const cp = openPicker();
+    const onChange = vi.fn();
+    cp.addEventListener('change', onChange);
+    cp.onValueInput(new CustomEvent('change', { detail: { value: '#ff0000' } }));
+    expect(cp.context.hue.getter()).toBe(0);
+    expect(cp.context.saturation.getter()).toBe(100);
+    expect(onChange).toHaveBeenCalled();
+  });
+
+  it('trims surrounding whitespace', () => {
+    const cp = openPicker();
+    cp.onValueInput(new CustomEvent('change', { detail: { value: '  rgb(0,255,0)  ' } }));
+    expect(cp.context.hue.getter()).toBe(120);
+  });
+
+  it('ignores events with no string value', () => {
+    const cp = openPicker();
+    const before = cp.context.hue.getter();
+    expect(() => cp.onValueInput(new CustomEvent('change', { detail: {} }))).not.toThrow();
+    expect(cp.context.hue.getter()).toBe(before);
+  });
+
+  it('resets the editing flag afterwards so the input keeps syncing', () => {
+    const cp = openPicker();
+    cp.onValueInput(new CustomEvent('change', { detail: { value: '#ff0000' } }));
+    expect(cp._editingInput).toBe(false);
+  });
+});
+
+describe('onFormatChange / syncValueInput', () => {
+  it('switches the display format and re-syncs the input', () => {
+    const cp = openPicker();
+    cp.onFormatChange(new CustomEvent('change', { detail: { value: 'RGB' } }));
+    expect(cp._format).toBe('RGB');
+    expect((cp.colorPickerValueInput as any).value).toBe('rgb(255, 255, 255)');
+    cp.onFormatChange(new CustomEvent('change', { detail: { value: 'HEX' } }));
+    expect(cp._format).toBe('HEX');
+    expect((cp.colorPickerValueInput as any).value).toBe('#ffffff');
+  });
+
+  it('unknown format values fall back to HEX', () => {
+    const cp = openPicker();
+    cp._format = 'RGB';
+    cp.onFormatChange(new CustomEvent('change', { detail: { value: 'nope' } }));
+    expect(cp._format).toBe('HEX');
+  });
+
+  it('syncValueInput skips while the user is editing', () => {
+    const cp = openPicker();
+    (cp.colorPickerValueInput as any).value = 'user-typing';
+    cp._editingInput = true;
+    cp.syncValueInput();
+    expect((cp.colorPickerValueInput as any).value).toBe('user-typing');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// openColorPicker — panel construction
 // ---------------------------------------------------------------------------
 
 describe('openColorPicker', () => {
-  it('creates colorPickerInner on first call', () => {
-    const cp = openPicker();
-    expect(cp.colorPickerInner).toBeTruthy();
-  });
-
-  it('returns early on second call (no re-creation)', () => {
-    const cp = openPicker();
-    const first = cp.colorPickerInner;
+  it('builds the panel into the popover content', () => {
+    const cp = createCp();
+    expect(cp.colorPickerInner).toBeUndefined();
     cp.openColorPicker();
-    expect(cp.colorPickerInner).toBe(first);
+    expect(cp.colorPickerInner).toBeDefined();
+    expect(cp.popoverContent.contains(cp.colorPickerInner!)).toBe(true);
+    expect(cp.colorPickerPalette).toBeDefined();
+    expect(cp.colorPickerHueSlider).toBeDefined();
+    expect(cp.colorPickerAlphaSlider).toBeDefined();
   });
 
-  it('appends inner panel to popoverContent', () => {
+  it('is idempotent — a second open does not rebuild the panel', () => {
     const cp = openPicker();
-    expect(cp.popoverContent.querySelector('.ran-color-picker-inner')).not.toBeNull();
+    const inner = cp.colorPickerInner;
+    cp.openColorPicker();
+    expect(cp.colorPickerInner).toBe(inner);
+    expect(cp.popoverContent.querySelectorAll('.ran-color-picker-inner')).toHaveLength(1);
   });
 
-  it('creates slider hue element', () => {
-    const cp = openPicker();
-    expect(cp.colorPickerPanelSliderHue).toBeTruthy();
+  it('does nothing while disabled', () => {
+    const cp = createCp();
+    cp.setAttribute('disabled', '');
+    cp.openColorPicker();
+    expect(cp.colorPickerInner).toBeUndefined();
   });
 
-  it('creates slider alpha element', () => {
+  it('exposes accessible sliders (role, label, range)', () => {
     const cp = openPicker();
-    expect(cp.colorPickerPanelSliderAlpha).toBeTruthy();
-  });
-
-  it('creates palette panel element', () => {
-    const cp = openPicker();
-    expect(cp.colorPickerPanelPalette).toBeTruthy();
-  });
-
-  it('creates palette dot element', () => {
-    const cp = openPicker();
-    expect(cp.colorPickerPanelDot).toBeTruthy();
-  });
-
-  it('creates color block inner element', () => {
-    const cp = openPicker();
-    expect(cp.colorPickerColorBlockInner).toBeTruthy();
-  });
-
-  it('creates input container with select and inputs', () => {
-    const cp = openPicker();
-    expect(cp.colorPickerInputContainer).toBeTruthy();
-    expect(cp.colorPickerInputContainerSelectItem).toBeTruthy();
-    expect(cp.colorPickerInputContainerInputColor).toBeTruthy();
-    expect(cp.colorPickerInputContainerInputNumber).toBeTruthy();
-  });
-
-  it('inner-content contains panel, slider, input sections', () => {
-    const cp = openPicker();
-    const content = cp.popoverContent;
-    expect(content.querySelector('.ran-color-picker-panel')).not.toBeNull();
-    expect(content.querySelector('.ran-color-picker-slider-container')).not.toBeNull();
-    expect(content.querySelector('.ran-color-picker-input-container')).not.toBeNull();
+    expect(cp.colorPickerHueSlider!.getAttribute('role')).toBe('slider');
+    expect(cp.colorPickerHueSlider!.getAttribute('aria-valuemax')).toBe('360');
+    expect(cp.colorPickerAlphaSlider!.getAttribute('role')).toBe('slider');
+    expect(cp.colorPickerAlphaSlider!.getAttribute('aria-valuemax')).toBe('100');
   });
 });
 
 // ---------------------------------------------------------------------------
-// createColorPickerProgress — slider event wiring
+// Reactive panel effects
 // ---------------------------------------------------------------------------
 
-describe('createColorPickerProgress — event wiring', () => {
-  it('slider-hue dispatching change updates hue context', () => {
+describe('setupEffects (reactive panel updates)', () => {
+  it('positions the palette dot from saturation/lightness (percent-based)', () => {
     const cp = openPicker();
-    cp.colorPickerPanelSliderHue!.dispatchEvent(new CustomEvent('change', { detail: { value: 0.5 } }));
-    expect(cp.context.hue.getter()).toBeCloseTo(180, 0);
+    cp.context.saturation.setter(30);
+    cp.context.lightness.setter(70);
+    expect(cp.colorPickerPaletteDot!.style.left).toBe('30%');
+    expect(cp.colorPickerPaletteDot!.style.top).toBe('30%');
   });
 
-  it('slider-alpha dispatching change updates transparency context', () => {
+  it('moves the hue thumb and keeps aria-valuenow live', () => {
     const cp = openPicker();
-    cp.colorPickerPanelSliderAlpha!.dispatchEvent(new CustomEvent('change', { detail: { value: 0.3 } }));
-    expect(cp.context.transparency.getter()).toBeCloseTo(30, 0);
+    cp.context.hue.setter(180);
+    expect(cp.colorPickerHueThumb!.style.left).toBe('50%');
+    expect(cp.colorPickerHueSlider!.getAttribute('aria-valuenow')).toBe('180');
+  });
+
+  it('keeps the alpha slider position and aria state in sync', () => {
+    const cp = openPicker();
+    cp.context.transparency.setter(40);
+    expect(cp.colorPickerAlphaThumb!.style.left).toBe('40%');
+    expect(cp.colorPickerAlphaSlider!.getAttribute('aria-valuenow')).toBe('40');
+    expect(cp.colorPickerAlphaSlider!.getAttribute('aria-valuetext')).toBe('40%');
+  });
+
+  it('paints the saturation panel with the pure hue', () => {
+    const cp = openPicker();
+    cp.context.hue.setter(120);
+    expect(cp.colorPickerSaturation!.style.backgroundColor).toBe('rgb(0, 255, 0)');
+  });
+
+  it('updates the trigger swatch background with the current color', () => {
+    const cp = openPicker();
+    cp.context.hue.setter(0);
+    cp.context.saturation.setter(100);
+    cp.context.lightness.setter(100);
+    // jsdom normalizes rgba(…, 1) to rgb(…)
+    expect(cp.colorpickerInner.style.background).toBe('rgb(255, 0, 0)');
   });
 });
 
 // ---------------------------------------------------------------------------
-// Signal subscribers — update methods
+// Disabled state
 // ---------------------------------------------------------------------------
 
-describe('updateColorPickerPanelSliderHueProgressPercent', () => {
-  it('sets percent attribute on hue slider', () => {
-    const cp = openPicker();
-    cp.updateColorPickerPanelSliderHueProgressPercent(180);
-    expect(cp.colorPickerPanelSliderHue?.getAttribute('percent')).toBe('0.5');
-  });
-
-  it('is triggered when hue signal changes', () => {
-    const cp = openPicker();
-    cp.context.hue.setter(360);
-    expect(cp.colorPickerPanelSliderHue?.getAttribute('percent')).toBe('1');
-  });
-
-  it('does nothing when slider element does not exist', () => {
+describe('disabled state', () => {
+  it('reflects disabled into ARIA and removes the swatch from the tab order', () => {
     const cp = createCp();
-    expect(() => cp.updateColorPickerPanelSliderHueProgressPercent(90)).not.toThrow();
-  });
-});
-
-describe('updateColorPickerPanelSliderAlphaProgressPercent', () => {
-  it('sets percent attribute on alpha slider', () => {
-    const cp = openPicker();
-    cp.updateColorPickerPanelSliderAlphaProgressPercent(50);
-    expect(cp.colorPickerPanelSliderAlpha?.getAttribute('percent')).toBe('0.5');
-  });
-
-  it('is triggered when transparency signal changes', () => {
-    const cp = openPicker();
-    cp.context.transparency.setter(100);
-    expect(cp.colorPickerPanelSliderAlpha?.getAttribute('percent')).toBe('1');
-  });
-});
-
-describe('updateColorPickerPanelSliderAlphaProgressWrap', () => {
-  it('sets --ran-progress-wrap-background CSS var on alpha slider', () => {
-    const cp = openPicker();
-    cp.updateColorPickerPanelSliderAlphaProgressWrap();
-    const style = cp.colorPickerPanelSliderAlpha?.style.getPropertyValue('--ran-progress-wrap-background');
-    expect(style).toContain('linear-gradient');
-  });
-
-  it('does nothing when alpha slider does not exist', () => {
-    const cp = createCp();
-    expect(() => cp.updateColorPickerPanelSliderAlphaProgressWrap()).not.toThrow();
-  });
-});
-
-describe('updateColorPickerPanelSliderAlphaProgressDot', () => {
-  it('sets --ran-progress-dot-background CSS var on alpha slider', () => {
-    const cp = openPicker();
-    cp.updateColorPickerPanelSliderAlphaProgressDot();
-    const style = cp.colorPickerPanelSliderAlpha?.style.getPropertyValue('--ran-progress-dot-background');
-    expect(style).toContain('rgb(');
-  });
-});
-
-describe('updateColorPickerPanelSliderHueProgressDot', () => {
-  it('sets --ran-progress-dot-background CSS var on hue slider', () => {
-    const cp = openPicker();
-    cp.updateColorPickerPanelSliderHueProgressDot();
-    const style = cp.colorPickerPanelSliderHue?.style.getPropertyValue('--ran-progress-dot-background');
-    expect(style).toContain('rgb(');
-  });
-});
-
-describe('updateColorPickerColorBlockInnerBackground', () => {
-  it('sets background style on color block inner', () => {
-    const cp = openPicker();
-    const spy = vi.spyOn(cp.colorPickerColorBlockInner!.style, 'setProperty');
-    cp.updateColorPickerColorBlockInnerBackground();
-    expect(spy).toHaveBeenCalledWith('background', expect.stringContaining('rgb('));
-  });
-
-  it('does nothing when element does not exist', () => {
-    const cp = createCp();
-    expect(() => cp.updateColorPickerColorBlockInnerBackground()).not.toThrow();
-  });
-});
-
-describe('updateColorPickerPanelSaturationBackground', () => {
-  it('sets background-color style on saturation panel', () => {
-    const cp = openPicker();
-    cp.updateColorPickerPanelSaturationBackground();
-    const bg = cp.colorPickerPanelSaturation?.style.getPropertyValue('background-color');
-    expect(bg).toBe('rgb(255, 0, 0)'); // hue=0 → red
-  });
-
-  it('does nothing when element does not exist', () => {
-    const cp = createCp();
-    expect(() => cp.updateColorPickerPanelSaturationBackground()).not.toThrow();
+    cp.setAttribute('disabled', '');
+    expect(cp.getAttribute('aria-disabled')).toBe('true');
+    expect(cp.colorpicker.getAttribute('tabindex')).toBe('-1');
+    cp.removeAttribute('disabled');
+    expect(cp.getAttribute('aria-disabled')).toBeNull();
+    expect(cp.colorpicker.getAttribute('tabindex')).toBe('0');
   });
 });
 
 // ---------------------------------------------------------------------------
-// Palette interaction: click
+// Lifecycle
 // ---------------------------------------------------------------------------
 
-describe('changeColorPalettePosition', () => {
-  it('does nothing when colorPickerPanelPalette is missing', () => {
-    const cp = createCp();
-    expect(() => cp.changeColorPalettePosition(10, 10)).not.toThrow();
+describe('lifecycle', () => {
+  it('applies an initial value attribute to the context', () => {
+    const cp = document.createElement('r-colorpicker') as any;
+    cp.setAttribute('value', '#00ff00');
+    document.body.appendChild(cp);
+    expect(cp.context.hue.getter()).toBe(120);
+    expect(cp.context.saturation.getter()).toBe(100);
   });
 
-  it('top-left click → saturation=0, lightness=100', () => {
+  it('value attribute changes flow into the context after connect', () => {
+    const cp = createCp();
+    cp.setAttribute('value', 'rgb(0,0,255)');
+    expect(cp.context.hue.getter()).toBe(240);
+  });
+
+  it('disconnect disposes the panel effects', () => {
     const cp = openPicker();
-    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => {
-      cb(0);
-      return 0;
-    });
-    mockPaletteBCR(cp, { top: 0, left: 0, width: 200, height: 160 });
-    cp.changeColorPalettePosition(0, 0);
-    expect(cp.context.saturation.getter()).toBeCloseTo(0, 0);
-    expect(cp.context.lightness.getter()).toBeCloseTo(100, 0);
-  });
-
-  it('bottom-right click → saturation=100, lightness=0', () => {
-    const cp = openPicker();
-    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => {
-      cb(0);
-      return 0;
-    });
-    mockPaletteBCR(cp, { top: 0, left: 0, width: 200, height: 160 });
-    cp.changeColorPalettePosition(200, 160);
-    expect(cp.context.saturation.getter()).toBeCloseTo(100, 0);
-    expect(cp.context.lightness.getter()).toBeCloseTo(0, 0);
-  });
-
-  it('center click → saturation≈50, lightness≈50', () => {
-    const cp = openPicker();
-    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => {
-      cb(0);
-      return 0;
-    });
-    mockPaletteBCR(cp, { top: 0, left: 0, width: 200, height: 160 });
-    cp.changeColorPalettePosition(100, 80);
-    expect(cp.context.saturation.getter()).toBeCloseTo(50, 0);
-    expect(cp.context.lightness.getter()).toBeCloseTo(50, 0);
-  });
-
-  it('sets dot position via requestAnimationFrame', () => {
-    const cp = openPicker();
-    const frames: FrameRequestCallback[] = [];
-    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => {
-      frames.push(cb);
-      return frames.length;
-    });
-    mockPaletteBCR(cp, { top: 0, left: 0, width: 200, height: 160 });
-    cp.changeColorPalettePosition(50, 40);
-    expect(frames.length).toBe(1);
-    frames[0](0);
-    expect(cp.colorPickerPanelDot?.style.getPropertyValue('left')).toBe('42px'); // 50 - BOT_WIDTH(8)
-    expect(cp.colorPickerPanelDot?.style.getPropertyValue('top')).toBe('32px'); // 40 - BOT_WIDTH(8)
-  });
-
-  it('clamps values outside palette bounds', () => {
-    const cp = openPicker();
-    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => {
-      cb(0);
-      return 0;
-    });
-    mockPaletteBCR(cp, { top: 0, left: 0, width: 200, height: 160 });
-    cp.changeColorPalettePosition(-100, -100); // below 0
-    expect(cp.context.saturation.getter()).toBeCloseTo(0, 0);
-    expect(cp.context.lightness.getter()).toBeCloseTo(100, 0);
-    cp.changeColorPalettePosition(999, 999); // above max
-    expect(cp.context.saturation.getter()).toBeCloseTo(100, 0);
-    expect(cp.context.lightness.getter()).toBeCloseTo(0, 0);
-  });
-});
-
-describe('clickColorPalette', () => {
-  it('calls changeColorPalettePosition with offsetX/offsetY', () => {
-    const cp = openPicker();
-    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => {
-      cb(0);
-      return 0;
-    });
-    mockPaletteBCR(cp, { top: 0, left: 0, width: 200, height: 160 });
-    const spy = vi.spyOn(cp, 'changeColorPalettePosition');
-    const event = new MouseEvent('mousedown', { bubbles: false });
-    Object.defineProperty(event, 'offsetX', { value: 100 });
-    Object.defineProperty(event, 'offsetY', { value: 80 });
-    cp.clickColorPalette(event);
-    expect(spy).toHaveBeenCalledWith(100, 80);
-  });
-});
-
-// ---------------------------------------------------------------------------
-// Palette interaction: drag (mouseMoveColorPickerPalette — bug fix validation)
-// ---------------------------------------------------------------------------
-
-describe('mouseMoveColorPickerPalette', () => {
-  it('does nothing when colorPickerPaletteSelect is false', () => {
-    const cp = openPicker();
-    cp.colorPickerPaletteSelect = false;
-    const initialSat = cp.context.saturation.getter();
-    cp.mouseMoveColorPickerPalette(createMouseMoveWithPage(200, 200));
-    expect(cp.context.saturation.getter()).toBe(initialSat);
-  });
-
-  it('does nothing when palette element is missing', () => {
-    const cp = createCp();
-    cp.colorPickerPaletteSelect = true;
-    expect(() => cp.mouseMoveColorPickerPalette(createMouseMoveWithPage(100, 50))).not.toThrow();
-  });
-
-  // For these tests we mock at Element.prototype level so jsdom reliably
-  // returns non-zero dimensions during the method call.
-  it('moving to top of palette → lightness ≈ 100 (Y-axis inverted)', () => {
-    vi.spyOn(Element.prototype, 'getBoundingClientRect').mockReturnValue({
-      top: 100,
-      left: 50,
-      width: 200,
-      height: 160,
-      right: 250,
-      bottom: 260,
-      x: 50,
-      y: 100,
-      toJSON: () => ({}),
-    } as DOMRect);
-    const cp = openPicker();
-    cp.colorPickerPaletteSelect = true;
-    cp.mouseMoveColorPickerPalette(createMouseMoveWithPage(150, 100));
-    expect(cp.context.lightness.getter()).toBeCloseTo(100, 0);
-  });
-
-  it('moving to bottom of palette → lightness ≈ 0', () => {
-    vi.spyOn(Element.prototype, 'getBoundingClientRect').mockReturnValue({
-      top: 100,
-      left: 50,
-      width: 200,
-      height: 160,
-      right: 250,
-      bottom: 260,
-      x: 50,
-      y: 100,
-      toJSON: () => ({}),
-    } as DOMRect);
-    const cp = openPicker();
-    cp.colorPickerPaletteSelect = true;
-    cp.mouseMoveColorPickerPalette(createMouseMoveWithPage(150, 260));
-    expect(cp.context.lightness.getter()).toBeCloseTo(0, 0);
-  });
-
-  it('moving to left edge → saturation ≈ 0', () => {
-    vi.spyOn(Element.prototype, 'getBoundingClientRect').mockReturnValue({
-      top: 100,
-      left: 50,
-      width: 200,
-      height: 160,
-      right: 250,
-      bottom: 260,
-      x: 50,
-      y: 100,
-      toJSON: () => ({}),
-    } as DOMRect);
-    const cp = openPicker();
-    cp.colorPickerPaletteSelect = true;
-    cp.mouseMoveColorPickerPalette(createMouseMoveWithPage(50, 180));
-    expect(cp.context.saturation.getter()).toBeCloseTo(0, 0);
-  });
-
-  it('moving to right edge → saturation ≈ 100', () => {
-    vi.spyOn(Element.prototype, 'getBoundingClientRect').mockReturnValue({
-      top: 100,
-      left: 50,
-      width: 200,
-      height: 160,
-      right: 250,
-      bottom: 260,
-      x: 50,
-      y: 100,
-      toJSON: () => ({}),
-    } as DOMRect);
-    const cp = openPicker();
-    cp.colorPickerPaletteSelect = true;
-    cp.mouseMoveColorPickerPalette(createMouseMoveWithPage(250, 180));
-    expect(cp.context.saturation.getter()).toBeCloseTo(100, 0);
-  });
-
-  it('drag and click produce consistent lightness for the same position', () => {
-    // palette at origin so pageX/pageY equal offsetX/offsetY directly
-    vi.spyOn(Element.prototype, 'getBoundingClientRect').mockReturnValue({
-      top: 0,
-      left: 0,
-      width: 200,
-      height: 160,
-      right: 200,
-      bottom: 160,
-      x: 0,
-      y: 0,
-      toJSON: () => ({}),
-    } as DOMRect);
-    const cp = openPicker();
-
-    cp.changeColorPalettePosition(100, 80);
-    const clickLightness = cp.context.lightness.getter();
-
-    cp.colorPickerPaletteSelect = true;
-    cp.mouseMoveColorPickerPalette(createMouseMoveWithPage(100, 80));
-    const dragLightness = cp.context.lightness.getter();
-
-    expect(Math.abs(dragLightness - clickLightness)).toBeLessThan(2);
-  });
-});
-
-// ---------------------------------------------------------------------------
-// mouseDown / mouseUp on palette dot
-// ---------------------------------------------------------------------------
-
-describe('mouseDownColorPickerPalette', () => {
-  it('sets colorPickerPaletteSelect to true', () => {
-    const cp = createCp();
-    cp.colorPickerPaletteSelect = false;
-    const event = new MouseEvent('mousedown');
-    vi.spyOn(event, 'stopPropagation');
-    vi.spyOn(event, 'preventDefault');
-    cp.mouseDownColorPickerPalette(event);
-    expect(cp.colorPickerPaletteSelect).toBe(true);
-    expect(event.stopPropagation).toHaveBeenCalled();
-    expect(event.preventDefault).toHaveBeenCalled();
-  });
-});
-
-describe('mouseUpColorPickerPalette', () => {
-  it('sets colorPickerPaletteSelect to false', () => {
-    const cp = createCp();
-    cp.colorPickerPaletteSelect = true;
-    cp.mouseUpColorPickerPalette();
-    expect(cp.colorPickerPaletteSelect).toBe(false);
-  });
-});
-
-// ---------------------------------------------------------------------------
-// clickStop
-// ---------------------------------------------------------------------------
-
-describe('clickStop', () => {
-  it('calls stopPropagation and preventDefault on event', () => {
-    const cp = createCp();
-    const event = new MouseEvent('click', { bubbles: true, cancelable: true });
-    vi.spyOn(event, 'stopPropagation');
-    vi.spyOn(event, 'preventDefault');
-    cp.clickStop(event);
-    expect(event.stopPropagation).toHaveBeenCalled();
-    expect(event.preventDefault).toHaveBeenCalled();
-  });
-});
-
-// ---------------------------------------------------------------------------
-// changeColorPickerHue / changeColorPickerAlpha
-// ---------------------------------------------------------------------------
-
-describe('changeColorPickerHue', () => {
-  it('sets hue from event detail.value * 360', () => {
-    const cp = createCp();
-    cp.changeColorPickerHue(new CustomEvent('change', { detail: { value: 0.5 } }));
-    expect(cp.context.hue.getter()).toBeCloseTo(180, 0);
-  });
-
-  it('hue=1.0 → 360', () => {
-    const cp = createCp();
-    cp.changeColorPickerHue(new CustomEvent('change', { detail: { value: 1 } }));
-    expect(cp.context.hue.getter()).toBeCloseTo(360, 0);
-  });
-});
-
-describe('changeColorPickerAlpha', () => {
-  it('sets transparency from event detail.value * 100', () => {
-    const cp = createCp();
-    cp.changeColorPickerAlpha(new CustomEvent('change', { detail: { value: 0.3 } }));
-    expect(cp.context.transparency.getter()).toBeCloseTo(30, 0);
-  });
-
-  it('value=0 → transparency=0', () => {
-    const cp = createCp();
-    cp.changeColorPickerAlpha(new CustomEvent('change', { detail: { value: 0 } }));
-    expect(cp.context.transparency.getter()).toBeCloseTo(0, 0);
-  });
-});
-
-// ---------------------------------------------------------------------------
-// connectedCallback / disconnectedCallback
-// ---------------------------------------------------------------------------
-
-describe('connectedCallback', () => {
-  it('sets ran-colorpicker class on the host', () => {
-    const cp = createCp();
-    expect(cp.getAttribute('class')).toBe('ran-colorpicker');
-  });
-
-  it('registers click listener that calls openColorPicker', () => {
-    const cp = createCp();
-    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => {
-      cb(0);
-      return 0;
-    });
-    cp.popoverBlock.click();
-    expect(cp.colorPickerInner).toBeTruthy();
-  });
-});
-
-describe('disconnectedCallback', () => {
-  it('aborts EventManager to remove all lifecycle listeners', () => {
-    const cp = openPicker();
-    const abortSpy = vi.spyOn((cp as any)._events, 'abort');
-    document.body.removeChild(cp);
-    expect(abortSpy).toHaveBeenCalledOnce();
-  });
-
-  it('disposes reactive effects on disconnect', () => {
-    const cp = openPicker();
-    const disposeSpy = vi.spyOn(cp as any, 'disposeEffects');
-    document.body.removeChild(cp);
-    expect(disposeSpy).toHaveBeenCalledOnce();
-  });
-});
-
-// ---------------------------------------------------------------------------
-// attributeChangedCallback
-// ---------------------------------------------------------------------------
-
-describe('attributeChangedCallback', () => {
-  it('value change calls updateColorValue', () => {
-    const cp = createCp();
-    const spy = vi.spyOn(cp, 'updateColorValue');
-    cp.attributeChangedCallback('value', '', '#00ff00');
-    expect(spy).toHaveBeenCalledWith('#00ff00');
-  });
-
-  it('same oldValue and newValue → no update', () => {
-    const cp = createCp();
-    const spy = vi.spyOn(cp, 'updateColorValue');
-    cp.attributeChangedCallback('value', '#ff0000', '#ff0000');
-    expect(spy).not.toHaveBeenCalled();
-  });
-
-  it('sheet change calls handlerExternalCss', () => {
-    const cp = createCp();
-    const spy = vi.spyOn(cp, 'handlerExternalCss');
-    cp.attributeChangedCallback('sheet', '', '.x { color: red }');
-    expect(spy).toHaveBeenCalled();
-  });
-});
-
-// ---------------------------------------------------------------------------
-// handlerExternalCss
-// ---------------------------------------------------------------------------
-
-describe('handlerExternalCss', () => {
-  it('does nothing when sheet is empty', () => {
-    const cp = createCp();
-    expect(() => cp.handlerExternalCss()).not.toThrow();
-  });
-
-  it('calls adoptSheetText when sheet is set', () => {
-    const cp = createCp();
-    cp.setAttribute('sheet', '.x { color: red }');
-    expect(() => cp.handlerExternalCss()).not.toThrow();
-  });
-});
-
-// ---------------------------------------------------------------------------
-// value / sheet getters and setters
-// ---------------------------------------------------------------------------
-
-describe('value getter / setter', () => {
-  it('getter returns current context value', () => {
-    const cp = createCp();
-    expect(cp.value).toBe('');
-    cp.updateColorValue('#ff0000');
-    expect(cp.value).toBe('#ff0000');
-  });
-
-  it('setter reflects to attribute and calls updateColorValue', () => {
-    const cp = createCp();
-    const spy = vi.spyOn(cp, 'updateColorValue');
-    cp.value = 'rgb(0,255,0)';
-    expect(cp.getAttribute('value')).toBe('rgb(0,255,0)');
-    expect(spy).toHaveBeenCalledWith('rgb(0,255,0)');
-  });
-});
-
-describe('sheet getter / setter', () => {
-  it('getter returns attribute value', () => {
-    const cp = createCp();
-    cp.setAttribute('sheet', '.x{}');
-    expect(cp.sheet).toBe('.x{}');
-  });
-
-  it('setter reflects to attribute', () => {
-    const cp = createCp();
-    cp.sheet = '.y { color: blue }';
-    expect(cp.getAttribute('sheet')).toBe('.y { color: blue }');
+    cp.remove();
+    cp.context.saturation.setter(77);
+    expect(cp.colorPickerPaletteDot!.style.left).not.toBe('77%');
+    expect(cp._effectDisposers).toHaveLength(0);
   });
 });

@@ -79,7 +79,11 @@ export function signal<T>(initial: T, options?: SignalOptions<T>): [Getter<T>, S
       // Inside batch() — collect effects, deduplicate, flush after batch exits.
       for (const sub of subscribers) pendingBatch.add(sub);
     } else {
-      for (const sub of subscribers) sub();
+      // Iterate a SNAPSHOT, not the live set: an effect's re-run deletes itself
+      // from `subscribers` (stale-subscription cleanup) and re-adds itself when
+      // it reads this signal again. A Set revisits elements re-added during
+      // iteration, so iterating live loops forever (delete → re-add → revisit).
+      for (const sub of [...subscribers]) sub();
     }
   };
 
