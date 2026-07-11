@@ -2,6 +2,8 @@
 
 Router-aware anchor that renders an `<a>` around its slotted content and intercepts in-app navigation.
 
+> **Use when** you need an anchor that routes internal paths through the ranui router while letting external links fall through to the browser — `<r-link>` intercepts in-app navigation and does `push`/`replace` for you.
+
 ## Quick Start
 
 ### Basic Usage

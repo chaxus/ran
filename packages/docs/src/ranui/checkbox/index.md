@@ -2,6 +2,8 @@
 
 Checkbox component for toggling a single on/off choice, with an optional label and native form support.
 
+> **Use when** you need a single on/off toggle with a label that participates in native forms — `<r-checkbox>` reports its checked state to `FormData` and `<r-form>` and is keyboard-operable.
+
 ## Quick Start
 
 ### Basic Usage

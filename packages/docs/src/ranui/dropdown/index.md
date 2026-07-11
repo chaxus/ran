@@ -2,6 +2,8 @@
 
 A low-level floating-panel primitive: a rounded, elevated surface with an optional directional arrow. It carries the overlay z-index and is the building block that `r-popover` and `r-select` position and portal to `<body>`.
 
+> **Use when** you need a low-level floating panel to build overlays like popovers or select menus — `<r-dropdown>` carries the z-index and arrow so you don't hand-roll positioning.
+
 ## Quick Start
 
 ### Basic Usage

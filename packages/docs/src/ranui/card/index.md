@@ -2,6 +2,8 @@
 
 A structured content container with header, body, and footer zones for grouping related content. Cards are Geist-style bordered surfaces — page background plus a 1px border, not a gray fill — and stay inert on hover unless you opt in with `hoverable`.
 
+> **Use when** you need to group related content into a bordered surface with title, description, body, and footer zones — `<r-card>` gives you those slots plus an optional `hoverable` interactive state.
+
 ## Quick Start
 
 ### Basic Usage

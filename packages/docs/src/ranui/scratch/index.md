@@ -2,6 +2,8 @@
 
 Experimental scratch-ticket surface that renders a full-size `<canvas>` cover over an award layer inside its shadow DOM. Touch-dragging across the canvas erases the covering with `destination-out` compositing, and scratching away enough area reveals what sits underneath. The host is `display: block`, so give it an explicit width and height.
 
+> **Use when** you need an experimental, touch-only scratch-ticket surface where dragging erases a cover canvas to reveal a layer beneath — `<r-scratch>` is a work-in-progress with touch-only interaction and no mouse fallback.
+
 > ⚠️ **Experimental**: This component is a work in progress. Interaction is **touch-only** (it wires `touchstart` / `touchmove` / `touchend`, with no mouse or pointer fallback), so it does not respond on a desktop pointer. Its observed attributes are declared but not yet mapped to visual output — see the notes below.
 
 ## Quick Start

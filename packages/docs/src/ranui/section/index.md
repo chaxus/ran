@@ -2,6 +2,8 @@
 
 Page section surface with an optional heading and subtitle above a slotted body.
 
+> **Use when** you need to label a major region of a page with an accessible level-2 heading and optional subtitle above its content — `<r-section>` provides the header row and body surface.
+
 ## Quick Start
 
 ### Basic Usage

@@ -2,6 +2,8 @@
 
 Online preview component for `docx`, `pptx`, `pdf`, and `xlsx` files
 
+> **Use when** you need to preview `docx`, `pptx`, `pdf`, or `xlsx` files in the browser — `<r-preview>` opens a document preview modal from a file URL (now shipped as the standalone `@ranui/preview` package).
+
 > ⚠️ **Important Notice**: The ranui package will no longer provide this component after version 0.1.10-alpha-27. Please migrate to the standalone [@ranui/preview](https://www.npmjs.com/package/@ranui/preview) package.
 
 ## Quick Start

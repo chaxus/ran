@@ -2,6 +2,8 @@
 
 Global feedback component for operation results, invoked imperatively through the `message` API and rendered as a dismissable toast.
 
+> **Use when** you need a transient, auto-dismissing toast to confirm an operation result — call the imperative `message.info` / `success` / `warning` / `error` / `toast` API instead of placing markup.
+
 ## Quick Start
 
 <Demo>

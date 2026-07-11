@@ -2,6 +2,8 @@
 
 Form container that wraps a native `<form>` in the shadow DOM and serializes its fields into a JSON string on submit.
 
+> **Use when** you need to collect a set of named fields and read them back as a serialized JSON string on submit — `<r-form>` wraps a native `<form>` and gathers its projected fields for you.
+
 ## Quick Start
 
 ### Basic Usage

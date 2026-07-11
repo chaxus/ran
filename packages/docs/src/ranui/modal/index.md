@@ -2,6 +2,8 @@
 
 Dialog component for focused interactions on top of the current page, with focus trapping, scroll locking, and background inerting.
 
+> **Use when** you need a dialog for a focused interaction over the page, with focus trapping, scroll locking, and background inerting — drive `<r-modal>` via the `open` attribute or the imperative `Modal.confirm` / `Modal.info` helpers.
+
 ## Quick Start
 
 ### Basic Usage

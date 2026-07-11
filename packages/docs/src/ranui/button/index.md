@@ -2,6 +2,8 @@
 
 Button component for triggering instant actions with multiple styles and states.
 
+> **Use when** you need a clickable action control with ready-made primary/contrast/warning/text styles plus disabled and icon support — reach for `<r-button>` instead of styling a raw `<button>`.
+
 ## Quick Start
 
 ### Basic Usage

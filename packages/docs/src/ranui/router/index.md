@@ -2,6 +2,8 @@
 
 Client-side routing for Single Page Applications. Provides declarative HTML components and a JavaScript API with navigation guards, View Transitions, and cross-document (MPA) support.
 
+> **Use when** you need client-side SPA routing with navigation guards, View Transitions, and cross-document (MPA) support — `createRouter` plus `<r-router>` / `<r-route>` / `<r-link>` wire up in-app navigation.
+
 ## Quick Start
 
 A complete mini-app with authentication guard and SPA transition:

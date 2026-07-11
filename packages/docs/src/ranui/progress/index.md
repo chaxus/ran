@@ -2,6 +2,8 @@
 
 Progress bar for showing task completion, with an optional draggable handle.
 
+> **Use when** you need a progress bar to show task completion — use `<r-progress>` static for read-only progress, or `type="drag"` when the user should set the value via a draggable handle.
+
 ## Quick Start
 
 <Demo>

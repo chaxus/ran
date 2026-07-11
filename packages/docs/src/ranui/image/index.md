@@ -2,6 +2,8 @@
 
 Image component that renders an image with a built-in fallback shown when the source fails to load.
 
+> **Use when** you need an image that gracefully degrades to a placeholder if the source fails to load — `<r-img>` swaps in a built-in broken-image graphic or your own `fallback`.
+
 ## Quick Start
 
 ### Basic Usage

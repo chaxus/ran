@@ -5,6 +5,8 @@ Components never hard-code colors — they read semantic tokens, so switching th
 overriding a token restyles the whole library at once. The token system is based on the
 [Geist](https://vercel.com/geist) design language.
 
+> **Use when** you need to add light/dark theming to a ranui app — call `initTheme` / `setTheme` and consume the semantic `--ran-color-*` design tokens so switching theme or overriding a token restyles the whole library at once.
+
 There are exactly two themes — **light** and **dark** — plus a **system** mode that follows
 the OS preference. (Earlier "theme pack" APIs were removed; `setThemePack` / `RanThemePackName`
 no longer exist.)

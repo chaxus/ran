@@ -5,6 +5,8 @@ A three-state segmented control — **system / light / dark** — wired to ranui
 under the localStorage key `ran-theme`, and keeps every instance on the page (and in other
 tabs) in sync.
 
+> **Use when** you need a ready-made system/light/dark segmented control wired to ranui's theme API — `<r-theme-switch>` handles persistence, system tracking, and cross-tab sync so you don't hand-roll a toggle.
+
 ## Quick Start
 
 ### Basic Usage

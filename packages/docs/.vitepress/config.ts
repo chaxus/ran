@@ -188,6 +188,36 @@ export default defineConfig({
         }),
       ]);
     }
+
+    // Per-page structured data for individual component (ranui) and utility (ranuts)
+    // reference pages: a TechArticle so search engines and AI answer engines can
+    // extract and cite them as API documentation. The two library landing pages
+    // above already carry SoftwareSourceCode, so they're excluded here.
+    const isComponentPage = /^src\/ranui\/[^/]+\/index\.md$/.test(enRel) && enRel !== 'src/ranui/index.md';
+    const isUtilPage = enRel.startsWith('src/ranuts/') && enRel !== 'src/ranuts/index.md' && enRel.endsWith('.md');
+    if (isComponentPage || isUtilPage) {
+      head.push([
+        'script',
+        { type: 'application/ld+json' },
+        JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'TechArticle',
+          headline: ogTitle,
+          name: title,
+          description: desc,
+          inLanguage: isCn ? 'zh-CN' : 'en',
+          url: selfUrl,
+          about: {
+            '@type': 'SoftwareSourceCode',
+            name: isComponentPage ? 'ranui' : 'ranuts',
+            codeRepository: 'https://github.com/chaxus/ran',
+            programmingLanguage: 'TypeScript',
+          },
+          isPartOf: { '@id': `${ORIGIN}/#website` },
+          author: { '@type': 'Person', name: 'chaxus', url: 'https://github.com/chaxus' },
+        }),
+      ]);
+    }
   },
   locales: {
     // root: { label: '简体中文', lang: 'zh-CN' },

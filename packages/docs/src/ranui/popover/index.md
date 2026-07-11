@@ -2,6 +2,8 @@
 
 Popover component that reveals a floating bubble card layer when the trigger is hovered or clicked.
 
+> **Use when** you need a floating bubble panel that opens on hover or click of a trigger — `<r-popover>` positions and portals its `<r-content>` panel and wires the accessibility for you.
+
 ## Quick Start
 
 ### Basic Usage

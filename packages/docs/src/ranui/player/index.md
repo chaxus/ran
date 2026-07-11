@@ -2,6 +2,8 @@
 
 A native `<r-player>` media element that wraps a `<video>` with a unified control bar, progress dragging, volume control, playback speed, fullscreen, and HLS streaming.
 
+> **Use when** you need a video player with a built-in control bar, progress scrubbing, playback speed, fullscreen, and HLS (`.m3u8`) streaming — `<r-player>` wraps `<video>` and runs unchanged across frameworks.
+
 Built on `hls.js` and Web Components, so the same player runs unchanged across frameworks. Capabilities driven from source:
 
 - Draggable progress bar with buffered indicator and a time tooltip on hover

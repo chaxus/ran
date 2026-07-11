@@ -1,4 +1,4 @@
-# 🚀 Ran - Exploration & Learning
+# ran — Web Components UI Library (ranui) & TypeScript Utilities (ranuts)
 
 <p align="center">
   <a href="https://ran.chaxus.com/" target="_blank" rel="noopener noreferrer">
@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-  <strong>A monorepo for technology exploration and learning, featuring experimental UI libraries, utilities, and various tools.</strong>
+  <strong>A framework-agnostic Web Components UI library built on native custom elements (ranui) and a tree-shakeable TypeScript utility library (ranuts) — plus the tooling and bilingual docs around them.</strong>
 </p>
 
 <p align="center">

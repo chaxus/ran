@@ -1,4 +1,4 @@
-# 🚀 Ran - 技术探索与学习平台
+# ran — Web Components 组件库（ranui）与 TypeScript 工具库（ranuts）
 
 <p align="center">
   <a href="https://ran.chaxus.com/" target="_blank" rel="noopener noreferrer">
@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-  <strong>一个用于技术探索和学习的单仓库项目，包含实验性的 UI 库、工具函数和各种工具。</strong>
+  <strong>ranui —— 基于原生 custom elements、框架无关的 Web Components 组件库；ranuts —— 可 tree-shaking 的 TypeScript 工具库；外加围绕它们的工具链与中英双语文档。</strong>
 </p>
 
 <p align="center">

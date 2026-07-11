@@ -6,6 +6,8 @@ import Loading from '../../../vue/loading.vue'
 
 Loading component providing a collection of animated indicators to signal in-progress work.
 
+> **Use when** you need an animated spinner or loading indicator to signal in-progress work — `<r-loading>` offers ~30 built-in animation styles selected by `name` and themed through CSS variables.
+
 ## Quick Start
 
 ### Basic Usage

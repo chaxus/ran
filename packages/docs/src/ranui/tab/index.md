@@ -2,6 +2,8 @@
 
 Tabbed container that switches between panes. Compose `<r-tabs>` as the container with one or more `<r-tab>` panes inside it.
 
+> **Use when** you need a tabbed container that switches between panes — compose `<r-tabs>` with `<r-tab>` children, each supplying a header `label` and pane body.
+
 ## Quick Start
 
 ### Basic Usage

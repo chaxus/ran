@@ -2,6 +2,8 @@
 
 Radar chart for comparing several metrics of one dataset on a two-dimensional canvas.
 
+> **Use when** you need a radar/spider chart to compare several metrics of one dataset — feed `<r-radar>` a JSON array of axis names and scores through the `abilitys` attribute.
+
 ## Quick Start
 
 ### Basic Usage

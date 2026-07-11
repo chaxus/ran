@@ -2,6 +2,8 @@
 
 Semantic vector graphics
 
+> **Use when** you need a named, resizable, recolorable vector icon (with an optional spin animation) inline in your UI — `<r-icon>` renders it from a built-in icon set by `name`.
+
 ## Code demo
 
 <Demo>

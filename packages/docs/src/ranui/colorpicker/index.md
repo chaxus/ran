@@ -2,6 +2,8 @@
 
 A compact color swatch that opens a popover panel with a saturation/lightness palette, a hue slider, an alpha slider, and a HEX/RGB value input. Its `value` accepts and emits standard CSS color strings.
 
+> **Use when** you need to let users pick a color with a saturation/hue/alpha panel and HEX/RGB input — `<r-colorpicker>` accepts and emits standard CSS color strings and reports every format on `change`.
+
 ## Quick Start
 
 ### Basic Usage

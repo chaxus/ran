@@ -2,6 +2,8 @@
 
 Render high-quality LaTeX math formulas in HTML pages using KaTeX.
 
+> **Use when** you need to render a LaTeX math formula as display math in an HTML page — `<r-math>` typesets the expression from its `latex` attribute using KaTeX.
+
 ## Quick Start
 
 ### Basic Usage

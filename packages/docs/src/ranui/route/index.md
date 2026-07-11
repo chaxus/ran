@@ -2,6 +2,8 @@
 
 A routing outlet element. Placed inside an [`r-router`](../router/), it shows its slotted content when the current path matches its `path` pattern and hides it otherwise.
 
+> **Use when** you need a routing outlet that shows its content only while the current path matches a pattern (with `:param` and `*` support) — place `<r-route>` inside an `<r-router>` to build a client-side view switch.
+
 ## Quick Start
 
 ### Basic Usage

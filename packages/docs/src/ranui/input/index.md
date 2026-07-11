@@ -2,6 +2,8 @@
 
 Input component for entering content via keyboard, the most basic form control.
 
+> **Use when** you need a text field with a floating label, leading icon, validation status/message, and native form participation — `<r-input>` covers text, password, and number entry.
+
 ## Quick Start
 
 ### Basic Usage

@@ -2,6 +2,8 @@
 
 Dropdown selector for choosing a single value from a list of options, with optional search and form participation.
 
+> **Use when** you need a single-value dropdown selector built from `<r-option>` children, with optional search and native form participation — `<r-select>` handles opening, filtering, and `FormData` reporting.
+
 ## Quick Start
 
 ### Basic Usage
