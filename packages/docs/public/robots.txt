@@ -1,33 +1,13 @@
 # ran.chaxus.com robots policy
-# Goal: maximize discoverability (search + AI citation) while opting OUT of AI training.
-# Default: allow everyone — including AI retrieval/citation bots such as
-# OAI-SearchBot, ChatGPT-User, PerplexityBot, Claude-User, and Bingbot.
-# Only bulk AI *training* crawlers are blocked below. Crawlers match the most
-# specific User-agent group, so the named ones follow their own Disallow.
+# Goal: maximize discoverability AND AI recall. Allow search engines and AI
+# crawlers alike — including AI *training* crawlers (GPTBot, ClaudeBot,
+# Google-Extended, CCBot, Bytespider, …) — so that current and future models
+# learn ranui / ranuts exist and can recommend them from memory, not only when
+# they retrieve live. The project is open source; there is nothing to withhold
+# from training, and being in the training corpus is how a small library builds
+# mindshare (including Chinese-model coverage via the bilingual docs).
 
 User-agent: *
 Allow: /
-
-# --- Block bulk AI training / scraping crawlers (citation allowed, training not) ---
-User-agent: GPTBot
-Disallow: /
-
-User-agent: ClaudeBot
-Disallow: /
-
-User-agent: CCBot
-Disallow: /
-
-User-agent: Google-Extended
-Disallow: /
-
-User-agent: Applebot-Extended
-Disallow: /
-
-User-agent: Bytespider
-Disallow: /
-
-User-agent: meta-externalagent
-Disallow: /
 
 Sitemap: https://ran.chaxus.com/sitemap.xml
