@@ -1,8 +1,8 @@
 # 🚀 Ran - 技术探索与学习平台
 
 <p align="center">
-  <a href="https://chaxus.github.io/ran/" target="_blank" rel="noopener noreferrer">
-    <img width="180" src="https://chaxus.github.io/ran/icon.png" alt="ran logo">
+  <a href="https://ran.chaxus.com/" target="_blank" rel="noopener noreferrer">
+    <img width="180" src="https://ran.chaxus.com/icon.png" alt="ran logo">
   </a>
 </p>
 
@@ -115,9 +115,9 @@ pnpm --filter ranui build
 
 ## 📚 文档
 
-- **📖 博客和文章**: [设计模式等](https://chaxus.github.io/ran/src/article/designMode.html)
-- **🎨 RanUI 文档**: [UI 库指南](https://chaxus.github.io/ran/cn/src/ranui/)
-- **🛠️ RanUTS 文档**: [工具函数库指南](https://chaxus.github.io/ran/cn/src/ranuts/)
+- **📖 博客和文章**: [设计模式等](https://ran.chaxus.com/src/article/design_mode)
+- **🎨 RanUI 文档**: [UI 库指南](https://ran.chaxus.com/cn/src/ranui/)
+- **🛠️ RanUTS 文档**: [工具函数库指南](https://ran.chaxus.com/cn/src/ranuts/)
 - **📝 项目文档**: [docs](packages/docs)
 
 ## 🤖 AI / Claude Code

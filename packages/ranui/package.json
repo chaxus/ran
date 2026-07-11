@@ -1,7 +1,7 @@
 {
   "name": "ranui",
-  "version": "0.2.0-alpha.5",
-  "description": "UI Component library based on `Web Component`",
+  "version": "0.2.0-alpha.6",
+  "description": "A framework-agnostic Web Components UI library built on native custom elements, with TypeScript types, light/dark theming, SSR and PWA support.",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "type": "module",
@@ -71,16 +71,23 @@
     "docs/style-tokens-public.md"
   ],
   "keywords": [
+    "ranui",
     "ran",
+    "web-components",
+    "web components",
+    "custom-elements",
+    "custom-element",
+    "shadow-dom",
+    "framework-agnostic",
     "component",
     "components",
     "ui",
+    "ui-library",
+    "component-library",
     "design",
-    "web-components",
-    "web components",
-    "webComponents",
-    "ranui",
-    "lib"
+    "typescript",
+    "ssr",
+    "pwa"
   ],
   "exports": {
     ".": {

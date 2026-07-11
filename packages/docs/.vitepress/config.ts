@@ -25,13 +25,22 @@ import { LANGS_DICT } from './lib/constant';
 // ── SEO helpers ──────────────────────────────────────────────────────────────
 const ORIGIN = HOME.replace(/\/+$/, ''); // https://ran.chaxus.com
 const SITE_TAGLINE = 'ran — Web Components UI library (ranui) & utility library (ranuts)';
+const SITE_TAGLINE_CN = 'ran — Web Components 组件库（ranui）与 TypeScript 工具库（ranuts）';
+const HOME_DESC_EN =
+  'ran is an open-source front-end ecosystem: ranui, a framework-agnostic Web Components UI library on native custom elements, and ranuts, a tree-shakeable TypeScript utility library.';
+const HOME_DESC_CN =
+  'ran 是一套开源前端生态：ranui —— 基于原生 custom elements、框架无关的 Web Components 组件库；ranuts —— 可 tree-shaking 的 TypeScript 工具库。';
 
-/** Convert a VitePress source path (e.g. `src/ranui/index.md`) to its site URL path. */
+/**
+ * Convert a VitePress source path (e.g. `src/ranui/index.md`) to its site URL path.
+ * Extensionless to match the served URL (Cloudflare Pages serves `/foo`, and `/foo.html`
+ * 308-redirects to it) and VitePress `cleanUrls`, so canonical/hreflang/sitemap agree.
+ */
 const relToUrl = (rel: string): string => {
   const p = rel.replace(/\.md$/, '');
   if (p === 'index') return '/';
   if (p.endsWith('/index')) return `/${p.slice(0, -'index'.length)}`;
-  return `/${p}.html`;
+  return `/${p}`;
 };
 
 /** Site-wide structured data: the site + its author (personal brand). */
@@ -83,6 +92,11 @@ export default defineConfig({
     },
   },
   lastUpdated: true,
+  // Serve/link extensionless URLs so generated links, canonical, hreflang and the
+  // sitemap all match what Cloudflare Pages actually serves (`/foo`, with `/foo.html`
+  // 308-redirecting to it). Previously ~214 sitemap/canonical URLs pointed at the
+  // redirecting `.html` form.
+  cleanUrls: true,
   sitemap: {
     hostname: HOME,
   },
@@ -103,18 +117,27 @@ export default defineConfig({
     // The home page's document <title> is otherwise just "ran" (title === site
     // title, so no template is applied). Promote it to the full tagline so the
     // most important on-page SEO signal carries the product keywords.
+    const isCn = rel.startsWith('cn/');
     const isHome = enRel === 'index.md';
+    const homeTagline = isCn ? SITE_TAGLINE_CN : SITE_TAGLINE;
     if (isHome) {
-      pageData.title = SITE_TAGLINE;
+      pageData.title = homeTagline;
       pageData.titleTemplate = false;
     }
 
     const title = pageData.title || 'ran';
-    const ogTitle = isHome ? SITE_TAGLINE : `${title} | ran`;
-    const desc =
-      pageData.frontmatter.description ||
-      pageData.description ||
-      `${title} — documentation for ran: ranui Web Components and ranuts utilities.`;
+    const ogTitle = isHome ? homeTagline : `${title} | ran`;
+    const desc = isHome
+      ? isCn
+        ? HOME_DESC_CN
+        : HOME_DESC_EN
+      : pageData.frontmatter.description ||
+        pageData.description ||
+        `${title} — documentation for ran: ranui Web Components and ranuts utilities.`;
+    // Assign to pageData.description (the field VitePress renders into
+    // <meta name="description">). Setting frontmatter.description alone is too late —
+    // it left all 316 pages sharing the site-level description.
+    pageData.description = desc;
     pageData.frontmatter.description = desc;
 
     const head = (pageData.frontmatter.head ??= []);

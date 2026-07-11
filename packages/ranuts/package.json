@@ -1,7 +1,7 @@
 {
   "name": "ranuts",
-  "version": "0.2.0-alpha.0",
-  "description": "lib",
+  "version": "0.2.0-alpha.1",
+  "description": "Tree-shakeable TypeScript utility library: DOM/BOM helpers, string/object/number/color utils, debounce/throttle/compose, a 2D rendering engine and a virtual DOM.",
   "main": "dist/index.umd.cjs",
   "module": "dist/index.js",
   "type": "module",
@@ -58,7 +58,22 @@
     "doc:api": "tsx ./bin/generate-api-docs.ts",
     "prepublish": "npm run build"
   },
-  "keywords": [],
+  "keywords": [
+    "ranuts",
+    "utils",
+    "utilities",
+    "typescript",
+    "javascript",
+    "debounce",
+    "throttle",
+    "compose",
+    "dom",
+    "bom",
+    "virtual-dom",
+    "canvas",
+    "webgl",
+    "tree-shakeable"
+  ],
   "author": "",
   "license": "MIT",
   "devDependencies": {

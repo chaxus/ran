@@ -1,8 +1,8 @@
 # 🚀 Ran - Exploration & Learning
 
 <p align="center">
-  <a href="https://chaxus.github.io/ran/" target="_blank" rel="noopener noreferrer">
-    <img width="180" src="https://chaxus.github.io/ran/icon.png" alt="ran logo">
+  <a href="https://ran.chaxus.com/" target="_blank" rel="noopener noreferrer">
+    <img width="180" src="https://ran.chaxus.com/icon.png" alt="ran logo">
   </a>
 </p>
 
@@ -115,9 +115,9 @@ pnpm --filter ranui build
 
 ## 📚 Documentation
 
-- **📖 Blog & Articles**: [Design Patterns & More](https://chaxus.github.io/ran/src/article/design_mode.html)
-- **🎨 RanUI Documentation**: [UI Library Guide](https://chaxus.github.io/ran/src/ranui/)
-- **🛠️ RanUTS Documentation**: [Utility Library Guide](https://chaxus.github.io/ran/src/ranuts/)
+- **📖 Blog & Articles**: [Design Patterns & More](https://ran.chaxus.com/src/article/design_mode)
+- **🎨 RanUI Documentation**: [UI Library Guide](https://ran.chaxus.com/src/ranui/)
+- **🛠️ RanUTS Documentation**: [Utility Library Guide](https://ran.chaxus.com/src/ranuts/)
 - **📝 Project Documentation**: [docs](packages/docs)
 
 ## 🤖 AI / Claude Code
