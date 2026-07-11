@@ -1,53 +1,89 @@
 <template>
-  <div class="ran-hero">
-    <!-- animated aurora background -->
-    <div class="ran-aurora" aria-hidden="true">
-      <span class="blob blob-1"></span>
-      <span class="blob blob-2"></span>
-      <span class="blob blob-3"></span>
-      <span class="grid"></span>
+  <div class="ran-home">
+    <!-- ambient background: dot grid + a single quiet blue glow -->
+    <div class="bg" aria-hidden="true">
+      <span class="bg-glow"></span>
+      <span class="bg-dots"></span>
     </div>
 
-    <!-- hero -->
-    <header class="hero-inner">
-      <span class="eyebrow reveal" :style="delay(0)"> <span class="dot"></span>{{ t.eyebrow }} </span>
+    <!-- hero: copy left, live product right -->
+    <header class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow reveal" :style="delay(0)"> <span class="dot"></span>{{ t.eyebrow }} </span>
 
-      <h1 class="wordmark reveal" :style="delay(1)">ran</h1>
+        <h1 class="headline reveal" :style="delay(1)">{{ t.headline }}</h1>
 
-      <p class="subtitle reveal" :style="delay(3)">{{ t.subtitle }}</p>
+        <p class="subtitle reveal" :style="delay(2)">{{ t.subtitle }}</p>
 
-      <div class="cta reveal" :style="delay(4)">
-        <a class="btn btn-primary" :href="localeHref('/src/ranui/')">
-          {{ t.ctaPrimary }}
-          <svg viewBox="0 0 24 24" width="18" height="18">
-            <path
-              d="M5 12h14M13 6l6 6-6 6"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-        </a>
-        <a class="btn btn-ghost" href="https://github.com/chaxus/ran" target="_blank" rel="noreferrer">
-          <svg viewBox="0 0 24 24" width="18" height="18">
-            <path
-              fill="currentColor"
-              d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-.88-.01-1.73-2.78.62-3.37-1.37-3.37-1.37-.45-1.18-1.11-1.5-1.11-1.5-.91-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.36-2.22-.26-4.56-1.14-4.56-5.06 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.7 0 0 .84-.28 2.75 1.05a9.4 9.4 0 0 1 5 0c1.91-1.33 2.75-1.05 2.75-1.05.55 1.4.2 2.44.1 2.7.64.72 1.03 1.63 1.03 2.75 0 3.93-2.34 4.79-4.57 5.05.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.82 0 .27.18.6.69.49A10.02 10.02 0 0 0 22 12.25C22 6.58 17.52 2 12 2Z"
-            />
-          </svg>
-          {{ t.ctaSecondary }}
-        </a>
+        <div class="cmd reveal" :style="delay(3)">
+          <code>npm&nbsp;i&nbsp;ranui&nbsp;ranuts</code>
+          <button class="copy" :class="{ done: copied }" @click="copyInstall" :aria-label="t.copy">
+            <svg v-if="!copied" viewBox="0 0 24 24" width="16" height="16">
+              <rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.8" />
+              <path d="M5 15V5a2 2 0 0 1 2-2h10" fill="none" stroke="currentColor" stroke-width="1.8" />
+            </svg>
+            <svg v-else viewBox="0 0 24 24" width="16" height="16">
+              <path
+                d="M4 12l5 5L20 6"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <div class="cta reveal" :style="delay(4)">
+          <a class="btn btn-primary" :href="localeHref('/src/ranui/')">
+            {{ t.ctaPrimary }}
+            <svg viewBox="0 0 24 24" width="18" height="18">
+              <path
+                d="M5 12h14M13 6l6 6-6 6"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </a>
+          <a class="btn btn-ghost" href="https://github.com/chaxus/ran" target="_blank" rel="noreferrer">
+            <svg viewBox="0 0 24 24" width="18" height="18">
+              <path
+                fill="currentColor"
+                d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-.88-.01-1.73-2.78.62-3.37-1.37-3.37-1.37-.45-1.18-1.11-1.5-1.11-1.5-.91-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.36-2.22-.26-4.56-1.14-4.56-5.06 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.7 0 0 .84-.28 2.75 1.05a9.4 9.4 0 0 1 5 0c1.91-1.33 2.75-1.05 2.75-1.05.55 1.4.2 2.44.1 2.7.64.72 1.03 1.63 1.03 2.75 0 3.93-2.34 4.79-4.57 5.05.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.82 0 .27.18.6.69.49A10.02 10.02 0 0 0 22 12.25C22 6.58 17.52 2 12 2Z"
+              />
+            </svg>
+            {{ t.ctaSecondary }}
+          </a>
+        </div>
       </div>
 
-      <ul class="chips reveal" :style="delay(5)">
-        <li v-for="c in t.chips" :key="c">{{ c }}</li>
-      </ul>
+      <div class="hero-live reveal" :style="delay(2)">
+        <div class="live-head"><span class="live-dot"></span>{{ t.liveLabel }}</div>
+        <div v-if="mounted" class="live-body">
+          <div class="live-row">
+            <r-button type="contrast">Contrast</r-button>
+            <r-button>Default</r-button>
+            <r-button type="primary">Primary</r-button>
+          </div>
+          <div class="live-row">
+            <r-progress class="live-progress" percent="66" total="100"></r-progress>
+          </div>
+          <div class="live-row live-inline">
+            <r-loading class="live-loading" name="circle-line"></r-loading>
+            <r-checkbox checked="true">Subscribe</r-checkbox>
+          </div>
+        </div>
+        <div v-else class="live-body live-skeleton"><span></span><span></span><span></span></div>
+        <span class="live-note">{{ t.liveNote }}</span>
+      </div>
     </header>
 
-    <!-- stats band -->
-    <section class="stats reveal" :style="delay(6)">
+    <!-- stats: a bare hairline strip, not another card -->
+    <section class="stats reveal" :style="delay(5)">
       <div v-for="s in t.stats" :key="s.label" class="stat">
         <span class="stat-num">{{ s.num }}</span>
         <span class="stat-label">{{ s.label }}</span>
@@ -60,7 +96,7 @@
         v-for="(p, i) in t.pillars"
         :key="p.title"
         class="pillar reveal"
-        :style="delay(7 + i)"
+        :style="delay(6 + i)"
         :href="localeHref(p.link)"
         @pointermove="spot"
       >
@@ -84,12 +120,15 @@
       </a>
     </section>
 
-    <!-- signature capabilities -->
-    <section class="caps">
-      <h2 class="caps-title reveal" :style="delay(9)">{{ t.capsTitle }}</h2>
-      <p class="caps-sub reveal" :style="delay(9)">{{ t.capsSub }}</p>
-      <div class="caps-grid">
-        <div v-for="(col, ci) in t.caps" :key="col.lib" class="caps-col reveal" :style="delay(10 + ci)">
+    <!-- signature capabilities: one bordered bento, columns welded by a hairline -->
+    <section class="section caps">
+      <div class="sec-head reveal" :style="delay(8)">
+        <span class="kicker">{{ t.capsKicker }}</span>
+        <h2>{{ t.capsTitle }}</h2>
+        <p class="sec-sub">{{ t.capsSub }}</p>
+      </div>
+      <div class="bento reveal" :style="delay(9)">
+        <div v-for="col in t.caps" :key="col.lib" class="caps-col">
           <div class="caps-col-head">
             <span class="caps-lib">{{ col.lib }}</span>
             <span class="caps-lib-tag">{{ col.tag }}</span>
@@ -109,70 +148,44 @@
       </div>
     </section>
 
-    <!-- get started: code + live preview -->
-    <section class="showcase">
-      <div class="showcase-copy reveal" :style="delay(10)">
+    <!-- get started: install/register left, use-anywhere right -->
+    <section class="section start">
+      <div class="sec-head reveal" :style="delay(10)">
+        <span class="kicker">{{ t.startKicker }}</span>
         <h2>{{ t.startTitle }}</h2>
-        <p>{{ t.startDesc }}</p>
+        <p class="sec-sub">{{ t.startDesc }}</p>
+      </div>
 
-        <div class="cmd">
-          <code>npm&nbsp;i&nbsp;ranui&nbsp;ranuts</code>
-          <button class="copy" :class="{ done: copied }" @click="copyInstall" :aria-label="t.copy">
-            <svg v-if="!copied" viewBox="0 0 24 24" width="16" height="16">
-              <rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.8" />
-              <path d="M5 15V5a2 2 0 0 1 2-2h10" fill="none" stroke="currentColor" stroke-width="1.8" />
-            </svg>
-            <svg v-else viewBox="0 0 24 24" width="16" height="16">
-              <path
-                d="M4 12l5 5L20 6"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2.2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </button>
-        </div>
+      <div class="panel reveal" :style="delay(11)">
+        <div class="code-cell">
+          <div class="code-head">{{ t.startStep1 }}</div>
+          <pre class="snippet" v-pre><span class="c-com">$ npm i ranui ranuts</span>
 
-        <pre class="snippet" v-pre><span class="c-com">// register the &lt;r-*&gt; elements once</span>
+<span class="c-com">// register the &lt;r-*&gt; elements once</span>
 <span class="c-kw">import</span> <span class="c-str">'ranui'</span>
 <span class="c-kw">import</span> { debounce } <span class="c-kw">from</span> <span class="c-str">'ranuts'</span></pre>
-      </div>
-
-      <div class="showcase-live reveal" :style="delay(11)">
-        <div class="live-head"><span class="live-dot"></span>{{ t.liveLabel }}</div>
-        <div v-if="mounted" class="live-body">
-          <div class="live-row">
-            <r-button type="primary">Primary</r-button>
-            <r-button type="warning">Warning</r-button>
-            <r-button type="text">Text</r-button>
-          </div>
-          <div class="live-row">
-            <r-progress percent="66" total="100" style="width: 100%"></r-progress>
-          </div>
-          <div class="live-row live-inline">
-            <r-loading name="circle"></r-loading>
-            <r-checkbox checked="true">Subscribe</r-checkbox>
-          </div>
         </div>
-        <div v-else class="live-body live-skeleton"><span></span><span></span><span></span></div>
-        <span class="live-note">{{ t.liveNote }}</span>
+        <div class="code-cell">
+          <div class="code-head">{{ t.startStep2 }}</div>
+          <pre class="snippet" v-pre><span class="c-com">&lt;!-- Vue, React, or plain HTML --&gt;</span>
+<span class="c-tag">&lt;r-button</span> <span class="c-attr">type</span>=<span class="c-str">"primary"</span><span class="c-tag">&gt;</span>Save<span class="c-tag">&lt;/r-button&gt;</span>
+<span class="c-tag">&lt;r-progress</span> <span class="c-attr">percent</span>=<span class="c-str">"66"</span><span class="c-tag">&gt;&lt;/r-progress&gt;</span></pre>
+        </div>
       </div>
     </section>
 
-    <!-- feature strip -->
-    <section class="features">
-      <div v-for="(f, i) in t.features" :key="f.title" class="feature reveal" :style="delay(12 + i)">
-        <span class="feature-icon" v-html="icons[f.kind]"></span>
-        <div>
+    <!-- feature strip: four cells welded by hairlines, no boxes -->
+    <section class="strip reveal" :style="delay(12)">
+      <div v-for="f in t.features" :key="f.title" class="feature">
+        <span class="feature-head">
+          <span class="feature-icon" v-html="icons[f.kind]"></span>
           <h4>{{ f.title }}</h4>
-          <p>{{ f.desc }}</p>
-        </div>
+        </span>
+        <p>{{ f.desc }}</p>
       </div>
     </section>
 
-    <footer class="closing reveal" :style="delay(16)">
+    <footer class="closing reveal" :style="delay(13)">
       <span>{{ t.closing }}</span>
     </footer>
   </div>
@@ -247,12 +260,11 @@ const icons: Record<string, string> = {
 
 const en = {
   eyebrow: 'Open source · MIT Licensed',
-  tagline: 'A troupe of little vagrants of the world, leave your footprints in my words.',
+  headline: 'A Web Components UI library & typed utility belt',
   subtitle:
-    'A web-native toolkit: a Web Components UI library and a typed utility belt — framework-agnostic, tree-shakeable, and documented in two languages.',
+    'ranui ships 28+ framework-agnostic r- elements; ranuts packs 90+ tree-shakeable TypeScript helpers. Use them in Vue, React, or plain HTML — no build step required.',
   ctaPrimary: 'Explore Components',
   ctaSecondary: 'Star on GitHub',
-  chips: ['Web Components', 'TypeScript', 'Framework-agnostic', 'Offline-ready PWA'],
   stats: [
     { num: '28+', label: 'Components' },
     { num: '90+', label: 'Utilities' },
@@ -282,6 +294,7 @@ const en = {
       link: '/src/article/design_mode.html',
     },
   ],
+  capsKicker: 'Capabilities',
   capsTitle: 'Not just another toolkit',
   capsSub: "A handful of things you won't find in most libraries.",
   caps: [
@@ -358,9 +371,12 @@ const en = {
       ],
     },
   ],
+  startKicker: 'Quick start',
   startTitle: 'Get started in seconds',
   startDesc:
     'Install both packages, register the elements once, and use them anywhere — no build step or framework required.',
+  startStep1: 'Install & register',
+  startStep2: 'Use anywhere',
   copy: 'Copy install command',
   liveLabel: 'Live',
   liveNote: 'Real ranui components, running right on this page.',
@@ -383,12 +399,11 @@ const en = {
 
 const cn = {
   eyebrow: '开源 · MIT 协议',
-  tagline: '世界上一队小小的漂泊者呀，请留下你们的足印在我的文字里。',
+  headline: 'Web Components 组件库与 TypeScript 工具集',
   subtitle:
-    '面向 Web 的工具集：一个 Web Components 组件库，加一套带类型的工具函数 —— 框架无关、可 Tree-shaking、中英双语维护。',
+    'ranui 提供 28+ 个框架无关的 r- 元素，ranuts 收录 90+ 个可 Tree-shaking 的类型化工具函数 —— 在 Vue、React 或纯 HTML 中直接使用，无需构建步骤。',
   ctaPrimary: '浏览组件',
   ctaSecondary: '前往 GitHub',
-  chips: ['Web Components', 'TypeScript', '框架无关', '可离线 PWA'],
   stats: [
     { num: '28+', label: '组件' },
     { num: '90+', label: '工具函数' },
@@ -418,6 +433,7 @@ const cn = {
       link: '/src/article/design_mode.html',
     },
   ],
+  capsKicker: '特色能力',
   capsTitle: '不只是又一个工具库',
   capsSub: '一些在多数库里找不到的能力。',
   caps: [
@@ -474,8 +490,11 @@ const cn = {
       ],
     },
   ],
+  startKicker: '快速开始',
   startTitle: '几秒钟即可上手',
   startDesc: '安装两个包，注册一次元素，即可在任意地方使用 —— 无需构建步骤，也不依赖任何框架。',
+  startStep1: '安装并注册',
+  startStep2: '随处使用',
   copy: '复制安装命令',
   liveLabel: '实时',
   liveNote: '真实的 ranui 组件，就运行在这个页面上。',
@@ -490,96 +509,74 @@ const cn = {
 
 const t = computed(() => (isCN.value ? cn : en));
 
-const delay = (i: number) => ({ '--d': `${i * 65}ms` });
+const delay = (i: number) => ({ '--d': `${i * 70}ms` });
 </script>
 
 <style scoped>
-/* Geist: monochrome-first — ink carries the hierarchy, blue is the single
-   accent, green only means status. All values ride the --ran-* token layer
-   (loaded via ranui/style) so light/dark flips for free. */
-.ran-hero {
+/* Geist layout model: one container width, one hairline color, left-aligned
+   section heads with a blue kicker, panels welded by 1px lines instead of
+   floating cards. Ink carries hierarchy; blue is the single accent. */
+.ran-home {
+  --container: 1080px;
+  --hairline: var(--vp-c-divider);
   position: relative;
   width: 100%;
   overflow: hidden;
-  padding: clamp(64px, 12vw, 140px) 24px 96px;
+  padding: clamp(48px, 8vw, 96px) 24px 96px;
   isolation: isolate;
 }
+.ran-home > * {
+  max-width: var(--container);
+  margin-left: auto;
+  margin-right: auto;
+}
 
-/* ---------- aurora background ---------- */
-.ran-aurora {
+/* ---------- ambient background ---------- */
+.bg {
   position: absolute;
   inset: 0;
   z-index: -1;
+  max-width: none;
   overflow: hidden;
 }
-.ran-aurora .blob {
+.bg-glow {
   position: absolute;
-  border-radius: 50%;
-  filter: blur(70px);
-  opacity: 0.55;
-  will-change: transform;
+  top: -320px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(1100px, 120vw);
+  height: 720px;
+  background: radial-gradient(
+    ellipse 55% 50% at 50% 22%,
+    color-mix(in srgb, var(--ran-blue-700, #006bff) 8%, transparent),
+    transparent 68%
+  );
+  filter: blur(48px);
 }
-.blob-1 {
-  width: 46vw;
-  height: 46vw;
-  top: -14vw;
-  left: -6vw;
-  background: radial-gradient(circle at 30% 30%, var(--ran-blue-300, #dfefff), transparent 70%);
-  animation: drift 22s ease-in-out infinite;
-}
-.blob-2 {
-  width: 40vw;
-  height: 40vw;
-  top: -10vw;
-  right: -8vw;
-  background: radial-gradient(circle at 60% 40%, var(--ran-blue-200, #e9f4ff), transparent 70%);
-  animation: drift 26s ease-in-out infinite reverse;
-}
-.blob-3 {
-  width: 34vw;
-  height: 34vw;
-  top: 22vw;
-  left: 34vw;
-  display: none; /* the third (pink) wash is gone with the tri-color brand */
-  opacity: 0.35;
-  animation: drift 30s ease-in-out infinite;
-}
-.ran-aurora .grid {
+.bg-dots {
   position: absolute;
   inset: 0;
-  background-image:
-    linear-gradient(var(--vp-c-divider) 1px, transparent 1px),
-    linear-gradient(90deg, var(--vp-c-divider) 1px, transparent 1px);
-  background-size: 56px 56px;
-  opacity: 0.18;
-  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 78%);
-  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 78%);
+  background-image: radial-gradient(var(--vp-c-divider) 1px, transparent 1px);
+  background-size: 26px 26px;
+  opacity: 0.5;
+  mask-image: radial-gradient(ellipse 75% 55% at 50% 0%, #000 25%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse 75% 55% at 50% 0%, #000 25%, transparent 75%);
 }
-:global(.dark .ran-aurora .blob) {
-  opacity: 0.4;
-}
-:global(.dark .blob-3) {
-  opacity: 0.28;
-}
-
-@keyframes drift {
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-  33% {
-    transform: translate(4%, 6%) scale(1.08);
-  }
-  66% {
-    transform: translate(-5%, 3%) scale(0.95);
-  }
+:global(.dark) .bg-glow {
+  background: radial-gradient(
+    ellipse 55% 50% at 50% 22%,
+    color-mix(in srgb, var(--ran-blue-700, #006bff) 18%, transparent),
+    transparent 68%
+  );
 }
 
-/* ---------- hero ---------- */
-.hero-inner {
-  max-width: 860px;
-  margin: 0 auto;
-  text-align: center;
+/* ---------- hero: copy left, live product right ---------- */
+.hero {
+  display: grid;
+  grid-template-columns: 1.08fr 0.92fr;
+  gap: clamp(36px, 5vw, 64px);
+  align-items: center;
+  padding-top: clamp(16px, 3vw, 40px);
 }
 .eyebrow {
   display: inline-flex;
@@ -590,7 +587,7 @@ const delay = (i: number) => ({ '--d': `${i * 65}ms` });
   letter-spacing: 0.02em;
   color: var(--vp-c-text-2);
   padding: 6px 14px;
-  border: 1px solid var(--vp-c-divider);
+  border: 1px solid var(--hairline);
   border-radius: 999px;
   background: color-mix(in srgb, var(--vp-c-bg) 60%, transparent);
   backdrop-filter: blur(8px);
@@ -602,387 +599,45 @@ const delay = (i: number) => ({ '--d': `${i * 65}ms` });
   background: var(--ran-color-success, #28a948);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--ran-color-success, #28a948) 25%, transparent);
 }
-.wordmark {
-  margin: 26px 0 0;
+.headline {
+  margin: 22px 0 0;
   font-family: var(--vp-font-family-base);
-  font-size: clamp(100px, 21vw, 236px);
-  line-height: 0.86;
+  font-size: clamp(34px, 4.4vw, 50px);
+  line-height: 1.08;
+  text-wrap: balance;
   font-weight: 700;
-  letter-spacing: -0.045em;
-  color: var(--vp-c-text-1);
-}
-.tagline {
-  margin: 20px auto 0;
-  max-width: 620px;
-  font-size: clamp(17px, 2.4vw, 22px);
-  font-weight: 500;
-  line-height: 1.5;
-  color: var(--vp-c-text-1);
+  letter-spacing: -0.03em;
+  background: linear-gradient(
+    180deg,
+    var(--vp-c-text-1) 60%,
+    color-mix(in srgb, var(--vp-c-text-1) 60%, transparent) 130%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 .subtitle {
-  margin: 16px auto 0;
-  max-width: 600px;
-  font-size: 15.5px;
-  line-height: 1.65;
-  color: var(--vp-c-text-2);
-}
-
-/* ---------- buttons ---------- */
-.cta {
-  margin-top: 34px;
-  display: flex;
-  gap: 14px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 22px;
-  border-radius: 12px;
-  font-size: 15px;
-  font-weight: 600;
-  transition:
-    transform 0.18s ease,
-    box-shadow 0.18s ease,
-    background 0.18s ease,
-    border-color 0.18s ease;
-}
-.btn svg {
-  transition: transform 0.18s ease;
-}
-.btn-primary {
-  color: var(--ran-color-contrast-text, var(--ran-background-100, #fff));
-  background: var(--ran-color-contrast-bg, var(--ran-gray-1000, #171717));
-  border-radius: 999px;
-}
-.btn-primary:hover {
-  background: var(--ran-color-contrast-bg-hover, #383838);
-}
-.btn-primary:hover svg {
-  transform: translateX(3px);
-}
-.btn-ghost {
-  color: var(--vp-c-text-1);
-  border: 1px solid var(--vp-c-divider);
-  background: color-mix(in srgb, var(--vp-c-bg) 55%, transparent);
-  backdrop-filter: blur(8px);
-}
-.btn-ghost:hover {
-  transform: translateY(-2px);
-  border-color: var(--vp-c-text-3);
-}
-
-/* ---------- chips ---------- */
-.chips {
-  margin: 30px 0 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-.chips li {
-  font-size: 12.5px;
-  font-weight: 500;
-  color: var(--vp-c-text-2);
-  padding: 5px 12px;
-  border-radius: 8px;
-  border: 1px solid var(--vp-c-divider);
-  background: var(--vp-c-bg-soft);
-}
-
-/* ---------- stats ---------- */
-.stats {
-  max-width: 720px;
-  margin: clamp(56px, 8vw, 88px) auto 0;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  padding: 26px 20px;
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 18px;
-  background: color-mix(in srgb, var(--vp-c-bg-soft) 70%, transparent);
-  backdrop-filter: blur(6px);
-}
-.stat {
-  text-align: center;
-}
-.stat-num {
-  display: block;
-  font-family: var(--vp-font-family-base);
-  font-size: clamp(30px, 5vw, 42px);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1;
-  color: var(--vp-c-text-1);
-}
-.stat-label {
-  display: block;
-  margin-top: 8px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--vp-c-text-2);
-}
-
-/* ---------- pillars ---------- */
-.pillars {
-  max-width: 1080px;
-  margin: clamp(56px, 8vw, 96px) auto 0;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-.pillar {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  padding: 28px;
-  border-radius: 18px;
-  border: 1px solid var(--vp-c-divider);
-  background: var(--vp-c-bg-soft);
-  overflow: hidden;
-  transition:
-    transform 0.22s ease,
-    border-color 0.22s ease,
-    box-shadow 0.22s ease;
-}
-.pillar .spotlight {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.25s ease;
-  background: radial-gradient(
-    220px circle at var(--mx, 50%) var(--my, 0),
-    color-mix(in srgb, var(--ran-blue-700, #006bff) 14%, transparent),
-    transparent 60%
-  );
-}
-.pillar::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  padding: 1px;
-  border-radius: inherit;
-  background: linear-gradient(130deg, var(--ran-blue-700, #006bff), var(--ran-blue-500, #94ccff));
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  opacity: 0;
-  transition: opacity 0.22s ease;
-}
-.pillar:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--ran-shadow-menu, 0 8px 24px -6px rgba(0, 0, 0, 0.14));
-}
-.pillar:hover::before {
-  opacity: 1;
-}
-.pillar:hover .spotlight {
-  opacity: 1;
-}
-.pillar > * {
-  position: relative;
-}
-.pillar-icon {
-  width: 46px;
-  height: 46px;
-  display: grid;
-  place-items: center;
-  border-radius: 12px;
-  color: var(--vp-c-text-1);
-  border: 1px solid var(--vp-c-divider);
-  background: var(--vp-c-bg);
-}
-.pillar-icon :deep(svg) {
-  width: 24px;
-  height: 24px;
-}
-.pillar h3 {
   margin: 18px 0 0;
-  font-size: 21px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  color: var(--vp-c-text-1);
-  border: 0;
-}
-.pillar p {
-  margin: 10px 0 0;
-  font-size: 14px;
-  line-height: 1.6;
-  color: var(--vp-c-text-2);
-  flex: 1;
-}
-.pillar-more {
-  margin-top: 18px;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 13.5px;
-  font-weight: 600;
-  color: var(--vp-c-brand, #006bff);
-}
-.pillar-more svg {
-  transition: transform 0.18s ease;
-}
-.pillar:hover .pillar-more svg {
-  transform: translateX(3px);
-}
-
-/* ---------- signature capabilities ---------- */
-.caps {
-  max-width: 1080px;
-  margin: clamp(64px, 9vw, 112px) auto 0;
-}
-.caps-title {
-  margin: 0;
-  font-family: var(--vp-font-family-base);
-  font-size: clamp(26px, 3.8vw, 38px);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  color: var(--vp-c-text-1);
-  text-align: center;
-}
-.caps-sub {
-  margin: 10px auto 0;
-  text-align: center;
-  font-size: 15px;
-  color: var(--vp-c-text-2);
-}
-.caps-grid {
-  margin-top: clamp(28px, 4vw, 44px);
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-.caps-col {
-  padding: 26px;
-  border-radius: 18px;
-  border: 1px solid var(--vp-c-divider);
-  background: var(--vp-c-bg-soft);
-}
-.caps-col-head {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  padding-bottom: 16px;
-  margin-bottom: 8px;
-  border-bottom: 1px solid var(--vp-c-divider);
-}
-.caps-lib {
-  font-family: var(--vp-font-family-base);
-  font-size: 20px;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-  color: var(--vp-c-text-1);
-}
-.caps-lib-tag {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--vp-c-text-3);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-.caps-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.caps-list li {
-  display: flex;
-  gap: 13px;
-  padding: 12px 0;
-}
-.caps-list li + li {
-  border-top: 1px solid var(--vp-c-divider);
-}
-.caps-ico {
-  flex: 0 0 auto;
-  width: 34px;
-  height: 34px;
-  display: grid;
-  place-items: center;
-  border-radius: 9px;
-  color: var(--vp-c-brand, #006bff);
-  border: 1px solid var(--vp-c-divider);
-  background: var(--vp-c-bg);
-}
-.caps-ico :deep(svg) {
-  width: 18px;
-  height: 18px;
-}
-.caps-text {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  min-width: 0;
-}
-.caps-name {
-  font-size: 14.5px;
-  font-weight: 650;
-  color: var(--vp-c-text-1);
-}
-.caps-name code {
-  margin-left: 4px;
-  font-family: var(--vp-font-family-mono);
-  font-size: 11.5px;
-  font-weight: 500;
-  color: var(--vp-c-text-3);
-  background: var(--vp-c-bg-alt);
-  padding: 1px 6px;
-  border-radius: 5px;
-}
-.caps-desc {
-  font-size: 13px;
-  line-height: 1.55;
+  max-width: 520px;
+  font-size: 15.5px;
+  line-height: 1.7;
   color: var(--vp-c-text-2);
 }
 
-/* ---------- showcase (code + live) ---------- */
-.showcase {
-  max-width: 1080px;
-  margin: clamp(56px, 8vw, 96px) auto 0;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  align-items: stretch;
-}
-.showcase-copy {
-  padding: 6px 4px;
-}
-.showcase-copy h2 {
-  margin: 0;
-  font-family: var(--vp-font-family-base);
-  font-size: clamp(26px, 3.6vw, 34px);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  color: var(--vp-c-text-1);
-  border: 0;
-}
-.showcase-copy > p {
-  margin: 12px 0 0;
-  font-size: 15px;
-  line-height: 1.65;
-  color: var(--vp-c-text-2);
-  max-width: 420px;
-}
+/* install command, inline in the hero */
 .cmd {
-  margin: 22px 0 0;
+  margin: 26px 0 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 12px 12px 12px 18px;
-  border-radius: 12px;
-  border: 1px solid var(--vp-c-divider);
+  max-width: 340px;
+  padding: 10px 10px 10px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--hairline);
   background: var(--vp-c-bg-alt);
   font-family: var(--vp-font-family-mono);
-  font-size: 14px;
+  font-size: 13.5px;
   color: var(--vp-c-text-1);
 }
 .cmd code::before {
@@ -993,17 +648,16 @@ const delay = (i: number) => ({ '--d': `${i * 65}ms` });
   flex: 0 0 auto;
   display: grid;
   place-items: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 8px;
-  border: 1px solid var(--vp-c-divider);
-  background: var(--vp-c-bg-soft);
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  border: 1px solid var(--hairline);
+  background: var(--vp-c-bg);
   color: var(--vp-c-text-2);
   cursor: pointer;
   transition:
     color 0.18s ease,
-    border-color 0.18s ease,
-    background 0.18s ease;
+    border-color 0.18s ease;
 }
 .copy:hover {
   color: var(--vp-c-text-1);
@@ -1013,46 +667,71 @@ const delay = (i: number) => ({ '--d': `${i * 65}ms` });
   color: var(--ran-color-success, #28a948);
   border-color: color-mix(in srgb, var(--ran-color-success, #28a948) 45%, transparent);
 }
-.snippet {
-  margin: 14px 0 0;
-  padding: 16px 18px;
-  border-radius: 12px;
-  border: 1px solid var(--vp-c-divider);
-  background: var(--vp-c-bg-alt);
-  font-family: var(--vp-font-family-mono);
-  font-size: 13.5px;
-  line-height: 1.7;
-  overflow-x: auto;
+
+/* ---------- buttons ---------- */
+.cta {
+  margin-top: 22px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
 }
-.snippet .c-com {
-  color: var(--vp-c-text-3);
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 22px;
+  border-radius: 999px;
+  font-size: 14.5px;
+  font-weight: 600;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease;
 }
-.snippet .c-kw {
-  color: var(--ran-blue-700, #006bff);
+.btn svg {
+  transition: transform 0.18s ease;
 }
-.snippet .c-str {
-  color: var(--ran-green-700, #28a948);
+.btn-primary {
+  color: var(--ran-color-contrast-text, var(--ran-background-100, #fff));
+  background: var(--ran-color-contrast-bg, var(--ran-gray-1000, #171717));
+}
+.btn-primary:hover {
+  background: var(--ran-color-contrast-bg-hover, #383838);
+}
+.btn-primary:hover svg {
+  transform: translateX(3px);
+}
+.btn-ghost {
+  color: var(--vp-c-text-1);
+  border: 1px solid var(--hairline);
+  background: color-mix(in srgb, var(--vp-c-bg) 55%, transparent);
+  backdrop-filter: blur(8px);
+}
+.btn-ghost:hover {
+  border-color: var(--vp-c-text-3);
 }
 
-.showcase-live {
+/* ---------- hero live panel ---------- */
+.hero-live {
   display: flex;
   flex-direction: column;
-  border-radius: 16px;
-  border: 1px solid var(--vp-c-divider);
-  background: var(--vp-c-bg-soft);
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  background: var(--vp-c-bg);
   overflow: hidden;
 }
 .live-head {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 18px;
-  font-size: 12.5px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
+  padding: 12px 20px;
+  font-family: var(--vp-font-family-mono);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--vp-c-text-2);
-  border-bottom: 1px solid var(--vp-c-divider);
+  border-bottom: 1px solid var(--hairline);
   background: var(--vp-c-bg-alt);
 }
 .live-dot {
@@ -1066,8 +745,8 @@ const delay = (i: number) => ({ '--d': `${i * 65}ms` });
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  padding: 26px 22px;
+  gap: 22px;
+  padding: 30px 24px;
   justify-content: center;
 }
 .live-row {
@@ -1077,8 +756,30 @@ const delay = (i: number) => ({ '--d': `${i * 65}ms` });
   align-items: center;
 }
 .live-inline {
-  align-items: center;
-  gap: 20px;
+  gap: 18px;
+}
+/* the live demo rides the same Geist palette as the rest of the page:
+   progress + spinner get their token overrides here (green/teal defaults
+   would break the one-accent rule) */
+.live-progress {
+  width: 100%;
+  --ran-progress-wrap-height: 6px;
+  --ran-progress-wrap-value-background: linear-gradient(
+    90deg,
+    var(--ran-blue-600, #48aeff),
+    var(--ran-blue-700, #006bff)
+  );
+}
+.live-loading {
+  --loading-circle-line-border-width: 22px;
+  --loading-circle-line-border-height: 22px;
+  --loading-circle-line-border-padding: 2.5px;
+  --loading-circle-line-border-background: linear-gradient(
+    0deg,
+    color-mix(in srgb, var(--ran-blue-700, #006bff) 12%, transparent) 33%,
+    var(--ran-blue-700, #006bff) 100%
+  );
+  --loading-circle-line-core-background: var(--vp-c-bg);
 }
 .live-skeleton {
   gap: 14px;
@@ -1105,47 +806,360 @@ const delay = (i: number) => ({ '--d': `${i * 65}ms` });
   }
 }
 .live-note {
-  padding: 12px 18px 16px;
+  padding: 12px 20px 16px;
   font-size: 12.5px;
   color: var(--vp-c-text-3);
 }
 
-/* ---------- features ---------- */
-.features {
-  max-width: 1080px;
-  margin: clamp(56px, 8vw, 88px) auto 0;
+/* ---------- stats strip: hairlines, no box ---------- */
+.stats {
+  margin-top: clamp(56px, 8vw, 88px);
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
+  gap: 1px;
+  background: var(--hairline);
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
 }
-.feature {
+.stat {
+  background: var(--vp-c-bg);
+  text-align: center;
+  padding: 28px 12px;
+}
+.stat-num {
+  display: block;
+  font-family: var(--vp-font-family-base);
+  font-size: clamp(28px, 4vw, 36px);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--vp-c-text-1);
+}
+.stat-label {
+  display: block;
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--vp-c-text-3);
+}
+
+/* ---------- pillars ---------- */
+.pillars {
+  margin-top: clamp(64px, 9vw, 112px);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.pillar {
+  position: relative;
   display: flex;
-  gap: 13px;
-  padding: 4px;
+  flex-direction: column;
+  padding: 28px;
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  background: var(--vp-c-bg);
+  overflow: hidden;
+  transition:
+    border-color 0.22s ease,
+    box-shadow 0.22s ease;
 }
-.feature-icon {
-  flex: 0 0 auto;
-  width: 38px;
-  height: 38px;
+.pillar .spotlight {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  background: radial-gradient(
+    220px circle at var(--mx, 50%) var(--my, 0),
+    color-mix(in srgb, var(--ran-blue-700, #006bff) 12%, transparent),
+    transparent 60%
+  );
+}
+.pillar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(130deg, var(--ran-blue-700, #006bff), var(--ran-blue-500, #94ccff));
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.22s ease;
+}
+.pillar:hover {
+  box-shadow: var(--ran-shadow-menu, 0 8px 24px -6px rgba(0, 0, 0, 0.14));
+}
+.pillar:hover::before {
+  opacity: 1;
+}
+.pillar:hover .spotlight {
+  opacity: 1;
+}
+.pillar > * {
+  position: relative;
+}
+.pillar-icon {
+  width: 42px;
+  height: 42px;
   display: grid;
   place-items: center;
   border-radius: 10px;
-  color: var(--vp-c-brand, #006bff);
-  border: 1px solid var(--vp-c-divider);
+  color: var(--vp-c-text-1);
+  border: 1px solid var(--hairline);
   background: var(--vp-c-bg-soft);
 }
-.feature-icon :deep(svg) {
+.pillar-icon :deep(svg) {
+  width: 22px;
+  height: 22px;
+}
+.pillar h3 {
+  margin: 18px 0 0;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--vp-c-text-1);
+  border: 0;
+}
+.pillar p {
+  margin: 10px 0 0;
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--vp-c-text-2);
+  flex: 1;
+}
+.pillar-more {
+  margin-top: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--vp-c-brand, #006bff);
+}
+.pillar-more svg {
+  transition: transform 0.18s ease;
+}
+.pillar:hover .pillar-more svg {
+  transform: translateX(3px);
+}
+
+/* ---------- section head: kicker + left-aligned title ---------- */
+.section {
+  margin-top: clamp(72px, 10vw, 120px);
+}
+.sec-head {
+  border-top: 1px solid var(--hairline);
+  padding-top: 28px;
+  margin-bottom: 32px;
+}
+.kicker {
+  display: block;
+  font-family: var(--vp-font-family-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--vp-c-brand, #006bff);
+}
+.sec-head h2 {
+  margin: 12px 0 0;
+  font-family: var(--vp-font-family-base);
+  font-size: clamp(24px, 3.2vw, 32px);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--vp-c-text-1);
+  border: 0;
+  padding: 0;
+}
+.sec-sub {
+  margin: 10px 0 0;
+  max-width: 560px;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--vp-c-text-2);
+}
+
+/* ---------- capabilities bento: columns welded by a hairline ---------- */
+.bento {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--hairline);
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.caps-col {
+  padding: 26px 28px;
+  background: var(--vp-c-bg);
+}
+.caps-col-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding-bottom: 16px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--hairline);
+}
+.caps-lib {
+  font-family: var(--vp-font-family-base);
+  font-size: 18px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  color: var(--vp-c-text-1);
+}
+.caps-lib-tag {
+  font-family: var(--vp-font-family-mono);
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--vp-c-text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.caps-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.caps-list li {
+  display: flex;
+  gap: 12px;
+  padding: 14px 0;
+}
+.caps-list li + li {
+  border-top: 1px solid var(--hairline);
+}
+.caps-ico {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  width: 20px;
+  height: 20px;
+  color: var(--vp-c-text-3);
+}
+.caps-ico :deep(svg) {
   width: 20px;
   height: 20px;
 }
+.caps-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.caps-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+}
+.caps-name code {
+  margin-left: 4px;
+  font-family: var(--vp-font-family-mono);
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--vp-c-text-3);
+  background: var(--vp-c-bg-alt);
+  padding: 1px 6px;
+  border-radius: 5px;
+}
+.caps-desc {
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--vp-c-text-2);
+}
+
+/* ---------- get started: two welded code cells ---------- */
+.panel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--hairline);
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.code-cell {
+  display: flex;
+  flex-direction: column;
+  background: var(--vp-c-bg);
+}
+.code-head {
+  padding: 12px 20px;
+  font-family: var(--vp-font-family-mono);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--vp-c-text-2);
+  border-bottom: 1px solid var(--hairline);
+  background: var(--vp-c-bg-alt);
+}
+.snippet {
+  flex: 1;
+  margin: 0;
+  padding: 20px 22px;
+  font-family: var(--vp-font-family-mono);
+  font-size: 13px;
+  line-height: 1.75;
+  overflow-x: auto;
+}
+.snippet .c-com {
+  color: var(--vp-c-text-3);
+}
+.snippet .c-kw {
+  color: var(--ran-blue-700, #006bff);
+}
+.snippet .c-str {
+  color: var(--ran-green-700, #28a948);
+}
+.snippet .c-tag {
+  color: var(--ran-blue-700, #006bff);
+}
+.snippet .c-attr {
+  color: var(--vp-c-text-2);
+}
+
+/* ---------- feature strip: hairline-welded cells, no boxes ---------- */
+.strip {
+  margin-top: clamp(72px, 10vw, 120px);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--hairline);
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+}
+.feature {
+  background: var(--vp-c-bg);
+  padding: 22px 24px;
+}
+.feature-head {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.feature-icon {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  color: var(--vp-c-text-3);
+}
+.feature-icon :deep(svg) {
+  width: 18px;
+  height: 18px;
+}
 .feature h4 {
-  margin: 2px 0 0;
-  font-size: 15px;
-  font-weight: 650;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
   color: var(--vp-c-text-1);
 }
 .feature p {
-  margin: 5px 0 0;
+  margin: 8px 0 0;
   font-size: 13px;
   line-height: 1.55;
   color: var(--vp-c-text-2);
@@ -1153,10 +1167,7 @@ const delay = (i: number) => ({ '--d': `${i * 65}ms` });
 
 /* ---------- closing ---------- */
 .closing {
-  max-width: 1080px;
-  margin: clamp(64px, 9vw, 104px) auto 0;
-  padding-top: 32px;
-  border-top: 1px solid var(--vp-c-divider);
+  margin-top: clamp(72px, 10vw, 112px);
   text-align: center;
 }
 .closing span {
@@ -1175,38 +1186,42 @@ const delay = (i: number) => ({ '--d': `${i * 65}ms` });
 @keyframes reveal {
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: none;
   }
 }
 
 /* ---------- responsive ---------- */
 @media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
   .pillars {
     grid-template-columns: 1fr;
   }
-  .features {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .showcase {
-    grid-template-columns: 1fr;
-  }
-  .caps-grid {
+  .bento,
+  .panel,
+  .strip {
     grid-template-columns: 1fr;
   }
 }
 @media (max-width: 520px) {
   .stats {
     grid-template-columns: repeat(2, 1fr);
-    gap: 22px 16px;
-  }
-  .features {
-    grid-template-columns: 1fr;
   }
   .cta {
     flex-direction: column;
   }
   .btn {
     justify-content: center;
+  }
+  .cmd {
+    max-width: none;
+  }
+}
+@media (max-width: 900px) and (min-width: 521px) {
+  .strip {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -1215,7 +1230,6 @@ const delay = (i: number) => ({ '--d': `${i * 65}ms` });
     opacity: 1;
     transform: none;
   }
-  .ran-aurora .blob,
   .live-skeleton span {
     animation: none;
   }
