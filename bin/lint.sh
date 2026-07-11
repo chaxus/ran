@@ -10,4 +10,3 @@ pnpm -F ranui build
 pnpm -F docs tsc
 pnpm -F ranui tsc
 pnpm -F ranuts tsc
-pnpm -F solidity tsc
