@@ -205,7 +205,8 @@ export default defineConfig({
         crossorigin: '',
       },
     ],
-    ['meta', { name: 'theme-color', content: '#646cff' }],
+    ['meta', { name: 'theme-color', media: '(prefers-color-scheme: light)', content: '#ffffff' }],
+    ['meta', { name: 'theme-color', media: '(prefers-color-scheme: dark)', content: '#000000' }],
     // author
     ['meta', { name: 'author', content: 'chaxus' }],
     // 表示爬虫对此页面的处理行为 或 应当遵守的规则，是用来做搜索引擎抓取的

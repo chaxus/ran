@@ -494,18 +494,9 @@ const delay = (i: number) => ({ '--d': `${i * 65}ms` });
 </script>
 
 <style scoped>
-/* brand gradient stops — deeper on light bg, brighter on dark bg.
-   Defined globally on :root/.dark so no intermediate element can shadow them. */
-:global(:root) {
-  --ran-g1: #7c5cff;
-  --ran-g2: #4aa6ff;
-  --ran-g3: #ff5db1;
-}
-:global(.dark) {
-  --ran-g1: #a78bff;
-  --ran-g2: #7cc4ff;
-  --ran-g3: #ff8fcf;
-}
+/* Geist: monochrome-first — ink carries the hierarchy, blue is the single
+   accent, green only means status. All values ride the --ran-* token layer
+   (loaded via ranui/style) so light/dark flips for free. */
 .ran-hero {
   position: relative;
   width: 100%;
@@ -533,7 +524,7 @@ const delay = (i: number) => ({ '--d': `${i * 65}ms` });
   height: 46vw;
   top: -14vw;
   left: -6vw;
-  background: radial-gradient(circle at 30% 30%, #7c5cff, transparent 70%);
+  background: radial-gradient(circle at 30% 30%, var(--ran-blue-300, #dfefff), transparent 70%);
   animation: drift 22s ease-in-out infinite;
 }
 .blob-2 {
@@ -541,7 +532,7 @@ const delay = (i: number) => ({ '--d': `${i * 65}ms` });
   height: 40vw;
   top: -10vw;
   right: -8vw;
-  background: radial-gradient(circle at 60% 40%, #33b6ff, transparent 70%);
+  background: radial-gradient(circle at 60% 40%, var(--ran-blue-200, #e9f4ff), transparent 70%);
   animation: drift 26s ease-in-out infinite reverse;
 }
 .blob-3 {
@@ -549,7 +540,7 @@ const delay = (i: number) => ({ '--d': `${i * 65}ms` });
   height: 34vw;
   top: 22vw;
   left: 34vw;
-  background: radial-gradient(circle at 50% 50%, #ff5db1, transparent 70%);
+  display: none; /* the third (pink) wash is gone with the tri-color brand */
   opacity: 0.35;
   animation: drift 30s ease-in-out infinite;
 }
@@ -608,23 +599,17 @@ const delay = (i: number) => ({ '--d': `${i * 65}ms` });
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #33d17a;
-  box-shadow: 0 0 0 3px color-mix(in srgb, #33d17a 25%, transparent);
+  background: var(--ran-color-success, #28a948);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ran-color-success, #28a948) 25%, transparent);
 }
 .wordmark {
   margin: 26px 0 0;
-  font-family: 'Space Grotesk Display', sans-serif;
+  font-family: var(--vp-font-family-base);
   font-size: clamp(100px, 21vw, 236px);
   line-height: 0.86;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  background: linear-gradient(115deg, var(--ran-g1) 6%, var(--ran-g2) 50%, var(--ran-g3) 96%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-:global(.dark .wordmark) {
-  filter: drop-shadow(0 8px 40px color-mix(in srgb, var(--ran-g1) 40%, transparent));
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  color: var(--vp-c-text-1);
 }
 .tagline {
   margin: 20px auto 0;
@@ -668,13 +653,12 @@ const delay = (i: number) => ({ '--d': `${i * 65}ms` });
   transition: transform 0.18s ease;
 }
 .btn-primary {
-  color: #fff;
-  background: linear-gradient(115deg, #7c5cff, #4aa6ff);
-  box-shadow: 0 8px 26px -8px color-mix(in srgb, #4aa6ff 65%, transparent);
+  color: var(--ran-color-contrast-text, var(--ran-background-100, #fff));
+  background: var(--ran-color-contrast-bg, var(--ran-gray-1000, #171717));
+  border-radius: 999px;
 }
 .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 14px 34px -8px color-mix(in srgb, #4aa6ff 75%, transparent);
+  background: var(--ran-color-contrast-bg-hover, #383838);
 }
 .btn-primary:hover svg {
   transform: translateX(3px);
@@ -733,10 +717,7 @@ const delay = (i: number) => ({ '--d': `${i * 65}ms` });
   font-weight: 800;
   letter-spacing: -0.02em;
   line-height: 1;
-  background: linear-gradient(120deg, var(--ran-g1), var(--ran-g2));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--vp-c-text-1);
 }
 .stat-label {
   display: block;
@@ -776,7 +757,7 @@ const delay = (i: number) => ({ '--d': `${i * 65}ms` });
   transition: opacity 0.25s ease;
   background: radial-gradient(
     220px circle at var(--mx, 50%) var(--my, 0),
-    color-mix(in srgb, #7c5cff 22%, transparent),
+    color-mix(in srgb, var(--ran-blue-700, #006bff) 14%, transparent),
     transparent 60%
   );
 }
@@ -786,7 +767,7 @@ const delay = (i: number) => ({ '--d': `${i * 65}ms` });
   inset: 0;
   padding: 1px;
   border-radius: inherit;
-  background: linear-gradient(130deg, #7c5cff, #4aa6ff, #ff5db1);
+  background: linear-gradient(130deg, var(--ran-blue-700, #006bff), var(--ran-blue-500, #94ccff));
   -webkit-mask:
     linear-gradient(#000 0 0) content-box,
     linear-gradient(#000 0 0);
@@ -797,7 +778,7 @@ const delay = (i: number) => ({ '--d': `${i * 65}ms` });
 }
 .pillar:hover {
   transform: translateY(-4px);
-  box-shadow: 0 20px 40px -22px rgba(60, 80, 200, 0.45);
+  box-shadow: var(--ran-shadow-menu, 0 8px 24px -6px rgba(0, 0, 0, 0.14));
 }
 .pillar:hover::before {
   opacity: 1;
@@ -814,14 +795,9 @@ const delay = (i: number) => ({ '--d': `${i * 65}ms` });
   display: grid;
   place-items: center;
   border-radius: 12px;
-  color: #fff;
-  background: linear-gradient(135deg, #7c5cff, #4aa6ff);
-}
-.pillar-icon[data-kind='utils'] {
-  background: linear-gradient(135deg, #23c483, #4aa6ff);
-}
-.pillar-icon[data-kind='article'] {
-  background: linear-gradient(135deg, #ff8a5b, #ff5db1);
+  color: var(--vp-c-text-1);
+  border: 1px solid var(--vp-c-divider);
+  background: var(--vp-c-bg);
 }
 .pillar-icon :deep(svg) {
   width: 24px;
@@ -849,7 +825,7 @@ const delay = (i: number) => ({ '--d': `${i * 65}ms` });
   gap: 5px;
   font-size: 13.5px;
   font-weight: 600;
-  color: var(--vp-c-brand-1, #4aa6ff);
+  color: var(--vp-c-brand, #006bff);
 }
 .pillar-more svg {
   transition: transform 0.18s ease;
@@ -903,10 +879,7 @@ const delay = (i: number) => ({ '--d': `${i * 65}ms` });
   font-size: 20px;
   font-weight: 800;
   letter-spacing: -0.01em;
-  background: linear-gradient(120deg, var(--ran-g1), var(--ran-g2));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--vp-c-text-1);
 }
 .caps-lib-tag {
   font-size: 12px;
@@ -935,7 +908,7 @@ const delay = (i: number) => ({ '--d': `${i * 65}ms` });
   display: grid;
   place-items: center;
   border-radius: 9px;
-  color: var(--ran-g2);
+  color: var(--vp-c-brand, #006bff);
   border: 1px solid var(--vp-c-divider);
   background: var(--vp-c-bg);
 }
@@ -1037,8 +1010,8 @@ const delay = (i: number) => ({ '--d': `${i * 65}ms` });
   border-color: var(--vp-c-text-3);
 }
 .copy.done {
-  color: #23c483;
-  border-color: color-mix(in srgb, #23c483 45%, transparent);
+  color: var(--ran-color-success, #28a948);
+  border-color: color-mix(in srgb, var(--ran-color-success, #28a948) 45%, transparent);
 }
 .snippet {
   margin: 14px 0 0;
@@ -1055,10 +1028,10 @@ const delay = (i: number) => ({ '--d': `${i * 65}ms` });
   color: var(--vp-c-text-3);
 }
 .snippet .c-kw {
-  color: #c678dd;
+  color: var(--ran-blue-700, #006bff);
 }
 .snippet .c-str {
-  color: #98c379;
+  color: var(--ran-green-700, #28a948);
 }
 
 .showcase-live {
@@ -1086,8 +1059,8 @@ const delay = (i: number) => ({ '--d': `${i * 65}ms` });
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #23c483;
-  box-shadow: 0 0 0 3px color-mix(in srgb, #23c483 22%, transparent);
+  background: var(--ran-color-success, #28a948);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ran-color-success, #28a948) 22%, transparent);
 }
 .live-body {
   flex: 1;
@@ -1157,7 +1130,7 @@ const delay = (i: number) => ({ '--d': `${i * 65}ms` });
   display: grid;
   place-items: center;
   border-radius: 10px;
-  color: var(--vp-c-brand-1, #4aa6ff);
+  color: var(--vp-c-brand, #006bff);
   border: 1px solid var(--vp-c-divider);
   background: var(--vp-c-bg-soft);
 }
