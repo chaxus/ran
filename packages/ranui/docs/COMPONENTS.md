@@ -15,7 +15,7 @@ Generated at: 2026-07-11T05:42:36.629Z
 Source: `components/button/index.ts`
 
 - **Attributes**: `disabled: boolean | string`, `effect: string`, `icon: string`, `iconSize: string`, `sheet: string`, `type: string`
-- **Properties**: 
+- **Properties**:
   - `disabled: boolean | string`
   - `effect: string`
   - `icon: string`
@@ -31,7 +31,7 @@ Source: `components/button/index.ts`
 Source: `components/card/index.ts`
 
 - **Attributes**: `description: string`, `hoverable: boolean`, `sheet: string`, `title: string`
-- **Properties**: 
+- **Properties**:
   - `description: string`
   - `hoverable: boolean` — Interactive card (Geist): hover darkens the border and lifts to the elevated shadow tier. Purely presentational — gate it to cards that are actually clickable.
   - `sheet: string`
@@ -115,7 +115,7 @@ Source: `components/icon/index.ts`
 Source: `components/image/index.ts`
 
 - **Attributes**: —
-- **Properties**: 
+- **Properties**:
   - `alt` — Alternative text forwarded to the inner `<img>`. Defaults to `''` (empty),
   - `fallback`
   - `sheet`
@@ -128,7 +128,7 @@ Source: `components/image/index.ts`
 Source: `components/input/index.ts`
 
 - **Attributes**: `disabled: boolean`, `icon: string`, `label: string`, `max: string`, `message: string`, `min: string`, `name: string`, `placeholder: string`, `required: boolean`, `sheet: string`, `status: string`, `step: string`, `type: string`, `value: string`
-- **Properties**: 
+- **Properties**:
   - `disabled: boolean` — input 上 disabled 属性
   - `icon: string` — 一个 icon
   - `label: string` — 类似于 Metiral Design 的输入体验。
@@ -332,10 +332,9 @@ Source: `components/tab/index.ts`
 Source: `components/theme-switch/index.ts`
 
 - **Attributes**: `label-dark`, `label-light`, `label-system`, `sheet: string`
-- **Properties**: 
+- **Properties**:
   - `sheet: string`
   - `value: RanThemeName` — `<r-theme-switch>` — a three-state (system / light / dark) segmented control
 - **Events**: `change` → detail `{ theme }`
 - **Slots**: —
 - **Parts**: —
-

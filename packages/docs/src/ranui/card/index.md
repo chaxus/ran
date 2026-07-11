@@ -26,12 +26,12 @@ A structured content container with header, body, and footer zones for grouping 
 
 ### Properties
 
-| Property      | Type      | Default | Description                                                                    |
-| ------------- | --------- | ------- | ------------------------------------------------------------------------------ |
-| `title`       | `string`  | `''`    | Card heading, shown at the top of the header. Hidden when empty.               |
-| `description` | `string`  | `''`    | Subtitle rendered below the title. Hidden when empty.                          |
-| `hoverable`   | `boolean` | `false` | Interactive card: hover darkens the border and lifts to the elevated shadow.   |
-| `sheet`       | `string`  | `''`    | CSS injected into the card's shadow DOM.                                       |
+| Property      | Type      | Default | Description                                                                  |
+| ------------- | --------- | ------- | ---------------------------------------------------------------------------- |
+| `title`       | `string`  | `''`    | Card heading, shown at the top of the header. Hidden when empty.             |
+| `description` | `string`  | `''`    | Subtitle rendered below the title. Hidden when empty.                        |
+| `hoverable`   | `boolean` | `false` | Interactive card: hover darkens the border and lifts to the elevated shadow. |
+| `sheet`       | `string`  | `''`    | CSS injected into the card's shadow DOM.                                     |
 
 ### Title `title`
 

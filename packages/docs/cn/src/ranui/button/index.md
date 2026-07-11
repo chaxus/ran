@@ -19,9 +19,9 @@
 | 属性       | 类型      | 默认值      | 说明                                                          |
 | ---------- | --------- | ----------- | ------------------------------------------------------------- |
 | `type`     | `string`  | `'default'` | 按钮类型：`default`、`primary`、`contrast`、`warning`、`text` |
-| `disabled` | `boolean` | `false`     | 是否禁用按钮                                      |
-| `icon`     | `string`  | `''`        | 按钮图标名称                                      |
-| `effect`   | `boolean` | `true`      | 是否显示点击水波纹特效                            |
+| `disabled` | `boolean` | `false`     | 是否禁用按钮                                                  |
+| `icon`     | `string`  | `''`        | 按钮图标名称                                                  |
+| `effect`   | `boolean` | `true`      | 是否显示点击水波纹特效                                        |
 
 ### 按钮类型 `type`
 

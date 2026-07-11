@@ -13,7 +13,9 @@ Generated at: 2026-07-11T05:42:37.197Z
 - Parts: 2
 
 #### Tokens
+
 <!-- layers: semantic: 15 · skin: 2 · component: 36 · internal: 1 -->
+
 - `--ran-btn-after-background-image`
 - `--ran-btn-after-opacity`
 - `--ran-btn-after-transform`
@@ -70,6 +72,7 @@ Generated at: 2026-07-11T05:42:37.197Z
 - `--ran-skin-raised-shadow`
 
 #### Parts
+
 - `button`
 - `content`
 
@@ -79,7 +82,9 @@ Generated at: 2026-07-11T05:42:37.197Z
 - Parts: 7
 
 #### Tokens
+
 <!-- layers: semantic: 8 · skin: 1 · internal: 12 -->
+
 - `--ran-card-background`
 - `--ran-card-border-color`
 - `--ran-card-description-color`
@@ -103,6 +108,7 @@ Generated at: 2026-07-11T05:42:37.197Z
 - `--ran-skin-border-style`
 
 #### Parts
+
 - `body`
 - `card`
 - `description`
@@ -117,7 +123,9 @@ Generated at: 2026-07-11T05:42:37.197Z
 - Parts: 5
 
 #### Tokens
+
 <!-- layers: semantic: 5 · skin: 1 · component: 30 · internal: 1 -->
+
 - `--ran-blue-400`
 - `--ran-checkbox-border-radius`
 - `--ran-checkbox-checked-after-opacity`
@@ -157,6 +165,7 @@ Generated at: 2026-07-11T05:42:37.197Z
 - `--ran-skin-font-family`
 
 #### Parts
+
 - `checkbox`
 - `inner`
 - `input`
@@ -169,7 +178,9 @@ Generated at: 2026-07-11T05:42:37.197Z
 - Parts: 2
 
 #### Tokens
+
 <!-- layers: semantic: 5 · component: 7 · internal: 3 -->
+
 - `--ran-color-bg-elevated`
 - `--ran-color-border`
 - `--ran-color-border-hover`
@@ -187,6 +198,7 @@ Generated at: 2026-07-11T05:42:37.197Z
 - `--ran-radius-sm`
 
 #### Parts
+
 - `block`
 - `swatch`
 
@@ -196,7 +208,9 @@ Generated at: 2026-07-11T05:42:37.197Z
 - Parts: 1
 
 #### Tokens
+
 <!-- layers: semantic: 5 · skin: 1 · component: 15 · internal: 1 -->
+
 - `--ran-color-bg-elevated`
 - `--ran-color-text`
 - `--ran-dropdown-arrow-after-background`
@@ -221,6 +235,7 @@ Generated at: 2026-07-11T05:42:37.197Z
 - `--ran-z-dropdown`
 
 #### Parts
+
 - `dropdown`
 
 ### `form`
@@ -229,9 +244,11 @@ Generated at: 2026-07-11T05:42:37.197Z
 - Parts: 0
 
 #### Tokens
+
 - (none)
 
 #### Parts
+
 - (none)
 
 ### `icon`
@@ -240,7 +257,9 @@ Generated at: 2026-07-11T05:42:37.197Z
 - Parts: 1
 
 #### Tokens
+
 <!-- layers: component: 7 -->
+
 - `--ran-icon-align-items`
 - `--ran-icon-color`
 - `--ran-icon-font-size`
@@ -250,6 +269,7 @@ Generated at: 2026-07-11T05:42:37.197Z
 - `--ran-icon-svg-stroke`
 
 #### Parts
+
 - `ran-icon`
 
 ### `image`
@@ -258,9 +278,11 @@ Generated at: 2026-07-11T05:42:37.197Z
 - Parts: 0
 
 #### Tokens
+
 - (none)
 
 #### Parts
+
 - (none)
 
 ### `input`
@@ -269,7 +291,9 @@ Generated at: 2026-07-11T05:42:37.197Z
 - Parts: 4
 
 #### Tokens
+
 <!-- layers: semantic: 11 · skin: 1 · component: 71 · internal: 1 -->
+
 - `--ran-blue-400`
 - `--ran-color-bg-elevated`
 - `--ran-color-bg-muted`
@@ -356,6 +380,7 @@ Generated at: 2026-07-11T05:42:37.197Z
 - `--ran-skin-font-family`
 
 #### Parts
+
 - `content`
 - `input`
 - `label`
@@ -367,12 +392,15 @@ Generated at: 2026-07-11T05:42:37.197Z
 - Parts: 0
 
 #### Tokens
+
 <!-- layers: semantic: 3 -->
+
 - `--ran-color-link`
 - `--ran-color-primary`
 - `--ran-radius-sm`
 
 #### Parts
+
 - (none)
 
 ### `loading`
@@ -381,12 +409,15 @@ Generated at: 2026-07-11T05:42:37.197Z
 - Parts: 1
 
 #### Tokens
+
 <!-- layers: semantic: 3 -->
+
 - `--ran-color-primary`
 - `--ran-color-success`
 - `--ran-color-text`
 
 #### Parts
+
 - `sun`
 
 ### `math`
@@ -395,11 +426,14 @@ Generated at: 2026-07-11T05:42:37.197Z
 - Parts: 0
 
 #### Tokens
+
 <!-- layers: component: 2 -->
+
 - `--ran-math-align-items`
 - `--ran-math-justify-content`
 
 #### Parts
+
 - (none)
 
 ### `message`
@@ -408,7 +442,9 @@ Generated at: 2026-07-11T05:42:37.197Z
 - Parts: 0
 
 #### Tokens
+
 <!-- layers: semantic: 4 · component: 23 · internal: 1 -->
+
 - `--ran-color-bg-elevated`
 - `--ran-color-text`
 - `--ran-message-color`
@@ -439,6 +475,7 @@ Generated at: 2026-07-11T05:42:37.197Z
 - `--ran-z-message`
 
 #### Parts
+
 - (none)
 
 ### `modal`
@@ -447,7 +484,9 @@ Generated at: 2026-07-11T05:42:37.197Z
 - Parts: 8
 
 #### Tokens
+
 <!-- layers: semantic: 10 · component: 18 · internal: 1 -->
+
 - `--ran-color-bg-elevated`
 - `--ran-color-border`
 - `--ran-color-border-secondary`
@@ -479,6 +518,7 @@ Generated at: 2026-07-11T05:42:37.197Z
 - `--ran-z-modal`
 
 #### Parts
+
 - `body`
 - `close`
 - `dialog`
@@ -494,7 +534,9 @@ Generated at: 2026-07-11T05:42:37.197Z
 - Parts: 0
 
 #### Tokens
+
 <!-- layers: component: 38 -->
+
 - `--ran-dropdown-background`
 - `--ran-dropdown-box-shadow`
 - `--ran-dropdown-option-active-background-color`
@@ -535,6 +577,7 @@ Generated at: 2026-07-11T05:42:37.197Z
 - `--ran-progress-dot-background`
 
 #### Parts
+
 - (none)
 
 ### `popover`
@@ -543,9 +586,11 @@ Generated at: 2026-07-11T05:42:37.197Z
 - Parts: 0
 
 #### Tokens
+
 - (none)
 
 #### Parts
+
 - (none)
 
 ### `popover/content`
@@ -554,9 +599,11 @@ Generated at: 2026-07-11T05:42:37.197Z
 - Parts: 0
 
 #### Tokens
+
 - (none)
 
 #### Parts
+
 - (none)
 
 ### `progress`
@@ -565,7 +612,9 @@ Generated at: 2026-07-11T05:42:37.197Z
 - Parts: 3
 
 #### Tokens
+
 <!-- layers: semantic: 2 · component: 2 · internal: 1 -->
+
 - `--ran-color-primary`
 - `--ran-gray-200`
 - `--ran-progress-dot-background`
@@ -573,6 +622,7 @@ Generated at: 2026-07-11T05:42:37.197Z
 - `--ran-radius-full`
 
 #### Parts
+
 - `dot`
 - `fill`
 - `track`
@@ -583,7 +633,9 @@ Generated at: 2026-07-11T05:42:37.197Z
 - Parts: 0
 
 #### Tokens
+
 <!-- layers: semantic: 1 · component: 4 -->
+
 - `--ran-color-border`
 - `--ran-radar-fill-color`
 - `--ran-radar-line-color`
@@ -591,6 +643,7 @@ Generated at: 2026-07-11T05:42:37.197Z
 - `--ran-radar-stroke-color`
 
 #### Parts
+
 - (none)
 
 ### `route`
@@ -599,9 +652,11 @@ Generated at: 2026-07-11T05:42:37.197Z
 - Parts: 0
 
 #### Tokens
+
 - (none)
 
 #### Parts
+
 - (none)
 
 ### `router`
@@ -610,9 +665,11 @@ Generated at: 2026-07-11T05:42:37.197Z
 - Parts: 0
 
 #### Tokens
+
 - (none)
 
 #### Parts
+
 - (none)
 
 ### `scratch`
@@ -621,9 +678,11 @@ Generated at: 2026-07-11T05:42:37.197Z
 - Parts: 0
 
 #### Tokens
+
 - (none)
 
 #### Parts
+
 - (none)
 
 ### `section`
@@ -632,7 +691,9 @@ Generated at: 2026-07-11T05:42:37.197Z
 - Parts: 4
 
 #### Tokens
+
 <!-- layers: semantic: 6 · skin: 1 · internal: 8 -->
+
 - `--ran-color-bg-elevated`
 - `--ran-color-border`
 - `--ran-color-text`
@@ -650,6 +711,7 @@ Generated at: 2026-07-11T05:42:37.197Z
 - `--ran-skin-border-style`
 
 #### Parts
+
 - `body`
 - `header`
 - `heading`
@@ -661,7 +723,9 @@ Generated at: 2026-07-11T05:42:37.197Z
 - Parts: 5
 
 #### Tokens
+
 <!-- layers: semantic: 6 · skin: 1 · component: 41 -->
+
 - `--ran-color-bg-elevated`
 - `--ran-color-border`
 - `--ran-color-primary`
@@ -712,6 +776,7 @@ Generated at: 2026-07-11T05:42:37.197Z
 - `--ran-skin-font-family`
 
 #### Parts
+
 - `icon`
 - `search`
 - `select`
@@ -724,7 +789,9 @@ Generated at: 2026-07-11T05:42:37.197Z
 - Parts: 2
 
 #### Tokens
+
 <!-- layers: semantic: 3 · component: 15 · internal: 2 -->
+
 - `--ran-blue-100`
 - `--ran-color-text`
 - `--ran-dropdown-option-active-background-color`
@@ -747,6 +814,7 @@ Generated at: 2026-07-11T05:42:37.197Z
 - `--ran-radius-sm`
 
 #### Parts
+
 - `content`
 - `item`
 
@@ -756,9 +824,11 @@ Generated at: 2026-07-11T05:42:37.197Z
 - Parts: 0
 
 #### Tokens
+
 - (none)
 
 #### Parts
+
 - (none)
 
 ### `skeleton`
@@ -767,7 +837,9 @@ Generated at: 2026-07-11T05:42:37.197Z
 - Parts: 0
 
 #### Tokens
+
 <!-- layers: semantic: 1 · component: 4 · internal: 2 -->
+
 - `--ran-gray-alpha-200`
 - `--ran-gray-alpha-500`
 - `--ran-radius-sm`
@@ -777,6 +849,7 @@ Generated at: 2026-07-11T05:42:37.197Z
 - `--ran-skeleton-shimmer`
 
 #### Parts
+
 - (none)
 
 ### `tab`
@@ -785,7 +858,9 @@ Generated at: 2026-07-11T05:42:37.197Z
 - Parts: 6
 
 #### Tokens
+
 <!-- layers: semantic: 3 · component: 6 -->
+
 - `--ran-color-border`
 - `--ran-color-primary`
 - `--ran-radius-sm`
@@ -797,6 +872,7 @@ Generated at: 2026-07-11T05:42:37.197Z
 - `--ran-tab-line-transition`
 
 #### Parts
+
 - `content`
 - `content-wrap`
 - `header`
@@ -810,9 +886,11 @@ Generated at: 2026-07-11T05:42:37.197Z
 - Parts: 1
 
 #### Tokens
+
 - (none)
 
 #### Parts
+
 - `content`
 
 ### `theme-switch`
@@ -821,7 +899,9 @@ Generated at: 2026-07-11T05:42:37.197Z
 - Parts: 0
 
 #### Tokens
+
 <!-- layers: semantic: 7 · skin: 1 · internal: 11 -->
+
 - `--ran-color-bg-hover`
 - `--ran-color-border`
 - `--ran-color-primary`
@@ -843,5 +923,5 @@ Generated at: 2026-07-11T05:42:37.197Z
 - `--ran-theme-switch-radius`
 
 #### Parts
-- (none)
 
+- (none)

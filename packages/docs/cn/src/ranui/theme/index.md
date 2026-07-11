@@ -68,31 +68,31 @@ type ThemeTokenMap = Record<string, string | number | null | undefined>;
 
 ### 语义颜色令牌
 
-| 令牌                           | 用途            |
-| ------------------------------ | --------------- |
-| `--ran-color-primary`          | 主操作          |
-| `--ran-color-primary-hover`    | 主操作悬停      |
-| `--ran-color-primary-active`   | 主操作激活      |
-| `--ran-color-success`          | 成功            |
-| `--ran-color-warning`          | 警告            |
-| `--ran-color-danger`           | 危险 / 错误     |
-| `--ran-color-bg`               | 页面背景        |
-| `--ran-color-bg-subtle`        | 次级背景        |
-| `--ran-color-bg-elevated`      | 卡片 / 表面背景 |
-| `--ran-color-bg-muted`         | 弱化表面        |
-| `--ran-color-bg-hover`         | 悬停表面        |
-| `--ran-color-bg-active`        | 激活表面        |
-| `--ran-color-text`             | 主文本          |
-| `--ran-color-text-secondary`   | 次级文本        |
-| `--ran-color-text-disabled`    | 禁用文本        |
-| `--ran-color-border`           | 默认边框        |
-| `--ran-color-border-secondary` | 次级边框        |
-| `--ran-color-border-hover`     | 悬停边框        |
-| `--ran-color-border-active`    | 激活边框        |
-| `--ran-color-link`             | 链接色          |
-| `--ran-color-contrast-bg`        | 对比操作表面  |
-| `--ran-color-contrast-bg-hover`  | 对比悬停      |
-| `--ran-color-contrast-bg-active` | 对比激活      |
+| 令牌                             | 用途             |
+| -------------------------------- | ---------------- |
+| `--ran-color-primary`            | 主操作           |
+| `--ran-color-primary-hover`      | 主操作悬停       |
+| `--ran-color-primary-active`     | 主操作激活       |
+| `--ran-color-success`            | 成功             |
+| `--ran-color-warning`            | 警告             |
+| `--ran-color-danger`             | 危险 / 错误      |
+| `--ran-color-bg`                 | 页面背景         |
+| `--ran-color-bg-subtle`          | 次级背景         |
+| `--ran-color-bg-elevated`        | 卡片 / 表面背景  |
+| `--ran-color-bg-muted`           | 弱化表面         |
+| `--ran-color-bg-hover`           | 悬停表面         |
+| `--ran-color-bg-active`          | 激活表面         |
+| `--ran-color-text`               | 主文本           |
+| `--ran-color-text-secondary`     | 次级文本         |
+| `--ran-color-text-disabled`      | 禁用文本         |
+| `--ran-color-border`             | 默认边框         |
+| `--ran-color-border-secondary`   | 次级边框         |
+| `--ran-color-border-hover`       | 悬停边框         |
+| `--ran-color-border-active`      | 激活边框         |
+| `--ran-color-link`               | 链接色           |
+| `--ran-color-contrast-bg`        | 对比操作表面     |
+| `--ran-color-contrast-bg-hover`  | 对比悬停         |
+| `--ran-color-contrast-bg-active` | 对比激活         |
 | `--ran-color-contrast-text`      | 对比表面上的文本 |
 
 **contrast（对比）** 这组令牌支撑单色的「最高对比度」操作（即 Geist 对比按钮

@@ -18,12 +18,12 @@ Button component for triggering instant actions with multiple styles and states.
 
 ### Properties
 
-| Property   | Type      | Default     | Description                                                       |
-| ---------- | --------- | ----------- | ----------------------------------------------------------------- |
+| Property   | Type      | Default     | Description                                                      |
+| ---------- | --------- | ----------- | ---------------------------------------------------------------- |
 | `type`     | `string`  | `'default'` | Button type: `default`, `primary`, `contrast`, `warning`, `text` |
-| `disabled` | `boolean` | `false`     | Whether the button is disabled                       |
-| `icon`     | `string`  | `''`        | Button icon name                                     |
-| `effect`   | `boolean` | `true`      | Whether to show click ripple effect                  |
+| `disabled` | `boolean` | `false`     | Whether the button is disabled                                   |
+| `icon`     | `string`  | `''`        | Button icon name                                                 |
+| `effect`   | `boolean` | `true`      | Whether to show click ripple effect                              |
 
 ### Button Types `type`
 
