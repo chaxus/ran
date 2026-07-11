@@ -5,6 +5,7 @@ packages:
 overrides:
   esbuild: '>=0.28.1'
   '@babel/core': '>=7.29.6'
+  'vitepress>vite': '^6.4.3'
 allowBuilds:
   core-js: true
   esbuild: true
