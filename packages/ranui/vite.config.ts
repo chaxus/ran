@@ -94,6 +94,7 @@ export const componentEntries: Record<string, string> = {
   router: resolve(__dirname, 'components/router/index.ts'),
   route: resolve(__dirname, 'components/route/index.ts'),
   link: resolve(__dirname, 'components/link/index.ts'),
+  'theme-switch': resolve(__dirname, 'components/theme-switch/index.ts'),
 };
 
 export const es: BuildOptions = {

@@ -30,6 +30,12 @@ $bin/tsc --declaration --emitDeclarationOnly --outDir ./dist --project tsconfig.
 cp tsconfig.json ./dist
 cp typings.d.ts ./dist
 
+# ship the self-hosted Geist faces (fonts.css + variable *.woff2 + OFL license)
+# as dist/fonts/ — consumed via the "./fonts" package export or by copying the
+# directory wholesale (URLs inside fonts.css are relative to it).
+mkdir -p $dist/fonts
+cp fonts/fonts.css fonts/Geist-Variable.woff2 fonts/GeistMono-Variable.woff2 fonts/OFL-LICENSE.txt $dist/fonts/
+
 # 获取脚本所在的目录
 SCRIPT_DIR=$(cd $(dirname $0) && pwd)
 

@@ -6,16 +6,16 @@ shape), slots, and `::part()` names — extracted from source. For CSS variables
 (theming tokens) see [style-tokens-public.md](./style-tokens-public.md); for
 design rules see [DESIGN.md](./DESIGN.md).
 
-Generated at: 2026-07-11T04:29:31.985Z
+Generated at: 2026-07-11T05:42:36.629Z
 
-29 custom elements.
+30 custom elements.
 
 ## `<r-button>`
 
 Source: `components/button/index.ts`
 
 - **Attributes**: `disabled: boolean | string`, `effect: string`, `icon: string`, `iconSize: string`, `sheet: string`, `type: string`
-- **Properties**:
+- **Properties**: 
   - `disabled: boolean | string`
   - `effect: string`
   - `icon: string`
@@ -30,8 +30,12 @@ Source: `components/button/index.ts`
 
 Source: `components/card/index.ts`
 
-- **Attributes**: `description: string`, `sheet: string`, `title: string`
-- **Properties**: `description: string`, `sheet: string`, `title: string`
+- **Attributes**: `description: string`, `hoverable: boolean`, `sheet: string`, `title: string`
+- **Properties**: 
+  - `description: string`
+  - `hoverable: boolean` — Interactive card (Geist): hover darkens the border and lifts to the elevated shadow tier. Purely presentational — gate it to cards that are actually clickable.
+  - `sheet: string`
+  - `title: string`
 - **Events**: —
 - **Slots**: `default`, `extra (named)`, `footer (named)`
 - **Parts**: `body`, `card`, `description`, `extra`, `footer`, `header`, `title`
@@ -111,7 +115,7 @@ Source: `components/icon/index.ts`
 Source: `components/image/index.ts`
 
 - **Attributes**: —
-- **Properties**:
+- **Properties**: 
   - `alt` — Alternative text forwarded to the inner `<img>`. Defaults to `''` (empty),
   - `fallback`
   - `sheet`
@@ -124,7 +128,7 @@ Source: `components/image/index.ts`
 Source: `components/input/index.ts`
 
 - **Attributes**: `disabled: boolean`, `icon: string`, `label: string`, `max: string`, `message: string`, `min: string`, `name: string`, `placeholder: string`, `required: boolean`, `sheet: string`, `status: string`, `step: string`, `type: string`, `value: string`
-- **Properties**:
+- **Properties**: 
   - `disabled: boolean` — input 上 disabled 属性
   - `icon: string` — 一个 icon
   - `label: string` — 类似于 Metiral Design 的输入体验。
@@ -322,3 +326,16 @@ Source: `components/tab/index.ts`
 - **Events**: `change` → detail `{ active }`
 - **Slots**: `default`
 - **Parts**: `content`, `content-wrap`, `header`, `indicator`, `nav`, `tabs`
+
+## `<r-theme-switch>`
+
+Source: `components/theme-switch/index.ts`
+
+- **Attributes**: `label-dark`, `label-light`, `label-system`, `sheet: string`
+- **Properties**: 
+  - `sheet: string`
+  - `value: RanThemeName` — `<r-theme-switch>` — a three-state (system / light / dark) segmented control
+- **Events**: `change` → detail `{ theme }`
+- **Slots**: —
+- **Parts**: —
+

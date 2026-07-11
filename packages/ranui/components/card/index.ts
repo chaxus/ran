@@ -18,7 +18,7 @@ export class Card extends RanElement {
   _footerEl!: HTMLElement;
 
   static get observedAttributes(): string[] {
-    return ['title', 'description', 'sheet'];
+    return ['title', 'description', 'sheet', 'hoverable'];
   }
 
   constructor() {
@@ -82,6 +82,18 @@ export class Card extends RanElement {
   }
   set sheet(value: string) {
     setStringAttribute(this, 'sheet', value);
+  }
+
+  /** Interactive card (Geist): hover darkens the border and lifts to the elevated shadow tier. Purely presentational — gate it to cards that are actually clickable. */
+  get hoverable(): boolean {
+    return this.hasAttribute('hoverable');
+  }
+  set hoverable(value: boolean) {
+    if (value) {
+      this.setAttribute('hoverable', '');
+    } else {
+      this.removeAttribute('hoverable');
+    }
   }
 
   // ── Internal sync ──────────────────────────────────────────────────────────
