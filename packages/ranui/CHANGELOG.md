@@ -6,6 +6,19 @@ All notable changes to `ranui` will be documented in this file.
 
 ### Added
 
+- **Contrast (monochrome) action tokens + `r-button type="contrast"`** (Geist contrast button): new semantic tokens `--ran-color-contrast-bg` / `-bg-hover` / `-bg-active` / `--ran-color-contrast-text` that invert with the theme (black-on-white in light, white-on-black in dark), and a first-class `type="contrast"` button variant consuming them (default/hover/active/ripple).
+
+### Changed
+
+- **`r-card` default surface is now Geist-style bordered** — page background (`--ran-color-bg`) + 1px `--ran-color-border`, replacing the muted gray fill (`--ran-color-bg-muted`). Consumers that want the old inset look can set `--ran-card-background: var(--ran-color-bg-muted)`. Also added a dedicated `--ran-card-border-color` component token so hover border-darkening can be driven from outside the (closed) shadow root.
+- **Default (secondary) `r-button` hover no longer flips to the accent color** — it darkens the border (gray 400 → 500) and keeps primary text, per the Geist state ladder; the default ripple is now a translucent gray (`--ran-gray-alpha-400`) instead of primary blue.
+
+### Fixed
+
+- Replaced legacy antd-era hardcoded fallbacks (`#1890ff`, `#40a9ff`, `#d9d9d9`) in button/card/section/input/checkbox/colorpicker/select/message with current Geist token values (`#006bff`, `#eaeaea`, `#f2f2f2`) so a missing token layer degrades to the correct palette.
+
+### Added
+
 - **Accessibility pass across components (DESIGN.md §7):**
   - `r-message` toasts are now announced by screen readers: the stack is a persistent `aria-live="polite"` region, each toast is `aria-atomic`, and `error`/`warning` escalate to an assertive `role="alert"` (others `role="status"`).
   - `r-img` gains an `alt` attribute/property forwarded to the inner `<img>`; when unset it defaults to an empty `alt` (decorative) so screen readers skip it instead of announcing the URL.

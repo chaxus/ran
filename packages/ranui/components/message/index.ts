@@ -38,7 +38,7 @@ const typeMapColor = new Map([
   ['success', '#52c41a'],
   ['warning', '#faad14'],
   ['error', '#ff4d4f'],
-  ['info', '#1890ff'],
+  ['info', '#006bff'],
   ['toast', 'rgba(0, 0, 0, 0.7)'],
 ]);
 

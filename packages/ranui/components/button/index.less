@@ -54,9 +54,9 @@
 
   &([type="primary"]) {
     .ran-btn-content {
-      background-color: var(--ran-btn-content-background-color, var(--ran-color-primary, #1890ff));
+      background-color: var(--ran-btn-content-background-color, var(--ran-color-primary, #006bff));
       background-image: var(--ran-btn-content-background-image, none);
-      border-color: var(--ran-btn-content-border-color, var(--ran-color-primary, #1890ff));
+      border-color: var(--ran-btn-content-border-color, var(--ran-color-primary, #006bff));
       color: var(--ran-btn-content-color, #fff);
     }
   }
@@ -74,12 +74,42 @@
     }
   }
 
+  /* Geist "contrast": the highest-contrast monochrome action. Tracks
+     --ran-color-contrast-* so it inverts (black-on-white ↔ white-on-black)
+     with the theme. */
+  &([type="contrast"]) {
+    .ran-btn-content {
+      background-color: var(--ran-btn-content-background-color, var(--ran-color-contrast-bg, #171717));
+      background-image: var(--ran-btn-content-background-image, none);
+      border-color: var(--ran-btn-content-border-color, var(--ran-color-contrast-bg, #171717));
+      color: var(--ran-btn-content-color, var(--ran-color-contrast-text, #fff));
+    }
+  }
+
+  &([type="contrast"]:not([disabled])) {
+    .ran-btn::after {
+      background-image: var(
+        --ran-btn-after-background-image,
+        radial-gradient(circle, var(--ran-color-contrast-text, #fff) 10%, transparent 10.01%)
+      );
+    }
+  }
+
+  &([type="contrast"]:not([disabled]):active) {
+    .ran-btn-content {
+      background-color: var(--ran-btn-content-active-background-color, var(--ran-color-contrast-bg-active, #4d4d4d));
+      border-color: var(--ran-btn-content-active-border-color, var(--ran-color-contrast-bg-active, #4d4d4d));
+    }
+  }
+
   /* 媒体查询，针对屏幕宽度大于或等于 1024px 的设备（这里假设这是电脑屏幕的最小宽度） */
   @media (min-width: 1024px) {
+    /* Default (secondary) hover — Geist border-darken, not accent-flip:
+       border steps 400 → 500 on the gray ladder, text stays primary text. */
     &(:not([disabled]):hover) {
       .ran-btn-content {
-        border-color: var(--ran-btn-content-hover-border-color, var(--ran-color-primary, #1890ff));
-        color: var(--ran-btn-content-hover-color, var(--ran-color-primary, #1890ff));
+        border-color: var(--ran-btn-content-hover-border-color, var(--ran-color-border-hover, #c9c9c9));
+        color: var(--ran-btn-content-hover-color, var(--ran-color-text, #171717));
       }
     }
 
@@ -88,6 +118,14 @@
         background-color: var(--ran-btn-content-hover-background-color, var(--ran-color-primary-hover, #0059ec));
         border-color: var(--ran-btn-content-hover-border-color, var(--ran-color-primary-hover, #0059ec));
         color: var(--ran-btn-content-hover-color, #fff);
+      }
+    }
+
+    &([type="contrast"]:not([disabled]):hover) {
+      .ran-btn-content {
+        background-color: var(--ran-btn-content-hover-background-color, var(--ran-color-contrast-bg-hover, #383838));
+        border-color: var(--ran-btn-content-hover-border-color, var(--ran-color-contrast-bg-hover, #383838));
+        color: var(--ran-btn-content-hover-color, var(--ran-color-contrast-text, #fff));
       }
     }
 
@@ -152,7 +190,7 @@
         left: @clickX;
         top: @clickY;
         pointer-events: none;
-        background-image: radial-gradient(circle, var(--ran-color-primary, #1890ff) 10%, transparent 10.01%);
+        background-image: radial-gradient(circle, var(--ran-gray-alpha-400, #00000014) 10%, transparent 10.01%);
         background-repeat: no-repeat;
         background-position: 50%;
         transform: translate(-50%, -50%) scale(10);
@@ -181,7 +219,7 @@
   border-image-outset: 0;
   border-image-repeat: stretch;
   border-radius: var(--ran-btn-content-border-radius, var(--ran-radius-sm, 6px));
-  border-color: var(--ran-btn-content-border-color, var(--ran-color-border, #d9d9d9));
+  border-color: var(--ran-btn-content-border-color, var(--ran-color-border, #eaeaea));
   color: var(--ran-btn-content-color, var(--ran-color-text, #000000d9));
   line-height: var(--ran-btn-content-line-height, 22px);
   font-size: var(--ran-btn-content-font-size, 14px);

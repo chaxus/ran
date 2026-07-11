@@ -13,9 +13,10 @@
   padding: var(--ran-card-padding, 16px);
   border-width: var(--ran-skin-border-width, 1px);
   border-style: var(--ran-skin-border-style, solid);
-  border-color: var(--ran-color-border, #d9d9d9);
+  border-color: var(--ran-card-border-color, var(--ran-color-border, #eaeaea));
   border-radius: var(--ran-card-radius, var(--ran-radius-md));
-  background: var(--ran-card-background, var(--ran-color-bg-muted));
+  // Geist card: page background + 1px border, not a muted gray fill.
+  background: var(--ran-card-background, var(--ran-color-bg));
   box-shadow: var(--ran-card-shadow, none);
   box-sizing: border-box;
 

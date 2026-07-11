@@ -38,25 +38,27 @@ Scales: `--ran-gray-100..1000`, `--ran-gray-alpha-100..1000` (translucent, layer
 
 **Use the semantic layer, not the scale, in components:**
 
-| Token                                        | Maps to                         | Use for             |
-| -------------------------------------------- | ------------------------------- | ------------------- |
-| `--ran-color-bg`                             | background-100                  | Page background     |
-| `--ran-color-bg-subtle`                      | background-200                  | Subtle page zones   |
-| `--ran-color-bg-elevated`                    | bg-100 / gray-100 (dark)        | Cards, surfaces     |
-| `--ran-color-bg-muted`                       | gray-100                        | Inset / muted fills |
-| `--ran-color-bg-hover`                       | gray-200                        | Hover background    |
-| `--ran-color-bg-active`                      | gray-300                        | Active background   |
-| `--ran-color-text`                           | gray-1000                       | Primary text        |
-| `--ran-color-text-secondary`                 | gray-900                        | Secondary text      |
-| `--ran-color-text-disabled`                  | gray-700                        | Disabled text       |
-| `--ran-color-border`                         | gray-400                        | Default border      |
-| `--ran-color-border-hover`                   | gray-500                        | Hover border        |
-| `--ran-color-border-active`                  | gray-600                        | Active border       |
-| `--ran-color-primary` / `-hover` / `-active` | blue-700 / 800 / 900            | Primary action      |
-| `--ran-color-success` / `warning` / `danger` | green-700 / amber-700 / red-700 | Status              |
-| `--ran-color-link`                           | blue-700                        | Links               |
+| Token                                            | Maps to                         | Use for                      |
+| ------------------------------------------------ | ------------------------------- | ---------------------------- |
+| `--ran-color-bg`                                 | background-100                  | Page background              |
+| `--ran-color-bg-subtle`                          | background-200                  | Subtle page zones            |
+| `--ran-color-bg-elevated`                        | bg-100 / gray-100 (dark)        | Cards, surfaces              |
+| `--ran-color-bg-muted`                           | gray-100                        | Inset / muted fills          |
+| `--ran-color-bg-hover`                           | gray-200                        | Hover background             |
+| `--ran-color-bg-active`                          | gray-300                        | Active background            |
+| `--ran-color-text`                               | gray-1000                       | Primary text                 |
+| `--ran-color-text-secondary`                     | gray-900                        | Secondary text               |
+| `--ran-color-text-disabled`                      | gray-700                        | Disabled text                |
+| `--ran-color-border`                             | gray-400                        | Default border               |
+| `--ran-color-border-hover`                       | gray-500                        | Hover border                 |
+| `--ran-color-border-active`                      | gray-600                        | Active border                |
+| `--ran-color-primary` / `-hover` / `-active`     | blue-700 / 800 / 900            | Primary action               |
+| `--ran-color-success` / `warning` / `danger`     | green-700 / amber-700 / red-700 | Status                       |
+| `--ran-color-link`                               | blue-700                        | Links                        |
+| `--ran-color-contrast-bg` / `-hover` / `-active` | gray-1000 / literal steps       | Contrast (monochrome) action |
+| `--ran-color-contrast-text`                      | background-100                  | Text on contrast             |
 
-**Accent meaning:** blue = primary & links · green = success · amber = warning · red = danger/error.
+**Accent meaning:** blue = primary & links · green = success · amber = warning · red = danger/error. The **contrast** pair is the monochrome "highest-contrast" action (Geist contrast button): black-on-white in light, white-on-black in dark — use it when the primary action should carry no hue.
 
 **Light & dark:** same token name, different value. `gray-1000` is `#171717` in light and `#ededed` in dark. Components reference the _semantic name_; dark mode only redefines the base scale (one mixin), and everything re-resolves.
 
