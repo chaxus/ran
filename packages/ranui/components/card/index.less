@@ -4,6 +4,20 @@
   min-height: var(--ran-card-min-height, 0);
 }
 
+/* Interactive card (Geist): opt in with the `hoverable` attribute — border
+   darkens one step (400 → 500) and the surface takes the quiet elevated
+   shadow. Non-interactive cards must not react to hover, so this is gated. */
+:host([hoverable]) .ran-card {
+  /* border-color / box-shadow only — never background (theme-flip flash) */
+  transition:
+    border-color var(--ran-motion-duration-base, 0.2s),
+    box-shadow var(--ran-motion-duration-base, 0.2s);
+}
+:host([hoverable]:hover) .ran-card {
+  border-color: var(--ran-card-hover-border-color, var(--ran-color-border-hover, #c9c9c9));
+  box-shadow: var(--ran-card-hover-shadow, var(--ran-shadow-elevated, 0 1px 2px rgba(0, 0, 0, 0.04)));
+}
+
 .ran-card {
   display: grid;
   align-content: start;

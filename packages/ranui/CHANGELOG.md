@@ -7,6 +7,9 @@ All notable changes to `ranui` will be documented in this file.
 ### Added
 
 - **Contrast (monochrome) action tokens + `r-button type="contrast"`** (Geist contrast button): new semantic tokens `--ran-color-contrast-bg` / `-bg-hover` / `-bg-active` / `--ran-color-contrast-text` that invert with the theme (black-on-white in light, white-on-black in dark), and a first-class `type="contrast"` button variant consuming them (default/hover/active/ripple).
+- **`<r-theme-switch>`** — a Vercel-style three-state (system / light / dark) segmented pill wired to the theme API (`setTheme`, localStorage `ran-theme`). Instances sync across the page and across tabs, `label`/`label-*` attributes localize aria-labels, a composed `change` event reports `{ theme }`, and `theme-color` metas are kept in step using the resolved `--ran-color-bg` (originals restored in `system`). Ships as `ranui/theme-switch` + `dist/iife/theme-switch.iife.js`.
+- **Self-hosted Geist faces: `ranui/fonts`** — `dist/fonts/fonts.css` + variable-weight `Geist-Variable.woff2` / `GeistMono-Variable.woff2` (~138 KB total, SIL OFL 1.1, license shipped alongside). One import gives consumers the canonical faces behind `--ran-font-family` / `--ran-font-mono`, self-hosted and offline-friendly (no CDN).
+- **`r-card hoverable` attribute** — opt-in Geist interactive-card hover (border 400 → 500 + elevated shadow; `--ran-card-hover-border-color` / `--ran-card-hover-shadow` overridable). Non-interactive cards stay inert.
 
 ### Changed
 

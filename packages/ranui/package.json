@@ -89,6 +89,7 @@
       "require": "./dist/index.cjs"
     },
     "./style": "./dist/ranui.css",
+    "./fonts": "./dist/fonts/fonts.css",
     "./builder": {
       "types": "./dist/builder.d.ts",
       "import": "./dist/builder.js",
@@ -222,6 +223,11 @@
     "./link": {
       "types": "./dist/index.d.ts",
       "import": "./dist/link.js",
+      "require": "./dist/index.cjs"
+    },
+    "./theme-switch": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/theme-switch.js",
       "require": "./dist/index.cjs"
     },
     "./type": {

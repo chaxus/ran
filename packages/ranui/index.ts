@@ -26,6 +26,7 @@ export { Section } from '@/components/section';
 export { Router } from '@/components/router';
 export { Route } from '@/components/route';
 export { Link } from '@/components/link';
+export { ThemeSwitch } from '@/components/theme-switch';
 export {
   RouterCore,
   createRouter,
@@ -77,6 +78,7 @@ import '@/components/section';
 import '@/components/router';
 import '@/components/route';
 import '@/components/link';
+import '@/components/theme-switch';
 
 // ── Typed custom elements ───────────────────────────────────────────────────
 // Augment the DOM tag map so `document.querySelector('r-select')` and
@@ -107,6 +109,7 @@ import type { Section as TSection } from '@/components/section';
 import type { Router as TRouter } from '@/components/router';
 import type { Route as TRoute } from '@/components/route';
 import type { Link as TLink } from '@/components/link';
+import type { ThemeSwitch as TThemeSwitch } from '@/components/theme-switch';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -135,5 +138,6 @@ declare global {
     'r-router': TRouter;
     'r-route': TRoute;
     'r-link': TLink;
+    'r-theme-switch': TThemeSwitch;
   }
 }

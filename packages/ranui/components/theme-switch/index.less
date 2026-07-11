@@ -1,0 +1,54 @@
+/* Theme switch — a Vercel/Geist-style three-state segmented pill
+   (system / light / dark). Values ride the semantic token layer; per-instance
+   overrides via --ran-theme-switch-*. */
+:host {
+  display: var(--ran-theme-switch-display, inline-flex);
+  box-sizing: border-box;
+}
+
+.ran-theme-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ran-theme-switch-gap, 2px);
+  padding: var(--ran-theme-switch-padding, 2px);
+  border-width: var(--ran-skin-border-width, 1px);
+  border-style: var(--ran-skin-border-style, solid);
+  border-color: var(--ran-theme-switch-border-color, var(--ran-color-border, #eaeaea));
+  border-radius: var(--ran-theme-switch-radius, var(--ran-radius-full, 9999px));
+  background: var(--ran-theme-switch-background, transparent);
+  box-sizing: border-box;
+}
+
+.ran-theme-switch button {
+  width: var(--ran-theme-switch-button-size, 28px);
+  height: var(--ran-theme-switch-button-size, 28px);
+  display: grid;
+  place-items: center;
+  border: none;
+  border-radius: var(--ran-theme-switch-radius, var(--ran-radius-full, 9999px));
+  background: transparent;
+  color: var(--ran-theme-switch-color, var(--ran-color-text-secondary, #4d4d4d));
+  cursor: pointer;
+  padding: 0;
+  /* color only — transitioning background would fade on a theme flip */
+  transition: color var(--ran-motion-duration-fast, 0.15s) ease;
+}
+
+.ran-theme-switch button:hover {
+  color: var(--ran-theme-switch-hover-color, var(--ran-color-text, #171717));
+}
+
+.ran-theme-switch button[aria-pressed='true'] {
+  background: var(--ran-theme-switch-active-background, var(--ran-color-bg-hover, #ebebeb));
+  color: var(--ran-theme-switch-active-color, var(--ran-color-text, #171717));
+}
+
+.ran-theme-switch button:focus-visible {
+  outline: var(--ran-theme-switch-focus-outline, 2px solid var(--ran-color-primary, #006bff));
+  outline-offset: 2px;
+}
+
+.ran-theme-switch svg {
+  width: var(--ran-theme-switch-icon-size, 16px);
+  height: var(--ran-theme-switch-icon-size, 16px);
+}
