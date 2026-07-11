@@ -83,6 +83,7 @@ export function signal<T>(initial: T, options?: SignalOptions<T>): [Getter<T>, S
       // from `subscribers` (stale-subscription cleanup) and re-adds itself when
       // it reads this signal again. A Set revisits elements re-added during
       // iteration, so iterating live loops forever (delete → re-add → revisit).
+      // oxlint-disable-next-line unicorn/no-useless-spread -- the copy is load-bearing
       for (const sub of [...subscribers]) sub();
     }
   };
