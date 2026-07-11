@@ -30,8 +30,8 @@
   color: var(--ran-theme-switch-color, var(--ran-color-text-secondary, #4d4d4d));
   cursor: pointer;
   padding: 0;
-  /* color only — transitioning background would fade on a theme flip */
-  transition: color var(--ran-motion-duration-fast, 0.15s) ease;
+  /* No transition: color is a palette prop and fades on the very theme flip
+     this control triggers. Hover feedback snaps, like the rest of the library. */
 }
 
 .ran-theme-switch button:hover {

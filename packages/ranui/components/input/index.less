@@ -14,7 +14,6 @@
     &-label {
       transform: var(--ran-input-label-transform, translateY(-50%));
       top: var(--ran-input-label-top, 50%);
-      transition: var(--ran-input-label-transition, all 0.3s);
     }
   }
 }
@@ -39,14 +38,9 @@
   border-image-outset: 0;
   border-image-repeat: stretch;
   border-radius: var(--ran-input-border-radius, var(--ran-radius-sm, 6px));
-  // Interaction-driven props only — never `background`, or a light/dark theme
-  // switch visibly fades the field instead of flipping with the page.
-  transition: var(
-    --ran-input-transition,
-    border-color var(--ran-motion-duration-base, 0.2s),
-    box-shadow var(--ran-motion-duration-base, 0.2s),
-    color var(--ran-motion-duration-base, 0.2s)
-  );
+  // No default transition: border-color / box-shadow / color are palette props
+  // and would fade on a theme flip. Consumers can opt in via the hook var.
+  transition: var(--ran-input-transition, none);
   // overflow: var(--ran-input-overflow, hidden);
   min-height: var(--ran-input-min-height, 32px);
   .ran-icon {
@@ -173,13 +167,8 @@
     line-height: var(--ran-input-content-line-height, 1.48);
     background-color: var(--ran-input-content-background-color, var(--ran-color-bg-elevated, #fff));
     background-image: var(--ran-input-content-background-image, none);
-    // See note above — exclude `background` so theme switches are instant.
-    transition: var(
-      --ran-input-content-transition,
-      border-color var(--ran-motion-duration-base, 0.2s),
-      box-shadow var(--ran-motion-duration-base, 0.2s),
-      color var(--ran-motion-duration-base, 0.2s)
-    );
+    // See note above — palette props never transition, so theme flips are instant.
+    transition: var(--ran-input-content-transition, none);
     outline: var(--ran-input-content-outline, none);
     border-radius: var(--ran-input-content-border-radius, var(--ran-radius-sm, 6px));
     padding: var(--ran-input-content-padding, 0 0 0 2px);
@@ -211,19 +200,14 @@
     position: var(--ran-input-label-position, absolute);
     font-size: var(--ran-input-label-font-size, 14px);
     left: var(--ran-input-label-left, 8px);
-    transition: var(
-      --ran-input-label-transition,
-      transform 0.3s,
-      color 0.3s,
-      background-color 0.3s,
-      backdrop-filter 0.3s
-    );
+    /* Float animation rides motion props only (the label moves and shrinks);
+       color / background-color are palette props and would fade on a theme flip. */
+    transition: var(--ran-input-label-transition, transform 0.3s, top 0.3s, font-size 0.3s);
     transform-origin: var(--ran-input-label-transform-origin, left);
     padding: var(--ran-input-label-padding, 0 0);
     color: var(--ran-input-label-color, var(--ran-color-text-disabled, #999));
     background: var(--ran-input-label-background, var(--ran-color-bg-elevated, #fff));
     opacity: var(--ran-input-label-opacity, 0.9);
-    transition: var(--ran-input-label-transition, all 0.3s);
   }
 }
 

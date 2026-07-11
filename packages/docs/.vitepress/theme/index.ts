@@ -33,9 +33,20 @@ declare global {
  */
 const syncRanuiTheme = () => {
   const html = document.documentElement;
+  let lastDark: boolean | undefined;
+  let flipTimer: number | undefined;
   const apply = () => {
     const dark = html.classList.contains('dark');
     html.setAttribute('data-ran-theme', dark ? 'dark' : 'light');
+    // 换肤瞬间挂一个 theme-flip 脉冲 class(样式见 index.less):冻结全站 transition,
+    // 否则导航栏(0.5s)、ranui 组件(0.2s)各按自己的时长淡变,页面切换不同步。
+    // MutationObserver 在渲染前回调,class 能赶在本帧绘制前生效,不会闪。
+    if (lastDark !== undefined && dark !== lastDark) {
+      html.classList.add('theme-flip');
+      window.clearTimeout(flipTimer);
+      flipTimer = window.setTimeout(() => html.classList.remove('theme-flip'), 120);
+    }
+    lastDark = dark;
   };
   apply();
   new MutationObserver(apply).observe(html, { attributes: true, attributeFilter: ['class'] });

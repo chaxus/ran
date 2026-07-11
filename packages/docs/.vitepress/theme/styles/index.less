@@ -74,6 +74,25 @@ p img {
   }
 }
 
+/* Theme flip sync — html.theme-flip is pulsed for ~120ms by syncRanuiTheme
+   (theme/index.ts) whenever light/dark toggles. It freezes every light-DOM
+   transition so the whole page flips in one frame: without it the VitePress
+   navbar (background-color 0.5s) and our own hover transitions each fade at
+   their own pace. ranui components need no override here — the library ships
+   no palette transitions by design (see ranui DESIGN.md §5); the motion tokens
+   below are only belt-and-braces for anything that opts back in. Animations
+   (spinners, skeletons) are left running on purpose. */
+html.theme-flip,
+html.theme-flip *,
+html.theme-flip *::before,
+html.theme-flip *::after {
+  transition: none !important;
+}
+html.theme-flip {
+  --ran-motion-duration-fast: 0s;
+  --ran-motion-duration-base: 0s;
+}
+
 /* PWA install prompt (@khmyznikov/pwa-install) — re-tint its shadow-DOM vars
    onto the site palette: Geist blue instead of the stock indigo, page-matching
    surfaces in both themes. */

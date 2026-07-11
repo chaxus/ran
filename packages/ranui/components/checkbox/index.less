@@ -100,9 +100,11 @@
       border-inline-start: var(--ran-checkbox-inner-after-border-inline-start, 0);
       opacity: var(--ran-checkbox-inner-after-opacity, 0);
       content: var(--ran-checkbox-inner-after-content, '');
+      /* transform/opacity only — `all` would also fade the check-mark border
+         color on a theme flip */
       transition: var(
         --ran-checkbox-inner-after-transition,
-        all 0.1s cubic-bezier(0.71, -0.46, 0.88, 0.6),
+        transform 0.1s cubic-bezier(0.71, -0.46, 0.88, 0.6),
         opacity 0.1s
       );
       transform: var(--ran-checkbox-inner-after-transform, rotate(45deg) scale(1) translate(-50%, -50%));

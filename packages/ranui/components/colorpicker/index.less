@@ -14,7 +14,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: var(--ran-colorpicker-transition, border-color 0.2s, box-shadow 0.2s);
+  /* No default transition: border-color / box-shadow are palette props and
+     would fade on a theme flip. Opt in via the hook var if wanted. */
+  transition: var(--ran-colorpicker-transition, none);
   background: var(--ran-colorpicker-background, var(--ran-color-bg-elevated, #ffffff));
   padding: 3px;
 

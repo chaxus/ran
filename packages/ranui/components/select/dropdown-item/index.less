@@ -6,7 +6,9 @@
     color: var(--ran-dropdown-option-item-color, var(--ran-color-text, rgba(0, 0, 0, 0.88)));
     font-weight: var(--ran-dropdown-option-item-font-weight, normal);
     font-size: var(--ran-dropdown-option-item-font-size, 14px);
-    transition: var(--ran-dropdown-option-item-transition, background var(--ran-motion-duration-base, 0.2s) ease);
+    /* No default transition: background is a palette prop — an open dropdown
+       would fade its items on a theme flip. Opt in via the hook var if wanted. */
+    transition: var(--ran-dropdown-option-item-transition, none);
     border-radius: var(--ran-dropdown-option-item-border-radius, var(--ran-radius-sm, 6px));
     cursor: var(--ran-dropdown-option-item-cursor, pointer);
     &:hover {

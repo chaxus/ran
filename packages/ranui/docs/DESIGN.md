@@ -142,20 +142,30 @@ Durations: `--ran-motion-duration-fast` `0.15s`, `--ran-motion-duration-base` `0
 
 **Principle:** the bigger the change, the more time it earns. Otherwise: don't animate. Keep motion quick, light, and restrained. Respect `prefers-reduced-motion`.
 
-**Never animate a theme switch.** Transitions are for _interaction_ (hover / focus / press), not for flipping light↔dark. A structural surface that declares `transition: all` will, on a theme toggle, fade its `background-color` from the light value to the dark value over the transition duration — a visible white→dark flash while the rest of the page has already flipped. Rules:
+**Never animate a theme switch.** Transitions are for _interaction_ (hover / focus / press), not for flipping light↔dark. CSS cannot tell _why_ a property changed: any palette prop listed in a `transition` will also fade when the theme flips its token — each component at its own duration, while the host page has already switched. A general-purpose library must not impose that on its consumers. Rules:
 
-- Do **not** put `background` / `background-color` in a `transition` on any surface that carries a theme-driven color. List the interaction props explicitly (`border-color`, `box-shadow`, `color`, `opacity`, `transform`) — never `all`.
-- `transition: all` is banned in component styles for this reason; it also silently animates properties you never intended.
+- **Palette props never get a default transition.** `background` / `background-color`, `color`, `border-color`, `box-shadow`, `fill`, `stroke` — none of them, on any element that carries a theme-driven color. Hover/focus feedback on these props snaps.
+- **Motion props may transition.** `transform`, `opacity`, and box-geometry props (`left` / `top` / `width` / `height` / `font-size`) don't follow the theme — checkbox pops, floating labels, tab ink-bars, ripples all stay animated.
+- `transition: all` and bare-duration shorthands (`transition: 0.2s` — which means `all`) are banned; they silently include palette props.
+- Every removed default keeps its `--ran-*-transition` hook var, so a consumer who wants palette fades can opt in per component.
 
 ```less
-/* ✗ flashes on theme switch */
+/* ✗ fades on theme switch (palette props; `all`; bare duration = all) */
 transition: all var(--ran-motion-duration-base, 0.2s);
-
-/* ✓ interaction only — theme flip is instant */
+transition: 0.2s;
 transition:
-  border-color var(--ran-motion-duration-base, 0.2s),
-  box-shadow var(--ran-motion-duration-base, 0.2s),
-  color var(--ran-motion-duration-base, 0.2s);
+  border-color 0.2s,
+  color 0.2s;
+
+/* ✓ motion props only — theme flip is instant, interaction still animates */
+transition: var(
+  --ran-checkbox-inner-after-transition,
+  transform 0.1s cubic-bezier(0.71, -0.46, 0.88, 0.6),
+  opacity 0.1s
+);
+
+/* ✓ no motion at all, with an opt-in hook for consumers */
+transition: var(--ran-input-transition, none);
 ```
 
 ---

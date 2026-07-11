@@ -40,7 +40,9 @@
       height: 2px;
       border-radius: 2px;
       background: @lineColor;
-      transition: var(--ran-tab-line-transition, 0.2s);
+      /* positional props only — the bare `0.2s` shorthand meant `all`, which
+         also faded the line color on a theme flip */
+      transition: var(--ran-tab-line-transition, left 0.2s, width 0.2s, transform 0.2s);
     }
   }
 
@@ -50,7 +52,7 @@
       display: flex;
       width: 100%;
       height: 100%;
-      transition: var(--ran-tab-content-transition, 0.2s);
+      transition: var(--ran-tab-content-transition, transform 0.2s);
     }
   }
 }

@@ -1265,7 +1265,9 @@
       position: var(--loading-cube-dim-item-position, relative);
       transform: var(--loading-cube-dim-item-transform, translateZ(3em));
       transform-style: var(--loading-cube-dim-item-transform-style, preserve-3d);
-      transition: var(--loading-cube-dim-item-transition, 0.25s);
+      /* transform only — the bare `0.25s` shorthand meant `all`, which also
+         faded the shadow color on a theme flip */
+      transition: var(--loading-cube-dim-item-transition, transform 0.25s);
       box-shadow: var(--loading-cube-dim-item-box-shadow, 13em 13em 1.5em rgba(0, 0, 0, 0.1));
       animation: var(--loading-cube-dim-item-animation, anim 1s infinite);
       animation-play-state: var(--loading-cube-dim-item-animation-play-state, running);

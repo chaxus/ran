@@ -1,13 +1,5 @@
 @import url('../../base.less');
 
-// Interaction-driven props only. (Also fixes a `all0.2s` typo — a missing space
-// made this an invalid value, so the transition never applied at all.) Never
-// include `background`, or a light/dark theme switch fades the control.
-@transition:
-  border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1),
-  box-shadow 0.2s cubic-bezier(0.645, 0.045, 0.355, 1),
-  color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
-
 @theme-color: var(--ran-color-primary, #006bff);
 
 :host {
@@ -112,7 +104,9 @@
     background-color: var(--ran-select-selection-background-color, var(--ran-color-bg-elevated, #ffffff));
     background-image: var(--ran-select-selection-background-image, none);
     border: var(--ran-select-selection-border, 1px solid var(--ran-color-border, #eaeaea));
-    transition: var(--ran-select-selection-transition, @transition);
+    /* No default transition: border-color / box-shadow / color are palette props
+       and would fade on a theme flip. Consumers can opt in via the hook var. */
+    transition: var(--ran-select-selection-transition, none);
     width: var(--ran-select-selection-width, 100%);
     height: var(--ran-select-selection-height, 100%);
     padding: var(--ran-select-selection-padding, 0 11px);

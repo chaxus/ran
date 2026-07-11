@@ -19,14 +19,13 @@
     display: var(--ran-btn-contain-display, block);
     background-image: var(--ran-btn-contain-background-image, none);
     cursor: var(--ran-btn-contain-cursor, pointer);
-    // Transition only interaction-driven props — never `background`. Animating the
-    // surface color makes a light/dark theme switch visibly fade the button
-    // (white → dark) instead of flipping instantly with the rest of the page.
+    // Motion props only (opacity) — never palette props (background / color /
+    // border-color / box-shadow). Palette transitions make every theme flip fade
+    // component-by-component instead of switching with the host page in one
+    // frame, which a general-purpose library must not impose on its consumers.
+    // Hosts that want palette fades can opt in via --ran-btn-contain-transition.
     transition: var(
       --ran-btn-contain-transition,
-      color var(--ran-motion-duration-base, 0.2s) cubic-bezier(0.645, 0.045, 0.355, 1),
-      border-color var(--ran-motion-duration-base, 0.2s) cubic-bezier(0.645, 0.045, 0.355, 1),
-      box-shadow var(--ran-motion-duration-base, 0.2s) cubic-bezier(0.645, 0.045, 0.355, 1),
       opacity var(--ran-motion-duration-base, 0.2s) cubic-bezier(0.645, 0.045, 0.355, 1)
     );
     user-select: var(--ran-btn-contain-user-select, none);
