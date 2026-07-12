@@ -1,3 +1,15 @@
+# OpenAI-side adapter for the shared `refactoring-ui-design` skill.
+#
+# The skill instructions live ONCE in ../SKILL.md. This file only carries
+# OpenAI-specific interface + policy and points at that shared body, so the
+# same guidance is loaded on OpenAI and on Claude — no duplicated content.
+# See ../README.md for the directory convention.
+schema_version: 1
+
+# Single source of truth — the same Markdown body Claude loads from SKILL.md.
+instructions:
+  source: ../SKILL.md
+
 interface:
   display_name: 'Refactoring UI Design'
   short_description: 'Developer-focused UI polish tactics'

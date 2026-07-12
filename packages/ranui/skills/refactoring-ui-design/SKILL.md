@@ -1,6 +1,15 @@
 ---
 name: refactoring-ui-design
 description: Use when designing, reviewing, or improving web UI visual quality, especially when a developer-built interface feels cluttered, flat, generic, poorly spaced, weakly hierarchical, or hard to scan.
+license: MIT
+metadata:
+  version: 1.0.0
+  category: design
+  tags: [ui, design, refactoring, visual-hierarchy, spacing, color, typography]
+  homepage: https://www.refactoringui.com/
+  # This Markdown body is the single source of truth for the skill instructions.
+  # Per-vendor adapters live in ./agents/ and reference this file — see README.md.
+  agents: [claude, openai]
 ---
 
 # Refactoring UI Design
