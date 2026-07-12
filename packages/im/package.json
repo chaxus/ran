@@ -15,6 +15,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/node": "catalog:",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.4",
@@ -22,8 +23,9 @@
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-router-dom": "^7.13.1",
-    "tsx": "^4.21.0",
-    "vite": "^7.3.5"
+    "tsx": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:"
   },
   "dependencies": {
     "ranuts": "workspace:^"

@@ -345,6 +345,55 @@ function initSection(container: HTMLElement) {
 }
 ```
 
+#### Using reactivity **inside a component** (signal / createEffect)
+
+Most components need no signals at all — their reactive source is **attributes**, so
+the canonical pattern (imperative sync in `attributeChangedCallback`) already has the
+correct lifecycle for free. Reach for signals only when you have **several
+interdependent internal states** (e.g. colorpicker's HSV↔RGB↔alpha). When you do,
+follow these rules:
+
+- **A getter binding / effect only auto-disposes inside an active `createRoot`.** A
+  component's `constructor` **and** `connectedCallback` are _not_ reactive scopes
+  (`currentOwner` is `null`), so an effect created there is **orphaned** — never
+  disposed. Two failure modes: (1) if the signal outlives the element (a module-level
+  or shared store), the signal's `observers` set pins the effect → pins the element →
+  **it can't be GC'd after removal**; (2) the effect's cleanup never runs and it keeps
+  firing on a detached node. A per-instance signal doing a pure DOM binding forms an
+  isolated cycle that GC _can_ still collect, but you lose cleanup — so don't rely on it.
+- **Don't use `Div().text(getter)` getter bindings in component code.** Reserve getter
+  bindings for `createRoot`-scoped page/route glue. Inside a component, build with
+  **plain values** and either sync imperatively in `attributeChangedCallback`, or drive
+  updates with explicit `createEffect`s whose dispose functions you **collect and call
+  on disconnect**. Canonical example — `components/colorpicker` (`setupEffects` pushes
+  disposers into `_effectDisposers`; `disposeEffects` runs them in `disconnectedCallback`):
+
+  ```typescript
+  private _disposers: Array<() => void> = [];
+
+  private setupEffects = (): void => {
+    this._disposers.push(
+      createEffect(() => { this._el.textContent = this._value(); }),
+    );
+  };
+
+  connectedCallback(): void {
+    // ...build DOM once...
+    if (this._panelBuilt && this._disposers.length === 0) this.setupEffects(); // re-arm
+  }
+  disconnectedCallback(): void {
+    this._disposers.forEach((d) => d());
+    this._disposers = [];
+  }
+  ```
+
+- **Keep effect setup and teardown lifecycle-symmetric.** If you `disposeEffects()` on
+  every `disconnectedCallback`, you must be able to **re-arm** them on reconnect —
+  otherwise a moved/re-parented element (a spec-supported disconnect→reconnect) goes
+  silently inert. If effects are built lazily (e.g. once when a panel first opens),
+  guard `connectedCallback` to re-run setup when the DOM already exists but the
+  disposers were cleared (`if (this._built && this._disposers.length === 0) this.setupEffects();`).
+
 > **Leak footgun — reactive builder bindings without an owner.** `ElementBuilder`
 > accepts a getter (`Div().text(mySignal)`, `.class(() => …)`) which creates an
 > effect **owned by the current reactive scope**. A component **constructor has no
@@ -862,6 +911,8 @@ Each component gets its own `dist/{name}.js` ES module. The barrel `dist/index.j
 | Styles not applied in SSR                                                                                                                                                                            | Use `RanElement` base class and `defineSSR`                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | `adoptedStyleSheets` frozen in jsdom                                                                                                                                                                 | `syncSheetAttribute` / `adoptSheetText` already handles `<style>` fallback                                                                                                                                                                                                                                                                                                                                                                                                       |
 | Event listeners leak on disconnect                                                                                                                                                                   | Use `EventManager` — call `manager.abort()` in `disconnectedCallback`; never track individual `removeEventListener` calls                                                                                                                                                                                                                                                                                                                                                        |
+| Reactive `createEffect` / getter binding built in a component's `constructor` or `connectedCallback`                                                                                                 | Those aren't reactive scopes (`currentOwner` is `null`) → the effect is orphaned and never disposed (leaks the element if the signal is external; cleanup never runs). Don't use getter bindings in components; use explicit `createEffect` and collect its dispose into an array you clear in `disconnectedCallback` (see `components/colorpicker`). Reserve getter bindings / auto-owned effects for `createRoot`-scoped page/route glue.                                      |
+| Effects disposed on `disconnectedCallback` but only set up once (lazily) → component goes inert after a move/re-parent                                                                               | Setup and teardown must be lifecycle-symmetric. If effects are built lazily (e.g. on first panel open) and disposed on every disconnect, re-arm them on reconnect: `if (this._built && this._disposers.length === 0) this.setupEffects();` in `connectedCallback`. A disconnect→reconnect is spec-supported (DOM moves).                                                                                                                                                         |
 | `import '@/components/mycomp'` not in index.ts                                                                                                                                                       | Components won't register for users who `import 'ranui'`                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | Missing `card` entry in vite.config.ts                                                                                                                                                               | `dist/card.js` won't be built; per-component imports break                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | Factory function wrapper pattern (`function Custom() { defineSSR(...); return Class; } export default Custom()`)                                                                                     | Anti-pattern — `defineSSR` handles registration; use `defineSSR(...); export default ClassName;` directly                                                                                                                                                                                                                                                                                                                                                                        |

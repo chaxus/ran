@@ -1,6 +1,24 @@
 packages:
   # all packages in subdirs of packages/ and components/
   - 'packages/**'
+# Single source of truth for versions of shared build/test tooling.
+# Packages reference these with "catalog:" so every workspace stays on one version.
+catalog:
+  '@types/node': ^26.1.1
+  '@vitest/coverage-v8': ^4.1.10
+  less: ^4.6.7
+  terser: ^5.49.0
+  tsx: ^4.23.0
+  typescript: ^7.0.2
+  vite: ^8.1.4
+  vitest: ^4.1.10
+catalogs:
+  # ranuts' doc generator (bin/generate-api-docs.ts) drives the classic TypeScript
+  # compiler API (createProgram/TypeChecker/displayPartsToString), which the TS 7
+  # native compiler no longer exposes via the bare `typescript` import. Pin ranuts
+  # to TS 6 until that tool is migrated; every other package uses the default TS 7.
+  ts6:
+    typescript: ^6.0.3
 # Force patched versions of transitively-pulled build tools (Dependabot advisories).
 overrides:
   esbuild: '>=0.28.1'

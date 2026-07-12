@@ -19,11 +19,7 @@ const build: BuildEnvironmentOptions = {
   assetsInlineLimit: 1024,
   reportCompressedSize: false,
   rollupOptions: {
-    output: {
-      experimentalMinChunkSize: 500,
-    },
     treeshake: {
-      preset: 'recommended',
       manualPureFunctions: ['console.log'],
     },
   },

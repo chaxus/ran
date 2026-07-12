@@ -514,6 +514,9 @@ export class ColorPicker extends RanElement {
     this._events.on(document, 'mouseup', this.onPointerUp);
     this.syncDisabledState();
     if (this.value) this.updateColorValue(this.value);
+    // Panel effects are disposed on disconnect; re-arm them on reconnect so a
+    // moved/re-parented picker stays reactive (the panel is built only once).
+    if (this.colorPickerInner && this._effectDisposers.length === 0) this.setupEffects();
   }
 
   disconnectedCallback(): void {

@@ -25,15 +25,13 @@
   "author": "chaxus",
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^26.1.1",
-    "less": "^4.6.7",
-    "typescript": "^7.0.2"
+    "@types/node": "catalog:",
+    "less": "catalog:",
+    "typescript": "catalog:"
   },
   "dependencies": {
     "@khmyznikov/pwa-install": "^0.6.4",
-    "@lit/react": "^1.0.8",
     "@ranui/preview": "^0.1.0-alpha-2",
-    "lit": "^3.3.3",
     "ranui": "workspace:*",
     "ranuts": "workspace:*",
     "vitepress": "2.0.0-alpha.18",

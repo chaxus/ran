@@ -288,16 +288,17 @@
   "devDependencies": {
     "@argos-ci/playwright": "^7.3.5",
     "@playwright/test": "^1.61.1",
-    "@types/node": "^26.1.1",
-    "@vitest/coverage-v8": "^4.1.10",
+    "@types/node": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
     "jsdom": "^29.1.1",
-    "less": "^4.6.7",
+    "less": "catalog:",
     "rollup-plugin-visualizer": "^7.0.1",
     "svgo": "^4.0.1",
-    "tsx": "^4.23.0",
-    "typescript": "^7.0.2",
-    "vite": "^8.1.4",
-    "vitest": "^4.1.10"
+    "terser": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vitest": "catalog:"
   },
   "dependencies": {
     "ranuts": "workspace:^"

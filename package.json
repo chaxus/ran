@@ -24,16 +24,8 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^26.1.1",
     "jscpd": "^5.0.12",
     "oxlint": "^1.73.0",
-    "prettier": "^3.9.5",
-    "terser": "^5.49.0",
-    "typescript": "^6.0.3",
-    "vite": "^8.1.4",
-    "vite-plugin-dts": "^5.0.3",
-    "vitest": "^4.1.10",
-    "vue": "^3.5.39",
-    "vue-tsc": "^3.3.7"
+    "prettier": "^3.9.5"
   }
 }

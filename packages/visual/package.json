@@ -23,8 +23,9 @@
   "author": "chaxus",
   "license": "ISC",
   "devDependencies": {
-    "typescript": "^5.9.3",
-    "vite": "^6.4.3"
+    "terser": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:"
   },
   "dependencies": {
     "ranuts": "workspace:^"

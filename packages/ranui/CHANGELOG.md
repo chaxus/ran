@@ -14,6 +14,8 @@ All notable changes to `ranui` will be documented in this file.
 - **`r-card hoverable` attribute** — opt-in Geist interactive-card hover (border 400 → 500 + elevated shadow; `--ran-card-hover-border-color` / `--ran-card-hover-shadow` overridable). Non-interactive cards stay inert.
 - **Reactive ownership + `untrack` in `ranui/builder`** — the signal engine now exposes `createRoot` / `onCleanup` / `getOwner` / `runWithOwner` (plus the `Owner` type) and `untrack`, re-exported from both `ranui/builder` and `ranui`. Effects and memos form an owner tree: disposing a scope (`createRoot((dispose) => …)`) tears down every effect, memo, binding, and `onCleanup` it spawned in one call — the intended teardown unit per page/route in an MPA/SPA. A self-referential effect (reads and writes the same signal) now throws a "cyclic dependency" error instead of looping. Documented in the new `docs/BUILDER.md`.
 - **Reactive `ElementBuilder` bindings** — `text` / `attr` / `class` / `boolAttr` / `style` / `part` / `data` / `aria` / `role` / `label` now accept a **getter** (a signal or `computed`) in addition to a plain value; the DOM updates itself on change via an effect owned by the current scope. Passing a plain value keeps the previous one-shot behavior. (Reactivity applies to the single-key `style(prop, getter)` form, not the object/`attrs` map forms.)
+- **`<r-route src>` lazy, code-split pages** — a route with a `src` module specifier now dynamically `import()`s that module on match and runs its `default: (host) => void | (() => void)` render **inside a `createRoot`**; leaving the route disposes that scope, tearing down every effect, binding, and `onCleanup` the page registered (an optional returned cleanup runs too). The per-page-lifecycle mode for larger multi-page apps; static (slotted) routes are unchanged and stay the SSG default. Imports are guarded against leave→re-enter races.
+- **Nested route configs** — `createRouter({ routes })` now accepts `children` on a route; paths are flattened to absolute (`parent/child`) for matching and `getStaticPaths()` (SSG enumeration). `matchPath` is now a single exported helper shared by `RouterCore` and `<r-route>`.
 
 ### Changed
 
@@ -25,6 +27,8 @@ All notable changes to `ranui` will be documented in this file.
 
 ### Fixed
 
+- **`r-colorpicker` stays reactive after a disconnect → reconnect** — the panel's 4 update effects are disposed on every `disconnectedCallback` but were only set up once (on first open), so a moved/re-parented picker went silently inert (dragging no longer updated the swatch/thumbs). `connectedCallback` now re-arms them when the panel already exists but the disposers were cleared.
+- **`currentRoute.params` is now populated for config-based routes** — `RouterCore._navigate` fills `to.params` via the new `matchParams(path)` (first matching flattened route wins), so `:param` values are available on `RouteLocation` after navigation instead of always being `{}`.
 - Replaced legacy antd-era hardcoded fallbacks (`#1890ff`, `#40a9ff`, `#d9d9d9`) in button/card/section/input/checkbox/colorpicker/select/message with current Geist token values (`#006bff`, `#eaeaea`, `#f2f2f2`) so a missing token layer degrades to the correct palette.
 
 ### Added

@@ -164,6 +164,13 @@ dispose(); // removes the binding's effect + runs cleanups
 Build reactive UI **inside a `createRoot`**. Bindings created with no owner still
 work but won't auto-dispose (dispose them manually).
 
+> **Inside a Web Component?** A component's `constructor`/`connectedCallback` are
+> _not_ reactive scopes, so a getter binding or `createEffect` created there is
+> orphaned (never disposed). Don't use getter bindings in component code — build
+> with plain values and drive updates with explicit `createEffect`s whose dispose
+> functions you collect and call in `disconnectedCallback`, re-arming on reconnect.
+> See the ranui component guide (`CLAUDE.md` → "Using reactivity inside a component").
+
 ### Multi-page / SPA pattern
 
 Give each page/route its own root and dispose it on navigation — every effect,
