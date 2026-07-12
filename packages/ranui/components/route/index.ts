@@ -29,6 +29,9 @@ export class Route extends RanElement {
   private _module: { default?: PageRender } | null = null;
   private _disposePage: (() => void) | null = null;
   private _pageHost: HTMLElement | null = null;
+  // Bumped on every mount/unmount so an in-flight import() that resolves after a
+  // leave (and possible re-enter) can tell it has been superseded and bail.
+  private _mountToken = 0;
 
   constructor() {
     super();
@@ -95,6 +98,7 @@ export class Route extends RanElement {
   private async _mount(): Promise<void> {
     if (this._mounted) return;
     this._mounted = true;
+    const token = ++this._mountToken;
     if (!this._pageHost) {
       this._pageHost = document.createElement('div');
       this._pageHost.setAttribute('part', 'page');
@@ -102,7 +106,7 @@ export class Route extends RanElement {
     }
     try {
       this._module ??= (await import(/* @vite-ignore */ this.src)) as { default?: PageRender };
-      if (!this._mounted) return; // navigated away while importing
+      if (token !== this._mountToken) return; // superseded by a later unmount/mount while importing
       const render = this._module.default;
       if (typeof render !== 'function') {
         console.error(`[r-route] "${this.src}" has no default export (host) => void`);
@@ -123,6 +127,7 @@ export class Route extends RanElement {
   private _unmount(): void {
     if (!this._mounted) return;
     this._mounted = false;
+    this._mountToken++; // invalidate any import() still in flight
     this._disposePage?.();
     this._disposePage = null;
     this._pageHost?.replaceChildren();
