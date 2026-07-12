@@ -65,6 +65,52 @@ export const registerIcons = (icons: Record<string, unknown>): void => {
   });
 };
 
+/**
+ * Names of the SVGs ranui ships in `assets/icons/`. This tuple is the source of
+ * truth for {@link RanIconName}; a unit test asserts it stays in sync with the
+ * asset folder, so adding/removing an SVG without updating this list fails CI.
+ */
+export const RAN_ICON_NAMES = [
+  'add-user',
+  'arrow-down',
+  'book',
+  'check-circle',
+  'check-circle-fill',
+  'close',
+  'close-circle',
+  'close-circle-fill',
+  'drop',
+  'eye',
+  'eye-close',
+  'github',
+  'globe',
+  'home',
+  'info-circle',
+  'info-circle-fill',
+  'issue',
+  'loading',
+  'loading-scene',
+  'lock',
+  'menu',
+  'message',
+  'more',
+  'plus',
+  'power-off',
+  'preview',
+  'search',
+  'setting',
+  'sort',
+  'team',
+  'unlock',
+  'user',
+  'warning-circle',
+  'warning-circle-fill',
+  'without-content',
+] as const;
+
+/** A name from ranui's bundled icon set (see {@link registerBuiltinIcons}). */
+export type RanIconName = (typeof RAN_ICON_NAMES)[number];
+
 export class Icon extends RanElement {
   private readonly isDev = isDev;
   _events = new EventManager();

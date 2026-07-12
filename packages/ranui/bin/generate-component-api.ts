@@ -182,6 +182,25 @@ function renderInline(values: string[]): string {
   return values.length ? values.map((v) => `\`${v}\``).join(', ') : '—';
 }
 
+/** Hand-written usage notes injected per element (source-of-truth caveats the
+ * extracted API surface can't convey — e.g. required setup calls). */
+const ELEMENT_NOTES: Record<string, string> = {
+  'r-icon': [
+    '> **Requires registration.** `<r-icon>` has no built-in icon set — it renders only SVGs',
+    '> registered into its in-memory registry, so `<r-icon name="lock">` is **blank** until `lock`',
+    '> is registered. Register once, in the browser, before the first `<r-icon>` connects:',
+    '>',
+    '> ```ts',
+    "> import { registerBuiltinIcons } from 'ranui';       // or 'ranui/icons'",
+    '> registerBuiltinIcons(); // registers every name in RAN_ICON_NAMES',
+    '> ```',
+    '>',
+    '> For a custom set, call `registerIcon(name, svgString)` / `registerIcons({ … })`, or pass raw',
+    '> SVG markup straight to `name` (rendered as-is when it starts with `<svg`). Valid bundled',
+    '> names are the `RanIconName` union / `RAN_ICON_NAMES` tuple.',
+  ].join('\n'),
+};
+
 function renderProps(props: Prop[]): string {
   if (!props.length) return '—';
   const sig = (p: Prop): string => `\`${p.type ? `${p.name}: ${p.type}` : p.name}\``;
@@ -262,6 +281,11 @@ async function main(): Promise<void> {
     slots.push(...el.namedSlots.map((s) => `${s} (named)`));
     lines.push(`- **Slots**: ${slots.length ? slots.map((s) => `\`${s}\``).join(', ') : '—'}`);
     lines.push(`- **Parts**: ${renderInline(el.parts)}`);
+    const note = ELEMENT_NOTES[el.tag];
+    if (note) {
+      lines.push('');
+      lines.push(note);
+    }
     lines.push('');
   }
 

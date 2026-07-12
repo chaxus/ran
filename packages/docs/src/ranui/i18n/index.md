@@ -82,6 +82,8 @@ through untouched — so CSS, JSON, and code fragments inside a message are safe
 only ambiguous case is a literal `{word}` you want to show verbatim. To escape it, **double the
 braces** — the same convention as Rust `format!`, Python `str.format`, and .NET `String.Format`:
 
+::: v-pre
+
 ```js
 const i18n = useI18n(); // messages below assumed registered
 
@@ -110,6 +112,8 @@ you pass params, so `{{`/`}}` always mean literal braces.
 > brace-doubling rule is the least surprising complement: no new escape character, familiar from
 > every mainstream format-string API, and trivial to reason about in one pass. If you need real
 > plural/gender/number grammar, format with `Intl.*` and pass the result in as a param.
+
+:::
 
 ## Reacting to locale changes
 

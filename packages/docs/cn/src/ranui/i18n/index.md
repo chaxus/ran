@@ -79,6 +79,8 @@ i18n.t('greeting', { user: 'Ada' }); // → "欢迎回来，Ada！"
 里的 CSS、JSON、代码片段默认是安全的。唯一有歧义的情况是想原样显示字面量 `{word}`。转义方式是
 **把花括号加倍**——与 Rust `format!`、Python `str.format`、.NET `String.Format` 相同的约定：
 
+::: v-pre
+
 ```js
 const i18n = useI18n(); // 假设下面的消息已注册
 
@@ -104,6 +106,8 @@ i18n.t('{{{name}}}', { name: 'Ada' }); // → "{Ada}"（把值包在字面花括
 > ranui 保持轻量的单花括号 `{name}` 语法，对它而言「花括号加倍」是最不意外的补充：不引入新的转义
 > 字符、在各主流 format-string API 中都很熟悉、且一次扫描即可推理清楚。若确实需要复数/性别/数字
 > 语法，请用 `Intl.*` 格式化后作为参数传入。
+
+:::
 
 ## 响应语言变化
 

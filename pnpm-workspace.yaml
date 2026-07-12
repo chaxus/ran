@@ -21,12 +21,9 @@ overrides:
   '@ranui/preview>ranui': 'workspace:*'
   '@ranui/preview>ranuts': 'workspace:*'
 allowBuilds:
-  core-js: true
   esbuild: true
   fsevents: true
-  preact: true
   sharp: true
-  tesseract.js: true
 # Own package: bare name required — versioned entries don't satisfy the
 # pre-run lockfile verification (same lesson as document/fileview repos).
 minimumReleaseAgeExclude:

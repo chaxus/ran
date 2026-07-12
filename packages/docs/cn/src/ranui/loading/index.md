@@ -10,7 +10,9 @@ import Loading from '../../../../vue/loading.vue'
 
 ### 基础用法
 
-<r-loading name="circle"></r-loading>
+<Demo>
+  <r-loading name="circle"></r-loading>
+</Demo>
 
 ```html
 <r-loading name="circle"></r-loading>

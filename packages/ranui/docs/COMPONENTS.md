@@ -6,7 +6,7 @@ shape), slots, and `::part()` names — extracted from source. For CSS variables
 (theming tokens) see [style-tokens-public.md](./style-tokens-public.md); for
 design rules see [DESIGN.md](./DESIGN.md).
 
-Generated at: 2026-07-12T08:14:18.321Z
+Generated at: 2026-07-12T08:47:20.080Z
 
 30 custom elements.
 
@@ -109,6 +109,19 @@ Source: `components/icon/index.ts`
 - **Events**: `ranui-icon-registered` → detail `{ name }`
 - **Slots**: —
 - **Parts**: `ran-icon`
+
+> **Requires registration.** `<r-icon>` has no built-in icon set — it renders only SVGs
+> registered into its in-memory registry, so `<r-icon name="lock">` is **blank** until `lock`
+> is registered. Register once, in the browser, before the first `<r-icon>` connects:
+>
+> ```ts
+> import { registerBuiltinIcons } from 'ranui'; // or 'ranui/icons'
+> registerBuiltinIcons(); // registers every name in RAN_ICON_NAMES
+> ```
+>
+> For a custom set, call `registerIcon(name, svgString)` / `registerIcons({ … })`, or pass raw
+> SVG markup straight to `name` (rendered as-is when it starts with `<svg`). Valid bundled
+> names are the `RanIconName` union / `RAN_ICON_NAMES` tuple.
 
 ## `<r-img>`
 

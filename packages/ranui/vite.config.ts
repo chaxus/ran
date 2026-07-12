@@ -112,6 +112,7 @@ export const es: BuildOptions = {
       'ssr-stream': resolve(__dirname, 'ssr-stream.ts'),
       theme: resolve(__dirname, 'theme.ts'),
       i18n: resolve(__dirname, 'i18n.ts'),
+      icons: resolve(__dirname, 'components/icon/builtin.ts'),
       style: resolve(__dirname, 'style.ts'),
     },
     fileName: (_: string, name: string): string => {

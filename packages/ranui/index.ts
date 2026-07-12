@@ -1,7 +1,9 @@
 export { setTheme, getTheme, setThemeToken, clearThemeToken, setThemeTokens, initTheme } from '@/utils/theme';
 export type { RanThemeName, ThemeTarget, ThemeTokenMap } from '@/utils/theme';
 export { Button } from '@/components/button';
-export { Icon, registerIcon, registerIcons } from '@/components/icon';
+export { Icon, registerIcon, registerIcons, RAN_ICON_NAMES } from '@/components/icon';
+export type { RanIconName } from '@/components/icon';
+export { registerBuiltinIcons, BUILTIN_ICON_NAMES } from '@/components/icon/builtin';
 export { ImageElement } from '@/components/image';
 export { Input } from '@/components/input';
 export { CustomMessage } from '@/components/message';
