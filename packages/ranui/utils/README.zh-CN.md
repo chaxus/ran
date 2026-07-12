@@ -362,25 +362,18 @@ export const RanElement = HTMLElementSSR()!;
 ## 主题工具 (`theme.ts`)
 
 ```ts
-import {
-  clearThemeToken,
-  getTheme,
-  getThemePack,
-  initTheme,
-  setTheme,
-  setThemePack,
-  setThemeToken,
-  setThemeTokens,
-} from '@/utils/theme';
+import { clearThemeToken, getTheme, initTheme, setTheme, setThemeToken, setThemeTokens } from '@/utils/theme';
 ```
+
+这些 API 即公开的 `ranui/theme` 入口，使用方可以
+`import { initTheme } from 'ranui/theme'`，不会注册任何组件。已不再提供主题包——
+基于 Geist 的 Token 体系，仅 `light`/`dark`。
 
 | API                                   | 说明                                              |
 | :------------------------------------ | :------------------------------------------------ |
-| `initTheme(target?)`                  | 从 localStorage 恢复主题和主题包。                |
+| `initTheme(target?)`                  | 从 localStorage 恢复主题。                        |
 | `setTheme(name, target?)`             | 设置 `light`、`dark` 或 `system`。                |
 | `getTheme(target?)`                   | 读取当前主题；当存储值为系统主题时返回 `system`。 |
-| `setThemePack(name, target?)`         | 设置主题包，或通过 `default` 清除主题包。         |
-| `getThemePack(target?)`               | 读取当前启用的主题包。                            |
 | `setThemeToken(name, value, target?)` | 在目标元素上设置单个 CSS Token。                  |
 | `clearThemeToken(name, target?)`      | 移除单个 CSS Token。                              |
 | `setThemeTokens(tokens, target?)`     | 批量设置或清除 CSS Token。                        |
@@ -389,16 +382,40 @@ import {
 
 ```ts
 type RanThemeName = 'light' | 'dark' | 'system';
-type RanThemePackName =
-  'default' | 'windows-98' | 'windows-xp' | 'system-6' | 'wired' | 'paper' | 'pixel-retro' | 'neo-brutalism';
 ```
 
 localStorage key:
 
 ```ts
 'ran-theme';
-'ran-theme-pack';
 ```
+
+## 国际化 (`i18n/index.ts`)
+
+框架无关的 i18n 引擎，与路由采用相同的 core/单例结构。同时作为公开的
+`ranui/i18n` 入口提供（不注册任何组件）。
+
+```ts
+import { createI18n, useI18n } from 'ranui/i18n';
+import type { I18nConfig, MessageDict, TranslateParams } from 'ranui/i18n';
+
+createI18n({ messages: { en, zh }, fallbackLocale: 'en', persist: true, detectNavigator: true });
+useI18n()!.t('hero.title', { name }); // 依次回退到 fallback locale、key；{param} 插值
+useI18n()!.setLocale('zh'); // 持久化；通知 onChange 订阅者
+```
+
+| API                      | 说明                                              |
+| :----------------------- | :------------------------------------------------ |
+| `t(key, params?)`        | 翻译；依次回退到 fallback locale、再到 key 本身。 |
+| `setLocale(locale)`      | 切换语言；持久化并通知订阅者。                    |
+| `getLocale()`            | 读取当前语言。                                    |
+| `onChange(fn)`           | 订阅语言变化；返回取消订阅函数。                  |
+| `addMessages(locale, m)` | 向某语言合并更多词条。                            |
+| `getMessages(locale?)`   | 读取词条字典。                                    |
+| `availableLocales`       | 列出已注册的语言。                                |
+| `destroy()`              | 销毁订阅。                                        |
+
+localStorage key：`'ran-locale'`。核心逻辑 SSR 安全。
 
 ## 路由 (`router/index.ts`)
 

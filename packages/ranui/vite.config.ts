@@ -110,6 +110,8 @@ export const es: BuildOptions = {
       builder: resolve(__dirname, 'builder.ts'),
       ssr: resolve(__dirname, 'ssr.ts'),
       'ssr-stream': resolve(__dirname, 'ssr-stream.ts'),
+      theme: resolve(__dirname, 'theme.ts'),
+      i18n: resolve(__dirname, 'i18n.ts'),
       style: resolve(__dirname, 'style.ts'),
     },
     fileName: (_: string, name: string): string => {

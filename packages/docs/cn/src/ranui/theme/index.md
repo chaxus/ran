@@ -4,6 +4,14 @@ ranui 提供基于**设计令牌**（CSS 自定义属性）的明暗主题系统
 令牌，因此切换主题或覆盖某个令牌即可一次性重塑整个组件库的样式。令牌体系基于
 [Geist](https://vercel.com/geist) 设计语言。
 
+**Geist 是什么：** Geist 是 Vercel 的开源设计体系——vercel.com 与 Next.js 文档站背后用的就是
+它。它的核心思想是**颜色是一条「状态阶梯」，而非调色板**：每条色阶从 100 走到 1000，每一档都有
+固定职责（100 默认背景 · 200 悬停 · 300 激活 · 400 边框 · 500 悬停边框 · 600 激活边框 · 700 实心
+填充 · 800 实心悬停 · 900 次要文字 · 1000 主要文字）。ranui 把这套阶梯落成 `--ran-*` 色阶，在其上
+叠加**语义令牌**（`--ran-color-bg`、`--ran-color-text`、`--ran-color-border` 等），并以
+**Geist Sans / Geist Mono** 作为默认字体。实际收益是：暗色模式只需重定义基础色阶——每个语义令牌
+都引用它并自动翻转，因此组件天然暗色安全。完整阶梯见下方 [令牌分层](#令牌分层) 与 [字体](#字体)。
+
 主题只有 **light（浅色）** 和 **dark（深色）** 两种，外加跟随操作系统偏好的 **system** 模式。
 （旧的「主题包（theme pack）」API 已移除，`setThemePack` / `RanThemePackName` 不再存在。）
 
@@ -12,7 +20,7 @@ ranui 提供基于**设计令牌**（CSS 自定义属性）的明暗主题系统
 页面加载时调用一次 `initTheme()` 恢复用户上次的选择，再用 `setTheme()` 切换：
 
 ```js
-import { initTheme, setTheme, getTheme } from 'ranui';
+import { initTheme, setTheme, getTheme } from 'ranui/theme';
 
 // 从 localStorage 恢复持久化的主题（'light' | 'dark' | 'system'）
 initTheme();
@@ -23,6 +31,10 @@ setTheme('system'); // 跟随 prefers-color-scheme 实时更新
 
 getTheme(); // → 'light' | 'dark' | 'system' | ''
 ```
+
+独立的 **`ranui/theme`** 入口只包含主题引擎——引入它不会注册任何自定义元素，因此只需要
+Token 和暗色模式的页面不会把整个组件库带进来。如果偏好单一引入，这些函数同样从顶层
+`ranui` 主入口重新导出。
 
 `setTheme` 会在 `<html>` 上写入 `data-ran-theme`（以及兼容用的 `theme`）属性，所有组件样式随之
 响应。选择会保存在 localStorage 键 `ran-theme` 下。
@@ -138,7 +150,7 @@ import 'ranui/fonts';
 ### 运行时（JS）
 
 ```js
-import { setThemeToken, setThemeTokens, clearThemeToken } from 'ranui';
+import { setThemeToken, setThemeTokens, clearThemeToken } from 'ranui/theme';
 
 // 在 <html> 上覆盖单个令牌（影响全局）
 setThemeToken('--ran-color-primary', '#7c3aed');

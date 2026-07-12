@@ -5,6 +5,17 @@ Components never hard-code colors — they read semantic tokens, so switching th
 overriding a token restyles the whole library at once. The token system is based on the
 [Geist](https://vercel.com/geist) design language.
 
+**What Geist is:** Geist is Vercel's open-source design system — the one behind vercel.com and
+the Next.js docs. Its defining idea is that **color is a state ladder, not a palette**: each
+color scale runs from step 100 to 1000, and every step has one fixed job (100 default
+background · 200 hover · 300 active · 400 border · 500 hover border · 600 active border · 700
+solid fill · 800 solid hover · 900 secondary text · 1000 primary text). ranui adopts that
+ladder as its `--ran-*` scales, layers **semantic tokens** (`--ran-color-bg`,
+`--ran-color-text`, `--ran-color-border`, …) on top, and ships **Geist Sans / Geist Mono** as
+the default typefaces. The practical payoff: dark mode only has to redefine the base scale —
+every semantic token references it and flips automatically, so components stay dark-safe for
+free. See [Token layers](#token-layers) and [Fonts](#fonts) below for the full ladder.
+
 > **Use when** you need to add light/dark theming to a ranui app — call `initTheme` / `setTheme` and consume the semantic `--ran-color-*` design tokens so switching theme or overriding a token restyles the whole library at once.
 
 There are exactly two themes — **light** and **dark** — plus a **system** mode that follows
@@ -17,7 +28,7 @@ Call `initTheme()` once on page load to restore the user's saved choice, then `s
 to switch:
 
 ```js
-import { initTheme, setTheme, getTheme } from 'ranui';
+import { initTheme, setTheme, getTheme } from 'ranui/theme';
 
 // Restore the persisted theme ('light' | 'dark' | 'system') from localStorage
 initTheme();
@@ -28,6 +39,11 @@ setTheme('system'); // tracks prefers-color-scheme and updates live
 
 getTheme(); // → 'light' | 'dark' | 'system' | ''
 ```
+
+The dedicated **`ranui/theme`** entry ships only the theming engine — importing it
+registers no custom elements, so a page that just wants tokens and dark mode never pulls
+in the component library. The same functions are also re-exported from the top-level
+`ranui` barrel if you prefer a single import.
 
 `setTheme` writes `data-ran-theme` (and a legacy `theme`) attribute onto `<html>`; all
 component styles react to it. The choice is saved under the localStorage key `ran-theme`.
@@ -147,7 +163,7 @@ just without the Geist faces.
 ### At runtime (JS)
 
 ```js
-import { setThemeToken, setThemeTokens, clearThemeToken } from 'ranui';
+import { setThemeToken, setThemeTokens, clearThemeToken } from 'ranui/theme';
 
 // One token, on <html> (affects everything)
 setThemeToken('--ran-color-primary', '#7c3aed');

@@ -45,6 +45,8 @@ packages/ranui/
 ├── test/unit/            # *.contract.test.ts per component
 ├── demo/                 # Dev server entry (Vite); routed showcase (r-router)
 ├── index.ts              # Barrel exports + side-effect imports
+├── theme.ts              # `ranui/theme` public entry (theming only, no components)
+├── i18n.ts               # `ranui/i18n` public entry (i18n only, no components)
 ├── vite.config.ts        # Build + dev server config
 ├── vitest.config.ts      # Test config (jsdom, 80%+ coverage)
 └── base.less             # Shared LESS variables/mixins (auto-imported)
@@ -365,6 +367,11 @@ export const RanElement = HTMLElementSSR()!;
 
 Light/dark only — **there are no theme packs** (they were removed; `setThemePack`/`getThemePack`/`RanThemePackName` no longer exist). The token system is Geist-based; see [docs/DESIGN.md](docs/DESIGN.md) and [docs/THEME_STYLE_SYSTEM_DESIGN.md](docs/THEME_STYLE_SYSTEM_DESIGN.md).
 
+Exported from the `ranui` barrel **and** from the dedicated **`ranui/theme`** subpath entry
+(`theme.ts` → built to `dist/theme.js`), which registers no custom elements — consumers who
+only want tokens/dark mode can `import { initTheme } from 'ranui/theme'` without the
+components. Documented at `docs/src/ranui/theme/`.
+
 ```typescript
 type RanThemeName = 'light' | 'dark' | 'system'
 type ThemeTarget = HTMLElement | Document
@@ -392,7 +399,15 @@ Because dark is class-drivable, a host that flips `.dark` synchronously (e.g. Vi
 
 ### `utils/i18n/index.ts` — framework-agnostic i18n
 
-Same core/singleton shape as the router. Exported from the `ranui` barrel.
+Same core/singleton shape as the router. Exported from the `ranui` barrel **and** from the
+dedicated **`ranui/i18n`** subpath entry (`i18n.ts` → built to `dist/i18n.js`), which
+registers no custom elements so consumers can `import { createI18n } from 'ranui/i18n'`
+without pulling in every component. `MessageDict` is **flat** (`t()` does a direct
+`messages[locale][key]` lookup) — keys are literal strings like `'hero.title'`, not nested
+objects. `t(key, params)` interpolates `{name}` placeholders; `{{`/`}}` escape to literal
+`{`/`}` (Rust/Python/.NET `format` convention) — a lone or spaced brace is left as-is, so
+CSS/JSON in a message is safe. Persisted locale key: `'ran-locale'`. Documented at
+`docs/src/ranui/i18n/`.
 
 ```typescript
 const i18n = createI18n({ messages: { en, zh }, fallbackLocale: 'en', persist: true, detectNavigator: true });

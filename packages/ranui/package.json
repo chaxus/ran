@@ -1,6 +1,6 @@
 {
   "name": "ranui",
-  "version": "0.2.0-alpha.6",
+  "version": "0.2.0-alpha.7",
   "description": "A framework-agnostic Web Components UI library built on native custom elements, with TypeScript types, light/dark theming, SSR and PWA support.",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
@@ -16,6 +16,12 @@
       ],
       "ssr-stream": [
         "./dist/ssr-stream.d.ts"
+      ],
+      "theme": [
+        "./dist/theme.d.ts"
+      ],
+      "i18n": [
+        "./dist/i18n.d.ts"
       ],
       "typings": [
         "./dist/typings.d.ts"
@@ -110,6 +116,16 @@
     "./ssr-stream": {
       "types": "./dist/ssr-stream.d.ts",
       "import": "./dist/ssr-stream.js",
+      "require": "./dist/index.cjs"
+    },
+    "./theme": {
+      "types": "./dist/theme.d.ts",
+      "import": "./dist/theme.js",
+      "require": "./dist/index.cjs"
+    },
+    "./i18n": {
+      "types": "./dist/i18n.d.ts",
+      "import": "./dist/i18n.js",
       "require": "./dist/index.cjs"
     },
     "./button": {

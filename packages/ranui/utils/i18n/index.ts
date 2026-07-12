@@ -24,6 +24,8 @@ export interface I18nConfig {
 
 const DEFAULT_STORAGE_KEY = 'ran-locale';
 
+const EMPTY_PARAMS: TranslateParams = Object.freeze({});
+
 const readStored = (key: string): string | null => {
   if (typeof localStorage === 'undefined') return null;
   try {
@@ -116,16 +118,36 @@ export class I18nCore {
 
   /**
    * Translate a key against the active locale, falling back to the fallback
-   * locale and finally the key itself. `{param}` placeholders are interpolated.
+   * locale and finally the key itself. `{param}` placeholders are interpolated;
+   * `{{` / `}}` are escapes for literal `{` / `}` (see {@link I18nCore._interpolate}).
    */
   t(key: string, params?: TranslateParams): string {
     const value = this._messages[this._locale]?.[key] ?? this._messages[this._fallback]?.[key] ?? key;
     return this._interpolate(value, params);
   }
 
+  /**
+   * Substitute `{param}` placeholders and unescape literal braces.
+   *
+   * Grammar (a single left-to-right pass, so escapes and placeholders never
+   * fight each other), matching the format-string convention used by Rust
+   * `format!`, Python `str.format`, and .NET `String.Format`:
+   * - `{{` → literal `{`
+   * - `}}` → literal `}`
+   * - `{name}` → `params.name` (stringified), or left untouched when the param
+   *   is absent, so a stray placeholder is visible rather than silently blank.
+   *
+   * A lone `{`/`}` or a `{ spaced }` group is not a placeholder and is emitted
+   * verbatim, so CSS/JSON/code fragments in a message pass through unharmed.
+   * To wrap a value in literal braces, double the outer pair: `{{{name}}}`.
+   */
   private _interpolate(str: string, params?: TranslateParams): string {
-    if (!params) return str;
-    return str.replace(/\{(\w+)\}/g, (match, name) => (params[name] != null ? String(params[name]) : match));
+    const values = params ?? EMPTY_PARAMS;
+    return str.replace(/\{\{|\}\}|\{(\w+)\}/g, (match, name: string | undefined) => {
+      if (match === '{{') return '{';
+      if (match === '}}') return '}';
+      return values[name!] != null ? String(values[name!]) : match;
+    });
   }
 
   /** Subscribe to locale changes. Returns an unsubscribe function. */

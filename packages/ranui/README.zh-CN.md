@@ -59,21 +59,44 @@ npm install ranui --save
 pnpm doc:style
 ```
 
-### 主题与主题包
+### 主题
 
-RanUI 支持亮色、暗色与系统主题，并提供多个 CSS-only 主题包。
+RanUI 基于 [Geist 设计体系](https://vercel.com/geist) 提供统一的 CSS Token 主题体系——Geist 是 Vercel 的开源设计语言，其核心是把颜色组织成一条**状态阶梯**（每条色阶 100→1000，每档一个固定职责：背景 → 悬停 → 边框 → 实心填充 → 文字）。RanUI 采用这套阶梯并搭配 **Geist Sans / Geist Mono**，因此暗色模式只需重定义基础色阶，所有语义 Token 自动翻转。支持 `light`、`dark`、`system` 三种模式（已不再提供主题包）。可在运行时切换模式或覆盖任意 Token（SSR 安全）：
 
 ```ts
-import { initTheme, setTheme, setThemePack, setThemeToken } from 'ranui';
-import 'ranui/theme-packs/pixel-retro';
+import { initTheme, setTheme, setThemeToken, setThemeTokens } from 'ranui/theme';
+import 'ranui/style';
 
-initTheme();
-setTheme('system');
-setThemePack('pixel-retro');
-setThemeToken('--ran-color-primary', '#2563eb');
+initTheme(); // 页面加载时恢复上次的选择
+setTheme('system'); // 'light' | 'dark' | 'system'
+setThemeToken('--ran-color-primary', '#6c47ff');
+setThemeTokens({ '--ran-radius-md': '10px' });
 ```
 
-可用主题包包括 `windows-98`、`windows-xp`、`system-6`、`wired`、`paper`、`pixel-retro`、`neo-brutalism`。使用 `setThemePack('default')` 可恢复默认主题包。
+`ranui/theme` 入口只包含主题引擎，不会注册任何自定义元素——只需要 Token / 暗色模式时它不会把组件带进你的包体。这些 API 同样从 `ranui` 主入口重新导出。
+
+暗色模式只重定义基础色阶，语义 Token（`--ran-color-*`）引用色阶后自动翻转。详见 [docs/THEME_STYLE_SYSTEM_DESIGN.md](./docs/THEME_STYLE_SYSTEM_DESIGN.md) 与 [docs/DESIGN.md](./docs/DESIGN.md)。
+
+### 国际化
+
+框架无关的 i18n 引擎作为独立的 `ranui/i18n` 入口提供，与 `ranui/theme` 一样不注册任何自定义元素：
+
+```ts
+import { createI18n, useI18n } from 'ranui/i18n';
+
+createI18n({
+  // 每种语言是扁平字典——key 原样使用（不做嵌套）
+  messages: { en: { 'hero.title': 'Hi {name}' }, zh: { 'hero.title': '你好 {name}' } },
+  fallbackLocale: 'en',
+  persist: true, // 记住选择（localStorage）
+  detectNavigator: true, // 按浏览器语言初始化
+});
+
+useI18n()!.t('hero.title', { name: 'Ada' }); // → "Hi Ada"
+useI18n()!.setLocale('zh'); // 持久化并通知订阅者
+```
+
+`t()` 依次回退到 fallback locale、再到 key 本身；`{param}` 占位符会被插值。核心逻辑 SSR 安全。
 
 ## 引入方式
 
@@ -81,6 +104,13 @@ setThemeToken('--ran-color-primary', '#2563eb');
 
 ```js
 import 'ranui/button';
+```
+
+非组件入口单独打包对应的工具引擎，可以只引入需要的部分，而不注册全部元素：
+
+```js
+import { initTheme } from 'ranui/theme'; // 仅主题
+import { createI18n } from 'ranui/i18n'; // 仅 i18n
 ```
 
 如果遇到样式问题，可以选择手动导入样式文件

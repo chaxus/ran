@@ -362,25 +362,18 @@ It resolves to the native `HTMLElement` in the browser and `HTMLElementMock` in 
 ## Theme Utilities (`theme.ts`)
 
 ```ts
-import {
-  clearThemeToken,
-  getTheme,
-  getThemePack,
-  initTheme,
-  setTheme,
-  setThemePack,
-  setThemeToken,
-  setThemeTokens,
-} from '@/utils/theme';
+import { clearThemeToken, getTheme, initTheme, setTheme, setThemeToken, setThemeTokens } from '@/utils/theme';
 ```
+
+The same APIs are the public `ranui/theme` entry, so consumers can
+`import { initTheme } from 'ranui/theme'` without registering any components.
+There are no theme packs — the token system is Geist-based, `light`/`dark` only.
 
 | API                                   | Description                                                    |
 | :------------------------------------ | :------------------------------------------------------------- |
-| `initTheme(target?)`                  | Restore theme and theme pack from localStorage.                |
+| `initTheme(target?)`                  | Restore the theme from localStorage.                           |
 | `setTheme(name, target?)`             | Set `light`, `dark`, or `system`.                              |
 | `getTheme(target?)`                   | Read the current theme; returns `system` when stored that way. |
-| `setThemePack(name, target?)`         | Set a theme pack, or clear it with `default`.                  |
-| `getThemePack(target?)`               | Read the active theme pack.                                    |
 | `setThemeToken(name, value, target?)` | Set one CSS token on the target element.                       |
 | `clearThemeToken(name, target?)`      | Remove one CSS token.                                          |
 | `setThemeTokens(tokens, target?)`     | Set or clear multiple CSS tokens.                              |
@@ -389,16 +382,40 @@ Theme names:
 
 ```ts
 type RanThemeName = 'light' | 'dark' | 'system';
-type RanThemePackName =
-  'default' | 'windows-98' | 'windows-xp' | 'system-6' | 'wired' | 'paper' | 'pixel-retro' | 'neo-brutalism';
 ```
 
-localStorage keys:
+localStorage key:
 
 ```ts
 'ran-theme';
-'ran-theme-pack';
 ```
+
+## i18n (`i18n/index.ts`)
+
+Framework-agnostic i18n engine, same core/singleton shape as the router. Also
+exposed as the public `ranui/i18n` entry (registers no components).
+
+```ts
+import { createI18n, useI18n } from 'ranui/i18n';
+import type { I18nConfig, MessageDict, TranslateParams } from 'ranui/i18n';
+
+createI18n({ messages: { en, zh }, fallbackLocale: 'en', persist: true, detectNavigator: true });
+useI18n()!.t('hero.title', { name }); // fallback locale → key; {param} interpolation
+useI18n()!.setLocale('zh'); // persists; notifies onChange subscribers
+```
+
+| API                      | Description                                                    |
+| :----------------------- | :------------------------------------------------------------- |
+| `t(key, params?)`        | Translate; falls back to fallback locale, then the key itself. |
+| `setLocale(locale)`      | Switch locale; persists and notifies subscribers.              |
+| `getLocale()`            | Read the active locale.                                        |
+| `onChange(fn)`           | Subscribe to locale changes; returns an unsubscribe function.  |
+| `addMessages(locale, m)` | Merge more messages into a locale.                             |
+| `getMessages(locale?)`   | Read the message dictionary.                                   |
+| `availableLocales`       | List the registered locales.                                   |
+| `destroy()`              | Tear down subscriptions.                                       |
+
+localStorage key: `'ran-locale'`. The core is SSR-safe.
 
 ## Router (`router/index.ts`)
 

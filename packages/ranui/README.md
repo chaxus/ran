@@ -89,10 +89,10 @@ pnpm doc:style
 
 ### Theming
 
-ranui ships a single token system based on the [Geist design system](https://vercel.com/design), with `light`, `dark`, and `system` modes — there are no theme packs. Switch the mode or override any token at runtime (SSR-safe):
+ranui ships a single token system based on the [Geist design system](https://vercel.com/geist) — Vercel's open-source design language, where color is a **state ladder** (each scale runs 100→1000, one job per step: background → hover → border → solid fill → text). ranui adopts that ladder plus **Geist Sans / Geist Mono**, so dark mode just redefines the base scale and every semantic token flips automatically. Three modes — `light`, `dark`, `system` — and no theme packs. Switch the mode or override any token at runtime (SSR-safe):
 
 ```ts
-import { initTheme, setTheme, setThemeToken, setThemeTokens } from 'ranui';
+import { initTheme, setTheme, setThemeToken, setThemeTokens } from 'ranui/theme';
 import 'ranui/style';
 
 initTheme(); // restore the persisted choice on load
@@ -101,7 +101,34 @@ setThemeToken('--ran-color-primary', '#6c47ff');
 setThemeTokens({ '--ran-radius-md': '10px' });
 ```
 
+The `ranui/theme` entry ships only the theming engine — no custom elements are
+registered, so it stays out of your bundle if you just want tokens/dark mode.
+The same APIs are also re-exported from the `ranui` barrel.
+
 Dark mode redefines only the base color scale; semantic tokens (`--ran-color-*`) reference it and flip automatically. See [docs/THEME_STYLE_SYSTEM_DESIGN.md](./docs/THEME_STYLE_SYSTEM_DESIGN.md) and [docs/DESIGN.md](./docs/DESIGN.md).
+
+### Internationalization
+
+A framework-agnostic i18n engine ships as its own `ranui/i18n` entry — like
+`ranui/theme`, it registers no custom elements:
+
+```ts
+import { createI18n, useI18n } from 'ranui/i18n';
+
+createI18n({
+  // each locale is a flat dictionary — keys are used verbatim (no nesting)
+  messages: { en: { 'hero.title': 'Hi {name}' }, zh: { 'hero.title': '你好 {name}' } },
+  fallbackLocale: 'en',
+  persist: true, // remember the choice in localStorage
+  detectNavigator: true, // pick the initial locale from the browser
+});
+
+useI18n()!.t('hero.title', { name: 'Ada' }); // → "Hi Ada"
+useI18n()!.setLocale('zh'); // persists and notifies subscribers
+```
+
+`t()` falls back to the fallback locale, then to the key itself; `{param}`
+placeholders are interpolated. The core is SSR-safe.
 
 ## Imports
 
@@ -109,6 +136,14 @@ Use per-component imports to reduce bundle size:
 
 ```js
 import 'ranui/button';
+```
+
+Non-component subpaths ship the utilities on their own, so you can pull in just
+the engine you need without registering every element:
+
+```js
+import { initTheme } from 'ranui/theme'; // theming only
+import { createI18n } from 'ranui/i18n'; // i18n only
 ```
 
 If styles are missing, import the stylesheet manually:

@@ -279,10 +279,11 @@ const themeCnConfig: DefaultTheme.Config = {
         link: '/cn/src/ranui/',
       },
       {
-        text: '主题',
+        text: '基础能力',
         items: [
           { text: 'Theme 主题与令牌', link: '/cn/src/ranui/theme/' },
           { text: 'ThemeSwitch 主题切换', link: '/cn/src/ranui/theme-switch/' },
+          { text: 'i18n 国际化', link: '/cn/src/ranui/i18n/' },
         ],
       },
       {

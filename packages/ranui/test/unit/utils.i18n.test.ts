@@ -51,6 +51,37 @@ describe('utils/i18n', () => {
     expect(i18n.t('welcome')).toBe('Welcome, {name}');
   });
 
+  it('stringifies numeric params', () => {
+    const i18n = new I18nCore({ messages: { en: { total: '{count} items · ${sum}' } }, locale: 'en' });
+    expect(i18n.t('total', { count: 3, sum: 59.9 })).toBe('3 items · $59.9');
+  });
+
+  describe('literal braces', () => {
+    const brace = (en: string) => new I18nCore({ messages: { en: { k: en } }, locale: 'en' });
+
+    it('passes lone / spaced / non-word braces through untouched', () => {
+      expect(brace('css .a { color: red }').t('k', { color: 'x' })).toBe('css .a { color: red }');
+      expect(brace('json {"a":1}').t('k')).toBe('json {"a":1}');
+      expect(brace('a { b } c').t('k')).toBe('a { b } c');
+      expect(brace('open { only').t('k')).toBe('open { only');
+    });
+
+    it('unescapes {{ and }} to literal braces (Rust/Python format convention)', () => {
+      expect(brace('use {{ and }}').t('k')).toBe('use { and }');
+      expect(brace('{{name}}').t('k', { name: 'Ada' })).toBe('{name}');
+      expect(brace('{{}}').t('k')).toBe('{}');
+    });
+
+    it('wraps an interpolated value in literal braces via doubled outer pairs', () => {
+      expect(brace('{{{name}}}').t('k', { name: 'Ada' })).toBe('{Ada}');
+    });
+
+    it('escapes consistently whether or not params are passed', () => {
+      expect(brace('a {{ b').t('k')).toBe('a { b');
+      expect(brace('a {{ b').t('k', { x: 1 })).toBe('a { b');
+    });
+  });
+
   it('setLocale switches locale and notifies subscribers', () => {
     const i18n = new I18nCore({ messages, locale: 'en' });
     const handler = vi.fn();

@@ -279,10 +279,11 @@ const themeEnConfig: DefaultTheme.Config = {
         link: '/src/ranui/',
       },
       {
-        text: 'Theming',
+        text: 'Foundations',
         items: [
           { text: 'Theme & Tokens', link: '/src/ranui/theme/' },
           { text: 'ThemeSwitch', link: '/src/ranui/theme-switch/' },
+          { text: 'i18n', link: '/src/ranui/i18n/' },
         ],
       },
       {
