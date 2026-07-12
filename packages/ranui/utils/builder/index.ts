@@ -1,7 +1,17 @@
 export { isSSR } from './env';
 export { EventManager } from './events';
-export { signal, createEffect, computed, batch } from './signal';
-export type { Getter, Setter, SignalOptions } from './signal';
+export {
+  signal,
+  createEffect,
+  computed,
+  batch,
+  untrack,
+  createRoot,
+  onCleanup,
+  getOwner,
+  runWithOwner,
+} from './signal';
+export type { Getter, Setter, SignalOptions, Owner } from './signal';
 export { escapeHtml, escapeHtmlAttribute } from './escape';
 export { type MockNode, matchSelector, collectMatches } from './selectors';
 export { DocumentFragmentMock, HTMLElementMock, ShadowRootMock } from './mocks';

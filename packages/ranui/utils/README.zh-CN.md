@@ -216,19 +216,30 @@ const actions = Div()
 
 ## 响应式原语 (`builder/signal.ts`)
 
-细粒度响应式，设计参考 SwiftUI `@Observable` 和 Solid.js signals。在 `createEffect` 或 `computed` 中读取 signal 会自动建立依赖关系，无需手动订阅。
+细粒度响应式，设计参考 SwiftUI `@Observable` 和 Solid.js signals。在 `createEffect` 或 `computed` 中读取 signal 会自动建立依赖关系，无需手动订阅。完整指南（所有权、`ElementBuilder` 响应式绑定、MPA/SPA 销毁）见 [`docs/BUILDER.md`](../docs/BUILDER.md)。
 
 ```ts
-import { signal, createEffect, computed, batch } from '@/utils/builder';
+import {
+  signal,
+  createEffect,
+  computed,
+  batch,
+  untrack,
+  createRoot,
+  onCleanup,
+  getOwner,
+  runWithOwner,
+} from '@/utils/builder';
 ```
 
-**核心模型 — 与 SwiftUI 的 `View = f(State)` 同一思路，并借鉴 Solid.js 补充两个正确性改进：**
+**核心模型 — 与 SwiftUI 的 `View = f(State)` 同一思路，采用 Solid.js 风格的所有权与惰性 memo：**
 
 ```
 signal()       ≈  @State / @Observable 属性
 createEffect() ≈  SwiftUI body（自动追踪；重新执行前清理过期订阅）
-computed()     ≈  Swift computed property（派生值，自动缓存）
+computed()     ≈  Swift computed property（派生值，惰性 + 按值记忆化）
 batch()        ≈  SwiftUI 的自动合并变更（同一事件处理器内只 flush 一次）
+createRoot()   ≈  一个可销毁的作用域，拥有其内部创建的一切
 ```
 
 ### 用法
@@ -258,15 +269,19 @@ return () => {
 
 ### API 参考
 
-| API                         | 说明                                                                                                                                                                                                                                                       |
-| :-------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `signal(initial, options?)` | 创建响应式值，返回 `[getter, setter]`。在 effect 内读取 getter 会自动追踪依赖。                                                                                                                                                                            |
-| `getter()`                  | 读取当前值，自动订阅当前 effect。                                                                                                                                                                                                                          |
-| `setter(value)`             | 写入新值，通知所有依赖 effect。值未变时跳过（`Object.is`）。                                                                                                                                                                                               |
-| `setter(fn)`                | 更新函数形式：接收上一个值，返回新值。                                                                                                                                                                                                                     |
-| `createEffect(fn)`          | 立即执行 `fn`，其依赖的 signal 变化时自动重新执行。每次重新执行前会将自身从不再读取的 signal 中移除（过期订阅清理）。返回 `dispose` 函数，调用后停止追踪并从所有 signal 移除引用（GC 友好）。`fn` 可返回 cleanup 函数，在每次重新执行前和 dispose 时调用。 |
-| `computed(fn)`              | 派生只读 signal，依赖变化时惰性重新计算。返回 getter。                                                                                                                                                                                                     |
-| `batch(fn)`                 | 将多次 signal 写入合并为一次原子更新。所有依赖 effect 在 `fn` 返回后统一 flush（去重）。嵌套 `batch()` 调用会被最外层吸收。                                                                                                                                |
+| API                                      | 说明                                                                                                                                                                                                                                                       |
+| :--------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `signal(initial, options?)`              | 创建响应式值，返回 `[getter, setter]`。在 effect 内读取 getter 会自动追踪依赖。                                                                                                                                                                            |
+| `getter()`                               | 读取当前值，自动订阅当前 effect。                                                                                                                                                                                                                          |
+| `setter(value)`                          | 写入新值，通知所有依赖 effect。值未变时跳过（`Object.is`）。                                                                                                                                                                                               |
+| `setter(fn)`                             | 更新函数形式：接收上一个值，返回新值。                                                                                                                                                                                                                     |
+| `createEffect(fn)`                       | 立即执行 `fn`，其依赖的 signal 变化时自动重新执行。每次重新执行前会将自身从不再读取的 signal 中移除（过期订阅清理）。返回 `dispose` 函数，调用后停止追踪并从所有 signal 移除引用（GC 友好）。`fn` 可返回 cleanup 函数，在每次重新执行前和 dispose 时调用。 |
+| `computed(fn, options?)`                 | 派生只读 signal —— **惰性 + 按值记忆化**。仅在依赖变化后被读取时才重新计算（未被读取的 memo 从不计算），且仅当派生值真正改变（`Object.is`，可通过 `options.equals` 覆盖）才通知其观察者 —— 因此值稳定的 memo 背后的 effect 不会被唤醒。返回 getter。       |
+| `batch(fn)`                              | 将多次 signal 写入合并为一次原子更新。所有依赖 effect 在 `fn` 返回后统一 flush（去重）。嵌套 `batch()` 调用会被最外层吸收。                                                                                                                                |
+| `untrack(fn)`                            | 在 `fn` 内读取 signal 而不让当前计算订阅它们。                                                                                                                                                                                                             |
+| `createRoot(fn)`                         | 创建可销毁的响应式作用域。`fn` 接收一个 `dispose`；内部创建的 effect/memo/绑定都归该作用域所有，`dispose` 时连同其 `onCleanup` 一并销毁。MPA/SPA 中每个页面/路由用一个。                                                                                   |
+| `onCleanup(fn)`                          | 在当前作用域注册清理函数，作用域重新执行或销毁时运行。                                                                                                                                                                                                     |
+| `getOwner()` / `runWithOwner(owner, fn)` | 捕获当前所有者作用域，之后在其下运行 `fn` —— 用于跨异步边界恢复响应式作用域（如路由器）。                                                                                                                                                                  |
 
 ### `signal` 选项
 

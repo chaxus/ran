@@ -74,6 +74,7 @@
     "typings.d.ts",
     "docs/DESIGN.md",
     "docs/COMPONENTS.md",
+    "docs/BUILDER.md",
     "docs/style-tokens-public.md"
   ],
   "keywords": [
@@ -233,6 +234,21 @@
       "import": "./dist/card.js",
       "require": "./dist/index.cjs"
     },
+    "./form": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/form.js",
+      "require": "./dist/index.cjs"
+    },
+    "./scratch": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/scratch.js",
+      "require": "./dist/index.cjs"
+    },
+    "./section": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/section.js",
+      "require": "./dist/index.cjs"
+    },
     "./router": {
       "types": "./dist/index.d.ts",
       "import": "./dist/router.js",
@@ -270,7 +286,7 @@
     }
   },
   "devDependencies": {
-    "@argos-ci/playwright": "^7.3.0",
+    "@argos-ci/playwright": "^7.3.5",
     "@playwright/test": "^1.61.1",
     "@types/node": "^26.1.1",
     "@vitest/coverage-v8": "^4.1.10",
@@ -279,7 +295,7 @@
     "rollup-plugin-visualizer": "^7.0.1",
     "svgo": "^4.0.1",
     "tsx": "^4.23.0",
-    "typescript": "^6.0.3",
+    "typescript": "^7.0.2",
     "vite": "^8.1.4",
     "vitest": "^4.1.10"
   },

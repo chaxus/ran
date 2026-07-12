@@ -99,6 +99,60 @@ function parseQuery(search: string): Record<string, string> {
   return result;
 }
 
+/**
+ * Match a route pattern (with `:param` and `*` segments) against a path.
+ * Single source of truth shared by RouterCore and the `<r-route>` element.
+ */
+export function matchPath(
+  routePath: string,
+  exact: boolean,
+  path: string,
+): { matched: boolean; params: Record<string, string> } {
+  const paramNames: string[] = [];
+  const regexStr = routePath
+    .split('/')
+    .map((segment) => {
+      if (segment.startsWith(':')) {
+        paramNames.push(segment.slice(1));
+        return '([^/]+)';
+      }
+      if (segment === '*') return '(.*)';
+      return segment.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    })
+    .join('/');
+  const pattern = exact ? new RegExp(`^${regexStr}$`) : new RegExp(`^${regexStr}(?:/.*)?$`);
+  const match = path.match(pattern);
+  if (!match) return { matched: false, params: {} };
+  const params: Record<string, string> = {};
+  paramNames.forEach((name, i) => {
+    params[name] = decodeURIComponent(match[i + 1] ?? '');
+  });
+  return { matched: true, params };
+}
+
+/** Join a parent and child route path, collapsing duplicate slashes. */
+function joinPath(parent: string, child: string): string {
+  if (!parent) return child;
+  return `${parent.replace(/\/$/, '')}/${child.replace(/^\//, '')}`;
+}
+
+interface FlatRoute {
+  path: string;
+  exact: boolean;
+  meta?: Record<string, unknown>;
+}
+
+/** Flatten nested route configs into absolute-path entries (children → parent/child). */
+function flattenRoutes(routes: RouteConfig[], parent = ''): FlatRoute[] {
+  const out: FlatRoute[] = [];
+  for (const route of routes) {
+    const full = joinPath(parent, route.path);
+    out.push({ path: full, exact: route.exact ?? false, meta: route.meta });
+    if (route.children?.length) out.push(...flattenRoutes(route.children, full));
+  }
+  return out;
+}
+
 function hasSpaSupport(): boolean {
   return typeof document !== 'undefined' && 'startViewTransition' in document;
 }
@@ -138,6 +192,7 @@ export class RouterCore {
   private readonly _mode: 'history' | 'hash';
   private readonly _base: string;
   private readonly _routes: RouteConfig[];
+  private readonly _flatRoutes: FlatRoute[];
   private readonly _vtMode: boolean | ViewTransitionMode | undefined;
   private readonly _beforeGuards: NavigationGuard[] = [];
   private readonly _afterGuards: RouteChangeHandler[] = [];
@@ -152,6 +207,7 @@ export class RouterCore {
     this._mode = config.mode ?? 'history';
     this._base = config.base ?? '';
     this._routes = config.routes ?? [];
+    this._flatRoutes = flattenRoutes(this._routes);
     this._vtMode = config.viewTransition;
 
     if (resolveMpaMode(this._vtMode)) {
@@ -175,33 +231,26 @@ export class RouterCore {
     return this._current;
   }
 
-  // ── Static path matching (used by matchRoute and SSG) ───────────────────
+  // ── Static path matching (used by matchRoute, params, and SSG) ──────────
 
-  private _matchConfigPath(path: string, route: RouteConfig): boolean {
-    const paramNames: string[] = [];
-    const regexStr = route.path
-      .split('/')
-      .map((segment) => {
-        if (segment.startsWith(':')) {
-          paramNames.push(segment.slice(1));
-          return '([^/]+)';
-        }
-        if (segment === '*') return '(.*)';
-        return segment.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      })
-      .join('/');
-    const pattern = route.exact ? new RegExp(`^${regexStr}$`) : new RegExp(`^${regexStr}(?:/.*)?$`);
-    return pattern.test(path);
-  }
-
-  /** Return the first RouteConfig whose path matches the given URL path, or null. */
+  /** Return the first matching route (absolute path, nested-aware), or null. */
   matchRoute(path: string): RouteConfig | null {
-    return this._routes.find((r) => this._matchConfigPath(path, r)) ?? null;
+    const flat = this._flatRoutes.find((r) => matchPath(r.path, r.exact, path).matched);
+    return flat ? { path: flat.path, exact: flat.exact, meta: flat.meta } : null;
   }
 
-  /** Return all route paths declared in the router config — used to enumerate SSG pages. */
+  /** Extract `:param` values for the first matching route ({} if none). */
+  matchParams(path: string): Record<string, string> {
+    for (const route of this._flatRoutes) {
+      const result = matchPath(route.path, route.exact, path);
+      if (result.matched) return result.params;
+    }
+    return {};
+  }
+
+  /** All declared route paths (nested flattened) — used to enumerate SSG pages. */
   getStaticPaths(): string[] {
-    return this._routes.map((r) => r.path);
+    return this._flatRoutes.map((r) => r.path);
   }
 
   // ── MPA setup ───────────────────────────────────────────────────────────
@@ -275,6 +324,7 @@ export class RouterCore {
 
   _notify(): void {
     const to = this._buildLocation(this._getCurrentPath());
+    to.params = this.matchParams(to.path);
     const from = this._current;
     this._current = to;
 

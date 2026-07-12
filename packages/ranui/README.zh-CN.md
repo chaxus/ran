@@ -282,7 +282,7 @@ window.message?.success({
 
 ### 响应式原语
 
-`signal`、`createEffect`、`computed`、`batch` 与 DOM builder 一起提供，用于在无框架依赖的情况下构建响应式页面区块。设计参考 SwiftUI 的 `@Observable`，并借鉴 Solid.js 补充了两个正确性改进：effect 重新执行前自动清理过期订阅；`batch()` 将多次 signal 写入合并为一次 effect flush，与 SwiftUI 自动合并变更的行为对齐。
+`signal`、`createEffect`、`computed`、`batch`、`untrack` 以及所有权层（`createRoot` / `onCleanup` / `getOwner` / `runWithOwner`）与 DOM builder 一起提供，用于在无框架依赖的情况下构建响应式页面区块。设计参考 SwiftUI 的 `@Observable`，并采用 Solid.js 风格的保证：effect 重新执行前自动清理过期订阅；`batch()` 将多次写入合并为一次 flush；`computed` 是**惰性 + 按值记忆化**的（未被读取的 memo 从不计算，且仅当值真正改变时才唤醒依赖）；每个 effect/memo/绑定都归其作用域所有，销毁一个 `createRoot` 即可一次性拆除其派生的一切 —— 这是页面/路由的销毁单元。`ElementBuilder` 链式方法（`text`/`attr`/`class`/…）也接受 signal getter 作为自动更新的绑定。完整指南见 [`docs/BUILDER.md`](docs/BUILDER.md)。
 
 ```ts
 import { signal, createEffect, computed, batch, EventManager, Div, ButtonBuilder } from 'ranui/builder';

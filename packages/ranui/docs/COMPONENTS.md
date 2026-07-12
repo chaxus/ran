@@ -6,7 +6,7 @@ shape), slots, and `::part()` names — extracted from source. For CSS variables
 (theming tokens) see [style-tokens-public.md](./style-tokens-public.md); for
 design rules see [DESIGN.md](./DESIGN.md).
 
-Generated at: 2026-07-11T05:42:36.629Z
+Generated at: 2026-07-12T08:14:18.321Z
 
 30 custom elements.
 
@@ -251,8 +251,13 @@ Source: `components/radar/index.ts`
 
 Source: `components/route/index.ts`
 
-- **Attributes**: `exact: boolean`, `path: string`, `sheet: string`
-- **Properties**: `exact: boolean`, `params: Record<string, string>`, `path: string`, `sheet: string`
+- **Attributes**: `exact: boolean`, `path: string`, `sheet: string`, `src: string`
+- **Properties**:
+  - `exact: boolean`
+  - `params: Record<string, string>`
+  - `path: string`
+  - `sheet: string`
+  - `src: string` — A lazy page module's default export: render into `host`, optionally return a cleanup. */
 - **Events**: `routematch` → detail `{ params, path }`
 - **Slots**: `default`
 - **Parts**: —

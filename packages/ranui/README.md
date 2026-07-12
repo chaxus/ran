@@ -315,7 +315,7 @@ window.message?.success({
 
 ### Reactive Primitives
 
-`signal`, `createEffect`, `computed`, and `batch` ship alongside the DOM builder for building reactive page sections without a framework. The design mirrors SwiftUI's `@Observable` with two correctness improvements from Solid.js: effects automatically clean up stale subscriptions before each re-run, and `batch()` coalesces multiple signal writes into a single effect flush — the same guarantee SwiftUI gives for free.
+`signal`, `createEffect`, `computed`, `batch`, `untrack`, and an ownership layer (`createRoot` / `onCleanup` / `getOwner` / `runWithOwner`) ship alongside the DOM builder for building reactive page sections without a framework. The design mirrors SwiftUI's `@Observable` with Solid.js-style guarantees: effects auto-clean stale subscriptions before each re-run; `batch()` coalesces writes into one flush; `computed` is **lazy + value-memoized** (an unread memo never computes, and it wakes dependents only when its value actually changes); and every effect/memo/binding is owned by its scope, so disposing a `createRoot` tears down everything it spawned in one call — the teardown unit for a page/route. `ElementBuilder` chainables (`text`/`attr`/`class`/…) also accept a signal getter for auto-updating bindings. Full guide: [`docs/BUILDER.md`](docs/BUILDER.md).
 
 ```ts
 import { signal, createEffect, computed, batch, EventManager, Div, ButtonBuilder } from 'ranui/builder';

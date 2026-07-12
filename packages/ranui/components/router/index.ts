@@ -9,7 +9,7 @@ import {
   syncSheetAttribute,
 } from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
-import { useRouter, type RouterComponentElement } from '@/utils/router';
+import { useRouter, type RouterComponentElement, type RouterCore } from '@/utils/router';
 
 type RouteElement = HTMLElement & { _update: (path: string) => void };
 
@@ -22,6 +22,8 @@ export class Router extends RanElement {
   _shadowDom: ShadowRoot;
   _slot: HTMLSlotElement;
   _currentPath: string = '';
+  /** Bound RouterCore (when createRouter() was used) — navigation delegates to it. */
+  _core: RouterCore | null = null;
 
   constructor() {
     super();
@@ -62,6 +64,12 @@ export class Router extends RanElement {
   }
 
   navigate(path: string, replace = false): void {
+    // With a RouterCore, route everything through it so guards, View
+    // Transitions, and afterEach/onRouteChange run uniformly.
+    if (this._core) {
+      void (replace ? this._core.replace(path) : this._core.push(path));
+      return;
+    }
     const fullPath = this.mode === 'hash' ? `#${path}` : this.base + path;
     if (replace) {
       window.history.replaceState(null, '', fullPath);
@@ -81,7 +89,11 @@ export class Router extends RanElement {
   }
 
   _handlePopState = (): void => {
-    this._syncRoutes();
+    // Back/forward: run the full pipeline (View Transitions + hooks) via the
+    // core when present. Guards can't cancel a completed browser navigation, so
+    // the core's _notify() intentionally skips beforeEach here.
+    if (this._core) this._core._notify();
+    else this._syncRoutes();
   };
 
   _handleNavigate = (e: Event): void => {
@@ -97,7 +109,10 @@ export class Router extends RanElement {
     this._events.on(this._slot, 'slotchange', () => this._syncRoutes());
     // Register with RouterCore if a global instance exists
     const core = useRouter();
-    if (core) core._bind(this as unknown as RouterComponentElement);
+    if (core) {
+      this._core = core;
+      core._bind(this as unknown as RouterComponentElement);
+    }
     this._syncRoutes();
     // Re-sync after r-route is guaranteed to be upgraded
     if (typeof customElements !== 'undefined') {
@@ -108,6 +123,7 @@ export class Router extends RanElement {
   disconnectedCallback(): void {
     const core = useRouter();
     if (core) core._unbind(this as unknown as RouterComponentElement);
+    this._core = null;
     this._events.abort();
   }
 

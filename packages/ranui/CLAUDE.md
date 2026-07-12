@@ -345,6 +345,18 @@ function initSection(container: HTMLElement) {
 }
 ```
 
+> **Leak footgun — reactive builder bindings without an owner.** `ElementBuilder`
+> accepts a getter (`Div().text(mySignal)`, `.class(() => …)`) which creates an
+> effect **owned by the current reactive scope**. A component **constructor has no
+> owner**, so a getter binding built there (the canonical ranui pattern) never gets
+> disposed: the signal keeps the effect — and the element it closes over — alive,
+> and the effect keeps firing after `disconnectedCallback`. Inside a component,
+> either pass **plain values** to the builder and update them imperatively in
+> `attributeChangedCallback`, or drive updates with an explicit `createEffect`
+> whose dispose you collect and call on disconnect (see `components/colorpicker`
+> `setupEffects` / `_effectDisposers`). Reserve getter bindings for code that runs
+> inside a `createRoot` (page/route glue), where the scope disposes them for you.
+
 ### `utils/ssr-registry.ts`
 
 ```typescript

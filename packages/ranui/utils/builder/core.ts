@@ -1,6 +1,7 @@
 import { isSSR } from './env';
 import { DocumentFragmentMock, HTMLElementMock, ShadowRootMock } from './mocks';
 import type { EventManager } from './events';
+import { createEffect, type Getter } from './signal';
 
 export interface Ref<T extends HTMLElement = HTMLElement> {
   current: T | null;
@@ -20,9 +21,21 @@ export class ElementBuilder<T extends HTMLElement = HTMLElement> {
     return this;
   }
 
-  class(name: string): this {
-    if (isSSR) (this.el as unknown as HTMLElementMock).attributes.set('class', name);
-    else this.el.className = name;
+  /**
+   * Apply a value now, or bind it reactively when a getter is passed.
+   * A getter creates an effect owned by the current reactive scope (createRoot),
+   * so the binding is disposed automatically when that scope is torn down.
+   */
+  private bind<V>(value: V | Getter<V>, apply: (v: V) => void): void {
+    if (typeof value === 'function') createEffect(() => apply((value as Getter<V>)()));
+    else apply(value);
+  }
+
+  class(name: string | Getter<string>): this {
+    this.bind(name, (n) => {
+      if (isSSR) (this.el as unknown as HTMLElementMock).attributes.set('class', n);
+      else this.el.className = n;
+    });
     return this;
   }
 
@@ -36,8 +49,8 @@ export class ElementBuilder<T extends HTMLElement = HTMLElement> {
     return this;
   }
 
-  attr(name: string, value: string): this {
-    this.el.setAttribute(name, value);
+  attr(name: string, value: string | Getter<string>): this {
+    this.bind(value, (v) => this.el.setAttribute(name, v));
     return this;
   }
 
@@ -49,40 +62,41 @@ export class ElementBuilder<T extends HTMLElement = HTMLElement> {
     return this;
   }
 
-  boolAttr(name: string, value: boolean, enabledValue = ''): this {
-    if (value) this.el.setAttribute(name, enabledValue);
-    else this.el.removeAttribute(name);
+  boolAttr(name: string, value: boolean | Getter<boolean>, enabledValue = ''): this {
+    this.bind(value, (v) => {
+      if (v) this.el.setAttribute(name, enabledValue);
+      else this.el.removeAttribute(name);
+    });
     return this;
   }
 
-  part(value: string): this {
-    this.el.setAttribute('part', value);
-    return this;
+  part(value: string | Getter<string>): this {
+    return this.attr('part', value);
   }
 
-  data(key: string, value: string): this {
+  data(key: string, value: string | Getter<string>): this {
     return this.attr(`data-${key}`, value);
   }
 
-  style(keyOrMap: string | Record<string, string>, value?: string): this {
+  style(keyOrMap: string | Record<string, string>, value?: string | Getter<string>): this {
     if (typeof keyOrMap === 'string') {
-      this.el.style.setProperty(keyOrMap, value ?? '');
+      this.bind(value ?? '', (v) => this.el.style.setProperty(keyOrMap, v));
     } else {
       Object.entries(keyOrMap).forEach(([k, v]) => this.el.style.setProperty(k, v));
     }
     return this;
   }
 
-  cssVar(name: string, value: string): this {
+  cssVar(name: string, value: string | Getter<string>): this {
     const property = name.startsWith('--') ? name : `--${name}`;
     return this.style(property, value);
   }
 
-  aria(key: string, value: string): this {
+  aria(key: string, value: string | Getter<string>): this {
     return this.attr(`aria-${key}`, value);
   }
 
-  role(value: string): this {
+  role(value: string | Getter<string>): this {
     return this.attr('role', value);
   }
 
@@ -90,15 +104,15 @@ export class ElementBuilder<T extends HTMLElement = HTMLElement> {
     return this.attr('tabindex', String(value));
   }
 
-  label(value: string): this {
+  label(value: string | Getter<string>): this {
     return this.aria('label', value);
   }
 
-  labelledBy(id: string): this {
+  labelledBy(id: string | Getter<string>): this {
     return this.aria('labelledby', id);
   }
 
-  describedBy(id: string): this {
+  describedBy(id: string | Getter<string>): this {
     return this.aria('describedby', id);
   }
 
@@ -201,8 +215,10 @@ export class ElementBuilder<T extends HTMLElement = HTMLElement> {
     return this.children(...items);
   }
 
-  text(value: string): this {
-    this.el.textContent = value;
+  text(value: string | Getter<string>): this {
+    this.bind(value, (v) => {
+      this.el.textContent = v;
+    });
     return this;
   }
 

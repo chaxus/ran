@@ -216,19 +216,30 @@ const actions = Div()
 
 ## Reactive Primitives (`builder/signal.ts`)
 
-Fine-grained reactivity inspired by SwiftUI's `@Observable` and Solid.js signals. Reading a signal inside `createEffect` or `computed` automatically establishes a dependency — no manual subscription needed.
+Fine-grained reactivity inspired by SwiftUI's `@Observable` and Solid.js signals. Reading a signal inside `createEffect` or `computed` automatically establishes a dependency — no manual subscription needed. See [`docs/BUILDER.md`](../docs/BUILDER.md) for the full guide (ownership, reactive `ElementBuilder` bindings, MPA/SPA teardown).
 
 ```ts
-import { signal, createEffect, computed, batch } from '@/utils/builder';
+import {
+  signal,
+  createEffect,
+  computed,
+  batch,
+  untrack,
+  createRoot,
+  onCleanup,
+  getOwner,
+  runWithOwner,
+} from '@/utils/builder';
 ```
 
-**Core model — same idea as SwiftUI's `View = f(State)`, with two correctness improvements borrowed from Solid.js:**
+**Core model — same idea as SwiftUI's `View = f(State)`, Solid.js-style ownership and lazy memos:**
 
 ```
 signal()       ≈  @State / @Observable property
 createEffect() ≈  SwiftUI body  (auto-tracks reads; cleans stale deps before each re-run)
-computed()     ≈  Swift computed property  (derived, cached)
+computed()     ≈  Swift computed property  (derived, LAZY + value-memoized)
 batch()        ≈  SwiftUI's automatic mutation coalescing  (one flush per event handler)
+createRoot()   ≈  a disposable scope that owns everything created inside it
 ```
 
 ### Usage
@@ -258,15 +269,19 @@ return () => {
 
 ### API Reference
 
-| API                         | Description                                                                                                                                                                                                                                                                                                                          |
-| :-------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `signal(initial, options?)` | Create a reactive value. Returns `[getter, setter]`. Reading the getter inside an effect auto-tracks the dependency.                                                                                                                                                                                                                 |
-| `getter()`                  | Read the current value. Auto-subscribes the running effect.                                                                                                                                                                                                                                                                          |
-| `setter(value)`             | Write a new value; notifies all dependent effects. Skips update when value is unchanged (`Object.is`).                                                                                                                                                                                                                               |
-| `setter(fn)`                | Updater form: receives previous value, returns next.                                                                                                                                                                                                                                                                                 |
-| `createEffect(fn)`          | Run `fn` immediately; re-run whenever any signal read inside it changes. Before each re-run, removes itself from signals it no longer reads (stale-subscription cleanup). Returns a `dispose` function that stops tracking and removes all subscriptions for GC. `fn` may return a cleanup called before each re-run and on dispose. |
-| `computed(fn)`              | Derived read-only signal. Recomputes when its dependencies change. Returns a getter.                                                                                                                                                                                                                                                 |
-| `batch(fn)`                 | Run multiple signal writes as one atomic update. All dependent effects are deferred and flushed once (deduplicated) after `fn` returns. Nested `batch()` calls are absorbed by the outermost one.                                                                                                                                    |
+| API                                      | Description                                                                                                                                                                                                                                                                                                                               |
+| :--------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `signal(initial, options?)`              | Create a reactive value. Returns `[getter, setter]`. Reading the getter inside an effect auto-tracks the dependency.                                                                                                                                                                                                                      |
+| `getter()`                               | Read the current value. Auto-subscribes the running effect.                                                                                                                                                                                                                                                                               |
+| `setter(value)`                          | Write a new value; notifies all dependent effects. Skips update when value is unchanged (`Object.is`).                                                                                                                                                                                                                                    |
+| `setter(fn)`                             | Updater form: receives previous value, returns next.                                                                                                                                                                                                                                                                                      |
+| `createEffect(fn)`                       | Run `fn` immediately; re-run whenever any signal read inside it changes. Before each re-run, removes itself from signals it no longer reads (stale-subscription cleanup). Returns a `dispose` function that stops tracking and removes all subscriptions for GC. `fn` may return a cleanup called before each re-run and on dispose.      |
+| `computed(fn, options?)`                 | Derived read-only signal — **lazy + value-memoized**. Recomputes only when read after a dependency changed (an unread memo never computes) and re-notifies its observers only when the derived value actually changes (`Object.is`, override via `options.equals`) — so effects behind a value-stable memo stay asleep. Returns a getter. |
+| `batch(fn)`                              | Run multiple signal writes as one atomic update. All dependent effects are deferred and flushed once (deduplicated) after `fn` returns. Nested `batch()` calls are absorbed by the outermost one.                                                                                                                                         |
+| `untrack(fn)`                            | Read signals inside `fn` without subscribing the current computation to them.                                                                                                                                                                                                                                                             |
+| `createRoot(fn)`                         | Create a disposable reactive scope. `fn` receives a `dispose`; effects/memos/bindings created inside are owned by the scope and torn down (with their `onCleanup`s) when `dispose` runs. One per page/route in an MPA/SPA.                                                                                                                |
+| `onCleanup(fn)`                          | Register a cleanup on the current scope; runs when the scope re-runs or is disposed.                                                                                                                                                                                                                                                      |
+| `getOwner()` / `runWithOwner(owner, fn)` | Capture the current owner scope and later run `fn` under it — for restoring reactive scope across async boundaries (e.g. a router).                                                                                                                                                                                                       |
 
 ### `signal` options
 
