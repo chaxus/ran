@@ -12,13 +12,6 @@ catalog:
   typescript: ^7.0.2
   vite: ^8.1.4
   vitest: ^4.1.10
-catalogs:
-  # ranuts' doc generator (bin/generate-api-docs.ts) drives the classic TypeScript
-  # compiler API (createProgram/TypeChecker/displayPartsToString), which the TS 7
-  # native compiler no longer exposes via the bare `typescript` import. Pin ranuts
-  # to TS 6 until that tool is migrated; every other package uses the default TS 7.
-  ts6:
-    typescript: ^6.0.3
 # Force patched versions of transitively-pulled build tools (Dependabot advisories).
 overrides:
   esbuild: '>=0.28.1'
