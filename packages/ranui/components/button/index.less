@@ -26,7 +26,8 @@
     // Hosts that want palette fades can opt in via --ran-btn-contain-transition.
     transition: var(
       --ran-btn-contain-transition,
-      opacity var(--ran-motion-duration-base, 0.2s) cubic-bezier(0.645, 0.045, 0.355, 1)
+      opacity var(--ran-motion-duration-base, 0.2s)
+        var(--ran-motion-ease-standard, cubic-bezier(0.645, 0.045, 0.355, 1))
     );
     user-select: var(--ran-btn-contain-user-select, none);
     touch-action: var(--ran-btn-contain-touch-action, manipulation);
@@ -176,6 +177,12 @@
       opacity: var(--ran-btn-after-opacity, 0.3);
       transition: var(--ran-btn-after-transition, 0s);
     }
+    // Tactile press: scale the visible surface down; it springs back on release
+    // via .ran-btn-content's transform transition. Motion prop only — safe on
+    // theme flip.
+    .ran-btn-content {
+      transform: var(--ran-btn-content-active-transform, scale(0.96));
+    }
   }
 
   @media (min-width: 1024px) {
@@ -227,7 +234,19 @@
   white-space: var(--ran-btn-content-white-space, nowrap);
   text-align: var(--ran-btn-content-text-align, center);
   box-sizing: var(--ran-btn-content-box-sizing, border-box);
+  // Motion prop only (transform) — spring easing gives a slight bounce on
+  // release when the press scale (see :active) relaxes back to rest.
+  transition: var(
+    --ran-btn-content-transition,
+    transform var(--ran-motion-duration-base, 0.2s) var(--ran-motion-ease-spring, cubic-bezier(0.34, 1.26, 0.5, 1))
+  );
   .icon {
     margin-right: var(--ran-btn-icon-margin-right, 2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ran-btn-content {
+    transition: none;
   }
 }

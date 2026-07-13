@@ -10,7 +10,7 @@
   padding-top: 26px;
   border-top: 1px solid var(--vp-c-divider);
   font-weight: 700;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
 }
 .vp-doc h2 + h3 {
   margin-top: 12px;
@@ -153,5 +153,182 @@
 /* ---------- sidebar: clearer active item ---------- */
 .VPSidebarItem.is-active > .item .link .text,
 .VPSidebarItem.is-active > .item .text {
+  font-weight: 600;
+}
+
+/* ==================================================================== *
+ * Deep typography pass — Geist/Vercel reading experience. Refines the
+ * prose itself: rendering, scale, rhythm, links, code, callouts. Colors
+ * ride the same tokens so both themes flip cleanly; no heavy effects.
+ * ==================================================================== */
+
+/* ---------- global rendering + selection ---------- */
+.vp-doc {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+::selection {
+  background: color-mix(in srgb, var(--vp-c-text-1) 16%, transparent);
+}
+
+/* ---------- heading scale + tracking (Geist tightens as it grows) ---------- */
+.vp-doc h1 {
+  font-size: clamp(30px, 4vw, 40px);
+  line-height: 1.12;
+  font-weight: 720;
+  letter-spacing: -0.035em;
+}
+.vp-doc h3 {
+  letter-spacing: -0.015em;
+}
+.vp-doc h4 {
+  margin-top: 24px;
+  font-weight: 640;
+  letter-spacing: -0.01em;
+}
+/* anchor mark: quiet until the heading is hovered */
+.vp-doc .header-anchor {
+  font-weight: 400;
+  color: var(--vp-c-text-3);
+  text-decoration: none;
+}
+
+/* ---------- body rhythm + measure ---------- */
+.vp-doc p,
+.vp-doc li {
+  line-height: 1.75;
+}
+.vp-doc p {
+  margin: 16px 0;
+}
+.vp-doc ul,
+.vp-doc ol {
+  padding-left: 1.35em;
+}
+.vp-doc li + li {
+  margin-top: 6px;
+}
+.vp-doc li > ul,
+.vp-doc li > ol {
+  margin: 6px 0;
+}
+.vp-doc ul > li::marker {
+  color: var(--vp-c-text-3);
+}
+.vp-doc ol > li::marker {
+  color: var(--vp-c-text-3);
+  font-variant-numeric: tabular-nums;
+}
+/* keep prose from running too wide on big screens (comfortable measure) */
+.vp-doc > :is(p, ul, ol, blockquote, h2, h3, h4) {
+  max-width: 72ch;
+}
+
+/* ---------- links: Vercel editorial underline ---------- */
+.vp-doc p a,
+.vp-doc li a {
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--vp-c-brand) 32%, transparent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition:
+    text-decoration-color 0.18s ease,
+    color 0.18s ease;
+}
+.vp-doc p a:hover,
+.vp-doc li a:hover {
+  text-decoration-color: var(--vp-c-brand);
+}
+
+/* ---------- inline code: hairline chip (tables stay quiet, per above) ---------- */
+.vp-doc :not(pre) > code {
+  border: 1px solid var(--vp-c-divider);
+  background: var(--vp-c-bg-soft);
+  border-radius: 6px;
+  padding: 0.14em 0.42em;
+  font-size: 0.85em;
+  color: var(--vp-c-text-1);
+}
+/* re-quiet code inside tables: no chip border, flatter fill (keeps API tables calm) */
+.vp-doc td code,
+.vp-doc th code {
+  border-color: transparent;
+  background: var(--vp-c-bg-alt);
+}
+/* links that are themselves code (e.g. `SyncHook`) keep the chip, drop the underline */
+.vp-doc a > code {
+  text-decoration: none;
+}
+
+/* ---------- fenced code blocks: match the card system ---------- */
+.vp-doc div[class*='language-'] {
+  margin: 22px 0;
+  border-radius: 12px;
+  border: 1px solid var(--vp-c-divider);
+}
+.vp-doc div[class*='language-'] pre {
+  padding: 20px 0;
+}
+/* language tag + copy button sit quieter */
+.vp-doc [class*='language-'] > span.lang {
+  color: var(--vp-c-text-3);
+  font-family: var(--vp-font-family-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* ---------- callouts: full hairline card, not just a left bar ---------- */
+.vp-doc .custom-block {
+  border-radius: 12px;
+  border: 1px solid var(--vp-c-divider);
+  padding: 16px 18px;
+  font-size: 14px;
+}
+.vp-doc .custom-block .custom-block-title {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.vp-doc .custom-block.tip {
+  border-color: color-mix(in srgb, var(--vp-c-brand) 40%, var(--vp-c-divider));
+}
+.vp-doc .custom-block a {
+  font-weight: 600;
+}
+
+/* ---------- blockquote, hr, kbd ---------- */
+.vp-doc blockquote {
+  border-left: 2px solid var(--vp-c-divider);
+  padding-left: 18px;
+  color: var(--vp-c-text-2);
+  font-style: normal;
+}
+.vp-doc hr {
+  border: 0;
+  border-top: 1px solid var(--vp-c-divider);
+  margin: 40px 0;
+}
+.vp-doc kbd {
+  display: inline-block;
+  border: 1px solid var(--vp-c-divider);
+  border-bottom-width: 2px;
+  border-radius: 6px;
+  background: var(--vp-c-bg-soft);
+  padding: 1px 6px;
+  font-family: var(--vp-font-family-mono);
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--vp-c-text-1);
+}
+
+/* ---------- API tables: tabular figures for tidy numeric columns ---------- */
+.vp-doc td {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- "On this page" outline: active marker ---------- */
+.VPDocAsideOutline .outline-link.active {
+  color: var(--vp-c-brand);
   font-weight: 600;
 }

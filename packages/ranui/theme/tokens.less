@@ -161,6 +161,21 @@
   /* ── Motion ─────────────────────────────────────────────────────── */
   --ran-motion-duration-fast: 0.15s;
   --ran-motion-duration-base: 0.2s;
+  --ran-motion-duration-slow: 0.35s;
+
+  /* Easing curves. `standard` is the general in-out; the spring family is
+     distilled from tuned SwiftUI springs (response/damping → single-overshoot
+     bézier) for interaction polish.
+     ⚠️ Pair these with MOTION props only (transform / opacity) — never palette
+     props (background / color / border / box-shadow). Palette transitions make
+     every theme flip fade component-by-component instead of switching with the
+     host page in one frame; the library must not impose that on consumers
+     (see components/button/index.less). */
+  --ran-motion-ease-standard: cubic-bezier(0.645, 0.045, 0.355, 1); /* in-out, general purpose */
+  --ran-motion-ease-snappy: cubic-bezier(0.33, 0, 0.15, 1); /* quick, no overshoot — toggles, small state */
+  --ran-motion-ease-spring: cubic-bezier(0.34, 1.26, 0.5, 1); /* slight overshoot — buttons, cards */
+  --ran-motion-ease-bouncy: cubic-bezier(0.34, 1.56, 0.64, 1); /* playful overshoot — like, add-to-cart */
+  --ran-motion-ease-smooth: cubic-bezier(0.4, 0, 0.2, 1); /* calm, no overshoot — reveals, layout */
 
   /* ── Skin primitives (component-facing; kept minimal) ───────────── */
   --ran-skin-border-width: 1px;

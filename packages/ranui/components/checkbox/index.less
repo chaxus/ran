@@ -115,6 +115,11 @@
       background-color: var(--ran-checkbox-checked-background-color, var(--ran-color-primary, #006bff));
       background-image: var(--ran-checkbox-checked-background-image, none);
       border: var(--ran-checkbox-checked-border, 1px solid var(--ran-color-primary, #006bff));
+      // Bouncy pop on check — a transform-only keyframe (safe on theme flip).
+      animation: var(
+        --ran-checkbox-pop-animation,
+        ran-checkbox-pop var(--ran-motion-duration-base, 0.2s) var(--ran-motion-ease-bouncy, cubic-bezier(0.34, 1.56, 0.64, 1))
+      );
       &::after {
         opacity: var(--ran-checkbox-checked-after-opacity, 1);
       }
@@ -123,5 +128,25 @@
   &:focus-within &-inner {
     box-shadow: var(--ran-checkbox-focus-box-shadow, 0 0 0 2px var(--ran-blue-400, #cae7ff));
     border-color: var(--ran-checkbox-focus-border-color, var(--ran-color-primary, #006bff));
+  }
+}
+
+/* Pop keyframe for the check transition — transform only, so it never touches
+   palette props and stays in sync across a theme flip. */
+@keyframes ran-checkbox-pop {
+  0% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.14);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ran-checkbox-checked .ran-checkbox-inner {
+    animation: none;
   }
 }

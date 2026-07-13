@@ -4,4 +4,4 @@ title: ran
 pageClass: ran-home-page
 ---
 
-<Home />
+<HomeCinematic />
