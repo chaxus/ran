@@ -120,3 +120,50 @@ html.theme-flip {
     width: 100%;
   }
 }
+
+/* ==========================================================================
+   Vercel/Geist nav bar — a thin, translucent, blurred floating bar. The blur
+   here is a single small strip (not a full-page filter), which is the standard
+   Vercel treatment and renders fine in both themes.
+   ========================================================================== */
+#app .VPNavBar {
+  background-color: color-mix(in srgb, var(--vp-c-bg) 70%, transparent);
+  backdrop-filter: saturate(180%) blur(12px);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
+  border-bottom: 1px solid var(--vp-c-divider-light);
+}
+/* let the translucent bar show through: VitePress paints opaque bg on these
+   inner wrappers, which would defeat the blur */
+#app .VPNavBar .content-body,
+#app .VPNavBar.has-sidebar .content-body,
+#app .VPNavBar .curtain {
+  background: transparent !important;
+}
+#app .VPNavBar.has-sidebar .title {
+  background: transparent !important;
+}
+/* menu links get a soft rounded highlight on hover/active (Vercel style) */
+#app .VPNavBarMenuLink {
+  border-radius: 8px;
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease;
+}
+#app .VPNavBarMenuLink:hover,
+#app .VPNavBarMenuLink.active {
+  background-color: var(--vp-c-bg-soft);
+}
+/* refine the search trigger to match the hairline system */
+#app .VPNavBarSearch .DocSearch-Button,
+#app .VPNavBarSearch button.DocSearch-Button {
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+  background: var(--vp-c-bg-soft);
+  transition:
+    border-color 0.18s ease,
+    background-color 0.18s ease;
+}
+#app .VPNavBarSearch .DocSearch-Button:hover {
+  border-color: var(--vp-c-text-3);
+  background: var(--vp-c-bg);
+}
