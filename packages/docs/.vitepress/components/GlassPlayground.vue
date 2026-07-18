@@ -168,8 +168,7 @@ onBeforeUnmount(() => clearTimeout(copyTimer));
     radial-gradient(40% 55% at 22% 26%, #ff5f6d, transparent 60%),
     radial-gradient(45% 55% at 80% 30%, #22d3ee, transparent 60%),
     radial-gradient(55% 60% at 55% 88%, #a855f7, transparent 60%),
-    radial-gradient(40% 45% at 12% 82%, #f9d423, transparent 55%),
-    #0b0d16;
+    radial-gradient(40% 45% at 12% 82%, #f9d423, transparent 55%), #0b0d16;
 }
 .gp-bg span,
 .gp-bg b,

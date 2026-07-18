@@ -198,7 +198,7 @@ However, since we don't know how many whitespace characters there are, we can on
 Let's implement `TrimRight` first:
 
 ```ts
-type TrimRight<Str extends string> = Str extends `${infer Rest}${' ' | '\n' | '\t'}` ? TrimRight<Rest> : Str
+type TrimRight<Str extends string> = Str extends `${infer Rest}${' ' | '\n' | '\t'}` ? TrimRight<Rest> : Str;
 ```
 
 The type parameter `Str` is the string to trim.

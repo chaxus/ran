@@ -50,31 +50,31 @@
 
 ### 属性
 
-| 属性          | 类型      | 默认值  | 说明                                                                 |
-| ------------- | --------- | ------- | -------------------------------------------------------------------- |
-| `blur`        | `number`  | `16`    | 背景模糊半径（px），即磨砂程度。                                      |
-| `saturate`    | `number`  | `180`   | 背景饱和度百分比，提升玻璃后内容的色彩（vibrancy）。                  |
-| `displace`    | `number`  | `8`     | 液态折射强度（SVG 位移 scale）。`0` 为纯磨砂平面，越大越"波浪"。      |
-| `frequency`   | `number`  | `0.005` | 湍流基频，越小则涟漪越大越平滑。                                      |
-| `radius`      | `number`  | `20`    | 圆角半径（px）。                                                      |
-| `tint`        | `string`  | 淡白    | 玻璃填充色，任意 CSS 背景值。                                         |
-| `sheen`       | `boolean` | `false` | 表面流动的镜面高光动画。                                              |
-| `interactive` | `boolean` | `false` | hover 抬升 + 按下回弹反馈，用于可点击的玻璃。                         |
+| 属性          | 类型      | 默认值  | 说明                                                             |
+| ------------- | --------- | ------- | ---------------------------------------------------------------- |
+| `blur`        | `number`  | `16`    | 背景模糊半径（px），即磨砂程度。                                 |
+| `saturate`    | `number`  | `180`   | 背景饱和度百分比，提升玻璃后内容的色彩（vibrancy）。             |
+| `displace`    | `number`  | `8`     | 液态折射强度（SVG 位移 scale）。`0` 为纯磨砂平面，越大越"波浪"。 |
+| `frequency`   | `number`  | `0.005` | 湍流基频，越小则涟漪越大越平滑。                                 |
+| `radius`      | `number`  | `20`    | 圆角半径（px）。                                                 |
+| `tint`        | `string`  | 淡白    | 玻璃填充色，任意 CSS 背景值。                                    |
+| `sheen`       | `boolean` | `false` | 表面流动的镜面高光动画。                                         |
+| `interactive` | `boolean` | `false` | hover 抬升 + 按下回弹反馈，用于可点击的玻璃。                    |
 
 ### CSS parts 与 token
 
 用 `::part(glass)`、`::part(specular)` 或覆盖 `--ran-glass-*` 自定义属性来定制内部：
 
-| Token                          | 作用                       |
-| ------------------------------ | -------------------------- |
-| `--ran-glass-blur`             | 背景模糊半径。             |
-| `--ran-glass-saturate`         | 背景饱和度。               |
-| `--ran-glass-radius`           | 圆角半径。                 |
-| `--ran-glass-tint`             | 填充背景。                 |
-| `--ran-glass-border`           | 亮边。                     |
-| `--ran-glass-shadow`           | 阴影（高光 + 景深）。       |
-| `--ran-glass-specular`         | 镜面高光背景。             |
-| `--ran-glass-specular-opacity` | 镜面高光强度。             |
+| Token                          | 作用                  |
+| ------------------------------ | --------------------- |
+| `--ran-glass-blur`             | 背景模糊半径。        |
+| `--ran-glass-saturate`         | 背景饱和度。          |
+| `--ran-glass-radius`           | 圆角半径。            |
+| `--ran-glass-tint`             | 填充背景。            |
+| `--ran-glass-border`           | 亮边。                |
+| `--ran-glass-shadow`           | 阴影（高光 + 景深）。 |
+| `--ran-glass-specular`         | 镜面高光背景。        |
+| `--ran-glass-specular-opacity` | 镜面高光强度。        |
 
 ## 说明
 

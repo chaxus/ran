@@ -422,7 +422,7 @@ const transpiler = Transpiler.TypeScriptCompiler;
 
 TypeScript also supports literal types — meaning values like `1111`, `'aaaa'`, `{ a: 1 }` can themselves serve as types.
 
-Among these, string literal types come in two forms: ordinary string literals, such as `'aaa'`, and template literals, such as `` aaa${string} ``, which means a string literal type that starts with `aaa` followed by any `string`.
+Among these, string literal types come in two forms: ordinary string literals, such as `'aaa'`, and template literals, such as `aaa${string}`, which means a string literal type that starts with `aaa` followed by any `string`.
 
 So if you want to constrain a string literal type to start with a certain string, you can write it like this:
 
