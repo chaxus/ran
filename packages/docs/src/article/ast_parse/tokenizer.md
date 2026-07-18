@@ -1,39 +1,39 @@
 # Abstract Syntax Tree
 
-## 一.（`abstract syntax tree`）抽象语法树的作用
+## 1. The role of the abstract syntax tree (`abstract syntax tree`)
 
-源码是一串按照语法格式来组织的字符串，人能够认识，但是计算机并不认识，想让计算机认识就要转成一种数据结构，通过不同的对象来保存不同的数据，并且按照依赖关系组织起来，这种数据结构就是抽象语法树（`abstract syntax tree`）。
+Source code is a string organized according to a grammar. Humans can read it, but computers cannot. To make it understandable to a computer, it needs to be converted into a data structure that stores different pieces of data in different objects and organizes them according to their dependency relationships. This data structure is the abstract syntax tree (`abstract syntax tree`).
 
-之所以叫“抽象”语法树是因为数据结构中省略掉了一些无具体意义的分隔符比如 `; { }` 等。
+It's called "abstract" because the data structure omits some delimiters that have no concrete meaning, such as `; { }`.
 
-有了 `AST`，计算机就能理解源码字符串的意思，而理解是能够转换的前提，所以编译的第一步需要把源码 `parse` 成 `AST`。
+With an `AST`, a computer can understand the meaning of the source code string, and understanding is the prerequisite for transformation. So the first step of compilation is to `parse` the source code into an `AST`.
 
-转成 `AST` 之后就可以通过修改 `AST` ，分析 `AST` 的方式来修改和分析代码，比如 `babel` 就通过这种方式进行代码的转换，比如 `rollup` 的 `Tree Shaking` ，就是通过分析 `AST`的 导入导出语法，从而分析出没有使用的代码，进行去除。
+Once converted into an `AST`, you can modify and analyze code by modifying and analyzing the `AST`. For example, `babel` performs code transformation this way, and `rollup`'s `Tree Shaking` works by analyzing the import/export syntax in the `AST` to find unused code and remove it.
 
-## 二。常见的 AST 节点
+## 2. Common AST nodes
 
-常见的 AST 节点
-AST 是对源码的抽象，字面量、标识符、表达式、语句、模块语法、class 语法都有各自的 AST。
+Common AST nodes.
+An AST is an abstraction of the source code — literals, identifiers, expressions, statements, module syntax, and class syntax all have their own AST representation.
 
-我们分别来了解一下：
+Let's look at each of them:
 
 ### Literal
 
-`Literal` 是字面量的意思，比如 `let name = 'value'`中，`'value'`就是一个字符串字面量 `StringLiteral`，相应的还有数字字面量 `NumericLiteral`，布尔字面量 `BooleanLiteral`，字符串字面量 `StringLiteral`，正则表达式字面量 `RegExpLiteral` 等。
+`Literal` means a literal value. For example, in `let name = 'value'`, `'value'` is a string literal, `StringLiteral`. Correspondingly there are numeric literals `NumericLiteral`, boolean literals `BooleanLiteral`, string literals `StringLiteral`, regular expression literals `RegExpLiteral`, and so on.
 
-下面这些字面量都有对应的 `Literal` 节点：
+The following literals all have corresponding `Literal` nodes:
 
 ![](../../../assets//ranuts//astParse//Literal.jpeg)
 
-代码中的字面量很多，`babel` 就是通过 `xxLiteral` 来抽象这部分内容的。
+There are many kinds of literals in code, and `babel` abstracts this part with `xxLiteral` nodes.
 
 ### Identifier
 
-`Identifer` 是标识符的意思，变量名、属性名、参数名等各种声明和引用的名字，都是`Identifer`。
+`Identifier` means an identifier — the names used in various declarations and references, such as variable names, property names, and parameter names, are all `Identifier`.
 
-我们知道， `JS` 中的标识符只能包含字母或数字或下划线 `（“_”）` 或美元符号 `（“$”）` ，且不能以数字开头。这是 `Identifier` 的词法特点。
+We know that identifiers in `JS` can only contain letters, digits, underscores (`"_"`), or dollar signs (`"$"`), and cannot start with a digit. This is the lexical characteristic of an `Identifier`.
 
-尝试分析一下，下面这一段代码里面有多少 `Identifier` 呢？
+Try to figure out how many `Identifier`s are in the following code:
 
 ```js
 const name = 'value';
@@ -47,17 +47,17 @@ const obj = {
 };
 ```
 
-答案是这些
+The answer is these:
 
 ![](../../../assets//ranuts//astParse//Identifier.jpeg)
 
 ### Statement
 
-`statement` 是语句，它是可以独立执行的单位，比如 `break、continue、debugger、return` 或者 `if` 语句、`while` 语句、`for` 语句，还有声明语句，表达式语句等。我们写的每一条可以独立执行的代码都是语句。
+A `statement` is a unit of code that can be executed independently — things like `break`, `continue`, `debugger`, `return`, or `if` statements, `while` statements, `for` statements, as well as declaration statements and expression statements. Every line of code we write that can run independently is a statement.
 
-语句末尾一般会加一个分号分隔，或者用换行分隔。
+Statements are usually terminated with a semicolon, or separated by a line break.
 
-下面这些我们经常写的代码，每一行都是一个 `Statement`：
+Each of the following lines of code we commonly write is a `Statement`:
 
 ```js
 break;
@@ -76,17 +76,17 @@ label: console.log();
 with (a){}
 ```
 
-它们对应的 AST 节点如下图所示：
+Their corresponding AST nodes are shown below:
 
 ![](../../../assets//ranuts//astParse//Statement.jpeg)
 
-语句是代码执行的最小单位，可以说，代码是由语句 `（Statement）` 构成的。
+A statement is the smallest unit of code execution — you could say that code is made up of statements (`Statement`).
 
 ### Declaration
 
-声明语句是一种特殊的语句，它执行的逻辑是在作用域内声明一个变量、函数、 `class、import、export` 等。
+A declaration statement is a special kind of statement. Its logic is to declare a variable, function, `class`, `import`, `export`, etc. within a scope.
 
-比如下面这些语句都是声明语句：
+For example, the following statements are all declaration statements:
 
 ```js
 const a = 1;
@@ -100,17 +100,17 @@ export { e };
 export * from 'e';
 ```
 
-它们对应的 AST 节点如下图：
+Their corresponding AST nodes are shown below:
 
 ![](../../../assets//ranuts//astParse//Declaration.jpeg)
 
-声明语句用于定义变量，这也是代码中一个基础组成部分。
+Declaration statements are used to define variables, which is also a fundamental building block of code.
 
 ### Expression
 
-`expression` 是表达式，特点是执行完以后有返回值，这是和语句 (`statement`) 的区别。
+An `expression` produces a return value after it executes — this is what distinguishes it from a statement (`statement`).
 
-下面是一些常见的表达式
+Here are some common expressions:
 
 ```js
 [1,2,3]
@@ -126,52 +126,52 @@ super;
 a::b;
 ```
 
-它们对应的 AST 如图：
+Their corresponding AST is shown below:
 
 ![](../../../assets//ranuts//astParse//Expression.jpeg)
 
-细心的同学可能会问 `identifier` 和 `super` 怎么也是表达式呢？
+You might ask: how can `identifier` and `super` also be expressions?
 
-因为 `identifier、super` 有返回值，符合表达式的特点，所以也是 `expression` 。
+Because `identifier` and `super` have return values, they fit the characteristics of an expression, so they're also `expression`s.
 
-我们判断 `AST` 节点是不是某种类型要看它是不是符合该种类型的特点，比如语句的特点是能够单独执行，表达式的特点是有返回值。
+To determine whether an `AST` node belongs to a certain type, we check whether it matches the characteristics of that type — for example, the characteristic of a statement is that it can execute independently, and the characteristic of an expression is that it has a return value.
 
-有的表达式可以单独执行，符合语句的特点，所以也是语句，比如赋值表达式、数组表达式等。
+Some expressions can execute independently, matching the characteristics of a statement, so they're also statements — for example, assignment expressions and array expressions.
 
 ```js
 a = 1;
 [1, 2, 3];
 ```
 
-但有的表达式不能单独执行，需要和其他类型的节点组合在一起构成语句。
+But some expressions cannot execute independently and need to be combined with other kinds of nodes to form a statement.
 
-比如匿名函数表达式和匿名 `class` 表达式单独执行会报错：
+For example, an anonymous function expression or an anonymous `class` expression will throw an error if executed on its own:
 
 ```js
 function(){};
 class{}
 ```
 
-需要和其他部分一起构成一条语句，比如组成赋值语句：
+They need to be combined with other parts to form a statement, such as an assignment statement:
 
 ```js
 a = function () {};
 b = class {};
 ```
 
-这条赋值语句对应的 `AST` 是这样的：
+The `AST` for this assignment statement looks like this:
 
 ![](../../../assets//ranuts//astParse//ExpressionStatement.jpeg)
 
-你会发现赋值语句的 AST 节点 `AssignmentExpression` 包裹了一层 `ExpressionStatement` 的节点，代表这个表达式是被当成语句执行的。
+You'll notice that the `AssignmentExpression` AST node of the assignment statement is wrapped in an `ExpressionStatement` node, indicating that this expression is being executed as a statement.
 
 ### Class
 
-`class` 的语法也有专门的 AST 节点来表示。
+`class` syntax also has dedicated AST nodes to represent it.
 
-整个 `class` 的内容是 `ClassBody` ，属性是 `ClassProperty` ，方法是 `ClassMethod` （通过 `kind` 属性来区分是 `constructor` 还是 `method` ）。
+The entire body of a `class` is `ClassBody`, its properties are `ClassProperty`, and its methods are `ClassMethod` (distinguished as `constructor` or `method` via the `kind` property).
 
-比如下面的代码
+For example, the following code:
 
 ```js
 class Guang extends Person {
@@ -181,26 +181,26 @@ class Guang extends Person {
 }
 ```
 
-对应的 AST 是这样的
+Corresponds to this AST:
 
 ![](../../../assets//ranuts//astParse//Class.jpeg)
 
-`class` 是 `es next` 的语法， `babel` 中有专门的 `AST` 来表示它的内容。
+`class` is `es next` syntax, and `babel` has dedicated `AST` nodes to represent its content.
 
 ### Modules
 
-`es module` 是语法级别的模块规范，所以也有专门的 `AST` 节点。
+`es module` is a module specification at the syntax level, so it also has dedicated `AST` nodes.
 
 **import**
-`import` 有 3 种语法：
+`import` has 3 syntax forms:
 
-`named import`：
+`named import`:
 
 ```js
 import { c, d } from 'c';
 ```
 
-`default import`：
+`default import`:
 
 ```js
 import a from 'a';
@@ -212,36 +212,36 @@ import a from 'a';
 import * as b from 'b';
 ```
 
-这 3 种语法都对应 `ImportDeclaration` 节点，但是 `specifiers` 属性不同，分别对应 `ImportSpicifier` `、ImportDefaultSpecifier` `、ImportNamespaceSpcifier` 。
+All 3 syntax forms correspond to an `ImportDeclaration` node, but the `specifiers` property differs, corresponding to `ImportSpicifier`, `ImportDefaultSpecifier`, and `ImportNamespaceSpcifier` respectively.
 
 ![](../../../assets//ranuts//astParse//import.jpeg)
 
-图中黄框标出的就是 `specifier` 部分。可以直观的看出整体结构相同，只是 `specifier` 部分不同，所以 `import` 语法的 `AST` 的结构是 `ImportDeclaration` 包含着各种 `import specifier` 。
+The yellow boxes in the diagram mark the `specifier` part. You can clearly see that the overall structure is the same, only the `specifier` part differs — so the `AST` structure for `import` syntax is an `ImportDeclaration` containing various `import specifier`s.
 
 **export**
-`export` 也有 3 种语法：
+`export` also has 3 syntax forms:
 
-`named export`：
+`named export`:
 
 ```js
 export { b, d };
 ```
 
-`default export`：
+`default export`:
 
 ```js
 export default a;
 ```
 
-`all export`：
+`all export`:
 
 ```js
 export * from 'c';
 ```
 
-分别对应 `ExportNamedDeclaration` `、ExportDefaultDeclaration` `、ExportAllDeclaration` 的 `AST` 。
+These correspond to the `AST` of `ExportNamedDeclaration`, `ExportDefaultDeclaration`, and `ExportAllDeclaration` respectively.
 
-比如这三种 `export`
+For example, these three kinds of `export`:
 
 ```js
 export { b, d };
@@ -249,103 +249,103 @@ export default a;
 export * from 'c';
 ```
 
-对应的 AST 节点为
+Correspond to the following AST nodes:
 
 ![](../../../assets//ranuts//astParse//export.jpeg)
 
 ### Program & Directive
 
-`program` 是代表整个程序的节点，它有 `body` 属性代表程序体，存放 `statement` 数组，就是具体执行的语句的集合。还有 `directives` 属性，存放 `Directive` 节点，比如 `"use strict"` 这种指令会使用 `Directive` 节点表示。
+`Program` is the node representing the entire program. It has a `body` property representing the program body, holding an array of `statement`s — the collection of statements to be executed. It also has a `directives` property, holding `Directive` nodes — for example, a directive like `"use strict"` is represented with a `Directive` node.
 
 ![](../../../assets//ranuts//astParse//Program.jpeg)
 
-`Program` 是包裹具体执行语句的节点，而 `Directive` 则是代码中的指令部分。
+`Program` is the node that wraps the executable statements, while `Directive` represents the directive part of the code.
 
 ### File & Comment
 
-`babel` 的 `AST` 最外层节点是 `File` ，它有 `program` 、 `comments` 、 `tokens` 等属性，分别存放 `Program` 程序体、注释、 `token` 等，是最外层节点。
+The outermost node of `babel`'s `AST` is `File`. It has `program`, `comments`, `tokens`, and other properties, holding the `Program` body, comments, `token`s, etc. It is the outermost node.
 
-注释分为块注释和行内注释，对应 `CommentBlock` 和 `CommentLine` 节点。
+Comments are divided into block comments and inline comments, corresponding to `CommentBlock` and `CommentLine` nodes.
 
 ![](../../../assets//ranuts//astParse//File.jpeg)
 
-上面 6 种就是常见的一些 `AST` 节点类型， `babel` 就是通过这些节点来抽象源码中不同的部分。
+The 6 categories above are the common `AST` node types — `babel` uses these nodes to abstract different parts of the source code.
 
-### `AST` 可视化查看工具
+### `AST` visualization tools
 
-这么多 `AST` 我们都要记住么？
+Do we need to memorize all these `AST` node types?
 
-不需要。可以通过 `axtexplorer.net` 这个网站来可视化的查看。
+No. You can view them visually via the website `astexplorer.net`.
 
 ![](../../../assets//ranuts//astParse//axtexplorer.jpeg)
 
-这个网站可以查看代码 `parse` 以后的 `AST` ，可以切换 `parse` 的语言和用的 `parser` ，也可以修改 `parse options` 。
+This website lets you view the `AST` after code is `parse`d, switch the language and `parser` being used, and modify `parse options`.
 
-点击这里的 `save` 就可以保存下来，然后把 `url` 分享出去：
+Click `save` here to save it, and then share the `url`:
 
 ![](../../../assets//ranuts//astParse//axtexplorerSave.jpeg)
 
-比如这个链接：`https://astexplorer.net/`
+For example, this link: `https://astexplorer.net/`
 
-如果想查看全部的 `AST` 可以在 `babel parser` 仓库里的 `AST` 文档里查，或者直接去看 `@babel/types` 的 `typescript` 类型定义。
+If you want to see the full list of `AST` node types, you can check the `AST` documentation in the `babel parser` repository, or look directly at the `typescript` type definitions of `@babel/types`.
 
-### AST 的公共属性
+### Common properties of AST
 
-每种 `AST` 都有自己的属性，但是它们也有一些公共的属性：
+Every kind of `AST` has its own properties, but they also share some common properties:
 
-`type`： `AST` 节点的类型
+`type`: the type of the `AST` node.
 
-`start` 、 `end` 、`loc：start` 和 `end` 代表该节点在源码中的开始和结束下标。而 `loc` 属性是一个对象，有 `line` 和 `column` 属性分别记录开始和结束的行列号。
+`start`, `end`, `loc`: `start` and `end` represent the start and end index of the node in the source code. The `loc` property is an object with `line` and `column` properties recording the starting and ending line and column numbers.
 
-`leadingComments` 、 `innerComments` 、 `trailingComments` ：表示开始的注释、中间的注释、结尾的注释，每个 `AST` 节点中都可能存在注释，而且可能在开始、中间、结束这三种位置，想拿到某个 AST 的注释就通过这三个属性。
+`leadingComments`, `innerComments`, `trailingComments`: represent leading comments, comments in the middle, and trailing comments. Every `AST` node may have comments attached, and they may appear at the start, in the middle, or at the end — these three properties are how you access the comments for a given AST node.
 
-比如这段有注释的代码的 `AST` ：
+For example, the `AST` of this commented code:
 
 ![](../../../assets//ranuts//astParse//Comment.jpeg)
 
-`extra：`记录一些额外的信息，用于处理一些特殊情况。比如 `StringLiteral` 的 `value` 只是值的修改，而修改 `extra.raw` 则可以连同单双引号一起修改。
-比如这段代码的 `AST`：
+`extra`: records some extra information used to handle special cases. For example, modifying the `value` of a `StringLiteral` only changes the value itself, while modifying `extra.raw` lets you change the quotes (single or double) along with it.
+For example, the `AST` of this code:
 
 ![](../../../assets//ranuts//astParse//extra.jpeg)
 
-修改 `value` 只能修改值，修改 `extra.raw` 可以连引号一起修改。
+Modifying `value` only changes the value, while modifying `extra.raw` lets you change the quotes as well.
 
-### 总结
+### Summary
 
-了解了这些节点，就能知道平时写的代码是怎么用 `AST` 表示的。
+Understanding these nodes lets you know how the code you normally write is represented as an `AST`.
 
-当然也不需要记，可以用 `(astexpoler.net)` 可视化的查看。
+Of course, you don't need to memorize them — you can view them visually using `(astexpoler.net)`.
 
-`AST` 节点可能同时有多种类型，确定一种 AST 节点是什么类型主要看它的特点，比如 `Statement` 的特点是可以单独执行， `Expression` 的特点是有返回值，所以一些可以单独执行的 `Expression` 会包一层 `ExpressionStatement`。
+An `AST` node may match more than one type at the same time. To determine what type an `AST` node is, look at its characteristics — for example, the characteristic of a `Statement` is that it can execute independently, and the characteristic of an `Expression` is that it has a return value. So some `Expression`s that can execute independently get wrapped in an `ExpressionStatement`.
 
-不同 `AST` 节点有不同的属性来存放对应的源码信息，但是都有一些公共属性如 `type` `、xxComments` 、 `loc` 等。
+Different `AST` nodes have different properties for storing the corresponding source code information, but they all share some common properties such as `type`, `xxComments`, and `loc`.
 
-学会了 `AST` ，就可以把对代码的操作转为对 `AST` 的操作了，这是编译、静态分析的第一步。
+Once you understand `AST`, you can turn operations on code into operations on the `AST` — this is the first step of compilation and static analysis.
 
-## 三。编写词法分析器（Tokenizer）
+## 3. Writing a lexical analyzer (Tokenizer)
 
-词法分析器，也叫分词器 (`Tokenizer`)，它的作用是将代码划分为一个个词法单元，便于进行后续的语法分析。比如下面的这段代码：
+A lexical analyzer, also called a tokenizer (`Tokenizer`), is responsible for splitting code into individual lexical units to make subsequent syntax analysis easier. For example, given this code:
 
 ```js
 let foo = function () {};
 ```
 
-在经过分词之后，代码会被切分为如下的 `token` 数组：
+After tokenization, the code is split into the following `token` array:
 
 ```js
 ['let', 'foo', '=', 'function', '(', ')', '{', '}'];
 ```
 
-从中你可以看到，原本一行普通的代码字符串被拆分成了拥有语法属性的 `token` 列表，不同的 `token` 之间也存在千丝万缕的联系，而后面所要介绍的语法分析器，就是来梳理各个 `token` 之间的联系，整理出 `AST` 数据结构。
+As you can see, an ordinary line of code that was originally just a string is broken down into a list of `token`s carrying syntactic properties, and there are intricate relationships between the different `token`s. The syntax analyzer, which we'll introduce later, works by untangling the relationships between these `token`s to produce the `AST` data structure.
 
-当下我们所要实现的词法分析器，本质上是对代码字符串进行逐个字符的扫描，然后根据一定的语法规则进行分组。其中，涉及到几个关键的步骤：
+The tokenizer we're going to implement here essentially scans the code string character by character, then groups characters according to certain grammar rules. This involves a few key steps:
 
-1. 确定语法规则，包括语言内置的关键词、单字符、分隔符等
-2. 逐个代码字符扫描，根据语法规则进行 `token` 分组
+1. Define the grammar rules, including the language's built-in keywords, single characters, delimiters, etc.
+2. Scan the code character by character, grouping into `token`s according to the grammar rules.
 
-### 1. 确定 Token 的类型和规则
+### 1. Defining the Token types and rules
 
-增加 `Token` 的类型
+Add the `Token` types:
 
 ```ts
 export enum TokenType {
@@ -355,7 +355,7 @@ export enum TokenType {
   Assign = 'Assign',
   // function
   Function = 'Function',
-  // 变量名
+  // variable name
   Identifier = 'Identifier',
   // (
   LeftParen = 'LeftParen',
@@ -376,7 +376,7 @@ export type Token = {
 };
 ```
 
-定义 Token 类型到规则的映射
+Define the mapping from Token type to rule:
 
 ```ts
 const TOKENS_GENERATOR: Record<string, (...args: any[]) => Token> = {
@@ -418,7 +418,7 @@ const TOKENS_GENERATOR: Record<string, (...args: any[]) => Token> = {
 
 type SingleCharTokens = '(' | ')' | '{' | '}' | '=';
 
-// 单字符到 Token 生成器的映射
+// mapping from single characters to Token generators
 const KNOWN_SINGLE_CHAR_TOKENS = new Map<SingleCharTokens, (typeof TOKENS_GENERATOR)[keyof typeof TOKENS_GENERATOR]>([
   ['(', TOKENS_GENERATOR.leftParen],
   [')', TOKENS_GENERATOR.rightParen],
@@ -428,17 +428,17 @@ const KNOWN_SINGLE_CHAR_TOKENS = new Map<SingleCharTokens, (typeof TOKENS_GENERA
 ]);
 ```
 
-有了 Token 类型和对应生成的规则，我们便可以去遍历分析代码，输出分析后的结果。
+With the Token types and their corresponding generation rules in place, we can now traverse and analyze the code, and output the analyzed result.
 
-### 2.代码字符扫描
+### 2. Scanning the code characters
 
-在扫描字符的过程，我们需要对不同的字符各自进行不同的处理，具体的策略如下：
+While scanning characters, we need to handle different characters differently. The specific strategy is as follows:
 
-- 当前字符为分隔符，如空格，直接跳过，不处理；
-- 当前字符为字母，需要继续扫描，获取完整的单词：
-  - 如果单词为语法关键字，则新建相应关键字的 `Token`
-  - 否则视为普通的变量名
-- 当前字符为单字符，如`{、}、(、)`，则新建单字符对应的 `Token`
+- If the current character is a delimiter, such as a space, skip it directly without further processing;
+- If the current character is a letter, keep scanning to get the complete word:
+  - If the word is a syntax keyword, create the corresponding keyword `Token`
+  - Otherwise, treat it as an ordinary variable name
+- If the current character is a single character, such as `{`, `}`, `(`, `)`, create the corresponding single-character `Token`
 
 ```ts
 export class Tokenizer {
@@ -453,8 +453,8 @@ export class Tokenizer {
       let currentChar = this._source[this._currentIndex];
       const startIndex = this._currentIndex;
 
-      // 根据语法规则进行 token 分组
-      // while 循环内部
+      // group into tokens according to the grammar rules
+      // inside the while loop
       let currentChar = this._source[this._currentIndex];
       const startIndex = this._currentIndex;
 
@@ -462,12 +462,12 @@ export class Tokenizer {
         return (char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z');
       };
 
-      // 1. 处理空格
+      // 1. handle spaces
       if (currentChar === ' ') {
         this._currentIndex++;
         continue;
       }
-      // 2. 处理字母
+      // 2. handle letters
       else if (isAlpha(currentChar)) {
         let identifier = '';
         while (isAlpha(currentChar)) {
@@ -477,16 +477,16 @@ export class Tokenizer {
         }
         let token: Token;
         if (identifier in TOKENS_GENERATOR) {
-          // 如果是关键字
+          // if it's a keyword
           token = TOKENS_GENERATOR[identifier as keyof typeof TOKENS_GENERATOR](startIndex);
         } else {
-          // 如果是普通标识符
+          // if it's an ordinary identifier
           token = TOKENS_GENERATOR['identifier'](startIndex, identifier);
         }
         this._tokens.push(token);
         continue;
       }
-      // 3. 处理单字符
+      // 3. handle single characters
       else if (KNOWN_SINGLE_CHAR_TOKENS.has(currentChar as SingleCharTokens)) {
         const token = KNOWN_SINGLE_CHAR_TOKENS.get(currentChar as SingleCharTokens)!(startIndex);
         this._tokens.push(token);
@@ -499,13 +499,13 @@ export class Tokenizer {
 }
 ```
 
-使用方式
+Usage:
 
 ```ts
 const tokenizer = new Tokenizer('let a = function() {}');
 ```
 
-结果
+Result:
 
 ```ts
 const tokenizer = [
@@ -520,17 +520,17 @@ const tokenizer = [
 ];
 ```
 
-一个简易版本的分词器已经被我们开发出来了，不过目前的分词器还比较简陋，仅仅支持有限的语法，不过在明确了核心的开发步骤之后，后面继续完善的过程就比较简单了。
+We've now built a simple version of the tokenizer. It's still fairly basic and only supports a limited grammar, but now that we've established the core development steps, extending it further will be straightforward.
 
-## 四。编写语法分析器（Parser）
+## 4. Writing a syntax analyzer (Parser)
 
-在解析出词法 `token` 之后，我们就可以进入语法分析阶段了。在这个阶段，我们会依次遍历 `token` ，对代码进行语法结构层面的分析，最后的目标是生成 `AST` 数据结构。至于代码的 `AST` 结构到底是什么样子，你可以去 `AST Explorer` 网站进行在线预览：
+Once we've parsed the lexical `token`s, we can move on to the syntax analysis stage. In this stage, we traverse the `token`s in order and analyze the code at the level of syntactic structure, with the ultimate goal of generating an `AST` data structure. As for what the `AST` structure of the code actually looks like, you can preview it live on the `AST Explorer` website:
 
 ![](../../../assets//ranuts//astParse//Comment.jpeg)
 
-接下来，我们要做的就是将 `token` 数组转换为上图所示的 `AST` 数据。
+Next, what we need to do is convert the `token` array into the `AST` data shown in the diagram above.
 
-开发步骤主要分为：
+The development steps are mainly divided into:
 
-- 初始化类型声明
+- Initialize type declarations
 -

@@ -1,11 +1,11 @@
 # Babel
 
-babel 核心库主要是：
+The core Babel libraries are:
 
-- @babel/parser 对源码进行 parse，可以通过 plugins、sourceType 等来指定 parse 语法，功能是把源码转成 AST。
-- @babel/traverse 通过 visitor 函数对遍历到的 ast 进行处理，分为 enter 和 exit 两个阶段，具体操作 AST 使用 path 的 api，还可以通过 state 来在遍历过程中传递一些数据
-- @babel/types 用于创建、判断 AST 节点，提供了 xxx、isXxx、assertXxx 的 api
-- @babel/template 当需要批量创建 AST 的时候可以使用 @babel/template 来简化 AST 创建逻辑。
-- @babel/code-frame 可以创建友好的报错信息
-- @babel/generator 打印 AST 成目标代码字符串，支持 comments、minified、sourceMaps 等选项。
-- @babel/core 基于上面的包来完成 babel 的编译流程，并应用 plugin 和 preset。
+- @babel/parser parses the source code. The parsing syntax can be specified via options such as plugins and sourceType. Its job is to convert source code into an AST.
+- @babel/traverse processes the traversed AST via visitor functions, split into enter and exit phases. AST manipulation is done through the path API, and state can be used to pass data around during traversal.
+- @babel/types is used to create and check AST nodes, providing APIs such as xxx, isXxx, and assertXxx.
+- @babel/template simplifies AST creation logic when you need to create ASTs in bulk.
+- @babel/code-frame produces friendly error messages.
+- @babel/generator prints an AST into a target code string, supporting options such as comments, minified, and sourceMaps.
+- @babel/core builds on the packages above to complete Babel's compilation pipeline and apply plugins and presets.

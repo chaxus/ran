@@ -55,31 +55,31 @@ A design pattern generally contains elements such as the pattern name, problem, 
 
 Each pattern has a corresponding object structure diagram, and in order to show the details of the interaction between objects, sometimes a 'UML' diagram is used to show how it works. Here will not be the various elements of 'UML' mentioned, just want to talk about the relationship between the classes in the class diagram, can understand the meaning of the lines and arrows between the classes in the class diagram, it is enough to deal with daily work and communication. At the same time, we should be able to match the meaning of the class diagram to the final code. With this knowledge, there is no problem looking at the design pattern structure diagram in the later sections.
 
-<!-- 本文中大部分是 UML 类图，也有个别简易流程图。由于文中部分模式并未配图，你可以在 [这里](../../assets/article/designPattern/UML/创建型/单例.jpg) 查看我在网络上收集的完整 23 种设计模式 UML 类图。 -->
+<!-- Most of the diagrams in this article are UML class diagrams, though a few are simple flowcharts. Since some patterns in the text don't have an accompanying diagram, you can view the complete set of UML class diagrams for all 23 design patterns that I collected online [here](../../assets/article/designPattern/UML/creational/singleton.jpg). -->
 
 ### 1.1 inherit
 
 Inheritance is represented directly by a hollow arrow.
 
-![](../../assets/article/designPattern/继承.png)
+![](../../assets/article/designPattern/inheritance.png)
 
 ### 1.2 realize
 
 The implementation relationship is represented by a dashed line with a hollow arrow.
 
-![](../../assets/article/designPattern/实现.png)
+![](../../assets/article/designPattern/realization.png)
 
 ### 1.3 assembly
 
 Like aggregation relations, composition relations also represent the semantics of a whole made up of parts. For example, a company is composed of multiple departments, but the combinatorial relationship is a special aggregation relationship of strong dependence, if the whole does not exist, then the part does not exist. For example, the company no longer exists, and the department will no longer exist.
 
-![](../../assets/article/designPattern/组合.png)
+![](../../assets/article/designPattern/composition.png)
 
 ### 1.4 Polymerization
 
 Aggregation relationships are used to represent relationships between entity objects, representing the semantics of a whole made up of parts, such as a department consisting of multiple employees. Unlike combinatorial relations, the whole and the part are not strongly dependent, and even if the whole does not exist, the part still exists. For example, if the department is abolished, the personnel will not disappear, they will still exist.
 
-![](../../assets/article/designPattern/聚合.png)
+![](../../assets/article/designPattern/aggregation.png)
 
 ### 1.5 Association
 
@@ -87,7 +87,7 @@ The association relationship is expressed by a straight line, which describes th
 
 For example, the relationship between the passenger and the ticket is an association relationship, the student and the school is an association relationship, the association relationship does not emphasize the direction by default, indicating that the object knows each other. If particular emphasis is placed on direction, as shown in the figure below, it means that A knows B, but B does not know A.
 
-![](../../assets/article/designPattern/关联.png)
+![](../../assets/article/designPattern/association.png)
 
 ### 1.6 dependence
 
@@ -95,7 +95,7 @@ Dependencies are represented by A set of dotted lines with arrows, such as A dep
 
 Unlike an association relationship, it is a temporary relationship that usually occurs during run time, and dependencies may change as the run time changes. Obviously, dependence also has a direction, two-way dependence is a very bad structure, we should always maintain one-way dependence, eliminate the generation of two-way dependence.
 
-![](../../assets/article/designPattern/依赖.png)
+![](../../assets/article/designPattern/dependency.png)
 
 ## II, six principles
 
@@ -237,7 +237,7 @@ Behavioral patterns are abstractions that divide responsibilities and algorithms
 
 > Simple Factory Pattern: A single class (factory class) is defined to be responsible for creating instances of other classes. Instances of different classes can be returned based on the parameters of the creation method, and the created instances usually have a common parent class.
 
-![](../../assets/article/designPattern/简单工厂.png)
+![](../../assets/article/designPattern/simple_factory.png)
 
 **Example:**
 
@@ -286,7 +286,7 @@ const pepsiCola: PepsiCola = createColaWithType(1);
 
 > Factory Method Pattern (' factory method pattern ') is also known as the factory pattern, the factory parent class is responsible for defining the public interface for creating product objects, and the factory subclass is responsible for generating concrete product objects, that is, through different factory subclasses to create different product objects.
 
-![](../../assets/article/designPattern/工厂方法.png)
+![](../../assets/article/designPattern/factory_method.png)
 
 **Example:**
 
@@ -324,7 +324,7 @@ The abstract factory pattern does not directly generate instances, but is used t
 
 > Abstract Factory Pattern: Provides an interface for creating a series of related or interdependent objects without specifying their concrete classes.
 
-![](../../assets/article/designPattern/抽象工厂.png)
+![](../../assets/article/designPattern/abstract_factory.png)
 
 **Example:**
 
@@ -398,7 +398,7 @@ const pepsiColaBox = PepsiColaFactory.createBox();
 
 > Singleton Pattern: The singleton pattern ensures that there is only one instance of a class and provides a full access point to it.
 
-![](../../assets/article/designPattern/UML/创建型/单例.jpg)
+![](../../assets/article/designPattern/UML/creational/singleton.jpg)
 
 **Example:**
 
@@ -433,7 +433,7 @@ Since there is no abstraction layer in the singleton pattern, singleton classes 
 
 The factory pattern is mainly for the creation of object instances or class clusters (abstract factories), concerned with the final output (creation) is what, not concerned with the creation process. The builder pattern is concerned with the entire process of creating the object, down to every detail of creating the object.
 
-![](../../assets/article/designPattern/建造者.jpeg)
+![](../../assets/article/designPattern/builder.jpeg)
 
 **Example:**
 
@@ -521,7 +521,7 @@ const product: Product = director.constructorProduct();
 
 > Prototype Pattern: A prototype instance points to the class that created the object, and uses the properties and methods of the shared prototype used by the class that created the new object.
 
-![](../../assets/article/designPattern/UML/创建型/原型.jpg)
+![](../../assets/article/designPattern/UML/creational/prototype.jpg)
 
 **Example:**
 
@@ -580,7 +580,7 @@ car.getModel();
 
 You can think of decorators as equipment purchased by game characters, such as heroes in LOL who start the game with only basic attack power and mana. However, after the purchase of equipment, you can enjoy the output bonus brought by the equipment when triggering attacks and skills. We can understand the purchase of equipment to give the hero's attack and skill related methods decorated.
 
-![](../../assets/article/designPattern/装饰.jpg)
+![](../../assets/article/designPattern/decorator.jpg)
 
 **Example:**
 
@@ -620,11 +620,11 @@ function readonly(target, name, descriptor) {
 
 - Decorator mode requires the creation of some concrete decorator classes, which increases the complexity of the system.
 
-### 5.2 外观模式
+### 5.2 Facade Pattern
 
 > Facade Pattern: A facade pattern defines a high-level interface that provides a unified interface for a set of interfaces in a subsystem. It makes the subsystem easier to use, not only simplifying the interfaces in the class, but also decoupling the caller from the interface. Appearance mode, also known as facade mode, is a structural design mode.
 
-![](../../assets/article/designPattern/外观.png)
+![](../../assets/article/designPattern/facade.png)
 
 **Example:**
 
@@ -651,11 +651,11 @@ const addMyEvent = function (el, ev, fn) {
 
 - Violates the open-close principle: Adding a new subsystem without introducing abstract facade classes may require changes to facade classes or client code.
 
-### 5.3 代理模式
+### 5.3 Proxy Pattern
 
 > Proxy Pattern: Provide a proxy for an object, and this proxy object controls access to the original object.
 
-![](../../assets/article/designPattern/代理.png)
+![](../../assets/article/designPattern/proxy.png)
 
 **Example:**
 
@@ -715,7 +715,7 @@ this.response = Object.create(response);
 
 > Flyweight Pattern: The meta mode is a mode that optimizes program performance, essentially reducing the number of objects created. Using sharing technology to reuse a large number of fine-grained objects, reduce the program memory occupation, improve the performance of the program. Share metamode can be used when there are a large number of similar objects that occupy a large amount of memory. Most of the state in an object can be extrapolated to external state.
 
-![](../../assets/article/designPattern/享元.png)
+![](../../assets/article/designPattern/flyweight.png)
 
 **Example:**
 
@@ -777,7 +777,7 @@ const VipMusicService = {
 
 > Simple Factory Pattern: Separate the abstract part from its implementation part so that they can both vary independently.
 
-![](../../assets/article/designPattern/桥接.png)
+![](../../assets/article/designPattern/bridge.png)
 
 **Example:**
 
@@ -854,7 +854,7 @@ man.init();
 
 > Adapter Pattern: Adapter mode is used to solve the incompatibility of two interfaces, do not need to change the existing interface, through the packaging of a layer, to achieve normal cooperation between the two interfaces. When we try to call an interface of a module or object, but find that the format of the interface does not meet the current requirements, we can use the adapter pattern.
 
-![](../../assets/article/designPattern/适配器.png)
+![](../../assets/article/designPattern/adapter.png)
 
 **Example:**
 
@@ -888,7 +888,7 @@ function addEvent(ele, event, callback) {
 
 > Chain of Responsibility Pattern: Avoid coupling the request sender with the receiver, make it possible for multiple objects to receive the request, connect those objects into a chain, and pass the request along the chain until an object handles it. The responsibility chain pattern is an object behavior pattern. Similar to dominoes, by requesting the first condition, subsequent conditions continue to be executed until a result is returned.
 
-![](../../assets/article/designPattern/责任链.png)
+![](../../assets/article/designPattern/chain_of_responsibility.png)
 
 **Example:**
 
@@ -964,7 +964,7 @@ The command mode consists of three roles:
 3. The command object 'command' (receives the command and invokes the corresponding interface of the receiver to process the publisher's request).
    The publisher invoker and the receiver are independent and encapsulate the request into a command object command. The specific execution of the request is executed by the command object calling the corresponding interface of the receiver.
 
-![](../../assets/article/designPattern/命令.png)
+![](../../assets/article/designPattern/command.png)
 
 **Example:**
 
@@ -1023,7 +1023,7 @@ client.invoke();
 
 > Interpreter Pattern: Define the grammar of a language and build an interpreter to interpret sentences in that language, where "language" means code that uses a specified format and syntax. The interpreter pattern is a kind of behavior pattern.
 
-![](../../assets/article/designPattern/解释器.jpg)
+![](../../assets/article/designPattern/interpreter.jpg)
 
 **Example:**
 
@@ -1096,7 +1096,7 @@ console.log(context.sum);
 
 > Iterator Pattern: A relatively simple pattern, most languages now have iterators built in, so that people don't think of it as a design pattern. Iterators don't just iterate over arrays; iterators can be aborted. Provides a way to access aggregate objects without exposing the internal representation of the object, which is alias a Cursor. The iterator pattern is an object behavior pattern.
 
-![](../../assets/article/designPattern/迭代器.png)
+![](../../assets/article/designPattern/iterator.png)
 
 **Example:**
 
@@ -1131,7 +1131,7 @@ Because the iterator pattern separates the responsibility of storing data and tr
 
 > Mediator Pattern: Objects communicate with each other through third-party intermediaries. Encapsulate a set of object interactions with a mediator, which allows objects to be loosely coupled without explicitly referring to each other, and can change their interactions independently. The mediator model, also known as the mediator model, is an object behavior model.
 
-![](../../assets/article/designPattern/中介者.png)
+![](../../assets/article/designPattern/mediator.png)
 
 **Example:**
 
@@ -1205,7 +1205,7 @@ The inclusion of a large number of details about interactions between colleagues
 
 > Memento Pattern: Capture the internal state of an object, without breaking the encapsulation, and save that state outside the object for later use or for the object to revert to a previous state. It is an object behavior pattern that is alias Token.
 
-![](../../assets/article/designPattern/UML/行为型/备忘录.jpg)
+![](../../assets/article/designPattern/UML/behavioral/memento.jpg)
 
 **Example:**
 
@@ -1245,7 +1245,7 @@ var Page = function () {
 
 > Observer Pattern: Define a one-to-many dependency relationship between objects so that each time an object's state changes, its dependent objects are notified and automatically updated. Aliases for the observer pattern include the 'Publish/Subscribe' pattern, the model-view (' Model/View ') pattern, the Source/Listener (' source/listener ') pattern, or the 'Dependents' pattern. The observer pattern is an object behavior pattern.
 
-![](../../assets/article/designPattern/观察者.png)
+![](../../assets/article/designPattern/observer.png)
 
 **Example:**
 
@@ -1284,7 +1284,7 @@ If an observation target has many direct and indirect observers, it takes a lot 
 
 > State Pattern: By allowing an object to change its behavior when its internal state changes, the object appears to modify its class. Its alias is the state object (' Objects for States'), in fact, is to use an object or array to record a set of states, each state corresponds to an implementation, the implementation according to the state to run the implementation. The state pattern is an object behavior pattern.
 
-![](../../assets/article/designPattern/状态.png)
+![](../../assets/article/designPattern/state.png)
 
 **Example:**
 
@@ -1352,7 +1352,7 @@ new SuperMarry()
 
 > Strategy Pattern: Define a list of algorithms, wrap them up, and be interchangeable. It is to extract and encapsulate seemingly unrelated code and reuse it to make it easier to understand and expand. It is commonly used in process judgment statements such as if judgment, switch enumeration, and data dictionary. Also known as the Policy model (' policy '). Policy pattern is an object behavior pattern.
 
-![](../../assets/article/designPattern/策略.png)
+![](../../assets/article/designPattern/strategy.png)
 
 **Example:**
 
@@ -1427,7 +1427,7 @@ var compileUtil = {
 
 > Template method pattern : Define the framework of an algorithm in an operation, while deferring some steps to subclasses. The template method pattern allows subclasses to redefine certain steps of an algorithm without changing its structure.
 
-![](../../assets/article/designPattern/模板.png)
+![](../../assets/article/designPattern/template.png)
 
 **Example:**
 
@@ -1607,7 +1607,7 @@ The reason why Beverage.prototype.init is called a template method is that it en
 
 > Visitor Pattern:Provides a representation of operations that act on elements of an object structure, which allows us to define new operations on those elements without changing their class. Visitor pattern is an object behavior pattern.
 
-![](../../assets/article/designPattern/访问者.png)
+![](../../assets/article/designPattern/visitor.png)
 
 **Example:**
 

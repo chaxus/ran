@@ -1,35 +1,35 @@
-# 函数式编程
+# Functional Programming
 
-- 概述：函数式编程 (`Functional Programming`)`FP`就是编程规范之一，我们常听说的编程规范还有面向对象编程，面向过程编程。
-- 面向对象的编程思维方式：把现实世界中的事物抽象成程序世界的类和对象，通过封装，继承和多态演示事物事件的联系
-- 函数编程的思维方式：把现实世界的事物和事物之间的**联系**抽象到程序世界 (对运算过程进行抽象)
-  - 程序的本质：根据输入，通过某种运算，获得相应的输出
-  - 函数式编程中的函数不是指程序中的 (函数) 方法，**而是数学中的函数，即映射关系**
-  - 相同的输入始终要得到相同的输出 (纯函数)
-  - 函数式编程用来描述数据 (函数) 之间的映射关系
+- Overview: Functional Programming (`FP`) is one of several programming paradigms. Other paradigms you've likely heard of include object-oriented programming and procedural programming.
+- Object-oriented thinking: abstracts real-world things into classes and objects in the program world, and expresses the relationships between things through encapsulation, inheritance, and polymorphism.
+- Functional thinking: abstracts the **relationships** between real-world things into the program world (i.e., it abstracts the process of computation).
+  - The essence of a program: given an input, produce the corresponding output through some computation.
+  - A "function" in functional programming doesn't refer to a function (method) in a program, **but rather to a function in the mathematical sense — a mapping relationship**.
+  - The same input must always produce the same output (a pure function).
+  - Functional programming is used to describe the mapping relationships between pieces of data (functions).
 
 ```js
-//非函数式编程，面向过程的编程方式
+//Non-functional, procedural style
 let num1 = 1;
 let num2 = 2;
 let sum = num1 + num2;
 
-//函数式编程，对面向过程的抽象
+//Functional programming, an abstraction over the procedural style
 function sum(n1, n2) {
   return n1 + n2;
 }
 let result = sum(1, 2);
 ```
 
-## 一。`JS`函数基本知识
+## 1. Basics of `JS` functions
 
-- 函数可以储存在变量中
-- 函数可以作为参数
-- 函数可以作为返回值
+- Functions can be stored in variables
+- Functions can be passed as arguments
+- Functions can be used as return values
 
-在`JavaScript`中，函数就是一个普通的对象，(可以通过`new Function()`),我们可以把函数存储到变量/数组中，它还可以作为另一个函数的参数和返回值，甚至我们还可以在程序运行的时候通过`new Function('alert(1)')`来构建一个新的函数
+In `JavaScript`, a function is just an ordinary object (it can be created via `new Function()`). We can store a function in a variable/array, and it can also be used as an argument to, or the return value of, another function. We can even construct a new function at runtime with `new Function('alert(1)')`.
 
-- 把函数赋值给变量
+- Assigning a function to a variable
 
 ```js
 let fn = function () {
@@ -37,13 +37,13 @@ let fn = function () {
 };
 ```
 
-## 二。高阶函数
+## 2. Higher-order functions
 
-- 高阶函数 (`Higher-order function`)
-  - 可以把函数作为参数传递给另一个函数
-  - 可以把函数作为另一个函数的返回结果
+- Higher-order function
+  - Can accept a function as an argument
+  - Can return a function as its result
 
-1. 函数作为参数
+1. Function as an argument
 
 ```js
 //forEach
@@ -64,7 +64,7 @@ function filter(array, fn) {
   return result;
 }
 
-//测试
+//test
 let array = [1, 2, 3, 4, 5, 6, 7];
 forEach(array, function (item) {
   console.log(item);
@@ -76,22 +76,22 @@ let r = filter(array, function (item) {
 console.log(r);
 ```
 
-2. 函数作为返回值
+2. Function as a return value
 
 ```js
-//高阶函数，函数作为返回值
+//Higher-order function, returning a function
 function makeFn() {
   let msg = 'Highter-order Function';
   return function () {
     console.log(msg);
   };
 }
-//第一种调用方式
+//First way to call it
 const fn = makeFn();
 fn();
-//第二种调用方式
+//Second way to call it
 makeFn()();
-//once 只能执行一次的函数
+//once: a function that can only run once
 function once(fn) {
   let done = false;
   return function () {
@@ -102,7 +102,7 @@ function once(fn) {
   };
 }
 let pay = once(function (money) {
-  console.log(`支付${money}`);
+  console.log(`Pay ${money}`);
 });
 pay(5);
 pay(5);
@@ -111,32 +111,32 @@ pay(5);
 pay(5);
 ```
 
-## 三。闭包
+## 3. Closures
 
-**概述**:有权访问另一个函数作用域中的变量的函数
+**Overview**: A function that has access to variables in another function's scope.
 
-**本质**:函数执行的时候会入栈，当执行完后会移除栈，但是堆上的作用域成员因为被外部引用而不能释放。因此内部函数依然可以访问外部函数的成员。
+**Essence**: When a function executes, it's pushed onto the stack; once it finishes, it's popped off. However, scope members on the heap that are still referenced externally cannot be released. As a result, the inner function can still access members of the outer function.
 
-**栈**：栈会自动分配内存，会自动释放，存放基本数据类型，占据固定大小的空间。
+**The stack**: Memory is allocated and released automatically; it stores primitive data types and takes up a fixed amount of space.
 
-**栈的溢出**：递归调用方法，随着栈的深度增加，直到内存不够分配，产生溢出。
+**Stack overflow**: With recursive calls, as the stack depth grows, memory eventually runs out, causing an overflow.
 
-**栈的优势**：所有方法中的变量都存在栈中，随着方法执行的结束，这个方法的内存栈也随之销毁，存取速度很快，仅次于 CPU 的寄存器，可以共享。
+**Advantages of the stack**: All variables in a method live on the stack, and the method's stack memory is destroyed as soon as the method finishes executing. Access is very fast — second only to the CPU's registers — and it can be shared.
 
-**堆**：动态分配内存，大小不定，也不会自动释放内存，不会随着方法的结束而销毁堆内存，存放引用数据类型，实际保存的不是变量本身，而是指向该对象的指针。
+**The heap**: Memory is allocated dynamically, its size is not fixed, and it isn't released automatically or destroyed when a method finishes. It stores reference data types — what's actually saved is not the variable itself but a pointer to the object.
 
-**堆溢出**：循环创建对象，就是不断的 new 对象
+**Heap overflow**: Creating objects in a loop — i.e., continuously calling `new`.
 
-## 四。纯函数
+## 4. Pure functions
 
-- 概念：相同的输入永远会得到相同的输出，而且没有任何可观察的副作用，类似数学中的函数`y=f(x)`
-- 例子：`slice`函数就是纯函数，对一个数组，相同的输入永远得到相同的输出，splice 就是非纯函数，相同的输入可能会得到不同的结果，因为会改变原数组
-- 函数式编程不会保留计算中间的结果，所以变量不可变 (无状态)
-- 可以把一个函数的执行结果交给另一个函数去执行
-- 纯函数可以缓存，因为相同的输入必然有相同的输出
+- Concept: The same input always produces the same output, with no observable side effects — similar to a mathematical function `y=f(x)`.
+- Example: `slice` is a pure function — given the same array input, it always returns the same output. `splice` is impure — the same input can produce different results because it mutates the original array.
+- Functional programming doesn't keep intermediate computation results, so variables are immutable (stateless).
+- The result of one function's execution can be handed off to another function to execute.
+- Pure functions can be cached/memoized, because the same input always has the same output.
 
 ```js
-//memoize 函数
+//memoize function
 function memoize(fn) {
   let cache = {};
   return function () {
@@ -147,27 +147,27 @@ function memoize(fn) {
 }
 ```
 
-- 可测试，让测试更方便
-- 多线程环境下操作共享的内存数据可能会出现意外的情况，而纯函数不需要共享的数据空间，只和输入有关，所以并行环境下可以任意运行纯函数
-- 副作用，副作用会让纯函数变的不纯，比如依赖外部的状态，就无法保证输出相同，带来副作用，副作用来源：配置文件，数据库，获取用户的输入等等...所有的外部交互都可能带来副作用，副作用使得方法通用性下降，不适合扩展和重用，同时给程序带来安全隐患，副作用不可能完全禁止，只能尽可能的在控制范围内。
+- Testable: makes testing much easier.
+- In a multithreaded environment, operating on shared memory data can lead to unexpected results, but a pure function doesn't need shared data space — it only depends on its input — so pure functions can run freely in parallel.
+- Side effects: side effects make a pure function impure. For example, if a function depends on external state, it can no longer guarantee the same output — that's a side effect. Sources of side effects include: configuration files, databases, reading user input, and so on — any interaction with the outside world can introduce a side effect. Side effects reduce a method's generality, making it less suitable for extension and reuse, and they introduce security risks into a program. Side effects can never be fully eliminated — they can only be kept within a controlled scope as much as possible.
 
 ```js
-//不纯的函数
+//Impure function
 let mini = 18;
 function checkAge(age) {
   return age > min;
 }
-//纯函数 (有硬编码，后续可以通过柯里化来解决)
+//Pure function (has a hardcoded value; can later be resolved via currying)
 function checkAge(age) {
   let mini = 18;
   return age > mini;
 }
 ```
 
-## 五。柯里化 (`Haskell Brooks Curry`)
+## 5. Currying (`Haskell Brooks Curry`)
 
 ```js
-//解决上述硬编码的问题
+//Solving the hardcoding problem above
 function checkAge(min) {
   return function (age) {
     return age >= min;
@@ -177,22 +177,22 @@ let checkAge18 = checkAge(18);
 checkAge18(22);
 ```
 
-`es6`进行简化
+Simplified with `es6`
 
 ```js
 let checkAge = (min) => (age) => age >= min;
 ```
 
-- 当一个函数有多个参数的时候，可以先传递一部分，先调用它，并返回一个函数 (这部分参数以后保持不变)
-- 然后返回一个新的函数接受剩下的参数，返回结果
-- `lodash`中的柯里化函数
+- When a function takes multiple arguments, you can pass part of them first, call it, and get back a function (these initial arguments remain fixed going forward).
+- That returned function then accepts the remaining arguments and returns the result.
+- The currying function in `lodash`
   - `_.curry(func)`
-  - 功能：创建一个函数，该函数接受一个或多个 func 的参数，如果该函数所有的参数都被传递，则返回函数的结果，否则，返回该函数并等待继续传递参数
-  - 参数：需要柯里化的函数
-  - 返回值：柯里化后的函数
+  - What it does: creates a function that accepts one or more of `func`'s arguments. If all of the function's arguments have been supplied, it returns the function's result; otherwise, it returns a function that keeps waiting for the remaining arguments.
+  - Argument: the function to curry.
+  - Return value: the curried function.
 
 ```js
-//lodash 中的 curry 的使用
+//Using curry from lodash
 const _ = require('loadsh');
 function getSum(a, b, c) {
   return a + b + c;
@@ -203,7 +203,7 @@ console.log(curried(1)(2, 3)); //6
 console.log(curried(1)(2)(3)); //6
 ```
 
-实现一个 curry 函数
+Implementing a curry function
 
 ```js
 function curry(func) {
@@ -219,18 +219,18 @@ function curry(func) {
 }
 ```
 
-- 总结：柯里化可以让我们给一个函数传递较少的参数，返回一个记住来某些固定参数的新函数，这是一种对函数参数的缓存，让函数变的更灵活，让函数的粒度更小。可以把多元函数转换成一元的函数，可以组合使用函数产生强大的功能。
+- Summary: Currying lets us pass a function fewer arguments at a time, returning a new function that remembers certain fixed arguments. This is a form of caching for function arguments, which makes a function more flexible and its granularity finer. It can turn a multi-argument function into a single-argument (unary) function, and such functions can be composed together to produce powerful behavior.
 
-## 六。函数的组合
+## 6. Function composition
 
-- 纯函数和柯里化很容易让我们写出洋葱代码，比如`h(f(g(x)))`
-  - 获取数组的最后一个元素并转化为大写字母，`_.toUpper(._first(_.revers(array)))`
-  - 函数的组合可以让我们把细粒度的函数，重新组合成一个新的函数
-- `lodash`中的组合函数
-  - `lodash`中的组合函数`flow()`和`flowRight()`,都可以组合多个函数
-  - `flow()`是从左到右执行
-  - `flowRight()`是从右到左执行
-  - 自己实现一个`flowRight`函数：
+- Pure functions and currying can easily lead us to write "onion code," such as `h(f(g(x)))`.
+  - For example, getting the last element of an array and converting it to uppercase: `_.toUpper(._first(_.revers(array)))`.
+  - Function composition lets us combine fine-grained functions back into a new function.
+- Composition functions in `lodash`
+  - `lodash` provides the composition functions `flow()` and `flowRight()`, both of which can compose multiple functions.
+  - `flow()` executes left to right.
+  - `flowRight()` executes right to left.
+  - Implementing our own `flowRight` function:
 
 ```js
 function composeRight(...args) {
@@ -240,16 +240,16 @@ function composeRight(...args) {
     }, value);
   };
 }
-//箭头函数
+//Arrow function version
 const compose =
   (...args) =>
   (value) =>
     args.reverse().reduce((acc, fn) => fn(acc), value);
-//如果是表达式赋值的话，不会变量提升
+//Note: with expression assignment, there's no function hoisting
 ```
 
-- 函数的组合要满足结合律，即 f,g,h 三个函数，无论先组合那几个，结果都是等效的，即 flowRight(_.toUpper,_.first,\_.revers)
-- 函数组合如何进行调试？
+- Function composition must satisfy the associative law — for three functions f, g, h, no matter which pair you compose first, the result is equivalent, i.e., `flowRight(_.toUpper,_.first,\_.revers)`.
+- How do you debug a function composition?
 
 ```js
 const log = (v) => {
@@ -258,71 +258,71 @@ const log = (v) => {
 };
 ```
 
-- `lodash`库中的 fp 模块
-  - `lodash`的 fp 模块提供了实用的对函数式编程友好的方法
-  - 提供了不可变的**auto-curried iteratee-first data-last**的方法
+- The fp module in the `lodash` library
+  - `lodash`'s `fp` module provides utility methods that are friendly to functional programming.
+  - It offers immutable methods that are **auto-curried, iteratee-first, data-last**.
 
 ```js
-//lodash 方法
+//lodash methods
 const _ = require('lodash');
 _.map(['a', 'b', 'c'], _.toUpper);
 //=>['A','B','C']
 _.map(['a', 'b', 'c']);
 //=>['a','b','c']
-//loadsh/fp 模块
+//loadsh/fp module
 const fp = require('lodasg/fp');
 fp.map(fp.toUpper, ['a', 'b', 'c']);
 fp.map(fp.toUpper)(['a', 'b', 'c']);
 ```
 
-## 七.Point Free
+## 7. Point Free
 
-我们可以把数据处理的过程定义成与数据无关的合成运算，不需要用到代表数据的那个参数，只要把简单的运算步骤合成到一起，在使用这种模式之前我们需要定义一些辅助的基本运算函数。
+We can define a data-processing pipeline as a composed operation that has nothing to do with the data itself — without referencing the parameter that represents the data — simply by composing together simple computation steps. Before using this pattern, we need to define a few auxiliary basic operation functions.
 
-- 不需要指明处理的数据
-- 只需要合成运算过程
-- 需要定义一些辅助的基本运算函数
+- No need to specify the data being processed
+- Only need to compose the operation pipeline
+- Requires defining a few auxiliary basic operation functions
 
 ```js
 const f = fp.flowRight(fp.join('-'), fp.map(_.toLower), fp.splite(''));
 ```
 
-## 八。`functor`(函子)
+## 8. `functor`
 
-- 为什么要了解函子<br />目前没有解决如何在函数式编程中，把副作用控制在可控的范围内，异常处理，异步操作等等。
+- Why learn about functors?<br />So far we haven't addressed how to keep side effects within a controllable scope in functional programming — exception handling, asynchronous operations, and so on.
 - `Functor`
-  - 容器：包含值和值的变形关系 (这个变形关系就是函数)
-  - 函子：是一个特殊的容器，通过一个普通对象来实现，该对象具有 map 方法，map 方法可以运行一个函数对值进行处理 (变形关系)
+  - Container: contains a value and a transformation relationship for that value (this transformation relationship is a function).
+  - Functor: a special kind of container, implemented as a plain object that has a `map` method. The `map` method can run a function to process the value (the transformation).
 
 ```js
-//Functor 函子
+//Functor
 class Container {
-  //函子内部要有一个值
+  //A functor must hold a value internally
   constructor(value) {
-    //这个值是传入进来的，且不对外公布
+    //This value is passed in and is not exposed externally
     this._value = value;
   }
   map(fn) {
-    //map 方法，接受一个处理值的函数，去处理这个值。
-    //并且要把处理的值，传给一个新的函子，最后返回这个新的函子
+    //The map method takes a function that processes the value.
+    //It passes the processed value into a new functor and returns that new functor.
     return new Container(fn(this._value));
   }
 }
 
-//新建一个函子
+//Creating a new functor
 let r = new Container(5).map((x) => x + 1).map((x) => x * x);
 ```
 
-`of`方法：
+The `of` method:
 
 ```js
-//of 方法用来返回一个函子对象
+//The of method is used to return a functor object
 class Container {
   constructor(value) {
     this._value = value;
   }
   static of(value) {
-    //传入值，返回一个新的函子对象
+    //Takes a value and returns a new functor object
     return new Container(value);
   }
   map(fn) {
@@ -332,21 +332,21 @@ class Container {
 let r = Container.of(5)
   .map((x) => x + 1)
   .map((x) => x * x);
-console.log(r); //打印出来的是一个函子，不是值，永远不会把这个值取出来，需要改变这个值的时候，使用 map 方法传入一个函数去处理，进行链式调用。
+console.log(r); //What's printed is a functor, not a value — the value is never extracted directly. When you need to change the value, pass a function into the map method and chain calls.
 ```
 
-- 总结
-  - 函数式编程的运算不直接操作值，而是由函子完成
-  - 函子就是一个实现了`map`契约的对象
-  - 我们可以把函子想象成一个盒子，这个盒子里封装了一个值
-  - 想要处理盒子中的值，我们需要给盒子的`map`方法传递一个处理值的函数（纯函数），由这个函数对值进行处理
-  - 最终`map`方法返回一个包含新值的盒子（函子）
-- `MayBe`函子
-  - 我们在编程过程中可能会遇到很多的错误，需要对这些错误进行相应的处理
-  - MayBe 函子的作用就是可以对外部的空值情况做处理（控制副作用在允许的范围之内）
+- Summary
+  - Functional programming operations don't act directly on values; they're carried out by functors.
+  - A functor is simply an object that implements the `map` contract.
+  - You can think of a functor as a box that wraps a value.
+  - To process the value inside the box, you pass a value-processing function (a pure function) into the box's `map` method, and that function processes the value.
+  - Finally, the `map` method returns a new box (functor) containing the new value.
+- `MayBe` functor
+  - While programming we may encounter many kinds of errors that need to be handled accordingly.
+  - The purpose of the MayBe functor is to handle cases of empty/null values from the outside (keeping side effects within an allowed scope).
 
 ```js
-//MayBe 函子
+//MayBe functor
 class MayBe {
   static of(value) {
     return new MayBe(value);
@@ -367,13 +367,13 @@ let r = MayBe.of(null)
 console.log(r);
 ```
 
-- 问题：如果多次调用 map，中间出现了 null 空值的情况，最后会返回包含 null 的函子。虽然 maybe 函子可以处理空值的情况，但不知道是哪一步出现了空值
-- Either 函子
-  - Either 两者中的任意一个，类似于 if...else...的处理
-  - 异常会让函数变的不纯，Either 函子可以用来做异常处理
+- Problem: if `map` is called multiple times and a `null` value shows up somewhere in the middle, the final result is a functor containing `null`. While the MayBe functor can handle the empty-value case, there's no way to tell which step produced the null.
+- Either functor
+  - "Either" means one of two things — similar to an `if...else...` branch.
+  - Exceptions make a function impure; the Either functor can be used for exception handling.
 
 ```js
-//Either 函子
+//Either functor
 class Left {
   static of(value) {
     return new Left(value);
@@ -412,10 +412,10 @@ console.log(r);
 r.map((x) => x.toUpper());
 ```
 
-- IO 函子
-  - IO 函子中的\_value 是一个函数，这里是把函数当作值来处理
-  - IO 函子可以把不纯的函数储存到\_value 中，延迟执行这个不纯的操作 (惰性执行)
-  - 把不纯的操作交给调用者来处理
+- IO functor
+  - The `_value` inside an IO functor is a function — here, a function is treated as a value.
+  - The IO functor can store an impure function in `_value`, deferring execution of that impure operation (lazy evaluation).
+  - It hands the impure operation off to the caller to execute.
 
 ```js
 const fp = require('lodash/fp');
@@ -432,21 +432,21 @@ class IO {
     return IO.of(fp.flowRight(fn, this._value));
   }
 }
-//调用
-//因为是在 node 环境，所以直接传递 process 对象，node 的进程
+//Usage
+//Since this runs in a Node environment, we can pass the process object directly, i.e., Node's own process
 let r = IO.of(process).map((p) => p.execPath);
 console.log(r); //IO {_value :[Function]}
-console.log(r._value()); //执行 node 进程的路径
+console.log(r._value()); //Executes and returns the path of the Node process
 ```
 
 - folktale
-  - folktale 是一个标准的函数式编程库
-  - 和 lodash，ramda 不同的是，他没有提供很多功能函数
-  - 只提供了函数式处理的操作，例如，curry，compose 等，和一些函子 Task，Either,MayBe 等
+  - folktale is a standard functional programming library.
+  - Unlike lodash and ramda, it doesn't provide a large number of utility functions.
+  - It only provides functional-processing operations such as curry and compose, plus a handful of functors like Task, Either, and MayBe.
 
 ```js
 //folktale  2.3.2
-//Task 处理异步任务
+//Task: handling asynchronous tasks
 const fs = require('fs');
 const { task } = require('folktale/concurrency/task');
 const { split, find } = require('loadsh/fp');
@@ -462,11 +462,11 @@ function readFile(filename) {
     });
   });
 }
-//会返回一个 Task 函子
+//Returns a Task functor
 readFile('package.json')
   .run()
   .listen({
-    //监听事件的状态
+    //Listening for the event's status
     onRejected: (err) => {
       console.log(err);
     },
@@ -474,13 +474,13 @@ readFile('package.json')
       console.log(value);
     },
   });
-//可以在 run 之前调用 map，去处理返回的结果
+//map can be called before run, to process the returned result
 readFile('package.json')
   .map(split('\n'))
   .map(find((x) => x.includes('version')))
   .run()
   .listen({
-    //监听事件的状态
+    //Listening for the event's status
     onRejected: (err) => {
       console.log(err);
     },
@@ -490,11 +490,11 @@ readFile('package.json')
   });
 ```
 
-- Pointed 函子
-  - Pointed 函子是实现的静态方法 of 的函子
-  - of 是为了避免使用 new 来创建对象，更深层的含义是 of 方法用来把值放到上下文 Context 中 (把值放到容器中，使用 map 来处理值)
-- Monad 函子
-  - Monad 函子是为来解决 IO 函子嵌套的问题
+- Pointed functor
+  - A Pointed functor is a functor that implements the static `of` method.
+  - `of` exists to avoid using `new` to create objects; on a deeper level, `of` is used to place a value into a context (put the value into the container, then use `map` to process it).
+- Monad functor
+  - The Monad functor exists to solve the problem of nested IO functors.
 
 ```js
 const fp = require('lodash/fp');
@@ -528,11 +528,11 @@ let r = cat('package.json')._value()._value();
 console.log(r);
 ```
 
-- Monad 函子是一个可以变扁的 Pointed 函子，变扁就是解决函子嵌套的问题 IO(IO(x))
-- 一个函子如果具有 join 和 of 两个方法并遵守一些定律就是一个 Monad
+- A Monad functor is a Pointed functor that can be flattened. "Flattening" solves the problem of nested functors, i.e., `IO(IO(x))`.
+- Any functor that has both `join` and `of` methods, and obeys certain laws, is a Monad.
 
 ```js
-//注意看 join 方法
+//Note the join method
 const fp = require('lodash/fp');
 const fs = require('fs');
 class IO {
@@ -551,7 +551,7 @@ class IO {
     return this._value();
   }
   flatMap(fn) {
-    //经常会用到 map 和 join 方法，所以就用 flatMap 将其变扁
+    //map followed by join is such a common pattern that flatMap combines the two into a "flattened" call
     return this.map(fn).join();
   }
 }
@@ -561,13 +561,13 @@ let print = function (x) {
     return x;
   });
 };
-let r = readFile('package.json') //这里可以用 map 去处理内容
+let r = readFile('package.json') //map can be used here to process the content
   .flatMap(print)
   .join();
 ```
 
-## 参考资料
+## References
 
-- [函数式编程与异步编程](http://t.zoukankan.com/feng9exe-p-10477713.html)
-- [函数式编程初探](http://www.ruanyifeng.com/blog/2012/04/functional_programming.html)
-- [函数式编程入门教程](http://www.ruanyifeng.com/blog/2017/02/fp-tutorial.html)
+- [Functional Programming and Asynchronous Programming](http://t.zoukankan.com/feng9exe-p-10477713.html)
+- [An Introduction to Functional Programming](http://www.ruanyifeng.com/blog/2012/04/functional_programming.html)
+- [A Functional Programming Tutorial](http://www.ruanyifeng.com/blog/2017/02/fp-tutorial.html)

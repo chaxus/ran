@@ -91,7 +91,7 @@ export class Application {
 
 在渲染前，还需要考虑扩展性，虽然目前只用到`canvas`进行渲染，但要很显然要保留`webGL`，`webGPU`渲染能力的扩展接口。
 
-因此设计一个`getRenderer`方法，用来抉择。根据传入的`prefer`，指定渲染方式。根据[接口分离原则](https://chaxus.github.io/ran/cn/src/article/designMode.html)每一种渲染方法都是一个独立的类。
+因此设计一个`getRenderer`方法，用来抉择。根据传入的`prefer`，指定渲染方式。根据[接口分离原则](https://ran.chaxus.com/cn/src/article/design_mode)每一种渲染方法都是一个独立的类。
 
 ```ts
 export const getRenderer = (options: IApplicationOptions): Renderer => {

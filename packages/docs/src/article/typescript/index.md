@@ -1,50 +1,50 @@
-# TypeScript 的类型系统
+# TypeScript's Type System
 
-## 一。类型是什么
+## I. What Is a Type
 
-类型具体点来说就是指 number、boolean、string 等基础类型和 Object、Function 等复合类型，它们是编程语言提供的对不同内容的抽象：
+Concretely, a type refers to primitive types like number, boolean, and string, as well as composite types like Object and Function. Types are the abstraction that programming languages provide for different kinds of data:
 
-- **不同类型变量占据的内存大小不同：** boolean 类型的变量会分配 4 个字节的内存，而 number 类型的变量则会分配 8 个字节的内存，给变量声明了不同的类型就代表了会占据不同的内存空间。
+- **Different types occupy different amounts of memory:** a boolean variable is allocated 4 bytes of memory, while a number variable is allocated 8 bytes. Declaring a variable with a different type means it occupies a different amount of memory space.
 
-- **不同类型变量可做的操作不同：** number 类型可以做加减乘除等运算，boolean 就不可以，复合类型中不同类型的对象可用的方法不同，比如 Date 和 RegExp，变量的类型不同代表可以对该变量做的操作就不同。
+- **Different types support different operations:** a number can be added, subtracted, multiplied, or divided, but a boolean cannot. Among composite types, different objects support different methods — for example, Date and RegExp. A variable's type determines what operations can be performed on it.
 
-有了类型，那我们的操作必须和类型相匹配，否则就会报错，这就是类型检查。
+Once types exist, our operations must match the type, or else an error occurs — this is type checking.
 
-如果能保证对某种类型只做该类型允许的操作，这就叫做类型安全。
+If we can guarantee that only operations allowed by a given type are performed on it, that is called type safety.
 
-类型检查可以在运行时做，也可以运行之前的编译期做。这是两种不同的类型，前者叫做动态类型检查，后者叫做静态类型检查。
+Type checking can happen at runtime, or ahead of time during compilation. These are two different approaches: the former is called dynamic type checking, and the latter static type checking.
 
-两种类型检查各有优缺点。动态类型检查 在源码中不保留类型信息，对某个变量赋什么值、做什么操作都是允许的，写代码很灵活。但这也埋下了类型不安全的隐患，比如对 string 做了乘除，对 Date 对象调用了 exec 方法，这些都是运行时才能检查出来的错误。
+Each approach has its pros and cons. Dynamic type checking keeps no type information in the source code — any value can be assigned to a variable, and any operation can be performed, making the code very flexible to write. But this also plants the seeds of type-unsafe bugs: for example, multiplying or dividing a string, or calling the `exec` method on a Date object — these errors can only be caught at runtime.
 
-其中，最常见的错误应该是“null is not an object”、“undefined is not a function”之类的了，写代码时没发现类型不匹配，到了运行的时候才发现，就会有很多这种报错。
+Among these, the most common errors are probably things like "null is not an object" and "undefined is not a function." A type mismatch that goes unnoticed while writing the code only surfaces at runtime, producing many such errors.
 
-所以，动态类型虽然代码写起来简单，但代码中很容易藏着一些类型不匹配的隐患。
+So while dynamic typing is simpler to write, the code can easily hide type-mismatch pitfalls.
 
-静态类型检查则是在源码中保留类型信息，声明变量要指定类型，对变量做的操作要和类型匹配，会有专门的编译器在编译期间做检查。
+Static type checking, on the other hand, preserves type information in the source code: declaring a variable requires specifying its type, and operations on that variable must match the declared type — a dedicated compiler checks this at compile time.
 
-静态类型给写代码增加了一些难度，因为你除了要考虑代码要表达的逻辑之外，还要考虑类型逻辑：变量是什么类型的、是不是匹配、要不要做类型转换等。
+Static typing adds some difficulty to writing code, because in addition to the logic you want to express, you also have to consider type logic: what type a variable is, whether it matches, whether a type conversion is needed, and so on.
 
-不过，静态类型也消除了类型不安全的隐患，因为在编译期间就做了类型检查，就不会出现对 string 做了乘除，调用了 Date 的 exec 方法这类问题。
+However, static typing also eliminates the risk of type-unsafe bugs, because type checking happens at compile time — you'll never end up multiplying a string or calling `exec` on a Date object.
 
-所以，静态类型虽然代码写起来要考虑的问题多一些，会复杂一些，但是却消除了代码中潜藏类型不安全问题的可能。
+So while static typing requires more consideration and is more complex to write, it eliminates the possibility of type-unsafe issues hiding in the code.
 
-知道了动态类型检查和静态类型检查的区别，我们自然可以得出这样的结论：
+Now that we understand the difference between dynamic and static type checking, we can naturally draw this conclusion:
 
-动态类型只适合简单的场景，对于大项目却不太合适，因为代码中可能藏着的隐患太多了，万一线上报一个类型不匹配的错误，那可能就是大问题。
+Dynamic typing is fine for simple scenarios, but not well suited to large projects, because there could be too many hidden pitfalls in the code — if a type-mismatch error shows up in production, it could be a serious problem.
 
-而静态类型虽然会增加写代码的成本，但是却能更好的保证代码的健壮性，减少 Bug 率。
+Static typing, while it increases the cost of writing code, better guarantees code robustness and reduces the bug rate.
 
-所以，大型项目注定会用静态类型语言开发。
+So large projects are destined to be built with statically typed languages.
 
-## 二。类型系统的分类
+## II. Classification of Type Systems
 
-### 1.简单的类型系统
+### 1. Simple type systems
 
-变量、函数、类等都可以声明类型，编译器会基于声明的类型做类型检查，类型不匹配时会报错。
+Variables, functions, classes, and so on can all be declared with types, and the compiler performs type checking based on the declared types, raising an error when types don't match.
 
-这是最基础的类型系统，能保证类型安全，但有些死板。
+This is the most basic kind of type system. It guarantees type safety, but can be somewhat rigid.
 
-比如一个 add 函数既可以做整数加法、又可以做浮点数加法，却需要声明两个函数：
+For instance, an `add` function that needs to support both integer addition and floating-point addition requires declaring two separate functions:
 
 ```c
 int add(int a, int b) {
@@ -56,17 +56,17 @@ double add(double a, double b) {
 }
 ```
 
-这个问题的解决思路很容易想到：如果类型能传参数就好了，传入 int 就是整数加法，传入 double 就是浮点数加法。
+The obvious solution: what if the type itself could be a parameter? Pass in `int` and get integer addition; pass in `double` and get floating-point addition.
 
-所以，就有了第二种类型系统。
+And so we arrive at the second kind of type system.
 
-### 2.支持泛型的类型系统
+### 2. Type systems that support generics
 
-泛型的英文是 Generic Type，通用的类型，它可以代表任何一种类型，也叫做类型参数。
+"Generic" is short for Generic Type — a general-purpose type that can stand in for any type. It's also called a type parameter.
 
-它给类型系统增加了一些灵活性，在整体比较固定，部分变量的类型有变化的情况下，可以减少很多重复代码。
+It adds some flexibility to the type system: when the overall structure is fixed but some variable types vary, generics can eliminate a lot of duplicate code.
 
-比如上面的 add 函数，有了泛型之后就可以这样写：
+Take the `add` function above — with generics, it can be written like this:
 
 ```java
 T add<T>(T a, T b) {
@@ -77,35 +77,35 @@ add(1,2);
 add(1.111, 2.2222);
 ```
 
-声明时把会变化的类型声明成泛型（也就是类型参数），在调用的时候再确定类型。
+At declaration time, the type that will vary is declared as a generic (i.e., a type parameter), and the concrete type is determined at call time.
 
-Java 就是这种类型系统。如果你看过 Java 代码，你会发现泛型用的特别多，这确实是一个很好的增加类型系统灵活性的特性。
+Java is this kind of type system. If you've looked at Java code, you'll notice generics are used extensively — it's indeed a great feature for adding flexibility to a type system.
 
-但是，这种类型系统的灵活性对于 JavaScript 来说还不够，因为 JavaScript 太过灵活了。
+However, this level of flexibility isn't enough for JavaScript, because JavaScript is far more flexible.
 
-比如，在 Java 里，对象都是由类 new 出来的，你不能凭空创建对象，但是 JavaScript 却可以，它支持对象字面量。
+For example, in Java, objects are always created by `new`-ing a class — you can't create an object out of thin air. But JavaScript can, since it supports object literals.
 
-那如果是一个返回对象某个属性值的函数，类型该怎么写呢？
+So how would you write the type for a function that returns the value of some property on an object?
 
 ```ts
-function getPropValue<T>(obj: T, key): key对应的属性值类型 {
+function getPropValue<T>(obj: T, key): TypeOfValueForKey {
   return obj[key];
 }
 ```
 
-好像拿到了 T，也不能拿到它的属性和属性值，如果能对类型参数 T 做一些逻辑处理就好了。
+It seems that just having `T` isn't enough — you also can't get at its properties and their value types. It would help if we could perform some logic on the type parameter `T`.
 
-所以，就有了第三种类型系统。
+And so we arrive at the third kind of type system.
 
-### 3.支持类型编程的类型系统
+### 3. Type systems that support type-level programming
 
-在 Java 里面，拿到了对象的类型就能找到它的类，进一步拿到各种信息，所以类型系统支持泛型就足够了。
+In Java, once you have an object's type, you can find its class and, from there, all sorts of information — so a type system that supports generics is enough.
 
-但是在 JavaScript 里面，对象可以字面量的方式创建，还可以灵活的增删属性，拿到对象并不能确定什么，所以要支持对传入的类型参数做进一步的处理。
+But in JavaScript, objects can be created as literals, and properties can be freely added or removed — getting hold of an object doesn't tell you much on its own. So the type system needs to support further processing of the type parameters passed in.
 
-对传入的类型参数（泛型）做各种逻辑运算，产生新的类型，这就是类型编程。
+Performing various logical operations on a passed-in type parameter (generic) to produce a new type — that's type-level programming.
 
-比如上面那个 getProps 的函数，类型可以这样写：
+For the `getPropValue` function above, the type can be written like this:
 
 ```ts
 function getPropValue<T extends object, Key extends keyof T>(obj: T, key: Key): T[Key] {
@@ -113,21 +113,21 @@ function getPropValue<T extends object, Key extends keyof T>(obj: T, key: Key): 
 }
 ```
 
-这里的 keyof T、T[Key] 就是对类型参数 T 的类型运算。
+Here, `keyof T` and `T[Key]` are type-level operations performed on the type parameter `T`.
 
-TypeScript 的类型系统就是第三种，支持对类型参数做各种逻辑处理，可以写很复杂的类型逻辑。
+TypeScript's type system is this third kind — it supports all sorts of logical processing on type parameters, allowing for very complex type-level logic.
 
-类型逻辑可以多复杂？
+How complex can type-level logic get?
 
-类型逻辑是对类型参数的各种处理，可以实现很多强大的功能：
+Type-level logic performs various operations on type parameters and can implement a lot of powerful functionality.
 
-比如这个 ParseQueryString 的类型：
+Take this `ParseQueryString` type, for example:
 
 ```ts
 type res = ParseQueryString<'a=1&b=2&c=3'>;
 ```
 
-它可以对传入的字符串的类型参数做解析，返回解析以后的结果。等于
+It can parse the string passed in as a type parameter and return the parsed result — equivalent to:
 
 ```ts
 type res = {
@@ -137,9 +137,9 @@ type res = {
 };
 ```
 
-如果是 Java 的只支持泛型的类型系统可以做到么？明显不能。但是 TypeScript 的类型系统就可以，因为它可以对泛型（类型参数）做各种逻辑处理。
+Could Java's generics-only type system do this? Clearly not. But TypeScript's type system can, because it can perform all sorts of logical processing on generics (type parameters).
 
-只不过，这个类型的类型逻辑的代码比较多（下面的 ts 类型暂时看不懂没关系，在顺口溜那节会有详解，这里只是用来直观感受下类型编程的复杂度的，等学完以后大家也能实现这样的复杂高级类型的）：
+That said, the type-level logic for this type takes quite a bit of code (don't worry if the TS type below doesn't make sense yet — it will be explained in detail in the mnemonics section; this is just to give you a feel for the complexity of type-level programming. Once you've finished learning, you'll be able to implement advanced types like this yourself):
 
 ```ts
 type ParseParam<Param extends string> = Param extends `${infer Key}=${infer Value}`
@@ -164,31 +164,31 @@ type ParseQueryString<Str extends string> = Str extends `${infer Param}&${infer 
   : ParseParam<Str>;
 ```
 
-TypeScript 的类型系统是图灵完备的，也就是能描述各种可计算逻辑。简单点来理解就是循环、条件等各种 JS 里面有的语法它都有，JS 能写的逻辑它都能写。
+TypeScript's type system is Turing complete, meaning it can describe any computable logic. In simple terms, it has all the constructs JS has — loops, conditionals, and so on — so anything JS logic can express, the type system can express too.
 
-对类型参数的编程是 TypeScript 类型系统最强大的部分，可以实现各种复杂的类型计算逻辑，是它的优点。但同时也被认为是它的缺点，因为除了业务逻辑外还要写很多类型逻辑。
+Programming with type parameters is the most powerful part of TypeScript's type system, letting you implement all sorts of complex type-level computation — that's its strength. But it's also considered its weakness, because on top of business logic, you also have to write a lot of type-level logic.
 
-不过，我倒是觉得这种复杂度是不可避免的，因为 JS 本身足够灵活，要准确定义类型那类型系统必然也要设计的足够灵活。
+That said, I'd argue this complexity is unavoidable, because JS itself is flexible enough that a type system designed to accurately describe it must be flexible enough too.
 
-### 4.类型安全和型变
+### 4. Type safety and variance
 
-TypeScript 给 JavaScript 添加了一套静态类型系统，是为了保证类型安全的，也就是保证变量只能赋同类型的值，对象只能访问它有的属性、方法。
+TypeScript adds a static type system to JavaScript in order to guarantee type safety — that is, to ensure a variable can only be assigned a value of the same type, and an object can only access the properties and methods it actually has.
 
-比如 number 类型的值不能赋值给 boolean 类型的变量，Date 类型的对象就不能调用 exec 方法。
+For example, a `number` value cannot be assigned to a `boolean` variable, and a `Date` object cannot call the `exec` method.
 
-这是类型检查做的事情，遇到类型安全问题会在编译时报错。
+That's what type checking does — when a type safety issue arises, it produces a compile-time error.
 
-但是这种类型安全的限制也不能太死板，有的时候需要一些变通，比如子类型是可以赋值给父类型的变量的，可以完全当成父类型来使用，也就是“型变（variant）”（类型改变）。
+But this type-safety restriction can't be too rigid either — sometimes some flexibility is needed. For example, a subtype can be assigned to a variable of its parent type and used entirely as if it were the parent type — this is called "variance" (a change in type).
 
-这种“型变”分为两种，一种是子类型可以赋值给父类型，叫做协变（covariant），一种是父类型可以赋值给子类型，叫做逆变（contravariant）。
+This "variance" comes in two flavors: when a subtype can be assigned to a parent type, it's called covariance; when a parent type can be assigned to a subtype, it's called contravariance.
 
-先来看下协变：
+Let's start with covariance:
 
-#### 协变（covariant）
+#### Covariant
 
-对具体成员的输出参数进行一次类型转换，且类型转换的准则是“里氏替换原则”。
+A type conversion applied to the output parameters of a concrete member, following the "Liskov Substitution Principle."
 
-其中协变是很好理解的，比如我们有两个 interface：
+Covariance is easy to understand. Say we have two interfaces:
 
 ```ts
 interface Animal {
@@ -203,7 +203,7 @@ interface Cat {
 }
 ```
 
-这里 Cat 是 Animal 的子类型，更具体，那么 Cat 类型的变量就可以赋值给 Animal 类型：
+Here, `Cat` is a subtype of `Animal` — it's more specific — so a variable of type `Cat` can be assigned to a variable of type `Animal`:
 
 ```ts
 let animal: Animal = {
@@ -220,21 +220,21 @@ let cat: Cat = {
 animal = cat;
 ```
 
-这并不会报错，虽然这俩类型不一样，但是依然是类型安全的。
+This doesn't produce an error. Even though the two types differ, it's still type safe.
 
-这种子类型可以赋值给父类型的情况就叫做协变。
+This case — where a subtype can be assigned to a parent type — is called covariance.
 
-为什么要支持协变很容易理解：类型系统支持了父子类型，那如果子类型还不能赋值给父类型，还叫父子类型么？
+It's easy to see why covariance needs to be supported: if the type system supports parent-child type relationships, but a subtype still couldn't be assigned to its parent type, would it really be a parent-child relationship at all?
 
-所以型变是实现类型父子关系必须的，它在保证类型安全的基础上，增加了类型系统的灵活性。
+So variance is necessary to implement type parent-child relationships — it adds flexibility to the type system while still guaranteeing type safety.
 
-逆变相对难理解一些：
+Contravariance is a bit harder to grasp:
 
-#### 逆变（contravariant）
+#### Contravariant
 
-是对具体成员的输入参数进行一次类型转换，且类型转换的准则是"里氏替换原则"。
+A type conversion applied to the input parameters of a concrete member, following the "Liskov Substitution Principle."
 
-我们有这样两个函数：
+Say we have these two functions:
 
 ```ts
 let printHobbies: (cat: Cat) => void;
@@ -250,11 +250,11 @@ printName = (animal) => {
 };
 ```
 
-printHobbies 的参数 Guang 是 printName 参数 Person 的子类型。
+The parameter type of `printHobbies` is a subtype of the parameter type of `printName`.
 
-那么问题来了，printName 能赋值给 printHobbies 么？printHobbies 能赋值给 printName 么？
+So here's the question: can `printName` be assigned to `printHobbies`? Can `printHobbies` be assigned to `printName`?
 
-测试一下发现是这样的：
+Testing it out, here's what happens:
 
 ```ts
 let printHobbies: (cat: Cat) => void;
@@ -272,27 +272,27 @@ printName = (animal) => {
 printHobbies = printName;
 ```
 
-printName 的参数 Person 不是 printHobbies 的参数 Guang 的父类型么，为啥能赋值给子类型？
+Isn't `printName`'s parameter type the parent type of `printHobbies`'s parameter type? Why can it be assigned to the one with the subtype parameter?
 
-因为这个函数调用的时候是按照 Guang 来约束的类型，但实际上函数只用到了父类型 Person 的属性和方法，当然不会有问题，依然是类型安全的。
+Because when this function is called, it's constrained by the subtype, but the function body actually only uses properties and methods of the parent type — so naturally there's no problem, and it's still type safe.
 
-这就是逆变，函数的参数有逆变的性质（而返回值是协变的，也就是子类型可以赋值给父类型）。
+This is contravariance: function parameters are contravariant (while return values are covariant — a subtype can be assigned to the parent type).
 
-那反过来呢，如果 printHoobies 赋值给 printName 会发生什么？
+Now, what about the other direction — what happens if `printHobbies` is assigned to `printName`?
 
-因为函数声明的时候是按照 Person 来约束类型，但是调用的时候是按照 Guang 的类型来访问的属性和方法，那自然类型不安全了，所以就会报错。
+Because the function was declared with the parameter constrained to the subtype, but when called it would be accessing properties and methods based on the parent type, that's clearly type unsafe — so it produces an error.
 
-但是在 ts2.x 之前支持这种赋值，也就是父类型可以赋值给子类型，子类型可以赋值给父类型，既逆变又协变，叫做“双向协变”。
+Before TypeScript 2.x, this kind of assignment was allowed in both directions — a parent type could be assigned to a subtype, and a subtype could be assigned to a parent type, i.e., both contravariance and covariance at once, called "bivariance."
 
-但是这明显是有问题的，不能保证类型安全，所以之后 ts 加了一个编译选项 strictFunctionTypes，设置为 true 就只支持函数参数的逆变，设置为 false 则是双向协变。
+But this is clearly problematic, since it can't guarantee type safety. So TypeScript later added a compiler option, `strictFunctionTypes`: set it to `true` and only contravariance of function parameters is supported; set it to `false` and you get bivariance.
 
-我们把 strictFunctionTypes 关掉之后，就会发现两种赋值都可以了。
+If we turn `strictFunctionTypes` off, we'll find both assignments are allowed.
 
-这样就支持函数参数的双向协变，类型检查不会报错，但不能严格保证类型安全。
+This supports bivariance of function parameters — type checking won't produce an error, but type safety can't be strictly guaranteed.
 
-开启之后，函数参数就只支持逆变，子类型赋值给父类型就会报错。
+With it turned on, function parameters only support contravariance — assigning a subtype to a parent type will produce an error.
 
-再举个逆变的例子，大家觉得下面这样的 ts 代码会报错么：
+Here's another contravariance example — do you think the following TS code will produce an error?
 
 ```ts
 type Func = (a: string) => void;
@@ -300,55 +300,55 @@ type Func = (a: string) => void;
 const func: Func = (a: 'hello') => undefined;
 ```
 
-答案是参数的位置会，返回值的位置不会：
+The answer: the parameter position will, the return value position won't.
 
-参数的位置是逆变的，也就是被赋值的函数参数要是赋值的函数参数的子类型，而 string 不是 'hello' 的子类型，所以报错了。
+The parameter position is contravariant — meaning the parameter of the function being assigned must be a subtype of the parameter of the function it's being assigned to, and `string` is not a subtype of `'hello'`, so it errors.
 
-返回值的位置是协变的，也就是赋值的函数的返回值是被赋值的函数的返回值的子类型，这里 undefined 是 void 的子类型，所以不报错。
+The return value position is covariant — meaning the return value of the function being assigned must be a subtype of the return value of the function it's being assigned to. Here, `undefined` is a subtype of `void`, so no error.
 
-### 不变（invariant）
+### Invariant
 
-逆变和协变都是型变，是针对父子类型而言的，非父子类型自然就不会型变，也就是不变：
+Contravariance and covariance are both forms of variance, which apply to parent-child type relationships. Types that aren't in a parent-child relationship naturally don't undergo variance — that is, they're invariant:
 
-非父子类型之间不会发生型变，只要类型不一样就会报错
+Types that are not in a parent-child relationship never undergo variance — if the types differ at all, it's an error.
 
-那类型之间的父子关系是怎么确定的呢，好像也没有看到 extends 的继承？
+So how is the parent-child relationship between types determined — there's no `extends` inheritance in sight?
 
-像 java 里面的类型都是通过 extends 继承的，如果 A extends B，那 A 就是 B 的子类型。这种叫做名义类型系统（nominal type）。
+In languages like Java, types are all related through `extends` inheritance — if `A extends B`, then `A` is a subtype of `B`. This is called a nominal type system.
 
-而 ts 里不看这个，只要结构上是一致的，那么就可以确定父子关系，这种叫做结构类型系统（structual type）。
+TypeScript doesn't work this way — as long as the structures match, a parent-child relationship can be established. This is called a structural type system.
 
-通过结构，更具体的那个是子类型。这里的 Cat 有 Animal 的所有属性，并且还多了一些属性，所以 Cat 是 Animal 的子类型。
+Structurally, the more specific type is the subtype. Here, `Cat` has all of `Animal`'s properties plus some extra ones, so `Cat` is a subtype of `Animal`.
 
-注意，这里用的是更具体，而不是更多。
+Note that what matters is being more specific, not having more properties.
 
-判断联合类型父子关系的时候， 'a' | 'b' 和 'a' | 'b' | 'c' 哪个更具体？
+When determining the parent-child relationship between union types, which is more specific: `'a' | 'b'` or `'a' | 'b' | 'c'`?
 
-'a' | 'b' 更具体，所以 'a' | 'b' 是 'a' | 'b' | 'c' 的子类型。
+`'a' | 'b'` is more specific, so `'a' | 'b'` is a subtype of `'a' | 'b' | 'c'`.
 
-## 三.TypeScript 类型系统
+## III. TypeScript's Type System
 
-### 1.支持的类型
+### 1. Supported types
 
-静态类型系统的目的是把类型检查从运行时提前到编译时，那 TS 类型系统中肯定要把 JS 的运行时类型拿过来，也就是 number、boolean、string、object、bigint、symbol、undefined、null 这些类型，还有就是它们的包装类型 Number、Boolean、String、Object、Symbol。
+The purpose of a static type system is to move type checking from runtime up to compile time, so TypeScript's type system naturally needs to pull in JS's runtime types — `number`, `boolean`, `string`, `object`, `bigint`, `symbol`, `undefined`, `null` — as well as their wrapper types `Number`, `Boolean`, `String`, `Object`, `Symbol`.
 
-这些很容易理解，给 JS 添加静态类型，总没有必要重新造一套基础类型吧，直接复用 JS 的基础类型就行。
+These are easy to understand — when adding static types to JS, there's no need to invent a whole new set of primitive types; just reuse JS's existing ones.
 
-复合类型方面，JS 有 class、Array，这些 TypeScript 类型系统也都支持，但是又多加了三种类型：元组（Tuple）、接口（Interface）、枚举（Enum）。
+On the composite type side, JS has `class` and `Array`, both of which TypeScript's type system supports as well — but TypeScript adds three more types on top: Tuple, Interface, and Enum.
 
-#### 元组
+#### Tuple
 
-元组（Tuple）就是元素个数和类型固定的数组类型：
+A Tuple is an array type with a fixed number of elements and fixed types:
 
 ```ts
 type Tuple = [number, string];
 ```
 
-#### 接口
+#### Interface
 
-接口（Interface）可以描述函数、对象、构造器的结构：
+An Interface can describe the shape of functions, objects, and constructors.
 
-对象：
+Objects:
 
 ```ts
 interface IPerson {
@@ -367,7 +367,7 @@ const obj: IPerson = {
 };
 ```
 
-函数：
+Functions:
 
 ```ts
 interface SayHello {
@@ -379,7 +379,7 @@ const func: SayHello = (name: string) => {
 };
 ```
 
-构造器：
+Constructors:
 
 ```ts
 interface PersonConstructor {
@@ -391,7 +391,7 @@ function createPerson(ctor: PersonConstructor): IPerson {
 }
 ```
 
-对象类型、class 类型在 TypeScript 里也叫做索引类型，也就是索引了多个元素的类型的意思。对象可以动态添加属性，如果不知道会有什么属性，可以用可索引签名：
+Object types and class types are also called index types in TypeScript — meaning types that index multiple elements. Since objects can have properties added dynamically, if you don't know in advance what properties there will be, you can use an index signature:
 
 ```ts
 interface IPerson {
@@ -402,11 +402,11 @@ obj.name = 'guang';
 obj.age = 18;
 ```
 
-总之，接口可以用来描述函数、构造器、索引类型（对象、class、数组）等复合类型。
+In short, an interface can be used to describe composite types such as functions, constructors, and index types (objects, classes, arrays).
 
-#### 枚举
+#### Enum
 
-枚举（Enum）是一系列值的复合：
+An Enum is a composite of a series of values:
 
 ```ts
 enum Transpiler {
@@ -420,11 +420,11 @@ enum Transpiler {
 const transpiler = Transpiler.TypeScriptCompiler;
 ```
 
-此外，TypeScript 还支持字面量类型，也就是类似 1111、'aaaa'、{ a: 1} 这种值也可以做为类型。
+TypeScript also supports literal types — meaning values like `1111`, `'aaaa'`, `{ a: 1 }` can themselves serve as types.
 
-其中，字符串的字面量类型有两种，一种是普通的字符串字面量，比如 'aaa'，另一种是模版字面量，比如 aaa${string}，它的意思是以 aaa 开头，后面是任意 string 的字符串字面量类型。
+Among these, string literal types come in two forms: ordinary string literals, such as `'aaa'`, and template literals, such as `` aaa${string} ``, which means a string literal type that starts with `aaa` followed by any `string`.
 
-所以想要约束以某个字符串开头的字符串字面量类型时可以这样写：
+So if you want to constrain a string literal type to start with a certain string, you can write it like this:
 
 ```ts
 function func(str: `#${string}`) {}
@@ -434,18 +434,18 @@ func('aaaa'); // error
 func('#aaaa'); // true
 ```
 
-还有四种特殊的类型：void、never、any、unknown：
+There are also four special types: `void`, `never`, `any`, and `unknown`.
 
-- never 代表不可达，比如函数抛异常的时候，返回值就是 never。
-- void 代表空，可以是 undefined 或 never。
-- any 是任意类型，任何类型都可以赋值给它，它也可以赋值给任何类型（除了 never）。
-- unknown 是未知类型，任何类型都可以赋值给它，但是它不可以赋值给别的类型。
+- `never` represents unreachable — for example, when a function throws, its return type is `never`.
+- `void` represents emptiness — it can be `undefined` or `never`.
+- `any` is an arbitrary type — any type can be assigned to it, and it can be assigned to any type (except `never`).
+- `unknown` is an unknown type — any type can be assigned to it, but it cannot be assigned to other types.
 
-这些就是 TypeScript 类型系统中的全部类型了，大部分是从 JS 中迁移过来的，比如基础类型、Array、class 等，也添加了一些类型，比如 枚举（enum）、接口（interface）、元组等，还支持了字面量类型和 void、never、any、unknown 的特殊类型。
+That covers all the types in TypeScript's type system. Most are carried over from JS — primitive types, `Array`, `class`, and so on — while a few are added, such as enum, interface, and tuple. It also supports literal types and the special types `void`, `never`, `any`, and `unknown`.
 
-### 2.类型的装饰
+### 2. Type modifiers
 
-除了描述类型的结构外，TypeScript 的类型系统还支持描述类型的属性，比如是否可选，是否只读等：
+Besides describing a type's structure, TypeScript's type system also supports describing a type's attributes — for example, whether it's optional or read-only:
 
 ```ts
 interface IPerson {
@@ -456,23 +456,23 @@ interface IPerson {
 type tuple = [string, number?];
 ```
 
-### 3.类型运算
+### 3. Type-level operations
 
-我们知道了 TypeScript 类型系统里有哪些类型，那么可以对这些类型做什么类型运算呢？
+Now that we know what types exist in TypeScript's type system, what operations can we perform on them?
 
-#### 条件：extends ?
+#### Conditionals: extends ? :
 
-TypeScript 里的条件判断是 extends ? :，叫做条件类型（Conditional Type）比如：
+Conditional logic in TypeScript is written as `extends ? :`, called a Conditional Type. For example:
 
 ```ts
 type res = 1 extends 2 ? true : false; // type res = false
 ```
 
-这就是 TypeScript 类型系统里的 if else。
+This is the if-else of TypeScript's type system.
 
-但是，上面这样的逻辑没啥意义，静态的值自己就能算出结果来，为什么要用代码去判断呢？
+But logic like the above isn't very useful on its own — since both sides are static values, you could just compute the result yourself; why write code to check it?
 
-所以，类型运算逻辑都是用来做一些动态的类型的运算的，也就是对类型参数的运算。
+So type-level conditional logic is really meant for dynamic type computations — operations on type parameters.
 
 ```ts
 type isTwo<T> = T extends 2 ? true : false;
@@ -481,15 +481,15 @@ type res = isTwo<1>; // type res = false
 type res2 = isTwo<2>; // type res = true
 ```
 
-这种类型也叫做高级类型。
+This kind of type is also called an advanced type.
 
-高级类型的特点是传入类型参数，经过一系列类型运算逻辑后，返回新的类型。
+The hallmark of an advanced type is: you pass in a type parameter, run it through a series of type-level operations, and get back a new type.
 
-#### 推导：infer
+#### Inference: infer
 
-如何提取类型的一部分呢？答案是 infer。
+How do you extract part of a type? The answer is `infer`.
 
-比如提取元组类型的第一个元素：
+For example, extracting the first element of a tuple type:
 
 ```ts
 type First<Tuple extends unknown[]> = Tuple extends [infer T, ...infer R] ? T : never;
@@ -497,31 +497,31 @@ type First<Tuple extends unknown[]> = Tuple extends [infer T, ...infer R] ? T : 
 type res = First<[1, 2, 3]>; // type res = 1
 ```
 
-注意，第一个 extends 不是条件，条件类型是 extends ? :，这里的 extends 是约束的意思，也就是约束类型参数只能是数组类型。
+Note that the first `extends` here isn't a conditional — conditional types use `extends ? :`. The `extends` here means "constrained to" — that is, it constrains the type parameter to array types only.
 
-因为不知道数组元素的具体类型，所以用 unknown。
+Since we don't know the concrete type of the array elements, we use `unknown`.
 
-infer 在后面的章节会大量用到，这里先简单了解即可。
+`infer` will be used extensively in later chapters — for now, just get a basic feel for it.
 
-#### 联合：｜
+#### Union: |
 
-联合类型（Union）类似 js 里的或运算符 |，但是作用于类型，代表类型可以是几个类型之一。
+A Union type is similar to the `|` OR operator in JS, but it operates on types — it means a type can be one of several types.
 
 ```ts
 type Union = 1 | 2 | 3;
 ```
 
-#### 交叉：&
+#### Intersection: &
 
-交叉类型（Intersection）类似 js 中的与运算符 &，但是作用于类型，代表对类型做合并。
+An Intersection type is similar to the `&` AND operator in JS, but it operates on types — it means merging types together.
 
 ```ts
 type ObjType = { a: number } & { c: boolean };
 ```
 
-注意，同一类型可以合并，不同的类型没法合并，会被舍弃：
+Note that identical types can be merged, but distinct primitive types cannot — they get discarded instead:
 
-可以合并的
+Can be merged:
 
 ```ts
 type ObjType = { a: number } & { c: boolean };
@@ -529,17 +529,17 @@ type ObjType = { a: number } & { c: boolean };
 type res = { a: number; c: boolean } extends ObjType ? true : false; // type res = true
 ```
 
-不可合并
+Cannot be merged:
 
 ```ts
 type res = 'aaaa' & 2222; // type res = never
 ```
 
-#### 映射类型
+#### Mapped types
 
-对象、class 在 TypeScript 对应的类型是索引类型（Index Type），那么如何对索引类型作修改呢？
+For objects and classes, the corresponding TypeScript type is an Index Type — so how do you modify an index type?
 
-答案是映射类型。
+The answer is mapped types.
 
 ```ts
 type MapType<T> = {
@@ -547,13 +547,13 @@ type MapType<T> = {
 };
 ```
 
-keyof T 是查询索引类型中所有的索引，叫做索引查询。
+`keyof T` queries all the indexes (keys) of an index type — this is called an index query.
 
-T[Key] 是取索引类型某个索引的值，叫做索引访问。
+`T[Key]` retrieves the value at a given index of the index type — this is called an index access.
 
-in 是用于遍历联合类型的运算符。
+`in` is the operator used to iterate over a union type.
 
-比如我们把一个索引类型的值变成 3 个元素的数组：
+For example, turning the values of an index type into 3-element arrays:
 
 ```ts
 type MapType<T> = {
@@ -563,11 +563,11 @@ type MapType<T> = {
 type res = MapType<{ a: 1; b: 2 }>; // type res = { a: [1, 1, 1]; b:[2, 2, 2]; }
 ```
 
-映射类型就相当于把一个集合映射到另一个集合，这是它名字的由来。
+A mapped type is essentially mapping one set to another — hence the name.
 
-除了值可以变化，索引也可以做变化，用 as 运算符，叫做重映射。
+Besides the values, the keys can also be transformed, using the `as` operator — this is called re-mapping.
 
-我们用 as 把索引也做了修改，改成了 3 个 key 重复：
+Here we use `as` to modify the keys too, repeating each key 3 times:
 
 ```ts
 type MapType<T> = {
@@ -577,19 +577,19 @@ type MapType<T> = {
 // type res = { aaa: [1, 1, 1]; bbb: [2, 2, 2]; }
 ```
 
-这里的 & string 可能大家会迷惑，解释一下：
+The `& string` here might be confusing, so let's explain it:
 
-因为索引类型（对象、class 等）可以用 string、number 和 symbol 作为 key，这里 keyof T 取出的索引就是 string | number | symbol 的联合类型，和 string 取交叉部分就只剩下 string 了。就像前面所说，交叉类型会把同一类型做合并，不同类型舍弃。
+Since an index type (object, class, etc.) can use `string`, `number`, or `symbol` as keys, `keyof T` yields a union type of `string | number | symbol`. Intersecting that with `string` leaves only `string`. As mentioned earlier, an intersection type merges identical types and discards distinct ones.
 
-## 四。判断类型的类型
+## IV. Determining a Type's "Type"
 
 ### IsAny
 
-如何判断一个类型是 any 类型呢？要根据它的特性来：
+How do you determine whether a type is `any`? You have to rely on its characteristics:
 
-any 类型与任何类型的交叉都是 any，也就是 1 & any 结果是 any。
+Intersecting `any` with any other type always yields `any` — that is, `1 & any` results in `any`.
 
-所以，可以这样写：
+So it can be written like this:
 
 ```ts
 type IsAny<T> = 'null' extends 'undefined' & T ? true : false;
@@ -597,43 +597,43 @@ type IsAny<T> = 'null' extends 'undefined' & T ? true : false;
 
 ### IsEqual
 
-之前我们实现 IsEqual 是这样写的：
+Previously, we implemented `IsEqual` like this:
 
 ```ts
 type IsEqual<A, B> = (A extends B ? true : false) & (B extends A ? true : false);
 ```
 
-问题出在 any 的判断上：
+The problem shows up when checking against `any`:
 
 ```ts
 type IsEqualResult = IsEqual<'aaa', any>;
 // type IsEqualResult = false
 ```
 
-因为 any 可以是任何类型，任何类型也都是 any，所以当这样写判断不出 any 类型来。
+Because `any` can be any type, and any type is also `any`, writing it this way can't correctly detect `any`.
 
-所以，我们会这样写：
+So instead, we write it like this:
 
 ```ts
 type IsEqual<A, B> = (<T>() => T extends A ? 1 : 2) extends <T>() => T extends B ? 1 : 2 ? true : false;
 ```
 
-这样就能正常判断了：
+This lets it be checked correctly.
 
-其中 T 是不传类型的，相当于一个临时变量
+Here, `T` is never given a concrete type — it's essentially a temporary placeholder.
 
-其目的是对比：
+The goal is to compare:
 
 ```ts
 <T>() => T extends X ? 1 : 2
 <T>() => T extends Y ? 1 : 2
 ```
 
-这两个泛型函数类型是否相等，[原理](https://stackoverflow.com/questions/68961864/how-does-the-equals-work-in-typescript/68963796#68963796)
+whether these two generic function types are equal. [How it works](https://stackoverflow.com/questions/68961864/how-does-the-equals-work-in-typescript/68963796#68963796)
 
 ### IsUnion
 
-还记得怎么判断 union 类型么？要根据它遇到条件类型时会分散成单个传入做计算的特性：
+Remember how to determine whether something is a union type? It relies on the fact that a union type, when it hits a conditional type, gets distributed into individual members that are each computed separately:
 
 ```ts
 type IsUnion<A, B = A> = A extends A ? ([B] extends [A] ? false : true) : never;
@@ -641,33 +641,33 @@ type IsUnion<A, B = A> = A extends A ? ([B] extends [A] ? false : true) : never;
 
 ### IsNever
 
-never 在条件类型中也比较特殊，如果条件类型左边是类型参数，并且传入的是 never，那么直接返回 never：
+`never` is also special in conditional types: if the left side of a conditional type is a type parameter, and `never` is passed in, the result is directly `never`:
 
 ```ts
 type TestNever<T> = T extends number ? 1 : 2;
 ```
 
-当 T 为 never 时：
+When `T` is `never`:
 
 ```ts
 type TestNeverResult = TestNever<never>;
 // type TestNeverResult = never
 ```
 
-所以，要判断 never 类型，就不能直接 T extends number，可以这样写：
+So to check for `never`, you can't write `T extends number` directly — instead write it like this:
 
 ```ts
 type IsNever<T> = [T] extends [never] ? true : false;
 ```
 
-这样就能正常判断 never 类型了：
+Now `never` can be checked correctly:
 
 ```ts
 type TestNeverResult = IsNever<never>;
 // type TestNeverResult = true
 ```
 
-除此以外，any 在条件类型中也比较特殊，如果类型参数为 any，会直接返回 trueType 和 falseType 的合并：
+Beyond that, `any` is also special in conditional types — if the type parameter is `any`, the result is directly the union of the `trueType` and `falseType` branches:
 
 ```ts
 type TestAny<T> = T extends number ? 1 : 2;
@@ -676,13 +676,13 @@ type TestAnyResult = TestAny<any>;
 // type TestAnyResult = 1 | 2
 ```
 
-联合类型、never、any 在作为条件类型的类型参数时的这些特殊情况，也会在后面的原理篇来解释原因。
+These special cases for union types, `never`, and `any` as type parameters of a conditional type will be explained in more depth in a later section on the underlying mechanics.
 
 ### IsTuple
 
-元组类型怎么判断呢？它和数组有什么区别呢？
+How do you determine a tuple type? What's the difference from an array?
 
-元组类型的 length 是数字字面量，而数组的 length 是 number。
+A tuple type's `length` is a numeric literal type, while an array's `length` is `number`.
 
 ```ts
 type len
@@ -690,39 +690,39 @@ type len
 
 ### UnionToIntersection
 
-类型之间是有父子关系的，更具体的那个是子类型，比如 A 和 B 的交叉类型 A & B 就是联合类型 A | B 的子类型，因为更具体。
+Types have parent-child relationships — the more specific one is the subtype. For example, the intersection type `A & B` is a subtype of the union type `A | B`, because it's more specific.
 
-如果允许父类型赋值给子类型，就叫做**逆变**。
+Allowing a parent type to be assigned to a subtype is called **contravariance**.
 
-如果允许子类型赋值给父类型，就叫做**协变**。
+Allowing a subtype to be assigned to a parent type is called **covariance**.
 
-（关于逆变、协变等概念的详细解释可以看原理篇）
+(For a detailed explanation of contravariance, covariance, and related concepts, see the fundamentals chapter.)
 
-在 TypeScript 中有函数参数是有逆变的性质的，也就是如果参数可能是多个类型，参数类型会变成它们的交叉类型。
+In TypeScript, function parameters exhibit contravariance — meaning if a parameter could be one of multiple types, the parameter type becomes their intersection.
 
-所以联合转交叉可以这样实现：
+So converting a union to an intersection can be implemented like this:
 
 ```ts
 type UnionToIntersection<U> = (U extends U ? (x: U) => unknown : never) extends (x: infer R) => unknown ? R : never;
 ```
 
-类型参数 U 是要转换的联合类型。
+The type parameter `U` is the union type to convert.
 
-U extends U 是为了触发联合类型的 distributive 的性质，让每个类型单独传入做计算，最后合并。
+`U extends U` triggers the distributive behavior of union types, so each member type is passed in and computed separately, then merged at the end.
 
-利用 U 做为参数构造个函数，通过模式匹配取参数的类型。
+Using `U` as a parameter, we construct a function, then use pattern matching to extract the parameter's type.
 
-结果就是交叉类型
+The result is the intersection type.
 
-函数参数的逆变性质一般就联合类型转交叉类型会用，记住就行。
+The contravariant nature of function parameters is generally only used for converting unions to intersections — just remember that.
 
 ### GetOptional
 
-如何提取索引类型中的可选索引呢？
+How do you extract the optional keys from an index type?
 
-这也要利用可选索引的特性：可选索引的值为 undefined 和值类型的联合类型。
+This also relies on a characteristic of optional keys: an optional key's value is a union of `undefined` and the value's actual type.
 
-过滤可选索引，就要构造一个新的索引类型，过程中做过滤：
+To filter out optional keys, you need to construct a new index type, filtering along the way:
 
 ```ts
 type GetOptional<Obj extends Record<string, any>> = {
@@ -730,35 +730,35 @@ type GetOptional<Obj extends Record<string, any>> = {
 };
 ```
 
-类型参数 Obj 为待处理的索引类型，类型约束为索引为 string、值为任意类型的索引类型 Record<string, any>。
+The type parameter `Obj` is the index type to process, constrained to `Record<string, any>` — an index type whose keys are strings and whose values can be any type.
 
-用映射类型的语法重新构造索引类型，索引是之前的索引也就是 Key in keyof Obj，但要做一些过滤，也就是 as 之后的部分。
+Using mapped type syntax, we reconstruct the index type — the keys are the original keys, i.e., `Key in keyof Obj`, but with some filtering applied, i.e., the part after `as`.
 
-过滤的方式就是单独取出该索引之后，判断空对象是否是其子类型。
+The filtering works by taking each key individually and checking whether an empty object is a subtype of it.
 
-这里的 Pick 是 ts 提供的内置高级类型，就是取出某个 Key 构造新的索引类型：
+`Pick` here is a built-in advanced type provided by TS — it constructs a new index type by picking out a given key:
 
 ```ts
 type Pick<T, K extends keyof T> = { [P in K]: T[P] };
 ```
 
-比如单独取出 age 构造的新的索引类型是这样的：
+For instance, picking out just `age` produces a new index type like this:
 
-可选的意思是这个索引可能没有，没有的时候，那 Pick<Obj, Key> 就是空的，所以 {} extends Pick<Obj, Key> 就能过滤出可选索引。
+Optional means the key might not be present. When it isn't, `Pick<Obj, Key>` is empty, so `{} extends Pick<Obj, Key>` can be used to filter out optional keys.
 
-值的类型依然是之前的，也就是 Obj[Key]。
+The value type stays the same as before — `Obj[Key]`.
 
-这样，就能过滤出所有可选索引，构造成新的索引类型：
+This way, we can filter out all the optional keys and construct a new index type.
 
-## 总结
+## Summary
 
-- any 类型与任何类型的交叉都是 any，也就是 1 & any 结果是 any，可以用这个特性判断 any 类型。
-- 联合类型作为类型参数出现在条件类型左侧时，会分散成单个类型传入，最后合并。
-- never 作为类型参数出现在条件类型左侧时，会直接返回 never。
-- any 作为类型参数出现在条件类型左侧时，会直接返回 trueType 和 falseType 的联合类型。
-- 元组类型也是数组类型，但 length 是数字字面量，而数组的 length 是 number。可以用来判断元组类型。
-- 函数参数处会发生逆变，可以用来实现联合类型转交叉类型。
-- 可选索引的索引可能没有，那 Pick 出来的就可能是 {}，可以用来过滤可选索引，反过来也可以过滤非可选索引。
-- 索引类型的索引为字符串字面量类型，而可索引签名不是，可以用这个特性过滤掉可索引签名。
-- keyof 只能拿到 class 的 public 的索引，可以用来过滤出 public 的属性。
-- 默认推导出来的不是字面量类型，加上 as const 可以推导出字面量类型，但带有 readonly 修饰，这样模式匹配的时候也得加上 readonly 才行。
+- Intersecting `any` with any type always yields `any` — that is, `1 & any` results in `any`. This characteristic can be used to detect the `any` type.
+- When a union type appears as a type parameter on the left side of a conditional type, it gets distributed into individual types, computed separately, and then merged.
+- When `never` appears as a type parameter on the left side of a conditional type, the result is directly `never`.
+- When `any` appears as a type parameter on the left side of a conditional type, the result is directly the union of `trueType` and `falseType`.
+- A tuple type is also an array type, but its `length` is a numeric literal type, while an array's `length` is `number`. This can be used to detect tuple types.
+- Function parameters undergo contravariance, which can be used to convert union types to intersection types.
+- An optional key might not be present, so `Pick`-ing it out could yield `{}` — this can be used to filter for optional keys, and conversely, non-optional keys.
+- The keys of an index type are string literal types, whereas an index signature's key is not — this characteristic can be used to filter out index signatures.
+- `keyof` only picks up the `public` members of a class, so it can be used to filter out `public` properties.
+- By default, inferred types are not literal types; adding `as const` lets you infer literal types, but they come with a `readonly` modifier, so pattern matching against them also needs to include `readonly`.

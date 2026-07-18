@@ -1,81 +1,81 @@
-# 重新构造做变换
+# Reconstruction for Transformation
 
-类型编程主要的目的就是对类型做各种转换，那么如何对类型做修改呢？
+The main purpose of type programming is to transform types in various ways — so how do we modify a type?
 
-TypeScript 类型系统支持 3 种可以声明任意类型的变量：type、infer、类型参数。
+The TypeScript type system supports 3 kinds of "variables" that can declare an arbitrary type: `type`, `infer`, and type parameters.
 
-type 叫做类型别名，其实就是声明一个变量存储某个类型：
+`type` is called a type alias — it's essentially declaring a variable that stores some type:
 
 ```ts
 type ttt = Promise<number>;
 ```
 
-infer 用于类型的提取，然后存到一个变量里，相当于局部变量：
+`infer` is used to extract a type and store it in a variable, similar to a local variable:
 
 ```ts
 type GetValueType<P> = P extends Promise<infer Value> ? Value : never;
 ```
 
-类型参数用于接受具体的类型，在类型运算中也相当于局部变量：
+Type parameters are used to accept a concrete type, and in type-level computation they also act like local variables:
 
 ```ts
 type isTwo<T> = T extends 2 ? true : false;
 ```
 
-但是，严格来说这三种也都不叫变量，因为它们不能被重新赋值。
+Strictly speaking, though, none of these three are actually "variables," because they can't be reassigned.
 
-TypeScript 设计可以做类型编程的类型系统的目的就是为了产生各种复杂的类型，那不能修改怎么产生新类型呢？
+TypeScript designed a type system capable of type programming precisely so it could produce all kinds of complex types — so if we can't modify a type, how do we produce a new one?
 
-答案是重新构造。
+The answer is reconstruction.
 
-这就涉及到了第二个类型体操套路：重新构造做变换。
+This brings us to the second type-gymnastics pattern: reconstruction for transformation.
 
-## 重新构造
+## Reconstruction
 
-TypeScript 的 type、infer、类型参数声明的变量都不能修改，想对类型做各种变换产生新的类型就需要重新构造。
+Variables declared via `type`, `infer`, or type parameters in TypeScript can't be modified. To transform a type and produce a new one, you need to reconstruct it.
 
-数组、字符串、函数等类型的重新构造比较简单。
+Reconstructing array, string, and function types is fairly simple.
 
-索引类型，也就是多个元素的聚合类型的重新构造复杂一些，涉及到了映射类型的语法。
+Reconstructing index types — that is, aggregate types made up of multiple elements — is a bit more complex, involving mapped type syntax.
 
-我们先从简单的开始：
+Let's start with the simple cases:
 
-## 数组类型的重新构造
+## Reconstructing Array Types
 
 ### Push
 
-有这样一个元组类型：
+Given a tuple type like this:
 
 ```ts
 type tuple = [1, 2, 3];
 ```
 
-我想给这个元组类型再添加一些类型，怎么做呢？
+I want to add more elements to this tuple type — how do I do that?
 
-TypeScript 类型变量不支持修改，我们可以构造一个新的元组类型：
+Since TypeScript type variables don't support modification, we can construct a new tuple type instead:
 
 ```ts
 type Push<Arr extends unknown[], Ele> = [...Arr, Ele];
 ```
 
-类型参数 Arr 是要修改的数组/元组类型，元素的类型任意，也就是 unknown。
+The type parameter `Arr` is the array/tuple type to modify, and its element type is arbitrary, i.e., `unknown`.
 
-类型参数 Ele 是添加的元素的类型。
+The type parameter `Ele` is the type of the element being added.
 
-返回的是用 Arr 已有的元素加上 Ele 构造的新的元组类型。
+The result is a new tuple type constructed from `Arr`'s existing elements plus `Ele`.
 
 ```ts
 type PushResult = Push<[1, 2, 3], 4>;
 // type PushResult = [1,2,3,4]
 ```
 
-这就是数组/元组的重新构造。
+This is reconstruction for arrays/tuples.
 
-> 数组和元组的区别：数组类型是指任意多个同一类型的元素构成的，比如 `number[]`、`Array<number>`，而元组则是数量固定，类型可以不同的元素构成的，比如 `[1, true, 'name']`。
+> The difference between arrays and tuples: an array type consists of any number of elements of the same type, e.g. `number[]`, `Array<number>`, while a tuple has a fixed number of elements whose types can differ, e.g. `[1, true, 'name']`.
 
 ### Unshift
 
-可以在后面添加，同样也可以在前面添加：
+Just as we can append to the end, we can also prepend to the front:
 
 ```ts
 type Unshift<Arr extends unknown[], Ele> = [Ele, ...Arr];
@@ -83,20 +83,20 @@ type Unshift<Arr extends unknown[], Ele> = [Ele, ...Arr];
 
 ### Zip
 
-有这样两个元组：
+Given these two tuples:
 
 ```ts
 type tuple1 = [1, 2];
 type tuple2 = ['name', 'value'];
 ```
 
-我们想把它们合并成这样的元组：
+we want to merge them into a tuple like this:
 
 ```ts
 type tuple = [[1, 'name'], [2, 'value']];
 ```
 
-思路很容易想到，提取元组中的两个元素，构造成新的元组：
+The approach is straightforward: extract the two elements from each tuple, then construct a new tuple from them:
 
 ```ts
 type Zip<One extends [unknown, unknown], Other extends [unknown, unknown]> = One extends [
@@ -109,20 +109,20 @@ type Zip<One extends [unknown, unknown], Other extends [unknown, unknown]> = One
   : [];
 ```
 
-两个类型参数 One、Other 是两个元组，类型是 [unknown, unknown]，代表 2 个任意类型的元素构成的元组。
+The two type parameters `One` and `Other` are tuples of type `[unknown, unknown]`, representing tuples made of 2 elements of arbitrary type.
 
-通过 infer 分别提取 One 和 Other 的元素到 infer 声明的局部变量 OneFirst、OneSecond、OtherFirst、OtherSecond 里。
+Using `infer`, we extract the elements of `One` and `Other` into the local variables `OneFirst`, `OneSecond`, `OtherFirst`, and `OtherSecond` declared by `infer`.
 
-用提取的元素构造成新的元组返回即可：
+Then we construct and return a new tuple from these extracted elements:
 
 ```ts
 type ZipResult = Zip<[1, 2], ['name', 'value']>;
 // type ZipResult = [[1, 'name'], [2, 'value']];
 ```
 
-但是这样只能合并两个元素的元组，如果是任意个呢？
+But this only merges tuples with two elements — what if there are an arbitrary number of elements?
 
-那就得用递归了：
+Then we need recursion:
 
 ```ts
 type Zip<One extends unknown[], Other extends unknown[]> = One extends [infer OneFirst, ...infer OneRest]
@@ -132,46 +132,46 @@ type Zip<One extends unknown[], Other extends unknown[]> = One extends [infer On
   : [];
 ```
 
-类型参数 One、Other 声明为 unknown[]，也就是元素个数任意，类型任意的数组。
+The type parameters `One` and `Other` are declared as `unknown[]`, i.e., arrays with an arbitrary number of elements of arbitrary type.
 
-每次提取 One 和 Other 的第一个元素 OneFirst、OtherFirst，剩余的放到 OneRest、OtherRest 里。
+Each time, we extract the first elements of `One` and `Other` — `OneFirst` and `OtherFirst` — and put the rest into `OneRest` and `OtherRest`.
 
-用 OneFirst、OtherFirst 构造成新的元组的一个元素，剩余元素继续递归处理 OneRest、OtherRest。
+`OneFirst` and `OtherFirst` are used to construct one element of the new tuple, and the remaining elements are handled by recursively processing `OneRest` and `OtherRest`.
 
-这样，就能处理任意个数元组的合并：
+This way, we can merge tuples of any number of elements:
 
 ```ts
 type ZipResult = Zip<[1, 2, 3, 4, 5], ['name', 'value', 'three', 'four', 'five']>;
 // type ZipResult = [[1, 'name'], [2, 'value'], [3, 'three'], [4, 'four'], [5, 'five']];
 ```
 
-了解了数组类型的重新构造，我们再来看下字符串类型的：
+Now that we understand reconstructing array types, let's look at reconstructing string types:
 
-## 字符串类型的重新构造
+## Reconstructing String Types
 
 ### CapitalizeStr
 
-我们想把一个字符串字面量类型的 'guang' 转为首字母大写的 'Guang'。
+We want to transform the string literal type `'guang'` into `'Guang'`, with the first letter capitalized.
 
-需要用到字符串类型的提取和重新构造：
+This requires extracting and reconstructing string types:
 
 ```ts
 type CapitalizeStr<Str extends string> = Str extends `${infer First}${infer Rest}` ? `${Uppercase<First>}${Rest}` : Str;
 ```
 
-我们声明了类型参数 Str 是要处理的字符串类型，通过 extends 约束为 string。
+We declare the type parameter `Str` as the string type to process, constrained to `string` via `extends`.
 
-通过 infer 提取出首个字符到局部变量 First，提取后面的字符到局部变量 Rest。
+Using `infer`, we extract the first character into the local variable `First`, and the remaining characters into the local variable `Rest`.
 
-然后使用 TypeScript 提供的内置高级类型 Uppercase 把首字母转为大写，加上 Rest，构造成新的字符串类型返回。
+Then we use TypeScript's built-in utility type `Uppercase` to capitalize the first letter, append `Rest`, and construct and return a new string type.
 
-这就是字符串类型的重新构造：从已有的字符串类型中提取出一些部分字符串，经过一系列变换，构造成新的字符串类型。
+This is reconstruction for string types: extracting parts of an existing string type, applying a series of transformations, and constructing a new string type.
 
 ### CamelCase
 
-我们再来实现 dong_dong_dong 到 dongDongDong 的变换。
+Let's also implement the transformation from `dong_dong_dong` to `dongDongDong`.
 
-同样是提取和重新构造：
+Again, this is extraction plus reconstruction:
 
 ```ts
 type CamelCase<Str extends string> = Str extends `${infer Left}_${infer Right}${infer Rest}`
@@ -179,17 +179,17 @@ type CamelCase<Str extends string> = Str extends `${infer Left}_${infer Right}${
   : Str;
 ```
 
-类型参数 Str 是待处理的字符串类型，约束为 string。
+The type parameter `Str` is the string type to process, constrained to `string`.
 
-提取 \_ 之前和之后的两个字符到 infer 声明的局部变量 Left 和 Right，剩下的字符放到 Rest 里。
+We extract the characters before and after the `_` into the local variables `Left` and `Right` declared by `infer`, and put the remaining characters into `Rest`.
 
-然后把右边的字符 Right 大写，和 Left 构造成新的字符串，剩余的字符 Rest 要继续递归的处理。
+Then we uppercase the right-hand character `Right`, construct a new string with `Left`, and recursively process the remaining characters `Rest`.
 
-这样就完成了从下划线到驼峰形式的转换：
+This completes the transformation from snake_case to camelCase:
 
 ### DropSubStr
 
-可以修改自然也可以删除，我们再来做一个删除一段字符串的案例：删除字符串中的某个子串
+Just as we can modify a string, we can also delete part of it. Let's do an example of removing a substring from a string:
 
 ```ts
 type DropSubStr<Str extends string, SubStr extends string> = Str extends `${infer Prefix}${SubStr}${infer Suffix}`
@@ -197,23 +197,23 @@ type DropSubStr<Str extends string, SubStr extends string> = Str extends `${infe
   : Str;
 ```
 
-类型参数 Str 是待处理的字符串，SubStr 是要删除的字符串，都通过 extends 约束为 string 类型。
+The type parameter `Str` is the string to process, and `SubStr` is the substring to remove; both are constrained to `string` via `extends`.
 
-通过模式匹配提取 SubStr 之前和之后的字符串到 infer 声明的局部变量 Prefix、Suffix 中。
+Using pattern matching, we extract the strings before and after `SubStr` into the local variables `Prefix` and `Suffix` declared by `infer`.
 
-如果不匹配就直接返回 Str。
+If there's no match, we return `Str` directly.
 
-如果匹配，那就用 Prefix、Suffix 构造成新的字符串，然后继续递归删除 SubStr。直到不再匹配，也就是没有 SubStr 了。
+If there is a match, we construct a new string from `Prefix` and `Suffix`, then continue recursively removing `SubStr` until there's no more match, i.e., no more occurrences of `SubStr` remain.
 
-字符串类型的重新构造之后，我们再来看下函数类型的重新构造：
+After looking at reconstruction for string types, let's move on to reconstruction for function types:
 
-## 函数类型的重新构造
+## Reconstructing Function Types
 
 ### AppendArgument
 
-之前我们分别实现了参数和返回值的提取，那么重新构造就是用这些提取出的类型做下修改，构造一个新的类型即可。
+Earlier, we implemented extraction of parameters and return values separately. Reconstruction, then, is just modifying these extracted types and constructing a new type from them.
 
-比如在已有的函数类型上添加一个参数：
+For example, adding a parameter to an existing function type:
 
 ```ts
 type AppendArgument<Func extends Function, Arg> = Func extends (...args: infer Args) => infer ReturnType
@@ -221,19 +221,19 @@ type AppendArgument<Func extends Function, Arg> = Func extends (...args: infer A
   : never;
 ```
 
-类型参数 Func 是待处理的函数类型，通过 extends 约束为 Function，Arg 是要添加的参数类型。
+The type parameter `Func` is the function type to process, constrained to `Function` via `extends`, and `Arg` is the type of the parameter to add.
 
-通过模式匹配提取参数到 infer 声明的局部变量 Args 中，提取返回值到局部变量 ReturnType 中。
+Using pattern matching, we extract the parameters into the local variable `Args` declared by `infer`, and extract the return value into the local variable `ReturnType`.
 
-用 Args 数组添加 Arg 构造成新的参数类型，结合 ReturnType 构造成新的函数类型返回。
+We construct a new parameter type by appending `Arg` to the `Args` array, and combine it with `ReturnType` to construct and return a new function type.
 
-这样就完成了函数类型的修改：
+This completes the modification of a function type:
 
-最后，我们再来看下索引类型的重新构造
+Finally, let's look at reconstruction for index types.
 
-## 索引类型的重新构造
+## Reconstructing Index Types
 
-索引类型是聚合多个元素的类型，class、对象等都是索引类型，比如这就是一个索引类型：
+An index type is a type that aggregates multiple elements — classes, objects, etc. are all index types. For example, this is an index type:
 
 ```ts
 type obj = {
@@ -243,7 +243,7 @@ type obj = {
 };
 ```
 
-索引类型可以添加修饰符 readonly（只读）、?（可选）:
+Index types can have modifiers added, such as `readonly` (read-only) or `?` (optional):
 
 ```ts
 type obj = {
@@ -253,7 +253,7 @@ type obj = {
 };
 ```
 
-对它的修改和构造新类型涉及到了映射类型的语法：
+Modifying it and constructing a new type involves mapped type syntax:
 
 ```ts
 type Mapping<Obj extends object> = {
@@ -263,7 +263,7 @@ type Mapping<Obj extends object> = {
 
 ### Mapping
 
-映射的过程中可以对 value 做下修改，比如：
+During mapping, we can also modify the value, for example:
 
 ```ts
 type Mapping<Obj extends object> = {
@@ -271,17 +271,17 @@ type Mapping<Obj extends object> = {
 };
 ```
 
-类型参数 Obj 是待处理的索引类型，通过 extends 约束为 object。
+The type parameter `Obj` is the index type to process, constrained to `object` via `extends`.
 
-用 keyof 取出 Obj 的索引，作为新的索引类型的索引，也就是 Key in keyof Obj。
+We use `keyof` to extract the keys of `Obj` as the keys of the new index type, i.e., `Key in keyof Obj`.
 
-值的类型可以做变换，这里我们用之前索引类型的值 Obj[Key] 构造成了三个元素的元组类型 [Obj[Key], Obj[Key], Obj[Key]]：
+The type of the value can be transformed — here we take the original value `Obj[Key]` and construct a three-element tuple type from it: `[Obj[Key], Obj[Key], Obj[Key]]`:
 
 ### UppercaseKey
 
-除了可以对 Value 做修改，也可以对 Key 做修改，使用 as，这叫做重映射：
+Besides modifying the value, we can also modify the key using `as` — this is called remapping.
 
-比如把索引类型的 Key 变为大写。
+For example, converting the keys of an index type to uppercase:
 
 ```ts
 type UppercaseKey<Obj extends object> = {
@@ -289,27 +289,27 @@ type UppercaseKey<Obj extends object> = {
 };
 ```
 
-类型参数 Obj 是待处理的索引类型，通过 extends 约束为 object。
+The type parameter `Obj` is the index type to process, constrained to `object` via `extends`.
 
-新的索引类型的索引为 Obj 中的索引，也就是 Key in keyof Obj，但要做一些变换，也就是 as 之后的。
+The keys of the new index type start out as the keys of `Obj`, i.e., `Key in keyof Obj`, but undergo a transformation — the part after `as`.
 
-通过 Uppercase 把索引 Key 转为大写，因为索引可能为 string、number、symbol 类型，而这里只能接受 string 类型，所以要 & string，也就是取索引中 string 的部分。
+We use `Uppercase` to convert the key `Key` to uppercase. Since a key can be of type `string`, `number`, or `symbol`, but `Uppercase` only accepts `string`, we intersect with `& string` to take only the `string` portion of the key.
 
-value 保持不变，也就是之前的索引 Key 对应的值的类型 Obj[Key]。
+The value stays unchanged — it remains the type of the value corresponding to the original key, `Obj[Key]`.
 
-这样构造出的新的索引类型，就把原来索引类型的索引转为了大写：
+The resulting index type converts the original index type's keys to uppercase:
 
 ### Record
 
-TypeScript 提供了内置的高级类型 Record 来创建索引类型：
+TypeScript provides the built-in utility type `Record` for creating index types:
 
 ```ts
 type Record<K extends string | number | symbol, T> = { [P in K]: T };
 ```
 
-指定索引和值的类型分别为 K 和 T，就可以创建一个对应的索引类型。
+By specifying the key and value types as `K` and `T`, you can create a corresponding index type.
 
-上面的索引类型的约束我们用的 object，其实更语义化一点我推荐用 Record<string, any>：
+Above, we constrained the index type using `object`; a more semantically appropriate choice is `Record<string, any>`:
 
 ```ts
 type UppercaseKey<Obj extends Record<string, any>> = {
@@ -317,13 +317,13 @@ type UppercaseKey<Obj extends Record<string, any>> = {
 };
 ```
 
-也就是约束类型参数 Obj 为 key 为 string，值为任意类型的索引类型。
+This constrains the type parameter `Obj` to be an index type whose keys are `string` and whose values are of any type.
 
 ### ToReadonly
 
-索引类型的索引可以添加 readonly 的修饰符，代表只读。
+An index type's keys can have the `readonly` modifier added, meaning read-only.
 
-那我们就可以实现给索引类型添加 readonly 修饰的高级类型：
+So we can implement a utility type that adds `readonly` to an index type:
 
 ```ts
 type ToReadonly<T> = {
@@ -331,11 +331,11 @@ type ToReadonly<T> = {
 };
 ```
 
-通过映射类型构造了新的索引类型，给索引加上了 readonly 的修饰，其余的保持不变，索引依然为原来的索引 Key in keyof T，值依然为原来的值 T[Key]。
+Using a mapped type, we construct a new index type where the keys are marked `readonly`, while everything else stays the same — the keys remain the original keys, `Key in keyof T`, and the values remain the original values, `T[Key]`.
 
 ### ToPartial
 
-同理，索引类型还可以添加可选修饰符：
+Similarly, an index type's keys can also have the optional modifier added:
 
 ```ts
 type ToPartial<T> = {
@@ -343,11 +343,11 @@ type ToPartial<T> = {
 };
 ```
 
-给索引类型 T 的索引添加了 ? 可选修饰符，其余保持不变。
+This adds the `?` optional modifier to the keys of index type `T`, while everything else stays the same.
 
 ### ToMutable
 
-可以添加 readonly 修饰，当然也可以去掉：
+Just as we can add the `readonly` modifier, we can also remove it:
 
 ```ts
 type ToMutable<T> = {
@@ -355,11 +355,11 @@ type ToMutable<T> = {
 };
 ```
 
-给索引类型 T 的每个索引去掉 readonly 的修饰，其余保持不变。
+This removes the `readonly` modifier from every key of index type `T`, while everything else stays the same.
 
 ### ToRequired
 
-同理，也可以去掉可选修饰符：
+Similarly, we can also remove the optional modifier:
 
 ```ts
 type ToRequired<T> = {
@@ -367,11 +367,11 @@ type ToRequired<T> = {
 };
 ```
 
-给索引类型 T 的索引去掉 ? 的修饰，其余保持不变。
+This removes the `?` modifier from the keys of index type `T`, while everything else stays the same.
 
 ### FilterByValueType
 
-可以在构造新索引类型的时候根据值的类型做下过滤：
+We can also filter based on the value's type while constructing a new index type:
 
 ```ts
 type FilterByValueType<Obj extends Record<string, any>, ValueType> = {
@@ -379,14 +379,14 @@ type FilterByValueType<Obj extends Record<string, any>, ValueType> = {
 };
 ```
 
-类型参数 Obj 为要处理的索引类型，通过 extends 约束为索引为 string，值为任意类型的索引类型 Record<string, any>。
+The type parameter `Obj` is the index type to process, constrained via `extends` to `Record<string, any>` — an index type whose keys are `string` and whose values are of any type.
 
-类型参数 ValueType 为要过滤出的值的类型。
+The type parameter `ValueType` is the value type to filter for.
 
-构造新的索引类型，索引为 Obj 的索引，也就是 Key in keyof Obj，但要做一些变换，也就是 as 之后的部分。
+We construct a new index type whose keys start out as the keys of `Obj`, i.e., `Key in keyof Obj`, but undergo a transformation — the part after `as`.
 
-如果原来索引的值 Obj[Key] 是 ValueType 类型，索引依然为之前的索引 Key，否则索引设置为 never，never 的索引会在生成新的索引类型时被去掉。
+If the original key's value `Obj[Key]` is of type `ValueType`, the key remains the original key `Key`; otherwise the key is set to `never`. Keys of type `never` are dropped when the new index type is generated.
 
-值保持不变，依然为原来索引的值，也就是 Obj[Key]。
+The value stays unchanged — it remains the value of the original key, `Obj[Key]`.
 
-这样就达到了过滤索引类型的索引，产生新的索引类型的目的：
+This achieves the goal of filtering an index type's keys to produce a new index type:

@@ -58,7 +58,7 @@ export const UTILS_PATH = `${HOME}src/ranuts/utils/`;
 
 export const RANUI_PATH = `${HOME}src/ranui/`;
 
-export const ARTICLE_PATH = `${HOME}src/article/designMode.html`;
+export const ARTICLE_PATH = `${HOME}src/article/design_mode`;
 
 export const KEY_WORDS = 'ran,component,components,ui,design,ranui,web-components,javascript,typescript,js';
 

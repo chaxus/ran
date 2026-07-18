@@ -56,7 +56,7 @@ The three buttons are icon-only, so each carries an `aria-label`. Override them 
 | `label-dark`   | `'Dark theme'`   | `aria-label` of the dark button.   |
 
 ```html
-<r-theme-switch label="主题" label-system="跟随系统" label-light="浅色" label-dark="深色"></r-theme-switch>
+<r-theme-switch label="Theme" label-system="System theme" label-light="Light theme" label-dark="Dark theme"></r-theme-switch>
 ```
 
 ## Events

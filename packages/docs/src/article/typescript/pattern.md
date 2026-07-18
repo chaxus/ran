@@ -1,62 +1,62 @@
-# 模式匹配提取
+# Pattern Matching and Extraction
 
-字符串可以和正则做模式匹配，找到匹配的部分，提取子组，之后可以用 1,2 等引用匹配的子组。
+Strings can be pattern-matched against regular expressions to find matching parts and extract subgroups, which can then be referenced later using `$1`, `$2`, and so on.
 
 ```ts
 'abc'.replace(/a(b)c/, '$1,$1,$1');
 // 'b,b,b'
 ```
 
-Typescript 的类型也同样可以做模式匹配。
+TypeScript types can do pattern matching in the same way.
 
-比如这样一个 Promise 类型：
+For example, take a `Promise` type like this:
 
 ```ts
 type p = Promise<'value'>;
 ```
 
-我们想提取 value 的类型，可以这样做：
+If we want to extract the type of `value`, we can do this:
 
 ```ts
 type GetValueType<P> = P extends Promise<infer Value> ? Value : never;
 ```
 
-通过 extends 对传入的类型参数 P 做模式匹配，其中值的类型是需要提取的，通过 infer 声明一个局部变量 Value 来保存，如果匹配，就返回匹配到的 Value，否则就返回 never 代表没匹配到。
+We use `extends` to pattern-match against the incoming type parameter `P`. The value type we need to extract is captured into a local variable `Value` declared with `infer`. If the match succeeds, we return the matched `Value`; otherwise we return `never` to indicate no match.
 
 ```ts
 // type GetValueResult = 'value'
 type GetValueResult = GetValueType<Promise<'value'>>;
 ```
 
-这就是 Typescript 类型的模式匹配：
+This is pattern matching for TypeScript types:
 
-Typescript 类型的模式匹配是通过 extends 对类型参数做匹配，结果保存到通过 infer 声明的局部类型变量里，如果匹配就能从该局部变量里拿到提取出的类型。
+TypeScript's type-level pattern matching works by using `extends` to match a type parameter, storing the result in a local type variable declared with `infer`. If the match succeeds, the extracted type can be retrieved from that local variable.
 
-这个模式匹配的套路有多有用呢？我们来看下在数组、字符串、函数、构造器等类型里的应用。
+How useful is this pattern-matching approach? Let's look at how it applies to array, string, function, and constructor types.
 
-## 1.数组类型
+## 1. Array Types
 
-### 提取第一个元素
+### Extracting the first element
 
-数组类型想提取第一个元素的类型怎么做呢？
+How do we extract the type of the first element from an array type?
 
 ```ts
 type arr = [1, 2, 3];
 ```
 
-用它来匹配一个模式类型，提取第一个元素的类型到通过 infer 声明的局部变量里返回。
+We match it against a pattern type, extracting the first element's type into a local variable declared with `infer` and returning it.
 
 ```ts
 type GetFirst<Arr extends unknown[]> = Arr extends [infer First, ...unknown[]] ? First : never;
 ```
 
-类型参数 Arr 通过 extends 约束为只能是数组类型，数组元素是 unkown 也就是可以是任何值。
+The type parameter `Arr` is constrained via `extends` to be an array type only, and its elements are `unknown`, meaning they can be any value.
 
-> any 和 unknown 的区别：any 和 unknown 都代表任意类型，但是 unknown 只能接收任意类型的值，而 any 除了可以接收任意类型的值，也可以赋值给任意类型（除了 never）。类型体操中经常用 unknown 接受和匹配任何类型，而很少把任何类型赋值给某个类型变量。
+> The difference between `any` and `unknown`: both `any` and `unknown` represent arbitrary types, but `unknown` can only accept a value of any type, whereas `any` can not only accept a value of any type but also be assigned to any type (except `never`). In type gymnastics, `unknown` is often used to accept and match any type, while it's rare to assign an arbitrary type to some type variable.
 
-对 Arr 做模式匹配，把我们要提取的第一个元素的类型放到通过 infer 声明的 First 局部变量里，后面的元素可以是任何类型，用 unknown 接收，然后把局部变量 First 返回。
+We pattern-match against `Arr`, placing the type of the first element we want to extract into the local variable `First` declared with `infer`. The remaining elements can be of any type, captured with `unknown`, and then we return the local variable `First`.
 
-当类型参数 Arr 为 [1,2,3] 时：
+When the type parameter `Arr` is `[1, 2, 3]`:
 
 ```ts
 type GetFirst<Arr extends unknown[]> = Arr extends [infer First, ...unknown[]] ? First : never;
@@ -64,22 +64,22 @@ type GetFirstValue = GetFirst<[1, 2, 3]>;
 // type GetFirstValue = 1
 ```
 
-当类型参数 Arr 为 [] 时：
+When the type parameter `Arr` is `[]`:
 
 ```ts
 type GetFirstResult = GetFirst<[]>;
 // type GetFirstResult = never
 ```
 
-### 提取最后一个元素
+### Extracting the last element
 
-可以提取第一个元素，当然也可以提取最后一个元素，修改下模式类型就行：
+Just as we can extract the first element, we can also extract the last one — just tweak the pattern type:
 
 ```ts
 type GetLastValue<Arr extends unknown[]> = Arr extends [...unknown, infer Last] ? Last : never;
 ```
 
-当类型参数 Arr 为 [1,2,3]时：
+When the type parameter `Arr` is `[1, 2, 3]`:
 
 ```ts
 type GetLastResult = GetFirst<[1, 2, 3]>;
@@ -88,22 +88,22 @@ type GetLastResult = GetFirst<[1, 2, 3]>;
 
 ### PopArr
 
-我们分别取了首尾元素，当然也可以取剩余的数组，比如取去掉了最后一个元素的数组：
+We've extracted the first and last elements separately; naturally we can also extract the remaining array, such as the array with its last element removed:
 
 ```ts
 type PopArr<Arr extends unknown[]> = Arr extends [...infer Rest, unknown] ? Rest : never;
 ```
 
-如果是空数组，就直接返回，否则匹配剩余的元素，放到 infer 声明的局部变量 Rest 里，返回 Rest。
+If it's an empty array, it's returned as-is; otherwise the remaining elements are matched and placed into the local variable `Rest` declared with `infer`, which is then returned.
 
-当类型参数 Arr 为 [1,2,3] 时：
+When the type parameter `Arr` is `[1, 2, 3]`:
 
 ```ts
 type PopResult = PopArr<[1, 2, 3]>;
 // type PopResult = [1,2]
 ```
 
-当类型参数 Arr 为 [] 时：
+When the type parameter `Arr` is `[]`:
 
 ```ts
 type PopResult = PopArr<[]>;
@@ -112,43 +112,43 @@ type PopResult = PopArr<[]>;
 
 ### ShiftArr
 
-同理可得 ShiftArr 的实现：
+The implementation of `ShiftArr` follows the same logic:
 
 ```ts
 type ShiftArr<Arr extends unknown[]> = Arr extends [unknown, ...infer Rest] ? Rest : never;
 ```
 
-当类型参数 Arr 为 [1,2,3]时：
+When the type parameter `Arr` is `[1, 2, 3]`:
 
 ```ts
 type ShiftResult = ShiftArr<[1, 2, 3]>;
 // type ShiftResult = [2,3]
 ```
 
-## 2.字符串类型
+## 2. String Types
 
-字符串类型也同样可以做模式匹配，匹配一个模式字符串，把需要提取的部分放到 infer 声明的局部变量里。
+String types can likewise be pattern-matched: we match against a pattern string and place the part we need to extract into a local variable declared with `infer`.
 
 ### StartsWith
 
-判断字符串是否以某个前缀开头，也是通过模式匹配：
+Determining whether a string starts with a given prefix is also done via pattern matching:
 
 ```ts
 type StartWith<str extends string, Prefix extends string> = Str extends `${Prefix}${string}` ? true : false;
 ```
 
-需要声明字符串 Str、匹配的前缀 Prefix 两个类型参数，它们都是 string。
+We need to declare two type parameters — the string `Str` and the prefix to match `Prefix` — both of which are `string`.
 
-用 Str 去匹配一个模式类型，模式类型的前缀是 Prefix，后面是任意的 string，如果匹配返回 true，否则返回 false。
+We match `Str` against a pattern type whose prefix is `Prefix` followed by any `string`. If it matches, return `true`; otherwise return `false`.
 
-当匹配时：
+When it matches:
 
 ```ts
 type StartWithResult = StartWidth<'prefix string', 'prefix'>;
 // type StartWithResult = true
 ```
 
-不匹配时：
+When it doesn't match:
 
 ```ts
 type StartWithResult = StartWidth<'prefix string', 'string'>;
@@ -157,9 +157,9 @@ type StartWithResult = StartWidth<'prefix string', 'string'>;
 
 ### Replace
 
-字符串可以匹配一个模式类型，提取想要的部分，自然也可以用这些再构成一个新的类型。
+A string can be matched against a pattern type to extract the parts we want, which can naturally then be used to construct a new type.
 
-比如实现字符串替换：
+For example, implementing string replacement:
 
 ```ts
 type ReplaceStr<
@@ -169,20 +169,20 @@ type ReplaceStr<
 > = Str extends `${infer Prefix}${From}${infer Suffix}` ? `${Prefix}${To}${Suffix}` : Str;
 ```
 
-声明要替换的字符串 Str、待替换的字符串 From、替换成的字符串 3 个类型参数，通过 extends 约束为都是 string 类型。
+We declare three type parameters: `Str`, the string to perform the replacement on; `From`, the substring to be replaced; and `To`, the string to replace it with — all constrained to `string` via `extends`.
 
-用 Str 去匹配模式串，模式串由 From 和之前之后的字符串构成，把之前之后的字符串放到通过 infer 声明的局部变量 Prefix、Suffix 里。
+We match `Str` against a pattern string made up of `From` along with whatever comes before and after it, placing the preceding and following strings into the local variables `Prefix` and `Suffix` declared with `infer`.
 
-用 Prefix、Suffix 加上替换到的字符串 To 构造成新的字符串类型返回。
+We then construct a new string type using `Prefix`, `Suffix`, and the replacement string `To`, and return it.
 
-当匹配时：
+When it matches:
 
 ```ts
 type ReplaceResult = ReplaceStr<'str replace to result', 'result', 'aaaa'>;
 // type ReplaceResult =  'str replace to aaaa'
 ```
 
-不匹配时：
+When it doesn't match:
 
 ```ts
 type ReplaceResult = ReplaceStr<'str replace to result', '???', 'aaaa'>;
@@ -191,56 +191,56 @@ type ReplaceResult = ReplaceStr<'str replace to result', '???', 'aaaa'>;
 
 ### Trim
 
-能够匹配和替换字符串，那也就能实现去掉空白字符的 Trim：
+Since we can match and replace strings, we can also implement `Trim`, which strips whitespace characters.
 
-不过因为我们不知道有多少个空白字符，所以只能一个个匹配和去掉，需要递归。
+However, since we don't know how many whitespace characters there are, we can only match and remove them one at a time, which requires recursion.
 
-先实现 TrimRight:
+Let's implement `TrimRight` first:
 
 ```ts
-type TrimRight<Str extends string> = Str extends `${infer Rest}${' ' | '\n' ｜ '\t'}` ? TrimRight<Rest> : Str
+type TrimRight<Str extends string> = Str extends `${infer Rest}${' ' | '\n' | '\t'}` ? TrimRight<Rest> : Str
 ```
 
-类型参数 Str 是要 Trim 的字符串。
+The type parameter `Str` is the string to trim.
 
-如果 Str 匹配字符串 + 空白字符 (空格、换行、制表符)，那就把字符串放到 infer 声明的局部变量 Rest 里。
+If `Str` matches a string followed by a whitespace character (space, newline, or tab), the preceding string is placed into the local variable `Rest` declared with `infer`.
 
-把 Rest 作为类型参数递归 TrimRight，直到不匹配，这时的类型参数 Str 就是处理结果。
+We then recurse `TrimRight` with `Rest` as the type parameter until there's no match, at which point the current `Str` type parameter is the result.
 
 ```ts
 type TrimRightResult = TrimRight<'value          '>;
 // type TrimRightResult = 'value'
 ```
 
-同理可得 TrimLeft：
+`TrimLeft` follows the same logic:
 
 ```ts
 type TrimLeft<Str extends string> = Str extends `${' '|'\n'|'\t'}`${infer Rest} ? TrimLeft<Rest> : Str
 ```
 
-TrimRight 和 TrimLeft 结合就是 Trim：
+Combining `TrimRight` and `TrimLeft` gives us `Trim`:
 
 ```ts
 type Trim<Str extends string> = TrimRight<TrimLeft<Str>>;
 ```
 
-## 3.函数
+## 3. Functions
 
-函数同样也可以做类型匹配，比如提取参数、返回值的类型。
+Functions can also be type-matched, for example to extract parameter and return-value types.
 
 ### GetParameters
 
-函数类型可以通过模式匹配来提取参数的类型：
+We can use pattern matching to extract a function type's parameter types:
 
 ```ts
 type GetParameters<Func extends Function> = Func extends (...args: infer Args) => unknown ? Args : never;
 ```
 
-类型参数 Func 是要匹配的函数类型，通过 extends 约束为 Function。
+The type parameter `Func` is the function type to match, constrained to `Function` via `extends`.
 
-Func 和模式类型做匹配，参数类型放到用 infer 声明的局部变量 Args 里，返回值可以是任何类型，用 unknown。
+We match `Func` against a pattern type, placing the parameter types into the local variable `Args` declared with `infer`. The return value can be of any type, so we use `unknown`.
 
-返回提取到的参数类型 Args。
+We return the extracted parameter type `Args`.
 
 ```ts
 type GetParametersResult = GetParameters<(name: string, age: number) => string>;
@@ -249,15 +249,15 @@ type GetParametersResult = GetParameters<(name: string, age: number) => string>;
 
 ### GetReturnType
 
-能提取参数类型，同样也可以提取返回值类型：
+Just as we can extract parameter types, we can also extract the return type:
 
 ```ts
 type GetReturnType<Func extends Function> = Func extends (...args: unknown[]) => infer ReturnType ? ReturnType : never;
 ```
 
-Func 和模式类型做匹配，提取返回值到通过 infer 声明的局部变量 ReturnType 里返回。
+We match `Func` against a pattern type, extracting the return value into the local variable `ReturnType` declared with `infer` and returning it.
 
-参数类型可以是任意类型，也就是 any[]（注意，这里不能用 unknown，这里的解释涉及到参数的逆变性质，具体原因逆变那一节会解释）。
+The parameter types can be of any type, i.e. `any[]` (note: `unknown` can't be used here — the reason involves the contravariant nature of parameters, which will be explained in detail in the section on contravariance).
 
 ```ts
 type GetReturnTypeResult = GetReturnType<() => 'return value'>;
@@ -266,7 +266,7 @@ type GetReturnTypeResult = GetReturnType<() => 'return value'>;
 
 ### GetThisParameterType
 
-方法里可以调用 this，比如这样：
+Methods can reference `this`, for example like this:
 
 ```ts
 class Dong {
@@ -285,9 +285,9 @@ const dong = new Dong();
 dong.hello();
 ```
 
-用对象。方法名的方式调用的时候，this 就指向那个对象。
+When calling via `object.methodName`, `this` refers to that object.
 
-但是方法也可以用 call 或者 apply 调用：
+But methods can also be invoked via `call` or `apply`:
 
 ```ts
 class Dong {
@@ -306,11 +306,11 @@ const dong = new Dong();
 dong.hello().call({ x: 1 });
 ```
 
-call 调用的时候，this 就变了，但这里却没有被检查出来 this 指向的错误。
+When called via `call`, `this` changes, but here the mismatch in what `this` points to is not caught by the checker.
 
-如何让编译器能够检查出 this 指向的错误呢？
+How can we get the compiler to catch errors involving what `this` refers to?
 
-可以在方法声明时指定 this 的类型：
+We can specify the type of `this` when declaring the method:
 
 ```ts
 class Dong {
@@ -326,35 +326,35 @@ class Dong {
 }
 ```
 
-这样，当 call/apply 调用的时候，就能检查出 this 指向的对象是否是对的：
+This way, when called via `call`/`apply`, the compiler can check whether the object `this` refers to is correct:
 
-如果没有报错，说明没开启 `strictBindCallApply` 的编译选项，这个是控制是否按照原函数的类型来检查 bind、call、apply
+If no error is raised, it means the `strictBindCallApply` compiler option isn't enabled — this option controls whether `bind`, `call`, and `apply` are checked against the original function's type.
 
-这里的 this 类型同样也可以通过模式匹配提取出来：
+This `this` type can likewise be extracted via pattern matching:
 
 ```ts
 type GetThisParameterType<T> = T extends (this: infer This, ...args: unknown[]) => unknown ? This : unknown;
 ```
 
-类型参数 T 是待处理的类型。
+The type parameter `T` is the type to process.
 
-用 T 匹配一个模式类型，提取 this 的类型到 infer 声明的局部变量 ThisType 中，其余的参数是任意类型，也就是 any，返回值也是任意类型。
+We match `T` against a pattern type, extracting the type of `this` into the local variable `ThisType` declared with `infer`. The remaining parameters can be of any type, i.e. `any`, and the return value can also be any type.
 
-返回提取到的 ThisType。
+We return the extracted `ThisType`.
 
-这样就能提取出 this 的类型：
+This allows us to extract the type of `this`:
 
-## 4.构造器类型
+## 4. Constructor Types
 
-构造器和函数的区别是，构造器是用于创建对象的，所以可以被 new。
+The difference between a constructor and a function is that a constructor is used to create objects, so it can be invoked with `new`.
 
-同样，我们也可以通过模式匹配提取构造器的参数和返回值的类型：
+Likewise, we can use pattern matching to extract a constructor's parameter and return types:
 
 ### GetInstanceType
 
-构造器类型可以用 interface 声明，使用 new(): xx 的语法。
+Constructor types can be declared with an `interface`, using the `new (): xx` syntax.
 
-比如：
+For example:
 
 ```ts
 interface Person {
@@ -366,7 +366,7 @@ interface PersonConstructor {
 }
 ```
 
-这里的 PersonConstructor 返回的是 Person 类型的实例对象，这个也可以通过模式匹配取出来。
+Here, `PersonConstructor` returns an instance object of type `Person`, which can also be extracted via pattern matching.
 
 ```ts
 type GetInstanceType<ConstructorType extends new (...args: any) => any> = ConstructorType extends new (
@@ -376,11 +376,11 @@ type GetInstanceType<ConstructorType extends new (...args: any) => any> = Constr
   : any;
 ```
 
-类型参数 ConstructorType 是待处理的类型，通过 extends 约束为构造器类型。
+The type parameter `ConstructorType` is the type to process, constrained to a constructor type via `extends`.
 
-用 ConstructorType 匹配一个模式类型，提取返回的实例类型到 infer 声明的局部变量 InstanceType 里，返回 InstanceType。
+We match `ConstructorType` against a pattern type, extracting the returned instance type into the local variable `InstanceType` declared with `infer`, and return `InstanceType`.
 
-这样就能取出构造器对应的实例类型：
+This lets us extract the instance type corresponding to a constructor:
 
 ```ts
 interface PersonConstructor {
@@ -393,7 +393,7 @@ type GetInstanceTypeResult = GetInstanceType<PersonConstructor>;
 
 ### GetConstructorParameters
 
-GetInstanceType 是提取构造器返回值类型，那同样也可以提取构造器的参数类型：
+`GetInstanceType` extracts a constructor's return type; similarly, we can also extract a constructor's parameter types:
 
 ```ts
 type GetConstructorParameters<ConstructorType extends new (...args: any) => any> = ConstructorType extends new (
@@ -403,11 +403,11 @@ type GetConstructorParameters<ConstructorType extends new (...args: any) => any>
   : never;
 ```
 
-类型参数 ConstructorType 为待处理的类型，通过 extends 约束为构造器类型。
+The type parameter `ConstructorType` is the type to process, constrained to a constructor type via `extends`.
 
-用 ConstructorType 匹配一个模式类型，提取参数的部分到 infer 声明的局部变量 ParametersType 里，返回 ParametersType。
+We match `ConstructorType` against a pattern type, extracting the parameters into the local variable `ParametersType` declared with `infer`, and return `ParametersType`.
 
-这样就能提取出构造器对应的参数类型：
+This lets us extract the parameter types corresponding to a constructor:
 
 ```ts
 interface PersonConstructor {
@@ -418,9 +418,9 @@ type GetConstructorParametersResult = GetConstructorParameters<PersonConstructor
 // type GetConstructorParametersResult = [name:string]
 ```
 
-### 索引类型
+### Index Types
 
-索引类型也同样可以用模式匹配提取某个索引的值的类型，这个用的也挺多的，比如 React 的 index.d.ts 里的 PropsWithRef 的高级类型，就是通过模式匹配提取了 ref 的值的类型：
+Index types can also have the type of a given index's value extracted via pattern matching — this is used quite often. For example, the `PropsWithRef` advanced type in React's `index.d.ts` extracts the type of the `ref` value via pattern matching:
 
 ```ts
 type PropsWithRef<P> = 'ref' extends keyof P
@@ -432,7 +432,7 @@ type PropsWithRef<P> = 'ref' extends keyof P
   : P;
 ```
 
-我们简化一下那个高级类型，提取 Props 里 ref 的类型：
+Let's simplify that advanced type to extract the type of `ref` on `Props`:
 
 ```ts
 type GetPropsRef<Props> = 'ref' extends keyof Props
@@ -442,22 +442,22 @@ type GetPropsRef<Props> = 'ref' extends keyof Props
   : never;
 ```
 
-类型参数 Props 为待处理的类型。
+The type parameter `Props` is the type to process.
 
-通过 keyof Props 取出 Props 的所有索引构成的联合类型，判断下 ref 是否在其中，也就是 'ref' extends keyof Props。
+We use `keyof Props` to get the union type made up of all of `Props`'s keys, and check whether `ref` is among them — i.e. `'ref' extends keyof Props`.
 
-为什么要做这个判断，上面注释里写了：
+Why do we need this check? As noted above:
 
-在 ts3.0 里面如果没有对应的索引，Obj[Key] 返回的是 {} 而不是 never，所以这样做下兼容处理。
+In TS 3.0, if there's no corresponding index, `Obj[Key]` returns `{}` rather than `never`, so this check is there for compatibility.
 
-如果有 ref 这个索引的话，就通过 infer 提取 Value 的类型返回，否则返回 never。
+If the `ref` key exists, we extract the type of `Value` via `infer` and return it; otherwise we return `never`.
 
 ```ts
 type GetPropsRefResult = GetPropsRef<{ ref: 1; name: 'str' }>;
 // type GetPropsRefResult = 1
 ```
 
-当 ref 为 undefined 时：
+When `ref` is `undefined`:
 
 ```ts
 type GetPropsRefResult = GetPropsRef<{ ref: undefined; name: 'str' }>;
