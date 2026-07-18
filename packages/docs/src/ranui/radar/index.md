@@ -54,7 +54,7 @@ Each entry of the `abilitys` array accepts the following keys:
 | `backgroundColor` | `string` | No       | Background color of the label pill (default transparent)        |
 | `fontSize`        | `number` | No       | Font size of the label (defaults to a size scaled to the chart) |
 | `fontColor`       | `string` | No       | Label text color (defaults to `--ran-color-text`)               |
-| `fontFamily`      | `string` | No       | Label font family (default `黑体`)                              |
+| `fontFamily`      | `string` | No       | Label font family (default `SimHei`)                            |
 
 > Note: `colorPolygon`, `colorLine`, `fillColor`, and `strokeColor` are read case-insensitively, so they render correctly whether the attribute is present up front or changed after mount — updating any of them re-renders the chart. For theme-aware styling, prefer the CSS variables below.
 

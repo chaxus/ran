@@ -1,28 +1,28 @@
-# 递归复用
+# Recursive Reuse
 
-递归是把问题分解为一系列相似的小问题，通过函数不断调用自身来解决这一个个小问题，直到满足结束条件，就完成了问题的求解。
+Recursion breaks a problem down into a series of similar smaller problems, solving them one by one through a function repeatedly calling itself until a termination condition is met, at which point the problem is solved.
 
-TypeScript 的高级类型支持类型参数，可以做各种类型运算逻辑，返回新的类型，和函数调用是对应的，自然也支持递归。
+TypeScript's advanced types support type parameters and can perform all kinds of type-level logic to return new types—this corresponds to function calls, so naturally it also supports recursion.
 
-TypeScript 类型系统不支持循环，但支持递归。当处理数量（个数、长度、层数）不固定的类型的时候，可以只处理一个类型，然后递归的调用自身处理下一个类型，直到结束条件也就是所有的类型都处理完了，就完成了不确定数量的类型编程，达到循环的效果。
+The TypeScript type system doesn't support loops, but it does support recursion. When dealing with a type whose quantity (count, length, depth) is not fixed, you can process just one type at a time, then recursively call yourself to process the next type, until the termination condition—i.e., all types have been processed—is reached. This completes type-level programming over an indeterminate quantity, achieving the effect of a loop.
 
-既然提到了数组、字符串、对象等类型，那么我们就来看一下这些类型的递归案例吧。
+Since we've mentioned arrays, strings, objects, and other types, let's look at recursion examples for each of these types.
 
-## Promise 的递归复用
+## Recursive Reuse with Promise
 
 ### DeepPromiseValueType
 
-先用 Promise 热热身，实现一个提取不确定层数的 Promise 中的 value 类型的高级类型。
+Let's warm up with Promise first, by implementing an advanced type that extracts the value type from a Promise nested to an indeterminate depth.
 
 ```ts
 type ttt = Promise<Promise<Promise<Record<string, any>>>>;
 ```
 
-这里是 3 层 Promise，value 类型是索引类型。
+Here we have 3 levels of Promise, and the value type is an indexed type.
 
-数量不确定，一涉及到这个就要想到用递归来做，每次只处理一层的提取，然后剩下的到下次递归做，直到结束条件。
+Whenever the quantity is indeterminate, you should think of recursion—process the extraction for just one level each time, and leave the rest to the next recursive call, until the termination condition is met.
 
-所以高级类型是这样的：
+So the advanced type looks like this:
 
 ```ts
 type DeepPromiseValueType<P extends Promise<unknown>> =
@@ -33,43 +33,43 @@ type DeepPromiseValueType<P extends Promise<unknown>> =
     : never;
 ```
 
-类型参数 P 是待处理的 Promise，通过 extends 约束为 Promise 类型，value 类型不确定，设为 unknown。
+The type parameter `P` is the Promise to process, constrained to a Promise type via `extends`. Since the value type is indeterminate, it's set to `unknown`.
 
-每次只处理一个类型的提取，也就是通过模式匹配提取出 value 的类型到 infer 声明的局部变量 ValueType 中。
+Each time, we only handle the extraction of one type—that is, we use pattern matching to extract the value type into the local variable `ValueType` declared via `infer`.
 
-然后判断如果 ValueType 依然是 Promise 类型，就递归处理。
+Then we check whether `ValueType` is still a Promise type, and if so, we process it recursively.
 
-结束条件就是 ValueType 不为 Promise 类型，那就处理完了所有的层数，返回这时的 ValueType。
+The termination condition is when `ValueType` is no longer a Promise type—at that point all levels have been processed, and we return the current `ValueType`.
 
-这样，我们就提取到了最里层的 Promise 的 value 类型，也就是索引类型：
+This way, we extract the value type of the innermost Promise, i.e., the indexed type:
 
-其实这个类型的实现可以进一步的简化：
+Actually, this type's implementation can be simplified further:
 
 ```ts
 type DeepPromiseValueType2<T> = T extends Promise<infer ValueType> ? DeepPromiseValueType2<ValueType> : T;
 ```
 
-不再约束类型参数必须是 Promise，这样就可以少一层判断。
+We no longer constrain the type parameter to be a Promise, which lets us drop one level of checking.
 
-接下来再看下数组类型的递归复用：
+Next, let's look at recursion over array types.
 
-## 数组类型的递归
+## Recursion over Array Types
 
 ### ReverseArr
 
-有这样一个元组类型：
+Consider the following tuple type:
 
 ```ts
 type arr = [1, 2, 3, 4, 5];
 ```
 
-我们把它反过来，也就是变成：
+We want to reverse it, i.e., turn it into:
 
 ```ts
 type arr = [5, 4, 3, 2, 1];
 ```
 
-这个学完了提取和构造很容易写出来：
+Having learned extraction and construction, this is easy to write:
 
 ```ts
 type ReverseArr<Arr extends unknown[]> = Arr extends [infer One, infer Two, infer Three, infer Four, infer Five]
@@ -77,31 +77,31 @@ type ReverseArr<Arr extends unknown[]> = Arr extends [infer One, infer Two, infe
   : never;
 ```
 
-但如果数组长度不确定呢？
+But what if the array length is indeterminate?
 
-数量不确定，条件反射的就要想到递归。
+Whenever the quantity is indeterminate, your first instinct should be recursion.
 
-我们每次只处理一个类型，剩下的递归做，直到满足结束条件。
+We process just one type each time, and handle the rest recursively, until the termination condition is satisfied.
 
 ```ts
 type ReverseArr<Arr extends unknown[]> = Arr extends [infer First, ...infer Rest] ? [...ReverseArr<Rest>, First] : Arr;
 ```
 
-类型参数 Arr 为待处理的数组类型，元素类型不确定，也就是 unknown。
+The type parameter `Arr` is the array type to process; the element type is indeterminate, i.e., `unknown`.
 
-每次只处理一个元素的提取，放到 infer 声明的局部变量 First 里，剩下的放到 Rest 里。
+Each time, we extract just one element into the local variable `First` declared via `infer`, and put the rest into `Rest`.
 
-用 First 作为最后一个元素构造新数组，其余元素递归的取。
+We use `First` as the last element to construct the new array, and recursively take the remaining elements.
 
-结束条件就是取完所有的元素，也就是不再满足模式匹配的条件，这时候就返回 Arr。
+The termination condition is when all elements have been consumed, i.e., the pattern match no longer holds—at that point we return `Arr`.
 
 ### Includes
 
-既然递归可以做循环用，那么像查找元素这种自然也就可以实现。
+Since recursion can be used as a loop, something like element lookup can naturally be implemented too.
 
-比如查找 [1, 2, 3, 4, 5] 中是否存在 4，是就返回 true，否则返回 false。
+For example, to check whether `4` exists in `[1, 2, 3, 4, 5]`, returning `true` if so and `false` otherwise.
 
-从长度不固定的数组中查找某个元素，数量不确定，这时候就应该想到递归。
+Searching for an element in an array of indeterminate length—since the quantity is indeterminate, you should think of recursion.
 
 ```ts
 type Includes<Arr extends unknown[], FindItem> = Arr extends [infer First, ...infer Rest]
@@ -113,21 +113,21 @@ type Includes<Arr extends unknown[], FindItem> = Arr extends [infer First, ...in
 type IsEqual<A, B> = (A extends B ? true : false) & (B extends A ? true : false);
 ```
 
-类型参数 Arr 是待查找的数组类型，元素类型任意，也就是 unknown。FindItem 待查找的元素类型。
+The type parameter `Arr` is the array type to search, with an arbitrary element type, i.e., `unknown`. `FindItem` is the element type to look for.
 
-每次提取一个元素到 infer 声明的局部变量 First 中，剩余的放到局部变量 Rest。
+Each time, we extract one element into the local variable `First` declared via `infer`, and put the rest into the local variable `Rest`.
 
-判断 First 是否是要查找的元素，也就是和 FindItem 相等，是的话就返回 true，否则继续递归判断下一个元素。
+We check whether `First` is the element we're looking for, i.e., whether it equals `FindItem`. If so, we return `true`; otherwise we continue recursively checking the next element.
 
-直到结束条件也就是提取不出下一个元素，这时返回 false。
+Until the termination condition is reached—i.e., no next element can be extracted—at which point we return `false`.
 
-相等的判断就是 A 是 B 的子类型并且 B 也是 A 的子类型，。
+The equality check is: `A` is a subtype of `B` and `B` is also a subtype of `A`.
 
-这样就完成了不确定长度的数组中的元素查找，用递归实现了循环。
+This way, we've implemented element lookup in an array of indeterminate length, using recursion to achieve the effect of a loop.
 
 ### RemoveItem
 
-可以查找自然就可以删除，只需要改下返回结果，构造一个新的数组返回。
+If we can search, we can naturally remove as well—we just need to change the returned result, constructing and returning a new array.
 
 ```ts
 type RemoveItem<Arr extends unknown[], Item, Result extends unknown[] = []> = Arr extends [infer First, ...infer Rest]
@@ -139,21 +139,21 @@ type RemoveItem<Arr extends unknown[], Item, Result extends unknown[] = []> = Ar
 type IsEqual<A, B> = (A extends B ? true : false) & (B extends A ? true : false);
 ```
 
-类型参数 Arr 是待处理的数组，元素类型任意，也就是 unknown[]。类型参数 Item 为待查找的元素类型。类型参数 Result 是构造出的新数组，默认值是 []。
+The type parameter `Arr` is the array to process, with an arbitrary element type, i.e., `unknown[]`. The type parameter `Item` is the element type to look for. The type parameter `Result` is the new array being constructed, with a default value of `[]`.
 
-通过模式匹配提取数组中的一个元素的类型，如果是 Item 类型的话就删除，也就是不放入构造的新数组，直接返回之前的 Result。
+We use pattern matching to extract the type of one element from the array. If it's of type `Item`, we remove it—that is, we don't add it to the new array being constructed, and simply return the previous `Result` as is.
 
-否则放入构造的新数组，也就是再构造一个新的数组 [...Result, First]。
+Otherwise, we add it to the new array being constructed, i.e., we construct another new array `[...Result, First]`.
 
-直到模式匹配不再满足，也就是处理完了所有的元素，返回这时候的 Result。
+Until the pattern match no longer holds—i.e., all elements have been processed—we return the current `Result`.
 
-这样我们就完成了不确定元素个数的数组的某个元素的删除：
+This way, we've implemented removal of a given element from an array with an indeterminate number of elements:
 
 ### BuildArray
 
-我们学过数组类型的构造，如果构造的数组类型元素个数不确定，也需要递归。
+We've learned about constructing array types—if the number of elements in the array being constructed is indeterminate, recursion is needed as well.
 
-比如传入 5 和元素类型，构造一个长度为 5 的该元素类型构成的数组。
+For example, given `5` and an element type, construct an array of length 5 made up of that element type.
 
 ```ts
 type BuildArray<Length extends number, Ele = unknown, Arr extends unknown[] = []> = Arr['length'] extends Length
@@ -161,17 +161,17 @@ type BuildArray<Length extends number, Ele = unknown, Arr extends unknown[] = []
   : BuildArray<Length, Ele, [...Arr, Ele]>;
 ```
 
-类型参数 Length 为数组长度，约束为 number。类型参数 Ele 为元素类型，默认值为 unknown。类型参数 Arr 为构造出的数组，默认值是 []。
+The type parameter `Length` is the array length, constrained to `number`. The type parameter `Ele` is the element type, with a default value of `unknown`. The type parameter `Arr` is the array being constructed, with a default value of `[]`.
 
-每次判断下 Arr 的长度是否到了 Length，是的话就返回 Arr，否则在 Arr 上加一个元素，然后递归构造。
+Each time, we check whether the length of `Arr` has reached `Length`. If so, we return `Arr`; otherwise we add one more element to `Arr` and recursively construct further.
 
-学完了数组类型的递归，我们再来看下字符串类型。
+Having learned recursion over array types, let's move on to string types.
 
-## 字符串类型的递归
+## Recursion over String Types
 
 ### ReplaceAll
 
-学模式匹配的时候，我们实现过一个 Replace 的高级类型：
+When we learned about pattern matching, we implemented an advanced type called `Replace`:
 
 ```ts
 type ReplaceStr<
@@ -181,15 +181,15 @@ type ReplaceStr<
 > = Str extends `${infer Prefix}${From}${infer Suffix}` ? `${Prefix}${To}${Suffix}` : Str;
 ```
 
-它能把一个字符串中的某个字符替换成另一个：
+It can replace one occurrence of a character in a string with another:
 
-但是如果有多个这样的字符就处理不了了。
+But it can't handle the case where there are multiple such characters.
 
-如果不确定有多少个 From 字符，怎么处理呢？
+What if we don't know how many `From` characters there are?
 
-在类型体操里，遇到数量不确定的问题，就要条件反射的想到递归。
+In type-level programming, whenever you encounter a problem with an indeterminate quantity, your first instinct should be recursion.
 
-每次递归只处理一个类型，这部分我们已经实现了，那么加上递归的调用就可以。
+Each recursive call handles just one type—we've already implemented that part—so we just need to add the recursive call.
 
 ```ts
 type ReplaceAll<
@@ -199,23 +199,23 @@ type ReplaceAll<
 > = Str extends `${infer Left}${From}${infer Right}` ? `${Left}${To}${ReplaceAll<Right, From, To>}` : Str;
 ```
 
-类型参数 Str 是待处理的字符串类型，From 是待替换的字符，To 是替换到的字符。
+The type parameter `Str` is the string type to process, `From` is the character to be replaced, and `To` is the character to replace it with.
 
-通过模式匹配提取 From 左右的字符串到 infer 声明的局部变量 Left 和 Right 里。
+We use pattern matching to extract the strings to the left and right of `From` into the local variables `Left` and `Right` declared via `infer`.
 
-用 Left 和 To 构造新的字符串，剩余的 Right 部分继续递归的替换。
+We use `Left` and `To` to construct the new string, and continue recursively replacing in the remaining `Right` part.
 
-结束条件是不再满足模式匹配，也就是没有要替换的元素，这时就直接返回字符串 Str。
+The termination condition is when the pattern match no longer holds, i.e., there's nothing left to replace—at that point we simply return the string `Str`.
 
-这样就实现了任意数量的字符串替换：
+This way, we've implemented string replacement for an arbitrary number of occurrences:
 
 ### StringToUnion
 
-我们想把字符串字面量类型的每个字符都提取出来组成联合类型，也就是把 'dong' 转为 'd' | 'o' | 'n' | 'g'。
+We want to extract every character of a string literal type to form a union type, i.e., turn `'dong'` into `'d' | 'o' | 'n' | 'g'`.
 
-怎么做呢？
+How do we do this?
 
-很明显也是提取和构造：
+Clearly, this is also extraction and construction:
 
 ```ts
 type StringToUnion<Str extends string> = Str extends `${infer One}${infer Two}${infer Three}${infer Four}`
@@ -223,9 +223,9 @@ type StringToUnion<Str extends string> = Str extends `${infer One}${infer Two}${
   : never;
 ```
 
-但如果字符串长度不确定呢？
+But what if the string length is indeterminate?
 
-数量不确定，在类型体操中就要条件反射的想到递归。
+Whenever the quantity is indeterminate, in type-level programming your first instinct should be recursion.
 
 ```ts
 type StringToUnion<Str extends string> = Str extends `${infer First}${infer Rest}`
@@ -233,19 +233,19 @@ type StringToUnion<Str extends string> = Str extends `${infer First}${infer Rest
   : never;
 ```
 
-类型参数 Str 为待处理的字符串类型，通过 extends 约束为 string。
+The type parameter `Str` is the string type to process, constrained to `string` via `extends`.
 
-通过模式匹配提取第一个字符到 infer 声明的局部变量 First，其余的字符放到局部变量 Rest。
+We use pattern matching to extract the first character into the local variable `First` declared via `infer`, and put the rest of the characters into the local variable `Rest`.
 
-用 First 构造联合类型，剩余的元素递归的取。
+We use `First` to construct the union type, and recursively take the remaining elements.
 
-这样就完成了不确定长度的字符串的提取和联合类型的构造：
+This way, we've implemented extraction and union-type construction for a string of indeterminate length:
 
 ### ReverseStr
 
-我们实现了数组的反转，自然也可以实现字符串类型的反转。
+We've implemented array reversal, so naturally we can implement string reversal as well.
 
-同样是递归提取和构造。
+It's likewise recursive extraction and construction.
 
 ```ts
 type ReverseStr<Str extends string, Result extends string = ''> = Str extends `${infer First}${infer Rest}`
@@ -253,23 +253,23 @@ type ReverseStr<Str extends string, Result extends string = ''> = Str extends `$
   : Result;
 ```
 
-类型参数 Str 为待处理的字符串。类型参数 Result 为构造出的字符，默认值是空串。
+The type parameter `Str` is the string to process. The type parameter `Result` is the character string being constructed, with a default value of an empty string.
 
-通过模式匹配提取第一个字符到 infer 声明的局部变量 First，其余字符放到 Rest。
+We use pattern matching to extract the first character into the local variable `First` declared via `infer`, and put the rest of the characters into `Rest`.
 
-用 First 和之前的 Result 构造成新的字符串，把 First 放到前面，因为递归是从左到右处理，那么不断往前插就是把右边的放到了左边，完成了反转的效果。
+We construct a new string using `First` and the previous `Result`, placing `First` at the front. Since recursion processes from left to right, continually prepending characters ends up moving the ones on the right to the left, achieving the reversal effect.
 
-直到模式匹配不满足，就处理完了所有的字符。
+Once the pattern match no longer holds, all characters have been processed.
 
-这样就完成了字符串的反转：
+This way, we've implemented string reversal:
 
-## 对象类型的递归
+## Recursion over Object Types
 
 ### DeepReadonly
 
-对象类型的递归，也可以叫做索引类型的递归。
+Recursion over object types can also be called recursion over indexed types.
 
-我们之前实现了索引类型的映射，给索引加上了 readonly 的修饰：
+Previously, we implemented a mapping over an indexed type, adding the `readonly` modifier to its keys:
 
 ```ts
 type ToReadonly<T> = {
@@ -277,9 +277,9 @@ type ToReadonly<T> = {
 };
 ```
 
-如果这个索引类型层数不确定呢？
+What if the depth of this indexed type is indeterminate?
 
-比如这样：
+For example, like this:
 
 ```ts
 type obj = {
@@ -298,9 +298,9 @@ type obj = {
 };
 ```
 
-数量（层数）不确定，类型体操中应该自然的想到递归。
+Whenever the quantity (depth) is indeterminate, in type-level programming your first instinct should naturally be recursion.
 
-我们在之前的映射上加入递归的逻辑：
+Let's add recursive logic to the previous mapping:
 
 ```ts
 type DeepReadonly<Obj extends Record<string, any>> = {
@@ -312,27 +312,27 @@ type DeepReadonly<Obj extends Record<string, any>> = {
 };
 ```
 
-类型参数 Obj 是待处理的索引类型，约束为 Record<string, any>，也就是索引为 string，值为任意类型的索引类型。
+The type parameter `Obj` is the indexed type to process, constrained to `Record<string, any>`—that is, an indexed type whose keys are `string` and whose values can be any type.
 
-索引映射自之前的索引，也就是 Key in keyof Obj，只不过加上了 readonly 的修饰。
+The keys are mapped from the original keys, i.e., `Key in keyof Obj`, just with the `readonly` modifier added.
 
-值要做下判断，如果是 object 类型并且还是 Function，那么就直接取之前的值 Obj[Key]。
+The value needs to be checked: if it's an `object` type and also a `Function`, we simply take the previous value `Obj[Key]` as is.
 
-如果是 object 类型但不是 Function，那就是说也是一个索引类型，就递归处理 DeepReadonly<Obj[Key]>。
+If it's an `object` type but not a `Function`, that means it's also an indexed type, so we process it recursively as `DeepReadonly<Obj[Key]>`.
 
-否则，值不是 object 就直接返回之前的值 Obj[Key]。
+Otherwise, if the value is not an `object`, we just return the previous value `Obj[Key]` as is.
 
-这样就完成了任意层数的索引类型的添加 readonly 修饰：
+This way, we've implemented adding the `readonly` modifier to an indexed type of arbitrary depth:
 
-我们取处理以后的索引 a 的值看一下，发现 b 已经加上了 readonly 修饰。
+Let's look at the value of key `a` after processing, and we can see that `b` already has the `readonly` modifier applied.
 
-测试一下：
+Let's test it:
 
-为啥这里没有计算呀？
+Why isn't this being computed here?
 
-因为 ts 的类型只有被用到的时候才会做计算。
+Because TypeScript only computes a type when it's actually used.
 
-所以可以在前面加上一段 Obj extends never ? never 或者 Obj extends any 等，从而触发计算：
+So we can prepend something like `Obj extends never ? never` or `Obj extends any`, etc., to trigger the computation:
 
 ```ts
 type DeepReadonly<Obj extends Record<string, any>> = Obj extends any

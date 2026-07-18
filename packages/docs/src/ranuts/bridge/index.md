@@ -314,11 +314,11 @@ bridgeManager.removeClient(id);
 ```js
 import { MessageCodec } from 'ranuts/utils';
 
-const encoded = MessageCodec.encode({ msg: '你好 👋', n: 1 });
+const encoded = MessageCodec.encode({ msg: 'héllo 👋', n: 1 });
 // -> a Base64 string, safe for URLs / cookies / localStorage
 
 const decoded = MessageCodec.decode(encoded);
-console.log(decoded); // => { msg: '你好 👋', n: 1 }
+console.log(decoded); // => { msg: 'héllo 👋', n: 1 }
 ```
 
 ## Notes

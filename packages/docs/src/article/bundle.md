@@ -1,8 +1,8 @@
 # Bundle
 
-Bundle 的本质就是输入，转换，输出。在机器上直接运行的代码，往往都难以维护和理解，我们需要将开发者方便理解和维护的代码，通过打包等工具转换成方便机器或者程序使用的代码。对于 web 前端来说，打包工具，至少需要以下功能：
+At its core, a bundler is about input, transformation, and output. Code that runs directly on a machine is often hard to maintain and understand, so we need to convert code that's easy for developers to read and maintain into code that's convenient for machines or programs to consume, using tools such as bundlers. For web frontend, a bundler needs at least the following capabilities:
 
-- 编译能力
-- 插件机制
+- Compilation
+- A plugin mechanism
 - HMR
-- cli 和命令行能力
+- CLI and command-line capabilities

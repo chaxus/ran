@@ -1,80 +1,80 @@
-# 二叉树的定义
+# Binary Tree Definition
 
-在计算机科学中，二叉树（Binary tree）是每个节点最多只有两个分支（即不存在分支度大于 2 的节点）的树结构。通常分支被称作“左子树”或“右子树”。二叉树的分支具有左右次序，不能随意颠倒[<sup>[1]</sup>](#参考文档)。。
+In computer science, a binary tree is a tree data structure in which each node has at most two branches (i.e., no node has a branching degree greater than 2). These branches are commonly called the "left subtree" and "right subtree". The branches of a binary tree have a left-right order and cannot be arbitrarily swapped[<sup>[1]</sup>](#references).
 
-# 二叉树的性质
+# Properties of Binary Trees
 
-- 在二叉树的第 i 层上最多有 2^(i-1)个结点（i>=1）
-- 深度为 h 的二叉树，最多有 2^h-1 个结点，最少有 h 个结点（h>=1）
-- 包含 n 个结点的二叉树的高度至少为(log2n)+1
-- 非空的二叉树，分支度为 0 的总数为 n0，分支度为 2 的总数为 n2，则 n0=n2+1
-- 二叉树的总结点数 n = n1 + n2 + n0
-- 总连线数等于总节点数减一(B = n - 1)
-- 总连线数等于分支度为 2 的节点的两倍加上分支度为 1 的节点(B = n2 _ 2 + n1 _ 1)
+- At level i of a binary tree, there are at most 2^(i-1) nodes (i >= 1)
+- A binary tree of depth h has at most 2^h-1 nodes and at least h nodes (h >= 1)
+- A binary tree containing n nodes has a height of at least (log2n)+1
+- For a non-empty binary tree, if n0 is the total number of nodes with degree 0 and n2 is the total number of nodes with degree 2, then n0 = n2 + 1
+- The total number of nodes in a binary tree: n = n1 + n2 + n0
+- The total number of edges equals the total number of nodes minus one (B = n - 1)
+- The total number of edges equals twice the number of nodes with degree 2 plus the number of nodes with degree 1 (B = n2 _ 2 + n1 _ 1)
 
-# 二叉树的类型
+# Types of Binary Trees
 
-## 满二叉树
+## Full Binary Tree
 
-一棵深度为 k 且有 2k-1 个节点的二叉树称为满二叉树。
-除最后一层无任何子节点外，每一层上的所有结点都有两个子结点的二叉树[<sup>[2]</sup>](#参考文档)。
+A binary tree of depth k with 2k-1 nodes is called a full binary tree.
+It is a binary tree in which every level except the last is completely filled, with every node having two child nodes[<sup>[2]</sup>](#references).
 
-## 完全二叉树
+## Complete Binary Tree
 
-一棵深度为 k 的有 n 个结点的二叉树，对树中的结点按从上至下、从左到右的顺序进行编号，如果编号为 i（1≤i≤n）的结点与满二叉树中编号为 i 的结点在二叉树中的位置相同，则这棵二叉树称为完全二叉树。
+Consider a binary tree of depth k with n nodes, where the nodes are numbered from top to bottom and left to right. If, for every node numbered i (1≤i≤n), that node occupies the same position as the node numbered i in a full binary tree, then this binary tree is called a complete binary tree.
 
-## 二叉搜索树
+## Binary Search Tree
 
-二叉搜索树（BST）又称二叉查找树或二叉排序树。它或者是一棵空树，或者是具有下列性质的二叉树： 若它的左子树不空，则左子树上所有结点的值均小于它的根结点的值； 若它的右子树不空，则右子树上所有结点的值均大于它的根结点的值； 它的左、右子树也分别为二叉排序树。
+A binary search tree (BST), also known as a binary sort tree, is either an empty tree or a binary tree with the following properties: if its left subtree is not empty, the values of all nodes in the left subtree are less than the value of its root node; if its right subtree is not empty, the values of all nodes in the right subtree are greater than the value of its root node; and its left and right subtrees are also binary search trees.
 
-## 平衡二叉树
+## Balanced Binary Tree
 
-平衡二叉树(AVL)一定是二叉搜索树，且左子树和右子树的高度差的绝对值不超过 1。
-![平衡二叉树](../../../assets/ranuts/tree/balanceTree.png)
+A balanced binary tree (AVL tree) is always a binary search tree in which the absolute difference between the heights of the left and right subtrees does not exceed 1.
+![Balanced Binary Tree](../../../assets/ranuts/tree/balanceTree.png)
 
-## B 树
+## B-Tree
 
-B 树属于多叉树又名平衡多路查找树（查找路径不只两个）
+A B-tree is a type of multi-way tree, also known as a balanced multi-way search tree (it has more than two search paths).
 
-## B+树
+## B+ Tree
 
-B+树是 B 树的变体，也是一种多路搜索树。
+A B+ tree is a variant of the B-tree and is also a multi-way search tree.
 
-## B\*树
+## B\* Tree
 
-B* 树是 B+树的变体，在 B+树的非根和非叶子结点再增加指向兄弟的指针；B* 树定义了非叶子结点关键字个数至少为(2/3)_M，即块的最低使用率为 2/3（代替 B+树的 1/2）。B_ 树分配新结点的概率比 B+树要低，空间使用率更高；
+A B* tree is a variant of the B+ tree, in which non-root and non-leaf nodes have additional pointers to their siblings. A B* tree defines the minimum number of keys in a non-leaf node as at least (2/3) _ M, meaning the minimum block utilization is 2/3 (compared to 1/2 for the B+ tree). B* trees have a lower probability of allocating new nodes than B+ trees, resulting in higher space utilization.
 
-## 红黑树
+## Red-Black Tree
 
-红黑树是一种平衡二叉查找树的变体，它的左右子树高差有可能大于 1，所以红黑树不是严格意义上的平衡二叉树（AVL），但对它进行平衡的代价较低， 其平均统计性能要强于 AVL 。
+A red-black tree is a variant of the balanced binary search tree. The height difference between its left and right subtrees may exceed 1, so a red-black tree is not a strictly balanced binary tree (AVL tree). However, the cost of rebalancing it is lower, and its average statistical performance is better than that of an AVL tree.
 
-## 堆
+## Heap
 
-# 遍历
+# Traversal
 
-## 前序遍历
+## Preorder Traversal
 
-## 后序遍历
+## Postorder Traversal
 
-## 中序遍历
+## Inorder Traversal
 
-## 层序遍历
+## Level-order Traversal
 
-# 常见算法题
+# Common Algorithm Problems
 
-## 镜像二叉树
+## Mirror Binary Tree
 
-## 重建二叉树
+## Reconstruct Binary Tree
 
-## 二叉树深度
+## Binary Tree Depth
 
-## 二叉树节点总数
+## Total Number of Binary Tree Nodes
 
-## 判断二叉树子结构
+## Determine Binary Tree Substructure
 
-输入两棵二叉树 A 和 B，判断 B 是不是 A 的子结构。（ps：约定空树不是任意一个树的子结构）
+Given two binary trees A and B, determine whether B is a substructure of A. (Note: by convention, an empty tree is not considered a substructure of any tree.)
 
-# 参考文档
+# References
 
-1. [维基百科二叉树](https://zh.wikipedia.org/wiki/%E4%BA%8C%E5%8F%89%E6%A0%91)
-2. [百度百科满二叉树](https://baike.baidu.com/item/满二叉树/7773283)
+1. [Wikipedia: Binary Tree](https://zh.wikipedia.org/wiki/%E4%BA%8C%E5%8F%89%E6%A0%91)
+2. [Baidu Baike: Full Binary Tree](https://baike.baidu.com/item/%E6%BB%A1%E4%BA%8C%E5%8F%89%E6%A0%91/7773283)

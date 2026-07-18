@@ -1,0 +1,121 @@
+/* r-glass — liquid / frosted glass surface.
+ *
+ * Refracts + frosts whatever sits behind the host: backdrop-filter blur +
+ * saturate for the frost, an SVG feDisplacementMap (driven by the `displace`
+ * attribute) for the liquid light-bending, plus a specular rim and top
+ * highlight for the "glass" read. Everything is token-driven; the JS layer only
+ * writes the SVG filter's scale/frequency (which CSS can't reach) and reflects
+ * the numeric attributes onto the custom properties below.
+ *
+ * Discipline: transitions are motion-props only (transform/opacity) so a theme
+ * flip never fades the surface out of sync with the host page. */
+
+:host {
+  display: var(--ran-glass-display, inline-block);
+  position: var(--ran-glass-position, relative);
+  border-radius: var(--ran-glass-radius, 20px);
+  isolation: isolate;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* zero-size holder for the SVG displacement filter */
+.ran-glass-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.ran-glass {
+  position: relative;
+  box-sizing: border-box;
+  min-width: var(--ran-glass-min-width, 0);
+  min-height: var(--ran-glass-min-height, 0);
+  padding: var(--ran-glass-padding, 0);
+  border-radius: inherit;
+  overflow: hidden;
+  color: inherit;
+  /* Default = the iOS frosted-material look: a strong even blur + gentle
+     vibrancy + light tint + a thin bright edge. A small displacement adds just
+     a hint of a real glass surface (set `displace` higher for a liquid wave).
+     scale 0 is a perfectly flat frosted pane. */
+  -webkit-backdrop-filter: blur(var(--ran-glass-blur, 16px)) saturate(var(--ran-glass-saturate, 180%))
+    brightness(var(--ran-glass-brightness, 1.05));
+  backdrop-filter: blur(var(--ran-glass-blur, 16px)) saturate(var(--ran-glass-saturate, 180%))
+    brightness(var(--ran-glass-brightness, 1.05)) var(--ran-glass-refraction, url(#ran-glass-filter));
+  background: var(--ran-glass-tint, rgba(255, 255, 255, 0.14));
+  border: var(--ran-glass-border, 1px solid rgba(255, 255, 255, 0.35));
+  box-shadow: var(
+    --ran-glass-shadow,
+    inset 0 1px 1px rgba(255, 255, 255, 0.6),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+    inset 0 -20px 40px rgba(255, 255, 255, 0.04),
+    0 24px 60px -18px rgba(0, 0, 0, 0.5)
+  );
+  transition: var(
+    --ran-glass-transition,
+    transform var(--ran-motion-duration-base, 0.2s) var(--ran-motion-ease-spring, cubic-bezier(0.34, 1.26, 0.5, 1))
+  );
+}
+
+/* specular layer: a soft top highlight + optional moving sheen. Purely
+   decorative light, never intercepts pointer events. */
+.ran-glass-specular {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: var(--ran-glass-specular-opacity, 1);
+  background: var(
+    --ran-glass-specular,
+    linear-gradient(180deg, rgba(255, 255, 255, 0.28), transparent 34%),
+    radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, 0.18), transparent 60%)
+  );
+}
+.ran-glass-specular::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(105deg, transparent 42%, rgba(255, 255, 255, 0.4) 50%, transparent 58%);
+  transform: translateX(-130%);
+  opacity: 0;
+}
+:host([sheen]) .ran-glass-specular::after {
+  opacity: 0.7;
+  animation: ran-glass-sheen var(--ran-glass-sheen-duration, 6s) ease-in-out infinite;
+}
+@keyframes ran-glass-sheen {
+  50% {
+    transform: translateX(130%);
+  }
+}
+
+/* content sits above the specular layer */
+.ran-glass ::slotted(*) {
+  position: relative;
+  z-index: 1;
+}
+
+/* interactive: lift on hover, press-scale that springs back */
+:host([interactive]) .ran-glass {
+  cursor: pointer;
+}
+:host([interactive]:hover) .ran-glass {
+  transform: translateY(-2px);
+}
+:host([interactive]:active) .ran-glass {
+  transform: translateY(0) scale(0.98);
+  transition-duration: var(--ran-motion-duration-fast, 0.15s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host([sheen]) .ran-glass-specular::after {
+    animation: none;
+    opacity: 0;
+  }
+  .ran-glass {
+    transition: none;
+  }
+}

@@ -29,7 +29,7 @@
 
 其中`web`端源码已添加`MIT`协议并完全开源，如果看完对大家有帮助的话，欢迎大家`star`,`issue`,`pr`，也希望能友好交流～
 
-demo 地址：https://chaxus.github.io/ran/src/ranui/player/
+demo 地址：https://ran.chaxus.com/src/ranui/player/
 
 源码地址：https://github.com/chaxus/ran
 
@@ -829,7 +829,7 @@ this.ctx = {
 
 ![image.png](../../../assets/article/video/rplayer_demo.webp)
 
-demo 地址：https://chaxus.github.io/ran/src/ranui/player/
+demo 地址：https://ran.chaxus.com/src/ranui/player/
 
 源码地址：https://github.com/chaxus/ran
 
@@ -867,7 +867,7 @@ demo 地址：https://chaxus.github.io/ran/src/ranui/player/
 
 这是`demo`和源码地址：
 
-`demo`和文档地址：https://chaxus.github.io/ran/src/ranui/player/
+`demo`和文档地址：https://ran.chaxus.com/src/ranui/player/
 
 源码地址：https://github.com/chaxus/ran
 

@@ -276,7 +276,7 @@ async function loadTheme(zip: JSZip) {
 
 完整源码：[ranui](https://github.com/chaxus/ran/tree/main/packages/ranui)
 
-使用文档：[preview 组件](https://chaxus.github.io/ran/src/ranui/preview/)
+使用文档：[preview 组件](https://ran.chaxus.com/src/ranui/preview/)
 
 ### 2.pdf 的预览方案
 
@@ -317,7 +317,7 @@ github 链接：https://github.com/mozilla/pdf.js/blob/master/package.json
 具体使用情况如下：
 
 - 完整源码：https://github.com/chaxus/ran/tree/main/packages/ranui
-- 使用文档：https://chaxus.github.io/ran/src/ranui/preview/
+- 使用文档：https://ran.chaxus.com/src/ranui/preview/
 
 ```ts
 import * as pdfjs from 'pdfjs-dist';
@@ -495,13 +495,13 @@ export const renderDocx = (options: DocxOptions): Promise<void> | undefined => {
 
 ### 5.前端预览方案总结
 
-我们对以上找到的优秀的解决方案，进行改进和总结，并封装成一个`web components`组件：[preview 组件](https://chaxus.github.io/ran/src/ranui/preview/)
+我们对以上找到的优秀的解决方案，进行改进和总结，并封装成一个`web components`组件：[preview 组件](https://ran.chaxus.com/src/ranui/preview/)
 
 为什么是`web components`组件？
 
 因为它跟框架无关，可以在任何框架中使用，且使用起来跟原生的`div`标签一样方便。
 
-并编写使用文档：[preview 组件文档](https://chaxus.github.io/ran/src/ranui/preview/)，
+并编写使用文档：[preview 组件文档](https://ran.chaxus.com/src/ranui/preview/)，
 文档支持交互体验。
 
 源码公开，`MIT`协议。

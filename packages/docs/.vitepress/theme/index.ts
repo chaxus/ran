@@ -9,6 +9,7 @@ import Layout from '../components/Layout.vue';
 import NavLayout from '../components/NavLayout.vue';
 import Home from '../components/Home.vue';
 import HomeCinematic from '../components/HomeCinematic.vue';
+import GlassPlayground from '../components/GlassPlayground.vue';
 import IconGallery from '../components/IconGallery.vue';
 import Demo from '../components/Demo.vue';
 import i18n, { loadLanguageAsync } from '../lang';
@@ -114,6 +115,7 @@ export default {
     app.use(env);
     app.component('Home', Home);
     app.component('HomeCinematic', HomeCinematic);
+    app.component('GlassPlayground', GlassPlayground);
     app.component('IconGallery', IconGallery);
     app.component('Demo', Demo);
     const locale = localStorageGetItem(RAN_CHAXUS_LANG) || LANGS_DICT.EN;

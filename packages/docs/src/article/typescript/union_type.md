@@ -1,14 +1,14 @@
-# 分布式条件类型
+# Distributed Conditional Types
 
-当类型参数为联合类型，并且在条件类型左边直接引用该类型参数的时候，TypeScript 会把每一个元素单独传入来做类型运算，最后再合并成联合类型，这种语法叫做分布式条件类型。
+When a type parameter is a union type, and that type parameter is referenced directly on the left side of a conditional type, TypeScript passes each member of the union into the type computation separately, then merges the results back into a union type. This behavior is called a distributed conditional type.
 
-比如这样一个联合类型：
+For example, given a union type like this:
 
 ```ts
 type Union = 'a' | 'b' | 'c';
 ```
 
-我们想把其中的 a 大写，就可以这样写：
+If we want to uppercase the `a`, we could write:
 
 ```ts
 type UppercaseA<Item extends string> = Item extends 'a' ? Uppercase<Item> : Item;
@@ -19,21 +19,21 @@ type result = UppercaseA<Union>;
 // type result = 'A' | 'b' | 'c';
 ```
 
-可以看到，我们类型参数 Item 约束为 string，条件类型的判断中也是判断是否是 a，但传入的是联合类型。
+As you can see, our type parameter `Item` is constrained to `string`, and the conditional type checks whether it's `'a'`, but we passed in a union type.
 
-这就是 TypeScript 对联合类型在条件类型中使用时的特殊处理：会把联合类型的每一个元素单独传入做类型计算，最后合并。
+This is TypeScript's special handling of union types inside conditional types: each member of the union is passed in separately for the type computation, and the results are merged afterward.
 
-这和联合类型遇到字符串时的处理一样：
+This is the same behavior as when a union type is used with template literal strings:
 
-这样确实是简化了类型编程逻辑的，不需要递归提取每个元素再处理。
+This does simplify type-level programming logic, since we don't need to recursively extract each member and process it manually.
 
-TypeScript 之所以这样处理联合类型也很容易理解，因为联合类型的每个元素都是互不相关的，不像数组、索引、字符串那样元素之间是有关系的。所以设计成了每一个单独处理，最后合并。
+It's easy to understand why TypeScript handles union types this way: each member of a union type is unrelated to the others, unlike arrays, indexes, or strings, where the elements have a relationship to each other. So TypeScript was designed to process each member separately and merge the results at the end.
 
-知道了 TypeScript 怎么处理的联合类型，趁热打铁来练习一下：
+Now that we know how TypeScript handles union types, let's put it into practice:
 
 ## CamelcaseUnion
 
-Camelcase 我们实现过，就是提取字符串中的字符，首字母大写以后重新构造一个新的。
+We've implemented `Camelcase` before — it extracts characters from a string, capitalizes the first letter, and reconstructs a new string.
 
 ```ts
 type Camelcase<Str extends string> = Str extends `${infer Left}_${infer Right}${infer Rest}`
@@ -41,14 +41,14 @@ type Camelcase<Str extends string> = Str extends `${infer Left}_${infer Right}${
   : Str;
 ```
 
-提取 \_ 左右的字符，把右边字符大写之后构造成新的字符串，余下的字符串递归处理。
+It extracts the characters on either side of `_`, uppercases the character on the right, constructs a new string, and recursively processes the remaining string.
 
 ```ts
 type CamelcaseResult = Camelcase<'aa_aa_aa'>;
 // type CamelcaseResult = 'aaAaAa'
 ```
 
-如果是对字符串数组做 Camelcase，那就要递归处理每一个元素：
+If we want to apply `Camelcase` to an array of strings, we'd need to recursively process each element:
 
 ```ts
 type CamelcaseArr<Arr extends unknown[]> = Arr extends [infer Item, ...infer RestArr]
@@ -56,13 +56,13 @@ type CamelcaseArr<Arr extends unknown[]> = Arr extends [infer Item, ...infer Res
   : [];
 ```
 
-类型参数 Arr 为待处理数组。
+The type parameter `Arr` is the array to process.
 
-递归提取每一个元素做 Camelcase，因为 Camelcase 要求传入 string，这里要 & string 来变成 string 类型。
+We recursively extract each element and apply `Camelcase` to it. Since `Camelcase` requires a `string` to be passed in, we use `& string` here to convert the type to `string`.
 
-那如果是联合类型呢？
+But what about union types?
 
-联合类型不需要递归提取每个元素，TypeScript 内部会把每一个元素传入单独做计算，之后把每个元素的计算结果合并成联合类型。
+Union types don't need recursive extraction of each member — TypeScript internally passes each member in separately for computation, then merges the results of each member back into a union type.
 
 ```ts
 type CamelcaseUnion<Item extends string> = Item extends `${infer Left}_${infer Right}${infer Rest}`
@@ -70,39 +70,39 @@ type CamelcaseUnion<Item extends string> = Item extends `${infer Left}_${infer R
   : Item;
 ```
 
-这不和单个字符串的处理没区别么？
+Isn't this exactly the same as handling a single string?
 
-没错，对联合类型的处理和对单个类型的处理没什么区别，TypeScript 会把每个单独的类型拆开传入。不需要像数组类型那样需要递归提取每个元素做处理。
+That's right — handling a union type is no different from handling a single type; TypeScript splits each individual type apart and passes it in. There's no need to recursively extract each element the way we do with array types.
 
-确实简化了很多，好像都是优点？
+That does simplify things quite a bit. Sounds like it's all upside, right?
 
-也不全是，其实这样处理也增加了一些认知成本，不信我们再来看个例子：
+Not quite. This behavior actually introduces some extra cognitive overhead too. Let's look at another example to see why:
 
 ## IsUnion
 
-判断联合类型我们会这样写：
+To check whether a type is a union, we'd typically write it like this:
 
 ```ts
 type IsUnion<A, B = A> = A extends A ? ([B] extends [A] ? false : true) : never;
 ```
 
-当传入联合类型时，会返回 true：
+When passed a union type, it returns `true`:
 
 ```ts
 type IsUnionResult = IsUnion<'a' | 'b' 'c'>
 // type IsUnionResult = true
 ```
 
-当传入其他类型时，会返回 false：
+When passed any other type, it returns `false`:
 
 ```ts
 type IsUnionResult = IsUnion<['a' | 'b' 'c']>
 // type IsUnionResult = false
 ```
 
-这就是分布式条件类型带来的认知成本。
+This is the cognitive overhead introduced by distributed conditional types.
 
-我们先来看这样一个类型：
+Let's first look at a type like this:
 
 ```ts
 type TestUnion<A, B = A> = A extends A ? { a: A; b: B } : never;
@@ -110,64 +110,64 @@ type TestUnion<A, B = A> = A extends A ? { a: A; b: B } : never;
 type TestUnionResult = TestUnion<'a' | 'b' | 'c'>;
 ```
 
-传入联合类型 'a' | 'b' | 'c' 的时候，结果是这样的：
+When we pass in the union type `'a' | 'b' | 'c'`, the result looks like this:
 
-A 和 B 都是同一个联合类型，为啥值还不一样呢？
+`A` and `B` are the same union type — so why do their values end up different?
 
-**因为条件类型中如果左边的类型是联合类型，会把每个元素单独传入做计算，而右边不会。**
+**Because in a conditional type, if the type on the left side is a union type, each member is passed in separately for computation, but the right side is not.**
 
-所以 A 是 'a' 的时候，B 是 'a' | 'b' | 'c'，A 是 'b' 的时候，B 是 'a' | 'b' | 'c'。。。
+So when `A` is `'a'`, `B` is `'a' | 'b' | 'c'`; when `A` is `'b'`, `B` is `'a' | 'b' | 'c'`, and so on.
 
-那么利用这个特点就可以实现 Union 类型的判断：
+We can use this behavior to implement a check for union types:
 
 ```ts
 type IsUnion<A, B = A> = A extends A ? ([B] extends [A] ? false : true) : never;
 ```
 
-类型参数 A、B 是待判断的联合类型，B 默认值为 A，也就是同一个类型。
+The type parameters `A` and `B` are the union type to check, with `B` defaulting to `A`, i.e., the same type.
 
-**A extends A 这段看似没啥意义，主要是为了触发分布式条件类型，让 A 的每个类型单独传入。**
+**The `A extends A` part looks meaningless at first glance, but its main purpose is to trigger the distributed conditional type, so that each member of `A` is passed in separately.**
 
-**[B] extends [A] 这样不直接写 B 就可以避免触发分布式条件类型，那么 B 就是整个联合类型。**
+**Writing `[B] extends [A]` instead of just `B` avoids triggering the distributed conditional type, so `B` remains the entire union type.**
 
-B 是联合类型整体，而 A 是单个类型，自然不成立，而其它类型没有这种特殊处理，A 和 B 都是同一个，怎么判断都成立。
+`B` is the union type as a whole, while `A` is a single member, so naturally the check fails. For non-union types, there's no such special handling — `A` and `B` are the same type, so the check always passes.
 
-利用这个特点就可以判断出是否是联合类型。
+This behavior lets us determine whether a type is a union type.
 
-其中有两个点比较困惑，我们重点记一下：
+There are two confusing points here worth remembering:
 
-当 A 是联合类型时：
+When `A` is a union type:
 
-A extends A 这种写法是为了触发分布式条件类型，让每个类型单独传入处理的，没别的意义。
+Writing `A extends A` is done purely to trigger the distributed conditional type, so each member is passed in and processed separately — nothing more.
 
-A extends A 和 [A] extends [A] 是不同的处理，前者是单个类型和整个类型做判断，后者两边都是整个联合类型，因为只有 extends 左边直接是类型参数才会触发分布式条件类型。
+`A extends A` and `[A] extends [A]` are handled differently: the former checks a single member against the whole type, while the latter checks the entire union type against itself on both sides. This is because the distributed conditional type is only triggered when the left side of `extends` is a bare type parameter.
 
-理解了这两点，分布式条件类型就算掌握了。
+Once you understand these two points, you've mastered distributed conditional types.
 
 ## BEM
 
-bem 是 css 命名规范，用 block\_\_element--modifier 的形式来描述某个区块下面的某个元素的某个状态的样式。
+BEM is a CSS naming convention that uses the form `block__element--modifier` to describe the style of a particular state of an element within a block.
 
-那么我们可以写这样一个高级类型，传入 block、element、modifier，返回构造出的 class 名：
+We can write an advanced type that takes a block, element, and modifier, and returns the constructed class name:
 
-这样使用：
+Used like this:
 
 ```ts
 type bemResult = BEM<'guang', ['aaa', 'bbb'], ['warning', 'success']>;
 ```
 
-它的实现就是三部分的合并，但传入的是数组，要递归遍历取出每一个元素来和其他部分组合，这样太麻烦了。
+The implementation merges three parts together, but since we're passing in arrays, we'd need to recursively iterate over each element to combine it with the other parts — which is quite cumbersome.
 
-而如果是联合类型就不用递归遍历了，因为联合类型遇到字符串也是会单独每个元素单独传入做处理。
+If instead we use union types, we don't need to iterate recursively, because a union type used with a template literal string is also processed by passing each member in separately.
 
-数组转联合类型可以这样写：
+We can convert an array to a union type like this:
 
 ```ts
 type union = ['aaa', 'bbb'][number];
 // type union = 'aaa' | 'bbb'
 ```
 
-那么 BEM 就可以这样实现：
+So `BEM` can be implemented like this:
 
 ```ts
 type BEM<
@@ -177,38 +177,38 @@ type BEM<
 > = `${Block}__${Element[number]}--${Modifiers[number]}`;
 ```
 
-类型参数 Block、Element、Modifiers 分别是 bem 规范的三部分，其中 Element 和 Modifiers 都可能多个，约束为 string[]。
+The type parameters `Block`, `Element`, and `Modifiers` correspond to the three parts of the BEM convention. Since `Element` and `Modifiers` may each contain multiple values, they're constrained to `string[]`.
 
-构造一个字符串类型，其中 Element 和 Modifiers 通过索引访问来变为联合类型。
+We construct a template literal string type, where `Element` and `Modifiers` are converted to union types via indexed access.
 
-字符串类型中遇到联合类型的时候，会每个元素单独传入计算，也就是这样的效果：
+When a template literal string type encounters a union type, each member is passed in separately for computation, producing this effect:
 
 ```ts
 type RemResult = BEM<'a', ['b', 'c'], ['d', 'e']>;
 // type RemResult = 'a__b--d' | 'a__b--e' | 'a__c--d' | 'a__b--e'
 ```
 
-可以看到，用好了联合类型，确实能简化类型编程逻辑。
+As you can see, using union types well really does simplify type-level programming logic.
 
 ## AllCombinations
 
-我们再来实现一个全组合的高级类型，也是联合类型相关的：
+Let's implement another advanced type that's also related to union types — one that produces all combinations.
 
-希望传入 'A' | 'B' 的时候，能够返回所有的组合： 'A' | 'B' | 'BA' | 'AB'。
+We want that when passed `'A' | 'B'`, it returns all combinations: `'A' | 'B' | 'BA' | 'AB'`.
 
-这种全组合问题的实现思路就是两两组合，组合出的字符串再和其他字符串两两组和：
+The approach to this "all combinations" problem is to combine members pairwise, then combine the resulting strings with the remaining strings pairwise as well:
 
-比如 'A' | 'B' | 'c'，就是 A 和 B、C 组合，B 和 A、C 组合，C 和 A、B 组合。然后组合出来的字符串再和其他字符串组合。
+For example, with `'A' | 'B' | 'c'`, we combine A with B and C, combine B with A and C, and combine C with A and B. Then the resulting strings are combined with the other strings again.
 
-任何两个类型的组合有四种：A、B、AB、BA
+Combining any two types produces four results: A, B, AB, and BA.
 
 ```ts
 type Combination<A extends string, B extends string> = A | B | `${A}${B}` | `${B}${A}`;
 ```
 
-然后构造出来的字符串再和其他字符串组合。
+Then the resulting strings are combined with the remaining strings again.
 
-所以全组合的高级类型就是这样：
+So the advanced type for all combinations looks like this:
 
 ```ts
 type AllCombinations<A extends string, B extends string = A> = A extends A
@@ -216,24 +216,24 @@ type AllCombinations<A extends string, B extends string = A> = A extends A
   : never;
 ```
 
-类型参数 A、B 是待组合的两个联合类型，B 默认是 A 也就是同一个。
+The type parameters `A` and `B` are the two union types to combine, with `B` defaulting to `A`, i.e., the same type.
 
-A extends A 的意义就是让联合类型每个类型单独传入做处理，上面我们刚学会。
+The purpose of `A extends A` is to make each member of the union type get passed in and processed separately — something we just learned above.
 
-A 的处理就是 A 和 B 中去掉 A 以后的所有类型组合，也就是 Combination<A, B 去掉 A 以后的所有组合>。
+The processing for `A` is to combine it with every type remaining in `B` after removing `A` — that is, `Combination<A, all combinations of B with A removed>`.
 
-而 B 去掉 A 以后的所有组合就是 AllCombinations<Exclude<B, A>>，所以全组合就是 Combination<A, AllCombinations<Exclude<B, A>>>。
+And all combinations of `B` with `A` removed is `AllCombinations<Exclude<B, A>>`. So the full combination is `Combination<A, AllCombinations<Exclude<B, A>>>`.
 
-## 总结
+## Summary
 
-联合类型中的每个类型都是相互独立的，TypeScript 对它做了特殊处理，也就是遇到字符串类型、条件类型的时候会把每个类型单独传入做计算，最后把每个类型的计算结果合并成联合类型。
+Each member of a union type is independent of the others. TypeScript gives union types special treatment: when they're used with template literal string types or conditional types, each member is passed in separately for computation, and the results for each member are merged back into a union type at the end.
 
-条件类型左边是联合类型的时候就会触法这种处理，叫做分布式条件类型。
+This behavior is triggered whenever the left side of a conditional type is a union type, and it's called a distributed conditional type.
 
-有两点特别要注意：
+There are two points worth paying special attention to:
 
-- A extends A 不是没意义，意义是取出联合类型中的单个类型放入 A
+- `A extends A` is not meaningless — its purpose is to extract each individual member of the union type into `A`.
 
-- A extends A 才是分布式条件类型， [A] extends [A] 就不是了，只有左边是单独的类型参数才可以。
+- `A extends A` triggers a distributed conditional type, but `[A] extends [A]` does not — only a bare type parameter on the left side triggers it.
 
-我们后面做了一些案例，发现联合类型的这种 distributive 的特性确实能简化类型编程，但是也增加了认知成本，不过这也是不可避免的事。
+Through the examples we worked through, we found that this distributive characteristic of union types really does simplify type-level programming, though it also adds some cognitive overhead — which is, in the end, unavoidable.

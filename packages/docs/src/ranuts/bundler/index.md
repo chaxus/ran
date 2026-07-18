@@ -1,7 +1,7 @@
 # Bundler
 
-`Bundler`的使用：
-传入 options 参数
+Using `Bundler`:
+Pass in the `options` parameter
 
 ```
 function build(options: Options):Promise<Build> {
@@ -16,6 +16,6 @@ function build(options: Options):Promise<Build> {
 }
 ```
 
-架构图
+Architecture diagram
 
 ![](../../../assets/article/bundle/bundle.png)
