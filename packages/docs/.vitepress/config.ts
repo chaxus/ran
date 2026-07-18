@@ -100,6 +100,25 @@ export default defineConfig({
   sitemap: {
     hostname: HOME,
   },
+  markdown: {
+    // Render ```mermaid fenced blocks as diagrams. We can't use
+    // vitepress-plugin-mermaid (it peers on VitePress 1.x; this repo is 2.x-alpha),
+    // so we hand off to the <Mermaid> theme component: base64 the source (so the
+    // diagram syntax survives Vue template compilation) and let it render client-side.
+    config(md) {
+      const defaultFence =
+        md.renderer.rules.fence?.bind(md.renderer.rules) ??
+        ((tokens: any, idx: number, options: any, _env: any, self: any) => self.renderToken(tokens, idx, options));
+      md.renderer.rules.fence = (tokens: any, idx: number, options: any, env: any, self: any) => {
+        const token = tokens[idx];
+        if (token.info.trim().toLowerCase() === 'mermaid') {
+          const code = Buffer.from(token.content, 'utf-8').toString('base64');
+          return `<Mermaid id="mermaid-${idx}" code="${code}"></Mermaid>\n`;
+        }
+        return defaultFence(tokens, idx, options, env, self);
+      };
+    },
+  },
   // Per-page SEO: canonical, EN/CN hreflang alternates (existence-checked so we never
   // point at a 404), unique og:/twitter: tags, meta description, and SoftwareSourceCode
   // structured data on the ranui/ranuts landing pages.

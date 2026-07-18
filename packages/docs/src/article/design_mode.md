@@ -73,13 +73,31 @@ The implementation relationship is represented by a dashed line with a hollow ar
 
 Like aggregation relations, composition relations also represent the semantics of a whole made up of parts. For example, a company is composed of multiple departments, but the combinatorial relationship is a special aggregation relationship of strong dependence, if the whole does not exist, then the part does not exist. For example, the company no longer exists, and the department will no longer exist.
 
-![](../../assets/article/designPattern/composition.png)
+```mermaid
+classDiagram
+  class Company
+  class Finance
+  class Engineering
+  class Risk
+  Company *-- Finance
+  Company *-- Engineering
+  Company *-- Risk
+```
 
 ### 1.4 Polymerization
 
 Aggregation relationships are used to represent relationships between entity objects, representing the semantics of a whole made up of parts, such as a department consisting of multiple employees. Unlike combinatorial relations, the whole and the part are not strongly dependent, and even if the whole does not exist, the part still exists. For example, if the department is abolished, the personnel will not disappear, they will still exist.
 
-![](../../assets/article/designPattern/aggregation.png)
+```mermaid
+classDiagram
+  class Team
+  class Alpha
+  class Beta
+  class Gamma
+  Team o-- Alpha
+  Team o-- Beta
+  Team o-- Gamma
+```
 
 ### 1.5 Association
 
@@ -87,7 +105,12 @@ The association relationship is expressed by a straight line, which describes th
 
 For example, the relationship between the passenger and the ticket is an association relationship, the student and the school is an association relationship, the association relationship does not emphasize the direction by default, indicating that the object knows each other. If particular emphasis is placed on direction, as shown in the figure below, it means that A knows B, but B does not know A.
 
-![](../../assets/article/designPattern/association.png)
+```mermaid
+classDiagram
+  class Person
+  class IDCard
+  Person --> IDCard
+```
 
 ### 1.6 dependence
 
@@ -95,7 +118,12 @@ Dependencies are represented by A set of dotted lines with arrows, such as A dep
 
 Unlike an association relationship, it is a temporary relationship that usually occurs during run time, and dependencies may change as the run time changes. Obviously, dependence also has a direction, two-way dependence is a very bad structure, we should always maintain one-way dependence, eliminate the generation of two-way dependence.
 
-![](../../assets/article/designPattern/dependency.png)
+```mermaid
+classDiagram
+  class Person
+  class Money
+  Person ..> Money
+```
 
 ## II, six principles
 
@@ -237,7 +265,17 @@ Behavioral patterns are abstractions that divide responsibilities and algorithms
 
 > Simple Factory Pattern: A single class (factory class) is defined to be responsible for creating instances of other classes. Instances of different classes can be returned based on the parameters of the creation method, and the created instances usually have a common parent class.
 
-![](../../assets/article/designPattern/simple_factory.png)
+```mermaid
+classDiagram
+  class SimpleFactory
+  class AbstractCola
+  class CocaCola
+  class Pepsi
+  CocaCola --|> AbstractCola
+  Pepsi --|> AbstractCola
+  SimpleFactory ..> CocaCola : param 0
+  SimpleFactory ..> Pepsi : param 1
+```
 
 **Example:**
 
@@ -286,7 +324,21 @@ const pepsiCola: PepsiCola = createColaWithType(1);
 
 > Factory Method Pattern (' factory method pattern ') is also known as the factory pattern, the factory parent class is responsible for defining the public interface for creating product objects, and the factory subclass is responsible for generating concrete product objects, that is, through different factory subclasses to create different product objects.
 
-![](../../assets/article/designPattern/factory_method.png)
+```mermaid
+classDiagram
+  class AbstractFactory
+  class PepsiFactory
+  class CocaColaFactory
+  class AbstractCola
+  class Pepsi
+  class CocaCola
+  PepsiFactory --|> AbstractFactory
+  CocaColaFactory --|> AbstractFactory
+  Pepsi --|> AbstractCola
+  CocaCola --|> AbstractCola
+  PepsiFactory ..> Pepsi
+  CocaColaFactory ..> CocaCola
+```
 
 **Example:**
 
@@ -324,7 +376,30 @@ The abstract factory pattern does not directly generate instances, but is used t
 
 > Abstract Factory Pattern: Provides an interface for creating a series of related or interdependent objects without specifying their concrete classes.
 
-![](../../assets/article/designPattern/abstract_factory.png)
+```mermaid
+classDiagram
+  class AbstractFactory
+  class PepsiThemeFactory
+  class CocaColaThemeFactory
+  class AbstractCola
+  class Pepsi
+  class CocaCola
+  class AbstractBottle
+  class PepsiBottle
+  class CocaColaBottle
+  PepsiThemeFactory --|> AbstractFactory
+  CocaColaThemeFactory --|> AbstractFactory
+  Pepsi --|> AbstractCola
+  CocaCola --|> AbstractCola
+  PepsiBottle --|> AbstractBottle
+  CocaColaBottle --|> AbstractBottle
+  PepsiThemeFactory ..> Pepsi
+  PepsiThemeFactory ..> PepsiBottle
+  CocaColaThemeFactory ..> CocaCola
+  CocaColaThemeFactory ..> CocaColaBottle
+  Pepsi --> PepsiBottle
+  CocaCola --> CocaColaBottle
+```
 
 **Example:**
 
@@ -433,7 +508,33 @@ Since there is no abstraction layer in the singleton pattern, singleton classes 
 
 The factory pattern is mainly for the creation of object instances or class clusters (abstract factories), concerned with the final output (creation) is what, not concerned with the creation process. The builder pattern is concerned with the entire process of creating the object, down to every detail of creating the object.
 
-![](../../assets/article/designPattern/builder.jpeg)
+```mermaid
+classDiagram
+  note "Builder Pattern"
+  class Client {
+    +operation() void
+  }
+  class Director {
+    +constructor() Product
+  }
+  class Builder {
+    +buildPartA() void
+    +buildPartB() void
+    +buildPartC() void
+    +getResult() void
+  }
+  class ConcreteBuilder {
+    +buildPartA() void
+    +buildPartB() void
+    +buildPartC() void
+    +buildProduct() Product
+  }
+  class Product
+  Client ..> ConcreteBuilder
+  Director o-- Builder
+  ConcreteBuilder --|> Builder
+  ConcreteBuilder ..> Product
+```
 
 **Example:**
 
@@ -655,7 +756,19 @@ const addMyEvent = function (el, ev, fn) {
 
 > Proxy Pattern: Provide a proxy for an object, and this proxy object controls access to the original object.
 
-![](../../assets/article/designPattern/proxy.png)
+```mermaid
+classDiagram
+    class SellerClient["Seller"]
+    class RealEstateAgent {
+        -sellHouse()
+        -filterBuyers()
+    }
+    class Seller {
+        -sellHouse()
+    }
+    SellerClient --> RealEstateAgent
+    RealEstateAgent --> Seller
+```
 
 **Example:**
 
@@ -715,7 +828,19 @@ this.response = Object.create(response);
 
 > Flyweight Pattern: The meta mode is a mode that optimizes program performance, essentially reducing the number of objects created. Using sharing technology to reuse a large number of fine-grained objects, reduce the program memory occupation, improve the performance of the program. Share metamode can be used when there are a large number of similar objects that occupy a large amount of memory. Most of the state in an object can be extrapolated to external state.
 
-![](../../assets/article/designPattern/flyweight.png)
+```mermaid
+classDiagram
+    class FreeMusicService {
+        -listenToMusic()
+    }
+    class VipMusicLibrary {
+        -listenToMusic()
+        -downloadMusic()
+    }
+    class MusicLibraryObject
+    FreeMusicService ..> MusicLibraryObject
+    VipMusicLibrary ..> MusicLibraryObject
+```
 
 **Example:**
 
@@ -777,7 +902,22 @@ const VipMusicService = {
 
 > Simple Factory Pattern: Separate the abstract part from its implementation part so that they can both vary independently.
 
-![](../../assets/article/designPattern/bridge.png)
+```mermaid
+classDiagram
+    class PhoneAbstract
+    class SimCardProtocol {
+        -getSimInfo()
+    }
+    class iPhone
+    class XiaomiPhone
+    class MobileSimCard
+    class UnicomSimCard
+    PhoneAbstract ..> SimCardProtocol
+    iPhone --|> PhoneAbstract
+    XiaomiPhone --|> PhoneAbstract
+    MobileSimCard ..|> SimCardProtocol
+    UnicomSimCard ..|> SimCardProtocol
+```
 
 **Example:**
 
@@ -854,7 +994,24 @@ man.init();
 
 > Adapter Pattern: Adapter mode is used to solve the incompatibility of two interfaces, do not need to change the existing interface, through the packaging of a layer, to achieve normal cooperation between the two interfaces. When we try to call an interface of a module or object, but find that the format of the interface does not meet the current requirements, we can use the adapter pattern.
 
-![](../../assets/article/designPattern/adapter.png)
+```mermaid
+classDiagram
+    class SimCardProtocol {
+        -normalSize()
+    }
+    class NanoSimProtocol {
+        -nanoSize()
+    }
+    class SimPhone
+    class SimCard
+    class SimAdapter
+    class NanoSim
+    SimPhone ..> SimCardProtocol
+    SimCard ..|> SimCardProtocol
+    SimAdapter ..|> SimCardProtocol
+    NanoSim --|> NanoSimProtocol
+    SimAdapter ..> NanoSim
+```
 
 **Example:**
 
@@ -888,7 +1045,26 @@ function addEvent(ele, event, callback) {
 
 > Chain of Responsibility Pattern: Avoid coupling the request sender with the receiver, make it possible for multiple objects to receive the request, connect those objects into a chain, and pass the request along the chain until an object handles it. The responsibility chain pattern is an object behavior pattern. Similar to dominoes, by requesting the first condition, subsequent conditions continue to be executed until a result is returned.
 
-![](../../assets/article/designPattern/chain_of_responsibility.png)
+```mermaid
+classDiagram
+  class Code
+  class Success {
+    200-299
+  }
+  class Warning {
+    300-399
+  }
+  class HttpFail {
+    400-499
+  }
+  class ServiceFail {
+    500-599
+  }
+  Code --> Success
+  Success --> Warning
+  Warning --> HttpFail
+  HttpFail --> ServiceFail
+```
 
 **Example:**
 
@@ -964,7 +1140,19 @@ The command mode consists of three roles:
 3. The command object 'command' (receives the command and invokes the corresponding interface of the receiver to process the publisher's request).
    The publisher invoker and the receiver are independent and encapsulate the request into a command object command. The specific execution of the request is executed by the command object calling the corresponding interface of the receiver.
 
-![](../../assets/article/designPattern/command.png)
+```mermaid
+classDiagram
+  class RemoteControl
+  class AbstractCommand
+  class CommandA
+  class CommandB
+  class Television
+  RemoteControl ..> AbstractCommand
+  CommandA --|> AbstractCommand
+  CommandB --|> AbstractCommand
+  CommandA ..> Television
+  CommandB ..> Television
+```
 
 **Example:**
 
@@ -1096,7 +1284,17 @@ console.log(context.sum);
 
 > Iterator Pattern: A relatively simple pattern, most languages now have iterators built in, so that people don't think of it as a design pattern. Iterators don't just iterate over arrays; iterators can be aborted. Provides a way to access aggregate objects without exposing the internal representation of the object, which is alias a Cursor. The iterator pattern is an object behavior pattern.
 
-![](../../assets/article/designPattern/iterator.png)
+```mermaid
+classDiagram
+  class Client
+  class Iterator {
+    +previous()
+    +next()
+  }
+  class Dataset
+  Client --> Iterator
+  Iterator --> Dataset
+```
 
 **Example:**
 
@@ -1131,7 +1329,26 @@ Because the iterator pattern separates the responsibility of storing data and tr
 
 > Mediator Pattern: Objects communicate with each other through third-party intermediaries. Encapsulate a set of object interactions with a mediator, which allows objects to be loosely coupled without explicitly referring to each other, and can change their interactions independently. The mediator model, also known as the mediator model, is an object behavior model.
 
-![](../../assets/article/designPattern/mediator.png)
+```mermaid
+classDiagram
+  class ColleagueA
+  class ColleagueB
+  class ColleagueC
+  class ColleagueD
+  class Mediator
+  class ColleagueE
+  class ColleagueF
+  class ColleagueG
+  class ColleagueH
+  ColleagueA --> Mediator
+  ColleagueB --> Mediator
+  ColleagueC --> Mediator
+  ColleagueD --> Mediator
+  Mediator --> ColleagueE
+  ColleagueF --> Mediator
+  ColleagueG --> Mediator
+  ColleagueH --> Mediator
+```
 
 **Example:**
 
@@ -1245,7 +1462,20 @@ var Page = function () {
 
 > Observer Pattern: Define a one-to-many dependency relationship between objects so that each time an object's state changes, its dependent objects are notified and automatically updated. Aliases for the observer pattern include the 'Publish/Subscribe' pattern, the model-view (' Model/View ') pattern, the Source/Listener (' source/listener ') pattern, or the 'Dependents' pattern. The observer pattern is an object behavior pattern.
 
-![](../../assets/article/designPattern/observer.png)
+```mermaid
+classDiagram
+  class WeatherStation {
+    +registerWithObserver()
+  }
+  class AbstractObserver {
+    +observeWeather()
+  }
+  class Farmer
+  class Student
+  WeatherStation --> AbstractObserver
+  Farmer ..|> AbstractObserver
+  Student ..|> AbstractObserver
+```
 
 **Example:**
 
@@ -1284,7 +1514,27 @@ If an observation target has many direct and indirect observers, it takes a lot 
 
 > State Pattern: By allowing an object to change its behavior when its internal state changes, the object appears to modify its class. Its alias is the state object (' Objects for States'), in fact, is to use an object or array to record a set of states, each state corresponds to an implementation, the implementation according to the state to run the implementation. The state pattern is an object behavior pattern.
 
-![](../../assets/article/designPattern/state.png)
+```mermaid
+classDiagram
+  class Account {
+    -state: State
+    +saveMoney()
+    +drawMoney()
+    +borrowMoney()
+  }
+  class State {
+    +saveMoney()
+    +drawMoney()
+    +borrowMoney()
+  }
+  class RichState
+  class ZeroState
+  class DebtState
+  Account o-- State
+  RichState --|> State
+  ZeroState --|> State
+  DebtState --|> State
+```
 
 **Example:**
 
@@ -1352,7 +1602,22 @@ new SuperMarry()
 
 > Strategy Pattern: Define a list of algorithms, wrap them up, and be interchangeable. It is to extract and encapsulate seemingly unrelated code and reuse it to make it easier to understand and expand. It is commonly used in process judgment statements such as if judgment, switch enumeration, and data dictionary. Also known as the Policy model (' policy '). Policy pattern is an object behavior pattern.
 
-![](../../assets/article/designPattern/strategy.png)
+```mermaid
+classDiagram
+  class OnlineShop {
+    -buyProductWithVip()
+  }
+  class Vip {
+    -calcPrice()
+  }
+  class GoldVip
+  class SilverVip
+  class BronzeVip
+  OnlineShop ..> Vip
+  GoldVip --|> Vip
+  SilverVip --|> Vip
+  BronzeVip --|> Vip
+```
 
 **Example:**
 
@@ -1427,7 +1692,22 @@ var compileUtil = {
 
 > Template method pattern : Define the framework of an algorithm in an operation, while deferring some steps to subclasses. The template method pattern allows subclasses to redefine certain steps of an algorithm without changing its structure.
 
-![](../../assets/article/designPattern/template.png)
+```mermaid
+classDiagram
+  class CookTutorial {
+    -cook()
+    -step1()
+    -step2()
+    -step3()
+    -step4()
+  }
+  class CookFish {
+    -step1()
+    -step2()
+    -step4()
+  }
+  CookFish --|> CookTutorial
+```
 
 **Example:**
 
@@ -1607,7 +1887,26 @@ The reason why Beverage.prototype.init is called a template method is that it en
 
 > Visitor Pattern:Provides a representation of operations that act on elements of an object structure, which allows us to define new operations on those elements without changing their class. Visitor pattern is an object behavior pattern.
 
-![](../../assets/article/designPattern/visitor.png)
+```mermaid
+classDiagram
+  class AbstractVisitor {
+    +visitEmployee()
+  }
+  class AbstractElement {
+    +accept()
+  }
+  class Client
+  class HRDept
+  class FADept
+  class EmployeeA
+  class EmployeeB
+  Client --> AbstractVisitor
+  Client --> AbstractElement
+  HRDept ..|> AbstractVisitor
+  FADept ..|> AbstractVisitor
+  EmployeeA ..|> AbstractElement
+  EmployeeB ..|> AbstractElement
+```
 
 **Example:**
 

@@ -27,6 +27,7 @@
   "devDependencies": {
     "@types/node": "catalog:",
     "less": "catalog:",
+    "mermaid": "^11.16.0",
     "typescript": "catalog:"
   },
   "dependencies": {
