@@ -2,7 +2,7 @@
 
 A liquid / frosted glass surface. `<r-glass>` frosts and refracts whatever sits behind it — `backdrop-filter` blur + saturate for the frost, an SVG `feDisplacementMap` for the liquid light-bending, plus a specular rim and highlight for the glass read. Everything is token-driven; content goes in the default slot.
 
-> **Use when** you want a premium translucent panel over rich content — a hero card, a floating toolbar, a media overlay. The `displace` knob sets how *liquid* it looks (0 is a flat frosted pane). All effects degrade to a plain translucent surface where `backdrop-filter` is unsupported.
+> **Use when** you want a premium translucent panel over rich content — a hero card, a floating toolbar, a media overlay. The `displace` knob sets how _liquid_ it looks (0 is a flat frosted pane). All effects degrade to a plain translucent surface where `backdrop-filter` is unsupported.
 
 ## Playground
 
@@ -50,16 +50,16 @@ Drag the glass around the stage, tune every knob, and copy the exact markup. The
 
 ### Properties
 
-| Property      | Type      | Default | Description                                                                                     |
-| ------------- | --------- | ------- | ----------------------------------------------------------------------------------------------- |
-| `blur`        | `number`  | `16`    | Backdrop blur radius, in px (the frost amount).                                                  |
-| `saturate`    | `number`  | `180`   | Backdrop saturation, as a percentage — lifts the color of what's behind the glass.              |
-| `displace`    | `number`  | `8`     | Liquid refraction strength (SVG displacement scale). `0` is a flat frosted pane; higher = wavier.|
-| `frequency`   | `number`  | `0.005` | Turbulence base frequency — smaller values give larger, smoother ripples.                        |
-| `radius`      | `number`  | `20`    | Corner radius, in px.                                                                            |
-| `tint`        | `string`  | subtle  | Glass fill tint — any CSS background value.                                                      |
-| `sheen`       | `boolean` | `false` | Animated specular sweep across the surface.                                                      |
-| `interactive` | `boolean` | `false` | Hover lift + press-scale feedback, for clickable glass.                                          |
+| Property      | Type      | Default | Description                                                                                       |
+| ------------- | --------- | ------- | ------------------------------------------------------------------------------------------------- |
+| `blur`        | `number`  | `16`    | Backdrop blur radius, in px (the frost amount).                                                   |
+| `saturate`    | `number`  | `180`   | Backdrop saturation, as a percentage — lifts the color of what's behind the glass.                |
+| `displace`    | `number`  | `8`     | Liquid refraction strength (SVG displacement scale). `0` is a flat frosted pane; higher = wavier. |
+| `frequency`   | `number`  | `0.005` | Turbulence base frequency — smaller values give larger, smoother ripples.                         |
+| `radius`      | `number`  | `20`    | Corner radius, in px.                                                                             |
+| `tint`        | `string`  | subtle  | Glass fill tint — any CSS background value.                                                       |
+| `sheen`       | `boolean` | `false` | Animated specular sweep across the surface.                                                       |
+| `interactive` | `boolean` | `false` | Hover lift + press-scale feedback, for clickable glass.                                           |
 
 ### Refraction `displace`
 
@@ -73,8 +73,7 @@ Drag the glass around the stage, tune every knob, and copy the exact markup. The
 </Demo>
 
 ```html
-<r-glass displace="0">…flat frost…</r-glass>
-<r-glass displace="60">…liquid…</r-glass>
+<r-glass displace="0">…flat frost…</r-glass> <r-glass displace="60">…liquid…</r-glass>
 ```
 
 ### Sheen & interactive
@@ -99,16 +98,16 @@ Drag the glass around the stage, tune every knob, and copy the exact markup. The
 
 Style internals with `::part(glass)` and `::part(specular)`, or override the `--ran-glass-*` custom properties:
 
-| Token                          | Purpose                                  |
-| ------------------------------ | ---------------------------------------- |
-| `--ran-glass-blur`             | Backdrop blur radius.                    |
-| `--ran-glass-saturate`         | Backdrop saturation.                     |
-| `--ran-glass-radius`           | Corner radius.                           |
-| `--ran-glass-tint`             | Fill background.                         |
-| `--ran-glass-border`           | Rim border.                              |
-| `--ran-glass-shadow`           | Box shadow stack (specular + depth).     |
-| `--ran-glass-specular`         | Specular highlight background.           |
-| `--ran-glass-specular-opacity` | Specular strength.                       |
+| Token                          | Purpose                              |
+| ------------------------------ | ------------------------------------ |
+| `--ran-glass-blur`             | Backdrop blur radius.                |
+| `--ran-glass-saturate`         | Backdrop saturation.                 |
+| `--ran-glass-radius`           | Corner radius.                       |
+| `--ran-glass-tint`             | Fill background.                     |
+| `--ran-glass-border`           | Rim border.                          |
+| `--ran-glass-shadow`           | Box shadow stack (specular + depth). |
+| `--ran-glass-specular`         | Specular highlight background.       |
+| `--ran-glass-specular-opacity` | Specular strength.                   |
 
 ```css
 r-glass::part(glass) {
