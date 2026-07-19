@@ -1,3 +1,7 @@
+---
+description: "ranui Message 以命令式方式展示全局反馈（info/success/warning/error/toast），以轻量浮层渲染。"
+---
+
 # message 全局提示
 
 全局展示操作反馈信息。

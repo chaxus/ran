@@ -1,3 +1,7 @@
+---
+description: "The ranui Tabs (<r-tabs>) organize content into switchable panels — a native Web Component usable in any framework."
+---
+
 # Tab
 
 Tabbed container that switches between panes. Compose `<r-tabs>` as the container with one or more `<r-tab>` panes inside it.

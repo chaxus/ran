@@ -1,3 +1,7 @@
+---
+description: "AI Agent 的工作原理：Prompt、角色、工具与上下文——LLM 智能体背后的基础构件。"
+---
+
 # Prompt
 
 ## System Prompt

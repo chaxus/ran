@@ -1,3 +1,7 @@
+---
+description: "The ranui Modal (<r-modal>) is a dialog for focused interactions, with focus trapping, scroll locking, background inerting and an imperative Modal.confirm API."
+---
+
 # Modal
 
 Dialog component for focused interactions on top of the current page, with focus trapping, scroll locking, and background inerting.

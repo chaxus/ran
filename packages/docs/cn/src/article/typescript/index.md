@@ -1,3 +1,7 @@
+---
+description: "深入 TypeScript 类型系统：用条件类型、映射类型与递归类型做类型编程。"
+---
+
 # TypeScript 的类型系统
 
 ## 一.类型是什么

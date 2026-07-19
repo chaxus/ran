@@ -1,3 +1,7 @@
+---
+description: "A deep dive into the TypeScript type system: type-level programming with conditional, mapped and recursive types."
+---
+
 # TypeScript's Type System
 
 ## I. What Is a Type

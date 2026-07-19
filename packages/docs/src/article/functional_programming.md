@@ -1,3 +1,7 @@
+---
+description: "An introduction to functional programming: pure functions, composition, currying and immutability, with JavaScript/TypeScript examples."
+---
+
 # Functional Programming
 
 - Overview: Functional Programming (`FP`) is one of several programming paradigms. Other paradigms you've likely heard of include object-oriented programming and procedural programming.

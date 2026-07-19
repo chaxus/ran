@@ -1,3 +1,7 @@
+---
+description: "The ranui Loading (<r-loading>) shows a spinning indicator while content or an action is in progress."
+---
+
 <script setup>
 import Loading from '../../../vue/loading.vue'
 </script>

@@ -1,3 +1,7 @@
+---
+description: "ranui is a Web Components UI library built on native custom elements (<r-*>), with TypeScript types, light/dark theming, Shadow DOM, SSR and PWA support."
+---
+
 # ranui
 
 Development scheme based on `Web Components`

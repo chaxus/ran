@@ -1,3 +1,7 @@
+---
+description: "ranui Checkbox（<r-checkbox>）用于切换单个开关选项，支持可选标签与原生表单。"
+---
+
 # CheckBox 多选框
 
 ## 代码演示

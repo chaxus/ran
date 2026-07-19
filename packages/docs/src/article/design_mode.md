@@ -1,3 +1,7 @@
+---
+description: "A tour of the 23 classic Gang of Four design patterns — creational, structural and behavioral — with front-end examples."
+---
+
 # 23 classic design patterns
 
 > The Design Pattern is a set of frequently used, widely known, cataloged code design experiences that are used in order to reuse code, make it easier for others to understand, and ensure code reliability.

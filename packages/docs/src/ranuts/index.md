@@ -1,3 +1,7 @@
+---
+description: "ranuts is a tree-shakeable JavaScript/TypeScript utility library: DOM/BOM, string/object/number/color helpers, algorithms, a 2D rendering engine and a virtual DOM."
+---
+
 # ranuts overview
 
 ## Category Navigation
