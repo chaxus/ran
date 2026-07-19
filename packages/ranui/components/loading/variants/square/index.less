@@ -1,0 +1,75 @@
+@blue-1: var(--ran-color-primary, #4096ff);
+@green-1: var(--ran-color-success, #67cf22);
+@gray-1: var(--ran-color-text, #333);
+
+.ran-loading {
+  .square {
+    @keyframes square-box1 {
+      0% {
+        transform: var(--loading-square-box1-keyframes-0, rotate(0));
+      }
+      25% {
+        transform: var(--loading-square-box1-keyframes-25, rotate(90deg));
+      }
+      50% {
+        transform: var(--loading-square-box1-keyframes-50, rotate(180deg));
+      }
+      75% {
+        transform: var(--loading-square-box1-keyframes-75, rotate(270deg));
+      }
+      100% {
+        transform: var(--loading-square-box1-keyframes-100, rotate(360deg));
+      }
+    }
+
+    @keyframes square-box2 {
+      0% {
+        transform: var(--loading-square-box2-keyframes-0, rotate(45deg));
+      }
+      25% {
+        transform: var(--loading-square-box2-keyframes-25, rotate(-45deg));
+      }
+      50% {
+        transform: var(--loading-square-box2-keyframes-50, rotate(-135deg));
+      }
+      75% {
+        transform: var(--loading-square-box2-keyframes-75, rotate(-225deg));
+      }
+      100% {
+        transform: var(--loading-square-box2-keyframes-100, rotate(-315deg));
+      }
+    }
+    &-box1 {
+      width: var(--loading-square-box1-width, 50px);
+      height: var(--loading-square-box1-height, 50px);
+      padding: var(--loading-square-box1-padding, 3px);
+      position: var(--loading-square-box1-position, absolute);
+      display: var(--loading-square-box1-display, flex);
+      justify-content: var(--loading-square-box1-justify-content, center);
+      align-items: var(--loading-square-box1-align-items, center);
+      background: var(--loading-square-box1-background, #ffab91);
+      animation: var(--loading-square-box1-animation, square-box1 3s ease-in-out 0s infinite alternate);
+      animation-play-state: var(--loading-square-box1-animation-play-state, running);
+    }
+
+    &-box2 {
+      width: var(--loading-square-box2-width, 50px);
+      height: var(--loading-square-box2-height, 50px);
+      padding: var(--loading-square-box2-padding, 3px);
+      left: var(--loading-square-box2-left, -50px);
+      display: var(--loading-square-box2-display, flex);
+      justify-content: var(--loading-square-box2-justify-content, center);
+      align-items: var(--loading-square-box2-align-items, center);
+      background: var(--loading-square-box2-background, rgb(63, 249, 220));
+      transform: var(--loading-square-box2-transform, rotate(45deg));
+      animation: var(--loading-square-box2-animation, square-box2 3s ease-in-out 0s infinite alternate);
+      animation-play-state: var(--loading-square-box2-animation-play-state, running);
+    }
+
+    &-core {
+      width: var(--loading-square-core-width, 100%);
+      height: var(--loading-square-core-height, 100%);
+      background: var(--loading-square-core-background, #37474f);
+    }
+  }
+}

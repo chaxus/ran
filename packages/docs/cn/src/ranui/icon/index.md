@@ -6,22 +6,26 @@ description: 'ranui Icon（<r-icon>）渲染语义化矢量图形（SVG），支
 
 语义化的矢量图形
 
-## 使用前需先注册图标
+## 使用图标
 
-**`<r-icon>` 没有内置图标集，也没有 iconfont 兜底。** 它只渲染你按名称注册到内存表里的 SVG。如果某个 `name` 从未注册，元素**什么都不渲染**（一片空白）—— 这正是「图标显示为空」最常见的原因。
+### 最简单：直接用自带名称（零配置）
 
-### 最简单：注册自带图标集（推荐）
+ranui 已把自带图标集**内联进了产物包**。自带 `name` 会**按需自动加载**——无需注册、无需 import、无需接线任何资源路径。只有你实际用到的那个 SVG 会被拉取（每个都是独立的异步 chunk），所以引用一个图标绝不会把整套图标全打进来：
 
-ranui 已把自带图标集**内联进了产物包**（无需接线任何资源文件）。**尽早、只调用一次** `registerBuiltinIcons()`——要在任何会渲染 `<r-icon>` 的组件挂载之前——所有自带名称即可使用：
+```html
+<r-icon name="lock"></r-icon> <r-icon name="eye"></r-icon>
+```
+
+有效的自带名称就是 `RanIconName` 联合类型 / `RAN_ICON_NAMES` 元组（见下）。**自定义**名称若从未注册，仍然**什么都不渲染**（一片空白）—— 这只针对你自己的 SVG，见 [自定义图标](#自定义图标)。
+
+### 可选：一次性全量注册
+
+如果你希望所有自带图标都**同步可用**（不走逐个异步加载——例如图标密集的页面想避免首帧闪烁，或在没有代码分割的环境里），尽早只调用一次 `registerBuiltinIcons()`：
 
 ```ts
 import { registerBuiltinIcons } from 'ranui'; // 或 'ranui/icons'
 
-registerBuiltinIcons(); // 注册 RAN_ICON_NAMES 里的全部名称
-```
-
-```html
-<r-icon name="lock"></r-icon> <r-icon name="eye"></r-icon>
+registerBuiltinIcons(); // 提前注册 RAN_ICON_NAMES 里的全部名称（约 15 KB）
 ```
 
 有效名称以 `RanIconName` 联合类型与 `RAN_ICON_NAMES` 元组导出（编辑器可自动补全、拼写错误会被类型检查捕获）：

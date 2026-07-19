@@ -1,0 +1,52 @@
+@blue-1: var(--ran-color-primary, #4096ff);
+@green-1: var(--ran-color-success, #67cf22);
+@gray-1: var(--ran-color-text, #333);
+
+.ran-loading {
+  .dot {
+    width: var(--loading-dot-width, 4em);
+    height: var(--loading-dot-height, 4em);
+    position: var(--loading-dot-position, relative);
+    text-align: var(--loading-dot-text-align, center);
+    animation: var(--loading-dot-animation, ran-loading-dot-rotate 2s infinite linear);
+    animation-play-state: var(--loading-dot-animation-play-state, running);
+    .dot1 {
+      width: var(--loading-dot1-width, 60%);
+      height: var(--loading-dot1-height, 60%);
+      display: var(--loading-dot1-display, inline-block);
+      position: var(--loading-dot1-position, absolute);
+      top: var(--loading-dot1-top, 0);
+      background: var(--loading-dot1-background, @blue-1);
+      border-radius: var(--loading-dot1-border-radius, 100%);
+      animation: var(--loading-dot1-animation, ran-loading-dot-bounce 2s infinite ease-in-out);
+      animation-play-state: var(--loading-dot1-animation-play-state, running);
+    }
+    .dot2 {
+      width: var(--loading-dot2-width, 60%);
+      height: var(--loading-dot2-height, 60%);
+      display: var(--loading-dot2-display, inline-block);
+      position: var(--loading-dot2-position, absolute);
+      background: var(--loading-dot2-background, @blue-1);
+      border-radius: var(--loading-dot2-border-radius, 100%);
+      animation: var(--loading-dot2-animation, ran-loading-dot-bounce 2s infinite ease-in-out);
+      top: var(--loading-dot2-top, auto);
+      bottom: var(--loading-dot2-bottom, 0px);
+      animation-delay: var(--loading-dot2-animation-delay, -1s);
+      animation-play-state: var(--loading-dot2-animation-play-state, running);
+    }
+    @keyframes ran-loading-dot-rotate {
+      100% {
+        transform: var(--loading-dot-keyframes-rotate, rotate(360deg));
+      }
+    }
+    @keyframes ran-loading-dot-bounce {
+      0%,
+      100% {
+        transform: var(--loading-dot-keyframes-bounce-0, scale(0));
+      }
+      50% {
+        transform: var(--loading-dot-keyframes-bounce-50, scale(1));
+      }
+    }
+  }
+}

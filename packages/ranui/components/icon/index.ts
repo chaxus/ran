@@ -72,6 +72,26 @@ export const registerIcons = (icons: Record<string, unknown>): void => {
 // opt-in via registerBuiltinIcons(). See core-icons.ts.
 registerIcons(coreIcons);
 
+// Name-driven lazy loading of the bundled icon set (same DX as <r-loading name="…">):
+// `<r-icon name="home">` works with zero registration and only fetches home.svg —
+// no `import 'ranui/icons'` (which eagerly pulls all ~43) and no per-icon registerIcon.
+// Each SVG is a separate async chunk (raw string); a name miss on a builtin lazy-loads
+// it, then registers → the existing `ranui-icon-registered` event re-renders. Custom
+// icons (not shipped with ranui) still use registerIcon(); the lib can't know them.
+const builtinIconLoaders = import.meta.glob<string>('../../assets/icons/*.svg', {
+  query: '?raw',
+  import: 'default',
+});
+const builtinIconLoaderByName: Record<string, () => Promise<string>> = {};
+for (const [filePath, loader] of Object.entries(builtinIconLoaders)) {
+  const name = filePath
+    .split('/')
+    .pop()
+    ?.replace(/\.svg$/, '');
+  // `sprite.svg` is a combined sheet, not an individually named icon.
+  if (name && name !== 'sprite') builtinIconLoaderByName[name] = loader;
+}
+
 /**
  * Names of the SVGs ranui ships in `assets/icons/`. This tuple is the source of
  * truth for {@link RanIconName}; a unit test asserts it stays in sync with the
@@ -242,6 +262,11 @@ export class Icon extends RanElement {
           const cacheKey = `inline:${iconName}`;
           const svg = iconSvgCache.get(cacheKey);
           if (!svg) {
+            const loader = builtinIconLoaderByName[iconName];
+            if (loader) {
+              this.lazyLoadBuiltinIcon(iconName, loader);
+              return;
+            }
             if (this.isDev && hasStartedRegistration) {
               console.warn(`[ranui-icon] icon not registered: ${iconName}`);
             }
@@ -259,6 +284,24 @@ export class Icon extends RanElement {
         }
       }
     }
+  };
+
+  /**
+   * A builtin icon name that isn't registered yet → fetch its SVG chunk on demand,
+   * then registerIcon() (which caches it and dispatches `ranui-icon-registered`; this
+   * element's own listener turns that into a re-render if the name still matches). The
+   * dynamic import is module-cached, so concurrent/duplicate calls share one fetch.
+   */
+  lazyLoadBuiltinIcon = (name: string, loader: () => Promise<string>): void => {
+    loader()
+      .then((svg) => {
+        registerIcon(name, svg);
+      })
+      .catch((error) => {
+        if (this.isDev) {
+          console.warn(`[ranui-icon] lazy load builtin failed: ${name}`, error);
+        }
+      });
   };
 
   isSvgText = (value: string): boolean => {

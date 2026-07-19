@@ -1,0 +1,67 @@
+@blue-1: var(--ran-color-primary, #4096ff);
+@green-1: var(--ran-color-success, #67cf22);
+@gray-1: var(--ran-color-text, #333);
+
+.ran-loading {
+  .solar {
+    width: var(--loading-solar-width, 250px);
+    height: var(--loading-solar-height, 250px);
+    display: var(--loading-solar-display, flex);
+    justify-content: var(--loading-solar-justify-content, center);
+    align-items: var(--loading-solar-align-items, center);
+    @keyframes solar {
+      from {
+        transform: var(--loading-solar-keyframes-from, rotate(0));
+      }
+      to {
+        transform: var(--loading-solar-keyframes-to, rotate(359deg));
+      }
+    }
+
+    .orbit {
+      position: var(--loading-solar-orbit-position, relative);
+      display: var(--loading-solar-orbit-display, flex);
+      justify-content: var(--loading-solar-orbit-justify-content, center);
+      align-items: var(--loading-solar-orbit-align-items, center);
+      border: var(--loading-solar-orbit-border, 1px solid #77777d);
+      border-radius: var(--loading-solar-orbit-border-radius, 50%);
+    }
+
+    .earth-orbit {
+      width: var(--loading-solar-earth-orbit-width, 165px);
+      height: var(--loading-solar-earth-orbit-height, 165px);
+      animation: var(--loading-solar-earth-orbit-animation, solar 12s linear 0s infinite);
+      animation-play-state: var(--loading-solar-earth-orbit-animation-play-state, running);
+    }
+
+    .venus-orbit {
+      width: var(--loading-solar-venus-orbit-width, 120px);
+      height: var(--loading-solar-venus-orbit-height, 120px);
+      animation: var(--loading-solar-venus-orbit-width, solar 7.4s linear 0s infinite);
+      animation-play-state: var(--loading-solar-venus-orbit-animation-play-state, running);
+    }
+
+    .mercury-orbit {
+      width: var(--loading-solar-mercury-orbit-width, 90px);
+      height: var(--loading-solar-mercury-orbit-height, 90px);
+      animation: var(--loading-solar-mercury-orbit-animation, solar 3s linear 0s infinite);
+      animation-play-state: var(--loading-solar-mercury-orbit-animation-play-state, running);
+    }
+
+    .planet {
+      position: var(--loading-solar-planet-position, absolute);
+      top: var(--loading-solar-planet-top, -5px);
+      width: var(--loading-solar-planet-width, 10px);
+      height: var(--loading-solar-planet-height, 10px);
+      border-radius: var(--loading-solar-planet-border-radius, 50%);
+      background: var(--loading-solar-planet-background, #3ff9dc);
+    }
+
+    .sun {
+      width: var(--loading-solar-sun-width, 35px);
+      height: var(--loading-solar-sun-height, 35px);
+      border-radius: var(--loading-solar-sun-border-radius, 50%);
+      background: var(--loading-solar-sun-background, #ffab91);
+    }
+  }
+}

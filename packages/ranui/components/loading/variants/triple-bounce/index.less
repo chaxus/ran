@@ -1,0 +1,36 @@
+@blue-1: var(--ran-color-primary, #4096ff);
+@green-1: var(--ran-color-success, #67cf22);
+@gray-1: var(--ran-color-text, #333);
+
+.ran-loading {
+  .triple-bounce {
+    width: var(--loading-triple-bounce-width, 10em);
+    text-align: var(--loading-triple-bounce-text-align, center);
+    div {
+      width: var(--loading-triple-bounce-div-width, 2em);
+      height: var(--loading-triple-bounce-div-height, 2em);
+      background: var(--loading-triple-bounce-div-background, @blue-1);
+      border-radius: var(--loading-triple-bounce-div-border-radius, 100%);
+      display: var(--loading-triple-bounce-div-display, inline-block);
+      animation: var(--loading-triple-bounce-div-animation, ran-loading-triple-bounce 1.4s infinite ease-in-out);
+      animation-play-state: var(--loading-triple-bounce-div-animation-play-state, running);
+      animation-fill-mode: var(--loading-triple-bounce-div-animation-fill-mode, both);
+    }
+    .triple-bounce1 {
+      animation-delay: var(--loading-triple-bounce1-animation-delay, -0.32s);
+    }
+    .triple-bounce2 {
+      animation-delay: var(--loading-triple-bounce2-animation-delay, -0.16s);
+    }
+    @keyframes ran-loading-triple-bounce {
+      0%,
+      80%,
+      100% {
+        transform: var(--loading-triple-bounce-keyframes-0, scale(0));
+      }
+      40% {
+        transform: var(--loading-triple-bounce-keyframes-40, scale(1));
+      }
+    }
+  }
+}

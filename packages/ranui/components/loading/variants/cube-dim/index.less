@@ -1,0 +1,80 @@
+@blue-1: var(--ran-color-primary, #4096ff);
+@green-1: var(--ran-color-success, #67cf22);
+@gray-1: var(--ran-color-text, #333);
+
+.ran-loading {
+  .cube-dim {
+    height: var(--loading-cube-dim-height, 9em);
+    width: var(--loading-cube-dim-width, 9em);
+    padding: var(--loading-cube-dim-padding, 3em);
+    transform: var(--loading-cube-dim-transform, rotateX(45deg) rotateZ(45deg));
+    transform-style: var(--loading-cube-dim-transform-style, preserve-3d);
+    @keyframes anim {
+      50% {
+        transform: var(--loading-cube-dim-width, translateZ(0.5em));
+      }
+    }
+    &-item {
+      background-color: var(--loading-cube-dim-item-background-color, #05afd1);
+      position: var(--loading-cube-dim-item-position, relative);
+      transform: var(--loading-cube-dim-item-transform, translateZ(3em));
+      transform-style: var(--loading-cube-dim-item-transform-style, preserve-3d);
+      /* transform only — the bare `0.25s` shorthand meant `all`, which also
+         faded the shadow color on a theme flip */
+      transition: var(--loading-cube-dim-item-transition, transform 0.25s);
+      box-shadow: var(--loading-cube-dim-item-box-shadow, 13em 13em 1.5em rgba(0, 0, 0, 0.1));
+      animation: var(--loading-cube-dim-item-animation, anim 1s infinite);
+      animation-play-state: var(--loading-cube-dim-item-animation-play-state, running);
+      float: var(--loading-cube-dim-item-float, left);
+      height: var(--loading-cube-dim-item-height, 3em);
+      width: var(--loading-cube-dim-item-width, 3em);
+      &:nth-child(1) {
+        animation-delay: var(--loading-cube-dim-item-nth-child-1-animation-delay, 0.05s);
+      }
+      &:nth-child(2) {
+        animation-delay: var(--loading-cube-dim-item-nth-child-2-animation-delay, 0.1s);
+      }
+      &:nth-child(3) {
+        animation-delay: var(--loading-cube-dim-item-nth-child-3-animation-delay, 0.15s);
+      }
+      &:nth-child(4) {
+        animation-delay: var(--loading-cube-dim-item-nth-child-4-animation-delay, 0.2s);
+      }
+      &:nth-child(5) {
+        animation-delay: var(--loading-cube-dim-item-nth-child-5-animation-delay, 0.25s);
+      }
+      &:nth-child(6) {
+        animation-delay: var(--loading-cube-dim-item-nth-child-6-animation-delay, 0.3s);
+      }
+      &:nth-child(7) {
+        animation-delay: var(--loading-cube-dim-item-nth-child-7-animation-delay, 0.35s);
+      }
+      &:nth-child(8) {
+        animation-delay: var(--loading-cube-dim-item-nth-child-8-animation-delay, 0.4s);
+      }
+      &:nth-child(9) {
+        animation-delay: var(--loading-cube-dim-item-nth-child-9-animation-delay, 0.45s);
+      }
+      &::before {
+        content: var(--loading-cube-dim-item-before-content, '');
+        float: var(--loading-cube-dim-item-before-float, left);
+        height: var(--loading-cube-dim-item-before-height, 3em);
+        position: var(--loading-cube-dim-item-before-position, absolute);
+        width: var(--loading-cube-dim-item-before-width, 3em);
+        background-color: var(--loading-cube-dim-item-before-background-color, #048ca7);
+        transform: var(--loading-cube-dim-item-before-transform, rotateY(90deg) translateX(3em));
+        transform-origin: var(--loading-cube-dim-item-before-transform-origin, 100% 0);
+      }
+      &::after {
+        content: var(--loading-cube-dim-item-after-content, '');
+        float: var(--loading-cube-dim-item-after-float, left);
+        height: var(--loading-cube-dim-item-after-height, 3em);
+        position: var(--loading-cube-dim-item-after-position, absolute);
+        width: var(--loading-cube-dim-item-after-width, 3em);
+        background-color: var(--loading-cube-dim-item-after-background-color, #049dbc);
+        transform: var(--loading-cube-dim-item-after-transform, rotateX(-90deg) translateY(3em));
+        transform-origin: var(--loading-cube-dim-item-after-transform-origin, 100% 100%);
+      }
+    }
+  }
+}

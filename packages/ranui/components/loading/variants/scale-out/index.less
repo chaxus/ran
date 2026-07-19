@@ -1,0 +1,23 @@
+@blue-1: var(--ran-color-primary, #4096ff);
+@green-1: var(--ran-color-success, #67cf22);
+@gray-1: var(--ran-color-text, #333);
+
+.ran-loading {
+  .scale-out {
+    width: var(--loading-scale-out-width, 4em);
+    height: var(--loading-scale-out-height, 4em);
+    background: var(--loading-scale-out-background, @blue-1);
+    border-radius: var(--loading-scale-out-border-radius, 100%);
+    animation: var(--loading-scale-out-animation, ran-loading-scale-out 1s infinite ease-in-out);
+    animation-play-state: var(--loading-scale-out-animation-play-state, running);
+    @keyframes ran-loading-scale-out {
+      0% {
+        transform: var(--loading-scale-out-keyframes-0-transform, scale(0));
+      }
+      100% {
+        transform: var(--loading-scale-out-keyframes-100-transform, scale(1));
+        opacity: var(--loading-scale-out-keyframes-100-transform, 0);
+      }
+    }
+  }
+}

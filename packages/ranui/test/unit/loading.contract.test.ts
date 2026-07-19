@@ -71,24 +71,28 @@ describe('r-loading contract', () => {
     expect(shadow.querySelector('.ran-loading')).not.toBeNull();
   });
 
-  it('createLoading clears previous animation before rendering new one', () => {
+  it('createLoading clears previous animation before rendering new one', async () => {
     const loading = document.createElement('r-loading') as any;
     document.body.appendChild(loading);
     const shadow = loading._shadowDom as ShadowRoot;
 
     loading.name = ICON_NAME_AMP.ROTATE;
+    await loading._pending;
     expect(shadow.querySelector('.rotate')).not.toBeNull();
 
     loading.name = ICON_NAME_AMP.STRETCH;
+    await loading._pending;
     expect(shadow.querySelector('.rotate')).toBeNull();
     expect(shadow.querySelector('.stretch')).not.toBeNull();
   });
 
-  it.each(ALL_ANIMATIONS)('renders %s animation with selector %s', (name, selector) => {
+  // Non-core variants render lazily (dynamic import) → await the in-flight promise.
+  it.each(ALL_ANIMATIONS)('renders %s animation with selector %s', async (name, selector) => {
     const loading = document.createElement('r-loading') as any;
     document.body.appendChild(loading);
     const shadow = loading._shadowDom as ShadowRoot;
     loading.name = name;
+    await loading._pending;
     expect(shadow.querySelector(selector)).not.toBeNull();
   });
 

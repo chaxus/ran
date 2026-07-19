@@ -1,0 +1,41 @@
+@blue-1: var(--ran-color-primary, #4096ff);
+@green-1: var(--ran-color-success, #67cf22);
+@gray-1: var(--ran-color-text, #333);
+
+.ran-loading {
+  .stretch {
+    width: var(--loading-stretch-width, 4em);
+    height: var(--loading-stretch-height, 5em);
+    text-align: var(--loading-stretch-text-align, center);
+    display: var(--loading-stretch-display, flex);
+    flex-flow: var(--loading-stretch-flex-flow, row nowrap);
+    justify-content: var(--loading-stretch-justify-content, space-between);
+    align-items: var(--loading-stretch-align-items, center);
+    @keyframes ran-loading-stretch {
+      0%,
+      40%,
+      100% {
+        transform: var(--loading-stretch-keyframes-0, scaleY(0.4));
+      }
+      20% {
+        transform: var(--loading-stretch-keyframes-20, scaleY(1));
+      }
+    }
+    div {
+      background-color: var(--loading-stretch-div-background-color, @blue-1);
+      height: var(--loading-stretch-div-height, 100%);
+      width: var(--loading-stretch-div-width, 0.4em);
+      animation: var(--loading-stretch-div-animation, ran-loading-stretch 1.2s infinite ease-in-out);
+      animation-play-state: var(--loading-stretch-div-animation-play-state, running);
+    }
+    @animation-delay-base: -1.3s;
+    .set-animation-delay(@index) when (@index > 1) {
+      @animation-delay: @animation-delay-base + (@index * 0.1s);
+      .rect@{index} {
+        animation-delay: var(--loading-stretch-rect-animation-delay, ~'@{animation-delay}');
+      }
+      .set-animation-delay(@index - 1);
+    }
+    .set-animation-delay(5);
+  }
+}

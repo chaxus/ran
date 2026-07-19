@@ -181,4 +181,5 @@ None. The component dispatches no custom events.
 - **CSS Variables**: Customize size and color via the `--loading-{type}-*` tokens rather than wrapping elements.
 - **Sizing**: Prefer `px` units over the default `em` sizing for predictable dimensions.
 - **Performance**: Avoid rendering many simultaneous animations on one screen.
+- **On-demand loading**: Each animation is a separate lazy chunk (its JS + CSS), so a `name` only ever loads the one variant it uses — referencing one animation never bundles the other 28. The default `circle` and the common `dot` are built in for instant, flash-free first render; the rest load asynchronously on first use. Usage is unchanged — just set `name`.
 - **Theming**: The base colors follow `--ran-color-*` theme tokens, so animations adapt to light and dark modes automatically.

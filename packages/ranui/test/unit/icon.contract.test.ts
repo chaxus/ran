@@ -218,4 +218,14 @@ describe('r-icon contract', () => {
     const result = (icon as any).parseSvg('<malformed!!!>');
     expect(result).toBeUndefined();
   });
+
+  // A bundled icon name renders with zero registration: the cache miss lazy-loads
+  // the SVG chunk, registers it, and the registered-event re-renders the element.
+  it('lazy-loads a bundled icon by name without any registration', async () => {
+    const icon = document.createElement('r-icon') as Icon;
+    icon.name = 'home'; // a real name from assets/icons/, never registered in this test
+    document.body.appendChild(icon);
+    await sleep(50); // dynamic import + registerIcon + re-render
+    expect((icon as any)._shadowDom?.querySelector('svg')).not.toBeNull();
+  });
 });

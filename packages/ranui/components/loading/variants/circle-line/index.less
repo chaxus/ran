@@ -1,0 +1,37 @@
+@blue-1: var(--ran-color-primary, #4096ff);
+@green-1: var(--ran-color-success, #67cf22);
+@gray-1: var(--ran-color-text, #333);
+
+.ran-loading {
+  .circle-line {
+    @keyframes circle-line {
+      from {
+        transform: var(--loading-circle-line-keyframes-from, rotate(0));
+      }
+      to {
+        transform: var(--loading-circle-line-keyframes-to, rotate(359deg));
+      }
+    }
+    &-border {
+      width: var(--loading-circle-line-border-width, 50px);
+      height: var(--loading-circle-line-border-height, 50px);
+      padding: var(--loading-circle-line-border-padding, 3px);
+      display: var(--loading-circle-line-border-display, flex);
+      justify-content: var(--loading-circle-line-border-justify-content, center);
+      align-items: var(--loading-circle-line-border-align-items, center);
+      border-radius: var(--loading-circle-line-border-border-radius, 50%);
+      background: var(
+        --loading-circle-line-border-background,
+        linear-gradient(0deg, rgba(63, 249, 220, 0.1) 33%, rgba(63, 249, 220, 1) 100%)
+      );
+      animation: var(--loading-circle-line-border-animation, circle-line 0.8s linear 0s infinite);
+      animation-play-state: var(--loading-circle-line-border-animation-play-state, running);
+    }
+    &-core {
+      width: var(--loading-circle-line-core-width, 100%);
+      height: var(--loading-circle-line-core-height, 100%);
+      background: var(--loading-circle-line-core-background, #fff);
+      border-radius: var(--loading-circle-line-core-border-radius, 50%);
+    }
+  }
+}

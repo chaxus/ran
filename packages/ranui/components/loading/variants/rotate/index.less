@@ -1,0 +1,24 @@
+@blue-1: var(--ran-color-primary, #4096ff);
+@green-1: var(--ran-color-success, #67cf22);
+@gray-1: var(--ran-color-text, #333);
+
+.ran-loading {
+  .rotate {
+    @keyframes ran-loading-rotate {
+      0% {
+        transform: var(--loading-rotate-keyframes-0, perspective(120px) rotateX(0deg) rotateY(0deg));
+      }
+      50% {
+        transform: var(--loading-rotate-keyframes-50, perspective(120px) rotateX(-180.1deg) rotateY(0deg));
+      }
+      100% {
+        transform: var(--loading-rotate-keyframes-100, perspective(120px) rotateX(-180deg) rotateY(-179.9deg));
+      }
+    }
+    width: var(--loading-rotate-width, 4em);
+    height: var(--loading-rotate-height, 4em);
+    background: var(--loading-rotate-background, @blue-1);
+    animation: var(--loading-rotate-animation, ran-loading-rotate 1.2s infinite ease-in-out);
+    animation-play-state: var(--loading-rotate-div-animation-play-state, running);
+  }
+}
