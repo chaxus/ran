@@ -352,6 +352,18 @@ const themeEnConfig: DefaultTheme.Config = {
             link: '/src/article/functional_programming',
           },
           {
+            text: 'Web document preview',
+            link: '/src/article/doc_preview',
+          },
+          {
+            text: 'Web video encryption',
+            link: '/src/article/video',
+          },
+          {
+            text: 'Visual rendering engine',
+            link: '/src/article/visual',
+          },
+          {
             text: 'Sorting algorithm',
             link: '/src/article/sort/',
             collapsed: true,
@@ -367,6 +379,11 @@ const themeEnConfig: DefaultTheme.Config = {
               { text: 'Bucket sort', link: '/src/article/sort/bucket/' },
               { text: 'Radix sort', link: '/src/article/sort/radix/' },
             ],
+          },
+          {
+            text: 'Math',
+            collapsed: true,
+            items: [{ text: 'Linear algebra', link: '/src/article/math/linear_algebra' }],
           },
         ],
       },
