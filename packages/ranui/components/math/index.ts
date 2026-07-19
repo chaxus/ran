@@ -57,8 +57,9 @@ export class Math extends RanElement {
   contain: HTMLElement;
   _toolbar: HTMLElement;
   _copyResetTimer?: number;
+  _downloadMenu?: HTMLElement;
   static get observedAttributes(): string[] {
-    return ['latex', 'display', 'font', 'macros', 'wrap', 'copy', 'sheet'];
+    return ['latex', 'display', 'font', 'macros', 'wrap', 'copy', 'download', 'sheet'];
   }
   constructor() {
     super();
@@ -129,6 +130,17 @@ export class Math extends RanElement {
   }
   set copyable(v: boolean) {
     setBooleanAttribute(this, 'copy', v);
+  }
+  // What the copy button copies: `copy` / `copy="source"` → LaTeX source; `copy="mathml"`
+  // → the rendered MathML markup (Temml emits no SVG — MathML is the portable vector form).
+  get copyTarget(): 'source' | 'mathml' {
+    return getStringAttribute(this, 'copy') === 'mathml' ? 'mathml' : 'source';
+  }
+  get downloadable(): boolean {
+    return this.hasAttribute('download');
+  }
+  set downloadable(v: boolean) {
+    setBooleanAttribute(this, 'download', v);
   }
   get sheet(): string {
     return getStringAttribute(this, 'sheet');
@@ -204,17 +216,29 @@ export class Math extends RanElement {
     return btn;
   }
   private buildToolbar(): void {
+    this.closeDownloadMenu();
     this._toolbar.innerHTML = '';
     const buttons: HTMLElement[] = [];
-    if (this.copyable) buttons.push(this.iconButton('copy', this.label('copy', 'Copy LaTeX'), this.copySource));
+    if (this.copyable) {
+      const label = this.copyTarget === 'mathml' ? 'Copy MathML' : 'Copy LaTeX';
+      buttons.push(this.iconButton('copy', this.label('copy', label), this.copyContent));
+    }
+    if (this.downloadable)
+      buttons.push(this.iconButton('download', this.label('download', 'Download'), this.onDownload));
     buttons.forEach((b) => this._toolbar.appendChild(b));
     this._wrap.classList.toggle('has-controls', buttons.length > 0);
   }
-  private copySource = (): void => {
-    const source = this.latex;
-    if (!source || !navigator.clipboard) return;
-    navigator.clipboard.writeText(source).then(() => {
-      this.emit('copied', { kind: 'source' });
+  private currentMathML(): string {
+    const math = this.contain.querySelector('math');
+    return math ? math.outerHTML : '';
+  }
+  // Copy the source (default) or the rendered MathML, per the `copy` attribute value.
+  private copyContent = (): void => {
+    const target = this.copyTarget;
+    const text = target === 'mathml' ? this.currentMathML() : this.latex;
+    if (!text || !navigator.clipboard) return;
+    navigator.clipboard.writeText(text).then(() => {
+      this.emit('copied', { kind: target });
       const icon = this._toolbar.querySelector('r-icon[name="copy"]');
       if (icon) {
         icon.setAttribute('name', 'check');
@@ -223,19 +247,88 @@ export class Math extends RanElement {
       }
     });
   };
+  // ── Download (opt-in) — source (.tex) / MathML (.mml) ─────────────────────
+  // `download` (bare) offers both via a menu; restrict with `download="mathml"` or
+  // `download="mathml source"`. A single format downloads directly.
+  private downloadFormats(): string[] {
+    const v = getStringAttribute(this, 'download').trim();
+    const list = v ? v.split(/\s+/) : ['source', 'mathml'];
+    return list.filter((f) => f === 'source' || f === 'mathml');
+  }
+  private onDownload = (): void => {
+    const formats = this.downloadFormats();
+    if (formats.length <= 1) this.triggerDownload(formats[0] || 'mathml');
+    else this.toggleDownloadMenu();
+  };
+  private triggerDownload(format: string): void {
+    if (format === 'source') this.downloadSource();
+    else this.downloadMathML();
+  }
+  private saveBlob(blob: Blob, filename: string): void {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+  private downloadSource(): void {
+    const source = this.latex;
+    if (!source) return;
+    this.saveBlob(new Blob([source], { type: 'application/x-tex;charset=utf-8' }), 'formula.tex');
+    this.emit('download', { format: 'source' });
+  }
+  private downloadMathML(): void {
+    const mml = this.currentMathML();
+    if (!mml) return;
+    this.saveBlob(
+      new Blob([`<?xml version="1.0" encoding="UTF-8"?>\n${mml}`], { type: 'application/mathml+xml;charset=utf-8' }),
+      'formula.mml',
+    );
+    this.emit('download', { format: 'mathml' });
+  }
+  private toggleDownloadMenu(): void {
+    if (this._downloadMenu) {
+      this.closeDownloadMenu();
+      return;
+    }
+    const menu = Div().class('ran-math-menu').part('menu').build();
+    const names: Record<string, string> = {
+      source: this.label('download-source', 'Source (.tex)'),
+      mathml: this.label('download-mathml', 'MathML (.mml)'),
+    };
+    this.downloadFormats().forEach((fmt) => {
+      const item = View('button').class('ran-math-menu-item').attr('type', 'button').build();
+      item.textContent = names[fmt] || fmt;
+      this._events.on(item, 'click', () => {
+        this.triggerDownload(fmt);
+        this.closeDownloadMenu();
+      });
+      menu.appendChild(item);
+    });
+    this._wrap.appendChild(menu);
+    this._downloadMenu = menu;
+  }
+  private closeDownloadMenu = (): void => {
+    this._downloadMenu?.remove();
+    this._downloadMenu = undefined;
+  };
   // ── Lifecycle ─────────────────────────────────────────────────────────────
   connectedCallback(): void {
     this.handlerExternalCss();
     this.render();
+    // Close the download menu when the pointer leaves (the toolbar hides too).
+    this._events.on(this._wrap, 'mouseleave', this.closeDownloadMenu);
   }
   disconnectedCallback(): void {
     this._events.abort();
     window.clearTimeout(this._copyResetTimer);
+    this.closeDownloadMenu();
   }
   attributeChangedCallback(k: string, o: string | null, n: string | null): void {
     if (o === n) return;
     if (k === 'latex' || k === 'display' || k === 'font' || k === 'macros' || k === 'wrap') this.render();
-    else if (k === 'copy') this.buildToolbar();
+    else if (k === 'copy' || k === 'download') this.buildToolbar();
     else if (k === 'sheet') this.handlerExternalCss();
   }
 }

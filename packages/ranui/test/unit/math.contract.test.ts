@@ -240,6 +240,64 @@ describe('r-math contract', () => {
     expect(math._toolbar.querySelector('r-icon')?.getAttribute('name')).toBe('check');
   });
 
+  it('copies the rendered MathML when copy="mathml"', async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, 'clipboard', { value: { writeText }, configurable: true });
+
+    const math = document.createElement('r-math') as any;
+    math.setAttribute('copy', 'mathml');
+    document.body.appendChild(math);
+    const onCopied = vi.fn();
+    math.addEventListener('copied', onCopied);
+    math.latex = 'x^2';
+    await sleep();
+
+    math._toolbar.querySelector('.ran-math-btn').click();
+    await sleep();
+
+    expect(writeText).toHaveBeenCalledTimes(1);
+    expect(writeText.mock.calls[0][0]).toContain('<math'); // MathML markup, not LaTeX
+    expect(onCopied.mock.calls[0][0].detail).toEqual({ kind: 'mathml' });
+  });
+
+  it('downloads directly when a single download format is given', async () => {
+    const createObjectURL = vi.fn(() => 'blob:x');
+    const revokeObjectURL = vi.fn();
+    Object.defineProperty(URL, 'createObjectURL', { value: createObjectURL, configurable: true });
+    Object.defineProperty(URL, 'revokeObjectURL', { value: revokeObjectURL, configurable: true });
+
+    const math = document.createElement('r-math') as any;
+    math.setAttribute('download', 'mathml');
+    document.body.appendChild(math);
+    const onDownload = vi.fn();
+    math.addEventListener('download', onDownload);
+    math.latex = 'x^2';
+    await sleep();
+
+    math._toolbar.querySelector('.ran-math-btn').click();
+    expect(createObjectURL).toHaveBeenCalledTimes(1);
+    expect(onDownload.mock.calls[0][0].detail).toEqual({ format: 'mathml' });
+    // No menu for a single format.
+    expect(math._wrap.querySelector('.ran-math-menu')).toBeNull();
+  });
+
+  it('opens a format menu when download lists multiple formats', async () => {
+    const math = document.createElement('r-math') as any;
+    math.setAttribute('download', ''); // bare → source + mathml
+    document.body.appendChild(math);
+    math.latex = 'x^2';
+    await sleep();
+
+    math._toolbar.querySelector('.ran-math-btn').click();
+    const items = math._wrap.querySelectorAll('.ran-math-menu-item');
+    expect(items.length).toBe(2);
+    expect([...items].map((i: any) => i.textContent)).toEqual(['Source (.tex)', 'MathML (.mml)']);
+
+    // Pointer leaving the diagram closes the menu.
+    math._wrap.dispatchEvent(new Event('mouseleave'));
+    expect(math._wrap.querySelector('.ran-math-menu')).toBeNull();
+  });
+
   it('attributeChangedCallback calls render on latex and display change', () => {
     const math = document.createElement('r-math') as any;
     document.body.appendChild(math);

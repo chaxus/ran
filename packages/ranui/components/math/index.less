@@ -75,6 +75,35 @@
   outline: var(--ran-math-button-focus-outline, 2px solid var(--ran-color-primary, #1890ff));
   outline-offset: 1px;
 }
+
+/* Download format menu (shown when `download` lists >1 format). */
+.ran-math-menu {
+  position: absolute;
+  top: var(--ran-math-menu-top, 40px);
+  right: var(--ran-math-toolbar-right, 6px);
+  display: flex;
+  flex-direction: column;
+  min-width: 132px;
+  padding: 4px;
+  border-radius: var(--ran-radius-md, 8px);
+  background: var(--ran-math-toolbar-background, var(--ran-color-bg-elevated, #fff));
+  box-shadow: var(--ran-math-toolbar-shadow, var(--ran-shadow-menu, 0 2px 8px rgba(0, 0, 0, 0.12)));
+  z-index: 1;
+  text-align: left;
+}
+.ran-math-menu-item {
+  padding: 6px 10px;
+  border: none;
+  border-radius: var(--ran-radius-sm, 6px);
+  background: transparent;
+  color: var(--ran-math-menu-item-color, var(--ran-color-text, #222));
+  text-align: left;
+  font-size: 13px;
+  cursor: pointer;
+}
+.ran-math-menu-item:hover {
+  background: var(--ran-math-button-hover-background, var(--ran-color-bg-muted, rgba(0, 0, 0, 0.06)));
+}
 @media (prefers-reduced-motion: reduce) {
   .ran-math-toolbar {
     transition: none;

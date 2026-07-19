@@ -209,27 +209,38 @@ Feature set:
 - **Errors → DOM**: bad LaTeX (`throwOnError: true` + `catch`) renders an `::part(error)`
   `<pre>` box + dispatches an `error` CustomEvent `{ detail: { message } }`
   (`bubbles+composed`). No more console-only swallow.
-- **Copy (opt-in)**: `copy` boolean attr → a hover-revealed top-right toolbar with a single
-  button that copies the **LaTeX source** to the clipboard (icon flips to a check-mark for
-  1.2 s), dispatches `copied` `{ kind: 'source' }`, localizable via `label-copy`. Mirrors
-  r-mermaid: `<r-icon name="copy">` (core glyph, auto-registered by `@/components/icon`),
-  `EventManager` for the click, `.has-controls` gate. A bare `<r-math>` has no toolbar.
+- **Copy (opt-in)**: `copy` boolean attr → a hover-revealed top-right toolbar button that
+  copies the **LaTeX source** to the clipboard (icon flips to a check-mark for 1.2 s),
+  dispatches `copied` `{ kind }`, localizable via `label-copy`. `copy="mathml"` copies the
+  rendered **MathML markup** instead (`kind: 'mathml'`) — Temml emits no SVG, so MathML is
+  the portable/vector form. Mirrors r-mermaid: `<r-icon name="copy">` (core glyph,
+  auto-registered by `@/components/icon`), `EventManager`, `.has-controls` gate. A bare
+  `<r-math>` has no toolbar.
+- **Download (opt-in)**: `download` attr → export **source `.tex`** (`application/x-tex`)
+  and/or **MathML `.mml`** (`application/mathml+xml`). Bare `download` offers both via a
+  small menu (like r-mermaid's format menu); `download="mathml"` / `download="source"`
+  download that one directly. Dispatches `download` `{ format }`, `label-download` /
+  `label-download-source` / `label-download-mathml`. **No SVG/PNG raster export**: MathML
+  can only rasterize via an SVG `<foreignObject>`, which _always_ taints the canvas →
+  `toBlob` throws (r-mermaid hits this only for HTML-label diagrams; r-math would hit it for
+  every formula). Raster/SVG image output would need a different backend (MathJax-SVG); out
+  of scope for the native-MathML approach.
 - **Bundled-font opt-out**: `font="system"` skips `ensureMathFonts()` and falls through to
   the system-font stack in `temml.css` — trades cross-browser consistency back for ~518 KB.
 - **Temml pass-through**: `macros='{"\\RR":"\\mathbb{R}"}'` (JSON, invalid JSON ignored) →
   Temml `macros`; `wrap="none|tex|="` → Temml soft line-breaking (invalid values dropped).
-- **Events**: `render` `{ ok: true }`, `error` `{ message }`, `copied` `{ kind }` (all
-  `bubbles+composed`).
+- **Events**: `render` `{ ok: true }`, `error` `{ message }`, `copied` `{ kind }`,
+  `download` `{ format }` (all `bubbles+composed`).
 - **Parts**: `::part(math)` (wrap), `::part(render)` (MathML target), `::part(error)`,
-  `::part(toolbar)`, `::part(button)`.
+  `::part(toolbar)`, `::part(button)`, `::part(menu)`.
 - **CSS vars**: `--ran-math-{display,inline-display,color,align,position}`,
   `--ran-math-error-{color,background,padding}`,
   `--ran-math-toolbar-{top,right,gap,background,shadow}`,
-  `--ran-math-button-{size,color,hover-background,hover-color,focus-outline}` — each
-  dark-safe (fallbacks point at flipping tokens).
+  `--ran-math-button-{size,color,hover-background,hover-color,focus-outline}`,
+  `--ran-math-menu-{top,item-color}` — each dark-safe (fallbacks point at flipping tokens).
 
 **Trade-off accepted (documented):** the bundled Latin Modern face makes glyphs identical
-across browsers, but MathML *layout* is still the browser's own — so old Safari's spacing
+across browsers, but MathML _layout_ is still the browser's own — so old Safari's spacing
 of a few constructs is marginally less refined than KaTeX's hand-tuned HTML boxes. This is
 inherent to native MathML and affects spacing only, not glyphs. The cost of the guarantee
 is the ~518 KB lazy font chunk; a consumer who wants to trade consistency back for bytes
@@ -238,9 +249,9 @@ system-font stack already present in `temml.css`.
 
 ### 3.2 Not yet done (optional)
 
-- **Copy SVG/MathML** (currently copies source only), and a `download` control (MathML /
-  source) if a consumer asks — the toolbar infrastructure (`.has-controls`, `iconButton`,
-  `EventManager`) is already in place, so adding buttons is cheap.
+- **Raster/SVG image export** — deliberately **not** implemented (see the download bullet:
+  MathML→canvas always taints). Would require a MathJax-SVG rendering path; only worth it if
+  a consumer specifically needs a PNG of a formula.
 - **Raw Temml theme/trust options** (`errorColor`, `trust`, `colorIsTextColor`) as
   attributes if needed.
 

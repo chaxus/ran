@@ -154,6 +154,11 @@ interface BaseIntrinsicElements {
   'r-math': any & {
     latex: string;
     display: 'inline' | 'block';
+    font: 'system' | string;
+    macros: string;
+    wrap: 'none' | 'tex' | '=';
+    copy: boolean | 'source' | 'mathml';
+    download: boolean | string;
     sheet: string;
   };
   'r-button': any & {
