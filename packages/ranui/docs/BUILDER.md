@@ -195,6 +195,21 @@ Div().children(
 binding so it updates without rebuilding. `Show` returns a getter, so it slots
 into `children()` anywhere.
 
+**Control flow composes.** A `Show`/`Switch` branch (and any reactive getter) may
+return **any `Child`** — including a `For`/`Index` list or a nested `Show` — no
+wrapper element needed:
+
+```ts
+Show({
+  when: () => loaded(),
+  children: () => For({ each: () => rows(), key: (r) => r.id, render: (r) => Li().text(r.title) }),
+  fallback: () => Spinner(),
+});
+```
+
+When the branch flips away, the nested list's scope (its effects) is disposed and
+its nodes removed; re-entering rebuilds fresh from the current source.
+
 ### Multi-branch — `Switch` / `Match`
 
 `Switch` is the n-way `Show`: it renders the **first** `Match` whose `when` is

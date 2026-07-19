@@ -798,3 +798,105 @@ describe('Switch / Match', () => {
     });
   });
 });
+
+// ---------------------------------------------------------------------------
+// Composition — control flow nests freely (Show/Switch return For/Index/getter)
+// ---------------------------------------------------------------------------
+
+describe('Composition — Show/Switch containing For/Index', () => {
+  it('Show can return a For directly (no wrapper element)', () => {
+    createRoot(() => {
+      const [on, setOn] = signal(false);
+      const [rows] = signal([{ id: 1 }, { id: 2 }, { id: 3 }]);
+      const el = new ElementBuilder('ul')
+        .children(
+          Show({
+            when: () => on(),
+            children: () =>
+              For({ each: () => rows(), key: (r) => r.id, render: (r) => new ElementBuilder('li').text(`${r.id}`) }),
+            fallback: () => new ElementBuilder('p').text('off'),
+          }),
+        )
+        .build();
+      // falsy branch first — no list, no "[object Object]"
+      expect(el.querySelector('p')?.textContent).toBe('off');
+      expect(el.querySelectorAll('li').length).toBe(0);
+      expect(el.textContent).not.toContain('[object');
+      // flip on → the For list mounts directly
+      setOn(true);
+      expect(el.querySelector('p')).toBeNull();
+      expect([...el.querySelectorAll('li')].map((n) => n.textContent)).toEqual(['1', '2', '3']);
+    });
+  });
+
+  it('disposes the nested For scope when the branch flips away', () => {
+    createRoot(() => {
+      const [on, setOn] = signal(true);
+      const [rows, setRows] = signal([{ id: 1 }]);
+      const el = new ElementBuilder('ul')
+        .children(
+          Show({
+            when: () => on(),
+            children: () =>
+              For({ each: () => rows(), key: (r) => r.id, render: (r) => new ElementBuilder('li').text(`${r.id}`) }),
+          }),
+        )
+        .build();
+      expect(el.querySelectorAll('li').length).toBe(1);
+      setOn(false); // branch torn down → For scope disposed, nodes removed
+      expect(el.querySelectorAll('li').length).toBe(0);
+      // updating the (now-orphaned) source must not resurrect anything
+      setRows([{ id: 1 }, { id: 2 }]);
+      expect(el.querySelectorAll('li').length).toBe(0);
+      setOn(true); // re-enter → rebuilt fresh from current source
+      expect(el.querySelectorAll('li').length).toBe(2);
+    });
+  });
+
+  it('Switch branch can return an Index list', () => {
+    createRoot(() => {
+      const [mode, setMode] = signal<'list' | 'empty'>('empty');
+      const [nums] = signal([7, 8]);
+      const el = new ElementBuilder('div')
+        .children(
+          Switch({
+            fallback: () => new ElementBuilder('span').text('none'),
+            children: [
+              Match({
+                when: () => mode() === 'list',
+                children: () =>
+                  Index({ each: () => nums(), render: (n) => new ElementBuilder('b').text(() => `${n()}`) }),
+              }),
+            ],
+          }),
+        )
+        .build();
+      expect(el.querySelector('span')?.textContent).toBe('none');
+      setMode('list');
+      expect([...el.querySelectorAll('b')].map((n) => n.textContent)).toEqual(['7', '8']);
+      expect(el.querySelector('span')).toBeNull();
+    });
+  });
+
+  it('nests Show inside Show', () => {
+    createRoot(() => {
+      const [a, setA] = signal(false);
+      const [b, setB] = signal(false);
+      const el = new ElementBuilder('div')
+        .children(
+          Show({
+            when: () => a(),
+            children: () => Show({ when: () => b(), children: () => new ElementBuilder('i').text('both') }),
+          }),
+        )
+        .build();
+      expect(el.querySelector('i')).toBeNull();
+      setB(true);
+      expect(el.querySelector('i')).toBeNull(); // outer still false
+      setA(true);
+      expect(el.querySelector('i')?.textContent).toBe('both'); // both true
+      setA(false);
+      expect(el.querySelector('i')).toBeNull();
+    });
+  });
+});
