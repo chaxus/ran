@@ -4,6 +4,13 @@
 SwiftUI/Solid-style fine-grained reactivity. No virtual DOM, no re-render of a
 whole tree — a signal change updates only the exact node bound to it.
 
+> **Principle: build once, update in place.** A view function runs once; state
+> changes flow through fine-grained bindings, never by re-running the view. Pick
+> the primitive that matches the shape — value → getter binding; conditional →
+> [`Show`](#conditionals--show) / [`Switch`](#multi-branch--switch--match); list →
+> [`For`](#keyed-lists--for) / [`Index`](#index-lists--index). A raw getter child
+> is the coarse fallback (rebuilds its whole region on any read).
+
 ```ts
 import {
   View,
@@ -80,6 +87,21 @@ Ul()
 .delegate(manager, selector, type, handler) // event delegation on a container
 ```
 
+### Refs (incl. imperative custom-element methods)
+
+`createRef<T>()` + `.ref(holder)` capture the built element. For a custom
+element with imperative methods, **type the ref with the component's element
+class** (each component exports it) — then its methods are typed, no cast:
+
+```ts
+import { Popover } from 'ranui'; // the element class
+import { View, createRef } from 'ranui/builder';
+
+const ref = createRef<Popover>();
+View<Popover>('r-popover').attr('trigger', 'click').ref(ref).children(/* … */).build();
+ref.current?.closePopover(); // typed method, no `as` cast
+```
+
 ---
 
 ## 2. Reactivity
@@ -143,13 +165,56 @@ Return a node, a `null` (conditional), or an array (list). Static siblings aroun
 the getter keep their position.
 
 > **Semantics — this is a full rebuild, not a keyed diff.** On each change the
-> whole region is torn down and re-created; there is no per-item keying. That is
-> the right tool for **conditionals and small/on-demand lists** (menus, search
-> results, toggled blocks). It is _not_ a keyed list primitive: a rebuild drops
-> DOM state inside the region (focus, scroll, uncontrolled input values, in-flight
-> CSS transitions) and is O(n) per change. For large or high-churn lists, or when
-> you must preserve that state, keep a stable container and mutate/patch its rows
-> yourself (or bind per-row signals so only the changed row's text/attrs update).
+> whole region is torn down and re-created; there is no per-item keying, and it
+> re-runs on **every** change the getter reads — even one that doesn't alter the
+> result. It is the coarse escape hatch. Prefer the fine-grained primitives:
+> [`Show`](#conditionals--show) for conditionals (rebuilds only when the branch
+> flips) and [`For`](#keyed-lists--for) for lists (reuses nodes by key). Reach for
+> a raw getter only for content whose shape genuinely changes on every update.
+
+### Conditionals — `Show`
+
+`Show` is a **fine-grained** conditional: it rebuilds a branch only when the
+_truthiness_ of `when` flips, not on every change `when` reads. Content inside a
+branch updates through its own bindings — the branch is built once. (A raw getter
+child, by contrast, tears down and rebuilds on every dependency tick.)
+
+```ts
+import { Show } from 'ranui/builder';
+
+Div().children(
+  Show({
+    when: () => user(), // reads a signal
+    children: (u) => Span().text(() => u().name), // built once; text updates in place
+    fallback: () => Span().text('Signed out'), // optional
+  }),
+);
+```
+
+`children` gets an accessor to the narrowed truthy value — read it inside a
+binding so it updates without rebuilding. `Show` returns a getter, so it slots
+into `children()` anywhere.
+
+### Multi-branch — `Switch` / `Match`
+
+`Switch` is the n-way `Show`: it renders the **first** `Match` whose `when` is
+truthy (else `fallback`), and is equally fine-grained — only the _index_ of the
+winning branch is memoized, so it rebuilds only when the active branch changes.
+Evaluation short-circuits at the first match.
+
+```ts
+import { Switch, Match } from 'ranui/builder';
+
+Div().children(
+  Switch({
+    fallback: () => Span().text('idle'),
+    children: [
+      Match({ when: () => status() === 'loading', children: () => Spinner() }),
+      Match({ when: () => error(), children: (e) => ErrorView(e) }), // e: accessor to the truthy value
+    ],
+  }),
+);
+```
 
 ```ts
 // Conditional — toggles a node in/out between static siblings
@@ -162,6 +227,64 @@ Ul().children(() => rows().map((r) => Li().text(r.title)));
 On **SSR** a getter is evaluated once (static snapshot); reactivity is a
 client-only concern. Like all bindings, reactive children must be built inside a
 `createRoot` so their effects are owned and disposed with the page (see §3 Ownership).
+
+### Keyed lists — `For`
+
+For lists that add/remove/reorder, `For` matches items by `key` and **reuses
+their DOM nodes** — only changed items touch the DOM, so focus, scroll, input
+values and transitions inside surviving rows are preserved (a plain getter child
+would rebuild all of them). Pass the handle straight to `children()`.
+
+```ts
+import { For } from 'ranui/builder';
+
+const [rows, setRows] = signal([{ id: 1, title: 'a' }]);
+
+Ul().children(
+  For({
+    each: () => rows(), // reactive source array
+    key: (r) => r.id, // stable, UNIQUE identity per item
+    render: (r, index) => Li().text(() => `${index()}. ${r.title}`),
+  }),
+);
+```
+
+- `key` **must be unique** — it is how a node is matched to its item across
+  updates. A duplicate key is ignored (only the first item with it renders) and
+  warned in dev. (Don't use the array index as the key — that defeats reuse on
+  reorder.)
+- `each` reads a signal, so update it with a **new array** (`setRows([...])`).
+  Mutating the same array in place and re-setting it is skipped (`Object.is`
+  equality), and the list won't update.
+- `render` runs **once per item**, not on every list change. Drive per-row
+  updates with signals (e.g. `.text(() => …)`); `index` is a **getter** so it
+  stays correct after reorders.
+- Removing an item disposes that row's scope (its effects/cleanups). The whole
+  list is disposed with its owning `createRoot`.
+- **SSR**: rendered once as a static snapshot (no reconciliation).
+
+### Index lists — `Index`
+
+`Index` is the position-keyed counterpart to `For`: the node at index `i` is
+reused across updates and its **item is a signal** — when the value at that
+position changes, it updates in place (the node is not rebuilt); nodes never
+move. Use it when position is the identity (primitive arrays, fixed rows); use
+`For` when items have a stable id and can reorder.
+
+```ts
+import { Index } from 'ranui/builder';
+
+Ul().children(
+  Index({
+    each: () => nums(),
+    render: (n, i) => Li().text(() => `${i}: ${n()}`), // n is an accessor; i is a fixed number
+  }),
+);
+```
+
+Rule of thumb: **`Show`/`Switch` for conditionals; `For` (keyed by id) or `Index`
+(keyed by position) for lists; a raw getter child only for content that changes
+shape on every update.**
 
 A getter binding creates an effect **owned by the current scope** (see below), so
 it is cleaned up automatically when that scope is disposed. Reactivity applies to

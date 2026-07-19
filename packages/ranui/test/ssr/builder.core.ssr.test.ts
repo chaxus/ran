@@ -3,7 +3,7 @@
  * isSSR === true here, so HTMLElementMock / ShadowRootMock code paths are exercised.
  */
 import { describe, it, expect } from 'vitest';
-import { createRef, ElementBuilder } from '@/utils/builder/core';
+import { createRef, ElementBuilder, For, Index, Show, Switch, Match } from '@/utils/builder/core';
 import { HTMLElementMock, ShadowRootMock } from '@/utils/builder/mocks';
 
 // ---------------------------------------------------------------------------
@@ -203,6 +203,51 @@ describe('ElementBuilder (SSR) — children()', () => {
       .build() as unknown as HTMLElementMock;
     expect(el.childrenList).toHaveLength(2);
     expect((el.childrenList[0] as HTMLElementMock).tagName).toBe('li');
+  });
+
+  it('renders For() once as a static snapshot on SSR', () => {
+    const el = new ElementBuilder('ul')
+      .children(
+        For({
+          each: () => [{ id: 'x' }, { id: 'y' }],
+          key: (r) => r.id,
+          render: (r, index) => new ElementBuilder('li').text(() => `${index()}:${r.id}`),
+        }),
+      )
+      .build() as unknown as HTMLElementMock;
+    expect(el.childrenList).toHaveLength(2);
+    expect((el.childrenList[0] as HTMLElementMock).tagName).toBe('li');
+    expect(el.serialize()).toContain('0:x');
+    expect(el.serialize()).toContain('1:y');
+  });
+
+  it('renders Index() once as a static snapshot on SSR', () => {
+    const el = new ElementBuilder('ul')
+      .children(Index({ each: () => [10, 20], render: (n, i) => new ElementBuilder('li').text(() => `${i}:${n()}`) }))
+      .build() as unknown as HTMLElementMock;
+    expect(el.childrenList).toHaveLength(2);
+    expect(el.serialize()).toContain('0:10');
+    expect(el.serialize()).toContain('1:20');
+  });
+
+  it('renders Show() truthy branch as a snapshot on SSR', () => {
+    const el = new ElementBuilder('div')
+      .children(Show({ when: () => true, children: () => new ElementBuilder('span').text('on') }))
+      .build() as unknown as HTMLElementMock;
+    expect(el.serialize()).toContain('on');
+  });
+
+  it('renders the matching Switch() branch as a snapshot on SSR', () => {
+    const el = new ElementBuilder('div')
+      .children(
+        Switch({
+          fallback: () => new ElementBuilder('em').text('idle'),
+          children: [Match({ when: () => true, children: () => new ElementBuilder('span').text('hit') })],
+        }),
+      )
+      .build() as unknown as HTMLElementMock;
+    expect(el.serialize()).toContain('hit');
+    expect(el.serialize()).not.toContain('idle');
   });
 });
 

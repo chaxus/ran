@@ -217,6 +217,23 @@ syncSheetAttribute(host: HTMLElement, root: ShadowRoot, name: string, old: strin
 
 ### `utils/builder/` — Fluent DOM builder
 
+> **DESIGN INVARIANT — fine-grained, build-once. Do not regress this.**
+> A view function runs **once**; a state change updates only the exact node bound
+> to a signal. There is **no re-render of a view/component on state change** — that
+> is the React/JSX model this builder exists to avoid. When you need reactive
+> structure, use the primitive that matches the shape, never a coarser one:
+>
+> - **value** → a getter binding: `.text(getter)`, `.attr/.class/.style(…, getter)`
+> - **conditional** → `Show` (1 branch) / `Switch`+`Match` (n branches) — rebuilds
+>   only when the chosen branch flips
+> - **list** → `For` (keyed, by identity) / `Index` (by position, item is a signal)
+> - a raw getter child (`() => node`) is the **coarse escape hatch** — it rebuilds
+>   its whole region on every read; use it only for content that truly changes
+>   shape each update, never for a plain conditional or list.
+>
+> When adding API, never introduce anything that re-runs a whole view/subtree on a
+> state change. Reactivity flows through fine-grained bindings + these primitives.
+
 ```typescript
 // Factory functions (all return ElementBuilder<T>)
 Div()      // → ElementBuilder<HTMLDivElement>
@@ -237,9 +254,14 @@ Section(), Article(), Nav(), Header(), Footer(), Main()
 .on(type, listener, options)              // permanent, build-time
 .listen(manager, type, handler, options)  // lifecycle-managed via EventManager
 .children(...items)  .text(value)         .ref(holder)
-//   children() items may be nodes/strings/builders/arrays/null OR a getter
-//   () => node|node[]|null — a reactive region (auto-reconciled; SSR: once)
+//   children() items may be nodes/strings/builders/arrays/null, a getter
+//   () => node|node[]|null (reactive region — coarse: full rebuild on change),
+//   Show({when,children,fallback}) for a FINE-GRAINED conditional (rebuilds only
+//   when truthiness flips), or For({each,key,render}) for a KEYED list (reuses
+//   nodes). Prefer Show/For over a raw getter; getters/For/Show render once on SSR.
 .build(): T          // returns the DOM element
+// Typed ref to a custom element's imperative methods: import its class and
+//   createRef<Popover>() (from 'ranui') → ref.current?.closePopover() — no cast.
 ```
 
 **Example:**

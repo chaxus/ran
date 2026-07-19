@@ -1,4 +1,4 @@
-import { promises as fs } from 'node:fs';
+import { promises as fs, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { API, SignatureKind, SymbolFlags } from 'typescript/unstable/sync';
 import type { Checker, Symbol as TsSymbol } from 'typescript/unstable/sync';
@@ -46,7 +46,7 @@ const ENTRIES: Entry[] = [
   { subpath: 'ranuts/vnode', file: 'src/vnode/index.ts', blurb: 'Snabbdom 风格虚拟 DOM', runtime: 'browser' },
 ];
 
-type Kind = 'function' | 'class' | 'interface' | 'type' | 'enum' | 'const' | 'other';
+type Kind = 'function' | 'class' | 'interface' | 'type' | 'enum' | 'const' | 'namespace' | 'other';
 
 interface ApiSymbol {
   name: string;
@@ -64,10 +64,11 @@ const KIND_TITLES: Record<Kind, string> = {
   type: 'Types',
   enum: 'Enums',
   const: 'Constants',
+  namespace: 'Namespaces',
   other: 'Other',
 };
 
-const KIND_ORDER: Kind[] = ['function', 'class', 'interface', 'type', 'enum', 'const', 'other'];
+const KIND_ORDER: Kind[] = ['function', 'class', 'interface', 'type', 'enum', 'const', 'namespace', 'other'];
 
 function truncate(s: string): string {
   const oneLine = s.replace(/\s+/g, ' ').trim();
@@ -94,6 +95,9 @@ function getKind(checker: Checker, sym: TsSymbol, loc: Node | undefined): Kind {
   if (f & SymbolFlags.Interface) return 'interface';
   if (f & SymbolFlags.TypeAlias) return 'type';
   if (f & (SymbolFlags.RegularEnum | SymbolFlags.ConstEnum)) return 'enum';
+  // `import * as ns` re-exported: the alias resolves to a module symbol whose
+  // `.name` is its quoted absolute file path — never emit that. Render as a namespace.
+  if (f & (SymbolFlags.ValueModule | SymbolFlags.NamespaceModule)) return 'namespace';
   if (f & (SymbolFlags.Variable | SymbolFlags.BlockScopedVariable) && loc) {
     // `export const foo = () => {}` is a variable with a call signature → treat as function
     const type = checker.getTypeOfSymbolAtLocation(sym, loc);
@@ -103,8 +107,11 @@ function getKind(checker: Checker, sym: TsSymbol, loc: Node | undefined): Kind {
   return 'other';
 }
 
-function getSignature(checker: Checker, sym: TsSymbol, kind: Kind, loc: Node | undefined): string {
-  if (!loc) return sym.name;
+function getSignature(checker: Checker, sym: TsSymbol, kind: Kind, loc: Node | undefined, exportName: string): string {
+  // For namespaces the resolved symbol name is a quoted absolute file path; always
+  // use the export name so no local path leaks into the docs.
+  if (kind === 'namespace') return `namespace ${exportName}`;
+  if (!loc) return exportName;
   if (kind === 'function') {
     const type = checker.getTypeOfSymbolAtLocation(sym, loc);
     const sigs = checker.getSignaturesOfType(type, SignatureKind.Call);
@@ -127,7 +134,22 @@ function getSignature(checker: Checker, sym: TsSymbol, kind: Kind, loc: Node | u
   return sym.name;
 }
 
-function getDesc(checker: Checker, sym: TsSymbol): string {
+// A module (namespace re-export) carries no JSDoc on its symbol, so read the
+// module file's leading `@description:` tag directly. Returns '' if absent.
+function getModuleDesc(loc: Node | undefined): string {
+  const fileName = (loc as { fileName?: string } | undefined)?.fileName;
+  if (!fileName) return '';
+  try {
+    const src = readFileSync(fileName, 'utf8');
+    const m = src.match(/@description:?\s*(.+)/);
+    return m ? m[1].trim() : '';
+  } catch {
+    return '';
+  }
+}
+
+function getDesc(checker: Checker, sym: TsSymbol, kind: Kind, loc: Node | undefined): string {
+  if (kind === 'namespace') return getModuleDesc(loc);
   const tags = sym.getJsDocTags(checker);
   const descTag = tags.find((t) => t.name === 'description');
   // TS7 renders tag text and doc comments to strings directly (no SymbolDisplayPart[]).
@@ -150,8 +172,8 @@ function collectEntry(checker: Checker, sourceFile: SourceFile): ApiSymbol[] {
     out.push({
       name: exp.name,
       kind,
-      signature: getSignature(checker, sym, kind, loc),
-      desc: getDesc(checker, sym),
+      signature: getSignature(checker, sym, kind, loc, exp.name),
+      desc: getDesc(checker, sym, kind, loc),
     });
   }
   return out.sort((a, b) => a.name.localeCompare(b.name));

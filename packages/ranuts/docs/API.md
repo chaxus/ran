@@ -8,7 +8,7 @@ constraints, conventions) read [../CLAUDE.md](../CLAUDE.md) first.
 Import from the **subpath** that owns the symbol, e.g. `import { debounce } from
 'ranuts/utils'`. The root `ranuts` barrel re-exports the utils + visual surface.
 
-**199 exports** across 4 entry points. Generated at 2026-07-12T08:35:31.295Z.
+**199 exports** across 4 entry points. Generated at 2026-07-19T03:26:04.501Z.
 
 ## Entry points
 
@@ -304,6 +304,6 @@ import {} from /* … */ 'ranuts/vnode';
 - `const propsModule: { create: (oldVnode: VNode, vnode: VNode) => void; update: (oldVnode: VNode, vnode: VNode) => void; }`
 - `const styleModule: { pre: () => void; create: (oldVnode: VNode, vnode: VNode) => void; update: (oldVnode: VNode, vnode: VNode) => void; destroy: (vnode: VNode)…`
 
-### Other
+### Namespaces
 
-- `"/Users/ranzhouhang/Documents/code/ran/packages/ranuts/src/vnode/is"`
+- `namespace is` — 类型判断工具集（数组 / 字符串 / 原始值 / VNode）
