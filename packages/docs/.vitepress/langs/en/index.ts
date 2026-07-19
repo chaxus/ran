@@ -348,6 +348,10 @@ const themeEnConfig: DefaultTheme.Config = {
             link: '/src/article/design_mode',
           },
           {
+            text: 'How AI agents work',
+            link: '/src/article/ai/',
+          },
+          {
             text: 'Functional programming',
             link: '/src/article/functional_programming',
           },
