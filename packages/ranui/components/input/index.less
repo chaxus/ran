@@ -21,8 +21,15 @@
   box-sizing: var(--ran-input-box-sizing, border-box);
   position: var(--ran-input-position, relative);
   display: var(--ran-input-display, flex);
+  // Center content on the cross axis so a taller host (consumer sets `height`
+  // on :host) keeps icon + input + suffix vertically centred instead of top-aligned.
+  align-items: var(--ran-input-align-items, center);
   width: var(--ran-input-width, 100%);
-  height: var(--ran-input-height, auto);
+  // Fill the host height (was `auto`, which left this flex row at its 32px
+  // min-height, top-aligned in a taller host → content rode high). With 100%
+  // the row stretches to the host; when the host height is auto, 100% collapses
+  // back to content height, so both fixed-height and content-sized hosts stay centred.
+  height: var(--ran-input-height, 100%);
   min-width: var(--ran-input-min-width, 0);
   padding: var(--ran-input-padding, 0px 0px 0px 4px);
   color: var(--ran-input-color, var(--ran-color-text, #000000d9));
