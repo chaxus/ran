@@ -58,8 +58,9 @@ Factories: `View(tag)`, `Div`, `Span`, `Slot`, `ButtonBuilder`, `InputBuilder`,
 | Refs/shadow    | `ref(holder)`, `shadow(opts?)` → `ShadowBuilder`                                                            |
 | Terminal       | `build()`, `serialize()` (SSR HTML string)                                                                  |
 
-`children()` accepts elements, strings, other `ElementBuilder`s, arrays, and
-`null`/`undefined` (skipped) — nest freely:
+`children()` accepts elements, strings, other `ElementBuilder`s, arrays,
+`null`/`undefined` (skipped), **and getters `() => …`** (reactive regions, see
+[Reactive children](#reactive-children)) — nest freely:
 
 ```ts
 Ul()
@@ -132,6 +133,35 @@ Div()
   .boolAttr('disabled', () => !active())
   .build();
 ```
+
+### Reactive children
+
+`children()` / `replaceChildren()` also take a **getter** as any argument. The
+getter marks a live region: it re-runs when a signal it reads changes, replacing
+the region — no `createRef` + `createEffect` + `replaceChildren` boilerplate.
+Return a node, a `null` (conditional), or an array (list). Static siblings around
+the getter keep their position.
+
+> **Semantics — this is a full rebuild, not a keyed diff.** On each change the
+> whole region is torn down and re-created; there is no per-item keying. That is
+> the right tool for **conditionals and small/on-demand lists** (menus, search
+> results, toggled blocks). It is _not_ a keyed list primitive: a rebuild drops
+> DOM state inside the region (focus, scroll, uncontrolled input values, in-flight
+> CSS transitions) and is O(n) per change. For large or high-churn lists, or when
+> you must preserve that state, keep a stable container and mutate/patch its rows
+> yourself (or bind per-row signals so only the changed row's text/attrs update).
+
+```ts
+// Conditional — toggles a node in/out between static siblings
+Div().children(Header().text('H'), () => (open() ? Div().class('panel').text('body') : null), Footer().text('F'));
+
+// List — reconciles as the array changes
+Ul().children(() => rows().map((r) => Li().text(r.title)));
+```
+
+On **SSR** a getter is evaluated once (static snapshot); reactivity is a
+client-only concern. Like all bindings, reactive children must be built inside a
+`createRoot` so their effects are owned and disposed with the page (see §3 Ownership).
 
 A getter binding creates an effect **owned by the current scope** (see below), so
 it is cleaned up automatically when that scope is disposed. Reactivity applies to

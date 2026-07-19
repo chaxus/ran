@@ -86,6 +86,7 @@ export const componentEntries: Record<string, string> = {
   checkbox: resolve(__dirname, 'components/checkbox/index.ts'),
   colorpicker: resolve(__dirname, 'components/colorpicker/index.ts'),
   popover: resolve(__dirname, 'components/popover/index.ts'),
+  content: resolve(__dirname, 'components/popover/content/index.ts'),
   dropdown: resolve(__dirname, 'components/dropdown/index.ts'),
   loading: resolve(__dirname, 'components/loading/index.ts'),
   form: resolve(__dirname, 'components/form/index.ts'),

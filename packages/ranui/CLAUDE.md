@@ -237,6 +237,8 @@ Section(), Article(), Nav(), Header(), Footer(), Main()
 .on(type, listener, options)              // permanent, build-time
 .listen(manager, type, handler, options)  // lifecycle-managed via EventManager
 .children(...items)  .text(value)         .ref(holder)
+//   children() items may be nodes/strings/builders/arrays/null OR a getter
+//   () => node|node[]|null — a reactive region (auto-reconciled; SSR: once)
 .build(): T          // returns the DOM element
 ```
 

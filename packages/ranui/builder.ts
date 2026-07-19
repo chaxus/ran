@@ -17,7 +17,7 @@ export { matchSelector, collectMatches } from './utils/builder/selectors';
 export type { MockNode } from './utils/builder/selectors';
 export { DocumentFragmentMock, HTMLElementMock, ShadowRootMock } from './utils/builder/mocks';
 export { createRef, ElementBuilder, ShadowBuilder } from './utils/builder/core';
-export type { Ref } from './utils/builder/core';
+export type { Ref, Child } from './utils/builder/core';
 export {
   View,
   Div,
