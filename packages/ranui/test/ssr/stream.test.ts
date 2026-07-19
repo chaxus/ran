@@ -4,6 +4,7 @@ import { renderToStream, renderHTMLToString } from '@/utils/ssr-stream';
 // Importing components registers them in the SSR registry
 import '@/components/button/index';
 import '@/components/progress/index';
+import '@/components/theme-switch/index';
 
 async function collect(gen: AsyncGenerator<string>): Promise<string> {
   const chunks: string[] = [];
@@ -48,5 +49,15 @@ describe('renderHTMLToString', () => {
     const html = await renderHTMLToString('<r-button type="primary">Click</r-button>');
     expect(typeof html).toBe('string');
     expect(html).toContain('<template shadowrootmode="closed">');
+  });
+
+  // Regression: r-theme-switch built its shadow with raw document.createElement in
+  // the constructor, throwing "document is not defined" under SSR. It now uses the
+  // isSSR-aware builder, so SSR construction/serialization must not throw.
+  it('renders r-theme-switch without touching document (SSR-safe)', async () => {
+    const html = await renderHTMLToString('<r-theme-switch></r-theme-switch>');
+    expect(typeof html).toBe('string');
+    expect(html).toContain('<template shadowrootmode="closed">');
+    expect(html).toContain('ran-theme-switch');
   });
 });
