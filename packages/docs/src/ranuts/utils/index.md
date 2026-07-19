@@ -1,3 +1,7 @@
+---
+description: "Overview of ranuts utility functions: functional helpers (debounce, throttle, memoize, compose) plus string, object, number and color utilities."
+---
+
 # Utility Functions
 
 ## Functional Programming
