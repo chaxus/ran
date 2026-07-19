@@ -1,0 +1,95 @@
+:host {
+  display: block;
+}
+.ran-mermaid {
+  position: relative;
+  padding: var(--ran-mermaid-padding, 0);
+}
+.ran-mermaid-diagram {
+  display: flex;
+  justify-content: center;
+  overflow-x: auto;
+}
+.ran-mermaid-diagram svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Hover-revealed control bar (opt-in via copy/download/fullscreen attributes). */
+.ran-mermaid-toolbar {
+  position: absolute;
+  top: var(--ran-mermaid-toolbar-top, 8px);
+  right: var(--ran-mermaid-toolbar-right, 8px);
+  display: none;
+  gap: var(--ran-mermaid-toolbar-gap, 4px);
+  padding: 4px;
+  border-radius: var(--ran-radius-md, 8px);
+  background: var(--ran-mermaid-toolbar-background, var(--ran-color-bg-elevated, #fff));
+  box-shadow: var(--ran-mermaid-toolbar-shadow, var(--ran-shadow-menu, 0 2px 8px rgba(0, 0, 0, 0.12)));
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  pointer-events: none;
+}
+.ran-mermaid.has-controls .ran-mermaid-toolbar {
+  display: flex;
+}
+.ran-mermaid:hover .ran-mermaid-toolbar,
+.ran-mermaid-toolbar:focus-within {
+  opacity: 1;
+  pointer-events: auto;
+}
+.ran-mermaid-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--ran-mermaid-button-size, 28px);
+  height: var(--ran-mermaid-button-size, 28px);
+  padding: 0;
+  border: none;
+  border-radius: var(--ran-radius-sm, 6px);
+  background: transparent;
+  color: var(--ran-mermaid-button-color, var(--ran-color-text-secondary, #666));
+  cursor: pointer;
+}
+.ran-mermaid-btn:hover {
+  background: var(--ran-mermaid-button-hover-background, var(--ran-color-bg-muted, rgba(0, 0, 0, 0.06)));
+  color: var(--ran-mermaid-button-hover-color, var(--ran-color-text, #222));
+}
+.ran-mermaid-btn:focus-visible {
+  outline: var(--ran-mermaid-button-focus-outline, 2px solid var(--ran-color-primary, #1890ff));
+  outline-offset: 1px;
+}
+/* Download format menu (shown when the download attribute lists >1 format). */
+.ran-mermaid-menu {
+  position: absolute;
+  top: var(--ran-mermaid-menu-top, 44px);
+  right: var(--ran-mermaid-toolbar-right, 8px);
+  display: flex;
+  flex-direction: column;
+  min-width: 132px;
+  padding: 4px;
+  border-radius: var(--ran-radius-md, 8px);
+  background: var(--ran-mermaid-toolbar-background, var(--ran-color-bg-elevated, #fff));
+  box-shadow: var(--ran-mermaid-toolbar-shadow, var(--ran-shadow-menu, 0 2px 8px rgba(0, 0, 0, 0.12)));
+  z-index: 1;
+}
+.ran-mermaid-menu-item {
+  padding: 6px 10px;
+  border: none;
+  border-radius: var(--ran-radius-sm, 6px);
+  background: transparent;
+  color: var(--ran-mermaid-menu-item-color, var(--ran-color-text, #222));
+  text-align: left;
+  font-size: 13px;
+  cursor: pointer;
+}
+.ran-mermaid-menu-item:hover {
+  background: var(--ran-mermaid-button-hover-background, var(--ran-color-bg-muted, rgba(0, 0, 0, 0.06)));
+}
+.ran-mermaid-error {
+  margin: 0;
+  padding: 12px;
+  color: var(--ran-mermaid-error-color, #c0392b);
+  white-space: pre-wrap;
+  font-size: 13px;
+}

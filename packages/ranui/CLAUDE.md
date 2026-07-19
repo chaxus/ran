@@ -152,6 +152,16 @@ export default MyComponent;
 - Export both named (`export class`) and default (`export default`)
 - Use `EventManager` from `@/utils/builder` for lifecycle-bound listeners in `connectedCallback`; call `manager.abort()` in `disconnectedCallback` — never manually call `removeEventListener` per listener
 
+### Async external-lib renderer components (`r-mermaid`, `r-math`)
+
+Some components lazy-load a heavy third-party library and render its output into the shadow root. Follow this specialized recipe (full evaluation + enrichment roadmap in [`docs/RENDERER_COMPONENTS.md`](docs/RENDERER_COMPONENTS.md) — read it before building or enriching one, so it isn't re-analyzed):
+
+- **Dependency**: the lib is a regular `dependency` (auto-installs with ranui — peerDependency is wrong here: yarn classic never auto-installs peers), reached only via a **dynamic `import()` inside `render()`**, so it lands as an async chunk only when the component actually renders. Verify nothing static leaks into `index.js` (for `r-mermaid`: `dist/mermaid.js` is a 91-byte stub; the lib is a separate `mermaid.core-*` chunk).
+- **Source**: a URI-encoded attribute (`code` / `latex`, so multiline / `<|--` / `$$` survive HTML parsing) **or** `this.textContent.trim()`.
+- **Errors → DOM, not console**: render an `::part(error)` box + dispatch an `error` CustomEvent (`bubbles+composed`). (`r-math`'s console-only `catch` is the anti-pattern.)
+- **Theme**: `theme=auto|light|dark`; `auto` follows `.dark` / `[data-ran-theme]` via a `MutationObserver` on `documentElement`, disconnected in `disconnectedCallback`.
+- **Interactive controls (fullscreen / zoom-pan / copy / download) are opt-in** boolean attributes — a bare element renders a clean static result. Reuse existing mechanisms: **`r-modal`** for the fullscreen overlay, the `r-colorpicker`/`r-player` pointer-drag idiom (`range()` + `getBoundingClientRect()`) + a `wheel`/`transform:scale()` for pan-zoom, `<r-icon>`+`registerIcon` for toolbar buttons, `label-*` attribute overrides for i18n. Do **not** reinvent overlay/focus-trap or use `r-player`'s legacy background-image icons.
+
 ### Registering in the package
 
 After creating `components/mycomp/index.ts`:

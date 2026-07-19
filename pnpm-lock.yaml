@@ -9,12 +9,27 @@ catalogs:
     '@types/node':
       specifier: ^26.1.1
       version: 26.1.1
+    '@vitest/coverage-v8':
+      specifier: ^4.1.10
+      version: 4.1.10
     less:
       specifier: ^4.6.7
       version: 4.6.7
+    terser:
+      specifier: ^5.49.0
+      version: 5.49.0
+    tsx:
+      specifier: ^4.23.0
+      version: 4.23.0
     typescript:
       specifier: ^7.0.2
       version: 7.0.2
+    vite:
+      specifier: ^8.1.4
+      version: 8.1.4
+    vitest:
+      specifier: ^4.1.10
+      version: 4.1.10
 
 overrides:
   esbuild: '>=0.28.1'
@@ -187,6 +202,9 @@ importers:
 
   packages/ranui:
     dependencies:
+      mermaid:
+        specifier: ^11
+        version: 11.16.0
       ranuts:
         specifier: workspace:^
         version: link:../ranuts
@@ -3091,10 +3109,6 @@ packages:
     resolution: {integrity: sha512-V7+vQEJ06Z+c5tSye8S+nHUfI51xoXIXjHQ99cQtKUkQqqO1kO/KCJUfZXuB47h/YBlDhah2H3hdUGXn8ie0oA==}
     engines: {node: '>=8.6'}
 
-  picomatch@4.0.4:
-    resolution: {integrity: sha512-QP88BAKvMam/3NxH6vj2o21R6MjxZUAd6nlwAS/pnGvN9IVLocLHxGYIzFhg6fUQ+5th6P4dv4eW9jX3DSIj7A==}
-    engines: {node: '>=12'}
-
   picomatch@4.0.5:
     resolution: {integrity: sha512-RvwwcruNjI1ncT5xRakeyS9Lf8lcItv34KD+aif+VH9kduAyfYBipGh12274xtenIPZ119/R9BdTBa8gAwSh0A==}
     engines: {node: '>=12'}
@@ -5621,10 +5635,6 @@ snapshots:
     dependencies:
       reusify: 1.1.0
 
-  fdir@6.5.0(picomatch@4.0.4):
-    optionalDependencies:
-      picomatch: 4.0.4
-
   fdir@6.5.0(picomatch@4.0.5):
     optionalDependencies:
       picomatch: 4.0.5
@@ -6260,8 +6270,6 @@ snapshots:
 
   picomatch@2.3.2: {}
 
-  picomatch@4.0.4: {}
-
   picomatch@4.0.5: {}
 
   pirates@4.0.7: {}
@@ -6596,7 +6604,7 @@ snapshots:
       lines-and-columns: 1.2.4
       mz: 2.7.0
       pirates: 4.0.7
-      tinyglobby: 0.2.16
+      tinyglobby: 0.2.17
       ts-interface-checker: 0.1.13
 
   supports-color@7.2.0:
@@ -6642,8 +6650,8 @@ snapshots:
 
   tinyglobby@0.2.16:
     dependencies:
-      fdir: 6.5.0(picomatch@4.0.4)
-      picomatch: 4.0.4
+      fdir: 6.5.0(picomatch@4.0.5)
+      picomatch: 4.0.5
 
   tinyglobby@0.2.17:
     dependencies:
