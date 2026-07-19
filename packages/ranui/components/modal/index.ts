@@ -61,7 +61,17 @@ export class Modal extends RanElement {
   _afterCloseTimer: number | null;
 
   static get observedAttributes(): string[] {
-    return ['open', 'title', 'maskClosable', 'closeOnEsc', 'lockScroll', 'autoFocus', 'closable', 'hide-header', 'sheet'];
+    return [
+      'open',
+      'title',
+      'maskClosable',
+      'closeOnEsc',
+      'lockScroll',
+      'autoFocus',
+      'closable',
+      'hide-header',
+      'sheet',
+    ];
   }
 
   constructor() {

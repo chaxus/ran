@@ -30,7 +30,7 @@ predates it and should be brought in line):
    parsing; else `this.textContent.trim()` for hand-authoring. r-mermaid does both; r-math
    only supports the encoded attribute today.
 3. **Render into an `ensureShadowElement` container**, never light DOM. Note: mermaid and
-   KaTeX both measure text against a temporary element *they* create, then return a static
+   KaTeX both measure text against a temporary element _they_ create, then return a static
    sized output — so placing the result into a (closed) shadow root is safe.
 4. **Errors go to the DOM, not the console.** Render an `::part(error)` box with the
    message and dispatch an `error` CustomEvent (`{ detail: { message } }`,
@@ -49,6 +49,7 @@ predates it and should be brought in line):
 ## 2. `r-mermaid`
 
 ### 2.1 Current (shipped — enriched)
+
 Full renderer + interactive viewer. Everything below the base render is **opt-in**:
 
 - **Source**: `code` attribute (URI-encoded) **or** text content.
@@ -78,7 +79,7 @@ Full renderer + interactive viewer. Everything below the base render is **opt-in
   floating close button (top-right), close via button / mask / ESC; the dialog keeps an
   a11y name via `aria-label` from `title`. This is the industry lightbox pattern
   (PhotoSwipe / MUI Dialog / Ant Image preview).
-- **Toolbar icons are outline glyphs.** ranui's builtins are *filled* 1024-grid icons and
+- **Toolbar icons are outline glyphs.** ranui's builtins are _filled_ 1024-grid icons and
   `r-icon`'s `setColor` forces inline `fill: currentColor` on the `<svg>` root — which
   flood-fills an outline icon. So the core action SVGs (`assets/icons/copy.svg` etc.) wrap
   their shapes in `<g fill="none">`, which that inline style doesn't reach. Author any
@@ -88,21 +89,23 @@ Full renderer + interactive viewer. Everything below the base render is **opt-in
   (headerless + floating close, open→close lifecycle clean), pan/zoom; events
   render/copied/download/error/fullscreenchange all fire; outline icons confirmed.
 - **Lazy**: `import('mermaid')` and `import('@/components/modal')` are both dynamic — the
-  mermaid lib *and* r-modal are async chunks (modal only fetched when fullscreen opens);
+  mermaid lib _and_ r-modal are async chunks (modal only fetched when fullscreen opens);
   verified `dist/mermaid.js` = 91-byte stub, `index.js` has 0 static mermaid imports.
 
 ### 2.2 Gap vs Streamdown's mermaid
-| Streamdown control | Behavior | Worth adding to ranui? |
-|---|---|---|
-| **fullscreen** | button (top-right, on hover) → modal overlay for inspection | ✅ high value for complex diagrams |
-| **download** | export **SVG** (Streamdown ships SVG only) | ✅ SVG easy; PNG/source as extras |
-| **copy** | copy the rendered diagram to clipboard | ✅ copy **source** and/or SVG |
-| **panZoom** | opt-in; zoom in/out + pan for large diagrams | ✅ but opt-in / fullscreen-only |
-| **error component** | message + code + retry callback | ✅ becomes `::part(error)` + retry |
-| **theme variants** | default/dark/forest/neutral/base + `themeVariables` | 🟡 pass-through optional |
-| controls default | all on, individually disableable | ranui: **opt-in** (see below) |
+
+| Streamdown control  | Behavior                                                    | Worth adding to ranui?             |
+| ------------------- | ----------------------------------------------------------- | ---------------------------------- |
+| **fullscreen**      | button (top-right, on hover) → modal overlay for inspection | ✅ high value for complex diagrams |
+| **download**        | export **SVG** (Streamdown ships SVG only)                  | ✅ SVG easy; PNG/source as extras  |
+| **copy**            | copy the rendered diagram to clipboard                      | ✅ copy **source** and/or SVG      |
+| **panZoom**         | opt-in; zoom in/out + pan for large diagrams                | ✅ but opt-in / fullscreen-only    |
+| **error component** | message + code + retry callback                             | ✅ becomes `::part(error)` + retry |
+| **theme variants**  | default/dark/forest/neutral/base + `themeVariables`         | 🟡 pass-through optional           |
+| controls default    | all on, individually disableable                            | ranui: **opt-in** (see below)      |
 
 ### 2.3 Enrichment design — mapped to ranui mechanisms
+
 - **Controls opt-in, not default-on.** Inline docs diagrams shouldn't all grow a toolbar.
   Expose boolean attributes `copy` / `download` / `fullscreen` / `pan-zoom` (via
   `setBooleanAttribute`), or a single `controls="copy download fullscreen"`. Default =
@@ -110,11 +113,11 @@ Full renderer + interactive viewer. Everything below the base render is **opt-in
   ethos.
 - **Toolbar** = a hover-revealed control bar (reuse `r-player`'s auto-hide idiom:
   opacity 0 → 1 on hover). Build icon buttons the **modern** way — `<r-icon name="…">`
-  + `registerIcon(...)` in this module (NOT `r-player`'s legacy background-image icons).
-  Expose `::part(toolbar)` and `::part(button)`.
+  - `registerIcon(...)` in this module (NOT `r-player`'s legacy background-image icons).
+    Expose `::part(toolbar)` and `::part(button)`.
 - **Fullscreen** = reuse **`r-modal`** as the overlay (it already gives dialog/mask,
   focus-trap, ESC-close, body-scroll-lock, z-index stacking) rather than reinventing.
-  Streamdown's "modal overlay with dark background" maps 1:1. (For a *true* browser
+  Streamdown's "modal overlay with dark background" maps 1:1. (For a _true_ browser
   fullscreen instead, the only reusable helper is `components/player/core/fullscreen.ts`'s
   `requestElementFullscreen`/`exitDocumentFullscreen` — pure, prefix-handling functions.)
   Recommendation: **r-modal overlay** + enable pan/zoom inside it.
@@ -146,6 +149,7 @@ Full renderer + interactive viewer. Everything below the base render is **opt-in
   `ranui/i18n` singleton — no component does, and it's an opt-in separate subpath.
 
 ### 2.4 Roadmap (status)
+
 - **P0 — done:** error → `::part(error)` + `error` event; `EventManager`; `::part`s.
 - **P1 — done:** hover toolbar with **copy (source)** + **download (SVG)** + **fullscreen
   via r-modal**.
@@ -162,7 +166,9 @@ Every control is opt-in; a bare `<r-mermaid>` stays a clean static diagram.
 ## 3. `r-math`
 
 ### 3.1 Current gaps (from source audit)
+
 72-line renderer with real limitations:
+
 - **Block-only** — always wraps in `$$…$$`; no inline mode.
 - **Silent failure** — `catch` only `console.warn`s; no DOM error state, no event.
 - **Source only via `latex` attribute** (URI-encoded); no text-content authoring.
@@ -174,6 +180,7 @@ Every control is opt-in; a bare `<r-mermaid>` stays a clean static diagram.
 - **Undocumented** — no `r-math` entry in the generated `docs/COMPONENTS.md`.
 
 ### 3.2 Improvement design (align with the §1 pattern)
+
 - **Content source**: accept `this.textContent` **and** the encoded `latex` attribute
   (mirror r-mermaid's `code`).
 - **Inline vs block**: add `display="inline|block"` — inline uses `$…$`, block uses
@@ -189,6 +196,7 @@ Every control is opt-in; a bare `<r-mermaid>` stays a clean static diagram.
 - **Docs**: add `r-math` to `docs/COMPONENTS.md` (regenerate).
 
 ### 3.3 Shared with r-mermaid
+
 Both are §1 renderers. **Don't** pre-extract a shared base for just two — but once a
 third arrives (`r-code` with shiki), factor the common bits (source resolution:
 attr-or-textContent; error-to-`::part(error)`+event; theme MutationObserver; lazy-import
@@ -198,6 +206,7 @@ consistent by copying this checklist.
 ---
 
 ## 4. Consistency checklist for any renderer component
+
 - [ ] Heavy lib is a **regular `dependency`**, reached only via dynamic `import()` in
       `render()` (lazy async chunk; nothing eager in `index.js`).
 - [ ] Source = URI-encoded attribute **or** `textContent`.

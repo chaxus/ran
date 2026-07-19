@@ -154,8 +154,10 @@ export class Mermaid extends RanElement {
     this._toolbar.innerHTML = '';
     const buttons: HTMLElement[] = [];
     if (this.copyable) buttons.push(this.iconButton('copy', this.label('copy', 'Copy source'), this.copySource));
-    if (this.downloadable) buttons.push(this.iconButton('download', this.label('download', 'Download'), this.onDownload));
-    if (this.fullscreenable) buttons.push(this.iconButton('fullscreen', this.label('fullscreen', 'Fullscreen'), this.openFullscreen));
+    if (this.downloadable)
+      buttons.push(this.iconButton('download', this.label('download', 'Download'), this.onDownload));
+    if (this.fullscreenable)
+      buttons.push(this.iconButton('fullscreen', this.label('fullscreen', 'Fullscreen'), this.openFullscreen));
     buttons.forEach((b) => this._toolbar.appendChild(b));
     this._wrap.classList.toggle('has-controls', buttons.length > 0);
   }
@@ -303,7 +305,8 @@ export class Mermaid extends RanElement {
       const wrap = Div().build();
       wrap.style.cssText = 'position:relative;width:100%;height:82vh;overflow:hidden;';
       const stage = Div().build();
-      stage.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;cursor:grab;touch-action:none;';
+      stage.style.cssText =
+        'width:100%;height:100%;display:flex;align-items:center;justify-content:center;cursor:grab;touch-action:none;';
       const inner = Div().build();
       inner.style.cssText = 'transform-origin:center center;transition:transform .05s linear;';
       inner.appendChild(svg.cloneNode(true));
