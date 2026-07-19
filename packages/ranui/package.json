@@ -26,6 +26,90 @@
       "typings": [
         "./dist/typings.d.ts"
       ],
+      "button": [
+        "./dist/components/button/index.d.ts"
+      ],
+      "icon": [
+        "./dist/components/icon/index.d.ts"
+      ],
+      "image": [
+        "./dist/components/image/index.d.ts"
+      ],
+      "input": [
+        "./dist/components/input/index.d.ts"
+      ],
+      "message": [
+        "./dist/components/message/index.d.ts"
+      ],
+      "skeleton": [
+        "./dist/components/skeleton/index.d.ts"
+      ],
+      "tab": [
+        "./dist/components/tab/index.d.ts"
+      ],
+      "tabpane": [
+        "./dist/components/tabpane/index.d.ts"
+      ],
+      "radar": [
+        "./dist/components/radar/index.d.ts"
+      ],
+      "modal": [
+        "./dist/components/modal/index.d.ts"
+      ],
+      "select": [
+        "./dist/components/select/index.d.ts"
+      ],
+      "progress": [
+        "./dist/components/progress/index.d.ts"
+      ],
+      "player": [
+        "./dist/components/player/index.d.ts"
+      ],
+      "popover": [
+        "./dist/components/popover/index.d.ts"
+      ],
+      "dropdown": [
+        "./dist/components/dropdown/index.d.ts"
+      ],
+      "loading": [
+        "./dist/components/loading/index.d.ts"
+      ],
+      "colorpicker": [
+        "./dist/components/colorpicker/index.d.ts"
+      ],
+      "math": [
+        "./dist/components/math/index.d.ts"
+      ],
+      "mermaid": [
+        "./dist/components/mermaid/index.d.ts"
+      ],
+      "checkbox": [
+        "./dist/components/checkbox/index.d.ts"
+      ],
+      "card": [
+        "./dist/components/card/index.d.ts"
+      ],
+      "form": [
+        "./dist/components/form/index.d.ts"
+      ],
+      "scratch": [
+        "./dist/components/scratch/index.d.ts"
+      ],
+      "section": [
+        "./dist/components/section/index.d.ts"
+      ],
+      "router": [
+        "./dist/components/router/index.d.ts"
+      ],
+      "route": [
+        "./dist/components/route/index.d.ts"
+      ],
+      "link": [
+        "./dist/components/link/index.d.ts"
+      ],
+      "theme-switch": [
+        "./dist/components/theme-switch/index.d.ts"
+      ],
       "*": [
         "./dist/index.d.ts"
       ]
@@ -130,12 +214,12 @@
       "require": "./dist/index.cjs"
     },
     "./button": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/button/index.d.ts",
       "import": "./dist/button.js",
       "require": "./dist/index.cjs"
     },
     "./icon": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/icon/index.d.ts",
       "import": "./dist/icon.js",
       "require": "./dist/index.cjs"
     },
@@ -145,67 +229,67 @@
       "require": "./dist/index.cjs"
     },
     "./image": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/image/index.d.ts",
       "import": "./dist/image.js",
       "require": "./dist/index.cjs"
     },
     "./input": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/input/index.d.ts",
       "import": "./dist/input.js",
       "require": "./dist/index.cjs"
     },
     "./message": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/message/index.d.ts",
       "import": "./dist/message.js",
       "require": "./dist/index.cjs"
     },
     "./skeleton": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/skeleton/index.d.ts",
       "import": "./dist/skeleton.js",
       "require": "./dist/index.cjs"
     },
     "./tab": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/tab/index.d.ts",
       "import": "./dist/tab.js",
       "require": "./dist/index.cjs"
     },
     "./tabpane": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/tabpane/index.d.ts",
       "import": "./dist/tabpane.js",
       "require": "./dist/index.cjs"
     },
     "./radar": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/radar/index.d.ts",
       "import": "./dist/radar.js",
       "require": "./dist/index.cjs"
     },
     "./modal": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/modal/index.d.ts",
       "import": "./dist/modal.js",
       "require": "./dist/index.cjs"
     },
     "./select": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/select/index.d.ts",
       "import": "./dist/select.js",
       "require": "./dist/index.cjs"
     },
     "./progress": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/progress/index.d.ts",
       "import": "./dist/progress.js",
       "require": "./dist/index.cjs"
     },
     "./player": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/player/index.d.ts",
       "import": "./dist/player.js",
       "require": "./dist/index.cjs"
     },
     "./popover": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/popover/index.d.ts",
       "import": "./dist/popover.js",
       "require": "./dist/index.cjs"
     },
     "./dropdown": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/dropdown/index.d.ts",
       "import": "./dist/dropdown.js",
       "require": "./dist/index.cjs"
     },
@@ -215,67 +299,67 @@
       "require": "./dist/index.cjs"
     },
     "./loading": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/loading/index.d.ts",
       "import": "./dist/loading.js",
       "require": "./dist/index.cjs"
     },
     "./colorpicker": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/colorpicker/index.d.ts",
       "import": "./dist/colorpicker.js",
       "require": "./dist/index.cjs"
     },
     "./math": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/math/index.d.ts",
       "import": "./dist/math.js",
       "require": "./dist/index.cjs"
     },
     "./mermaid": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/mermaid/index.d.ts",
       "import": "./dist/mermaid.js",
       "require": "./dist/index.cjs"
     },
     "./checkbox": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/checkbox/index.d.ts",
       "import": "./dist/checkbox.js",
       "require": "./dist/index.cjs"
     },
     "./card": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/card/index.d.ts",
       "import": "./dist/card.js",
       "require": "./dist/index.cjs"
     },
     "./form": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/form/index.d.ts",
       "import": "./dist/form.js",
       "require": "./dist/index.cjs"
     },
     "./scratch": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/scratch/index.d.ts",
       "import": "./dist/scratch.js",
       "require": "./dist/index.cjs"
     },
     "./section": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/section/index.d.ts",
       "import": "./dist/section.js",
       "require": "./dist/index.cjs"
     },
     "./router": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/router/index.d.ts",
       "import": "./dist/router.js",
       "require": "./dist/index.cjs"
     },
     "./route": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/route/index.d.ts",
       "import": "./dist/route.js",
       "require": "./dist/index.cjs"
     },
     "./link": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/link/index.d.ts",
       "import": "./dist/link.js",
       "require": "./dist/index.cjs"
     },
     "./theme-switch": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/components/theme-switch/index.d.ts",
       "import": "./dist/theme-switch.js",
       "require": "./dist/index.cjs"
     },
