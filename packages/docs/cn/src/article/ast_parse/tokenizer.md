@@ -1,3 +1,7 @@
+---
+description: "源码如何变成抽象语法树：词法分析与语法解析详解，编译器与打包器的基础。"
+---
+
 # Abstract Syntax Tree
 
 ## 一.（`abstract syntax tree`）抽象语法树的作用

@@ -1,3 +1,7 @@
+---
+description: "How source code becomes an Abstract Syntax Tree: tokenizing and parsing explained, the foundation of compilers and bundlers."
+---
+
 # Abstract Syntax Tree
 
 ## 1. The role of the abstract syntax tree (`abstract syntax tree`)

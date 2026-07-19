@@ -1,3 +1,7 @@
+---
+description: "ranui Player（<r-player>）在原生 <video> 之上封装统一控制栏：播放、进度拖拽、音量、倍速与全屏。"
+---
+
 # r-player 视频播放器
 
 基于`hlsjs`和`web components`，让原生的标签`r-player`拥有统一的视频控件。

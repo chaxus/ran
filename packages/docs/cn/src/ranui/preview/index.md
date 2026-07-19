@@ -1,3 +1,7 @@
+---
+description: "ranui Preview（<r-preview>）在浏览器中在线预览 docx、pptx、pdf、xlsx 文件。"
+---
+
 # preview 文件预览
 
 支持 `docx`、`pptx`、`pdf`、`xlsx` 文件的在线预览组件

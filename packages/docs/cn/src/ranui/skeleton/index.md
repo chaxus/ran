@@ -1,3 +1,7 @@
+---
+description: "ranui Skeleton（<r-skeleton>）在内容加载时展示带微光动画的占位骨架。"
+---
+
 # skeleton 骨架屏
 
 在需要等待加载内容的位置提供一个占位图形组合。

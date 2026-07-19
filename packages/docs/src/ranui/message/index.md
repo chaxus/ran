@@ -1,3 +1,7 @@
+---
+description: "The ranui Message API shows global feedback (info, success, warning, error, toast) imperatively, rendered as a lightweight overlay."
+---
+
 # Message
 
 Global feedback component for operation results, invoked imperatively through the `message` API and rendered as a dismissable toast.

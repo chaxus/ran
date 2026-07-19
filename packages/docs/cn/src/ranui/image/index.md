@@ -1,3 +1,7 @@
+---
+description: "ranui Image（<r-image>）渲染图片并内置加载失败时的兜底占位。"
+---
+
 # Image 图片
 
 ## 代码演示

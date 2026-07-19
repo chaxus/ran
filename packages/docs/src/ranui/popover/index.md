@@ -1,3 +1,7 @@
+---
+description: "The ranui Popover (<r-popover>) reveals a floating bubble card on hover or click, for tooltips, menus and contextual content."
+---
+
 # Popover
 
 Popover component that reveals a floating bubble card layer when the trigger is hovered or clicked.

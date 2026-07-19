@@ -1,3 +1,7 @@
+---
+description: "函数式编程入门：纯函数、组合、柯里化与不可变性，配 JavaScript/TypeScript 示例。"
+---
+
 # 函数式编程
 
 - 概述：函数式编程 (`Functional Programming`)`FP`就是编程规范之一，我们常听说的编程规范还有面向对象编程，面向过程编程。

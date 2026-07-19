@@ -1,3 +1,7 @@
+---
+description: "The ranui Preview (<r-preview>) renders in-browser online previews of docx, pptx, pdf and xlsx files."
+---
+
 # preview
 
 Online preview component for `docx`, `pptx`, `pdf`, and `xlsx` files

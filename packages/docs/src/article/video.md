@@ -1,3 +1,8 @@
+---
+title: "Adaptive-bitrate encrypted Web video playback"
+description: "How to build adaptive-bitrate, encrypted Web video playback — the front-end and back-end challenges (HLS, DRM, key delivery) and practical solutions."
+---
+
 <h1>Implementing Adaptive Bitrate Web Video Encrypted Playback: Front-End and Back-End Challenges and Solutions</h1>
 
 Recently I ran into a `web` video scenario again. I had done some research on this before: [A Brief Survey of H5 Video Playback](https://juejin.cn/post/7238739662822735933)

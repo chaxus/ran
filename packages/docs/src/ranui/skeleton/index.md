@@ -1,3 +1,7 @@
+---
+description: "The ranui Skeleton (<r-skeleton>) shows a shimmering placeholder that fills the space of content while it loads."
+---
+
 # Skeleton
 
 Placeholder graphic that fills the space of content while it loads, using a shimmering animation.

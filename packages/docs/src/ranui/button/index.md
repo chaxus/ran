@@ -1,3 +1,7 @@
+---
+description: "The ranui Button (<r-button>) triggers instant actions with multiple types, sizes, and loading/disabled states — a framework-agnostic Web Component."
+---
+
 # Button
 
 Button component for triggering instant actions with multiple styles and states.
