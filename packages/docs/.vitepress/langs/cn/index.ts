@@ -344,6 +344,7 @@ const themeCnConfig: DefaultTheme.Config = {
       {
         items: [
           { text: '23 种经典设计模式', link: '/cn/src/article/design_mode' },
+          { text: 'AI Agent 原理', link: '/cn/src/article/ai/' },
           {
             text: '函数式编程',
             link: '/cn/src/article/functional_programming',
