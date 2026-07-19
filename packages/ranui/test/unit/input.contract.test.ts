@@ -372,4 +372,24 @@ describe('r-input contract', () => {
     input.value = '';
     expect(setFormValue).toHaveBeenLastCalledWith('');
   });
+
+  it('forwards focus() / blur() / select() to the inner input', () => {
+    // The host isn't in the tab order and its shadow is closed, so callers rely on
+    // the host relaying focus to the real <input>. Guard that contract.
+    const input = document.createElement('r-input') as Input;
+    document.body.appendChild(input);
+
+    const inner = (input as any)._inputContent as HTMLInputElement;
+    const focusSpy = vi.spyOn(inner, 'focus');
+    const blurSpy = vi.spyOn(inner, 'blur');
+    const selectSpy = vi.spyOn(inner, 'select');
+
+    input.focus();
+    input.blur();
+    input.select();
+
+    expect(focusSpy).toHaveBeenCalledTimes(1);
+    expect(blurSpy).toHaveBeenCalledTimes(1);
+    expect(selectSpy).toHaveBeenCalledTimes(1);
+  });
 });
