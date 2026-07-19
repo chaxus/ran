@@ -72,9 +72,9 @@
         <div class="live-head"><span class="live-dot"></span>{{ t.liveLabel }}</div>
         <div v-if="mounted" class="live-body">
           <div class="live-row">
-            <r-button type="contrast">Contrast</r-button>
-            <r-button>Default</r-button>
             <r-button type="primary">Primary</r-button>
+            <r-button>Default</r-button>
+            <r-button type="warning">Warning</r-button>
           </div>
           <div class="live-row">
             <r-progress class="live-progress" percent="66" total="100"></r-progress>
@@ -810,11 +810,11 @@ const wordIndex = (li: number, wi: number): number => {
   transition: transform var(--ran-motion-duration-base, 0.2s) var(--ran-motion-ease-spring, ease);
 }
 .btn-primary {
-  color: var(--ran-color-contrast-text, var(--ran-background-100, #fff));
-  background: var(--ran-color-contrast-bg, var(--ran-gray-1000, #171717));
+  color: var(--ran-color-primary-text, var(--ran-background-100, #fff));
+  background: var(--ran-color-primary, var(--ran-gray-1000, #171717));
 }
 .btn-primary:hover {
-  background: var(--ran-color-contrast-bg-hover, #383838);
+  background: var(--ran-color-primary-hover, #383838);
   transform: translateY(-1px);
   box-shadow: 0 8px 22px -10px rgba(0, 0, 0, 0.28);
 }

@@ -91,36 +91,35 @@ per-component dark overrides.
 
 ### Semantic color tokens
 
-| Token                            | Role                      |
-| -------------------------------- | ------------------------- |
-| `--ran-color-primary`            | Primary action            |
-| `--ran-color-primary-hover`      | Primary hover             |
-| `--ran-color-primary-active`     | Primary active            |
-| `--ran-color-success`            | Success                   |
-| `--ran-color-warning`            | Warning                   |
-| `--ran-color-danger`             | Danger / error            |
-| `--ran-color-bg`                 | Page background           |
-| `--ran-color-bg-subtle`          | Subtle background         |
-| `--ran-color-bg-elevated`        | Card / surface background |
-| `--ran-color-bg-muted`           | Muted surface             |
-| `--ran-color-bg-hover`           | Hover surface             |
-| `--ran-color-bg-active`          | Active surface            |
-| `--ran-color-text`               | Primary text              |
-| `--ran-color-text-secondary`     | Secondary text            |
-| `--ran-color-text-disabled`      | Disabled text             |
-| `--ran-color-border`             | Default border            |
-| `--ran-color-border-secondary`   | Subtle border             |
-| `--ran-color-border-hover`       | Hover border              |
-| `--ran-color-border-active`      | Active border             |
-| `--ran-color-link`               | Link color                |
-| `--ran-color-contrast-bg`        | Contrast action surface   |
-| `--ran-color-contrast-bg-hover`  | Contrast hover            |
-| `--ran-color-contrast-bg-active` | Contrast active           |
-| `--ran-color-contrast-text`      | Text on contrast surface  |
+| Token                          | Role                             |
+| ------------------------------ | -------------------------------- |
+| `--ran-color-primary`          | Primary action (monochrome)      |
+| `--ran-color-primary-hover`    | Primary hover                    |
+| `--ran-color-primary-active`   | Primary active                   |
+| `--ran-color-primary-text`     | Inverse ink on a primary surface |
+| `--ran-color-success`          | Success                          |
+| `--ran-color-warning`          | Warning                          |
+| `--ran-color-danger`           | Danger / error                   |
+| `--ran-color-bg`               | Page background                  |
+| `--ran-color-bg-subtle`        | Subtle background                |
+| `--ran-color-bg-elevated`      | Card / surface background        |
+| `--ran-color-bg-muted`         | Muted surface                    |
+| `--ran-color-bg-hover`         | Hover surface                    |
+| `--ran-color-bg-active`        | Active surface                   |
+| `--ran-color-text`             | Primary text                     |
+| `--ran-color-text-secondary`   | Secondary text                   |
+| `--ran-color-text-disabled`    | Disabled text                    |
+| `--ran-color-border`           | Default border                   |
+| `--ran-color-border-secondary` | Subtle border                    |
+| `--ran-color-border-hover`     | Hover border                     |
+| `--ran-color-border-active`    | Active border                    |
+| `--ran-color-link`             | Link color                       |
 
-The **contrast** group backs the monochrome "highest-contrast" action (the Geist contrast
-button, `<r-button type="contrast">`): black-on-white in light mode, white-on-black in dark.
-Use it when the primary action should carry no hue.
+The **primary** group is the monochrome "highest-contrast" action (the Geist brand tone,
+`<r-button type="primary">`): black-on-white in light mode, white-on-black in dark. It carries
+no hue — blue is reserved for links (`--ran-color-link`) and the focus ring only.
+`--ran-color-primary-text` is the inverse ink for text/icons sitting on a primary surface (it
+flips too, so a primary button reads correctly in both themes).
 
 **Color is a state ladder, not a palette.** Within a scale, each step has a fixed job:
 `100` default bg · `200` hover bg · `300` active bg · `400` border · `500` hover border ·

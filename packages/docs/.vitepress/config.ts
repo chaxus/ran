@@ -105,7 +105,7 @@ const deriveDescription = (absPath: string): string => {
     collected.push(text);
     if (collected.join(' ').length >= 160) break;
   }
-  let s = collected
+  const s = collected
     .join(' ')
     .replace(/!\[[^\]]*\]\([^)]*\)/g, '') // images
     .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1') // links -> text

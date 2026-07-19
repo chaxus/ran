@@ -35,7 +35,6 @@ Button component for triggering instant actions with multiple styles and states.
 
 <Demo>
   <r-button type="primary">Primary Button</r-button>
-  <r-button type="contrast">Contrast Button</r-button>
   <r-button type="warning">Warning Button</r-button>
   <r-button type="text">Text Button</r-button>
   <r-button>Default Button</r-button>
@@ -43,13 +42,12 @@ Button component for triggering instant actions with multiple styles and states.
 
 ```html
 <r-button type="primary">Primary Button</r-button>
-<r-button type="contrast">Contrast Button</r-button>
 <r-button type="warning">Warning Button</r-button>
 <r-button type="text">Text Button</r-button>
 <r-button>Default Button</r-button>
 ```
 
-`contrast` is the highest-contrast monochrome action (from the Geist design language): black-on-white in light mode, white-on-black in dark mode. Use it when the main action should carry no hue. It rides the `--ran-color-contrast-*` tokens — see [Theme & Tokens](/src/ranui/theme/).
+`primary` is the monochrome action (from the Geist design language): black-on-white in light mode, white-on-black in dark mode. Blue carries no brand meaning here — it is reserved for links and the focus ring. It rides the `--ran-color-primary*` tokens (`--ran-color-primary`, `-hover`, `-active`, and `--ran-color-primary-text` for the inverse ink) — see [Theme & Tokens](/src/ranui/theme/).
 
 ### Disabled State `disabled`
 
@@ -107,7 +105,7 @@ Button component for triggering instant actions with multiple styles and states.
 
 ## Best Practices
 
-- **Primary Actions**: Use `type="primary"`, or `type="contrast"` when the action should stay monochrome
+- **Primary Actions**: Use `type="primary"` (monochrome — black-on-white / white-on-black)
 - **Dangerous Actions**: Use `type="warning"`
 - **Secondary Actions**: Use `type="text"`
 - **Disabled State**: Use `disabled` when actions unavailable
