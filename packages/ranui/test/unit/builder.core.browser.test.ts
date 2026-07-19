@@ -2,8 +2,8 @@
  * Tests for ElementBuilder and ShadowBuilder in browser (jsdom) environment.
  * isSSR === false here, so real DOM APIs are exercised.
  */
-import { describe, it, expect } from 'vitest';
-import { createRef, ElementBuilder, ShadowBuilder } from '@/utils/builder/core';
+import { describe, it, expect, vi } from 'vitest';
+import { createRef, ElementBuilder, ShadowBuilder, For, Index, Show, Switch, Match } from '@/utils/builder/core';
 import { createRoot, signal } from '@/utils/builder/signal';
 
 // ---------------------------------------------------------------------------
@@ -280,6 +280,140 @@ describe('ElementBuilder — reactive children()', () => {
 });
 
 // ---------------------------------------------------------------------------
+// For — keyed list reconciliation
+// ---------------------------------------------------------------------------
+
+describe('For — keyed list', () => {
+  it('renders the initial list', () => {
+    createRoot(() => {
+      const [rows] = signal([{ id: 1 }, { id: 2 }, { id: 3 }]);
+      const el = new ElementBuilder('ul')
+        .children(
+          For({ each: () => rows(), key: (r) => r.id, render: (r) => new ElementBuilder('li').text(`${r.id}`) }),
+        )
+        .build();
+      expect([...el.querySelectorAll('li')].map((n) => n.textContent)).toEqual(['1', '2', '3']);
+    });
+  });
+
+  it('reuses the SAME DOM node for a surviving key across updates', () => {
+    createRoot(() => {
+      const [rows, setRows] = signal([{ id: 1 }, { id: 2 }]);
+      const el = new ElementBuilder('ul')
+        .children(
+          For({ each: () => rows(), key: (r) => r.id, render: (r) => new ElementBuilder('li').text(`${r.id}`) }),
+        )
+        .build();
+      const liForId1 = [...el.querySelectorAll('li')].find((n) => n.textContent === '1')!;
+      // prepend + append — id 1 must keep its node (this is the whole point of keying)
+      setRows([{ id: 0 }, { id: 1 }, { id: 2 }, { id: 9 }]);
+      const after = [...el.querySelectorAll('li')];
+      expect(after.map((n) => n.textContent)).toEqual(['0', '1', '2', '9']);
+      expect(after.find((n) => n.textContent === '1')).toBe(liForId1); // same node, not rebuilt
+    });
+  });
+
+  it('preserves in-node DOM state (e.g. a live property) across reorders', () => {
+    createRoot(() => {
+      const [rows, setRows] = signal([{ id: 'a' }, { id: 'b' }]);
+      const el = new ElementBuilder('ul')
+        .children(For({ each: () => rows(), key: (r) => r.id, render: (r) => new ElementBuilder('li').text(r.id) }))
+        .build();
+      const liA = [...el.querySelectorAll('li')].find((n) => n.textContent === 'a')! as HTMLElement & {
+        _state?: string;
+      };
+      liA._state = 'kept'; // uncontrolled state a rebuild would lose
+      setRows([{ id: 'b' }, { id: 'a' }]); // reorder
+      const liAAfter = [...el.querySelectorAll('li')].find((n) => n.textContent === 'a')! as HTMLElement & {
+        _state?: string;
+      };
+      expect(el.textContent).toBe('ba'); // reordered in the DOM
+      expect(liAAfter).toBe(liA); // same node
+      expect(liAAfter._state).toBe('kept'); // state survived
+    });
+  });
+
+  it('removes and disposes nodes whose key disappears', () => {
+    createRoot(() => {
+      const [rows, setRows] = signal([{ id: 1 }, { id: 2 }, { id: 3 }]);
+      const disposed: number[] = [];
+      const el = new ElementBuilder('ul')
+        .children(
+          For({
+            each: () => rows(),
+            key: (r) => r.id,
+            render: (r) => {
+              // per-item effect cleanup fires on removal (scope disposed)
+              const [, setX] = signal(0);
+              void setX;
+              const li = new ElementBuilder('li').text(`${r.id}`).build();
+              return li;
+            },
+          }),
+        )
+        .build();
+      void disposed;
+      expect(el.querySelectorAll('li').length).toBe(3);
+      setRows([{ id: 1 }, { id: 3 }]);
+      expect([...el.querySelectorAll('li')].map((n) => n.textContent)).toEqual(['1', '3']);
+      setRows([]);
+      expect(el.querySelectorAll('li').length).toBe(0);
+    });
+  });
+
+  it('exposes a reactive index that tracks the item after reorder', () => {
+    createRoot(() => {
+      const [rows, setRows] = signal([{ id: 'a' }, { id: 'b' }, { id: 'c' }]);
+      const el = new ElementBuilder('ol')
+        .children(
+          For({
+            each: () => rows(),
+            key: (r) => r.id,
+            render: (r, index) => new ElementBuilder('li').text(() => `${index()}:${r.id}`),
+          }),
+        )
+        .build();
+      expect([...el.querySelectorAll('li')].map((n) => n.textContent)).toEqual(['0:a', '1:b', '2:c']);
+      setRows([{ id: 'c' }, { id: 'a' }, { id: 'b' }]); // rotate
+      // reused nodes, but their index accessor re-ran → labels updated
+      expect([...el.querySelectorAll('li')].map((n) => n.textContent)).toEqual(['0:c', '1:a', '2:b']);
+    });
+  });
+
+  it('disposes all item scopes when the owning scope is disposed', () => {
+    let el!: HTMLElement;
+    const [rows, setRows] = signal([{ id: 1 }]);
+    let itemEffectRuns = 0;
+    const dispose = createRoot((d) => {
+      el = new ElementBuilder('ul')
+        .children(
+          For({
+            each: () => rows(),
+            key: (r) => r.id,
+            render: (r) => {
+              const [tick, setTick] = signal(0);
+              const li = new ElementBuilder('li').text(() => `${r.id}:${tick()}`).build();
+              // expose a way to bump this item's own signal after teardown
+              (li as HTMLElement & { _bump?: () => void })._bump = () => setTick((n) => n + 1);
+              itemEffectRuns++;
+              return li;
+            },
+          }),
+        )
+        .build();
+      return d;
+    });
+    const li = el.querySelector('li') as HTMLElement & { _bump?: () => void };
+    expect(li.textContent).toBe('1:0');
+    dispose();
+    // after dispose, list no longer reacts
+    setRows([{ id: 1 }, { id: 2 }]);
+    expect(el.querySelectorAll('li').length).toBe(1); // list effect gone
+    expect(itemEffectRuns).toBe(1);
+  });
+});
+
+// ---------------------------------------------------------------------------
 // ElementBuilder — ref()
 // ---------------------------------------------------------------------------
 
@@ -456,5 +590,211 @@ describe('ShadowBuilder — serialize()', () => {
     const html = sb.serialize();
     expect(html).toContain('span');
     expect(html).toContain('x');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// For — duplicate-key safety
+// ---------------------------------------------------------------------------
+
+describe('For — duplicate keys', () => {
+  it('ignores the duplicate (no leak, deterministic) and warns', () => {
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    try {
+      createRoot(() => {
+        const [rows, setRows] = signal([
+          { id: 1, v: 'a' },
+          { id: 1, v: 'b' },
+        ]);
+        const el = new ElementBuilder('ul')
+          .children(For({ each: () => rows(), key: (r) => r.id, render: (r) => new ElementBuilder('li').text(r.v) }))
+          .build();
+        // only the first occurrence of key 1 renders — no orphaned node
+        expect(el.querySelectorAll('li').length).toBe(1);
+        expect(el.querySelector('li')?.textContent).toBe('a');
+        expect(spy).toHaveBeenCalled();
+        // a later clean update still reconciles correctly (no stale leak)
+        setRows([
+          { id: 1, v: 'a' },
+          { id: 2, v: 'c' },
+        ]);
+        expect([...el.querySelectorAll('li')].map((n) => n.textContent)).toEqual(['a', 'c']);
+      });
+    } finally {
+      spy.mockRestore();
+    }
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Show — fine-grained conditional
+// ---------------------------------------------------------------------------
+
+describe('Show — conditional', () => {
+  it('renders children when truthy, fallback when falsy', () => {
+    createRoot(() => {
+      const [on, setOn] = signal(true);
+      const el = new ElementBuilder('div')
+        .children(
+          Show({
+            when: () => on(),
+            children: () => new ElementBuilder('span').text('yes'),
+            fallback: () => new ElementBuilder('em').text('no'),
+          }),
+        )
+        .build();
+      expect(el.querySelector('span')?.textContent).toBe('yes');
+      expect(el.querySelector('em')).toBeNull();
+      setOn(false);
+      expect(el.querySelector('span')).toBeNull();
+      expect(el.querySelector('em')?.textContent).toBe('no');
+    });
+  });
+
+  it('renders nothing when falsy and no fallback', () => {
+    createRoot(() => {
+      const [on, setOn] = signal(false);
+      const el = new ElementBuilder('div')
+        .children(Show({ when: () => on(), children: () => new ElementBuilder('span').text('x') }))
+        .build();
+      expect(el.querySelector('span')).toBeNull();
+      setOn(true);
+      expect(el.querySelector('span')?.textContent).toBe('x');
+    });
+  });
+
+  it('is FINE-GRAINED: does not rebuild the branch when when() changes but truthiness holds', () => {
+    createRoot(() => {
+      // when() returns a truthy count; toggling 1 -> 2 keeps it truthy
+      const [count, setCount] = signal(1);
+      let builds = 0;
+      const el = new ElementBuilder('div')
+        .children(
+          Show({
+            when: () => count() > 0,
+            children: () => {
+              builds++;
+              return new ElementBuilder('span').text(() => `count=${count()}`);
+            },
+          }),
+        )
+        .build();
+      expect(builds).toBe(1);
+      const span = el.querySelector('span')!;
+      expect(span.textContent).toBe('count=1');
+
+      setCount(2); // still truthy → branch NOT rebuilt, only the text binding updates
+      expect(builds).toBe(1); // <- the whole point: no re-render of the branch
+      expect(el.querySelector('span')).toBe(span); // same node
+      expect(span.textContent).toBe('count=2'); // inner binding updated
+
+      setCount(0); // truthiness flips → branch torn down
+      expect(el.querySelector('span')).toBeNull();
+      setCount(5); // flips back → rebuilt once
+      expect(builds).toBe(2);
+    });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Index — position-keyed list
+// ---------------------------------------------------------------------------
+
+describe('Index — position-keyed list', () => {
+  it('renders the initial list with static index', () => {
+    createRoot(() => {
+      const [nums] = signal([10, 20, 30]);
+      const el = new ElementBuilder('ul')
+        .children(Index({ each: () => nums(), render: (n, i) => new ElementBuilder('li').text(() => `${i}:${n()}`) }))
+        .build();
+      expect([...el.querySelectorAll('li')].map((n) => n.textContent)).toEqual(['0:10', '1:20', '2:30']);
+    });
+  });
+
+  it('reuses the node at a position and updates its item signal in place', () => {
+    createRoot(() => {
+      const [nums, setNums] = signal([10, 20]);
+      const el = new ElementBuilder('ul')
+        .children(Index({ each: () => nums(), render: (n) => new ElementBuilder('li').text(() => `${n()}`) }))
+        .build();
+      const li0 = el.querySelectorAll('li')[0];
+      setNums([99, 20]); // change value at index 0
+      expect(el.querySelectorAll('li')[0]).toBe(li0); // same node (position reused)
+      expect(li0.textContent).toBe('99'); // item signal updated in place
+    });
+  });
+
+  it('grows and shrinks (appends new slots, disposes trailing ones)', () => {
+    createRoot(() => {
+      const [nums, setNums] = signal([1, 2]);
+      const el = new ElementBuilder('ul')
+        .children(Index({ each: () => nums(), render: (n) => new ElementBuilder('li').text(() => `${n()}`) }))
+        .build();
+      expect(el.querySelectorAll('li').length).toBe(2);
+      setNums([1, 2, 3, 4]);
+      expect([...el.querySelectorAll('li')].map((n) => n.textContent)).toEqual(['1', '2', '3', '4']);
+      setNums([1]);
+      expect([...el.querySelectorAll('li')].map((n) => n.textContent)).toEqual(['1']);
+    });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Switch / Match — fine-grained multi-branch
+// ---------------------------------------------------------------------------
+
+describe('Switch / Match', () => {
+  it('renders the first matching branch, else fallback', () => {
+    createRoot(() => {
+      const [status, setStatus] = signal('idle');
+      const el = new ElementBuilder('div')
+        .children(
+          Switch({
+            fallback: () => new ElementBuilder('em').text('idle'),
+            children: [
+              Match({ when: () => status() === 'loading', children: () => new ElementBuilder('span').text('spin') }),
+              Match({ when: () => status() === 'error', children: () => new ElementBuilder('b').text('err') }),
+            ],
+          }),
+        )
+        .build();
+      expect(el.querySelector('em')?.textContent).toBe('idle'); // fallback
+      setStatus('loading');
+      expect(el.querySelector('span')?.textContent).toBe('spin');
+      expect(el.querySelector('em')).toBeNull();
+      setStatus('error');
+      expect(el.querySelector('b')?.textContent).toBe('err');
+      expect(el.querySelector('span')).toBeNull();
+    });
+  });
+
+  it('is FINE-GRAINED: rebuilds only when the winning branch changes', () => {
+    createRoot(() => {
+      const [n, setN] = signal(5);
+      let loadingBuilds = 0;
+      const el = new ElementBuilder('div')
+        .children(
+          Switch({
+            children: [
+              Match({
+                when: () => n() > 0, // stays true for 5 -> 7
+                children: () => {
+                  loadingBuilds++;
+                  return new ElementBuilder('span').text(() => `n=${n()}`);
+                },
+              }),
+            ],
+          }),
+        )
+        .build();
+      expect(loadingBuilds).toBe(1);
+      const span = el.querySelector('span')!;
+      setN(7); // winner unchanged (still branch 0) → no rebuild
+      expect(loadingBuilds).toBe(1);
+      expect(el.querySelector('span')).toBe(span);
+      expect(span.textContent).toBe('n=7'); // inner binding updated
+      setN(-1); // no branch matches → fallback (none) → span removed
+      expect(el.querySelector('span')).toBeNull();
+    });
   });
 });

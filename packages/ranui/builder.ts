@@ -16,8 +16,18 @@ export { escapeHtml, escapeHtmlAttribute } from './utils/builder/escape';
 export { matchSelector, collectMatches } from './utils/builder/selectors';
 export type { MockNode } from './utils/builder/selectors';
 export { DocumentFragmentMock, HTMLElementMock, ShadowRootMock } from './utils/builder/mocks';
-export { createRef, ElementBuilder, ShadowBuilder } from './utils/builder/core';
-export type { Ref, Child } from './utils/builder/core';
+export { createRef, For, Index, Show, Switch, Match, ElementBuilder, ShadowBuilder } from './utils/builder/core';
+export type {
+  Ref,
+  Child,
+  ForOptions,
+  ForHandle,
+  IndexOptions,
+  IndexHandle,
+  ShowOptions,
+  SwitchOptions,
+  MatchClause,
+} from './utils/builder/core';
 export {
   View,
   Div,

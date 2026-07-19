@@ -1,3 +1,7 @@
+/**
+ * @description: 类型判断工具集（数组 / 字符串 / 原始值 / VNode）
+ * @module
+ */
 import type { VNode } from './vnode';
 
 // 判断是否为数组
