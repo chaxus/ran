@@ -1,6 +1,69 @@
 import type { DefaultTheme } from 'vitepress';
 import { GITHUB, EDITOR } from '../../common/index';
 
+// Shared across /src/article/, /src/blockchain/ and /src/note/ so those pages
+// all render this sidebar (VitePress matches sidebars by path prefix).
+const articleEnSidebar: DefaultTheme.SidebarItem[] = [
+  {
+    items: [
+      { text: '23 classic design patterns', link: '/src/article/design_mode' },
+      { text: 'How AI agents work', link: '/src/article/ai/' },
+      { text: 'Functional programming', link: '/src/article/functional_programming' },
+      { text: 'Web document preview', link: '/src/article/doc_preview' },
+      { text: 'Web video encryption', link: '/src/article/video' },
+      { text: 'Visual rendering engine', link: '/src/article/visual' },
+      { text: 'Abstract syntax tree', link: '/src/article/ast_parse/tokenizer' },
+      {
+        text: 'TypeScript type system',
+        collapsed: true,
+        items: [
+          { text: 'Overview', link: '/src/article/typescript/' },
+          { text: 'Counting with array length', link: '/src/article/typescript/calculate' },
+          { text: 'Pattern matching and extraction', link: '/src/article/typescript/pattern' },
+          { text: 'Reconstruction for transformation', link: '/src/article/typescript/reconstruction' },
+          { text: 'Recursive reuse', link: '/src/article/typescript/recursion' },
+          { text: 'Distributed conditional types', link: '/src/article/typescript/union_type' },
+        ],
+      },
+      {
+        text: 'Sorting algorithm',
+        link: '/src/article/sort/',
+        collapsed: true,
+        items: [
+          { text: 'bubble sort', link: '/src/article/sort/bubble/' },
+          { text: 'selection sort', link: '/src/article/sort/select/' },
+          { text: 'insertion sort', link: '/src/article/sort/insert/' },
+          { text: 'shell sort', link: '/src/article/sort/shell/' },
+          { text: 'Merge sort', link: '/src/article/sort/merge/' },
+          { text: 'Quick sort', link: '/src/article/sort/quick/' },
+          { text: 'Heap Sort', link: '/src/article/sort/heap/' },
+          { text: 'Counting sort', link: '/src/article/sort/count/' },
+          { text: 'Bucket sort', link: '/src/article/sort/bucket/' },
+          { text: 'Radix sort', link: '/src/article/sort/radix/' },
+        ],
+      },
+      {
+        text: 'Math',
+        collapsed: true,
+        items: [{ text: 'Linear algebra', link: '/src/article/math/linear_algebra' }],
+      },
+      {
+        text: 'Blockchain',
+        collapsed: true,
+        items: [
+          { text: 'Blockchain data structures', link: '/src/blockchain/' },
+          { text: 'How to participate in Web3', link: '/src/blockchain/web3' },
+        ],
+      },
+      {
+        text: 'Notes',
+        collapsed: true,
+        items: [{ text: 'Compiling LibreOffice to WebAssembly', link: '/src/note/libreoffice2wasm' }],
+      },
+    ],
+  },
+];
+
 const themeEnConfig: DefaultTheme.Config = {
   logo: '/home.svg',
   search: {
@@ -298,7 +361,7 @@ const themeEnConfig: DefaultTheme.Config = {
         text: 'Data Presentation',
         items: [
           { text: 'Image', link: '/src/ranui/image/' },
-          { text: 'Math', link: '/src/ranui/math' },
+          { text: 'Math', link: '/src/ranui/math/' },
           { text: 'Mermaid', link: '/src/ranui/mermaid/' },
           { text: 'CheckBox', link: '/src/ranui/checkbox/' },
           { text: 'Tabs', link: '/src/ranui/tab/' },
@@ -340,58 +403,9 @@ const themeEnConfig: DefaultTheme.Config = {
         ],
       },
     ],
-    '/src/article/': [
-      {
-        items: [
-          {
-            text: '23 classic design patterns',
-            link: '/src/article/design_mode',
-          },
-          {
-            text: 'How AI agents work',
-            link: '/src/article/ai/',
-          },
-          {
-            text: 'Functional programming',
-            link: '/src/article/functional_programming',
-          },
-          {
-            text: 'Web document preview',
-            link: '/src/article/doc_preview',
-          },
-          {
-            text: 'Web video encryption',
-            link: '/src/article/video',
-          },
-          {
-            text: 'Visual rendering engine',
-            link: '/src/article/visual',
-          },
-          {
-            text: 'Sorting algorithm',
-            link: '/src/article/sort/',
-            collapsed: true,
-            items: [
-              { text: 'bubble sort', link: '/src/article/sort/bubble/' },
-              { text: 'selection sort', link: '/src/article/sort/select/' },
-              { text: 'insertion sort', link: '/src/article/sort/insert/' },
-              { text: 'shell sort', link: '/src/article/sort/shell/' },
-              { text: 'Merge sort', link: '/src/article/sort/merge/' },
-              { text: 'Quick sort', link: '/src/article/sort/quick/' },
-              { text: 'Heap Sort', link: '/src/article/sort/heap/' },
-              { text: 'Counting sort', link: '/src/article/sort/count/' },
-              { text: 'Bucket sort', link: '/src/article/sort/bucket/' },
-              { text: 'Radix sort', link: '/src/article/sort/radix/' },
-            ],
-          },
-          {
-            text: 'Math',
-            collapsed: true,
-            items: [{ text: 'Linear algebra', link: '/src/article/math/linear_algebra' }],
-          },
-        ],
-      },
-    ],
+    '/src/article/': articleEnSidebar,
+    '/src/blockchain/': articleEnSidebar,
+    '/src/note/': articleEnSidebar,
   },
 };
 
