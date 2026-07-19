@@ -54,36 +54,36 @@ diagram. The toolbar appears on hover (top-right).
 
 ### Attributes
 
-| Attribute    | Type                          | Default  | Description                                                                          |
-| ------------ | ----------------------------- | -------- | ------------------------------------------------------------------------------------ |
-| `code`       | `string` (URI-encoded)        | —        | Diagram source. Falls back to the element's text content when absent.                |
-| `theme`      | `'auto' \| 'light' \| 'dark'` | `'auto'` | Mermaid theme. `auto` follows the page (`.dark` / `[data-ran-theme]`) and re-renders on toggle. |
-| `copy`       | boolean                       | off      | Show the copy-source button.                                                         |
-| `download`   | boolean / `"svg png source"`  | off      | Show the download button; value restricts the offered formats.                       |
-| `fullscreen` | boolean                       | off      | Show the fullscreen button.                                                          |
-| `sheet`      | `string`                      | —        | Extra CSS injected into the shadow root.                                             |
+| Attribute    | Type                          | Default  | Description                                                                                                                                                              |
+| ------------ | ----------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `code`       | `string` (URI-encoded)        | —        | Diagram source. Falls back to the element's text content when absent.                                                                                                    |
+| `theme`      | `'auto' \| 'light' \| 'dark'` | `'auto'` | Mermaid theme. `auto` follows the page (`.dark` / `[data-ran-theme]`) and re-renders on toggle.                                                                          |
+| `copy`       | boolean                       | off      | Show the copy-source button.                                                                                                                                             |
+| `download`   | boolean / `"svg png source"`  | off      | Show the download button; value restricts the offered formats.                                                                                                           |
+| `fullscreen` | boolean                       | off      | Show the fullscreen button.                                                                                                                                              |
+| `sheet`      | `string`                      | —        | Extra CSS injected into the shadow root.                                                                                                                                 |
 | `label-*`    | `string`                      | English  | Override control labels: `label-copy`, `label-download`, `label-fullscreen`, `label-zoom-in`, `label-zoom-out`, `label-reset`, `label-diagram` (fullscreen dialog name). |
 
 ## Events
 
 All events bubble and cross the shadow boundary (`composed`).
 
-| Event              | `detail`                          | Fired when                          |
-| ------------------ | --------------------------------- | ----------------------------------- |
-| `render`           | `{ ok: true }`                    | a diagram finished rendering        |
-| `copied`           | `{ kind: 'source' }`              | the source was copied               |
-| `download`         | `{ format: 'svg' \| 'png' \| 'source' }` | a file was downloaded        |
-| `error`            | `{ message: string }`             | the diagram failed to parse/render  |
-| `fullscreenchange` | `{ open: boolean }`               | the fullscreen lightbox opened/closed |
+| Event              | `detail`                                 | Fired when                            |
+| ------------------ | ---------------------------------------- | ------------------------------------- |
+| `render`           | `{ ok: true }`                           | a diagram finished rendering          |
+| `copied`           | `{ kind: 'source' }`                     | the source was copied                 |
+| `download`         | `{ format: 'svg' \| 'png' \| 'source' }` | a file was downloaded                 |
+| `error`            | `{ message: string }`                    | the diagram failed to parse/render    |
+| `fullscreenchange` | `{ open: boolean }`                      | the fullscreen lightbox opened/closed |
 
 ## CSS Parts
 
-| Part      | Description                              |
-| --------- | ---------------------------------------- |
-| `mermaid` | The outer wrapper.                       |
-| `diagram` | The rendered-diagram container.          |
-| `toolbar` | The hover control bar.                   |
-| `button`  | Each toolbar icon button.                |
+| Part      | Description                                |
+| --------- | ------------------------------------------ |
+| `mermaid` | The outer wrapper.                         |
+| `diagram` | The rendered-diagram container.            |
+| `toolbar` | The hover control bar.                     |
+| `button`  | Each toolbar icon button.                  |
 | `error`   | The error message box (on render failure). |
 
 ```css
