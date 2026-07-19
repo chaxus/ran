@@ -80,9 +80,16 @@
   --ran-green-1000: #003a00;
 
   /* ── Semantic colors (component-facing; flip with the base scale) ─ */
-  --ran-color-primary: var(--ran-blue-700);
-  --ran-color-primary-hover: var(--ran-blue-800);
-  --ran-color-primary-active: var(--ran-blue-900);
+  /* Primary = the monochrome action (Vercel/Geist): black-on-white in light,
+     white-on-black in dark. The brand/primary tone carries no hue — blue is
+     reserved for links (--ran-color-link) and the focus ring only.
+     `-text` is the inverse ink for text/icons sitting ON a primary surface; it
+     must flip too (else white-on-white in dark). hover/active step toward the
+     page bg and are overridden in dark.less. */
+  --ran-color-primary: var(--ran-gray-1000);
+  --ran-color-primary-hover: #383838;
+  --ran-color-primary-active: #4d4d4d;
+  --ran-color-primary-text: var(--ran-background-100);
   --ran-color-success: var(--ran-green-700);
   --ran-color-warning: var(--ran-amber-700);
   --ran-color-danger: var(--ran-red-700);
@@ -103,15 +110,6 @@
   --ran-color-border-hover: var(--ran-gray-500);
   --ran-color-border-active: var(--ran-gray-600);
   --ran-color-link: var(--ran-blue-700);
-
-  /* Contrast surface (Geist "contrast" button): the highest-contrast
-     monochrome action. bg/text track gray-1000/background-100 so they invert
-     in dark mode; hover/active are literals stepped toward the page bg and
-     overridden in dark.less. */
-  --ran-color-contrast-bg: var(--ran-gray-1000);
-  --ran-color-contrast-bg-hover: #383838;
-  --ran-color-contrast-bg-active: #4d4d4d;
-  --ran-color-contrast-text: var(--ran-background-100);
 
   /* ── Typography ─────────────────────────────────────────────────── */
   --ran-font-family:
@@ -156,7 +154,8 @@
   --ran-z-message: 1200;
 
   /* ── Focus ring (Geist) ─────────────────────────────────────────── */
-  --ran-focus-ring: 0 0 0 2px var(--ran-background-100), 0 0 0 4px var(--ran-color-primary);
+  /* Focus stays blue (Geist), decoupled from the now-monochrome primary. */
+  --ran-focus-ring: 0 0 0 2px var(--ran-background-100), 0 0 0 4px var(--ran-blue-700);
 
   /* ── Motion ─────────────────────────────────────────────────────── */
   --ran-motion-duration-fast: 0.15s;

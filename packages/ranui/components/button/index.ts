@@ -94,7 +94,7 @@ export class Button extends RanElement {
     }
   }
 
-  /** Visual variant: `''` (default) | `'primary'` | `'contrast'` | `'warning'` | `'text'`. Drives the `:host([type=...])` styles. */
+  /** Visual variant: `''` (default) | `'primary'` (monochrome) | `'warning'` | `'text'`. Drives the `:host([type=...])` styles. */
   get type(): string {
     return this.getAttribute('type') || '';
   }

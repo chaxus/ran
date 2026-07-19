@@ -30,7 +30,10 @@ describe('theme tokens', () => {
     const source = read('theme/tokens.less');
 
     [
-      '--ran-color-primary: var(--ran-blue-700)',
+      // Primary is the monochrome action (Vercel/Geist); blue is links + focus only.
+      '--ran-color-primary: var(--ran-gray-1000)',
+      '--ran-color-primary-text: var(--ran-background-100)',
+      '--ran-color-link: var(--ran-blue-700)',
       '--ran-color-text: var(--ran-gray-1000)',
       '--ran-color-bg: var(--ran-background-100)',
       '--ran-color-border: var(--ran-gray-400)',

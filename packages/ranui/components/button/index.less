@@ -52,53 +52,30 @@
     outline-offset: var(--ran-btn-focus-outline-offset, 2px);
   }
 
+  /* Primary = the monochrome action (Vercel/Geist): black-on-white ↔ white-on-black.
+     Text/ripple use --ran-color-primary-text so the ink inverts with the surface. */
   &([type="primary"]) {
     .ran-btn-content {
-      background-color: var(--ran-btn-content-background-color, var(--ran-color-primary, #006bff));
+      background-color: var(--ran-btn-content-background-color, var(--ran-color-primary, #171717));
       background-image: var(--ran-btn-content-background-image, none);
-      border-color: var(--ran-btn-content-border-color, var(--ran-color-primary, #006bff));
-      color: var(--ran-btn-content-color, #fff);
+      border-color: var(--ran-btn-content-border-color, var(--ran-color-primary, #171717));
+      color: var(--ran-btn-content-color, var(--ran-color-primary-text, #fff));
     }
   }
 
   &([type="primary"]:not([disabled])) {
     .ran-btn::after {
-      background-image: var(--ran-btn-after-background-image, radial-gradient(circle, #fff 10%, transparent 10.01%));
+      background-image: var(
+        --ran-btn-after-background-image,
+        radial-gradient(circle, var(--ran-color-primary-text, #fff) 10%, transparent 10.01%)
+      );
     }
   }
 
   &([type="primary"]:not([disabled]):active) {
     .ran-btn-content {
-      background-color: var(--ran-btn-content-active-background-color, var(--ran-color-primary-active, #005ff2));
-      border-color: var(--ran-btn-content-active-border-color, var(--ran-color-primary-active, #005ff2));
-    }
-  }
-
-  /* Geist "contrast": the highest-contrast monochrome action. Tracks
-     --ran-color-contrast-* so it inverts (black-on-white ↔ white-on-black)
-     with the theme. */
-  &([type="contrast"]) {
-    .ran-btn-content {
-      background-color: var(--ran-btn-content-background-color, var(--ran-color-contrast-bg, #171717));
-      background-image: var(--ran-btn-content-background-image, none);
-      border-color: var(--ran-btn-content-border-color, var(--ran-color-contrast-bg, #171717));
-      color: var(--ran-btn-content-color, var(--ran-color-contrast-text, #fff));
-    }
-  }
-
-  &([type="contrast"]:not([disabled])) {
-    .ran-btn::after {
-      background-image: var(
-        --ran-btn-after-background-image,
-        radial-gradient(circle, var(--ran-color-contrast-text, #fff) 10%, transparent 10.01%)
-      );
-    }
-  }
-
-  &([type="contrast"]:not([disabled]):active) {
-    .ran-btn-content {
-      background-color: var(--ran-btn-content-active-background-color, var(--ran-color-contrast-bg-active, #4d4d4d));
-      border-color: var(--ran-btn-content-active-border-color, var(--ran-color-contrast-bg-active, #4d4d4d));
+      background-color: var(--ran-btn-content-active-background-color, var(--ran-color-primary-active, #4d4d4d));
+      border-color: var(--ran-btn-content-active-border-color, var(--ran-color-primary-active, #4d4d4d));
     }
   }
 
@@ -115,17 +92,9 @@
 
     &([type="primary"]:not([disabled]):hover) {
       .ran-btn-content {
-        background-color: var(--ran-btn-content-hover-background-color, var(--ran-color-primary-hover, #0059ec));
-        border-color: var(--ran-btn-content-hover-border-color, var(--ran-color-primary-hover, #0059ec));
-        color: var(--ran-btn-content-hover-color, #fff);
-      }
-    }
-
-    &([type="contrast"]:not([disabled]):hover) {
-      .ran-btn-content {
-        background-color: var(--ran-btn-content-hover-background-color, var(--ran-color-contrast-bg-hover, #383838));
-        border-color: var(--ran-btn-content-hover-border-color, var(--ran-color-contrast-bg-hover, #383838));
-        color: var(--ran-btn-content-hover-color, var(--ran-color-contrast-text, #fff));
+        background-color: var(--ran-btn-content-hover-background-color, var(--ran-color-primary-hover, #383838));
+        border-color: var(--ran-btn-content-hover-border-color, var(--ran-color-primary-hover, #383838));
+        color: var(--ran-btn-content-hover-color, var(--ran-color-primary-text, #fff));
       }
     }
 
