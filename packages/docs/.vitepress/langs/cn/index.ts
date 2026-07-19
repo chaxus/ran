@@ -299,6 +299,7 @@ const themeCnConfig: DefaultTheme.Config = {
         items: [
           { text: 'Image 图片', link: '/cn/src/ranui/image/' },
           { text: 'Math 数学公式', link: '/cn/src/ranui/math/' },
+          { text: 'Mermaid 图表', link: '/cn/src/ranui/mermaid/' },
           { text: 'CheckBox 多选框', link: '/cn/src/ranui/checkbox/' },
           { text: 'Tabs 标签页', link: '/cn/src/ranui/tab/' },
           { text: 'Preview 预览', link: '/cn/src/ranui/preview/' },
