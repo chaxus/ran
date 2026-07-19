@@ -1,5 +1,5 @@
 import themeSwitchCss from './index.less?inline';
-import { EventManager } from '@/utils/builder';
+import { ButtonBuilder, Div, EventManager, isSSR } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import { ensureShadowRoot, ensureShadowElement, getStringAttribute, setStringAttribute } from '@/utils/component';
 import { syncSheetAttribute } from '@/utils/component';
@@ -39,20 +39,20 @@ export class ThemeSwitch extends RanElement {
     super();
     this._shadowDom = ensureShadowRoot(this, themeSwitchCss);
     this._group = ensureShadowElement(this._shadowDom, '.ran-theme-switch', () => {
-      const group = document.createElement('div');
-      group.className = 'ran-theme-switch';
-      group.setAttribute('part', 'switch');
-      group.setAttribute('role', 'group');
-      for (const choice of CHOICES) {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.dataset.choice = choice;
-        button.setAttribute('part', `button ${choice}`);
-        button.setAttribute('aria-pressed', 'false');
-        button.innerHTML = ICONS[choice];
-        group.appendChild(button);
-      }
-      return group;
+      // Build via the isSSR-aware builder (not raw document.*) so the constructor
+      // is SSR-safe. SVG glyphs are innerHTML, set client-only (like r-icon; the
+      // SSR shadow renders empty and the client rebuilds it).
+      const buttons = CHOICES.map((choice) => {
+        const button = ButtonBuilder()
+          .attr('type', 'button')
+          .data('choice', choice)
+          .attr('part', `button ${choice}`)
+          .aria('pressed', 'false')
+          .build();
+        if (!isSSR) button.innerHTML = ICONS[choice];
+        return button;
+      });
+      return Div().class('ran-theme-switch').attr('part', 'switch').role('group').children(buttons).build();
     }) as HTMLDivElement;
   }
 
