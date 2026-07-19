@@ -188,6 +188,22 @@ describe('ElementBuilder (SSR) — children()', () => {
     expect(el.childrenList).toHaveLength(1);
     expect((el.childrenList[0] as HTMLElementMock).tagName).toBe('strong');
   });
+
+  it('evaluates a getter child once as a static snapshot (single node)', () => {
+    const el = new ElementBuilder('div')
+      .children(() => new ElementBuilder('span').text('reactive'))
+      .build() as unknown as HTMLElementMock;
+    expect(el.childrenList).toHaveLength(1);
+    expect((el.childrenList[0] as HTMLElementMock).tagName).toBe('span');
+  });
+
+  it('evaluates a getter child that returns an array (snapshot list)', () => {
+    const el = new ElementBuilder('ul')
+      .children(() => ['a', 'b'].map((t) => new ElementBuilder('li').text(t)))
+      .build() as unknown as HTMLElementMock;
+    expect(el.childrenList).toHaveLength(2);
+    expect((el.childrenList[0] as HTMLElementMock).tagName).toBe('li');
+  });
 });
 
 describe('ElementBuilder (SSR) — ref()', () => {

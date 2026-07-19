@@ -4,6 +4,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { createRef, ElementBuilder, ShadowBuilder } from '@/utils/builder/core';
+import { createRoot, signal } from '@/utils/builder/signal';
 
 // ---------------------------------------------------------------------------
 // createRef
@@ -208,6 +209,73 @@ describe('ElementBuilder — children()', () => {
       .build();
     expect(el.querySelector('span')).toBeNull();
     expect(el.querySelector('strong')?.textContent).toBe('new');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// ElementBuilder — reactive children (getter items)
+// ---------------------------------------------------------------------------
+
+describe('ElementBuilder — reactive children()', () => {
+  it('renders a getter child and updates it when its signal changes', () => {
+    createRoot(() => {
+      const [label, setLabel] = signal('a');
+      const el = new ElementBuilder('div').children(() => new ElementBuilder('span').text(label())).build();
+      expect(el.querySelector('span')?.textContent).toBe('a');
+      setLabel('b');
+      expect(el.querySelectorAll('span').length).toBe(1);
+      expect(el.querySelector('span')?.textContent).toBe('b');
+    });
+  });
+
+  it('reconciles a reactive list (array from getter) in place', () => {
+    createRoot(() => {
+      const [items, setItems] = signal(['x', 'y']);
+      const el = new ElementBuilder('ul').children(() => items().map((t) => new ElementBuilder('li').text(t))).build();
+      expect(el.querySelectorAll('li').length).toBe(2);
+      setItems(['x', 'y', 'z']);
+      expect(el.querySelectorAll('li').length).toBe(3);
+      expect(el.textContent).toBe('xyz');
+      setItems([]);
+      expect(el.querySelectorAll('li').length).toBe(0);
+    });
+  });
+
+  it('toggles a conditional child (null ↔ node) without touching static siblings', () => {
+    createRoot(() => {
+      const [show, setShow] = signal(false);
+      const el = new ElementBuilder('div')
+        .children(
+          new ElementBuilder('header').text('H'),
+          () => (show() ? new ElementBuilder('em').text('on') : null),
+          new ElementBuilder('footer').text('F'),
+        )
+        .build();
+      // static siblings always present; conditional starts absent
+      expect(el.querySelector('header')?.textContent).toBe('H');
+      expect(el.querySelector('footer')?.textContent).toBe('F');
+      expect(el.querySelector('em')).toBeNull();
+      setShow(true);
+      expect(el.querySelector('em')?.textContent).toBe('on');
+      // inserted between the static siblings, order preserved
+      expect(el.textContent).toBe('HonF');
+      setShow(false);
+      expect(el.querySelector('em')).toBeNull();
+      expect(el.textContent).toBe('HF');
+    });
+  });
+
+  it('disposes reactive-child effects when the owning scope is disposed', () => {
+    let el!: HTMLElement;
+    const [label, setLabel] = signal('a');
+    const dispose = createRoot((d) => {
+      el = new ElementBuilder('div').children(() => new ElementBuilder('span').text(label())).build();
+      return d;
+    });
+    expect(el.querySelector('span')?.textContent).toBe('a');
+    dispose();
+    setLabel('b'); // no owner → binding must not re-run
+    expect(el.querySelector('span')?.textContent).toBe('a');
   });
 });
 

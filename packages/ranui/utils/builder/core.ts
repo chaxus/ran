@@ -9,6 +9,76 @@ export interface Ref<T extends HTMLElement = HTMLElement> {
 
 export const createRef = <T extends HTMLElement = HTMLElement>(): Ref<T> => ({ current: null });
 
+/** A single directly-appendable child: element, text, nested builder, or nothing.
+ *  Internal helper — the public, general type is {@link Child}. */
+type StaticChild = HTMLElement | string | ElementBuilder<any> | undefined | null;
+
+/**
+ * The one type every `children()` / `replaceChildren()` argument accepts:
+ * a node, text, nested builder, `null`/`undefined`, a (nested) array of those,
+ * **or** a getter `() => …` marking a reactive region. A getter is re-evaluated
+ * whenever a signal it reads changes and its DOM is reconciled in place — no
+ * manual `createRef` + `createEffect` + `replaceChildren`. On SSR a getter is
+ * evaluated once (static snapshot).
+ */
+export type Child = StaticChild | StaticChild[] | (() => StaticChild | StaticChild[]);
+
+const flattenChildren = (arr: unknown[]): unknown[] =>
+  arr.reduce<unknown[]>((acc, val) => (Array.isArray(val) ? acc.concat(flattenChildren(val)) : acc.concat(val)), []);
+
+/** Resolve one static child to a node (client) / string (SSR); `null` when skippable. */
+const toChildNode = (item: StaticChild): Node | string | null => {
+  if (item == null) return null;
+  if (item instanceof ElementBuilder) return item.build() as unknown as Node;
+  if (typeof item === 'string') return isSSR ? item : document.createTextNode(item);
+  return item as Node;
+};
+
+/**
+ * Mount a reactive child region into `parent`. Client: a stable anchor comment
+ * marks the insertion point; a `createEffect` (owned by the current reactive
+ * scope, so auto-disposed with the page) rebuilds and reconciles the region on
+ * change. SSR: evaluate once and append the snapshot.
+ */
+const mountReactiveChildren = (parent: Node, getter: () => StaticChild | StaticChild[]): void => {
+  if (isSSR) {
+    flattenChildren([getter()]).forEach((item) => {
+      const node = toChildNode(item as StaticChild);
+      if (node != null) (parent as unknown as { appendChild(n: unknown): unknown }).appendChild(node);
+    });
+    return;
+  }
+  const anchor = document.createComment('');
+  parent.appendChild(anchor);
+  let current: Node[] = [];
+  createEffect(() => {
+    const resolved = flattenChildren([getter()]);
+    for (const n of current) n.parentNode?.removeChild(n);
+    const fresh: Node[] = [];
+    let ref: ChildNode = anchor;
+    for (const item of resolved) {
+      const node = toChildNode(item as StaticChild);
+      if (node == null) continue;
+      ref.after(node as Node);
+      ref = node as ChildNode;
+      fresh.push(node as Node);
+    }
+    current = fresh;
+  });
+};
+
+/** Append mixed static / array / reactive-getter children to a parent node. */
+const appendChildren = (parent: Node, items: Child[]): void => {
+  flattenChildren(items).forEach((item) => {
+    if (typeof item === 'function') {
+      mountReactiveChildren(parent, item as () => StaticChild | StaticChild[]);
+      return;
+    }
+    const node = toChildNode(item as StaticChild);
+    if (node != null) (parent as unknown as { appendChild(n: unknown): unknown }).appendChild(node);
+  });
+};
+
 export class ElementBuilder<T extends HTMLElement = HTMLElement> {
   private el: T;
 
@@ -169,43 +239,12 @@ export class ElementBuilder<T extends HTMLElement = HTMLElement> {
     return this;
   }
 
-  children(
-    ...items: (
-      | HTMLElement
-      | string
-      | ElementBuilder<any>
-      | undefined
-      | null
-      | (HTMLElement | string | ElementBuilder<any> | undefined | null)[]
-    )[]
-  ): this {
-    const flatten = (arr: any[]): any[] =>
-      arr.reduce((acc, val) => (Array.isArray(val) ? acc.concat(flatten(val)) : acc.concat(val)), []);
-
-    flatten(items).forEach((item) => {
-      if (item == null) return;
-      if (item instanceof ElementBuilder) {
-        this.el.appendChild(item.build() as unknown as Node);
-      } else if (typeof item === 'string') {
-        if (isSSR) this.el.appendChild(item as any);
-        else this.el.appendChild(document.createTextNode(item));
-      } else {
-        this.el.appendChild(item as Node);
-      }
-    });
+  children(...items: Child[]): this {
+    appendChildren(this.el, items);
     return this;
   }
 
-  replaceChildren(
-    ...items: (
-      | HTMLElement
-      | string
-      | ElementBuilder<any>
-      | undefined
-      | null
-      | (HTMLElement | string | ElementBuilder<any> | undefined | null)[]
-    )[]
-  ): this {
+  replaceChildren(...items: Child[]): this {
     if (isSSR) {
       const mock = this.el as unknown as HTMLElementMock | DocumentFragmentMock;
       mock.childrenList = [];
@@ -255,30 +294,8 @@ export class ShadowBuilder<T extends HTMLElement = HTMLElement> {
     this.options = options;
   }
 
-  children(
-    ...items: (
-      | HTMLElement
-      | string
-      | ElementBuilder<any>
-      | undefined
-      | null
-      | (HTMLElement | string | ElementBuilder<any> | undefined | null)[]
-    )[]
-  ): this {
-    const flatten = (arr: any[]): any[] =>
-      arr.reduce((acc, val) => (Array.isArray(val) ? acc.concat(flatten(val)) : acc.concat(val)), []);
-
-    flatten(items).forEach((item) => {
-      if (item == null) return;
-      if (item instanceof ElementBuilder) {
-        this.root.appendChild(item.build() as unknown as Node);
-      } else if (typeof item === 'string') {
-        if (isSSR) this.root.appendChild(item as any);
-        else this.root.appendChild(document.createTextNode(item));
-      } else {
-        this.root.appendChild(item as Node);
-      }
-    });
+  children(...items: Child[]): this {
+    appendChildren(this.root, items);
     return this;
   }
 

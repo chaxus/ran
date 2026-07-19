@@ -35,16 +35,16 @@
 
 ### 属性
 
-| 属性           | 类型      | 默认值  | 说明                                     |
-| -------------- | --------- | ------- | ---------------------------------------- |
-| `open`         | `boolean` | `false` | 对话框是否可见                           |
-| `title`        | `string`  | `''`    | 头部标题文本（为空时回退为 `Modal`）     |
-| `closable`     | `boolean` | `true`  | 是否显示关闭（`x`）按钮                   |
-| `maskClosable` | `boolean` | `true`  | 点击背景遮罩是否关闭对话框               |
-| `closeOnEsc`   | `boolean` | `true`  | 按下 `Escape` 键是否关闭对话框           |
-| `lockScroll`   | `boolean` | `true`  | 对话框打开时是否锁定 body 滚动           |
-| `autoFocus`    | `boolean` | `true`  | 打开时是否自动聚焦第一个可聚焦元素       |
-| `sheet`        | `string`  | `''`    | 注入到 shadow DOM 中的 CSS               |
+| 属性           | 类型      | 默认值  | 说明                                 |
+| -------------- | --------- | ------- | ------------------------------------ |
+| `open`         | `boolean` | `false` | 对话框是否可见                       |
+| `title`        | `string`  | `''`    | 头部标题文本（为空时回退为 `Modal`） |
+| `closable`     | `boolean` | `true`  | 是否显示关闭（`x`）按钮              |
+| `maskClosable` | `boolean` | `true`  | 点击背景遮罩是否关闭对话框           |
+| `closeOnEsc`   | `boolean` | `true`  | 按下 `Escape` 键是否关闭对话框       |
+| `lockScroll`   | `boolean` | `true`  | 对话框打开时是否锁定 body 滚动       |
+| `autoFocus`    | `boolean` | `true`  | 打开时是否自动聚焦第一个可聚焦元素   |
+| `sheet`        | `string`  | `''`    | 注入到 shadow DOM 中的 CSS           |
 
 ### 标题 `title`
 
@@ -103,10 +103,10 @@
 
 ## 插槽 Slots
 
-| 插槽      | 说明                                     |
-| --------- | ---------------------------------------- |
-| (默认)    | 对话框的主体内容                         |
-| `footer`  | 底部操作区；仅在该插槽有内容时才显示底栏 |
+| 插槽     | 说明                                     |
+| -------- | ---------------------------------------- |
+| (默认)   | 对话框的主体内容                         |
+| `footer` | 底部操作区；仅在该插槽有内容时才显示底栏 |
 
 ```html
 <r-modal open title="确认">
@@ -122,14 +122,14 @@
 
 所有与关闭相关的事件都会在 `event.detail` 中携带一个 `trigger`，描述关闭的来源：`'mask'`、`'button'`、`'escape'` 或 `'program'`。
 
-| 事件          | 可取消 | `detail`      | 说明                                        |
-| ------------- | ------ | ------------- | ------------------------------------------- |
-| `beforeopen`  | 是     | —             | 打开前触发；调用 `preventDefault()` 可取消  |
-| `open`        | 否     | —             | 对话框打开时触发                            |
-| `afteropen`   | 否     | —             | 打开过渡动画结束后触发                      |
-| `beforeclose` | 是     | `{ trigger }` | 关闭前触发；调用 `preventDefault()` 可取消  |
-| `close`       | 否     | `{ trigger }` | 对话框关闭时触发                            |
-| `afterclose`  | 否     | `{ trigger }` | 关闭过渡动画结束后触发                      |
+| 事件          | 可取消 | `detail`      | 说明                                       |
+| ------------- | ------ | ------------- | ------------------------------------------ |
+| `beforeopen`  | 是     | —             | 打开前触发；调用 `preventDefault()` 可取消 |
+| `open`        | 否     | —             | 对话框打开时触发                           |
+| `afteropen`   | 否     | —             | 打开过渡动画结束后触发                     |
+| `beforeclose` | 是     | `{ trigger }` | 关闭前触发；调用 `preventDefault()` 可取消 |
+| `close`       | 否     | `{ trigger }` | 对话框关闭时触发                           |
+| `afterclose`  | 否     | `{ trigger }` | 关闭过渡动画结束后触发                     |
 
 ```html
 <r-modal id="modal" title="示例"></r-modal>
@@ -151,14 +151,14 @@
 
 `Modal` 类提供了一组静态辅助方法，无需编写标签即可创建、挂载并解析一个对话框。每个方法返回 `Promise<{ action, trigger }>`，其中 `action` 为 `'confirm'`、`'cancel'` 或 `'dismiss'`。
 
-| 方法                  | 说明                                      |
-| --------------------- | ----------------------------------------- |
-| `Modal.open(opts)`    | 打开一个只带「确定」按钮的对话框          |
-| `Modal.confirm(opts)` | 打开一个带「确定」和「取消」按钮的对话框  |
-| `Modal.info(opts)`    | 信息型对话框（标题默认为 `Info`）         |
-| `Modal.success(opts)` | 成功型对话框（标题默认为 `Success`）      |
-| `Modal.warning(opts)` | 警告型对话框（标题默认为 `Warning`）      |
-| `Modal.error(opts)`   | 错误型对话框（标题默认为 `Error`）        |
+| 方法                  | 说明                                     |
+| --------------------- | ---------------------------------------- |
+| `Modal.open(opts)`    | 打开一个只带「确定」按钮的对话框         |
+| `Modal.confirm(opts)` | 打开一个带「确定」和「取消」按钮的对话框 |
+| `Modal.info(opts)`    | 信息型对话框（标题默认为 `Info`）        |
+| `Modal.success(opts)` | 成功型对话框（标题默认为 `Success`）     |
+| `Modal.warning(opts)` | 警告型对话框（标题默认为 `Warning`）     |
+| `Modal.error(opts)`   | 错误型对话框（标题默认为 `Error`）       |
 
 选项（均可选）：`title`、`content`、`okText`、`cancelText`、`showCancel`、`maskClosable`、`closeOnEsc`、`lockScroll`、`autoFocus`、`closable`、`onConfirm`、`onCancel`。`onConfirm` / `onCancel` 可返回 `false`（或 resolve 为 `false` 的 promise）以保持对话框打开。
 
@@ -184,16 +184,16 @@ if (result.action === 'confirm') {
 
 使用 `::part()` 为内部各部件设置样式。
 
-| Part     | 说明                     |
-| -------- | ------------------------ |
-| `root`   | 最外层遮罩容器           |
-| `mask`   | 对话框背后的背景遮罩     |
-| `dialog` | 对话框盒子               |
-| `header` | 头部栏                   |
-| `title`  | 标题                     |
-| `close`  | 关闭（`x`）按钮          |
-| `body`   | 可滚动的主体区域         |
-| `footer` | 底部操作栏               |
+| Part     | 说明                 |
+| -------- | -------------------- |
+| `root`   | 最外层遮罩容器       |
+| `mask`   | 对话框背后的背景遮罩 |
+| `dialog` | 对话框盒子           |
+| `header` | 头部栏               |
+| `title`  | 标题                 |
+| `close`  | 关闭（`x`）按钮      |
+| `body`   | 可滚动的主体区域     |
+| `footer` | 底部操作栏           |
 
 ```css
 r-modal::part(dialog) {
