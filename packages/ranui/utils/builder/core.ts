@@ -14,13 +14,14 @@ export const createRef = <T extends HTMLElement = HTMLElement>(): Ref<T> => ({ c
 type StaticChild = HTMLElement | string | ElementBuilder<any> | undefined | null;
 
 /**
- * The one type every `children()` / `replaceChildren()` argument accepts:
- * a node, text, nested builder, `null`/`undefined`, a (nested) array of those,
- * a getter `() => …` marking a reactive region (re-evaluated when a signal it
- * reads changes; rebuilds the region — see docs), or a {@link For} handle for a
- * keyed list (reuses nodes across updates). On SSR getters / `For` render once.
+ * The one type every `children()` / `replaceChildren()` argument accepts —
+ * fully composable (recursive): a node, text, nested builder, `null`/`undefined`,
+ * a (nested) array, a {@link For}/{@link Index} handle for a keyed list, or a
+ * getter `() => Child` marking a reactive region. A getter (or `Show`/`Switch`
+ * branch) may itself return any `Child`, including a `For`/`Index` or another
+ * getter — control-flow nests freely. On SSR getters / `For` / `Index` render once.
  */
-export type Child = StaticChild | StaticChild[] | (() => StaticChild | StaticChild[]) | ForHandle | IndexHandle;
+export type Child = StaticChild | ForHandle | IndexHandle | Child[] | (() => Child);
 
 const flattenChildren = (arr: unknown[]): unknown[] =>
   arr.reduce<unknown[]>((acc, val) => (Array.isArray(val) ? acc.concat(flattenChildren(val)) : acc.concat(val)), []);
@@ -34,36 +35,46 @@ const toChildNode = (item: StaticChild): Node | string | null => {
 };
 
 /**
- * Mount a reactive child region into `parent`. Client: a stable anchor comment
- * marks the insertion point; a `createEffect` (owned by the current reactive
- * scope, so auto-disposed with the page) rebuilds and reconciles the region on
- * change. SSR: evaluate once and append the snapshot.
+ * Mount a reactive child region into `parent`. The getter may return **any**
+ * `Child` — static nodes, arrays, a `For`/`Index` handle, or another getter —
+ * so `Show`/`Switch` branches nest control flow freely.
+ *
+ * Client: a `start`/`end` comment pair brackets the region. Each run disposes the
+ * previous run's scope (tearing down any nested `For`/`Index`/getter effects),
+ * clears the bracketed nodes, then mounts the new output under a fresh
+ * `createRoot` via `appendChildren` (uniform dispatch). SSR: evaluate once.
  */
-const mountReactiveChildren = (parent: Node, getter: () => StaticChild | StaticChild[]): void => {
+const mountReactiveChildren = (parent: Node, getter: () => Child): void => {
   if (isSSR) {
-    flattenChildren([getter()]).forEach((item) => {
-      const node = toChildNode(item as StaticChild);
-      if (node != null) (parent as unknown as { appendChild(n: unknown): unknown }).appendChild(node);
-    });
+    appendChildren(parent, [getter()]);
     return;
   }
-  const anchor = document.createComment('');
-  parent.appendChild(anchor);
-  let current: Node[] = [];
-  createEffect(() => {
-    const resolved = flattenChildren([getter()]);
-    for (const n of current) n.parentNode?.removeChild(n);
-    const fresh: Node[] = [];
-    let ref: ChildNode = anchor;
-    for (const item of resolved) {
-      const node = toChildNode(item as StaticChild);
-      if (node == null) continue;
-      ref.after(node as Node);
-      ref = node as ChildNode;
-      fresh.push(node as Node);
+  const start = document.createComment('');
+  const end = document.createComment('');
+  parent.appendChild(start);
+  parent.appendChild(end);
+  let disposeInner: (() => void) | null = null;
+  const clear = (): void => {
+    disposeInner?.();
+    disposeInner = null;
+    let n = start.nextSibling;
+    while (n && n !== end) {
+      const nextN = n.nextSibling;
+      n.parentNode?.removeChild(n);
+      n = nextN;
     }
-    current = fresh;
+  };
+  createEffect(() => {
+    const out = getter();
+    clear();
+    const frag = document.createDocumentFragment();
+    disposeInner = createRoot((dispose) => {
+      appendChildren(frag, [out]);
+      return dispose;
+    });
+    end.parentNode?.insertBefore(frag, end);
   });
+  onCleanup(() => disposeInner?.());
 };
 
 // ── For — keyed list reconciliation ──────────────────────────────────────────
@@ -120,11 +131,12 @@ const isForSpec = (v: unknown): v is ForSpec<unknown> =>
 export interface ShowOptions<T> {
   /** Condition source. Truthy → `children`, falsy → `fallback`. */
   when: () => T;
-  /** Built when `when` is truthy. Receives an accessor to the narrowed value —
+  /** Built when `when` is truthy. May return any {@link Child} — a `For`/`Index`
+   *  list, a nested `Show`, etc. Receives an accessor to the narrowed value —
    *  read it inside a binding (`.text(() => v())`) to update without rebuilding. */
-  children: (value: () => NonNullable<T>) => StaticChild;
+  children: (value: () => NonNullable<T>) => Child;
   /** Built when `when` is falsy. Omitted → nothing is rendered. */
-  fallback?: () => StaticChild;
+  fallback?: () => Child;
 }
 
 /**
@@ -143,7 +155,7 @@ export interface ShowOptions<T> {
  * `Show` returns a getter, so it is accepted anywhere `children()` takes a child.
  * Must be created inside a `createRoot` (it owns a memo + the branch effect).
  */
-export function Show<T>(options: ShowOptions<T>): () => StaticChild {
+export function Show<T>(options: ShowOptions<T>): () => Child {
   const on = computed(() => Boolean(options.when()));
   const value = (): NonNullable<T> => options.when() as NonNullable<T>;
   return () => (on() ? options.children(value) : (options.fallback?.() ?? null));
@@ -154,7 +166,7 @@ export function Show<T>(options: ShowOptions<T>): () => StaticChild {
 /** One branch of a {@link Switch}; build with {@link Match}. */
 export interface MatchClause<T> {
   when: () => T;
-  children: (value: () => NonNullable<T>) => StaticChild;
+  children: (value: () => NonNullable<T>) => Child;
 }
 
 /** Declare one `Switch` branch (identity helper — gives per-clause type inference). */
@@ -168,7 +180,7 @@ export interface SwitchOptions {
    *  heterogeneous (each `Match<T>` carries its own `T`), hence `any` here. */
   children: MatchClause<any>[];
   /** Rendered when no branch matches. Omitted → nothing. */
-  fallback?: () => StaticChild;
+  fallback?: () => Child;
 }
 
 /**
@@ -186,7 +198,7 @@ export interface SwitchOptions {
  *     ],
  *   })
  */
-export function Switch(options: SwitchOptions): () => StaticChild {
+export function Switch(options: SwitchOptions): () => Child {
   const clauses = options.children;
   const winner = computed(() => clauses.findIndex((c) => Boolean(c.when())));
   return () => {
@@ -388,7 +400,7 @@ const appendChildren = (parent: Node, items: Child[]): void => {
       return;
     }
     if (typeof item === 'function') {
-      mountReactiveChildren(parent, item as () => StaticChild | StaticChild[]);
+      mountReactiveChildren(parent, item as () => Child);
       return;
     }
     const node = toChildNode(item as StaticChild);

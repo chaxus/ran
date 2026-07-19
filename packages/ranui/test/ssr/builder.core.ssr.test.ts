@@ -362,3 +362,44 @@ describe('ShadowBuilder (SSR) — done()', () => {
     expect(shadow).toBeInstanceOf(ShadowRootMock);
   });
 });
+
+describe('Composition (SSR) — Show/Switch containing For', () => {
+  it('Show returning a For renders the list snapshot on SSR', () => {
+    const el = new ElementBuilder('ul')
+      .children(
+        Show({
+          when: () => true,
+          children: () =>
+            For({
+              each: () => [{ id: 'a' }, { id: 'b' }],
+              key: (r) => r.id,
+              render: (r) => new ElementBuilder('li').text(r.id),
+            }),
+        }),
+      )
+      .build() as unknown as HTMLElementMock;
+    const html = el.serialize();
+    expect(html).toContain('<li');
+    expect(html).toContain('a');
+    expect(html).toContain('b');
+    expect(html).not.toContain('[object');
+  });
+
+  it('Switch fallback returning For renders on SSR', () => {
+    const el = new ElementBuilder('div')
+      .children(
+        Switch({
+          fallback: () =>
+            For({
+              each: () => [{ id: 1 }],
+              key: (r) => r.id,
+              render: (r) => new ElementBuilder('span').text(`${r.id}`),
+            }),
+          children: [Match({ when: () => false, children: () => new ElementBuilder('em').text('x') })],
+        }),
+      )
+      .build() as unknown as HTMLElementMock;
+    expect(el.serialize()).toContain('<span');
+    expect(el.serialize()).not.toContain('[object');
+  });
+});
