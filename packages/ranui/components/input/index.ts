@@ -68,6 +68,27 @@ export class Input extends RanElement {
     if (!this._inputContent.id) this._inputContent.id = `ran-input-${++inputIdSeq}`;
   }
   /**
+   * @description: 聚焦到内部原生 <input>。宿主自身不在 tab 序、也无内建 focus 行为，
+   * 需显式把 `hostEl.focus()` 转发到 shadow 内真实输入框，才能支持
+   * 程序化聚焦 / "/" 之类快捷键 / label 点击聚焦（closed shadow 下外部无法自行触达）。
+   * @param {FocusOptions} options 原生 focus 选项（如 preventScroll）
+   */
+  focus(options?: FocusOptions): void {
+    this._inputContent?.focus(options);
+  }
+  /**
+   * @description: 让内部 <input> 失焦，转发 `hostEl.blur()`。
+   */
+  blur(): void {
+    this._inputContent?.blur();
+  }
+  /**
+   * @description: 选中内部 <input> 的全部文本，便于"聚焦即全选"的快捷输入体验。
+   */
+  select(): void {
+    this._inputContent?.select?.();
+  }
+  /**
    * @description: 获取 input 的值
    * @return {String}
    */
