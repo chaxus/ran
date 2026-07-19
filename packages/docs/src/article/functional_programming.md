@@ -1,5 +1,5 @@
 ---
-description: "An introduction to functional programming: pure functions, composition, currying and immutability, with JavaScript/TypeScript examples."
+description: 'An introduction to functional programming: pure functions, composition, currying and immutability, with JavaScript/TypeScript examples.'
 ---
 
 # Functional Programming

@@ -1,5 +1,5 @@
 ---
-description: "The ranui Tabs (<r-tabs>) organize content into switchable panels — a native Web Component usable in any framework."
+description: 'The ranui Tabs (<r-tabs>) organize content into switchable panels — a native Web Component usable in any framework.'
 ---
 
 # Tab

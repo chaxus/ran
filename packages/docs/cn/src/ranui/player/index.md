@@ -1,5 +1,5 @@
 ---
-description: "ranui Player（<r-player>）在原生 <video> 之上封装统一控制栏：播放、进度拖拽、音量、倍速与全屏。"
+description: 'ranui Player（<r-player>）在原生 <video> 之上封装统一控制栏：播放、进度拖拽、音量、倍速与全屏。'
 ---
 
 # r-player 视频播放器

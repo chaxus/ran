@@ -1,5 +1,5 @@
 ---
-description: "How source code becomes an Abstract Syntax Tree: tokenizing and parsing explained, the foundation of compilers and bundlers."
+description: 'How source code becomes an Abstract Syntax Tree: tokenizing and parsing explained, the foundation of compilers and bundlers.'
 ---
 
 # Abstract Syntax Tree

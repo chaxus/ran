@@ -1,5 +1,5 @@
 ---
-description: "ranui Input（<r-input>）是用于键盘输入的基础表单控件，支持类型、尺寸与校验，可在任意框架中使用的原生 Web Component。"
+description: 'ranui Input（<r-input>）是用于键盘输入的基础表单控件，支持类型、尺寸与校验，可在任意框架中使用的原生 Web Component。'
 ---
 
 # Select 下拉选择框

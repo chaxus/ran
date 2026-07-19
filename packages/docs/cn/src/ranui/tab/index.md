@@ -1,5 +1,5 @@
 ---
-description: "ranui Tabs（<r-tabs>）将内容组织为可切换的标签页，是可用于任意框架的原生 Web Component。"
+description: 'ranui Tabs（<r-tabs>）将内容组织为可切换的标签页，是可用于任意框架的原生 Web Component。'
 ---
 
 # Tab 图标

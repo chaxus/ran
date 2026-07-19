@@ -1,5 +1,5 @@
 ---
-description: "ranui Skeleton（<r-skeleton>）在内容加载时展示带微光动画的占位骨架。"
+description: 'ranui Skeleton（<r-skeleton>）在内容加载时展示带微光动画的占位骨架。'
 ---
 
 # skeleton 骨架屏

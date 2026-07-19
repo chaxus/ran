@@ -1,5 +1,5 @@
 ---
-description: "The ranui Loading (<r-loading>) shows a spinning indicator while content or an action is in progress."
+description: 'The ranui Loading (<r-loading>) shows a spinning indicator while content or an action is in progress.'
 ---
 
 <script setup>

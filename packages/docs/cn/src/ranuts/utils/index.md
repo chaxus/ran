@@ -1,5 +1,5 @@
 ---
-description: "ranuts 工具函数总览：函数式工具（debounce、throttle、memoize、compose）以及字符串、对象、数字、颜色等实用函数。"
+description: 'ranuts 工具函数总览：函数式工具（debounce、throttle、memoize、compose）以及字符串、对象、数字、颜色等实用函数。'
 ---
 
 # 工具函数

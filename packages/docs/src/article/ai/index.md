@@ -1,5 +1,5 @@
 ---
-description: "How AI agents work: prompts, roles, tools and context — the building blocks behind LLM-powered agents."
+description: 'How AI agents work: prompts, roles, tools and context — the building blocks behind LLM-powered agents.'
 ---
 
 # Prompt

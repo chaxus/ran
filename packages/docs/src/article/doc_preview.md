@@ -1,6 +1,6 @@
 ---
-title: "docx / pptx / xlsx / pdf file preview solutions"
-description: "The most comprehensive summary of in-browser file preview solutions for docx, pptx, xlsx (Excel) and pdf, with trade-offs and pitfalls."
+title: 'docx / pptx / xlsx / pdf file preview solutions'
+description: 'The most comprehensive summary of in-browser file preview solutions for docx, pptx, xlsx (Excel) and pdf, with trade-offs and pitfalls.'
 ---
 
 <h1> The Most Comprehensive Summary of docx, pptx, xlsx (Excel), and pdf File Preview Solutions </h1>

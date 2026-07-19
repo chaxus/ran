@@ -15,7 +15,7 @@ Generated at: 2026-07-19T06:15:56.300Z
 Source: `components/button/index.ts`
 
 - **Attributes**: `disabled: boolean | string`, `effect: string`, `icon: string`, `iconSize: string`, `sheet: string`, `type: string`
-- **Properties**: 
+- **Properties**:
   - `disabled: boolean | string`
   - `effect: string`
   - `icon: string`
@@ -31,7 +31,7 @@ Source: `components/button/index.ts`
 Source: `components/card/index.ts`
 
 - **Attributes**: `description: string`, `hoverable: boolean`, `sheet: string`, `title: string`
-- **Properties**: 
+- **Properties**:
   - `description: string`
   - `hoverable: boolean` — Interactive card (Geist): hover darkens the border and lifts to the elevated shadow tier. Purely presentational — gate it to cards that are actually clickable.
   - `sheet: string`
@@ -105,7 +105,7 @@ Source: `components/form/index.ts`
 Source: `components/glass/index.ts`
 
 - **Attributes**: `blur`, `displace: string`, `frequency: string`, `radius: string`, `saturate: string`, `tint: string`
-- **Properties**: 
+- **Properties**:
   - `displace: string` — Liquid refraction strength — the SVG displacement scale. `0` is a flat pane.
   - `frequency: string` — Turbulence base frequency — smaller = larger, smoother liquid ripples.
   - `interactive: boolean` — Hover lift + press-scale feedback (for clickable glass).
@@ -132,7 +132,7 @@ Source: `components/icon/index.ts`
 > is registered. Register once, in the browser, before the first `<r-icon>` connects:
 >
 > ```ts
-> import { registerBuiltinIcons } from 'ranui';       // or 'ranui/icons'
+> import { registerBuiltinIcons } from 'ranui'; // or 'ranui/icons'
 > registerBuiltinIcons(); // registers every name in RAN_ICON_NAMES
 > ```
 >
@@ -145,7 +145,7 @@ Source: `components/icon/index.ts`
 Source: `components/image/index.ts`
 
 - **Attributes**: —
-- **Properties**: 
+- **Properties**:
   - `alt` — Alternative text forwarded to the inner `<img>`. Defaults to `''` (empty),
   - `fallback`
   - `sheet`
@@ -158,7 +158,7 @@ Source: `components/image/index.ts`
 Source: `components/input/index.ts`
 
 - **Attributes**: `disabled: boolean`, `icon: string`, `label: string`, `max: string`, `message: string`, `min: string`, `name: string`, `placeholder: string`, `required: boolean`, `sheet: string`, `status: string`, `step: string`, `type: string`, `value: string`
-- **Properties**: 
+- **Properties**:
   - `disabled: boolean` — input 上 disabled 属性
   - `icon: string` — 一个 icon
   - `label: string` — 类似于 Metiral Design 的输入体验。
@@ -232,7 +232,7 @@ Source: `components/message/index.ts`
 Source: `components/modal/index.ts`
 
 - **Attributes**: `autoFocus: boolean`, `closable: boolean`, `closeOnEsc: boolean`, `hide-header`, `lockScroll: boolean`, `maskClosable: boolean`, `open: boolean`, `sheet: string`, `title: string`
-- **Properties**: 
+- **Properties**:
   - `autoFocus: boolean`
   - `closable: boolean`
   - `closeOnEsc: boolean`
@@ -301,7 +301,7 @@ Source: `components/radar/index.ts`
 Source: `components/route/index.ts`
 
 - **Attributes**: `exact: boolean`, `path: string`, `sheet: string`, `src: string`
-- **Properties**: 
+- **Properties**:
   - `exact: boolean`
   - `params: Record<string, string>`
   - `path: string`
@@ -386,10 +386,9 @@ Source: `components/tab/index.ts`
 Source: `components/theme-switch/index.ts`
 
 - **Attributes**: `label-dark`, `label-light`, `label-system`, `sheet: string`
-- **Properties**: 
+- **Properties**:
   - `sheet: string`
   - `value: RanThemeName` — `<r-theme-switch>` — a three-state (system / light / dark) segmented control
 - **Events**: `change` → detail `{ theme }`
 - **Slots**: —
 - **Parts**: `button ${choice}`, `switch`
-

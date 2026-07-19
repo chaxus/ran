@@ -1,5 +1,5 @@
 ---
-description: "ranui Popover（<r-popover>）在悬停或点击时弹出浮动气泡卡片，用于提示、菜单与上下文内容。"
+description: 'ranui Popover（<r-popover>）在悬停或点击时弹出浮动气泡卡片，用于提示、菜单与上下文内容。'
 ---
 
 # Popover 气泡卡片

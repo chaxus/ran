@@ -1,5 +1,5 @@
 ---
-description: "The ranui Icon (<r-icon>) renders semantic vector graphics (SVG) with sizing and color control."
+description: 'The ranui Icon (<r-icon>) renders semantic vector graphics (SVG) with sizing and color control.'
 ---
 
 # Icon

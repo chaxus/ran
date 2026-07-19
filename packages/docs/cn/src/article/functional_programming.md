@@ -1,5 +1,5 @@
 ---
-description: "函数式编程入门：纯函数、组合、柯里化与不可变性，配 JavaScript/TypeScript 示例。"
+description: '函数式编程入门：纯函数、组合、柯里化与不可变性，配 JavaScript/TypeScript 示例。'
 ---
 
 # 函数式编程

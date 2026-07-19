@@ -1,5 +1,5 @@
 ---
-description: "The ranui Popover (<r-popover>) reveals a floating bubble card on hover or click, for tooltips, menus and contextual content."
+description: 'The ranui Popover (<r-popover>) reveals a floating bubble card on hover or click, for tooltips, menus and contextual content.'
 ---
 
 # Popover
