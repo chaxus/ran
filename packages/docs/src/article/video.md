@@ -143,12 +143,12 @@ Compared to the common `MP4` format, the `FLV` format has a simpler structure, s
 
 For example, here's the standard header of an `FLV` file, defining what each range of bits means. Once we understand this, we can use `MediaSource` to read and transcode it.
 
-| Field          | Data Type       | Default | Details                                                        |
-| -------------- | --------------- | ------- | --------------------------------------------------------------- |
-| Signature      | byte[3]         | "FLV"   | Always "FLV"                                                    |
-| Version        | uint8           | 1       | Only 0x01 is valid                                              |
-| Flags          | uint8 bitmask   | 0x05    | 0x04 is audio, 0x01 is video (so 0x05 is audio + video)         |
-| Header Size    | uint32_be       | 9       | Used to skip newer extension headers                            |
+| Field       | Data Type     | Default | Details                                                 |
+| ----------- | ------------- | ------- | ------------------------------------------------------- |
+| Signature   | byte[3]       | "FLV"   | Always "FLV"                                            |
+| Version     | uint8         | 1       | Only 0x01 is valid                                      |
+| Flags       | uint8 bitmask | 0x05    | 0x04 is audio, 0x01 is video (so 0x05 is audio + video) |
+| Header Size | uint32_be     | 9       | Used to skip newer extension headers                    |
 
 The `MP4` format is a bit more complex; the specific standard is defined in [ISO/IEC 14496-12](https://www.iso.org/standard/83102.html), which runs to over two hundred pages, so it won't fit here — if you're interested, feel free to look it up yourself.
 
@@ -645,30 +645,30 @@ const change = (e:CustomEvent) => {
 
 The possible values of `type` are:
 
-| Name           | Description                                                                                                                            |
-| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| canplay        | The browser can play the media file, but likely doesn't have enough data buffered to play through to the end without further buffering. |
-| canplaythrough | The browser estimates it can play the media through to the end without needing to stop for further buffering.                          |
-| complete       | OfflineAudioContext rendering has completed.                                                                                             |
-| durationchange | Fires when the value of the duration property changes.                                                                                   |
+| Name           | Description                                                                                                                                   |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| canplay        | The browser can play the media file, but likely doesn't have enough data buffered to play through to the end without further buffering.       |
+| canplaythrough | The browser estimates it can play the media through to the end without needing to stop for further buffering.                                 |
+| complete       | OfflineAudioContext rendering has completed.                                                                                                  |
+| durationchange | Fires when the value of the duration property changes.                                                                                        |
 | emptied        | The media content becomes empty — for example, when the media has finished (or partially finished) loading and load() is called to reload it. |
-| ended          | Playback has stopped because the end of the media has been reached.                                                                       |
-| loadedmetadata | Metadata has finished loading.                                                                                                            |
-| progress       | Fires periodically as the browser loads a resource.                                                                                       |
-| ratechange     | The playback rate has changed.                                                                                                            |
-| seeked         | A seek operation has completed.                                                                                                           |
-| seeking        | A seek operation has begun.                                                                                                               |
-| stalled        | The user agent is trying to fetch media data, but the data unexpectedly hasn't arrived.                                                  |
-| suspend        | Media data loading has been suspended.                                                                                                    |
-| loadeddata     | The first frame of the media has finished loading.                                                                                        |
-| timeupdate     | The time indicated by the currentTime property has changed.                                                                              |
-| volumechange   | The volume has changed.                                                                                                                   |
-| waiting        | Playback has stopped due to a temporary lack of data.                                                                                     |
-| play           | Playback has started.                                                                                                                     |
-| playing        | Playback is ready to begin after having been paused or delayed due to a lack of data.                                                     |
-| pause          | Playback has been paused.                                                                                                                 |
-| volume         | The volume has changed.                                                                                                                   |
-| fullscreen     | A fullscreen event has fired                                                                                                              |
+| ended          | Playback has stopped because the end of the media has been reached.                                                                           |
+| loadedmetadata | Metadata has finished loading.                                                                                                                |
+| progress       | Fires periodically as the browser loads a resource.                                                                                           |
+| ratechange     | The playback rate has changed.                                                                                                                |
+| seeked         | A seek operation has completed.                                                                                                               |
+| seeking        | A seek operation has begun.                                                                                                                   |
+| stalled        | The user agent is trying to fetch media data, but the data unexpectedly hasn't arrived.                                                       |
+| suspend        | Media data loading has been suspended.                                                                                                        |
+| loadeddata     | The first frame of the media has finished loading.                                                                                            |
+| timeupdate     | The time indicated by the currentTime property has changed.                                                                                   |
+| volumechange   | The volume has changed.                                                                                                                       |
+| waiting        | Playback has stopped due to a temporary lack of data.                                                                                         |
+| play           | Playback has started.                                                                                                                         |
+| playing        | Playback is ready to begin after having been paused or delayed due to a lack of data.                                                         |
+| pause          | Playback has been paused.                                                                                                                     |
+| volume         | The volume has changed.                                                                                                                       |
+| fullscreen     | A fullscreen event has fired                                                                                                                  |
 
 We need a way to hook into different lifecycle stages, so we need a publish/subscribe class.
 
