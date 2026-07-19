@@ -1,5 +1,5 @@
 ---
-description: "设计 2D 可视化渲染引擎：用例、约束与边界情况，覆盖 Canvas、WebGL 与 WebGPU。"
+description: '设计 2D 可视化渲染引擎：用例、约束与边界情况，覆盖 Canvas、WebGL 与 WebGPU。'
 ---
 
 # 可视化渲染引擎

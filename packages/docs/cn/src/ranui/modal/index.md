@@ -1,5 +1,5 @@
 ---
-description: "ranui Modal（<r-modal>）是聚焦交互的对话框，内置焦点锁定、滚动锁定、背景惰性化与命令式 Modal.confirm API。"
+description: 'ranui Modal（<r-modal>）是聚焦交互的对话框，内置焦点锁定、滚动锁定、背景惰性化与命令式 Modal.confirm API。'
 ---
 
 # Modal 对话框

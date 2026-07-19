@@ -1,5 +1,5 @@
 ---
-description: "ranui 是基于原生自定义元素（<r-*>）的 Web Components UI 组件库，内置 TypeScript 类型、明暗主题、Shadow DOM、SSR 与 PWA 支持。"
+description: 'ranui 是基于原生自定义元素（<r-*>）的 Web Components UI 组件库，内置 TypeScript 类型、明暗主题、Shadow DOM、SSR 与 PWA 支持。'
 ---
 
 # ranui

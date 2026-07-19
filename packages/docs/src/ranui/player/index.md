@@ -1,5 +1,5 @@
 ---
-description: "The ranui Player (<r-player>) wraps native <video> with a unified control bar: play, progress dragging, volume, speed and fullscreen."
+description: 'The ranui Player (<r-player>) wraps native <video> with a unified control bar: play, progress dragging, volume, speed and fullscreen.'
 ---
 
 # Player

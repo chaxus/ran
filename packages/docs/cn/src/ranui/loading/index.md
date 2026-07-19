@@ -1,5 +1,5 @@
 ---
-description: "ranui Loading（<r-loading>）在内容或操作进行中展示旋转加载指示。"
+description: 'ranui Loading（<r-loading>）在内容或操作进行中展示旋转加载指示。'
 ---
 
 <script setup>

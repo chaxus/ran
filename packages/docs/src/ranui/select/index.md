@@ -1,5 +1,5 @@
 ---
-description: "The ranui Select (<r-select>) is a dropdown for choosing a value from options, with optional search and native form participation."
+description: 'The ranui Select (<r-select>) is a dropdown for choosing a value from options, with optional search and native form participation.'
 ---
 
 # Select

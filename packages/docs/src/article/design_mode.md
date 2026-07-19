@@ -1,5 +1,5 @@
 ---
-description: "A tour of the 23 classic Gang of Four design patterns — creational, structural and behavioral — with front-end examples."
+description: 'A tour of the 23 classic Gang of Four design patterns — creational, structural and behavioral — with front-end examples.'
 ---
 
 # 23 classic design patterns

@@ -1,5 +1,5 @@
 ---
-description: "ranui Select（<r-select>）是从选项中选值的下拉选择器，支持搜索与原生表单参与。"
+description: 'ranui Select（<r-select>）是从选项中选值的下拉选择器，支持搜索与原生表单参与。'
 ---
 
 # Select 下拉选择框

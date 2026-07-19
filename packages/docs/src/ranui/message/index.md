@@ -1,5 +1,5 @@
 ---
-description: "The ranui Message API shows global feedback (info, success, warning, error, toast) imperatively, rendered as a lightweight overlay."
+description: 'The ranui Message API shows global feedback (info, success, warning, error, toast) imperatively, rendered as a lightweight overlay.'
 ---
 
 # Message

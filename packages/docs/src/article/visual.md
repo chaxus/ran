@@ -1,5 +1,5 @@
 ---
-description: "Designing a 2D visualization rendering engine: use cases, constraints and edge cases across Canvas, WebGL and WebGPU."
+description: 'Designing a 2D visualization rendering engine: use cases, constraints and edge cases across Canvas, WebGL and WebGPU.'
 ---
 
 # Visualization Rendering Engine

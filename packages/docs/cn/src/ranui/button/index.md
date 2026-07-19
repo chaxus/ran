@@ -1,5 +1,5 @@
 ---
-description: "ranui Button（<r-button>）用于触发即时操作，支持多种类型、尺寸、加载与禁用状态，是跨框架的原生 Web Component。"
+description: 'ranui Button（<r-button>）用于触发即时操作，支持多种类型、尺寸、加载与禁用状态，是跨框架的原生 Web Component。'
 ---
 
 # Button 按钮

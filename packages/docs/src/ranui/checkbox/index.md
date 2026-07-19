@@ -1,5 +1,5 @@
 ---
-description: "The ranui Checkbox (<r-checkbox>) toggles a single on/off choice, with an optional label and native form support."
+description: 'The ranui Checkbox (<r-checkbox>) toggles a single on/off choice, with an optional label and native form support.'
 ---
 
 # Checkbox

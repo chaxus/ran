@@ -1,6 +1,6 @@
 ---
-title: "docx / pptx / xlsx / pdf 文件预览方案"
-description: "最全的浏览器端文件预览方案总结：docx、pptx、xlsx(Excel)、pdf，含取舍与踩坑。"
+title: 'docx / pptx / xlsx / pdf 文件预览方案'
+description: '最全的浏览器端文件预览方案总结：docx、pptx、xlsx(Excel)、pdf，含取舍与踩坑。'
 ---
 
 <h1> 最全的 docx,pptx,xlsx(excel),pdf 文件预览方案总结 </h1>

@@ -1,5 +1,5 @@
 ---
-description: "The ranui Input (<r-input>) is a basic form control for keyboard entry, with types, sizes and validation — a native Web Component for any framework."
+description: 'The ranui Input (<r-input>) is a basic form control for keyboard entry, with types, sizes and validation — a native Web Component for any framework.'
 ---
 
 # Input

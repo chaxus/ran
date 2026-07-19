@@ -1,5 +1,5 @@
 ---
-description: "ranui Progress（<r-progress>）以进度条展示任务完成度，支持可拖拽手柄。"
+description: 'ranui Progress（<r-progress>）以进度条展示任务完成度，支持可拖拽手柄。'
 ---
 
 # progress 进度条

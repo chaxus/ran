@@ -1,5 +1,5 @@
 ---
-description: "ranui Icon（<r-icon>）渲染语义化矢量图形（SVG），支持尺寸与颜色控制。"
+description: 'ranui Icon（<r-icon>）渲染语义化矢量图形（SVG），支持尺寸与颜色控制。'
 ---
 
 # Icon 图标

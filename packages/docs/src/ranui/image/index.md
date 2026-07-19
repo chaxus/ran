@@ -1,5 +1,5 @@
 ---
-description: "The ranui Image (<r-image>) renders an image with a built-in fallback shown when the source fails to load."
+description: 'The ranui Image (<r-image>) renders an image with a built-in fallback shown when the source fails to load.'
 ---
 
 # Image

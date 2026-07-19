@@ -1,5 +1,5 @@
 ---
-description: "The ranui Progress (<r-progress>) shows task completion as a bar, with an optional draggable handle."
+description: 'The ranui Progress (<r-progress>) shows task completion as a bar, with an optional draggable handle.'
 ---
 
 # Progress
