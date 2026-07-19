@@ -58,7 +58,11 @@ const articleEnSidebar: DefaultTheme.SidebarItem[] = [
       {
         text: 'Notes',
         collapsed: true,
-        items: [{ text: 'Compiling LibreOffice to WebAssembly', link: '/src/note/libreoffice2wasm' }],
+        items: [
+          { text: 'Compiling LibreOffice to WebAssembly', link: '/src/note/libreoffice2wasm' },
+          { text: 'CentOS', link: '/src/note/centos' },
+          { text: 'Docker', link: '/src/note/docker' },
+        ],
       },
     ],
   },
