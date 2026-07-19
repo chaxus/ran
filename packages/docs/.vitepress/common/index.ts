@@ -60,8 +60,6 @@ export const RANUI_PATH = `${HOME}src/ranui/`;
 
 export const ARTICLE_PATH = `${HOME}src/article/design_mode`;
 
-export const KEY_WORDS = 'ran,component,components,ui,design,ranui,web-components,javascript,typescript,js';
-
 export const GITHUB = 'https://github.com/chaxus/ran';
 
 // Sibling open-source project: a privacy-first, in-browser document editor.

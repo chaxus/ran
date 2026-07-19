@@ -1,6 +1,73 @@
 import type { DefaultTheme } from 'vitepress';
 import { GITHUB, EDITOR } from '../../common/index';
 
+// 在 /cn/src/article/、/cn/src/blockchain/、/cn/src/note/ 之间共享，
+// 使这些页面都能渲染该侧边栏（VitePress 按路径前缀匹配侧边栏）。
+const articleCnSidebar: DefaultTheme.SidebarItem[] = [
+  {
+    items: [
+      { text: '23 种经典设计模式', link: '/cn/src/article/design_mode' },
+      { text: 'AI Agent 原理', link: '/cn/src/article/ai/' },
+      { text: '函数式编程', link: '/cn/src/article/functional_programming' },
+      { text: 'web 文档预览方案', link: '/cn/src/article/doc_preview' },
+      { text: 'Web 视频加密动态方案', link: '/cn/src/article/video' },
+      { text: '可视化渲染引擎', link: '/cn/src/article/visual' },
+      { text: '抽象语法树', link: '/cn/src/article/ast_parse/tokenizer' },
+      {
+        text: 'TypeScript 类型系统',
+        collapsed: true,
+        items: [
+          { text: '总览', link: '/cn/src/article/typescript/' },
+          { text: '用数组长度做计数', link: '/cn/src/article/typescript/calculate' },
+          { text: '模式匹配与提取', link: '/cn/src/article/typescript/pattern' },
+          { text: '重新构造做变换', link: '/cn/src/article/typescript/reconstruction' },
+          { text: '递归复用', link: '/cn/src/article/typescript/recursion' },
+          { text: '分布式条件类型', link: '/cn/src/article/typescript/union_type' },
+        ],
+      },
+      {
+        text: '排序算法',
+        link: '/cn/src/article/sort/',
+        collapsed: true,
+        items: [
+          { text: '冒泡排序', link: '/cn/src/article/sort/bubble/' },
+          { text: '选择排序', link: '/cn/src/article/sort/select/' },
+          { text: '插入排序', link: '/cn/src/article/sort/insert/' },
+          { text: '希尔排序', link: '/cn/src/article/sort/shell/' },
+          { text: '归并排序', link: '/cn/src/article/sort/merge/' },
+          { text: '快速排序', link: '/cn/src/article/sort/quick/' },
+          { text: '堆排序', link: '/cn/src/article/sort/heap/' },
+          { text: '计数排序', link: '/cn/src/article/sort/count/' },
+          { text: '桶排序', link: '/cn/src/article/sort/bucket/' },
+          { text: '基数排序', link: '/cn/src/article/sort/radix/' },
+        ],
+      },
+      {
+        text: '数学',
+        collapsed: true,
+        items: [{ text: '线性代数', link: '/cn/src/article/math/linear_algebra' }],
+      },
+      {
+        text: '区块链',
+        collapsed: true,
+        items: [
+          { text: '区块链数据结构', link: '/cn/src/blockchain/' },
+          { text: '如何参与 Web3', link: '/cn/src/blockchain/web3' },
+        ],
+      },
+      {
+        text: '笔记',
+        collapsed: true,
+        items: [
+          { text: '将 LibreOffice 编译为 WebAssembly', link: '/cn/src/note/libreoffice2wasm' },
+          { text: 'CentOS', link: '/cn/src/note/centos' },
+          { text: 'Docker', link: '/cn/src/note/docker' },
+        ],
+      },
+    ],
+  },
+];
+
 const themeCnConfig: DefaultTheme.Config = {
   logo: '/home.svg',
   search: {
@@ -340,52 +407,9 @@ const themeCnConfig: DefaultTheme.Config = {
         ],
       },
     ],
-    '/cn/src/article/': [
-      {
-        items: [
-          { text: '23 种经典设计模式', link: '/cn/src/article/design_mode' },
-          { text: 'AI Agent 原理', link: '/cn/src/article/ai/' },
-          {
-            text: '函数式编程',
-            link: '/cn/src/article/functional_programming',
-          },
-          {
-            text: 'web 文档预览方案',
-            link: '/cn/src/article/doc_preview',
-          },
-          {
-            text: 'Web 视频加密动态方案',
-            link: '/cn/src/article/video',
-          },
-          {
-            text: '可视化渲染引擎',
-            link: '/cn/src/article/visual',
-          },
-          {
-            text: '排序算法',
-            link: '/cn/src/article/sort/',
-            collapsed: true,
-            items: [
-              { text: '冒泡排序', link: '/cn/src/article/sort/bubble/' },
-              { text: '选择排序', link: '/cn/src/article/sort/select/' },
-              { text: '插入排序', link: '/cn/src/article/sort/insert/' },
-              { text: '希尔排序', link: '/cn/src/article/sort/shell/' },
-              { text: '归并排序', link: '/cn/src/article/sort/merge/' },
-              { text: '快速排序', link: '/cn/src/article/sort/quick/' },
-              { text: '堆排序', link: '/cn/src/article/sort/heap/' },
-              { text: '计数排序', link: '/cn/src/article/sort/count/' },
-              { text: '桶排序', link: '/cn/src/article/sort/bucket/' },
-              { text: '基数排序', link: '/cn/src/article/sort/radix/' },
-            ],
-          },
-          {
-            text: '数学',
-            collapsed: true,
-            items: [{ text: '线性代数', link: '/cn/src/article/math/linear_algebra' }],
-          },
-        ],
-      },
-    ],
+    '/cn/src/article/': articleCnSidebar,
+    '/cn/src/blockchain/': articleCnSidebar,
+    '/cn/src/note/': articleCnSidebar,
   },
 };
 

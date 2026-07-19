@@ -15,10 +15,16 @@ llms_full="./.vitepress/dist/llms-full.txt"
   echo "# ran — full documentation corpus"
   echo "# https://ran.chaxus.com  •  auto-generated at build time"
   echo
-  find ./src -name "*.md" | sort | while read -r f; do
-    rel="${f#./src/}"
+  find ./src ./cn/src -name "*.md" | sort | while read -r f; do
+    # keep the src/ or cn/src/ prefix; drop .md; map /index to the clean
+    # directory URL so links match cleanUrls + canonical (no .html suffix).
+    path="${f#./}"
+    path="${path%.md}"
+    case "$path" in
+      */index) path="${path%index}" ;;
+    esac
     echo "================================================================"
-    echo "# https://ran.chaxus.com/src/${rel%.md}.html"
+    echo "# https://ran.chaxus.com/${path}"
     echo "================================================================"
     echo
     cat "$f"

@@ -1,3 +1,7 @@
+# Compiling LibreOffice to WebAssembly
+
+Notes on building LibreOffice from source and compiling it to WebAssembly with Emscripten and Binaryen.
+
 ## Project Repository:
 
 ```sh

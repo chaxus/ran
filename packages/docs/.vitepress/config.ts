@@ -9,7 +9,6 @@ import {
   GOOGLE_ANALYSE,
   GTAG,
   HOME,
-  // KEY_WORDS,
   OG_IMAGE,
   OG_IMAGE_ALT,
   OG_IMAGE_HEIGHT,
@@ -172,6 +171,8 @@ export default defineConfig({
       ['meta', { property: 'og:title', content: ogTitle }],
       ['meta', { property: 'og:description', content: desc }],
       ['meta', { property: 'og:url', content: selfUrl }],
+      ['meta', { property: 'og:locale', content: isCn ? 'zh_CN' : 'en_US' }],
+      ['meta', { property: 'og:locale:alternate', content: isCn ? 'en_US' : 'zh_CN' }],
       ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
       ['meta', { name: 'twitter:title', content: ogTitle }],
       ['meta', { name: 'twitter:description', content: desc }],
@@ -299,8 +300,8 @@ export default defineConfig({
     ['meta', { property: 'og:image:alt', content: OG_IMAGE_ALT }],
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:site_name', content: 'ran' }],
-    ['meta', { property: 'og:locale', content: 'en_US' }],
-    ['meta', { property: 'og:locale:alternate', content: 'zh_CN' }],
+    // og:locale / og:locale:alternate are injected per-page in transformPageData
+    // so Chinese pages emit zh_CN instead of a hard-coded en_US.
     // twitter:image is explicit so the large-summary card never falls back to the icon.
     ['meta', { name: 'twitter:image', content: OG_IMAGE }],
     ['meta', { name: 'twitter:image:alt', content: OG_IMAGE_ALT }],
@@ -316,8 +317,6 @@ export default defineConfig({
     ['meta', { property: 'article:ranui', content: RANUI_PATH }],
     ['meta', { property: 'article:ranuts', content: UTILS_PATH }],
     ['meta', { property: 'article:section', content: ARTICLE_PATH }],
-    // keywords
-    // ['meta', { name: 'keywords', content: KEY_WORDS }],
     // chrome
     ['meta', { httpEquiv: 'Permissions-Policy', content: 'interest-cohort=()' }],
     // set font size
