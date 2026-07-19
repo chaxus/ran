@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { defineConfig } from 'vitepress';
 import { themeEnConfig } from './langs/en';
 import { themeCnConfig } from './langs/cn';
@@ -63,6 +65,60 @@ const SITE_JSONLD = {
       sameAs: ['https://github.com/chaxus'],
     },
   ],
+};
+
+/**
+ * Derive a unique <meta description> from a page's own content when it has no
+ * hand-written frontmatter description. Reads the source markdown and returns
+ * its first substantive prose paragraph, cleaned of markup and truncated — far
+ * better for SEO than the near-duplicate site-wide template fallback, and it
+ * scales to every long-tail page automatically.
+ */
+const deriveDescription = (absPath: string): string => {
+  let raw: string;
+  try {
+    raw = readFileSync(absPath, 'utf8');
+  } catch {
+    return '';
+  }
+  raw = raw.replace(/^---\n[\s\S]*?\n---\n/, ''); // drop leading frontmatter
+  let inCode = false;
+  const collected: string[] = [];
+  for (const line of raw.split('\n')) {
+    const t = line.trim();
+    if (/^(```|~~~)/.test(t)) {
+      inCode = !inCode;
+      continue;
+    }
+    if (inCode) continue;
+    if (!t) {
+      if (collected.length) break; // blank line ends the first paragraph
+      continue;
+    }
+    // Skip structural lines that don't read as prose.
+    if (/^(#|import\s|<|!|\||=|:::)/.test(t)) continue;
+    const text = t
+      .replace(/^>+\s*/, '') // blockquote marker
+      .replace(/^[-*+]\s+/, '') // bullet marker
+      .replace(/^\d+\.\s+/, ''); // ordered marker
+    if (!text) continue;
+    collected.push(text);
+    if (collected.join(' ').length >= 160) break;
+  }
+  let s = collected
+    .join(' ')
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, '') // images
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1') // links -> text
+    .replace(/`([^`]*)`/g, '$1') // inline code
+    .replace(/[*_]{1,3}([^*_]+)[*_]{1,3}/g, '$1') // bold / italic
+    .replace(/<[^>]+>/g, '') // stray html
+    .replace(/\s+/g, ' ')
+    .trim();
+  if (!s) return '';
+  if (s.length <= 160) return s;
+  const cut = s.slice(0, 157);
+  const sp = cut.lastIndexOf(' ');
+  return `${(sp > 100 ? cut.slice(0, sp) : cut).trim()}…`;
 };
 
 export default defineConfig({
@@ -150,6 +206,7 @@ export default defineConfig({
         ? HOME_DESC_CN
         : HOME_DESC_EN
       : pageData.frontmatter.description ||
+        deriveDescription(join(siteConfig.srcDir, rel)) ||
         pageData.description ||
         `${title} — documentation for ran: ranui Web Components and ranuts utilities.`;
     // Assign to pageData.description (the field VitePress renders into
