@@ -61,7 +61,7 @@ export class Modal extends RanElement {
   _afterCloseTimer: number | null;
 
   static get observedAttributes(): string[] {
-    return ['open', 'title', 'maskClosable', 'closeOnEsc', 'lockScroll', 'autoFocus', 'closable', 'sheet'];
+    return ['open', 'title', 'maskClosable', 'closeOnEsc', 'lockScroll', 'autoFocus', 'closable', 'hide-header', 'sheet'];
   }
 
   constructor() {
@@ -120,6 +120,7 @@ export class Modal extends RanElement {
     this.syncTitle();
     this.syncClosable();
     this.syncFooter();
+    this.syncHeader();
   }
 
   get open(): boolean {
@@ -207,6 +208,23 @@ export class Modal extends RanElement {
       this.setAttribute('closable', 'true');
     }
   }
+  /**
+   * Headerless mode: drops the title bar and its border, leaving only a floating
+   * close button (top-right) when `closable`. Suited to content-only dialogs like
+   * image / diagram lightboxes. The dialog keeps an accessible name via `aria-label`
+   * (derived from `title`) since the visible `<h3>` title is removed.
+   */
+  get hideHeader(): boolean {
+    const value = this.getAttribute('hide-header');
+    return value !== null && value !== 'false' && value !== '0';
+  }
+  set hideHeader(value: boolean | string | null | undefined) {
+    if (!value || value === 'false' || value === '0') {
+      this.removeAttribute('hide-header');
+    } else {
+      this.setAttribute('hide-header', '');
+    }
+  }
 
   handlerExternalCss = (): void => {
     syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
@@ -214,6 +232,8 @@ export class Modal extends RanElement {
 
   syncTitle = (): void => {
     this._title.textContent = this.title || 'Modal';
+    // In headerless mode the visible title is gone; keep the dialog's a11y name current.
+    if (this.hideHeader) this._dialog.setAttribute('aria-label', this.title || 'Modal');
   };
 
   syncClosable = (): void => {
@@ -221,6 +241,20 @@ export class Modal extends RanElement {
     this._closeBtn.hidden = !isClosable;
     this._closeBtn.setAttribute('aria-hidden', isClosable ? 'false' : 'true');
     this._closeBtn.tabIndex = isClosable ? 0 : -1;
+  };
+
+  syncHeader = (): void => {
+    const hideHeader = this.hideHeader;
+    this._root.classList.toggle('hide-header', hideHeader);
+    // The <h3 id=_labelId> title leaves the a11y tree when the header is hidden, so
+    // aria-labelledby would dangle — label the dialog directly instead.
+    if (hideHeader) {
+      this._dialog.setAttribute('aria-label', this.title || 'Modal');
+      this._dialog.removeAttribute('aria-labelledby');
+    } else {
+      this._dialog.setAttribute('aria-labelledby', this._labelId);
+      this._dialog.removeAttribute('aria-label');
+    }
   };
 
   syncFooter = (): void => {
@@ -483,6 +517,7 @@ export class Modal extends RanElement {
     this.syncTitle();
     this.syncClosable();
     this.syncFooter();
+    this.syncHeader();
     if (this.open) {
       this.openDialog();
     } else {
@@ -506,6 +541,10 @@ export class Modal extends RanElement {
     }
     if (name === 'closable') {
       this.syncClosable();
+      return;
+    }
+    if (name === 'hide-header') {
+      this.syncHeader();
       return;
     }
     if (name === 'open') {

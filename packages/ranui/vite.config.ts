@@ -80,6 +80,7 @@ export const componentEntries: Record<string, string> = {
   modal: resolve(__dirname, 'components/modal/index.ts'),
   select: resolve(__dirname, 'components/select/index.ts'),
   math: resolve(__dirname, 'components/math/index.ts'),
+  mermaid: resolve(__dirname, 'components/mermaid/index.ts'),
   player: resolve(__dirname, 'components/player/index.ts'),
   progress: resolve(__dirname, 'components/progress/index.ts'),
   checkbox: resolve(__dirname, 'components/checkbox/index.ts'),

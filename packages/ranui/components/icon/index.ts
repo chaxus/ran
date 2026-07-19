@@ -11,6 +11,8 @@ import {
 } from '@/utils/component';
 
 const isDev = import.meta.env.DEV;
+import { coreIcons } from './core-icons';
+
 const iconSvgCache = new Map<string, string>();
 let hasStartedRegistration = false;
 
@@ -65,6 +67,11 @@ export const registerIcons = (icons: Record<string, unknown>): void => {
   });
 };
 
+// Core action glyphs are always available — components like <r-mermaid> can use
+// <r-icon name="copy"> without registering anything. The rest of assets/icons stays
+// opt-in via registerBuiltinIcons(). See core-icons.ts.
+registerIcons(coreIcons);
+
 /**
  * Names of the SVGs ranui ships in `assets/icons/`. This tuple is the source of
  * truth for {@link RanIconName}; a unit test asserts it stays in sync with the
@@ -74,14 +81,18 @@ export const RAN_ICON_NAMES = [
   'add-user',
   'arrow-down',
   'book',
+  'check',
   'check-circle',
   'check-circle-fill',
   'close',
   'close-circle',
   'close-circle-fill',
+  'copy',
+  'download',
   'drop',
   'eye',
   'eye-close',
+  'fullscreen',
   'github',
   'globe',
   'home',
@@ -97,6 +108,7 @@ export const RAN_ICON_NAMES = [
   'plus',
   'power-off',
   'preview',
+  'refresh',
   'search',
   'setting',
   'sort',
@@ -106,6 +118,8 @@ export const RAN_ICON_NAMES = [
   'warning-circle',
   'warning-circle-fill',
   'without-content',
+  'zoom-in',
+  'zoom-out',
 ] as const;
 
 /** A name from ranui's bundled icon set (see {@link registerBuiltinIcons}). */

@@ -61,6 +61,20 @@
   border-bottom: var(--ran-modal-header-border-bottom, 1px solid var(--ran-color-border-secondary, #f0f0f0));
 }
 
+/* Headerless mode: collapse the title bar into a floating close button (top-right). */
+.ran-modal-root.hide-header .ran-modal-header {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  padding: var(--ran-modal-hide-header-padding, 10px);
+  border-bottom: none;
+  background: transparent;
+}
+.ran-modal-root.hide-header .ran-modal-title {
+  display: none;
+}
+
 .ran-modal-title {
   margin: var(--ran-modal-title-margin, 0);
   font-size: var(--ran-modal-title-font-size, 16px);

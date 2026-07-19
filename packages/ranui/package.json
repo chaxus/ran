@@ -229,6 +229,11 @@
       "import": "./dist/math.js",
       "require": "./dist/index.cjs"
     },
+    "./mermaid": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/mermaid.js",
+      "require": "./dist/index.cjs"
+    },
     "./checkbox": {
       "types": "./dist/index.d.ts",
       "import": "./dist/checkbox.js",
@@ -306,6 +311,7 @@
     "vitest": "catalog:"
   },
   "dependencies": {
+    "mermaid": "^11",
     "ranuts": "workspace:^"
   }
 }
