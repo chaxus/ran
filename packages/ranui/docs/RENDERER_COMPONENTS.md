@@ -2,8 +2,8 @@
 
 Some ranui components are **async external-library renderers**: they lazy-load a large
 third-party library and render its output into the shadow root. Today that's
-`r-mermaid` (mermaid) and `r-math` (KaTeX); the same shape fits a future `r-code`
-(shiki), `r-chart`, etc.
+`r-mermaid` (mermaid) and `r-math` (**Temml → native MathML**); the same shape fits a
+future `r-code` (shiki), `r-chart`, etc.
 
 This file is the **canonical evaluation** for these components so the analysis isn't
 redone each time — including how they should be enriched (fullscreen / zoom / copy /
@@ -27,14 +27,15 @@ predates it and should be brought in line):
    imports.
 2. **Source from either an attribute or text content.** Priority: a URI-encoded attribute
    (`code` for mermaid, `latex` for math) so multiline / `<|--` / `$$` survive HTML
-   parsing; else `this.textContent.trim()` for hand-authoring. r-mermaid does both; r-math
-   only supports the encoded attribute today.
-3. **Render into an `ensureShadowElement` container**, never light DOM. Note: mermaid and
-   KaTeX both measure text against a temporary element _they_ create, then return a static
-   sized output — so placing the result into a (closed) shadow root is safe.
+   parsing; else `this.textContent.trim()` for hand-authoring. Both r-mermaid and r-math
+   do this.
+3. **Render into an `ensureShadowElement` container**, never light DOM. Note: mermaid
+   returns a statically-sized SVG and Temml returns a self-contained MathML string that the
+   browser lays out natively — so placing the result into a (closed) shadow root is safe.
 4. **Errors go to the DOM, not the console.** Render an `::part(error)` box with the
    message and dispatch an `error` CustomEvent (`{ detail: { message } }`,
-   `bubbles+composed`). r-math's current console-only `catch` is the anti-pattern to fix.
+   `bubbles+composed`). Both components do this (r-math's old console-only `catch` was the
+   anti-pattern — now fixed).
 5. **Theme-aware.** A `theme` attribute (`auto | light | dark`); `auto` follows the page
    (`<html class="dark">` and `[data-ran-theme="dark"]`) and re-renders on change via a
    `MutationObserver` on `documentElement` (`class`, `data-ran-theme`). Disconnect it in
@@ -165,43 +166,92 @@ Every control is opt-in; a bare `<r-mermaid>` stays a clean static diagram.
 
 ## 3. `r-math`
 
-### 3.1 Current gaps (from source audit)
+### 3.1 Current (shipped — Temml → native MathML)
 
-72-line renderer with real limitations:
+**Rendering backend = [Temml](https://temml.org)**, not KaTeX. Temml compiles LaTeX to
+**native MathML** which the browser lays out itself — the deliberate "industry best
+practice" choice for a lightweight, SSR-friendly component library:
 
-- **Block-only** — always wraps in `$$…$$`; no inline mode.
-- **Silent failure** — `catch` only `console.warn`s; no DOM error state, no event.
-- **Source only via `latex` attribute** (URI-encoded); no text-content authoring.
-- **No `::part()`s** — the `.ran-math` container isn't exposed (every other component is).
-- **No theme tokens** — `index.less` has zero `--ran-color-*`; color is whatever KaTeX /
-  inherited `color` gives; not dark-mode-safe by design.
-- **Accessibility gap** — `index.less` hides KaTeX's `.katex-html` branch
-  (`--ran-math-katex-display: none`), suppressing the more selectable/AT-friendly output.
-- **Undocumented** — no `r-math` entry in the generated `docs/COMPONENTS.md`.
+- **Proper dependency, lazy chunk.** `temml` is a normal `dependency` reached via dynamic
+  `import('temml')` → a ~277 KB lazy chunk. This replaced a **612 KB vendored JS blob**
+  (`assets/js/katex/*`, unversioned, committed to git) that additionally needed ~20 KaTeX
+  web font files. Verified: `dist/math.js` is an 80-byte stub and the barrel `index.js` has
+  0 static temml/font imports.
+- **Bundled math font for cross-browser consistency.** MathML's appearance otherwise
+  depends on whatever math font the reader's OS ships (Cambria Math on Windows, nothing
+  reliable on many macOS/Linux setups). So the component **bundles Latin Modern Math**
+  (Computer-Modern / LaTeX look — GUST/LPPL) plus the small `Temml.woff2` script/prime face
+  (MIT), both **inlined as `?inline` data-URIs**, **dynamically imported** (own lazy chunk —
+  never eager in the barrel) and registered **once at the document level** via
+  `ensureMathFonts()`. Chromium ignores `@font-face` declared _inside_ a shadow root, so
+  document-level injection is the portable workaround; the family names are only referenced
+  by `<r-math>`'s own MathML, so nothing leaks. System math fonts stay in the `font-family`
+  stack as fallbacks. Provenance/licenses: `assets/fonts/LICENSE.md`. Cost: the lazy `math`
+  font chunk is ~518 KB — fetched only when `<r-math>` actually renders.
+- **Theme is automatic — no `MutationObserver`, no re-render.** MathML inherits `color` via
+  `currentColor`; `:host` sets `color: var(--ran-color-text)`, so light/dark flips in the
+  same paint with no JS. (This is why r-math, unlike r-mermaid, needs no `theme` attr or
+  observer — mermaid bakes colors into its SVG and must re-render; MathML doesn't.)
+- **Self-contained CSS.** Temml's MathML stylesheet is vendored trimmed into
+  `components/math/temml.css` (upstream `Temml-Local.css` minus the `@font-face` rules —
+  injected at the document level instead — and with `body`→`:host` for the equation-number
+  counter reset), injected into the shadow root alongside `index.less?inline`. The
+  `font-family` stack leads with `'Latin Modern Math'`.
 
-### 3.2 Improvement design (align with the §1 pattern)
+Feature set:
 
-- **Content source**: accept `this.textContent` **and** the encoded `latex` attribute
-  (mirror r-mermaid's `code`).
-- **Inline vs block**: add `display="inline|block"` — inline uses `$…$`, block uses
-  `$$…$$` (default `block`).
-- **Errors → DOM**: `::part(error)` box + `error` event; stop swallowing to console.
-- **Accessibility**: don't suppress the MathML/HTML branch by default; expose
-  `role="math"` + `aria-label` derived from the source so screen readers get the formula.
-- **Copy (opt-in)**: `copy` attribute → copy the LaTeX source; `label-copy`; `copied`
-  event. Shared with r-mermaid's clipboard helper.
-- **Theme tokens**: `--ran-math-color`, `--ran-math-error-color`, dark-safe; `theme` attr
-  parity if useful.
-- **Parts**: `::part(math)`, `::part(error)`.
-- **Docs**: add `r-math` to `docs/COMPONENTS.md` (regenerate).
+- **Source**: URI-encoded `latex` attribute **or** `this.textContent.trim()` (both, like
+  r-mermaid's `code`). Getter `decodeURIComponent`s with a raw-string fallback so
+  hand-authored attributes still work; setter `encodeURIComponent`s.
+- **Inline vs block**: `display="inline|block"` (default `block`) → Temml `displayMode`.
+- **Accessibility**: `annotate: true` embeds `<annotation encoding="application/x-tex">`
+  (source is copyable + available to AT); native `<math>` already carries the math role.
+- **Errors → DOM**: bad LaTeX (`throwOnError: true` + `catch`) renders an `::part(error)`
+  `<pre>` box + dispatches an `error` CustomEvent `{ detail: { message } }`
+  (`bubbles+composed`). No more console-only swallow.
+- **Copy (opt-in)**: `copy` boolean attr → a hover-revealed top-right toolbar with a single
+  button that copies the **LaTeX source** to the clipboard (icon flips to a check-mark for
+  1.2 s), dispatches `copied` `{ kind: 'source' }`, localizable via `label-copy`. Mirrors
+  r-mermaid: `<r-icon name="copy">` (core glyph, auto-registered by `@/components/icon`),
+  `EventManager` for the click, `.has-controls` gate. A bare `<r-math>` has no toolbar.
+- **Bundled-font opt-out**: `font="system"` skips `ensureMathFonts()` and falls through to
+  the system-font stack in `temml.css` — trades cross-browser consistency back for ~518 KB.
+- **Temml pass-through**: `macros='{"\\RR":"\\mathbb{R}"}'` (JSON, invalid JSON ignored) →
+  Temml `macros`; `wrap="none|tex|="` → Temml soft line-breaking (invalid values dropped).
+- **Events**: `render` `{ ok: true }`, `error` `{ message }`, `copied` `{ kind }` (all
+  `bubbles+composed`).
+- **Parts**: `::part(math)` (wrap), `::part(render)` (MathML target), `::part(error)`,
+  `::part(toolbar)`, `::part(button)`.
+- **CSS vars**: `--ran-math-{display,inline-display,color,align,position}`,
+  `--ran-math-error-{color,background,padding}`,
+  `--ran-math-toolbar-{top,right,gap,background,shadow}`,
+  `--ran-math-button-{size,color,hover-background,hover-color,focus-outline}` — each
+  dark-safe (fallbacks point at flipping tokens).
+
+**Trade-off accepted (documented):** the bundled Latin Modern face makes glyphs identical
+across browsers, but MathML *layout* is still the browser's own — so old Safari's spacing
+of a few constructs is marginally less refined than KaTeX's hand-tuned HTML boxes. This is
+inherent to native MathML and affects spacing only, not glyphs. The cost of the guarantee
+is the ~518 KB lazy font chunk; a consumer who wants to trade consistency back for bytes
+sets **`font="system"`**, which skips `ensureMathFonts()` and falls through to the
+system-font stack already present in `temml.css`.
+
+### 3.2 Not yet done (optional)
+
+- **Copy SVG/MathML** (currently copies source only), and a `download` control (MathML /
+  source) if a consumer asks — the toolbar infrastructure (`.has-controls`, `iconButton`,
+  `EventManager`) is already in place, so adding buttons is cheap.
+- **Raw Temml theme/trust options** (`errorColor`, `trust`, `colorIsTextColor`) as
+  attributes if needed.
 
 ### 3.3 Shared with r-mermaid
 
 Both are §1 renderers. **Don't** pre-extract a shared base for just two — but once a
 third arrives (`r-code` with shiki), factor the common bits (source resolution:
-attr-or-textContent; error-to-`::part(error)`+event; theme MutationObserver; lazy-import
-guard) into a small `utils/renderer.ts` mixin/helper. For now, keep them parallel and
-consistent by copying this checklist.
+attr-or-textContent; error-to-`::part(error)`+event; lazy-import guard) into a small
+`utils/renderer.ts` mixin/helper. Note the theme axis differs (mermaid re-renders via a
+MutationObserver; math rides `currentColor` for free), so the theme step stays
+per-component. For now, keep them parallel and consistent by copying this checklist.
 
 ---
 

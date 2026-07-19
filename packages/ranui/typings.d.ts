@@ -1,6 +1,8 @@
 /// <reference types="vite/client" />
 declare module '*.less';
 declare module '*.less?inline';
+declare module '*.css?inline';
+declare module '*.woff2?inline';
 declare module '*.ts';
 declare module '*.svg';
 declare module '*.svg?raw';
@@ -151,6 +153,8 @@ interface BaseIntrinsicElements {
   };
   'r-math': any & {
     latex: string;
+    display: 'inline' | 'block';
+    sheet: string;
   };
   'r-button': any & {
     sheet: string;

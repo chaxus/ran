@@ -1,36 +1,134 @@
 import { RanElement } from '@/utils/index';
-import { Div, Span } from '@/utils/builder';
+import { Div, View, EventManager } from '@/utils/builder';
 import {
   ensureShadowElement,
   ensureShadowRoot,
   getStringAttribute,
   setStringAttribute,
+  setBooleanAttribute,
   syncSheetAttribute,
 } from '@/utils/component';
+// Registers <r-icon> + its always-on core action glyphs (copy/check), so the opt-in
+// toolbar can use <r-icon name="copy"> directly. Small, eager — the heavy bits (temml,
+// fonts) stay lazy below.
+import '@/components/icon';
 import mathCss from './index.less?inline';
+// Temml's MathML stylesheet, trimmed & self-contained. Shipped alongside the component
+// styles so the native <math> output is spaced/positioned correctly inside the (closed)
+// shadow root.
+import temmlCss from './temml.css?inline';
 import { defineSSR } from '@/utils/ssr-registry';
+
+// Bundled math fonts make <r-math> render identically on every OS / browser (rather than
+// depending on a system math font). `latinmodernmath` is the main face (Computer-Modern /
+// LaTeX look, GUST/LPPL); `Temml.woff2` covers \mathscr + prime glyphs (MIT). See
+// assets/fonts/LICENSE.md.
+//
+// They are imported *dynamically* (like the temml lib) so the ~388 KB face lands in its
+// own lazy chunk fetched only on first render — never eagerly bundled into the barrel for
+// consumers who `import 'ranui'` but never use <r-math>. `font="system"` skips them
+// entirely and falls through to the system-font stack in temml.css.
+//
+// Chromium ignores @font-face declared inside a shadow root, so the faces are registered
+// once at the document level (a harmless side effect — the family names are only ever
+// referenced by <r-math>'s own MathML). Idempotent across every <r-math> instance.
+const MATH_FONTS_STYLE_ID = 'ran-math-fonts';
+let mathFontsRequested = false;
+const ensureMathFonts = async (): Promise<void> => {
+  if (typeof document === 'undefined' || mathFontsRequested) return;
+  mathFontsRequested = true;
+  const [{ default: latinModernMathFont }, { default: temmlScriptFont }] = await Promise.all([
+    import('@/assets/fonts/latinmodernmath.woff2?inline'),
+    import('@/assets/fonts/Temml.woff2?inline'),
+  ]);
+  if (document.getElementById(MATH_FONTS_STYLE_ID)) return;
+  const style = document.createElement('style');
+  style.id = MATH_FONTS_STYLE_ID;
+  style.textContent =
+    `@font-face{font-family:'Latin Modern Math';src:url(${latinModernMathFont}) format('woff2');font-weight:normal;font-style:normal;font-display:swap;}` +
+    `@font-face{font-family:'Temml';src:url(${temmlScriptFont}) format('woff2');font-weight:normal;font-style:normal;font-display:swap;}`;
+  (document.head || document.documentElement).appendChild(style);
+};
+
 export class Math extends RanElement {
-  contain: HTMLElement;
+  _events = new EventManager();
   _shadowDom: ShadowRoot;
+  _wrap: HTMLElement;
+  contain: HTMLElement;
+  _toolbar: HTMLElement;
+  _copyResetTimer?: number;
   static get observedAttributes(): string[] {
-    return ['latex', 'sheet'];
+    return ['latex', 'display', 'font', 'macros', 'wrap', 'copy', 'sheet'];
   }
   constructor() {
     super();
-    this._shadowDom = ensureShadowRoot(this, mathCss);
-    const contain = ensureShadowElement(
-      this._shadowDom,
-      '.ran-math',
-      () => Div().class('ran-math').build() as HTMLDivElement,
+    this._shadowDom = ensureShadowRoot(this, `${mathCss}\n${temmlCss}`);
+    this._wrap = ensureShadowElement(this._shadowDom, '.ran-math', () =>
+      Div()
+        .class('ran-math')
+        .part('math')
+        .children(Div().class('ran-math-render').part('render'), Div().class('ran-math-toolbar').part('toolbar'))
+        .build(),
     );
-    this.contain = contain;
+    this.contain = this._wrap.querySelector('.ran-math-render') as HTMLElement;
+    this._toolbar = this._wrap.querySelector('.ran-math-toolbar') as HTMLElement;
   }
+  // ── Accessors ─────────────────────────────────────────────────────────────
+  // Source: URI-encoded `latex` attribute (so `{`, `\`, newlines survive HTML
+  // parsing) or, when the attribute is absent, the element's text content.
   get latex(): string {
-    const latex = getStringAttribute(this, 'latex');
-    return decodeURIComponent(latex);
+    const attr = getStringAttribute(this, 'latex');
+    if (attr) {
+      try {
+        return decodeURIComponent(attr);
+      } catch {
+        return attr;
+      }
+    }
+    return (this.textContent || '').trim();
   }
   set latex(value: string) {
-    setStringAttribute(this, 'latex', value);
+    setStringAttribute(this, 'latex', encodeURIComponent(value));
+  }
+  get display(): string {
+    return getStringAttribute(this, 'display') || 'block';
+  }
+  set display(value: string) {
+    setStringAttribute(this, 'display', value);
+  }
+  get font(): string {
+    return getStringAttribute(this, 'font');
+  }
+  set font(value: string) {
+    setStringAttribute(this, 'font', value);
+  }
+  // Temml `macros` — a JSON object of `{ "\\name": "expansion" }`. Invalid JSON is ignored.
+  get macros(): Record<string, string> | undefined {
+    const raw = getStringAttribute(this, 'macros');
+    if (!raw) return undefined;
+    try {
+      const parsed = JSON.parse(raw);
+      return parsed && typeof parsed === 'object' ? parsed : undefined;
+    } catch {
+      return undefined;
+    }
+  }
+  set macros(value: Record<string, string> | string | undefined) {
+    setStringAttribute(this, 'macros', typeof value === 'string' ? value : value ? JSON.stringify(value) : null);
+  }
+  // Temml `wrap` — soft line-breaking: 'none' | 'tex' | '='. Anything else → temml default.
+  get wrap(): 'none' | 'tex' | '=' | undefined {
+    const v = getStringAttribute(this, 'wrap');
+    return v === 'none' || v === 'tex' || v === '=' ? v : undefined;
+  }
+  set wrap(value: string) {
+    setStringAttribute(this, 'wrap', value);
+  }
+  get copyable(): boolean {
+    return this.hasAttribute('copy');
+  }
+  set copyable(v: boolean) {
+    setBooleanAttribute(this, 'copy', v);
   }
   get sheet(): string {
     return getStringAttribute(this, 'sheet');
@@ -38,32 +136,107 @@ export class Math extends RanElement {
   set sheet(value: string) {
     setStringAttribute(this, 'sheet', value);
   }
+  private label(key: string, fallback: string): string {
+    return getStringAttribute(this, `label-${key}`) || fallback;
+  }
+  private emit(name: string, detail: Record<string, unknown>): void {
+    this.dispatchEvent(new CustomEvent(name, { detail, bubbles: true, composed: true }));
+  }
   handlerExternalCss = (): void => {
     syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
   };
+  private showError(message: string): void {
+    this.contain.innerHTML = '';
+    const pre = View('pre').class('ran-math-error').part('error').build();
+    pre.textContent = message;
+    this.contain.appendChild(pre);
+    this._toolbar.innerHTML = '';
+    this._wrap.classList.remove('has-controls');
+    this.emit('error', { message });
+  }
+  // ── Rendering ─────────────────────────────────────────────────────────────
   render(): void {
-    if (!this.latex) return;
-    import('@/assets/js/katex/katex-es.js')
-      .then((katex) => {
-        this.contain.innerHTML = '';
-        if (this.latex) {
-          const span = Span().text(`$$${this.latex}$$`).build() as HTMLSpanElement;
-          this.contain.appendChild(span);
-          katex.renderMathInElement(this.contain);
+    const latex = this.latex;
+    if (!latex) {
+      this.contain.innerHTML = '';
+      this._toolbar.innerHTML = '';
+      this._wrap.classList.remove('has-controls');
+      return;
+    }
+    // Fire-and-forget: the MathML renders immediately with the fallback stack and swaps to
+    // Latin Modern when the lazy font resolves (font-display: swap). `font="system"` opts
+    // out of the bundled font to save bytes. A font-load failure must not break rendering.
+    if (this.font !== 'system') ensureMathFonts().catch(() => {});
+    import('temml')
+      .then(({ default: temml }) => {
+        try {
+          // `annotate` embeds <annotation encoding="application/x-tex"> so the source
+          // is copyable and available to assistive tech; native MathML handles the rest.
+          const options: Record<string, unknown> = {
+            displayMode: this.display !== 'inline',
+            throwOnError: true,
+            annotate: true,
+          };
+          const macros = this.macros;
+          if (macros) options.macros = macros;
+          const wrap = this.wrap;
+          if (wrap) options.wrap = wrap;
+          this.contain.innerHTML = temml.renderToString(latex, options);
+          this.buildToolbar();
+          this.emit('render', { ok: true });
+        } catch (err) {
+          this.showError(String((err as Error)?.message || err));
         }
       })
-      .catch(function (err: Error) {
-        console.warn(`ranui math component warning: ${err.message}\n${err}`);
-      });
+      .catch((err: Error) => this.showError(err.message));
   }
+  // ── Toolbar (opt-in) ──────────────────────────────────────────────────────
+  private iconButton(icon: string, label: string, onClick: () => void): HTMLButtonElement {
+    const btn = View('button')
+      .class('ran-math-btn')
+      .part('button')
+      .attr('type', 'button')
+      .attr('aria-label', label)
+      .attr('title', label)
+      .children(View('r-icon').attr('name', icon).attr('size', '16').attr('color', 'currentColor'))
+      .build() as HTMLButtonElement;
+    this._events.on(btn, 'click', onClick);
+    return btn;
+  }
+  private buildToolbar(): void {
+    this._toolbar.innerHTML = '';
+    const buttons: HTMLElement[] = [];
+    if (this.copyable) buttons.push(this.iconButton('copy', this.label('copy', 'Copy LaTeX'), this.copySource));
+    buttons.forEach((b) => this._toolbar.appendChild(b));
+    this._wrap.classList.toggle('has-controls', buttons.length > 0);
+  }
+  private copySource = (): void => {
+    const source = this.latex;
+    if (!source || !navigator.clipboard) return;
+    navigator.clipboard.writeText(source).then(() => {
+      this.emit('copied', { kind: 'source' });
+      const icon = this._toolbar.querySelector('r-icon[name="copy"]');
+      if (icon) {
+        icon.setAttribute('name', 'check');
+        window.clearTimeout(this._copyResetTimer);
+        this._copyResetTimer = window.setTimeout(() => icon.setAttribute('name', 'copy'), 1200);
+      }
+    });
+  };
+  // ── Lifecycle ─────────────────────────────────────────────────────────────
   connectedCallback(): void {
     this.handlerExternalCss();
     this.render();
   }
+  disconnectedCallback(): void {
+    this._events.abort();
+    window.clearTimeout(this._copyResetTimer);
+  }
   attributeChangedCallback(k: string, o: string | null, n: string | null): void {
     if (o === n) return;
-    if (k === 'latex') this.render();
-    if (k === 'sheet') this.handlerExternalCss();
+    if (k === 'latex' || k === 'display' || k === 'font' || k === 'macros' || k === 'wrap') this.render();
+    else if (k === 'copy') this.buildToolbar();
+    else if (k === 'sheet') this.handlerExternalCss();
   }
 }
 

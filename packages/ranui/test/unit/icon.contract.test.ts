@@ -5,6 +5,15 @@ import '@/components/icon/index';
 
 describe('r-icon contract', () => {
   const sleep = (ms = 10) => new Promise((r) => setTimeout(r, ms));
+  // Poll for a condition instead of a fixed sleep — a lazy icon import can take longer than
+  // any hard-coded wait when the full suite loads the shared event loop.
+  const waitFor = async (fn: () => boolean, timeout = 2000, step = 10): Promise<void> => {
+    const start = Date.now();
+    while (!fn()) {
+      if (Date.now() - start > timeout) return;
+      await sleep(step);
+    }
+  };
 
   beforeEach(() => {
     document.body.innerHTML = '';
@@ -225,7 +234,8 @@ describe('r-icon contract', () => {
     const icon = document.createElement('r-icon') as Icon;
     icon.name = 'home'; // a real name from assets/icons/, never registered in this test
     document.body.appendChild(icon);
-    await sleep(50); // dynamic import + registerIcon + re-render
+    // dynamic import + registerIcon + re-render — poll rather than a fixed wait (flaky under load)
+    await waitFor(() => !!(icon as any)._shadowDom?.querySelector('svg'));
     expect((icon as any)._shadowDom?.querySelector('svg')).not.toBeNull();
   });
 });

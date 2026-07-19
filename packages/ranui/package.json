@@ -1,6 +1,6 @@
 {
   "name": "ranui",
-  "version": "0.3.1-alpha.1",
+  "version": "0.4.1-alpha.1",
   "description": "A framework-agnostic Web Components UI library built on native custom elements, with TypeScript types, light/dark theming, SSR and PWA support.",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
@@ -312,6 +312,7 @@
   },
   "dependencies": {
     "mermaid": "^11",
-    "ranuts": "workspace:^"
+    "ranuts": "workspace:^",
+    "temml": "^0.13.3"
   }
 }

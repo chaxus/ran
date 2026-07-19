@@ -1,12 +1,82 @@
 :host {
+  /* MathML inherits `color` via currentColor, so pointing this at the theme text
+     token makes the formula follow light/dark automatically — no re-render needed. */
+  display: var(--ran-math-display, block);
+  color: var(--ran-math-color, var(--ran-color-text, inherit));
   position: var(--ran-math-position, relative);
 }
-.ran-math {
-  display: var(--ran-math-display, flex);
-  justify-content: var(--ran-math-justify-content, space-around);
-  align-items: var(--ran-math-align-items, center);
+:host([display='inline']) {
+  display: var(--ran-math-inline-display, inline-block);
 }
 
-.katex-html {
-  display: var(--ran-math-katex-display, none);
+.ran-math {
+  position: relative;
+  text-align: var(--ran-math-align, center);
+}
+:host([display='inline']) .ran-math {
+  text-align: initial;
+}
+
+.ran-math-error {
+  margin: 0;
+  padding: var(--ran-math-error-padding, 8px 12px);
+  color: var(--ran-math-error-color, var(--ran-color-danger, #e5484d));
+  background: var(--ran-math-error-background, var(--ran-gray-alpha-100, rgba(0, 0, 0, 0.04)));
+  border-radius: var(--ran-radius-sm, 6px);
+  font-family: var(--ran-font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  font-size: 13px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+  text-align: left;
+}
+
+/* ── Toolbar (opt-in via `copy`) — hover-revealed, top-right ─────────────── */
+.ran-math-toolbar {
+  position: absolute;
+  top: var(--ran-math-toolbar-top, 6px);
+  right: var(--ran-math-toolbar-right, 6px);
+  display: none;
+  gap: var(--ran-math-toolbar-gap, 4px);
+  padding: 4px;
+  border-radius: var(--ran-radius-md, 8px);
+  background: var(--ran-math-toolbar-background, var(--ran-color-bg-elevated, #fff));
+  box-shadow: var(--ran-math-toolbar-shadow, var(--ran-shadow-menu, 0 2px 8px rgba(0, 0, 0, 0.12)));
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  pointer-events: none;
+}
+.ran-math.has-controls .ran-math-toolbar {
+  display: flex;
+}
+.ran-math:hover .ran-math-toolbar,
+.ran-math-toolbar:focus-within {
+  opacity: 1;
+  pointer-events: auto;
+}
+.ran-math-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--ran-math-button-size, 28px);
+  height: var(--ran-math-button-size, 28px);
+  padding: 0;
+  border: none;
+  border-radius: var(--ran-radius-sm, 6px);
+  background: transparent;
+  color: var(--ran-math-button-color, var(--ran-color-text-secondary, #666));
+  cursor: pointer;
+}
+.ran-math-btn:hover {
+  background: var(--ran-math-button-hover-background, var(--ran-color-bg-muted, rgba(0, 0, 0, 0.06)));
+  color: var(--ran-math-button-hover-color, var(--ran-color-text, #222));
+}
+.ran-math-btn:focus-visible {
+  outline: var(--ran-math-button-focus-outline, 2px solid var(--ran-color-primary, #1890ff));
+  outline-offset: 1px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ran-math-toolbar {
+    transition: none;
+  }
 }
