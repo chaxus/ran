@@ -42,7 +42,7 @@ class Server {
     };
     this.middleware = [];
     /**
-     * @description: 添加中间件
+     * @description: Add a middleware
      */
   }
   use(handle: MiddlewareFunction): void {

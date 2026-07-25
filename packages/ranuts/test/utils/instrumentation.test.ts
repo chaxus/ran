@@ -64,7 +64,7 @@ describe('replaceOld', () => {
     const target = { greet: (): string => 'original' };
     const restoreInner = replaceOld(target, 'greet', () => () => 'inner');
     replaceOld(target, 'greet', () => () => 'outer');
-    restoreInner(); // 我们的 wrapper 已不在位，restore 应当放弃而不是把 outer 顶掉
+    restoreInner(); // our wrapper is no longer installed, so restore should give up rather than displace the outer one
     expect(target.greet()).toBe('outer');
   });
 
@@ -187,7 +187,7 @@ describe('handleError', () => {
   });
 
   it('does not stack listeners when called repeatedly without teardown', () => {
-    // 回归：旧实现没有取消函数，热更新每重载一次就多一对监听，错误被上报 N 次
+    // Regression: without a teardown function, every hot reload added another pair of listeners and reported each error N times
     const { win, count } = makeWindow();
     define('window', win);
     const offs = [handleError(vi.fn()), handleError(vi.fn()), handleError(vi.fn())];

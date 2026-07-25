@@ -3,7 +3,7 @@ import { performanceTime } from '@/utils/time';
 import { isClient } from '@/utils/device';
 
 /**
- * @description: 覆盖浏览器的后退事件
+ * @description: Override the browser's back-button behaviour
  * @param {*} callback
  * @return {*}
  */
@@ -15,7 +15,7 @@ export const retain = (callback = noop): void => {
     }
   };
 
-  // 向 history 栈中推入两个和当前页面一样的历史记录，用来在页面发生跳转的时候区分返回和前进动作
+  // Push two entries identical to the current page, so a later navigation can be told apart as back or forward
   if (isClient) {
     window.history.pushState(null, '', window.location.href);
   }
@@ -27,7 +27,7 @@ export const retain = (callback = noop): void => {
 };
 
 /**
- * @description: 获取指定的 cookie
+ * @description: Read a named cookie
  * @param {string} objName
  * @return {*}
  */
@@ -61,7 +61,7 @@ export interface BaseReturn {
 }
 
 /**
- * @description: url 转 arrayBuffer
+ * @description: Fetch a URL as an ArrayBuffer
  * @param {string} src
  * @param {RequestUrlToArraybufferOption} options
  * @return {*}
@@ -113,7 +113,7 @@ export interface Context {
   oBackingStorePixelRatio: number;
 }
 /**
- * @description: 获取分辨率
+ * @description: Get the device pixel ratio
  * @param {CanvasRenderingContext2D} context
  * @return {*}
  */
@@ -147,7 +147,7 @@ export const createObjectURL = async (src: Blob | ArrayBuffer | Response): Promi
 };
 
 /**
- * @description: 计算每毫秒的帧率，每秒的帧率需要乘 1000
+ * @description: Frames per millisecond; multiply by 1000 for frames per second
  * @return {*}
  */
 export const getFrame = (n: number = 10): Promise<number> => {
@@ -164,8 +164,8 @@ export const getFrame = (n: number = 10): Promise<number> => {
       lastFrame = now;
       if (frameList.length > n) {
         const num = frameList.reduce((i, j) => i + j);
-        // 帧率就是 1 / time
-        // time 是每次 requestAnimationFrame 执行的间隔
+        // Frame rate is 1 / time,
+        // where time is the interval between requestAnimationFrame callbacks
         resolve(1 / (num / n));
         cancelAnimationFrame(requestAnimationFrameRef);
       }
@@ -287,7 +287,7 @@ export const isInIframe = (): boolean => {
 };
 
 /**
- * @description: 将一个对象转换成 querystring，拼接到 url 后面
+ * @description: Turn an object into a query string and append it to a URL
  * @return {*}
  */
 export function appendUrl(url: string, params: Record<string, string> = {}): string {
@@ -307,7 +307,7 @@ export function appendUrl(url: string, params: Record<string, string> = {}): str
 }
 
 /**
- * @description: 移除拖拽事件的阴影
+ * @description: Remove the drag event's ghost image
  * @param {DragEvent} event
  * @return {*}
  */
@@ -338,7 +338,7 @@ interface ClientRatio {
   height: number;
 }
 /**
- * 跨浏览器获取可视窗口大小
+ * Get the viewport size across browsers
  */
 export const getWindow = (): ClientRatio => {
   if (typeof window !== 'undefined') {
@@ -354,7 +354,7 @@ export const getWindow = (): ClientRatio => {
 };
 
 /**
- * @description: 返回当前网络状态，当前吞吐量，是否切换网络
+ * @description: Current network status: type, throughput, and whether the connection changed
  */
 export const connection = (): number | undefined => {
   if (typeof window !== 'undefined') {
@@ -408,9 +408,9 @@ export function encodeUrl(url: string): string {
 }
 
 interface Options {
-  url?: string; // 请求地址
-  duration?: number; // 请求的间隔
-  count?: number; // 请求的次数
+  url?: string; // request URL
+  duration?: number; // interval between requests
+  count?: number; // number of requests
 }
 
 interface ReturnType {
@@ -419,7 +419,7 @@ interface ReturnType {
 }
 
 /**
- * @description: 图片请求
+ * @description: Request an image (used to time the network)
  * @param {string} url
  * @return {Promise<ImageLoadError | number>}
  */
@@ -427,7 +427,7 @@ export const imageRequest = (url?: string): Promise<number> => {
   return new Promise((resolve, reject) => {
     const img = new Image();
     const startTime = new Date().getTime();
-    // 此处选择加载 github 的 favicon，大小为 2.2kB
+    // GitHub's favicon is used here — 2.2 kB
     img.src = url ? url : `https://github.com/favicon.ico?d=${startTime}`;
     img.onload = () => {
       const endTime = new Date().getTime();
@@ -442,7 +442,7 @@ export const imageRequest = (url?: string): Promise<number> => {
 };
 
 /**
- * @description: 间隔一定时间，执行指定的函数
+ * @description: Run a function repeatedly at a fixed interval
  * @param {HandlerFunction} handler
  * @param {array} params
  */
@@ -461,16 +461,16 @@ export const durationHandler =
     });
 
 /**
- * @description: 通过请求来测试当前网络的 ping 值
+ * @description: Measure the network's ping by timing requests
  * @param {*} options
  */
 export const networkSpeed = async (options: Options): Promise<ReturnType> => {
   const { url, duration = 3000, count = 5 } = options;
-  // 抖动，用来描述网络的波动情况。比如每秒测量一次 ping 值，5s 后取五次测量结果的最大最小值求差，可以看出网络的波动情况，差值越小代表网络越稳定；
+  // Jitter describes how much the network fluctuates: ping once a second, then after 5s take the spread between the highest and lowest of the five readings. A smaller spread means a steadier connection.
   let jitter = 0;
-  // 平均的 ping 值
+  // Mean ping
   let ping = 0;
-  // ping 值的数组
+  // All ping readings
   const pingList: Array<number> = [];
   for (let i = 0; i < count; i++) {
     const handler = durationHandler(imageRequest, url);
@@ -489,7 +489,7 @@ export const isSafari = (): boolean | undefined | string => {
   if (typeof navigator === 'undefined') {
     return undefined;
   }
-  // 不是标准，但 ios safari 上有 vendor 属性
+  // Non-standard, but iOS Safari exposes a `vendor` property
   return (
     // eslint-disable-next-line n/no-unsupported-features/node-builtins
     navigator.vendor &&

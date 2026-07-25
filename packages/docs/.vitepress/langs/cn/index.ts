@@ -108,6 +108,7 @@ const themeCnConfig: DefaultTheme.Config = {
               { text: 'throttle - 节流函数', link: '/cn/src/ranuts/utils/throttle' },
               { text: 'once / singleFlight - 只执行一次', link: '/cn/src/ranuts/utils/memoize' },
               { text: 'QuestQueue - 并发受限队列', link: '/cn/src/ranuts/utils/quest_queue' },
+              { text: 'withTimeout / deferred - Promise 原语', link: '/cn/src/ranuts/utils/with_timeout' },
               { text: 'noop - 空函数', link: '/cn/src/ranuts/utils/noop' },
               { text: 'compose - 组合中间件函数', link: '/cn/src/ranuts/utils/compose' },
             ],
@@ -132,6 +133,7 @@ const themeCnConfig: DefaultTheme.Config = {
               { text: 'isString - 判断是否为字符串', link: '/cn/src/ranuts/utils/is_string' },
               { text: 'str2Xml - 字符串转 XML', link: '/cn/src/ranuts/utils/str2xml' },
               { text: 'detectLanguage - 文本语言检测', link: '/cn/src/ranuts/utils/detect_language' },
+              { text: 'resolveLocale - 解析当前语言', link: '/cn/src/ranuts/utils/resolve_locale' },
               { text: 'segmentByRanges - 偏移与高亮切分', link: '/cn/src/ranuts/utils/segment' },
             ],
           },
@@ -210,10 +212,12 @@ const themeCnConfig: DefaultTheme.Config = {
             text: '存储',
             collapsed: true,
             items: [
-              { text: 'localStorageGetItem - 获取存储值', link: '/cn/src/ranuts/utils/local_storage' },
-              { text: 'localStorageSetItem - 设置存储值', link: '/cn/src/ranuts/utils/local_storage' },
+              { text: 'localStorage 工具 - 安全存取', link: '/cn/src/ranuts/utils/local_storage' },
+              { text: 'createStore - 带前缀的 JSON 存储', link: '/cn/src/ranuts/utils/local_storage' },
               { text: 'WebDB - IndexedDB 封装', link: '/cn/src/ranuts/utils/web_db' },
+              { text: 'createHandoff - 跨页面交接文件', link: '/cn/src/ranuts/utils/create_handoff' },
               { text: 'readFileAs* - 读取 File / Blob', link: '/cn/src/ranuts/utils/read_file' },
+              { text: 'zip - 读写 ZIP 压缩包', link: '/cn/src/ranuts/utils/zip' },
             ],
           },
           {
@@ -222,6 +226,7 @@ const themeCnConfig: DefaultTheme.Config = {
             items: [
               { text: 'getAllQueryString - 提取查询参数', link: '/cn/src/ranuts/utils/get_all_query_string' },
               { text: 'getQuery - 提取查询参数', link: '/cn/src/ranuts/utils/get_query' },
+              { text: 'queryFlag / isInIframe - 布尔开关与嵌入判断', link: '/cn/src/ranuts/utils/query_flag' },
               { text: 'encodeUrl - 安全编码 URL', link: '/cn/src/ranuts/utils/encode_url' },
               { text: 'appendUrl - 拼接查询参数', link: '/cn/src/ranuts/utils/append_url' },
               { text: 'createLocalePath - 多语言 URL 换算', link: '/cn/src/ranuts/utils/locale_path' },

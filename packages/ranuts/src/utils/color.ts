@@ -182,8 +182,21 @@ export const randomColor = function (): Color {
   return new Color(r);
 };
 
-export const hexToRgb = function (hex: string): RegExpExecArray | null | Array<number> {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+/**
+ * @description: `#rrggbb` / `#rgb` (with or without the `#`) to `[r, g, b]`; null when it cannot be parsed.
+ *
+ * The three-digit shorthand is expanded per the CSS rule (`#abc` → `#aabbcc`), not
+ * zero-padded — padding would turn `#fff` into `#0f0f0f`, a dark grey rather than white.
+ *
+ * @param {string} hex
+ * @return {Array<number> | null}
+ */
+export const hexToRgb = function (hex: string): Array<number> | null {
+  const value = hex[0] === '#' ? hex.slice(1) : hex;
+  if (/^[a-f\d]{3}$/i.test(value)) {
+    return [parseInt(value[0] + value[0], 16), parseInt(value[1] + value[1], 16), parseInt(value[2] + value[2], 16)];
+  }
+  const result = /^([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(value);
   return result ? [parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16)] : null;
 };
 
@@ -385,20 +398,117 @@ export const hsbToRgb = function (h: number, s: number, v: number): number[] {
     b = q;
   }
 
-  r = Math.floor(r * 255);
-  g = Math.floor(g * 255);
-  b = Math.floor(b * 255);
+  // round, not floor: floor drags every channel down by up to 1, so an rgb → hsb → rgb
+  // round trip never settles — dragging around a colour picker keeps bleeding colour out.
+  r = round(r * 255);
+  g = round(g * 255);
+  b = round(b * 255);
 
   return [r, g, b];
 };
 
 export const hsvToRgb = hsbToRgb;
 
-export const hsbToHsl = function (h: any, s: any, b: any): number[] {
+export const hsbToHsl = function (h: number, s: number, b: number): number[] {
   return rgbToHsl(hsbToRgb(h, s, b));
 };
 
 export const hsvToHsl = hsbToHsl;
+
+/** Alias of `rgbToHsb` — HSV and HSB are two names for the same colour space. */
+export const rgbToHsv = rgbToHsb;
+
+/**
+ * @description: `#rrggbb` / `#rgb` to `[h, s, b]`; null when the hex is invalid.
+ * @param {string} hex
+ * @return {number[] | null}
+ */
+export const hexToHsb = function (hex: string): number[] | null {
+  const rgb = hexToRgb(hex);
+  return rgb ? rgbToHsb(rgb[0], rgb[1], rgb[2]) : null;
+};
+
+export const hexToHsv = hexToHsb;
+
+/**
+ * @description: `[h, s, l]` to `[h, s, b]`
+ * @param {number} h hue, 0–360
+ * @param {number} s saturation, 0–100
+ * @param {number} l lightness, 0–100
+ * @return {number[]}
+ */
+export const hslToHsb = function (h: number, s: number, l: number): number[] {
+  const [r, g, b] = hslToRgb(h, s, l);
+  return rgbToHsb(r, g, b);
+};
+
+export const hslToHsv = hslToHsb;
+
+/**
+ * @description: A two-digit hex alpha channel (`ff` / `80` / `00`) to a 0–100 percentage.
+ * @param {string} aa two hex digits
+ * @return {number} 0 ~ 100
+ */
+export const hexToAlpha = function (aa: string): number {
+  return round((parseInt(aa, 16) / 255) * 100);
+};
+
+/**
+ * @description: Build a CSS `rgba()` string. Alpha is 0–100 rather than 0–1, matching the
+ * percentage convention the rest of this module uses.
+ * @param {number} r 0~255
+ * @param {number} g 0~255
+ * @param {number} b 0~255
+ * @param {number} a 0~100
+ * @return {string}
+ */
+export const rgbaString = function (r: number, g: number, b: number, a: number): string {
+  return 'rgba(' + [r, g, b, a / 100].join(',') + ')';
+};
+
+/**
+ * @description: Composite a translucent colour **over white**, giving the equivalent opaque rgb.
+ *
+ * For places that do not accept alpha (writing back a 6-digit hex, say). Note the backdrop
+ * is hard-coded to white: under a dark theme the result comes out too light, so composite
+ * against your own backdrop when you need a different one.
+ *
+ * @param {number} r 0~255
+ * @param {number} g 0~255
+ * @param {number} b 0~255
+ * @param {number} a 0~100
+ * @return {number[]} [r, g, b]
+ */
+export const rgbaToRgb = function (r: number, g: number, b: number, a: number): number[] {
+  const alpha = a / 100;
+  return [
+    Math.trunc((1 - alpha) * 255 + alpha * r),
+    Math.trunc((1 - alpha) * 255 + alpha * g),
+    Math.trunc((1 - alpha) * 255 + alpha * b),
+  ];
+};
+
+/**
+ * @description: Composite a translucent colour over white and return it as a 6-digit hex.
+ * @param {number} r 0~255
+ * @param {number} g 0~255
+ * @param {number} b 0~255
+ * @param {number} a 0~100
+ * @return {string}
+ */
+export const rgbaToHex = function (r: number, g: number, b: number, a: number): string {
+  const rgb = rgbaToRgb(r, g, b, a);
+  return rgbToHex(rgb[0], rgb[1], rgb[2]);
+};
+
+/** `#rgb` / `#rrggbb` (the `#` is required) */
+export const HEX_COLOR_REGEX = /^#([\da-f]{6}|[\da-f]{3})$/i;
+
+/** `rgb(r,g,b)`, no spaces — strip whitespace before matching */
+export const RGB_REGEX = /^rgb\((\d{1,3}),(\d{1,3}),(\d{1,3})\)$/;
+
+/** `rgba(r,g,b,a)`, no spaces — strip whitespace before matching */
+export const RGBA_REGEX = /^rgba\((\d{1,3}),(\d{1,3}),(\d{1,3}),(\d{1,3}(\.\d+)?)\)$/;
 
 export class ColorScheme {
   palette: Color[];

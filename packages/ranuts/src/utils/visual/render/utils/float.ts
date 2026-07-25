@@ -8,14 +8,14 @@ export class CustomFloatArray {
   private _data!: Float32Array;
 
   /**
-   * 获取长度
+   * Current length
    */
   get length(): number {
     return this._length;
   }
 
   /**
-   * 拼接一个 number 数组
+   * Append an array of numbers
    */
   public concat(arr: number[]): void {
     const newLen = this._length + arr.length;
@@ -31,8 +31,8 @@ export class CustomFloatArray {
   }
 
   /**
-   * 插入数据
-   * @param num 要插入的数
+   * Push one value
+   * @param num the value to push
    */
   public push(num: number): void {
     if (this._length >= this.curMaxLen) {
@@ -44,7 +44,7 @@ export class CustomFloatArray {
   }
 
   /**
-   * 扩容
+   * Grow the backing buffer
    */
   public expandCapacity(): void {
     this.curMaxLen *= 2;
@@ -55,7 +55,7 @@ export class CustomFloatArray {
   }
 
   /**
-   * 以从 0 到 this.length 的这段 buffer 为底层，建立 Float32Array 视图并返回
+   * A Float32Array view over the buffer from 0 to this.length
    */
   get data(): Float32Array {
     if (this._oldLength !== this._length) {
@@ -66,10 +66,10 @@ export class CustomFloatArray {
   }
 
   /**
-   * 清空
+   * Clear
    */
   public clear(): void {
-    // 并不会真的清空
+    // does not actually zero the memory
     this._length = 0;
   }
 }
@@ -82,14 +82,14 @@ export class CustomIntArray {
   private _data!: Uint32Array;
 
   /**
-   * 获取长度
+   * Current length
    */
   get length(): number {
     return this._length;
   }
 
   /**
-   * 拼接一个 number 数组
+   * Append an array of numbers
    */
   public concat(arr: number[]): void {
     const newLen = this.length + arr.length;
@@ -105,7 +105,7 @@ export class CustomIntArray {
   }
 
   /**
-   * 拼接一个UInt16数组
+   * Append a UInt16 array
    */
   public concatUInt16(uint16: Uint32Array): void {
     const newLen = this.length + uint16.length;
@@ -120,7 +120,7 @@ export class CustomIntArray {
   }
 
   /**
-   * 扩容
+   * Grow the backing buffer
    */
   public expandCapacity(): void {
     this.curMaxLen *= 2;
@@ -131,7 +131,7 @@ export class CustomIntArray {
   }
 
   /**
-   * 以从 0 到 this.length 的这段 buffer 为底层，建立 Uint32Array 视图并返回
+   * A Uint32Array view over the buffer from 0 to this.length
    */
   get data(): Uint32Array {
     if (this._oldLength !== this._length) {
@@ -143,10 +143,10 @@ export class CustomIntArray {
   }
 
   /**
-   * 清空
+   * Clear
    */
   public clear(): void {
-    // 并不会真的清空
+    // does not actually zero the memory
     this._length = 0;
   }
 }

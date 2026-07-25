@@ -1,40 +1,40 @@
-// 首屏加载时间 First Contentful Paint（FCP）：首次内容绘制时间，指浏览器首次绘制页面中至少一个文本、
-// 图像、非白色背景色的 canvas/svg 元素等的时间，代表页面首屏加载的时间点。
+// First Contentful Paint (FCP): when the browser first paints any text, image, or
+// non-white canvas/svg element — the moment the first screenful becomes visible.
 
-// 首次绘制时间 First Paint（FP）：首次绘制时间，指浏览器首次在屏幕上渲染像素的时间，代表页面开始渲染的时间点。(白屏时间）
+// First Paint (FP): when the browser first renders any pixel — the end of the blank screen.
 
-// 最大内容绘制时间 Largest Contentful Paint（LCP）：最大内容绘制时间，指页面上最大的可见元素（文本、图像、视频等）绘制完成的时间，
-// 代表用户视觉上感知到页面加载完成的时间点。
+// Largest Contentful Paint (LCP): when the largest visible element (text, image, video)
+// finishes painting — where the user perceives the page as loaded.
 
-// 用户可交互时间 Time to Interactive（TTI）：可交互时间，指页面加载完成并且用户能够与页面进行交互的时间，代表用户可以开始操作页面的时间点。
+// Time to Interactive (TTI): when loading is done and the page can actually be used.
 
-// 页面总阻塞时间 Total Blocking Time (TBT)：页面上出现阻塞的时间，指在页面变得完全交互之前，用户与页面上的元素交互时出现阻塞的时间。
-// TBT 应该尽可能小，通常应该在 300 毫秒以内。
+// Total Blocking Time (TBT): how long the main thread was blocked before the page became
+// fully interactive. Keep it as low as possible — under 300 ms as a rule.
 
-// 搜索引擎优化 Search Engine Optimization (SEO)：网站在搜索引擎中的排名和可见性。评分范围从 0 到 100，100 分表示网站符合所有 SEO 最佳实践。
+// Search Engine Optimization (SEO): ranking and visibility in search engines. Scored 0-100, where 100 means every SEO best practice is met.
 
-// TTFB 指代从资源的请求到响应第一个字节的时间跨度。
+// TTFB: the span from requesting a resource to the first byte of its response.
 
 // DCL (DOMContentLoaded)
-// DCL 指代当 HTML 文档被完全加载和解析完成之后，DOMContentLoaded 事件被触发，无需等待样式，图像和子框架的完成加载的时间。
+// DCL: when DOMContentLoaded fires — the HTML is fully loaded and parsed, without waiting for stylesheets, images or subframes.
 interface BasicType {
   [x: string]: number | undefined;
-  dnsSearch: number; // DNS 解析耗时
-  tcpConnect: number; // TCP 连接耗时
-  sslConnect: number; // SSL 安全连接耗时
-  request: number; // TTFB 网络请求耗时
-  response: number; // 数据传输耗时
-  parseDomTree: number; // DOM 解析耗时
-  resource: number; // 资源加载耗时
+  dnsSearch: number; // DNS lookup time
+  tcpConnect: number; // TCP connect time
+  sslConnect: number; // TLS handshake time
+  request: number; // TTFB — request time
+  response: number; // content transfer time
+  parseDomTree: number; // DOM parse time
+  resource: number; // resource load time
   domReady: number; // DOM Ready
-  httpHead: number; // http 头部大小
-  interactive: number; // 首次可交互时间
-  complete: number; // 页面完全加载
-  redirect: number; // 重定向次数
-  redirectTime: number; // 重定向耗时
-  duration: number; // 资源请求的总耗时 responseEnd-startTime
-  fp: number | undefined; // 渲染出第一个像素点，白屏时间
-  fcp: number | undefined; // 渲染出第一个内容，首屏结束时间
+  httpHead: number; // HTTP header size
+  interactive: number; // time to first interactive
+  complete: number; // page fully loaded
+  redirect: number; // number of redirects
+  redirectTime: number; // time spent redirecting
+  duration: number; // total request time (responseEnd - startTime)
+  fp: number | undefined; // first pixel painted — end of the blank screen
+  fcp: number | undefined; // first content painted — first screenful complete
 }
 
 export function getPerformance(): BasicType | undefined {

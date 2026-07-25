@@ -1,6 +1,6 @@
 import { DEVICE, currentDevice } from '@/utils/device';
 /**
- * @description: 给指定的元素添加指定的 class
+ * @description: Add a class to an element
  * @param {Element} element
  * @param {string} addClass
  */
@@ -12,7 +12,7 @@ export const addClassToElement = (element: Element, addClass: string): void => {
   }
 };
 /**
- * @description: 给指定的元素移除指定的 class
+ * @description: Remove a class from an element
  * @param {Element} element
  * @param {string} removeClass
  */
@@ -25,7 +25,7 @@ export const removeClassToElement = (element: Element, removeClass: string): voi
 };
 
 /**
- * @description: 创建一个 Fragment
+ * @description: Create a DocumentFragment
  * @param {Element} list
  * @return {*}
  */
@@ -83,18 +83,18 @@ export function escapeHtml(string?: string | number | null): string {
   return lastIndex !== index ? html + str.substring(lastIndex, index) : html;
 }
 /**
- * @description: 根据 UI 稿宽度设置 rem
+ * @description: Set the root font size from the design mock's width
  * @param {*} void
  * @return {*}
  */
 export const setFontSize2html = (designWidth: number = 375): void => {
   let base = designWidth;
   const { documentElement } = document;
-  const mediaQuery = window.matchMedia('(orientation: portrait)'); // 检测是否为竖屏
+  const mediaQuery = window.matchMedia('(orientation: portrait)'); // portrait orientation?
   let timer: string | number | NodeJS.Timeout | undefined;
-  let standardRatio = 667 / 375; // 设计稿宽高比
+  let standardRatio = 667 / 375; // design mock aspect ratio
   if (currentDevice() === DEVICE.IPAD) {
-    standardRatio = 1024 / 768; // iPad设计稿宽高比
+    standardRatio = 1024 / 768; // iPad design mock aspect ratio
     base = 768;
   }
   function setFontSize() {
@@ -111,7 +111,7 @@ export const setFontSize2html = (designWidth: number = 375): void => {
 
     const realRatio = width / height;
 
-    // 根据相对设计稿更小的宽或者高来计算fontSize
+    // Base the font size on whichever of width/height is smaller relative to the mock
     if (realRatio >= standardRatio) {
       width = height * standardRatio;
       documentElement.classList.remove('adjustHeight');
@@ -124,7 +124,7 @@ export const setFontSize2html = (designWidth: number = 375): void => {
 
     // window.adjustWidth = width;
     // window.adjustHeight = height;
-    // fontSize = 自适应宽与原来宽度比 * 初始 fontSize
+    // fontSize = (adapted width / original width) * initial fontSize
     let target = (width / base) * 16;
     if (isLandscape) {
       target /= standardRatio;
@@ -157,7 +157,7 @@ export const setFontSize2html = (designWidth: number = 375): void => {
   window.addEventListener(
     'orientationchange',
     function () {
-      console.log('改变了手机方向');
+      console.log('device orientation changed');
       setFontSize();
     },
     false,
@@ -165,6 +165,7 @@ export const setFontSize2html = (designWidth: number = 375): void => {
   setFontSize();
 };
 
-// 链式 DOM 构建 API 现在住在 ./chain，以便 vnode 入口复用同一份实现，
-// 而不必牵入本文件的其余部分（setFontSize2html 会连带引入 utils/device）。
+// The chainable DOM builder now lives in ./chain, so the vnode entry can reuse one
+// implementation without pulling in the rest of this file (setFontSize2html would drag in
+// utils/device).
 export { Chain, create } from './chain';

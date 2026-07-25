@@ -8,18 +8,18 @@ constraints, conventions) read [../CLAUDE.md](../CLAUDE.md) first.
 Import from the **subpath** that owns the symbol, e.g. `import { debounce } from
 'ranuts/utils'`. The root `ranuts` barrel re-exports the utils + visual surface.
 
-**249 exports** across 4 entry points. Generated at 2026-07-25T06:54:11.261Z.
+**316 exports** across 4 entry points. Generated at 2026-07-25T07:27:53.361Z.
 
 ## Entry points
 
-- [`ranuts/utils`](#ranutsutils) — 浏览器 / 通用工具函数 · _browser + node_ · 185 exports
-- [`ranuts/node`](#ranutsnode) — Node 服务端工具（fs / http / ws / 中间件） · _node only_ · 26 exports
-- [`ranuts/visual`](#ranutsvisual) — 2D 渲染引擎（Canvas / WebGL / WebGPU） · _browser only_ · 12 exports
-- [`ranuts/vnode`](#ranutsvnode) — Snabbdom 风格虚拟 DOM · _browser_ · 26 exports
+- [`ranuts/utils`](#ranutsutils) — Browser and general-purpose utilities · _browser + node_ · 252 exports
+- [`ranuts/node`](#ranutsnode) — Node server utilities (fs / http / ws / middleware) · _node only_ · 26 exports
+- [`ranuts/visual`](#ranutsvisual) — 2D rendering engine (Canvas / WebGL / WebGPU) · _browser only_ · 12 exports
+- [`ranuts/vnode`](#ranutsvnode) — Snabbdom-style virtual DOM · _browser_ · 26 exports
 
 ## `ranuts/utils`
 
-浏览器 / 通用工具函数 · runtime: **browser + node** · source: `src/utils/index.ts`
+Browser and general-purpose utilities · runtime: **browser + node** · source: `src/utils/index.ts`
 
 ```ts
 import { /* … */ } from 'ranuts/utils';
@@ -27,149 +27,191 @@ import { /* … */ } from 'ranuts/utils';
 
 ### Functions
 
-- `acceptPortBridge({ targetOrigin, name, }?: AcceptPortBridgeOptions) => Promise<PortBridge>` — 接收方：等待发起方递来的 port，握手完成后返回 bridge。
-- `addClassToElement(element: Element, addClass: string) => void` — 给指定的元素添加指定的 class
+- `acceptPortBridge({ targetOrigin, name, }?: AcceptPortBridgeOptions) => Promise<PortBridge>` — Acceptor: wait for the port the initiator hands over and return the bridge once the
+- `addClassToElement(element: Element, addClass: string) => void` — Add a class to an element
 - `addNumSym(value: string | number, flag?: string | number) => string`
-- `appendUrl(url: string, params?: Record<string, string>) => string` — 将一个对象转换成 querystring，拼接到 url 后面
+- `adoptSheetText(shadowRoot: ShadowRoot, cssText: string, marker?: string) => void` — Inject dynamic styles supplied at runtime (a component's `sheet` property, say).
+- `adoptStyles(shadowRoot: ShadowRoot, cssText: string, marker?: string) => void` — Inject a component's static styles into a shadow root.
+- `appendUrl(url: string, params?: Record<string, string>) => string` — Turn an object into a query string and append it to a URL
 - `arrayBufferToString(buffer: ArrayBuffer | Uint8Array) => string` — Decode bytes into a string using the sniffed encoding. Required when reading
-- `audioVendor() => Promise<string>` — 音频指纹，1.生成音频信息流 (三角波)，对其进行 FFT 变换，计算 SHA 值作为指纹。2.生成音频信息流（正弦波），进行动态压缩处理，计算 MD5 值。
+- `audioVendor() => Promise<string>` — Audio fingerprint. 1. Generate an audio stream (triangle wave), run an FFT over it and hash the result with SHA. 2. Generate an audio stream (sine wave), run it through dynamic compression and hash with MD5.
 - `buildOffsets(lengths: readonly number[]) => number[]` — The global start offset of every chunk in the concatenated coordinate
 - `canvasVendor() => string | null`
 - `changeHumpToLowerCase(str: string) => string`
 - `checkEncoding(uint8Array: Uint8Array) => string`
 - `clearBr(str?: string) => string` — Strip whitespace, line breaks and HTML tags out of a string
 - `clearStr(str: string, options?: ClearStrOption) => string` — Trim surrounding whitespace, percent-decode, and drop surrounding quotes
-- `cloneDeep<T>(value: T, cloneMap?: WeakMap<object, any>) => T` — 深克隆函数，支持各种复杂数据类型和循环引用
+- `cloneDeep<T>(value: T, cloneMap?: WeakMap<object, any>) => T` — Deep clone, covering the complex built-in types and circular references.
 - `componentToHex(c: string | number) => string`
-- `compose<T>(middleware: Array<Middleware<T>>) => ComposedMiddleware<T>` — 将异步函数转化为同步的方式进行执行
-- `connection() => number | undefined` — 返回当前网络状态，当前吞吐量，是否切换网络
-- `convertImageToBase64(file: File) => Promise<convertImageToBase64Return>` — 图片转 base64
+- `compose<T>(middleware: Array<Middleware<T>>) => ComposedMiddleware<T>` — Run a chain of async functions as if it were sequential
+- `connection() => number | undefined` — Current network status: type, throughput, and whether the connection changed
+- `convertImageToBase64(file: File) => Promise<convertImageToBase64Return>` — Convert an image to base64
+- `crc32(data: Uint8Array) => number` — CRC32 checksum (IEEE 802.3 polynomial), the one ZIP stores per entry.
 - `create(tagName: string, options?: ElementCreationOptions) => Chain`
 - `createData(params?: Record<string, unknown>) => Record<string, unknown>` — Build the standard envelope that accompanies a report — page URL, referrer,
-- `createDocumentFragment(list: Element[]) => DocumentFragment | undefined` — 创建一个 Fragment
+- `createDocumentFragment(list: Element[]) => DocumentFragment | undefined` — Create a DocumentFragment
+- `createHandoff<T>({ dbName, storeName, key }: HandoffOptions) => Handoff<T>` — A one-shot value handoff between two pages of the same origin, backed by
 - `createLocalePath(config: LocalePathConfig) => LocalePath` — Create the set of locale path conversion functions.
 - `createObjectURL(src: Blob | ArrayBuffer | Response) => Promise<string>`
-- `createPortBridge(port: MessagePort) => PortBridge` — 在任意 MessagePort 上构建 bridge（Web Worker / SharedWorker 或已握手的 port）。
+- `createPortBridge(port: MessagePort) => PortBridge` — Build a bridge on any MessagePort (a Web Worker, a SharedWorker, or a port from a completed handshake).
 - `createSignal<T = unknown>(value: T, options?: SignalOptions<T>) => [() => T, (newValue: T) => void]` — Create a minimal signal with optional event broadcasting, returned as
+- `createStore<T>(prefix?: string) => JsonStore<T>` — A prefixed, JSON-serialising view over localStorage.
+- `createZip(files: ReadonlyArray<{ name: string; data: Uint8Array | string; }>) => Uint8Array` — Build a ZIP from scratch, every entry STORED. No compression, so this is
 - `currentDevice() => CurrentDevice`
+- `cutRound(img: ImgSource, radius: number) => ImgSource` — Round an image's corners, returning an offscreen canvas.
 - `debounce<T extends (...args: any[]) => any>(fn: T, ms?: number) => Debounced<T>` — Debounce — on a burst of calls, run only the last one, **`ms` milliseconds
+- `deferred<T = void>() => Deferred<T>` — A promise plus its `resolve` / `reject`, for the case where the thing that
+- `delay(ms: number) => Promise<void>` — Resolve after `ms` milliseconds. Uses the bare `setTimeout`, so it works in
 - `detectLanguage(text: string, sampleSize?: number) => TextLanguage` — Decide a text's primary language from the ratio of CJK to Latin characters.
-- `durationHandler<T, U>(handler: (...args: T[]) => U, ...params: T[]) => ((a: number) => Promise<U>)` — 间隔一定时间，执行指定的函数
+- `durationHandler<T, U>(handler: (...args: T[]) => U, ...params: T[]) => ((a: number) => Promise<U>)` — Run a function repeatedly at a fixed interval
 - `encodeUrl(url: string) => string` — Encode a URL to a percent-encoded form, excluding already-encoded sequences.
 - `escapeHtml(string?: string | number | null) => string`
-- `filterObj(obj: Record<string, unknown>, list: Array<string>) => Record<string, unknown>` — 过滤对象的属性，去除对象中在list数组里面有的属性，返回一个新对象，一般是用于去除空字符和null
+- `fanShapedByArc(ctx: CanvasRenderingContext2D, maxRadius: number, start: number, end: number, gutter: number) => void` — Trace a pie slice with arc(), including the gutter between slices.
+- `filterObj(obj: Record<string, unknown>, list: Array<string>) => Record<string, unknown>` — Return a new object without the properties whose values appear in `list` — typically used to drop empty strings and nulls
 - `formatDate(value?: number | string | Date, pattern?: string) => string` — Format a date with a token pattern. Accepts a timestamp, a date string, a
 - `formatJson(value: string | object, onError?: (error: Error) => void, indent?: number) => string` — Pretty-print JSON. Accepts an object or a JSON string (single quotes are
-- `getAllQueryString(url?: string) => Record<string, string>` — 将 url 上的字符串转换成对象
-- `getCookie(objName: string) => string` — 获取指定的 cookie
+- `getAllQueryString(url?: string) => Record<string, string>` — Parse a URL's query string into an object. Defaults to the current
+- `getAngle(deg: number) => number` — Degrees to radians
+- `getArcPointerByDeg(deg: number, r: number) => [number, number]` — The point on a circle at a given angle
+- `getCookie(objName: string) => string` — Read a named cookie
 - `getCookieByName(name: string) => string`
 - `getExtensions(mimeType: string) => string[]` — Get file extensions from MIME type
-- `getFrame(n?: number) => Promise<number>` — 计算每毫秒的帧率，每秒的帧率需要乘 1000
+- `getFrame(n?: number) => Promise<number>` — Frames per millisecond; multiply by 1000 for frames per second
+- `getImage(src: string) => Promise<ImgSource>` — Load an image by path, resolving once it has decoded.
+- `getLinearGradient(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, background: string) => CanvasGradient` — Translate a CSS `linear-gradient(...)` string into a Canvas CanvasGradient.
 - `getMatchingSentences(text: string, searchValue: string) => string[]` — Collect the complete sentences of a text that contain the search term, keeping only the
+- `getMatrix(radius: number, sigma?: number) => number[]` — Build a 2D Gaussian weight matrix, normalised so the weights sum to 1.
 - `getMime(ext: string) => string | undefined`
 - `getPerformance() => BasicType | undefined`
-- `getPixelRatio(context: CanvasRenderingContext2D & Partial<Context>) => number` — 获取分辨率
-- `getQuery(url?: string) => Record<string, string>` — 将 url 上的字符串转换成对象
+- `getPixelRatio(context: CanvasRenderingContext2D & Partial<Context>) => number` — Get the device pixel ratio
+- `getQuery(url?: string) => Record<string, string>` — Alias of [`getAllQueryString`](#getallquerystring). The two used to be
 - `getRandomString(len?: number) => string`
 - `getReportUrl() => string` — The currently configured reporting endpoint, or `''` when none was set
 - `getStatus(code?: number | string) => number | string | undefined` — Get the status code.
-- `getWindow() => ClientRatio` — 跨浏览器获取可视窗口大小
+- `getTangentByPointer(x: number, y: number) => Array<number>` — The tangent line at a point on a circle
+- `getWindow() => ClientRatio` — Get the viewport size across browsers
 - `handleConsole(hooks?: (...args: unknown[]) => void) => (() => void)` — Tap into `console` so every call also reaches your hook, while still printing
 - `handleError(hooks?: (error: ErrorPayload) => void) => (() => void)` — Listen for uncaught errors and unhandled promise rejections, in the capture
 - `handleFetchHook(options?: Partial<Options>) => (() => void)` — Instrument `window.fetch` so every request, response and failure reaches your
 - `handleXhrHook(options?: Partial<Options>) => (() => void)` — Instrument `XMLHttpRequest` (`open` / `send`) so requests, responses and
-- `hexToRgb(hex: string) => RegExpExecArray | null | Array<number>`
+- `hexToAlpha(aa: string) => number` — A two-digit hex alpha channel (`ff` / `80` / `00`) to a 0–100 percentage.
+- `hexToHsb(hex: string) => number[] | null` — `#rrggbb` / `#rgb` to `[h, s, b]`; null when the hex is invalid.
+- `hexToHsv(hex: string) => number[] | null`
+- `hexToRgb(hex: string) => Array<number> | null` — `#rrggbb` / `#rgb` (with or without the `#`) to `[r, g, b]`; null when it cannot be parsed.
+- `hsbToHsl(h: number, s: number, b: number) => number[]`
 - `hsbToRgb(h: number, s: number, v: number) => number[]`
+- `hslToHsb(h: number, s: number, l: number) => number[]` — `[h, s, l]` to `[h, s, b]`
+- `hslToHsv(h: number, s: number, l: number) => number[]`
 - `hslToRgb(h: number | string | number[], s: number | string, l: number | string) => Array<number>`
-- `hsvToHsl(h: any, s: any, b: any) => number[]`
+- `hsvToHsl(h: number, s: number, b: number) => number[]`
 - `hsvToRgb(h: number, s: number, v: number) => number[]`
 - `hue2rgb(p: number, q: number, t: number) => number`
-- `imageRequest(url?: string) => Promise<number>` — 图片请求
+- `imageRequest(url?: string) => Promise<number>` — Request an image (used to time the network)
 - `indexForOffset(offsets: readonly number[], offset: number) => number` — Binary-search which chunk a global offset falls into — the last index
+- `inflateRaw(data: Uint8Array) => Promise<Uint8Array>` — Decompress raw DEFLATE bytes (no zlib or gzip wrapper) — the form ZIP
 - `isBangDevice() => boolean`
-- `isEqual(value: any, other: any, seen?: Map<any, any>) => boolean` — 深度比较两个值是否相等
-- `isImageSize(file: File, width?: number, height?: number) => Promise<boolean>` — 校验图片尺寸是否等于给定的宽 / 高。两者都传时必须**同时**满足；
-- `isMobile() => boolean` — 是否是移动端
+- `isEqual(value: any, other: any, seen?: Map<any, any>) => boolean` — Deep-compare two values.
+- `isImageSize(file: File, width?: number, height?: number) => Promise<boolean>` — Check an image's dimensions against a given width / height. When both are
+- `isInIframe() => boolean` — Whether this page is running inside an iframe. Returns false under SSR.
+- `isMobile() => boolean` — Whether this is a mobile device
 - `isSafari() => boolean | undefined | string`
 - `isString(obj: unknown) => boolean`
 - `isUrlCached(url: string) => Promise<boolean>` — Whether a URL is already in CacheStorage. When probing a group of files,
-- `isWeiXin() => boolean` — 判断是否是微信浏览器的函数
-- `localStorageGetItem(name: string) => string`
-- `localStorageSetItem(name: string, value: string) => void`
-- `matchMediaQuery(query: string) => boolean` — 同步读取一条媒体查询当前是否匹配。SSR 返回 false。
+- `isWeiXin() => boolean` — Whether this is the WeChat in-app browser
+- `loadScript({ type, content }: LoadScriptOptions) => Promise<{ success: boolean; }>` — Inject one script dynamically, de-duplicated by content.
+- `localStorageGetItem(name: string) => string` — Read a string from localStorage, or `''` when missing or unavailable.
+- `localStorageRemoveItem(name: string) => void` — Remove a key from localStorage. Silently does nothing when storage is unavailable.
+- `localStorageSetItem(name: string, value: string) => void` — Write a string to localStorage. Silently does nothing when storage is
+- `matchMediaQuery(query: string) => boolean` — Read whether a media query currently matches, synchronously. Returns false under SSR.
 - `mathjs(a: number, type: string, b: number) => ComputeNumberResult`
 - `md5(str: string) => string` — MD5 hash function implementation
 - `memoize<T extends Func>(fn: T | unknown) => ((...args: Parameters<T>) => ReturnType<T>)` — Former name of `once`. The name is misleading — it does not cache per
-- `merge(a: Obj, b?: Obj) => Obj` — 合并对象
-- `mergeExports(obj: Record<string, string>, exports: Record<string, string>) => Record<string, string>` — 将 exports 对象拼接到 obj 上，并冻结 obj
+- `merge(a: Obj, b?: Obj) => Obj` — Merge objects
+- `mergeExports(obj: Record<string, string>, exports: Record<string, string>) => Record<string, string>` — Copy an exports object onto `obj`, then freeze it
 - `navigatorLanguage() => TextLanguage` — Map the browser UI language into the same buckets (the default when there is
 - `networkAllowsDownload(options?: NetworkAllowanceOptions) => boolean` — Whether the current network and user settings allow proactively downloading
-- `networkSpeed(options: Options) => Promise<ReturnType>` — 通过请求来测试当前网络的 ping 值
+- `networkSpeed(options: Options) => Promise<ReturnType>` — Measure the network's ping by timing requests
 - `noop() => void`
 - `once<T extends Func>(fn: T | unknown) => ((...args: Parameters<T>) => ReturnType<T>)` — Run once — evaluate on the first call, cache the result, and return that
-- `openPortBridge({ targetWindow, targetOrigin, name, }: OpenPortBridgeOptions) => PortBridge` — 发起方：创建 MessageChannel，把一端交给目标窗口，自己持有另一端。
-- `parseChineseNumber(value: string) => number | null` — 中文数字转阿拉伯数字，支持「十五」「二十三」「一百零三」「一千零一」「三万」，
-- `parseEnglishNumber(value: string) => number | null` — 英文序号转数字：阿拉伯数字 / 英文数词（one–twenty）/ 罗马数字，依次尝试。
-- `parseRomanNumber(value: string) => number | null` — 罗马数字转阿拉伯数字（大小写皆可，按减法记法处理 IV / IX）。非法输入返回 null。
-- `performanceTime() => number` — 获取当前时间戳
-- `perToNum(str?: string) => number` — 百分比转换成数字
+- `opacity(img: ImgSource, opacity: number) => ImgSource` — Apply an overall opacity to an image, returning an offscreen canvas.
+- `openPortBridge({ targetWindow, targetOrigin, name, }: OpenPortBridgeOptions) => PortBridge` — Initiator: create a MessageChannel, hand one port to the target window and keep the other.
+- `parseChineseNumber(value: string) => number | null` — Chinese numerals to Arabic, covering 「十五」「二十三」「一百零三」「一千零一」「三万」.
+- `parseEnglishNumber(value: string) => number | null` — English ordinals to numbers, tried in order: Arabic digits, number words
+- `parseRomanNumber(value: string) => number | null` — Roman numerals to Arabic (either case, handling subtractive forms such as IV / IX). Returns null for invalid input.
+- `performanceTime() => number` — Current timestamp
+- `perToNum(str?: string) => number` — Convert a percentage string into a number
 - `prefetchUrl(url: string) => Promise<void>` — Pull a single URL into the cache; skipped when already cached. Failures are
 - `prefetchUrls(urls: string[], options?: PrefetchOptions) => Promise<void>` — Prefetch a group of URLs, **serially** — prefetching is background work, and
 - `prefetchWhenIdle(urls: string[], options?: WhenIdleOptions & NetworkAllowanceOptions & PrefetchOptions) => (() => void)` — Prefetch a group of URLs while idle, subject to `networkAllowsDownload`.
-- `querystring(data?: {}) => string` — 对象转 url 字符串
+- `queryFlag(key: string, url?: string) => boolean` — Read a query parameter as a boolean flag. True for `?k`, `?k=`, `?k=1` and
+- `querystring(data?: {}) => string` — Serialise an object into a URL query string
 - `randomColor() => Color`
 - `randomString(len?: number) => string`
-- `range(num: number, min?: number, max?: number) => number` — 限制最大和最小值
+- `range(num: number, min?: number, max?: number) => number` — Clamp a value between a minimum and a maximum
 - `readFileAsArrayBuffer(blob: Blob) => Promise<ArrayBuffer>` — Read a File / Blob as an ArrayBuffer
 - `readFileAsDataURL(blob: Blob) => Promise<string>` — Read a File / Blob as a data: URL (image previews and the like)
 - `readFileAsText(blob: Blob, encoding?: string) => Promise<string>` — Read a File / Blob as text
 - `readFileAsUint8Array(blob: Blob) => Promise<Uint8Array>` — Read a File / Blob as a Uint8Array (pair with checkEncoding / arrayBufferToString for encoding sniffing)
-- `removeClassToElement(element: Element, removeClass: string) => void` — 给指定的元素移除指定的 class
-- `removeGhosting(event: DragEvent) => void` — 移除拖拽事件的阴影
+- `readZipEntries(bytes: Uint8Array) => ZipEntry[]` — Read an archive's central directory. Returns `[]` for anything that is not
+- `readZipEntry(bytes: Uint8Array, entry: string | ZipEntry) => Promise<Uint8Array | null>` — Extract one entry's decompressed bytes. Resolves `null` when the entry is
+- `removeClassToElement(element: Element, removeClass: string) => void` — Remove a class from an element
+- `removeGhosting(event: DragEvent) => void` — Remove the drag event's ghost image
 - `replaceOld(source: any, name: string, replacement: (...args: unknown[]) => unknown, isForced?: boolean) => () => void` — Replace a property on an object, wrapping whatever was there before.
 - `report({ url, type, payload }: BeaconPayload) => boolean` — Send a telemetry beacon. Prefers `navigator.sendBeacon` (does not block
-- `requestUrlToBuffer(src: string, options: Partial<RequestUrlToArraybufferOption>) => Promise<requestUrlToArraybufferReturn>` — url 转 arrayBuffer
-- `retain(callback?: () => void) => void` — 覆盖浏览器的后退事件
+- `requestUrlToBuffer(src: string, options: Partial<RequestUrlToArraybufferOption>) => Promise<requestUrlToArraybufferReturn>` — Fetch a URL as an ArrayBuffer
+- `resolveLocale(options: ResolveLocaleOptions) => string` — Resolve which of your supported locales to use, from the usual chain:
+- `retain(callback?: () => void) => void` — Override the browser's back-button behaviour
+- `rewriteZip(bytes: Uint8Array, options?: RewriteZipOptions) => Promise<Uint8Array>` — Rebuild an archive with some entries replaced and/or new entries appended.
+- `rgbaString(r: number, g: number, b: number, a: number) => string` — Build a CSS `rgba()` string. Alpha is 0–100 rather than 0–1, matching the
+- `rgbaToHex(r: number, g: number, b: number, a: number) => string` — Composite a translucent colour over white and return it as a 6-digit hex.
+- `rgbaToRgb(r: number, g: number, b: number, a: number) => number[]` — Composite a translucent colour **over white**, giving the equivalent opaque rgb.
 - `rgbToHex(r: string | number | Array<string | number>, g?: string | number, b?: string | number) => string`
 - `rgbToHsb(r: number, g: number, b: number) => number[]`
 - `rgbToHsl(r: number | number[], g?: number, b?: number) => Array<number>`
-- `scriptOnLoad(urls: string[], append?: HTMLElement, callback?: () => void) => Promise<void>` — 动态插入 script/link 标签
+- `rgbToHsv(r: number, g: number, b: number) => number[]` — Alias of `rgbToHsb` — HSV and HSB are two names for the same colour space.
+- `roundRectByArc(ctx: CanvasRenderingContext2D, ...[x, y, w, h, r]: number[]) => void` — Trace a rounded rectangle with arc(). A corner radius larger than half the
+- `scriptOnLoad(urls: string[], append?: HTMLElement, callback?: () => void) => Promise<void>` — Insert script/link tags dynamically
 - `segmentByRanges<T>(text: string, chunkStart: number, ranges: readonly OffsetRange<T>[]) => Segment<T>[]` — Split one chunk of text into a sequence of plain / matched spans according
-- `setAttributeByGlobal(name: string, value: unknown) => void` — 给全局对象上增加属性
-- `setFontSize2html(designWidth?: number) => void` — 根据 UI 稿宽度设置 rem
+- `setAttributeByGlobal(name: string, value: unknown) => void` — Define a property on the global object
+- `setFontSize2html(designWidth?: number) => void` — Set the root font size from the design mock's width
 - `setMime(ext: string, mimeType: string) => Map<string, string>`
 - `setReportUrl(next: ReportConfig | string) => void` — Configure the default reporting endpoint (and optionally the cookie holding
 - `singleFlight<T>(fn: () => Promise<T>) => SingleFlight<T>` — The async flavour of "run once": concurrent callers share one in-flight
 - `str2Xml(xmlStr: string, format?: DOMParserSupportedType) => HTMLElement | undefined` — Parse a string into XML using the given MIME type
 - `strParse(str?: string, sep?: string | RegExp, eq?: string | RegExp) => Record<string, string>` — Parse a delimited string into an object, e.g.
 - `throttle<T extends (...args: any[]) => any>(fn: T, delay?: number) => Throttled<T>` — Throttle — under a burst of calls, run at a fixed interval: the first call
-- `timeFormat(time: number) => string` — 时间秒，转化成:分割的时间
+- `timeFormat(time: number) => string` — Format a number of seconds as a colon-separated duration
 - `timestampToTime(timestamp?: number | string) => Date & { format?: Function; }` — Turn a timestamp into a `Date` carrying a `format` method.
 - `toFullWidth(value: string) => string` — Convert half-width characters to full-width (the inverse of `toHalfWidth`)
 - `toHalfWidth(value: string) => string` — Convert full-width characters to half-width (digits, letters, punctuation and
 - `toString(value: string | number) => string`
 - `transformNumber(value: string, locale?: string, precision?: number, fixed?: number) => string`
 - `transformText(content: string | ArrayBuffer) => TransformText | undefined`
-- `watchMediaQuery(query: string, callback: (matches: boolean) => void) => (() => void)` — 监听媒体查询变化。回调会**先同步触发一次当前值**（省掉调用方自己再读一遍
+- `watchMediaQuery(query: string, callback: (matches: boolean) => void) => (() => void)` — Watch a media query. The callback **fires once synchronously with the
 - `webglVendor() => { vendor: string; renderer: string; } | null`
 - `whenIdle(callback: () => void, options?: WhenIdleOptions) => (() => void)` — Run a callback while the browser is idle, falling back to setTimeout where
+- `withTimeout<T>(promise: Promise<T>, ms: number, options?: { message?: string; onTimeout?: () => void; }) => Promise<T>` — Reject if a promise has not settled within `ms`. The returned promise
+- `withTimeoutFallback<T>(promise: Promise<T>, ms: number, fallback: T, onTimeout?: () => void) => Promise<T>` — Resolve to a fallback value instead of rejecting when `ms` elapses. For
+- `zipHasEntry(bytes: Uint8Array, name: string) => boolean` — Whether the archive contains an entry with exactly this name. Cheaper than
 
 ### Classes
 
-- `class AudioRecorder` — 录音
+- `class AudioRecorder` — Record audio
 - `class BridgeManager`
-- `class Chain` — 链式调用的 dom 操作
+- `class Chain` — Chainable DOM operations
 - `class Color`
 - `class ColorScheme`
+- `class EventManager` — EventManager — a scoped listener registry built on AbortController.
 - `class Hsl`
 - `class Hsla`
-- `class Mathjs` — 数字运算（主要用于小数点精度问题）
+- `class Mathjs` — Arithmetic that works around floating-point precision.
 - `class Monitor` — Front-end telemetry: page-load performance, clicks, errors, fetch/XHR traffic
-- `class PostMessageBridge` — Bridge 注册事件，供 client 消费
+- `class PostMessageBridge` — Bridge registration event, consumed by the client
 - `class QuestQueue` — An async task queue with limited concurrency. At most `simultaneous` tasks
 - `class Rgb`
 - `class Rgba`
 - `class SyncHook`
+- `class TimeoutError`
 - `class TOTP`
 - `class WebDB` — A Promise wrapper over IndexedDB. The native API is event-callback and
 - `class WorkerClient` — A worker client with request ids. The request type `Req` is defined by the
@@ -182,8 +224,13 @@ import { /* … */ } from 'ranuts/utils';
 - `interface BroadcastPayload`
 - `interface CallToPayload`
 - `interface Debounced`
+- `interface Deferred` — Promise primitives that JavaScript does not ship: an externally settled promise and a
+- `interface Handoff`
+- `interface HandoffOptions`
 - `interface IDBResult` — The uniform result shape of every IndexedDB operation. Every method
 - `interface IDBStoreSchema` — Declarative schema for object stores. `openDataBase` creates the missing
+- `interface JsonStore`
+- `interface LoadScriptOptions`
 - `interface LocalePath`
 - `interface LocalePathConfig`
 - `interface LocaleRoute` — URL maths for a multi-language site (pure functions, no global state, no DOM).
@@ -193,41 +240,61 @@ import { /* … */ } from 'ranuts/utils';
 - `interface OffsetRange` — An annotation in global coordinates: the half-open interval `[start, end)` plus any payload
 - `interface OpenPortBridgeOptions`
 - `interface PendingRequest`
-- `interface PortBridge` — 基于 MessagePort 的点对点桥接（方案 B，作为新 API 提供）。
+- `interface PortBridge` — A point-to-point bridge over MessagePort.
 - `interface PrefetchOptions`
 - `interface ReportConfig`
+- `interface ResolveLocaleOptions`
+- `interface RewriteZipOptions`
 - `interface Segment` — One piece of the split result: `value === null` marks a plain span covered by no range
 - `interface SingleFlight`
+- `interface SpeedType` — The ease-in / ease-out pair of one easing family
 - `interface Throttled`
 - `interface TransformText`
 - `interface WebDBOptions`
 - `interface WhenIdleOptions`
 - `interface WorkerClientOptions`
 - `interface WorkerResponseBase` — A response must at least echo the request id so the two can be paired
+- `interface ZipEntry` — One entry as described by the archive's central directory.
 
 ### Types
 
 - `type CurrentDevice`
+- `type EasingFn` — One easing function: (elapsed, from, delta, duration) => current value
+- `type ImgSource` — A bitmap container usable both as a drawImage source and as a render target
 - `type TextLanguage` — Coarse language bucket: Chinese / English / other only
 
 ### Constants
 
+- `const ADOPTED_SHEET_MARKER: "data-adopted-sheet"`
+- `const ADOPTED_STYLE_MARKER: "data-adopted-style"` — Default marker attribute on the <style> fallback, identifying styles this module injected
 - `const BRIDGE_MARKER: "__ranuts_bridge__"`
 - `const bridgeManager: BridgeManager`
+- `const circ: SpeedType`
 - `const Client: { connect: ({ id, targetWindow, targetOrigin, channel, }: BridgeManagerOptions) => { bridge: PostMessageBridge; id: string; }; remove: (id: strin…`
+- `const cubic: SpeedType`
 - `const DEFAULT_CHANNEL: "default"`
+- `const expo: SpeedType`
 - `const FMT: Record<string, string[]>`
+- `const HEX_COLOR_REGEX: RegExp` — `#rgb` / `#rrggbb` (the `#` is required)
 - `const isClient: boolean`
 - `const MessageCodec: { encode(data: any): string; decode<T = any>(encodedStr: string): T | null; encodeFile(file: File): Promise<string>; decodeFile(encoded: st…` — Message codec.
 - `const MimeType: Map<string, string>`
-- `const MOBILE_MEDIA_QUERY: "(max-width: 768px)"` — 视口断点：与移动端布局的分界线保持一致
+- `const MOBILE_MEDIA_QUERY: "(max-width: 768px)"` — Viewport breakpoint, matching where the mobile layout takes over
 - `const Platform: { init: <T = unknown, R = unknown>(events: Record<string, MessageHandler<T, R>>) => { destroy: () => void; }; }`
+- `const quad: SpeedType`
+- `const quart: SpeedType`
+- `const quint: SpeedType`
+- `const RGB_REGEX: RegExp` — `rgb(r,g,b)`, no spaces — strip whitespace before matching
+- `const RGBA_REGEX: RegExp` — `rgba(r,g,b,a)`, no spaces — strip whitespace before matching
+- `const sine: SpeedType`
 - `const status: { message: Map<number, string>; code: Map<string, number>; codes: number[]; redirect: { 300: boolean; 301: boolean; 302: boolean; 303: boolean; 3…`
 - `const subscribers: SyncHook` — Global event bus: a signal carrying a `subscriber` broadcasts through it on change
+- `const ZIP_DEFLATE: 8`
+- `const ZIP_STORED: 0` — Compression methods this module understands.
 
 ## `ranuts/node`
 
-Node 服务端工具（fs / http / ws / 中间件） · runtime: **node only** · source: `src/node/index.ts`
+Node server utilities (fs / http / ws / middleware) · runtime: **node only** · source: `src/node/index.ts`
 
 ```ts
 import { /* … */ } from 'ranuts/node';
@@ -235,25 +302,25 @@ import { /* … */ } from 'ranuts/node';
 
 ### Functions
 
-- `appendFile(path: string, content: string) => Promise<Ranuts.Identification>` — 给一个已经存在的文件追加内容
+- `appendFile(path: string, content: string) => Promise<Ranuts.Identification>` — Append content to an existing file
 - `bodyMiddleware(options?: Partial<ServerBody>) => MiddlewareFunction`
 - `connect(connectMiddleware: ConnectMiddleware) => MiddlewareFunction`
 - `get({ url }: Request) => Promise<Response>`
 - `getIPAdress() => string | undefined`
-- `default(req: Req) => ParseUrl | undefined` — 解析 IncomingMessage 类型的请求url，返回的类型永远是 ParseUrl
+- `default(req: Req) => ParseUrl | undefined` — Parse an IncomingMessage's request URL; the return type is always ParseUrl
 - `prompt({ message, stream, defaultResponse }: PromptOption) => Promise<boolean>`
-- `queryFileInfo(path: string) => Promise<Ranuts.Identification>` — 查询一个文件的详细信息，一般用于区分文件还是目录（data.isDirectory()）
+- `queryFileInfo(path: string) => Promise<Ranuts.Identification>` — Stat a file — typically to tell a file from a directory via data.isDirectory()
 - `readDir(options: Options) => Array<string>`
-- `readFile(path: string, format?: BufferEncoding) => FilePromiseResult` — 读取一个文件，读取成功返回状态码和文件内容
+- `readFile(path: string, format?: BufferEncoding) => FilePromiseResult` — Read a file, returning a status code and the content on success
 - `readStream(option: ReadOption) => ReadStream`
 - `runCommand(command: string, args: string[]) => Promise<void>`
 - `startTask() => symbol`
 - `staticMiddleware(option?: Partial<Option>) => MiddlewareFunction`
 - `taskEnd(symbol: symbol) => number | bigint`
-- `traverse(dir: string, callback: Caller, pre?: string) => Promise<any>` — 递归遍历每一个目录，为找到的文件都执行一个函数
-- `traverseSync(dir: string, callback: Caller, pre?: string) => void` — 同步方法，递归遍历每一个目录，为找到的文件都执行一个函数
-- `watchFile(path: string, interval?: number) => Promise<Ranuts.Identification>` — 观察一个文件是否被改变，返回状态
-- `writeFile(path: string, content: string) => Promise<Ranuts.Identification>` — 根据文件路径创建文件，如果文件存在会清空再写入，如果不存在会创建
+- `traverse(dir: string, callback: Caller, pre?: string) => Promise<any>` — Walk every directory recursively, running a function for each file found
+- `traverseSync(dir: string, callback: Caller, pre?: string) => void` — Synchronous: walk every directory recursively, running a function for each file found
+- `watchFile(path: string, interval?: number) => Promise<Ranuts.Identification>` — Watch a file for changes and report its status
+- `writeFile(path: string, content: string) => Promise<Ranuts.Identification>` — Write a file at the given path, truncating it if it exists and creating it if it does not
 - `writeStream(option: WriteOption) => WriteStream`
 - `WSS(this: any, server: http.Server) => void` — Create a WebSocket Server
 
@@ -276,7 +343,7 @@ import { /* … */ } from 'ranuts/node';
 
 ## `ranuts/visual`
 
-2D 渲染引擎（Canvas / WebGL / WebGPU） · runtime: **browser only** · source: `src/utils/visual/index.ts`
+2D rendering engine (Canvas / WebGL / WebGPU) · runtime: **browser only** · source: `src/utils/visual/index.ts`
 
 ```ts
 import { /* … */ } from 'ranuts/visual';
@@ -308,7 +375,7 @@ import { /* … */ } from 'ranuts/visual';
 
 ## `ranuts/vnode`
 
-Snabbdom 风格虚拟 DOM · runtime: **browser** · source: `src/vnode/index.ts`
+Snabbdom-style virtual DOM · runtime: **browser** · source: `src/vnode/index.ts`
 
 ```ts
 import { /* … */ } from 'ranuts/vnode';
@@ -324,7 +391,7 @@ import { /* … */ } from 'ranuts/vnode';
 
 ### Classes
 
-- `class Chain` — 链式调用的 dom 操作
+- `class Chain` — Chainable DOM operations
 
 ### Interfaces
 
@@ -356,5 +423,5 @@ import { /* … */ } from 'ranuts/vnode';
 
 ### Namespaces
 
-- `namespace is` — 类型判断工具集（数组 / 字符串 / 原始值 / VNode）
+- `namespace is` — Type guards — array / string / primitive / VNode
 

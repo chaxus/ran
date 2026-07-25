@@ -2,8 +2,8 @@ import type { Stats } from 'node:fs';
 import fs from '@/node/fs';
 
 /**
- * @description: 查询一个文件的详细信息，一般用于区分文件还是目录（data.isDirectory()）
- * @param {string} path 文件路径
+ * @description: Stat a file — typically to tell a file from a directory via data.isDirectory()
+ * @param {string} path file path
  * @return {Promise}
  */
 

@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { formatDate, formatJson, timestampToTime } from '@/utils';
 
-// 固定时刻：2026-07-25 14:05:09.042 本地时间
+// A fixed instant: 2026-07-25 14:05:09.042 local time
 const SAMPLE = new Date(2026, 6, 25, 14, 5, 9, 42);
 
 describe('formatDate', () => {
@@ -24,12 +24,12 @@ describe('formatDate', () => {
   });
 
   it('keeps MM and mm distinct', () => {
-    // 回归：旧实现链式 replace 且带 i 标志，'yyyy-mm-dd' 会被解析成 年-分钟-日
+    // Regression: chained case-insensitive replaces made 'yyyy-mm-dd' render as year-minute-day
     expect(formatDate(SAMPLE, 'MM mm')).toBe('07 05');
   });
 
   it('never re-substitutes a value it just wrote', () => {
-    // 回归：旧实现顺序 replace，前一步写入的数字可能被后一步的模式再次命中
+    // Regression: with sequential replaces, digits written by one step could be matched again by a later pattern
     expect(formatDate(new Date(2026, 4, 5, 5, 5, 5), 'YYYY-MM-DD HH:mm:ss')).toBe('2026-05-05 05:05:05');
   });
 
@@ -72,8 +72,9 @@ describe('formatJson', () => {
   });
 
   it('does not mangle braces, brackets or commas inside string values', () => {
-    // 回归：旧实现按 { } [ ] , 注入换行、再按每行引号数量猜哪些属于字符串，
-    // 值里含这些字符时结构被破坏
+    // Regression: the old implementation injected newlines around { } [ ] , and then guessed
+    // which parts were strings by counting quotes per line, corrupting any value containing
+    // those characters
     const value = { css: 'a { color: red, }', list: '[1,2]' };
     expect(JSON.parse(formatJson(value))).toEqual(value);
   });

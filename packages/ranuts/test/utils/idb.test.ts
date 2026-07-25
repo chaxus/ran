@@ -1,9 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { WebDB } from '@/utils';
+import { WebDB, createHandoff } from '@/utils';
 
-/* ── 最小 IndexedDB 替身 ────────────────────────────────────────────────────
- * 只实现 WebDB 用到的那部分（open/升级、事务、增删改查、游标），足以覆盖
- * schema 建表、版本对齐、Promise 化这三条主要逻辑。
+/* ── A minimal IndexedDB stand-in ──────────────────────────────────────────
+ * Only the parts WebDB uses (open/upgrade, transactions, CRUD, cursors), which is enough to
+ * cover the three things that matter: creating stores from the schema, aligning versions,
+ * and the promise wrapping.
  */
 
 class FakeRequest<T = unknown> {
@@ -143,7 +144,7 @@ class FakeDatabase {
   }
 }
 
-/** 磁盘：数据库名 → 已持久化的实例（跨 open 保留数据与版本） */
+/** The "disk": database name → the persisted instance, keeping data and version across opens */
 const disk = new Map<string, FakeDatabase>();
 
 const fakeIndexedDB = {
@@ -212,7 +213,7 @@ describe('WebDB', () => {
     await open(1);
     const db = new WebDB({ dbName: 'test', version: 2, stores: STORES });
     await db.openDataBase();
-    // 索引只在第一次升级时建过一次，重复打开不会再建
+    // The index was created once on the first upgrade; reopening does not create it again
     expect(disk.get('test')!.stores.get('books')!.createdIndexes).toEqual(['byAuthor']);
     expect(db.version).toBe(2);
   });
@@ -269,7 +270,7 @@ describe('WebDB', () => {
   });
 
   it('recovers from VersionError by realigning to the on-disk version', async () => {
-    await open(3); // 磁盘上是 v3
+    await open(3); // v3 is what is on disk
     const stale = new WebDB({ dbName: 'test', version: 1, stores: STORES });
     const result = await stale.openDataBase();
     expect(result.status).toBe('success');
@@ -291,5 +292,97 @@ describe('WebDB', () => {
     const db = await open();
     disk.get('test')!.onversionchange?.();
     expect(db.database).toBeUndefined();
+  });
+});
+
+/*
+ * A second, smaller IndexedDB stand-in for `createHandoff`. It needs things the WebDB fake
+ * above deliberately lacks — out-of-line keys (`put(value, key)`) and transaction
+ * completion events — and `createHandoff` resolves on `oncomplete`, so a fake that never
+ * fires it would hang rather than fail.
+ */
+class HandoffTransaction {
+  oncomplete: (() => void) | null = null;
+  onerror: (() => void) | null = null;
+  onabort: (() => void) | null = null;
+  private pending = 0;
+  constructor(private rows: Map<string, unknown>) {
+    // Settle once the synchronous body of the caller has queued its requests.
+    queueMicrotask(() => queueMicrotask(() => this.oncomplete?.()));
+  }
+  objectStore(): {
+    get: (key: string) => { result: unknown; onsuccess: (() => void) | null };
+    put: (value: unknown, key: string) => void;
+    delete: (key: string) => void;
+  } {
+    const rows = this.rows;
+    return {
+      get: (key: string) => {
+        const request: { result: unknown; onsuccess: (() => void) | null } = { result: undefined, onsuccess: null };
+        this.pending++;
+        queueMicrotask(() => {
+          request.result = rows.get(key);
+          request.onsuccess?.();
+          this.pending--;
+        });
+        return request;
+      },
+      put: (value: unknown, key: string) => void rows.set(key, value),
+      delete: (key: string) => void rows.delete(key),
+    };
+  }
+}
+
+describe('createHandoff', () => {
+  const rows = new Map<string, unknown>();
+
+  const install = (): void => {
+    rows.clear();
+    (globalThis as unknown as { indexedDB: unknown }).indexedDB = {
+      open: () => {
+        const request: Record<string, unknown> = {
+          result: {
+            objectStoreNames: { contains: () => true },
+            transaction: () => new HandoffTransaction(rows),
+            close: () => {},
+          },
+        };
+        queueMicrotask(() => (request.onsuccess as (() => void) | undefined)?.());
+        return request;
+      },
+    };
+  };
+
+  afterEach(() => {
+    delete (globalThis as unknown as { indexedDB?: unknown }).indexedDB;
+  });
+
+  it('hands a value from one page to the next', async () => {
+    install();
+    const handoff = createHandoff<string>({ dbName: 'test-handoff' });
+    await expect(handoff.put('walden.docx')).resolves.toBe(true);
+    await expect(handoff.take()).resolves.toBe('walden.docx');
+  });
+
+  it('is one-shot: a second take finds nothing', async () => {
+    install();
+    const handoff = createHandoff<string>({ dbName: 'test-handoff' });
+    await handoff.put('walden.docx');
+    await handoff.take();
+    // This is what stops a reload from re-opening the same file.
+    await expect(handoff.take()).resolves.toBeNull();
+  });
+
+  it('resolves null when nothing was ever handed over', async () => {
+    install();
+    await expect(createHandoff<string>({ dbName: 'test-handoff' }).take()).resolves.toBeNull();
+  });
+
+  it('degrades to null / false when IndexedDB is unavailable', async () => {
+    // A page that merely *tried* to hand a file over must not break because storage is
+    // missing or blocked (SSR, private mode, third-party frame).
+    const handoff = createHandoff<string>({ dbName: 'test-handoff' });
+    await expect(handoff.put('value')).resolves.toBe(false);
+    await expect(handoff.take()).resolves.toBeNull();
   });
 });

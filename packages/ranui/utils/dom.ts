@@ -1,4 +1,4 @@
-import { md5 } from 'ranuts/utils';
+import { escapeHtml, getMime } from 'ranuts/utils';
 import { Div, Span, View } from './builder';
 
 export const falseList = [false, 'false', null, undefined];
@@ -66,87 +66,26 @@ export const createIconList = (): void => {
   }, 0);
 };
 
-// Cache for loaded scripts
-const loadedScripts = new Set<string>();
-
-/**
- * @description: 动态加载脚本
- */
-export const loadScript = ({ type, content }: { type: string; content: string }): Promise<{ success: boolean }> => {
-  return new Promise((resolve, reject) => {
-    // Generate a unique key for the script using MD5
-    const scriptKey = md5(content);
-
-    // Check if script is already loaded
-    if (loadedScripts.has(scriptKey)) {
-      resolve({ success: true });
-      return;
-    }
-
-    const script = document.createElement('script');
-    if (type === 'url') {
-      script.src = content;
-    }
-    if (type === 'content') {
-      script.textContent = content;
-    }
-    script.onload = function () {
-      loadedScripts.add(scriptKey);
-      resolve({ success: true });
-    };
-    script.onerror = function (error) {
-      reject({ success: false, error });
-    };
-    document.body.append(script);
-  });
-};
-
-/**
- * 转义 HTML 特殊字符，防止 XSS
- */
-export const escapeHtml = (unsafe: any): string => {
-  if (typeof unsafe !== 'string') return String(unsafe);
-  return unsafe
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-};
-
 /**
  * 极简的声明式模板实现
  * 将模板字符串解析为 DocumentFragment，并对动态部分进行转义防止 XSS
  */
-export const html = (strings: TemplateStringsArray, ...values: any[]): DocumentFragment => {
+export const html = (strings: TemplateStringsArray, ...values: unknown[]): DocumentFragment => {
   const template = document.createElement('template');
   template.innerHTML = strings.reduce((acc, str, i) => {
     const value = values[i - 1];
-    const safeValue = Array.isArray(value) ? value.map(escapeHtml).join('') : escapeHtml(value);
+    const safeValue = Array.isArray(value)
+      ? value.map((item) => escapeHtml(item as string)).join('')
+      : escapeHtml(value as string);
     return acc + safeValue + str;
   });
   return template.content;
 };
 
 /**
- * 根据文件扩展名获取 MIME 类型
+ * 根据文件扩展名获取 MIME 类型，未知扩展名回落到 `application/octet-stream`。
  */
 export function getMimeTypeFromExtension(fileName: string): string {
   const ext = fileName.split('.').pop()?.toLowerCase() || '';
-  const mimeTypes: Record<string, string> = {
-    doc: 'application/msword',
-    docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    xls: 'application/vnd.ms-excel',
-    xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    ppt: 'application/vnd.ms-powerpoint',
-    pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-    pdf: 'application/pdf',
-    txt: 'text/plain',
-    png: 'image/png',
-    jpg: 'image/jpeg',
-    jpeg: 'image/jpeg',
-    gif: 'image/gif',
-    svg: 'image/svg+xml',
-  };
-  return mimeTypes[ext] || 'application/octet-stream';
+  return getMime(`.${ext}`) || 'application/octet-stream';
 }

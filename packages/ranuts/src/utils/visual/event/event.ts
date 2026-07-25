@@ -4,7 +4,7 @@ import type { Container } from '@/utils/visual/vertex/container';
 import type { FederatedEventMap } from '@/utils/visual/event/types';
 
 export class EventSystem {
-  private canvasEle: HTMLCanvasElement; // canvas 元素
+  private canvasEle: HTMLCanvasElement; // the canvas element
   private eventBoundary: EventBoundary;
   private rootEvent = new FederatedMouseEvent();
   constructor(canvasEle: HTMLCanvasElement, stage: Container) {
@@ -12,7 +12,7 @@ export class EventSystem {
     this.eventBoundary = new EventBoundary(stage);
     this.addEvents();
   }
-  // canvas 元素上触发了 pointermove 事件后，将原生事件转化成这个渲染引擎的内部事件 (FederatedMouseEvent)，并执行对应的 event handler。
+  // On a pointermove over the canvas, translate the native event into the engine's own event (FederatedMouseEvent) and run the matching handler.
   private addEvents = () => {
     this.canvasEle.addEventListener('pointermove', this.onPointerMove, true);
     this.canvasEle.addEventListener('pointerleave', this.onPointerLeave, true);
@@ -35,7 +35,7 @@ export class EventSystem {
     this.bootstrapEvent(nativeEvent);
     this.eventBoundary.fireEvent(this.rootEvent);
   };
-  // 用 offsetX 和 offsetY 来将 DOM 事件的坐标转化成 canvas 视窗的全局坐标：
+  // offsetX / offsetY convert the DOM event's coordinates into the canvas viewport's global coordinates:
   private bootstrapEvent = (nativeEvent: PointerEvent) => {
     this.rootEvent.isTrusted = nativeEvent.isTrusted;
     this.rootEvent.timeStamp = performance.now();

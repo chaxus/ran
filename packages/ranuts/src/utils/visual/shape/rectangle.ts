@@ -2,7 +2,7 @@ import { Shape } from '@/utils/visual/shape/shape';
 import { SHAPE_TYPE } from '@/utils/visual/enums';
 import type { Point } from '@/utils/visual/vertex/point';
 
-// Rectangle 类继承自 Shape 类，表示矩形
+// Rectangle, extending Shape
 export class Rectangle extends Shape {
   public x: number;
   public y: number;

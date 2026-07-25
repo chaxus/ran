@@ -4,11 +4,12 @@ import { EventSystem } from '@/utils/visual/event';
 import type { Renderer } from '@/utils/visual/render/render';
 import type { IApplicationOptions } from '@/utils/visual/types';
 
-// 这是渲染引擎的入口，将 canvas 元素等参数传给这个类，然后这个类就会启动渲染引擎，开始渲染。
-// Application 类的 stage 属性是一个 Container，要把节点添加到 stage 上，渲染引擎才会渲染这些节点，stage 是一切待渲染元素的祖先元素。
+// The rendering engine's entry point: hand it the canvas and it starts rendering.
+// Its `stage` is a Container — nodes are only rendered once added to the stage, which is the
+// ancestor of everything that gets drawn.
 export class Application {
   private readonly renderer: Renderer;
-  public readonly stage: Container; // stage 是一切待渲染元素的祖先元素。
+  public readonly stage: Container; // the ancestor of everything that gets drawn
   public readonly view: HTMLCanvasElement;
   private animationFrameId: number | undefined;
   public eventSystem: EventSystem;
@@ -16,19 +17,19 @@ export class Application {
   constructor(options: IApplicationOptions) {
     const { view = document.createElement('canvas') } = options;
     this.view = view;
-    // 根据参数，判断是用什么渲染模式
+    // Pick the rendering backend from the options
     this.renderer = getRenderer({ ...options, view });
-    // 创建一个根容器
+    // Create the root container
     this.stage = new Container();
     this.eventSystem = new EventSystem(this.view, this.stage);
   }
 
   /**
-   * 创建并初始化一个 Application。
+   * Create and initialise an Application.
    *
-   * 推荐使用此异步工厂而非 `new Application()`：WebGPU 后端的设备初始化是异步的，
-   * 必须在首次 render 之前 await 完成。Canvas / WebGL 后端的 init 会立即 resolve，
-   * 因此该工厂对所有后端都是安全且一致的。
+   * Prefer this async factory over `new Application()`: the WebGPU backend initialises its
+   * device asynchronously and must finish before the first render. The Canvas and WebGL
+   * backends resolve immediately, so the factory is safe and consistent for all of them.
    *
    * @example
    * const app = await Application.create({ view, prefer: RENDERER_TYPE.WEB_GPU });

@@ -1,5 +1,5 @@
 /**
- * 顶点着色器
+ * Vertex shader
  */
 export const vertexShaderSource = /* wgsl */ `
 @group(0) @binding(0) var<uniform> u_root_transform: mat3x3<f32>;
@@ -24,7 +24,7 @@ fn main(
 `;
 
 /**
- * 片元着色器
+ * Fragment shader
  */
 export const fragmentShaderSource = /* wgsl */ `
 @fragment

@@ -1,4 +1,4 @@
-// 设置普通的二维数据点
+// A plain 2D point
 export class Point {
   public x: number;
   public y: number;
@@ -15,9 +15,10 @@ export class Point {
     return new Point(this.x, this.y);
   };
 }
-// 当二维的数据点发生变化时，需要通知并执行回调函数。
-// 回调始终接收最新的 (x, y)，因为 Transform 的 onScaleChange / onSkewChange 依赖这两个参数；
-// 若不传参，scale / skew 会被设成 undefined 进而让整个变换矩阵变成 NaN。
+// A change to the point notifies its callback.
+// The callback always receives the latest (x, y), because Transform's onScaleChange /
+// onSkewChange depend on both: without them, scale / skew end up undefined and the whole
+// transform matrix becomes NaN.
 export class ObservablePoint {
   private _x: number;
   private _y: number;

@@ -14,7 +14,7 @@ interface Res {
   message?: string;
 }
 
-/** 最小 Worker 替身：记录收到的消息，允许测试手动回投响应 */
+/** A minimal Worker stand-in: records what it receives and lets the test post responses back by hand */
 class FakeWorker {
   static instances: FakeWorker[] = [];
   sent: Array<Req & { operationId: number }> = [];
@@ -75,7 +75,7 @@ describe('WorkerClient', () => {
     const { client, worker } = makeClient();
     const first = client.send({ type: 'a' });
     const second = client.send({ type: 'b' });
-    // 乱序回复：先回第二条
+    // Out-of-order replies: answer the second request first
     worker().reply({ operationId: 2, type: 'result', payload: 'B' });
     worker().reply({ operationId: 1, type: 'result', payload: 'A' });
     await expect(first).resolves.toMatchObject({ payload: 'A' });

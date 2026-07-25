@@ -1,13 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import {
-  escapeHtml,
-  falseList,
-  getMimeTypeFromExtension,
-  html,
-  isDisabled,
-  loadScript,
-  removeClassToElementChild,
-} from '@/utils/dom';
+import { escapeHtml, loadScript } from 'ranuts/utils';
+import { falseList, getMimeTypeFromExtension, html, isDisabled, removeClassToElementChild } from '@/utils/dom';
 
 describe('utils/dom', () => {
   beforeEach(() => {
@@ -42,7 +35,7 @@ describe('utils/dom', () => {
 
   it('escapes unsafe HTML and stringifies non-string values', () => {
     expect(escapeHtml(`<img src="x" onerror='alert(1)'>&`)).toBe(
-      '&lt;img src=&quot;x&quot; onerror=&#039;alert(1)&#039;&gt;&amp;',
+      '&lt;img src=&quot;x&quot; onerror=&#39;alert(1)&#39;&gt;&amp;',
     );
     expect(escapeHtml(null)).toBe('null');
     expect(escapeHtml(123)).toBe('123');

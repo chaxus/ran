@@ -8,7 +8,7 @@ export const getBezierLength = (
   P3X: number,
   P3Y: number,
 ): number => {
-  const n = 10; // 取 10 段
+  const n = 10; // 10 segments
 
   let x = P0X;
   let y = P0Y;
@@ -54,7 +54,7 @@ export const getQuadraticBezierLength = (
 
   const a = Math.sqrt((4 * A * C - B * B) / 4);
 
-  // 牛顿 - 莱布尼兹公式
+  // Newton–Leibniz formula
   const F1 =
     (A / 2 + B / 4) * Math.sqrt((A + B / 2) * (A + B / 2) + a * a) +
     ((a * a) / 2) * Math.log(Math.abs(A + B / 2 + Math.sqrt((A + B / 2) * (A + B / 2) + a * a)));
@@ -62,7 +62,7 @@ export const getQuadraticBezierLength = (
   const F0 =
     (B / 4) * Math.sqrt((B * B) / 4 + a * a) + ((a * a) / 2) * Math.log(B / 2 + Math.sqrt((B * B) / 4 + a * a));
 
-  const length = (1 / (Math.sqrt(A) * A)) * (F1 - F0); // 不要忘了前面还有个(A根号A分之一)
+  const length = (1 / (Math.sqrt(A) * A)) * (F1 - F0); // remember the leading 1 / (A · √A) factor
 
   return length;
 };

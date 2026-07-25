@@ -1,10 +1,10 @@
-// 支持的形状类型
+// Supported shape types
 export enum SHAPE_TYPE {
-  RECTANGLE = 'rectangle', // 矩形
-  POLYGON = 'polygon', // 多边形
-  CIRCLE = 'circle', // 圆形
-  ELLIPSE = 'ellipse', // 椭圆
-  ROUNDED_RECTANGLE = 'rounded rectangle', // 圆角矩形
+  RECTANGLE = 'rectangle', // rectangle
+  POLYGON = 'polygon', // polygon
+  CIRCLE = 'circle', // circle
+  ELLIPSE = 'ellipse', // ellipse
+  ROUNDED_RECTANGLE = 'rounded rectangle', // rounded rectangle
 }
 
 export enum LINE_CAP {
@@ -19,17 +19,17 @@ export enum LINE_JOIN {
   ROUND = 'round',
 }
 
-// 渲染器类型
+// Renderer types
 export enum RENDERER_TYPE {
   WEB_GL = 'webgl',
   CANVAS = 'canvas',
   WEB_GPU = 'webgpu',
 }
 
-export const MAX_VERTEX_COUNT = 65536; // 支持的最大的顶点数量
+export const MAX_VERTEX_COUNT = 65536; // maximum supported vertex count
 
-// 顶点位置 2 个 Float32，顶点颜色 4 个 Unsigned Byte，一共 12 个 byte
-export const BYTES_PER_VERTEX = 12; // 每个顶点占多少字节
+// 2 Float32 for the position plus 4 unsigned bytes for the colour — 12 bytes in total
+export const BYTES_PER_VERTEX = 12; // bytes per vertex
 
 export const CONTAINER = 'container';
 

@@ -10,42 +10,42 @@ export type VNodeChildElement = VNode | string | number;
 export type ArrayOrElement<T> = T | T[];
 export type VNodeChildren = ArrayOrElement<VNodeChildElement>;
 
-// key 属性类型
+// Type of the key attribute
 export type Key = string | number;
 
-// VNode 接口
+// The VNode interface
 export interface VNode {
-  // dom 节点的选择器，
-  // 虚拟节点的 .sel 属性通过对 h() 传入一个 CSS 选择器生成，
-  // 比如：h('div#container', {}, [...]) 将会创建一个虚拟节点并以 div#container 作为其 .sel 属性的值。
+  // Selector for the DOM node.
+  // A vnode's .sel comes from the CSS selector passed to h(); for example
+  // h('div#container', {}, [...]) creates a vnode whose .sel is 'div#container'.
   sel: string | undefined;
-  // 节点数据
+  // Node data
   data: VNodeData | undefined;
-  // 子节点，和 text 互斥
+  // Child nodes; mutually exclusive with text
   children: Array<VNode | string | number> | undefined;
-  // 存储 VNode 转化成的真实 dom
+  // The real DOM node this VNode was turned into
   elm: Node | undefined;
-  // 节点的文本内容，和 children 互斥
+  // Text content; mutually exclusive with children
   text: string | number | undefined;
-  // key，用于优化 diff 算法
+  // key — lets the diff match nodes across updates
   key: Key | undefined;
   listener?: EventListenerOrEventListenerObject | undefined;
 }
 
 export interface VNodeData {
-  // 设置 VNode 对应的 DOM 元素的属性，通过 对象。属性 的方式来设置，它内部不会去处理布尔类型的属性
+  // Properties set on the element as `element.prop = value`; boolean attributes get no special handling
   props?: Props;
-  // 设置 VNode 对应的 DOM 元素的属性，通过 setAttributes 来设置，它内部不会去处理布尔类型的属性
+  // Attributes set via setAttribute; boolean attributes get no special handling
   attrs?: Attrs;
-  // 设置 VNode 对应的 DOM 元素的 class
+  // Classes on the element
   class?: Classes;
-  // 设置 VNode 对应的 DOM 元素的 css style
+  // Inline CSS style on the element
   style?: VNodeStyle;
-  // 设置 VNode 对应的 DOM 元素的监听事件
+  // Event listeners on the element
   on?: On;
-  // 设置 VNode 对应的 key
+  // The VNode's key
   key?: Key;
-  // svg 元素
+  // SVG element
   ns?: string;
   hook?: Hooks;
 }

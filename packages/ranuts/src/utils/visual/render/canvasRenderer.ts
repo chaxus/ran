@@ -9,7 +9,7 @@ export class CanvasRenderer extends Renderer {
   constructor(options: IApplicationOptions) {
     super(options);
     if (options.debug) {
-      console.log('正在使用 %c canvas2D ', 'color: #05aa6d; background-color: #ffffff;font-size: 20px;', '渲染');
+      console.log('rendering with %c canvas2D ', 'color: #05aa6d; background-color: #ffffff;font-size: 20px;', '');
     }
 
     const { backgroundColor, backgroundAlpha } = options;
@@ -21,7 +21,7 @@ export class CanvasRenderer extends Renderer {
     container.updateTransform();
     this.ctx.save();
     this.ctx.clearRect(0, 0, this.screen.width, this.screen.height);
-    // 绘制 background
+    // Paint the background
     if (this.backgroundAlpha) {
       this.ctx.globalAlpha = this.backgroundAlpha;
     }

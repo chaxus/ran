@@ -3,35 +3,35 @@ import type { VNode } from '../vnode';
 export type Props = Record<string, any>;
 
 function updateProps(oldVnode: VNode, vnode: VNode): void {
-  // 用于缓存 props 的 name
+  // Property name during the loop
   let key: string;
-  // 缓存遍历中当前 props 的值
+  // The new value
   let cur: any;
-  // 缓存遍历中旧 props 的值
+  // The old value
   let old: any;
-  // 缓存 VNode 的 dom 元素
+  // The VNode's DOM element
   const elm = vnode.elm;
-  // 获取旧 VNode 的 props 属性
+  // The old VNode's props
   let oldProps = oldVnode.data ? oldVnode.data.props : undefined;
-  // 获取新 VNode 的 props 属性
+  // The new VNode's props
   let props = vnode.data ? vnode.data.props : undefined;
 
-  // 如果新旧 VNode 都没有 props 属性，直接返回
+  // Nothing to do when neither VNode has props
   if (!oldProps && !props) return;
-  // 如果新旧 VNode 的 props 属性完全一样，直接返回
+  // Nothing to do when both point at the same props object
   if (oldProps === props) return;
-  //  如果旧 VNode 没有 props，将其设置为空对象
+  // Default the old props to an empty object
   oldProps = oldProps || {};
-  //  如果新 VNode 没有 props，将其设置为空对象
+  // Default the new props to an empty object
   props = props || {};
 
-  // 遍历新 VNode 的 props
+  // Walk the new VNode's props
   for (key in props) {
-    // 缓存当前 prop 属性的值
+    // The new value
     cur = props[key];
-    // 缓存旧 VNode 中同名 prop 的值
+    // The old value for the same name
     old = oldProps[key];
-    // 如果新旧 prop 值不同，同时当 dom 是含有 value 属性的元素（如：input），当前 value 值和当前 prop 值不同时，将值设置为当前 prop 的值
+    // Write when the values differ — and for elements carrying a live `value` (an input, say), only when the element's current value differs too, so typing is not clobbered
     if (old !== cur && (key !== 'value' || (elm as any)[key] !== cur)) {
       (elm as any)[key] = cur;
     }

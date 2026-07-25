@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { readFileAsArrayBuffer, readFileAsDataURL, readFileAsText, readFileAsUint8Array } from '@/utils';
 
-/** 最小 FileReader 替身：按 mode 决定回调走 load / error / abort 哪条出口 */
+/** A minimal FileReader stand-in: `mode` decides whether it exits via load, error or abort */
 type Mode = 'load' | 'error' | 'abort';
 let mode: Mode = 'load';
 let payload: unknown = null;

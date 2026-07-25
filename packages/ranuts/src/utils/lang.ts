@@ -117,11 +117,9 @@ export const resolveLocale = (options: ResolveLocaleOptions): string => {
 
   const sources: Array<string | undefined | null> = [];
 
-  if (query) {
-    // Imported lazily-ish via a local read so this module stays usable in Node: both
-    // helpers already return empty results when there is no document/window.
-    sources.push(getAllQueryString(url)[query]);
-  }
+  // Every source below returns an empty result rather than throwing when its global is
+  // missing, so the chain stays usable under SSR and in tests.
+  if (query) sources.push(getAllQueryString(url)[query]);
   if (cookie) sources.push(getCookieByName(cookie));
   if (storageKey) sources.push(localStorageGetItem(storageKey));
   if (useNavigator && typeof navigator !== 'undefined') {

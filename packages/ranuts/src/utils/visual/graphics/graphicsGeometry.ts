@@ -12,26 +12,26 @@ export class GraphicsGeometry {
   private dirty = false;
   public shapeIndex = 0;
   /**
-   * 每个 batchPart 代表一个 fill 或者一个 stroke
+   * Each batchPart is one fill or one stroke
    */
   public batchParts: BatchPart[] = [];
   /**
-   * 顶点数组，每 2 个元素代表一个顶点
+   * Vertex array; every 2 elements are one vertex
    */
   public vertices = new CustomFloatArray();
   /**
-   * 顶点下标数组，每个元素代表一个顶点下标
+   * Index array; each element is one vertex index
    */
   public indices = new CustomIntArray();
   public drawShape(shape: Shape, fillStyle: Fill, lineStyle: Line): void {
     const data = new GraphicsData(shape, fillStyle, lineStyle);
     this.graphicsData.push(data);
-    // 新增了图形，需要重新构建顶点 / 三角剖分，否则 GPU 后端拿不到任何几何数据
+    // A shape was added, so vertices and triangulation must be rebuilt — otherwise the GPU backends get no geometry at all
     this.dirty = true;
   }
   /**
-   * @param p 待检测点
-   * @returns {boolean} 待检测点是否落在某一个子图形内
+   * @param p the point to test
+   * @returns {boolean} whether the point falls inside one of the sub-shapes
    */
   public containsPoint(p: Point): boolean {
     for (let i = 0; i < this.graphicsData.length; i++) {
@@ -46,7 +46,7 @@ export class GraphicsGeometry {
     return false;
   }
   /**
-   * 将所有子图形都转化成顶点并且进行三角剖分
+   * Turn every sub-shape into vertices and triangulate them
    */
   public buildVerticesAndTriangulate(): void {
     if (!this.dirty) return;
@@ -65,8 +65,9 @@ export class GraphicsGeometry {
   }
   public clear(): void {
     this.graphicsData = [];
-    // 同时清空已构建的顶点 / 索引 / batchPart，并把构建游标归零，
-    // 否则 clear 后重绘会在旧数据基础上累加，导致大数组里残留已删除的图形
+    // Also clear the built vertices / indices / batchParts and reset the build cursor —
+    // otherwise redrawing after a clear accumulates on top of the old data and the big array
+    // keeps rendering shapes that were deleted
     this.vertices.clear();
     this.indices.clear();
     this.batchParts = [];

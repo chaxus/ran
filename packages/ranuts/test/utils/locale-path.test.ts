@@ -93,7 +93,7 @@ describe('createLocalePath — sub-directory deployment', () => {
 
   it('only strips the base at the start, not wherever it appears', () => {
     const nested = createLocalePath({ locales: LOCALES, base: '/zh' });
-    // '/a/zh/b' 里的 '/zh' 不是 base，不能被剥掉
+    // The '/zh' inside '/a/zh/b' is not the base and must not be stripped
     expect(nested.stripLocale('/a/zh/b')).toBe('/zh/a/zh/b');
   });
 });

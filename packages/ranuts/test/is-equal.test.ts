@@ -1,9 +1,9 @@
 import { describe, expect, test } from 'vitest';
 import { isEqual } from '../src/utils/obj';
 
-describe('isEqual 函数测试', () => {
-  // 测试基本类型
-  test('基本类型比较', () => {
+describe('isEqual', () => {
+  // primitives
+  test('compares primitives', () => {
     expect(isEqual(1, 1)).toBe(true);
     expect(isEqual('a', 'a')).toBe(true);
     expect(isEqual(true, true)).toBe(true);
@@ -15,16 +15,16 @@ describe('isEqual 函数测试', () => {
     expect(isEqual(null, undefined)).toBe(false);
   });
 
-  // 测试特殊值
-  test('特殊值比较', () => {
+  // special values
+  test('compares special values', () => {
     expect(isEqual(NaN, NaN)).toBe(true);
     expect(isEqual(0, -0)).toBe(true);
     expect(isEqual(-0, -0)).toBe(true);
     expect(isEqual(0, 0)).toBe(true);
   });
 
-  // 测试数组
-  test('数组比较', () => {
+  // arrays
+  test('compares arrays', () => {
     expect(isEqual([1, 2, 3], [1, 2, 3])).toBe(true);
     expect(isEqual([1, 2, 3], [1, 2, 4])).toBe(false);
     expect(isEqual([1, 2, 3], [1, 2])).toBe(false);
@@ -33,8 +33,8 @@ describe('isEqual 函数测试', () => {
     expect(isEqual([1, [2, 3]], [1, [2, 4]])).toBe(false);
   });
 
-  // 测试对象
-  test('对象比较', () => {
+  // objects
+  test('compares objects', () => {
     expect(isEqual({}, {})).toBe(true);
     expect(isEqual({ a: 1 }, { a: 1 })).toBe(true);
     expect(isEqual({ a: 1, b: 2 }, { a: 1, b: 2 })).toBe(true);
@@ -44,8 +44,8 @@ describe('isEqual 函数测试', () => {
     expect(isEqual({ a: 1, b: { c: 3 } }, { a: 1, b: { c: 4 } })).toBe(false);
   });
 
-  // 测试嵌套对象
-  test('嵌套对象比较', () => {
+  // nested objects
+  test('compares nested objects', () => {
     const obj1 = { a: 1, b: { c: 2, d: [3, 4, { e: 5 }] } };
     const obj2 = { a: 1, b: { c: 2, d: [3, 4, { e: 5 }] } };
     const obj3 = { a: 1, b: { c: 2, d: [3, 4, { e: 6 }] } };
@@ -54,8 +54,8 @@ describe('isEqual 函数测试', () => {
     expect(isEqual(obj1, obj3)).toBe(false);
   });
 
-  // 测试日期对象
-  test('日期对象比较', () => {
+  // Date
+  test('compares Date objects', () => {
     const date1 = new Date('2023-01-01');
     const date2 = new Date('2023-01-01');
     const date3 = new Date('2023-01-02');
@@ -64,16 +64,16 @@ describe('isEqual 函数测试', () => {
     expect(isEqual(date1, date3)).toBe(false);
   });
 
-  // 测试正则表达式
-  test('正则表达式比较', () => {
+  // RegExp
+  test('compares regular expressions', () => {
     expect(isEqual(/abc/, /abc/)).toBe(true);
     expect(isEqual(/abc/g, /abc/g)).toBe(true);
     expect(isEqual(/abc/, /def/)).toBe(false);
     expect(isEqual(/abc/g, /abc/i)).toBe(false);
   });
 
-  // 测试 Map 对象
-  test('Map 对象比较', () => {
+  // Map
+  test('compares Maps', () => {
     const map1 = new Map([
       ['a', 1],
       ['b', 2],
@@ -91,8 +91,8 @@ describe('isEqual 函数测试', () => {
     expect(isEqual(map1, map3)).toBe(false);
   });
 
-  // 测试 Set 对象
-  test('Set 对象比较', () => {
+  // Set
+  test('compares Sets', () => {
     const set1 = new Set([1, 2, 3]);
     const set2 = new Set([1, 2, 3]);
     const set3 = new Set([1, 2, 4]);
@@ -101,8 +101,8 @@ describe('isEqual 函数测试', () => {
     expect(isEqual(set1, set3)).toBe(false);
   });
 
-  // 测试循环引用
-  test('循环引用比较', () => {
+  // circular references
+  test('compares circular references', () => {
     const obj1: any = { a: 1 };
     const obj2: any = { a: 1 };
     obj1.self = obj1;
@@ -118,8 +118,8 @@ describe('isEqual 函数测试', () => {
     expect(isEqual(arr1, arr2)).toBe(true);
   });
 
-  // 测试混合对象
-  test('混合类型对象比较', () => {
+  // mixed structures
+  test('compares mixed-type objects', () => {
     const obj1 = {
       a: 1,
       b: 'string',

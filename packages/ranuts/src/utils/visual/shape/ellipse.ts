@@ -1,7 +1,7 @@
 import { Shape } from '@/utils/visual/shape/shape';
 import { SHAPE_TYPE } from '@/utils/visual/enums';
 import type { Point } from '@/utils/visual/vertex/point';
-// 椭圆类，继承自 Shape 类
+// Ellipse, extending Shape
 export class Ellipse extends Shape {
   public x: number;
   public y: number;

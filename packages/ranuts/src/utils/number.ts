@@ -4,7 +4,7 @@ interface ComputeNumberResult {
   next: (a: string, b: number) => ComputeNumberResult;
 }
 /**
- * @description: 百分比转换成数字
+ * @description: Convert a percentage string into a number
  * @param {string} str
  * @return {*}
  */
@@ -19,7 +19,7 @@ export const perToNum = (str: string = ''): number => {
 };
 
 /**
- * @description: 限制最大和最小值
+ * @description: Clamp a value between a minimum and a maximum
  * @return {*}
  */
 export const range = (num: number, min: number = 0, max: number = 1): number => {
@@ -27,21 +27,21 @@ export const range = (num: number, min: number = 0, max: number = 1): number => 
 };
 
 /**
- * 数字运算（主要用于小数点精度问题）
- * @param {number} a 前面的值
- * @param {"+"|"-"|"*"|"/"} type 计算方式
- * @param {number} b 后面的值
+ * Arithmetic that works around floating-point precision.
+ * @param {number} a left operand
+ * @param {"+"|"-"|"*"|"/"} type operation
+ * @param {number} b right operand
  * @example
  * ```js
- * // 可链式调用
+ * // chainable
  * const res = computeNumber(1.3, "-", 1.2).next("+", 1.5).next("*", 2.3).next("/", 0.2).result;
  * console.log(res);
  * ```
  */
 export class Mathjs {
   /**
-   * 获取数字小数点的长度
-   * @param {number} n 数字
+   * Number of digits after the decimal point
+   * @param {number} n the number
    */
   getDecimalLength = (n: number): number => {
     const [_, decimal] = n.toString().split('.');
@@ -81,19 +81,19 @@ export class Mathjs {
     return this.handleMethod(a, b)('-');
   };
 }
-// 数字运算
+// Arithmetic
 export function mathjs(a: number, type: string, b: number): ComputeNumberResult {
   /**
-   * 获取数字小数点的长度
-   * @param {number} n 数字
+   * Number of digits after the decimal point
+   * @param {number} n the number
    */
   function getDecimalLength(n: number) {
     const [_, decimal] = n.toString().split('.');
     return decimal ? decimal.length : 0;
   }
   /**
-   * 修正小数点
-   * @description 防止出现 `33.33333*100000 = 3333332.9999999995` && `33.33*10 = 333.29999999999995` 这类情况做的处理
+   * Correct the decimal point
+   * @description Guards against results like `33.33333*100000 = 3333332.9999999995` and `33.33*10 = 333.29999999999995`
    * @param {number} n
    */
   const amend = (n: number, precision = 15) => parseFloat(Number(n).toPrecision(precision));
@@ -121,12 +121,12 @@ export function mathjs(a: number, type: string, b: number): ComputeNumberResult 
   result = amend(result);
 
   return {
-    /** 计算结果 */
+    /** the result so far */
     result,
     /**
-     * 继续计算
-     * @param {"+"|"-"|"*"|"/"} nextType 继续计算方式
-     * @param {number} nextValue 继续计算的值
+     * Continue the calculation
+     * @param {"+"|"-"|"*"|"/"} nextType next operation
+     * @param {number} nextValue next operand
      */
     next: (nextType: string, nextValue: number) => {
       return mathjs(result, nextType, nextValue);
@@ -155,7 +155,7 @@ export const transformNumber = (value: string, locale = 'zh-CN', precision = 2, 
   return Number(formattedValue).toFixed(fixed) + units[unitIndex];
 };
 
-// 给数字添加符号
+// Prefix a number with its sign
 export const addNumSym = (value: string | number, flag?: string | number): string => {
   if (toString(value).startsWith('+') || toString(value).startsWith('-')) {
     return toString(value);
@@ -166,10 +166,11 @@ export const addNumSym = (value: string | number, flag?: string | number): strin
   return Number(value || 0) > 0 ? `+${toString(value)}` : toString(value);
 };
 
-/* ── 自然语言里的数字 ──────────────────────────────────────────────────────
- * 解析人写给人看的序号：「第二十三章」「Chapter XIV」「Part Three」。
- * 三个解析器统一约定：**无法完整解析就返回 null**，绝不返回猜测值——
- * 这类解析多用于「这行是不是标题」的判断，一个错误的数字会污染整条序列校验。
+/* ── Numbers written for humans ────────────────────────────────────────────
+ * Parse ordinals as people write them: 「第二十三章」, "Chapter XIV", "Part Three".
+ * All three parsers share one rule: **return null unless the whole input parsed**, never a
+ * guess. These are mostly used to decide "is this line a heading", and one wrong number
+ * poisons the entire sequence check.
  */
 
 const CN_DIGITS: Record<string, number> = {
@@ -194,15 +195,16 @@ const CN_UNITS: Record<string, number> = {
 };
 
 /**
- * @description: 中文数字转阿拉伯数字，支持「十五」「二十三」「一百零三」「一千零一」「三万」，
- * 简繁通用（万/萬），全角数字先归一化。混入无法识别的字符时返回 null。
+ * @description: Chinese numerals to Arabic, covering 「十五」「二十三」「一百零三」「一千零一」「三万」.
+ * Simplified and traditional alike (万/萬); full-width digits are normalised first. Returns
+ * null when an unrecognised character is present.
  * @param {string} value
  * @return {number | null}
  * @example
  * ```ts
  * parseChineseNumber('二十三'); // 23
  * parseChineseNumber('一百零三'); // 103
- * parseChineseNumber('第三章'); // null（含非数字字符，请先截出编号段）
+ * parseChineseNumber('第三章'); // null — contains non-numeral characters, slice the number out first
  * ```
  */
 export const parseChineseNumber = (value: string): number | null => {
@@ -216,7 +218,7 @@ export const parseChineseNumber = (value: string): number | null => {
     if (CN_DIGITS[char] !== undefined) {
       current = CN_DIGITS[char];
     } else if (CN_UNITS[char] !== undefined) {
-      // 「十五」的「十」前面没有数字，按 1 处理
+      // In 「十五」 the 「十」 has no digit before it, so it counts as 1
       section += (current || (char === '十' ? 1 : 0)) * CN_UNITS[char];
       current = 0;
     } else if (char === '万' || char === '萬') {
@@ -241,7 +243,7 @@ const ROMAN_VALUES: Record<string, number> = {
 };
 
 /**
- * @description: 罗马数字转阿拉伯数字（大小写皆可，按减法记法处理 IV / IX）。非法输入返回 null。
+ * @description: Roman numerals to Arabic (either case, handling subtractive forms such as IV / IX). Returns null for invalid input.
  * @param {string} value
  * @return {number | null}
  * @example
@@ -290,8 +292,8 @@ const EN_NUMBER_WORDS: Record<string, number> = {
 };
 
 /**
- * @description: 英文序号转数字：阿拉伯数字 / 英文数词（one–twenty）/ 罗马数字，依次尝试。
- * 都不匹配返回 null。
+ * @description: English ordinals to numbers, tried in order: Arabic digits, number words
+ * (one–twenty), then Roman numerals. Returns null when none match.
  * @param {string} value
  * @return {number | null}
  * @example

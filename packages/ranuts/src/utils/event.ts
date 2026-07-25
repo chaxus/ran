@@ -1,11 +1,13 @@
 /**
- * @description: EventManager — 以 AbortController 为底座的作用域事件注册表。
+ * @description: EventManager — a scoped listener registry built on AbortController.
  *
- * 解决的问题是「装上去的监听怎么全部摘下来」：手工 `removeEventListener` 必须持有
- * 与注册时**完全相同**的函数引用和 options，一旦中途包了一层箭头函数就再也摘不掉，
- * 于是组件反复挂载卸载就会漏监听。AbortController 把这件事变成一次 `abort()`。
+ * The problem it solves is removing every listener you installed. A manual
+ * `removeEventListener` needs the **exact** same function reference and options used to
+ * register — wrap the handler in an arrow function anywhere along the way and it can never
+ * be removed, so a component that mounts and unmounts repeatedly leaks listeners.
+ * AbortController reduces all of that to a single `abort()`.
  *
- * Web Component 里的用法：
+ * In a Web Component:
  *
  *   private _events = new EventManager();
  *
@@ -16,10 +18,10 @@
  *   }
  *
  *   disconnectedCallback() {
- *     this._events.abort(); // 摘掉全部监听，并为下一次 connect 重置
+ *     this._events.abort(); // remove every listener and reset for the next connect
  *   }
  *
- * 普通页面里的用法：
+ * In an ordinary page:
  *
  *   function initSection(container: HTMLElement) {
  *     const scope = new EventManager();
@@ -30,7 +32,7 @@
  *         handleAction(target.getAttribute('data-action'));
  *       });
  *
- *     return () => scope.abort(); // 区块销毁时调用
+ *     return () => scope.abort(); // call when the section is torn down
  *   }
  */
 export class EventManager {
@@ -40,7 +42,7 @@ export class EventManager {
     this.ac = new AbortController();
   }
 
-  /** 底层的 AbortSignal —— 需要时可直接透传给 addEventListener 的 options。 */
+  /** The underlying AbortSignal — pass it straight to addEventListener's options when needed. */
   get signal(): AbortSignal {
     return this.ac.signal;
   }
@@ -68,10 +70,10 @@ export class EventManager {
   }
 
   /**
-   * @description: 事件委托 —— 只在 `parent` 上挂一个监听，事件来自匹配 `selector`
-   * 的后代时才触发 `handler`。
+   * @description: Event delegation — one listener on `parent`, invoking `handler` only when
+   * the event came from a descendant matching `selector`.
    *
-   * handler 拿到原始事件和命中的元素两个参数。
+   * The handler receives the original event and the matched element.
    *
    *   scope.delegate(list, '.item', 'click', (ev, item) => {
    *     console.log(item.getAttribute('data-id'));
@@ -96,8 +98,8 @@ export class EventManager {
   }
 
   /**
-   * @description: 摘掉全部已注册的监听，并重置内部 AbortController。
-   * 可以重复调用；之后的 on() / delegate() 从一个干净的作用域重新开始。
+   * @description: Remove every registered listener and reset the internal AbortController.
+   * Safe to call repeatedly; later on() / delegate() calls start from a clean scope.
    */
   abort(): void {
     this.ac.abort();

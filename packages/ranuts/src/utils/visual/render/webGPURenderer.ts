@@ -12,27 +12,27 @@ export class WebGPURenderer extends BatchRenderer {
   private options: IApplicationOptions;
 
   /**
-   * 顶点的 webGPU buffer
+   * WebGPU buffer holding the vertices
    */
   private gpuVertexBuffer!: GPUBuffer;
 
   /**
-   * 顶点下标的 webGPU buffer
+   * WebGPU buffer holding the vertex indices
    */
   private gpuIndexBuffer!: GPUBuffer;
 
   /**
-   * 投影矩阵的 webGPU buffer
+   * WebGPU buffer holding the projection matrix
    */
   private projectionMatBuffer!: GPUBuffer;
 
   /**
-   * stage 的变换矩阵的 webGPU buffer
+   * WebGPU buffer holding the stage's transform matrix
    */
   private stageMatBuffer!: GPUBuffer;
 
   /**
-   * uniform 变量的 bind group
+   * Bind group for the uniforms
    */
 
   private uniformBindGroup!: GPUBindGroup;
@@ -41,7 +41,7 @@ export class WebGPURenderer extends BatchRenderer {
     super(options);
 
     if (options.debug) {
-      console.log('正在使用 %c webGPU ', 'color: #0072c6; background-color: #ffffff;font-size: 20px;', '渲染');
+      console.log('rendering with %c webGPU ', 'color: #0072c6; background-color: #ffffff;font-size: 20px;', '');
     }
 
     this.options = options;
@@ -186,15 +186,15 @@ export class WebGPURenderer extends BatchRenderer {
         a,
         b,
         0,
-        0, // 矩阵第一列
+        0, // first matrix column
         c,
         d,
         0,
-        0, // 矩阵第二列
+        0, // second matrix column
         tx,
         ty,
         1,
-        0, // 矩阵第三列
+        0, // third matrix column
       ]),
     );
   }
@@ -213,21 +213,21 @@ export class WebGPURenderer extends BatchRenderer {
         scaleX,
         0,
         0,
-        0, // 矩阵第一列
+        0, // first matrix column
         0,
         -scaleY,
         0,
-        0, // 矩阵第二列
+        0, // second matrix column
         -1,
         1,
         1,
-        0, // 矩阵第三列
+        0, // third matrix column
       ]),
     );
   }
 
   /**
-   * 初始化 pipeline
+   * Initialise the pipeline
    */
   private createPipeline() {
     this.pipeline = this.device.createRenderPipeline({
@@ -245,12 +245,12 @@ export class WebGPURenderer extends BatchRenderer {
             attributes: [
               {
                 shaderLocation: 0, // @location(0) a_position
-                format: 'float32x2', // 读 2 个 Float32，不用正交化
+                format: 'float32x2', // 2 Float32s, not normalised
                 offset: 0,
               },
               {
                 shaderLocation: 1, // @location(1) a_color
-                format: 'unorm8x4', // 读 4 个 UInt8 并且正交化
+                format: 'unorm8x4', // 4 UInt8s, normalised
                 offset: 2 * Float32Array.BYTES_PER_ELEMENT,
               },
             ],
@@ -289,7 +289,7 @@ export class WebGPURenderer extends BatchRenderer {
   }
 
   /**
-   * 初始化 device
+   * Initialise the device
    */
   private async initDevice() {
     // eslint-disable-next-line n/no-unsupported-features/node-builtins
@@ -308,7 +308,7 @@ export class WebGPURenderer extends BatchRenderer {
   }
 
   /**
-   * 初始化 renderPassDescriptor
+   * Initialise the renderPassDescriptor
    */
   private initRenderPassDescriptor() {
     const { backgroundColor = '', backgroundAlpha = 1 } = this.options;

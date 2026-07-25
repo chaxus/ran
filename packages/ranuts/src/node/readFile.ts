@@ -2,9 +2,9 @@ import fs from '@/node/fs';
 import type { Error, FilePromiseResult } from '@/node/fs';
 
 /**
- * @description: 读取一个文件，读取成功返回状态码和文件内容
- * @param {string} path 文件路径
- * @param {string} format 读取格式，默认utf-8
+ * @description: Read a file, returning a status code and the content on success
+ * @param {string} path file path
+ * @param {string} format encoding, defaults to utf-8
  * @return {Promise}
  */
 const readFile = (path: string, format: BufferEncoding = 'utf-8'): FilePromiseResult => {

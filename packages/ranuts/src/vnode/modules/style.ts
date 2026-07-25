@@ -3,57 +3,58 @@ import type { VNode, VNodeData } from '../vnode';
 export type VNodeStyle = Record<string, any>;
 
 /**
- *  在 snabbdom 中 style 有三个额外的生命周期 delayed, remove 和 destroy，主要是方便我们 css 动画的使用，而我们 terdom 是为了学习虚拟 dom
- * 的原理，所以这里我删除这两个生命周期，方便源码的阅读。
+ * snabbdom's style module has three extra lifecycles — delayed, remove and destroy — mainly
+ * to support CSS animation. This implementation exists to learn how a virtual DOM works, so
+ * they are left out to keep the source readable.
  * */
 
 let reflowForced = false;
 
 function updateStyle(oldVnode: VNode, vnode: VNode): void {
-  // 缓存遍历中当前新 VNode 中的 style
+  // The new style value during the loop
   let cur: any;
-  // 缓存遍历中当前 style 的 name
+  // The style name during the loop
   let name: string;
-  // 获取 dom 节点
+  // The DOM element
   const elm = vnode.elm;
-  // 获取旧 VNode 的 style
+  // The old VNode's style
   let oldStyle = (oldVnode.data as VNodeData).style;
-  // 获取新 VNode 的 style
+  // The new VNode's style
   let style = (vnode.data as VNodeData).style;
 
-  // 如果新旧 VNode 都没有设置 style，直接返回
+  // Nothing to do when neither VNode sets a style
   if (!oldStyle && !style) return;
-  // 如果新旧 VNode 的 style 完全相同，直接返回
+  // Nothing to do when both point at the same style object
   if (oldStyle === style) return;
-  // 如果没有旧 VNode 的 style，设置为空对象
+  // Default the old style to an empty object
   oldStyle = oldStyle || {};
-  // 如果没有新 VNode 的 style，设置为空对象
+  // Default the new style to an empty object
   style = style || {};
 
-  // 遍历旧 VNode 的 style
+  // Walk the old VNode's styles
   for (name in oldStyle) {
-    // 如果新 VNode 中没有相同 name 的 style
+    // Not present on the new VNode any more
     if (!style[name]) {
       if (name[0] === '-' && name[1] === '-') {
-        // 如果是以 -- 开头，代表是 css 变量，使用 removeProperty 删除
+        // A leading '--' marks a CSS custom property — drop it with removeProperty
         (elm as any).style.removeProperty(name);
       } else {
-        // 否则直接设为空
+        // otherwise clear it
         (elm as any).style[name] = '';
       }
     }
   }
 
-  // 遍历新 VNode 中的 style
+  // Walk the new VNode's styles
   for (name in style) {
-    // 缓存当前 style 的值
+    // The value to apply
     cur = style[name];
     if (cur !== oldStyle[name]) {
       if (name[0] === '-' && name[1] === '-') {
-        // 如果是以 -- 开头，代表是 css 变量，使用 setProperty 设置
+        // A leading '--' marks a CSS custom property — set it with setProperty
         (elm as any).style.setProperty(name, cur);
       } else {
-        // 否则直接设置
+        // otherwise assign it directly
         (elm as any).style[name] = cur;
       }
     }

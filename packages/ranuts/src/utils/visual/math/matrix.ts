@@ -8,12 +8,12 @@ interface TransformableObject {
   skew: Point;
   rotation: number;
 }
-// 在渲染引擎中，一切变换 (平移、旋转、缩放等) 都会转化成变换矩阵 (matrix)，
-// 因为 canvas 只接受矩阵变换，虽然 canvas 为了开发的便捷，也提供了 ctx.rotate,ctx.scale 等操作，
-// 但是 canvas 中的这些操作会直接转换成变换矩阵，而不像 DOM 那样，有锚点的概念，
-// 所以 canvas 提供的 rotate，scale 等操作，和 DOM 提供的 rotate，scale 的表现是不一样的。
-// Matrix 类将会提供各种各样的与矩阵操作相关的函数 (矩阵相乘，矩阵求逆等)，任何变换的叠加都将会转换成 matrix，方便我们调用 canvas 的指令。
-// 矩阵的操作
+// In this engine every transform (translate, rotate, scale, …) becomes a matrix, because a
+// matrix is all canvas accepts. Canvas does offer ctx.rotate / ctx.scale for convenience, but
+// those convert straight into a matrix and have no notion of an anchor point the way the DOM
+// does — so canvas's rotate and scale do not behave like the DOM's.
+// Matrix provides the matrix operations (multiplication, inversion, …); every composed
+// transform ends up here, ready to hand to a canvas instruction.
 export class Matrix {
   public a: number; // x scale
   public b: number; // y skew
@@ -43,7 +43,7 @@ export class Matrix {
   };
 
   /**
-   * 将当前矩阵右乘一个矩阵
+   * Post-multiply this matrix by another
    */
   public append = (m: Matrix): Matrix => {
     const { a: a0, b: b0, c: c0, d: d0, tx: tx0, ty: ty0 } = this;
@@ -231,9 +231,9 @@ export class Matrix {
     return transform;
   };
   /**
-   * 对某个点应用当前的变换矩阵
-   * @param p 某个点
-   * @returns {Point} 点 p 应用当前变换矩阵后得到的一个新的点
+   * Apply this transform to a point
+   * @param p the point
+   * @returns {Point} a new point, p transformed by this matrix
    */
   apply = (p: Point): Point => {
     const newPos = new Point();
@@ -248,9 +248,9 @@ export class Matrix {
   };
 
   /**
-   * 对某个点应用当前的变换矩阵的逆矩阵
-   * @param p 某个点
-   * @returns {Point} 点 p 应用当前变换矩阵的逆矩阵后得到的一个新的点
+   * Apply this transform's inverse to a point
+   * @param p the point
+   * @returns {Point} a new point, p transformed by the inverse of this matrix
    */
   applyInverse = (p: Point): Point => {
     const newPos = new Point();
@@ -267,7 +267,7 @@ export class Matrix {
   };
 
   /**
-   * 将当前矩阵左乘一个矩阵
+   * Pre-multiply this matrix by another
    */
   public prepend = (m: Matrix): Matrix => {
     const { a: a0, b: b0, c: c0, d: d0, tx: tx0, ty: ty0 } = m;

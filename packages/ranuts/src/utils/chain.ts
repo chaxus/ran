@@ -1,8 +1,8 @@
 /**
- * @description: 链式调用的 DOM 构建 API。
+ * @description: A chainable DOM builder.
  *
- * 独立成文件，让 `vnode` 入口可以复用同一份实现而不必牵入 `utils/dom.ts`
- * 的其余部分（`setFontSize2html` 会连带引入 `utils/device`）。
+ * Kept in its own file so the `vnode` entry can reuse one implementation without pulling in
+ * the rest of `utils/dom.ts` (`setFontSize2html` would drag in `utils/device`).
  */
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const SVG_TAG_NAMES = [
@@ -34,7 +34,7 @@ const SVG_TAG_NAMES = [
   'feColorMatrix',
 ];
 /**
- * @description: 链式调用的 dom 操作
+ * @description: Chainable DOM operations
  * (tag) (key value) (children)
  * @return {HTMLElement}
  */
@@ -46,7 +46,7 @@ export class Chain {
     this.listener = new Map();
   }
   /**
-   * @description: 创建元素
+   * @description: Create an element
    * @param {string} tagName
    * @param {ElementCreationOptions} options
    * @return {Chain}
@@ -58,7 +58,7 @@ export class Chain {
     return document.createElement(tagName, options);
   };
   /**
-   * @description: 设置当前元素的属性
+   * @description: Set an attribute on the current element
    * @param {string} name
    * @param {string} value
    * @return {Chain}
@@ -68,7 +68,7 @@ export class Chain {
     return this;
   };
   /**
-   * @description: 移除当前元素的属性
+   * @description: Remove an attribute from the current element
    * @param {string} name
    * @return {Chain}
    */
@@ -77,7 +77,7 @@ export class Chain {
     return this;
   };
   /**
-   * @description: 当前元素添加子元素
+   * @description: Append a child to the current element
    * @param {HTMLElement} child
    * @return {ChainElement}
    */
@@ -86,7 +86,7 @@ export class Chain {
     return this;
   };
   /**
-   * @description: 当前元素移除子元素
+   * @description: Remove a child from the current element
    * @param {HTMLElement} child
    * @return {Chain}
    */
@@ -95,7 +95,7 @@ export class Chain {
     return this;
   };
   /**
-   * @description: 给当前元素设置文本内容
+   * @description: Set the current element's text content
    * @param {string} text
    * @return {Chain}
    */
@@ -104,7 +104,7 @@ export class Chain {
     return this;
   };
   /**
-   * @description: 给当前元素设置样式
+   * @description: Set styles on the current element
    * @param {string} name
    * @param {string} value
    * @return {Chain}
@@ -113,7 +113,7 @@ export class Chain {
     this.element.style.setProperty(name, value);
     return this;
   };
-  // 根据不同的子元素类型，添加元素
+  // Append according to the child's type
   private addElementByType = (item: Chain | HTMLElement, parent: Element | DocumentFragment): void => {
     if (item instanceof Chain) {
       parent.appendChild(item.element);
@@ -123,7 +123,7 @@ export class Chain {
     }
   };
   /**
-   * @description: 给当前元素添加子元素
+   * @description: Append children to the current element
    * @return {Chain}
    */
   public addChild = (child: Chain | Chain[] | HTMLElement | HTMLElement[]): Chain => {
@@ -139,7 +139,7 @@ export class Chain {
     return this;
   };
   /**
-   * @description: 给当前元素添加事件监听
+   * @description: Add an event listener to the current element
    * @param {string} type
    * @param {EventListener} listener
    * @return {Chain}
@@ -163,7 +163,7 @@ export class Chain {
     return this;
   };
   /**
-   * @description: 移除当前元素的事件监听
+   * @description: Remove an event listener from the current element
    * @param {string} type
    * @return {Chain}
    */
@@ -182,7 +182,7 @@ export class Chain {
     return this;
   };
   /**
-   * @description: 移除当前元素的所有事件监听
+   * @description: Remove every event listener from the current element
    * @return {Chain}
    */
   public clearAllListener = (): Chain => {

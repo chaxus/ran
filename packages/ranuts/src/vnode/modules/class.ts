@@ -3,36 +3,36 @@ import type { VNode } from '../vnode';
 export type Classes = Record<string, boolean>;
 
 function updateClass(oldVnode: VNode, vnode: VNode): void {
-  // 用于缓存遍历中当前 class 属性的值
+  // The class flag during the loop
   let cur: any;
-  // 用于缓存遍历中当前 class 的 name
+  // The class name during the loop
   let name: string;
-  // 获取新 VNode 的 dom 元素
+  // The new VNode's DOM element
   const elm: Element = vnode.elm as Element;
-  // 获取旧 VNode 的 class 数据
+  // The old VNode's class map
   let oldClass = oldVnode.data && oldVnode.data.class;
-  // 获取新 VNode 的 class 数据
+  // The new VNode's class map
   let className = vnode.data && vnode.data.class;
 
-  // 如果新旧 VNode 都没有 class，直接返回
+  // Nothing to do when neither VNode has classes
   if (!oldClass && !className) return;
-  // 如果新旧 VNode 完全相同，直接返回
+  // Nothing to do when both point at the same object
   if (oldClass === className) return;
-  // 如果旧 VNode 没有 class，将其设置为空对象
+  // Default the old classes to an empty object
   oldClass = oldClass || {};
-  // 如果新 VNode 没有 class，将其设置为空对象
+  // Default the new classes to an empty object
   className = className || {};
 
-  // 遍历旧 VNode 的 class
+  // Walk the old VNode's classes
   for (name in oldClass) {
-    // 如果当前 class 旧 VNode 上有但新 VNode 没有，则删除该 VNode
+    // Remove any class the new VNode no longer declares
     if (oldClass[name] && !Object.prototype.hasOwnProperty.call(className, name)) {
       elm.classList.remove(name);
     }
   }
-  // 遍历新 Vnodde 的 class
+  // Walk the new VNode's classes
   for (name in className) {
-    // 如果新旧 VNode 的 class 值不同，则根据新 VNode 的 class 值是 true or false 来判断是新增还是删除 class
+    // When the flag changed, add it for true and remove it for false
     cur = className[name];
     if (cur !== oldClass[name]) {
       (elm.classList as any)[cur ? 'add' : 'remove'](name);

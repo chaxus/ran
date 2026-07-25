@@ -13,31 +13,31 @@ const createShader = (gl: WebGLRenderingContext, type: number, source: string): 
   } else {
     const err = gl.getShaderInfoLog(shader);
     gl.deleteShader(shader);
-    console.error(`编译 shader 错误：${err}`);
-    throw new Error(`编译 shader 错误：${err}`);
+    console.error(`shader compilation failed: ${err}`);
+    throw new Error(`shader compilation failed: ${err}`);
   }
 };
 
 const createProgram = (gl: WebGLRenderingContext, vertexShader: WebGLShader, fragmentShader: WebGLShader) => {
   const program = gl.createProgram() as WebGLProgram;
   if (!program) {
-    console.error(`创建 program 失败`);
-    throw new Error(`创建 program 失败`);
+    console.error(`failed to create the program`);
+    throw new Error(`failed to create the program`);
   }
 
-  gl.attachShader(program, vertexShader); // 内部会判断是 vertexShader 还是 fragmentShader
+  gl.attachShader(program, vertexShader); // attachShader works out the shader type itself
   gl.attachShader(program, fragmentShader);
 
   gl.linkProgram(program);
-  // 检查 link 结果
+  // Check the link result
   const linked = gl.getProgramParameter(program, gl.LINK_STATUS);
   if (!linked) {
     const err = gl.getProgramInfoLog(program);
-    console.error(`link 出错：${err}`);
+    console.error(`link failed: ${err}`);
     gl.deleteProgram(program);
     gl.deleteShader(vertexShader);
     gl.deleteShader(fragmentShader);
-    throw new Error(`link 出错：${err}`);
+    throw new Error(`link failed: ${err}`);
   }
 
   gl.useProgram(program);
@@ -46,29 +46,30 @@ const createProgram = (gl: WebGLRenderingContext, vertexShader: WebGLShader, fra
 };
 
 /**
- * 设置顶点属性布局。调用前需保证目标 ARRAY_BUFFER 已经绑定。
- * 顶点格式与共享批处理管线（BatchRenderer）一致：position(2×Float32) + color(4×Uint8, 归一化)，stride = BYTES_PER_VERTEX。
+ * Set the vertex attribute layout. The target ARRAY_BUFFER must already be bound.
+ * The vertex format matches the shared batching pipeline (BatchRenderer):
+ * position (2×Float32) + colour (4×Uint8, normalised), stride = BYTES_PER_VERTEX.
  */
 export const setupVertexLayout = (gl: WebGLRenderingContext, program: WebGLProgram): void => {
   const aPositionLoc = gl.getAttribLocation(program, `a_position`);
   gl.vertexAttribPointer(
-    aPositionLoc, // attribute 变量的 location
-    2, // 读 2 个单元
-    gl.FLOAT, //类型
-    false, //不需要正交化
-    BYTES_PER_VERTEX, //跨度 (12 个 byte)
-    0, // 从每组的第几个字节开始读
+    aPositionLoc, // location of the attribute
+    2, // read 2 components
+    gl.FLOAT, // type
+    false, // no normalisation
+    BYTES_PER_VERTEX, // stride (12 bytes)
+    0, // byte offset within each vertex
   );
   gl.enableVertexAttribArray(aPositionLoc);
 
   const aColorLoc = gl.getAttribLocation(program, `a_color`);
   gl.vertexAttribPointer(
-    aColorLoc, // attribute 变量的 location
-    4, // 读 4 个单元
-    gl.UNSIGNED_BYTE, //类型
-    true, //需要正交化
-    BYTES_PER_VERTEX, //跨度 (12 个 byte)
-    8, // 从每组的第几个字节开始读
+    aColorLoc, // location of the attribute
+    4, // read 4 components
+    gl.UNSIGNED_BYTE, // type
+    true, // normalise
+    BYTES_PER_VERTEX, // stride (12 bytes)
+    8, // byte offset within each vertex
   );
   gl.enableVertexAttribArray(aColorLoc);
 };
@@ -81,7 +82,7 @@ export const initShader = (renderer: WebGLRenderer): WebGLProgram => {
 
   const program = createProgram(gl, vertexShader, fragmentShader);
 
-  // 指定混合模式（premultiplied alpha，与 WebGPU 后端一致）
+  // Blend mode: premultiplied alpha, matching the WebGPU backend
   gl.enable(gl.BLEND);
   gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
 

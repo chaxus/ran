@@ -13,7 +13,7 @@ const defer = <T>(): { promise: Promise<T>; resolve: (v: T) => void; reject: (e:
 
 describe('QuestQueue', () => {
   it('starts a task as soon as it is added', async () => {
-    // 回归：旧实现 add() 只是入队，必须再手动调 running() 才会执行
+    // Regression: add() used to only enqueue — running() had to be called by hand to start anything
     const queue = new QuestQueue({ simultaneous: 2 });
     await expect(queue.add(async () => 'done')).resolves.toBe('done');
   });
@@ -40,7 +40,7 @@ describe('QuestQueue', () => {
   });
 
   it('runs tasks first-in-first-out', async () => {
-    // 回归：旧实现用 queue.pop()，实际是后进先出
+    // Regression: the old implementation used queue.pop(), making it LIFO
     const queue = new QuestQueue({ simultaneous: 1 });
     const order: number[] = [];
     await Promise.all([1, 2, 3].map((n) => queue.add(async () => void order.push(n))));
@@ -58,7 +58,7 @@ describe('QuestQueue', () => {
     const b = queue.add(async () => void started.push('b'));
 
     await Promise.resolve();
-    expect(started).toEqual(['a']); // b 还在排队
+    expect(started).toEqual(['a']); // b is still queued
 
     first.resolve('ok');
     await Promise.all([a, b]);

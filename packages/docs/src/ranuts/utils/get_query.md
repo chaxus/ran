@@ -53,7 +53,9 @@ console.log(`Page: ${page}, Limit: ${limit}`);
 
 ## Notes
 
-1. **Same functionality**: `getQuery` has the same functionality as `getAllQueryString`, can be used interchangeably.
-2. **URL decoding**: Parameter values are automatically URL decoded.
-3. **Server-side environment**: Returns empty object `{}` in server-side environments (no `window` object).
-4. **Default URL**: If `url` parameter is not provided, defaults to `window.location.href`.
+1. **Alias of `getAllQueryString`.** The two used to be byte-identical copies of the same
+   body; `getQuery` now forwards, so a fix lands in both. See
+   [`getAllQueryString`](/src/ranuts/utils/get_all_query_string) for the parsing rules.
+2. **Bare flags are preserved** as `''` since 0.3. Read them with
+   [`queryFlag`](/src/ranuts/utils/query_flag).
+3. **Server-side environment**: returns `{}` when there is no `window` and no `url` was passed.

@@ -5,7 +5,7 @@ import { compose } from '../../src/utils/compose';
 describe('utils', () => {
   it('compose: compose', async () => {
     /**
-     * @description: 创建一个异步函数
+     * @description: Build an async function
      * @param {number} ms
      * @return {*}
      */
@@ -40,7 +40,7 @@ describe('utils', () => {
     });
 
     await compose(stack)({});
-    // 最后输出数组是 [1,2,3,4,5,6]
+    // The final array is [1,2,3,4,5,6]
     expect(arr).toEqual(expect.arrayContaining([1, 2, 3, 4, 5, 6]));
   });
   it('compose: compose catch downstream errors', async () => {
@@ -65,7 +65,7 @@ describe('utils', () => {
     });
 
     await compose(stack)({});
-    // 输出顺序 是 [ 1, 6, 4, 2, 3 ]
+    // The output order is [1, 6, 4, 2, 3]
     expect(arr).toEqual([1, 6, 4, 2, 3]);
   });
 });

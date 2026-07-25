@@ -8,41 +8,41 @@ const colonChar = 58;
 const xChar = 120;
 
 function updateAttrs(oldVnode: VNode, vnode: VNode): void {
-  // 用于缓存 attrs 的 name
+  // Attribute name during the loop
   let key: string;
-  // 用于缓存 Vnode 的 dom
+  // The VNode's DOM element
   const elm: Element = vnode.elm as Element;
-  // 用于缓存旧 VNode 的 attrs
+  // The old VNode's attrs
   let oldAttrs = oldVnode.data && oldVnode.data.attrs;
-  // 用于缓存新 VNode 的 attrs
+  // The new VNode's attrs
   let attrs = vnode.data && vnode.data.attrs;
 
-  // 如果新旧 VNode 都没有 attrs 属性，直接返回
+  // Nothing to do when neither VNode has attrs
   if (!oldAttrs && !attrs) return;
-  // 如果新旧 VNode 的 attrs 属性相同，直接返回
+  // Nothing to do when both point at the same attrs object
   if (oldAttrs === attrs) return;
-  //  如果旧 VNode 没有 attrs，将其设置为空对象
+  // Default the old attrs to an empty object
   oldAttrs = oldAttrs || {};
-  //  如果新 VNode 没有 attrs，将其设置为空对象
+  // Default the new attrs to an empty object
   attrs = attrs || {};
 
-  // 遍历新 VNode 的 attrs
+  // Walk the new VNode's attrs
   for (key in attrs) {
-    // 获取当前 attrs 的值
+    // The new value
     const cur = attrs[key];
-    // 获取旧 VNode 对应的 attrs 的值
+    // The old value for the same name
     const old = oldAttrs[key];
-    // 如果新旧 VNode 的 attrs 值不相同
+    // Only when the two differ
     if (old !== cur) {
-      // 如果新 VNode 的 attrs 值为 true
+      // A value of true
       if (cur === true) {
-        // 通过 setAttribute 设置为空字符串
+        // becomes setAttribute(name, '')
         elm.setAttribute(key, '');
       } else if (cur === false) {
-        // 如果新 VNode 的 attrs 值为 false，则删除 key
+        // A value of false removes the attribute
         elm.removeAttribute(key);
       } else {
-        // 设置 svg 的属性
+        // Namespaced SVG attributes
         if (key.charCodeAt(0) !== xChar) {
           elm.setAttribute(key, cur as any);
         } else if (key.charCodeAt(3) === colonChar) {
@@ -52,15 +52,15 @@ function updateAttrs(oldVnode: VNode, vnode: VNode): void {
           // Assume xlink namespace
           elm.setAttributeNS(xlinkNS, key, cur as any);
         } else {
-          // 通过 setAttribute 设置值
+          // Plain setAttribute
           elm.setAttribute(key, `${cur}`);
         }
       }
     }
   }
-  // 遍历旧 VNode 的 attrs
+  // Walk the old VNode's attrs
   for (key in oldAttrs) {
-    // 如果新 VNode 的 attrs 中没有相同的 key，则直接删除该 attrs 属性
+    // Remove any attribute the new VNode no longer declares
     if (!(key in attrs)) {
       elm.removeAttribute(key);
     }

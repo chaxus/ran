@@ -365,11 +365,7 @@ export interface Handoff<T> {
  * const file = await handoff.take(); // null on a reload — the value is consumed
  * ```
  */
-export const createHandoff = <T>({
-  dbName,
-  storeName = 'files',
-  key = 'pending',
-}: HandoffOptions): Handoff<T> => {
+export const createHandoff = <T>({ dbName, storeName = 'files', key = 'pending' }: HandoffOptions): Handoff<T> => {
   /**
    * The store is created in `onupgradeneeded` at version 1, so whichever side opens the
    * database first sets it up and the other finds it already there.

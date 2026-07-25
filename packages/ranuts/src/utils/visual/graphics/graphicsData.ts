@@ -7,7 +7,7 @@ export class GraphicsData {
   public lineStyle: Line;
   public fillStyle: Fill;
   /**
-   * 顶点数组，每 2 个元素代表一个顶点
+   * Vertex array; every 2 elements are one vertex
    */
   public vertices: number[] = [];
   constructor(shape: Shape, fillStyle: Fill, lineStyle: Line) {

@@ -3,8 +3,8 @@ import { initShader, setupVertexLayout } from '@/utils/visual/render/utils/webgl
 import { toRgbArray } from '@/utils/visual/render/utils/index';
 import type { IApplicationOptions } from '@/utils/visual/types';
 
-// WebGL 后端与 WebGPU 后端共用 BatchRenderer 的批处理管线（三角剖分 → 打包大数组），
-// 仅在 draw / updateBuffer / 矩阵 uniform 上使用各自的图形 API。
+// The WebGL and WebGPU backends share BatchRenderer's batching pipeline (triangulate → pack
+// the big array); only draw / updateBuffer / matrix uniforms use each one's own graphics API.
 export class WebGLRenderer extends BatchRenderer {
   public gl: WebGLRenderingContext;
   private program: WebGLProgram;
@@ -19,17 +19,17 @@ export class WebGLRenderer extends BatchRenderer {
     super(options);
 
     if (options.debug) {
-      console.log('正在使用 %c webGL ', 'color: #881910; background-color: #ffffff;font-size: 20px;', '渲染');
+      console.log('rendering with %c webGL ', 'color: #881910; background-color: #ffffff;font-size: 20px;', '');
     }
 
     this.gl = this.canvasEle.getContext('webgl', { antialias: true }) as WebGLRenderingContext;
 
-    // 共享批处理管线使用 Uint32 顶点索引，WebGL1 需要开启该扩展
+    // The shared pipeline uses Uint32 vertex indices, which WebGL1 needs this extension for
     this.gl.getExtension('OES_element_index_uint');
 
     this.program = initShader(this);
 
-    // 创建并绑定顶点 / 索引 buffer，设置顶点属性布局
+    // Create and bind the vertex / index buffers and set the attribute layout
     this.glVertexBuffer = this.gl.createBuffer() as WebGLBuffer;
     this.glIndexBuffer = this.gl.createBuffer() as WebGLBuffer;
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.glVertexBuffer);

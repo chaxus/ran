@@ -1,10 +1,18 @@
+/**
+ * These image helpers now live in ranuts (`getImage` / `cutRound` / `opacity` /
+ * `getMatrix`). The test stays here because it needs a DOM — ranuts' own suite runs
+ * in the node environment with no jsdom, so it could only cover the pure `getMatrix`.
+ *
+ * `getBase64Image` is gone: ranuts already had `readFileAsDataURL` (and
+ * `convertImageToBase64`) doing exactly the same FileReader dance.
+ */
 import { describe, expect, it, vi } from 'vitest';
-import { getBase64Image, getImage, getMatrix } from '@/utils/image';
+import { getImage, getMatrix, readFileAsDataURL } from 'ranuts/utils';
 
-describe('utils/image', () => {
+describe('ranuts image helpers', () => {
   it('creates a normalized gaussian matrix', () => {
     const matrix = getMatrix(1, 1);
-    const total = matrix.reduce((sum, value) => sum + value, 0);
+    const total = matrix.reduce((sum: number, value: number) => sum + value, 0);
 
     expect(matrix).toHaveLength(9);
     expect(total).toBeCloseTo(1);
@@ -64,8 +72,6 @@ describe('utils/image', () => {
   it('reads files as base64 data URLs', async () => {
     const file = new File(['ranui'], 'ranui.txt', { type: 'text/plain' });
 
-    await expect(getBase64Image(file)).resolves.toEqual({
-      base64: 'data:text/plain;base64,cmFudWk=',
-    });
+    await expect(readFileAsDataURL(file)).resolves.toBe('data:text/plain;base64,cmFudWk=');
   });
 });

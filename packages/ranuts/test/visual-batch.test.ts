@@ -5,8 +5,9 @@ import { BatchRenderer } from '@/utils/visual/render/batchRenderer';
 import { BYTES_PER_VERTEX } from '@/utils/visual/enums';
 import type { IApplicationOptions } from '@/utils/visual/types';
 
-// 用一个不依赖 GPU 的假渲染器驱动共享批处理管线（updateChildrenTransform → buildArray
-// → Graphics.buildBatches → 三角剖分 → packData），从而在 node 环境下测真实的几何/打包逻辑。
+// A GPU-free fake renderer drives the shared batching pipeline (updateChildrenTransform →
+// buildArray → Graphics.buildBatches → triangulation → packData), so the real geometry and
+// packing logic can be tested in the node environment.
 class FakeRenderer extends BatchRenderer {
   public drawCount = 0;
   protected draw(): void {
@@ -49,12 +50,12 @@ describe('visual/BatchRenderer pipeline', () => {
     expect(r.drawCount).toBe(1);
     expect(r.vCount).toBeGreaterThan(0);
     expect(r.iCount).toBeGreaterThan(0);
-    // 索引必须成三角形组，且都指向有效顶点
+    // Indices must come in triangles and all point at valid vertices
     expect(r.iCount % 3).toBe(0);
     for (let i = 0; i < r.iCount; i++) {
       expect(r.indices[i]).toBeLessThan(r.vCount);
     }
-    // 大数组每个顶点占 BYTES_PER_VERTEX 字节（position 2×f32 + color 1×u32）
+    // Each vertex takes BYTES_PER_VERTEX bytes in the big array (position 2×f32 + colour 1×u32)
     const floatsPerVertex = BYTES_PER_VERTEX / 4;
     expect(r.verts.length).toBeGreaterThanOrEqual(r.vCount * floatsPerVertex);
   });
@@ -63,7 +64,7 @@ describe('visual/BatchRenderer pipeline', () => {
     const r = new FakeRenderer(opts);
     const stage = filledRect();
     r.render(stage);
-    r.render(stage); // 第二帧走 updateArray 分支，不应崩
+    r.render(stage); // the second frame takes the updateArray branch and must not crash
     expect(r.drawCount).toBe(2);
   });
 
@@ -77,7 +78,7 @@ describe('visual/BatchRenderer pipeline', () => {
     const afterFirst = r.iCount;
     expect(afterFirst).toBeGreaterThan(0);
 
-    // 首帧之后再添加节点：必须触发重建，索引数增加
+    // Adding a node after the first frame must trigger a rebuild, growing the index count
     const g2 = new Graphics();
     g2.beginFill('#ff0000').drawRect(0, 0, 10, 10).endFill();
     stage.addChild(g2);
@@ -114,18 +115,18 @@ describe('visual/BatchRenderer pipeline', () => {
 
     g.clear();
     r.render(stage);
-    expect(r.iCount).toBe(0); // 清空后重建，没有残留
+    expect(r.iCount).toBe(0); // rebuilt after clearing, with nothing left over
 
     g.beginFill('#00ff00').drawCircle(0, 0, 20).endFill();
     r.render(stage);
-    expect(r.iCount).toBeGreaterThan(0); // 重绘后又有内容
+    expect(r.iCount).toBeGreaterThan(0); // content is back after redrawing
   });
 
   it('builds independently per renderer instance (version compare, not a shared flag)', () => {
     const r1 = new FakeRenderer(opts);
     r1.render(filledRect());
 
-    // 旧实现里 needBuildArr 是 static，r1 构建后会把它置 false，导致 r2 跳过构建、缓冲区为空。
+    // needBuildArr used to be static, so r1's build set it false and r2 skipped its own build, leaving an empty buffer.
     const r2 = new FakeRenderer(opts);
     r2.render(filledRect());
 
@@ -143,7 +144,7 @@ describe('visual/Transform via Container', () => {
   it('keeps a finite world transform after scale/skew/rotation (ObservablePoint forwards x/y)', () => {
     const c = new Container();
     c.position.set(100, 50);
-    c.scale.set(2, 3); // 旧 bug：set 不转发 x/y → onScaleChange 收到 undefined → 整个矩阵 NaN
+    c.scale.set(2, 3); // old bug: set did not forward x/y, so onScaleChange got undefined and the whole matrix became NaN
     c.skew.set(0.1, 0.2);
     c.rotation = Math.PI / 6;
     c.updateTransform();
@@ -152,7 +153,7 @@ describe('visual/Transform via Container', () => {
     for (const v of [wt.a, wt.b, wt.c, wt.d, wt.tx, wt.ty]) {
       expect(Number.isFinite(v)).toBe(true);
     }
-    // 平移（pivot 为 0）应原样体现在世界矩阵里
+    // With a pivot of 0, the translation should appear verbatim in the world matrix
     expect(wt.tx).toBeCloseTo(100, 6);
     expect(wt.ty).toBeCloseTo(50, 6);
   });

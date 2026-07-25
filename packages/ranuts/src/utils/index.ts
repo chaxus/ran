@@ -44,8 +44,10 @@ import {
   getQuery,
   getWindow,
   imageRequest,
+  isInIframe,
   isSafari,
   networkSpeed,
+  queryFlag,
   removeGhosting,
   requestUrlToBuffer,
   retain,
@@ -89,7 +91,8 @@ import { AudioRecorder } from './audioRecorder';
 import { createSignal, subscribers } from './signal';
 import { audioVendor, canvasVendor, webglVendor } from './behavior';
 import { TOTP } from './totp/totp';
-import { localStorageGetItem, localStorageSetItem } from './storage';
+import { createStore, localStorageGetItem, localStorageRemoveItem, localStorageSetItem } from './storage';
+import type { JsonStore } from './storage';
 import { compose } from './compose';
 import { handleConsole } from './console';
 import { debounce } from './debounce';
@@ -104,22 +107,49 @@ import {
   setFontSize2html,
 } from './dom';
 import { handleError } from './error';
-import { convertImageToBase64, isImageSize } from './img';
+import { EventManager } from './event';
+import { circ, cubic, expo, quad, quart, quint, sine } from './tween';
+import type { EasingFn, SpeedType } from './tween';
+import { convertImageToBase64, cutRound, getImage, getMatrix, isImageSize, opacity } from './img';
+import type { ImgSource } from './img';
+import {
+  fanShapedByArc,
+  getAngle,
+  getArcPointerByDeg,
+  getLinearGradient,
+  getTangentByPointer,
+  roundRectByArc,
+} from './canvas';
+import { ADOPTED_SHEET_MARKER, ADOPTED_STYLE_MARKER, adoptSheetText, adoptStyles } from './style';
 import { memoize, once, singleFlight } from './memoize';
 import type { SingleFlight } from './memoize';
-import { WebDB } from './idb';
-import type { IDBResult, IDBStoreSchema, WebDBOptions } from './idb';
+import { WebDB, createHandoff } from './idb';
+import type { Handoff, HandoffOptions, IDBResult, IDBStoreSchema, WebDBOptions } from './idb';
 import { buildOffsets, indexForOffset, segmentByRanges } from './segment';
 import type { OffsetRange, Segment } from './segment';
-import { detectLanguage, navigatorLanguage } from './lang';
+import { detectLanguage, navigatorLanguage, resolveLocale } from './lang';
 import { createLocalePath } from './localePath';
 import type { LocalePath, LocalePathConfig, LocaleRoute } from './localePath';
-import type { TextLanguage } from './lang';
+import type { ResolveLocaleOptions, TextLanguage } from './lang';
 import { readFileAsArrayBuffer, readFileAsDataURL, readFileAsText, readFileAsUint8Array } from './file';
 import { WorkerClient } from './worker';
 import type { WorkerClientOptions, WorkerResponseBase } from './worker';
 import { isUrlCached, networkAllowsDownload, prefetchUrl, prefetchUrls, prefetchWhenIdle, whenIdle } from './prefetch';
 import type { NetworkAllowanceOptions, PrefetchOptions, WhenIdleOptions } from './prefetch';
+import { TimeoutError, deferred, delay, withTimeout, withTimeoutFallback } from './async';
+import type { Deferred } from './async';
+import {
+  ZIP_DEFLATE,
+  ZIP_STORED,
+  createZip,
+  crc32,
+  inflateRaw,
+  readZipEntries,
+  readZipEntry,
+  rewriteZip,
+  zipHasEntry,
+} from './zip';
+import type { RewriteZipOptions, ZipEntry } from './zip';
 import { Monitor } from './monitor';
 import { getStatus, status } from './network';
 import { noop } from './noop';
@@ -128,7 +158,8 @@ import { QuestQueue } from './queue';
 import { createData, getReportUrl, report, setReportUrl } from './report';
 import type { BeaconPayload, ReportConfig } from './report';
 import { handleFetchHook, handleXhrHook } from './request';
-import { scriptOnLoad } from './script';
+import { loadScript, scriptOnLoad } from './script';
+import type { LoadScriptOptions } from './script';
 import { throttle } from './throttle';
 import type { Throttled } from './throttle';
 import { formatDate, performanceTime, timeFormat, timestampToTime } from './time';
@@ -147,13 +178,22 @@ import {
   Color,
   ColorScheme,
   FMT,
+  HEX_COLOR_REGEX,
   Hsl,
   Hsla,
+  RGBA_REGEX,
+  RGB_REGEX,
   Rgb,
   Rgba,
   componentToHex,
+  hexToAlpha,
+  hexToHsb,
+  hexToHsv,
   hexToRgb,
+  hsbToHsl,
   hsbToRgb,
+  hslToHsb,
+  hslToHsv,
   hslToRgb,
   hsvToHsl,
   hsvToRgb,
@@ -162,6 +202,10 @@ import {
   rgbToHex,
   rgbToHsb,
   rgbToHsl,
+  rgbToHsv,
+  rgbaString,
+  rgbaToHex,
+  rgbaToRgb,
 } from '@/utils/color';
 export {
   performanceTime,
@@ -245,6 +289,8 @@ export {
   createObjectURL,
   getFrame,
   getAllQueryString,
+  queryFlag,
+  isInIframe,
   appendUrl,
   removeGhosting,
   getCookieByName,
@@ -258,6 +304,8 @@ export {
   isBangDevice,
   localStorageGetItem,
   localStorageSetItem,
+  localStorageRemoveItem,
+  createStore,
   setAttributeByGlobal,
   setFontSize2html,
   Chain,
@@ -289,11 +337,13 @@ export {
   DEFAULT_CHANNEL,
   singleFlight,
   WebDB,
+  createHandoff,
   buildOffsets,
   indexForOffset,
   segmentByRanges,
   detectLanguage,
   navigatorLanguage,
+  resolveLocale,
   readFileAsArrayBuffer,
   readFileAsUint8Array,
   readFileAsText,
@@ -305,6 +355,20 @@ export {
   prefetchUrl,
   prefetchUrls,
   prefetchWhenIdle,
+  deferred,
+  withTimeout,
+  withTimeoutFallback,
+  delay,
+  TimeoutError,
+  crc32,
+  inflateRaw,
+  readZipEntries,
+  readZipEntry,
+  zipHasEntry,
+  rewriteZip,
+  createZip,
+  ZIP_STORED,
+  ZIP_DEFLATE,
   arrayBufferToString,
   toHalfWidth,
   toFullWidth,
@@ -319,9 +383,49 @@ export {
   getReportUrl,
   formatDate,
   handleXhrHook,
+  EventManager,
+  quad,
+  cubic,
+  quart,
+  quint,
+  sine,
+  expo,
+  circ,
+  getImage,
+  cutRound,
+  opacity,
+  getMatrix,
+  getAngle,
+  getArcPointerByDeg,
+  getTangentByPointer,
+  fanShapedByArc,
+  roundRectByArc,
+  getLinearGradient,
+  adoptStyles,
+  adoptSheetText,
+  ADOPTED_STYLE_MARKER,
+  ADOPTED_SHEET_MARKER,
+  rgbToHsv,
+  hexToHsb,
+  hexToHsv,
+  hsbToHsl,
+  hslToHsb,
+  hslToHsv,
+  hexToAlpha,
+  rgbaString,
+  rgbaToRgb,
+  rgbaToHex,
+  HEX_COLOR_REGEX,
+  RGB_REGEX,
+  RGBA_REGEX,
+  loadScript,
 };
 
 export type {
+  EasingFn,
+  SpeedType,
+  ImgSource,
+  LoadScriptOptions,
   Debounced,
   Throttled,
   BeaconPayload,
@@ -333,6 +437,13 @@ export type {
   IDBResult,
   IDBStoreSchema,
   WebDBOptions,
+  Handoff,
+  HandoffOptions,
+  JsonStore,
+  Deferred,
+  ZipEntry,
+  RewriteZipOptions,
+  ResolveLocaleOptions,
   OffsetRange,
   Segment,
   TextLanguage,

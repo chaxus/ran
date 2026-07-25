@@ -1,6 +1,7 @@
 // Framework-agnostic i18n core. Mirrors the router design: a small reactive
 // engine (I18nCore) with an optional global singleton (createI18n / useI18n).
 // No DOM coupling — bind it to the UI however you like.
+import { localStorageGetItem, localStorageSetItem } from 'ranuts/utils';
 
 export type MessageDict = Record<string, string>;
 export type LocaleMessages = Record<string, MessageDict>;
@@ -26,23 +27,10 @@ const DEFAULT_STORAGE_KEY = 'ran-locale';
 
 const EMPTY_PARAMS: TranslateParams = Object.freeze({});
 
-const readStored = (key: string): string | null => {
-  if (typeof localStorage === 'undefined') return null;
-  try {
-    return localStorage.getItem(key);
-  } catch {
-    return null;
-  }
-};
-
-const writeStored = (key: string, value: string): void => {
-  if (typeof localStorage === 'undefined') return;
-  try {
-    localStorage.setItem(key, value);
-  } catch {
-    // ignore (SSR / private browsing)
-  }
-};
+// localStorage 的读写守卫住在 ranuts：它不只在 SSR 下缺失，在 cookie 被禁的
+// 第三方 iframe 里**访问**就会抛，在 Safari 隐私模式 / 配额用尽时**写入**会抛。
+const readStored = (key: string): string | null => localStorageGetItem(key) || null;
+const writeStored = localStorageSetItem;
 
 const detectNavigatorLocale = (available: string[]): string | null => {
   if (typeof navigator === 'undefined' || !navigator.language) return null;

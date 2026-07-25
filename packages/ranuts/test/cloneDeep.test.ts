@@ -1,9 +1,9 @@
 import { describe, expect, test } from 'vitest';
 import { cloneDeep } from '../src/utils/obj';
 
-describe('cloneDeep 函数测试', () => {
-  // 测试基本类型
-  test('基本类型克隆', () => {
+describe('cloneDeep', () => {
+  // primitives
+  test('clones primitives', () => {
     expect(cloneDeep(42)).toBe(42);
     expect(cloneDeep('hello')).toBe('hello');
     expect(cloneDeep(true)).toBe(true);
@@ -11,60 +11,60 @@ describe('cloneDeep 函数测试', () => {
     expect(cloneDeep(undefined)).toBe(undefined);
   });
 
-  // 测试数组
-  test('数组克隆', () => {
+  // arrays
+  test('clones arrays', () => {
     const original = [1, 2, 3];
     const cloned = cloneDeep(original);
 
     expect(cloned).toEqual(original);
-    expect(cloned).not.toBe(original); // 确保不是同一个引用
+    expect(cloned).not.toBe(original); // not the same reference
 
-    // 修改克隆后的数组不应影响原数组
+    // Mutating the clone must not affect the original
     cloned.push(4);
     expect(original.length).toBe(3);
   });
 
-  // 测试嵌套数组
-  test('嵌套数组克隆', () => {
+  // nested arrays
+  test('clones nested arrays', () => {
     const original = [1, [2, 3], [4, [5, 6]]];
     const cloned: any = cloneDeep(original);
 
     expect(cloned).toEqual(original);
-    expect(cloned[1]).not.toBe(original[1]); // 确保嵌套数组也被克隆
+    expect(cloned[1]).not.toBe(original[1]); // the nested array was cloned too
 
-    // 修改嵌套数组
+    // Mutate the nested array
     cloned[2][1] = [7, 8];
     expect((original[2] as number[])[1]).toEqual([5, 6]);
   });
 
-  // 测试对象
-  test('对象克隆', () => {
+  // objects
+  test('clones objects', () => {
     const original = { a: 1, b: 2, c: 3 };
     const cloned = cloneDeep(original);
 
     expect(cloned).toEqual(original);
     expect(cloned).not.toBe(original);
 
-    // 修改克隆后的对象不应影响原对象
+    // Mutating the clone must not affect the original
     cloned.a = 100;
     expect(original.a).toBe(1);
   });
 
-  // 测试嵌套对象
-  test('嵌套对象克隆', () => {
+  // nested objects
+  test('clones nested objects', () => {
     const original = { a: 1, b: { c: 2, d: { e: 3 } } };
     const cloned = cloneDeep(original);
 
     expect(cloned).toEqual(original);
-    expect(cloned.b).not.toBe(original.b); // 确保嵌套对象也被克隆
+    expect(cloned.b).not.toBe(original.b); // the nested object was cloned too
 
-    // 修改嵌套对象
+    // Mutate the nested object
     cloned.b.c = 100;
     expect(original.b.c).toBe(2);
   });
 
-  // 测试日期对象
-  test('日期对象克隆', () => {
+  // Date
+  test('clones Date objects', () => {
     const original = new Date('2023-01-01');
     const cloned = cloneDeep(original);
 
@@ -72,8 +72,8 @@ describe('cloneDeep 函数测试', () => {
     expect(cloned).not.toBe(original);
   });
 
-  // 测试正则表达式
-  test('正则表达式克隆', () => {
+  // RegExp
+  test('clones regular expressions', () => {
     const original = /test/gi;
     const cloned = cloneDeep(original);
 
@@ -82,8 +82,8 @@ describe('cloneDeep 函数测试', () => {
     expect(cloned).not.toBe(original);
   });
 
-  // 测试 Map 对象
-  test('Map 对象克隆', () => {
+  // Map
+  test('clones Maps', () => {
     const original = new Map([
       ['a', 1],
       ['b', 2],
@@ -94,13 +94,13 @@ describe('cloneDeep 函数测试', () => {
     expect(cloned.get('b')).toBe(2);
     expect(cloned).not.toBe(original);
 
-    // 修改克隆后的 Map 不应影响原 Map
+    // Mutating the cloned Map must not affect the original
     cloned.set('a', 100);
     expect(original.get('a')).toBe(1);
   });
 
-  // 测试 Set 对象
-  test('Set 对象克隆', () => {
+  // Set
+  test('clones Sets', () => {
     const original = new Set([1, 2, 3]);
     const cloned = cloneDeep(original);
 
@@ -109,13 +109,13 @@ describe('cloneDeep 函数测试', () => {
     expect(cloned.has(3)).toBe(true);
     expect(cloned).not.toBe(original);
 
-    // 修改克隆后的 Set 不应影响原 Set
+    // Mutating the cloned Set must not affect the original
     cloned.add(4);
     expect(original.has(4)).toBe(false);
   });
 
-  // 测试循环引用
-  test('循环引用克隆', () => {
+  // circular references
+  test('clones circular references', () => {
     const original: any = { a: 1, b: 2 };
     original.self = original;
 
@@ -123,12 +123,12 @@ describe('cloneDeep 函数测试', () => {
 
     expect(cloned.a).toBe(1);
     expect(cloned.b).toBe(2);
-    expect(cloned.self).toBe(cloned); // 循环引用应该指向克隆对象本身
+    expect(cloned.self).toBe(cloned); // the circular reference points at the clone itself
     expect(cloned.self).not.toBe(original);
   });
 
-  // 测试数组循环引用
-  test('数组循环引用克隆', () => {
+  // circular references in arrays
+  test('clones circular references inside arrays', () => {
     const original: any[] = [1, 2];
     original.push(original);
 
@@ -136,12 +136,12 @@ describe('cloneDeep 函数测试', () => {
 
     expect(cloned[0]).toBe(1);
     expect(cloned[1]).toBe(2);
-    expect(cloned[2]).toBe(cloned); // 循环引用应该指向克隆数组本身
+    expect(cloned[2]).toBe(cloned); // the circular reference points at the cloned array itself
     expect(cloned[2]).not.toBe(original);
   });
 
-  // 测试复杂嵌套结构
-  test('复杂嵌套结构克隆', () => {
+  // complex nested structures
+  test('clones a complex nested structure', () => {
     const original: any = {
       a: 1,
       b: [2, 3, { c: 4 }],
@@ -165,13 +165,13 @@ describe('cloneDeep 函数测试', () => {
     expect(cloned.g).not.toBe(original.g);
     expect(cloned.l).not.toBe(original.l);
 
-    // 修改克隆对象不影响原对象
+    // Mutating the clone must not affect the original
     cloned.b[2].c = 400;
     expect((original.b[2] as { c: number }).c).toBe(4);
   });
 
-  // 测试带有 Symbol 键的对象
-  test('Symbol 键的对象克隆', () => {
+  // symbol-keyed objects
+  test('clones objects with symbol keys', () => {
     const sym = Symbol('test');
     const original = { [sym]: 'symbol value' };
     const cloned = cloneDeep(original);
@@ -180,8 +180,8 @@ describe('cloneDeep 函数测试', () => {
     expect(cloned).not.toBe(original);
   });
 
-  // 测试自定义类实例
-  test('自定义类实例克隆', () => {
+  // custom class instances
+  test('clones custom class instances', () => {
     class Person {
       name: string;
       age: number;
@@ -204,7 +204,7 @@ describe('cloneDeep 函数测试', () => {
     expect(cloned.greet()).toBe("Hello, I'm John!");
     expect(cloned).not.toBe(original);
 
-    // 修改克隆对象不影响原对象
+    // Mutating the clone must not affect the original
     cloned.name = 'Jane';
     expect(original.name).toBe('John');
     expect(cloned.greet()).toBe("Hello, I'm Jane!");

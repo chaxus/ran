@@ -5,7 +5,7 @@ export interface Fragment extends DocumentFragment {
 }
 
 export interface DOMAPI {
-  // 创建元素节点
+  // Create an element node
   createElement: (tagName: any, options?: ElementCreationOptions) => HTMLElement;
   createElementNS: (namespaceURI: string, qualifiedName: string, options?: ElementCreationOptions) => Element;
   /**
@@ -13,31 +13,31 @@ export interface DOMAPI {
    * @todo Make it required when the fragment is considered stable.
    */
   createDocumentFragment?: () => Fragment;
-  // 创建文本节点
+  // Create a text node
   createTextNode: (text: string) => Text;
-  // 创建注释节点
+  // Create a comment node
   createComment: (text: string) => Comment;
-  // 在指定的已有子节点之前插入新的子节点。
+  // Insert a new child before an existing one
   insertBefore: (parentNode: Node, newNode: Node, referenceNode: Node | null) => void;
-  // 删除子节点
+  // Remove a child
   removeChild: (node: Node, child: Node) => void;
-  // 添加子节点
+  // Append a child
   appendChild: (node: Node, child: Node) => void;
-  // 获取元素父节点
+  // Get the parent node
   parentNode: (node: Node) => Node | null;
-  // 获取元素紧跟的节点
+  // Get the next sibling
   nextSibling: (node: Node) => Node | null;
-  // 获取元素标签名
+  // Get the tag name
   tagName: (elm: Element) => string;
-  // 设置元素文本内容
+  // Set the text content
   setTextContent: (node: Node, text: string | null) => void;
-  // 获取元素文本内容
+  // Get the text content
   getTextContent: (node: Node) => string | null;
-  // 判定是否为元素节点
+  // Is it an element node?
   isElement: (node: Node) => node is Element;
-  // 判定是否为文本节点
+  // Is it a text node?
   isText: (node: Node) => node is Text;
-  // 判定是否为注释节点
+  // Is it a comment node?
   isComment: (node: Node) => node is Comment;
   /**
    * @experimental

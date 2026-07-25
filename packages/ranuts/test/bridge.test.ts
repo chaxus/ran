@@ -31,8 +31,9 @@ describe('Platform bridge', () => {
     const events = Object.create({ inherited: inheritedHandler });
     Platform.init(events);
 
-    // 用新的信封协议（结构化对象 + 协议标记）投递；'inherited' 是原型上的键，
-    // 不应被 Object.entries 采集为处理器，因此不该被调用。
+    // Delivered with the envelope protocol (structured object + protocol marker). 'inherited'
+    // lives on the prototype, so Object.entries never picks it up as a handler and it must
+    // not be called.
     await messageHandler?.({
       data: { __bridge: BRIDGE_MARKER, channel: 'default', type: 'inherited', payload: 'payload', id: 'request-id' },
       origin: 'https://example.com',
@@ -109,13 +110,13 @@ describe('Platform bridge', () => {
 });
 
 describe('MessageCodec round-trip', () => {
-  it('round-trips unicode payloads (中文 / emoji)', () => {
+  it('round-trips unicode payloads (CJK / emoji)', () => {
     const data = { msg: '你好 🌈 世界', n: 42, nested: { a: ['x', 'y'] } };
     expect(MessageCodec.decode(MessageCodec.encode(data))).toEqual(data);
   });
 
   it('round-trips large payloads without dropping data', () => {
-    // 大于分块阈值 (0x8000)，触发 encode 的分块拼接路径
+    // Larger than the 0x8000 chunk threshold, so encode takes its chunked path
     const data = { type: 'file', payload: 'x'.repeat(200_000), id: 'abc' };
     const encoded = MessageCodec.encode(data);
     expect(encoded).not.toBe('');
@@ -124,11 +125,11 @@ describe('MessageCodec round-trip', () => {
 
   it('returns empty/null on failure without logging to console', () => {
     const spy = vi.spyOn(console, 'log');
-    // 循环引用无法 JSON.stringify → encode 返回 ''
+    // A circular structure cannot be JSON.stringify-ed, so encode returns ''
     const circular: Record<string, unknown> = {};
     circular.self = circular;
     expect(MessageCodec.encode(circular)).toBe('');
-    // 非本协议字符串解码失败 → 返回 null
+    // A string that is not our protocol fails to decode, so null comes back
     expect(MessageCodec.decode('not-a-valid-encoded-message')).toBeNull();
     expect(spy).not.toHaveBeenCalled();
     spy.mockRestore();
@@ -154,7 +155,7 @@ describe('PostMessageBridge request/response', () => {
   const created: PostMessageBridge[] = [];
 
   afterEach(() => {
-    // 销毁本轮创建的 bridge，从共享分发器摘除，避免跨用例串扰
+    // Destroy the bridges this round created and unhook them from the shared dispatcher, so cases cannot bleed into each other
     created.splice(0).forEach((bridge) => bridge.destroy());
     vi.restoreAllMocks();
     Object.defineProperty(globalThis, 'window', {
@@ -181,7 +182,7 @@ describe('PostMessageBridge request/response', () => {
     return { bridge, deliver: (event: Partial<MessageEvent>) => messageHandler?.(event as MessageEvent) };
   };
 
-  // 现在线路上是结构化对象（非 base64），直接读最后一条 envelope
+  // The wire now carries a structured object rather than base64, so read the last envelope directly
   const lastEnvelope = (target: FakeWindow): Envelope => target.postMessage.mock.calls.at(-1)?.[0] as Envelope;
   const deliverTo = (bridge: PostMessageBridge, data: Partial<Envelope>, source: FakeWindow) =>
     bridge.receive({ data, origin: '*', source: source as unknown as Window } as unknown as MessageEvent);
@@ -191,7 +192,7 @@ describe('PostMessageBridge request/response', () => {
     const { bridge } = setupBridge(target);
     const promise = bridge.send('do', { a: 1 });
     const env = lastEnvelope(target);
-    // 信封应带协议标记 + 通道 + 发送方 id，且 payload 未被 base64 化
+    // The envelope should carry the protocol marker, the channel and the sender id, with the payload not base64-encoded
     expect(env.__bridge).toBeTruthy();
     expect(env.channel).toBe('default');
     expect(env.payload).toEqual({ a: 1 });
@@ -217,9 +218,9 @@ describe('PostMessageBridge request/response', () => {
     const { bridge } = setupBridge(target);
     const promise = bridge.send('do', {});
     const env = lastEnvelope(target);
-    // 来自其他窗口的响应应被忽略
+    // A response from another window is ignored
     deliverTo(bridge, { ...env, payload: 'spoofed', isResponse: true, senderId: 'peer' }, { postMessage: vi.fn() });
-    // 来自正确窗口的响应才生效
+    // Only a response from the right window counts
     deliverTo(bridge, { ...env, payload: 'trusted', isResponse: true, senderId: 'peer' }, target);
     await expect(promise).resolves.toBe('trusted');
   });
@@ -229,7 +230,7 @@ describe('PostMessageBridge request/response', () => {
     const { bridge } = setupBridge(target);
     const promise = bridge.send('do', {});
     const env = lastEnvelope(target);
-    // 无 __bridge 标记（其它库的消息）应被忽略，pending 保持
+    // Without the __bridge marker (another library's message) it is ignored and the request stays pending
     deliverTo(bridge, { type: 'do', payload: 'noise', id: env.id, isResponse: true } as Partial<Envelope>, target);
     deliverTo(bridge, { ...env, payload: 'real', isResponse: true, senderId: 'peer' }, target);
     await expect(promise).resolves.toBe('real');
@@ -241,12 +242,12 @@ describe('PostMessageBridge request/response', () => {
     const handler = vi.fn(() => 'ok');
     bridge.on('greet', handler);
     const marker = (() => {
-      // 借一次 send 取出协议标记；该 send 不会有响应，destroy 时会被 reject，
-      // 挂 catch 吞掉，避免 unhandled rejection。
+      // Borrow one send to obtain the protocol marker. It never gets a response and is
+      // rejected on destroy, so the catch swallows it to avoid an unhandled rejection.
       bridge.send('warmup', {}).catch(() => {});
       return lastEnvelope(target).__bridge;
     })();
-    // 另一通道的请求应被忽略
+    // A request on another channel is ignored
     deliverTo(
       bridge,
       { __bridge: marker, channel: 'channel-B', type: 'greet', payload: {}, id: 'r1', senderId: 'peer' },
@@ -254,7 +255,7 @@ describe('PostMessageBridge request/response', () => {
     );
     await flush();
     expect(handler).not.toHaveBeenCalled();
-    // 本通道的请求才处理
+    // Only a request on this channel is handled
     deliverTo(
       bridge,
       { __bridge: marker, channel: 'channel-A', type: 'greet', payload: {}, id: 'r2', senderId: 'peer' },
@@ -268,15 +269,15 @@ describe('PostMessageBridge request/response', () => {
     const target = { postMessage: vi.fn() };
     const { bridge } = setupBridge(target);
     bridge.on('greet', () => 'hi');
-    // warmup send 不会有响应，destroy 时会被 reject，挂 catch 避免 unhandled rejection。
+    // The warm-up send never gets a response and is rejected on destroy; the catch avoids an unhandled rejection.
     bridge.send('warmup', {}).catch(() => {});
     const { __bridge: marker, channel, senderId } = lastEnvelope(target);
     target.postMessage.mockClear();
-    // 用 bridge 自己的 senderId 发来的请求 → 跳过，不回复
+    // A request carrying the bridge's own senderId is skipped, not answered
     deliverTo(bridge, { __bridge: marker, channel, type: 'greet', payload: {}, id: 'self', senderId }, target);
     await flush();
     expect(target.postMessage).not.toHaveBeenCalled();
-    // 其它实例的请求 → 正常回复
+    // A request from another instance is answered normally
     deliverTo(bridge, { __bridge: marker, channel, type: 'greet', payload: {}, id: 'other', senderId: 'peer' }, target);
     await flush();
     expect(target.postMessage).toHaveBeenCalledTimes(1);
@@ -291,7 +292,7 @@ describe('PostMessageBridge request/response', () => {
   });
 
   it('rejects when the payload cannot be structured-cloned', async () => {
-    // 模拟 postMessage 抛 DataCloneError（如 payload 含函数）
+    // Simulate postMessage throwing DataCloneError (a payload holding a function, say)
     const target = {
       postMessage: vi.fn(() => {
         throw new Error('DataCloneError');
@@ -307,20 +308,20 @@ describe('PostMessageBridge request/response', () => {
       writable: true,
       value: undefined,
     });
-    // 无 window 时构造不应抛错
+    // Construction must not throw when there is no window
     const bridge = new PostMessageBridge();
-    // send 明确 reject，broadcast / destroy 静默降级
+    // send rejects explicitly, while broadcast / destroy degrade silently
     await expect(bridge.send('do', {})).rejects.toThrow('unavailable outside a browser');
     expect(() => bridge.broadcast({ type: 'x', payload: 1 })).not.toThrow();
     expect(() => bridge.destroy()).not.toThrow();
   });
 
-  it('routes messages through the shared dispatcher (方案 C)', async () => {
+  it('routes messages through the shared dispatcher', async () => {
     const target = { postMessage: vi.fn() };
     const { bridge, deliver } = setupBridge(target);
     const promise = bridge.send('do', {});
     const env = lastEnvelope(target);
-    // 通过共享分发器捕获的全局监听器投递，而非直接 receive
+    // Delivered through the global listener the shared dispatcher installed, rather than calling receive directly
     deliver({
       data: { ...env, payload: 'via-dispatcher', isResponse: true, senderId: 'peer' },
       origin: '*',
@@ -330,7 +331,7 @@ describe('PostMessageBridge request/response', () => {
   });
 });
 
-// 用假的 MessagePort 对（node 环境无 DOM MessagePort），验证方案 B 的收发逻辑
+// A fake MessagePort pair (the node env has no DOM MessagePort), exercising the port bridge's send/receive logic
 const makePortPair = () => {
   const listeners: { a: Set<(e: { data: unknown }) => void>; b: Set<(e: { data: unknown }) => void> } = {
     a: new Set(),
@@ -352,7 +353,7 @@ const makePortPair = () => {
   return [make('a', 'b'), make('b', 'a')] as const;
 };
 
-describe('PortBridge (方案 B, MessagePort)', () => {
+describe('PortBridge (MessagePort)', () => {
   it('round-trips a request/response over a port pair', async () => {
     const [p1, p2] = makePortPair();
     const a = createPortBridge(p1 as unknown as MessagePort);

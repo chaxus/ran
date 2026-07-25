@@ -4,7 +4,7 @@ import readline from 'node:readline';
 export const runCommand = (command: string, args: string[]): Promise<void> => {
   return new Promise<void>((resolve, reject) => {
     const executedCommand = childProcess.spawn(command, args, {
-      stdio: 'inherit', // 子进程继承父进程的 stdio（标准输入/输出）流。这意味着子进程可以使用父进程的 stdin（标准输入流）和 stdout（标准输出流）。
+      stdio: 'inherit', // The child inherits the parent's stdio streams, so it can use the parent's stdin and stdout directly.
       shell: false,
     });
     executedCommand.on('error', (e) => reject(e));

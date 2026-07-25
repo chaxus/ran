@@ -1,19 +1,40 @@
 /**
- * 缓动函数
- * t: current time（当前时间）
- * b: beginning value（初始值）
- * c: change in value（变化量）
- * d: duration（持续时间）
+ * @description: A set of easing functions. Each is a pure mathematical mapping — it does not
+ * touch the DOM and brings no RAF loop of its own; the caller feeds in the elapsed time from
+ * its own animation frame and gets back the value for that frame.
  *
- * 感谢张鑫旭大佬 https://github.com/zhangxinxu/Tween
+ * Parameters follow Robert Penner's classic convention:
+ * - t: current time (how much has elapsed)
+ * - b: beginning value
+ * - c: change in value (the final value is b + c)
+ * - d: duration
+ *
+ * Every function clamps at `t >= d`, so calling past the duration returns the final value rather than extrapolating.
+ *
+ * With thanks to Zhang Xinxu — https://github.com/zhangxinxu/Tween
+ *
+ * @example
+ * ```ts
+ * const start = performance.now();
+ * const tick = (now: number) => {
+ *   const x = cubic.easeOut(now - start, 0, 300, 600); // 0 → 300 over 600ms
+ *   el.style.transform = `translateX(${x}px)`;
+ *   if (now - start < 600) requestAnimationFrame(tick);
+ * };
+ * requestAnimationFrame(tick);
+ * ```
  */
 
-interface SpeedType {
-  easeIn: (...arr: number[]) => number;
-  easeOut: (...arr: number[]) => number;
+/** One easing function: (elapsed, from, delta, duration) => current value */
+export type EasingFn = (t: number, b: number, c: number, d: number) => number;
+
+/** The ease-in / ease-out pair of one easing family */
+export interface SpeedType {
+  easeIn: EasingFn;
+  easeOut: EasingFn;
 }
 
-// 二次方的缓动
+// Quadratic easing
 export const quad: SpeedType = {
   easeIn: function (t, b, c, d) {
     if (t >= d) t = d;
@@ -25,7 +46,7 @@ export const quad: SpeedType = {
   },
 };
 
-// 三次方的缓动
+// Cubic easing
 export const cubic: SpeedType = {
   easeIn: function (t, b, c, d) {
     if (t >= d) t = d;
@@ -37,7 +58,7 @@ export const cubic: SpeedType = {
   },
 };
 
-// 四次方的缓动
+// Quartic easing
 export const quart: SpeedType = {
   easeIn: function (t, b, c, d) {
     if (t >= d) t = d;
@@ -49,7 +70,7 @@ export const quart: SpeedType = {
   },
 };
 
-// 五次方的缓动
+// Quintic easing
 export const quint: SpeedType = {
   easeIn: function (t, b, c, d) {
     if (t >= d) t = d;
@@ -61,7 +82,7 @@ export const quint: SpeedType = {
   },
 };
 
-// 正弦曲线的缓动
+// Sinusoidal easing
 export const sine: SpeedType = {
   easeIn: function (t, b, c, d) {
     if (t >= d) t = d;
@@ -73,7 +94,7 @@ export const sine: SpeedType = {
   },
 };
 
-// 指数曲线的缓动
+// Exponential easing
 export const expo: SpeedType = {
   easeIn: function (t, b, c, d) {
     if (t >= d) t = d;
@@ -85,7 +106,7 @@ export const expo: SpeedType = {
   },
 };
 
-// 圆形曲线的缓动
+// Circular easing
 export const circ: SpeedType = {
   easeIn: function (t, b, c, d) {
     if (t >= d) t = d;

@@ -35,7 +35,7 @@ const TOKEN = /YYYY|YY|MM|M|DD|D|HH|H|hh|h|mm|m|ss|s|SSS|A|a|\[([^\]]*)]/g;
  * ```ts
  * formatDate();                                          // '2026-07-25 14:30:00'
  * formatDate(1753425000000, 'YYYY/MM/DD');               // '2026/07/25'
- * formatDate(new Date(), 'YYYY[年]MM[月]DD[日] hh:mm a'); // '2026年07月25日 02:30 pm'
+ * formatDate(new Date(), 'YYYY[年]MM[月]DD[日] hh:mm a'); // '2026年07月25日 02:30 pm' (escaped literals)
  * ```
  */
 export const formatDate = (value?: number | string | Date, pattern: string = 'YYYY-MM-DD HH:mm:ss'): string => {
@@ -84,7 +84,7 @@ export function timestampToTime(timestamp?: number | string): Date & { format?: 
 }
 
 /**
- * @description: 时间秒，转化成:分割的时间
+ * @description: Format a number of seconds as a colon-separated duration
  * @param {number} time
  * @return {*}
  */
@@ -101,7 +101,7 @@ export const timeFormat = (time: number): string => {
 };
 
 /**
- * @description: 获取当前时间戳
+ * @description: Current timestamp
  * @return {*}
  */
 export const performanceTime = (): number => {

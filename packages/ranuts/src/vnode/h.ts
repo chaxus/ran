@@ -1,6 +1,6 @@
 import type { VNode, VNodeChildElement, VNodeChildren, VNodeData, VNodes } from './vnode';
 import { vnode } from './vnode';
-// 类型判断
+// Type guards
 import * as is from './is';
 
 export function addNS(
@@ -21,47 +21,47 @@ export function addNS(
   }
 }
 
-// h 函数的重载
+// Overloads of h()
 export function h(sel: string): VNode;
 export function h(sel: string, data: VNodeData | null): VNode;
 export function h(sel: string, children: VNodeChildren): VNode;
 export function h(sel: string, data: VNodeData | null, children: VNodeChildren): VNode;
 export function h(sel: string, b?: VNodeData | null | VNodeChildren, c?: VNodeChildren): VNode {
-  // 缓存 VNode 数据
+  // VNode data
   let data: VNodeData = {};
-  // 缓存 children 数据
+  // Children
   let children: VNodeChildElement[] | undefined = undefined;
-  // 缓存文本数据
+  // Text content
   let text: string | number | undefined;
-  // 用于缓存遍历 children 的 index
+  // Index while looping over children
   let i: number;
 
-  // 处理参数，实现重载的机制
+  // Sort the arguments out — this is what implements the overloads
   if (c !== undefined) {
-    // 处理三个参数的情况
+    // Three arguments
     // sel、data、children/text
     if (b != null) {
       data = b as VNodeData;
     }
     if (is.array(c)) {
       children = c;
-      // 如果 c 是字符串或者数字
+      // c is a string or number
     } else if (is.primitive(c)) {
       text = c;
-      // 如果 c 是 VNode
+      // c is a VNode
     } else if (c && c.sel) {
       children = [c];
     }
   } else if (b !== undefined && b != null) {
-    // 处理两个参数的情况
-    // 如果 b 是数组
+    // Two arguments
+    // b is an array
     if (is.array(b)) {
       children = b;
-      // 如果 b 是字符串或数字
+      // b is a string or number
     } else if (is.primitive(b)) {
       text = b;
     } else {
-      // 这里由于 b 没有使用 any 类型，所以需要进一步判断 b 是否为 VNode
+      // b is not typed as any, so it has to be narrowed to a VNode explicitly
       if (is.isVnode(b)) {
         children = [b];
       } else {
@@ -69,12 +69,12 @@ export function h(sel: string, b?: VNodeData | null | VNodeChildren, c?: VNodeCh
       }
     }
   }
-  // 处理 children 中的原始值 (string/number)
+  // Turn primitive children (string/number) into text vnodes
   if (typeof children !== 'undefined') {
     for (i = 0; i < children.length; ++i) {
-      // 如果 child 是 string/number，创建文本节点
-      // 这里由于 children 没有使用 any 类型，所以需要进一步判断 children[i] 是否为 string | number
-      // 不能直接使用 children[i],所以使用 msg 缓存
+      // A string/number child becomes a text node.
+      // children is not typed as any, so children[i] has to be narrowed to string | number,
+      // which is why the narrowed value is held in `msg` rather than used inline.
       const msg = children[i];
       if (is.primitive(msg)) {
         children[i] = vnode(undefined, undefined, undefined, msg, undefined);
@@ -84,6 +84,6 @@ export function h(sel: string, b?: VNodeData | null | VNodeChildren, c?: VNodeCh
   if (sel[0] === 's' && sel[1] === 'v' && sel[2] === 'g' && (sel.length === 3 || sel[3] === '.' || sel[3] === '#')) {
     addNS(data, children, sel);
   }
-  // 符合 VNode
+  // Now a well-formed VNode
   return vnode(sel, data, children, text, undefined);
 }

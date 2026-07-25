@@ -26,8 +26,9 @@ describe('report endpoint configuration', () => {
   });
 
   it('sends nothing when no endpoint is configured', () => {
-    // 回归：旧实现回退到 getHost()，它返回字面量 '//log.' —— 一个不可达的 host，
-    // 于是每条不带 url 的上报都被发往垃圾地址而不是明确失败
+    // Regression: the old implementation fell back to getHost(), which returned the literal
+    // '//log.' — an unreachable host — so every report without a url went to a junk address
+    // instead of failing outright
     const sendBeacon = vi.fn(() => true);
     define('navigator', { sendBeacon });
     define('Blob', class {});
@@ -84,8 +85,8 @@ describe('createData', () => {
   });
 
   it('omits userId until a cookie name is configured', () => {
-    // 回归：旧实现硬编码读取 'chaxus_prod' —— 这个仓库作者自己部署的 cookie 名，
-    // 在任何其它应用里都不存在
+    // Regression: the old implementation hard-coded a read of 'chaxus_prod', the cookie name
+    // from this repo author's own deployment, which exists in no other application
     stubBrowser('uid=abc123');
     expect('userId' in createData()).toBe(false);
 

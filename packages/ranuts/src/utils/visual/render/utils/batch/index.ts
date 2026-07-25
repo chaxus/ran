@@ -4,7 +4,7 @@ import type { Fill } from '@/utils/visual/style';
 import { BYTES_PER_VERTEX } from '@/utils/visual/enums';
 import type { Graphics } from '@/utils/visual/graphics';
 /**
- * 构建大数组
+ * Build the big array
  */
 export const buildArray = (batchRenderer: BatchRenderer, container: Container): void => {
   if (container.worldAlpha <= 0 || !container.visible) {
@@ -21,7 +21,7 @@ export const buildArray = (batchRenderer: BatchRenderer, container: Container): 
 };
 
 /**
- * 更新大数组
+ * Update the big array
  */
 export const updateArray = (floatView: Float32Array, container: Container): void => {
   if (container.worldAlpha <= 0 || !container.visible) {
@@ -39,42 +39,42 @@ export const updateArray = (floatView: Float32Array, container: Container): void
 
 export abstract class Batch {
   /**
-   * 顶点个数
+   * Vertex count
    */
   vertexCount = 0;
 
   /**
-   * 顶点下标个数
+   * Index count
    */
   indexCount = 0;
 
   /**
-   * rgba 的小端序形式
+   * rgba packed little-endian
    */
   rgba = 0;
 
   /**
-   * 顶点数据在大数组中的起点
+   * Where this batch's vertices start in the big array
    */
   vertexStart = 0;
 
   /**
-   * 顶点下标数据在大数组中的起点
+   * Where this batch's indices start in the big array
    */
   indexStart = 0;
 
   /**
-   * 将顶点数据写入大数组中
+   * Write the vertex data into the big array
    */
   public abstract packVertices(floatView: Float32Array, intView: Uint32Array): void;
 
   /**
-   * 将顶点下标数据写入大数组中
+   * Write the index data into the big array
    */
   public abstract packIndices(int32: Uint32Array): void;
 
   /**
-   * 在大数组中更新顶点位置数据
+   * Update the vertex positions inside the big array
    */
   public abstract updateVertices(floatView: Float32Array): void;
 }
@@ -121,17 +121,17 @@ export class GraphicsBatchPool extends BatchPool {
 
 export class GraphicsBatch extends Batch {
   /**
-   * 顶点部分在 geometry.vertices 中的起始下标
+   * Where this part's vertices start in geometry.vertices
    */
   public vertexOffset = 0;
 
   /**
-   * 顶点下标部分在 geometry.indices 中的起始下标
+   * Where this part's indices start in geometry.indices
    */
   public indexOffset = 0;
 
   /**
-   * 对应的 Graphics 实例
+   * The Graphics instance this belongs to
    */
   graphics!: Graphics;
 

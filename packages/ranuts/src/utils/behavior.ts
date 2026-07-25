@@ -18,14 +18,14 @@ export const handleClick = (hooks: (event: MouseEvent) => void = noop): (() => v
 };
 
 // const fingerprinting = () => {
-//   // userAgent(用户代理) 浏览器的语言 设备能够支持的最大同时触摸的点数 可用的逻辑处理器核心数
+//   // userAgent, browser language, maximum simultaneous touch points, logical CPU cores
 //   const { userAgent, language, maxTouchPoints, hardwareConcurrency } = navigator;
 //   const { width, height, colorDepth } = screen;
-//   // 格林威治时间和本地时间之间的时差
+//   // Offset between GMT and local time
 //   const timezone = new Date().getTimezoneOffset();
 // };
 /**
- * @description: 获取地区经纬度（会弹出提示让用户授权）
+ * @description: Read the device's latitude and longitude (prompts the user for permission)
  * @return {*}
  */
 export const getRegionalLatitudeAndLongitude = (): Promise<GeolocationPosition> => {
@@ -95,7 +95,7 @@ enum AudioCompressor {
   RELEASE = 'release',
 }
 /**
- * @description: 音频指纹，1.生成音频信息流 (三角波)，对其进行 FFT 变换，计算 SHA 值作为指纹。2.生成音频信息流（正弦波），进行动态压缩处理，计算 MD5 值。
+ * @description: Audio fingerprint. 1. Generate an audio stream (triangle wave), run an FFT over it and hash the result with SHA. 2. Generate an audio stream (sine wave), run it through dynamic compression and hash with MD5.
  */
 export const audioVendor = (): Promise<string> => {
   return new Promise((resolve, reject) => {

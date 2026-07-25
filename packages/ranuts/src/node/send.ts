@@ -14,44 +14,44 @@ const staticMiddleware = (option: Partial<Option> = {}): MiddlewareFunction => {
       const { req, res } = ctx;
       if (req.url) {
         const htmlContentType = 'text/html';
-        // 获取传入的地址，如果没有，取当前的目录
+        // Use the given directory, falling back to the current one
         const dirPath = pathname ? pathname : process.cwd();
-        // 静态资源文件根路径
+        // Static asset root
         const root = path.normalize(path.resolve(dirPath));
-        // 获取访问的文件类型
+        // The requested file's type
         const extension = path.extname(req.url).slice(1);
-        // 增加 mimeType
+        // Register the MIME type
         Object.keys(fileTypes).forEach((key) => setMime(key, fileTypes[key]));
-        // 文件类型后缀
+        // File extension
         const type = extension ? getMime(extension) : htmlContentType;
-        // 是否支持的文件类型
+        // Is this file type served?
         const supportedExtension = Boolean(type);
-        // 如果这个文件类型不允许访问，则直接返回 404
+        // A disallowed file type is a 404 outright
         if (!supportedExtension) {
           res.writeHead(404, { 'Content-Type': 'text/html' });
           res.end('404: File not found');
           return;
         }
 
-        // 通过 url 获取访问的文件名称
+        // Take the file name from the URL
         let fileName = req.url;
-        // 如果访问的路径是 /
+        // The path is /
         if (req.url === '/') {
-          // 则文件名是 index.html
+          // so the file is index.html
           fileName = 'index.html';
-          // 如果访问的文件类型不在允许的类型里面，默认返回 index.html
+          // An unlisted file type falls back to index.html
         } else if (!extension) {
           try {
-            // 检测文件是否允许访问
+            // Check whether the file may be served
             fs.accessSync(path.join(root, req.url + '.html'), fs.constants.F_OK);
-            // 当允许访问时，则返回对应的页面
+            // Allowed — serve that page
             fileName = req.url + '.html';
           } catch {
-            // 否则直接返回 index.html
+            // otherwise serve index.html
             fileName = path.join(req.url, 'index.html');
           }
         }
-        // 有文件名且访问的文件类型也允许访问
+        // A file name is present and its type is allowed
         const filePath = path.join(root, fileName);
         const isPathUnderRoot = path.normalize(path.resolve(filePath)).startsWith(root);
 

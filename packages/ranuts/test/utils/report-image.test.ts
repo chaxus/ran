@@ -18,7 +18,7 @@ afterEach(() => {
 });
 
 describe('report', () => {
-  /** 记录 <img> 兜底是否被走到 */
+  /** Records whether the <img> fallback was reached */
   const trackImages = (): { srcs: string[] } => {
     const srcs: string[] = [];
     define('document', {});
@@ -47,8 +47,9 @@ describe('report', () => {
   });
 
   it('falls back to the image beacon when sendBeacon is missing', () => {
-    // 回归：旧实现按 `typeof navigator !== 'undefined'` 分支，而 navigator 在所有浏览器里都存在，
-    // 图片兜底因此永远走不到，sendBeacon 缺失时上报被静默丢弃
+    // Regression: the old implementation branched on `typeof navigator !== 'undefined'`, and
+    // navigator exists in every browser — so the image fallback was unreachable and reports
+    // were silently dropped whenever sendBeacon was missing
     define('navigator', {});
     const { srcs } = trackImages();
 
@@ -81,7 +82,7 @@ describe('report', () => {
 });
 
 describe('isImageSize', () => {
-  /** 可控的 Image 替身：记录 objectURL 生命周期，手动触发 load / error */
+  /** A controllable Image stand-in: tracks the objectURL's lifecycle and fires load / error by hand */
   const setupImage = (): { created: string[]; revoked: string[]; fire: (event: 'load' | 'error') => void } => {
     const created: string[] = [];
     const revoked: string[] = [];
@@ -124,7 +125,7 @@ describe('isImageSize', () => {
   const file = {} as File;
 
   it('rejects outside a browser instead of throwing on window', async () => {
-    // 回归：旧实现 reject 之后没有 return，继续访问 window，SSR 下直接抛 ReferenceError
+    // Regression: the old implementation did not return after reject, went on to touch window, and threw a ReferenceError under SSR
     const promise = isImageSize(file, 100);
     await expect(promise).rejects.toThrow('browser-only');
   });
@@ -137,7 +138,7 @@ describe('isImageSize', () => {
   });
 
   it('requires BOTH dimensions to match when both are given', async () => {
-    // 回归：旧实现后一个条件整个覆盖前一个，宽度形同虚设
+    // Regression: the later condition used to overwrite the earlier one, making the width check a no-op
     const { fire } = setupImage();
     const wrongWidth = isImageSize(file, 999, 50);
     fire('load');

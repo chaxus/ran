@@ -53,7 +53,9 @@ console.log(`页码: ${page}, 每页: ${limit}`);
 
 ## 注意事项
 
-1. **功能相同**：`getQuery` 与 `getAllQueryString` 功能完全相同，可以互换使用。
-2. **URL 解码**：参数值会自动进行 URL 解码。
-3. **服务端环境**：在服务端环境（无 `window` 对象）时返回空对象 `{}`。
-4. **默认 URL**：如果不传 `url` 参数，默认使用 `window.location.href`。
+1. **`getAllQueryString` 的别名**。两者曾是逐字节相同的两份实现；现在 `getQuery` 直接转发，
+   修一处两处都生效。解析规则见
+   [`getAllQueryString`](/cn/src/ranuts/utils/get_all_query_string)。
+2. **不带值的开关自 0.3 起被保留**为 `''`。读取这类开关请用
+   [`queryFlag`](/cn/src/ranuts/utils/query_flag)。
+3. **服务端环境**：没有 `window` 且未传 `url` 时返回 `{}`。

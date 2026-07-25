@@ -18,7 +18,7 @@ import type { ILineStyleOptions } from '@/utils/visual/types';
 import type { CanvasRenderer } from '@/utils/visual/render/canvasRenderer';
 import type { Point } from '@/utils/visual/vertex/point';
 
-// Graphics 类继承自 Container 类，表示绘制各种图形的容器
+// Graphics extends Container: the container that draws shapes
 export class Graphics extends Container {
   private _lineStyle = new Line();
   private _fillStyle = new Fill();
@@ -47,24 +47,24 @@ export class Graphics extends Container {
   };
   protected drawShape = (shape: Shape): Graphics => {
     this.geometry.drawShape(shape, this._fillStyle.clone(), this._lineStyle.clone());
-    // 几何内容变了，通知渲染器重建大数组
+    // The geometry changed — tell the renderer to rebuild the big array
     this.markStructureDirty();
     return this;
   };
   /**
-   * 清空已有的 path，开始新的 path
+   * Finish the current path and start a new one
    */
   protected startPoly = (): void => {
     const len = this.currentPath.points.length;
     if (len > 2) {
-      // 如果超过 2 个点，那么就算一个合法的 path
+      // More than 2 points makes it a valid path
       this.drawShape(this.currentPath);
     }
     this.currentPath = new Polygon();
   };
-  // 如果要填充图形，则需要先调用这个函数给画笔设置填充色
+  // Call this before filling a shape, to give the pen its fill colour
   public beginFill = (color = '#000000', alpha = 1): Graphics => {
-    // 在填充参数变化之前，先将已有的 path 画出来
+    // Flush the current path before the fill parameters change
     this.startPoly();
     this._fillStyle.color = color;
     this._fillStyle.alpha = alpha;
@@ -74,7 +74,7 @@ export class Graphics extends Container {
     return this;
   };
   /**
-   * 结束填充模式
+   * Leave fill mode
    */
   public endFill = (): Graphics => {
     this.startPoly();
@@ -82,41 +82,41 @@ export class Graphics extends Container {
     return this;
   };
   /**
-   * 画矩形
-   * @param x x 坐标
-   * @param y y 坐标
-   * @param width 宽度
-   * @param height 高度
+   * Draw a rectangle
+   * @param x x coordinate
+   * @param y y coordinate
+   * @param width width
+   * @param height height
    */
   public drawRect = (x: number, y: number, width: number, height: number): Graphics => {
     return this.drawShape(new Rectangle(x, y, width, height));
   };
   /**
-   * 画圆
-   * @param x 圆心 X 坐标
-   * @param y 圆心 Y 坐标
-   * @param radius 半径
+   * Draw a circle
+   * @param x x of the centre
+   * @param y y of the centre
+   * @param radius radius
    */
   public drawCircle = (x: number, y: number, radius: number): Graphics => {
     return this.drawShape(new Circle(x, y, radius));
   };
   /**
-   * 画圆角矩形
-   * @param x x 坐标
-   * @param y y 坐标
-   * @param width 宽度
-   * @param height 高度
-   * @param radius 圆角半径
+   * Draw a rounded rectangle
+   * @param x x coordinate
+   * @param y y coordinate
+   * @param width width
+   * @param height height
+   * @param radius corner radius
    */
   public drawRoundedRect = (x: number, y: number, width: number, height: number, radius: number): Graphics => {
     return this.drawShape(new RoundedRectangle(x, y, width, height, radius));
   };
   /**
-   * 画椭圆
-   * @param x 椭圆中心 x 坐标
-   * @param y 椭圆中心 y 坐标
-   * @param radiusX 椭圆 x 轴半径
-   * @param radiusY 椭圆 y 轴半径
+   * Draw an ellipse
+   * @param x x of the ellipse's centre
+   * @param y y of the ellipse's centre
+   * @param radiusX x-axis radius
+   * @param radiusY y-axis radius
    */
 
   public drawEllipse = (x: number, y: number, radiusX: number, radiusY: number): Graphics => {
@@ -124,8 +124,8 @@ export class Graphics extends Container {
   };
 
   /**
-   * 画多边形
-   * @param points 多边形顶点坐标数组，每 2 个元素算一组 (x,y)
+   * Draw a polygon
+   * @param points the polygon's vertices; every 2 elements are one (x, y)
    */
   public drawPolygon = (points: number[]): Graphics => {
     const poly = new Polygon(points);
@@ -148,7 +148,7 @@ export class Graphics extends Container {
       return this;
     }
 
-    // 去除重复的点
+    // Drop duplicate points
     const points = this.currentPath.points;
     const fromX = points[points.length - 2];
     const fromY = points[points.length - 1];
@@ -165,14 +165,14 @@ export class Graphics extends Container {
   };
 
   public containsPoint = (p: Point): boolean => {
-    // 如果设置了 hitArea 则只判断 hitArea
+    // With a hitArea set, only the hitArea is tested
     if (this.hitArea) {
       return this.hitArea.contains(p);
     }
     return this.geometry.containsPoint(p);
   };
-  // 二阶贝塞尔曲线
-  // 采样多个点，然后连成一个近似于二阶贝塞尔曲线的直边多边形
+  // Quadratic Bézier curve
+  // Sampled into points, then joined into a straight-edged polygon approximating the curve
   public quadraticCurveTo = (cpX: number, cpY: number, toX: number, toY: number): Graphics => {
     const len = this.currentPath.points.length;
     if (len === 0) {
@@ -184,29 +184,29 @@ export class Graphics extends Container {
     const P1Y = cpY;
     const P2X = toX;
     const P2Y = toY;
-    // 求出这条二阶贝塞尔曲线的长度
+    // Length of the quadratic Bézier
     const curveLength = getQuadraticBezierLength(P0X, P0Y, P1X, P1Y, P2X, P2Y);
-    let segmentsCount = Math.ceil(curveLength / 10); // 每10个像素采样一次
-    // 最大 2048 份
+    let segmentsCount = Math.ceil(curveLength / 10); // one sample every 10 pixels
+    // at most 2048 segments
     if (segmentsCount > 2048) {
       segmentsCount = 2048;
     }
-    // 最小 8 份
+    // at least 8 segments
     if (segmentsCount < 8) {
       segmentsCount = 8;
     }
-    // 计算出采样点的坐标然后放入 points 数组
+    // Compute each sample's coordinates and push them into points
     for (let i = 1; i <= segmentsCount; i++) {
       const t = i / segmentsCount;
-      // 直接套用二阶贝塞尔曲线的公式
+      // Straight from the quadratic Bézier formula
       const x = (1 - t) * (1 - t) * P0X + 2 * t * (1 - t) * P1X + t * t * P2X;
       const y = (1 - t) * (1 - t) * P0Y + 2 * t * (1 - t) * P1Y + t * t * P2Y;
       this.currentPath.points.push(x, y);
     }
     return this;
   };
-  // 三阶贝塞尔曲线
-  // 采样多个点，然后连成一个近似于三阶贝塞尔曲线的直边多边形
+  // Cubic Bézier curve
+  // Sampled into points, then joined into a straight-edged polygon approximating the curve
   public bezierCurveTo = (cpX: number, cpY: number, cpX2: number, cpY2: number, toX: number, toY: number): Graphics => {
     const len = this.currentPath.points.length;
     if (len === 0) {
@@ -220,21 +220,21 @@ export class Graphics extends Container {
     const P2Y = cpY2;
     const P3X = toX;
     const P3Y = toY;
-    // 求出这条三阶贝塞尔曲线的长度
+    // Length of the cubic Bézier
     const curveLength = getBezierLength(P0X, P0Y, P1X, P1Y, P2X, P2Y, P3X, P3Y);
-    let segmentsCount = Math.ceil(curveLength / 10); // 每10个像素采样一次
-    // 最大 2048 份
+    let segmentsCount = Math.ceil(curveLength / 10); // one sample every 10 pixels
+    // at most 2048 segments
     if (segmentsCount > 2048) {
       segmentsCount = 2048;
     }
-    // 最小 8 份
+    // at least 8 segments
     if (segmentsCount < 8) {
       segmentsCount = 8;
     }
-    // 计算出采样点的坐标然后放入 points 数组
+    // Compute each sample's coordinates and push them into points
     for (let i = 1; i <= segmentsCount; i++) {
       const t = i / segmentsCount;
-      // 直接套用三阶贝塞尔曲线的公式
+      // Straight from the cubic Bézier formula
       const x =
         (1 - t) * (1 - t) * (1 - t) * P0X +
         3 * t * (1 - t) * (1 - t) * P1X +
@@ -250,7 +250,7 @@ export class Graphics extends Container {
 
     return this;
   };
-  // 圆弧arc
+  // Arc
   public arc = (
     cx: number,
     cy: number,
@@ -282,13 +282,13 @@ export class Graphics extends Container {
     const startX = cx + Math.cos(startAngle) * radius;
     const startY = cy + Math.sin(startAngle) * radius;
     this.lineTo(startX, startY);
-    const curveLen = Math.abs(diff) * radius; // 角度 (弧度制) 乘以半径等于弧长
+    const curveLen = Math.abs(diff) * radius; // angle in radians times radius is the arc length
     let segmentsCount = Math.ceil(curveLen / 10);
-    // 最大 2048 份
+    // at most 2048 segments
     if (segmentsCount > 2048) {
       segmentsCount = 2048;
     }
-    // 最小 8 份
+    // at least 8 segments
     if (segmentsCount < 8) {
       segmentsCount = 8;
     }
@@ -305,18 +305,17 @@ export class Graphics extends Container {
     if (!this.currentPath) return this;
     const len = this.currentPath.points.length;
     /**
-     * 如果画笔当前没有落点，则该操作相当于 moveTo(x1, y1)
-     * 如果半径为 0，则该操作也相当于 lineTo(x1, y1)
+     * With no current point, this behaves as moveTo(x1, y1).
+     * With a radius of 0, it behaves as lineTo(x1, y1).
      */
     if (len === 0 || radius === 0) {
       this.lineTo(x1, y1);
       return this;
     }
     /**
-     * 假设画笔落点为 P0，控制点 1 为 P1，控制点 2 为 P2，如果向量 P0P1 和向量 P1P2 的夹角太小或者夹角接近 180 度，
-     * 或者向量 P0P1 或向量 P1P2 其中一个的长度为 0，
-     * 那么该操作也相当于 moveTo(x1, y1)，
-     * 我们用叉积来判断这种情况
+     * Take the current point as P0 and the control points as P1 and P2. When the angle
+     * between P0P1 and P1P2 is very small or close to 180°, or either vector has zero
+     * length, this also behaves as moveTo(x1, y1). The cross product detects that case.
      */
     const a1 = this.currentPath.points[len - 1] - y1;
     const b1 = this.currentPath.points[len - 2] - x1;
@@ -353,12 +352,12 @@ export class Graphics extends Container {
     this.currentPath = new Polygon();
     this.batches = [];
     this.batchCount = 0;
-    // 几何被清空，通知渲染器重建大数组
+    // The geometry was cleared — tell the renderer to rebuild the big array
     this.markStructureDirty();
     return this;
   };
   /**
-   * 调用 canvas API 绘制自身
+   * Draw itself through the Canvas API
    */
   protected renderCanvas = (render: CanvasRenderer): void => {
     this.startPoly();

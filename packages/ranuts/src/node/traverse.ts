@@ -8,7 +8,7 @@ const toRead = promisify(readdir);
 
 type Caller = (relPath: string, absPath: string, stats: Stats) => any;
 /**
- * @description: 递归遍历每一个目录，为找到的文件都执行一个函数
+ * @description: Walk every directory recursively, running a function for each file found
  * @param {string} dir
  * @param {Caller} callback
  * @param {*} pre
@@ -28,7 +28,7 @@ export async function traverse(dir: string, callback: Caller, pre = ''): Promise
   );
 }
 /**
- * @description: 同步方法，递归遍历每一个目录，为找到的文件都执行一个函数
+ * @description: Synchronous: walk every directory recursively, running a function for each file found
  * @param {string} dir
  * @param {Caller} callback
  * @param {*} pre

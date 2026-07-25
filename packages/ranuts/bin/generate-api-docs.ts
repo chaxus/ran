@@ -30,20 +30,25 @@ interface Entry {
 // Keep in sync with package.json "exports". The root "." entry is intentionally
 // omitted: it re-exports the utils + visual surface and would only duplicate.
 const ENTRIES: Entry[] = [
-  { subpath: 'ranuts/utils', file: 'src/utils/index.ts', blurb: '浏览器 / 通用工具函数', runtime: 'browser + node' },
+  {
+    subpath: 'ranuts/utils',
+    file: 'src/utils/index.ts',
+    blurb: 'Browser and general-purpose utilities',
+    runtime: 'browser + node',
+  },
   {
     subpath: 'ranuts/node',
     file: 'src/node/index.ts',
-    blurb: 'Node 服务端工具（fs / http / ws / 中间件）',
+    blurb: 'Node server utilities (fs / http / ws / middleware)',
     runtime: 'node only',
   },
   {
     subpath: 'ranuts/visual',
     file: 'src/utils/visual/index.ts',
-    blurb: '2D 渲染引擎（Canvas / WebGL / WebGPU）',
+    blurb: '2D rendering engine (Canvas / WebGL / WebGPU)',
     runtime: 'browser only',
   },
-  { subpath: 'ranuts/vnode', file: 'src/vnode/index.ts', blurb: 'Snabbdom 风格虚拟 DOM', runtime: 'browser' },
+  { subpath: 'ranuts/vnode', file: 'src/vnode/index.ts', blurb: 'Snabbdom-style virtual DOM', runtime: 'browser' },
 ];
 
 type Kind = 'function' | 'class' | 'interface' | 'type' | 'enum' | 'const' | 'namespace' | 'other';

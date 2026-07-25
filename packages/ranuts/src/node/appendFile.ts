@@ -3,9 +3,9 @@ import readFile from '@/node/readFile';
 import type { Error } from '@/node/fs';
 
 /**
- * @description: 给一个已经存在的文件追加内容
- * @param {string} path 文件路径
- * @param {string} content 新加的内容
+ * @description: Append content to an existing file
+ * @param {string} path file path
+ * @param {string} content content to append
  * @return {Promise}
  */
 

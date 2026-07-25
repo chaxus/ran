@@ -1,6 +1,14 @@
-import { range } from 'ranuts/utils';
+import {
+  HEX_COLOR_REGEX,
+  RGBA_REGEX,
+  RGB_REGEX,
+  hexToHsv,
+  hsvToRgb,
+  range,
+  rgbToHex,
+  rgbToHsv,
+} from 'ranuts/utils';
 import { signal, createEffect, RanElement, isDisabled } from '@/utils/index';
-import { HEX_COLOR_REGEX, RGBA_REGEX, RGB_REGEX, hex2hsv, hsv2rgb, rgb2hex, rgb2hsv } from '@/utils/color';
 import { Div, View, EventManager, Style } from '@/utils/builder';
 import '@/components/popover';
 import '@/components/input';
@@ -184,14 +192,14 @@ export class ColorPicker extends RanElement {
   // ── Color helpers ────────────────────────────────────────────────────────
   currentRgba = (): RGBA => {
     const { hue, saturation, lightness, transparency } = this.context;
-    const { r, g, b } = hsv2rgb(hue.getter(), saturation.getter(), lightness.getter());
+    const [r, g, b] = hsvToRgb(hue.getter(), saturation.getter(), lightness.getter());
     return { r, g, b, a: transparency.getter() / 100 };
   };
 
   /** Canonical string used for the `value` attribute and `change` events. */
   currentValue = (): string => {
     const { r, g, b, a } = this.currentRgba();
-    return a < 1 ? `rgba(${r}, ${g}, ${b}, ${Number(a.toFixed(2))})` : rgb2hex(r, g, b);
+    return a < 1 ? `rgba(${r}, ${g}, ${b}, ${Number(a.toFixed(2))})` : rgbToHex(r, g, b);
   };
 
   /** String shown in the value input, depending on the selected format. */
@@ -201,7 +209,7 @@ export class ColorPicker extends RanElement {
       return a < 1 ? `rgba(${r}, ${g}, ${b}, ${Number(a.toFixed(2))})` : `rgb(${r}, ${g}, ${b})`;
     }
     // HEX shows the 6-digit color; alpha is controlled by the alpha slider.
-    return rgb2hex(r, g, b);
+    return rgbToHex(r, g, b);
   };
 
   updateColorValue = (value: string): void => {
@@ -211,19 +219,20 @@ export class ColorPicker extends RanElement {
     const rgba = RGBA_REGEX.exec(compact); // rgba(255, 255, 255, 0)
     const rgb = RGB_REGEX.exec(compact); // rgb(255, 255, 255)
     if (hex) {
-      const { h, s, v } = hex2hsv(hex[0]);
+      // hexToHsv returns null only for malformed hex, which HEX_COLOR_REGEX already excluded.
+      const [h, s, v] = hexToHsv(hex[0])!;
       this.context.hue.setter(h);
       this.context.saturation.setter(s);
       this.context.lightness.setter(v);
       this.context.transparency.setter(100);
     } else if (rgba) {
-      const { h, s, v } = rgb2hsv(Number(rgba[1]), Number(rgba[2]), Number(rgba[3]));
+      const [h, s, v] = rgbToHsv(Number(rgba[1]), Number(rgba[2]), Number(rgba[3]));
       this.context.hue.setter(h);
       this.context.saturation.setter(s);
       this.context.lightness.setter(v);
       this.context.transparency.setter(Number(rgba[4]) * 100);
     } else if (rgb) {
-      const { h, s, v } = rgb2hsv(Number(rgb[1]), Number(rgb[2]), Number(rgb[3]));
+      const [h, s, v] = rgbToHsv(Number(rgb[1]), Number(rgb[2]), Number(rgb[3]));
       this.context.hue.setter(h);
       this.context.saturation.setter(s);
       this.context.lightness.setter(v);
@@ -245,7 +254,7 @@ export class ColorPicker extends RanElement {
       new CustomEvent('change', {
         detail: {
           value,
-          hex: rgb2hex(r, g, b),
+          hex: rgbToHex(r, g, b),
           rgb: `rgb(${r}, ${g}, ${b})`,
           rgba: `rgba(${r}, ${g}, ${b}, ${Number(a.toFixed(2))})`,
           alpha: Number(a.toFixed(2)),
@@ -382,7 +391,7 @@ export class ColorPicker extends RanElement {
     this._effectDisposers.push(
       // Saturation panel background = the pure hue.
       createEffect(() => {
-        const { r, g, b } = hsv2rgb(this.context.hue.getter(), 100, 100);
+        const [r, g, b] = hsvToRgb(this.context.hue.getter(), 100, 100);
         this.colorPickerSaturation?.style.setProperty('background-color', `rgb(${r}, ${g}, ${b})`);
       }),
       // Palette dot position (percent-based, layout independent).
@@ -395,7 +404,7 @@ export class ColorPicker extends RanElement {
       // Hue slider thumb position + color.
       createEffect(() => {
         const h = this.context.hue.getter();
-        const { r, g, b } = hsv2rgb(h, 100, 100);
+        const [r, g, b] = hsvToRgb(h, 100, 100);
         this.colorPickerHueThumb?.style.setProperty('left', `${(h / HUE) * 100}%`);
         this.colorPickerHueThumb?.style.setProperty('background', `rgb(${r}, ${g}, ${b})`);
         this.colorPickerHueSlider?.setAttribute('aria-valuenow', String(Math.round(h)));

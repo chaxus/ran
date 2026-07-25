@@ -1,11 +1,11 @@
 import type { LINE_CAP, LINE_JOIN, RENDERER_TYPE } from '@/utils/visual/enums';
 
 export interface IApplicationOptions {
-  prefer?: RENDERER_TYPE.CANVAS | RENDERER_TYPE.WEB_GL | RENDERER_TYPE.WEB_GPU; // 使用哪种 renderer
+  prefer?: RENDERER_TYPE.CANVAS | RENDERER_TYPE.WEB_GL | RENDERER_TYPE.WEB_GPU; // which renderer to use
   view?: HTMLCanvasElement;
   backgroundColor?: string;
   backgroundAlpha?: number;
-  debug?: boolean; // 开启后打印当前使用的渲染后端（默认关闭，避免污染控制台与测试）
+  debug?: boolean; // when on, logs which backend is in use (off by default, to keep the console and tests clean)
 }
 
 export interface IFillStyleOptions {

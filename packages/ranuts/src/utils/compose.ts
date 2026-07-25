@@ -4,7 +4,7 @@ type Middleware<T> = (context: T, next: Next) => any;
 
 type ComposedMiddleware<T> = (context: T, next?: Next) => Promise<void>;
 /**
- * @description: 将异步函数转化为同步的方式进行执行
+ * @description: Run a chain of async functions as if it were sequential
  * @param {Array} middleware
  * @return {*}
  */

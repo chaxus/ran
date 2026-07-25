@@ -5,8 +5,8 @@ type Globals = Record<string, unknown>;
 const g = globalThis as unknown as Globals;
 
 /**
- * 覆盖全局对象。必须用 defineProperty：Node 里 `navigator` 是只有 getter 的访问器属性，
- * 直接赋值会抛 TypeError。
+ * Override a global. defineProperty is required: in Node `navigator` is a getter-only
+ * accessor, so assigning to it throws a TypeError.
  */
 const stub = (values: Globals): (() => void) => {
   const saved = Object.keys(values).map((key) => [key, Object.getOwnPropertyDescriptor(g, key)] as const);

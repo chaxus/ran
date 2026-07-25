@@ -17,18 +17,18 @@ const bodyMiddleware = (options: Partial<ServerBody> = {}): MiddlewareFunction =
   return (ctx: Context, next: Next) => {
     const { req, res } = ctx;
     const { url, method } = req;
-    // 处理 URL 上的 query 参数
+    // Parse the URL's query parameters
     const [path = '', search = ''] = url?.split('?') || [];
     const query = search ? new URLSearchParams(search) : {};
     if (!ctx.request) {
       ctx.request = {};
     }
-    // 添加到 request 上
+    // Attach them to the request
     ctx.request.method = method;
     ctx.request.path = path;
     ctx.request.url = url;
     ctx.request.query = query;
-    // 处理 contentType
+    // Handle the content type
     const contentType = req.headers['content-type'];
     // application/json
     if (contentType === 'application/json') {

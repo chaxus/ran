@@ -21,15 +21,15 @@ describe('createSignal', () => {
   });
 
   it('updates with equals: true — it means "use the default comparison", not "always equal"', () => {
-    // 回归：旧实现把 true 当成「永远相等」，{ equals: true } 的 signal 一次也不会更新
+    // Regression: `true` used to mean "always equal", so an { equals: true } signal never updated at all
     const [get, set] = createSignal(0, { equals: true });
     set(1);
     expect(get()).toBe(1);
   });
 
   it('always notifies with equals: false, even for a deep-equal value', () => {
-    // 回归：旧实现在 equals 之外还压了一层 cloneDeep + isEqual 深比较，
-    // 于是 equals:false（「永远通知」）对深度相等的新对象失效
+    // Regression: the old implementation layered a cloneDeep + isEqual deep comparison on top
+    // of `equals`, so equals:false ("always notify") stopped working for a deeply equal object
     const event = 'signal-test-always';
     const cb = vi.fn();
     subscribers.tap(event, cb);
@@ -62,7 +62,7 @@ describe('createSignal', () => {
   it('honours a custom comparator', () => {
     const [get, set] = createSignal(0, { equals: (prev, next) => Math.abs(prev - next) < 10 });
     set(5);
-    expect(get()).toBe(0); // 差值小于 10，视为相等
+    expect(get()).toBe(0); // within 10, so treated as equal
     set(50);
     expect(get()).toBe(50);
   });

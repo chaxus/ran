@@ -2,7 +2,7 @@ import { Shape } from '@/utils/visual/shape/shape';
 import { SHAPE_TYPE } from '@/utils/visual/enums';
 import type { Point } from '@/utils/visual/vertex/point';
 
-// 多边形由多个点构成，points 数组每 2 个元素代表一个点的坐标
+// A polygon is a list of points; every 2 elements of `points` are one point's coordinates
 export class Polygon extends Shape {
   public points: number[] = [];
   public closeStroke = false;
@@ -11,28 +11,28 @@ export class Polygon extends Shape {
     super();
     this.points = points;
   }
-  // 判断线段与射线是否相交
+  // Does this segment cross the ray?
   private isIntersect(px: number, py: number, p1x: number, p1y: number, p2x: number, p2y: number) {
-    // 线段在射线上方
+    // The segment is above the ray
     if (p1y > py && p2y > py) {
       return false;
     }
 
-    // 线段在射线下方
+    // The segment is below the ray
     if (p1y < py && p2y < py) {
       return false;
     }
 
-    // 线段的两个端点都在待检测点的左边
+    // Both endpoints are left of the test point
     if (p1x < px && p2x < px) {
       return false;
     }
 
-    // 线段的2个端点都在待检测点的右边
+    // Both endpoints are right of the test point
     if (p1x > px && p2x > px) {
       return true;
     }
-    // 线段的一个端点在待检测点的左边，另一个端点在待检测点的右边，这个时候可能相交，也可能不相交：
+    // One endpoint is left of the test point and the other right, so it may or may not cross:
     const p2o = p1y - p2y;
     const p1o = p2x - p1x;
     const p2q = py - p2y;
@@ -48,7 +48,7 @@ export class Polygon extends Shape {
     const len = this.points.length;
     let count = 0;
 
-    // points 数组的每两个元素为一个顶点的坐标
+    // Every two elements of `points` are one vertex
     for (let i = 2; i <= len - 2; i += 2) {
       const p1x = this.points[i - 2];
       const p1y = this.points[i - 1];
@@ -59,7 +59,7 @@ export class Polygon extends Shape {
       }
     }
 
-    // 还需要判断最后一个点和第一个点的连线是否与射线相交
+    // The closing edge from the last point back to the first has to be tested too
     const p1x = this.points[0];
     const p1y = this.points[1];
     const p2x = this.points[len - 2];

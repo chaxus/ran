@@ -24,7 +24,7 @@ export class RoundedRectangle extends Shape {
       return false;
     }
 
-    // 判断左上角
+    // Top-left corner
     const c1x = this.x + this.radius;
     const c1y = this.y + this.radius;
     if (p.x < c1x && p.y < c1y) {
@@ -35,7 +35,7 @@ export class RoundedRectangle extends Shape {
       }
     }
 
-    // 判断左下角
+    // Bottom-left corner
     const c2x = this.x + this.radius;
     const c2y = this.y + this.height - this.radius;
     if (p.x < c2x && p.y > c2y) {
@@ -46,7 +46,7 @@ export class RoundedRectangle extends Shape {
       }
     }
 
-    // 判断右上角
+    // Top-right corner
     const c3x = this.x + this.width - this.radius;
     const c3y = this.y + this.radius;
     if (p.x > c3x && p.y < c3y) {
@@ -57,7 +57,7 @@ export class RoundedRectangle extends Shape {
       }
     }
 
-    // 判断右下角
+    // Bottom-right corner
     const c4x = this.x + this.width - this.radius;
     const c4y = this.y + this.height - this.radius;
     if (p.x > c4x && p.y < c4y) {

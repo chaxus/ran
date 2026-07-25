@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 
 // const ws = new WSS({ port: 500 })
 // ws.on('connect', (cli: Client) => {
-//   console.log('一个客户端连接了')
+//   console.log('a client connected')
 //   ws.broadcast('Hello! every client!')
 //   cli.send('Welcome, a user')
 //   cli.ping()

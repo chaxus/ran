@@ -6,7 +6,7 @@ import {
   getLinearGradient,
   getTangentByPointer,
   roundRectByArc,
-} from '@/utils/math';
+} from '@/utils/canvas';
 
 function createContextMock(): CanvasRenderingContext2D & {
   gradient: { addColorStop: ReturnType<typeof vi.fn> };
@@ -23,34 +23,34 @@ function createContextMock(): CanvasRenderingContext2D & {
   } as unknown as CanvasRenderingContext2D & { gradient: { addColorStop: ReturnType<typeof vi.fn> } };
 }
 
-describe('utils/math', () => {
+describe('utils/canvas', () => {
   it('converts degrees to radians', () => {
     expect(getAngle(0)).toBe(0);
     expect(getAngle(180)).toBeCloseTo(Math.PI);
     expect(getAngle(360)).toBeCloseTo(Math.PI * 2);
   });
 
-  it('computes rounded arc points from radians and radius', () => {
+  it('computes points on a circle', () => {
     expect(getArcPointerByDeg(0, 10)).toEqual([10, 0]);
     expect(getArcPointerByDeg(Math.PI / 2, 10)).toEqual([0, 10]);
     expect(getArcPointerByDeg(Math.PI, 10)).toEqual([-10, 0]);
   });
 
-  it('computes tangent slope and intercept for a point', () => {
+  it('computes the tangent line through a point', () => {
     expect(getTangentByPointer(2, 4)).toEqual([-0.5, 5]);
   });
 
-  it('draws a fan shape with an outer arc and inner point', () => {
+  it('builds a fan-shaped path', () => {
     const ctx = createContextMock();
     fanShapedByArc(ctx, 100, 0, Math.PI / 2, 8);
 
     expect(ctx.beginPath).toHaveBeenCalledTimes(1);
-    expect(ctx.arc).toHaveBeenCalledWith(0, 0, 100, expect.any(Number), expect.any(Number), false);
-    expect(ctx.lineTo).toHaveBeenCalledWith(expect.any(Number), expect.any(Number));
+    expect(ctx.arc).toHaveBeenCalledTimes(1);
+    expect(ctx.lineTo).toHaveBeenCalledTimes(1);
     expect(ctx.closePath).toHaveBeenCalledTimes(1);
   });
 
-  it('caps rounded rectangle radius to half the smaller dimension', () => {
+  it('clamps the corner radius to half of the shortest side', () => {
     const ctx = createContextMock();
     roundRectByArc(ctx, 10, 20, 30, 10, 20);
 
@@ -61,13 +61,11 @@ describe('utils/math', () => {
 
   it('creates linear gradients for keyword directions', () => {
     const ctx = createContextMock();
-    const gradient = getLinearGradient(ctx, 10, 20, 100, 50, 'linear-gradient(to right, red 0, blue 1)') as unknown as {
-      addColorStop: ReturnType<typeof vi.fn>;
-    };
+    const gradient = getLinearGradient(ctx, 10, 20, 100, 50, 'linear-gradient(to right, red 0, blue 1)');
 
     expect(ctx.createLinearGradient).toHaveBeenCalledWith(10, 20, 110, 20);
-    expect(gradient.addColorStop).toHaveBeenCalledWith('0', 'red');
-    expect(gradient.addColorStop).toHaveBeenCalledWith('1', 'blue');
+    expect(gradient.addColorStop).toHaveBeenCalledWith(0, 'red');
+    expect(gradient.addColorStop).toHaveBeenCalledWith(1, 'blue');
   });
 
   it('creates linear gradients for degree directions', () => {

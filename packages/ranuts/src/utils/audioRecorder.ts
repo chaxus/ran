@@ -544,7 +544,7 @@ function getMimeType() {
   return undefined;
 }
 /**
- * @description: 录音
+ * @description: Record audio
  * @return {*}
  */
 export class AudioRecorder {

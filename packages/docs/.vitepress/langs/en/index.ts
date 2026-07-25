@@ -108,6 +108,7 @@ const themeEnConfig: DefaultTheme.Config = {
               { text: 'throttle - Throttle function', link: '/src/ranuts/utils/throttle' },
               { text: 'once / singleFlight - Run exactly once', link: '/src/ranuts/utils/memoize' },
               { text: 'QuestQueue - Concurrency-limited queue', link: '/src/ranuts/utils/quest_queue' },
+              { text: 'withTimeout / deferred - Promise primitives', link: '/src/ranuts/utils/with_timeout' },
               { text: 'noop - No-op function', link: '/src/ranuts/utils/noop' },
               { text: 'compose - Compose middleware', link: '/src/ranuts/utils/compose' },
             ],
@@ -132,6 +133,7 @@ const themeEnConfig: DefaultTheme.Config = {
               { text: 'isString - Check if string', link: '/src/ranuts/utils/is_string' },
               { text: 'str2Xml - String to XML', link: '/src/ranuts/utils/str2xml' },
               { text: 'detectLanguage - Detect text language', link: '/src/ranuts/utils/detect_language' },
+              { text: 'resolveLocale - Pick the active locale', link: '/src/ranuts/utils/resolve_locale' },
               { text: 'segmentByRanges - Offsets & highlights', link: '/src/ranuts/utils/segment' },
             ],
           },
@@ -210,10 +212,12 @@ const themeEnConfig: DefaultTheme.Config = {
             text: 'Storage',
             collapsed: true,
             items: [
-              { text: 'localStorageGetItem - Get storage', link: '/src/ranuts/utils/local_storage' },
-              { text: 'localStorageSetItem - Set storage', link: '/src/ranuts/utils/local_storage' },
+              { text: 'localStorage helpers - Safe storage', link: '/src/ranuts/utils/local_storage' },
+              { text: 'createStore - Prefixed JSON storage', link: '/src/ranuts/utils/local_storage' },
               { text: 'WebDB - IndexedDB wrapper', link: '/src/ranuts/utils/web_db' },
+              { text: 'createHandoff - Hand a file across pages', link: '/src/ranuts/utils/create_handoff' },
               { text: 'readFileAs* - Read File / Blob', link: '/src/ranuts/utils/read_file' },
+              { text: 'zip - Read & rewrite ZIP archives', link: '/src/ranuts/utils/zip' },
             ],
           },
           {
@@ -222,6 +226,7 @@ const themeEnConfig: DefaultTheme.Config = {
             items: [
               { text: 'getAllQueryString - Extract query', link: '/src/ranuts/utils/get_all_query_string' },
               { text: 'getQuery - Extract query', link: '/src/ranuts/utils/get_query' },
+              { text: 'queryFlag / isInIframe - Boolean flags & embedding', link: '/src/ranuts/utils/query_flag' },
               { text: 'encodeUrl - Encode URL safely', link: '/src/ranuts/utils/encode_url' },
               { text: 'appendUrl - Append query params', link: '/src/ranuts/utils/append_url' },
               { text: 'createLocalePath - i18n URL maths', link: '/src/ranuts/utils/locale_path' },

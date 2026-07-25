@@ -2,7 +2,7 @@ import { Server, staticMiddleware } from '@/node';
 
 const app = new Server();
 
-// 允许访问的文件类型
+// File types allowed to be served
 // const fileTypes: Record<string, string> = {
 //   html: 'text/html',
 //   css: 'text/css',

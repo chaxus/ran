@@ -19,16 +19,16 @@ describe('escapeHtml', () => {
   });
 
   it('escapes single quote', () => {
-    expect(escapeHtml("it's")).toBe('it&#039;s');
+    expect(escapeHtml("it's")).toBe('it&#39;s');
   });
 
   it('escapes all special characters together', () => {
-    expect(escapeHtml('<a href="test\'s & others">')).toBe('&lt;a href=&quot;test&#039;s &amp; others&quot;&gt;');
+    expect(escapeHtml('<a href="test\'s & others">')).toBe('&lt;a href=&quot;test&#39;s &amp; others&quot;&gt;');
   });
 
   it('escapes XSS-style payload', () => {
     expect(escapeHtml('<script>alert("xss&\'1\'");</script>')).toBe(
-      '&lt;script&gt;alert(&quot;xss&amp;&#039;1&#039;&quot;);&lt;/script&gt;',
+      '&lt;script&gt;alert(&quot;xss&amp;&#39;1&#39;&quot;);&lt;/script&gt;',
     );
   });
 
@@ -61,7 +61,7 @@ describe('escapeHtml', () => {
   });
 
   it('handles string with only special chars', () => {
-    expect(escapeHtml('<>&"\'')).toBe('&lt;&gt;&amp;&quot;&#039;');
+    expect(escapeHtml('<>&"\'')).toBe('&lt;&gt;&amp;&quot;&#39;');
   });
 });
 

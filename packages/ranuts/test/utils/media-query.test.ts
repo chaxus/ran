@@ -3,7 +3,7 @@ import { MOBILE_MEDIA_QUERY, matchMediaQuery, watchMediaQuery } from '@/utils';
 
 const g = globalThis as unknown as { window?: unknown };
 
-/** 可手动触发 change 的 MediaQueryList 替身 */
+/** A MediaQueryList stand-in whose change event can be fired by hand */
 const makeMql = (matches: boolean, legacy = false) => {
   const listeners = new Set<() => void>();
   const mql: Record<string, unknown> = {

@@ -7,19 +7,21 @@ import type { IApplicationOptions } from '@/utils/visual/types';
 
 export abstract class BatchRenderer extends Renderer {
   /**
-   * 上次构建大数组时的场景结构版本号（每个渲染器实例独立）。与根节点的 structureVersion
-   * 不一致时说明场景结构变了（增删节点 / 重绘），需要重建；否则只做逐帧 transform 更新。
-   * 初值 -1 保证首帧一定构建。基于版本号对比，多个渲染器共享同一场景也不会互相“消费”脏标记。
+   * The scene structure version at the last rebuild, held per renderer instance. When it
+   * differs from the root's structureVersion the scene changed (a node was added or removed,
+   * or a shape redrawn) and the big array must be rebuilt; otherwise only per-frame transform
+   * updates are needed. Starting at -1 guarantees a build on the first frame. Comparing
+   * versions rather than consuming a dirty flag lets several renderers share one scene.
    */
   protected builtVersion = -1;
 
   /**
-   * 顶点个数
+   * Vertex count
    */
   protected vertexCount = 0;
 
   /**
-   * 顶点下标个数
+   * Index count
    */
   protected indexCount = 0;
 
@@ -27,27 +29,27 @@ export abstract class BatchRenderer extends Renderer {
   protected batchesCount = 0;
 
   /**
-   * 顶点数组 float32 视图
+   * Float32 view over the vertex array
    */
   protected vertFloatView: Float32Array;
 
   /**
-   * 顶点数组 Uint32 视图
+   * Uint32 view over the vertex array
    */
   protected vertIntView: Uint32Array;
 
   /**
-   * 顶点下标数组
+   * Index array
    */
   protected indexBuffer: Uint32Array;
 
   /**
-   * 当前的 webGL｜webGPU vertex buffer 的长度
+   * Current length of the WebGL/WebGPU vertex buffer
    */
   protected curVertBufferLength = 0;
 
   /**
-   * 当前的 webGL｜webGPU index buffer 的长度
+   * Current length of the WebGL/WebGPU index buffer
    */
   protected curIndexBufferLength = 0;
 
@@ -85,7 +87,7 @@ export abstract class BatchRenderer extends Renderer {
   }
 
   /**
-   * 如果现有的 typed array 放不下了，则新建一个
+   * Allocate a bigger typed array when the current one can no longer hold the data
    */
   protected resizeBufferIfNeeded(): void {
     if (this.vertexCount * BYTES_PER_VERTEX > this.vertFloatView.byteLength) {
@@ -100,7 +102,7 @@ export abstract class BatchRenderer extends Renderer {
   }
 
   /**
-   * 将数据打包到大数组里
+   * Pack the data into the big array
    */
   protected packData(): void {
     for (let i = 0; i < this.batchesCount; i++) {
@@ -114,27 +116,27 @@ export abstract class BatchRenderer extends Renderer {
   }
 
   /**
-   * 调用 webGL 或 webGPU 的绘制 api 将内容绘制出来
+   * Draw via the WebGL or WebGPU drawing API
    */
   protected abstract draw(): void;
 
   /**
-   * 更新更新 vertex buffer 和 index buffer
+   * Update the vertex and index buffers
    */
   protected abstract updateBuffer(): void;
 
   /**
-   * 设置投影矩阵，这是为了适配 canvas 元素的尺寸
+   * Set the projection matrix, which adapts to the canvas element's size
    */
   protected abstract setProjectionMatrix(): void;
 
   /**
-   * 更新 stage 的 transform 对应的 uniform 变量
+   * Update the uniform holding the stage's transform
    */
   protected abstract setRootTransform(a: number, b: number, c: number, d: number, tx: number, ty: number): void;
 
   /**
-   * 更新子节点的 transform
+   * Update the children's transforms
    */
   protected updateChildrenTransform(rootContainer: Container): void {
     rootContainer.sortChildren();
@@ -157,13 +159,13 @@ export abstract class BatchRenderer extends Renderer {
   }
 
   /**
-   * 更新节点的位置信息并渲染
+   * Update node positions and render
    */
   public render(rootContainer: Container): void {
     this.updateChildrenTransform(rootContainer);
 
     /**
-     * 场景结构变化时重建大数组，否则只更新顶点位置
+     * Rebuild the big array when the scene structure changed; otherwise only update vertex positions
      */
     if (this.builtVersion !== rootContainer.structureVersion) {
       this.startBuild();

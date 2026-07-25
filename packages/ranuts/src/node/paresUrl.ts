@@ -12,7 +12,7 @@ interface Req extends IncomingMessage {
   _parsedUrl?: ParseUrl;
 }
 /**
- * @description: 解析 IncomingMessage 类型的请求url，返回的类型永远是 ParseUrl
+ * @description: Parse an IncomingMessage's request URL; the return type is always ParseUrl
  * @param {Req} req
  * @return {ParseUrl}
  */

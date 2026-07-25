@@ -4,7 +4,7 @@ import type { Container } from '@/utils/visual/vertex/container';
 import type { Cursor, FederatedMouseEvent } from '@/utils/visual/event/types';
 
 export class EventBoundary {
-  private rootContainer: Container; // 根元素 stage
+  private rootContainer: Container; // the root element, i.e. the stage
   private hasFoundTarget = false;
   private hitTarget: Container | null = null;
   public cursor: Cursor = 'auto';
@@ -17,9 +17,9 @@ export class EventBoundary {
     this.eventHandlerMap.mousedown = this.fireMouseDown;
     this.eventHandlerMap.mouseup = this.fireMouseUp;
   }
-  // 引入了层级关系的碰撞检测
+  // Hit testing that respects the scene hierarchy
   private hitTestRecursive = (curTarget: Container, globalPos: Point) => {
-    // 如果对象不可见则返回
+    // Invisible objects are skipped
     if (!curTarget.visible) {
       return;
     }
@@ -28,7 +28,7 @@ export class EventBoundary {
       return;
     }
 
-    // 深度优先遍历子元素
+    // Depth-first over the children
     for (let i = curTarget.children.length - 1; i >= 0; i--) {
       const child = curTarget.children[i];
       this.hitTestRecursive(child, globalPos);
@@ -38,7 +38,7 @@ export class EventBoundary {
       return;
     }
 
-    // 最后检测自身
+    // and finally test itself
     const p = curTarget.worldTransform.applyInverse(globalPos);
     if (curTarget.containsPoint(p)) {
       this.hitTarget = curTarget;
@@ -57,20 +57,20 @@ export class EventBoundary {
     this.eventHandlerMap[event.type]?.(event);
   };
   private fireMouseMove = (event: FederatedMouseEvent) => {
-    // 执行 event handler，首先获取碰撞元素，这里使用的是上一篇文章讲述的碰撞检测代码
+    // Run the handlers: first find what was hit, using the hit testing above
     const hitTarget = this.hitTest(event.global);
     // event.target = target
 
     const topTarget = this.overTargets.length > 0 ? this.overTargets[this.overTargets.length - 1] : null;
 
-    // 处理 mouseout 和 mouseleave 事件
+    // mouseout and mouseleave
     if (topTarget && topTarget !== hitTarget) {
-      // 首先是 mouseout
+      // mouseout first
       event.target = topTarget;
       event.type = 'mouseout';
       this.dispatchEvent(event);
 
-      // 接着处理 mouseleave
+      // then mouseleave
       if (!hitTarget || !this.composePath(hitTarget).includes(topTarget)) {
         event.type = 'mouseleave';
         event.eventPhase = EventPhase.AT_TARGET;
@@ -80,7 +80,7 @@ export class EventBoundary {
             event.target = this.overTargets[i];
             event.currentTarget = event.target;
 
-            // 执行对应的 event handler，捕获和冒泡分别执行一次
+            // Run the handlers — once for capture, once for bubble
             event.target.call(`${event.type}capture`, event);
             event.target.call(event.type, event);
           }
@@ -90,7 +90,7 @@ export class EventBoundary {
             event.target = tempTarget;
             event.currentTarget = event.target;
 
-            // 执行对应的 event handler，捕获和冒泡分别执行一次
+            // Run the handlers — once for capture, once for bubble
             event.target.call(`${event.type}capture`, event);
             event.target.call(event.type, event);
 
@@ -100,14 +100,14 @@ export class EventBoundary {
       }
     }
 
-    // 处理 mouseover 和 mouseenter 事件
+    // mouseover and mouseenter
     if (hitTarget && topTarget !== hitTarget) {
-      // 首先是 mouseover
+      // mouseover first
       event.target = hitTarget;
       event.type = 'mouseover';
       this.dispatchEvent(event);
 
-      // 接下来是 mouseenter
+      // then mouseenter
       const composedPath = this.composePath(hitTarget);
       event.type = 'mouseenter';
       event.eventPhase = EventPhase.AT_TARGET;
@@ -116,12 +116,12 @@ export class EventBoundary {
           event.target = composedPath[i];
           event.currentTarget = event.target;
 
-          // 执行对应的event handler，捕获和冒泡分别执行一次
+          // Run the handlers — once for capture, once for bubble
           event.target.call(`${event.type}capture`, event);
           event.target.call(event.type, event);
         }
       } else {
-        // 首先找出分叉点，也就是hitTarget和topTarget的冒泡路径上的共同点
+        // Find where the paths diverge — the common ancestor of hitTarget and topTarget
         let forkedPointIdx = composedPath.length - 1;
         for (; forkedPointIdx >= 0; forkedPointIdx--) {
           if (this.composePath(topTarget).includes(composedPath[forkedPointIdx])) {
@@ -129,19 +129,19 @@ export class EventBoundary {
           }
         }
 
-        // 按照自顶向下的顺序依次在对应的 event target 上触发 mouseenter 事件
+        // Fire mouseenter on each target from the top down
         for (let i = forkedPointIdx + 1; i < composedPath.length; i++) {
           event.target = composedPath[i];
           event.currentTarget = event.target;
 
-          // 执行对应的event handler，捕获和冒泡分别执行一次
+          // Run the handlers — once for capture, once for bubble
           event.target.call(`${event.type}capture`, event);
           event.target.call(event.type, event);
         }
       }
     }
 
-    // 处理mousemove事件
+    // mousemove
     if (hitTarget) {
       event.target = hitTarget;
       event.type = 'mousemove';
@@ -165,7 +165,7 @@ export class EventBoundary {
     event.target = hitTarget;
     this.dispatchEvent(event);
 
-    // 记录 mousedown 时的传播路径
+    // Record the propagation path at mousedown
     this.pressTargetsMap[event.button] = this.composePath(hitTarget);
   };
   private fireMouseUp = (event: FederatedMouseEvent) => {
@@ -183,11 +183,11 @@ export class EventBoundary {
 
     const pressTarget = propagationPath[propagationPath.length - 1];
 
-    // 处理 click 事件
+    // click
     let clickTarget: Container = pressTarget;
     const composedPath = this.composePath(hitTarget);
 
-    // 找出最近公共祖先
+    // Find the nearest common ancestor
     while (clickTarget) {
       if (!composedPath.includes(clickTarget)) {
         if (clickTarget.parent) {
@@ -213,7 +213,7 @@ export class EventBoundary {
   };
   private propagate = (event: FederatedMouseEvent) => {
     const composedPath = this.composePath(event.target);
-    // 首先是捕获阶段
+    // Capture phase first
     event.eventPhase = EventPhase.CAPTURING;
     for (let i = 0; i < composedPath.length - 1; i++) {
       event.currentTarget = composedPath[i];
@@ -223,7 +223,7 @@ export class EventBoundary {
       }
     }
 
-    // 然后是at target阶段
+    // then the at-target phase
     event.eventPhase = EventPhase.AT_TARGET;
     event.currentTarget = event.target;
     event.currentTarget.call(`${event.type}capture`, event);
@@ -235,7 +235,7 @@ export class EventBoundary {
       return;
     }
 
-    // 最后是冒泡阶段
+    // and finally the bubble phase
     event.eventPhase = EventPhase.BUBBLING;
     for (let i = composedPath.length - 2; i >= 0; i--) {
       event.currentTarget = composedPath[i];

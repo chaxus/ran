@@ -1,11 +1,14 @@
+import { localStorageGetItem, localStorageSetItem, watchMediaQuery } from 'ranuts/utils';
+
 export type RanThemeName = 'light' | 'dark' | 'system';
 export type ThemeTarget = HTMLElement | Document;
 export type ThemeTokenMap = Record<string, string | number | null | undefined>;
 
 const STORAGE_KEY_THEME = 'ran-theme';
+const DARK_MEDIA_QUERY = '(prefers-color-scheme: dark)';
 
-let _systemMediaQuery: MediaQueryList | null = null;
-let _systemListener: (() => void) | null = null;
+/** watchMediaQuery 返回的取消订阅函数；只有 `system` 模式下才有值 */
+let _detachSystemWatch: (() => void) | null = null;
 
 const resolveThemeElement = (target?: ThemeTarget): HTMLElement | undefined => {
   if (target && 'style' in target) return target as HTMLElement;
@@ -14,18 +17,14 @@ const resolveThemeElement = (target?: ThemeTarget): HTMLElement | undefined => {
   return document.documentElement;
 };
 
-const applySystemTheme = (element: HTMLElement): void => {
-  const prefersDark = typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches;
+const applySystemTheme = (element: HTMLElement, prefersDark: boolean): void => {
   element.setAttribute('data-ran-theme', prefersDark ? 'dark' : 'light');
   element.setAttribute('theme', prefersDark ? 'dark' : 'light');
 };
 
 const detachSystemListener = (): void => {
-  if (_systemMediaQuery && _systemListener) {
-    _systemMediaQuery.removeEventListener('change', _systemListener);
-    _systemMediaQuery = null;
-    _systemListener = null;
-  }
+  _detachSystemWatch?.();
+  _detachSystemWatch = null;
 };
 
 export const setTheme = (name: RanThemeName, target?: ThemeTarget): void => {
@@ -36,25 +35,16 @@ export const setTheme = (name: RanThemeName, target?: ThemeTarget): void => {
 
   if (name === 'system') {
     if (typeof window === 'undefined') return;
-    applySystemTheme(element);
-    _systemMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    _systemListener = () => applySystemTheme(element);
-    _systemMediaQuery.addEventListener('change', _systemListener);
-    try {
-      localStorage.setItem(STORAGE_KEY_THEME, 'system');
-    } catch {
-      // ignore storage errors in SSR / private browsing
-    }
+    // watchMediaQuery 会先同步回调一次当前值，再在系统切换时回调，
+    // 所以这里不用另外读一遍初值。
+    _detachSystemWatch = watchMediaQuery(DARK_MEDIA_QUERY, (prefersDark) => applySystemTheme(element, prefersDark));
+    localStorageSetItem(STORAGE_KEY_THEME, 'system');
     return;
   }
 
   element.setAttribute('data-ran-theme', name);
   element.setAttribute('theme', name);
-  try {
-    localStorage.setItem(STORAGE_KEY_THEME, name);
-  } catch {
-    // ignore
-  }
+  localStorageSetItem(STORAGE_KEY_THEME, name);
 };
 
 export const getTheme = (target?: ThemeTarget): RanThemeName | '' => {
@@ -62,12 +52,8 @@ export const getTheme = (target?: ThemeTarget): RanThemeName | '' => {
   if (!element) return '';
   const value = element.getAttribute('data-ran-theme') || element.getAttribute('theme') || '';
   if (value === 'light' || value === 'dark') {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY_THEME);
-      if (stored === 'system') return 'system';
-    } catch {
-      // ignore
-    }
+    // 属性上只会是 light / dark；'system' 是「跟随系统」这个**意图**，只存在于存储里。
+    if (localStorageGetItem(STORAGE_KEY_THEME) === 'system') return 'system';
     return value;
   }
   return '';
@@ -96,14 +82,8 @@ export const setThemeTokens = (tokens: ThemeTokenMap, target?: HTMLElement): voi
 };
 
 export const initTheme = (target?: ThemeTarget): void => {
-  if (typeof localStorage === 'undefined') return;
-
-  try {
-    const storedTheme = localStorage.getItem(STORAGE_KEY_THEME) as RanThemeName | null;
-    if (storedTheme === 'light' || storedTheme === 'dark' || storedTheme === 'system') {
-      setTheme(storedTheme, target);
-    }
-  } catch {
-    // ignore storage errors
+  const storedTheme = localStorageGetItem(STORAGE_KEY_THEME) as RanThemeName | '';
+  if (storedTheme === 'light' || storedTheme === 'dark' || storedTheme === 'system') {
+    setTheme(storedTheme, target);
   }
 };

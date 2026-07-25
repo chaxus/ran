@@ -533,6 +533,9 @@ export const MimeType = new Map<string, string>([
   ['.m13', 'application/x-msmediaview'],
   ['.m14', 'application/x-msmediaview'],
   ['.wmf', 'application/x-msmetafile'],
+  // Enhanced Metafile — the vector format OOXML embeds for pasted charts/shapes. It has no
+  // IANA registration; `image/x-emf` is what browsers and the OOXML tooling use.
+  ['.emf', 'image/x-emf'],
   ['.mny', 'application/x-msmoney'],
   ['.pub', 'application/x-mspublisher'],
   ['.scd', 'application/x-msschedule'],
@@ -618,6 +621,7 @@ export const MimeType = new Map<string, string>([
   ['.ra', 'audio/x-pn-realaudio'],
   ['.rmp', 'audio/x-pn-realaudio-plugin'],
   ['.wav', 'audio/x-wav'],
+  ['.flac', 'audio/flac'],
   ['.cdx', 'chemical/x-cdx'],
   ['.cif', 'chemical/x-cif'],
   ['.cmdf', 'chemical/x-cmdf'],

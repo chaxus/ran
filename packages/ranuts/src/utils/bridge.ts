@@ -30,9 +30,9 @@ export interface MessageData<T = unknown> {
   id?: string;
   isResponse?: boolean;
   isError?: boolean;
-  /** 通道标识：用于隔离同一窗口上的多个 bridge（默认 DEFAULT_CHANNEL） */
+  /** Channel id, isolating several bridges on one window (defaults to DEFAULT_CHANNEL) */
   channel?: string;
-  /** 发送方实例 id：用于避免 bridge 处理自己发出的请求（自答自问） */
+  /** Sender instance id, so a bridge never answers its own request */
   senderId?: string;
 }
 
@@ -42,32 +42,33 @@ export interface PendingRequest<R = unknown> {
 }
 
 const DEFAULT_TIMEOUT = 120000;
-// 协议标记：只有带此标记的消息才被 bridge 处理，
-// 借此和页面上其它库（HMR、DevTools、第三方 SDK）的 postMessage 流量区分开。
-// 导出以便需要手动互操作/测试时对齐协议。
+// Protocol marker: only messages carrying it are handled, which is what separates this
+// traffic from every other library's postMessage on the page (HMR, DevTools, third-party
+// SDKs). Exported so manual interop and tests can match the protocol.
 export const BRIDGE_MARKER = '__ranuts_bridge__';
-// 默认通道：不显式指定 channel 时两端都落在这里，保持向后兼容。
+// Default channel: both ends land here when no channel is given, preserving the old behaviour.
 export const DEFAULT_CHANNEL = 'default';
-// 白名单
+// Allowlist
 // const whiteList = ['localhost', '127.0.0.1', 'chaxus.github.io']
 
-/** bridge 在线路上传输的信封：MessageData + 协议标记 */
+/** The envelope sent over the wire: MessageData plus the protocol marker */
 interface BridgeEnvelope<T = unknown> extends MessageData<T> {
   __bridge: string;
 }
 
 /**
- * 全局消息分发器：所有 PostMessageBridge 共享**同一个** window 'message' 监听器，
- * 再由它把事件分发给各 bridge（方案 C）。避免 N 个 bridge = N 个监听器、
- * 每条消息被处理 N 遍。第一个 bridge 注册时挂监听，最后一个注销时摘掉。
+ * Global dispatcher: every PostMessageBridge shares **one** window 'message' listener, which
+ * then fans events out to the individual bridges. This avoids N bridges meaning N listeners
+ * with each message handled N times. The listener is installed when the first bridge
+ * registers and removed when the last one unregisters.
  */
 class BridgeDispatcher {
   private bridges = new Set<PostMessageBridge>();
-  // 记录当前挂载监听器的 window（而非布尔），以便在 window 变化时重新挂载。
+  // Track which window currently holds the listener (rather than a boolean), so it can be reinstalled when the window changes.
   private attachedWindow: Window | null = null;
 
   private handleMessage = (event: MessageEvent): void => {
-    // 复制成数组，避免 bridge 在 receive 内销毁自身时修改遍历中的集合。
+    // Copy to an array, so a bridge destroying itself inside receive cannot mutate the set being iterated.
     for (const bridge of Array.from(this.bridges)) {
       bridge.receive(event);
     }
@@ -93,7 +94,7 @@ class BridgeDispatcher {
 const bridgeDispatcher = new BridgeDispatcher();
 
 /**
- * Bridge 注册事件，供 client 消费
+ * Bridge registration event, consumed by the client
  */
 
 export class PostMessageBridge {
@@ -101,13 +102,13 @@ export class PostMessageBridge {
   private targetOrigin: string;
   private messageHandlers: Map<string, MessageHandler<any, any>>;
   private pendingRequests: Map<string, PendingRequest<any>>;
-  // 通道标识：同一窗口上区分不同 bridge（方案 A）。默认落在 DEFAULT_CHANNEL，
-  // 两端不显式传 channel 时行为与旧版一致，向后兼容。
+  // Channel id, telling bridges on one window apart. It defaults to DEFAULT_CHANNEL, so
+  // omitting the channel on both ends behaves exactly as it used to.
   private channel: string;
-  // 本实例唯一 id：用于避免处理自己发出的请求（自答自问，方案 A）。
+  // This instance's unique id, so it never handles a request it sent itself.
   private senderId: string;
-  // 是否运行在可用的浏览器环境（存在 window）。
-  // 非浏览器环境（node/SSR）下降级为惰性 no-op，避免实例化即抛错。
+  // Whether a usable browser environment (a window) is present. Outside one (node/SSR) the
+  // instance degrades to a no-op rather than throwing on construction.
   private available: boolean;
 
   constructor(targetWindow?: Window, targetOrigin = '*', channel: string = DEFAULT_CHANNEL) {
@@ -118,17 +119,18 @@ export class PostMessageBridge {
     this.pendingRequests = new Map();
     this.available = typeof window !== 'undefined';
     if (!this.available) {
-      // 无 window：桥接不可用，保留空实例，各操作降级处理。
+      // No window: the bridge is unusable, so keep an inert instance and degrade every operation.
       this.targetWindow = undefined as unknown as Window;
       return;
     }
     this.targetWindow = targetWindow ?? window;
-    // 注册到共享分发器（方案 C），不再各自 addEventListener。
+    // Register with the shared dispatcher instead of calling addEventListener individually.
     bridgeDispatcher.add(this);
   }
 
-  // 用结构化克隆（postMessage 原生能力）直接发对象，盖上协议标记 + 通道 + 发送方 id。
-  // 不再走 base64/JSON，从而保留 Date/Map/Set/ArrayBuffer 等类型，也不再额外编解码。
+  // Send the object directly via structured clone (postMessage's own mechanism), stamped
+  // with the protocol marker, the channel and the sender id. No base64/JSON step, so
+  // Date/Map/Set/ArrayBuffer survive and nothing is encoded twice.
   private post(target: Window, data: MessageData): void {
     const envelope: BridgeEnvelope = {
       ...data,
@@ -139,32 +141,32 @@ export class PostMessageBridge {
     target.postMessage(envelope, this.targetOrigin);
   }
 
-  // 由共享分发器调用，处理单条 window message 事件。
-  // @internal 不建议外部直接调用。
+  // Called by the shared dispatcher to handle one window message event.
+  // @internal — not meant to be called from outside.
   receive = (event: MessageEvent): void => {
     if (!this.available) return;
     // const hostname = new URL(event.origin).hostname
     // if (this.targetOrigin !== '*' && event.origin !== this.targetOrigin && !whiteList.includes(hostname)) return
     if (this.targetOrigin !== '*' && event.origin !== this.targetOrigin) return;
 
-    // 校验来源窗口，避免不同窗口互相串消息。event.source 为 null 时不过滤。
+    // Check the source window so different windows cannot cross-talk. A null event.source is not filtered.
     if (event.source && event.source !== this.targetWindow) return;
 
     const data = event.data as BridgeEnvelope | undefined;
-    // 协议标记过滤：非本协议流量（其它库的 postMessage）直接忽略，
-    // 无需解码、无控制台噪音。
+    // Protocol-marker filter: traffic that is not ours (another library's postMessage) is
+    // ignored outright — nothing decoded, nothing logged.
     if (!data || typeof data !== 'object' || data.__bridge !== BRIDGE_MARKER) return;
-    // 通道隔离：只处理本通道的消息（方案 A，解决同窗口多 bridge 串台）。
+    // Channel isolation: only this channel's messages are handled, so several bridges on one window do not cross-talk.
     if ((data.channel ?? DEFAULT_CHANNEL) !== this.channel) return;
 
     const { type, payload, id, isResponse, isError, senderId } = data;
 
-    // 处理响应消息
+    // Response messages
     if (isResponse && id) {
       const pendingRequest = this.pendingRequests.get(id);
       if (pendingRequest) {
-        // 远端 handler 抛错时回传 isError，需要 reject 而不是 resolve，
-        // 否则调用方会把错误信息当成正常结果。
+        // A remote handler that threw sends back isError, which must reject rather than
+        // resolve — otherwise the caller treats the error message as a normal result.
         if (isError) {
           pendingRequest.reject(new Error(typeof payload === 'string' ? payload : 'Bridge request failed'));
         } else {
@@ -175,16 +177,16 @@ export class PostMessageBridge {
       return;
     }
 
-    // 自答自问防护（方案 A）：不处理自己发出的请求。
-    // 同窗口做请求/响应时请用两个 bridge 实例（senderId 不同即可互通）。
+    // Self-answer guard: a bridge never handles a request it sent. For request/response
+    // within one window use two bridge instances — differing senderIds are enough.
     if (senderId && senderId === this.senderId) return;
 
-    // 处理普通消息
+    // Ordinary messages
     if (typeof type !== 'string' || !this.messageHandlers.has(type)) return;
     const handler = this.messageHandlers.get(type);
     if (isFunction(handler)) {
-      // 响应回发给消息真正的来源，而非固定的 targetWindow，
-      // 避免 targetWindow 与请求来源不一致时回错窗口。
+      // Reply to where the message actually came from rather than the fixed targetWindow,
+      // so a mismatch between the two cannot send the response to the wrong window.
       const replyWindow = (event.source as Window | null) ?? this.targetWindow;
       Promise.resolve(handler(payload))
         .then((response) => {
@@ -204,24 +206,24 @@ export class PostMessageBridge {
     }
   };
 
-  // 注册消息处理器
+  // Register a message handler
   on = <T = unknown, R = unknown>(type: string, handler: MessageHandler<T, R>): void => {
     this.messageHandlers.set(type, handler as MessageHandler<any, any>);
   };
 
-  // 移除消息处理器
+  // Remove a message handler
   off = (type: string): void => {
     this.messageHandlers.delete(type);
   };
 
-  // 发送消息并等待响应
+  // Send a message and await the response
   send = async <T = unknown, R = unknown>(type: string, payload: T): Promise<R> => {
     if (!this.available) {
       return Promise.reject(new Error('PostMessageBridge is unavailable outside a browser environment'));
     }
     const id = getRandomString(10);
     return new Promise<R>((rs, reject) => {
-      // 兜底方案，如果一段时间没有收到响应，则请求结束
+      // Backstop: end the request when no response arrives in time
       const timeout = setTimeout(() => {
         if (this.pendingRequests.has(id)) {
           this.pendingRequests.delete(id);
@@ -236,34 +238,35 @@ export class PostMessageBridge {
         clearTimeout(timeout);
         reject(error);
       };
-      // 先注册 pending，再发送，避免响应先于注册到达。
+      // Register the pending entry before sending, so a response cannot arrive first.
       this.pendingRequests.set(id, { resolve, reject: rejectWith });
       try {
         this.post(this.targetWindow, { type, payload, id });
       } catch (error) {
-        // 结构化克隆失败（如 payload 含函数 / DOM 节点）立即 reject，
-        // 不再让请求白白等满超时。（循环引用结构化克隆本身能处理）
+        // A structured-clone failure (a payload holding a function or a DOM node) rejects
+        // immediately rather than burning the full timeout. Circular references are fine —
+        // structured clone handles those itself.
         this.pendingRequests.delete(id);
         rejectWith(error instanceof Error ? error : new Error('Failed to post message'));
       }
     });
   };
 
-  // 广播消息
+  // Broadcast a message
   broadcast = <T = unknown>(data: { type: string; payload: T }): void => {
     if (!this.available) return;
     try {
       this.post(this.targetWindow, { type: data.type, payload: data.payload });
     } catch {
-      // 广播为尽力而为，克隆失败静默忽略。
+      // Broadcasting is best-effort; a clone failure is ignored silently.
     }
   };
 
-  // 清理
+  // Teardown
   destroy = (): void => {
     bridgeDispatcher.remove(this);
     this.messageHandlers.clear();
-    // reject 未决请求，顺带清理各自的 timeout 定时器，避免悬挂。
+    // Reject the pending requests and clear their timeout timers, so nothing is left hanging.
     this.pendingRequests.forEach((pending) => {
       pending.reject(new Error('Bridge destroyed'));
     });
@@ -277,7 +280,7 @@ export interface BridgeManagerOptions {
   id?: string;
   targetOrigin?: string;
   targetWindow?: Window;
-  /** 通道标识：需要隔离同一窗口上的多个连接时显式指定，两端须一致 */
+  /** Channel id; set it to isolate several connections on one window. Both ends must agree. */
   channel?: string;
 }
 
@@ -296,7 +299,7 @@ export class BridgeManager {
     return BridgeManager.instance;
   }
 
-  // 创建新的 bridge
+  // Create a new bridge
   connectClient = ({
     id,
     targetOrigin,
@@ -314,12 +317,12 @@ export class BridgeManager {
     return { bridge, id };
   };
 
-  // 获取指定 bridge
+  // Get a bridge by name
   getClient = (id: string): PostMessageBridge | undefined => {
     return this.bridges.get(id);
   };
 
-  // 移除 bridge
+  // Remove a bridge
   removeClient = (id: string): void => {
     const bridge = this.bridges.get(id);
     if (bridge) {
@@ -328,7 +331,7 @@ export class BridgeManager {
     }
   };
 
-  // 移除所有 bridge
+  // Remove every bridge
   removeAllClient = (): void => {
     this.bridges.forEach((bridge) => {
       bridge.destroy();
@@ -336,14 +339,14 @@ export class BridgeManager {
     this.bridges.clear();
   };
 
-  // 广播消息到所有 bridge
+  // Broadcast to every bridge
   broadcast = <T = unknown>(payload: { type: string; payload: T }): void => {
     this.bridges.forEach((bridge) => {
       bridge.broadcast(payload);
     });
   };
 
-  // 发送消息到指定 bridge
+  // Send to a named bridge
   sendTo = <T = unknown, R = unknown>(id: string, type: string, payload: T): Promise<R> => {
     const bridge = this.getClient(id);
     if (!bridge) {
@@ -353,7 +356,7 @@ export class BridgeManager {
   };
 }
 
-// 导出单例实例
+// The exported singleton
 export const bridgeManager = BridgeManager.getInstance();
 
 // #endregion BridgeManager end
@@ -372,7 +375,7 @@ export interface CallToPayload<T = unknown> {
 }
 
 export const Client = {
-  // 连接 Client
+  // Connect a client
   connect: ({
     id,
     targetWindow,
@@ -381,28 +384,28 @@ export const Client = {
   }: BridgeManagerOptions): { bridge: PostMessageBridge; id: string } => {
     return bridgeManager.connectClient({ id, targetWindow, targetOrigin, channel });
   },
-  // 移除 Client 连接
+  // Disconnect a client
   remove: (id: string): void => {
     if (!id) return;
     bridgeManager.removeClient(id);
   },
-  // 移除所有 Client 连接
+  // Disconnect every client
   removeAll: (): void => {
     bridgeManager.removeAllClient();
   },
-  /** 广播消息到所有 Platform */
+  /** Broadcast to every Platform */
   broadcast: (payload: BroadcastPayload): void => {
     return bridgeManager.broadcast(payload);
   },
-  /** 发送消息到指定 Platform */
+  /** Send to a named Platform */
   call: <T = unknown, R = unknown>({ id, type, payload }: CallToPayload<T>): Promise<R> => {
     return bridgeManager.sendTo<T, R>(id, type, payload);
   },
-  /** 广播消息到所有所有可以接收消息的窗口 (为了安全考虑，不建议使用) */
+  /** Broadcast to every window that can receive it (discouraged — it is a security risk) */
   broadcastToAll: (payload: BroadcastPayload): void => {
     if (typeof window === 'undefined') return;
-    // 与 bridge 协议一致：发结构化信封（带协议标记 + 默认通道），
-    // 这样接收端的 PostMessageBridge / Platform 才能识别。
+    // Matches the bridge protocol: a structured envelope carrying the marker and the default
+    // channel, so a receiving PostMessageBridge / Platform recognises it.
     const envelope: BridgeEnvelope = {
       __bridge: BRIDGE_MARKER,
       channel: DEFAULT_CHANNEL,
@@ -422,14 +425,14 @@ export const initPlatform = <T = unknown, R = unknown>(
     Object.entries(events).filter((entry): entry is [string, MessageHandler<T, R>] => isFunction(entry[1])),
   );
 
-  // 找到指定的元素，建立连接，通信。
-  // 与 PostMessageBridge 使用同一套信封协议（结构化对象 + 协议标记 + 通道），
-  // 因此 Client(PostMessageBridge) ↔ Platform 可以直接互通。
+  // Find the target element, connect, and talk to it. This uses the same envelope protocol
+  // as PostMessageBridge (structured object + protocol marker + channel), so a
+  // Client(PostMessageBridge) and a Platform interoperate directly.
   const initBridge = async (event: MessageEvent) => {
     // const hostname = new URL(event.origin).hostname
     // if (!whiteList.includes(hostname)) return
     const data = event.data as BridgeEnvelope<T> | undefined;
-    // 协议标记过滤：忽略非本协议的 postMessage 流量。
+    // Protocol-marker filter: postMessage traffic that is not ours is ignored.
     if (!data || typeof data !== 'object' || data.__bridge !== BRIDGE_MARKER) return;
     const { type, payload, id } = data;
     const channel = data.channel ?? DEFAULT_CHANNEL;
@@ -447,12 +450,12 @@ export const initPlatform = <T = unknown, R = unknown>(
       const result = await handler(payload);
       reply({ payload: result });
     } catch (error) {
-      // 回传错误，让调用方 reject，而不是一直等到超时。
+      // Send the error back so the caller rejects instead of waiting out the timeout.
       reply({ payload: error instanceof Error ? error.message : String(error), isError: true });
     }
   };
   window.removeEventListener('message', initBridge);
-  // iframe 中建立连接
+  // Establish the connection from inside an iframe
   window.addEventListener('message', initBridge);
 
   const destroy = () => {
@@ -471,23 +474,25 @@ export const Platform = {
 
 // #region PortBridge start
 /**
- * 基于 MessagePort 的点对点桥接（方案 B，作为新 API 提供）。
+ * A point-to-point bridge over MessagePort.
  *
- * 与 PostMessageBridge 的「全局广播 + 过滤」不同，MessagePort 是浏览器提供的
- * 私有点对点信道：只有握手时拿到 port 的双方能通信。因此天然规避了
- * 跨窗口串消息、来源伪造、同窗口多桥串台、自答自问等问题，也无需 origin 过滤、
- * 无需协议标记、无需 base64——payload 直接走结构化克隆。
+ * Unlike PostMessageBridge's broadcast-then-filter model, a MessagePort is a private
+ * point-to-point channel provided by the browser: only the two parties holding the port
+ * after the handshake can talk. That rules out cross-window leakage, forged origins,
+ * cross-talk between bridges on one window and self-answering by construction — with no
+ * origin filter, no protocol marker and no base64, since the payload goes straight through
+ * structured clone.
  *
- * 典型用法：
- *   // A 窗口（发起方）
+ * Typical use:
+ *   // Window A (initiator)
  *   const bridge = openPortBridge({ targetWindow: iframe.contentWindow, targetOrigin });
  *   const res = await bridge.send('ping', { n: 1 });
  *
- *   // B 窗口（接收方）
+ *   // Window B (acceptor)
  *   const bridge = await acceptPortBridge({ targetOrigin });
  *   bridge.on('ping', ({ n }) => n + 1);
  *
- * 也可用于已有 port 的场景（Web Worker / SharedWorker）：createPortBridge(port)。
+ * It also works where a port already exists (Web Worker / SharedWorker): createPortBridge(port).
  */
 export interface PortBridge {
   on: <T = unknown, R = unknown>(type: string, handler: MessageHandler<T, R>) => void;
@@ -497,13 +502,13 @@ export interface PortBridge {
   destroy: () => void;
 }
 
-// 握手消息标记：接收方据此识别「有人递来了 port」。
+// Handshake marker, telling the acceptor that a port has been handed over.
 const PORT_INIT_MARKER = '__ranuts_port_init__';
 
 export interface OpenPortBridgeOptions {
   targetWindow: Window;
   targetOrigin?: string;
-  /** 连接名：一个页面里区分多个独立 port 连接，两端须一致（默认 'default'） */
+  /** Connection name, telling independent port connections apart on one page. Both ends must agree (defaults to 'default'). */
   name?: string;
 }
 
@@ -513,7 +518,7 @@ export interface AcceptPortBridgeOptions {
 }
 
 /**
- * 在任意 MessagePort 上构建 bridge（Web Worker / SharedWorker 或已握手的 port）。
+ * Build a bridge on any MessagePort (a Web Worker, a SharedWorker, or a port from a completed handshake).
  */
 export const createPortBridge = (port: MessagePort): PortBridge => {
   const messageHandlers = new Map<string, MessageHandler<any, any>>();
@@ -556,7 +561,7 @@ export const createPortBridge = (port: MessagePort): PortBridge => {
   };
 
   port.addEventListener('message', onMessage);
-  // 使用 addEventListener 时需显式 start() 才开始收消息。
+  // With addEventListener, start() must be called explicitly before messages arrive.
   port.start();
 
   return {
@@ -596,7 +601,7 @@ export const createPortBridge = (port: MessagePort): PortBridge => {
       try {
         port.postMessage({ type: data.type, payload: data.payload });
       } catch {
-        // 尽力而为
+        // best-effort
       }
     },
     destroy: () => {
@@ -610,7 +615,7 @@ export const createPortBridge = (port: MessagePort): PortBridge => {
 };
 
 /**
- * 发起方：创建 MessageChannel，把一端交给目标窗口，自己持有另一端。
+ * Initiator: create a MessageChannel, hand one port to the target window and keep the other.
  */
 export const openPortBridge = ({
   targetWindow,
@@ -623,8 +628,9 @@ export const openPortBridge = ({
 };
 
 /**
- * 接收方：等待发起方递来的 port，握手完成后返回 bridge。
- * 返回的 Promise 在收到匹配 name 的握手消息后 resolve。
+ * Acceptor: wait for the port the initiator hands over and return the bridge once the
+ * handshake completes. The returned promise resolves on a handshake message with a matching
+ * name.
  */
 export const acceptPortBridge = ({
   targetOrigin = '*',

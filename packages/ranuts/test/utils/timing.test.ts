@@ -26,8 +26,8 @@ describe('debounce', () => {
   });
 
   it('preserves the call-site `this`', () => {
-    // 回归：旧实现用箭头函数包裹，this 在定义处绑死为模块作用域，
-    // 挂在对象上调用时拿到的是 undefined 而不是该对象。
+    // Regression: the old implementation wrapped it in an arrow function, binding `this` to
+    // the module scope at definition, so calling it on an object gave undefined, not the object.
     const seen: unknown[] = [];
     const obj = {
       name: 'target',
@@ -84,7 +84,7 @@ describe('throttle', () => {
     expect(fn).toHaveBeenCalledTimes(1);
     vi.advanceTimersByTime(100);
     expect(fn).toHaveBeenCalledTimes(2);
-    // 尾部补的是最后一次的参数
+    // The trailing call replays the last arguments
     expect(fn).toHaveBeenLastCalledWith('c');
   });
 
@@ -120,7 +120,7 @@ describe('throttle', () => {
   });
 
   it('does not touch window — usable in node / worker / SSR', () => {
-    // 回归：旧实现调 window.setTimeout，无 window 的环境下直接抛 ReferenceError
+    // Regression: the old implementation called window.setTimeout, throwing a ReferenceError where there is no window
     expect(typeof globalThis.window).toBe('undefined');
     const fn = vi.fn();
     const t = throttle(fn, 100);
@@ -131,8 +131,8 @@ describe('throttle', () => {
   });
 
   it('gives two throttled functions independent windows', () => {
-    // 回归：已删除的 generateThrottle 让它产出的所有函数共享一份 lastCallTime/timeoutId，
-    // 于是两个互不相干的节流函数会互相压制。
+    // Regression: the removed generateThrottle gave every function it produced one shared
+    // lastCallTime/timeoutId, so two unrelated throttled functions suppressed each other.
     const a = vi.fn();
     const b = vi.fn();
     const ta = throttle(a, 100);

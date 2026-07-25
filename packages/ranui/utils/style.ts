@@ -1,7 +1,9 @@
-// ─── adoptStyles ──────────────────────────────────────────────────────────────
-// 统一的 Shadow DOM 样式注入工具。
-// 优先使用 Constructable Stylesheets（多实例共享一份解析结果，性能最佳），
-// 降级到 <style> 标签注入。
+// Shadow DOM 样式注入。实现住在 ranuts（`adoptStyles` / `adoptSheetText`），
+// 这里只把 ranui 自己的 <style> 标记属性绑上去。
+//
+// 标记属性留在 ranui 是有意的：`data-ranui` / `data-ranui-sheet` 是 ranui 组件
+// 渲染出的 DOM 的一部分，消费者可能靠它定位注入的样式，属于 ranui 的对外契约，
+// 不该跟着通用实现一起下沉到 ranuts。
 //
 // 使用方式：
 //   import css from './index.less?inline';
@@ -11,82 +13,23 @@
 //     this._shadowDom = this.shadowRoot || this.attachShadow({ mode: 'closed' });
 //     adoptStyles(this._shadowDom, css);
 //   }
-// ─────────────────────────────────────────────────────────────────────────────
+import { adoptSheetText as adoptSheetTextBase, adoptStyles as adoptStylesBase } from 'ranuts/utils';
 
-/** CSS 字符串 → CSSStyleSheet 对象缓存，同组件多实例只解析一次 */
-const sheetCache = new Map<string, CSSStyleSheet>();
-const dynamicSheetCache = new Map<string, CSSStyleSheet>();
+/** ranui 静态组件样式在降级 <style> 上的标记 */
+export const RANUI_STYLE_MARKER = 'data-ranui';
+/** ranui 动态 `sheet` 属性样式在降级 <style> 上的标记 */
+export const RANUI_SHEET_MARKER = 'data-ranui-sheet';
 
 /**
- * 将 CSS 字符串注入到指定的 Shadow DOM。
- * - SSR 环境安全（自动跳过）
- * - 幂等：同一 shadowRoot 不会重复注入
- * - 优先使用 Constructable Stylesheets 提升性能
+ * 把组件的静态样式注入到指定的 Shadow DOM。
+ * 优先 Constructable Stylesheets，不支持时降级为一个带 `data-ranui` 标记的 <style>。
  */
-export const adoptStyles = (shadowRoot: ShadowRoot, cssText: string): void => {
-  // SSR 守卫
-  if (typeof document === 'undefined') return;
-  if (!cssText) return;
-
-  if (typeof CSSStyleSheet !== 'undefined') {
-    try {
-      if (!sheetCache.has(cssText)) {
-        const sheet = new CSSStyleSheet();
-        sheet.replaceSync(cssText);
-        sheetCache.set(cssText, sheet);
-      }
-      const sheet = sheetCache.get(cssText)!;
-      // 幂等：避免重复添加
-      if (!shadowRoot.adoptedStyleSheets.includes(sheet)) {
-        shadowRoot.adoptedStyleSheets = [...shadowRoot.adoptedStyleSheets, sheet];
-      }
-      return;
-    } catch {
-      // Constructable Stylesheets 不支持（如 Firefox 旧版），降级处理
-    }
-  }
-
-  // 降级：<style> 标签，data-ranui 标记防止重复注入
-  if (!shadowRoot.querySelector('style[data-ranui]')) {
-    const style = document.createElement('style');
-    style.setAttribute('data-ranui', '');
-    style.textContent = cssText;
-    shadowRoot.appendChild(style);
-  }
-};
+export const adoptStyles = (shadowRoot: ShadowRoot, cssText: string): void =>
+  adoptStylesBase(shadowRoot, cssText, RANUI_STYLE_MARKER);
 
 /**
  * 注入通过组件 `sheet` 属性传入的动态样式。
- * 幂等策略：同一 shadowRoot 内相同 cssText 只注入一次。
+ * 同一个 shadowRoot 内相同 cssText 只注入一次。
  */
-export const adoptSheetText = (shadowRoot: ShadowRoot, cssText: string): void => {
-  if (typeof document === 'undefined') return;
-  if (!cssText) return;
-
-  if (typeof CSSStyleSheet !== 'undefined') {
-    try {
-      if (!dynamicSheetCache.has(cssText)) {
-        const sheet = new CSSStyleSheet();
-        sheet.replaceSync(cssText);
-        dynamicSheetCache.set(cssText, sheet);
-      }
-      const sheet = dynamicSheetCache.get(cssText)!;
-      if (!shadowRoot.adoptedStyleSheets.includes(sheet)) {
-        shadowRoot.adoptedStyleSheets = [...shadowRoot.adoptedStyleSheets, sheet];
-      }
-      return;
-    } catch {
-      // ignore and fallback to style tag
-    }
-  }
-
-  const existed = Array.from(shadowRoot.querySelectorAll('style[data-ranui-sheet]')).some(
-    (item) => item.textContent === cssText,
-  );
-  if (!existed) {
-    const style = document.createElement('style');
-    style.setAttribute('data-ranui-sheet', '');
-    style.textContent = cssText;
-    shadowRoot.appendChild(style);
-  }
-};
+export const adoptSheetText = (shadowRoot: ShadowRoot, cssText: string): void =>
+  adoptSheetTextBase(shadowRoot, cssText, RANUI_SHEET_MARKER);

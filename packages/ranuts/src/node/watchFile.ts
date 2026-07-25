@@ -2,9 +2,9 @@ import type { Stats } from 'node:fs';
 import fs from '@/node/fs';
 
 /**
- * @description: 观察一个文件是否被改变，返回状态
- * @param {string} path 监听的文件路径
- * @param {number} interval 监听的时间，单位毫秒，默认 20 毫秒
+ * @description: Watch a file for changes and report its status
+ * @param {string} path file to watch
+ * @param {number} interval poll interval in milliseconds, defaults to 20
  * @return {Promise}
  */
 

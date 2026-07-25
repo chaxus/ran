@@ -21,11 +21,11 @@ const buildCircleVertices = (circle: Circle, data: GraphicsData) => {
 const buildRoundedRectangleVertices = (roundedRectangle: RoundedRectangle, data: GraphicsData) => {
   const { x, y, width, height, radius } = roundedRectangle;
 
-  // 分 4 段来求
+  // Solved in four arcs
   const len = (2 * Math.PI * radius) / 4;
   const segmentCount = Math.min(Math.ceil(len / 4), 2048);
 
-  // 第一段圆弧 (圆角矩形的右下角)
+  // First arc (bottom-right corner)
   for (let i = 0; i < segmentCount; i++) {
     const angle = (i / segmentCount) * Math.PI * 0.5;
 
@@ -35,7 +35,7 @@ const buildRoundedRectangleVertices = (roundedRectangle: RoundedRectangle, data:
     data.vertices.push(x + width - radius + pX, y + height - radius + pY);
   }
 
-  // 第二段圆弧(圆角矩形的左下角)
+  // Second arc (bottom-left corner)
   for (let i = 0; i < segmentCount; i++) {
     const angle = (i / segmentCount) * Math.PI * 0.5 + Math.PI / 2;
 
@@ -45,7 +45,7 @@ const buildRoundedRectangleVertices = (roundedRectangle: RoundedRectangle, data:
     data.vertices.push(x + radius + pX, y + height - radius + pY);
   }
 
-  // 第三段圆弧(圆角矩形的左上角)
+  // Third arc (top-left corner)
   for (let i = 0; i < segmentCount; i++) {
     const angle = (i / segmentCount) * Math.PI * 0.5 + Math.PI;
 
@@ -55,7 +55,7 @@ const buildRoundedRectangleVertices = (roundedRectangle: RoundedRectangle, data:
     data.vertices.push(x + radius + pX, y + radius + pY);
   }
 
-  // 第四段圆弧(圆角矩形的右上角)
+  // Fourth arc (top-right corner)
   for (let i = 0; i < segmentCount; i++) {
     const angle = (i / segmentCount) * Math.PI * 0.5 + Math.PI * 1.5;
 
@@ -81,8 +81,8 @@ const buildEllipseVertices = (ellipse: Ellipse, data: GraphicsData) => {
 };
 
 /**
- * 将一个图形顶点化
- * @param data 子图形data
+ * Turn a shape into vertices
+ * @param data the sub-shape's data
  */
 export const buildVertices = (data: GraphicsData): void => {
   const { shape, vertices } = data;
@@ -104,7 +104,7 @@ export const buildVertices = (data: GraphicsData): void => {
   }
 
   if (shape instanceof Polygon) {
-    // 多边形本身就是一系列的顶点
+    // A polygon is already a list of vertices
     data.vertices = shape.points;
   }
 };
@@ -112,14 +112,14 @@ export const buildVertices = (data: GraphicsData): void => {
 const triangulateCircleFill = (vertices: number[]) => {
   const indices: number[] = [];
 
-  // 之前把中心点 push 到了顶点数组，所以顶点的个数要 +1
+  // The centre point was pushed onto the vertex array, so the count is one higher
   const len = vertices.length / 2 + 1;
 
   for (let i = 1; i < len - 1; i++) {
     indices.push(0, i, i + 1);
   }
 
-  // 还有最后一块
+  // And the final wedge
   indices.push(0, len - 1, 1);
 
   return indices;
@@ -137,14 +137,14 @@ export const triangulateFill = (data: GraphicsData, geometry: GraphicsGeometry):
     geometry.vertices.concat(vertices);
     geometry.indices.concat([0, 1, 2, 0, 2, 3]);
 
-    // 矩形的顶点是固定的 4 个，顶点下标则是固定的 6 个
+    // A rectangle is always 4 vertices and always 6 indices
     batchPart.end(4, 6);
   }
 
   if (shape instanceof Circle) {
     const { x, y } = shape;
 
-    // 先将圆心 push 进去
+    // Push the centre first
     geometry.vertices.push(x);
     geometry.vertices.push(y);
 
@@ -159,7 +159,7 @@ export const triangulateFill = (data: GraphicsData, geometry: GraphicsGeometry):
   if (shape instanceof RoundedRectangle) {
     const { x, y, width, height } = shape;
 
-    // 先将中心点 push 进去
+    // Push the centre first
     geometry.vertices.push(x + width / 2);
     geometry.vertices.push(y + height / 2);
 
@@ -174,7 +174,7 @@ export const triangulateFill = (data: GraphicsData, geometry: GraphicsGeometry):
   if (shape instanceof Ellipse) {
     const { x, y } = shape;
 
-    // 先将椭圆中心点 push 进去
+    // Push the ellipse's centre first
     geometry.vertices.push(x);
     geometry.vertices.push(y);
 
@@ -197,16 +197,16 @@ export const triangulateFill = (data: GraphicsData, geometry: GraphicsGeometry):
 };
 
 /**
- * 求两条线段所在的直线的交点，原理：https://www.cnblogs.com/xpvincent/p/5208994.html
- * @param p0x 线段 1 的第一个点的 x
- * @param p0y 线段 1 的第一个点的 y
- * @param p1x 线段 1 的第二个点的 x
- * @param p1y 线段 1 的第二个点的 y
- * @param p2x 线段 2 的第一个点的 x
- * @param p2y 线段 2 的第一个点的 y
- * @param p3x 线段 2 的第二个点的 x
- * @param p3y 线段 2 的第二个点的 y
- * @returns {number[]} 交点坐标
+ * Intersection of the lines through two segments. Derivation: https://www.cnblogs.com/xpvincent/p/5208994.html
+ * @param p0x x of segment 1's first point
+ * @param p0y y of segment 1's first point
+ * @param p1x x of segment 1's second point
+ * @param p1y y of segment 1's second point
+ * @param p2x x of segment 2's first point
+ * @param p2y y of segment 2's first point
+ * @param p3x x of segment 2's second point
+ * @param p3y y of segment 2's second point
+ * @returns {number[]} the intersection point
  */
 const getIntersectingPoint = (
   p0x: number,
@@ -226,13 +226,12 @@ const getIntersectingPoint = (
   let f = 0;
 
   if (Math.abs(p1x - p0x) <= Number.EPSILON) {
-    // 是否是垂直线段
-    // 垂直线段的解析式为x=a
+    // Vertical segment? A vertical line's equation is x = a
     a = 1;
     b = 0;
     e = p1x;
   } else {
-    // 得到y = kx + b形式的解析式，就得到了a、b和e
+    // Putting it in y = kx + b form gives a, b and e
     const k = (p1y - p0y) / (p1x - p0x);
     const b0 = p1y - k * p1x;
 
@@ -241,7 +240,7 @@ const getIntersectingPoint = (
     e = -b0;
   }
 
-  // 同理
+  // Same again for the other segment
   if (Math.abs(p3x - p2x) <= Number.EPSILON) {
     c = 1;
     d = 0;
@@ -262,7 +261,7 @@ const getIntersectingPoint = (
 };
 
 export const getNormalVector = (x: number, y: number, lineWidth: number): [number, number] => {
-  // 旋转 90 度后就是一个法向量了
+  // Rotating by 90° gives the normal
   const newX = y;
   const newY = -x;
 
@@ -291,7 +290,7 @@ const buildRoundCorner = (
   const v2y = p2y - cy;
 
   let startAngle = 0;
-  // 先判断是否落在坐标轴上，再判断落在第几象限
+  // First check whether it lies on an axis, then work out the quadrant
   if (v1x === 0) {
     if (v1y > 0) {
       startAngle = Math.PI * 0.5;
@@ -305,16 +304,16 @@ const buildRoundCorner = (
       startAngle = Math.PI;
     }
   } else if (v1x >= 0 && v1y >= 0) {
-    // 第一象限
+    // First quadrant
     startAngle = Math.atan(v1y / v1x);
   } else if (v1x <= 0 && v1y >= 0) {
-    // 第二象限
+    // Second quadrant
     startAngle = Math.atan(-v1x / v1y) + Math.PI * 0.5;
   } else if (v1x <= 0 && v1y <= 0) {
-    // 第三象限
+    // Third quadrant
     startAngle = Math.atan(v1y / v1x) + Math.PI;
   } else {
-    // 第四象限
+    // Fourth quadrant
     startAngle = Math.atan(v1x / -v1y) + Math.PI * 1.5;
   }
 
@@ -332,16 +331,16 @@ const buildRoundCorner = (
       endAngle = Math.PI;
     }
   } else if (v2x >= 0 && v2y >= 0) {
-    // 第一象限
+    // First quadrant
     endAngle = Math.atan(v2y / v2x);
   } else if (v2x <= 0 && v2y >= 0) {
-    // 第二象限
+    // Second quadrant
     endAngle = Math.atan(-v2x / v2y) + Math.PI * 0.5;
   } else if (v2x <= 0 && v2y <= 0) {
-    // 第三象限
+    // Third quadrant
     endAngle = Math.atan(v2y / v2x) + Math.PI;
   } else {
-    // 第四象限
+    // Fourth quadrant
     endAngle = Math.atan(v2x / -v2y) + Math.PI * 1.5;
   }
 
@@ -371,7 +370,7 @@ const buildRoundCorner = (
 };
 
 /**
- * 构建描边的顶点 & 对其进行三角剖分
+ * Build the stroke's vertices and triangulate them
  */
 export const triangulateStroke = (data: GraphicsData, geometry: GraphicsGeometry): void => {
   const { vertices, shape, lineStyle } = data;
@@ -387,27 +386,27 @@ export const triangulateStroke = (data: GraphicsData, geometry: GraphicsGeometry
     closedShape = true;
   }
 
-  // 如果是封闭的 stroke，则需要在首尾顶点中间的位置插入 2 个一样的顶点，这是为了处理起点和终点处的 lineJoin
+  // A closed stroke needs two identical vertices inserted between the first and last points, so the join at the start/end is handled
   if (closedShape) {
-    // 第一个点
+    // First point
     const fx = vertices[0];
     const fy = vertices[1];
 
-    // 最后一个点
+    // Last point
     const lx = vertices[vertices.length - 2];
     const ly = vertices[vertices.length - 1];
 
-    // 如果第一个点和最后一个点的距离太近了，那么需要去掉一个点
+    // Drop one of them when the first and last points are too close together
     if (Math.abs(fx - lx) < 0.0001 && Math.abs(fy - ly) < 0.0001) {
       vertices.pop();
       vertices.pop();
     }
 
-    // 最后一个点
+    // Last point
     const nlx = vertices[vertices.length - 2];
     const nly = vertices[vertices.length - 1];
 
-    // 中间的点
+    // Midpoint
     const mx = (fx + nlx) / 2;
     const my = (fy + nly) / 2;
 
@@ -423,23 +422,23 @@ export const triangulateStroke = (data: GraphicsData, geometry: GraphicsGeometry
   const lineVertices: number[] = [];
   const lineIndices: number[] = [];
 
-  // 第一个点
+  // First point
   const fx = vertices[0];
   const fy = vertices[1];
-  // 第二个点
+  // Second point
   const sx = vertices[2];
   const sy = vertices[3];
 
   const [nvx, nvy] = getNormalVector(sx - fx, sy - fy, lineWidth);
 
-  // 处理起点的lineCap，只有非封闭stroke需要处理
+  // Handle the start cap — only an open stroke needs one
   if (!closedShape) {
     if (lineCap === LINE_CAP.SQUARE) {
-      // 将法向量再旋转90度
+      // Rotate the normal by another 90°
       const nnvx = nvy;
       const nnvy = -nvx;
 
-      // Square相当于一个矩形
+      // 'square' amounts to a rectangle
       lineVertices.push(
         fx + nvx,
         fy + nvy,
@@ -459,25 +458,24 @@ export const triangulateStroke = (data: GraphicsData, geometry: GraphicsGeometry
     }
 
     if (lineCap === LINE_CAP.BUTT) {
-      // butt是默认值
-      // 什么都不用做
+      // 'butt' is the default — nothing to do
     }
   }
 
   cursor = lineVertices.length / 2;
 
-  // 往顶点数组里塞2个顶点，以供下一次处理lineJoin使用
+  // Push two vertices for the next join to build on
   lineVertices.push(fx - nvx, fy - nvy, fx + nvx, fy + nvy);
 
-  // 处理每一个线段以及线段之间的lineJoin
+  // Walk each segment and the join between them
   for (let i = 2; i < vertices.length - 2; i += 2) {
-    // 第一个点
+    // First point
     const x0 = vertices[i - 2];
     const y0 = vertices[i - 1];
-    // 第二个点
+    // Second point
     const x1 = vertices[i];
     const y1 = vertices[i + 1];
-    // 第三个点
+    // Third point
     const x2 = vertices[i + 2];
     const y2 = vertices[i + 3];
 
@@ -489,15 +487,15 @@ export const triangulateStroke = (data: GraphicsData, geometry: GraphicsGeometry
     const dx1 = x2 - x1;
     const dy1 = y2 - y1;
 
-    const cross = dx1 * dy0 - dx0 * dy1; // 叉积
-    const dot = dx0 * dx1 + dy0 * dy1; // 点积
+    const cross = dx1 * dy0 - dx0 * dy1; // cross product
+    const dot = dx0 * dx1 + dy0 * dy1; // dot product
 
-    // 判断两个线段的夹角是否约等于0或者180度
+    // Is the angle between the two segments roughly 0° or 180°?
     if (Math.abs(cross) < 0.001 * Math.abs(dot)) {
-      // 右边乘以点积，让这个判断逻辑不受线段长度的影响，从而更加准确
+      // Multiplying the right side by the dot product makes the test independent of segment length, and so more accurate
 
       /**
-       * 处理线段本身
+       * Handle the segment itself
        */
       lineVertices.push(x1 + nvx1, y1 + nvy1, x1 - nvx1, y1 - nvy1);
       lineIndices.push(0 + cursor, 1 + cursor, 2 + cursor, 0 + cursor, 2 + cursor, 3 + cursor);
@@ -505,12 +503,12 @@ export const triangulateStroke = (data: GraphicsData, geometry: GraphicsGeometry
       cursor = lineVertices.length / 2;
 
       if (dot > 0) {
-        // 两个线段同向，当作 0 度处理
+        // Same direction — treat it as 0°
 
-        // 往顶点数组里塞 2 个顶点，以供下一次处理 lineJoin 使用
+        // Push two vertices for the next join to build on
         lineVertices.push(x1 - nvx1, y1 - nvy1, x1 + nvx1, y1 + nvy1);
       } else {
-        // 两个线段反向，则当作 180 度处理
+        // Opposite directions — treat it as 180°
         if (lineJoin === LINE_JOIN.ROUND) {
           buildRoundCorner(x1, y1, x1 + nvx1, y1 + nvy1, x1 - nvx1, y1 - nvy1, lineVertices, lineIndices);
 
@@ -518,17 +516,17 @@ export const triangulateStroke = (data: GraphicsData, geometry: GraphicsGeometry
         }
 
         if (lineJoin === LINE_JOIN.BEVEL || lineJoin === LINE_JOIN.MITER) {
-          // 什么都不用做
+          // nothing to do
         }
 
-        // 往顶点数组里塞 2 个顶点，以供下一次处理 lineJoin 使用
+        // Push two vertices for the next join to build on
         lineVertices.push(x1 + nvx1, y1 + nvy1, x1 - nvx1, y1 - nvy1);
       }
 
       continue;
     }
 
-    // 外侧的 miter point
+    // Outer miter point
     const [ompx, ompy] = getIntersectingPoint(
       x0 + nvx1,
       y0 + nvy1,
@@ -539,7 +537,7 @@ export const triangulateStroke = (data: GraphicsData, geometry: GraphicsGeometry
       x2 + nvx2,
       y2 + nvy2,
     );
-    // 内侧的 miter point
+    // Inner miter point
     const [impx, impy] = getIntersectingPoint(
       x0 - nvx1,
       y0 - nvy1,
@@ -553,14 +551,14 @@ export const triangulateStroke = (data: GraphicsData, geometry: GraphicsGeometry
 
     let realLineJoin = lineJoin;
     if (lineJoin === LINE_JOIN.MITER) {
-      // miterLength 的平方
+      // miterLength squared
       const miterLenSq = (impx - ompx) ** 2 + (impy - ompy) ** 2;
       const lineWidthSq = lineWidth ** 2;
 
       const miterOk = miterLenSq / lineWidthSq <= miterLimit ** 2;
 
       if (!miterOk) {
-        // 超出了miterLimit则将此处的lineJoin置为'bevel'
+        // Past miterLimit, so this join falls back to 'bevel'
         realLineJoin = LINE_JOIN.BEVEL;
       }
     }
@@ -575,36 +573,36 @@ export const triangulateStroke = (data: GraphicsData, geometry: GraphicsGeometry
     if (isLineLongEnough) {
       if (realLineJoin === LINE_JOIN.BEVEL) {
         if (cross > 0) {
-          // 四边形
+          // quad
           lineVertices.push(ompx, ompy, x1 - nvx1, y1 - nvy1);
           lineIndices.push(0 + cursor, 1 + cursor, 2 + cursor, 0 + cursor, 2 + cursor, 3 + cursor);
 
           cursor = lineVertices.length / 2;
 
-          // 三角形
+          // triangle
           lineVertices.push(ompx, ompy, x1 - nvx1, y1 - nvy1, x1 - nvx2, y1 - nvy2);
 
           lineIndices.push(0 + cursor, 1 + cursor, 2 + cursor);
 
           cursor = lineVertices.length / 2;
 
-          // 结尾
+          // end
           lineVertices.push(x1 - nvx2, y1 - nvy2, ompx, ompy);
         } else {
-          // 四边形
+          // quad
           lineVertices.push(x1 + nvx1, y1 + nvy1, impx, impy);
           lineIndices.push(0 + cursor, 1 + cursor, 2 + cursor, 0 + cursor, 2 + cursor, 3 + cursor);
 
           cursor = lineVertices.length / 2;
 
-          // 三角形
+          // triangle
           lineVertices.push(impx, impy, x1 + nvx1, y1 + nvy1, x1 + nvx2, y1 + nvy2);
 
           lineIndices.push(0 + cursor, 1 + cursor, 2 + cursor);
 
           cursor = lineVertices.length / 2;
 
-          // 结尾
+          // end
           lineVertices.push(impx, impy, x1 + nvx2, y1 + nvy2);
         }
       }
@@ -619,61 +617,61 @@ export const triangulateStroke = (data: GraphicsData, geometry: GraphicsGeometry
 
       if (realLineJoin === LINE_JOIN.ROUND) {
         if (cross < 0) {
-          // 四边形
+          // quad
           lineVertices.push(x1 + nvx1, y1 + nvy1, impx, impy);
           lineIndices.push(0 + cursor, 1 + cursor, 2 + cursor, 0 + cursor, 2 + cursor, 3 + cursor);
 
           cursor = lineVertices.length / 2;
 
-          // 三角形1
+          // triangle 1
           lineVertices.push(impx, impy, x1 + nvx1, y1 + nvy1, x1, y1);
           lineIndices.push(0 + cursor, 1 + cursor, 2 + cursor);
 
           cursor = lineVertices.length / 2;
 
-          // 三角形2
+          // triangle 2
           lineVertices.push(impx, impy, x1 + nvx2, y1 + nvy2, x1, y1);
           lineIndices.push(0 + cursor, 1 + cursor, 2 + cursor);
 
           cursor = lineVertices.length / 2;
 
-          // 扇形
+          // fan
           buildRoundCorner(x1, y1, x1 + nvx1, y1 + nvy1, x1 + nvx2, y1 + nvy2, lineVertices, lineIndices);
 
           cursor = lineVertices.length / 2;
 
-          // 线段的结尾
+          // end of the segment
           lineVertices.push(impx, impy, x1 + nvx2, y1 + nvy2);
         } else {
-          // 四边形
+          // quad
           lineVertices.push(ompx, ompy, x1 - nvx1, y1 - nvy1);
           lineIndices.push(0 + cursor, 1 + cursor, 2 + cursor, 0 + cursor, 2 + cursor, 3 + cursor);
 
           cursor = lineVertices.length / 2;
 
-          // 三角形1
+          // triangle 1
           lineVertices.push(ompx, ompy, x1 - nvx1, y1 - nvy1, x1, y1);
           lineIndices.push(0 + cursor, 1 + cursor, 2 + cursor);
 
           cursor = lineVertices.length / 2;
 
-          // 三角形2
+          // triangle 2
           lineVertices.push(ompx, ompy, x1 - nvx2, y1 - nvy2, x1, y1);
           lineIndices.push(0 + cursor, 1 + cursor, 2 + cursor);
 
           cursor = lineVertices.length / 2;
 
-          // 扇形
+          // fan
           buildRoundCorner(x1, y1, x1 - nvx2, y1 - nvy2, x1 - nvx1, y1 - nvy1, lineVertices, lineIndices);
 
           cursor = lineVertices.length / 2;
 
-          // 线段的结尾
+          // end of the segment
           lineVertices.push(x1 - nvx2, y1 - nvy2, ompx, ompy);
         }
       }
     } else {
-      // 线段1的整体
+      // Segment 1 as a whole
       lineVertices.push(x1 + nvx1, y1 + nvy1, x1 - nvx1, y1 - nvy1);
       lineIndices.push(0 + cursor, 1 + cursor, 2 + cursor, 0 + cursor, 2 + cursor, 3 + cursor);
 
@@ -681,11 +679,11 @@ export const triangulateStroke = (data: GraphicsData, geometry: GraphicsGeometry
 
       if (realLineJoin === LINE_JOIN.BEVEL) {
         if (cross > 0) {
-          // 三角形
+          // triangle
           lineVertices.push(x1, y1, x1 - nvx1, y1 - nvy1, x1 - nvx2, y1 - nvy2);
           lineIndices.push(0 + cursor, 1 + cursor, 2 + cursor);
         } else {
-          // 三角形
+          // triangle
           lineVertices.push(x1, y1, x1 + nvx1, y1 + nvy1, x1 + nvx2, y1 + nvy2);
           lineIndices.push(0 + cursor, 1 + cursor, 2 + cursor);
         }
@@ -693,11 +691,11 @@ export const triangulateStroke = (data: GraphicsData, geometry: GraphicsGeometry
 
       if (realLineJoin === LINE_JOIN.MITER) {
         if (cross > 0) {
-          // 2 个三角形
+          // two triangles
           lineVertices.push(x1, y1, x1 - nvx1, y1 - nvy1, impx, impy, x1 - nvx2, y1 - nvy2);
           lineIndices.push(0 + cursor, 1 + cursor, 2 + cursor, 0 + cursor, 2 + cursor, 3 + cursor);
         } else {
-          // 2 个三角形
+          // two triangles
           lineVertices.push(x1, y1, x1 + nvx1, y1 + nvy1, ompx, ompy, x1 + nvx2, y1 + nvy2);
           lineIndices.push(0 + cursor, 1 + cursor, 2 + cursor, 0 + cursor, 2 + cursor, 3 + cursor);
         }
@@ -705,10 +703,10 @@ export const triangulateStroke = (data: GraphicsData, geometry: GraphicsGeometry
 
       if (realLineJoin === LINE_JOIN.ROUND) {
         if (cross > 0) {
-          // 一个扇形
+          // a fan
           buildRoundCorner(x1, y1, x1 - nvx2, y1 - nvy2, x1 - nvx1, y1 - nvy1, lineVertices, lineIndices);
         } else {
-          // 一个扇形
+          // a fan
           buildRoundCorner(x1, y1, x1 + nvx1, y1 + nvy1, x1 + nvx2, y1 + nvy2, lineVertices, lineIndices);
         }
       }
@@ -719,7 +717,7 @@ export const triangulateStroke = (data: GraphicsData, geometry: GraphicsGeometry
     }
   }
 
-  // 处理最后一个线段
+  // Handle the last segment
   const lastX = vertices[vertices.length - 2];
   const lastY = vertices[vertices.length - 1];
   const secondLastX = vertices[vertices.length - 4];
@@ -732,19 +730,19 @@ export const triangulateStroke = (data: GraphicsData, geometry: GraphicsGeometry
 
   cursor = lineVertices.length / 2;
 
-  // 处理终点的 lineCap，只有非封闭 stroke 需要处理
+  // Handle the end cap — only an open stroke needs one
   if (!closedShape) {
-    // 最后一个点
+    // Last point
     const lx = vertices[vertices.length - 2];
     const ly = vertices[vertices.length - 1];
-    // 倒数第二个点
+    // Second-to-last point
     const slx = vertices[vertices.length - 4];
     const sly = vertices[vertices.length - 3];
 
     const [nvx, nvy] = getNormalVector(lx - slx, ly - sly, lineWidth);
 
     if (lineCap === LINE_CAP.SQUARE) {
-      // 将法向量再旋转 90 度
+      // Rotate the normal by another 90°
       const nnvx = -nvy;
       const nnvy = nvx;
 

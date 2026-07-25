@@ -63,12 +63,23 @@ console.log(params.search); // 'hello world' (automatically decoded)
 
 ## Notes
 
-1. **URL decoding**: Parameter values are automatically URL decoded.
+1. **A bare flag keeps its place.** `?embed` and `?embed=` both yield `{ embed: '' }`. Before
+   0.3 any parameter without a value was dropped, which made `?readonly` and `?embed` — the
+   usual way to write a boolean flag — indistinguishable from the parameter being absent. Read
+   such a flag with [`queryFlag`](/src/ranuts/utils/query_flag).
 
-2. **Server-side environment**: Returns empty object `{}` in server-side environments (no `window` object).
+2. **A fragment never leaks into the last value.** `?lang=en#section` yields `{ lang: 'en' }`.
 
-3. **Default URL**: If `url` parameter is not provided, defaults to `window.location.href`.
+3. **Only the first `=` splits**, so a value may contain one: `?next=/a?b=1` yields
+   `{ next: '/a?b=1' }`.
 
-4. **Empty value handling**: Returns empty object if URL has no query parameters.
+4. **URL decoding**: keys and values are percent-decoded, and `+` becomes a space — matching
+   `URLSearchParams`. A malformed escape such as `%zz` is kept verbatim rather than dropping
+   the parameter, so one bad value cannot hide the others.
 
-5. **Duplicate parameters**: If URL has duplicate parameter names, only the last value is kept.
+5. **Server-side environment**: returns `{}` when there is no `window` and no `url` was
+   passed. Pass a URL to use it in a build-time script.
+
+6. **Default URL**: without `url`, defaults to `window.location.href`.
+
+7. **Duplicate parameters**: only the last value is kept.

@@ -7,18 +7,19 @@ import type { Matrix } from '@/utils/visual/math/matrix';
 import type { Cursor, FederatedEventMap } from '@/utils/visual/event';
 import type { Shape } from '@/utils/visual/shape';
 
-// 这个类代表了最原始的‘节点’的概念，所有可以被展示到 canvas 画布上的、各种类型的节点都会继承于这个类，这是一个抽象类，我们并不会直接实例化这个类。
-// 这个类上面挂载了‘节点’的各种属性，比如：父元素、透明度、旋转角度、缩放、平移、节点是否可见等。
-// 这个类还继承了 SyncHook 类，这个类是一个自定义的事件订阅/发布类，用于实现事件的订阅和发布。
+// The most basic notion of a "node": everything that can appear on the canvas extends this.
+// It is abstract and never instantiated directly.
+// It carries a node's properties — parent, alpha, rotation, scale, translation, visibility.
+// It also extends SyncHook, the custom publish/subscribe class used for events.
 export abstract class Vertex extends SyncHook {
-  protected _zIndex = 0; // 节点的层级关系
-  public parent: Container | undefined = undefined; // 节点的父子关系
+  protected _zIndex = 0; // stacking order
+  public parent: Container | undefined = undefined; // parent link
   public visible = true;
   public transform = new Transform();
-  public alpha = 1; // 节点当前的透明度
-  public worldAlpha = 1; // 透明度会受到父节点的透明度影响，因此需要一个全局的透明度
+  public alpha = 1; // this node's own alpha
+  public worldAlpha = 1; // alpha compounds with the parent's, so a world-space alpha is kept too
   public hitArea: Shape | null = null;
-  public cursor: Cursor = 'auto'; // 鼠标样式
+  public cursor: Cursor = 'auto'; // cursor style
 
   get zIndex(): number {
     return this._zIndex;

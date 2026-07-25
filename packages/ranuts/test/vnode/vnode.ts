@@ -1,9 +1,9 @@
 import { init } from '@/vnode/init';
 import { h } from '@/vnode/h';
-// 2. 注册模块
+// 2. Register the modules
 const patch = init();
 
-// 3. 使用 h() 函数的第二个参数传入模块需要的数据 (对象)
+// 3. Pass the data the modules need as h()'s second argument (an object)
 const content = h('div', [
   h('h1', '欢迎使用 vnode'),
   h('p', '掘金博文：'),
