@@ -1,71 +1,47 @@
 # debounce
 
-Debounce function used to limit the execution frequency of a function. Within a specified time interval, if the function is called multiple times, only the last call will be executed after the delay time.
+Debounce: when a function is triggered rapidly, run it **only after the triggering stops**
+for `ms` milliseconds. Use it when only the final state matters — search-as-you-type,
+window resize, autosave.
+
+For "I need the intermediate values too", use [throttle](./throttle).
 
 ## API
 
-### debounce
-
-#### Return
-
-| Argument   | Description        | Type       |
-| ---------- | ------------------ | ---------- |
-| `Function` | Debounced function | `Function` |
+### debounce(fn, ms?)
 
 #### Parameters
 
-| Parameter | Description               | Type       | Default  |
-| --------- | ------------------------- | ---------- | -------- |
-| `fn`      | Function to be debounced  | `Function` | Required |
-| `ms`      | Delay time (milliseconds) | `number`   | `500`    |
+| Parameter | Description            | Type       | Default  |
+| --------- | ---------------------- | ---------- | -------- |
+| `fn`      | Function to debounce   | `Function` | Required |
+| `ms`      | Quiet period (ms)      | `number`   | `500`    |
+
+#### Return
+
+A debounced function that keeps the call-site `this` and the **last** arguments, plus:
+
+| Member      | Description                                            | Type            |
+| ----------- | ------------------------------------------------------ | --------------- |
+| `cancel()`  | Drop the pending call                                   | `() => void`    |
+| `flush()`   | Run the pending call right now (e.g. before submitting) | `() => void`    |
+| `pending()` | Whether a call is waiting                               | `() => boolean` |
 
 ## Example
 
-### Basic Usage
-
 ```js
 import { debounce } from 'ranuts';
 
-const handleSearch = debounce((keyword) => {
-  console.log('Search:', keyword);
-}, 300);
+const save = debounce((draft) => api.save(draft), 800);
+input.addEventListener('input', (e) => save(e.target.value));
 
-// Rapid consecutive calls, only the last one executes after 300ms
-handleSearch('a');
-handleSearch('ab');
-handleSearch('abc'); // Only this will execute
-```
-
-### Search Input Debounce
-
-```js
-import { debounce } from 'ranuts';
-
-const searchInput = document.getElementById('search');
-const handleSearch = debounce((e) => {
-  const keyword = e.target.value;
-  // Execute search logic
-  console.log('Search keyword:', keyword);
-}, 500);
-
-searchInput.addEventListener('input', handleSearch);
-```
-
-### Window Resize Debounce
-
-```js
-import { debounce } from 'ranuts';
-
-const handleResize = debounce(() => {
-  console.log('Window resized');
-  // Execute layout adjustment logic
-}, 200);
-
-window.addEventListener('resize', handleResize);
+form.addEventListener('submit', () => save.flush()); // don't lose the last keystroke
+onUnmount(() => save.cancel());
 ```
 
 ## Notes
 
-1. **this binding**: The debounce function maintains the original function's `this` context.
-2. **Parameter passing**: The debounce function passes all parameters to the original function.
-3. **Cancel execution**: If you need to cancel a pending function execution, you need to save a reference to the returned function, but the current implementation does not support cancellation.
+1. **Only the last call runs**, with the arguments of that last call.
+2. **`this` is taken from the call site** — `obj.handler()` sees `obj`.
+3. **Always `cancel()` on teardown**, otherwise the pending timer fires into a destroyed context.
+4. **Fully typed**: parameter and return types are inferred from `fn`.

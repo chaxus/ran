@@ -1,71 +1,46 @@
 # debounce
 
-防抖函数，用于限制函数的执行频率。在指定的时间间隔内，如果函数被多次调用，只有最后一次调用会在延迟时间后执行。
+防抖：函数被高频触发时，只在**停止触发 `ms` 毫秒后**执行最后一次。适用于只关心最终状态的场景 ——
+输入联想、窗口 resize、自动保存。
+
+若中间过程值也需要，请用 [throttle](./throttle)。
 
 ## API
 
-### debounce
+### debounce(fn, ms?)
 
-#### Return
+#### 参数
 
-| 参数       | 说明         | 类型       |
-| ---------- | ------------ | ---------- |
-| `Function` | 防抖后的函数 | `Function` |
+| 参数   | 说明             | 类型       | 默认值 |
+| ------ | ---------------- | ---------- | ------ |
+| `fn`   | 要防抖的函数     | `Function` | 必填   |
+| `ms`   | 静默时长（毫秒） | `number`   | `500`  |
 
-#### Parameters
+#### 返回
 
-| 参数 | 说明             | 类型       | 默认值 |
-| ---- | ---------------- | ---------- | ------ |
-| `fn` | 需要防抖的函数   | `Function` | 无     |
-| `ms` | 延迟时间（毫秒） | `number`   | `500`  |
+防抖后的函数，保留调用处的 `this` 与**最后一次**的参数，并附带：
 
-## Example
+| 成员        | 说明                                     | 类型            |
+| ----------- | ---------------------------------------- | --------------- |
+| `cancel()`  | 取消挂起的调用                           | `() => void`    |
+| `flush()`   | 立即执行挂起的调用（如提交表单前强制落盘） | `() => void`    |
+| `pending()` | 是否有调用在等待                         | `() => boolean` |
 
-### 基础用法
-
-```js
-import { debounce } from 'ranuts';
-
-const handleSearch = debounce((keyword) => {
-  console.log('搜索:', keyword);
-}, 300);
-
-// 快速连续调用，只会在最后一次调用后 300ms 执行
-handleSearch('a');
-handleSearch('ab');
-handleSearch('abc'); // 只有这次会执行
-```
-
-### 搜索框防抖
+## 示例
 
 ```js
 import { debounce } from 'ranuts';
 
-const searchInput = document.getElementById('search');
-const handleSearch = debounce((e) => {
-  const keyword = e.target.value;
-  // 执行搜索逻辑
-  console.log('搜索关键词:', keyword);
-}, 500);
+const save = debounce((draft) => api.save(draft), 800);
+input.addEventListener('input', (e) => save(e.target.value));
 
-searchInput.addEventListener('input', handleSearch);
+form.addEventListener('submit', () => save.flush()); // 别丢掉最后一次输入
+onUnmount(() => save.cancel());
 ```
 
-### 窗口 resize 防抖
+## 注意
 
-```js
-import { debounce } from 'ranuts';
-
-const handleResize = debounce(() => {
-  console.log('窗口大小改变');
-  // 执行布局调整逻辑
-}, 200);
-
-window.addEventListener('resize', handleResize);
-```
-
-## 注意事项
-
-1. **this 绑定**：防抖函数会保持原函数的 `this` 上下文。
-2. **参数传递**：防抖函数会传递所有参数给原函数。
-3. **取消执行**：如果需要取消待执行的函数，需要保存返回的函数引用，但当前实现不支持取消。
+1. **只执行最后一次**，参数取最后一次调用的参数。
+2. **`this` 取自调用处** —— `obj.handler()` 能拿到 `obj`。
+3. **销毁时务必 `cancel()`**，否则挂起的定时器会在已销毁的上下文里执行。
+4. **类型完整**：参数与返回值类型从 `fn` 推导。

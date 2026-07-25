@@ -1,96 +1,56 @@
 # throttle
 
-Throttle function used to limit the execution frequency of a function. Within a specified time interval, the function will execute at most once.
+Throttle: when a function is triggered rapidly, run it at most once per interval. The first
+call runs immediately (leading edge) and the last call inside a window is replayed when the
+window closes (trailing edge), so the final state is never dropped.
+
+Use it for scroll, pointer-move and drag — anything that needs **continuous feedback**.
+For "only the final value matters" (search-as-you-type, autosave), use [debounce](./debounce).
 
 ## API
 
-### throttle
-
-#### Return
-
-| Argument   | Description        | Type       |
-| ---------- | ------------------ | ---------- |
-| `Function` | Throttled function | `Function` |
+### throttle(fn, delay?)
 
 #### Parameters
 
 | Parameter | Description                  | Type       | Default  |
 | --------- | ---------------------------- | ---------- | -------- |
-| `func`    | Function to be throttled     | `Function` | Required |
-| `delay`   | Time interval (milliseconds) | `number`   | `300`    |
-
-### generateThrottle
-
-Generate a throttle function generator that can be used to create multiple throttle functions.
+| `fn`      | Function to throttle         | `Function` | Required |
+| `delay`   | Minimum interval (ms)        | `number`   | `300`    |
 
 #### Return
 
-| Argument   | Description                 | Type       |
-| ---------- | --------------------------- | ---------- |
-| `Function` | Throttle function generator | `Function` |
+A throttled function that keeps the call-site `this` and arguments, plus:
+
+| Member      | Description                                | Type              |
+| ----------- | ------------------------------------------ | ----------------- |
+| `cancel()`  | Drop the pending trailing call             | `() => void`      |
+| `pending()` | Whether a trailing call is waiting          | `() => boolean`   |
 
 ## Example
 
-### Basic Usage
-
 ```js
 import { throttle } from 'ranuts';
 
-const handleScroll = throttle(() => {
-  console.log('Scroll event');
-}, 200);
+const onScroll = throttle(() => update(window.scrollY), 100);
+window.addEventListener('scroll', onScroll);
 
-// Multiple calls within 200ms will only execute once
-window.addEventListener('scroll', handleScroll);
-```
-
-### Button Click Throttle
-
-```js
-import { throttle } from 'ranuts';
-
-const handleClick = throttle(() => {
-  console.log('Button clicked');
-  // Execute submit logic
-}, 1000);
-
-document.getElementById('submit').addEventListener('click', handleClick);
-```
-
-### Using generateThrottle
-
-```js
-import { generateThrottle } from 'ranuts';
-
-const throttleGenerator = generateThrottle();
-
-const handleScroll = throttleGenerator(() => {
-  console.log('Scroll');
-}, 200);
-
-const handleResize = throttleGenerator(() => {
-  console.log('Resize');
-}, 300);
-
-window.addEventListener('scroll', handleScroll);
-window.addEventListener('resize', handleResize);
-```
-
-### Mouse Move Throttle
-
-```js
-import { throttle } from 'ranuts';
-
-const handleMouseMove = throttle((e) => {
-  console.log('Mouse position:', e.clientX, e.clientY);
-}, 100);
-
-document.addEventListener('mousemove', handleMouseMove);
+// On teardown — remove the listener *and* drop the pending trailing call
+window.removeEventListener('scroll', onScroll);
+onScroll.cancel();
 ```
 
 ## Notes
 
-1. **Execution timing**: The throttle function will execute at the beginning or end of the time interval, ensuring it executes at least once within the specified time.
-2. **this binding**: The throttle function maintains the original function's `this` context.
-3. **Parameter passing**: The throttle function passes all parameters to the original function.
-4. **Difference from debounce**: Throttle ensures execution at least once within the specified time, while debounce only executes after the last call.
+1. **Leading + trailing**: runs immediately, then once more at the end of the window with the
+   latest arguments.
+2. **`this` and arguments** are forwarded from the call site.
+3. **Runs anywhere**: uses the bare `setTimeout`, so it works in Node, Web Workers and SSR.
+4. **Each call to `throttle()` gets its own window** — two throttled functions never interfere.
+5. **Always `cancel()` on teardown**, otherwise the trailing call fires into a destroyed context.
+
+::: warning Removed in 0.3
+`generateThrottle()` has been removed. It returned a factory whose generated functions all
+**shared one timer and one timestamp**, so two unrelated throttled functions suppressed each
+other. Replace `const g = generateThrottle(); const f = g(fn, delay)` with `throttle(fn, delay)`.
+:::
