@@ -786,17 +786,26 @@ branded browser touches the OS, not `node_modules`); install Chrome normally, or
 
 #### Two screenshot mechanisms, two audiences
 
-| Assertion                       | Baseline lives in         | Runs on CI                                   |
-| ------------------------------- | ------------------------- | -------------------------------------------- |
-| `expect(el).toHaveScreenshot()` | gitignored `screenshots/` | **No** — `ignoreSnapshots: !!process.env.CI` |
-| `argosScreenshot(page, …)`      | Argos (hosted)            | Yes — the actual visual gate                 |
+| Assertion                       | Baseline lives in                                     | Runs on CI                                   |
+| ------------------------------- | ----------------------------------------------------- | -------------------------------------------- |
+| `expect(el).toHaveScreenshot()` | committed `test/e2e/*.spec.ts-snapshots/*-darwin.png` | **No** — `ignoreSnapshots: !!process.env.CI` |
+| `argosScreenshot(page, …)`      | Argos (hosted)                                        | Yes — the actual visual gate                 |
 
-`toHaveScreenshot` is a **local** aid: its baselines are per-machine (macOS renders differently
-from a Linux runner) and are regenerated with `npm run test:update`. They are skipped on CI on
-purpose — with no baselines in the checkout, the first attempt would fail with "A snapshot
-doesn't exist, writing actual", the retry would find the file it just wrote, and the job would
-go green having compared every screenshot against itself. A gate that cannot fail is worse than
-no gate, because it looks like one.
+Do not confuse the two directories. **`screenshots/` is Argos' output folder** — note the
+`.argos.json` sidecars — and is gitignored. The `toHaveScreenshot` baselines are the 128 PNGs
+committed next to each spec.
+
+`toHaveScreenshot` is a **macOS-local** aid: Playwright puts the platform in the filename, so
+every committed baseline ends in `-darwin.png`. The Ubuntu CI runner looks for `-linux.png`,
+finds nothing, fails the first attempt with "A snapshot doesn't exist, writing actual", then
+passes on retry against the file it just wrote — going green having compared each screenshot
+with itself. A gate that cannot fail is worse than no gate, because it looks like one.
+Committing a second, Linux-rendered set is the alternative; Argos already does that job without
+another 128 binaries in the repo.
+
+**`npm run test:update` rewrites tracked files.** It overwrites all 128 baselines and your next
+commit carries them. Review that diff — a wholesale refresh silently absorbs a real regression
+into the new baseline.
 
 Argos is the real gate, and `visual-regression.yml` runs **the whole suite** (`--project=chromium`),
 not just `test/e2e/visual/` — every spec already calls `argosScreenshot`, and scoping CI to

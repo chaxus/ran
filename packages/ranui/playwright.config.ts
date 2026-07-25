@@ -13,14 +13,17 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   /**
-   * `toHaveScreenshot` is a **local** tool only; on CI the visual gate is Argos.
+   * `toHaveScreenshot` is a **macOS-local** tool; on CI the visual gate is Argos.
    *
-   * Its baselines live in the gitignored `screenshots/`, so a CI checkout has none. Without
-   * this flag the first attempt would fail with "A snapshot doesn't exist, writing actual",
-   * the retry would find the file it just wrote and pass, and the job would go green having
-   * compared each screenshot against itself — a gate that can never fail is worse than no
-   * gate, because it looks like one. Argos holds the real baselines and compares
-   * cross-platform, which is what a Linux runner needs against macOS-authored screenshots.
+   * Its baselines are committed under `test/e2e/*.spec.ts-snapshots/`, but Playwright puts the
+   * platform in the filename — every one of them is `…-darwin.png`. The CI runner is Ubuntu, so
+   * it would look for `…-linux.png`, find nothing, fail the first attempt with "A snapshot
+   * doesn't exist, writing actual", then pass on retry against the file it just wrote. The job
+   * goes green having compared each screenshot with itself; a gate that cannot fail is worse
+   * than no gate, because it looks like one.
+   *
+   * Committing a second, Linux-rendered baseline set would be the alternative — Argos already
+   * does that job better, comparing across platforms without 128 more binaries in the repo.
    */
   ignoreSnapshots: !!process.env.CI,
   reporter: reporters,
