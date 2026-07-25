@@ -42,7 +42,7 @@ npm install ranui --save
 
 ## 文档和示例
 
-[See components and use examples](https://chaxus.github.io/ran/cn/src/ranui/)
+[See components and use examples](https://ran.chaxus.com/cn/src/ranui/)
 
 ### 样式定制文档
 
@@ -376,7 +376,7 @@ import { enableMpaViewTransitions } from 'ranui';
 enableMpaViewTransitions();
 ```
 
-完整 API（守卫、`onPageSwap`/`onPageReveal`、元素级动画命名）请参考 [路由文档](https://chaxus.github.io/ran/cn/src/ranui/router/)。
+完整 API（守卫、`onPageSwap`/`onPageReveal`、元素级动画命名）请参考 [路由文档](https://ran.chaxus.com/cn/src/ranui/router/)。
 
 ### SSR & Builder (推荐)
 

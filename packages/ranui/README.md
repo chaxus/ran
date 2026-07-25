@@ -42,7 +42,7 @@ npm install ranui --save
 
 ## Documentation and Examples
 
-[See components and use examples](https://chaxus.github.io/ran/src/ranui/)
+[See components and use examples](https://ran.chaxus.com/src/ranui/)
 
 ### Components & API reference
 
@@ -409,7 +409,7 @@ import { enableMpaViewTransitions } from 'ranui';
 enableMpaViewTransitions();
 ```
 
-See the [Router documentation](https://chaxus.github.io/ran/src/ranui/router/) for the full API including guards, `onPageSwap`/`onPageReveal`, and per-element transition names.
+See the [Router documentation](https://ran.chaxus.com/src/ranui/router/) for the full API including guards, `onPageSwap`/`onPageReveal`, and per-element transition names.
 
 ### SSR & Builder
 

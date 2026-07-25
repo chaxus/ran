@@ -34,20 +34,22 @@ npm install ranuts@latest --save
 
 ## 文档
 
-[一些常用的函数和工具](https://chaxus.github.io/ran/cn/src/ranuts/)
+[一些常用的函数和工具](https://ran.chaxus.com/cn/src/ranuts/)
 
 ## 使用方式
 
 按需导入。您可以选择：
 
-- ranuts/utils
-- ranuts/node
-- ranuts/react
+- `ranuts/utils` —— DOM/BOM、字符串、对象、数字、颜色、时间、存储、i18n 等工具
+- `ranuts/node` —— HTTP 服务、路由、ws、fs、流、中间件（**仅 Node**）
+- `ranuts/visual` —— 2D 渲染引擎（Canvas / WebGL / WebGPU，**仅浏览器**）
+- `ranuts/vnode` —— Snabbdom 风格的虚拟 DOM
+- `ranuts/i18n` —— 单独的 i18n 引擎，不牵入 `utils` 的其余部分
 
 ```js
 import { str2Xml } from 'ranuts/utils';
 import { readFile } from 'ranuts/node';
-import { reactify } from 'ranuts/react';
+import { createI18n } from 'ranuts/i18n';
 ```
 
 全量导入（全量导入会引入许多不必要的模块，建议按需导入）

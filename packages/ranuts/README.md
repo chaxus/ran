@@ -32,7 +32,7 @@ npm install ranuts@latest --save
 
 ## Document
 
-[Some commonly used functions and tools](https://chaxus.github.io/ran/src/ranuts/)
+[Some commonly used functions and tools](https://ran.chaxus.com/src/ranuts/)
 
 **For AI agents / LLMs:** start from [CLAUDE.md](./CLAUDE.md) (orientation: entry points,
 runtime constraints, conventions) and [docs/API.md](./docs/API.md) (generated reference of
@@ -53,14 +53,16 @@ Claude then uses it automatically (or invoke it as `/ranuts:ranuts`).
 
 Import as required. You can select:
 
-- ranuts/utils
-- ranuts/node
-- ranuts/react
+- `ranuts/utils` — DOM/BOM, string, object, number, colour, time, storage, i18n helpers
+- `ranuts/node` — HTTP server, router, ws, fs, streams, middleware (**Node only**)
+- `ranuts/visual` — 2D rendering engine (Canvas / WebGL / WebGPU, **browser only**)
+- `ranuts/vnode` — Snabbdom-style virtual DOM
+- `ranuts/i18n` — the i18n engine on its own, without the rest of `utils`
 
 ```js
 import { str2Xml } from 'ranuts/utils';
 import { readFile } from 'ranuts/node';
-import { reactify } from 'ranuts/react';
+import { createI18n } from 'ranuts/i18n';
 ```
 
 Full import,(Full import will introduce many unnecessary modules. You are advised to import them on demand)
