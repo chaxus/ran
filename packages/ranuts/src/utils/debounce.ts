@@ -1,23 +1,25 @@
 export interface Debounced<T extends (...args: any[]) => any> {
   (this: unknown, ...args: Parameters<T>): void;
-  /** 取消尚未触发的那次调用 */
+  /** Cancel the pending invocation, if any. */
   cancel: () => void;
-  /** 立即触发挂起的那次调用（表单提交前强制落盘等） */
+  /** Invoke the pending call immediately (e.g. force a flush before form submit). */
   flush: () => void;
-  /** 是否有调用正在等待触发 */
+  /** Whether an invocation is currently waiting to fire. */
   pending: () => boolean;
 }
 
 /**
- * @description: 防抖——连续触发时只在**停止触发 ms 毫秒后**执行最后一次。
- * 用于输入联想、窗口 resize、自动保存这类「只关心最终状态」的场景。
+ * @description: Debounce — on a burst of calls, run only the last one, **`ms` milliseconds
+ * after the calls stop**. For input suggestions, window resize, autosave — anything that
+ * only cares about the final state.
  *
- * 保留调用时的 `this` 与最后一次的参数。返回的函数带 `cancel` / `flush`：
- * 组件卸载时应 `cancel()`，否则挂起的定时器会在已销毁的上下文里执行。
+ * Preserves the caller's `this` and the arguments of the last call. The returned function
+ * carries `cancel` / `flush`: call `cancel()` on unmount, otherwise the pending timer fires
+ * into an already destroyed context.
  *
- * @param {Function} fn 要防抖的函数
- * @param {number} ms 静默时长，默认 500
- * @return {Debounced} 带 cancel / flush / pending 的包装函数
+ * @param {Function} fn function to debounce
+ * @param {number} ms quiet period in milliseconds, defaults to 500
+ * @return {Debounced} wrapped function with cancel / flush / pending
  * @example
  * ```ts
  * const save = debounce((draft: string) => api.save(draft), 800);
@@ -40,9 +42,10 @@ export const debounce = <T extends (...args: any[]) => any>(fn: T, ms = 500): De
     fn.apply(context, args);
   };
 
-  // 必须是 function 而不是箭头函数：箭头函数的 this 在定义处就绑死了模块作用域，
-  // 挂在对象上调用（`obj.handler()`）时拿不到 obj。
+  // Must be a `function`, not an arrow: an arrow binds `this` to the module scope at
+  // definition time, so `obj.handler()` would never see `obj`.
   const debounced = function (this: unknown, ...args: Parameters<T>): void {
+    // oxlint-disable-next-line typescript/no-this-alias -- capturing the caller's `this` is the point here
     lastThis = this;
     lastArgs = args;
     if (timer !== null) clearTimeout(timer);

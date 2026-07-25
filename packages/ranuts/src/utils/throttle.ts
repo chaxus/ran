@@ -1,23 +1,24 @@
 export interface Throttled<T extends (...args: any[]) => any> {
   (this: unknown, ...args: Parameters<T>): void;
-  /** 取消尾部挂起的那次调用 */
+  /** Cancel the pending trailing invocation, if any. */
   cancel: () => void;
-  /** 是否有尾部调用正在等待触发 */
+  /** Whether a trailing invocation is waiting to fire. */
   pending: () => boolean;
 }
 
 /**
- * @description: 节流——高频触发时按固定间隔执行，首次立即执行（leading），
- * 间隔内的最后一次触发在窗口结束时补上（trailing），保证「最后的状态不丢」。
- * 用于滚动、鼠标移动、拖拽这类需要**持续反馈**的场景（与 `debounce` 相反：
- * 防抖只要最终值，节流要过程值）。
+ * @description: Throttle — under a burst of calls, run at a fixed interval: the first call
+ * runs immediately (leading) and the last call inside a window is replayed when the window
+ * closes (trailing), so the final state is never dropped. For scroll, mouse move and drag —
+ * anything needing **continuous feedback** (the opposite of `debounce`, which only wants the
+ * final value while throttle wants the intermediate ones).
  *
- * 保留调用时的 `this` 与参数。用裸 `setTimeout` 而非 `window.setTimeout`——
- * 后者在 Node / Worker / SSR 里直接抛 ReferenceError。
+ * Preserves the caller's `this` and arguments. Uses the bare `setTimeout` rather than
+ * `window.setTimeout` — the latter throws a ReferenceError in Node / Workers / SSR.
  *
- * @param {Function} fn 要节流的函数
- * @param {number} delay 最小间隔（毫秒），默认 300
- * @return {Throttled} 带 cancel / pending 的包装函数
+ * @param {Function} fn function to throttle
+ * @param {number} delay minimum interval in milliseconds, defaults to 300
+ * @return {Throttled} wrapped function with cancel / pending
  * @example
  * ```ts
  * const onScroll = throttle(() => update(window.scrollY), 100);
@@ -45,6 +46,7 @@ export function throttle<T extends (...args: any[]) => any>(fn: T, delay: number
   const throttled = function (this: unknown, ...args: Parameters<T>): void {
     const now = Date.now();
     const remaining = delay - (now - lastCallTime);
+    // oxlint-disable-next-line typescript/no-this-alias -- capturing the caller's `this` is the point here
     lastThis = this;
     lastArgs = args;
     if (remaining <= 0) {
