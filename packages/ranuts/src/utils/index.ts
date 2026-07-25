@@ -128,6 +128,8 @@ import type { Handoff, HandoffOptions, IDBResult, IDBStoreSchema, WebDBOptions }
 import { buildOffsets, indexForOffset, segmentByRanges } from './segment';
 import type { OffsetRange, Segment } from './segment';
 import { detectLanguage, navigatorLanguage, resolveLocale } from './lang';
+import { I18nCore, createI18n, useI18n } from './i18n';
+import type { I18nConfig, LocaleChangeHandler, LocaleMessages, MessageDict, TranslateParams } from './i18n';
 import { createLocalePath } from './localePath';
 import type { LocalePath, LocalePathConfig, LocaleRoute } from './localePath';
 import type { ResolveLocaleOptions, TextLanguage } from './lang';
@@ -419,6 +421,9 @@ export {
   RGB_REGEX,
   RGBA_REGEX,
   loadScript,
+  I18nCore,
+  createI18n,
+  useI18n,
 };
 
 export type {
@@ -426,6 +431,11 @@ export type {
   SpeedType,
   ImgSource,
   LoadScriptOptions,
+  I18nConfig,
+  MessageDict,
+  LocaleMessages,
+  TranslateParams,
+  LocaleChangeHandler,
   Debounced,
   Throttled,
   BeaconPayload,
