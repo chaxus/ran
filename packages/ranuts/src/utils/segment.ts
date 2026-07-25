@@ -1,15 +1,19 @@
 /**
- * 「块序列 + 全局偏移」的坐标换算与区间切分（纯函数，无 DOM，易测）。
+ * Coordinate maths and range splitting over a "chunk sequence + global offset" model
+ * (pure functions, no DOM, easy to test).
  *
- * 适用场景：内容被切成若干块（分页、分片、虚拟列表、日志分段），而标注/高亮/搜索命中
- * 记录的是**拼接后的全局偏移**。把标注存在全局坐标系里而不是「第 N 块第 M 个字」，
- * 重新切块（换字号、改页宽、变分片大小）后标注仍然有效。
+ * The use case: content is cut into chunks (pagination, sharding, a virtual list, log
+ * segments) while annotations / highlights / search hits are recorded as **offsets into
+ * the concatenated whole**. Storing an annotation in global coordinates rather than as
+ * "chunk N, character M" keeps it valid after re-chunking (a different font size, page
+ * width or shard size).
  */
 
 /**
- * @description: 每块在拼接坐标系里的全局起始偏移（前缀和）。offsets[i] = 前 i 块长度之和。
- * @param {readonly number[]} lengths 每块的长度
- * @return {number[]} 与入参等长的偏移数组
+ * @description: The global start offset of every chunk in the concatenated coordinate
+ * space (a prefix sum). `offsets[i]` = the summed length of the first `i` chunks.
+ * @param {readonly number[]} lengths length of each chunk
+ * @return {number[]} offset array, same length as the input
  * @example
  * ```ts
  * buildOffsets([3, 5, 2]); // [0, 3, 8]
@@ -27,11 +31,13 @@ export const buildOffsets = (lengths: readonly number[]): number[] => {
 };
 
 /**
- * @description: 二分查找全局偏移落在第几块——最后一个满足 `offsets[i] <= offset` 的下标。
- * 越界会夹取到 `[0, offsets.length - 1]`，空数组返回 0，故返回值总是可安全索引的。
- * @param {readonly number[]} offsets buildOffsets 的结果（必须非递减）
- * @param {number} offset 全局偏移
- * @return {number} 块下标
+ * @description: Binary-search which chunk a global offset falls into — the last index
+ * satisfying `offsets[i] <= offset`. Out-of-range values are clamped to
+ * `[0, offsets.length - 1]` and an empty array returns 0, so the result is always safe to
+ * index with.
+ * @param {readonly number[]} offsets the result of buildOffsets (must be non-decreasing)
+ * @param {number} offset global offset
+ * @return {number} chunk index
  */
 export const indexForOffset = (offsets: readonly number[], offset: number): number => {
   if (offsets.length === 0) return 0;
@@ -50,33 +56,36 @@ export const indexForOffset = (offsets: readonly number[], offset: number): numb
   return ans;
 };
 
-/** 全局坐标系里的一段标注：`[start, end)` 半开区间 + 任意携带值 */
+/** An annotation in global coordinates: the half-open interval `[start, end)` plus any payload */
 export interface OffsetRange<T> {
   start: number;
   end: number;
   value: T;
 }
 
-/** 切分结果的一段：`value` 为 null 表示没被任何区间覆盖的普通段 */
+/** One piece of the split result: `value === null` marks a plain span covered by no range */
 export interface Segment<T> {
   text: string;
-  /** 在全局坐标系里的起点（= chunkStart + 段内偏移） */
+  /** Start in global coordinates (= chunkStart + the offset inside the chunk) */
   start: number;
   end: number;
   value: T | null;
 }
 
 /**
- * @description: 把一块文本按落在其范围内的区间切成「普通段 / 命中段」序列，供分段渲染
- * （高亮划线、标记搜索命中、diff 上色）。
+ * @description: Split one chunk of text into a sequence of plain / matched spans according
+ * to the ranges falling inside it, ready for span-by-span rendering (highlights,
+ * underlines, search hits, diff colouring).
  *
- * 区间按起点排序后单调消费：重叠时后者只接非重叠的尾巴，被完全吞没的直接跳过——
- * 保证切点严格递增、不产生负长度或重复文本。不做区间合并（个人标注极少重叠）。
+ * Ranges are sorted by start and consumed monotonically: on overlap the later range only
+ * takes its non-overlapping tail, and a fully swallowed range is skipped — so cut points
+ * strictly increase and no negative-length or duplicated text is produced. Ranges are not
+ * merged (personal annotations rarely overlap).
  *
- * @param {string} text 本块文本
- * @param {number} chunkStart 本块在全局坐标系里的起始偏移（buildOffsets 的结果）
- * @param {readonly OffsetRange<T>[]} ranges 全局坐标系里的区间，可含与本块无关的项
- * @return {Segment<T>[]} 顺序拼接等于 `text`，至少一段
+ * @param {string} text this chunk's text
+ * @param {number} chunkStart this chunk's start offset in global coordinates (from buildOffsets)
+ * @param {readonly OffsetRange<T>[]} ranges ranges in global coordinates, may include unrelated items
+ * @return {Segment<T>[]} spans that concatenate back to `text`; always at least one
  */
 export const segmentByRanges = <T>(
   text: string,
@@ -102,8 +111,8 @@ export const segmentByRanges = <T>(
   for (const range of local) {
     let s = range.s;
     if (s < cursor) {
-      if (range.e <= cursor) continue; // 完全被前一段吞没
-      s = cursor; // 只接非重叠尾巴
+      if (range.e <= cursor) continue; // fully swallowed by the previous span
+      s = cursor; // take only the non-overlapping tail
     }
     if (s > cursor) push(cursor, s, null);
     push(s, range.e, range.value);

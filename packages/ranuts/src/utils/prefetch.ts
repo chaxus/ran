@@ -1,28 +1,31 @@
 /**
- * 「后台预取 + 缓存探测」。
+ * Background prefetching plus cache probing.
  *
- * 核心事实：只要用 fetch 请求过一次的同源 GET，就会进 Service Worker 的 CacheStorage
- * （前提是 SW 对同源 GET 做了 cache-first），之后任何代码请求同一 URL 都命中缓存、离线可用。
- * 所以「预热大资源」不需要专门的下载器，把字节拉进缓存即可。
+ * The key fact: a same-origin GET that has been fetched once lands in the service worker's
+ * CacheStorage (assuming the SW is cache-first for same-origin GETs), and from then on any
+ * code requesting that URL hits the cache and works offline. So "warming up a large asset"
+ * needs no dedicated downloader — pulling the bytes into the cache is enough.
  *
- * 但预取是**替用户花流量**，必须受约束：省流量模式、2G 慢网、用户显式关闭时都不该偷跑。
+ * But prefetching **spends the user's data on their behalf**, so it must be constrained:
+ * it should stay quiet under data-saver mode, on slow 2G, and whenever the user turned it off.
  */
 
-/** 调用时判断，而不是模块加载时——同一份代码可能先在 SSR 里被 import，再在浏览器里被调用 */
+/** Checked at call time, not module load — the same code may be imported during SSR and called later in the browser */
 const hasWindow = (): boolean => typeof window !== 'undefined';
 
 export interface WhenIdleOptions {
-  /** requestIdleCallback 的最长等待（毫秒），默认 8000 */
+  /** Maximum wait for requestIdleCallback in milliseconds, defaults to 8000 */
   timeout?: number;
-  /** 不支持 requestIdleCallback 时的退避延时（毫秒），默认 2500 */
+  /** Fallback delay in milliseconds when requestIdleCallback is unavailable, defaults to 2500 */
   fallbackDelay?: number;
 }
 
 /**
- * @description: 在浏览器空闲时执行回调，无 `requestIdleCallback`（Safari 长期缺席）时退回 setTimeout。
- * @param {Function} callback 空闲时执行
+ * @description: Run a callback while the browser is idle, falling back to setTimeout where
+ * `requestIdleCallback` is missing (long absent in Safari).
+ * @param {Function} callback runs when idle
  * @param {WhenIdleOptions} options
- * @return {Function} 取消函数；回调已执行后调用无副作用
+ * @return {Function} cancel function; calling it after the callback ran is a no-op
  */
 export const whenIdle = (callback: () => void, options: WhenIdleOptions = {}): (() => void) => {
   const { timeout = 8000, fallbackDelay = 2500 } = options;
@@ -42,16 +45,18 @@ export const whenIdle = (callback: () => void, options: WhenIdleOptions = {}): (
 };
 
 export interface NetworkAllowanceOptions {
-  /** localStorage 开关：设了任意值即视为用户关闭预取 */
+  /** localStorage switch: any value stored under this key means the user turned prefetching off */
   optOutKey?: string;
-  /** 视为「慢网」的 effectiveType，默认 slow-2g / 2g */
+  /** effectiveType values treated as a "slow network", defaults to slow-2g / 2g */
   slowTypes?: string[];
 }
 
 /**
- * @description: 当前网络与用户设置是否允许「主动下载大资源」。
- * 省流量（`saveData`）、慢网、用户显式关闭时返回 false。信息拿不到时**默认允许**——
- * Network Information API 在 Safari/Firefox 上不存在，不能因为读不到就一律不预取。
+ * @description: Whether the current network and user settings allow proactively downloading
+ * a large asset. Returns false under data-saver (`saveData`), on a slow network, or when the
+ * user opted out. When the information is unavailable it **defaults to allowed** — the
+ * Network Information API does not exist in Safari/Firefox, and a missing reading must not
+ * disable prefetching everywhere.
  * @param {NetworkAllowanceOptions} options
  * @return {boolean}
  */
@@ -63,7 +68,7 @@ export const networkAllowsDownload = (options: NetworkAllowanceOptions = {}): bo
       // eslint-disable-next-line n/no-unsupported-features/node-builtins
       if (localStorage.getItem(optOutKey)) return false;
     } catch {
-      // localStorage 被禁用（隐私模式 / 三方 iframe）时不阻断
+      // Do not block when localStorage is disabled (private mode / third-party iframe)
     }
   }
   // eslint-disable-next-line n/no-unsupported-features/node-builtins
@@ -73,12 +78,13 @@ export const networkAllowsDownload = (options: NetworkAllowanceOptions = {}): bo
   return true;
 };
 
-/** CacheStorage 是否可用（非安全上下文 / 老浏览器可能没有） */
+/** Whether CacheStorage is available (missing in insecure contexts / old browsers) */
 const hasCaches = (): boolean => typeof caches !== 'undefined';
 
 /**
- * @description: URL 是否已在 CacheStorage 里。探测一组文件时应挑**最后下载完成的那个**
- * （通常是最大的）作为判据，否则会把「下到一半」误判成已缓存。
+ * @description: Whether a URL is already in CacheStorage. When probing a group of files,
+ * test the one that **finishes downloading last** (usually the largest), otherwise a
+ * half-finished download reads as fully cached.
  * @param {string} url
  * @return {Promise<boolean>}
  */
@@ -92,8 +98,9 @@ export const isUrlCached = async (url: string): Promise<boolean> => {
 };
 
 /**
- * @description: 拉取单个 URL 进缓存；已缓存则跳过。失败静默——预取失败只是让后续加载
- * 走一次真实下载，不该冒泡打断主流程。
+ * @description: Pull a single URL into the cache; skipped when already cached. Failures are
+ * silent — a failed prefetch only means the later load performs a real download, it must not
+ * bubble up and interrupt the main flow.
  * @param {string} url
  * @return {Promise<void>}
  */
@@ -102,19 +109,20 @@ export const prefetchUrl = async (url: string): Promise<void> => {
     if (await isUrlCached(url)) return;
     await fetch(url, { cache: 'force-cache' });
   } catch {
-    // 忽略
+    // ignored
   }
 };
 
 export interface PrefetchOptions {
   /**
-   * 交给 Service Worker 预取时用的消息 type。SW 里用 `event.waitUntil` 保活，
-   * 下载不随页面导航中断（用户快进快出时尤其明显）；无可控 SW 时自动退回主线程 fetch。
+   * Message type used to hand prefetching to the service worker. The SW keeps the work alive
+   * with `event.waitUntil`, so a download survives page navigation (very noticeable when the
+   * user moves around quickly); without a controlling SW it falls back to a main-thread fetch.
    */
   serviceWorkerMessage?: string;
 }
 
-/** 请求 SW 在其上下文里预取；无可控 SW 返回 false */
+/** Ask the SW to prefetch in its own context; returns false when there is no controlling SW */
 const precacheViaServiceWorker = (urls: string[], type: string): boolean => {
   try {
     // eslint-disable-next-line n/no-unsupported-features/node-builtins
@@ -129,8 +137,8 @@ const precacheViaServiceWorker = (urls: string[], type: string): boolean => {
 };
 
 /**
- * @description: 预取一组 URL。**串行**执行——预取是背景任务，并发打满带宽会拖慢用户
- * 正在看的页面。
+ * @description: Prefetch a group of URLs, **serially** — prefetching is background work, and
+ * saturating the bandwidth in parallel slows down the page the user is actually looking at.
  * @param {string[]} urls
  * @param {PrefetchOptions} options
  * @return {Promise<void>}
@@ -144,10 +152,11 @@ export const prefetchUrls = async (urls: string[], options: PrefetchOptions = {}
 };
 
 /**
- * @description: 在空闲时预取一组 URL，并受 `networkAllowsDownload` 约束。非阻塞，立即返回。
+ * @description: Prefetch a group of URLs while idle, subject to `networkAllowsDownload`.
+ * Non-blocking, returns immediately.
  * @param {string[]} urls
- * @param {object} options 合并了空闲调度、网络许可与 SW 转发三者的选项
- * @return {Function} 取消函数（仅能取消尚未开始的调度）
+ * @param {object} options the idle-scheduling, network-allowance and SW-forwarding options combined
+ * @return {Function} cancel function (can only cancel a schedule that has not started)
  */
 export const prefetchWhenIdle = (
   urls: string[],
