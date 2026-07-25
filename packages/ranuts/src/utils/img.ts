@@ -1,5 +1,4 @@
 import type { BaseReturn } from '@/utils/bom';
-import { isClient } from '@/utils/device';
 
 /**
  * @description: 校验图片尺寸是否等于给定的宽 / 高。两者都传时必须**同时**满足；
@@ -16,7 +15,7 @@ import { isClient } from '@/utils/device';
 export const isImageSize = (file: File, width?: number, height?: number): Promise<boolean> => {
   return new Promise((resolve, reject) => {
     // 必须 return：原先只调 reject 不返回，后面照样访问 window，SSR 下直接抛 ReferenceError
-    if (!isClient) {
+    if (typeof window === 'undefined') {
       reject(new Error('isImageSize is browser-only: window is undefined'));
       return;
     }
