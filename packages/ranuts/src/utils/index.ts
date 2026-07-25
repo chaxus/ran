@@ -103,7 +103,7 @@ import {
 } from './dom';
 import { handleError } from './error';
 import { convertImageToBase64, isImageSize } from './img';
-import { memoize, singleFlight } from './memoize';
+import { memoize, once, singleFlight } from './memoize';
 import type { SingleFlight } from './memoize';
 import { WebDB } from './idb';
 import type { IDBResult, IDBStoreSchema, WebDBOptions } from './idb';
@@ -197,6 +197,7 @@ export {
   setMime,
   getMime,
   memoize,
+  once,
   isImageSize,
   convertImageToBase64,
   handleError,
