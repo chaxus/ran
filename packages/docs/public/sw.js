@@ -8,7 +8,10 @@ const IGNORE_REQUEST_LIST = [
   // 百度的请求不用缓存
   'baidu.com',
   'blob:',
-  'www.google-analytics.com'
+  'www.google-analytics.com',
+  // Cloudflare Web Analytics 的 beacon，和上面几个同理：分析脚本没有离线价值，
+  // 缓存它只会把某个版本钉死
+  'cloudflareinsights.com'
 ]
 
 // 请求方法
@@ -39,17 +42,22 @@ const updateCache = (fetchedResponse, request) => {
   const { status } = fetchedResponse
   // 只缓存状态码为 200 的请求
   if (status !== RESPONSE_STATUS.SUCCESS) return
-  if (filterRequest(request)) {
-    caches.open(CACHE_NAME).then(cache => {
-      // 将请求到的资源添加到缓存中
-      // 判断下只有 fetch 的请求才有 clone 方法，才可以被缓存，从 cache 中获取的响应没有 clone
-      if (fetchedResponse?.clone) {
-        cache.put(url, fetchedResponse.clone());
-      }
-    }).catch(error => {
-      console.log('service worker update cache error:', error, request)
-    })
-  }
+  if (!filterRequest(request)) return
+  // 只有 fetch 来的响应才有 clone；从 cache 里取出的没有
+  if (!fetchedResponse?.clone) return
+
+  // **必须在这里同步 clone**，不能放进下面 caches.open 的 .then 里。
+  //
+  // 调用方是 `const r = await fetch(req); updateCache(r, req); return r;` —— caches.open()
+  // 的回调要等到微任务才执行，而那时 return 已经把响应交给浏览器、body 正在被读取，
+  // 再 clone() 就会抛 "Failed to execute 'clone' on 'Response': Response body is already used"。
+  // 一个响应体只能读一次，所以要在交出去之前先复制一份。
+  const copy = fetchedResponse.clone()
+  caches.open(CACHE_NAME).then(cache => {
+    cache.put(url, copy);
+  }).catch(error => {
+    console.log('service worker update cache error:', error, request)
+  })
 }
 /**
  * @description: 忽略 IGNORE_REQUEST_LIST 列表中的请求和非 GET 方法的请求

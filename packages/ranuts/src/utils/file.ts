@@ -32,10 +32,15 @@ export const readFileAsArrayBuffer = (blob: Blob): Promise<ArrayBuffer> => read<
 
 /**
  * @description: Read a File / Blob as a Uint8Array (pair with checkEncoding / arrayBufferToString for encoding sniffing)
+ *
+ * Typed as `Uint8Array<ArrayBuffer>`, not the default `Uint8Array<ArrayBufferLike>`: a
+ * FileReader never yields a SharedArrayBuffer, and the loose form does not satisfy APIs that
+ * ask for an ArrayBuffer-backed view, forcing callers into a pointless cast.
+ *
  * @param {Blob} blob
- * @return {Promise<Uint8Array>}
+ * @return {Promise<Uint8Array<ArrayBuffer>>}
  */
-export const readFileAsUint8Array = async (blob: Blob): Promise<Uint8Array> =>
+export const readFileAsUint8Array = async (blob: Blob): Promise<Uint8Array<ArrayBuffer>> =>
   new Uint8Array(await readFileAsArrayBuffer(blob));
 
 /**

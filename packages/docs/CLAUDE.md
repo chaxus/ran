@@ -138,6 +138,13 @@ did not work.
 **network-first with cache fallback** — a docs site must not serve yesterday's prose. Build
 output is content-hashed and therefore immutable, so everything else is **cache-first**.
 
+**4. Clone a response _synchronously_, before handing it to the page.** A response body can
+only be read once. `updateCache` used to clone inside `caches.open().then(...)`, which runs a
+microtask later — by then the caller has already returned the response to the browser and the
+body is being consumed, so `clone()` throws `Failed to execute 'clone' on 'Response': Response
+body is already used`. This stayed invisible while the fetch handler was broken (nothing
+consumed the response); it surfaced the moment interception started working.
+
 `activate` runs `deleteOldCaches()`, which keeps only the current `CACHE_NAME` — that is what
 actually evicts the previous deploy's assets, and it is driven by the version inside the file.
 
