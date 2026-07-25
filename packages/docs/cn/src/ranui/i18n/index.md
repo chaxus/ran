@@ -144,13 +144,13 @@ i18n.setLocale('fr');
 
 ### `I18nConfig`
 
-| 字段              | 类型             | 默认值         | 说明                                            |
-| ----------------- | ---------------- | -------------- | ----------------------------------------------- |
-| `messages`        | `LocaleMessages` | `{}`           | `语言 → { key → 字符串 }`，每个字典都是扁平的。 |
-| `locale`          | `string`         | 回退语言       | 初始语言（开启持久化时会被已保存的选择覆盖）。  |
-| `fallbackLocale`  | `string`         | `'en'`         | 当前语言缺少某 key 时查询的回退语言。           |
-| `persist`         | `boolean`        | `false`        | 将当前语言持久化到 `localStorage`。             |
-| `storageKey`      | `string`         | `'ran-locale'` | 开启持久化时使用的 localStorage 键。            |
+| 字段              | 类型             | 默认值         | 说明                                                                                                                                         |
+| ----------------- | ---------------- | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `messages`        | `LocaleMessages` | `{}`           | `语言 → { key → 字符串 }`，每个字典都是扁平的。                                                                                              |
+| `locale`          | `string`         | 回退语言       | 初始语言（开启持久化时会被已保存的选择覆盖）。                                                                                               |
+| `fallbackLocale`  | `string`         | `'en'`         | 当前语言缺少某 key 时查询的回退语言。                                                                                                        |
+| `persist`         | `boolean`        | `false`        | 将当前语言持久化到 `localStorage`。                                                                                                          |
+| `storageKey`      | `string`         | `'ran-locale'` | 开启持久化时使用的 localStorage 键。                                                                                                         |
 | `detectNavigator` | `boolean`        | `false`        | 用浏览器的语言偏好初始化语言。读的是完整有序的 `navigator.languages` 列表，首选语言没有词典的读者仍能拿到第二选择，而不是直接掉到 fallback。 |
 
 ### `I18nCore` 方法
