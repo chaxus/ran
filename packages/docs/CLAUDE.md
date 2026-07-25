@@ -143,14 +143,39 @@ actually evicts the previous deploy's assets, and it is driven by the version in
 
 ---
 
+## Debugging a hydration mismatch
+
+VitePress `dev` does not SSR, so a mismatch reproduces **only in a production build**, where
+Vue prints a bare `Hydration completed but contains mismatches.` with no location. To get the
+node, temporarily add the Vue build flag and rebuild:
+
+```ts
+// .vitepress/config.ts → vite
+define: { __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: 'true' },
+```
+
+Then `npx vitepress preview` and read the console: Vue names the element
+(`Hydration children mismatch on [node HTMLAnchorElement]`). **Remove the flag afterwards** —
+it ships the extra diagnostics to users.
+
+Do not diagnose by diffing the SSR HTML against the live DOM: components that legitimately
+change in `onMounted` (the homepage swaps a skeleton for real `<r-*>` elements) show up as
+differences that have nothing to do with hydration.
+
+The usual root cause is invalid HTML nesting, because the browser's parser silently relocates
+the offending node while Vue's vdom still expects it where the server put it.
+
+---
+
 ## Gotchas
 
-| Pitfall                                                                | Fix                                                                                                                                                             |
-| ---------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| A `{{` in markdown (documenting template syntax, say) breaks the build | VitePress compiles every page as a Vue template. Wrap in `::: v-pre` or `<code v-pre>`.                                                                         |
-| Adding a `.md` file to the package root that is not meant to be a page | Anything under the VitePress root becomes a route. Add it to `srcExclude` in `config.ts` — that is why this file is listed there.                               |
-| A bare `<tag>` in prose breaks the build the same way                  | Same cause — an unclosed element. Backtick it. The ranuts API generator escapes these automatically (`escapeAngles`); hand-written pages must do it themselves. |
-| Adding a page but it never appears                                     | The sidebar is hand-maintained in `.vitepress/langs/{en,cn}/index.ts`. A page with no entry is reachable only by URL.                                           |
-| Editing `src/ranuts/api.md` directly                                   | Generated. Edit the ranuts source JSDoc and run `pnpm -F ranuts doc:api`.                                                                                       |
-| Assuming `screenshots/`-style generated output is ignored by tooling   | Generated artefacts must be added to `.prettierignore` explicitly, or `lint:prettier` goes red the first time someone runs the generator.                       |
-| Expecting the CN tree to update itself                                 | `cn/src/` is a manual mirror of `src/`. New pages need both.                                                                                                    |
+| Pitfall                                                                                          | Fix                                                                                                                                                                                                                                                              |
+| ------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A `{{` in markdown (documenting template syntax, say) breaks the build                           | VitePress compiles every page as a Vue template. Wrap in `::: v-pre` or `<code v-pre>`.                                                                                                                                                                          |
+| Adding a `.md` file to the package root that is not meant to be a page                           | Anything under the VitePress root becomes a route. Add it to `srcExclude` in `config.ts` — that is why this file is listed there.                                                                                                                                |
+| Putting anything with an `<a>` (or other interactive content) into `#nav-bar-title-before/after` | Those slots render **inside** the logo's `<a class="title">`. Nested anchors are invalid HTML, so the parser auto-closes the outer one and relocates your markup — the DOM stops matching Vue's vdom and hydration fails. Use `#nav-bar-content-before` instead. |
+| A bare `<tag>` in prose breaks the build the same way                                            | Same cause — an unclosed element. Backtick it. The ranuts API generator escapes these automatically (`escapeAngles`); hand-written pages must do it themselves.                                                                                                  |
+| Adding a page but it never appears                                                               | The sidebar is hand-maintained in `.vitepress/langs/{en,cn}/index.ts`. A page with no entry is reachable only by URL.                                                                                                                                            |
+| Editing `src/ranuts/api.md` directly                                                             | Generated. Edit the ranuts source JSDoc and run `pnpm -F ranuts doc:api`.                                                                                                                                                                                        |
+| Assuming `screenshots/`-style generated output is ignored by tooling                             | Generated artefacts must be added to `.prettierignore` explicitly, or `lint:prettier` goes red the first time someone runs the generator.                                                                                                                        |
+| Expecting the CN tree to update itself                                                           | `cn/src/` is a manual mirror of `src/`. New pages need both.                                                                                                                                                                                                     |
