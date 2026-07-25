@@ -93,6 +93,7 @@ import { localStorageGetItem, localStorageSetItem } from './storage';
 import { compose } from './compose';
 import { handleConsole } from './console';
 import { debounce } from './debounce';
+import type { Debounced } from './debounce';
 import {
   Chain,
   addClassToElement,
@@ -129,6 +130,7 @@ import type { BeaconPayload, ReportConfig } from './report';
 import { handleFetchHook, handleXhrHook } from './request';
 import { scriptOnLoad } from './script';
 import { throttle } from './throttle';
+import type { Throttled } from './throttle';
 import { formatDate, performanceTime, timeFormat, timestampToTime } from './time';
 import type { CurrentDevice } from './device';
 import {
@@ -320,6 +322,8 @@ export {
 };
 
 export type {
+  Debounced,
+  Throttled,
   BeaconPayload,
   ReportConfig,
   LocalePath,

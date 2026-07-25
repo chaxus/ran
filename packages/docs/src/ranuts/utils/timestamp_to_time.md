@@ -1,84 +1,54 @@
-# timestampToTime
+# formatDate / timestampToTime
 
-Convert a timestamp to a Date object with a `format` method for date formatting.
+Format a date with a token pattern.
 
 ## API
 
-### timestampToTime
+### formatDate(value?, pattern?)
 
-#### Return
+| Parameter | Description                                      | Type                        | Default                 |
+| --------- | ------------------------------------------------ | --------------------------- | ----------------------- |
+| `value`   | Timestamp, date string or `Date`; omit for now   | `number \| string \| Date`  | now                     |
+| `pattern` | Token pattern                                    | `string`                    | `'YYYY-MM-DD HH:mm:ss'` |
 
-| Argument                       | Description                    | Type                           |
-| ------------------------------ | ------------------------------ | ------------------------------ |
-| `Date & { format?: Function }` | Date object with format method | `Date & { format?: Function }` |
+| Token       | Meaning        | Token      | Meaning        |
+| ----------- | -------------- | ---------- | -------------- |
+| `YYYY`/`YY` | Year           | `mm`/`m`   | Minute         |
+| `MM`/`M`    | Month (1–12)   | `ss`/`s`   | Second         |
+| `DD`/`D`    | Day            | `SSS`      | Milliseconds   |
+| `HH`/`H`    | Hour (0–23)    | `A`/`a`    | AM/PM · am/pm  |
+| `hh`/`h`    | Hour (1–12)    | `[...]`    | Literal text   |
 
-#### Parameters
+Returns `'Invalid Date'` when the input cannot be parsed.
 
-| Parameter   | Description                        | Type               | Default  |
-| ----------- | ---------------------------------- | ------------------ | -------- |
-| `timestamp` | Timestamp (milliseconds or string) | `number \| string` | Optional |
+### timestampToTime(timestamp?)
 
-### format Method
-
-The returned Date object includes a `format` method for date formatting.
-
-#### format Parameters
-
-| Parameter | Description        | Type     | Default                 |
-| --------- | ------------------ | -------- | ----------------------- |
-| `format`  | Date format string | `string` | `'YYYY-MM-DD HH:mm:ss'` |
-
-#### Format Description
-
-- `YYYY` - Year (4 digits)
-- `MM` - Month (2 digits)
-- `DD` - Date (2 digits)
-- `HH` - Hour (24-hour format, 2 digits)
-- `mm` - Minute (2 digits)
-- `SS` - Second (2 digits)
+Deprecated. Returns a `Date` with a `format` method attached to the instance.
 
 ## Example
 
-### Basic Usage
-
 ```js
-import { timestampToTime } from 'ranuts';
+import { formatDate } from 'ranuts';
 
-const date = timestampToTime(1609459200000);
-console.log(date.format()); // '2021-01-01 00:00:00'
-```
-
-### Custom Format
-
-```js
-import { timestampToTime } from 'ranuts';
-
-const date = timestampToTime(1609459200000);
-console.log(date.format('YYYY/MM/DD')); // '2021/01/01'
-console.log(date.format('YYYY-MM-DD HH:mm')); // '2021-01-01 00:00'
-```
-
-### Use Current Time
-
-```js
-import { timestampToTime } from 'ranuts';
-
-const now = timestampToTime();
-console.log(now.format('YYYY-MM-DD')); // '2024-01-01'
-```
-
-### String Timestamp
-
-```js
-import { timestampToTime } from 'ranuts';
-
-const date = timestampToTime('1609459200000');
-console.log(date.format()); // '2021-01-01 00:00:00'
+formatDate();                                          // '2026-07-25 14:30:00'
+formatDate(1753425000000, 'YYYY/MM/DD');               // '2026/07/25'
+formatDate(new Date(), 'YYYY[年]MM[月]DD[日] hh:mm a');
+formatDate('not a date');                              // 'Invalid Date'
 ```
 
 ## Notes
 
-1. **Timestamp format**: Supports numeric (milliseconds) or string format timestamps.
-2. **Default value**: If no parameter is passed, uses current time.
-3. **format method**: The returned Date object extends the `format` method, which can be chained.
-4. **Format characters**: The `Y`, `M`, `D`, `H`, `m`, `S` characters in the format string will be replaced with corresponding date-time values.
+1. **Case is significant.** `MM` is the month, `mm` the minute; `HH` is 24-hour, `hh` 12-hour.
+2. **The pattern is substituted in one pass**, so a value just written can never be matched
+   again by a later token.
+3. **Wrap literals in `[]`** to keep letters out of the substitution.
+
+::: warning Fixed and superseded in 0.3
+The old formatter chained six `.replace()` calls with case-insensitive flags. Two consequences:
+a later pattern could match digits an earlier one had just written, and `/M+/g` vs `/m+/g` vs
+`/D+/gi` overlapped — so a lowercase pattern like `yyyy-mm-dd` produced year-minute-day.
+
+`timestampToTime` is deprecated in favour of `formatDate`: bolting a method onto a `Date`
+instance does not survive serialization and cannot be typed beyond `Function`. Its `format`
+now delegates to `formatDate`, so existing callers get the fixed token handling.
+:::
