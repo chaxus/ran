@@ -1,13 +1,4 @@
-import {
-  HEX_COLOR_REGEX,
-  RGBA_REGEX,
-  RGB_REGEX,
-  hexToHsv,
-  hsvToRgb,
-  range,
-  rgbToHex,
-  rgbToHsv,
-} from 'ranuts/utils';
+import { HEX_COLOR_REGEX, RGBA_REGEX, RGB_REGEX, hexToHsv, hsvToRgb, range, rgbToHex, rgbToHsv } from 'ranuts/utils';
 import { signal, createEffect, RanElement, isDisabled } from '@/utils/index';
 import { Div, View, EventManager, Style } from '@/utils/builder';
 import '@/components/popover';

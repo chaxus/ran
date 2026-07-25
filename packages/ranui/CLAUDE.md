@@ -34,10 +34,10 @@ packages/ranui/
 │   ├── component.ts      # ensureShadowRoot, ensureShadowElement, attribute helpers
 │   ├── builder/          # ElementBuilder fluent DOM builder
 │   ├── router/           # RouterCore, createRouter, useRouter, enableMpaViewTransitions
-│   ├── i18n/             # I18nCore, createI18n, useI18n (framework-agnostic)
+│   ├── i18n/             # re-export of ranuts/i18n (the engine itself lives in ranuts)
 │   ├── ssr-registry.ts   # defineSSR, SSR support
 │   ├── theme.ts          # setTheme, setThemeToken(s), initTheme (light/dark/system)
-│   ├── style.ts          # adoptStyles, adoptSheetText
+│   ├── style.ts          # adoptStyles, adoptSheetText — binds ranui's markers onto ranuts'
 │   └── dom.ts            # falseList, isDisabled
 ├── theme/                # tokens.less (Geist base+semantic) + dark.less (dark mixin)
 ├── docs/DESIGN.md        # ⭐ AI-facing design standard — follow it for ANY UI work
@@ -507,6 +507,13 @@ Dark mode is a single source of truth: `theme/dark.less` redefines only the base
 Because dark is class-drivable, a host that flips `.dark` synchronously (e.g. VitePress) switches ranui **in the same paint** — no attribute-sync lag.
 
 ### `utils/i18n/index.ts` — framework-agnostic i18n
+
+**The engine lives in ranuts** (`ranuts/i18n` → `packages/ranuts/src/utils/i18n.ts`); this
+module is a re-export so `@/utils/i18n`, `ranui/i18n` and the `ranui` barrel keep working
+unchanged. It moved because nothing in it touches the DOM or a component, and the locale
+plumbing it needs (guarded `localStorage`, navigator matching) already lived in ranuts.
+`detectNavigator` now goes through ranuts' `resolveLocale`, which reads the whole ordered
+`navigator.languages` list instead of only `navigator.language`.
 
 Same core/singleton shape as the router. Exported from the `ranui` barrel **and** from the
 dedicated **`ranui/i18n`** subpath entry (`i18n.ts` → built to `dist/i18n.js`), which
