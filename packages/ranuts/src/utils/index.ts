@@ -110,6 +110,8 @@ import type { IDBResult, IDBStoreSchema, WebDBOptions } from './idb';
 import { buildOffsets, indexForOffset, segmentByRanges } from './segment';
 import type { OffsetRange, Segment } from './segment';
 import { detectLanguage, navigatorLanguage } from './lang';
+import { createLocalePath } from './localePath';
+import type { LocalePath, LocalePathConfig, LocaleRoute } from './localePath';
 import type { TextLanguage } from './lang';
 import { readFileAsArrayBuffer, readFileAsDataURL, readFileAsText, readFileAsUint8Array } from './file';
 import { WorkerClient } from './worker';
@@ -124,7 +126,7 @@ import { QuestQueue } from './queue';
 import { createData, report } from './report';
 import { handleFetchHook } from './request';
 import { scriptOnLoad } from './script';
-import { generateThrottle, throttle } from './throttle';
+import { throttle } from './throttle';
 import { performanceTime, timeFormat, timestampToTime } from './time';
 import type { CurrentDevice } from './device';
 import {
@@ -161,7 +163,6 @@ export {
   performanceTime,
   timeFormat,
   timestampToTime,
-  generateThrottle,
   throttle,
   SyncHook,
   changeHumpToLowerCase,
@@ -309,9 +310,13 @@ export {
   MOBILE_MEDIA_QUERY,
   matchMediaQuery,
   watchMediaQuery,
+  createLocalePath,
 };
 
 export type {
+  LocalePath,
+  LocalePathConfig,
+  LocaleRoute,
   SingleFlight,
   IDBResult,
   IDBStoreSchema,

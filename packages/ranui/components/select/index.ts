@@ -1,4 +1,4 @@
-import { generateThrottle, isMobile } from 'ranuts/utils';
+import { isMobile, throttle } from 'ranuts/utils';
 import selectCss from './index.less?inline';
 import arrowDownIcon from '@/assets/icons/arrow-down.svg?raw';
 import { RanElement, isDisabled } from '@/utils/index';
@@ -40,8 +40,6 @@ const placementDirection: PlacementDirection = {
 // The dropdown caret is part of the select's own chrome, so the component
 // registers its icon itself rather than relying on the consumer to do it.
 registerIcon('arrow-down', arrowDownIcon);
-
-const searchThrottle = generateThrottle();
 
 const animationTime = 300;
 
@@ -748,7 +746,7 @@ export class Select extends RanElement {
   _applyShowSearch = (): void => {
     this._searchEvents.abort();
     if (this.showSearch) {
-      this.onSearch = searchThrottle(this.changeSearch);
+      this.onSearch = throttle(this.changeSearch);
       if (this.onSearch) {
         this._searchEvents.on(this._search, 'change', this.onSearch).on(this._search, 'click', this.onSearch);
       }

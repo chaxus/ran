@@ -1,4 +1,4 @@
-import { SyncHook, addClassToElement, generateThrottle, range, removeClassToElement, timeFormat } from 'ranuts/utils';
+import { SyncHook, addClassToElement, range, removeClassToElement, timeFormat } from 'ranuts/utils';
 import '../../assets/js/hls.js';
 import type { Progress } from '@/components/progress';
 import '@/components/select';
@@ -38,8 +38,6 @@ import { HTMLElementSSR } from '@/utils/index';
 import { ensureShadowRoot, getStringAttribute, setStringAttribute, syncSheetAttribute } from '@/utils/component';
 import playerCss from './index.less?inline';
 import { defineSSR } from '@/utils/ssr-registry';
-
-const throttle = generateThrottle();
 
 type Callback = (...args: unknown[]) => unknown;
 type EventName = string | symbol;
@@ -773,9 +771,6 @@ export class RanPlayer extends HTMLElementSSR()! {
     if (currentTime >= 0) {
       this._playerControllerBottomTimeCurrent.innerText = timeFormat(currentTime);
     }
-  };
-  changeAttribute = (k: string, o: string, n: string, attribute: string, callback: Function): void => {
-    if (k === attribute && o !== n) throttle(callback)();
   };
   /**
    * @description: 点击整个视频时，触发的事件

@@ -1,25 +1,42 @@
-export type Func = () => unknown;
+export type Func = (...args: any[]) => unknown;
+
 /**
- * @description: 返回缓存的函数，执行一次后，无须执行直接返回结果
- * @param {Func} fn
- * @return {Func}
+ * @description: 只执行一次——首次调用求值并缓存，之后无论传什么参数都直接返回首次的结果。
+ * 用于惰性初始化（配置解析、昂贵的一次性计算、懒 getter）。
+ *
+ * **不是按参数缓存的 memoize**：参数只在第一次生效，后续调用的参数被忽略。
+ * 需要按参数缓存请自行用 Map；异步版本用 [`singleFlight`](#singleflight)。
+ * 求值后会释放对 `fn` 的引用，让它闭包捕获的资源可被回收。
+ *
+ * @param {Function} fn 只该执行一次的函数；传非函数值则原样返回该值
+ * @return {Function} 包装后的函数
+ * @example
+ * ```ts
+ * const config = once(() => JSON.parse(readFileSync('config.json', 'utf8')));
+ * config(); // 解析
+ * config(); // 直接返回上次的结果
+ * ```
  */
-export const memoize = (fn: unknown): Func => {
-  let cache = false;
-  let result: unknown = undefined;
-  return (...args: unknown[]) => {
-    if (cache) {
-      return result;
-    } else {
-      result = typeof fn === 'function' ? fn(...args) : fn;
-      cache = true;
-      // Allow to clean up memory for fn
-      // and all dependent resources
-      fn = undefined;
-      return result;
+export const once = <T extends Func>(fn: T | unknown): ((...args: Parameters<T>) => ReturnType<T>) => {
+  let cached = false;
+  let result: unknown;
+  let target: unknown = fn;
+  return (...args: Parameters<T>): ReturnType<T> => {
+    if (!cached) {
+      result = typeof target === 'function' ? target(...args) : target;
+      cached = true;
+      // 释放 fn 及其闭包捕获的资源
+      target = undefined;
     }
+    return result as ReturnType<T>;
   };
 };
+
+/**
+ * @description: `once` 的旧名。名字带有误导——它并不按参数缓存，只是「执行一次」。
+ * @deprecated 改用 [`once`](#once)；异步场景用 [`singleFlight`](#singleflight)。
+ */
+export const memoize = once;
 
 export interface SingleFlight<T> {
   (): Promise<T>;
