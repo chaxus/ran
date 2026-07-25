@@ -8,7 +8,7 @@ constraints, conventions) read [../CLAUDE.md](../CLAUDE.md) first.
 Import from the **subpath** that owns the symbol, e.g. `import { debounce } from
 'ranuts/utils'`. The root `ranuts` barrel re-exports the utils + visual surface.
 
-**238 exports** across 4 entry points. Generated at 2026-07-25T06:22:11.429Z.
+**238 exports** across 4 entry points. Generated at 2026-07-25T06:22:53.032Z.
 
 ## Entry points
 
@@ -56,7 +56,7 @@ import { /* … */ } from 'ranuts/utils';
 - `durationHandler<T, U>(handler: (...args: T[]) => U, ...params: T[]) => ((a: number) => Promise<U>)` — 间隔一定时间，执行指定的函数
 - `encodeUrl(url: string) => string` — Encode a URL to a percent-encoded form, excluding already-encoded sequences.
 - `escapeHtml(string?: string | number | null) => string`
-- `filterObj(obj: Record<string, unknown>, list: Array<string>) => Record<string, unknown>` — 过滤对象的属性，去除对象中在list数组里面有的属性，返回一个新对象，一般是用于去除空字符和null
+- `filterObj(obj: Record<string, unknown>, list: Array<string>) => Record<string, unknown>` — 过滤对象的属性，去除对象中在 list 数组里面有的属性，返回一个新对象，一般是用于去除空字符和 null
 - `formatJson(jsonObj: string, callback?: () => void) => string`
 - `generateThrottle() => Function` — 生成节流函数
 - `getAllQueryString(url?: string) => Record<string, string>` — 将 url 上的字符串转换成对象
@@ -139,7 +139,7 @@ import { /* … */ } from 'ranuts/utils';
 - `str2Xml(xmlStr: string, format?: DOMParserSupportedType) => HTMLElement | undefined` — 传入字符串和指定的格式，将字符串转成 xml
 - `strParse(str?: string, sep?: string | RegExp, eq?: string | RegExp) => Record<string, string>` — 将字符串转对象，比如
 - `throttle<T extends (...args: any[]) => any>(func: T, delay?: number) => ThrottleFunc<T>` — 节流
-- `timeFormat(time: number) => string` — 时间秒，转化成:分割的时间
+- `timeFormat(time: number) => string` — 时间秒，转化成：分割的时间
 - `timestampToTime(timestamp?: number | string) => Date & { format?: Function; }` — 时间戳转日期
 - `toFullWidth(value: string) => string` — 半角字符转全角（`toHalfWidth` 的逆向）
 - `toHalfWidth(value: string) => string` — 全角字符转半角（数字、字母、标点与全角空格）。中文输入法产出的全角数字
@@ -229,7 +229,7 @@ import { /* … */ } from 'ranuts/node';
 - `connect(connectMiddleware: ConnectMiddleware) => MiddlewareFunction`
 - `get({ url }: Request) => Promise<Response>`
 - `getIPAdress() => string | undefined`
-- `default(req: Req) => ParseUrl | undefined` — 解析 IncomingMessage 类型的请求url，返回的类型永远是 ParseUrl
+- `default(req: Req) => ParseUrl | undefined` — 解析 IncomingMessage 类型的请求 url，返回的类型永远是 ParseUrl
 - `prompt({ message, stream, defaultResponse }: PromptOption) => Promise<boolean>`
 - `queryFileInfo(path: string) => Promise<Ranuts.Identification>` — 查询一个文件的详细信息，一般用于区分文件还是目录（data.isDirectory()）
 - `readDir(options: Options) => Array<string>`
