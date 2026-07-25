@@ -167,6 +167,21 @@ the offending node while Vue's vdom still expects it where the server put it.
 
 ---
 
+## PWA
+
+The site is installable — `public/manifest.json` is linked from `<head>` and the Service Worker
+is registered — but there is **deliberately no custom install prompt**. A
+`<pwa-install>` element (`@khmyznikov/pwa-install`) used to be appended to `<body>` on every
+page load; it interrupted reading on a documentation site, and its `use-local-storage`
+"remember the dismissal" attribute did not actually stop it recurring. Removed along with the
+dependency.
+
+Installation still works through the browser's own affordance (the address-bar install icon,
+or the menu). Don't add a custom prompt back without a reason that outweighs nagging every
+reader on every visit.
+
+---
+
 ## Gotchas
 
 | Pitfall                                                                                          | Fix                                                                                                                                                                                                                                                              |

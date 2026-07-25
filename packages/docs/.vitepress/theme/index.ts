@@ -14,7 +14,7 @@ import Mermaid from '../components/Mermaid.vue';
 import IconGallery from '../components/IconGallery.vue';
 import Demo from '../components/Demo.vue';
 import i18n, { loadLanguageAsync } from '../lang';
-import { LANGS_DICT, MANIFEST_PATH_ROOT, PWA_ELEMENT_NAME, PWA_INSTALL_ID, RAN_CHAXUS_LANG } from '../lib/constant';
+import { LANGS_DICT, RAN_CHAXUS_LANG } from '../lib/constant';
 import './styles/fonts.less';
 import './styles/index.less';
 import './styles/doc.less';
@@ -83,23 +83,6 @@ const enablePageTransitions = (router: Router): void => {
   };
 };
 
-/**
- * @description: pwa 引导安装
- */
-const pwaInstall = () => {
-  import('@khmyznikov/pwa-install').then(() => {
-    let pwaInstall = document.getElementById(PWA_INSTALL_ID);
-    if (!pwaInstall) {
-      pwaInstall = document.createElement(PWA_ELEMENT_NAME);
-      pwaInstall.setAttribute('manifest-url', MANIFEST_PATH_ROOT);
-      pwaInstall.setAttribute('id', PWA_INSTALL_ID);
-      // remember the visitor's dismissal — without this the prompt pops on every page load
-      pwaInstall.setAttribute('use-local-storage', 'true');
-      document.body.appendChild(pwaInstall);
-    }
-  });
-};
-
 export default {
   extends: DefaultTheme,
   // Wrap the default layout to mount the product switcher (ranui/ranuts) next to the logo.
@@ -111,7 +94,6 @@ export default {
       import('./register-icons'); // register ranui's SVG icons so <r-icon> demos render
       syncRanuiTheme();
       enablePageTransitions(router);
-      pwaInstall();
     }
     app.use(env);
     app.component('Home', Home);

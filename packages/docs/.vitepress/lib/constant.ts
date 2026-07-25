@@ -25,7 +25,3 @@ export const LANG_MESSAGES = {
 export enum I18N_MODE {
   LEGACY = 'legacy',
 }
-
-export const PWA_INSTALL_ID = 'PWA_INSTALL_ID';
-export const PWA_ELEMENT_NAME = 'pwa-install';
-export const MANIFEST_PATH_ROOT = '/manifest.json';

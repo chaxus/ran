@@ -31,7 +31,6 @@
     "typescript": "catalog:"
   },
   "dependencies": {
-    "@khmyznikov/pwa-install": "^0.6.4",
     "@ranui/preview": "^0.1.0-alpha-2",
     "ranui": "workspace:*",
     "ranuts": "workspace:*",
