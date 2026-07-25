@@ -26,7 +26,7 @@ createI18n({
   },
   fallbackLocale: 'en', // 当前语言缺少某 key 时的回退语言
   persist: true, // 记住选择，保存在 localStorage 键 'ran-locale'
-  detectNavigator: true, // 用 navigator.language 初始化语言
+  detectNavigator: true, // 用浏览器的语言偏好初始化语言
 });
 
 const i18n = useI18n();
@@ -151,7 +151,7 @@ i18n.setLocale('fr');
 | `fallbackLocale`  | `string`         | `'en'`         | 当前语言缺少某 key 时查询的回退语言。           |
 | `persist`         | `boolean`        | `false`        | 将当前语言持久化到 `localStorage`。             |
 | `storageKey`      | `string`         | `'ran-locale'` | 开启持久化时使用的 localStorage 键。            |
-| `detectNavigator` | `boolean`        | `false`        | 用 `navigator.language` 初始化语言。            |
+| `detectNavigator` | `boolean`        | `false`        | 用浏览器的语言偏好初始化语言。读的是完整有序的 `navigator.languages` 列表，首选语言没有词典的读者仍能拿到第二选择，而不是直接掉到 fallback。 |
 
 ### `I18nCore` 方法
 

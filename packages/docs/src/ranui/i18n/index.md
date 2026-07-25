@@ -25,7 +25,7 @@ createI18n({
   },
   fallbackLocale: 'en', // used when a key is missing in the active locale
   persist: true, // remember the choice under localStorage key 'ran-locale'
-  detectNavigator: true, // seed the initial locale from navigator.language
+  detectNavigator: true, // seed the initial locale from the browser's language preferences
 });
 
 const i18n = useI18n();
@@ -157,7 +157,7 @@ i18n.setLocale('fr');
 | `fallbackLocale`  | `string`         | `'en'`         | Locale consulted when a key is missing in the active locale. |
 | `persist`         | `boolean`        | `false`        | Persist the active locale to `localStorage`.                 |
 | `storageKey`      | `string`         | `'ran-locale'` | localStorage key used when `persist` is on.                  |
-| `detectNavigator` | `boolean`        | `false`        | Seed the initial locale from `navigator.language`.           |
+| `detectNavigator` | `boolean`        | `false`        | Seed the initial locale from the browser's language preferences. Reads the whole ordered `navigator.languages` list, so a reader whose first choice has no dictionary still gets their second rather than the fallback. |
 
 ### `I18nCore` methods
 
