@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test';
-import { argosScreenshot } from '@argos-ci/playwright';
 import { DEV_SERVER } from '../../build/config';
 import { isolatedSetup, mount } from './helpers';
 
@@ -27,7 +26,6 @@ test('image — single', async ({ page }) => {
   const el = page.locator('r-img');
   await expect(el).toBeVisible();
   await expect(el).toHaveScreenshot('image-single.png');
-  await argosScreenshot(page, 'image-single', { element: el });
 });
 
 test('image — multiple side by side', async ({ page }) => {
@@ -43,5 +41,4 @@ test('image — multiple side by side', async ({ page }) => {
   const el = page.locator('div').first();
   await expect(el).toBeVisible();
   await expect(el).toHaveScreenshot('image-multiple.png');
-  await argosScreenshot(page, 'image-multiple', { element: el });
 });

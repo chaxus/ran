@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test';
-import { argosScreenshot } from '@argos-ci/playwright';
 import { DEV_SERVER } from '../../build/config';
 import { isolatedSetup, mount } from './helpers';
 
@@ -14,7 +13,6 @@ test('checkbox — unchecked', async ({ page }) => {
   const el = page.locator('r-checkbox');
   await expect(el).toBeVisible();
   await expect(el).toHaveScreenshot('checkbox-unchecked.png');
-  await argosScreenshot(page, 'checkbox-unchecked', { element: el });
 });
 
 test('checkbox — checked', async ({ page }) => {
@@ -22,7 +20,6 @@ test('checkbox — checked', async ({ page }) => {
   const el = page.locator('r-checkbox');
   await expect(el).toBeVisible();
   await expect(el).toHaveScreenshot('checkbox-checked.png');
-  await argosScreenshot(page, 'checkbox-checked', { element: el });
 });
 
 test('checkbox — disabled unchecked', async ({ page }) => {
@@ -30,7 +27,6 @@ test('checkbox — disabled unchecked', async ({ page }) => {
   const el = page.locator('r-checkbox');
   await expect(el).toBeVisible();
   await expect(el).toHaveScreenshot('checkbox-disabled-unchecked.png');
-  await argosScreenshot(page, 'checkbox-disabled-unchecked', { element: el });
 });
 
 test('checkbox — disabled checked', async ({ page }) => {
@@ -38,7 +34,6 @@ test('checkbox — disabled checked', async ({ page }) => {
   const el = page.locator('r-checkbox');
   await expect(el).toBeVisible();
   await expect(el).toHaveScreenshot('checkbox-disabled-checked.png');
-  await argosScreenshot(page, 'checkbox-disabled-checked', { element: el });
 });
 
 test('checkbox — all variants row', async ({ page }) => {
@@ -56,5 +51,4 @@ test('checkbox — all variants row', async ({ page }) => {
   const el = page.locator('div').first();
   await expect(el).toBeVisible();
   await expect(el).toHaveScreenshot('checkbox-all-variants.png');
-  await argosScreenshot(page, 'checkbox-all-variants', { element: el });
 });

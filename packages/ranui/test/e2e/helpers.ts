@@ -1,4 +1,5 @@
 import type { Page } from '@playwright/test';
+import { DEV_SERVER } from '../../build/config';
 
 /**
  * Freezes animations in the **light DOM** only — page chrome, demo scaffolding, anything the
@@ -39,6 +40,22 @@ export async function isolatedSetup(page: Page, url: string, waitForTag: string)
     document.body.style.cssText = style;
     document.body.innerHTML = '';
   }, BASE_BODY_STYLE);
+}
+
+/**
+ * Setup for the specs under `test/e2e/visual/`, which screenshot the demo's `/components`
+ * route in place rather than mounting isolated markup.
+ *
+ * Same determinism guarantees as `isolatedSetup` — in particular `document.fonts.ready`,
+ * which these specs used to skip. `r-math` lazy-loads Temml plus two font faces, so without
+ * it the formula is measured against fallback metrics and the screenshot lands a hundred-odd
+ * pixels off, differently each run.
+ */
+export async function demoSetup(page: Page, waitForTag: string): Promise<void> {
+  await page.goto(`${DEV_SERVER}components`, { waitUntil: 'domcontentloaded' });
+  await page.waitForFunction((tag) => !!customElements.get(tag), waitForTag);
+  await page.evaluate(() => document.fonts.ready.then(() => undefined));
+  await page.addStyleTag({ content: FREEZE_ANIMATIONS });
 }
 
 /**

@@ -1,10 +1,5 @@
-import { defineConfig, devices, type ReporterDescription } from '@playwright/test';
+import { defineConfig, devices } from '@playwright/test';
 import { DEV_SERVER } from './build/config';
-
-const reporters: ReporterDescription[] = [['html']];
-if (process.env.ARGOS_TOKEN) {
-  reporters.push(['@argos-ci/playwright/reporter']);
-}
 
 export default defineConfig({
   testDir: './test/e2e',
@@ -13,20 +8,21 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   /**
-   * `toHaveScreenshot` is a **macOS-local** tool; on CI the visual gate is Argos.
+   * Screenshot comparison is a **macOS-local** check. CI runs the functional assertions only.
    *
-   * Its baselines are committed under `test/e2e/*.spec.ts-snapshots/`, but Playwright puts the
+   * Baselines are committed under `test/e2e/*.spec.ts-snapshots/`, but Playwright puts the
    * platform in the filename — every one of them is `…-darwin.png`. The CI runner is Ubuntu, so
    * it would look for `…-linux.png`, find nothing, fail the first attempt with "A snapshot
    * doesn't exist, writing actual", then pass on retry against the file it just wrote. The job
-   * goes green having compared each screenshot with itself; a gate that cannot fail is worse
+   * would go green having compared each screenshot with itself; a gate that cannot fail is worse
    * than no gate, because it looks like one.
    *
-   * Committing a second, Linux-rendered baseline set would be the alternative — Argos already
-   * does that job better, comparing across platforms without 128 more binaries in the repo.
+   * Turning visual regression into a real CI gate needs a Linux-rendered baseline set —
+   * generated in a container matching the runner and committed alongside the macOS one. That is
+   * deliberately not done here; see CLAUDE.md ("Visual regression is local-only, on purpose").
    */
   ignoreSnapshots: !!process.env.CI,
-  reporter: reporters,
+  reporter: [['html']],
   use: {
     baseURL: DEV_SERVER,
     trace: 'on-first-retry',

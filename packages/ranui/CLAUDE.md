@@ -784,32 +784,54 @@ system-installed Google Chrome. It is deliberately not part of `e2e:install` (in
 branded browser touches the OS, not `node_modules`); install Chrome normally, or run
 `npx playwright install chrome`.
 
-#### Two screenshot mechanisms, two audiences
+#### Visual regression is local-only, on purpose
 
-| Assertion                       | Baseline lives in                                     | Runs on CI                                   |
-| ------------------------------- | ----------------------------------------------------- | -------------------------------------------- |
-| `expect(el).toHaveScreenshot()` | committed `test/e2e/*.spec.ts-snapshots/*-darwin.png` | **No** — `ignoreSnapshots: !!process.env.CI` |
-| `argosScreenshot(page, …)`      | Argos (hosted)                                        | Yes — the actual visual gate                 |
+`toHaveScreenshot` baselines are the 128 PNGs committed next to each spec under
+`test/e2e/*.spec.ts-snapshots/`. Playwright puts the platform in the filename, so every one of
+them ends in `-darwin.png`.
 
-Do not confuse the two directories. **`screenshots/` is Argos' output folder** — note the
-`.argos.json` sidecars — and is gitignored. The `toHaveScreenshot` baselines are the 128 PNGs
-committed next to each spec.
+**There is no visual gate on CI, and that is a deliberate choice, not an oversight.** The Ubuntu
+runner would look for `-linux.png`, find nothing, fail the first attempt with "A snapshot doesn't
+exist, writing actual", then pass on retry against the file it just wrote — going green having
+compared each screenshot with itself. A gate that cannot fail is worse than no gate, because it
+looks like one. `ignoreSnapshots: !!process.env.CI` therefore turns screenshot comparison off
+there, and `e2e.yml` gates on the **functional** assertions, which run identically on Linux.
 
-`toHaveScreenshot` is a **macOS-local** aid: Playwright puts the platform in the filename, so
-every committed baseline ends in `-darwin.png`. The Ubuntu CI runner looks for `-linux.png`,
-finds nothing, fails the first attempt with "A snapshot doesn't exist, writing actual", then
-passes on retry against the file it just wrote — going green having compared each screenshot
-with itself. A gate that cannot fail is worse than no gate, because it looks like one.
-Committing a second, Linux-rendered set is the alternative; Argos already does that job without
-another 128 binaries in the repo.
+Making it a real CI gate needs a second, Linux-rendered baseline set, generated in a container
+matching the runner and committed alongside the macOS one — 128 more binaries and a container
+step. That is the open option if visual regressions start slipping through; until then this is
+recorded as a known gap rather than papered over.
+
+> A hosted service (Argos) was wired in for exactly this and has been **removed**. Its token was
+> never configured, so `if (process.env.ARGOS_TOKEN)` was always false: 77 `argosScreenshot`
+> calls across 15 specs uploaded nothing, and the workflow named "Visual Regression" gated on
+> nothing. An inert dependency that looks like coverage is worse than none. The `visual/` specs'
+> assertions were converted to `toHaveScreenshot`, so no coverage was lost locally.
 
 **`npm run test:update` rewrites tracked files.** It overwrites all 128 baselines and your next
 commit carries them. Review that diff — a wholesale refresh silently absorbs a real regression
 into the new baseline.
 
-Argos is the real gate, and `visual-regression.yml` runs **the whole suite** (`--project=chromium`),
-not just `test/e2e/visual/` — every spec already calls `argosScreenshot`, and scoping CI to
-`visual/` meant 77 of those calls never fired.
+#### What cannot be screenshotted deterministically
+
+Two things on the demo route defeat pixel comparison no matter how long you wait, and both are
+now asserted functionally instead — don't reintroduce a screenshot for them:
+
+- **A live `<video>`.** `#component-player` holds the demo's HLS stream; a decoding video never
+  yields two identical frames. When a full-page shot has to include it, mask it
+  (`{ mask: [page.locator('#component-player')] }`).
+- **A full-page shot of the demo route with an overlay open.** `r-modal`'s dialog is
+  `position: fixed` inside a **closed** shadow root, so no page locator can reach it and the
+  only option is `expect(page)` — which drags the whole route into frame. Masking the player
+  fixed chromium and Google Chrome but not the narrow Mobile Chrome viewport. The modal's
+  appearance is covered deterministically by `modal — open` in `test/e2e/modal.spec.ts`, which
+  mounts it in an isolated body.
+
+`<canvas>` rasterisation is not bit-identical run to run either (~100px on the colorpicker
+panel); that one assertion carries a `maxDiffPixels: 200` allowance rather than a mask.
+
+**Residual flake: roughly 1 test in 3–4 full runs**, and not the same one twice — small
+sub-pixel diffs on `r-tab`'s indicator and similar. Re-run before assuming a real regression.
 
 #### Determinism rules for visual specs
 

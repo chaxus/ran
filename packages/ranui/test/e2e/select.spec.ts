@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test';
-import { argosScreenshot } from '@argos-ci/playwright';
 import { DEV_SERVER } from '../../build/config';
 import { isolatedSetup, mount } from './helpers';
 
@@ -29,7 +28,6 @@ test('select — with value', async ({ page }) => {
   await page.waitForTimeout(50);
 
   await expect(el).toHaveScreenshot('select-with-value.png');
-  await argosScreenshot(page, 'select-with-value', { element: el });
 
   // Selected text must be vertically centred inside the trigger.
   // This assertion fails when selection-item lacks align-items/line-height centering.
@@ -72,7 +70,6 @@ test('select — placeholder', async ({ page }) => {
   const el = page.locator('r-select');
   await expect(el).toBeVisible();
   await expect(el).toHaveScreenshot('select-placeholder.png');
-  await argosScreenshot(page, 'select-placeholder', { element: el });
 });
 
 // ── showSearch ───────────────────────────────────────────────────────────────
@@ -92,7 +89,6 @@ test('select — showSearch', async ({ page }) => {
   const el = page.locator('r-select');
   await expect(el).toBeVisible();
   await expect(el).toHaveScreenshot('select-show-search.png');
-  await argosScreenshot(page, 'select-show-search', { element: el });
 });
 
 // ── disabled ─────────────────────────────────────────────────────────────────
@@ -110,7 +106,6 @@ test('select — disabled', async ({ page }) => {
   const el = page.locator('r-select');
   await expect(el).toBeVisible();
   await expect(el).toHaveScreenshot('select-disabled.png');
-  await argosScreenshot(page, 'select-disabled', { element: el });
 });
 
 // ── open dropdown ─────────────────────────────────────────────────────────────
@@ -131,5 +126,4 @@ test('select — open dropdown', async ({ page }) => {
   await page.locator('r-select').click();
   await page.waitForTimeout(350);
   await expect(page).toHaveScreenshot('select-open.png');
-  await argosScreenshot(page, 'select-open');
 });

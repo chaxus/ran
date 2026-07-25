@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test';
-import { argosScreenshot } from '@argos-ci/playwright';
 import { DEV_SERVER } from '../../build/config';
 import { isolatedSetup, mount } from './helpers';
 
@@ -24,7 +23,6 @@ test('popover — closed', async ({ page }) => {
   await mount(page, POPOVER_HTML);
   await expect(page.locator('r-button')).toBeVisible();
   await expect(page.locator('div').first()).toHaveScreenshot('popover-closed.png');
-  await argosScreenshot(page, 'popover-closed', { element: page.locator('div').first() });
 });
 
 test('popover — open on hover', async ({ page }) => {
@@ -35,7 +33,6 @@ test('popover — open on hover', async ({ page }) => {
   await page.waitForTimeout(200);
   // Popup is appended to body outside the component — capture full viewport
   await expect(page).toHaveScreenshot('popover-open.png');
-  await argosScreenshot(page, 'popover-open');
 });
 
 test('popover — open on click', async ({ page }) => {
@@ -45,5 +42,4 @@ test('popover — open on click', async ({ page }) => {
   await trigger.click();
   await page.waitForTimeout(200);
   await expect(page).toHaveScreenshot('popover-click-open.png');
-  await argosScreenshot(page, 'popover-click-open');
 });

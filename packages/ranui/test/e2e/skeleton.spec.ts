@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test';
-import { argosScreenshot } from '@argos-ci/playwright';
 import { DEV_SERVER } from '../../build/config';
 import { isolatedSetup, mount } from './helpers';
 
@@ -14,7 +13,6 @@ test('skeleton — default', async ({ page }) => {
   const el = page.locator('r-skeleton');
   await expect(el).toBeVisible();
   await expect(el).toHaveScreenshot('skeleton-default.png');
-  await argosScreenshot(page, 'skeleton-default', { element: el });
 });
 
 test('skeleton — custom height', async ({ page }) => {
@@ -22,7 +20,6 @@ test('skeleton — custom height', async ({ page }) => {
   const el = page.locator('r-skeleton');
   await expect(el).toBeVisible();
   await expect(el).toHaveScreenshot('skeleton-custom-height.png');
-  await argosScreenshot(page, 'skeleton-custom-height', { element: el });
 });
 
 test('skeleton — stacked', async ({ page }) => {
@@ -39,5 +36,4 @@ test('skeleton — stacked', async ({ page }) => {
   const el = page.locator('div').first();
   await expect(el).toBeVisible();
   await expect(el).toHaveScreenshot('skeleton-stacked.png');
-  await argosScreenshot(page, 'skeleton-stacked', { element: el });
 });

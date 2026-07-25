@@ -1,4 +1,4 @@
-name: Visual Regression
+name: E2E
 
 on:
   push:
@@ -12,14 +12,13 @@ on:
 
 permissions:
   contents: read
-  pull-requests: write # required for Argos to post PR comments
 
 jobs:
-  visual:
+  e2e:
     if: github.repository == 'chaxus/ran'
     timeout-minutes: 30
     runs-on: ubuntu-latest
-    name: "Visual Regression (Chromium)"
+    name: "E2E (Chromium)"
     steps:
       - uses: actions/checkout@v7
         with:
@@ -48,20 +47,20 @@ jobs:
       - name: Build ranui
         run: pnpm --filter ranui run build
 
-      # The whole e2e suite, not just test/e2e/visual/. Every spec already calls
-      # argosScreenshot — 77 of those calls live outside visual/ and were never running here,
-      # so their uploads never happened and those components had no visual gate at all.
-      # `toHaveScreenshot` is skipped on CI via `ignoreSnapshots` (see playwright.config.ts);
-      # Argos holds the baselines.
-      - name: Run visual regression tests
-        env:
-          ARGOS_TOKEN: ${{ secrets.ARGOS_TOKEN }}
+      # The whole suite, not just test/e2e/visual/ — the functional assertions (element
+      # presence, text content, geometry, keyboard behaviour) all run on Linux and are what
+      # this job actually gates on.
+      #
+      # Screenshot comparison is skipped here: `ignoreSnapshots` is on when CI=1, because the
+      # committed baselines are macOS-rendered (`*-darwin.png`) and a Linux runner would
+      # regenerate rather than compare them. See packages/ranui/CLAUDE.md.
+      - name: Run E2E tests
         run: pnpm --filter ranui exec playwright test --project=chromium
 
       - name: Upload Playwright report
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: playwright-visual-report
+          name: playwright-report
           path: packages/ranui/playwright-report/
           retention-days: 7

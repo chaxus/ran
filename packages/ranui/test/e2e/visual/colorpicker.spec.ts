@@ -1,10 +1,8 @@
 import { test, expect } from '@playwright/test';
-import { argosScreenshot } from '@argos-ci/playwright';
-import { DEV_SERVER } from '../../../build/config';
+import { demoSetup } from '../helpers';
 
 test.beforeEach(async ({ page }) => {
-  await page.goto(`${DEV_SERVER}components`, { waitUntil: 'domcontentloaded' });
-  await page.waitForFunction(() => customElements.get('r-colorpicker'));
+  await demoSetup(page, 'r-colorpicker');
 });
 
 test('colorpicker default appearance', async ({ page }) => {
@@ -12,15 +10,23 @@ test('colorpicker default appearance', async ({ page }) => {
   await expect(section).toBeVisible();
   // Give the canvas time to fully render
   await page.waitForTimeout(200);
-  await argosScreenshot(page, 'colorpicker-default', { element: section });
+  await expect(section).toHaveScreenshot('colorpicker-default.png');
 });
 
 test('colorpicker panel open', async ({ page }) => {
   // Click the first colorpicker swatch to open the panel
   await page.locator('#component-colorpicker r-colorpicker').first().click();
   await page.waitForTimeout(300);
-  // Canvas panel should now be visible; screenshot the whole page to capture the overlay
-  await argosScreenshot(page, 'colorpicker-panel-open');
+  // Screenshot the panel itself, not the page. The panel is portaled out of the component,
+  // so a full-page shot was the easy way to capture it — but it also captured everything else
+  // on the demo route, including the live-stream player still decoding frames, and so differed
+  // by ~28k pixels between two runs of the same code.
+  const panel = page.locator('.ran-color-picker-inner').first();
+  await expect(panel).toBeVisible();
+  // The saturation area and alpha checkerboard are <canvas>, and canvas rasterisation is not
+  // bit-identical run to run (~100px of a 10k-pixel panel). A small allowance keeps this a
+  // real gate — a genuine regression to this panel moves far more than 200 pixels.
+  await expect(panel).toHaveScreenshot('colorpicker-panel-open.png', { maxDiffPixels: 200 });
 });
 
 test('colorpicker rgba value', async ({ page }) => {
@@ -29,5 +35,5 @@ test('colorpicker rgba value', async ({ page }) => {
   const second = pickers.nth(1);
   await expect(second).toBeVisible();
   await page.waitForTimeout(200);
-  await argosScreenshot(page, 'colorpicker-rgba', { element: second });
+  await expect(second).toHaveScreenshot('colorpicker-rgba.png');
 });

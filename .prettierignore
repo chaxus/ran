@@ -11,7 +11,6 @@ skills/
 # Playwright artefacts — generated, gitignored, and full of JSON that Prettier would
 # happily reformat. Without these, `lint:prettier` is clean only until someone runs the
 # e2e suite, after which it reports ~180 style issues in files nobody wrote.
-screenshots/
 test-results/
 playwright-report/
 coverage/

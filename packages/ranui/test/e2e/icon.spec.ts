@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test';
-import { argosScreenshot } from '@argos-ci/playwright';
 import { DEV_SERVER } from '../../build/config';
 import { isolatedSetup, mount } from './helpers';
 
@@ -26,7 +25,6 @@ test('icon — size variants', async ({ page }) => {
   const el = page.locator('div').first();
   await expect(el).toBeVisible();
   await expect(el).toHaveScreenshot('icon-sizes.png');
-  await argosScreenshot(page, 'icon-sizes', { element: el });
 });
 
 test('icon — custom color', async ({ page }) => {
@@ -43,7 +41,6 @@ test('icon — custom color', async ({ page }) => {
   const el = page.locator('div').first();
   await expect(el).toBeVisible();
   await expect(el).toHaveScreenshot('icon-colors.png');
-  await argosScreenshot(page, 'icon-colors', { element: el });
 });
 
 test('icon — spin', async ({ page }) => {
@@ -52,5 +49,4 @@ test('icon — spin', async ({ page }) => {
   await expect(el).toBeVisible();
   // Animation is frozen by FREEZE_ANIMATIONS — screenshot captures a static frame
   await expect(el).toHaveScreenshot('icon-spin.png');
-  await argosScreenshot(page, 'icon-spin', { element: el });
 });

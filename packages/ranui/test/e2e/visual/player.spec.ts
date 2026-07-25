@@ -1,10 +1,8 @@
 import { test, expect } from '@playwright/test';
-import { argosScreenshot } from '@argos-ci/playwright';
-import { DEV_SERVER } from '../../../build/config';
+import { demoSetup } from '../helpers';
 
 test.beforeEach(async ({ page }) => {
-  await page.goto(`${DEV_SERVER}components`, { waitUntil: 'domcontentloaded' });
-  await page.waitForFunction(() => customElements.get('r-player'));
+  await demoSetup(page, 'r-player');
 });
 
 test('player initial UI (no video loaded)', async ({ page }) => {
@@ -24,7 +22,7 @@ test('player initial UI (no video loaded)', async ({ page }) => {
   await page.waitForTimeout(500);
   const container = page.locator('div').first();
   await expect(container).toBeVisible();
-  await argosScreenshot(page, 'player-no-src', { element: container });
+  await expect(container).toHaveScreenshot('player-no-src.png');
 });
 
 test('player control bar layout', async ({ page }) => {
@@ -45,16 +43,16 @@ test('player control bar layout', async ({ page }) => {
   await page.waitForTimeout(800);
 
   // Try to screenshot just the control bar area if it exists in shadow DOM
-  await argosScreenshot(page, 'player-control-bar', {
-    element: page.locator('r-player'),
-  });
+  await expect(page.locator('r-player')).toHaveScreenshot('player-control-bar.png');
 });
 
-test('player with live stream src (UI ready state)', async ({ page }) => {
-  // Use the existing demo section with the HLS stream; only screenshot the container before playback
+test('player with live stream src mounts in the demo', async ({ page }) => {
+  // Functional only — deliberately no screenshot. This section holds the demo's live HLS
+  // stream, and a decoding <video> never yields two identical frames, so the old
+  // `toHaveScreenshot` here could only ever fail with "Failed to take two consecutive stable
+  // screenshots". The player's visual chrome is covered deterministically by the two tests
+  // above, which mount a standalone player with no src.
   const section = page.locator('#component-player');
   await expect(section).toBeVisible();
-  // Don't wait for stream to load — just verify the initial UI chrome renders
-  await page.waitForTimeout(1000);
-  await argosScreenshot(page, 'player-demo-section', { element: section });
+  await expect(section.locator('r-player')).toHaveCount(1);
 });

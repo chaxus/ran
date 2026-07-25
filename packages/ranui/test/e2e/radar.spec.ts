@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test';
-import { argosScreenshot } from '@argos-ci/playwright';
 import { DEV_SERVER } from '../../build/config';
 import { isolatedSetup, mount } from './helpers';
 
@@ -31,7 +30,6 @@ test('radar — default dataset', async ({ page }) => {
   await expect(el).toBeVisible();
   await page.waitForTimeout(200); // canvas paints asynchronously after connectedCallback
   await expect(el).toHaveScreenshot('radar-default.png');
-  await argosScreenshot(page, 'radar-default', { element: el });
 });
 
 test('radar — uniform scores', async ({ page }) => {
@@ -55,5 +53,4 @@ test('radar — uniform scores', async ({ page }) => {
   await expect(el).toBeVisible();
   await page.waitForTimeout(200);
   await expect(el).toHaveScreenshot('radar-uniform.png');
-  await argosScreenshot(page, 'radar-uniform', { element: el });
 });

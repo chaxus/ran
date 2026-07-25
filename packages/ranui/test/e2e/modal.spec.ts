@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test';
-import { argosScreenshot } from '@argos-ci/playwright';
 import { DEV_SERVER } from '../../build/config';
 import { isolatedSetup, mount } from './helpers';
 
@@ -26,7 +25,6 @@ test('modal — closed (trigger only)', async ({ page }) => {
   await mount(page, MODAL_HTML);
   await expect(page.locator('#open-btn')).toBeVisible();
   await expect(page.locator('div').first()).toHaveScreenshot('modal-closed.png');
-  await argosScreenshot(page, 'modal-closed', { element: page.locator('div').first() });
 });
 
 test('modal — open', async ({ page }) => {
@@ -35,7 +33,6 @@ test('modal — open', async ({ page }) => {
   await page.waitForTimeout(150);
   // Modal overlays the whole viewport — screenshot the page
   await expect(page).toHaveScreenshot('modal-open.png');
-  await argosScreenshot(page, 'modal-open');
 });
 
 test('modal — title visible when open', async ({ page }) => {

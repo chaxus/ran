@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test';
-import { argosScreenshot } from '@argos-ci/playwright';
 import { DEV_SERVER } from '../../build/config';
 import { isolatedSetup, mount } from './helpers';
 
@@ -22,7 +21,6 @@ test('tab — first tab active (default)', async ({ page }) => {
   const el = page.locator('#tabs');
   await expect(el).toBeVisible();
   await expect(el).toHaveScreenshot('tab-first-active.png');
-  await argosScreenshot(page, 'tab-first-active', { element: el });
 });
 
 test('tab — second tab active', async ({ page }) => {
@@ -32,7 +30,6 @@ test('tab — second tab active', async ({ page }) => {
   await el.locator('r-tab[r-key="api"]').click();
   await page.waitForTimeout(100);
   await expect(el).toHaveScreenshot('tab-second-active.png');
-  await argosScreenshot(page, 'tab-second-active', { element: el });
 });
 
 test('tab — disabled tab appearance', async ({ page }) => {
@@ -43,5 +40,4 @@ test('tab — disabled tab appearance', async ({ page }) => {
   const disabledTab = el.locator('r-tab[r-key="disabled"]');
   await expect(disabledTab).toBeVisible();
   await expect(el).toHaveScreenshot('tab-with-disabled.png');
-  await argosScreenshot(page, 'tab-with-disabled', { element: el });
 });

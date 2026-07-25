@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test';
-import { argosScreenshot } from '@argos-ci/playwright';
 import { DEV_SERVER } from '../../build/config';
 import { isolatedSetup, mount } from './helpers';
 
@@ -19,7 +18,6 @@ test('input — default with label', async ({ page }) => {
   const el = page.locator('r-input');
   await expect(el).toBeVisible();
   await expect(el).toHaveScreenshot('input-default.png');
-  await argosScreenshot(page, 'input-default', { element: el });
 });
 
 test('input — with icon', async ({ page }) => {
@@ -32,7 +30,6 @@ test('input — with icon', async ({ page }) => {
   const el = page.locator('r-input');
   await expect(el).toBeVisible();
   await expect(el).toHaveScreenshot('input-with-icon.png');
-  await argosScreenshot(page, 'input-with-icon', { element: el });
 });
 
 test('input — focused', async ({ page }) => {
@@ -51,7 +48,6 @@ test('input — focused', async ({ page }) => {
   });
   await page.waitForTimeout(50);
   await expect(el).toHaveScreenshot('input-focused.png');
-  await argosScreenshot(page, 'input-focused', { element: el });
 });
 
 test('input — disabled', async ({ page }) => {
@@ -64,5 +60,4 @@ test('input — disabled', async ({ page }) => {
   const el = page.locator('r-input');
   await expect(el).toBeVisible();
   await expect(el).toHaveScreenshot('input-disabled.png');
-  await argosScreenshot(page, 'input-disabled', { element: el });
 });

@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test';
-import { argosScreenshot } from '@argos-ci/playwright';
 import { DEV_SERVER } from '../../build/config';
 import { isolatedSetup, mount, settlePending } from './helpers';
 
@@ -18,7 +17,6 @@ for (const name of ['rotate', 'stretch', 'dot', 'circle-line'] as const) {
     // not for an arbitrary number of milliseconds.
     await settlePending(page, 'r-loading');
     await expect(el).toHaveScreenshot(`loading-${name}.png`);
-    await argosScreenshot(page, `loading-${name}`, { element: el });
   });
 }
 
@@ -38,5 +36,4 @@ test('loading — all types row', async ({ page }) => {
   await expect(el).toBeVisible();
   await settlePending(page, 'r-loading');
   await expect(el).toHaveScreenshot('loading-all.png');
-  await argosScreenshot(page, 'loading-all', { element: el });
 });
