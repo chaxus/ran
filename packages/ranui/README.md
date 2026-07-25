@@ -10,7 +10,7 @@ An experimental UI component library based on Web Components. Components use Sha
 <a href="https://github.com/chaxus/ran"><img src="https://img.badgesize.io/https:/unpkg.com/ranui/dist/index.js?label=brotli&compression=brotli" alt="brotli"></a>
 <a href="https://github.com/chaxus/ran"><img src="https://img.shields.io/badge/module%20formats-umd%2C%20esm-green.svg" alt="module formats: umd, esm"></a>
 
-[中文](./README.zh-CN.md) | **English**
+**English** | [中文](./README.zh-CN.md)
 
 ## Important Notice
 
