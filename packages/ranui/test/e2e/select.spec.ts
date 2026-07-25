@@ -35,8 +35,11 @@ test('select — with value', async ({ page }) => {
   // This assertion fails when selection-item lacks align-items/line-height centering.
   // Screenshots above are created first so baseline generation always works.
   const centering = await page.evaluate(() => {
-    const host = document.querySelector('#sel') as any;
-    const root = host?.shadowRoot;
+    const host = document.querySelector('#sel') as (HTMLElement & { _shadowDom?: ShadowRoot }) | null;
+    // `host.shadowRoot` is always null — ranui attaches **closed** shadow roots, so this
+    // assertion silently degraded to `centering === null` and could never pass. Components
+    // expose the root as `_shadowDom`.
+    const root = host?._shadowDom;
     const container = root?.querySelector('.selection') as HTMLElement | null;
     const item = root?.querySelector('.selection-item') as HTMLElement | null;
     if (!container || !item) return null;

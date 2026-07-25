@@ -12,10 +12,40 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
+  /**
+   * `toHaveScreenshot` is a **local** tool only; on CI the visual gate is Argos.
+   *
+   * Its baselines live in the gitignored `screenshots/`, so a CI checkout has none. Without
+   * this flag the first attempt would fail with "A snapshot doesn't exist, writing actual",
+   * the retry would find the file it just wrote and pass, and the job would go green having
+   * compared each screenshot against itself — a gate that can never fail is worse than no
+   * gate, because it looks like one. Argos holds the real baselines and compares
+   * cross-platform, which is what a Linux runner needs against macOS-authored screenshots.
+   */
+  ignoreSnapshots: !!process.env.CI,
   reporter: reporters,
   use: {
     baseURL: DEV_SERVER,
     trace: 'on-first-retry',
+    /**
+     * The only animation freeze that actually reaches a ranui component.
+     *
+     * Every component lives in a **closed** shadow root, and both of the obvious approaches
+     * stop at that boundary: `page.addStyleTag()` injects into the document, whose stylesheets
+     * do not cascade into a shadow tree, and Playwright's own `animations: 'disabled'` works
+     * through `document.getAnimations()`, which cannot see into a closed root either. Neither
+     * fails loudly — the animation simply keeps running, and `toHaveScreenshot` then dies with
+     * "Failed to take two consecutive stable screenshots" on every spinner.
+     *
+     * Emulating the media query works because ranui ships `REDUCED_MOTION_CSS` *inside* each
+     * shadow root (see `utils/component.ts`), so the rule is already on the right side of the
+     * boundary. It zeroes durations and iteration counts only — nothing appears or disappears,
+     * so screenshots still capture the real component.
+     *
+     * Goes through `contextOptions`: `@playwright/test` 1.61 does not expose `reducedMotion`
+     * as a top-level `use` key, only on the browser context.
+     */
+    contextOptions: { reducedMotion: 'reduce' },
   },
 
   /* Configure projects for major browsers */

@@ -784,6 +784,51 @@ system-installed Google Chrome. It is deliberately not part of `e2e:install` (in
 branded browser touches the OS, not `node_modules`); install Chrome normally, or run
 `npx playwright install chrome`.
 
+#### Two screenshot mechanisms, two audiences
+
+| Assertion                       | Baseline lives in         | Runs on CI                                   |
+| ------------------------------- | ------------------------- | -------------------------------------------- |
+| `expect(el).toHaveScreenshot()` | gitignored `screenshots/` | **No** — `ignoreSnapshots: !!process.env.CI` |
+| `argosScreenshot(page, …)`      | Argos (hosted)            | Yes — the actual visual gate                 |
+
+`toHaveScreenshot` is a **local** aid: its baselines are per-machine (macOS renders differently
+from a Linux runner) and are regenerated with `npm run test:update`. They are skipped on CI on
+purpose — with no baselines in the checkout, the first attempt would fail with "A snapshot
+doesn't exist, writing actual", the retry would find the file it just wrote, and the job would
+go green having compared every screenshot against itself. A gate that cannot fail is worse than
+no gate, because it looks like one.
+
+Argos is the real gate, and `visual-regression.yml` runs **the whole suite** (`--project=chromium`),
+not just `test/e2e/visual/` — every spec already calls `argosScreenshot`, and scoping CI to
+`visual/` meant 77 of those calls never fired.
+
+#### Determinism rules for visual specs
+
+Three things make component screenshots flaky, and all three have already bitten:
+
+- **Animations do not stop at the shadow boundary.** Components use **closed** shadow roots, so
+  `page.addStyleTag()` (document-level) and Playwright's `animations: 'disabled'`
+  (`document.getAnimations()`) both miss them entirely, silently. The freeze that works is
+  `contextOptions: { reducedMotion: 'reduce' }` in `playwright.config.ts`, which triggers the
+  `REDUCED_MOTION_CSS` that `ensureShadowRoot` adopts _inside_ every root. Note the option must
+  go through `contextOptions` — `@playwright/test` 1.61 has no top-level `use.reducedMotion`.
+- **Wait for lazily-loaded variants, not for milliseconds.** `r-loading` / `r-icon` resolve
+  `name` through a dynamic `import()`; use `settlePending(page, 'r-loading')` from `helpers.ts`
+  rather than `waitForTimeout`.
+- **Settle fonts before anything measures itself.** `isolatedSetup` awaits `document.fonts.ready`
+  because components that cache their own layout (r-tab's sliding indicator) otherwise measure
+  against fallback metrics and land a few pixels off, non-deterministically.
+
+#### Reaching into a component from a spec
+
+`host.shadowRoot` is **always `null`** — the roots are closed. Components expose theirs as the
+`_shadowDom` instance property; use that. Two specs asserted through `host.shadowRoot`, silently
+degraded to "element not found", and could never have passed.
+
+Likewise, don't assert `toBeVisible()` on a host whose content is `position: fixed` inside the
+shadow root (`r-modal`): `:host` is `position: static` with no box of its own, so Playwright
+correctly reports it hidden. Assert on the shadow content instead.
+
 ### Test file naming
 
 `test/unit/{component}.contract.test.ts` for component tests.

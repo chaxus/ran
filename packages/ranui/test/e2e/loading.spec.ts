@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { argosScreenshot } from '@argos-ci/playwright';
 import { DEV_SERVER } from '../../build/config';
-import { isolatedSetup, mount } from './helpers';
+import { isolatedSetup, mount, settlePending } from './helpers';
 
 test.use({ viewport: { width: 600, height: 200 } });
 
@@ -14,7 +14,9 @@ for (const name of ['rotate', 'stretch', 'dot', 'circle-line'] as const) {
     await mount(page, `<r-loading name="${name}"></r-loading>`);
     const el = page.locator('r-loading');
     await expect(el).toBeVisible();
-    await page.waitForTimeout(50); // one frame after animation freeze
+    // Lazily-loaded variants swap their children when the chunk lands — wait for that,
+    // not for an arbitrary number of milliseconds.
+    await settlePending(page, 'r-loading');
     await expect(el).toHaveScreenshot(`loading-${name}.png`);
     await argosScreenshot(page, `loading-${name}`, { element: el });
   });
@@ -34,7 +36,7 @@ test('loading — all types row', async ({ page }) => {
   );
   const el = page.locator('div').first();
   await expect(el).toBeVisible();
-  await page.waitForTimeout(50);
+  await settlePending(page, 'r-loading');
   await expect(el).toHaveScreenshot('loading-all.png');
   await argosScreenshot(page, 'loading-all', { element: el });
 });

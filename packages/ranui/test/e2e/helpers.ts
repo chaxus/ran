@@ -1,5 +1,15 @@
 import type { Page } from '@playwright/test';
 
+/**
+ * Freezes animations in the **light DOM** only — page chrome, demo scaffolding, anything the
+ * specs mount directly into `<body>`.
+ *
+ * It cannot reach inside a component: this is injected as a document-level `<style>`, and
+ * document stylesheets do not cascade into a shadow tree. Components are frozen instead by
+ * `reducedMotion: 'reduce'` in `playwright.config.ts`, which triggers the `REDUCED_MOTION_CSS`
+ * that `ensureShadowRoot` adopts into every shadow root. Don't add component animation
+ * overrides here — they will silently do nothing.
+ */
 export const FREEZE_ANIMATIONS = `
   *, *::before, *::after {
     animation-duration: 0.001ms !important;
@@ -19,11 +29,34 @@ const BASE_BODY_STYLE = 'margin: 0; padding: 24px; background: #ffffff; box-sizi
 export async function isolatedSetup(page: Page, url: string, waitForTag: string): Promise<void> {
   await page.goto(url, { waitUntil: 'load' });
   await page.waitForFunction((tag) => !!customElements.get(tag), waitForTag);
+  // Components that measure their own layout (r-tab's sliding indicator, for one) read label
+  // widths once and cache the result. Run that measurement against fallback metrics and the
+  // indicator lands a few pixels off — non-deterministically, since whether the webfont is
+  // already cached varies run to run. Settle the fonts before anything mounts.
+  await page.evaluate(() => document.fonts.ready.then(() => undefined));
   await page.addStyleTag({ content: FREEZE_ANIMATIONS });
   await page.evaluate((style) => {
     document.body.style.cssText = style;
     document.body.innerHTML = '';
   }, BASE_BODY_STYLE);
+}
+
+/**
+ * Wait until every matching element has finished rendering its lazily-loaded variant.
+ *
+ * Components that resolve `name` at runtime (`r-loading`, `r-icon`) fetch the variant with a
+ * dynamic `import()` and expose the in-flight promise as `_pending`. A fixed `waitForTimeout`
+ * races that fetch — on a cold module graph the chunk lands *after* the screenshot starts, and
+ * `toHaveScreenshot` then fails with "Failed to take two consecutive stable screenshots"
+ * because the element is still swapping its children between the two captures.
+ *
+ * Awaiting `_pending` is deterministic regardless of how slow the chunk is.
+ */
+export async function settlePending(page: Page, selector: string): Promise<void> {
+  await page.evaluate(async (sel) => {
+    const nodes = Array.from(document.querySelectorAll(sel)) as Array<HTMLElement & { _pending?: Promise<void> }>;
+    await Promise.all(nodes.map((node) => node._pending ?? Promise.resolve()));
+  }, selector);
 }
 
 /**

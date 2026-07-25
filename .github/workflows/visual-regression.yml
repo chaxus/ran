@@ -48,10 +48,15 @@ jobs:
       - name: Build ranui
         run: pnpm --filter ranui run build
 
+      # The whole e2e suite, not just test/e2e/visual/. Every spec already calls
+      # argosScreenshot — 77 of those calls live outside visual/ and were never running here,
+      # so their uploads never happened and those components had no visual gate at all.
+      # `toHaveScreenshot` is skipped on CI via `ignoreSnapshots` (see playwright.config.ts);
+      # Argos holds the baselines.
       - name: Run visual regression tests
         env:
           ARGOS_TOKEN: ${{ secrets.ARGOS_TOKEN }}
-        run: pnpm --filter ranui exec playwright test --project=chromium test/e2e/visual/
+        run: pnpm --filter ranui exec playwright test --project=chromium
 
       - name: Upload Playwright report
         if: always()
