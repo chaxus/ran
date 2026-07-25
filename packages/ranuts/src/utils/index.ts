@@ -124,11 +124,12 @@ import { getStatus, status } from './network';
 import { noop } from './noop';
 import { getPerformance } from './performance';
 import { QuestQueue } from './queue';
-import { createData, report } from './report';
-import { handleFetchHook } from './request';
+import { createData, getReportUrl, report, setReportUrl } from './report';
+import type { BeaconPayload, ReportConfig } from './report';
+import { handleFetchHook, handleXhrHook } from './request';
 import { scriptOnLoad } from './script';
 import { throttle } from './throttle';
-import { performanceTime, timeFormat, timestampToTime } from './time';
+import { formatDate, performanceTime, timeFormat, timestampToTime } from './time';
 import type { CurrentDevice } from './device';
 import {
   MOBILE_MEDIA_QUERY,
@@ -312,9 +313,15 @@ export {
   matchMediaQuery,
   watchMediaQuery,
   createLocalePath,
+  setReportUrl,
+  getReportUrl,
+  formatDate,
+  handleXhrHook,
 };
 
 export type {
+  BeaconPayload,
+  ReportConfig,
   LocalePath,
   LocalePathConfig,
   LocaleRoute,

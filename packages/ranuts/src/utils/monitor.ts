@@ -1,145 +1,146 @@
 import { handleError } from '@/utils/error';
 import { getPerformance } from '@/utils/performance';
-import { createData, report } from '@/utils/report';
+import { createData, report, setReportUrl } from '@/utils/report';
 import { handleFetchHook, handleXhrHook } from '@/utils/request';
 import { handleConsole } from '@/utils/console';
 import { throttle } from '@/utils/throttle';
 import { handleClick } from '@/utils/behavior';
+import { noop } from '@/utils/noop';
 
 export interface Payload {
   payload: Record<string, unknown>;
   type?: string;
 }
+
+export interface MonitorOptions {
+  /** Telemetry endpoint. Required — without it nothing is sent. */
+  url: string;
+  /** Cookie holding the user id, included in every envelope */
+  userIdCookie?: string;
+  /** Minimum interval between beacons, ms. Default 300 */
+  throttleMs?: number;
+  /** Which channels to instrument. Everything except `console` is on by default. */
+  channels?: Partial<Record<MonitorChannel, boolean>>;
+}
+
+export type MonitorChannel = 'click' | 'error' | 'fetch' | 'xhr' | 'performance' | 'console';
+
+const DEFAULT_CHANNELS: Record<MonitorChannel, boolean> = {
+  click: true,
+  error: true,
+  fetch: true,
+  xhr: true,
+  performance: true,
+  // Off by default: `handleConsole` patches the global console, and every hooked call is
+  // itself reported, so switching it on with a console-logging backend loops forever.
+  console: false,
+};
+
+/**
+ * @description: Front-end telemetry: page-load performance, clicks, errors, fetch/XHR traffic
+ * and (optionally) console output, all beaconed to one endpoint.
+ *
+ * @example
+ * ```ts
+ * const monitor = new Monitor({ url: 'https://telemetry.example.com/collect' });
+ * const stop = monitor.start();
+ * monitor.log({ event: 'checkout' }); // manual event
+ * // on teardown (HMR, SPA route with a different config, tests)
+ * stop();
+ * ```
+ */
 export class Monitor {
-  constructor() {
-    this.initialize();
+  private options: MonitorOptions;
+  private teardown: Array<() => void> = [];
+  private send: (payload: Payload) => void = noop;
+
+  constructor(options: MonitorOptions) {
+    this.options = options;
+    setReportUrl({ url: options.url, userIdCookie: options.userIdCookie });
+    this.send = throttle((data: Payload) => report(data), options.throttleMs ?? 300);
   }
+
+  /** Whether instrumentation is currently installed */
+  get running(): boolean {
+    return this.teardown.length > 0;
+  }
+
   /**
-   * @description: 页面加载性能上报
-   * @param {Payload} param1
+   * @description: Install the configured channels. Idempotent — calling it twice does not
+   * double-instrument.
+   * @return {Function} stop — removes every listener and global patch
    */
-  reportPerformance(): void {
-    const params = getPerformance();
-    const payload = createData();
-    report({
-      payload: {
-        ...params,
-        ...payload,
-      },
-    });
-  }
-  /**
-   * @description: 手动触发的上报
-   * @param {Record} payload
-   * @param {*} unknown
-   */
-  log(payload: Record<string, unknown>): void {
-    report({ payload });
-  }
-  /**
-   * @description: 点击上报
-   * @return {*}
-   */
-  reportClick(): void {
-    const throttleReport = throttle(report);
-    const payload = createData();
-    const hook = (event: MouseEvent) => {
-      const { pageX, pageY, screenX, screenY, type } = event;
-      throttleReport({
-        payload: {
-          ...payload,
-          data: { pageX, pageY, screenX, screenY, type },
-          type: 'click',
-        },
-      });
-    };
-    handleClick(hook);
-  }
-  // ajax 上报
-  reportXhr(): void {
-    const throttleReport = throttle(report);
-    const payload = createData();
-    const requestHook = (...args: unknown[]) => {
-      throttleReport({
-        payload: { ...payload, data: { ...args }, type: 'xhrRequest' },
-      });
-    };
-    const responseHook = (...args: unknown[]) => {
-      throttleReport({
-        payload: { ...payload, data: { ...args }, type: 'xhrResponse' },
-      });
-    };
-    const errorHook = (...args: unknown[]) => {
-      throttleReport({
-        payload: { ...payload, data: { ...args }, type: 'xhrError' },
-      });
-    };
-    handleXhrHook({ requestHook, responseHook, errorHook });
-  }
-  /**
-   * @description: fetch上报
-   */
-  reportFetch(): void {
-    const throttleReport = throttle(report);
-    const payload = createData();
-    const requestHook = (...args: unknown[]) => {
-      throttleReport({
-        payload: { ...payload, data: { ...args }, type: 'fetchRequest' },
-      });
-    };
-    const responseHook = (...args: unknown[]) => {
-      throttleReport({
-        payload: { ...payload, data: { ...args }, type: 'fetchResponse' },
-      });
-    };
-    const errorHook = (...args: unknown[]) => {
-      throttleReport({
-        payload: { ...payload, data: { ...args }, type: 'fetchError' },
-      });
-    };
-    handleFetchHook({ requestHook, responseHook, errorHook });
-  }
-  /**
-   * @description: 错误上报
-   */
-  reportError(): void {
-    const throttleReport = throttle(report);
-    const payload = createData();
-    const hook = (...args: unknown[]) => {
-      throttleReport({
-        payload: { ...payload, data: { ...args }, type: 'error' },
-      });
-    };
-    handleError(hook);
-  }
-  /**
-   * @description: 上报console
-   */
-  reportConsole(): void {
-    const throttleReport = throttle(report);
-    const payload = createData();
-    const hook = (...args: unknown[]) => {
-      throttleReport({
-        payload: { ...payload, data: { ...args }, type: 'console' },
-      });
-    };
-    handleConsole(hook);
-  }
-  init = (): void => {
-    this.reportClick();
-    this.reportError();
-    this.reportFetch();
-    this.reportPerformance();
-    this.reportXhr();
+  start = (): (() => void) => {
+    if (this.running) return this.stop;
+    const channels = { ...DEFAULT_CHANNELS, ...this.options.channels };
+    if (channels.performance) this.reportPerformance();
+    if (channels.click) this.teardown.push(this.reportClick());
+    if (channels.error) this.teardown.push(this.reportError());
+    if (channels.fetch) this.teardown.push(this.reportFetch());
+    if (channels.xhr) this.teardown.push(this.reportXhr());
+    if (channels.console) this.teardown.push(this.reportConsole());
+    return this.stop;
   };
-  initialize(): void {
-    if (typeof window !== 'undefined' && !window.ranlog) {
-      window.ranlog = true;
-      this.init();
-    }
-    if (typeof process !== 'undefined' && !process.ranlog) {
-      process.ranlog = true;
-      this.init();
-    }
-  }
+
+  /** @description: Remove every listener and restore every patched global */
+  stop = (): void => {
+    const fns = this.teardown.splice(0, this.teardown.length);
+    for (const fn of fns) fn();
+  };
+
+  /**
+   * Build one event. `createData()` is called **per event**, not once at install time — the
+   * old version captured it when the hook was registered, so every later click reported the
+   * URL and timestamp of page load rather than of the click.
+   */
+  private event = (type: string, data: Record<string, unknown>): Payload => ({
+    payload: { ...createData(), data, type },
+  });
+
+  /** @description: Report a one-off event with the standard envelope */
+  log = (payload: Record<string, unknown>): void => {
+    this.send({ payload: { ...createData(), ...payload } });
+  };
+
+  /** @description: Page-load performance metrics; fires once, so it is not throttled */
+  reportPerformance = (): void => {
+    report({ payload: { ...getPerformance(), ...createData(), type: 'performance' } });
+  };
+
+  /** @description: Click tracking */
+  reportClick = (): (() => void) => {
+    const hook = (event: MouseEvent): void => {
+      const { pageX, pageY, screenX, screenY, type } = event;
+      this.send(this.event('click', { pageX, pageY, screenX, screenY, type }));
+    };
+    return handleClick(hook);
+  };
+
+  /** @description: Uncaught errors and unhandled rejections */
+  reportError = (): (() => void) => {
+    return handleError((...args: unknown[]) => this.send(this.event('error', { ...args })));
+  };
+
+  /** @description: fetch traffic */
+  reportFetch = (): (() => void) =>
+    handleFetchHook({
+      requestHook: (...args) => this.send(this.event('fetchRequest', { ...args })),
+      responseHook: (...args) => this.send(this.event('fetchResponse', { ...args })),
+      errorHook: (...args) => this.send(this.event('fetchError', { ...args })),
+    });
+
+  /** @description: XMLHttpRequest traffic */
+  reportXhr = (): (() => void) =>
+    handleXhrHook({
+      requestHook: (...args) => this.send(this.event('xhrRequest', { ...args })),
+      responseHook: (...args) => this.send(this.event('xhrResponse', { ...args })),
+      errorHook: (...args) => this.send(this.event('xhrError', { ...args })),
+    });
+
+  /**
+   * @description: console output. Off by default — see `DEFAULT_CHANNELS`; a backend that
+   * logs to the console would loop.
+   */
+  reportConsole = (): (() => void) =>
+    handleConsole((...args: unknown[]) => this.send(this.event('console', { ...args })));
 }
