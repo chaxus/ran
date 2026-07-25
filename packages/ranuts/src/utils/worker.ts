@@ -1,32 +1,36 @@
 /**
- * Web Worker 的请求/响应封装。
+ * A request/response wrapper over a Web Worker.
  *
- * 原生 worker 只有「发消息」和「收消息」，没有请求 - 响应的概念：并发发两个任务回来两条消息，
- * 分不清哪条对应哪个。业界通行解法是给每条请求编号、响应带回同一个编号——这个类把这套
- * 关联逻辑（编号、pending 表、进度事件、worker 崩溃时拒绝全部在途请求）做成通用件。
+ * A native worker only knows "post a message" and "receive a message" — there is no notion
+ * of a request and its response: send two tasks concurrently, get two messages back, and
+ * there is no way to tell which is which. The standard fix is to number each request and
+ * echo that number in the response; this class packages that correlation logic (ids, a
+ * pending table, progress events, rejecting every in-flight request when the worker
+ * crashes) into something reusable.
  *
- * 同时管 worker 的生命周期：**首次 send 才创建 worker**（重活不该在页面加载时就起），
- * `dispose()` 终止并拒绝在途请求，之后再 send 会重建。
+ * It also owns the worker's lifecycle: **the worker is created on the first `send`** (heavy
+ * work should not start at page load), and `dispose()` terminates it and rejects in-flight
+ * requests; a later `send` rebuilds it.
  */
 
-/** 响应至少要带回请求编号，才能与请求配对 */
+/** A response must at least echo the request id so the two can be paired */
 export interface WorkerResponseBase {
   operationId: number;
   type?: string;
 }
 
 export interface WorkerClientOptions<Res extends WorkerResponseBase, Progress> {
-  /** 如何创建 worker，例如 `() => new Worker(new URL('./my.worker.ts', import.meta.url), { type: 'module' })` */
+  /** How to create the worker, e.g. `() => new Worker(new URL('./my.worker.ts', import.meta.url), { type: 'module' })` */
   create: () => Worker;
-  /** 是否为「进度」消息——不结束请求，只回调 onProgress。默认 `type === 'progress'` */
+  /** Whether this is a progress message — it does not settle the request, it only calls onProgress. Defaults to `type === 'progress'` */
   isProgress?: (response: Res) => boolean;
-  /** 从进度消息里取出进度负载。默认取 `response.progress` */
+  /** Extract the progress payload from a progress message. Defaults to `response.progress` */
   getProgress?: (response: Res) => Progress;
-  /** 是否为错误消息。默认 `type === 'error'` */
+  /** Whether this is an error message. Defaults to `type === 'error'` */
   isError?: (response: Res) => boolean;
-  /** 错误消息文案。默认取 `response.message` */
+  /** Error message text. Defaults to `response.message` */
   getErrorMessage?: (response: Res) => string;
-  /** 单个请求的超时（毫秒）；省略即不超时。超时只拒绝该请求，不终止 worker */
+  /** Per-request timeout in milliseconds; omit for none. A timeout only rejects that request, it does not terminate the worker */
   timeout?: number;
 }
 
@@ -38,8 +42,9 @@ interface Pending<Res, Progress> {
 }
 
 /**
- * @description: 带请求编号的 Worker 客户端。请求类型 `Req` 由调用方定义，客户端只负责
- * 补上 `operationId` 并把响应路由回对应的 promise。
+ * @description: A worker client with request ids. The request type `Req` is defined by the
+ * caller; the client only fills in `operationId` and routes each response back to the right
+ * promise.
  *
  * @example
  * ```ts
@@ -49,7 +54,7 @@ interface Pending<Res, Progress> {
  * const loaded = await client.send({ type: 'load', modelId }, (p) => render(p.progress));
  * client.dispose();
  * ```
- * worker 侧只需把收到的 `operationId` 原样带回：
+ * The worker side only has to echo the `operationId` it received:
  * ```ts
  * self.onmessage = ({ data }) => self.postMessage({ operationId: data.operationId, type: 'result', ... });
  * ```
@@ -64,21 +69,21 @@ export class WorkerClient<Req extends object, Res extends WorkerResponseBase, Pr
     this.options = options;
   }
 
-  /** worker 是否已创建（首次 send 时才创建） */
+  /** Whether the worker has been created (it is created on the first `send`) */
   get active(): boolean {
     return this.worker !== null;
   }
 
-  /** 在途请求数 */
+  /** Number of in-flight requests */
   get pendingCount(): number {
     return this.pending.size;
   }
 
   /**
-   * @description: 发一条请求，等它对应的响应
-   * @param {Req} request 请求体（`operationId` 由客户端补上，不要自己传）
-   * @param {Function} onProgress 进度回调，收到进度消息时触发，不结束请求
-   * @param {Transferable[]} transfer 需要转移所有权的对象（ArrayBuffer 等，避免结构化克隆的拷贝开销）
+   * @description: Send one request and await its matching response
+   * @param {Req} request request body (`operationId` is filled in by the client — do not pass it)
+   * @param {Function} onProgress progress callback, fired on progress messages without settling the request
+   * @param {Transferable[]} transfer objects whose ownership is transferred (ArrayBuffer and friends, avoiding the structured-clone copy)
    * @return {Promise<Res>}
    */
   send = (request: Req, onProgress?: (progress: Progress) => void, transfer?: Transferable[]): Promise<Res> => {
@@ -101,7 +106,7 @@ export class WorkerClient<Req extends object, Res extends WorkerResponseBase, Pr
     });
   };
 
-  /** @description: 终止 worker 并拒绝所有在途请求；下次 send 会重建 */
+  /** @description: Terminate the worker and reject every in-flight request; the next `send` rebuilds it */
   dispose = (): void => {
     this.worker?.terminate();
     this.worker = null;
@@ -112,7 +117,8 @@ export class WorkerClient<Req extends object, Res extends WorkerResponseBase, Pr
     if (!this.worker) {
       this.worker = this.options.create();
       this.worker.onmessage = (event: MessageEvent<Res>) => this.handleMessage(event.data);
-      // worker 内的未捕获错误不带 operationId，无法归属到某条请求，只能整体拒绝。
+      // An uncaught error inside the worker carries no operationId, so it cannot be
+      // attributed to one request — everything in flight has to be rejected.
       this.worker.onerror = (event: ErrorEvent) => this.rejectAll(new Error(event.message || 'worker crashed'));
     }
     return this.worker;
@@ -127,7 +133,7 @@ export class WorkerClient<Req extends object, Res extends WorkerResponseBase, Pr
 
   private handleMessage = (response: Res): void => {
     const entry = this.pending.get(response.operationId);
-    if (!entry) return; // 已超时/已 dispose 的请求，迟到的响应直接丢弃
+    if (!entry) return; // late response for a timed-out / disposed request — drop it
     const { isProgress, getProgress, isError, getErrorMessage } = this.options;
     if (isProgress ? isProgress(response) : response.type === 'progress') {
       const progress = getProgress

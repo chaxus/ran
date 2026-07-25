@@ -1,14 +1,17 @@
-// 数据库：IDBDatabase 对象，数据库有版本概念，同一时刻只能有一个版本，每个域名可以建多个数据库
-// 对象仓库：IDBObjectStore 对象，类似于关系型数据库的表格
-// 索引：IDBIndex 对象，可以在对象仓库中，为不同的属性建立索引，主键建立默认索引
-// 事务：IDBTransaction 对象，增删改查都需要通过事务来完成
-// 操作请求：IDBRequest 对象
-// 指针：IDBCursor 对象
-// 主键集合：IDBKeyRange 对象
+// Database: IDBDatabase — versioned, only one version active at a time, and an origin may
+//   hold several databases.
+// Object store: IDBObjectStore — the equivalent of a table in a relational database.
+// Index: IDBIndex — an index over any property of an object store; the primary key is
+//   indexed by default.
+// Transaction: IDBTransaction — every read and write goes through one.
+// Request: IDBRequest
+// Cursor: IDBCursor
+// Key range: IDBKeyRange
 
 /**
- * @description: IndexedDB 操作的统一返回结构。所有方法 resolve/reject 的都是这个形状，
- * 调用方只需判断 `error` 即可，不必区分「请求没建起来」和「请求失败了」两种路径。
+ * @description: The uniform result shape of every IndexedDB operation. Every method
+ * resolves and rejects with this shape, so callers only need to check `error` rather than
+ * distinguishing "the request was never created" from "the request failed".
  */
 export interface IDBResult<T = unknown> {
   status: 'success' | 'error' | 'pending';
@@ -20,9 +23,10 @@ export interface IDBResult<T = unknown> {
 }
 
 /**
- * @description: 对象仓库的声明式 schema。`openDataBase` 会在 `onupgradeneeded` 里
- * 创建缺失的仓库与索引——**建表只能在版本升级事务里做**，所以必须提前声明，
- * 不能等数据库打开后再调 createObjectStore。
+ * @description: Declarative schema for object stores. `openDataBase` creates the missing
+ * stores and indexes inside `onupgradeneeded` — **stores can only be created in a version
+ * upgrade transaction**, so they must be declared up front; createObjectStore cannot be
+ * called after the database is open.
  */
 export interface IDBStoreSchema {
   name: string;
@@ -37,9 +41,9 @@ export interface IDBStoreSchema {
 export interface WebDBOptions {
   dbName: string;
   version?: number;
-  /** 声明式仓库定义：升级时自动建缺失的 store / index（已存在的跳过，幂等） */
+  /** Declarative store definitions: missing stores / indexes are created on upgrade (existing ones are skipped — idempotent) */
   stores?: IDBStoreSchema[];
-  /** 逃生舱：schema 表达不了的迁移（改 keyPath、搬数据）在这里做，于 stores 建完后调用 */
+  /** Escape hatch: migrations the schema cannot express (changing a keyPath, moving data) go here, called after `stores` are created */
   upgrade?: (db: IDBDatabase, event: IDBVersionChangeEvent, transaction: IDBTransaction | null) => void;
 }
 
@@ -49,16 +53,20 @@ const fail = (message: string, data: unknown = null): IDBResult<never> =>
   ({ status: 'error', code: 1, data, error: true, message }) as IDBResult<never>;
 
 /**
- * @description: IndexedDB 的 Promise 封装。原生 IndexedDB 是事件回调 + 事务式 API，
- * 每次读写都要 open → transaction → objectStore → request → onsuccess/onerror 五步，
- * 这个类把它压成 `await db.add({ storeName, data })`。
+ * @description: A Promise wrapper over IndexedDB. The native API is event-callback and
+ * transaction based — every read or write takes five steps (open → transaction →
+ * objectStore → request → onsuccess/onerror); this class collapses that into
+ * `await db.add({ storeName, data })`.
  *
- * 三个容易踩的点已内置处理：
- * 1. **版本降级**：用比磁盘上更低的 version 打开会抛 VersionError。这里解析出实际版本、
- *    对齐后自动重开，而不是把错误抛给调用方。
- * 2. **升级阻塞**：其它标签页/worker 持有旧连接时，新版本的升级会一直挂起。
- *    连接上 `onversionchange` 会主动断开自己，让升级方能继续。
- * 3. **建表时机**：仓库只能在 `onupgradeneeded` 里建，故用 `stores` 声明式配置。
+ * Three easy traps are handled internally:
+ * 1. **Version downgrade**: opening with a version lower than the one on disk throws a
+ *    VersionError. Here the actual version is parsed out and the database reopened aligned
+ *    to it, instead of surfacing the error to the caller.
+ * 2. **Blocked upgrade**: an upgrade hangs while another tab or worker holds an old
+ *    connection. `onversionchange` on the connection closes it so the upgrading side can
+ *    proceed.
+ * 3. **When stores can be created**: only inside `onupgradeneeded`, hence the declarative
+ *    `stores` configuration.
  *
  * @example
  * ```ts
@@ -89,7 +97,8 @@ export class WebDB {
   }
 
   /**
-   * @description: 打开数据库；版本低于磁盘上的实际版本时自动对齐并重开
+   * @description: Open the database; when the requested version is below the one on disk,
+   * align to it and reopen automatically
    * @return {Promise<IDBResult<{ db: IDBDatabase }>>}
    */
   openDataBase = (): Promise<IDBResult<{ db: IDBDatabase }>> => {
@@ -102,7 +111,8 @@ export class WebDB {
       request.onsuccess = () => {
         this.database = request.result;
         this.version = this.database.version;
-        // 其他连接（新标签页/worker）请求更高版本时主动断开，避免阻塞升级
+        // Close this connection when another one (a new tab/worker) asks for a higher
+        // version, so the upgrade is not blocked
         this.database.onversionchange = () => {
           this.database?.close();
           this.database = undefined;
@@ -110,8 +120,9 @@ export class WebDB {
         resolve(ok({ db: this.database }));
       };
       request.onerror = () => {
-        // 打开低版本数据库导致失败：解析出磁盘上的实际版本，对齐后重开。
-        // 必须把重开的结果接回本次 promise，否则调用方会永远挂着。
+        // Failed because the requested version is older than the stored one: parse the
+        // actual version, align and reopen. The reopen result must feed back into this
+        // promise, otherwise the caller waits forever.
         if (request.error && request.error.name === 'VersionError') {
           const message = request.error.message || '';
           const [, existVersion] = message.match(/\d+/g) || [];
@@ -147,7 +158,7 @@ export class WebDB {
     this.database = undefined;
   };
 
-  /** @description: 关闭并重新打开（版本对齐后恢复连接用） */
+  /** @description: Close and reopen (used to restore the connection after aligning versions) */
   refreshDatabase = (): Promise<IDBResult<{ db: IDBDatabase }>> => {
     this.closeDataBase();
     return this.openDataBase();
@@ -161,15 +172,16 @@ export class WebDB {
     });
   };
 
-  /** @description: 取一个 objectStore（各自开一个事务，仅适合读一次的场景） */
+  /** @description: Get an objectStore (each call opens its own transaction — only suitable for a single read) */
   getObjectStore = (storeName: string, mode: IDBTransactionMode = 'readonly'): IDBObjectStore | undefined => {
     if (!this.database) return undefined;
     return this.database.transaction([storeName], mode).objectStore(storeName);
   };
 
   /**
-   * @description: 把一个 IDBRequest 包成 Promise<IDBResult>，所有读写方法共用。
-   * `store` 拿不到（数据库没开 / 仓库不存在）时也走同一条错误出口。
+   * @description: Wrap an IDBRequest into a Promise<IDBResult>, shared by every read and
+   * write method. When `store` cannot be obtained (database not open / store missing) the
+   * failure takes the same error path.
    */
   private run = <T>(
     storeName: string,
@@ -197,7 +209,7 @@ export class WebDB {
     });
   };
 
-  /** @description: 新增；主键已存在会失败（想覆盖用 update） */
+  /** @description: Insert; fails when the primary key already exists (use `update` to overwrite) */
   add = <T = unknown>({ storeName, data }: { storeName: string; data: T }): Promise<IDBResult<T>> =>
     this.run(
       storeName,
@@ -207,7 +219,7 @@ export class WebDB {
       () => data,
     );
 
-  /** @description: 写入（put 语义：不存在则插入，存在则覆盖） */
+  /** @description: Write with `put` semantics: insert when absent, overwrite when present */
   update = <T = unknown>({ storeName, data }: { storeName: string; data: T }): Promise<IDBResult> =>
     this.run(
       storeName,
@@ -226,7 +238,7 @@ export class WebDB {
       (request) => request.result as T,
     );
 
-  /** @description: 读取整个仓库；数据量大时用 readByCursor 逐条处理，避免一次性驻留内存 */
+  /** @description: Read a whole store; for large volumes use readByCursor to process record by record instead of holding everything in memory */
   readAll = <T = unknown>({
     storeName,
     query,
@@ -259,7 +271,7 @@ export class WebDB {
       (r) => r.result as number,
     );
 
-  /** @description: 游标遍历，按 keyRange / direction 收集结果 */
+  /** @description: Walk a cursor, collecting results per keyRange / direction */
   readByCursor = <T = unknown>({
     storeName,
     keyRange,

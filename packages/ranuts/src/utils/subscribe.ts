@@ -13,18 +13,18 @@ export const NEW_LISTENER = 'NEW_LISTENER';
 export class SyncHook {
   public readonly _events = new Map<EventName, Set<EventItem>>();
   /**
-   * @description: 订阅事件
+   * @description: Subscribe to an event
    * @param {EventName} eventName
    * @param {EventItem} eventItem
    * @return {void}
    */
   public tap = (eventName: EventName, eventItem: EventItem | Callback): this => {
     if (this._events.get(eventName) && eventName !== Symbol.for(NEW_LISTENER)) {
-      // 注册一个 newListener 用于监听新的事件订阅
+      // Emit newListener so new subscriptions can be observed
       this.call(Symbol.for(NEW_LISTENER), eventName);
     }
 
-    // 由于一个事件可能注册多个回调函数，所以使用数组来存储事件队列
+    // One event may carry several callbacks, so the queue is stored as a collection
     const callbacks = this._events.get(eventName) || new Set<EventItem>();
     if (typeof eventItem === 'function') {
       callbacks.add({
@@ -39,7 +39,7 @@ export class SyncHook {
     return this;
   };
   /**
-   * @description: 触发事件
+   * @description: Emit an event
    * @param {EventName} eventName
    * @param {array} args
    * @return {void}
@@ -53,7 +53,7 @@ export class SyncHook {
     return this;
   };
   /**
-   * @description: 同步触发事件
+   * @description: Emit an event, awaiting each listener in turn
    * @param {EventName} eventName
    * @param {array} args
    * @return {Promise<void>}
@@ -67,7 +67,7 @@ export class SyncHook {
     return this;
   };
   /**
-   * @description: 只订阅一次事件，触发后就移除事件
+   * @description: Subscribe once — the listener is removed after it fires
    * @param {EventName} eventName
    * @param {EventItem} eventItem
    * @return {void}
@@ -94,28 +94,29 @@ export class SyncHook {
         initialCallback: callback,
       };
     }
-    // 由于需要在回调函数执行后，取消订阅当前事件，所以需要对传入的回调函数做一层包装，然后绑定包装后的函数
-    // 考虑：如果当前事件在未执行，被用户取消订阅，能否取消？
-    // 由于：我们订阅事件的时候，修改了原回调函数的引用，所以，用户触发 off 的时候不能找到对应的回调函数
-    // 所以，我们需要在当前函数与用户传入的回调函数做一个绑定，我们通过自定义属性来实现
+    // The callback has to be unsubscribed right after it runs, so the caller's function is
+    // wrapped and the wrapper is what gets registered. That raises a question: can the user
+    // still unsubscribe before it fires? Registering changed the callback reference, so
+    // `off` would not find the caller's function — hence the wrapper keeps a link back to
+    // the original via `initialCallback`.
     this.tap(eventName, one);
     return this;
   };
   /**
-   * @description: 移除订阅的事件
+   * @description: Remove a subscription
    * @param {EventName} eventName
    * @param {EventItem} eventItem
    * @return {void}
    */
   public off = (eventName: EventName, eventItem: EventItem | Callback): this => {
-    // 找到事件对应的回调函数，删除对应的回调函数
+    // Find the callbacks registered for this event and drop the matching one
     const callbacks = this._events.get(eventName) || new Set<EventItem>();
     const newCallbacks = [...callbacks].filter((item) => {
       if (typeof eventItem === 'function') {
         return item.callback !== eventItem && item.initialCallback !== eventItem;
       } else {
         const { callback } = eventItem;
-        /* 用于 once 的取消订阅 */
+        /* used to unsubscribe a `once` listener */
         return item.callback !== callback && item.initialCallback !== callback;
       }
     });
@@ -124,25 +125,33 @@ export class SyncHook {
   };
 }
 
-// SyncBailHook 是一个同步的、保险类型的 Hook，意思是只要其中一个有返回了，后面的就不执行了。
+// Notes on the other Tapable-style hooks, for reference:
 
-// SyncWaterfallHook 是一个同步的、瀑布式类型的 Hook。瀑布类型的钩子就是如果前一个事件函数的结果 result !== undefined，则 result 会作为后一个事件函数的第一个参数（也就是上一个函数的执行结果会成为下一个函数的参数）
+// SyncBailHook — synchronous, bailing: as soon as one listener returns a value, the rest are skipped.
 
-// SyncLoopHook 是一个同步、循环类型的 Hook。循环类型的含义是不停的循环执行事件函数，直到所有函数结果 result === undefined，不符合条件就调头重新开始执行。
+// SyncWaterfallHook — synchronous, waterfall: when a listener's result !== undefined, that
+// result becomes the first argument of the next listener.
 
-// 异步的 hook
-// 异步钩子需要通过 tapAsync 函数注册事件，同时也会多一个 callback 参数，执行 callback 告诉 hook 该注册事件已经执行完成
-// call 方法只有同步钩子才有，异步钩子得使用 callAsync
+// SyncLoopHook — synchronous, looping: listeners keep running until every result is
+// undefined; anything else restarts the sequence from the beginning.
 
-// AsyncParallelHook 是一个异步并行、基本类型的 Hook，它与同步 Hook 不同的地方在于：
-// 它会同时开启多个异步任务，而且需要通过 tapAsync 方法来注册事件（同步 Hook 是通过 tap 方法）
-// 在执行注册事件时需要使用 callAsync 方法来触发（同步 Hook 使用的是 call 方法）
-// 同时，在每个注册函数的回调中，会多一个 callback 参数，它是一个函数。执行 callback 函数相当于告诉 Hook 它这一个异步任务执行完成了。
+// Async hooks
+// Async listeners are registered with tapAsync and receive an extra `callback` argument;
+// calling it tells the hook that listener has finished.
+// `call` only exists on sync hooks — async hooks use `callAsync`.
 
-// AsyncParallelBailHook 是一个异步并行、保险类型的 Hook，只要其中一个有返回值，就会执行 callAsync 中的回调函数。
+// AsyncParallelHook — asynchronous, parallel, basic. Unlike a sync hook it starts every
+// async task at once, listeners are registered with tapAsync (not tap), the hook is fired
+// with callAsync (not call), and each listener receives an extra `callback` to signal that
+// its own async task is done.
 
-// AsyncSeriesHook 是一个异步、串行类型的 Hook，只有前面的执行完成了，后面的才会一个接一个的执行。
+// AsyncParallelBailHook — asynchronous, parallel, bailing: as soon as one listener returns a
+// value, the callAsync callback runs.
 
-// AsyncSeriesBailHook 是一个异步串行、保险类型的 Hook。在串行的执行过程中，只要其中一个有返回值，后面的就不会执行了。
+// AsyncSeriesHook — asynchronous, serial: each listener starts only once the previous one finished.
 
-// AsyncSeriesWaterfallHook 是一个异步串行、瀑布类型的 Hook。如果前一个事件函数的结果 result !== undefined，则 result 会作为后一个事件函数的第一个参数（也就是上一个函数的执行结果会成为下一个函数的参数）。
+// AsyncSeriesBailHook — asynchronous, serial, bailing: during the serial run, the first
+// listener that returns a value skips the rest.
+
+// AsyncSeriesWaterfallHook — asynchronous, serial, waterfall: when a listener's result
+// !== undefined, that result becomes the first argument of the next listener.
