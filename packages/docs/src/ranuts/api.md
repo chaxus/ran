@@ -13,7 +13,7 @@ constraints, conventions) read [CLAUDE.md](https://github.com/chaxus/ran/blob/ma
 Import from the **subpath** that owns the symbol, e.g. `import { debounce } from
 'ranuts/utils'`. The root `ranuts` barrel re-exports the utils + visual surface.
 
-**332 exports** across 5 entry points. Generated at 2026-07-25T10:16:00.338Z.
+**332 exports** across 5 entry points. Generated at 2026-07-25T10:17:15.788Z.
 
 ## Entry points
 
@@ -28,7 +28,7 @@ Import from the **subpath** that owns the symbol, e.g. `import { debounce } from
 Browser and general-purpose utilities · runtime: **browser + node** · source: `src/utils/index.ts`
 
 ```ts
-import {} from /* … */ 'ranuts/utils';
+import { /* … */ } from 'ranuts/utils';
 ```
 
 ### Functions
@@ -311,7 +311,7 @@ import {} from /* … */ 'ranuts/utils';
 Node server utilities (fs / http / ws / middleware) · runtime: **node only** · source: `src/node/index.ts`
 
 ```ts
-import {} from /* … */ 'ranuts/node';
+import { /* … */ } from 'ranuts/node';
 ```
 
 ### Functions
@@ -360,7 +360,7 @@ import {} from /* … */ 'ranuts/node';
 2D rendering engine (Canvas / WebGL / WebGPU) · runtime: **browser only** · source: `src/utils/visual/index.ts`
 
 ```ts
-import {} from /* … */ 'ranuts/visual';
+import { /* … */ } from 'ranuts/visual';
 ```
 
 ### Classes
@@ -392,7 +392,7 @@ import {} from /* … */ 'ranuts/visual';
 Framework-agnostic i18n engine (also re-exported from ranuts/utils) · runtime: **browser + node** · source: `src/utils/i18n.ts`
 
 ```ts
-import {} from /* … */ 'ranuts/i18n';
+import { /* … */ } from 'ranuts/i18n';
 ```
 
 ### Functions
@@ -420,7 +420,7 @@ import {} from /* … */ 'ranuts/i18n';
 Snabbdom-style virtual DOM · runtime: **browser** · source: `src/vnode/index.ts`
 
 ```ts
-import {} from /* … */ 'ranuts/vnode';
+import { /* … */ } from 'ranuts/vnode';
 ```
 
 ### Functions
@@ -466,3 +466,4 @@ import {} from /* … */ 'ranuts/vnode';
 ### Namespaces
 
 - `namespace is` — Type guards — array / string / primitive / VNode
+
