@@ -115,6 +115,9 @@ export const es: BuildOptions = {
       node: resolve(__dirname, 'src/node/index.ts'),
       index: resolve(__dirname, 'index.ts'),
       'utils/visual': resolve(__dirname, 'src/utils/visual/index.ts'),
+      // Its own entry so `ranuts/i18n` costs only the i18n engine and its two helpers,
+      // instead of dragging in whatever else the `ranuts/utils` barrel happens to share.
+      'utils/i18n': resolve(__dirname, 'src/utils/i18n.ts'),
       vnode: resolve(__dirname, 'src/vnode/index.ts'),
     },
     fileName: (_: string, name: string): string => {

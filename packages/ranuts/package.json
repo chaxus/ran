@@ -29,6 +29,10 @@
       "types": "./dist/src/utils/visual/index.d.ts",
       "import": "./dist/src/utils/visual/index.js"
     },
+    "./i18n": {
+      "types": "./dist/src/utils/i18n.d.ts",
+      "import": "./dist/src/utils/i18n/index.js"
+    },
     "./vnode": {
       "types": "./dist/src/vnode/index.d.ts",
       "import": "./dist/src/vnode/index.js"

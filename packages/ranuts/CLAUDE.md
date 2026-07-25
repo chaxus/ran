@@ -33,6 +33,7 @@ Each subpath is an independent, tree-shakeable barrel. Import from the subpath, 
 | `ranuts/utils`  | `src/utils/index.ts`        | DOM/BOM, string, object, number, color, time, etc.  | browser + node\* |
 | `ranuts/node`   | `src/node/index.ts`         | HTTP server, router, ws, fs, streams, middleware    | **node only**    |
 | `ranuts/visual` | `src/utils/visual/index.ts` | 2D rendering engine (Canvas / WebGL / WebGPU)       | **browser only** |
+| `ranuts/i18n`   | `src/utils/i18n.ts`         | `I18nCore` / `createI18n` / `useI18n` — DOM-free     | browser + node   |
 | `ranuts/vnode`  | `src/vnode/index.ts`        | Snabbdom-style virtual DOM (`h`, `init`, modules)   | browser          |
 
 \* `ranuts/utils` is broad: most functions are browser-oriented (touch `window`/`document`),
@@ -62,6 +63,7 @@ packages/ranuts/
 │   │   ├── prefetch.ts       # whenIdle / networkAllowsDownload / prefetchUrls
 │   │   ├── lang.ts           # detectLanguage + resolveLocale (query→cookie→storage→navigator)
 │   │   ├── file.ts           # readFileAs* — FileReader promises
+│   │   ├── i18n.ts           # ranuts/i18n — I18nCore, {param} interpolation, locale persistence
 │   │   ├── event.ts          # EventManager — AbortController-scoped listeners + delegation
 │   │   ├── chain.ts          # Chain / create — chainable DOM builder (shared with vnode)
 │   │   ├── style.ts          # adoptStyles / adoptSheetText — Shadow DOM CSS injection

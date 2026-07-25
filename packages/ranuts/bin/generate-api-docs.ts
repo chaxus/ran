@@ -48,6 +48,12 @@ const ENTRIES: Entry[] = [
     blurb: '2D rendering engine (Canvas / WebGL / WebGPU)',
     runtime: 'browser only',
   },
+  {
+    subpath: 'ranuts/i18n',
+    file: 'src/utils/i18n.ts',
+    blurb: 'Framework-agnostic i18n engine (also re-exported from ranuts/utils)',
+    runtime: 'browser + node',
+  },
   { subpath: 'ranuts/vnode', file: 'src/vnode/index.ts', blurb: 'Snabbdom-style virtual DOM', runtime: 'browser' },
 ];
 

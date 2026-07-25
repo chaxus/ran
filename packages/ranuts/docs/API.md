@@ -8,13 +8,14 @@ constraints, conventions) read [../CLAUDE.md](../CLAUDE.md) first.
 Import from the **subpath** that owns the symbol, e.g. `import { debounce } from
 'ranuts/utils'`. The root `ranuts` barrel re-exports the utils + visual surface.
 
-**316 exports** across 4 entry points. Generated at 2026-07-25T07:27:53.361Z.
+**332 exports** across 5 entry points. Generated at 2026-07-25T07:53:47.430Z.
 
 ## Entry points
 
-- [`ranuts/utils`](#ranutsutils) — Browser and general-purpose utilities · _browser + node_ · 252 exports
+- [`ranuts/utils`](#ranutsutils) — Browser and general-purpose utilities · _browser + node_ · 260 exports
 - [`ranuts/node`](#ranutsnode) — Node server utilities (fs / http / ws / middleware) · _node only_ · 26 exports
 - [`ranuts/visual`](#ranutsvisual) — 2D rendering engine (Canvas / WebGL / WebGPU) · _browser only_ · 12 exports
+- [`ranuts/i18n`](#ranutsin) — Framework-agnostic i18n engine (also re-exported from ranuts/utils) · _browser + node_ · 8 exports
 - [`ranuts/vnode`](#ranutsvnode) — Snabbdom-style virtual DOM · _browser_ · 26 exports
 
 ## `ranuts/utils`
@@ -51,6 +52,7 @@ import { /* … */ } from 'ranuts/utils';
 - `createData(params?: Record<string, unknown>) => Record<string, unknown>` — Build the standard envelope that accompanies a report — page URL, referrer,
 - `createDocumentFragment(list: Element[]) => DocumentFragment | undefined` — Create a DocumentFragment
 - `createHandoff<T>({ dbName, storeName, key }: HandoffOptions) => Handoff<T>` — A one-shot value handoff between two pages of the same origin, backed by
+- `createI18n(config?: I18nConfig) => I18nCore` — Create and register the global i18n singleton.
 - `createLocalePath(config: LocalePathConfig) => LocalePath` — Create the set of locale path conversion functions.
 - `createObjectURL(src: Blob | ArrayBuffer | Response) => Promise<string>`
 - `createPortBridge(port: MessagePort) => PortBridge` — Build a bridge on any MessagePort (a Web Worker, a SharedWorker, or a port from a completed handshake).
@@ -187,6 +189,7 @@ import { /* … */ } from 'ranuts/utils';
 - `toString(value: string | number) => string`
 - `transformNumber(value: string, locale?: string, precision?: number, fixed?: number) => string`
 - `transformText(content: string | ArrayBuffer) => TransformText | undefined`
+- `useI18n() => I18nCore | null` — Return the active global i18n instance, or null if none was created.
 - `watchMediaQuery(query: string, callback: (matches: boolean) => void) => (() => void)` — Watch a media query. The callback **fires once synchronously with the
 - `webglVendor() => { vendor: string; renderer: string; } | null`
 - `whenIdle(callback: () => void, options?: WhenIdleOptions) => (() => void)` — Run a callback while the browser is idle, falling back to setTimeout where
@@ -204,6 +207,7 @@ import { /* … */ } from 'ranuts/utils';
 - `class EventManager` — EventManager — a scoped listener registry built on AbortController.
 - `class Hsl`
 - `class Hsla`
+- `class I18nCore`
 - `class Mathjs` — Arithmetic that works around floating-point precision.
 - `class Monitor` — Front-end telemetry: page-load performance, clicks, errors, fetch/XHR traffic
 - `class PostMessageBridge` — Bridge registration event, consumed by the client
@@ -227,6 +231,7 @@ import { /* … */ } from 'ranuts/utils';
 - `interface Deferred` — Promise primitives that JavaScript does not ship: an externally settled promise and a
 - `interface Handoff`
 - `interface HandoffOptions`
+- `interface I18nConfig`
 - `interface IDBResult` — The uniform result shape of every IndexedDB operation. Every method
 - `interface IDBStoreSchema` — Declarative schema for object stores. `openDataBase` creates the missing
 - `interface JsonStore`
@@ -261,7 +266,11 @@ import { /* … */ } from 'ranuts/utils';
 - `type CurrentDevice`
 - `type EasingFn` — One easing function: (elapsed, from, delta, duration) => current value
 - `type ImgSource` — A bitmap container usable both as a drawImage source and as a render target
+- `type LocaleChangeHandler`
+- `type LocaleMessages`
+- `type MessageDict`
 - `type TextLanguage` — Coarse language bucket: Chinese / English / other only
+- `type TranslateParams`
 
 ### Constants
 
@@ -372,6 +381,34 @@ import { /* … */ } from 'ranuts/visual';
 
 - `const BYTES_PER_VERTEX: 12`
 - `const MAX_VERTEX_COUNT: 65536`
+
+## `ranuts/i18n`
+
+Framework-agnostic i18n engine (also re-exported from ranuts/utils) · runtime: **browser + node** · source: `src/utils/i18n.ts`
+
+```ts
+import { /* … */ } from 'ranuts/i18n';
+```
+
+### Functions
+
+- `createI18n(config?: I18nConfig) => I18nCore` — Create and register the global i18n singleton.
+- `useI18n() => I18nCore | null` — Return the active global i18n instance, or null if none was created.
+
+### Classes
+
+- `class I18nCore`
+
+### Interfaces
+
+- `interface I18nConfig`
+
+### Types
+
+- `type LocaleChangeHandler`
+- `type LocaleMessages`
+- `type MessageDict`
+- `type TranslateParams`
 
 ## `ranuts/vnode`
 
