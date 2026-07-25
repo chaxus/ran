@@ -1,7 +1,7 @@
 import { detect } from 'jschardet';
 
 /**
- * @description: 将字符串转对象，比如
+ * @description: Parse a delimited string into an object, e.g.
  * @param {string} url 'a=1&b=2&c=3'
  * @param {string} sep &
  * @param {string} eq =
@@ -25,9 +25,9 @@ export const strParse = (
   return result;
 };
 /**
- * @description: 清除字符串中的空格、换行和 HTML 标签
- * @param {string} str 要清理的字符串
- * @return {string} 清理后的纯文本
+ * @description: Strip whitespace, line breaks and HTML tags out of a string
+ * @param {string} str string to clean
+ * @return {string} the resulting plain text
  */
 export const clearBr = (str = ''): string => {
   if (str.length === 0) return '';
@@ -53,7 +53,7 @@ export const clearBr = (str = ''): string => {
 };
 
 /**
- * @description: 传入字符串和指定的格式，将字符串转成 xml
+ * @description: Parse a string into XML using the given MIME type
  * @param {string} xmlStr
  * @param {DOMParserSupportedType} format
  * @return {Document}
@@ -101,7 +101,7 @@ interface ClearStrOption {
 }
 
 /**
- * @description: 去除字符串首尾的空格，encode 编码，首尾的引号
+ * @description: Trim surrounding whitespace, percent-decode, and drop surrounding quotes
  * @param {string} str
  * @return {string}
  */
@@ -112,17 +112,18 @@ export const clearStr = (str: string, options: ClearStrOption = {}): string => {
 };
 
 /**
- * 获取文本中包含搜索关键词的完整句子，对于重复的句子只保留最长的一个
- * @param text 原文本
- * @param searchValue 搜索关键词
- * @returns 包含关键词的完整句子数组（已去重）
+ * Collect the complete sentences of a text that contain the search term, keeping only the
+ * longest one among overlapping matches
+ * @param text source text
+ * @param searchValue search term
+ * @returns the complete sentences containing the term (de-duplicated)
  */
 export function getMatchingSentences(text: string, searchValue: string): string[] {
   if (!text || !searchValue) {
     return [];
   }
 
-  // 用于存储句子及其位置信息
+  // Holds a sentence together with its position
   interface SentenceInfo {
     sentence: string;
     start: number;
@@ -136,7 +137,7 @@ export function getMatchingSentences(text: string, searchValue: string): string[
   while ((match = searchRegex.exec(text)) !== null) {
     const matchStart = match.index;
 
-    // 向左搜索句子开始（句号、换行符或文本开始）
+    // Scan left for the sentence start (a full stop, a line break, or the start of the text)
     let sentenceStart = matchStart;
     while (sentenceStart > 0) {
       const char = text[sentenceStart - 1];
@@ -146,7 +147,7 @@ export function getMatchingSentences(text: string, searchValue: string): string[
       sentenceStart--;
     }
 
-    // 向右搜索句子结束（句号、换行符或文本结束）
+    // Scan right for the sentence end (a full stop, a line break, or the end of the text)
     let sentenceEnd = matchStart + searchValue.length;
     while (sentenceEnd < text.length) {
       const char = text[sentenceEnd];
@@ -157,7 +158,7 @@ export function getMatchingSentences(text: string, searchValue: string): string[
       sentenceEnd++;
     }
 
-    // 提取完整句子并去除首尾空白
+    // Take the complete sentence and trim it
     const sentence = text.slice(sentenceStart, sentenceEnd).trim();
     if (sentence) {
       sentencesInfo.push({
@@ -168,15 +169,15 @@ export function getMatchingSentences(text: string, searchValue: string): string[
     }
   }
 
-  // 对重叠的句子进行处理，只保留最长的一个
+  // Resolve overlapping sentences, keeping only the longest
   const filteredSentences: string[] = [];
   const usedRanges: Array<{ start: number; end: number }> = [];
 
-  // 按句子长度降序排序，这样我们会优先处理最长的句子
+  // Sort by length descending so the longest sentences are handled first
   sentencesInfo.sort((a, b) => b.sentence.length - a.sentence.length);
 
   for (const info of sentencesInfo) {
-    // 检查当前句子是否与已使用的范围重叠
+    // Does this sentence overlap a range that was already taken?
     const hasOverlap = usedRanges.some((range) => !(info.end <= range.start || info.start >= range.end));
 
     if (!hasOverlap) {
@@ -188,7 +189,7 @@ export function getMatchingSentences(text: string, searchValue: string): string[
     }
   }
 
-  // 去除完全重复的句子
+  // Drop exact duplicates
   return [...new Set(filteredSentences)];
 }
 
@@ -197,7 +198,7 @@ export const toString = (value: string | number): string => {
 };
 
 export const checkEncoding = (uint8Array: Uint8Array): string => {
-  // 将 Uint8Array 转换为字符串
+  // Turn the Uint8Array into a string
   const asciiString = Array.from(uint8Array)
     .map((byte) => String.fromCharCode(byte))
     .join('');
@@ -206,9 +207,10 @@ export const checkEncoding = (uint8Array: Uint8Array): string => {
 };
 
 /**
- * @description: 按嗅探出的编码把二进制解码成字符串。读取来源不明的文本文件（用户上传的
- * txt、老网站抓来的内容）时必须这么做——直接 `new TextDecoder().decode()` 会把 GBK/Big5
- * 解成乱码，而这类文件在中文场景里占相当比例。
+ * @description: Decode bytes into a string using the sniffed encoding. Required when reading
+ * text files of unknown provenance (a user-uploaded txt, content scraped off an old site) —
+ * a plain `new TextDecoder().decode()` turns GBK/Big5 into mojibake, and such files are a
+ * sizeable share of Chinese-language content.
  * @param {ArrayBuffer | Uint8Array} buffer
  * @return {string}
  */
@@ -218,8 +220,9 @@ export const arrayBufferToString = (buffer: ArrayBuffer | Uint8Array): string =>
 };
 
 /**
- * @description: 全角字符转半角（数字、字母、标点与全角空格）。中文输入法产出的全角数字
- * 在正则、`parseInt`、字符串比较里都不等价于半角，解析前先归一化。
+ * @description: Convert full-width characters to half-width (digits, letters, punctuation and
+ * the ideographic space). Full-width digits produced by a Chinese IME are not equivalent to
+ * half-width ones in regexes, `parseInt` or string comparison, so normalise before parsing.
  * @param {string} value
  * @return {string}
  */
@@ -228,7 +231,7 @@ export const toHalfWidth = (value: string): string => {
 };
 
 /**
- * @description: 半角字符转全角（`toHalfWidth` 的逆向）
+ * @description: Convert half-width characters to full-width (the inverse of `toHalfWidth`)
  * @param {string} value
  * @return {string}
  */
