@@ -1,39 +1,41 @@
 import { SyncHook } from './subscribe';
 
-/** 全局事件总线：带 `subscriber` 的 signal 在变更时通过它广播 */
+/** Global event bus: a signal carrying a `subscriber` broadcasts through it on change */
 export const subscribers = new SyncHook();
 
 export interface SignalOptions<T> {
-  /** 事件名；给了才会在变更时通过 `subscribers` 广播，供跨模块订阅 */
+  /** Event name; only when given does a change broadcast through `subscribers` for cross-module listeners */
   subscriber?: string;
   /**
-   * 相等判定，决定「这次写入算不算变化」：
-   * - 省略 / `true` —— 用 `Object.is`（引用/值相等），标准 signal 语义
-   * - `false` —— 永远算变化，每次写入都通知
-   * - 函数 —— 返回 true 表示相等、跳过通知。想要深比较就传 `isEqual`
+   * Equality check, deciding whether a write counts as a change:
+   * - omitted / `true` — use `Object.is` (reference/value equality), the standard signal semantics
+   * - `false` — always a change, notify on every write
+   * - function — returning true means equal, so the notification is skipped. Pass `isEqual` for a deep comparison
    */
   equals?: boolean | ((prev: T, next: T) => boolean);
 }
 
 /**
- * @description: 创建一个带可选事件广播的最小 signal，返回 `[读, 写]`。
+ * @description: Create a minimal signal with optional event broadcasting, returned as
+ * `[read, write]`.
  *
- * 默认用 `Object.is` 判等——**不做深比较**。旧实现每次写入都 `cloneDeep` 一份快照再
- * `isEqual` 比对：一是 O(数据规模) 的拷贝落在每次写入的热路径上，二是这层深比较盖过了
- * `equals` 选项，让 `equals: false`（「永远通知」）失效。需要深比较请显式传
- * `{ equals: isEqual }`，代价就明明白白写在调用处。
+ * Equality defaults to `Object.is` — **no deep comparison**. The old implementation
+ * `cloneDeep`-ed a snapshot on every write and compared it with `isEqual`: that put an
+ * O(data size) copy on the hot write path, and the deep comparison overrode the `equals`
+ * option, breaking `equals: false` ("always notify"). Pass `{ equals: isEqual }` explicitly
+ * when a deep comparison is wanted, so its cost is visible at the call site.
  *
- * @param {T} value 初始值
+ * @param {T} value initial value
  * @param {SignalOptions} options
  * @return {[() => T, (next: T) => void]}
  * @example
  * ```ts
  * const [count, setCount] = createSignal(0, { subscriber: 'count-changed' });
  * subscribers.tap('count-changed', () => render(count()));
- * setCount(1); // 触发
- * setCount(1); // 值相同，不触发
+ * setCount(1); // notifies
+ * setCount(1); // same value, no notification
  *
- * const [tree, setTree] = createSignal(initial, { equals: isEqual }); // 需要深比较时显式声明
+ * const [tree, setTree] = createSignal(initial, { equals: isEqual }); // opt in to deep comparison
  * ```
  */
 export const createSignal = <T = unknown>(
@@ -45,8 +47,9 @@ export const createSignal = <T = unknown>(
 
   const changed = (prev: T, next: T): boolean => {
     if (equals === false) return true;
-    // `true` 与省略同义：都走默认的 Object.is。旧实现把 `true` 当成「永远相等」，
-    // 于是 `{ equals: true }` 的 signal 一次也不会更新。
+    // `true` is synonymous with omitting it: both take the default Object.is. The old
+    // implementation read `true` as "always equal", so an `{ equals: true }` signal never
+    // updated at all.
     if (typeof equals === 'function') return !equals(prev, next);
     return !Object.is(prev, next);
   };

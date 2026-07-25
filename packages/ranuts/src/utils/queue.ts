@@ -1,7 +1,7 @@
 export type QueueTask<T = unknown> = () => Promise<T> | T;
 
 export interface QuestQueueOptions {
-  /** 最大并发数；`<= 0` 视为 1 */
+  /** Maximum concurrency; `<= 0` is treated as 1 */
   simultaneous?: number;
 }
 
@@ -12,27 +12,29 @@ interface QueueEntry {
 }
 
 /**
- * @description: 并发受限的异步任务队列。同时最多跑 `simultaneous` 个，其余排队，
- * 每完成一个就补位。用于批量上传、批量请求这类「不能一次全发出去」的场景。
+ * @description: An async task queue with limited concurrency. At most `simultaneous` tasks
+ * run at once, the rest wait, and each completion pulls in the next. For batch uploads or
+ * batch requests — anything that must not be fired all at once.
  *
- * 队列**先进先出**，且 `add()` 返回该任务自己的 promise——单个任务失败只会 reject
- * 它自己的 promise，不会拖垮整条队列（此前的实现用 `pop()` 后进先出、单个 promise
- * 混装所有任务的结果，且 `add` 根本不会触发执行，必须手动调 `running`）。
+ * The queue is **FIFO**, and `add()` returns that task's own promise, so one failing task
+ * only rejects its own promise instead of taking the whole queue down. (The previous
+ * implementation popped LIFO, packed every task's result into a single shared promise, and
+ * `add` never started anything — `running` had to be called by hand.)
  *
  * @example
  * ```ts
  * const queue = new QuestQueue({ simultaneous: 3 });
  * const results = await Promise.all(urls.map((url) => queue.add(() => fetch(url))));
- * // 或者等整条队列排空（含失败的）：
+ * // or wait for the whole queue to drain (failures included):
  * await queue.onIdle();
  * ```
  */
 export class QuestQueue {
-  /** 正在执行的任务数 */
+  /** Number of tasks currently running */
   running = 0;
-  /** 已完成（含失败）的任务数 */
+  /** Number of finished tasks (failures included) */
   executed = 0;
-  /** 最大并发数 */
+  /** Maximum concurrency */
   simultaneous: number;
 
   private queue: QueueEntry[] = [];
@@ -42,19 +44,20 @@ export class QuestQueue {
     this.simultaneous = Math.max(1, simultaneous);
   }
 
-  /** 等待执行的任务数 */
+  /** Number of tasks waiting to run */
   get pending(): number {
     return this.queue.length;
   }
 
-  /** 队列是否已排空（无排队、无在执行） */
+  /** Whether the queue has drained (nothing queued, nothing running) */
   get idle(): boolean {
     return this.queue.length === 0 && this.running === 0;
   }
 
   /**
-   * @description: 入队一个异步任务，返回它自己的结果 promise。有空位时立即开跑。
-   * @param {QueueTask<T>} task 无参函数，返回 promise 或同步值
+   * @description: Enqueue an async task and get back its own result promise. Starts
+   * immediately when a slot is free.
+   * @param {QueueTask<T>} task nullary function returning a promise or a plain value
    * @return {Promise<T>}
    */
   add = <T = unknown>(task: QueueTask<T>): Promise<T> => {
@@ -68,8 +71,9 @@ export class QuestQueue {
   };
 
   /**
-   * @description: 批量入队，语义与 `Promise.allSettled` 一致：等全部结束，
-   * 逐个返回成功/失败，**顺序与入参一致**，不会因为一个失败就丢掉其余结果。
+   * @description: Enqueue a batch with `Promise.allSettled` semantics: wait for all of them,
+   * report each outcome individually **in input order**, and never drop the remaining results
+   * because one failed.
    * @param {QueueTask[]} tasks
    * @return {Promise<PromiseSettledResult<T>[]>}
    */
@@ -77,7 +81,7 @@ export class QuestQueue {
     Promise.allSettled(tasks.map((task) => this.add(task)));
 
   /**
-   * @description: 等队列排空。已经空了则立即 resolve。
+   * @description: Wait for the queue to drain. Resolves immediately when already empty.
    * @return {Promise<void>}
    */
   onIdle = (): Promise<void> => {
@@ -85,20 +89,21 @@ export class QuestQueue {
     return new Promise<void>((resolve) => this.idleWaiters.push(resolve));
   };
 
-  /** @description: 丢弃所有尚未开始的任务（在执行的不受影响），它们的 promise 会 reject */
+  /** @description: Drop every task that has not started (running ones are untouched); their promises reject */
   clear = (): void => {
     const dropped = this.queue.splice(0, this.queue.length);
     for (const entry of dropped) entry.reject(new Error('QuestQueue cleared'));
     this.settleIdle();
   };
 
-  /** 有空位就从队头取任务开跑；每个任务结束后再调一次，形成补位循环 */
+  /** Pull tasks off the head while slots are free; called again after each task to keep the loop going */
   private next = (): void => {
     while (this.running < this.simultaneous && this.queue.length > 0) {
       const entry = this.queue.shift() as QueueEntry;
       this.running++;
-      // 用 Promise.resolve 包一层：同步抛错的任务也能走进 catch，而不是把异常
-      // 抛回 add() 的调用栈、让 running 永远减不回来、后续任务全部卡死。
+      // Wrapped in Promise.resolve so a task that throws synchronously still lands in the
+      // catch, instead of throwing back into add()'s call stack, leaving `running` never
+      // decremented and every later task stuck.
       Promise.resolve()
         .then(entry.task)
         .then(entry.resolve, entry.reject)

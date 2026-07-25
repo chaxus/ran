@@ -31,17 +31,7 @@ import {
 } from './str';
 import type { TransformText } from './str';
 import {
-  BridgeManager,
-  Client,
-  Platform,
-  PostMessageBridge,
-  acceptPortBridge,
-  createPortBridge,
-  openPortBridge,
-  BRIDGE_MARKER,
-  DEFAULT_CHANNEL,
   appendUrl,
-  bridgeManager,
   connection,
   createObjectURL,
   durationHandler,
@@ -50,7 +40,6 @@ import {
   getCookie,
   getCookieByName,
   getFrame,
-  getHost,
   getPixelRatio,
   getQuery,
   getWindow,
@@ -61,17 +50,29 @@ import {
   requestUrlToBuffer,
   retain,
 } from './bom';
+import {
+  BRIDGE_MARKER,
+  BridgeManager,
+  Client,
+  DEFAULT_CHANNEL,
+  Platform,
+  PostMessageBridge,
+  acceptPortBridge,
+  bridgeManager,
+  createPortBridge,
+  openPortBridge,
+} from './bridge';
 import type {
+  AcceptPortBridgeOptions,
   BridgeManagerOptions,
   BroadcastPayload,
   CallToPayload,
   MessageData,
   MessageHandler,
+  OpenPortBridgeOptions,
   PendingRequest,
   PortBridge,
-  OpenPortBridgeOptions,
-  AcceptPortBridgeOptions,
-} from './bom';
+} from './bridge';
 import {
   cloneDeep,
   filterObj,
@@ -240,7 +241,6 @@ export {
   getPixelRatio,
   createObjectURL,
   getFrame,
-  getHost,
   getAllQueryString,
   appendUrl,
   removeGhosting,
