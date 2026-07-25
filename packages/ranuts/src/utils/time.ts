@@ -38,10 +38,7 @@ const TOKEN = /YYYY|YY|MM|M|DD|D|HH|H|hh|h|mm|m|ss|s|SSS|A|a|\[([^\]]*)]/g;
  * formatDate(new Date(), 'YYYY[年]MM[月]DD[日] hh:mm a'); // '2026年07月25日 02:30 pm'
  * ```
  */
-export const formatDate = (
-  value?: number | string | Date,
-  pattern: string = 'YYYY-MM-DD HH:mm:ss',
-): string => {
+export const formatDate = (value?: number | string | Date, pattern: string = 'YYYY-MM-DD HH:mm:ss'): string => {
   const date = value === undefined || value === null ? new Date() : new Date(value);
   if (Number.isNaN(date.getTime())) return 'Invalid Date';
 
