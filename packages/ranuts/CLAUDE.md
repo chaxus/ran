@@ -49,8 +49,15 @@ the same for any new code. **Do not import `ranuts/node` in browser code** — i
 packages/ranuts/
 ├── index.ts                  # Root barrel (re-exports utils + visual + selected)
 ├── src/
-│   ├── utils/                # ranuts/utils — the largest surface (~13.8k LOC)
+│   ├── utils/                # ranuts/utils — the largest surface (~14k LOC)
 │   │   ├── str.ts obj.ts number.ts color.ts bom.ts dom.ts time.ts …
+│   │   ├── idb.ts            # WebDB — Promise wrapper over IndexedDB (declarative stores)
+│   │   ├── worker.ts         # WorkerClient — request/response over a Web Worker
+│   │   ├── segment.ts        # offsets ↔ chunks, range→segment splitting (highlights)
+│   │   ├── localePath.ts     # createLocalePath — i18n sub-directory URL maths
+│   │   ├── prefetch.ts       # whenIdle / networkAllowsDownload / prefetchUrls
+│   │   ├── lang.ts           # detectLanguage (zh/en/other by character ratio)
+│   │   ├── file.ts           # readFileAs* — FileReader promises
 │   │   ├── visual/           # ranuts/visual — 2D rendering engine (see below)
 │   │   └── totp/             # TOTP + hand-rolled SHA
 │   ├── node/                 # ranuts/node — mini HTTP framework
@@ -126,7 +133,23 @@ Then `npm run doc:api`.
 
 - Guard every `window`/`document`/`localStorage`/`navigator` access with `typeof … !== 'undefined'`
   in code reachable from `ranuts/utils` (it's imported in node too).
+- **Guard at call time, not module load.** `isClient` is a module-level constant evaluated when
+  the module is first imported, so it is `false` forever in any SSR-then-hydrate or
+  import-early/call-later flow — and it cannot be stubbed in tests. New code checks
+  `typeof window === 'undefined'` inside the function. `isClient` stays exported for
+  compatibility but should not be used for new branches.
+- Never call `window.setTimeout` / `window.setInterval`. The bare globals work in Node, Web
+  Workers and the browser alike; the `window.`-prefixed ones throw `ReferenceError` outside a
+  document. (This is what made `throttle` unusable in SSR before 0.3.)
 - Keep `ranuts/node` server-only; never import it from browser-facing modules.
+
+### Anything returning a wrapper function must expose teardown
+
+`debounce`, `throttle`, `watchMediaQuery`, `whenIdle`, `WorkerClient`, `QuestQueue` all hand
+back something holding a timer, a listener or a worker. Every one of them exposes
+`cancel()` / an unsubscribe function / `dispose()`, and callers are expected to use it on
+teardown. A new utility of this shape without a teardown path is incomplete — a pending timer
+firing into a destroyed component is the failure mode.
 
 ---
 
@@ -151,14 +174,35 @@ npm run doc:api      # regenerate docs/API.md from source + JSDoc
 
 ## Gotchas
 
-| Pitfall                                                                   | Fix                                                                                                |
-| ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| Importing from a deep source path or `@/…`                                | Import from the public subpath (`ranuts/utils`, `ranuts/visual`, …). `@/…` is build-internal only. |
-| Importing `ranuts/node` in browser code                                   | It externalizes `fs`/`http`/`child_process` — server-only. Use `ranuts/utils` for browser helpers. |
-| `new Application()` then `render()` with WebGPU                           | Device init is async — use `await Application.create(...)`, then `app.start()`.                    |
-| Hand-editing `docs/API.md`                                                | It's generated. Edit the source JSDoc and run `npm run doc:api`.                                   |
-| Adding an export but it's missing from `docs/API.md`                      | Re-export it from the module's `index.ts` barrel, then `npm run doc:api`.                          |
-| New entry point not importable as `ranuts/foo`                            | Wire all three: `package.json` exports + `vite.config.ts` es entry + generator `ENTRIES`.          |
-| `console.log` left in a function that a test calls                        | `vitest.config.ts` `onConsoleLog` throws — remove it or the test fails.                            |
-| Assuming a GPU/Canvas test can run in CI                                  | Test env is node (no DOM/GPU). Test pure logic; gate visual checks behind a browser demo.          |
-| Passing a non-`#rrggbb` color to the GPU backend and expecting it to fail | It won't — `getRgb` resolves any CSS color via the browser parser, matching the Canvas backend.    |
+| Pitfall                                                                          | Fix                                                                                                                                    |
+| -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| Importing from a deep source path or `@/…`                                       | Import from the public subpath (`ranuts/utils`, `ranuts/visual`, …). `@/…` is build-internal only.                                     |
+| Importing `ranuts/node` in browser code                                          | It externalizes `fs`/`http`/`child_process` — server-only. Use `ranuts/utils` for browser helpers.                                     |
+| `new Application()` then `render()` with WebGPU                                  | Device init is async — use `await Application.create(...)`, then `app.start()`.                                                        |
+| Hand-editing `docs/API.md`                                                       | It's generated. Edit the source JSDoc and run `npm run doc:api`.                                                                       |
+| Adding an export but it's missing from `docs/API.md`                             | Re-export it from the module's `index.ts` barrel, then `npm run doc:api`.                                                              |
+| New entry point not importable as `ranuts/foo`                                   | Wire all three: `package.json` exports + `vite.config.ts` es entry + generator `ENTRIES`.                                              |
+| `console.log` left in a function that a test calls                               | `vitest.config.ts` `onConsoleLog` throws — remove it or the test fails.                                                                |
+| Assuming a GPU/Canvas test can run in CI                                         | Test env is node (no DOM/GPU). Test pure logic; gate visual checks behind a browser demo.                                              |
+| Passing a non-`#rrggbb` color to the GPU backend and expecting it to fail        | It won't — `getRgb` resolves any CSS color via the browser parser, matching the Canvas backend.                                        |
+| Branching on `isClient` in new code                                              | It's a module-load-time constant — wrong after SSR, unstubbable in tests. Check `typeof window === 'undefined'` inside the function.   |
+| `window.setTimeout` in a `ranuts/utils` module                                   | Throws outside a document. Use the bare `setTimeout`.                                                                                  |
+| A module-level factory that keeps mutable state shared by everything it produces | Give each produced function its own state (this is why `generateThrottle` was removed).                                                |
+| Reaching for `memoize` expecting per-argument caching                            | It only runs once and ignores later arguments. Use `once` (its new name), `singleFlight` for async, or a `Map` for real keyed caching. |
+| Assuming `createSignal` deep-compares                                            | It uses `Object.is` since 0.3. Pass `{ equals: isEqual }` when you want deep comparison.                                               |
+
+---
+
+## Breaking changes in 0.3
+
+The package is `0.x` and explicitly experimental, so these landed without a deprecation cycle.
+Each fixed a defect rather than changing a preference.
+
+| Symbol                  | Change                                                                                                                                                                              | Migration                                                                 |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `generateThrottle`      | **Removed.** The factory's generated functions shared one timer and one timestamp, so unrelated throttled functions suppressed each other.                                          | `const f = throttle(fn, delay)`                                           |
+| `memoize`               | Renamed to `once`, kept as a deprecated alias. The old type declared zero arguments while forwarding them.                                                                          | Prefer `once`; use `singleFlight` for the async case.                     |
+| `createSignal`          | `{ equals: true }` used to freeze the signal (it meant "always equal"); every write ran `cloneDeep` + `isEqual`, which overrode `equals` and put an O(size) copy on the write path. | Pass `{ equals: isEqual }` if you relied on deep comparison.              |
+| `QuestQueue`            | Rewritten. `add()` never started anything, it popped LIFO, one promise carried unrelated tasks' results, and `allSettled` was off by one. The `total` constructor option is gone.   | Use `await queue.add(task)`, `queue.allSettled(tasks)`, `queue.onIdle()`. |
+| `report`                | Return type narrowed to `boolean`; the image fallback is now reachable.                                                                                                             | None.                                                                     |
+| `debounce` / `throttle` | Now generically typed and return `cancel()` / `flush()` / `pending()`.                                                                                                              | None; call `cancel()` on teardown.                                        |
