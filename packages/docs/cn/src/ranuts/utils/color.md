@@ -181,8 +181,39 @@ new ColorScheme(colorVal: (string | number)[], angleArray: number[])
 | `hsbToRgb(h, s, v)` | HSB/HSV → `[r, g, b]`（0–255）                          | `(h: number, s: number, v: number) => number[]` |
 | `hsvToRgb(h, s, v)` | `hsbToRgb` 的别名                                       | `(h: number, s: number, v: number) => number[]` |
 | `hsvToHsl(h, s, b)` | HSB/HSV → `[h, s, l]`（经由 `rgbToHsl(hsbToRgb(...))`） | `(h, s, b) => number[]`                         |
+| `rgbToHsv(r, g, b)` | `rgbToHsb` 的别名                                       | `(r: number, g: number, b: number) => number[]` |
+| `hexToHsb(hex)`     | `#rrggbb` / `#rgb` → `[h, s, b]`，非法时返回 `null`     | `(hex: string) => number[] \| null`             |
+| `hexToHsv(hex)`     | `hexToHsb` 的别名                                       | `(hex: string) => number[] \| null`             |
+| `hsbToHsl(h, s, b)` | HSB/HSV → `[h, s, l]`                                   | `(h, s, b) => number[]`                         |
+| `hslToHsb(h, s, l)` | HSL → `[h, s, b]`                                       | `(h, s, l) => number[]`                         |
+| `hslToHsv(h, s, l)` | `hslToHsb` 的别名                                       | `(h, s, l) => number[]`                         |
 
 > `componentToHex`、`rgbToHex` 和 `hexToRgb` 是底层构建块；参见 [rgbToHex](./rgb_to_hex.md) 与 [hexToRgb](./hex_to_rgb.md)。
+
+### 透明度相关
+
+透明度用 **0 – 100** 表示，与本模块其余函数对饱和度、亮度的百分比口径一致 —— 不是 CSS `rgba()` 用的 0 – 1。
+
+| 函数                  | 说明                                                     | 签名                       |
+| --------------------- | -------------------------------------------------------- | -------------------------- |
+| `hexToAlpha(aa)`      | 两位十六进制的 alpha 通道（`ff` / `80` / `00`）→ 0 – 100 | `(aa: string) => number`   |
+| `rgbaString(r,g,b,a)` | 拼一个 CSS `rgba()` 字符串，`a` 会除以 100               | `(r, g, b, a) => string`   |
+| `rgbaToRgb(r,g,b,a)`  | 把半透明色**合成到白底**，得到等效的不透明 `[r, g, b]`   | `(r, g, b, a) => number[]` |
+| `rgbaToHex(r,g,b,a)`  | 同样的合成，返回 6 位 hex 字符串                         | `(r, g, b, a) => string`   |
+
+::: warning
+`rgbaToRgb` / `rgbaToHex` 的底色**写死是白色**。它们是为那些不接受 alpha 通道的场合准备的（比如要写回 6 位 hex）。深色主题下合成结果会偏亮，需要别的底色请自己做混合。
+:::
+
+### 格式正则
+
+用于校验颜色字符串的正则。`RGB_REGEX` 和 `RGBA_REGEX` **不允许空格**，匹配前请先去掉（`value.replace(/\s+/g, '')`）。
+
+| 常量              | 匹配                                       |
+| ----------------- | ------------------------------------------ |
+| `HEX_COLOR_REGEX` | `#rgb` / `#rrggbb`，必须带 `#`，忽略大小写 |
+| `RGB_REGEX`       | `rgb(r,g,b)`                               |
+| `RGBA_REGEX`      | `rgba(r,g,b,a)`                            |
 
 ### FMT
 

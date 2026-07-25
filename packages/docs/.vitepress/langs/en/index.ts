@@ -169,6 +169,7 @@ const themeEnConfig: DefaultTheme.Config = {
               { text: 'rgbToHex - RGB to hex', link: '/src/ranuts/utils/rgb_to_hex' },
               { text: 'randomColor - Generate random color', link: '/src/ranuts/utils/random_color' },
               { text: 'Color - Color classes & conversions', link: '/src/ranuts/utils/color' },
+              { text: 'hexToAlpha / rgbaToRgb - Alpha helpers', link: '/src/ranuts/utils/color' },
             ],
           },
           {
@@ -206,6 +207,8 @@ const themeEnConfig: DefaultTheme.Config = {
               { text: 'escapeHtml - Escape HTML', link: '/src/ranuts/utils/escape_html' },
               { text: 'Chain - Chainable DOM', link: '/src/ranuts/utils/chain' },
               { text: 'create - Create DOM element', link: '/src/ranuts/utils/create' },
+              { text: 'EventManager - Scoped listeners', link: '/src/ranuts/utils/event_manager' },
+              { text: 'adoptStyles - Shadow DOM CSS', link: '/src/ranuts/utils/adopt_styles' },
             ],
           },
           {
@@ -246,6 +249,7 @@ const themeEnConfig: DefaultTheme.Config = {
             items: [
               { text: 'convertImageToBase64 - Image to Base64', link: '/src/ranuts/utils/convert_image_to_base64' },
               { text: 'isImageSize - Validate image size', link: '/src/ranuts/utils/is_image_size' },
+              { text: 'getImage / cutRound / opacity - Canvas image ops', link: '/src/ranuts/utils/image_process' },
             ],
           },
           {
@@ -283,7 +287,10 @@ const themeEnConfig: DefaultTheme.Config = {
           {
             text: 'Script Loading',
             collapsed: true,
-            items: [{ text: 'scriptOnLoad - Dynamic script loading', link: '/src/ranuts/utils/script_on_load' }],
+            items: [
+              { text: 'scriptOnLoad - Dynamic script loading', link: '/src/ranuts/utils/script_on_load' },
+              { text: 'loadScript - Single script, de-duplicated', link: '/src/ranuts/utils/load_script' },
+            ],
           },
           {
             text: 'Error Handling',
@@ -326,6 +333,19 @@ const themeEnConfig: DefaultTheme.Config = {
         text: 'MIME Type',
         collapsed: true,
         items: [{ text: 'getMime - Get MIME type', link: '/src/ranuts/mime_type/mime_type' }],
+      },
+      {
+        text: 'Canvas & Animation',
+        collapsed: true,
+        items: [
+          { text: 'Canvas 2D geometry - Paths & gradients', link: '/src/ranuts/utils/canvas' },
+          { text: 'tween - Easing functions', link: '/src/ranuts/utils/tween' },
+        ],
+      },
+      {
+        text: 'i18n',
+        collapsed: true,
+        items: [{ text: 'Internationalisation engine', link: '/src/ranuts/i18n/' }],
       },
       {
         text: '2D Rendering (visual)',

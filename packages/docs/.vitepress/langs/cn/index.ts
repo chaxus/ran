@@ -169,6 +169,7 @@ const themeCnConfig: DefaultTheme.Config = {
               { text: 'rgbToHex - RGB 转十六进制', link: '/cn/src/ranuts/utils/rgb_to_hex' },
               { text: 'randomColor - 生成随机颜色', link: '/cn/src/ranuts/utils/random_color' },
               { text: 'Color - 颜色类与转换', link: '/cn/src/ranuts/utils/color' },
+              { text: 'hexToAlpha / rgbaToRgb - 透明度相关', link: '/cn/src/ranuts/utils/color' },
             ],
           },
           {
@@ -206,6 +207,8 @@ const themeCnConfig: DefaultTheme.Config = {
               { text: 'escapeHtml - 转义 HTML', link: '/cn/src/ranuts/utils/escape_html' },
               { text: 'Chain - 链式 DOM 操作', link: '/cn/src/ranuts/utils/chain' },
               { text: 'create - 创建 DOM 元素', link: '/cn/src/ranuts/utils/create' },
+              { text: 'EventManager - 作用域事件管理', link: '/cn/src/ranuts/utils/event_manager' },
+              { text: 'adoptStyles - Shadow DOM 样式注入', link: '/cn/src/ranuts/utils/adopt_styles' },
             ],
           },
           {
@@ -246,6 +249,7 @@ const themeCnConfig: DefaultTheme.Config = {
             items: [
               { text: 'convertImageToBase64 - 图片转 Base64', link: '/cn/src/ranuts/utils/convert_image_to_base64' },
               { text: 'isImageSize - 校验图片尺寸', link: '/cn/src/ranuts/utils/is_image_size' },
+              { text: 'getImage / cutRound / opacity - Canvas 图像处理', link: '/cn/src/ranuts/utils/image_process' },
             ],
           },
           {
@@ -283,7 +287,10 @@ const themeCnConfig: DefaultTheme.Config = {
           {
             text: '脚本加载',
             collapsed: true,
-            items: [{ text: 'scriptOnLoad - 动态加载脚本', link: '/cn/src/ranuts/utils/script_on_load' }],
+            items: [
+              { text: 'scriptOnLoad - 动态加载脚本', link: '/cn/src/ranuts/utils/script_on_load' },
+              { text: 'loadScript - 单个脚本，按内容去重', link: '/cn/src/ranuts/utils/load_script' },
+            ],
           },
           {
             text: '错误处理',
@@ -326,6 +333,19 @@ const themeCnConfig: DefaultTheme.Config = {
         text: 'MIME 类型',
         collapsed: true,
         items: [{ text: 'getMime - 获取 MIME 类型', link: '/cn/src/ranuts/mime_type/mime_type' }],
+      },
+      {
+        text: 'Canvas 与动画',
+        collapsed: true,
+        items: [
+          { text: 'Canvas 2D 几何 - 路径与渐变', link: '/cn/src/ranuts/utils/canvas' },
+          { text: 'tween - 缓动函数', link: '/cn/src/ranuts/utils/tween' },
+        ],
+      },
+      {
+        text: 'i18n',
+        collapsed: true,
+        items: [{ text: '国际化引擎', link: '/cn/src/ranuts/i18n/' }],
       },
       {
         text: '2D 渲染引擎 (visual)',

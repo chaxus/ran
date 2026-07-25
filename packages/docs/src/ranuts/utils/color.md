@@ -181,8 +181,43 @@ Standalone functions used internally by `Color`; each is exported for direct use
 | `hsbToRgb(h, s, v)` | HSB/HSV → `[r, g, b]` (0–255)                                   | `(h: number, s: number, v: number) => number[]` |
 | `hsvToRgb(h, s, v)` | Alias of `hsbToRgb`                                             | `(h: number, s: number, v: number) => number[]` |
 | `hsvToHsl(h, s, b)` | HSB/HSV → `[h, s, l]` (via `rgbToHsl(hsbToRgb(...))`)           | `(h, s, b) => number[]`                         |
+| `rgbToHsv(r, g, b)` | Alias of `rgbToHsb`                                             | `(r: number, g: number, b: number) => number[]` |
+| `hexToHsb(hex)`     | `#rrggbb` / `#rgb` → `[h, s, b]`, or `null` on malformed input  | `(hex: string) => number[] \| null`             |
+| `hexToHsv(hex)`     | Alias of `hexToHsb`                                             | `(hex: string) => number[] \| null`             |
+| `hsbToHsl(h, s, b)` | HSB/HSV → `[h, s, l]`                                           | `(h, s, b) => number[]`                         |
+| `hslToHsb(h, s, l)` | HSL → `[h, s, b]`                                               | `(h, s, l) => number[]`                         |
+| `hslToHsv(h, s, l)` | Alias of `hslToHsb`                                             | `(h, s, l) => number[]`                         |
 
 > `componentToHex`, `rgbToHex` and `hexToRgb` are the low-level building blocks; see [rgbToHex](./rgb_to_hex.md) and [hexToRgb](./hex_to_rgb.md).
+
+### Alpha helpers
+
+Alpha is expressed as **0 – 100**, matching the percentage scale the rest of this module uses for
+saturation and lightness — not the 0 – 1 that CSS `rgba()` takes.
+
+| Function              | Description                                                        | Signature                  |
+| --------------------- | ------------------------------------------------------------------ | -------------------------- |
+| `hexToAlpha(aa)`      | A two-digit hex alpha channel (`ff` / `80` / `00`) → 0 – 100       | `(aa: string) => number`   |
+| `rgbaString(r,g,b,a)` | Build a CSS `rgba()` string; `a` is divided by 100                 | `(r, g, b, a) => string`   |
+| `rgbaToRgb(r,g,b,a)`  | Composite a translucent colour **onto white** → opaque `[r, g, b]` | `(r, g, b, a) => number[]` |
+| `rgbaToHex(r,g,b,a)`  | The same composite, returned as a 6-digit hex string               | `(r, g, b, a) => string`   |
+
+::: warning
+`rgbaToRgb` / `rgbaToHex` hard-code **white** as the backdrop. They exist for places that cannot
+accept an alpha channel (writing back a 6-digit hex, say). Under a dark theme the result will read
+too light — blend against your own backdrop instead.
+:::
+
+### Format patterns
+
+Regular expressions for validating colour strings. `RGB_REGEX` and `RGBA_REGEX` do **not** tolerate
+spaces — strip them first (`value.replace(/\s+/g, '')`).
+
+| Constant          | Matches                                            |
+| ----------------- | -------------------------------------------------- |
+| `HEX_COLOR_REGEX` | `#rgb` / `#rrggbb`, `#` required, case-insensitive |
+| `RGB_REGEX`       | `rgb(r,g,b)`                                       |
+| `RGBA_REGEX`      | `rgba(r,g,b,a)`                                    |
 
 ### FMT
 
