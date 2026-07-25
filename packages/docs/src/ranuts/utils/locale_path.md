@@ -12,22 +12,22 @@ locale carries a prefix.
 
 ### createLocalePath(config)
 
-| Parameter       | Description                                                              | Type              | Default              |
-| --------------- | ------------------------------------------------------------------------ | ----------------- | -------------------- |
-| `locales`       | `{ code, prefix? }[]` — no prefix means "default locale, lives at root"  | `LocaleRoute[]`   | Required             |
-| `defaultLocale` | Default locale code                                                      | `string`          | first prefix-less    |
-| `base`          | Deployment sub-path, e.g. `/weread`; trailing slash is ignored            | `string`          | `''`                 |
+| Parameter       | Description                                                             | Type            | Default           |
+| --------------- | ----------------------------------------------------------------------- | --------------- | ----------------- |
+| `locales`       | `{ code, prefix? }[]` — no prefix means "default locale, lives at root" | `LocaleRoute[]` | Required          |
+| `defaultLocale` | Default locale code                                                     | `string`        | first prefix-less |
+| `base`          | Deployment sub-path, e.g. `/weread`; trailing slash is ignored          | `string`        | `''`              |
 
 Returns:
 
-| Member                          | Description                                                      |
-| ------------------------------- | ---------------------------------------------------------------- |
-| `base` / `defaultLocale`        | Normalized config, read-only                                     |
-| `localeFromPath(pathname)`      | Detect the locale; unknown paths fall back to the default        |
-| `stripLocale(pathname)`         | Drop the locale prefix — the language-agnostic path for routing  |
-| `href(path, code?)`             | Build a link for a locale                                        |
-| `hrefForLocale(pathname, code)` | Re-point the current path at another locale (language switcher)  |
-| `alternates(pathname)`          | Every locale's URL, for `<link rel="alternate" hreflang>`        |
+| Member                          | Description                                                     |
+| ------------------------------- | --------------------------------------------------------------- |
+| `base` / `defaultLocale`        | Normalized config, read-only                                    |
+| `localeFromPath(pathname)`      | Detect the locale; unknown paths fall back to the default       |
+| `stripLocale(pathname)`         | Drop the locale prefix — the language-agnostic path for routing |
+| `href(path, code?)`             | Build a link for a locale                                       |
+| `hrefForLocale(pathname, code)` | Re-point the current path at another locale (language switcher) |
+| `alternates(pathname)`          | Every locale's URL, for `<link rel="alternate" hreflang>`       |
 
 ## Example
 
@@ -39,10 +39,10 @@ const paths = createLocalePath({
   base: '/docs',
 });
 
-paths.href('/book/walden/');                    // '/docs/book/walden/'
-paths.href('/book/walden/', 'zh-CN');           // '/docs/zh/book/walden/'
-paths.localeFromPath('/docs/zh/book/');         // 'zh-CN'
-paths.stripLocale('/docs/zh/book/');            // '/docs/book/'
+paths.href('/book/walden/'); // '/docs/book/walden/'
+paths.href('/book/walden/', 'zh-CN'); // '/docs/zh/book/walden/'
+paths.localeFromPath('/docs/zh/book/'); // 'zh-CN'
+paths.stripLocale('/docs/zh/book/'); // '/docs/book/'
 paths.hrefForLocale('/docs/zh/book/', 'zh-HK'); // '/docs/zh-hant/book/'
 
 // hreflang tags

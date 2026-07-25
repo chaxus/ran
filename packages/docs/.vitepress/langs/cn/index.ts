@@ -106,7 +106,8 @@ const themeCnConfig: DefaultTheme.Config = {
             items: [
               { text: 'debounce - 防抖函数', link: '/cn/src/ranuts/utils/debounce' },
               { text: 'throttle - 节流函数', link: '/cn/src/ranuts/utils/throttle' },
-              { text: 'memoize - 记忆化函数', link: '/cn/src/ranuts/utils/memoize' },
+              { text: 'once / singleFlight - 只执行一次', link: '/cn/src/ranuts/utils/memoize' },
+              { text: 'QuestQueue - 并发受限队列', link: '/cn/src/ranuts/utils/quest_queue' },
               { text: 'noop - 空函数', link: '/cn/src/ranuts/utils/noop' },
               { text: 'compose - 组合中间件函数', link: '/cn/src/ranuts/utils/compose' },
             ],
@@ -130,6 +131,8 @@ const themeCnConfig: DefaultTheme.Config = {
               { text: 'getMatchingSentences - 提取匹配句子', link: '/cn/src/ranuts/utils/get_matching_sentences' },
               { text: 'isString - 判断是否为字符串', link: '/cn/src/ranuts/utils/is_string' },
               { text: 'str2Xml - 字符串转 XML', link: '/cn/src/ranuts/utils/str2xml' },
+              { text: 'detectLanguage - 文本语言检测', link: '/cn/src/ranuts/utils/detect_language' },
+              { text: 'segmentByRanges - 偏移与高亮切分', link: '/cn/src/ranuts/utils/segment' },
             ],
           },
           {
@@ -153,6 +156,7 @@ const themeCnConfig: DefaultTheme.Config = {
               { text: 'perToNum - 百分比转数字', link: '/cn/src/ranuts/utils/per_to_num' },
               { text: 'transformNumber - 数字格式化', link: '/cn/src/ranuts/utils/transform_number' },
               { text: 'addNumSym - 添加正负号', link: '/cn/src/ranuts/utils/add_num_sym' },
+              { text: 'parseChineseNumber - 自然语言数字', link: '/cn/src/ranuts/utils/parse_number' },
             ],
           },
           {
@@ -184,6 +188,7 @@ const themeCnConfig: DefaultTheme.Config = {
               { text: 'isSafari - 判断 Safari', link: '/cn/src/ranuts/utils/is_safari' },
               { text: 'isBangDevice - 判断刘海屏', link: '/cn/src/ranuts/utils/is_bang_device' },
               { text: 'currentDevice - 获取设备类型', link: '/cn/src/ranuts/utils/current_device' },
+              { text: 'watchMediaQuery - 监听媒体查询', link: '/cn/src/ranuts/utils/watch_media_query' },
             ],
           },
           {
@@ -207,6 +212,8 @@ const themeCnConfig: DefaultTheme.Config = {
             items: [
               { text: 'localStorageGetItem - 获取存储值', link: '/cn/src/ranuts/utils/local_storage' },
               { text: 'localStorageSetItem - 设置存储值', link: '/cn/src/ranuts/utils/local_storage' },
+              { text: 'WebDB - IndexedDB 封装', link: '/cn/src/ranuts/utils/web_db' },
+              { text: 'readFileAs* - 读取 File / Blob', link: '/cn/src/ranuts/utils/read_file' },
             ],
           },
           {
@@ -217,6 +224,7 @@ const themeCnConfig: DefaultTheme.Config = {
               { text: 'getQuery - 提取查询参数', link: '/cn/src/ranuts/utils/get_query' },
               { text: 'encodeUrl - 安全编码 URL', link: '/cn/src/ranuts/utils/encode_url' },
               { text: 'appendUrl - 拼接查询参数', link: '/cn/src/ranuts/utils/append_url' },
+              { text: 'createLocalePath - 多语言 URL 换算', link: '/cn/src/ranuts/utils/locale_path' },
             ],
           },
           {
@@ -251,6 +259,8 @@ const themeCnConfig: DefaultTheme.Config = {
               { text: 'imageRequest - 测试网络延迟', link: '/cn/src/ranuts/utils/image_request' },
               { text: 'networkSpeed - 测试网络速度', link: '/cn/src/ranuts/utils/network_speed' },
               { text: 'connection - 获取网络连接信息', link: '/cn/src/ranuts/utils/connection' },
+              { text: 'prefetch - 空闲时预热缓存', link: '/cn/src/ranuts/utils/prefetch' },
+              { text: 'WorkerClient - Worker 请求响应', link: '/cn/src/ranuts/utils/worker_client' },
             ],
           },
           {

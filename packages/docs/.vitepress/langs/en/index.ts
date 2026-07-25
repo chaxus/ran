@@ -106,7 +106,8 @@ const themeEnConfig: DefaultTheme.Config = {
             items: [
               { text: 'debounce - Debounce function', link: '/src/ranuts/utils/debounce' },
               { text: 'throttle - Throttle function', link: '/src/ranuts/utils/throttle' },
-              { text: 'memoize - Memoization function', link: '/src/ranuts/utils/memoize' },
+              { text: 'once / singleFlight - Run exactly once', link: '/src/ranuts/utils/memoize' },
+              { text: 'QuestQueue - Concurrency-limited queue', link: '/src/ranuts/utils/quest_queue' },
               { text: 'noop - No-op function', link: '/src/ranuts/utils/noop' },
               { text: 'compose - Compose middleware', link: '/src/ranuts/utils/compose' },
             ],
@@ -130,6 +131,8 @@ const themeEnConfig: DefaultTheme.Config = {
               { text: 'getMatchingSentences - Extract sentences', link: '/src/ranuts/utils/get_matching_sentences' },
               { text: 'isString - Check if string', link: '/src/ranuts/utils/is_string' },
               { text: 'str2Xml - String to XML', link: '/src/ranuts/utils/str2xml' },
+              { text: 'detectLanguage - Detect text language', link: '/src/ranuts/utils/detect_language' },
+              { text: 'segmentByRanges - Offsets & highlights', link: '/src/ranuts/utils/segment' },
             ],
           },
           {
@@ -153,6 +156,7 @@ const themeEnConfig: DefaultTheme.Config = {
               { text: 'perToNum - Percentage to number', link: '/src/ranuts/utils/per_to_num' },
               { text: 'transformNumber - Format number', link: '/src/ranuts/utils/transform_number' },
               { text: 'addNumSym - Add sign to number', link: '/src/ranuts/utils/add_num_sym' },
+              { text: 'parseChineseNumber - Human-written numbers', link: '/src/ranuts/utils/parse_number' },
             ],
           },
           {
@@ -184,6 +188,7 @@ const themeEnConfig: DefaultTheme.Config = {
               { text: 'isSafari - Check Safari browser', link: '/src/ranuts/utils/is_safari' },
               { text: 'isBangDevice - Check notch device', link: '/src/ranuts/utils/is_bang_device' },
               { text: 'currentDevice - Get device type', link: '/src/ranuts/utils/current_device' },
+              { text: 'watchMediaQuery - Watch a media query', link: '/src/ranuts/utils/watch_media_query' },
             ],
           },
           {
@@ -207,6 +212,8 @@ const themeEnConfig: DefaultTheme.Config = {
             items: [
               { text: 'localStorageGetItem - Get storage', link: '/src/ranuts/utils/local_storage' },
               { text: 'localStorageSetItem - Set storage', link: '/src/ranuts/utils/local_storage' },
+              { text: 'WebDB - IndexedDB wrapper', link: '/src/ranuts/utils/web_db' },
+              { text: 'readFileAs* - Read File / Blob', link: '/src/ranuts/utils/read_file' },
             ],
           },
           {
@@ -217,6 +224,7 @@ const themeEnConfig: DefaultTheme.Config = {
               { text: 'getQuery - Extract query', link: '/src/ranuts/utils/get_query' },
               { text: 'encodeUrl - Encode URL safely', link: '/src/ranuts/utils/encode_url' },
               { text: 'appendUrl - Append query params', link: '/src/ranuts/utils/append_url' },
+              { text: 'createLocalePath - i18n URL maths', link: '/src/ranuts/utils/locale_path' },
             ],
           },
           {
@@ -251,6 +259,8 @@ const themeEnConfig: DefaultTheme.Config = {
               { text: 'imageRequest - Test network latency', link: '/src/ranuts/utils/image_request' },
               { text: 'networkSpeed - Test network speed', link: '/src/ranuts/utils/network_speed' },
               { text: 'connection - Get network info', link: '/src/ranuts/utils/connection' },
+              { text: 'prefetch - Warm the cache when idle', link: '/src/ranuts/utils/prefetch' },
+              { text: 'WorkerClient - Worker request/response', link: '/src/ranuts/utils/worker_client' },
             ],
           },
           {

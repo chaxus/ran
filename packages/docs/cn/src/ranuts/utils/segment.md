@@ -22,10 +22,10 @@ buildOffsets([3, 5, 2]); // [0, 3, 8]
 
 把一块文本切成「普通段 / 命中段」序列，供分段渲染（高亮、搜索命中、diff 上色）。
 
-| 参数         | 说明                                  | 类型                        |
-| ------------ | ------------------------------------- | --------------------------- |
-| `text`       | 本块文本                              | `string`                    |
-| `chunkStart` | 本块在全局坐标系里的起始偏移          | `number`                    |
+| 参数         | 说明                                   | 类型                        |
+| ------------ | -------------------------------------- | --------------------------- |
+| `text`       | 本块文本                               | `string`                    |
+| `chunkStart` | 本块在全局坐标系里的起始偏移           | `number`                    |
 | `ranges`     | 全局坐标系里的 `{ start, end, value }` | `readonly OffsetRange<T>[]` |
 
 返回 `{ text, start, end, value }[]`，未被覆盖的段 `value` 为 `null`。顺序拼接必然还原
@@ -42,11 +42,15 @@ const offsets = buildOffsets(pages.map((p) => p.text.length));
 const pageIndex = indexForOffset(offsets, note.start);
 
 // 渲染某一页及其高亮
-const segments = segmentByRanges(pages[i].text, offsets[i], notes.map((n) => ({
-  start: n.start,
-  end: n.end,
-  value: n,
-})));
+const segments = segmentByRanges(
+  pages[i].text,
+  offsets[i],
+  notes.map((n) => ({
+    start: n.start,
+    end: n.end,
+    value: n,
+  })),
+);
 segments.forEach((s) => container.append(s.value ? mark(s.text, s.value) : text(s.text)));
 ```
 

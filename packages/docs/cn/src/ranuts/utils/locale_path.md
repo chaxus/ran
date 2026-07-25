@@ -10,11 +10,11 @@
 
 ### createLocalePath(config)
 
-| 参数            | 说明                                                    | 类型            | 默认值               |
-| --------------- | ------------------------------------------------------- | --------------- | -------------------- |
+| 参数            | 说明                                                      | 类型            | 默认值               |
+| --------------- | --------------------------------------------------------- | --------------- | -------------------- |
 | `locales`       | `{ code, prefix? }[]`，无 prefix 表示默认语言、落在根路径 | `LocaleRoute[]` | 必填                 |
-| `defaultLocale` | 默认语言 code                                           | `string`        | 第一个无 prefix 的项 |
-| `base`          | 部署子路径，如 `/weread`；结尾斜杠会被忽略              | `string`        | `''`                 |
+| `defaultLocale` | 默认语言 code                                             | `string`        | 第一个无 prefix 的项 |
+| `base`          | 部署子路径，如 `/weread`；结尾斜杠会被忽略                | `string`        | `''`                 |
 
 返回：
 
@@ -37,10 +37,10 @@ const paths = createLocalePath({
   base: '/docs',
 });
 
-paths.href('/book/walden/');                    // '/docs/book/walden/'
-paths.href('/book/walden/', 'zh-CN');           // '/docs/zh/book/walden/'
-paths.localeFromPath('/docs/zh/book/');         // 'zh-CN'
-paths.stripLocale('/docs/zh/book/');            // '/docs/book/'
+paths.href('/book/walden/'); // '/docs/book/walden/'
+paths.href('/book/walden/', 'zh-CN'); // '/docs/zh/book/walden/'
+paths.localeFromPath('/docs/zh/book/'); // 'zh-CN'
+paths.stripLocale('/docs/zh/book/'); // '/docs/book/'
 paths.hrefForLocale('/docs/zh/book/', 'zh-HK'); // '/docs/zh-hant/book/'
 
 // hreflang 标签

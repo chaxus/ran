@@ -25,11 +25,11 @@ Binary search for the chunk a global offset falls in. Out-of-range offsets are c
 Split one chunk into plain and matched segments for piecewise rendering (highlights, search
 hits, diff colouring).
 
-| Parameter    | Description                                     | Type                              |
-| ------------ | ----------------------------------------------- | --------------------------------- |
-| `text`       | This chunk's text                               | `string`                          |
-| `chunkStart` | This chunk's global start offset                | `number`                          |
-| `ranges`     | `{ start, end, value }[]` in global coordinates  | `readonly OffsetRange<T>[]`       |
+| Parameter    | Description                                     | Type                        |
+| ------------ | ----------------------------------------------- | --------------------------- |
+| `text`       | This chunk's text                               | `string`                    |
+| `chunkStart` | This chunk's global start offset                | `number`                    |
+| `ranges`     | `{ start, end, value }[]` in global coordinates | `readonly OffsetRange<T>[]` |
 
 Returns `{ text, start, end, value }[]`, where `value` is `null` for uncovered text. Joining
 the segments always reproduces `text`, and there is always at least one segment.
@@ -45,11 +45,15 @@ const offsets = buildOffsets(pages.map((p) => p.text.length));
 const pageIndex = indexForOffset(offsets, note.start);
 
 // Render one page with its highlights
-const segments = segmentByRanges(pages[i].text, offsets[i], notes.map((n) => ({
-  start: n.start,
-  end: n.end,
-  value: n,
-})));
+const segments = segmentByRanges(
+  pages[i].text,
+  offsets[i],
+  notes.map((n) => ({
+    start: n.start,
+    end: n.end,
+    value: n,
+  })),
+);
 segments.forEach((s) => container.append(s.value ? mark(s.text, s.value) : text(s.text)));
 ```
 
