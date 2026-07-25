@@ -36,7 +36,7 @@ export const MOBILE_MEDIA_QUERY = '(max-width: 768px)';
  * @return {boolean}
  */
 export const matchMediaQuery = (query: string): boolean => {
-  if (!isClient || typeof window.matchMedia !== 'function') return false;
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return false;
   return window.matchMedia(query).matches;
 };
 
@@ -54,7 +54,7 @@ export const matchMediaQuery = (query: string): boolean => {
  * ```
  */
 export const watchMediaQuery = (query: string, callback: (matches: boolean) => void): (() => void) => {
-  if (!isClient || typeof window.matchMedia !== 'function') {
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
     callback(false);
     return () => {};
   }

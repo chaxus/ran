@@ -31,17 +31,18 @@ describe('r-select upgrade with a pre-existing value (SSR)', () => {
     return document.querySelector('r-select') as Select;
   };
 
+  /** 闭合 shadow root 里的标签节点（组件内部字段，测试里按内部结构断言）。 */
+  const labelNode = (select: Select): HTMLElement => (select as unknown as { _text: HTMLElement })._text;
+
   it('reflects the markup value into the label', async () => {
     const select = await mountFromMarkup('zh');
-    // @ts-expect-error - reach into the closed shadow root for the label node
-    expect(select._text.textContent).toBe('中文');
+    expect(labelNode(select).textContent).toBe('中文');
     expect(select.getAttribute('value')).toBe('zh');
   });
 
   it('never leaves the label with a zero line-height', async () => {
     const select = await mountFromMarkup('zh');
-    // @ts-expect-error - closed shadow root
-    const lineHeight = select._text.style.lineHeight;
+    const lineHeight = labelNode(select).style.lineHeight;
     // Either unset (stylesheet decides) or a real height — but never collapsed.
     expect(lineHeight).not.toBe('0px');
   });

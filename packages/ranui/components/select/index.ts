@@ -735,7 +735,7 @@ export class Select extends RanElement {
   reapplyValueAfterConnect = (): void => {
     const value = this.getAttribute('value');
     if (!value) return;
-    this._activeOption = null;
+    this._activeOption = undefined;
     this.syncSelectedFromValue(value);
     this.applyLabelLineHeight();
   };

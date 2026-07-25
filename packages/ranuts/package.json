@@ -1,6 +1,6 @@
 {
   "name": "ranuts",
-  "version": "0.2.0-alpha.1",
+  "version": "0.3.0-alpha.1",
   "description": "Tree-shakeable TypeScript utility library: DOM/BOM helpers, string/object/number/color utils, debounce/throttle/compose, a 2D rendering engine and a virtual DOM.",
   "main": "dist/index.umd.cjs",
   "module": "dist/index.js",

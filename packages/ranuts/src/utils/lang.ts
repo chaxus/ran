@@ -1,5 +1,3 @@
-import { isClient } from './device';
-
 /** 粗粒度语言桶：只区分中文 / 英文 / 其他 */
 export type TextLanguage = 'zh' | 'en' | 'other';
 
@@ -38,7 +36,7 @@ export const detectLanguage = (text: string, sampleSize = 20000): TextLanguage =
  * @return {TextLanguage}
  */
 export const navigatorLanguage = (): TextLanguage => {
-  if (!isClient) return 'other';
+  if (typeof navigator === 'undefined') return 'other';
   // eslint-disable-next-line n/no-unsupported-features/node-builtins
   const lang = (navigator.language || '').toLowerCase();
   if (lang.startsWith('zh')) return 'zh';

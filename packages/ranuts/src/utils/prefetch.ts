@@ -1,5 +1,3 @@
-import { isClient } from './device';
-
 /**
  * 「后台预取 + 缓存探测」。
  *
@@ -9,6 +7,9 @@ import { isClient } from './device';
  *
  * 但预取是**替用户花流量**，必须受约束：省流量模式、2G 慢网、用户显式关闭时都不该偷跑。
  */
+
+/** 调用时判断，而不是模块加载时——同一份代码可能先在 SSR 里被 import，再在浏览器里被调用 */
+const hasWindow = (): boolean => typeof window !== 'undefined';
 
 export interface WhenIdleOptions {
   /** requestIdleCallback 的最长等待（毫秒），默认 8000 */
@@ -25,7 +26,7 @@ export interface WhenIdleOptions {
  */
 export const whenIdle = (callback: () => void, options: WhenIdleOptions = {}): (() => void) => {
   const { timeout = 8000, fallbackDelay = 2500 } = options;
-  if (!isClient) return () => {};
+  if (!hasWindow()) return () => {};
   const idle = (
     window as unknown as {
       requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
@@ -56,7 +57,7 @@ export interface NetworkAllowanceOptions {
  */
 export const networkAllowsDownload = (options: NetworkAllowanceOptions = {}): boolean => {
   const { optOutKey, slowTypes = ['slow-2g', '2g'] } = options;
-  if (!isClient) return false;
+  if (!hasWindow()) return false;
   if (optOutKey) {
     try {
       // eslint-disable-next-line n/no-unsupported-features/node-builtins
@@ -117,7 +118,7 @@ export interface PrefetchOptions {
 const precacheViaServiceWorker = (urls: string[], type: string): boolean => {
   try {
     // eslint-disable-next-line n/no-unsupported-features/node-builtins
-    const ctrl = isClient && 'serviceWorker' in navigator ? navigator.serviceWorker.controller : null;
+    const ctrl = typeof navigator !== 'undefined' && 'serviceWorker' in navigator ? navigator.serviceWorker.controller : null;
     if (!ctrl) return false;
     ctrl.postMessage({ type, urls });
     return true;
