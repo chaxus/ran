@@ -23,6 +23,19 @@ Web Worker 的请求/响应封装。原生 worker 只有「发消息」和「收
 | `active`                                | worker 是否已创建          |
 | `pendingCount`                          | 在途请求数                 |
 
+### serveWorker(handler, options?) —— worker 侧
+
+跑在 worker **内部**的对侧件。读回每条请求的 `operationId`，await 你的 handler，
+再带着同一个 id 把结果投回去。
+
+| 参数                 | 说明                                                       | 类型       |
+| -------------------- | ---------------------------------------------------------- | ---------- |
+| `handler`            | `(request, { progress }) => Response \| Promise<Response>` | `Function` |
+| `options.scope`      | 监听目标，默认 `self`；接 MessagePort 或测试替身时覆盖     | object     |
+| `options.resultType` | handler 返回非对象时用的响应 `type`，默认 `'result'`       | `string`   |
+
+返回 `stop` 函数，用于移除监听。
+
 ## 示例
 
 ```js
@@ -37,12 +50,19 @@ const { scores } = await client.send({ type: 'classify', lines });
 client.dispose();
 ```
 
-worker 侧只需把 `operationId` 原样带回：
+worker 侧：
 
 ```js
-self.onmessage = ({ data }) => {
-  self.postMessage({ operationId: data.operationId, type: 'result', scores });
-};
+// nlp.worker.ts
+import { serveWorker } from 'ranuts';
+
+serveWorker(async (request, { progress }) => {
+  if (request.type === 'load') {
+    const device = await loadModel(request.modelId, (p) => progress(p));
+    return { type: 'loaded', device };
+  }
+  return { type: 'result', scores: await classify(request.lines) };
+});
 ```
 
 ## 注意
@@ -53,3 +73,6 @@ self.onmessage = ({ data }) => {
 4. **`dispose()` 终止并拒绝**，下次 `send` 会重建 worker。
 5. **超时只拒绝该请求**，worker 继续存活。
 6. **大 buffer 用 `transfer`** 转移所有权，避免结构化克隆的拷贝开销。
+7. **`serveWorker` 连同步抛错一起接住**。sync throw 会逃到 worker 的 error handler，
+   而那条路径不带 `operationId` —— 客户端只能把**所有**在途请求一起失败，而不是坏掉的那一个。
+8. **两侧一起提供是刻意的**。手写 worker 侧正是 id 回传与错误信封在各项目间跑偏的地方。

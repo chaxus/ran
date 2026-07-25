@@ -16,7 +16,7 @@ bridge, ZIP read/write, prefetching, i18n, scoped event management, a 2D renderi
 ## Docs
 
 - [ranui — Web Components UI library](https://ran.chaxus.com/src/ranui/): button, input, select, checkbox, radio, card, tabs, modal, popover, dropdown, progress, message, icon, and more `<r-*>` elements, with theming, i18n, routing and SSR
-- [ranuts — utility library](https://ran.chaxus.com/src/ranuts/): functional (debounce, throttle, memoize, compose), string/object/number/colour utils, storage and IndexedDB, Web Worker and postMessage helpers, ZIP, i18n, a 2D rendering engine, virtual DOM, TOTP
+- [ranuts — utility library](https://ran.chaxus.com/src/ranuts/): functional (debounce, throttle, memoize, compose), string/object/number/colour utils, storage and IndexedDB, Web Worker request/response on both ends, Service Worker caching and precache, text pagination, postMessage bridge, ZIP, i18n, a 2D rendering engine, virtual DOM, TOTP
 - [Articles](https://ran.chaxus.com/src/article/design_mode): design-pattern and front-end engineering notes (parsers, compilers, bundlers, TypeScript, algorithms)
 
 ## Entry points
@@ -24,7 +24,7 @@ bridge, ZIP read/write, prefetching, i18n, scoped event management, a 2D renderi
 Both packages are multi-entry so consumers import only what they use:
 
 - `ranui` (all components), `ranui/<component>`, `ranui/builder`, `ranui/theme`, `ranui/i18n`, `ranui/ssr`
-- `ranuts` (root barrel), `ranuts/utils`, `ranuts/node` (Node only), `ranuts/visual` (browser only), `ranuts/vnode`, `ranuts/i18n`
+- `ranuts` (root barrel), `ranuts/utils`, `ranuts/node` (Node only), `ranuts/visual` (browser only), `ranuts/vnode`, `ranuts/i18n`, `ranuts/sw` (service worker only)
 
 ## Reference
 

@@ -274,6 +274,7 @@ const themeEnConfig: DefaultTheme.Config = {
               { text: 'connection - Get network info', link: '/src/ranuts/utils/connection' },
               { text: 'prefetch - Warm the cache when idle', link: '/src/ranuts/utils/prefetch' },
               { text: 'WorkerClient - Worker request/response', link: '/src/ranuts/utils/worker_client' },
+              { text: 'paginateText - Paginate text into pages', link: '/src/ranuts/utils/paginate' },
             ],
           },
           {
@@ -360,6 +361,11 @@ const themeEnConfig: DefaultTheme.Config = {
         text: 'Virtual DOM (vnode)',
         collapsed: true,
         items: [{ text: 'Virtual DOM', link: '/src/ranuts/vnode/' }],
+      },
+      {
+        text: 'Service Worker (sw)',
+        collapsed: true,
+        items: [{ text: 'Caching & precache', link: '/src/ranuts/sw/' }],
       },
       {
         text: 'Node Server',

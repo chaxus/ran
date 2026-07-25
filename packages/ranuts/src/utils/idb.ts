@@ -319,6 +319,66 @@ export class WebDB {
       'clear',
       () => null,
     );
+
+  /**
+   * @description: A typed, forgiving handle on one object store. Binds the store name once
+   * instead of repeating it at every call, and returns plain values rather than `IDBResult`.
+   *
+   * **Every method swallows failures** and answers with the empty case (`null` / `[]` /
+   * `false` / `0`). That is the right default for the storage most apps put in IndexedDB —
+   * reading progress, drafts, caches — where a failed read should degrade the feature, not
+   * take down the screen. It is the wrong default when the write *is* the user's action
+   * (saving a document, completing a purchase): there, call the `IDBResult` methods above and
+   * handle the error.
+   *
+   * @param {string} name object store name (must be declared in `stores`)
+   * @return {IDBCollection<T>}
+   * @example
+   * ```ts
+   * const notes = db.collection<BookNote>('books_notes');
+   * await notes.put(note);              // false if it failed
+   * const all = await notes.all();      // [] if it failed
+   * const one = await notes.get(id);    // null if missing or failed
+   * ```
+   */
+  collection = <T = unknown>(name: string): IDBCollection<T> => {
+    const ok = <R>(promise: Promise<IDBResult<R>>, fallback: R): Promise<R> =>
+      promise.then((result) => result.data ?? fallback).catch(() => fallback);
+    const done = (promise: Promise<IDBResult>): Promise<boolean> => promise.then(() => true).catch(() => false);
+
+    return {
+      name,
+      get: (key: IDBValidKey): Promise<T | null> =>
+        this.readByKey<T>({ storeName: name, key })
+          .then((result) => result.data ?? null)
+          .catch(() => null),
+      all: (): Promise<T[]> => ok(this.readByCursor<T>({ storeName: name }), [] as T[]),
+      count: (): Promise<number> => ok(this.count({ storeName: name }), 0),
+      add: (value: T): Promise<boolean> => done(this.add<T>({ storeName: name, data: value })),
+      put: (value: T): Promise<boolean> => done(this.update<T>({ storeName: name, data: value })),
+      remove: (key: IDBValidKey): Promise<boolean> => done(this.delete({ storeName: name, key })),
+      clear: (): Promise<boolean> => done(this.clear({ storeName: name })),
+    };
+  };
+}
+
+/** A store name bound once, values unwrapped, failures folded into the empty case */
+export interface IDBCollection<T> {
+  readonly name: string;
+  /** The record, or `null` when missing or unreadable */
+  get: (key: IDBValidKey) => Promise<T | null>;
+  /** Every record, or `[]` on failure */
+  all: () => Promise<T[]>;
+  /** Record count, or `0` on failure */
+  count: () => Promise<number>;
+  /** Insert; `false` if the key already exists or the write failed */
+  add: (value: T) => Promise<boolean>;
+  /** Insert or overwrite; `false` on failure */
+  put: (value: T) => Promise<boolean>;
+  /** Delete one record; `false` on failure */
+  remove: (key: IDBValidKey) => Promise<boolean>;
+  /** Empty the store; `false` on failure */
+  clear: () => Promise<boolean>;
 }
 
 export interface HandoffOptions {

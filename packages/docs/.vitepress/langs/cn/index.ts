@@ -14,6 +14,11 @@ const articleCnSidebar: DefaultTheme.SidebarItem[] = [
       { text: '可视化渲染引擎', link: '/cn/src/article/visual' },
       { text: '抽象语法树', link: '/cn/src/article/ast_parse/tokenizer' },
       {
+        text: 'Service Worker (sw)',
+        collapsed: true,
+        items: [{ text: '缓存策略与预取', link: '/cn/src/ranuts/sw/' }],
+      },
+      {
         text: 'TypeScript 类型系统',
         collapsed: true,
         items: [
@@ -274,6 +279,7 @@ const themeCnConfig: DefaultTheme.Config = {
               { text: 'connection - 获取网络连接信息', link: '/cn/src/ranuts/utils/connection' },
               { text: 'prefetch - 空闲时预热缓存', link: '/cn/src/ranuts/utils/prefetch' },
               { text: 'WorkerClient - Worker 请求响应', link: '/cn/src/ranuts/utils/worker_client' },
+              { text: 'paginateText - 文本分页', link: '/cn/src/ranuts/utils/paginate' },
             ],
           },
           {

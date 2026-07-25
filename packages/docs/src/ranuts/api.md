@@ -1,6 +1,6 @@
 ---
 title: ranuts API reference
-description: Every symbol exported by ranuts — 332 exports across 5 entry points, with signatures and descriptions.
+description: Every symbol exported by ranuts — 352 exports across 6 entry points, with signatures and descriptions.
 ---
 
 # ranuts API (Generated)
@@ -13,11 +13,12 @@ constraints, conventions) read [CLAUDE.md](https://github.com/chaxus/ran/blob/ma
 Import from the **subpath** that owns the symbol, e.g. `import { debounce } from
 'ranuts/utils'`. The root `ranuts` barrel re-exports the utils + visual surface.
 
-**332 exports** across 5 entry points. Generated at 2026-07-25T10:17:15.788Z.
+**352 exports** across 6 entry points. Generated at 2026-07-25T13:06:04.393Z.
 
 ## Entry points
 
-- [`ranuts/utils`](#ranutsutils) — Browser and general-purpose utilities · _browser + node_ · 260 exports
+- [`ranuts/utils`](#ranutsutils) — Browser and general-purpose utilities · _browser + node_ · 271 exports
+- [`ranuts/sw`](#ranutssw) — Service Worker caching strategies and the precache protocol · _service worker only_ · 9 exports
 - [`ranuts/node`](#ranutsnode) — Node server utilities (fs / http / ws / middleware) · _node only_ · 26 exports
 - [`ranuts/visual`](#ranutsvisual) — 2D rendering engine (Canvas / WebGL / WebGPU) · _browser only_ · 12 exports
 - [`ranuts/i18n`](#ranutsi18n) — Framework-agnostic i18n engine (also re-exported from ranuts/utils) · _browser + node_ · 8 exports
@@ -28,7 +29,7 @@ Import from the **subpath** that owns the symbol, e.g. `import { debounce } from
 Browser and general-purpose utilities · runtime: **browser + node** · source: `src/utils/index.ts`
 
 ```ts
-import { /* … */ } from 'ranuts/utils';
+import {} from /* … */ 'ranuts/utils';
 ```
 
 ### Functions
@@ -142,6 +143,7 @@ import { /* … */ } from 'ranuts/utils';
 - `once<T extends Func>(fn: T | unknown) => ((...args: Parameters<T>) => ReturnType<T>)` — Run once — evaluate on the first call, cache the result, and return that
 - `opacity(img: ImgSource, opacity: number) => ImgSource` — Apply an overall opacity to an image, returning an offscreen canvas.
 - `openPortBridge({ targetWindow, targetOrigin, name, }: OpenPortBridgeOptions) => PortBridge` — Initiator: create a MessageChannel, hand one port to the target window and keep the other.
+- `paginateText(text: string, box: TextBox, metrics: TextGridMetrics, options?: PaginateOptions) => PaginateResult` — Cut text into pages that fit `box`, given the type metrics.
 - `parseChineseNumber(value: string) => number | null` — Chinese numerals to Arabic, covering 「十五」「二十三」「一百零三」「一千零一」「三万」.
 - `parseEnglishNumber(value: string) => number | null` — English ordinals to numbers, tried in order: Arabic digits, number words
 - `parseRomanNumber(value: string) => number | null` — Roman numerals to Arabic (either case, handling subtractive forms such as IV / IX). Returns null for invalid input.
@@ -158,7 +160,7 @@ import { /* … */ } from 'ranuts/utils';
 - `readFileAsArrayBuffer(blob: Blob) => Promise<ArrayBuffer>` — Read a File / Blob as an ArrayBuffer
 - `readFileAsDataURL(blob: Blob) => Promise<string>` — Read a File / Blob as a data: URL (image previews and the like)
 - `readFileAsText(blob: Blob, encoding?: string) => Promise<string>` — Read a File / Blob as text
-- `readFileAsUint8Array(blob: Blob) => Promise<Uint8Array>` — Read a File / Blob as a Uint8Array (pair with checkEncoding / arrayBufferToString for encoding sniffing)
+- `readFileAsUint8Array(blob: Blob) => Promise<Uint8Array<ArrayBuffer>>` — Read a File / Blob as a Uint8Array (pair with checkEncoding / arrayBufferToString for encoding sniffing)
 - `readZipEntries(bytes: Uint8Array) => ZipEntry[]` — Read an archive's central directory. Returns `[]` for anything that is not
 - `readZipEntry(bytes: Uint8Array, entry: string | ZipEntry) => Promise<Uint8Array | null>` — Extract one entry's decompressed bytes. Resolves `null` when the entry is
 - `removeClassToElement(element: Element, removeClass: string) => void` — Remove a class from an element
@@ -179,6 +181,7 @@ import { /* … */ } from 'ranuts/utils';
 - `roundRectByArc(ctx: CanvasRenderingContext2D, ...[x, y, w, h, r]: number[]) => void` — Trace a rounded rectangle with arc(). A corner radius larger than half the
 - `scriptOnLoad(urls: string[], append?: HTMLElement, callback?: () => void) => Promise<void>` — Insert script/link tags dynamically
 - `segmentByRanges<T>(text: string, chunkStart: number, ranges: readonly OffsetRange<T>[]) => Segment<T>[]` — Split one chunk of text into a sequence of plain / matched spans according
+- `serveWorker<Req extends WorkerRequestBase, Res extends object = object, Progress = unknown>(handler: (request: Req, context: WorkerHandlerContext<Progress>) =>…` — Serve requests inside a Web Worker, mirroring {@link WorkerClient} on the
 - `setAttributeByGlobal(name: string, value: unknown) => void` — Define a property on the global object
 - `setFontSize2html(designWidth?: number) => void` — Set the root font size from the design mock's width
 - `setMime(ext: string, mimeType: string) => Map<string, string>`
@@ -237,6 +240,7 @@ import { /* … */ } from 'ranuts/utils';
 - `interface Handoff`
 - `interface HandoffOptions`
 - `interface I18nConfig`
+- `interface IDBCollection` — A store name bound once, values unwrapped, failures folded into the empty case
 - `interface IDBResult` — The uniform result shape of every IndexedDB operation. Every method
 - `interface IDBStoreSchema` — Declarative schema for object stores. `openDataBase` creates the missing
 - `interface JsonStore`
@@ -249,6 +253,8 @@ import { /* … */ } from 'ranuts/utils';
 - `interface NetworkAllowanceOptions`
 - `interface OffsetRange` — An annotation in global coordinates: the half-open interval `[start, end)` plus any payload
 - `interface OpenPortBridgeOptions`
+- `interface PaginateOptions`
+- `interface PaginateResult`
 - `interface PendingRequest`
 - `interface PortBridge` — A point-to-point bridge over MessagePort.
 - `interface PrefetchOptions`
@@ -256,13 +262,19 @@ import { /* … */ } from 'ranuts/utils';
 - `interface ResolveLocaleOptions`
 - `interface RewriteZipOptions`
 - `interface Segment` — One piece of the split result: `value === null` marks a plain span covered by no range
+- `interface ServeWorkerOptions`
 - `interface SingleFlight`
 - `interface SpeedType` — The ease-in / ease-out pair of one easing family
+- `interface TextBox` — The box each page must fit into, in px.
+- `interface TextGridMetrics`
+- `interface TextPage`
 - `interface Throttled`
 - `interface TransformText`
 - `interface WebDBOptions`
 - `interface WhenIdleOptions`
 - `interface WorkerClientOptions`
+- `interface WorkerHandlerContext` — Handed to the handler so it can stream progress for the request it is currently serving
+- `interface WorkerRequestBase` — A request always carries the id the client stamped on it
 - `interface WorkerResponseBase` — A response must at least echo the request id so the two can be paired
 - `interface ZipEntry` — One entry as described by the archive's central directory.
 
@@ -306,12 +318,35 @@ import { /* … */ } from 'ranuts/utils';
 - `const ZIP_DEFLATE: 8`
 - `const ZIP_STORED: 0` — Compression methods this module understands.
 
+## `ranuts/sw`
+
+Service Worker caching strategies and the precache protocol · runtime: **service worker only** · source: `src/sw/index.ts`
+
+```ts
+import {} from /* … */ 'ranuts/sw';
+```
+
+### Functions
+
+- `cacheFirst(request: Request, options: CacheStrategyOptions) => Promise<Response>` — Cache-first: serve the stored copy when there is one, otherwise fetch and
+- `dropCachesExcept(keep: readonly string[], options?: { scope?: SWScope; }) => Promise<string[]>` — Delete every cache except the ones named. Call it on `activate` so a new
+- `networkFirst(request: Request, options: CacheStrategyOptions) => Promise<Response>` — Network-first: go to the network, store what comes back, and fall back to the
+- `precache(cacheName: string, urls: readonly string[], options?: { scope?: SWScope; }) => Promise<void>` — Fill a cache with a list of URLs, skipping what is already there. Failures are
+- `servePrecache(options: ServePrecacheOptions) => (() => void)` — Answer the precache messages that `prefetchUrls({ serviceWorkerMessage })`
+
+### Interfaces
+
+- `interface CacheStrategyOptions`
+- `interface PrecacheMessageEvent` — The bit of `ExtendableMessageEvent` used here, declared locally rather than pulled from
+- `interface ServePrecacheOptions`
+- `interface SWScope` — Minimal view of the SW global the helpers touch, so they can be unit-tested with a stub.
+
 ## `ranuts/node`
 
 Node server utilities (fs / http / ws / middleware) · runtime: **node only** · source: `src/node/index.ts`
 
 ```ts
-import { /* … */ } from 'ranuts/node';
+import {} from /* … */ 'ranuts/node';
 ```
 
 ### Functions
@@ -360,7 +395,7 @@ import { /* … */ } from 'ranuts/node';
 2D rendering engine (Canvas / WebGL / WebGPU) · runtime: **browser only** · source: `src/utils/visual/index.ts`
 
 ```ts
-import { /* … */ } from 'ranuts/visual';
+import {} from /* … */ 'ranuts/visual';
 ```
 
 ### Classes
@@ -392,7 +427,7 @@ import { /* … */ } from 'ranuts/visual';
 Framework-agnostic i18n engine (also re-exported from ranuts/utils) · runtime: **browser + node** · source: `src/utils/i18n.ts`
 
 ```ts
-import { /* … */ } from 'ranuts/i18n';
+import {} from /* … */ 'ranuts/i18n';
 ```
 
 ### Functions
@@ -420,7 +455,7 @@ import { /* … */ } from 'ranuts/i18n';
 Snabbdom-style virtual DOM · runtime: **browser** · source: `src/vnode/index.ts`
 
 ```ts
-import { /* … */ } from 'ranuts/vnode';
+import {} from /* … */ 'ranuts/vnode';
 ```
 
 ### Functions
@@ -466,4 +501,3 @@ import { /* … */ } from 'ranuts/vnode';
 ### Namespaces
 
 - `namespace is` — Type guards — array / string / primitive / VNode
-

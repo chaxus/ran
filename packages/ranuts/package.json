@@ -1,6 +1,6 @@
 {
   "name": "ranuts",
-  "version": "0.3.0-alpha.2",
+  "version": "0.4.0-alpha.1",
   "description": "Tree-shakeable TypeScript utility library: DOM/BOM helpers, string/object/number/color utils, debounce/throttle/compose, a 2D rendering engine and a virtual DOM.",
   "main": "dist/index.umd.cjs",
   "module": "dist/index.js",
@@ -28,6 +28,10 @@
     "./visual": {
       "types": "./dist/src/utils/visual/index.d.ts",
       "import": "./dist/src/utils/visual/index.js"
+    },
+    "./sw": {
+      "types": "./dist/src/sw/index.d.ts",
+      "import": "./dist/src/sw/index.js"
     },
     "./i18n": {
       "types": "./dist/src/utils/i18n.d.ts",

@@ -32,6 +32,32 @@ IndexedDB 的 Promise 封装。原生 IndexedDB 是事件回调 + 事务式 API�
 | `delete({ storeName, key })`                         | 删单条                             |
 | `clear({ storeName })`                               | 清空仓库                           |
 
+### `db.collection<T>(name)`
+
+单个仓库的类型化句柄。仓库名只绑一次，返回值直接是普通值而不是 `IDBResult`。
+
+| 成员          | 返回                 | 失败时  |
+| ------------- | -------------------- | ------- |
+| `get(key)`    | `Promise<T \| null>` | `null`  |
+| `all()`       | `Promise<T[]>`       | `[]`    |
+| `count()`     | `Promise<number>`    | `0`     |
+| `add(value)`  | `Promise<boolean>`   | `false` |
+| `put(value)`  | `Promise<boolean>`   | `false` |
+| `remove(key)` | `Promise<boolean>`   | `false` |
+| `clear()`     | `Promise<boolean>`   | `false` |
+
+```js
+const notes = db.collection('books_notes');
+await notes.put(note); // 失败返回 false
+const all = await notes.all(); // 失败返回 []
+```
+
+::: warning 选对层
+每个方法都**把错误吞掉**。对大多数应用放进 IndexedDB 的东西（阅读进度、草稿、缓存）这是对的默认值 ——
+读失败应该让功能降级，而不是让页面崩。但当写入本身就是用户的动作时（保存文档、完成下单）这个默认值是错的：
+那种情况请用上面返回 `IDBResult` 的方法，自己处理失败。
+:::
+
 ## 示例
 
 ```js

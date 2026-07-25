@@ -12,6 +12,7 @@ description: 'ranuts is a tree-shakeable JavaScript/TypeScript utility library: 
 - [2D Rendering (visual)](./visual/index.md) - Canvas / WebGL / WebGPU 2D rendering engine (browser-only)
 - [Virtual DOM (vnode)](./vnode/index.md) - Snabbdom-style lightweight virtual DOM
 - [Bridge (postMessage)](./bridge/index.md) - Cross-context messaging over postMessage (window / iframe / worker)
+- [Service Worker (sw)](./sw/index.md) - Cache strategies + the worker half of the precache protocol
 - [Event System](./utils/sync_hook.md) - Publish-subscribe pattern (`SyncHook`)
 - [MIME Type](./mime_type/mime_type.md) - MIME type processing
 - [Others](./binary_tree/index.md) - Binary tree, bundler, etc.

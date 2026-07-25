@@ -25,6 +25,19 @@ to its own promise.
 | `active`                                | Whether the worker has been created       |
 | `pendingCount`                          | Number of in-flight requests              |
 
+### serveWorker(handler, options?) — the worker side
+
+The counterpart that runs _inside_ the worker. Reads `operationId` off each request, awaits
+your handler, and posts the reply back carrying that same id.
+
+| Parameter            | Description                                                               | Type       |
+| -------------------- | ------------------------------------------------------------------------- | ---------- |
+| `handler`            | `(request, { progress }) => Response \| Promise<Response>`                | `Function` |
+| `options.scope`      | Where to listen. Defaults to `self`; override for a port or a test        | object     |
+| `options.resultType` | Response `type` when the handler returns a non-object. Default `'result'` | `string`   |
+
+Returns a `stop` function that removes the listener.
+
 ## Example
 
 ```js
@@ -39,12 +52,19 @@ const { scores } = await client.send({ type: 'classify', lines });
 client.dispose();
 ```
 
-The worker only has to echo the `operationId` back:
+And the worker side:
 
 ```js
-self.onmessage = ({ data }) => {
-  self.postMessage({ operationId: data.operationId, type: 'result', scores });
-};
+// nlp.worker.ts
+import { serveWorker } from 'ranuts';
+
+serveWorker(async (request, { progress }) => {
+  if (request.type === 'load') {
+    const device = await loadModel(request.modelId, (p) => progress(p));
+    return { type: 'loaded', device };
+  }
+  return { type: 'result', scores: await classify(request.lines) };
+});
 ```
 
 ## Notes
@@ -57,3 +77,8 @@ self.onmessage = ({ data }) => {
 4. **`dispose()` terminates and rejects**; the next `send` rebuilds the worker.
 5. **A timeout rejects only that request** and leaves the worker alive.
 6. **Use `transfer` for large buffers** to move ownership instead of structured-cloning a copy.
+7. **`serveWorker` catches synchronous throws too.** A sync throw inside `onmessage` escapes to
+   the worker's error handler, and that path carries no `operationId` — so the client could only
+   fail _every_ in-flight request rather than the one that actually broke.
+8. **Both halves ship together on purpose.** Hand-rolling the worker side is where the id echo
+   and the error envelope drift apart between projects.

@@ -124,8 +124,10 @@ import { ADOPTED_SHEET_MARKER, ADOPTED_STYLE_MARKER, adoptSheetText, adoptStyles
 import { memoize, once, singleFlight } from './memoize';
 import type { SingleFlight } from './memoize';
 import { WebDB, createHandoff } from './idb';
-import type { Handoff, HandoffOptions, IDBResult, IDBStoreSchema, WebDBOptions } from './idb';
+import type { Handoff, HandoffOptions, IDBCollection, IDBResult, IDBStoreSchema, WebDBOptions } from './idb';
 import { buildOffsets, indexForOffset, segmentByRanges } from './segment';
+import { paginateText } from './paginate';
+import type { PaginateOptions, PaginateResult, TextBox, TextGridMetrics, TextPage } from './paginate';
 import type { OffsetRange, Segment } from './segment';
 import { detectLanguage, navigatorLanguage, resolveLocale } from './lang';
 import { I18nCore, createI18n, useI18n } from './i18n';
@@ -134,8 +136,14 @@ import { createLocalePath } from './localePath';
 import type { LocalePath, LocalePathConfig, LocaleRoute } from './localePath';
 import type { ResolveLocaleOptions, TextLanguage } from './lang';
 import { readFileAsArrayBuffer, readFileAsDataURL, readFileAsText, readFileAsUint8Array } from './file';
-import { WorkerClient } from './worker';
-import type { WorkerClientOptions, WorkerResponseBase } from './worker';
+import { WorkerClient, serveWorker } from './worker';
+import type {
+  ServeWorkerOptions,
+  WorkerClientOptions,
+  WorkerHandlerContext,
+  WorkerRequestBase,
+  WorkerResponseBase,
+} from './worker';
 import { isUrlCached, networkAllowsDownload, prefetchUrl, prefetchUrls, prefetchWhenIdle, whenIdle } from './prefetch';
 import type { NetworkAllowanceOptions, PrefetchOptions, WhenIdleOptions } from './prefetch';
 import { TimeoutError, deferred, delay, withTimeout, withTimeoutFallback } from './async';
@@ -341,6 +349,7 @@ export {
   WebDB,
   createHandoff,
   buildOffsets,
+  paginateText,
   indexForOffset,
   segmentByRanges,
   detectLanguage,
@@ -351,6 +360,7 @@ export {
   readFileAsText,
   readFileAsDataURL,
   WorkerClient,
+  serveWorker,
   whenIdle,
   networkAllowsDownload,
   isUrlCached,
@@ -444,6 +454,7 @@ export type {
   LocalePathConfig,
   LocaleRoute,
   SingleFlight,
+  IDBCollection,
   IDBResult,
   IDBStoreSchema,
   WebDBOptions,
@@ -455,9 +466,17 @@ export type {
   RewriteZipOptions,
   ResolveLocaleOptions,
   OffsetRange,
+  PaginateOptions,
+  PaginateResult,
+  TextBox,
+  TextGridMetrics,
+  TextPage,
   Segment,
   TextLanguage,
+  ServeWorkerOptions,
   WorkerClientOptions,
+  WorkerHandlerContext,
+  WorkerRequestBase,
   WorkerResponseBase,
   WhenIdleOptions,
   NetworkAllowanceOptions,

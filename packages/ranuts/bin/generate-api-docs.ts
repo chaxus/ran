@@ -42,6 +42,12 @@ const ENTRIES: Entry[] = [
     runtime: 'browser + node',
   },
   {
+    subpath: 'ranuts/sw',
+    file: 'src/sw/index.ts',
+    blurb: 'Service Worker caching strategies and the precache protocol',
+    runtime: 'service worker only',
+  },
+  {
     subpath: 'ranuts/node',
     file: 'src/node/index.ts',
     blurb: 'Node server utilities (fs / http / ws / middleware)',

@@ -161,3 +161,96 @@ export class WorkerClient<Req extends object, Res extends WorkerResponseBase, Pr
     }
   };
 }
+
+/* ── The worker side ───────────────────────────────────────────────────────
+ * `WorkerClient` above is only half of the protocol. Without a counterpart every worker
+ * hand-rolls the same three things — echo the id back, wrap failures in an error envelope,
+ * post progress without settling — and each one gets to invent its own subtle bug (a sync
+ * throw escaping the handler and killing the worker, a rejection with no id so the caller
+ * waits forever). `serveWorker` is that counterpart.
+ */
+
+/** A request always carries the id the client stamped on it */
+export interface WorkerRequestBase {
+  operationId: number;
+  type?: string;
+}
+
+/** Handed to the handler so it can stream progress for the request it is currently serving */
+export interface WorkerHandlerContext<Progress> {
+  /** Post a progress update. Does not settle the request; may be called any number of times. */
+  progress: (payload: Progress) => void;
+}
+
+export interface ServeWorkerOptions {
+  /**
+   * Where to listen. Defaults to `self` — override for a `MessagePort`, a nested worker, or
+   * a test double.
+   */
+  scope?: {
+    addEventListener: (type: 'message', listener: (event: MessageEvent) => void) => void;
+    removeEventListener: (type: 'message', listener: (event: MessageEvent) => void) => void;
+    postMessage: (message: unknown, transfer?: Transferable[]) => void;
+  };
+  /** Response `type` for a successful reply that the handler returned bare (non-object). Default `'result'`. */
+  resultType?: string;
+}
+
+/**
+ * @description: Serve requests inside a Web Worker, mirroring {@link WorkerClient} on the
+ * other end. Reads `operationId` off each request, awaits your handler, and posts the reply
+ * back with that same id.
+ *
+ * Failures become `{ operationId, type: 'error', message }` — the envelope `WorkerClient`
+ * rejects on by default. **Both synchronous throws and rejected promises are caught**: a sync
+ * throw inside `onmessage` would otherwise escape to the worker's error handler, which carries
+ * no id, so the client could only fail *every* in-flight request instead of the one that broke.
+ *
+ * @param {Function} handler receives the request and a context whose `progress()` streams updates
+ * @param {ServeWorkerOptions} options
+ * @return {Function} stop — removes the listener
+ * @example
+ * ```ts
+ * // my.worker.ts
+ * serveWorker<MyRequest, MyResponse, ModelProgress>(async (request, { progress }) => {
+ *   if (request.type === 'load') {
+ *     const device = await load(request.modelId, (p) => progress(p));
+ *     return { type: 'loaded', device };
+ *   }
+ *   return { type: 'result', scores: await classify(request.lines) };
+ * });
+ * ```
+ */
+export const serveWorker = <Req extends WorkerRequestBase, Res extends object = object, Progress = unknown>(
+  handler: (request: Req, context: WorkerHandlerContext<Progress>) => Promise<Res> | Res,
+  options: ServeWorkerOptions = {},
+): (() => void) => {
+  const scope = options.scope ?? (globalThis as unknown as ServeWorkerOptions['scope']);
+  if (!scope || typeof scope.addEventListener !== 'function') return () => {};
+  const resultType = options.resultType ?? 'result';
+
+  const listener = (event: MessageEvent): void => {
+    const request = event.data as Req | undefined;
+    // Not one of ours: no id means nothing to reply to. Staying silent is deliberate — the
+    // same worker may also receive unrelated messages (a port handshake, a framework ping).
+    if (!request || typeof request.operationId !== 'number') return;
+    const { operationId } = request;
+
+    const post = (payload: object): void => scope.postMessage({ ...payload, operationId });
+    const context: WorkerHandlerContext<Progress> = {
+      progress: (payload: Progress) => post({ type: 'progress', progress: payload }),
+    };
+
+    // Promise.resolve().then(...) so a synchronous throw lands in the catch below rather
+    // than escaping this listener.
+    Promise.resolve()
+      .then(() => handler(request, context))
+      .then(
+        (result) => post(typeof result === 'object' && result !== null ? result : { type: resultType, result }),
+        (error: unknown) => post({ type: 'error', message: error instanceof Error ? error.message : String(error) }),
+      );
+  };
+
+  scope.addEventListener('message', listener);
+  return () => scope.removeEventListener('message', listener);
+};

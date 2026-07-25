@@ -32,6 +32,35 @@ Every method resolves or rejects with the same `IDBResult` shape, so callers onl
 | `delete({ storeName, key })`                         | Delete one record               |
 | `clear({ storeName })`                               | Empty a store                   |
 
+### `db.collection<T>(name)`
+
+A typed, forgiving handle on one store. Binds the store name once and returns plain values
+instead of `IDBResult`.
+
+| Member        | Returns              | On failure |
+| ------------- | -------------------- | ---------- |
+| `get(key)`    | `Promise<T \| null>` | `null`     |
+| `all()`       | `Promise<T[]>`       | `[]`       |
+| `count()`     | `Promise<number>`    | `0`        |
+| `add(value)`  | `Promise<boolean>`   | `false`    |
+| `put(value)`  | `Promise<boolean>`   | `false`    |
+| `remove(key)` | `Promise<boolean>`   | `false`    |
+| `clear()`     | `Promise<boolean>`   | `false`    |
+
+```js
+const notes = db.collection('books_notes');
+await notes.put(note); // false if it failed
+const all = await notes.all(); // [] if it failed
+```
+
+::: warning Pick the right layer
+Every method **swallows the error**. That is the right default for what most apps keep in
+IndexedDB — reading progress, drafts, caches — where a failed read should degrade the feature,
+not take down the screen. It is the wrong default when the write _is_ the user's action
+(saving a document, completing a purchase): there, call the `IDBResult` methods above and
+handle the failure.
+:::
+
 ## Example
 
 ```js

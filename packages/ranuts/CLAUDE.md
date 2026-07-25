@@ -27,14 +27,15 @@ from the **subpath that owns it** (below) — not from a deep source path.
 Each subpath is an independent, tree-shakeable barrel. Import from the subpath, never from
 `ranuts/dist/...` or `@/...` (that alias is internal to the source).
 
-| Import from     | Source                      | What                                                | Runtime          |
-| --------------- | --------------------------- | --------------------------------------------------- | ---------------- |
-| `ranuts`        | `index.ts`                  | Root barrel — re-exports the utils + visual surface | browser + node   |
-| `ranuts/utils`  | `src/utils/index.ts`        | DOM/BOM, string, object, number, color, time, etc.  | browser + node\* |
-| `ranuts/node`   | `src/node/index.ts`         | HTTP server, router, ws, fs, streams, middleware    | **node only**    |
-| `ranuts/visual` | `src/utils/visual/index.ts` | 2D rendering engine (Canvas / WebGL / WebGPU)       | **browser only** |
-| `ranuts/i18n`   | `src/utils/i18n.ts`         | `I18nCore` / `createI18n` / `useI18n` — DOM-free    | browser + node   |
-| `ranuts/vnode`  | `src/vnode/index.ts`        | Snabbdom-style virtual DOM (`h`, `init`, modules)   | browser          |
+| Import from     | Source                      | What                                                | Runtime            |
+| --------------- | --------------------------- | --------------------------------------------------- | ------------------ |
+| `ranuts`        | `index.ts`                  | Root barrel — re-exports the utils + visual surface | browser + node     |
+| `ranuts/utils`  | `src/utils/index.ts`        | DOM/BOM, string, object, number, color, time, etc.  | browser + node\*   |
+| `ranuts/node`   | `src/node/index.ts`         | HTTP server, router, ws, fs, streams, middleware    | **node only**      |
+| `ranuts/visual` | `src/utils/visual/index.ts` | 2D rendering engine (Canvas / WebGL / WebGPU)       | **browser only**   |
+| `ranuts/i18n`   | `src/utils/i18n.ts`         | `I18nCore` / `createI18n` / `useI18n` — DOM-free    | browser + node     |
+| `ranuts/sw`     | `src/sw/index.ts`           | Cache strategies + the precache protocol's SW half  | **service worker** |
+| `ranuts/vnode`  | `src/vnode/index.ts`        | Snabbdom-style virtual DOM (`h`, `init`, modules)   | browser            |
 
 \* `ranuts/utils` is broad: most functions are browser-oriented (touch `window`/`document`),
 but pure helpers (`str`, `obj`, `number`, `compose`, `cloneDeep`, …) run anywhere. Functions
@@ -153,15 +154,25 @@ Then `npm run doc:api`.
 - Never call `window.setTimeout` / `window.setInterval`. The bare globals work in Node, Web
   Workers and the browser alike; the `window.`-prefixed ones throw `ReferenceError` outside a
   document. (This is what made `throttle` unusable in SSR before 0.3.)
-- Keep `ranuts/node` server-only; never import it from browser-facing modules.
+- Keep `ranuts/node` server-only; never import it from browser-facing modules. Same for
+  `ranuts/sw`: it runs in a `ServiceWorkerGlobalScope` with no `window`/`document`, which is
+  why it is its own entry rather than part of the utils barrel.
+
+### Ship both halves of a protocol, or neither
+
+`WorkerClient` without `serveWorker` meant every worker re-implemented the same id echo and
+error envelope — and each got to invent its own bug (a sync throw escaping the handler, a
+rejection with no id so the caller waits forever). Same for `prefetchUrls({ serviceWorkerMessage })`
+without `servePrecache`. When a helper defines a message shape, the counterpart that answers
+it belongs in the library too; a JSDoc block saying "just echo the id back" is not a substitute.
 
 ### Anything that installs something must return how to uninstall it
 
 `debounce`, `throttle`, `watchMediaQuery`, `whenIdle`, `WorkerClient`, `QuestQueue` hand back
 something holding a timer, a listener or a worker. `replaceOld`, `handleConsole`,
-`handleFetchHook`, `handleXhrHook`, `handleError`, `handleClick` and `Monitor.start()` patch a
-global or register a listener. **All of them return a teardown function**, and callers are
-expected to use it.
+`handleFetchHook`, `handleXhrHook`, `handleError`, `handleClick`, `serveWorker`,
+`servePrecache` and `Monitor.start()` patch a global or register a listener. **All of them
+return a teardown function**, and callers are expected to use it.
 
 A utility of this shape without a teardown path is incomplete. The failure modes are concrete:
 a pending timer firing into a destroyed component; a hot reload re-patching an already-patched
