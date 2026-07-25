@@ -146,6 +146,10 @@ export default defineConfig({
       },
     },
   },
+  // CLAUDE.md is an internal orientation doc, not a page. It lives inside the VitePress root,
+  // so without this VitePress compiles it as a route — and since every page is compiled as a
+  // Vue template, its own "a bare `{{` breaks the build" note breaks the build.
+  srcExclude: ['**/CLAUDE.md'],
   lastUpdated: true,
   // Serve/link extensionless URLs so generated links, canonical, hreflang and the
   // sitemap all match what Cloudflare Pages actually serves (`/foo`, with `/foo.html`
