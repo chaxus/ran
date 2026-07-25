@@ -1,10 +1,15 @@
-#!/bin/bash
-# 任何一步失败都必须让整个脚本失败。
+#!/bin/sh
+# 本脚本必须是 POSIX sh 兼容的。
 #
-# 此前没有这行，而脚本最后一条语句是 echo —— 于是 vitepress 编译失败时，后续的 mv/cat
-# 接着报错，脚本仍以退出码 0 结束，还打印一句像成功的话。Cloudflare Pages 会把这种
-# "失败" 当成构建成功并发布上一次的残留产物。一个不可能失败的构建比没有构建更危险。
-set -euo pipefail
+# package.json 里是 `sh ./bin/build.sh`，而用 sh 调用会**忽略 shebang** —— 真正的解释器
+# 是系统的 /bin/sh。macOS 上它是 bash，Cloudflare 构建镜像上它是 dash。所以这里写
+# `set -euo pipefail` 在本机跑得好好的，到 CF 上直接
+# `set: Illegal option -o pipefail` 退出 2。别在这个文件里用 bashism。
+#
+# 任何一步失败都必须让整个脚本失败：此前没有 set -e，而脚本最后一条语句是 echo ——
+# 于是 vitepress 编译失败时，后续的 mv/cat 接着报错，脚本仍以退出码 0 结束，还打印
+# 一句像成功的话。CF Pages 会把这种"失败"当成构建成功并发布上一次的残留产物。
+set -eu
 
 # Service Worker 的版本号。只注入到 sw.js 的**内容**里（CACHE_NAME 用它），
 # 不再写进任何被 git 跟踪的源文件，也不再进文件名 —— 理由见下方 sw.js 处理段。
@@ -16,11 +21,17 @@ $bin/vitepress build
 # 生成 llms-full.txt:把所有文档 markdown 全文拼成一个纯文本,供 LLM 一次性摄取(GEO)。
 # 精编的入口地图见 public/llms.txt;这个是全文语料。
 llms_full="./.vitepress/dist/llms-full.txt"
+# 先把清单落到临时文件再遍历，而不是 `find | sort | while`。POSIX sh 没有 pipefail，
+# 管道的退出码只看最后一个命令 —— find 失败时 sort 照样成功，循环拿到空输入，
+# 结果是静默产出一个空的 llms-full.txt。分成两步后 set -e 才能拦住 find 的失败。
+md_list=$(mktemp)
+find ./src ./cn/src -name "*.md" > "$md_list"
+sort -o "$md_list" "$md_list"
 {
   echo "# ran — full documentation corpus"
   echo "# https://ran.chaxus.com  •  auto-generated at build time"
   echo
-  find ./src ./cn/src -name "*.md" | sort | while read -r f; do
+  while read -r f; do
     # keep the src/ or cn/src/ prefix; drop .md; map /index to the clean
     # directory URL so links match cleanUrls + canonical (no .html suffix).
     path="${f#./}"
@@ -35,8 +46,9 @@ llms_full="./.vitepress/dist/llms-full.txt"
     cat "$f"
     echo
     echo
-  done
+  done < "$md_list"
 } > "$llms_full"
+rm "$md_list"
 echo "llms-full.txt generated: $llms_full"
 # 指定输出的目录
 dir="./.vitepress/dist"
