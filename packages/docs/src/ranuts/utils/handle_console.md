@@ -10,14 +10,14 @@ every event is reported N times.
 
 ## API
 
-| Function                       | Instruments                          | Returns   |
-| ------------------------------ | ------------------------------------ | --------- |
-| `handleConsole(hook)`          | `console.log/info/warn/error/assert` | `restore` |
-| `handleFetchHook(options)`     | `window.fetch`                       | `restore` |
-| `handleXhrHook(options)`       | `XMLHttpRequest#open` / `#send`      | `restore` |
-| `handleError(hook)`            | `error` + `unhandledrejection`       | `unsubscribe` |
-| `handleClick(hook)`            | document clicks (capture phase)      | `unsubscribe` |
-| `replaceOld(obj, key, wrap)`   | any property on any object           | `restore` |
+| Function                     | Instruments                          | Returns       |
+| ---------------------------- | ------------------------------------ | ------------- |
+| `handleConsole(hook)`        | `console.log/info/warn/error/assert` | `restore`     |
+| `handleFetchHook(options)`   | `window.fetch`                       | `restore`     |
+| `handleXhrHook(options)`     | `XMLHttpRequest#open` / `#send`      | `restore`     |
+| `handleError(hook)`          | `error` + `unhandledrejection`       | `unsubscribe` |
+| `handleClick(hook)`          | document clicks (capture phase)      | `unsubscribe` |
+| `replaceOld(obj, key, wrap)` | any property on any object           | `restore`     |
 
 `handleFetchHook` / `handleXhrHook` take `{ requestHook, responseHook, errorHook }`.
 

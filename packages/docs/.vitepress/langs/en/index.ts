@@ -174,7 +174,7 @@ const themeEnConfig: DefaultTheme.Config = {
             collapsed: true,
             items: [
               { text: 'timeFormat - Format time', link: '/src/ranuts/utils/time_format' },
-              { text: 'timestampToTime - Timestamp to Date', link: '/src/ranuts/utils/timestamp_to_time' },
+              { text: 'formatDate - Format a date', link: '/src/ranuts/utils/timestamp_to_time' },
               { text: 'performanceTime - High precision timestamp', link: '/src/ranuts/utils/performance_time' },
             ],
           },
@@ -268,7 +268,8 @@ const themeEnConfig: DefaultTheme.Config = {
             collapsed: true,
             items: [
               { text: 'getWindow - Get window size', link: '/src/ranuts/utils/get_window' },
-              { text: 'getHost - Get host address', link: '/src/ranuts/utils/get_host' },
+              { text: 'report - Telemetry beacons', link: '/src/ranuts/utils/report' },
+              { text: 'handleConsole - Instrumentation hooks', link: '/src/ranuts/utils/handle_console' },
               { text: 'createObjectURL - Create object URL', link: '/src/ranuts/utils/create_object_url' },
               { text: 'removeGhosting - Remove drag shadow', link: '/src/ranuts/utils/remove_ghosting' },
               { text: 'retain - Override back event', link: '/src/ranuts/utils/retain' },

@@ -6,11 +6,11 @@ Pretty-print JSON. Accepts an object, or a JSON string to reformat.
 
 ### formatJson(value, onError?, indent?)
 
-| Parameter | Description                                                   | Type                | Default  |
-| --------- | ------------------------------------------------------------- | ------------------- | -------- |
-| `value`   | Object, or a JSON string (single quotes are tolerated)        | `string \| object`  | Required |
-| `onError` | Called with the parse/serialize error                          | `(e: Error) => void` | no-op   |
-| `indent`  | Spaces per level                                               | `number`            | `4`      |
+| Parameter | Description                                            | Type                 | Default  |
+| --------- | ------------------------------------------------------ | -------------------- | -------- |
+| `value`   | Object, or a JSON string (single quotes are tolerated) | `string \| object`   | Required |
+| `onError` | Called with the parse/serialize error                  | `(e: Error) => void` | no-op    |
+| `indent`  | Spaces per level                                       | `number`             | `4`      |
 
 Returns the formatted string, or `''` when the input cannot be parsed.
 
@@ -20,8 +20,8 @@ Returns the formatted string, or `''` when the input cannot be parsed.
 import { formatJson } from 'ranuts';
 
 formatJson({ a: 1, b: [2, 3] });
-formatJson("{'a': 1}");                  // single quotes tolerated
-formatJson({ a: 1 }, undefined, 2);      // 2-space indent
+formatJson("{'a': 1}"); // single quotes tolerated
+formatJson({ a: 1 }, undefined, 2); // 2-space indent
 formatJson('nope', (e) => console.warn(e)); // '' and the error handed to the callback
 ```
 

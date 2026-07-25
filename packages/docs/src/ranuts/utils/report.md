@@ -8,10 +8,10 @@ Send telemetry beacons to your own endpoint.
 
 Configure the default endpoint once at startup. Accepts a URL string, or an object:
 
-| Field          | Description                                                        | Type     |
-| -------------- | ------------------------------------------------------------------ | -------- |
-| `url`          | Default endpoint for every `report()` without its own `url`         | `string` |
-| `userIdCookie` | Cookie holding the user id, included by `createData()`              | `string` |
+| Field          | Description                                                 | Type     |
+| -------------- | ----------------------------------------------------------- | -------- |
+| `url`          | Default endpoint for every `report()` without its own `url` | `string` |
+| `userIdCookie` | Cookie holding the user id, included by `createData()`      | `string` |
 
 ### getReportUrl()
 

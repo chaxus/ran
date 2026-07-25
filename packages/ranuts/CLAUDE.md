@@ -51,6 +51,7 @@ packages/ranuts/
 ├── src/
 │   ├── utils/                # ranuts/utils — the largest surface (~14k LOC)
 │   │   ├── str.ts obj.ts number.ts color.ts bom.ts dom.ts time.ts …
+│   │   ├── bridge.ts         # postMessage request/response (split out of bom.ts)
 │   │   ├── idb.ts            # WebDB — Promise wrapper over IndexedDB (declarative stores)
 │   │   ├── worker.ts         # WorkerClient — request/response over a Web Worker
 │   │   ├── segment.ts        # offsets ↔ chunks, range→segment splitting (highlights)
@@ -143,13 +144,30 @@ Then `npm run doc:api`.
   document. (This is what made `throttle` unusable in SSR before 0.3.)
 - Keep `ranuts/node` server-only; never import it from browser-facing modules.
 
-### Anything returning a wrapper function must expose teardown
+### Anything that installs something must return how to uninstall it
 
-`debounce`, `throttle`, `watchMediaQuery`, `whenIdle`, `WorkerClient`, `QuestQueue` all hand
-back something holding a timer, a listener or a worker. Every one of them exposes
-`cancel()` / an unsubscribe function / `dispose()`, and callers are expected to use it on
-teardown. A new utility of this shape without a teardown path is incomplete — a pending timer
-firing into a destroyed component is the failure mode.
+`debounce`, `throttle`, `watchMediaQuery`, `whenIdle`, `WorkerClient`, `QuestQueue` hand back
+something holding a timer, a listener or a worker. `replaceOld`, `handleConsole`,
+`handleFetchHook`, `handleXhrHook`, `handleError`, `handleClick` and `Monitor.start()` patch a
+global or register a listener. **All of them return a teardown function**, and callers are
+expected to use it.
+
+A utility of this shape without a teardown path is incomplete. The failure modes are concrete:
+a pending timer firing into a destroyed component; a hot reload re-patching an already-patched
+`console` until every log is nested through a dozen wrappers and every event is reported N
+times; a test that can never give the next test a clean global back.
+
+`replaceOld`'s restore additionally checks that **its own** wrapper is still installed before
+writing the original back — otherwise unwinding an inner layer would silently uninstall an
+outer one.
+
+### No hard-coded endpoints, cookie names or domains
+
+A library cannot know where your telemetry goes or what your auth cookie is called. `report`
+requires an endpoint (`setReportUrl` once, or per call) and returns `false` rather than
+guessing; `createData` includes a user id only when `userIdCookie` is configured. This is what
+`getHost` got wrong — it built a URL from a domain baked into this repo, and a stale edit had
+already reduced its output to the unreachable literal `'//log.'`.
 
 ---
 

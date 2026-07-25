@@ -174,7 +174,7 @@ const themeCnConfig: DefaultTheme.Config = {
             collapsed: true,
             items: [
               { text: 'timeFormat - 时间格式化', link: '/cn/src/ranuts/utils/time_format' },
-              { text: 'timestampToTime - 时间戳转 Date', link: '/cn/src/ranuts/utils/timestamp_to_time' },
+              { text: 'formatDate - 格式化日期', link: '/cn/src/ranuts/utils/timestamp_to_time' },
               { text: 'performanceTime - 高精度时间戳', link: '/cn/src/ranuts/utils/performance_time' },
             ],
           },
@@ -268,7 +268,8 @@ const themeCnConfig: DefaultTheme.Config = {
             collapsed: true,
             items: [
               { text: 'getWindow - 获取窗口大小', link: '/cn/src/ranuts/utils/get_window' },
-              { text: 'getHost - 获取主机地址', link: '/cn/src/ranuts/utils/get_host' },
+              { text: 'report - 埋点上报', link: '/cn/src/ranuts/utils/report' },
+              { text: 'handleConsole - 监控注入钩子', link: '/cn/src/ranuts/utils/handle_console' },
               { text: 'createObjectURL - 创建对象 URL', link: '/cn/src/ranuts/utils/create_object_url' },
               { text: 'removeGhosting - 移除拖拽阴影', link: '/cn/src/ranuts/utils/remove_ghosting' },
               { text: 'retain - 覆盖后退事件', link: '/cn/src/ranuts/utils/retain' },

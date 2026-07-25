@@ -6,11 +6,11 @@
 
 ### formatJson(value, onError?, indent?)
 
-| 参数      | 说明                                     | 类型                 | 默认值 |
-| --------- | ---------------------------------------- | -------------------- | ------ |
-| `value`   | 对象，或 JSON 字符串（容忍单引号）       | `string \| object`   | 必填   |
-| `onError` | 解析/序列化出错时的回调                  | `(e: Error) => void` | 空函数 |
-| `indent`  | 每级缩进空格数                           | `number`             | `4`    |
+| 参数      | 说明                               | 类型                 | 默认值 |
+| --------- | ---------------------------------- | -------------------- | ------ |
+| `value`   | 对象，或 JSON 字符串（容忍单引号） | `string \| object`   | 必填   |
+| `onError` | 解析/序列化出错时的回调            | `(e: Error) => void` | 空函数 |
+| `indent`  | 每级缩进空格数                     | `number`             | `4`    |
 
 返回格式化后的字符串，无法解析时返回 `''`。
 
@@ -20,8 +20,8 @@
 import { formatJson } from 'ranuts';
 
 formatJson({ a: 1, b: [2, 3] });
-formatJson("{'a': 1}");                     // 容忍单引号
-formatJson({ a: 1 }, undefined, 2);         // 2 空格缩进
+formatJson("{'a': 1}"); // 容忍单引号
+formatJson({ a: 1 }, undefined, 2); // 2 空格缩进
 formatJson('nope', (e) => console.warn(e)); // 返回 '' 并把错误交给回调
 ```
 

@@ -7,14 +7,14 @@
 
 ## API
 
-| 函数                         | 注入对象                             | 返回        |
-| ---------------------------- | ------------------------------------ | ----------- |
-| `handleConsole(hook)`        | `console.log/info/warn/error/assert` | `restore`   |
-| `handleFetchHook(options)`   | `window.fetch`                       | `restore`   |
-| `handleXhrHook(options)`     | `XMLHttpRequest#open` / `#send`      | `restore`   |
+| 函数                         | 注入对象                             | 返回          |
+| ---------------------------- | ------------------------------------ | ------------- |
+| `handleConsole(hook)`        | `console.log/info/warn/error/assert` | `restore`     |
+| `handleFetchHook(options)`   | `window.fetch`                       | `restore`     |
+| `handleXhrHook(options)`     | `XMLHttpRequest#open` / `#send`      | `restore`     |
 | `handleError(hook)`          | `error` + `unhandledrejection`       | `unsubscribe` |
 | `handleClick(hook)`          | document 点击（捕获阶段）            | `unsubscribe` |
-| `replaceOld(obj, key, wrap)` | 任意对象上的任意属性                 | `restore`   |
+| `replaceOld(obj, key, wrap)` | 任意对象上的任意属性                 | `restore`     |
 
 `handleFetchHook` / `handleXhrHook` 接收 `{ requestHook, responseHook, errorHook }`。
 
