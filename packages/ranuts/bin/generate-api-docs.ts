@@ -18,7 +18,12 @@ import type { Node, SourceFile } from 'typescript/unstable/ast';
 
 const ROOT = path.resolve(process.cwd());
 const OUTPUT_FILE = path.join(ROOT, 'docs', 'API.md');
+// Second output: the same reference as a page on the docs site. Publishing it there gives
+// the full 332-symbol surface a real URL — so it lands in the sitemap, and in `llms-full.txt`
+// (which concatenates the site's markdown), instead of only existing inside the npm tarball.
+const SITE_OUTPUT_FILE = path.join(ROOT, '..', 'docs', 'src', 'ranuts', 'api.md');
 const TSCONFIG = path.join(ROOT, 'tsconfig.json');
+const REPO_BLOB = 'https://github.com/chaxus/ran/blob/main/packages/ranuts';
 
 interface Entry {
   subpath: string;
@@ -159,16 +164,33 @@ function getModuleDesc(loc: Node | undefined): string {
   }
 }
 
+/**
+ * Wrap bare `<tag>` sequences in backticks so they survive as text.
+ *
+ * Descriptions are emitted as prose, not code, and VitePress compiles every markdown page as
+ * a Vue template — so a JSDoc line mentioning `<style>` without backticks becomes an unclosed
+ * element and fails the whole docs build. (GitHub swallows it silently instead, which is
+ * arguably worse.) Anything already inside backticks is left alone.
+ */
+function escapeAngles(desc: string): string {
+  return desc
+    .split(/(`[^`]*`)/)
+    .map((part, i) => (i % 2 === 1 ? part : part.replace(/<(\/?[A-Za-z][^>\s]*)>/g, '`<$1>`')))
+    .join('');
+}
+
 function getDesc(checker: Checker, sym: TsSymbol, kind: Kind, loc: Node | undefined): string {
   if (kind === 'namespace') return getModuleDesc(loc);
   const tags = sym.getJsDocTags(checker);
   const descTag = tags.find((t) => t.name === 'description');
   // TS7 renders tag text and doc comments to strings directly (no SymbolDisplayPart[]).
   const raw = descTag ? (descTag.text ?? '') : sym.getDocumentationComment(checker);
-  return (raw || '')
-    .replace(/^[:\s]+/, '')
-    .split(/\r?\n/)[0]
-    .trim();
+  return escapeAngles(
+    (raw || '')
+      .replace(/^[:\s]+/, '')
+      .split(/\r?\n/)[0]
+      .trim(),
+  );
 }
 
 function collectEntry(checker: Checker, sourceFile: SourceFile): ApiSymbol[] {
@@ -224,7 +246,9 @@ async function main(): Promise<void> {
       const symbols = collectEntry(checker, sourceFile);
       total += symbols.length;
 
-      const anchor = entry.subpath.replace(/[^a-z]/g, '');
+      // Digits count: markdown slugs keep them, so `ranuts/i18n` is `#ranutsi18n`.
+      // Stripping them produced `#ranutsin`, a link to nothing.
+      const anchor = entry.subpath.replace(/[^a-z0-9]/g, '');
       tocLines.push(
         `- [\`${entry.subpath}\`](#${anchor}) — ${entry.blurb} · _${entry.runtime}_ · ${symbols.length} exports`,
       );
@@ -266,8 +290,24 @@ async function main(): Promise<void> {
       '',
     ];
 
-    await fs.writeFile(OUTPUT_FILE, `${header.join('\n')}\n${sections.join('\n')}\n`, 'utf8');
+    const body = `${header.join('\n')}\n${sections.join('\n')}\n`;
+    await fs.writeFile(OUTPUT_FILE, body, 'utf8');
     console.log(`Generated: ${path.relative(ROOT, OUTPUT_FILE)} (${total} exports, ${ENTRIES.length} entry points)`);
+
+    // Docs-site copy. Two edits are needed and both would be wrong to skip:
+    // frontmatter, so the page gets its own <title>/<meta description> rather than
+    // inheriting the site defaults; and the `../CLAUDE.md` link, which resolves inside the
+    // npm tarball but 404s on the site — point it at GitHub instead.
+    const siteBody = [
+      '---',
+      'title: ranuts API reference',
+      `description: Every symbol exported by ranuts — ${total} exports across ${ENTRIES.length} entry points, with signatures and descriptions.`,
+      '---',
+      '',
+      body.replace('[../CLAUDE.md](../CLAUDE.md)', `[CLAUDE.md](${REPO_BLOB}/CLAUDE.md)`),
+    ].join('\n');
+    await fs.writeFile(SITE_OUTPUT_FILE, siteBody, 'utf8');
+    console.log(`Generated: ${path.relative(ROOT, SITE_OUTPUT_FILE)}`);
   } finally {
     api.close();
   }

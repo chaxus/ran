@@ -323,6 +323,13 @@ export default defineConfig({
     // base
     ['link', { rel: 'icon', href: `${BASE_PATH}favicon.ico` }],
     ['link', { rel: 'manifest', href: `${BASE_PATH}manifest.json` }],
+    // llms.txt — the curated entry map for LLM crawlers, and llms-full.txt, the whole
+    // corpus as plain text. The convention is that agents fetch `/llms.txt` directly, so
+    // these links are belt-and-braces rather than required; they cost two tags and make the
+    // files discoverable to anything that reads <head> instead of guessing the well-known
+    // path. `type: text/markdown` matches what the files actually are.
+    ['link', { rel: 'alternate', type: 'text/markdown', href: `${BASE_PATH}llms.txt`, title: 'llms.txt' }],
+    ['link', { rel: 'alternate', type: 'text/plain', href: `${BASE_PATH}llms-full.txt`, title: 'llms-full.txt' }],
     // Geist Sans carries all body text — preload so the swap happens before first paint.
     // Geist Mono is intentionally not preloaded: pages without code shouldn't pay for it.
     [

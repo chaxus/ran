@@ -96,6 +96,10 @@ const themeEnConfig: DefaultTheme.Config = {
         link: '/src/ranuts/',
       },
       {
+        text: 'API reference (all 332 exports)',
+        link: '/src/ranuts/api',
+      },
+      {
         text: 'Utility Functions',
         link: '/src/ranuts/utils/',
         collapsed: false,
