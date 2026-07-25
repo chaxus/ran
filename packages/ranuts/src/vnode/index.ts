@@ -1,7 +1,9 @@
 import { init } from './init';
 import { addNS, h } from './h';
 import { vnode } from './vnode';
-import { Chain, create } from './chainDom';
+// Chain 曾在 ./chainDom 有一份独立副本，缺少 SVG 命名空间支持和事件监听管理。
+// 现在统一到 utils/chain，vnode 入口导出的是能力更全的那一份（向后兼容的超集）。
+import { Chain, create } from '@/utils/chain';
 import { htmlDomApi } from './htmlDomApi';
 import { modules } from './modules';
 import { attributesModule } from './modules/attributes';

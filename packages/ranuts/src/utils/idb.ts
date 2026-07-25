@@ -320,3 +320,134 @@ export class WebDB {
       () => null,
     );
 }
+
+export interface HandoffOptions {
+  /** Database name. Both sides of the handoff must agree on this. */
+  dbName: string;
+  /** Object store name, created on first open. */
+  storeName?: string;
+  /** Key the single pending value is stored under. */
+  key?: string;
+}
+
+export interface Handoff<T> {
+  /** Store a value for the next page to take. Resolves false when it could not be stored. */
+  put: (value: T) => Promise<boolean>;
+  /** Take the pending value and delete it. Resolves null when there is nothing pending. */
+  take: () => Promise<T | null>;
+}
+
+/**
+ * @description: A one-shot value handoff between two pages of the same origin, backed by
+ * IndexedDB.
+ *
+ * The problem it solves: a `File` picked on page A cannot be carried to page B. It does not
+ * survive a URL (too large, and not serialisable), and `sessionStorage` only takes strings.
+ * IndexedDB stores structured-cloneable values as-is — `File`, `Blob`, `ArrayBuffer`,
+ * `Map` — so page A calls `put(file)` and navigates, and page B calls `take()`.
+ *
+ * **Reading is destructive**: `take()` deletes the value in the same transaction that reads
+ * it, so a reload does not re-open the same file and a stale URL flag finds nothing. Both
+ * sides degrade to `null` / `false` rather than throwing — a blocked or unavailable
+ * IndexedDB (private mode, third-party frame) must not break the page that merely *tried*
+ * to hand something over.
+ *
+ * @param {HandoffOptions} options
+ * @return {Handoff<T>}
+ * @example
+ * ```ts
+ * // Landing page
+ * const handoff = createHandoff<File>({ dbName: 'document-handoff' });
+ * await handoff.put(picked);
+ * location.href = '/app?open=local';
+ *
+ * // App
+ * const file = await handoff.take(); // null on a reload — the value is consumed
+ * ```
+ */
+export const createHandoff = <T>({
+  dbName,
+  storeName = 'files',
+  key = 'pending',
+}: HandoffOptions): Handoff<T> => {
+  /**
+   * The store is created in `onupgradeneeded` at version 1, so whichever side opens the
+   * database first sets it up and the other finds it already there.
+   */
+  const open = (): Promise<IDBDatabase | null> =>
+    new Promise((resolve) => {
+      if (typeof indexedDB === 'undefined') {
+        resolve(null);
+        return;
+      }
+      let request: IDBOpenDBRequest;
+      try {
+        request = indexedDB.open(dbName, 1);
+      } catch {
+        resolve(null);
+        return;
+      }
+      request.onupgradeneeded = () => {
+        if (!request.result.objectStoreNames.contains(storeName)) request.result.createObjectStore(storeName);
+      };
+      request.onerror = () => resolve(null);
+      request.onblocked = () => resolve(null);
+      request.onsuccess = () => resolve(request.result);
+    });
+
+  return {
+    put: async (value: T): Promise<boolean> => {
+      const db = await open();
+      if (!db) return false;
+      return new Promise<boolean>((resolve) => {
+        try {
+          const transaction = db.transaction(storeName, 'readwrite');
+          transaction.objectStore(storeName).put(value, key);
+          // Resolve on `oncomplete`, not on the request's `onsuccess`: the write is only
+          // durable once the transaction commits, and the page navigates away right after.
+          transaction.oncomplete = () => {
+            db.close();
+            resolve(true);
+          };
+          transaction.onerror = transaction.onabort = () => {
+            db.close();
+            resolve(false);
+          };
+        } catch {
+          db.close();
+          resolve(false);
+        }
+      });
+    },
+
+    take: async (): Promise<T | null> => {
+      const db = await open();
+      if (!db) return null;
+      return new Promise<T | null>((resolve) => {
+        try {
+          const transaction = db.transaction(storeName, 'readwrite');
+          const objectStore = transaction.objectStore(storeName);
+          const request = objectStore.get(key);
+          let value: T | null = null;
+          request.onsuccess = () => {
+            value = (request.result as T | undefined) ?? null;
+            // Read and delete share one transaction, so two tabs racing on the same
+            // handoff cannot both come away with the value.
+            if (value !== null) objectStore.delete(key);
+          };
+          transaction.oncomplete = () => {
+            db.close();
+            resolve(value);
+          };
+          transaction.onerror = transaction.onabort = () => {
+            db.close();
+            resolve(null);
+          };
+        } catch {
+          db.close();
+          resolve(null);
+        }
+      });
+    },
+  };
+};

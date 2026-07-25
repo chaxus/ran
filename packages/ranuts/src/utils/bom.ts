@@ -178,53 +178,112 @@ export const getFrame = (n: number = 10): Promise<number> => {
 };
 
 /**
- * @description: 将 url 上的字符串转换成对象
- * @param {string} url
- * @param {*} string
- * @return {*}
+ * Extract the query part of a URL: everything after the first `?` and before any `#`.
+ * Returns '' when there is none. Reading `window.location.search` is not enough — callers
+ * pass full hrefs too, and a fragment must never leak into the last parameter's value.
  */
-export const getAllQueryString = (url?: string): Record<string, string> => {
-  if (typeof window !== 'undefined') {
-    const r: Record<string, string> = {};
-    const href = url || window.location.href;
-    if (href.split('?')[1]) {
-      const str = href.split('?')[1];
-      const strList = str.split('&');
-      strList.forEach((item) => {
-        const [key, val] = item.split('=');
-        if (key && val) {
-          r[key] = decodeURIComponent(val);
-        }
-      });
-    }
-    return r;
-  }
-  return {};
+const queryOf = (url?: string): string => {
+  const href = url ?? (typeof window === 'undefined' ? '' : window.location.href);
+  const start = href.indexOf('?');
+  if (start === -1) return '';
+  const rest = href.slice(start + 1);
+  const hash = rest.indexOf('#');
+  return hash === -1 ? rest : rest.slice(0, hash);
 };
 
 /**
- * @description: 将 url 上的字符串转换成对象
- * @param {string} url
- * @param {*} string
- * @return {*}
+ * @description: Parse a URL's query string into an object. Defaults to the current
+ * `window.location.href`, so it returns `{}` under SSR unless a URL is passed.
+ *
+ * A **bare flag keeps its place** as an empty string: `?embed` and `?embed=` both yield
+ * `{ embed: '' }`. The previous implementation dropped any parameter without a value,
+ * which made `?readonly` and `?embed` — the usual way to write a boolean flag —
+ * indistinguishable from the parameter being absent. Use [`queryFlag`](#queryflag) to read
+ * such a flag as a boolean.
+ *
+ * `+` is decoded as a space and a value containing `=` is preserved (only the first `=`
+ * splits), matching `URLSearchParams`.
+ *
+ * @param {string} url full URL or query string; defaults to the current location
+ * @return {Record<string, string>} parameters; `{}` when there are none
+ * @example
+ * ```ts
+ * getAllQueryString('https://x.dev/a?embed&lang=zh-CN&next=/a%3Fb%3D1');
+ * // { embed: '', lang: 'zh-CN', next: '/a?b=1' }
+ * ```
  */
-export const getQuery = (url?: string): Record<string, string> => {
-  if (typeof window !== 'undefined') {
-    const r: Record<string, string> = {};
-    const href = url || window.location.href;
-    if (href.split('?')[1]) {
-      const str = href.split('?')[1];
-      const strList = str.split('&');
-      strList.forEach((item) => {
-        const [key, val] = item.split('=');
-        if (key && val) {
-          r[key] = decodeURIComponent(val);
-        }
-      });
+export const getAllQueryString = (url?: string): Record<string, string> => {
+  const result: Record<string, string> = {};
+  const query = queryOf(url);
+  if (!query) return result;
+  for (const pair of query.split('&')) {
+    if (!pair) continue;
+    const eq = pair.indexOf('=');
+    const rawKey = eq === -1 ? pair : pair.slice(0, eq);
+    const rawValue = eq === -1 ? '' : pair.slice(eq + 1);
+    if (!rawKey) continue;
+    try {
+      result[decodeURIComponent(rawKey.replace(/\+/g, ' '))] = decodeURIComponent(rawValue.replace(/\+/g, ' '));
+    } catch {
+      // A malformed percent-escape ("%zz") throws in decodeURIComponent — keep the raw text
+      // rather than dropping the parameter, so a single bad value cannot hide the others.
+      result[rawKey] = rawValue;
     }
-    return r;
   }
-  return {};
+  return result;
+};
+
+/**
+ * @description: Alias of [`getAllQueryString`](#getallquerystring). The two used to be
+ * byte-identical copies of the same body; this one now forwards so a fix lands in both.
+ * @param {string} url full URL or query string; defaults to the current location
+ * @return {Record<string, string>}
+ */
+export const getQuery = (url?: string): Record<string, string> => getAllQueryString(url);
+
+/**
+ * @description: Read a query parameter as a boolean flag. True for `?k`, `?k=`, `?k=1` and
+ * `?k=true` (case-insensitive); false for anything else, including an absent parameter and
+ * an explicit `?k=false`.
+ *
+ * This is the URL spelling of a boolean: `?embed`, `?readonly` and `?debug` are all written
+ * without a value most of the time, so a plain `getQuery(url).embed` check is wrong for the
+ * most common form.
+ *
+ * @param {string} key parameter name
+ * @param {string} url full URL or query string; defaults to the current location
+ * @return {boolean}
+ * @example
+ * ```ts
+ * queryFlag('embed', '?embed');        // true
+ * queryFlag('embed', '?embed=1');      // true
+ * queryFlag('embed', '?embed=false');  // false
+ * queryFlag('embed', '?lang=en');      // false
+ * ```
+ */
+export const queryFlag = (key: string, url?: string): boolean => {
+  const value = getAllQueryString(url)[key];
+  if (value === undefined) return false;
+  const normalized = value.toLowerCase();
+  return normalized === '' || normalized === '1' || normalized === 'true';
+};
+
+/**
+ * @description: Whether this page is running inside an iframe. Returns false under SSR.
+ *
+ * Cross-origin embedding can make `window.parent` throw on access in some engines, so the
+ * comparison is guarded: an unreadable parent means the page is framed by a foreign origin,
+ * which still counts as embedded.
+ *
+ * @return {boolean}
+ */
+export const isInIframe = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  try {
+    return window.parent !== window;
+  } catch {
+    return true;
+  }
 };
 
 /**
