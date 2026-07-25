@@ -27,7 +27,7 @@ packages/docs/
 
 ## Build script conventions (`bin/build.sh`)
 
-**It starts with `set -euo pipefail`. Keep it there.** Without it the script's exit code is
+**It starts with `set -eu`, and must stay POSIX `sh`.** Without it the script's exit code is
 whatever the trailing `echo` returns — i.e. **0 even when VitePress failed to compile**. That
 happened: a broken markdown page failed the build, `mv`/`cat` then failed on the missing
 `sw.js`, and the script still exited 0 printing `service work file paths have been generate`.
@@ -35,6 +35,15 @@ Cloudflare Pages reads that exit code; a build that cannot fail publishes stale 
 reporting success.
 
 If you add a step, assume it will be the one that fails.
+
+**No bashisms.** `package.json` runs `sh ./bin/build.sh`, and invoking a script through `sh`
+**ignores its shebang** — the real interpreter is the system `/bin/sh`. That is bash on macOS
+but **dash** on the Cloudflare build image, so anything bash-only passes locally and fails only
+in CI. `set -euo pipefail` did exactly that: `set: Illegal option -o pipefail`, exit 2.
+
+Consequently there is no `pipefail` here. Where a pipeline's first command matters, write the
+intermediate result to a file instead of piping — see how the llms-full.txt file list is built.
+Verify changes with `/bin/dash -n bin/build.sh`, or run the whole thing under `/bin/dash`.
 
 ---
 
