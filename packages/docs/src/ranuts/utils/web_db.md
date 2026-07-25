@@ -8,29 +8,29 @@ every read or write is five steps (open → transaction → objectStore → requ
 
 ### new WebDB(options)
 
-| Parameter  | Description                                                             | Type                | Default  |
-| ---------- | ----------------------------------------------------------------------- | ------------------- | -------- |
-| `dbName`   | Database name                                                           | `string`            | Required |
-| `version`  | Schema version; bump it whenever `stores` changes                       | `number`            | `1`      |
-| `stores`   | Declarative object stores + indexes, created during an upgrade          | `IDBStoreSchema[]`  | `[]`     |
-| `upgrade`  | Escape hatch for migrations the schema cannot express, run after `stores` | `Function`          | —        |
+| Parameter | Description                                                               | Type               | Default  |
+| --------- | ------------------------------------------------------------------------- | ------------------ | -------- |
+| `dbName`  | Database name                                                             | `string`           | Required |
+| `version` | Schema version; bump it whenever `stores` changes                         | `number`           | `1`      |
+| `stores`  | Declarative object stores + indexes, created during an upgrade            | `IDBStoreSchema[]` | `[]`     |
+| `upgrade` | Escape hatch for migrations the schema cannot express, run after `stores` | `Function`         | —        |
 
 Every method resolves or rejects with the same `IDBResult` shape, so callers only check `error`.
 
-| Method             | Description                                          |
-| ------------------ | ---------------------------------------------------- |
-| `openDataBase()`   | Open (and upgrade if needed)                         |
-| `closeDataBase()`  | Close and drop the handle                            |
-| `refreshDatabase()`| Close then reopen                                    |
-| `deleteDatabase()` | Delete the database                                  |
-| `add({ storeName, data })`    | Insert; fails if the key exists           |
-| `update({ storeName, data })` | Put — insert or overwrite                 |
-| `readByKey({ storeName, key })` | Read one record                         |
-| `readAll({ storeName, query?, count? })` | Read every record            |
-| `readByCursor({ storeName, keyRange?, direction? })` | Walk with a cursor |
-| `count({ storeName, query? })` | Count records                            |
-| `delete({ storeName, key })`   | Delete one record                        |
-| `clear({ storeName })`         | Empty a store                            |
+| Method                                               | Description                     |
+| ---------------------------------------------------- | ------------------------------- |
+| `openDataBase()`                                     | Open (and upgrade if needed)    |
+| `closeDataBase()`                                    | Close and drop the handle       |
+| `refreshDatabase()`                                  | Close then reopen               |
+| `deleteDatabase()`                                   | Delete the database             |
+| `add({ storeName, data })`                           | Insert; fails if the key exists |
+| `update({ storeName, data })`                        | Put — insert or overwrite       |
+| `readByKey({ storeName, key })`                      | Read one record                 |
+| `readAll({ storeName, query?, count? })`             | Read every record               |
+| `readByCursor({ storeName, keyRange?, direction? })` | Walk with a cursor              |
+| `count({ storeName, query? })`                       | Count records                   |
+| `delete({ storeName, key })`                         | Delete one record               |
+| `clear({ storeName })`                               | Empty a store                   |
 
 ## Example
 

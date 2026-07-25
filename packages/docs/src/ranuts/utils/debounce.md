@@ -12,17 +12,17 @@ For "I need the intermediate values too", use [throttle](./throttle).
 
 #### Parameters
 
-| Parameter | Description            | Type       | Default  |
-| --------- | ---------------------- | ---------- | -------- |
-| `fn`      | Function to debounce   | `Function` | Required |
-| `ms`      | Quiet period (ms)      | `number`   | `500`    |
+| Parameter | Description          | Type       | Default  |
+| --------- | -------------------- | ---------- | -------- |
+| `fn`      | Function to debounce | `Function` | Required |
+| `ms`      | Quiet period (ms)    | `number`   | `500`    |
 
 #### Return
 
 A debounced function that keeps the call-site `this` and the **last** arguments, plus:
 
-| Member      | Description                                            | Type            |
-| ----------- | ------------------------------------------------------ | --------------- |
+| Member      | Description                                             | Type            |
+| ----------- | ------------------------------------------------------- | --------------- |
 | `cancel()`  | Drop the pending call                                   | `() => void`    |
 | `flush()`   | Run the pending call right now (e.g. before submitting) | `() => void`    |
 | `pending()` | Whether a call is waiting                               | `() => boolean` |

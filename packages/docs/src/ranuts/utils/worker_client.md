@@ -9,21 +9,21 @@ to its own promise.
 
 ### new WorkerClient(options)
 
-| Parameter          | Description                                                          | Type                        | Default                     |
-| ------------------ | -------------------------------------------------------------------- | --------------------------- | --------------------------- |
-| `create`           | How to construct the worker                                          | `() => Worker`              | Required                    |
-| `isProgress`       | Is this a progress message? (does not settle the request)            | `(res) => boolean`          | `res.type === 'progress'`   |
-| `getProgress`      | Extract the progress payload                                         | `(res) => Progress`         | `res.progress`              |
-| `isError`          | Is this an error message?                                            | `(res) => boolean`          | `res.type === 'error'`      |
-| `getErrorMessage`  | Error text                                                           | `(res) => string`           | `res.message`               |
-| `timeout`          | Per-request timeout (ms); rejects that request only                  | `number`                    | none                        |
+| Parameter         | Description                                               | Type                | Default                   |
+| ----------------- | --------------------------------------------------------- | ------------------- | ------------------------- |
+| `create`          | How to construct the worker                               | `() => Worker`      | Required                  |
+| `isProgress`      | Is this a progress message? (does not settle the request) | `(res) => boolean`  | `res.type === 'progress'` |
+| `getProgress`     | Extract the progress payload                              | `(res) => Progress` | `res.progress`            |
+| `isError`         | Is this an error message?                                 | `(res) => boolean`  | `res.type === 'error'`    |
+| `getErrorMessage` | Error text                                                | `(res) => string`   | `res.message`             |
+| `timeout`         | Per-request timeout (ms); rejects that request only       | `number`            | none                      |
 
-| Member                                   | Description                                        |
-| ---------------------------------------- | -------------------------------------------------- |
-| `send(request, onProgress?, transfer?)`  | Send one request, await its response               |
-| `dispose()`                              | Terminate and reject everything in flight          |
-| `active`                                 | Whether the worker has been created                |
-| `pendingCount`                           | Number of in-flight requests                       |
+| Member                                  | Description                               |
+| --------------------------------------- | ----------------------------------------- |
+| `send(request, onProgress?, transfer?)` | Send one request, await its response      |
+| `dispose()`                             | Terminate and reject everything in flight |
+| `active`                                | Whether the worker has been created       |
+| `pendingCount`                          | Number of in-flight requests              |
 
 ## Example
 

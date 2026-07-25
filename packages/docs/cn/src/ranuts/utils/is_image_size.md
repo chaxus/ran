@@ -82,7 +82,6 @@ async function handleFileUpload(file) {
 }
 ```
 
-
 ## 行为
 
 1. 同时传 `width` 与 `height` 时**必须同时满足**；两者都不传则只校验文件能否解码为图片。

@@ -8,25 +8,25 @@ async counterpart.
 
 ### once(fn)
 
-| Parameter | Description                                                   | Type              | Default  |
-| --------- | ------------------------------------------------------------- | ----------------- | -------- |
-| `fn`      | Function to run once; a non-function value is returned as-is  | `Function \| any` | Required |
+| Parameter | Description                                                  | Type              | Default  |
+| --------- | ------------------------------------------------------------ | ----------------- | -------- |
+| `fn`      | Function to run once; a non-function value is returned as-is | `Function \| any` | Required |
 
 Returns a wrapped function. The first call evaluates and caches; every later call returns
 that first result, **whatever arguments are passed**.
 
 ### singleFlight(fn)
 
-| Parameter | Description                    | Type                  | Default  |
-| --------- | ------------------------------ | --------------------- | -------- |
-| `fn`      | Async function to run once     | `() => Promise<T>`    | Required |
+| Parameter | Description                | Type               | Default  |
+| --------- | -------------------------- | ------------------ | -------- |
+| `fn`      | Async function to run once | `() => Promise<T>` | Required |
 
 Returns a wrapped function plus:
 
-| Member    | Description                                                      | Type            |
-| --------- | ---------------------------------------------------------------- | --------------- |
-| `reset()` | Discard the cached result so the next call runs `fn` again        | `() => void`    |
-| `started` | Whether it has a result or is currently running                   | `boolean`       |
+| Member    | Description                                                | Type         |
+| --------- | ---------------------------------------------------------- | ------------ |
+| `reset()` | Discard the cached result so the next call runs `fn` again | `() => void` |
+| `started` | Whether it has a result or is currently running            | `boolean`    |
 
 ### memoize(fn)
 

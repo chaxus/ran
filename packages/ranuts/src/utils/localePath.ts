@@ -76,7 +76,9 @@ export const createLocalePath = (config: LocalePathConfig): LocalePath => {
   const base = normalizeBase(config.base ?? '');
   const defaultLocale = config.defaultLocale ?? (locales.find((l) => !l.prefix) ?? locales[0]).code;
   // 长前缀优先匹配：否则 `zh` 会先命中 `/zh-hant/...`，把繁体路径判成简体
-  const prefixed = locales.filter((l) => l.prefix).sort((a, b) => (b.prefix as string).length - (a.prefix as string).length);
+  const prefixed = locales
+    .filter((l) => l.prefix)
+    .sort((a, b) => (b.prefix as string).length - (a.prefix as string).length);
 
   const localeOf = (code: string): LocaleRoute => locales.find((l) => l.code === code) ?? { code: defaultLocale };
 

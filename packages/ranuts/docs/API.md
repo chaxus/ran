@@ -22,7 +22,7 @@ Import from the **subpath** that owns the symbol, e.g. `import { debounce } from
 浏览器 / 通用工具函数 · runtime: **browser + node** · source: `src/utils/index.ts`
 
 ```ts
-import { /* … */ } from 'ranuts/utils';
+import {} from /* … */ 'ranuts/utils';
 ```
 
 ### Functions
@@ -219,7 +219,7 @@ import { /* … */ } from 'ranuts/utils';
 Node 服务端工具（fs / http / ws / 中间件） · runtime: **node only** · source: `src/node/index.ts`
 
 ```ts
-import { /* … */ } from 'ranuts/node';
+import {} from /* … */ 'ranuts/node';
 ```
 
 ### Functions
@@ -268,7 +268,7 @@ import { /* … */ } from 'ranuts/node';
 2D 渲染引擎（Canvas / WebGL / WebGPU） · runtime: **browser only** · source: `src/utils/visual/index.ts`
 
 ```ts
-import { /* … */ } from 'ranuts/visual';
+import {} from /* … */ 'ranuts/visual';
 ```
 
 ### Classes
@@ -300,7 +300,7 @@ import { /* … */ } from 'ranuts/visual';
 Snabbdom 风格虚拟 DOM · runtime: **browser** · source: `src/vnode/index.ts`
 
 ```ts
-import { /* … */ } from 'ranuts/vnode';
+import {} from /* … */ 'ranuts/vnode';
 ```
 
 ### Functions
@@ -346,4 +346,3 @@ import { /* … */ } from 'ranuts/vnode';
 ### Namespaces
 
 - `namespace is` — 类型判断工具集（数组 / 字符串 / 原始值 / VNode）
-

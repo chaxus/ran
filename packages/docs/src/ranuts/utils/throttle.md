@@ -13,19 +13,19 @@ For "only the final value matters" (search-as-you-type, autosave), use [debounce
 
 #### Parameters
 
-| Parameter | Description                  | Type       | Default  |
-| --------- | ---------------------------- | ---------- | -------- |
-| `fn`      | Function to throttle         | `Function` | Required |
-| `delay`   | Minimum interval (ms)        | `number`   | `300`    |
+| Parameter | Description           | Type       | Default  |
+| --------- | --------------------- | ---------- | -------- |
+| `fn`      | Function to throttle  | `Function` | Required |
+| `delay`   | Minimum interval (ms) | `number`   | `300`    |
 
 #### Return
 
 A throttled function that keeps the call-site `this` and arguments, plus:
 
-| Member      | Description                                | Type              |
-| ----------- | ------------------------------------------ | ----------------- |
-| `cancel()`  | Drop the pending trailing call             | `() => void`      |
-| `pending()` | Whether a trailing call is waiting          | `() => boolean`   |
+| Member      | Description                        | Type            |
+| ----------- | ---------------------------------- | --------------- |
+| `cancel()`  | Drop the pending trailing call     | `() => void`    |
+| `pending()` | Whether a trailing call is waiting | `() => boolean` |
 
 ## Example
 

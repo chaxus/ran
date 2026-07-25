@@ -8,29 +8,29 @@ IndexedDB 的 Promise 封装。原生 IndexedDB 是事件回调 + 事务式 API�
 
 ### new WebDB(options)
 
-| 参数      | 说明                                                     | 类型               | 默认值 |
-| --------- | -------------------------------------------------------- | ------------------ | ------ |
-| `dbName`  | 数据库名                                                 | `string`           | 必填   |
-| `version` | schema 版本；改动 `stores` 时必须递增                    | `number`           | `1`    |
-| `stores`  | 声明式仓库与索引，在版本升级事务里创建                   | `IDBStoreSchema[]` | `[]`   |
-| `upgrade` | 逃生舱：schema 表达不了的迁移，在 `stores` 建完后调用    | `Function`         | —      |
+| 参数      | 说明                                                  | 类型               | 默认值 |
+| --------- | ----------------------------------------------------- | ------------------ | ------ |
+| `dbName`  | 数据库名                                              | `string`           | 必填   |
+| `version` | schema 版本；改动 `stores` 时必须递增                 | `number`           | `1`    |
+| `stores`  | 声明式仓库与索引，在版本升级事务里创建                | `IDBStoreSchema[]` | `[]`   |
+| `upgrade` | 逃生舱：schema 表达不了的迁移，在 `stores` 建完后调用 | `Function`         | —      |
 
 所有方法都以统一的 `IDBResult` 形状 resolve/reject，调用方只需判断 `error`。
 
-| 方法                | 说明                             |
-| ------------------- | -------------------------------- |
-| `openDataBase()`    | 打开（必要时升级）               |
-| `closeDataBase()`   | 关闭并释放句柄                   |
-| `refreshDatabase()` | 关闭后重开                       |
-| `deleteDatabase()`  | 删库                             |
-| `add({ storeName, data })`    | 新增；主键已存在则失败 |
-| `update({ storeName, data })` | put 语义：不存在则插入，存在则覆盖 |
-| `readByKey({ storeName, key })` | 读单条               |
-| `readAll({ storeName, query?, count? })` | 读全部      |
-| `readByCursor({ storeName, keyRange?, direction? })` | 游标遍历 |
-| `count({ storeName, query? })` | 计数                  |
-| `delete({ storeName, key })`   | 删单条                |
-| `clear({ storeName })`         | 清空仓库              |
+| 方法                                                 | 说明                               |
+| ---------------------------------------------------- | ---------------------------------- |
+| `openDataBase()`                                     | 打开（必要时升级）                 |
+| `closeDataBase()`                                    | 关闭并释放句柄                     |
+| `refreshDatabase()`                                  | 关闭后重开                         |
+| `deleteDatabase()`                                   | 删库                               |
+| `add({ storeName, data })`                           | 新增；主键已存在则失败             |
+| `update({ storeName, data })`                        | put 语义：不存在则插入，存在则覆盖 |
+| `readByKey({ storeName, key })`                      | 读单条                             |
+| `readAll({ storeName, query?, count? })`             | 读全部                             |
+| `readByCursor({ storeName, keyRange?, direction? })` | 游标遍历                           |
+| `count({ storeName, query? })`                       | 计数                               |
+| `delete({ storeName, key })`                         | 删单条                             |
+| `clear({ storeName })`                               | 清空仓库                           |
 
 ## 示例
 

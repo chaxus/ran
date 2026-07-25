@@ -9,19 +9,19 @@ A minimal signal: `[read, write]`, with optional broadcast over the shared
 
 #### Parameters
 
-| Parameter            | Description                                          | Type                                        | Default     |
-| -------------------- | ---------------------------------------------------- | ------------------------------------------- | ----------- |
-| `value`              | Initial value                                        | `T`                                         | Required    |
-| `options.subscriber` | Event name; broadcasts on `subscribers` when changed | `string`                                    | `undefined` |
+| Parameter            | Description                                          | Type                                         | Default     |
+| -------------------- | ---------------------------------------------------- | -------------------------------------------- | ----------- |
+| `value`              | Initial value                                        | `T`                                          | Required    |
+| `options.subscriber` | Event name; broadcasts on `subscribers` when changed | `string`                                     | `undefined` |
 | `options.equals`     | How to decide "did it change"                        | `boolean \| ((prev: T, next: T) => boolean)` | `true`      |
 
 `equals` semantics:
 
-| Value      | Behaviour                                                          |
-| ---------- | ------------------------------------------------------------------ |
+| Value            | Behaviour                                                          |
+| ---------------- | ------------------------------------------------------------------ |
 | omitted / `true` | `Object.is` — reference/value equality (standard signal semantics) |
-| `false`    | Every write counts as a change and notifies                        |
-| a function | Return `true` to mean "equal, skip the notification"               |
+| `false`          | Every write counts as a change and notifies                        |
+| a function       | Return `true` to mean "equal, skip the notification"               |
 
 #### Return
 
@@ -44,7 +44,7 @@ const [tree, setTree] = createSignal(initial, { equals: isEqual });
 
 ## Notes
 
-1. **Reference equality by default.** A freshly built but deep-equal object *is* a change.
+1. **Reference equality by default.** A freshly built but deep-equal object _is_ a change.
    This matches standard signal semantics and keeps writes O(1).
 2. **Deep comparison is opt-in** via `{ equals: isEqual }` — the cost is then visible at the
    call site.
@@ -58,4 +58,4 @@ Two fixes that change behaviour:
 - Every write used to run `cloneDeep` + `isEqual` on top of `equals`. That put an
   O(data-size) copy on the write hot path, and the extra deep check overrode `equals`, so
   `{ equals: false }` ("always notify") silently did nothing for deep-equal values. Both are gone.
-:::
+  :::

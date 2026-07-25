@@ -82,7 +82,6 @@ async function handleFileUpload(file) {
 }
 ```
 
-
 ## Behaviour
 
 1. **Both dimensions must match** when both `width` and `height` are given. Passing neither
