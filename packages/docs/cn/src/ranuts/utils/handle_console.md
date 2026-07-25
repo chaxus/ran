@@ -1,92 +1,48 @@
-# handleConsole
+# 监控注入钩子
 
-拦截并处理 console 方法调用，可以在控制台输出前后执行自定义逻辑。
+拦截 `console`、`fetch`、`XMLHttpRequest`、点击与未捕获错误 —— 用于监控后端、调试浮层或测试。
+
+**每一个都会返回卸载函数，请保留并调用它。** 注入全局却没有回退路径是一扇单向门：测试无法自我清理，
+热更新会在已注入的全局上再注入一层，直到每次调用要穿过十几层包装、每个事件被上报 N 次。
 
 ## API
 
-### handleConsole
+| 函数                         | 注入对象                             | 返回        |
+| ---------------------------- | ------------------------------------ | ----------- |
+| `handleConsole(hook)`        | `console.log/info/warn/error/assert` | `restore`   |
+| `handleFetchHook(options)`   | `window.fetch`                       | `restore`   |
+| `handleXhrHook(options)`     | `XMLHttpRequest#open` / `#send`      | `restore`   |
+| `handleError(hook)`          | `error` + `unhandledrejection`       | `unsubscribe` |
+| `handleClick(hook)`          | document 点击（捕获阶段）            | `unsubscribe` |
+| `replaceOld(obj, key, wrap)` | 任意对象上的任意属性                 | `restore`   |
 
-#### Return
+`handleFetchHook` / `handleXhrHook` 接收 `{ requestHook, responseHook, errorHook }`。
 
-无返回值（`void`）
-
-#### Parameters
-
-| 参数    | 说明         | 类型       | 默认值 |
-| ------- | ------------ | ---------- | ------ |
-| `hooks` | 拦截回调函数 | `Function` | `noop` |
-
-#### hooks 参数
-
-回调函数接收以下参数：
-
-- `type`: console 方法类型（'log', 'info', 'warn', 'error', 'assert'）
-- `...args`: 传递给 console 方法的参数
-
-## Example
-
-### 基础用法
+## 示例
 
 ```js
-import { handleConsole } from 'ranuts';
+import { handleConsole, handleError, handleFetchHook } from 'ranuts';
 
-handleConsole((type, ...args) => {
-  console.log(`[${type}]`, ...args);
-  // 可以在这里记录日志、发送到服务器等
-});
+const teardown = [
+  handleConsole((type, ...args) => send({ type, args })),
+  handleError((error) => send({ type: 'error', error: String(error) })),
+  handleFetchHook({ errorHook: (url, error) => send({ type: 'fetchError', url }) }),
+];
+
+// 销毁时（热更新、路由切换、测试清理）
+teardown.forEach((off) => off());
 ```
 
-### 日志收集
+## 注意
 
-```js
-import { handleConsole } from 'ranuts';
+1. **原有行为完全保留**。响应照常透传，错误照常重新抛出，console 照常打印。
+2. **`replaceOld` 的 restore 只撤销自己那一层**。如果之后有别的层叠加在上面，
+   盲目写回原值会把那一层静默卸载，所以它选择放弃。
+3. **`handleXhrHook` 注入的是原型**，对所有实例生效；其监听用 `{ once: true }` 注册，
+   复用同一个 XHR 对象也不会越积越多。
+4. **不要把 console 上报到一个会打日志的后端** —— 钩子会被它自己产生的那次调用触发。
+   （这也是 `Monitor` 的 `console` 通道默认关闭的原因。）
 
-const logs = [];
-
-handleConsole((type, ...args) => {
-  logs.push({
-    type,
-    args,
-    timestamp: Date.now(),
-  });
-});
-
-// 之后可以将 logs 发送到服务器
-```
-
-### 过滤敏感信息
-
-```js
-import { handleConsole } from 'ranuts';
-
-handleConsole((type, ...args) => {
-  // 过滤敏感信息
-  const filtered = args.map((arg) => {
-    if (typeof arg === 'string' && arg.includes('password')) {
-      return '[FILTERED]';
-    }
-    return arg;
-  });
-  console[type](...filtered);
-});
-```
-
-### 错误上报
-
-```js
-import { handleConsole } from 'ranuts';
-
-handleConsole((type, ...args) => {
-  if (type === 'error') {
-    // 上报错误到服务器
-    reportError(args);
-  }
-});
-```
-
-## 注意事项
-
-1. **拦截的方法**：拦截 `log`、`info`、`warn`、`error`、`assert` 五个 console 方法。
-2. **原方法保留**：拦截后仍会执行原始的 console 方法，只是添加了钩子。
-3. **参数传递**：回调函数会接收方法类型和所有原始参数。
-4. **用途**：常用于日志收集、错误监控、调试工具等场景。
+::: warning 0.3 变更
+这些函数此前都返回 `void`，没有卸载途径。现在统一返回卸载函数；老调用点照常工作，直接开始使用即可。
+:::
