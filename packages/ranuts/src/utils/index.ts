@@ -1,7 +1,18 @@
 import { SyncHook } from './subscribe';
-import { Mathjs, addNumSym, mathjs, perToNum, range, transformNumber } from './number';
+import {
+  Mathjs,
+  addNumSym,
+  mathjs,
+  parseChineseNumber,
+  parseEnglishNumber,
+  parseRomanNumber,
+  perToNum,
+  range,
+  transformNumber,
+} from './number';
 import {
   MessageCodec,
+  arrayBufferToString,
   changeHumpToLowerCase,
   checkEncoding,
   clearBr,
@@ -13,6 +24,8 @@ import {
   randomString,
   str2Xml,
   strParse,
+  toFullWidth,
+  toHalfWidth,
   toString,
   transformText,
 } from './str';
@@ -90,7 +103,26 @@ import {
 } from './dom';
 import { handleError } from './error';
 import { convertImageToBase64, isImageSize } from './img';
-import { memoize } from './memoize';
+import { memoize, singleFlight } from './memoize';
+import type { SingleFlight } from './memoize';
+import { WebDB } from './idb';
+import type { IDBResult, IDBStoreSchema, WebDBOptions } from './idb';
+import { buildOffsets, indexForOffset, segmentByRanges } from './segment';
+import type { OffsetRange, Segment } from './segment';
+import { detectLanguage, navigatorLanguage } from './lang';
+import type { TextLanguage } from './lang';
+import { readFileAsArrayBuffer, readFileAsDataURL, readFileAsText, readFileAsUint8Array } from './file';
+import { WorkerClient } from './worker';
+import type { WorkerClientOptions, WorkerResponseBase } from './worker';
+import {
+  isUrlCached,
+  networkAllowsDownload,
+  prefetchUrl,
+  prefetchUrls,
+  prefetchWhenIdle,
+  whenIdle,
+} from './prefetch';
+import type { NetworkAllowanceOptions, PrefetchOptions, WhenIdleOptions } from './prefetch';
 import { Monitor } from './monitor';
 import { getStatus, status } from './network';
 import { noop } from './noop';
@@ -102,7 +134,16 @@ import { scriptOnLoad } from './script';
 import { generateThrottle, throttle } from './throttle';
 import { performanceTime, timeFormat, timestampToTime } from './time';
 import type { CurrentDevice } from './device';
-import { currentDevice, isBangDevice, isClient, isMobile, isWeiXin } from './device';
+import {
+  MOBILE_MEDIA_QUERY,
+  currentDevice,
+  isBangDevice,
+  isClient,
+  isMobile,
+  isWeiXin,
+  matchMediaQuery,
+  watchMediaQuery,
+} from './device';
 import {
   Color,
   ColorScheme,
@@ -248,9 +289,48 @@ export {
   createPortBridge,
   BRIDGE_MARKER,
   DEFAULT_CHANNEL,
+  singleFlight,
+  WebDB,
+  buildOffsets,
+  indexForOffset,
+  segmentByRanges,
+  detectLanguage,
+  navigatorLanguage,
+  readFileAsArrayBuffer,
+  readFileAsUint8Array,
+  readFileAsText,
+  readFileAsDataURL,
+  WorkerClient,
+  whenIdle,
+  networkAllowsDownload,
+  isUrlCached,
+  prefetchUrl,
+  prefetchUrls,
+  prefetchWhenIdle,
+  arrayBufferToString,
+  toHalfWidth,
+  toFullWidth,
+  parseChineseNumber,
+  parseRomanNumber,
+  parseEnglishNumber,
+  MOBILE_MEDIA_QUERY,
+  matchMediaQuery,
+  watchMediaQuery,
 };
 
 export type {
+  SingleFlight,
+  IDBResult,
+  IDBStoreSchema,
+  WebDBOptions,
+  OffsetRange,
+  Segment,
+  TextLanguage,
+  WorkerClientOptions,
+  WorkerResponseBase,
+  WhenIdleOptions,
+  NetworkAllowanceOptions,
+  PrefetchOptions,
   CurrentDevice,
   TransformText,
   MessageHandler,

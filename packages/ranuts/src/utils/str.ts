@@ -205,6 +205,41 @@ export const checkEncoding = (uint8Array: Uint8Array): string => {
   return detected.encoding || 'utf-8';
 };
 
+/**
+ * @description: 按嗅探出的编码把二进制解码成字符串。读取来源不明的文本文件（用户上传的
+ * txt、老网站抓来的内容）时必须这么做——直接 `new TextDecoder().decode()` 会把 GBK/Big5
+ * 解成乱码，而这类文件在中文场景里占相当比例。
+ * @param {ArrayBuffer | Uint8Array} buffer
+ * @return {string}
+ */
+export const arrayBufferToString = (buffer: ArrayBuffer | Uint8Array): string => {
+  const uint8Array = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
+  return new TextDecoder(checkEncoding(uint8Array)).decode(uint8Array);
+};
+
+/**
+ * @description: 全角字符转半角（数字、字母、标点与全角空格）。中文输入法产出的全角数字
+ * 在正则、`parseInt`、字符串比较里都不等价于半角，解析前先归一化。
+ * @param {string} value
+ * @return {string}
+ */
+export const toHalfWidth = (value: string): string => {
+  return value
+    .replace(/[！-～]/g, (char) => String.fromCharCode(char.charCodeAt(0) - 0xfee0))
+    .replace(/\u3000/g, ' ');
+};
+
+/**
+ * @description: 半角字符转全角（`toHalfWidth` 的逆向）
+ * @param {string} value
+ * @return {string}
+ */
+export const toFullWidth = (value: string): string => {
+  return value
+    .replace(/[!-~]/g, (char) => String.fromCharCode(char.charCodeAt(0) + 0xfee0))
+    .replace(/ /g, '\u3000');
+};
+
 export interface TransformText {
   encoding: string;
   content: string;

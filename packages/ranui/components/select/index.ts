@@ -281,6 +281,29 @@ export class Select extends RanElement {
     this.syncActiveState();
   };
 
+  /**
+   * Vertically center the closed-state label by matching its line-height to the
+   * host height.
+   *
+   * Guarded on a non-zero height: during a custom-element **upgrade** (SSR/DSD
+   * markup, or any element whose `value` attribute is present before it is laid
+   * out) `attributeChangedCallback` runs before `connectedCallback`, so
+   * `getBoundingClientRect()` still reports 0. Writing `line-height: 0px` then
+   * collapses the label to invisible even though its text is correct — the
+   * component looks empty until something re-selects the option. When there is
+   * no layout yet we clear the inline value and let the stylesheet decide;
+   * `connectedCallback` re-applies it once the element has a box.
+   */
+  applyLabelLineHeight = (): void => {
+    if (!this._text) return;
+    const { height } = this.getBoundingClientRect();
+    if (height > 0) {
+      this._text.style.setProperty('line-height', `${height}px`);
+    } else {
+      this._text.style.removeProperty('line-height');
+    }
+  };
+
   selectOptionElement = (optionElement: HTMLElement | null, shouldDispatch = true): void => {
     if (!optionElement) return;
     const label = optionElement.getAttribute('title') || optionElement.textContent?.trim() || '';
@@ -291,9 +314,7 @@ export class Select extends RanElement {
     this._text.textContent = label;
     this._text.setAttribute('title', label);
     this._search.setAttribute('placeholder', label);
-    const rect = this.getBoundingClientRect();
-    const { height } = rect;
-    this._text.style.setProperty('line-height', `${height}px`);
+    this.applyLabelLineHeight();
     if (this._activeOption && this._activeOption !== optionElement) {
       this._activeOption.removeAttribute('active');
       this._activeOption.setAttribute('aria-selected', 'false');
@@ -642,11 +663,9 @@ export class Select extends RanElement {
     const label = this._optionValueMapLabel.get(defaultValue);
     if (!label) return;
     this.setAttribute('value', defaultValue);
-    const rect = this.getBoundingClientRect();
-    const { height } = rect;
-    this._text.style.setProperty('line-height', `${height}px`);
     this._text.textContent = label;
     this._text.setAttribute('title', label);
+    this.applyLabelLineHeight();
     const options = this.getDropdownOptions();
     const target = options.find((item) => item.getAttribute('value') === defaultValue) || null;
     if (target) {
@@ -698,7 +717,28 @@ export class Select extends RanElement {
       this._events.on(this, 'click', this.selectMouseDown).on(this, 'blur', this.selectBlur);
     }
     this._applyShowSearch();
+    // SSR / declarative shadow DOM: the `value` attribute is already present at
+    // upgrade time, so `syncSelectedFromValue` ran *before* this callback — with
+    // no layout and no dropdown built yet. Re-apply it here, now that the element
+    // is connected, so the closed-state label and the active option are correct.
+    this.reapplyValueAfterConnect();
   }
+
+  /**
+   * Re-run the `value` → label/active-option reflection after connect.
+   *
+   * `syncSelectedFromValue` bails out when `_activeOption` already matches, which
+   * is exactly the situation left behind by an upgrade-time sync: the option was
+   * marked active but the label was written without layout. Clearing the cached
+   * option first forces a full, correct pass.
+   */
+  reapplyValueAfterConnect = (): void => {
+    const value = this.getAttribute('value');
+    if (!value) return;
+    this._activeOption = null;
+    this.syncSelectedFromValue(value);
+    this.applyLabelLineHeight();
+  };
   /**
    * (Re)wire the search-box listeners to match the current `showSearch` value.
    * Reactive: abort any previously-registered search listeners first, then

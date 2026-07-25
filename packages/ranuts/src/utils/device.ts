@@ -24,6 +24,56 @@ export const currentDevice = (): CurrentDevice => {
 
 export const isClient = typeof window !== 'undefined';
 
+/** 视口断点：与移动端布局的分界线保持一致 */
+export const MOBILE_MEDIA_QUERY = '(max-width: 768px)';
+
+/**
+ * @description: 同步读取一条媒体查询当前是否匹配。SSR 返回 false。
+ *
+ * 判断「是不是移动端」优先用这个而不是 `isMobile()`：UA 嗅探认的是**设备**，
+ * 媒体查询认的是**视口**——桌面浏览器缩窄窗口、平板横竖屏切换时只有后者是对的。
+ * @param {string} query 媒体查询串
+ * @return {boolean}
+ */
+export const matchMediaQuery = (query: string): boolean => {
+  if (!isClient || typeof window.matchMedia !== 'function') return false;
+  return window.matchMedia(query).matches;
+};
+
+/**
+ * @description: 监听媒体查询变化。回调会**先同步触发一次当前值**（省掉调用方自己再读一遍
+ * 初值），之后每次变化再触发。返回取消订阅函数——务必在组件销毁 / 页面 dispose 时调用，
+ * MediaQueryList 的监听不解绑会让闭包连同它捕获的 DOM 一起泄漏。
+ * @param {string} query 媒体查询串
+ * @param {Function} callback 匹配状态变化时调用
+ * @return {Function} 取消订阅
+ * @example
+ * ```ts
+ * const off = watchMediaQuery(MOBILE_MEDIA_QUERY, (isMobile) => render(isMobile));
+ * onCleanup(off);
+ * ```
+ */
+export const watchMediaQuery = (query: string, callback: (matches: boolean) => void): (() => void) => {
+  if (!isClient || typeof window.matchMedia !== 'function') {
+    callback(false);
+    return () => {};
+  }
+  const mql = window.matchMedia(query);
+  const handler = (): void => callback(mql.matches);
+  handler();
+  // addEventListener 是新写法；Safari 14 以前只有 addListener，两者都接一下
+  if (typeof mql.addEventListener === 'function') {
+    mql.addEventListener('change', handler);
+    return () => mql.removeEventListener('change', handler);
+  }
+  const legacy = mql as unknown as {
+    addListener: (cb: () => void) => void;
+    removeListener: (cb: () => void) => void;
+  };
+  legacy.addListener(handler);
+  return () => legacy.removeListener(handler);
+};
+
 /**
  * @description: 判断是否是微信浏览器的函数
  * @param {*} boolean

@@ -1,4 +1,4 @@
-import { toString } from './str';
+import { toHalfWidth, toString } from './str';
 interface ComputeNumberResult {
   result: number;
   next: (a: string, b: number) => ComputeNumberResult;
@@ -164,4 +164,145 @@ export const addNumSym = (value: string | number, flag?: string | number): strin
     return Number(flag || 0) > 0 ? `+${toString(value)}` : toString(value);
   }
   return Number(value || 0) > 0 ? `+${toString(value)}` : toString(value);
+};
+
+/* ── 自然语言里的数字 ──────────────────────────────────────────────────────
+ * 解析人写给人看的序号：「第二十三章」「Chapter XIV」「Part Three」。
+ * 三个解析器统一约定：**无法完整解析就返回 null**，绝不返回猜测值——
+ * 这类解析多用于「这行是不是标题」的判断，一个错误的数字会污染整条序列校验。
+ */
+
+const CN_DIGITS: Record<string, number> = {
+  零: 0,
+  〇: 0,
+  一: 1,
+  二: 2,
+  两: 2,
+  三: 3,
+  四: 4,
+  五: 5,
+  六: 6,
+  七: 7,
+  八: 8,
+  九: 9,
+};
+
+const CN_UNITS: Record<string, number> = {
+  十: 10,
+  百: 100,
+  千: 1000,
+};
+
+/**
+ * @description: 中文数字转阿拉伯数字，支持「十五」「二十三」「一百零三」「一千零一」「三万」，
+ * 简繁通用（万/萬），全角数字先归一化。混入无法识别的字符时返回 null。
+ * @param {string} value
+ * @return {number | null}
+ * @example
+ * ```ts
+ * parseChineseNumber('二十三'); // 23
+ * parseChineseNumber('一百零三'); // 103
+ * parseChineseNumber('第三章'); // null（含非数字字符，请先截出编号段）
+ * ```
+ */
+export const parseChineseNumber = (value: string): number | null => {
+  const text = toHalfWidth(value.trim());
+  if (/^\d+$/.test(text)) return Number.parseInt(text, 10);
+  if (text.length === 0) return null;
+  let result = 0;
+  let section = 0;
+  let current = 0;
+  for (const char of text) {
+    if (CN_DIGITS[char] !== undefined) {
+      current = CN_DIGITS[char];
+    } else if (CN_UNITS[char] !== undefined) {
+      // 「十五」的「十」前面没有数字，按 1 处理
+      section += (current || (char === '十' ? 1 : 0)) * CN_UNITS[char];
+      current = 0;
+    } else if (char === '万' || char === '萬') {
+      result = (result + section + current) * 10000;
+      section = 0;
+      current = 0;
+    } else {
+      return null;
+    }
+  }
+  return result + section + current;
+};
+
+const ROMAN_VALUES: Record<string, number> = {
+  I: 1,
+  V: 5,
+  X: 10,
+  L: 50,
+  C: 100,
+  D: 500,
+  M: 1000,
+};
+
+/**
+ * @description: 罗马数字转阿拉伯数字（大小写皆可，按减法记法处理 IV / IX）。非法输入返回 null。
+ * @param {string} value
+ * @return {number | null}
+ * @example
+ * ```ts
+ * parseRomanNumber('XIV'); // 14
+ * parseRomanNumber('mcmxciv'); // 1994
+ * ```
+ */
+export const parseRomanNumber = (value: string): number | null => {
+  const text = value.trim().toUpperCase();
+  if (!/^[IVXLCDM]+$/.test(text)) return null;
+  let result = 0;
+  for (let i = 0; i < text.length; i++) {
+    const current = ROMAN_VALUES[text[i]];
+    const next = ROMAN_VALUES[text[i + 1]];
+    if (next && current < next) {
+      result -= current;
+    } else {
+      result += current;
+    }
+  }
+  return result;
+};
+
+const EN_NUMBER_WORDS: Record<string, number> = {
+  one: 1,
+  two: 2,
+  three: 3,
+  four: 4,
+  five: 5,
+  six: 6,
+  seven: 7,
+  eight: 8,
+  nine: 9,
+  ten: 10,
+  eleven: 11,
+  twelve: 12,
+  thirteen: 13,
+  fourteen: 14,
+  fifteen: 15,
+  sixteen: 16,
+  seventeen: 17,
+  eighteen: 18,
+  nineteen: 19,
+  twenty: 20,
+};
+
+/**
+ * @description: 英文序号转数字：阿拉伯数字 / 英文数词（one–twenty）/ 罗马数字，依次尝试。
+ * 都不匹配返回 null。
+ * @param {string} value
+ * @return {number | null}
+ * @example
+ * ```ts
+ * parseEnglishNumber('Three'); // 3
+ * parseEnglishNumber('XII'); // 12
+ * ```
+ */
+export const parseEnglishNumber = (value: string): number | null => {
+  const text = value.trim().toLowerCase();
+  if (/^\d+$/.test(text)) return Number.parseInt(text, 10);
+  if (EN_NUMBER_WORDS[text] !== undefined) return EN_NUMBER_WORDS[text];
+  return parseRomanNumber(text);
 };
