@@ -1,6 +1,7 @@
 /**
- * FileReader 的 Promise 封装。原生 FileReader 是 `onload`/`onerror`/`onabort` 三个回调，
- * 忘了接 `onabort` 时用户取消会让 promise 永远挂着——这里三条出口都接上。
+ * Promise wrappers around FileReader. The native FileReader exposes three callbacks —
+ * `onload` / `onerror` / `onabort` — and forgetting `onabort` leaves the promise pending
+ * forever when the user cancels; all three exits are wired up here.
  */
 
 type ReadAs = 'arrayBuffer' | 'text' | 'dataURL' | 'binaryString';
@@ -23,14 +24,14 @@ const read = <T>(blob: Blob, as: ReadAs, encoding?: string): Promise<T> => {
 };
 
 /**
- * @description: 读取 File / Blob 为 ArrayBuffer
+ * @description: Read a File / Blob as an ArrayBuffer
  * @param {Blob} blob
  * @return {Promise<ArrayBuffer>}
  */
 export const readFileAsArrayBuffer = (blob: Blob): Promise<ArrayBuffer> => read<ArrayBuffer>(blob, 'arrayBuffer');
 
 /**
- * @description: 读取 File / Blob 为 Uint8Array（配合 checkEncoding / arrayBufferToString 做编码嗅探）
+ * @description: Read a File / Blob as a Uint8Array (pair with checkEncoding / arrayBufferToString for encoding sniffing)
  * @param {Blob} blob
  * @return {Promise<Uint8Array>}
  */
@@ -38,15 +39,15 @@ export const readFileAsUint8Array = async (blob: Blob): Promise<Uint8Array> =>
   new Uint8Array(await readFileAsArrayBuffer(blob));
 
 /**
- * @description: 读取 File / Blob 为文本
+ * @description: Read a File / Blob as text
  * @param {Blob} blob
- * @param {string} encoding 字符集，默认 utf-8；未知编码的文本文件应先用 checkEncoding 嗅探
+ * @param {string} encoding charset, defaults to utf-8; sniff with checkEncoding first when the encoding is unknown
  * @return {Promise<string>}
  */
 export const readFileAsText = (blob: Blob, encoding?: string): Promise<string> => read<string>(blob, 'text', encoding);
 
 /**
- * @description: 读取 File / Blob 为 data: URL（图片预览等）
+ * @description: Read a File / Blob as a data: URL (image previews and the like)
  * @param {Blob} blob
  * @return {Promise<string>}
  */

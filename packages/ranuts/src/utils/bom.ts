@@ -1,5 +1,4 @@
-import { getRandomString, isString } from './str';
-import { isFunction } from './func';
+import { isString } from './str';
 import { noop } from '@/utils/noop';
 import { performanceTime } from '@/utils/time';
 import { isClient } from '@/utils/device';

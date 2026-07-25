@@ -9,8 +9,8 @@ import {
   perToNum,
   range,
   transformNumber,
-} from './number';
-import {
+  } from './number';,
+  import {,
   MessageCodec,
   arrayBufferToString,
   changeHumpToLowerCase,
@@ -28,20 +28,10 @@ import {
   toHalfWidth,
   toString,
   transformText,
-} from './str';
-import type { TransformText } from './str';
-import {
-  BridgeManager,
-  Client,
-  Platform,
-  PostMessageBridge,
-  acceptPortBridge,
-  createPortBridge,
-  openPortBridge,
-  BRIDGE_MARKER,
-  DEFAULT_CHANNEL,
+  } from './str';,
+  import type { TransformText } from './str';,
+  import {,
   appendUrl,
-  bridgeManager,
   connection,
   createObjectURL,
   durationHandler,
@@ -61,17 +51,7 @@ import {
   requestUrlToBuffer,
   retain,
 } from './bom';
-import type {
-  BridgeManagerOptions,
-  BroadcastPayload,
-  CallToPayload,
-  MessageData,
-  MessageHandler,
-  PendingRequest,
-  PortBridge,
-  OpenPortBridgeOptions,
-  AcceptPortBridgeOptions,
-} from './bom';
+
 import {
   cloneDeep,
   filterObj,
@@ -84,6 +64,29 @@ import {
   setAttributeByGlobal,
 } from './obj';
 import { MimeType, getExtensions, getMime, setMime } from './mimeType';
+import {
+  BRIDGE_MARKER,
+  BridgeManager,
+  Client,
+  DEFAULT_CHANNEL,
+  Platform,
+  PostMessageBridge,
+  acceptPortBridge,
+  bridgeManager,
+  createPortBridge,
+  openPortBridge,
+} from './bridge';
+import type {
+  AcceptPortBridgeOptions,
+  BridgeManagerOptions,
+  BroadcastPayload,
+  CallToPayload,
+  MessageData,
+  MessageHandler,
+  OpenPortBridgeOptions,
+  PendingRequest,
+  PortBridge,
+} from './bridge';
 import { AudioRecorder } from './audioRecorder';
 import { createSignal, subscribers } from './signal';
 import { audioVendor, canvasVendor, webglVendor } from './behavior';
