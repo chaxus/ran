@@ -469,14 +469,14 @@ export const md5 = (str: string): string => {
 
   return (wordToHex(a) + wordToHex(b) + wordToHex(c) + wordToHex(d)).toLowerCase();
 };
-// 生成随机数
+// Generate a random string
 export const getRandomString = (len: number = 8): string => {
   return Math.random()
     .toString(36)
     .substring(2, len + 2);
 };
 
-// 添加类型定义
+// Type definitions
 type FileMetadata = {
   type: 'File';
   name: string;
@@ -503,7 +503,7 @@ type FileChunk = {
   data: string;
 };
 
-// 添加错误类型
+// Error type
 class MessageCodecError extends Error {
   constructor(
     message: string,
@@ -515,25 +515,25 @@ class MessageCodecError extends Error {
 }
 
 /**
- * 消息编解码工具
- * 正确处理所有 Unicode 字符，包括中文、emoji 等
- * 编码后的字符串只包含 A-Z, a-z, 0-9, +, /, = 这些安全字符
- * 适合在 URL、Cookie 等场景使用
- * 编码解码过程是双向的，不会丢失数据，不会出现编码解码不一致的问题
+ * Message codec.
+ * Handles every Unicode character correctly, CJK and emoji included.
+ * The encoded string only contains the safe characters A-Z, a-z, 0-9, +, / and =,
+ * so it is usable in URLs, cookies and similar places.
+ * Encoding and decoding are exact inverses: no data is lost and the two never disagree.
  */
 export const MessageCodec = {
   /**
-   * 编码消息
-   * @param data 要编码的数据
-   * @returns 编码后的字符串
+   * Encode a message
+   * @param data data to encode
+   * @returns the encoded string
    */
   encode(data: any): string {
     try {
       const jsonStr = JSON.stringify(data);
       const encoder = new TextEncoder();
       const bytes = encoder.encode(jsonStr);
-      // 分块拼接，避免 String.fromCharCode.apply 对大 payload（如文件）
-      // 触发 "Maximum call stack size exceeded" 导致消息被静默丢弃。
+      // Concatenate in chunks: String.fromCharCode.apply on a large payload (a file, say)
+      // throws "Maximum call stack size exceeded" and the message is silently dropped.
       let binaryStr = '';
       const CHUNK_SIZE = 0x8000;
       for (let i = 0; i < bytes.length; i += CHUNK_SIZE) {
@@ -541,16 +541,16 @@ export const MessageCodec = {
       }
       return btoa(binaryStr);
     } catch {
-      // 编码失败返回空串，由调用方（如 PostMessageBridge.send）感知并处理，
-      // 不在此打日志——避免污染控制台。
+      // On failure return an empty string and let the caller (PostMessageBridge.send, for
+      // instance) detect and handle it. No logging here — it would pollute the console.
       return '';
     }
   },
 
   /**
-   * 解码消息
-   * @param encodedStr 编码后的字符串
-   * @returns 解码后的数据
+   * Decode a message
+   * @param encodedStr the encoded string
+   * @returns the decoded data
    */
   decode<T = any>(encodedStr: string): T | null {
     try {
@@ -563,17 +563,17 @@ export const MessageCodec = {
       const jsonStr = decoder.decode(bytes);
       return JSON.parse(jsonStr);
     } catch {
-      // 解码失败（页面上其它库的 postMessage 流量并非本协议）返回 null，
-      // 不打日志——否则外部消息会持续刷屏控制台。
+      // Return null on failure (postMessage traffic from other libraries on the page does
+      // not follow this protocol). No logging — foreign messages would flood the console.
       return null;
     }
   },
 
   /**
-   * 编码文件对象
-   * @param file File对象
-   * @returns 编码后的字符串
-   * @throws {MessageCodecError} 当文件编码失败时抛出
+   * Encode a File
+   * @param file the File
+   * @returns the encoded string
+   * @throws {MessageCodecError} when encoding the file fails
    */
   async encodeFile(file: File): Promise<string> {
     try {
@@ -595,10 +595,10 @@ export const MessageCodec = {
   },
 
   /**
-   * 解码文件对象
-   * @param encoded 编码后的字符串
-   * @returns 解码后的 File 对象
-   * @throws {MessageCodecError} 当解码失败或类型不匹配时抛出
+   * Decode a File
+   * @param encoded the encoded string
+   * @returns the decoded File
+   * @throws {MessageCodecError} when decoding fails or the type does not match
    */
   decodeFile(encoded: string): File {
     try {
@@ -607,10 +607,10 @@ export const MessageCodec = {
         throw new MessageCodecError(`Expected File type but got ${decoded.type}`, 'INVALID_FILE_TYPE');
       }
       const metadata = decoded as FileMetadata;
-      // 确保 content 是 ArrayBuffer 类型
+      // Make sure `content` really is an ArrayBuffer
       const content =
         metadata.content instanceof Uint8Array
-          ? metadata.content.buffer.slice(0) // 创建一个新的 ArrayBuffer
+          ? metadata.content.buffer.slice(0) // create a fresh ArrayBuffer
           : metadata.content;
       return new File([content as ArrayBuffer], metadata.name, {
         type: metadata.mimeType,
@@ -628,10 +628,10 @@ export const MessageCodec = {
   },
 
   /**
-   * 编码 Blob 对象
-   * @param blob Blob 对象
-   * @returns 编码后的字符串
-   * @throws {MessageCodecError} 当编码失败时抛出
+   * Encode a Blob
+   * @param blob the Blob
+   * @returns the encoded string
+   * @throws {MessageCodecError} when encoding fails
    */
   async encodeBlob(blob: Blob): Promise<string> {
     try {
@@ -651,10 +651,10 @@ export const MessageCodec = {
   },
 
   /**
-   * 解码 Blob 对象
-   * @param encoded 编码后的字符串
-   * @returns 解码后的 Blob 对象
-   * @throws {MessageCodecError} 当解码失败或类型不匹配时抛出
+   * Decode a Blob
+   * @param encoded the encoded string
+   * @returns the decoded Blob
+   * @throws {MessageCodecError} when decoding fails or the type does not match
    */
   decodeBlob(encoded: string): Blob {
     try {
@@ -663,10 +663,10 @@ export const MessageCodec = {
         throw new MessageCodecError(`Expected Blob type but got ${decoded.type}`, 'INVALID_BLOB_TYPE');
       }
       const metadata = decoded as BlobMetadata;
-      // 确保 content 是 ArrayBuffer 类型
+      // Make sure `content` really is an ArrayBuffer
       const content =
         metadata.content instanceof Uint8Array
-          ? metadata.content.buffer.slice(0) // 创建一个新的 ArrayBuffer
+          ? metadata.content.buffer.slice(0) // create a fresh ArrayBuffer
           : metadata.content;
       return new Blob([content as ArrayBuffer], { type: metadata.mimeType });
     } catch (error) {
@@ -681,9 +681,9 @@ export const MessageCodec = {
   },
 
   /**
-   * 编码 Date 对象
-   * @param date Date 对象
-   * @returns 编码后的字符串
+   * Encode a Date
+   * @param date the Date
+   * @returns the encoded string
    */
   encodeDate(date: Date): string {
     try {
@@ -698,9 +698,9 @@ export const MessageCodec = {
   },
 
   /**
-   * 解码 Date 对象
-   * @param encodedStr 编码后的字符串
-   * @returns 解码后的 Date 对象
+   * Decode a Date
+   * @param encodedStr the encoded string
+   * @returns the decoded Date
    */
   decodeDate(encodedStr: string): Date {
     try {
@@ -716,9 +716,9 @@ export const MessageCodec = {
   },
 
   /**
-   * 编码 RegExp 对象
-   * @param regexp RegExp 对象
-   * @returns 编码后的字符串
+   * Encode a RegExp
+   * @param regexp the RegExp
+   * @returns the encoded string
    */
   encodeRegExp(regexp: RegExp): string {
     try {
@@ -734,9 +734,9 @@ export const MessageCodec = {
   },
 
   /**
-   * 解码 RegExp 对象
-   * @param encodedStr 编码后的字符串
-   * @returns 解码后的 RegExp 对象
+   * Decode a RegExp
+   * @param encodedStr the encoded string
+   * @returns the decoded RegExp
    */
   decodeRegExp(encodedStr: string): RegExp {
     try {
@@ -752,9 +752,9 @@ export const MessageCodec = {
   },
 
   /**
-   * 编码 Map 对象
-   * @param map Map 对象
-   * @returns 编码后的字符串
+   * Encode a Map
+   * @param map the Map
+   * @returns the encoded string
    */
   encodeMap<K, V>(map: Map<K, V>): string {
     try {
@@ -769,9 +769,9 @@ export const MessageCodec = {
   },
 
   /**
-   * 解码 Map 对象
-   * @param encodedStr 编码后的字符串
-   * @returns 解码后的 Map 对象
+   * Decode a Map
+   * @param encodedStr the encoded string
+   * @returns the decoded Map
    */
   decodeMap<K, V>(encodedStr: string): Map<K, V> {
     try {
@@ -787,9 +787,9 @@ export const MessageCodec = {
   },
 
   /**
-   * 编码 Set 对象
-   * @param set Set 对象
-   * @returns 编码后的字符串
+   * Encode a Set
+   * @param set the Set
+   * @returns the encoded string
    */
   encodeSet<T>(set: Set<T>): string {
     try {
@@ -804,9 +804,9 @@ export const MessageCodec = {
   },
 
   /**
-   * 解码 Set 对象
-   * @param encodedStr 编码后的字符串
-   * @returns 解码后的 Set 对象
+   * Decode a Set
+   * @param encodedStr the encoded string
+   * @returns the decoded Set
    */
   decodeSet<T>(encodedStr: string): Set<T> {
     try {
@@ -822,9 +822,9 @@ export const MessageCodec = {
   },
 
   /**
-   * 编码 Error 对象
-   * @param error Error 对象
-   * @returns 编码后的字符串
+   * Encode an Error
+   * @param error the Error
+   * @returns the encoded string
    */
   encodeError(error: Error): string {
     try {
@@ -841,9 +841,9 @@ export const MessageCodec = {
   },
 
   /**
-   * 解码 Error 对象
-   * @param encodedStr 编码后的字符串
-   * @returns 解码后的 Error 对象
+   * Decode an Error
+   * @param encodedStr the encoded string
+   * @returns the decoded Error
    */
   decodeError(encodedStr: string): Error {
     try {
@@ -862,9 +862,9 @@ export const MessageCodec = {
   },
 
   /**
-   * 编码 ArrayBuffer 对象
-   * @param buffer ArrayBuffer 对象
-   * @returns 编码后的字符串
+   * Encode an ArrayBuffer
+   * @param buffer the ArrayBuffer
+   * @returns the encoded string
    */
   encodeArrayBuffer(buffer: ArrayBuffer): string {
     try {
@@ -879,9 +879,9 @@ export const MessageCodec = {
   },
 
   /**
-   * 解码 ArrayBuffer 对象
-   * @param encodedStr 编码后的字符串
-   * @returns 解码后的 ArrayBuffer 对象
+   * Decode an ArrayBuffer
+   * @param encodedStr the encoded string
+   * @returns the decoded ArrayBuffer
    */
   decodeArrayBuffer(encodedStr: string): ArrayBuffer {
     try {
@@ -897,9 +897,9 @@ export const MessageCodec = {
   },
 
   /**
-   * 编码 TypedArray 对象
-   * @param typedArray TypedArray 对象
-   * @returns 编码后的字符串
+   * Encode a TypedArray
+   * @param typedArray the TypedArray
+   * @returns the encoded string
    */
   encodeTypedArray(typedArray: ArrayBufferView): string {
     try {
@@ -915,9 +915,9 @@ export const MessageCodec = {
   },
 
   /**
-   * 解码 TypedArray 对象
-   * @param encodedStr 编码后的字符串
-   * @returns 解码后的 TypedArray 对象
+   * Decode a TypedArray
+   * @param encodedStr the encoded string
+   * @returns the decoded TypedArray
    */
   decodeTypedArray(encodedStr: string): ArrayBufferView {
     try {
@@ -934,15 +934,15 @@ export const MessageCodec = {
   },
 
   /**
-   * 分片编码文件对象
-   * @param file File 对象
-   * @param chunkSize 分片大小，默认 1MB
-   * @returns 包含文件信息和分片数据的可传输对象数组
-   * @throws {MessageCodecError} 当分片编码失败时抛出
+   * Encode a File as chunks
+   * @param file the File
+   * @param chunkSize chunk size, defaults to 1MB
+   * @returns transferable objects carrying the file metadata and the chunk data
+   * @throws {MessageCodecError} when chunked encoding fails
    */
   async encodeFileChunked(
     file: File,
-    chunkSize: number = 16 * 1024, // 默认 16KB
+    chunkSize: number = 16 * 1024, // defaults to 16KB
   ): Promise<FileChunk[]> {
     try {
       if (chunkSize <= 0) {
@@ -984,10 +984,10 @@ export const MessageCodec = {
   },
 
   /**
-   * 解码分片文件对象
-   * @param chunks 编码后的文件分片数组
-   * @returns 重建的File对象
-   * @throws {MessageCodecError} 当分片解码失败或分片不完整时抛出
+   * Decode a chunked File
+   * @param chunks the encoded file chunks
+   * @returns the reconstructed File
+   * @throws {MessageCodecError} when decoding fails or the chunks are incomplete
    */
   async decodeFileChunked(chunks: FileChunk[]): Promise<File> {
     try {
@@ -997,7 +997,7 @@ export const MessageCodec = {
 
       const { type, lastModified, totalChunks } = chunks[0];
 
-      // 验证分片完整性
+      // Validate chunk integrity
       if (chunks.length !== totalChunks) {
         throw new MessageCodecError(
           `Missing chunks. Expected ${totalChunks}, got ${chunks.length}`,
@@ -1005,17 +1005,17 @@ export const MessageCodec = {
         );
       }
 
-      // 按分片索引排序
+      // Sort by chunk index
       chunks.sort((a, b) => a.chunkIndex - b.chunkIndex);
 
-      // 验证分片索引的连续性
+      // Validate that the chunk indexes are contiguous
       for (let i = 0; i < chunks.length; i++) {
         if (chunks[i].chunkIndex !== i) {
           throw new MessageCodecError(`Invalid chunk index at position ${i}`, 'INVALID_CHUNK_ORDER');
         }
       }
 
-      // 合并所有分片
+      // Merge every chunk
       const chunksData = await Promise.all(
         chunks.map(async (chunk) => {
           const binaryStr = chunk.data;
@@ -1027,7 +1027,7 @@ export const MessageCodec = {
         }),
       );
 
-      // 创建完整的 ArrayBuffer
+      // Build the complete ArrayBuffer
       const totalSize = chunks.reduce((sum, chunk) => sum + chunk.data.length, 0);
       const result = new Uint8Array(totalSize);
       let offset = 0;
