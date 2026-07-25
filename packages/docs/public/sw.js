@@ -135,13 +135,44 @@ this.addEventListener(SERVICE_WORK.INSTALL, function (event) {
   );
 });
 
-this.addEventListener(SERVICE_WORK.FETCH, async (event) => {
-  // 拦截请求
+/**
+ * 网络优先，失败回落到缓存。
+ * 给 HTML 导航用：文档站的正文必须是最新的，缓存只作为离线兜底。
+ */
+const networkFirst = async (request) => {
   try {
-    cacheFirst(event.request)
+    const responseFromServer = await fetch(request);
+    updateCache(responseFromServer, request)
+    return responseFromServer
   } catch (error) {
-    console.log('service worker self fetch error:', error, event)
+    const responseFromCache = await caches.match(request.url);
+    if (responseFromCache) return responseFromCache
+    console.log('service worker networkFirst error:', error, request)
+    return new Response("Network error happened", {
+      status: 408,
+      headers: { "Content-Type": "text/plain" },
+    });
   }
+}
+
+// 这个处理器**必须是同步函数**：respondWith 只能在事件派发的同步阶段调用，
+// 包成 async 之后第一个 await 就已经让出了控制权，浏览器会认为没人拦截。
+//
+// 之前这里是 `async (event) => { cacheFirst(event.request) }` —— 既没调
+// respondWith，函数本身又是 async。两个原因叠加，结果是整个 Service Worker
+// 从不拦截任何请求：install 时辛苦预缓存的资源一次都没被读过，用户白白付了
+// 安装时的下载成本，离线也不可用。
+this.addEventListener(SERVICE_WORK.FETCH, (event) => {
+  const { request } = event
+  // 非 GET（POST 表单、上报等）交回浏览器，缓存里也不该有它们
+  if (request.method !== REQUEST_METHOD.GET) return
+  if (!filterRequest(request)) return
+  // HTML 导航走网络优先，其余（构建产物带内容哈希，天然不可变）走缓存优先
+  if (request.mode === 'navigate') {
+    event.respondWith(networkFirst(request));
+    return
+  }
+  event.respondWith(cacheFirst(request));
 });
 
 this.addEventListener(SERVICE_WORK.ACTIVATE, (event) => {

@@ -1,12 +1,15 @@
 #!/bin/bash
-# 更新 service work的版本号
-version=$(date +%s)
-# 将版本号写入 variable 目录下 SERVICE_WORK_VERSION.ts
-SERVICE_WORK_VERSION="./variable/SERVICE_WORK_VERSION.ts"
+# 任何一步失败都必须让整个脚本失败。
+#
+# 此前没有这行，而脚本最后一条语句是 echo —— 于是 vitepress 编译失败时，后续的 mv/cat
+# 接着报错，脚本仍以退出码 0 结束，还打印一句像成功的话。Cloudflare Pages 会把这种
+# "失败" 当成构建成功并发布上一次的残留产物。一个不可能失败的构建比没有构建更危险。
+set -euo pipefail
 
-# 单引号 + 分号：与 prettier 的配置一致，否则每次构建都会把这个被跟踪的文件
-# 改成不合规格式，下一次 lint 就报错。
-echo "export const SERVICE_WORK_VERSION = '$version';" > $SERVICE_WORK_VERSION
+# Service Worker 的版本号。只注入到 sw.js 的**内容**里（CACHE_NAME 用它），
+# 不再写进任何被 git 跟踪的源文件，也不再进文件名 —— 理由见下方 sw.js 处理段。
+version=$(date +%s)
+
 # 执行 ssg 构建命令
 bin=./node_modules/.bin
 $bin/vitepress build
@@ -35,16 +38,19 @@ llms_full="./.vitepress/dist/llms-full.txt"
   done
 } > "$llms_full"
 echo "llms-full.txt generated: $llms_full"
-# 开启调试模式
-# set -x
 # 指定输出的目录
 dir="./.vitepress/dist"
-# 生成的目标文件
-target="./.vitepress/dist/sw.js"
-# 改名
-mv "$target" "./.vitepress/dist/sw$version.js"
-
-target="./.vitepress/dist/sw$version.js"
+# Service Worker 保持在**固定 URL** /sw.js。
+#
+# 此前每次构建都把它改名成 sw<时间戳>.js。这恰好废掉了 SW 自带的更新机制:浏览器靠
+# 重新抓取**同一个** URL 并逐字节比对来判断要不要更新,而旧客户端注册的
+# sw<旧时间戳>.js 在新部署里已经不存在,更新检查只会一直 404。于是唯一的更新途径变成
+# "用户打开页面 → 内联脚本注册新文件名"。
+#
+# 版本号写在文件内容里(下面注入的 VERSION)就足够触发更新:内容变了,字节比对就会发现。
+# 而且浏览器抓 SW 主脚本时默认绕过 HTTP 缓存(updateViaCache 默认 'imports'),
+# 不存在"URL 不变就拿到旧文件"的问题。
+target="$dir/sw.js"
 # 创建一个临时文件
 tmpfile=$(mktemp)
 # 将目录 dir 下的文件名追加到临时文件中(只预缓存 app shell,排除大体积媒体:

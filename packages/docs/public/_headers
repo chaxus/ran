@@ -1,0 +1,8 @@
+# Cloudflare Pages 响应头。
+#
+# Service Worker 脚本永不缓存。浏览器抓 SW 主脚本时本来就绕过自己的 HTTP 缓存
+# （updateViaCache 默认 'imports'），但那管不到 CDN 边缘：如果 Cloudflare 把 /sw.js
+# 缓存住，更新检查拿到的仍是旧字节，SW 就永远不会更新。SW 是全站唯一一个既要固定 URL
+# 又必须始终新鲜的文件，所以显式声明。
+/sw.js
+  Cache-Control: no-cache
