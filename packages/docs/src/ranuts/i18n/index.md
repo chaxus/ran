@@ -71,6 +71,48 @@ A lone `{` / `}` or a spaced group like `{ x }` is **not** a placeholder and is 
 CSS, JSON or code fragments inside a message pass through unharmed. To wrap a value in literal
 braces, double the outer pair — <code v-pre>{{{name}}}</code>.
 
+## Typed dictionaries
+
+Pass your dictionary shape as a type argument and every `t()` call is checked at compile time.
+Without it, a renamed or mistyped key degrades silently into "render the key itself" — the
+user sees `agentModelFirstDownlaod` where a sentence should be, and nothing fails until then.
+
+```ts
+interface Messages {
+  save: string;
+  cancel: string;
+}
+
+const i18n = createI18n<Messages>({
+  messages: {
+    en: { save: 'Save', cancel: 'Cancel' },
+    'zh-CN': { save: '保存' }, // still being translated — that is fine
+  },
+  fallbackLocale: 'en',
+});
+
+i18n.t('save'); // ok
+i18n.t('saev'); // compile error
+
+useI18n<Messages>()?.t('cancel'); // pass the same type back to keep the check
+```
+
+Three details make this usable rather than merely available:
+
+1. **Each locale is `Partial`.** A translation in progress is the normal state; the fallback
+   locale covers what a locale has not filled in yet.
+2. **The type comes from the type argument, never from the data.** `messages` is wrapped in
+   `NoInfer`, so locales with different key sets cannot make TypeScript infer their
+   _intersection_ — otherwise a key only the fallback defines would be rejected at every call
+   site, and an incomplete translation would break the build instead of falling back at runtime.
+3. **An `interface` works, not just a `type`.** The constraint is `StringValues<T>`
+   (`{ [K in keyof T]: string }`) rather than `Record<string, string>`, because TypeScript
+   only gives implicit index signatures to type aliases — constraining the obvious way would
+   have forced every consumer to rewrite their dictionary as a `type`.
+
+Omitting the type argument keeps the untyped behaviour exactly: the default `MessageDict` is
+`Record<string, string>`, whose `keyof` is `string`.
+
 ## Config
 
 | Field             | Description                                                           | Type             | Default        |

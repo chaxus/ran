@@ -59,6 +59,44 @@ i18n.t('hero.title', { name: 'Ada' }); // "你好，Ada"
 
 单独的 `{` / `}`，或者 `{ x }` 这种带空格的组合，**不是**占位符，会原样输出 —— 所以消息里夹带 CSS、JSON 或代码片段不会被破坏。想让值外面包一层字面量花括号，把外层那对写两遍 —— <code v-pre>{{{name}}}</code>。
 
+## 类型化字典
+
+把字典形状作为类型参数传进去，每次 `t()` 调用都会在编译期校验。不传的话，改名或拼错的 key
+会静默退化成「把 key 本身渲染出来」—— 用户在本该是一句话的地方看到 `agentModelFirstDownlaod`，
+而在此之前没有任何东西会失败。
+
+```ts
+interface Messages {
+  save: string;
+  cancel: string;
+}
+
+const i18n = createI18n<Messages>({
+  messages: {
+    en: { save: 'Save', cancel: 'Cancel' },
+    'zh-CN': { save: '保存' }, // 还在翻译中，没问题
+  },
+  fallbackLocale: 'en',
+});
+
+i18n.t('save'); // ok
+i18n.t('saev'); // 编译报错
+
+useI18n<Messages>()?.t('cancel'); // 把同一个类型传回来，校验才继续生效
+```
+
+有三个细节决定了它是「能用」而不只是「有」：
+
+1. **每个语言的字典是 `Partial` 的**。翻译没补全是常态，缺的部分由 fallback 语言兜底。
+2. **类型只来自类型参数，绝不从数据反推**。`messages` 套了 `NoInfer`，所以各语言 key 不齐时
+   TypeScript 不会把 `TDict` 推成它们的**交集** —— 否则只有 fallback 定义的 key 会在每个调用点
+   报错，翻译没补全就编译不过，而不是运行时回落。
+3. **`interface` 也能用，不限于 `type`**。约束是 `StringValues<T>`（`{ [K in keyof T]: string }`）
+   而不是 `Record<string, string>`，因为 TypeScript 只给 type alias 隐式索引签名 —— 用显而易见的
+   那种写法会逼所有使用方把字典改写成 `type`。
+
+不传类型参数则行为完全不变：默认的 `MessageDict` 就是 `Record<string, string>`，它的 `keyof` 是 `string`。
+
 ## 配置
 
 | 字段              | 说明                                           | 类型             | 默认值         |

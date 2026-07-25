@@ -6,4 +6,11 @@
 // `ranui/i18n` exists so consumers can take the engine without the rest of the library, and
 // going through the barrel would hand them whatever else that chunk happens to carry.
 export { I18nCore, createI18n, useI18n } from 'ranuts/i18n';
-export type { I18nConfig, MessageDict, LocaleMessages, TranslateParams, LocaleChangeHandler } from 'ranuts/i18n';
+export type {
+  I18nConfig,
+  MessageDict,
+  StringValues,
+  LocaleMessages,
+  TranslateParams,
+  LocaleChangeHandler,
+} from 'ranuts/i18n';

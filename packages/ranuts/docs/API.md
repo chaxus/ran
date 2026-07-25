@@ -8,15 +8,15 @@ constraints, conventions) read [../CLAUDE.md](../CLAUDE.md) first.
 Import from the **subpath** that owns the symbol, e.g. `import { debounce } from
 'ranuts/utils'`. The root `ranuts` barrel re-exports the utils + visual surface.
 
-**352 exports** across 6 entry points. Generated at 2026-07-25T13:06:04.393Z.
+**354 exports** across 6 entry points. Generated at 2026-07-25T14:41:48.637Z.
 
 ## Entry points
 
-- [`ranuts/utils`](#ranutsutils) — Browser and general-purpose utilities · _browser + node_ · 271 exports
+- [`ranuts/utils`](#ranutsutils) — Browser and general-purpose utilities · _browser + node_ · 272 exports
 - [`ranuts/sw`](#ranutssw) — Service Worker caching strategies and the precache protocol · _service worker only_ · 9 exports
 - [`ranuts/node`](#ranutsnode) — Node server utilities (fs / http / ws / middleware) · _node only_ · 26 exports
 - [`ranuts/visual`](#ranutsvisual) — 2D rendering engine (Canvas / WebGL / WebGPU) · _browser only_ · 12 exports
-- [`ranuts/i18n`](#ranutsi18n) — Framework-agnostic i18n engine (also re-exported from ranuts/utils) · _browser + node_ · 8 exports
+- [`ranuts/i18n`](#ranutsi18n) — Framework-agnostic i18n engine (also re-exported from ranuts/utils) · _browser + node_ · 9 exports
 - [`ranuts/vnode`](#ranutsvnode) — Snabbdom-style virtual DOM · _browser_ · 26 exports
 
 ## `ranuts/utils`
@@ -53,7 +53,7 @@ import { /* … */ } from 'ranuts/utils';
 - `createData(params?: Record<string, unknown>) => Record<string, unknown>` — Build the standard envelope that accompanies a report — page URL, referrer,
 - `createDocumentFragment(list: Element[]) => DocumentFragment | undefined` — Create a DocumentFragment
 - `createHandoff<T>({ dbName, storeName, key }: HandoffOptions) => Handoff<T>` — A one-shot value handoff between two pages of the same origin, backed by
-- `createI18n(config?: I18nConfig) => I18nCore` — Create and register the global i18n singleton.
+- `createI18n<TDict extends StringValues<TDict> = MessageDict>(config?: I18nConfig<TDict>) => I18nCore<TDict>` — Create and register the global i18n singleton.
 - `createLocalePath(config: LocalePathConfig) => LocalePath` — Create the set of locale path conversion functions.
 - `createObjectURL(src: Blob | ArrayBuffer | Response) => Promise<string>`
 - `createPortBridge(port: MessagePort) => PortBridge` — Build a bridge on any MessagePort (a Web Worker, a SharedWorker, or a port from a completed handshake).
@@ -192,7 +192,7 @@ import { /* … */ } from 'ranuts/utils';
 - `toString(value: string | number) => string`
 - `transformNumber(value: string, locale?: string, precision?: number, fixed?: number) => string`
 - `transformText(content: string | ArrayBuffer) => TransformText | undefined`
-- `useI18n() => I18nCore | null` — Return the active global i18n instance, or null if none was created.
+- `useI18n<TDict extends StringValues<TDict> = MessageDict>() => I18nCore<TDict> | null` — The active global instance, or null when none was created. Pass the same
 - `watchMediaQuery(query: string, callback: (matches: boolean) => void) => (() => void)` — Watch a media query. The callback **fires once synchronously with the
 - `webglVendor() => { vendor: string; renderer: string; } | null`
 - `whenIdle(callback: () => void, options?: WhenIdleOptions) => (() => void)` — Run a callback while the browser is idle, falling back to setTimeout where
@@ -210,7 +210,7 @@ import { /* … */ } from 'ranuts/utils';
 - `class EventManager` — EventManager — a scoped listener registry built on AbortController.
 - `class Hsl`
 - `class Hsla`
-- `class I18nCore`
+- `class I18nCore` — The engine. Optionally parameterised by your dictionary shape.
 - `class Mathjs` — Arithmetic that works around floating-point precision.
 - `class Monitor` — Front-end telemetry: page-load performance, clicks, errors, fetch/XHR traffic
 - `class PostMessageBridge` — Bridge registration event, consumed by the client
@@ -279,8 +279,9 @@ import { /* … */ } from 'ranuts/utils';
 - `type EasingFn` — One easing function: (elapsed, from, delta, duration) => current value
 - `type ImgSource` — A bitmap container usable both as a drawImage source and as a render target
 - `type LocaleChangeHandler`
-- `type LocaleMessages`
+- `type LocaleMessages` — Locale → dictionary. Parameterised by the dictionary shape so an app can hand in its own
 - `type MessageDict`
+- `type StringValues` — "An object whose values are all strings" — the constraint the dictionary type parameter
 - `type TextLanguage` — Coarse language bucket: Chinese / English / other only
 - `type TranslateParams`
 
@@ -427,12 +428,12 @@ import { /* … */ } from 'ranuts/i18n';
 
 ### Functions
 
-- `createI18n(config?: I18nConfig) => I18nCore` — Create and register the global i18n singleton.
-- `useI18n() => I18nCore | null` — Return the active global i18n instance, or null if none was created.
+- `createI18n<TDict extends StringValues<TDict> = MessageDict>(config?: I18nConfig<TDict>) => I18nCore<TDict>` — Create and register the global i18n singleton.
+- `useI18n<TDict extends StringValues<TDict> = MessageDict>() => I18nCore<TDict> | null` — The active global instance, or null when none was created. Pass the same
 
 ### Classes
 
-- `class I18nCore`
+- `class I18nCore` — The engine. Optionally parameterised by your dictionary shape.
 
 ### Interfaces
 
@@ -441,8 +442,9 @@ import { /* … */ } from 'ranuts/i18n';
 ### Types
 
 - `type LocaleChangeHandler`
-- `type LocaleMessages`
+- `type LocaleMessages` — Locale → dictionary. Parameterised by the dictionary shape so an app can hand in its own
 - `type MessageDict`
+- `type StringValues` — "An object whose values are all strings" — the constraint the dictionary type parameter
 - `type TranslateParams`
 
 ## `ranuts/vnode`

@@ -131,7 +131,14 @@ import type { PaginateOptions, PaginateResult, TextBox, TextGridMetrics, TextPag
 import type { OffsetRange, Segment } from './segment';
 import { detectLanguage, navigatorLanguage, resolveLocale } from './lang';
 import { I18nCore, createI18n, useI18n } from './i18n';
-import type { I18nConfig, LocaleChangeHandler, LocaleMessages, MessageDict, TranslateParams } from './i18n';
+import type {
+  I18nConfig,
+  LocaleChangeHandler,
+  LocaleMessages,
+  MessageDict,
+  StringValues,
+  TranslateParams,
+} from './i18n';
 import { createLocalePath } from './localePath';
 import type { LocalePath, LocalePathConfig, LocaleRoute } from './localePath';
 import type { ResolveLocaleOptions, TextLanguage } from './lang';
@@ -443,6 +450,7 @@ export type {
   LoadScriptOptions,
   I18nConfig,
   MessageDict,
+  StringValues,
   LocaleMessages,
   TranslateParams,
   LocaleChangeHandler,
