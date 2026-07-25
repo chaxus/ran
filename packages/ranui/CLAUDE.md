@@ -761,6 +761,29 @@ npm run test:unit:watch    # watch mode
 npm run test:unit:coverage # with coverage report
 ```
 
+### E2E (Playwright)
+
+```bash
+npm run test:e2e           # provisions the browser, then runs the suite
+npm run e2e:install        # provision only (idempotent — a no-op once installed)
+npm run test:update        # refresh screenshot snapshots
+npm run test:report        # open the last HTML report
+```
+
+`@playwright/test` being a devDependency only installs the **library** — the browser binaries
+live outside `node_modules`, in `~/Library/Caches/ms-playwright`, and are not provisioned by
+`pnpm install`. A fresh clone therefore used to fail every e2e test with
+`browserType.launch: Executable doesn't exist`, which reads like a broken suite rather than a
+missing download. `test:e2e` / `test:ui` / `test:update` now run `e2e:install` first, so that
+cannot happen; `playwright install` exits immediately when the browser is already present, so
+the guard costs nothing on repeat runs.
+
+The `chromium` and `Mobile Chrome` projects both use Playwright's bundled Chromium, which
+`e2e:install` provides. The **`Google Chrome` project uses `channel: 'chrome'`** — the real,
+system-installed Google Chrome. It is deliberately not part of `e2e:install` (installing a
+branded browser touches the OS, not `node_modules`); install Chrome normally, or run
+`npx playwright install chrome`.
+
 ### Test file naming
 
 `test/unit/{component}.contract.test.ts` for component tests.
