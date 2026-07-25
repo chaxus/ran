@@ -199,14 +199,32 @@ export class WebDB {
 
   /** @description: 新增；主键已存在会失败（想覆盖用 update） */
   add = <T = unknown>({ storeName, data }: { storeName: string; data: T }): Promise<IDBResult<T>> =>
-    this.run(storeName, 'readwrite', (store) => store.add(data), 'add', () => data);
+    this.run(
+      storeName,
+      'readwrite',
+      (store) => store.add(data),
+      'add',
+      () => data,
+    );
 
   /** @description: 写入（put 语义：不存在则插入，存在则覆盖） */
   update = <T = unknown>({ storeName, data }: { storeName: string; data: T }): Promise<IDBResult> =>
-    this.run(storeName, 'readwrite', (store) => store.put(data), 'update', () => null);
+    this.run(
+      storeName,
+      'readwrite',
+      (store) => store.put(data),
+      'update',
+      () => null,
+    );
 
   readByKey = <T = unknown>({ storeName, key }: { storeName: string; key: IDBValidKey }): Promise<IDBResult<T>> =>
-    this.run(storeName, 'readonly', (store) => store.get(key), 'read', (request) => request.result as T);
+    this.run(
+      storeName,
+      'readonly',
+      (store) => store.get(key),
+      'read',
+      (request) => request.result as T,
+    );
 
   /** @description: 读取整个仓库；数据量大时用 readByCursor 逐条处理，避免一次性驻留内存 */
   readAll = <T = unknown>({
@@ -218,10 +236,28 @@ export class WebDB {
     query?: IDBValidKey | IDBKeyRange;
     count?: number;
   }): Promise<IDBResult<T[]>> =>
-    this.run(storeName, 'readonly', (store) => store.getAll(query, count), 'read all', (r) => r.result as T[]);
+    this.run(
+      storeName,
+      'readonly',
+      (store) => store.getAll(query, count),
+      'read all',
+      (r) => r.result as T[],
+    );
 
-  count = ({ storeName, query }: { storeName: string; query?: IDBValidKey | IDBKeyRange }): Promise<IDBResult<number>> =>
-    this.run(storeName, 'readonly', (store) => store.count(query), 'count', (r) => r.result as number);
+  count = ({
+    storeName,
+    query,
+  }: {
+    storeName: string;
+    query?: IDBValidKey | IDBKeyRange;
+  }): Promise<IDBResult<number>> =>
+    this.run(
+      storeName,
+      'readonly',
+      (store) => store.count(query),
+      'count',
+      (r) => r.result as number,
+    );
 
   /** @description: 游标遍历，按 keyRange / direction 收集结果 */
   readByCursor = <T = unknown>({
@@ -255,8 +291,20 @@ export class WebDB {
   };
 
   delete = ({ storeName, key }: { storeName: string; key: IDBValidKey }): Promise<IDBResult> =>
-    this.run(storeName, 'readwrite', (store) => store.delete(key), 'delete', () => null);
+    this.run(
+      storeName,
+      'readwrite',
+      (store) => store.delete(key),
+      'delete',
+      () => null,
+    );
 
   clear = ({ storeName }: { storeName: string }): Promise<IDBResult> =>
-    this.run(storeName, 'readwrite', (store) => store.clear(), 'clear', () => null);
+    this.run(
+      storeName,
+      'readwrite',
+      (store) => store.clear(),
+      'clear',
+      () => null,
+    );
 }

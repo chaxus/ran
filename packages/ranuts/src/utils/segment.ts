@@ -17,7 +17,7 @@
  * ```
  */
 export const buildOffsets = (lengths: readonly number[]): number[] => {
-  const offsets: number[] = new Array(lengths.length);
+  const offsets: number[] = Array.from({ length: lengths.length });
   let acc = 0;
   for (let i = 0; i < lengths.length; i++) {
     offsets[i] = acc;
@@ -85,7 +85,11 @@ export const segmentByRanges = <T>(
 ): Segment<T>[] => {
   const chunkEnd = chunkStart + text.length;
   const local = ranges
-    .map((r) => ({ value: r.value, s: Math.max(r.start, chunkStart) - chunkStart, e: Math.min(r.end, chunkEnd) - chunkStart }))
+    .map((r) => ({
+      value: r.value,
+      s: Math.max(r.start, chunkStart) - chunkStart,
+      e: Math.min(r.end, chunkEnd) - chunkStart,
+    }))
     .filter((r) => r.e > r.s)
     .sort((a, b) => a.s - b.s || a.e - b.e);
 

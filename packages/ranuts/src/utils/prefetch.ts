@@ -118,7 +118,8 @@ export interface PrefetchOptions {
 const precacheViaServiceWorker = (urls: string[], type: string): boolean => {
   try {
     // eslint-disable-next-line n/no-unsupported-features/node-builtins
-    const ctrl = typeof navigator !== 'undefined' && 'serviceWorker' in navigator ? navigator.serviceWorker.controller : null;
+    const ctrl =
+      typeof navigator !== 'undefined' && 'serviceWorker' in navigator ? navigator.serviceWorker.controller : null;
     if (!ctrl) return false;
     ctrl.postMessage({ type, urls });
     return true;

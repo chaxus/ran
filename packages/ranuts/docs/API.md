@@ -8,11 +8,11 @@ constraints, conventions) read [../CLAUDE.md](../CLAUDE.md) first.
 Import from the **subpath** that owns the symbol, e.g. `import { debounce } from
 'ranuts/utils'`. The root `ranuts` barrel re-exports the utils + visual surface.
 
-**199 exports** across 4 entry points. Generated at 2026-07-19T03:26:04.501Z.
+**238 exports** across 4 entry points. Generated at 2026-07-25T06:22:11.429Z.
 
 ## Entry points
 
-- [`ranuts/utils`](#ranutsutils) — 浏览器 / 通用工具函数 · _browser + node_ · 135 exports
+- [`ranuts/utils`](#ranutsutils) — 浏览器 / 通用工具函数 · _browser + node_ · 174 exports
 - [`ranuts/node`](#ranutsnode) — Node 服务端工具（fs / http / ws / 中间件） · _node only_ · 26 exports
 - [`ranuts/visual`](#ranutsvisual) — 2D 渲染引擎（Canvas / WebGL / WebGPU） · _browser only_ · 12 exports
 - [`ranuts/vnode`](#ranutsvnode) — Snabbdom 风格虚拟 DOM · _browser_ · 26 exports
@@ -22,7 +22,7 @@ Import from the **subpath** that owns the symbol, e.g. `import { debounce } from
 浏览器 / 通用工具函数 · runtime: **browser + node** · source: `src/utils/index.ts`
 
 ```ts
-import {} from /* … */ 'ranuts/utils';
+import { /* … */ } from 'ranuts/utils';
 ```
 
 ### Functions
@@ -31,7 +31,9 @@ import {} from /* … */ 'ranuts/utils';
 - `addClassToElement(element: Element, addClass: string) => void` — 给指定的元素添加指定的 class
 - `addNumSym(value: string | number, flag?: string | number) => string`
 - `appendUrl(url: string, params?: Record<string, string>) => string` — 将一个对象转换成 querystring，拼接到 url 后面
+- `arrayBufferToString(buffer: ArrayBuffer | Uint8Array) => string` — 按嗅探出的编码把二进制解码成字符串。读取来源不明的文本文件（用户上传的
 - `audioVendor() => Promise<string>` — 音频指纹，1.生成音频信息流 (三角波)，对其进行 FFT 变换，计算 SHA 值作为指纹。2.生成音频信息流（正弦波），进行动态压缩处理，计算 MD5 值。
+- `buildOffsets(lengths: readonly number[]) => number[]` — 每块在拼接坐标系里的全局起始偏移（前缀和）。offsets[i] = 前 i 块长度之和。
 - `canvasVendor() => string | null`
 - `changeHumpToLowerCase(str: string) => string`
 - `checkEncoding(uint8Array: Uint8Array) => string`
@@ -50,6 +52,7 @@ import {} from /* … */ 'ranuts/utils';
 - `createSignal<T = unknown>(value: T, options?: { subscriber?: string; equals?: boolean | ((prev: T | undefined, next: T) => boolean); }) => [() => T, (newValue:…`
 - `currentDevice() => CurrentDevice`
 - `debounce(fn: any, ms?: number) => any` — 防抖
+- `detectLanguage(text: string, sampleSize?: number) => TextLanguage` — 按 CJK / 拉丁字符占比判定一段文本的主语言。纯统计，不加载任何模型或词典，
 - `durationHandler<T, U>(handler: (...args: T[]) => U, ...params: T[]) => ((a: number) => Promise<U>)` — 间隔一定时间，执行指定的函数
 - `encodeUrl(url: string) => string` — Encode a URL to a percent-encoded form, excluding already-encoded sequences.
 - `escapeHtml(string?: string | number | null) => string`
@@ -80,29 +83,44 @@ import {} from /* … */ 'ranuts/utils';
 - `hsvToRgb(h: number, s: number, v: number) => number[]`
 - `hue2rgb(p: number, q: number, t: number) => number`
 - `imageRequest(url?: string) => Promise<number>` — 图片请求
+- `indexForOffset(offsets: readonly number[], offset: number) => number` — 二分查找全局偏移落在第几块——最后一个满足 `offsets[i] <= offset` 的下标。
 - `isBangDevice() => boolean`
 - `isEqual(value: any, other: any, seen?: Map<any, any>) => boolean` — 深度比较两个值是否相等
 - `isImageSize(file: File, width?: number, height?: number) => Promise<boolean>` — 校验图片尺寸
 - `isMobile() => boolean` — 是否是移动端
 - `isSafari() => boolean | undefined | string`
 - `isString(obj: unknown) => boolean`
+- `isUrlCached(url: string) => Promise<boolean>` — URL 是否已在 CacheStorage 里。探测一组文件时应挑**最后下载完成的那个**
 - `isWeiXin() => boolean` — 判断是否是微信浏览器的函数
 - `localStorageGetItem(name: string) => string`
 - `localStorageSetItem(name: string, value: string) => void`
+- `matchMediaQuery(query: string) => boolean` — 同步读取一条媒体查询当前是否匹配。SSR 返回 false。
 - `mathjs(a: number, type: string, b: number) => ComputeNumberResult`
 - `md5(str: string) => string` — MD5 hash function implementation
 - `memoize(fn: unknown) => Func` — 返回缓存的函数，执行一次后，无须执行直接返回结果
 - `merge(a: Obj, b?: Obj) => Obj` — 合并对象
 - `mergeExports(obj: Record<string, string>, exports: Record<string, string>) => Record<string, string>` — 将 exports 对象拼接到 obj 上，并冻结 obj
+- `navigatorLanguage() => TextLanguage` — 浏览器 UI 语言映射到同一套语言桶（无内容可检测时的默认值）。SSR 返回 'other'。
+- `networkAllowsDownload(options?: NetworkAllowanceOptions) => boolean` — 当前网络与用户设置是否允许「主动下载大资源」。
 - `networkSpeed(options: Options) => Promise<ReturnType>` — 通过请求来测试当前网络的 ping 值
 - `noop() => void`
 - `openPortBridge({ targetWindow, targetOrigin, name, }: OpenPortBridgeOptions) => PortBridge` — 发起方：创建 MessageChannel，把一端交给目标窗口，自己持有另一端。
+- `parseChineseNumber(value: string) => number | null` — 中文数字转阿拉伯数字，支持「十五」「二十三」「一百零三」「一千零一」「三万」，
+- `parseEnglishNumber(value: string) => number | null` — 英文序号转数字：阿拉伯数字 / 英文数词（one–twenty）/ 罗马数字，依次尝试。
+- `parseRomanNumber(value: string) => number | null` — 罗马数字转阿拉伯数字（大小写皆可，按减法记法处理 IV / IX）。非法输入返回 null。
 - `performanceTime() => number` — 获取当前时间戳
 - `perToNum(str?: string) => number` — 百分比转换成数字
+- `prefetchUrl(url: string) => Promise<void>` — 拉取单个 URL 进缓存；已缓存则跳过。失败静默——预取失败只是让后续加载
+- `prefetchUrls(urls: string[], options?: PrefetchOptions) => Promise<void>` — 预取一组 URL。**串行**执行——预取是背景任务，并发打满带宽会拖慢用户
+- `prefetchWhenIdle(urls: string[], options?: WhenIdleOptions & NetworkAllowanceOptions & PrefetchOptions) => (() => void)` — 在空闲时预取一组 URL，并受 `networkAllowsDownload` 约束。非阻塞，立即返回。
 - `querystring(data?: {}) => string` — 对象转 url 字符串
 - `randomColor() => Color`
 - `randomString(len?: number) => string`
 - `range(num: number, min?: number, max?: number) => number` — 限制最大和最小值
+- `readFileAsArrayBuffer(blob: Blob) => Promise<ArrayBuffer>` — 读取 File / Blob 为 ArrayBuffer
+- `readFileAsDataURL(blob: Blob) => Promise<string>` — 读取 File / Blob 为 data: URL（图片预览等）
+- `readFileAsText(blob: Blob, encoding?: string) => Promise<string>` — 读取 File / Blob 为文本
+- `readFileAsUint8Array(blob: Blob) => Promise<Uint8Array>` — 读取 File / Blob 为 Uint8Array（配合 checkEncoding / arrayBufferToString 做编码嗅探）
 - `removeClassToElement(element: Element, removeClass: string) => void` — 给指定的元素移除指定的 class
 - `removeGhosting(event: DragEvent) => void` — 移除拖拽事件的阴影
 - `replaceOld(source: any, name: string, replacement: (...args: unknown[]) => unknown, isForced?: boolean) => void` — 重写对象上面的某个属性
@@ -113,18 +131,24 @@ import {} from /* … */ 'ranuts/utils';
 - `rgbToHsb(r: number, g: number, b: number) => number[]`
 - `rgbToHsl(r: number | number[], g?: number, b?: number) => Array<number>`
 - `scriptOnLoad(urls: string[], append?: HTMLElement, callback?: () => void) => Promise<void>` — 动态插入 script/link 标签
+- `segmentByRanges<T>(text: string, chunkStart: number, ranges: readonly OffsetRange<T>[]) => Segment<T>[]` — 把一块文本按落在其范围内的区间切成「普通段 / 命中段」序列，供分段渲染
 - `setAttributeByGlobal(name: string, value: unknown) => void` — 给全局对象上增加属性
 - `setFontSize2html(designWidth?: number) => void` — 根据 UI 稿宽度设置 rem
 - `setMime(ext: string, mimeType: string) => Map<string, string>`
+- `singleFlight<T>(fn: () => Promise<T>) => SingleFlight<T>` — 异步版的「只执行一次」：并发调用共享同一个在途 promise，成功后所有后续调用
 - `str2Xml(xmlStr: string, format?: DOMParserSupportedType) => HTMLElement | undefined` — 传入字符串和指定的格式，将字符串转成 xml
 - `strParse(str?: string, sep?: string | RegExp, eq?: string | RegExp) => Record<string, string>` — 将字符串转对象，比如
 - `throttle<T extends (...args: any[]) => any>(func: T, delay?: number) => ThrottleFunc<T>` — 节流
 - `timeFormat(time: number) => string` — 时间秒，转化成:分割的时间
 - `timestampToTime(timestamp?: number | string) => Date & { format?: Function; }` — 时间戳转日期
+- `toFullWidth(value: string) => string` — 半角字符转全角（`toHalfWidth` 的逆向）
+- `toHalfWidth(value: string) => string` — 全角字符转半角（数字、字母、标点与全角空格）。中文输入法产出的全角数字
 - `toString(value: string | number) => string`
 - `transformNumber(value: string, locale?: string, precision?: number, fixed?: number) => string`
 - `transformText(content: string | ArrayBuffer) => TransformText | undefined`
+- `watchMediaQuery(query: string, callback: (matches: boolean) => void) => (() => void)` — 监听媒体查询变化。回调会**先同步触发一次当前值**（省掉调用方自己再读一遍
 - `webglVendor() => { vendor: string; renderer: string; } | null`
+- `whenIdle(callback: () => void, options?: WhenIdleOptions) => (() => void)` — 在浏览器空闲时执行回调，无 `requestIdleCallback`（Safari 长期缺席）时退回 setTimeout。
 
 ### Classes
 
@@ -143,6 +167,8 @@ import {} from /* … */ 'ranuts/utils';
 - `class Rgba`
 - `class SyncHook`
 - `class TOTP`
+- `class WebDB` — IndexedDB 的 Promise 封装。原生 IndexedDB 是事件回调 + 事务式 API，
+- `class WorkerClient` — 带请求编号的 Worker 客户端。请求类型 `Req` 由调用方定义，客户端只负责
 
 ### Interfaces
 
@@ -150,16 +176,28 @@ import {} from /* … */ 'ranuts/utils';
 - `interface BridgeManagerOptions`
 - `interface BroadcastPayload`
 - `interface CallToPayload`
+- `interface IDBResult` — IndexedDB 操作的统一返回结构。所有方法 resolve/reject 的都是这个形状，
+- `interface IDBStoreSchema` — 对象仓库的声明式 schema。`openDataBase` 会在 `onupgradeneeded` 里
 - `interface MessageData`
 - `interface MessageHandler`
+- `interface NetworkAllowanceOptions`
+- `interface OffsetRange` — 全局坐标系里的一段标注：`[start, end)` 半开区间 + 任意携带值
 - `interface OpenPortBridgeOptions`
 - `interface PendingRequest`
 - `interface PortBridge` — 基于 MessagePort 的点对点桥接（方案 B，作为新 API 提供）。
+- `interface PrefetchOptions`
+- `interface Segment` — 切分结果的一段：`value` 为 null 表示没被任何区间覆盖的普通段
+- `interface SingleFlight`
 - `interface TransformText`
+- `interface WebDBOptions`
+- `interface WhenIdleOptions`
+- `interface WorkerClientOptions`
+- `interface WorkerResponseBase` — 响应至少要带回请求编号，才能与请求配对
 
 ### Types
 
 - `type CurrentDevice`
+- `type TextLanguage` — 粗粒度语言桶：只区分中文 / 英文 / 其他
 
 ### Constants
 
@@ -171,6 +209,7 @@ import {} from /* … */ 'ranuts/utils';
 - `const isClient: boolean`
 - `const MessageCodec: { encode(data: any): string; decode<T = any>(encodedStr: string): T | null; encodeFile(file: File): Promise<string>; decodeFile(encoded: st…` — 消息编解码工具
 - `const MimeType: Map<string, string>`
+- `const MOBILE_MEDIA_QUERY: "(max-width: 768px)"` — 视口断点：与移动端布局的分界线保持一致
 - `const Platform: { init: <T = unknown, R = unknown>(events: Record<string, MessageHandler<T, R>>) => { destroy: () => void; }; }`
 - `const status: { message: Map<number, string>; code: Map<string, number>; codes: number[]; redirect: { 300: boolean; 301: boolean; 302: boolean; 303: boolean; 3…`
 - `const subscribers: SyncHook`
@@ -180,7 +219,7 @@ import {} from /* … */ 'ranuts/utils';
 Node 服务端工具（fs / http / ws / 中间件） · runtime: **node only** · source: `src/node/index.ts`
 
 ```ts
-import {} from /* … */ 'ranuts/node';
+import { /* … */ } from 'ranuts/node';
 ```
 
 ### Functions
@@ -229,7 +268,7 @@ import {} from /* … */ 'ranuts/node';
 2D 渲染引擎（Canvas / WebGL / WebGPU） · runtime: **browser only** · source: `src/utils/visual/index.ts`
 
 ```ts
-import {} from /* … */ 'ranuts/visual';
+import { /* … */ } from 'ranuts/visual';
 ```
 
 ### Classes
@@ -261,7 +300,7 @@ import {} from /* … */ 'ranuts/visual';
 Snabbdom 风格虚拟 DOM · runtime: **browser** · source: `src/vnode/index.ts`
 
 ```ts
-import {} from /* … */ 'ranuts/vnode';
+import { /* … */ } from 'ranuts/vnode';
 ```
 
 ### Functions
@@ -307,3 +346,4 @@ import {} from /* … */ 'ranuts/vnode';
 ### Namespaces
 
 - `namespace is` — 类型判断工具集（数组 / 字符串 / 原始值 / VNode）
+

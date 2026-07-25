@@ -4,13 +4,19 @@ import { isUrlCached, networkAllowsDownload, prefetchUrl, prefetchUrls, whenIdle
 type Globals = Record<string, unknown>;
 const g = globalThis as unknown as Globals;
 
+/**
+ * 覆盖全局对象。必须用 defineProperty：Node 里 `navigator` 是只有 getter 的访问器属性，
+ * 直接赋值会抛 TypeError。
+ */
 const stub = (values: Globals): (() => void) => {
-  const saved = Object.keys(values).map((key) => [key, key in g ? g[key] : undefined] as const);
-  Object.assign(g, values);
+  const saved = Object.keys(values).map((key) => [key, Object.getOwnPropertyDescriptor(g, key)] as const);
+  for (const [key, value] of Object.entries(values)) {
+    Object.defineProperty(g, key, { value, configurable: true, writable: true });
+  }
   return () => {
-    for (const [key, value] of saved) {
-      if (value === undefined) delete g[key];
-      else g[key] = value;
+    for (const [key, descriptor] of saved) {
+      if (descriptor) Object.defineProperty(g, key, descriptor);
+      else delete g[key];
     }
   };
 };

@@ -114,14 +114,7 @@ import type { TextLanguage } from './lang';
 import { readFileAsArrayBuffer, readFileAsDataURL, readFileAsText, readFileAsUint8Array } from './file';
 import { WorkerClient } from './worker';
 import type { WorkerClientOptions, WorkerResponseBase } from './worker';
-import {
-  isUrlCached,
-  networkAllowsDownload,
-  prefetchUrl,
-  prefetchUrls,
-  prefetchWhenIdle,
-  whenIdle,
-} from './prefetch';
+import { isUrlCached, networkAllowsDownload, prefetchUrl, prefetchUrls, prefetchWhenIdle, whenIdle } from './prefetch';
 import type { NetworkAllowanceOptions, PrefetchOptions, WhenIdleOptions } from './prefetch';
 import { Monitor } from './monitor';
 import { getStatus, status } from './network';

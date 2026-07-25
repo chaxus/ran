@@ -202,7 +202,7 @@ describe('WebDB', () => {
   };
 
   it('creates the declared stores and indexes on upgrade', async () => {
-    const db = await open();
+    await open();
     const raw = disk.get('test')!;
     expect([...raw.stores.keys()]).toEqual(['books', 'notes']);
     expect(raw.stores.get('books')!.createdIndexes).toEqual(['byAuthor']);
@@ -223,7 +223,7 @@ describe('WebDB', () => {
       dbName: 'test',
       version: 1,
       stores: STORES,
-      upgrade: (database) => seen.push(...[...(database as unknown as FakeDatabase).stores.keys()]),
+      upgrade: (database) => void seen.push(...(database as unknown as FakeDatabase).stores.keys()),
     });
     await db.openDataBase();
     expect(seen).toEqual(['books', 'notes']);

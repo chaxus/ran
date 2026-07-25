@@ -224,9 +224,7 @@ export const arrayBufferToString = (buffer: ArrayBuffer | Uint8Array): string =>
  * @return {string}
  */
 export const toHalfWidth = (value: string): string => {
-  return value
-    .replace(/[！-～]/g, (char) => String.fromCharCode(char.charCodeAt(0) - 0xfee0))
-    .replace(/\u3000/g, ' ');
+  return value.replace(/[！-～]/g, (char) => String.fromCharCode(char.charCodeAt(0) - 0xfee0)).replace(/\u3000/g, ' ');
 };
 
 /**
@@ -235,9 +233,7 @@ export const toHalfWidth = (value: string): string => {
  * @return {string}
  */
 export const toFullWidth = (value: string): string => {
-  return value
-    .replace(/[!-~]/g, (char) => String.fromCharCode(char.charCodeAt(0) + 0xfee0))
-    .replace(/ /g, '\u3000');
+  return value.replace(/[!-~]/g, (char) => String.fromCharCode(char.charCodeAt(0) + 0xfee0)).replace(/ /g, '\u3000');
 };
 
 export interface TransformText {
