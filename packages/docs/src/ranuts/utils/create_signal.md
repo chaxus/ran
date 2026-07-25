@@ -1,95 +1,61 @@
 # createSignal
 
-Create a reactive signal (Signal) that notifies subscribers when value changes.
+A minimal signal: `[read, write]`, with optional broadcast over the shared
+[`subscribers`](./sync_hook) bus so unrelated modules can react to a change.
 
 ## API
 
-### createSignal
-
-#### Return
-
-| Argument           | Description                         | Type                               |
-| ------------------ | ----------------------------------- | ---------------------------------- |
-| `[getter, setter]` | Returns getter and setter functions | `[() => T, (newValue: T) => void]` |
+### createSignal(value, options?)
 
 #### Parameters
 
-| Parameter | Description                      | Type      | Default  |
-| --------- | -------------------------------- | --------- | -------- |
-| `value`   | Initial value                    | `T`       | Required |
-| `options` | Configuration options (optional) | `Options` | Optional |
+| Parameter            | Description                                          | Type                                        | Default     |
+| -------------------- | ---------------------------------------------------- | ------------------------------------------- | ----------- |
+| `value`              | Initial value                                        | `T`                                         | Required    |
+| `options.subscriber` | Event name; broadcasts on `subscribers` when changed | `string`                                    | `undefined` |
+| `options.equals`     | How to decide "did it change"                        | `boolean \| ((prev: T, next: T) => boolean)` | `true`      |
 
-#### Options
+`equals` semantics:
 
-| Parameter    | Description                             | Type                  | Default  |
-| ------------ | --------------------------------------- | --------------------- | -------- |
-| `subscriber` | Subscriber identifier                   | `string`              | Optional |
-| `equals`     | Equality comparison function or boolean | `boolean \| Function` | Optional |
+| Value      | Behaviour                                                          |
+| ---------- | ------------------------------------------------------------------ |
+| omitted / `true` | `Object.is` — reference/value equality (standard signal semantics) |
+| `false`    | Every write counts as a change and notifies                        |
+| a function | Return `true` to mean "equal, skip the notification"               |
+
+#### Return
+
+`[getter, setter]`.
 
 ## Example
 
-### Basic Usage
-
 ```js
-import { createSignal } from 'ranuts';
+import { createSignal, isEqual, subscribers } from 'ranuts';
 
-const [count, setCount] = createSignal(0);
+const [count, setCount] = createSignal(0, { subscriber: 'count-changed' });
+subscribers.tap('count-changed', () => render(count()));
 
-console.log(count()); // 0
-setCount(10);
-console.log(count()); // 10
-```
+setCount(1); // notifies
+setCount(1); // same value — no notification
 
-### Subscribe to Changes
-
-```js
-import { createSignal, subscribers } from 'ranuts';
-
-const [name, setName] = createSignal('John', {
-  subscriber: 'nameSignal',
-});
-
-// Subscribe to changes
-subscribers.tap('nameSignal', () => {
-  console.log('Name changed:', name());
-});
-
-setName('Jane'); // Triggers subscription callback
-```
-
-### Custom Comparison Function
-
-```js
-import { createSignal } from 'ranuts';
-
-const [user, setUser] = createSignal(
-  { id: 1, name: 'John' },
-  {
-    equals: (prev, next) => prev.id === next.id,
-  },
-);
-
-// Only updates when id is different
-setUser({ id: 1, name: 'Jane' }); // Won't update (same id)
-setUser({ id: 2, name: 'Bob' }); // Will update (different id)
-```
-
-### Disable Auto Comparison
-
-```js
-import { createSignal } from 'ranuts';
-
-const [data, setData] = createSignal(
-  { value: 1 },
-  {
-    equals: false, // Always updates, no comparison
-  },
-);
+// Opt in to deep comparison when you actually need it
+const [tree, setTree] = createSignal(initial, { equals: isEqual });
 ```
 
 ## Notes
 
-1. **Reactive**: Automatically notifies subscribers when value changes (if `subscriber` is set).
-2. **Deep comparison**: Defaults to using `isEqual` for deep comparison, only updates when value truly changes.
-3. **Custom comparison**: Can customize comparison logic through `equals` option.
-4. **Use case**: Commonly used for state management, reactive UI, data binding, etc.
+1. **Reference equality by default.** A freshly built but deep-equal object *is* a change.
+   This matches standard signal semantics and keeps writes O(1).
+2. **Deep comparison is opt-in** via `{ equals: isEqual }` — the cost is then visible at the
+   call site.
+3. **`subscriber` is optional.** Without it the signal is purely local state.
+
+::: warning Changed in 0.3
+Two fixes that change behaviour:
+
+- `{ equals: true }` used to mean "always equal", freezing the signal so it **never updated**.
+  It now means "use the default comparison", consistent with `undefined`.
+- Every write used to run `cloneDeep` + `isEqual` on top of `equals`. That put an
+  O(data-size) copy on the write hot path, and the extra deep check overrode `equals`, so
+  `{ equals: false }` ("always notify") silently did nothing for deep-equal values. Both are gone.
+:::

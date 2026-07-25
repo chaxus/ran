@@ -1,95 +1,59 @@
 # createSignal
 
-创建响应式信号（Signal），支持值变化时通知订阅者。
+最小 signal：返回 `[读, 写]`，可选地通过共享的 [`subscribers`](./sync_hook) 总线广播变更，
+让互不相干的模块也能响应。
 
 ## API
 
-### createSignal
+### createSignal(value, options?)
 
-#### Return
+#### 参数
 
-| 参数               | 说明                       | 类型                               |
-| ------------------ | -------------------------- | ---------------------------------- |
-| `[getter, setter]` | 返回 getter 和 setter 函数 | `[() => T, (newValue: T) => void]` |
+| 参数                 | 说明                                     | 类型                                        | 默认值      |
+| -------------------- | ---------------------------------------- | ------------------------------------------- | ----------- |
+| `value`              | 初始值                                   | `T`                                         | 必填        |
+| `options.subscriber` | 事件名；变更时通过 `subscribers` 广播    | `string`                                    | `undefined` |
+| `options.equals`     | 如何判定「算不算变化」                   | `boolean \| ((prev: T, next: T) => boolean)` | `true`      |
 
-#### Parameters
+`equals` 语义：
 
-| 参数      | 说明             | 类型      | 默认值 |
-| --------- | ---------------- | --------- | ------ |
-| `value`   | 初始值           | `T`       | 无     |
-| `options` | 配置选项（可选） | `Options` | 无     |
+| 取值             | 行为                                             |
+| ---------------- | ------------------------------------------------ |
+| 省略 / `true`    | `Object.is`，引用/值相等（标准 signal 语义）     |
+| `false`          | 每次写入都算变化并通知                           |
+| 函数             | 返回 `true` 表示相等、跳过通知                   |
 
-#### Options
+#### 返回
 
-| 参数         | 说明                   | 类型                  | 默认值 |
-| ------------ | ---------------------- | --------------------- | ------ |
-| `subscriber` | 订阅者标识             | `string`              | 无     |
-| `equals`     | 相等性比较函数或布尔值 | `boolean \| Function` | 无     |
+`[getter, setter]`。
 
-## Example
-
-### 基础用法
+## 示例
 
 ```js
-import { createSignal } from 'ranuts';
+import { createSignal, isEqual, subscribers } from 'ranuts';
 
-const [count, setCount] = createSignal(0);
+const [count, setCount] = createSignal(0, { subscriber: 'count-changed' });
+subscribers.tap('count-changed', () => render(count()));
 
-console.log(count()); // 0
-setCount(10);
-console.log(count()); // 10
+setCount(1); // 触发
+setCount(1); // 值相同，不触发
+
+// 确实需要深比较时，显式声明
+const [tree, setTree] = createSignal(initial, { equals: isEqual });
 ```
 
-### 订阅变化
+## 注意
 
-```js
-import { createSignal, subscribers } from 'ranuts';
+1. **默认引用相等**。新构造但深度相等的对象**算**变化。这符合标准 signal 语义，也让写入保持 O(1)。
+2. **深比较需显式开启**：`{ equals: isEqual }`，代价明明白白写在调用处。
+3. **`subscriber` 可选**，不传时就是纯本地状态。
 
-const [name, setName] = createSignal('John', {
-  subscriber: 'nameSignal',
-});
+::: warning 0.3 行为变更
+两处修复会改变行为：
 
-// 订阅变化
-subscribers.tap('nameSignal', () => {
-  console.log('Name changed:', name());
-});
-
-setName('Jane'); // 触发订阅回调
-```
-
-### 自定义比较函数
-
-```js
-import { createSignal } from 'ranuts';
-
-const [user, setUser] = createSignal(
-  { id: 1, name: 'John' },
-  {
-    equals: (prev, next) => prev.id === next.id,
-  },
-);
-
-// 只有 id 不同时才会更新
-setUser({ id: 1, name: 'Jane' }); // 不会更新（id 相同）
-setUser({ id: 2, name: 'Bob' }); // 会更新（id 不同）
-```
-
-### 禁用自动比较
-
-```js
-import { createSignal } from 'ranuts';
-
-const [data, setData] = createSignal(
-  { value: 1 },
-  {
-    equals: false, // 总是更新，不进行比较
-  },
-);
-```
-
-## 注意事项
-
-1. **响应式**：值变化时会自动通知订阅者（如果设置了 `subscriber`）。
-2. **深度比较**：默认使用 `isEqual` 进行深度比较，只有值真正改变时才更新。
-3. **自定义比较**：可以通过 `equals` 选项自定义比较逻辑。
-4. **用途**：常用于状态管理、响应式 UI、数据绑定等场景。
+- `{ equals: true }` 此前表示「永远相等」，导致 signal **一次也不会更新**。现在它表示
+  「用默认比较」，与 `undefined` 一致。
+- 此前每次写入都在 `equals` 之外额外跑一遍 `cloneDeep` + `isEqual`：既把 O(数据规模) 的拷贝
+  压在写入热路径上，又让这层深比较盖过 `equals`，`{ equals: false }`（「永远通知」）
+  对深度相等的值静默失效。两者均已移除。
+:::

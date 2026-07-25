@@ -1,73 +1,60 @@
-# memoize
+# once / singleFlight
 
-记忆化函数，用于缓存函数执行结果。函数执行一次后，后续调用会直接返回缓存的结果，无需重新执行。
+**只执行一次**并复用结果 —— 用于惰性初始化：配置解析、昂贵的一次性计算、懒 getter。
+`once` 是同步版，`singleFlight` 是异步版。
 
 ## API
 
-### memoize
+### once(fn)
 
-#### Return
+| 参数 | 说明                                       | 类型              | 默认值 |
+| ---- | ------------------------------------------ | ----------------- | ------ |
+| `fn` | 只执行一次的函数；传非函数值则原样返回该值 | `Function \| any` | 必填   |
 
-| 参数       | 说明           | 类型       |
-| ---------- | -------------- | ---------- |
-| `Function` | 记忆化后的函数 | `Function` |
+返回包装后的函数。首次调用求值并缓存，之后**无论传什么参数**都直接返回首次的结果。
 
-#### Parameters
+### singleFlight(fn)
 
-| 参数 | 说明                 | 类型              | 默认值 |
-| ---- | -------------------- | ----------------- | ------ |
-| `fn` | 需要记忆化的函数或值 | `Function \| any` | 无     |
+| 参数 | 说明                   | 类型               | 默认值 |
+| ---- | ---------------------- | ------------------ | ------ |
+| `fn` | 只执行一次的异步函数   | `() => Promise<T>` | 必填   |
 
-## Example
+返回包装后的函数，并附带：
 
-### 基础用法
+| 成员      | 说明                                   | 类型         |
+| --------- | -------------------------------------- | ------------ |
+| `reset()` | 丢弃缓存结果，下次调用重新执行 `fn`    | `() => void` |
+| `started` | 是否已有结果或正在执行中               | `boolean`    |
 
-```js
-import { memoize } from 'ranuts';
+### memoize(fn)
 
-const expensiveFunction = () => {
-  console.log('执行计算');
-  return Math.random() * 100;
-};
+`once` 的废弃别名，见下方说明。
 
-const memoizedFn = memoize(expensiveFunction);
-
-console.log(memoizedFn()); // 执行计算，返回随机值
-console.log(memoizedFn()); // 直接返回缓存的结果，不执行计算
-console.log(memoizedFn()); // 直接返回缓存的结果，不执行计算
-```
-
-### 缓存值
+## 示例
 
 ```js
-import { memoize } from 'ranuts';
+import { once, singleFlight } from 'ranuts';
 
-const value = { data: 'test' };
-const memoizedValue = memoize(value);
+// 同步：首次访问时才解析配置
+const config = once(() => JSON.parse(rawConfig));
+config(); // 解析
+config(); // 走缓存
 
-console.log(memoizedValue()); // 返回 { data: 'test' }
-console.log(memoizedValue()); // 返回相同的值
+// 异步：无论多少调用方并发，数据库只打开一次
+const ready = singleFlight(() => db.openDataBase());
+await Promise.all([ready(), ready(), ready()]); // 只打开一次
 ```
 
-### 复杂计算缓存
+## 注意
 
-```js
-import { memoize } from 'ranuts';
+1. **`once` 不按参数缓存**。只有首次调用的参数生效。需要按参数缓存请自行用 `Map`。
+2. **`once` 求值后会释放 `fn`**，让它闭包捕获的资源可被回收。
+3. **`singleFlight` 不缓存失败**。失败会清空缓存，让一次偶发的网络抖动仍可重试 ——
+   缓存一个 rejected promise 会把偶发故障变成永久故障。
+4. **并发调用共享同一个在途 promise**，N 个调用方竞争时 `fn` 也只跑一次。这正是
+   「`init()` 返回 void → 调用方无从 await → 早期写操作全部失败」这个经典 bug 的解法。
 
-const calculateSum = (numbers) => {
-  console.log('计算中...');
-  return numbers.reduce((sum, num) => sum + num, 0);
-};
-
-const memoizedCalculate = memoize(calculateSum);
-
-// 注意：由于参数处理方式，这种方式可能不会按预期工作
-// 建议用于无参数或固定参数的函数
-```
-
-## 注意事项
-
-1. **单次缓存**：函数只执行一次，后续调用都返回第一次的结果。
-2. **参数处理**：当前实现会传递参数，但缓存机制基于单次执行，参数变化不会触发重新计算。
-3. **内存清理**：执行后会清理原始函数引用，释放内存。
-4. **适用场景**：适用于初始化函数、单例模式、或只需要执行一次的昂贵计算。
+::: warning 0.3 改名
+`memoize` 是个有误导的名字 —— 它从不按参数缓存，只是「执行一次」。现已成为 `once` 的别名并标记废弃。
+它此前的类型签名也是错的（声明为无参却透传参数），现在从 `fn` 推导。
+:::

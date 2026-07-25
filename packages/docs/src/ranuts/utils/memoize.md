@@ -1,73 +1,66 @@
-# memoize
+# once / singleFlight
 
-Memoization function used to cache function execution results. After the function executes once, subsequent calls will directly return the cached result without re-execution.
+Run something **exactly once** and reuse the result — lazy initialization for config parsing,
+expensive one-off computation, lazy getters. `once` is synchronous; `singleFlight` is the
+async counterpart.
 
 ## API
 
-### memoize
+### once(fn)
 
-#### Return
+| Parameter | Description                                                   | Type              | Default  |
+| --------- | ------------------------------------------------------------- | ----------------- | -------- |
+| `fn`      | Function to run once; a non-function value is returned as-is  | `Function \| any` | Required |
 
-| Argument   | Description       | Type       |
-| ---------- | ----------------- | ---------- |
-| `Function` | Memoized function | `Function` |
+Returns a wrapped function. The first call evaluates and caches; every later call returns
+that first result, **whatever arguments are passed**.
 
-#### Parameters
+### singleFlight(fn)
 
-| Parameter | Description                  | Type              | Default  |
-| --------- | ---------------------------- | ----------------- | -------- |
-| `fn`      | Function or value to memoize | `Function \| any` | Required |
+| Parameter | Description                    | Type                  | Default  |
+| --------- | ------------------------------ | --------------------- | -------- |
+| `fn`      | Async function to run once     | `() => Promise<T>`    | Required |
+
+Returns a wrapped function plus:
+
+| Member    | Description                                                      | Type            |
+| --------- | ---------------------------------------------------------------- | --------------- |
+| `reset()` | Discard the cached result so the next call runs `fn` again        | `() => void`    |
+| `started` | Whether it has a result or is currently running                   | `boolean`       |
+
+### memoize(fn)
+
+Deprecated alias of `once`. See the warning below.
 
 ## Example
 
-### Basic Usage
-
 ```js
-import { memoize } from 'ranuts';
+import { once, singleFlight } from 'ranuts';
 
-const expensiveFunction = () => {
-  console.log('Computing...');
-  return Math.random() * 100;
-};
+// Sync: parse the config only on first access
+const config = once(() => JSON.parse(rawConfig));
+config(); // parses
+config(); // cached
 
-const memoizedFn = memoize(expensiveFunction);
-
-console.log(memoizedFn()); // Executes computation, returns random value
-console.log(memoizedFn()); // Returns cached result directly, no computation
-console.log(memoizedFn()); // Returns cached result directly, no computation
-```
-
-### Cache Value
-
-```js
-import { memoize } from 'ranuts';
-
-const value = { data: 'test' };
-const memoizedValue = memoize(value);
-
-console.log(memoizedValue()); // Returns { data: 'test' }
-console.log(memoizedValue()); // Returns the same value
-```
-
-### Complex Calculation Cache
-
-```js
-import { memoize } from 'ranuts';
-
-const calculateSum = (numbers) => {
-  console.log('Calculating...');
-  return numbers.reduce((sum, num) => sum + num, 0);
-};
-
-const memoizedCalculate = memoize(calculateSum);
-
-// Note: Due to parameter handling, this approach may not work as expected
-// Recommended for functions with no parameters or fixed parameters
+// Async: open the database once, no matter how many callers race
+const ready = singleFlight(() => db.openDataBase());
+await Promise.all([ready(), ready(), ready()]); // opens once
 ```
 
 ## Notes
 
-1. **Single cache**: The function executes only once, and subsequent calls return the first result.
-2. **Parameter handling**: The current implementation passes parameters, but the caching mechanism is based on a single execution, and parameter changes will not trigger recalculation.
-3. **Memory cleanup**: After execution, the original function reference is cleared to free memory.
-4. **Use cases**: Suitable for initialization functions, singleton patterns, or expensive calculations that only need to execute once.
+1. **`once` is not keyed by arguments.** Only the first call's arguments take effect. If you
+   need per-argument caching, use a `Map` yourself.
+2. **`once` releases `fn` after evaluating**, so whatever it captured can be garbage collected.
+3. **`singleFlight` does not cache rejections.** A failed attempt clears the cache so a
+   transient network blip stays retryable — caching a rejected promise would make one glitch
+   permanent.
+4. **Concurrent `singleFlight` callers share the in-flight promise**, so `fn` runs once even
+   when N callers race. This is the fix for the classic "init() returns void, so callers can't
+   await it, so early writes fail" bug.
+
+::: warning Renamed in 0.3
+`memoize` was a misleading name — it never cached by argument, it just ran once. It is now an
+alias of `once` and is deprecated. The type signature was also wrong before (declared as
+zero-argument while it forwarded arguments); it now infers from `fn`.
+:::

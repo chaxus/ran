@@ -82,6 +82,23 @@ async function handleFileUpload(file) {
 }
 ```
 
+
+## Behaviour
+
+1. **Both dimensions must match** when both `width` and `height` are given. Passing neither
+   only checks that the file decodes as an image.
+2. **A decode failure rejects** (corrupt file, non-image) instead of leaving the promise pending.
+3. **The object URL is always revoked**, on success and on failure, so validating many files
+   does not leak blob URLs until page unload.
+4. **Browser only** — rejects with a clear error under SSR.
+
+::: warning Fixed in 0.3
+Previously the second condition overwrote the first, so passing both `width` and `height`
+silently ignored `width`; there was no `onerror`, so a corrupt file left the promise pending
+forever; and the SSR guard called `reject` without returning, then went on to touch `window`
+and throw a `ReferenceError`.
+:::
+
 ## Notes
 
 1. **Async operation**: Returns Promise, needs to be handled with `await` or `.then()`.
