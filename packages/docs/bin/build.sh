@@ -4,7 +4,9 @@ version=$(date +%s)
 # 将版本号写入 variable 目录下 SERVICE_WORK_VERSION.ts
 SERVICE_WORK_VERSION="./variable/SERVICE_WORK_VERSION.ts"
 
-echo "export const SERVICE_WORK_VERSION = \"$version\"" > $SERVICE_WORK_VERSION
+# 单引号 + 分号：与 prettier 的配置一致，否则每次构建都会把这个被跟踪的文件
+# 改成不合规格式，下一次 lint 就报错。
+echo "export const SERVICE_WORK_VERSION = '$version';" > $SERVICE_WORK_VERSION
 # 执行 ssg 构建命令
 bin=./node_modules/.bin
 $bin/vitepress build

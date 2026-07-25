@@ -17,13 +17,6 @@ export const handleClick = (hooks: (event: MouseEvent) => void = noop): (() => v
   return () => document.removeEventListener('click', onClick, true);
 };
 
-// const fingerprinting = () => {
-//   // userAgent, browser language, maximum simultaneous touch points, logical CPU cores
-//   const { userAgent, language, maxTouchPoints, hardwareConcurrency } = navigator;
-//   const { width, height, colorDepth } = screen;
-//   // Offset between GMT and local time
-//   const timezone = new Date().getTimezoneOffset();
-// };
 /**
  * @description: Read the device's latitude and longitude (prompts the user for permission)
  * @return {*}

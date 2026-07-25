@@ -387,7 +387,6 @@
     "jsdom": "^29.1.1",
     "less": "catalog:",
     "rollup-plugin-visualizer": "^7.0.1",
-    "svgo": "^4.0.1",
     "terser": "catalog:",
     "tsx": "catalog:",
     "typescript": "catalog:",

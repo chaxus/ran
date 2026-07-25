@@ -3,8 +3,6 @@ import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import type { BuildOptions, PluginOption, UserConfig } from 'vite';
 import { visualizer } from 'rollup-plugin-visualizer';
-// import viteImagemin from '@vheemstra/vite-plugin-imagemin';
-// import imageminSvgo from 'imagemin-svgo';
 import loadSvg from './plugins/load-svg';
 import { PORT } from './build/config';
 
@@ -131,7 +129,7 @@ export const viteConfig: UserConfig = {
     exclude: ['public'],
   },
   plugins: [
-    loadSvg({ svgo: false, defaultImport: 'raw' }),
+    loadSvg({ defaultImport: 'raw' }),
     enableAnalyze
       ? (visualizer({
           emitFile: false,

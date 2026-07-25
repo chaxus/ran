@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default defineConfig({
-  plugins: [loadSvg({ svgo: false, defaultImport: 'raw' })],
+  plugins: [loadSvg({ defaultImport: 'raw' })],
   test: {
     // Pure Node.js — no DOM globals at all. This is what forces isSSR=true and
     // exercises the HTMLElementMock / ShadowRootMock code paths.
