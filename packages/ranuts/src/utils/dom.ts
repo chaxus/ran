@@ -165,6 +165,55 @@ export const setFontSize2html = (designWidth: number = 375): void => {
   setFontSize();
 };
 
+/**
+ * @description: Make a `<textarea>` grow and shrink with its content, so a long message is
+ * readable without an inner scrollbar.
+ *
+ * Set the ceiling in CSS with `max-height` rather than here — once the element hits it, the
+ * measured `scrollHeight` stops growing and the textarea scrolls internally, which is the
+ * behaviour you want at the limit.
+ *
+ * Two details make this work where the naive version does not: the height is reset to `auto`
+ * before each measurement (`scrollHeight` never reports *less* than the current height, so
+ * without the reset the box could only ever grow), and `box-sizing` decides whether padding is
+ * already inside `scrollHeight`, which is why the border is added back for `content-box`.
+ *
+ * @param {HTMLTextAreaElement} element the textarea to manage
+ * @return {() => void} detaches the listener and restores the inline height
+ * @example
+ * ```ts
+ * const stop = autosizeTextarea(document.querySelector('textarea')!);
+ * // later
+ * stop();
+ * ```
+ */
+export const autosizeTextarea = (element: HTMLTextAreaElement): (() => void) => {
+  const previousHeight = element.style.height;
+
+  // Border widths can come back as a keyword ('medium', 'thin') rather than a length whenever
+  // the value has not been resolved against a layout. parseFloat gives NaN for those, and one
+  // NaN turns the whole height into an invalid declaration the browser silently drops.
+  const px = (value: string): number => {
+    const parsed = parseFloat(value);
+    return Number.isFinite(parsed) ? parsed : 0;
+  };
+
+  const resize = (): void => {
+    element.style.height = 'auto';
+    const style = getComputedStyle(element);
+    const border = style.boxSizing === 'border-box' ? 0 : px(style.borderTopWidth) + px(style.borderBottomWidth);
+    element.style.height = `${element.scrollHeight + border}px`;
+  };
+
+  element.addEventListener('input', resize);
+  resize();
+
+  return (): void => {
+    element.removeEventListener('input', resize);
+    element.style.height = previousHeight;
+  };
+};
+
 // The chainable DOM builder now lives in ./chain, so the vnode entry can reuse one
 // implementation without pulling in the rest of this file (setFontSize2html would drag in
 // utils/device).

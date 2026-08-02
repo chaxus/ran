@@ -180,7 +180,7 @@ const themeEnConfig: DefaultTheme.Config = {
             text: 'Time Processing',
             collapsed: true,
             items: [
-              { text: 'timeFormat - Format time', link: '/src/ranuts/utils/time_format' },
+              { text: 'formatDuration / formatRelative - Format time', link: '/src/ranuts/utils/time_format' },
               { text: 'formatDate - Format a date', link: '/src/ranuts/utils/timestamp_to_time' },
               { text: 'performanceTime - High precision timestamp', link: '/src/ranuts/utils/performance_time' },
             ],

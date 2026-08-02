@@ -239,6 +239,56 @@ export const toFullWidth = (value: string): string => {
   return value.replace(/[!-~]/g, (char) => String.fromCharCode(char.charCodeAt(0) + 0xfee0)).replace(/ /g, '\u3000');
 };
 
+/** Which end of the string gets dropped when it is too long. */
+export type TruncatePosition = 'end' | 'start' | 'middle';
+
+export interface TruncateOptions {
+  /** Ceiling for the returned string, ellipsis included. */
+  length: number;
+  /** Default `'end'`. */
+  position?: TruncatePosition;
+  /** Default `'…'`. */
+  ellipsis?: string;
+}
+
+/**
+ * @description: Shorten a string to a maximum length, marking the cut with an ellipsis.
+ *
+ * `position` decides which end survives, and that choice carries real information:
+ *
+ * - `'end'` (default) keeps the beginning — right for prose and titles.
+ * - `'start'` keeps the **tail**, which is what a file path wants. `/Users/someone/work/…`
+ *   are the bytes a reader already knows; `…/src/utils/str.ts` is the part they need.
+ * - `'middle'` keeps both ends, for identifiers whose head *and* tail are meaningful, such as
+ *   a hash or an account number.
+ *
+ * The result never exceeds `length`, so a `length` shorter than the ellipsis returns a
+ * truncated ellipsis rather than overflowing.
+ *
+ * @param {string} value
+ * @param {TruncateOptions | number} options a bare number is shorthand for `{ length }`
+ * @return {string}
+ * @example
+ * ```ts
+ * truncate('the quick brown fox', 12);                                 // 'the quick b…'
+ * truncate('/Users/me/code/app/src/index.ts', { length: 20, position: 'start' }); // '…de/app/src/index.ts'
+ * truncate('0xabcdef0123456789', { length: 11, position: 'middle' });   // '0xabc…56789'
+ * ```
+ */
+export const truncate = (value: string, options: TruncateOptions | number): string => {
+  const { length, position = 'end', ellipsis = '…' } = typeof options === 'number' ? { length: options } : options;
+  if (!value || value.length <= length) return value;
+  if (length <= ellipsis.length) return ellipsis.slice(0, Math.max(0, length));
+
+  const budget = length - ellipsis.length;
+  if (position === 'start') return ellipsis + value.slice(value.length - budget);
+  if (position === 'middle') {
+    const head = Math.ceil(budget / 2);
+    return value.slice(0, head) + ellipsis + value.slice(value.length - (budget - head));
+  }
+  return value.slice(0, budget) + ellipsis;
+};
+
 export interface TransformText {
   encoding: string;
   content: string;

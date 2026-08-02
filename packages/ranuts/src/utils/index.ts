@@ -28,8 +28,11 @@ import {
   toHalfWidth,
   toString,
   transformText,
+  truncate,
 } from './str';
-import type { TransformText } from './str';
+import type { TransformText, TruncateOptions, TruncatePosition } from './str';
+import { createSpeechRecognizer, isSpeechRecognitionSupported } from './speech';
+import type { SpeechError, SpeechErrorKind, SpeechRecognizer, SpeechRecognizerOptions } from './speech';
 import {
   appendUrl,
   connection,
@@ -100,6 +103,7 @@ import type { Debounced } from './debounce';
 import {
   Chain,
   addClassToElement,
+  autosizeTextarea,
   create,
   createDocumentFragment,
   escapeHtml,
@@ -179,7 +183,8 @@ import { loadScript, scriptOnLoad } from './script';
 import type { LoadScriptOptions } from './script';
 import { throttle } from './throttle';
 import type { Throttled } from './throttle';
-import { formatDate, performanceTime, timeFormat, timestampToTime } from './time';
+import { formatDate, formatDuration, formatRelative, performanceTime, timeFormat, timestampToTime } from './time';
+import type { DateInput, FormatRelativeOptions, RelativeStyle } from './time';
 import type { CurrentDevice } from './device';
 import {
   MOBILE_MEDIA_QUERY,
@@ -325,6 +330,9 @@ export {
   createStore,
   setAttributeByGlobal,
   setFontSize2html,
+  autosizeTextarea,
+  createSpeechRecognizer,
+  isSpeechRecognitionSupported,
   Chain,
   create,
   isEqual,
@@ -391,6 +399,7 @@ export {
   arrayBufferToString,
   toHalfWidth,
   toFullWidth,
+  truncate,
   parseChineseNumber,
   parseRomanNumber,
   parseEnglishNumber,
@@ -401,6 +410,8 @@ export {
   setReportUrl,
   getReportUrl,
   formatDate,
+  formatDuration,
+  formatRelative,
   handleXhrHook,
   EventManager,
   quad,
@@ -444,6 +455,15 @@ export {
 };
 
 export type {
+  DateInput,
+  FormatRelativeOptions,
+  RelativeStyle,
+  TruncateOptions,
+  TruncatePosition,
+  SpeechError,
+  SpeechErrorKind,
+  SpeechRecognizer,
+  SpeechRecognizerOptions,
   EasingFn,
   SpeedType,
   ImgSource,

@@ -1,6 +1,6 @@
 ---
 title: ranuts API reference
-description: Every symbol exported by ranuts — 354 exports across 6 entry points, with signatures and descriptions.
+description: Every symbol exported by ranuts — 359 exports across 6 entry points, with signatures and descriptions.
 ---
 
 # ranuts API (Generated)
@@ -13,11 +13,11 @@ constraints, conventions) read [CLAUDE.md](https://github.com/chaxus/ran/blob/ma
 Import from the **subpath** that owns the symbol, e.g. `import { debounce } from
 'ranuts/utils'`. The root `ranuts` barrel re-exports the utils + visual surface.
 
-**354 exports** across 6 entry points. Generated at 2026-07-25T14:41:48.637Z.
+**359 exports** across 6 entry points. Generated at 2026-08-02T12:01:23.108Z.
 
 ## Entry points
 
-- [`ranuts/utils`](#ranutsutils) — Browser and general-purpose utilities · _browser + node_ · 272 exports
+- [`ranuts/utils`](#ranutsutils) — Browser and general-purpose utilities · _browser + node_ · 277 exports
 - [`ranuts/sw`](#ranutssw) — Service Worker caching strategies and the precache protocol · _service worker only_ · 9 exports
 - [`ranuts/node`](#ranutsnode) — Node server utilities (fs / http / ws / middleware) · _node only_ · 26 exports
 - [`ranuts/visual`](#ranutsvisual) — 2D rendering engine (Canvas / WebGL / WebGPU) · _browser only_ · 12 exports
@@ -76,8 +76,10 @@ import { /* … */ } from 'ranuts/utils';
 - `escapeHtml(string?: string | number | null) => string`
 - `fanShapedByArc(ctx: CanvasRenderingContext2D, maxRadius: number, start: number, end: number, gutter: number) => void` — Trace a pie slice with arc(), including the gutter between slices.
 - `filterObj(obj: Record<string, unknown>, list: Array<string>) => Record<string, unknown>` — Return a new object without the properties whose values appear in `list` — typically used to drop empty strings and nulls
-- `formatDate(value?: number | string | Date, pattern?: string) => string` — Format a date with a token pattern. Accepts a timestamp, a date string, a
+- `formatDate(value?: DateInput, pattern?: string) => string` — Format a date with a token pattern. Accepts a timestamp, a date string, a
+- `formatDuration(seconds: number) => string` — Format an elapsed number of **seconds** as a colon-separated clock duration,
 - `formatJson(value: string | object, onError?: (error: Error) => void, indent?: number) => string` — Pretty-print JSON. Accepts an object or a JSON string (single quotes are
+- `formatRelative(value: DateInput, options?: FormatRelativeOptions) => string` — Format a point in time relative to another — "3 days ago", "in 2 hours".
 - `getAllQueryString(url?: string) => Record<string, string>` — Parse a URL's query string into an object. Defaults to the current
 - `getAngle(deg: number) => number` — Degrees to radians
 - `getArcPointerByDeg(deg: number, r: number) => [number, number]` — The point on a circle at a given angle
@@ -237,6 +239,7 @@ import { /* … */ } from 'ranuts/utils';
 - `interface CallToPayload`
 - `interface Debounced`
 - `interface Deferred` — Promise primitives that JavaScript does not ship: an externally settled promise and a
+- `interface FormatRelativeOptions`
 - `interface Handoff`
 - `interface HandoffOptions`
 - `interface I18nConfig`
@@ -281,11 +284,13 @@ import { /* … */ } from 'ranuts/utils';
 ### Types
 
 - `type CurrentDevice`
+- `type DateInput` — Accepted everywhere a moment in time is taken; `undefined` means "now".
 - `type EasingFn` — One easing function: (elapsed, from, delta, duration) => current value
 - `type ImgSource` — A bitmap container usable both as a drawImage source and as a render target
 - `type LocaleChangeHandler`
 - `type LocaleMessages` — Locale → dictionary. Parameterised by the dictionary shape so an app can hand in its own
 - `type MessageDict`
+- `type RelativeStyle` — `'compact'` is ours; the other three are `Intl.RelativeTimeFormat` styles.
 - `type StringValues` — "An object whose values are all strings" — the constraint the dictionary type parameter
 - `type TextLanguage` — Coarse language bucket: Chinese / English / other only
 - `type TranslateParams`

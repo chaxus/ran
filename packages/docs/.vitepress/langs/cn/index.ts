@@ -185,7 +185,7 @@ const themeCnConfig: DefaultTheme.Config = {
             text: '时间处理',
             collapsed: true,
             items: [
-              { text: 'timeFormat - 时间格式化', link: '/cn/src/ranuts/utils/time_format' },
+              { text: 'formatDuration / formatRelative - 时间格式化', link: '/cn/src/ranuts/utils/time_format' },
               { text: 'formatDate - 格式化日期', link: '/cn/src/ranuts/utils/timestamp_to_time' },
               { text: 'performanceTime - 高精度时间戳', link: '/cn/src/ranuts/utils/performance_time' },
             ],

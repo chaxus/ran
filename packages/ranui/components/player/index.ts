@@ -1,4 +1,4 @@
-import { SyncHook, addClassToElement, range, removeClassToElement, timeFormat } from 'ranuts/utils';
+import { SyncHook, addClassToElement, range, removeClassToElement, formatDuration } from 'ranuts/utils';
 import '../../assets/js/hls.js';
 import type { Progress } from '@/components/progress';
 import '@/components/select';
@@ -493,9 +493,9 @@ export class RanPlayer extends HTMLElementSSR()! {
     const currentTimeWhenSwitching =
       this._isSwitchingSource && this._pendingPlaybackRestore ? this._pendingPlaybackRestore.currentTime : 0;
     this.syncProgressByPercentage(duration > 0 ? currentTimeWhenSwitching / duration : 0);
-    this._playerControllerBottomTimeCurrent.innerText = timeFormat(currentTimeWhenSwitching);
+    this._playerControllerBottomTimeCurrent.innerText = formatDuration(currentTimeWhenSwitching);
     this._playerControllerBottomTimeDivide.innerText = '/';
-    this._playerControllerBottomTimeDuration.innerText = timeFormat(this.ctx.duration);
+    this._playerControllerBottomTimeDuration.innerText = formatDuration(this.ctx.duration);
     this.change('loadeddata', e);
   };
   onTimeupdate = (e: Event): void => {
@@ -756,7 +756,7 @@ export class RanPlayer extends HTMLElementSSR()! {
       if (Number.isFinite(duration) && duration > 0) {
         this.syncProgressByPercentage(currentTime / duration);
       }
-      this._playerControllerBottomTimeCurrent.innerText = timeFormat(currentTime);
+      this._playerControllerBottomTimeCurrent.innerText = formatDuration(currentTime);
       return;
     }
     const currentTime = this.getCurrentTime();
@@ -769,7 +769,7 @@ export class RanPlayer extends HTMLElementSSR()! {
     this.syncProgressByPercentage(currentTime / duration);
     this.updateBufferedProgress();
     if (currentTime >= 0) {
-      this._playerControllerBottomTimeCurrent.innerText = timeFormat(currentTime);
+      this._playerControllerBottomTimeCurrent.innerText = formatDuration(currentTime);
     }
   };
   /**
@@ -890,7 +890,7 @@ export class RanPlayer extends HTMLElementSSR()! {
     } else {
       this._playerTip.style.setProperty('transform', `translateX(calc(${offsetX}px - 50%))`);
     }
-    this._playerTipTime.innerText = timeFormat((offsetX / this._progress.clientWidth) * this.ctx.duration);
+    this._playerTipTime.innerText = formatDuration((offsetX / this._progress.clientWidth) * this.ctx.duration);
   };
   progressMouseLeave = (e: MouseEvent): void => {
     if ((e.target as HTMLElement | null)?.classList.contains('ran-player-controller-progress-wrap-dot')) {
@@ -907,7 +907,7 @@ export class RanPlayer extends HTMLElementSSR()! {
     } else {
       this._playerTip.style.setProperty('transform', `translateX(calc(${offsetX}px - 50%))`);
     }
-    this._playerTipTime.innerText = timeFormat((offsetX / this._progress.clientWidth) * this.ctx.duration);
+    this._playerTipTime.innerText = formatDuration((offsetX / this._progress.clientWidth) * this.ctx.duration);
   };
   changePlayerVolume = (): void => {
     if (!this._video) return;

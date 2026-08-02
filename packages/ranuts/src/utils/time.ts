@@ -1,8 +1,9 @@
-function formatDuration(time: number): string | number {
-  return time < 10 ? `0${time}` : time;
-}
-
 const pad = (value: number, width = 2): string => String(value).padStart(width, '0');
+
+/** Accepted everywhere a moment in time is taken; `undefined` means "now". */
+export type DateInput = number | string | Date;
+
+const toDate = (value?: DateInput): Date => (value === undefined || value === null ? new Date() : new Date(value));
 
 /**
  * Format tokens, longest first so `YYYY` is matched before `YY` and `MM` before `M`.
@@ -35,11 +36,11 @@ const TOKEN = /YYYY|YY|MM|M|DD|D|HH|H|hh|h|mm|m|ss|s|SSS|A|a|\[([^\]]*)]/g;
  * ```ts
  * formatDate();                                          // '2026-07-25 14:30:00'
  * formatDate(1753425000000, 'YYYY/MM/DD');               // '2026/07/25'
- * formatDate(new Date(), 'YYYY[年]MM[月]DD[日] hh:mm a'); // '2026年07月25日 02:30 pm' (escaped literals)
+ * formatDate(new Date(), 'YYYY[年]MM[月]DD[日] hh:mm a'); // '2026 年 07 月 25 日 02:30 pm' (escaped literals)
  * ```
  */
-export const formatDate = (value?: number | string | Date, pattern: string = 'YYYY-MM-DD HH:mm:ss'): string => {
-  const date = value === undefined || value === null ? new Date() : new Date(value);
+export const formatDate = (value?: DateInput, pattern: string = 'YYYY-MM-DD HH:mm:ss'): string => {
+  const date = toDate(value);
   if (Number.isNaN(date.getTime())) return 'Invalid Date';
 
   const hours24 = date.getHours();
@@ -84,20 +85,166 @@ export function timestampToTime(timestamp?: number | string): Date & { format?: 
 }
 
 /**
- * @description: Format a number of seconds as a colon-separated duration
- * @param {number} time
- * @return {*}
+ * @description: Format an elapsed number of **seconds** as a colon-separated clock duration,
+ * the shape media players use for a playhead: `mm:ss`, widening to `hh:mm:ss` past an hour.
+ *
+ * This is a length of time, not a point in time — for the latter see
+ * [`formatDate`](#formatdate) (absolute) and [`formatRelative`](#formatrelative) (relative).
+ *
+ * @param {number} seconds elapsed seconds; negatives clamp to `0`
+ * @return {string} the duration, or `''` when the input is not a finite number — a player
+ * asks for `video.duration` before metadata loads and gets `NaN`, and an empty label reads
+ * better there than `NaN:NaN`
+ * @example
+ * ```ts
+ * formatDuration(0);    // '00:00'
+ * formatDuration(65);   // '01:05'
+ * formatDuration(3661); // '01:01:01'
+ * formatDuration(NaN);  // ''
+ * ```
  */
-export const timeFormat = (time: number): string => {
-  if (time === 0) return '00:00';
-  if (!time) return '';
-  const hour = Math.trunc(time / 3600);
-  const minute = Math.trunc((time % 3600) / 60);
-  const second = formatDuration(Math.trunc(time - hour * 3600 - minute * 60));
-  if (hour === 0) {
-    return `${formatDuration(minute)}:${second}`;
+export const formatDuration = (seconds: number): string => {
+  if (!Number.isFinite(seconds)) return '';
+  const total = Math.max(0, Math.trunc(seconds));
+  const hour = Math.trunc(total / 3600);
+  const minute = Math.trunc((total % 3600) / 60);
+  const second = pad(total % 60);
+  return hour === 0 ? `${pad(minute)}:${second}` : `${pad(hour)}:${pad(minute)}:${second}`;
+};
+
+/**
+ * @description: Format a number of seconds as a colon-separated duration
+ * @deprecated Renamed to [`formatDuration`](#formatduration) — `timeFormat` said nothing about
+ * *which* of the three time formats it was, and read backwards from its `formatDate` sibling.
+ * This alias stays for compatibility and behaves identically.
+ * @param {number} time
+ * @return {string}
+ */
+export const timeFormat = (time: number): string => formatDuration(time);
+
+/**
+ * Largest unit first. Milliseconds per unit; months and years use the average Gregorian
+ * year (365.25 days) so that "11 months ago" never rounds into "1 year ago" early.
+ */
+const RELATIVE_UNITS: ReadonlyArray<readonly [Intl.RelativeTimeFormatUnit, number]> = [
+  ['year', 31_557_600_000],
+  ['month', 2_629_800_000],
+  ['week', 604_800_000],
+  ['day', 86_400_000],
+  ['hour', 3_600_000],
+  ['minute', 60_000],
+  ['second', 1000],
+];
+
+/** Language-neutral suffixes for the `compact` style, keyed by `Intl` unit. */
+const COMPACT_UNITS: Record<string, string> = {
+  year: 'y',
+  quarter: 'q',
+  month: 'mo',
+  week: 'w',
+  day: 'd',
+  hour: 'h',
+  minute: 'm',
+  second: 's',
+};
+
+/**
+ * `Intl.RelativeTimeFormat` instances are expensive to construct and immutable once built,
+ * so they are worth keeping — a list re-rendering a hundred timestamps builds one, not a hundred.
+ */
+const relativeFormatters = new Map<string, Intl.RelativeTimeFormat>();
+
+const getRelativeFormatter = (
+  locale: string | string[] | undefined,
+  style: 'long' | 'short' | 'narrow',
+  numeric: 'always' | 'auto',
+): Intl.RelativeTimeFormat | undefined => {
+  if (typeof Intl === 'undefined' || typeof Intl.RelativeTimeFormat !== 'function') return undefined;
+  const key = `${String(locale)}|${style}|${numeric}`;
+  let formatter = relativeFormatters.get(key);
+  if (!formatter) {
+    formatter = new Intl.RelativeTimeFormat(locale, { style, numeric });
+    relativeFormatters.set(key, formatter);
   }
-  return `${formatDuration(hour)}:${formatDuration(minute)}:${second}`;
+  return formatter;
+};
+
+/** `'compact'` is ours; the other three are `Intl.RelativeTimeFormat` styles. */
+export type RelativeStyle = 'long' | 'short' | 'narrow' | 'compact';
+
+export interface FormatRelativeOptions {
+  /** What to measure against. Defaults to the current time. */
+  now?: DateInput;
+  /** BCP 47 tag(s); defaults to the runtime's locale. Ignored by the `compact` style. */
+  locale?: string | string[];
+  /** Defaults to `'long'` (`'3 days ago'`). */
+  style?: RelativeStyle;
+  /**
+   * `'auto'` (the default here) swaps in idioms where a language has them — `yesterday`
+   * rather than `1 day ago`, `now` rather than `in 0 seconds`. `'always'` keeps the number.
+   */
+  numeric?: 'always' | 'auto';
+}
+
+/**
+ * @description: Format a point in time relative to another — "3 days ago", "in 2 hours".
+ *
+ * Localization is delegated to the platform's `Intl.RelativeTimeFormat`, which has been
+ * available in every major browser since 2020 and knows each language's plural and
+ * inflection rules. This function supplies only the part `Intl` deliberately leaves out:
+ * picking *which* unit to express the gap in.
+ *
+ * Like `Intl` itself it reports a **single** unit — a gap of 3 days and 6 hours is
+ * "3 days ago", never "3 days and 6 hours ago".
+ *
+ * The extra `compact` style is the dense badge form seen next to list items (`5m`, `3h`,
+ * `2d`). It is a magnitude only: it carries **no direction**, so a future timestamp reads
+ * the same as a past one. Use it for feeds of past events, and any other style when the
+ * reader has to tell past from future.
+ *
+ * @param {DateInput} value the moment to describe
+ * @param {FormatRelativeOptions} options
+ * @return {string} the description, or `''` when either end cannot be parsed
+ * @example
+ * ```ts
+ * const twoHoursAgo = Date.now() - 2 * 3600_000;
+ * formatRelative(twoHoursAgo);                          // '2 hours ago'
+ * formatRelative(twoHoursAgo, { style: 'short' });      // '2 hr. ago'
+ * formatRelative(twoHoursAgo, { style: 'compact' });    // '2h'
+ * formatRelative(twoHoursAgo, { locale: 'zh-CN' });     // '2 小时前'
+ * formatRelative(Date.now() + 60_000);                  // 'in 1 minute'
+ * ```
+ */
+export const formatRelative = (value: DateInput, options: FormatRelativeOptions = {}): string => {
+  const { now, locale, style = 'long', numeric = 'auto' } = options;
+  const target = toDate(value).getTime();
+  const base = toDate(now).getTime();
+  if (Number.isNaN(target) || Number.isNaN(base)) return '';
+
+  const diff = target - base;
+  const magnitude = Math.abs(diff);
+
+  // Choose the coarsest unit the gap actually fills, then round within it. Rounding can push
+  // the count up onto the next unit's doorstep (59.6 minutes → "60 minutes"), so promote when
+  // it does and the reader sees "1 hour" instead.
+  let index = RELATIVE_UNITS.findIndex(([, ms]) => magnitude >= ms);
+  if (index === -1) index = RELATIVE_UNITS.length - 1; // under a second: express as 0 seconds
+  // Round the magnitude and reapply the sign: `Math.round(-1.5)` is `-1`, which would make
+  // 90 minutes ago read "1 hour ago" while 90 minutes ahead read "in 2 hours".
+  const sign = diff < 0 ? -1 : 1;
+  let [unit, unitMs] = RELATIVE_UNITS[index];
+  let count = sign * Math.round(magnitude / unitMs);
+  if (index > 0 && Math.abs(count) * unitMs >= RELATIVE_UNITS[index - 1][1]) {
+    [unit, unitMs] = RELATIVE_UNITS[index - 1];
+    count = sign * Math.round(magnitude / unitMs);
+  }
+
+  if (style === 'compact') return `${Math.abs(count)}${COMPACT_UNITS[unit] ?? ''}`;
+
+  const formatter = getRelativeFormatter(locale, style, numeric);
+  // Pre-2020 runtimes without Intl.RelativeTimeFormat still get something readable.
+  if (!formatter) return `${Math.abs(count)}${COMPACT_UNITS[unit] ?? ''}`;
+  return formatter.format(count, unit);
 };
 
 /**

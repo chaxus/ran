@@ -64,7 +64,8 @@ description: 'Overview of ranuts utility functions: functional helpers (debounce
 
 | Method          | Description                                 | Detail                                    |
 | --------------- | ------------------------------------------- | ----------------------------------------- |
-| timeFormat      | Convert time in seconds to formatted string | [timeFormat](./time_format.md)            |
+| formatDuration  | Convert time in seconds to formatted string | [formatDuration](./time_format.md)        |
+| formatRelative  | Describe a time relative to now ("3 days ago") | [formatRelative](./time_format.md)     |
 | timestampToTime | Convert timestamp to Date object            | [timestampToTime](./timestamp_to_time.md) |
 | performanceTime | Get high-precision timestamp                | [performanceTime](./performance_time.md)  |
 
