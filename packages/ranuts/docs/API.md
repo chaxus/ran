@@ -8,11 +8,11 @@ constraints, conventions) read [../CLAUDE.md](../CLAUDE.md) first.
 Import from the **subpath** that owns the symbol, e.g. `import { debounce } from
 'ranuts/utils'`. The root `ranuts` barrel re-exports the utils + visual surface.
 
-**359 exports** across 6 entry points. Generated at 2026-08-02T12:01:23.108Z.
+**369 exports** across 6 entry points. Generated at 2026-08-02T12:10:00.120Z.
 
 ## Entry points
 
-- [`ranuts/utils`](#ranutsutils) — Browser and general-purpose utilities · _browser + node_ · 277 exports
+- [`ranuts/utils`](#ranutsutils) — Browser and general-purpose utilities · _browser + node_ · 287 exports
 - [`ranuts/sw`](#ranutssw) — Service Worker caching strategies and the precache protocol · _service worker only_ · 9 exports
 - [`ranuts/node`](#ranutsnode) — Node server utilities (fs / http / ws / middleware) · _node only_ · 26 exports
 - [`ranuts/visual`](#ranutsvisual) — 2D rendering engine (Canvas / WebGL / WebGPU) · _browser only_ · 12 exports
@@ -37,6 +37,7 @@ import { /* … */ } from 'ranuts/utils';
 - `appendUrl(url: string, params?: Record<string, string>) => string` — Turn an object into a query string and append it to a URL
 - `arrayBufferToString(buffer: ArrayBuffer | Uint8Array) => string` — Decode bytes into a string using the sniffed encoding. Required when reading
 - `audioVendor() => Promise<string>` — Audio fingerprint. 1. Generate an audio stream (triangle wave), run an FFT over it and hash the result with SHA. 2. Generate an audio stream (sine wave), run it through dynamic compression and hash with MD5.
+- `autosizeTextarea(element: HTMLTextAreaElement) => (() => void)` — Make a `<textarea>` grow and shrink with its content, so a long message is
 - `buildOffsets(lengths: readonly number[]) => number[]` — The global start offset of every chunk in the concatenated coordinate
 - `canvasVendor() => string | null`
 - `changeHumpToLowerCase(str: string) => string`
@@ -58,6 +59,7 @@ import { /* … */ } from 'ranuts/utils';
 - `createObjectURL(src: Blob | ArrayBuffer | Response) => Promise<string>`
 - `createPortBridge(port: MessagePort) => PortBridge` — Build a bridge on any MessagePort (a Web Worker, a SharedWorker, or a port from a completed handshake).
 - `createSignal<T = unknown>(value: T, options?: SignalOptions<T>) => [() => T, (newValue: T) => void]` — Create a minimal signal with optional event broadcasting, returned as
+- `createSpeechRecognizer(options?: SpeechRecognizerOptions) => SpeechRecognizer` — Create a dictation session over the Web Speech API.
 - `createStore<T>(prefix?: string) => JsonStore<T>` — A prefixed, JSON-serialising view over localStorage.
 - `createZip(files: ReadonlyArray<{ name: string; data: Uint8Array | string; }>) => Uint8Array` — Build a ZIP from scratch, every entry STORED. No compression, so this is
 - `currentDevice() => CurrentDevice`
@@ -120,6 +122,7 @@ import { /* … */ } from 'ranuts/utils';
 - `isInIframe() => boolean` — Whether this page is running inside an iframe. Returns false under SSR.
 - `isMobile() => boolean` — Whether this is a mobile device
 - `isSafari() => boolean | undefined | string`
+- `isSpeechRecognitionSupported() => boolean` — Whether this runtime can recognize speech. Checked at call time, so it is safe
 - `isString(obj: unknown) => boolean`
 - `isUrlCached(url: string) => Promise<boolean>` — Whether a URL is already in CacheStorage. When probing a group of files,
 - `isWeiXin() => boolean` — Whether this is the WeChat in-app browser
@@ -194,6 +197,7 @@ import { /* … */ } from 'ranuts/utils';
 - `toString(value: string | number) => string`
 - `transformNumber(value: string, locale?: string, precision?: number, fixed?: number) => string`
 - `transformText(content: string | ArrayBuffer) => TransformText | undefined`
+- `truncate(value: string, options: TruncateOptions | number) => string` — Shorten a string to a maximum length, marking the cut with an ellipsis.
 - `useI18n<TDict extends StringValues<TDict> = MessageDict>() => I18nCore<TDict> | null` — The active global instance, or null when none was created. Pass the same
 - `watchMediaQuery(query: string, callback: (matches: boolean) => void) => (() => void)` — Watch a media query. The callback **fires once synchronously with the
 - `webglVendor() => { vendor: string; renderer: string; } | null`
@@ -262,12 +266,16 @@ import { /* … */ } from 'ranuts/utils';
 - `interface Segment` — One piece of the split result: `value === null` marks a plain span covered by no range
 - `interface ServeWorkerOptions`
 - `interface SingleFlight`
+- `interface SpeechError`
+- `interface SpeechRecognizer`
+- `interface SpeechRecognizerOptions`
 - `interface SpeedType` — The ease-in / ease-out pair of one easing family
 - `interface TextBox` — The box each page must fit into, in px.
 - `interface TextGridMetrics`
 - `interface TextPage`
 - `interface Throttled`
 - `interface TransformText`
+- `interface TruncateOptions`
 - `interface WebDBOptions`
 - `interface WhenIdleOptions`
 - `interface WorkerClientOptions`
@@ -286,9 +294,11 @@ import { /* … */ } from 'ranuts/utils';
 - `type LocaleMessages` — Locale → dictionary. Parameterised by the dictionary shape so an app can hand in its own
 - `type MessageDict`
 - `type RelativeStyle` — `'compact'` is ours; the other three are `Intl.RelativeTimeFormat` styles.
+- `type SpeechErrorKind` — `denied` means the user or the browser refused the microphone — worth surfacing.
 - `type StringValues` — "An object whose values are all strings" — the constraint the dictionary type parameter
 - `type TextLanguage` — Coarse language bucket: Chinese / English / other only
 - `type TranslateParams`
+- `type TruncatePosition` — Which end of the string gets dropped when it is too long.
 
 ### Constants
 
