@@ -1,4 +1,4 @@
-import { addClassToElement, formatDuration, removeClassToElement } from 'ranuts/utils';
+import { formatDuration } from 'ranuts/utils';
 import { createEffect } from '@/utils/index';
 import { syncPlayButtonState } from './events';
 import { normalizeProgress } from './progress';
@@ -15,9 +15,6 @@ export interface PlayerVisualEffectRefs {
   volumeIcon: HTMLElement;
   volumeProgress: HTMLElement;
 }
-
-const VOLUME_ICON_CLASS = 'ran-player-controller-bottom-right-volume-icon-volume';
-const MUTE_ICON_CLASS = 'ran-player-controller-bottom-right-volume-icon-mute';
 
 /**
  * One effect per visual concern that used to be written from several handler
@@ -54,13 +51,7 @@ export function createPlaybackVisualEffects(
     // changePlayerVolume (mute toggle) and changeVolumeProgress (drag).
     createEffect(() => {
       const volume = signals.volume.getter();
-      if (volume > 0) {
-        addClassToElement(refs.volumeIcon, VOLUME_ICON_CLASS);
-        removeClassToElement(refs.volumeIcon, MUTE_ICON_CLASS);
-      } else {
-        addClassToElement(refs.volumeIcon, MUTE_ICON_CLASS);
-        removeClassToElement(refs.volumeIcon, VOLUME_ICON_CLASS);
-      }
+      refs.volumeIcon.querySelector('r-icon')?.setAttribute('name', volume > 0 ? 'volume' : 'volume-mute');
       refs.volumeProgress.setAttribute('percent', `${volume}`);
     }),
   ];

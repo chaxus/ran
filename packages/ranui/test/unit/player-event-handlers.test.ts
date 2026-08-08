@@ -94,9 +94,7 @@ describe('r-player media event handlers', () => {
 
     player._video.dispatchEvent(new Event('play'));
     expect(player.ctx.currentState).toBe('play');
-    expect(
-      player._playerControllerBottomPlayBtn.classList.contains('ran-player-controller-bottom-left-btn-pause'),
-    ).toBe(true);
+    expect(player._playerControllerBottomPlayBtn.querySelector('r-icon')?.getAttribute('name')).toBe('pause');
 
     player._video.dispatchEvent(new Event('playing'));
     expect(player._playerBtn.style.display).toBe('none');
@@ -105,9 +103,7 @@ describe('r-player media event handlers', () => {
     player._video.dispatchEvent(new Event('pause'));
     expect(player._playerBtn.style.display).toBe('none');
     expect(player._playerController.style.opacity).toBe('1');
-    expect(
-      player._playerControllerBottomPlayBtn.classList.contains('ran-player-controller-bottom-left-btn-play'),
-    ).toBe(true);
+    expect(player._playerControllerBottomPlayBtn.querySelector('r-icon')?.getAttribute('name')).toBe('play');
 
     player._isSwitchingSource = true;
     const setLoadingStateSpy = vi.spyOn(player, 'setLoadingState');

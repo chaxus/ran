@@ -31,6 +31,10 @@ import { RanElement } from '@/utils/index';
 import { registerIcon } from '@/components/icon';
 import pipIcon from '@/assets/icons/pip.svg?raw';
 import castIcon from '@/assets/icons/cast.svg?raw';
+import playIcon from '@/assets/icons/play.svg?raw';
+import pauseIcon from '@/assets/icons/pause.svg?raw';
+import volumeIcon from '@/assets/icons/volume.svg?raw';
+import volumeMuteIcon from '@/assets/icons/volume-mute.svg?raw';
 import {
   ensureShadowRoot,
   getStringAttribute,
@@ -43,6 +47,10 @@ import { defineSSR } from '@/utils/ssr-registry';
 
 registerIcon('pip', pipIcon);
 registerIcon('cast', castIcon);
+registerIcon('play', playIcon);
+registerIcon('pause', pauseIcon);
+registerIcon('volume', volumeIcon);
+registerIcon('volume-mute', volumeMuteIcon);
 
 type Callback = (...args: unknown[]) => unknown;
 type EventName = string | symbol;

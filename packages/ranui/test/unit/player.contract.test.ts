@@ -331,19 +331,13 @@ describe('r-player contract', () => {
     player._playControllerBottomVolumeIcon.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     expect(player.ctx.volume).toBe(0);
     expect(player._playControllerBottomVolumeProgress.getAttribute('percent')).toBe('0');
-    expect(
-      player._playControllerBottomVolumeIcon.classList.contains('ran-player-controller-bottom-right-volume-icon-mute'),
-    ).toBe(true);
+    expect(player._playControllerBottomVolumeIcon.querySelector('r-icon')?.getAttribute('name')).toBe('volume-mute');
 
     player._playControllerBottomVolumeIcon.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     expect(player.ctx.volume).toBe(75);
     expect(player._video.volume).toBe(0.75);
     expect(player._playControllerBottomVolumeProgress.getAttribute('percent')).toBe('75');
-    expect(
-      player._playControllerBottomVolumeIcon.classList.contains(
-        'ran-player-controller-bottom-right-volume-icon-volume',
-      ),
-    ).toBe(true);
+    expect(player._playControllerBottomVolumeIcon.querySelector('r-icon')?.getAttribute('name')).toBe('volume');
   });
 
   it('seeks by normalized percentage using available duration', () => {

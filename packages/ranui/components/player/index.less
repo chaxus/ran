@@ -168,14 +168,19 @@
   }
 
   &-play-btn {
-    background: var(--ran-player-play-btn-background, url(./img/bigplay.png) no-repeat);
-    background-size: var(--ran-player-play-btn-background-size, contain);
+    color: var(--ran-player-play-btn-color, #fff);
+    filter: var(--ran-player-play-btn-filter, drop-shadow(0 1px 4px rgba(0, 0, 0, 0.5)));
     width: var(--ran-player-play-btn-width, 64px);
     height: var(--ran-player-play-btn-height, 64px);
     position: var(--ran-player-play-btn-position, absolute);
     top: var(--ran-player-play-btn-top, 50%);
     left: var(--ran-player-play-btn-left, 50%);
     transform: var(--ran-player-play-btn-transform, translate(-50%, -50%));
+
+    r-icon {
+      width: 100%;
+      height: 100%;
+    }
   }
 
   .prism-auto-stream-selector {
@@ -388,9 +393,15 @@
         &-btn {
           width: var(--ran-player-toggle-width, 20px);
           height: var(--ran-player-toggle-height, 20px);
+          color: var(--ran-player-toggle-color, #fff);
           cursor: var(--ran-player-toggle-cursor, pointer);
           outline: var(--ran-player-toggle-outline, 0);
           -webkit-tap-highlight-color: transparent;
+
+          r-icon {
+            width: 100%;
+            height: 100%;
+          }
 
           &:active,
           &:focus {
@@ -409,19 +420,6 @@
               var(--ran-radius-sm, 4px)
             );
           }
-        }
-
-        &-btn-play {
-          background: var(--ran-player-toggle-play-background, url(./img/smallplay.png) no-repeat);
-          background-size: var(--ran-player-toggle-play-background-size, contain);
-        }
-
-        &-btn-pause {
-          background: var(
-            --ran-player-toggle-pause-background,
-            url(./img/smallpause.png) no-repeat
-          );
-          background-size: var(--ran-player-toggle-pause-background-size, contain);
         }
 
         &-time {
@@ -484,29 +482,16 @@
           margin-right: var(--ran-player-volume-margin-right, 12px);
           cursor: var(--ran-player-volume-cursor, pointer);
 
-          &-icon-volume {
-            background: var(
-              --ran-player-volume-icon-background,
-              url(./img/volumenotmute.svg) no-repeat
-            );
-            background-size: var(
-              --ran-player-volume-icon-background-size,
-              contain
-            );
-          }
-
-          &-icon-mute {
-            background: var(
-              --ran-player-volume-icon-muted-background,
-              url(./img/volumemute.svg) no-repeat
-            );
-            background-size: var(--ran-player-volume-icon-muted-background-size, contain);
-          }
-
           &-icon {
             width: var(--ran-player-volume-icon-width, 18px);
             height: var(--ran-player-volume-icon-height, 18px);
             margin-right: 6px;
+            color: var(--ran-player-volume-icon-color, #fff);
+
+            r-icon {
+              width: 100%;
+              height: 100%;
+            }
           }
 
           &-progress {
@@ -784,13 +769,17 @@
         }
 
         &-full {
-          background: var(--ran-player-fullscreen-background, url('./img/fullscreenfig.png'));
-          background-size: var(--ran-player-fullscreen-background-size, contain);
+          color: var(--ran-player-fullscreen-color, #fff);
           width: var(--ran-player-fullscreen-width, 16px);
           height: var(--ran-player-fullscreen-height, 16px);
           cursor: var(--ran-player-fullscreen-cursor, pointer);
           outline: var(--ran-player-fullscreen-outline, 0);
           -webkit-tap-highlight-color: transparent;
+
+          r-icon {
+            width: 100%;
+            height: 100%;
+          }
 
           &:focus-visible {
             outline: var(

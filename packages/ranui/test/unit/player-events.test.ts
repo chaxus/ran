@@ -46,23 +46,27 @@ describe('player/core/events', () => {
   describe('syncPlayButtonState', () => {
     const makeButton = () => {
       const el = document.createElement('div');
+      el.appendChild(document.createElement('r-icon'));
       return el;
     };
 
-    it('adds pause class and removes play class when playing', () => {
+    it('switches the inner r-icon to pause and sets the aria-label when playing', () => {
       const btn = makeButton();
-      btn.classList.add('ran-player-controller-bottom-left-btn-play');
       syncPlayButtonState(btn, true);
-      expect(btn.classList.contains('ran-player-controller-bottom-left-btn-pause')).toBe(true);
-      expect(btn.classList.contains('ran-player-controller-bottom-left-btn-play')).toBe(false);
+      expect(btn.querySelector('r-icon')?.getAttribute('name')).toBe('pause');
+      expect(btn.getAttribute('aria-label')).toBe('Pause');
     });
 
-    it('adds play class and removes pause class when not playing', () => {
+    it('switches the inner r-icon to play and sets the aria-label when not playing', () => {
       const btn = makeButton();
-      btn.classList.add('ran-player-controller-bottom-left-btn-pause');
       syncPlayButtonState(btn, false);
-      expect(btn.classList.contains('ran-player-controller-bottom-left-btn-play')).toBe(true);
-      expect(btn.classList.contains('ran-player-controller-bottom-left-btn-pause')).toBe(false);
+      expect(btn.querySelector('r-icon')?.getAttribute('name')).toBe('play');
+      expect(btn.getAttribute('aria-label')).toBe('Play');
+    });
+
+    it('does not throw when the button has no r-icon child', () => {
+      const btn = document.createElement('div');
+      expect(() => syncPlayButtonState(btn, true)).not.toThrow();
     });
   });
 

@@ -92,11 +92,21 @@ their own level lists from their own libraries' native APIs.
 
 ### 1.4 Icons
 
-Legacy PNG/SVG `background-image` icons (`components/player/img/*`, wired through
-`index.less`) — **not** on the `<r-icon>` + `registerIcon` system every other component uses.
-New chrome (PiP, subtitles, cast) should use `<r-icon>`; migrating the existing play/pause/
-fullscreen/volume glyphs is a separate, purely-visual item (§4, Phase 4) — not bundled into
-feature work to avoid unrelated visual-regression risk.
+**Migrated (Phase 4).** The legacy PNG/SVG `background-image` icons
+(`components/player/img/*`, wired through `index.less`) are gone — `components/player/img/`
+was deleted entirely. Every control-bar glyph now goes through the `<r-icon>` +
+`registerIcon` system every other component uses: `play`/`pause` (the center overlay button
+and the bottom-left toggle — solid filled triangle/bars, new assets), `volume`/`volume-mute`
+(outline speaker glyphs, new assets), and `fullscreen` (reuses the existing shared `fullscreen`
+**core icon** — no new asset needed, since it's already statically bundled for every `<r-icon>`
+consumer via `core-icons.ts`). `core/events.ts`'s `syncPlayButtonState` and
+`core/effects.ts`'s volume effect now toggle the inner `<r-icon>`'s `name` attribute instead of
+swapping CSS classes tied to a background image — each control's outer `<div>` still owns its
+own `width`/`height`/`color` (via the existing CSS custom-property tokens), with a plain
+`r-icon { width: 100%; height: 100%; }` rule sizing the icon to fill it, exactly like the PiP
+and cast buttons already did. `play`/`pause`/`volume`/`volume-mute` were added to
+`RAN_ICON_NAMES` alongside `pip`/`cast`, keeping the "stays in sync with `assets/icons/`" test
+green.
 
 ---
 
@@ -260,9 +270,10 @@ feature work to avoid unrelated visual-regression risk.
   change event). AirPlay/Remote Playback (`core/remote-playback.ts` + `showRemotePlaybackPicker()`,
   a new `cast` icon). Mobile gestures (`core/gestures.ts`, a new `gestureseek` change event).
   Thumbnail scrubbing preview (`core/thumbnails.ts`, a new `thumbnails` attribute).
-- **Phase 4 — recorded, not scheduled:** WebRTC low-latency live playback; migrating the
-  existing play/pause/fullscreen/volume icons from legacy background-image to
-  `<r-icon>`/`registerIcon` (purely visual, decoupled from the feature work above).
+- **Phase 4 — in progress:** Icon migration (play/pause/fullscreen/volume from legacy
+  background-image to `<r-icon>`/`registerIcon`, `components/player/img/` deleted) — **done**,
+  see §1.4. WebRTC low-latency live playback — still not scheduled (see §3's WebRTC entry for
+  why: a fundamentally different transport model, no `<video src>` load).
 
 Every new control follows the opt-in rule already established elsewhere in ranui (§5): a
 bare `<r-player src="...">` stays exactly as simple as it is today.

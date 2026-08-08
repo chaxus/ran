@@ -73,7 +73,10 @@ export function ensurePlayerView(input: {
 
   if (!player || !container || !playerBtn || !gestureFlash || !playerController) {
     container = Div().build() as HTMLDivElement;
-    playerBtn = Div().class('ran-player-play-btn').build() as HTMLDivElement;
+    playerBtn = Div()
+      .class('ran-player-play-btn')
+      .children(View('r-icon').attr('name', 'play').build())
+      .build() as HTMLDivElement;
     // Purely visual, `pointer-events: none` in CSS so it never intercepts taps —
     // shown/hidden by `core/gestures.ts` on a double-tap seek.
     gestureFlash = Div().class('ran-player-gesture-flash').attr('aria-hidden', 'true').build() as HTMLDivElement;
@@ -101,7 +104,9 @@ export function ensurePlayerView(input: {
       Div().class('ran-player-controller-bottom-left-btn'),
       'button',
       'Play',
-    ).build() as HTMLDivElement;
+    )
+      .children(View('r-icon').attr('name', 'play').build())
+      .build() as HTMLDivElement;
     const playerControllerBottomTimeCurrent = Div()
       .class('ran-player-controller-bottom-left-time-current')
       .build() as HTMLDivElement;
@@ -139,7 +144,8 @@ export function ensurePlayerView(input: {
       .build() as HTMLDivElement;
 
     const playControllerBottomVolumeIcon = Div()
-      .class('ran-player-controller-bottom-right-volume-icon ran-player-controller-bottom-right-volume-icon-volume')
+      .class('ran-player-controller-bottom-right-volume-icon')
+      .children(View('r-icon').attr('name', 'volume').build())
       .build() as HTMLDivElement;
     const playControllerBottomVolumeProgress = View('r-progress')
       .class('ran-player-controller-bottom-right-volume-progress')
@@ -184,7 +190,9 @@ export function ensurePlayerView(input: {
       Div().class('ran-player-controller-bottom-right-full'),
       'button',
       'Fullscreen',
-    ).build() as HTMLDivElement;
+    )
+      .children(View('r-icon').attr('name', 'fullscreen').build())
+      .build() as HTMLDivElement;
 
     const playerControllerBottomRight = Div()
       .class('ran-player-controller-bottom-right')
