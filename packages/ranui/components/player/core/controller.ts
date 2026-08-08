@@ -36,6 +36,7 @@ export interface PlayerControllerHandlers {
   onFullscreenChange: () => void;
   onResize: () => void;
   onPipClick: (e: Event) => void;
+  onVisibilityChange: () => void;
 }
 
 type EventTargetScope = keyof PlayerControllerElements | 'document' | 'window';
@@ -67,6 +68,7 @@ const CONTROLLER_EVENT_BINDINGS: ControllerEventBinding[] = [
   { target: 'volumeIcon', eventName: 'click', handler: 'onVolumeIconClick' },
   { target: 'pipBtn', eventName: 'click', handler: 'onPipClick' },
   { target: 'document', eventName: 'fullscreenchange', handler: 'onFullscreenChange' },
+  { target: 'document', eventName: 'visibilitychange', handler: 'onVisibilityChange' },
   { target: 'window', eventName: 'resize', handler: 'onResize' },
 ];
 

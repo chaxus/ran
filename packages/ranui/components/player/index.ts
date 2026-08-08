@@ -26,6 +26,14 @@ import { createPlayerVisualSignals, type PlayerVisualSignals } from './core/stor
 import { createPlaybackVisualEffects, type PlayerVisualEffectRefs } from './core/effects';
 import { exitPip, isPipSupported, requestPip } from './core/pip';
 import { describeMediaError } from './core/error';
+import { clearResumePosition, loadResumePosition, saveResumePosition, shouldResumeAt } from './core/resume';
+import {
+  applyTracksToVideo,
+  loadPreferredSubtitleLanguage,
+  savePreferredSubtitleLanguage,
+  setActiveSubtitleLanguage,
+  type PlayerTrackConfig,
+} from './core/tracks';
 import { ensurePlayerView } from './core/view';
 import { EventManager, View } from '@/utils/builder';
 import { RanElement, batch } from '@/utils/index';
@@ -143,6 +151,7 @@ export class RanPlayer extends RanElement {
   _playControllerBottomSpeed: HTMLDivElement;
   _playControllerBottomVolumeIcon: HTMLDivElement;
   _playControllerBottomVolumeProgress: Progress;
+  _playControllerBottomSubtitle: HTMLElement;
   _playControllerBottomPip: HTMLDivElement;
   _playControllerBottomRightFullScreen: HTMLDivElement;
   _playControllerBottomVolume: HTMLDivElement;
@@ -157,6 +166,7 @@ export class RanPlayer extends RanElement {
   _hls?: HlsPlayer;
   _pendingPlaybackRestore?: PlaybackSnapshot;
   _isShowingErrorModal = false;
+  _tracks: PlayerTrackConfig[] = [];
   static get observedAttributes(): string[] {
     return [
       'src',
@@ -172,6 +182,7 @@ export class RanPlayer extends RanElement {
       'loop',
       'muted',
       'disable-error-modal',
+      'remember-position',
     ];
   }
   /**
@@ -209,6 +220,7 @@ export class RanPlayer extends RanElement {
     this._playControllerBottomVolume = viewRefs.playControllerBottomVolume;
     this._playControllerBottomVolumeProgress = viewRefs.playControllerBottomVolumeProgress;
     this._playControllerBottomVolumeIcon = viewRefs.playControllerBottomVolumeIcon;
+    this._playControllerBottomSubtitle = viewRefs.playControllerBottomSubtitle;
     this._playControllerBottomPip = viewRefs.playControllerBottomPip;
     this._playControllerBottomClarity = viewRefs.playControllerBottomClarity;
     this._playControllerBottomRightFullScreen = viewRefs.playControllerBottomRightFullScreen;
@@ -300,6 +312,23 @@ export class RanPlayer extends RanElement {
   }
   set disableErrorModal(value: boolean) {
     setBooleanAttribute(this, 'disable-error-modal', value);
+  }
+  get rememberPosition(): boolean {
+    return this.hasAttribute('remember-position');
+  }
+  set rememberPosition(value: boolean) {
+    setBooleanAttribute(this, 'remember-position', value);
+  }
+  /**
+   * @description: 字幕/CC 轨道配置，imperative 属性而不是 attribute——player 会在每次
+   * `updatePlayer()` 时清空 light DOM，不能指望用户塞 `<track>` 子标签进去。
+   */
+  get tracks(): PlayerTrackConfig[] {
+    return this._tracks;
+  }
+  set tracks(value: PlayerTrackConfig[]) {
+    this._tracks = value || [];
+    this.applyTracks();
   }
   get sheet(): string {
     return getStringAttribute(this, 'sheet');
@@ -542,6 +571,7 @@ export class RanPlayer extends RanElement {
     this.ctx.currentState = e.type;
     this._isSwitchingSource = false;
     this.setLoadingState(false);
+    if (this.rememberPosition) clearResumePosition(this.src);
     this.change('ended', e);
   };
   onError = (e: Event): void => {
@@ -556,6 +586,14 @@ export class RanPlayer extends RanElement {
     if (this._pendingPlaybackRestore) {
       this.restorePlaybackSnapshot(this._pendingPlaybackRestore);
       this._pendingPlaybackRestore = undefined;
+    } else if (this.rememberPosition && !this._isSwitchingSource) {
+      // Only a genuine fresh load resumes from storage — a quality-switch reload
+      // already took the `_pendingPlaybackRestore` branch above instead.
+      const resumeAt = loadResumePosition(this.src);
+      if (shouldResumeAt(resumeAt, this.getTotalTime())) {
+        this.setCurrentTime(resumeAt);
+        this.change('resume', resumeAt);
+      }
     }
     this._isSwitchingSource = false;
     this.updateBufferedProgress();
@@ -675,6 +713,7 @@ export class RanPlayer extends RanElement {
     this.ctx.currentState = e.type;
     this.setLoadingState(false);
     syncCenterPlayVisibility(this._playerBtn, !this._isSeeking);
+    if (this.rememberPosition) saveResumePosition(this.src, this.getCurrentTime());
     this.change('pause', e);
     this._visualSignals.isPlaying.setter(false);
     this.cancelAnimationFrame();
@@ -1145,6 +1184,16 @@ export class RanPlayer extends RanElement {
     }
     this.updateCurrentProgress();
   };
+  /**
+   * @description: 断点续播保存的第二个触发点——`pause` 只覆盖"用户手动暂停"，标签页切走/关闭
+   * 往往不会先触发 pause。`visibilitychange` 比 `beforeunload` 更可靠（移动端支持更好，
+   * MDN 现在推荐这个而不是 beforeunload 做"页面即将失去焦点前保存状态"）。
+   */
+  onVisibilityChange = (): void => {
+    if (this.rememberPosition && document.visibilityState === 'hidden') {
+      saveResumePosition(this.src, this.getCurrentTime());
+    }
+  };
   fullScreenChange = (): void => {
     if (document.fullscreenElement?.classList.contains('ran-player')) {
       this.change('fullscreen', true);
@@ -1269,6 +1318,7 @@ export class RanPlayer extends RanElement {
       onFullscreenChange: this.fullScreenChange,
       onResize: this.resize,
       onPipClick: this.togglePip,
+      onVisibilityChange: this.onVisibilityChange,
     };
   };
   connectedCallback(): void {

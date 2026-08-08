@@ -34,6 +34,7 @@ export interface PlayerViewRefs {
   playerControllerBottomTimeCurrent: HTMLDivElement;
   playerControllerBottomTimeDuration: HTMLDivElement;
   playerControllerBottomTimeDivide: HTMLDivElement;
+  playControllerBottomSubtitle: HTMLElement;
   playControllerBottomClarity: HTMLElement;
   playControllerBottomSpeed: HTMLDivElement;
   playControllerBottomVolumeIcon: HTMLDivElement;
@@ -143,6 +144,11 @@ export function ensurePlayerView(input: {
       .children(playControllerBottomVolumeIcon, playControllerBottomVolumeProgress)
       .build() as HTMLDivElement;
 
+    // Empty/hidden until `createSubtitleSelect()` (index.ts) builds an `<r-select>`
+    // into it once `tracks` is set — same lazy-population pattern as clarity below.
+    const playControllerBottomSubtitle = Div()
+      .class('ran-player-controller-bottom-right-subtitle')
+      .build() as HTMLDivElement;
     const playControllerBottomClarity = Div()
       .class('ran-player-controller-bottom-right-clarity')
       .build() as HTMLDivElement;
@@ -167,6 +173,7 @@ export function ensurePlayerView(input: {
     const playerControllerBottomRight = Div()
       .class('ran-player-controller-bottom-right')
       .children(
+        playControllerBottomSubtitle,
         playControllerBottomClarity,
         playControllerBottomSpeed,
         playControllerBottomVolume,
@@ -279,6 +286,10 @@ export function ensurePlayerView(input: {
     ) as HTMLDivElement | null,
     '.ran-player-controller-bottom-right-volume-icon',
   );
+  const playControllerBottomSubtitle = assertExists(
+    playerControllerBottomRight.querySelector('.ran-player-controller-bottom-right-subtitle') as HTMLElement | null,
+    '.ran-player-controller-bottom-right-subtitle',
+  );
   const playControllerBottomClarity = assertExists(
     playerControllerBottomRight.querySelector('.ran-player-controller-bottom-right-clarity') as HTMLElement | null,
     '.ran-player-controller-bottom-right-clarity',
@@ -326,6 +337,7 @@ export function ensurePlayerView(input: {
     playControllerBottomSpeed,
     playControllerBottomVolumeIcon,
     playControllerBottomVolumeProgress,
+    playControllerBottomSubtitle,
     playControllerBottomPip,
     playControllerBottomRightFullScreen,
     playControllerBottomVolume,
