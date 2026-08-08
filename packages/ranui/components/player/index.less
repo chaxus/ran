@@ -106,12 +106,12 @@
   }
 
   &-contain {
-    width: var(--ran-player-contain-width, 100%);
-    height: var(--ran-player-contain-height, 100%);
+    width: var(--ran-player-video-wrap-width, 100%);
+    height: var(--ran-player-video-wrap-height, 100%);
 
     &-video {
-      width: var(--ran-player-contain-video-width, 100%);
-      height: var(--ran-player-contain-video-height, 100%);
+      width: var(--ran-player-video-width, 100%);
+      height: var(--ran-player-video-height, 100%);
     }
   }
 
@@ -198,277 +198,277 @@
     box-sizing: var(--ran-player-controller-box-sizing, content-box);
 
     &-tip {
-      position: var(--ran-player-controller-tip-position, absolute);
-      top: var(--ran-player-controller-tip-top, -12px);
-      max-width: var(--ran-player-controller-tip-max-width, 60px);
-      height: var(--ran-player-controller-tip-height, 24px);
-      line-height: var(--ran-player-controller-tip-line-height, 9px);
+      position: var(--ran-player-tip-position, absolute);
+      top: var(--ran-player-tip-top, -12px);
+      max-width: var(--ran-player-tip-max-width, 60px);
+      height: var(--ran-player-tip-height, 24px);
+      line-height: var(--ran-player-tip-line-height, 9px);
       transform-origin: var(--ran-x, 50%) var(--ran-y, 50%);
-      box-sizing: var(--ran-player-controller-tip-box-sizing, border-box);
-      margin: var(--ran-player-controller-tip-margin, 0);
-      padding: var(--ran-player-controller-tip-padding, 4px 6px);
-      color: var(--ran-player-controller-tip-color, #fff);
-      font-size: var(--ran-player-controller-tip-font-size, 10px);
-      list-style: var(--ran-player-controller-tip-list-style, none);
-      font-family: var(--ran-player-controller-tip-font-family, @font-family);
-      z-index: var(--ran-player-controller-tip-z-index, 100);
-      font-variant: var(--ran-player-controller-tip-font-variant, initial);
-      background: var(--ran-player-controller-tip-background, rgba(0, 0, 0, 0.5));
-      border-radius: var(--ran-player-controller-tip-border-radius, 8px);
-      outline: var(--ran-player-controller-tip-outline, none);
-      box-shadow: var(--ran-player-controller-tip-box-shadow, @box-shadow);
-      overflow: var(--ran-player-controller-tip-overflow, hidden);
-      white-space: var(--ran-player-controller-tip-white-space, nowrap);
-      text-overflow: var(--ran-player-controller-tip-text-overflow, ellipsis);
-      opacity: var(--ran-player-controller-tip-opacity, 0);
-      text-align: var(--ran-player-controller-tip-text-align, center);
+      box-sizing: var(--ran-player-tip-box-sizing, border-box);
+      margin: var(--ran-player-tip-margin, 0);
+      padding: var(--ran-player-tip-padding, 4px 6px);
+      color: var(--ran-player-tip-color, #fff);
+      font-size: var(--ran-player-tip-font-size, 10px);
+      list-style: var(--ran-player-tip-list-style, none);
+      font-family: var(--ran-player-tip-font-family, @font-family);
+      z-index: var(--ran-player-tip-z-index, 100);
+      font-variant: var(--ran-player-tip-font-variant, initial);
+      background: var(--ran-player-tip-background, rgba(0, 0, 0, 0.5));
+      border-radius: var(--ran-player-tip-border-radius, 8px);
+      outline: var(--ran-player-tip-outline, none);
+      box-shadow: var(--ran-player-tip-box-shadow, @box-shadow);
+      overflow: var(--ran-player-tip-overflow, hidden);
+      white-space: var(--ran-player-tip-white-space, nowrap);
+      text-overflow: var(--ran-player-tip-text-overflow, ellipsis);
+      opacity: var(--ran-player-tip-opacity, 0);
+      text-align: var(--ran-player-tip-text-align, center);
 
       &-time {
-        margin-top: var(--ran-player-controller-tip-time-margin-top, 4px);
-        text-align: var(--ran-player-controller-tip-time-text-align, center);
-        max-width: var(--ran-player-controller-tip-time-max-width, 80px);
-        overflow: var(--ran-player-controller-tip-time-overflow, hidden);
-        white-space: var(--ran-player-controller-tip-time-white-space, nowrap);
-        text-overflow: var(--ran-player-controller-tip-time-text-overflow, ellipsis);
-        text-align: var(--ran-player-controller-tip-time-text-align, center);
+        margin-top: var(--ran-player-tip-time-margin-top, 4px);
+        text-align: var(--ran-player-tip-time-text-align, center);
+        max-width: var(--ran-player-tip-time-max-width, 80px);
+        overflow: var(--ran-player-tip-time-overflow, hidden);
+        white-space: var(--ran-player-tip-time-white-space, nowrap);
+        text-overflow: var(--ran-player-tip-time-text-overflow, ellipsis);
+        text-align: var(--ran-player-tip-time-text-align, center);
       }
 
       &-text {
-        margin-top: var(--ran-player-controller-tip-text-margin-top, 4px);
-        max-width: var(--ran-player-controller-tip-text-max-width, 80px);
-        overflow: var(--ran-player-controller-tip-text-overflow, hidden);
-        white-space: var(--ran-player-controller-tip-text-white-space, nowrap);
-        text-overflow: var(--ran-player-controller-tip-text-text-overflow, ellipsis);
-        text-align: var(--ran-player-controller-tip-text-text-align, center);
+        margin-top: var(--ran-player-tip-text-margin-top, 4px);
+        max-width: var(--ran-player-tip-text-max-width, 80px);
+        overflow: var(--ran-player-tip-text-overflow, hidden);
+        white-space: var(--ran-player-tip-text-white-space, nowrap);
+        text-overflow: var(--ran-player-tip-text-text-overflow, ellipsis);
+        text-align: var(--ran-player-tip-text-text-align, center);
       }
     }
 
     &-progress {
-      position: var(--ran-player-controller-progress-position, relative);
-      width: var(--ran-player-controller-progress-width, 100%);
-      height: var(--ran-player-controller-progress-height, 4px);
-      cursor: var(--ran-player-controller-progress-cursor, pointer);
-      box-sizing: var(--ran-player-controller-progress-box-sizing, content-box);
+      position: var(--ran-player-progress-position, relative);
+      width: var(--ran-player-progress-width, 100%);
+      height: var(--ran-player-progress-height, 4px);
+      cursor: var(--ran-player-progress-cursor, pointer);
+      box-sizing: var(--ran-player-progress-box-sizing, content-box);
 
       &:focus {
-        outline: var(--ran-player-controller-progress-focus-outline, 0);
+        outline: var(--ran-player-progress-focus-outline, 0);
         -webkit-tap-highlight-color: transparent;
       }
 
       &:active {
-        outline: var(--ran-player-controller-progress-active-outline, 0);
+        outline: var(--ran-player-progress-active-outline, 0);
         -webkit-tap-highlight-color: transparent;
       }
 
       &:focus-visible {
         outline: var(
-          --ran-player-controller-progress-focus-visible-outline,
+          --ran-player-progress-focus-visible-outline,
           2px solid var(--ran-player-focus-outline-color, var(--ran-focus-ring-inverse-color, #fff))
         );
-        outline-offset: var(--ran-player-controller-progress-focus-visible-outline-offset, 4px);
+        outline-offset: var(--ran-player-progress-focus-visible-outline-offset, 4px);
         border-radius: var(
-          --ran-player-controller-progress-focus-visible-border-radius,
+          --ran-player-progress-focus-visible-border-radius,
           var(--ran-radius-full, 9999px)
         );
       }
 
       &-wrap {
-        width: var(--ran-player-controller-progress-wrap-width, 100%);
-        height: var(--ran-player-controller-progress-wrap-height, 100%);
-        border-radius: var(--ran-player-controller-progress-wrap-border-radius, 20px);
-        background: var(--ran-player-controller-progress-wrap-background, rgba(255, 255, 255, 0.3));
-        position: var(--ran-player-controller-progress-wrap-position, relative);
-        overflow: var(--ran-player-controller-progress-wrap-overflow, hidden);
-        pointer-events: var(--ran-player-controller-progress-wrap-pointer-events, none);
-        box-sizing: var(--ran-player-controller-progress-wrap-box-sizing, content-box);
+        width: var(--ran-player-progress-track-width, 100%);
+        height: var(--ran-player-progress-track-height, 100%);
+        border-radius: var(--ran-player-progress-track-border-radius, 20px);
+        background: var(--ran-player-progress-track-background, rgba(255, 255, 255, 0.3));
+        position: var(--ran-player-progress-track-position, relative);
+        overflow: var(--ran-player-progress-track-overflow, hidden);
+        pointer-events: var(--ran-player-progress-track-pointer-events, none);
+        box-sizing: var(--ran-player-progress-track-box-sizing, content-box);
 
         &-buffer {
-          position: var(--ran-player-controller-progress-wrap-buffer-position, absolute);
-          top: var(--ran-player-controller-progress-wrap-buffer-top, 0px);
-          left: var(--ran-player-controller-progress-wrap-buffer-left, 0);
-          height: var(--ran-player-controller-progress-wrap-buffer-height, 100%);
-          width: var(--ran-player-controller-progress-wrap-buffer-width, 100%);
-          transform: var(--ran-player-controller-progress-wrap-buffer-transform, scaleX(0));
-          transform-origin: var(--ran-player-controller-progress-wrap-buffer-transform-origin, 0 0);
-          will-change: var(--ran-player-controller-progress-wrap-buffer-will-change, transform);
-          background: var(--ran-player-controller-progress-wrap-buffer-background, rgba(255, 255, 255, 0.45));
-          border-radius: var(--ran-player-controller-progress-wrap-buffer-border-radius, 20px);
-          box-sizing: var(--ran-player-controller-progress-wrap-buffer-box-sizing, content-box);
-          z-index: var(--ran-player-controller-progress-wrap-buffer-z-index, 1);
+          position: var(--ran-player-progress-buffer-position, absolute);
+          top: var(--ran-player-progress-buffer-top, 0px);
+          left: var(--ran-player-progress-buffer-left, 0);
+          height: var(--ran-player-progress-buffer-height, 100%);
+          width: var(--ran-player-progress-buffer-width, 100%);
+          transform: var(--ran-player-progress-buffer-transform, scaleX(0));
+          transform-origin: var(--ran-player-progress-buffer-transform-origin, 0 0);
+          will-change: var(--ran-player-progress-buffer-will-change, transform);
+          background: var(--ran-player-progress-buffer-background, rgba(255, 255, 255, 0.45));
+          border-radius: var(--ran-player-progress-buffer-border-radius, 20px);
+          box-sizing: var(--ran-player-progress-buffer-box-sizing, content-box);
+          z-index: var(--ran-player-progress-buffer-z-index, 1);
         }
 
         &-value {
-          position: var(--ran-player-controller-progress-wrap-value-position, absolute);
-          top: var(--ran-player-controller-progress-wrap-value-top, 0px);
-          left: var(--ran-player-controller-progress-wrap-value-left, 0);
-          height: var(--ran-player-controller-progress-wrap-value-height, 100%);
-          width: var(--ran-player-controller-progress-wrap-value-width, 100%);
-          transform: var(--ran-player-controller-progress-wrap-value-transform, scaleX(0));
-          transform-origin: var(--ran-player-controller-progress-wrap-value-transform-origin, 0 0);
-          will-change: var(--ran-player-controller-progress-wrap-value-will-change, transform);
-          background: var(--ran-player-controller-progress-wrap-value-background, rgba(255, 255, 255, 0.8));
-          border-radius: var(--ran-player-controller-progress-wrap-value-border-radius, 20px);
-          box-sizing: var(--ran-player-controller-progress-wrap-value-box-sizing, content-box);
-          cursor: var(--ran-player-controller-progress-wrap-value-cursor, pointer);
-          z-index: var(--ran-player-controller-progress-wrap-value-z-index, 2);
+          position: var(--ran-player-progress-fill-position, absolute);
+          top: var(--ran-player-progress-fill-top, 0px);
+          left: var(--ran-player-progress-fill-left, 0);
+          height: var(--ran-player-progress-fill-height, 100%);
+          width: var(--ran-player-progress-fill-width, 100%);
+          transform: var(--ran-player-progress-fill-transform, scaleX(0));
+          transform-origin: var(--ran-player-progress-fill-transform-origin, 0 0);
+          will-change: var(--ran-player-progress-fill-will-change, transform);
+          background: var(--ran-player-progress-fill-background, rgba(255, 255, 255, 0.8));
+          border-radius: var(--ran-player-progress-fill-border-radius, 20px);
+          box-sizing: var(--ran-player-progress-fill-box-sizing, content-box);
+          cursor: var(--ran-player-progress-fill-cursor, pointer);
+          z-index: var(--ran-player-progress-fill-z-index, 2);
         }
       }
 
       &-dot {
-        position: var(--ran-player-controller-progress-dot-position, absolute);
-        top: var(--ran-player-controller-progress-dot-top, -2px);
-        left: var(--ran-player-controller-progress-dot-left, -2px);
-        border-radius: var(--ran-player-controller-progress-dot-border-radius, 50%);
-        z-index: var(--ran-player-controller-progress-dot-z-index, 9);
-        width: var(--ran-player-controller-progress-dot-width, 8px);
-        height: var(--ran-player-controller-progress-dot-height, 8px);
-        background: var(--ran-player-controller-progress-dot-background, rgba(255, 255, 255, 1));
-        cursor: var(--ran-player-controller-progress-dot-cursor, pointer);
+        position: var(--ran-player-progress-dot-position, absolute);
+        top: var(--ran-player-progress-dot-top, -2px);
+        left: var(--ran-player-progress-dot-left, -2px);
+        border-radius: var(--ran-player-progress-dot-border-radius, 50%);
+        z-index: var(--ran-player-progress-dot-z-index, 9);
+        width: var(--ran-player-progress-dot-width, 8px);
+        height: var(--ran-player-progress-dot-height, 8px);
+        background: var(--ran-player-progress-dot-background, rgba(255, 255, 255, 1));
+        cursor: var(--ran-player-progress-dot-cursor, pointer);
       }
     }
 
     &-bottom {
-      margin-top: var(--ran-player-controller-bottom-margin-top, 8px);
-      width: var(--ran-player-controller-bottom-width, 100%);
-      display: var(--ran-player-controller-bottom-display, flex);
-      justify-content: var(--ran-player-controller-bottom-justify-content, space-between);
-      align-items: var(--ran-player-controller-bottom-align-items, center);
+      margin-top: var(--ran-player-controls-margin-top, 8px);
+      width: var(--ran-player-controls-width, 100%);
+      display: var(--ran-player-controls-display, flex);
+      justify-content: var(--ran-player-controls-justify-content, space-between);
+      align-items: var(--ran-player-controls-align-items, center);
 
       &-left {
-        user-select: var(--ran-player-controller-bottom-left-user-select, none);
-        display: var(--ran-player-controller-bottom-left-display, flex);
-        justify-content: var(--ran-player-controller-bottom-left-justify-content, flex-start);
-        align-items: var(--ran-player-controller-bottom-left-align-items, center);
+        user-select: var(--ran-player-controls-left-user-select, none);
+        display: var(--ran-player-controls-left-display, flex);
+        justify-content: var(--ran-player-controls-left-justify-content, flex-start);
+        align-items: var(--ran-player-controls-left-align-items, center);
 
         &-btn {
-          width: var(--ran-player-controller-bottom-left-btn-width, 20px);
-          height: var(--ran-player-controller-bottom-left-btn-height, 20px);
-          cursor: var(--ran-player-controller-bottom-left-btn-cursor, pointer);
-          outline: var(--ran-player-controller-bottom-left-btn-outline, 0);
+          width: var(--ran-player-toggle-width, 20px);
+          height: var(--ran-player-toggle-height, 20px);
+          cursor: var(--ran-player-toggle-cursor, pointer);
+          outline: var(--ran-player-toggle-outline, 0);
           -webkit-tap-highlight-color: transparent;
 
           &:active,
           &:focus {
-            outline: var(--ran-player-controller-bottom-left-btn-focus-outline, 0);
+            outline: var(--ran-player-toggle-focus-outline, 0);
             -webkit-tap-highlight-color: transparent;
           }
 
           &:focus-visible {
             outline: var(
-              --ran-player-controller-bottom-left-btn-focus-visible-outline,
+              --ran-player-toggle-focus-visible-outline,
               2px solid var(--ran-player-focus-outline-color, var(--ran-focus-ring-inverse-color, #fff))
             );
-            outline-offset: var(--ran-player-controller-bottom-left-btn-focus-visible-outline-offset, 2px);
+            outline-offset: var(--ran-player-toggle-focus-visible-outline-offset, 2px);
             border-radius: var(
-              --ran-player-controller-bottom-left-btn-focus-visible-border-radius,
+              --ran-player-toggle-focus-visible-border-radius,
               var(--ran-radius-sm, 4px)
             );
           }
         }
 
         &-btn-play {
-          background: var(--ran-player-controller-bottom-left-btn-play-background, url(./img/smallplay.png) no-repeat);
-          background-size: var(--ran-player-controller-bottom-left-btn-play-background-size, contain);
+          background: var(--ran-player-toggle-play-background, url(./img/smallplay.png) no-repeat);
+          background-size: var(--ran-player-toggle-play-background-size, contain);
         }
 
         &-btn-pause {
           background: var(
-            --ran-player-controller-bottom-left-btn-pause-background,
+            --ran-player-toggle-pause-background,
             url(./img/smallpause.png) no-repeat
           );
-          background-size: var(--ran-player-controller-bottom-left-btn-pause-background-size, contain);
+          background-size: var(--ran-player-toggle-pause-background-size, contain);
         }
 
         &-time {
-          margin-left: var(--ran-player-controller-bottom-left-time-margin-left, 16px);
-          display: var(--ran-player-controller-bottom-left-time-display, flex);
-          justify-content: var(--ran-player-controller-bottom-left-time-justify-content, flex-start);
-          align-items: var(--ran-player-controller-bottom-left-time-align-items, center);
+          margin-left: var(--ran-player-time-margin-left, 16px);
+          display: var(--ran-player-time-display, flex);
+          justify-content: var(--ran-player-time-justify-content, flex-start);
+          align-items: var(--ran-player-time-align-items, center);
 
           &-current {
-            color: var(--ran-player-controller-bottom-left-time-current-color, #fff);
-            font-family: var(--ran-player-controller-bottom-left-time-current-font-family, PingFang SC);
-            font-size: var(--ran-player-controller-bottom-left-time-current-font-size, 12px);
-            min-width: var(--ran-player-controller-bottom-left-time-current-min-width, 40px);
-            font-style: var(--ran-player-controller-bottom-left-time-current-font-style, normal);
-            font-weight: var(--ran-player-controller-bottom-left-time-current-font-weight, 400);
-            line-height: var(--ran-player-controller-bottom-left-time-current-line-height, normal);
-            text-align: var(--ran-player-controller-bottom-left-time-current-text-align, center);
-            position: var(--ran-player-controller-bottom-left-time-current-position, relative);
-            top: var(--ran-player-controller-bottom-left-time-current-top, 2px);
+            color: var(--ran-player-time-current-color, #fff);
+            font-family: var(--ran-player-time-current-font-family, PingFang SC);
+            font-size: var(--ran-player-time-current-font-size, 12px);
+            min-width: var(--ran-player-time-current-min-width, 40px);
+            font-style: var(--ran-player-time-current-font-style, normal);
+            font-weight: var(--ran-player-time-current-font-weight, 400);
+            line-height: var(--ran-player-time-current-line-height, normal);
+            text-align: var(--ran-player-time-current-text-align, center);
+            position: var(--ran-player-time-current-position, relative);
+            top: var(--ran-player-time-current-top, 2px);
           }
 
           &-divide {
-            color: var(--ran-player-controller-bottom-left-time-divide-color, #fff);
-            font-family: var(--ran-player-controller-bottom-left-time-divide-font-family, PingFang SC);
-            font-size: var(--ran-player-controller-bottom-left-time-divide-font-size, 12px);
-            font-style: var(--ran-player-controller-bottom-left-time-divide-font-style, normal);
-            font-weight: var(--ran-player-controller-bottom-left-time-divide-font-weight, 400);
-            line-height: var(--ran-player-controller-bottom-left-time-divide-line-height, normal);
-            margin: var(--ran-player-controller-bottom-left-time-divide-margin, 0 2px);
-            text-align: var(--ran-player-controller-bottom-left-time-divide-text-align, center);
-            position: var(--ran-player-controller-bottom-left-time-divide-position, relative);
-            top: var(--ran-player-controller-bottom-left-time-divide-top, 2px);
+            color: var(--ran-player-time-divide-color, #fff);
+            font-family: var(--ran-player-time-divide-font-family, PingFang SC);
+            font-size: var(--ran-player-time-divide-font-size, 12px);
+            font-style: var(--ran-player-time-divide-font-style, normal);
+            font-weight: var(--ran-player-time-divide-font-weight, 400);
+            line-height: var(--ran-player-time-divide-line-height, normal);
+            margin: var(--ran-player-time-divide-margin, 0 2px);
+            text-align: var(--ran-player-time-divide-text-align, center);
+            position: var(--ran-player-time-divide-position, relative);
+            top: var(--ran-player-time-divide-top, 2px);
           }
 
           &-duration {
-            color: var(--ran-player-controller-bottom-left-time-duration-color, #fff);
-            font-family: var(--ran-player-controller-bottom-left-time-duration-font-family, PingFang SC);
-            font-size: var(--ran-player-controller-bottom-left-time-duration-font-size, 12px);
-            font-style: var(--ran-player-controller-bottom-left-time-duration-font-style, normal);
-            font-weight: var(--ran-player-controller-bottom-left-time-duration-font-weight, 400);
-            line-height: var(--ran-player-controller-bottom-left-time-duration-line-height, normal);
-            min-width: var(--ran-player-controller-bottom-left-time-duration-min-width, 40px);
-            text-align: var(--ran-player-controller-bottom-left-time-duration-text-align, center);
-            position: var(--ran-player-controller-bottom-left-time-duration-position, relative);
-            top: var(--ran-player-controller-bottom-left-time-duration-top, 2px);
+            color: var(--ran-player-time-duration-color, #fff);
+            font-family: var(--ran-player-time-duration-font-family, PingFang SC);
+            font-size: var(--ran-player-time-duration-font-size, 12px);
+            font-style: var(--ran-player-time-duration-font-style, normal);
+            font-weight: var(--ran-player-time-duration-font-weight, 400);
+            line-height: var(--ran-player-time-duration-line-height, normal);
+            min-width: var(--ran-player-time-duration-min-width, 40px);
+            text-align: var(--ran-player-time-duration-text-align, center);
+            position: var(--ran-player-time-duration-position, relative);
+            top: var(--ran-player-time-duration-top, 2px);
           }
         }
       }
 
       &-right {
-        user-select: var(--ran-player-controller-bottom-right-user-select, none);
-        display: var(--ran-player-controller-bottom-right-display, flex);
-        justify-content: var(--ran-player-controller-bottom-right-justify-content, flex-end);
-        align-items: var(--ran-player-controller-bottom-right-align-items, center);
+        user-select: var(--ran-player-controls-right-user-select, none);
+        display: var(--ran-player-controls-right-display, flex);
+        justify-content: var(--ran-player-controls-right-justify-content, flex-end);
+        align-items: var(--ran-player-controls-right-align-items, center);
 
         &-volume {
-          display: var(--ran-player-controller-bottom-right-volume-display, flex);
-          justify-content: var(--ran-player-controller-bottom-right-volume-justify-content, space-between);
-          align-items: var(--ran-player-controller-bottom-right-volume-align-items, center);
-          margin-right: var(--ran-player-controller-bottom-right-volume-margin-right, 12px);
-          cursor: var(--ran-player-controller-bottom-right-align-volume-cursor, pointer);
+          display: var(--ran-player-volume-display, flex);
+          justify-content: var(--ran-player-volume-justify-content, space-between);
+          align-items: var(--ran-player-volume-align-items, center);
+          margin-right: var(--ran-player-volume-margin-right, 12px);
+          cursor: var(--ran-player-volume-cursor, pointer);
 
           &-icon-volume {
             background: var(
-              --ran-player-controller-bottom-right-align-volume-icon-volume-background,
+              --ran-player-volume-icon-background,
               url(./img/volumenotmute.svg) no-repeat
             );
             background-size: var(
-              --ran-player-controller-bottom-right-align-volume-icon-volume-background-size,
+              --ran-player-volume-icon-background-size,
               contain
             );
           }
 
           &-icon-mute {
             background: var(
-              --ran-player-controller-bottom-right-align-volume-icon-mute-background,
+              --ran-player-volume-icon-muted-background,
               url(./img/volumemute.svg) no-repeat
             );
-            background-size: var(--ran-player-controller-bottom-right-align-volume-icon-mute-background-size, contain);
+            background-size: var(--ran-player-volume-icon-muted-background-size, contain);
           }
 
           &-icon {
-            width: var(--ran-player-controller-bottom-right-align-volume-icon-width, 18px);
-            height: var(--ran-player-controller-bottom-right-align-volume-icon-height, 18px);
+            width: var(--ran-player-volume-icon-width, 18px);
+            height: var(--ran-player-volume-icon-height, 18px);
             margin-right: 6px;
           }
 
           &-progress {
-            width: var(--ran-player-controller-bottom-right-align-volume-progress-width, 50px);
-            --ran-progress-wrap-height: 4px;
-            --ran-progress-wrap-background: rgba(255, 255, 255, 0.3);
-            --ran-progress-wrap-value-background: rgba(255, 255, 255, 0.8);
+            width: var(--ran-player-volume-progress-width, 50px);
+            --ran-progress-track-height: 4px;
+            --ran-progress-track-background: rgba(255, 255, 255, 0.3);
+            --ran-progress-fill-background: rgba(255, 255, 255, 0.8);
             --ran-progress-dot-top: -2px;
             --ran-progress-dot-left: -4px;
             --ran-progress-dot-width: 8px;
@@ -477,11 +477,11 @@
 
             .ran-progress {
               &-wrap {
-                --ran-progress-wrap-height: 4px;
-                --ran-progress-wrap-background: rgba(255, 255, 255, 0.3);
+                --ran-progress-track-height: 4px;
+                --ran-progress-track-background: rgba(255, 255, 255, 0.3);
 
                 &-value {
-                  --ran-progress-wrap-value-background: rgba(255, 255, 255, 0.8);
+                  --ran-progress-fill-background: rgba(255, 255, 255, 0.8);
                 }
               }
 
@@ -497,22 +497,22 @@
         }
 
         &-speed {
-          width: var(--ran-player-controller-bottom-right-align-speed-width, 30px);
-          height: var(--ran-player-controller-bottom-right-align-speed-height, 20px);
-          color: var(--ran-player-controller-bottom-right-align-speed-color, #fff);
-          font-family: var(--ran-player-controller-bottom-right-align-speed-font-family, PingFang SC);
-          font-size: var(--ran-player-controller-bottom-right-align-speed-font-size, 14px);
-          font-style: var(--ran-player-controller-bottom-right-align-speed-font-style, normal);
-          font-weight: var(--ran-player-controller-bottom-right-align-speed-font-weight, 400);
-          line-height: var(--ran-player-controller-bottom-right-align-speed-line-height, normal);
-          margin-right: var(--ran-player-controller-bottom-right-align-speed-margin-right, 22px);
-          cursor: var(--ran-player-controller-bottom-right-align-speed-cursor, pointer);
-          outline: var(--ran-player-controller-bottom-right-align-speed-outline, 0);
+          width: var(--ran-player-speed-width, 30px);
+          height: var(--ran-player-speed-height, 20px);
+          color: var(--ran-player-speed-color, #fff);
+          font-family: var(--ran-player-speed-font-family, PingFang SC);
+          font-size: var(--ran-player-speed-font-size, 14px);
+          font-style: var(--ran-player-speed-font-style, normal);
+          font-weight: var(--ran-player-speed-font-weight, 400);
+          line-height: var(--ran-player-speed-line-height, normal);
+          margin-right: var(--ran-player-speed-margin-right, 22px);
+          cursor: var(--ran-player-speed-cursor, pointer);
+          outline: var(--ran-player-speed-outline, 0);
           -webkit-tap-highlight-color: transparent;
 
           &:active,
           &:focus {
-            outline: var(--ran-player-controller-bottom-right-align-speed-focus-outline, 0);
+            outline: var(--ran-player-speed-focus-outline, 0);
             -webkit-tap-highlight-color: transparent;
           }
 
@@ -553,17 +553,17 @@
         }
 
         &-subtitle {
-          color: var(--ran-player-controller-bottom-right-align-subtitle-color, #fff);
-          font-family: var(--ran-player-controller-bottom-right-align-subtitle-font-family, PingFang SC);
-          font-size: var(--ran-player-controller-bottom-right-align-subtitle-font-size, 14px);
-          width: var(--ran-player-controller-bottom-right-align-subtitle-width, 30px);
-          height: var(--ran-player-controller-bottom-right-align-subtitle-height, 20px);
-          font-style: var(--ran-player-controller-bottom-right-align-subtitle-font-style, normal);
-          font-weight: var(--ran-player-controller-bottom-right-align-subtitle-font-weight, 400);
-          line-height: var(--ran-player-controller-bottom-right-align-subtitle-line-height, normal);
-          cursor: var(--ran-player-controller-bottom-right-align-subtitle-cursor, pointer);
-          margin-right: var(--ran-player-controller-bottom-right-align-subtitle-margin-right, 12px);
-          outline: var(--ran-player-controller-bottom-right-align-subtitle-outline, 0);
+          color: var(--ran-player-subtitle-color, #fff);
+          font-family: var(--ran-player-subtitle-font-family, PingFang SC);
+          font-size: var(--ran-player-subtitle-font-size, 14px);
+          width: var(--ran-player-subtitle-width, 30px);
+          height: var(--ran-player-subtitle-height, 20px);
+          font-style: var(--ran-player-subtitle-font-style, normal);
+          font-weight: var(--ran-player-subtitle-font-weight, 400);
+          line-height: var(--ran-player-subtitle-line-height, normal);
+          cursor: var(--ran-player-subtitle-cursor, pointer);
+          margin-right: var(--ran-player-subtitle-margin-right, 12px);
+          outline: var(--ran-player-subtitle-outline, 0);
           -webkit-tap-highlight-color: transparent;
 
           // Empty when no tracks are configured — collapse instead of leaving a gap.
@@ -573,7 +573,7 @@
 
           &:active,
           &:focus {
-            outline: var(--ran-player-controller-bottom-right-align-subtitle-focus-outline, 0);
+            outline: var(--ran-player-subtitle-focus-outline, 0);
             -webkit-tap-highlight-color: transparent;
           }
 
@@ -610,22 +610,22 @@
         }
 
         &-clarity {
-          color: var(--ran-player-controller-bottom-right-align-clarity-color, #fff);
-          font-family: var(--ran-player-controller-bottom-right-align-clarity-font-family, PingFang SC);
-          font-size: var(--ran-player-controller-bottom-right-align-clarity-font-size, 14px);
-          width: var(--ran-player-controller-bottom-right-align-clarity-width, 30px);
-          height: var(--ran-player-controller-bottom-right-align-clarity-height, 20px);
-          font-style: var(--ran-player-controller-bottom-right-align-clarity-font-style, normal);
-          font-weight: var(--ran-player-controller-bottom-right-align-clarity-font-weight, 400);
-          line-height: var(--ran-player-controller-bottom-right-align-clarity-line-height, normal);
-          cursor: var(--ran-player-controller-bottom-right-align-clarity-cursor, pointer);
-          margin-right: var(--ran-player-controller-bottom-right-align-clarity-margin-right, 12px);
-          outline: var(--ran-player-controller-bottom-right-align-clarity-outline, 0);
+          color: var(--ran-player-clarity-color, #fff);
+          font-family: var(--ran-player-clarity-font-family, PingFang SC);
+          font-size: var(--ran-player-clarity-font-size, 14px);
+          width: var(--ran-player-clarity-width, 30px);
+          height: var(--ran-player-clarity-height, 20px);
+          font-style: var(--ran-player-clarity-font-style, normal);
+          font-weight: var(--ran-player-clarity-font-weight, 400);
+          line-height: var(--ran-player-clarity-line-height, normal);
+          cursor: var(--ran-player-clarity-cursor, pointer);
+          margin-right: var(--ran-player-clarity-margin-right, 12px);
+          outline: var(--ran-player-clarity-outline, 0);
           -webkit-tap-highlight-color: transparent;
 
           &:active,
           &:focus {
-            outline: var(--ran-player-controller-bottom-right-align-clarity-focus-outline, 0);
+            outline: var(--ran-player-clarity-focus-outline, 0);
             -webkit-tap-highlight-color: transparent;
           }
 
@@ -662,25 +662,25 @@
         }
 
         &-knowledge {
-          color: var(--ran-player-controller-bottom-right-align-knowledge-color, #fff);
-          font-family: var(--ran-player-controller-bottom-right-align-knowledge-font-family, PingFang SC);
-          font-size: var(--ran-player-controller-bottom-right-align-knowledge-font-size, 14px);
-          font-style: var(--ran-player-controller-bottom-right-align-knowledge-font-style, normal);
-          font-weight: var(--ran-player-controller-bottom-right-align-knowledge-font-weight, 400);
-          line-height: var(--ran-player-controller-bottom-right-align-knowledge-line-height, normal);
-          margin-right: var(--ran-player-controller-bottom-right-align-knowledge-margin-right, 24px);
-          cursor: var(--ran-player-controller-bottom-right-align-knowledge-cursor, pointer);
+          color: var(--ran-player-knowledge-color, #fff);
+          font-family: var(--ran-player-knowledge-font-family, PingFang SC);
+          font-size: var(--ran-player-knowledge-font-size, 14px);
+          font-style: var(--ran-player-knowledge-font-style, normal);
+          font-weight: var(--ran-player-knowledge-font-weight, 400);
+          line-height: var(--ran-player-knowledge-line-height, normal);
+          margin-right: var(--ran-player-knowledge-margin-right, 24px);
+          cursor: var(--ran-player-knowledge-cursor, pointer);
         }
 
         &-pip {
-          display: var(--ran-player-controller-bottom-right-pip-display, flex);
-          align-items: var(--ran-player-controller-bottom-right-pip-align-items, center);
-          width: var(--ran-player-controller-bottom-right-pip-width, 18px);
-          height: var(--ran-player-controller-bottom-right-pip-height, 18px);
-          margin-right: var(--ran-player-controller-bottom-right-pip-margin-right, 12px);
-          color: var(--ran-player-controller-bottom-right-pip-color, #fff);
-          cursor: var(--ran-player-controller-bottom-right-pip-cursor, pointer);
-          outline: var(--ran-player-controller-bottom-right-pip-outline, 0);
+          display: var(--ran-player-pip-display, flex);
+          align-items: var(--ran-player-pip-align-items, center);
+          width: var(--ran-player-pip-width, 18px);
+          height: var(--ran-player-pip-height, 18px);
+          margin-right: var(--ran-player-pip-margin-right, 12px);
+          color: var(--ran-player-pip-color, #fff);
+          cursor: var(--ran-player-pip-cursor, pointer);
+          outline: var(--ran-player-pip-outline, 0);
           -webkit-tap-highlight-color: transparent;
 
           r-icon {
@@ -694,34 +694,34 @@
 
           &:focus-visible {
             outline: var(
-              --ran-player-controller-bottom-right-pip-focus-visible-outline,
+              --ran-player-pip-focus-visible-outline,
               2px solid var(--ran-player-focus-outline-color, var(--ran-focus-ring-inverse-color, #fff))
             );
-            outline-offset: var(--ran-player-controller-bottom-right-pip-focus-visible-outline-offset, 2px);
+            outline-offset: var(--ran-player-pip-focus-visible-outline-offset, 2px);
             border-radius: var(
-              --ran-player-controller-bottom-right-pip-focus-visible-border-radius,
+              --ran-player-pip-focus-visible-border-radius,
               var(--ran-radius-sm, 4px)
             );
           }
         }
 
         &-full {
-          background: var(--ran-player-controller-bottom-right-align-full-background, url('./img/fullscreenfig.png'));
-          background-size: var(--ran-player-controller-bottom-right-align-full-background-size, contain);
-          width: var(--ran-player-controller-bottom-right-align-full-width, 16px);
-          height: var(--ran-player-controller-bottom-right-align-full-height, 16px);
-          cursor: var(--ran-player-controller-bottom-right-align-full-cursor, pointer);
-          outline: var(--ran-player-controller-bottom-right-align-full-outline, 0);
+          background: var(--ran-player-fullscreen-background, url('./img/fullscreenfig.png'));
+          background-size: var(--ran-player-fullscreen-background-size, contain);
+          width: var(--ran-player-fullscreen-width, 16px);
+          height: var(--ran-player-fullscreen-height, 16px);
+          cursor: var(--ran-player-fullscreen-cursor, pointer);
+          outline: var(--ran-player-fullscreen-outline, 0);
           -webkit-tap-highlight-color: transparent;
 
           &:focus-visible {
             outline: var(
-              --ran-player-controller-bottom-right-align-full-focus-visible-outline,
+              --ran-player-fullscreen-focus-visible-outline,
               2px solid var(--ran-player-focus-outline-color, var(--ran-focus-ring-inverse-color, #fff))
             );
-            outline-offset: var(--ran-player-controller-bottom-right-align-full-focus-visible-outline-offset, 2px);
+            outline-offset: var(--ran-player-fullscreen-focus-visible-outline-offset, 2px);
             border-radius: var(
-              --ran-player-controller-bottom-right-align-full-focus-visible-border-radius,
+              --ran-player-fullscreen-focus-visible-border-radius,
               var(--ran-radius-sm, 4px)
             );
           }
