@@ -6,6 +6,7 @@ import {
   parseThumbnailVtt,
   type ThumbnailCue,
 } from '@/components/player/core/thumbnails';
+import '@/components/player';
 
 const SAMPLE_VTT = `WEBVTT
 
@@ -143,5 +144,87 @@ describe('core/thumbnails applyThumbnailPreview', () => {
     expect(el.style.height).toBe('90px');
     expect(el.style.backgroundImage).toBe('url("https://cdn.example.com/sprite.jpg")');
     expect(el.style.backgroundPosition).toBe('-20px -40px');
+  });
+});
+
+describe('r-player thumbnails attribute wiring', () => {
+  beforeEach(() => {
+    document.body.innerHTML = '';
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+  });
+
+  it('fetches and parses the manifest when the thumbnails attribute is set', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, text: () => Promise.resolve(SAMPLE_VTT) }));
+    const player = document.createElement('r-player') as any;
+    document.body.appendChild(player);
+
+    player.thumbnails = 'https://cdn.example.com/video/thumbs.vtt';
+    await player.loadThumbnails();
+
+    expect(player._thumbnailCues).toHaveLength(3);
+  });
+
+  it('drops a stale response when thumbnails changes again before the first fetch resolves', async () => {
+    // Setting the `thumbnails` property already triggers one `loadThumbnails()` call per
+    // change via `attributeChangedCallback` — this test relies on exactly those two
+    // automatic calls (not manual extra ones) to exercise the token race guard.
+    let resolveFirst!: (value: { ok: boolean; text: () => Promise<string> }) => void;
+    const first = new Promise((resolve) => {
+      resolveFirst = resolve;
+    });
+    const fetchMock = vi
+      .fn()
+      .mockImplementationOnce(() => first)
+      .mockImplementationOnce(() => Promise.resolve({ ok: true, text: () => Promise.resolve(SAMPLE_VTT) }));
+    vi.stubGlobal('fetch', fetchMock);
+
+    const player = document.createElement('r-player') as any;
+    document.body.appendChild(player);
+
+    player.thumbnails = 'https://cdn.example.com/video/first.vtt'; // token 1, pending on `first`
+    player.thumbnails = 'https://cdn.example.com/video/second.vtt'; // token 2, resolves immediately
+    await new Promise((r) => setTimeout(r, 0));
+    expect(player._thumbnailCues).toHaveLength(3);
+
+    resolveFirst({
+      ok: true,
+      text: () => Promise.resolve('WEBVTT\n\n00:00:00.000 --> 00:00:01.000\nsprite.jpg#xywh=0,0,1,1\n'),
+    });
+    await new Promise((r) => setTimeout(r, 0));
+
+    // The stale token-1 response must not overwrite token 2's already-applied cues.
+    expect(player._thumbnailCues).toHaveLength(3);
+  });
+
+  it('renders the cropped thumbnail into the tip on progress hover when a cue matches', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, text: () => Promise.resolve(SAMPLE_VTT) }));
+    const player = document.createElement('r-player') as any;
+    document.body.appendChild(player);
+    player.thumbnails = 'https://cdn.example.com/video/thumbs.vtt';
+    await player.loadThumbnails();
+    player.ctx.duration = 15;
+    vi.spyOn(player._progress, 'getBoundingClientRect').mockReturnValue({ left: 0 } as DOMRect);
+    Object.defineProperty(player._progress, 'clientWidth', { value: 150, configurable: true });
+
+    player.progressMouseMove({ clientX: 15 } as MouseEvent); // 15/150 * 15s = 1.5s -> first cue
+
+    expect(player._playerTipThumbnail.style.display).toBe('block');
+    expect(player._playerTipThumbnail.style.backgroundImage).toContain('sprite.jpg');
+  });
+
+  it('hides the thumbnail tip when no thumbnails manifest is loaded', () => {
+    const player = document.createElement('r-player') as any;
+    document.body.appendChild(player);
+    player.ctx.duration = 15;
+    vi.spyOn(player._progress, 'getBoundingClientRect').mockReturnValue({ left: 0 } as DOMRect);
+    Object.defineProperty(player._progress, 'clientWidth', { value: 150, configurable: true });
+
+    player.progressMouseMove({ clientX: 15 } as MouseEvent);
+
+    expect(player._playerTipThumbnail.style.display).toBe('none');
   });
 });

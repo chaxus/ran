@@ -47,6 +47,17 @@ predates that pattern in places, and closing that gap is itself part of this roa
 - **Resume playback**: opt-in via `remember-position` — saves position to `localStorage` on
   `pause`/tab-hidden, restores on the next load of the same `src`, clears on `ended`
   (`core/resume.ts`).
+- **AirPlay / Remote Playback**: `showRemotePlaybackPicker()` + a control-bar cast button,
+  rendered only when the browser supports the standards-track Remote Playback API or Safari's
+  `webkitShowPlaybackTargetPicker()` (progressive enhancement — `core/remote-playback.ts`).
+- **QoE metrics**: `getMetrics()` returns `{rebufferCount, rebufferDuration, firstFrameMs,
+  qualitySwitchCount, errorCount}` for the current source, derived from the existing `change`
+  event stream (`core/metrics.ts`).
+- **Mobile gestures**: touch-only — double-tap left/right half of the video to seek ∓10s,
+  vertical swipe on the right half for volume; mouse/pen interaction is untouched
+  (`core/gestures.ts`).
+- **Thumbnail scrubbing preview**: `thumbnails` attribute (a WebVTT sprite-sheet manifest URL)
+  shows a cropped thumbnail above the seek-bar hover tip (`core/thumbnails.ts`).
 
 ### 1.2 Formats
 
@@ -98,7 +109,7 @@ feature work to avoid unrelated visual-regression risk.
 | 3 | `poster`/`autoplay`/`loop`/`muted` | native `<video>` | **shipped (Phase 0)** | ✅ trivial, commonly expected |
 | 4 | Error + retry UI | Video.js, Shaka | **shipped (Phase 1)** | ✅ real UX gap today |
 | 5 | Resume playback | YouTube (signed-in), many VOD players | **shipped (Phase 1)** | ✅ opt-in, low complexity via `localStorage` |
-| 6 | Thumbnail scrubbing preview | YouTube, Video.js (VTT sprite plugin) | progress hover shows time text only | 🟡 real value, real complexity (VTT sprite parsing) |
+| 6 | Thumbnail scrubbing preview | YouTube, Video.js (VTT sprite plugin) | **shipped (Phase 3)** | ✅ done via `core/thumbnails.ts`, a new `thumbnails` attribute |
 | 7 | DASH | Shaka, dash.js-based players | **shipped (Phase 2)** | ✅ done via the engine-adapter refactor (§3) |
 | 8 | FLV / raw MPEG-TS | Video.js + flv.js/mpegts.js plugins | **shipped (Phase 2)** | ✅ done via `mpegts.js` (see below) |
 | 9 | Mobile gestures (double-tap seek, swipe volume) | YouTube app, most native players | **shipped (Phase 3)** | ✅ done via `core/gestures.ts`, Pointer Events idiom borrowed from `r-mermaid` |
@@ -143,12 +154,24 @@ feature work to avoid unrelated visual-regression risk.
   `remember-position` boolean attribute (silently resuming without consent is a bad
   surprise, not a default). Key by `src`; save on `pause`/throttled `timeupdate`, restore on
   `loadedmetadata` when the saved position is meaningfully short of the duration.
-- **Thumbnail scrubbing preview** → parse a WebVTT sprite manifest (the same convention
-  YouTube/Video.js use: cues whose text is `spritesheet.jpg#xywh=x,y,w,h`), position a
-  cropped `background-image` of the sprite inside the existing `_playerTip` tooltip on
-  progress hover instead of (or alongside) the time text. New `thumbnails` attribute (a VTT
-  URL). No existing ranui parsing utility for WebVTT — this is genuinely new code, and the
-  most implementation-heavy item on this list after the DASH/FLV engine work.
+- **Thumbnail scrubbing preview — shipped (Phase 3).** `core/thumbnails.ts` parses a WebVTT
+  sprite manifest (the same convention YouTube/Video.js use: cues whose text is
+  `spritesheet.jpg#xywh=x,y,w,h`) — `parseThumbnailVtt`/`findThumbnailCue` are pure and
+  independently testable, `loadThumbnailCues` does the `fetch()`, and `applyThumbnailPreview`
+  crops the sprite via `background-position` sized to the cue's own `w`/`h` (no need to know
+  the full sheet's natural dimensions). A new `thumbnails` attribute (a VTT URL) drives it,
+  fetched/parsed once per attribute change — independent of `src`, so a quality/source switch
+  never refetches it — guarded against a stale response overwriting a newer one with the same
+  bump-and-compare token pattern `r-loading`/`r-icon` use for their async variant loads. The
+  cropped thumbnail renders inside the existing `_playerTip` tooltip, alongside the time text
+  rather than replacing it, positioned via `bottom: 100%` above the pill (which required
+  loosening `.ran-player-controller-tip`'s `overflow` from `hidden` to `visible` — the
+  time/text children already self-truncate via their own `overflow`/`text-overflow`, so
+  nothing regressed). `progressMouseEnter`/`progressMouseMove` in `core/seek.ts` were merged
+  into one `updateProgressTip` helper since thumbnails needed the same hover-time math the
+  time-text branch already computed at both call sites. No existing ranui parsing utility for
+  WebVTT — this was genuinely new code, and the most implementation-heavy item on this list
+  after the DASH/FLV engine work.
 - **DASH + FLV/TS + the underlying engine-adapter refactor** → these three have to move
   together. Today's `core/media.ts`/`core/levels.ts`/`changeClarity` model is HLS-shaped:
   quality = a different URL, loaded via `hls.loadSource(url)`. **DASH doesn't work that
@@ -233,11 +256,10 @@ feature work to avoid unrelated visual-regression risk.
   attribute forces a specific engine for URLs that can't be sniffed by extension. The
   `hlsManifestLoaded`/`hlsError` `change` event types were renamed to the generic
   `levelsready`/`sourceerror` as part of this — a deliberate breaking change (alpha stage).
-- **Phase 3 — in progress:** QoE metrics (`core/metrics.ts` + `getMetrics()`, a new
-  `qualityswitch` change event) — **done**. AirPlay/Remote Playback (`core/remote-playback.ts`
-  + `showRemotePlaybackPicker()`, a new `cast` icon) — **done**. Mobile gestures
-  (`core/gestures.ts`, a new `gestureseek` change event) — **done**. Still planned: thumbnail
-  scrubbing preview (WebVTT sprite).
+- **Phase 3 — done:** QoE metrics (`core/metrics.ts` + `getMetrics()`, a new `qualityswitch`
+  change event). AirPlay/Remote Playback (`core/remote-playback.ts` + `showRemotePlaybackPicker()`,
+  a new `cast` icon). Mobile gestures (`core/gestures.ts`, a new `gestureseek` change event).
+  Thumbnail scrubbing preview (`core/thumbnails.ts`, a new `thumbnails` attribute).
 - **Phase 4 — recorded, not scheduled:** WebRTC low-latency live playback; migrating the
   existing play/pause/fullscreen/volume icons from legacy background-image to
   `<r-icon>`/`registerIcon` (purely visual, decoupled from the feature work above).

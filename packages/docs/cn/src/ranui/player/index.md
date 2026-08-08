@@ -19,11 +19,12 @@ description: 'ranui Player（<r-player>）在原生 <video> 之上封装统一�
 10. 画中画（Picture-in-Picture）——只在浏览器真正支持时才渲染按钮
 11. AirPlay / Remote Playback 投屏按钮——同样只在浏览器支持时才渲染
 12. 移动端手势——双击左右两侧快进/快退 10 秒，右侧竖向滑动调节音量（仅触摸生效）
-13. `poster`/`autoplay`/`loop`/`muted` 原生 `<video>` 属性透传
-14. 字幕/CC——原生 `<track>` 渲染，语言选择记住上次的选择
-15. 错误 + 重试弹窗——播放失败时默认弹出，可关闭
-16. 断点续播——可选开启，存到 `localStorage`
-17. QoE 埋点——`getMetrics()` 基于现有事件流算出卡顿次数/时长、首帧耗时、清晰度切换次数、错误次数
+13. 缩略图预览——设置 `thumbnails` 为 WebVTT 雪碧图 manifest，拖动进度条时在提示框上方显示对应帧
+14. `poster`/`autoplay`/`loop`/`muted` 原生 `<video>` 属性透传
+15. 字幕/CC——原生 `<track>` 渲染，语言选择记住上次的选择
+16. 错误 + 重试弹窗——播放失败时默认弹出，可关闭
+17. 断点续播——可选开启，存到 `localStorage`
+18. QoE 埋点——`getMetrics()` 基于现有事件流算出卡顿次数/时长、首帧耗时、清晰度切换次数、错误次数
 
 ## 代码演示
 
@@ -62,6 +63,26 @@ description: 'ranui Player（<r-player>）在原生 <video> 之上封装统一�
 ### poster
 
 初始播放前展示的封面图 URL，透传给 `<video poster>`。
+
+### thumbnails
+
+```html
+<r-player src="/ran/hls/example.m3u8" thumbnails="/ran/hls/thumbnails.vtt"></r-player>
+```
+
+指向一个 WebVTT manifest，cue 内容遵循 YouTube / Video.js 的雪碧图约定——每条 cue 的文本是一张图片引用加 `#xywh=x,y,w,h` 片段，标出要从共享雪碧图里裁剪的那一块：
+
+```vtt
+WEBVTT
+
+00:00:00.000 --> 00:00:05.000
+sprites.jpg#xywh=0,0,160,90
+
+00:00:05.000 --> 00:00:10.000
+sprites.jpg#xywh=160,0,160,90
+```
+
+图片引用会相对 VTT 文件自己的 URL 解析，所以雪碧图和 manifest 放在同一目录时不用写绝对路径。鼠标悬停或拖动进度条时，会在原有的时间提示框上方显示当前时间点对应的裁剪缩略图；没设置 `thumbnails`，或 manifest 还没加载完成时，什么都不会渲染。manifest 只在 `thumbnails` 这个属性本身变化时抓取解析一次，和 `src` 无关——切换清晰度/源不会重新拉取它。
 
 ### autoplay
 

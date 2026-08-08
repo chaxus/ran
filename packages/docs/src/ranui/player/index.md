@@ -17,6 +17,7 @@ Built on Web Components, with `hls.js`/`dashjs`/`mpegts.js` lazy-loaded on deman
 - Picture-in-Picture toggle — the button only renders when the browser actually supports it
 - AirPlay/Remote Playback button — the browser's own device picker, feature-detected the same way as Picture-in-Picture
 - Mobile gestures — double-tap the left/right half to seek ∓10s, vertical swipe on the right half for volume (touch only; mouse/pen interaction is unaffected)
+- Thumbnail scrubbing preview — set `thumbnails` to a WebVTT sprite-sheet manifest URL, a cropped preview appears above the seek-bar hover tip
 - `poster` / `autoplay` / `loop` / `muted` — standard `<video>` attributes, passed straight through
 - Subtitles/CC — set the `tracks` property, browser-native cue rendering, a language picker that remembers the viewer's choice
 - Error + retry — a `Modal.error()` dialog on fatal playback failures, on by default, opt-out via `disable-error-modal`
@@ -54,6 +55,7 @@ Built on Web Components, with `hls.js`/`dashjs`/`mpegts.js` lazy-loaded on deman
 | `autoplay`     | `boolean` | `false` | Boolean attribute — presence means `true`, same as native `<video autoplay>`. Browsers generally require `muted` for autoplay to actually start without a user gesture. |
 | `loop`         | `boolean` | `false` | Boolean attribute — loops playback on end, same as native `<video loop>`.                             |
 | `muted`        | `boolean` | `false` | Boolean attribute — starts silent. Internally this sets volume to `0` (so the mute icon/slider agree) **and** the native `<video>.muted` flag (so the browser's autoplay-muted policy is satisfied). Removing the attribute restores the previous volume. |
+| `thumbnails`   | `string` | `''`    | URL of a WebVTT sprite-sheet manifest — shows a cropped thumbnail above the seek-bar hover tip. See [Thumbnail Scrubbing Preview](#thumbnail-scrubbing-preview) below. Independent of `src`: only refetched when this attribute itself changes. |
 | `disable-error-modal` | `boolean` | `false` | Opt out of the built-in error + retry dialog — errors still reach you via the `error`/`sourceerror` `change` events, so build your own UI on top. |
 | `remember-position` | `boolean` | `false` | Opt in to resume playback: saves the current position to `localStorage` (keyed by `src`) on pause / when the tab is hidden, restores it on the next load of the same `src`, and clears it once playback ends. |
 | `tracks`       | `PlayerTrackConfig[]` | `[]`    | Subtitle/CC tracks — **JS property only, no matching attribute** (the player clears its own light DOM on every load, so declarative `<track>` children wouldn't survive). See [Subtitles/CC](#subtitles-cc-tracks) below. |
@@ -115,6 +117,26 @@ The cast button appears when the browser exposes either the standards-track Remo
 ### Mobile Gestures
 
 Touch-only, on by default, no attribute to enable: double-tap the left half of the video to seek back 10 seconds, double-tap the right half to seek forward 10 seconds (a brief `-10s`/`+10s` flash confirms it), and drag vertically on the right half to adjust volume. Mouse and pen interaction is completely untouched — a single touch tap still toggles play/pause, just debounced by the same window used to detect a double-tap, so a double-tap-to-seek never lets the in-between tap flicker playback. Fires a `gestureseek` `change` event (`{ direction, seconds }`) alongside the existing `volume` event for the swipe.
+
+### Thumbnail Scrubbing Preview `thumbnails`
+
+```html
+<r-player src="/ran/hls/example.m3u8" thumbnails="/ran/hls/thumbnails.vtt"></r-player>
+```
+
+`thumbnails` points at a WebVTT manifest whose cues follow the sprite-sheet convention YouTube and Video.js use — each cue's text is an image reference plus a `#xywh=x,y,w,h` fragment identifying its crop out of a shared sprite sheet:
+
+```vtt
+WEBVTT
+
+00:00:00.000 --> 00:00:05.000
+sprites.jpg#xywh=0,0,160,90
+
+00:00:05.000 --> 00:00:10.000
+sprites.jpg#xywh=160,0,160,90
+```
+
+The image reference is resolved relative to the VTT file's own URL, so a sprite sheet next to the manifest needs no absolute path. Hovering (or dragging) the seek bar shows the cue covering that time as a cropped thumbnail above the existing time tooltip — nothing renders when `thumbnails` is unset, or before the manifest has loaded. The manifest is fetched and parsed once per `thumbnails` change, independent of `src`: switching quality/source doesn't refetch it.
 
 ### Subtitles/CC `tracks`
 

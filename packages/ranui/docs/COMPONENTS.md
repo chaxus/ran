@@ -6,7 +6,7 @@ shape), slots, and `::part()` names — extracted from source. For CSS variables
 (theming tokens) see [style-tokens-public.md](./style-tokens-public.md); for
 design rules see [DESIGN.md](./DESIGN.md).
 
-Generated at: 2026-08-08T14:14:49.933Z
+Generated at: 2026-08-08T14:36:09.848Z
 
 31 custom elements.
 
@@ -252,14 +252,14 @@ Source: `components/select/option/index.ts`
 
 Source: `components/player/index.ts`
 
-- **Attributes**: `autoplay: boolean`, `currenttime`, `currentTime: string`, `debug: string`, `disable-error-modal`, `format: string`, `loop: boolean`, `muted: boolean`, `playbackrate`, `playbackRate: string`, `poster: string`, `remember-position`, `sheet: string`, `src: string`, `volume: string`
+- **Attributes**: `autoplay: boolean`, `currenttime`, `currentTime: string`, `debug: string`, `disable-error-modal`, `format: string`, `loop: boolean`, `muted: boolean`, `playbackrate`, `playbackRate: string`, `poster: string`, `remember-position`, `sheet: string`, `src: string`, `thumbnails: string`, `volume: string`
 - **Properties**: 
   - `autoplay: boolean`
   - `controllerBarTimeId: ReturnType<typeof setTimeout> | undefined`
   - `currentTime: string`
   - `debug: string`
   - `disableErrorModal: boolean`
-  - `format: string` — 初始化 view 和 video 的全局上下文
+  - `format: string` — 强制指定引擎（`hls`/`dash`/`flv`/`native`），给拿不到扩展名的
   - `loop: boolean`
   - `moveProgress`
   - `muted: boolean`
@@ -268,6 +268,7 @@ Source: `components/player/index.ts`
   - `rememberPosition: boolean`
   - `sheet: string`
   - `src: string`
+  - `thumbnails: string` — 初始化 view 和 video 的全局上下文
   - `tracks: PlayerTrackConfig[]` — 字幕/CC 轨道配置，imperative 属性而不是 attribute——player 会在每次
   - `volume: string`
 - **Events**: `change` → detail `{ currentTime, data, duration, tag, type }`

@@ -246,11 +246,27 @@
       border-radius: var(--ran-player-tip-border-radius, 8px);
       outline: var(--ran-player-tip-outline, none);
       box-shadow: var(--ran-player-tip-box-shadow, @box-shadow);
-      overflow: var(--ran-player-tip-overflow, hidden);
+      // `visible`, not `hidden` — the thumbnail preview below sits above this pill via
+      // `bottom: 100%`, and a clipping ancestor would cut it off. The time/text children
+      // still self-truncate via their own `overflow`/`text-overflow`, so this is safe.
+      overflow: var(--ran-player-tip-overflow, visible);
       white-space: var(--ran-player-tip-white-space, nowrap);
       text-overflow: var(--ran-player-tip-text-overflow, ellipsis);
       opacity: var(--ran-player-tip-opacity, 0);
       text-align: var(--ran-player-tip-text-align, center);
+
+      &-thumbnail {
+        display: none;
+        position: var(--ran-player-tip-thumbnail-position, absolute);
+        bottom: var(--ran-player-tip-thumbnail-bottom, 100%);
+        left: var(--ran-player-tip-thumbnail-left, 50%);
+        transform: var(--ran-player-tip-thumbnail-transform, translateX(-50%));
+        margin-bottom: var(--ran-player-tip-thumbnail-margin-bottom, 6px);
+        background-repeat: no-repeat;
+        border: var(--ran-player-tip-thumbnail-border, 2px solid rgba(255, 255, 255, 0.9));
+        border-radius: var(--ran-player-tip-thumbnail-border-radius, 4px);
+        box-shadow: var(--ran-player-tip-thumbnail-box-shadow, 0 2px 8px rgba(0, 0, 0, 0.4));
+      }
 
       &-time {
         margin-top: var(--ran-player-tip-time-margin-top, 4px);
