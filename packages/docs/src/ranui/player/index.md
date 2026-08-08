@@ -144,6 +144,7 @@ The player exposes imperative controls on the element instance:
 | `customRequestFullscreen()`                | Enter fullscreen. Returns a `Promise`.                  |
 | `customExitFullscreen()`                   | Exit fullscreen. Returns a `Promise`.                   |
 | `togglePip()`                              | Enter/exit Picture-in-Picture. No-op if unsupported or no source is loaded. |
+| `setSubtitleLanguage(lang)`                | Set the active subtitle track by `srclang`, or `'off'` to disable. |
 
 ## Events
 
@@ -184,7 +185,7 @@ Native media states forwarded from the underlying `<video>`:
 | `durationchange` | The `duration` value changed.                         |
 | `emptied`        | Media emptied / reloaded.                             |
 | `ended`          | Playback reached the end.                             |
-| `error`          | A media error occurred.                               |
+| `error`          | A media error occurred (also opens the built-in error+retry dialog, unless `disable-error-modal` is set). |
 | `loadstart`      | The browser began loading the media.                  |
 | `loadedmetadata` | Metadata has loaded.                                  |
 | `loadeddata`     | The first frame has loaded.                           |
@@ -209,8 +210,10 @@ Player-specific actions:
 | `speed`             | `number`           | Playback speed changed via the speed selector.         |
 | `fullscreen`        | `boolean`          | Fullscreen entered (`true`) or exited (`false`).       |
 | `pictureinpicture`  | `boolean`          | Picture-in-Picture entered (`true`) or exited (`false`) — fires whether triggered by `togglePip()` or the browser's own PiP window controls. |
+| `subtitlechange`    | `string`           | Subtitle language changed via the CC picker or `setSubtitleLanguage()` — a `srclang`, or `'off'`. |
+| `resume`            | `number`           | A saved position was silently restored on load (`remember-position`); `data` is the restored time in seconds. |
 | `hlsManifestLoaded` | `{ data }`         | HLS manifest parsed; clarity levels are now available. |
-| `hlsError`          | `{ event, data }`  | An HLS error occurred (falls back to the raw `src`).   |
+| `hlsError`          | `{ event, data }`  | An HLS error occurred (falls back to the raw `src`; a **fatal** error also opens the error+retry dialog unless `disable-error-modal` is set — non-fatal errors are hls.js's own internal recovery and don't). |
 
 ## Slots
 
@@ -227,4 +230,4 @@ The player does not accept slotted content: it clears its own light-DOM children
 
 ## Roadmap
 
-`<r-player>` is actively growing — subtitles/CC, DASH/FLV playback, an error+retry UI, resume playback, and more are planned. See [`PLAYER_ROADMAP.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/PLAYER_ROADMAP.md) in the repo for the full breakdown and current phase.
+`<r-player>` is actively growing. Subtitles/CC, an error+retry UI, and resume playback (Phase 1) are done — DASH/FLV playback, thumbnail scrubbing preview, mobile gestures, AirPlay/Remote Playback, and QoE metrics are still planned. See [`PLAYER_ROADMAP.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/PLAYER_ROADMAP.md) in the repo for the full breakdown and current phase.

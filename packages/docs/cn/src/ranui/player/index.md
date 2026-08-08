@@ -18,6 +18,9 @@ description: 'ranui Player（<r-player>）在原生 <video> 之上封装统一�
 9. 各浏览器控件统一
 10. 画中画（Picture-in-Picture）——只在浏览器真正支持时才渲染按钮
 11. `poster`/`autoplay`/`loop`/`muted` 原生 `<video>` 属性透传
+12. 字幕/CC——原生 `<track>` 渲染，语言选择记住上次的选择
+13. 错误 + 重试弹窗——播放失败时默认弹出，可关闭
+14. 断点续播——可选开启，存到 `localStorage`
 
 ## 代码演示
 
