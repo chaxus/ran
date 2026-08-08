@@ -153,10 +153,10 @@ The toast stack lives in a body-portaled container; each `<r-message>` renders i
 
 | CSS Variable                                   | Default                        | Description               |
 | ---------------------------------------------- | ------------------------------ | ------------------------- |
-| `--ran-message-notice-content-background`      | `var(--ran-color-bg-elevated)` | Toast surface background  |
-| `--ran-message-notice-content-border-radius`   | `var(--ran-radius-md)`         | Toast corner radius       |
-| `--ran-message-notice-content-box-shadow`      | `var(--ran-shadow-menu)`       | Toast elevation           |
-| `--ran-message-notice-content-info-span-color` | `var(--ran-color-text)`        | Toast text color          |
+| `--ran-message-content-background`      | `var(--ran-color-bg-elevated)` | Toast surface background  |
+| `--ran-message-content-border-radius`   | `var(--ran-radius-md)`         | Toast corner radius       |
+| `--ran-message-content-box-shadow`      | `var(--ran-shadow-menu)`       | Toast elevation           |
+| `--ran-message-text-color` | `var(--ran-color-text)`        | Toast text color          |
 | `--ran-message-z-index`                        | `var(--ran-z-message, 1200)`   | Stack z-index             |
 | `--ran-message-top`                            | `8px`                          | Stack offset from the top |
 

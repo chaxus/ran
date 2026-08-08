@@ -25,6 +25,7 @@ import {
 import { createPlayerVisualSignals, type PlayerVisualSignals } from './core/store';
 import { createPlaybackVisualEffects, type PlayerVisualEffectRefs } from './core/effects';
 import { exitPip, isPipSupported, requestPip } from './core/pip';
+import { describeMediaError } from './core/error';
 import { ensurePlayerView } from './core/view';
 import { EventManager, View } from '@/utils/builder';
 import { RanElement, batch } from '@/utils/index';
@@ -155,6 +156,7 @@ export class RanPlayer extends RanElement {
   _video?: HTMLVideoElement;
   _hls?: HlsPlayer;
   _pendingPlaybackRestore?: PlaybackSnapshot;
+  _isShowingErrorModal = false;
   static get observedAttributes(): string[] {
     return [
       'src',
@@ -169,6 +171,7 @@ export class RanPlayer extends RanElement {
       'autoplay',
       'loop',
       'muted',
+      'disable-error-modal',
     ];
   }
   /**
@@ -291,6 +294,12 @@ export class RanPlayer extends RanElement {
   }
   set muted(value: boolean) {
     setBooleanAttribute(this, 'muted', value);
+  }
+  get disableErrorModal(): boolean {
+    return this.hasAttribute('disable-error-modal');
+  }
+  set disableErrorModal(value: boolean) {
+    setBooleanAttribute(this, 'disable-error-modal', value);
   }
   get sheet(): string {
     return getStringAttribute(this, 'sheet');
@@ -453,6 +462,36 @@ export class RanPlayer extends RanElement {
     if (this._video) {
       this._video.src = this.src;
     }
+    // Non-fatal hls.js errors are already handled by the library's own internal
+    // recovery — only a fatal error means playback has actually stopped and is
+    // worth interrupting the user for.
+    if ((data as { fatal?: boolean } | null)?.fatal) {
+      this.showErrorModal('The stream could not be loaded.');
+    }
+  };
+  /**
+   * @description: 默认开启的错误 + 重试弹窗，`disable-error-modal` 关掉后消费者可以自己接
+   * `change`/`hlsError` 事件做自定义错误 UI。`r-modal` 懒加载——只有真的出错才下载它，参照
+   * r-mermaid 全屏弹层的 `import('@/components/modal')` 写法。
+   */
+  showErrorModal = (message: string): void => {
+    if (this.disableErrorModal || this._isShowingErrorModal) return;
+    this._isShowingErrorModal = true;
+    import('@/components/modal')
+      .then(({ default: Modal }) => {
+        return Modal.error({
+          title: 'Playback failed',
+          content: message,
+          okText: 'Retry',
+          onConfirm: () => {
+            this._isShowingErrorModal = false;
+            this.updatePlayer();
+          },
+        });
+      })
+      .then(() => {
+        this._isShowingErrorModal = false;
+      });
   };
   change = (name: string, value: unknown): void => {
     const currentTime = this.getCurrentTime();
@@ -510,6 +549,7 @@ export class RanPlayer extends RanElement {
     this._isSwitchingSource = false;
     this.setLoadingState(false);
     this.change('error', e);
+    this.showErrorModal(describeMediaError(this._video?.error));
   };
   onLoadedmetadata = (e: Event): void => {
     this.ctx.currentState = e.type;
