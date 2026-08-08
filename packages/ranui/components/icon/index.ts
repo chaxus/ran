@@ -125,6 +125,7 @@ export const RAN_ICON_NAMES = [
   'menu',
   'message',
   'more',
+  'pip',
   'plus',
   'power-off',
   'preview',

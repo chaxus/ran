@@ -10,9 +10,15 @@ ranui 不提供一个专门包裹 `<form>` 的组件。`r-input`、`r-checkbox`�
 
 ## 快速开始
 
+三种字段类型放在同一个普通 `<form>` 里提交——改一下字段的值再提交，就能在下面看到完整的实时结果。这个 demo 用浏览器自带的 `FormData`/`Object.fromEntries` 拼对象，不需要任何 import；下面马上会介绍的 `serializeForm()` 做的是同一件事，只多做了一件 `Object.fromEntries` 做不到的事：同名字段重复出现时会返回数组，而不是悄悄只保留最后一个值。
+
 <Demo column>
-  <form onsubmit="event.preventDefault(); message.info(new FormData(this).get('username'))">
+  <form onsubmit="event.preventDefault(); message.info(JSON.stringify(Object.fromEntries(new FormData(this))))">
     <r-input name="username" label="Username" placeholder="Enter username"></r-input>
+    <r-select name="role" style="width: 100%; height: 40px" defaultValue="member">
+      <r-option value="member">Member</r-option>
+      <r-option value="admin">Admin</r-option>
+    </r-select>
     <r-checkbox name="subscribe" value="yes">Subscribe to newsletter</r-checkbox>
     <r-button type="primary"><button type="submit" style="all: unset; cursor: pointer">Submit</button></r-button>
   </form>
@@ -21,6 +27,10 @@ ranui 不提供一个专门包裹 `<form>` 的组件。`r-input`、`r-checkbox`�
 ```html
 <form id="signup">
   <r-input name="username" label="Username" placeholder="Enter username"></r-input>
+  <r-select name="role" defaultValue="member">
+    <r-option value="member">Member</r-option>
+    <r-option value="admin">Admin</r-option>
+  </r-select>
   <r-checkbox name="subscribe" value="yes">Subscribe to newsletter</r-checkbox>
   <button type="submit">Submit</button>
 </form>
@@ -30,7 +40,7 @@ ranui 不提供一个专门包裹 `<form>` 的组件。`r-input`、`r-checkbox`�
 
   document.getElementById('signup').addEventListener('submit', (event) => {
     event.preventDefault(); // 一个真正的 <form> 默认会跳转页面
-    console.log(serializeForm(event.target)); // { username: '...', subscribe: 'yes' }
+    console.log(serializeForm(event.target)); // { username: '...', role: 'member', subscribe: 'yes' }
   });
 </script>
 ```

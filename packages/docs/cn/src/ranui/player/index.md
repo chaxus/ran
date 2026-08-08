@@ -16,6 +16,8 @@ description: 'ranui Player（<r-player>）在原生 <video> 之上封装统一�
 7. `hls`协议标准加密视频播放
 8. 基于原生开发，可在所有框架运行，统一跨框架情况
 9. 各浏览器控件统一
+10. 画中画（Picture-in-Picture）——只在浏览器真正支持时才渲染按钮
+11. `poster`/`autoplay`/`loop`/`muted` 原生 `<video>` 属性透传
 
 ## 代码演示
 
@@ -46,6 +48,26 @@ description: 'ranui Player（<r-player>）在原生 <video> 之上封装统一�
 ### debug
 
 控制台会打印输出一些信息
+
+### poster
+
+初始播放前展示的封面图 URL，透传给 `<video poster>`。
+
+### autoplay
+
+布尔属性，出现即为 `true`，等价于原生 `<video autoplay>`。大多数浏览器要求同时设置 `muted` 才能在没有用户交互的情况下自动播放。
+
+### loop
+
+布尔属性，播放结束后循环播放，等价于原生 `<video loop>`。
+
+### muted
+
+布尔属性，初始静音。内部同时把音量设为 `0`（保证静音图标/滑块和实际状态一致）并设置原生 `<video>.muted`（保证满足浏览器的"静音才允许自动播放"策略）。移除该属性会恢复之前的音量。
+
+### togglePip()
+
+进入/退出画中画的方法。画中画按钮只在 `document.pictureInPictureEnabled` 为真时才会显示。
 
 ## 事件`event`
 
@@ -91,3 +113,4 @@ description: 'ranui Player（<r-player>）在原生 <video> 之上封装统一�
 | pause          | 播放已暂停。                                                                                                      |
 | volume         | 音量发生变化。                                                                                                    |
 | fullscreen     | 触发全屏事件                                                                                                      |
+| pictureinpicture | 画中画进入（`true`）/退出（`false`）——不管是通过 `togglePip()` 还是浏览器自己的画中画窗口控件触发的                |

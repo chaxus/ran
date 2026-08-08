@@ -14,8 +14,10 @@ Built on `hls.js` and Web Components, so the same player runs unchanged across f
 - Volume control and mute toggle
 - Playback speed selection
 - Fullscreen toggle (and `Esc` to exit)
+- Picture-in-Picture toggle — the button only renders when the browser actually supports it
+- `poster` / `autoplay` / `loop` / `muted` — standard `<video>` attributes, passed straight through
 - HLS (`.m3u8`) playback with automatic bitrate switching and a manual clarity selector, when `window.Hls` (hls.js) is available
-- Keyboard shortcuts: `Space` play/pause, `ArrowLeft` / `ArrowRight` seek 5s, `Escape` exit fullscreen
+- Keyboard shortcuts: `Space` play/pause, `ArrowLeft` / `ArrowRight` seek 5s, `Escape` exit fullscreen, `Home`/`End`/arrows on the focused seek bar
 
 ## Quick Start
 
@@ -41,8 +43,12 @@ Built on `hls.js` and Web Components, so the same player runs unchanged across f
 | `playbackRate` | `string` | `''`    | Playback speed multiplier (e.g. `1`, `1.5`, `2`). Also accepted lowercase as `playbackrate`.          |
 | `debug`        | `string` | `''`    | When truthy, logs every internal `change` event and warnings to the console.                          |
 | `sheet`        | `string` | `''`    | CSS text injected into the component's shadow DOM for custom styling.                                 |
+| `poster`       | `string` | `''`    | Image URL shown before playback starts. Passed straight to `<video poster>`.                          |
+| `autoplay`     | `boolean` | `false` | Boolean attribute — presence means `true`, same as native `<video autoplay>`. Browsers generally require `muted` for autoplay to actually start without a user gesture. |
+| `loop`         | `boolean` | `false` | Boolean attribute — loops playback on end, same as native `<video loop>`.                             |
+| `muted`        | `boolean` | `false` | Boolean attribute — starts silent. Internally this sets volume to `0` (so the mute icon/slider agree) **and** the native `<video>.muted` flag (so the browser's autoplay-muted policy is satisfied). Removing the attribute restores the previous volume. |
 
-> Observed attributes (from `observedAttributes`): `src`, `volume`, `currentTime` / `currenttime`, `playbackRate` / `playbackrate`, `debug`, `sheet`.
+> Observed attributes (from `observedAttributes`): `src`, `volume`, `currentTime` / `currenttime`, `playbackRate` / `playbackrate`, `debug`, `sheet`, `poster`, `autoplay`, `loop`, `muted`.
 
 ### Video Source `src`
 
@@ -82,6 +88,16 @@ Seconds from the start of the media.
 <r-player src="/ran/hls/example.m3u8" debug="true"></r-player>
 ```
 
+### Poster, Autoplay, Loop, Muted
+
+```html
+<r-player src="/ran/hls/example.m3u8" poster="/ran/hls/poster.jpg" autoplay muted loop></r-player>
+```
+
+### Picture-in-Picture
+
+The PiP button in the control bar only appears when `document.pictureInPictureEnabled` is true — there's no dead button in browsers that don't support it. Toggle it programmatically with `togglePip()`.
+
 ## Methods
 
 The player exposes imperative controls on the element instance:
@@ -97,6 +113,7 @@ The player exposes imperative controls on the element instance:
 | `getPlaybackRate()` / `setPlaybackRate(n)` | Read/set the speed multiplier.                          |
 | `customRequestFullscreen()`                | Enter fullscreen. Returns a `Promise`.                  |
 | `customExitFullscreen()`                   | Exit fullscreen. Returns a `Promise`.                   |
+| `togglePip()`                              | Enter/exit Picture-in-Picture. No-op if unsupported or no source is loaded. |
 
 ## Events
 
@@ -161,6 +178,7 @@ Player-specific actions:
 | `volume`            | `number` (`0`–`100`) | Volume changed via the control bar or mute toggle.     |
 | `speed`             | `number`           | Playback speed changed via the speed selector.         |
 | `fullscreen`        | `boolean`          | Fullscreen entered (`true`) or exited (`false`).       |
+| `pictureinpicture`  | `boolean`          | Picture-in-Picture entered (`true`) or exited (`false`) — fires whether triggered by `togglePip()` or the browser's own PiP window controls. |
 | `hlsManifestLoaded` | `{ data }`         | HLS manifest parsed; clarity levels are now available. |
 | `hlsError`          | `{ event, data }`  | An HLS error occurred (falls back to the raw `src`).   |
 
@@ -174,4 +192,9 @@ The player does not accept slotted content: it clears its own light-DOM children
 - **HLS**: `.m3u8` playback needs hls.js loaded on `window.Hls`. Without it the player falls back to setting the raw `src` on the `<video>`, which only works where the browser plays HLS natively (e.g. Safari). Enable `debug` to see a warning when hls.js is missing.
 - **One listener**: Prefer a single `change` listener with a `switch (detail.type)` over trying to attach many event handlers — all state flows through `change`.
 - **Volume units**: `volume` (attribute), `setVolume()`/`getVolume()`, and the `volume` change payload all use a single `0`–`100` scale. Only the underlying native `<video>.volume` is `0`–`1` — the player converts at that one boundary.
+- **Picture-in-Picture is progressive enhancement**: the button is hidden, not disabled, when the browser lacks support — don't rely on it always being present in the DOM.
 - **Custom styling**: Use the `sheet` attribute to inject shadow-DOM CSS; there are no exported `::part()` handles on the player itself.
+
+## Roadmap
+
+`<r-player>` is actively growing — subtitles/CC, DASH/FLV playback, an error+retry UI, resume playback, and more are planned. See [`PLAYER_ROADMAP.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/PLAYER_ROADMAP.md) in the repo for the full breakdown and current phase.

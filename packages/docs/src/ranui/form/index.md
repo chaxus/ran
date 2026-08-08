@@ -10,9 +10,15 @@ ranui does not ship a `<form>`-wrapping component. `r-input`, `r-checkbox`, and 
 
 ## Quick Start
 
+All three field types, submitted with a plain `<form>` — try changing a field and submitting to see the live result below. This demo builds the object with the browser's own `FormData`/`Object.fromEntries` (no import needed); `serializeForm()`, introduced next, does the same thing plus one thing `Object.fromEntries` can't: a repeated field name comes back as an array instead of silently keeping only the last value.
+
 <Demo column>
-  <form onsubmit="event.preventDefault(); message.info(new FormData(this).get('username'))">
+  <form onsubmit="event.preventDefault(); message.info(JSON.stringify(Object.fromEntries(new FormData(this))))">
     <r-input name="username" label="Username" placeholder="Enter username"></r-input>
+    <r-select name="role" style="width: 100%; height: 40px" defaultValue="member">
+      <r-option value="member">Member</r-option>
+      <r-option value="admin">Admin</r-option>
+    </r-select>
     <r-checkbox name="subscribe" value="yes">Subscribe to newsletter</r-checkbox>
     <r-button type="primary"><button type="submit" style="all: unset; cursor: pointer">Submit</button></r-button>
   </form>
@@ -21,6 +27,10 @@ ranui does not ship a `<form>`-wrapping component. `r-input`, `r-checkbox`, and 
 ```html
 <form id="signup">
   <r-input name="username" label="Username" placeholder="Enter username"></r-input>
+  <r-select name="role" defaultValue="member">
+    <r-option value="member">Member</r-option>
+    <r-option value="admin">Admin</r-option>
+  </r-select>
   <r-checkbox name="subscribe" value="yes">Subscribe to newsletter</r-checkbox>
   <button type="submit">Submit</button>
 </form>
@@ -30,7 +40,7 @@ ranui does not ship a `<form>`-wrapping component. `r-input`, `r-checkbox`, and 
 
   document.getElementById('signup').addEventListener('submit', (event) => {
     event.preventDefault(); // a real <form> otherwise navigates the page
-    console.log(serializeForm(event.target)); // { username: '...', subscribe: 'yes' }
+    console.log(serializeForm(event.target)); // { username: '...', role: 'member', subscribe: 'yes' }
   });
 </script>
 ```
