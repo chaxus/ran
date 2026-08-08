@@ -760,7 +760,9 @@ function intersects(p1: Node, q1: Node, p2: Node, q2: Node, includeBoundary = tr
 
 // for collinear points p, q, r, check if point q lies on segment pr
 function onSegment(p: Node, q: Node, r: Node): boolean {
-  return q.x <= Math.max(p.x, r.x) && q.x >= Math.min(p.x, r.x) && q.y <= Math.max(p.y, r.y) && q.y >= Math.min(p.y, r.y);
+  return (
+    q.x <= Math.max(p.x, r.x) && q.x >= Math.min(p.x, r.x) && q.y <= Math.max(p.y, r.y) && q.y >= Math.min(p.y, r.y)
+  );
 }
 
 // check if a polygon diagonal intersects any polygon segments
@@ -775,7 +777,12 @@ function intersectsPolygon(a: Node, b: Node): boolean {
   let p = a;
   do {
     const n = p.next;
-    if ((p.x > maxX && n.x > maxX) || (p.x < minX && n.x < minX) || (p.y > maxY && n.y > maxY) || (p.y < minY && n.y < minY)) {
+    if (
+      (p.x > maxX && n.x > maxX) ||
+      (p.x < minX && n.x < minX) ||
+      (p.y > maxY && n.y > maxY) ||
+      (p.y < minY && n.y < minY)
+    ) {
       p = n;
       continue;
     }
@@ -903,7 +910,9 @@ export function deviation(
     const a = triangles[i] * dim;
     const b = triangles[i + 1] * dim;
     const c = triangles[i + 2] * dim;
-    trianglesArea += Math.abs((data[a] - data[c]) * (data[b + 1] - data[a + 1]) - (data[a] - data[b]) * (data[c + 1] - data[a + 1]));
+    trianglesArea += Math.abs(
+      (data[a] - data[c]) * (data[b + 1] - data[a + 1]) - (data[a] - data[b]) * (data[c + 1] - data[a + 1]),
+    );
   }
 
   return polygonArea === 0 && trianglesArea === 0 ? 0 : Math.abs((trianglesArea - polygonArea) / polygonArea);
@@ -1047,7 +1056,11 @@ export function refine(triangles: number[], coords: ArrayLike<number>, dim = 2):
     // so this short-circuits before the two convexity orients on the common path. The quad must
     // also be convex (both new triangles CCW) — flipping a reflex quad would push a triangle
     // outside the polygon. Boundary/hole edges need no guard — they self-protect via he === -1.
-    if (!inCircle(x0, y0, xr, yr, xl, yl, x1, y1) && orient(x0, y0, xr, yr, x1, y1) > 0 && orient(x0, y0, x1, y1, xl, yl) > 0) {
+    if (
+      !inCircle(x0, y0, xr, yr, xl, yl, x1, y1) &&
+      orient(x0, y0, xr, yr, x1, y1) > 0 &&
+      orient(x0, y0, x1, y1, xl, yl) > 0
+    ) {
       t[a] = p1;
       t[b] = p0;
       const hbl = he[bl],
@@ -1088,7 +1101,16 @@ function orient(ax: number, ay: number, bx: number, by: number, cx: number, cy: 
 // Whether p is inside or exactly on the circumcircle of triangle (a, b, c). Sign is negated vs the
 // usual predicate to match earcut's CCW winding — the standard sign would build the anti-Delaunay
 // mesh. Cocircular quads are legal ties, so refine only flips when this returns false.
-function inCircle(ax: number, ay: number, bx: number, by: number, cx: number, cy: number, px: number, py: number): boolean {
+function inCircle(
+  ax: number,
+  ay: number,
+  bx: number,
+  by: number,
+  cx: number,
+  cy: number,
+  px: number,
+  py: number,
+): boolean {
   const dx = ax - px,
     dy = ay - py,
     ex = bx - px,

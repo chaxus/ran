@@ -1,5 +1,5 @@
 import scratchCss from './index.less?inline';
-import { Div, View } from '@/utils/builder';
+import { Div, EventManager, View } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import { defineSSR } from '@/utils/ssr-registry';
 import { ensureShadowElement, ensureShadowRoot } from '@/utils/component';
@@ -10,6 +10,7 @@ class ScratchTicket extends RanElement {
   state: { touchStart: boolean; scratchArea: number };
   scratchAward: HTMLDivElement;
   _shadowDom: ShadowRoot;
+  _events = new EventManager();
   static get observedAttributes(): string[] {
     return ['disabled', 'icon', 'effect', 'iconSize', 'sheet'];
   }

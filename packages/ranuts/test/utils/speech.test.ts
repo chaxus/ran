@@ -139,18 +139,12 @@ describe('createSpeechRecognizer', () => {
     expect(onResult).toHaveBeenLastCalledWith('one two', false);
 
     // Segment 1 finalizes; segment 2 starts interim. resultIndex now covers 0 and 1.
-    native.emit(
-      [{ transcript: 'one' }, { transcript: ' two' }, { transcript: ' three', isFinal: false }],
-      2,
-    );
+    native.emit([{ transcript: 'one' }, { transcript: ' two' }, { transcript: ' three', isFinal: false }], 2);
     expect(onResult).toHaveBeenLastCalledWith('one two three', false);
 
     // Segment 2 finalizes with revised text (interim results can change up to the moment they
     // finalize) — the cached prefix must not have locked in the old interim wording early.
-    native.emit(
-      [{ transcript: 'one' }, { transcript: ' two' }, { transcript: ' three!' }],
-      3,
-    );
+    native.emit([{ transcript: 'one' }, { transcript: ' two' }, { transcript: ' three!' }], 3);
     expect(onResult).toHaveBeenLastCalledWith('one two three!', true);
   });
 
