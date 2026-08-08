@@ -1,14 +1,14 @@
 ---
-description: 'The ranui Player (<r-player>) wraps native <video> with a unified control bar: play, progress dragging, volume, speed and fullscreen.'
+description: 'The ranui Player (<r-player>) wraps native <video> with a unified control bar: play, progress dragging, volume, speed and fullscreen, with HLS/DASH/FLV streaming.'
 ---
 
 # Player
 
-A native `<r-player>` media element that wraps a `<video>` with a unified control bar, progress dragging, volume control, playback speed, fullscreen, and HLS streaming.
+A native `<r-player>` media element that wraps a `<video>` with a unified control bar, progress dragging, volume control, playback speed, fullscreen, and HLS/DASH/FLV streaming.
 
-> **Use when** you need a video player with a built-in control bar, progress scrubbing, playback speed, fullscreen, and HLS (`.m3u8`) streaming — `<r-player>` wraps `<video>` and runs unchanged across frameworks.
+> **Use when** you need a video player with a built-in control bar, progress scrubbing, playback speed, fullscreen, and HLS/DASH/FLV streaming — `<r-player>` wraps `<video>` and runs unchanged across frameworks.
 
-Built on `hls.js` and Web Components, so the same player runs unchanged across frameworks. Capabilities driven from source:
+Built on Web Components, with `hls.js`/`dashjs`/`mpegts.js` lazy-loaded on demand for their respective formats, so the same player runs unchanged across frameworks. Capabilities driven from source:
 
 - Draggable progress bar with buffered indicator and a time tooltip on hover
 - Volume control and mute toggle
@@ -19,7 +19,7 @@ Built on `hls.js` and Web Components, so the same player runs unchanged across f
 - Subtitles/CC — set the `tracks` property, browser-native cue rendering, a language picker that remembers the viewer's choice
 - Error + retry — a `Modal.error()` dialog on fatal playback failures, on by default, opt-out via `disable-error-modal`
 - Resume playback — opt-in via `remember-position`, saved to `localStorage`, keyed per `src`
-- HLS (`.m3u8`) playback with automatic bitrate switching and a manual clarity selector — `hls.js` loads lazily on demand, no setup required. Force a specific engine (or opt back into plain `<video src>`) via the `format` attribute when a URL's extension can't be sniffed.
+- HLS (`.m3u8`) and DASH (`.mpd`) playback with automatic bitrate switching and a manual clarity selector; FLV/raw MPEG-TS (`.flv`/`.ts`) playback via `mpegts.js` — every engine lazy-loads on demand, no setup required. Force a specific engine (or opt back into plain `<video src>`) via the `format` attribute when a URL's extension can't be sniffed.
 - Keyboard shortcuts: `Space` play/pause, `ArrowLeft` / `ArrowRight` seek 5s, `Escape` exit fullscreen, `Home`/`End`/arrows on the focused seek bar
 
 ## Quick Start
@@ -41,7 +41,7 @@ Built on `hls.js` and Web Components, so the same player runs unchanged across f
 | Property       | Type     | Default | Description                                                                                           |
 | -------------- | -------- | ------- | ----------------------------------------------------------------------------------------------------- |
 | `src`          | `string` | `''`    | Video resource URL. Changing it reloads the player. Engine (HLS/native) is auto-detected from the extension. |
-| `format`       | `string` | `''`    | Force a specific engine instead of auto-detecting from `src`'s extension — useful for extensionless/signed streaming URLs. `hls`/`native` are wired today; `dash`/`flv` are recognized but not yet backed by an engine (upcoming). Changing it reloads the player. |
+| `format`       | `string` | `''`    | Force a specific engine — `hls` / `dash` / `flv` / `native` — instead of auto-detecting from `src`'s extension. Useful for extensionless/signed streaming URLs. Changing it reloads the player. |
 | `volume`       | `string` | `''`    | Initial volume on a `0`–`100` scale — same scale as `setVolume()`/`getVolume()`. |
 | `currentTime`  | `string` | `''`    | Initial playback position in seconds. Also accepted lowercase as `currenttime`.                       |
 | `playbackRate` | `string` | `''`    | Playback speed multiplier (e.g. `1`, `1.5`, `2`). Also accepted lowercase as `playbackrate`.          |
@@ -223,7 +223,7 @@ The player does not accept slotted content: it clears its own light-DOM children
 ## Best Practices
 
 - **Sizing**: The host is `display: block` with no intrinsic size — always give it an explicit width and height, otherwise the video collapses.
-- **HLS**: `.m3u8` sources load `hls.js` lazily and automatically — no setup required. If a URL's extension can't be sniffed (extensionless/signed CDN URLs), set the `format` attribute explicitly (e.g. `format="hls"`) instead of relying on detection.
+- **Streaming engines**: `.m3u8` (HLS), `.mpd` (DASH), and `.flv`/`.ts` (FLV/MPEG-TS via `mpegts.js`) sources each load their engine lazily and automatically — no setup required. If a URL's extension can't be sniffed (extensionless/signed CDN URLs), set the `format` attribute explicitly (e.g. `format="dash"`) instead of relying on detection.
 - **One listener**: Prefer a single `change` listener with a `switch (detail.type)` over trying to attach many event handlers — all state flows through `change`.
 - **Volume units**: `volume` (attribute), `setVolume()`/`getVolume()`, and the `volume` change payload all use a single `0`–`100` scale. Only the underlying native `<video>.volume` is `0`–`1` — the player converts at that one boundary.
 - **Picture-in-Picture is progressive enhancement**: the button is hidden, not disabled, when the browser lacks support — don't rely on it always being present in the DOM.
@@ -231,4 +231,4 @@ The player does not accept slotted content: it clears its own light-DOM children
 
 ## Roadmap
 
-`<r-player>` is actively growing. Subtitles/CC, an error+retry UI, and resume playback (Phase 1) are done — DASH/FLV playback, thumbnail scrubbing preview, mobile gestures, AirPlay/Remote Playback, and QoE metrics are still planned. See [`PLAYER_ROADMAP.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/PLAYER_ROADMAP.md) in the repo for the full breakdown and current phase.
+`<r-player>` is actively growing. Subtitles/CC, an error+retry UI, and resume playback (Phase 1), plus DASH and FLV/raw MPEG-TS playback behind an engine-agnostic adapter architecture (Phase 2), are done — thumbnail scrubbing preview, mobile gestures, AirPlay/Remote Playback, and QoE metrics are still planned. See [`PLAYER_ROADMAP.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/PLAYER_ROADMAP.md) in the repo for the full breakdown and current phase.

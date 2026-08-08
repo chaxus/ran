@@ -1,10 +1,10 @@
 ---
-description: 'ranui Player（<r-player>）在原生 <video> 之上封装统一控制栏：播放、进度拖拽、音量、倍速与全屏。'
+description: 'ranui Player（<r-player>）在原生 <video> 之上封装统一控制栏：播放、进度拖拽、音量、倍速与全屏，支持 HLS/DASH/FLV 流媒体。'
 ---
 
 # r-player 视频播放器
 
-基于`hlsjs`和`web components`，让原生的标签`r-player`拥有统一的视频控件。
+基于 `web components`，让原生的标签`r-player`拥有统一的视频控件；`hls.js`/`dashjs`/`mpegts.js` 按需懒加载，分别对应 HLS/DASH/FLV 三种格式。
 不采用`new Player(options)`的方式挂载到指定`dom`，视图的归视图，逻辑的归逻辑，所见及所得，更加直观。
 
 1. 可拖拽进度条
@@ -13,7 +13,7 @@ description: 'ranui Player（<r-player>）在原生 <video> 之上封装统一�
 4. 手动清晰度切换
 5. 倍速播放
 6. 样式自定义覆盖
-7. `hls`协议标准加密视频播放
+7. `hls`/`dash`/`flv` 流媒体播放，引擎按需懒加载，无需手动引入
 8. 基于原生开发，可在所有框架运行，统一跨框架情况
 9. 各浏览器控件统一
 10. 画中画（Picture-in-Picture）——只在浏览器真正支持时才渲染按钮
@@ -38,7 +38,7 @@ description: 'ranui Player（<r-player>）在原生 <video> 之上封装统一�
 
 ### format
 
-强制指定播放引擎，代替按 `src` 扩展名自动探测——给拿不到扩展名的加签/无后缀流地址用。`hls`/`native` 已经可用；`dash`/`flv` 已经能识别但还没有接实际引擎（后续规划）。改这个属性会重新加载播放器。
+强制指定播放引擎——`hls`/`dash`/`flv`/`native`——代替按 `src` 扩展名自动探测，给拿不到扩展名的加签/无后缀流地址用。改这个属性会重新加载播放器。
 
 ### volume
 

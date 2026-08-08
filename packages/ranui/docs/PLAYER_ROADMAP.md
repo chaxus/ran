@@ -52,21 +52,32 @@ predates that pattern in places, and closing that gap is itself part of this roa
 
 - **Native `<video>` formats**: MP4, WebM, Ogg — whatever the browser's own decoder supports,
   no extra code needed.
-- **HLS (`.m3u8`)**: via hls.js, loaded today as `import '../../assets/js/hls.js'`
-  (`components/player/index.ts:2`) — a **749KB vendored, eagerly-imported blob**, not a lazy
-  npm dependency. Every consumer pays for this even if they only ever play MP4. Falls back to
-  native `<video src>` when hls.js is absent or `Hls.isSupported()` is false (e.g. Safari,
-  which plays HLS natively) — that fallback path (`core/media.ts` `loadVideoSource`) is
-  already correct and reusable.
-- **Not supported today**: DASH, FLV/raw MPEG-TS, WebRTC.
+- **HLS (`.m3u8`)**: via `hls.js`, now a real lazy npm dependency (`core/adapters/hls.ts`,
+  reached only via `await import('hls.js')`) — no more vendored blob, no more `window.Hls`
+  requirement. Falls back to native `<video src>` when the format has no registered adapter or
+  `Hls.isSupported()` is false (e.g. Safari, which plays HLS natively).
+- **DASH (`.mpd`)**: via `dashjs` (`core/adapters/dash.ts`), also a lazy npm dependency. Quality
+  switching stays inside the already-loaded manifest (`setRepresentationForTypeById`) — no
+  `<video>` reload, unlike HLS.
+- **FLV / raw MPEG-TS (`.flv`/`.ts`)**: via `mpegts.js` (`core/adapters/flv.ts`), the actively
+  maintained fork of `flv.js`. Typically single-bitrate live streams — no clarity selector
+  renders since there's nothing to switch.
+- **Format detection**: by `src`'s extension (`core/adapters/detect.ts`'s `detectFormat`), or
+  forced explicitly via the `format` attribute for extensionless/signed streaming URLs.
+- **Not supported today**: WebRTC.
 
 ### 1.3 Architecture (for context — see the player's own internal-refactor history)
 
 Signal-based visual state (`core/store.ts`/`core/effects.ts`) + `EventManager`-scoped
-listeners + a plain `ctx` object for the informal `ctx.action` SyncHook API. The HLS binding
-(`core/media.ts` `loadVideoSource`) and the clarity/levels model (`core/levels.ts`
-`buildManifestLevels`) are both **HLS-shaped**: one URL per quality label, switched by
-reloading the `<video>` source. This assumption does not hold for DASH (see §3, DASH).
+listeners + a plain `ctx` object for the informal `ctx.action` SyncHook API. Streaming engines
+conform to a shared `EngineAdapter` interface (`core/adapters/types.ts`:
+`{load, destroy, getQualityLevels, setQuality, on, reloadsOnQualityChange}`), selected by
+`core/adapters/index.ts`'s `createEngineAdapter(format)` registry — no format-specific
+branching lives in `components/player/index.ts`, `core/media.ts`, or `core/clarity.ts`
+themselves. Each adapter is responsible for translating its own library's event/quality
+vocabulary into the generic one; `core/levels.ts`'s `buildManifestLevels` (URL-per-level
+dedup) is HLS-specific now that its only consumer is `core/adapters/hls.ts` — DASH/FLV build
+their own level lists from their own libraries' native APIs.
 
 ### 1.4 Icons
 
@@ -88,8 +99,8 @@ feature work to avoid unrelated visual-regression risk.
 | 4 | Error + retry UI | Video.js, Shaka | **shipped (Phase 1)** | ✅ real UX gap today |
 | 5 | Resume playback | YouTube (signed-in), many VOD players | **shipped (Phase 1)** | ✅ opt-in, low complexity via `localStorage` |
 | 6 | Thumbnail scrubbing preview | YouTube, Video.js (VTT sprite plugin) | progress hover shows time text only | 🟡 real value, real complexity (VTT sprite parsing) |
-| 7 | DASH | Shaka, dash.js-based players | unsupported | ✅ but needs an engine-adapter refactor first (§3) |
-| 8 | FLV / raw MPEG-TS | Video.js + flv.js/mpegts.js plugins | unsupported | ✅ live-streaming use case (`mpegts.js`, see below) |
+| 7 | DASH | Shaka, dash.js-based players | **shipped (Phase 2)** | ✅ done via the engine-adapter refactor (§3) |
+| 8 | FLV / raw MPEG-TS | Video.js + flv.js/mpegts.js plugins | **shipped (Phase 2)** | ✅ done via `mpegts.js` (see below) |
 | 9 | Mobile gestures (double-tap seek, swipe volume) | YouTube app, most native players | none | 🟡 real value, no existing gesture code to build on |
 | 10 | AirPlay / Remote Playback | native `<video controls>` on Safari/Chrome | none | 🟡 best-effort, feature-detected, inconsistent browser support |
 | 11 | QoE metrics hook | Shaka, hls.js's own stats, commercial players | `change` event exposes raw states, no derived metrics | 🟡 valuable for production use, pure computation on existing events |
@@ -192,10 +203,14 @@ feature work to avoid unrelated visual-regression risk.
   `pause`/`visibilitychange:hidden`, cleared on `ended`); subtitles/CC (`core/tracks.ts` +
   `tracks` property + native `<track>` + an `<r-select>` language picker mirroring the
   clarity selector, preference persisted globally via `createStore`).
-- **Phase 2 — planned:** Engine-adapter architecture generalization (HLS → lazy npm
-  dependency behind the new `{load, destroy, getQualityLevels, setQuality}` interface) + DASH
-  (`dashjs`) + FLV/TS (`mpegts.js`) — shipped together since all three depend on the same new
-  architecture.
+- **Phase 2 — done:** Engine-adapter architecture generalization (`core/adapters/types.ts`'s
+  `{load, destroy, getQualityLevels, setQuality, on, reloadsOnQualityChange}` interface; HLS
+  converted onto it and `hls.js` migrated from a 749KB vendored blob to a lazy npm dependency)
+  + DASH (`dashjs`, `core/adapters/dash.ts`) + FLV/TS (`mpegts.js`, `core/adapters/flv.ts`) —
+  shipped together since all three depend on the same new architecture. A new `format`
+  attribute forces a specific engine for URLs that can't be sniffed by extension. The
+  `hlsManifestLoaded`/`hlsError` `change` event types were renamed to the generic
+  `levelsready`/`sourceerror` as part of this — a deliberate breaking change (alpha stage).
 - **Phase 3 — planned:** Thumbnail scrubbing preview (WebVTT sprite), mobile gestures
   (double-tap seek + volume swipe), AirPlay/Remote Playback button, QoE metrics
   (`getMetrics()`).
@@ -224,9 +239,10 @@ bare `<r-player src="...">` stays exactly as simple as it is today.
       feature-detected as available — no dead buttons.
 - [ ] New gesture code follows the Pointer Events idiom (`pointerdown`/`pointermove`/
       `pointerup` + `setPointerCapture`), not separate mouse/touch listeners.
-- [ ] New engine adapters conform to the shared `{load, destroy, getQualityLevels,
-      setQuality, on}` interface (once Phase 2 lands) — no format-specific branching left in
-      `components/player/index.ts` itself.
+- [x] New engine adapters conform to the shared `core/adapters/types.ts` `EngineAdapter`
+      interface (`{load, destroy, getQualityLevels, setQuality, on, reloadsOnQualityChange}`)
+      — no format-specific branching left in `components/player/index.ts`, `core/media.ts`, or
+      `core/clarity.ts` (Phase 2, done).
 - [ ] Errors surface as a visible UI state (`Modal.error` / a `::part(error)`-style element)
       **and** a `change`/CustomEvent — never console-only.
 - [ ] Every new attribute/method/event is added to `docs/src/ranui/player/index.md` **and**

@@ -1,10 +1,12 @@
 import { createHlsAdapter } from './hls';
-// import { createDashAdapter } from './dash'; // wired in M2
-// import { createFlvAdapter } from './flv';   // wired in M3
+import { createDashAdapter } from './dash';
+import { createFlvAdapter } from './flv';
 import type { EngineAdapter, EngineFormat } from './types';
 
 const registry: Partial<Record<Exclude<EngineFormat, 'native'>, () => EngineAdapter>> = {
   hls: createHlsAdapter,
+  dash: createDashAdapter,
+  flv: createFlvAdapter,
 };
 
 /**

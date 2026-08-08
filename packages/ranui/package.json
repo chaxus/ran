@@ -389,6 +389,7 @@
     "dashjs": "5.2.0",
     "hls.js": "1.6.17",
     "mermaid": "11.16.1",
+    "mpegts.js": "1.8.1",
     "ranuts": "workspace:*",
     "temml": "0.13.4"
   }
