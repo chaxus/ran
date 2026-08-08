@@ -179,13 +179,13 @@ export class Select extends RanElement {
   private _updateValidity = (): void => {
     if (!this._internals) return;
     if (this.disabled) {
-      this._internals.setValidity({});
+      this._internals?.setValidity?.({});
       return;
     }
     if (this.required && !this.value) {
-      this._internals.setValidity({ valueMissing: true }, 'Please select an item in the list.', this._selection);
+      this._internals?.setValidity?.({ valueMissing: true }, 'Please select an item in the list.', this._selection);
     } else {
-      this._internals.setValidity({});
+      this._internals?.setValidity?.({});
     }
   };
   checkValidity(): boolean {

@@ -90,15 +90,15 @@ The component does **not** dispatch any custom events — there is nothing to bi
 
 ## Styling
 
-This component exposes **no `::part()` hooks and no `--ran-scratch-*` CSS variables**. Its shadow DOM is three fixed layers:
+This component exposes **no `::part()` hooks**, but its two layer colors are theme-token-driven CSS variables. Its shadow DOM is three fixed layers:
 
-| Class                        | Role                                                         |
-| ---------------------------- | ------------------------------------------------------------ |
-| `.ran-scratch-ticket`        | Full-size relative container (`width: 100%; height: 100%`)   |
-| `.ran-scratch-ticket-award`  | The reveal layer, `z-index: 1`, hardcoded `background: #000` |
-| `.ran-scratch-ticket-canvas` | The scratch cover canvas, `z-index: 2`                       |
+| Class                         | Role                                                                                                                    |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------------------- |
+| `.ran-scratch-ticket`         | Full-size relative container (`width: 100%; height: 100%`)                                                             |
+| `.ran-scratch-ticket-award`   | The reveal layer, `z-index: 1`, `background: var(--ran-scratch-award-background, var(--ran-color-bg-elevated, #fff))` |
+| `.ran-scratch-ticket-canvas`  | The scratch cover canvas, `z-index: 2`; filled with `--ran-scratch-cover-background` (default `var(--ran-color-text-secondary, #6b6b6b)`), set on the host |
 
-Because the award background is a hardcoded `#000` (not a theme token), it does not adapt to light/dark mode. Size the host with plain `width` / `height`. Note: the `sheet` attribute is observed but is **not** wired to inject CSS in the current implementation.
+Both colors route through theme tokens with a literal fallback, so they adapt to light/dark mode by default and can be overridden with `--ran-scratch-award-background` / `--ran-scratch-cover-background`. Size the host with plain `width` / `height`. Note: the `sheet` attribute is observed but is **not** wired to inject CSS in the current implementation.
 
 ## Best Practices
 

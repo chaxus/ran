@@ -1,3 +1,5 @@
+import type { EventManager } from '@/utils/builder';
+
 export interface PlayerControllerElements {
   host: HTMLElement;
   container: HTMLDivElement;
