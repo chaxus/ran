@@ -57,6 +57,15 @@ export enum PLACEMENT_TYPE {
   RIGHT = 'right',
 }
 
+// The arrow points back at the trigger, so it always renders on the side
+// opposite to where the panel actually sits.
+const oppositeSide: Record<PLACEMENT_TYPE, PLACEMENT_TYPE> = {
+  [PLACEMENT_TYPE.TOP]: PLACEMENT_TYPE.BOTTOM,
+  [PLACEMENT_TYPE.BOTTOM]: PLACEMENT_TYPE.TOP,
+  [PLACEMENT_TYPE.LEFT]: PLACEMENT_TYPE.RIGHT,
+  [PLACEMENT_TYPE.RIGHT]: PLACEMENT_TYPE.LEFT,
+};
+
 export class Popover extends RanElement {
   _events = new EventManager();
   _slot: HTMLSlotElement;
@@ -286,6 +295,10 @@ export class Popover extends RanElement {
       });
       popoverTop = computed.top + window.scrollY;
       popoverLeft = computed.left + window.scrollX;
+      // A flip changes which side the panel actually renders on — repoint the
+      // arrow so it still points back at the trigger instead of the nominal side.
+      const side = oppositeSide[computed.placement as PLACEMENT_TYPE];
+      if (side) this.popoverContent.setAttribute('arrow', side);
     }
 
     this.popoverContent.style.setProperty('inset', `${popoverTop}px auto auto ${popoverLeft}px`);
@@ -347,18 +360,8 @@ export class Popover extends RanElement {
     this.setDropdownDisplayNone();
   };
   changePlacement = debounce((): void => {
-    if (this.placement === PLACEMENT_TYPE.TOP) {
-      this.popoverContent?.setAttribute('arrow', PLACEMENT_TYPE.BOTTOM);
-    }
-    if (this.placement === PLACEMENT_TYPE.BOTTOM) {
-      this.popoverContent?.setAttribute('arrow', PLACEMENT_TYPE.TOP);
-    }
-    if (this.placement === PLACEMENT_TYPE.LEFT) {
-      this.popoverContent?.setAttribute('arrow', PLACEMENT_TYPE.RIGHT);
-    }
-    if (this.placement === PLACEMENT_TYPE.RIGHT) {
-      this.popoverContent?.setAttribute('arrow', PLACEMENT_TYPE.LEFT);
-    }
+    const side = oppositeSide[this.placement as PLACEMENT_TYPE];
+    if (side) this.popoverContent?.setAttribute('arrow', side);
   }, HOVER_TIME);
   connectedCallback(): void {
     this.initAria();

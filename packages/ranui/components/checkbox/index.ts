@@ -28,8 +28,12 @@ export class Checkbox extends RanElement {
   container: HTMLElement;
   _shadowDom: ShadowRoot;
   static get observedAttributes(): string[] {
-    return ['disabled', 'checked', 'value', 'sheet'];
+    return ['disabled', 'checked', 'value', 'required', 'sheet'];
   }
+  // Snapshot of the pre-interaction checked state, captured once on first
+  // connect, so formResetCallback has something to restore to.
+  _defaultChecked = false;
+  _defaultCaptured = false;
   constructor() {
     super();
     // attachInternals is allowed in the constructor; guard for SSR/old runtimes.
@@ -77,6 +81,16 @@ export class Checkbox extends RanElement {
       this.removeAttribute('disabled');
     } else {
       this.setAttribute('disabled', '');
+    }
+  }
+  get required(): boolean {
+    return this.hasAttribute('required');
+  }
+  set required(value: boolean | string) {
+    if (!value || value === 'false') {
+      this.removeAttribute('required');
+    } else {
+      this.setAttribute('required', '');
     }
   }
   get value(): string {
@@ -153,7 +167,46 @@ export class Checkbox extends RanElement {
     // `setFormValue` is optional-chained: jsdom's ElementInternals stub omits it,
     // real browsers implement it.
     this._internals?.setFormValue?.(checked ? this.getAttribute('value') || 'true' : null);
+    this._updateValidity();
   };
+  /**
+   * Lets `required` be seen by form.checkValidity()/reportValidity()/:invalid.
+   * Disabled checkboxes never block submission, matching native semantics.
+   */
+  private _updateValidity = (): void => {
+    if (!this._internals) return;
+    if (this.disabled) {
+      this._internals.setValidity({});
+      return;
+    }
+    if (this.required && !this.context.checked) {
+      this._internals.setValidity(
+        { valueMissing: true },
+        'Please check this box if you want to proceed.',
+        this.container,
+      );
+    } else {
+      this._internals.setValidity({});
+    }
+  };
+  checkValidity(): boolean {
+    return this._internals?.checkValidity?.() ?? true;
+  }
+  reportValidity(): boolean {
+    return this._internals?.reportValidity?.() ?? true;
+  }
+  get validity(): ValidityState | undefined {
+    return this._internals?.validity;
+  }
+  get validationMessage(): string {
+    return this._internals?.validationMessage ?? '';
+  }
+  /**
+   * @description: 原生 form.reset() 时恢复到连接时（用户交互前）的初始勾选状态
+   */
+  formResetCallback(): void {
+    this.checked = this._defaultChecked;
+  }
   update = (): void => {
     this.updateChecked();
   };
@@ -199,6 +252,7 @@ export class Checkbox extends RanElement {
       this.checked = newValue;
       this.value = newValue;
     }
+    if (name === 'required' || name === 'disabled') this._updateValidity();
     if (name === 'sheet') this.handlerExternalCss();
   }
 }

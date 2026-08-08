@@ -608,6 +608,7 @@ export class Input extends RanElement {
     if (this.required) {
       this._inputContent.setAttribute('required', '');
     }
+    this._updateValidity();
     this._events.on(this._inputContent, 'input', this.customInput);
     // 原生 change 在失焦/提交时触发，这里转发为组件的 change 事件
     this._events.on(this._inputContent, 'change', this.customChange);
