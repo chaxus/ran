@@ -3,12 +3,7 @@ import '../../assets/js/hls.js';
 import type { Progress } from '@/components/progress';
 import '@/components/select';
 import { PLAY_STATE_LIST, SPEED } from './core/constants';
-import {
-  bindControllerEvents,
-  type PlayerControllerElements,
-  type PlayerControllerHandlers,
-  unbindControllerEvents,
-} from './core/controller';
+import { bindControllerEvents, type PlayerControllerElements, type PlayerControllerHandlers } from './core/controller';
 import {
   createPlaybackSnapshot,
   resolveSeekDuration,
@@ -18,12 +13,7 @@ import {
 import { bindMediaEvents, loadVideoSource, unbindMediaEvents, type PlayerMediaHandlers } from './core/media';
 import { buildManifestLevels } from './core/levels';
 import { exitDocumentFullscreen, requestElementFullscreen } from './core/fullscreen';
-import {
-  shouldSetLoadingOnSeeking,
-  shouldSetLoadingOnWaiting,
-  syncCenterPlayVisibility,
-  syncPlayButtonState,
-} from './core/events';
+import { shouldSetLoadingOnSeeking, shouldSetLoadingOnWaiting, syncCenterPlayVisibility } from './core/events';
 import { getBufferedPercentage, normalizeProgress } from './core/progress';
 import {
   createDefaultPlayerContext,
@@ -32,9 +22,11 @@ import {
   resetTransientRuntimeState,
   type PlayerRuntimeState,
 } from './core/state';
+import { createPlayerVisualSignals, type PlayerVisualSignals } from './core/store';
+import { createPlaybackVisualEffects, type PlayerVisualEffectRefs } from './core/effects';
 import { ensurePlayerView } from './core/view';
-import { View } from '@/utils/builder';
-import { HTMLElementSSR } from '@/utils/index';
+import { EventManager, View } from '@/utils/builder';
+import { RanElement } from '@/utils/index';
 import { ensureShadowRoot, getStringAttribute, setStringAttribute, syncSheetAttribute } from '@/utils/component';
 import playerCss from './index.less?inline';
 import { defineSSR } from '@/utils/ssr-registry';
@@ -107,8 +99,11 @@ declare global {
   }
 }
 
-export class RanPlayer extends HTMLElementSSR()! {
+export class RanPlayer extends RanElement {
   public ctx: Context;
+  _events = new EventManager();
+  _visualSignals!: PlayerVisualSignals;
+  _effectDisposers: Array<() => void> = [];
   _player: HTMLDivElement;
   _container: HTMLDivElement;
   _playerController: HTMLDivElement;
@@ -193,8 +188,29 @@ export class RanPlayer extends HTMLElementSSR()! {
     this._playerTipText = viewRefs.playerTipText;
     this.ctx = createDefaultPlayerContext<SyncHook, Partial<Level>>(new SyncHook());
     this.applyRuntimeState(createDefaultRuntimeState<PlaybackSnapshot>());
+    this._visualSignals = createPlayerVisualSignals();
     this._isSwitchingSource = false;
   }
+  getVisualEffectRefs = (): PlayerVisualEffectRefs => {
+    return {
+      playBtn: this._playerControllerBottomPlayBtn,
+      progress: this._progress,
+      progressValue: this._progressWrapValue,
+      progressDot: this._progressDot,
+      progressBuffer: this._progressWrapBuffer,
+      timeCurrent: this._playerControllerBottomTimeCurrent,
+      timeDuration: this._playerControllerBottomTimeDuration,
+      volumeIcon: this._playControllerBottomSpeedIcon,
+      volumeProgress: this._playControllerBottomVolumeProgress,
+    };
+  };
+  setupEffects = (): void => {
+    this._effectDisposers.push(...createPlaybackVisualEffects(this.getVisualEffectRefs(), this._visualSignals));
+  };
+  disposeEffects = (): void => {
+    for (const dispose of this._effectDisposers) dispose();
+    this._effectDisposers = [];
+  };
   get src(): string {
     return this.getAttribute('src') || '';
   }
@@ -405,7 +421,7 @@ export class RanPlayer extends HTMLElementSSR()! {
     this.ctx.currentState = e.type;
     this._isSwitchingSource = false;
     this.setLoadingState(false);
-    syncPlayButtonState(this._playerControllerBottomPlayBtn, false);
+    this._visualSignals.isPlaying.setter(false);
     this.change('canplay', e);
     this.resize();
   };
@@ -494,10 +510,9 @@ export class RanPlayer extends HTMLElementSSR()! {
     this.updateBufferedProgress();
     const currentTimeWhenSwitching =
       this._isSwitchingSource && this._pendingPlaybackRestore ? this._pendingPlaybackRestore.currentTime : 0;
-    this.syncProgressByPercentage(duration > 0 ? currentTimeWhenSwitching / duration : 0);
-    this._playerControllerBottomTimeCurrent.innerText = formatDuration(currentTimeWhenSwitching);
+    this._visualSignals.duration.setter(duration);
+    this._visualSignals.currentTime.setter(currentTimeWhenSwitching);
     this._playerControllerBottomTimeDivide.innerText = '/';
-    this._playerControllerBottomTimeDuration.innerText = formatDuration(this.ctx.duration);
     this.change('loadeddata', e);
   };
   onTimeupdate = (e: Event): void => {
@@ -523,7 +538,7 @@ export class RanPlayer extends HTMLElementSSR()! {
     this.ctx.currentState = e.type;
     this.setLoadingState(false);
     this.requestAnimationFrame(this.updateCurrentProgress);
-    syncPlayButtonState(this._playerControllerBottomPlayBtn, true);
+    this._visualSignals.isPlaying.setter(true);
     this.showControllerBar();
     this.change('play', e);
   };
@@ -532,7 +547,7 @@ export class RanPlayer extends HTMLElementSSR()! {
     this._isSwitchingSource = false;
     this.setLoadingState(false);
     syncCenterPlayVisibility(this._playerBtn, false);
-    syncPlayButtonState(this._playerControllerBottomPlayBtn, true);
+    this._visualSignals.isPlaying.setter(true);
     this.requestAnimationFrame(this.updateCurrentProgress);
     this.showControllerBar();
     this.change('playing', e);
@@ -542,7 +557,7 @@ export class RanPlayer extends HTMLElementSSR()! {
     this.setLoadingState(false);
     syncCenterPlayVisibility(this._playerBtn, !this._isSeeking);
     this.change('pause', e);
-    syncPlayButtonState(this._playerControllerBottomPlayBtn, false);
+    this._visualSignals.isPlaying.setter(false);
     this.cancelAnimationFrame();
     this._playerController.style.setProperty('opacity', '1');
     if (this.controllerBarTimeId) {
@@ -634,7 +649,8 @@ export class RanPlayer extends HTMLElementSSR()! {
     if (!this._video) return;
     const duration = this.getTotalTime();
     const percentage = getBufferedPercentage(this._video, duration);
-    this._progressWrapBuffer.style.setProperty('transform', `scaleX(${percentage})`);
+    this._visualSignals.duration.setter(duration);
+    this._visualSignals.bufferedPercentage.setter(percentage);
   };
   syncProgressByPercentage = (percentage: number): void => {
     const normalizedPercentage = normalizeProgress(percentage);
@@ -755,25 +771,17 @@ export class RanPlayer extends HTMLElementSSR()! {
    */
   updateCurrentProgress = (): void => {
     if (this._isSwitchingSource && this._pendingPlaybackRestore) {
-      const duration = this.ctx.duration;
-      const currentTime = this._pendingPlaybackRestore.currentTime;
-      if (Number.isFinite(duration) && duration > 0) {
-        this.syncProgressByPercentage(currentTime / duration);
-      }
-      this._playerControllerBottomTimeCurrent.innerText = formatDuration(currentTime);
+      this._visualSignals.duration.setter(this.ctx.duration);
+      this._visualSignals.currentTime.setter(this._pendingPlaybackRestore.currentTime);
       return;
     }
     const currentTime = this.getCurrentTime();
     this.ctx.currentTime = currentTime;
     const { duration } = this.ctx;
-    if (!Number.isFinite(duration) || duration <= 0) {
-      this.syncProgressByPercentage(0);
-      return;
-    }
-    this.syncProgressByPercentage(currentTime / duration);
-    this.updateBufferedProgress();
-    if (currentTime >= 0) {
-      this._playerControllerBottomTimeCurrent.innerText = formatDuration(currentTime);
+    this._visualSignals.duration.setter(duration);
+    this._visualSignals.currentTime.setter(currentTime);
+    if (Number.isFinite(duration) && duration > 0) {
+      this.updateBufferedProgress();
     }
   };
   /**
@@ -939,19 +947,10 @@ export class RanPlayer extends HTMLElementSSR()! {
     if (!this._video) return;
     const { volume } = this.ctx;
     if (volume > 0) {
-      addClassToElement(this._playControllerBottomSpeedIcon, 'ran-player-controller-bottom-right-volume-icon-mute');
-      removeClassToElement(
-        this._playControllerBottomSpeedIcon,
-        'ran-player-controller-bottom-right-volume-icon-volume',
-      );
-      this._playControllerBottomVolumeProgress.setAttribute('percent', '0');
       this.setVolume(0);
       this.change('volume', 0);
     } else {
       const restoredVolume = this._volume || 0.5;
-      addClassToElement(this._playControllerBottomSpeedIcon, 'ran-player-controller-bottom-right-volume-icon-volume');
-      removeClassToElement(this._playControllerBottomSpeedIcon, 'ran-player-controller-bottom-right-volume-icon-mute');
-      this._playControllerBottomVolumeProgress.setAttribute('percent', `${restoredVolume}`);
       this.setVolume(restoredVolume);
       this.change('volume', restoredVolume);
     }
@@ -995,6 +994,7 @@ export class RanPlayer extends HTMLElementSSR()! {
     if (this._video) {
       this.ctx.volume = n;
       this._video.volume = n;
+      this._visualSignals.volume.setter(n);
     }
     return this.ctx.volume;
   };
@@ -1090,11 +1090,13 @@ export class RanPlayer extends HTMLElementSSR()! {
     // the player (including the already-wired Space/Escape/Arrow shortcuts in
     // SpaceKeyDown) was ever focusable, so no keyboard user could reach them.
     if (!this.hasAttribute('tabindex')) this.tabIndex = 0;
-    bindControllerEvents(this.getControllerElements(), this.getControllerHandlers());
+    bindControllerEvents(this._events, this.getControllerElements(), this.getControllerHandlers());
+    if (this._effectDisposers.length === 0) this.setupEffects();
     this.updatePlayer();
   }
   disconnectedCallback(): void {
-    unbindControllerEvents(this.getControllerElements(), this.getControllerHandlers());
+    this._events.abort();
+    this.disposeEffects();
     this.clearListenerEvent();
     this._hls?.destroy?.();
     this._hls = undefined;

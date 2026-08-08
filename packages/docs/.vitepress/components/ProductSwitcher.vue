@@ -1,5 +1,5 @@
 <template>
-  <div ref="root" class="product-switcher">
+  <div ref="root" class="product-switcher" :style="anchorStyle ?? undefined">
     <button
       class="product-switcher-btn"
       type="button"
@@ -44,12 +44,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted, onBeforeUnmount } from 'vue';
+import { computed, ref, onMounted, onBeforeUnmount, watch, nextTick } from 'vue';
 import { useData, useRoute, useRouter } from 'vitepress';
+import { useLayout } from 'vitepress/theme-without-fonts';
 
 const { lang } = useData();
 const route = useRoute();
 const router = useRouter();
+const { hasSidebar } = useLayout();
 
 const open = ref(false);
 const root = ref<HTMLElement>();
@@ -60,6 +62,56 @@ const go = (link: string) => {
   open.value = false;
   router.go(link);
 };
+
+// On pages with a sidebar, VitePress reserves a full sidebar-width column (272px)
+// for the logo so it lines up with the sidebar below — the logo itself is far
+// narrower than that column, and this switcher renders past the column's edge
+// (in `#nav-bar-content-before`, see NavLayout.vue), which reads as "far from the
+// logo". There is no such reserved column on the home page, so the switcher
+// already sits right after the logo there. Rather than hardcode the logo's pixel
+// width (it shifts at the >=1440px breakpoint, where the column becomes a
+// viewport-centered calc()), measure the real rendered edge of the logo/title and
+// pin the switcher there via absolute positioning, only when the reserved column
+// is actually in effect. Below 960px `.title` is a normal flex item with no
+// reserved column, so the switcher's default inline position is already correct.
+const SWITCHER_GAP = 12;
+const anchorStyle = ref<{ position: string; left: string; top: string; transform: string; margin: string } | null>(
+  null,
+);
+
+const measure = (): void => {
+  if (!hasSidebar.value || !root.value || window.innerWidth < 960) {
+    anchorStyle.value = null;
+    return;
+  }
+  const titleLink = document.querySelector<HTMLElement>('.VPNavBar .VPNavBarTitle a.title');
+  const offsetParent = root.value.offsetParent as HTMLElement | null;
+  if (!titleLink || !offsetParent) {
+    anchorStyle.value = null;
+    return;
+  }
+  let logoRight = titleLink.getBoundingClientRect().left;
+  titleLink.querySelectorAll(':scope > *').forEach((el) => {
+    logoRight = Math.max(logoRight, el.getBoundingClientRect().right);
+  });
+  const parentRect = offsetParent.getBoundingClientRect();
+  const titleRect = titleLink.getBoundingClientRect();
+  anchorStyle.value = {
+    position: 'absolute',
+    left: `${logoRight + SWITCHER_GAP - parentRect.left}px`,
+    top: `${titleRect.top + titleRect.height / 2 - parentRect.top}px`,
+    transform: 'translateY(-50%)',
+    margin: '0',
+  };
+};
+
+let resizeTimer: ReturnType<typeof setTimeout> | undefined;
+const onResize = (): void => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(measure, 100);
+};
+
+watch([hasSidebar, () => route.path], () => nextTick(measure));
 
 const isCn = computed(() => lang.value === 'zh-CN');
 const prefix = computed(() => (isCn.value ? '/cn' : ''));
@@ -97,10 +149,15 @@ const onKeydown = (e: KeyboardEvent) => {
 onMounted(() => {
   document.addEventListener('click', onDocClick);
   document.addEventListener('keydown', onKeydown);
+  window.addEventListener('resize', onResize);
+  measure();
+  document.fonts?.ready.then(measure);
 });
 onBeforeUnmount(() => {
   document.removeEventListener('click', onDocClick);
   document.removeEventListener('keydown', onKeydown);
+  window.removeEventListener('resize', onResize);
+  clearTimeout(resizeTimer);
 });
 </script>
 

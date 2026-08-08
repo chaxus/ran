@@ -45,7 +45,8 @@ export function createPlaybackVisualEffects(
       refs.progressValue.style.setProperty('transform', `scaleX(${percentage})`);
       refs.progressDot.style.setProperty('transform', `translateX(${percentage * refs.progress.offsetWidth}px)`);
       refs.progressBuffer.style.setProperty('transform', `scaleX(${normalizeProgress(buffered)})`);
-      if (!hasDuration) return;
+      refs.progress.setAttribute('aria-valuenow', String(Math.round(percentage * 100)));
+      refs.progress.setAttribute('aria-valuetext', formatDuration(percentage * duration));
       refs.timeCurrent.innerText = formatDuration(currentTime);
       refs.timeDuration.innerText = formatDuration(duration);
     }),

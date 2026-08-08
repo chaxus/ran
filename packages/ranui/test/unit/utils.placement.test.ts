@@ -131,6 +131,31 @@ describe('computePlacement', () => {
     expect(result.top).toBe(800 - 200 - 8);
   });
 
+  it('does not flip when the anchor or floating rect has no real layout (e.g. jsdom, or an unmeasured panel)', () => {
+    // anchor.top === 0 with a zero-height anchor makes spaceAbove read as 0,
+    // which would otherwise always look like "no room above" and force a
+    // spurious flip regardless of where the trigger actually sits.
+    const result = computePlacement({
+      anchor: { top: 0, left: 0, width: 0, height: 0 },
+      floating: { width: 0, height: 0 },
+      placement: 'top',
+      offset: 4,
+      boundary,
+    });
+    expect(result.placement).toBe('top');
+  });
+
+  it('does not flip when only the floating panel is unmeasured (zero size) even if the anchor is real', () => {
+    const result = computePlacement({
+      anchor: { top: 10, left: 100, width: 200, height: 40 },
+      floating: { width: 0, height: 0 },
+      placement: 'top',
+      offset: 4,
+      boundary,
+    });
+    expect(result.placement).toBe('top');
+  });
+
   it('skips the shift clamp when the panel is larger than the boundary', () => {
     const tinyBoundary = { top: 0, left: 0, width: 100, height: 800 };
     const result = computePlacement({

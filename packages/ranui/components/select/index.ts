@@ -476,15 +476,10 @@ export class Select extends RanElement {
     if (this._selectDropDownInTimeId) return;
     this.updateAriaExpanded(true);
     if (this._selectionDropdown && this._selectionDropdown.style.display !== 'block') {
-      // Chosen from the nominal `placement`, not the (possibly flipped)
-      // resolved side — `placementPosition()` below only knows whether it
-      // flipped one animation frame later, after measuring the panel's real
-      // height. A flip near a viewport edge can therefore play the entrance
-      // slide from the nominal direction while the panel renders on the
-      // opposite side. Known limitation, not fixed: closing it needs the
-      // transit class applied from inside placementPosition's flip result
-      // rather than here.
-      this._selectionDropdown.setAttribute('transit', placementDirection[this.placement].add);
+      // The entrance transit class is applied from inside placementPosition()
+      // instead of here, once it knows the *resolved* (possibly flipped) side —
+      // deciding it here from the nominal `placement` would play the slide from
+      // the wrong direction whenever a flip actually happens.
       this._selectionDropdown?.style.setProperty('display', 'block');
       this._attachReposition();
       this._selectDropDownInTimeId = setTimeout(() => {
@@ -496,11 +491,21 @@ export class Select extends RanElement {
       }, animationTime);
     }
   };
-  placementPosition = (): void => {
+  /**
+   * @param applyEntranceTransit - Only true for the call that opens the
+   * dropdown (from `selectMouseDown`). Scroll/resize-triggered repositioning
+   * (`_repositionDropdown`) reuses this same method while already open and
+   * must not re-trigger the entrance animation on every scroll tick.
+   */
+  placementPosition = (applyEntranceTransit = false): void => {
     if (!this._selectionDropdown || !this._selectDropdown) return;
 
     // Defer coordinate mapping to next animation frame so that display: block
     // changes and newly-populated drop-down items are factored into measurements.
+    // This also defers the flip decision itself (it needs the panel's real,
+    // laid-out height), which is why the entrance transit class — chosen from
+    // the *resolved* side, not the nominal `placement` — is applied here too,
+    // rather than synchronously in setSelectDropdownDisplayBlock.
     requestAnimationFrame(() => {
       if (!this._selectionDropdown || !this._selectDropdown) return;
       const rect = this.getBoundingClientRect();
@@ -526,6 +531,9 @@ export class Select extends RanElement {
           selectTop = top - rootRect.top - this._selectionDropdown.clientHeight - OFFSET;
         }
         this._selectionDropdown.style.setProperty('inset', `${selectTop}px auto auto ${selectLeft}px`);
+        if (applyEntranceTransit) {
+          this._selectionDropdown.setAttribute('transit', placementDirection[this.placement].add);
+        }
         return;
       }
 
@@ -533,7 +541,11 @@ export class Select extends RanElement {
       // when the preferred side lacks room (e.g. select near the bottom of the
       // screen) and shift horizontally to stay on-screen — the same
       // flip/shift middleware pattern Floating UI/Radix use.
-      const { top: selectTop, left: selectLeft } = computePlacement({
+      const {
+        top: selectTop,
+        left: selectLeft,
+        placement: resolvedPlacement,
+      } = computePlacement({
         anchor: { top, left, width, height },
         floating: { width, height: this._selectionDropdown.clientHeight },
         placement: this.placement === 'top' ? 'top' : 'bottom',
@@ -543,6 +555,9 @@ export class Select extends RanElement {
         'inset',
         `${selectTop + window.scrollY}px auto auto ${selectLeft + window.scrollX}px`,
       );
+      if (applyEntranceTransit) {
+        this._selectionDropdown.setAttribute('transit', placementDirection[resolvedPlacement].add);
+      }
     });
   };
 
@@ -578,7 +593,7 @@ export class Select extends RanElement {
     this.removeDropDownTimeId(e);
     this.setSelectDropdownDisplayNone();
     this.setSelectDropdownDisplayBlock();
-    this.placementPosition();
+    this.placementPosition(true);
   };
   removeDropDownTimeId = (e: Event): void => {
     e.stopPropagation();

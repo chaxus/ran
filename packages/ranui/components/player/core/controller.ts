@@ -71,22 +71,19 @@ function resolveEventTarget(elements: PlayerControllerElements, target: EventTar
   return elements[target];
 }
 
-function applyControllerEvents(
-  method: 'addEventListener' | 'removeEventListener',
+/**
+ * Registers every controller/chrome listener through `events` (an
+ * `EventManager`). Teardown is a single `events.abort()` call by the caller —
+ * there is no matching unbind function to keep in sync.
+ */
+export function bindControllerEvents(
+  events: EventManager,
   elements: PlayerControllerElements,
   handlers: PlayerControllerHandlers,
 ): void {
   CONTROLLER_EVENT_BINDINGS.forEach((binding) => {
     const target = resolveEventTarget(elements, binding.target);
     const handler = handlers[binding.handler] as EventListener;
-    target[method](binding.eventName, handler);
+    events.on(target, binding.eventName, handler);
   });
-}
-
-export function bindControllerEvents(elements: PlayerControllerElements, handlers: PlayerControllerHandlers): void {
-  applyControllerEvents('addEventListener', elements, handlers);
-}
-
-export function unbindControllerEvents(elements: PlayerControllerElements, handlers: PlayerControllerHandlers): void {
-  applyControllerEvents('removeEventListener', elements, handlers);
 }

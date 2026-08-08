@@ -51,7 +51,14 @@ export const computePlacement = (options: ComputePlacementOptions): ComputedPlac
   let placement = options.placement;
   const isVertical = placement === 'top' || placement === 'bottom';
 
-  if (isVertical) {
+  // Without a real measured size for the anchor or the floating panel — e.g.
+  // jsdom, which never performs actual layout, or a panel read before its
+  // content/layout has settled — the space calculations below are
+  // meaningless and would spuriously "detect" a collision on every call.
+  // Skip flip/shift and just honor the caller's preferred placement.
+  const hasRealLayout = anchor.width > 0 && anchor.height > 0 && floating.width > 0 && floating.height > 0;
+
+  if (hasRealLayout && isVertical) {
     const spaceBelow = boundary.top + boundary.height - (anchor.top + anchor.height);
     const spaceAbove = anchor.top - boundary.top;
     if (placement === 'bottom' && spaceBelow < floating.height + offset && spaceAbove > spaceBelow) {
@@ -59,7 +66,7 @@ export const computePlacement = (options: ComputePlacementOptions): ComputedPlac
     } else if (placement === 'top' && spaceAbove < floating.height + offset && spaceBelow > spaceAbove) {
       placement = 'bottom';
     }
-  } else {
+  } else if (hasRealLayout) {
     const spaceRight = boundary.left + boundary.width - (anchor.left + anchor.width);
     const spaceLeft = anchor.left - boundary.left;
     if (placement === 'right' && spaceRight < floating.width + offset && spaceLeft > spaceRight) {
@@ -86,12 +93,13 @@ export const computePlacement = (options: ComputePlacementOptions): ComputedPlac
   }
 
   // Shift along the cross axis to stay within the boundary — skip when the
-  // panel is wider/taller than the boundary itself (nothing to gain by clamping).
-  if (isVertical) {
+  // panel is wider/taller than the boundary itself (nothing to gain by
+  // clamping) or when there's no real layout to clamp against.
+  if (hasRealLayout && isVertical) {
     const minLeft = boundary.left + padding;
     const maxLeft = boundary.left + boundary.width - floating.width - padding;
     if (maxLeft >= minLeft) left = Math.min(Math.max(left, minLeft), maxLeft);
-  } else {
+  } else if (hasRealLayout) {
     const minTop = boundary.top + padding;
     const maxTop = boundary.top + boundary.height - floating.height - padding;
     if (maxTop >= minTop) top = Math.min(Math.max(top, minTop), maxTop);
