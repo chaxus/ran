@@ -16,6 +16,9 @@ Built on `hls.js` and Web Components, so the same player runs unchanged across f
 - Fullscreen toggle (and `Esc` to exit)
 - Picture-in-Picture toggle — the button only renders when the browser actually supports it
 - `poster` / `autoplay` / `loop` / `muted` — standard `<video>` attributes, passed straight through
+- Subtitles/CC — set the `tracks` property, browser-native cue rendering, a language picker that remembers the viewer's choice
+- Error + retry — a `Modal.error()` dialog on fatal playback failures, on by default, opt-out via `disable-error-modal`
+- Resume playback — opt-in via `remember-position`, saved to `localStorage`, keyed per `src`
 - HLS (`.m3u8`) playback with automatic bitrate switching and a manual clarity selector, when `window.Hls` (hls.js) is available
 - Keyboard shortcuts: `Space` play/pause, `ArrowLeft` / `ArrowRight` seek 5s, `Escape` exit fullscreen, `Home`/`End`/arrows on the focused seek bar
 
@@ -47,8 +50,11 @@ Built on `hls.js` and Web Components, so the same player runs unchanged across f
 | `autoplay`     | `boolean` | `false` | Boolean attribute — presence means `true`, same as native `<video autoplay>`. Browsers generally require `muted` for autoplay to actually start without a user gesture. |
 | `loop`         | `boolean` | `false` | Boolean attribute — loops playback on end, same as native `<video loop>`.                             |
 | `muted`        | `boolean` | `false` | Boolean attribute — starts silent. Internally this sets volume to `0` (so the mute icon/slider agree) **and** the native `<video>.muted` flag (so the browser's autoplay-muted policy is satisfied). Removing the attribute restores the previous volume. |
+| `disable-error-modal` | `boolean` | `false` | Opt out of the built-in error + retry dialog — errors still reach you via the `error`/`hlsError` `change` events, so build your own UI on top. |
+| `remember-position` | `boolean` | `false` | Opt in to resume playback: saves the current position to `localStorage` (keyed by `src`) on pause / when the tab is hidden, restores it on the next load of the same `src`, and clears it once playback ends. |
+| `tracks`       | `PlayerTrackConfig[]` | `[]`    | Subtitle/CC tracks — **JS property only, no matching attribute** (the player clears its own light DOM on every load, so declarative `<track>` children wouldn't survive). See [Subtitles/CC](#subtitles-cc-tracks) below. |
 
-> Observed attributes (from `observedAttributes`): `src`, `volume`, `currentTime` / `currenttime`, `playbackRate` / `playbackrate`, `debug`, `sheet`, `poster`, `autoplay`, `loop`, `muted`.
+> Observed attributes (from `observedAttributes`): `src`, `volume`, `currentTime` / `currenttime`, `playbackRate` / `playbackrate`, `debug`, `sheet`, `poster`, `autoplay`, `loop`, `muted`, `disable-error-modal`, `remember-position`.
 
 ### Video Source `src`
 
@@ -97,6 +103,30 @@ Seconds from the start of the media.
 ### Picture-in-Picture
 
 The PiP button in the control bar only appears when `document.pictureInPictureEnabled` is true — there's no dead button in browsers that don't support it. Toggle it programmatically with `togglePip()`.
+
+### Subtitles/CC `tracks`
+
+```js
+const player = document.querySelector('r-player');
+player.tracks = [
+  { src: '/captions/en.vtt', srclang: 'en', label: 'English', default: true },
+  { src: '/captions/fr.vtt', srclang: 'fr', label: 'Français' },
+];
+```
+
+Each entry becomes a native `<track>` on the underlying `<video>` — cue rendering is entirely the browser's own, the player doesn't draw anything custom. A language picker (an `<r-select>`, same interaction as the clarity selector) appears in the control bar with **Off** plus one entry per track; picking a language is remembered in `localStorage` and applied automatically the next time any `<r-player>` on the page gets tracks (global preference, not per-video) — falling back to whichever track has `default: true` if nothing was saved yet. Setting `tracks = []` removes the picker and every track. `setSubtitleLanguage(lang)` sets the active language imperatively (`lang` is a `srclang`, or `'off'`).
+
+### Error + Retry
+
+On by default. A fatal HLS error or a native `<video>` `error` event opens a `Modal.error()` dialog (lazy-loaded — `r-modal` isn't fetched at all until something actually fails) with a **Retry** button that reloads the player. Set `disable-error-modal` to turn this off and handle errors yourself via the `error`/`hlsError` `change` events instead. Non-fatal HLS errors (hls.js recovers these internally) never trigger the dialog.
+
+### Resume Playback `remember-position`
+
+```html
+<r-player src="/ran/hls/example.m3u8" remember-position></r-player>
+```
+
+Saves `getCurrentTime()` to `localStorage` (keyed by `src`) on `pause` and whenever the tab becomes hidden (`visibilitychange`, more reliable than `beforeunload`), restores it on the next load of that same `src`, and clears it once the video reaches `ended`. Silently skipped if the saved position is within 2 seconds of the duration — a finished video restarts fresh rather than "resuming" at its own end. Only the position is remembered; volume/speed/subtitle preferences are separate opt-ins.
 
 ## Methods
 

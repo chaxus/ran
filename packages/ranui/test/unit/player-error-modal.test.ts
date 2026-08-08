@@ -10,6 +10,11 @@ const makePlayer = (): any => {
   return player;
 };
 
+/** `showErrorModal` reaches `Modal.error` through a dynamic `import()`, which
+ * takes more than a couple of microtask ticks even for an already-loaded
+ * module — poll instead of guessing how many `await Promise.resolve()`s it needs. */
+const flush = (ms = 50) => new Promise((resolve) => setTimeout(resolve, ms));
+
 describe('r-player error + retry modal', () => {
   beforeEach(() => {
     document.body.innerHTML = '';
@@ -21,10 +26,8 @@ describe('r-player error + retry modal', () => {
     const errorSpy = vi.spyOn(Modal, 'error').mockResolvedValue({ action: 'dismiss', trigger: 'program' });
 
     player.hlsError({}, { fatal: true, details: 'bufferStalledError' });
-    await Promise.resolve();
-    await Promise.resolve();
+    await vi.waitFor(() => expect(errorSpy).toHaveBeenCalledTimes(1));
 
-    expect(errorSpy).toHaveBeenCalledTimes(1);
     expect(errorSpy.mock.calls[0][0]).toMatchObject({ title: 'Playback failed', okText: 'Retry' });
   });
 
@@ -33,8 +36,7 @@ describe('r-player error + retry modal', () => {
     const errorSpy = vi.spyOn(Modal, 'error').mockResolvedValue({ action: 'dismiss', trigger: 'program' });
 
     player.hlsError({}, { fatal: false, details: 'bufferSeekOverHole' });
-    await Promise.resolve();
-    await Promise.resolve();
+    await flush();
 
     expect(errorSpy).not.toHaveBeenCalled();
   });
@@ -45,10 +47,8 @@ describe('r-player error + retry modal', () => {
     Object.defineProperty(player._video, 'error', { value: { code: 4 }, configurable: true });
 
     player._video.dispatchEvent(new Event('error'));
-    await Promise.resolve();
-    await Promise.resolve();
+    await vi.waitFor(() => expect(errorSpy).toHaveBeenCalledTimes(1));
 
-    expect(errorSpy).toHaveBeenCalledTimes(1);
     expect(errorSpy.mock.calls[0][0]).toMatchObject({ content: 'This video format or source is not supported.' });
   });
 
@@ -58,8 +58,7 @@ describe('r-player error + retry modal', () => {
     const errorSpy = vi.spyOn(Modal, 'error').mockResolvedValue({ action: 'dismiss', trigger: 'program' });
 
     player.hlsError({}, { fatal: true });
-    await Promise.resolve();
-    await Promise.resolve();
+    await flush();
 
     expect(errorSpy).not.toHaveBeenCalled();
   });
@@ -73,9 +72,10 @@ describe('r-player error + retry modal', () => {
     // of how far the first call's dynamic import has progressed.
     player.hlsError({}, { fatal: true });
     player.hlsError({}, { fatal: true });
-    await Promise.resolve();
-    await Promise.resolve();
+    await vi.waitFor(() => expect(errorSpy).toHaveBeenCalledTimes(1));
 
+    // Give any (incorrect) second call a chance to land before asserting it didn't.
+    await flush();
     expect(errorSpy).toHaveBeenCalledTimes(1);
   });
 
@@ -89,12 +89,12 @@ describe('r-player error + retry modal', () => {
     });
 
     player.hlsError({}, { fatal: true });
-    await Promise.resolve();
-    await Promise.resolve();
+    await vi.waitFor(() => expect(capturedOnConfirm).toBeInstanceOf(Function));
 
-    expect(capturedOnConfirm).toBeInstanceOf(Function);
     capturedOnConfirm?.();
     expect(updateSpy).toHaveBeenCalledTimes(1);
+
+    await flush();
     expect(player._isShowingErrorModal).toBe(false);
   });
 });
