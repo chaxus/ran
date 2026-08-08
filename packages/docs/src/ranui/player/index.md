@@ -19,7 +19,7 @@ Built on `hls.js` and Web Components, so the same player runs unchanged across f
 - Subtitles/CC — set the `tracks` property, browser-native cue rendering, a language picker that remembers the viewer's choice
 - Error + retry — a `Modal.error()` dialog on fatal playback failures, on by default, opt-out via `disable-error-modal`
 - Resume playback — opt-in via `remember-position`, saved to `localStorage`, keyed per `src`
-- HLS (`.m3u8`) playback with automatic bitrate switching and a manual clarity selector, when `window.Hls` (hls.js) is available
+- HLS (`.m3u8`) playback with automatic bitrate switching and a manual clarity selector — `hls.js` loads lazily on demand, no setup required. Force a specific engine (or opt back into plain `<video src>`) via the `format` attribute when a URL's extension can't be sniffed.
 - Keyboard shortcuts: `Space` play/pause, `ArrowLeft` / `ArrowRight` seek 5s, `Escape` exit fullscreen, `Home`/`End`/arrows on the focused seek bar
 
 ## Quick Start
@@ -40,7 +40,8 @@ Built on `hls.js` and Web Components, so the same player runs unchanged across f
 
 | Property       | Type     | Default | Description                                                                                           |
 | -------------- | -------- | ------- | ----------------------------------------------------------------------------------------------------- |
-| `src`          | `string` | `''`    | Video resource URL. Changing it reloads the player. `.m3u8` sources use HLS when hls.js is present.   |
+| `src`          | `string` | `''`    | Video resource URL. Changing it reloads the player. Engine (HLS/native) is auto-detected from the extension. |
+| `format`       | `string` | `''`    | Force a specific engine instead of auto-detecting from `src`'s extension — useful for extensionless/signed streaming URLs. `hls`/`native` are wired today; `dash`/`flv` are recognized but not yet backed by an engine (upcoming). Changing it reloads the player. |
 | `volume`       | `string` | `''`    | Initial volume on a `0`–`100` scale — same scale as `setVolume()`/`getVolume()`. |
 | `currentTime`  | `string` | `''`    | Initial playback position in seconds. Also accepted lowercase as `currenttime`.                       |
 | `playbackRate` | `string` | `''`    | Playback speed multiplier (e.g. `1`, `1.5`, `2`). Also accepted lowercase as `playbackrate`.          |
@@ -50,11 +51,11 @@ Built on `hls.js` and Web Components, so the same player runs unchanged across f
 | `autoplay`     | `boolean` | `false` | Boolean attribute — presence means `true`, same as native `<video autoplay>`. Browsers generally require `muted` for autoplay to actually start without a user gesture. |
 | `loop`         | `boolean` | `false` | Boolean attribute — loops playback on end, same as native `<video loop>`.                             |
 | `muted`        | `boolean` | `false` | Boolean attribute — starts silent. Internally this sets volume to `0` (so the mute icon/slider agree) **and** the native `<video>.muted` flag (so the browser's autoplay-muted policy is satisfied). Removing the attribute restores the previous volume. |
-| `disable-error-modal` | `boolean` | `false` | Opt out of the built-in error + retry dialog — errors still reach you via the `error`/`hlsError` `change` events, so build your own UI on top. |
+| `disable-error-modal` | `boolean` | `false` | Opt out of the built-in error + retry dialog — errors still reach you via the `error`/`sourceerror` `change` events, so build your own UI on top. |
 | `remember-position` | `boolean` | `false` | Opt in to resume playback: saves the current position to `localStorage` (keyed by `src`) on pause / when the tab is hidden, restores it on the next load of the same `src`, and clears it once playback ends. |
 | `tracks`       | `PlayerTrackConfig[]` | `[]`    | Subtitle/CC tracks — **JS property only, no matching attribute** (the player clears its own light DOM on every load, so declarative `<track>` children wouldn't survive). See [Subtitles/CC](#subtitles-cc-tracks) below. |
 
-> Observed attributes (from `observedAttributes`): `src`, `volume`, `currentTime` / `currenttime`, `playbackRate` / `playbackrate`, `debug`, `sheet`, `poster`, `autoplay`, `loop`, `muted`, `disable-error-modal`, `remember-position`.
+> Observed attributes (from `observedAttributes`): `src`, `format`, `volume`, `currentTime` / `currenttime`, `playbackRate` / `playbackrate`, `debug`, `sheet`, `poster`, `autoplay`, `loop`, `muted`, `disable-error-modal`, `remember-position`.
 
 ### Video Source `src`
 
@@ -118,7 +119,7 @@ Each entry becomes a native `<track>` on the underlying `<video>` — cue render
 
 ### Error + Retry
 
-On by default. A fatal HLS error or a native `<video>` `error` event opens a `Modal.error()` dialog (lazy-loaded — `r-modal` isn't fetched at all until something actually fails) with a **Retry** button that reloads the player. Set `disable-error-modal` to turn this off and handle errors yourself via the `error`/`hlsError` `change` events instead. Non-fatal HLS errors (hls.js recovers these internally) never trigger the dialog.
+On by default. A fatal streaming-engine error or a native `<video>` `error` event opens a `Modal.error()` dialog (lazy-loaded — `r-modal` isn't fetched at all until something actually fails) with a **Retry** button that reloads the player. Set `disable-error-modal` to turn this off and handle errors yourself via the `error`/`sourceerror` `change` events instead. Non-fatal engine errors (hls.js recovers these internally) never trigger the dialog.
 
 ### Resume Playback `remember-position`
 
@@ -212,8 +213,8 @@ Player-specific actions:
 | `pictureinpicture`  | `boolean`          | Picture-in-Picture entered (`true`) or exited (`false`) — fires whether triggered by `togglePip()` or the browser's own PiP window controls. |
 | `subtitlechange`    | `string`           | Subtitle language changed via the CC picker or `setSubtitleLanguage()` — a `srclang`, or `'off'`. |
 | `resume`            | `number`           | A saved position was silently restored on load (`remember-position`); `data` is the restored time in seconds. |
-| `hlsManifestLoaded` | `{ data }`         | HLS manifest parsed; clarity levels are now available. |
-| `hlsError`          | `{ event, data }`  | An HLS error occurred (falls back to the raw `src`; a **fatal** error also opens the error+retry dialog unless `disable-error-modal` is set — non-fatal errors are hls.js's own internal recovery and don't). |
+| `levelsready`       | `{ levels }`       | The streaming engine's manifest was parsed; clarity levels are now available. |
+| `sourceerror`       | `{ fatal, detail }` | A streaming-engine error occurred (falls back to the raw `src`; a **fatal** error also opens the error+retry dialog unless `disable-error-modal` is set — non-fatal errors are the engine's own internal recovery and don't). |
 
 ## Slots
 
@@ -222,7 +223,7 @@ The player does not accept slotted content: it clears its own light-DOM children
 ## Best Practices
 
 - **Sizing**: The host is `display: block` with no intrinsic size — always give it an explicit width and height, otherwise the video collapses.
-- **HLS**: `.m3u8` playback needs hls.js loaded on `window.Hls`. Without it the player falls back to setting the raw `src` on the `<video>`, which only works where the browser plays HLS natively (e.g. Safari). Enable `debug` to see a warning when hls.js is missing.
+- **HLS**: `.m3u8` sources load `hls.js` lazily and automatically — no setup required. If a URL's extension can't be sniffed (extensionless/signed CDN URLs), set the `format` attribute explicitly (e.g. `format="hls"`) instead of relying on detection.
 - **One listener**: Prefer a single `change` listener with a `switch (detail.type)` over trying to attach many event handlers — all state flows through `change`.
 - **Volume units**: `volume` (attribute), `setVolume()`/`getVolume()`, and the `volume` change payload all use a single `0`–`100` scale. Only the underlying native `<video>.volume` is `0`–`1` — the player converts at that one boundary.
 - **Picture-in-Picture is progressive enhancement**: the button is hidden, not disabled, when the browser lacks support — don't rely on it always being present in the DOM.

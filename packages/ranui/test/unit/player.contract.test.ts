@@ -175,13 +175,13 @@ describe('r-player contract', () => {
     const destroySpy = vi.fn();
 
     player._video = video;
-    player._hls = { destroy: destroySpy };
+    player._engine = { destroy: destroySpy, setQuality: vi.fn(), getQualityLevels: vi.fn(() => []), on: vi.fn(), load: vi.fn(), reloadsOnQualityChange: true };
 
     document.body.removeChild(player);
 
     expect(removeSpy).toHaveBeenCalled();
     expect(destroySpy).toHaveBeenCalledTimes(1);
-    expect(player._hls).toBeUndefined();
+    expect(player._engine).toBeUndefined();
   });
 
   it('syncs currentTime and playbackRate attribute changes to the video element', () => {
@@ -198,34 +198,39 @@ describe('r-player contract', () => {
     expect(player.ctx.playbackRate).toBe(1.5);
   });
 
-  it('normalizes manifest levels and updates clarity state', () => {
+  it('updates clarity state when levels become available', () => {
     const player = document.createElement('r-player') as any;
     document.body.appendChild(player);
     const createClaritySpy = vi.spyOn(player, 'createClaritySelect').mockImplementation(() => undefined);
     const changeSpy = vi.spyOn(player, 'change').mockImplementation(() => undefined);
 
-    player.manifestLoaded('hlsManifestLoaded', {
-      url: 'https://cdn.example.com/master.m3u8',
-      levels: [
-        { height: 720, url: 'https://cdn.example.com/720.m3u8' },
-        { bitrate: 480_000, url: 'https://cdn.example.com/480.m3u8' },
-      ],
-    });
+    player.manifestLoaded([
+      { id: 'https://cdn.example.com/720.m3u8', name: '720p', height: 720 },
+      { id: 'https://cdn.example.com/480.m3u8', name: '480k', bitrate: 480_000 },
+      { id: 'https://cdn.example.com/master.m3u8', name: 'Auto' },
+    ]);
 
     expect(player.ctx.levels.map((item: { name: string }) => item.name)).toEqual(['720p', '480k', 'Auto']);
     expect(player.ctx.levelMap.get('720p')).toBe('https://cdn.example.com/720.m3u8');
     expect(player.ctx.levelMap.get('Auto')).toBe('https://cdn.example.com/master.m3u8');
     expect(createClaritySpy).toHaveBeenCalled();
-    expect(changeSpy).toHaveBeenCalledWith('hlsManifestLoaded', expect.any(Object));
+    expect(changeSpy).toHaveBeenCalledWith('levelsready', expect.any(Object));
   });
 
-  it('switches clarity by preserving playback state and loading the selected URL', () => {
+  it('switches clarity by preserving playback state and setting the selected quality', () => {
     const player = document.createElement('r-player') as any;
     document.body.appendChild(player);
     const snapshot = { currentTime: 12, playbackRate: 1.25, volume: 60, shouldResume: true };
-    const hls = { destroy: vi.fn(), loadSource: vi.fn(), startLoad: vi.fn() };
+    const engine = {
+      destroy: vi.fn(),
+      setQuality: vi.fn(),
+      getQualityLevels: vi.fn(() => []),
+      on: vi.fn(),
+      load: vi.fn(),
+      reloadsOnQualityChange: true,
+    };
     player.ctx.levelMap.set('720p', 'https://cdn.example.com/720.m3u8');
-    player._hls = hls;
+    player._engine = engine;
     vi.spyOn(player, 'capturePlaybackSnapshot').mockReturnValue(snapshot);
     const loadingSpy = vi.spyOn(player, 'setLoadingState');
 
@@ -235,11 +240,33 @@ describe('r-player contract', () => {
     expect(player._pendingPlaybackRestore).toBe(snapshot);
     expect(player._isSwitchingSource).toBe(true);
     expect(loadingSpy).toHaveBeenCalledWith(true);
-    expect(hls.loadSource).toHaveBeenCalledWith('https://cdn.example.com/720.m3u8');
-    expect(hls.startLoad).toHaveBeenCalled();
+    expect(engine.setQuality).toHaveBeenCalledWith('https://cdn.example.com/720.m3u8');
   });
 
-  it('falls back to native src and emits hlsError when hls fails', () => {
+  it('does not run the reload dance when the engine does not reload on quality change', () => {
+    const player = document.createElement('r-player') as any;
+    document.body.appendChild(player);
+    const engine = {
+      destroy: vi.fn(),
+      setQuality: vi.fn(),
+      getQualityLevels: vi.fn(() => []),
+      on: vi.fn(),
+      load: vi.fn(),
+      reloadsOnQualityChange: false,
+    };
+    player.ctx.levelMap.set('720p', 'dash-quality-0');
+    player._engine = engine;
+    const loadingSpy = vi.spyOn(player, 'setLoadingState');
+
+    player.changeClarity(new CustomEvent('change', { detail: { value: '720p' } }));
+
+    expect(player._isSwitchingSource).toBe(false);
+    expect(player._pendingPlaybackRestore).toBeUndefined();
+    expect(loadingSpy).not.toHaveBeenCalled();
+    expect(engine.setQuality).toHaveBeenCalledWith('dash-quality-0');
+  });
+
+  it('falls back to native src and emits sourceerror when the engine fails', () => {
     const player = document.createElement('r-player') as any;
     document.body.appendChild(player);
     player.setAttribute('src', 'https://cdn.example.com/fallback.mp4');
@@ -251,12 +278,12 @@ describe('r-player contract', () => {
       detail = (event as CustomEvent).detail;
     });
 
-    player.hlsError('error-event', { fatal: true });
+    player.hlsError({ fatal: true, detail: 'error-event' });
 
     expect(player._isSwitchingSource).toBe(false);
     expect(player._player.classList.contains('ran-player-buffering')).toBe(false);
     expect(player._video.src).toContain('https://cdn.example.com/fallback.mp4');
-    expect(detail.type).toBe('hlsError');
+    expect(detail.type).toBe('sourceerror');
   });
 
   it('updates playback rate and resumes when changing speed while playing', () => {

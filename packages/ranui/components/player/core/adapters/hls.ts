@@ -1,5 +1,5 @@
 import type Hls from 'hls.js';
-import type { ErrorData, Level, ManifestLoadedData } from 'hls.js';
+import type { ErrorData, LevelParsed, ManifestLoadedData } from 'hls.js';
 import { buildManifestLevels } from '../levels';
 import { createAdapterEmitter, type EngineAdapter, type EngineQualityLevel } from './types';
 
@@ -15,7 +15,7 @@ export function createHlsAdapter(): EngineAdapter {
   let levels: EngineQualityLevel[] = [];
 
   const handleManifestLoaded = (_event: string, data: ManifestLoadedData): void => {
-    const normalized = buildManifestLevels<Level>({
+    const normalized = buildManifestLevels<LevelParsed>({
       levels: data.levels,
       manifestUrl: data.url,
       existingLevelMap: levelMap,

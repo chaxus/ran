@@ -34,7 +34,11 @@ description: 'ranui Player（<r-player>）在原生 <video> 之上封装统一�
 
 ### src
 
-视频的资源地址
+视频的资源地址，播放引擎（HLS/native）按扩展名自动探测。
+
+### format
+
+强制指定播放引擎，代替按 `src` 扩展名自动探测——给拿不到扩展名的加签/无后缀流地址用。`hls`/`native` 已经可用；`dash`/`flv` 已经能识别但还没有接实际引擎（后续规划）。改这个属性会重新加载播放器。
 
 ### volume
 
@@ -74,7 +78,7 @@ description: 'ranui Player（<r-player>）在原生 <video> 之上封装统一�
 
 ### disable-error-modal
 
-布尔属性。播放失败（fatal 的 HLS 错误、原生 `error` 事件）默认会弹出 `Modal.error()` 错误 + 重试弹窗（`r-modal` 懒加载，真的出错才下载），设了这个属性就关掉，改成自己接 `error`/`hlsError` change 事件做自定义 UI。
+布尔属性。播放失败（fatal 的引擎错误、原生 `error` 事件）默认会弹出 `Modal.error()` 错误 + 重试弹窗（`r-modal` 懒加载，真的出错才下载），设了这个属性就关掉，改成自己接 `error`/`sourceerror` change 事件做自定义 UI。
 
 ### remember-position
 
@@ -141,3 +145,5 @@ player.tracks = [
 | pictureinpicture | 画中画进入（`true`）/退出（`false`）——不管是通过 `togglePip()` 还是浏览器自己的画中画窗口控件触发的                |
 | subtitlechange | 字幕语言切换（通过选择器或 `setSubtitleLanguage()`），`data` 是 `srclang` 或 `'off'`                                  |
 | resume         | `remember-position` 静默恢复了保存的播放位置，`data` 是恢复到的秒数                                                   |
+| levelsready    | 播放引擎解析完 manifest，清晰度档位可用了                                                                          |
+| sourceerror    | 播放引擎报错（回退到原始 `src`；fatal 错误且没设 `disable-error-modal` 时还会弹错误+重试框）                          |

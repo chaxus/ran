@@ -57,25 +57,6 @@ export declare class SHook {
   off: (eventName: EventName, eventItem: EventItem | Callback) => void;
 }
 
-export interface HlsPlayer {
-  startLoad(): () => void;
-  off: (s: string, f: Function) => void;
-  on: (s: string, f: Function) => void;
-  loadSource: (s: string) => void;
-  attachMedia: (v: HTMLVideoElement) => void;
-  destroy: () => void;
-}
-
-export interface Level {
-  audioCodec: string;
-  bitrate: number;
-  height: number;
-  width: number;
-  name: string;
-  url: string;
-  videoCodec: string;
-}
-
 export interface Context {
   action: SyncHook;
   currentState: string;
@@ -85,26 +66,10 @@ export interface Context {
   volume: number;
   playbackRate: number;
   fullScreen: boolean;
-  levels: Partial<Level>[];
+  levels: EngineQualityLevel[];
   url: string;
   levelMap: Map<string, string>;
   clarity: string;
-}
-
-interface Hls {
-  Events: {
-    MANIFEST_LOADED: 'hlsManifestLoaded';
-    ERROR: 'error';
-  };
-  isSupported: () => boolean;
-}
-
-type HLS = Hls & (new () => HlsPlayer);
-
-declare global {
-  interface Window {
-    Hls: HLS;
-  }
 }
 
 export class RanPlayer extends RanElement {
@@ -145,18 +110,19 @@ export class RanPlayer extends RanElement {
   _shadowDom: ShadowRoot;
   _volume?: number;
   _video?: HTMLVideoElement;
-  _hls?: HlsPlayer;
+  _engine?: EngineAdapter;
   _tracks: PlayerTrackConfig[] = [];
   /** Domain modules — each built once in the constructor from a narrow `getXxxDeps()` slice. */
   _errorModal!: PlayerErrorModalController;
   _mediaHandlers!: PlayerMediaHandlers;
   _seek!: PlayerSeekHandlers;
   _chrome!: PlayerChromeHandlers;
-  _clarity!: PlayerClarityHandlers<Partial<Level>>;
+  _clarity!: PlayerClarityHandlers<EngineQualityLevel>;
   _subtitles!: PlayerSubtitleHandlers;
   static get observedAttributes(): string[] {
     return [
       'src',
+      'format',
       'volume',
       'currentTime',
       'currenttime',
@@ -215,14 +181,14 @@ export class RanPlayer extends RanElement {
     this._playerTip = viewRefs.playerTip;
     this._playerTipTime = viewRefs.playerTipTime;
     this._playerTipText = viewRefs.playerTipText;
-    this.ctx = createDefaultPlayerContext<SyncHook, Partial<Level>>(new SyncHook());
+    this.ctx = createDefaultPlayerContext<SyncHook, EngineQualityLevel>(new SyncHook());
     this._runtimeState = createDefaultRuntimeState<PlaybackSnapshot>();
     this._visualSignals = createPlayerVisualSignals();
     this._errorModal = createErrorModalController(this.getErrorModalDeps());
     this._mediaHandlers = createMediaEventHandlers(this.getMediaDispatchDeps());
     this._seek = createSeekHandlers(this.getSeekDeps());
     this._chrome = createChromeHandlers(this.getChromeDeps());
-    this._clarity = createClarityHandlers<Partial<Level>>(this.getClarityDeps());
+    this._clarity = createClarityHandlers<EngineQualityLevel>(this.getClarityDeps());
     this._subtitles = createSubtitleHandlers(this.getSubtitleDeps());
   }
   getVisualEffectRefs = (): PlayerVisualEffectRefs => {
@@ -333,12 +299,12 @@ export class RanPlayer extends RanElement {
     getSrc: () => this.src,
     getCurrentTime: () => this.getCurrentTime(),
   });
-  getClarityDeps = (): PlayerClarityDeps<Partial<Level>> => ({
+  getClarityDeps = (): PlayerClarityDeps<EngineQualityLevel> => ({
     refs: { clarityContainer: this._playControllerBottomClarity, player: this._player },
     state: this._runtimeState,
     ctx: this.ctx,
+    getEngine: () => this._engine,
     getVideo: () => this._video,
-    getHls: () => this._hls,
     getSrc: () => this.src,
     capturePlaybackSnapshot: () => this.capturePlaybackSnapshot(),
     setLoadingState: (loading) => this.setLoadingState(loading),
@@ -388,6 +354,16 @@ export class RanPlayer extends RanElement {
   }
   set poster(value: string) {
     this.setAttribute('poster', value || '');
+  }
+  /**
+   * @description: 强制指定引擎（`hls`/`dash`/`flv`/`native`），给拿不到扩展名的
+   * 加签/无后缀流地址用；缺省时按 `src` 扩展名自动探测（见 `core/adapters/detect.ts`）。
+   */
+  get format(): string {
+    return this.getAttribute('format') || '';
+  }
+  set format(value: string) {
+    this.setAttribute('format', value || '');
   }
   get autoplay(): boolean {
     return this.hasAttribute('autoplay');
@@ -502,18 +478,13 @@ export class RanPlayer extends RanElement {
   };
   changeClarity = (e: Event): void => this._clarity.changeClarity(e);
   createClaritySelect = (): void => this._clarity.createClaritySelect();
-  manifestLoaded = (type: string, data: { levels: Level[]; url: string }): void =>
-    this._clarity.manifestLoaded(type, data);
-  hlsError = (event: unknown, data: unknown): void => this._clarity.hlsError(event, data);
+  manifestLoaded = (levels: EngineQualityLevel[]): void => this._clarity.manifestLoaded(levels);
+  hlsError = (payload: { fatal: boolean; detail: unknown }): void => this._clarity.hlsError(payload);
   applyTracks = (): void => this._subtitles.applyTracks();
   setSubtitleLanguage = (lang: string): void => this._subtitles.setSubtitleLanguage(lang);
   changeSubtitleTrack = (e: Event): void => this._subtitles.changeSubtitleTrack(e);
   createSubtitleSelect = (): void => this._subtitles.createSubtitleSelect();
   updatePlayer = (): void => {
-    const Hls = window.Hls;
-    if (!Hls && this.debug) {
-      console.warn('r-player: Hls.js is not loaded from window.Hls');
-    }
     // 重置清晰度状态，避免旧数据干扰新视频的 manifest 加载
     resetSourceContextState(this.ctx);
     this._playControllerBottomClarity.innerHTML = '';
@@ -540,13 +511,13 @@ export class RanPlayer extends RanElement {
     this._video.loop = this.loop;
     if (this.muted) this.setVolume(0);
     try {
-      this._hls = loadVideoSource<HlsPlayer>({
+      this._engine = loadVideoSource({
         video: this._video,
         src: this.src,
-        Hls,
-        existingHls: this._hls,
-        onManifestLoaded: this.manifestLoaded,
-        onHlsError: this.hlsError,
+        format: this.format,
+        existingEngine: this._engine,
+        onLevelsReady: this.manifestLoaded,
+        onEngineError: this.hlsError,
       });
       if (!this._container.contains(this._video)) {
         this._container.appendChild(this._video);
@@ -754,15 +725,15 @@ export class RanPlayer extends RanElement {
     this._events.abort();
     this.disposeEffects();
     this.clearListenerEvent();
-    this._hls?.destroy?.();
-    this._hls = undefined;
+    this._engine?.destroy();
+    this._engine = undefined;
     this.cancelAnimationFrame();
     this.resetTransientState();
     this._isSwitchingSource = false;
     this.setLoadingState(false);
   }
   attributeChangedCallback(k: string, o: string, n: string): void {
-    if (k === 'src' && o !== n) {
+    if ((k === 'src' || k === 'format') && o !== n) {
       this.updatePlayer();
     }
     if (k === 'volume' && o !== n) {

@@ -25,7 +25,7 @@ describe('r-player error + retry modal', () => {
     const player = makePlayer();
     const errorSpy = vi.spyOn(Modal, 'error').mockResolvedValue({ action: 'dismiss', trigger: 'program' });
 
-    player.hlsError({}, { fatal: true, details: 'bufferStalledError' });
+    player.hlsError({ fatal: true, detail: { details: 'bufferStalledError' } });
     await vi.waitFor(() => expect(errorSpy).toHaveBeenCalledTimes(1));
 
     expect(errorSpy.mock.calls[0][0]).toMatchObject({ title: 'Playback failed', okText: 'Retry' });
@@ -35,7 +35,7 @@ describe('r-player error + retry modal', () => {
     const player = makePlayer();
     const errorSpy = vi.spyOn(Modal, 'error').mockResolvedValue({ action: 'dismiss', trigger: 'program' });
 
-    player.hlsError({}, { fatal: false, details: 'bufferSeekOverHole' });
+    player.hlsError({ fatal: false, detail: { details: 'bufferSeekOverHole' } });
     await flush();
 
     expect(errorSpy).not.toHaveBeenCalled();
@@ -57,7 +57,7 @@ describe('r-player error + retry modal', () => {
     player.setAttribute('disable-error-modal', '');
     const errorSpy = vi.spyOn(Modal, 'error').mockResolvedValue({ action: 'dismiss', trigger: 'program' });
 
-    player.hlsError({}, { fatal: true });
+    player.hlsError({ fatal: true, detail: {} });
     await flush();
 
     expect(errorSpy).not.toHaveBeenCalled();
@@ -70,8 +70,8 @@ describe('r-player error + retry modal', () => {
     // The guard (`_isShowingErrorModal`) is set synchronously before the lazy
     // import even starts, so the second call bails out immediately regardless
     // of how far the first call's dynamic import has progressed.
-    player.hlsError({}, { fatal: true });
-    player.hlsError({}, { fatal: true });
+    player.hlsError({ fatal: true, detail: {} });
+    player.hlsError({ fatal: true, detail: {} });
     await vi.waitFor(() => expect(errorSpy).toHaveBeenCalledTimes(1));
 
     // Give any (incorrect) second call a chance to land before asserting it didn't.
@@ -88,7 +88,7 @@ describe('r-player error + retry modal', () => {
       return Promise.resolve({ action: 'confirm', trigger: 'program' });
     });
 
-    player.hlsError({}, { fatal: true });
+    player.hlsError({ fatal: true, detail: {} });
     await vi.waitFor(() => expect(capturedOnConfirm).toBeInstanceOf(Function));
 
     capturedOnConfirm?.();

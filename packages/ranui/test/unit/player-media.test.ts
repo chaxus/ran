@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { bindMediaEvents, unbindMediaEvents, loadVideoSource } from '@/components/player/core/media';
-import type { PlayerMediaHandlers, HlsPlayerLike, HlsLikeStatic } from '@/components/player/core/media';
+import type { PlayerMediaHandlers } from '@/components/player/core/media';
+import type { EngineAdapter } from '@/components/player/core/adapters/types';
 
 const makeHandlers = (): PlayerMediaHandlers => ({
   onCanplay: vi.fn(),
@@ -106,124 +107,104 @@ describe('bindMediaEvents / unbindMediaEvents', () => {
   });
 });
 
+const makeFakeAdapter = (): EngineAdapter => ({
+  reloadsOnQualityChange: true,
+  load: vi.fn().mockResolvedValue(undefined),
+  destroy: vi.fn(),
+  getQualityLevels: vi.fn(() => []),
+  setQuality: vi.fn(),
+  on: vi.fn(),
+});
+
 describe('loadVideoSource', () => {
-  it('destroys existingHls when provided', () => {
+  it('destroys existingEngine when provided', () => {
     const video = document.createElement('video');
-    const existingHls: HlsPlayerLike = {
-      destroy: vi.fn(),
-      startLoad: vi.fn() as any,
-      off: vi.fn(),
-      on: vi.fn(),
-      loadSource: vi.fn(),
-      attachMedia: vi.fn(),
-    };
-    loadVideoSource({ video, src: '', existingHls, onManifestLoaded: vi.fn(), onHlsError: vi.fn() });
-    expect(existingHls.destroy).toHaveBeenCalledTimes(1);
+    const existingEngine = makeFakeAdapter();
+    loadVideoSource({
+      video,
+      src: '',
+      existingEngine,
+      onLevelsReady: vi.fn(),
+      onEngineError: vi.fn(),
+      createEngineAdapter: () => makeFakeAdapter(),
+    });
+    expect(existingEngine.destroy).toHaveBeenCalledTimes(1);
   });
 
-  it('creates HLS instance and attaches when Hls.isSupported() is true and src is set', () => {
+  it('detects the format, resolves an adapter through the injected factory, and loads it', () => {
     const video = document.createElement('video');
-    const hlsInstance: HlsPlayerLike = {
-      destroy: vi.fn(),
-      startLoad: vi.fn() as any,
-      off: vi.fn(),
-      on: vi.fn(),
-      loadSource: vi.fn(),
-      attachMedia: vi.fn(),
-    };
-    const onManifestLoaded = vi.fn();
-    const onHlsError = vi.fn();
-    function MockHls() {
-      return hlsInstance;
-    }
-    (MockHls as any).isSupported = () => true;
-    (MockHls as any).Events = { MANIFEST_LOADED: 'manifestLoaded', ERROR: 'hlsError' };
-    const Hls = MockHls as unknown as HlsLikeStatic<HlsPlayerLike>;
+    const adapter = makeFakeAdapter();
+    const createEngineAdapter = vi.fn(() => adapter);
 
-    const result = loadVideoSource({ video, src: 'test.m3u8', Hls, onManifestLoaded, onHlsError });
+    const result = loadVideoSource({
+      video,
+      src: 'test.m3u8',
+      onLevelsReady: vi.fn(),
+      onEngineError: vi.fn(),
+      createEngineAdapter,
+    });
 
-    expect(hlsInstance.loadSource).toHaveBeenCalledWith('test.m3u8');
-    expect(hlsInstance.attachMedia).toHaveBeenCalledWith(video);
-    expect(hlsInstance.on).toHaveBeenCalledWith('manifestLoaded', onManifestLoaded);
-    expect(hlsInstance.on).toHaveBeenCalledWith('hlsError', onHlsError);
-    expect(hlsInstance.off).toHaveBeenCalledWith('manifestLoaded', onManifestLoaded);
-    expect(hlsInstance.off).toHaveBeenCalledWith('hlsError', onHlsError);
-    expect(result).toBe(hlsInstance);
+    expect(createEngineAdapter).toHaveBeenCalledWith('hls');
+    expect(adapter.on).toHaveBeenCalledWith('levelsready', expect.any(Function));
+    expect(adapter.on).toHaveBeenCalledWith('error', expect.any(Function));
+    expect(adapter.load).toHaveBeenCalledWith(video, 'test.m3u8');
+    expect(result).toBe(adapter);
   });
 
-  it('falls back to video.src when Hls is not supported', () => {
+  it('forwards levelsready/error adapter events to onLevelsReady/onEngineError', () => {
     const video = document.createElement('video');
-    const Hls = vi.fn() as unknown as HlsLikeStatic<HlsPlayerLike>;
-    (Hls as any).isSupported = vi.fn(() => false);
-    (Hls as any).Events = { MANIFEST_LOADED: 'manifestLoaded', ERROR: 'hlsError' };
+    const handlers = new Map<string, (payload: unknown) => void>();
+    const adapter: EngineAdapter = {
+      ...makeFakeAdapter(),
+      on: vi.fn((event, handler) => handlers.set(event, handler as (payload: unknown) => void)),
+    };
+    const onLevelsReady = vi.fn();
+    const onEngineError = vi.fn();
 
-    const result = loadVideoSource({ video, src: 'video.mp4', Hls, onManifestLoaded: vi.fn(), onHlsError: vi.fn() });
+    loadVideoSource({
+      video,
+      src: 'test.m3u8',
+      onLevelsReady,
+      onEngineError,
+      createEngineAdapter: () => adapter,
+    });
+
+    handlers.get('levelsready')?.({ levels: [{ id: 'a', name: 'a' }] });
+    expect(onLevelsReady).toHaveBeenCalledWith([{ id: 'a', name: 'a' }]);
+    handlers.get('error')?.({ fatal: true, detail: 'boom' });
+    expect(onEngineError).toHaveBeenCalledWith({ fatal: true, detail: 'boom' });
+  });
+
+  it('falls back to video.src when the format has no registered adapter', () => {
+    const video = document.createElement('video');
+    const result = loadVideoSource({
+      video,
+      src: 'video.mp4',
+      onLevelsReady: vi.fn(),
+      onEngineError: vi.fn(),
+      createEngineAdapter: () => undefined,
+    });
     expect(video.src).toContain('video.mp4');
     expect(result).toBeUndefined();
   });
 
-  it('falls back to video.src when Hls is undefined', () => {
+  it('does not set video.src when src is empty', () => {
     const video = document.createElement('video');
-    const result = loadVideoSource({ video, src: 'video.mp4', onManifestLoaded: vi.fn(), onHlsError: vi.fn() });
-    expect(video.src).toContain('video.mp4');
-    expect(result).toBeUndefined();
-  });
-
-  it('does not set video.src when src is empty and no Hls', () => {
-    const video = document.createElement('video');
-    const result = loadVideoSource({ video, src: '', onManifestLoaded: vi.fn(), onHlsError: vi.fn() });
+    const result = loadVideoSource({
+      video,
+      src: '',
+      onLevelsReady: vi.fn(),
+      onEngineError: vi.fn(),
+      createEngineAdapter: () => makeFakeAdapter(),
+    });
     expect(video.src).toBe('');
     expect(result).toBeUndefined();
   });
 
-  it('falls back to native src when HLS constructor throws', () => {
+  it('resolves the real hls/dash/flv registry by default when no factory is injected', () => {
     const video = document.createElement('video');
-    function ThrowingHls() {
-      throw new Error('HLS init failed');
-    }
-    (ThrowingHls as any).isSupported = () => true;
-    (ThrowingHls as any).Events = { MANIFEST_LOADED: 'manifestLoaded', ERROR: 'hlsError' };
-    const Hls = ThrowingHls as unknown as HlsLikeStatic<HlsPlayerLike>;
-
-    const result = loadVideoSource({ video, src: 'stream.m3u8', Hls, onManifestLoaded: vi.fn(), onHlsError: vi.fn() });
-    expect(video.src).toContain('stream.m3u8');
+    const result = loadVideoSource({ video, src: 'video.mp4', onLevelsReady: vi.fn(), onEngineError: vi.fn() });
+    expect(video.src).toContain('video.mp4');
     expect(result).toBeUndefined();
-  });
-
-  it('destroys existingHls before creating a new HLS instance', () => {
-    const video = document.createElement('video');
-    const existingHls: HlsPlayerLike = {
-      destroy: vi.fn(),
-      startLoad: vi.fn() as any,
-      off: vi.fn(),
-      on: vi.fn(),
-      loadSource: vi.fn(),
-      attachMedia: vi.fn(),
-    };
-    const newHlsInstance: HlsPlayerLike = {
-      destroy: vi.fn(),
-      startLoad: vi.fn() as any,
-      off: vi.fn(),
-      on: vi.fn(),
-      loadSource: vi.fn(),
-      attachMedia: vi.fn(),
-    };
-    function NewMockHls() {
-      return newHlsInstance;
-    }
-    (NewMockHls as any).isSupported = () => true;
-    (NewMockHls as any).Events = { MANIFEST_LOADED: 'manifestLoaded', ERROR: 'hlsError' };
-    const Hls = NewMockHls as unknown as HlsLikeStatic<HlsPlayerLike>;
-
-    const result = loadVideoSource({
-      video,
-      src: 'new.m3u8',
-      Hls,
-      existingHls,
-      onManifestLoaded: vi.fn(),
-      onHlsError: vi.fn(),
-    });
-    expect(existingHls.destroy).toHaveBeenCalledTimes(1);
-    expect(result).toBe(newHlsInstance);
   });
 });
