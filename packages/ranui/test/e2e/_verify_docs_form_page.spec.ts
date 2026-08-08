@@ -1,22 +1,30 @@
 import { test, expect } from '@playwright/test';
 
-// Throwaway spec to verify the rewritten docs Forms guide actually renders
-// and works in a real browser — not part of the permanent suite.
-
-test('docs form guide — quick start demo works end to end', async ({ page }) => {
-  const logs: string[] = [];
-  page.on('console', (msg) => logs.push(`[${msg.type()}] ${msg.text()}`));
-  page.on('pageerror', (err) => logs.push(`[pageerror] ${err.message}`));
-
+test('docs form guide — required field demo blocks then allows submit', async ({ page }) => {
   await page.goto('http://localhost:5175/src/ranui/form/', { waitUntil: 'networkidle' });
-  await page.waitForFunction(() => !!customElements.get('r-select'), null, { timeout: 15000 });
+  await page.waitForFunction(() => !!customElements.get('r-input'), null, { timeout: 15000 });
   await page.waitForTimeout(500);
 
-  const demo = page.locator('.ran-demo').first();
-  await demo.scrollIntoViewIfNeeded();
-  await page.screenshot({ path: 'test-results/_form-doc-demo.png', fullPage: false });
-  await demo.screenshot({ path: 'test-results/_form-doc-demo-only.png' });
+  const demos = page.locator('.ran-demo');
+  const validationDemo = demos.nth(2); // Quick Start, Layout, Validation and reset
+  await validationDemo.scrollIntoViewIfNeeded();
 
-  console.log('DEMO HTML:', await demo.evaluate((el) => el.outerHTML).catch((e) => String(e)));
-  console.log('LOGS:', JSON.stringify(logs, null, 2));
+  const form = validationDemo.locator('form');
+  const submitFired = () =>
+    page.evaluate((sel) => {
+      return new Promise<boolean>((resolve) => {
+        const f = document.querySelectorAll(sel)[2] as HTMLFormElement;
+        let fired = false;
+        f.addEventListener('submit', () => (fired = true), { once: true });
+        (f.querySelector('button[type="submit"]') as HTMLButtonElement).click();
+        setTimeout(() => resolve(fired), 150);
+      });
+    }, '.ran-demo form');
+
+  expect(await submitFired()).toBe(false); // empty required field blocks it
+
+  await validationDemo.locator('r-input').click();
+  await page.keyboard.type('alice');
+
+  expect(await submitFired()).toBe(true);
 });

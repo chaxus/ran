@@ -127,7 +127,7 @@ The host itself carries the accessible checkbox semantics: `role="checkbox"`, `a
 
 ```html
 <form>
-  <r-checkbox name="terms" value="accepted" required>I agree to the terms</r-checkbox>
+  <r-checkbox name="terms" required>I agree to the terms</r-checkbox>
   <button type="submit">Submit</button>
 </form>
 ```

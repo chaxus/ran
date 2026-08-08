@@ -19,7 +19,7 @@ ranui 不提供一个专门包裹 `<form>` 的组件。`r-input`、`r-checkbox`�
       <r-option value="member">Member</r-option>
       <r-option value="admin">Admin</r-option>
     </r-select>
-    <r-checkbox name="subscribe" value="yes">Subscribe to newsletter</r-checkbox>
+    <r-checkbox name="subscribe">Subscribe to newsletter</r-checkbox>
     <r-button type="primary"><button type="submit" style="all: unset; cursor: pointer">Submit</button></r-button>
   </form>
 </Demo>
@@ -31,7 +31,7 @@ ranui 不提供一个专门包裹 `<form>` 的组件。`r-input`、`r-checkbox`�
     <r-option value="member">Member</r-option>
     <r-option value="admin">Admin</r-option>
   </r-select>
-  <r-checkbox name="subscribe" value="yes">Subscribe to newsletter</r-checkbox>
+  <r-checkbox name="subscribe">Subscribe to newsletter</r-checkbox>
   <button type="submit">Submit</button>
 </form>
 
@@ -40,7 +40,7 @@ ranui 不提供一个专门包裹 `<form>` 的组件。`r-input`、`r-checkbox`�
 
   document.getElementById('signup').addEventListener('submit', (event) => {
     event.preventDefault(); // 一个真正的 <form> 默认会跳转页面
-    console.log(serializeForm(event.target)); // { username: '...', role: 'member', subscribe: 'yes' }
+    console.log(serializeForm(event.target)); // { username: '...', role: 'member', subscribe: 'true' }
   });
 </script>
 ```

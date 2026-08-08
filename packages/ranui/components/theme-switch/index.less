@@ -27,7 +27,7 @@
   border: none;
   border-radius: var(--ran-theme-switch-radius, var(--ran-radius-full, 9999px));
   background: transparent;
-  color: var(--ran-theme-switch-color, var(--ran-color-text-secondary, #4d4d4d));
+  color: var(--ran-theme-switch-button-color, var(--ran-color-text-secondary, #4d4d4d));
   cursor: pointer;
   padding: 0;
   /* No transition: color is a palette prop and fades on the very theme flip
@@ -35,16 +35,16 @@
 }
 
 .ran-theme-switch button:hover {
-  color: var(--ran-theme-switch-hover-color, var(--ran-color-text, #171717));
+  color: var(--ran-theme-switch-button-hover-color, var(--ran-color-text, #171717));
 }
 
 .ran-theme-switch button[aria-pressed='true'] {
-  background: var(--ran-theme-switch-active-background, var(--ran-color-bg-hover, #ebebeb));
-  color: var(--ran-theme-switch-active-color, var(--ran-color-text, #171717));
+  background: var(--ran-theme-switch-button-active-background, var(--ran-color-bg-hover, #ebebeb));
+  color: var(--ran-theme-switch-button-active-color, var(--ran-color-text, #171717));
 }
 
 .ran-theme-switch button:focus-visible {
-  outline: var(--ran-theme-switch-focus-outline, 2px solid var(--ran-color-primary, #006bff));
+  outline: var(--ran-theme-switch-button-focus-outline, 2px solid var(--ran-color-primary, #006bff));
   outline-offset: 2px;
 }
 

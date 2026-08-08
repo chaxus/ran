@@ -19,7 +19,7 @@ All three field types, submitted with a plain `<form>` — try changing a field 
       <r-option value="member">Member</r-option>
       <r-option value="admin">Admin</r-option>
     </r-select>
-    <r-checkbox name="subscribe" value="yes">Subscribe to newsletter</r-checkbox>
+    <r-checkbox name="subscribe">Subscribe to newsletter</r-checkbox>
     <r-button type="primary"><button type="submit" style="all: unset; cursor: pointer">Submit</button></r-button>
   </form>
 </Demo>
@@ -31,7 +31,7 @@ All three field types, submitted with a plain `<form>` — try changing a field 
     <r-option value="member">Member</r-option>
     <r-option value="admin">Admin</r-option>
   </r-select>
-  <r-checkbox name="subscribe" value="yes">Subscribe to newsletter</r-checkbox>
+  <r-checkbox name="subscribe">Subscribe to newsletter</r-checkbox>
   <button type="submit">Submit</button>
 </form>
 
@@ -40,7 +40,7 @@ All three field types, submitted with a plain `<form>` — try changing a field 
 
   document.getElementById('signup').addEventListener('submit', (event) => {
     event.preventDefault(); // a real <form> otherwise navigates the page
-    console.log(serializeForm(event.target)); // { username: '...', role: 'member', subscribe: 'yes' }
+    console.log(serializeForm(event.target)); // { username: '...', role: 'member', subscribe: 'true' }
   });
 </script>
 ```
