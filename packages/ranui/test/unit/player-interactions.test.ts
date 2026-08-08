@@ -14,35 +14,34 @@ describe('r-player interaction methods', () => {
 
   it('clicking the player container toggles play and pause state', () => {
     const player = makePlayer();
-    const event = new MouseEvent('click');
     const pauseSpy = vi.spyOn(player, 'pause').mockImplementation(() => undefined);
     const playSpy = vi.spyOn(player, 'play').mockImplementation(() => undefined);
 
     player.ctx.currentState = 'play';
-    player.dispatchClickPlayerContainerAction(event);
+    player._container.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     expect(pauseSpy).toHaveBeenCalled();
     expect(player._playerBtn.style.display).toBe('block');
 
     player.ctx.currentState = 'pause';
-    player.dispatchClickPlayerContainerAction(event);
+    player._container.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     expect(playSpy).toHaveBeenCalled();
     expect(player._playerBtn.style.display).toBe('none');
   });
 
   it('keyboard arrows seek by five seconds within duration bounds', () => {
     const player = makePlayer();
+    player._video = document.createElement('video');
     player.ctx.currentTime = 10;
     player.ctx.duration = 20;
-    const setCurrentTimeSpy = vi.spyOn(player, 'setCurrentTime');
     const playSpy = vi.spyOn(player, 'play').mockImplementation(() => undefined);
 
-    player.SpaceKeyDown(new KeyboardEvent('keydown', { code: 'ArrowLeft' }));
-    expect(setCurrentTimeSpy).toHaveBeenLastCalledWith(5);
+    player.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowLeft', bubbles: true }));
+    expect(player.getCurrentTime()).toBe(5);
     expect(playSpy).toHaveBeenCalled();
 
     player.ctx.currentTime = 18;
-    player.SpaceKeyDown(new KeyboardEvent('keydown', { code: 'ArrowRight' }));
-    expect(setCurrentTimeSpy).toHaveBeenLastCalledWith(20);
+    player.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowRight', bubbles: true }));
+    expect(player.getCurrentTime()).toBe(20);
   });
 
   it('progress click seeks using progress geometry', () => {
@@ -52,7 +51,7 @@ describe('r-player interaction methods', () => {
     Object.defineProperty(player._progress, 'offsetWidth', { value: 200, configurable: true });
     player._progressWrap.getBoundingClientRect = vi.fn(() => ({ left: 10 }) as DOMRect);
 
-    player.progressClick(new MouseEvent('click', { clientX: 60 }));
+    player._progress.dispatchEvent(new MouseEvent('click', { clientX: 60, bubbles: true }));
 
     expect(player._video.currentTime).toBe(25);
     expect(player.ctx.currentTime).toBe(25);
@@ -68,9 +67,9 @@ describe('r-player interaction methods', () => {
     player._progress.getBoundingClientRect = vi.fn(() => ({ left: 0 }) as DOMRect);
     vi.spyOn(player._video, 'play').mockReturnValue(Promise.resolve() as any);
 
-    player.progressDotMouseDown();
-    player.progressDotMouseMoveDocument(new MouseEvent('mousemove', { clientX: 109 }));
-    player.progressDotMouseUp();
+    player._progressDot.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+    document.dispatchEvent(new MouseEvent('mousemove', { clientX: 109 }));
+    document.dispatchEvent(new MouseEvent('mouseup'));
 
     expect(player.moveProgress.mouseDown).toBe(false);
     expect(player.ctx.currentTime).toBe(50);
@@ -83,7 +82,7 @@ describe('r-player interaction methods', () => {
     Object.defineProperty(player._progress, 'clientWidth', { value: 200, configurable: true });
     player._progress.getBoundingClientRect = vi.fn(() => ({ left: 0 }) as DOMRect);
 
-    player.progressMouseEnter(new MouseEvent('mouseenter', { clientX: 50 }));
+    player._progress.dispatchEvent(new MouseEvent('mouseenter', { clientX: 50, bubbles: true }));
 
     expect(player._playerTip.style.opacity).toBe('1');
     expect(player._playerTipTime.innerText).toBe('00:25');
@@ -97,7 +96,7 @@ describe('r-player interaction methods', () => {
     });
     Object.defineProperty(document, 'fullscreenElement', { value: player._player, configurable: true });
 
-    player.fullScreenChange();
+    document.dispatchEvent(new Event('fullscreenchange'));
 
     expect(player.ctx.fullScreen).toBe(true);
     expect(detail.type).toBe('fullscreen');

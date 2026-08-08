@@ -1,8 +1,14 @@
 import scratchCss from './index.less?inline';
-import { Div, EventManager, View } from '@/utils/builder';
-import { RanElement } from '@/utils/index';
+import { Div, EventManager, Slot, View } from '@/utils/builder';
+import { RanElement, isDisabled } from '@/utils/index';
 import { defineSSR } from '@/utils/ssr-registry';
-import { ensureShadowElement, ensureShadowRoot } from '@/utils/component';
+import {
+  ensureShadowElement,
+  ensureShadowRoot,
+  getStringAttribute,
+  setStringAttribute,
+  syncSheetAttribute,
+} from '@/utils/component';
 
 class ScratchTicket extends RanElement {
   scratchTicketContainer: HTMLDivElement;
@@ -11,8 +17,12 @@ class ScratchTicket extends RanElement {
   scratchAward: HTMLDivElement;
   _shadowDom: ShadowRoot;
   _events = new EventManager();
+  // `icon`/`effect`/`iconSize` used to be observed here with nothing reading them —
+  // reveal content is arbitrary (a prize amount, an image, an <r-icon>, several
+  // elements), not a single named icon, so it belongs in the default slot below
+  // rather than a narrow name+size attribute pair. See docs/src/ranui/scratch.
   static get observedAttributes(): string[] {
-    return ['disabled', 'icon', 'effect', 'iconSize', 'sheet'];
+    return ['disabled', 'sheet'];
   }
   constructor() {
     super();
@@ -23,7 +33,9 @@ class ScratchTicket extends RanElement {
         .style('width', '100%')
         .style('height', '100%')
         .build() as HTMLCanvasElement;
-      const scratchAward = Div().class('ran-scratch-ticket-award').build() as HTMLDivElement;
+      // Default slot: whatever the consumer puts under <r-scratch> is the reveal
+      // content, projected here so it renders underneath the scratch cover.
+      const scratchAward = Div().class('ran-scratch-ticket-award').part('award').children(Slot()).build() as HTMLDivElement;
       return Div().class('ran-scratch-ticket').children(scratchTicket, scratchAward).build() as HTMLDivElement;
     });
     const scratchAward = scratchTicketContainer.querySelector('.ran-scratch-ticket-award') as HTMLDivElement;
@@ -38,23 +50,45 @@ class ScratchTicket extends RanElement {
       scratchArea: 0,
     };
   }
+  get disabled(): boolean {
+    return isDisabled(this);
+  }
+  set disabled(value: boolean) {
+    if (value) this.setAttribute('disabled', '');
+    else this.removeAttribute('disabled');
+  }
+  get sheet(): string {
+    return getStringAttribute(this, 'sheet');
+  }
+  set sheet(value: string) {
+    setStringAttribute(this, 'sheet', value);
+  }
+  handlerExternalCss = (): void => {
+    syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
+  };
+  syncDisabled = (): void => {
+    this.setAttribute('aria-disabled', this.disabled ? 'true' : 'false');
+  };
   touchStartScratch = (): void => {
+    if (this.disabled) return;
     this.state.touchStart = true;
   };
   touchMoveScratch = (): void => {
-    if (this.state.touchStart) {
-      const ctx = this.scratchTicket.getContext('2d');
-      if (!ctx) return;
-      this.state.scratchArea += 30;
-      ctx.beginPath();
-      ctx.arc(100, 100, 30, 0, 2 * Math.PI);
-      ctx.globalCompositeOperation = 'destination-out';
-      ctx.fill();
-      ctx.closePath();
-    }
+    // `pointer-events: none` on [disabled] already stops real touches from
+    // reaching here — this guard is for a programmatically dispatched event.
+    if (this.disabled || !this.state.touchStart) return;
+    const ctx = this.scratchTicket.getContext('2d');
+    if (!ctx) return;
+    this.state.scratchArea += 30;
+    ctx.beginPath();
+    ctx.arc(100, 100, 30, 0, 2 * Math.PI);
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.fill();
+    ctx.closePath();
   };
   touchEndScratch = (): void => {
     this.state.touchStart = false;
+    if (this.disabled) return;
     const { width, height } = this.scratchTicket;
     const ctx = this.scratchTicket.getContext('2d');
     if (!ctx) return;
@@ -73,6 +107,8 @@ class ScratchTicket extends RanElement {
     ctx.fillRect(0, 0, width, height);
   };
   connectedCallback(): void {
+    this.handlerExternalCss();
+    this.syncDisabled();
     this._events
       .on(this.scratchTicket, 'touchstart', this.touchStartScratch)
       .on(this.scratchTicket, 'touchmove', this.touchMoveScratch)
@@ -87,6 +123,8 @@ class ScratchTicket extends RanElement {
     if (!this._shadowDom.contains(this.scratchTicketContainer)) {
       this._shadowDom.appendChild(this.scratchTicketContainer);
     }
+    if (name === 'disabled') this.syncDisabled();
+    if (name === 'sheet') this.handlerExternalCss();
     this.drawScratchTicket();
   }
 }

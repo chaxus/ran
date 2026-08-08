@@ -186,6 +186,17 @@ input.addEventListener('change', (event) => {
 </form>
 ```
 
+**Reset**: a native `form.reset()` (or `<button type="reset">`) restores the value the field had when it first connected — implemented via `formResetCallback()`, one of the lifecycle hooks the browser calls automatically on a form-associated custom element.
+
+**Validation**: setting `required` makes an empty field invalid via `ElementInternals.setValidity()` — `form.checkValidity()`/`form.reportValidity()` see it, and submitting shows the browser's native validation bubble anchored on the field. `disabled` fields never block validation, matching native `<input>`. `r-input` also exposes the usual native-field methods/properties: `checkValidity()`, `reportValidity()`, `validity`, `validationMessage`.
+
+```html
+<form>
+  <r-input name="username" label="Username" required></r-input>
+  <button type="submit">Submit</button>
+</form>
+```
+
 ## CSS Parts
 
 Exposed via `::part()` for external styling.

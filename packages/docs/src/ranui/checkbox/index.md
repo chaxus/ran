@@ -31,6 +31,7 @@ The default slot content becomes the checkbox label.
 | `checked`  | `boolean` | `false`   | Whether the checkbox is checked                                 |
 | `value`    | `string`  | `'false'` | Form value; mirrors the checked state as `'true'` / `'false'`   |
 | `disabled` | `boolean` | `false`   | Whether the checkbox is disabled                                |
+| `required` | `boolean` | `false`   | Whether the box must be checked for the form to submit          |
 | `sheet`    | `string`  | `''`      | CSS injected into the component's shadow DOM for custom styling |
 
 > The `checked` and `value` attributes are kept in sync: setting one updates the other. When checked, `value` is `'true'`; when unchecked, `value` is `'false'`.
@@ -119,6 +120,17 @@ A disabled checkbox does not fire `change`.
 `r-checkbox` is a form-associated custom element (`formAssociated = true`). It relays its checked state through `ElementInternals.setFormValue`, so it participates in native forms and is collected by `new FormData(form)` — including inside `<r-form>`. Following native checkbox semantics, it contributes its `value` only when checked.
 
 The host itself carries the accessible checkbox semantics: `role="checkbox"`, `aria-checked`, `aria-disabled`, and keyboard operability (toggle on Space or Enter).
+
+**Reset**: a native `form.reset()` restores the checked state the box had when it first connected, via `formResetCallback()`.
+
+**Validation**: `required` makes an unchecked box invalid via `ElementInternals.setValidity()`, visible to `form.checkValidity()`/`form.reportValidity()`; a `disabled` box never blocks validation. `checkValidity()`, `reportValidity()`, `validity`, and `validationMessage` are exposed on the element, same as a native field.
+
+```html
+<form>
+  <r-checkbox name="terms" value="accepted" required>I agree to the terms</r-checkbox>
+  <button type="submit">Submit</button>
+</form>
+```
 
 ## CSS Parts
 

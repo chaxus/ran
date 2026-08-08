@@ -94,7 +94,7 @@ describe('r-player contract', () => {
     };
 
     player._pendingPlaybackRestore = snapshot;
-    player.onLoadedmetadata(new Event('loadedmetadata'));
+    player._video.dispatchEvent(new Event('loadedmetadata'));
 
     expect(restoreSpy).toHaveBeenCalledWith(snapshot);
     expect(player._pendingPlaybackRestore).toBeUndefined();
@@ -121,7 +121,7 @@ describe('r-player contract', () => {
     player._isSwitchingSource = true;
     const setLoadingStateSpy = vi.spyOn(player, 'setLoadingState');
 
-    player.onWaiting(new Event('waiting'));
+    player._video.dispatchEvent(new Event('waiting'));
 
     expect(setLoadingStateSpy).toHaveBeenCalledWith(true);
   });
@@ -138,11 +138,10 @@ describe('r-player contract', () => {
       shouldResume: true,
     };
     vi.spyOn(player, 'getTotalTime').mockReturnValue(100);
-    const syncProgressSpy = vi.spyOn(player, 'syncProgressByPercentage');
 
-    player.onLoadeddata(new Event('loadeddata'));
+    player._video.dispatchEvent(new Event('loadeddata'));
 
-    expect(syncProgressSpy).toHaveBeenCalledWith(0.42);
+    expect(player._progressWrapValue.style.transform).toBe('scaleX(0.42)');
     expect(player._playerControllerBottomTimeCurrent.innerText).toBe('00:42');
   });
 
@@ -159,12 +158,11 @@ describe('r-player contract', () => {
       shouldResume: true,
     };
 
-    const syncProgressSpy = vi.spyOn(player, 'syncProgressByPercentage');
     const getCurrentTimeSpy = vi.spyOn(player, 'getCurrentTime');
 
     player.updateCurrentProgress();
 
-    expect(syncProgressSpy).toHaveBeenCalledWith(0.5);
+    expect(player._progressWrapValue.style.transform).toBe('scaleX(0.5)');
     expect(getCurrentTimeSpy).not.toHaveBeenCalled();
   });
 
@@ -271,7 +269,9 @@ describe('r-player contract', () => {
     player._video = video;
     const safePlaySpy = vi.spyOn(player, 'safePlay');
 
-    player.changeSpeed(new CustomEvent('change', { detail: { value: '1.5' } }));
+    player._playControllerBottomSpeedPopover.dispatchEvent(
+      new CustomEvent('change', { detail: { value: '1.5' } }),
+    );
 
     expect(player.ctx.playbackRate).toBe(1.5);
     expect(player._video.playbackRate).toBe(1.5);
@@ -284,7 +284,9 @@ describe('r-player contract', () => {
     player._video = document.createElement('video');
     player._video.volume = 0.5;
 
-    player.changeVolumeProgress(new CustomEvent('change', { detail: { value: 80 } }));
+    player._playControllerBottomVolumeProgress.dispatchEvent(
+      new CustomEvent('change', { detail: { value: 80 } }),
+    );
 
     expect(player.ctx.volume).toBe(0.8);
     expect(player._video.volume).toBe(0.8);
@@ -299,14 +301,22 @@ describe('r-player contract', () => {
     player.ctx.volume = 0.75;
     player._volume = 0.75;
 
-    player.changePlayerVolume();
+    player._playControllerBottomSpeedIcon.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     expect(player.ctx.volume).toBe(0);
     expect(player._playControllerBottomVolumeProgress.getAttribute('percent')).toBe('0');
+    expect(
+      player._playControllerBottomSpeedIcon.classList.contains('ran-player-controller-bottom-right-volume-icon-mute'),
+    ).toBe(true);
 
-    player.changePlayerVolume();
+    player._playControllerBottomSpeedIcon.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     expect(player.ctx.volume).toBe(0.75);
     expect(player._video.volume).toBe(0.75);
-    expect(player._playControllerBottomVolumeProgress.getAttribute('percent')).toBe('0.75');
+    expect(player._playControllerBottomVolumeProgress.getAttribute('percent')).toBe('75');
+    expect(
+      player._playControllerBottomSpeedIcon.classList.contains(
+        'ran-player-controller-bottom-right-volume-icon-volume',
+      ),
+    ).toBe(true);
   });
 
   it('seeks by normalized percentage using available duration', () => {

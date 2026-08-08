@@ -5,6 +5,7 @@ const makePlayer = (): any => {
   const player = document.createElement('r-player') as any;
   document.body.appendChild(player);
   player._video = document.createElement('video');
+  player.listenEvent();
   return player;
 };
 
@@ -59,34 +60,34 @@ describe('r-player controls and browser-facing helpers', () => {
     expect(player.controllerBarTimeId).toBeUndefined();
   });
 
-  it('uses the player button action to toggle playback state', () => {
+  it('uses the play button to toggle playback state', () => {
     const player = makePlayer();
     const pauseSpy = vi.spyOn(player, 'pause').mockImplementation(() => undefined);
     const playSpy = vi.spyOn(player, 'play').mockImplementation(() => undefined);
 
     player.ctx.currentState = 'play';
-    player.dispatchClickPlayerBtnAction(new MouseEvent('click'));
+    player._playerControllerBottomPlayBtn.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     expect(pauseSpy).toHaveBeenCalled();
     expect(player._playerBtn.style.display).toBe('block');
 
     player.ctx.currentState = 'pause';
-    player.dispatchClickPlayerBtnAction(new MouseEvent('click'));
+    player._playerControllerBottomPlayBtn.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     expect(playSpy).toHaveBeenCalled();
     expect(player._playerBtn.style.display).toBe('none');
   });
 
-  it('opens and exits fullscreen through wrapped fullscreen helpers', async () => {
+  it('opens and exits fullscreen through the fullscreen button', async () => {
     const player = makePlayer();
     vi.spyOn(player, 'resize').mockImplementation(() => undefined);
     const requestSpy = vi.spyOn(player, 'customRequestFullscreen').mockResolvedValue(undefined);
     const exitSpy = vi.spyOn(player, 'customExitFullscreen').mockResolvedValue(undefined);
 
-    player.openFullScreen();
+    player._playControllerBottomRightFullScreen.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     await Promise.resolve();
     expect(requestSpy).toHaveBeenCalled();
     expect(player.ctx.fullScreen).toBe(true);
 
-    player.openFullScreen();
+    player._playControllerBottomRightFullScreen.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     await Promise.resolve();
     expect(exitSpy).toHaveBeenCalled();
     expect(player.ctx.fullScreen).toBe(false);
@@ -97,14 +98,13 @@ describe('r-player controls and browser-facing helpers', () => {
     player.moveProgress.mouseDown = true;
     Object.defineProperty(player._progress, 'offsetWidth', { value: 200, configurable: true });
     player._progress.getBoundingClientRect = vi.fn(() => ({ left: 0 }) as DOMRect);
-    const syncSpy = vi.spyOn(player, 'syncProgressByPercentage');
 
-    player.progressDotMouseMove(new MouseEvent('mousemove', { clientX: 109 }));
-    expect(syncSpy).toHaveBeenCalledWith(0.5);
+    player._player.dispatchEvent(new MouseEvent('mousemove', { clientX: 109, bubbles: true }));
+    expect(player._progressWrapValue.style.transform).toBe('scaleX(0.5)');
     expect(player.moveProgress.percentage).toBe(0.5);
 
     player._playerTip.style.opacity = '1';
-    player.progressMouseLeave(new MouseEvent('mouseleave'));
+    player._progress.dispatchEvent(new MouseEvent('mouseleave', { bubbles: true }));
     expect(player._playerTip.style.opacity).toBe('0');
   });
 
@@ -114,7 +114,7 @@ describe('r-player controls and browser-facing helpers', () => {
     Object.defineProperty(player._progress, 'clientWidth', { value: 200, configurable: true });
     player._progress.getBoundingClientRect = vi.fn(() => ({ left: 10 }) as DOMRect);
 
-    player.progressMouseMove(new MouseEvent('mousemove', { clientX: 60 }));
+    player._progress.dispatchEvent(new MouseEvent('mousemove', { clientX: 60, bubbles: true }));
 
     expect(player._playerTip.style.opacity).toBe('1');
     expect(player._playerTipTime.innerText).toBe('00:20');
@@ -124,9 +124,8 @@ describe('r-player controls and browser-facing helpers', () => {
     const player = makePlayer();
     player._player.getBoundingClientRect = vi.fn(() => ({ width: 320, height: 180 }) as DOMRect);
     Object.defineProperty(document.body, 'clientWidth', { value: 400, configurable: true });
-    vi.spyOn(player, 'updateCurrentProgress').mockImplementation(() => undefined);
 
-    player.resize();
+    window.dispatchEvent(new Event('resize'));
 
     expect(player._video.style.width).toBe('320px');
     expect(player._video.style.height).toBe('180px');

@@ -4,6 +4,16 @@
   --ran-scratch-cover-background: var(--ran-color-text-secondary, #6b6b6b);
 }
 
+:host([disabled]) {
+  cursor: var(--ran-scratch-disabled-cursor, not-allowed);
+  opacity: var(--ran-scratch-disabled-opacity, 0.6);
+  .ran-scratch-ticket-canvas {
+    /* Belt-and-braces with the JS guard in touchStartScratch/touchMoveScratch:
+       this is what actually stops a real touch from reaching the canvas. */
+    pointer-events: none;
+  }
+}
+
 .ran-scratch-ticket {
   position: relative;
   display: block;

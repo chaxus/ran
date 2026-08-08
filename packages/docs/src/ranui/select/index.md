@@ -45,6 +45,7 @@ Options are supplied as slotted `<r-option>` children. Each option's `value` att
 | `getPopupContainerId` | `string`  | `''`       | Element `id` to mount the dropdown into (defaults to `document.body`)                   |
 | `dropdownclass`       | `string`  | `''`       | Custom class applied to the dropdown panel                                              |
 | `trigger`             | `string`  | `'click'`  | How the dropdown opens: `click`, `hover`, or `click,hover` (hover is ignored on mobile) |
+| `required`            | `boolean` | `false`    | Whether a selection is required for the form to submit                                  |
 | `sheet`               | `string`  | `''`       | CSS injected into the shadow DOM                                                        |
 
 > **Note:** `defaultValue` and `showSearch` are reactive — changing them after the element has connected is re-processed (alongside `value`, `disabled`, and `sheet`) in `attributeChangedCallback`. Updating `defaultValue` re-applies the matching selection; toggling `showSearch` wires or unwires the inline search box.
@@ -249,6 +250,20 @@ Fired only when `showSearch` is enabled, as the user types in the search box (th
 ## Form Association
 
 `r-select` is a form-associated custom element (`static formAssociated = true`). It relays its selected `value` through `ElementInternals`, so it is collected by `new FormData(form)` and by `<r-form>` under the select's `name`. The form value is seeded from any initial selection on connect and kept in sync as the value changes.
+
+**Reset**: a native `form.reset()` restores `defaultValue`'s selection if one is set, otherwise clears the selection entirely — via `formResetCallback()`.
+
+**Validation**: `required` makes an empty selection invalid via `ElementInternals.setValidity()`, visible to `form.checkValidity()`/`form.reportValidity()`; a `disabled` select never blocks validation. `checkValidity()`, `reportValidity()`, `validity`, and `validationMessage` are exposed on the element, same as a native field.
+
+```html
+<form>
+  <r-select name="country" required>
+    <r-option value="us">United States</r-option>
+    <r-option value="ca">Canada</r-option>
+  </r-select>
+  <button type="submit">Submit</button>
+</form>
+```
 
 ## Slots
 
