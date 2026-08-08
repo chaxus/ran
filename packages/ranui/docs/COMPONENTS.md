@@ -6,7 +6,7 @@ shape), slots, and `::part()` names — extracted from source. For CSS variables
 (theming tokens) see [style-tokens-public.md](./style-tokens-public.md); for
 design rules see [DESIGN.md](./DESIGN.md).
 
-Generated at: 2026-08-08T09:46:15.554Z
+Generated at: 2026-08-08T10:58:45.472Z
 
 31 custom elements.
 
@@ -255,10 +255,12 @@ Source: `components/player/index.ts`
 - **Attributes**: `autoplay: boolean`, `currenttime`, `currentTime: string`, `debug: string`, `disable-error-modal`, `loop: boolean`, `muted: boolean`, `playbackrate`, `playbackRate: string`, `poster: string`, `remember-position`, `sheet: string`, `src: string`, `volume: string`
 - **Properties**: 
   - `autoplay: boolean`
+  - `controllerBarTimeId: ReturnType<typeof setTimeout> | undefined`
   - `currentTime: string`
   - `debug: string`
   - `disableErrorModal: boolean`
   - `loop: boolean`
+  - `moveProgress`
   - `muted: boolean`
   - `playbackRate: string`
   - `poster: string`
