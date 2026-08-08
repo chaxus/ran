@@ -8,6 +8,7 @@
     "target": "ESNext",
     "declaration": true,
     "outDir": "dist",
+    "rootDir": ".",
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "isolatedModules": false,
