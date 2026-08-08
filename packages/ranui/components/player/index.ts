@@ -261,6 +261,30 @@ export class RanPlayer extends RanElement {
   set playbackRate(value: string) {
     this.setAttribute('playbackRate', value || '');
   }
+  get poster(): string {
+    return this.getAttribute('poster') || '';
+  }
+  set poster(value: string) {
+    this.setAttribute('poster', value || '');
+  }
+  get autoplay(): boolean {
+    return this.hasAttribute('autoplay');
+  }
+  set autoplay(value: boolean) {
+    setBooleanAttribute(this, 'autoplay', value);
+  }
+  get loop(): boolean {
+    return this.hasAttribute('loop');
+  }
+  set loop(value: boolean) {
+    setBooleanAttribute(this, 'loop', value);
+  }
+  get muted(): boolean {
+    return this.hasAttribute('muted');
+  }
+  set muted(value: boolean) {
+    setBooleanAttribute(this, 'muted', value);
+  }
   get sheet(): string {
     return getStringAttribute(this, 'sheet');
   }
@@ -393,6 +417,10 @@ export class RanPlayer extends RanElement {
       .attr('initial-time', '0.01')
       .build() as HTMLVideoElement;
     this._video.controls = false;
+    if (this.poster) this._video.poster = this.poster;
+    this._video.autoplay = this.autoplay;
+    this._video.loop = this.loop;
+    if (this.muted) this.setVolume(0);
     try {
       this._hls = loadVideoSource<HlsPlayer>({
         video: this._video,
@@ -1061,11 +1089,15 @@ export class RanPlayer extends RanElement {
   };
   /**
    * @description: 0-100 制，和 `volume` 属性、音量滑块一致；`<video>.volume` 是原生 0-1 制，只在这里做换算。
+   * 顺带把原生 `<video>.muted` 和"音量是否为 0"绑在一起——这样 `volume=0` 才会真正满足浏览器的
+   * "muted autoplay" 免打扰策略（单纯把 volume 设成 0 不等于 `.muted === true`，某些浏览器的
+   * autoplay 判定只认后者），而不用再维护一个独立于音量的"是否静音"状态。
    */
   public setVolume = (n: number): number => {
     if (this._video) {
       this.ctx.volume = n;
       this._video.volume = n / 100;
+      this._video.muted = n <= 0;
       this._visualSignals.volume.setter(n);
     }
     return this.ctx.volume;
@@ -1193,6 +1225,18 @@ export class RanPlayer extends RanElement {
     }
     if (k === 'sheet' && o !== n) {
       this.handlerExternalCss();
+    }
+    if (k === 'poster' && o !== n && this._video) {
+      this._video.poster = this.poster;
+    }
+    if (k === 'autoplay' && o !== n && this._video) {
+      this._video.autoplay = this.autoplay;
+    }
+    if (k === 'loop' && o !== n && this._video) {
+      this._video.loop = this.loop;
+    }
+    if (k === 'muted' && o !== n) {
+      this.setVolume(this.muted ? 0 : this._volume || 50);
     }
   }
 }

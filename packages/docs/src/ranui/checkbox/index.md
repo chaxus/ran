@@ -159,4 +159,4 @@ r-checkbox::part(label) {
 - **Checked vs. value**: Use `checked` for boolean state; read `value` (`'true'` / `'false'`) when collecting form data.
 - **Disabled State**: Use `disabled` when the choice is unavailable.
 - **Listen to `change`**: Read `event.detail.checked` rather than re-querying the DOM.
-- **Forms**: Drop `r-checkbox` inside a `<form>` — its value is collected automatically when checked. Wrap that `<form>` in `<r-form>` for a default layout and JSON serialization convenience.
+- **Forms**: Drop `r-checkbox` inside a `<form>` — its value is collected automatically when checked. See [Forms](/src/ranui/form/) for the `serializeForm()` helper that turns a submit into a plain object.

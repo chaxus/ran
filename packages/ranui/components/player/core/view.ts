@@ -38,6 +38,7 @@ export interface PlayerViewRefs {
   playControllerBottomSpeed: HTMLDivElement;
   playControllerBottomVolumeIcon: HTMLDivElement;
   playControllerBottomVolumeProgress: Progress;
+  playControllerBottomPip: HTMLDivElement;
   playControllerBottomRightFullScreen: HTMLDivElement;
   playControllerBottomVolume: HTMLDivElement;
   playControllerBottomSpeedPopover: HTMLElement;
@@ -145,6 +146,18 @@ export function ensurePlayerView(input: {
     const playControllerBottomClarity = Div()
       .class('ran-player-controller-bottom-right-clarity')
       .build() as HTMLDivElement;
+    // Hidden by default (`ran-player-controller-bottom-right-pip-hidden`, toggled by
+    // `syncPipButtonVisibility` in index.ts once `isPipSupported()` is known — that check
+    // needs `document`, so it can't run at SSR/construction time). No `<r-icon>` child
+    // needed for aria: the icon is decorative by default when it carries no aria-label of
+    // its own, and this button already has one via `focusableRole`.
+    const playControllerBottomPip = focusableRole(
+      Div().class('ran-player-controller-bottom-right-pip ran-player-controller-bottom-right-pip-hidden'),
+      'button',
+      'Picture in picture',
+    )
+      .children(View('r-icon').attr('name', 'pip').build())
+      .build() as HTMLDivElement;
     const playControllerBottomRightFullScreen = focusableRole(
       Div().class('ran-player-controller-bottom-right-full'),
       'button',
@@ -157,6 +170,7 @@ export function ensurePlayerView(input: {
         playControllerBottomClarity,
         playControllerBottomSpeed,
         playControllerBottomVolume,
+        playControllerBottomPip,
         playControllerBottomRightFullScreen,
       )
       .build() as HTMLDivElement;
@@ -269,6 +283,10 @@ export function ensurePlayerView(input: {
     playerControllerBottomRight.querySelector('.ran-player-controller-bottom-right-clarity') as HTMLElement | null,
     '.ran-player-controller-bottom-right-clarity',
   );
+  const playControllerBottomPip = assertExists(
+    playerControllerBottomRight.querySelector('.ran-player-controller-bottom-right-pip') as HTMLDivElement | null,
+    '.ran-player-controller-bottom-right-pip',
+  );
   const playControllerBottomRightFullScreen = assertExists(
     playerControllerBottomRight.querySelector('.ran-player-controller-bottom-right-full') as HTMLDivElement | null,
     '.ran-player-controller-bottom-right-full',
@@ -308,6 +326,7 @@ export function ensurePlayerView(input: {
     playControllerBottomSpeed,
     playControllerBottomVolumeIcon,
     playControllerBottomVolumeProgress,
+    playControllerBottomPip,
     playControllerBottomRightFullScreen,
     playControllerBottomVolume,
     playControllerBottomSpeedPopover,

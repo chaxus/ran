@@ -6,9 +6,9 @@ shape), slots, and `::part()` names — extracted from source. For CSS variables
 (theming tokens) see [style-tokens-public.md](./style-tokens-public.md); for
 design rules see [DESIGN.md](./DESIGN.md).
 
-Generated at: 2026-08-08T07:32:18.965Z
+Generated at: 2026-08-08T09:15:59.116Z
 
-32 custom elements.
+31 custom elements.
 
 ## `<r-button>`
 
@@ -89,16 +89,6 @@ Source: `components/select/dropdown-item/index.ts`
 - **Events**: —
 - **Slots**: `default`
 - **Parts**: `content`, `item`
-
-## `<r-form>`
-
-Source: `components/form/index.ts`
-
-- **Attributes**: `sheet: string`
-- **Properties**: `sheet: string`, `value: string | null`
-- **Events**: —
-- **Slots**: `default`
-- **Parts**: —
 
 ## `<r-glass>`
 
@@ -262,8 +252,8 @@ Source: `components/select/option/index.ts`
 
 Source: `components/player/index.ts`
 
-- **Attributes**: `currenttime`, `currentTime: string`, `debug: string`, `playbackrate`, `playbackRate: string`, `sheet: string`, `src: string`, `volume: string`
-- **Properties**: `currentTime: string`, `debug: string`, `playbackRate: string`, `sheet: string`, `src: string`, `volume: string`
+- **Attributes**: `autoplay: boolean`, `currenttime`, `currentTime: string`, `debug: string`, `loop: boolean`, `muted: boolean`, `playbackrate`, `playbackRate: string`, `poster: string`, `sheet: string`, `src: string`, `volume: string`
+- **Properties**: `autoplay: boolean`, `currentTime: string`, `debug: string`, `loop: boolean`, `muted: boolean`, `playbackRate: string`, `poster: string`, `sheet: string`, `src: string`, `volume: string`
 - **Events**: `change` → detail `{ currentTime, data, duration, tag, type }`
 - **Slots**: —
 - **Parts**: —
