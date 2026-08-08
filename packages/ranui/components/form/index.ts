@@ -1,4 +1,4 @@
-import { EventManager, Slot, View } from '@/utils/builder';
+import { EventManager, Slot } from '@/utils/builder';
 import formCss from './index.less?inline';
 import { RanElement } from '@/utils/index';
 import { defineSSR } from '@/utils/ssr-registry';
@@ -11,7 +11,6 @@ import {
 } from '@/utils/component';
 
 export class Form extends RanElement {
-  _form: HTMLFormElement;
   _shadowDom: ShadowRoot;
   _events = new EventManager();
 
@@ -23,14 +22,15 @@ export class Form extends RanElement {
     super();
     this._shadowDom = ensureShadowRoot(this, formCss);
 
-    // Default (unnamed) slot: any child placed directly inside <r-form> is
-    // projected here — no slot="..." attribute needed, and no wrapper <div>
-    // that would swallow every field into a single flex/grid item.
-    this._form = ensureShadowElement(
-      this._shadowDom,
-      '.ran-form',
-      () => View('form').class('ran-form').part('form').children(Slot()).build() as HTMLFormElement,
-    );
+    // Deliberately no <form> element here. A <form> owner is resolved by
+    // walking the real (light) DOM ancestor chain, which never crosses into
+    // a shadow root — a <form> hidden inside shadow DOM can never become the
+    // form owner of light-DOM children, even ones rendered through a <slot>
+    // (verified empirically: a plain slotted <input>'s `.form` is null).
+    // So the real <form> must be authored by the consumer, as an ordinary
+    // light-DOM child — this is just a passthrough slot plus a default
+    // layout for it (see index.less, `::slotted(form)`).
+    ensureShadowElement(this._shadowDom, 'slot', () => Slot().build());
   }
 
   get value(): string | null {
@@ -51,11 +51,16 @@ export class Form extends RanElement {
     syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
   };
 
-  private _handleSubmit = (): void => {
-    // Recomputed fresh on every submit — must not be hoisted out of this
-    // handler, or `value` would forever reflect whatever FormData looked
-    // like at connect time instead of what the user actually submitted.
-    const formData = new FormData(this._form);
+  private _handleSubmit = (event: Event): void => {
+    // A real <form> submits by navigating the page by default — this is a JS
+    // form wrapper, so stop that and serialize instead.
+    event.preventDefault();
+    // `submit`/`reset` bubble from the consumer's light-DOM <form> up through
+    // this host; `event.target` is always that <form> (the event's own
+    // target, per spec) — recomputed fresh on every submit, so `value`
+    // always reflects what was actually submitted, not whatever the fields
+    // held when the form first connected.
+    const formData = new FormData(event.target as HTMLFormElement);
     const jsonData: Record<string, unknown> = {};
     formData.forEach((_, key) => {
       if (!(key in jsonData)) {
@@ -73,7 +78,7 @@ export class Form extends RanElement {
 
   connectedCallback(): void {
     this.handlerExternalCss();
-    this._events.on(this._form, 'submit', this._handleSubmit).on(this._form, 'reset', this._handleReset);
+    this._events.on(this, 'submit', this._handleSubmit).on(this, 'reset', this._handleReset);
   }
 
   disconnectedCallback(): void {

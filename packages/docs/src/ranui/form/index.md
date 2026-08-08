@@ -1,8 +1,8 @@
 # Form
 
-Form container that wraps a native `<form>` in the shadow DOM and serializes its fields into a JSON string on submit.
+Lightweight wrapper around a native `<form>` that serializes it into a JSON string on submit.
 
-> **Use when** you need to collect a set of named fields and read them back as a serialized JSON string on submit — `<r-form>` wraps a native `<form>` and gathers its projected fields for you.
+> **Use when** you need to collect a set of named fields and read them back as a serialized JSON string on submit — `<r-form>` wraps your own native `<form>`, stops its default page-navigating submit, and serializes it for you.
 
 ## Quick Start
 
@@ -10,46 +10,54 @@ Form container that wraps a native `<form>` in the shadow DOM and serializes its
 
 <Demo column>
   <r-form>
-    <r-input name="username" label="Username" placeholder="Enter username"></r-input>
-    <r-checkbox name="subscribe" value="yes">Subscribe to newsletter</r-checkbox>
-    <r-button type="primary"><button type="submit" style="all: unset; cursor: pointer">Submit</button></r-button>
+    <form>
+      <r-input name="username" label="Username" placeholder="Enter username"></r-input>
+      <r-checkbox name="subscribe" value="yes">Subscribe to newsletter</r-checkbox>
+      <r-button type="primary"><button type="submit" style="all: unset; cursor: pointer">Submit</button></r-button>
+    </form>
   </r-form>
 </Demo>
 
 ```html
 <r-form>
-  <r-input name="username" label="Username" placeholder="Enter username"></r-input>
-  <r-checkbox name="subscribe" value="yes">Subscribe to newsletter</r-checkbox>
-  <button type="submit">Submit</button>
+  <form>
+    <r-input name="username" label="Username" placeholder="Enter username"></r-input>
+    <r-checkbox name="subscribe" value="yes">Subscribe to newsletter</r-checkbox>
+    <button type="submit">Submit</button>
+  </form>
 </r-form>
 ```
 
-Any child placed directly inside `<r-form>` is projected into the internal `<form>` — there is no named slot to remember, and no wrapper element required. `.ran-form` also ships a sensible default layout (vertical stack, 16px gap), so a plain `<r-form>` like the one above already looks right with zero configuration. See [Layout and Styling](#layout-and-styling-sheet) below to change it.
+`<r-form>` requires a real `<form>` as its child — it does not create one for you. That is deliberate: a `<form>` hidden inside shadow DOM can never become the form owner of anything outside it (verified — not just theoretical; see [Why a real `<form>`?](#why-a-real-form) below), so there is no shadow-DOM trick that could stand in for your own `<form>`. `<r-form>` just gives that `<form>` a sensible default layout (vertical stack, 16px gap — zero configuration needed, as above) and listens for its `submit`/`reset`.
 
 ## API Reference
 
 ### Properties
 
-| Property | Type             | Default | Description                                                                                |
-| -------- | ---------------- | ------- | ------------------------------------------------------------------------------------------ |
-| `value`  | `string \| null` | `null`  | Serialized form state as a JSON string, (re)written fresh every time the form is submitted |
-| `sheet`  | `string`         | `''`    | CSS injected into the component's shadow DOM (the internal form has class `.ran-form`)     |
+| Property | Type             | Default | Description                                                                                    |
+| -------- | ---------------- | ------- | ---------------------------------------------------------------------------------------------- |
+| `value`  | `string \| null` | `null`  | Serialized form state as a JSON string, (re)written fresh every time the `<form>` is submitted |
+| `sheet`  | `string`         | `''`    | CSS injected into the component's shadow DOM, targeting the slotted `<form>` via `::slotted()` |
 
 ### Serialized Value `value`
 
-On submit, the component collects the form's named fields via `FormData` into a plain object and writes `JSON.stringify(...)` of that object to `value` — recomputed fresh on every submit, so it always reflects what was actually in the fields at that moment, not whatever they held when the form first connected. Setting `value` reflects to the `value` attribute; a `null` value is ignored. A native `reset` (e.g. `<button type="reset">` or `form.reset()`) clears `value` back to `null`.
+On submit, `<r-form>` calls `preventDefault()` (stopping the native page-navigating submit), collects the form's named fields via `FormData` into a plain object, and writes `JSON.stringify(...)` of that object to `value` — recomputed fresh on every submit, so it always reflects what was actually in the fields at that moment. Setting `value` reflects to the `value` attribute; a `null` value is ignored. A native `reset` (e.g. `<button type="reset">` or `form.reset()`) clears `value` back to `null`.
 
 <Demo column>
   <r-form>
-    <r-input name="email" label="Email" placeholder="you@example.com"></r-input>
-    <r-button type="primary"><button type="submit" style="all: unset; cursor: pointer">Save</button></r-button>
+    <form>
+      <r-input name="email" label="Email" placeholder="you@example.com"></r-input>
+      <r-button type="primary"><button type="submit" style="all: unset; cursor: pointer">Save</button></r-button>
+    </form>
   </r-form>
 </Demo>
 
 ```html
 <r-form id="signup">
-  <r-input name="email" label="Email" placeholder="you@example.com"></r-input>
-  <button type="submit">Save</button>
+  <form>
+    <r-input name="email" label="Email" placeholder="you@example.com"></r-input>
+    <button type="submit">Save</button>
+  </form>
 </r-form>
 
 <script>
@@ -61,25 +69,29 @@ On submit, the component collects the form's named fields via `FormData` into a 
 
 ### Layout and Styling `sheet`
 
-`.ran-form` lays out its own direct children — every field placed straight inside `<r-form>` becomes one of those children — using a default vertical flex layout (`flex-direction: column`, `align-items: stretch`, `gap: 16px`). Three ways to customize it, in order of how much you're changing:
+The slotted `<form>` gets a default vertical flex layout (`flex-direction: column`, `align-items: stretch`, `gap: 16px`). Three ways to customize it, in order of how much you're changing:
 
 - **CSS variables** — for value-only tweaks, set them directly on the host, no `sheet` needed: `--ran-form-gap`, `--ran-form-flex-direction`, `--ran-form-align-items`, `--ran-form-content-display`, and `--ran-form-display` (the host itself, default `contents`).
-- **`::part(form)`** — targets the internal `<form>` from an ordinary stylesheet, same as any other ranui component.
-- **`sheet`** — for structural changes (like switching to a grid), injects CSS straight into the shadow DOM, following the same convention as every other ranui component.
+- **Plain CSS on your own `<form>`** — it's a real light-DOM element, so an ordinary rule (a class, an id, `r-form form { ... }`) works with no ranui-specific mechanism at all.
+- **`sheet`** — for structural changes (like switching to a grid) using the same convention as every other ranui component, injected as `::slotted(form) { ... }`.
 
 <Demo column>
-  <r-form sheet=".ran-form { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }">
-    <r-input name="first" label="First name"></r-input>
-    <r-input name="last" label="Last name"></r-input>
-    <r-button type="primary"><button type="submit" style="all: unset; cursor: pointer">Continue</button></r-button>
+  <r-form sheet="::slotted(form) { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }">
+    <form>
+      <r-input name="first" label="First name"></r-input>
+      <r-input name="last" label="Last name"></r-input>
+      <r-button type="primary"><button type="submit" style="all: unset; cursor: pointer">Continue</button></r-button>
+    </form>
   </r-form>
 </Demo>
 
 ```html
-<r-form sheet=".ran-form { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }">
-  <r-input name="first" label="First name"></r-input>
-  <r-input name="last" label="Last name"></r-input>
-  <button type="submit">Continue</button>
+<r-form sheet="::slotted(form) { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }">
+  <form>
+    <r-input name="first" label="First name"></r-input>
+    <r-input name="last" label="Last name"></r-input>
+    <button type="submit">Continue</button>
+  </form>
 </r-form>
 ```
 
@@ -92,18 +104,20 @@ r-form {
 
 ## Events
 
-`r-form` does not dispatch any custom events. It listens to the internal `<form>`'s native `submit` and `reset` events: `submit` (re)computes and writes `value`; `reset` clears `value` back to `null`. Read the result back from `value` after a submit occurs.
+`r-form` does not dispatch any custom events. It listens for `submit` and `reset` bubbling up from its slotted `<form>`: `submit` is prevented (no page navigation) and (re)computes `value`; `reset` clears `value` back to `null`.
 
 ```html
 <r-form id="profile">
-  <r-input name="name" label="Name"></r-input>
-  <button type="submit">Submit</button>
+  <form>
+    <r-input name="name" label="Name"></r-input>
+    <button type="submit">Submit</button>
+  </form>
 </r-form>
 
 <script>
   const form = document.querySelector('#profile');
   document.querySelector('#profile button[type="submit"]').addEventListener('click', () => {
-    // value is set from the internal form's submit
+    // value is set from the submit that just bubbled through
     console.log(form.value);
   });
 </script>
@@ -113,16 +127,18 @@ r-form {
 
 ### Default slot
 
-The single (unnamed) slot that projects your fields into the internal `<form>`. Every child of `<r-form>` lands here and is serialized if it has a `name`.
+The single (unnamed) slot — put your own `<form>` (and only that) inside `<r-form>`.
 
-## Why no dedicated slot name?
+## Why a real `<form>`?
 
-`r-input`, `r-checkbox`, and `r-select` are themselves [Form-Associated Custom Elements](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_form-associated_custom_elements) — each calls `attachInternals()` and relays its value with `ElementInternals.setFormValue()`. That means they already work inside a **plain native `<form>`**, with no `<r-form>` involved at all: `new FormData(form)` collects them, `form.reset()` restores their pre-interaction state, and a `required` field blocks submission and shows the browser's native validation UI, anchored on the field. `<r-form>` is optional convenience on top of that — a default layout plus a `value` property that saves you writing the `FormData` → JSON boilerplate yourself.
+It would be simpler on the surface for `<r-form>` to build its own internal `<form>` in shadow DOM and slot your fields into it — earlier versions of this component did exactly that. It does not work: a form owner is resolved by walking the real (light) DOM ancestor chain, and that walk never crosses into a shadow root. A `<form>` hidden inside shadow DOM can never become the form owner of light-DOM children, even ones rendered through a `<slot>` — this was verified directly (a plain `<input>` slotted that way has `.form === null` and is invisible to `new FormData(...)`, in a real browser, not just a theoretical spec reading).
+
+So the `<form>` has to be real, authored by you, in the light DOM. The upside: `r-input`, `r-checkbox`, and `r-select` are themselves [Form-Associated Custom Elements](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_form-associated_custom_elements) (`attachInternals()` + `ElementInternals.setFormValue()`), so once they're real descendants of a real `<form>`, everything native just works: `new FormData(form)` collects them, `form.reset()` restores their pre-interaction state, and a `required` field blocks submission and shows the browser's native validation UI, anchored on the field — none of that needs a single line of code in `<r-form>`. `<r-form>` itself is optional convenience on top: a default layout plus a `value` property that saves you writing the `FormData` → JSON boilerplate yourself. You can skip it entirely and use a plain `<form>` if you don't need either.
 
 ## Best Practices
 
-- **No slot attribute needed**: place fields directly inside `<r-form>`; a wrapper element works too, but then only the wrapper (not the fields inside it) participates in `.ran-form`'s layout.
+- **Always nest a real `<form>`**: `<r-form>` does not create one — see [Why a real `<form>`?](#why-a-real-form).
 - **Name your fields**: only fields with a `name` are captured into the serialized `value`.
 - **Read the result from `value`**: the serialized JSON string lives on the `value` property/attribute after submit, and clears on reset.
-- **Prefer CSS variables for spacing, `sheet` for structure**: see [Layout and Styling](#layout-and-styling-sheet).
+- **Prefer CSS variables or plain CSS for layout**: reach for `sheet` only for structural changes — see [Layout and Styling](#layout-and-styling-sheet).
 - **Reach for `required` on the fields themselves**: `r-input`, `r-checkbox`, and `r-select` all support `required` plus `checkValidity()`/`reportValidity()` — native browser validation blocks submission without any code in `<r-form>`.

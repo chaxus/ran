@@ -6,17 +6,19 @@ describe('r-form contract', () => {
     document.body.innerHTML = '';
   });
 
-  it('renders shadow DOM with r-form form element', () => {
+  it('renders a shadow DOM with a plain passthrough slot (no owned <form>)', () => {
+    // A <form> inside shadow DOM can never become the form owner of
+    // light-DOM children — even ones rendered through a <slot> — because form
+    // ownership is resolved over the real (light) DOM ancestor chain, which
+    // never crosses into shadow DOM. So <r-form> intentionally does not own
+    // a <form>; the real <form> is authored by the consumer in light DOM.
     const form = document.createElement('r-form');
     document.body.appendChild(form);
 
     const shadow = (form as any)._shadowDom as ShadowRoot;
     expect(shadow).toBeTruthy();
-
-    const inner = shadow.querySelector('.ran-form');
-    expect(inner).not.toBeNull();
-    expect(inner?.tagName.toLowerCase()).toBe('form');
-    expect(inner?.getAttribute('part')).toBe('form');
+    expect(shadow.querySelector('slot')).not.toBeNull();
+    expect(shadow.querySelector('form')).toBeNull();
   });
 
   it('reflects value property via getter/setter', () => {
@@ -36,55 +38,48 @@ describe('r-form contract', () => {
     expect(form.getAttribute('value')).toBeNull();
   });
 
-  it('renders an unnamed default slot (no r-form_content indirection)', () => {
-    const form = document.createElement('r-form');
-    document.body.appendChild(form);
-
-    const shadow = (form as any)._shadowDom as ShadowRoot;
-    const slot = shadow.querySelector('slot');
-    expect(slot).not.toBeNull();
-    expect(slot?.getAttribute('name')).toBeNull();
-  });
-
-  it('submit event on inner form sets value as JSON', () => {
+  it('submit on a light-DOM <form> child sets value as JSON and prevents navigation', () => {
     const form = document.createElement('r-form') as any;
+    const innerForm = document.createElement('form');
+    const input = document.createElement('input');
+    input.name = 'username';
+    input.value = 'alice';
+    innerForm.appendChild(input);
+    form.appendChild(innerForm);
     document.body.appendChild(form);
 
-    // Trigger submit on the inner form element to exercise the submit listener
-    const innerForm = form._form as HTMLFormElement;
-    innerForm.dispatchEvent(new Event('submit'));
-    // value is set to JSON.stringify(jsonData) which is '{}' (no form data)
-    expect(typeof form.value).toBe('string');
+    const event = new Event('submit', { bubbles: true, cancelable: true });
+    innerForm.dispatchEvent(event);
+
+    expect(form.value).toBe(JSON.stringify({ username: 'alice' }));
+    expect(event.defaultPrevented).toBe(true);
   });
 
   it('recomputes FormData fresh on every submit, not a stale snapshot from connect', () => {
     const form = document.createElement('r-form') as any;
-    document.body.appendChild(form);
-
-    const innerForm = form._form as HTMLFormElement;
-    // Placed directly into the internal shadow <form> (bypassing slot
-    // assignment, which jsdom cannot flatten) so plain FormData collection
-    // sees it — same technique the previous test already relies on via `_form`.
+    const innerForm = document.createElement('form');
     const input = document.createElement('input');
     input.name = 'username';
     innerForm.appendChild(input);
+    form.appendChild(innerForm);
+    document.body.appendChild(form);
 
     // Changed *after* connect, before submit — must be read at submit time.
     input.value = 'alice';
-
-    innerForm.dispatchEvent(new Event('submit'));
+    innerForm.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
     expect(form.value).toBe(JSON.stringify({ username: 'alice' }));
   });
 
-  it('reset event on inner form clears value', () => {
+  it('reset on a light-DOM <form> child clears value', () => {
     const form = document.createElement('r-form') as any;
+    const innerForm = document.createElement('form');
+    form.appendChild(innerForm);
     document.body.appendChild(form);
 
     form.value = '{"name":"test"}';
     expect(form.getAttribute('value')).toBe('{"name":"test"}');
 
-    const innerForm = form._form as HTMLFormElement;
-    innerForm.dispatchEvent(new Event('reset'));
+    innerForm.dispatchEvent(new Event('reset', { bubbles: true }));
     expect(form.getAttribute('value')).toBeNull();
   });
 });

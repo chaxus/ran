@@ -2,7 +2,10 @@
   display: var(--ran-form-display, contents);
 }
 
-.ran-form {
+/* Styles the consumer's own light-DOM <form> (see index.ts for why there is
+ * no shadow-DOM <form> here) — ::slotted() reaches into the assigned node's
+ * own box model without owning it. */
+::slotted(form) {
   display: var(--ran-form-content-display, flex);
   flex-direction: var(--ran-form-flex-direction, column);
   align-items: var(--ran-form-align-items, stretch);
