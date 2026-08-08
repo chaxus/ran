@@ -54,11 +54,11 @@ formatDuration(NaN); // ''
 | `value`   | 要描述的时间点 | `number \| string \| Date` | 必填   |
 | `options` | 见下表         | `FormatRelativeOptions`    | `{}`   |
 
-| 选项      | 说明                                                   | 类型                       | 默认值     |
-| --------- | ------------------------------------------------------ | -------------------------- | ---------- |
-| `now`     | 参照的时间点                                           | `number \| string \| Date` | 当前时间   |
-| `locale`  | BCP 47 语言标签；`compact` 风格会忽略它                | `string \| string[]`       | 运行时语言 |
-| `style`   | `'long' \| 'short' \| 'narrow' \| 'compact'`           | `RelativeStyle`            | `'long'`   |
+| 选项      | 说明                                                     | 类型                       | 默认值     |
+| --------- | -------------------------------------------------------- | -------------------------- | ---------- |
+| `now`     | 参照的时间点                                             | `number \| string \| Date` | 当前时间   |
+| `locale`  | BCP 47 语言标签；`compact` 风格会忽略它                  | `string \| string[]`       | 运行时语言 |
+| `style`   | `'long' \| 'short' \| 'narrow' \| 'compact'`             | `RelativeStyle`            | `'long'`   |
 | `numeric` | `'auto'` 会换用「昨天」这类习惯说法，`'always'` 保留数字 | `'always' \| 'auto'`       | `'auto'`   |
 
 #### 返回值

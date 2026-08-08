@@ -4,7 +4,11 @@ import type { ElementBuilder } from '@/utils/builder';
 
 /** A keyboard-focusable, labeled control — the play/fullscreen buttons and the
  * seek slider all need the same tabIndex + role + aria-label triple. */
-function focusableRole<T extends HTMLElement>(builder: ElementBuilder<T>, role: string, label: string): ElementBuilder<T> {
+function focusableRole<T extends HTMLElement>(
+  builder: ElementBuilder<T>,
+  role: string,
+  label: string,
+): ElementBuilder<T> {
   return builder.tabIndex(0).role(role).aria('label', label);
 }
 

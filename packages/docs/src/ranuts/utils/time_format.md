@@ -3,11 +3,11 @@
 Time shows up in a UI in three different shapes, and mixing them up is the usual source of
 confusion. `ranuts` gives each one its own function:
 
-| Question the reader is asking | Function | Example output |
-| ----------------------------- | -------- | -------------- |
-| *When* did this happen, exactly? | [`formatDate`](./timestamp_to_time.md) | `2026-07-25 14:05:09` |
-| *How long* is this? | `formatDuration` | `01:01:01` |
-| How long *ago* was it? | `formatRelative` | `3 days ago`, `5m` |
+| Question the reader is asking    | Function                               | Example output        |
+| -------------------------------- | -------------------------------------- | --------------------- |
+| _When_ did this happen, exactly? | [`formatDate`](./timestamp_to_time.md) | `2026-07-25 14:05:09` |
+| _How long_ is this?              | `formatDuration`                       | `01:01:01`            |
+| How long _ago_ was it?           | `formatRelative`                       | `3 days ago`, `5m`    |
 
 ## formatDuration
 
@@ -16,8 +16,8 @@ media player uses for a playhead. `mm:ss`, widening to `hh:mm:ss` past an hour.
 
 #### Parameters
 
-| Parameter | Description                          | Type     | Default  |
-| --------- | ------------------------------------ | -------- | -------- |
+| Parameter | Description                           | Type     | Default  |
+| --------- | ------------------------------------- | -------- | -------- |
 | `seconds` | Elapsed seconds; negatives clamp to 0 | `number` | Required |
 
 #### Returns
@@ -38,7 +38,7 @@ has loaded and gets `NaN`, and a blank label reads better there than `NaN:NaN`.
 
 ::: tip Renamed
 This function used to be called `timeFormat`. That name stays as a deprecated alias and
-behaves identically, but it said nothing about *which* of the three time formats it produced.
+behaves identically, but it said nothing about _which_ of the three time formats it produced.
 :::
 
 ## formatRelative
@@ -49,24 +49,24 @@ Localization is delegated to the platform's
 [`Intl.RelativeTimeFormat`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat),
 available in every major browser since 2020, which already knows each language's plural and
 inflection rules. `formatRelative` supplies only the part `Intl` deliberately leaves out:
-choosing *which* unit to express the gap in.
+choosing _which_ unit to express the gap in.
 
 Like `Intl` itself it reports a **single** unit — a gap of 3 days and 6 hours is "3 days ago",
 never "3 days and 6 hours ago".
 
 #### Parameters
 
-| Parameter | Description             | Type                              | Default  |
-| --------- | ----------------------- | --------------------------------- | -------- |
-| `value`   | The moment to describe  | `number \| string \| Date`        | Required |
-| `options` | See below               | `FormatRelativeOptions`           | `{}`     |
+| Parameter | Description            | Type                       | Default  |
+| --------- | ---------------------- | -------------------------- | -------- |
+| `value`   | The moment to describe | `number \| string \| Date` | Required |
+| `options` | See below              | `FormatRelativeOptions`    | `{}`     |
 
-| Option    | Description                                                        | Type                                          | Default        |
-| --------- | ------------------------------------------------------------------ | --------------------------------------------- | -------------- |
-| `now`     | What to measure against                                             | `number \| string \| Date`                    | current time   |
-| `locale`  | BCP 47 tag(s); ignored by the `compact` style                       | `string \| string[]`                          | runtime locale |
-| `style`   | `'long' \| 'short' \| 'narrow' \| 'compact'`                        | `RelativeStyle`                               | `'long'`       |
-| `numeric` | `'auto'` swaps in idioms like `yesterday`; `'always'` keeps numbers | `'always' \| 'auto'`                          | `'auto'`       |
+| Option    | Description                                                         | Type                       | Default        |
+| --------- | ------------------------------------------------------------------- | -------------------------- | -------------- |
+| `now`     | What to measure against                                             | `number \| string \| Date` | current time   |
+| `locale`  | BCP 47 tag(s); ignored by the `compact` style                       | `string \| string[]`       | runtime locale |
+| `style`   | `'long' \| 'short' \| 'narrow' \| 'compact'`                        | `RelativeStyle`            | `'long'`       |
+| `numeric` | `'auto'` swaps in idioms like `yesterday`; `'always'` keeps numbers | `'always' \| 'auto'`       | `'auto'`       |
 
 #### Returns
 

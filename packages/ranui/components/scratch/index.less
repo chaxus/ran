@@ -1,6 +1,7 @@
 :host {
   position: relative;
   display: block;
+  --ran-scratch-cover-background: var(--ran-color-text-secondary, #6b6b6b);
 }
 
 .ran-scratch-ticket {
@@ -17,7 +18,7 @@
   display: block;
   width: 100%;
   height: 100%;
-  background: var(--ran-scratch-award-background, #000);
+  background: var(--ran-scratch-award-background, var(--ran-color-bg-elevated, #fff));
   z-index: 1;
 }
 

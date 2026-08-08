@@ -62,12 +62,12 @@ description: 'ranuts 工具函数总览：函数式工具（debounce、throttle�
 
 ## 时间处理
 
-| 方法            | 说明                         | 详细内容                                  |
-| --------------- | ---------------------------- | ----------------------------------------- |
-| formatDuration  | 将时间秒数转换为格式化字符串 | [formatDuration](./time_format.md)        |
-| formatRelative  | 描述相对当前的时间（「3 天前」） | [formatRelative](./time_format.md)    |
-| timestampToTime | 将时间戳转换为 Date 对象     | [timestampToTime](./timestamp_to_time.md) |
-| performanceTime | 获取高精度时间戳             | [performanceTime](./performance_time.md)  |
+| 方法            | 说明                             | 详细内容                                  |
+| --------------- | -------------------------------- | ----------------------------------------- |
+| formatDuration  | 将时间秒数转换为格式化字符串     | [formatDuration](./time_format.md)        |
+| formatRelative  | 描述相对当前的时间（「3 天前」） | [formatRelative](./time_format.md)        |
+| timestampToTime | 将时间戳转换为 Date 对象         | [timestampToTime](./timestamp_to_time.md) |
+| performanceTime | 获取高精度时间戳                 | [performanceTime](./performance_time.md)  |
 
 ## 设备检测
 

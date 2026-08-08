@@ -20,16 +20,16 @@ Render high-quality LaTeX math formulas in HTML pages using Temml, compiled stra
 
 ### Properties
 
-| Property | Type     | Default | Description                                                                             |
-| -------- | -------- | ------- | --------------------------------------------------------------------------------------- |
-| `latex`  | `string` | `''`    | The LaTeX formula to render. The formula is provided via this attribute, not slot text. |
-| `display`  | `string`  | `'block'` | `block` (display math) or `inline` (inline math). |
-| `font`     | `string`  | `''`      | Set to `system` to skip the bundled Latin Modern Math face and use the reader's system math font. |
-| `macros`   | `string`  | `''`      | A JSON object of Temml macros. Invalid JSON is silently ignored. |
-| `wrap`     | `string`  | `''`      | Temml soft line-breaking: `none`, `tex`, or `=`. |
+| Property   | Type      | Default   | Description                                                                                           |
+| ---------- | --------- | --------- | ----------------------------------------------------------------------------------------------------- |
+| `latex`    | `string`  | `''`      | The LaTeX formula to render. The formula is provided via this attribute, not slot text.               |
+| `display`  | `string`  | `'block'` | `block` (display math) or `inline` (inline math).                                                     |
+| `font`     | `string`  | `''`      | Set to `system` to skip the bundled Latin Modern Math face and use the reader's system math font.     |
+| `macros`   | `string`  | `''`      | A JSON object of Temml macros. Invalid JSON is silently ignored.                                      |
+| `wrap`     | `string`  | `''`      | Temml soft line-breaking: `none`, `tex`, or `=`.                                                      |
 | `copy`     | `boolean` | `false`   | Shows a copy button. Bare `copy` copies the LaTeX source; `copy="mathml"` copies the rendered MathML. |
-| `download` | `boolean` | `false`   | Shows a download button/menu for the source (`.tex`) and/or MathML (`.mml`). |
-| `sheet`  | `string` | `''`    | CSS injected into the component's shadow DOM.                                           |
+| `download` | `boolean` | `false`   | Shows a download button/menu for the source (`.tex`) and/or MathML (`.mml`).                          |
+| `sheet`    | `string`  | `''`      | CSS injected into the component's shadow DOM.                                                         |
 
 > 💡 **Note**: The `latex` property getter decodes its value with `decodeURIComponent`, so URI-encoded formulas are decoded before rendering. Providing the formula as slotted text content has no effect — only the `latex` attribute is rendered.
 
@@ -55,12 +55,12 @@ Render high-quality LaTeX math formulas in HTML pages using Temml, compiled stra
 
 ## Events
 
-| Event     | detail                          | Fired when                                                             |
-| --------- | -------------------------------- | ------------------------------------------------------------------------ |
-| `render`  | `{ ok: true }`                  | The formula rendered successfully.                                      |
-| `error`   | `{ message: string }`           | Temml failed to parse the formula (e.g. invalid LaTeX).                 |
-| `copied`  | `{ kind: 'source' \| 'mathml' }` | The copy button copied the source or MathML to the clipboard.           |
-| `download`| `{ format: 'source' \| 'mathml' }` | The download button saved a `.tex` or `.mml` file.                   |
+| Event      | detail                             | Fired when                                                    |
+| ---------- | ---------------------------------- | ------------------------------------------------------------- |
+| `render`   | `{ ok: true }`                     | The formula rendered successfully.                            |
+| `error`    | `{ message: string }`              | Temml failed to parse the formula (e.g. invalid LaTeX).       |
+| `copied`   | `{ kind: 'source' \| 'mathml' }`   | The copy button copied the source or MathML to the clipboard. |
+| `download` | `{ format: 'source' \| 'mathml' }` | The download button saved a `.tex` or `.mml` file.            |
 
 ## Best Practices
 

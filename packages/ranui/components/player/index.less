@@ -261,9 +261,15 @@
       }
 
       &:focus-visible {
-        outline: var(--ran-player-controller-progress-focus-visible-outline, 2px solid var(--ran-player-focus-outline-color, #fff));
+        outline: var(
+          --ran-player-controller-progress-focus-visible-outline,
+          2px solid var(--ran-player-focus-outline-color, #fff)
+        );
         outline-offset: var(--ran-player-controller-progress-focus-visible-outline-offset, 4px);
-        border-radius: var(--ran-player-controller-progress-focus-visible-border-radius, var(--ran-radius-full, 9999px));
+        border-radius: var(
+          --ran-player-controller-progress-focus-visible-border-radius,
+          var(--ran-radius-full, 9999px)
+        );
       }
 
       &-wrap {
@@ -353,7 +359,10 @@
               2px solid var(--ran-player-focus-outline-color, #fff)
             );
             outline-offset: var(--ran-player-controller-bottom-left-btn-focus-visible-outline-offset, 2px);
-            border-radius: var(--ran-player-controller-bottom-left-btn-focus-visible-border-radius, var(--ran-radius-sm, 4px));
+            border-radius: var(
+              --ran-player-controller-bottom-left-btn-focus-visible-border-radius,
+              var(--ran-radius-sm, 4px)
+            );
           }
         }
 
