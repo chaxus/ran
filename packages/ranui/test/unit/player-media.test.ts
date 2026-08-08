@@ -25,15 +25,17 @@ const makeHandlers = (): PlayerMediaHandlers => ({
   onTimeupdate: vi.fn(),
   onVolumechange: vi.fn(),
   onWaiting: vi.fn(),
+  onEnterPictureInPicture: vi.fn(),
+  onLeavePictureInPicture: vi.fn(),
 });
 
 describe('bindMediaEvents / unbindMediaEvents', () => {
-  it('registers all 22 media event listeners on the video element', () => {
+  it('registers all 24 media event listeners on the video element', () => {
     const video = document.createElement('video');
     const addSpy = vi.spyOn(video, 'addEventListener');
     const handlers = makeHandlers();
     bindMediaEvents(video, handlers);
-    expect(addSpy).toHaveBeenCalledTimes(22);
+    expect(addSpy).toHaveBeenCalledTimes(24);
   });
 
   it('dispatches events to the correct handler after bind', () => {
@@ -48,12 +50,12 @@ describe('bindMediaEvents / unbindMediaEvents', () => {
     expect(handlers.onTimeupdate).toHaveBeenCalledTimes(1);
   });
 
-  it('removes all 22 media event listeners', () => {
+  it('removes all 24 media event listeners', () => {
     const video = document.createElement('video');
     const removeSpy = vi.spyOn(video, 'removeEventListener');
     const handlers = makeHandlers();
     unbindMediaEvents(video, handlers);
-    expect(removeSpy).toHaveBeenCalledTimes(22);
+    expect(removeSpy).toHaveBeenCalledTimes(24);
   });
 
   it('handlers are not called after unbind', () => {

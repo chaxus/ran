@@ -11,6 +11,7 @@ export interface PlayerControllerElements {
   volumeProgress: HTMLElement;
   fullScreenBtn: HTMLDivElement;
   volumeIcon: HTMLDivElement;
+  pipBtn: HTMLDivElement;
 }
 
 export interface PlayerControllerHandlers {
@@ -34,6 +35,7 @@ export interface PlayerControllerHandlers {
   onVolumeIconClick: (e: Event) => void;
   onFullscreenChange: () => void;
   onResize: () => void;
+  onPipClick: (e: Event) => void;
 }
 
 type EventTargetScope = keyof PlayerControllerElements | 'document' | 'window';
@@ -63,6 +65,7 @@ const CONTROLLER_EVENT_BINDINGS: ControllerEventBinding[] = [
   { target: 'volumeProgress', eventName: 'change', handler: 'onVolumeChange' },
   { target: 'fullScreenBtn', eventName: 'click', handler: 'onFullScreenClick' },
   { target: 'volumeIcon', eventName: 'click', handler: 'onVolumeIconClick' },
+  { target: 'pipBtn', eventName: 'click', handler: 'onPipClick' },
   { target: 'document', eventName: 'fullscreenchange', handler: 'onFullscreenChange' },
   { target: 'window', eventName: 'resize', handler: 'onResize' },
 ];

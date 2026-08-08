@@ -24,9 +24,12 @@ import {
 } from './core/state';
 import { createPlayerVisualSignals, type PlayerVisualSignals } from './core/store';
 import { createPlaybackVisualEffects, type PlayerVisualEffectRefs } from './core/effects';
+import { exitPip, isPipSupported, requestPip } from './core/pip';
 import { ensurePlayerView } from './core/view';
 import { EventManager, View } from '@/utils/builder';
 import { RanElement, batch } from '@/utils/index';
+import { registerIcon } from '@/components/icon';
+import pipIcon from '@/assets/icons/pip.svg?raw';
 import {
   ensureShadowRoot,
   getStringAttribute,
@@ -37,6 +40,8 @@ import {
 import playerCss from './index.less?inline';
 import { defineSSR } from '@/utils/ssr-registry';
 import { isActivationKey, sliderStepFromKeydown } from '@/utils/a11y';
+
+registerIcon('pip', pipIcon);
 
 type Callback = (...args: unknown[]) => unknown;
 type EventName = string | symbol;
@@ -137,6 +142,7 @@ export class RanPlayer extends RanElement {
   _playControllerBottomSpeed: HTMLDivElement;
   _playControllerBottomVolumeIcon: HTMLDivElement;
   _playControllerBottomVolumeProgress: Progress;
+  _playControllerBottomPip: HTMLDivElement;
   _playControllerBottomRightFullScreen: HTMLDivElement;
   _playControllerBottomVolume: HTMLDivElement;
   _playControllerBottomSpeedPopover: HTMLElement;
@@ -200,6 +206,7 @@ export class RanPlayer extends RanElement {
     this._playControllerBottomVolume = viewRefs.playControllerBottomVolume;
     this._playControllerBottomVolumeProgress = viewRefs.playControllerBottomVolumeProgress;
     this._playControllerBottomVolumeIcon = viewRefs.playControllerBottomVolumeIcon;
+    this._playControllerBottomPip = viewRefs.playControllerBottomPip;
     this._playControllerBottomClarity = viewRefs.playControllerBottomClarity;
     this._playControllerBottomRightFullScreen = viewRefs.playControllerBottomRightFullScreen;
     this._playerController = viewRefs.playerController;
@@ -596,6 +603,16 @@ export class RanPlayer extends RanElement {
     );
     this.change('waiting', e);
   };
+  /**
+   * @description: 原生 enterpictureinpicture/leavepictureinpicture 事件 —
+   * 覆盖浏览器自己的 PiP 悬浮窗控件触发退出的情况，不只是走 togglePip() 这一条路径。
+   */
+  onEnterPictureInPicture = (e: Event): void => {
+    this.change('pictureinpicture', true);
+  };
+  onLeavePictureInPicture = (e: Event): void => {
+    this.change('pictureinpicture', false);
+  };
   onPlay = (e: Event): void => {
     this.ctx.currentState = e.type;
     this.setLoadingState(false);
@@ -651,6 +668,8 @@ export class RanPlayer extends RanElement {
       onTimeupdate: this.onTimeupdate,
       onVolumechange: this.onVolumechange,
       onWaiting: this.onWaiting,
+      onEnterPictureInPicture: this.onEnterPictureInPicture,
+      onLeavePictureInPicture: this.onLeavePictureInPicture,
     };
   };
   clearListenerEvent = (): void => {
@@ -1002,6 +1021,27 @@ export class RanPlayer extends RanElement {
         });
     }
   };
+  /**
+   * @description: PiP 按钮只在浏览器真正支持时才可见——渐进增强，而不是渲染一个点了没反应的
+   * 按钮。`isPipSupported()` 依赖 `document`，SSR/构造阶段拿不到有意义的结果，所以只在
+   * `connectedCallback` 里跑一次。
+   */
+  syncPipButtonVisibility = (): void => {
+    const supported = isPipSupported(this._video);
+    this._playControllerBottomPip.classList.toggle('ran-player-controller-bottom-right-pip-hidden', !supported);
+  };
+  togglePip = (): void => {
+    if (!this._video) return;
+    if (document.pictureInPictureElement === this._video) {
+      exitPip().catch((error) => {
+        if (this.debug) console.warn(`exit picture-in-picture error:${error}`);
+      });
+      return;
+    }
+    requestPip(this._video).catch((error) => {
+      if (this.debug) console.warn(`request picture-in-picture error:${error}`);
+    });
+  };
   changeSpeed = (e: Event): void => {
     const speed = Number((e as CustomEvent).detail.value) || 1;
     const shouldResume = shouldResumePlayback(this._video);
@@ -1163,6 +1203,7 @@ export class RanPlayer extends RanElement {
       volumeProgress: this._playControllerBottomVolumeProgress,
       fullScreenBtn: this._playControllerBottomRightFullScreen,
       volumeIcon: this._playControllerBottomVolumeIcon,
+      pipBtn: this._playControllerBottomPip,
     };
   };
   getControllerHandlers = (): PlayerControllerHandlers => {
@@ -1187,6 +1228,7 @@ export class RanPlayer extends RanElement {
       onVolumeIconClick: this.changePlayerVolume,
       onFullscreenChange: this.fullScreenChange,
       onResize: this.resize,
+      onPipClick: this.togglePip,
     };
   };
   connectedCallback(): void {
@@ -1197,6 +1239,7 @@ export class RanPlayer extends RanElement {
     if (!this.hasAttribute('tabindex')) this.tabIndex = 0;
     bindControllerEvents(this._events, this.getControllerElements(), this.getControllerHandlers());
     if (this._effectDisposers.length === 0) this.setupEffects();
+    this.syncPipButtonVisibility();
     this.updatePlayer();
   }
   disconnectedCallback(): void {

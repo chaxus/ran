@@ -39,6 +39,8 @@ export interface PlayerMediaHandlers {
   onTimeupdate: (e: Event) => void;
   onVolumechange: (e: Event) => void;
   onWaiting: (e: Event) => void;
+  onEnterPictureInPicture: (e: Event) => void;
+  onLeavePictureInPicture: (e: Event) => void;
 }
 
 const MEDIA_EVENT_HANDLER_MAP: Array<[string, keyof PlayerMediaHandlers]> = [
@@ -64,6 +66,8 @@ const MEDIA_EVENT_HANDLER_MAP: Array<[string, keyof PlayerMediaHandlers]> = [
   ['timeupdate', 'onTimeupdate'],
   ['volumechange', 'onVolumechange'],
   ['waiting', 'onWaiting'],
+  ['enterpictureinpicture', 'onEnterPictureInPicture'],
+  ['leavepictureinpicture', 'onLeavePictureInPicture'],
 ];
 
 export function bindMediaEvents(video: HTMLVideoElement, handlers: PlayerMediaHandlers): void {
