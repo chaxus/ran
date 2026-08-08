@@ -6,7 +6,7 @@ shape), slots, and `::part()` names — extracted from source. For CSS variables
 (theming tokens) see [style-tokens-public.md](./style-tokens-public.md); for
 design rules see [DESIGN.md](./DESIGN.md).
 
-Generated at: 2026-08-08T09:24:31.635Z
+Generated at: 2026-08-08T09:42:28.640Z
 
 31 custom elements.
 
@@ -252,8 +252,21 @@ Source: `components/select/option/index.ts`
 
 Source: `components/player/index.ts`
 
-- **Attributes**: `autoplay: boolean`, `currenttime`, `currentTime: string`, `debug: string`, `loop: boolean`, `muted: boolean`, `playbackrate`, `playbackRate: string`, `poster: string`, `sheet: string`, `src: string`, `volume: string`
-- **Properties**: `autoplay: boolean`, `currentTime: string`, `debug: string`, `loop: boolean`, `muted: boolean`, `playbackRate: string`, `poster: string`, `sheet: string`, `src: string`, `volume: string`
+- **Attributes**: `autoplay: boolean`, `currenttime`, `currentTime: string`, `debug: string`, `disable-error-modal`, `loop: boolean`, `muted: boolean`, `playbackrate`, `playbackRate: string`, `poster: string`, `remember-position`, `sheet: string`, `src: string`, `volume: string`
+- **Properties**: 
+  - `autoplay: boolean`
+  - `currentTime: string`
+  - `debug: string`
+  - `disableErrorModal: boolean`
+  - `loop: boolean`
+  - `muted: boolean`
+  - `playbackRate: string`
+  - `poster: string`
+  - `rememberPosition: boolean`
+  - `sheet: string`
+  - `src: string`
+  - `tracks: PlayerTrackConfig[]` — 初始化 view 和 video 的全局上下文
+  - `volume: string`
 - **Events**: `change` → detail `{ currentTime, data, duration, tag, type }`
 - **Slots**: —
 - **Parts**: —

@@ -158,7 +158,7 @@ transition:
 
 /* ✓ motion props only — theme flip is instant, interaction still animates */
 transition: var(
-  --ran-checkbox-inner-after-transition,
+  --ran-checkbox-tick-transition,
   transform 0.1s cubic-bezier(0.71, -0.46, 0.88, 0.6),
   opacity 0.1s
 );
@@ -192,7 +192,7 @@ transition: var(--ran-input-transition, none);
 
 - Use the semantic ranui components (`r-button`, `r-input`, `r-select`, `r-card`, `r-modal`, …) rather than re-building primitives.
 - Theme through **CSS variables**, **`::part()`**, or the **`sheet`** attribute (escape hatch). CSS variables cross Shadow DOM; selectors do not.
-- Component tokens default to semantic tokens: `var(--ran-btn-content-background-color, var(--ran-color-primary, #171717))`.
+- Component tokens default to semantic tokens: `var(--ran-btn-background, var(--ran-color-primary, #171717))`.
 - Map states to the color ladder: default → `bg`/`text`; hover → `bg-hover` / `border-hover` / `primary-hover`; active → `bg-active` / `primary-active`; disabled → `text-disabled` + reduced opacity; focus → focus ring.
 - **Interactive cards opt in**: `r-card` only reacts to hover with the `hoverable` attribute (border 400 → 500 + elevated shadow). Non-interactive cards must stay inert — never add hover feedback to something that isn't clickable.
 - **Theme switching UI is a component**: use `<r-theme-switch>` (system / light / dark segmented pill, wired to `setTheme`/localStorage, syncs across instances and updates `theme-color` metas) instead of hand-rolling toggles. Localize with `label` / `label-system` / `label-light` / `label-dark`.

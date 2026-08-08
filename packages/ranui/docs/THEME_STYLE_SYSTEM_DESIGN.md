@@ -11,7 +11,7 @@ Base palette (Geist scales)   --ran-gray-700, --ran-blue-700 …
         ↓ referenced by
 Semantic tokens               --ran-color-primary, --ran-color-text …
         ↓ default values for
-Component tokens              --ran-btn-content-background-color …
+Component tokens              --ran-btn-background …
 ```
 
 The system preserves ranui's Web Components boundaries:
@@ -107,9 +107,9 @@ Stable public override points that fall back to semantic tokens, which fall back
 
 ```css
 .ran-btn-content {
-  background-color: var(--ran-btn-content-background-color, var(--ran-color-primary, #006bff));
-  color: var(--ran-btn-content-color, #fff);
-  border-radius: var(--ran-btn-content-border-radius, var(--ran-radius-sm, 6px));
+  background-color: var(--ran-btn-background, var(--ran-color-primary, #006bff));
+  color: var(--ran-btn-color, #fff);
+  border-radius: var(--ran-btn-border-radius, var(--ran-radius-sm, 6px));
 }
 ```
 
@@ -199,7 +199,7 @@ setThemeTokens({ '--ran-color-primary': '#6c47ff', '--ran-radius-md': '10px' });
 
 ```css
 r-button {
-  --ran-btn-content-background-color: #6c47ff;
+  --ran-btn-background: #6c47ff;
 }
 r-button::part(content) {
   border-radius: 999px;

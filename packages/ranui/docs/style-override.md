@@ -39,8 +39,8 @@ r-button {
 
 /* 配合 class 实现按语境覆盖 */
 .dark-theme r-select {
-  --ran-select-selection-background-color: #1a1a1a;
-  --ran-select-selection-color: #fff;
+  --ran-select-background-color: #1a1a1a;
+  --ran-select-color: #fff;
 }
 ```
 
@@ -151,9 +151,9 @@ if (name === 'sheet' && newValue) {
 --ran-btn-disabled-opacity
 
 /* Select */
---ran-select-selection-background-color
---ran-select-selection-border
---ran-select-selection-hover-border
+--ran-select-background-color
+--ran-select-border
+--ran-select-hover-border
 
 /* Dropdown（Select 的弹出层）*/
 --ran-dropdown-background

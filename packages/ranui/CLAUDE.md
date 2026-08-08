@@ -659,8 +659,8 @@ Every component's `index.less` automatically receives `@import "base.less"` via 
 --ran-card-description-font-size, 14px
 
 /* Button example */
---ran-btn-content-background-color, var(--ran-color-primary, #1890ff)
---ran-btn-content-color, #fff
+--ran-btn-background, var(--ran-color-primary, #1890ff)
+--ran-btn-color, #fff
 ```
 
 ### LESS template for a new component

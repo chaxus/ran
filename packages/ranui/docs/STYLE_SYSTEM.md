@@ -87,7 +87,7 @@ constructor() {
 
 | 方式                   | 场景               | 示例                                                           |
 | ---------------------- | ------------------ | -------------------------------------------------------------- |
-| **CSS 变量** `--ran-*` | 全局主题、批量覆盖 | `r-button { --ran-btn-content-background-color: #6c47ff; }`    |
+| **CSS 变量** `--ran-*` | 全局主题、批量覆盖 | `r-button { --ran-btn-background: #6c47ff; }`    |
 | **`::part()`**         | 精细结构样式覆盖   | `r-button::part(content) { border-radius: 999px; }`            |
 | **`sheet` 属性**       | 程序化/动态注入    | `<r-button sheet=".ran-btn-content { ... }">`                  |
 | **Slot 内容**          | 自定义插槽内容样式 | `<r-button><strong style="color:red">文字</strong></r-button>` |
