@@ -144,12 +144,15 @@ export interface DoubleTapDetector {
  */
 export function createDoubleTapDetector(options: DoubleTapDetectorOptions = {}): DoubleTapDetector {
   const { windowMs = 300, maxDistancePx = 60 } = options;
-  let lastTapAt = 0;
+  // `-Infinity` (not `0`) is the "no previous tap" sentinel — `0` would collide with a real
+  // tap recorded at `now === 0` (a fake-timers test, or any clock starting at zero), making
+  // that first tap falsely pair with itself.
+  let lastTapAt = -Infinity;
   let lastTapX = 0;
   let lastTapY = 0;
 
   const reset = (): void => {
-    lastTapAt = 0;
+    lastTapAt = -Infinity;
     lastTapX = 0;
     lastTapY = 0;
   };

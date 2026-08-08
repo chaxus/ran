@@ -8,11 +8,11 @@ constraints, conventions) read [../CLAUDE.md](../CLAUDE.md) first.
 Import from the **subpath** that owns the symbol, e.g. `import { debounce } from
 'ranuts/utils'`. The root `ranuts` barrel re-exports the utils + visual surface.
 
-**369 exports** across 6 entry points. Generated at 2026-08-02T12:10:00.120Z.
+**376 exports** across 6 entry points. Generated at 2026-08-08T15:40:50.984Z.
 
 ## Entry points
 
-- [`ranuts/utils`](#ranutsutils) — Browser and general-purpose utilities · _browser + node_ · 287 exports
+- [`ranuts/utils`](#ranutsutils) — Browser and general-purpose utilities · _browser + node_ · 294 exports
 - [`ranuts/sw`](#ranutssw) — Service Worker caching strategies and the precache protocol · _service worker only_ · 9 exports
 - [`ranuts/node`](#ranutsnode) — Node server utilities (fs / http / ws / middleware) · _node only_ · 26 exports
 - [`ranuts/visual`](#ranutsvisual) — 2D rendering engine (Canvas / WebGL / WebGPU) · _browser only_ · 12 exports
@@ -53,11 +53,13 @@ import { /* … */ } from 'ranuts/utils';
 - `create(tagName: string, options?: ElementCreationOptions) => Chain`
 - `createData(params?: Record<string, unknown>) => Record<string, unknown>` — Build the standard envelope that accompanies a report — page URL, referrer,
 - `createDocumentFragment(list: Element[]) => DocumentFragment | undefined` — Create a DocumentFragment
+- `createDoubleTapDetector(options?: DoubleTapDetectorOptions) => DoubleTapDetector` — Double-tap detection over raw `(x, y, time)` samples — pointer-type-agnostic,
 - `createHandoff<T>({ dbName, storeName, key }: HandoffOptions) => Handoff<T>` — A one-shot value handoff between two pages of the same origin, backed by
 - `createI18n<TDict extends StringValues<TDict> = MessageDict>(config?: I18nConfig<TDict>) => I18nCore<TDict>` — Create and register the global i18n singleton.
 - `createLocalePath(config: LocalePathConfig) => LocalePath` — Create the set of locale path conversion functions.
 - `createObjectURL(src: Blob | ArrayBuffer | Response) => Promise<string>`
 - `createPortBridge(port: MessagePort) => PortBridge` — Build a bridge on any MessagePort (a Web Worker, a SharedWorker, or a port from a completed handshake).
+- `createRaceGuard() => RaceGuard` — Bump-and-compare guard against a stale async response overwriting a newer
 - `createSignal<T = unknown>(value: T, options?: SignalOptions<T>) => [() => T, (newValue: T) => void]` — Create a minimal signal with optional event broadcasting, returned as
 - `createSpeechRecognizer(options?: SpeechRecognizerOptions) => SpeechRecognizer` — Create a dictation session over the Web Speech API.
 - `createStore<T>(prefix?: string) => JsonStore<T>` — A prefixed, JSON-serialising view over localStorage.
@@ -147,6 +149,8 @@ import { /* … */ } from 'ranuts/utils';
 - `parseChineseNumber(value: string) => number | null` — Chinese numerals to Arabic, covering 「十五」「二十三」「一百零三」「一千零一」「三万」.
 - `parseEnglishNumber(value: string) => number | null` — English ordinals to numbers, tried in order: Arabic digits, number words
 - `parseRomanNumber(value: string) => number | null` — Roman numerals to Arabic (either case, handling subtractive forms such as IV / IX). Returns null for invalid input.
+- `parseVttCueTiming(line: string) => { start: number; end: number; } | undefined` — Parse a WebVTT cue timing line — `<start> --> <end>`, optionally followed by
+- `parseVttTimestamp(raw: string) => number | undefined` — Parse a WebVTT/SRT-style timestamp — `HH:MM:SS.mmm` or `MM:SS.mmm` (the hour
 - `performanceTime() => number` — Current timestamp
 - `perToNum(str?: string) => number` — Convert a percentage string into a number
 - `prefetchUrl(url: string) => Promise<void>` — Pull a single URL into the cache; skipped when already cached. Failures are
@@ -238,6 +242,8 @@ import { /* … */ } from 'ranuts/utils';
 - `interface CallToPayload`
 - `interface Debounced`
 - `interface Deferred` — Promise primitives that JavaScript does not ship: an externally settled promise and a
+- `interface DoubleTapDetector`
+- `interface DoubleTapDetectorOptions`
 - `interface FormatRelativeOptions`
 - `interface Handoff`
 - `interface HandoffOptions`
@@ -260,6 +266,7 @@ import { /* … */ } from 'ranuts/utils';
 - `interface PendingRequest`
 - `interface PortBridge` — A point-to-point bridge over MessagePort.
 - `interface PrefetchOptions`
+- `interface RaceGuard`
 - `interface ReportConfig`
 - `interface ResolveLocaleOptions`
 - `interface RewriteZipOptions`
