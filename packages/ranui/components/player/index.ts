@@ -1,20 +1,11 @@
-import { SyncHook, addClassToElement, range, removeClassToElement, formatDuration } from 'ranuts/utils';
+import { SyncHook } from 'ranuts/utils';
 import '../../assets/js/hls.js';
 import type { Progress } from '@/components/progress';
 import '@/components/select';
-import { PLAY_STATE_LIST, SPEED } from './core/constants';
+import { SPEED } from './core/constants';
 import { bindControllerEvents, type PlayerControllerElements, type PlayerControllerHandlers } from './core/controller';
-import {
-  createPlaybackSnapshot,
-  resolveSeekDuration,
-  shouldResumePlayback,
-  type PlaybackSnapshot,
-} from './core/playback';
+import { createPlaybackSnapshot, shouldResumePlayback, type PlaybackSnapshot } from './core/playback';
 import { bindMediaEvents, loadVideoSource, unbindMediaEvents, type PlayerMediaHandlers } from './core/media';
-import { buildManifestLevels } from './core/levels';
-import { exitDocumentFullscreen, requestElementFullscreen } from './core/fullscreen';
-import { shouldSetLoadingOnSeeking, shouldSetLoadingOnWaiting, syncCenterPlayVisibility } from './core/events';
-import { getBufferedPercentage, normalizeProgress } from './core/progress';
 import {
   createDefaultPlayerContext,
   createDefaultRuntimeState,
@@ -24,19 +15,16 @@ import {
 } from './core/state';
 import { createPlayerVisualSignals, type PlayerVisualSignals } from './core/store';
 import { createPlaybackVisualEffects, type PlayerVisualEffectRefs } from './core/effects';
-import { exitPip, isPipSupported, requestPip } from './core/pip';
-import { describeMediaError } from './core/error';
-import { clearResumePosition, loadResumePosition, saveResumePosition, shouldResumeAt } from './core/resume';
-import {
-  applyTracksToVideo,
-  loadPreferredSubtitleLanguage,
-  savePreferredSubtitleLanguage,
-  setActiveSubtitleLanguage,
-  type PlayerTrackConfig,
-} from './core/tracks';
+import { createErrorModalController, type PlayerErrorModalController, type PlayerErrorModalDeps } from './core/error-modal';
+import { createSeekHandlers, type PlayerSeekDeps, type PlayerSeekHandlers } from './core/seek';
+import { createChromeHandlers, type PlayerChromeDeps, type PlayerChromeHandlers } from './core/chrome';
+import { createMediaEventHandlers, type PlayerMediaDispatchDeps } from './core/media-dispatch';
+import { createClarityHandlers, type PlayerClarityDeps, type PlayerClarityHandlers } from './core/clarity';
+import { createSubtitleHandlers, type PlayerSubtitleDeps, type PlayerSubtitleHandlers } from './core/subtitles';
+import { type PlayerTrackConfig } from './core/tracks';
 import { ensurePlayerView } from './core/view';
 import { EventManager, View } from '@/utils/builder';
-import { RanElement, batch } from '@/utils/index';
+import { RanElement } from '@/utils/index';
 import { registerIcon } from '@/components/icon';
 import pipIcon from '@/assets/icons/pip.svg?raw';
 import {
@@ -48,7 +36,6 @@ import {
 } from '@/utils/component';
 import playerCss from './index.less?inline';
 import { defineSSR } from '@/utils/ssr-registry';
-import { isActivationKey, sliderStepFromKeydown } from '@/utils/a11y';
 
 registerIcon('pip', pipIcon);
 
@@ -134,12 +121,8 @@ export class RanPlayer extends RanElement {
   _progressWrap: HTMLDivElement;
   _progressWrapBuffer: HTMLDivElement;
   _progressWrapValue: HTMLDivElement;
-  requestAnimationFrameId?: number;
-  moveProgress!: { percentage: number; mouseDown: boolean };
-  _isSeeking!: boolean;
-  _wasPlayingBeforeSeek!: boolean;
-  _isBuffering!: boolean;
-  _isSwitchingSource!: boolean;
+  /** Single source of truth for transient interaction state — see accessors below. */
+  _runtimeState!: PlayerRuntimeState<PlaybackSnapshot>;
   _playerControllerBottom: HTMLDivElement;
   _playerControllerBottomRight: HTMLDivElement;
   _playerControllerBottomLeft: HTMLDivElement;
@@ -156,7 +139,6 @@ export class RanPlayer extends RanElement {
   _playControllerBottomRightFullScreen: HTMLDivElement;
   _playControllerBottomVolume: HTMLDivElement;
   _playControllerBottomSpeedPopover: HTMLElement;
-  controllerBarTimeId?: NodeJS.Timeout;
   _playerTip: HTMLDivElement;
   _playerTipTime: HTMLDivElement;
   _playerTipText: HTMLDivElement;
@@ -164,9 +146,14 @@ export class RanPlayer extends RanElement {
   _volume?: number;
   _video?: HTMLVideoElement;
   _hls?: HlsPlayer;
-  _pendingPlaybackRestore?: PlaybackSnapshot;
-  _isShowingErrorModal = false;
   _tracks: PlayerTrackConfig[] = [];
+  /** Domain modules — each built once in the constructor from a narrow `getXxxDeps()` slice. */
+  _errorModal!: PlayerErrorModalController;
+  _mediaHandlers!: PlayerMediaHandlers;
+  _seek!: PlayerSeekHandlers;
+  _chrome!: PlayerChromeHandlers;
+  _clarity!: PlayerClarityHandlers<Partial<Level>>;
+  _subtitles!: PlayerSubtitleHandlers;
   static get observedAttributes(): string[] {
     return [
       'src',
@@ -229,9 +216,14 @@ export class RanPlayer extends RanElement {
     this._playerTipTime = viewRefs.playerTipTime;
     this._playerTipText = viewRefs.playerTipText;
     this.ctx = createDefaultPlayerContext<SyncHook, Partial<Level>>(new SyncHook());
-    this.applyRuntimeState(createDefaultRuntimeState<PlaybackSnapshot>());
+    this._runtimeState = createDefaultRuntimeState<PlaybackSnapshot>();
     this._visualSignals = createPlayerVisualSignals();
-    this._isSwitchingSource = false;
+    this._errorModal = createErrorModalController(this.getErrorModalDeps());
+    this._mediaHandlers = createMediaEventHandlers(this.getMediaDispatchDeps());
+    this._seek = createSeekHandlers(this.getSeekDeps());
+    this._chrome = createChromeHandlers(this.getChromeDeps());
+    this._clarity = createClarityHandlers<Partial<Level>>(this.getClarityDeps());
+    this._subtitles = createSubtitleHandlers(this.getSubtitleDeps());
   }
   getVisualEffectRefs = (): PlayerVisualEffectRefs => {
     return {
@@ -253,6 +245,103 @@ export class RanPlayer extends RanElement {
     for (const dispose of this._effectDisposers) dispose();
     this._effectDisposers = [];
   };
+  // ── Domain wiring — narrow getXxxDeps() slices; cross-domain calls are forwarding closures so vi.spyOn still sees them.
+  getErrorModalDeps = (): PlayerErrorModalDeps => ({
+    isDisabled: () => this.disableErrorModal,
+    onRetry: () => this.updatePlayer(),
+  });
+  getMediaDispatchDeps = (): PlayerMediaDispatchDeps => ({
+    refs: { playerBtn: this._playerBtn, timeDivide: this._playerControllerBottomTimeDivide },
+    state: this._runtimeState,
+    ctx: this.ctx,
+    visualSignals: this._visualSignals,
+    getVideo: () => this._video,
+    rememberPosition: () => this.rememberPosition,
+    getSrc: () => this.src,
+    change: (name, value) => this.change(name, value),
+    setLoadingState: (loading) => this.setLoadingState(loading),
+    resize: () => this.resize(),
+    showErrorModal: (message) => this.showErrorModal(message),
+    restorePlaybackSnapshot: (snapshot) => this.restorePlaybackSnapshot(snapshot),
+    setCurrentTime: (n) => this.setCurrentTime(n),
+    getCurrentTime: () => this.getCurrentTime(),
+    getTotalTime: () => this.getTotalTime(),
+    getVolume: () => this.getVolume(),
+    requestAnimationFrame: (fn) => this.requestAnimationFrame(fn),
+    cancelAnimationFrame: () => this.cancelAnimationFrame(),
+    updateCurrentProgress: () => this.updateCurrentProgress(),
+    updateBufferedProgress: () => this.updateBufferedProgress(),
+    showControllerBar: (e) => this.showControllerBar(e),
+  });
+  getSeekDeps = (): PlayerSeekDeps => ({
+    refs: {
+      progress: this._progress,
+      progressWrap: this._progressWrap,
+      progressWrapValue: this._progressWrapValue,
+      progressDot: this._progressDot,
+      playerBtn: this._playerBtn,
+      playerTip: this._playerTip,
+      playerTipTime: this._playerTipTime,
+      playerTipText: this._playerTipText,
+    },
+    state: this._runtimeState,
+    ctx: this.ctx,
+    visualSignals: this._visualSignals,
+    getVideo: () => this._video,
+    getTotalTime: () => this.getTotalTime(),
+    getCurrentTime: () => this.getCurrentTime(),
+    setCurrentTime: (n) => this.setCurrentTime(n),
+    safePlay: (showLoading) => this.safePlay(showLoading),
+    pause: () => this.pause(),
+    showControllerBar: (e) => this.showControllerBar(e),
+  });
+  getChromeDeps = (): PlayerChromeDeps => ({
+    refs: {
+      player: this._player,
+      playerBtn: this._playerBtn,
+      playerController: this._playerController,
+      playControllerBottomVolume: this._playControllerBottomVolume,
+      playControllerBottomPip: this._playControllerBottomPip,
+    },
+    state: this._runtimeState,
+    ctx: this.ctx,
+    getVideo: () => this._video,
+    isDebug: () => !!this.debug,
+    play: () => this.play(),
+    pause: () => this.pause(),
+    setCurrentTime: (n) => this.setCurrentTime(n),
+    setPlaybackRate: (n) => this.setPlaybackRate(n),
+    setVolume: (n) => this.setVolume(n),
+    safePlay: (showLoading) => this.safePlay(showLoading),
+    change: (name, value) => this.change(name, value),
+    updateCurrentProgress: () => this.updateCurrentProgress(),
+    getVolumeMemo: () => this._volume,
+    setVolumeMemo: (n) => {
+      this._volume = n;
+    },
+    rememberPosition: () => this.rememberPosition,
+    getSrc: () => this.src,
+    getCurrentTime: () => this.getCurrentTime(),
+  });
+  getClarityDeps = (): PlayerClarityDeps<Partial<Level>> => ({
+    refs: { clarityContainer: this._playControllerBottomClarity, player: this._player },
+    state: this._runtimeState,
+    ctx: this.ctx,
+    getVideo: () => this._video,
+    getHls: () => this._hls,
+    getSrc: () => this.src,
+    capturePlaybackSnapshot: () => this.capturePlaybackSnapshot(),
+    setLoadingState: (loading) => this.setLoadingState(loading),
+    change: (name, value) => this.change(name, value),
+    showErrorModal: (message) => this.showErrorModal(message),
+  });
+  getSubtitleDeps = (): PlayerSubtitleDeps => ({
+    refs: { subtitleContainer: this._playControllerBottomSubtitle, player: this._player },
+    getPlayerId: () => this._player.getAttribute('id'),
+    getVideo: () => this._video,
+    getTracks: () => this._tracks,
+    change: (name, value) => this.change(name, value),
+  });
   get src(): string {
     return this.getAttribute('src') || '';
   }
@@ -339,26 +428,45 @@ export class RanPlayer extends RanElement {
   handlerExternalCss = (): void => {
     syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
   };
-  getRuntimeState = (): PlayerRuntimeState<PlaybackSnapshot> => {
-    return {
-      moveProgress: this.moveProgress,
-      isSeeking: this._isSeeking,
-      wasPlayingBeforeSeek: this._wasPlayingBeforeSeek,
-      isBuffering: this._isBuffering,
-      pendingPlaybackRestore: this._pendingPlaybackRestore,
-    };
-  };
-  applyRuntimeState = (state: PlayerRuntimeState<PlaybackSnapshot>): void => {
-    this.moveProgress = state.moveProgress;
-    this._isSeeking = state.isSeeking;
-    this._wasPlayingBeforeSeek = state.wasPlayingBeforeSeek;
-    this._isBuffering = state.isBuffering;
-    this._pendingPlaybackRestore = state.pendingPlaybackRestore;
-  };
+  // ── Transient runtime state — thin accessors over the shared `_runtimeState`, so `player.moveProgress`/`_isSeeking = true` etc. keep working.
+  get moveProgress(): { percentage: number; mouseDown: boolean } {
+    return this._runtimeState.moveProgress;
+  }
+  get _isSeeking(): boolean {
+    return this._runtimeState.isSeeking;
+  }
+  set _isSeeking(v: boolean) {
+    this._runtimeState.isSeeking = v;
+  }
+  get _wasPlayingBeforeSeek(): boolean {
+    return this._runtimeState.wasPlayingBeforeSeek;
+  }
+  set _wasPlayingBeforeSeek(v: boolean) {
+    this._runtimeState.wasPlayingBeforeSeek = v;
+  }
+  get _isSwitchingSource(): boolean {
+    return this._runtimeState.isSwitchingSource;
+  }
+  set _isSwitchingSource(v: boolean) {
+    this._runtimeState.isSwitchingSource = v;
+  }
+  get _pendingPlaybackRestore(): PlaybackSnapshot | undefined {
+    return this._runtimeState.pendingPlaybackRestore;
+  }
+  set _pendingPlaybackRestore(v: PlaybackSnapshot | undefined) {
+    this._runtimeState.pendingPlaybackRestore = v;
+  }
+  get controllerBarTimeId(): ReturnType<typeof setTimeout> | undefined {
+    return this._runtimeState.controllerBarTimeId;
+  }
+  set controllerBarTimeId(v: ReturnType<typeof setTimeout> | undefined) {
+    this._runtimeState.controllerBarTimeId = v;
+  }
+  get _isShowingErrorModal(): boolean {
+    return this._errorModal.isShowing();
+  }
   resetTransientState = (): void => {
-    const runtimeState = this.getRuntimeState();
-    resetTransientRuntimeState(runtimeState);
-    this.applyRuntimeState(runtimeState);
+    resetTransientRuntimeState(this._runtimeState);
   };
   capturePlaybackSnapshot = (): PlaybackSnapshot => {
     const currentTime = this.getCurrentTime();
@@ -382,112 +490,17 @@ export class RanPlayer extends RanElement {
     }
     this.pause();
   };
-  changeClarity = (e: Event): void => {
-    this.ctx.clarity = (e as CustomEvent).detail.value;
-    const url = this.ctx.levelMap.get((e as CustomEvent).detail.value);
-    if (url && this._hls) {
-      this._pendingPlaybackRestore = this.capturePlaybackSnapshot();
-      this._isSwitchingSource = true;
-      this.setLoadingState(true);
-      this._hls.loadSource(url);
-      this._hls.startLoad();
-    }
-  };
-  createClaritySelect = (): void => {
-    const { levels } = this.ctx;
-    this._playControllerBottomClarity.innerHTML = '';
-    if (levels.length <= 0) return;
-    const Fragment = document.createDocumentFragment();
-    levels.forEach((item) => {
-      const { name, url } = item;
-      if (!name || !url) return;
-      this.ctx.levelMap.set(name, url);
-      const option = View('r-option').attr('value', name).text(name).build() as HTMLElement;
-      Fragment.appendChild(option);
-    });
-    const id = this._player.getAttribute('id');
-    const select = View('r-select')
-      .attr('value', this.ctx.clarity || 'Auto')
-      .attr('type', 'text')
-      .attr('trigger', 'hover,click')
-      .attr('placement', 'top')
-      .attr('dropdownclass', 'video-clarity-dropdown')
-      .aria('label', 'Video quality')
-      .children(Fragment as unknown as HTMLElement)
-      .build() as HTMLElement;
-
-    if (id) select.setAttribute('getPopupContainerId', id);
-    select.addEventListener('change', this.changeClarity);
-    this._playControllerBottomClarity.appendChild(select);
-  };
-  /**
-   * @description: 把 `_tracks` 应用到当前 `_video`——重建 `<track>` 元素，重建语言选择
-   * select，再按"上次记住的语言"或"配置里 default:true 的那条"选一个初始激活语言。
-   * `updatePlayer()`（新 video）和 `tracks` setter（已有 video 时动态更新）都会调用它。
-   */
-  applyTracks = (): void => {
-    if (!this._video) return;
-    applyTracksToVideo(this._video, this._tracks);
-    this.createSubtitleSelect();
-    if (this._tracks.length <= 0) return;
-    const preferred = loadPreferredSubtitleLanguage();
-    const preferredAvailable = preferred !== 'off' && this._tracks.some((track) => track.srclang === preferred);
-    const fallbackDefault = this._tracks.find((track) => track.default);
-    const initialLang = preferredAvailable ? preferred : fallbackDefault?.srclang || 'off';
-    this.setSubtitleLanguage(initialLang);
-  };
-  setSubtitleLanguage = (lang: string): void => {
-    if (!this._video) return;
-    setActiveSubtitleLanguage(this._video.textTracks, lang);
-    const select = this._playControllerBottomSubtitle.querySelector('r-select');
-    if (select) select.setAttribute('value', lang === 'off' ? 'Off' : lang);
-  };
-  changeSubtitleTrack = (e: Event): void => {
-    const lang = (e as CustomEvent).detail.value === 'Off' ? 'off' : (e as CustomEvent).detail.value;
-    this.setSubtitleLanguage(lang);
-    savePreferredSubtitleLanguage(lang);
-    this.change('subtitlechange', lang);
-  };
-  /**
-   * @description: 完全照抄 `createClaritySelect` 的结构——`<r-select>` 里 "Off" + 每条
-   * track 的 label，选中即切换激活语言。不做独立的 CC 开关按钮，"Off" 选项本身就是关闭入口。
-   */
-  createSubtitleSelect = (): void => {
-    this._playControllerBottomSubtitle.innerHTML = '';
-    if (this._tracks.length <= 0) return;
-    const Fragment = document.createDocumentFragment();
-    Fragment.appendChild(View('r-option').attr('value', 'Off').text('Off').build() as HTMLElement);
-    this._tracks.forEach((track) => {
-      const option = View('r-option').attr('value', track.srclang).text(track.label).build() as HTMLElement;
-      Fragment.appendChild(option);
-    });
-    const id = this._player.getAttribute('id');
-    const select = View('r-select')
-      .attr('value', 'Off')
-      .attr('type', 'text')
-      .attr('trigger', 'hover,click')
-      .attr('placement', 'top')
-      .attr('dropdownclass', 'video-subtitle-dropdown')
-      .aria('label', 'Subtitles')
-      .children(Fragment as unknown as HTMLElement)
-      .build() as HTMLElement;
-
-    if (id) select.setAttribute('getPopupContainerId', id);
-    select.addEventListener('change', this.changeSubtitleTrack);
-    this._playControllerBottomSubtitle.appendChild(select);
-  };
-  manifestLoaded = (type: string, data: { levels: Level[]; url: string }): void => {
-    if (type === 'hlsManifestLoaded') {
-      const { url, levels = [] } = data;
-      if (levels.length <= 0) return;
-      const normalized = buildManifestLevels({ levels, manifestUrl: url, existingLevelMap: this.ctx.levelMap });
-      this.ctx.levels.push(...normalized.levels);
-      normalized.levelMapEntries.forEach(([name, levelUrl]) => this.ctx.levelMap.set(name, levelUrl));
-      this.ctx.url = url;
-      this.createClaritySelect();
-      this.change('hlsManifestLoaded', { data });
-    }
-  };
+  // ── Clarity (HLS rendition switching) — delegates to core/clarity.ts ─────
+  changeClarity = (e: Event): void => this._clarity.changeClarity(e);
+  createClaritySelect = (): void => this._clarity.createClaritySelect();
+  manifestLoaded = (type: string, data: { levels: Level[]; url: string }): void =>
+    this._clarity.manifestLoaded(type, data);
+  hlsError = (event: unknown, data: unknown): void => this._clarity.hlsError(event, data);
+  // ── Subtitles/CC — delegates to core/subtitles.ts ─────────────────────────
+  applyTracks = (): void => this._subtitles.applyTracks();
+  setSubtitleLanguage = (lang: string): void => this._subtitles.setSubtitleLanguage(lang);
+  changeSubtitleTrack = (e: Event): void => this._subtitles.changeSubtitleTrack(e);
+  createSubtitleSelect = (): void => this._subtitles.createSubtitleSelect();
   /**
    * @description: 初始化 video 和更新 video 方法
    * @return {*}
@@ -541,44 +554,7 @@ export class RanPlayer extends RanElement {
       if (this.debug) console.warn('r-player update player error:', error);
     }
   };
-  hlsError = (event: unknown, data: unknown): void => {
-    this._isSwitchingSource = false;
-    this.setLoadingState(false);
-    this.change('hlsError', { event, data });
-    if (this._video) {
-      this._video.src = this.src;
-    }
-    // Non-fatal hls.js errors are already handled by the library's own internal
-    // recovery — only a fatal error means playback has actually stopped and is
-    // worth interrupting the user for.
-    if ((data as { fatal?: boolean } | null)?.fatal) {
-      this.showErrorModal('The stream could not be loaded.');
-    }
-  };
-  /**
-   * @description: 默认开启的错误 + 重试弹窗，`disable-error-modal` 关掉后消费者可以自己接
-   * `change`/`hlsError` 事件做自定义错误 UI。`r-modal` 懒加载——只有真的出错才下载它，参照
-   * r-mermaid 全屏弹层的 `import('@/components/modal')` 写法。
-   */
-  showErrorModal = (message: string): void => {
-    if (this.disableErrorModal || this._isShowingErrorModal) return;
-    this._isShowingErrorModal = true;
-    import('@/components/modal')
-      .then(({ default: Modal }) => {
-        return Modal.error({
-          title: 'Playback failed',
-          content: message,
-          okText: 'Retry',
-          onConfirm: () => {
-            this._isShowingErrorModal = false;
-            this.updatePlayer();
-          },
-        });
-      })
-      .then(() => {
-        this._isShowingErrorModal = false;
-      });
-  };
+  showErrorModal = (message: string): void => this._errorModal.show(message);
   change = (name: string, value: unknown): void => {
     const currentTime = this.getCurrentTime();
     const duration = this.getTotalTime();
@@ -597,217 +573,7 @@ export class RanPlayer extends RanElement {
       }),
     );
   };
-  onCanplay = (e: Event): void => {
-    this.ctx.currentState = e.type;
-    this._isSwitchingSource = false;
-    this.setLoadingState(false);
-    this._visualSignals.isPlaying.setter(false);
-    this.change('canplay', e);
-    this.resize();
-  };
-  onCanplaythrough = (e: Event): void => {
-    this.ctx.currentState = e.type;
-    this._isSwitchingSource = false;
-    this.setLoadingState(false);
-    this.change('canplaythrough', e);
-  };
-  onComplete = (e: Event): void => {
-    this.ctx.currentState = e.type;
-    this.change('complete', e);
-  };
-  onDurationchange = (e: Event): void => {
-    this.ctx.currentState = e.type;
-    this.updateBufferedProgress();
-    this.change('durationchange', e);
-  };
-  onEmptied = (e: Event): void => {
-    this.ctx.currentState = e.type;
-    this.change('emptied', e);
-  };
-  onEnded = (e: Event): void => {
-    this.ctx.currentState = e.type;
-    this._isSwitchingSource = false;
-    this.setLoadingState(false);
-    if (this.rememberPosition) clearResumePosition(this.src);
-    this.change('ended', e);
-  };
-  onError = (e: Event): void => {
-    this.ctx.currentState = e.type;
-    this._isSwitchingSource = false;
-    this.setLoadingState(false);
-    this.change('error', e);
-    this.showErrorModal(describeMediaError(this._video?.error));
-  };
-  onLoadedmetadata = (e: Event): void => {
-    this.ctx.currentState = e.type;
-    if (this._pendingPlaybackRestore) {
-      this.restorePlaybackSnapshot(this._pendingPlaybackRestore);
-      this._pendingPlaybackRestore = undefined;
-    } else if (this.rememberPosition && !this._isSwitchingSource) {
-      // Only a genuine fresh load resumes from storage — a quality-switch reload
-      // already took the `_pendingPlaybackRestore` branch above instead.
-      const resumeAt = loadResumePosition(this.src);
-      if (shouldResumeAt(resumeAt, this.getTotalTime())) {
-        this.setCurrentTime(resumeAt);
-        this.change('resume', resumeAt);
-      }
-    }
-    this._isSwitchingSource = false;
-    this.updateBufferedProgress();
-    this.change('loadedmetadata', e);
-  };
-  onLoadstart = (e: Event): void => {
-    this.ctx.currentState = e.type;
-    this.change('loadstart', e);
-  };
-  onProgress = (e: Event): void => {
-    this.ctx.currentState = e.type;
-    this.updateBufferedProgress();
-    this.change('progress', e);
-  };
-  onRatechange = (e: Event): void => {
-    this.ctx.currentState = e.type;
-    this.change('ratechange', e);
-  };
-  onSeeked = (e: Event): void => {
-    this.ctx.currentState = e.type;
-    this._isSwitchingSource = false;
-    this.setLoadingState(false);
-    this.change('seeked', e);
-  };
-  onSeeking = (e: Event): void => {
-    this.ctx.currentState = e.type;
-    this.setLoadingState(
-      shouldSetLoadingOnSeeking({
-        isDraggingProgress: this.moveProgress.mouseDown,
-        video: this._video,
-      }),
-    );
-    this.change('seeking', e);
-  };
-  onStalled = (e: Event): void => {
-    this.ctx.currentState = e.type;
-    this.change('stalled', e);
-  };
-  onSuspend = (e: Event): void => {
-    this.ctx.currentState = e.type;
-    this.change('suspend', e);
-  };
-  onLoadeddata = (e: Event): void => {
-    this.ctx.currentState = e.type;
-    const duration = this.getTotalTime();
-    this.ctx.duration = duration;
-    this.updateBufferedProgress();
-    const currentTimeWhenSwitching =
-      this._isSwitchingSource && this._pendingPlaybackRestore ? this._pendingPlaybackRestore.currentTime : 0;
-    // Both setters change in the same tick here — batch so the progress
-    // effect (which does a forced-layout `offsetWidth` read) flushes once
-    // instead of twice.
-    batch(() => {
-      this._visualSignals.duration.setter(duration);
-      this._visualSignals.currentTime.setter(currentTimeWhenSwitching);
-    });
-    this._playerControllerBottomTimeDivide.innerText = '/';
-    this.change('loadeddata', e);
-  };
-  onTimeupdate = (e: Event): void => {
-    this.ctx.currentState = e.type;
-    this.change('timeupdate', e);
-  };
-  onVolumechange = (e: Event): void => {
-    this.ctx.currentState = e.type;
-    // Mirrors the visual signal here too — not just `ctx.volume` — so it
-    // can't go stale when the native `volumechange` fires from something
-    // other than `setVolume()` (an external script touching `video.volume`
-    // directly, an OS media key, etc). `getVolume()` already does the
-    // 0-1 → 0-100 scale conversion and writes `ctx.volume`; reuse it instead
-    // of duplicating the math, then push the same 0-100 value into the
-    // signal so it matches the scale `setVolume()` uses.
-    const volume = this.getVolume();
-    this._visualSignals.volume.setter(volume);
-    this.change('volumechange', e);
-  };
-  onWaiting = (e: Event): void => {
-    this.ctx.currentState = e.type;
-    this.setLoadingState(
-      this._isSwitchingSource ||
-        shouldSetLoadingOnWaiting({
-          isSeeking: this._isSeeking,
-          video: this._video,
-        }),
-    );
-    this.change('waiting', e);
-  };
-  /**
-   * @description: 原生 enterpictureinpicture/leavepictureinpicture 事件 —
-   * 覆盖浏览器自己的 PiP 悬浮窗控件触发退出的情况，不只是走 togglePip() 这一条路径。
-   */
-  onEnterPictureInPicture = (e: Event): void => {
-    this.change('pictureinpicture', true);
-  };
-  onLeavePictureInPicture = (e: Event): void => {
-    this.change('pictureinpicture', false);
-  };
-  onPlay = (e: Event): void => {
-    this.ctx.currentState = e.type;
-    this.setLoadingState(false);
-    this.requestAnimationFrame(this.updateCurrentProgress);
-    this._visualSignals.isPlaying.setter(true);
-    this.showControllerBar();
-    this.change('play', e);
-  };
-  onPlaying = (e: Event): void => {
-    this.ctx.currentState = e.type;
-    this._isSwitchingSource = false;
-    this.setLoadingState(false);
-    syncCenterPlayVisibility(this._playerBtn, false);
-    this._visualSignals.isPlaying.setter(true);
-    this.requestAnimationFrame(this.updateCurrentProgress);
-    this.showControllerBar();
-    this.change('playing', e);
-  };
-  onPause = (e: Event): void => {
-    this.ctx.currentState = e.type;
-    this.setLoadingState(false);
-    syncCenterPlayVisibility(this._playerBtn, !this._isSeeking);
-    if (this.rememberPosition) saveResumePosition(this.src, this.getCurrentTime());
-    this.change('pause', e);
-    this._visualSignals.isPlaying.setter(false);
-    this.cancelAnimationFrame();
-    this._playerController.style.setProperty('opacity', '1');
-    if (this.controllerBarTimeId) {
-      clearTimeout(this.controllerBarTimeId);
-      this.controllerBarTimeId = undefined;
-    }
-  };
-  getMediaHandlers = (): PlayerMediaHandlers => {
-    return {
-      onCanplay: this.onCanplay,
-      onCanplaythrough: this.onCanplaythrough,
-      onComplete: this.onComplete,
-      onDurationchange: this.onDurationchange,
-      onEmptied: this.onEmptied,
-      onEnded: this.onEnded,
-      onError: this.onError,
-      onLoadeddata: this.onLoadeddata,
-      onLoadedmetadata: this.onLoadedmetadata,
-      onLoadstart: this.onLoadstart,
-      onPause: this.onPause,
-      onPlay: this.onPlay,
-      onPlaying: this.onPlaying,
-      onProgress: this.onProgress,
-      onRatechange: this.onRatechange,
-      onSeeked: this.onSeeked,
-      onSeeking: this.onSeeking,
-      onStalled: this.onStalled,
-      onSuspend: this.onSuspend,
-      onTimeupdate: this.onTimeupdate,
-      onVolumechange: this.onVolumechange,
-      onWaiting: this.onWaiting,
-      onEnterPictureInPicture: this.onEnterPictureInPicture,
-      onLeavePictureInPicture: this.onLeavePictureInPicture,
-    };
-  };
+  getMediaHandlers = (): PlayerMediaHandlers => this._mediaHandlers;
   clearListenerEvent = (): void => {
     if (!this._video) return;
     if (typeof this._video.removeEventListener !== 'function') return;
@@ -822,444 +588,41 @@ export class RanPlayer extends RanElement {
     this.clearListenerEvent();
     bindMediaEvents(this._video, this.getMediaHandlers());
   };
-  showControllerBar = (e?: MouseEvent): void => {
-    if (e) {
-      const dom = e.target as HTMLElement;
-      if (dom?.classList.value.includes('ran-player-controller')) {
-        this._playerController.style.setProperty('opacity', '1');
-        if (this.controllerBarTimeId) {
-          clearTimeout(this.controllerBarTimeId);
-          this.controllerBarTimeId = undefined;
-        }
-        return;
-      }
-    }
-    if (PLAY_STATE_LIST.includes(this.ctx.currentState)) {
-      this._playerController.style.setProperty('opacity', '1');
-      if (this.controllerBarTimeId) {
-        clearTimeout(this.controllerBarTimeId);
-        this.controllerBarTimeId = undefined;
-      }
-      this.controllerBarTimeId = setTimeout(() => {
-        this._playerController.style.setProperty('opacity', '0');
-        clearTimeout(this.controllerBarTimeId);
-        this.controllerBarTimeId = undefined;
-      }, 2000);
-    } else {
-      this._playerController.style.setProperty('opacity', '1');
-      if (this.controllerBarTimeId) {
-        clearTimeout(this.controllerBarTimeId);
-        this.controllerBarTimeId = undefined;
-      }
-    }
-  };
-  setLoadingState = (loading: boolean): void => {
-    if (this._isBuffering === loading) return;
-    this._isBuffering = loading;
-    if (loading) {
-      addClassToElement(this._player, 'ran-player-buffering');
-      return;
-    }
-    removeClassToElement(this._player, 'ran-player-buffering');
-  };
-  updateBufferedProgress = (): void => {
-    if (!this._video) return;
-    const duration = this.getTotalTime();
-    const percentage = getBufferedPercentage(this._video, duration);
-    // Batched for the same reason as onLoadeddata/updateCurrentProgress —
-    // `batch()` absorbs nested calls into whichever batch is already open
-    // (e.g. when this runs from inside updateCurrentProgress's batch), so
-    // it's always correct to batch here even when called standalone.
-    batch(() => {
-      this._visualSignals.duration.setter(duration);
-      this._visualSignals.bufferedPercentage.setter(percentage);
-    });
-  };
-  syncProgressByPercentage = (percentage: number): void => {
-    const normalizedPercentage = normalizeProgress(percentage);
-    this._progressWrapValue.style.setProperty('transform', `scaleX(${normalizedPercentage})`);
-    this._progressDot.style.setProperty(
-      'transform',
-      `translateX(${normalizedPercentage * this._progress.offsetWidth}px)`,
-    );
-    this._progress.setAttribute('aria-valuenow', String(Math.round(normalizedPercentage * 100)));
-    this._progress.setAttribute('aria-valuetext', formatDuration(normalizedPercentage * this.ctx.duration));
-  };
-  seekToPercentage = (percentage: number): void => {
-    const durationFromContext = this.ctx.duration;
-    const durationFromVideo = this.getTotalTime();
-    const duration = resolveSeekDuration(durationFromVideo, durationFromContext);
-    if (!Number.isFinite(duration) || duration <= 0) return;
-    this.setCurrentTime(duration * normalizeProgress(percentage));
-    this.updateCurrentProgress();
-  };
-  /**
-   * @description: 进度条点击事件
-   * @param {MouseEvent} e
-   * @return {*}
-   */
-  progressClick = (e: MouseEvent): void => {
-    const rect = this._progressWrap.getBoundingClientRect();
-    const offsetX = e.clientX - rect.left;
-    const percentage = range(offsetX / this._progress.offsetWidth);
-    this.seekToPercentage(percentage);
-  };
-  /**
-   * @description: ARIA slider keyboard contract for the seek bar — Home/End
-   * jump to the ends, ArrowLeft/Down and ArrowRight/Up step (Shift for a
-   * coarser step), matching the `role="slider"`/aria-valuemin/valuemax the
-   * element already carries (see core/view.ts). Reuses the same percentage
-   * scale (0-100) as aria-valuenow and the same `seekToPercentage` seek path
-   * the click/drag handlers already use, rather than duplicating seek math.
-   * `sliderStepFromKeydown` returning `undefined` means the key isn't part of
-   * the slider pattern, so nothing is prevented/handled.
-   */
-  onProgressKeydown = (e: KeyboardEvent): void => {
-    const { currentTime, duration } = this.ctx;
-    const hasDuration = Number.isFinite(duration) && duration > 0;
-    const currentPercentage = hasDuration ? normalizeProgress(currentTime / duration) * 100 : 0;
-    const next = sliderStepFromKeydown(e, { current: currentPercentage, min: 0, max: 100 });
-    if (next === undefined) return;
-    e.preventDefault();
-    this.seekToPercentage(next / 100);
-  };
-  /**
-   * @description: 进度条鼠标按下事件
-   * @param {MouseEvent} e
-   * @return {*}
-   */
-  progressDotMouseDown = (): void => {
-    this._playerBtn.style.setProperty('display', 'none');
-    this.moveProgress.mouseDown = true;
-    const duration = this.getTotalTime() || this.ctx.duration;
-    const currentTime = this.getCurrentTime();
-    this.moveProgress.percentage = duration > 0 ? Math.floor(normalizeProgress(currentTime / duration) * 100) / 100 : 0;
-    this._isSeeking = true;
-    this._wasPlayingBeforeSeek = !!this._video && !this._video.paused && !this._video.ended;
-    this.cancelAnimationFrame();
-  };
-  /**
-   * @description: 进度条鼠标移动事件
-   * @param {MouseEvent} e
-   * @return {*}
-   */
-  progressDotMouseMove = (e: MouseEvent): void => {
-    this.showControllerBar(e);
-    if (!this.moveProgress.mouseDown) return;
-    const rect = this._progress.getBoundingClientRect();
-    const offsetX = e.clientX - rect.left - 9;
-    const percentage = range(offsetX / this._progress.offsetWidth);
-    this.syncProgressByPercentage(percentage);
-    this.moveProgress.percentage = Math.floor(percentage * 100) / 100;
-  };
-  progressDotMouseMoveDocument = (e: MouseEvent): void => {
-    if (!this.moveProgress.mouseDown) return;
-    const rect = this._progress.getBoundingClientRect();
-    const offsetX = e.clientX - rect.left - 9;
-    const percentage = range(offsetX / this._progress.offsetWidth);
-    this.syncProgressByPercentage(percentage);
-    this.moveProgress.percentage = Math.floor(percentage * 100) / 100;
-  };
-  /**
-   * @description: 进度条鼠标松开事件
-   * @param {MouseEvent} e
-   * @return {*}
-   */
-  progressDotMouseUp = (): void => {
-    if (!this.moveProgress.mouseDown) return;
-    const shouldResume = this._wasPlayingBeforeSeek;
-    this.seekToPercentage(this.moveProgress.percentage);
-    this.moveProgress.mouseDown = false;
-    this._isSeeking = false;
-    this._wasPlayingBeforeSeek = false;
-    if (shouldResume) {
-      this.safePlay(true);
-      this.requestAnimationFrame(this.updateCurrentProgress);
-      return;
-    }
-    this.pause();
-    this.cancelAnimationFrame();
-  };
-  /**
-   * @description: 更新页面样式
-   * @param {Function} fn
-   * @return {*}
-   */
-  requestAnimationFrame = (fn: Function): void => {
-    if (this.requestAnimationFrameId) return;
-    this.requestAnimationFrameId = window.requestAnimationFrame(() => {
-      fn();
-      if (this.requestAnimationFrameId) {
-        cancelAnimationFrame(this.requestAnimationFrameId);
-      }
-      this.requestAnimationFrameId = undefined;
-      this.requestAnimationFrame(fn);
-    });
-  };
-  /**
-   * @description: 取消页面动画
-   * @param {Function} fn
-   * @return {*}
-   */
-  cancelAnimationFrame = (): void => {
-    if (!this.requestAnimationFrameId) return;
-    cancelAnimationFrame(this.requestAnimationFrameId);
-    this.requestAnimationFrameId = undefined;
-  };
-  /**
-   * @description: 更新进度条
-   * @param {*} void
-   * @return {*}
-   */
-  updateCurrentProgress = (): void => {
-    if (this._isSwitchingSource && this._pendingPlaybackRestore) {
-      const duration = this.ctx.duration;
-      const currentTime = this._pendingPlaybackRestore.currentTime;
-      batch(() => {
-        this._visualSignals.duration.setter(duration);
-        this._visualSignals.currentTime.setter(currentTime);
-      });
-      return;
-    }
-    const currentTime = this.getCurrentTime();
-    this.ctx.currentTime = currentTime;
-    const { duration } = this.ctx;
-    // Single batch covers duration+currentTime here and, when it runs,
-    // updateBufferedProgress's own (nested) batch too — nested batches are
-    // absorbed by the outermost one, so all the setters this tick share one
-    // effect flush instead of two or three.
-    batch(() => {
-      this._visualSignals.duration.setter(duration);
-      this._visualSignals.currentTime.setter(currentTime);
-      if (Number.isFinite(duration) && duration > 0) {
-        this.updateBufferedProgress();
-      }
-    });
-  };
-  /**
-   * @description: 点击整个视频时，触发的事件
-   * @param {*} void
-   * @return {*}
-   */
-  dispatchClickPlayerContainerAction = (e: Event): void => {
-    e.stopPropagation();
-    e.preventDefault();
-    if (PLAY_STATE_LIST.includes(this.ctx.currentState)) {
-      this.pause();
-      this._playerBtn.style.setProperty('display', 'block');
-    } else {
-      this.play();
-      this._playerBtn.style.setProperty('display', 'none');
-    }
-  };
-  /**
-   * @description: 空格事件
-   * @param {KeyboardEvent} e
-   * @return {*}
-   */
-  SpaceKeyDown = (e: KeyboardEvent): void => {
-    const { currentTime, duration } = this.ctx;
-    if (e.code === 'Space') {
-      this.dispatchClickPlayerBtnAction(e);
-    }
-    if (e.code === 'Escape') {
-      this.customExitFullscreen()
-        .then(() => {
-          this.ctx.fullScreen = false;
-        })
-        .catch((error) => {
-          if (this.debug) console.warn(`exit full screen error:${error}`);
-        });
-    }
-    if (e.code === 'ArrowLeft') {
-      const time = range(currentTime - 5, 0, duration);
-      this.setCurrentTime(time);
-      this.play();
-    }
-    if (e.code === 'ArrowRight') {
-      const time = range(currentTime + 5, 0, duration);
-      this.setCurrentTime(time);
-      this.play();
-    }
-  };
-  /**
-   * @description: 点击 player-btn，触发的事件
-   * @param {*} void
-   * @return {*}
-   */
-  dispatchClickPlayerBtnAction = (e: Event): void => {
-    e.stopPropagation();
-    e.preventDefault();
-    if (PLAY_STATE_LIST.includes(this.ctx.currentState)) {
-      this.pause();
-      this._playerBtn.style.setProperty('display', 'block');
-    } else {
-      this.play();
-      this._playerBtn.style.setProperty('display', 'none');
-    }
-  };
-  /**
-   * Enter/Space activation for the play/pause div — it has no native button
-   * semantics, so nothing fires a `click` from the keyboard without this.
-   * `dispatchClickPlayerBtnAction` already stops propagation, which also
-   * keeps the host's own Space-to-toggle-play handler (`SpaceKeyDown`) from
-   * double-firing on the same keystroke.
-   */
-  onPlayBtnKeydown = (e: KeyboardEvent): void => {
-    if (!isActivationKey(e)) return;
-    this.dispatchClickPlayerBtnAction(e);
-  };
-  /**
-   * Enter/Space activation for the fullscreen div. Stops propagation itself
-   * (unlike `dispatchClickPlayerBtnAction`, `openFullScreen` takes no event) —
-   * otherwise Space here would bubble to the host and also toggle play/pause.
-   */
-  onFullScreenKeydown = (e: KeyboardEvent): void => {
-    if (!isActivationKey(e)) return;
-    e.preventDefault();
-    e.stopPropagation();
-    this.openFullScreen();
-  };
-  changeVolumeProgress = (e: Event): void => {
-    if (this._video) {
-      const volume = (e as CustomEvent).detail.value;
-      this.setVolume(volume);
-      this.change('volume', volume);
-      if (volume > 0) {
-        this._volume = volume;
-      }
-    }
-  };
-  customRequestFullscreen = (): Promise<void> => {
-    return requestElementFullscreen(this._player);
-  };
-  customExitFullscreen = (): Promise<void> => {
-    return exitDocumentFullscreen(document);
-  };
-  openFullScreen = (): void => {
-    if (!this.ctx.fullScreen) {
-      this.customRequestFullscreen()
-        .then(() => {
-          this.resize();
-          this.ctx.fullScreen = true;
-        })
-        .catch((error) => {
-          if (this.debug) console.warn(`full screen error:${error}`);
-        });
-    } else {
-      this.customExitFullscreen()
-        .then(() => {
-          this.resize();
-          this.ctx.fullScreen = false;
-        })
-        .catch((error) => {
-          if (this.debug) console.warn(`exit full screen error:${error}`);
-        });
-    }
-  };
-  /**
-   * @description: PiP 按钮只在浏览器真正支持时才可见——渐进增强，而不是渲染一个点了没反应的
-   * 按钮。`isPipSupported()` 依赖 `document`，SSR/构造阶段拿不到有意义的结果，所以只在
-   * `connectedCallback` 里跑一次。
-   */
-  syncPipButtonVisibility = (): void => {
-    const supported = isPipSupported(this._video);
-    this._playControllerBottomPip.classList.toggle('ran-player-controller-bottom-right-pip-hidden', !supported);
-  };
-  togglePip = (): void => {
-    if (!this._video) return;
-    if (document.pictureInPictureElement === this._video) {
-      exitPip().catch((error) => {
-        if (this.debug) console.warn(`exit picture-in-picture error:${error}`);
-      });
-      return;
-    }
-    requestPip(this._video).catch((error) => {
-      if (this.debug) console.warn(`request picture-in-picture error:${error}`);
-    });
-  };
-  changeSpeed = (e: Event): void => {
-    const speed = Number((e as CustomEvent).detail.value) || 1;
-    const shouldResume = shouldResumePlayback(this._video);
-    this.ctx.playbackRate = speed;
-    this.change('speed', speed);
-    this.setPlaybackRate(speed);
-    if (shouldResume) {
-      this.safePlay(false);
-    }
-  };
-  progressMouseEnter = (e: MouseEvent): void => {
-    this._playerTip.style.setProperty('opacity', '1');
-    const rect = this._progress.getBoundingClientRect();
-    const offsetX = e.clientX - rect.left;
-    if (this._playerTipText.innerText) {
-      this._playerTip.style.setProperty('transform', `translate(calc(${offsetX}px - 50%),-20px)`);
-    } else {
-      this._playerTip.style.setProperty('transform', `translateX(calc(${offsetX}px - 50%))`);
-    }
-    this._playerTipTime.innerText = formatDuration((offsetX / this._progress.clientWidth) * this.ctx.duration);
-  };
-  progressMouseLeave = (e: MouseEvent): void => {
-    if ((e.target as HTMLElement | null)?.classList.contains('ran-player-controller-progress-wrap-dot')) {
-      return;
-    }
-    this._playerTip.style.setProperty('opacity', '0');
-  };
-  progressMouseMove = (e: MouseEvent): void => {
-    const rect = this._progress.getBoundingClientRect();
-    this._playerTip.style.setProperty('opacity', '1');
-    const offsetX = e.clientX - rect.left;
-    if (this._playerTipText.innerText) {
-      this._playerTip.style.setProperty('transform', `translate(calc(${offsetX}px - 50%),-20px)`);
-    } else {
-      this._playerTip.style.setProperty('transform', `translateX(calc(${offsetX}px - 50%))`);
-    }
-    this._playerTipTime.innerText = formatDuration((offsetX / this._progress.clientWidth) * this.ctx.duration);
-  };
-  changePlayerVolume = (): void => {
-    if (!this._video) return;
-    const { volume } = this.ctx;
-    if (volume > 0) {
-      this.setVolume(0);
-      this.change('volume', 0);
-    } else {
-      const restoredVolume = this._volume || 50;
-      this.setVolume(restoredVolume);
-      this.change('volume', restoredVolume);
-    }
-  };
-  resize = (): void => {
-    if (this._video) {
-      const { width, height } = this._player.getBoundingClientRect();
-      this._video.style.setProperty('width', `${width}px`);
-      this._video.style.setProperty('height', `${height}px`);
-      if (document.body.clientWidth < 500) {
-        this._playControllerBottomVolume.style.setProperty('display', 'none');
-      } else {
-        this._playControllerBottomVolume.style.setProperty('display', 'flex');
-      }
-    }
-    this.updateCurrentProgress();
-  };
-  /**
-   * @description: 断点续播保存的第二个触发点——`pause` 只覆盖"用户手动暂停"，标签页切走/关闭
-   * 往往不会先触发 pause。`visibilitychange` 比 `beforeunload` 更可靠（移动端支持更好，
-   * MDN 现在推荐这个而不是 beforeunload 做"页面即将失去焦点前保存状态"）。
-   */
-  onVisibilityChange = (): void => {
-    if (this.rememberPosition && document.visibilityState === 'hidden') {
-      saveResumePosition(this.src, this.getCurrentTime());
-    }
-  };
-  fullScreenChange = (): void => {
-    if (document.fullscreenElement?.classList.contains('ran-player')) {
-      this.change('fullscreen', true);
-      this.ctx.fullScreen = true;
-    } else {
-      this.change('fullscreen', false);
-      this.ctx.fullScreen = false;
-    }
-  };
+  // ── Control-bar chrome — delegates to core/chrome.ts ──────────────────────
+  showControllerBar = (e?: MouseEvent): void => this._chrome.showControllerBar(e);
+  setLoadingState = (loading: boolean): void => this._chrome.setLoadingState(loading);
+  dispatchClickPlayerContainerAction = (e: Event): void => this._chrome.dispatchClickPlayerContainerAction(e);
+  SpaceKeyDown = (e: KeyboardEvent): void => this._chrome.SpaceKeyDown(e);
+  dispatchClickPlayerBtnAction = (e: Event): void => this._chrome.dispatchClickPlayerBtnAction(e);
+  onPlayBtnKeydown = (e: KeyboardEvent): void => this._chrome.onPlayBtnKeydown(e);
+  onFullScreenKeydown = (e: KeyboardEvent): void => this._chrome.onFullScreenKeydown(e);
+  changeVolumeProgress = (e: Event): void => this._chrome.changeVolumeProgress(e);
+  customRequestFullscreen = (): Promise<void> => this._chrome.customRequestFullscreen();
+  customExitFullscreen = (): Promise<void> => this._chrome.customExitFullscreen();
+  openFullScreen = (): void => this._chrome.openFullScreen();
+  syncPipButtonVisibility = (): void => this._chrome.syncPipButtonVisibility();
+  togglePip = (): void => this._chrome.togglePip();
+  changeSpeed = (e: Event): void => this._chrome.changeSpeed(e);
+  changePlayerVolume = (): void => this._chrome.changePlayerVolume();
+  resize = (): void => this._chrome.resize();
+  onVisibilityChange = (): void => this._chrome.onVisibilityChange();
+  fullScreenChange = (): void => this._chrome.fullScreenChange();
+  // ── Seek bar — delegates to core/seek.ts ──────────────────────────────────
+  updateBufferedProgress = (): void => this._seek.updateBufferedProgress();
+  syncProgressByPercentage = (percentage: number): void => this._seek.syncProgressByPercentage(percentage);
+  seekToPercentage = (percentage: number): void => this._seek.seekToPercentage(percentage);
+  progressClick = (e: MouseEvent): void => this._seek.progressClick(e);
+  onProgressKeydown = (e: KeyboardEvent): void => this._seek.onProgressKeydown(e);
+  progressDotMouseDown = (): void => this._seek.progressDotMouseDown();
+  progressDotMouseMove = (e: MouseEvent): void => this._seek.progressDotMouseMove(e);
+  progressDotMouseMoveDocument = (e: MouseEvent): void => this._seek.progressDotMouseMoveDocument(e);
+  progressDotMouseUp = (): void => this._seek.progressDotMouseUp();
+  requestAnimationFrame = (fn: Function): void => this._seek.requestAnimationFrame(fn);
+  cancelAnimationFrame = (): void => this._seek.cancelAnimationFrame();
+  updateCurrentProgress = (): void => this._seek.updateCurrentProgress();
+  progressMouseEnter = (e: MouseEvent): void => this._seek.progressMouseEnter(e);
+  progressMouseLeave = (e: MouseEvent): void => this._seek.progressMouseLeave(e);
+  progressMouseMove = (e: MouseEvent): void => this._seek.progressMouseMove(e);
   public getPlaybackRate = (): number => {
     if (this._video) {
       this.ctx.playbackRate = this._video.playbackRate || 0;
