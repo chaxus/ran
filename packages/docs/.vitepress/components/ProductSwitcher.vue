@@ -90,12 +90,18 @@ const measure = (): void => {
     anchorStyle.value = null;
     return;
   }
-  let logoRight = titleLink.getBoundingClientRect().left;
-  titleLink.querySelectorAll(':scope > *').forEach((el) => {
-    logoRight = Math.max(logoRight, el.getBoundingClientRect().right);
+  const titleRect = titleLink.getBoundingClientRect();
+  let logoRight = titleRect.left;
+  titleLink.childNodes.forEach((node) => {
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      logoRight = Math.max(logoRight, (node as HTMLElement).getBoundingClientRect().right);
+    } else if (node.nodeType === Node.TEXT_NODE && node.textContent?.trim()) {
+      const range = document.createRange();
+      range.selectNodeContents(node);
+      logoRight = Math.max(logoRight, range.getBoundingClientRect().right);
+    }
   });
   const parentRect = offsetParent.getBoundingClientRect();
-  const titleRect = titleLink.getBoundingClientRect();
   anchorStyle.value = {
     position: 'absolute',
     left: `${logoRight + SWITCHER_GAP - parentRect.left}px`,

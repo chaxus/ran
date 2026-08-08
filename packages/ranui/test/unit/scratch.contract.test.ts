@@ -196,6 +196,64 @@ describe('r-scratch contract', () => {
     expect(() => scratch.touchEndScratch()).not.toThrow();
   });
 
+  it('projects arbitrary light-DOM content as the reveal layer via the default slot', () => {
+    // The reveal content is arbitrary (text, an image, an <r-icon>, several
+    // elements) rather than a fixed icon+size pair — it's projected through
+    // the default slot exactly like every other ranui component's content.
+    const scratch = document.createElement('r-scratch') as any;
+    scratch.innerHTML = '<span class="prize">You won 50 coins</span>';
+    document.body.appendChild(scratch);
+
+    const slot = scratch._shadowDom.querySelector('.ran-scratch-ticket-award slot') as HTMLSlotElement;
+    expect(slot).not.toBeNull();
+    const assigned = slot.assignedElements();
+    expect(assigned).toHaveLength(1);
+    expect(assigned[0].textContent).toBe('You won 50 coins');
+  });
+
+  it('disabled property reflects to the attribute and back', () => {
+    const scratch = document.createElement('r-scratch') as any;
+    document.body.appendChild(scratch);
+    expect(scratch.disabled).toBe(false);
+
+    scratch.disabled = true;
+    expect(scratch.hasAttribute('disabled')).toBe(true);
+    expect(scratch.disabled).toBe(true);
+
+    scratch.disabled = false;
+    expect(scratch.hasAttribute('disabled')).toBe(false);
+  });
+
+  it('reflects aria-disabled and blocks scratching while disabled', () => {
+    const scratch = document.createElement('r-scratch') as any;
+    scratch.setAttribute('disabled', '');
+    document.body.appendChild(scratch);
+    expect(scratch.getAttribute('aria-disabled')).toBe('true');
+
+    scratch.touchStartScratch();
+    expect(scratch.state.touchStart).toBe(false);
+
+    scratch.state.touchStart = true; // simulate as if a touch had started
+    // fillRect included: attributeChangedCallback always redraws the cover, so
+    // flipping `disabled` below re-enters drawScratchTicket via the same mock.
+    const mockCtx = { beginPath: vi.fn(), arc: vi.fn(), fill: vi.fn(), closePath: vi.fn(), fillRect: vi.fn() };
+    vi.spyOn(scratch.scratchTicket, 'getContext').mockReturnValue(mockCtx as any);
+    scratch.touchMoveScratch();
+    expect(mockCtx.beginPath).not.toHaveBeenCalled();
+
+    scratch.disabled = false;
+    expect(scratch.getAttribute('aria-disabled')).toBe('false');
+  });
+
+  it('sheet property reflects to attribute', () => {
+    const scratch = document.createElement('r-scratch') as any;
+    document.body.appendChild(scratch);
+
+    scratch.sheet = '.ran-scratch-ticket-award { background: red; }';
+    expect(scratch.getAttribute('sheet')).toBe('.ran-scratch-ticket-award { background: red; }');
+    expect(scratch.sheet).toBe('.ran-scratch-ticket-award { background: red; }');
+  });
+
   it('attributeChangedCallback appends container when not in shadow DOM', () => {
     const scratch = document.createElement('r-scratch') as any;
     document.body.appendChild(scratch);
