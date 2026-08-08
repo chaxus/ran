@@ -114,8 +114,8 @@ Full renderer + interactive viewer. Everything below the base render is **opt-in
   ethos.
 - **Toolbar** = a hover-revealed control bar (reuse `r-player`'s auto-hide idiom:
   opacity 0 → 1 on hover). Build icon buttons the **modern** way — `<r-icon name="…">`
-  - `registerIcon(...)` in this module (NOT `r-player`'s legacy background-image icons).
-    Expose `::part(toolbar)` and `::part(button)`.
+  - `registerIcon(...)` in this module (the pattern `r-player` itself now uses throughout —
+    see `docs/PLAYER_ROADMAP.md` §1.4). Expose `::part(toolbar)` and `::part(button)`.
 - **Fullscreen** = reuse **`r-modal`** as the overlay (it already gives dialog/mask,
   focus-trap, ESC-close, body-scroll-lock, z-index stacking) rather than reinventing.
   Streamdown's "modal overlay with dark background" maps 1:1. (For a _true_ browser

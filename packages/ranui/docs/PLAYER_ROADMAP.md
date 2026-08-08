@@ -7,7 +7,8 @@ production-grade player (Video.js / Plyr / Shaka-level capability), so the analy
 redone each time a feature is picked up. Follow `docs/RENDERER_COMPONENTS.md`'s conventions
 where they apply (lazy heavy deps, `::part(error)` + event over console, `registerIcon` +
 `<r-icon>` over legacy background-image icons, `r-modal` over reinventing overlays) — player
-predates that pattern in places, and closing that gap is itself part of this roadmap.
+predated that pattern in places (Phase 1's error modal, Phase 4's icon migration closed those
+gaps), and any newly-discovered gap is worth closing the same way rather than papering over it.
 
 ---
 
