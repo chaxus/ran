@@ -336,3 +336,11 @@ bare `<r-player src="...">` stays exactly as simple as it is today.
       **and** a `change`/CustomEvent — never console-only.
 - [ ] Every new attribute/method/event is added to `docs/src/ranui/player/index.md` **and**
       its `cn/` mirror in the same change.
+- [ ] New logic that isn't actually media-player-specific (time/timestamp parsing, async
+      race/timeout guards, pointer-gesture matching, browser-API compat shims) goes into
+      `ranuts/utils` rather than staying hand-rolled in `core/*.ts` — check `docs/API.md`
+      there first for an existing primitive (`withTimeout`/`withTimeoutFallback`,
+      `createRaceGuard`, `createDoubleTapDetector`, `parseVttTimestamp`/`parseVttCueTiming`,
+      …) before writing a new one. Phase 3/4 shipped at least one case of duplicating an
+      existing ranuts utility (`core/adapters/webrtc.ts`'s ICE-gathering wait reinvented
+      `withTimeoutFallback`) — worth checking for on review, not just when adding new code.
