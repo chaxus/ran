@@ -17,7 +17,11 @@ export interface PlayerRuntimeState<TPending = unknown> {
   isSeeking: boolean;
   wasPlayingBeforeSeek: boolean;
   isBuffering: boolean;
+  /** Owned by `core/clarity.ts`, read by `core/seek.ts`/`core/media-dispatch.ts` — a quality-switch reload in flight. */
+  isSwitchingSource: boolean;
   pendingPlaybackRestore?: TPending;
+  /** Owned by `core/chrome.ts` — the auto-hide-controller-bar timer. */
+  controllerBarTimeId?: ReturnType<typeof setTimeout>;
 }
 
 export function createDefaultPlayerContext<TAction, TLevel = unknown>(
@@ -54,7 +58,9 @@ export function createDefaultRuntimeState<TPending = unknown>(): PlayerRuntimeSt
     isSeeking: false,
     wasPlayingBeforeSeek: false,
     isBuffering: false,
+    isSwitchingSource: false,
     pendingPlaybackRestore: undefined,
+    controllerBarTimeId: undefined,
   };
 }
 
