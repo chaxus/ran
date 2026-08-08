@@ -89,9 +89,21 @@ export default {
   Layout: NavLayout,
   enhanceApp({ app, router }: EnhanceAppContext): void {
     if (!import.meta.env.SSR) {
-      import('ranui');
-      import('@ranui/preview'); // r-preview was split out of the ranui main package; import it so the preview demo works
-      import('./register-icons'); // register ranui's SVG icons so <r-icon> demos render
+      // `@ranui/preview` pins its own old `ranui` dependency and bundles it, so it
+      // defines `r-icon` / `r-message` from that stale copy. Both that bundle and this
+      // workspace's ranui guard `customElements.define` with `customElements.get(tag) ||
+      // ...`, so whichever module finishes loading first silently wins the tag — the
+      // loser's registration is a no-op with no error. Firing both imports unawaited
+      // raced them, and the preview package's single small prebuilt chunk routinely beat
+      // the current (many-module, unbundled-in-dev) `ranui` import, leaving every
+      // `<r-icon>` on the site wired to the old component's own isolated icon cache —
+      // one that this app's `registerIcons()` calls (which touch the *current* module's
+      // cache) can never populate. Result: every icon renders permanently blank. Awaiting
+      // `ranui` first guarantees it always claims the tags before `@ranui/preview` loads.
+      import('ranui').then(() => {
+        import('@ranui/preview'); // r-preview was split out of the ranui main package; import it so the preview demo works
+        import('./register-icons'); // register ranui's SVG icons so <r-icon> demos render
+      });
       syncRanuiTheme();
       enablePageTransitions(router);
     }

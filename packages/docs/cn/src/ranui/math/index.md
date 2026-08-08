@@ -1,6 +1,6 @@
 # math 数学公式
 
-在 `HTML` 页面中高质量展示 `LaTeX` 数学公式
+使用 [Temml](https://temml.org/) 将 `LaTeX` 数学公式编译为原生 `MathML`，在 `HTML` 页面中高质量展示。
 
 ## 代码演示
 

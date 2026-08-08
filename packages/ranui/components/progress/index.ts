@@ -32,7 +32,6 @@ export class Progress extends RanElement {
     const container = ensureShadowElement(this._shadowDom, '.ran-progress', () =>
       Div()
         .class('ran-progress')
-        .role('progressbar')
         .children(
           Div().class('ran-progress-wrap').part('track').children(Div().class('ran-progress-wrap-value').part('fill')),
           Div().class('ran-progress-dot').part('dot'),
@@ -129,6 +128,46 @@ export class Progress extends RanElement {
     this.moveProgress.mouseDown = false;
   };
 
+  /**
+   * Arrow-key seeking for `type="drag"` — the mouse/touch drag path had no
+   * keyboard equivalent, so a `role="slider"` with no way to actually operate
+   * it from the keyboard. Left/Down and Right/Up step by 1% of `total`;
+   * Home/End jump to the ends, matching native `<input type="range">`.
+   */
+  progressKeydown = (e: KeyboardEvent): void => {
+    if (this.type !== 'drag') return;
+    const total = Number(this.total) || 100;
+    const step = total / 100;
+    const current = Number(this.percent);
+    let next: number | undefined;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowUp') next = Math.min(total, current + step);
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') next = Math.max(0, current - step);
+    else if (e.key === 'Home') next = 0;
+    else if (e.key === 'End') next = total;
+    if (next === undefined) return;
+    e.preventDefault();
+    this.percent = String(next);
+    this.updateUI(next / total);
+    this.change();
+  };
+
+  /**
+   * role + aria-value* live on the host (the focusable element) rather than
+   * the shadow-internal `.ran-progress` div — a screen reader needs both on
+   * the same accessible node. `progressbar` is read-only semantics; `drag`
+   * is operable, so it gets `slider` plus the tab stop that makes the
+   * existing keyboard/mouse handlers reachable in the first place.
+   */
+  syncA11y = (): void => {
+    const isDrag = this.type === 'drag';
+    this.setAttribute('role', isDrag ? 'slider' : 'progressbar');
+    this.setAttribute('aria-valuemin', '0');
+    this.setAttribute('aria-valuemax', this.total);
+    if (isDrag && !this.hasAttribute('tabindex')) {
+      this.tabIndex = 0;
+    }
+  };
+
   updateUI = (percentage: number): void => {
     this.style.setProperty('--progress-percent', String(percentage));
   };
@@ -179,7 +218,8 @@ export class Progress extends RanElement {
       .on(this._progress, 'click', this.progressClick)
       .on(this._progressDot, 'mousedown', this.progressDotMouseDown)
       .on(document, 'mousemove', this.progressDotMouseMove as EventListener)
-      .on(document, 'mouseup', this.progressDotMouseUp as EventListener);
+      .on(document, 'mouseup', this.progressDotMouseUp as EventListener)
+      .on(this, 'keydown', this.progressKeydown as EventListener);
   };
 
   private resize = (): void => {
@@ -194,6 +234,7 @@ export class Progress extends RanElement {
     this.dragEvent();
     this.updateCurrentProgress();
     this.appendProgressDot();
+    this.syncA11y();
     this._events.on(window, 'resize', this.resize);
   }
 
@@ -205,6 +246,7 @@ export class Progress extends RanElement {
     if (oldValue === newValue) return;
     if (name === 'dot' || name === 'type') this.appendProgressDot();
     if (name === 'percent' || name === 'total') this.updateCurrentProgress();
+    if (name === 'type' || name === 'total') this.syncA11y();
     if (name === 'sheet') this.handlerExternalCss();
   }
 }

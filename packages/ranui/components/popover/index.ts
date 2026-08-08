@@ -137,6 +137,10 @@ export class Popover extends RanElement {
         .class('ran-popover-dropdown')
         .style('display', 'none')
         .style('position', 'absolute')
+        // r-dropdown is a zero-padding primitive (select's item list wants
+        // edge-to-edge rows); a popover's arbitrary content needs breathing
+        // room, or it renders flush against the rounded panel edges.
+        .cssVar('ran-dropdown-padding', 'var(--ran-popover-content-padding, 12px)')
         .build() as HTMLElement;
       this.popoverContent?.addEventListener('click', this.stopPropagation);
 

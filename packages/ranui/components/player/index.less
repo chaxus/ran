@@ -61,6 +61,17 @@
   animation: var(--video-control-loading-animation, loading 1s infinite);
 }
 
+/* The player skin is a fixed dark control bar over arbitrary video content —
+   a dark, monochrome --ran-color-primary ring would have no contrast here
+   regardless of the page's own light/dark theme, so it gets its own
+   light-on-dark focus token instead of the shared one. Inset (negative
+   offset): the host is usually a full-bleed 100%×100% box, and an outward
+   ring would get clipped by a video-wrapper `overflow: hidden` ancestor. */
+:host(:focus-visible) {
+  outline: var(--ran-player-focus-outline, 2px solid var(--ran-player-focus-outline-color, #fff));
+  outline-offset: var(--ran-player-focus-outline-offset, -2px);
+}
+
 .ran-player {
   display: var(--ran-player-display, block);
   height: var(--ran-player-height, 100%);
@@ -249,6 +260,12 @@
         -webkit-tap-highlight-color: transparent;
       }
 
+      &:focus-visible {
+        outline: var(--ran-player-controller-progress-focus-visible-outline, 2px solid var(--ran-player-focus-outline-color, #fff));
+        outline-offset: var(--ran-player-controller-progress-focus-visible-outline-offset, 4px);
+        border-radius: var(--ran-player-controller-progress-focus-visible-border-radius, var(--ran-radius-full, 9999px));
+      }
+
       &-wrap {
         width: var(--ran-player-controller-progress-wrap-width, 100%);
         height: var(--ran-player-controller-progress-wrap-height, 100%);
@@ -328,6 +345,15 @@
           &:focus {
             outline: var(--ran-player-controller-bottom-left-btn-focus-outline, 0);
             -webkit-tap-highlight-color: transparent;
+          }
+
+          &:focus-visible {
+            outline: var(
+              --ran-player-controller-bottom-left-btn-focus-visible-outline,
+              2px solid var(--ran-player-focus-outline-color, #fff)
+            );
+            outline-offset: var(--ran-player-controller-bottom-left-btn-focus-visible-outline-offset, 2px);
+            border-radius: var(--ran-player-controller-bottom-left-btn-focus-visible-border-radius, var(--ran-radius-sm, 4px));
           }
         }
 
@@ -511,7 +537,7 @@
               width: 100%;
               text-align: center;
               left: 0;
-              color: #fff;
+              color: var(--ran-player-select-item-color, #fff);
               font-size: 12px;
             }
           }
@@ -563,7 +589,7 @@
               width: 100%;
               text-align: center;
               left: 0;
-              color: #fff;
+              color: var(--ran-player-select-item-color, #fff);
               font-size: 12px;
             }
           }
@@ -586,6 +612,20 @@
           width: var(--ran-player-controller-bottom-right-align-full-width, 16px);
           height: var(--ran-player-controller-bottom-right-align-full-height, 16px);
           cursor: var(--ran-player-controller-bottom-right-align-full-cursor, pointer);
+          outline: var(--ran-player-controller-bottom-right-align-full-outline, 0);
+          -webkit-tap-highlight-color: transparent;
+
+          &:focus-visible {
+            outline: var(
+              --ran-player-controller-bottom-right-align-full-focus-visible-outline,
+              2px solid var(--ran-player-focus-outline-color, #fff)
+            );
+            outline-offset: var(--ran-player-controller-bottom-right-align-full-focus-visible-outline-offset, 2px);
+            border-radius: var(
+              --ran-player-controller-bottom-right-align-full-focus-visible-border-radius,
+              var(--ran-radius-sm, 4px)
+            );
+          }
         }
       }
     }

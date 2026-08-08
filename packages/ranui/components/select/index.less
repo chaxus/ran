@@ -49,9 +49,13 @@
       display: var(--ran-select-icon-text-display, none);
     }
   }
-  &(:not([disabled],[type="text"]):focus) {
+  /* :focus-visible (not :focus) so the ring shows for keyboard navigation only —
+     a mouse click that opens the dropdown shouldn't also draw a focus halo,
+     matching r-button's convention. */
+  &(:not([disabled],[type="text"]):focus-visible) {
     .selection {
       border: var(--ran-select-selection-focus-border, 1px solid @theme-color);
+      box-shadow: var(--ran-select-selection-focus-box-shadow, var(--ran-focus-ring));
       &-search {
         cursor: var(--ran-select-selection-focus-search-cursor, pointer);
       }

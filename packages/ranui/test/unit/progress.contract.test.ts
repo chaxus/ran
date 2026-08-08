@@ -211,10 +211,46 @@ describe('r-progress contract', () => {
     expect(progress.getAttribute('sheet')).toBe('.ran-progress { background: red; }');
   });
 
-  it('role=progressbar is set on container', () => {
+  it('role=progressbar is set on the host, matching aria-valuenow on the same element', () => {
     const progress = document.createElement('r-progress') as any;
     document.body.appendChild(progress);
-    expect(progress._progress.getAttribute('role')).toBe('progressbar');
+    expect(progress.getAttribute('role')).toBe('progressbar');
+    expect(progress.getAttribute('aria-valuemin')).toBe('0');
+    expect(progress.getAttribute('aria-valuemax')).toBe('100');
+  });
+
+  it('type="drag" gets role=slider and a tab stop; static stays out of tab order', () => {
+    const drag = document.createElement('r-progress') as any;
+    drag.setAttribute('type', 'drag');
+    document.body.appendChild(drag);
+    expect(drag.getAttribute('role')).toBe('slider');
+    expect(drag.tabIndex).toBe(0);
+
+    const staticBar = document.createElement('r-progress') as any;
+    document.body.appendChild(staticBar);
+    expect(staticBar.hasAttribute('tabindex')).toBe(false);
+  });
+
+  it('arrow keys seek a drag progress by 1% of total and dispatch change', () => {
+    const drag = document.createElement('r-progress') as any;
+    drag.setAttribute('type', 'drag');
+    drag.setAttribute('percent', '50');
+    document.body.appendChild(drag);
+
+    const onChange = vi.fn();
+    drag.addEventListener('change', onChange);
+    drag.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
+    expect(drag.percent).toBe('51');
+    expect(onChange).toHaveBeenCalledTimes(1);
+
+    drag.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }));
+    expect(drag.percent).toBe('50');
+
+    drag.dispatchEvent(new KeyboardEvent('keydown', { key: 'End', bubbles: true }));
+    expect(drag.percent).toBe('100');
+
+    drag.dispatchEvent(new KeyboardEvent('keydown', { key: 'Home', bubbles: true }));
+    expect(drag.percent).toBe('0');
   });
 
   it('disconnectedCallback removes event listeners without error', () => {

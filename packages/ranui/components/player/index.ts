@@ -306,6 +306,7 @@ export class RanPlayer extends HTMLElementSSR()! {
       .attr('trigger', 'hover,click')
       .attr('placement', 'top')
       .attr('dropdownclass', 'video-clarity-dropdown')
+      .aria('label', 'Video quality')
       .children(Fragment as unknown as HTMLElement)
       .build() as HTMLElement;
 
@@ -834,6 +835,28 @@ export class RanPlayer extends HTMLElementSSR()! {
       this._playerBtn.style.setProperty('display', 'none');
     }
   };
+  /**
+   * Enter/Space activation for the play/pause div — it has no native button
+   * semantics, so nothing fires a `click` from the keyboard without this.
+   * `dispatchClickPlayerBtnAction` already stops propagation, which also
+   * keeps the host's own Space-to-toggle-play handler (`SpaceKeyDown`) from
+   * double-firing on the same keystroke.
+   */
+  onPlayBtnKeydown = (e: KeyboardEvent): void => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    this.dispatchClickPlayerBtnAction(e);
+  };
+  /**
+   * Enter/Space activation for the fullscreen div. Stops propagation itself
+   * (unlike `dispatchClickPlayerBtnAction`, `openFullScreen` takes no event) —
+   * otherwise Space here would bubble to the host and also toggle play/pause.
+   */
+  onFullScreenKeydown = (e: KeyboardEvent): void => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    e.preventDefault();
+    e.stopPropagation();
+    this.openFullScreen();
+  };
   changeVolumeProgress = (e: Event): void => {
     if (this._video) {
       const volume = (e as CustomEvent).detail.value / 100;
@@ -1042,6 +1065,8 @@ export class RanPlayer extends HTMLElementSSR()! {
       onKeydown: this.SpaceKeyDown,
       onProgressDotMouseDown: this.progressDotMouseDown,
       onPlayBtnClick: this.dispatchClickPlayerBtnAction,
+      onPlayBtnKeydown: this.onPlayBtnKeydown,
+      onFullScreenKeydown: this.onFullScreenKeydown,
       onProgressClick: this.progressClick,
       onProgressMouseEnter: this.progressMouseEnter,
       onProgressMouseMove: this.progressMouseMove,
@@ -1058,6 +1083,10 @@ export class RanPlayer extends HTMLElementSSR()! {
   };
   connectedCallback(): void {
     this.handlerExternalCss();
+    // Makes the host reachable by keyboard at all — without this, nothing in
+    // the player (including the already-wired Space/Escape/Arrow shortcuts in
+    // SpaceKeyDown) was ever focusable, so no keyboard user could reach them.
+    if (!this.hasAttribute('tabindex')) this.tabIndex = 0;
     bindControllerEvents(this.getControllerElements(), this.getControllerHandlers());
     this.updatePlayer();
   }

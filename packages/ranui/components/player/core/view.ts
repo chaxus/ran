@@ -67,11 +67,17 @@ export function ensurePlayerView(input: {
     const progressDot = Div().class('ran-player-controller-progress-dot').build() as HTMLDivElement;
     const progress = Div()
       .class('ran-player-controller-progress')
+      .tabIndex(0)
+      .role('slider')
+      .aria('label', 'Seek')
       .children(progressWrap, progressDot)
       .build() as HTMLDivElement;
 
     const playerControllerBottomPlayBtn = Div()
       .class('ran-player-controller-bottom-left-btn')
+      .tabIndex(0)
+      .role('button')
+      .aria('label', 'Play')
       .build() as HTMLDivElement;
     const playerControllerBottomTimeCurrent = Div()
       .class('ran-player-controller-bottom-left-time-current')
@@ -100,6 +106,7 @@ export function ensurePlayerView(input: {
       .attr('placement', 'top')
       .attr('getPopupContainerId', playerIdentifier)
       .attr('dropdownclass', 'video-speed-dropdown')
+      .aria('label', 'Playback speed')
       .children(...speedOptions.map((item) => View('r-option').attr('value', `${item.value}`).text(item.label).build()))
       .build() as HTMLElement;
     playControllerBottomSpeedPopover.addEventListener('change', onSpeedChange);
@@ -126,6 +133,9 @@ export function ensurePlayerView(input: {
       .build() as HTMLDivElement;
     const playControllerBottomRightFullScreen = Div()
       .class('ran-player-controller-bottom-right-full')
+      .tabIndex(0)
+      .role('button')
+      .aria('label', 'Fullscreen')
       .build() as HTMLDivElement;
 
     const playerControllerBottomRight = Div()

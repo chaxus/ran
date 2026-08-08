@@ -14,10 +14,12 @@ export function syncPlayButtonState(playButton: HTMLElement, isPlaying: boolean)
   if (isPlaying) {
     removeClassToElement(playButton, 'ran-player-controller-bottom-left-btn-play');
     addClassToElement(playButton, 'ran-player-controller-bottom-left-btn-pause');
+    playButton.setAttribute('aria-label', 'Pause');
     return;
   }
   removeClassToElement(playButton, 'ran-player-controller-bottom-left-btn-pause');
   addClassToElement(playButton, 'ran-player-controller-bottom-left-btn-play');
+  playButton.setAttribute('aria-label', 'Play');
 }
 
 export function syncCenterPlayVisibility(centerPlayButton: HTMLElement, visible: boolean): void {

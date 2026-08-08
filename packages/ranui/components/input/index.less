@@ -55,9 +55,13 @@
     align-items: var(--ran-input-icon-align-items, center);
     justify-content: var(--ran-input-icon-justify-content, center);
   }
-  &:focus-within {
-    border-color: var(--ran-input-active-border-color, var(--ran-color-primary, #006bff));
-    box-shadow: var(--ran-input-active-box-shadow, 0 0 0 2px var(--ran-blue-400, #cae7ff));
+  /* :has(:focus-visible) instead of :focus-within — a mouse click also focuses
+     the native input, and :focus-within fired for that too, leaving a ring on
+     every click. Keyboard-only, matching r-button's :focus-visible convention;
+     the token also matches r-checkbox's ring for a consistent focus treatment. */
+  &:has(.ran-input-content:focus-visible) {
+    border-color: var(--ran-input-active-border-color, var(--ran-color-primary, #171717));
+    box-shadow: var(--ran-input-active-box-shadow, var(--ran-focus-ring));
     border-right-width: var(--ran-input-active-border-right-width, 1px);
     outline: var(--ran-input-active-outline, 0);
   }

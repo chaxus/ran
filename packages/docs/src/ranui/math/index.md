@@ -1,8 +1,8 @@
 # Math
 
-Render high-quality LaTeX math formulas in HTML pages using KaTeX.
+Render high-quality LaTeX math formulas in HTML pages using Temml, compiled straight to native MathML.
 
-> **Use when** you need to render a LaTeX math formula as display math in an HTML page — `<r-math>` typesets the expression from its `latex` attribute using KaTeX.
+> **Use when** you need to render a LaTeX math formula as display math in an HTML page — `<r-math>` typesets the expression from its `latex` attribute with [Temml](https://temml.org/), which compiles LaTeX to MathML that the browser lays out itself (no canvas/SVG, no KaTeX runtime).
 
 ## Quick Start
 
@@ -23,9 +23,15 @@ Render high-quality LaTeX math formulas in HTML pages using KaTeX.
 | Property | Type     | Default | Description                                                                             |
 | -------- | -------- | ------- | --------------------------------------------------------------------------------------- |
 | `latex`  | `string` | `''`    | The LaTeX formula to render. The formula is provided via this attribute, not slot text. |
+| `display`  | `string`  | `'block'` | `block` (display math) or `inline` (inline math). |
+| `font`     | `string`  | `''`      | Set to `system` to skip the bundled Latin Modern Math face and use the reader's system math font. |
+| `macros`   | `string`  | `''`      | A JSON object of Temml macros. Invalid JSON is silently ignored. |
+| `wrap`     | `string`  | `''`      | Temml soft line-breaking: `none`, `tex`, or `=`. |
+| `copy`     | `boolean` | `false`   | Shows a copy button. Bare `copy` copies the LaTeX source; `copy="mathml"` copies the rendered MathML. |
+| `download` | `boolean` | `false`   | Shows a download button/menu for the source (`.tex`) and/or MathML (`.mml`). |
 | `sheet`  | `string` | `''`    | CSS injected into the component's shadow DOM.                                           |
 
-> 💡 **Note**: The `latex` property getter decodes its value with `decodeURIComponent`, so URI-encoded formulas are decoded before rendering. The formula is wrapped in `$$…$$` and rendered with KaTeX. Providing the formula as slotted text content has no effect — only the `latex` attribute is rendered.
+> 💡 **Note**: The `latex` property getter decodes its value with `decodeURIComponent`, so URI-encoded formulas are decoded before rendering. Providing the formula as slotted text content has no effect — only the `latex` attribute is rendered.
 
 ### Formula `latex`
 
@@ -49,11 +55,16 @@ Render high-quality LaTeX math formulas in HTML pages using KaTeX.
 
 ## Events
 
-This component does not emit any custom events.
+| Event     | detail                          | Fired when                                                             |
+| --------- | -------------------------------- | ------------------------------------------------------------------------ |
+| `render`  | `{ ok: true }`                  | The formula rendered successfully.                                      |
+| `error`   | `{ message: string }`           | Temml failed to parse the formula (e.g. invalid LaTeX).                 |
+| `copied`  | `{ kind: 'source' \| 'mathml' }` | The copy button copied the source or MathML to the clipboard.           |
+| `download`| `{ format: 'source' \| 'mathml' }` | The download button saved a `.tex` or `.mml` file.                   |
 
 ## Best Practices
 
 - **Provide formulas via `latex`**: Set the formula on the `latex` attribute; slotted text content is not rendered.
 - **Escape backslashes in JavaScript**: When assigning `latex` from a JS string literal, remember that `\` must be escaped (e.g. `'\\frac{1}{2}'`).
-- **Display math only**: Formulas are wrapped in `$$…$$` and rendered as display (block) math.
+- **Handle parse failures**: Listen for `error` (or check the rendered `::part(error)` box) rather than assuming every formula is valid LaTeX.
 - **Custom layout via `sheet`**: Use the `sheet` attribute to override the internal `.ran-math` layout when needed.

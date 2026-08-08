@@ -115,7 +115,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 10px;
+  gap: var(--ran-modal-actions-gap, 10px);
 }
 
 .ran-modal-footer::slotted(.ran-modal-action) {
@@ -131,9 +131,14 @@
 }
 
 .ran-modal-footer::slotted(.ran-modal-action-confirm) {
-  border-color: var(--ran-color-primary, #155eef);
-  background: var(--ran-color-primary, #155eef);
-  color: #fff;
+  border-color: var(--ran-color-primary, #171717);
+  background: var(--ran-color-primary, #171717);
+  /* Bare #fff read fine against the old blue primary but is wrong once
+     --ran-color-primary flips to a light surface in dark mode (monochrome
+     primary: black-on-white in light, white-on-black in dark) — a bare white
+     confirm-button label went invisible on a white button. Use the inverse
+     ink token, which flips with it. */
+  color: var(--ran-color-primary-text, #fff);
 }
 
 .ran-modal-footer::slotted(.ran-modal-action:disabled) {

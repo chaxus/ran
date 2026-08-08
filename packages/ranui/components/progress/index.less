@@ -1,5 +1,10 @@
 :host {
   display: block;
+  /* Without an intrinsic width, a block box with no content sizes to 0 inside a
+     flex row (e.g. the docs <Demo> preview, or any flex layout) — the bar
+     silently disappears. A default width makes the component work out of the
+     box; consumers can still override via style="width:…" or the token. */
+  width: var(--ran-progress-width, 100%);
   height: var(--ran-progress-height, 20px);
   &:active,
   &:focus {
@@ -25,7 +30,7 @@
   &-wrap {
     width: var(--ran-progress-wrap-width, 100%);
     height: var(--ran-progress-wrap-height, 8px);
-    border-radius: var(--ran-progress-wrap-border-radius, 20px);
+    border-radius: var(--ran-progress-wrap-border-radius, var(--ran-radius-full, 9999px));
     background: var(--ran-progress-wrap-background, var(--ran-gray-200, #ebebeb));
     position: var(--ran-progress-wrap-position, relative);
     overflow: var(--ran-progress-wrap-overflow, hidden);
@@ -38,8 +43,10 @@
       transform: scaleX(var(--progress-percent, 0));
       transform-origin: var(--ran-progress-wrap-value-transform-origin, 0 0);
       will-change: var(--ran-progress-wrap-value-will-change, transform);
-      background: var(--ran-progress-wrap-value-background, linear-gradient(90deg, #0bc8bb 2.42%, #00d297 98.79%));
-      border-radius: var(--ran-progress-wrap-value-border-radius, 20px);
+      /* Monochrome primary, matching the rest of the design system (was a
+         leftover Ant-Design-era teal→green gradient unrelated to any token). */
+      background: var(--ran-progress-wrap-value-background, var(--ran-color-primary, #171717));
+      border-radius: var(--ran-progress-wrap-value-border-radius, var(--ran-radius-full, 9999px));
     }
   }
   &-dot {
@@ -50,7 +57,9 @@
     border-radius: var(--ran-progress-dot-border-radius, 50%);
     width: var(--ran-progress-dot-width, 18px);
     height: var(--ran-progress-dot-height, 18px);
-    background: var(--ran-progress-dot-background, linear-gradient(90deg, #0bc8bb 2.42%, #00d297 98.79%));
+    background: var(--ran-progress-dot-background, var(--ran-color-primary, #171717));
+    border: var(--ran-progress-dot-border, 2px solid var(--ran-color-bg-elevated, #fff));
+    box-shadow: var(--ran-progress-dot-box-shadow, var(--ran-shadow-elevated, 0 1px 2px rgba(0, 0, 0, 0.15)));
     cursor: var(--ran-progress-dot-cursor, pointer);
   }
 }

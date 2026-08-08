@@ -126,9 +126,13 @@
       }
     }
   }
-  &:focus-within &-inner {
-    box-shadow: var(--ran-checkbox-focus-box-shadow, 0 0 0 2px var(--ran-blue-400, #cae7ff));
-    border-color: var(--ran-checkbox-focus-border-color, var(--ran-color-primary, #006bff));
+  /* :has(:focus-visible) instead of :focus-within — a mouse click on the label
+     also focuses the native input, and :focus-within fired for that too, so
+     every click left a persistent ring behind. Keyboard-only, matching the
+     rest of the library's focus convention (see r-button). */
+  &:has(.ran-checkbox-input:focus-visible) &-inner {
+    box-shadow: var(--ran-checkbox-focus-box-shadow, var(--ran-focus-ring));
+    border-color: var(--ran-checkbox-focus-border-color, var(--ran-color-primary, #171717));
   }
 }
 
