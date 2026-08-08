@@ -33,7 +33,7 @@ description: 'ranui Player（<r-player>）在原生 <video> 之上封装统一�
 
 ### volume
 
-设置初始音量，默认 0.5
+设置初始音量，0-100 制，默认 50。`setVolume()`/`getVolume()` 方法与 `volume` change 事件的 `data` 也是同一套 0-100 刻度。
 
 ### currentTime
 

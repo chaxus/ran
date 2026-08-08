@@ -36,7 +36,7 @@ Built on `hls.js` and Web Components, so the same player runs unchanged across f
 | Property       | Type     | Default | Description                                                                                           |
 | -------------- | -------- | ------- | ----------------------------------------------------------------------------------------------------- |
 | `src`          | `string` | `''`    | Video resource URL. Changing it reloads the player. `.m3u8` sources use HLS when hls.js is present.   |
-| `volume`       | `string` | `''`    | Initial volume on a `0`–`100` scale (the attribute value is divided by 100 and applied to the video). |
+| `volume`       | `string` | `''`    | Initial volume on a `0`–`100` scale — same scale as `setVolume()`/`getVolume()`. |
 | `currentTime`  | `string` | `''`    | Initial playback position in seconds. Also accepted lowercase as `currenttime`.                       |
 | `playbackRate` | `string` | `''`    | Playback speed multiplier (e.g. `1`, `1.5`, `2`). Also accepted lowercase as `playbackrate`.          |
 | `debug`        | `string` | `''`    | When truthy, logs every internal `change` event and warnings to the console.                          |
@@ -93,7 +93,7 @@ The player exposes imperative controls on the element instance:
 | `getCurrentTime()`                         | Current playback position in seconds.                   |
 | `setCurrentTime(seconds)`                  | Seek to a position.                                     |
 | `getTotalTime()`                           | Total media duration in seconds.                        |
-| `getVolume()` / `setVolume(v)`             | Read/set volume on a `0`–`1` scale.                     |
+| `getVolume()` / `setVolume(v)`             | Read/set volume on a `0`–`100` scale — same scale as the `volume` attribute. |
 | `getPlaybackRate()` / `setPlaybackRate(n)` | Read/set the speed multiplier.                          |
 | `customRequestFullscreen()`                | Enter fullscreen. Returns a `Promise`.                  |
 | `customExitFullscreen()`                   | Exit fullscreen. Returns a `Promise`.                   |
@@ -158,7 +158,7 @@ Player-specific actions:
 
 | Type                | `data`             | Description                                            |
 | ------------------- | ------------------ | ------------------------------------------------------ |
-| `volume`            | `number` (`0`–`1`) | Volume changed via the control bar or mute toggle.     |
+| `volume`            | `number` (`0`–`100`) | Volume changed via the control bar or mute toggle.     |
 | `speed`             | `number`           | Playback speed changed via the speed selector.         |
 | `fullscreen`        | `boolean`          | Fullscreen entered (`true`) or exited (`false`).       |
 | `hlsManifestLoaded` | `{ data }`         | HLS manifest parsed; clarity levels are now available. |
@@ -173,5 +173,5 @@ The player does not accept slotted content: it clears its own light-DOM children
 - **Sizing**: The host is `display: block` with no intrinsic size — always give it an explicit width and height, otherwise the video collapses.
 - **HLS**: `.m3u8` playback needs hls.js loaded on `window.Hls`. Without it the player falls back to setting the raw `src` on the `<video>`, which only works where the browser plays HLS natively (e.g. Safari). Enable `debug` to see a warning when hls.js is missing.
 - **One listener**: Prefer a single `change` listener with a `switch (detail.type)` over trying to attach many event handlers — all state flows through `change`.
-- **Volume units**: The `volume` attribute is `0`–`100`, but `setVolume()` / `getVolume()` and the `volume` change payload use `0`–`1`.
+- **Volume units**: `volume` (attribute), `setVolume()`/`getVolume()`, and the `volume` change payload all use a single `0`–`100` scale. Only the underlying native `<video>.volume` is `0`–`1` — the player converts at that one boundary.
 - **Custom styling**: Use the `sheet` attribute to inject shadow-DOM CSS; there are no exported `::part()` handles on the player itself.
