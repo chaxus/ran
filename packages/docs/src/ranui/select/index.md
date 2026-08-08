@@ -249,7 +249,7 @@ Fired only when `showSearch` is enabled, as the user types in the search box (th
 
 ## Form Association
 
-`r-select` is a form-associated custom element (`static formAssociated = true`). It relays its selected `value` through `ElementInternals`, so it is collected by `new FormData(form)` and by `<r-form>` under the select's `name`. The form value is seeded from any initial selection on connect and kept in sync as the value changes.
+`r-select` is a form-associated custom element (`static formAssociated = true`). It relays its selected `value` through `ElementInternals`, so it is collected by `new FormData(form)` under the select's `name`, when it's a real descendant of a native `<form>`. The form value is seeded from any initial selection on connect and kept in sync as the value changes.
 
 **Reset**: a native `form.reset()` restores `defaultValue`'s selection if one is set, otherwise clears the selection entirely — via `formResetCallback()`.
 
@@ -287,4 +287,4 @@ Fired only when `showSearch` is enabled, as the user types in the search box (th
 - **Trigger method**: Match `trigger` to user expectations; `hover` is ignored on mobile, so keep `click` available.
 - **Mount position**: In scroll or overflow-clipped layouts, use `getPopupContainerId` to control where the dropdown mounts.
 - **Custom styling**: Use `dropdownclass` or the exposed `::part()` names to restyle the trigger and dropdown.
-- **Forms**: Give the select a `name` so its value is captured by `FormData` / `<r-form>`.
+- **Forms**: Give the select a `name` so its value is captured by `FormData` inside a native `<form>`.

@@ -301,19 +301,19 @@ describe('r-player contract', () => {
     player.ctx.volume = 0.75;
     player._volume = 0.75;
 
-    player._playControllerBottomSpeedIcon.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    player._playControllerBottomVolumeIcon.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     expect(player.ctx.volume).toBe(0);
     expect(player._playControllerBottomVolumeProgress.getAttribute('percent')).toBe('0');
     expect(
-      player._playControllerBottomSpeedIcon.classList.contains('ran-player-controller-bottom-right-volume-icon-mute'),
+      player._playControllerBottomVolumeIcon.classList.contains('ran-player-controller-bottom-right-volume-icon-mute'),
     ).toBe(true);
 
-    player._playControllerBottomSpeedIcon.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    player._playControllerBottomVolumeIcon.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     expect(player.ctx.volume).toBe(0.75);
     expect(player._video.volume).toBe(0.75);
     expect(player._playControllerBottomVolumeProgress.getAttribute('percent')).toBe('75');
     expect(
-      player._playControllerBottomSpeedIcon.classList.contains(
+      player._playControllerBottomVolumeIcon.classList.contains(
         'ran-player-controller-bottom-right-volume-icon-volume',
       ),
     ).toBe(true);

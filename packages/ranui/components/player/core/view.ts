@@ -36,7 +36,7 @@ export interface PlayerViewRefs {
   playerControllerBottomTimeDivide: HTMLDivElement;
   playControllerBottomClarity: HTMLElement;
   playControllerBottomSpeed: HTMLDivElement;
-  playControllerBottomSpeedIcon: HTMLDivElement;
+  playControllerBottomVolumeIcon: HTMLDivElement;
   playControllerBottomVolumeProgress: Progress;
   playControllerBottomRightFullScreen: HTMLDivElement;
   playControllerBottomVolume: HTMLDivElement;
@@ -129,7 +129,7 @@ export function ensurePlayerView(input: {
       .children(playControllerBottomSpeedPopover)
       .build() as HTMLDivElement;
 
-    const playControllerBottomSpeedIcon = Div()
+    const playControllerBottomVolumeIcon = Div()
       .class('ran-player-controller-bottom-right-volume-icon ran-player-controller-bottom-right-volume-icon-volume')
       .build() as HTMLDivElement;
     const playControllerBottomVolumeProgress = View('r-progress')
@@ -139,7 +139,7 @@ export function ensurePlayerView(input: {
       .build() as Progress;
     const playControllerBottomVolume = Div()
       .class('ran-player-controller-bottom-right-volume')
-      .children(playControllerBottomSpeedIcon, playControllerBottomVolumeProgress)
+      .children(playControllerBottomVolumeIcon, playControllerBottomVolumeProgress)
       .build() as HTMLDivElement;
 
     const playControllerBottomClarity = Div()
@@ -259,7 +259,7 @@ export function ensurePlayerView(input: {
     playControllerBottomVolume.querySelector('r-progress') as Progress | null,
     'r-progress',
   );
-  const playControllerBottomSpeedIcon = assertExists(
+  const playControllerBottomVolumeIcon = assertExists(
     playControllerBottomVolume.querySelector(
       '.ran-player-controller-bottom-right-volume-icon',
     ) as HTMLDivElement | null,
@@ -306,7 +306,7 @@ export function ensurePlayerView(input: {
     playerControllerBottomTimeDivide,
     playControllerBottomClarity,
     playControllerBottomSpeed,
-    playControllerBottomSpeedIcon,
+    playControllerBottomVolumeIcon,
     playControllerBottomVolumeProgress,
     playControllerBottomRightFullScreen,
     playControllerBottomVolume,

@@ -178,7 +178,7 @@ input.addEventListener('change', (event) => {
 
 ## Form Association
 
-`r-input` is a form-associated custom element (`static formAssociated = true`). It attaches `ElementInternals` and relays its value via `setFormValue`, so the field is collected by `new FormData(form)` and works inside `<r-form>` and native `<form>` elements — set `name` to give the value a key.
+`r-input` is a form-associated custom element (`static formAssociated = true`). It attaches `ElementInternals` and relays its value via `setFormValue`, so the field is collected by `new FormData(form)` when it's a real descendant of a native `<form>` — set `name` to give the value a key. `<r-form>` wraps that `<form>` for a default layout and JSON serialization convenience; it isn't required.
 
 ```html
 <form>

@@ -20,6 +20,7 @@ import {
 import popoverCss from './index.less?inline';
 import { defineSSR } from '@/utils/ssr-registry';
 import { computePlacement, type Placement } from '@/utils/placement';
+import { isActivationKey } from '@/utils/a11y';
 
 // index.ts:29 Uncaught DOMException: Failed to construct 'CustomElement': The result must not have children
 // index.ts:31 Uncaught DOMException: Failed to construct 'CustomElement': The result must not have attributes
@@ -160,7 +161,16 @@ export class Popover extends RanElement {
         this.popoverContent?.addEventListener('mouseleave', this.blur);
         this.popoverContent?.addEventListener('mouseenter', this.removeDropDownTimeId);
       }
-      document.body.appendChild(div);
+      // Mount into the same container placementPosition() computes coordinates
+      // against — the getPopupContainerId branch there measures relative to
+      // `root`, not the viewport, so the panel must actually live inside it
+      // (mirrors r-select's createOption, which resolves the same container).
+      const rootNode = this.getRootNode() as ShadowRoot | Document;
+      const container =
+        (rootNode.getElementById ? rootNode.getElementById(this.getPopupContainerId) : null) ||
+        document.getElementById(this.getPopupContainerId) ||
+        document.body;
+      container.appendChild(div);
     }
     if (this.popoverContent && content.length > 0) {
       this.popoverContent.innerHTML = '';
@@ -327,7 +337,7 @@ export class Popover extends RanElement {
     this.setDropdownDisplayBlock();
   };
   keydownPopover = (e: KeyboardEvent): void => {
-    if (e.key === 'Enter' || e.key === ' ') {
+    if (isActivationKey(e)) {
       e.preventDefault();
       this.setDropdownDisplayBlock();
     }
@@ -360,6 +370,14 @@ export class Popover extends RanElement {
     this.setDropdownDisplayNone();
   };
   changePlacement = debounce((): void => {
+    // While open in the body-portal (flip-capable) path, placementPosition()'s
+    // resolved-side arrow is authoritative. Without this guard, a debounced
+    // call queued (by a `placement` attribute write, or the initial connect)
+    // just before the panel opens and flips can fire *after* the flip and
+    // revert `arrow` to the nominal, unflipped side while the panel itself
+    // stays flipped — pointing the arrow away from the trigger. The
+    // getPopupContainerId branch has no flip concept, so it always applies.
+    if (!this.getPopupContainerId && this.popoverContent?.style.display === 'block') return;
     const side = oppositeSide[this.placement as PLACEMENT_TYPE];
     if (side) this.popoverContent?.setAttribute('arrow', side);
   }, HOVER_TIME);

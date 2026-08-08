@@ -128,7 +128,7 @@ export class RanPlayer extends RanElement {
   _playerControllerBottomTimeDivide: HTMLDivElement;
   _playControllerBottomClarity: HTMLElement;
   _playControllerBottomSpeed: HTMLDivElement;
-  _playControllerBottomSpeedIcon: HTMLDivElement;
+  _playControllerBottomVolumeIcon: HTMLDivElement;
   _playControllerBottomVolumeProgress: Progress;
   _playControllerBottomRightFullScreen: HTMLDivElement;
   _playControllerBottomVolume: HTMLDivElement;
@@ -179,7 +179,7 @@ export class RanPlayer extends RanElement {
     this._playControllerBottomSpeedPopover = viewRefs.playControllerBottomSpeedPopover;
     this._playControllerBottomVolume = viewRefs.playControllerBottomVolume;
     this._playControllerBottomVolumeProgress = viewRefs.playControllerBottomVolumeProgress;
-    this._playControllerBottomSpeedIcon = viewRefs.playControllerBottomSpeedIcon;
+    this._playControllerBottomVolumeIcon = viewRefs.playControllerBottomVolumeIcon;
     this._playControllerBottomClarity = viewRefs.playControllerBottomClarity;
     this._playControllerBottomRightFullScreen = viewRefs.playControllerBottomRightFullScreen;
     this._playerController = viewRefs.playerController;
@@ -200,7 +200,7 @@ export class RanPlayer extends RanElement {
       progressBuffer: this._progressWrapBuffer,
       timeCurrent: this._playerControllerBottomTimeCurrent,
       timeDuration: this._playerControllerBottomTimeDuration,
-      volumeIcon: this._playControllerBottomSpeedIcon,
+      volumeIcon: this._playControllerBottomVolumeIcon,
       volumeProgress: this._playControllerBottomVolumeProgress,
     };
   };
@@ -1058,7 +1058,7 @@ export class RanPlayer extends RanElement {
       playBtn: this._playerControllerBottomPlayBtn,
       volumeProgress: this._playControllerBottomVolumeProgress,
       fullScreenBtn: this._playControllerBottomRightFullScreen,
-      volumeIcon: this._playControllerBottomSpeedIcon,
+      volumeIcon: this._playControllerBottomVolumeIcon,
     };
   };
   getControllerHandlers = (): PlayerControllerHandlers => {
@@ -1124,9 +1124,5 @@ export class RanPlayer extends RanElement {
   }
 }
 
-function Custom() {
-  defineSSR('r-player', RanPlayer as unknown as new () => HTMLElement);
-  return RanPlayer;
-}
-
-export default Custom();
+defineSSR('r-player', RanPlayer as unknown as new () => HTMLElement);
+export default RanPlayer;

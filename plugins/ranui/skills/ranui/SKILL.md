@@ -55,8 +55,12 @@ SSR helpers: `import { defineSSR } from 'ranui/ssr-registry'` (source) / `ranui/
 ## Elements at a glance
 
 - **Forms**: `r-input`, `r-checkbox`, `r-select` (+ `r-option`, `r-dropdown-item`),
-  `r-colorpicker`, `r-form`. These are **form-associated** — their values are
-  collected by `<r-form>`'s native `FormData`.
+  `r-colorpicker`. These are **form-associated custom elements**
+  (`attachInternals()` + `ElementInternals.setFormValue()`) — their values are
+  collected by `new FormData(form)` when they're real descendants of a native
+  `<form>`. `r-form` is a separate, optional wrapper around your own `<form>`
+  (it does not own one itself) that adds a default layout and JSON
+  serialization on submit — it is not itself form-associated.
 - **Feedback/overlay**: `r-message` (toasts), `r-modal`, `r-popover`, `r-loading`,
   `r-skeleton`, `r-progress`.
 - **Layout/content**: `r-card`, `r-section`, `r-tab`/`r-tabs`, `r-icon`, `r-img`,

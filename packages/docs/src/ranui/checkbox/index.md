@@ -6,7 +6,7 @@ description: 'The ranui Checkbox (<r-checkbox>) toggles a single on/off choice, 
 
 Checkbox component for toggling a single on/off choice, with an optional label and native form support.
 
-> **Use when** you need a single on/off toggle with a label that participates in native forms — `<r-checkbox>` reports its checked state to `FormData` and `<r-form>` and is keyboard-operable.
+> **Use when** you need a single on/off toggle with a label that participates in native forms — `<r-checkbox>` reports its checked state to `FormData` and is keyboard-operable.
 
 ## Quick Start
 
@@ -117,7 +117,7 @@ A disabled checkbox does not fire `change`.
 
 ## Form Association
 
-`r-checkbox` is a form-associated custom element (`formAssociated = true`). It relays its checked state through `ElementInternals.setFormValue`, so it participates in native forms and is collected by `new FormData(form)` — including inside `<r-form>`. Following native checkbox semantics, it contributes its `value` only when checked.
+`r-checkbox` is a form-associated custom element (`formAssociated = true`). It relays its checked state through `ElementInternals.setFormValue`, so it participates in native forms and is collected by `new FormData(form)` when it's a real descendant of a native `<form>`. Following native checkbox semantics, it contributes its `value` only when checked.
 
 The host itself carries the accessible checkbox semantics: `role="checkbox"`, `aria-checked`, `aria-disabled`, and keyboard operability (toggle on Space or Enter).
 
@@ -159,4 +159,4 @@ r-checkbox::part(label) {
 - **Checked vs. value**: Use `checked` for boolean state; read `value` (`'true'` / `'false'`) when collecting form data.
 - **Disabled State**: Use `disabled` when the choice is unavailable.
 - **Listen to `change`**: Read `event.detail.checked` rather than re-querying the DOM.
-- **Forms**: Drop `r-checkbox` inside a `<form>` or `<r-form>` — its value is collected automatically when checked.
+- **Forms**: Drop `r-checkbox` inside a `<form>` — its value is collected automatically when checked. Wrap that `<form>` in `<r-form>` for a default layout and JSON serialization convenience.
