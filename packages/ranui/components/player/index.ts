@@ -329,9 +329,7 @@ export class RanPlayer extends RanElement {
     customRequestFullscreen: () => this.customRequestFullscreen(),
     customExitFullscreen: () => this.customExitFullscreen(),
     getVolumeMemo: () => this._volume,
-    setVolumeMemo: (n) => {
-      this._volume = n;
-    },
+    setVolumeMemo: (n) => (this._volume = n),
     rememberPosition: () => this.rememberPosition,
     getSrc: () => this.src,
     getCurrentTime: () => this.getCurrentTime(),
@@ -504,13 +502,11 @@ export class RanPlayer extends RanElement {
     }
     this.pause();
   };
-  // ── Clarity (HLS rendition switching) — delegates to core/clarity.ts ─────
   changeClarity = (e: Event): void => this._clarity.changeClarity(e);
   createClaritySelect = (): void => this._clarity.createClaritySelect();
   manifestLoaded = (type: string, data: { levels: Level[]; url: string }): void =>
     this._clarity.manifestLoaded(type, data);
   hlsError = (event: unknown, data: unknown): void => this._clarity.hlsError(event, data);
-  // ── Subtitles/CC — delegates to core/subtitles.ts ─────────────────────────
   applyTracks = (): void => this._subtitles.applyTracks();
   setSubtitleLanguage = (lang: string): void => this._subtitles.setSubtitleLanguage(lang);
   changeSubtitleTrack = (e: Event): void => this._subtitles.changeSubtitleTrack(e);
@@ -602,7 +598,6 @@ export class RanPlayer extends RanElement {
     this.clearListenerEvent();
     bindMediaEvents(this._video, this.getMediaHandlers());
   };
-  // ── Control-bar chrome — delegates to core/chrome.ts ──────────────────────
   showControllerBar = (e?: MouseEvent): void => this._chrome.showControllerBar(e);
   setLoadingState = (loading: boolean): void => this._chrome.setLoadingState(loading);
   dispatchClickPlayerContainerAction = (e: Event): void => this._chrome.dispatchClickPlayerContainerAction(e);
@@ -621,7 +616,6 @@ export class RanPlayer extends RanElement {
   resize = (): void => this._chrome.resize();
   onVisibilityChange = (): void => this._chrome.onVisibilityChange();
   fullScreenChange = (): void => this._chrome.fullScreenChange();
-  // ── Seek bar — delegates to core/seek.ts ──────────────────────────────────
   updateBufferedProgress = (): void => this._seek.updateBufferedProgress();
   syncProgressByPercentage = (percentage: number): void => this._seek.syncProgressByPercentage(percentage);
   seekToPercentage = (percentage: number): void => this._seek.seekToPercentage(percentage);
