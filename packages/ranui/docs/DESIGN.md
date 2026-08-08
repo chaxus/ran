@@ -201,6 +201,46 @@ transition: var(--ran-input-transition, none);
 
 ---
 
+## 9. Component token naming
+
+Component-scoped CSS custom properties (the `var(--ran-{component}-…, fallback)` hooks in each
+`index.less`) must follow:
+
+```
+--ran-{component}-{element}[-{state}]-{property}
+```
+
+- `component` — the existing prefix (`btn`, `select`, `player`, …), unchanged.
+- `element` — the single most specific **named UI part** (`progress`, `volume`, `tip`, `dot`,
+  `speed`). Drop segments that only describe **position/layout inside an already-named parent**
+  and add no new identity (`bottom`, `left`, `right`, `align`, `content` as a bare wrapper). Keep
+  a segment when it names a genuinely distinct visual layer — e.g. progress's track vs fill are
+  two different things, so they keep two different element names (`track` / `fill`), just short
+  ones instead of `wrap` / `wrap-value`.
+- `state` — optional, only for a real, independently-toggleable interaction state (`hover`,
+  `active`, `focus`, `disabled`, `warning`). Don't invent a state segment that doesn't already
+  exist as a distinct override point.
+- `property` — the CSS property family being overridden (`background`, `color`, `border-color`,
+  `font-size`, `width`, …), as-is.
+
+**Soft ceiling: aim for ≤4 hyphenated segments after `ran`** (component, element, optional state,
+property). This is a principle applied by reading the component's structure, not a mechanical
+truncation — two genuinely different override points must never collapse into the same name. Do
+not encode the full DOM/BEM nesting path into the token name (e.g.
+`--ran-player-controller-bottom-right-align-volume-icon-mute-background` is wrong — the position
+inside `.controller` isn't part of the token's identity).
+
+| Avoid (full DOM path) | Prefer |
+| --- | --- |
+| `--ran-select-selection-search-input-active-border-right-width` | `--ran-select-search-active-border-width` |
+| `--ran-btn-content-hover-background-color` | `--ran-btn-hover-background` |
+| `--ran-progress-wrap-value-background` | `--ran-progress-fill-background` |
+
+This applies to **new** component tokens going forward. See `changelogs/2026-08-08.md` for the
+pass that brought existing components in line with it (0.5.0-alpha.0).
+
+---
+
 ## Verification checklist (before shipping UI)
 
 - [ ] Primary task and primary action are unmistakable.

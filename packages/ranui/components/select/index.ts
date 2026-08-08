@@ -15,9 +15,11 @@ import {
   ensureShadowElement,
   ensureShadowRoot,
   getStringAttribute,
+  setBooleanAttribute,
   setStringAttribute,
   syncSheetAttribute,
 } from '@/utils/component';
+import { checkInternalsValidity, isActivationKey, reportInternalsValidity, updateRequiredValidity } from '@/utils/a11y';
 
 interface Option {
   label: string | number;
@@ -150,7 +152,12 @@ export class Select extends RanElement {
     return this.getAttribute('value') || '';
   }
   set value(value: string) {
-    if (!isDisabled(this) && value) {
+    // Native <select> allows its value to be set/restored programmatically
+    // (including from formResetCallback) regardless of `disabled` — disabled
+    // only blocks *user* interaction, not assignment. Gating this on
+    // `!isDisabled(this)` used to silently drop formResetCallback's restore
+    // whenever the field happened to be disabled at reset time.
+    if (value) {
       this.setAttribute('value', value);
     } else {
       this.removeAttribute('value');
@@ -166,33 +173,30 @@ export class Select extends RanElement {
     return this.hasAttribute('required');
   }
   set required(value: boolean | string) {
-    if (!value || value === 'false') {
-      this.removeAttribute('required');
-    } else {
-      this.setAttribute('required', '');
-    }
+    setBooleanAttribute(this, 'required', !(!value || value === 'false'));
   }
   /**
-   * Lets `required` be seen by form.checkValidity()/reportValidity()/:invalid.
+   * Lets `required` be seen by form.checkValidity()/reportValidity()/:invalid,
+   * and mirrors it into aria-required/aria-invalid for assistive tech.
    * Disabled selects never block submission, matching native semantics.
    */
   private _updateValidity = (): void => {
-    if (!this._internals) return;
-    if (this.disabled) {
-      this._internals?.setValidity?.({});
-      return;
-    }
-    if (this.required && !this.value) {
-      this._internals?.setValidity?.({ valueMissing: true }, 'Please select an item in the list.', this._selection);
-    } else {
-      this._internals?.setValidity?.({});
-    }
+    updateRequiredValidity(this, this._internals, {
+      disabled: this.disabled,
+      required: this.required,
+      isEmpty: !this.value,
+      message: 'Please select an item in the list.',
+      // The host itself is the focusable/tabbable element (tabIndex is set on
+      // `this`, never on `_selection`) — the native validation bubble anchors
+      // correctly only against a focusable descendant.
+      anchor: this,
+    });
   };
   checkValidity(): boolean {
-    return this._internals?.checkValidity?.() ?? true;
+    return checkInternalsValidity(this._internals);
   }
   reportValidity(): boolean {
-    return this._internals?.reportValidity?.() ?? true;
+    return reportInternalsValidity(this._internals);
   }
   get validity(): ValidityState | undefined {
     return this._internals?.validity;
@@ -429,7 +433,7 @@ export class Select extends RanElement {
       if (target >= 0) this.setActiveOptionByIndex(target);
       return;
     }
-    if (e.key === 'Enter' || e.key === ' ') {
+    if (isActivationKey(e)) {
       e.preventDefault();
       if (!this.isDropdownOpen()) {
         this.selectMouseDown(e);
@@ -713,6 +717,12 @@ export class Select extends RanElement {
       this._optionValueMapLabel.set(value, label);
     });
     this.createSelectDropdownContent(this._optionList);
+    // Options populated asynchronously (e.g. after a fetch) can arrive while
+    // the dropdown is already open. placementPosition()'s flip decision reads
+    // `_selectionDropdown.clientHeight`, which was 0 (no options yet) the
+    // first time it ran, so a select near the viewport edge never flipped.
+    // Re-run it now that the panel has real content/height.
+    if (this._selectionDropdown?.style.display === 'block') this.placementPosition();
   };
   createSelectDropdownContent = (options: Option[] = []): void => {
     if (options.length === 0) {

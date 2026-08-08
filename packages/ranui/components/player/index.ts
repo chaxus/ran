@@ -870,7 +870,7 @@ export class RanPlayer extends RanElement {
   };
   changeVolumeProgress = (e: Event): void => {
     if (this._video) {
-      const volume = (e as CustomEvent).detail.value / 100;
+      const volume = (e as CustomEvent).detail.value;
       this.setVolume(volume);
       this.change('volume', volume);
       if (volume > 0) {
@@ -950,7 +950,7 @@ export class RanPlayer extends RanElement {
       this.setVolume(0);
       this.change('volume', 0);
     } else {
-      const restoredVolume = this._volume || 0.5;
+      const restoredVolume = this._volume || 50;
       this.setVolume(restoredVolume);
       this.change('volume', restoredVolume);
     }
@@ -990,17 +990,20 @@ export class RanPlayer extends RanElement {
     }
     return this.ctx.playbackRate;
   };
+  /**
+   * @description: 0-100 制，和 `volume` 属性、音量滑块一致；`<video>.volume` 是原生 0-1 制，只在这里做换算。
+   */
   public setVolume = (n: number): number => {
     if (this._video) {
       this.ctx.volume = n;
-      this._video.volume = n;
+      this._video.volume = n / 100;
       this._visualSignals.volume.setter(n);
     }
     return this.ctx.volume;
   };
   public getVolume = (): number => {
     if (this._video) {
-      this.ctx.volume = this._video.volume || 0;
+      this.ctx.volume = (this._video.volume || 0) * 100;
     }
     return this.ctx.volume;
   };
@@ -1110,7 +1113,7 @@ export class RanPlayer extends RanElement {
       this.updatePlayer();
     }
     if (k === 'volume' && o !== n) {
-      this.setVolume(Number(n) / 100);
+      this.setVolume(Number(n));
     }
     if ((k === 'currentTime' || k === 'currenttime') && o !== n) {
       this.setCurrentTime(Number(n));
