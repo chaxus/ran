@@ -4,6 +4,7 @@ import { Div, RanElement, Slot, falseList, isDisabled } from '@/utils/index';
 import { EventManager, View } from '@/utils/builder';
 import { defineSSR } from '@/utils/ssr-registry';
 import { ensureShadowElement, ensureShadowRoot, syncSheetAttribute } from '@/utils/component';
+import { isActivationKey } from '@/utils/a11y';
 
 export class Button extends RanElement {
   _btn!: HTMLDivElement;
@@ -164,7 +165,7 @@ export class Button extends RanElement {
 
   keydown = (event: KeyboardEvent): void => {
     if (isDisabled(this)) return;
-    if (event.key === 'Enter' || event.key === ' ') {
+    if (isActivationKey(event)) {
       event.preventDefault();
       this.click();
     }

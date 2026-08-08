@@ -51,3 +51,51 @@ export function sliderStepFromKeydown(e: KeyboardEvent, options: SliderStepOptio
 export function isActivationKey(e: KeyboardEvent): boolean {
   return e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar';
 }
+
+export interface RequiredValidityOptions {
+  disabled: boolean;
+  required: boolean;
+  isEmpty: boolean;
+  /** Native validation-bubble message. Default: "Please fill out this field." */
+  message?: string;
+  /** Element the native validation bubble anchors to — must be focusable. */
+  anchor?: HTMLElement;
+}
+
+/**
+ * Shared "required field" validity + a11y sync for form-associated components
+ * (checkbox/input/select): mirrors emptiness into `ElementInternals.setValidity`
+ * (so `form.checkValidity()`/`reportValidity()`/`:invalid` work) and into
+ * `aria-required`/`aria-invalid` on the host, so assistive tech gets the same
+ * signal sighted users get from the native validation bubble. Disabled fields
+ * never block submission or report invalid, matching native `<input disabled>`.
+ *
+ * This exact ~10-line branch (disabled → clear / required+empty → valueMissing
+ * / else clear) used to be hand-duplicated across checkbox, input, and select;
+ * this is the canonical version new form-associated components should call.
+ */
+export function updateRequiredValidity(
+  host: HTMLElement,
+  internals: ElementInternals | undefined,
+  options: RequiredValidityOptions,
+): void {
+  const { disabled, required, isEmpty, message = 'Please fill out this field.', anchor } = options;
+  if (required) host.setAttribute('aria-required', 'true');
+  else host.removeAttribute('aria-required');
+
+  const invalid = !disabled && required && isEmpty;
+  if (invalid) host.setAttribute('aria-invalid', 'true');
+  else host.removeAttribute('aria-invalid');
+
+  if (!internals) return;
+  if (invalid) internals.setValidity?.({ valueMissing: true }, message, anchor);
+  else internals.setValidity?.({});
+}
+
+/** Shared `checkValidity()`/`reportValidity()` passthroughs to `ElementInternals`. */
+export function checkInternalsValidity(internals: ElementInternals | undefined): boolean {
+  return internals?.checkValidity?.() ?? true;
+}
+export function reportInternalsValidity(internals: ElementInternals | undefined): boolean {
+  return internals?.reportValidity?.() ?? true;
+}

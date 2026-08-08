@@ -14,7 +14,7 @@ import {
 } from '@/utils/component';
 import colorPickerCss from './index.less?inline';
 import panelCss from './panel.less?inline';
-import { sliderStepFromKeydown } from '@/utils/a11y';
+import { isActivationKey, sliderStepFromKeydown } from '@/utils/a11y';
 
 const HUE = 360;
 
@@ -331,7 +331,7 @@ export class ColorPicker extends RanElement {
   /** Open the picker from the keyboard: Enter/Space act like a click on the swatch. */
   onSwatchKeydown = (e: KeyboardEvent): void => {
     if (isDisabled(this)) return;
-    if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+    if (isActivationKey(e)) {
       e.preventDefault();
       this.colorpicker?.click();
     }
