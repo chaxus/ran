@@ -9,26 +9,22 @@ Form container that wraps a native `<form>` in the shadow DOM and serializes its
 ### Basic Usage
 
 <Demo column>
-  <r-form>
-    <div slot="r-form_content">
-      <r-input name="username" label="Username" placeholder="Enter username"></r-input>
-      <r-checkbox name="subscribe" value="yes">Subscribe to newsletter</r-checkbox>
-      <r-button type="primary"><button type="submit" style="all: unset; cursor: pointer">Submit</button></r-button>
-    </div>
+  <r-form sheet=".r-form { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; }">
+    <r-input slot="r-form_content" name="username" label="Username" placeholder="Enter username"></r-input>
+    <r-checkbox slot="r-form_content" name="subscribe" value="yes">Subscribe to newsletter</r-checkbox>
+    <r-button slot="r-form_content" type="primary"><button type="submit" style="all: unset; cursor: pointer">Submit</button></r-button>
   </r-form>
 </Demo>
 
 ```html
-<r-form>
-  <div slot="r-form_content">
-    <r-input name="username" label="Username" placeholder="Enter username"></r-input>
-    <r-checkbox name="subscribe" value="yes">Subscribe to newsletter</r-checkbox>
-    <button type="submit">Submit</button>
-  </div>
+<r-form sheet=".r-form { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; }">
+  <r-input slot="r-form_content" name="username" label="Username" placeholder="Enter username"></r-input>
+  <r-checkbox slot="r-form_content" name="subscribe" value="yes">Subscribe to newsletter</r-checkbox>
+  <button slot="r-form_content" type="submit">Submit</button>
 </r-form>
 ```
 
-Fields must be projected through the named slot `r-form_content` (directly or via a wrapper carrying `slot="r-form_content"`) so they land inside the internal `<form>`.
+Fields must be projected through the named slot `r-form_content` (directly, or via a wrapper carrying `slot="r-form_content"`). Slotting them directly — as above — is what lets a `sheet` rule on `.r-form` (see [Injected Styles](#injected-styles-sheet)) lay the fields themselves out with spacing; a single wrapper `<div>` would give `.r-form` only one child to lay out.
 
 ## API Reference
 
@@ -44,20 +40,16 @@ Fields must be projected through the named slot `r-form_content` (directly or vi
 On submit, the component collects its named fields via `FormData` into a plain object and writes `JSON.stringify(...)` of that object to `value`. Setting `value` reflects to the `value` attribute; a `null` value is ignored.
 
 <Demo column>
-  <r-form>
-    <div slot="r-form_content">
-      <r-input name="email" label="Email" placeholder="you@example.com"></r-input>
-      <button type="submit">Save</button>
-    </div>
+  <r-form sheet=".r-form { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; }">
+    <r-input slot="r-form_content" name="email" label="Email" placeholder="you@example.com"></r-input>
+    <r-button slot="r-form_content" type="primary"><button type="submit" style="all: unset; cursor: pointer">Save</button></r-button>
   </r-form>
 </Demo>
 
 ```html
-<r-form id="signup">
-  <div slot="r-form_content">
-    <r-input name="email" label="Email" placeholder="you@example.com"></r-input>
-    <button type="submit">Save</button>
-  </div>
+<r-form id="signup" sheet=".r-form { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; }">
+  <r-input slot="r-form_content" name="email" label="Email" placeholder="you@example.com"></r-input>
+  <button slot="r-form_content" type="submit">Save</button>
 </r-form>
 
 <script>
@@ -72,24 +64,22 @@ On submit, the component collects its named fields via `FormData` into a plain o
 `sheet` follows the same convention as every other ranui component: its CSS is injected into the shadow DOM. Target the internal form through its `.r-form` class — for example to lay the fields out as a grid.
 
 <Demo column>
-  <r-form sheet=".r-form { display: grid; gap: 12px; }">
-    <div slot="r-form_content">
-      <r-input name="first" label="First name"></r-input>
-      <r-input name="last" label="Last name"></r-input>
-      <button type="submit">Continue</button>
-    </div>
+  <r-form sheet=".r-form { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }">
+    <r-input slot="r-form_content" name="first" label="First name"></r-input>
+    <r-input slot="r-form_content" name="last" label="Last name"></r-input>
+    <r-button slot="r-form_content" type="primary"><button type="submit" style="all: unset; cursor: pointer">Continue</button></r-button>
   </r-form>
 </Demo>
 
 ```html
-<r-form sheet=".r-form { display: grid; gap: 12px; }">
-  <div slot="r-form_content">
-    <r-input name="first" label="First name"></r-input>
-    <r-input name="last" label="Last name"></r-input>
-    <button type="submit">Continue</button>
-  </div>
+<r-form sheet=".r-form { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }">
+  <r-input slot="r-form_content" name="first" label="First name"></r-input>
+  <r-input slot="r-form_content" name="last" label="Last name"></r-input>
+  <button slot="r-form_content" type="submit">Continue</button>
 </r-form>
 ```
+
+This works because `.r-form` lays out its own direct children — each field slotted straight into `r-form_content` (not wrapped in a `<div>`) becomes one of those children, so `display: grid` on `.r-form` places the fields themselves, not just a single wrapper.
 
 ## Events
 

@@ -115,69 +115,50 @@ describe('r-scratch contract', () => {
     expect(scratch.state.scratchArea).toBe(0);
   });
 
-  it('attributeChangedCallback appends container and calls drawScratchTicket', () => {
+  it('attributeChangedCallback appends container and calls drawScratchTicket when value changes', () => {
     const scratch = document.createElement('r-scratch') as any;
     document.body.appendChild(scratch);
 
     const drawSpy = vi.spyOn(scratch, 'drawScratchTicket');
-    scratch.attributeChangedCallback();
+    scratch.attributeChangedCallback('disabled', null, 'true');
     expect(drawSpy).toHaveBeenCalled();
   });
 
-  it('drawScratchTicket sets up touch event listeners on canvas', () => {
+  it('attributeChangedCallback skips work when old === next', () => {
     const scratch = document.createElement('r-scratch') as any;
     document.body.appendChild(scratch);
 
-    const mockCtx = { drawImage: vi.fn() };
-    vi.spyOn(scratch.scratchTicket, 'getContext').mockReturnValue(mockCtx as any);
-
-    const addSpy = vi.spyOn(scratch.scratchTicket, 'addEventListener');
-    scratch.drawScratchTicket();
-    expect(addSpy).toHaveBeenCalledWith('touchstart', scratch.touchStartScratch);
-    expect(addSpy).toHaveBeenCalledWith('touchmove', scratch.touchMoveScratch);
-    expect(addSpy).toHaveBeenCalledWith('touchend', scratch.touchEndScratch);
+    const drawSpy = vi.spyOn(scratch, 'drawScratchTicket');
+    scratch.attributeChangedCallback('disabled', 'true', 'true');
+    expect(drawSpy).not.toHaveBeenCalled();
   });
 
-  it('drawScratchTicket onload draws image when fired', () => {
+  it('connectedCallback binds touch listeners on the canvas', () => {
+    const scratch = document.createElement('r-scratch') as any;
+    const addSpy = vi.spyOn(scratch.scratchTicket, 'addEventListener');
+
+    document.body.appendChild(scratch);
+
+    expect(addSpy).toHaveBeenCalledWith('touchstart', scratch.touchStartScratch, expect.any(Object));
+    expect(addSpy).toHaveBeenCalledWith('touchmove', scratch.touchMoveScratch, expect.any(Object));
+    expect(addSpy).toHaveBeenCalledWith('touchend', scratch.touchEndScratch, expect.any(Object));
+  });
+
+  it('drawScratchTicket paints an opaque cover instead of leaving the canvas blank', () => {
     const scratch = document.createElement('r-scratch') as any;
     document.body.appendChild(scratch);
 
     const mockCtx = {
-      drawImage: vi.fn(),
+      fillRect: vi.fn(),
+      fillStyle: '',
+      globalCompositeOperation: '',
     };
     vi.spyOn(scratch.scratchTicket, 'getContext').mockReturnValue(mockCtx as any);
 
     scratch.drawScratchTicket();
 
-    // Manually fire the onload to test the callback
-    const img = new Image();
-    Object.defineProperty(img, 'width', { value: 100 });
-    Object.defineProperty(img, 'height', { value: 100 });
-    scratch.scratchTicket.width = 100;
-    scratch.scratchTicket.height = 100;
-
-    // Call the onload function directly if we can
-    const _revealImg = { src: '', onload: null as any };
-    let capturedOnload: Function | null = null;
-    const origImage = global.Image;
-    (global as any).Image = function () {
-      capturedOnload = null;
-      const mockImg = {
-        src: '',
-        set onload(fn: any) {
-          capturedOnload = fn;
-        },
-      };
-      return mockImg;
-    };
-
-    scratch.drawScratchTicket();
-    if (capturedOnload) {
-      (capturedOnload as Function)();
-      expect(mockCtx.drawImage).toHaveBeenCalled();
-    }
-
-    (global as any).Image = origImage;
+    expect(mockCtx.fillStyle).toBeTruthy();
+    expect(mockCtx.fillRect).toHaveBeenCalledWith(0, 0, scratch.scratchTicket.width, scratch.scratchTicket.height);
   });
 
   it('touchEndScratch does not clear when scratchArea below threshold', () => {
@@ -224,7 +205,7 @@ describe('r-scratch contract', () => {
     expect(scratch._shadowDom.contains(scratch.scratchTicketContainer)).toBe(false);
 
     const drawSpy = vi.spyOn(scratch, 'drawScratchTicket').mockImplementation(() => {});
-    scratch.attributeChangedCallback();
+    scratch.attributeChangedCallback('disabled', null, 'true');
     expect(scratch._shadowDom.contains(scratch.scratchTicketContainer)).toBe(true);
     expect(drawSpy).toHaveBeenCalled();
   });

@@ -38,18 +38,13 @@ class ScratchTicket extends RanElement {
       scratchArea: 0,
     };
   }
-  touchStartScratch = (e: TouchEvent): void => {
-    console.log('eeeeee', e);
+  touchStartScratch = (): void => {
     this.state.touchStart = true;
   };
   touchMoveScratch = (): void => {
-    // debugger;
     if (this.state.touchStart) {
-      // const rect = this.scratchTicket.getBoundingClientRect();
       const ctx = this.scratchTicket.getContext('2d');
       if (!ctx) return;
-      //   const x = e.touches[0].clientX - rect.left;
-      //   const y = e.touches[0].clientY - rect.top;
       this.state.scratchArea += 30;
       ctx.beginPath();
       ctx.arc(100, 100, 30, 0, 2 * Math.PI);
@@ -71,16 +66,24 @@ class ScratchTicket extends RanElement {
   drawScratchTicket = (): void => {
     const ctx = this.scratchTicket.getContext('2d');
     if (!this.scratchTicketContainer || !ctx) return;
-    const revealImg = new Image();
-    revealImg.src = '';
-    revealImg.onload = () => {
-      ctx.drawImage(revealImg, 0, 0, this.scratchTicket.width, this.scratchTicket.height);
-    };
-    this.scratchTicket.addEventListener('touchstart', this.touchStartScratch);
-    this.scratchTicket.addEventListener('touchmove', this.touchMoveScratch);
-    this.scratchTicket.addEventListener('touchend', this.touchEndScratch);
+    const { width, height } = this.scratchTicket;
+    const coverColor = getComputedStyle(this).getPropertyValue('--ran-scratch-cover-background').trim();
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.fillStyle = coverColor || '#6b6b6b';
+    ctx.fillRect(0, 0, width, height);
   };
-  attributeChangedCallback(): void {
+  connectedCallback(): void {
+    this._events
+      .on(this.scratchTicket, 'touchstart', this.touchStartScratch)
+      .on(this.scratchTicket, 'touchmove', this.touchMoveScratch)
+      .on(this.scratchTicket, 'touchend', this.touchEndScratch);
+    this.drawScratchTicket();
+  }
+  disconnectedCallback(): void {
+    this._events.abort();
+  }
+  attributeChangedCallback(name: string, old: string, next: string): void {
+    if (old === next) return;
     if (!this._shadowDom.contains(this.scratchTicketContainer)) {
       this._shadowDom.appendChild(this.scratchTicketContainer);
     }

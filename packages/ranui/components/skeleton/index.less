@@ -8,6 +8,15 @@
   }
 }
 
+:host {
+  display: block;
+  /* Without an intrinsic width/height, a block box with no content sizes to 0
+     inside a flex row (e.g. the docs <Demo> preview) — the bar silently
+     disappears. Defaults make the component work out of the box. */
+  width: var(--ran-skeleton-width, 100%);
+  height: var(--ran-skeleton-height, 16px);
+}
+
 .ran-skeleton {
   position: relative;
   z-index: 0;

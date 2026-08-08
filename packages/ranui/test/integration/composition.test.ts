@@ -17,6 +17,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = resolve(__filename, '..');
 
 const PROGRESS_LESS = readFileSync(resolve(__dirname, '../../components/progress/index.less'), 'utf-8');
+const SKELETON_LESS = readFileSync(resolve(__dirname, '../../components/skeleton/index.less'), 'utf-8');
 
 // Register all components under test
 import '@/components/button';
@@ -31,6 +32,7 @@ import '@/components/popover';
 import '@/components/progress';
 import '@/components/select';
 import '@/components/select/option';
+import '@/components/skeleton';
 import '@/components/tab'; // registers r-tabs
 import '@/components/tabpane'; // registers r-tab
 
@@ -164,5 +166,36 @@ describe('r-progress CSS height contract', () => {
     expect(() => card.scrollHeight).not.toThrow();
 
     document.body.removeChild(card);
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 4. r-skeleton — default width/height on :host
+//    Regression: :host had no display/width/height, so it stayed the browser
+//    default inline box with zero intrinsic size. As a direct flex child of
+//    the docs <Demo> preview (or any flex row), a bare <r-skeleton></r-skeleton>
+//    rendered nothing visible even though its shadow-DOM .ran-skeleton had
+//    width:100% — 100% of a zero-size host is still zero.
+//    Fix: :host { display:block; width: var(--ran-skeleton-width, 100%);
+//                 height: var(--ran-skeleton-height, 16px) }
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe('r-skeleton CSS sizing contract', () => {
+  beforeEach(() => {
+    document.body.innerHTML = '';
+  });
+
+  it(':host declares display:block in LESS source', () => {
+    expect(SKELETON_LESS).toMatch(/:host\s*{[^}]*display:\s*block/);
+  });
+
+  it(':host declares a non-percent, non-zero default height', () => {
+    // Matches:  height: var(--ran-skeleton-height, 16px)
+    expect(SKELETON_LESS).toMatch(/:host\s*{[^}]*height:\s*var\(--ran-skeleton-height,\s*\d+px\)/);
+  });
+
+  it(':host declares a default width so it is visible as a bare flex child', () => {
+    // Matches:  width: var(--ran-skeleton-width, 100%)
+    expect(SKELETON_LESS).toMatch(/:host\s*{[^}]*width:\s*var\(--ran-skeleton-width,/);
   });
 });
