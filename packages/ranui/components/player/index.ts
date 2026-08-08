@@ -38,6 +38,7 @@ import { HTMLElementSSR } from '@/utils/index';
 import { ensureShadowRoot, getStringAttribute, setStringAttribute, syncSheetAttribute } from '@/utils/component';
 import playerCss from './index.less?inline';
 import { defineSSR } from '@/utils/ssr-registry';
+import { isActivationKey } from '@/utils/a11y';
 
 type Callback = (...args: unknown[]) => unknown;
 type EventName = string | symbol;
@@ -845,7 +846,7 @@ export class RanPlayer extends HTMLElementSSR()! {
    * double-firing on the same keystroke.
    */
   onPlayBtnKeydown = (e: KeyboardEvent): void => {
-    if (e.key !== 'Enter' && e.key !== ' ') return;
+    if (!isActivationKey(e)) return;
     this.dispatchClickPlayerBtnAction(e);
   };
   /**
@@ -854,7 +855,7 @@ export class RanPlayer extends HTMLElementSSR()! {
    * otherwise Space here would bubble to the host and also toggle play/pause.
    */
   onFullScreenKeydown = (e: KeyboardEvent): void => {
-    if (e.key !== 'Enter' && e.key !== ' ') return;
+    if (!isActivationKey(e)) return;
     e.preventDefault();
     e.stopPropagation();
     this.openFullScreen();

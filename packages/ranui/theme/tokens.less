@@ -156,13 +156,18 @@
   /* ── Focus ring (Geist) ─────────────────────────────────────────── */
   /* Focus stays blue (Geist), decoupled from the now-monochrome primary. */
   --ran-focus-ring: 0 0 0 2px var(--ran-background-100), 0 0 0 4px var(--ran-blue-700);
-  /* For a component whose own surface is a *fixed* dark skin regardless of the
-     page theme (r-player's control bar over arbitrary video content) —
-     --ran-focus-ring's inner ring is --ran-background-100, which is white in
-     light mode and would have no contrast there. Deliberately not redefined
-     in dark.less: unlike --ran-focus-ring, this one doesn't track the page
-     theme, it tracks the fixed-dark surface it's meant for. */
-  --ran-focus-ring-inverse: 0 0 0 2px rgba(0, 0, 0, 0.4), 0 0 0 4px #fff;
+  /* The outline-based sibling of --ran-focus-ring, for a component that draws
+     its focus indicator with `outline` instead of `box-shadow` (r-button:
+     `outline: var(--ran-btn-focus-outline, 2px solid var(--ran-color-primary))`).
+     --ran-color-primary is the "light-skin" color for that shorthand — flips
+     correctly with the page theme. A component whose own surface is a
+     *fixed* dark skin regardless of page theme (r-player's control bar over
+     arbitrary video content) needs the opposite: a light color that stays
+     legible against ITS dark surface no matter what the page theme is doing.
+     That's this token. Deliberately not redefined in dark.less — unlike
+     --ran-color-primary, it doesn't track the page theme, it tracks the
+     fixed-dark surface it's meant for. */
+  --ran-focus-ring-inverse-color: #fff;
 
   /* ── Motion ─────────────────────────────────────────────────────── */
   --ran-motion-duration-fast: 0.15s;

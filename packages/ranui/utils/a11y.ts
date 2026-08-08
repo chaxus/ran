@@ -36,3 +36,18 @@ export function sliderStepFromKeydown(e: KeyboardEvent, options: SliderStepOptio
       return undefined;
   }
 }
+
+/**
+ * Whether a keydown is the "activate" gesture for a non-native interactive
+ * element (a `<div>`/host acting as a button) — Enter or Space, matching the
+ * behavior a real `<button>` gets from the browser for free. Includes
+ * `'Spacebar'`, the pre-standardization key name old Edge/IE report.
+ *
+ * The same `e.key === 'Enter' || e.key === ' '` check (some call sites also
+ * add `'Spacebar'`, some don't) is hand-duplicated across button, select,
+ * popover, checkbox, and colorpicker; this is the canonical version new code
+ * should call instead of re-typing the check.
+ */
+export function isActivationKey(e: KeyboardEvent): boolean {
+  return e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar';
+}

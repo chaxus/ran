@@ -1,4 +1,4 @@
-import { Slot, View } from '@/utils/builder';
+import { EventManager, Slot, View } from '@/utils/builder';
 import formCss from './index.less?inline';
 import { RanElement } from '@/utils/index';
 import { defineSSR } from '@/utils/ssr-registry';
@@ -13,6 +13,7 @@ import {
 export class Form extends RanElement {
   _form: HTMLFormElement;
   _shadowDom: ShadowRoot;
+  _events = new EventManager();
 
   static get observedAttributes(): string[] {
     return ['sheet'];
@@ -22,10 +23,13 @@ export class Form extends RanElement {
     super();
     this._shadowDom = ensureShadowRoot(this, formCss);
 
+    // Default (unnamed) slot: any child placed directly inside <r-form> is
+    // projected here — no slot="..." attribute needed, and no wrapper <div>
+    // that would swallow every field into a single flex/grid item.
     this._form = ensureShadowElement(
       this._shadowDom,
-      '.r-form',
-      () => View('form').class('r-form').children(Slot().attr('name', 'r-form_content')).build() as HTMLFormElement,
+      '.ran-form',
+      () => View('form').class('ran-form').part('form').children(Slot()).build() as HTMLFormElement,
     );
   }
 
@@ -47,18 +51,33 @@ export class Form extends RanElement {
     syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
   };
 
-  connectedCallback(): void {
-    this.handlerExternalCss();
-    const jsonData: Record<string, unknown> = {};
+  private _handleSubmit = (): void => {
+    // Recomputed fresh on every submit — must not be hoisted out of this
+    // handler, or `value` would forever reflect whatever FormData looked
+    // like at connect time instead of what the user actually submitted.
     const formData = new FormData(this._form);
+    const jsonData: Record<string, unknown> = {};
     formData.forEach((_, key) => {
-      if (!jsonData[key]) {
+      if (!(key in jsonData)) {
         jsonData[key] = formData.getAll(key).length > 1 ? formData.getAll(key) : formData.get(key);
       }
     });
-    this._form.addEventListener('submit', () => {
-      this.value = JSON.stringify(jsonData);
-    });
+    this.value = JSON.stringify(jsonData);
+  };
+
+  private _handleReset = (): void => {
+    // Bypass the public setter — it deliberately ignores null (see the
+    // `value` setter contract above) — reset needs an actual clear.
+    this.removeAttribute('value');
+  };
+
+  connectedCallback(): void {
+    this.handlerExternalCss();
+    this._events.on(this._form, 'submit', this._handleSubmit).on(this._form, 'reset', this._handleReset);
+  }
+
+  disconnectedCallback(): void {
+    this._events.abort();
   }
 
   attributeChangedCallback(name: string, oldValue: string, newValue: string): void {

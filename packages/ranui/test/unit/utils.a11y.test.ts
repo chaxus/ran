@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { sliderStepFromKeydown } from '@/utils/a11y';
+import { isActivationKey, sliderStepFromKeydown } from '@/utils/a11y';
 
 const key = (k: string, shiftKey = false): KeyboardEvent => ({ key: k, shiftKey }) as KeyboardEvent;
 
@@ -39,5 +39,19 @@ describe('sliderStepFromKeydown', () => {
   it('returns undefined for any other key, so callers can skip preventDefault', () => {
     expect(sliderStepFromKeydown(key('Enter'), { current: 5, min: 0, max: 10 })).toBeUndefined();
     expect(sliderStepFromKeydown(key('Tab'), { current: 5, min: 0, max: 10 })).toBeUndefined();
+  });
+});
+
+describe('isActivationKey', () => {
+  it('accepts Enter, Space, and the legacy "Spacebar" key name', () => {
+    expect(isActivationKey(key('Enter'))).toBe(true);
+    expect(isActivationKey(key(' '))).toBe(true);
+    expect(isActivationKey(key('Spacebar'))).toBe(true);
+  });
+
+  it('rejects any other key', () => {
+    expect(isActivationKey(key('Tab'))).toBe(false);
+    expect(isActivationKey(key('Escape'))).toBe(false);
+    expect(isActivationKey(key('a'))).toBe(false);
   });
 });

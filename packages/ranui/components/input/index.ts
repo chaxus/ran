@@ -45,6 +45,12 @@ export class Input extends RanElement {
   _inputContent: HTMLInputElement;
   _icon: HTMLElement | undefined;
   _message: HTMLElement | undefined;
+  // Snapshot of the pre-interaction value, captured once on first connect,
+  // so formResetCallback has something to restore to (native <input> keeps
+  // this on `defaultValue`; this component reflects `value` straight to the
+  // attribute on every keystroke, so there is no other place to read it from).
+  _defaultValue = '';
+  _defaultValueCaptured = false;
   constructor() {
     super();
     // attachInternals is allowed in the constructor; guard for SSR/old runtimes.
@@ -109,6 +115,7 @@ export class Input extends RanElement {
     }
     // Relay to the form on every value change (guarded — jsdom omits setFormValue).
     this._internals?.setFormValue?.(this.getAttribute('value') ?? '');
+    this._updateValidity();
   }
   /**
    * @description: 获取 input 的占位字符
@@ -319,6 +326,43 @@ export class Input extends RanElement {
     syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
   };
   /**
+   * @description: 让宿主的表单校验状态（required 等）能被 form.checkValidity()/
+   * reportValidity()/:invalid 感知到。disabled 的控件永远不参与校验，与原生一致。
+   */
+  private _updateValidity = (): void => {
+    if (!this._internals) return;
+    if (this.disabled) {
+      this._internals.setValidity({});
+      return;
+    }
+    if (this.required && !this.value) {
+      this._internals.setValidity({ valueMissing: true }, 'Please fill out this field.', this._inputContent);
+    } else {
+      this._internals.setValidity({});
+    }
+  };
+  /**
+   * @description: 原生表单参与方法：form.checkValidity()/reportValidity() 的宿主入口
+   */
+  checkValidity(): boolean {
+    return this._internals?.checkValidity?.() ?? true;
+  }
+  reportValidity(): boolean {
+    return this._internals?.reportValidity?.() ?? true;
+  }
+  get validity(): ValidityState | undefined {
+    return this._internals?.validity;
+  }
+  get validationMessage(): string {
+    return this._internals?.validationMessage ?? '';
+  }
+  /**
+   * @description: 原生 form.reset() 时恢复到连接时（用户交互前）的初始值
+   */
+  formResetCallback(): void {
+    this.value = this._defaultValue;
+  }
+  /**
    * @description: 原生的 input 方法
    * @param {Event} event
    */
@@ -465,6 +509,7 @@ export class Input extends RanElement {
       } else {
         this._inputContent.removeAttribute('required');
       }
+      this._updateValidity();
     }
   };
   /**
@@ -480,6 +525,7 @@ export class Input extends RanElement {
         this._input.setAttribute('disabled', '');
         this._inputContent.setAttribute('disabled', '');
       }
+      this._updateValidity();
     }
   };
   /**
@@ -528,6 +574,10 @@ export class Input extends RanElement {
   };
   connectedCallback(): void {
     this.handlerExternalCss();
+    if (!this._defaultValueCaptured) {
+      this._defaultValue = this.value;
+      this._defaultValueCaptured = true;
+    }
     // 如果一开始就设置了 input 的值，则初始化 input 的值
     if (this.value) {
       this._inputContent.value = this.value;
