@@ -39,10 +39,14 @@ class FakeRecognition {
     this.onend?.();
   }
 
-  /** Feed a result the way the platform does: every segment recognized so far. */
-  emit(segments: { transcript: string; isFinal?: boolean }[]): void {
+  /**
+   * Feed a result the way the platform does: every segment recognized so far, plus (when given)
+   * `resultIndex` — the lowest index that changed in this event, per the real API's contract.
+   */
+  emit(segments: { transcript: string; isFinal?: boolean }[], resultIndex?: number): void {
     this.onresult?.({
       results: segments.map((s) => Object.assign([{ transcript: s.transcript }], { isFinal: s.isFinal ?? true })),
+      resultIndex,
     });
   }
 }
@@ -114,6 +118,40 @@ describe('createSpeechRecognizer', () => {
 
     native.emit([{ transcript: 'hello' }, { transcript: ' world', isFinal: false }]);
     expect(onResult).toHaveBeenLastCalledWith('hello world', false);
+  });
+
+  it('builds the correct transcript across many events using resultIndex, not just a full rescan', () => {
+    // Mirrors how the real API reports a long continuous session: each event only "changes"
+    // the result at resultIndex onward — everything before it is done and won't be touched
+    // again. The cached-prefix path (resultIndex present) must produce the same transcript as
+    // a full rescan would.
+    install();
+    const onResult = vi.fn();
+    createSpeechRecognizer({ onResult }).start();
+    const native = FakeRecognition.instances[0];
+
+    // Segment 0 finalizes.
+    native.emit([{ transcript: 'one' }], 0);
+    expect(onResult).toHaveBeenLastCalledWith('one', true);
+
+    // Segment 1 starts as interim; resultIndex says segment 0 is done and won't change again.
+    native.emit([{ transcript: 'one' }, { transcript: ' two', isFinal: false }], 1);
+    expect(onResult).toHaveBeenLastCalledWith('one two', false);
+
+    // Segment 1 finalizes; segment 2 starts interim. resultIndex now covers 0 and 1.
+    native.emit(
+      [{ transcript: 'one' }, { transcript: ' two' }, { transcript: ' three', isFinal: false }],
+      2,
+    );
+    expect(onResult).toHaveBeenLastCalledWith('one two three', false);
+
+    // Segment 2 finalizes with revised text (interim results can change up to the moment they
+    // finalize) — the cached prefix must not have locked in the old interim wording early.
+    native.emit(
+      [{ transcript: 'one' }, { transcript: ' two' }, { transcript: ' three!' }],
+      3,
+    );
+    expect(onResult).toHaveBeenLastCalledWith('one two three!', true);
   });
 
   it('classifies the routine non-events apart from a real refusal', () => {

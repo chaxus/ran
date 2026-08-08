@@ -24,6 +24,9 @@ interface NativeRecognition {
 
 interface NativeResultEvent {
   results: ArrayLike<ArrayLike<{ transcript: string }> & { isFinal?: boolean }>;
+  /** Lowest index whose result changed in this event — everything before it is guaranteed
+   * unchanged since the previous `onresult` call. Absent only on nonstandard implementations. */
+  resultIndex?: number;
 }
 
 type RecognitionConstructor = new () => NativeRecognition;
@@ -150,15 +153,29 @@ export const createSpeechRecognizer = (options: SpeechRecognizerOptions = {}): S
       native.interimResults = interimResults;
       native.maxAlternatives = 1;
 
+      // Per-capture cache: results before `resultIndex` are guaranteed unchanged since the
+      // previous event, so they're folded in here at most once instead of being
+      // re-concatenated on every single interim update. Without this, `continuous: true`
+      // (the default) re-walks the entire finalized transcript on every result event — O(n)
+      // work per event, O(n^2) over a long dictation session.
+      let finalizedTranscript = '';
+      let finalizedUpTo = 0;
+
       native.onresult = (event): void => {
-        let transcript = '';
+        const results = event.results;
+        const stableEnd = Math.min(event.resultIndex ?? 0, results.length);
+        for (; finalizedUpTo < stableEnd; finalizedUpTo++) {
+          finalizedTranscript += results[finalizedUpTo]?.[0]?.transcript ?? '';
+        }
+
+        let tail = '';
         let isFinal = true;
-        for (let i = 0; i < event.results.length; i++) {
-          const result = event.results[i];
-          transcript += result?.[0]?.transcript ?? '';
+        for (let i = finalizedUpTo; i < results.length; i++) {
+          const result = results[i];
+          tail += result?.[0]?.transcript ?? '';
           if (result?.isFinal === false) isFinal = false;
         }
-        onResult?.(transcript, isFinal);
+        onResult?.(finalizedTranscript + tail, isFinal);
       };
       native.onerror = (event): void => onError?.({ kind: classify(event.error), detail: event.error });
       native.onstart = (): void => onStart?.();
