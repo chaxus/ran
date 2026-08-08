@@ -658,4 +658,57 @@ describe('r-select contract', () => {
     select.removeAttribute('showSearch');
     expect(spy).toHaveBeenCalledTimes(2);
   });
+
+  it('required property getter/setter reflects the attribute as a boolean', async () => {
+    const select = await createSelectWithOptions();
+    expect(select.required).toBe(false);
+    select.required = 'true';
+    expect(select.hasAttribute('required')).toBe(true);
+    expect(select.required).toBe(true);
+
+    select.required = 'false';
+    expect(select.hasAttribute('required')).toBe(false);
+  });
+
+  it('formResetCallback restores defaultValue when set, else clears the selection', async () => {
+    const select = await createSelectWithOptions(); // options value '1' / '2'
+    select.setAttribute('defaultValue', '1');
+    select.value = '2';
+    expect(select.value).toBe('2');
+
+    (select as any).formResetCallback();
+    expect(select.value).toBe('1');
+
+    select.removeAttribute('defaultValue');
+    select.value = '2';
+    (select as any).formResetCallback();
+    expect(select.hasAttribute('value')).toBe(false);
+    expect((select as any)._text.textContent).toBe('');
+  });
+
+  it('setValidity flags a required-but-empty selection, and clears when selected or disabled', async () => {
+    const select = await createSelectWithOptions();
+    const setValidity = vi.fn();
+    (select as any)._internals.setValidity = setValidity;
+
+    select.required = 'true';
+    expect(setValidity).toHaveBeenLastCalledWith(
+      { valueMissing: true },
+      expect.any(String),
+      (select as any)._selection,
+    );
+
+    select.value = '1';
+    expect(setValidity).toHaveBeenLastCalledWith({});
+
+    select.value = '';
+    expect(setValidity).toHaveBeenLastCalledWith(
+      { valueMissing: true },
+      expect.any(String),
+      (select as any)._selection,
+    );
+
+    select.disabled = true;
+    expect(setValidity).toHaveBeenLastCalledWith({});
+  });
 });

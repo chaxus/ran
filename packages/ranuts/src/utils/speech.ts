@@ -155,9 +155,13 @@ export const createSpeechRecognizer = (options: SpeechRecognizerOptions = {}): S
 
       // Per-capture cache: results before `resultIndex` are guaranteed unchanged since the
       // previous event, so they're folded in here at most once instead of being
-      // re-concatenated on every single interim update. Without this, `continuous: true`
-      // (the default) re-walks the entire finalized transcript on every result event — O(n)
-      // work per event, O(n^2) over a long dictation session.
+      // re-concatenated on every single interim update — turning the naive O(n) rebuild per
+      // event (O(n^2) over a long `continuous: true` session) into amortized O(1) per event
+      // for the stable prefix, with only the small live tail re-scanned each time.
+      // Depends on the platform actually populating `resultIndex`: on an implementation that
+      // doesn't (`?? 0` below), `finalizedUpTo` never advances and this degrades to the naive
+      // full-rescan — still correct, just not the optimization. Every implementation this has
+      // been tested against provides it.
       let finalizedTranscript = '';
       let finalizedUpTo = 0;
 

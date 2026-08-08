@@ -76,6 +76,7 @@ export class Select extends RanElement {
   static get observedAttributes(): string[] {
     return [
       'disabled',
+      'required',
       'sheet',
       'type',
       'value',
@@ -159,7 +160,67 @@ export class Select extends RanElement {
   // Relay the selected value to the associated form (guarded — jsdom omits it).
   syncFormValue = (): void => {
     this._internals?.setFormValue?.(this.value);
+    this._updateValidity();
   };
+  get required(): boolean {
+    return this.hasAttribute('required');
+  }
+  set required(value: boolean | string) {
+    if (!value || value === 'false') {
+      this.removeAttribute('required');
+    } else {
+      this.setAttribute('required', '');
+    }
+  }
+  /**
+   * Lets `required` be seen by form.checkValidity()/reportValidity()/:invalid.
+   * Disabled selects never block submission, matching native semantics.
+   */
+  private _updateValidity = (): void => {
+    if (!this._internals) return;
+    if (this.disabled) {
+      this._internals.setValidity({});
+      return;
+    }
+    if (this.required && !this.value) {
+      this._internals.setValidity({ valueMissing: true }, 'Please select an item in the list.', this._selection);
+    } else {
+      this._internals.setValidity({});
+    }
+  };
+  checkValidity(): boolean {
+    return this._internals?.checkValidity?.() ?? true;
+  }
+  reportValidity(): boolean {
+    return this._internals?.reportValidity?.() ?? true;
+  }
+  get validity(): ValidityState | undefined {
+    return this._internals?.validity;
+  }
+  get validationMessage(): string {
+    return this._internals?.validationMessage ?? '';
+  }
+  /**
+   * @description: 原生 form.reset() 时恢复到 defaultValue（若有）或清空选中项
+   */
+  formResetCallback(): void {
+    const fallback = this.defaultValue;
+    if (fallback) {
+      this.value = fallback;
+      return;
+    }
+    this.removeAttribute('value');
+    this._text.textContent = '';
+    this._text.removeAttribute('title');
+    if (this._activeOption) {
+      this._activeOption.removeAttribute('active');
+      this._activeOption.setAttribute('aria-selected', 'false');
+      this._activeOption = undefined;
+    }
+    this._activeIndex = -1;
+    this.syncActiveState();
+    this.syncFormValue();
+  }
   get defaultValue(): string {
     return this.getAttribute('defaultValue') || '';
   }
@@ -415,6 +476,14 @@ export class Select extends RanElement {
     if (this._selectDropDownInTimeId) return;
     this.updateAriaExpanded(true);
     if (this._selectionDropdown && this._selectionDropdown.style.display !== 'block') {
+      // Chosen from the nominal `placement`, not the (possibly flipped)
+      // resolved side — `placementPosition()` below only knows whether it
+      // flipped one animation frame later, after measuring the panel's real
+      // height. A flip near a viewport edge can therefore play the entrance
+      // slide from the nominal direction while the panel renders on the
+      // opposite side. Known limitation, not fixed: closing it needs the
+      // transit class applied from inside placementPosition's flip result
+      // rather than here.
       this._selectionDropdown.setAttribute('transit', placementDirection[this.placement].add);
       this._selectionDropdown?.style.setProperty('display', 'block');
       this._attachReposition();
@@ -789,6 +858,7 @@ export class Select extends RanElement {
       }
     }
     if (name === 'value') this.syncSelectedFromValue(newValue);
+    if (name === 'required' || name === 'disabled') this._updateValidity();
     if (name === 'sheet' && this._shadowDom) this.handlerExternalCss();
     // Reactive: `defaultValue` and `showSearch` used to apply only on first
     // connect. Re-run the same effect their initial-connect code performs when

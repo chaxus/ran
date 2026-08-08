@@ -186,4 +186,52 @@ describe('r-checkbox contract', () => {
     checkbox.click(); // -> unchecked contributes nothing
     expect(setFormValue).toHaveBeenLastCalledWith(null);
   });
+
+  it('required property getter/setter reflects the attribute as a boolean', () => {
+    const checkbox = document.createElement('r-checkbox') as Checkbox;
+    document.body.appendChild(checkbox);
+
+    expect(checkbox.required).toBe(false);
+    checkbox.required = 'true';
+    expect(checkbox.hasAttribute('required')).toBe(true);
+    expect(checkbox.required).toBe(true);
+
+    checkbox.required = 'false';
+    expect(checkbox.hasAttribute('required')).toBe(false);
+  });
+
+  it('formResetCallback restores the checked state present at first connect', () => {
+    const checkbox = document.createElement('r-checkbox') as Checkbox;
+    checkbox.setAttribute('checked', 'true');
+    document.body.appendChild(checkbox);
+
+    checkbox.click(); // unchecks it
+    expect(checkbox.checked).toBe(false);
+
+    (checkbox as any).formResetCallback();
+    expect(checkbox.checked).toBe(true);
+  });
+
+  it('setValidity flags a required-but-unchecked box, and clears when checked or disabled', () => {
+    const checkbox = document.createElement('r-checkbox') as any;
+    document.body.appendChild(checkbox);
+    const setValidity = vi.fn();
+    checkbox._internals.setValidity = setValidity;
+
+    checkbox.required = 'true';
+    expect(setValidity).toHaveBeenLastCalledWith(
+      { valueMissing: true },
+      expect.any(String),
+      checkbox.container,
+    );
+
+    checkbox.click(); // now checked
+    expect(setValidity).toHaveBeenLastCalledWith({});
+
+    checkbox.click(); // unchecked again
+    expect(setValidity).toHaveBeenLastCalledWith({ valueMissing: true }, expect.any(String), checkbox.container);
+
+    checkbox.disabled = true;
+    expect(setValidity).toHaveBeenLastCalledWith({});
+  });
 });

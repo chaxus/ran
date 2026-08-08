@@ -176,17 +176,17 @@ export class Checkbox extends RanElement {
   private _updateValidity = (): void => {
     if (!this._internals) return;
     if (this.disabled) {
-      this._internals.setValidity({});
+      this._internals?.setValidity?.({});
       return;
     }
     if (this.required && !this.context.checked) {
-      this._internals.setValidity(
+      this._internals?.setValidity?.(
         { valueMissing: true },
         'Please check this box if you want to proceed.',
         this.container,
       );
     } else {
-      this._internals.setValidity({});
+      this._internals?.setValidity?.({});
     }
   };
   checkValidity(): boolean {
@@ -233,6 +233,10 @@ export class Checkbox extends RanElement {
   };
   connectedCallback(): void {
     this.handlerExternalCss();
+    if (!this._defaultCaptured) {
+      this._defaultChecked = this.context.checked;
+      this._defaultCaptured = true;
+    }
     this._events.on(this, 'click', this.onChange);
     this._events.on(this, 'keydown', this.onKeydown as EventListener);
     // Establish the host's checkbox semantics (role/tabindex/aria-checked) and

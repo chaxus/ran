@@ -392,4 +392,50 @@ describe('r-input contract', () => {
     expect(blurSpy).toHaveBeenCalledTimes(1);
     expect(selectSpy).toHaveBeenCalledTimes(1);
   });
+
+  it('formResetCallback restores the value present at first connect', () => {
+    const input = document.createElement('r-input') as Input;
+    input.setAttribute('value', 'initial');
+    document.body.appendChild(input);
+
+    input.value = 'typed by the user';
+    expect(input.value).toBe('typed by the user');
+
+    (input as any).formResetCallback();
+    expect(input.value).toBe('initial');
+  });
+
+  it('setValidity flags a required-but-empty value, and clears when filled or disabled', () => {
+    const input = document.createElement('r-input') as any;
+    document.body.appendChild(input);
+    // jsdom's ElementInternals stub omits setValidity; stub it to observe calls.
+    const setValidity = vi.fn();
+    input._internals.setValidity = setValidity;
+
+    input.required = 'true';
+    expect(setValidity).toHaveBeenLastCalledWith({ valueMissing: true }, expect.any(String), input._inputContent);
+
+    input.value = 'filled';
+    expect(setValidity).toHaveBeenLastCalledWith({});
+
+    input.value = '';
+    expect(setValidity).toHaveBeenLastCalledWith({ valueMissing: true }, expect.any(String), input._inputContent);
+
+    input.disabled = true;
+    expect(setValidity).toHaveBeenLastCalledWith({});
+  });
+
+  it('checkValidity/reportValidity/validity/validationMessage delegate to ElementInternals', () => {
+    const input = document.createElement('r-input') as any;
+    document.body.appendChild(input);
+    input._internals.checkValidity = vi.fn(() => false);
+    input._internals.reportValidity = vi.fn(() => false);
+    input._internals.validity = { valueMissing: true } as unknown as ValidityState;
+    input._internals.validationMessage = 'Please fill out this field.';
+
+    expect(input.checkValidity()).toBe(false);
+    expect(input.reportValidity()).toBe(false);
+    expect(input.validity).toEqual({ valueMissing: true });
+    expect(input.validationMessage).toBe('Please fill out this field.');
+  });
 });
