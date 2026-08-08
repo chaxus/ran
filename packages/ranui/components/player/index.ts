@@ -245,7 +245,6 @@ export class RanPlayer extends RanElement {
     for (const dispose of this._effectDisposers) dispose();
     this._effectDisposers = [];
   };
-  // ── Domain wiring — narrow getXxxDeps() slices; cross-domain calls are forwarding closures so vi.spyOn still sees them.
   getErrorModalDeps = (): PlayerErrorModalDeps => ({
     isDisabled: () => this.disableErrorModal,
     onRetry: () => this.updatePlayer(),
@@ -440,7 +439,6 @@ export class RanPlayer extends RanElement {
   handlerExternalCss = (): void => {
     syncSheetAttribute(this, this._shadowDom, 'sheet', null, this.sheet);
   };
-  // ── Transient runtime state — thin accessors over the shared `_runtimeState`, so `player.moveProgress`/`_isSeeking = true` etc. keep working.
   get moveProgress(): { percentage: number; mouseDown: boolean } {
     return this._runtimeState.moveProgress;
   }
@@ -511,10 +509,6 @@ export class RanPlayer extends RanElement {
   setSubtitleLanguage = (lang: string): void => this._subtitles.setSubtitleLanguage(lang);
   changeSubtitleTrack = (e: Event): void => this._subtitles.changeSubtitleTrack(e);
   createSubtitleSelect = (): void => this._subtitles.createSubtitleSelect();
-  /**
-   * @description: 初始化 video 和更新 video 方法
-   * @return {*}
-   */
   updatePlayer = (): void => {
     const Hls = window.Hls;
     if (!Hls && this.debug) {
@@ -589,10 +583,6 @@ export class RanPlayer extends RanElement {
     if (typeof this._video.removeEventListener !== 'function') return;
     unbindMediaEvents(this._video, this.getMediaHandlers());
   };
-  /**
-   * @description: 用户行为和 video 之间的交互
-   * @return {*}
-   */
   listenEvent = (): void => {
     if (!this._video) return;
     this.clearListenerEvent();
