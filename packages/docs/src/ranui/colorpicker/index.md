@@ -128,7 +128,7 @@ The trigger swatch reads these tokens:
 | --------------------------------------- | ------------------------- |
 | `--ran-colorpicker-background`          | Swatch background         |
 | `--ran-colorpicker-border`              | Swatch border             |
-| `--ran-colorpicker-border-hover`        | Border color on hover     |
+| `--ran-colorpicker-hover-border-color`        | Border color on hover     |
 | `--ran-colorpicker-border-radius`       | Swatch corner radius      |
 | `--ran-colorpicker-block-border-radius` | Inner block corner radius |
 | `--ran-colorpicker-transition`          | Hover transition          |

@@ -891,8 +891,8 @@ const wordIndex = (li: number, wi: number): number => {
 }
 .live-progress {
   width: 100%;
-  --ran-progress-wrap-height: 6px;
-  --ran-progress-wrap-value-background: linear-gradient(90deg, var(--vp-c-text-3), var(--ink));
+  --ran-progress-track-height: 6px;
+  --ran-progress-fill-background: linear-gradient(90deg, var(--vp-c-text-3), var(--ink));
 }
 .live-loading {
   --loading-circle-line-border-width: 22px;

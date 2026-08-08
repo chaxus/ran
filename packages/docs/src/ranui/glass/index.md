@@ -106,7 +106,7 @@ Style internals with `::part(glass)` and `::part(specular)`, or override the `--
 | `--ran-glass-tint`             | Fill background.                     |
 | `--ran-glass-border`           | Rim border.                          |
 | `--ran-glass-shadow`           | Box shadow stack (specular + depth). |
-| `--ran-glass-specular`         | Specular highlight background.       |
+| `--ran-glass-specular-background` | Specular highlight background.       |
 | `--ran-glass-specular-opacity` | Specular strength.                   |
 
 ```css

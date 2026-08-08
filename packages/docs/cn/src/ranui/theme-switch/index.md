@@ -94,9 +94,9 @@ r-theme-switch::part(dark) {
 可覆盖的 CSS 变量：`--ran-theme-switch-display`、`--ran-theme-switch-gap`、
 `--ran-theme-switch-padding`、`--ran-theme-switch-border-color`、`--ran-theme-switch-radius`、
 `--ran-theme-switch-background`、`--ran-theme-switch-button-size`、`--ran-theme-switch-icon-size`、
-`--ran-theme-switch-color`、`--ran-theme-switch-hover-color`、
-`--ran-theme-switch-active-background`、`--ran-theme-switch-active-color`、
-`--ran-theme-switch-focus-outline`。
+`--ran-theme-switch-button-color`、`--ran-theme-switch-button-hover-color`、
+`--ran-theme-switch-button-active-background`、`--ran-theme-switch-button-active-color`、
+`--ran-theme-switch-button-focus-outline`。
 
 ```css
 r-theme-switch {

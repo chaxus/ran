@@ -73,7 +73,7 @@
 | `--ran-glass-tint`             | 填充背景。            |
 | `--ran-glass-border`           | 亮边。                |
 | `--ran-glass-shadow`           | 阴影（高光 + 景深）。 |
-| `--ran-glass-specular`         | 镜面高光背景。        |
+| `--ran-glass-specular-background` | 镜面高光背景。        |
 | `--ran-glass-specular-opacity` | 镜面高光强度。        |
 
 ## 说明
