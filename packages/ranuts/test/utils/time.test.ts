@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { formatDuration, formatRelative, timeFormat } from '@/utils';
+import { formatDuration, formatRelative, parseVttCueTiming, parseVttTimestamp, timeFormat } from '@/utils';
 
 const SECOND = 1000;
 const MINUTE = 60 * SECOND;
@@ -141,5 +141,50 @@ describe('formatRelative', () => {
         IntlAny.RelativeTimeFormat = original;
       }
     });
+  });
+});
+
+describe('parseVttTimestamp', () => {
+  it('parses MM:SS.mmm', () => {
+    expect(parseVttTimestamp('00:00:05.000')).toBeCloseTo(5, 5);
+    expect(parseVttTimestamp('01:05.250')).toBeCloseTo(65.25, 5);
+  });
+
+  it('parses HH:MM:SS.mmm with an hours component', () => {
+    expect(parseVttTimestamp('01:00:00.000')).toBeCloseTo(3600, 5);
+    expect(parseVttTimestamp('01:01:01.500')).toBeCloseTo(3661.5, 5);
+  });
+
+  it('is the inverse of formatDuration for whole seconds', () => {
+    expect(parseVttTimestamp('00:01:05.000')).toBe(65);
+    expect(formatDuration(parseVttTimestamp('00:01:05.000')!)).toBe('01:05');
+  });
+
+  it('trims surrounding whitespace', () => {
+    expect(parseVttTimestamp('  00:00:05.000  ')).toBeCloseTo(5, 5);
+  });
+
+  it('returns undefined for text that is not a timestamp', () => {
+    expect(parseVttTimestamp('not a timestamp')).toBeUndefined();
+    expect(parseVttTimestamp('')).toBeUndefined();
+  });
+});
+
+describe('parseVttCueTiming', () => {
+  it('parses a plain start --> end line', () => {
+    expect(parseVttCueTiming('00:00:00.000 --> 00:00:05.000')).toEqual({ start: 0, end: 5 });
+  });
+
+  it('ignores cue settings after the end timestamp', () => {
+    expect(parseVttCueTiming('00:00:05.000 --> 00:00:10.000 align:start line:0')).toEqual({ start: 5, end: 10 });
+  });
+
+  it('returns undefined when there is no --> separator', () => {
+    expect(parseVttCueTiming('00:00:05.000')).toBeUndefined();
+  });
+
+  it('returns undefined when either side fails to parse', () => {
+    expect(parseVttCueTiming('not-a-time --> 00:00:05.000')).toBeUndefined();
+    expect(parseVttCueTiming('00:00:00.000 --> not-a-time')).toBeUndefined();
   });
 });

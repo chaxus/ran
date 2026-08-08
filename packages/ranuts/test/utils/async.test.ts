@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { TimeoutError, deferred, delay, withTimeout, withTimeoutFallback } from '@/utils/async';
+import { TimeoutError, createRaceGuard, deferred, delay, withTimeout, withTimeoutFallback } from '@/utils/async';
 
 describe('deferred', () => {
   it('resolves from outside the executor', async () => {
@@ -102,5 +102,42 @@ describe('delay', () => {
     await vi.advanceTimersByTimeAsync(1);
     expect(spy).toHaveBeenCalledOnce();
     vi.useRealTimers();
+  });
+});
+
+describe('createRaceGuard', () => {
+  it('reports a token current until a newer one starts', () => {
+    const guard = createRaceGuard();
+    const token = guard.start();
+    expect(guard.isCurrent(token)).toBe(true);
+  });
+
+  it('invalidates an older token once a newer attempt starts', () => {
+    const guard = createRaceGuard();
+    const first = guard.start();
+    const second = guard.start();
+    expect(guard.isCurrent(first)).toBe(false);
+    expect(guard.isCurrent(second)).toBe(true);
+  });
+
+  it('resolves the classic stale-fetch race: only the latest response applies', async () => {
+    const guard = createRaceGuard();
+    const applied: string[] = [];
+
+    const run = async (query: string, delayMs: number): Promise<void> => {
+      const token = guard.start();
+      await delay(delayMs);
+      if (!guard.isCurrent(token)) return;
+      applied.push(query);
+    };
+
+    vi.useFakeTimers();
+    const slow = run('first', 100); // started first, resolves last
+    const fast = run('second', 10); // started second, resolves first — should win
+    await vi.advanceTimersByTimeAsync(100);
+    await Promise.all([slow, fast]);
+    vi.useRealTimers();
+
+    expect(applied).toEqual(['second']);
   });
 });

@@ -111,7 +111,8 @@ import {
   setFontSize2html,
 } from './dom';
 import { handleError } from './error';
-import { EventManager } from './event';
+import { EventManager, createDoubleTapDetector } from './event';
+import type { DoubleTapDetector, DoubleTapDetectorOptions } from './event';
 import { circ, cubic, expo, quad, quart, quint, sine } from './tween';
 import type { EasingFn, SpeedType } from './tween';
 import { convertImageToBase64, cutRound, getImage, getMatrix, isImageSize, opacity } from './img';
@@ -157,8 +158,8 @@ import type {
 } from './worker';
 import { isUrlCached, networkAllowsDownload, prefetchUrl, prefetchUrls, prefetchWhenIdle, whenIdle } from './prefetch';
 import type { NetworkAllowanceOptions, PrefetchOptions, WhenIdleOptions } from './prefetch';
-import { TimeoutError, deferred, delay, withTimeout, withTimeoutFallback } from './async';
-import type { Deferred } from './async';
+import { TimeoutError, createRaceGuard, deferred, delay, withTimeout, withTimeoutFallback } from './async';
+import type { Deferred, RaceGuard } from './async';
 import {
   ZIP_DEFLATE,
   ZIP_STORED,
@@ -183,7 +184,16 @@ import { loadScript, scriptOnLoad } from './script';
 import type { LoadScriptOptions } from './script';
 import { throttle } from './throttle';
 import type { Throttled } from './throttle';
-import { formatDate, formatDuration, formatRelative, performanceTime, timeFormat, timestampToTime } from './time';
+import {
+  formatDate,
+  formatDuration,
+  formatRelative,
+  parseVttCueTiming,
+  parseVttTimestamp,
+  performanceTime,
+  timeFormat,
+  timestampToTime,
+} from './time';
 import type { DateInput, FormatRelativeOptions, RelativeStyle } from './time';
 import type { CurrentDevice } from './device';
 import {
@@ -387,6 +397,7 @@ export {
   withTimeoutFallback,
   delay,
   TimeoutError,
+  createRaceGuard,
   crc32,
   inflateRaw,
   readZipEntries,
@@ -412,8 +423,11 @@ export {
   formatDate,
   formatDuration,
   formatRelative,
+  parseVttCueTiming,
+  parseVttTimestamp,
   handleXhrHook,
   EventManager,
+  createDoubleTapDetector,
   quad,
   cubic,
   quart,
@@ -490,6 +504,9 @@ export type {
   HandoffOptions,
   JsonStore,
   Deferred,
+  RaceGuard,
+  DoubleTapDetector,
+  DoubleTapDetectorOptions,
   ZipEntry,
   RewriteZipOptions,
   ResolveLocaleOptions,

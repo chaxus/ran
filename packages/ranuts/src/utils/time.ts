@@ -122,6 +122,51 @@ export const formatDuration = (seconds: number): string => {
  */
 export const timeFormat = (time: number): string => formatDuration(time);
 
+const VTT_TIMESTAMP = /(?:(\d{2,}):)?(\d{2}):(\d{2})\.(\d{3})/;
+
+/**
+ * @description: Parse a WebVTT/SRT-style timestamp — `HH:MM:SS.mmm` or `MM:SS.mmm` (the hour
+ * component is optional) — into seconds. The inverse of [`formatDuration`](#formatduration),
+ * for anything that reads cue timings back out of subtitle/thumbnail-sprite manifests rather
+ * than formatting a duration for display.
+ * @param {string} raw the timestamp text, e.g. `'00:01:05.250'` or `'01:05.250'`
+ * @return {number | undefined} seconds, or `undefined` when `raw` doesn't match the pattern
+ * @example
+ * ```ts
+ * parseVttTimestamp('00:00:05.000');    // 5
+ * parseVttTimestamp('01:05.250');       // 65.25
+ * parseVttTimestamp('01:00:00.000');    // 3600
+ * parseVttTimestamp('not a timestamp'); // undefined
+ * ```
+ */
+export const parseVttTimestamp = (raw: string): number | undefined => {
+  const match = raw.trim().match(VTT_TIMESTAMP);
+  if (!match) return undefined;
+  const [, hours, minutes, seconds, millis] = match;
+  return (hours ? Number(hours) * 3600 : 0) + Number(minutes) * 60 + Number(seconds) + Number(millis) / 1000;
+};
+
+/**
+ * @description: Parse a WebVTT cue timing line — `<start> --> <end>`, optionally followed by
+ * cue settings (`align:start line:0`) after the end timestamp, which are ignored. Built on
+ * [`parseVttTimestamp`](#parsevtttimestamp) for each side.
+ * @param {string} line the timing line, e.g. `'00:00:00.000 --> 00:00:05.000 align:start line:0'`
+ * @return {{ start: number; end: number } | undefined} `undefined` when either side fails to parse
+ * @example
+ * ```ts
+ * parseVttCueTiming('00:00:00.000 --> 00:00:05.000'); // { start: 0, end: 5 }
+ * parseVttCueTiming('00:00:05.000 --> 00:00:10.000 align:start line:0'); // { start: 5, end: 10 }
+ * ```
+ */
+export const parseVttCueTiming = (line: string): { start: number; end: number } | undefined => {
+  const [startRaw, endRaw] = line.split('-->');
+  if (!startRaw || !endRaw) return undefined;
+  const start = parseVttTimestamp(startRaw);
+  const end = parseVttTimestamp(endRaw.trim().split(/\s+/)[0] ?? '');
+  if (start === undefined || end === undefined) return undefined;
+  return { start, end };
+};
+
 /**
  * Largest unit first. Milliseconds per unit; months and years use the average Gregorian
  * year (365.25 days) so that "11 months ago" never rounds into "1 year ago" early.

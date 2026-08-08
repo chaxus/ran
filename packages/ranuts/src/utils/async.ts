@@ -137,3 +137,41 @@ export const withTimeoutFallback = <T>(
  * @return {Promise<void>}
  */
 export const delay = (ms: number): Promise<void> => new Promise<void>((resolve) => setTimeout(resolve, ms));
+
+export interface RaceGuard {
+  /** Call before starting a new async attempt. Returns a token to close over and check later. */
+  start: () => number;
+  /** True when `token` is still the most recent one `start()` handed out — i.e. nothing newer superseded it. */
+  isCurrent: (token: number) => boolean;
+}
+
+/**
+ * @description: Bump-and-compare guard against a stale async response overwriting a newer
+ * one — the "user changed the input again before the first request came back" race. Every
+ * `start()` invalidates whatever token came before it; after an `await`, check `isCurrent`
+ * before applying the result.
+ *
+ * This is the same shape hand-rolled at each call site that needs it (a search box re-typed
+ * mid-fetch, a lazy-loaded icon/variant whose `name` changes before its chunk resolves, a
+ * manifest re-fetched before the first parse finishes) — same bug potential each time if the
+ * counter or the comparison is done slightly wrong.
+ * @return {RaceGuard}
+ * @example
+ * ```ts
+ * const guard = createRaceGuard();
+ *
+ * async function search(query: string) {
+ *   const token = guard.start();
+ *   const results = await fetchResults(query);
+ *   if (!guard.isCurrent(token)) return; // a newer search() call already superseded this one
+ *   render(results);
+ * }
+ * ```
+ */
+export const createRaceGuard = (): RaceGuard => {
+  let current = 0;
+  return {
+    start: () => ++current,
+    isCurrent: (token: number) => token === current,
+  };
+};

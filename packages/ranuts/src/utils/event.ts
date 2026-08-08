@@ -106,3 +106,65 @@ export class EventManager {
     this.ac = new AbortController();
   }
 }
+
+export interface DoubleTapDetectorOptions {
+  /** Max gap between the two taps, in ms. Default `300`. */
+  windowMs?: number;
+  /** Max 2D distance between the two taps, in px. Default `60`. */
+  maxDistancePx?: number;
+}
+
+export interface DoubleTapDetector {
+  /**
+   * Record a tap at `(x, y)` and report whether it forms a double-tap with the
+   * immediately preceding one. A detected double-tap resets tracking, so a
+   * third rapid tap starts a fresh pair rather than counting as part of the
+   * same double-tap.
+   */
+  check: (x: number, y: number, now?: number) => boolean;
+  /** Forget the last recorded tap — e.g. when a gesture other than a tap (a drag) starts. */
+  reset: () => void;
+}
+
+/**
+ * @description: Double-tap detection over raw `(x, y, time)` samples — pointer-type-agnostic,
+ * so it works the same fed from Pointer/Touch/Mouse events. Built for touch gestures (double-tap
+ * to seek, to zoom, to like) where re-deriving the timestamp+distance threshold logic at every
+ * call site is easy to get subtly wrong (comparing only one axis, forgetting to reset after a
+ * hit so three fast taps count as two overlapping double-taps).
+ * @param {DoubleTapDetectorOptions} options `windowMs` (default 300) and `maxDistancePx` (default 60)
+ * @return {DoubleTapDetector}
+ * @example
+ * ```ts
+ * const detector = createDoubleTapDetector();
+ * el.addEventListener('pointerup', (e) => {
+ *   if (detector.check(e.clientX, e.clientY)) seek();
+ * });
+ * ```
+ */
+export function createDoubleTapDetector(options: DoubleTapDetectorOptions = {}): DoubleTapDetector {
+  const { windowMs = 300, maxDistancePx = 60 } = options;
+  let lastTapAt = 0;
+  let lastTapX = 0;
+  let lastTapY = 0;
+
+  const reset = (): void => {
+    lastTapAt = 0;
+    lastTapX = 0;
+    lastTapY = 0;
+  };
+
+  const check = (x: number, y: number, now: number = Date.now()): boolean => {
+    const isDouble = now - lastTapAt < windowMs && Math.hypot(x - lastTapX, y - lastTapY) < maxDistancePx;
+    if (isDouble) {
+      reset();
+      return true;
+    }
+    lastTapAt = now;
+    lastTapX = x;
+    lastTapY = y;
+    return false;
+  };
+
+  return { check, reset };
+}
