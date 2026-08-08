@@ -253,6 +253,23 @@ describe('r-progress contract', () => {
     expect(drag.percent).toBe('0');
   });
 
+  it('stays interactive after switching type to "drag" post-connect, not just when set before mount', () => {
+    // Regression: listeners used to be bound once in connectedCallback, gated
+    // on `type` *at connect time* — a bar created as "primary" and switched to
+    // "drag" afterwards got the slider role + tabindex (syncA11y re-runs on
+    // attribute change) but arrow-key/click/drag seeking silently did nothing.
+    const progress = document.createElement('r-progress') as any;
+    document.body.appendChild(progress);
+    progress.setAttribute('percent', '50');
+    progress.setAttribute('type', 'drag');
+
+    const onChange = vi.fn();
+    progress.addEventListener('change', onChange);
+    progress.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
+    expect(progress.percent).toBe('51');
+    expect(onChange).toHaveBeenCalledTimes(1);
+  });
+
   it('disconnectedCallback removes event listeners without error', () => {
     const progress = document.createElement('r-progress') as Progress;
     document.body.appendChild(progress);

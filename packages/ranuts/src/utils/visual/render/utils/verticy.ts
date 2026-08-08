@@ -1,4 +1,4 @@
-import earcut from 'earcut';
+import earcut from './earcut';
 import { Circle, Ellipse, Polygon, Rectangle, RoundedRectangle } from '@/utils/visual/shape';
 import type { GraphicsData } from '@/utils/visual/graphics/graphicsData';
 import { BatchPart } from '@/utils/visual/render/utils/batch';

@@ -72,7 +72,20 @@ describe('autosizeTextarea', () => {
     expect(el.style.height).toBe('99px');
   });
 
-  it('adds the border back only for content-box sizing', () => {
+  it('adds the border back for border-box sizing, since scrollHeight never includes it', () => {
+    const el = makeTextarea();
+    const spy = vi.spyOn(window, 'getComputedStyle').mockReturnValue({
+      boxSizing: 'border-box',
+      borderTopWidth: '2px',
+      borderBottomWidth: '3px',
+    } as unknown as CSSStyleDeclaration);
+
+    autosizeTextarea(el);
+    expect(el.style.height).toBe('25px');
+    spy.mockRestore();
+  });
+
+  it('does not add the border for content-box sizing, whose height already excludes it', () => {
     const el = makeTextarea();
     const spy = vi.spyOn(window, 'getComputedStyle').mockReturnValue({
       boxSizing: 'content-box',
@@ -81,7 +94,7 @@ describe('autosizeTextarea', () => {
     } as unknown as CSSStyleDeclaration);
 
     autosizeTextarea(el);
-    expect(el.style.height).toBe('25px');
+    expect(el.style.height).toBe('20px');
     spy.mockRestore();
   });
 });

@@ -1,5 +1,6 @@
 import { describe, expect, it, beforeEach, vi } from 'vitest';
 import type { Mermaid } from '@/components/mermaid';
+import { sleep as sharedSleep } from './helpers/component';
 
 // Mermaid is mocked so tests never load the real (large, canvas/DOM-heavy) package —
 // only the render() call and the options it's given are asserted, matching the
@@ -11,7 +12,9 @@ const render = vi.fn(async (id: string, code: string) => {
 const initialize = vi.fn();
 vi.mock('mermaid', () => ({ default: { initialize, render } }));
 
-const sleep = (ms = 20): Promise<void> => new Promise((r) => setTimeout(r, ms));
+// The mocked render() still goes through a dynamic import() + async render chain,
+// so give it more headroom than the shared helper's 10ms default.
+const sleep = (): Promise<void> => sharedSleep(20);
 
 describe('r-mermaid contract', () => {
   beforeEach(async () => {

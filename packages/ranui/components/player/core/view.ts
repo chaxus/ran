@@ -1,5 +1,12 @@
 import type { Progress } from '@/components/progress';
 import { Div, View } from '@/utils/builder';
+import type { ElementBuilder } from '@/utils/builder';
+
+/** A keyboard-focusable, labeled control — the play/fullscreen buttons and the
+ * seek slider all need the same tabIndex + role + aria-label triple. */
+function focusableRole<T extends HTMLElement>(builder: ElementBuilder<T>, role: string, label: string): ElementBuilder<T> {
+  return builder.tabIndex(0).role(role).aria('label', label);
+}
 
 export interface SpeedOption {
   label: string;
@@ -65,20 +72,15 @@ export function ensurePlayerView(input: {
       .children(progressWrapBuffer, progressWrapValue)
       .build() as HTMLDivElement;
     const progressDot = Div().class('ran-player-controller-progress-dot').build() as HTMLDivElement;
-    const progress = Div()
-      .class('ran-player-controller-progress')
-      .tabIndex(0)
-      .role('slider')
-      .aria('label', 'Seek')
+    const progress = focusableRole(Div().class('ran-player-controller-progress'), 'slider', 'Seek')
       .children(progressWrap, progressDot)
       .build() as HTMLDivElement;
 
-    const playerControllerBottomPlayBtn = Div()
-      .class('ran-player-controller-bottom-left-btn')
-      .tabIndex(0)
-      .role('button')
-      .aria('label', 'Play')
-      .build() as HTMLDivElement;
+    const playerControllerBottomPlayBtn = focusableRole(
+      Div().class('ran-player-controller-bottom-left-btn'),
+      'button',
+      'Play',
+    ).build() as HTMLDivElement;
     const playerControllerBottomTimeCurrent = Div()
       .class('ran-player-controller-bottom-left-time-current')
       .build() as HTMLDivElement;
@@ -131,12 +133,11 @@ export function ensurePlayerView(input: {
     const playControllerBottomClarity = Div()
       .class('ran-player-controller-bottom-right-clarity')
       .build() as HTMLDivElement;
-    const playControllerBottomRightFullScreen = Div()
-      .class('ran-player-controller-bottom-right-full')
-      .tabIndex(0)
-      .role('button')
-      .aria('label', 'Fullscreen')
-      .build() as HTMLDivElement;
+    const playControllerBottomRightFullScreen = focusableRole(
+      Div().class('ran-player-controller-bottom-right-full'),
+      'button',
+      'Fullscreen',
+    ).build() as HTMLDivElement;
 
     const playerControllerBottomRight = Div()
       .class('ran-player-controller-bottom-right')

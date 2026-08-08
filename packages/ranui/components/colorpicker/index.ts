@@ -14,6 +14,7 @@ import {
 } from '@/utils/component';
 import colorPickerCss from './index.less?inline';
 import panelCss from './panel.less?inline';
+import { sliderStepFromKeydown } from '@/utils/a11y';
 
 const HUE = 360;
 
@@ -315,27 +316,8 @@ export class ColorPicker extends RanElement {
     (e: KeyboardEvent): void => {
       const max = kind === 'hue' ? HUE : 100;
       const sig = kind === 'hue' ? this.context.hue : this.context.transparency;
-      const step = e.shiftKey ? 10 : 1;
-      const cur = sig.getter();
-      let next = cur;
-      switch (e.key) {
-        case 'ArrowRight':
-        case 'ArrowUp':
-          next = cur + step;
-          break;
-        case 'ArrowLeft':
-        case 'ArrowDown':
-          next = cur - step;
-          break;
-        case 'Home':
-          next = 0;
-          break;
-        case 'End':
-          next = max;
-          break;
-        default:
-          return;
-      }
+      const next = sliderStepFromKeydown(e, { current: sig.getter(), min: 0, max, step: 1 });
+      if (next === undefined) return;
       e.preventDefault();
       sig.setter(range(next, 0, max));
       this.emitChange();

@@ -201,7 +201,13 @@ export const autosizeTextarea = (element: HTMLTextAreaElement): (() => void) => 
   const resize = (): void => {
     element.style.height = 'auto';
     const style = getComputedStyle(element);
-    const border = style.boxSizing === 'border-box' ? 0 : px(style.borderTopWidth) + px(style.borderBottomWidth);
+    // `scrollHeight` never includes the border, regardless of box-sizing. The
+    // CSS `height` property's own meaning does depend on it though: for
+    // `border-box` it must include the border to size the box correctly, for
+    // `content-box` it must not. This was inverted — a border-box textarea
+    // with a visible border came out one border-width short and clipped its
+    // last line.
+    const border = style.boxSizing === 'border-box' ? px(style.borderTopWidth) + px(style.borderBottomWidth) : 0;
     element.style.height = `${element.scrollHeight + border}px`;
   };
 

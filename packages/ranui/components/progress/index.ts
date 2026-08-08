@@ -9,6 +9,7 @@ import {
   syncSheetAttribute,
 } from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
+import { sliderStepFromKeydown } from '@/utils/a11y';
 
 const attributes: string[] = ['percent', 'type', 'total', 'dot', 'sheet'];
 
@@ -131,19 +132,15 @@ export class Progress extends RanElement {
   /**
    * Arrow-key seeking for `type="drag"` — the mouse/touch drag path had no
    * keyboard equivalent, so a `role="slider"` with no way to actually operate
-   * it from the keyboard. Left/Down and Right/Up step by 1% of `total`;
-   * Home/End jump to the ends, matching native `<input type="range">`.
+   * it from the keyboard. Left/Down and Right/Up step by 1% of `total`
+   * (Shift for a 10%-of-total coarse step); Home/End jump to the ends,
+   * matching native `<input type="range">`. Key mapping is shared with
+   * r-colorpicker's hue/alpha sliders via `sliderStepFromKeydown`.
    */
   progressKeydown = (e: KeyboardEvent): void => {
     if (this.type !== 'drag') return;
     const total = Number(this.total) || 100;
-    const step = total / 100;
-    const current = Number(this.percent);
-    let next: number | undefined;
-    if (e.key === 'ArrowRight' || e.key === 'ArrowUp') next = Math.min(total, current + step);
-    else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') next = Math.max(0, current - step);
-    else if (e.key === 'Home') next = 0;
-    else if (e.key === 'End') next = total;
+    const next = sliderStepFromKeydown(e, { current: Number(this.percent), min: 0, max: total, step: total / 100 });
     if (next === undefined) return;
     e.preventDefault();
     this.percent = String(next);
@@ -163,6 +160,11 @@ export class Progress extends RanElement {
     this.setAttribute('role', isDrag ? 'slider' : 'progressbar');
     this.setAttribute('aria-valuemin', '0');
     this.setAttribute('aria-valuemax', this.total);
+    // The `percent` *property* setter also writes this, but declarative
+    // markup (`<r-progress percent="42">`) or `setAttribute('percent', …)`
+    // never goes through that setter — without this, a screen reader saw a
+    // slider/progressbar with a min and max but no current value.
+    this.setAttribute('aria-valuenow', this.percent);
     if (isDrag && !this.hasAttribute('tabindex')) {
       this.tabIndex = 0;
     }
@@ -212,8 +214,18 @@ export class Progress extends RanElement {
     this.updateUI(percent);
   };
 
+  /**
+   * Bound once, unconditionally, from `connectedCallback` — NOT re-run when
+   * `type` changes later. Gating the *binding* on `this.type === 'drag'` (as
+   * this used to) meant a `<r-progress>` created as `primary` and switched to
+   * `drag` afterwards got `syncA11y`'s role="slider"/tabIndex (which does
+   * re-run on attribute change) without ever getting click/drag/keyboard
+   * listeners — a slider that claims to be operable and silently isn't. Each
+   * handler below already re-checks `this.type` itself, so binding
+   * unconditionally here is safe and keeps behavior in sync with the type
+   * actually in effect at interaction time, not at connect time.
+   */
   dragEvent = (): void => {
-    if (this.type !== 'drag') return;
     this._events
       .on(this._progress, 'click', this.progressClick)
       .on(this._progressDot, 'mousedown', this.progressDotMouseDown)
@@ -246,7 +258,7 @@ export class Progress extends RanElement {
     if (oldValue === newValue) return;
     if (name === 'dot' || name === 'type') this.appendProgressDot();
     if (name === 'percent' || name === 'total') this.updateCurrentProgress();
-    if (name === 'type' || name === 'total') this.syncA11y();
+    if (name === 'type' || name === 'total' || name === 'percent') this.syncA11y();
     if (name === 'sheet') this.handlerExternalCss();
   }
 }

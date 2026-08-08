@@ -16,18 +16,18 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "catalog:",
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^5.1.4",
-    "classnames": "^2.5.1",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
-    "react-router-dom": "^7.13.1",
+    "@types/react": "19.2.15",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "5.2.0",
+    "classnames": "2.5.1",
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
+    "react-router-dom": "7.15.1",
     "tsx": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:"
   },
   "dependencies": {
-    "ranuts": "workspace:^"
+    "ranuts": "workspace:*"
   }
 }

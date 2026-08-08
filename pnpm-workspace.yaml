@@ -4,18 +4,18 @@ packages:
 # Single source of truth for versions of shared build/test tooling.
 # Packages reference these with "catalog:" so every workspace stays on one version.
 catalog:
-  '@types/node': ^26.1.1
-  '@vitest/coverage-v8': ^4.1.10
-  less: ^4.6.7
-  terser: ^5.49.0
-  tsx: ^4.23.0
-  typescript: ^7.0.2
-  vite: ^8.1.4
-  vitest: ^4.1.10
+  '@types/node': 26.1.2
+  '@vitest/coverage-v8': 4.1.10
+  less: 4.8.1
+  terser: 5.49.2
+  tsx: 4.23.10
+  typescript: 7.0.2
+  vite: 8.2.1
+  vitest: 4.1.10
 # Force patched versions of transitively-pulled build tools (Dependabot advisories).
 overrides:
-  esbuild: '>=0.28.1'
-  '@babel/core': '>=7.29.6'
+  esbuild: 0.28.1
+  '@babel/core': 7.29.7
   # @ranui/preview (split out of this repo) pins old published ranui/ranuts,
   # which would drag tesseract.js back into the lockfile — use the workspace code.
   '@ranui/preview>ranui': 'workspace:*'
