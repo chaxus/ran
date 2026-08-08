@@ -44,21 +44,23 @@ describe('core/tracks pure functions', () => {
   });
 
   it('setActiveSubtitleLanguage/getActiveSubtitleLanguage toggle TextTrack.mode by language', () => {
-    const video = document.createElement('video');
-    applyTracksToVideo(video, [
-      { src: 'en.vtt', srclang: 'en', label: 'English' },
-      { src: 'fr.vtt', srclang: 'fr', label: 'Français' },
-    ]);
+    // jsdom doesn't implement the TextTrack API (video.textTracks stays empty
+    // even with real <track> children), so these take a plain array of
+    // track-like objects instead of a real HTMLVideoElement — see core/tracks.ts.
+    const tracks = [
+      { language: 'en', mode: 'showing' },
+      { language: 'fr', mode: 'hidden' },
+    ] as unknown as TextTrack[];
 
-    setActiveSubtitleLanguage(video, 'fr');
-    expect(getActiveSubtitleLanguage(video)).toBe('fr');
-    expect(video.textTracks[0].mode).toBe('hidden');
-    expect(video.textTracks[1].mode).toBe('showing');
+    setActiveSubtitleLanguage(tracks, 'fr');
+    expect(getActiveSubtitleLanguage(tracks)).toBe('fr');
+    expect(tracks[0].mode).toBe('hidden');
+    expect(tracks[1].mode).toBe('showing');
 
-    setActiveSubtitleLanguage(video, 'off');
-    expect(getActiveSubtitleLanguage(video)).toBe('off');
-    expect(video.textTracks[0].mode).toBe('hidden');
-    expect(video.textTracks[1].mode).toBe('hidden');
+    setActiveSubtitleLanguage(tracks, 'off');
+    expect(getActiveSubtitleLanguage(tracks)).toBe('off');
+    expect(tracks[0].mode).toBe('hidden');
+    expect(tracks[1].mode).toBe('hidden');
   });
 
   it('persists and reads back the preferred subtitle language', () => {

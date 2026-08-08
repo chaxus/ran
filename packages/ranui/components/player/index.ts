@@ -438,7 +438,7 @@ export class RanPlayer extends RanElement {
   };
   setSubtitleLanguage = (lang: string): void => {
     if (!this._video) return;
-    setActiveSubtitleLanguage(this._video, lang);
+    setActiveSubtitleLanguage(this._video.textTracks, lang);
     const select = this._playControllerBottomSubtitle.querySelector('r-select');
     if (select) select.setAttribute('value', lang === 'off' ? 'Off' : lang);
   };

@@ -23,18 +23,23 @@ export function applyTracksToVideo(video: HTMLVideoElement, tracks: PlayerTrackC
 }
 
 /**
+ * Takes `video.textTracks` (a `TextTrackList`) rather than the `<video>` itself —
+ * keeps this testable with a plain array of track-like objects, since jsdom
+ * doesn't implement the TextTrack API at all (`video.textTracks.length` stays 0
+ * no matter how many `<track>` children exist).
+ *
  * `lang` is a track's `srclang`, or `'off'` to hide every track. Cue rendering
  * itself is entirely native — this only toggles which TextTrack the browser
  * is allowed to render.
  */
-export function setActiveSubtitleLanguage(video: HTMLVideoElement, lang: string): void {
-  Array.from(video.textTracks).forEach((track) => {
+export function setActiveSubtitleLanguage(tracks: Iterable<TextTrack>, lang: string): void {
+  Array.from(tracks).forEach((track) => {
     track.mode = lang !== 'off' && track.language === lang ? 'showing' : 'hidden';
   });
 }
 
-export function getActiveSubtitleLanguage(video: HTMLVideoElement): string {
-  const active = Array.from(video.textTracks).find((track) => track.mode === 'showing');
+export function getActiveSubtitleLanguage(tracks: Iterable<TextTrack>): string {
+  const active = Array.from(tracks).find((track) => track.mode === 'showing');
   return active?.language || 'off';
 }
 
