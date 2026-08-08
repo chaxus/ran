@@ -170,22 +170,26 @@ green.
   `loadedmetadata` when the saved position is meaningfully short of the duration.
 - **Thumbnail scrubbing preview — shipped (Phase 3).** `core/thumbnails.ts` parses a WebVTT
   sprite manifest (the same convention YouTube/Video.js use: cues whose text is
-  `spritesheet.jpg#xywh=x,y,w,h`) — `parseThumbnailVtt`/`findThumbnailCue` are pure and
-  independently testable, `loadThumbnailCues` does the `fetch()`, and `applyThumbnailPreview`
-  crops the sprite via `background-position` sized to the cue's own `w`/`h` (no need to know
-  the full sheet's natural dimensions). A new `thumbnails` attribute (a VTT URL) drives it,
-  fetched/parsed once per attribute change — independent of `src`, so a quality/source switch
-  never refetches it — guarded against a stale response overwriting a newer one with the same
-  bump-and-compare token pattern `r-loading`/`r-icon` use for their async variant loads. The
-  cropped thumbnail renders inside the existing `_playerTip` tooltip, alongside the time text
-  rather than replacing it, positioned via `bottom: 100%` above the pill (which required
-  loosening `.ran-player-controller-tip`'s `overflow` from `hidden` to `visible` — the
-  time/text children already self-truncate via their own `overflow`/`text-overflow`, so
-  nothing regressed). `progressMouseEnter`/`progressMouseMove` in `core/seek.ts` were merged
-  into one `updateProgressTip` helper since thumbnails needed the same hover-time math the
-  time-text branch already computed at both call sites. No existing ranui parsing utility for
-  WebVTT — this was genuinely new code, and the most implementation-heavy item on this list
-  after the DASH/FLV engine work.
+  `spritesheet.jpg#xywh=x,y,w,h`) — cue *timing* parsing (`"00:00:05.000 --> ..."` → seconds)
+  is generic enough that it moved to `ranuts/utils`'s `parseVttCueTiming`/`parseVttTimestamp`
+  (the inverse of `formatDuration`, which already lived there); `parseThumbnailVtt` layers the
+  player-specific `#xywh=` sprite-rect parsing on top and is still independently testable,
+  `loadThumbnailCues` does the `fetch()`, and `applyThumbnailPreview` crops the sprite via
+  `background-position` sized to the cue's own `w`/`h` (no need to know the full sheet's
+  natural dimensions). A new `thumbnails` attribute (a VTT URL) drives it, fetched/parsed once
+  per attribute change — independent of `src`, so a quality/source switch never refetches it —
+  guarded against a stale response overwriting a newer one with `ranuts/utils`'s
+  `createRaceGuard()` (the same bump-and-compare pattern `r-loading`'s async variant loading
+  hand-rolled — generalized into ranuts once this was the second call site). The cropped
+  thumbnail renders inside the existing `_playerTip` tooltip, alongside the time text rather
+  than replacing it, positioned via `bottom: 100%` above the pill (which required loosening
+  `.ran-player-controller-tip`'s `overflow` from `hidden` to `visible` — the time/text children
+  already self-truncate via their own `overflow`/`text-overflow`, so nothing regressed).
+  `progressMouseEnter`/`progressMouseMove` in `core/seek.ts` were merged into one
+  `updateProgressTip` helper since thumbnails needed the same hover-time math the time-text
+  branch already computed at both call sites. The `#xywh=` sprite-rect parsing has no ranuts
+  home (it's genuinely player-specific — WebVTT itself doesn't define it), and was the most
+  implementation-heavy item on this list after the DASH/FLV engine work.
 - **DASH + FLV/TS + the underlying engine-adapter refactor** → these three have to move
   together. Today's `core/media.ts`/`core/levels.ts`/`changeClarity` model is HLS-shaped:
   quality = a different URL, loaded via `hls.loadSource(url)`. **DASH doesn't work that
@@ -219,8 +223,13 @@ green.
   per the Pointer Events spec, and a single tap is re-implemented via a `deps.onSingleTap`
   callback (reusing `dispatchClickPlayerContainerAction` directly) — debounced by the same
   300ms window used to detect a double-tap, so a double-tap-to-seek never lets the in-between
-  single tap toggle play/pause and visibly flicker playback. Fires a new `gestureseek` change
-  event (`{ direction, seconds }`); the volume swipe reuses the existing `volume` event.
+  single tap toggle play/pause and visibly flicker playback. The double-tap timestamp+distance
+  matching itself is pointer-type-agnostic and has nothing media-specific about it, so it moved
+  to `ranuts/utils`'s `createDoubleTapDetector()` rather than staying hand-rolled here — the
+  bug that surfaced generalizing it (a `0`/`0`/`0` "no previous tap" sentinel colliding with a
+  real first tap at that exact time/position) is exactly the kind of subtle mistake a shared,
+  tested utility is meant to catch once instead of per call site. Fires a new `gestureseek`
+  change event (`{ direction, seconds }`); the volume swipe reuses the existing `volume` event.
 - **AirPlay / Remote Playback — shipped (Phase 3).** Feature-detected, best-effort:
   `core/remote-playback.ts`'s `isRemotePlaybackSupported()`/`requestRemotePlayback()` try the
   standards-track **Remote Playback API** (`videoElement.remote.prompt()`, Chrome/Edge) first,
@@ -256,8 +265,10 @@ green.
   only via the explicit `format="webrtc"` attribute (no `.whep` extension convention exists to
   sniff). Unlike HLS/DASH/FLV, this engine needs **no lazy npm dependency at all** —
   `RTCPeerConnection`/`fetch` are native browser APIs, so there's no chunk to download. Scope
-  deliberately kept modest: non-trickle ICE (waits for gathering to finish, capped at 3s, then
-  sends whatever candidates it has) rather than WHEP's PATCH-based trickle mechanism, and no
+  deliberately kept modest: non-trickle ICE (waits for gathering to finish, capped at 3s via
+  `ranuts/utils`'s `withTimeoutFallback` — the first hand-rolled cut of this duplicated a
+  utility that already existed, so it was rewritten to reuse it instead — then sends whatever
+  candidates it has) rather than WHEP's PATCH-based trickle mechanism, and no
   `Link: rel="ice-server"` header parsing for server-supplied STUN/TURN hints — both are real
   parts of the WHEP spec, left out because they're substantial added complexity that most
   directly-reachable WHEP deployments don't need. `getQualityLevels()` always returns `[]`,

@@ -52,12 +52,13 @@ packages/ranuts/
 ├── index.ts                  # Root barrel (re-exports utils + visual + selected)
 ├── src/
 │   ├── utils/                # ranuts/utils — the largest surface (~14k LOC)
-│   │   ├── str.ts obj.ts number.ts color.ts bom.ts dom.ts time.ts …
+│   │   ├── str.ts obj.ts number.ts color.ts bom.ts dom.ts …
+│   │   ├── time.ts           # formatDate / formatDuration / formatRelative + parseVttTimestamp / parseVttCueTiming
 │   │   ├── bridge.ts         # postMessage request/response (split out of bom.ts)
 │   │   ├── idb.ts            # WebDB (declarative stores) + createHandoff (one-shot value handoff)
 │   │   ├── worker.ts         # WorkerClient — request/response over a Web Worker
 │   │   ├── zip.ts            # ZIP read/rewrite — crc32, inflateRaw, rewriteZip, createZip
-│   │   ├── async.ts          # deferred / withTimeout / withTimeoutFallback / delay
+│   │   ├── async.ts          # deferred / withTimeout / withTimeoutFallback / delay / createRaceGuard
 │   │   ├── storage.ts        # localStorage* + createStore (prefixed JSON view)
 │   │   ├── segment.ts        # offsets ↔ chunks, range→segment splitting (highlights)
 │   │   ├── localePath.ts     # createLocalePath — i18n sub-directory URL maths
@@ -65,7 +66,7 @@ packages/ranuts/
 │   │   ├── lang.ts           # detectLanguage + resolveLocale (query→cookie→storage→navigator)
 │   │   ├── file.ts           # readFileAs* — FileReader promises
 │   │   ├── i18n.ts           # ranuts/i18n — I18nCore, {param} interpolation, locale persistence
-│   │   ├── event.ts          # EventManager — AbortController-scoped listeners + delegation
+│   │   ├── event.ts          # EventManager (AbortController-scoped listeners + delegation) + createDoubleTapDetector
 │   │   ├── chain.ts          # Chain / create — chainable DOM builder (shared with vnode)
 │   │   ├── style.ts          # adoptStyles / adoptSheetText — Shadow DOM CSS injection
 │   │   ├── canvas.ts         # Canvas 2D geometry — roundRectByArc, fanShapedByArc, getLinearGradient
