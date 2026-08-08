@@ -72,6 +72,28 @@ description: 'ranui Player（<r-player>）在原生 <video> 之上封装统一�
 
 进入/退出画中画的方法。画中画按钮只在 `document.pictureInPictureEnabled` 为真时才会显示。
 
+### disable-error-modal
+
+布尔属性。播放失败（fatal 的 HLS 错误、原生 `error` 事件）默认会弹出 `Modal.error()` 错误 + 重试弹窗（`r-modal` 懒加载，真的出错才下载），设了这个属性就关掉，改成自己接 `error`/`hlsError` change 事件做自定义 UI。
+
+### remember-position
+
+布尔属性，开启断点续播：`pause` 时和标签页切到后台时把当前播放位置存到 `localStorage`（按 `src` 分别存），下次加载同一个 `src` 时自动跳转过去，播完（`ended`）后清掉。离结尾不到 2 秒的位置不会续播（避免刚看完又跳回结尾）。只记播放位置，不记音量/倍速/字幕这些。
+
+### tracks
+
+字幕/CC 轨道配置，**只有 JS 属性，没有对应的 HTML attribute**（player 每次加载都会清空 light DOM，声明式的 `<track>` 子标签活不下来）：
+
+```js
+const player = document.querySelector('r-player');
+player.tracks = [
+  { src: '/captions/en.vtt', srclang: 'en', label: 'English', default: true },
+  { src: '/captions/fr.vtt', srclang: 'fr', label: 'Français' },
+];
+```
+
+每一项会变成挂在原生 `<video>` 上的 `<track>`，字幕渲染完全交给浏览器，播放器不做任何自定义样式。控制栏会出现一个语言选择器（"Off" + 每条 track 的 `label`，和清晰度选择器交互方式一样），选择结果存在 `localStorage`（全局的，不分视频），下次有 `tracks` 的播放器会自动应用；没存过的话就用配置里 `default: true` 的那条。`setSubtitleLanguage(lang)` 可以用代码切换（`lang` 是某条 track 的 `srclang`，或者 `'off'`）。
+
 ## 事件`event`
 
 ### onchange
@@ -117,3 +139,5 @@ description: 'ranui Player（<r-player>）在原生 <video> 之上封装统一�
 | volume         | 音量发生变化。                                                                                                    |
 | fullscreen     | 触发全屏事件                                                                                                      |
 | pictureinpicture | 画中画进入（`true`）/退出（`false`）——不管是通过 `togglePip()` 还是浏览器自己的画中画窗口控件触发的                |
+| subtitlechange | 字幕语言切换（通过选择器或 `setSubtitleLanguage()`），`data` 是 `srclang` 或 `'off'`                                  |
+| resume         | `remember-position` 静默恢复了保存的播放位置，`data` 是恢复到的秒数                                                   |

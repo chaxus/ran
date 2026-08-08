@@ -34,6 +34,19 @@ predates that pattern in places, and closing that gap is itself part of this roa
 - **Keyboard focus**: the host is tab-focusable; every shortcut above works without a mouse.
 - **Mobile inline playback**: `webkit-playsinline`/`playsinline`/`x5-video-player-type` so
   iOS Safari and WeChat's X5 engine play inline instead of forcing native fullscreen.
+- **Picture-in-Picture**: `togglePip()` + a control-bar button, rendered only when
+  `document.pictureInPictureEnabled` (progressive enhancement — `core/pip.ts`).
+- **`poster`/`autoplay`/`loop`/`muted`**: standard `<video>` attributes, passed through.
+- **Subtitles/CC**: `tracks` property (imperative — light DOM gets cleared on every load, so
+  no declarative `<track>` children) → native `<track>` elements, native cue rendering, an
+  `<r-select>` language picker (mirrors the clarity selector), preference persisted globally
+  via `createStore` (`core/tracks.ts`).
+- **Error + retry**: on by default — a fatal HLS error or a native `error` event opens a
+  lazy-loaded `Modal.error()` dialog with a Retry button; `disable-error-modal` opts out
+  (`core/error.ts`).
+- **Resume playback**: opt-in via `remember-position` — saves position to `localStorage` on
+  `pause`/tab-hidden, restores on the next load of the same `src`, clears on `ended`
+  (`core/resume.ts`).
 
 ### 1.2 Formats
 
@@ -69,11 +82,11 @@ feature work to avoid unrelated visual-regression risk.
 
 | # | Feature | Reference | Current state | Worth adding? |
 | - | ------- | --------- | -------------- | -------------- |
-| 1 | Subtitles/CC | native `<video controls>`, YouTube | none | ✅ table-stakes for many use cases |
-| 2 | Picture-in-Picture | native `<video controls>`, YouTube | none | ✅ one native API call, high value/cost ratio |
-| 3 | `poster`/`autoplay`/`loop`/`muted` | native `<video>` | attributes not passed through at all | ✅ trivial, commonly expected |
-| 4 | Error + retry UI | Video.js, Shaka | silent fallback to raw `src`, no visible UI | ✅ real UX gap today |
-| 5 | Resume playback | YouTube (signed-in), many VOD players | none | ✅ opt-in, low complexity via `localStorage` |
+| 1 | Subtitles/CC | native `<video controls>`, YouTube | **shipped (Phase 1)** | ✅ table-stakes for many use cases |
+| 2 | Picture-in-Picture | native `<video controls>`, YouTube | **shipped (Phase 0)** | ✅ one native API call, high value/cost ratio |
+| 3 | `poster`/`autoplay`/`loop`/`muted` | native `<video>` | **shipped (Phase 0)** | ✅ trivial, commonly expected |
+| 4 | Error + retry UI | Video.js, Shaka | **shipped (Phase 1)** | ✅ real UX gap today |
+| 5 | Resume playback | YouTube (signed-in), many VOD players | **shipped (Phase 1)** | ✅ opt-in, low complexity via `localStorage` |
 | 6 | Thumbnail scrubbing preview | YouTube, Video.js (VTT sprite plugin) | progress hover shows time text only | 🟡 real value, real complexity (VTT sprite parsing) |
 | 7 | DASH | Shaka, dash.js-based players | unsupported | ✅ but needs an engine-adapter refactor first (§3) |
 | 8 | FLV / raw MPEG-TS | Video.js + flv.js/mpegts.js plugins | unsupported | ✅ live-streaming use case (`mpegts.js`, see below) |
@@ -173,9 +186,12 @@ feature work to avoid unrelated visual-regression risk.
 - **Phase 0 — done:** `poster`/`autoplay`/`loop`/`muted` attribute passthrough;
   Picture-in-Picture (`core/pip.ts` + button, feature-detected, `change('pictureinpicture', …)`).
   Zero new dependencies, zero architecture changes.
-- **Phase 1 — planned:** Error + retry UI (`Modal.error`), resume playback (`createStore`,
-  opt-in via `remember-position`), subtitles/CC (`tracks` property + native `<track>` +
-  language picker).
+- **Phase 1 — done:** Error + retry UI (`core/error.ts` + lazy-loaded `Modal.error`, fatal
+  HLS errors + native `error`, opt-out via `disable-error-modal`); resume playback
+  (`core/resume.ts` + `createStore`, opt-in via `remember-position`, saved on
+  `pause`/`visibilitychange:hidden`, cleared on `ended`); subtitles/CC (`core/tracks.ts` +
+  `tracks` property + native `<track>` + an `<r-select>` language picker mirroring the
+  clarity selector, preference persisted globally via `createStore`).
 - **Phase 2 — planned:** Engine-adapter architecture generalization (HLS → lazy npm
   dependency behind the new `{load, destroy, getQualityLevels, setQuality}` interface) + DASH
   (`dashjs`) + FLV/TS (`mpegts.js`) — shipped together since all three depend on the same new
