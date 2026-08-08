@@ -35,6 +35,19 @@ export interface PlayerSeekDeps {
   safePlay: (showLoading: boolean) => void;
   pause: () => void;
   showControllerBar: (e?: MouseEvent) => void;
+  /**
+   * Self-forwarding entries for this module's own methods — handlers below call
+   * siblings through the RanPlayer wrapper (`this.seekToPercentage(...)` etc.)
+   * instead of the local closures, so a `vi.spyOn(player, 'seekToPercentage')`
+   * set up after construction still intercepts them (a bare local reference
+   * would forever point at the pre-spy original).
+   */
+  seekToPercentage: (percentage: number) => void;
+  syncProgressByPercentage: (percentage: number) => void;
+  updateCurrentProgress: () => void;
+  updateBufferedProgress: () => void;
+  requestAnimationFrame: (fn: Function) => void;
+  cancelAnimationFrame: () => void;
 }
 
 export interface PlayerSeekHandlers {
@@ -98,7 +111,7 @@ export function createSeekHandlers(deps: PlayerSeekDeps): PlayerSeekHandlers {
     const duration = resolveSeekDuration(durationFromVideo, durationFromContext);
     if (!Number.isFinite(duration) || duration <= 0) return;
     deps.setCurrentTime(duration * normalizeProgress(percentage));
-    updateCurrentProgress();
+    deps.updateCurrentProgress();
   };
 
   const requestAnimationFrameFn = (fn: Function): void => {
@@ -140,7 +153,7 @@ export function createSeekHandlers(deps: PlayerSeekDeps): PlayerSeekHandlers {
       visualSignals.duration.setter(duration);
       visualSignals.currentTime.setter(currentTime);
       if (Number.isFinite(duration) && duration > 0) {
-        updateBufferedProgress();
+        deps.updateBufferedProgress();
       }
     });
   };
@@ -156,7 +169,7 @@ export function createSeekHandlers(deps: PlayerSeekDeps): PlayerSeekHandlers {
       const rect = refs.progressWrap.getBoundingClientRect();
       const offsetX = e.clientX - rect.left;
       const percentage = range(offsetX / refs.progress.offsetWidth);
-      seekToPercentage(percentage);
+      deps.seekToPercentage(percentage);
     },
     /**
      * ARIA slider keyboard contract for the seek bar — Home/End jump to the
@@ -175,7 +188,7 @@ export function createSeekHandlers(deps: PlayerSeekDeps): PlayerSeekHandlers {
       const next = sliderStepFromKeydown(e, { current: currentPercentage, min: 0, max: 100 });
       if (next === undefined) return;
       e.preventDefault();
-      seekToPercentage(next / 100);
+      deps.seekToPercentage(next / 100);
     },
     progressDotMouseDown: (): void => {
       refs.playerBtn.style.setProperty('display', 'none');
@@ -187,7 +200,7 @@ export function createSeekHandlers(deps: PlayerSeekDeps): PlayerSeekHandlers {
       state.isSeeking = true;
       const video = deps.getVideo();
       state.wasPlayingBeforeSeek = !!video && !video.paused && !video.ended;
-      cancelAnimationFrameFn();
+      deps.cancelAnimationFrame();
     },
     progressDotMouseMove: (e: MouseEvent): void => {
       deps.showControllerBar(e);
@@ -195,7 +208,7 @@ export function createSeekHandlers(deps: PlayerSeekDeps): PlayerSeekHandlers {
       const rect = refs.progress.getBoundingClientRect();
       const offsetX = e.clientX - rect.left - 9;
       const percentage = range(offsetX / refs.progress.offsetWidth);
-      syncProgressByPercentage(percentage);
+      deps.syncProgressByPercentage(percentage);
       state.moveProgress.percentage = Math.floor(percentage * 100) / 100;
     },
     progressDotMouseMoveDocument: (e: MouseEvent): void => {
@@ -203,23 +216,23 @@ export function createSeekHandlers(deps: PlayerSeekDeps): PlayerSeekHandlers {
       const rect = refs.progress.getBoundingClientRect();
       const offsetX = e.clientX - rect.left - 9;
       const percentage = range(offsetX / refs.progress.offsetWidth);
-      syncProgressByPercentage(percentage);
+      deps.syncProgressByPercentage(percentage);
       state.moveProgress.percentage = Math.floor(percentage * 100) / 100;
     },
     progressDotMouseUp: (): void => {
       if (!state.moveProgress.mouseDown) return;
       const shouldResume = state.wasPlayingBeforeSeek;
-      seekToPercentage(state.moveProgress.percentage);
+      deps.seekToPercentage(state.moveProgress.percentage);
       state.moveProgress.mouseDown = false;
       state.isSeeking = false;
       state.wasPlayingBeforeSeek = false;
       if (shouldResume) {
         deps.safePlay(true);
-        requestAnimationFrameFn(updateCurrentProgress);
+        deps.requestAnimationFrame(deps.updateCurrentProgress);
         return;
       }
       deps.pause();
-      cancelAnimationFrameFn();
+      deps.cancelAnimationFrame();
     },
     progressMouseEnter: (e: MouseEvent): void => {
       refs.playerTip.style.setProperty('opacity', '1');

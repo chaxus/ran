@@ -251,7 +251,11 @@ export class RanPlayer extends RanElement {
     onRetry: () => this.updatePlayer(),
   });
   getMediaDispatchDeps = (): PlayerMediaDispatchDeps => ({
-    refs: { playerBtn: this._playerBtn, timeDivide: this._playerControllerBottomTimeDivide },
+    refs: {
+      playerBtn: this._playerBtn,
+      timeDivide: this._playerControllerBottomTimeDivide,
+      playerController: this._playerController,
+    },
     state: this._runtimeState,
     ctx: this.ctx,
     visualSignals: this._visualSignals,
@@ -294,6 +298,12 @@ export class RanPlayer extends RanElement {
     safePlay: (showLoading) => this.safePlay(showLoading),
     pause: () => this.pause(),
     showControllerBar: (e) => this.showControllerBar(e),
+    seekToPercentage: (percentage) => this.seekToPercentage(percentage),
+    syncProgressByPercentage: (percentage) => this.syncProgressByPercentage(percentage),
+    updateCurrentProgress: () => this.updateCurrentProgress(),
+    updateBufferedProgress: () => this.updateBufferedProgress(),
+    requestAnimationFrame: (fn) => this.requestAnimationFrame(fn),
+    cancelAnimationFrame: () => this.cancelAnimationFrame(),
   });
   getChromeDeps = (): PlayerChromeDeps => ({
     refs: {
@@ -315,6 +325,9 @@ export class RanPlayer extends RanElement {
     safePlay: (showLoading) => this.safePlay(showLoading),
     change: (name, value) => this.change(name, value),
     updateCurrentProgress: () => this.updateCurrentProgress(),
+    resize: () => this.resize(),
+    customRequestFullscreen: () => this.customRequestFullscreen(),
+    customExitFullscreen: () => this.customExitFullscreen(),
     getVolumeMemo: () => this._volume,
     setVolumeMemo: (n) => {
       this._volume = n;
@@ -334,6 +347,7 @@ export class RanPlayer extends RanElement {
     setLoadingState: (loading) => this.setLoadingState(loading),
     change: (name, value) => this.change(name, value),
     showErrorModal: (message) => this.showErrorModal(message),
+    createClaritySelect: () => this.createClaritySelect(),
   });
   getSubtitleDeps = (): PlayerSubtitleDeps => ({
     refs: { subtitleContainer: this._playControllerBottomSubtitle, player: this._player },

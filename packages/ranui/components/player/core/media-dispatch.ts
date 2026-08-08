@@ -9,12 +9,13 @@ import type { PlayerVisualSignals } from './store';
 
 export type PlayerMediaDispatchRuntimeState = Pick<
   PlayerRuntimeState<PlaybackSnapshot>,
-  'moveProgress' | 'isSeeking' | 'isSwitchingSource' | 'pendingPlaybackRestore'
+  'moveProgress' | 'isSeeking' | 'isSwitchingSource' | 'pendingPlaybackRestore' | 'controllerBarTimeId'
 >;
 
 export interface PlayerMediaDispatchRefs {
   playerBtn: HTMLElement;
   timeDivide: HTMLElement;
+  playerController: HTMLElement;
 }
 
 export interface PlayerMediaDispatchDeps {
@@ -238,10 +239,11 @@ export function createMediaEventHandlers(deps: PlayerMediaDispatchDeps): PlayerM
       deps.change('pause', e);
       visualSignals.isPlaying.setter(false);
       deps.cancelAnimationFrame();
-      // `ctx.currentState` is already 'pause' here, which is not in
-      // `PLAY_STATE_LIST` — `showControllerBar()`'s else-branch is exactly
-      // this opacity-reset + timer-clear, so delegate instead of duplicating it.
-      deps.showControllerBar();
+      refs.playerController.style.setProperty('opacity', '1');
+      if (state.controllerBarTimeId) {
+        clearTimeout(state.controllerBarTimeId);
+        state.controllerBarTimeId = undefined;
+      }
     },
   };
 }

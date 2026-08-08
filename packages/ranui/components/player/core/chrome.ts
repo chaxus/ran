@@ -32,6 +32,16 @@ export interface PlayerChromeDeps {
   safePlay: (showLoading: boolean) => void;
   change: (name: string, value: unknown) => void;
   updateCurrentProgress: () => void;
+  /**
+   * Self-forwarding entries for this module's own `resize`/`customRequestFullscreen`/
+   * `customExitFullscreen` — `openFullScreen`/`SpaceKeyDown` call these through the
+   * RanPlayer wrapper (`this.resize()` etc.) instead of the local closures below, so a
+   * `vi.spyOn(player, 'resize')` set up after construction still intercepts them (a bare
+   * local reference would forever point at the pre-spy original).
+   */
+  resize: () => void;
+  customRequestFullscreen: () => Promise<void>;
+  customExitFullscreen: () => Promise<void>;
   getVolumeMemo: () => number | undefined;
   setVolumeMemo: (n: number) => void;
   rememberPosition: () => boolean;
@@ -142,18 +152,20 @@ export function createChromeHandlers(deps: PlayerChromeDeps): PlayerChromeHandle
 
   const openFullScreen = (): void => {
     if (!ctx.fullScreen) {
-      customRequestFullscreen()
+      deps
+        .customRequestFullscreen()
         .then(() => {
-          resize();
+          deps.resize();
           ctx.fullScreen = true;
         })
         .catch((error) => {
           if (deps.isDebug()) console.warn(`full screen error:${error}`);
         });
     } else {
-      customExitFullscreen()
+      deps
+        .customExitFullscreen()
         .then(() => {
-          resize();
+          deps.resize();
           ctx.fullScreen = false;
         })
         .catch((error) => {
@@ -182,7 +194,8 @@ export function createChromeHandlers(deps: PlayerChromeDeps): PlayerChromeHandle
         dispatchClickAction(e);
       }
       if (e.code === 'Escape') {
-        customExitFullscreen()
+        deps
+          .customExitFullscreen()
           .then(() => {
             ctx.fullScreen = false;
           })

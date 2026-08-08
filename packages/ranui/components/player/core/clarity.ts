@@ -33,6 +33,13 @@ export interface PlayerClarityDeps<TLevel extends ManifestLevelLike = ManifestLe
   setLoadingState: (loading: boolean) => void;
   change: (name: string, value: unknown) => void;
   showErrorModal: (message: string) => void;
+  /**
+   * Self-forwarding entry for this module's own `createClaritySelect` —
+   * `manifestLoaded` calls it through the RanPlayer wrapper instead of the
+   * local closure below, so a `vi.spyOn(player, 'createClaritySelect')` set
+   * up after construction still intercepts it.
+   */
+  createClaritySelect: () => void;
 }
 
 export interface PlayerClarityHandlers<TLevel extends ManifestLevelLike = ManifestLevelLike> {
@@ -102,7 +109,7 @@ export function createClarityHandlers<TLevel extends ManifestLevelLike = Manifes
       ctx.levels.push(...normalized.levels);
       normalized.levelMapEntries.forEach(([name, levelUrl]) => ctx.levelMap.set(name, levelUrl));
       ctx.url = url;
-      createClaritySelect();
+      deps.createClaritySelect();
       deps.change('hlsManifestLoaded', { data });
     }
   };
