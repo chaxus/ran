@@ -19,7 +19,7 @@ export interface Context {
 
 export class Checkbox extends RanElement {
   // Participate in native forms: the host relays its checked state via
-  // ElementInternals.setFormValue, so `new FormData(form)` (which <r-form> uses)
+  // ElementInternals.setFormValue, so `new FormData(form)`
   // collects it even though the visual <input> lives in shadow DOM.
   static formAssociated = true;
   _events = new EventManager();

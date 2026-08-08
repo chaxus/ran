@@ -87,7 +87,6 @@ export const componentEntries: Record<string, string> = {
   content: resolve(__dirname, 'components/popover/content/index.ts'),
   dropdown: resolve(__dirname, 'components/dropdown/index.ts'),
   loading: resolve(__dirname, 'components/loading/index.ts'),
-  form: resolve(__dirname, 'components/form/index.ts'),
   scratch: resolve(__dirname, 'components/scratch/index.ts'),
   card: resolve(__dirname, 'components/card/index.ts'),
   glass: resolve(__dirname, 'components/glass/index.ts'),

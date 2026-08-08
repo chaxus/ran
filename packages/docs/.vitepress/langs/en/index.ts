@@ -432,7 +432,7 @@ const themeEnConfig: DefaultTheme.Config = {
         text: 'Data Entry',
         items: [
           { text: 'Input', link: '/src/ranui/input/' },
-          { text: 'Form', link: '/src/ranui/form/' },
+          { text: 'Forms', link: '/src/ranui/form/' },
           { text: 'ColorPicker', link: '/src/ranui/colorpicker/' },
         ],
       },

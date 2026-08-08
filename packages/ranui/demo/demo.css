@@ -177,13 +177,13 @@ body::before {
 
 .lang-select {
   width: 96px;
-  --ran-select-selection-item-left: 24px;
+  --ran-select-item-left: 24px;
   /* no arrow, so the item doesn't need to reserve room on the right */
-  --ran-select-selection-item-right: 8px;
-  --ran-select-selection-color: currentColor;
+  --ran-select-item-right: 8px;
+  --ran-select-color: currentColor;
   --ran-select-root-color: currentColor;
   /* drop the chevron — the globe leads instead */
-  --ran-select-selection-icon-display: none;
+  --ran-select-icon-display: none;
 }
 
 #theme-toggle {

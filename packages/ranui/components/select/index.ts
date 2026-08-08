@@ -48,7 +48,7 @@ const animationTime = 300;
 
 export class Select extends RanElement {
   // Participate in native forms: the selected value is host state, so relay it via
-  // ElementInternals so `new FormData(form)` (used by <r-form>) collects it.
+  // ElementInternals so `new FormData(form)` collects it.
   static formAssociated = true;
   _internals?: ElementInternals;
   _events = new EventManager();

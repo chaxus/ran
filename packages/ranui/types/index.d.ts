@@ -17,7 +17,6 @@ import type { Loading } from '@/components/loading';
 import type { Math } from '@/components/math';
 import type { Popover } from '@/components/popover';
 import type { Content } from '@/components/popover/content';
-import type { CustomElement as Form } from '@/components/form';
 import type ScratchTicket from '@/components/scratch';
 import type { Dropdown } from '@/components/dropdown';
 import type { DropdownItem } from '@/components/select/dropdown-item';
@@ -43,7 +42,6 @@ declare global {
     'r-math': Math;
     'r-popover': Popover;
     'r-content': Content;
-    'r-form': Form;
     'r-scratch': ScratchTicket;
     'r-dropdown': Dropdown;
     'r-dropdown-item': DropdownItem;

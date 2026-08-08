@@ -89,9 +89,6 @@
       "card": [
         "./dist/components/card/index.d.ts"
       ],
-      "form": [
-        "./dist/components/form/index.d.ts"
-      ],
       "scratch": [
         "./dist/components/scratch/index.d.ts"
       ],
@@ -327,11 +324,6 @@
     "./card": {
       "types": "./dist/components/card/index.d.ts",
       "import": "./dist/card.js",
-      "require": "./dist/index.cjs"
-    },
-    "./form": {
-      "types": "./dist/components/form/index.d.ts",
-      "import": "./dist/form.js",
       "require": "./dist/index.cjs"
     },
     "./scratch": {

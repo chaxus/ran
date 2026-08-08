@@ -1,144 +1,96 @@
-# Form
+---
+description: 'How to build forms with ranui — r-input, r-checkbox, and r-select work directly inside a plain native <form>, no wrapper component required.'
+---
 
-Lightweight wrapper around a native `<form>` that serializes it into a JSON string on submit.
+# Forms
 
-> **Use when** you need to collect a set of named fields and read them back as a serialized JSON string on submit — `<r-form>` wraps your own native `<form>`, stops its default page-navigating submit, and serializes it for you.
+ranui does not ship a `<form>`-wrapping component. `r-input`, `r-checkbox`, and `r-select` are themselves [Form-Associated Custom Elements](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_form-associated_custom_elements) — each calls `attachInternals()` and relays its value via `ElementInternals.setFormValue()` — so they already work inside a plain native `<form>`: `new FormData(form)` collects them, `form.reset()` restores their pre-interaction state, and a `required` field blocks submission and shows the browser's native validation UI, anchored on the field. None of that needs any ranui-specific markup.
+
+> **Use when** you're assembling a form out of `r-input`/`r-checkbox`/`r-select` — just use a real `<form>`, and reach for `serializeForm()` (below) if you want the submitted values as a plain object instead of hand-rolling `FormData` iteration.
 
 ## Quick Start
 
-### Basic Usage
-
 <Demo column>
-  <r-form>
-    <form>
-      <r-input name="username" label="Username" placeholder="Enter username"></r-input>
-      <r-checkbox name="subscribe" value="yes">Subscribe to newsletter</r-checkbox>
-      <r-button type="primary"><button type="submit" style="all: unset; cursor: pointer">Submit</button></r-button>
-    </form>
-  </r-form>
-</Demo>
-
-```html
-<r-form>
-  <form>
+  <form onsubmit="event.preventDefault(); message.info(new FormData(this).get('username'))">
     <r-input name="username" label="Username" placeholder="Enter username"></r-input>
     <r-checkbox name="subscribe" value="yes">Subscribe to newsletter</r-checkbox>
-    <button type="submit">Submit</button>
+    <r-button type="primary"><button type="submit" style="all: unset; cursor: pointer">Submit</button></r-button>
   </form>
-</r-form>
-```
-
-`<r-form>` requires a real `<form>` as its child — it does not create one for you. That is deliberate: a `<form>` hidden inside shadow DOM can never become the form owner of anything outside it (verified — not just theoretical; see [Why a real `<form>`?](#why-a-real-form) below), so there is no shadow-DOM trick that could stand in for your own `<form>`. `<r-form>` just gives that `<form>` a sensible default layout (vertical stack, 16px gap — zero configuration needed, as above) and listens for its `submit`/`reset`.
-
-## API Reference
-
-### Properties
-
-| Property | Type             | Default | Description                                                                                    |
-| -------- | ---------------- | ------- | ---------------------------------------------------------------------------------------------- |
-| `value`  | `string \| null` | `null`  | Serialized form state as a JSON string, (re)written fresh every time the `<form>` is submitted |
-| `sheet`  | `string`         | `''`    | CSS injected into the component's shadow DOM, targeting the slotted `<form>` via `::slotted()` |
-
-### Serialized Value `value`
-
-On submit, `<r-form>` calls `preventDefault()` (stopping the native page-navigating submit), collects the form's named fields via `FormData` into a plain object, and writes `JSON.stringify(...)` of that object to `value` — recomputed fresh on every submit, so it always reflects what was actually in the fields at that moment. Setting `value` reflects to the `value` attribute; a `null` value is ignored. A native `reset` (e.g. `<button type="reset">` or `form.reset()`) clears `value` back to `null`.
-
-<Demo column>
-  <r-form>
-    <form>
-      <r-input name="email" label="Email" placeholder="you@example.com"></r-input>
-      <r-button type="primary"><button type="submit" style="all: unset; cursor: pointer">Save</button></r-button>
-    </form>
-  </r-form>
 </Demo>
 
 ```html
-<r-form id="signup">
-  <form>
-    <r-input name="email" label="Email" placeholder="you@example.com"></r-input>
-    <button type="submit">Save</button>
-  </form>
-</r-form>
+<form id="signup">
+  <r-input name="username" label="Username" placeholder="Enter username"></r-input>
+  <r-checkbox name="subscribe" value="yes">Subscribe to newsletter</r-checkbox>
+  <button type="submit">Submit</button>
+</form>
 
-<script>
-  const form = document.querySelector('#signup');
-  // Read the serialized JSON string after the internal form submits
-  console.log(form.value); // e.g. '{"email":"you@example.com"}'
-</script>
-```
+<script type="module">
+  import { serializeForm } from 'ranui';
 
-### Layout and Styling `sheet`
-
-The slotted `<form>` gets a default vertical flex layout (`flex-direction: column`, `align-items: stretch`, `gap: 16px`). Three ways to customize it, in order of how much you're changing:
-
-- **CSS variables** — for value-only tweaks, set them directly on the host, no `sheet` needed: `--ran-form-gap`, `--ran-form-flex-direction`, `--ran-form-align-items`, `--ran-form-content-display`, and `--ran-form-display` (the host itself, default `contents`).
-- **Plain CSS on your own `<form>`** — it's a real light-DOM element, so an ordinary rule (a class, an id, `r-form form { ... }`) works with no ranui-specific mechanism at all.
-- **`sheet`** — for structural changes (like switching to a grid) using the same convention as every other ranui component, injected as `::slotted(form) { ... }`.
-
-<Demo column>
-  <r-form sheet="::slotted(form) { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }">
-    <form>
-      <r-input name="first" label="First name"></r-input>
-      <r-input name="last" label="Last name"></r-input>
-      <r-button type="primary"><button type="submit" style="all: unset; cursor: pointer">Continue</button></r-button>
-    </form>
-  </r-form>
-</Demo>
-
-```html
-<r-form sheet="::slotted(form) { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }">
-  <form>
-    <r-input name="first" label="First name"></r-input>
-    <r-input name="last" label="Last name"></r-input>
-    <button type="submit">Continue</button>
-  </form>
-</r-form>
-```
-
-```css
-/* Equivalent value-only tweak, no sheet: */
-r-form {
-  --ran-form-gap: 24px;
-}
-```
-
-## Events
-
-`r-form` does not dispatch any custom events. It listens for `submit` and `reset` bubbling up from its slotted `<form>`: `submit` is prevented (no page navigation) and (re)computes `value`; `reset` clears `value` back to `null`.
-
-```html
-<r-form id="profile">
-  <form>
-    <r-input name="name" label="Name"></r-input>
-    <button type="submit">Submit</button>
-  </form>
-</r-form>
-
-<script>
-  const form = document.querySelector('#profile');
-  document.querySelector('#profile button[type="submit"]').addEventListener('click', () => {
-    // value is set from the submit that just bubbled through
-    console.log(form.value);
+  document.getElementById('signup').addEventListener('submit', (event) => {
+    event.preventDefault(); // a real <form> otherwise navigates the page
+    console.log(serializeForm(event.target)); // { username: '...', subscribe: 'yes' }
   });
 </script>
 ```
 
-## Slots
+## `serializeForm(form)`
 
-### Default slot
+Collects a `<form>`'s named fields into a plain object via `FormData` — the boilerplate every consumer otherwise hand-rolls to turn a submit into something they can `JSON.stringify` or send as a fetch body. It's a plain function with no dependency on ranui fields specifically; it works with any real `<form>`.
 
-The single (unnamed) slot — put your own `<form>` (and only that) inside `<r-form>`.
+```ts
+function serializeForm(form: HTMLFormElement): Record<string, unknown>;
+```
 
-## Why a real `<form>`?
+A field with more than one value under the same `name` (e.g. multiple checkboxes sharing a name) comes back as an array; everything else comes back as a single value.
 
-It would be simpler on the surface for `<r-form>` to build its own internal `<form>` in shadow DOM and slot your fields into it — earlier versions of this component did exactly that. It does not work: a form owner is resolved by walking the real (light) DOM ancestor chain, and that walk never crosses into a shadow root. A `<form>` hidden inside shadow DOM can never become the form owner of light-DOM children, even ones rendered through a `<slot>` — this was verified directly (a plain `<input>` slotted that way has `.form === null` and is invisible to `new FormData(...)`, in a real browser, not just a theoretical spec reading).
+```ts
+import { serializeForm } from 'ranui';
 
-So the `<form>` has to be real, authored by you, in the light DOM. The upside: `r-input`, `r-checkbox`, and `r-select` are themselves [Form-Associated Custom Elements](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_form-associated_custom_elements) (`attachInternals()` + `ElementInternals.setFormValue()`), so once they're real descendants of a real `<form>`, everything native just works: `new FormData(form)` collects them, `form.reset()` restores their pre-interaction state, and a `required` field blocks submission and shows the browser's native validation UI, anchored on the field — none of that needs a single line of code in `<r-form>`. `<r-form>` itself is optional convenience on top: a default layout plus a `value` property that saves you writing the `FormData` → JSON boilerplate yourself. You can skip it entirely and use a plain `<form>` if you don't need either.
+const data = serializeForm(document.querySelector('form'));
+// { username: 'alice', tags: ['a', 'b'] }
+fetch('/api/signup', { method: 'POST', body: JSON.stringify(data) });
+```
 
-## Best Practices
+## Layout
 
-- **Always nest a real `<form>`**: `<r-form>` does not create one — see [Why a real `<form>`?](#why-a-real-form).
-- **Name your fields**: only fields with a `name` are captured into the serialized `value`.
-- **Read the result from `value`**: the serialized JSON string lives on the `value` property/attribute after submit, and clears on reset.
-- **Prefer CSS variables or plain CSS for layout**: reach for `sheet` only for structural changes — see [Layout and Styling](#layout-and-styling-sheet).
-- **Reach for `required` on the fields themselves**: `r-input`, `r-checkbox`, and `r-select` all support `required` plus `checkValidity()`/`reportValidity()` — native browser validation blocks submission without any code in `<r-form>`.
+Fields have no default form-level layout — style your own `<form>` with plain CSS:
+
+<Demo column>
+  <form style="display: flex; flex-direction: column; gap: 16px;">
+    <r-input name="first" label="First name"></r-input>
+    <r-input name="last" label="Last name"></r-input>
+    <r-button type="primary"><button type="submit" style="all: unset; cursor: pointer">Continue</button></r-button>
+  </form>
+</Demo>
+
+```html
+<form style="display: flex; flex-direction: column; gap: 16px;">
+  <r-input name="first" label="First name"></r-input>
+  <r-input name="last" label="Last name"></r-input>
+  <button type="submit">Continue</button>
+</form>
+```
+
+## Validation and reset
+
+`r-input`, `r-checkbox`, and `r-select` all support `required` (which blocks submission and triggers the browser's native validation bubble, exactly like a native field) plus `checkValidity()`, `reportValidity()`, `validity`, and `validationMessage`. A native `form.reset()` — or `<button type="reset">` — restores each field to its pre-interaction state via `formResetCallback()`. See each field's own docs ([Input](/src/ranui/input/#form-association), [Checkbox](/src/ranui/checkbox/#form-association), [Select](/src/ranui/select/#form-association)) for details.
+
+<Demo column>
+  <form onsubmit="event.preventDefault(); message.success('Valid — submitted')">
+    <r-input name="username" label="Username" required></r-input>
+    <r-button type="primary"><button type="submit" style="all: unset; cursor: pointer">Submit</button></r-button>
+  </form>
+</Demo>
+
+```html
+<form>
+  <r-input name="username" label="Username" required></r-input>
+  <button type="submit">Submit</button>
+</form>
+```
+
+## Why no `<r-form>` wrapper?
+
+An earlier version of ranui had one — it built its own internal `<form>` inside shadow DOM and slotted fields into it. That does not work: a form owner is resolved by walking the real (light) DOM ancestor chain, and that walk never crosses into a shadow root. A `<form>` hidden inside shadow DOM can never become the form owner of light-DOM children, even ones rendered through a `<slot>` — this was verified directly (a plain `<input>` slotted that way has `.form === null` and is invisible to `new FormData(...)`, in a real browser, not just a theoretical spec reading). So the `<form>` always had to be real and in the light DOM regardless — which meant the wrapper added an extra element around your own `<form>` without adding any capability a plain `<form>` didn't already have. Removed in favor of `serializeForm()`, which gives you the one genuinely useful piece (submit → plain object) without the wrapper.

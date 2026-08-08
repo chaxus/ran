@@ -30,20 +30,20 @@
   }
   &(:not([disabled],[type="text"]):hover) {
     .selection {
-      border: var(--ran-select-selection-hover-border, 1px solid @theme-color);
+      border: var(--ran-select-hover-border, 1px solid @theme-color);
       &-search {
-        cursor: var(--ran-select-selection-hover-search-cursor, pointer);
+        cursor: var(--ran-select-search-hover-cursor, pointer);
       }
       &-item {
-        cursor: var(--ran-select-selection-hover-item-cursor, pointer);
-        color: var(--ran-select-selection-hover-item-color, var(--ran-color-text-disabled, #bfbfbf));
+        cursor: var(--ran-select-item-hover-cursor, pointer);
+        color: var(--ran-select-item-hover-color, var(--ran-color-text-disabled, #bfbfbf));
       }
     }
   }
   &([type="text"]) {
     .selection {
-      border: var(--ran-select-selection-text-border, none);
-      background: var(--ran-select-selection-text-background, transparent);
+      border: var(--ran-select-text-border, none);
+      background: var(--ran-select-text-background, transparent);
     }
     .icon {
       display: var(--ran-select-icon-text-display, none);
@@ -54,37 +54,37 @@
      matching r-button's convention. */
   &(:not([disabled],[type="text"]):focus-visible) {
     .selection {
-      border: var(--ran-select-selection-focus-border, 1px solid @theme-color);
-      box-shadow: var(--ran-select-selection-focus-box-shadow, var(--ran-focus-ring));
+      border: var(--ran-select-focus-border, 1px solid @theme-color);
+      box-shadow: var(--ran-select-focus-box-shadow, var(--ran-focus-ring));
       &-search {
-        cursor: var(--ran-select-selection-focus-search-cursor, pointer);
+        cursor: var(--ran-select-search-focus-cursor, pointer);
       }
       &-item {
-        cursor: var(--ran-select-selection-focus-item-cursor, pointer);
-        color: var(--ran-select-selection-focus-item-color, var(--ran-color-text-disabled, #bfbfbf));
+        cursor: var(--ran-select-item-focus-cursor, pointer);
+        color: var(--ran-select-item-focus-color, var(--ran-color-text-disabled, #bfbfbf));
       }
     }
   }
   .selection-search {
-    display: var(--ran-select-selection-search-display, none);
+    display: var(--ran-select-search-display, none);
   }
   &([showSearch]:not([disabled])) {
     .selection {
       &-search {
-        cursor: var(--ran-select-selection-search-visible-cursor, text);
-        display: var(--ran-select-selection-search-visible-display, block);
+        cursor: var(--ran-select-search-visible-cursor, text);
+        display: var(--ran-select-search-visible-display, block);
       }
       &-item {
-        cursor: var(--ran-select-selection-search-visible-item-cursor, pointer);
+        cursor: var(--ran-select-item-search-cursor, pointer);
       }
     }
   }
   &([showSearch]:not([disabled]):focus) {
     .selection {
       &-search {
-        display: var(--ran-select-selection-search-visible-display, block);
-        cursor: var(--ran-select-selection-search-visible-cursor, text);
-        opacity: var(--ran-select-selection-search-visible-opacity, 1);
+        display: var(--ran-select-search-visible-display, block);
+        cursor: var(--ran-select-search-visible-cursor, text);
+        opacity: var(--ran-select-search-visible-opacity, 1);
       }
     }
   }
@@ -104,111 +104,111 @@
   position: var(--ran-select-root-position, relative);
   display: var(--ran-select-root-display, inline-block);
   .selection {
-    position: var(--ran-select-selection-position, relative);
-    background-color: var(--ran-select-selection-background-color, var(--ran-color-bg-elevated, #ffffff));
-    background-image: var(--ran-select-selection-background-image, none);
-    border: var(--ran-select-selection-border, 1px solid var(--ran-color-border, #eaeaea));
+    position: var(--ran-select-position, relative);
+    background-color: var(--ran-select-background-color, var(--ran-color-bg-elevated, #ffffff));
+    background-image: var(--ran-select-background-image, none);
+    border: var(--ran-select-border, 1px solid var(--ran-color-border, #eaeaea));
     /* No default transition: border-color / box-shadow / color are palette props
        and would fade on a theme flip. Consumers can opt in via the hook var. */
-    transition: var(--ran-select-selection-transition, none);
-    width: var(--ran-select-selection-width, 100%);
-    height: var(--ran-select-selection-height, 100%);
-    padding: var(--ran-select-selection-padding, 0 11px);
-    box-sizing: var(--ran-select-selection-box-sizing, border-box);
-    margin: var(--ran-select-selection-margin, 0);
-    color: var(--ran-select-selection-color, var(--ran-color-text, rgba(0, 0, 0, 0.88)));
-    font-size: var(--ran-select-selection-font-size, 14px);
-    line-height: var(--ran-select-selection-line-height, 1.5714285714285714);
-    list-style: var(--ran-select-selection-list-style, none);
-    font-family: var(--ran-select-selection-font-family, inherit);
-    display: var(--ran-select-selection-display, flex);
-    border-radius: var(--ran-select-selection-border-radius, var(--ran-radius-sm, 6px));
+    transition: var(--ran-select-transition, none);
+    width: var(--ran-select-width, 100%);
+    height: var(--ran-select-height, 100%);
+    padding: var(--ran-select-padding, 0 11px);
+    box-sizing: var(--ran-select-box-sizing, border-box);
+    margin: var(--ran-select-margin, 0);
+    color: var(--ran-select-color, var(--ran-color-text, rgba(0, 0, 0, 0.88)));
+    font-size: var(--ran-select-font-size, 14px);
+    line-height: var(--ran-select-line-height, 1.5714285714285714);
+    list-style: var(--ran-select-list-style, none);
+    font-family: var(--ran-select-font-family, inherit);
+    display: var(--ran-select-display, flex);
+    border-radius: var(--ran-select-border-radius, var(--ran-radius-sm, 6px));
     &-search {
-      position: var(--ran-select-selection-search-position, absolute);
-      opacity: var(--ran-select-selection-search-opacity, 0);
-      top: var(--ran-select-selection-search-top, 0);
-      left: var(--ran-select-selection-search-left, 0);
-      height: var(--ran-select-selection-search-height, 100%);
-      inset-inline-start: var(--ran-select-selection-search-inset-inline-start, 11px);
-      inset-inline-end: var(--ran-select-selection-search-inset-inline-end, 11px);
-      margin: var(--ran-select-selection-search-margin, 0);
-      padding: var(--ran-select-selection-search-padding, 0);
-      background: var(--ran-select-selection-search-background, transparent);
-      border: var(--ran-select-selection-search-border, none);
-      outline: var(--ran-select-selection-search-outline, none);
-      appearance: var(--ran-select-selection-search-appearance, none);
-      font-family: var(--ran-select-selection-search-font-family, inherit);
-      cursor: var(--ran-select-selection-search-cursor, not-allowed);
+      position: var(--ran-select-search-position, absolute);
+      opacity: var(--ran-select-search-opacity, 0);
+      top: var(--ran-select-search-top, 0);
+      left: var(--ran-select-search-left, 0);
+      height: var(--ran-select-search-height, 100%);
+      inset-inline-start: var(--ran-select-search-inset-inline-start, 11px);
+      inset-inline-end: var(--ran-select-search-inset-inline-end, 11px);
+      margin: var(--ran-select-search-margin, 0);
+      padding: var(--ran-select-search-padding, 0);
+      background: var(--ran-select-search-background, transparent);
+      border: var(--ran-select-search-border, none);
+      outline: var(--ran-select-search-outline, none);
+      appearance: var(--ran-select-search-appearance, none);
+      font-family: var(--ran-select-search-font-family, inherit);
+      cursor: var(--ran-select-search-cursor, not-allowed);
       &::-webkit-search-cancel-button {
-        display: var(--ran-select-selection-search-cancel-display, none);
-        -webkit-appearance: var(--ran-select-selection-search-cancel-appearance, none);
+        display: var(--ran-select-search-cancel-display, none);
+        -webkit-appearance: var(--ran-select-search-cancel-appearance, none);
       }
       &::part(input) {
-        border: var(--ran-select-selection-search-input-border, none);
-        padding: var(--ran-select-selection-search-input-padding, 0);
+        border: var(--ran-select-search-input-border, none);
+        padding: var(--ran-select-search-input-padding, 0);
         height: 100%;
         min-height: 100%;
         box-sizing: border-box;
-        outline: var(--ran-select-selection-search-input-outline, none);
+        outline: var(--ran-select-search-input-outline, none);
         &:active {
-          border: var(--ran-select-selection-search-input-active-border, none);
-          padding: var(--ran-select-selection-search-input-active-padding, 0);
-          height: var(--ran-select-selection-search-input-active-height, 100%);
-          outline: var(--ran-select-selection-search-input-active-outline, none);
-          border-color: var(--ran-select-selection-search-input-active-border-color, transparent);
-          box-shadow: var(--ran-select-selection-search-input-active-box-shadow, none);
-          border-right-width: var(--ran-select-selection-search-input-active-border-right-width, 0px);
+          border: var(--ran-select-search-active-border, none);
+          padding: var(--ran-select-search-active-padding, 0);
+          height: var(--ran-select-search-active-height, 100%);
+          outline: var(--ran-select-search-active-outline, none);
+          border-color: var(--ran-select-search-active-border-color, transparent);
+          box-shadow: var(--ran-select-search-active-box-shadow, none);
+          border-right-width: var(--ran-select-search-active-border-width, 0px);
         }
       }
       &::part(content) {
-        min-height: var(--ran-select-selection-search-input-content-min-height, 0);
+        min-height: var(--ran-select-search-content-min-height, 0);
       }
     }
     &-item {
-      position: var(--ran-select-selection-item-position, absolute);
-      top: var(--ran-select-selection-item-top, 0);
-      left: var(--ran-select-selection-item-left, 12px);
+      position: var(--ran-select-item-position, absolute);
+      top: var(--ran-select-item-top, 0);
+      left: var(--ran-select-item-left, 12px);
       /* bound the width so the ellipsis actually triggers (leaves room for the arrow) */
-      right: var(--ran-select-selection-item-right, 28px);
-      margin: var(--ran-select-selection-item-margin, 0);
-      padding: var(--ran-select-selection-item-padding, 0);
-      background: var(--ran-select-selection-item-background, transparent);
-      border: var(--ran-select-selection-item-border, none);
-      outline: var(--ran-select-selection-item-outline, none);
-      appearance: var(--ran-select-selection-item-appearance, none);
-      font-family: var(--ran-select-selection-item-font-family, inherit);
-      height: var(--ran-select-selection-item-height, 100%);
-      display: var(--ran-select-selection-item-display, flex);
-      align-items: var(--ran-select-selection-item-align-items, center);
-      user-select: var(--ran-select-selection-item-user-select, none);
-      overflow: var(--ran-select-selection-item-overflow, hidden);
-      white-space: var(--ran-select-selection-item-white-space, nowrap);
-      text-overflow: var(--ran-select-selection-item-text-overflow, ellipsis);
-      cursor: var(--ran-select-selection-item-cursor, pointer);
+      right: var(--ran-select-item-right, 28px);
+      margin: var(--ran-select-item-margin, 0);
+      padding: var(--ran-select-item-padding, 0);
+      background: var(--ran-select-item-background, transparent);
+      border: var(--ran-select-item-border, none);
+      outline: var(--ran-select-item-outline, none);
+      appearance: var(--ran-select-item-appearance, none);
+      font-family: var(--ran-select-item-font-family, inherit);
+      height: var(--ran-select-item-height, 100%);
+      display: var(--ran-select-item-display, flex);
+      align-items: var(--ran-select-item-align-items, center);
+      user-select: var(--ran-select-item-user-select, none);
+      overflow: var(--ran-select-item-overflow, hidden);
+      white-space: var(--ran-select-item-white-space, nowrap);
+      text-overflow: var(--ran-select-item-text-overflow, ellipsis);
+      cursor: var(--ran-select-item-cursor, pointer);
     }
     &-select {
-      color: var(--ran-select-selection-select-color, var(--ran-color-text-disabled, rgba(0, 0, 0, 0.25)));
+      color: var(--ran-select-select-color, var(--ran-color-text-disabled, rgba(0, 0, 0, 0.25)));
     }
     .icon {
-      display: var(--ran-select-selection-icon-display, flex);
-      align-items: var(--ran-select-selection-icon-align-items, center);
-      color: var(--ran-select-selection-icon-color, var(--ran-color-text-disabled, rgba(0, 0, 0, 0.25)));
-      font-style: var(--ran-select-selection-icon-font-style, normal);
-      text-align: var(--ran-select-selection-icon-text-align, center);
-      text-transform: var(--ran-select-selection-icon-text-transform, none);
-      text-rendering: var(--ran-select-selection-icon-text-rendering, optimizeLegibility);
+      display: var(--ran-select-icon-display, flex);
+      align-items: var(--ran-select-icon-align-items, center);
+      color: var(--ran-select-icon-color, var(--ran-color-text-disabled, rgba(0, 0, 0, 0.25)));
+      font-style: var(--ran-select-icon-font-style, normal);
+      text-align: var(--ran-select-icon-text-align, center);
+      text-transform: var(--ran-select-icon-text-transform, none);
+      text-rendering: var(--ran-select-icon-text-rendering, optimizeLegibility);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-      position: var(--ran-select-selection-icon-position, absolute);
-      top: var(--ran-select-selection-icon-top, 50%);
-      inset-inline-start: var(--ran-select-selection-icon-inset-inline-start, auto);
-      inset-inline-end: var(--ran-select-selection-icon-inset-inline-end, 8px);
-      height: var(--ran-select-selection-icon-height, 16px);
+      position: var(--ran-select-icon-position, absolute);
+      top: var(--ran-select-icon-top, 50%);
+      inset-inline-start: var(--ran-select-icon-inset-inline-start, auto);
+      inset-inline-end: var(--ran-select-icon-inset-inline-end, 8px);
+      height: var(--ran-select-icon-height, 16px);
       /* center on the vertical midline regardless of icon height (was a brittle -3px margin) */
-      transform: var(--ran-select-selection-icon-transform, translateY(-50%));
-      margin-top: var(--ran-select-selection-icon-margin-top, 0);
-      font-size: var(--ran-select-selection-icon-font-size, 12px);
-      pointer-events: var(--ran-select-selection-icon-pointer-events, none);
+      transform: var(--ran-select-icon-transform, translateY(-50%));
+      margin-top: var(--ran-select-icon-margin-top, 0);
+      font-size: var(--ran-select-icon-font-size, 12px);
+      pointer-events: var(--ran-select-icon-pointer-events, none);
     }
   }
 }

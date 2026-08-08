@@ -27,7 +27,13 @@ import { createPlaybackVisualEffects, type PlayerVisualEffectRefs } from './core
 import { ensurePlayerView } from './core/view';
 import { EventManager, View } from '@/utils/builder';
 import { RanElement, batch } from '@/utils/index';
-import { ensureShadowRoot, getStringAttribute, setStringAttribute, syncSheetAttribute } from '@/utils/component';
+import {
+  ensureShadowRoot,
+  getStringAttribute,
+  setBooleanAttribute,
+  setStringAttribute,
+  syncSheetAttribute,
+} from '@/utils/component';
 import playerCss from './index.less?inline';
 import { defineSSR } from '@/utils/ssr-registry';
 import { isActivationKey, sliderStepFromKeydown } from '@/utils/a11y';
@@ -144,7 +150,20 @@ export class RanPlayer extends RanElement {
   _hls?: HlsPlayer;
   _pendingPlaybackRestore?: PlaybackSnapshot;
   static get observedAttributes(): string[] {
-    return ['src', 'volume', 'currentTime', 'currenttime', 'playbackRate', 'playbackrate', 'debug', 'sheet'];
+    return [
+      'src',
+      'volume',
+      'currentTime',
+      'currenttime',
+      'playbackRate',
+      'playbackrate',
+      'debug',
+      'sheet',
+      'poster',
+      'autoplay',
+      'loop',
+      'muted',
+    ];
   }
   /**
    * @description: 初始化 view 和 video 的全局上下文

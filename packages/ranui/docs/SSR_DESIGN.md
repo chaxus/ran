@@ -182,7 +182,7 @@ const tree = parseToComponentTree(html); // 建立父子关系
 const output = serializeTree(tree); // 父组件序列化时可读取 children
 ```
 
-涉及组件：`r-select`（读取 `r-option` 的 value/label）、`r-tabs`（读取 `r-tab` 的 label/key）、`r-form`（读取表单字段）。
+涉及组件：`r-select`（读取 `r-option` 的 value/label）、`r-tabs`（读取 `r-tab` 的 label/key）。
 
 ---
 
