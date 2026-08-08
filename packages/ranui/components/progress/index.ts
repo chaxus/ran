@@ -109,9 +109,23 @@ export class Progress extends RanElement {
     this.change();
   };
 
+  /**
+   * `document` mousemove/mouseup are attached here (drag start) and removed in
+   * `progressDotMouseUp`/`disconnectedCallback` (drag end) — NOT bound for the
+   * component's whole connected lifetime. A page can reasonably have many
+   * `<r-progress>`, most never dragged (e.g. a list of upload rows); a
+   * document-level listener per instance would run its no-op
+   * `moveProgress.mouseDown` check on every single mousemove for the entire
+   * page for as long as any of them exist. Scoping it to "only while a drag on
+   * *this* instance is actually happening" keeps that cost at the number of
+   * drags in flight (normally 0 or 1), not the number of progress bars on the
+   * page.
+   */
   progressDotMouseDown = (e: MouseEvent): void => {
     this.moveProgress.mouseDown = true;
     e.stopPropagation();
+    document.addEventListener('mousemove', this.progressDotMouseMove as EventListener);
+    document.addEventListener('mouseup', this.progressDotMouseUp as EventListener);
   };
 
   progressDotMouseMove = (e: MouseEvent): void => {
@@ -127,6 +141,8 @@ export class Progress extends RanElement {
 
   progressDotMouseUp = (): void => {
     this.moveProgress.mouseDown = false;
+    document.removeEventListener('mousemove', this.progressDotMouseMove as EventListener);
+    document.removeEventListener('mouseup', this.progressDotMouseUp as EventListener);
   };
 
   /**
@@ -226,11 +242,12 @@ export class Progress extends RanElement {
    * actually in effect at interaction time, not at connect time.
    */
   dragEvent = (): void => {
+    // Click and keydown are cheap and rarely fire, so binding them
+    // unconditionally is fine — the `document` mousemove/mouseup pair is not
+    // (see `progressDotMouseDown`) and is deliberately not bound here.
     this._events
       .on(this._progress, 'click', this.progressClick)
       .on(this._progressDot, 'mousedown', this.progressDotMouseDown)
-      .on(document, 'mousemove', this.progressDotMouseMove as EventListener)
-      .on(document, 'mouseup', this.progressDotMouseUp as EventListener)
       .on(this, 'keydown', this.progressKeydown as EventListener);
   };
 
@@ -252,6 +269,11 @@ export class Progress extends RanElement {
 
   disconnectedCallback(): void {
     this._events.abort();
+    // In case the element is removed mid-drag (mouse still down) — these are
+    // bound outside `_events` (see progressDotMouseDown), so `.abort()` above
+    // doesn't reach them. Removing a listener that was never added is a no-op.
+    document.removeEventListener('mousemove', this.progressDotMouseMove as EventListener);
+    document.removeEventListener('mouseup', this.progressDotMouseUp as EventListener);
   }
 
   attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
