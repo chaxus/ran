@@ -1,12 +1,12 @@
 ---
-description: 'The ranui Player (<r-player>) wraps native <video> with a unified control bar: play, progress dragging, volume, speed and fullscreen, with HLS/DASH/FLV streaming.'
+description: 'The ranui Player (<r-player>) wraps native <video> with a unified control bar: play, progress dragging, volume, speed and fullscreen, with HLS/DASH/FLV/WebRTC streaming.'
 ---
 
 # Player
 
-A native `<r-player>` media element that wraps a `<video>` with a unified control bar, progress dragging, volume control, playback speed, fullscreen, and HLS/DASH/FLV streaming.
+A native `<r-player>` media element that wraps a `<video>` with a unified control bar, progress dragging, volume control, playback speed, fullscreen, and HLS/DASH/FLV/WebRTC streaming.
 
-> **Use when** you need a video player with a built-in control bar, progress scrubbing, playback speed, fullscreen, and HLS/DASH/FLV streaming — `<r-player>` wraps `<video>` and runs unchanged across frameworks.
+> **Use when** you need a video player with a built-in control bar, progress scrubbing, playback speed, fullscreen, and HLS/DASH/FLV/WebRTC streaming — `<r-player>` wraps `<video>` and runs unchanged across frameworks.
 
 Built on Web Components, with `hls.js`/`dashjs`/`mpegts.js` lazy-loaded on demand for their respective formats, so the same player runs unchanged across frameworks. Capabilities driven from source:
 
@@ -61,7 +61,7 @@ Built on Web Components, with `hls.js`/`dashjs`/`mpegts.js` lazy-loaded on deman
 | `remember-position` | `boolean` | `false` | Opt in to resume playback: saves the current position to `localStorage` (keyed by `src`) on pause / when the tab is hidden, restores it on the next load of the same `src`, and clears it once playback ends. |
 | `tracks`       | `PlayerTrackConfig[]` | `[]`    | Subtitle/CC tracks — **JS property only, no matching attribute** (the player clears its own light DOM on every load, so declarative `<track>` children wouldn't survive). See [Subtitles/CC](#subtitles-cc-tracks) below. |
 
-> Observed attributes (from `observedAttributes`): `src`, `format`, `volume`, `currentTime` / `currenttime`, `playbackRate` / `playbackrate`, `debug`, `sheet`, `poster`, `autoplay`, `loop`, `muted`, `disable-error-modal`, `remember-position`.
+> Observed attributes (from `observedAttributes`): `src`, `format`, `volume`, `currentTime` / `currenttime`, `playbackRate` / `playbackrate`, `debug`, `sheet`, `poster`, `thumbnails`, `autoplay`, `loop`, `muted`, `disable-error-modal`, `remember-position`.
 
 ### Video Source `src`
 
@@ -72,6 +72,30 @@ Built on Web Components, with `hls.js`/`dashjs`/`mpegts.js` lazy-loaded on deman
 ```html
 <r-player src="/ran/hls/example.m3u8"></r-player>
 ```
+
+### WebRTC Live Playback `format="webrtc"`
+
+```html
+<r-player format="webrtc" src="https://stream.example.com/whep/room123"></r-player>
+```
+
+For low-latency live streams, set `format="webrtc"` and point `src` at a **WHEP** (WebRTC-HTTP
+Egress Protocol) endpoint — the kind Cloudflare Stream, LiveKit egress, Millicast, and similar
+platforms expose. There's no library dependency: `RTCPeerConnection` and `fetch` are native
+browser APIs, so unlike HLS/DASH/FLV this engine has no lazy chunk to download. A WHEP endpoint
+has no file extension to auto-detect, so `format="webrtc"` is **required** — it's never inferred
+from `src`.
+
+Under the hood: creates an `RTCPeerConnection` with `recvonly` audio/video transceivers, waits
+for ICE gathering, `POST`s the SDP offer to `src` (`Content-Type: application/sdp`), applies the
+SDP answer from the response body, and attaches the incoming stream via `video.srcObject`.
+Ending playback `DELETE`s the session resource the server returned in the response's `Location`
+header. Scope is deliberately modest: non-trickle ICE (capped at a few seconds, then proceeds
+with whatever candidates it has) rather than WHEP's PATCH-based trickle mechanism, and no
+`Link: rel="ice-server"` header parsing for server-supplied STUN/TURN hints — most directly
+reachable WHEP deployments work without either. Like FLV, there's no clarity selector: WHEP has
+no standard client-facing multi-bitrate selection, so `getMetrics()`'s `qualitySwitchCount` stays
+at `0` for this engine.
 
 ### Initial Volume `volume`
 
@@ -283,7 +307,7 @@ The player does not accept slotted content: it clears its own light-DOM children
 ## Best Practices
 
 - **Sizing**: The host is `display: block` with no intrinsic size — always give it an explicit width and height, otherwise the video collapses.
-- **Streaming engines**: `.m3u8` (HLS), `.mpd` (DASH), and `.flv`/`.ts` (FLV/MPEG-TS via `mpegts.js`) sources each load their engine lazily and automatically — no setup required. If a URL's extension can't be sniffed (extensionless/signed CDN URLs), set the `format` attribute explicitly (e.g. `format="dash"`) instead of relying on detection.
+- **Streaming engines**: `.m3u8` (HLS), `.mpd` (DASH), and `.flv`/`.ts` (FLV/MPEG-TS via `mpegts.js`) sources each load their engine lazily and automatically — no setup required. If a URL's extension can't be sniffed (extensionless/signed CDN URLs), set the `format` attribute explicitly (e.g. `format="dash"`) instead of relying on detection. WebRTC (`format="webrtc"`) is always explicit — a WHEP endpoint has nothing to sniff.
 - **One listener**: Prefer a single `change` listener with a `switch (detail.type)` over trying to attach many event handlers — all state flows through `change`.
 - **Volume units**: `volume` (attribute), `setVolume()`/`getVolume()`, and the `volume` change payload all use a single `0`–`100` scale. Only the underlying native `<video>.volume` is `0`–`1` — the player converts at that one boundary.
 - **Picture-in-Picture is progressive enhancement**: the button is hidden, not disabled, when the browser lacks support — don't rely on it always being present in the DOM.
@@ -291,4 +315,4 @@ The player does not accept slotted content: it clears its own light-DOM children
 
 ## Roadmap
 
-`<r-player>` is actively growing. Subtitles/CC, an error+retry UI, and resume playback (Phase 1), plus DASH and FLV/raw MPEG-TS playback behind an engine-agnostic adapter architecture (Phase 2), are done — thumbnail scrubbing preview, mobile gestures, AirPlay/Remote Playback, and QoE metrics are still planned. See [`PLAYER_ROADMAP.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/PLAYER_ROADMAP.md) in the repo for the full breakdown and current phase.
+`<r-player>` is actively growing. Subtitles/CC, an error+retry UI, and resume playback (Phase 1); DASH and FLV/raw MPEG-TS playback behind an engine-agnostic adapter architecture (Phase 2); QoE metrics, AirPlay/Remote Playback, mobile gestures, and thumbnail scrubbing preview (Phase 3); and WebRTC/WHEP live playback plus migrating the player's own control-bar icons onto `<r-icon>` (Phase 4) are all done. See [`PLAYER_ROADMAP.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/PLAYER_ROADMAP.md) in the repo for the full breakdown.

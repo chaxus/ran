@@ -6,7 +6,7 @@ shape), slots, and `::part()` names — extracted from source. For CSS variables
 (theming tokens) see [style-tokens-public.md](./style-tokens-public.md); for
 design rules see [DESIGN.md](./DESIGN.md).
 
-Generated at: 2026-08-08T14:36:09.848Z
+Generated at: 2026-08-08T15:29:33.582Z
 
 31 custom elements.
 
@@ -259,7 +259,7 @@ Source: `components/player/index.ts`
   - `currentTime: string`
   - `debug: string`
   - `disableErrorModal: boolean`
-  - `format: string` — 强制指定引擎（`hls`/`dash`/`flv`/`native`），给拿不到扩展名的
+  - `format: string` — 强制指定引擎（`hls`/`dash`/`flv`/`webrtc`/`native`），给拿不到扩展名的
   - `loop: boolean`
   - `moveProgress`
   - `muted: boolean`

@@ -76,7 +76,10 @@ gaps), and any newly-discovered gap is worth closing the same way rather than pa
   renders since there's nothing to switch.
 - **Format detection**: by `src`'s extension (`core/adapters/detect.ts`'s `detectFormat`), or
   forced explicitly via the `format` attribute for extensionless/signed streaming URLs.
-- **Not supported today**: WebRTC.
+- **WebRTC (WHEP)**: `format="webrtc"` — always explicit, never sniffed (no `src` extension
+  convention). `src` is a WHEP (WebRTC-HTTP Egress Protocol) endpoint URL — the kind
+  Cloudflare Stream, LiveKit egress, and Millicast expose. No lazy npm dependency:
+  `RTCPeerConnection`/`fetch` are native browser APIs (`core/adapters/webrtc.ts`).
 
 ### 1.3 Architecture (for context — see the player's own internal-refactor history)
 
@@ -126,7 +129,7 @@ green.
 | 9 | Mobile gestures (double-tap seek, swipe volume) | YouTube app, most native players | **shipped (Phase 3)** | ✅ done via `core/gestures.ts`, Pointer Events idiom borrowed from `r-mermaid` |
 | 10 | AirPlay / Remote Playback | native `<video controls>` on Safari/Chrome | **shipped (Phase 3)** | ✅ done via `core/remote-playback.ts`, feature-detected same as PiP |
 | 11 | QoE metrics hook | Shaka, hls.js's own stats, commercial players | **shipped (Phase 3)** | ✅ done via `core/metrics.ts`, pure computation on existing events |
-| 12 | WebRTC low-latency live | ultra-low-latency live players | unsupported | ❌ not planned — different transport model entirely (see §3) |
+| 12 | WebRTC low-latency live | ultra-low-latency live players | **shipped (Phase 4)** | ✅ done via WHEP (`core/adapters/webrtc.ts`), a new `webrtc` engine format — see §3 |
 
 ---
 
@@ -241,10 +244,27 @@ green.
   `RanPlayer.change()` feeds every event through `this._metrics.record(name, value)`; the
   counters reset on every `updatePlayer()` (a fresh `src`/`format` load) so a snapshot always
   describes the current source, never a cross-source running total. Exposed via `getMetrics()`.
-- **WebRTC — not planned.** Fundamentally different transport (no `<video src>` load; needs
-  `RTCPeerConnection` + a signaling server) — doesn't fit the engine-adapter model the other
-  three formats share, and is a different scope of work than everything else on this list.
-  Recorded here so it isn't silently forgotten, not because it's scheduled.
+- **WebRTC — shipped (Phase 4), via WHEP.** The blocker recorded here through Phase 0-3 was
+  real: WebRTC needs a signaling server to exchange SDP/ICE before `RTCPeerConnection` can do
+  anything, and a generic component library can't ship a signaling server or know a
+  consumer's app-specific one — that's what "doesn't fit the engine-adapter model" meant.
+  **WHEP** (WebRTC-HTTP Egress Protocol, an IETF draft) removes that blocker: it standardizes
+  signaling as a single HTTP `POST` (SDP offer in, SDP answer out), which is exactly the
+  "give it a URL" shape HLS/DASH/FLV already have. `core/adapters/webrtc.ts` implements a
+  WHEP client conforming to the same `EngineAdapter` interface as the other three — `src` is
+  a WHEP endpoint URL (what Cloudflare Stream, LiveKit egress, and Millicast expose), reached
+  only via the explicit `format="webrtc"` attribute (no `.whep` extension convention exists to
+  sniff). Unlike HLS/DASH/FLV, this engine needs **no lazy npm dependency at all** —
+  `RTCPeerConnection`/`fetch` are native browser APIs, so there's no chunk to download. Scope
+  deliberately kept modest: non-trickle ICE (waits for gathering to finish, capped at 3s, then
+  sends whatever candidates it has) rather than WHEP's PATCH-based trickle mechanism, and no
+  `Link: rel="ice-server"` header parsing for server-supplied STUN/TURN hints — both are real
+  parts of the WHEP spec, left out because they're substantial added complexity that most
+  directly-reachable WHEP deployments don't need. `getQualityLevels()` always returns `[]`,
+  matching FLV's "nothing to switch" behavior (WHEP has no standard client-facing multi-bitrate
+  selection). Errors surface through the same `error` adapter event as the other three engines
+  (network failure POSTing the offer, a non-`ok` response, or `RTCPeerConnection.connectionState`
+  becoming `'failed'`).
 
 ---
 
@@ -271,10 +291,10 @@ green.
   change event). AirPlay/Remote Playback (`core/remote-playback.ts` + `showRemotePlaybackPicker()`,
   a new `cast` icon). Mobile gestures (`core/gestures.ts`, a new `gestureseek` change event).
   Thumbnail scrubbing preview (`core/thumbnails.ts`, a new `thumbnails` attribute).
-- **Phase 4 — in progress:** Icon migration (play/pause/fullscreen/volume from legacy
-  background-image to `<r-icon>`/`registerIcon`, `components/player/img/` deleted) — **done**,
-  see §1.4. WebRTC low-latency live playback — still not scheduled (see §3's WebRTC entry for
-  why: a fundamentally different transport model, no `<video src>` load).
+- **Phase 4 — done:** Icon migration (play/pause/fullscreen/volume from legacy
+  background-image to `<r-icon>`/`registerIcon`, `components/player/img/` deleted, see §1.4).
+  WebRTC low-latency live playback via WHEP (`core/adapters/webrtc.ts`, a new `webrtc` engine
+  format, see §3).
 
 Every new control follows the opt-in rule already established elsewhere in ranui (§5): a
 bare `<r-player src="...">` stays exactly as simple as it is today.

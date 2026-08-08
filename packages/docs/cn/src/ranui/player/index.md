@@ -1,10 +1,10 @@
 ---
-description: 'ranui Player（<r-player>）在原生 <video> 之上封装统一控制栏：播放、进度拖拽、音量、倍速与全屏，支持 HLS/DASH/FLV 流媒体。'
+description: 'ranui Player（<r-player>）在原生 <video> 之上封装统一控制栏：播放、进度拖拽、音量、倍速与全屏，支持 HLS/DASH/FLV/WebRTC 流媒体。'
 ---
 
 # r-player 视频播放器
 
-基于 `web components`，让原生的标签`r-player`拥有统一的视频控件；`hls.js`/`dashjs`/`mpegts.js` 按需懒加载，分别对应 HLS/DASH/FLV 三种格式。
+基于 `web components`，让原生的标签`r-player`拥有统一的视频控件；`hls.js`/`dashjs`/`mpegts.js` 按需懒加载，分别对应 HLS/DASH/FLV 三种格式；WebRTC（WHEP）直接用浏览器原生 API，不需要额外的库。
 不采用`new Player(options)`的方式挂载到指定`dom`，视图的归视图，逻辑的归逻辑，所见及所得，更加直观。
 
 1. 可拖拽进度条
@@ -25,6 +25,7 @@ description: 'ranui Player（<r-player>）在原生 <video> 之上封装统一�
 16. 错误 + 重试弹窗——播放失败时默认弹出，可关闭
 17. 断点续播——可选开启，存到 `localStorage`
 18. QoE 埋点——`getMetrics()` 基于现有事件流算出卡顿次数/时长、首帧耗时、清晰度切换次数、错误次数
+19. WebRTC 低延迟直播——`format="webrtc"` + WHEP 端点 URL，浏览器原生 API，无需额外依赖
 
 ## 代码演示
 
@@ -42,7 +43,17 @@ description: 'ranui Player（<r-player>）在原生 <video> 之上封装统一�
 
 ### format
 
-强制指定播放引擎——`hls`/`dash`/`flv`/`native`——代替按 `src` 扩展名自动探测，给拿不到扩展名的加签/无后缀流地址用。改这个属性会重新加载播放器。
+强制指定播放引擎——`hls`/`dash`/`flv`/`webrtc`/`native`——代替按 `src` 扩展名自动探测，给拿不到扩展名的加签/无后缀流地址用。改这个属性会重新加载播放器。`webrtc`（WHEP 端点 URL）没有扩展名可探测，必须显式指定这个值。
+
+### WebRTC 低延迟直播 `format="webrtc"`
+
+```html
+<r-player format="webrtc" src="https://stream.example.com/whep/room123"></r-player>
+```
+
+低延迟直播场景下，把 `format` 设为 `webrtc`，`src` 指向一个 **WHEP**（WebRTC-HTTP Egress Protocol）端点——Cloudflare Stream、LiveKit egress、Millicast 这类平台暴露的就是这种端点。这个引擎没有库依赖：`RTCPeerConnection` 和 `fetch` 都是浏览器原生 API，不像 HLS/DASH/FLV 那样有一个懒加载的 chunk。WHEP 端点没有文件扩展名可以自动探测，所以 `format="webrtc"` 是**必须**显式指定的，不会从 `src` 推断出来。
+
+实现细节：创建一个 `recvonly` 音视频 transceiver 的 `RTCPeerConnection`，等 ICE 收集完成后把 SDP offer `POST` 到 `src`（`Content-Type: application/sdp`），把响应体里的 SDP answer 应用上去，再把收到的媒体流通过 `video.srcObject` 挂上去。结束播放时会向服务端在响应 `Location` 头里返回的会话资源地址发 `DELETE`。范围有意控制得比较克制：用的是非 trickle 的 ICE（等几秒钟，收集到多少候选就用多少），没有实现 WHEP 基于 PATCH 的 trickle 机制，也没有解析 `Link: rel="ice-server"` 响应头拿服务端下发的 STUN/TURN——大多数可以直连的 WHEP 部署这两个都不需要。和 FLV 一样没有清晰度选择器：WHEP 没有客户端可用的标准多码率切换机制，所以这个引擎下 `getMetrics()` 的 `qualitySwitchCount` 会一直是 `0`。
 
 ### volume
 
