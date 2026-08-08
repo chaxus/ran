@@ -2,35 +2,35 @@
   &([type="toast"]) {
     .ran-message {
       &-notice {
-        padding: var(--ran-message-toast-notice-padding, 8px);
-        text-align: var(--ran-message-toast-notice-text-align, center);
-        max-width: var(--ran-message-toast-notice-max-width, 90%);
-        margin: var(--ran-message-toast-notice-margin, 0 auto);
-        word-break: var(--ran-message-toast-notice-word-break, break-all);
+        padding: var(--ran-message-notice-toast-padding, 8px);
+        text-align: var(--ran-message-notice-toast-text-align, center);
+        max-width: var(--ran-message-notice-toast-max-width, 90%);
+        margin: var(--ran-message-notice-toast-margin, 0 auto);
+        word-break: var(--ran-message-notice-toast-word-break, break-all);
         &-content {
-          display: var(--ran-message-toast-notice-content-display, inline-block);
-          padding: var(--ran-message-toast-notice-content-padding, 10px 16px);
+          display: var(--ran-message-content-toast-display, inline-block);
+          padding: var(--ran-message-content-toast-padding, 10px 16px);
           /* Deliberately a fixed dark pill (Android-toast convention) rather
              than --ran-color-bg-elevated — a toast is meant to read the same
              regardless of the host page's light/dark theme. Still routed
              through tokens so a consumer can retheme it. */
-          background: var(--ran-message-toast-notice-content-background, rgba(0, 0, 0, 0.7));
-          border-radius: var(--ran-message-toast-notice-content-border-radius, var(--ran-radius-sm, 7px));
-          pointer-events: var(--ran-message-toast-notice-content-pointer-events, all);
+          background: var(--ran-message-content-toast-background, rgba(0, 0, 0, 0.7));
+          border-radius: var(--ran-message-content-toast-border-radius, var(--ran-radius-sm, 7px));
+          pointer-events: var(--ran-message-content-toast-pointer-events, all);
           &-info {
-            align-items: var(--ran-message-toast-notice-content-info-align-items, center);
-            display: var(--ran-message-toast-notice-content-info-display, flex);
+            align-items: var(--ran-message-info-toast-align-items, center);
+            display: var(--ran-message-info-toast-display, flex);
             span {
-              margin: var(--ran-message-toast-notice-content-info-span-margin, 0);
-              padding: var(--ran-message-toast-notice-content-info-span-padding, 0);
-              font-size: var(--ran-message-toast-notice-content-info-span-font-size, 14px);
-              font-variant: var(--ran-message-toast-notice-content-info-span-font-variant, tabular-nums);
-              list-style: var(--ran-message-toast-notice-content-info-span-list-style, none);
-              font-feature-settings: var(--ran-message-toast-notice-content-info-span-font-feature-settings, 'tnum');
-              z-index: var(--ran-message-toast-notice-content-info-span-z-index, 1010);
-              width: var(--ran-message-toast-notice-content-info-span-width, 100%);
-              pointer-events: var(--ran-message-toast-notice-content-info-span-pointer-events, none);
-              color: var(--ran-message-toast-notice-content-info-span-color, #fff);
+              margin: var(--ran-message-text-toast-margin, 0);
+              padding: var(--ran-message-text-toast-padding, 0);
+              font-size: var(--ran-message-text-toast-font-size, 14px);
+              font-variant: var(--ran-message-text-toast-font-variant, tabular-nums);
+              list-style: var(--ran-message-text-toast-list-style, none);
+              font-feature-settings: var(--ran-message-text-toast-font-feature-settings, 'tnum');
+              z-index: var(--ran-message-text-toast-z-index, 1010);
+              width: var(--ran-message-text-toast-width, 100%);
+              pointer-events: var(--ran-message-text-toast-pointer-events, none);
+              color: var(--ran-message-text-toast-color, #fff);
             }
           }
         }
@@ -46,34 +46,34 @@
     margin: var(--ran-message-notice-margin, 0 auto);
     word-break: var(--ran-message-notice-word-break, break-all);
     &-content {
-      display: var(--ran-message-notice-content-display, inline-block);
-      padding: var(--ran-message-notice-content-padding, 10px 16px);
-      background: var(--ran-message-notice-content-background, var(--ran-color-bg-elevated, #fff));
-      border-image-source: var(--ran-message-notice-content-border-image-source, none);
-      border-image-slice: var(--ran-message-notice-content-border-image-slice, 8);
-      border-image-width: var(--ran-message-notice-content-border-image-width, 4px);
+      display: var(--ran-message-content-display, inline-block);
+      padding: var(--ran-message-content-padding, 10px 16px);
+      background: var(--ran-message-content-background, var(--ran-color-bg-elevated, #fff));
+      border-image-source: var(--ran-message-content-border-image-source, none);
+      border-image-slice: var(--ran-message-content-border-image-slice, 8);
+      border-image-width: var(--ran-message-content-border-image-width, 4px);
       border-image-outset: 0;
       border-image-repeat: stretch;
-      border-radius: var(--ran-message-notice-content-border-radius, var(--ran-radius-md, 12px));
+      border-radius: var(--ran-message-content-border-radius, var(--ran-radius-md, 12px));
       box-shadow: var(
-        --ran-message-notice-content-box-shadow,
+        --ran-message-content-box-shadow,
         var(--ran-shadow-menu, 0 2px 4px #0000000d, 0 8px 24px -6px #00000024)
       );
-      pointer-events: var(--ran-message-notice-content-pointer-events, all);
+      pointer-events: var(--ran-message-content-pointer-events, all);
       &-info {
-        align-items: var(--ran-message-notice-content-info-align-items, center);
-        display: var(--ran-message-notice-content-info-display, flex);
+        align-items: var(--ran-message-info-align-items, center);
+        display: var(--ran-message-info-display, flex);
         span {
-          margin: var(--ran-message-notice-content-info-span-margin, 0);
-          padding: var(--ran-message-notice-content-info-span-padding, 0);
-          color: var(--ran-message-notice-content-info-span-color, var(--ran-color-text, #000000d9));
-          font-size: var(--ran-message-notice-content-info-span-font-size, 14px);
-          font-variant: var(--ran-message-notice-content-info-span-font-variant, tabular-nums);
-          list-style: var(--ran-message-notice-content-info-span-list-style, none);
-          font-feature-settings: var(--ran-message-notice-content-info-span-font-feature-settings, 'tnum');
-          z-index: var(--ran-message-notice-content-info-span-z-index, 1010);
-          width: var(--ran-message-notice-content-info-span-width, 100%);
-          pointer-events: var(--ran-message-notice-content-info-span-pointer-events, none);
+          margin: var(--ran-message-text-margin, 0);
+          padding: var(--ran-message-text-padding, 0);
+          color: var(--ran-message-text-color, var(--ran-color-text, #000000d9));
+          font-size: var(--ran-message-text-font-size, 14px);
+          font-variant: var(--ran-message-text-font-variant, tabular-nums);
+          list-style: var(--ran-message-text-list-style, none);
+          font-feature-settings: var(--ran-message-text-font-feature-settings, 'tnum');
+          z-index: var(--ran-message-text-z-index, 1010);
+          width: var(--ran-message-text-width, 100%);
+          pointer-events: var(--ran-message-text-pointer-events, none);
         }
       }
     }

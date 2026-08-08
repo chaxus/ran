@@ -1,5 +1,6 @@
 export { setTheme, getTheme, setThemeToken, clearThemeToken, setThemeTokens, initTheme } from '@/utils/theme';
 export type { RanThemeName, ThemeTarget, ThemeTokenMap } from '@/utils/theme';
+export { serializeForm } from '@/utils/form';
 export { Button } from '@/components/button';
 export { Icon, registerIcon, registerIcons, RAN_ICON_NAMES } from '@/components/icon';
 export type { RanIconName } from '@/components/icon';
@@ -23,7 +24,6 @@ export { Mermaid } from '@/components/mermaid';
 export { PLACEMENT_TYPE, Popover } from '@/components/popover';
 export type { PlacementDirection } from '@/components/popover';
 export { ARROW_TYPE, Dropdown } from '@/components/dropdown';
-export { Form } from '@/components/form';
 export { Card } from '@/components/card';
 export { Glass } from '@/components/glass';
 export { Section } from '@/components/section';

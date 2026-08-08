@@ -19,14 +19,14 @@
       &::after {
         cursor: not-allowed;
         pointer-events: none;
-        opacity: var(--ran-checkbox-checked-after-opacity, 1);
+        opacity: var(--ran-checkbox-tick-checked-opacity, 1);
       }
     }
     .ran-checkbox-checked {
       .ran-checkbox-inner {
         background-color: var(--ran-checkbox-checked-background-color, var(--ran-color-bg-muted, #f2f2f2));
         &::after {
-          opacity: var(--ran-checkbox-checked-after-opacity, 0);
+          opacity: var(--ran-checkbox-tick-checked-opacity, 0);
         }
       }
     }
@@ -88,26 +88,26 @@
     border-radius: var(--ran-checkbox-inner-border-radius, 4px);
     border-collapse: var(--ran-checkbox-inner-border-collapse, separate);
     &::after {
-      box-sizing: var(--ran-checkbox-inner-after-box-sizing, border-box);
-      position: var(--ran-checkbox-inner-after-position, absolute);
-      top: var(--ran-checkbox-inner-after-top, 50%);
-      inset-inline-start: var(--ran-checkbox-inner-after-inset-inline-start, 25%);
-      display: var(--ran-checkbox-inner-after-display, table);
-      width: var(--ran-checkbox-inner-after-width, calc(16px / 14 * 5));
-      height: var(--ran-checkbox-inner-after-height, calc(16px / 14 * 8));
-      border: var(--ran-checkbox-inner-after-border, 2px solid #fff);
-      border-top: var(--ran-checkbox-inner-after-border-top, 0);
-      border-inline-start: var(--ran-checkbox-inner-after-border-inline-start, 0);
-      opacity: var(--ran-checkbox-inner-after-opacity, 0);
-      content: var(--ran-checkbox-inner-after-content, '');
+      box-sizing: var(--ran-checkbox-tick-box-sizing, border-box);
+      position: var(--ran-checkbox-tick-position, absolute);
+      top: var(--ran-checkbox-tick-top, 50%);
+      inset-inline-start: var(--ran-checkbox-tick-inset-inline-start, 25%);
+      display: var(--ran-checkbox-tick-display, table);
+      width: var(--ran-checkbox-tick-width, calc(16px / 14 * 5));
+      height: var(--ran-checkbox-tick-height, calc(16px / 14 * 8));
+      border: var(--ran-checkbox-tick-border, 2px solid #fff);
+      border-top: var(--ran-checkbox-tick-border-top, 0);
+      border-inline-start: var(--ran-checkbox-tick-border-inline-start, 0);
+      opacity: var(--ran-checkbox-tick-opacity, 0);
+      content: var(--ran-checkbox-tick-content, '');
       /* transform/opacity only — `all` would also fade the check-mark border
          color on a theme flip */
       transition: var(
-        --ran-checkbox-inner-after-transition,
+        --ran-checkbox-tick-transition,
         transform 0.1s cubic-bezier(0.71, -0.46, 0.88, 0.6),
         opacity 0.1s
       );
-      transform: var(--ran-checkbox-inner-after-transform, rotate(45deg) scale(1) translate(-50%, -50%));
+      transform: var(--ran-checkbox-tick-transform, rotate(45deg) scale(1) translate(-50%, -50%));
     }
   }
   &-checked {
@@ -122,7 +122,7 @@
           var(--ran-motion-ease-bouncy, cubic-bezier(0.34, 1.56, 0.64, 1))
       );
       &::after {
-        opacity: var(--ran-checkbox-checked-after-opacity, 1);
+        opacity: var(--ran-checkbox-tick-checked-opacity, 1);
       }
     }
   }
