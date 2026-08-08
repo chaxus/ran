@@ -26,11 +26,11 @@ import { createPlayerVisualSignals, type PlayerVisualSignals } from './core/stor
 import { createPlaybackVisualEffects, type PlayerVisualEffectRefs } from './core/effects';
 import { ensurePlayerView } from './core/view';
 import { EventManager, View } from '@/utils/builder';
-import { RanElement } from '@/utils/index';
+import { RanElement, batch } from '@/utils/index';
 import { ensureShadowRoot, getStringAttribute, setStringAttribute, syncSheetAttribute } from '@/utils/component';
 import playerCss from './index.less?inline';
 import { defineSSR } from '@/utils/ssr-registry';
-import { isActivationKey } from '@/utils/a11y';
+import { isActivationKey, sliderStepFromKeydown } from '@/utils/a11y';
 
 type Callback = (...args: unknown[]) => unknown;
 type EventName = string | symbol;
@@ -511,8 +511,13 @@ export class RanPlayer extends RanElement {
     this.updateBufferedProgress();
     const currentTimeWhenSwitching =
       this._isSwitchingSource && this._pendingPlaybackRestore ? this._pendingPlaybackRestore.currentTime : 0;
-    this._visualSignals.duration.setter(duration);
-    this._visualSignals.currentTime.setter(currentTimeWhenSwitching);
+    // Both setters change in the same tick here — batch so the progress
+    // effect (which does a forced-layout `offsetWidth` read) flushes once
+    // instead of twice.
+    batch(() => {
+      this._visualSignals.duration.setter(duration);
+      this._visualSignals.currentTime.setter(currentTimeWhenSwitching);
+    });
     this._playerControllerBottomTimeDivide.innerText = '/';
     this.change('loadeddata', e);
   };
@@ -522,6 +527,15 @@ export class RanPlayer extends RanElement {
   };
   onVolumechange = (e: Event): void => {
     this.ctx.currentState = e.type;
+    // Mirrors the visual signal here too — not just `ctx.volume` — so it
+    // can't go stale when the native `volumechange` fires from something
+    // other than `setVolume()` (an external script touching `video.volume`
+    // directly, an OS media key, etc). `getVolume()` already does the
+    // 0-1 → 0-100 scale conversion and writes `ctx.volume`; reuse it instead
+    // of duplicating the math, then push the same 0-100 value into the
+    // signal so it matches the scale `setVolume()` uses.
+    const volume = this.getVolume();
+    this._visualSignals.volume.setter(volume);
     this.change('volumechange', e);
   };
   onWaiting = (e: Event): void => {
@@ -650,8 +664,14 @@ export class RanPlayer extends RanElement {
     if (!this._video) return;
     const duration = this.getTotalTime();
     const percentage = getBufferedPercentage(this._video, duration);
-    this._visualSignals.duration.setter(duration);
-    this._visualSignals.bufferedPercentage.setter(percentage);
+    // Batched for the same reason as onLoadeddata/updateCurrentProgress —
+    // `batch()` absorbs nested calls into whichever batch is already open
+    // (e.g. when this runs from inside updateCurrentProgress's batch), so
+    // it's always correct to batch here even when called standalone.
+    batch(() => {
+      this._visualSignals.duration.setter(duration);
+      this._visualSignals.bufferedPercentage.setter(percentage);
+    });
   };
   syncProgressByPercentage = (percentage: number): void => {
     const normalizedPercentage = normalizeProgress(percentage);
@@ -681,6 +701,25 @@ export class RanPlayer extends RanElement {
     const offsetX = e.clientX - rect.left;
     const percentage = range(offsetX / this._progress.offsetWidth);
     this.seekToPercentage(percentage);
+  };
+  /**
+   * @description: ARIA slider keyboard contract for the seek bar — Home/End
+   * jump to the ends, ArrowLeft/Down and ArrowRight/Up step (Shift for a
+   * coarser step), matching the `role="slider"`/aria-valuemin/valuemax the
+   * element already carries (see core/view.ts). Reuses the same percentage
+   * scale (0-100) as aria-valuenow and the same `seekToPercentage` seek path
+   * the click/drag handlers already use, rather than duplicating seek math.
+   * `sliderStepFromKeydown` returning `undefined` means the key isn't part of
+   * the slider pattern, so nothing is prevented/handled.
+   */
+  onProgressKeydown = (e: KeyboardEvent): void => {
+    const { currentTime, duration } = this.ctx;
+    const hasDuration = Number.isFinite(duration) && duration > 0;
+    const currentPercentage = hasDuration ? normalizeProgress(currentTime / duration) * 100 : 0;
+    const next = sliderStepFromKeydown(e, { current: currentPercentage, min: 0, max: 100 });
+    if (next === undefined) return;
+    e.preventDefault();
+    this.seekToPercentage(next / 100);
   };
   /**
    * @description: 进度条鼠标按下事件
@@ -772,18 +811,28 @@ export class RanPlayer extends RanElement {
    */
   updateCurrentProgress = (): void => {
     if (this._isSwitchingSource && this._pendingPlaybackRestore) {
-      this._visualSignals.duration.setter(this.ctx.duration);
-      this._visualSignals.currentTime.setter(this._pendingPlaybackRestore.currentTime);
+      const duration = this.ctx.duration;
+      const currentTime = this._pendingPlaybackRestore.currentTime;
+      batch(() => {
+        this._visualSignals.duration.setter(duration);
+        this._visualSignals.currentTime.setter(currentTime);
+      });
       return;
     }
     const currentTime = this.getCurrentTime();
     this.ctx.currentTime = currentTime;
     const { duration } = this.ctx;
-    this._visualSignals.duration.setter(duration);
-    this._visualSignals.currentTime.setter(currentTime);
-    if (Number.isFinite(duration) && duration > 0) {
-      this.updateBufferedProgress();
-    }
+    // Single batch covers duration+currentTime here and, when it runs,
+    // updateBufferedProgress's own (nested) batch too — nested batches are
+    // absorbed by the outermost one, so all the setters this tick share one
+    // effect flush instead of two or three.
+    batch(() => {
+      this._visualSignals.duration.setter(duration);
+      this._visualSignals.currentTime.setter(currentTime);
+      if (Number.isFinite(duration) && duration > 0) {
+        this.updateBufferedProgress();
+      }
+    });
   };
   /**
    * @description: 点击整个视频时，触发的事件
@@ -1075,6 +1124,7 @@ export class RanPlayer extends RanElement {
       onPlayBtnKeydown: this.onPlayBtnKeydown,
       onFullScreenKeydown: this.onFullScreenKeydown,
       onProgressClick: this.progressClick,
+      onProgressKeydown: this.onProgressKeydown,
       onProgressMouseEnter: this.progressMouseEnter,
       onProgressMouseMove: this.progressMouseMove,
       onProgressMouseLeave: this.progressMouseLeave,

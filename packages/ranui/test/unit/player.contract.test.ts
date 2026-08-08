@@ -89,7 +89,7 @@ describe('r-player contract', () => {
     const snapshot = {
       currentTime: 15,
       playbackRate: 1.5,
-      volume: 0.7,
+      volume: 70,
       shouldResume: true,
     };
 
@@ -134,7 +134,7 @@ describe('r-player contract', () => {
     player._pendingPlaybackRestore = {
       currentTime: 42,
       playbackRate: 1,
-      volume: 0.5,
+      volume: 50,
       shouldResume: true,
     };
     vi.spyOn(player, 'getTotalTime').mockReturnValue(100);
@@ -154,7 +154,7 @@ describe('r-player contract', () => {
     player._pendingPlaybackRestore = {
       currentTime: 50,
       playbackRate: 1,
-      volume: 0.5,
+      volume: 50,
       shouldResume: true,
     };
 
@@ -222,7 +222,7 @@ describe('r-player contract', () => {
   it('switches clarity by preserving playback state and loading the selected URL', () => {
     const player = document.createElement('r-player') as any;
     document.body.appendChild(player);
-    const snapshot = { currentTime: 12, playbackRate: 1.25, volume: 0.6, shouldResume: true };
+    const snapshot = { currentTime: 12, playbackRate: 1.25, volume: 60, shouldResume: true };
     const hls = { destroy: vi.fn(), loadSource: vi.fn(), startLoad: vi.fn() };
     player.ctx.levelMap.set('720p', 'https://cdn.example.com/720.m3u8');
     player._hls = hls;
@@ -288,9 +288,9 @@ describe('r-player contract', () => {
       new CustomEvent('change', { detail: { value: 80 } }),
     );
 
-    expect(player.ctx.volume).toBe(0.8);
+    expect(player.ctx.volume).toBe(80);
     expect(player._video.volume).toBe(0.8);
-    expect(player._volume).toBe(0.8);
+    expect(player._volume).toBe(80);
   });
 
   it('toggles mute and restores the remembered volume', () => {
@@ -298,8 +298,8 @@ describe('r-player contract', () => {
     document.body.appendChild(player);
     player._video = document.createElement('video');
     player._video.volume = 0.75;
-    player.ctx.volume = 0.75;
-    player._volume = 0.75;
+    player.ctx.volume = 75;
+    player._volume = 75;
 
     player._playControllerBottomVolumeIcon.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     expect(player.ctx.volume).toBe(0);
@@ -309,7 +309,7 @@ describe('r-player contract', () => {
     ).toBe(true);
 
     player._playControllerBottomVolumeIcon.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-    expect(player.ctx.volume).toBe(0.75);
+    expect(player.ctx.volume).toBe(75);
     expect(player._video.volume).toBe(0.75);
     expect(player._playControllerBottomVolumeProgress.getAttribute('percent')).toBe('75');
     expect(

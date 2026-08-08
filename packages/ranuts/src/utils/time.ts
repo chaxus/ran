@@ -242,8 +242,14 @@ export const formatRelative = (value: DateInput, options: FormatRelativeOptions 
   if (style === 'compact') return `${Math.abs(count)}${COMPACT_UNITS[unit] ?? ''}`;
 
   const formatter = getRelativeFormatter(locale, style, numeric);
-  // Pre-2020 runtimes without Intl.RelativeTimeFormat still get something readable.
-  if (!formatter) return `${Math.abs(count)}${COMPACT_UNITS[unit] ?? ''}`;
+  if (!formatter) {
+    // Pre-2020 runtimes without Intl.RelativeTimeFormat still get something readable — but
+    // unlike the directionless `compact` style above, this fallback stands in for a *directional*
+    // style (`'long'`/`'short'`/`'narrow'`), so it must keep saying which way the gap runs
+    // rather than collapsing past and future into the same string.
+    const compactLabel = COMPACT_UNITS[unit] ?? '';
+    return count < 0 ? `${Math.abs(count)}${compactLabel} ago` : `in ${count}${compactLabel}`;
+  }
   return formatter.format(count, unit);
 };
 

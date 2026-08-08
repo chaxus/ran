@@ -131,7 +131,6 @@ export const isSpeechRecognitionSupported = (): boolean => getConstructor() !== 
  */
 export const createSpeechRecognizer = (options: SpeechRecognizerOptions = {}): SpeechRecognizer => {
   const { lang, continuous = true, interimResults = true, onResult, onError, onStart, onEnd } = options;
-  const Constructor = getConstructor();
   let current: NativeRecognition | null = null;
 
   const finish = (): void => {
@@ -140,57 +139,81 @@ export const createSpeechRecognizer = (options: SpeechRecognizerOptions = {}): S
   };
 
   const recognizer: SpeechRecognizer = {
-    supported: Constructor !== undefined,
+    // Re-checked on every access rather than captured once at creation time: capturing it here
+    // would freeze `undefined` for the lifetime of this recognizer if `createSpeechRecognizer`
+    // is called before `window`/the vendor-prefixed API is available (SSR, an early
+    // module-scope call before hydration), even after the real constructor shows up later.
+    get supported(): boolean {
+      return getConstructor() !== undefined;
+    },
     get active(): boolean {
       return current !== null;
     },
 
     start(): void {
+      // Resolved fresh on every call, for the same reason `supported` is a getter above.
+      const Constructor = getConstructor();
       if (!Constructor || current) return;
-      const native = new Constructor();
-      native.lang = typeof lang === 'function' ? lang() : (lang ?? '');
-      native.continuous = continuous;
-      native.interimResults = interimResults;
-      native.maxAlternatives = 1;
 
-      // Per-capture cache: results before `resultIndex` are guaranteed unchanged since the
-      // previous event, so they're folded in here at most once instead of being
-      // re-concatenated on every single interim update — turning the naive O(n) rebuild per
-      // event (O(n^2) over a long `continuous: true` session) into amortized O(1) per event
-      // for the stable prefix, with only the small live tail re-scanned each time.
-      // Depends on the platform actually populating `resultIndex`: on an implementation that
-      // doesn't (`?? 0` below), `finalizedUpTo` never advances and this degrades to the naive
-      // full-rescan — still correct, just not the optimization. Every implementation this has
-      // been tested against provides it.
-      let finalizedTranscript = '';
-      let finalizedUpTo = 0;
-
-      native.onresult = (event): void => {
-        const results = event.results;
-        const stableEnd = Math.min(event.resultIndex ?? 0, results.length);
-        for (; finalizedUpTo < stableEnd; finalizedUpTo++) {
-          finalizedTranscript += results[finalizedUpTo]?.[0]?.transcript ?? '';
-        }
-
-        let tail = '';
-        let isFinal = true;
-        for (let i = finalizedUpTo; i < results.length; i++) {
-          const result = results[i];
-          tail += result?.[0]?.transcript ?? '';
-          if (result?.isFinal === false) isFinal = false;
-        }
-        onResult?.(finalizedTranscript + tail, isFinal);
-      };
-      native.onerror = (event): void => onError?.({ kind: classify(event.error), detail: event.error });
-      native.onstart = (): void => onStart?.();
-      native.onend = finish;
-
-      current = native;
       try {
+        // Instantiation itself can throw — e.g. a Permissions-Policy restriction or an iframe
+        // without microphone permission delegation — so it has to be inside this try/catch
+        // alongside `native.start()` rather than ahead of it, or that throw would propagate
+        // straight out of the library past the documented onError/onEnd channel.
+        const native = new Constructor();
+        native.lang = typeof lang === 'function' ? lang() : (lang ?? '');
+        native.continuous = continuous;
+        native.interimResults = interimResults;
+        native.maxAlternatives = 1;
+
+        // Per-capture cache: results before `resultIndex` are guaranteed unchanged since the
+        // previous event, so they're folded in here at most once instead of being
+        // re-concatenated on every single interim update — turning the naive O(n) rebuild per
+        // event (O(n^2) over a long `continuous: true` session) into amortized O(1) per event
+        // for the stable prefix, with only the small live tail re-scanned each time.
+        // Depends on the platform actually populating `resultIndex`: on an implementation that
+        // doesn't (`?? 0` below), `finalizedUpTo` never advances and this degrades to the naive
+        // full-rescan — still correct, just not the optimization. Every implementation this has
+        // been tested against provides it.
+        let finalizedTranscript = '';
+        let finalizedUpTo = 0;
+
+        native.onresult = (event): void => {
+          const results = event.results;
+          const stableEnd = Math.min(event.resultIndex ?? 0, results.length);
+          if (stableEnd < finalizedUpTo) {
+            // Known-quirky implementations (WebKit/Safari) can report a `resultIndex` that
+            // regresses below what was already cached. Trusting the stale `finalizedUpTo` here
+            // would start the tail loop past the true divergence point and silently drop any
+            // newly-changed low-index results. `results` carries the full session history on
+            // every event, so it is always safe to fold back in from the start.
+            finalizedUpTo = 0;
+            finalizedTranscript = '';
+          }
+          for (; finalizedUpTo < stableEnd; finalizedUpTo++) {
+            finalizedTranscript += results[finalizedUpTo]?.[0]?.transcript ?? '';
+          }
+
+          let tail = '';
+          let isFinal = true;
+          for (let i = finalizedUpTo; i < results.length; i++) {
+            const result = results[i];
+            tail += result?.[0]?.transcript ?? '';
+            if (result?.isFinal === false) isFinal = false;
+          }
+          onResult?.(finalizedTranscript + tail, isFinal);
+        };
+        native.onerror = (event): void => onError?.({ kind: classify(event.error), detail: event.error });
+        native.onstart = (): void => onStart?.();
+        native.onend = finish;
+
+        current = native;
         native.start();
       } catch (error) {
-        // Chrome throws InvalidStateError if a capture is somehow already in flight. Report it
-        // and reset, rather than leaving the recognizer wedged in a permanently "active" state.
+        // Either construction or `start()` can throw (Chrome throws InvalidStateError if a
+        // capture is somehow already in flight). Report it and reset, rather than leaving the
+        // recognizer wedged in a permanently "active" state or letting the throw escape past
+        // the documented error channel.
         current = null;
         onError?.({ kind: 'failed', detail: error instanceof Error ? error.message : String(error) });
         onEnd?.();

@@ -1,10 +1,12 @@
 import { RanElement, falseList, isDisabled } from '@/utils/index';
 import { Div, EventManager, InputBuilder, Label, View } from '@/utils/builder';
+import { checkInternalsValidity, reportInternalsValidity, updateRequiredValidity } from '@/utils/a11y';
 import '@/components/icon/index';
 import {
   ensureShadowElement,
   ensureShadowRoot,
   getStringAttribute,
+  setBooleanAttribute,
   setStringAttribute,
   syncSheetAttribute,
 } from '@/utils/component';
@@ -106,7 +108,12 @@ export class Input extends RanElement {
    * @param {String} value
    */
   set value(value: string) {
-    if (!isDisabled(this) && value) {
+    // Native <input disabled> still restores its value on programmatic
+    // assignment / form reset — disabled only blocks *user* interaction, not
+    // assignment. Gating this on `!isDisabled(this)` used to silently drop
+    // formResetCallback's restore whenever the field happened to be disabled
+    // at reset time.
+    if (value) {
       this.setAttribute('value', value);
       this._input.setAttribute('value', value);
     } else {
@@ -147,11 +154,7 @@ export class Input extends RanElement {
    * @param {*} value
    */
   set required(value: boolean | string) {
-    if (!value || value === 'false') {
-      this.removeAttribute('required');
-    } else {
-      this.setAttribute('required', '');
-    }
+    setBooleanAttribute(this, 'required', !(!value || value === 'false'));
   }
   /**
    * @description: 获取 input 上 disabled 属性
@@ -330,25 +333,21 @@ export class Input extends RanElement {
    * reportValidity()/:invalid 感知到。disabled 的控件永远不参与校验，与原生一致。
    */
   private _updateValidity = (): void => {
-    if (!this._internals) return;
-    if (this.disabled) {
-      this._internals?.setValidity?.({});
-      return;
-    }
-    if (this.required && !this.value) {
-      this._internals?.setValidity?.({ valueMissing: true }, 'Please fill out this field.', this._inputContent);
-    } else {
-      this._internals?.setValidity?.({});
-    }
+    updateRequiredValidity(this, this._internals, {
+      disabled: this.disabled,
+      required: this.required,
+      isEmpty: !this.value,
+      anchor: this._inputContent,
+    });
   };
   /**
    * @description: 原生表单参与方法：form.checkValidity()/reportValidity() 的宿主入口
    */
   checkValidity(): boolean {
-    return this._internals?.checkValidity?.() ?? true;
+    return checkInternalsValidity(this._internals);
   }
   reportValidity(): boolean {
-    return this._internals?.reportValidity?.() ?? true;
+    return reportInternalsValidity(this._internals);
   }
   get validity(): ValidityState | undefined {
     return this._internals?.validity;

@@ -22,6 +22,7 @@ export interface PlayerControllerHandlers {
   onPlayBtnKeydown: (e: KeyboardEvent) => void;
   onFullScreenKeydown: (e: KeyboardEvent) => void;
   onProgressClick: (e: MouseEvent) => void;
+  onProgressKeydown: (e: KeyboardEvent) => void;
   onProgressMouseEnter: (e: MouseEvent) => void;
   onProgressMouseMove: (e: MouseEvent) => void;
   onProgressMouseLeave: (e: MouseEvent) => void;
@@ -52,6 +53,7 @@ const CONTROLLER_EVENT_BINDINGS: ControllerEventBinding[] = [
   { target: 'playBtn', eventName: 'keydown', handler: 'onPlayBtnKeydown' },
   { target: 'fullScreenBtn', eventName: 'keydown', handler: 'onFullScreenKeydown' },
   { target: 'progress', eventName: 'click', handler: 'onProgressClick' },
+  { target: 'progress', eventName: 'keydown', handler: 'onProgressKeydown' },
   { target: 'progress', eventName: 'mouseenter', handler: 'onProgressMouseEnter' },
   { target: 'progress', eventName: 'mousemove', handler: 'onProgressMouseMove' },
   { target: 'progress', eventName: 'mouseleave', handler: 'onProgressMouseLeave' },

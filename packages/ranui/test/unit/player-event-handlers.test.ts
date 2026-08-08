@@ -32,6 +32,16 @@ describe('r-player media event handlers', () => {
     expect(seenTypes).toEqual(eventNames);
   });
 
+  it('onVolumechange syncs the visual volume signal, not just ctx.volume, on the native event', () => {
+    const player = makePlayer();
+    Object.defineProperty(player._video, 'volume', { value: 0.42, configurable: true });
+
+    player._video.dispatchEvent(new Event('volumechange'));
+
+    expect(player.ctx.volume).toBeCloseTo(42);
+    expect(player._visualSignals.volume.getter()).toBeCloseTo(42);
+  });
+
   it('clears switching and loading state for ready and terminal media events', () => {
     const player = makePlayer();
 
@@ -46,7 +56,7 @@ describe('r-player media event handlers', () => {
 
   it('restores pending playback snapshot on loadedmetadata', () => {
     const player = makePlayer();
-    const snapshot = { currentTime: 18, playbackRate: 1.25, volume: 0.8, shouldResume: false };
+    const snapshot = { currentTime: 18, playbackRate: 1.25, volume: 80, shouldResume: false };
     player._pendingPlaybackRestore = snapshot;
     const pauseSpy = vi.spyOn(player, 'pause').mockImplementation(() => undefined);
 
@@ -54,7 +64,7 @@ describe('r-player media event handlers', () => {
 
     expect(player.getCurrentTime()).toBe(18);
     expect(player.getPlaybackRate()).toBe(1.25);
-    expect(player.getVolume()).toBe(0.8);
+    expect(player.getVolume()).toBe(80);
     expect(pauseSpy).toHaveBeenCalled();
     expect(player._pendingPlaybackRestore).toBeUndefined();
     expect(player._isSwitchingSource).toBe(false);

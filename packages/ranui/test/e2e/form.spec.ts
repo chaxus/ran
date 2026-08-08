@@ -55,9 +55,9 @@ test('form — reset clears value', async ({ page }) => {
   );
 
   await page.locator('button[type="submit"]').click();
-  expect(
-    await page.evaluate(() => (document.querySelector('r-form') as HTMLElement & { value: string }).value),
-  ).toBe(JSON.stringify({ username: 'alice' }));
+  expect(await page.evaluate(() => (document.querySelector('r-form') as HTMLElement & { value: string }).value)).toBe(
+    JSON.stringify({ username: 'alice' }),
+  );
 
   await page.locator('button[type="reset"]').click();
   expect(

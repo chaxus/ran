@@ -6,6 +6,7 @@ import { createSpeechRecognizer, isSpeechRecognitionSupported } from '@/utils';
 class FakeRecognition {
   static instances: FakeRecognition[] = [];
   static throwOnStart = false;
+  static throwOnConstruct = false;
 
   lang = '';
   continuous = false;
@@ -19,6 +20,7 @@ class FakeRecognition {
   onend: (() => void) | null = null;
 
   constructor() {
+    if (FakeRecognition.throwOnConstruct) throw new Error('Permissions-Policy blocked microphone');
     FakeRecognition.instances.push(this);
   }
 
@@ -54,6 +56,7 @@ class FakeRecognition {
 const install = (): void => {
   FakeRecognition.instances = [];
   FakeRecognition.throwOnStart = false;
+  FakeRecognition.throwOnConstruct = false;
   (window as unknown as Record<string, unknown>).SpeechRecognition = FakeRecognition;
 };
 
@@ -213,6 +216,64 @@ describe('createSpeechRecognizer', () => {
     FakeRecognition.throwOnStart = false;
     mic.start();
     expect(mic.active).toBe(true);
+  });
+
+  it('reports a construction failure through onError instead of throwing out of start()', () => {
+    // A Permissions-Policy restriction or an iframe without microphone permission delegation
+    // can make the constructor itself throw, not just `.start()`. That throw must be caught
+    // and reported the same documented way as a runtime recognition error, not propagate
+    // synchronously out of `start()`.
+    install();
+    FakeRecognition.throwOnConstruct = true;
+    const onError = vi.fn();
+    const onEnd = vi.fn();
+    const mic = createSpeechRecognizer({ onError, onEnd });
+
+    expect(() => mic.start()).not.toThrow();
+    expect(mic.active).toBe(false);
+    expect(onError).toHaveBeenCalledWith({ kind: 'failed', detail: 'Permissions-Policy blocked microphone' });
+    expect(onEnd).toHaveBeenCalledTimes(1);
+
+    // Still usable afterwards.
+    FakeRecognition.throwOnConstruct = false;
+    mic.start();
+    expect(mic.active).toBe(true);
+  });
+
+  it('re-resolves the constructor lazily, so a recognizer created before the API exists still works', () => {
+    // Simulates SSR / an early module-scope call: createSpeechRecognizer() runs before the
+    // vendor API is available, so a naive "resolve once at creation" implementation would
+    // freeze `supported`/`start()` as permanently inert even after the API shows up.
+    uninstall();
+    const onStart = vi.fn();
+    const mic = createSpeechRecognizer({ onStart });
+    expect(mic.supported).toBe(false);
+    mic.start();
+    expect(mic.active).toBe(false);
+
+    install();
+    expect(mic.supported).toBe(true);
+    mic.start();
+    expect(mic.active).toBe(true);
+    expect(onStart).toHaveBeenCalledTimes(1);
+  });
+
+  it('reprocesses from the regressed point when resultIndex goes backwards', () => {
+    // Known-quirky Web Speech implementations (WebKit/Safari) can report a resultIndex that
+    // regresses below an already-cached prefix. The cache must not skip forward from the stale
+    // value, or a newly-changed low-index result is silently dropped from the transcript.
+    install();
+    const onResult = vi.fn();
+    createSpeechRecognizer({ onResult }).start();
+    const native = FakeRecognition.instances[0];
+
+    native.emit([{ transcript: 'one' }, { transcript: ' two' }, { transcript: ' three', isFinal: false }], 2);
+    expect(onResult).toHaveBeenLastCalledWith('one two three', false);
+
+    // resultIndex regresses from 2 to 1, and segment 1's text is revised — a stale cache would
+    // keep serving the old "two" instead of picking up "TWO!".
+    native.emit([{ transcript: 'one' }, { transcript: ' TWO!' }, { transcript: ' three', isFinal: false }], 1);
+    expect(onResult).toHaveBeenLastCalledWith('one TWO! three', false);
   });
 
   it('discards pending results on abort', () => {

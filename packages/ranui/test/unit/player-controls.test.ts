@@ -29,7 +29,7 @@ describe('r-player controls and browser-facing helpers', () => {
     expect(player.capturePlaybackSnapshot()).toEqual({
       currentTime: 42,
       playbackRate: 1.5,
-      volume: 0.7,
+      volume: 70,
       shouldResume: true,
     });
   });
@@ -139,7 +139,7 @@ describe('r-player controls and browser-facing helpers', () => {
     const pauseSpy = vi.spyOn(player._video, 'pause').mockImplementation(() => undefined);
 
     expect(player.getPlaybackRate()).toBe(1.25);
-    expect(player.getVolume()).toBe(0.4);
+    expect(player.getVolume()).toBe(40);
     player.pause();
     expect(pauseSpy).toHaveBeenCalled();
   });

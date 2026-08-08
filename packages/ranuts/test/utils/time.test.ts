@@ -122,4 +122,24 @@ describe('formatRelative', () => {
   afterEach(() => {
     vi.useRealTimers();
   });
+
+  describe('fallback when Intl.RelativeTimeFormat is unavailable', () => {
+    it('stays directional instead of collapsing to the directionless compact format', () => {
+      // Older Node without full-ICU, or an engine without Intl.RelativeTimeFormat, must not
+      // make a past and a future date render identically — the compact style is the only one
+      // allowed to drop direction.
+      const original = Intl.RelativeTimeFormat;
+      const IntlAny = Intl as unknown as Record<string, unknown>;
+      delete IntlAny.RelativeTimeFormat;
+      try {
+        const past = at(-3 * DAY);
+        const future = at(3 * DAY);
+        expect(past).not.toBe(future);
+        expect(past).toBe('3d ago');
+        expect(future).toBe('in 3d');
+      } finally {
+        IntlAny.RelativeTimeFormat = original;
+      }
+    });
+  });
 });

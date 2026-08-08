@@ -265,12 +265,14 @@ describe('r-input contract', () => {
     expect(input.step).toBe('2');
   });
 
-  it('value setter with disabled removes attribute', () => {
+  it('value setter updates the attribute even while disabled (matches native <input disabled>)', () => {
     const input = document.createElement('r-input') as Input;
     document.body.appendChild(input);
     input.disabled = 'true';
-    input.value = 'blocked';
-    expect(input.hasAttribute('value')).toBe(false);
+    input.value = 'still set';
+    expect(input.hasAttribute('value')).toBe(true);
+    expect(input.value).toBe('still set');
+    expect((input as any)._inputContent.value).toBe('still set');
   });
 
   it('value setter with empty string removes attribute', () => {
@@ -400,6 +402,18 @@ describe('r-input contract', () => {
 
     input.value = 'typed by the user';
     expect(input.value).toBe('typed by the user');
+
+    (input as any).formResetCallback();
+    expect(input.value).toBe('initial');
+  });
+
+  it('formResetCallback restores the captured default value even when disabled at reset time', () => {
+    const input = document.createElement('r-input') as Input;
+    input.setAttribute('value', 'initial');
+    document.body.appendChild(input);
+
+    input.value = 'typed by the user';
+    input.disabled = true;
 
     (input as any).formResetCallback();
     expect(input.value).toBe('initial');

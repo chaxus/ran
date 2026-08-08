@@ -101,11 +101,14 @@ describe('r-select contract', () => {
     expect(select.getAttribute('value')).toBe('my-val');
   });
 
-  it('value setter removes attribute when disabled', async () => {
+  it('value setter still assigns while disabled (only user interaction is blocked, matching native <select>)', async () => {
+    // formResetCallback relies on this: a disabled select must still be able to
+    // restore its defaultValue on reset — only the user's own interaction
+    // (opening the dropdown, clicking an option) is blocked by `disabled`.
     const select = await createSelectWithOptions();
     select.disabled = true;
-    select.value = 'should-not-set';
-    expect(select.hasAttribute('value')).toBe(false);
+    select.value = 'should-still-set';
+    expect(select.getAttribute('value')).toBe('should-still-set');
   });
 
   it('defaultValue getter and setter', async () => {
@@ -695,7 +698,7 @@ describe('r-select contract', () => {
     expect(setValidity).toHaveBeenLastCalledWith(
       { valueMissing: true },
       expect.any(String),
-      (select as any)._selection,
+      select,
     );
 
     select.value = '1';
@@ -705,7 +708,7 @@ describe('r-select contract', () => {
     expect(setValidity).toHaveBeenLastCalledWith(
       { valueMissing: true },
       expect.any(String),
-      (select as any)._selection,
+      select,
     );
 
     select.disabled = true;

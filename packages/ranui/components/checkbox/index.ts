@@ -1,10 +1,12 @@
 import { addClassToElement, removeClassToElement } from 'ranuts/utils';
 import { RanElement, falseList, isDisabled } from '@/utils/index';
 import { Div, EventManager, InputBuilder, Slot, Span } from '@/utils/builder';
+import { checkInternalsValidity, isActivationKey, reportInternalsValidity, updateRequiredValidity } from '@/utils/a11y';
 import {
   ensureShadowElement,
   ensureShadowRoot,
   getStringAttribute,
+  setBooleanAttribute,
   setStringAttribute,
   syncSheetAttribute,
 } from '@/utils/component';
@@ -87,11 +89,7 @@ export class Checkbox extends RanElement {
     return this.hasAttribute('required');
   }
   set required(value: boolean | string) {
-    if (!value || value === 'false') {
-      this.removeAttribute('required');
-    } else {
-      this.setAttribute('required', '');
-    }
+    setBooleanAttribute(this, 'required', !(!value || value === 'false'));
   }
   get value(): string {
     const checked = this.getAttribute('value');
@@ -174,26 +172,22 @@ export class Checkbox extends RanElement {
    * Disabled checkboxes never block submission, matching native semantics.
    */
   private _updateValidity = (): void => {
-    if (!this._internals) return;
-    if (this.disabled) {
-      this._internals?.setValidity?.({});
-      return;
-    }
-    if (this.required && !this.context.checked) {
-      this._internals?.setValidity?.(
-        { valueMissing: true },
-        'Please check this box if you want to proceed.',
-        this.container,
-      );
-    } else {
-      this._internals?.setValidity?.({});
-    }
+    updateRequiredValidity(this, this._internals, {
+      disabled: this.disabled,
+      required: this.required,
+      isEmpty: !this.context.checked,
+      message: 'Please check this box if you want to proceed.',
+      // The host itself is the focusable/tabbable element (tabIndex is set on
+      // `this` in syncA11yAndForm, never on `container`) — the native
+      // validation bubble anchors correctly only against a focusable element.
+      anchor: this,
+    });
   };
   checkValidity(): boolean {
-    return this._internals?.checkValidity?.() ?? true;
+    return checkInternalsValidity(this._internals);
   }
   reportValidity(): boolean {
-    return this._internals?.reportValidity?.() ?? true;
+    return reportInternalsValidity(this._internals);
   }
   get validity(): ValidityState | undefined {
     return this._internals?.validity;
@@ -226,7 +220,7 @@ export class Checkbox extends RanElement {
   // A checkbox toggles on Space (and Enter, for convenience); without this the
   // host was clickable but not keyboard-operable.
   onKeydown = (event: KeyboardEvent): void => {
-    if (event.key === ' ' || event.key === 'Spacebar' || event.key === 'Enter') {
+    if (isActivationKey(event)) {
       event.preventDefault();
       this.onChange();
     }

@@ -44,6 +44,48 @@ describe('r-player interaction methods', () => {
     expect(player.getCurrentTime()).toBe(20);
   });
 
+  it('progress bar keyboard slider (Home/End/ArrowLeft/ArrowRight) seeks and prevents default', () => {
+    const player = makePlayer();
+    player._video = document.createElement('video');
+    Object.defineProperty(player._video, 'duration', { value: 100, configurable: true });
+    player.ctx.duration = 100;
+    player.ctx.currentTime = 50;
+
+    const rightEvent = new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true, cancelable: true });
+    player._progress.dispatchEvent(rightEvent);
+    expect(rightEvent.defaultPrevented).toBe(true);
+    expect(player._video.currentTime).toBe(51);
+    expect(player.ctx.currentTime).toBe(51);
+
+    const leftEvent = new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true, cancelable: true });
+    player._progress.dispatchEvent(leftEvent);
+    expect(leftEvent.defaultPrevented).toBe(true);
+    expect(player._video.currentTime).toBe(50);
+
+    const homeEvent = new KeyboardEvent('keydown', { key: 'Home', bubbles: true, cancelable: true });
+    player._progress.dispatchEvent(homeEvent);
+    expect(homeEvent.defaultPrevented).toBe(true);
+    expect(player._video.currentTime).toBe(0);
+
+    const endEvent = new KeyboardEvent('keydown', { key: 'End', bubbles: true, cancelable: true });
+    player._progress.dispatchEvent(endEvent);
+    expect(endEvent.defaultPrevented).toBe(true);
+    expect(player._video.currentTime).toBe(100);
+  });
+
+  it('progress bar keyboard slider ignores unrelated keys (no seek, no preventDefault)', () => {
+    const player = makePlayer();
+    player._video = document.createElement('video');
+    Object.defineProperty(player._video, 'duration', { value: 100, configurable: true });
+    player.ctx.duration = 100;
+    player.ctx.currentTime = 50;
+
+    const otherEvent = new KeyboardEvent('keydown', { key: 'a', bubbles: true, cancelable: true });
+    player._progress.dispatchEvent(otherEvent);
+    expect(otherEvent.defaultPrevented).toBe(false);
+    expect(player._video.currentTime).toBe(0);
+  });
+
   it('progress click seeks using progress geometry', () => {
     const player = makePlayer();
     player._video = document.createElement('video');

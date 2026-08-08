@@ -219,19 +219,38 @@ describe('r-checkbox contract', () => {
     checkbox._internals.setValidity = setValidity;
 
     checkbox.required = 'true';
-    expect(setValidity).toHaveBeenLastCalledWith(
-      { valueMissing: true },
-      expect.any(String),
-      checkbox.container,
-    );
+    // The native validation bubble anchors to the host itself — the host is
+    // the focusable/tabbable element (tabIndex is set on `this` in
+    // syncA11yAndForm), not the internal, non-focusable `.container` div.
+    expect(setValidity).toHaveBeenLastCalledWith({ valueMissing: true }, expect.any(String), checkbox);
 
     checkbox.click(); // now checked
     expect(setValidity).toHaveBeenLastCalledWith({});
 
     checkbox.click(); // unchecked again
-    expect(setValidity).toHaveBeenLastCalledWith({ valueMissing: true }, expect.any(String), checkbox.container);
+    expect(setValidity).toHaveBeenLastCalledWith({ valueMissing: true }, expect.any(String), checkbox);
 
     checkbox.disabled = true;
     expect(setValidity).toHaveBeenLastCalledWith({});
+  });
+
+  it('value setter updates the attribute even while disabled (matches native <input disabled>)', () => {
+    const checkbox = document.createElement('r-checkbox') as Checkbox;
+    document.body.appendChild(checkbox);
+
+    checkbox.disabled = true;
+    (checkbox as any).value = 'true';
+    expect(checkbox.getAttribute('value')).toBe('true');
+    expect((checkbox as any).context.checked).toBe(true);
+  });
+
+  it('formResetCallback restores the captured default checked state even when disabled at reset time', () => {
+    const checkbox = document.createElement('r-checkbox') as Checkbox;
+    checkbox.setAttribute('checked', 'true');
+    document.body.appendChild(checkbox);
+
+    checkbox.disabled = true;
+    (checkbox as any).formResetCallback();
+    expect(checkbox.checked).toBe(true);
   });
 });

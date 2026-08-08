@@ -277,16 +277,25 @@ export interface TruncateOptions {
  */
 export const truncate = (value: string, options: TruncateOptions | number): string => {
   const { length, position = 'end', ellipsis = '…' } = typeof options === 'number' ? { length: options } : options;
-  if (!value || value.length <= length) return value;
-  if (length <= ellipsis.length) return ellipsis.slice(0, Math.max(0, length));
+  if (!value) return value;
 
-  const budget = length - ellipsis.length;
-  if (position === 'start') return ellipsis + value.slice(value.length - budget);
+  // Slice by Unicode code point, not UTF-16 code unit: a naive `value.slice(i)` can land inside
+  // a surrogate pair (any character outside the Basic Multilingual Plane — emoji, some CJK
+  // extension characters — is 2 UTF-16 units), producing an unpaired surrogate next to the
+  // ellipsis that renders as mojibake. `Array.from` iterates by code point, keeping every
+  // surrogate pair intact.
+  const chars = Array.from(value);
+  const ellipsisChars = Array.from(ellipsis);
+  if (chars.length <= length) return value;
+  if (length <= ellipsisChars.length) return ellipsisChars.slice(0, Math.max(0, length)).join('');
+
+  const budget = length - ellipsisChars.length;
+  if (position === 'start') return ellipsis + chars.slice(chars.length - budget).join('');
   if (position === 'middle') {
     const head = Math.ceil(budget / 2);
-    return value.slice(0, head) + ellipsis + value.slice(value.length - (budget - head));
+    return chars.slice(0, head).join('') + ellipsis + chars.slice(chars.length - (budget - head)).join('');
   }
-  return value.slice(0, budget) + ellipsis;
+  return chars.slice(0, budget).join('') + ellipsis;
 };
 
 export interface TransformText {

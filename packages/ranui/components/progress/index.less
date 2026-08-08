@@ -28,25 +28,25 @@
     -webkit-tap-highlight-color: transparent;
   }
   &-wrap {
-    width: var(--ran-progress-wrap-width, 100%);
-    height: var(--ran-progress-wrap-height, 8px);
-    border-radius: var(--ran-progress-wrap-border-radius, var(--ran-radius-full, 9999px));
-    background: var(--ran-progress-wrap-background, var(--ran-gray-200, #ebebeb));
-    position: var(--ran-progress-wrap-position, relative);
-    overflow: var(--ran-progress-wrap-overflow, hidden);
+    width: var(--ran-progress-track-width, 100%);
+    height: var(--ran-progress-track-height, 8px);
+    border-radius: var(--ran-progress-track-border-radius, var(--ran-radius-full, 9999px));
+    background: var(--ran-progress-track-background, var(--ran-gray-200, #ebebeb));
+    position: var(--ran-progress-track-position, relative);
+    overflow: var(--ran-progress-track-overflow, hidden);
     &-value {
-      position: var(--ran-progress-wrap-value-position, absolute);
-      top: var(--ran-progress-wrap-value-top, 0);
-      left: var(--ran-progress-wrap-value-left, 0);
-      height: var(--ran-progress-wrap-value-height, 100%);
-      width: var(--ran-progress-wrap-value-width, 100%);
+      position: var(--ran-progress-fill-position, absolute);
+      top: var(--ran-progress-fill-top, 0);
+      left: var(--ran-progress-fill-left, 0);
+      height: var(--ran-progress-fill-height, 100%);
+      width: var(--ran-progress-fill-width, 100%);
       transform: scaleX(var(--progress-percent, 0));
-      transform-origin: var(--ran-progress-wrap-value-transform-origin, 0 0);
-      will-change: var(--ran-progress-wrap-value-will-change, transform);
+      transform-origin: var(--ran-progress-fill-transform-origin, 0 0);
+      will-change: var(--ran-progress-fill-will-change, transform);
       /* Monochrome primary, matching the rest of the design system (was a
          leftover Ant-Design-era teal→green gradient unrelated to any token). */
-      background: var(--ran-progress-wrap-value-background, var(--ran-color-primary, #171717));
-      border-radius: var(--ran-progress-wrap-value-border-radius, var(--ran-radius-full, 9999px));
+      background: var(--ran-progress-fill-background, var(--ran-color-primary, #171717));
+      border-radius: var(--ran-progress-fill-border-radius, var(--ran-radius-full, 9999px));
     }
   }
   &-dot {

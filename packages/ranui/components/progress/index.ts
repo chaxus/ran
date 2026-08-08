@@ -20,6 +20,12 @@ export class Progress extends RanElement {
   _progressDot!: HTMLDivElement;
   _shadowDom!: ShadowRoot;
   _events = new EventManager();
+  // Scoped to a single drag session (created in progressDotMouseDown, aborted
+  // in progressDotMouseUp/disconnectedCallback) rather than folded into
+  // `_events` — see the comment on `progressDotMouseDown` for why the
+  // document-level mousemove/mouseup pair must not stay bound for the
+  // component's whole connected lifetime.
+  _dragEvents = new EventManager();
   moveProgress: { mouseDown: boolean } = { mouseDown: false };
   // Tracks whether *this component* put tabindex="0" on, so syncA11y can take
   // it back off when type leaves "drag" — without leaking into a tabindex a
@@ -128,8 +134,9 @@ export class Progress extends RanElement {
   progressDotMouseDown = (e: MouseEvent): void => {
     this.moveProgress.mouseDown = true;
     e.stopPropagation();
-    document.addEventListener('mousemove', this.progressDotMouseMove as EventListener);
-    document.addEventListener('mouseup', this.progressDotMouseUp as EventListener);
+    this._dragEvents
+      .on(document, 'mousemove', this.progressDotMouseMove as EventListener)
+      .on(document, 'mouseup', this.progressDotMouseUp as EventListener);
   };
 
   progressDotMouseMove = (e: MouseEvent): void => {
@@ -149,8 +156,7 @@ export class Progress extends RanElement {
 
   progressDotMouseUp = (): void => {
     this.moveProgress.mouseDown = false;
-    document.removeEventListener('mousemove', this.progressDotMouseMove as EventListener);
-    document.removeEventListener('mouseup', this.progressDotMouseUp as EventListener);
+    this._dragEvents.abort();
   };
 
   /**
@@ -163,7 +169,10 @@ export class Progress extends RanElement {
    */
   progressKeydown = (e: KeyboardEvent): void => {
     if (this.type !== 'drag') return;
-    const total = Number(this.total) || 100;
+    // No `|| 100` fallback here: `this.total` already defaults to '100' when
+    // the attribute is absent (see the getter above), so `|| 100` only had an
+    // effect when `total="0"` was set on purpose — silently discarding it.
+    const total = Number(this.total);
     const next = sliderStepFromKeydown(e, { current: Number(this.percent), min: 0, max: total, step: total / 100 });
     if (next === undefined) return;
     e.preventDefault();
@@ -243,7 +252,7 @@ export class Progress extends RanElement {
 
   updateCurrentProgress = (): void => {
     if (!this._progress) return;
-    const total = Number(this.total) || 100;
+    const total = Number(this.total);
     const percent = Number(this.percent) / total;
     this.updateUI(percent);
   };
@@ -287,11 +296,11 @@ export class Progress extends RanElement {
 
   disconnectedCallback(): void {
     this._events.abort();
-    // In case the element is removed mid-drag (mouse still down) — these are
-    // bound outside `_events` (see progressDotMouseDown), so `.abort()` above
-    // doesn't reach them. Removing a listener that was never added is a no-op.
-    document.removeEventListener('mousemove', this.progressDotMouseMove as EventListener);
-    document.removeEventListener('mouseup', this.progressDotMouseUp as EventListener);
+    // In case the element is removed mid-drag (mouse still down) — `_dragEvents`
+    // is a separate EventManager (see progressDotMouseDown) so `_events.abort()`
+    // above doesn't reach it. `.abort()` is safe to call even if no drag is
+    // currently in flight (no listeners registered).
+    this._dragEvents.abort();
   }
 
   attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
