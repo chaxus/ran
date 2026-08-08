@@ -1,4 +1,4 @@
-export type EngineFormat = 'hls' | 'dash' | 'flv' | 'native';
+export type EngineFormat = 'hls' | 'dash' | 'flv' | 'webrtc' | 'native';
 
 /**
  * Sentinel id for the synthesized "let the engine choose" entry — same meaning

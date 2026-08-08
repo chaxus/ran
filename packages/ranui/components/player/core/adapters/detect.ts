@@ -7,14 +7,16 @@ const EXTENSION_MAP: Record<string, EngineFormat> = {
   ts: 'flv', // mpegts.js also demuxes raw MPEG-TS, not just FLV containers
 };
 
-const VALID_HINTS: ReadonlySet<string> = new Set(['hls', 'dash', 'flv', 'native']);
+const VALID_HINTS: ReadonlySet<string> = new Set(['hls', 'dash', 'flv', 'webrtc', 'native']);
 
 /**
  * `typeHint` (the player's `format` attribute) always wins when it's one of
  * the known engine names — an explicit override for extensionless/signed
  * streaming URLs that can't be sniffed. Otherwise falls back to matching the
  * URL's extension (query string/hash stripped first), defaulting to `native`
- * for anything unrecognized (including no `src` at all).
+ * for anything unrecognized (including no `src` at all). `webrtc` (a WHEP
+ * endpoint URL) has no extension convention to sniff at all — it's only ever
+ * reached via the explicit hint.
  */
 export function detectFormat(src: string, typeHint?: string): EngineFormat {
   const hint = (typeHint || '').trim().toLowerCase();
