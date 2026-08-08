@@ -1,11 +1,12 @@
+import { parseVttCueTiming } from 'ranuts/utils';
+
 /**
  * Thumbnail scrubbing preview — parses a WebVTT sprite-sheet manifest, the
  * same convention YouTube/Video.js use: a cue's text is
- * `spritesheet.jpg#xywh=x,y,w,h` (`docs/PLAYER_ROADMAP.md` Phase 3). No
- * existing ranui WebVTT parser to reuse — subtitles/CC (`core/tracks.ts`)
- * hand cue parsing off entirely to the browser's native `<track>` element;
- * this feature needs the sprite coordinates for itself, so it's genuinely
- * new parsing code.
+ * `spritesheet.jpg#xywh=x,y,w,h` (`docs/PLAYER_ROADMAP.md` Phase 3). Cue
+ * *timing* parsing is generic enough to live in `ranuts/utils`
+ * (`parseVttCueTiming`/`parseVttTimestamp`) — the sprite-rect fragment below
+ * is the only genuinely player-specific parsing left.
  */
 export interface ThumbnailCue {
   start: number;
@@ -15,25 +16,6 @@ export interface ThumbnailCue {
   y: number;
   w: number;
   h: number;
-}
-
-const TIMESTAMP_PATTERN = /(?:(\d{2,}):)?(\d{2}):(\d{2})\.(\d{3})/;
-
-function parseTimestamp(raw: string): number | undefined {
-  const match = raw.trim().match(TIMESTAMP_PATTERN);
-  if (!match) return undefined;
-  const [, hours, minutes, seconds, millis] = match;
-  return (hours ? Number(hours) * 3600 : 0) + Number(minutes) * 60 + Number(seconds) + Number(millis) / 1000;
-}
-
-function parseCueTiming(line: string): { start: number; end: number } | undefined {
-  const [startRaw, endRaw] = line.split('-->');
-  if (!startRaw || !endRaw) return undefined;
-  const start = parseTimestamp(startRaw);
-  // The end timestamp may be followed by cue settings (`align:start line:0`) — only the first token matters.
-  const end = parseTimestamp(endRaw.trim().split(/\s+/)[0] ?? '');
-  if (start === undefined || end === undefined) return undefined;
-  return { start, end };
 }
 
 function parseSpriteReference(
@@ -70,7 +52,7 @@ export function parseThumbnailVtt(vttText: string, baseUrl: string): ThumbnailCu
       .filter(Boolean);
     const timingIndex = lines.findIndex((line) => line.includes('-->'));
     if (timingIndex === -1) continue;
-    const timing = parseCueTiming(lines[timingIndex]);
+    const timing = parseVttCueTiming(lines[timingIndex]);
     if (!timing) continue;
     const spriteLine = lines[timingIndex + 1];
     if (!spriteLine) continue;

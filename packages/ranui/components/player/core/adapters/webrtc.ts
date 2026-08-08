@@ -1,3 +1,4 @@
+import { withTimeoutFallback } from 'ranuts/utils';
 import { createAdapterEmitter, type EngineAdapter } from './types';
 
 /**
@@ -14,9 +15,10 @@ import { createAdapterEmitter, type EngineAdapter } from './types';
  * `format="webrtc"` attribute (`core/adapters/detect.ts`).
  *
  * Scope, deliberately kept modest: non-trickle ICE (waits for gathering to
- * finish, capped at `ICE_GATHERING_TIMEOUT_MS`, then sends whatever
- * candidates it has) rather than the WHEP PATCH-based trickle mechanism, and
- * no `Link: rel="ice-server"` header parsing for server-supplied STUN/TURN
+ * finish, capped at `ICE_GATHERING_TIMEOUT_MS` via `ranuts/utils`'s
+ * `withTimeoutFallback` — proceed with whatever candidates it has rather than
+ * fail) rather than the WHEP PATCH-based trickle mechanism, and no
+ * `Link: rel="ice-server"` header parsing for server-supplied STUN/TURN
  * hints — both are real WHEP spec features, left out because they add
  * meaningful complexity for a first cut and most WHEP servers work without
  * them for directly-reachable deployments. `getQualityLevels()` always
@@ -28,19 +30,19 @@ const ICE_GATHERING_TIMEOUT_MS = 3000;
 
 function waitForIceGatheringComplete(pc: RTCPeerConnection, timeoutMs = ICE_GATHERING_TIMEOUT_MS): Promise<void> {
   if (pc.iceGatheringState === 'complete') return Promise.resolve();
-  return new Promise((resolve) => {
-    const onChange = (): void => {
+  let onChange: (() => void) | undefined;
+  const cleanup = (): void => {
+    if (onChange) pc.removeEventListener('icegatheringstatechange', onChange);
+  };
+  const gathering = new Promise<void>((resolve) => {
+    onChange = (): void => {
       if (pc.iceGatheringState !== 'complete') return;
-      clearTimeout(timer);
-      pc.removeEventListener('icegatheringstatechange', onChange);
+      cleanup();
       resolve();
     };
-    const timer = setTimeout(() => {
-      pc.removeEventListener('icegatheringstatechange', onChange);
-      resolve();
-    }, timeoutMs);
     pc.addEventListener('icegatheringstatechange', onChange);
   });
+  return withTimeoutFallback(gathering, timeoutMs, undefined, cleanup);
 }
 
 export function createWebrtcAdapter(): EngineAdapter {

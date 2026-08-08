@@ -1,8 +1,13 @@
+import { createDoubleTapDetector } from 'ranuts/utils';
+
 /**
  * Mobile gestures — double-tap left/right half to seek ∓10s, vertical swipe
  * on the right half for volume (`docs/PLAYER_ROADMAP.md` Phase 3). Pointer
  * Events idiom (`pointerdown`/`pointermove`/`pointerup` + `setPointerCapture`),
  * mirroring `r-mermaid`'s fullscreen pan/zoom (`components/mermaid/index.ts`).
+ * Double-tap detection itself is `ranuts/utils`'s `createDoubleTapDetector`
+ * (pointer-type-agnostic timestamp+distance matching) — genuinely generic,
+ * not media-player-specific.
  *
  * Scoped to `pointerType === 'touch'` only — mouse/pen interaction is
  * untouched, still handled by the existing container `click` listener
@@ -57,8 +62,10 @@ export function attachGestureHandlers(
   let isSwiping = false;
   let pendingSingleTapTimer: ReturnType<typeof setTimeout> | undefined;
   let flashTimer: ReturnType<typeof setTimeout> | undefined;
-  let lastTapAt = 0;
-  let lastTapX = 0;
+  const doubleTapDetector = createDoubleTapDetector({
+    windowMs: DOUBLE_TAP_WINDOW_MS,
+    maxDistancePx: DOUBLE_TAP_MAX_DISTANCE_PX,
+  });
 
   const isRightHalf = (clientX: number): boolean => {
     const rect = refs.container.getBoundingClientRect();
@@ -129,18 +136,13 @@ export function attachGestureHandlers(
       isSwiping = false;
       return;
     }
-    const tapAt = now();
     const tapX = e.clientX;
-    const isDoubleTap =
-      tapAt - lastTapAt < DOUBLE_TAP_WINDOW_MS && Math.abs(tapX - lastTapX) < DOUBLE_TAP_MAX_DISTANCE_PX;
+    const isDoubleTap = doubleTapDetector.check(e.clientX, e.clientY, now());
     if (isDoubleTap) {
       clearPendingSingleTap();
-      lastTapAt = 0;
       seek(isRightHalf(tapX) ? 'forward' : 'backward');
       return;
     }
-    lastTapAt = tapAt;
-    lastTapX = tapX;
     clearPendingSingleTap();
     pendingSingleTapTimer = setTimeout(() => {
       pendingSingleTapTimer = undefined;

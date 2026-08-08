@@ -1,4 +1,5 @@
-import { SyncHook } from 'ranuts/utils';
+import { SyncHook, createRaceGuard } from 'ranuts/utils';
+import type { RaceGuard } from 'ranuts/utils';
 import type { Progress } from '@/components/progress';
 import '@/components/select';
 import { SPEED } from './core/constants';
@@ -129,7 +130,7 @@ export class RanPlayer extends RanElement {
   _engine?: EngineAdapter;
   _tracks: PlayerTrackConfig[] = [];
   _thumbnailCues: ThumbnailCue[] = [];
-  _thumbnailLoadToken = 0;
+  _thumbnailLoadGuard: RaceGuard = createRaceGuard();
   /** Domain modules — each built once in the constructor from a narrow `getXxxDeps()` slice. */
   _errorModal!: PlayerErrorModalController;
   _mediaHandlers!: PlayerMediaHandlers;
@@ -541,16 +542,16 @@ export class RanPlayer extends RanElement {
    */
   getMetrics = (): PlayerMetrics => this._metrics.getMetrics();
   /**
-   * Guarded by `_thumbnailLoadToken` (bump-and-compare, same pattern as
-   * `r-loading`/`r-icon`'s async variant race guard) — if `thumbnails`
-   * changes again before this fetch resolves, the stale response is dropped
-   * instead of overwriting the newer manifest's cues.
+   * Guarded by `_thumbnailLoadGuard` (`ranuts/utils`'s `createRaceGuard` —
+   * the same bump-and-compare pattern `r-loading`'s async variant loading
+   * uses) — if `thumbnails` changes again before this fetch resolves, the
+   * stale response is dropped instead of overwriting the newer manifest's cues.
    */
   loadThumbnails = async (): Promise<void> => {
-    const token = ++this._thumbnailLoadToken;
+    const token = this._thumbnailLoadGuard.start();
     const url = this.thumbnails;
     const cues = url ? await loadThumbnailCues(url) : [];
-    if (token !== this._thumbnailLoadToken) return;
+    if (!this._thumbnailLoadGuard.isCurrent(token)) return;
     this._thumbnailCues = cues;
   };
   updatePlayer = (): void => {
