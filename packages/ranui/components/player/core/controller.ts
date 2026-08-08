@@ -12,6 +12,7 @@ export interface PlayerControllerElements {
   fullScreenBtn: HTMLDivElement;
   volumeIcon: HTMLDivElement;
   pipBtn: HTMLDivElement;
+  remoteBtn: HTMLDivElement;
 }
 
 export interface PlayerControllerHandlers {
@@ -36,6 +37,7 @@ export interface PlayerControllerHandlers {
   onFullscreenChange: () => void;
   onResize: () => void;
   onPipClick: (e: Event) => void;
+  onRemoteClick: (e: Event) => void;
   onVisibilityChange: () => void;
 }
 
@@ -67,6 +69,7 @@ const CONTROLLER_EVENT_BINDINGS: ControllerEventBinding[] = [
   { target: 'fullScreenBtn', eventName: 'click', handler: 'onFullScreenClick' },
   { target: 'volumeIcon', eventName: 'click', handler: 'onVolumeIconClick' },
   { target: 'pipBtn', eventName: 'click', handler: 'onPipClick' },
+  { target: 'remoteBtn', eventName: 'click', handler: 'onRemoteClick' },
   { target: 'document', eventName: 'fullscreenchange', handler: 'onFullscreenChange' },
   { target: 'document', eventName: 'visibilitychange', handler: 'onVisibilityChange' },
   { target: 'window', eventName: 'resize', handler: 'onResize' },

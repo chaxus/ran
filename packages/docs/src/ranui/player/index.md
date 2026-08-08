@@ -19,6 +19,7 @@ Built on Web Components, with `hls.js`/`dashjs`/`mpegts.js` lazy-loaded on deman
 - Subtitles/CC — set the `tracks` property, browser-native cue rendering, a language picker that remembers the viewer's choice
 - Error + retry — a `Modal.error()` dialog on fatal playback failures, on by default, opt-out via `disable-error-modal`
 - Resume playback — opt-in via `remember-position`, saved to `localStorage`, keyed per `src`
+- QoE metrics — `getMetrics()` derives rebuffer count/duration, first-frame time, quality-switch count and error count from the existing event stream
 - HLS (`.m3u8`) and DASH (`.mpd`) playback with automatic bitrate switching and a manual clarity selector; FLV/raw MPEG-TS (`.flv`/`.ts`) playback via `mpegts.js` — every engine lazy-loads on demand, no setup required. Force a specific engine (or opt back into plain `<video src>`) via the `format` attribute when a URL's extension can't be sniffed.
 - Keyboard shortcuts: `Space` play/pause, `ArrowLeft` / `ArrowRight` seek 5s, `Escape` exit fullscreen, `Home`/`End`/arrows on the focused seek bar
 
@@ -129,6 +130,28 @@ On by default. A fatal streaming-engine error or a native `<video>` `error` even
 
 Saves `getCurrentTime()` to `localStorage` (keyed by `src`) on `pause` and whenever the tab becomes hidden (`visibilitychange`, more reliable than `beforeunload`), restores it on the next load of that same `src`, and clears it once the video reaches `ended`. Silently skipped if the saved position is within 2 seconds of the duration — a finished video restarts fresh rather than "resuming" at its own end. Only the position is remembered; volume/speed/subtitle preferences are separate opt-ins.
 
+### QoE Metrics
+
+```js
+const player = document.querySelector('r-player');
+player.addEventListener('change', () => {
+  console.log(player.getMetrics());
+  // { rebufferCount, rebufferDuration, firstFrameMs, qualitySwitchCount, errorCount }
+});
+```
+
+`getMetrics()` returns a plain-object snapshot derived from the same `change` event stream documented below — there's no separate tracking to opt into:
+
+| Field                | Type              | Description                                                              |
+| -------------------- | ----------------- | ------------------------------------------------------------------------- |
+| `rebufferCount`       | `number`          | Number of `waiting`→`playing` transitions (stalls that then recovered).   |
+| `rebufferDuration`    | `number`          | Total time (ms) spent stalled across all rebuffers.                      |
+| `firstFrameMs`        | `number \| null`  | ms from the current `src` starting to load to the first playable frame; `null` until then. |
+| `qualitySwitchCount`  | `number`          | Number of clarity levels the user has picked from the quality selector.  |
+| `errorCount`          | `number`          | Number of `error`/`sourceerror` events.                                  |
+
+The snapshot resets whenever a new `src`/`format` loads — it always describes the **current** source, not a running total across sources.
+
 ## Methods
 
 The player exposes imperative controls on the element instance:
@@ -146,6 +169,7 @@ The player exposes imperative controls on the element instance:
 | `customExitFullscreen()`                   | Exit fullscreen. Returns a `Promise`.                   |
 | `togglePip()`                              | Enter/exit Picture-in-Picture. No-op if unsupported or no source is loaded. |
 | `setSubtitleLanguage(lang)`                | Set the active subtitle track by `srclang`, or `'off'` to disable. |
+| `getMetrics()`                             | Read the current [QoE metrics](#qoe-metrics) snapshot. |
 
 ## Events
 
@@ -215,6 +239,7 @@ Player-specific actions:
 | `resume`            | `number`           | A saved position was silently restored on load (`remember-position`); `data` is the restored time in seconds. |
 | `levelsready`       | `{ levels }`       | The streaming engine's manifest was parsed; clarity levels are now available. |
 | `sourceerror`       | `{ fatal, detail }` | A streaming-engine error occurred (falls back to the raw `src`; a **fatal** error also opens the error+retry dialog unless `disable-error-modal` is set — non-fatal errors are the engine's own internal recovery and don't). |
+| `qualityswitch`     | `{ level }`        | The user picked a clarity level from the quality selector.                                        |
 
 ## Slots
 

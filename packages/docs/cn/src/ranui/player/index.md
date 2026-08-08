@@ -21,6 +21,7 @@ description: 'ranui Player（<r-player>）在原生 <video> 之上封装统一�
 12. 字幕/CC——原生 `<track>` 渲染，语言选择记住上次的选择
 13. 错误 + 重试弹窗——播放失败时默认弹出，可关闭
 14. 断点续播——可选开启，存到 `localStorage`
+15. QoE 埋点——`getMetrics()` 基于现有事件流算出卡顿次数/时长、首帧耗时、清晰度切换次数、错误次数
 
 ## 代码演示
 
@@ -98,6 +99,28 @@ player.tracks = [
 
 每一项会变成挂在原生 `<video>` 上的 `<track>`，字幕渲染完全交给浏览器，播放器不做任何自定义样式。控制栏会出现一个语言选择器（"Off" + 每条 track 的 `label`，和清晰度选择器交互方式一样），选择结果存在 `localStorage`（全局的，不分视频），下次有 `tracks` 的播放器会自动应用；没存过的话就用配置里 `default: true` 的那条。`setSubtitleLanguage(lang)` 可以用代码切换（`lang` 是某条 track 的 `srclang`，或者 `'off'`）。
 
+### getMetrics()
+
+读取当前源的 QoE（体验质量）快照，数据全部来自播放器已有的 `change` 事件流，不需要额外开启任何东西：
+
+```js
+const player = document.querySelector('r-player');
+player.addEventListener('change', () => {
+  console.log(player.getMetrics());
+  // { rebufferCount, rebufferDuration, firstFrameMs, qualitySwitchCount, errorCount }
+});
+```
+
+| 字段                 | 类型              | 说明                                                         |
+| -------------------- | ----------------- | ------------------------------------------------------------ |
+| `rebufferCount`      | `number`          | `waiting`→`playing` 的次数（卡顿后恢复播放的次数）           |
+| `rebufferDuration`   | `number`          | 所有卡顿累计耗时（毫秒）                                     |
+| `firstFrameMs`       | `number \| null`  | 从当前 `src` 开始加载到首帧可播放的耗时（毫秒），首帧出现前为 `null` |
+| `qualitySwitchCount` | `number`          | 用户在清晰度选择器里切换档位的次数                           |
+| `errorCount`         | `number`          | `error`/`sourceerror` 事件的次数                             |
+
+每次 `src`/`format` 变化重新加载都会重置——快照永远只描述**当前**这个源，不是跨源的累计值。
+
 ## 事件`event`
 
 ### onchange
@@ -147,3 +170,4 @@ player.tracks = [
 | resume         | `remember-position` 静默恢复了保存的播放位置，`data` 是恢复到的秒数                                                   |
 | levelsready    | 播放引擎解析完 manifest，清晰度档位可用了                                                                          |
 | sourceerror    | 播放引擎报错（回退到原始 `src`；fatal 错误且没设 `disable-error-modal` 时还会弹错误+重试框）                          |
+| qualityswitch  | 用户在清晰度选择器里切换了档位，`data` 是 `{ level }`                                                              |

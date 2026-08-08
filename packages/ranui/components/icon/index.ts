@@ -101,6 +101,7 @@ export const RAN_ICON_NAMES = [
   'add-user',
   'arrow-down',
   'book',
+  'cast',
   'check',
   'check-circle',
   'check-circle-fill',

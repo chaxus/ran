@@ -40,6 +40,7 @@ export interface PlayerViewRefs {
   playControllerBottomVolumeIcon: HTMLDivElement;
   playControllerBottomVolumeProgress: Progress;
   playControllerBottomPip: HTMLDivElement;
+  playControllerBottomRemote: HTMLDivElement;
   playControllerBottomRightFullScreen: HTMLDivElement;
   playControllerBottomVolume: HTMLDivElement;
   playControllerBottomSpeedPopover: HTMLElement;
@@ -164,6 +165,15 @@ export function ensurePlayerView(input: {
     )
       .children(View('r-icon').attr('name', 'pip').build())
       .build() as HTMLDivElement;
+    // Hidden by default, same reasoning/mechanism as PiP above — visibility toggled by
+    // `syncRemoteButtonVisibility` once `isRemotePlaybackSupported()` is known.
+    const playControllerBottomRemote = focusableRole(
+      Div().class('ran-player-controller-bottom-right-remote ran-player-controller-bottom-right-remote-hidden'),
+      'button',
+      'Cast to device',
+    )
+      .children(View('r-icon').attr('name', 'cast').build())
+      .build() as HTMLDivElement;
     const playControllerBottomRightFullScreen = focusableRole(
       Div().class('ran-player-controller-bottom-right-full'),
       'button',
@@ -178,6 +188,7 @@ export function ensurePlayerView(input: {
         playControllerBottomSpeed,
         playControllerBottomVolume,
         playControllerBottomPip,
+        playControllerBottomRemote,
         playControllerBottomRightFullScreen,
       )
       .build() as HTMLDivElement;
@@ -298,6 +309,10 @@ export function ensurePlayerView(input: {
     playerControllerBottomRight.querySelector('.ran-player-controller-bottom-right-pip') as HTMLDivElement | null,
     '.ran-player-controller-bottom-right-pip',
   );
+  const playControllerBottomRemote = assertExists(
+    playerControllerBottomRight.querySelector('.ran-player-controller-bottom-right-remote') as HTMLDivElement | null,
+    '.ran-player-controller-bottom-right-remote',
+  );
   const playControllerBottomRightFullScreen = assertExists(
     playerControllerBottomRight.querySelector('.ran-player-controller-bottom-right-full') as HTMLDivElement | null,
     '.ran-player-controller-bottom-right-full',
@@ -339,6 +354,7 @@ export function ensurePlayerView(input: {
     playControllerBottomVolumeProgress,
     playControllerBottomSubtitle,
     playControllerBottomPip,
+    playControllerBottomRemote,
     playControllerBottomRightFullScreen,
     playControllerBottomVolume,
     playControllerBottomSpeedPopover,

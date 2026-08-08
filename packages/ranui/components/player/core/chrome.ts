@@ -5,6 +5,7 @@ import { exitDocumentFullscreen, requestElementFullscreen } from './fullscreen';
 import { shouldResumePlayback } from './playback';
 import type { PlaybackSnapshot } from './playback';
 import { exitPip, isPipSupported, requestPip } from './pip';
+import { isRemotePlaybackSupported, requestRemotePlayback } from './remote-playback';
 import { maybeSaveResumePosition } from './resume';
 import type { PlayerContextState, PlayerRuntimeState } from './state';
 
@@ -14,6 +15,7 @@ export interface PlayerChromeRefs {
   playerController: HTMLDivElement;
   playControllerBottomVolume: HTMLDivElement;
   playControllerBottomPip: HTMLDivElement;
+  playControllerBottomRemote: HTMLDivElement;
 }
 
 export type PlayerChromeRuntimeState = Pick<PlayerRuntimeState<PlaybackSnapshot>, 'isBuffering' | 'controllerBarTimeId'>;
@@ -65,6 +67,8 @@ export interface PlayerChromeHandlers {
   changeSpeed: (e: Event) => void;
   syncPipButtonVisibility: () => void;
   togglePip: () => void;
+  syncRemoteButtonVisibility: () => void;
+  showRemotePlaybackPicker: () => void;
   resize: () => void;
   onVisibilityChange: () => void;
   fullScreenChange: () => void;
@@ -288,6 +292,22 @@ export function createChromeHandlers(deps: PlayerChromeDeps): PlayerChromeHandle
       }
       requestPip(video).catch((error) => {
         if (deps.isDebug()) console.warn(`request picture-in-picture error:${error}`);
+      });
+    },
+    /**
+     * Cast/AirPlay button — same progressive-enhancement rule as PiP: only
+     * rendered when at least one of the Remote Playback API or
+     * `webkitShowPlaybackTargetPicker` is actually available.
+     */
+    syncRemoteButtonVisibility: (): void => {
+      const supported = isRemotePlaybackSupported(deps.getVideo());
+      refs.playControllerBottomRemote.classList.toggle('ran-player-controller-bottom-right-remote-hidden', !supported);
+    },
+    showRemotePlaybackPicker: (): void => {
+      const video = deps.getVideo();
+      if (!video) return;
+      requestRemotePlayback(video).catch((error) => {
+        if (deps.isDebug()) console.warn(`request remote playback error:${error}`);
       });
     },
     /**

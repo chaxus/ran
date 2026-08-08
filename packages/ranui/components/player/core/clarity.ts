@@ -93,6 +93,7 @@ export function createClarityHandlers<TLevel extends EngineQualityLevel = Engine
       deps.setLoadingState(true);
     }
     engine.setQuality(id);
+    deps.change('qualityswitch', { level: ctx.clarity });
   };
 
   const manifestLoaded = (levels: TLevel[]): void => {

@@ -103,7 +103,7 @@ feature work to avoid unrelated visual-regression risk.
 | 8 | FLV / raw MPEG-TS | Video.js + flv.js/mpegts.js plugins | **shipped (Phase 2)** | ✅ done via `mpegts.js` (see below) |
 | 9 | Mobile gestures (double-tap seek, swipe volume) | YouTube app, most native players | none | 🟡 real value, no existing gesture code to build on |
 | 10 | AirPlay / Remote Playback | native `<video controls>` on Safari/Chrome | none | 🟡 best-effort, feature-detected, inconsistent browser support |
-| 11 | QoE metrics hook | Shaka, hls.js's own stats, commercial players | `change` event exposes raw states, no derived metrics | 🟡 valuable for production use, pure computation on existing events |
+| 11 | QoE metrics hook | Shaka, hls.js's own stats, commercial players | **shipped (Phase 3)** | ✅ done via `core/metrics.ts`, pure computation on existing events |
 | 12 | WebRTC low-latency live | ultra-low-latency live players | unsupported | ❌ not planned — different transport model entirely (see §3) |
 
 ---
@@ -179,12 +179,15 @@ feature work to avoid unrelated visual-regression risk.
   Playback API** (`videoElement.remote.prompt()`) for Chrome/Edge, Safari's
   `webkitShowPlaybackTargetPicker()` for AirPlay. Button renders only when at least one is
   available — same progressive-enhancement rule as Picture-in-Picture.
-- **QoE metrics** → pure computation layered on the event stream the player already emits
-  via `change()`; no new UI. A `core/metrics.ts` accumulator derives `{rebufferCount,
-  rebufferDuration, firstFrameMs, qualitySwitchCount, errorCount}` from existing
-  handler transitions (`onWaiting`→`onPlaying` = a rebuffer, `updatePlayer()` timestamp → first
-  `canplay` = first-frame time, `changeClarity` calls = quality switches, `onError`/
-  `hlsError` = errors), exposed via a new `getMetrics()` method.
+- **QoE metrics — shipped (Phase 3).** Pure computation layered on the event stream the
+  player already emits via `change()`; no new UI. `core/metrics.ts`'s `createMetricsController()`
+  derives `{rebufferCount, rebufferDuration, firstFrameMs, qualitySwitchCount, errorCount}`
+  from that stream — `waiting`→`playing` = a rebuffer, `updatePlayer()`'s `onLoadStart()` call →
+  first `canplay`/`playing` = first-frame time, a new `qualityswitch` change event (dispatched
+  from `changeClarity` in `core/clarity.ts`) = quality switches, `error`/`sourceerror` = errors.
+  `RanPlayer.change()` feeds every event through `this._metrics.record(name, value)`; the
+  counters reset on every `updatePlayer()` (a fresh `src`/`format` load) so a snapshot always
+  describes the current source, never a cross-source running total. Exposed via `getMetrics()`.
 - **WebRTC — not planned.** Fundamentally different transport (no `<video src>` load; needs
   `RTCPeerConnection` + a signaling server) — doesn't fit the engine-adapter model the other
   three formats share, and is a different scope of work than everything else on this list.
@@ -211,9 +214,10 @@ feature work to avoid unrelated visual-regression risk.
   attribute forces a specific engine for URLs that can't be sniffed by extension. The
   `hlsManifestLoaded`/`hlsError` `change` event types were renamed to the generic
   `levelsready`/`sourceerror` as part of this — a deliberate breaking change (alpha stage).
-- **Phase 3 — planned:** Thumbnail scrubbing preview (WebVTT sprite), mobile gestures
-  (double-tap seek + volume swipe), AirPlay/Remote Playback button, QoE metrics
-  (`getMetrics()`).
+- **Phase 3 — in progress:** QoE metrics (`core/metrics.ts` + `getMetrics()`, a new
+  `qualityswitch` change event) — **done**. Still planned: thumbnail scrubbing preview
+  (WebVTT sprite), mobile gestures (double-tap seek + volume swipe), AirPlay/Remote
+  Playback button.
 - **Phase 4 — recorded, not scheduled:** WebRTC low-latency live playback; migrating the
   existing play/pause/fullscreen/volume icons from legacy background-image to
   `<r-icon>`/`registerIcon` (purely visual, decoupled from the feature work above).

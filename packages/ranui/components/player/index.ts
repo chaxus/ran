@@ -21,12 +21,14 @@ import { createChromeHandlers, type PlayerChromeDeps, type PlayerChromeHandlers 
 import { createMediaEventHandlers, type PlayerMediaDispatchDeps } from './core/media-dispatch';
 import { createClarityHandlers, type PlayerClarityDeps, type PlayerClarityHandlers } from './core/clarity';
 import { createSubtitleHandlers, type PlayerSubtitleDeps, type PlayerSubtitleHandlers } from './core/subtitles';
+import { createMetricsController, type PlayerMetrics, type PlayerMetricsController } from './core/metrics';
 import { type PlayerTrackConfig } from './core/tracks';
 import { ensurePlayerView } from './core/view';
 import { EventManager, View } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import { registerIcon } from '@/components/icon';
 import pipIcon from '@/assets/icons/pip.svg?raw';
+import castIcon from '@/assets/icons/cast.svg?raw';
 import {
   ensureShadowRoot,
   getStringAttribute,
@@ -38,6 +40,7 @@ import playerCss from './index.less?inline';
 import { defineSSR } from '@/utils/ssr-registry';
 
 registerIcon('pip', pipIcon);
+registerIcon('cast', castIcon);
 
 type Callback = (...args: unknown[]) => unknown;
 type EventName = string | symbol;
@@ -101,6 +104,7 @@ export class RanPlayer extends RanElement {
   _playControllerBottomVolumeProgress: Progress;
   _playControllerBottomSubtitle: HTMLElement;
   _playControllerBottomPip: HTMLDivElement;
+  _playControllerBottomRemote: HTMLDivElement;
   _playControllerBottomRightFullScreen: HTMLDivElement;
   _playControllerBottomVolume: HTMLDivElement;
   _playControllerBottomSpeedPopover: HTMLElement;
@@ -119,6 +123,7 @@ export class RanPlayer extends RanElement {
   _chrome!: PlayerChromeHandlers;
   _clarity!: PlayerClarityHandlers<EngineQualityLevel>;
   _subtitles!: PlayerSubtitleHandlers;
+  _metrics!: PlayerMetricsController;
   static get observedAttributes(): string[] {
     return [
       'src',
@@ -175,6 +180,7 @@ export class RanPlayer extends RanElement {
     this._playControllerBottomVolumeIcon = viewRefs.playControllerBottomVolumeIcon;
     this._playControllerBottomSubtitle = viewRefs.playControllerBottomSubtitle;
     this._playControllerBottomPip = viewRefs.playControllerBottomPip;
+    this._playControllerBottomRemote = viewRefs.playControllerBottomRemote;
     this._playControllerBottomClarity = viewRefs.playControllerBottomClarity;
     this._playControllerBottomRightFullScreen = viewRefs.playControllerBottomRightFullScreen;
     this._playerController = viewRefs.playerController;
@@ -190,6 +196,7 @@ export class RanPlayer extends RanElement {
     this._chrome = createChromeHandlers(this.getChromeDeps());
     this._clarity = createClarityHandlers<EngineQualityLevel>(this.getClarityDeps());
     this._subtitles = createSubtitleHandlers(this.getSubtitleDeps());
+    this._metrics = createMetricsController();
   }
   getVisualEffectRefs = (): PlayerVisualEffectRefs => {
     return {
@@ -277,6 +284,7 @@ export class RanPlayer extends RanElement {
       playerController: this._playerController,
       playControllerBottomVolume: this._playControllerBottomVolume,
       playControllerBottomPip: this._playControllerBottomPip,
+      playControllerBottomRemote: this._playControllerBottomRemote,
     },
     state: this._runtimeState,
     ctx: this.ctx,
@@ -484,9 +492,15 @@ export class RanPlayer extends RanElement {
   setSubtitleLanguage = (lang: string): void => this._subtitles.setSubtitleLanguage(lang);
   changeSubtitleTrack = (e: Event): void => this._subtitles.changeSubtitleTrack(e);
   createSubtitleSelect = (): void => this._subtitles.createSubtitleSelect();
+  /**
+   * QoE snapshot derived from the `change()` event stream since the current
+   * `src` started loading — see `core/metrics.ts`.
+   */
+  getMetrics = (): PlayerMetrics => this._metrics.getMetrics();
   updatePlayer = (): void => {
     // 重置清晰度状态，避免旧数据干扰新视频的 manifest 加载
     resetSourceContextState(this.ctx);
+    this._metrics.onLoadStart();
     this._playControllerBottomClarity.innerHTML = '';
     // 如果有子元素，进行置空
     this.innerHTML = '';
@@ -533,6 +547,7 @@ export class RanPlayer extends RanElement {
   change = (name: string, value: unknown): void => {
     const currentTime = this.getCurrentTime();
     const duration = this.getTotalTime();
+    this._metrics.record(name, value);
     if (this.debug) {
       console.log(name, value);
     }
@@ -572,6 +587,8 @@ export class RanPlayer extends RanElement {
   openFullScreen = (): void => this._chrome.openFullScreen();
   syncPipButtonVisibility = (): void => this._chrome.syncPipButtonVisibility();
   togglePip = (): void => this._chrome.togglePip();
+  syncRemoteButtonVisibility = (): void => this._chrome.syncRemoteButtonVisibility();
+  showRemotePlaybackPicker = (): void => this._chrome.showRemotePlaybackPicker();
   changeSpeed = (e: Event): void => this._chrome.changeSpeed(e);
   changePlayerVolume = (): void => this._chrome.changePlayerVolume();
   resize = (): void => this._chrome.resize();
@@ -682,6 +699,7 @@ export class RanPlayer extends RanElement {
       fullScreenBtn: this._playControllerBottomRightFullScreen,
       volumeIcon: this._playControllerBottomVolumeIcon,
       pipBtn: this._playControllerBottomPip,
+      remoteBtn: this._playControllerBottomRemote,
     };
   };
   getControllerHandlers = (): PlayerControllerHandlers => {
@@ -707,6 +725,7 @@ export class RanPlayer extends RanElement {
       onFullscreenChange: this.fullScreenChange,
       onResize: this.resize,
       onPipClick: this.togglePip,
+      onRemoteClick: this.showRemotePlaybackPicker,
       onVisibilityChange: this.onVisibilityChange,
     };
   };
@@ -719,6 +738,7 @@ export class RanPlayer extends RanElement {
     bindControllerEvents(this._events, this.getControllerElements(), this.getControllerHandlers());
     if (this._effectDisposers.length === 0) this.setupEffects();
     this.syncPipButtonVisibility();
+    this.syncRemoteButtonVisibility();
     this.updatePlayer();
   }
   disconnectedCallback(): void {
