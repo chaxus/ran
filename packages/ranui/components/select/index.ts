@@ -7,6 +7,7 @@ import '@/components/dropdown';
 import '@/components/select/dropdown-item';
 import { registerIcon } from '@/components/icon';
 import { defineSSR } from '@/utils/ssr-registry';
+import { computePlacement } from '@/utils/placement';
 import '@/components/input';
 import type { Input } from '@/components/input';
 import { Div, EventManager, InputBuilder, Slot, Span, View } from '@/utils/builder';
@@ -434,7 +435,7 @@ export class Select extends RanElement {
     requestAnimationFrame(() => {
       if (!this._selectionDropdown || !this._selectDropdown) return;
       const rect = this.getBoundingClientRect();
-      const { top, left, bottom, width } = rect;
+      const { top, left, bottom, width, height } = rect;
       const rootNode = this.getRootNode() as ShadowRoot | Document;
       const root =
         (rootNode.getElementById ? rootNode.getElementById(this.getPopupContainerId) : null) ||
@@ -443,22 +444,36 @@ export class Select extends RanElement {
       this._selectionDropdown.style.setProperty('--ran-x', `${top + window.scrollX}`);
       this._selectionDropdown.style.setProperty('--ran-y', `${left + window.scrollY}`);
       const OFFSET = 4;
-      let selectTop = bottom + window.scrollY + OFFSET;
-      let selectLeft = left + window.scrollX;
       this._selectionDropdown.style.setProperty('width', `${width}px`);
-      if (this.placement === 'top') {
-        selectTop = top + window.scrollY - this._selectionDropdown.clientHeight - OFFSET;
-      }
+
       if (this.getPopupContainerId && root) {
+        // Coordinates are relative to the custom container, not the viewport —
+        // boundary-aware flip (which assumes viewport coordinates) doesn't
+        // apply here, so fall back to the simple two-way placement.
         const rootRect = root.getBoundingClientRect();
-        selectLeft = left - rootRect.left;
+        const selectLeft = left - rootRect.left;
+        let selectTop = bottom - rootRect.top + OFFSET;
         if (this.placement === 'top') {
           selectTop = top - rootRect.top - this._selectionDropdown.clientHeight - OFFSET;
-        } else {
-          selectTop = bottom - rootRect.top + OFFSET;
         }
+        this._selectionDropdown.style.setProperty('inset', `${selectTop}px auto auto ${selectLeft}px`);
+        return;
       }
-      this._selectionDropdown.style.setProperty('inset', `${selectTop}px auto auto ${selectLeft}px`);
+
+      // Portaled to <body>: viewport-relative, so flip to the opposite side
+      // when the preferred side lacks room (e.g. select near the bottom of the
+      // screen) and shift horizontally to stay on-screen — the same
+      // flip/shift middleware pattern Floating UI/Radix use.
+      const { top: selectTop, left: selectLeft } = computePlacement({
+        anchor: { top, left, width, height },
+        floating: { width, height: this._selectionDropdown.clientHeight },
+        placement: this.placement === 'top' ? 'top' : 'bottom',
+        offset: OFFSET,
+      });
+      this._selectionDropdown.style.setProperty(
+        'inset',
+        `${selectTop + window.scrollY}px auto auto ${selectLeft + window.scrollX}px`,
+      );
     });
   };
 

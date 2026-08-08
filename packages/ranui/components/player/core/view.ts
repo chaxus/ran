@@ -76,7 +76,15 @@ export function ensurePlayerView(input: {
       .children(progressWrapBuffer, progressWrapValue)
       .build() as HTMLDivElement;
     const progressDot = Div().class('ran-player-controller-progress-dot').build() as HTMLDivElement;
+    // Percentage-based (0-100), not raw seconds — duration isn't known at
+    // construction time and changes per source, whereas 0-100 stays valid for
+    // the element's whole lifetime. aria-valuetext (kept in sync in
+    // syncProgressByPercentage) carries the actual "current of total" time
+    // for a screen reader, since a bare percentage isn't very meaningful for
+    // a seek bar.
     const progress = focusableRole(Div().class('ran-player-controller-progress'), 'slider', 'Seek')
+      .aria('valuemin', '0')
+      .aria('valuemax', '100')
       .children(progressWrap, progressDot)
       .build() as HTMLDivElement;
 

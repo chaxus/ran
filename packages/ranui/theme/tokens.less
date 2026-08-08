@@ -156,6 +156,13 @@
   /* ── Focus ring (Geist) ─────────────────────────────────────────── */
   /* Focus stays blue (Geist), decoupled from the now-monochrome primary. */
   --ran-focus-ring: 0 0 0 2px var(--ran-background-100), 0 0 0 4px var(--ran-blue-700);
+  /* For a component whose own surface is a *fixed* dark skin regardless of the
+     page theme (r-player's control bar over arbitrary video content) —
+     --ran-focus-ring's inner ring is --ran-background-100, which is white in
+     light mode and would have no contrast there. Deliberately not redefined
+     in dark.less: unlike --ran-focus-ring, this one doesn't track the page
+     theme, it tracks the fixed-dark surface it's meant for. */
+  --ran-focus-ring-inverse: 0 0 0 2px rgba(0, 0, 0, 0.4), 0 0 0 4px #fff;
 
   /* ── Motion ─────────────────────────────────────────────────────── */
   --ran-motion-duration-fast: 0.15s;

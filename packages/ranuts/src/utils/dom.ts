@@ -175,8 +175,11 @@ export const setFontSize2html = (designWidth: number = 375): void => {
  *
  * Two details make this work where the naive version does not: the height is reset to `auto`
  * before each measurement (`scrollHeight` never reports *less* than the current height, so
- * without the reset the box could only ever grow), and `box-sizing` decides whether padding is
- * already inside `scrollHeight`, which is why the border is added back for `content-box`.
+ * without the reset the box could only ever grow), and `box-sizing` decides what the CSS
+ * `height` being set is supposed to mean — `scrollHeight` always includes padding and never
+ * the border, but `border-box`'s `height` must cover the border too (so it's added back) while
+ * `content-box`'s `height` must exclude the padding `scrollHeight` already baked in (so it's
+ * subtracted).
  *
  * @param {HTMLTextAreaElement} element the textarea to manage
  * @return {() => void} detaches the listener and restores the inline height
@@ -201,14 +204,22 @@ export const autosizeTextarea = (element: HTMLTextAreaElement): (() => void) => 
   const resize = (): void => {
     element.style.height = 'auto';
     const style = getComputedStyle(element);
-    // `scrollHeight` never includes the border, regardless of box-sizing. The
-    // CSS `height` property's own meaning does depend on it though: for
-    // `border-box` it must include the border to size the box correctly, for
-    // `content-box` it must not. This was inverted — a border-box textarea
-    // with a visible border came out one border-width short and clipped its
-    // last line.
-    const border = style.boxSizing === 'border-box' ? px(style.borderTopWidth) + px(style.borderBottomWidth) : 0;
-    element.style.height = `${element.scrollHeight + border}px`;
+    // `scrollHeight` always includes padding and never the border, regardless
+    // of box-sizing. What the `height` we're about to set needs to *mean*
+    // does depend on box-sizing though:
+    //  - border-box: height must cover border + padding + content, so the
+    //    border (the one thing scrollHeight is missing) is added back. This
+    //    was inverted — a border-box textarea with a visible border came out
+    //    one border-width short and clipped its last line.
+    //  - content-box: height must be content only, so the padding
+    //    scrollHeight already includes has to be subtracted back out, or a
+    //    padded content-box textarea ends up padding-height taller than its
+    //    content needs.
+    const extra =
+      style.boxSizing === 'border-box'
+        ? px(style.borderTopWidth) + px(style.borderBottomWidth)
+        : -(px(style.paddingTop) + px(style.paddingBottom));
+    element.style.height = `${element.scrollHeight + extra}px`;
   };
 
   element.addEventListener('input', resize);

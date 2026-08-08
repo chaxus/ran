@@ -35,6 +35,13 @@ withDefaults(
   border: 1px solid var(--vp-c-divider);
   border-radius: 12px;
   background: var(--vp-c-bg-soft);
+  /* A demo may embed a component that carries its own elevated z-index (e.g.
+   * r-dropdown's --ran-z-dropdown: 1100) as *content*, not as a real triggered
+   * overlay. Without a stacking context of its own, that z-index compares
+   * directly against page-level chrome (VitePress's mobile sidebar + its
+   * backdrop), so the demo panel paints on top of the dimmed sidebar instead
+   * of staying inside its own box. isolation:isolate contains it. */
+  isolation: isolate;
 }
 
 .ran-demo__preview.is-start {

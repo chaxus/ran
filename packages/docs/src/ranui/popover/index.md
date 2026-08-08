@@ -160,5 +160,5 @@ Accessibility is wired automatically: the host receives `tabindex="0"`, `aria-ha
 - **Trigger element**: Place a focusable control (e.g. `<r-button>`) as the trigger so keyboard open/close works.
 - **Content wrapper**: Always wrap panel content in `<r-content>` — plain children that are not inside `<r-content>` are not shown as the floating panel.
 - **Inline sizing**: The host is `display: block`; add `style="display: inline-block;"` (or place it in an inline context) so it shrinks to the trigger.
-- **Placement**: Choose the `placement` that keeps the panel within the viewport for the trigger's position.
-- **Scoped container**: Use `getPopupContainerId` to anchor the panel inside a specific scroll/positioning container when the default body-level positioning is not desired.
+- **Placement**: `placement` is a preference, not a guarantee — when the trigger is near a viewport edge and the preferred side lacks room, the panel automatically flips to the opposite side and shifts along the cross axis to stay on-screen. This auto-flip only applies to the default body-level positioning.
+- **Scoped container**: Use `getPopupContainerId` to anchor the panel inside a specific scroll/positioning container when the default body-level positioning is not desired — flip/shift do not apply in this mode, so choose a `placement` that fits the container.

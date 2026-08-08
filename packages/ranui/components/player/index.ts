@@ -642,6 +642,8 @@ export class RanPlayer extends HTMLElementSSR()! {
       'transform',
       `translateX(${normalizedPercentage * this._progress.offsetWidth}px)`,
     );
+    this._progress.setAttribute('aria-valuenow', String(Math.round(normalizedPercentage * 100)));
+    this._progress.setAttribute('aria-valuetext', formatDuration(normalizedPercentage * this.ctx.duration));
   };
   seekToPercentage = (percentage: number): void => {
     const durationFromContext = this.ctx.duration;

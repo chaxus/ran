@@ -117,6 +117,8 @@ Duplicate option labels or values log a `console.warn`.
 
 ### Dropdown Direction `placement`
 
+`placement` is a preference, not a guarantee: when the trigger is near a viewport edge and the preferred side lacks room, the dropdown automatically flips to the other side and shifts horizontally to stay on-screen. This only applies to the default body-level mount — with `getPopupContainerId` set, choose a `placement` that fits the container.
+
 <Demo>
   <r-select style="width: 120px; height: 40px" defaultValue="185" placement="top">
     <r-option value="185">Mike</r-option>

@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { formatDuration } from 'ranuts/utils';
 import '@/components/player';
 
 describe('r-player contract', () => {
@@ -44,6 +45,21 @@ describe('r-player contract', () => {
     expect(playSpy).not.toHaveBeenCalled();
     expect(pauseSpy).toHaveBeenCalled();
     expect(player.moveProgress.mouseDown).toBe(false);
+  });
+
+  it('exposes the seek bar as an ARIA slider with a live value, not just a bare role', () => {
+    const player = document.createElement('r-player') as any;
+    document.body.appendChild(player);
+
+    expect(player._progress.getAttribute('role')).toBe('slider');
+    expect(player._progress.getAttribute('tabindex')).toBe('0');
+    expect(player._progress.getAttribute('aria-valuemin')).toBe('0');
+    expect(player._progress.getAttribute('aria-valuemax')).toBe('100');
+
+    player.ctx.duration = 120;
+    player.syncProgressByPercentage(0.25);
+    expect(player._progress.getAttribute('aria-valuenow')).toBe('25');
+    expect(player._progress.getAttribute('aria-valuetext')).toBe(formatDuration(30));
   });
 
   it('updates buffered track from buffered ranges', () => {

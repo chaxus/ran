@@ -36,7 +36,7 @@ const TOKEN = /YYYY|YY|MM|M|DD|D|HH|H|hh|h|mm|m|ss|s|SSS|A|a|\[([^\]]*)]/g;
  * ```ts
  * formatDate();                                          // '2026-07-25 14:30:00'
  * formatDate(1753425000000, 'YYYY/MM/DD');               // '2026/07/25'
- * formatDate(new Date(), 'YYYY[年]MM[月]DD[日] hh:mm a'); // '2026 年 07 月 25 日 02:30 pm' (escaped literals)
+ * formatDate(new Date(), 'YYYY[年]MM[月]DD[日] hh:mm a'); // '2026年07月25日 02:30 pm' (escaped literals)
  * ```
  */
 export const formatDate = (value?: DateInput, pattern: string = 'YYYY-MM-DD HH:mm:ss'): string => {

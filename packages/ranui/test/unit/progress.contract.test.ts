@@ -284,6 +284,45 @@ describe('r-progress contract', () => {
     expect(onChange).toHaveBeenCalledTimes(1);
   });
 
+  it('stops responding to an in-flight drag once type switches away from "drag"', () => {
+    // Regression: the document-level mousemove listener is attached at
+    // mousedown and stays attached until mouseup, regardless of what happens
+    // to `type` in between — it must re-check `type`, not just the
+    // mousedown-time snapshot, or a mid-drag type switch keeps mutating a bar
+    // that's now supposed to be a non-interactive "primary" progress bar.
+    const progress = document.createElement('r-progress') as any;
+    progress.setAttribute('type', 'drag');
+    progress.setAttribute('percent', '50');
+    document.body.appendChild(progress);
+    progress._progressDot.getBoundingClientRect = () => ({ width: 0 }) as DOMRect;
+    progress._progress.getBoundingClientRect = () => ({ left: 0 }) as DOMRect;
+    Object.defineProperty(progress._progress, 'offsetWidth', { value: 100, configurable: true });
+
+    progress._progressDot.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+    progress.setAttribute('type', 'primary');
+    document.dispatchEvent(new MouseEvent('mousemove', { clientX: 80 }));
+    expect(progress.percent).toBe('50');
+
+    document.dispatchEvent(new MouseEvent('mouseup'));
+  });
+
+  it('removes the tabindex it added itself when type leaves "drag", but never touches a consumer-set one', () => {
+    const progress = document.createElement('r-progress') as any;
+    progress.setAttribute('type', 'drag');
+    document.body.appendChild(progress);
+    expect(progress.hasAttribute('tabindex')).toBe(true);
+
+    progress.setAttribute('type', 'primary');
+    expect(progress.hasAttribute('tabindex')).toBe(false);
+
+    const withOwnTabindex = document.createElement('r-progress') as any;
+    withOwnTabindex.setAttribute('tabindex', '-1');
+    withOwnTabindex.setAttribute('type', 'drag');
+    document.body.appendChild(withOwnTabindex);
+    withOwnTabindex.setAttribute('type', 'primary');
+    expect(withOwnTabindex.getAttribute('tabindex')).toBe('-1');
+  });
+
   it('disconnectedCallback removes event listeners without error', () => {
     const progress = document.createElement('r-progress') as Progress;
     document.body.appendChild(progress);

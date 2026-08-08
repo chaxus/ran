@@ -21,6 +21,10 @@ export class Progress extends RanElement {
   _shadowDom!: ShadowRoot;
   _events = new EventManager();
   moveProgress: { mouseDown: boolean } = { mouseDown: false };
+  // Tracks whether *this component* put tabindex="0" on, so syncA11y can take
+  // it back off when type leaves "drag" — without leaking into a tabindex a
+  // consumer set explicitly themselves (which the component never touches).
+  private _tabIndexOwnedByComponent = false;
 
   static get observedAttributes(): string[] {
     return attributes;
@@ -129,7 +133,11 @@ export class Progress extends RanElement {
   };
 
   progressDotMouseMove = (e: MouseEvent): void => {
-    if (!this.moveProgress.mouseDown) return;
+    // `type` can change mid-drag (mousedown while type="drag", then the
+    // attribute flips to "primary" before mouseup) — the document listener
+    // stays attached until mouseup regardless, so it must re-check here too,
+    // not just at drag-start.
+    if (!this.moveProgress.mouseDown || this.type !== 'drag') return;
     const rect = this._progress.getBoundingClientRect();
     const offsetX = e.clientX - rect.left;
     const percentage = Math.min(1, Math.max(0, offsetX / this._progress.offsetWidth));
@@ -181,8 +189,18 @@ export class Progress extends RanElement {
     // never goes through that setter — without this, a screen reader saw a
     // slider/progressbar with a min and max but no current value.
     this.setAttribute('aria-valuenow', this.percent);
-    if (isDrag && !this.hasAttribute('tabindex')) {
-      this.tabIndex = 0;
+    if (isDrag) {
+      if (!this.hasAttribute('tabindex')) {
+        this.tabIndex = 0;
+        this._tabIndexOwnedByComponent = true;
+      }
+    } else if (this._tabIndexOwnedByComponent) {
+      // Switching away from "drag" makes the element non-operable again
+      // (progressKeydown/progressClick/progressDotMouseMove all early-return
+      // once type !== 'drag') — leaving tabindex="0" behind would tab-stop a
+      // keyboard user into a slider that does nothing.
+      this.removeAttribute('tabindex');
+      this._tabIndexOwnedByComponent = false;
     }
   };
 

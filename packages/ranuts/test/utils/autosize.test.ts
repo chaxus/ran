@@ -97,4 +97,33 @@ describe('autosizeTextarea', () => {
     expect(el.style.height).toBe('20px');
     spy.mockRestore();
   });
+
+  it('subtracts padding for content-box, since scrollHeight already includes it', () => {
+    // content-box's `height` means content only; scrollHeight (20px here) is
+    // content + padding, so padding has to come back out or the box ends up
+    // padding-height taller than it needs to be.
+    const el = makeTextarea();
+    const spy = vi.spyOn(window, 'getComputedStyle').mockReturnValue({
+      boxSizing: 'content-box',
+      paddingTop: '4px',
+      paddingBottom: '6px',
+    } as unknown as CSSStyleDeclaration);
+
+    autosizeTextarea(el);
+    expect(el.style.height).toBe('10px');
+    spy.mockRestore();
+  });
+
+  it('does not subtract padding for border-box, whose height already covers it', () => {
+    const el = makeTextarea();
+    const spy = vi.spyOn(window, 'getComputedStyle').mockReturnValue({
+      boxSizing: 'border-box',
+      paddingTop: '4px',
+      paddingBottom: '6px',
+    } as unknown as CSSStyleDeclaration);
+
+    autosizeTextarea(el);
+    expect(el.style.height).toBe('20px');
+    spy.mockRestore();
+  });
 });

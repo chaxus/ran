@@ -19,6 +19,7 @@ import {
 } from '@/utils/component';
 import popoverCss from './index.less?inline';
 import { defineSSR } from '@/utils/ssr-registry';
+import { computePlacement, type Placement } from '@/utils/placement';
 
 // index.ts:29 Uncaught DOMException: Failed to construct 'CustomElement': The result must not have children
 // index.ts:31 Uncaught DOMException: Failed to construct 'CustomElement': The result must not have attributes
@@ -249,27 +250,44 @@ export class Popover extends RanElement {
     if (!this.popoverContent) return;
     const rect = this.getBoundingClientRect();
     const { top, left, bottom, width, height } = rect;
-    let popoverTop = bottom + window.scrollY + arrowHeight;
-    let popoverLeft = left + window.scrollX;
     const root = document.getElementById(this.getPopupContainerId);
     const popoverContentRect = this.popoverContent.getBoundingClientRect();
-    if (this.placement === PLACEMENT_TYPE.TOP) {
-      popoverTop = top + window.scrollY - Math.max(popoverContentRect.height, height) - arrowHeight;
-      if (this.getPopupContainerId && root) {
-        const rootRect = root.getBoundingClientRect();
-        popoverLeft = left - rootRect.left;
-        popoverTop = top - root.getBoundingClientRect().top - this.popoverContent.clientHeight - arrowHeight;
-        popoverLeft = left - root.getBoundingClientRect().left;
+    let popoverTop: number;
+    let popoverLeft: number;
+
+    if (this.getPopupContainerId && root) {
+      // Coordinates are relative to the custom container, not the viewport —
+      // boundary-aware flip (which assumes viewport coordinates) doesn't
+      // apply here, so fall back to the simple placement.
+      const rootRect = root.getBoundingClientRect();
+      popoverTop = bottom - rootRect.top + arrowHeight;
+      popoverLeft = left - rootRect.left;
+      if (this.placement === PLACEMENT_TYPE.TOP) {
+        popoverTop = top - rootRect.top - this.popoverContent.clientHeight - arrowHeight;
       }
+      if (this.placement === PLACEMENT_TYPE.LEFT) {
+        popoverLeft = left - rootRect.left - Math.max(popoverContentRect.width, width) - arrowHeight;
+        popoverTop = top - rootRect.top;
+      }
+      if (this.placement === PLACEMENT_TYPE.RIGHT) {
+        popoverLeft = left - rootRect.left + width + arrowHeight;
+        popoverTop = top - rootRect.top;
+      }
+    } else {
+      // Portaled to <body>: viewport-relative, so flip to the opposite side
+      // when the preferred side lacks room and shift along the cross axis to
+      // stay on-screen — the same flip/shift middleware pattern Floating
+      // UI/Radix use.
+      const computed = computePlacement({
+        anchor: { top, left, width, height },
+        floating: { width: popoverContentRect.width, height: popoverContentRect.height },
+        placement: this.placement as Placement,
+        offset: arrowHeight,
+      });
+      popoverTop = computed.top + window.scrollY;
+      popoverLeft = computed.left + window.scrollX;
     }
-    if (this.placement === PLACEMENT_TYPE.LEFT) {
-      popoverLeft = left - Math.max(popoverContentRect.width, width) - arrowHeight;
-      popoverTop = top + window.scrollY;
-    }
-    if (this.placement === PLACEMENT_TYPE.RIGHT) {
-      popoverLeft = left + width + arrowHeight;
-      popoverTop = top + window.scrollY;
-    }
+
     this.popoverContent.style.setProperty('inset', `${popoverTop}px auto auto ${popoverLeft}px`);
     this.popoverContent.style.setProperty('--ran-x', `${popoverLeft}px`);
     this.popoverContent.style.setProperty('--ran-y', `${popoverTop}px`);
