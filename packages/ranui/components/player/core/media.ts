@@ -1,20 +1,6 @@
-export interface HlsLikeStatic<TPlayer> {
-  Events: {
-    MANIFEST_LOADED: string;
-    ERROR: string;
-  };
-  isSupported: () => boolean;
-  new (): TPlayer;
-}
-
-export interface HlsPlayerLike {
-  startLoad(): () => void;
-  off: (eventName: string, handler: Function) => void;
-  on: (eventName: string, handler: Function) => void;
-  loadSource: (src: string) => void;
-  attachMedia: (video: HTMLVideoElement) => void;
-  destroy: () => void;
-}
+import { createEngineAdapter } from './adapters';
+import { detectFormat } from './adapters/detect';
+import type { EngineAdapter, EngineFormat, EngineQualityLevel } from './adapters/types';
 
 export interface PlayerMediaHandlers {
   onCanplay: (e: Event) => void;
@@ -82,35 +68,34 @@ export function unbindMediaEvents(video: HTMLVideoElement, handlers: PlayerMedia
   }
 }
 
-export function loadVideoSource<TPlayer extends HlsPlayerLike>(input: {
+export interface LoadVideoSourceInput {
   video: HTMLVideoElement;
   src: string;
-  Hls?: HlsLikeStatic<TPlayer>;
-  existingHls?: TPlayer;
-  onManifestLoaded: Function;
-  onHlsError: Function;
-}): TPlayer | undefined {
-  const { video, src, Hls, existingHls, onManifestLoaded, onHlsError } = input;
-  if (existingHls) {
-    existingHls.destroy();
+  /** The player's `format` attribute value — passed straight through as `detectFormat`'s typeHint. */
+  format?: string;
+  existingEngine?: EngineAdapter;
+  onLevelsReady: (levels: EngineQualityLevel[]) => void;
+  onEngineError: (payload: { fatal: boolean; detail: unknown }) => void;
+  /**
+   * Injectable for tests — defaults to the real registry, mirroring how `Hls`
+   * was already an injected param rather than a `window.Hls` read inside this
+   * function.
+   */
+  createEngineAdapter?: (format: EngineFormat) => EngineAdapter | undefined;
+}
+
+export function loadVideoSource(input: LoadVideoSourceInput): EngineAdapter | undefined {
+  const { video, src, format, existingEngine, onLevelsReady, onEngineError } = input;
+  const resolveAdapter = input.createEngineAdapter ?? createEngineAdapter;
+  existingEngine?.destroy();
+  const detected = detectFormat(src, format);
+  const adapter = src ? resolveAdapter(detected) : undefined;
+  if (!adapter) {
+    if (src) video.src = src;
+    return undefined;
   }
-  if (Hls?.isSupported() && src) {
-    try {
-      const hls = new Hls();
-      hls.off(Hls.Events.MANIFEST_LOADED, onManifestLoaded);
-      hls.on(Hls.Events.MANIFEST_LOADED, onManifestLoaded);
-      hls.off(Hls.Events.ERROR, onHlsError);
-      hls.on(Hls.Events.ERROR, onHlsError);
-      hls.loadSource(src);
-      hls.attachMedia(video);
-      return hls;
-    } catch {
-      // Fall through to native src binding when HLS initialization fails.
-    }
-  }
-  if (src) {
-    // Native binding is the universal fallback for mp4 and browser-supported HLS.
-    video.src = src;
-  }
-  return undefined;
+  adapter.on('levelsready', ({ levels }) => onLevelsReady(levels));
+  adapter.on('error', (payload) => onEngineError(payload));
+  void adapter.load(video, src);
+  return adapter;
 }

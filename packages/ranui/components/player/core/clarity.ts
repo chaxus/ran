@@ -1,5 +1,5 @@
 import { View } from '@/utils/builder';
-import { buildManifestLevels, type ManifestLevelLike } from './levels';
+import type { EngineAdapter, EngineQualityLevel } from './adapters/types';
 import type { PlaybackSnapshot } from './playback';
 import type { PlayerRuntimeState } from './state';
 
@@ -10,24 +10,18 @@ export interface PlayerClarityRefs {
 
 export type PlayerClarityRuntimeState = Pick<PlayerRuntimeState<PlaybackSnapshot>, 'isSwitchingSource' | 'pendingPlaybackRestore'>;
 
-export interface PlayerClarityCtx<TLevel extends ManifestLevelLike = ManifestLevelLike> {
+export interface PlayerClarityCtx<TLevel extends EngineQualityLevel = EngineQualityLevel> {
   levels: TLevel[];
   levelMap: Map<string, string>;
   clarity: string;
-  url: string;
 }
 
-export interface HlsLoadable {
-  loadSource: (src: string) => void;
-  startLoad(): () => void;
-}
-
-export interface PlayerClarityDeps<TLevel extends ManifestLevelLike = ManifestLevelLike> {
+export interface PlayerClarityDeps<TLevel extends EngineQualityLevel = EngineQualityLevel> {
   refs: PlayerClarityRefs;
   state: PlayerClarityRuntimeState;
   ctx: PlayerClarityCtx<TLevel>;
+  getEngine: () => EngineAdapter | undefined;
   getVideo: () => HTMLVideoElement | undefined;
-  getHls: () => HlsLoadable | undefined;
   getSrc: () => string;
   capturePlaybackSnapshot: () => PlaybackSnapshot;
   setLoadingState: (loading: boolean) => void;
@@ -42,20 +36,20 @@ export interface PlayerClarityDeps<TLevel extends ManifestLevelLike = ManifestLe
   createClaritySelect: () => void;
 }
 
-export interface PlayerClarityHandlers<TLevel extends ManifestLevelLike = ManifestLevelLike> {
+export interface PlayerClarityHandlers<TLevel extends EngineQualityLevel = EngineQualityLevel> {
   changeClarity: (e: Event) => void;
   createClaritySelect: () => void;
-  manifestLoaded: (type: string, data: { levels: TLevel[]; url: string }) => void;
-  hlsError: (event: unknown, data: unknown) => void;
+  manifestLoaded: (levels: TLevel[]) => void;
+  hlsError: (payload: { fatal: boolean; detail: unknown }) => void;
 }
 
 /**
- * HLS-shaped rendition switching — the exact surface `docs/PLAYER_ROADMAP.md`
- * Phase 2's engine-agnostic adapter refactor rewrites (`loadSource(url)`
- * reload → `setQualityFor`/`setQuality(id)`). Kept separate from
- * `core/subtitles.ts` so that refactor only touches this one file.
+ * Rendition/quality switching, generalized across whichever `EngineAdapter`
+ * is currently loaded (`docs/PLAYER_ROADMAP.md` Phase 2) — no engine-specific
+ * branching lives here, that's the adapter's job (`core/adapters/*.ts`). Kept
+ * separate from `core/subtitles.ts` since subtitles are engine-independent.
  */
-export function createClarityHandlers<TLevel extends ManifestLevelLike = ManifestLevelLike>(
+export function createClarityHandlers<TLevel extends EngineQualityLevel = EngineQualityLevel>(
   deps: PlayerClarityDeps<TLevel>,
 ): PlayerClarityHandlers<TLevel> {
   const { refs, state, ctx } = deps;
@@ -66,9 +60,9 @@ export function createClarityHandlers<TLevel extends ManifestLevelLike = Manifes
     if (levels.length <= 0) return;
     const Fragment = document.createDocumentFragment();
     levels.forEach((item) => {
-      const { name, url } = item;
-      if (!name || !url) return;
-      ctx.levelMap.set(name, url);
+      const { name, id } = item;
+      if (!name || !id) return;
+      ctx.levelMap.set(name, id);
       const option = View('r-option').attr('value', name).text(name).build() as HTMLElement;
       Fragment.appendChild(option);
     });
@@ -90,42 +84,37 @@ export function createClarityHandlers<TLevel extends ManifestLevelLike = Manifes
 
   const changeClarity = (e: Event): void => {
     ctx.clarity = (e as CustomEvent).detail.value;
-    const url = ctx.levelMap.get((e as CustomEvent).detail.value);
-    const hls = deps.getHls();
-    if (url && hls) {
+    const id = ctx.levelMap.get((e as CustomEvent).detail.value);
+    const engine = deps.getEngine();
+    if (!id || !engine) return;
+    if (engine.reloadsOnQualityChange) {
       state.pendingPlaybackRestore = deps.capturePlaybackSnapshot();
       state.isSwitchingSource = true;
       deps.setLoadingState(true);
-      hls.loadSource(url);
-      hls.startLoad();
     }
+    engine.setQuality(id);
   };
 
-  const manifestLoaded = (type: string, data: { levels: TLevel[]; url: string }): void => {
-    if (type === 'hlsManifestLoaded') {
-      const { url, levels = [] } = data;
-      if (levels.length <= 0) return;
-      const normalized = buildManifestLevels<TLevel>({ levels, manifestUrl: url, existingLevelMap: ctx.levelMap });
-      ctx.levels.push(...normalized.levels);
-      normalized.levelMapEntries.forEach(([name, levelUrl]) => ctx.levelMap.set(name, levelUrl));
-      ctx.url = url;
-      deps.createClaritySelect();
-      deps.change('hlsManifestLoaded', { data });
-    }
+  const manifestLoaded = (levels: TLevel[]): void => {
+    if (levels.length <= 0) return;
+    ctx.levels = levels;
+    ctx.levelMap = new Map(levels.map((level) => [level.name, level.id]));
+    deps.createClaritySelect();
+    deps.change('levelsready', { levels });
   };
 
-  const hlsError = (event: unknown, data: unknown): void => {
+  const hlsError = (payload: { fatal: boolean; detail: unknown }): void => {
     state.isSwitchingSource = false;
     deps.setLoadingState(false);
-    deps.change('hlsError', { event, data });
+    deps.change('sourceerror', payload);
     const video = deps.getVideo();
     if (video) {
       video.src = deps.getSrc();
     }
-    // Non-fatal hls.js errors are already handled by the library's own internal
+    // Non-fatal engine errors are already handled by the library's own internal
     // recovery — only a fatal error means playback has actually stopped and is
     // worth interrupting the user for.
-    if ((data as { fatal?: boolean } | null)?.fatal) {
+    if (payload.fatal) {
       deps.showErrorModal('The stream could not be loaded.');
     }
   };

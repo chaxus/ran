@@ -1,11 +1,11 @@
 import { SyncHook } from 'ranuts/utils';
-import '../../assets/js/hls.js';
 import type { Progress } from '@/components/progress';
 import '@/components/select';
 import { SPEED } from './core/constants';
 import { bindControllerEvents, type PlayerControllerElements, type PlayerControllerHandlers } from './core/controller';
 import { createPlaybackSnapshot, shouldResumePlayback, type PlaybackSnapshot } from './core/playback';
 import { bindMediaEvents, loadVideoSource, unbindMediaEvents, type PlayerMediaHandlers } from './core/media';
+import type { EngineAdapter, EngineQualityLevel } from './core/adapters/types';
 import {
   createDefaultPlayerContext,
   createDefaultRuntimeState,
