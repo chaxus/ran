@@ -14,27 +14,27 @@
   pointer-events: var(--ran-btn-pointer-events, auto);
 
   .ran-btn {
-    box-sizing: var(--ran-btn-contain-box-sizing, border-box);
-    position: var(--ran-btn-contain-position, relative);
-    display: var(--ran-btn-contain-display, block);
-    background-image: var(--ran-btn-contain-background-image, none);
-    cursor: var(--ran-btn-contain-cursor, pointer);
+    box-sizing: var(--ran-btn-surface-box-sizing, border-box);
+    position: var(--ran-btn-surface-position, relative);
+    display: var(--ran-btn-surface-display, block);
+    background-image: var(--ran-btn-surface-background-image, none);
+    cursor: var(--ran-btn-surface-cursor, pointer);
     // Motion props only (opacity) — never palette props (background / color /
     // border-color / box-shadow). Palette transitions make every theme flip fade
     // component-by-component instead of switching with the host page in one
     // frame, which a general-purpose library must not impose on its consumers.
-    // Hosts that want palette fades can opt in via --ran-btn-contain-transition.
+    // Hosts that want palette fades can opt in via --ran-btn-surface-transition.
     transition: var(
-      --ran-btn-contain-transition,
+      --ran-btn-surface-transition,
       opacity var(--ran-motion-duration-base, 0.2s)
         var(--ran-motion-ease-standard, cubic-bezier(0.645, 0.045, 0.355, 1))
     );
-    user-select: var(--ran-btn-contain-user-select, none);
-    touch-action: var(--ran-btn-contain-touch-action, manipulation);
+    user-select: var(--ran-btn-surface-user-select, none);
+    touch-action: var(--ran-btn-surface-touch-action, manipulation);
     // Round the elevated surface to match the content, so it can never poke out
     // at the corners behind the rounded content (was showing white corners in dark).
-    border-radius: var(--ran-btn-content-border-radius, var(--ran-radius-sm, 6px));
-    background: var(--ran-btn-contain-background, var(--ran-color-bg-elevated, #fff));
+    border-radius: var(--ran-btn-border-radius, var(--ran-radius-sm, 6px));
+    background: var(--ran-btn-surface-background, var(--ran-color-bg-elevated, #fff));
   }
 
   &,
@@ -43,7 +43,7 @@
     outline: 0;
     -webkit-tap-highlight-color: transparent;
     .ran-btn {
-      outline: var(--ran-btn-contain-outline, 0);
+      outline: var(--ran-btn-surface-outline, 0);
     }
   }
 
@@ -56,10 +56,10 @@
      Text/ripple use --ran-color-primary-text so the ink inverts with the surface. */
   &([type="primary"]) {
     .ran-btn-content {
-      background-color: var(--ran-btn-content-background-color, var(--ran-color-primary, #171717));
+      background-color: var(--ran-btn-background, var(--ran-color-primary, #171717));
       background-image: var(--ran-btn-content-background-image, none);
-      border-color: var(--ran-btn-content-border-color, var(--ran-color-primary, #171717));
-      color: var(--ran-btn-content-color, var(--ran-color-primary-text, #fff));
+      border-color: var(--ran-btn-border-color, var(--ran-color-primary, #171717));
+      color: var(--ran-btn-color, var(--ran-color-primary-text, #fff));
     }
   }
 
@@ -74,8 +74,8 @@
 
   &([type="primary"]:not([disabled]):active) {
     .ran-btn-content {
-      background-color: var(--ran-btn-content-active-background-color, var(--ran-color-primary-active, #4d4d4d));
-      border-color: var(--ran-btn-content-active-border-color, var(--ran-color-primary-active, #4d4d4d));
+      background-color: var(--ran-btn-active-background, var(--ran-color-primary-active, #4d4d4d));
+      border-color: var(--ran-btn-active-border-color, var(--ran-color-primary-active, #4d4d4d));
     }
   }
 
@@ -85,34 +85,34 @@
        border steps 400 → 500 on the gray ladder, text stays primary text. */
     &(:not([disabled]):hover) {
       .ran-btn-content {
-        border-color: var(--ran-btn-content-hover-border-color, var(--ran-color-border-hover, #c9c9c9));
-        color: var(--ran-btn-content-hover-color, var(--ran-color-text, #171717));
+        border-color: var(--ran-btn-hover-border-color, var(--ran-color-border-hover, #c9c9c9));
+        color: var(--ran-btn-hover-color, var(--ran-color-text, #171717));
       }
     }
 
     &([type="primary"]:not([disabled]):hover) {
       .ran-btn-content {
-        background-color: var(--ran-btn-content-hover-background-color, var(--ran-color-primary-hover, #383838));
-        border-color: var(--ran-btn-content-hover-border-color, var(--ran-color-primary-hover, #383838));
-        color: var(--ran-btn-content-hover-color, var(--ran-color-primary-text, #fff));
+        background-color: var(--ran-btn-hover-background, var(--ran-color-primary-hover, #383838));
+        border-color: var(--ran-btn-hover-border-color, var(--ran-color-primary-hover, #383838));
+        color: var(--ran-btn-hover-color, var(--ran-color-primary-text, #fff));
       }
     }
 
     &([type="warning"]:not([disabled]):hover) {
       .ran-btn-content {
-        border-color: var(--ran-btn-content-warning-border-color, var(--ran-color-danger, #ff4d4f));
-        background-color: var(--ran-btn-content-warning-background-color, var(--ran-color-danger, #ff4d4f));
-        color: var(--ran-btn-content-warning-color, #fff);
+        border-color: var(--ran-btn-warning-border-color, var(--ran-color-danger, #ff4d4f));
+        background-color: var(--ran-btn-warning-background, var(--ran-color-danger, #ff4d4f));
+        color: var(--ran-btn-warning-color, #fff);
       }
     }
   }
 
   &([type="warning"]) {
     .ran-btn-content {
-      border-color: var(--ran-btn-content-warning-border-color, var(--ran-color-danger, #ff4d4f));
-      background-color: var(--ran-btn-content-warning-background-color, var(--ran-color-danger, #ff4d4f));
+      border-color: var(--ran-btn-warning-border-color, var(--ran-color-danger, #ff4d4f));
+      background-color: var(--ran-btn-warning-background, var(--ran-color-danger, #ff4d4f));
       background-image: var(--ran-btn-content-background-image, none);
-      color: var(--ran-btn-content-warning-color, #fff);
+      color: var(--ran-btn-warning-color, #fff);
     }
   }
 
@@ -124,7 +124,7 @@
 
   &([type="text"]) {
     .ran-btn-content {
-      border: var(--ran-btn-content-text-border, none);
+      border: var(--ran-btn-text-border, none);
     }
   }
 
@@ -134,9 +134,9 @@
     opacity: var(--ran-btn-disabled-opacity, 0.6);
 
     .ran-btn {
-      cursor: var(--ran-btn-disabled-container-cursor, not-allowed);
-      pointer-events: var(--ran-btn-disabled-container-pointer-events, all);
-      opacity: var(--ran-btn-disabled-container-opacity, 0.6);
+      cursor: var(--ran-btn-surface-disabled-cursor, not-allowed);
+      pointer-events: var(--ran-btn-surface-disabled-pointer-events, all);
+      opacity: var(--ran-btn-surface-disabled-opacity, 0.6);
     }
   }
 
@@ -150,7 +150,7 @@
     // via .ran-btn-content's transform transition. Motion prop only — safe on
     // theme flip.
     .ran-btn-content {
-      transform: var(--ran-btn-content-active-transform, scale(0.96));
+      transform: var(--ran-btn-active-transform, scale(0.96));
     }
   }
 
@@ -185,28 +185,28 @@
 .ran-btn-content {
   display: var(--ran-btn-content-display, flex);
   justify-content: var(--ran-btn-content-display, space-between);
-  align-items: var(--ran-btn-content-align-items, center);
-  padding: var(--ran-btn-content-padding, 4px 15px);
-  border: var(--ran-btn-content-border, 1px solid transparent);
-  border-image-source: var(--ran-btn-content-border-image-source, none);
-  border-image-slice: var(--ran-btn-content-border-image-slice, 8);
-  border-image-width: var(--ran-btn-content-border-image-width, 4px);
+  align-items: var(--ran-btn-align-items, center);
+  padding: var(--ran-btn-padding, 4px 15px);
+  border: var(--ran-btn-border, 1px solid transparent);
+  border-image-source: var(--ran-btn-border-image-source, none);
+  border-image-slice: var(--ran-btn-border-image-slice, 8);
+  border-image-width: var(--ran-btn-border-image-width, 4px);
   border-image-outset: 0;
   border-image-repeat: stretch;
-  border-radius: var(--ran-btn-content-border-radius, var(--ran-radius-sm, 6px));
-  border-color: var(--ran-btn-content-border-color, var(--ran-color-border, #eaeaea));
-  color: var(--ran-btn-content-color, var(--ran-color-text, #000000d9));
-  line-height: var(--ran-btn-content-line-height, 22px);
-  font-size: var(--ran-btn-content-font-size, 14px);
-  font-weight: var(--ran-btn-content-font-weight, 400);
-  font-family: var(--ran-btn-content-font-family, var(--ran-skin-font-family, inherit));
-  white-space: var(--ran-btn-content-white-space, nowrap);
-  text-align: var(--ran-btn-content-text-align, center);
+  border-radius: var(--ran-btn-border-radius, var(--ran-radius-sm, 6px));
+  border-color: var(--ran-btn-border-color, var(--ran-color-border, #eaeaea));
+  color: var(--ran-btn-color, var(--ran-color-text, #000000d9));
+  line-height: var(--ran-btn-line-height, 22px);
+  font-size: var(--ran-btn-font-size, 14px);
+  font-weight: var(--ran-btn-font-weight, 400);
+  font-family: var(--ran-btn-font-family, var(--ran-skin-font-family, inherit));
+  white-space: var(--ran-btn-white-space, nowrap);
+  text-align: var(--ran-btn-text-align, center);
   box-sizing: var(--ran-btn-content-box-sizing, border-box);
   // Motion prop only (transform) — spring easing gives a slight bounce on
   // release when the press scale (see :active) relaxes back to rest.
   transition: var(
-    --ran-btn-content-transition,
+    --ran-btn-transition,
     transform var(--ran-motion-duration-base, 0.2s) var(--ran-motion-ease-spring, cubic-bezier(0.34, 1.26, 0.5, 1))
   );
   .icon {

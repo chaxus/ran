@@ -95,6 +95,8 @@ describe('bindMediaEvents / unbindMediaEvents', () => {
       ['timeupdate', 'onTimeupdate'],
       ['volumechange', 'onVolumechange'],
       ['waiting', 'onWaiting'],
+      ['enterpictureinpicture', 'onEnterPictureInPicture'],
+      ['leavepictureinpicture', 'onLeavePictureInPicture'],
     ];
 
     for (const [event, handler] of pairs) {
