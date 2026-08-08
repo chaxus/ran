@@ -406,8 +406,9 @@ export class RanPlayer extends RanElement {
     this.setAttribute('thumbnails', value || '');
   }
   /**
-   * @description: 强制指定引擎（`hls`/`dash`/`flv`/`native`），给拿不到扩展名的
+   * @description: 强制指定引擎（`hls`/`dash`/`flv`/`webrtc`/`native`），给拿不到扩展名的
    * 加签/无后缀流地址用；缺省时按 `src` 扩展名自动探测（见 `core/adapters/detect.ts`）。
+   * `webrtc`（WHEP 端点 URL）没有扩展名可探测，必须显式指定这个值。
    */
   get format(): string {
     return this.getAttribute('format') || '';

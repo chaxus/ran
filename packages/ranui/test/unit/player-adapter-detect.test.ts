@@ -40,6 +40,11 @@ describe('detectFormat', () => {
     expect(detectFormat('https://cdn.example.com/video.mp4', 'hls')).toBe('hls');
   });
 
+  it('webrtc is only reachable via the explicit typeHint — there is no extension to sniff', () => {
+    expect(detectFormat('https://stream.example.com/whep/room123', 'webrtc')).toBe('webrtc');
+    expect(detectFormat('https://stream.example.com/whep/room123')).toBe('native');
+  });
+
   it('is case-insensitive and trims whitespace on typeHint', () => {
     expect(detectFormat('https://cdn.example.com/x', ' DASH ')).toBe('dash');
   });

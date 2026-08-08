@@ -24,6 +24,7 @@ Built on Web Components, with `hls.js`/`dashjs`/`mpegts.js` lazy-loaded on deman
 - Resume playback — opt-in via `remember-position`, saved to `localStorage`, keyed per `src`
 - QoE metrics — `getMetrics()` derives rebuffer count/duration, first-frame time, quality-switch count and error count from the existing event stream
 - HLS (`.m3u8`) and DASH (`.mpd`) playback with automatic bitrate switching and a manual clarity selector; FLV/raw MPEG-TS (`.flv`/`.ts`) playback via `mpegts.js` — every engine lazy-loads on demand, no setup required. Force a specific engine (or opt back into plain `<video src>`) via the `format` attribute when a URL's extension can't be sniffed.
+- WebRTC low-latency live playback via WHEP (`format="webrtc"`, `src` is a WHEP endpoint URL) — no library dependency, `RTCPeerConnection` is a native browser API.
 - Keyboard shortcuts: `Space` play/pause, `ArrowLeft` / `ArrowRight` seek 5s, `Escape` exit fullscreen, `Home`/`End`/arrows on the focused seek bar
 
 ## Quick Start
@@ -45,7 +46,7 @@ Built on Web Components, with `hls.js`/`dashjs`/`mpegts.js` lazy-loaded on deman
 | Property       | Type     | Default | Description                                                                                           |
 | -------------- | -------- | ------- | ----------------------------------------------------------------------------------------------------- |
 | `src`          | `string` | `''`    | Video resource URL. Changing it reloads the player. Engine (HLS/native) is auto-detected from the extension. |
-| `format`       | `string` | `''`    | Force a specific engine — `hls` / `dash` / `flv` / `native` — instead of auto-detecting from `src`'s extension. Useful for extensionless/signed streaming URLs. Changing it reloads the player. |
+| `format`       | `string` | `''`    | Force a specific engine — `hls` / `dash` / `flv` / `webrtc` / `native` — instead of auto-detecting from `src`'s extension. Useful for extensionless/signed streaming URLs; **required** for `webrtc` (a WHEP endpoint has no extension to detect). Changing it reloads the player. |
 | `volume`       | `string` | `''`    | Initial volume on a `0`–`100` scale — same scale as `setVolume()`/`getVolume()`. |
 | `currentTime`  | `string` | `''`    | Initial playback position in seconds. Also accepted lowercase as `currenttime`.                       |
 | `playbackRate` | `string` | `''`    | Playback speed multiplier (e.g. `1`, `1.5`, `2`). Also accepted lowercase as `playbackrate`.          |
