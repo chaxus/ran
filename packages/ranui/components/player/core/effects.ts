@@ -61,7 +61,7 @@ export function createPlaybackVisualEffects(
         addClassToElement(refs.volumeIcon, MUTE_ICON_CLASS);
         removeClassToElement(refs.volumeIcon, VOLUME_ICON_CLASS);
       }
-      refs.volumeProgress.setAttribute('percent', `${volume * 100}`);
+      refs.volumeProgress.setAttribute('percent', `${volume}`);
     }),
   ];
 }

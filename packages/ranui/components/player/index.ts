@@ -74,6 +74,7 @@ export interface Context {
   currentState: string;
   duration: number;
   currentTime: number;
+  /** 0-100, matches the `volume` attribute and `setVolume`/`getVolume` — not the native `<video>.volume` 0-1 scale. */
   volume: number;
   playbackRate: number;
   fullScreen: boolean;

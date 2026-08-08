@@ -30,6 +30,6 @@ export function createPlayerVisualSignals(): PlayerVisualSignals {
     currentTime: mk(0),
     duration: mk(0),
     bufferedPercentage: mk(0),
-    volume: mk(0.5),
+    volume: mk(50),
   };
 }

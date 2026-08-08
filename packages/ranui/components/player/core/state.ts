@@ -28,7 +28,7 @@ export function createDefaultPlayerContext<TAction, TLevel = unknown>(
     duration: 0,
     currentState: '',
     action,
-    volume: 0.5,
+    volume: 50,
     playbackRate: 1,
     clarity: '',
     fullScreen: false,
