@@ -28,6 +28,6 @@
     "vite": "catalog:"
   },
   "dependencies": {
-    "ranuts": "workspace:^"
+    "ranuts": "workspace:*"
   }
 }

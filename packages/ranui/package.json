@@ -382,8 +382,8 @@
   },
   "devDependencies": {
     "@playwright/test": "1.62.1",
-    "@types/node": "20.8.4",
-    "@vitest/coverage-v8": "0.29.8",
+    "@types/node": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
     "jsdom": "30.0.1",
     "less": "catalog:",
     "rollup-plugin-visualizer": "7.0.1",
@@ -395,7 +395,7 @@
   },
   "dependencies": {
     "mermaid": "11.16.1",
-    "ranuts": "workspace:^",
+    "ranuts": "workspace:*",
     "temml": "0.13.4"
   }
 }

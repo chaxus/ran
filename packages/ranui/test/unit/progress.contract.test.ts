@@ -217,6 +217,20 @@ describe('r-progress contract', () => {
     expect(progress.getAttribute('role')).toBe('progressbar');
     expect(progress.getAttribute('aria-valuemin')).toBe('0');
     expect(progress.getAttribute('aria-valuemax')).toBe('100');
+    expect(progress.getAttribute('aria-valuenow')).toBe('0');
+  });
+
+  it('aria-valuenow reflects percent set as an attribute, not only via the property setter', () => {
+    // Regression: aria-valuenow used to be written only inside the `percent`
+    // property setter, so declarative markup / setAttribute('percent', …)
+    // left a slider or progressbar with min/max but no current value.
+    const progress = document.createElement('r-progress') as any;
+    progress.setAttribute('percent', '42');
+    document.body.appendChild(progress);
+    expect(progress.getAttribute('aria-valuenow')).toBe('42');
+
+    progress.setAttribute('percent', '73');
+    expect(progress.getAttribute('aria-valuenow')).toBe('73');
   });
 
   it('type="drag" gets role=slider and a tab stop; static stays out of tab order', () => {

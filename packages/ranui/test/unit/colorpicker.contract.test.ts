@@ -185,5 +185,10 @@ describe('r-colorpicker contract', () => {
     cp.context.transparency.setter(50);
     cp.sliderKeydown('alpha')({ key: 'ArrowLeft', shiftKey: false, preventDefault() {} });
     expect(cp.context.transparency.getter()).toBe(49);
+
+    // Shift steps by 10 instead of 1 (shared with r-progress via sliderStepFromKeydown).
+    cp.context.hue.setter(10);
+    cp.sliderKeydown('hue')({ key: 'ArrowRight', shiftKey: true, preventDefault() {} });
+    expect(cp.context.hue.getter()).toBe(20);
   });
 });
