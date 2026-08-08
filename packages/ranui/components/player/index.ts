@@ -420,6 +420,62 @@ export class RanPlayer extends RanElement {
     select.addEventListener('change', this.changeClarity);
     this._playControllerBottomClarity.appendChild(select);
   };
+  /**
+   * @description: 把 `_tracks` 应用到当前 `_video`——重建 `<track>` 元素，重建语言选择
+   * select，再按"上次记住的语言"或"配置里 default:true 的那条"选一个初始激活语言。
+   * `updatePlayer()`（新 video）和 `tracks` setter（已有 video 时动态更新）都会调用它。
+   */
+  applyTracks = (): void => {
+    if (!this._video) return;
+    applyTracksToVideo(this._video, this._tracks);
+    this.createSubtitleSelect();
+    if (this._tracks.length <= 0) return;
+    const preferred = loadPreferredSubtitleLanguage();
+    const preferredAvailable = preferred !== 'off' && this._tracks.some((track) => track.srclang === preferred);
+    const fallbackDefault = this._tracks.find((track) => track.default);
+    const initialLang = preferredAvailable ? preferred : fallbackDefault?.srclang || 'off';
+    this.setSubtitleLanguage(initialLang);
+  };
+  setSubtitleLanguage = (lang: string): void => {
+    if (!this._video) return;
+    setActiveSubtitleLanguage(this._video, lang);
+    const select = this._playControllerBottomSubtitle.querySelector('r-select');
+    if (select) select.setAttribute('value', lang === 'off' ? 'Off' : lang);
+  };
+  changeSubtitleTrack = (e: Event): void => {
+    const lang = (e as CustomEvent).detail.value === 'Off' ? 'off' : (e as CustomEvent).detail.value;
+    this.setSubtitleLanguage(lang);
+    savePreferredSubtitleLanguage(lang);
+    this.change('subtitlechange', lang);
+  };
+  /**
+   * @description: 完全照抄 `createClaritySelect` 的结构——`<r-select>` 里 "Off" + 每条
+   * track 的 label，选中即切换激活语言。不做独立的 CC 开关按钮，"Off" 选项本身就是关闭入口。
+   */
+  createSubtitleSelect = (): void => {
+    this._playControllerBottomSubtitle.innerHTML = '';
+    if (this._tracks.length <= 0) return;
+    const Fragment = document.createDocumentFragment();
+    Fragment.appendChild(View('r-option').attr('value', 'Off').text('Off').build() as HTMLElement);
+    this._tracks.forEach((track) => {
+      const option = View('r-option').attr('value', track.srclang).text(track.label).build() as HTMLElement;
+      Fragment.appendChild(option);
+    });
+    const id = this._player.getAttribute('id');
+    const select = View('r-select')
+      .attr('value', 'Off')
+      .attr('type', 'text')
+      .attr('trigger', 'hover,click')
+      .attr('placement', 'top')
+      .attr('dropdownclass', 'video-subtitle-dropdown')
+      .aria('label', 'Subtitles')
+      .children(Fragment as unknown as HTMLElement)
+      .build() as HTMLElement;
+
+    if (id) select.setAttribute('getPopupContainerId', id);
+    select.addEventListener('change', this.changeSubtitleTrack);
+    this._playControllerBottomSubtitle.appendChild(select);
+  };
   manifestLoaded = (type: string, data: { levels: Level[]; url: string }): void => {
     if (type === 'hlsManifestLoaded') {
       const { url, levels = [] } = data;
@@ -480,6 +536,7 @@ export class RanPlayer extends RanElement {
       }
       this._video.parentElement?.setAttribute('class', 'ran-player-contain');
       this.listenEvent();
+      this.applyTracks();
     } catch (error) {
       if (this.debug) console.warn('r-player update player error:', error);
     }

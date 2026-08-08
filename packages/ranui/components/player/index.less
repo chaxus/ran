@@ -552,6 +552,63 @@
           }
         }
 
+        &-subtitle {
+          color: var(--ran-player-controller-bottom-right-align-subtitle-color, #fff);
+          font-family: var(--ran-player-controller-bottom-right-align-subtitle-font-family, PingFang SC);
+          font-size: var(--ran-player-controller-bottom-right-align-subtitle-font-size, 14px);
+          width: var(--ran-player-controller-bottom-right-align-subtitle-width, 30px);
+          height: var(--ran-player-controller-bottom-right-align-subtitle-height, 20px);
+          font-style: var(--ran-player-controller-bottom-right-align-subtitle-font-style, normal);
+          font-weight: var(--ran-player-controller-bottom-right-align-subtitle-font-weight, 400);
+          line-height: var(--ran-player-controller-bottom-right-align-subtitle-line-height, normal);
+          cursor: var(--ran-player-controller-bottom-right-align-subtitle-cursor, pointer);
+          margin-right: var(--ran-player-controller-bottom-right-align-subtitle-margin-right, 12px);
+          outline: var(--ran-player-controller-bottom-right-align-subtitle-outline, 0);
+          -webkit-tap-highlight-color: transparent;
+
+          // Empty when no tracks are configured — collapse instead of leaving a gap.
+          &:empty {
+            display: none;
+          }
+
+          &:active,
+          &:focus {
+            outline: var(--ran-player-controller-bottom-right-align-subtitle-focus-outline, 0);
+            -webkit-tap-highlight-color: transparent;
+          }
+
+          r-select {
+            width: 46px;
+            height: 20px;
+            outline: 0;
+            -webkit-tap-highlight-color: transparent;
+
+            &:active,
+            &:focus {
+              outline: 0;
+              -webkit-tap-highlight-color: transparent;
+            }
+
+            &::part(selection) {
+              background-color: transparent;
+              padding: 0;
+              border: none;
+            }
+
+            &::part(icon) {
+              display: none;
+            }
+
+            &::part(selection-item) {
+              width: 100%;
+              text-align: center;
+              left: 0;
+              color: var(--ran-player-select-item-color, #fff);
+              font-size: 12px;
+            }
+          }
+        }
+
         &-clarity {
           color: var(--ran-player-controller-bottom-right-align-clarity-color, #fff);
           font-family: var(--ran-player-controller-bottom-right-align-clarity-font-family, PingFang SC);
