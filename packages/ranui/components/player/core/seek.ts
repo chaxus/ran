@@ -6,6 +6,7 @@ import { resolveSeekDuration } from './playback';
 import type { PlaybackSnapshot } from './playback';
 import type { PlayerContextState, PlayerRuntimeState } from './state';
 import type { PlayerVisualSignals } from './store';
+import { applyThumbnailPreview, type ThumbnailCue } from './thumbnails';
 
 export interface PlayerSeekRefs {
   progress: HTMLDivElement;
@@ -14,6 +15,7 @@ export interface PlayerSeekRefs {
   progressDot: HTMLDivElement;
   playerBtn: HTMLDivElement;
   playerTip: HTMLDivElement;
+  playerTipThumbnail: HTMLDivElement;
   playerTipTime: HTMLDivElement;
   playerTipText: HTMLDivElement;
 }
@@ -35,6 +37,7 @@ export interface PlayerSeekDeps {
   safePlay: (showLoading: boolean) => void;
   pause: () => void;
   showControllerBar: (e?: MouseEvent) => void;
+  getThumbnailCue: (time: number) => ThumbnailCue | undefined;
   /**
    * Self-forwarding entries for this module's own methods — handlers below call
    * siblings through the RanPlayer wrapper (`this.seekToPercentage(...)` etc.)
@@ -158,6 +161,27 @@ export function createSeekHandlers(deps: PlayerSeekDeps): PlayerSeekHandlers {
     });
   };
 
+  /**
+   * Shared by `progressMouseEnter`/`progressMouseMove` — positions the tip,
+   * updates the time text, and (when a `thumbnails` manifest is loaded) the
+   * cropped sprite preview above it. Kept as one function once thumbnails
+   * needed the same hover time the time-text branch already computed, rather
+   * than tripling the offset/duration math across three call sites.
+   */
+  const updateProgressTip = (e: MouseEvent): void => {
+    refs.playerTip.style.setProperty('opacity', '1');
+    const rect = refs.progress.getBoundingClientRect();
+    const offsetX = e.clientX - rect.left;
+    if (refs.playerTipText.innerText) {
+      refs.playerTip.style.setProperty('transform', `translate(calc(${offsetX}px - 50%),-20px)`);
+    } else {
+      refs.playerTip.style.setProperty('transform', `translateX(calc(${offsetX}px - 50%))`);
+    }
+    const hoverTime = (offsetX / refs.progress.clientWidth) * ctx.duration;
+    refs.playerTipTime.innerText = formatDuration(hoverTime);
+    applyThumbnailPreview(refs.playerTipThumbnail, deps.getThumbnailCue(hoverTime));
+  };
+
   return {
     updateBufferedProgress,
     syncProgressByPercentage,
@@ -234,33 +258,13 @@ export function createSeekHandlers(deps: PlayerSeekDeps): PlayerSeekHandlers {
       deps.pause();
       deps.cancelAnimationFrame();
     },
-    progressMouseEnter: (e: MouseEvent): void => {
-      refs.playerTip.style.setProperty('opacity', '1');
-      const rect = refs.progress.getBoundingClientRect();
-      const offsetX = e.clientX - rect.left;
-      if (refs.playerTipText.innerText) {
-        refs.playerTip.style.setProperty('transform', `translate(calc(${offsetX}px - 50%),-20px)`);
-      } else {
-        refs.playerTip.style.setProperty('transform', `translateX(calc(${offsetX}px - 50%))`);
-      }
-      refs.playerTipTime.innerText = formatDuration((offsetX / refs.progress.clientWidth) * ctx.duration);
-    },
+    progressMouseEnter: updateProgressTip,
     progressMouseLeave: (e: MouseEvent): void => {
       if ((e.target as HTMLElement | null)?.classList.contains('ran-player-controller-progress-wrap-dot')) {
         return;
       }
       refs.playerTip.style.setProperty('opacity', '0');
     },
-    progressMouseMove: (e: MouseEvent): void => {
-      const rect = refs.progress.getBoundingClientRect();
-      refs.playerTip.style.setProperty('opacity', '1');
-      const offsetX = e.clientX - rect.left;
-      if (refs.playerTipText.innerText) {
-        refs.playerTip.style.setProperty('transform', `translate(calc(${offsetX}px - 50%),-20px)`);
-      } else {
-        refs.playerTip.style.setProperty('transform', `translateX(calc(${offsetX}px - 50%))`);
-      }
-      refs.playerTipTime.innerText = formatDuration((offsetX / refs.progress.clientWidth) * ctx.duration);
-    },
+    progressMouseMove: updateProgressTip,
   };
 }

@@ -17,11 +17,13 @@ description: 'ranui Player（<r-player>）在原生 <video> 之上封装统一�
 8. 基于原生开发，可在所有框架运行，统一跨框架情况
 9. 各浏览器控件统一
 10. 画中画（Picture-in-Picture）——只在浏览器真正支持时才渲染按钮
-11. `poster`/`autoplay`/`loop`/`muted` 原生 `<video>` 属性透传
-12. 字幕/CC——原生 `<track>` 渲染，语言选择记住上次的选择
-13. 错误 + 重试弹窗——播放失败时默认弹出，可关闭
-14. 断点续播——可选开启，存到 `localStorage`
-15. QoE 埋点——`getMetrics()` 基于现有事件流算出卡顿次数/时长、首帧耗时、清晰度切换次数、错误次数
+11. AirPlay / Remote Playback 投屏按钮——同样只在浏览器支持时才渲染
+12. 移动端手势——双击左右两侧快进/快退 10 秒，右侧竖向滑动调节音量（仅触摸生效）
+13. `poster`/`autoplay`/`loop`/`muted` 原生 `<video>` 属性透传
+14. 字幕/CC——原生 `<track>` 渲染，语言选择记住上次的选择
+15. 错误 + 重试弹窗——播放失败时默认弹出，可关闭
+16. 断点续播——可选开启，存到 `localStorage`
+17. QoE 埋点——`getMetrics()` 基于现有事件流算出卡顿次数/时长、首帧耗时、清晰度切换次数、错误次数
 
 ## 代码演示
 
@@ -76,6 +78,14 @@ description: 'ranui Player（<r-player>）在原生 <video> 之上封装统一�
 ### togglePip()
 
 进入/退出画中画的方法。画中画按钮只在 `document.pictureInPictureEnabled` 为真时才会显示。
+
+### showRemotePlaybackPicker()
+
+打开浏览器自带的 AirPlay / Remote Playback 设备选择器。投屏按钮只在浏览器支持标准的 Remote Playback API（`videoElement.remote.prompt()`，Chrome/Edge）或 Safari 的 `webkitShowPlaybackTargetPicker()`（AirPlay）中至少一种时才会显示——和画中画按钮一样是渐进增强，不支持就直接隐藏而不是显示一个点了没反应的按钮。
+
+### 移动端手势
+
+仅触摸生效，默认开启，不需要设置任何属性：双击视频左半边快退 10 秒，双击右半边快进 10 秒（会有一个简短的 `-10s`/`+10s` 提示浮层确认），在右半边竖向拖动可以调节音量。鼠标和触控笔的交互完全不受影响——单指点击依然是切换播放/暂停，只是延迟了和判断双击一样的时间窗口再执行，这样双击快进/快退时中间不会先闪一下播放状态。触发 `gestureseek` change 事件（`{ direction, seconds }`），音量滑动则复用已有的 `volume` 事件。
 
 ### disable-error-modal
 
@@ -171,3 +181,4 @@ player.addEventListener('change', () => {
 | levelsready    | 播放引擎解析完 manifest，清晰度档位可用了                                                                          |
 | sourceerror    | 播放引擎报错（回退到原始 `src`；fatal 错误且没设 `disable-error-modal` 时还会弹错误+重试框）                          |
 | qualityswitch  | 用户在清晰度选择器里切换了档位，`data` 是 `{ level }`                                                              |
+| gestureseek    | 双击手势触发了快进/快退，`data` 是 `{ direction, seconds }`（`direction` 为 `'forward'`/`'backward'`）              |

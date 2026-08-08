@@ -182,6 +182,35 @@
     display: var(--ran-player-prism-auto-stream-selector-display, none);
   }
 
+  &-gesture-flash {
+    position: var(--ran-player-gesture-flash-position, absolute);
+    top: var(--ran-player-gesture-flash-top, 50%);
+    padding: var(--ran-player-gesture-flash-padding, 8px 16px);
+    background: var(--ran-player-gesture-flash-background, rgba(0, 0, 0, 0.6));
+    color: var(--ran-player-gesture-flash-color, #fff);
+    font-size: var(--ran-player-gesture-flash-font-size, 14px);
+    font-weight: var(--ran-player-gesture-flash-font-weight, 600);
+    border-radius: var(--ran-player-gesture-flash-border-radius, var(--ran-radius-full, 999px));
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--ran-player-gesture-flash-transition, opacity 0.15s ease-out);
+    z-index: var(--ran-player-gesture-flash-z-index, 5);
+
+    &-left {
+      left: var(--ran-player-gesture-flash-left, 20%);
+      transform: translate(-50%, -50%);
+    }
+
+    &-right {
+      left: var(--ran-player-gesture-flash-right, 80%);
+      transform: translate(-50%, -50%);
+    }
+
+    &-visible {
+      opacity: 1;
+    }
+  }
+
   &-controller {
     position: var(--ran-player-controller-position, absolute);
     bottom: var(--ran-player-controller-bottom, 0);

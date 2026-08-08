@@ -15,6 +15,8 @@ Built on Web Components, with `hls.js`/`dashjs`/`mpegts.js` lazy-loaded on deman
 - Playback speed selection
 - Fullscreen toggle (and `Esc` to exit)
 - Picture-in-Picture toggle — the button only renders when the browser actually supports it
+- AirPlay/Remote Playback button — the browser's own device picker, feature-detected the same way as Picture-in-Picture
+- Mobile gestures — double-tap the left/right half to seek ∓10s, vertical swipe on the right half for volume (touch only; mouse/pen interaction is unaffected)
 - `poster` / `autoplay` / `loop` / `muted` — standard `<video>` attributes, passed straight through
 - Subtitles/CC — set the `tracks` property, browser-native cue rendering, a language picker that remembers the viewer's choice
 - Error + retry — a `Modal.error()` dialog on fatal playback failures, on by default, opt-out via `disable-error-modal`
@@ -106,6 +108,14 @@ Seconds from the start of the media.
 
 The PiP button in the control bar only appears when `document.pictureInPictureEnabled` is true — there's no dead button in browsers that don't support it. Toggle it programmatically with `togglePip()`.
 
+### AirPlay / Remote Playback
+
+The cast button appears when the browser exposes either the standards-track Remote Playback API (`videoElement.remote.prompt()` — Chrome/Edge) or Safari's `webkitShowPlaybackTargetPicker()` (AirPlay); it's hidden, not disabled, everywhere else — the same progressive-enhancement rule as Picture-in-Picture. Open the device picker programmatically with `showRemotePlaybackPicker()`.
+
+### Mobile Gestures
+
+Touch-only, on by default, no attribute to enable: double-tap the left half of the video to seek back 10 seconds, double-tap the right half to seek forward 10 seconds (a brief `-10s`/`+10s` flash confirms it), and drag vertically on the right half to adjust volume. Mouse and pen interaction is completely untouched — a single touch tap still toggles play/pause, just debounced by the same window used to detect a double-tap, so a double-tap-to-seek never lets the in-between tap flicker playback. Fires a `gestureseek` `change` event (`{ direction, seconds }`) alongside the existing `volume` event for the swipe.
+
 ### Subtitles/CC `tracks`
 
 ```js
@@ -170,6 +180,7 @@ The player exposes imperative controls on the element instance:
 | `togglePip()`                              | Enter/exit Picture-in-Picture. No-op if unsupported or no source is loaded. |
 | `setSubtitleLanguage(lang)`                | Set the active subtitle track by `srclang`, or `'off'` to disable. |
 | `getMetrics()`                             | Read the current [QoE metrics](#qoe-metrics) snapshot. |
+| `showRemotePlaybackPicker()`               | Open the browser's AirPlay/Remote Playback device picker. No-op if unsupported or no source is loaded. |
 
 ## Events
 
@@ -240,6 +251,7 @@ Player-specific actions:
 | `levelsready`       | `{ levels }`       | The streaming engine's manifest was parsed; clarity levels are now available. |
 | `sourceerror`       | `{ fatal, detail }` | A streaming-engine error occurred (falls back to the raw `src`; a **fatal** error also opens the error+retry dialog unless `disable-error-modal` is set — non-fatal errors are the engine's own internal recovery and don't). |
 | `qualityswitch`     | `{ level }`        | The user picked a clarity level from the quality selector.                                        |
+| `gestureseek`       | `{ direction, seconds }` | A double-tap seek gesture fired (`direction` is `'forward'`/`'backward'`).                    |
 
 ## Slots
 

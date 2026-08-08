@@ -22,6 +22,8 @@ import { createMediaEventHandlers, type PlayerMediaDispatchDeps } from './core/m
 import { createClarityHandlers, type PlayerClarityDeps, type PlayerClarityHandlers } from './core/clarity';
 import { createSubtitleHandlers, type PlayerSubtitleDeps, type PlayerSubtitleHandlers } from './core/subtitles';
 import { createMetricsController, type PlayerMetrics, type PlayerMetricsController } from './core/metrics';
+import { attachGestureHandlers, type PlayerGestureController, type PlayerGestureDeps } from './core/gestures';
+import { findThumbnailCue, loadThumbnailCues, type ThumbnailCue } from './core/thumbnails';
 import { type PlayerTrackConfig } from './core/tracks';
 import { ensurePlayerView } from './core/view';
 import { EventManager, View } from '@/utils/builder';
@@ -105,10 +107,12 @@ export class RanPlayer extends RanElement {
   _playControllerBottomSubtitle: HTMLElement;
   _playControllerBottomPip: HTMLDivElement;
   _playControllerBottomRemote: HTMLDivElement;
+  _gestureFlash: HTMLDivElement;
   _playControllerBottomRightFullScreen: HTMLDivElement;
   _playControllerBottomVolume: HTMLDivElement;
   _playControllerBottomSpeedPopover: HTMLElement;
   _playerTip: HTMLDivElement;
+  _playerTipThumbnail: HTMLDivElement;
   _playerTipTime: HTMLDivElement;
   _playerTipText: HTMLDivElement;
   _shadowDom: ShadowRoot;
@@ -116,6 +120,8 @@ export class RanPlayer extends RanElement {
   _video?: HTMLVideoElement;
   _engine?: EngineAdapter;
   _tracks: PlayerTrackConfig[] = [];
+  _thumbnailCues: ThumbnailCue[] = [];
+  _thumbnailLoadToken = 0;
   /** Domain modules — each built once in the constructor from a narrow `getXxxDeps()` slice. */
   _errorModal!: PlayerErrorModalController;
   _mediaHandlers!: PlayerMediaHandlers;
@@ -124,6 +130,7 @@ export class RanPlayer extends RanElement {
   _clarity!: PlayerClarityHandlers<EngineQualityLevel>;
   _subtitles!: PlayerSubtitleHandlers;
   _metrics!: PlayerMetricsController;
+  _gestures?: PlayerGestureController;
   static get observedAttributes(): string[] {
     return [
       'src',
@@ -136,6 +143,7 @@ export class RanPlayer extends RanElement {
       'debug',
       'sheet',
       'poster',
+      'thumbnails',
       'autoplay',
       'loop',
       'muted',
@@ -181,10 +189,12 @@ export class RanPlayer extends RanElement {
     this._playControllerBottomSubtitle = viewRefs.playControllerBottomSubtitle;
     this._playControllerBottomPip = viewRefs.playControllerBottomPip;
     this._playControllerBottomRemote = viewRefs.playControllerBottomRemote;
+    this._gestureFlash = viewRefs.gestureFlash;
     this._playControllerBottomClarity = viewRefs.playControllerBottomClarity;
     this._playControllerBottomRightFullScreen = viewRefs.playControllerBottomRightFullScreen;
     this._playerController = viewRefs.playerController;
     this._playerTip = viewRefs.playerTip;
+    this._playerTipThumbnail = viewRefs.playerTipThumbnail;
     this._playerTipTime = viewRefs.playerTipTime;
     this._playerTipText = viewRefs.playerTipText;
     this.ctx = createDefaultPlayerContext<SyncHook, EngineQualityLevel>(new SyncHook());
@@ -257,6 +267,7 @@ export class RanPlayer extends RanElement {
       progressDot: this._progressDot,
       playerBtn: this._playerBtn,
       playerTip: this._playerTip,
+      playerTipThumbnail: this._playerTipThumbnail,
       playerTipTime: this._playerTipTime,
       playerTipText: this._playerTipText,
     },
@@ -270,6 +281,7 @@ export class RanPlayer extends RanElement {
     safePlay: (showLoading) => this.safePlay(showLoading),
     pause: () => this.pause(),
     showControllerBar: (e) => this.showControllerBar(e),
+    getThumbnailCue: (time) => findThumbnailCue(this._thumbnailCues, time),
     seekToPercentage: (percentage) => this.seekToPercentage(percentage),
     syncProgressByPercentage: (percentage) => this.syncProgressByPercentage(percentage),
     updateCurrentProgress: () => this.updateCurrentProgress(),
@@ -320,6 +332,16 @@ export class RanPlayer extends RanElement {
     showErrorModal: (message) => this.showErrorModal(message),
     createClaritySelect: () => this.createClaritySelect(),
   });
+  getGestureDeps = (): PlayerGestureDeps => ({
+    refs: { container: this._container, gestureFlash: this._gestureFlash },
+    getCurrentTime: () => this.getCurrentTime(),
+    getTotalTime: () => this.getTotalTime(),
+    setCurrentTime: (n) => this.setCurrentTime(n),
+    getVolume: () => this.getVolume(),
+    setVolume: (n) => this.setVolume(n),
+    change: (name, value) => this.change(name, value),
+    onSingleTap: (e) => this.dispatchClickPlayerContainerAction(e),
+  });
   getSubtitleDeps = (): PlayerSubtitleDeps => ({
     refs: { subtitleContainer: this._playControllerBottomSubtitle, player: this._player },
     getPlayerId: () => this._player.getAttribute('id'),
@@ -362,6 +384,18 @@ export class RanPlayer extends RanElement {
   }
   set poster(value: string) {
     this.setAttribute('poster', value || '');
+  }
+  /**
+   * URL of a WebVTT sprite-sheet manifest (cues whose text is
+   * `spritesheet.jpg#xywh=x,y,w,h`, the YouTube/Video.js convention) — shows a
+   * cropped thumbnail above the seek-bar hover tip. Independent of `src`: not
+   * reset on a source reload, only refetched when this attribute itself changes.
+   */
+  get thumbnails(): string {
+    return this.getAttribute('thumbnails') || '';
+  }
+  set thumbnails(value: string) {
+    this.setAttribute('thumbnails', value || '');
   }
   /**
    * @description: 强制指定引擎（`hls`/`dash`/`flv`/`native`），给拿不到扩展名的
@@ -497,6 +531,19 @@ export class RanPlayer extends RanElement {
    * `src` started loading — see `core/metrics.ts`.
    */
   getMetrics = (): PlayerMetrics => this._metrics.getMetrics();
+  /**
+   * Guarded by `_thumbnailLoadToken` (bump-and-compare, same pattern as
+   * `r-loading`/`r-icon`'s async variant race guard) — if `thumbnails`
+   * changes again before this fetch resolves, the stale response is dropped
+   * instead of overwriting the newer manifest's cues.
+   */
+  loadThumbnails = async (): Promise<void> => {
+    const token = ++this._thumbnailLoadToken;
+    const url = this.thumbnails;
+    const cues = url ? await loadThumbnailCues(url) : [];
+    if (token !== this._thumbnailLoadToken) return;
+    this._thumbnailCues = cues;
+  };
   updatePlayer = (): void => {
     // 重置清晰度状态，避免旧数据干扰新视频的 manifest 加载
     resetSourceContextState(this.ctx);
@@ -739,11 +786,14 @@ export class RanPlayer extends RanElement {
     if (this._effectDisposers.length === 0) this.setupEffects();
     this.syncPipButtonVisibility();
     this.syncRemoteButtonVisibility();
+    this._gestures = attachGestureHandlers(this.getGestureDeps());
     this.updatePlayer();
   }
   disconnectedCallback(): void {
     this._events.abort();
     this.disposeEffects();
+    this._gestures?.destroy();
+    this._gestures = undefined;
     this.clearListenerEvent();
     this._engine?.destroy();
     this._engine = undefined;
@@ -770,6 +820,9 @@ export class RanPlayer extends RanElement {
     }
     if (k === 'poster' && o !== n && this._video) {
       this._video.poster = this.poster;
+    }
+    if (k === 'thumbnails' && o !== n) {
+      void this.loadThumbnails();
     }
     if (k === 'autoplay' && o !== n && this._video) {
       this._video.autoplay = this.autoplay;

@@ -101,8 +101,8 @@ feature work to avoid unrelated visual-regression risk.
 | 6 | Thumbnail scrubbing preview | YouTube, Video.js (VTT sprite plugin) | progress hover shows time text only | 🟡 real value, real complexity (VTT sprite parsing) |
 | 7 | DASH | Shaka, dash.js-based players | **shipped (Phase 2)** | ✅ done via the engine-adapter refactor (§3) |
 | 8 | FLV / raw MPEG-TS | Video.js + flv.js/mpegts.js plugins | **shipped (Phase 2)** | ✅ done via `mpegts.js` (see below) |
-| 9 | Mobile gestures (double-tap seek, swipe volume) | YouTube app, most native players | none | 🟡 real value, no existing gesture code to build on |
-| 10 | AirPlay / Remote Playback | native `<video controls>` on Safari/Chrome | none | 🟡 best-effort, feature-detected, inconsistent browser support |
+| 9 | Mobile gestures (double-tap seek, swipe volume) | YouTube app, most native players | **shipped (Phase 3)** | ✅ done via `core/gestures.ts`, Pointer Events idiom borrowed from `r-mermaid` |
+| 10 | AirPlay / Remote Playback | native `<video controls>` on Safari/Chrome | **shipped (Phase 3)** | ✅ done via `core/remote-playback.ts`, feature-detected same as PiP |
 | 11 | QoE metrics hook | Shaka, hls.js's own stats, commercial players | **shipped (Phase 3)** | ✅ done via `core/metrics.ts`, pure computation on existing events |
 | 12 | WebRTC low-latency live | ultra-low-latency live players | unsupported | ❌ not planned — different transport model entirely (see §3) |
 
@@ -165,20 +165,39 @@ feature work to avoid unrelated visual-regression risk.
   and **`mpegts.js`** (the actively-maintained fork of `flv.js`) for FLV — it also covers
   fragmented-MP4 and raw MPEG-TS in the same lib, which is the practical rest of "mainstream
   formats" beyond native+HLS+DASH.
-- **Mobile gestures** → no existing seek/volume gesture code anywhere in the repo to build
-  on; the closest template is **`r-mermaid`'s fullscreen pan/zoom**
+- **Mobile gestures — shipped (Phase 3).** `core/gestures.ts`'s `attachGestureHandlers()`
+  borrows **`r-mermaid`'s fullscreen pan/zoom** idiom
   (`components/mermaid/index.ts` — `pointerdown`/`pointermove`/`pointerup` +
-  `setPointerCapture`), which is the right idiom to copy (Pointer Events unify mouse/touch/
-  pen, unlike the mouse-only drag code the player's own progress bar currently uses). Scope:
-  double-tap left/right half → seek ∓10s with a brief visual flash; vertical swipe on the
-  right half → volume. (A left-half "swipe for brightness" gesture some native apps have was
-  considered and dropped from scope — it'd have to fake dimming via a CSS `filter` on the
-  video element, which is a app-specific gimmick more than a general-purpose library
-  feature.)
-- **AirPlay / Remote Playback** → feature-detected, best-effort: the standards-track **Remote
-  Playback API** (`videoElement.remote.prompt()`) for Chrome/Edge, Safari's
-  `webkitShowPlaybackTargetPicker()` for AirPlay. Button renders only when at least one is
-  available — same progressive-enhancement rule as Picture-in-Picture.
+  `setPointerCapture`), since Pointer Events unify mouse/touch/pen, unlike the mouse-only drag
+  code the player's own progress bar uses. Scope: double-tap left/right half of `_container` →
+  seek ∓10s with a brief `-10s`/`+10s` flash (`ran-player-gesture-flash`, `pointer-events:
+  none` so it never intercepts taps); vertical swipe starting on the right half → volume. (A
+  left-half "swipe for brightness" gesture some native apps have was considered and dropped
+  from scope — it'd have to fake dimming via a CSS `filter` on the video element, which is an
+  app-specific gimmick more than a general-purpose library feature.) Everything is gated on
+  `e.pointerType === 'touch'` — mouse/pen interaction on the container is completely untouched,
+  still handled by the pre-existing `click` listener (`core/controller.ts`'s
+  `onContainerClick`). For touch, the gesture module takes over tap interpretation entirely:
+  `e.preventDefault()` on `pointerdown` suppresses the browser's compatibility `click` event
+  per the Pointer Events spec, and a single tap is re-implemented via a `deps.onSingleTap`
+  callback (reusing `dispatchClickPlayerContainerAction` directly) — debounced by the same
+  300ms window used to detect a double-tap, so a double-tap-to-seek never lets the in-between
+  single tap toggle play/pause and visibly flicker playback. Fires a new `gestureseek` change
+  event (`{ direction, seconds }`); the volume swipe reuses the existing `volume` event.
+- **AirPlay / Remote Playback — shipped (Phase 3).** Feature-detected, best-effort:
+  `core/remote-playback.ts`'s `isRemotePlaybackSupported()`/`requestRemotePlayback()` try the
+  standards-track **Remote Playback API** (`videoElement.remote.prompt()`, Chrome/Edge) first,
+  falling back to Safari's `webkitShowPlaybackTargetPicker()` for AirPlay — mirrors
+  `core/fullscreen.ts`'s cast-through-an-untyped-host approach since neither method is in the
+  DOM lib types every browser actually ships one of. The cast button (new `cast` icon, alongside
+  `pip`) renders only when at least one is available — same progressive-enhancement rule as
+  Picture-in-Picture — and is wired through `core/chrome.ts`/`core/controller.ts` exactly like
+  the PiP button, exposed via a new `showRemotePlaybackPicker()` method. No new `change` event:
+  the browser owns the picker UI and connect/disconnect state: modeling `video.remote`'s
+  `connect`/`disconnect` (a separate `EventTarget` from `<video>`, unlike AirPlay's
+  `webkitcurrentplaybacktargetiswirelesschanged`) would add real lifecycle complexity for a
+  best-effort feature the roadmap scoped as "browser handles UI" — left out on purpose, not
+  forgotten.
 - **QoE metrics — shipped (Phase 3).** Pure computation layered on the event stream the
   player already emits via `change()`; no new UI. `core/metrics.ts`'s `createMetricsController()`
   derives `{rebufferCount, rebufferDuration, firstFrameMs, qualitySwitchCount, errorCount}`
@@ -215,9 +234,10 @@ feature work to avoid unrelated visual-regression risk.
   `hlsManifestLoaded`/`hlsError` `change` event types were renamed to the generic
   `levelsready`/`sourceerror` as part of this — a deliberate breaking change (alpha stage).
 - **Phase 3 — in progress:** QoE metrics (`core/metrics.ts` + `getMetrics()`, a new
-  `qualityswitch` change event) — **done**. Still planned: thumbnail scrubbing preview
-  (WebVTT sprite), mobile gestures (double-tap seek + volume swipe), AirPlay/Remote
-  Playback button.
+  `qualityswitch` change event) — **done**. AirPlay/Remote Playback (`core/remote-playback.ts`
+  + `showRemotePlaybackPicker()`, a new `cast` icon) — **done**. Mobile gestures
+  (`core/gestures.ts`, a new `gestureseek` change event) — **done**. Still planned: thumbnail
+  scrubbing preview (WebVTT sprite).
 - **Phase 4 — recorded, not scheduled:** WebRTC low-latency live playback; migrating the
   existing play/pause/fullscreen/volume icons from legacy background-image to
   `<r-icon>`/`registerIcon` (purely visual, decoupled from the feature work above).

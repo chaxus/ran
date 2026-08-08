@@ -22,6 +22,7 @@ export interface PlayerViewRefs {
   container: HTMLDivElement;
   playerBtn: HTMLDivElement;
   playerController: HTMLDivElement;
+  gestureFlash: HTMLDivElement;
   progress: HTMLDivElement;
   progressWrap: HTMLDivElement;
   progressWrapBuffer: HTMLDivElement;
@@ -45,6 +46,7 @@ export interface PlayerViewRefs {
   playControllerBottomVolume: HTMLDivElement;
   playControllerBottomSpeedPopover: HTMLElement;
   playerTip: HTMLDivElement;
+  playerTipThumbnail: HTMLDivElement;
   playerTipTime: HTMLDivElement;
   playerTipText: HTMLDivElement;
 }
@@ -66,11 +68,15 @@ export function ensurePlayerView(input: {
   let player = shadowDom.querySelector('.ran-player') as HTMLDivElement | null;
   let container = shadowDom.querySelector('.ran-player-contain') as HTMLDivElement | null;
   let playerBtn = shadowDom.querySelector('.ran-player-play-btn') as HTMLDivElement | null;
+  let gestureFlash = shadowDom.querySelector('.ran-player-gesture-flash') as HTMLDivElement | null;
   let playerController = shadowDom.querySelector('.ran-player-controller') as HTMLDivElement | null;
 
-  if (!player || !container || !playerBtn || !playerController) {
+  if (!player || !container || !playerBtn || !gestureFlash || !playerController) {
     container = Div().build() as HTMLDivElement;
     playerBtn = Div().class('ran-player-play-btn').build() as HTMLDivElement;
+    // Purely visual, `pointer-events: none` in CSS so it never intercepts taps —
+    // shown/hidden by `core/gestures.ts` on a double-tap seek.
+    gestureFlash = Div().class('ran-player-gesture-flash').attr('aria-hidden', 'true').build() as HTMLDivElement;
 
     const progressWrapBuffer = Div().class('ran-player-controller-progress-wrap-buffer').build() as HTMLDivElement;
     const progressWrapValue = Div().class('ran-player-controller-progress-wrap-value').build() as HTMLDivElement;
@@ -198,11 +204,15 @@ export function ensurePlayerView(input: {
       .children(playerControllerBottomLeft, playerControllerBottomRight)
       .build() as HTMLDivElement;
 
+    // Hidden (`display:none`) until `applyThumbnailPreview()` (`core/thumbnails.ts`) has a
+    // cue to show for the hovered time — empty/no `thumbnails` attribute means this box
+    // never appears, same progressive-enhancement rule as the PiP/cast buttons.
+    const playerTipThumbnail = Div().class('ran-player-controller-tip-thumbnail').build() as HTMLDivElement;
     const playerTipTime = Div().class('ran-player-controller-tip-time').build() as HTMLDivElement;
     const playerTipText = Div().class('ran-player-controller-tip-text').build() as HTMLDivElement;
     const playerTip = Div()
       .class('ran-player-controller-tip')
-      .children(playerTipTime, playerTipText)
+      .children(playerTipThumbnail, playerTipTime, playerTipText)
       .build() as HTMLDivElement;
 
     playerController = Div()
@@ -213,7 +223,7 @@ export function ensurePlayerView(input: {
     player = Div()
       .class('ran-player')
       .id(playerIdentifier)
-      .children(container, playerBtn, playerController)
+      .children(container, playerBtn, gestureFlash, playerController)
       .build() as HTMLDivElement;
 
     shadowDom.appendChild(player);
@@ -322,6 +332,10 @@ export function ensurePlayerView(input: {
     playerController.querySelector('.ran-player-controller-tip') as HTMLDivElement | null,
     '.ran-player-controller-tip',
   );
+  const playerTipThumbnail = assertExists(
+    playerTip.querySelector('.ran-player-controller-tip-thumbnail') as HTMLDivElement | null,
+    '.ran-player-controller-tip-thumbnail',
+  );
   const playerTipTime = assertExists(
     playerTip.querySelector('.ran-player-controller-tip-time') as HTMLDivElement | null,
     '.ran-player-controller-tip-time',
@@ -336,6 +350,7 @@ export function ensurePlayerView(input: {
     container: assertExists(container, '.ran-player-contain'),
     playerBtn: assertExists(playerBtn, '.ran-player-play-btn'),
     playerController: assertExists(playerController, '.ran-player-controller'),
+    gestureFlash: assertExists(gestureFlash, '.ran-player-gesture-flash'),
     progress,
     progressWrap,
     progressWrapBuffer,
@@ -359,6 +374,7 @@ export function ensurePlayerView(input: {
     playControllerBottomVolume,
     playControllerBottomSpeedPopover,
     playerTip,
+    playerTipThumbnail,
     playerTipTime,
     playerTipText,
   };
