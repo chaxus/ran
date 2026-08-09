@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import '@/components/player';
 
 const makePlayer = (): any => {
@@ -79,6 +79,37 @@ describe('r-player poster/autoplay/loop/muted', () => {
     player.removeAttribute('muted');
     expect(player.ctx.volume).toBe(65);
     expect(player._video.muted).toBe(false);
+  });
+
+  it('setting src before connecting calls updatePlayer exactly once (not twice)', () => {
+    // Reproduces the exact sequence that used to double-fire `updatePlayer()`
+    // — once from `attributeChangedCallback('src', ...)` while still
+    // disconnected, once again from `connectedCallback` right after — which
+    // created two `Hls` instances (the first only sometimes actually
+    // destroyed before its in-flight manifest fetch resolved) and, on real
+    // streams, two clarity/quality `<r-select>`s with one leaked as an
+    // orphaned, invisible dropdown panel. `document.createElement` +
+    // `setAttribute` + `appendChild` (this test) and plain parsed HTML both
+    // hit this same path — see the comment on `_didInitialConnect`.
+    const player = document.createElement('r-player') as any;
+    const spy = vi.spyOn(player, 'updatePlayer');
+
+    player.setAttribute('src', 'https://example.com/video.m3u8');
+    expect(spy, 'must not fire before the element has ever connected').not.toHaveBeenCalled();
+
+    document.body.appendChild(player);
+    expect(spy, 'connectedCallback must be the only thing that fires it for the initial load').toHaveBeenCalledTimes(1);
+  });
+
+  it('changing src on an already-connected player still calls updatePlayer', () => {
+    const player = makePlayer();
+    const spy = vi.spyOn(player, 'updatePlayer');
+
+    player.setAttribute('src', 'https://example.com/video.m3u8');
+    expect(spy, 'a source change on a live player must still reload').toHaveBeenCalledTimes(1);
+
+    player.setAttribute('src', 'https://example.com/other.m3u8');
+    expect(spy).toHaveBeenCalledTimes(2);
   });
 
   it('setVolume keeps native video.muted in sync with the 0-100 volume level', () => {

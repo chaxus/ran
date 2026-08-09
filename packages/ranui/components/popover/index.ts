@@ -78,6 +78,7 @@ export class Popover extends RanElement {
   dropDownInTimeId?: NodeJS.Timeout;
   dropDownOutTimeId?: NodeJS.Timeout;
   removeTimeId?: NodeJS.Timeout;
+  _repositionBound = false;
   static get observedAttributes(): string[] {
     return ['placement', 'trigger', 'sheet'];
   }
@@ -229,6 +230,7 @@ export class Popover extends RanElement {
       this.popoverContent.setAttribute('transit', placementDirection[this.placement].add);
       this.popoverContent?.style.setProperty('display', 'block');
       this.placementPosition();
+      this._attachReposition();
       this.dropDownInTimeId = setTimeout(() => {
         if (this.popoverContent) {
           this.popoverContent.removeAttribute('transit');
@@ -249,6 +251,7 @@ export class Popover extends RanElement {
     clearTimeout(this.dropDownOutTimeId);
     this.dropDownOutTimeId = undefined;
     if (this.popoverContent && this.popoverContent.style.display !== 'none') {
+      this._detachReposition();
       this.updateAriaExpanded(false);
       this.popoverContent.setAttribute('transit', placementDirection[this.placement].remove);
       this.dropDownOutTimeId = setTimeout(() => {
@@ -359,6 +362,30 @@ export class Popover extends RanElement {
     );
   };
   /**
+   * The panel is mounted on document.body (or getPopupContainerId) and
+   * positioned once on open, so it detaches from the trigger when the page
+   * (or any scroll container) scrolls, or when a resize reflows the trigger —
+   * e.g. a popover inside a sticky header, or the color picker swatch shown
+   * in a narrower layout. Re-run placement on scroll/resize while open.
+   * Capture-phase scroll catches nested scroll containers too. Mirrors
+   * r-select's `_attachReposition`.
+   */
+  _repositionDropdown = (): void => {
+    if (this.popoverContent?.style.display === 'block') this.placementPosition();
+  };
+  _attachReposition = (): void => {
+    if (this._repositionBound || typeof window === 'undefined') return;
+    window.addEventListener('scroll', this._repositionDropdown, true);
+    window.addEventListener('resize', this._repositionDropdown);
+    this._repositionBound = true;
+  };
+  _detachReposition = (): void => {
+    if (!this._repositionBound || typeof window === 'undefined') return;
+    window.removeEventListener('scroll', this._repositionDropdown, true);
+    window.removeEventListener('resize', this._repositionDropdown);
+    this._repositionBound = false;
+  };
+  /**
    * @description: 鼠标移入
    * @param {Event} e
    * @return {*}
@@ -458,6 +485,7 @@ export class Popover extends RanElement {
     this.setDropdownDisplayNone.cancel();
     this.blur.cancel();
     this.removeDropDownTimeId.cancel();
+    this._detachReposition();
     clearTimeout(this.dropDownInTimeId);
     this.dropDownInTimeId = undefined;
     clearTimeout(this.dropDownOutTimeId);
