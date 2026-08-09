@@ -454,7 +454,7 @@
           justify-content: center;
           width: var(--ran-player-toggle-width, var(--ran-size-3, 20px));
           height: var(--ran-player-toggle-height, var(--ran-size-3, 20px));
-          padding: var(--ran-player-toggle-padding, 4px);
+          padding: var(--ran-player-toggle-padding, var(--ran-space-1, 4px));
           border-radius: var(--ran-player-toggle-border-radius, var(--ran-radius-sm, 6px));
           color: var(--ran-player-toggle-color, #fff);
           cursor: var(--ran-player-toggle-cursor, pointer);
@@ -549,7 +549,7 @@
         // `margin-right` (12px here, 24px there), which is exactly the kind
         // of inconsistency that reads as "not aligned" in a row meant to look
         // like a single coherent toolbar.
-        gap: var(--ran-player-controls-right-gap, 4px);
+        gap: var(--ran-player-controls-right-gap, var(--ran-space-1, 4px));
 
         &-volume {
           display: var(--ran-player-volume-display, flex);
@@ -561,7 +561,7 @@
           // click surface, and the pill-shaped hover backdrop every other
           // control in this row now shares, instead of volume being the one
           // control with no hover feedback at all.
-          padding: var(--ran-player-volume-padding, 4px 8px);
+          padding: var(--ran-player-volume-padding, var(--ran-space-1, 4px) var(--ran-space-2, 8px));
           border-radius: var(--ran-player-volume-border-radius, var(--ran-radius-sm, 6px));
           transition: var(--ran-player-volume-transition, none);
 
@@ -631,7 +631,7 @@
           justify-content: center;
           width: var(--ran-player-speed-width, var(--ran-size-6, 30px));
           height: var(--ran-player-speed-height, var(--ran-size-3, 20px));
-          padding: var(--ran-player-speed-padding, 4px 8px);
+          padding: var(--ran-player-speed-padding, var(--ran-space-1, 4px) var(--ran-space-2, 8px));
           border-radius: var(--ran-player-speed-border-radius, var(--ran-radius-sm, 6px));
           color: var(--ran-player-speed-color, #fff);
           font-family: var(--ran-player-speed-font-family, PingFang SC);
@@ -737,7 +737,7 @@
           font-size: var(--ran-player-subtitle-font-size, var(--ran-text-label-1, 14px));
           width: var(--ran-player-subtitle-width, var(--ran-size-6, 30px));
           height: var(--ran-player-subtitle-height, var(--ran-size-3, 20px));
-          padding: var(--ran-player-subtitle-padding, 4px 8px);
+          padding: var(--ran-player-subtitle-padding, var(--ran-space-1, 4px) var(--ran-space-2, 8px));
           border-radius: var(--ran-player-subtitle-border-radius, var(--ran-radius-sm, 6px));
           font-style: var(--ran-player-subtitle-font-style, normal);
           font-weight: var(--ran-player-subtitle-font-weight, var(--ran-text-label-weight, 500));
@@ -819,7 +819,7 @@
           font-size: var(--ran-player-clarity-font-size, var(--ran-text-label-1, 14px));
           width: var(--ran-player-clarity-width, var(--ran-size-6, 30px));
           height: var(--ran-player-clarity-height, var(--ran-size-3, 20px));
-          padding: var(--ran-player-clarity-padding, 4px 8px);
+          padding: var(--ran-player-clarity-padding, var(--ran-space-1, 4px) var(--ran-space-2, 8px));
           border-radius: var(--ran-player-clarity-border-radius, var(--ran-radius-sm, 6px));
           font-style: var(--ran-player-clarity-font-style, normal);
           font-weight: var(--ran-player-clarity-font-weight, var(--ran-text-label-weight, 500));
@@ -902,7 +902,7 @@
           justify-content: center;
           width: var(--ran-player-pip-width, var(--ran-size-3, 20px));
           height: var(--ran-player-pip-height, var(--ran-size-3, 20px));
-          padding: var(--ran-player-pip-padding, 4px);
+          padding: var(--ran-player-pip-padding, var(--ran-space-1, 4px));
           border-radius: var(--ran-player-pip-border-radius, var(--ran-radius-sm, 6px));
           color: var(--ran-player-pip-color, #fff);
           cursor: var(--ran-player-pip-cursor, pointer);
@@ -942,7 +942,7 @@
           justify-content: center;
           width: var(--ran-player-remote-width, var(--ran-size-3, 20px));
           height: var(--ran-player-remote-height, var(--ran-size-3, 20px));
-          padding: var(--ran-player-remote-padding, 4px);
+          padding: var(--ran-player-remote-padding, var(--ran-space-1, 4px));
           border-radius: var(--ran-player-remote-border-radius, var(--ran-radius-sm, 6px));
           color: var(--ran-player-remote-color, #fff);
           cursor: var(--ran-player-remote-cursor, pointer);
@@ -987,7 +987,7 @@
           color: var(--ran-player-fullscreen-color, #fff);
           width: var(--ran-player-fullscreen-width, var(--ran-size-3, 20px));
           height: var(--ran-player-fullscreen-height, var(--ran-size-3, 20px));
-          padding: var(--ran-player-fullscreen-padding, 4px);
+          padding: var(--ran-player-fullscreen-padding, var(--ran-space-1, 4px));
           border-radius: var(--ran-player-fullscreen-border-radius, var(--ran-radius-sm, 6px));
           cursor: var(--ran-player-fullscreen-cursor, pointer);
           outline: var(--ran-player-fullscreen-outline, 0);

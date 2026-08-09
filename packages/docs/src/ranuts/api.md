@@ -13,7 +13,7 @@ constraints, conventions) read [CLAUDE.md](https://github.com/chaxus/ran/blob/ma
 Import from the **subpath** that owns the symbol, e.g. `import { debounce } from
 'ranuts/utils'`. The root `ranuts` barrel re-exports the utils + visual surface.
 
-**393 exports** across 6 entry points. Generated at 2026-08-09T08:10:04.139Z.
+**393 exports** across 6 entry points. Generated at 2026-08-09T08:26:44.533Z.
 
 ## Entry points
 

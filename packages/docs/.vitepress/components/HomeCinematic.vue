@@ -501,9 +501,9 @@ const cn = {
     {
       kind: 'article',
       title: '文章',
-      desc: '一路记录的技术笔记与深度剖析 —— 设计模式、函数式编程、AST 与 Web 平台。',
+      desc: '一路记录的技术笔记与深度剖析 —— 渲染引擎、函数式编程、排序算法与 Web 平台。',
       more: '开始阅读',
-      link: '/src/article/design_mode.html',
+      link: '/src/article/doc_preview.html',
     },
   ],
   capsKicker: '特色能力',

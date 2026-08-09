@@ -221,10 +221,28 @@
       // hairline seam against the panel border) while a stray `+ overlap` sat
       // in `translateY` instead, where it only ever mis-nudged the vertical
       // centering by 2px.
+      //
+      // `--ran-dropdown-arrow-shape-offset` is a separate, *static* correction
+      // (not a JS-measured one, unlike `--ran-dropdown-arrow-anchor-offset-y`):
+      // the arrow's ::before (flare) + ::after (tip) are both bottom-anchored
+      // inside the 16×16 box (by design — that's what makes them read as a
+      // continuous bump for `.top`/`.bottom`, which never rotate that box),
+      // so the *visible* ink sits well below the box's own geometric center.
+      // `rotate(270deg)`/`rotate(90deg)` below carry that pre-rotation vertical
+      // offset into whichever axis they land on — verified empirically
+      // (screenshots at several trial values) rather than hand-derived, since
+      // getting a rotate+translate composition right by algebra alone is easy
+      // to get subtly wrong. Without this, the arrow's *bounding box* centers
+      // correctly on the trigger but the visible triangle inside it doesn't.
       transform: translateX(
           calc(0px - var(--ran-dropdown-arrow-width, 16px) + var(--ran-dropdown-arrow-overlap, 2px))
         )
-        translateY(calc(var(--ran-dropdown-arrow-width, 16px) / 2 + var(--ran-dropdown-arrow-anchor-offset-y, 0px)))
+        translateY(
+          calc(
+            var(--ran-dropdown-arrow-width, 16px) / 2 + var(--ran-dropdown-arrow-shape-offset, -6px) +
+              var(--ran-dropdown-arrow-anchor-offset-y, 0px)
+          )
+        )
         rotate(270deg);
       top: max(
         0px,
@@ -233,13 +251,17 @@
     }
     .right {
       left: 100%;
-      // Same fix mirrored: the overlap moves from translateY into translateX
-      // (pulling the arrow left, into the panel's right edge, by `overlap`).
+      // Same fixes mirrored: the overlap moves from translateY into translateX
+      // (pulling the arrow left, into the panel's right edge, by `overlap`),
+      // plus the same static shape-offset correction as `.left` above (same
+      // sign — confirmed empirically that both directions need the same
+      // correction, since it compensates for the shape's construction, not
+      // for which way it's rotated).
       transform: translateX(calc(0px - var(--ran-dropdown-arrow-overlap, 2px)))
         translateY(
           calc(
             var(--ran-dropdown-arrow-anchor-height, var(--ran-dropdown-min-height, 100%)) / 2 - calc(@arrow-size / 2) +
-              var(--ran-dropdown-arrow-anchor-offset-y, 0px)
+              var(--ran-dropdown-arrow-shape-offset, -6px) + var(--ran-dropdown-arrow-anchor-offset-y, 0px)
           )
         )
         rotate(90deg);
