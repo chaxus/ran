@@ -484,8 +484,25 @@ export class Select extends RanElement {
       const options = this.getDropdownOptions();
       if (options.length === 0) return;
       const step = e.key === 'ArrowDown' ? 1 : -1;
-      const current = this._activeIndex >= 0 ? this._activeIndex : 0;
-      const target = this._nextEnabledIndex(current + step, step);
+      // Nothing active yet: land on the first option going down / last option
+      // going up, instead of stepping from an implied index 0 — which made the
+      // very first ArrowDown skip straight past option 0 to option 1.
+      const target =
+        this._activeIndex >= 0
+          ? this._nextEnabledIndex(this._activeIndex + step, step)
+          : this._nextEnabledIndex(step > 0 ? 0 : options.length - 1, step);
+      if (target >= 0) this.setActiveOptionByIndex(target);
+      return;
+    }
+    if (e.key === 'Home' || e.key === 'End') {
+      e.preventDefault();
+      if (!this.isDropdownOpen()) {
+        this.selectMouseDown(e);
+      }
+      const options = this.getDropdownOptions();
+      if (options.length === 0) return;
+      const step = e.key === 'Home' ? 1 : -1;
+      const target = this._nextEnabledIndex(e.key === 'Home' ? 0 : options.length - 1, step);
       if (target >= 0) this.setActiveOptionByIndex(target);
       return;
     }
@@ -503,6 +520,37 @@ export class Select extends RanElement {
     if (e.key === 'Escape') {
       e.preventDefault();
       this.setSelectDropdownDisplayNone();
+      return;
+    }
+    this._handleTypeahead(e);
+  };
+  /**
+   * WAI-ARIA combobox type-ahead: typing a printable character jumps to the
+   * next option (wrapping) whose label starts with the recently-typed
+   * characters, matching the behavior of a native `<select>`.
+   */
+  _handleTypeahead = (e: KeyboardEvent): void => {
+    if (e.key.length !== 1 || e.ctrlKey || e.altKey || e.metaKey) return;
+    e.preventDefault();
+    if (!this.isDropdownOpen()) this.selectMouseDown(e);
+    const options = this.getDropdownOptions();
+    const count = options.length;
+    if (count === 0) return;
+    clearTimeout(this._typeaheadTimeId);
+    this._typeaheadBuffer += e.key.toLowerCase();
+    this._typeaheadTimeId = setTimeout(() => {
+      this._typeaheadBuffer = '';
+    }, 500);
+    const start = this._activeIndex >= 0 ? this._activeIndex + 1 : 0;
+    for (let i = 0; i < count; i++) {
+      const index = (start + i) % count;
+      const option = options[index];
+      if (isDisabled(option)) continue;
+      const label = (option.getAttribute('title') || option.textContent || '').trim().toLowerCase();
+      if (label.startsWith(this._typeaheadBuffer)) {
+        this.setActiveOptionByIndex(index);
+        return;
+      }
     }
   };
   handlerExternalCss(): void {
@@ -713,6 +761,11 @@ export class Select extends RanElement {
     }
     this.selectOptionElement(element);
     this.removeDropDownTimeId(e);
+    // The clicked option is portaled to <body> and isn't itself focusable, so the
+    // browser's default mousedown-focus-shift behavior moves focus to <body> —
+    // unlike keyboard-driven selection, which never left the host. Reclaim it so
+    // mouse and keyboard selection leave the control in the same focused state.
+    this.focus();
   };
   /**
    * @description: 初始化创建选项下拉框
@@ -943,6 +996,7 @@ export class Select extends RanElement {
     this._searchEvents.abort();
     this._detachReposition();
     this.removeSelectDropdown();
+    clearTimeout(this._typeaheadTimeId);
   }
   attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
     if (oldValue === newValue) return;

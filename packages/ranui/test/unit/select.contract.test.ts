@@ -503,10 +503,24 @@ describe('r-select contract', () => {
     const select = await createSelectWithOptions();
     select.createOption();
 
-    // Directly call attributeChangedCallback with a truthy disabled value
-    (select as any).attributeChangedCallback('disabled', null, 'true');
+    // Go through the real attribute-setting path (not a direct callback invocation with a
+    // hand-picked newValue) — attributeChangedCallback reads the *current* disabled state
+    // off the element via the `disabled` getter, so the attribute must actually be set.
+    select.setAttribute('disabled', 'true');
     expect(select.getAttribute('aria-disabled')).toBe('true');
     expect((select as any)._select.hasAttribute('disabled')).toBe(true);
+  });
+
+  it('attributeChangedCallback treats the bare boolean form (`disabled` with no value) as disabled', async () => {
+    const select = await createSelectWithOptions();
+    select.createOption();
+
+    // `<r-select disabled>` reflects as an empty-string attribute value — must not be
+    // mistaken for "not disabled" the way a naive `!newValue` check would.
+    select.setAttribute('disabled', '');
+    expect(select.disabled).toBe(true);
+    expect(select.getAttribute('aria-disabled')).toBe('true');
+    expect(select.tabIndex).toBe(-1);
   });
 
   it('connectedCallback registers hover listeners via EventManager when trigger is hover', async () => {
