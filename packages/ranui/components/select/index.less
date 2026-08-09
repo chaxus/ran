@@ -93,7 +93,8 @@
 .ran-select {
   width: var(--ran-select-root-width, 100%);
   height: var(--ran-select-root-height, 100%);
-  font-size: var(--ran-select-root-font-size, 14px);
+  font-size: var(--ran-select-root-font-size, var(--ran-text-label-1, 14px));
+  font-weight: var(--ran-select-root-font-weight, var(--ran-text-label-weight, 500));
   box-sizing: var(--ran-select-root-box-sizing, border-box);
   margin: var(--ran-select-root-margin, 0);
   padding: var(--ran-select-root-padding, 0);
@@ -117,7 +118,8 @@
     box-sizing: var(--ran-select-box-sizing, border-box);
     margin: var(--ran-select-margin, 0);
     color: var(--ran-select-color, var(--ran-color-text, rgba(0, 0, 0, 0.88)));
-    font-size: var(--ran-select-font-size, 14px);
+    font-size: var(--ran-select-font-size, var(--ran-text-label-1, 14px));
+    font-weight: var(--ran-select-font-weight, var(--ran-text-label-weight, 500));
     line-height: var(--ran-select-line-height, 1.5714285714285714);
     list-style: var(--ran-select-list-style, none);
     font-family: var(--ran-select-font-family, inherit);
@@ -207,7 +209,7 @@
       /* center on the vertical midline regardless of icon height (was a brittle -3px margin) */
       transform: var(--ran-select-icon-transform, translateY(-50%));
       margin-top: var(--ran-select-icon-margin-top, 0);
-      font-size: var(--ran-select-icon-font-size, 12px);
+      font-size: var(--ran-select-icon-font-size, var(--ran-text-label-3, 12px));
       pointer-events: var(--ran-select-icon-pointer-events, none);
     }
   }

@@ -27,7 +27,7 @@
   --ran-dropdown-option-item-padding: 4px 2px;
   --ran-dropdown-option-item-color: #fff;
   --ran-dropdown-option-item-content-color: #fff;
-  --ran-dropdown-option-item-content-font-size: 11px;
+  --ran-dropdown-option-item-content-font-size: var(--ran-text-label-3, 12px);
   --ran-dropdown-option-active-background-color: rgba(255, 255, 255, 0.2);
   --ran-dropdown-option-item-content-text-align: center;
   --ran-dropdown-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
@@ -42,7 +42,7 @@
   --ran-dropdown-option-item-padding: 4px 2px;
   --ran-dropdown-option-item-color: #fff;
   --ran-dropdown-option-item-content-color: #fff;
-  --ran-dropdown-option-item-content-font-size: 11px;
+  --ran-dropdown-option-item-content-font-size: var(--ran-text-label-3, 12px);
   --ran-dropdown-option-active-background-color: rgba(255, 255, 255, 0.2);
   --ran-dropdown-option-item-content-text-align: center;
   --ran-dropdown-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
@@ -193,6 +193,10 @@
     padding: var(--ran-player-gesture-flash-padding, 8px 16px);
     background: var(--ran-player-gesture-flash-background, rgba(0, 0, 0, 0.6));
     color: var(--ran-player-gesture-flash-color, #fff);
+    /* Transient overlay flash, not core content — doesn't fit any typography
+       role (600 weight only exists on heading, which starts at 16px; forcing
+       either dimension in would change how punchy this reads). Kept as its
+       own one-off token, same reasoning as r-link's active-state weight. */
     font-size: var(--ran-player-gesture-flash-font-size, 14px);
     font-weight: var(--ran-player-gesture-flash-font-weight, 600);
     border-radius: var(--ran-player-gesture-flash-border-radius, var(--ran-radius-full, 999px));
@@ -242,7 +246,8 @@
       margin: var(--ran-player-tip-margin, 0);
       padding: var(--ran-player-tip-padding, 4px 6px);
       color: var(--ran-player-tip-color, #fff);
-      font-size: var(--ran-player-tip-font-size, 10px);
+      font-size: var(--ran-player-tip-font-size, var(--ran-text-label-3, 12px));
+      font-weight: var(--ran-player-tip-font-weight, var(--ran-text-label-weight, 500));
       list-style: var(--ran-player-tip-list-style, none);
       font-family: var(--ran-player-tip-font-family, @font-family);
       z-index: var(--ran-player-tip-z-index, 100);
@@ -431,10 +436,10 @@
           &-current {
             color: var(--ran-player-time-current-color, #fff);
             font-family: var(--ran-player-time-current-font-family, PingFang SC);
-            font-size: var(--ran-player-time-current-font-size, 12px);
+            font-size: var(--ran-player-time-current-font-size, var(--ran-text-label-3, 12px));
             min-width: var(--ran-player-time-current-min-width, 40px);
             font-style: var(--ran-player-time-current-font-style, normal);
-            font-weight: var(--ran-player-time-current-font-weight, 400);
+            font-weight: var(--ran-player-time-current-font-weight, var(--ran-text-mono-weight-regular, 400));
             line-height: var(--ran-player-time-current-line-height, normal);
             text-align: var(--ran-player-time-current-text-align, center);
             position: var(--ran-player-time-current-position, relative);
@@ -444,9 +449,9 @@
           &-divide {
             color: var(--ran-player-time-divide-color, #fff);
             font-family: var(--ran-player-time-divide-font-family, PingFang SC);
-            font-size: var(--ran-player-time-divide-font-size, 12px);
+            font-size: var(--ran-player-time-divide-font-size, var(--ran-text-label-3, 12px));
             font-style: var(--ran-player-time-divide-font-style, normal);
-            font-weight: var(--ran-player-time-divide-font-weight, 400);
+            font-weight: var(--ran-player-time-divide-font-weight, var(--ran-text-mono-weight-regular, 400));
             line-height: var(--ran-player-time-divide-line-height, normal);
             margin: var(--ran-player-time-divide-margin, 0 2px);
             text-align: var(--ran-player-time-divide-text-align, center);
@@ -457,9 +462,9 @@
           &-duration {
             color: var(--ran-player-time-duration-color, #fff);
             font-family: var(--ran-player-time-duration-font-family, PingFang SC);
-            font-size: var(--ran-player-time-duration-font-size, 12px);
+            font-size: var(--ran-player-time-duration-font-size, var(--ran-text-label-3, 12px));
             font-style: var(--ran-player-time-duration-font-style, normal);
-            font-weight: var(--ran-player-time-duration-font-weight, 400);
+            font-weight: var(--ran-player-time-duration-font-weight, var(--ran-text-mono-weight-regular, 400));
             line-height: var(--ran-player-time-duration-line-height, normal);
             min-width: var(--ran-player-time-duration-min-width, 40px);
             text-align: var(--ran-player-time-duration-text-align, center);
@@ -531,9 +536,9 @@
           height: var(--ran-player-speed-height, var(--ran-size-3, 20px));
           color: var(--ran-player-speed-color, #fff);
           font-family: var(--ran-player-speed-font-family, PingFang SC);
-          font-size: var(--ran-player-speed-font-size, 14px);
+          font-size: var(--ran-player-speed-font-size, var(--ran-text-label-1, 14px));
           font-style: var(--ran-player-speed-font-style, normal);
-          font-weight: var(--ran-player-speed-font-weight, 400);
+          font-weight: var(--ran-player-speed-font-weight, var(--ran-text-label-weight, 500));
           line-height: var(--ran-player-speed-line-height, normal);
           margin-right: var(--ran-player-speed-margin-right, 22px);
           cursor: var(--ran-player-speed-cursor, pointer);
@@ -577,7 +582,8 @@
               text-align: center;
               left: 0;
               color: var(--ran-player-select-item-color, #fff);
-              font-size: 12px;
+              font-size: var(--ran-player-select-item-font-size, var(--ran-text-label-3, 12px));
+              font-weight: var(--ran-player-select-item-font-weight, var(--ran-text-label-weight, 500));
             }
           }
         }
@@ -585,11 +591,11 @@
         &-subtitle {
           color: var(--ran-player-subtitle-color, #fff);
           font-family: var(--ran-player-subtitle-font-family, PingFang SC);
-          font-size: var(--ran-player-subtitle-font-size, 14px);
+          font-size: var(--ran-player-subtitle-font-size, var(--ran-text-label-1, 14px));
           width: var(--ran-player-subtitle-width, var(--ran-size-6, 30px));
           height: var(--ran-player-subtitle-height, var(--ran-size-3, 20px));
           font-style: var(--ran-player-subtitle-font-style, normal);
-          font-weight: var(--ran-player-subtitle-font-weight, 400);
+          font-weight: var(--ran-player-subtitle-font-weight, var(--ran-text-label-weight, 500));
           line-height: var(--ran-player-subtitle-line-height, normal);
           cursor: var(--ran-player-subtitle-cursor, pointer);
           margin-right: var(--ran-player-subtitle-margin-right, 12px);
@@ -634,7 +640,8 @@
               text-align: center;
               left: 0;
               color: var(--ran-player-select-item-color, #fff);
-              font-size: 12px;
+              font-size: var(--ran-player-select-item-font-size, var(--ran-text-label-3, 12px));
+              font-weight: var(--ran-player-select-item-font-weight, var(--ran-text-label-weight, 500));
             }
           }
         }
@@ -642,11 +649,11 @@
         &-clarity {
           color: var(--ran-player-clarity-color, #fff);
           font-family: var(--ran-player-clarity-font-family, PingFang SC);
-          font-size: var(--ran-player-clarity-font-size, 14px);
+          font-size: var(--ran-player-clarity-font-size, var(--ran-text-label-1, 14px));
           width: var(--ran-player-clarity-width, var(--ran-size-6, 30px));
           height: var(--ran-player-clarity-height, var(--ran-size-3, 20px));
           font-style: var(--ran-player-clarity-font-style, normal);
-          font-weight: var(--ran-player-clarity-font-weight, 400);
+          font-weight: var(--ran-player-clarity-font-weight, var(--ran-text-label-weight, 500));
           line-height: var(--ran-player-clarity-line-height, normal);
           cursor: var(--ran-player-clarity-cursor, pointer);
           margin-right: var(--ran-player-clarity-margin-right, 12px);
@@ -686,7 +693,8 @@
               text-align: center;
               left: 0;
               color: var(--ran-player-select-item-color, #fff);
-              font-size: 12px;
+              font-size: var(--ran-player-select-item-font-size, var(--ran-text-label-3, 12px));
+              font-weight: var(--ran-player-select-item-font-weight, var(--ran-text-label-weight, 500));
             }
           }
         }
@@ -694,9 +702,9 @@
         &-knowledge {
           color: var(--ran-player-knowledge-color, #fff);
           font-family: var(--ran-player-knowledge-font-family, PingFang SC);
-          font-size: var(--ran-player-knowledge-font-size, 14px);
+          font-size: var(--ran-player-knowledge-font-size, var(--ran-text-label-1, 14px));
           font-style: var(--ran-player-knowledge-font-style, normal);
-          font-weight: var(--ran-player-knowledge-font-weight, 400);
+          font-weight: var(--ran-player-knowledge-font-weight, var(--ran-text-label-weight, 500));
           line-height: var(--ran-player-knowledge-line-height, normal);
           margin-right: var(--ran-player-knowledge-margin-right, 24px);
           cursor: var(--ran-player-knowledge-cursor, pointer);

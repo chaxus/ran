@@ -119,6 +119,36 @@
   --ran-font-size: 14px;
   --ran-line-height: 1.5715;
 
+  /* ── Typography roles (DESIGN.md §3: choose a role, not a raw size) ──
+     Decide by role — the role fixes size + weight (+ line-height /
+     tracking where relevant). Geist caps weight at 600 (semibold);
+     emphasis comes from size/spacing, not heavier weight. A role is a
+     tool, not a law — transient/decorative UI (toast flashes, active-link
+     emphasis) that doesn't fit any role keeps its own one-off component
+     token instead of being forced in. */
+  --ran-text-heading-weight: 600;
+  --ran-text-heading-tracking: -0.03em;
+  --ran-text-heading-1: 32px;
+  --ran-text-heading-2: 24px;
+  --ran-text-heading-3: 20px;
+  --ran-text-heading-4: 16px;
+
+  --ran-text-label-weight: 500;
+  --ran-text-label-1: 14px;
+  --ran-text-label-2: 13px;
+  --ran-text-label-3: 12px;
+
+  --ran-text-copy-weight: 400;
+  --ran-text-copy-1: 16px;
+  --ran-text-copy-2: 14px;
+
+  --ran-text-button-size: 14px;
+  --ran-text-button-weight: 500;
+  --ran-text-button-line-height: 1;
+
+  --ran-text-mono-weight-regular: 400;
+  --ran-text-mono-weight-medium: 500;
+
   /* ── Radius (Geist) ─────────────────────────────────────────────── */
   --ran-radius-sm: 6px;
   --ran-radius-md: 12px;

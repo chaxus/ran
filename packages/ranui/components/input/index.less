@@ -33,7 +33,7 @@
   min-width: var(--ran-input-min-width, 0);
   padding: var(--ran-input-padding, 0px 0px 0px 4px);
   color: var(--ran-input-color, var(--ran-color-text, #000000d9));
-  font-size: var(--ran-input-font-size, 12px);
+  font-size: var(--ran-input-font-size, var(--ran-text-label-3, 12px));
   font-family: var(--ran-input-font-family, var(--ran-skin-font-family, inherit));
   line-height: var(--ran-input-line-height, 1.5715);
   background-color: var(--ran-input-background-color, var(--ran-color-bg-elevated, #fff));
@@ -174,7 +174,7 @@
     min-height: var(--ran-input-content-min-height, var(--ran-size-6, 30px));
     min-width: var(--ran-input-content-min-width, 0);
     color: var(--ran-input-content-color, var(--ran-color-text, #000000d9));
-    font-size: var(--ran-input-content-font-size, 14px);
+    font-size: var(--ran-input-content-font-size, var(--ran-text-copy-2, 14px));
     line-height: var(--ran-input-content-line-height, 1.48);
     background-color: var(--ran-input-content-background-color, var(--ran-color-bg-elevated, #fff));
     background-image: var(--ran-input-content-background-image, none);
@@ -183,7 +183,7 @@
     outline: var(--ran-input-content-outline, none);
     border-radius: var(--ran-input-content-border-radius, var(--ran-radius-sm, 6px));
     padding: var(--ran-input-content-padding, 0 0 0 2px);
-    font-weight: var(--ran-input-content-font-weight, 400);
+    font-weight: var(--ran-input-content-font-weight, var(--ran-text-copy-weight, 400));
     // Mobile Chrome/Safari paint a translucent tap-highlight rectangle over a
     // tapped element by default — easy to mistake for a stray focus ring
     // (`.ran-progress`/`:host` already guards against the same thing elsewhere
@@ -223,7 +223,8 @@
     box-sizing: var(--ran-input-label-box-sizing, border-box);
     pointer-events: var(--ran-input-label-pointer-events, none);
     position: var(--ran-input-label-position, absolute);
-    font-size: var(--ran-input-label-font-size, 14px);
+    font-size: var(--ran-input-label-font-size, var(--ran-text-label-1, 14px));
+    font-weight: var(--ran-input-label-font-weight, var(--ran-text-label-weight, 500));
     left: var(--ran-input-label-left, 8px);
     /* Float animation rides motion props only (the label moves and shrinks);
        color / background-color are palette props and would fade on a theme flip. */
@@ -248,7 +249,8 @@
    (DESIGN.md §7). Hidden when empty. */
 .ran-input-message {
   margin-top: var(--ran-input-message-margin-top, 4px);
-  font-size: var(--ran-input-message-font-size, 12px);
+  font-size: var(--ran-input-message-font-size, var(--ran-text-label-3, 12px));
+  font-weight: var(--ran-input-message-font-weight, var(--ran-text-label-weight, 500));
   line-height: var(--ran-input-message-line-height, 1.5);
   color: var(--ran-input-message-color, var(--ran-color-text-secondary, #8c8c8c));
   &:empty {

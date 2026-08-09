@@ -24,7 +24,8 @@
   background: var(--ran-math-error-background, var(--ran-gray-alpha-100, rgba(0, 0, 0, 0.04)));
   border-radius: var(--ran-radius-sm, 6px);
   font-family: var(--ran-font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
-  font-size: 13px;
+  font-size: var(--ran-math-error-font-size, var(--ran-text-label-2, 13px));
+  font-weight: var(--ran-math-error-font-weight, var(--ran-text-mono-weight-regular, 400));
   line-height: 1.5;
   white-space: pre-wrap;
   word-break: break-word;
@@ -99,7 +100,8 @@
   background: transparent;
   color: var(--ran-math-item-color, var(--ran-color-text, #222));
   text-align: left;
-  font-size: 13px;
+  font-size: var(--ran-math-menu-item-font-size, var(--ran-text-label-2, 13px));
+  font-weight: var(--ran-math-menu-item-font-weight, var(--ran-text-label-weight, 500));
   cursor: pointer;
 }
 .ran-math-menu-item:hover {

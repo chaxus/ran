@@ -42,7 +42,8 @@
 
 .ran-checkbox-label {
   color: var(--ran-checkbox-label-color, var(--ran-color-text, rgba(0, 0, 0, 0.88)));
-  font-size: var(--ran-checkbox-label-font-size, 14px);
+  font-size: var(--ran-checkbox-label-font-size, var(--ran-text-label-1, 14px));
+  font-weight: var(--ran-checkbox-label-font-weight, var(--ran-text-label-weight, 500));
   font-family: var(--ran-checkbox-label-font-family, var(--ran-skin-font-family, inherit));
   line-height: var(--ran-checkbox-label-line-height, 1.5);
   user-select: none;
@@ -57,7 +58,7 @@
   height: var(--ran-checkbox-height, var(--ran-size-1, 16px));
   padding: var(--ran-checkbox-padding, 0);
   color: var(--ran-checkbox-color, var(--ran-color-text, rgba(0, 0, 0, 0.88)));
-  font-size: var(--ran-checkbox-font-size, 14px);
+  font-size: var(--ran-checkbox-font-size, var(--ran-text-label-1, 14px));
   line-height: var(--ran-checkbox-line-height, 1);
   list-style: var(--ran-checkbox-list-style, none);
   font-family: var(--ran-checkbox-font-family, var(--ran-skin-font-family, @fontFamily));

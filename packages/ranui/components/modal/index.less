@@ -77,7 +77,8 @@
 
 .ran-modal-title {
   margin: var(--ran-modal-title-margin, 0);
-  font-size: var(--ran-modal-title-font-size, 16px);
+  font-size: var(--ran-modal-title-font-size, var(--ran-text-heading-4, 16px));
+  font-weight: var(--ran-modal-title-font-weight, var(--ran-text-heading-weight, 600));
   line-height: var(--ran-modal-title-line-height, 1.5);
   color: var(--ran-modal-title-color, var(--ran-color-text, #111827));
 }
@@ -126,7 +127,8 @@
   line-height: 32px;
   padding: 0 var(--ran-modal-action-padding-inline, var(--ran-space-4, 16px));
   cursor: pointer;
-  font-size: 14px;
+  font-size: var(--ran-modal-action-font-size, var(--ran-text-button-size, 14px));
+  font-weight: var(--ran-modal-action-font-weight, var(--ran-text-button-weight, 500));
   color: var(--ran-color-text-secondary, #344054);
 }
 

@@ -22,6 +22,9 @@ a {
 }
 
 :host([active]) a {
-  font-weight: 600;
+  /* Active-state emphasis only, not paired with a size change — doesn't fit
+     any typography role (heading is the only 600-weight role and requires
+     ≥16px). A scale is a tool, not a law: kept as its own one-off token. */
+  font-weight: var(--ran-link-active-font-weight, 600);
   text-decoration: underline;
 }

@@ -81,7 +81,8 @@
   background: transparent;
   color: var(--ran-mermaid-menu-item-color, var(--ran-color-text, #222));
   text-align: left;
-  font-size: 13px;
+  font-size: var(--ran-mermaid-menu-item-font-size, var(--ran-text-label-2, 13px));
+  font-weight: var(--ran-mermaid-menu-item-font-weight, var(--ran-text-label-weight, 500));
   cursor: pointer;
 }
 .ran-mermaid-menu-item:hover {
@@ -92,5 +93,6 @@
   padding: var(--ran-mermaid-error-padding, var(--ran-space-3, 12px));
   color: var(--ran-mermaid-error-color, #c0392b);
   white-space: pre-wrap;
-  font-size: 13px;
+  font-size: var(--ran-mermaid-error-font-size, var(--ran-text-label-2, 13px));
+  font-weight: var(--ran-mermaid-error-font-weight, var(--ran-text-label-weight, 500));
 }
