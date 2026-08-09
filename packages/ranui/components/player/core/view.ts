@@ -77,13 +77,13 @@ export interface PlayerViewRefs {
   playerTipText: HTMLDivElement;
 }
 
-function assertExists<T>(node: T | null, selector: string): T {
-  if (!node) {
-    throw new Error(`r-player view node not found: ${selector}`);
-  }
-  return node;
-}
-
+/**
+ * Builds the player's entire shadow DOM subtree in one pass. Every node is created
+ * once via the builder and its reference is captured directly in a local — there is
+ * no reuse/hydration path (this is called exactly once, from `r-player`'s
+ * constructor, and a Custom Element constructor never runs twice for the same
+ * instance), so refs are never re-derived by querying the DOM back.
+ */
 export function ensurePlayerView(input: {
   shadowDom: ShadowRoot;
   speedOptions: SpeedOption[];
@@ -91,23 +91,16 @@ export function ensurePlayerView(input: {
 }): PlayerViewRefs {
   const { shadowDom, speedOptions, onSpeedChange } = input;
 
-  let player = shadowDom.querySelector('.ran-player') as HTMLDivElement | null;
-  let container = shadowDom.querySelector('.ran-player-contain') as HTMLDivElement | null;
-  let playerBtn = shadowDom.querySelector('.ran-player-play-btn') as HTMLDivElement | null;
-  let gestureFlash = shadowDom.querySelector('.ran-player-gesture-flash') as HTMLDivElement | null;
-  let playerController = shadowDom.querySelector('.ran-player-controller') as HTMLDivElement | null;
+  const container = Div().build() as HTMLDivElement;
+  const playerBtn = Div()
+    .class('ran-player-play-btn')
+    .children(icon('play', 'var(--ran-player-play-btn-width, 64px)'))
+    .build() as HTMLDivElement;
+  // Purely visual, `pointer-events: none` in CSS so it never intercepts taps —
+  // shown/hidden by `core/gestures.ts` on a double-tap seek.
+  const gestureFlash = Div().class('ran-player-gesture-flash').attr('aria-hidden', 'true').build() as HTMLDivElement;
 
-  if (!player || !container || !playerBtn || !gestureFlash || !playerController) {
-    container = Div().build() as HTMLDivElement;
-    playerBtn = Div()
-      .class('ran-player-play-btn')
-      .children(icon('play', 'var(--ran-player-play-btn-width, 64px)'))
-      .build() as HTMLDivElement;
-    // Purely visual, `pointer-events: none` in CSS so it never intercepts taps —
-    // shown/hidden by `core/gestures.ts` on a double-tap seek.
-    gestureFlash = Div().class('ran-player-gesture-flash').attr('aria-hidden', 'true').build() as HTMLDivElement;
-
-    const progressWrapBuffer = Div().class('ran-player-controller-progress-wrap-buffer').build() as HTMLDivElement;
+  const progressWrapBuffer = Div().class('ran-player-controller-progress-wrap-buffer').build() as HTMLDivElement;
     const progressWrapValue = Div().class('ran-player-controller-progress-wrap-value').build() as HTMLDivElement;
     const progressWrap = Div()
       .class('ran-player-controller-progress-wrap')
@@ -247,142 +240,25 @@ export function ensurePlayerView(input: {
       .children(playerTipThumbnail, playerTipTime, playerTipText)
       .build() as HTMLDivElement;
 
-    playerController = Div()
+    const playerController = Div()
       .class('ran-player-controller')
       .children(playerTip, progress, playerControllerBottom)
       .build() as HTMLDivElement;
 
-    player = Div()
+    const player = Div()
       .class('ran-player')
       .id(playerIdentifier)
       .children(container, playerBtn, gestureFlash, playerController)
       .build() as HTMLDivElement;
 
     shadowDom.appendChild(player);
-  }
-
-  const progress = assertExists(
-    playerController.querySelector('.ran-player-controller-progress') as HTMLDivElement | null,
-    '.ran-player-controller-progress',
-  );
-  const progressWrap = assertExists(
-    progress.querySelector('.ran-player-controller-progress-wrap') as HTMLDivElement | null,
-    '.ran-player-controller-progress-wrap',
-  );
-  const progressWrapBuffer = assertExists(
-    progressWrap.querySelector('.ran-player-controller-progress-wrap-buffer') as HTMLDivElement | null,
-    '.ran-player-controller-progress-wrap-buffer',
-  );
-  const progressWrapValue = assertExists(
-    progressWrap.querySelector('.ran-player-controller-progress-wrap-value') as HTMLDivElement | null,
-    '.ran-player-controller-progress-wrap-value',
-  );
-  const progressDot = assertExists(
-    progress.querySelector('.ran-player-controller-progress-dot') as HTMLDivElement | null,
-    '.ran-player-controller-progress-dot',
-  );
-
-  const playerControllerBottom = assertExists(
-    playerController.querySelector('.ran-player-controller-bottom') as HTMLDivElement | null,
-    '.ran-player-controller-bottom',
-  );
-  const playerControllerBottomLeft = assertExists(
-    playerControllerBottom.querySelector('.ran-player-controller-bottom-left') as HTMLDivElement | null,
-    '.ran-player-controller-bottom-left',
-  );
-  const playerControllerBottomPlayBtn = assertExists(
-    playerControllerBottomLeft.querySelector('.ran-player-controller-bottom-left-btn') as HTMLDivElement | null,
-    '.ran-player-controller-bottom-left-btn',
-  );
-  const playerControllerBottomTimeCurrent = assertExists(
-    playerControllerBottomLeft.querySelector(
-      '.ran-player-controller-bottom-left-time-current',
-    ) as HTMLDivElement | null,
-    '.ran-player-controller-bottom-left-time-current',
-  );
-  const playerControllerBottomTimeDivide = assertExists(
-    playerControllerBottomLeft.querySelector('.ran-player-controller-bottom-left-time-divide') as HTMLDivElement | null,
-    '.ran-player-controller-bottom-left-time-divide',
-  );
-  const playerControllerBottomTimeDuration = assertExists(
-    playerControllerBottomLeft.querySelector(
-      '.ran-player-controller-bottom-left-time-duration',
-    ) as HTMLDivElement | null,
-    '.ran-player-controller-bottom-left-time-duration',
-  );
-
-  const playerControllerBottomRight = assertExists(
-    playerControllerBottom.querySelector('.ran-player-controller-bottom-right') as HTMLDivElement | null,
-    '.ran-player-controller-bottom-right',
-  );
-  const playControllerBottomSpeed = assertExists(
-    playerControllerBottomRight.querySelector('.ran-player-controller-bottom-right-speed') as HTMLDivElement | null,
-    '.ran-player-controller-bottom-right-speed',
-  );
-  const playControllerBottomSpeedPopover = assertExists(
-    playControllerBottomSpeed.querySelector('r-select') as HTMLElement | null,
-    'r-select',
-  );
-  playControllerBottomSpeedPopover.addEventListener('change', onSpeedChange);
-
-  const playControllerBottomVolume = assertExists(
-    playerControllerBottomRight.querySelector('.ran-player-controller-bottom-right-volume') as HTMLDivElement | null,
-    '.ran-player-controller-bottom-right-volume',
-  );
-  const playControllerBottomVolumeProgress = assertExists(
-    playControllerBottomVolume.querySelector('r-progress') as Progress | null,
-    'r-progress',
-  );
-  const playControllerBottomVolumeIcon = assertExists(
-    playControllerBottomVolume.querySelector(
-      '.ran-player-controller-bottom-right-volume-icon',
-    ) as HTMLDivElement | null,
-    '.ran-player-controller-bottom-right-volume-icon',
-  );
-  const playControllerBottomSubtitle = assertExists(
-    playerControllerBottomRight.querySelector('.ran-player-controller-bottom-right-subtitle') as HTMLElement | null,
-    '.ran-player-controller-bottom-right-subtitle',
-  );
-  const playControllerBottomClarity = assertExists(
-    playerControllerBottomRight.querySelector('.ran-player-controller-bottom-right-clarity') as HTMLElement | null,
-    '.ran-player-controller-bottom-right-clarity',
-  );
-  const playControllerBottomPip = assertExists(
-    playerControllerBottomRight.querySelector('.ran-player-controller-bottom-right-pip') as HTMLDivElement | null,
-    '.ran-player-controller-bottom-right-pip',
-  );
-  const playControllerBottomRemote = assertExists(
-    playerControllerBottomRight.querySelector('.ran-player-controller-bottom-right-remote') as HTMLDivElement | null,
-    '.ran-player-controller-bottom-right-remote',
-  );
-  const playControllerBottomRightFullScreen = assertExists(
-    playerControllerBottomRight.querySelector('.ran-player-controller-bottom-right-full') as HTMLDivElement | null,
-    '.ran-player-controller-bottom-right-full',
-  );
-
-  const playerTip = assertExists(
-    playerController.querySelector('.ran-player-controller-tip') as HTMLDivElement | null,
-    '.ran-player-controller-tip',
-  );
-  const playerTipThumbnail = assertExists(
-    playerTip.querySelector('.ran-player-controller-tip-thumbnail') as HTMLDivElement | null,
-    '.ran-player-controller-tip-thumbnail',
-  );
-  const playerTipTime = assertExists(
-    playerTip.querySelector('.ran-player-controller-tip-time') as HTMLDivElement | null,
-    '.ran-player-controller-tip-time',
-  );
-  const playerTipText = assertExists(
-    playerTip.querySelector('.ran-player-controller-tip-text') as HTMLDivElement | null,
-    '.ran-player-controller-tip-text',
-  );
 
   return {
-    player: assertExists(player, '.ran-player'),
-    container: assertExists(container, '.ran-player-contain'),
-    playerBtn: assertExists(playerBtn, '.ran-player-play-btn'),
-    playerController: assertExists(playerController, '.ran-player-controller'),
-    gestureFlash: assertExists(gestureFlash, '.ran-player-gesture-flash'),
+    player,
+    container,
+    playerBtn,
+    playerController,
+    gestureFlash,
     progress,
     progressWrap,
     progressWrapBuffer,
