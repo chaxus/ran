@@ -84,6 +84,10 @@ export class Select extends RanElement {
   _selector: HTMLDivElement;
   _label: HTMLLabelElement | undefined;
   onSearch?: (this: HTMLElement, ev: Event) => unknown;
+  // WAI-ARIA combobox type-ahead: accumulated recently-typed characters, reset
+  // after a pause between keystrokes.
+  _typeaheadBuffer = '';
+  _typeaheadTimeId?: NodeJS.Timeout;
   static get observedAttributes(): string[] {
     return [
       'disabled',

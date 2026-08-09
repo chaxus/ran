@@ -193,11 +193,11 @@ describe('r-math contract', () => {
     math.setAttribute('wrap', '=');
     math.latex = 'a+b+c';
     await sleep();
-    expect((renderToString.mock.calls.at(-1)?.[1] as any).wrap).toBe('=');
+    expect((renderToString.mock.calls.at(-1)?.[1] as any)?.wrap).toBe('=');
 
     math.setAttribute('wrap', 'bogus');
     await sleep();
-    expect((renderToString.mock.calls.at(-1)?.[1] as any).wrap).toBeUndefined();
+    expect((renderToString.mock.calls.at(-1)?.[1] as any)?.wrap).toBeUndefined();
   });
 
   it('builds a copy toolbar only when the copy attribute is set', async () => {
