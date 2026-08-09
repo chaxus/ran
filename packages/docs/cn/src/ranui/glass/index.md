@@ -50,23 +50,6 @@ description: '液态磨砂玻璃表面——backdrop 模糊、SVG 液态光线�
 </r-glass>
 ```
 
-## Rim —— GPU 镜面边缘（可选开启）
-
-`rim` 加一层镜面高光：固定从左上方打光的镜面边缘，加上圆角边框处一圈细微的色散（RGB 分离）描边。跟 `displace` 的折射不同，**它完全不采样背景**——着色器只知道面板自身的宽高和圆角半径，所以不会有"整体截取背景做折射"那种方案的交互性/可访问性代价（见下方[说明](#说明)）。它只是叠加在同一个 `backdrop-filter` 磨砂效果之上的纯装饰层，开关它不会改变玻璃背后采样的内容或方式。
-
-优先用 WebGL 渲染——同步创建、几乎所有浏览器都支持，所以 rim 自己的首次出现不会被拖慢——如果浏览器同时支持 WebGPU，会在后台悄悄升级过去（效果完全一样，像素级一致）。两种 GPU API 都不可用时（很老的浏览器、被禁用、SSR）会静默降级为普通的 CSS 镜面渐变——不存在"坏掉"的中间状态。
-
-<Demo>
-  <div style="position: relative; display: flex; gap: 16px; padding: 32px; border-radius: 16px; background: radial-gradient(circle at 30% 30%, #f9d423, #ff4e50 60%, #7b4397); overflow: hidden;">
-    <r-glass radius="20" style="flex: 1;"><div style="padding: 20px; color: #fff; font-size: 13px;">无 rim</div></r-glass>
-    <r-glass radius="20" rim style="flex: 1;"><div style="padding: 20px; color: #fff; font-size: 13px;">rim</div></r-glass>
-  </div>
-</Demo>
-
-```html
-<r-glass>…普通 CSS 镜面高光…</r-glass> <r-glass rim>…GPU 镜面边缘 + 色散描边（WebGL，可升级到 WebGPU）…</r-glass>
-```
-
 ## API 参考
 
 ### 属性
@@ -82,6 +65,56 @@ description: '液态磨砂玻璃表面——backdrop 模糊、SVG 液态光线�
 | `sheen`       | `boolean` | `false` | 表面流动的镜面高光动画。                                                                                                                          |
 | `interactive` | `boolean` | `false` | hover 抬升 + 按下回弹反馈，用于可点击的玻璃。同时让 host 变成可键盘操作的按钮——`role="button"`、可 tab 到、Enter/Space 等同点击。                 |
 | `rim`         | `boolean` | `false` | 可选开启的镜面边缘 + 色散描边，观感更"有光"。优先 WebGL（始终同步可用），后台悄悄升级到 WebGPU（若可用）。两者都不可用时降级为普通 CSS 镜面渐变。 |
+
+### 折射 `displace`
+
+`displace` 驱动 SVG `feDisplacementMap` 的 scale —— 光线穿过表面时被弯折的强度。设为 `0` 即为纯磨砂平面。
+
+<Demo>
+  <div style="position: relative; display: flex; gap: 16px; padding: 32px; border-radius: 16px; background: repeating-linear-gradient(45deg, #6366f1, #6366f1 12px, #ec4899 12px, #ec4899 24px); overflow: hidden;">
+    <r-glass displace="0" radius="14" style="flex: 1;"><div style="padding: 18px; color: #fff; font-size: 13px;">displace = 0</div></r-glass>
+    <r-glass displace="60" radius="14" style="flex: 1;"><div style="padding: 18px; color: #fff; font-size: 13px;">displace = 60</div></r-glass>
+  </div>
+</Demo>
+
+```html
+<r-glass displace="0">…纯磨砂…</r-glass> <r-glass displace="60">…液态…</r-glass>
+```
+
+### 流光与交互
+
+`sheen` 会添加一道流动的镜面高光；`interactive` 会添加 hover 抬升与富有弹性的按下反馈（使用共享的 `--ran-motion-ease-spring` 令牌）。
+
+<Demo>
+  <div style="position: relative; padding: 40px; border-radius: 16px; background: radial-gradient(circle at 30% 30%, #f9d423, #ff4e50 60%, #7b4397); overflow: hidden;">
+    <r-glass sheen interactive displace="36" style="width: 260px;">
+      <div style="padding: 20px; color: #fff; font-weight: 600;">悬停或按下试试</div>
+    </r-glass>
+  </div>
+</Demo>
+
+```html
+<r-glass sheen interactive displace="36">
+  <div>Hover &amp; press me</div>
+</r-glass>
+```
+
+### Rim —— GPU 镜面边缘（可选开启）
+
+`rim` 加一层镜面高光：固定从左上方打光的镜面边缘，加上圆角边框处一圈细微的色散（RGB 分离）描边。跟 `displace` 的折射不同，**它完全不采样背景**——着色器只知道面板自身的宽高和圆角半径，所以不会有"整体截取背景做折射"那种方案的交互性/可访问性代价（见下方[说明](#说明)）。它只是叠加在同一个 `backdrop-filter` 磨砂效果之上的纯装饰层，开关它不会改变玻璃背后采样的内容或方式。
+
+优先用 WebGL 渲染——同步创建、几乎所有浏览器都支持，所以 rim 自己的首次出现不会被拖慢——如果浏览器同时支持 WebGPU，会在后台悄悄升级过去（效果完全一样，像素级一致）。两种 GPU API 都不可用时（很老的浏览器、被禁用、SSR）会静默降级为普通的 CSS 镜面渐变——不存在"坏掉"的中间状态。
+
+<Demo>
+  <div style="position: relative; display: flex; gap: 16px; padding: 32px; border-radius: 16px; background: radial-gradient(circle at 30% 30%, #f9d423, #ff4e50 60%, #7b4397); overflow: hidden;">
+    <r-glass radius="20" style="flex: 1;"><div style="padding: 20px; color: #fff; font-size: 13px;">无 rim</div></r-glass>
+    <r-glass radius="20" rim style="flex: 1;"><div style="padding: 20px; color: #fff; font-size: 13px;">rim</div></r-glass>
+  </div>
+</Demo>
+
+```html
+<r-glass>…普通 CSS 镜面高光…</r-glass> <r-glass rim>…GPU 镜面边缘 + 色散描边（WebGL，可升级到 WebGPU）…</r-glass>
+```
 
 ### CSS parts 与 token
 

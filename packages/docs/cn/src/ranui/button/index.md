@@ -6,11 +6,15 @@ description: 'ranui Button（<r-button>）用于触发即时操作，支持多�
 
 按钮组件用于触发一个即时操作，支持多种样式和状态。
 
+> **适用场景**：需要一个开箱即用、自带 primary/contrast/warning/text 样式以及禁用、图标支持的可点击操作控件时——用 `<r-button>` 代替手写 `<button>` 样式。
+
 ## 快速开始
 
 ### 基础用法
 
-<r-button>Button</r-button>
+<Demo>
+  <r-button>Button</r-button>
+</Demo>
 
 ```html
 <r-button>Button</r-button>
@@ -31,18 +35,12 @@ description: 'ranui Button（<r-button>）用于触发即时操作，支持多�
 
 按钮支持五种不同的类型，适用于不同的场景
 
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-     <r-button type="primary">主要按钮</r-button>
-</div>
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-     <r-button type="warning">警告按钮</r-button>
-</div>
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-    <r-button type="text">文本按钮</r-button>
-</div>
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-    <r-button>默认按钮</r-button>
-</div>
+<Demo>
+  <r-button type="primary">主要按钮</r-button>
+  <r-button type="warning">警告按钮</r-button>
+  <r-button type="text">文本按钮</r-button>
+  <r-button>默认按钮</r-button>
+</Demo>
 
 ```html
 <r-button type="primary">主要按钮</r-button>
@@ -57,18 +55,12 @@ description: 'ranui Button（<r-button>）用于触发即时操作，支持多�
 
 添加 `disabled` 属性可以让按钮处于不可用状态，同时按钮样式也会相应改变
 
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-     <r-button type="primary" disabled>主要按钮</r-button>
-</div>
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-     <r-button type="warning" disabled>警告按钮</r-button>
-</div>
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-    <r-button type="text" disabled>文本按钮</r-button>
-</div>
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-    <r-button disabled>默认按钮</r-button>
-</div>
+<Demo>
+  <r-button type="primary" disabled>主要按钮</r-button>
+  <r-button type="warning" disabled>警告按钮</r-button>
+  <r-button type="text" disabled>文本按钮</r-button>
+  <r-button disabled>默认按钮</r-button>
+</Demo>
 
 ```html
 <r-button type="primary" disabled>主要按钮</r-button>
@@ -83,23 +75,24 @@ description: 'ranui Button（<r-button>）用于触发即时操作，支持多�
 
 > 💡 **提示**: 如果需要控制图标的具体位置，建议直接使用 Icon 组件而不是 icon 属性
 
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-     <r-button type="default" icon="user">默认按钮</r-button>
-</div>
-<div style="display:inline-block;margin-right: 8px;margin-bottom: 12px;">
-     <r-button type="primary" icon="home">主要按钮</r-button>
-</div>
+<Demo>
+  <r-button type="default" icon="user">默认按钮</r-button>
+  <r-button type="primary" icon="home">主要按钮</r-button>
+</Demo>
 
 ```html
-<r-button type="default" icon="user">默认按钮</r-button> <r-button type="primary" icon="home">主要按钮</r-button>
+<r-button type="default" icon="user">默认按钮</r-button>
+<r-button type="primary" icon="home">主要按钮</r-button>
 ```
 
 ### 特效控制 `effect`
 
 如果需要纯净的按钮样式，可以设置 `effect="false"` 来禁用点击时的水波纹特效
 
-<r-button type="default" effect="false" icon="user">默认按钮</r-button>
-<r-button type="primary" effect="false" icon="home">主要按钮</r-button>
+<Demo>
+  <r-button type="default" effect="false" icon="user">默认按钮</r-button>
+  <r-button type="primary" effect="false" icon="home">主要按钮</r-button>
+</Demo>
 
 ```html
 <r-button type="default" effect="false" icon="user">默认按钮</r-button>

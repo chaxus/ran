@@ -6,34 +6,37 @@ description: '面向单页应用的客户端路由：声明式组件、JS API、
 
 用于单页应用的客户端路由。提供声明式 HTML 组件和 JavaScript API，支持导航守卫、View Transitions 动画过渡以及跨文档（MPA）场景。
 
+> **适用场景**：需要支持导航守卫、View Transitions 过渡以及跨文档（MPA）能力的客户端 SPA 路由——用 `createRouter` 搭配 `<r-router>` / `<r-route>` / `<r-link>` 即可搭建应用内导航。
+
 ## 快速开始
 
-完整示例：路由配置、组件挂载、权限守卫、SPA 过渡动画。
+一个包含权限守卫和 SPA 过渡动画的完整迷你应用：
 
 ```js
 import { createRouter } from 'ranui';
 
+// 1. 创建路由，配置权限保护路由和 SPA 过渡动画
 const router = createRouter({
   mode: 'history',
   viewTransition: 'spa',
   routes: [
     { path: '/', exact: true, meta: { title: '首页' } },
-    { path: '/dashboard', meta: { requiresAuth: true, title: '仪表盘' } },
+    { path: '/about', meta: { title: '关于' } },
+    { path: '/dashboard', meta: { title: '仪表盘', requiresAuth: true } },
     { path: '/login', meta: { title: '登录' } },
-    { path: '/users/:id', meta: { requiresAuth: true } },
   ],
 });
 
-// 权限守卫
+// 2. 权限守卫——未登录用户重定向到登录页
 router.beforeEach((to, from, next) => {
-  if (to.meta?.requiresAuth && !isLoggedIn()) {
+  if (to.meta?.requiresAuth && !sessionStorage.getItem('token')) {
     next('/login');
   } else {
     next();
   }
 });
 
-// 更新页面标题 + 埋点
+// 3. 每次导航后更新页面标题并上报埋点
 router.afterEach((to) => {
   document.title = to.meta?.title ?? '应用';
 });
@@ -43,21 +46,23 @@ router.onRouteChange((to) => {
 ```
 
 ```html
+<!-- 挂载路由容器，添加导航链接，声明路由 -->
 <r-router>
   <nav>
     <r-link href="/">首页</r-link>
+    <r-link href="/about">关于</r-link>
     <r-link href="/dashboard">仪表盘</r-link>
   </nav>
 
   <r-route path="/" exact><h2>首页</h2></r-route>
+  <r-route path="/about"><h2>关于</h2></r-route>
   <r-route path="/dashboard"><h2>仪表盘</h2></r-route>
   <r-route path="/login"><h2>登录</h2></r-route>
-  <r-route path="/users/:id"><h2>用户详情</h2></r-route>
 </r-router>
 ```
 
 ```css
-/* SPA 淡入淡出过渡 */
+/* SPA 过渡动画——路由间交叉淡入淡出 */
 @keyframes fade-in {
   from {
     opacity: 0;
@@ -175,13 +180,6 @@ export default function renderSettings(host) {
 
 创建并注册全局 `RouterCore` 实例。在应用启动时调用一次，应早于任何 `r-router` 元素挂载。
 
-| 选项             | 类型                            | 默认值      | 说明                                         |
-| ---------------- | ------------------------------- | ----------- | -------------------------------------------- |
-| `mode`           | `'history' \| 'hash'`           | `'history'` | History API 模式                             |
-| `base`           | `string`                        | `''`        | 基础路径前缀，会从所有内部路径中去除         |
-| `routes`         | `RouteConfig[]`                 | `[]`        | 路由配置列表                                 |
-| `viewTransition` | `boolean \| ViewTransitionMode` | `false`     | 启用 View Transitions；`true` 等同于 `'spa'` |
-
 ```js
 import { createRouter } from 'ranui';
 
@@ -196,27 +194,36 @@ const router = createRouter({
 });
 ```
 
+#### 选项
+
+| 选项             | 类型                            | 默认值      | 说明                                         |
+| ---------------- | ------------------------------- | ----------- | -------------------------------------------- |
+| `mode`           | `'history' \| 'hash'`           | `'history'` | URL 策略                                     |
+| `base`           | `string`                        | `''`        | 基础路径前缀                                 |
+| `routes`         | `RouteConfig[]`                 | `[]`        | 路由配置列表，包含 path、exact 与 meta       |
+| `viewTransition` | `boolean \| ViewTransitionMode` | `false`     | 启用 View Transitions；`true` 等同于 `'spa'` |
+
 ### `RouterCore`
 
-`createRouter` 返回的实例，包含所有导航方法、钩子和属性。
+所有钩子方法都会返回一个**取消订阅函数**。
 
-| 名称                     | 签名 / 类型                                   | 说明                                         |
-| ------------------------ | --------------------------------------------- | -------------------------------------------- |
-| `push(path)`             | `(path: string) => Promise<void>`             | 导航并新增历史记录                           |
-| `replace(path)`          | `(path: string) => Promise<void>`             | 导航并替换当前历史记录                       |
-| `back()`                 | `() => void`                                  | `history.back()`                             |
-| `forward()`              | `() => void`                                  | `history.forward()`                          |
-| `go(delta)`              | `(delta: number) => void`                     | `history.go(delta)`                          |
-| `beforeEach(guard)`      | `(guard: NavigationGuard) => () => void`      | 注册导航守卫，返回取消订阅函数               |
-| `afterEach(handler)`     | `(handler: RouteChangeHandler) => () => void` | 导航后钩子，DOM 更新后执行，返回取消订阅函数 |
-| `onRouteChange(handler)` | `(handler: RouteChangeHandler) => () => void` | 订阅每次路由变化，返回取消订阅函数           |
-| `onPageSwap(handler)`    | `(handler: Function) => () => void`           | 跨文档 `pageswap` 事件，仅 MPA 模式有效      |
-| `onPageReveal(handler)`  | `(handler: Function) => () => void`           | 跨文档 `pagereveal` 事件，仅 MPA 模式有效    |
-| `destroy()`              | `() => void`                                  | 移除所有监听器和注入的 CSS                   |
-| `currentRoute`           | `RouteLocation \| null`                       | 当前路由位置对象                             |
-| `mode`                   | `'history' \| 'hash'`                         | History 模式                                 |
-| `base`                   | `string`                                      | 基础路径前缀                                 |
-| `routes`                 | `RouteConfig[]`                               | 已注册的路由配置                             |
+| 名称                     | 签名 / 类型                                              | 说明                                       |
+| ------------------------ | --------------------------------------------------------- | ------------------------------------------- |
+| `push(path)`             | `(path: string) => Promise<void>`                          | 导航并新增一条历史记录                     |
+| `replace(path)`          | `(path: string) => Promise<void>`                          | 导航并替换当前历史记录                     |
+| `back()`                 | `() => void`                                               | `history.back()`                            |
+| `forward()`              | `() => void`                                               | `history.forward()`                         |
+| `go(delta)`              | `(delta: number) => void`                                  | `history.go(delta)`                         |
+| `beforeEach(guard)`      | `(guard: NavigationGuard) => () => void`                    | 注册导航守卫；在导航提交前运行             |
+| `afterEach(handler)`     | `(handler: RouteChangeHandler) => () => void`                | 导航后钩子；DOM 更新后运行                 |
+| `onRouteChange(handler)` | `(handler: RouteChangeHandler) => () => void`                | 订阅每次路由变化                           |
+| `onPageSwap(handler)`    | `(handler: (e: PageSwapEvent) => void) => () => void`        | 跨文档 `pageswap` 事件，仅 MPA 模式有效    |
+| `onPageReveal(handler)`  | `(handler: (e: PageRevealEvent) => void) => () => void`      | 跨文档 `pagereveal` 事件，仅 MPA 模式有效  |
+| `destroy()`              | `() => void`                                               | 移除所有监听器和注入的 CSS                 |
+| `currentRoute`           | `RouteLocation \| null`                                     | 当前路由位置对象                           |
+| `mode`                   | `'history' \| 'hash'`                                       | History 模式                               |
+| `base`                   | `string`                                                    | 基础路径前缀                               |
+| `routes`                 | `RouteConfig[]`                                             | 已注册的路由配置                           |
 
 ```js
 router.push('/users/42');
@@ -253,7 +260,9 @@ const unsubscribe = router.beforeEach((to, from, next) => {
 unsubscribe();
 ```
 
-`afterEach` 和 `onRouteChange` 在导航完成后执行，适合更新页面标题和上报埋点：
+### 导航后钩子
+
+`afterEach` 和 `onRouteChange` 都在 DOM 更新后触发。依赖导航结果的副作用用 `afterEach`，轻量级订阅用 `onRouteChange`：
 
 ```js
 router.afterEach((to, from) => {
@@ -271,13 +280,15 @@ router.onRouteChange((to, from) => {
 
 ### 三种模式对比
 
+在开始编写 CSS 之前，先选定一种模式：
+
 | 模式     | Chrome      | 触发时机                                   | 是否需要 JS |
 | -------- | ----------- | ------------------------------------------ | ----------- |
 | `'spa'`  | 111+        | `router.push()` / `r-link` 点击            | 是          |
 | `'mpa'`  | 126+        | 任意 `<a>` 跳转、表单提交、`location.href` | 否          |
 | `'both'` | 111+ / 126+ | 以上全部                                   | 可选        |
 
-### SPA 模式
+### SPA —— 同文档过渡
 
 ```js
 const router = createRouter({ viewTransition: 'spa' }); // 或 true
@@ -308,7 +319,7 @@ const router = createRouter({ viewTransition: 'spa' }); // 或 true
 }
 ```
 
-### MPA 模式
+### MPA —— 跨文档过渡
 
 ```js
 const router = createRouter({ viewTransition: 'mpa' });
@@ -346,7 +357,7 @@ router.onPageReveal((e) => {
 const router = createRouter({ viewTransition: 'both' });
 ```
 
-SPA 导航使用 `startViewTransition()`，全页面跳转使用 `@view-transition` CSS 规则。
+SPA 导航使用 `startViewTransition()`，全页面跳转使用 `@view-transition` CSS 规则。有 JS 支持时走 JS 驱动的过渡，否则回退到 CSS。
 
 ## `view-transition-name` — 共享元素过渡
 
@@ -455,15 +466,22 @@ router.beforeEach((to, from, next) => {
 }
 ```
 
-多元素独立动画和退出过渡：给多个元素分别设置不同的 `view-transition-name` 即可让它们独立过渡；设为 `none` 则可排除某个元素不参与过渡（如 `.sidebar { view-transition-name: none; }`）。
+要将某个元素排除在过渡之外，设为 `view-transition-name: none`（如 `.sidebar { view-transition-name: none; }`）。要让多个部分各自独立动画，给每个元素分配一个唯一的名称——没有名称的元素都会随根过渡一起淡入淡出。
 
 ## SSR / SSG
 
-所有 browser API（`window`、`history`、`location`）均有调用守卫，在非浏览器环境下不会执行。SSR 中调用 `router.push()` / `router.replace()` 会跳过 `history` 操作，但导航守卫和钩子仍会正常执行，可用于服务端的路由逻辑和数据预取。
+所有 browser API（`window`、`history`、`document`）都用 `typeof` 判断做了调用守卫，因此在 Node/Deno 的 SSR 环境中调用 `createRouter` 是安全的。在 SSR 场景下，`push` 和 `replace` 仍会执行导航守卫并更新 `currentRoute`，但会跳过 `history.pushState` / `history.replaceState`；`popstate` 监听器永远不会在服务端注册。客户端正常水合（hydrate）即可——用同样的配置再调用一次 `createRouter`。
 
 ## 类型参考
 
 ```ts
+interface RouteLocation {
+  path: string; // 例如 '/users/42'
+  params: Record<string, string>; // 例如 { id: '42' }
+  query: Record<string, string>; // 例如 { tab: 'profile' }
+  fullPath: string; // 例如 '/users/42?tab=profile'
+}
+
 type ViewTransitionMode = 'spa' | 'mpa' | 'both';
 
 interface RouterConfig {
@@ -478,13 +496,6 @@ interface RouteConfig {
   exact?: boolean;
   meta?: Record<string, unknown>;
   children?: RouteConfig[];
-}
-
-interface RouteLocation {
-  path: string; // 例如 '/users/42'
-  params: Record<string, string>; // 例如 { id: '42' }
-  query: Record<string, string>; // 例如 { tab: 'profile' }
-  fullPath: string; // 例如 '/users/42?tab=profile'
 }
 
 type NavigationGuard = (

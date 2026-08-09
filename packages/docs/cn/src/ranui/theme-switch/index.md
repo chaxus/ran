@@ -8,11 +8,15 @@ description: '一个 system/light/dark 三态分段控件，接入 ranui 主题 
 [主题 API](/cn/src/ranui/theme/)。点击某一段会调用 `setTheme()`，把选择持久化到 localStorage
 键 `ran-theme`，并让页面上（以及其他标签页里）的所有实例保持同步。
 
+> **适用场景**：需要一个开箱即用的 system/light/dark 分段控件，并接入 ranui 主题 API 时——`<r-theme-switch>` 已经处理好持久化、系统跟随与跨标签页同步，无需自己手写一个开关。
+
 ## 快速开始
 
 ### 基础用法
 
-<r-theme-switch label="主题" label-system="跟随系统" label-light="浅色" label-dark="深色"></r-theme-switch>
+<Demo>
+  <r-theme-switch label="主题" label-system="跟随系统" label-light="浅色" label-dark="深色"></r-theme-switch>
+</Demo>
 
 ```html
 <r-theme-switch></r-theme-switch>

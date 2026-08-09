@@ -15,7 +15,7 @@ ranui 不提供一个专门包裹 `<form>` 的组件。`r-input`、`r-checkbox`�
 <Demo column>
   <form style="display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 320px;" onsubmit="event.preventDefault(); message.info(JSON.stringify(Object.fromEntries(new FormData(this))))">
     <r-input name="username" label="Username" placeholder="Enter username"></r-input>
-    <r-select name="role" style="width: 100%; height: 40px" defaultValue="member">
+    <r-select name="role" label="Role" style="width: 100%" defaultValue="member">
       <r-option value="member">Member</r-option>
       <r-option value="admin">Admin</r-option>
     </r-select>
@@ -29,7 +29,7 @@ ranui 不提供一个专门包裹 `<form>` 的组件。`r-input`、`r-checkbox`�
 ```html
 <form id="signup" style="display: flex; flex-direction: column; gap: 16px;">
   <r-input name="username" label="Username" placeholder="Enter username"></r-input>
-  <r-select name="role" defaultValue="member">
+  <r-select name="role" label="Role" defaultValue="member">
     <r-option value="member">Member</r-option>
     <r-option value="admin">Admin</r-option>
   </r-select>
@@ -87,7 +87,7 @@ fetch('/api/signup', { method: 'POST', body: JSON.stringify(data) });
 
 ## 校验与重置
 
-`r-input`、`r-checkbox`、`r-select` 都支持 `required`（会阻止提交并触发浏览器原生的校验提示，和原生字段一模一样），以及 `checkValidity()`、`reportValidity()`、`validity`、`validationMessage`。原生的 `form.reset()`（或 `<button type="reset">`）会通过 `formResetCallback()` 把每个字段恢复到交互前的状态。细节见各字段自己的文档（[Input](/cn/src/ranui/input/)、[Checkbox](/cn/src/ranui/checkbox/)、[Select](/cn/src/ranui/select/)）。
+`r-input`、`r-checkbox`、`r-select` 都支持 `required`（会阻止提交并触发浏览器原生的校验提示，和原生字段一模一样），以及 `checkValidity()`、`reportValidity()`、`validity`、`validationMessage`。原生的 `form.reset()`（或 `<button type="reset">`）会通过 `formResetCallback()` 把每个字段恢复到交互前的状态。细节见各字段自己的文档（[Input](/cn/src/ranui/input/#表单关联)、[Checkbox](/cn/src/ranui/checkbox/#表单关联)、[Select](/cn/src/ranui/select/#表单关联)）。
 
 <Demo column>
   <form style="display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 320px;" onsubmit="event.preventDefault(); message.success('Valid — submitted')">
