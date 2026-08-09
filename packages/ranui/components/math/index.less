@@ -92,7 +92,8 @@
   text-align: left;
 }
 .ran-math-menu-item {
-  padding: 6px 10px;
+  padding: var(--ran-math-menu-item-padding-block, var(--ran-space-2, 8px))
+    var(--ran-math-menu-item-padding-inline, var(--ran-space-3, 12px));
   border: none;
   border-radius: var(--ran-radius-sm, 6px);
   background: transparent;

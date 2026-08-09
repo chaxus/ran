@@ -18,7 +18,14 @@ const AUTO_REVEAL_THRESHOLD = 0.35;
 class ScratchTicket extends RanElement {
   scratchTicketContainer: HTMLDivElement;
   scratchTicket: HTMLCanvasElement;
-  state: { isScratching: boolean; scratchedArea: number; lastX: number; lastY: number };
+  state: {
+    isScratching: boolean;
+    scratchedArea: number;
+    lastX: number;
+    lastY: number;
+    /** The one pointer currently driving the scratch — see `onScratchPointerDown`. */
+    activePointerId?: number;
+  };
   scratchAward: HTMLDivElement;
   _shadowDom: ShadowRoot;
   _events = new EventManager();
@@ -55,6 +62,7 @@ class ScratchTicket extends RanElement {
       scratchedArea: 0,
       lastX: 0,
       lastY: 0,
+      activePointerId: undefined,
     };
   }
   get disabled(): boolean {
@@ -115,14 +123,31 @@ class ScratchTicket extends RanElement {
     const distance = Math.max(Math.hypot(toX - fromX, toY - fromY), 1);
     this.state.scratchedArea += distance * radius * 2;
   };
-  /** Pointer Events unify mouse/touch/pen — one code path scratches on both desktop and mobile. */
+  /**
+   * Pointer Events unify mouse/touch/pen — one code path scratches on both desktop and
+   * mobile — but "unify" doesn't mean "identical", so a few device-specific guards:
+   *
+   * - **Mouse**: `pointerdown` fires for *every* button, not just the primary one — a
+   *   right-click-drag (e.g. opening a browser context-menu gesture) or a middle-click
+   *   shouldn't scratch. `e.button !== 0` on a mouse pointer bails out before arming.
+   * - **Touch**: a second finger touching mid-scratch fires a *second* `pointerdown`
+   *   with a different `pointerId`, while the first finger may still be down. Without
+   *   tracking which pointer is actually driving the stroke, that second touch would
+   *   silently take over `lastX`/`lastY`, so `pointermove`s from *either* finger jump
+   *   between two unrelated positions. `activePointerId` pins the interaction to
+   *   whichever pointer started it; every other pointer's events are ignored until it
+   *   ends (`pointerup`/`pointercancel`/`lostpointercapture`).
+   */
   onScratchPointerDown = (e: PointerEvent): void => {
     if (this.disabled) return;
+    if (this.state.isScratching) return; // a second touch/pointer mid-stroke — ignore it
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
     // Stops the page from scrolling under a touch drag on the scratch surface, and
     // (per the Pointer Events spec) suppresses the synthetic compatibility `click`/
     // `mouse*` events a touch would otherwise also fire.
     e.preventDefault();
     this.state.isScratching = true;
+    this.state.activePointerId = e.pointerId;
     this.scratchTicket.setPointerCapture?.(e.pointerId);
     const { x, y } = this.toCanvasPoint(e.clientX, e.clientY);
     this.state.lastX = x;
@@ -132,13 +157,16 @@ class ScratchTicket extends RanElement {
   };
   onScratchPointerMove = (e: PointerEvent): void => {
     if (this.disabled || !this.state.isScratching) return;
+    if (e.pointerId !== this.state.activePointerId) return;
     const { x, y } = this.toCanvasPoint(e.clientX, e.clientY);
     this.scratchStroke(this.state.lastX, this.state.lastY, x, y);
     this.state.lastX = x;
     this.state.lastY = y;
   };
-  onScratchPointerUp = (): void => {
+  onScratchPointerUp = (e: PointerEvent): void => {
+    if (e.pointerId !== this.state.activePointerId) return;
     this.state.isScratching = false;
+    this.state.activePointerId = undefined;
     if (this.disabled) return;
     const { width, height } = this.scratchTicket;
     const ctx = this.scratchTicket.getContext('2d');
@@ -187,8 +215,13 @@ class ScratchTicket extends RanElement {
     this._events
       .on(this.scratchTicket, 'pointerdown', this.onScratchPointerDown as EventListener, { passive: false })
       .on(this.scratchTicket, 'pointermove', this.onScratchPointerMove as EventListener)
-      .on(this.scratchTicket, 'pointerup', this.onScratchPointerUp)
-      .on(this.scratchTicket, 'pointercancel', this.onScratchPointerUp)
+      .on(this.scratchTicket, 'pointerup', this.onScratchPointerUp as EventListener)
+      .on(this.scratchTicket, 'pointercancel', this.onScratchPointerUp as EventListener)
+      // A device/OS can reclaim pointer capture mid-gesture without ever firing
+      // `pointerup` (seen on some Android WebViews when a system gesture — e.g. the
+      // back-swipe edge — interrupts it). Without this, `isScratching` sticks `true`
+      // forever and the *next* unrelated pointer motion silently keeps scratching.
+      .on(this.scratchTicket, 'lostpointercapture', this.onScratchPointerUp as EventListener)
       .on(window, 'resize', this.onWindowResize);
     this.syncCanvasResolution();
   }

@@ -74,7 +74,8 @@
   z-index: 1;
 }
 .ran-mermaid-menu-item {
-  padding: 6px 10px;
+  padding: var(--ran-mermaid-menu-item-padding-block, var(--ran-space-2, 8px))
+    var(--ran-mermaid-menu-item-padding-inline, var(--ran-space-3, 12px));
   border: none;
   border-radius: var(--ran-radius-sm, 6px);
   background: transparent;
@@ -88,7 +89,7 @@
 }
 .ran-mermaid-error {
   margin: 0;
-  padding: 12px;
+  padding: var(--ran-mermaid-error-padding, var(--ran-space-3, 12px));
   color: var(--ran-mermaid-error-color, #c0392b);
   white-space: pre-wrap;
   font-size: 13px;

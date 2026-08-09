@@ -34,7 +34,7 @@
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    gap: 14px;
+    gap: var(--ran-card-header-gap, var(--ran-space-4, 16px));
   }
 
   &-title-area {
@@ -55,7 +55,7 @@
   }
 
   &-description {
-    margin: 4px 0 0;
+    margin: var(--ran-card-description-margin-top, var(--ran-space-1, 4px)) 0 0;
     color: var(--ran-card-description-color, var(--ran-color-text-secondary));
     font-size: var(--ran-card-description-font-size, 14px);
     line-height: 1.5;
