@@ -169,6 +169,24 @@ describe('r-checkbox contract', () => {
     expect(checkbox.context.checked).toBe(false);
   });
 
+  it('updates aria-disabled and tabIndex when disabled changes after the checkbox is already connected', () => {
+    const checkbox = document.createElement('r-checkbox') as any;
+    document.body.appendChild(checkbox);
+    expect(checkbox.tabIndex).toBe(0);
+    expect(checkbox.getAttribute('aria-disabled')).toBeNull();
+
+    // Setting `disabled` post-connect used to only recompute form validity — it never
+    // re-ran syncA11yAndForm, so the control stayed Tab-reachable and announced as
+    // enabled to assistive tech despite visually dimming and blocking interaction.
+    checkbox.setAttribute('disabled', '');
+    expect(checkbox.getAttribute('aria-disabled')).toBe('true');
+    expect(checkbox.tabIndex).toBe(-1);
+
+    checkbox.disabled = false;
+    expect(checkbox.getAttribute('aria-disabled')).toBeNull();
+    expect(checkbox.tabIndex).toBe(0);
+  });
+
   it('is form-associated and relays its value through ElementInternals', () => {
     expect((Checkbox as any).formAssociated).toBe(true);
 

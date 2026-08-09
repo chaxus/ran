@@ -442,6 +442,36 @@ describe('r-input contract', () => {
     expect(setValidity).toHaveBeenLastCalledWith({});
   });
 
+  it('writes aria-required/aria-invalid onto the real inner <input>, not the host', () => {
+    // The host is never what a screen reader focuses — the actual, closed-shadow
+    // <input> (_inputContent) is. Writing these to `this` instead means they never
+    // reach assistive tech.
+    const input = document.createElement('r-input') as any;
+    document.body.appendChild(input);
+
+    input.required = 'true';
+    expect(input._inputContent.getAttribute('aria-required')).toBe('true');
+    expect(input.getAttribute('aria-required')).toBeNull();
+    expect(input._inputContent.getAttribute('aria-invalid')).toBe('true');
+    expect(input.getAttribute('aria-invalid')).toBeNull();
+
+    input.value = 'filled';
+    expect(input._inputContent.getAttribute('aria-invalid')).toBeNull();
+  });
+
+  it('links the helper/validation message to the field via aria-describedby', () => {
+    const input = document.createElement('r-input') as any;
+    document.body.appendChild(input);
+
+    input.message = 'This field is required';
+    const describedbyId = input._inputContent.getAttribute('aria-describedby');
+    expect(describedbyId).toBeTruthy();
+    expect(input._shadowDom.getElementById(describedbyId).textContent).toBe('This field is required');
+
+    input.message = '';
+    expect(input._inputContent.getAttribute('aria-describedby')).toBeNull();
+  });
+
   it('checkValidity/reportValidity/validity/validationMessage delegate to ElementInternals', () => {
     const input = document.createElement('r-input') as any;
     document.body.appendChild(input);

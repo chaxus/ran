@@ -34,16 +34,17 @@ describe('r-select accessibility keyboard contract', () => {
       changes.push((event as CustomEvent).detail);
     });
 
+    // Nothing active yet: the first ArrowDown lands on the first option, not the second.
     select.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
     expect(select.getAttribute('aria-expanded')).toBe('true');
     expect(select.getAttribute('aria-activedescendant')).toBeTruthy();
-    expect(select.getDropdownOptions()[1].getAttribute('aria-selected')).toBe('true');
+    expect(select.getDropdownOptions()[0].getAttribute('aria-selected')).toBe('true');
 
     select.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
     vi.advanceTimersByTime(320);
 
-    expect(select.value).toBe('2');
+    expect(select.value).toBe('1');
     expect(select.getAttribute('aria-expanded')).toBe('false');
-    expect(changes).toEqual([{ value: '2', label: 'Beta' }]);
+    expect(changes).toEqual([{ value: '1', label: 'Alpha' }]);
   });
 });

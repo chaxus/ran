@@ -148,8 +148,9 @@ describe('r-progress CSS height contract', () => {
 
   it(':host height default is a px value, not 100%', () => {
     // Matches:  height: var(--ran-progress-height, 20px)
+    //       or: height: var(--ran-progress-height, var(--ran-size-3, 20px))
     // Rejects:  height: var(--ran-progress-height, 100%)
-    expect(PROGRESS_LESS).toMatch(/height:\s*var\(--ran-progress-height,\s*\d+px\)/);
+    expect(PROGRESS_LESS).toMatch(/height:\s*var\(--ran-progress-height,\s*(?:\d+px|var\(--ran-size-\d+,\s*\d+px\))\)/);
   });
 
   it('r-progress inside r-card does not make card overflow', () => {
@@ -191,7 +192,10 @@ describe('r-skeleton CSS sizing contract', () => {
 
   it(':host declares a non-percent, non-zero default height', () => {
     // Matches:  height: var(--ran-skeleton-height, 16px)
-    expect(SKELETON_LESS).toMatch(/:host\s*{[^}]*height:\s*var\(--ran-skeleton-height,\s*\d+px\)/);
+    //       or: height: var(--ran-skeleton-height, var(--ran-size-1, 16px))
+    expect(SKELETON_LESS).toMatch(
+      /:host\s*{[^}]*height:\s*var\(--ran-skeleton-height,\s*(?:\d+px|var\(--ran-size-\d+,\s*\d+px\))\)/,
+    );
   });
 
   it(':host declares a default width so it is visible as a bare flex child', () => {
