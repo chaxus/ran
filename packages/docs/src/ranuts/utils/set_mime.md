@@ -61,3 +61,21 @@ setMime('.xyz', 'application/x-xyz-format');
 2. **Override behavior**: If extension already exists, will override original MIME type.
 3. **Return value**: Returns entire MIME type Map, can continue operations.
 4. **Use case**: Commonly used to add custom file type MIME type mappings.
+
+## MimeType
+
+The underlying `Map<string, string>` that `getMime`, `setMime` and `getExtensions` all read
+and write — imported directly if you want to enumerate every known extension/type pair rather
+than look one up.
+
+```js
+import { MimeType } from 'ranuts/utils';
+
+MimeType.get('.pdf'); // 'application/pdf'
+MimeType.size; // total number of known extensions
+[...MimeType.entries()].filter(([, type]) => type.startsWith('image/'));
+```
+
+It's the same `Map` instance `setMime` mutates, so changes made through `setMime` are visible
+here immediately, and vice versa — mutating it directly works too, `setMime` is just a
+named entry point for the common case.

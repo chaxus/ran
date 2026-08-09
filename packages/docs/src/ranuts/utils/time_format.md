@@ -102,6 +102,29 @@ way. It is meant for feeds of past events. Use one of the other styles anywhere 
 to tell past from future.
 :::
 
+## parseVttTimestamp / parseVttCueTiming
+
+Parsing for WebVTT subtitle/caption timing — the `hh:mm:ss.mmm --> hh:mm:ss.mmm` lines in a
+`.vtt` file.
+
+`parseVttTimestamp` parses one timestamp (`hh:` is optional) into seconds; `parseVttCueTiming`
+parses a full cue timing line — both sides, separated by `-->`, with any trailing cue settings
+(`align:start line:0`) ignored — into `{ start, end }`.
+
+```js
+import { parseVttTimestamp, parseVttCueTiming } from 'ranuts/utils';
+
+parseVttTimestamp('00:00:05.000'); // 5
+parseVttTimestamp('01:05.250'); // 65.25
+parseVttTimestamp('not a timestamp'); // undefined
+
+parseVttCueTiming('00:00:00.000 --> 00:00:05.000'); // { start: 0, end: 5 }
+parseVttCueTiming('00:00:05.000 --> 00:00:10.000 align:start line:0'); // { start: 5, end: 10 }
+```
+
+Both return `undefined` — never throw — when the input doesn't match, so a malformed line in a
+subtitle file can be skipped rather than aborting the whole parse.
+
 ## Notes
 
 1. **Unit choice**: `formatRelative` picks the coarsest unit the gap actually fills, then

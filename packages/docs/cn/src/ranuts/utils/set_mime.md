@@ -61,3 +61,17 @@ setMime('.xyz', 'application/x-xyz-format');
 2. **覆盖行为**：如果扩展名已存在，会覆盖原有的 MIME 类型。
 3. **返回值**：返回整个 MIME 类型 Map，可以继续操作。
 4. **用途**：常用于添加自定义文件类型的 MIME 类型映射。
+
+## MimeType
+
+`getMime`、`setMime`、`getExtensions` 背后共用的 `Map<string, string>`——如果你想遍历所有已知的扩展名/类型对，而不是只查一个，可以直接导入它。
+
+```js
+import { MimeType } from 'ranuts/utils';
+
+MimeType.get('.pdf'); // 'application/pdf'
+MimeType.size; // 已知扩展名的总数
+[...MimeType.entries()].filter(([, type]) => type.startsWith('image/'));
+```
+
+它就是 `setMime` 修改的那个 `Map` 实例，所以通过 `setMime` 做的修改会立刻在这里可见，反过来直接改这个 `Map` 也一样生效——`setMime` 只是为常见场景提供了一个具名入口。

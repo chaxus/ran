@@ -19,7 +19,7 @@ description: 'ranuts 工具函数总览：函数式工具（debounce、throttle�
 | 方法                  | 说明                                  | 详细内容                                                |
 | --------------------- | ------------------------------------- | ------------------------------------------------------- |
 | md5                   | MD5 哈希函数                          | [md5](./md5.md)                                         |
-| randomString          | 生成随机字符串                        | [randomString](./random_string.md)                      |
+| randomString / getRandomString | 生成随机字符串                | [randomString](./random_string.md)                      |
 | clearBr               | 清除字符串中的空格、HTML 标签和换行符 | [clearBr](./clear_br.md)                                |
 | clearStr              | 去除字符串首尾的空格、URL 编码和引号  | [clearStr](./clear_str.md)                              |
 | truncate              | 用省略号截断字符串，对 Unicode 安全    | [truncate](./truncate.md)                               |
@@ -34,7 +34,7 @@ description: 'ranuts 工具函数总览：函数式工具（debounce、throttle�
 
 | 方法        | 说明                        | 详细内容                        |
 | ----------- | --------------------------- | ------------------------------- |
-| merge       | 合并对象                    | [merge](./merge.md)             |
+| merge / mergeExports | 合并对象；惰性 getter 导出对象 | [merge](./merge.md)             |
 | isEqual     | 深度比较两个值是否相等      | [isEqual](./is_equal.md)        |
 | cloneDeep   | 深度克隆对象或数组          | [cloneDeep](./clone_deep.md)    |
 | querystring | 将对象转换为 URL 查询字符串 | [querystring](./querystring.md) |
@@ -68,6 +68,7 @@ description: 'ranuts 工具函数总览：函数式工具（debounce、throttle�
 | --------------- | -------------------------------- | ----------------------------------------- |
 | formatDuration  | 将时间秒数转换为格式化字符串     | [formatDuration](./time_format.md)        |
 | formatRelative  | 描述相对当前的时间（「3 天前」） | [formatRelative](./time_format.md)        |
+| parseVttTimestamp / parseVttCueTiming | 解析 WebVTT 字幕时间行 | [parseVttTimestamp](./time_format.md) |
 | timestampToTime | 将时间戳转换为 Date 对象         | [timestampToTime](./timestamp_to_time.md) |
 | performanceTime | 获取高精度时间戳                 | [performanceTime](./performance_time.md)  |
 

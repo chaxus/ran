@@ -19,7 +19,7 @@ description: 'Overview of ranuts utility functions: functional helpers (debounce
 | Method                | Description                                                          | Detail                                                  |
 | --------------------- | -------------------------------------------------------------------- | ------------------------------------------------------- |
 | md5                   | MD5 hash function                                                    | [md5](./md5.md)                                         |
-| randomString          | Generate random string                                               | [randomString](./random_string.md)                      |
+| randomString / getRandomString | Generate random string                                     | [randomString](./random_string.md)                      |
 | clearBr               | Remove spaces, HTML tags, and line breaks from string                | [clearBr](./clear_br.md)                                |
 | clearStr              | Remove leading/trailing spaces, URL encoding, and quotes from string | [clearStr](./clear_str.md)                              |
 | truncate              | Shorten a string with an ellipsis, Unicode-safe                      | [truncate](./truncate.md)                               |
@@ -34,7 +34,7 @@ description: 'Overview of ranuts utility functions: functional helpers (debounce
 
 | Method      | Description                                | Detail                          |
 | ----------- | ------------------------------------------ | ------------------------------- |
-| merge       | Merge objects                              | [merge](./merge.md)             |
+| merge / mergeExports | Merge objects; lazy-getter exports object       | [merge](./merge.md)             |
 | isEqual     | Deep comparison of two values for equality | [isEqual](./is_equal.md)        |
 | cloneDeep   | Deep clone objects or arrays               | [cloneDeep](./clone_deep.md)    |
 | querystring | Convert object to URL query string         | [querystring](./querystring.md) |
@@ -68,6 +68,7 @@ description: 'Overview of ranuts utility functions: functional helpers (debounce
 | --------------- | ---------------------------------------------- | ----------------------------------------- |
 | formatDuration  | Convert time in seconds to formatted string    | [formatDuration](./time_format.md)        |
 | formatRelative  | Describe a time relative to now ("3 days ago") | [formatRelative](./time_format.md)        |
+| parseVttTimestamp / parseVttCueTiming | Parse WebVTT subtitle timing lines | [parseVttTimestamp](./time_format.md) |
 | timestampToTime | Convert timestamp to Date object               | [timestampToTime](./timestamp_to_time.md) |
 | performanceTime | Get high-precision timestamp                   | [performanceTime](./performance_time.md)  |
 
@@ -175,7 +176,7 @@ description: 'Overview of ranuts utility functions: functional helpers (debounce
 | -------------------- | -------------------------------------- | ---------------------------------------------------- |
 | TOTP                 | Time-based One-Time Password generator | [TOTP](./totp.md)                                    |
 | createSignal         | Create reactive signal                 | [createSignal](./create_signal.md)                   |
-| setMime              | Set or update MIME type mapping        | [setMime](./set_mime.md)                             |
+| setMime / MimeType   | Set or update MIME type mapping        | [setMime](./set_mime.md)                             |
 | getExtensions        | Get extensions from MIME type          | [getExtensions](./get_extensions.md)                 |
 | SyncHook             | Synchronous event hook class           | [SyncHook](./sync_hook.md)                           |
 | durationHandler      | Create delayed execution function      | [durationHandler](./duration_handler.md)             |

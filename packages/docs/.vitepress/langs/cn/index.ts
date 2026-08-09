@@ -127,7 +127,10 @@ const themeCnConfig: DefaultTheme.Config = {
             collapsed: true,
             items: [
               { text: 'md5 - MD5 哈希函数', link: '/cn/src/ranuts/utils/md5' },
-              { text: 'randomString - 生成随机字符串', link: '/cn/src/ranuts/utils/random_string' },
+              {
+                text: 'randomString / getRandomString - 生成随机字符串',
+                link: '/cn/src/ranuts/utils/random_string',
+              },
               { text: 'clearBr - 清除空格和换行', link: '/cn/src/ranuts/utils/clear_br' },
               { text: 'clearStr - 去除首尾空格和引号', link: '/cn/src/ranuts/utils/clear_str' },
               { text: 'truncate - 用省略号截断字符串', link: '/cn/src/ranuts/utils/truncate' },
@@ -146,7 +149,7 @@ const themeCnConfig: DefaultTheme.Config = {
             text: '对象处理',
             collapsed: true,
             items: [
-              { text: 'merge - 合并对象', link: '/cn/src/ranuts/utils/merge' },
+              { text: 'merge / mergeExports - 合并对象', link: '/cn/src/ranuts/utils/merge' },
               { text: 'isEqual - 深度比较', link: '/cn/src/ranuts/utils/is_equal' },
               { text: 'cloneDeep - 深度克隆', link: '/cn/src/ranuts/utils/clone_deep' },
               { text: 'querystring - 对象转查询字符串', link: '/cn/src/ranuts/utils/querystring' },
@@ -189,6 +192,10 @@ const themeCnConfig: DefaultTheme.Config = {
             collapsed: true,
             items: [
               { text: 'formatDuration / formatRelative - 时间格式化', link: '/cn/src/ranuts/utils/time_format' },
+              {
+                text: 'parseVttTimestamp / parseVttCueTiming - WebVTT 字幕时间解析',
+                link: '/cn/src/ranuts/utils/time_format',
+              },
               { text: 'formatDate - 格式化日期', link: '/cn/src/ranuts/utils/timestamp_to_time' },
               { text: 'performanceTime - 高精度时间戳', link: '/cn/src/ranuts/utils/performance_time' },
             ],
@@ -329,7 +336,7 @@ const themeCnConfig: DefaultTheme.Config = {
             items: [
               { text: 'TOTP - 一次性密码生成器', link: '/cn/src/ranuts/utils/totp' },
               { text: 'createSignal - 创建响应式信号', link: '/cn/src/ranuts/utils/create_signal' },
-              { text: 'setMime - 设置 MIME 类型', link: '/cn/src/ranuts/utils/set_mime' },
+              { text: 'setMime / MimeType - 设置 MIME 类型', link: '/cn/src/ranuts/utils/set_mime' },
               { text: 'getExtensions - 获取扩展名', link: '/cn/src/ranuts/utils/get_extensions' },
               { text: 'SyncHook - 同步事件钩子', link: '/cn/src/ranuts/utils/sync_hook' },
               { text: 'durationHandler - 延迟执行', link: '/cn/src/ranuts/utils/duration_handler' },

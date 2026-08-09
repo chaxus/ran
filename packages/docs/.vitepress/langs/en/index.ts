@@ -122,7 +122,10 @@ const themeEnConfig: DefaultTheme.Config = {
             collapsed: true,
             items: [
               { text: 'md5 - MD5 hash function', link: '/src/ranuts/utils/md5' },
-              { text: 'randomString - Generate random string', link: '/src/ranuts/utils/random_string' },
+              {
+                text: 'randomString / getRandomString - Generate random string',
+                link: '/src/ranuts/utils/random_string',
+              },
               { text: 'clearBr - Remove spaces and line breaks', link: '/src/ranuts/utils/clear_br' },
               { text: 'clearStr - Remove leading/trailing spaces', link: '/src/ranuts/utils/clear_str' },
               { text: 'truncate - Shorten with an ellipsis', link: '/src/ranuts/utils/truncate' },
@@ -141,7 +144,7 @@ const themeEnConfig: DefaultTheme.Config = {
             text: 'Object Processing',
             collapsed: true,
             items: [
-              { text: 'merge - Merge objects', link: '/src/ranuts/utils/merge' },
+              { text: 'merge / mergeExports - Merge objects', link: '/src/ranuts/utils/merge' },
               { text: 'isEqual - Deep comparison', link: '/src/ranuts/utils/is_equal' },
               { text: 'cloneDeep - Deep clone', link: '/src/ranuts/utils/clone_deep' },
               { text: 'querystring - Object to query string', link: '/src/ranuts/utils/querystring' },
@@ -184,6 +187,10 @@ const themeEnConfig: DefaultTheme.Config = {
             collapsed: true,
             items: [
               { text: 'formatDuration / formatRelative - Format time', link: '/src/ranuts/utils/time_format' },
+              {
+                text: 'parseVttTimestamp / parseVttCueTiming - WebVTT subtitle timing',
+                link: '/src/ranuts/utils/time_format',
+              },
               { text: 'formatDate - Format a date', link: '/src/ranuts/utils/timestamp_to_time' },
               { text: 'performanceTime - High precision timestamp', link: '/src/ranuts/utils/performance_time' },
             ],
@@ -327,7 +334,7 @@ const themeEnConfig: DefaultTheme.Config = {
             items: [
               { text: 'TOTP - One-time password generator', link: '/src/ranuts/utils/totp' },
               { text: 'createSignal - Create reactive signal', link: '/src/ranuts/utils/create_signal' },
-              { text: 'setMime - Set MIME type', link: '/src/ranuts/utils/set_mime' },
+              { text: 'setMime / MimeType - Set MIME type', link: '/src/ranuts/utils/set_mime' },
               { text: 'getExtensions - Get extensions', link: '/src/ranuts/utils/get_extensions' },
               { text: 'SyncHook - Sync event hook', link: '/src/ranuts/utils/sync_hook' },
               { text: 'durationHandler - Delayed execution', link: '/src/ranuts/utils/duration_handler' },

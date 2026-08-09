@@ -93,6 +93,25 @@ formatRelative(Date.now() - 2 * 86_400_000, { style: 'compact' }); // '2d'
 `compact` 只是量值，未来的时间戳和过去的渲染结果完全相同——都是 `5m`。它是为「已发生事件的信息流」准备的。凡是读者需要分辨过去与未来的场合，请改用其他风格。
 :::
 
+## parseVttTimestamp / parseVttCueTiming
+
+解析 WebVTT 字幕的时间信息——`.vtt` 文件里 `hh:mm:ss.mmm --> hh:mm:ss.mmm` 这样的行。
+
+`parseVttTimestamp` 解析单个时间戳（`hh:` 部分可选）为秒数；`parseVttCueTiming` 解析一整行 cue 时间信息——用 `-->` 分隔的两端，忽略结尾附带的 cue 设置（比如 `align:start line:0`）——返回 `{ start, end }`。
+
+```js
+import { parseVttTimestamp, parseVttCueTiming } from 'ranuts/utils';
+
+parseVttTimestamp('00:00:05.000'); // 5
+parseVttTimestamp('01:05.250'); // 65.25
+parseVttTimestamp('不是时间戳'); // undefined
+
+parseVttCueTiming('00:00:00.000 --> 00:00:05.000'); // { start: 0, end: 5 }
+parseVttCueTiming('00:00:05.000 --> 00:00:10.000 align:start line:0'); // { start: 5, end: 10 }
+```
+
+两者在输入不匹配时都返回 `undefined`——不会抛出异常——这样字幕文件里格式错误的一行可以被跳过，而不会导致整个解析过程中断。
+
 ## 注意事项
 
 1. **单位选择**：`formatRelative` 取间隔真正填满的最粗单位，再在该单位内取整。当取整正好顶到下一个单位的门口——59.6 分钟取整成「60 分钟」——它会自动进位，于是你读到的是「1 小时前」。
