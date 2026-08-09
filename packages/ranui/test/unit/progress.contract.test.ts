@@ -285,11 +285,11 @@ describe('r-progress contract', () => {
   });
 
   it('stops responding to an in-flight drag once type switches away from "drag"', () => {
-    // Regression: the document-level mousemove listener is attached at
-    // mousedown and stays attached until mouseup, regardless of what happens
-    // to `type` in between — it must re-check `type`, not just the
-    // mousedown-time snapshot, or a mid-drag type switch keeps mutating a bar
-    // that's now supposed to be a non-interactive "primary" progress bar.
+    // Regression: the document-level pointermove listener is attached at
+    // pointerdown and stays attached until pointerup, regardless of what
+    // happens to `type` in between — it must re-check `type`, not just the
+    // pointerdown-time snapshot, or a mid-drag type switch keeps mutating a
+    // bar that's now supposed to be a non-interactive "primary" progress bar.
     const progress = document.createElement('r-progress') as any;
     progress.setAttribute('type', 'drag');
     progress.setAttribute('percent', '50');
@@ -298,12 +298,12 @@ describe('r-progress contract', () => {
     progress._progress.getBoundingClientRect = () => ({ left: 0 }) as DOMRect;
     Object.defineProperty(progress._progress, 'offsetWidth', { value: 100, configurable: true });
 
-    progress._progressDot.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+    progress._progressDot.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
     progress.setAttribute('type', 'primary');
-    document.dispatchEvent(new MouseEvent('mousemove', { clientX: 80 }));
+    document.dispatchEvent(new PointerEvent('pointermove', { clientX: 80 }));
     expect(progress.percent).toBe('50');
 
-    document.dispatchEvent(new MouseEvent('mouseup'));
+    document.dispatchEvent(new PointerEvent('pointerup'));
   });
 
   it('removes the tabindex it added itself when type leaves "drag", but never touches a consumer-set one', () => {

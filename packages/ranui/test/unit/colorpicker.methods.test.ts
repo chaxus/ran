@@ -43,8 +43,11 @@ function mockBCR(
     }) as DOMRect;
 }
 
-function mouse(type: string, clientX: number, clientY = 0): MouseEvent {
-  return new MouseEvent(type, { clientX, clientY });
+// Named `mouse` for readability at call sites, but built as a PointerEvent —
+// palette/slider drag handlers take PointerEvent so mouse AND touch drag both
+// work (see index.ts `palettePointerDown`/`sliderPointerDown`/`onPointerMove`).
+function mouse(type: string, clientX: number, clientY = 0): PointerEvent {
+  return new PointerEvent(type, { clientX, clientY });
 }
 
 // ---------------------------------------------------------------------------
