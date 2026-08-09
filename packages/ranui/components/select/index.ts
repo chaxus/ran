@@ -579,18 +579,25 @@ export class Select extends RanElement {
         // apply here, so fall back to the simple two-way placement.
         const rootRect = root.getBoundingClientRect();
         // Center the panel on the trigger rather than left-aligning it. The
-        // `width` set above forces the panel to match the trigger's own
-        // width, but a consumer can still make the *rendered* panel wider
-        // than that (e.g. `::part(dropdown) { min-width: … }`, so a longer
+        // `width` set above forces *`r-dropdown`'s own host box* to match the
+        // trigger's width, but a consumer can still make the panel *inside*
+        // it wider (e.g. `::part(dropdown) { min-width: … }`, so a longer
         // option label isn't clipped on a deliberately compact trigger — see
-        // `r-player`'s speed/quality menus) — `min-width` wins over the
-        // inline `width` once it's larger. Reading the panel's real rendered
-        // width here (a synchronous layout read, but this only runs once per
-        // open, not on a hot path) and centering against it means: when the
-        // panel matches the trigger (the common case), this computes the
-        // exact same position as a plain left-align (zero offset) — it only
-        // shifts anything when the two widths actually diverge.
-        const panelWidth = this._selectionDropdown.getBoundingClientRect().width;
+        // `r-player`'s speed/quality menus): `min-width` on the shadow-
+        // internal `.ranui-dropdown` beats the host's inline `width` for that
+        // inner element, but the host's *own* box (what `getBoundingClientRect`
+        // on `this._selectionDropdown` reports) stays exactly the width we
+        // just set — the wider panel simply overflows it, invisible to a
+        // measurement taken on the host. Reaching into the host's own shadow
+        // root for the actual `.ranui-dropdown` panel gets the *rendered*
+        // width instead (falling back to the host's width if that shadow
+        // query ever comes back empty). When the panel matches the trigger
+        // (the common case), this computes the exact same position as a
+        // plain left-align (zero offset) — it only shifts anything when the
+        // two widths actually diverge.
+        const dropdownShadow = (this._selectionDropdown as unknown as { _shadowDom?: ShadowRoot })._shadowDom;
+        const panelEl = dropdownShadow?.querySelector<HTMLElement>('.ranui-dropdown');
+        const panelWidth = panelEl?.getBoundingClientRect().width ?? this._selectionDropdown.getBoundingClientRect().width;
         const selectLeft = left - rootRect.left - (panelWidth - width) / 2;
         let selectTop = bottom - rootRect.top + OFFSET;
         if (this.placement === 'top') {

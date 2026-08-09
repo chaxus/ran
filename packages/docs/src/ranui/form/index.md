@@ -109,4 +109,4 @@ Fields have no default form-level layout — style your own `<form>` with plain 
 
 ## Why no `<r-form>` wrapper?
 
-ranui doesn't ship a `<form>` wrapper: a `<form>` hidden inside shadow DOM can never become the form owner of light-DOM children, even ones rendered through a `<slot>` — that's a limitation of the browser's own form-owner algorithm, not something ranui failed to implement. So any wrapper component would only add an extra element around your own `<form>`, without adding any capability a plain `<form>` didn't already have. `serializeForm()` gives you the one genuinely useful piece (submit → plain object).
+A plain native `<form>` is already enough — ranui's field components work inside one directly, with no wrapper needed. `serializeForm()` fills the one real gap: turning a submission into a plain object.
