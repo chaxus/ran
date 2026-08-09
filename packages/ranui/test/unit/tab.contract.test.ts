@@ -134,6 +134,38 @@ describe('r-tabs and r-tab contract', () => {
     expect(tabs._line.style.transform).toBe('translateX(0px)');
   });
 
+  it('_onNavResize recomputes the indicator width when the nav reflows (e.g. a window resize)', () => {
+    // Regression: the indicator's left/width/transform are literal px values
+    // computed once in setTabLine — they used to go stale on any reflow that
+    // wasn't a fresh click (window resize, a sidebar collapsing, …).
+    const tabs = document.createElement('r-tabs') as any;
+    document.body.appendChild(tabs);
+
+    const tab1 = document.createElement('r-tab');
+    tab1.setAttribute('label', 'A');
+    tab1.setAttribute('r-key', 'k1');
+    const header1 = tabs.createTabHeader(tab1, 0);
+    tabs._nav.appendChild(header1);
+    tabs.tabHeaderKeyMapIndex = { k1: 0 };
+
+    header1.getBoundingClientRect = () => ({ width: 50 }) as DOMRect;
+    tabs.active = 'k1';
+    expect(tabs._line.style.width).toBe('50px');
+
+    // Simulate a reflow widening the tab (what a ResizeObserver on _nav would catch).
+    header1.getBoundingClientRect = () => ({ width: 80 }) as DOMRect;
+    tabs._onNavResize();
+    expect(tabs._line.style.width).toBe('80px');
+  });
+
+  it('_onNavResize does nothing when there is no active tab', () => {
+    const tabs = document.createElement('r-tabs') as any;
+    document.body.appendChild(tabs);
+    const spy = vi.spyOn(tabs, 'setTabLine');
+    tabs._onNavResize();
+    expect(spy).not.toHaveBeenCalled();
+  });
+
   it('updateAttribute sets attribute on nav child', () => {
     const tabs = document.createElement('r-tabs') as any;
     document.body.appendChild(tabs);

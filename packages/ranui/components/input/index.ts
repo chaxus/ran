@@ -380,6 +380,16 @@ export class Input extends RanElement {
     );
   };
   /**
+   * @description: 补上原生 <input> 的隐式提交行为。真正接收按键的 <input> 待在
+   * closed shadow root 里，其 form owner 沿真实 DOM 祖先链解析，永远解析不到光
+   * 标签外那个真实的 <form>，所以 Enter 不会像原生输入框一样自动提交表单——
+   * 用 ElementInternals.form（正确解析宿主关联的真实表单）显式触发。
+   */
+  customKeydown = (event: KeyboardEvent): void => {
+    if (event.key !== 'Enter' || event.isComposing) return;
+    this._internals?.form?.requestSubmit();
+  };
+  /**
    * @description: change 事件——与原生一致，在失焦（提交）时触发，而非每次输入
    */
   customChange = (): void => {
@@ -616,6 +626,7 @@ export class Input extends RanElement {
     this._events.on(this._inputContent, 'input', this.customInput);
     // 原生 change 在失焦/提交时触发，这里转发为组件的 change 事件
     this._events.on(this._inputContent, 'change', this.customChange);
+    this._events.on(this._inputContent, 'keydown', this.customKeydown);
     if (document.readyState === 'complete') {
       this.dealIcon();
     }

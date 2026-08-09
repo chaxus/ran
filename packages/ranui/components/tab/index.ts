@@ -36,6 +36,7 @@ export class Tabs extends RanElement {
   _shadowDom: ShadowRoot;
   _tabsId: number;
   tabHeaderKeyMapIndex: Record<string, number>;
+  _navResizeObserver?: ResizeObserver;
 
   constructor() {
     super();
@@ -195,6 +196,26 @@ export class Tabs extends RanElement {
     }
   };
 
+  /**
+   * The sliding indicator's `left`/`width`/`transform` are literal `px` values
+   * computed once in `setTabLine` from `getBoundingClientRect()` — they don't
+   * recompute on their own when the nav reflows (window resize, a sidebar
+   * collapsing, label text wrapping differently, fonts loading). A
+   * `ResizeObserver` on `_nav` catches all of those, not just a window
+   * `resize` event, mirroring `r-select`/`r-popover`'s reposition-on-resize
+   * for their portaled panels (see CLAUDE.md's floating-overlay-drift pitfall
+   * — this is the same class of bug for an in-flow indicator).
+   */
+  _onNavResize = (): void => {
+    if (this.active) this.setTabLine(this.active);
+  };
+
+  _attachNavResizeObserver = (): void => {
+    if (this._navResizeObserver || typeof ResizeObserver === 'undefined') return;
+    this._navResizeObserver = new ResizeObserver(this._onNavResize);
+    this._navResizeObserver.observe(this._nav);
+  };
+
   setTabContent = (key: string): void => {
     if (key) {
       const index = this.tabHeaderKeyMapIndex[key];
@@ -336,10 +357,13 @@ export class Tabs extends RanElement {
     this.handlerExternalCss();
     this._events.on(this._slot, 'slotchange', this.listenSlotChange);
     this._events.on(this._nav, 'keydown', this.onNavKeydown as EventListener);
+    this._attachNavResizeObserver();
   }
 
   disconnectedCallback(): void {
     this._events.abort();
+    this._navResizeObserver?.disconnect();
+    this._navResizeObserver = undefined;
   }
 
   attributeChangedCallback(name: string, oldValue: string, newValue: string): void {

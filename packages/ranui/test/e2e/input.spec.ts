@@ -61,3 +61,29 @@ test('input — disabled', async ({ page }) => {
   await expect(el).toBeVisible();
   await expect(el).toHaveScreenshot('input-disabled.png');
 });
+
+test('input — Enter key submits the host <form>', async ({ page }) => {
+  // The real <input> that receives the keypress lives in a closed shadow root, so its form
+  // owner resolves to null along the real DOM ancestor chain — Enter's native implicit
+  // submission never fires on its own. Regression test for that gap.
+  await mount(
+    page,
+    `
+    <form id="f">
+      <r-input name="username" label="Username"></r-input>
+    </form>
+  `,
+  );
+  await page.evaluate(() => {
+    (window as unknown as { submitted?: boolean }).submitted = false;
+    document.getElementById('f')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      (window as unknown as { submitted?: boolean }).submitted = true;
+    });
+  });
+  const host = page.locator('r-input');
+  await host.evaluate((el) => (el as HTMLElement & { focus: () => void }).focus());
+  await page.keyboard.type('alice');
+  await page.keyboard.press('Enter');
+  await expect.poll(() => page.evaluate(() => (window as unknown as { submitted?: boolean }).submitted)).toBe(true);
+});
