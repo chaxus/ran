@@ -258,13 +258,16 @@ export class ColorPicker extends RanElement {
   };
 
   // ── Pointer interaction ───────────────────────────────────────────────────
-  palettePointerDown = (e: MouseEvent): void => {
+  // Pointer Events (not mouse-only) so dragging works with touch — matches the
+  // `touch-action: none` already set on the palette/sliders in panel.less, and
+  // the `r-player`/`r-mermaid` pointer-drag idiom documented in CLAUDE.md.
+  palettePointerDown = (e: PointerEvent): void => {
     e.preventDefault();
     this.colorPickerPaletteSelect = true;
     this.updatePaletteFromEvent(e);
   };
 
-  updatePaletteFromEvent = (e: MouseEvent): void => {
+  updatePaletteFromEvent = (e: PointerEvent): void => {
     if (!this.colorPickerPalette) return;
     const { left, top, width, height } = this.colorPickerPalette.getBoundingClientRect();
     if (!width || !height) return;
@@ -277,13 +280,13 @@ export class ColorPicker extends RanElement {
 
   sliderPointerDown =
     (kind: 'hue' | 'alpha') =>
-    (e: MouseEvent): void => {
+    (e: PointerEvent): void => {
       e.preventDefault();
       this._activeSlider = kind;
       this.updateSliderFromEvent(kind, e);
     };
 
-  updateSliderFromEvent = (kind: 'hue' | 'alpha', e: MouseEvent): void => {
+  updateSliderFromEvent = (kind: 'hue' | 'alpha', e: PointerEvent): void => {
     const el = kind === 'hue' ? this.colorPickerHueSlider : this.colorPickerAlphaSlider;
     if (!el) return;
     const { left, width } = el.getBoundingClientRect();
@@ -295,9 +298,9 @@ export class ColorPicker extends RanElement {
   };
 
   onPointerMove = (e: Event): void => {
-    const me = e as MouseEvent;
-    if (this.colorPickerPaletteSelect) this.updatePaletteFromEvent(me);
-    else if (this._activeSlider) this.updateSliderFromEvent(this._activeSlider, me);
+    const pe = e as PointerEvent;
+    if (this.colorPickerPaletteSelect) this.updatePaletteFromEvent(pe);
+    else if (this._activeSlider) this.updateSliderFromEvent(this._activeSlider, pe);
   };
 
   /** Make a slider a focusable, described `role="slider"`; valuenow is kept live in setupEffects. */
@@ -416,7 +419,7 @@ export class ColorPicker extends RanElement {
     this.colorPickerPaletteDot = Div().class('ran-color-picker-palette-dot').build() as HTMLElement;
     this.colorPickerPalette = Div()
       .class('ran-color-picker-palette')
-      .on('mousedown', this.palettePointerDown)
+      .on('pointerdown', this.palettePointerDown)
       .children(this.colorPickerSaturation, this.colorPickerPaletteDot)
       .build() as HTMLElement;
 
@@ -426,7 +429,7 @@ export class ColorPicker extends RanElement {
     this.colorPickerHueThumb = Div().class('ran-color-picker-slider-thumb').build() as HTMLElement;
     this.colorPickerHueSlider = Div()
       .class('ran-color-picker-slider ran-color-picker-slider-hue')
-      .on('mousedown', this.sliderPointerDown('hue'))
+      .on('pointerdown', this.sliderPointerDown('hue'))
       .on('keydown', this.sliderKeydown('hue'))
       .children(this.colorPickerHueThumb)
       .build() as HTMLElement;
@@ -436,7 +439,7 @@ export class ColorPicker extends RanElement {
     this.colorPickerAlphaThumb = Div().class('ran-color-picker-slider-thumb').build() as HTMLElement;
     this.colorPickerAlphaSlider = Div()
       .class('ran-color-picker-slider ran-color-picker-slider-alpha')
-      .on('mousedown', this.sliderPointerDown('alpha'))
+      .on('pointerdown', this.sliderPointerDown('alpha'))
       .on('keydown', this.sliderKeydown('alpha'))
       .children(this.colorPickerAlphaTrack, this.colorPickerAlphaThumb)
       .build() as HTMLElement;
@@ -492,8 +495,9 @@ export class ColorPicker extends RanElement {
     this._events.on(this, 'keydown', this.blockWhenDisabled, { capture: true });
     this._events.on(this.popoverBlock, 'click', this.openColorPicker);
     this._events.on(this.colorpicker, 'keydown', this.onSwatchKeydown as EventListener);
-    this._events.on(document, 'mousemove', this.onPointerMove);
-    this._events.on(document, 'mouseup', this.onPointerUp);
+    this._events.on(document, 'pointermove', this.onPointerMove);
+    this._events.on(document, 'pointerup', this.onPointerUp);
+    this._events.on(document, 'pointercancel', this.onPointerUp);
     this.syncDisabledState();
     if (this.value) this.updateColorValue(this.value);
     // Panel effects are disposed on disconnect; re-arm them on reconnect so a

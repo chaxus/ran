@@ -185,7 +185,7 @@ describe('r-progress contract', () => {
     expect(changeDetail.percent).toBeDefined();
   });
 
-  it('drag mouse events: mousedown → mousemove → mouseup', () => {
+  it('drag pointer events (mouse or touch): pointerdown → pointermove → pointerup', () => {
     const progress = document.createElement('r-progress') as any;
     progress.setAttribute('type', 'drag');
     document.body.appendChild(progress);
@@ -193,13 +193,13 @@ describe('r-progress contract', () => {
     Object.defineProperty(progress._progress, 'offsetWidth', { value: 100 });
     progress._progress.getBoundingClientRect = vi.fn(() => ({ left: 0 }));
 
-    progress._progressDot.dispatchEvent(new MouseEvent('mousedown', { clientX: 0 }));
+    progress._progressDot.dispatchEvent(new PointerEvent('pointerdown', { clientX: 0 }));
     expect(progress.moveProgress.mouseDown).toBe(true);
 
-    document.dispatchEvent(new MouseEvent('mousemove', { clientX: 60 }));
+    document.dispatchEvent(new PointerEvent('pointermove', { clientX: 60 }));
     expect(progress.percent).toBe('60');
 
-    document.dispatchEvent(new MouseEvent('mouseup'));
+    document.dispatchEvent(new PointerEvent('pointerup'));
     expect(progress.moveProgress.mouseDown).toBe(false);
   });
 

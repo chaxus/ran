@@ -315,4 +315,4 @@ The player does not accept slotted content: it clears its own light-DOM children
 
 ## Roadmap
 
-`<r-player>` is actively growing. Subtitles/CC, an error+retry UI, and resume playback (Phase 1); DASH and FLV/raw MPEG-TS playback behind an engine-agnostic adapter architecture (Phase 2); QoE metrics, AirPlay/Remote Playback, mobile gestures, and thumbnail scrubbing preview (Phase 3); and WebRTC/WHEP live playback plus migrating the player's own control-bar icons onto `<r-icon>` (Phase 4) are all done. See [`PLAYER_ROADMAP.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/PLAYER_ROADMAP.md) in the repo for the full breakdown.
+`<r-player>` is under active development; see [`PLAYER_ROADMAP.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/PLAYER_ROADMAP.md) in the repo for what's planned next.

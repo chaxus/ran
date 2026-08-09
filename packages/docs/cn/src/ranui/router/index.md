@@ -346,7 +346,7 @@ router.onPageReveal((e) => {
 const router = createRouter({ viewTransition: 'both' });
 ```
 
-SPA 导航使用 `startViewTransition()`，全页面跳转使用 `@view-transition` CSS 规则。这是 Astro 的思路——有 JS 时做 SPA 过渡，没有 JS 时靠 CSS 兜底。
+SPA 导航使用 `startViewTransition()`，全页面跳转使用 `@view-transition` CSS 规则。
 
 ## `view-transition-name` — 共享元素过渡
 

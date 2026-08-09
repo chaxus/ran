@@ -137,26 +137,32 @@ export class Progress extends RanElement {
   };
 
   /**
-   * `document` mousemove/mouseup are attached here (drag start) and removed in
-   * `progressDotMouseUp`/`disconnectedCallback` (drag end) — NOT bound for the
-   * component's whole connected lifetime. A page can reasonably have many
-   * `<r-progress>`, most never dragged (e.g. a list of upload rows); a
-   * document-level listener per instance would run its no-op
-   * `moveProgress.mouseDown` check on every single mousemove for the entire
+   * `document` pointermove/pointerup(/pointercancel) are attached here (drag
+   * start) and removed in `progressDotMouseUp`/`disconnectedCallback` (drag
+   * end) — NOT bound for the component's whole connected lifetime. A page can
+   * reasonably have many `<r-progress>`, most never dragged (e.g. a list of
+   * upload rows); a document-level listener per instance would run its no-op
+   * `moveProgress.mouseDown` check on every single pointermove for the entire
    * page for as long as any of them exist. Scoping it to "only while a drag on
    * *this* instance is actually happening" keeps that cost at the number of
    * drags in flight (normally 0 or 1), not the number of progress bars on the
    * page.
+   *
+   * Pointer Events (not mouse-only) so dragging the dot works with touch —
+   * matches `touch-action: none` on `.ran-progress-dot` in index.less, and the
+   * `r-player`/`r-colorpicker` pointer-drag idiom documented in CLAUDE.md.
    */
-  progressDotMouseDown = (e: MouseEvent): void => {
+  progressDotMouseDown = (e: PointerEvent): void => {
+    e.preventDefault();
     this.moveProgress.mouseDown = true;
     e.stopPropagation();
     this._dragEvents
-      .on(document, 'mousemove', this.progressDotMouseMove as EventListener)
-      .on(document, 'mouseup', this.progressDotMouseUp as EventListener);
+      .on(document, 'pointermove', this.progressDotMouseMove as EventListener)
+      .on(document, 'pointerup', this.progressDotMouseUp as EventListener)
+      .on(document, 'pointercancel', this.progressDotMouseUp as EventListener);
   };
 
-  progressDotMouseMove = (e: MouseEvent): void => {
+  progressDotMouseMove = (e: PointerEvent): void => {
     // `type` can change mid-drag (mousedown while type="drag", then the
     // attribute flips to "primary" before mouseup) — the document listener
     // stays attached until mouseup regardless, so it must re-check here too,
@@ -291,7 +297,7 @@ export class Progress extends RanElement {
     // (see `progressDotMouseDown`) and is deliberately not bound here.
     this._events
       .on(this._progress, 'click', this.progressClick)
-      .on(this._progressDot, 'mousedown', this.progressDotMouseDown)
+      .on(this._progressDot, 'pointerdown', this.progressDotMouseDown)
       .on(this, 'keydown', this.progressKeydown as EventListener);
   };
 

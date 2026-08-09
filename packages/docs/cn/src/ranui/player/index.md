@@ -301,4 +301,4 @@ player.addEventListener('change', () => {
 
 ## Roadmap
 
-`<r-player>` 还在持续演进。字幕/CC、错误+重试 UI、断点续播（第一阶段）；基于引擎无关适配器架构的 DASH 和 FLV/原始 MPEG-TS 播放（第二阶段）；QoE 埋点、AirPlay/Remote Playback、移动端手势、缩略图预览（第三阶段）；以及 WebRTC/WHEP 直播和把播放器自己的控制栏图标迁移到 `<r-icon>`（第四阶段）都已完成。完整拆解见仓库里的 [`PLAYER_ROADMAP.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/PLAYER_ROADMAP.md)。
+`<r-player>` 仍在持续开发；后续规划见仓库中的 [`PLAYER_ROADMAP.md`](https://github.com/chaxus/ran/blob/main/packages/ranui/docs/PLAYER_ROADMAP.md)。

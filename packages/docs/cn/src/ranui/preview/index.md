@@ -91,20 +91,6 @@ npm install ranui
 
 > 💡 **提示**: 默认使用 `https://edit.chaxus.com` 提供的预览服务，如需自部署请参考 [OnlyOffice Web Local](https://github.com/ranuts/document)
 
-## 版本历史
-
-- **ranui 0.1.10-alpha-24 版本之前**:
-  - 使用多个第三方库（jszip、docx-preview、exceljs、pdfjs、pptx2html）进行文档预览
-
-- **ranui 0.1.10-alpha-26 版本之后**:
-  - 改用 OnlyOffice WebAssembly 版本，提供更好的预览体验
-  - 部署详情请参考：[OnlyOffice Web Local](https://github.com/ranuts/document)
-
-- **ranui 0.1.10-alpha-27 版本之后**:
-  - 🎉 新增独立的 [@ranui/preview](https://www.npmjs.com/package/@ranui/preview) 包
-  - 提供更轻量级的安装选项，专门用于文件预览功能
-  - ranui 包将不再包含 `r-preview` 组件
-
 ## 迁移指南
 
 如果您正在使用 ranui 包中的 `r-preview` 组件，建议按以下步骤迁移：

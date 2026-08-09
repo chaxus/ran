@@ -103,7 +103,7 @@ Drag the glass around the stage, tune every knob, and copy the exact markup. The
 
 `rim` adds a second highlight layer: a specular rim lit from a fixed top-left light direction, plus a subtle chromatic (RGB) fringe at the panel's rounded-rect border. Unlike the `displace` refraction, **it never samples the backdrop** — the shader only knows the panel's own width/height/corner radius, so it costs none of the interactivity/accessibility tradeoffs a full backdrop-capturing GPU approach would (see [Notes](#notes)). It's a purely decorative layer on top of the same `backdrop-filter` frost; turning it on or off never changes what's behind the glass or how it's sampled.
 
-Renders on WebGL first — synchronous, works in effectively every browser, so the rim never delays its own first paint — and transparently upgrades to WebGPU in the background if the browser has it (same effect, pixel-identical output; this single-draw-call workload doesn't render any faster on WebGPU, the upgrade exists for forward-compatibility, not performance). Falls back to the plain CSS specular gradient when neither GPU API is available (very old browsers, disabled, SSR) — there's no broken/blank state to design around.
+Renders on WebGL first — synchronous, works in effectively every browser, so the rim never delays its own first paint — and transparently upgrades to WebGPU in the background if the browser has it (same effect, pixel-identical output). Falls back to the plain CSS specular gradient when neither GPU API is available (very old browsers, disabled, SSR) — there's no broken/blank state to design around.
 
 <Demo>
   <div style="position: relative; display: flex; gap: 16px; padding: 32px; border-radius: 16px; background: radial-gradient(circle at 30% 30%, #f9d423, #ff4e50 60%, #7b4397); overflow: hidden;">
@@ -141,7 +141,7 @@ r-glass::part(glass) {
 
 ## Notes
 
-- **Backdrop sampling.** `<r-glass>` refracts the DOM behind it via `backdrop-filter`, so it works over normal page content — including selectable text, live video, and interactive elements behind the glass. A WebGL/WebGPU shader path that rasterizes the *backdrop itself* would look more "liquid" and work identically across browsers, but costs that same interactivity/accessibility and a much heavier bundle — deliberately not pursued. `rim` (above) is the middle ground: a GPU layer that never touches the backdrop, computed purely from the panel's own shape.
+- **Backdrop sampling.** `<r-glass>` refracts the DOM behind it via `backdrop-filter`, so selectable text, live video, and interactive elements behind the glass keep working. `rim` (above) is a purely decorative GPU layer computed from the panel's own shape — it never samples the backdrop.
 - **Legibility.** Keep body text on a solid inner surface; don't rely on the glass alone for contrast.
 - **Reduced transparency.** `<r-glass>` responds to the OS-level "reduce transparency" / "increase contrast" setting (`prefers-reduced-transparency: reduce`): it swaps to a solid, theme-aware surface (`--ran-color-bg-elevated` by default) instead of frosting/refracting. Native controls do this automatically; this is the custom-element equivalent.
 - **Cross-browser refraction.** The `feDisplacementMap` liquid effect currently renders in Chromium only — Safari and Firefox drop that part of the `backdrop-filter` value and keep the blur/saturate/brightness frost, which is a legitimate (if flatter) fallback, not a broken state.

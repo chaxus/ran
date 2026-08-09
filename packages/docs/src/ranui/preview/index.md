@@ -93,20 +93,6 @@ When you need to customize the document preview service, you can specify the ser
 
 > 💡 **Tip**: Defaults to the hosted preview service at `https://edit.chaxus.com`. To self-host it, see [OnlyOffice Web Local](https://github.com/ranuts/document)
 
-## Version History
-
-- **Before ranui 0.1.10-alpha-24**:
-  - Used multiple third-party libraries (jszip, docx-preview, exceljs, pdfjs, pptx2html) for document preview
-
-- **After ranui 0.1.10-alpha-26**:
-  - Switched to OnlyOffice WebAssembly version for better preview experience
-  - Deployment details can be found at: [OnlyOffice Web Local](https://github.com/ranuts/document)
-
-- **After ranui 0.1.10-alpha-27**:
-  - 🎉 Added standalone [@ranui/preview](https://www.npmjs.com/package/@ranui/preview) package
-  - Provides lighter installation option, specifically for file preview functionality
-  - The ranui package will no longer include the `r-preview` component
-
 ## Migration Guide
 
 If you're currently using the `r-preview` component from the ranui package, we recommend following these steps to migrate:
