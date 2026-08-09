@@ -107,6 +107,7 @@ router.onRouteChange((to) => {
 | ------- | --------- | ------- | ------------------------------------------- |
 | `path`  | `string`  | `'/'`   | 匹配模式，支持 `:param` 参数段和 `*` 通配符 |
 | `exact` | `boolean` | `false` | 是否要求精确匹配（不允许前缀匹配）          |
+| `src`   | `string`  | `''`    | 懒加载、代码分割、按需挂载/卸载页面的模块路径 |
 | `sheet` | `string`  | `''`    | 注入到 Shadow DOM 的 CSS                    |
 
 #### 事件
@@ -123,6 +124,26 @@ router.onRouteChange((to) => {
 /users/:id          捕获 :id，可通过 params.id 读取
 /*                  匹配一切路径
 ```
+
+#### 懒加载挂载/卸载 `src`
+
+对于更大的多页应用，`r-route` 可以按页面做代码分割，而不是把插槽内容一次性都打进主包。给 `src` 传一个模块路径；路径匹配时，`r-route` 会动态 `import()` 这个模块，并调用它的默认导出——`(host: HTMLElement) => void | (() => void)`——在一个响应式作用域内运行，传入一个用于渲染的 host 元素。离开该路由时，这整个作用域会被一次性销毁（页面注册的每个 effect、绑定、`onCleanup` 都会被清理），渲染内容也会被移除；再次进入该路由时，会直接用缓存的模块重新挂载，不会重新请求。
+
+```html
+<r-route path="/settings" src="/pages/settings.js"></r-route>
+```
+
+```js
+// pages/settings.js
+export default function renderSettings(host) {
+  host.textContent = '设置页面';
+  return () => {
+    /* 可选的清理逻辑，离开该路由时执行 */
+  };
+}
+```
+
+这个模式只在客户端生效——SSR/SSG 期间，懒加载路由只会解析显示/隐藏状态，不会加载页面模块本身。
 
 ### `r-link`
 
@@ -143,6 +164,10 @@ router.onRouteChange((to) => {
 <r-link href="/settings" replace>设置</r-link>
 <r-link href="https://github.com">GitHub ↗</r-link>
 ```
+
+#### 插槽
+
+`r-router`、`r-route`、`r-link` 都没有具名插槽——各自只渲染默认（无名）`<slot>`：`r-router` 和 `r-route` 原样投影子路由/路由内容，`r-link` 把放进去的任何内容作为链接的可见内容原样投影出来。三者也都没有定义 `::part()`，所以这一组件没有 CSS Parts 小节。
 
 ## JavaScript API
 
