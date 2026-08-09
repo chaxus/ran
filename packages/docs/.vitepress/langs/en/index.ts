@@ -1,7 +1,7 @@
 import type { DefaultTheme } from 'vitepress';
 import { GITHUB, EDITOR } from '../../common/index.ts';
 
-// Shared across /src/article/, /src/blockchain/ and /src/note/ so those pages
+// Shared across /src/article/ and /src/note/ so those pages
 // all render this sidebar (VitePress matches sidebars by path prefix).
 const articleEnSidebar: DefaultTheme.SidebarItem[] = [
   {
@@ -46,14 +46,6 @@ const articleEnSidebar: DefaultTheme.SidebarItem[] = [
         text: 'Math',
         collapsed: true,
         items: [{ text: 'Linear algebra', link: '/src/article/math/linear_algebra' }],
-      },
-      {
-        text: 'Blockchain',
-        collapsed: true,
-        items: [
-          { text: 'Blockchain data structures', link: '/src/blockchain/' },
-          { text: 'How to participate in Web3', link: '/src/blockchain/web3' },
-        ],
       },
       {
         text: 'Notes',
@@ -471,7 +463,6 @@ const themeEnConfig: DefaultTheme.Config = {
       },
     ],
     '/src/article/': articleEnSidebar,
-    '/src/blockchain/': articleEnSidebar,
     '/src/note/': articleEnSidebar,
   },
 };

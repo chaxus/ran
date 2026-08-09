@@ -22,6 +22,14 @@
   z-index: var(--ran-player-dropdown-z-index, var(--ran-z-dropdown, 1100));
   --ran-dropdown-padding: 4px 0;
   --ran-dropdown-background: rgba(43, 43, 43, 0.9);
+  // `r-dropdown`'s own default (`1px solid var(--ran-color-border, #eaeaea)`)
+  // is tuned for a *light* panel — it was never overridden here, so the open
+  // menu rendered with a light-gray hairline around a dark 0.9-alpha panel, a
+  // visible color mismatch. Every other color on this panel is a hand-picked
+  // dark-context rgba (see the block comment on `:host(:focus-visible)`
+  // below for why the player skin doesn't use the page-theme-following
+  // `--ran-color-*` tokens at all), so the border needs the same treatment.
+  --ran-dropdown-border: 1px solid rgba(255, 255, 255, 0.12);
   --ran-dropdown-option-item-hover-background-color: rgba(255, 255, 255, 0.15);
   --ran-dropdown-option-active-hover-background-color: rgba(255, 255, 255, 0.25);
   --ran-dropdown-option-item-padding: 4px 2px;
@@ -49,6 +57,9 @@
   z-index: var(--ran-player-dropdown-z-index, var(--ran-z-dropdown, 1100));
   --ran-dropdown-padding: 4px 0;
   --ran-dropdown-background: rgba(43, 43, 43, 0.9);
+  // Same reasoning as `.video-speed-dropdown` above — the default border is
+  // tuned for a light panel and mismatched against this dark one.
+  --ran-dropdown-border: 1px solid rgba(255, 255, 255, 0.12);
   --ran-dropdown-option-item-hover-background-color: rgba(255, 255, 255, 0.15);
   --ran-dropdown-option-active-hover-background-color: rgba(255, 255, 255, 0.25);
   --ran-dropdown-option-item-padding: 4px 2px;
@@ -644,6 +655,15 @@
           }
 
           r-select {
+            // `flex-shrink: 0` — `&-speed` above is a flex row narrower (30px)
+            // than this select's own intended 46px; without this, flexbox's
+            // default `flex-shrink: 1` compresses the select down to fit the
+            // row instead of letting it overflow the row like it did before
+            // `&-speed` became a flex container (for the hover-pill padding),
+            // squashing "1.5X"/"0.8X" and — since the open dropdown panel
+            // positions itself off *this* element's rect — throwing the
+            // panel off-center too.
+            flex-shrink: 0;
             width: var(--ran-player-speed-select-width, 46px);
             height: var(--ran-player-speed-select-height, var(--ran-size-3, 20px));
             outline: 0;
@@ -717,6 +737,8 @@
           }
 
           r-select {
+            // See the identical comment on `&-speed`'s `r-select` above.
+            flex-shrink: 0;
             width: var(--ran-player-subtitle-select-width, 46px);
             height: var(--ran-player-subtitle-select-height, var(--ran-size-3, 20px));
             outline: 0;
@@ -779,6 +801,8 @@
           }
 
           r-select {
+            // See the identical comment on `&-speed`'s `r-select` above.
+            flex-shrink: 0;
             width: var(--ran-player-clarity-select-width, 46px);
             height: var(--ran-player-clarity-select-height, var(--ran-size-3, 20px));
             outline: 0;

@@ -188,12 +188,18 @@
     // `transform: translateX()` — that resolves against the arrow's own box
     // (16px), which is what `--ran-dropdown-arrow-anchor-width`'s old
     // `100%`-ish fallbacks silently meant "8px" instead of "half the panel".
-    // A JS-computed anchor width (r-popover's placementPosition, pointing
+    // A JS-computed anchor offset (r-popover's placementPosition, pointing
     // the arrow at the trigger's own center rather than the panel's) still
     // overrides via the extra translateX term, additive on top of the
     // self-centering `left: 50%` base — so a bare `<r-dropdown arrow="top">`
     // with no anchor JS now centers correctly by default instead of
-    // collapsing toward the corner.
+    // collapsing toward the corner. `.left`/`.right` don't have an
+    // equivalent self-centering base (they position off the JS-measured
+    // trigger height via `top`/`--ran-dropdown-arrow-anchor-height` instead),
+    // but they take the same kind of JS-computed correction — this time on
+    // the Y axis, `--ran-dropdown-arrow-anchor-offset-y` — for when the panel
+    // top ends up shifted away from the trigger's top (boundary-clamped
+    // placement; see popover's placementPosition).
     .top {
       left: 50%;
       transform: translateX(calc(0px - @arrow-size / 2 + var(--ran-dropdown-arrow-anchor-offset, 0px)))
@@ -208,8 +214,17 @@
       top: max(0px, calc(100% - calc(@arrow-size / 4)));
     }
     .left {
-      transform: translateX(calc(0px - var(--ran-dropdown-arrow-width, 16px)))
-        translateY(calc(var(--ran-dropdown-arrow-width, 16px) / 2 + var(--ran-dropdown-arrow-overlap, 2px)))
+      // `.top`/`.bottom` fold their overlap into `translateY` because that's the
+      // axis they protrude on (arrow sits above/below the panel); `.left` sits
+      // to the panel's *left* and protrudes along X, so the overlap belongs in
+      // `translateX` — it used to be missing here entirely (0px overlap, a
+      // hairline seam against the panel border) while a stray `+ overlap` sat
+      // in `translateY` instead, where it only ever mis-nudged the vertical
+      // centering by 2px.
+      transform: translateX(
+          calc(0px - var(--ran-dropdown-arrow-width, 16px) + var(--ran-dropdown-arrow-overlap, 2px))
+        )
+        translateY(calc(var(--ran-dropdown-arrow-width, 16px) / 2 + var(--ran-dropdown-arrow-anchor-offset-y, 0px)))
         rotate(270deg);
       top: max(
         0px,
@@ -218,11 +233,13 @@
     }
     .right {
       left: 100%;
-      transform: translateX(0)
+      // Same fix mirrored: the overlap moves from translateY into translateX
+      // (pulling the arrow left, into the panel's right edge, by `overlap`).
+      transform: translateX(calc(0px - var(--ran-dropdown-arrow-overlap, 2px)))
         translateY(
           calc(
             var(--ran-dropdown-arrow-anchor-height, var(--ran-dropdown-min-height, 100%)) / 2 - calc(@arrow-size / 2) +
-              var(--ran-dropdown-arrow-overlap, 2px)
+              var(--ran-dropdown-arrow-anchor-offset-y, 0px)
           )
         )
         rotate(90deg);

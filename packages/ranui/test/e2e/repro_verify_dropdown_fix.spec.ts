@@ -1,10 +1,10 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { isolatedSetup } from './helpers';
 import { DEV_SERVER } from '../../build/config';
 
 test.use({ contextOptions: { reducedMotion: 'no-preference' } });
 
-test('investigate clarity/speed select + dropdown alignment and colors', async ({ page }) => {
+test('clarity/speed select width no longer compressed; dropdown border themed dark', async ({ page }) => {
   await isolatedSetup(page, DEV_SERVER, 'r-player');
   await page.evaluate(() => {
     const container = document.createElement('div');
@@ -29,29 +29,23 @@ test('investigate clarity/speed select + dropdown alignment and colors', async (
   const closedMetrics = await page.evaluate(() => {
     const el = document.querySelector('r-player') as any;
     const playerRoot = el._shadowDom as ShadowRoot;
-    const wrap = (sel: string) => playerRoot.querySelector(sel) as HTMLElement | null;
-    const rectOf = (n: HTMLElement | null) => {
+    const rectOf = (sel: string) => {
+      const n = playerRoot.querySelector(sel) as HTMLElement | null;
       if (!n) return null;
       const r = n.getBoundingClientRect();
-      const cs = getComputedStyle(n);
-      return {
-        x: Math.round(r.x),
-        y: Math.round(r.y),
-        w: Math.round(r.width),
-        h: Math.round(r.height),
-        centerX: Math.round(r.x + r.width / 2),
-        overflow: cs.overflow,
-      };
+      return { x: Math.round(r.x), w: Math.round(r.width), centerX: Math.round(r.x + r.width / 2) };
     };
-    const clarityWrap = wrap('.ran-player-controller-bottom-right-clarity');
-    const claritySelect = wrap('.ran-player-controller-bottom-right-clarity r-select');
-    const speedWrap = wrap('.ran-player-controller-bottom-right-speed');
-    const speedSelect = wrap('.ran-player-controller-bottom-right-speed r-select');
-    return { clarityWrap, claritySelect, speedWrap, speedSelect };
+    return {
+      clarityWrap: rectOf('.ran-player-controller-bottom-right-clarity'),
+      claritySelect: rectOf('.ran-player-controller-bottom-right-clarity r-select'),
+      speedWrap: rectOf('.ran-player-controller-bottom-right-speed'),
+      speedSelect: rectOf('.ran-player-controller-bottom-right-speed r-select'),
+    };
   });
   console.log('CLOSED STATE:', JSON.stringify(closedMetrics, null, 2));
+  expect(closedMetrics.claritySelect!.w).toBe(46);
+  expect(closedMetrics.speedSelect!.w).toBe(46);
 
-  // Open clarity dropdown and inspect the panel's position + colors.
   await page.evaluate(() => {
     const el = document.querySelector('r-player') as any;
     const root = el._shadowDom as ShadowRoot;
@@ -68,20 +62,18 @@ test('investigate clarity/speed select + dropdown alignment and colors', async (
     const selectRect = claritySelect.getBoundingClientRect();
 
     const dropdownHost = playerRoot.querySelector('r-dropdown.video-clarity-dropdown') as any;
-    if (!dropdownHost) return { error: 'no dropdown host found', selectRect: { x: selectRect.x, w: selectRect.width } };
     const dropdownRect = dropdownHost.getBoundingClientRect();
     const dropdownShadow = dropdownHost._shadowDom as ShadowRoot;
     const panel = dropdownShadow?.querySelector('.ranui-dropdown') as HTMLElement | null;
     const panelCs = panel ? getComputedStyle(panel) : null;
     return {
-      selectRect: { x: Math.round(selectRect.x), w: Math.round(selectRect.width), centerX: Math.round(selectRect.x + selectRect.width / 2) },
-      dropdownHostRect: { x: Math.round(dropdownRect.x), w: Math.round(dropdownRect.width), centerX: Math.round(dropdownRect.x + dropdownRect.width / 2) },
-      panelBorder: panelCs?.border,
+      selectCenterX: Math.round(selectRect.x + selectRect.width / 2),
+      dropdownHostCenterX: Math.round(dropdownRect.x + dropdownRect.width / 2),
       panelBorderColor: panelCs?.borderColor,
-      panelBackground: panelCs?.backgroundColor,
     };
   });
   console.log('OPEN STATE:', JSON.stringify(openMetrics, null, 2));
+  expect(openMetrics.panelBorderColor).not.toBe('rgb(234, 234, 234)');
 
-  await page.screenshot({ path: 'repro-dropdown-zoom.png', clip: { x: 480, y: 250, width: 200, height: 220 } });
+  await page.screenshot({ path: 'repro-dropdown-fixed.png', clip: { x: 480, y: 250, width: 220, height: 220 } });
 });

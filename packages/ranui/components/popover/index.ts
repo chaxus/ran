@@ -324,7 +324,6 @@ export class Popover extends RanElement {
     this.popoverContent.style.setProperty('inset', `${popoverTop}px auto auto ${popoverLeft}px`);
     this.popoverContent.style.setProperty('--ran-x', `${popoverLeft}px`);
     this.popoverContent.style.setProperty('--ran-y', `${popoverTop}px`);
-    this.popoverContent.style.setProperty('--ran-dropdown-arrow-anchor-width', `${width}px`);
     this.popoverContent.style.setProperty('--ran-dropdown-arrow-anchor-height', `${height}px`);
     this.popoverContent.style.setProperty('--ran-dropdown-min-width', `${popoverContentRect.width}px`);
     this.popoverContent.style.setProperty('--ran-dropdown-min-height', `${popoverContentRect.height}px`);
@@ -340,6 +339,20 @@ export class Popover extends RanElement {
     const triggerCenterX = left + width / 2;
     const panelCenterX = finalPanelRect.left + finalPanelRect.width / 2;
     this.popoverContent.style.setProperty('--ran-dropdown-arrow-anchor-offset', `${triggerCenterX - panelCenterX}px`);
+    // `.left`/`.right` assume the panel's top edge sits flush with the
+    // trigger's top edge (`popoverTop = top` above) to center the arrow via
+    // `--ran-dropdown-arrow-anchor-height`. That assumption breaks once
+    // `computePlacement`'s boundary shift kicks in (trigger near the top/
+    // bottom edge of the viewport) — the panel gets clamped vertically while
+    // the arrow's formula has no idea, so it stops pointing at the trigger
+    // and the whole thing reads as "misaligned". Same fix as the X-axis one
+    // above, just the other axis: measure the real delta and feed it in.
+    const triggerCenterY = top + height / 2;
+    const panelCenterY = finalPanelRect.top + finalPanelRect.height / 2;
+    this.popoverContent.style.setProperty(
+      '--ran-dropdown-arrow-anchor-offset-y',
+      `${triggerCenterY - panelCenterY}px`,
+    );
   };
   /**
    * @description: 鼠标移入
