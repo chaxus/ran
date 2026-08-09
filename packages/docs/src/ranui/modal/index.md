@@ -48,6 +48,7 @@ Modal visibility is controlled by the `open` attribute (or the `open` property).
 | `closeOnEsc`   | `boolean` | `true`  | Whether pressing `Escape` closes the modal             |
 | `lockScroll`   | `boolean` | `true`  | Whether body scroll is locked while the modal is open  |
 | `autoFocus`    | `boolean` | `true`  | Whether the first focusable element is focused on open |
+| `hideHeader`   | `boolean` | `false` | Drops the title bar entirely, leaving a floating close button |
 | `sheet`        | `string`  | `''`    | CSS injected into the shadow DOM                       |
 
 `closing` is a read-only attribute the element reflects on itself (not a settable property): present from the moment `close()` runs until the mask/dialog's fade-and-scale-out transition actually finishes (~0.3s later, same timing as the `afterclose` event). Useful for a host page that needs the modal to still count as "present" through that visual tail — see Best Practices below.
@@ -104,6 +105,16 @@ By default clicking the backdrop closes the modal. Set to `false` to require an 
 ```html
 <r-modal open title="Search" autoFocus="false">
   <input type="text" placeholder="Type to search" />
+</r-modal>
+```
+
+### Headerless Mode `hideHeader`
+
+Drops the title bar and its border entirely, leaving only a floating close button (top-right) when `closable`. Suited to content-only dialogs like image or diagram lightboxes, where a title bar would just eat into the content. The dialog keeps an accessible name via `aria-label` (derived from `title`) even though the visible `<h3>` title is gone, so set `title` for a screen-reader label even in headerless mode.
+
+```html
+<r-modal open hide-header>
+  <img src="/diagram.png" alt="Architecture diagram" style="display: block; max-width: 100%;" />
 </r-modal>
 ```
 

@@ -48,6 +48,7 @@ description: 'ranui Modal（<r-modal>）是聚焦交互的对话框，内置焦�
 | `closeOnEsc`   | `boolean` | `true`  | 按下 `Escape` 键是否关闭对话框       |
 | `lockScroll`   | `boolean` | `true`  | 对话框打开时是否锁定 body 滚动       |
 | `autoFocus`    | `boolean` | `true`  | 打开时是否自动聚焦第一个可聚焦元素   |
+| `hideHeader`   | `boolean` | `false` | 完全去掉标题栏，只留一个悬浮的关闭按钮 |
 | `sheet`        | `string`  | `''`    | 注入到 shadow DOM 中的 CSS           |
 
 ### 标题 `title`
@@ -102,6 +103,16 @@ description: 'ranui Modal（<r-modal>）是聚焦交互的对话框，内置焦�
 ```html
 <r-modal open title="搜索" autoFocus="false">
   <input type="text" placeholder="输入以搜索" />
+</r-modal>
+```
+
+### 无标题栏模式 `hideHeader`
+
+完全去掉标题栏及其边框，如果 `closable` 为真则只留一个悬浮在右上角的关闭按钮。适合图片、图表这类只放内容的对话框——标题栏在这种场景下只会占用内容空间。虽然可见的 `<h3>` 标题没了，对话框仍会通过 `aria-label`（取自 `title`）保留无障碍名称，所以即使用了无标题栏模式，也建议设置 `title` 供屏幕阅读器使用。
+
+```html
+<r-modal open hide-header>
+  <img src="/diagram.png" alt="架构图" style="display: block; max-width: 100%;" />
 </r-modal>
 ```
 

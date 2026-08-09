@@ -816,9 +816,21 @@
             }
 
             &::part(selection-item) {
-              width: 100%;
-              text-align: center;
+              // `.selection-item` is `display: flex` internally (see
+              // `components/select/index.less`) with no `justify-content` of
+              // its own (defaults to `flex-start`) — `text-align` doesn't
+              // affect a flex container's main-axis alignment at all, so the
+              // old `text-align: center` here was a silent no-op; the label
+              // was really just sitting at `justify-content`'s default
+              // left-aligned position the whole time. `right: 0` replaces the
+              // inherited `right: 28px` (space the base component reserves
+              // for its own dropdown arrow, which player hides), and now
+              // fully defines the box together with `left: 0` — dropping the
+              // separate `width: 100%` instead of stacking a third,
+              // potentially conflicting constraint on top of both.
               left: 0;
+              right: 0;
+              justify-content: center;
               color: var(--ran-player-select-item-color, #fff);
               font-size: var(--ran-player-select-item-font-size, var(--ran-text-label-3, 12px));
               font-weight: var(--ran-player-select-item-font-weight, var(--ran-text-label-weight, 500));
@@ -885,9 +897,21 @@
             }
 
             &::part(selection-item) {
-              width: 100%;
-              text-align: center;
+              // `.selection-item` is `display: flex` internally (see
+              // `components/select/index.less`) with no `justify-content` of
+              // its own (defaults to `flex-start`) — `text-align` doesn't
+              // affect a flex container's main-axis alignment at all, so the
+              // old `text-align: center` here was a silent no-op; the label
+              // was really just sitting at `justify-content`'s default
+              // left-aligned position the whole time. `right: 0` replaces the
+              // inherited `right: 28px` (space the base component reserves
+              // for its own dropdown arrow, which player hides), and now
+              // fully defines the box together with `left: 0` — dropping the
+              // separate `width: 100%` instead of stacking a third,
+              // potentially conflicting constraint on top of both.
               left: 0;
+              right: 0;
+              justify-content: center;
               color: var(--ran-player-select-item-color, #fff);
               font-size: var(--ran-player-select-item-font-size, var(--ran-text-label-3, 12px));
               font-weight: var(--ran-player-select-item-font-weight, var(--ran-text-label-weight, 500));
@@ -946,9 +970,21 @@
             }
 
             &::part(selection-item) {
-              width: 100%;
-              text-align: center;
+              // `.selection-item` is `display: flex` internally (see
+              // `components/select/index.less`) with no `justify-content` of
+              // its own (defaults to `flex-start`) — `text-align` doesn't
+              // affect a flex container's main-axis alignment at all, so the
+              // old `text-align: center` here was a silent no-op; the label
+              // was really just sitting at `justify-content`'s default
+              // left-aligned position the whole time. `right: 0` replaces the
+              // inherited `right: 28px` (space the base component reserves
+              // for its own dropdown arrow, which player hides), and now
+              // fully defines the box together with `left: 0` — dropping the
+              // separate `width: 100%` instead of stacking a third,
+              // potentially conflicting constraint on top of both.
               left: 0;
+              right: 0;
+              justify-content: center;
               color: var(--ran-player-select-item-color, #fff);
               font-size: var(--ran-player-select-item-font-size, var(--ran-text-label-3, 12px));
               font-weight: var(--ran-player-select-item-font-weight, var(--ran-text-label-weight, 500));
