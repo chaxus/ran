@@ -43,3 +43,13 @@ test('popover — open on click', async ({ page }) => {
   await page.waitForTimeout(200);
   await expect(page).toHaveScreenshot('popover-click-open.png');
 });
+
+test('popover — click trigger again closes it', async ({ page }) => {
+  await mount(page, POPOVER_HTML);
+  const trigger = page.locator('r-button');
+  const content = page.locator('.ran-popover-dropdown');
+  await trigger.click();
+  await expect(content).toHaveCSS('display', 'block');
+  await trigger.click();
+  await expect(content).toHaveCSS('display', 'none');
+});
