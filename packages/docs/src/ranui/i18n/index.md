@@ -107,15 +107,9 @@ i18n.t('{{{name}}}', { name: 'Ada' }); // → "{Ada}"  (value wrapped in literal
 Escaping is applied in the same left-to-right pass as interpolation and works whether or not
 you pass params, so `{{`/`}}` always mean literal braces.
 
-> **Why doubling rather than a backslash or ICU-style quotes?** The heavyweight i18n stacks
-> take different routes: **ICU MessageFormat** (react-intl / FormatJS, Java, PHP) escapes with a
-> single quote — `'{'` — because it also parses rich `{count, plural, …}` / `{gender, select, …}`
-> sub-syntax that needs a quoting character. **i18next** sidesteps escaping by making `{{name}}`
-> itself the placeholder, so single braces are always literal. **Vue I18n** uses a literal-wrap
-> form, `{'{'}`. ranui keeps the lightweight single-brace `{name}` syntax, and for that the
-> brace-doubling rule is the least surprising complement: no new escape character, familiar from
-> every mainstream format-string API, and trivial to reason about in one pass. If you need real
-> plural/gender/number grammar, format with `Intl.*` and pass the result in as a param.
+> Doubling is the same convention used by Rust `format!`, Python `str.format`, and .NET
+> `String.Format`, so it needs no new escape character. If you need real plural/gender/number
+> grammar, format with `Intl.*` and pass the result in as a param.
 
 :::
 
