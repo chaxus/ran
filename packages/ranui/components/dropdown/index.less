@@ -224,22 +224,26 @@
       //
       // `--ran-dropdown-arrow-shape-offset` is a separate, *static* correction
       // (not a JS-measured one, unlike `--ran-dropdown-arrow-anchor-offset-y`):
-      // the arrow's ::before (flare) + ::after (tip) are both bottom-anchored
-      // inside the 16×16 box (by design — that's what makes them read as a
+      // the arrow's SVG path (see `&-arrow` below) is bottom-anchored inside
+      // its own viewBox (by design — that's what makes it read as a
       // continuous bump for `.top`/`.bottom`, which never rotate that box),
-      // so the *visible* ink sits well below the box's own geometric center.
-      // `rotate(270deg)`/`rotate(90deg)` below carry that pre-rotation vertical
-      // offset into whichever axis they land on — verified empirically
-      // (screenshots at several trial values) rather than hand-derived, since
-      // getting a rotate+translate composition right by algebra alone is easy
-      // to get subtly wrong. Without this, the arrow's *bounding box* centers
-      // correctly on the trigger but the visible triangle inside it doesn't.
+      // so the *visible* ink's bounding box sits below the box's own
+      // geometric center. `rotate(270deg)`/`rotate(90deg)` carry that offset
+      // onto this axis. The default is derived directly from the path's own
+      // geometry — the tip's rounded apex sits at `1 - (9·√2)/32 ≈ 0.6023` of
+      // the arrow's height from the top, so the visible region's (apex → 100%)
+      // bounding-box midpoint sits `0.3011` of the arrow's size below center
+      // — expressed as a fraction of `--ran-dropdown-arrow-width` so it scales
+      // if that's overridden, not a fixed pixel value. Without this, the
+      // arrow's *bounding box* centers correctly on the trigger but the
+      // visible triangle inside it doesn't.
       transform: translateX(
           calc(0px - var(--ran-dropdown-arrow-width, 16px) + var(--ran-dropdown-arrow-overlap, 2px))
         )
         translateY(
           calc(
-            var(--ran-dropdown-arrow-width, 16px) / 2 + var(--ran-dropdown-arrow-shape-offset, -6px) +
+            var(--ran-dropdown-arrow-width, 16px) / 2 +
+              var(--ran-dropdown-arrow-shape-offset, calc(var(--ran-dropdown-arrow-width, 16px) * -0.301126)) +
               var(--ran-dropdown-arrow-anchor-offset-y, 0px)
           )
         )
@@ -261,7 +265,8 @@
         translateY(
           calc(
             var(--ran-dropdown-arrow-anchor-height, var(--ran-dropdown-min-height, 100%)) / 2 - calc(@arrow-size / 2) +
-              var(--ran-dropdown-arrow-shape-offset, -6px) + var(--ran-dropdown-arrow-anchor-offset-y, 0px)
+              var(--ran-dropdown-arrow-shape-offset, calc(var(--ran-dropdown-arrow-width, 16px) * -0.301126)) +
+              var(--ran-dropdown-arrow-anchor-offset-y, 0px)
           )
         )
         rotate(90deg);
@@ -277,31 +282,43 @@
     width: var(--ran-dropdown-arrow-width, @arrow-size);
     height: var(--ran-dropdown-arrow-height, @arrow-size);
     overflow: var(--ran-dropdown-arrow-overflow, hidden);
-    &::before {
-      background: var(--ran-dropdown-arrow-fill-background, var(--ran-color-bg-elevated, #fff));
-      position: var(--ran-dropdown-arrow-fill-position, absolute);
-      bottom: var(--ran-dropdown-arrow-fill-bottom, 0);
-      inset-inline-start: 0;
-      width: var(--ran-dropdown-arrow-fill-width, @arrow-size);
-      height: var(--ran-dropdown-arrow-fill-height, calc(@arrow-size / 2));
-      clip-path: path(
-        'M 0 8 A 4 4 0 0 0 2.82842712474619 6.82842712474619 L 6.585786437626905 3.0710678118654755 A 2 2 0 0 1 9.414213562373096 3.0710678118654755 L 13.17157287525381 6.82842712474619 A 4 4 0 0 0 16 8 Z'
-      );
-      content: var(--ran-dropdown-arrow-fill-content, '');
+    // The flare (rounded base) and the pointed tip used to be two separate,
+    // absolutely-positioned pseudo-elements (`::before` a `clip-path: path()`
+    // trapezoid, `::after` a rotated+clipped rounded square) with every
+    // coordinate hardcoded in raw pixels. `clip-path: path()` cannot take a
+    // `calc()`/`var()`-driven coordinate — its argument is a literal SVG path
+    // string — so that construction could never actually track
+    // `--ran-dropdown-arrow-width`/`-height`: overriding those resized the
+    // *box*, not the shape inside it.
+    //
+    // An inline SVG with `viewBox="0 0 16 16"` fixes that for free: the
+    // viewBox coordinate system is fixed at authoring time (so the path data
+    // below can stay exactly as designed), but the browser scales it to fill
+    // whatever the arrow box's actual rendered size is — the same mechanism
+    // any scalable icon relies on. `preserveAspectRatio="none"` matches prior
+    // behavior, where width/height were already independently overridable.
+    //
+    // The single path traces flare-corner → rise → rounded tip apex → rise →
+    // flare-corner as one continuous outline (replacing the two shapes' former
+    // *overlap*, not just placing them side by side) — the tip's rounded
+    // corner tangent points land almost exactly on the flare's own inner
+    // points by construction (see the derivation in the project history this
+    // shipped from), so this is the same silhouette, not a redesign.
+    svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      overflow: visible; // let the drop-shadow filter bleed outside the 16×16 viewBox
     }
-    &::after {
-      content: var(--ran-dropdown-arrow-tip-content, '');
-      position: var(--ran-dropdown-arrow-tip-position, absolute);
-      width: var(--ran-dropdown-arrow-tip-width, 9px);
-      height: var(--ran-dropdown-arrow-tip-height, 9px);
-      bottom: var(--ran-dropdown-arrow-tip-bottom, 0);
-      inset-inline: 0;
-      margin: var(--ran-dropdown-arrow-tip-margin, auto);
-      border-radius: var(--ran-dropdown-arrow-tip-border-radius, 0 0 2px 0);
-      transform: var(--ran-dropdown-arrow-tip-transform, translateY(50%) rotate(-135deg));
-      box-shadow: var(--ran-dropdown-arrow-tip-box-shadow, 2px 2px 5px rgba(0, 0, 0, 0.05));
-      z-index: var(--ran-dropdown-arrow-tip-z-index, 0);
-      background: var(--ran-dropdown-arrow-tip-background, var(--ran-color-bg-elevated, #fff));
+    path {
+      fill: var(--ran-dropdown-arrow-fill-background, var(--ran-dropdown-arrow-tip-background, var(--ran-color-bg-elevated, #fff)));
+      // `--ran-dropdown-arrow-shadow` takes a `filter: drop-shadow(...)` value —
+      // NOT the same syntax as the old `--ran-dropdown-arrow-tip-box-shadow`
+      // (a `box-shadow` value), which is why this doesn't chain to that old
+      // variable as a fallback the way `fill` does above: the two properties'
+      // value grammars aren't compatible, so a value meant for one would be
+      // invalid on the other rather than silently doing the same thing.
+      filter: var(--ran-dropdown-arrow-shadow, drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.05)));
     }
   }
 }

@@ -234,9 +234,13 @@ $ docker container run --rm - p 8000:3000 -it koa-demo:0.0.1
 2. `Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?`
 
 ```shell
-# docker服务没有启动
-$ service docker start
+# Linux：docker 服务没有启动
+$ sudo service docker start
+# 或者，用 systemd 的发行版：
+$ sudo systemctl start docker
 ```
+
+macOS 或 Windows 上用 Docker Desktop 的话，系统里根本没有 `service`/`systemctl` 这两个命令——应该去启动或重启 Docker Desktop 应用本身，守护进程是跑在它的虚拟机里的，不是宿主机上的一个服务。
 
 ## 参考资料
 

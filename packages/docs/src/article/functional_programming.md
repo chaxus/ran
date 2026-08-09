@@ -144,7 +144,7 @@ pay(5);
 function memoize(fn) {
   let cache = {};
   return function () {
-    let key = JSON.stringfy(arguments);
+    let key = JSON.stringify(arguments);
     cache[key] = cache[key] || fn.apply(fn, arguments);
     return cache[key];
   };
@@ -159,7 +159,7 @@ function memoize(fn) {
 //Impure function
 let mini = 18;
 function checkAge(age) {
-  return age > min;
+  return age > mini;
 }
 //Pure function (has a hardcoded value; can later be resolved via currying)
 function checkAge(age) {
@@ -197,7 +197,7 @@ let checkAge = (min) => (age) => age >= min;
 
 ```js
 //Using curry from lodash
-const _ = require('loadsh');
+const _ = require('lodash');
 function getSum(a, b, c) {
   return a + b + c;
 }
@@ -214,7 +214,7 @@ function curry(func) {
   return function curriedFn(...args) {
     if (args.length < func.length) {
       return function () {
-        return curriedFn(...args.concat(Array.form(arguments)));
+        return curriedFn(...args.concat(Array.from(arguments)));
       };
     } else {
       return func(...args);
@@ -273,8 +273,8 @@ _.map(['a', 'b', 'c'], _.toUpper);
 //=>['A','B','C']
 _.map(['a', 'b', 'c']);
 //=>['a','b','c']
-//loadsh/fp module
-const fp = require('lodasg/fp');
+//lodash/fp module
+const fp = require('lodash/fp');
 fp.map(fp.toUpper, ['a', 'b', 'c']);
 fp.map(fp.toUpper)(['a', 'b', 'c']);
 ```
@@ -288,7 +288,7 @@ We can define a data-processing pipeline as a composed operation that has nothin
 - Requires defining a few auxiliary basic operation functions
 
 ```js
-const f = fp.flowRight(fp.join('-'), fp.map(_.toLower), fp.splite(''));
+const f = fp.flowRight(fp.join('-'), fp.map(_.toLower), fp.split(''));
 ```
 
 ## 8. `functor`
@@ -413,7 +413,7 @@ let l = parseJSON('{name:zs}'); //error
 console.log(l);
 let r = parseJSON('{"name":"zs"}');
 console.log(r);
-r.map((x) => x.toUpper());
+r.map((x) => x.name.toUpperCase());
 ```
 
 - IO functor
@@ -453,13 +453,13 @@ console.log(r._value()); //Executes and returns the path of the Node process
 //Task: handling asynchronous tasks
 const fs = require('fs');
 const { task } = require('folktale/concurrency/task');
-const { split, find } = require('loadsh/fp');
+const { split, find } = require('lodash/fp');
 
 function readFile(filename) {
   return task((resolver) => {
     fs.readFile(filename, 'utf-8', (error, data) => {
       if (error) {
-        resolver.reject(err);
+        resolver.reject(error);
       } else {
         resolver.resolve(data);
       }
@@ -522,7 +522,7 @@ let readFile = function (filename) {
   });
 };
 let print = function (x) {
-  return new IO(function (x) {
+  return new IO(function () {
     console.log(x);
     return x;
   });

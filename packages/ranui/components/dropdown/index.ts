@@ -93,6 +93,17 @@ export class Dropdown extends RanElement {
     }
     if (!this.arrowIcon && this.container) {
       this.arrowIcon = Div().class('ranui-dropdown-arrow').build() as HTMLElement;
+      // One continuous outline (flare corners → rise → rounded tip apex → rise
+      // → flare corner) in a fixed 16×16 design space — an SVG `viewBox`, unlike
+      // the `clip-path: path()` this replaced, scales to whatever CSS actually
+      // sizes the box to (`--ran-dropdown-arrow-width`/`-height`), so the shape
+      // now genuinely tracks those tokens instead of only the box tracking them.
+      // See dropdown/index.less `&-arrow` for the derivation.
+      this.arrowIcon.innerHTML =
+        '<svg viewBox="0 0 16 16" preserveAspectRatio="none" aria-hidden="true" focusable="false">' +
+        '<path d="M 0 16 A 4 4 0 0 0 2.82842712474619 14.82842712474619 ' +
+        'L 6.585786437626905 11.050252531694166 A 2 2 0 0 1 9.414213562373096 11.050252531694166 ' +
+        'L 13.17157287525381 14.82842712474619 A 4 4 0 0 0 16 16 Z"/></svg>';
       this.container.appendChild(this.arrowIcon);
     }
     if (this.arrowIcon) {

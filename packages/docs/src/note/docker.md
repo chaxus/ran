@@ -232,9 +232,13 @@ $ docker container run --rm -p 8000:3000 -it koa-demo:0.0.1
 2. `Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?`
 
 ```shell
-# The docker service isn't started
-$ service docker start
+# Linux: the docker service isn't started
+$ sudo service docker start
+# or, on distros using systemd:
+$ sudo systemctl start docker
 ```
+
+On macOS or Windows with Docker Desktop, there's no `service`/`systemctl` binary — start or restart the Docker Desktop application instead; the daemon runs inside its VM, not as a host-level service.
 
 ## References
 

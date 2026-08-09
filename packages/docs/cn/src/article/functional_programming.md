@@ -144,7 +144,7 @@ pay(5);
 function memoize(fn) {
   let cache = {};
   return function () {
-    let key = JSON.stringfy(arguments);
+    let key = JSON.stringify(arguments);
     cache[key] = cache[key] || fn.apply(fn, arguments);
     return cache[key];
   };
@@ -159,7 +159,7 @@ function memoize(fn) {
 //不纯的函数
 let mini = 18;
 function checkAge(age) {
-  return age > min;
+  return age > mini;
 }
 //纯函数 (有硬编码，后续可以通过柯里化来解决)
 function checkAge(age) {
@@ -197,7 +197,7 @@ let checkAge = (min) => (age) => age >= min;
 
 ```js
 //lodash 中的 curry 的使用
-const _ = require('loadsh');
+const _ = require('lodash');
 function getSum(a, b, c) {
   return a + b + c;
 }
@@ -214,7 +214,7 @@ function curry(func) {
   return function curriedFn(...args) {
     if (args.length < func.length) {
       return function () {
-        return curriedFn(...args.concat(Array.form(arguments)));
+        return curriedFn(...args.concat(Array.from(arguments)));
       };
     } else {
       return func(...args);
@@ -273,8 +273,8 @@ _.map(['a', 'b', 'c'], _.toUpper);
 //=>['A','B','C']
 _.map(['a', 'b', 'c']);
 //=>['a','b','c']
-//loadsh/fp 模块
-const fp = require('lodasg/fp');
+//lodash/fp 模块
+const fp = require('lodash/fp');
 fp.map(fp.toUpper, ['a', 'b', 'c']);
 fp.map(fp.toUpper)(['a', 'b', 'c']);
 ```
@@ -288,7 +288,7 @@ fp.map(fp.toUpper)(['a', 'b', 'c']);
 - 需要定义一些辅助的基本运算函数
 
 ```js
-const f = fp.flowRight(fp.join('-'), fp.map(_.toLower), fp.splite(''));
+const f = fp.flowRight(fp.join('-'), fp.map(_.toLower), fp.split(''));
 ```
 
 ## 八。`functor`(函子)
@@ -413,7 +413,7 @@ let l = parseJSON('{name:zs}'); //error
 console.log(l);
 let r = parseJSON('{"name":"zs"}');
 console.log(r);
-r.map((x) => x.toUpper());
+r.map((x) => x.name.toUpperCase());
 ```
 
 - IO 函子
@@ -453,13 +453,13 @@ console.log(r._value()); //执行 node 进程的路径
 //Task 处理异步任务
 const fs = require('fs');
 const { task } = require('folktale/concurrency/task');
-const { split, find } = require('loadsh/fp');
+const { split, find } = require('lodash/fp');
 
 function readFile(filename) {
   return task((resolver) => {
     fs.readFile(filename, 'utf-8', (error, data) => {
       if (error) {
-        resolver.reject(err);
+        resolver.reject(error);
       } else {
         resolver.resolve(data);
       }
@@ -522,7 +522,7 @@ let readFile = function (filename) {
   });
 };
 let print = function (x) {
-  return new IO(function (x) {
+  return new IO(function () {
     console.log(x);
     return x;
   });
