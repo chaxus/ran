@@ -33,21 +33,32 @@ import { defineSSR } from '@/utils/ssr-registry';
 // once at the document level (a harmless side effect — the family names are only ever
 // referenced by <r-math>'s own MathML). Idempotent across every <r-math> instance.
 const MATH_FONTS_STYLE_ID = 'ran-math-fonts';
-let mathFontsRequested = false;
-const ensureMathFonts = async (): Promise<void> => {
-  if (typeof document === 'undefined' || mathFontsRequested) return;
-  mathFontsRequested = true;
-  const [{ default: latinModernMathFont }, { default: temmlScriptFont }] = await Promise.all([
-    import('@/assets/fonts/latinmodernmath.woff2?inline'),
-    import('@/assets/fonts/Temml.woff2?inline'),
-  ]);
-  if (document.getElementById(MATH_FONTS_STYLE_ID)) return;
-  const style = document.createElement('style');
-  style.id = MATH_FONTS_STYLE_ID;
-  style.textContent =
-    `@font-face{font-family:'Latin Modern Math';src:url(${latinModernMathFont}) format('woff2');font-weight:normal;font-style:normal;font-display:swap;}` +
-    `@font-face{font-family:'Temml';src:url(${temmlScriptFont}) format('woff2');font-weight:normal;font-style:normal;font-display:swap;}`;
-  (document.head || document.documentElement).appendChild(style);
+// A memoized promise, not a boolean "already requested" flag: a boolean guard would make every
+// call *after* the first return an instantly-resolved no-op promise, even while the first call's
+// actual font import + style insertion is still in flight — a caller racing a fresh <r-math>
+// against an in-progress one (or `render()` firing twice back-to-back, once via the `latex`
+// attribute's own auto-render and once from an explicit manual call) would see its `await`
+// resolve before the fonts were actually ready. Caching the promise itself means every caller,
+// first or Nth, awaits the *same* real completion.
+let mathFontsPromise: Promise<void> | undefined;
+const ensureMathFonts = (): Promise<void> => {
+  if (typeof document === 'undefined') return Promise.resolve();
+  if (!mathFontsPromise) {
+    mathFontsPromise = (async () => {
+      const [{ default: latinModernMathFont }, { default: temmlScriptFont }] = await Promise.all([
+        import('@/assets/fonts/latinmodernmath.woff2?inline'),
+        import('@/assets/fonts/Temml.woff2?inline'),
+      ]);
+      if (document.getElementById(MATH_FONTS_STYLE_ID)) return;
+      const style = document.createElement('style');
+      style.id = MATH_FONTS_STYLE_ID;
+      style.textContent =
+        `@font-face{font-family:'Latin Modern Math';src:url(${latinModernMathFont}) format('woff2');font-weight:normal;font-style:normal;font-display:swap;}` +
+        `@font-face{font-family:'Temml';src:url(${temmlScriptFont}) format('woff2');font-weight:normal;font-style:normal;font-display:swap;}`;
+      (document.head || document.documentElement).appendChild(style);
+    })();
+  }
+  return mathFontsPromise;
 };
 
 export class Math extends RanElement {
