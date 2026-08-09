@@ -63,6 +63,28 @@ Provide options via `<r-option>` child elements.
 
 Duplicate option labels or values log a `console.warn`.
 
+### Label `label`
+
+A static caption rendered above the field — always visible, never overlaps adjacent
+content. Uses the same tokens and layout as `r-input`'s `label`, so a labeled select and a
+labeled input placed side by side in a form line up (same height, same top edge).
+
+<Demo>
+  <r-select label="Country" style="width: 180px" defaultValue="185">
+    <r-option value="185">United States</r-option>
+    <r-option value="186">Canada</r-option>
+    <r-option value="187">Mexico</r-option>
+  </r-select>
+</Demo>
+
+```html
+<r-select label="Country" defaultValue="185">
+  <r-option value="185">United States</r-option>
+  <r-option value="186">Canada</r-option>
+  <r-option value="187">Mexico</r-option>
+</r-select>
+```
+
 ### Default Value `defaultValue`
 
 <Demo>
@@ -281,6 +303,7 @@ Fired only when `showSearch` is enabled, as the user types in the search box (th
 | `icon`           | Dropdown arrow icon                                 |
 | `selection-item` | Element showing the selected option's label         |
 | `search`         | The inline search input (visible with `showSearch`) |
+| `label`          | The static label above the field (present when `label` set) |
 
 ## Best Practices
 
