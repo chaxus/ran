@@ -126,16 +126,6 @@ export default defineConfig({
   description: DESCRIPTION,
   base: BASE_PATH,
   vite: {
-    // esbuild is pinned to >=0.28.1 workspace-wide (security override in
-    // pnpm-workspace.yaml). esbuild 0.28 refuses to down-level destructuring
-    // to VitePress/vite 5.4's default browser baseline, which breaks dev-time
-    // dependency optimization. Target esnext so no syntax lowering is attempted
-    // — the docs ship to modern browsers anyway.
-    optimizeDeps: {
-      esbuildOptions: {
-        target: 'esnext',
-      },
-    },
     build: {
       target: 'esnext',
       // Default (500kB) fires on every single build — every page-specific demo chunk

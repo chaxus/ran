@@ -748,8 +748,20 @@
           // `r-select:focus-visible` matches regardless of shadow
           // encapsulation, since the custom element host itself (not
           // something inside its shadow root) is the actual focus target.
+          // `@width` and `&-select`'s own `width` below are kept in sync
+          // (both 50px, not this row's `--ran-size-6`/30px scale step) —
+          // they used to disagree (wrapper 30px vs. the inner select's own
+          // 46px), and since the select has `flex-shrink: 0`, it simply
+          // overflowed the narrower wrapper rather than being clipped or
+          // stretching it, throwing the hover-pill background (painted on
+          // the wrapper's own, narrower box) a couple pixels short of fully
+          // covering the label text. Matching them removes that overflow
+          // *and* narrows the gap between the compact trigger and the wider
+          // dropdown panel above it (still deliberately wider — see the
+          // panel's own `min-width` override further up — so the longest
+          // option label, e.g. clarity's "1080", never clips).
           .player-pill-control(
-            @width: var(--ran-player-speed-width, var(--ran-size-6, 30px));
+            @width: var(--ran-player-speed-width, 50px);
             @height: var(--ran-player-speed-height, var(--ran-size-3, 20px));
             @padding: var(--ran-player-speed-padding, var(--ran-space-1, 4px) var(--ran-space-2, 8px));
             @radius: var(--ran-player-speed-border-radius, var(--ran-radius-sm, 6px));
