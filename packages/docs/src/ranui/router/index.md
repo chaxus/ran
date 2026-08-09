@@ -177,6 +177,14 @@ External URLs (`http://`, `//`, `mailto:`, `tel:`) pass through as normal `<a>` 
 <r-link href="https://github.com">GitHub ↗</r-link>
 ```
 
+#### Slots
+
+None of `r-router`, `r-route`, or `r-link` expose a named slot — each renders only
+the default (unnamed) `<slot>`: `r-router` and `r-route` project their child routes
+or route content as-is, and `r-link` projects whatever you put inside it as the
+link's visible content. None of the three define any `::part()` either, so there's
+no CSS Parts section for this component group.
+
 ## JavaScript API
 
 ### `createRouter(config?)`
