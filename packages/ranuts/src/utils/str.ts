@@ -66,19 +66,6 @@ export function randomString(len: number = 8): string {
   return `${Date.now()}-${pwd}`;
 }
 
-export function changeHumpToLowerCase(str: string): string {
-  const arr = str.split('');
-  const lowerCase = arr.map((val) => {
-    if (val.toUpperCase() === val) {
-      return '_' + val.toLowerCase();
-    } else {
-      return val;
-    }
-  });
-  str = lowerCase.join('');
-  return str;
-}
-
 interface ClearStrOption {
   urlencoded?: boolean;
 }

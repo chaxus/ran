@@ -104,29 +104,3 @@ export const isMobile = (): boolean => {
   }
   return false;
 };
-
-// Whether the device has a notch
-export const isBangDevice = (): boolean => {
-  if (!isClient) return false;
-  const iphone = /iphone/i.test(window.navigator.userAgent); // is it an iPhone?
-  const ratio2 = window.devicePixelRatio && window.devicePixelRatio === 2; // device pixel ratio of 2?
-  const ratio3 = window.devicePixelRatio && window.devicePixelRatio === 3; // device pixel ratio of 3?
-
-  const mini12 = window.screen.width === 360 && window.screen.height === 780; // 12mini
-  const pro11 = window.screen.width === 375 && window.screen.height === 812; // X Xs 11pro
-  const pro12 = window.screen.width === 390 && window.screen.height === 844; // 12 12pro
-  const promax11 = window.screen.width === 414 && window.screen.height === 896; // Xsm XR 11 11promax
-  const promax12 = window.screen.width === 428 && window.screen.height === 926; // 12promax
-
-  switch (true) {
-    case iphone && ratio3 && mini12: // 12 mini
-    case iphone && ratio3 && pro11: // X Xs 11pro
-    case iphone && ratio3 && pro12: // 12 12pro
-    case iphone && ratio2 && promax11: // XR 11
-    case iphone && ratio3 && promax11: // Xsm 11promax
-    case iphone && ratio3 && promax12: // 12promax
-      return true;
-    default:
-      return false;
-  }
-};
