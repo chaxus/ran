@@ -58,6 +58,12 @@ export class Math extends RanElement {
   _toolbar: HTMLElement;
   _copyResetTimer?: number;
   _downloadMenu?: HTMLElement;
+  // The lazy temml + font-face imports inside render() are deliberately
+  // fire-and-forget for callers — but tests need a way to know when a render
+  // has actually landed, rather than guessing with a fixed sleep (that raced
+  // and flaked in CI on a slower runner). Same idiom as r-loading/r-icon's
+  // `_pending` for their own lazy variant loads.
+  _pending?: Promise<void>;
   static get observedAttributes(): string[] {
     return ['latex', 'display', 'font', 'macros', 'wrap', 'copy', 'download', 'sheet'];
   }
@@ -173,13 +179,18 @@ export class Math extends RanElement {
       this.contain.innerHTML = '';
       this._toolbar.innerHTML = '';
       this._wrap.classList.remove('has-controls');
+      this._pending = undefined;
       return;
     }
-    // Fire-and-forget: the MathML renders immediately with the fallback stack and swaps to
-    // Latin Modern when the lazy font resolves (font-display: swap). `font="system"` opts
-    // out of the bundled font to save bytes. A font-load failure must not break rendering.
-    if (this.font !== 'system') ensureMathFonts().catch(() => {});
-    import('temml')
+    // Fire-and-forget *for callers* — render() itself stays synchronous/void, matching the
+    // attribute-driven components elsewhere in this library. `_pending` tracks the same work
+    // internally so a test (or any code that genuinely needs to know when a render has landed,
+    // rather than merely triggering one) can await it instead of guessing with a timer.
+    const fontPromise = this.font !== 'system' ? ensureMathFonts().catch(() => {}) : Promise.resolve();
+    // The MathML renders immediately with the fallback stack and swaps to Latin Modern when
+    // the lazy font resolves (font-display: swap) — rendering itself never waits on fontPromise,
+    // only `_pending` (the test-observable signal) does. A font-load failure must not break rendering.
+    const renderPromise = import('temml')
       .then(({ default: temml }) => {
         try {
           // `annotate` embeds <annotation encoding="application/x-tex"> so the source
@@ -201,6 +212,7 @@ export class Math extends RanElement {
         }
       })
       .catch((err: Error) => this.showError(err.message));
+    this._pending = Promise.all([fontPromise, renderPromise]).then(() => undefined);
   }
   // ── Toolbar (opt-in) ──────────────────────────────────────────────────────
   private iconButton(icon: string, label: string, onClick: () => void): HTMLButtonElement {

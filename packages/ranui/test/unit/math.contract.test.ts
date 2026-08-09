@@ -15,6 +15,10 @@ vi.mock('temml', () => ({ default: { renderToString } }));
 vi.mock('@/assets/fonts/latinmodernmath.woff2?inline', () => ({ default: 'data:font/woff2;base64,TEST_LM' }));
 vi.mock('@/assets/fonts/Temml.woff2?inline', () => ({ default: 'data:font/woff2;base64,TEST_TEMML' }));
 
+// Still used for waits that aren't covered by render()'s own `_pending` promise (e.g. a
+// clipboard write kicked off by a click handler) — anything downstream of render() itself
+// should `await math._pending` instead. A fixed sleep raced that async chain (lazy `import('temml')`
+// + the font-face import) and flaked in CI on a slower runner; `_pending` waits for the real thing.
 const sleep = (ms = 20): Promise<void> => new Promise((r) => setTimeout(r, ms));
 
 describe('r-math contract', () => {
@@ -86,7 +90,7 @@ describe('r-math contract', () => {
     document.body.appendChild(math);
     math.latex = 'x^2';
     math.render();
-    await sleep();
+    await math._pending;
 
     expect(renderToString).toHaveBeenCalledWith('x^2', expect.objectContaining({ displayMode: true, annotate: true }));
     expect(math.contain.querySelector('math')).not.toBeNull();
@@ -97,7 +101,7 @@ describe('r-math contract', () => {
     document.body.appendChild(math);
     math.setAttribute('display', 'inline');
     math.latex = 'x^2';
-    await sleep();
+    await math._pending;
 
     expect(renderToString).toHaveBeenLastCalledWith('x^2', expect.objectContaining({ displayMode: false }));
   });
@@ -106,7 +110,7 @@ describe('r-math contract', () => {
     const math = document.createElement('r-math') as any;
     document.body.appendChild(math);
     math.latex = 'x';
-    await sleep();
+    await math._pending;
 
     const style = document.getElementById('ran-math-fonts');
     expect(style).not.toBeNull();
@@ -118,7 +122,7 @@ describe('r-math contract', () => {
     const math2 = document.createElement('r-math') as any;
     document.body.appendChild(math2);
     math2.latex = 'y';
-    await sleep();
+    await math2._pending;
     expect(document.querySelectorAll('#ran-math-fonts').length).toBe(1);
   });
 
@@ -129,7 +133,7 @@ describe('r-math contract', () => {
     const onError = vi.fn();
     math.addEventListener('error', onError);
     math.latex = 'THROW';
-    await sleep();
+    await math._pending;
 
     const errorBox = math.contain.querySelector('.ran-math-error');
     expect(errorBox).not.toBeNull();
@@ -146,7 +150,7 @@ describe('r-math contract', () => {
     const onRender = vi.fn();
     math.addEventListener('render', onRender);
     math.latex = 'a+b';
-    await sleep();
+    await math._pending;
 
     expect(onRender).toHaveBeenCalledTimes(1);
     expect(onRender.mock.calls[0][0].detail).toEqual({ ok: true });
@@ -157,7 +161,7 @@ describe('r-math contract', () => {
     math.setAttribute('font', 'system');
     document.body.appendChild(math);
     math.latex = 'x^2';
-    await sleep();
+    await math._pending;
 
     expect(renderToString).toHaveBeenCalled();
     expect(math.contain.querySelector('math')).not.toBeNull();
@@ -168,7 +172,7 @@ describe('r-math contract', () => {
     document.body.appendChild(math);
     math.setAttribute('macros', '{"\\\\RR":"\\\\mathbb{R}"}');
     math.latex = '\\RR';
-    await sleep();
+    await math._pending;
 
     expect(renderToString).toHaveBeenLastCalledWith(
       '\\RR',
@@ -181,7 +185,7 @@ describe('r-math contract', () => {
     document.body.appendChild(math);
     math.setAttribute('macros', 'not json');
     math.latex = 'x';
-    await sleep();
+    await math._pending;
 
     const opts = renderToString.mock.calls.at(-1)?.[1] as Record<string, unknown>;
     expect(opts.macros).toBeUndefined();
@@ -192,11 +196,11 @@ describe('r-math contract', () => {
     document.body.appendChild(math);
     math.setAttribute('wrap', '=');
     math.latex = 'a+b+c';
-    await sleep();
+    await math._pending;
     expect((renderToString.mock.calls.at(-1)?.[1] as any)?.wrap).toBe('=');
 
     math.setAttribute('wrap', 'bogus');
-    await sleep();
+    await math._pending;
     expect((renderToString.mock.calls.at(-1)?.[1] as any)?.wrap).toBeUndefined();
   });
 
@@ -204,13 +208,13 @@ describe('r-math contract', () => {
     const math = document.createElement('r-math') as any;
     document.body.appendChild(math);
     math.latex = 'x^2';
-    await sleep();
+    await math._pending;
     // No control attr → no toolbar controls.
     expect(math._wrap.classList.contains('has-controls')).toBe(false);
     expect(math._toolbar.querySelector('.ran-math-btn')).toBeNull();
 
+    // buildToolbar() (unlike render()) is synchronous, so no wait is needed here.
     math.setAttribute('copy', '');
-    await sleep();
     const btn = math._toolbar.querySelector('.ran-math-btn');
     expect(btn).not.toBeNull();
     expect(btn.getAttribute('part')).toBe('button');
@@ -228,9 +232,11 @@ describe('r-math contract', () => {
     const onCopied = vi.fn();
     math.addEventListener('copied', onCopied);
     math.latex = '\\frac{1}{2}';
-    await sleep();
+    await math._pending;
 
     math._toolbar.querySelector('.ran-math-btn').click();
+    // The click handler's own async work (clipboard write + the icon's timed flip back) isn't
+    // tracked by render()'s `_pending` — it's a separate chain kicked off by the click itself.
     await sleep();
 
     expect(writeText).toHaveBeenCalledWith('\\frac{1}{2}');
@@ -250,9 +256,10 @@ describe('r-math contract', () => {
     const onCopied = vi.fn();
     math.addEventListener('copied', onCopied);
     math.latex = 'x^2';
-    await sleep();
+    await math._pending;
 
     math._toolbar.querySelector('.ran-math-btn').click();
+    // Same reasoning as above: waiting on the click's own clipboard-write chain, not render().
     await sleep();
 
     expect(writeText).toHaveBeenCalledTimes(1);
@@ -272,7 +279,7 @@ describe('r-math contract', () => {
     const onDownload = vi.fn();
     math.addEventListener('download', onDownload);
     math.latex = 'x^2';
-    await sleep();
+    await math._pending;
 
     math._toolbar.querySelector('.ran-math-btn').click();
     expect(createObjectURL).toHaveBeenCalledTimes(1);
@@ -286,7 +293,7 @@ describe('r-math contract', () => {
     math.setAttribute('download', ''); // bare → source + mathml
     document.body.appendChild(math);
     math.latex = 'x^2';
-    await sleep();
+    await math._pending;
 
     math._toolbar.querySelector('.ran-math-btn').click();
     const items = math._wrap.querySelectorAll('.ran-math-menu-item');
