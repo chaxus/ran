@@ -363,7 +363,6 @@ export {
   transformNumber,
   toString,
   addNumSym,
-  getQuery,
   checkEncoding,
   transformText,
   isSafari,

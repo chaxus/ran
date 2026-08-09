@@ -1,4 +1,4 @@
-import { currentDevice, isBangDevice, isMobile, isWeiXin } from 'ranuts/utils';
+import { currentDevice, isMobile, isWeiXin } from 'ranuts/utils';
 import type { App } from 'vue';
 import type { CurrentDevice } from 'ranuts/utils';
 import { LANGS_DICT } from '../lib/constant';
@@ -15,7 +15,6 @@ export interface Env {
   currentDevice: CurrentDevice;
   isWeiXin: boolean;
   isMobile: boolean;
-  isBang: boolean;
 }
 
 export const $env: Env = {
@@ -24,7 +23,6 @@ export const $env: Env = {
   currentDevice: currentDevice(),
   isWeiXin: isWeiXin(),
   isMobile: isMobile(),
-  isBang: isBangDevice(), // 是否是刘海机型
   // theme: localStorage.getItem("ran-chaxus-theme")
 };
 

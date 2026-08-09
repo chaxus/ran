@@ -46,6 +46,23 @@
 </r-glass>
 ```
 
+## Rim —— WebGL 镜面边缘（可选开启）
+
+`rim` 用 WebGL 加一层镜面高光：固定从左上方打光的镜面边缘，加上圆角边框处一圈细微的色散（RGB 分离）描边。跟 `displace` 的折射不同，**它完全不采样背景**——着色器只知道面板自身的宽高和圆角半径，所以不会有"整体截取背景做折射"那种 WebGL 方案的交互性/可访问性代价（见下方[说明](#说明)）。它只是叠加在同一个 `backdrop-filter` 磨砂效果之上的纯装饰层，开关它不会改变玻璃背后采样的内容或方式。
+
+在 WebGL 不可用时（很老的浏览器、被禁用、SSR）会静默降级为普通的 CSS 镜面渐变——不存在"坏掉"的中间状态。
+
+<Demo>
+  <div style="position: relative; display: flex; gap: 16px; padding: 32px; border-radius: 16px; background: radial-gradient(circle at 30% 30%, #f9d423, #ff4e50 60%, #7b4397); overflow: hidden;">
+    <r-glass radius="20" style="flex: 1;"><div style="padding: 20px; color: #fff; font-size: 13px;">无 rim</div></r-glass>
+    <r-glass radius="20" rim style="flex: 1;"><div style="padding: 20px; color: #fff; font-size: 13px;">rim</div></r-glass>
+  </div>
+</Demo>
+
+```html
+<r-glass>…普通 CSS 镜面高光…</r-glass> <r-glass rim>…WebGL 镜面边缘 + 色散描边…</r-glass>
+```
+
 ## API 参考
 
 ### 属性
@@ -60,10 +77,11 @@
 | `tint`        | `string`  | 淡白    | 玻璃填充色，任意 CSS 背景值。                                    |
 | `sheen`       | `boolean` | `false` | 表面流动的镜面高光动画。                                         |
 | `interactive` | `boolean` | `false` | hover 抬升 + 按下回弹反馈，用于可点击的玻璃。同时让 host 变成可键盘操作的按钮——`role="button"`、可 tab 到、Enter/Space 等同点击。 |
+| `rim`         | `boolean` | `false` | 可选开启的 WebGL 镜面边缘 + 色散描边，观感更"有光"。WebGL 不可用时降级为普通 CSS 镜面渐变。 |
 
 ### CSS parts 与 token
 
-用 `::part(glass)`、`::part(specular)` 或覆盖 `--ran-glass-*` 自定义属性来定制内部：
+用 `::part(glass)`、`::part(specular)`、以及（开启 `rim` 时的）`::part(rim)` 或覆盖 `--ran-glass-*` 自定义属性来定制内部：
 
 | Token                          | 作用                  |
 | ------------------------------ | --------------------- |
@@ -80,7 +98,7 @@
 
 ## 说明
 
-- **背景采样**：`<r-glass>` 通过 `backdrop-filter` 折射它背后的 DOM，因此在普通页面内容上直接可用——包括背后可选中的文字、正在播放的视频、可交互元素。用 WebGL/WebGPU 着色器方案理论上"液态感"更强、且三大浏览器表现一致，但代价是要先把背景栅格化成一张贴图，会牺牲同样这些交互性/可访问性，且包体积明显更重——这里刻意没有走这条路。
+- **背景采样**：`<r-glass>` 通过 `backdrop-filter` 折射它背后的 DOM，因此在普通页面内容上直接可用——包括背后可选中的文字、正在播放的视频、可交互元素。把**背景本身**栅格化再用 WebGL/WebGPU 着色器折射，理论上"液态感"更强、且三大浏览器表现一致，但代价是牺牲同样这些交互性/可访问性，且包体积明显更重——这条路刻意没走。上面的 `rim` 是折中方案：一个完全不碰背景、只根据面板自身形状计算的 WebGL 装饰层。
 - **可读性**：正文请放在不透明的内层面上，不要只靠玻璃扛对比度。
 - **降低透明度**：`<r-glass>` 响应系统级"降低透明度 / 提高对比度"设置（`prefers-reduced-transparency: reduce`）：会切换成一个不透明、跟随主题的实色面（默认 `--ran-color-bg-elevated`），而不是继续磨砂/折射。系统原生控件是自动适配的，这是自定义元素对等的实现。
 - **跨浏览器折射差异**：`feDisplacementMap` 液态效果目前只在 Chromium 内核渲染，Safari/Firefox 会丢弃 `backdrop-filter` 里这一段、保留模糊/饱和度/亮度的磨砂效果——这是合理的（虽然更平的）降级，不是坏掉了。

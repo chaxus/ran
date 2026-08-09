@@ -2,7 +2,7 @@
 import DefaultTheme from 'vitepress/theme-without-fonts';
 import type { EnhanceAppContext, Router } from 'vitepress';
 import { nextTick } from 'vue';
-import { localStorageGetItem, setAttributeByGlobal } from 'ranuts/utils';
+import { localStorageGetItem } from 'ranuts/utils';
 import env from '../plugins/env';
 import TOTP from '../components/TOTP.vue';
 import Layout from '../components/Layout.vue';
@@ -117,7 +117,9 @@ export default {
     const locale = localStorageGetItem(RAN_CHAXUS_LANG) || LANGS_DICT.EN;
     loadLanguageAsync(locale)
       .then(() => {
-        setAttributeByGlobal('__VUE_PROD_DEVTOOLS__', false);
+        if (typeof window !== 'undefined') {
+          (window as unknown as { __VUE_PROD_DEVTOOLS__: boolean }).__VUE_PROD_DEVTOOLS__ = false;
+        }
         app.use(i18n);
         app.component('Layout', Layout);
         app.component('TOTP', TOTP);
