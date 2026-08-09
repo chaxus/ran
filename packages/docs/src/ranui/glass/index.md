@@ -114,7 +114,7 @@ Silently falls back to the plain CSS specular gradient when WebGL is unavailable
 
 ### CSS parts & tokens
 
-Style internals with `::part(glass)` and `::part(specular)`, or override the `--ran-glass-*` custom properties:
+Style internals with `::part(glass)`, `::part(specular)`, and (when `rim` is set) `::part(rim)`, or override the `--ran-glass-*` custom properties:
 
 | Token                          | Purpose                              |
 | ------------------------------ | ------------------------------------ |
@@ -137,7 +137,7 @@ r-glass::part(glass) {
 
 ## Notes
 
-- **Backdrop sampling.** `<r-glass>` refracts the DOM behind it via `backdrop-filter`, so it works over normal page content — including selectable text, live video, and interactive elements behind the glass. A WebGL/WebGPU shader path would look more "liquid" and work identically across browsers, but requires rasterizing the backdrop into a texture first, which costs that same interactivity/accessibility and a much heavier bundle — deliberately not pursued here.
+- **Backdrop sampling.** `<r-glass>` refracts the DOM behind it via `backdrop-filter`, so it works over normal page content — including selectable text, live video, and interactive elements behind the glass. A WebGL/WebGPU shader path that rasterizes the *backdrop itself* would look more "liquid" and work identically across browsers, but costs that same interactivity/accessibility and a much heavier bundle — deliberately not pursued. `rim` (above) is the middle ground: a WebGL layer that never touches the backdrop, computed purely from the panel's own shape.
 - **Legibility.** Keep body text on a solid inner surface; don't rely on the glass alone for contrast.
 - **Reduced transparency.** `<r-glass>` responds to the OS-level "reduce transparency" / "increase contrast" setting (`prefers-reduced-transparency: reduce`): it swaps to a solid, theme-aware surface (`--ran-color-bg-elevated` by default) instead of frosting/refracting. Native controls do this automatically; this is the custom-element equivalent.
 - **Cross-browser refraction.** The `feDisplacementMap` liquid effect currently renders in Chromium only — Safari and Firefox drop that part of the `backdrop-filter` value and keep the blur/saturate/brightness frost, which is a legitimate (if flatter) fallback, not a broken state.

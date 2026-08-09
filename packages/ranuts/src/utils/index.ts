@@ -89,12 +89,10 @@ import {
   mergeExports,
   querystring,
   replaceOld,
-  setAttributeByGlobal,
 } from './obj';
 import { MimeType, getExtensions, getMime, setMime } from './mimeType';
 import { AudioRecorder } from './audioRecorder';
 import { createSignal, subscribers } from './signal';
-import { audioVendor, canvasVendor, webglVendor } from './behavior';
 import { TOTP } from './totp/totp';
 import { createStore, localStorageGetItem, localStorageRemoveItem, localStorageSetItem } from './storage';
 import type { JsonStore } from './storage';
@@ -203,7 +201,6 @@ import type { CurrentDevice } from './device';
 import {
   MOBILE_MEDIA_QUERY,
   currentDevice,
-  isBangDevice,
   isClient,
   isMobile,
   isWeiXin,
@@ -260,12 +257,10 @@ export {
   timestampToTime,
   throttle,
   SyncHook,
-  changeHumpToLowerCase,
   clearBr,
   clearStr,
   isString,
   randomString,
-  str2Xml,
   strParse,
   scriptOnLoad,
   handleFetchHook,
@@ -333,10 +328,6 @@ export {
   hsvToHsl,
   ColorScheme,
   AudioRecorder,
-  webglVendor,
-  canvasVendor,
-  audioVendor,
-  retain,
   getCookie,
   requestUrlToBuffer,
   getPixelRatio,
@@ -346,7 +337,6 @@ export {
   queryFlag,
   isInIframe,
   appendUrl,
-  removeGhosting,
   getCookieByName,
   getWindow,
   connection,
@@ -355,12 +345,10 @@ export {
   durationHandler,
   networkSpeed,
   TOTP,
-  isBangDevice,
   localStorageGetItem,
   localStorageSetItem,
   localStorageRemoveItem,
   createStore,
-  setAttributeByGlobal,
   setFontSize2html,
   autosizeTextarea,
   createSpeechRecognizer,
