@@ -209,21 +209,13 @@ export const getAllQueryString = (url?: string): Record<string, string> => {
 };
 
 /**
- * @description: Alias of [`getAllQueryString`](#getallquerystring). The two used to be
- * byte-identical copies of the same body; this one now forwards so a fix lands in both.
- * @param {string} url full URL or query string; defaults to the current location
- * @return {Record<string, string>}
- */
-export const getQuery = (url?: string): Record<string, string> => getAllQueryString(url);
-
-/**
  * @description: Read a query parameter as a boolean flag. True for `?k`, `?k=`, `?k=1` and
  * `?k=true` (case-insensitive); false for anything else, including an absent parameter and
  * an explicit `?k=false`.
  *
  * This is the URL spelling of a boolean: `?embed`, `?readonly` and `?debug` are all written
- * without a value most of the time, so a plain `getQuery(url).embed` check is wrong for the
- * most common form.
+ * without a value most of the time, so a plain `getAllQueryString(url).embed` check is wrong
+ * for the most common form.
  *
  * @param {string} key parameter name
  * @param {string} url full URL or query string; defaults to the current location
@@ -280,26 +272,6 @@ export function appendUrl(url: string, params: Record<string, string> = {}): str
   }
   return urlObj.href;
 }
-
-/**
- * @description: Remove the drag event's ghost image
- * @param {DragEvent} event
- * @return {*}
- */
-// dragDom.addEventListener('mouseenter', removeGhosting);
-// dragDom.addEventListener('dragstart', removeGhosting);
-// dragDom.addEventListener('drag', removeGhosting);
-export const removeGhosting = (event: DragEvent): void => {
-  const dragIcon = document.createElement('img');
-  const url = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
-  dragIcon.src = url;
-  dragIcon.width = 0;
-  dragIcon.height = 0;
-  dragIcon.style.opacity = '0';
-  if (event.dataTransfer) {
-    event.dataTransfer.setDragImage(dragIcon, 0, 0);
-  }
-};
 
 export function getCookieByName(name: string): string {
   if (typeof window !== 'undefined') {
