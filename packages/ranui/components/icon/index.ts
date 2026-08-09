@@ -103,6 +103,7 @@ export const RAN_ICON_NAMES = [
   'check',
   'check-circle',
   'check-circle-fill',
+  'chevron-down',
   'close',
   'close-circle',
   'close-circle-fill',
