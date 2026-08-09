@@ -67,3 +67,7 @@ const heap = (list: Array<number>): Array<number> => {
   return value;
 };
 ```
+
+## Algorithm analysis
+
+Heap sort is not stable — swapping the root with the last unsorted element during heapify can reorder equal elements — but it sorts in place, needing only O(1) extra space beyond the array itself. Unlike quicksort, its time complexity is O(n log n) in the best, average, **and** worst case, since building and re-heapifying the heap costs O(log n) per element regardless of the input's initial order; unlike merge sort, it gets that guarantee without any O(n) auxiliary buffer.

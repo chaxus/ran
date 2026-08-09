@@ -14,6 +14,10 @@ Radix sort is sorted by the lowest order first, and then collected; Then sort by
 
 ## Code demo
 
+Each digit bucket is itself sorted with [count sort](../count/index.md) — small, dense
+ranges of values are exactly what count sort is fast at, which is why it's the natural
+partner for radix sort's per-digit buckets rather than a general-purpose comparison sort.
+
 ```ts
 const getMax = (list: Array<number>) => {
   let max = list[0];
@@ -23,6 +27,27 @@ const getMax = (list: Array<number>) => {
     }
   }
   return max;
+};
+/**
+ * @description: Count Sort — see the Count Sort page for the full explanation.
+ * @param {Array<number>} list
+ * @return {Array<number>}
+ */
+const count = (list: Array<number>): Array<number> => {
+  if (list.length <= 1) return list;
+  const max = getMax(list);
+  const countList = new Array(max + 1).fill(0);
+  list.forEach((item) => {
+    countList[item] = (countList[item] || 0) + 1;
+  });
+  const result: Array<number> = [];
+  for (let i = 0; i < countList.length; i++) {
+    while (countList[i]) {
+      result.push(i);
+      countList[i]--;
+    }
+  }
+  return result;
 };
 const getDigit = (num: number) => {
   let digit = 1;

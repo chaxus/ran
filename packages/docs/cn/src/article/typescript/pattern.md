@@ -134,7 +134,7 @@ type ShiftResult = ShiftArr<[1, 2, 3]>;
 判断字符串是否以某个前缀开头，也是通过模式匹配：
 
 ```ts
-type StartWith<str extends string, Prefix extends string> = Str extends `${Prefix}${string}` ? true : false;
+type StartWith<Str extends string, Prefix extends string> = Str extends `${Prefix}${string}` ? true : false;
 ```
 
 需要声明字符串 Str、匹配的前缀 Prefix 两个类型参数，它们都是 string。
@@ -144,14 +144,14 @@ type StartWith<str extends string, Prefix extends string> = Str extends `${Prefi
 当匹配时：
 
 ```ts
-type StartWithResult = StartWidth<'prefix string', 'prefix'>;
+type StartWithResult = StartWith<'prefix string', 'prefix'>;
 // type StartWithResult = true
 ```
 
 不匹配时：
 
 ```ts
-type StartWithResult = StartWidth<'prefix string', 'string'>;
+type StartWithResult = StartWith<'prefix string', 'string'>;
 // type StartWithResult = false
 ```
 
@@ -215,7 +215,7 @@ type TrimRightResult = TrimRight<'value          '>;
 同理可得 TrimLeft：
 
 ```ts
-type TrimLeft<Str extends string> = Str extends `${' '|'\n'|'\t'}`${infer Rest} ? TrimLeft<Rest> : Str
+type TrimLeft<Str extends string> = Str extends `${' ' | '\n' | '\t'}${infer Rest}` ? TrimLeft<Rest> : Str;
 ```
 
 TrimRight 和 TrimLeft 结合就是 Trim：
@@ -252,7 +252,7 @@ type GetParametersResult = GetParameters<(name: string, age: number) => string>;
 能提取参数类型，同样也可以提取返回值类型：
 
 ```ts
-type GetReturnType<Func extends Function> = Func extends (...args: unknown[]) => infer ReturnType ? ReturnType : never;
+type GetReturnType<Func extends Function> = Func extends (...args: any[]) => infer ReturnType ? ReturnType : never;
 ```
 
 Func 和模式类型做匹配，提取返回值到通过 infer 声明的局部变量 ReturnType 里返回。

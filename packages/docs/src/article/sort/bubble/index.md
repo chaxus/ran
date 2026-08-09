@@ -30,3 +30,7 @@ const bubble = (list: number[]): number[] => {
   return list;
 };
 ```
+
+## Algorithm analysis
+
+Bubble sort is stable — the strict `>` comparison never swaps equal elements — and sorts in place, so it needs no extra memory beyond the input array. Time complexity is O(n²) in the average and worst case. This implementation runs every comparison of every pass regardless of how sorted the input already is; adding an early-exit flag that stops as soon as a pass makes no swaps would bring the best case (an already-sorted list) down to O(n), but that optimization isn't included here.

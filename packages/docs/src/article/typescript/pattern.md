@@ -134,7 +134,7 @@ String types can likewise be pattern-matched: we match against a pattern string 
 Determining whether a string starts with a given prefix is also done via pattern matching:
 
 ```ts
-type StartWith<str extends string, Prefix extends string> = Str extends `${Prefix}${string}` ? true : false;
+type StartWith<Str extends string, Prefix extends string> = Str extends `${Prefix}${string}` ? true : false;
 ```
 
 We need to declare two type parameters — the string `Str` and the prefix to match `Prefix` — both of which are `string`.
@@ -144,14 +144,14 @@ We match `Str` against a pattern type whose prefix is `Prefix` followed by any `
 When it matches:
 
 ```ts
-type StartWithResult = StartWidth<'prefix string', 'prefix'>;
+type StartWithResult = StartWith<'prefix string', 'prefix'>;
 // type StartWithResult = true
 ```
 
 When it doesn't match:
 
 ```ts
-type StartWithResult = StartWidth<'prefix string', 'string'>;
+type StartWithResult = StartWith<'prefix string', 'string'>;
 // type StartWithResult = false
 ```
 
@@ -215,7 +215,7 @@ type TrimRightResult = TrimRight<'value          '>;
 `TrimLeft` follows the same logic:
 
 ```ts
-type TrimLeft<Str extends string> = Str extends `${' '|'\n'|'\t'}`${infer Rest} ? TrimLeft<Rest> : Str
+type TrimLeft<Str extends string> = Str extends `${' ' | '\n' | '\t'}${infer Rest}` ? TrimLeft<Rest> : Str;
 ```
 
 Combining `TrimRight` and `TrimLeft` gives us `Trim`:
@@ -252,7 +252,7 @@ type GetParametersResult = GetParameters<(name: string, age: number) => string>;
 Just as we can extract parameter types, we can also extract the return type:
 
 ```ts
-type GetReturnType<Func extends Function> = Func extends (...args: unknown[]) => infer ReturnType ? ReturnType : never;
+type GetReturnType<Func extends Function> = Func extends (...args: any[]) => infer ReturnType ? ReturnType : never;
 ```
 
 We match `Func` against a pattern type, extracting the return value into the local variable `ReturnType` declared with `infer` and returning it.

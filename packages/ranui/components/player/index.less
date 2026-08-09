@@ -459,7 +459,7 @@
           color: var(--ran-player-toggle-color, #fff);
           cursor: var(--ran-player-toggle-cursor, pointer);
           outline: var(--ran-player-toggle-outline, 0);
-          transition: var(--ran-player-toggle-transition, background-color 0.15s ease-out);
+          transition: var(--ran-player-toggle-transition, none);
           -webkit-tap-highlight-color: transparent;
 
           &:hover {
@@ -485,7 +485,7 @@
             outline-offset: var(--ran-player-toggle-focus-visible-outline-offset, 2px);
             border-radius: var(
               --ran-player-toggle-focus-visible-border-radius,
-              var(--ran-radius-sm, 4px)
+              var(--ran-radius-sm, 6px)
             );
           }
         }
@@ -549,7 +549,7 @@
         // `margin-right` (12px here, 24px there), which is exactly the kind
         // of inconsistency that reads as "not aligned" in a row meant to look
         // like a single coherent toolbar.
-        gap: var(--ran-player-controls-right-gap, 2px);
+        gap: var(--ran-player-controls-right-gap, 4px);
 
         &-volume {
           display: var(--ran-player-volume-display, flex);
@@ -561,9 +561,9 @@
           // click surface, and the pill-shaped hover backdrop every other
           // control in this row now shares, instead of volume being the one
           // control with no hover feedback at all.
-          padding: var(--ran-player-volume-padding, 4px 6px);
+          padding: var(--ran-player-volume-padding, 4px 8px);
           border-radius: var(--ran-player-volume-border-radius, var(--ran-radius-sm, 6px));
-          transition: var(--ran-player-volume-transition, background-color 0.15s ease-out);
+          transition: var(--ran-player-volume-transition, none);
 
           &:hover {
             background: var(--ran-player-volume-hover-background, rgba(255, 255, 255, 0.12));
@@ -631,7 +631,7 @@
           justify-content: center;
           width: var(--ran-player-speed-width, var(--ran-size-6, 30px));
           height: var(--ran-player-speed-height, var(--ran-size-3, 20px));
-          padding: var(--ran-player-speed-padding, 4px 6px);
+          padding: var(--ran-player-speed-padding, 4px 8px);
           border-radius: var(--ran-player-speed-border-radius, var(--ran-radius-sm, 6px));
           color: var(--ran-player-speed-color, #fff);
           font-family: var(--ran-player-speed-font-family, PingFang SC);
@@ -641,7 +641,7 @@
           line-height: var(--ran-player-speed-line-height, normal);
           cursor: var(--ran-player-speed-cursor, pointer);
           outline: var(--ran-player-speed-outline, 0);
-          transition: var(--ran-player-speed-transition, background-color 0.15s ease-out);
+          transition: var(--ran-player-speed-transition, none);
           -webkit-tap-highlight-color: transparent;
 
           &:hover {
@@ -652,6 +652,25 @@
           &:focus {
             outline: var(--ran-player-speed-focus-outline, 0);
             -webkit-tap-highlight-color: transparent;
+          }
+
+          // `r-select`'s own focus-visible ring is deliberately suppressed
+          // for `type="text"` (see `components/select/index.less`) — this is
+          // that type, for the borderless trigger look this row needs, which
+          // otherwise leaves keyboard users with *zero* visible focus
+          // indicator here (DESIGN.md §7: every interactive element needs
+          // one). `:has()` reaches into the select's focus state from the
+          // wrapper — light-DOM `r-select:focus-visible` matches regardless
+          // of shadow encapsulation, since the custom element host itself
+          // (not something inside its shadow root) is the actual focus
+          // target — to draw the ring here instead, in the same light-on-dark
+          // treatment every other control in this row uses.
+          &:has(r-select:focus-visible) {
+            outline: var(
+              --ran-player-speed-focus-visible-outline,
+              2px solid var(--ran-player-focus-outline-color, var(--ran-focus-ring-inverse-color, #fff))
+            );
+            outline-offset: var(--ran-player-speed-focus-visible-outline-offset, 2px);
           }
 
           r-select {
@@ -709,14 +728,14 @@
           font-size: var(--ran-player-subtitle-font-size, var(--ran-text-label-1, 14px));
           width: var(--ran-player-subtitle-width, var(--ran-size-6, 30px));
           height: var(--ran-player-subtitle-height, var(--ran-size-3, 20px));
-          padding: var(--ran-player-subtitle-padding, 4px 6px);
+          padding: var(--ran-player-subtitle-padding, 4px 8px);
           border-radius: var(--ran-player-subtitle-border-radius, var(--ran-radius-sm, 6px));
           font-style: var(--ran-player-subtitle-font-style, normal);
           font-weight: var(--ran-player-subtitle-font-weight, var(--ran-text-label-weight, 500));
           line-height: var(--ran-player-subtitle-line-height, normal);
           cursor: var(--ran-player-subtitle-cursor, pointer);
           outline: var(--ran-player-subtitle-outline, 0);
-          transition: var(--ran-player-subtitle-transition, background-color 0.15s ease-out);
+          transition: var(--ran-player-subtitle-transition, none);
           -webkit-tap-highlight-color: transparent;
 
           &:hover {
@@ -734,6 +753,15 @@
           &:focus {
             outline: var(--ran-player-subtitle-focus-outline, 0);
             -webkit-tap-highlight-color: transparent;
+          }
+
+          // See the identical comment on `&-speed`'s `:has(r-select:focus-visible)` above.
+          &:has(r-select:focus-visible) {
+            outline: var(
+              --ran-player-subtitle-focus-visible-outline,
+              2px solid var(--ran-player-focus-outline-color, var(--ran-focus-ring-inverse-color, #fff))
+            );
+            outline-offset: var(--ran-player-subtitle-focus-visible-outline-offset, 2px);
           }
 
           r-select {
@@ -780,14 +808,14 @@
           font-size: var(--ran-player-clarity-font-size, var(--ran-text-label-1, 14px));
           width: var(--ran-player-clarity-width, var(--ran-size-6, 30px));
           height: var(--ran-player-clarity-height, var(--ran-size-3, 20px));
-          padding: var(--ran-player-clarity-padding, 4px 6px);
+          padding: var(--ran-player-clarity-padding, 4px 8px);
           border-radius: var(--ran-player-clarity-border-radius, var(--ran-radius-sm, 6px));
           font-style: var(--ran-player-clarity-font-style, normal);
           font-weight: var(--ran-player-clarity-font-weight, var(--ran-text-label-weight, 500));
           line-height: var(--ran-player-clarity-line-height, normal);
           cursor: var(--ran-player-clarity-cursor, pointer);
           outline: var(--ran-player-clarity-outline, 0);
-          transition: var(--ran-player-clarity-transition, background-color 0.15s ease-out);
+          transition: var(--ran-player-clarity-transition, none);
           -webkit-tap-highlight-color: transparent;
 
           &:hover {
@@ -857,7 +885,7 @@
           color: var(--ran-player-pip-color, #fff);
           cursor: var(--ran-player-pip-cursor, pointer);
           outline: var(--ran-player-pip-outline, 0);
-          transition: var(--ran-player-pip-transition, background-color 0.15s ease-out);
+          transition: var(--ran-player-pip-transition, none);
           -webkit-tap-highlight-color: transparent;
 
           &:hover {
@@ -881,7 +909,7 @@
             outline-offset: var(--ran-player-pip-focus-visible-outline-offset, 2px);
             border-radius: var(
               --ran-player-pip-focus-visible-border-radius,
-              var(--ran-radius-sm, 4px)
+              var(--ran-radius-sm, 6px)
             );
           }
         }
@@ -897,7 +925,7 @@
           color: var(--ran-player-remote-color, #fff);
           cursor: var(--ran-player-remote-cursor, pointer);
           outline: var(--ran-player-remote-outline, 0);
-          transition: var(--ran-player-remote-transition, background-color 0.15s ease-out);
+          transition: var(--ran-player-remote-transition, none);
           -webkit-tap-highlight-color: transparent;
 
           &:hover {
@@ -921,7 +949,7 @@
             outline-offset: var(--ran-player-remote-focus-visible-outline-offset, 2px);
             border-radius: var(
               --ran-player-remote-focus-visible-border-radius,
-              var(--ran-radius-sm, 4px)
+              var(--ran-radius-sm, 6px)
             );
           }
         }
@@ -941,7 +969,7 @@
           border-radius: var(--ran-player-fullscreen-border-radius, var(--ran-radius-sm, 6px));
           cursor: var(--ran-player-fullscreen-cursor, pointer);
           outline: var(--ran-player-fullscreen-outline, 0);
-          transition: var(--ran-player-fullscreen-transition, background-color 0.15s ease-out);
+          transition: var(--ran-player-fullscreen-transition, none);
           -webkit-tap-highlight-color: transparent;
 
           &:hover {
@@ -961,7 +989,7 @@
             outline-offset: var(--ran-player-fullscreen-focus-visible-outline-offset, 2px);
             border-radius: var(
               --ran-player-fullscreen-focus-visible-border-radius,
-              var(--ran-radius-sm, 4px)
+              var(--ran-radius-sm, 6px)
             );
           }
         }

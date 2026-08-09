@@ -271,6 +271,36 @@ describe('r-popover contract', () => {
     expect(() => popover.placementPosition()).not.toThrow();
   });
 
+  // Regression: `.left`/`.right` in dropdown/index.less position the arrow as an
+  // offset from the *panel's top edge*, which only points at the trigger's
+  // center when the panel's top edge is flush with the trigger's top edge.
+  // computePlacement's boundary shift (trigger near a viewport edge) breaks
+  // that assumption — the panel moves vertically but nothing told the arrow —
+  // so `placementPosition` must feed the real top-to-top delta back in via
+  // `--ran-dropdown-arrow-anchor-offset-y`, the same way it already does for
+  // the X axis on top/bottom via `--ran-dropdown-arrow-anchor-offset`.
+  it('placement=left/right feeds a Y-axis correction when the panel top drifts from the trigger top', async () => {
+    const sleep = (ms = 50) => new Promise((r) => setTimeout(r, ms));
+    const popover = document.createElement('r-popover') as any;
+    popover.placement = 'right';
+    popover.innerHTML = `<div id="trigger">Trigger</div><r-content>Content</r-content>`;
+    document.body.appendChild(popover);
+    await sleep(100);
+
+    const trigger = popover.querySelector('#trigger') as HTMLElement;
+    trigger.getBoundingClientRect = () =>
+      ({ top: 780, left: 400, width: 40, height: 40, bottom: 820, right: 440 }) as DOMRect;
+    // Simulates a boundary-clamped panel: its real top (600) no longer matches
+    // the trigger's top (780) — exactly the case `.left`/`.right`'s formula
+    // otherwise has no way to know about.
+    popover.popoverContent.getBoundingClientRect = () =>
+      ({ top: 600, left: 500, width: 150, height: 200, bottom: 800, right: 650 }) as DOMRect;
+
+    popover.placementPosition();
+
+    expect(popover.popoverContent.style.getPropertyValue('--ran-dropdown-arrow-anchor-offset-y')).toBe('180px');
+  });
+
   it('changePlacement sets arrow=top when placement is bottom', async () => {
     const sleep = (ms = 50) => new Promise((r) => setTimeout(r, ms));
     const popover = document.createElement('r-popover') as any;

@@ -14,6 +14,8 @@
 
 ## 代码演示
 
+每个位数的桶内部用[计数排序](../count/index.md)来排序——小范围、密集的数值区间正是计数排序擅长的场景，这也是为什么基数排序的每位分桶天然要配计数排序，而不是通用的比较排序。
+
 ```ts
 const getMax = (list: Array<number>) => {
   let max = list[0];
@@ -23,6 +25,27 @@ const getMax = (list: Array<number>) => {
     }
   }
   return max;
+};
+/**
+ * @description: 计数排序——完整讲解见计数排序页面。
+ * @param {Array<number>} list
+ * @return {Array<number>}
+ */
+const count = (list: Array<number>): Array<number> => {
+  if (list.length <= 1) return list;
+  const max = getMax(list);
+  const countList = new Array(max + 1).fill(0);
+  list.forEach((item) => {
+    countList[item] = (countList[item] || 0) + 1;
+  });
+  const result: Array<number> = [];
+  for (let i = 0; i < countList.length; i++) {
+    while (countList[i]) {
+      result.push(i);
+      countList[i]--;
+    }
+  }
+  return result;
 };
 const getDigit = (num: number) => {
   let digit = 1;

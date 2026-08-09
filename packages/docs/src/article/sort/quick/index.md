@@ -69,3 +69,7 @@ const quick = (list: number[] = []): number[] => {
   return combine(list, 0, size - 1);
 };
 ```
+
+## Algorithm analysis
+
+Quicksort's average time complexity is O(n log n), but the worst case is O(n²) when every pivot choice splits the list as unevenly as possible. This implementation always picks the leftmost element as the pivot (`partition`'s `pivot = left`), so — unlike a randomized-pivot quicksort — an already-sorted or reverse-sorted input triggers exactly that worst case. Quicksort is not stable, and while it sorts in place, the recursive calls in `combine` use O(log n) stack space on average, growing to O(n) in the worst case.
