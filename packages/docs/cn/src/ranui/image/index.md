@@ -22,9 +22,9 @@ description: 'ranui Image（<r-image>）渲染图片并内置加载失败时的�
 
 ### 属性
 
-| 属性       | 类型     | 默认值             | 说明                                                       |
-| ---------- | -------- | ------------------- | ------------------------------------------------------------ |
-| `src`      | `string` | `''`                | 图片地址。响应式——挂载后修改会重新加载图片。               |
+| 属性       | 类型     | 默认值              | 说明                                                        |
+| ---------- | -------- | ------------------- | ----------------------------------------------------------- |
+| `src`      | `string` | `''`                | 图片地址。响应式——挂载后修改会重新加载图片。                |
 | `alt`      | `string` | `''`                | 转发给内部 `<img>` 的替代文本。留空表示这是一张装饰性图片。 |
 | `fallback` | `string` | 内置的裂图 data URI | `src` 加载失败时展示的图片。                                |
 | `sheet`    | `string` | `''`                | 注入到组件 Shadow DOM 中的 CSS。                            |
@@ -67,9 +67,10 @@ description: 'ranui Image（<r-image>）渲染图片并内置加载失败时的�
 `sheet` 会把原始 CSS 注入组件的 Shadow DOM。可以用它来定制内部的 `.ran-image` 容器或内部的 `<img>`。
 
 <r-img
-  src="https://picsum.photos/id/1043/240/160"
-  sheet="img { border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,.25); }"
-></r-img>
+src="https://picsum.photos/id/1043/240/160"
+sheet="img { border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,.25); }"
+
+> </r-img>
 
 ```html
 <r-img

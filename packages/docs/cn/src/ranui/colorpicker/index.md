@@ -19,8 +19,7 @@ description: '一个紧凑的色块，点击展开面板，包含饱和度/明�
 </Demo>
 
 ```html
-<r-colorpicker value="#006bff"></r-colorpicker>
-<r-colorpicker value="rgba(255,0,0,0.5)"></r-colorpicker>
+<r-colorpicker value="#006bff"></r-colorpicker> <r-colorpicker value="rgba(255,0,0,0.5)"></r-colorpicker>
 ```
 
 点击色块（或聚焦后按 Enter/Space）即可打开面板。色相与透明度滑块支持键盘操作：
@@ -30,11 +29,11 @@ description: '一个紧凑的色块，点击展开面板，包含饱和度/明�
 
 ### 属性
 
-| 属性       | 类型      | 默认值  | 说明                                                              |
-| ---------- | --------- | ------- | ------------------------------------------------------------------- |
-| `value`    | `string`  | `''`    | 当前颜色，为 CSS 颜色字符串（HEX、`rgb(...)`、`rgba(...)`）        |
-| `disabled` | `boolean` | `false` | 设置后色块无法打开，会被移出 Tab 序列，并标记为 `aria-disabled`    |
-| `sheet`    | `string`  | `''`    | 注入到组件 shadow DOM 的 CSS                                       |
+| 属性       | 类型      | 默认值  | 说明                                                            |
+| ---------- | --------- | ------- | --------------------------------------------------------------- |
+| `value`    | `string`  | `''`    | 当前颜色，为 CSS 颜色字符串（HEX、`rgb(...)`、`rgba(...)`）     |
+| `disabled` | `boolean` | `false` | 设置后色块无法打开，会被移出 Tab 序列，并标记为 `aria-disabled` |
+| `sheet`    | `string`  | `''`    | 注入到组件 shadow DOM 的 CSS                                    |
 
 ### 颜色值 `value`
 
@@ -95,7 +94,7 @@ picker.disabled = false; // 重新启用
 该事件会**冒泡**且是 **composed**（可跨越 shadow 边界）。`event.detail` 携带各种格式的颜色：
 
 | 字段    | 类型     | 示例                                      |
-| ------- | -------- | ------------------------------------------ |
+| ------- | -------- | ----------------------------------------- |
 | `value` | `string` | `"#1677ff"` / `"rgba(22, 119, 255, 0.5)"` |
 | `hex`   | `string` | `"#1677ff"`                               |
 | `rgb`   | `string` | `"rgb(22, 119, 255)"`                     |
@@ -117,10 +116,10 @@ picker.disabled = false; // 重新启用
 
 触发色块暴露两个可在 shadow DOM 外部样式化的 part：
 
-| Part     | 说明                                     |
-| -------- | ---------------------------------------- |
-| `block`  | 色块容器（带棋盘格背景的触发框）          |
-| `swatch` | 显示当前颜色的内部填充块                  |
+| Part     | 说明                             |
+| -------- | -------------------------------- |
+| `block`  | 色块容器（带棋盘格背景的触发框） |
+| `swatch` | 显示当前颜色的内部填充块         |
 
 ```css
 r-colorpicker::part(block) {
@@ -135,14 +134,14 @@ r-colorpicker::part(block) {
 
 触发色块读取以下令牌：
 
-| 变量                                     | 用途             |
-| ----------------------------------------- | ---------------- |
-| `--ran-colorpicker-background`           | 色块背景         |
-| `--ran-colorpicker-border`               | 色块边框         |
-| `--ran-colorpicker-hover-border-color`   | 悬停时的边框颜色 |
-| `--ran-colorpicker-border-radius`        | 色块圆角         |
-| `--ran-colorpicker-block-border-radius`  | 内部块圆角       |
-| `--ran-colorpicker-transition`           | 悬停过渡         |
+| 变量                                    | 用途             |
+| --------------------------------------- | ---------------- |
+| `--ran-colorpicker-background`          | 色块背景         |
+| `--ran-colorpicker-border`              | 色块边框         |
+| `--ran-colorpicker-hover-border-color`  | 悬停时的边框颜色 |
+| `--ran-colorpicker-border-radius`       | 色块圆角         |
+| `--ran-colorpicker-block-border-radius` | 内部块圆角       |
+| `--ran-colorpicker-transition`          | 悬停过渡         |
 
 ```css
 r-colorpicker {

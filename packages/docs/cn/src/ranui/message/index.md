@@ -31,13 +31,13 @@ message.success('项目已删除');
 
 每个方法都会追加一条 toast，并在 `duration` 毫秒后自动消失（默认 `3000`）。以下五个方法共享同一套签名。
 
-| 方法                 | 说明                                       |
-| -------------------- | ------------------------------------------ |
-| `message.info()`     | 中性信息提示（蓝色信息图标）               |
-| `message.success()`  | 成功提示（绿色对勾图标）                   |
-| `message.warning()`  | 警告提示（琥珀色图标），以强调方式播报     |
-| `message.error()`    | 错误提示（红色图标），以强调方式播报       |
-| `message.toast()`    | 无图标的纯深色提示                         |
+| 方法                | 说明                                   |
+| ------------------- | -------------------------------------- |
+| `message.info()`    | 中性信息提示（蓝色信息图标）           |
+| `message.success()` | 成功提示（绿色对勾图标）               |
+| `message.warning()` | 警告提示（琥珀色图标），以强调方式播报 |
+| `message.error()`   | 错误提示（红色图标），以强调方式播报   |
+| `message.toast()`   | 无图标的纯深色提示                     |
 
 ### 方法签名
 
@@ -57,14 +57,14 @@ message.info({
 
 ### 选项
 
-| 选项           | 类型                         | 默认值           | 说明                                                       |
-| -------------- | ---------------------------- | ---------------- | ------------------------------------------------------------ |
-| `content`      | `string`                     | —                | 显示的文本内容（以对象形式传入时为必填项）                 |
-| `duration`     | `number`                     | `3000`           | 自动关闭的延时，单位毫秒                                   |
-| `close`        | `() => void`                 | —                | toast 被移除后触发的回调函数                                |
-| `top`          | `number \| string`           | `8`               | toast 堆栈相对于所在容器顶部的偏移量（数字将按 px 处理）    |
-| `zIndex`       | `number \| string`           | `1200`            | toast 容器的堆叠层级（z-index）                              |
-| `getContainer` | `() => HTMLElement \| null`  | `document.body`  | 返回 toast 堆栈挂载到的目标元素                              |
+| 选项           | 类型                        | 默认值          | 说明                                                     |
+| -------------- | --------------------------- | --------------- | -------------------------------------------------------- |
+| `content`      | `string`                    | —               | 显示的文本内容（以对象形式传入时为必填项）               |
+| `duration`     | `number`                    | `3000`          | 自动关闭的延时，单位毫秒                                 |
+| `close`        | `() => void`                | —               | toast 被移除后触发的回调函数                             |
+| `top`          | `number \| string`          | `8`             | toast 堆栈相对于所在容器顶部的偏移量（数字将按 px 处理） |
+| `zIndex`       | `number \| string`          | `1200`          | toast 容器的堆叠层级（z-index）                          |
+| `getContainer` | `() => HTMLElement \| null` | `document.body` | 返回 toast 堆栈挂载到的目标元素                          |
 
 > 传入 `null`、`undefined` 或空参数不会有任何效果——不会显示任何内容。
 
@@ -72,11 +72,11 @@ message.info({
 
 每条 toast 都是一个 `<r-message>` 自定义元素。全局 API 会替你设置这些属性，但也可以直接使用它们。
 
-| 属性      | 类型     | 默认值 | 说明                                                                                |
-| --------- | -------- | ------ | ------------------------------------------------------------------------------------- |
+| 属性      | 类型     | 默认值 | 说明                                                                                           |
+| --------- | -------- | ------ | ---------------------------------------------------------------------------------------------- |
 | `type`    | `string` | —      | `info`、`success`、`warning`、`error`、`toast` 之一，决定图标/颜色以及 ARIA live region 的角色 |
-| `content` | `string` | —      | 渲染在 toast 内部的文本                                                              |
-| `sheet`   | `string` | `''`   | 注入到组件 Shadow DOM 中的 CSS                                                        |
+| `content` | `string` | —      | 渲染在 toast 内部的文本                                                                        |
+| `sheet`   | `string` | `''`   | 注入到组件 Shadow DOM 中的 CSS                                                                 |
 
 ## 提示类型 `type`
 
@@ -161,14 +161,14 @@ message.info({
 
 toast 堆栈挂载在一个传送到 `body` 的容器中；每个 `<r-message>` 都在其 Shadow DOM 内渲染内容，表面可通过 CSS 变量主题化（均带有合理的兜底值）。
 
-| CSS 变量                              | 默认值                          | 说明               |
-| -------------------------------------- | -------------------------------- | ------------------ |
-| `--ran-message-content-background`    | `var(--ran-color-bg-elevated)`  | toast 表面背景色   |
-| `--ran-message-content-border-radius` | `var(--ran-radius-md)`          | toast 圆角         |
-| `--ran-message-content-box-shadow`    | `var(--ran-shadow-menu)`        | toast 阴影层级     |
-| `--ran-message-text-color`            | `var(--ran-color-text)`         | toast 文本颜色     |
-| `--ran-message-z-index`               | `var(--ran-z-message, 1200)`    | 堆栈层级（z-index）|
-| `--ran-message-top`                   | `8px`                            | 堆栈相对顶部的偏移 |
+| CSS 变量                              | 默认值                         | 说明                |
+| ------------------------------------- | ------------------------------ | ------------------- |
+| `--ran-message-content-background`    | `var(--ran-color-bg-elevated)` | toast 表面背景色    |
+| `--ran-message-content-border-radius` | `var(--ran-radius-md)`         | toast 圆角          |
+| `--ran-message-content-box-shadow`    | `var(--ran-shadow-menu)`       | toast 阴影层级      |
+| `--ran-message-text-color`            | `var(--ran-color-text)`        | toast 文本颜色      |
+| `--ran-message-z-index`               | `var(--ran-z-message, 1200)`   | 堆栈层级（z-index） |
+| `--ran-message-top`                   | `8px`                          | 堆栈相对顶部的偏移  |
 
 ## 最佳实践
 

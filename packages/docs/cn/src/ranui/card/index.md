@@ -30,12 +30,12 @@ description: '带有页眉、主体和页脚区域的结构化内容容器——
 
 ### 属性
 
-| 属性          | 类型      | 默认值  | 说明                                                   |
-| ------------- | --------- | ------- | ------------------------------------------------------ |
-| `title`       | `string`  | `''`    | 卡片标题，显示在页眉顶部。为空时隐藏。                 |
-| `description` | `string`  | `''`    | 渲染在标题下方的副标题。为空时隐藏。                   |
-| `hoverable`   | `boolean` | `false` | 交互式卡片：悬停时边框加深，并抬升至悬浮阴影。         |
-| `sheet`       | `string`  | `''`    | 注入到卡片 Shadow DOM 中的 CSS。                       |
+| 属性          | 类型      | 默认值  | 说明                                           |
+| ------------- | --------- | ------- | ---------------------------------------------- |
+| `title`       | `string`  | `''`    | 卡片标题，显示在页眉顶部。为空时隐藏。         |
+| `description` | `string`  | `''`    | 渲染在标题下方的副标题。为空时隐藏。           |
+| `hoverable`   | `boolean` | `false` | 交互式卡片：悬停时边框加深，并抬升至悬浮阴影。 |
+| `sheet`       | `string`  | `''`    | 注入到卡片 Shadow DOM 中的 CSS。               |
 
 ### 标题 `title`
 
@@ -103,14 +103,14 @@ description: '带有页眉、主体和页脚区域的结构化内容容器——
 
 卡片暴露以下 `::part()` 钩子，供外部样式使用：
 
-| 部件          | 说明                       |
-| ------------- | -------------------------- |
-| `card`        | 卡片外层容器。             |
-| `header`      | 页眉行。                   |
-| `title`       | 标题文本。                 |
-| `description` | 副标题文本。               |
-| `extra`       | 页眉中的 `extra` 插槽。    |
-| `body`        | 主体区域（默认插槽）。     |
+| 部件          | 说明                        |
+| ------------- | --------------------------- |
+| `card`        | 卡片外层容器。              |
+| `header`      | 页眉行。                    |
+| `title`       | 标题文本。                  |
+| `description` | 副标题文本。                |
+| `extra`       | 页眉中的 `extra` 插槽。     |
+| `body`        | 主体区域（默认插槽）。      |
 | `footer`      | 页脚区域（`footer` 插槽）。 |
 
 可覆盖的 CSS 变量：`--ran-card-display`、`--ran-card-min-height`、`--ran-card-gap`、`--ran-card-padding`、`--ran-card-radius`、`--ran-card-background`、`--ran-card-border-color`、`--ran-card-shadow`、`--ran-card-hover-border-color`、`--ran-card-hover-shadow`（后两个配合 `hoverable` 生效）、`--ran-card-title-color`、`--ran-card-title-font-size`、`--ran-card-title-font-weight`、`--ran-card-description-color`、`--ran-card-description-font-size`。

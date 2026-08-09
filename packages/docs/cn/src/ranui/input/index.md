@@ -103,8 +103,7 @@ description: 'ranui Input（<r-input>）是用于键盘输入的基础表单控�
 </Demo>
 
 ```html
-<r-input icon="lock" type="password" placeholder="密码"></r-input>
-<r-input type="number" placeholder="数字"></r-input>
+<r-input icon="lock" type="password" placeholder="密码"></r-input> <r-input type="number" placeholder="数字"></r-input>
 ```
 
 ### 校验状态 `status`

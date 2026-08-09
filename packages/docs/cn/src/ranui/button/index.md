@@ -81,8 +81,7 @@ description: 'ranui Button（<r-button>）用于触发即时操作，支持多�
 </Demo>
 
 ```html
-<r-button type="default" icon="user">默认按钮</r-button>
-<r-button type="primary" icon="home">主要按钮</r-button>
+<r-button type="default" icon="user">默认按钮</r-button> <r-button type="primary" icon="home">主要按钮</r-button>
 ```
 
 ### 特效控制 `effect`

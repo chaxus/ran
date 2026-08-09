@@ -207,23 +207,23 @@ const router = createRouter({
 
 所有钩子方法都会返回一个**取消订阅函数**。
 
-| 名称                     | 签名 / 类型                                              | 说明                                       |
-| ------------------------ | --------------------------------------------------------- | ------------------------------------------- |
-| `push(path)`             | `(path: string) => Promise<void>`                          | 导航并新增一条历史记录                     |
-| `replace(path)`          | `(path: string) => Promise<void>`                          | 导航并替换当前历史记录                     |
-| `back()`                 | `() => void`                                               | `history.back()`                            |
-| `forward()`              | `() => void`                                               | `history.forward()`                         |
-| `go(delta)`              | `(delta: number) => void`                                  | `history.go(delta)`                         |
-| `beforeEach(guard)`      | `(guard: NavigationGuard) => () => void`                    | 注册导航守卫；在导航提交前运行             |
-| `afterEach(handler)`     | `(handler: RouteChangeHandler) => () => void`                | 导航后钩子；DOM 更新后运行                 |
-| `onRouteChange(handler)` | `(handler: RouteChangeHandler) => () => void`                | 订阅每次路由变化                           |
-| `onPageSwap(handler)`    | `(handler: (e: PageSwapEvent) => void) => () => void`        | 跨文档 `pageswap` 事件，仅 MPA 模式有效    |
-| `onPageReveal(handler)`  | `(handler: (e: PageRevealEvent) => void) => () => void`      | 跨文档 `pagereveal` 事件，仅 MPA 模式有效  |
-| `destroy()`              | `() => void`                                               | 移除所有监听器和注入的 CSS                 |
-| `currentRoute`           | `RouteLocation \| null`                                     | 当前路由位置对象                           |
-| `mode`                   | `'history' \| 'hash'`                                       | History 模式                               |
-| `base`                   | `string`                                                    | 基础路径前缀                               |
-| `routes`                 | `RouteConfig[]`                                             | 已注册的路由配置                           |
+| 名称                     | 签名 / 类型                                             | 说明                                      |
+| ------------------------ | ------------------------------------------------------- | ----------------------------------------- |
+| `push(path)`             | `(path: string) => Promise<void>`                       | 导航并新增一条历史记录                    |
+| `replace(path)`          | `(path: string) => Promise<void>`                       | 导航并替换当前历史记录                    |
+| `back()`                 | `() => void`                                            | `history.back()`                          |
+| `forward()`              | `() => void`                                            | `history.forward()`                       |
+| `go(delta)`              | `(delta: number) => void`                               | `history.go(delta)`                       |
+| `beforeEach(guard)`      | `(guard: NavigationGuard) => () => void`                | 注册导航守卫；在导航提交前运行            |
+| `afterEach(handler)`     | `(handler: RouteChangeHandler) => () => void`           | 导航后钩子；DOM 更新后运行                |
+| `onRouteChange(handler)` | `(handler: RouteChangeHandler) => () => void`           | 订阅每次路由变化                          |
+| `onPageSwap(handler)`    | `(handler: (e: PageSwapEvent) => void) => () => void`   | 跨文档 `pageswap` 事件，仅 MPA 模式有效   |
+| `onPageReveal(handler)`  | `(handler: (e: PageRevealEvent) => void) => () => void` | 跨文档 `pagereveal` 事件，仅 MPA 模式有效 |
+| `destroy()`              | `() => void`                                            | 移除所有监听器和注入的 CSS                |
+| `currentRoute`           | `RouteLocation \| null`                                 | 当前路由位置对象                          |
+| `mode`                   | `'history' \| 'hash'`                                   | History 模式                              |
+| `base`                   | `string`                                                | 基础路径前缀                              |
+| `routes`                 | `RouteConfig[]`                                         | 已注册的路由配置                          |
 
 ```js
 router.push('/users/42');
