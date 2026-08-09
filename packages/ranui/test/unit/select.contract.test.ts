@@ -641,9 +641,12 @@ describe('r-select contract', () => {
       (o as any).scrollIntoView = vi.fn();
     });
 
-    // From nothing active, ArrowDown targets index 1 (disabled) → lands on index 2.
+    // From nothing active, ArrowDown lands on the first (enabled) option.
     select.keydownSelect(new KeyboardEvent('keydown', { key: 'ArrowDown', cancelable: true }));
+    expect(select._activeOption).toBe(opts[0]);
 
+    // From index 0, ArrowDown targets index 1 (disabled) → skips to index 2.
+    select.keydownSelect(new KeyboardEvent('keydown', { key: 'ArrowDown', cancelable: true }));
     expect(opts[1].getAttribute('aria-selected')).toBe('false');
     expect(opts[2].getAttribute('aria-selected')).toBe('true');
     expect(select._activeOption).toBe(opts[2]);

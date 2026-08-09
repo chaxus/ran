@@ -106,7 +106,8 @@ describe('QuestQueue', () => {
     const done = vi.fn();
     void queue.add(async () => 1);
     void queue.add(async () => 2);
-    const idle = queue.onIdle().then(() => done());
+    // oxlint-disable-next-line promise/no-callback-in-promise
+    const idle = queue.onIdle().then(done);
     expect(done).not.toHaveBeenCalled();
     await idle;
     expect(queue.idle).toBe(true);

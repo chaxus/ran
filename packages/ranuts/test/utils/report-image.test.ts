@@ -108,8 +108,7 @@ describe('isImageSize', () => {
         onerror?: () => void;
         src = '';
         constructor() {
-          // oxlint-disable-next-line typescript/no-this-alias -- capture the constructed
-          // mock instance so the test can fire its onload/onerror from outside
+          // oxlint-disable-next-line typescript/no-this-alias
           instance = this;
         }
       },
