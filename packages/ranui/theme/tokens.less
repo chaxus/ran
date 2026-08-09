@@ -244,4 +244,8 @@
   --ran-skin-border-style: solid;
   --ran-skin-raised-shadow: var(--ran-shadow-elevated);
   --ran-skin-font-family: var(--ran-font-family);
+  /* `border-image-slice`'s inset — was repeated as an identical, un-shared
+     4px literal in button/checkbox/input/modal/message; formalized here the
+     same way border-width already was. */
+  --ran-skin-border-image-width: 4px;
 }
