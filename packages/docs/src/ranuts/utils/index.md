@@ -26,10 +26,8 @@ description: 'Overview of ranuts utility functions: functional helpers (debounce
 | toString              | Convert value to string type                                         | [toString](./to_string.md)                              |
 | transformText         | Convert ArrayBuffer to text                                          | [transformText](./transform_text.md)                    |
 | checkEncoding         | Detect character encoding of Uint8Array data                         | [checkEncoding](./check_encoding.md)                    |
-| changeHumpToLowerCase | Convert camelCase to snake_case naming                               | [changeHumpToLowerCase](./change_hump_to_lower_case.md) |
 | getMatchingSentences  | Extract complete sentences containing keywords                       | [getMatchingSentences](./get_matching_sentences.md)     |
 | isString              | Determine if value is string type                                    | [isString](./is_string.md)                              |
-| str2Xml               | String is converted to `xml`                                         | [str2Xml](./str2xml.md)                                 |
 
 ## Object Processing
 
@@ -77,7 +75,6 @@ description: 'Overview of ranuts utility functions: functional helpers (debounce
 | isWeiXin      | Determine if browser is WeChat           | [isWeiXin](./is_weixin.md)           |
 | isClient      | Determine if environment is client       | [isClient](./is_client.md)           |
 | isSafari      | Determine if browser is Safari           | [isSafari](./is_safari.md)           |
-| isBangDevice  | Determine if device is iPhone with notch | [isBangDevice](./is_bang_device.md)  |
 | currentDevice | Get current device type                  | [currentDevice](./current_device.md) |
 
 ## DOM Manipulation
@@ -103,7 +100,6 @@ description: 'Overview of ranuts utility functions: functional helpers (debounce
 | Method            | Description                       | Detail                                         |
 | ----------------- | --------------------------------- | ---------------------------------------------- |
 | getAllQueryString | Extract query parameters from URL | [getAllQueryString](./get_all_query_string.md) |
-| getQuery          | Extract query parameters from URL | [getQuery](./get_query.md)                     |
 | encodeUrl         | Safely encode URL                 | [encodeUrl](./encode_url.md)                   |
 | appendUrl         | Append query parameters to URL    | [appendUrl](./append_url.md)                   |
 
