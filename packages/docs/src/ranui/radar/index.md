@@ -1,3 +1,7 @@
+---
+description: 'A radar/spider chart for comparing several metrics of one dataset on a 2D canvas.'
+---
+
 # Radar
 
 Radar chart for comparing several metrics of one dataset on a two-dimensional canvas.

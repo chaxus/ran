@@ -1,3 +1,7 @@
+---
+description: 'A three-state system/light/dark segmented control wired to ranui''s theme API, synced across tabs.'
+---
+
 # ThemeSwitch
 
 A three-state segmented control — **system / light / dark** — wired to ranui's

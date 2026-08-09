@@ -1,3 +1,7 @@
+---
+description: 'A structured content container with header, body, and footer zones — a Geist-style bordered surface for grouping related content.'
+---
+
 # Card
 
 A structured content container with header, body, and footer zones for grouping related content. Cards are Geist-style bordered surfaces — page background plus a 1px border, not a gray fill — and stay inert on hover unless you opt in with `hoverable`.

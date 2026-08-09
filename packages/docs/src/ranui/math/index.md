@@ -1,3 +1,7 @@
+---
+description: 'Render LaTeX math formulas as native MathML using Temml — no canvas, SVG, or KaTeX runtime.'
+---
+
 # Math
 
 Render high-quality LaTeX math formulas in HTML pages using Temml, compiled straight to native MathML.

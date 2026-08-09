@@ -1,3 +1,7 @@
+---
+description: 'A routing outlet that shows its slotted content only while the current path matches a pattern, for use inside r-router.'
+---
+
 # Route
 
 A routing outlet element. Placed inside an [`r-router`](../router/), it shows its slotted content when the current path matches its `path` pattern and hides it otherwise.

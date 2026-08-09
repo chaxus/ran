@@ -1,3 +1,7 @@
+---
+description: 'A router-aware anchor that intercepts in-app navigation and falls through to the browser for external links.'
+---
+
 # Link
 
 Router-aware anchor that renders an `<a>` around its slotted content and intercepts in-app navigation.

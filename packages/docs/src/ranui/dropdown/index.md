@@ -1,3 +1,7 @@
+---
+description: 'A low-level floating-panel primitive — the positioning and z-index building block that r-popover and r-select are built on.'
+---
+
 # Dropdown
 
 A low-level floating-panel primitive: a rounded, elevated surface with an optional directional arrow. It carries the overlay z-index and is the building block that `r-popover` and `r-select` position and portal to `<body>`.
@@ -116,7 +120,20 @@ r-dropdown::part(dropdown) {
 }
 ```
 
-Every visual property is overridable via `--ran-dropdown-*` tokens, for example `--ran-dropdown-background`, `--ran-dropdown-border-radius`, `--ran-dropdown-box-shadow`, `--ran-dropdown-padding`, `--ran-dropdown-arrow-width`, and `--ran-dropdown-host-z-index`.
+Every visual property is overridable via `--ran-dropdown-*` tokens, for example `--ran-dropdown-background`, `--ran-dropdown-border-radius`, `--ran-dropdown-box-shadow`, `--ran-dropdown-padding`, `--ran-dropdown-arrow-width`, and `--ran-dropdown-host-z-index`. The arrow is an inline SVG scaled by its own `viewBox`, so `--ran-dropdown-arrow-width`/`-height` resize the actual triangle, not just an empty box around it:
+
+<Demo>
+  <r-dropdown arrow="top" style="display: inline-block; width: 220px; margin: 20px; --ran-dropdown-arrow-width: 28px; --ran-dropdown-arrow-height: 28px;">
+    <div style="padding: 12px;">--ran-dropdown-arrow-width: 28px</div>
+  </r-dropdown>
+</Demo>
+
+```css
+r-dropdown {
+  --ran-dropdown-arrow-width: 28px;
+  --ran-dropdown-arrow-height: 28px;
+}
+```
 
 ## Best Practices
 

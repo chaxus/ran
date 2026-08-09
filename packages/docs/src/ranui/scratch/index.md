@@ -1,3 +1,7 @@
+---
+description: 'An experimental scratch-ticket surface where dragging a canvas cover reveals content beneath, via the Pointer Events API.'
+---
+
 # Scratch
 
 Experimental scratch-ticket surface that renders a full-size `<canvas>` cover over a reveal layer inside its shadow DOM. Dragging across the canvas erases the covering with `destination-out` compositing along the actual path your pointer traces, and scratching away enough area reveals what sits underneath. The host is `display: block`, so give it an explicit width and height.

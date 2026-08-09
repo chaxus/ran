@@ -1,3 +1,7 @@
+---
+description: "ranui's light/dark theming system built on Geist-based design tokens — components read semantic tokens instead of hard-coding colors."
+---
+
 # Theming
 
 ranui ships a light/dark theme system built on **design tokens** (CSS custom properties).

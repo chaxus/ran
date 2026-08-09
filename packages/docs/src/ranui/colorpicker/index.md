@@ -1,3 +1,7 @@
+---
+description: 'A compact color swatch that opens a picker panel with saturation/lightness, hue, and alpha controls, plus a HEX/RGB input.'
+---
+
 # Color Picker
 
 A compact color swatch that opens a popover panel with a saturation/lightness palette, a hue slider, an alpha slider, and a HEX/RGB value input. Its `value` accepts and emits standard CSS color strings.

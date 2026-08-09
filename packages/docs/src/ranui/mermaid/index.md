@@ -1,3 +1,7 @@
+---
+description: 'Render Mermaid diagrams (flowcharts, sequence, class, state, gantt) as a framework-agnostic web component with lazy-loaded rendering.'
+---
+
 # Mermaid
 
 Render [Mermaid](https://mermaid.js.org/) diagrams (flowcharts, sequence, class, state,

@@ -1,3 +1,7 @@
+---
+description: 'A liquid frosted-glass surface — backdrop blur, SVG light-bending displacement, and a specular rim, degrading gracefully where backdrop-filter is unsupported.'
+---
+
 # Glass
 
 A liquid / frosted glass surface. `<r-glass>` frosts and refracts whatever sits behind it — `backdrop-filter` blur + saturate for the frost, an SVG `feDisplacementMap` for the liquid light-bending, plus a specular rim and highlight for the glass read. Everything is token-driven; content goes in the default slot.

@@ -1,3 +1,7 @@
+---
+description: 'A page-section surface with an optional accessible heading and subtitle above a slotted body.'
+---
+
 # Section
 
 Page section surface with an optional heading and subtitle above a slotted body.

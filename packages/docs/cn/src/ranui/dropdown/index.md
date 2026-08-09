@@ -1,3 +1,7 @@
+---
+description: '底层浮层面板原语——r-popover 和 r-select 用来定位、控制层级的基础构建块。'
+---
+
 # Dropdown 下拉面板
 
 底层浮层面板原语：一个圆角、带投影的悬浮表面，可选配指向箭头。它自身携带浮层 z-index，
@@ -57,6 +61,14 @@ r-dropdown::part(dropdown) {
   border: 1px solid var(--line);
 }
 ```
+
+箭头是一个按自身 `viewBox` 缩放的内联 SVG，所以 `--ran-dropdown-arrow-width`/`-height` 改的是真正的三角形大小，不再只是外面那个空盒子：
+
+<Demo>
+  <r-dropdown arrow="top" style="display: inline-block; width: 220px; margin: 20px; --ran-dropdown-arrow-width: 28px; --ran-dropdown-arrow-height: 28px;">
+    <div style="padding: 12px;">--ran-dropdown-arrow-width: 28px</div>
+  </r-dropdown>
+</Demo>
 
 ## 说明
 

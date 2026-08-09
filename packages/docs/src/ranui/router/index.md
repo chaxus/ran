@@ -1,3 +1,7 @@
+---
+description: 'Client-side SPA routing with declarative components, a JS API, navigation guards, View Transitions, and cross-document (MPA) support.'
+---
+
 # Router
 
 Client-side routing for Single Page Applications. Provides declarative HTML components and a JavaScript API with navigation guards, View Transitions, and cross-document (MPA) support.
