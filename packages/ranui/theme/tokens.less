@@ -136,6 +136,27 @@
   --ran-space-16: 64px;
   --ran-space-24: 96px;
 
+  /* ── Sizing (element intrinsic dimensions: icons, control heights,
+     small square/rect controls) — a deliberately separate scale from
+     Spacing above. Sizing and spacing have different ranges and
+     progressions (a 4px-doubling spacing scale produces awkward values
+     for icon/control sizes), and consumers should be able to retune one
+     without perturbing the other — an icon getting bigger shouldn't also
+     widen every gap that happens to share its px value. Steps below are
+     not invented: they formalize the values already repeated across
+     components (checkbox, skeleton, select, theme-switch, colorpicker,
+     input, mermaid/math/theme-switch buttons, player controls) before
+     this scale existed. Numeric overlap with a Spacing step (e.g.
+     --ran-size-4 / --ran-space-6 both 24px) is coincidence, not aliasing —
+     keep them independent tokens. */
+  --ran-size-1: 16px;
+  --ran-size-2: 18px;
+  --ran-size-3: 20px;
+  --ran-size-4: 24px;
+  --ran-size-5: 28px;
+  --ran-size-6: 30px;
+  --ran-size-7: 32px;
+
   /* ── Elevation — three tiers, each must be perceptible ──────────────
      elevated = in-flow surfaces (card, section), kept subtle since they
      also have a border. menu = floating overlays (dropdown, select,

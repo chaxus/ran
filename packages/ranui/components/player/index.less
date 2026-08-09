@@ -235,7 +235,7 @@
       position: var(--ran-player-tip-position, absolute);
       top: var(--ran-player-tip-top, -12px);
       max-width: var(--ran-player-tip-max-width, 60px);
-      height: var(--ran-player-tip-height, 24px);
+      height: var(--ran-player-tip-height, var(--ran-size-4, 24px));
       line-height: var(--ran-player-tip-line-height, 9px);
       transform-origin: var(--ran-x, 50%) var(--ran-y, 50%);
       box-sizing: var(--ran-player-tip-box-sizing, border-box);
@@ -391,8 +391,8 @@
         align-items: var(--ran-player-controls-left-align-items, center);
 
         &-btn {
-          width: var(--ran-player-toggle-width, 20px);
-          height: var(--ran-player-toggle-height, 20px);
+          width: var(--ran-player-toggle-width, var(--ran-size-3, 20px));
+          height: var(--ran-player-toggle-height, var(--ran-size-3, 20px));
           color: var(--ran-player-toggle-color, #fff);
           cursor: var(--ran-player-toggle-cursor, pointer);
           outline: var(--ran-player-toggle-outline, 0);
@@ -483,8 +483,8 @@
           cursor: var(--ran-player-volume-cursor, pointer);
 
           &-icon {
-            width: var(--ran-player-volume-icon-width, 18px);
-            height: var(--ran-player-volume-icon-height, 18px);
+            width: var(--ran-player-volume-icon-width, var(--ran-size-2, 18px));
+            height: var(--ran-player-volume-icon-height, var(--ran-size-2, 18px));
             margin-right: var(--ran-player-volume-icon-margin-right, var(--ran-space-2, 8px));
             color: var(--ran-player-volume-icon-color, #fff);
 
@@ -527,8 +527,8 @@
         }
 
         &-speed {
-          width: var(--ran-player-speed-width, 30px);
-          height: var(--ran-player-speed-height, 20px);
+          width: var(--ran-player-speed-width, var(--ran-size-6, 30px));
+          height: var(--ran-player-speed-height, var(--ran-size-3, 20px));
           color: var(--ran-player-speed-color, #fff);
           font-family: var(--ran-player-speed-font-family, PingFang SC);
           font-size: var(--ran-player-speed-font-size, 14px);
@@ -547,8 +547,8 @@
           }
 
           r-select {
-            width: 46px;
-            height: 20px;
+            width: var(--ran-player-speed-select-width, 46px);
+            height: var(--ran-player-speed-select-height, var(--ran-size-3, 20px));
             outline: 0;
             -webkit-tap-highlight-color: transparent;
 
@@ -586,8 +586,8 @@
           color: var(--ran-player-subtitle-color, #fff);
           font-family: var(--ran-player-subtitle-font-family, PingFang SC);
           font-size: var(--ran-player-subtitle-font-size, 14px);
-          width: var(--ran-player-subtitle-width, 30px);
-          height: var(--ran-player-subtitle-height, 20px);
+          width: var(--ran-player-subtitle-width, var(--ran-size-6, 30px));
+          height: var(--ran-player-subtitle-height, var(--ran-size-3, 20px));
           font-style: var(--ran-player-subtitle-font-style, normal);
           font-weight: var(--ran-player-subtitle-font-weight, 400);
           line-height: var(--ran-player-subtitle-line-height, normal);
@@ -608,8 +608,8 @@
           }
 
           r-select {
-            width: 46px;
-            height: 20px;
+            width: var(--ran-player-subtitle-select-width, 46px);
+            height: var(--ran-player-subtitle-select-height, var(--ran-size-3, 20px));
             outline: 0;
             -webkit-tap-highlight-color: transparent;
 
@@ -643,8 +643,8 @@
           color: var(--ran-player-clarity-color, #fff);
           font-family: var(--ran-player-clarity-font-family, PingFang SC);
           font-size: var(--ran-player-clarity-font-size, 14px);
-          width: var(--ran-player-clarity-width, 30px);
-          height: var(--ran-player-clarity-height, 20px);
+          width: var(--ran-player-clarity-width, var(--ran-size-6, 30px));
+          height: var(--ran-player-clarity-height, var(--ran-size-3, 20px));
           font-style: var(--ran-player-clarity-font-style, normal);
           font-weight: var(--ran-player-clarity-font-weight, 400);
           line-height: var(--ran-player-clarity-line-height, normal);
@@ -660,8 +660,8 @@
           }
 
           r-select {
-            width: 46px;
-            height: 20px;
+            width: var(--ran-player-clarity-select-width, 46px);
+            height: var(--ran-player-clarity-select-height, var(--ran-size-3, 20px));
             outline: 0;
             -webkit-tap-highlight-color: transparent;
 
@@ -705,8 +705,8 @@
         &-pip {
           display: var(--ran-player-pip-display, flex);
           align-items: var(--ran-player-pip-align-items, center);
-          width: var(--ran-player-pip-width, 18px);
-          height: var(--ran-player-pip-height, 18px);
+          width: var(--ran-player-pip-width, var(--ran-size-2, 18px));
+          height: var(--ran-player-pip-height, var(--ran-size-2, 18px));
           margin-right: var(--ran-player-pip-margin-right, 12px);
           color: var(--ran-player-pip-color, #fff);
           cursor: var(--ran-player-pip-cursor, pointer);
@@ -738,8 +738,8 @@
         &-remote {
           display: var(--ran-player-remote-display, flex);
           align-items: var(--ran-player-remote-align-items, center);
-          width: var(--ran-player-remote-width, 18px);
-          height: var(--ran-player-remote-height, 18px);
+          width: var(--ran-player-remote-width, var(--ran-size-2, 18px));
+          height: var(--ran-player-remote-height, var(--ran-size-2, 18px));
           margin-right: var(--ran-player-remote-margin-right, 12px);
           color: var(--ran-player-remote-color, #fff);
           cursor: var(--ran-player-remote-cursor, pointer);
@@ -770,8 +770,8 @@
 
         &-full {
           color: var(--ran-player-fullscreen-color, #fff);
-          width: var(--ran-player-fullscreen-width, 16px);
-          height: var(--ran-player-fullscreen-height, 16px);
+          width: var(--ran-player-fullscreen-width, var(--ran-size-1, 16px));
+          height: var(--ran-player-fullscreen-height, var(--ran-size-1, 16px));
           cursor: var(--ran-player-fullscreen-cursor, pointer);
           outline: var(--ran-player-fullscreen-outline, 0);
           -webkit-tap-highlight-color: transparent;

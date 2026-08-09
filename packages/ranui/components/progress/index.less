@@ -5,7 +5,7 @@
      silently disappears. A default width makes the component work out of the
      box; consumers can still override via style="width:…" or the token. */
   width: var(--ran-progress-width, 100%);
-  height: var(--ran-progress-height, 20px);
+  height: var(--ran-progress-height, var(--ran-size-3, 20px));
   &:active,
   &:focus {
     outline: 0;

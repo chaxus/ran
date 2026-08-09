@@ -6,7 +6,7 @@
   position: var(--ran-select-host-position, relative);
   display: var(--ran-select-host-display, inline-block);
   cursor: var(--ran-select-host-cursor, pointer);
-  height: var(--ran-select-host-height, 32px);
+  height: var(--ran-select-host-height, var(--ran-size-7, 32px));
   outline: var(--ran-select-host-outline, 0);
   -webkit-tap-highlight-color: var(--ran-select-host-tap-highlight-color, transparent);
   &,
@@ -203,7 +203,7 @@
       top: var(--ran-select-icon-top, 50%);
       inset-inline-start: var(--ran-select-icon-inset-inline-start, auto);
       inset-inline-end: var(--ran-select-icon-inset-inline-end, 8px);
-      height: var(--ran-select-icon-height, 16px);
+      height: var(--ran-select-icon-height, var(--ran-size-1, 16px));
       /* center on the vertical midline regardless of icon height (was a brittle -3px margin) */
       transform: var(--ran-select-icon-transform, translateY(-50%));
       margin-top: var(--ran-select-icon-margin-top, 0);

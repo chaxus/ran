@@ -14,7 +14,7 @@
      inside a flex row (e.g. the docs <Demo> preview) — the bar silently
      disappears. Defaults make the component work out of the box. */
   width: var(--ran-skeleton-width, 100%);
-  height: var(--ran-skeleton-height, 16px);
+  height: var(--ran-skeleton-height, var(--ran-size-1, 16px));
 }
 
 .ran-skeleton {
@@ -23,7 +23,7 @@
   overflow: hidden;
   background: 0 0;
   width: 100%;
-  height: var(--ran-skeleton-height, 16px);
+  height: var(--ran-skeleton-height, var(--ran-size-1, 16px));
   background: var(--ran-skeleton-background, var(--ran-gray-alpha-200, rgba(0, 0, 0, 0.06)));
   border-radius: var(--ran-skeleton-border-radius, var(--ran-radius-sm, 6px));
   &::after {

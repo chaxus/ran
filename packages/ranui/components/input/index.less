@@ -49,7 +49,7 @@
   // and would fade on a theme flip. Consumers can opt in via the hook var.
   transition: var(--ran-input-transition, none);
   // overflow: var(--ran-input-overflow, hidden);
-  min-height: var(--ran-input-min-height, 32px);
+  min-height: var(--ran-input-min-height, var(--ran-size-7, 32px));
   .ran-icon {
     display: var(--ran-input-icon-display, flex);
     align-items: var(--ran-input-icon-align-items, center);
@@ -89,8 +89,8 @@
       position: absolute;
       top: 50%;
       right: var(--ran-input-status-icon-right, var(--ran-space-3, 12px));
-      width: 16px;
-      height: 16px;
+      width: var(--ran-input-status-icon-width, var(--ran-size-1, 16px));
+      height: var(--ran-input-status-icon-height, var(--ran-size-1, 16px));
       transform: translateY(-50%);
       pointer-events: none;
       mask-position: center;
@@ -171,7 +171,7 @@
     border: var(--ran-input-content-border, none);
     width: var(--ran-input-content-width, 100%);
     height: var(--ran-input-content-height, 100%);
-    min-height: var(--ran-input-content-min-height, 30px);
+    min-height: var(--ran-input-content-min-height, var(--ran-size-6, 30px));
     min-width: var(--ran-input-content-min-width, 0);
     color: var(--ran-input-content-color, var(--ran-color-text, #000000d9));
     font-size: var(--ran-input-content-font-size, 14px);
