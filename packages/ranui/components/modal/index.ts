@@ -399,6 +399,7 @@ export class Modal extends RanElement {
     const timeout = this.getTransitionTimeout();
     this._afterCloseTimer = window.setTimeout(() => {
       this._afterCloseTimer = null;
+      this.removeAttribute('closing');
       this.dispatchEvent(new CustomEvent('afterclose', { detail: { trigger } }));
     }, timeout);
   };
@@ -454,6 +455,10 @@ export class Modal extends RanElement {
     this._isDialogOpen = true;
     this._root.setAttribute('open', '');
     this._dialog.setAttribute('aria-hidden', 'false');
+    // A rapid reopen while the previous close's fade tail is still in flight
+    // cancels that timer below (`clearAfterTimers`), which would otherwise leave
+    // `closing` stuck set forever with nothing left to clear it.
+    this.removeAttribute('closing');
     this.dispatchEvent(new CustomEvent('open'));
     this.clearAfterTimers();
     this.emitAfterOpen();
@@ -479,6 +484,17 @@ export class Modal extends RanElement {
     }
     this._root.removeAttribute('open');
     this._dialog.setAttribute('aria-hidden', 'true');
+    // `open` is removed synchronously (above), but the mask/dialog fade-and-scale
+    // CSS transition keeps painting for another `getTransitionTimeout()` (~0.3s).
+    // A host page that escalates z-index while `[open]` is set (e.g. this repo's
+    // docs `Demo.vue`, via `:has(r-modal[open])`, to lift the modal above its own
+    // sticky nav) would otherwise drop that escalation the instant `open` is
+    // gone, mid-fade — the still-visible mask then repaints *under* whatever the
+    // host's chrome outranks it with, clipping out that region for the rest of
+    // the close. `closing` stays set through the transition tail so a host can
+    // key off `:has(r-modal[open]), :has(r-modal[closing])` instead and the
+    // escalation lasts exactly as long as the modal is visually present.
+    this.setAttribute('closing', '');
     if (this._previousActiveElement instanceof HTMLElement) {
       this._previousActiveElement.focus();
     }

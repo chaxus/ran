@@ -156,4 +156,70 @@ describe('r-glass contract', () => {
     document.body.appendChild(glass);
     expect(() => document.body.removeChild(glass)).not.toThrow();
   });
+
+  // jsdom has no WebGL, so `createRimRenderer` always resolves to `null` here —
+  // these assert the lazy create/teardown wiring and the "no WebGL" fallback
+  // path stay inert rather than throwing, not the shader output itself.
+  describe('rim (WebGL enhancement)', () => {
+    it('is a plain boolean attribute, off by default', () => {
+      const glass = document.createElement('r-glass') as Glass;
+      document.body.appendChild(glass);
+      expect(glass.rim).toBe(false);
+
+      glass.rim = true;
+      expect(glass.hasAttribute('rim')).toBe(true);
+    });
+
+    it('mounts a canvas inside the specular layer when enabled, and tears it down when disabled', () => {
+      const glass = document.createElement('r-glass') as Glass;
+      document.body.appendChild(glass);
+      const shadow = (glass as any)._shadowDom as ShadowRoot;
+      expect(shadow.querySelector('.ran-glass-rim')).toBeNull();
+
+      glass.rim = true;
+      const canvas = shadow.querySelector('.ran-glass-specular > .ran-glass-rim');
+      expect(canvas).not.toBeNull();
+      expect(canvas?.getAttribute('aria-hidden')).toBe('true');
+
+      glass.rim = false;
+      expect(shadow.querySelector('.ran-glass-rim')).toBeNull();
+    });
+
+    it('does not throw when WebGL is unavailable (jsdom) — falls back to no-op silently', () => {
+      const glass = document.createElement('r-glass') as any;
+      expect(() => {
+        glass.setAttribute('rim', '');
+        document.body.appendChild(glass);
+      }).not.toThrow();
+      expect(glass._rimRenderer).toBeNull();
+    });
+
+    it('re-enabling rim after teardown mounts a fresh canvas', () => {
+      const glass = document.createElement('r-glass') as Glass;
+      document.body.appendChild(glass);
+      const shadow = (glass as any)._shadowDom as ShadowRoot;
+
+      glass.rim = true;
+      glass.rim = false;
+      glass.rim = true;
+      expect(shadow.querySelectorAll('.ran-glass-rim').length).toBe(1);
+    });
+
+    it('changing radius while rim is active does not throw', () => {
+      const glass = document.createElement('r-glass') as Glass;
+      glass.setAttribute('rim', '');
+      document.body.appendChild(glass);
+      expect(() => {
+        glass.radius = '30';
+      }).not.toThrow();
+    });
+
+    it('rim set before connect is honored on connectedCallback', () => {
+      const glass = document.createElement('r-glass') as Glass;
+      glass.setAttribute('rim', '');
+      document.body.appendChild(glass);
+      const shadow = (glass as any)._shadowDom as ShadowRoot;
+      expect(shadow.querySelector('.ran-glass-rim')).not.toBeNull();
+    });
+  });
 });

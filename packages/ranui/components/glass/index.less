@@ -36,6 +36,12 @@
   border-radius: inherit;
   overflow: hidden;
   color: inherit;
+  /* `layout paint` (NOT `strict`/`content`, which also imply `size`) bounds
+     backdrop-filter's repaint/compositing cost to this box without forcing an
+     explicit size — a glass panel that sizes to its slotted content (the
+     common case: no width/height set) would collapse to 0 under `size`
+     containment. */
+  contain: layout paint;
   /* Default = the iOS frosted-material look: a strong even blur + gentle
      vibrancy + light tint + a thin bright edge. A small displacement adds just
      a hint of a real glass surface (set `displace` higher for a liquid wave).
@@ -72,6 +78,18 @@
     linear-gradient(180deg, rgba(255, 255, 255, 0.28), transparent 34%),
     radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, 0.18), transparent 60%)
   );
+}
+
+/* `rim`'s WebGL canvas — appended as a child of .ran-glass-specular (above its
+   own gradient background, below the ::after sheen sweep in paint order, since
+   ::after generated content paints after real children). Purely decorative,
+   like the specular layer itself. */
+.ran-glass-rim {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }
 .ran-glass-specular::after {
   content: '';

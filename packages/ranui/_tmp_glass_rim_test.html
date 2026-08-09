@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>r-glass rim test</title>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        gap: 24px;
+        align-items: center;
+        justify-content: center;
+        background: radial-gradient(circle at 25% 25%, #f9d423, #ff4e50 55%, #7b4397);
+        font-family: sans-serif;
+      }
+      .label {
+        color: #fff;
+        font-size: 13px;
+        padding: 20px;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <r-glass radius="24" style="width: 220px; height: 140px;">
+      <div class="label">no rim</div>
+    </r-glass>
+    <r-glass radius="24" rim style="width: 220px; height: 140px;">
+      <div class="label">rim (webgl)</div>
+    </r-glass>
+    <r-glass radius="48" rim displace="30" style="width: 260px; height: 160px;">
+      <div class="label">rim + displace, radius 48</div>
+    </r-glass>
+    <script type="module" src="./dist/glass.js"></script>
+  </body>
+</html>

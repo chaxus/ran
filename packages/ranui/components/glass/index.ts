@@ -4,6 +4,7 @@ import { RanElement } from '@/utils/index';
 import { ensureShadowElement, ensureShadowRoot, getStringAttribute, setStringAttribute } from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
 import { isActivationKey } from '@/utils/a11y';
+import { createRimRenderer, type RimRenderer } from './rim';
 
 let _glassSeq = 0;
 
@@ -17,12 +18,15 @@ let _glassSeq = 0;
  * slot. Parts: `glass` (the pane), `specular` (the highlight layer).
  *
  * Backdrop note: this samples the DOM behind the host — the portable technique.
- * A WebGL/WebGPU shader path (rasterizing the backdrop into a texture for a
- * fragment shader to refract) would look more "liquid" and work identically
- * across browsers, but costs the backdrop's interactivity/accessibility
- * (buttons, selectable text, live video behind the glass all become a flat
- * pixel buffer) and a much heavier bundle — deliberately not pursued here to
- * keep `<r-glass>` usable over arbitrary real content.
+ * A full WebGL/WebGPU shader path that rasterizes the *backdrop itself* into a
+ * texture would look more "liquid" and work identically across browsers, but
+ * costs the backdrop's interactivity/accessibility (buttons, selectable text,
+ * live video behind the glass all become a flat pixel buffer) and a much
+ * heavier bundle — deliberately not pursued here.
+ *
+ * `rim` is the middle ground: an opt-in WebGL layer (see `rim.ts`) that adds a
+ * more physically-lit specular edge + chromatic fringe, computed purely from
+ * the panel's own shape (never the backdrop), so it costs none of that.
  */
 export class Glass extends RanElement {
   _shadowDom!: ShadowRoot;
@@ -36,9 +40,12 @@ export class Glass extends RanElement {
   // a tabindex a consumer set explicitly themselves (mirrors r-progress's
   // syncA11y for the same reason: `type="drag"` there, `interactive` here).
   private _tabIndexOwnedByComponent = false;
+  private _rimCanvas: HTMLCanvasElement | null = null;
+  private _rimRenderer: RimRenderer | null = null;
+  private _rimResizeObserver: ResizeObserver | null = null;
 
   static get observedAttributes(): string[] {
-    return ['blur', 'saturate', 'displace', 'frequency', 'radius', 'tint', 'interactive'];
+    return ['blur', 'saturate', 'displace', 'frequency', 'radius', 'tint', 'interactive', 'rim'];
   }
 
   constructor() {
@@ -119,6 +126,19 @@ export class Glass extends RanElement {
     this.toggleAttribute('interactive', v);
   }
 
+  /**
+   * Opt-in WebGL specular rim + chromatic edge, lit from a fixed top-left light —
+   * shape-only, never samples the backdrop (see the class doc for why that's the
+   * point). Silently falls back to the plain CSS specular gradient when WebGL is
+   * unavailable (old browser, disabled, SSR). See `rim.ts`.
+   */
+  get rim(): boolean {
+    return this.hasAttribute('rim');
+  }
+  set rim(v: boolean) {
+    this.toggleAttribute('rim', v);
+  }
+
   // ── Internal ─────────────────────────────────────────────────────────────
 
   /** Inject the per-instance SVG displacement filter (client only, once). */
@@ -137,6 +157,49 @@ export class Glass extends RanElement {
     }
     this._turb = this._shadowDom.querySelector('feTurbulence');
     this._disp = this._shadowDom.querySelector('feDisplacementMap');
+  }
+
+  /**
+   * Lazily create the WebGL rim canvas + context — only while `rim` is set, so a
+   * page that never uses it never spends one of the browser's limited WebGL
+   * context slots. Kept alive (not torn down) across disconnect/reconnect, same
+   * as the SVG displacement filter above; only `_teardownRim` frees it, when
+   * `rim` is explicitly turned back off.
+   */
+  private _ensureRim(): void {
+    if (typeof document === 'undefined') return;
+    if (!this._rimCanvas) {
+      const canvas = document.createElement('canvas');
+      canvas.className = 'ran-glass-rim';
+      canvas.setAttribute('part', 'rim');
+      canvas.setAttribute('aria-hidden', 'true');
+      this._glass.querySelector('.ran-glass-specular')?.appendChild(canvas);
+      this._rimCanvas = canvas;
+      // null when WebGL is unavailable — the blank transparent canvas is then a
+      // harmless no-op and the plain CSS specular gradient is the only highlight.
+      this._rimRenderer = createRimRenderer(canvas);
+      if (this._rimRenderer && typeof ResizeObserver !== 'undefined') {
+        this._rimResizeObserver = new ResizeObserver(this._resizeRim);
+        this._rimResizeObserver.observe(this._glass);
+      }
+    }
+    this._resizeRim();
+    this._rimRenderer?.setRadius(Number(this.radius) || 20);
+  }
+
+  private _resizeRim = (): void => {
+    if (!this._rimRenderer) return;
+    const { width, height } = this._glass.getBoundingClientRect();
+    this._rimRenderer.resize(width, height);
+  };
+
+  private _teardownRim(): void {
+    this._rimResizeObserver?.disconnect();
+    this._rimResizeObserver = null;
+    this._rimRenderer?.destroy();
+    this._rimRenderer = null;
+    this._rimCanvas?.remove();
+    this._rimCanvas = null;
   }
 
   private _apply(name: string): void {
@@ -217,6 +280,7 @@ export class Glass extends RanElement {
     this._ensureFilter();
     Glass.observedAttributes.forEach((n) => this._apply(n));
     this._syncInteractive();
+    if (this.rim) this._ensureRim();
     this._events.on(this, 'keydown', this._onKeydown as EventListener);
   }
 
@@ -230,7 +294,13 @@ export class Glass extends RanElement {
       this._syncInteractive();
       return;
     }
+    if (name === 'rim') {
+      if (this.rim) this._ensureRim();
+      else this._teardownRim();
+      return;
+    }
     this._apply(name);
+    if (name === 'radius' && this.rim) this._rimRenderer?.setRadius(Number(this.radius) || 20);
   }
 }
 

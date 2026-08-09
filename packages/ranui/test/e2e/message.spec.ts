@@ -73,4 +73,44 @@ test.describe('message', () => {
     await expect(host).toHaveCSS('z-index', '1400');
     await expect(page.locator('#custom-message-root-2 r-message')).toHaveCount(2);
   });
+
+  test('leave animation ends faded out, not bounced back to full opacity', async ({ page }) => {
+    await page.goto(DEV_SERVER, { waitUntil: 'load' });
+    await page.waitForFunction(() => typeof (window as any).message?.info === 'function');
+
+    // `MessageMoveOut`'s keyframes need `animation-fill-mode: forwards` to hold
+    // their end state — see index.less. Without it the element visually snaps
+    // back to full opacity/height for the tail of the leave window because the
+    // CSS animation's natural completion and the JS removal `setTimeout` (see
+    // `AnimationTime`/duration math in index.ts) run on independent clocks and
+    // drift apart. Sample the host's computed opacity right up to removal —
+    // the reverted state (opacity ~1) would show up in the final samples.
+    const samples = await page.evaluate(async () => {
+      (window as any).message.info({ content: 'bounce test', duration: 500 });
+      const results: Array<{ opacity: string; exists: boolean }> = [];
+      const start = performance.now();
+      return await new Promise<typeof results>((resolve) => {
+        const sample = () => {
+          const el = document.querySelector('r-message.message') as HTMLElement | null;
+          if (el) {
+            results.push({ opacity: getComputedStyle(el).opacity, exists: true });
+          } else {
+            results.push({ opacity: 'n/a', exists: false });
+          }
+          if (performance.now() - start < 700) {
+            requestAnimationFrame(sample);
+          } else {
+            resolve(results);
+          }
+        };
+        requestAnimationFrame(sample);
+      });
+    });
+
+    const lastFew = samples.filter((s) => s.exists).slice(-3);
+    expect(lastFew.length).toBeGreaterThan(0);
+    for (const s of lastFew) {
+      expect(parseFloat(s.opacity)).toBeLessThan(0.5);
+    }
+  });
 });

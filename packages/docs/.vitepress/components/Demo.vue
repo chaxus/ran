@@ -62,13 +62,23 @@ withDefaults(
  * z-index:100 on every demo did — that blanket rule promoted the box itself,
  * not just its overlay content, above chrome that in-flow page content is
  * only ever supposed to sit below.
+ * `[closing]` (also reflected by r-modal) covers the ~0.3s fade-and-scale-out
+ * tail: `close()` removes `open` synchronously, but the mask/dialog keep
+ * painting for another `getTransitionTimeout()` while their CSS transition
+ * finishes. Without matching `[closing]` too, this rule stops applying the
+ * instant `open` is gone and the still-fading mask repaints *under* the nav
+ * (z-index 30) for that whole tail — visually, the strip behind the nav
+ * reveals through while the rest of the mask keeps fading normally, reading
+ * as the mask closing "in regions" instead of as one sheet. `[closing]` keeps
+ * the escalation alive for exactly as long as the modal is still visible.
  * `r-message` needs no such rule: its toasts already portal to
  * `document.body` (see `components/message/container.ts`), so they're never
  * descendants of this box to begin with and their own z-index (1200) already
  * outranks VitePress's whole chrome range on its own.
  * See `packages/ranui/docs/DESIGN.md` §4 for the component-side z-index
  * ladder this is bridging into the host page. */
-.ran-demo__preview:has(r-modal[open]) {
+.ran-demo__preview:has(r-modal[open]),
+.ran-demo__preview:has(r-modal[closing]) {
   position: relative;
   z-index: 100;
 }
