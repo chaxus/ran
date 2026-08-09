@@ -112,8 +112,20 @@
   }
 }
 
+// Both consumers that drive this animation via a `transit` attribute — r-popover and
+// r-select — wait a hardcoded 300ms (their own `animationTime` constant) before actually
+// setting `display:none`/removing the panel, matching that duration here so the CSS
+// animation's own opacity fade finishes exactly when the JS timer does. It used to be a
+// flat 0.1s (100ms): the panel visually finished fading 200ms *before* the JS timeout
+// fired, so it sat fully transparent-but-still-`display:block` for that gap — and the
+// arrow (`&-arrow` below, a *sibling* of `.ranui-dropdown` appended straight into
+// `.ranui-dropdown-container`, not a descendant — see `index.ts`'s `arrowIcon` — so it
+// never inherits this animation at all) stayed fully opaque that whole time, then popped
+// out abruptly with the panel at the 300ms cut, reading as "the arrow lags behind."
+// Aligning the durations doesn't give the arrow its own fade, but it does make both
+// disappear at the same instant instead of 200ms apart.
 .animation(@animation, @animation-mode:forwards) {
-  animation: @animation 0.1s;
+  animation: @animation var(--ran-dropdown-animation-duration, 0.3s);
   animation-fill-mode: @animation-mode;
 }
 

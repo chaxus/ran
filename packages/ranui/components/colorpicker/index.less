@@ -4,14 +4,28 @@
  * The popover panel is portaled into document.body by r-popover, so its styles
  * cannot live here — see panel.less, which is injected with the panel content.
  */
-.ran-colorpicker {
+// This chrome used to live on a `.ran-colorpicker` *class* selector — but the only place
+// that class was ever set was `this.setAttribute('class', 'ran-colorpicker')` on the host
+// itself (`index.ts` `connectedCallback`), which puts it in the *light* DOM. A shadow
+// stylesheet's plain class selectors only match elements *inside* that shadow root, so the
+// rule never matched anything: no border, no background, no padding ever rendered, and —
+// the more visible symptom — no `display` was ever applied to the host either. Without one,
+// the host fell back to the UA default (`inline`), but its single shadow child (`<r-popover>`,
+// `display:block` by its own default) still stretched full-width, leaving the actual 24px
+// swatch rendered on the left of an invisible full-width click target — clicking empty space
+// well past the visible swatch still opened the panel. `:host` is the selector that actually
+// reaches the host from inside its own shadow stylesheet; putting this block there both
+// restores the intended button chrome and (via `display: inline-flex`, a flex container's
+// item doesn't auto-stretch along the main axis the way a plain block child does) fixes the
+// oversized hit box.
+:host {
   box-sizing: border-box;
   min-width: var(--ran-colorpicker-min-width, var(--ran-size-7, 32px));
   height: var(--ran-colorpicker-height, var(--ran-size-7, 32px));
   border-radius: var(--ran-colorpicker-border-radius, var(--ran-radius-md, 8px));
   border: var(--ran-colorpicker-border, 1px solid var(--ran-color-border, #eaeaea));
   cursor: pointer;
-  display: inline-flex;
+  display: var(--ran-colorpicker-host-display, inline-flex);
   align-items: center;
   justify-content: center;
   /* No default transition: border-color / box-shadow are palette props and
@@ -19,34 +33,34 @@
   transition: var(--ran-colorpicker-transition, none);
   background: var(--ran-colorpicker-background, var(--ran-color-bg-elevated, #ffffff));
   padding: var(--ran-colorpicker-padding, var(--ran-space-1, 4px));
+}
 
-  &:hover {
-    border-color: var(--ran-colorpicker-hover-border-color, var(--ran-color-border-hover, var(--ran-gray-500)));
-  }
+:host(:hover) {
+  border-color: var(--ran-colorpicker-hover-border-color, var(--ran-color-border-hover, var(--ran-gray-500)));
+}
 
-  &-block {
-    position: relative;
-    border-radius: var(--ran-colorpicker-block-border-radius, var(--ran-radius-sm, 4px));
-    width: var(--ran-colorpicker-block-width, var(--ran-size-4, 24px));
-    height: var(--ran-colorpicker-block-height, var(--ran-size-4, 24px));
-    box-shadow: inset 0 0 0 1px var(--ran-gray-alpha-200, rgba(0, 0, 0, 0.09));
-    background-image: conic-gradient(
-      var(--ran-gray-alpha-100, rgba(0, 0, 0, 0.06)) 0 25%,
-      transparent 0 50%,
-      var(--ran-gray-alpha-100, rgba(0, 0, 0, 0.06)) 0 75%,
-      transparent 0
-    );
-    background-size: 50% 50%;
-  }
+.ran-colorpicker-block {
+  position: relative;
+  border-radius: var(--ran-colorpicker-block-border-radius, var(--ran-radius-sm, 4px));
+  width: var(--ran-colorpicker-block-width, var(--ran-size-4, 24px));
+  height: var(--ran-colorpicker-block-height, var(--ran-size-4, 24px));
+  box-shadow: inset 0 0 0 1px var(--ran-gray-alpha-200, rgba(0, 0, 0, 0.09));
+  background-image: conic-gradient(
+    var(--ran-gray-alpha-100, rgba(0, 0, 0, 0.06)) 0 25%,
+    transparent 0 50%,
+    var(--ran-gray-alpha-100, rgba(0, 0, 0, 0.06)) 0 75%,
+    transparent 0
+  );
+  background-size: 50% 50%;
 
-  &-inner {
-    width: 100%;
-    height: 100%;
-    border-radius: inherit;
-  }
-
-  &-block[disabled] {
+  &[disabled] {
     cursor: var(--ran-colorpicker-disabled-cursor, not-allowed);
     opacity: var(--ran-colorpicker-disabled-opacity, 0.5);
   }
+}
+
+.ran-colorpicker-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
 }

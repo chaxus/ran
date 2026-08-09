@@ -213,6 +213,23 @@ export class ColorPicker extends RanElement {
     return rgbToHex(r, g, b);
   };
 
+  /**
+   * Paint the trigger swatch's own background directly from the current color state.
+   * This is normally kept live by the reactive effect in `setupEffects()` — but that effect
+   * (like the rest of the panel) is only wired up once the panel has been built, which
+   * happens lazily on first open (`openColorPicker`). Before that first open, the swatch
+   * never got painted at all: it sat on its CSS default (transparent, showing the
+   * checkerboard) no matter what `value` was set to — including the *default* color the
+   * signals already carry with no `value` attribute at all (opaque white), so opening the
+   * panel for the first time made the swatch "suddenly" pick up a color it had silently
+   * been holding the whole time. Called eagerly so the swatch always reflects live state,
+   * panel built or not.
+   */
+  paintSwatch = (): void => {
+    const { r, g, b, a } = this.currentRgba();
+    this.colorpickerInner?.style.setProperty('background', `rgba(${r}, ${g}, ${b}, ${Number(a.toFixed(3))})`);
+  };
+
   updateColorValue = (value: string): void => {
     if (value === this.context?.value.getter()) return;
     const compact = value.replace(/\s+/g, '');
@@ -243,6 +260,7 @@ export class ColorPicker extends RanElement {
     }
     this.setAttribute('value', value);
     this.context?.value.setter(value);
+    this.paintSwatch();
   };
 
   /** Sync the `value` attribute to the live color and emit a `change` event. */
@@ -509,6 +527,9 @@ export class ColorPicker extends RanElement {
     this._events.on(document, 'pointercancel', this.onPointerUp);
     this.syncDisabledState();
     if (this.value) this.updateColorValue(this.value);
+    // Paint the swatch immediately regardless of whether `value` was set — the panel
+    // (and the reactive effect that would otherwise keep this in sync) doesn't exist yet.
+    this.paintSwatch();
     // Panel effects are disposed on disconnect; re-arm them on reconnect so a
     // moved/re-parented picker stays reactive (the panel is built only once).
     if (this.colorPickerInner && this._effectDisposers.length === 0) this.setupEffects();
