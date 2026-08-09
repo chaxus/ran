@@ -66,11 +66,7 @@ description: 'ranui Image（<r-image>）渲染图片并内置加载失败时的�
 
 `sheet` 会把原始 CSS 注入组件的 Shadow DOM。可以用它来定制内部的 `.ran-image` 容器或内部的 `<img>`。
 
-<r-img
-src="https://picsum.photos/id/1043/240/160"
-sheet="img { border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,.25); }"
-
-> </r-img>
+<r-img src="https://picsum.photos/id/1043/240/160" sheet="img { border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,.25); }"></r-img>
 
 ```html
 <r-img
