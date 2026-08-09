@@ -51,12 +51,25 @@
   }
   &-dot {
     position: var(--ran-progress-dot-position, absolute);
-    top: var(--ran-progress-dot-top, -5px);
+    // A calc() default, not a hardcoded magic number — the old `-5px` only centered
+    // an 18px dot on an 8px track because it happened to assume `border-box` sizing
+    // that the rule never actually declared (see `box-sizing` below); the moment
+    // either `--ran-progress-track-height` or `--ran-progress-dot-height` was
+    // overridden (as the player's volume slider does), it silently drifted off
+    // center. This recomputes from whichever track-height/dot-height are actually
+    // in effect, so a consumer overriding either token — or leaving both at their
+    // defaults — always gets a centered dot without needing to also override `top`.
+    top: var(--ran-progress-dot-top, calc((var(--ran-progress-track-height, 8px) - var(--ran-progress-dot-height, 14px)) / 2));
     left: calc(var(--progress-percent, 0) * 100%);
     transform: translateX(-50%);
     border-radius: var(--ran-progress-dot-border-radius, 50%);
-    width: var(--ran-progress-dot-width, 18px);
-    height: var(--ran-progress-dot-height, 18px);
+    // `border-box` so the declared width/height is the dot's actual rendered size —
+    // `content-box` (the browser default) would add the border on top, quietly
+    // growing the dot past what the width/height tokens (and the `top` calc above,
+    // which assumes the tokens are the true size) say.
+    box-sizing: border-box;
+    width: var(--ran-progress-dot-width, 14px);
+    height: var(--ran-progress-dot-height, 14px);
     background: var(--ran-progress-dot-background, var(--ran-color-primary, #171717));
     border: var(--ran-progress-dot-border, 2px solid var(--ran-color-bg-elevated, #fff));
     box-shadow: var(--ran-progress-dot-box-shadow, var(--ran-shadow-elevated, 0 1px 2px rgba(0, 0, 0, 0.15)));

@@ -8,8 +8,8 @@ import {
   setBooleanAttribute,
   syncSheetAttribute,
 } from '@/utils/component';
-// Registers <r-icon> and its always-on core action glyphs (copy/download/fullscreen/
-// zoom-in/zoom-out/refresh/check), so the toolbar can use <r-icon name="copy"> directly.
+// Registers <r-icon>; the toolbar's <r-icon name="copy"> etc. resolve their SVG via
+// r-icon's own name-driven lazy loading (assets/icons/*.svg), no local registration.
 import '@/components/icon';
 import mermaidCss from './index.less?inline';
 import { defineSSR } from '@/utils/ssr-registry';

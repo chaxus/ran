@@ -11,7 +11,6 @@ import {
 } from '@/utils/component';
 
 const isDev = import.meta.env.DEV;
-import { coreIcons } from './core-icons';
 
 const iconSvgCache = new Map<string, string>();
 let hasStartedRegistration = false;
@@ -67,17 +66,16 @@ export const registerIcons = (icons: Record<string, unknown>): void => {
   });
 };
 
-// Core action glyphs are always available — components like <r-mermaid> can use
-// <r-icon name="copy"> without registering anything. The rest of assets/icons stays
-// opt-in via registerBuiltinIcons(). See core-icons.ts.
-registerIcons(coreIcons);
-
 // Name-driven lazy loading of the bundled icon set (same DX as <r-loading name="…">):
 // `<r-icon name="home">` works with zero registration and only fetches home.svg —
 // no `import 'ranui/icons'` (which eagerly pulls all ~43) and no per-icon registerIcon.
 // Each SVG is a separate async chunk (raw string); a name miss on a builtin lazy-loads
 // it, then registers → the existing `ranui-icon-registered` event re-renders. Custom
 // icons (not shipped with ranui) still use registerIcon(); the lib can't know them.
+// Every builtin (including the ones ranui's own components reuse, e.g. mermaid/math's
+// toolbar or player's fullscreen button) goes through this same lazy path — there is no
+// separate always-eager subset, so a component using a builtin by name pays one async
+// fetch on first use, same as any consumer.
 const builtinIconLoaders = import.meta.glob<string>('../../assets/icons/*.svg', {
   query: '?raw',
   import: 'default',

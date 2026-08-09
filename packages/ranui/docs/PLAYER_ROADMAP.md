@@ -102,8 +102,8 @@ was deleted entirely. Every control-bar glyph now goes through the `<r-icon>` +
 `registerIcon` system every other component uses: `play`/`pause` (the center overlay button
 and the bottom-left toggle — solid filled triangle/bars, new assets), `volume`/`volume-mute`
 (outline speaker glyphs, new assets), and `fullscreen` (reuses the existing shared `fullscreen`
-**core icon** — no new asset needed, since it's already statically bundled for every `<r-icon>`
-consumer via `core-icons.ts`). `core/events.ts`'s `syncPlayButtonState` and
+asset in `assets/icons/` — no new asset needed; resolved through `r-icon`'s name-driven
+lazy loading like any other builtin, one async fetch on first use). `core/events.ts`'s `syncPlayButtonState` and
 `core/effects.ts`'s volume effect now toggle the inner `<r-icon>`'s `name` attribute instead of
 swapping CSS classes tied to a background image — each control's outer `<div>` still owns its
 own `width`/`height`/`color` (via the existing CSS custom-property tokens), with a plain

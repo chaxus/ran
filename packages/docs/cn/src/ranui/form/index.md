@@ -13,7 +13,7 @@ ranui 不提供一个专门包裹 `<form>` 的组件。`r-input`、`r-checkbox`�
 三种字段类型放在同一个普通 `<form>` 里提交——改一下字段的值再提交，就能在下面看到完整的实时结果。这个 demo 用浏览器自带的 `FormData`/`Object.fromEntries` 拼对象，不需要任何 import；下面马上会介绍的 `serializeForm()` 做的是同一件事，只多做了一件 `Object.fromEntries` 做不到的事：同名字段重复出现时会返回数组，而不是悄悄只保留最后一个值。
 
 <Demo column>
-  <form onsubmit="event.preventDefault(); message.info(JSON.stringify(Object.fromEntries(new FormData(this))))">
+  <form style="display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 320px;" onsubmit="event.preventDefault(); message.info(JSON.stringify(Object.fromEntries(new FormData(this))))">
     <r-input name="username" label="Username" placeholder="Enter username"></r-input>
     <r-select name="role" style="width: 100%; height: 40px" defaultValue="member">
       <r-option value="member">Member</r-option>
@@ -24,8 +24,10 @@ ranui 不提供一个专门包裹 `<form>` 的组件。`r-input`、`r-checkbox`�
   </form>
 </Demo>
 
+> 就像下面「布局」一节说的：字段没有自带的表单级布局，所以这个页面上的每个例子——包括这一个——都给自己的 `<form>` 设置了 CSS（`display: flex; flex-direction: column; gap: …`）。不设置的话，字段会按普通文档流依次排列、彼此没有间距，看起来会像是重叠/错位，而不是一个表单。
+
 ```html
-<form id="signup">
+<form id="signup" style="display: flex; flex-direction: column; gap: 16px;">
   <r-input name="username" label="Username" placeholder="Enter username"></r-input>
   <r-select name="role" defaultValue="member">
     <r-option value="member">Member</r-option>
@@ -88,14 +90,14 @@ fetch('/api/signup', { method: 'POST', body: JSON.stringify(data) });
 `r-input`、`r-checkbox`、`r-select` 都支持 `required`（会阻止提交并触发浏览器原生的校验提示，和原生字段一模一样），以及 `checkValidity()`、`reportValidity()`、`validity`、`validationMessage`。原生的 `form.reset()`（或 `<button type="reset">`）会通过 `formResetCallback()` 把每个字段恢复到交互前的状态。细节见各字段自己的文档（[Input](/cn/src/ranui/input/)、[Checkbox](/cn/src/ranui/checkbox/)、[Select](/cn/src/ranui/select/)）。
 
 <Demo column>
-  <form onsubmit="event.preventDefault(); message.success('Valid — submitted')">
+  <form style="display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 320px;" onsubmit="event.preventDefault(); message.success('Valid — submitted')">
     <r-input name="username" label="Username" required></r-input>
     <r-button type="primary"><button type="submit" style="all: unset; cursor: pointer">Submit</button></r-button>
   </form>
 </Demo>
 
 ```html
-<form>
+<form style="display: flex; flex-direction: column; gap: 16px;">
   <r-input name="username" label="Username" required></r-input>
   <button type="submit">Submit</button>
 </form>

@@ -13,7 +13,7 @@ ranui does not ship a `<form>`-wrapping component. `r-input`, `r-checkbox`, and 
 All three field types, submitted with a plain `<form>` — try changing a field and submitting to see the live result below. This demo builds the object with the browser's own `FormData`/`Object.fromEntries` (no import needed); `serializeForm()`, introduced next, does the same thing plus one thing `Object.fromEntries` can't: a repeated field name comes back as an array instead of silently keeping only the last value.
 
 <Demo column>
-  <form onsubmit="event.preventDefault(); message.info(JSON.stringify(Object.fromEntries(new FormData(this))))">
+  <form style="display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 320px;" onsubmit="event.preventDefault(); message.info(JSON.stringify(Object.fromEntries(new FormData(this))))">
     <r-input name="username" label="Username" placeholder="Enter username"></r-input>
     <r-select name="role" style="width: 100%; height: 40px" defaultValue="member">
       <r-option value="member">Member</r-option>
@@ -24,8 +24,14 @@ All three field types, submitted with a plain `<form>` — try changing a field 
   </form>
 </Demo>
 
+> As the [Layout](#layout) section below covers: fields have no default form-level layout of
+> their own, so every example on this page — including this one — sets its own `<form>` CSS
+> (`display: flex; flex-direction: column; gap: …`). Omitting it stacks fields in plain
+> in-flow order with no spacing between them, which reads as broken/overlapping rather than
+> a form.
+
 ```html
-<form id="signup">
+<form id="signup" style="display: flex; flex-direction: column; gap: 16px;">
   <r-input name="username" label="Username" placeholder="Enter username"></r-input>
   <r-select name="role" defaultValue="member">
     <r-option value="member">Member</r-option>
@@ -88,14 +94,14 @@ Fields have no default form-level layout — style your own `<form>` with plain 
 `r-input`, `r-checkbox`, and `r-select` all support `required` (which blocks submission and triggers the browser's native validation bubble, exactly like a native field) plus `checkValidity()`, `reportValidity()`, `validity`, and `validationMessage`. A native `form.reset()` — or `<button type="reset">` — restores each field to its pre-interaction state via `formResetCallback()`. See each field's own docs ([Input](/src/ranui/input/#form-association), [Checkbox](/src/ranui/checkbox/#form-association), [Select](/src/ranui/select/#form-association)) for details.
 
 <Demo column>
-  <form onsubmit="event.preventDefault(); message.success('Valid — submitted')">
+  <form style="display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 320px;" onsubmit="event.preventDefault(); message.success('Valid — submitted')">
     <r-input name="username" label="Username" required></r-input>
     <r-button type="primary"><button type="submit" style="all: unset; cursor: pointer">Submit</button></r-button>
   </form>
 </Demo>
 
 ```html
-<form>
+<form style="display: flex; flex-direction: column; gap: 16px;">
   <r-input name="username" label="Username" required></r-input>
   <button type="submit">Submit</button>
 </form>

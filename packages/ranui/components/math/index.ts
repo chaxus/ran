@@ -8,8 +8,8 @@ import {
   setBooleanAttribute,
   syncSheetAttribute,
 } from '@/utils/component';
-// Registers <r-icon> + its always-on core action glyphs (copy/check), so the opt-in
-// toolbar can use <r-icon name="copy"> directly. Small, eager — the heavy bits (temml,
+// Registers <r-icon>; the opt-in toolbar's <r-icon name="copy"> resolves its SVG via
+// r-icon's own name-driven lazy loading, no local registration. The heavy bits (temml,
 // fonts) stay lazy below.
 import '@/components/icon';
 import mathCss from './index.less?inline';

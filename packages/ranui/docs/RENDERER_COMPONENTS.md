@@ -71,9 +71,9 @@ Full renderer + interactive viewer. Everything below the base render is **opt-in
   `label-zoom-out` / `label-reset` (English fallbacks).
 - **CSS vars**: `--ran-mermaid-{padding,toolbar-*,button-*,error-color}`.
 - **Toolkit compliance**: `EventManager` for listeners, `<r-icon name="copy">` (the toolbar
-  glyphs — copy/check/download/fullscreen/zoom-in/zoom-out/refresh — are **core action
-  icons auto-registered by r-icon**, see `components/icon/core-icons.ts`; no per-component
-  registration), `defineSSR`, shadow/sheet 4-piece.
+  glyphs — copy/check/download/fullscreen/zoom-in/zoom-out/refresh — resolve through
+  `r-icon`'s own name-driven lazy loading of `assets/icons/*.svg`; no per-component
+  registration, one async fetch on first use), `defineSSR`, shadow/sheet 4-piece.
 - On a render failure mermaid appends a "bomb" error graphic to `<body>`; the component
   removes that leak (`#d{id}`/`#{id}`) so only the `::part(error)` box shows.
 - **Fullscreen uses r-modal's `hide-header` attribute** (added for this): no title bar, a
@@ -82,9 +82,9 @@ Full renderer + interactive viewer. Everything below the base render is **opt-in
   (PhotoSwipe / MUI Dialog / Ant Image preview).
 - **Toolbar icons are outline glyphs.** ranui's builtins are _filled_ 1024-grid icons and
   `r-icon`'s `setColor` forces inline `fill: currentColor` on the `<svg>` root — which
-  flood-fills an outline icon. So the core action SVGs (`assets/icons/copy.svg` etc.) wrap
+  flood-fills an outline icon. So the toolbar action SVGs (`assets/icons/copy.svg` etc.) wrap
   their shapes in `<g fill="none">`, which that inline style doesn't reach. Author any
-  future stroke icon the same way (see `components/icon/core-icons.ts`).
+  future stroke icon the same way.
 - **Browser-verified** (2026-07-19, chrome-devtools): render (flowchart + classDiagram),
   error→part+event with no leak, toolbar copy/download-menu/fullscreen, fullscreen r-modal
   (headerless + floating close, open→close lifecycle clean), pan/zoom; events

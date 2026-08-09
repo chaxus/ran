@@ -184,10 +184,23 @@
     border-radius: var(--ran-input-content-border-radius, var(--ran-radius-sm, 6px));
     padding: var(--ran-input-content-padding, 0 0 0 2px);
     font-weight: var(--ran-input-content-font-weight, 400);
+    // Mobile Chrome/Safari paint a translucent tap-highlight rectangle over a
+    // tapped element by default — easy to mistake for a stray focus ring
+    // (`.ran-progress`/`:host` already guards against the same thing elsewhere
+    // in this library; the input's own native `<input>` was missing it).
+    -webkit-tap-highlight-color: transparent;
     &:focus,
+    &:focus-visible,
     &:hover {
       border: var(--ran-input-content-hover-border, none);
-      outline: var(--ran-input-content-hover-outline, 0);
+      // The native `<input>`'s own default focus ring is suppressed here —
+      // the *intended* focus indicator is `--ran-focus-ring`'s box-shadow on
+      // the outer `.ran-input` wrapper (`:has(.ran-input-content:focus-visible)`
+      // below), not this inner element's own chrome. `none`, not `0`: `0` only
+      // zeroes `outline-width` and leaves `outline-style`/`-color` from the
+      // UA stylesheet in place, which some engines still paint a sliver of.
+      outline: var(--ran-input-content-hover-outline, none);
+      box-shadow: var(--ran-input-content-hover-box-shadow, none);
     }
     &::placeholder {
       color: var(--ran-input-content-placeholder-color, var(--ran-color-text-disabled, #999));

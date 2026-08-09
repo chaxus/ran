@@ -40,8 +40,24 @@ withDefaults(
    * overlay. Without a stacking context of its own, that z-index compares
    * directly against page-level chrome (VitePress's mobile sidebar + its
    * backdrop), so the demo panel paints on top of the dimmed sidebar instead
-   * of staying inside its own box. isolation:isolate contains it. */
+   * of staying inside its own box. isolation:isolate contains it.
+   *
+   * `isolation` alone only *contains* the comparison — it doesn't grant this
+   * box any priority in its *own* parent's stacking order, and a plain
+   * `position:static` element with no `z-index` still paints at the lowest
+   * "in-flow content" tier there. VitePress's own fixed-position chrome (nav
+   * z-index:30, backdrop:50, sidebar:60 — see `vitepress/theme-default`'s
+   * `vars.css`) sits above that tier regardless of what's isolated inside it,
+   * so a *real*, user-triggered overlay demoed inline here — `r-modal`,
+   * `r-message` (unlike the always-open-in-demo dropdown case above, these
+   * are opened on click and meant to cover the whole page) — rendered below
+   * the nav/sidebar instead of over them. `position:relative` + a `z-index`
+   * comfortably above VitePress's whole range gives the isolated box itself
+   * that priority, so its truly-fixed-position contents now escape upward
+   * past the site's own chrome without needing to out-rank it token-by-token. */
   isolation: isolate;
+  position: relative;
+  z-index: 100;
 }
 
 .ran-demo__preview.is-start {
