@@ -141,6 +141,12 @@ export default defineConfig({
       rollupOptions: {
         onwarn(warning, warn) {
           if (warning.code === 'INVALID_ANNOTATION') return;
+          // dashjs ships a UMD build; its `typeof exports !== 'undefined'` CJS-interop
+          // guard resolves to `undefined` at runtime in the browser and is harmless, but
+          // Rollup flags it every time it re-bundles ranui's already-built dist chunk for
+          // this dashjs adapter (see packages/ranui/components/player/core/adapters/dash.ts).
+          // Scoped to that one chunk so a real COMMONJS_VARIABLE_IN_ESM elsewhere still surfaces.
+          if (warning.code === 'COMMONJS_VARIABLE_IN_ESM' && warning.id?.includes('dash.all.min')) return;
           warn(warning);
         },
       },
