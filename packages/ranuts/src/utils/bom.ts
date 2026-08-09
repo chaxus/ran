@@ -1,30 +1,5 @@
-import { noop } from '@/utils/noop';
 import { performanceTime } from '@/utils/time';
 import { isClient } from '@/utils/device';
-
-/**
- * @description: Override the browser's back-button behaviour
- * @param {*} callback
- * @return {*}
- */
-export const retain = (callback = noop): void => {
-  const historyReturnCb = () => {
-    callback();
-    if (isClient) {
-      window.removeEventListener('popstate', historyReturnCb);
-    }
-  };
-
-  // Push two entries identical to the current page, so a later navigation can be told apart as back or forward
-  if (isClient) {
-    window.history.pushState(null, '', window.location.href);
-  }
-  setTimeout(() => {
-    if (isClient) {
-      window.addEventListener('popstate', historyReturnCb);
-    }
-  }, 500);
-};
 
 /**
  * @description: Read a named cookie
