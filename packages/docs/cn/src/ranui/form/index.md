@@ -105,4 +105,4 @@ fetch('/api/signup', { method: 'POST', body: JSON.stringify(data) });
 
 ## 为什么没有 `<r-form>` 包装组件
 
-早期的 ranui 有过一个——它自己在 shadow DOM 里建一个内部 `<form>`，再把字段投影进去。这行不通：表单归属是沿着真实的（light DOM）祖先链去解析的，这条链从不会跨进 shadow root。藏在 shadow DOM 里的 `<form>` 永远不可能成为 light DOM 子元素的表单归属，哪怕这些子元素是通过 `<slot>` 渲染出来的——这一点是直接实测出来的（一个通过这种方式投影的普通 `<input>`，它的 `.form` 是 `null`，`new FormData(...)` 也完全看不到它），是在真实浏览器里验证的，不是纸上谈兵。也就是说无论如何这个 `<form>` 都必须是真实的、在 light DOM 里的——这意味着那层包装组件只是在你自己的 `<form>` 外面多套了一层元素，却没有多提供任何一个普通 `<form>` 本来就没有的能力。现在改用 `serializeForm()` 提供其中唯一真正有用的部分（提交 → 普通对象），不再需要这层包装。
+一个普通的原生 `<form>` 已经够用——ranui 的字段组件能直接在里面工作，不需要再包一层组件。`serializeForm()` 补上唯一还缺的一点：把提交结果转成一个普通对象。

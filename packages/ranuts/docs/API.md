@@ -8,16 +8,16 @@ constraints, conventions) read [../CLAUDE.md](../CLAUDE.md) first.
 Import from the **subpath** that owns the symbol, e.g. `import { debounce } from
 'ranuts/utils'`. The root `ranuts` barrel re-exports the utils + visual surface.
 
-**393 exports** across 6 entry points. Generated at 2026-08-09T09:16:04.515Z.
+**393 exports** across 6 entry points. Generated at 2026-08-09T09:19:26.910Z.
 
 ## Entry points
 
-- [`ranuts/utils`](#ranutsutils) — Browser and general-purpose utilities · _browser + node_ · 307 exports
-- [`ranuts/sw`](#ranutssw) — Service Worker caching strategies and the precache protocol · _service worker only_ · 9 exports
-- [`ranuts/node`](#ranutsnode) — Node server utilities (fs / http / ws / middleware) · _node only_ · 26 exports
-- [`ranuts/visual`](#ranutsvisual) — 2D rendering engine (Canvas / WebGL / WebGPU) · _browser only_ · 16 exports
-- [`ranuts/i18n`](#ranutsi18n) — Framework-agnostic i18n engine (also re-exported from ranuts/utils) · _browser + node_ · 9 exports
-- [`ranuts/vnode`](#ranutsvnode) — Snabbdom-style virtual DOM · _browser_ · 26 exports
+- [`ranuts/utils`](#ranuts-utils) — Browser and general-purpose utilities · _browser + node_ · 307 exports
+- [`ranuts/sw`](#ranuts-sw) — Service Worker caching strategies and the precache protocol · _service worker only_ · 9 exports
+- [`ranuts/node`](#ranuts-node) — Node server utilities (fs / http / ws / middleware) · _node only_ · 26 exports
+- [`ranuts/visual`](#ranuts-visual) — 2D rendering engine (Canvas / WebGL / WebGPU) · _browser only_ · 16 exports
+- [`ranuts/i18n`](#ranuts-i18n) — Framework-agnostic i18n engine (also re-exported from ranuts/utils) · _browser + node_ · 9 exports
+- [`ranuts/vnode`](#ranuts-vnode) — Snabbdom-style virtual DOM · _browser_ · 26 exports
 
 ## `ranuts/utils`
 

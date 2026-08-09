@@ -336,9 +336,13 @@ async function main(): Promise<void> {
       const symbols = collectEntry(checker, sourceFile);
       total += symbols.length;
 
-      // Digits count: markdown slugs keep them, so `ranuts/i18n` is `#ranutsi18n`.
-      // Stripping them produced `#ranutsin`, a link to nothing.
-      const anchor = entry.subpath.replace(/[^a-z0-9]/g, '');
+      // Must match VitePress's own heading slugifier for `## \`ranuts/utils\`` etc:
+      // it collapses each run of non-alphanumeric characters to a single hyphen
+      // (so `ranuts/utils` → `ranuts-utils`), not strip them outright — stripping
+      // produced `ranutsutils`, a link to nothing, since the real heading ID keeps
+      // the separator as a hyphen. Digits are preserved either way, so `ranuts/i18n`
+      // is `ranuts-i18n`.
+      const anchor = entry.subpath.replace(/[^a-z0-9]+/g, '-');
       tocLines.push(
         `- [\`${entry.subpath}\`](#${anchor}) — ${entry.blurb} · _${entry.runtime}_ · ${symbols.length} exports`,
       );
