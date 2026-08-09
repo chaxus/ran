@@ -6,7 +6,7 @@ shape), slots, and `::part()` names — extracted from source. For CSS variables
 (theming tokens) see [style-tokens-public.md](./style-tokens-public.md); for
 design rules see [DESIGN.md](./DESIGN.md).
 
-Generated at: 2026-08-09T08:38:06.796Z
+Generated at: 2026-08-09T09:00:44.700Z
 
 31 custom elements.
 
@@ -355,7 +355,7 @@ Source: `components/section/index.ts`
 
 Source: `components/select/index.ts`
 
-- **Attributes**: `defaultvalue`, `disabled: boolean`, `dropdownclass: string`, `getPopupContainerId: string`, `label: string`, `placement: string`, `required: boolean`, `sheet: string`, `showsearch`, `trigger: string`, `type: string`, `value: string`
+- **Attributes**: `defaultvalue`, `disabled: boolean`, `dropdownclass: string`, `getpopupcontainerid`, `label: string`, `placement: string`, `required: boolean`, `sheet: string`, `showsearch`, `trigger: string`, `type: string`, `value: string`
 - **Properties**: 
   - `defaultValue: string`
   - `disabled: boolean`

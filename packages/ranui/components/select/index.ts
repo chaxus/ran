@@ -98,7 +98,7 @@ export class Select extends RanElement {
       'defaultvalue',
       'showsearch',
       'placement', // 弹窗的方向
-      'getPopupContainerId', // 挂载的节点
+      'getpopupcontainerid', // 挂载的节点——同上，必须小写才会被观察到
       'dropdownclass', // 弹窗的类名
       'trigger', // 触发下拉框的行为，click 还是 hover，hover 在 isMobile 移动端无效
     ];

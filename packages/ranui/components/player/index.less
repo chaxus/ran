@@ -99,9 +99,10 @@
 // every other block too, which is exactly how `fullscreen` ended up alone
 // at 16px while everything else was 18-20px. Every value below is passed in
 // explicitly by the caller (not derived from a name string via `@{}`
-// interpolation) so each control's own `--ran-player-{name}-*` tokens stay
-// written out and grep-able at the call site — only the *shape* (which
-// properties, which selectors, in what order) lives here once.
+// interpolation) so each control's own tokens (`--ran-player-pip-width`,
+// `--ran-player-toggle-width`, and so on) stay written out and grep-able at
+// the call site — only the *shape* (which properties, which selectors, in
+// what order) lives here once.
 .player-icon-control(
   @display;
   @align-items;

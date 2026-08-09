@@ -10,7 +10,10 @@ interface ExtendParentNode {
 
 export class TabPane extends RanElement {
   static get observedAttributes() {
-    return ['label', 'key', 'disabled', 'icon', 'effect', 'iconSize', 'sheet'];
+    // Attribute names are lowercased by the DOM before being compared against this
+    // list (and against `name` in attributeChangedCallback below), so 'iconSize'
+    // never matched and the sync-to-parent reaction below never fired.
+    return ['label', 'key', 'disabled', 'icon', 'effect', 'iconsize', 'sheet'];
   }
   _events = new EventManager();
   _div: HTMLElement;
