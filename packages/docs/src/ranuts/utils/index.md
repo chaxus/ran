@@ -154,7 +154,7 @@ description: 'Overview of ranuts utility functions: functional helpers (debounce
 | Method          | Description                           | Detail                                    |
 | --------------- | ------------------------------------- | ----------------------------------------- |
 | getWindow       | Get viewport window size              | [getWindow](./get_window.md)              |
-| createObjectURL | Create object URL                     | [createObjectURL](./create_object_url.md) |
+| createObjectURL / requestUrlToBuffer | Create object URL; fetch a URL as raw bytes | [createObjectURL](./create_object_url.md) |
 
 ## Script Loading
 

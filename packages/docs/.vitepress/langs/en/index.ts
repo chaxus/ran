@@ -308,7 +308,10 @@ const themeEnConfig: DefaultTheme.Config = {
               { text: 'getWindow - Get window size', link: '/src/ranuts/utils/get_window' },
               { text: 'report - Telemetry beacons', link: '/src/ranuts/utils/report' },
               { text: 'handleConsole - Instrumentation hooks', link: '/src/ranuts/utils/handle_console' },
-              { text: 'createObjectURL - Create object URL', link: '/src/ranuts/utils/create_object_url' },
+              {
+                text: 'createObjectURL / requestUrlToBuffer - Create object URL',
+                link: '/src/ranuts/utils/create_object_url',
+              },
             ],
           },
           {

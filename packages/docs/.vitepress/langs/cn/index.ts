@@ -310,7 +310,10 @@ const themeCnConfig: DefaultTheme.Config = {
               { text: 'getWindow - 获取窗口大小', link: '/cn/src/ranuts/utils/get_window' },
               { text: 'report - 埋点上报', link: '/cn/src/ranuts/utils/report' },
               { text: 'handleConsole - 监控注入钩子', link: '/cn/src/ranuts/utils/handle_console' },
-              { text: 'createObjectURL - 创建对象 URL', link: '/cn/src/ranuts/utils/create_object_url' },
+              {
+                text: 'createObjectURL / requestUrlToBuffer - 创建对象 URL',
+                link: '/cn/src/ranuts/utils/create_object_url',
+              },
             ],
           },
           {
