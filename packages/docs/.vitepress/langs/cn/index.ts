@@ -101,7 +101,7 @@ const themeCnConfig: DefaultTheme.Config = {
         link: '/cn/src/ranuts/',
       },
       {
-        text: 'API 索引（全部 332 个导出）',
+        text: 'API 索引（全部 393 个导出）',
         link: '/src/ranuts/api',
       },
       {
@@ -134,13 +134,8 @@ const themeCnConfig: DefaultTheme.Config = {
               { text: 'toString - 转换为字符串', link: '/cn/src/ranuts/utils/to_string' },
               { text: 'transformText - ArrayBuffer 转文本', link: '/cn/src/ranuts/utils/transform_text' },
               { text: 'checkEncoding - 检测字符编码', link: '/cn/src/ranuts/utils/check_encoding' },
-              {
-                text: 'changeHumpToLowerCase - 驼峰转下划线',
-                link: '/cn/src/ranuts/utils/change_hump_to_lower_case',
-              },
               { text: 'getMatchingSentences - 提取匹配句子', link: '/cn/src/ranuts/utils/get_matching_sentences' },
               { text: 'isString - 判断是否为字符串', link: '/cn/src/ranuts/utils/is_string' },
-              { text: 'str2Xml - 字符串转 XML', link: '/cn/src/ranuts/utils/str2xml' },
               { text: 'detectLanguage - 文本语言检测', link: '/cn/src/ranuts/utils/detect_language' },
               { text: 'resolveLocale - 解析当前语言', link: '/cn/src/ranuts/utils/resolve_locale' },
               { text: 'segmentByRanges - 偏移与高亮切分', link: '/cn/src/ranuts/utils/segment' },
@@ -198,7 +193,6 @@ const themeCnConfig: DefaultTheme.Config = {
               { text: 'isWeiXin - 判断微信浏览器', link: '/cn/src/ranuts/utils/is_weixin' },
               { text: 'isClient - 判断客户端环境', link: '/cn/src/ranuts/utils/is_client' },
               { text: 'isSafari - 判断 Safari', link: '/cn/src/ranuts/utils/is_safari' },
-              { text: 'isBangDevice - 判断刘海屏', link: '/cn/src/ranuts/utils/is_bang_device' },
               { text: 'currentDevice - 获取设备类型', link: '/cn/src/ranuts/utils/current_device' },
               { text: 'watchMediaQuery - 监听媒体查询', link: '/cn/src/ranuts/utils/watch_media_query' },
             ],
@@ -238,7 +232,6 @@ const themeCnConfig: DefaultTheme.Config = {
             collapsed: true,
             items: [
               { text: 'getAllQueryString - 提取查询参数', link: '/cn/src/ranuts/utils/get_all_query_string' },
-              { text: 'getQuery - 提取查询参数', link: '/cn/src/ranuts/utils/get_query' },
               { text: 'queryFlag / isInIframe - 布尔开关与嵌入判断', link: '/cn/src/ranuts/utils/query_flag' },
               { text: 'encodeUrl - 安全编码 URL', link: '/cn/src/ranuts/utils/encode_url' },
               { text: 'appendUrl - 拼接查询参数', link: '/cn/src/ranuts/utils/append_url' },
@@ -291,8 +284,6 @@ const themeCnConfig: DefaultTheme.Config = {
               { text: 'report - 埋点上报', link: '/cn/src/ranuts/utils/report' },
               { text: 'handleConsole - 监控注入钩子', link: '/cn/src/ranuts/utils/handle_console' },
               { text: 'createObjectURL - 创建对象 URL', link: '/cn/src/ranuts/utils/create_object_url' },
-              { text: 'removeGhosting - 移除拖拽阴影', link: '/cn/src/ranuts/utils/remove_ghosting' },
-              { text: 'retain - 覆盖后退事件', link: '/cn/src/ranuts/utils/retain' },
             ],
           },
           {
@@ -320,7 +311,6 @@ const themeCnConfig: DefaultTheme.Config = {
               { text: 'createSignal - 创建响应式信号', link: '/cn/src/ranuts/utils/create_signal' },
               { text: 'setMime - 设置 MIME 类型', link: '/cn/src/ranuts/utils/set_mime' },
               { text: 'getExtensions - 获取扩展名', link: '/cn/src/ranuts/utils/get_extensions' },
-              { text: 'setAttributeByGlobal - 全局属性', link: '/cn/src/ranuts/utils/set_attribute_by_global' },
               { text: 'SyncHook - 同步事件钩子', link: '/cn/src/ranuts/utils/sync_hook' },
               { text: 'durationHandler - 延迟执行', link: '/cn/src/ranuts/utils/duration_handler' },
               { text: 'task - 统计执行时间', link: '/cn/src/ranuts/utils/task' },

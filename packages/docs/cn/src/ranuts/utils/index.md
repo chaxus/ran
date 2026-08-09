@@ -138,10 +138,7 @@ description: 'ranuts 工具函数总览：函数式工具（debounce、throttle�
 | 方法            | 说明                 | 详细内容                                  |
 | --------------- | -------------------- | ----------------------------------------- |
 | getWindow       | 获取可视窗口大小     | [getWindow](./get_window.md)              |
-| getHost         | 根据环境获取主机地址 | [getHost](./get_host.md)                  |
 | createObjectURL | 创建对象 URL         | [createObjectURL](./create_object_url.md) |
-| removeGhosting  | 移除拖拽事件的阴影   | [removeGhosting](./remove_ghosting.md)    |
-| retain          | 覆盖浏览器的后退事件 | [retain](./retain.md)                     |
 
 ## 脚本加载
 
@@ -165,6 +162,5 @@ description: 'ranuts 工具函数总览：函数式工具（debounce、throttle�
 | createSignal         | 创建响应式信号             | [createSignal](./create_signal.md)                   |
 | setMime              | 设置或更新 MIME 类型映射   | [setMime](./set_mime.md)                             |
 | getExtensions        | 根据 MIME 类型获取扩展名   | [getExtensions](./get_extensions.md)                 |
-| setAttributeByGlobal | 给全局对象添加属性         | [setAttributeByGlobal](./set_attribute_by_global.md) |
 | SyncHook             | 同步事件钩子类             | [SyncHook](./sync_hook.md)                           |
 | durationHandler      | 创建延迟执行函数           | [durationHandler](./duration_handler.md)             |

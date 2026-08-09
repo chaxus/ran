@@ -137,9 +137,15 @@ export class Button extends RanElement {
       this._iconElement.setAttribute('name', iconName);
     }
 
-    const { width, height } = this._slot.getBoundingClientRect();
-    const size = Math.min(width, height) || 16;
-    const finalSize = this.iconSize || `${size > 5 ? size - 5 : size}`;
+    // Size relative to the button's own font-size, not the slotted content's
+    // rendered box: a text line's own bounding height already sits close to
+    // font-size, so subtracting further (the old `size - 5`) shrank the icon
+    // well below the text it sits beside — and gave an inconsistent result
+    // depending on what happened to be slotted. ~1.15x reads as visually
+    // balanced next to the label (Vercel's Geist button icons use the same
+    // ratio: 16px icon / 14px text) and works the same for icon-only buttons.
+    const fontSize = Number.parseFloat(getComputedStyle(this._btnContent).fontSize) || 14;
+    const finalSize = this.iconSize || `${Math.round(fontSize * 1.15)}`;
     this._iconElement.setAttribute('size', String(finalSize));
   };
 

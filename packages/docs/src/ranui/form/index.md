@@ -15,7 +15,7 @@ All three field types, submitted with a plain `<form>` — try changing a field 
 <Demo column>
   <form style="display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 320px;" onsubmit="event.preventDefault(); message.info(JSON.stringify(Object.fromEntries(new FormData(this))))">
     <r-input name="username" label="Username" placeholder="Enter username"></r-input>
-    <r-select name="role" style="width: 100%; height: 40px" defaultValue="member">
+    <r-select name="role" label="Role" style="width: 100%" defaultValue="member">
       <r-option value="member">Member</r-option>
       <r-option value="admin">Admin</r-option>
     </r-select>
@@ -33,7 +33,7 @@ All three field types, submitted with a plain `<form>` — try changing a field 
 ```html
 <form id="signup" style="display: flex; flex-direction: column; gap: 16px;">
   <r-input name="username" label="Username" placeholder="Enter username"></r-input>
-  <r-select name="role" defaultValue="member">
+  <r-select name="role" label="Role" defaultValue="member">
     <r-option value="member">Member</r-option>
     <r-option value="admin">Admin</r-option>
   </r-select>

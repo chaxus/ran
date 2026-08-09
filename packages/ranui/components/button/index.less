@@ -5,6 +5,19 @@
   box-sizing: var(--ran-btn-box-sizing, border-box);
   position: var(--ran-btn-position, relative);
   display: var(--ran-btn-display, inline-flex);
+  // A button must hug its own content by default. Without this, a host that
+  // places `r-button` in a `flex-direction: column` container (the standard
+  // form layout — see docs/src/ranui/form) gets stretched by the parent's
+  // default `align-items: stretch` to the container's full cross-axis width,
+  // even though the *visible* `.ran-btn` surface inside still shrinks to fit
+  // its text. The result: an invisible phantom box past the visible button
+  // that still carries this host's own `box-shadow` (a stray shadow bar
+  // trailing off to the right) and still receives clicks (since it's the
+  // real, full-sized custom-element box). `flex-start` opts out of stretch on
+  // both flex and grid parents (CSS Box Alignment defines it as a synonym for
+  // `start` outside flex containers) while staying overridable for a
+  // consumer that explicitly wants a full-width button.
+  align-self: var(--ran-btn-align-self, flex-start);
   background-image: var(--ran-btn-background-image, none);
   box-shadow: var(--ran-btn-box-shadow, var(--ran-skin-raised-shadow, 0 2px #00000004));
   cursor: var(--ran-btn-cursor, pointer);
@@ -122,7 +135,19 @@
     }
   }
 
+  // Text buttons are chromeless: no raised shadow, no filled surface behind
+  // the transparent content. Both of those live unconditionally on `:host`
+  // and `.ran-btn` (the surface layer's own comment explains why it needs a
+  // background at all — filling the anti-aliased gap behind a *rounded,
+  // opaque* content box in dark mode) so every other type keeps them; `text`
+  // is the one type whose content box is intentionally transparent, so the
+  // surface backing behind it was showing straight through as an unwanted
+  // white rectangle, with the host's shadow drawn under it.
   &([type="text"]) {
+    box-shadow: var(--ran-btn-text-box-shadow, none);
+    .ran-btn {
+      background: var(--ran-btn-text-surface-background, transparent);
+    }
     .ran-btn-content {
       border: var(--ran-btn-text-border, none);
     }
@@ -184,7 +209,7 @@
 
 .ran-btn-content {
   display: var(--ran-btn-content-display, flex);
-  justify-content: var(--ran-btn-content-display, space-between);
+  justify-content: var(--ran-btn-content-justify-content, space-between);
   align-items: var(--ran-btn-align-items, center);
   // Vertical padding compensates the line-height drop below (22px → 1, i.e.
   // font-size) so the button's total height is unchanged: previously

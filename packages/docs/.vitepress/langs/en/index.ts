@@ -96,7 +96,7 @@ const themeEnConfig: DefaultTheme.Config = {
         link: '/src/ranuts/',
       },
       {
-        text: 'API reference (all 332 exports)',
+        text: 'API reference (all 393 exports)',
         link: '/src/ranuts/api',
       },
       {
@@ -129,13 +129,8 @@ const themeEnConfig: DefaultTheme.Config = {
               { text: 'toString - Convert to string', link: '/src/ranuts/utils/to_string' },
               { text: 'transformText - ArrayBuffer to text', link: '/src/ranuts/utils/transform_text' },
               { text: 'checkEncoding - Detect encoding', link: '/src/ranuts/utils/check_encoding' },
-              {
-                text: 'changeHumpToLowerCase - Camel to snake',
-                link: '/src/ranuts/utils/change_hump_to_lower_case',
-              },
               { text: 'getMatchingSentences - Extract sentences', link: '/src/ranuts/utils/get_matching_sentences' },
               { text: 'isString - Check if string', link: '/src/ranuts/utils/is_string' },
-              { text: 'str2Xml - String to XML', link: '/src/ranuts/utils/str2xml' },
               { text: 'detectLanguage - Detect text language', link: '/src/ranuts/utils/detect_language' },
               { text: 'resolveLocale - Pick the active locale', link: '/src/ranuts/utils/resolve_locale' },
               { text: 'segmentByRanges - Offsets & highlights', link: '/src/ranuts/utils/segment' },
@@ -193,7 +188,6 @@ const themeEnConfig: DefaultTheme.Config = {
               { text: 'isWeiXin - Check WeChat browser', link: '/src/ranuts/utils/is_weixin' },
               { text: 'isClient - Check client environment', link: '/src/ranuts/utils/is_client' },
               { text: 'isSafari - Check Safari browser', link: '/src/ranuts/utils/is_safari' },
-              { text: 'isBangDevice - Check notch device', link: '/src/ranuts/utils/is_bang_device' },
               { text: 'currentDevice - Get device type', link: '/src/ranuts/utils/current_device' },
               { text: 'watchMediaQuery - Watch a media query', link: '/src/ranuts/utils/watch_media_query' },
             ],
@@ -233,7 +227,6 @@ const themeEnConfig: DefaultTheme.Config = {
             collapsed: true,
             items: [
               { text: 'getAllQueryString - Extract query', link: '/src/ranuts/utils/get_all_query_string' },
-              { text: 'getQuery - Extract query', link: '/src/ranuts/utils/get_query' },
               { text: 'queryFlag / isInIframe - Boolean flags & embedding', link: '/src/ranuts/utils/query_flag' },
               { text: 'encodeUrl - Encode URL safely', link: '/src/ranuts/utils/encode_url' },
               { text: 'appendUrl - Append query params', link: '/src/ranuts/utils/append_url' },
@@ -286,8 +279,6 @@ const themeEnConfig: DefaultTheme.Config = {
               { text: 'report - Telemetry beacons', link: '/src/ranuts/utils/report' },
               { text: 'handleConsole - Instrumentation hooks', link: '/src/ranuts/utils/handle_console' },
               { text: 'createObjectURL - Create object URL', link: '/src/ranuts/utils/create_object_url' },
-              { text: 'removeGhosting - Remove drag shadow', link: '/src/ranuts/utils/remove_ghosting' },
-              { text: 'retain - Override back event', link: '/src/ranuts/utils/retain' },
             ],
           },
           {
@@ -315,7 +306,6 @@ const themeEnConfig: DefaultTheme.Config = {
               { text: 'createSignal - Create reactive signal', link: '/src/ranuts/utils/create_signal' },
               { text: 'setMime - Set MIME type', link: '/src/ranuts/utils/set_mime' },
               { text: 'getExtensions - Get extensions', link: '/src/ranuts/utils/get_extensions' },
-              { text: 'setAttributeByGlobal - Global attribute', link: '/src/ranuts/utils/set_attribute_by_global' },
               { text: 'SyncHook - Sync event hook', link: '/src/ranuts/utils/sync_hook' },
               { text: 'durationHandler - Delayed execution', link: '/src/ranuts/utils/duration_handler' },
               { text: 'task - Statistical execution time', link: '/src/ranuts/utils/task' },
