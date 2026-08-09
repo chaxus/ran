@@ -267,7 +267,17 @@ export class Popover extends RanElement {
    */
   placementPosition = (): void => {
     if (!this.popoverContent) return;
-    const rect = this.getBoundingClientRect();
+    // Measure the *trigger*, not `this` — the host is `display: block` and
+    // stretches to fill whatever block container it sits in (a demo card,
+    // a form row, …), so its own rect is usually far wider/taller than the
+    // visible trigger. Using it here used to feed a wildly oversized anchor
+    // width/height into the arrow-centering math (`--ran-dropdown-arrow-
+    // anchor-width/height` in dropdown/index.less), pushing the arrow off
+    // the panel entirely, and into the RIGHT/LEFT placement math (`left +
+    // width`), offsetting the panel itself too. The trigger is whatever
+    // light-DOM child isn't the `<r-content>` content panel.
+    const triggerEl = (Array.from(this.children).find((el) => el.tagName !== 'R-CONTENT') as HTMLElement) ?? this;
+    const rect = triggerEl.getBoundingClientRect();
     const { top, left, bottom, width, height } = rect;
     const root = document.getElementById(this.getPopupContainerId);
     const popoverContentRect = this.popoverContent.getBoundingClientRect();
