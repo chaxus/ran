@@ -3,8 +3,8 @@ import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import type { BuildOptions, PluginOption, UserConfig } from 'vite';
 import { visualizer } from 'rollup-plugin-visualizer';
-import loadSvg from './plugins/load-svg';
-import { PORT } from './build/config';
+import loadSvg from './plugins/load-svg.ts';
+import { PORT } from './build/config.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 

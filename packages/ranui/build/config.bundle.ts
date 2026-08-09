@@ -1,7 +1,7 @@
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
-import { bundle, viteConfig } from '../vite.config';
+import { bundle, viteConfig } from '../vite.config.ts';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
