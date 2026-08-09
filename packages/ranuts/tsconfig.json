@@ -6,6 +6,7 @@
     "esModuleInterop": true,
     "target": "ESNext",
     "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
     "outDir": "dist",
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
