@@ -1,5 +1,5 @@
 import type { DefaultTheme } from 'vitepress';
-import { GITHUB, EDITOR } from '../../common/index';
+import { GITHUB, EDITOR } from '../../common/index.ts';
 
 // 在 /cn/src/article/、/cn/src/blockchain/、/cn/src/note/ 之间共享，
 // 使这些页面都能渲染该侧边栏（VitePress 按路径前缀匹配侧边栏）。

@@ -1,5 +1,5 @@
 import type { DefaultTheme } from 'vitepress';
-import { GITHUB, EDITOR } from '../../common/index';
+import { GITHUB, EDITOR } from '../../common/index.ts';
 
 // Shared across /src/article/, /src/blockchain/ and /src/note/ so those pages
 // all render this sidebar (VitePress matches sidebars by path prefix).

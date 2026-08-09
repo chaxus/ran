@@ -12,6 +12,18 @@ function focusableRole<T extends HTMLElement>(
   return builder.tabIndex(0).role(role).aria('label', label);
 }
 
+/**
+ * `<r-icon>` sizes its inner `<svg>` in `1em` by default (`components/icon/index.less`) —
+ * it does **not** grow to fill a parent box just because that box has a pixel width. Passing
+ * `sizeVar` (the same `--ran-player-*-width` custom property the icon's own button div uses)
+ * into the `size` attribute makes `<r-icon>` set that value as an inline CSS width/height on
+ * its `<svg>` directly, so the glyph always matches the button's box — including if a
+ * consumer overrides the CSS variable — instead of floating undersized inside it.
+ */
+function icon(name: string, sizeVar: string): HTMLElement {
+  return View('r-icon').attr('name', name).attr('size', sizeVar).build() as HTMLElement;
+}
+
 export interface SpeedOption {
   label: string;
   value: number;
@@ -75,7 +87,7 @@ export function ensurePlayerView(input: {
     container = Div().build() as HTMLDivElement;
     playerBtn = Div()
       .class('ran-player-play-btn')
-      .children(View('r-icon').attr('name', 'play').build())
+      .children(icon('play', 'var(--ran-player-play-btn-width, 64px)'))
       .build() as HTMLDivElement;
     // Purely visual, `pointer-events: none` in CSS so it never intercepts taps —
     // shown/hidden by `core/gestures.ts` on a double-tap seek.
@@ -105,7 +117,7 @@ export function ensurePlayerView(input: {
       'button',
       'Play',
     )
-      .children(View('r-icon').attr('name', 'play').build())
+      .children(icon('play', 'var(--ran-player-toggle-width, 20px)'))
       .build() as HTMLDivElement;
     const playerControllerBottomTimeCurrent = Div()
       .class('ran-player-controller-bottom-left-time-current')
@@ -145,7 +157,7 @@ export function ensurePlayerView(input: {
 
     const playControllerBottomVolumeIcon = Div()
       .class('ran-player-controller-bottom-right-volume-icon')
-      .children(View('r-icon').attr('name', 'volume').build())
+      .children(icon('volume', 'var(--ran-player-volume-icon-width, 18px)'))
       .build() as HTMLDivElement;
     const playControllerBottomVolumeProgress = View('r-progress')
       .class('ran-player-controller-bottom-right-volume-progress')
@@ -175,7 +187,7 @@ export function ensurePlayerView(input: {
       'button',
       'Picture in picture',
     )
-      .children(View('r-icon').attr('name', 'pip').build())
+      .children(icon('pip', 'var(--ran-player-pip-width, 18px)'))
       .build() as HTMLDivElement;
     // Hidden by default, same reasoning/mechanism as PiP above — visibility toggled by
     // `syncRemoteButtonVisibility` once `isRemotePlaybackSupported()` is known.
@@ -184,14 +196,14 @@ export function ensurePlayerView(input: {
       'button',
       'Cast to device',
     )
-      .children(View('r-icon').attr('name', 'cast').build())
+      .children(icon('cast', 'var(--ran-player-remote-width, 18px)'))
       .build() as HTMLDivElement;
     const playControllerBottomRightFullScreen = focusableRole(
       Div().class('ran-player-controller-bottom-right-full'),
       'button',
       'Fullscreen',
     )
-      .children(View('r-icon').attr('name', 'fullscreen').build())
+      .children(icon('fullscreen', 'var(--ran-player-fullscreen-width, 16px)'))
       .build() as HTMLDivElement;
 
     const playerControllerBottomRight = Div()

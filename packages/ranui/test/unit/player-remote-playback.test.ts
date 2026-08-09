@@ -95,4 +95,32 @@ describe('r-player cast/AirPlay button', () => {
 
     expect(prompt).toHaveBeenCalledTimes(1);
   });
+
+  it('shows the button after a real connect in a supporting browser — no manual re-sync', () => {
+    // Regression test: connectedCallback() used to call syncRemoteButtonVisibility()
+    // before updatePlayer() had created `_video`, so isRemotePlaybackSupported(undefined)
+    // always returned false and the button stayed hidden forever, even here where the
+    // browser genuinely supports it. Stubbing the prototype (not an instance) and never
+    // calling syncRemoteButtonVisibility() by hand is what makes this exercise the real
+    // connectedCallback lifecycle instead of masking the ordering bug.
+    const original = Object.getOwnPropertyDescriptor(HTMLVideoElement.prototype, 'remote');
+    Object.defineProperty(HTMLVideoElement.prototype, 'remote', {
+      configurable: true,
+      get: () => ({ prompt: vi.fn().mockResolvedValue(undefined) }),
+    });
+    try {
+      const player = document.createElement('r-player') as any;
+      document.body.appendChild(player);
+
+      expect(
+        player._playControllerBottomRemote.classList.contains('ran-player-controller-bottom-right-remote-hidden'),
+      ).toBe(false);
+    } finally {
+      if (original) {
+        Object.defineProperty(HTMLVideoElement.prototype, 'remote', original);
+      } else {
+        delete (HTMLVideoElement.prototype as any).remote;
+      }
+    }
+  });
 });

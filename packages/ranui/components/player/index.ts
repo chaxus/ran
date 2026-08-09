@@ -794,10 +794,17 @@ export class RanPlayer extends RanElement {
     if (!this.hasAttribute('tabindex')) this.tabIndex = 0;
     bindControllerEvents(this._events, this.getControllerElements(), this.getControllerHandlers());
     if (this._effectDisposers.length === 0) this.setupEffects();
+    this._gestures = attachGestureHandlers(this.getGestureDeps());
+    // `updatePlayer()` must run first — it's what creates `this._video`, and
+    // `syncRemoteButtonVisibility()` needs a real element to probe
+    // `.remote`/`.webkitShowPlaybackTargetPicker` on (unlike `isPipSupported()`,
+    // which only reads the document-level `pictureInPictureEnabled` and
+    // tolerates an undefined video, calling it before the video existed went
+    // unnoticed — but it always fell back to `false`, permanently hiding the
+    // cast button even in a fully supporting browser).
+    this.updatePlayer();
     this.syncPipButtonVisibility();
     this.syncRemoteButtonVisibility();
-    this._gestures = attachGestureHandlers(this.getGestureDeps());
-    this.updatePlayer();
   }
   disconnectedCallback(): void {
     this._events.abort();

@@ -1,8 +1,8 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { defineConfig } from 'vitepress';
-import { themeEnConfig } from './langs/en';
-import { themeCnConfig } from './langs/cn';
+import { themeEnConfig } from './langs/en/index.ts';
+import { themeCnConfig } from './langs/cn/index.ts';
 import {
   ARTICLE_PATH,
   BASE_PATH,
@@ -20,8 +20,8 @@ import {
   SERVICE_WORK,
   SET_FONT_SIZE,
   UTILS_PATH,
-} from './common/index';
-import { LANGS_DICT } from './lib/constant';
+} from './common/index.ts';
+import { LANGS_DICT } from './lib/constant.ts';
 
 // ── SEO helpers ──────────────────────────────────────────────────────────────
 const ORIGIN = HOME.replace(/\/+$/, ''); // https://ran.chaxus.com
