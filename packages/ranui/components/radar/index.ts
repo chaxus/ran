@@ -277,20 +277,10 @@ export class RadarChart extends RanElement {
     fontFamily: string,
     fontSize: string | number,
   ) {
-    ctx.beginPath();
     const radio = getPixelRatio(ctx);
     ctx.fillStyle = color;
-    ctx.moveTo(x + radius, y);
-    ctx.lineTo(x + width - radius, y);
-    ctx.arc(x + width - radius, y + radius, radius, (Math.PI * 3) / 2, Math.PI * 2);
-    ctx.lineTo(x + width, y + height - radius);
-    ctx.arc(x + width - radius, y + height - radius, radius, Math.PI, Math.PI / 2);
-    ctx.lineTo(x + radius, y + height);
-    ctx.arc(x + radius, y + height - radius, radius, Math.PI / 2, Math.PI);
-    ctx.lineTo(x, y + radius);
-    ctx.arc(x + radius, y + radius, radius, Math.PI, (Math.PI * 3) / 2);
+    roundRectByArc(ctx, x, y, width, height, radius);
     ctx.fill();
-    ctx.closePath();
     ctx.beginPath();
     ctx.fillStyle = fontColor;
     ctx.font = `${fontSize || 12 * radio}px ${fontFamily}`;

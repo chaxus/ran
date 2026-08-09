@@ -146,6 +146,8 @@ import type {
 } from './i18n';
 import { createLocalePath } from './localePath';
 import type { LocalePath, LocalePathConfig, LocaleRoute } from './localePath';
+import { computePlacement } from './placement';
+import type { ComputePlacementOptions, ComputedPlacement, Placement, PlacementRect } from './placement';
 import type { ResolveLocaleOptions, TextLanguage } from './lang';
 import { readFileAsArrayBuffer, readFileAsDataURL, readFileAsText, readFileAsUint8Array } from './file';
 import { WorkerClient, serveWorker } from './worker';
@@ -466,6 +468,7 @@ export {
   I18nCore,
   createI18n,
   useI18n,
+  computePlacement,
 };
 
 export type {
@@ -537,4 +540,8 @@ export type {
   PortBridge,
   OpenPortBridgeOptions,
   AcceptPortBridgeOptions,
+  ComputePlacementOptions,
+  ComputedPlacement,
+  Placement,
+  PlacementRect,
 };
