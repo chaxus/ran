@@ -4,6 +4,8 @@
 
 Chrome（以及 Chromium 内核浏览器）用 `MediaRecorder` 写出的 WEBM 文件没有时长元数据——文件能播放，但在整个 blob 被完整解码一次之前，跳转和显示时长都会失败。`AudioRecorder` 在请求麦克风、录音之后，会在 `stop()` 时原地修补 WEBM 容器里的时长字段，再把 `Blob` 交出来，这样录出来的文件立刻就能像普通音频文件一样使用。
 
+录制字节和识别语音是两码事——如果你真正想要的是文字而不是音频文件，看 [`createSpeechRecognizer`](./speech.md)。
+
 ## 使用
 
 ```ts

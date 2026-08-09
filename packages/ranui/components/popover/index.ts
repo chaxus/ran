@@ -347,16 +347,29 @@ export class Popover extends RanElement {
    * @return {*}
    */
   hoverPopover = (e: Event): void => {
-    this.clickPopover(e);
+    e.stopPropagation();
+    e.preventDefault();
+    this.setDropdownDisplayBlock();
   };
 
   clickContent = (e: Event): void => {
     e.stopPropagation();
   };
+  // Toggle, not just open — a click trigger's document-level close listener
+  // (see popoverTrigger) is blocked from ever firing on the trigger's own
+  // click (this handler calls stopPropagation first), so re-clicking the
+  // trigger was previously the one action that couldn't close it: it only
+  // ever called setDropdownDisplayBlock, whose "already open" guard then
+  // made the second click a no-op. Outside-click/Escape still worked, but a
+  // click-triggered panel that its own trigger can't dismiss reads as stuck.
   clickPopover = (e: Event): void => {
     e.stopPropagation();
     e.preventDefault();
-    this.setDropdownDisplayBlock();
+    if (this.popoverContent?.style.display === 'block') {
+      this.setDropdownDisplayNone();
+    } else {
+      this.setDropdownDisplayBlock();
+    }
   };
   keydownPopover = (e: KeyboardEvent): void => {
     if (isActivationKey(e)) {

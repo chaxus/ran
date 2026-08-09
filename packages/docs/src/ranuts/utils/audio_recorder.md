@@ -9,6 +9,10 @@ whole blob has been decoded once. `AudioRecorder` requests the microphone, recor
 on `stop()` patches the WEBM container's duration field in place before handing back the
 `Blob`, so the recording behaves like a normal audio file immediately.
 
+Recording bytes and recognizing speech are separate concerns — see
+[`createSpeechRecognizer`](./speech.md) if what you actually want is a transcript, not an
+audio file.
+
 ## Usage
 
 ```ts
