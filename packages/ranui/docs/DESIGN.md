@@ -243,9 +243,20 @@ that only works on one.
   token can be introduced instead of every component picking its own number.
 - **Never hide the only way to do something on mobile** — see the "Hiding navigation/affordances
   on mobile" pitfall below; reflow instead of `display:none`.
+- **A measured position/size is only correct until the next reflow.** Anything computed from
+  `getBoundingClientRect()` — a portaled panel's coordinates, a sliding indicator's offset — goes
+  stale on a resize, a container reflow, or (for a portaled panel) a scroll, none of which are the
+  interaction that originally triggered the measurement. A body-portaled panel needs `scroll`
+  (capture phase, for nested scroll containers) + `resize` listeners while open (`r-select`'s
+  `_attachReposition`, `r-popover`'s `_attachReposition`); an in-flow element needs a
+  `ResizeObserver` on the container that actually drives the measurement, not a plain `window`
+  `resize` (`r-tabs`'s `_navResizeObserver` on `_nav`, re-running `setTabLine`). Narrow-viewport
+  testing (see the checklist) exercises the *initial* layout at that width — it does not exercise
+  *resizing into* it, which is where this class of bug actually shows up.
 - **Verify on both inputs before shipping**, not just both color schemes: click-drag with a mouse
   *and* touch-drag (or the Chrome DevTools device toolbar's touch emulation) on anything with
-  `touch-action` in its CSS; tab/click through anything with `trigger="hover"`.
+  `touch-action` in its CSS; tab/click through anything with `trigger="hover"`; drag the browser
+  window narrower/wider (not just load at a fixed width) on anything with a measured position.
 
 ---
 
