@@ -337,7 +337,10 @@ export class Select extends RanElement {
       this.removeAttribute('disabled');
       this._selection.removeAttribute('disabled');
       this.removeAttribute('aria-disabled');
-      this.tabIndex = 0;
+      // Don't clobber a consumer-set custom tabindex — but a tabindex of -1 here can
+      // only be *our own* disabled-state assignment (see the enable branch below and
+      // attributeChangedCallback's 'disabled' handling), so that case must still reset.
+      if (this.tabIndex < 0 || !this.hasAttribute('tabindex')) this.tabIndex = 0;
     } else {
       this.setAttribute('disabled', '');
       this._selection.setAttribute('disabled', '');
@@ -1014,7 +1017,7 @@ export class Select extends RanElement {
         this._select.removeAttribute('disabled');
         this._selection.removeAttribute('disabled');
         this.removeAttribute('aria-disabled');
-        if (!this.hasAttribute('tabindex')) this.tabIndex = 0;
+        if (this.tabIndex < 0 || !this.hasAttribute('tabindex')) this.tabIndex = 0;
       }
     }
     if (name === 'value') this.syncSelectedFromValue(newValue);

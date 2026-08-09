@@ -110,6 +110,25 @@ test('select — disabled', async ({ page }) => {
 
 // ── open dropdown ─────────────────────────────────────────────────────────────
 
+test('select — selecting an option with the mouse keeps focus on the host', async ({ page }) => {
+  // The clicked option is portaled to <body> and isn't itself focusable, so the browser's
+  // default mousedown-focus-shift behavior used to move focus to <body> — unlike
+  // keyboard-driven selection, which never left the host.
+  await mount(
+    page,
+    `
+    <r-select id="sel" style="width: 200px">
+      <r-option value="jack">Jack</r-option>
+      <r-option value="lucy">Lucy</r-option>
+    </r-select>
+  `,
+  );
+  await page.locator('#sel').click();
+  await page.waitForTimeout(350);
+  await page.getByRole('option', { name: 'Lucy' }).click();
+  await expect(page.locator('#sel')).toBeFocused();
+});
+
 test('select — open dropdown', async ({ page }) => {
   await mount(
     page,

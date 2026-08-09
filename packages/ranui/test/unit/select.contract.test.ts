@@ -652,6 +652,64 @@ describe('r-select contract', () => {
     expect(select._activeOption).toBe(opts[2]);
   });
 
+  it('associates `label` via aria-label, not aria-labelledby pointing into its own shadow root', async () => {
+    // The rendered <label> lives inside this select's own shadow root — a plain
+    // aria-labelledby id-ref cannot cross into a (child) shadow tree, even the host's
+    // own, so the combobox's accessible name came back empty when this used
+    // aria-labelledby. Verified directly against Chrome's accessibility tree.
+    const select = await createSelectWithOptions();
+    select.setAttribute('label', 'Role');
+    expect(select.getAttribute('aria-label')).toBe('Role');
+    expect(select.hasAttribute('aria-labelledby')).toBe(false);
+
+    select.setAttribute('label', 'Updated role');
+    expect(select.getAttribute('aria-label')).toBe('Updated role');
+
+    select.removeAttribute('label');
+    expect(select.hasAttribute('aria-label')).toBe(false);
+  });
+
+  it('updates aria-disabled and tabIndex when disabled changes after the select is already connected', async () => {
+    const select = await createSelectWithOptions();
+    expect(select.tabIndex).toBe(0);
+
+    // The bare boolean-attribute form (`disabled` with no value) reflects as an empty
+    // string; a naive `!newValue` check treats that as falsy and takes the wrong branch.
+    select.setAttribute('disabled', '');
+    expect(select.getAttribute('aria-disabled')).toBe('true');
+    expect(select.tabIndex).toBe(-1);
+
+    select.removeAttribute('disabled');
+    expect(select.hasAttribute('aria-disabled')).toBe(false);
+    expect(select.tabIndex).toBe(0);
+  });
+
+  it('Home/End jump to the first/last enabled option', async () => {
+    const select = await createSelectWithDisabledMiddle();
+    const opts = select.getDropdownOptions();
+    opts.forEach((o) => {
+      (o as any).scrollIntoView = vi.fn();
+    });
+
+    select.keydownSelect(new KeyboardEvent('keydown', { key: 'End', cancelable: true }));
+    expect(select._activeOption).toBe(opts[2]);
+
+    select.keydownSelect(new KeyboardEvent('keydown', { key: 'Home', cancelable: true }));
+    expect(select._activeOption).toBe(opts[0]);
+  });
+
+  it('type-ahead jumps to the option starting with the typed characters', async () => {
+    const select = await createSelectWithDisabledMiddle(); // One / Two(disabled) / Three
+    const opts = select.getDropdownOptions();
+    opts.forEach((o) => {
+      (o as any).scrollIntoView = vi.fn();
+    });
+
+    select.keydownSelect(new KeyboardEvent('keydown', { key: 't', cancelable: true }));
+    // 'Two' is disabled — type-ahead must skip it and land on 'Three'.
+    expect(select._activeOption).toBe(opts[2]);
+  });
+
   // ── FIX A: defaultValue and showSearch are reactive after connect ─────────
   it('re-applies the selection when defaultValue changes after connect (FIX A)', async () => {
     const select = await createSelectWithOptions(); // options value '1' / '2'
