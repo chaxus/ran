@@ -138,6 +138,17 @@ export default defineConfig({
     },
     build: {
       target: 'esnext',
+      // Default (500kB) fires on every single build — every page-specific demo chunk
+      // over that size is a real, per-feature library that has no smaller substitute
+      // (KaTeX + temml + the latinmodernmath font for math rendering, hls.js/dash.js/
+      // mpegts.js for the video-streaming article, pdf.js for the doc-preview demo,
+      // cytoscape for graph diagrams, mermaid's per-diagram-type chunks). None of them
+      // are in the eagerly-loaded homepage/theme bundle — verified by inspecting
+      // dist/index.html's script tags, which pull in only the ~340kB Vue framework +
+      // theme chunk. Raised just above the largest known-legitimate chunk (pdf.js,
+      // ~1.36MB) so the warning stays a tripwire for an unexpected new large chunk
+      // instead of noise that's identical on every build and easy to stop reading.
+      chunkSizeWarningLimit: 1500,
       rollupOptions: {
         onwarn(warning, warn) {
           if (warning.code === 'INVALID_ANNOTATION') return;
