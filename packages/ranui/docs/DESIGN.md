@@ -213,7 +213,43 @@ transition: var(--ran-input-transition, none);
 
 ---
 
-## 8. Components — how to apply the system
+## 8. Input & viewport — mobile and desktop, both
+
+Every interactive component must work with a mouse **and** with touch, at a narrow phone
+width **and** a wide desktop width. Neither is a secondary target — do not ship a component
+that only works on one.
+
+- **Drag/slider/gesture interaction uses Pointer Events, never mouse-only.** Bind
+  `pointerdown`/`pointermove`/`pointerup`(`/pointercancel`) — never `mousedown`/`mousemove`/`mouseup`
+  alone — so the same handler drives mouse, touch, and pen. Pair it with `touch-action: none` in
+  CSS on the exact drag surface (not a larger wrapper) so the browser doesn't also try to scroll
+  the page underneath the drag. If the CSS sets `touch-action: none` on an element, that element
+  **must** have a pointer/touch handler wired to it — CSS signaling touch support with no JS behind
+  it is a broken component, not a harmless no-op (this was shipped and fixed once already, see
+  `changelogs/` around `r-colorpicker`/`r-progress`). Canonical references: `components/player/core/gestures.ts`
+  (touch-only gestures scoped via `pointerType === 'touch'`), `components/mermaid/index.ts` (pan/zoom),
+  `components/scratch/index.ts`, `components/colorpicker/index.ts`, `components/progress/index.ts`.
+- **A hover-only affordance needs a tap fallback.** `trigger="hover"` on an overlay must degrade to
+  click/tap on a touch device — see `r-select` / `r-popover`'s `.includes('hover') && !isMobile()`
+  gate (`isMobile()` from `ranuts/utils`). Never ship an interaction that is reachable only via
+  `:hover` or `mouseenter` with no click/tap equivalent.
+- **Prefer viewport-relative sizing over inventing a breakpoint.** `%`, `min()`, `max()`, `clamp()`,
+  `vw`/`vh` (e.g. `r-modal`'s `min(560px, calc(100vw - 32px))`) let a component self-adapt to a
+  narrow screen without a `@media` query at all — reach for these first. There is currently **no
+  shared breakpoint token** in `theme/tokens.less`; the one existing viewport `@media` query
+  (`components/button/index.less`, gating the sticky `:hover` state behind `min-width: 1024px` so
+  touch devices don't get a stuck hover) is a local, hardcoded literal. If a component genuinely
+  needs a hard breakpoint, don't silently invent another one-off px value — flag it so a shared
+  token can be introduced instead of every component picking its own number.
+- **Never hide the only way to do something on mobile** — see the "Hiding navigation/affordances
+  on mobile" pitfall below; reflow instead of `display:none`.
+- **Verify on both inputs before shipping**, not just both color schemes: click-drag with a mouse
+  *and* touch-drag (or the Chrome DevTools device toolbar's touch emulation) on anything with
+  `touch-action` in its CSS; tab/click through anything with `trigger="hover"`.
+
+---
+
+## 9. Components — how to apply the system
 
 - Use the semantic ranui components (`r-button`, `r-input`, `r-select`, `r-card`, `r-modal`, …) rather than re-building primitives.
 - Theme through **CSS variables**, **`::part()`**, or the **`sheet`** attribute (escape hatch). CSS variables cross Shadow DOM; selectors do not.
@@ -226,7 +262,7 @@ transition: var(--ran-input-transition, none);
 
 ---
 
-## 9. Component token naming
+## 10. Component token naming
 
 Component-scoped CSS custom properties (the `var(--ran-{component}-…, fallback)` hooks in each
 `index.less`) must follow:
@@ -270,6 +306,8 @@ pass that brought existing components in line with it (0.5.0-alpha.0).
 
 - [ ] Primary task and primary action are unmistakable.
 - [ ] Works in **light and dark**, at **narrow and wide** widths.
+- [ ] Works with **mouse and touch** — any drag/gesture uses Pointer Events, not mouse-only; any
+      `trigger="hover"` has a tap fallback.
 - [ ] All changed **states** exercised (hover, active, focus, disabled, loading, empty, error).
 - [ ] **Keyboard / focus** behavior verified; visible focus everywhere.
 - [ ] Edge cases: long text, large numbers, both locales (en / zh).

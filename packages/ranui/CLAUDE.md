@@ -19,7 +19,8 @@ For each element's **attributes / properties / events / slots / `::part()`**, co
 - **Radius/motion:** use the tokens; prefer no motion (0ms) and keep what remains quick (150/200/300ms); respect `prefers-reduced-motion`.
 - **Copy:** buttons = action + object ("Deploy project"); errors = what + how; toasts state the change ("Project deleted").
 - **Accessibility:** WCAG AA contrast; never signal state by color alone (pair an icon/label); visible focus ring on every interactive element; icon-only controls need an `aria-label`; full keyboard nav.
-- **Verify rendered output** in light _and_ dark, at narrow _and_ wide widths, across the materially changed states — code review alone is not enough.
+- **Mobile and desktop, both.** Any drag/slider/gesture uses Pointer Events (`pointerdown/move/up/cancel`), never mouse-only, matched by `touch-action: none` on the exact drag surface. Any `trigger="hover"` overlay degrades to click/tap on touch (`isMobile()` gate — see `r-select`/`r-popover`). Prefer viewport-relative sizing (`%`, `min()`, `clamp()`, `vw`/`vh`) over inventing a one-off `@media` breakpoint. See DESIGN.md §8.
+- **Verify rendered output** in light _and_ dark, at narrow _and_ wide widths, with mouse _and_ touch input, across the materially changed states — code review alone is not enough.
 
 ---
 
