@@ -26,10 +26,8 @@ description: 'ranuts 工具函数总览：函数式工具（debounce、throttle�
 | toString              | 将值转换为字符串类型                  | [toString](./to_string.md)                              |
 | transformText         | 将 ArrayBuffer 转换为文本             | [transformText](./transform_text.md)                    |
 | checkEncoding         | 检测 Uint8Array 数据的字符编码        | [checkEncoding](./check_encoding.md)                    |
-| changeHumpToLowerCase | 将驼峰命名转换为下划线命名            | [changeHumpToLowerCase](./change_hump_to_lower_case.md) |
 | getMatchingSentences  | 提取包含关键词的完整句子              | [getMatchingSentences](./get_matching_sentences.md)     |
 | isString              | 判断值是否为字符串类型                | [isString](./is_string.md)                              |
-| str2Xml               | 字符串转成 `xml`                      | [str2Xml](./str2xml.md)                                 |
 
 ## 对象处理
 
@@ -77,7 +75,6 @@ description: 'ranuts 工具函数总览：函数式工具（debounce、throttle�
 | isWeiXin      | 判断是否为微信浏览器     | [isWeiXin](./is_weixin.md)           |
 | isClient      | 判断是否为客户端环境     | [isClient](./is_client.md)           |
 | isSafari      | 判断是否为 Safari 浏览器 | [isSafari](./is_safari.md)           |
-| isBangDevice  | 判断是否为 iPhone 刘海屏 | [isBangDevice](./is_bang_device.md)  |
 | currentDevice | 获取当前设备类型         | [currentDevice](./current_device.md) |
 
 ## DOM 操作
@@ -103,7 +100,6 @@ description: 'ranuts 工具函数总览：函数式工具（debounce、throttle�
 | 方法              | 说明                 | 详细内容                                       |
 | ----------------- | -------------------- | ---------------------------------------------- |
 | getAllQueryString | 从 URL 提取查询参数  | [getAllQueryString](./get_all_query_string.md) |
-| getQuery          | 从 URL 提取查询参数  | [getQuery](./get_query.md)                     |
 | encodeUrl         | 安全地编码 URL       | [encodeUrl](./encode_url.md)                   |
 | appendUrl         | 将查询参数拼接到 URL | [appendUrl](./append_url.md)                   |
 

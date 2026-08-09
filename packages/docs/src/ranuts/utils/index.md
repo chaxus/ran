@@ -138,10 +138,7 @@ description: 'Overview of ranuts utility functions: functional helpers (debounce
 | Method          | Description                           | Detail                                    |
 | --------------- | ------------------------------------- | ----------------------------------------- |
 | getWindow       | Get viewport window size              | [getWindow](./get_window.md)              |
-| getHost         | Get host address based on environment | [getHost](./get_host.md)                  |
 | createObjectURL | Create object URL                     | [createObjectURL](./create_object_url.md) |
-| removeGhosting  | Remove drag event shadow              | [removeGhosting](./remove_ghosting.md)    |
-| retain          | Override browser back event           | [retain](./retain.md)                     |
 
 ## Script Loading
 
@@ -165,6 +162,5 @@ description: 'Overview of ranuts utility functions: functional helpers (debounce
 | createSignal         | Create reactive signal                 | [createSignal](./create_signal.md)                   |
 | setMime              | Set or update MIME type mapping        | [setMime](./set_mime.md)                             |
 | getExtensions        | Get extensions from MIME type          | [getExtensions](./get_extensions.md)                 |
-| setAttributeByGlobal | Add property to global object          | [setAttributeByGlobal](./set_attribute_by_global.md) |
 | SyncHook             | Synchronous event hook class           | [SyncHook](./sync_hook.md)                           |
 | durationHandler      | Create delayed execution function      | [durationHandler](./duration_handler.md)             |
