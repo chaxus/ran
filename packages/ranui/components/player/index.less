@@ -19,7 +19,7 @@
 }
 
 .video-speed-dropdown {
-  z-index: 1011;
+  z-index: var(--ran-player-dropdown-z-index, var(--ran-z-dropdown, 1100));
   --ran-dropdown-padding: 4px 0;
   --ran-dropdown-background: rgba(43, 43, 43, 0.9);
   --ran-dropdown-option-item-hover-background-color: rgba(255, 255, 255, 0.15);
@@ -34,7 +34,7 @@
 }
 
 .video-clarity-dropdown {
-  z-index: 1011;
+  z-index: var(--ran-player-dropdown-z-index, var(--ran-z-dropdown, 1100));
   --ran-dropdown-padding: 4px 0;
   --ran-dropdown-background: rgba(43, 43, 43, 0.9);
   --ran-dropdown-option-item-hover-background-color: rgba(255, 255, 255, 0.15);
