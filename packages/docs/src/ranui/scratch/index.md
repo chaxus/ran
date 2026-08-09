@@ -61,6 +61,12 @@ The component does **not** dispatch any custom events — there is nothing to bi
 
 Pointer coordinates are mapped through the canvas's actual drawing-buffer resolution (see below), so scratching tracks correctly under your finger/cursor regardless of the element's CSS size or the screen's device pixel ratio. All handlers no-op while `disabled` is set, and `touch-action: none` on the canvas keeps a touch drag from also scrolling the page.
 
+A few device-specific edge cases are handled explicitly rather than left to whatever "unifying" mouse/touch/pen happens to do by default:
+
+- **Mouse**: only the primary (left) button starts a scratch — a right-click-drag or middle-click doesn't.
+- **Multi-touch**: the first finger down owns the stroke; a second finger touching mid-scratch is ignored until the first one lifts, instead of the two silently fighting over the same drawing state.
+- **Interrupted gestures**: if the OS reclaims pointer capture mid-drag without ever firing `pointerup` (seen on some Android WebViews when a system back-swipe gesture interrupts a scratch), a `lostpointercapture` listener resets the internal state anyway — otherwise the component would think it's still scratching and the next unrelated pointer movement would silently keep drawing.
+
 ### Canvas resolution
 
 The canvas's internal resolution is synced to its actual rendered CSS size × `devicePixelRatio` (on connect, and again on window `resize`) — not left at the browser's fixed 300×150 default. This keeps the cover crisp on HiDPI screens and keeps pointer-to-canvas coordinate mapping accurate at any element size; a resize resets any in-progress scratch (the buffer necessarily clears when its dimensions change).

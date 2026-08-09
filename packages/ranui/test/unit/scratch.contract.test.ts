@@ -126,14 +126,16 @@ describe('r-scratch contract', () => {
     scratch.scratchTicket.width = 100;
     scratch.scratchTicket.height = 100;
     scratch.state.isScratching = true;
+    scratch.state.activePointerId = 1;
     scratch.state.scratchedArea = 100 * 100 * 0.5; // above the 0.35 threshold
 
     const mockCtx = mockDrawingContext();
     vi.spyOn(scratch.scratchTicket, 'getContext').mockReturnValue(mockCtx as any);
 
-    scratch.onScratchPointerUp();
+    scratch.onScratchPointerUp(pointer('pointerup', {}));
 
     expect(scratch.state.isScratching).toBe(false);
+    expect(scratch.state.activePointerId).toBeUndefined();
     expect(mockCtx.clearRect).toHaveBeenCalledWith(0, 0, 100, 100);
     expect(scratch.state.scratchedArea).toBe(0);
   });
@@ -143,14 +145,28 @@ describe('r-scratch contract', () => {
     document.body.appendChild(scratch);
     scratch.scratchTicket.width = 100;
     scratch.scratchTicket.height = 100;
+    scratch.state.isScratching = true;
+    scratch.state.activePointerId = 1;
     scratch.state.scratchedArea = 10;
 
     const mockCtx = mockDrawingContext();
     vi.spyOn(scratch.scratchTicket, 'getContext').mockReturnValue(mockCtx as any);
 
-    scratch.onScratchPointerUp();
+    scratch.onScratchPointerUp(pointer('pointerup', {}));
     expect(mockCtx.clearRect).not.toHaveBeenCalled();
     expect(scratch.state.scratchedArea).toBe(10);
+  });
+
+  it('onScratchPointerUp ignores a pointer that is not the one currently scratching', () => {
+    const scratch = document.createElement('r-scratch') as any;
+    document.body.appendChild(scratch);
+    scratch.state.isScratching = true;
+    scratch.state.activePointerId = 1;
+
+    scratch.onScratchPointerUp(pointer('pointerup', { pointerId: 2 }));
+
+    expect(scratch.state.isScratching).toBe(true);
+    expect(scratch.state.activePointerId).toBe(1);
   });
 
   it('onScratchPointerMove returns when ctx is null', () => {
@@ -158,6 +174,7 @@ describe('r-scratch contract', () => {
     document.body.appendChild(scratch);
 
     scratch.state.isScratching = true;
+    scratch.state.activePointerId = 1;
     vi.spyOn(scratch.scratchTicket, 'getContext').mockReturnValue(null as any);
     expect(() => scratch.onScratchPointerMove(pointer('pointermove', { clientX: 1, clientY: 1 }))).not.toThrow();
   });
@@ -165,9 +182,44 @@ describe('r-scratch contract', () => {
   it('onScratchPointerUp returns when ctx is null', () => {
     const scratch = document.createElement('r-scratch') as any;
     document.body.appendChild(scratch);
+    scratch.state.isScratching = true;
+    scratch.state.activePointerId = 1;
 
     vi.spyOn(scratch.scratchTicket, 'getContext').mockReturnValue(null as any);
-    expect(() => scratch.onScratchPointerUp()).not.toThrow();
+    expect(() => scratch.onScratchPointerUp(pointer('pointerup', {}))).not.toThrow();
+  });
+
+  it('ignores a non-primary mouse button (e.g. right-click-drag)', () => {
+    const scratch = document.createElement('r-scratch') as any;
+    document.body.appendChild(scratch);
+    vi.spyOn(scratch.scratchTicket, 'getBoundingClientRect').mockReturnValue({ left: 0, top: 0, width: 100, height: 100 } as DOMRect);
+    const mockCtx = mockDrawingContext();
+    vi.spyOn(scratch.scratchTicket, 'getContext').mockReturnValue(mockCtx as any);
+
+    scratch.onScratchPointerDown(pointer('pointerdown', { pointerType: 'mouse', button: 2, clientX: 10, clientY: 10 }));
+
+    expect(scratch.state.isScratching).toBe(false);
+    expect(mockCtx.stroke).not.toHaveBeenCalled();
+  });
+
+  it('a second touch mid-scratch does not hijack the active stroke', () => {
+    const scratch = document.createElement('r-scratch') as any;
+    document.body.appendChild(scratch);
+    vi.spyOn(scratch.scratchTicket, 'getBoundingClientRect').mockReturnValue({ left: 0, top: 0, width: 100, height: 100 } as DOMRect);
+    const mockCtx = mockDrawingContext();
+    vi.spyOn(scratch.scratchTicket, 'getContext').mockReturnValue(mockCtx as any);
+
+    scratch.onScratchPointerDown(pointer('pointerdown', { pointerId: 1, pointerType: 'touch', clientX: 10, clientY: 10 }));
+    expect(scratch.state.activePointerId).toBe(1);
+
+    // A second finger touches down before the first is lifted.
+    scratch.onScratchPointerDown(pointer('pointerdown', { pointerId: 2, pointerType: 'touch', clientX: 90, clientY: 90 }));
+    expect(scratch.state.activePointerId).toBe(1); // still the first finger
+
+    // The second finger's move must not be able to draw either.
+    const strokesBefore = mockCtx.stroke.mock.calls.length;
+    scratch.onScratchPointerMove(pointer('pointermove', { pointerId: 2, clientX: 95, clientY: 95 }));
+    expect(mockCtx.stroke.mock.calls.length).toBe(strokesBefore);
   });
 
   it('attributeChangedCallback appends container and calls drawScratchTicket when value changes', () => {
@@ -198,6 +250,8 @@ describe('r-scratch contract', () => {
     expect(addSpy).toHaveBeenCalledWith('pointermove', scratch.onScratchPointerMove, expect.any(Object));
     expect(addSpy).toHaveBeenCalledWith('pointerup', scratch.onScratchPointerUp, expect.any(Object));
     expect(addSpy).toHaveBeenCalledWith('pointercancel', scratch.onScratchPointerUp, expect.any(Object));
+    // A device/OS can reclaim pointer capture mid-gesture without ever firing `pointerup`.
+    expect(addSpy).toHaveBeenCalledWith('lostpointercapture', scratch.onScratchPointerUp, expect.any(Object));
   });
 
   it('drawScratchTicket paints an opaque cover instead of leaving the canvas blank', () => {
