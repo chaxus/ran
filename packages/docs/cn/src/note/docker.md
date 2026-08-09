@@ -1,3 +1,7 @@
+---
+description: '实用的 Docker 命令速查：镜像与容器的生命周期管理、编写 Dockerfile、CMD，以及 daemon 起不来时的排查思路。'
+---
+
 # docker
 
 查询 `docker` 是否在运行：

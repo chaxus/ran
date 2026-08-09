@@ -1,3 +1,7 @@
+---
+description: 'A practical Docker command reference: image and container lifecycle, writing a Dockerfile, CMD, and troubleshooting a daemon that will not start.'
+---
+
 # Docker
 
 Check whether `docker` is running:

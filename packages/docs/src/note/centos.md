@@ -1,3 +1,7 @@
+---
+description: 'Configuring CentOS 8 YUM repositories to point at vault.centos.org after official mirror support ended, plus basic system-version and cache commands.'
+---
+
 # CentOS
 
 Check the current system version:

@@ -324,6 +324,7 @@ export class Popover extends RanElement {
     this.popoverContent.style.setProperty('inset', `${popoverTop}px auto auto ${popoverLeft}px`);
     this.popoverContent.style.setProperty('--ran-x', `${popoverLeft}px`);
     this.popoverContent.style.setProperty('--ran-y', `${popoverTop}px`);
+    this.popoverContent.style.setProperty('--ran-dropdown-arrow-anchor-width', `${width}px`);
     this.popoverContent.style.setProperty('--ran-dropdown-arrow-anchor-height', `${height}px`);
     this.popoverContent.style.setProperty('--ran-dropdown-min-width', `${popoverContentRect.width}px`);
     this.popoverContent.style.setProperty('--ran-dropdown-min-height', `${popoverContentRect.height}px`);
@@ -339,19 +340,21 @@ export class Popover extends RanElement {
     const triggerCenterX = left + width / 2;
     const panelCenterX = finalPanelRect.left + finalPanelRect.width / 2;
     this.popoverContent.style.setProperty('--ran-dropdown-arrow-anchor-offset', `${triggerCenterX - panelCenterX}px`);
-    // `.left`/`.right` assume the panel's top edge sits flush with the
-    // trigger's top edge (`popoverTop = top` above) to center the arrow via
-    // `--ran-dropdown-arrow-anchor-height`. That assumption breaks once
-    // `computePlacement`'s boundary shift kicks in (trigger near the top/
-    // bottom edge of the viewport) — the panel gets clamped vertically while
-    // the arrow's formula has no idea, so it stops pointing at the trigger
-    // and the whole thing reads as "misaligned". Same fix as the X-axis one
-    // above, just the other axis: measure the real delta and feed it in.
-    const triggerCenterY = top + height / 2;
-    const panelCenterY = finalPanelRect.top + finalPanelRect.height / 2;
+    // `.left`/`.right` measure the arrow's vertical position as an offset from
+    // the *panel's top edge* (`top: max(0, anchor-height/2 - arrow-size)`,
+    // not a `left: 50%`-style self-centering base like `.top`/`.bottom` get),
+    // which only points at the trigger's center when the panel's top edge is
+    // flush with the trigger's top edge (`popoverTop = top` above). That
+    // assumption breaks once `computePlacement`'s boundary shift kicks in
+    // (trigger near the top/bottom edge of the viewport) — the panel gets
+    // clamped vertically while the arrow's formula has no idea, so it stops
+    // pointing at the trigger and the whole thing reads as "misaligned".
+    // Because the reference frame here is an *edge*, not a center like the
+    // X-axis case above, the correction is an edge-to-edge delta (how far the
+    // panel's top actually drifted from the trigger's top), not center-to-center.
     this.popoverContent.style.setProperty(
       '--ran-dropdown-arrow-anchor-offset-y',
-      `${triggerCenterY - panelCenterY}px`,
+      `${top - finalPanelRect.top}px`,
     );
   };
   /**

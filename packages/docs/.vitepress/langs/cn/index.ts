@@ -1,7 +1,7 @@
 import type { DefaultTheme } from 'vitepress';
 import { GITHUB, EDITOR } from '../../common/index.ts';
 
-// 在 /cn/src/article/、/cn/src/blockchain/、/cn/src/note/ 之间共享，
+// 在 /cn/src/article/、/cn/src/note/ 之间共享，
 // 使这些页面都能渲染该侧边栏（VitePress 按路径前缀匹配侧边栏）。
 const articleCnSidebar: DefaultTheme.SidebarItem[] = [
   {
@@ -51,14 +51,6 @@ const articleCnSidebar: DefaultTheme.SidebarItem[] = [
         text: '数学',
         collapsed: true,
         items: [{ text: '线性代数', link: '/cn/src/article/math/linear_algebra' }],
-      },
-      {
-        text: '区块链',
-        collapsed: true,
-        items: [
-          { text: '区块链数据结构', link: '/cn/src/blockchain/' },
-          { text: '如何参与 Web3', link: '/cn/src/blockchain/web3' },
-        ],
       },
       {
         text: '笔记',
@@ -468,7 +460,6 @@ const themeCnConfig: DefaultTheme.Config = {
       },
     ],
     '/cn/src/article/': articleCnSidebar,
-    '/cn/src/blockchain/': articleCnSidebar,
     '/cn/src/note/': articleCnSidebar,
   },
 };

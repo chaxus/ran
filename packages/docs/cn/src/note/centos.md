@@ -1,3 +1,7 @@
+---
+description: '在 CentOS 8 官方镜像停止支持后，把 YUM 源切换到 vault.centos.org，以及基础的系统版本与缓存命令。'
+---
+
 # CentOS
 
 查看当前系统的版本：

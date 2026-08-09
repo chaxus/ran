@@ -1,3 +1,7 @@
+---
+description: 'Notes on building LibreOffice from source and compiling it to WebAssembly with Emscripten and Binaryen, including dependency setup and issues encountered along the way.'
+---
+
 # Compiling LibreOffice to WebAssembly
 
 Notes on building LibreOffice from source and compiling it to WebAssembly with Emscripten and Binaryen.

@@ -1,3 +1,7 @@
+---
+description: '从源码构建 LibreOffice，并使用 Emscripten 与 Binaryen 将其编译为 WebAssembly 的记录，包含依赖安装与踩过的坑。'
+---
+
 # 将 LibreOffice 编译为 WebAssembly
 
 从源码构建 LibreOffice，并使用 Emscripten 与 Binaryen 将其编译为 WebAssembly 的记录。
