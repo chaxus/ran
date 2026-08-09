@@ -65,3 +65,35 @@ test('modal — title visible when open', async ({ page }) => {
   expect(state.visibility).toBe('visible');
   expect(state.title).toBe('Demo Modal');
 });
+
+test.describe('modal — closing attribute lifecycle', () => {
+  // `close()` removes `open` synchronously, but the mask/dialog fade-and-scale
+  // CSS transition keeps painting for ~0.3s more. A host page that escalates
+  // z-index only while `[open]` is present (see docs' `Demo.vue`, which lifts
+  // `r-modal` above its own sticky nav) would otherwise drop that escalation
+  // mid-fade, and the still-visible mask repaints *under* the nav for the
+  // rest of the close — reported as the mask closing "in regions" instead of
+  // as one sheet. `closing` stays set for exactly that tail so a host can key
+  // off `:has(r-modal[open]), :has(r-modal[closing])` instead. Needs real
+  // transition timing, so this block opts out of the suite-wide reduced-motion
+  // freeze (see playwright.config.ts) rather than the frozen ~0.01ms duration.
+  test.use({ contextOptions: { reducedMotion: 'no-preference' } });
+
+  test('stays set through the close transition tail, then clears', async ({ page }) => {
+    await mount(page, MODAL_HTML);
+    await page.locator('#open-btn').click();
+    await page.waitForTimeout(150);
+
+    const hasClosingAttr = () =>
+      page.evaluate(() => document.querySelector('r-modal')?.hasAttribute('closing') ?? false);
+
+    expect(await hasClosingAttr()).toBe(false);
+
+    await page.evaluate(() => (document.querySelector('r-modal') as any).close('program'));
+    // Immediately after close(), the fade transition is still in flight.
+    expect(await hasClosingAttr()).toBe(true);
+
+    await page.waitForTimeout(500);
+    expect(await hasClosingAttr()).toBe(false);
+  });
+});
