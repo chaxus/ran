@@ -82,7 +82,7 @@
   &[status='error'],
   &[status='warning'] {
     .ran-input-content {
-      padding-right: var(--ran-input-content-status-padding-right, 28px);
+      padding-right: var(--ran-input-content-status-padding-right, var(--ran-space-8, 32px));
     }
     &::after {
       content: '';
@@ -182,7 +182,7 @@
     transition: var(--ran-input-content-transition, none);
     outline: var(--ran-input-content-outline, none);
     border-radius: var(--ran-input-content-border-radius, var(--ran-radius-sm, 6px));
-    padding: var(--ran-input-content-padding, 0 0 0 2px);
+    padding: var(--ran-input-content-padding, 0 0 0 var(--ran-space-1, 4px));
     font-weight: var(--ran-input-content-font-weight, var(--ran-text-copy-weight, 400));
     // Mobile Chrome/Safari paint a translucent tap-highlight rectangle over a
     // tapped element by default — easy to mistake for a stray focus ring

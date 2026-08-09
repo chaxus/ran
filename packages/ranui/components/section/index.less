@@ -1,13 +1,13 @@
 :host {
   display: block;
-  scroll-margin-top: 96px;
+  scroll-margin-top: var(--ran-section-scroll-margin-top, var(--ran-space-24, 96px));
   border-width: var(--ran-skin-border-width, 1px);
   border-style: var(--ran-skin-border-style, solid);
   border-color: var(--ran-section-border-color, var(--ran-color-border, #eaeaea));
   border-radius: var(--ran-section-radius, var(--ran-radius-md, 8px));
   background: var(--ran-section-background, var(--ran-color-bg-elevated, #ffffff));
   box-shadow: var(--ran-section-shadow, var(--ran-shadow-elevated, none));
-  padding: var(--ran-section-padding, 28px);
+  padding: var(--ran-section-padding, var(--ran-space-8, 32px));
   box-sizing: border-box;
 }
 

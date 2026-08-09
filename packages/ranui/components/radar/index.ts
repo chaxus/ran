@@ -1,4 +1,4 @@
-import { getPixelRatio } from 'ranuts/utils';
+import { getPixelRatio, roundRectByArc } from 'ranuts/utils';
 import radarCss from './index.less?inline';
 import { Div, RanElement, View } from '@/utils/index';
 import {

@@ -1,4 +1,4 @@
-import { perToNum } from 'ranuts/utils';
+import { perToNum, range } from 'ranuts/utils';
 import progressCss from './index.less?inline';
 import { Div, EventManager, RanElement } from '@/utils/index';
 import {
@@ -112,7 +112,7 @@ export class Progress extends RanElement {
     if (this.type !== 'drag') return;
     const rect = this._progress.getBoundingClientRect();
     const offsetX = e.clientX - rect.left;
-    const percentage = Math.min(1, Math.max(0, offsetX / this._progress.offsetWidth));
+    const percentage = range(offsetX / this._progress.offsetWidth, 0, 1);
     const newVal = percentage * Number(this.total);
     this.percent = String(newVal);
     this.updateUI(percentage);
@@ -147,7 +147,7 @@ export class Progress extends RanElement {
     if (!this.moveProgress.mouseDown || this.type !== 'drag') return;
     const rect = this._progress.getBoundingClientRect();
     const offsetX = e.clientX - rect.left;
-    const percentage = Math.min(1, Math.max(0, offsetX / this._progress.offsetWidth));
+    const percentage = range(offsetX / this._progress.offsetWidth, 0, 1);
     const newVal = percentage * Number(this.total);
     this.percent = String(newVal);
     this.updateUI(percentage);
@@ -220,7 +220,7 @@ export class Progress extends RanElement {
   _preSerialize(): void {
     const percent = Number(this.getAttribute('percent') || '0');
     const total = Number(this.getAttribute('total') || '100');
-    const fraction = Math.min(1, Math.max(0, percent / total));
+    const fraction = range(percent / total, 0, 1);
     this.style.setProperty('--progress-percent', String(fraction));
   }
 

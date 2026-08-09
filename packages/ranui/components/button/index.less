@@ -190,7 +190,7 @@
   // font-size) so the button's total height is unchanged: previously
   // 4+4 (padding) + 22 (line-height) = 30px content-box height; now
   // 8+8 (padding) + 14 (line-height at font-size 14px) = the same 30px.
-  padding: var(--ran-btn-padding, 8px 15px);
+  padding: var(--ran-btn-padding, var(--ran-space-2, 8px) var(--ran-space-4, 16px));
   border: var(--ran-btn-border, 1px solid transparent);
   border-image-source: var(--ran-btn-border-image-source, none);
   border-image-slice: var(--ran-btn-border-image-slice, 8);
@@ -214,7 +214,7 @@
     transform var(--ran-motion-duration-base, 0.2s) var(--ran-motion-ease-spring, cubic-bezier(0.34, 1.26, 0.5, 1))
   );
   .icon {
-    margin-right: var(--ran-btn-icon-margin-right, 2px);
+    margin-right: var(--ran-btn-icon-margin-right, var(--ran-space-1, 4px));
   }
 }
 

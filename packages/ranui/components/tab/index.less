@@ -36,6 +36,11 @@
     &-line {
       position: absolute;
       width: 0;
+      // Not a spacing-scale value: this negates `height` exactly, pulling the
+      // indicator up by its own thickness so it sits flush against the header's
+      // bottom edge with zero gap. It's a geometric identity with the line
+      // above, not an independent rhythm choice — snapping it to -4px would
+      // open a visible gap under the indicator.
       margin-top: var(--ran-tab-line-margin-top, -2px);
       height: var(--ran-tab-line-height, 2px);
       border-radius: var(--ran-tab-line-border-radius, 2px);

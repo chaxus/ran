@@ -650,17 +650,17 @@ Every component's `index.less` automatically receives `@import "base.less"` via 
 --ran-motion-duration-fast | --ran-motion-duration-base
 
 /* Component-scoped tokens (always provide fallback) */
---ran-card-gap, 14px
---ran-card-padding, 16px
+--ran-card-gap, var(--ran-space-4, 16px)
+--ran-card-padding, var(--ran-space-4, 16px)
 --ran-card-radius, var(--ran-radius-md)
 --ran-card-background, var(--ran-color-bg-muted)
 --ran-card-shadow, none
 --ran-card-min-height, 0
 --ran-card-title-color, var(--ran-color-text)
---ran-card-title-font-size, 16px
---ran-card-title-font-weight, 600
+--ran-card-title-font-size, var(--ran-text-heading-4, 16px)
+--ran-card-title-font-weight, var(--ran-text-heading-weight, 600)
 --ran-card-description-color, var(--ran-color-text-secondary)
---ran-card-description-font-size, 14px
+--ran-card-description-font-size, var(--ran-text-copy-2, 14px)
 
 /* Button example */
 --ran-btn-background, var(--ran-color-primary, #1890ff)

@@ -1,4 +1,4 @@
-import { isMobile, throttle } from 'ranuts/utils';
+import { isMobile, range, throttle } from 'ranuts/utils';
 import selectCss from './index.less?inline';
 import arrowDownIcon from '@/assets/icons/arrow-down.svg?raw';
 import { RanElement, isDisabled } from '@/utils/index';
@@ -329,7 +329,7 @@ export class Select extends RanElement {
   setActiveOptionByIndex = (targetIndex: number): void => {
     const options = this.getDropdownOptions();
     if (options.length === 0) return;
-    const normalizedIndex = Math.max(0, Math.min(targetIndex, options.length - 1));
+    const normalizedIndex = range(targetIndex, 0, options.length - 1);
     const next = options[normalizedIndex];
     if (!next) return;
     if (this._activeOption && this._activeOption !== next) {
@@ -408,7 +408,7 @@ export class Select extends RanElement {
     const options = this.getDropdownOptions();
     const count = options.length;
     if (count === 0) return -1;
-    let index = Math.max(0, Math.min(from, count - 1));
+    let index = range(from, 0, count - 1);
     for (let i = 0; i < count; i++) {
       if (!isDisabled(options[index])) return index;
       const next = index + step;

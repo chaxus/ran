@@ -14,7 +14,7 @@
         word-break: var(--ran-message-notice-toast-word-break, break-all);
         &-content {
           display: var(--ran-message-content-toast-display, inline-block);
-          padding: var(--ran-message-content-toast-padding, 10px 16px);
+          padding: var(--ran-message-content-toast-padding, var(--ran-space-3, 12px) var(--ran-space-4, 16px));
           /* Deliberately a fixed dark pill (Android-toast convention) rather
              than --ran-color-bg-elevated — a toast is meant to read the same
              regardless of the host page's light/dark theme. Still routed
@@ -53,7 +53,7 @@
     word-break: var(--ran-message-notice-word-break, break-all);
     &-content {
       display: var(--ran-message-content-display, inline-block);
-      padding: var(--ran-message-content-padding, 10px 16px);
+      padding: var(--ran-message-content-padding, var(--ran-space-3, 12px) var(--ran-space-4, 16px));
       background: var(--ran-message-content-background, var(--ran-color-bg-elevated, #fff));
       border-image-source: var(--ran-message-content-border-image-source, none);
       border-image-slice: var(--ran-message-content-border-image-slice, 8);
