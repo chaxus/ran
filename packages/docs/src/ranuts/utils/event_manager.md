@@ -1,6 +1,7 @@
-# EventManager
+# EventManager / createDoubleTapDetector
 
-A lifecycle-scoped event registry backed by `AbortController`.
+A lifecycle-scoped event registry backed by `AbortController`, plus a small pointer-type-
+agnostic double-tap detector for touch gestures.
 
 The problem it solves is _taking listeners back off_. `removeEventListener` only works when you
 hand it the **exact same** function reference and options you registered with — wrap a handler in
@@ -108,3 +109,37 @@ The underlying `AbortSignal`, in case you want to pass it to `addEventListener` 
 | Argument | Description                | Type          |
 | -------- | -------------------------- | ------------- |
 | `signal` | The manager's abort signal | `AbortSignal` |
+
+## createDoubleTapDetector
+
+Double-tap detection over raw `(x, y, time)` samples — pointer-type-agnostic, so it works
+the same whether it's fed from Pointer, Touch, or Mouse events. Built for touch gestures
+(double-tap to seek, to zoom, to like) where re-deriving the timestamp + distance
+threshold logic at every call site is easy to get subtly wrong: comparing only one axis,
+or forgetting to reset after a hit so three fast taps count as two overlapping
+double-taps.
+
+```ts
+import { createDoubleTapDetector } from 'ranuts/utils';
+
+const detector = createDoubleTapDetector();
+el.addEventListener('pointerup', (e) => {
+  if (detector.check(e.clientX, e.clientY)) seek();
+});
+```
+
+### `createDoubleTapDetector(options?)`
+
+#### Parameters (`DoubleTapDetectorOptions`)
+
+| Option          | Description                                     | Type     | Default |
+| ---------------- | -------------------------------------------------- | -------- | ------- |
+| `windowMs`       | Max gap between the two taps, in ms                | `number` | `300`   |
+| `maxDistancePx`  | Max 2D distance between the two taps, in px        | `number` | `60`    |
+
+#### `DoubleTapDetector`
+
+| Member    | Description                                                                                                                | Type                                            |
+| --------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| `check`   | Record a tap at `(x, y)` and report whether it forms a double-tap with the immediately preceding one. A detected double-tap resets tracking, so a third rapid tap starts a fresh pair rather than counting as part of the same double-tap. | `(x: number, y: number, now?: number) => boolean` |
+| `reset`   | Forget the last recorded tap — call this when a gesture other than a tap (a drag) starts                                     | `() => void`                                     |

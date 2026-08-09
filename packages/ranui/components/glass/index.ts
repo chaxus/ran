@@ -40,9 +40,7 @@ export class Glass extends RanElement {
   // a tabindex a consumer set explicitly themselves (mirrors r-progress's
   // syncA11y for the same reason: `type="drag"` there, `interactive` here).
   private _tabIndexOwnedByComponent = false;
-  private _rimCanvas: HTMLCanvasElement | null = null;
   private _rimRenderer: RimRenderer | null = null;
-  private _rimResizeObserver: ResizeObserver | null = null;
 
   static get observedAttributes(): string[] {
     return ['blur', 'saturate', 'displace', 'frequency', 'radius', 'tint', 'interactive', 'rim'];
@@ -127,10 +125,12 @@ export class Glass extends RanElement {
   }
 
   /**
-   * Opt-in WebGL specular rim + chromatic edge, lit from a fixed top-left light —
+   * Opt-in GPU specular rim + chromatic edge, lit from a fixed top-left light —
    * shape-only, never samples the backdrop (see the class doc for why that's the
-   * point). Silently falls back to the plain CSS specular gradient when WebGL is
-   * unavailable (old browser, disabled, SSR). See `rim.ts`.
+   * point). Renders on WebGL first, always; transparently upgrades to WebGPU in
+   * the background if available (same pixel output, not a performance change —
+   * see `rim-webgpu.ts`). Silently falls back to the plain CSS specular gradient
+   * when neither GPU API is available (old browser, disabled, SSR). See `rim.ts`.
    */
   get rim(): boolean {
     return this.hasAttribute('rim');
@@ -160,46 +160,25 @@ export class Glass extends RanElement {
   }
 
   /**
-   * Lazily create the WebGL rim canvas + context — only while `rim` is set, so a
-   * page that never uses it never spends one of the browser's limited WebGL
-   * context slots. Kept alive (not torn down) across disconnect/reconnect, same
-   * as the SVG displacement filter above; only `_teardownRim` frees it, when
-   * `rim` is explicitly turned back off.
+   * Lazily create the rim renderer — only while `rim` is set, so a page that
+   * never uses it never spends one of the browser's limited WebGL/WebGPU
+   * context slots. `createRimRenderer` owns its own canvas(es) and resize
+   * tracking (see `rim.ts`) — this just mounts it into the specular layer and
+   * keeps it alive across disconnect/reconnect, same as the SVG displacement
+   * filter above; only `_teardownRim` frees it, when `rim` is explicitly
+   * turned back off.
    */
   private _ensureRim(): void {
-    if (typeof document === 'undefined') return;
-    if (!this._rimCanvas) {
-      const canvas = document.createElement('canvas');
-      canvas.className = 'ran-glass-rim';
-      canvas.setAttribute('part', 'rim');
-      canvas.setAttribute('aria-hidden', 'true');
-      this._glass.querySelector('.ran-glass-specular')?.appendChild(canvas);
-      this._rimCanvas = canvas;
-      // null when WebGL is unavailable — the blank transparent canvas is then a
-      // harmless no-op and the plain CSS specular gradient is the only highlight.
-      this._rimRenderer = createRimRenderer(canvas);
-      if (this._rimRenderer && typeof ResizeObserver !== 'undefined') {
-        this._rimResizeObserver = new ResizeObserver(this._resizeRim);
-        this._rimResizeObserver.observe(this._glass);
-      }
-    }
-    this._resizeRim();
-    this._rimRenderer?.setRadius(Number(this.radius) || 20);
+    if (this._rimRenderer || typeof document === 'undefined') return;
+    const container = this._glass.querySelector('.ran-glass-specular');
+    if (!container) return;
+    this._rimRenderer = createRimRenderer(container as HTMLElement);
+    this._rimRenderer.setRadius(Number(this.radius) || 20);
   }
 
-  private _resizeRim = (): void => {
-    if (!this._rimRenderer) return;
-    const { width, height } = this._glass.getBoundingClientRect();
-    this._rimRenderer.resize(width, height);
-  };
-
   private _teardownRim(): void {
-    this._rimResizeObserver?.disconnect();
-    this._rimResizeObserver = null;
     this._rimRenderer?.destroy();
     this._rimRenderer = null;
-    this._rimCanvas?.remove();
-    this._rimCanvas = null;
   }
 
   private _apply(name: string): void {

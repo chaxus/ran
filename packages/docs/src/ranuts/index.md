@@ -15,7 +15,6 @@ description: 'ranuts is a tree-shakeable JavaScript/TypeScript utility library: 
 - [Service Worker (sw)](./sw/index.md) - Cache strategies + the worker half of the precache protocol
 - [Event System](./utils/sync_hook.md) - Publish-subscribe pattern (`SyncHook`)
 - [MIME Type](./mime_type/mime_type.md) - MIME type processing
-- [Others](./binary_tree/index.md) - Binary tree, bundler, etc.
 
 ## Method list
 

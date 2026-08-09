@@ -157,7 +157,7 @@ export function ensurePlayerView(input: {
 
     const playControllerBottomVolumeIcon = Div()
       .class('ran-player-controller-bottom-right-volume-icon')
-      .children(icon('volume', 'var(--ran-player-volume-icon-width, 18px)'))
+      .children(icon('volume', 'var(--ran-player-volume-icon-width, 20px)'))
       .build() as HTMLDivElement;
     const playControllerBottomVolumeProgress = View('r-progress')
       .class('ran-player-controller-bottom-right-volume-progress')
@@ -187,7 +187,7 @@ export function ensurePlayerView(input: {
       'button',
       'Picture in picture',
     )
-      .children(icon('pip', 'var(--ran-player-pip-width, 18px)'))
+      .children(icon('pip', 'var(--ran-player-pip-width, 20px)'))
       .build() as HTMLDivElement;
     // Hidden by default, same reasoning/mechanism as PiP above — visibility toggled by
     // `syncRemoteButtonVisibility` once `isRemotePlaybackSupported()` is known.
@@ -196,14 +196,14 @@ export function ensurePlayerView(input: {
       'button',
       'Cast to device',
     )
-      .children(icon('cast', 'var(--ran-player-remote-width, 18px)'))
+      .children(icon('cast', 'var(--ran-player-remote-width, 20px)'))
       .build() as HTMLDivElement;
     const playControllerBottomRightFullScreen = focusableRole(
       Div().class('ran-player-controller-bottom-right-full'),
       'button',
       'Fullscreen',
     )
-      .children(icon('fullscreen', 'var(--ran-player-fullscreen-width, 16px)'))
+      .children(icon('fullscreen', 'var(--ran-player-fullscreen-width, 20px)'))
       .build() as HTMLDivElement;
 
     const playerControllerBottomRight = Div()

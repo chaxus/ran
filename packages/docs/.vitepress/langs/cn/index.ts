@@ -130,6 +130,7 @@ const themeCnConfig: DefaultTheme.Config = {
               { text: 'randomString - 生成随机字符串', link: '/cn/src/ranuts/utils/random_string' },
               { text: 'clearBr - 清除空格和换行', link: '/cn/src/ranuts/utils/clear_br' },
               { text: 'clearStr - 去除首尾空格和引号', link: '/cn/src/ranuts/utils/clear_str' },
+              { text: 'truncate - 用省略号截断字符串', link: '/cn/src/ranuts/utils/truncate' },
               { text: 'strParse - 字符串解析为对象', link: '/cn/src/ranuts/utils/str_parse' },
               { text: 'toString - 转换为字符串', link: '/cn/src/ranuts/utils/to_string' },
               { text: 'transformText - ArrayBuffer 转文本', link: '/cn/src/ranuts/utils/transform_text' },
@@ -210,9 +211,13 @@ const themeCnConfig: DefaultTheme.Config = {
               { text: 'escapeHtml - 转义 HTML', link: '/cn/src/ranuts/utils/escape_html' },
               { text: 'Chain - 链式 DOM 操作', link: '/cn/src/ranuts/utils/chain' },
               { text: 'create - 创建 DOM 元素', link: '/cn/src/ranuts/utils/create' },
-              { text: 'EventManager - 作用域事件管理', link: '/cn/src/ranuts/utils/event_manager' },
+              {
+                text: 'EventManager / createDoubleTapDetector - 作用域事件管理与双击检测',
+                link: '/cn/src/ranuts/utils/event_manager',
+              },
               { text: 'adoptStyles - Shadow DOM 样式注入', link: '/cn/src/ranuts/utils/adopt_styles' },
               { text: 'computePlacement - 浮层翻转/平移定位', link: '/cn/src/ranuts/utils/placement' },
+              { text: 'setFontSize2html - flexible rem 适配', link: '/cn/src/ranuts/utils/set_font_size' },
             ],
           },
           {
@@ -253,6 +258,14 @@ const themeCnConfig: DefaultTheme.Config = {
               { text: 'convertImageToBase64 - 图片转 Base64', link: '/cn/src/ranuts/utils/convert_image_to_base64' },
               { text: 'isImageSize - 校验图片尺寸', link: '/cn/src/ranuts/utils/is_image_size' },
               { text: 'getImage / cutRound / opacity - Canvas 图像处理', link: '/cn/src/ranuts/utils/image_process' },
+            ],
+          },
+          {
+            text: '音视频',
+            collapsed: true,
+            items: [
+              { text: 'AudioRecorder - 录音为 Blob', link: '/cn/src/ranuts/utils/audio_recorder' },
+              { text: 'createSpeechRecognizer - 语音转文本', link: '/cn/src/ranuts/utils/speech' },
             ],
           },
           {
@@ -367,14 +380,6 @@ const themeCnConfig: DefaultTheme.Config = {
         text: 'Bridge 跨上下文通信',
         collapsed: true,
         items: [{ text: 'postMessage 桥接', link: '/cn/src/ranuts/bridge/' }],
-      },
-      {
-        text: '其他',
-        collapsed: true,
-        items: [
-          { text: '二叉树', link: '/cn/src/ranuts/binary_tree/' },
-          { text: '打包器', link: '/cn/src/ranuts/bundler/' },
-        ],
       },
     ],
     '/cn/src/ranui/': [

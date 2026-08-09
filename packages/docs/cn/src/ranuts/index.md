@@ -15,7 +15,6 @@ description: 'ranuts 是可 tree-shaking 的 JavaScript/TypeScript 工具库：D
 - [Service Worker (sw)](./sw/index.md) - 缓存策略 + 预取协议的 worker 半边
 - [事件系统](./utils/sync_hook.md) - 发布订阅模式（`SyncHook`）
 - [MIME 类型](./mime_type/mime_type.md) - MIME 类型处理
-- [其他](./binary_tree/index.md) - 二叉树、打包器等
 
 ## 方法列表
 

@@ -1,20 +1,29 @@
 /**
- * Optional WebGL enhancement for `<r-glass rim>`: a shape-only specular rim +
- * a subtle chromatic fringe around the panel's rounded-rect border, lit from a
- * fixed top-left light direction.
+ * Optional GPU-accelerated enhancement for `<r-glass rim>`: a shape-only
+ * specular rim + a subtle chromatic fringe around the panel's rounded-rect
+ * border, lit from a fixed top-left light direction.
  *
  * Deliberately does NOT sample the backdrop — it never captures or rasterizes
  * the DOM behind the glass (see the class-level doc in `index.ts` for why that
  * matters: rasterizing would cost `backdrop-filter`'s free interactivity and
- * accessibility). The shader only knows the panel's own width/height/corner
- * radius; frosting and refracting real content behind the panel stays on
- * `backdrop-filter` + the SVG displacement filter. This layer purely adds a
- * more physically-lit edge on top, drawn on a transparent canvas.
+ * accessibility). Both backends only know the panel's own
+ * width/height/corner radius; frosting and refracting real content behind the
+ * panel stays on `backdrop-filter` + the SVG displacement filter. This layer
+ * purely adds a more physically-lit edge on top, drawn on a transparent
+ * canvas, redrawn only on resize/radius change — never a per-frame loop.
  *
- * Redrawn only on resize/radius change, not per animation frame — there is
- * nothing time-varying to animate, so this costs one draw call per layout
- * change, not a render loop.
+ * Two backends render the identical effect:
+ * - WebGL (this file): synchronous to set up (`canvas.getContext('webgl')`
+ *   returns immediately) and works in effectively every browser — this is
+ *   what renders first, always, guaranteeing the rim's first paint isn't
+ *   delayed by anything.
+ * - WebGPU (`rim-webgpu.ts`): negotiated asynchronously and not yet universal,
+ *   so `createRimRenderer` below tries it in the background and swaps to it
+ *   (freeing the WebGL context) only if/when it becomes ready. See that
+ *   file's module doc for why this exists despite not making the single draw
+ *   call this renders any faster.
  */
+import { createWebGpuRim, type RimBackend } from './rim-webgpu';
 
 const VERTEX_SRC = `
 attribute vec2 a_position;
@@ -86,18 +95,9 @@ function compile(gl: WebGLRenderingContext, type: number, src: string): WebGLSha
   return shader;
 }
 
-export interface RimRenderer {
-  /** CSS pixel size of the panel — internally scaled by (capped) devicePixelRatio. */
-  resize(width: number, height: number): void;
-  /** Corner radius, in CSS px, matching the `radius` attribute. */
-  setRadius(radius: number): void;
-  /** Frees the WebGL context — browsers cap how many can be live at once. */
-  destroy(): void;
-}
-
 /** Returns `null` when WebGL isn't available (old browser, disabled, SSR) — the
  * caller keeps the plain CSS specular layer as the only highlight in that case. */
-export function createRimRenderer(canvas: HTMLCanvasElement): RimRenderer | null {
+function createWebGlRim(canvas: HTMLCanvasElement): RimBackend | null {
   const gl = canvas.getContext('webgl', { alpha: true, premultipliedAlpha: true, antialias: true });
   if (!gl) return null;
 
@@ -127,39 +127,121 @@ export function createRimRenderer(canvas: HTMLCanvasElement): RimRenderer | null
   gl.enable(gl.BLEND);
   gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
 
-  let radius = 20;
-  let width = 0;
-  let height = 0;
-  let dpr = 1;
-
-  const draw = (): void => {
-    if (width <= 0 || height <= 0) return;
-    gl.viewport(0, 0, width, height);
-    gl.uniform2f(resolutionLoc, width, height);
-    gl.uniform1f(radiusLoc, radius * dpr);
-    gl.uniform1f(dprLoc, dpr);
-    gl.clearColor(0, 0, 0, 0);
-    gl.clear(gl.COLOR_BUFFER_BIT);
-    gl.drawArrays(gl.TRIANGLES, 0, 3);
-  };
-
   return {
-    resize(w, h) {
-      // Capped at 2x: this is a decorative few-pixel-wide edge glow, not content —
-      // a 3x/4x phone backing buffer would burn fill-rate for no visible gain.
-      dpr = Math.min(typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1, 2);
-      width = Math.max(1, Math.round(w * dpr));
-      height = Math.max(1, Math.round(h * dpr));
+    draw(width, height, radius, dpr) {
+      if (width <= 0 || height <= 0) return;
       canvas.width = width;
       canvas.height = height;
-      draw();
-    },
-    setRadius(r) {
-      radius = r;
-      draw();
+      gl.viewport(0, 0, width, height);
+      gl.uniform2f(resolutionLoc, width, height);
+      gl.uniform1f(radiusLoc, radius * dpr);
+      gl.uniform1f(dprLoc, dpr);
+      gl.clearColor(0, 0, 0, 0);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
     },
     destroy() {
       gl.getExtension('WEBGL_lose_context')?.loseContext();
+    },
+  };
+}
+
+export interface RimRenderer {
+  /** Corner radius, in CSS px, matching the `radius` attribute. */
+  setRadius(radius: number): void;
+  /** Tears down whichever backend is active and removes its canvas(es). */
+  destroy(): void;
+}
+
+// A decorative few-pixel-wide edge glow, not content — a 3x/4x phone backing
+// buffer would burn fill-rate for no visible gain.
+const MAX_DPR = 2;
+
+/**
+ * Mounts the rim canvas(es) into `container` (the `.ran-glass-specular` div)
+ * and keeps them sized to it via `ResizeObserver`. Always returns a working
+ * renderer object — even when neither backend is available the returned
+ * object is just inert (its canvas stays blank, so the plain CSS specular
+ * gradient remains the only highlight; there's nothing for the caller to
+ * branch on).
+ */
+export function createRimRenderer(container: HTMLElement): RimRenderer {
+  let radius = 20;
+  let destroyed = false;
+
+  const makeCanvas = (): HTMLCanvasElement => {
+    const canvas = document.createElement('canvas');
+    canvas.className = 'ran-glass-rim';
+    canvas.setAttribute('part', 'rim');
+    canvas.setAttribute('aria-hidden', 'true');
+    container.appendChild(canvas);
+    return canvas;
+  };
+
+  const glCanvas = makeCanvas();
+  let gl: RimBackend | null = createWebGlRim(glCanvas);
+  let gpu: RimBackend | null = null;
+  let gpuCanvas: HTMLCanvasElement | null = null;
+
+  const currentSize = (): { width: number; height: number; dpr: number } => {
+    const rect = container.getBoundingClientRect();
+    const dpr = Math.min(typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1, MAX_DPR);
+    return {
+      width: Math.max(1, Math.round(rect.width * dpr)),
+      height: Math.max(1, Math.round(rect.height * dpr)),
+      dpr,
+    };
+  };
+
+  const redraw = (): void => {
+    const { width, height, dpr } = currentSize();
+    (gpu ?? gl)?.draw(width, height, radius, dpr);
+  };
+
+  const resizeObserver = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(redraw) : null;
+  resizeObserver?.observe(container);
+  redraw();
+
+  // Cheap synchronous existence check — most browsers today don't advertise
+  // `navigator.gpu` at all, and skipping the second canvas entirely in that
+  // (common) case avoids mounting a permanent unused DOM node per instance.
+  // Only browsers that at least *have* the API pay the cost of the attempt.
+  if (typeof navigator !== 'undefined' && (navigator as unknown as { gpu?: unknown }).gpu) {
+    gpuCanvas = makeCanvas();
+    gpuCanvas.style.display = 'none';
+    createWebGpuRim(gpuCanvas).then((handle) => {
+      if (destroyed) {
+        handle?.destroy();
+        return;
+      }
+      if (!handle) {
+        // Advertised but negotiation failed (blocklisted driver, out of
+        // memory, etc.) — remove the speculative canvas, stay on WebGL.
+        gpuCanvas?.remove();
+        gpuCanvas = null;
+        return;
+      }
+      gpu = handle;
+      gl?.destroy();
+      gl = null;
+      glCanvas.remove();
+      (gpuCanvas as HTMLCanvasElement).style.display = '';
+      redraw();
+    });
+  }
+
+  return {
+    setRadius(r) {
+      radius = r;
+      redraw();
+    },
+    destroy() {
+      destroyed = true;
+      resizeObserver?.disconnect();
+      gpu?.destroy();
+      gl?.destroy();
+      glCanvas.remove();
+      gpuCanvas?.remove();
     },
   };
 }

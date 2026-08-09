@@ -22,6 +22,7 @@ description: 'ranuts 工具函数总览：函数式工具（debounce、throttle�
 | randomString          | 生成随机字符串                        | [randomString](./random_string.md)                      |
 | clearBr               | 清除字符串中的空格、HTML 标签和换行符 | [clearBr](./clear_br.md)                                |
 | clearStr              | 去除字符串首尾的空格、URL 编码和引号  | [clearStr](./clear_str.md)                              |
+| truncate              | 用省略号截断字符串，对 Unicode 安全    | [truncate](./truncate.md)                               |
 | strParse              | 将字符串解析为对象                    | [strParse](./str_parse.md)                              |
 | toString              | 将值转换为字符串类型                  | [toString](./to_string.md)                              |
 | transformText         | 将 ArrayBuffer 转换为文本             | [transformText](./transform_text.md)                    |
@@ -87,6 +88,17 @@ description: 'ranuts 工具函数总览：函数式工具（debounce、throttle�
 | escapeHtml             | 转义 HTML 特殊字符       | [escapeHtml](./escape_html.md)                          |
 | Chain                  | 链式调用的 DOM 操作类    | [Chain](./chain.md)                                     |
 | create                 | 创建 DOM 元素的辅助函数  | [create](./create.md)                                   |
+| EventManager / createDoubleTapDetector | 作用域事件注册表与双击检测 | [EventManager](./event_manager.md)         |
+| adoptStyles            | 把样式文本注入 shadow root | [adoptStyles](./adopt_styles.md)                       |
+| computePlacement       | 相对锚点翻转/平移浮层位置  | [computePlacement](./placement.md)                     |
+| setFontSize2html       | 移动端 flexible rem 视口适配 | [setFontSize2html](./set_font_size.md)               |
+
+## 音视频
+
+| 方法                    | 说明                        | 详细内容                                   |
+| ----------------------- | --------------------------- | -------------------------------------------- |
+| AudioRecorder           | 把麦克风录音录制成 `Blob`    | [AudioRecorder](./audio_recorder.md)         |
+| createSpeechRecognizer  | 基于 Web Speech API 的语音转文本 | [createSpeechRecognizer](./speech.md)    |
 
 ## 存储
 

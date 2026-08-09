@@ -117,9 +117,9 @@ export default {
     const locale = localStorageGetItem(RAN_CHAXUS_LANG) || LANGS_DICT.EN;
     loadLanguageAsync(locale)
       .then(() => {
-        if (typeof window !== 'undefined') {
-          (window as unknown as { __VUE_PROD_DEVTOOLS__: boolean }).__VUE_PROD_DEVTOOLS__ = false;
-        }
+        // vue-i18n reads this as a bare global — must be set in both the browser (client
+        // build) and Node (VitePress's SSR render pass), or SSR throws ReferenceError.
+        (globalThis as unknown as { __VUE_PROD_DEVTOOLS__: boolean }).__VUE_PROD_DEVTOOLS__ = false;
         app.use(i18n);
         app.component('Layout', Layout);
         app.component('TOTP', TOTP);

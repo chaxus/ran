@@ -185,13 +185,24 @@ describe('r-glass contract', () => {
       expect(shadow.querySelector('.ran-glass-rim')).toBeNull();
     });
 
-    it('does not throw when WebGL is unavailable (jsdom) — falls back to no-op silently', () => {
+    it('does not throw when WebGL/WebGPU are both unavailable (jsdom) — falls back to no-op silently', () => {
       const glass = document.createElement('r-glass') as any;
       expect(() => {
         glass.setAttribute('rim', '');
         document.body.appendChild(glass);
       }).not.toThrow();
-      expect(glass._rimRenderer).toBeNull();
+      // Still a live renderer object (setRadius/destroy are safe to call) — it's
+      // the canvas underneath that's a no-op, since jsdom has neither backend.
+      expect(glass._rimRenderer).not.toBeNull();
+      expect(() => glass._rimRenderer.setRadius(40)).not.toThrow();
+    });
+
+    it('does not attempt WebGPU when navigator.gpu is absent (jsdom) — mounts exactly one canvas', () => {
+      const glass = document.createElement('r-glass') as Glass;
+      glass.setAttribute('rim', '');
+      document.body.appendChild(glass);
+      const shadow = (glass as any)._shadowDom as ShadowRoot;
+      expect(shadow.querySelectorAll('.ran-glass-rim').length).toBe(1);
     });
 
     it('re-enabling rim after teardown mounts a fresh canvas', () => {

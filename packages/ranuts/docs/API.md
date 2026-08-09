@@ -8,7 +8,7 @@ constraints, conventions) read [../CLAUDE.md](../CLAUDE.md) first.
 Import from the **subpath** that owns the symbol, e.g. `import { debounce } from
 'ranuts/utils'`. The root `ranuts` barrel re-exports the utils + visual surface.
 
-**393 exports** across 6 entry points. Generated at 2026-08-09T05:40:20.296Z.
+**393 exports** across 6 entry points. Generated at 2026-08-09T05:55:39.129Z.
 
 ## Entry points
 

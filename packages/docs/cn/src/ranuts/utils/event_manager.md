@@ -1,6 +1,6 @@
-# EventManager
+# EventManager / createDoubleTapDetector
 
-以 `AbortController` 为底座的作用域事件注册表。
+以 `AbortController` 为底座的作用域事件注册表，外加一个不区分指针类型的双击检测器。
 
 它解决的是「装上去的监听怎么全部摘下来」。`removeEventListener` 必须拿到与注册时**完全相同**的函数引用和 options 才生效 —— 中途包了一层箭头函数，就再也摘不掉了。反复挂载卸载的组件于是每个周期漏一个监听。`AbortController` 把这件事变成一次 `abort()`。
 
@@ -102,3 +102,32 @@ scope.delegate(list, '.item', 'click', (ev, item) => {
 | 参数     | 说明                       | 类型          |
 | -------- | -------------------------- | ------------- |
 | `signal` | 该 manager 的 abort signal | `AbortSignal` |
+
+## createDoubleTapDetector
+
+基于原始 `(x, y, time)` 采样点做双击检测——不区分指针类型，无论是 Pointer、Touch 还是 Mouse 事件喂进来效果都一样。为触摸手势场景而写（双击跳转、双击缩放、双击点赞），因为在每个调用点重新推导"时间间隔 + 距离阈值"的判断逻辑很容易出细微的错：只比较了一个轴，或者命中后忘记重置，导致三次快速点击被算成两次重叠的双击。
+
+```ts
+import { createDoubleTapDetector } from 'ranuts/utils';
+
+const detector = createDoubleTapDetector();
+el.addEventListener('pointerup', (e) => {
+  if (detector.check(e.clientX, e.clientY)) seek();
+});
+```
+
+### `createDoubleTapDetector(options?)`
+
+#### 参数（`DoubleTapDetectorOptions`）
+
+| 参数              | 说明                       | 类型     | 默认值 |
+| ----------------- | -------------------------- | -------- | ------ |
+| `windowMs`        | 两次点击之间的最大间隔（ms） | `number` | `300`  |
+| `maxDistancePx`   | 两次点击之间的最大距离（px） | `number` | `60`   |
+
+#### `DoubleTapDetector`
+
+| 成员      | 说明                                                                                                       | 类型                                             |
+| --------- | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------- |
+| `check`   | 记录一次 `(x, y)` 点击，并判断它是否和上一次点击构成双击。命中后会重置内部状态，因此第三次快速点击会开始一组新的判断，而不会被算作同一次双击的一部分。 | `(x: number, y: number, now?: number) => boolean` |
+| `reset`   | 遗忘上一次记录的点击——当发生点击以外的手势（比如拖拽）时调用                                                | `() => void`                                       |

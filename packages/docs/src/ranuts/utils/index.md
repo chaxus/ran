@@ -22,6 +22,7 @@ description: 'Overview of ranuts utility functions: functional helpers (debounce
 | randomString          | Generate random string                                               | [randomString](./random_string.md)                      |
 | clearBr               | Remove spaces, HTML tags, and line breaks from string                | [clearBr](./clear_br.md)                                |
 | clearStr              | Remove leading/trailing spaces, URL encoding, and quotes from string | [clearStr](./clear_str.md)                              |
+| truncate              | Shorten a string with an ellipsis, Unicode-safe                      | [truncate](./truncate.md)                               |
 | strParse              | Parse string into object                                             | [strParse](./str_parse.md)                              |
 | toString              | Convert value to string type                                         | [toString](./to_string.md)                              |
 | transformText         | Convert ArrayBuffer to text                                          | [transformText](./transform_text.md)                    |
@@ -87,6 +88,17 @@ description: 'Overview of ranuts utility functions: functional helpers (debounce
 | escapeHtml             | Escape HTML special characters         | [escapeHtml](./escape_html.md)                          |
 | Chain                  | Chainable DOM manipulation class       | [Chain](./chain.md)                                     |
 | create                 | Helper function to create DOM elements | [create](./create.md)                                   |
+| EventManager / createDoubleTapDetector | Scoped listener registry & double-tap detection | [EventManager](./event_manager.md)     |
+| adoptStyles            | Inject stylesheet text into a shadow root | [adoptStyles](./adopt_styles.md)                      |
+| computePlacement       | Flip/shift a floating panel relative to an anchor | [computePlacement](./placement.md)            |
+| setFontSize2html       | Flexible-rem viewport scaling for mobile layouts | [setFontSize2html](./set_font_size.md)         |
+
+## Media
+
+| Method                | Description                            | Detail                                          |
+| --------------------- | --------------------------------------- | ------------------------------------------------ |
+| AudioRecorder         | Record microphone audio to a `Blob`     | [AudioRecorder](./audio_recorder.md)             |
+| createSpeechRecognizer | Speech-to-text over the Web Speech API | [createSpeechRecognizer](./speech.md)            |
 
 ## Storage
 

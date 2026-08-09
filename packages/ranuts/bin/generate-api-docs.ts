@@ -19,11 +19,16 @@ import type { Node, SourceFile } from 'typescript/unstable/ast';
 const ROOT = path.resolve(process.cwd());
 const OUTPUT_FILE = path.join(ROOT, 'docs', 'API.md');
 // Second output: the same reference as a page on the docs site. Publishing it there gives
-// the full 332-symbol surface a real URL — so it lands in the sitemap, and in `llms-full.txt`
+// the full exported surface a real URL — so it lands in the sitemap, and in `llms-full.txt`
 // (which concatenates the site's markdown), instead of only existing inside the npm tarball.
 const SITE_OUTPUT_FILE = path.join(ROOT, '..', 'docs', 'src', 'ranuts', 'api.md');
 const TSCONFIG = path.join(ROOT, 'tsconfig.json');
 const REPO_BLOB = 'https://github.com/chaxus/ran/blob/main/packages/ranuts';
+const DOCS_ROOT = path.join(ROOT, '..', 'docs');
+const SIDEBAR_FILES = [
+  path.join(DOCS_ROOT, '.vitepress', 'langs', 'en', 'index.ts'),
+  path.join(DOCS_ROOT, '.vitepress', 'langs', 'cn', 'index.ts'),
+];
 
 interface Entry {
   subpath: string;
@@ -218,6 +223,85 @@ function collectEntry(checker: Checker, sourceFile: SourceFile): ApiSymbol[] {
   return out.sort((a, b) => a.name.localeCompare(b.name));
 }
 
+// Every sidebar link under /src/ranuts/ or /cn/src/ranuts/ must resolve to a real
+// markdown file. This is what caught the stale `getHost` link left behind after a
+// 0.3 removal: the page was deleted, the sidebar entry wasn't, and it sat as a 404
+// reachable only by URL until someone happened to click it.
+async function collectSidebarLinks(): Promise<string[]> {
+  const linkPattern = /link:\s*'((?:\/cn)?\/src\/ranuts\/[^']*)'/g;
+  const links: string[] = [];
+  for (const sidebarFile of SIDEBAR_FILES) {
+    let text: string;
+    try {
+      text = await fs.readFile(sidebarFile, 'utf8');
+    } catch {
+      continue;
+    }
+    for (const match of text.matchAll(linkPattern)) links.push(match[1]);
+  }
+  return links;
+}
+
+function linkToFile(link: string): string {
+  const rel = link.endsWith('/') ? `${link}index.md` : `${link}.md`;
+  return path.join(DOCS_ROOT, rel);
+}
+
+async function collectMarkdownFiles(dir: string): Promise<string[]> {
+  const out: string[] = [];
+  async function walk(d: string): Promise<void> {
+    let entries: import('node:fs').Dirent[];
+    try {
+      entries = await fs.readdir(d, { withFileTypes: true });
+    } catch {
+      return;
+    }
+    for (const entry of entries) {
+      const p = path.join(d, entry.name);
+      if (entry.isDirectory()) await walk(p);
+      else if (entry.name.endsWith('.md')) out.push(p);
+    }
+  }
+  await walk(dir);
+  return out;
+}
+
+// Two checks, deliberately asymmetric:
+// - a sidebar link to a missing file is a live 404 → hard failure.
+// - a page nobody links to is only reachable by guessing the URL → warning, since an
+//   intentionally-unlinked page (rare, but not impossible) shouldn't break the build.
+async function checkDocsDrift(): Promise<void> {
+  const links = await collectSidebarLinks();
+  const linkedFiles = new Set(links.map((l) => linkToFile(l)));
+
+  const broken = links.filter((l) => {
+    try {
+      readFileSync(linkToFile(l));
+      return false;
+    } catch {
+      return true;
+    }
+  });
+
+  const allDocs = [
+    ...(await collectMarkdownFiles(path.join(DOCS_ROOT, 'src', 'ranuts'))),
+    ...(await collectMarkdownFiles(path.join(DOCS_ROOT, 'cn', 'src', 'ranuts'))),
+  ];
+  // api.md is generated + linked once from a top-level sidebar entry that this
+  // regex's /utils|node|.../ path shape doesn't match; exclude it explicitly.
+  const orphans = allDocs.filter((f) => !linkedFiles.has(f) && !f.endsWith(`${path.sep}api.md`));
+
+  if (orphans.length) {
+    console.warn(`[api-docs] ${orphans.length} doc page(s) exist but are not linked from either sidebar:`);
+    for (const o of orphans) console.warn(`  - ${path.relative(DOCS_ROOT, o)}`);
+  }
+  if (broken.length) {
+    console.error(`[api-docs] ${broken.length} sidebar link(s) point at a missing file:`);
+    for (const b of broken) console.error(`  - ${b} → ${path.relative(DOCS_ROOT, linkToFile(b))}`);
+    process.exitCode = 1;
+  }
+}
+
 async function main(): Promise<void> {
   const api = new API({ cwd: ROOT });
   try {
@@ -314,6 +398,8 @@ async function main(): Promise<void> {
     ].join('\n');
     await fs.writeFile(SITE_OUTPUT_FILE, siteBody, 'utf8');
     console.log(`Generated: ${path.relative(ROOT, SITE_OUTPUT_FILE)}`);
+
+    await checkDocsDrift();
   } finally {
     api.close();
   }

@@ -125,6 +125,7 @@ const themeEnConfig: DefaultTheme.Config = {
               { text: 'randomString - Generate random string', link: '/src/ranuts/utils/random_string' },
               { text: 'clearBr - Remove spaces and line breaks', link: '/src/ranuts/utils/clear_br' },
               { text: 'clearStr - Remove leading/trailing spaces', link: '/src/ranuts/utils/clear_str' },
+              { text: 'truncate - Shorten with an ellipsis', link: '/src/ranuts/utils/truncate' },
               { text: 'strParse - Parse string to object', link: '/src/ranuts/utils/str_parse' },
               { text: 'toString - Convert to string', link: '/src/ranuts/utils/to_string' },
               { text: 'transformText - ArrayBuffer to text', link: '/src/ranuts/utils/transform_text' },
@@ -205,9 +206,13 @@ const themeEnConfig: DefaultTheme.Config = {
               { text: 'escapeHtml - Escape HTML', link: '/src/ranuts/utils/escape_html' },
               { text: 'Chain - Chainable DOM', link: '/src/ranuts/utils/chain' },
               { text: 'create - Create DOM element', link: '/src/ranuts/utils/create' },
-              { text: 'EventManager - Scoped listeners', link: '/src/ranuts/utils/event_manager' },
+              {
+                text: 'EventManager / createDoubleTapDetector - Scoped listeners & double-tap',
+                link: '/src/ranuts/utils/event_manager',
+              },
               { text: 'adoptStyles - Shadow DOM CSS', link: '/src/ranuts/utils/adopt_styles' },
               { text: 'computePlacement - Floating panel flip/shift', link: '/src/ranuts/utils/placement' },
+              { text: 'setFontSize2html - Flexible rem scaling', link: '/src/ranuts/utils/set_font_size' },
             ],
           },
           {
@@ -248,6 +253,17 @@ const themeEnConfig: DefaultTheme.Config = {
               { text: 'convertImageToBase64 - Image to Base64', link: '/src/ranuts/utils/convert_image_to_base64' },
               { text: 'isImageSize - Validate image size', link: '/src/ranuts/utils/is_image_size' },
               { text: 'getImage / cutRound / opacity - Canvas image ops', link: '/src/ranuts/utils/image_process' },
+            ],
+          },
+          {
+            text: 'Media',
+            collapsed: true,
+            items: [
+              { text: 'AudioRecorder - Record to a Blob', link: '/src/ranuts/utils/audio_recorder' },
+              {
+                text: 'createSpeechRecognizer - Speech to text',
+                link: '/src/ranuts/utils/speech',
+              },
             ],
           },
           {
@@ -367,14 +383,6 @@ const themeEnConfig: DefaultTheme.Config = {
         text: 'Bridge (postMessage)',
         collapsed: true,
         items: [{ text: 'Cross-context messaging', link: '/src/ranuts/bridge/' }],
-      },
-      {
-        text: 'Others',
-        collapsed: true,
-        items: [
-          { text: 'Binary Tree', link: '/src/ranuts/binary_tree/' },
-          { text: 'Bundler', link: '/src/ranuts/bundler/' },
-        ],
       },
     ],
     '/src/ranui/': [

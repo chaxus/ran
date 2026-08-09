@@ -31,6 +31,18 @@
   --ran-dropdown-option-active-background-color: rgba(255, 255, 255, 0.2);
   --ran-dropdown-option-item-content-text-align: center;
   --ran-dropdown-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+
+  // The panel's own `min-width` defaults to the trigger's width (`r-select`'s
+  // closed-state box, ~46px here) via `--ran-dropdown-min-width`, which
+  // `r-popover`'s positioning JS sets as an *inline* style — a class-level
+  // custom-property override can't beat that, so the panel was clipping
+  // "1.5X"/"0.8X" down to "1.5…"/"0.8…". `::part(dropdown)` reaches past the
+  // shadow boundary to set `min-width` as a normal property on the panel
+  // itself instead, the same mechanism `r-select`'s own `::part(selection)`
+  // overrides already rely on elsewhere in this file.
+  &::part(dropdown) {
+    min-width: 56px;
+  }
 }
 
 .video-clarity-dropdown {
@@ -46,6 +58,12 @@
   --ran-dropdown-option-active-background-color: rgba(255, 255, 255, 0.2);
   --ran-dropdown-option-item-content-text-align: center;
   --ran-dropdown-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+
+  // Same reasoning as `.video-speed-dropdown` above — "Auto"/"1080p" were
+  // clipping to "A…"/"10…" at the trigger-width default.
+  &::part(dropdown) {
+    min-width: 56px;
+  }
 }
 
 .video-control_loading {
@@ -224,10 +242,25 @@
     position: var(--ran-player-controller-position, absolute);
     bottom: var(--ran-player-controller-bottom, 0);
     left: var(--ran-player-controller-left, 0);
+    // A frosted-glass bar, not `r-glass`: that component's WebGL SVG-displacement
+    // refraction is built for a decorative panel you look *at*, re-rendered only
+    // on its own interaction/resize — not for chrome that sits over a video
+    // repainting 30-60x/sec, where a per-frame GPU refraction pass is real,
+    // continuous cost for a look the viewer is mostly not looking straight at.
+    // `backdrop-filter` is the native, compositor-level way to get the same
+    // "frosted" read (blur + a saturation lift so colors under the glass don't
+    // look washed out) at a fraction of the cost — the technique every major
+    // player's premium chrome (Apple TV, YouTube's current bar, Vimeo) actually
+    // ships. The previous flat gray-to-gray gradient read as a dated plain
+    // scrim; this keeps a gradient (transparent up top, so it doesn't hard-edge
+    // against the video) but tints it neutral-dark instead of gray, to match
+    // the same dark surface the speed/clarity/subtitle dropdowns already use.
     background: var(
       --ran-player-controller-background,
-      linear-gradient(180deg, rgba(217, 217, 217, 0.5) 0%, rgba(91, 91, 91, 0.5) 100%)
+      linear-gradient(180deg, rgba(10, 10, 10, 0) 0%, rgba(10, 10, 10, 0.65) 100%)
     );
+    backdrop-filter: var(--ran-player-controller-backdrop-filter, blur(16px) saturate(160%));
+    -webkit-backdrop-filter: var(--ran-player-controller-backdrop-filter, blur(16px) saturate(160%));
     width: var(--ran-player-controller-width, calc(100% - 32px));
     height: var(--ran-player-controller-height, 34px);
     padding: var(--ran-player-controller-padding, 16px);
@@ -396,12 +429,31 @@
         align-items: var(--ran-player-controls-left-align-items, center);
 
         &-btn {
+          // `--ran-player-toggle-width/height` stays the *icon's* own size
+          // (unchanged: it's passed straight into `<r-icon>`'s `size` attribute
+          // in view.ts, independent of this box's model) — `padding` is additive
+          // under the default `content-box` sizing, so it grows a comfortable
+          // hit target *around* that unchanged icon rather than shrinking it.
+          // Same "bigger tap target + visible hover affordance" language every
+          // other right-side control below now uses, so the whole bar reads as
+          // one coherent toolbar instead of the play button being the one
+          // plain, untouched icon among styled ones.
+          display: flex;
+          align-items: center;
+          justify-content: center;
           width: var(--ran-player-toggle-width, var(--ran-size-3, 20px));
           height: var(--ran-player-toggle-height, var(--ran-size-3, 20px));
+          padding: var(--ran-player-toggle-padding, 4px);
+          border-radius: var(--ran-player-toggle-border-radius, var(--ran-radius-sm, 6px));
           color: var(--ran-player-toggle-color, #fff);
           cursor: var(--ran-player-toggle-cursor, pointer);
           outline: var(--ran-player-toggle-outline, 0);
+          transition: var(--ran-player-toggle-transition, background-color 0.15s ease-out);
           -webkit-tap-highlight-color: transparent;
+
+          &:hover {
+            background: var(--ran-player-toggle-hover-background, rgba(255, 255, 255, 0.12));
+          }
 
           r-icon {
             width: 100%;
@@ -479,19 +531,39 @@
         display: var(--ran-player-controls-right-display, flex);
         justify-content: var(--ran-player-controls-right-justify-content, flex-end);
         align-items: var(--ran-player-controls-right-align-items, center);
+        // Every control below now carries its own uniform padding as its
+        // spacing unit (added, not shared/collapsed — see each control's own
+        // comment), so one small row `gap` on top of that reads as even
+        // spacing throughout. Previously each control set its own one-off
+        // `margin-right` (12px here, 24px there), which is exactly the kind
+        // of inconsistency that reads as "not aligned" in a row meant to look
+        // like a single coherent toolbar.
+        gap: var(--ran-player-controls-right-gap, 2px);
 
         &-volume {
           display: var(--ran-player-volume-display, flex);
           justify-content: var(--ran-player-volume-justify-content, space-between);
           align-items: var(--ran-player-volume-align-items, center);
-          margin-right: var(--ran-player-volume-margin-right, 12px);
           cursor: var(--ran-player-volume-cursor, pointer);
+          // `content-box` (the default) means this padding *adds* around the
+          // icon+slider pair instead of shrinking them — a comfortable hover/
+          // click surface, and the pill-shaped hover backdrop every other
+          // control in this row now shares, instead of volume being the one
+          // control with no hover feedback at all.
+          padding: var(--ran-player-volume-padding, 4px 6px);
+          border-radius: var(--ran-player-volume-border-radius, var(--ran-radius-sm, 6px));
+          transition: var(--ran-player-volume-transition, background-color 0.15s ease-out);
+
+          &:hover {
+            background: var(--ran-player-volume-hover-background, rgba(255, 255, 255, 0.12));
+          }
 
           &-icon {
-            width: var(--ran-player-volume-icon-width, var(--ran-size-2, 18px));
-            height: var(--ran-player-volume-icon-height, var(--ran-size-2, 18px));
+            width: var(--ran-player-volume-icon-width, var(--ran-size-3, 20px));
+            height: var(--ran-player-volume-icon-height, var(--ran-size-3, 20px));
             margin-right: var(--ran-player-volume-icon-margin-right, var(--ran-space-2, 8px));
             color: var(--ran-player-volume-icon-color, #fff);
+            flex-shrink: 0;
 
             r-icon {
               width: 100%;
@@ -500,7 +572,10 @@
           }
 
           &-progress {
-            width: var(--ran-player-volume-progress-width, 50px);
+            // Was 50px — a touch narrow for a comfortable drag target once the
+            // icon grew to match every other control's 20px. 64px gives the
+            // dot more room to travel without changing the track's own look.
+            width: var(--ran-player-volume-progress-width, 64px);
             --ran-progress-track-height: 4px;
             --ran-progress-track-background: rgba(255, 255, 255, 0.3);
             --ran-progress-fill-background: rgba(255, 255, 255, 0.8);
@@ -532,18 +607,31 @@
         }
 
         &-speed {
+          // `content-box` padding grows the pill outward from the unchanged
+          // 30x20 core (same reasoning as `&-volume` above) instead of
+          // shrinking the "1.5X" label inside it, and gives this text control
+          // the same hover pill every icon control in the row now has.
+          display: flex;
+          align-items: center;
+          justify-content: center;
           width: var(--ran-player-speed-width, var(--ran-size-6, 30px));
           height: var(--ran-player-speed-height, var(--ran-size-3, 20px));
+          padding: var(--ran-player-speed-padding, 4px 6px);
+          border-radius: var(--ran-player-speed-border-radius, var(--ran-radius-sm, 6px));
           color: var(--ran-player-speed-color, #fff);
           font-family: var(--ran-player-speed-font-family, PingFang SC);
           font-size: var(--ran-player-speed-font-size, var(--ran-text-label-1, 14px));
           font-style: var(--ran-player-speed-font-style, normal);
           font-weight: var(--ran-player-speed-font-weight, var(--ran-text-label-weight, 500));
           line-height: var(--ran-player-speed-line-height, normal);
-          margin-right: var(--ran-player-speed-margin-right, var(--ran-space-6, 24px));
           cursor: var(--ran-player-speed-cursor, pointer);
           outline: var(--ran-player-speed-outline, 0);
+          transition: var(--ran-player-speed-transition, background-color 0.15s ease-out);
           -webkit-tap-highlight-color: transparent;
+
+          &:hover {
+            background: var(--ran-player-speed-hover-background, rgba(255, 255, 255, 0.12));
+          }
 
           &:active,
           &:focus {
@@ -589,20 +677,31 @@
         }
 
         &-subtitle {
+          display: flex;
+          align-items: center;
+          justify-content: center;
           color: var(--ran-player-subtitle-color, #fff);
           font-family: var(--ran-player-subtitle-font-family, PingFang SC);
           font-size: var(--ran-player-subtitle-font-size, var(--ran-text-label-1, 14px));
           width: var(--ran-player-subtitle-width, var(--ran-size-6, 30px));
           height: var(--ran-player-subtitle-height, var(--ran-size-3, 20px));
+          padding: var(--ran-player-subtitle-padding, 4px 6px);
+          border-radius: var(--ran-player-subtitle-border-radius, var(--ran-radius-sm, 6px));
           font-style: var(--ran-player-subtitle-font-style, normal);
           font-weight: var(--ran-player-subtitle-font-weight, var(--ran-text-label-weight, 500));
           line-height: var(--ran-player-subtitle-line-height, normal);
           cursor: var(--ran-player-subtitle-cursor, pointer);
-          margin-right: var(--ran-player-subtitle-margin-right, 12px);
           outline: var(--ran-player-subtitle-outline, 0);
+          transition: var(--ran-player-subtitle-transition, background-color 0.15s ease-out);
           -webkit-tap-highlight-color: transparent;
 
+          &:hover {
+            background: var(--ran-player-subtitle-hover-background, rgba(255, 255, 255, 0.12));
+          }
+
           // Empty when no tracks are configured — collapse instead of leaving a gap.
+          // `:empty` outranks the plain class rule above on specificity alone, so
+          // this still wins regardless of source order.
           &:empty {
             display: none;
           }
@@ -647,18 +746,27 @@
         }
 
         &-clarity {
+          display: flex;
+          align-items: center;
+          justify-content: center;
           color: var(--ran-player-clarity-color, #fff);
           font-family: var(--ran-player-clarity-font-family, PingFang SC);
           font-size: var(--ran-player-clarity-font-size, var(--ran-text-label-1, 14px));
           width: var(--ran-player-clarity-width, var(--ran-size-6, 30px));
           height: var(--ran-player-clarity-height, var(--ran-size-3, 20px));
+          padding: var(--ran-player-clarity-padding, 4px 6px);
+          border-radius: var(--ran-player-clarity-border-radius, var(--ran-radius-sm, 6px));
           font-style: var(--ran-player-clarity-font-style, normal);
           font-weight: var(--ran-player-clarity-font-weight, var(--ran-text-label-weight, 500));
           line-height: var(--ran-player-clarity-line-height, normal);
           cursor: var(--ran-player-clarity-cursor, pointer);
-          margin-right: var(--ran-player-clarity-margin-right, 12px);
           outline: var(--ran-player-clarity-outline, 0);
+          transition: var(--ran-player-clarity-transition, background-color 0.15s ease-out);
           -webkit-tap-highlight-color: transparent;
+
+          &:hover {
+            background: var(--ran-player-clarity-hover-background, rgba(255, 255, 255, 0.12));
+          }
 
           &:active,
           &:focus {
@@ -713,13 +821,20 @@
         &-pip {
           display: var(--ran-player-pip-display, flex);
           align-items: var(--ran-player-pip-align-items, center);
-          width: var(--ran-player-pip-width, var(--ran-size-2, 18px));
-          height: var(--ran-player-pip-height, var(--ran-size-2, 18px));
-          margin-right: var(--ran-player-pip-margin-right, 12px);
+          justify-content: center;
+          width: var(--ran-player-pip-width, var(--ran-size-3, 20px));
+          height: var(--ran-player-pip-height, var(--ran-size-3, 20px));
+          padding: var(--ran-player-pip-padding, 4px);
+          border-radius: var(--ran-player-pip-border-radius, var(--ran-radius-sm, 6px));
           color: var(--ran-player-pip-color, #fff);
           cursor: var(--ran-player-pip-cursor, pointer);
           outline: var(--ran-player-pip-outline, 0);
+          transition: var(--ran-player-pip-transition, background-color 0.15s ease-out);
           -webkit-tap-highlight-color: transparent;
+
+          &:hover {
+            background: var(--ran-player-pip-hover-background, rgba(255, 255, 255, 0.12));
+          }
 
           r-icon {
             width: 100%;
@@ -746,13 +861,20 @@
         &-remote {
           display: var(--ran-player-remote-display, flex);
           align-items: var(--ran-player-remote-align-items, center);
-          width: var(--ran-player-remote-width, var(--ran-size-2, 18px));
-          height: var(--ran-player-remote-height, var(--ran-size-2, 18px));
-          margin-right: var(--ran-player-remote-margin-right, 12px);
+          justify-content: center;
+          width: var(--ran-player-remote-width, var(--ran-size-3, 20px));
+          height: var(--ran-player-remote-height, var(--ran-size-3, 20px));
+          padding: var(--ran-player-remote-padding, 4px);
+          border-radius: var(--ran-player-remote-border-radius, var(--ran-radius-sm, 6px));
           color: var(--ran-player-remote-color, #fff);
           cursor: var(--ran-player-remote-cursor, pointer);
           outline: var(--ran-player-remote-outline, 0);
+          transition: var(--ran-player-remote-transition, background-color 0.15s ease-out);
           -webkit-tap-highlight-color: transparent;
+
+          &:hover {
+            background: var(--ran-player-remote-hover-background, rgba(255, 255, 255, 0.12));
+          }
 
           r-icon {
             width: 100%;
@@ -777,12 +899,26 @@
         }
 
         &-full {
+          // Was 16px — the one control smaller than everyone else's 18-20px in
+          // this row (an odd deliberate emphasis choice for the *last* icon
+          // rather than a natural one); now matches the row's shared 20px icon
+          // size like every other icon control.
+          display: flex;
+          align-items: center;
+          justify-content: center;
           color: var(--ran-player-fullscreen-color, #fff);
-          width: var(--ran-player-fullscreen-width, var(--ran-size-1, 16px));
-          height: var(--ran-player-fullscreen-height, var(--ran-size-1, 16px));
+          width: var(--ran-player-fullscreen-width, var(--ran-size-3, 20px));
+          height: var(--ran-player-fullscreen-height, var(--ran-size-3, 20px));
+          padding: var(--ran-player-fullscreen-padding, 4px);
+          border-radius: var(--ran-player-fullscreen-border-radius, var(--ran-radius-sm, 6px));
           cursor: var(--ran-player-fullscreen-cursor, pointer);
           outline: var(--ran-player-fullscreen-outline, 0);
+          transition: var(--ran-player-fullscreen-transition, background-color 0.15s ease-out);
           -webkit-tap-highlight-color: transparent;
+
+          &:hover {
+            background: var(--ran-player-fullscreen-hover-background, rgba(255, 255, 255, 0.12));
+          }
 
           r-icon {
             width: 100%;

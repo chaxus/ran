@@ -6,7 +6,7 @@ shape), slots, and `::part()` names — extracted from source. For CSS variables
 (theming tokens) see [style-tokens-public.md](./style-tokens-public.md); for
 design rules see [DESIGN.md](./DESIGN.md).
 
-Generated at: 2026-08-09T05:34:50.307Z
+Generated at: 2026-08-09T06:03:44.109Z
 
 31 custom elements.
 
@@ -100,7 +100,7 @@ Source: `components/glass/index.ts`
   - `frequency: string` — Turbulence base frequency — smaller = larger, smoother liquid ripples.
   - `interactive: boolean` — Hover lift + press-scale feedback, for clickable glass. Also makes the host
   - `radius: string` — Corner radius, in px.
-  - `rim: boolean` — Opt-in WebGL specular rim + chromatic edge, lit from a fixed top-left light —
+  - `rim: boolean` — Opt-in GPU specular rim + chromatic edge, lit from a fixed top-left light —
   - `saturate: string` — `r-glass` — a liquid / frosted glass surface.
   - `sheen: boolean` — Animated specular sweep across the surface.
   - `tint: string` — Glass fill tint (any CSS background value).

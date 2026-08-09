@@ -78,11 +78,13 @@ describe('createHlsAdapter', () => {
 
     expect(onLevelsReady).toHaveBeenCalledTimes(1);
     const { levels } = onLevelsReady.mock.calls[0][0];
-    expect(levels.map((l: { name: string }) => l.name)).toEqual(['720p', '480k', 'Auto']);
+    // `Auto` leads (the recommended default, matching YouTube/Twitch), then
+    // highest-quality-first — see `core/levels.ts`.
+    expect(levels.map((l: { name: string }) => l.name)).toEqual(['Auto', '720p', '480k']);
     expect(levels.map((l: { id: string }) => l.id)).toEqual([
+      'https://cdn.example.com/master.m3u8',
       'https://cdn.example.com/720.m3u8',
       'https://cdn.example.com/480.m3u8',
-      'https://cdn.example.com/master.m3u8',
     ]);
     expect(adapter.getQualityLevels()).toEqual(levels);
   });
