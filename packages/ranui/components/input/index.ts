@@ -338,6 +338,9 @@ export class Input extends RanElement {
       required: this.required,
       isEmpty: !this.value,
       anchor: this._inputContent,
+      // aria-required/aria-invalid must land on the real, closed-shadow <input> — it's
+      // the node assistive tech actually focuses and reports on, not the host element.
+      ariaTarget: this._inputContent,
     });
   };
   /**
@@ -488,10 +491,15 @@ export class Input extends RanElement {
     if (value) {
       if (!this._message) {
         this._message = Div().class('ran-input-message').part('message').build() as HTMLElement;
+        // Same shadow root as _inputContent, so an id-ref between them resolves —
+        // links the helper/validation text to the field for assistive tech.
+        this._message.id = `${this._inputContent.id}-message`;
         this._shadowDom.appendChild(this._message);
+        this._inputContent.setAttribute('aria-describedby', this._message.id);
       }
       this._message.textContent = value;
     } else if (this._message) {
+      this._inputContent.removeAttribute('aria-describedby');
       this._message.remove();
       this._message = undefined;
     }

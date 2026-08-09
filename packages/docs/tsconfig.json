@@ -5,6 +5,8 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "esModuleInterop": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
     "target": "ESNext",
     "declaration": true,
     "outDir": "dist",

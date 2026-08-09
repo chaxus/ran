@@ -60,6 +60,13 @@ export interface RequiredValidityOptions {
   message?: string;
   /** Element the native validation bubble anchors to — must be focusable. */
   anchor?: HTMLElement;
+  /**
+   * Element that receives `aria-required`/`aria-invalid` — the element assistive tech
+   * actually focuses. Defaults to `host`. Pass this when the host itself isn't the
+   * focusable node (e.g. r-input's real `<input>` lives in shadow DOM and is what a
+   * screen reader reports on, not the custom-element host).
+   */
+  ariaTarget?: HTMLElement;
 }
 
 /**
@@ -79,13 +86,13 @@ export function updateRequiredValidity(
   internals: ElementInternals | undefined,
   options: RequiredValidityOptions,
 ): void {
-  const { disabled, required, isEmpty, message = 'Please fill out this field.', anchor } = options;
-  if (required) host.setAttribute('aria-required', 'true');
-  else host.removeAttribute('aria-required');
+  const { disabled, required, isEmpty, message = 'Please fill out this field.', anchor, ariaTarget = host } = options;
+  if (required) ariaTarget.setAttribute('aria-required', 'true');
+  else ariaTarget.removeAttribute('aria-required');
 
   const invalid = !disabled && required && isEmpty;
-  if (invalid) host.setAttribute('aria-invalid', 'true');
-  else host.removeAttribute('aria-invalid');
+  if (invalid) ariaTarget.setAttribute('aria-invalid', 'true');
+  else ariaTarget.removeAttribute('aria-invalid');
 
   if (!internals) return;
   if (invalid) internals.setValidity?.({ valueMissing: true }, message, anchor);

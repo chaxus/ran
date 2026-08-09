@@ -250,7 +250,11 @@ export class Checkbox extends RanElement {
       this.checked = newValue;
       this.value = newValue;
     }
-    if (name === 'required' || name === 'disabled') this._updateValidity();
+    // 'disabled' also drives aria-disabled/tabIndex (syncA11yAndForm), not just validity —
+    // otherwise disabling a connected checkbox dims it visually but leaves it Tab-reachable
+    // and announced as enabled to assistive tech (syncA11yAndForm only ran at connect time).
+    if (name === 'disabled') this.syncA11yAndForm();
+    else if (name === 'required') this._updateValidity();
     if (name === 'sheet') this.handlerExternalCss();
   }
 }
