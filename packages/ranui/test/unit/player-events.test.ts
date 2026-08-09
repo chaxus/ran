@@ -46,27 +46,23 @@ describe('player/core/events', () => {
   describe('syncPlayButtonState', () => {
     const makeButton = () => {
       const el = document.createElement('div');
-      el.appendChild(document.createElement('r-icon'));
-      return el;
+      const icon = document.createElement('r-icon');
+      el.appendChild(icon);
+      return { btn: el, icon };
     };
 
-    it('switches the inner r-icon to pause and sets the aria-label when playing', () => {
-      const btn = makeButton();
-      syncPlayButtonState(btn, true);
-      expect(btn.querySelector('r-icon')?.getAttribute('name')).toBe('pause');
+    it('switches the icon to pause and sets the aria-label when playing', () => {
+      const { btn, icon } = makeButton();
+      syncPlayButtonState(btn, icon, true);
+      expect(icon.getAttribute('name')).toBe('pause');
       expect(btn.getAttribute('aria-label')).toBe('Pause');
     });
 
-    it('switches the inner r-icon to play and sets the aria-label when not playing', () => {
-      const btn = makeButton();
-      syncPlayButtonState(btn, false);
-      expect(btn.querySelector('r-icon')?.getAttribute('name')).toBe('play');
+    it('switches the icon to play and sets the aria-label when not playing', () => {
+      const { btn, icon } = makeButton();
+      syncPlayButtonState(btn, icon, false);
+      expect(icon.getAttribute('name')).toBe('play');
       expect(btn.getAttribute('aria-label')).toBe('Play');
-    });
-
-    it('does not throw when the button has no r-icon child', () => {
-      const btn = document.createElement('div');
-      expect(() => syncPlayButtonState(btn, true)).not.toThrow();
     });
   });
 

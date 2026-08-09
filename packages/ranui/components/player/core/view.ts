@@ -58,6 +58,10 @@ export interface PlayerViewRefs {
   playerControllerBottomRight: HTMLDivElement;
   playerControllerBottomLeft: HTMLDivElement;
   playerControllerBottomPlayBtn: HTMLDivElement;
+  /** The `<r-icon>` inside `playerControllerBottomPlayBtn` — exposed separately so
+   * `syncPlayButtonState` can swap its `name` directly instead of re-querying the
+   * button on every play/pause toggle. */
+  playerControllerBottomPlayBtnIcon: HTMLElement;
   playerControllerBottomTimeCurrent: HTMLDivElement;
   playerControllerBottomTimeDuration: HTMLDivElement;
   playerControllerBottomTimeDivide: HTMLDivElement;
@@ -65,6 +69,9 @@ export interface PlayerViewRefs {
   playControllerBottomClarity: HTMLElement;
   playControllerBottomSpeed: HTMLDivElement;
   playControllerBottomVolumeIcon: HTMLDivElement;
+  /** The `<r-icon>` inside `playControllerBottomVolumeIcon` — same reasoning as
+   * `playerControllerBottomPlayBtnIcon` above, for the mute/unmute swap. */
+  playControllerBottomVolumeIconGlyph: HTMLElement;
   playControllerBottomVolumeProgress: Progress;
   playControllerBottomPip: HTMLDivElement;
   playControllerBottomRemote: HTMLDivElement;
@@ -119,12 +126,14 @@ export function ensurePlayerView(input: {
     .children(progressWrap, progressDot)
     .build() as HTMLDivElement;
 
-  const playerControllerBottomPlayBtn = createIconControl(
-    'ran-player-controller-bottom-left-btn',
-    'play',
+  const playerControllerBottomPlayBtnIcon = icon('play', 'var(--ran-player-toggle-width, 20px)');
+  const playerControllerBottomPlayBtn = focusableRole(
+    Div().class('ran-player-controller-bottom-left-btn'),
+    'button',
     'Play',
-    'var(--ran-player-toggle-width, 20px)',
-  );
+  )
+    .children(playerControllerBottomPlayBtnIcon)
+    .build() as HTMLDivElement;
   const playerControllerBottomTimeCurrent = Div()
     .class('ran-player-controller-bottom-left-time-current')
     .build() as HTMLDivElement;
@@ -162,9 +171,10 @@ export function ensurePlayerView(input: {
     .children(playControllerBottomSpeedPopover)
     .build() as HTMLDivElement;
 
+  const playControllerBottomVolumeIconGlyph = icon('volume', 'var(--ran-player-volume-icon-width, 20px)');
   const playControllerBottomVolumeIcon = Div()
     .class('ran-player-controller-bottom-right-volume-icon')
-    .children(icon('volume', 'var(--ran-player-volume-icon-width, 20px)'))
+    .children(playControllerBottomVolumeIconGlyph)
     .build() as HTMLDivElement;
   const playControllerBottomVolumeProgress = View('r-progress')
     .class('ran-player-controller-bottom-right-volume-progress')
@@ -268,12 +278,14 @@ export function ensurePlayerView(input: {
     playerControllerBottomRight,
     playerControllerBottomLeft,
     playerControllerBottomPlayBtn,
+    playerControllerBottomPlayBtnIcon,
     playerControllerBottomTimeCurrent,
     playerControllerBottomTimeDuration,
     playerControllerBottomTimeDivide,
     playControllerBottomClarity,
     playControllerBottomSpeed,
     playControllerBottomVolumeIcon,
+    playControllerBottomVolumeIconGlyph,
     playControllerBottomVolumeProgress,
     playControllerBottomSubtitle,
     playControllerBottomPip,

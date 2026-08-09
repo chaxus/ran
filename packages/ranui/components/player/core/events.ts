@@ -8,9 +8,9 @@ export function shouldSetLoadingOnWaiting(input: { isSeeking: boolean; video?: H
   return !!video && !video.paused && !video.ended && !isSeeking;
 }
 
-/** Swaps the `<r-icon>` inside `playButton` between `play`/`pause` — see `<r-icon>` migration in `docs/PLAYER_ROADMAP.md` Phase 4. */
-export function syncPlayButtonState(playButton: HTMLElement, isPlaying: boolean): void {
-  playButton.querySelector('r-icon')?.setAttribute('name', isPlaying ? 'pause' : 'play');
+/** Swaps `playButtonIcon` (the `<r-icon>` inside `playButton`) between `play`/`pause` — see `<r-icon>` migration in `docs/PLAYER_ROADMAP.md` Phase 4. */
+export function syncPlayButtonState(playButton: HTMLElement, playButtonIcon: HTMLElement, isPlaying: boolean): void {
+  playButtonIcon.setAttribute('name', isPlaying ? 'pause' : 'play');
   const label = isPlaying ? 'Pause' : 'Play';
   playButton.setAttribute('aria-label', label);
   playButton.setAttribute('title', label);

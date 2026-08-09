@@ -30,13 +30,16 @@ export interface PlayerSubtitleHandlers {
 /** Engine-independent — untouched by Phase 2's HLS/DASH/FLV adapter refactor, unlike `core/clarity.ts`. */
 export function createSubtitleHandlers(deps: PlayerSubtitleDeps): PlayerSubtitleHandlers {
   const { refs } = deps;
+  // Rebuilt by `createSubtitleSelect` below whenever `tracks` changes — kept as a
+  // closure ref (set at build time) instead of re-querying `subtitleContainer` on
+  // every `setSubtitleLanguage` call.
+  let select: HTMLElement | null = null;
 
   const setSubtitleLanguage = (lang: string): void => {
     const video = deps.getVideo();
     if (!video) return;
     setActiveSubtitleLanguage(video.textTracks, lang);
-    const select = refs.subtitleContainer.querySelector('r-select');
-    if (select) select.setAttribute('value', lang === 'off' ? 'Off' : lang);
+    select?.setAttribute('value', lang === 'off' ? 'Off' : lang);
   };
 
   const changeSubtitleTrack = (e: Event): void => {
@@ -53,6 +56,7 @@ export function createSubtitleHandlers(deps: PlayerSubtitleDeps): PlayerSubtitle
    */
   const createSubtitleSelect = (): void => {
     refs.subtitleContainer.innerHTML = '';
+    select = null;
     const tracks = deps.getTracks();
     if (tracks.length <= 0) return;
     const Fragment = document.createDocumentFragment();
@@ -62,7 +66,7 @@ export function createSubtitleHandlers(deps: PlayerSubtitleDeps): PlayerSubtitle
       Fragment.appendChild(option);
     });
     const id = deps.getPlayerId();
-    const select = View('r-select')
+    const built = View('r-select')
       .attr('value', 'Off')
       .attr('type', 'text')
       .attr('trigger', 'hover,click')
@@ -73,9 +77,10 @@ export function createSubtitleHandlers(deps: PlayerSubtitleDeps): PlayerSubtitle
       .children(Fragment as unknown as HTMLElement)
       .build() as HTMLElement;
 
-    if (id) select.setAttribute('getPopupContainerId', id);
-    select.addEventListener('change', changeSubtitleTrack);
-    refs.subtitleContainer.appendChild(select);
+    if (id) built.setAttribute('getPopupContainerId', id);
+    built.addEventListener('change', changeSubtitleTrack);
+    refs.subtitleContainer.appendChild(built);
+    select = built;
   };
 
   /**

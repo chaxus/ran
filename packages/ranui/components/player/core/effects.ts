@@ -6,13 +6,14 @@ import type { PlayerVisualSignals } from './store';
 
 export interface PlayerVisualEffectRefs {
   playBtn: HTMLElement;
+  playBtnIcon: HTMLElement;
   progress: HTMLElement;
   progressValue: HTMLElement;
   progressDot: HTMLElement;
   progressBuffer: HTMLElement;
   timeCurrent: HTMLElement;
   timeDuration: HTMLElement;
-  volumeIcon: HTMLElement;
+  volumeIconGlyph: HTMLElement;
   volumeProgress: HTMLElement;
 }
 
@@ -29,7 +30,7 @@ export function createPlaybackVisualEffects(
   return [
     // Play/pause button class — was duplicated in onPlay/onPlaying/onPause.
     createEffect(() => {
-      syncPlayButtonState(refs.playBtn, signals.isPlaying.getter());
+      syncPlayButtonState(refs.playBtn, refs.playBtnIcon, signals.isPlaying.getter());
     }),
     // Progress fill + buffered track + dot position + time labels — was
     // duplicated across onDurationchange/onProgress/onLoadeddata/updateCurrentProgress.
@@ -51,7 +52,7 @@ export function createPlaybackVisualEffects(
     // changePlayerVolume (mute toggle) and changeVolumeProgress (drag).
     createEffect(() => {
       const volume = signals.volume.getter();
-      refs.volumeIcon.querySelector('r-icon')?.setAttribute('name', volume > 0 ? 'volume' : 'volume-mute');
+      refs.volumeIconGlyph.setAttribute('name', volume > 0 ? 'volume' : 'volume-mute');
       refs.volumeProgress.setAttribute('percent', `${volume}`);
     }),
   ];

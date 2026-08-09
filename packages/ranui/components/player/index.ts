@@ -110,12 +110,14 @@ export class RanPlayer extends RanElement {
   _playerControllerBottomRight: HTMLDivElement;
   _playerControllerBottomLeft: HTMLDivElement;
   _playerControllerBottomPlayBtn: HTMLDivElement;
+  _playerControllerBottomPlayBtnIcon: HTMLElement;
   _playerControllerBottomTimeCurrent: HTMLDivElement;
   _playerControllerBottomTimeDuration: HTMLDivElement;
   _playerControllerBottomTimeDivide: HTMLDivElement;
   _playControllerBottomClarity: HTMLElement;
   _playControllerBottomSpeed: HTMLDivElement;
   _playControllerBottomVolumeIcon: HTMLDivElement;
+  _playControllerBottomVolumeIconGlyph: HTMLElement;
   _playControllerBottomVolumeProgress: Progress;
   _playControllerBottomSubtitle: HTMLElement;
   _playControllerBottomPip: HTMLDivElement;
@@ -194,6 +196,7 @@ export class RanPlayer extends RanElement {
     this._playerControllerBottomRight = viewRefs.playerControllerBottomRight;
     this._playerControllerBottomLeft = viewRefs.playerControllerBottomLeft;
     this._playerControllerBottomPlayBtn = viewRefs.playerControllerBottomPlayBtn;
+    this._playerControllerBottomPlayBtnIcon = viewRefs.playerControllerBottomPlayBtnIcon;
     this._playerControllerBottomTimeCurrent = viewRefs.playerControllerBottomTimeCurrent;
     this._playerControllerBottomTimeDivide = viewRefs.playerControllerBottomTimeDivide;
     this._playerControllerBottomTimeDuration = viewRefs.playerControllerBottomTimeDuration;
@@ -202,6 +205,7 @@ export class RanPlayer extends RanElement {
     this._playControllerBottomVolume = viewRefs.playControllerBottomVolume;
     this._playControllerBottomVolumeProgress = viewRefs.playControllerBottomVolumeProgress;
     this._playControllerBottomVolumeIcon = viewRefs.playControllerBottomVolumeIcon;
+    this._playControllerBottomVolumeIconGlyph = viewRefs.playControllerBottomVolumeIconGlyph;
     this._playControllerBottomSubtitle = viewRefs.playControllerBottomSubtitle;
     this._playControllerBottomPip = viewRefs.playControllerBottomPip;
     this._playControllerBottomRemote = viewRefs.playControllerBottomRemote;
@@ -227,13 +231,14 @@ export class RanPlayer extends RanElement {
   getVisualEffectRefs = (): PlayerVisualEffectRefs => {
     return {
       playBtn: this._playerControllerBottomPlayBtn,
+      playBtnIcon: this._playerControllerBottomPlayBtnIcon,
       progress: this._progress,
       progressValue: this._progressWrapValue,
       progressDot: this._progressDot,
       progressBuffer: this._progressWrapBuffer,
       timeCurrent: this._playerControllerBottomTimeCurrent,
       timeDuration: this._playerControllerBottomTimeDuration,
-      volumeIcon: this._playControllerBottomVolumeIcon,
+      volumeIconGlyph: this._playControllerBottomVolumeIconGlyph,
       volumeProgress: this._playControllerBottomVolumeProgress,
     };
   };
