@@ -130,6 +130,33 @@ Shows its slotted content when the current path matches `path`; hides it otherwi
 /*                matches everything
 ```
 
+#### Lazy mount/unmount `src`
+
+For a larger multi-page app, `r-route` can code-split each page instead of always
+shipping its slotted content up front. Set `src` to a module specifier; on match,
+`r-route` dynamically `import()`s it and calls its default export — `(host: HTMLElement)
+=> void | (() => void)` — inside a reactive scope, passing a host element to render
+into. Leaving the route disposes that whole scope in one call (every effect, binding,
+and `onCleanup` the page registered), then removes the rendered content; returning to
+the route re-mounts from the cached module without re-fetching it.
+
+```html
+<r-route path="/settings" src="/pages/settings.js"></r-route>
+```
+
+```js
+// pages/settings.js
+export default function renderSettings(host) {
+  host.textContent = 'Settings page';
+  return () => {
+    /* optional cleanup, run when the route is left */
+  };
+}
+```
+
+This mode is client-only — during SSR/SSG, a lazy route only resolves its
+show/hide state, not the page module itself.
+
 ### `r-link`
 
 A navigation link. Prevents full-page reload for same-origin paths, calls `RouterCore.push/replace` if a router is active, otherwise dispatches a `ran-navigate` event up the DOM tree.

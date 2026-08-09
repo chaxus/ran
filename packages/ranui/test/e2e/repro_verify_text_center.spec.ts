@@ -60,4 +60,16 @@ test('label text is centered inside speed/clarity pill (not left-aligned)', asyn
   }
 
   await page.screenshot({ path: 'repro-text-center-full.png', clip: { x: 480, y: 420, width: 260, height: 60 } });
+
+  // Open the speed dropdown and screenshot the full picture: trigger text +
+  // panel together, to see whether they now visually read as aligned.
+  const speedSelectHandle = await page.evaluateHandle(() => {
+    const el = document.querySelector('r-player') as any;
+    const root = el._shadowDom as ShadowRoot;
+    return root.querySelector('.ran-player-controller-bottom-right-speed r-select');
+  });
+  const speedSelectEl = speedSelectHandle.asElement();
+  await speedSelectEl?.hover();
+  await page.waitForTimeout(500);
+  await page.screenshot({ path: 'repro-open-with-text-fix.png', clip: { x: 460, y: 200, width: 300, height: 280 } });
 });
