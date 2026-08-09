@@ -784,16 +784,16 @@
           );
 
           r-select {
-            // `flex-shrink: 0` — `&-speed` above is a flex row narrower (30px)
-            // than this select's own intended 46px; without this, flexbox's
-            // default `flex-shrink: 1` compresses the select down to fit the
-            // row instead of letting it overflow the row like it did before
-            // `&-speed` became a flex container (for the hover-pill padding),
-            // squashing "1.5X"/"0.8X" and — since the open dropdown panel
-            // positions itself off *this* element's rect — throwing the
-            // panel off-center too.
+            // `flex-shrink: 0`, so flexbox's default `flex-shrink: 1` never
+            // compresses this select to fit its wrapper — it did exactly
+            // that the moment `&-speed` became a flex container (for the
+            // hover-pill padding), squashing "1.5X"/"0.8X" and — since the
+            // open dropdown panel positions itself off *this* element's rect
+            // — throwing the panel off-center too. Its width now matches
+            // `&-speed`'s own `@width` above (both 50px) rather than
+            // overflowing a narrower wrapper.
             flex-shrink: 0;
-            width: var(--ran-player-speed-select-width, 46px);
+            width: var(--ran-player-speed-select-width, 50px);
             height: var(--ran-player-speed-select-height, var(--ran-size-3, 20px));
             // `r-select`'s own `.selection` (the shadow-internal box the label
             // text actually sits in) defaults `min-height` to 32px — sized for
@@ -851,8 +851,10 @@
         }
 
         &-subtitle {
+          // See the identical comment on `&-speed`'s `@width` above — kept in
+          // sync with the `r-select`'s own `width` below (both 50px).
           .player-pill-control(
-            @width: var(--ran-player-subtitle-width, var(--ran-size-6, 30px));
+            @width: var(--ran-player-subtitle-width, 50px);
             @height: var(--ran-player-subtitle-height, var(--ran-size-3, 20px));
             @padding: var(--ran-player-subtitle-padding, var(--ran-space-1, 4px) var(--ran-space-2, 8px));
             @radius: var(--ran-player-subtitle-border-radius, var(--ran-radius-sm, 6px));
@@ -884,9 +886,9 @@
 
           r-select {
             // See the identical comments on `&-speed`'s `r-select` above
-            // (`flex-shrink` and `--ran-select-min-height` both).
+            // (`flex-shrink`, matched `width`, and `--ran-select-min-height`).
             flex-shrink: 0;
-            width: var(--ran-player-subtitle-select-width, 46px);
+            width: var(--ran-player-subtitle-select-width, 50px);
             height: var(--ran-player-subtitle-select-height, var(--ran-size-3, 20px));
             --ran-select-min-height: var(--ran-player-subtitle-select-height, var(--ran-size-3, 20px));
             outline: 0;
@@ -932,8 +934,10 @@
         }
 
         &-clarity {
+          // See the identical comment on `&-speed`'s `@width` above — kept in
+          // sync with the `r-select`'s own `width` below (both 50px).
           .player-pill-control(
-            @width: var(--ran-player-clarity-width, var(--ran-size-6, 30px));
+            @width: var(--ran-player-clarity-width, 50px);
             @height: var(--ran-player-clarity-height, var(--ran-size-3, 20px));
             @padding: var(--ran-player-clarity-padding, var(--ran-space-1, 4px) var(--ran-space-2, 8px));
             @radius: var(--ran-player-clarity-border-radius, var(--ran-radius-sm, 6px));
@@ -957,9 +961,9 @@
 
           r-select {
             // See the identical comments on `&-speed`'s `r-select` above
-            // (`flex-shrink` and `--ran-select-min-height` both).
+            // (`flex-shrink`, matched `width`, and `--ran-select-min-height`).
             flex-shrink: 0;
-            width: var(--ran-player-clarity-select-width, 46px);
+            width: var(--ran-player-clarity-select-width, 50px);
             height: var(--ran-player-clarity-select-height, var(--ran-size-3, 20px));
             --ran-select-min-height: var(--ran-player-clarity-select-height, var(--ran-size-3, 20px));
             outline: 0;

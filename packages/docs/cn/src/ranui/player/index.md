@@ -59,7 +59,7 @@ description: 'ranui Player（<r-player>）在原生 <video> 之上封装统一�
 | `thumbnails`           | `string`               | `''`    | WebVTT 雪碧图 manifest 的地址——在进度条悬停提示上方显示裁剪后的缩略图。详见下方[缩略图预览](#缩略图预览-thumbnails)。和 `src` 无关：只有这个属性本身变化时才会重新抓取。 |
 | `disable-error-modal`  | `boolean`              | `false` | 关闭内置的错误 + 重试对话框——错误依然会通过 `error`/`sourceerror` 这两个 `change` 事件到达你手上，可以在此基础上搭自己的 UI。 |
 | `remember-position`    | `boolean`              | `false` | 开启断点续播：`pause` 时和标签页切到后台时把当前播放位置存到 `localStorage`（按 `src` 区分），下次加载同一个 `src` 时恢复，播放结束后清除。 |
-| `tracks`               | `PlayerTrackConfig[]`  | `[]`    | 字幕/CC 轨道——**只有 JS 属性，没有对应的 HTML attribute**（播放器每次加载都会清空自己的 light DOM，声明式的 `<track>` 子标签活不下来）。详见下方[字幕/CC](#字幕cc-tracks)。 |
+| `tracks`               | `PlayerTrackConfig[]`  | `[]`    | 字幕/CC 轨道——**只有 JS 属性，没有对应的 HTML attribute**（播放器每次加载都会清空自己的 light DOM，声明式的 `<track>` 子标签活不下来）。详见下方[字幕/CC](#字幕-cc-tracks)。 |
 
 > 观察的属性列表（来自 `observedAttributes`）：`src`、`format`、`volume`、`currentTime`/`currenttime`、`playbackRate`/`playbackrate`、`debug`、`sheet`、`poster`、`thumbnails`、`autoplay`、`loop`、`muted`、`disable-error-modal`、`remember-position`。
 
